@@ -2,3 +2,7 @@ import {
   "tonyfettes/raylib",
   "tonyfettes/raylib-examples/raylib_minesweeper_neon_ops_2026/internal/types",
 }
+
+warnings(
+  "+missing_doc",
+)
