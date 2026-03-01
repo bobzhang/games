@@ -1,4 +1,5 @@
 ///|
+/// Enumerates high-level states in the game flow.
 pub(all) enum GameState {
   Title
   Play
@@ -7,6 +8,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Enumerates ObjKind variants used by runtime state.
 pub(all) enum ObjKind {
   Scout
   Spinner
@@ -18,6 +20,7 @@ pub(all) enum ObjKind {
 } derive(Eq)
 
 ///|
+/// Stores runtime data for Obj.
 pub(all) struct Obj {
   mut active : Bool
   mut kind : ObjKind
@@ -35,6 +38,7 @@ pub(all) struct Obj {
 }
 
 ///|
+/// Stores runtime data for Shot.
 pub(all) struct Shot {
   mut active : Bool
   mut from_player : Bool
@@ -48,6 +52,7 @@ pub(all) struct Shot {
 }
 
 ///|
+/// Stores runtime data for Spark.
 pub(all) struct Spark {
   mut active : Bool
   mut x : Float
@@ -60,6 +65,7 @@ pub(all) struct Spark {
 }
 
 ///|
+/// Stores runtime data for ShockRing.
 pub(all) struct ShockRing {
   mut active : Bool
   mut x : Float
@@ -70,6 +76,7 @@ pub(all) struct ShockRing {
 }
 
 ///|
+/// Stores runtime data for Ghost.
 pub(all) struct Ghost {
   mut active : Bool
   mut x : Float
@@ -82,6 +89,7 @@ pub(all) struct Ghost {
 }
 
 ///|
+/// Stores runtime data for Player.
 pub(all) struct Player {
   mut x : Float
   mut y : Float
@@ -97,6 +105,7 @@ pub(all) struct Player {
 }
 
 ///|
+/// Aggregates all mutable state needed to run one game session.
 pub(all) struct Game {
   objs : Array[Obj]
   shots : Array[Shot]
@@ -145,6 +154,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a default Obj value for a new session.
 pub fn Obj::new() -> Obj {
   {
     active: false,
@@ -164,6 +174,7 @@ pub fn Obj::new() -> Obj {
 }
 
 ///|
+/// Creates a default Shot value for a new session.
 pub fn Shot::new() -> Shot {
   {
     active: false,
@@ -179,6 +190,7 @@ pub fn Shot::new() -> Shot {
 }
 
 ///|
+/// Creates a default Spark value for a new session.
 pub fn Spark::new() -> Spark {
   {
     active: false,
@@ -193,11 +205,13 @@ pub fn Spark::new() -> Spark {
 }
 
 ///|
+/// Creates a default ShockRing value for a new session.
 pub fn ShockRing::new() -> ShockRing {
   { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
 }
 
 ///|
+/// Creates a default Ghost value for a new session.
 pub fn Ghost::new() -> Ghost {
   {
     active: false,
@@ -212,6 +226,7 @@ pub fn Ghost::new() -> Ghost {
 }
 
 ///|
+/// Creates a default Player value for a new session.
 pub fn Player::new() -> Player {
   {
     x: Float::from_int(screen_w / 2),
@@ -229,6 +244,7 @@ pub fn Player::new() -> Player {
 }
 
 ///|
+/// Creates a default Game value for a new session.
 pub fn Game::new() -> Game {
   {
     objs: Array::makei(max_objs, fn(_i) { Obj::new() }),
