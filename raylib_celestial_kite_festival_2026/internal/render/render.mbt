@@ -1190,6 +1190,7 @@ fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Renders the full frame for the current game state.
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(6, 12, 24, 255))
 

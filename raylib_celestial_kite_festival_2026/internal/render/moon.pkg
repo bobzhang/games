@@ -4,6 +4,4 @@ import {
   "tonyfettes/raylib-examples/raylib_celestial_kite_festival_2026/internal/types",
 }
 
-warnings(
-  "+missing_doc",
-)
+warnings = "+missing_doc"
