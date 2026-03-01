@@ -880,6 +880,7 @@ fn draw_campaign_clear(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Renders world, UI panels, and overlays for the current frame.
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_bg(game)
 
