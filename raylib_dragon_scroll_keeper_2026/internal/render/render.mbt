@@ -721,6 +721,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Renders the full frame for the current game state.
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_background(game)
   draw_chamber_shell(game)
