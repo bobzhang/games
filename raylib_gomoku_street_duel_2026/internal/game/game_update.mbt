@@ -1,4 +1,5 @@
 ///|
+/// Advances one frame of duel state, human input, and AI turn logic.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   update_timers(game, dt)
 
