@@ -1,4 +1,5 @@
 ///|
+/// Draws one full frame for the current 2048 game state.
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@types.bg_color)
   match game.state {

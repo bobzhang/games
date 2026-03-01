@@ -1,4 +1,5 @@
 ///|
+/// Advances 2048 simulation by one frame, including input and tile animation.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   handle_input(game)
   update_animations(game, dt)
