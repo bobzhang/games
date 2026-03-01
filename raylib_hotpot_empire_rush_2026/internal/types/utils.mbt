@@ -1,34 +1,41 @@
 ///|
+/// Returns full kitchen grid width in pixels.
 pub fn kitchen_w() -> Int {
   station_cols * station_tile_w + (station_cols - 1) * station_gap
 }
 
 ///|
+/// Returns full kitchen grid height in pixels.
 pub fn kitchen_h() -> Int {
   station_rows * station_tile_h + (station_rows - 1) * station_gap
 }
 
 ///|
+/// Returns pixel X of a station column origin.
 pub fn station_x(col : Int) -> Int {
   kitchen_left + col * (station_tile_w + station_gap)
 }
 
 ///|
+/// Returns pixel Y of a station row origin.
 pub fn station_y(row : Int) -> Int {
   kitchen_top + row * (station_tile_h + station_gap)
 }
 
 ///|
+/// Returns left X coordinate of the right-side info panel.
 pub fn panel_x() -> Int {
   kitchen_left + kitchen_w() + 36
 }
 
 ///|
+/// Returns width of the right-side info panel.
 pub fn panel_w() -> Int {
   screen_w - panel_x() - 44
 }
 
 ///|
+/// Maps station grid coordinates to a station id.
 pub fn station_at(x : Int, y : Int) -> Int {
   if y == 0 {
     if x == 0 {
@@ -72,6 +79,7 @@ pub fn station_at(x : Int, y : Int) -> Int {
 }
 
 ///|
+/// Returns human-readable label for a station id.
 pub fn station_name(station : Int) -> String {
   if station == station_broth {
     "Broth Kettle"
@@ -101,6 +109,7 @@ pub fn station_name(station : Int) -> String {
 }
 
 ///|
+/// Returns display name for a broth kind id.
 pub fn broth_name(kind : Int) -> String {
   if kind == 0 {
     "Mala"
@@ -112,6 +121,7 @@ pub fn broth_name(kind : Int) -> String {
 }
 
 ///|
+/// Returns display name for a protein kind id.
 pub fn protein_name(kind : Int) -> String {
   if kind == 0 {
     "Beef"
@@ -123,6 +133,7 @@ pub fn protein_name(kind : Int) -> String {
 }
 
 ///|
+/// Returns display name for a vegetable kind id.
 pub fn veg_name(kind : Int) -> String {
   if kind == 0 {
     "Lotus"
@@ -134,6 +145,7 @@ pub fn veg_name(kind : Int) -> String {
 }
 
 ///|
+/// Returns display name for a spice level.
 pub fn spice_name(level : Int) -> String {
   if level <= 0 {
     "Mild"
@@ -145,6 +157,7 @@ pub fn spice_name(level : Int) -> String {
 }
 
 ///|
+/// Clamps an integer to the inclusive `[lo, hi]` range.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -156,6 +169,7 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Clamps a float to the inclusive `[lo, hi]` range.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -167,6 +181,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two float values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -176,6 +191,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two float values.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -185,6 +201,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Sets the HUD message text and resets its remaining lifetime.
 pub fn set_message(game : Game, text : String) -> Unit {
   game.msg = text
   game.msg_t = msg_ttl

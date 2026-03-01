@@ -842,6 +842,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws one full frame of kitchen tiles, UI, and overlays.
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_background(game)
   draw_kitchen(game)

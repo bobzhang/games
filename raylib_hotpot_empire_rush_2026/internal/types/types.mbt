@@ -1,4 +1,5 @@
 ///|
+/// Per-frame player input state used by game logic.
 pub(all) struct InputState {
   mut move_x : Int
   mut move_y : Int
@@ -11,6 +12,7 @@ pub(all) struct InputState {
 }
 
 ///|
+/// Creates a cleared input state with no active actions.
 pub fn InputState::new() -> InputState {
   {
     move_x: 0,
@@ -25,6 +27,7 @@ pub fn InputState::new() -> InputState {
 }
 
 ///|
+/// Customer order specification and patience timers.
 pub(all) struct Order {
   mut active : Bool
   mut id : Int
@@ -38,6 +41,7 @@ pub(all) struct Order {
 }
 
 ///|
+/// Creates an inactive order entry with the given stable id.
 pub fn Order::new(id : Int) -> Order {
   {
     active: false,
@@ -53,6 +57,7 @@ pub fn Order::new(id : Int) -> Order {
 }
 
 ///|
+/// Item currently carried by the player hand.
 pub(all) struct Item {
   mut kind : Int
   mut flavor : Int
@@ -60,11 +65,13 @@ pub(all) struct Item {
 }
 
 ///|
+/// Returns an empty hand item placeholder.
 pub fn Item::empty() -> Item {
   { kind: ingredient_none, flavor: 0, prepped: false }
 }
 
 ///|
+/// Prep-board workflow state and pending output.
 pub(all) struct PrepState {
   mut active : Bool
   mut kind : Int
@@ -77,6 +84,7 @@ pub(all) struct PrepState {
 }
 
 ///|
+/// Creates a reset prep state with default timing targets.
 pub fn PrepState::new() -> PrepState {
   {
     active: false,
@@ -91,6 +99,7 @@ pub fn PrepState::new() -> PrepState {
 }
 
 ///|
+/// Hotpot cooking state with selected ingredients and progress.
 pub(all) struct PotState {
   mut broth : Int
   mut protein : Int
@@ -103,6 +112,7 @@ pub(all) struct PotState {
 }
 
 ///|
+/// Creates an empty pot state with base cooking target.
 pub fn PotState::new() -> PotState {
   {
     broth: -1,
@@ -117,6 +127,7 @@ pub fn PotState::new() -> PotState {
 }
 
 ///|
+/// Complete mutable state for one hotpot empire run.
 pub(all) struct Game {
   input : InputState
   orders : Array[Order]
@@ -147,6 +158,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a new game with initialized queue, meters, and stats.
 pub fn Game::new() -> Game {
   {
     input: InputState::new(),
