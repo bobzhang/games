@@ -1,4 +1,5 @@
 ///|
+/// Returns the smaller of two integers.
 pub fn mini(a : Int, b : Int) -> Int {
   if a < b {
     a
@@ -8,6 +9,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the larger of two integers.
 pub fn maxi(a : Int, b : Int) -> Int {
   if a > b {
     a
@@ -17,6 +19,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Clamps an integer into the inclusive range [`lo`, `hi`].
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -28,6 +31,7 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Clamps a float into the inclusive range [`lo`, `hi`].
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -39,6 +43,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two floating-point values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -48,6 +53,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -57,22 +63,26 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns a pseudo-random float in the inclusive range [`lo`, `hi`].
 pub fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns true when `(x, y)` is inside the minefield.
 pub fn in_board(x : Int, y : Int) -> Bool {
   x >= 0 && x < board_w && y >= 0 && y < board_h
 }
 
 ///|
+/// Converts board coordinates into a flat row-major index.
 pub fn idx(x : Int, y : Int) -> Int {
   y * board_w + x
 }
 
 ///|
+/// Computes board origin and tile size, including active shake offsets.
 pub fn board_metrics(game : Game) -> (Int, Int, Int) {
   let area_x : Int = board_area_x()
   let area_y : Int = board_area_y()
@@ -97,12 +107,14 @@ pub fn board_metrics(game : Game) -> (Int, Int, Int) {
 }
 
 ///|
+/// Sets the transient HUD message and its remaining lifetime.
 pub fn set_msg(game : Game, msg : String, ttl : Float) -> Unit {
   game.msg = msg
   game.msg_t = ttl
 }
 
 ///|
+/// Checks whether an active pointer is currently inside a rectangle.
 pub fn pointer_on_rect(
   x : Float,
   y : Float,
@@ -126,16 +138,19 @@ pub fn pointer_on_rect(
 }
 
 ///|
+/// Returns the number of non-mine cells in the current board.
 pub fn safe_cells_total(game : Game) -> Int {
   board_w * board_h - game.mine_count
 }
 
 ///|
+/// Returns how many flags are still available based on mine budget.
 pub fn flags_left(game : Game) -> Int {
   game.mine_count - game.flagged_count
 }
 
 ///|
+/// Returns remaining safe cells that still need to be revealed.
 pub fn unrevealed_safe_cells(game : Game) -> Int {
   let left : Int = safe_cells_total(game) - game.revealed_safe
   if left < 0 {
@@ -146,6 +161,7 @@ pub fn unrevealed_safe_cells(game : Game) -> Int {
 }
 
 ///|
+/// Returns board-clear progress as an integer percentage.
 pub fn clear_ratio_pct(game : Game) -> Int {
   let total : Int = safe_cells_total(game)
   if total <= 0 {
@@ -163,6 +179,7 @@ pub fn clear_ratio_pct(game : Game) -> Int {
 }
 
 ///|
+/// Computes final grade from score, elapsed time, mistakes, and lives left.
 pub fn compute_grade(
   score : Int,
   time_s : Int,
@@ -195,6 +212,7 @@ pub fn compute_grade(
 }
 
 ///|
+/// Returns the compact letter label for a grade.
 pub fn grade_name(grade : Grade) -> String {
   match grade {
     GradeS => "S"
@@ -206,6 +224,7 @@ pub fn grade_name(grade : Grade) -> String {
 }
 
 ///|
+/// Returns the themed title string for a grade.
 pub fn grade_title(grade : Grade) -> String {
   match grade {
     GradeS => "Neon Oracle"
