@@ -3,6 +3,10 @@ import {
   "tonyfettes/raylib/raygui",
 }
 
+warnings(
+  "+missing_doc",
+)
+
 options(
   "is-main": true,
 )

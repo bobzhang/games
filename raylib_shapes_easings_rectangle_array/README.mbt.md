@@ -1,21 +1,40 @@
-# Shapes Easings Rectangle Array
+# Easings Rectangle Array
 
-Demonstrates easing functions applied to an array of rectangles. A grid of red rectangles shrinks and rotates using circular-out and linear-in easing curves, creating a synchronized animation effect.
+This example demonstrates easing functions applied to a grid of rectangles that simultaneously shrink and rotate. When you run it, a 16x9 grid of red rectangles smoothly collapses to nothing while spinning 360 degrees, then waits for SPACE to replay.
 
 ## Build and Run
 
 ```bash
-cd examples && moon build --target native raylib_shapes_easings_rectangle_array/
-cd examples && ./_build/native/debug/build/raylib_shapes_easings_rectangle_array/raylib_shapes_easings_rectangle_array.exe
+moon build --target native raylib_shapes_easings_rectangle_array/
+./_build/native/debug/build/raylib_shapes_easings_rectangle_array/raylib_shapes_easings_rectangle_array.exe
 ```
 
 ## Controls
 
-- **Space**: Replay the animation after it completes
+- **SPACE** -- Replay the animation (after it completes)
 
-## Key Concepts
+## What It Demonstrates
 
-- Implements `ease_circ_out` and `ease_linear_in` easing functions from scratch
-- Animates width, height, and rotation of a 16x9 grid of rectangles over 240 frames
-- Uses `draw_rectangle_pro` with per-frame rotation and shrinking dimensions
-- State machine toggles between animating (state 0) and waiting for replay (state 1)
+- **`ease_circ_out`** -- Circular easing applied uniformly to both width and height of all 144 rectangles, creating a smooth shrinking effect.
+- **`ease_linear_in`** -- Linear interpolation for rotation, providing constant angular velocity while the rectangles shrink.
+- **`draw_rectangle_pro`** -- Draws each rectangle with rotation around its center origin point.
+- **`FixedArray` for parallel arrays** -- Uses four `FixedArray[Float]` arrays (x, y, width, height) to store the state of all rectangles, demonstrating efficient fixed-size array usage in MoonBit.
+- **Grid layout computation** -- Positions are pre-calculated using nested loops for a uniform grid.
+
+## Public API Reference
+
+### Package `raylib_shapes_easings_rectangle_array`
+
+> Single-package example.
+
+No public API -- self-contained main function.
+
+## Architecture
+
+The program creates a 16x9 grid of 50x50 rectangles filling the 800x450 window. During state 0, each frame increments a counter and applies `ease_circ_out` to shrink all rectangle widths and heights from 50 to 0 over 240 frames, while `ease_linear_in` rotates them 360 degrees. When all rectangles reach zero size, the program transitions to state 1 and waits for SPACE to reset. Each rectangle is drawn with `draw_rectangle_pro` using its center as the origin for centered rotation.
+
+## Key Takeaways
+
+- Applying the same easing function to many objects simultaneously creates visually coordinated animations without per-object timing logic.
+- `FixedArray` is appropriate when the number of elements is known at initialization and does not change, providing predictable memory usage.
+- Combining two different easing curves (circular for size, linear for rotation) on the same objects produces interesting compound motion effects.
