@@ -4,3 +4,7 @@ import {
   "tonyfettes/raylib-examples/raylib_bomberman_1983_lite/internal/score",
   "tonyfettes/raylib-examples/raylib_bomberman_1983_lite/internal/types",
 }
+
+warnings(
+  "+missing_doc",
+)

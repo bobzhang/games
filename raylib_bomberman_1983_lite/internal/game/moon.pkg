@@ -7,3 +7,7 @@ import {
   "tonyfettes/raylib-examples/raylib_bomberman_1983_lite/internal/types",
   "tonyfettes/raylib-examples/raylib_bomberman_1983_lite/internal/world",
 }
+
+warnings(
+  "+missing_doc",
+)
