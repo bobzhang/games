@@ -1,4 +1,5 @@
 ///|
+/// High-level state of the dragon boat race flow.
 pub(all) enum GameState {
   Title
   Play
@@ -7,6 +8,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Per-frame input snapshot consumed by game logic.
 pub(all) struct Input {
   mut steer : Float
   mut paddle_pressed : Bool
@@ -18,6 +20,7 @@ pub(all) struct Input {
 }
 
 ///|
+/// Spawned hazard instance on the river track.
 pub(all) struct Hazard {
   mut active : Bool
   mut kind : Int
@@ -29,6 +32,7 @@ pub(all) struct Hazard {
 }
 
 ///|
+/// AI competitor boat state.
 pub(all) struct Rival {
   mut active : Bool
   mut id : Int
@@ -39,6 +43,7 @@ pub(all) struct Rival {
 }
 
 ///|
+/// Full mutable state for one dragon boat race session.
 pub(all) struct Game {
   input : Input
   hazards : Array[Hazard]
@@ -70,6 +75,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a default empty input snapshot.
 pub fn Input::new() -> Input {
   {
     steer: 0.0,
@@ -83,6 +89,7 @@ pub fn Input::new() -> Input {
 }
 
 ///|
+/// Returns an inactive hazard placeholder.
 pub fn Hazard::new() -> Hazard {
   {
     active: false,
@@ -96,11 +103,13 @@ pub fn Hazard::new() -> Hazard {
 }
 
 ///|
+/// Returns an inactive rival placeholder.
 pub fn Rival::new() -> Rival {
   { active: false, id: 0, lane: 0.0, dist: 0.0, speed_bias: 0.0, stroke_t: 0.0 }
 }
 
 ///|
+/// Allocates a new race state with prebuilt hazard and rival pools.
 pub fn Game::new() -> Game {
   {
     input: Input::new(),

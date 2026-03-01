@@ -920,6 +920,7 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Renders river world, racers, HUD, and state overlays for one frame.
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_background(game)
   draw_river_surface(game)

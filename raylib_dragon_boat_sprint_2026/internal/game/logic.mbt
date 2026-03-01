@@ -486,6 +486,7 @@ fn tick_message(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances one frame of race simulation, input, hazards, and ranking.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   sample_input(game)
   game.ui_t = game.ui_t + dt
