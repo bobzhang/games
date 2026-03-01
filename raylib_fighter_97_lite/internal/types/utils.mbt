@@ -1,4 +1,4 @@
-///|
+/// Returns the absolute value of `v`.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -7,7 +7,7 @@ pub fn absf(v : Float) -> Float {
   }
 }
 
-///|
+/// Clamps a float to the inclusive `[low, high]` range.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
     low
@@ -18,7 +18,7 @@ pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   }
 }
 
-///|
+/// Clamps an integer to the inclusive `[low, high]` range.
 pub fn clampi(v : Int, low : Int, high : Int) -> Int {
   if v < low {
     low
@@ -29,12 +29,12 @@ pub fn clampi(v : Int, low : Int, high : Int) -> Int {
   }
 }
 
-///|
+/// Converts a double literal to `Float`.
 pub fn f(v : Double) -> Float {
   Float::from_double(v)
 }
 
-///|
+/// Returns the smaller of two floats.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -43,7 +43,7 @@ pub fn minf(a : Float, b : Float) -> Float {
   }
 }
 
-///|
+/// Returns the larger of two floats.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -52,12 +52,12 @@ pub fn maxf(a : Float, b : Float) -> Float {
   }
 }
 
-///|
+/// Linearly interpolates from `a` to `b` by `t`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t
 }
 
-///|
+/// Moves `current` toward `target` by at most `delta`.
 pub fn approachf(current : Float, target : Float, delta : Float) -> Float {
   if current < target {
     minf(current + delta, target)
@@ -66,7 +66,7 @@ pub fn approachf(current : Float, target : Float, delta : Float) -> Float {
   }
 }
 
-///|
+/// Advances and returns the PRNG state.
 pub fn rand_next(game : Game) -> Int {
   let mut x = game.rng_state
   x = x ^ (x << 13)
@@ -79,7 +79,7 @@ pub fn rand_next(game : Game) -> Int {
   x
 }
 
-///|
+/// Returns a random integer in `[low, high]`.
 pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
   if high <= low {
     low
@@ -88,23 +88,23 @@ pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
   }
 }
 
-///|
+/// Returns a random float in `[low, high]`.
 pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
   let t = Float::from_int(rand_next(game) % 10000) / 10000.0
   low + (high - low) * t
 }
 
-///|
+/// Returns true with probability `p`.
 pub fn rand_chance(game : Game, p : Float) -> Bool {
   rand_rangef(game, 0.0, 1.0) < p
 }
 
-///|
+/// Returns archetype data for a fighter's selected character.
 pub fn fighter_archetype(game : Game, fighter : Fighter) -> CharacterArchetype {
   game.roster[clampi(fighter.archetype_index, 0, game.roster.length() - 1)]
 }
 
-///|
+/// Returns the other fighter slot index.
 pub fn other_slot(slot : Int) -> Int {
   if slot == 0 {
     1
@@ -113,7 +113,7 @@ pub fn other_slot(slot : Int) -> Int {
   }
 }
 
-///|
+/// Converts facing sign int to normalized float direction.
 pub fn facing_sign(facing : Int) -> Float {
   if facing < 0 {
     -1.0
@@ -122,17 +122,17 @@ pub fn facing_sign(facing : Int) -> Float {
   }
 }
 
-///|
+/// Clamps x-position to legal stage bounds.
 pub fn stage_clamp_x(x : Float) -> Float {
   clampf(x, stage_left_x + 24.0, stage_right_x - 24.0)
 }
 
-///|
+/// Returns absolute horizontal distance between fighters.
 pub fn fighter_distance_x(a : Fighter, b : Fighter) -> Float {
   absf(a.x - b.x)
 }
 
-///|
+/// Returns current hurtbox rectangle for a fighter pose.
 pub fn hurtbox_for(fighter : Fighter) -> @raylib.Rectangle {
   if fighter.crouching && fighter.on_ground {
     @raylib.Rectangle::new(
@@ -151,7 +151,7 @@ pub fn hurtbox_for(fighter : Fighter) -> @raylib.Rectangle {
   }
 }
 
-///|
+/// Returns attack hitbox rectangle for fighter and move.
 pub fn attack_hitbox_for(fighter : Fighter, mv : MoveSpec) -> @raylib.Rectangle {
   let fx = facing_sign(fighter.facing)
   @raylib.Rectangle::new(
@@ -162,7 +162,7 @@ pub fn attack_hitbox_for(fighter : Fighter, mv : MoveSpec) -> @raylib.Rectangle 
   )
 }
 
-///|
+/// Draws text with a black shadow offset.
 pub fn draw_shadow_text(
   text : String,
   x : Int,
@@ -174,7 +174,7 @@ pub fn draw_shadow_text(
   @raylib.draw_text(text, x, y, size, color)
 }
 
-///|
+/// Draws centered text with a black shadow offset.
 pub fn draw_center_shadow_text(
   text : String,
   x : Int,
@@ -186,7 +186,7 @@ pub fn draw_center_shadow_text(
   draw_shadow_text(text, x - w / 2, y, size, color)
 }
 
-///|
+/// Returns timer color based on remaining round time.
 pub fn countdown_color(timer : Float) -> @raylib.Color {
   if timer > 20.0 {
     @raylib.raywhite
@@ -197,12 +197,12 @@ pub fn countdown_color(timer : Float) -> @raylib.Color {
   }
 }
 
-///|
+/// Returns total guard capacity for an archetype.
 pub fn fighter_total_guard(archetype : CharacterArchetype) -> Int {
   guard_max + archetype.max_guard_bonus
 }
 
-///|
+/// Returns a short debug label for an action enum.
 pub fn action_name(action : Action) -> String {
   if action == ActionIdle {
     "idle"
@@ -239,7 +239,7 @@ pub fn action_name(action : Action) -> String {
   }
 }
 
-///|
+/// Adds super meter scaled by archetype gain multiplier.
 pub fn add_meter(
   fighter : Fighter,
   value : Int,
@@ -250,7 +250,7 @@ pub fn add_meter(
   fighter.super_meter = clampi(next, 0, super_max)
 }
 
-///|
+/// Restores guard meter up to archetype capacity.
 pub fn add_guard(
   fighter : Fighter,
   value : Float,
@@ -260,7 +260,7 @@ pub fn add_guard(
   fighter.guard_meter = clampi(fighter.guard_meter + value.to_int(), 0, target)
 }
 
-///|
+/// Resets transient fighter fields for a new round.
 pub fn reset_fighter_round_state(fighter : Fighter) -> Unit {
   fighter.vx = 0.0
   fighter.vy = 0.0
@@ -287,19 +287,19 @@ pub fn reset_fighter_round_state(fighter : Fighter) -> Unit {
   fighter.input = InputState::new()
 }
 
-///|
+/// Returns normalized health ratio in `[0,1]`.
 pub fn health_ratio(fighter : Fighter) -> Float {
   Float::from_int(clampi(fighter.health, 0, health_max)) /
   Float::from_int(health_max)
 }
 
-///|
+/// Returns normalized super meter ratio in `[0,1]`.
 pub fn meter_ratio(fighter : Fighter) -> Float {
   Float::from_int(clampi(fighter.super_meter, 0, super_max)) /
   Float::from_int(super_max)
 }
 
-///|
+/// Returns normalized guard ratio in `[0,1]`.
 pub fn guard_ratio(fighter : Fighter, archetype : CharacterArchetype) -> Float {
   let total = fighter_total_guard(archetype)
   if total <= 0 {
@@ -310,12 +310,12 @@ pub fn guard_ratio(fighter : Fighter, archetype : CharacterArchetype) -> Float {
   }
 }
 
-///|
+/// Returns whether throw input was pressed this frame.
 pub fn throw_input_pressed(input : InputState) -> Bool {
   (input.lp_pressed && input.lk_down) || (input.lk_pressed && input.lp_down)
 }
 
-///|
+/// Returns whether fighter can currently be thrown.
 pub fn fighter_is_throw_vulnerable(fighter : Fighter) -> Bool {
   fighter.on_ground &&
   fighter.invuln <= 0 &&
@@ -328,7 +328,7 @@ pub fn fighter_is_throw_vulnerable(fighter : Fighter) -> Bool {
   fighter.action != ActionThrow
 }
 
-///|
+/// Formats frame advantage with explicit sign.
 pub fn signed_frames_text(frames : Int) -> String {
   if frames > 0 {
     "+\{frames}"
@@ -337,7 +337,7 @@ pub fn signed_frames_text(frames : Int) -> String {
   }
 }
 
-///|
+/// Sets a training-mode note with timed display.
 pub fn set_training_note(game : Game, text : String) -> Unit {
   if not(game.mode_training) {
     return
@@ -346,7 +346,7 @@ pub fn set_training_note(game : Game, text : String) -> Unit {
   game.training_adv_timer = training_info_duration
 }
 
-///|
+/// Writes a formatted frame-advantage training note.
 pub fn set_training_frame_adv(
   game : Game,
   attacker_slot : Int,
@@ -359,29 +359,29 @@ pub fn set_training_frame_adv(
   )
 }
 
-///|
+/// Returns horizontal screen center as float.
 pub fn screen_center_xf() -> Float {
   Float::from_int(screen_width) * 0.5
 }
 
-///|
+/// Returns vertical screen center as float.
 pub fn screen_center_yf() -> Float {
   Float::from_int(screen_height) * 0.5
 }
 
-///|
+/// Projects world x to screen x using camera transform.
 pub fn camera_project_x(game : Game, x : Float) -> Float {
   let cx = screen_center_xf()
   (x - cx) * game.camera_zoom + cx + game.camera_x
 }
 
-///|
+/// Projects world y to screen y using camera transform.
 pub fn camera_project_y(game : Game, y : Float) -> Float {
   let cy = screen_center_yf()
   (y - cy) * game.camera_zoom + cy + game.camera_y
 }
 
-///|
+/// Projects world size to screen size using camera zoom.
 pub fn camera_project_size(game : Game, size : Float) -> Float {
   size * game.camera_zoom
 }
