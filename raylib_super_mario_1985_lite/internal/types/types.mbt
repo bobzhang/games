@@ -1,4 +1,4 @@
-///|
+/// Aggregated input state for one frame.
 pub(all) struct Input {
   move_left : Bool
   move_right : Bool
@@ -8,7 +8,7 @@ pub(all) struct Input {
   restart : Bool
 }
 
-///|
+/// Returns a neutral input state with all controls released.
 pub fn Input::none() -> Input {
   {
     move_left: false,
@@ -20,7 +20,7 @@ pub fn Input::none() -> Input {
   }
 }
 
-///|
+/// Mutable player runtime state.
 pub(all) struct Player {
   mut x : Float
   mut y : Float
@@ -38,7 +38,7 @@ pub(all) struct Player {
   mut flag_phase : Int
 }
 
-///|
+/// Creates a player with default movement and score state.
 pub fn Player::new() -> Player {
   {
     x: player_start_x,
@@ -58,7 +58,7 @@ pub fn Player::new() -> Player {
   }
 }
 
-///|
+/// Runtime enemy record.
 pub(all) struct Enemy {
   mut active : Bool
   mut squashed : Bool
@@ -70,7 +70,7 @@ pub(all) struct Enemy {
   mut dir : Int
 }
 
-///|
+/// Creates an inactive enemy slot.
 pub fn Enemy::inactive() -> Enemy {
   {
     active: false,
@@ -84,7 +84,7 @@ pub fn Enemy::inactive() -> Enemy {
   }
 }
 
-///|
+/// Creates an active enemy at position `x,y` moving in `dir`.
 pub fn Enemy::spawn(x : Float, y : Float, dir : Int) -> Enemy {
   {
     active: true,
@@ -98,7 +98,7 @@ pub fn Enemy::spawn(x : Float, y : Float, dir : Int) -> Enemy {
   }
 }
 
-///|
+/// Runtime coin record.
 pub(all) struct Coin {
   mut active : Bool
   x : Float
@@ -107,17 +107,17 @@ pub(all) struct Coin {
   mut phase : Float
 }
 
-///|
+/// Creates an inactive coin slot.
 pub fn Coin::inactive() -> Coin {
   { active: false, x: 0.0, y: 0.0, base_y: 0.0, phase: 0.0 }
 }
 
-///|
+/// Creates an active coin with initial bobbing phase.
 pub fn Coin::spawn(x : Float, y : Float, phase : Float) -> Coin {
   { active: true, x, y, base_y: y, phase }
 }
 
-///|
+/// Runtime particle record used by simple burst effects.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -130,7 +130,7 @@ pub(all) struct Particle {
   mut color : @raylib.Color
 }
 
-///|
+/// Creates an inactive particle slot.
 pub fn Particle::inactive() -> Particle {
   {
     active: false,
@@ -145,7 +145,7 @@ pub fn Particle::inactive() -> Particle {
   }
 }
 
-///|
+/// Global mutable game state for the Mario-lite loop.
 pub(all) struct Game {
   mut state : Int
   mut elapsed : Float
@@ -165,7 +165,7 @@ pub(all) struct Game {
   particles : Array[Particle]
 }
 
-///|
+/// Creates a fresh game state with allocated tile/entity pools.
 pub fn Game::new() -> Game {
   {
     state: state_title,

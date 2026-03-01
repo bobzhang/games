@@ -93,7 +93,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
   )
 }
 
-///|
+/// Draws HUD plus title/win/game-over overlays.
 pub fn draw_ui(game : @types.Game) -> Unit {
   draw_hud(game)
 

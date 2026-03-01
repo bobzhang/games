@@ -4,3 +4,5 @@ import {
   "tonyfettes/raylib-examples/raylib_super_mario_1985_lite/internal/particles",
   "tonyfettes/raylib-examples/raylib_super_mario_1985_lite/internal/types",
 }
+
+warnings = "+missing_doc"
