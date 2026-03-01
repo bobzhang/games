@@ -2,6 +2,4 @@ import {
   "moonbitlang/core/math",
 }
 
-warnings(
-  "+missing_doc",
-)
+warnings = "+missing_doc"

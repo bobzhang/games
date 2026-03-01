@@ -3,6 +3,4 @@ import {
   "tonyfettes/raylib-examples/raylib_shadow_puppet_theater_2026/internal/types",
 }
 
-warnings(
-  "+missing_doc",
-)
+warnings = "+missing_doc"
