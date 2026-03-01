@@ -1,4 +1,5 @@
 ///|
+/// Stores runtime data for Wagon.
 pub(all) struct Wagon {
   mut x : Float
   mut y : Float
@@ -8,6 +9,7 @@ pub(all) struct Wagon {
 }
 
 ///|
+/// Stores runtime data for Raider.
 pub(all) struct Raider {
   mut active : Bool
   mut kind : Int
@@ -25,6 +27,7 @@ pub(all) struct Raider {
 }
 
 ///|
+/// Stores runtime data for Bullet.
 pub(all) struct Bullet {
   mut active : Bool
   mut x : Float
@@ -36,6 +39,7 @@ pub(all) struct Bullet {
 }
 
 ///|
+/// Stores runtime data for Dust.
 pub(all) struct Dust {
   mut active : Bool
   mut x : Float
@@ -48,6 +52,7 @@ pub(all) struct Dust {
 }
 
 ///|
+/// Stores runtime data for Player.
 pub(all) struct Player {
   mut x : Float
   mut y : Float
@@ -65,6 +70,7 @@ pub(all) struct Player {
 }
 
 ///|
+/// Aggregates all mutable state needed to run one game session.
 pub(all) struct Game {
   wagons : Array[Wagon]
   raiders : Array[Raider]
@@ -101,6 +107,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a default Wagon value for a new session.
 pub fn Wagon::new(index : Int) -> Wagon {
   {
     x: wagon_slot_x(index),
@@ -112,6 +119,7 @@ pub fn Wagon::new(index : Int) -> Wagon {
 }
 
 ///|
+/// Creates a default Raider value for a new session.
 pub fn Raider::new() -> Raider {
   {
     active: false,
@@ -131,11 +139,13 @@ pub fn Raider::new() -> Raider {
 }
 
 ///|
+/// Creates a default Bullet value for a new session.
 pub fn Bullet::new() -> Bullet {
   { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, life: 0.0, dmg: 0.0 }
 }
 
 ///|
+/// Creates a default Dust value for a new session.
 pub fn Dust::new() -> Dust {
   {
     active: false,
@@ -150,6 +160,7 @@ pub fn Dust::new() -> Dust {
 }
 
 ///|
+/// Creates a default Player value for a new session.
 pub fn Player::new() -> Player {
   {
     x: caravan_center_x - perimeter_outer_rx * 0.9,
@@ -169,6 +180,7 @@ pub fn Player::new() -> Player {
 }
 
 ///|
+/// Creates a default Game value for a new session.
 pub fn Game::new() -> Game {
   let wagons = Array::makei(wagon_count, fn(i) { Wagon::new(i) })
   let raiders = Array::makei(max_raiders, fn(_i) { Raider::new() })
