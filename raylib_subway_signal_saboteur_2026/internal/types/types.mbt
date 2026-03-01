@@ -1,4 +1,5 @@
 ///|
+/// High-level phase of the game loop.
 pub(all) enum GameState {
   Title
   Play
@@ -6,6 +7,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Tile type stored in the subway board grid.
 pub(all) enum Tile {
   Void
   Floor
@@ -14,6 +16,7 @@ pub(all) enum Tile {
 } derive(Eq)
 
 ///|
+/// Current AI behavior mode for an inspector.
 pub(all) enum InspectorMode {
   Patrol
   Hunt
@@ -21,6 +24,7 @@ pub(all) enum InspectorMode {
 } derive(Eq)
 
 ///|
+/// Visual effect category for pooled particles.
 pub(all) enum ParticleKind {
   Spark
   Gold
@@ -28,6 +32,7 @@ pub(all) enum ParticleKind {
 } derive(Eq)
 
 ///|
+/// Lane color tag used by trains and route goals.
 pub(all) enum TrainColor {
   Red
   Blue
@@ -35,6 +40,7 @@ pub(all) enum TrainColor {
 } derive(Eq)
 
 ///|
+/// Grid actor with tile coordinates and interpolation state.
 pub(all) struct Actor {
   mut x : Int
   mut y : Int
@@ -49,6 +55,7 @@ pub(all) struct Actor {
 }
 
 ///|
+/// Moving train instance tracked on a lane and junction path.
 pub(all) struct Train {
   mut active : Bool
   mut x : Float
@@ -61,6 +68,7 @@ pub(all) struct Train {
 }
 
 ///|
+/// Inspector entity that patrols and can be stunned by EMP.
 pub(all) struct Inspector {
   mut active : Bool
   body : Actor
@@ -76,6 +84,7 @@ pub(all) struct Inspector {
 }
 
 ///|
+/// Particle instance used for score, spark, and smoke effects.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -88,6 +97,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// Complete mutable game state for one subway run.
 pub(all) struct Game {
   map : Array[Tile]
   switch_state : Array[Int]
@@ -128,6 +138,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a player actor initialized at the configured start cell.
 pub fn Actor::new() -> Actor {
   {
     x: start_x,
@@ -144,6 +155,7 @@ pub fn Actor::new() -> Actor {
 }
 
 ///|
+/// Creates an inactive train entry for the train object pool.
 pub fn Train::new() -> Train {
   {
     active: false,
@@ -158,6 +170,7 @@ pub fn Train::new() -> Train {
 }
 
 ///|
+/// Creates an inactive inspector with default patrol parameters.
 pub fn Inspector::new() -> Inspector {
   {
     active: false,
@@ -175,6 +188,7 @@ pub fn Inspector::new() -> Inspector {
 }
 
 ///|
+/// Creates an inactive particle entry for the particle pool.
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -189,6 +203,7 @@ pub fn Particle::new() -> Particle {
 }
 
 ///|
+/// Creates a new game state with initialized pools and counters.
 pub fn Game::new() -> Game {
   {
     map: Array::make(grid_w * grid_h, Void),
