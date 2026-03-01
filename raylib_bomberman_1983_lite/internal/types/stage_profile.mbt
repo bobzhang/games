@@ -1,4 +1,4 @@
-///|
+/// Stage metadata and visual tuning for a campaign mission.
 pub(all) struct StageProfile {
   title : String
   subtitle : String
@@ -11,7 +11,7 @@ pub(all) struct StageProfile {
   ui_accent : @raylib.Color
 }
 
-///|
+/// Creates a stage profile with gameplay and palette parameters.
 pub fn StageProfile::new(
   title : String,
   subtitle : String,
@@ -36,7 +36,7 @@ pub fn StageProfile::new(
   }
 }
 
-///|
+/// Returns baseline profile values used as defaults.
 pub fn default_stage_profile() -> StageProfile {
   StageProfile::new(
     "Border Skirmish",
