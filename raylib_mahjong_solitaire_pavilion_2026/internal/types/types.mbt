@@ -1,4 +1,5 @@
 ///|
+/// High-level phase of the mahjong-solitaire campaign.
 pub(all) enum GameState {
   Title
   Play
@@ -8,6 +9,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Directional input used for cursor movement repeat logic.
 pub(all) enum Dir {
   DirNone
   Left
@@ -17,6 +19,7 @@ pub(all) enum Dir {
 } derive(Eq)
 
 ///|
+/// Undo snapshot for one removed pair action.
 pub(all) struct UndoPair {
   valid : Bool
   x1 : Int
@@ -32,6 +35,7 @@ pub(all) struct UndoPair {
 }
 
 ///|
+/// Pooled particle used for tile-removal effects.
 pub(all) struct Spark {
   mut active : Bool
   mut x : Float
@@ -44,6 +48,7 @@ pub(all) struct Spark {
 }
 
 ///|
+/// Full mutable game state for board logic, campaign progress, and input.
 pub(all) struct Game {
   active : Array[Bool]
   cells : Array[Int]
@@ -93,6 +98,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a new campaign state with default buffers and counters.
 pub fn Game::new() -> Game {
   let undo_arr : Array[UndoPair] = Array::makei(max_undos, fn(_i) {
     {
