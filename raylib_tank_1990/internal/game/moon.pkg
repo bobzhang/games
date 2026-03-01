@@ -7,3 +7,5 @@ import {
   "tonyfettes/raylib-examples/raylib_tank_1990/internal/types",
   "tonyfettes/raylib-examples/raylib_tank_1990/internal/world",
 }
+
+warnings = "+missing_doc"
