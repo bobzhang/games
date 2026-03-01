@@ -954,6 +954,7 @@ fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances the game simulation by one frame using the current input state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   update_input(game)
 
