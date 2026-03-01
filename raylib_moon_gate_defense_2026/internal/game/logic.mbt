@@ -852,7 +852,7 @@ fn update_game_over_state(game : @types.Game) -> Unit {
   }
 }
 
-///|
+/// Advances one simulation step, including input, state transitions, and combat updates.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   update_input(game)
   game.time_s = game.time_s + dt
