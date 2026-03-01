@@ -247,6 +247,7 @@ fn start_next_stage(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reset state variables to the title-screen scene.
 pub fn init_title_scene(game : @types.Game) -> Unit {
   game.state = @types.Title
   game.stage_index = 0
@@ -545,6 +546,7 @@ fn update_victory_state(game : @types.Game, _dt : Float) -> Unit {
 }
 
 ///|
+/// Process input and advance one frame of game state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   // Handle input based on current state
   match game.state {

@@ -967,6 +967,7 @@ fn draw_victory_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draw background, world, HUD, and the active state overlay.
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_background(game)
 
