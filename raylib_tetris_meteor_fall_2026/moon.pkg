@@ -8,3 +8,7 @@ import {
 options(
   "is-main": true,
 )
+
+warnings(
+  "+missing_doc",
+)

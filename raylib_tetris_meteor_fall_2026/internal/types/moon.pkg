@@ -1,3 +1,7 @@
 import {
   "tonyfettes/raylib",
 }
+
+warnings(
+  "+missing_doc",
+)
