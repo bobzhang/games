@@ -810,6 +810,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances one frame of delivery logic, input handling, and game-state flow.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   if game.state == @types.state_title {
     update_title_input(game)
