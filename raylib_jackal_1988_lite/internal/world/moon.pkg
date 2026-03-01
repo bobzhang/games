@@ -1,3 +1,5 @@
 import {
   "tonyfettes/raylib-examples/raylib_jackal_1988_lite/internal/types",
 }
+
+warnings = "+missing_doc"

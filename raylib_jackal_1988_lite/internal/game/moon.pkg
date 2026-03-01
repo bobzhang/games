@@ -8,3 +8,5 @@ import {
   "tonyfettes/raylib-examples/raylib_jackal_1988_lite/internal/types",
   "tonyfettes/raylib-examples/raylib_jackal_1988_lite/internal/world",
 }
+
+warnings = "+missing_doc"
