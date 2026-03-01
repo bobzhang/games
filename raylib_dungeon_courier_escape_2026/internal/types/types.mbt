@@ -1,4 +1,5 @@
 ///|
+/// Enumerates high-level states in the game flow.
 pub(all) enum GameState {
   Title
   Play
@@ -6,6 +7,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Stores runtime data for Player.
 pub(all) struct Player {
   mut x : Float
   mut y : Float
@@ -18,6 +20,7 @@ pub(all) struct Player {
 }
 
 ///|
+/// Stores runtime data for Parcel.
 pub(all) struct Parcel {
   mut active : Bool
   mut delivered : Bool
@@ -27,6 +30,7 @@ pub(all) struct Parcel {
 }
 
 ///|
+/// Stores runtime data for ExitMarker.
 pub(all) struct ExitMarker {
   active : Bool
   x : Float
@@ -35,6 +39,7 @@ pub(all) struct ExitMarker {
 }
 
 ///|
+/// Stores runtime data for Guard.
 pub(all) struct Guard {
   mut active : Bool
   mut x : Float
@@ -57,6 +62,7 @@ pub(all) struct Guard {
 }
 
 ///|
+/// Stores runtime data for Trap.
 pub(all) struct Trap {
   mut active : Bool
   mut x : Float
@@ -67,6 +73,7 @@ pub(all) struct Trap {
 }
 
 ///|
+/// Stores runtime data for Smoke.
 pub(all) struct Smoke {
   mut active : Bool
   mut x : Float
@@ -76,6 +83,7 @@ pub(all) struct Smoke {
 }
 
 ///|
+/// Stores runtime data for InputState.
 pub(all) struct InputState {
   mut move_x : Float
   mut move_y : Float
@@ -87,6 +95,7 @@ pub(all) struct InputState {
 }
 
 ///|
+/// Aggregates all mutable state needed to run one game session.
 pub(all) struct Game {
   player : Player
   parcels : Array[Parcel]
@@ -112,6 +121,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a default Player value for a new session.
 pub fn Player::new() -> Player {
   {
     x: player_spawn_x(),
@@ -126,16 +136,19 @@ pub fn Player::new() -> Player {
 }
 
 ///|
+/// Creates a default Parcel value for a new session.
 pub fn Parcel::new() -> Parcel {
   { active: false, delivered: false, x: 0.0, y: 0.0, pulse: 0.0 }
 }
 
 ///|
+/// Creates a default ExitMarker value for a new session.
 pub fn ExitMarker::new(x : Float, y : Float) -> ExitMarker {
   { active: true, x, y, radius: exit_radius }
 }
 
 ///|
+/// Creates a default Guard value for a new session.
 pub fn Guard::new() -> Guard {
   {
     active: false,
@@ -160,16 +173,19 @@ pub fn Guard::new() -> Guard {
 }
 
 ///|
+/// Creates a default Trap value for a new session.
 pub fn Trap::new() -> Trap {
   { active: false, x: 0.0, y: 0.0, radius: 0.0, blink_t: 0.0, cooldown: 0.0 }
 }
 
 ///|
+/// Creates a default Smoke value for a new session.
 pub fn Smoke::new() -> Smoke {
   { active: false, x: 0.0, y: 0.0, radius: smoke_radius_base, life: 0.0 }
 }
 
 ///|
+/// Creates a default InputState value for a new session.
 pub fn InputState::new() -> InputState {
   {
     move_x: 0.0,
@@ -183,6 +199,7 @@ pub fn InputState::new() -> InputState {
 }
 
 ///|
+/// Creates a default Game value for a new session.
 pub fn Game::new() -> Game {
   let exits = Array::makei(max_exits, fn(i) {
     let p = default_exit_pos(i)

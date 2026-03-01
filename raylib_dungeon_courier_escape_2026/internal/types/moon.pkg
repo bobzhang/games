@@ -3,6 +3,4 @@ import {
   "tonyfettes/raylib",
 }
 
-warnings(
-  "+missing_doc",
-)
+warnings = "+missing_doc"
