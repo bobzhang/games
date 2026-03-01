@@ -864,6 +864,7 @@ fn draw_title_preview(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Renders the full frame for the current game state.
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(8, 22, 36, 255))
   draw_ocean_background(game)

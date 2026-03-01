@@ -1,4 +1,5 @@
 ///|
+/// Clamps an integer value to the inclusive range `[lo, hi]`.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -10,6 +11,7 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Clamps a float value to the inclusive range `[lo, hi]`.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -21,6 +23,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -30,6 +33,7 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two float values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -39,6 +43,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two float values.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -48,21 +53,25 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the square root of a non-negative float.
 pub fn sqrtf(v : Float) -> Float {
   v.sqrt()
 }
 
 ///|
+/// Returns the sine of an angle in radians.
 pub fn sinf(v : Float) -> Float {
   Float::from_double(@math.sin(v.to_double()))
 }
 
 ///|
+/// Returns the cosine of an angle in radians.
 pub fn cosf(v : Float) -> Float {
   Float::from_double(@math.cos(v.to_double()))
 }
 
 ///|
+/// Returns squared distance between two 2D points.
 pub fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx = x1 - x0
   let dy = y1 - y0
@@ -70,92 +79,110 @@ pub fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Returns a pseudo-random float sampled from `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let r = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns geometry information for arena left.
 pub fn arena_left() -> Float {
   Float::from_int(arena_x0)
 }
 
 ///|
+/// Returns geometry information for arena right.
 pub fn arena_right() -> Float {
   Float::from_int(arena_x1)
 }
 
 ///|
+/// Returns geometry information for arena top.
 pub fn arena_top() -> Float {
   Float::from_int(arena_y0)
 }
 
 ///|
+/// Returns geometry information for arena bottom.
 pub fn arena_bottom() -> Float {
   Float::from_int(arena_y1)
 }
 
 ///|
+/// Returns the touch or HUD hit area for title start button rect.
 pub fn title_start_button_rect() -> (Int, Int, Int, Int) {
   (screen_w / 2 - 180, screen_h / 2 + 112, 360, 72)
 }
 
 ///|
+/// Returns the touch or HUD hit area for result restart button rect.
 pub fn result_restart_button_rect() -> (Int, Int, Int, Int) {
   (screen_w / 2 - 190, screen_h / 2 + 84, 180, 64)
 }
 
 ///|
+/// Returns the touch or HUD hit area for result next button rect.
 pub fn result_next_button_rect() -> (Int, Int, Int, Int) {
   (screen_w / 2 + 10, screen_h / 2 + 84, 180, 64)
 }
 
 ///|
+/// Returns the touch or HUD hit area for result title button rect.
 pub fn result_title_button_rect() -> (Int, Int, Int, Int) {
   (screen_w / 2 - 110, screen_h / 2 + 160, 220, 52)
 }
 
 ///|
+/// Returns the touch or HUD hit area for mobile left btn.
 pub fn mobile_left_btn() -> (Int, Int, Int, Int) {
   (34, screen_h - 146, 66, 66)
 }
 
 ///|
+/// Returns the touch or HUD hit area for mobile right btn.
 pub fn mobile_right_btn() -> (Int, Int, Int, Int) {
   (182, screen_h - 146, 66, 66)
 }
 
 ///|
+/// Returns the touch or HUD hit area for mobile up btn.
 pub fn mobile_up_btn() -> (Int, Int, Int, Int) {
   (108, screen_h - 220, 66, 66)
 }
 
 ///|
+/// Returns the touch or HUD hit area for mobile down btn.
 pub fn mobile_down_btn() -> (Int, Int, Int, Int) {
   (108, screen_h - 72, 66, 66)
 }
 
 ///|
+/// Returns the touch or HUD hit area for mobile sonar btn.
 pub fn mobile_sonar_btn() -> (Int, Int, Int, Int) {
   (screen_w - 184, screen_h - 152, 148, 66)
 }
 
 ///|
+/// Returns the touch or HUD hit area for mobile boost btn.
 pub fn mobile_boost_btn() -> (Int, Int, Int, Int) {
   (screen_w - 184, screen_h - 76, 148, 58)
 }
 
 ///|
+/// Returns the touch or HUD hit area for mobile restart btn.
 pub fn mobile_restart_btn() -> (Int, Int, Int, Int) {
   (screen_w - 148, 20, 128, 46)
 }
 
 ///|
+/// Returns world-space coordinates for in hot zone xy.
 pub fn in_hot_zone_xy(x : Float, y : Float) -> Bool {
   dist2(x, y, hot_zone_x, hot_zone_y) <= hot_zone_r * hot_zone_r
 }
 
 ///|
+/// Returns the rectangle used for point in rect.
 pub fn point_in_rect(
   x : Float,
   y : Float,
@@ -172,6 +199,7 @@ pub fn point_in_rect(
 }
 
 ///|
+/// Returns the rectangle used for pointer on rect.
 pub fn pointer_on_rect(
   mx : Float,
   my : Float,
@@ -195,6 +223,7 @@ pub fn pointer_on_rect(
 }
 
 ///|
+/// Returns AI or spawn-planning data for nearest undetected target.
 pub fn nearest_undetected_target(game : Game) -> (Float, Float, Bool) {
   let mut best_x = game.sub_x
   let mut best_y = game.sub_y
@@ -216,6 +245,7 @@ pub fn nearest_undetected_target(game : Game) -> (Float, Float, Bool) {
 }
 
 ///|
+/// Returns a derived gameplay metric for lose reason text.
 pub fn lose_reason_text(game : Game) -> String {
   match game.lose_reason {
     Hull => "Hull failure after mine impact"
