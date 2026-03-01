@@ -1,8 +1,8 @@
 import {
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/raylib_super_mario_1985_lite/game",
-  "tonyfettes/raylib-examples/raylib_super_mario_1985_lite/render",
-  "tonyfettes/raylib-examples/raylib_super_mario_1985_lite/types",
+  "tonyfettes/raylib-examples/raylib_super_mario_1985_lite/internal/game",
+  "tonyfettes/raylib-examples/raylib_super_mario_1985_lite/internal/render",
+  "tonyfettes/raylib-examples/raylib_super_mario_1985_lite/internal/types",
 }
 
 options(

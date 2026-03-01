@@ -123,8 +123,8 @@ All tests run without a raylib window:
 ```bash
 cd examples
 moon test --target native \
-  -p tonyfettes/raylib-examples/raylib_super_mario_1985_lite/types \
-  -p tonyfettes/raylib-examples/raylib_super_mario_1985_lite/game
+  -p tonyfettes/raylib-examples/raylib_super_mario_1985_lite/internal/types \
+  -p tonyfettes/raylib-examples/raylib_super_mario_1985_lite/internal/game
 ```
 
 | Suite | File | Tests | Coverage |
