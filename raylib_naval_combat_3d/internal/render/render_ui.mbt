@@ -1,6 +1,6 @@
 // 2D UI overlay
 
-///|
+/// Draws the active 2D naval HUD/menu overlays for the current game state.
 pub fn draw_ui(game : @types.Game) -> Unit {
   if game.state == @types.state_menu {
     draw_menu(game)
