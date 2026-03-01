@@ -2,9 +2,7 @@
   "name": "tonyfettes/raylib-examples",
   "version": "0.1.0",
   "deps": {
-    "tonyfettes/raylib": {
-      "path": ".."
-    },
+    "tonyfettes/raylib": "0.2.2",
     "moonbitlang/async": "0.16.6"
   },
   "preferred-target": "native"

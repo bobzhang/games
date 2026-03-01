@@ -1,0 +1,6 @@
+# MoonBit
+_build/
+target/
+.mooncakes/
+
+.DS_Store
