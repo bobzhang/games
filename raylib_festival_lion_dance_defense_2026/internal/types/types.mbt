@@ -1,4 +1,5 @@
 ///|
+/// High-level state of the lion dance defense loop.
 pub(all) enum GameState {
   Title
   Playing
@@ -7,6 +8,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Player action identifiers used by UI and input mapping.
 pub(all) enum Action {
   Strike
   Guard
@@ -14,6 +16,7 @@ pub(all) enum Action {
 } derive(Eq)
 
 ///|
+/// Per-frame input state captured for gameplay logic.
 pub(all) struct InputState {
   mut move_x : Int
   mut move_y : Int
@@ -26,6 +29,7 @@ pub(all) struct InputState {
 }
 
 ///|
+/// Creates a cleared input state with no active commands.
 pub fn InputState::new() -> InputState {
   {
     move_x: 0,
@@ -40,6 +44,7 @@ pub fn InputState::new() -> InputState {
 }
 
 ///|
+/// Incoming threat entity moving along the parade street.
 pub(all) struct Threat {
   mut active : Bool
   mut kind : Int
@@ -52,6 +57,7 @@ pub(all) struct Threat {
 }
 
 ///|
+/// Creates an inactive threat slot for the threat pool.
 pub fn Threat::new() -> Threat {
   {
     active: false,
@@ -66,6 +72,7 @@ pub fn Threat::new() -> Threat {
 }
 
 ///|
+/// Complete mutable state for one defense run.
 pub(all) struct Game {
   input : InputState
   threats : Array[Threat]
@@ -98,6 +105,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a new game with initialized troupe, pools, and meters.
 pub fn Game::new() -> Game {
   {
     input: InputState::new(),
