@@ -1,4 +1,5 @@
 ///|
+/// Civilian pickup site tracked on the mission grid.
 pub(all) struct CivilianSite {
   mut active : Bool
   mut x : Int
@@ -7,6 +8,7 @@ pub(all) struct CivilianSite {
 }
 
 ///|
+/// Complete runtime state for one volcano rescue mission.
 pub(all) struct Game {
   terrain : Array[Int]
   lava : Array[Bool]
@@ -53,11 +55,13 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates an inactive civilian site with default values.
 pub fn CivilianSite::new() -> CivilianSite {
   { active: false, x: 0, y: 0, waiting: 0 }
 }
 
 ///|
+/// Creates a new game state with preallocated arrays and default UI state.
 pub fn Game::new() -> Game {
   {
     terrain: Array::make(max_cells, tile_ground),

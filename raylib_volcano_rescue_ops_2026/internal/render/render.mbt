@@ -917,6 +917,7 @@ fn draw_message(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the full frame for the current volcano rescue state.
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_bg(game)
 
