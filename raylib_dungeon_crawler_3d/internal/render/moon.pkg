@@ -4,3 +4,7 @@ import {
   "tonyfettes/raylib-examples/raylib_dungeon_crawler_3d/internal/levels",
   "tonyfettes/raylib-examples/raylib_dungeon_crawler_3d/internal/types",
 }
+
+warnings(
+  "+missing_doc",
+)
