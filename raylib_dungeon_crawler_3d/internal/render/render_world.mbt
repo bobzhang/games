@@ -1,6 +1,6 @@
 // 3D world rendering
 
-///|
+/// Draws the 3D dungeon world with tiles, actors, projectiles, and particle effects.
 pub fn draw_world(game : @types.Game) -> Unit {
   let camera = build_camera(game)
   @raylib.begin_mode_3d(camera)

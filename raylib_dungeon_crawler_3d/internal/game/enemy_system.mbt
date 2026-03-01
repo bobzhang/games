@@ -1,6 +1,6 @@
 // Enemy AI and projectile updates
 
-///|
+/// Updates enemy AI state, movement, attacks, and alert logic for the current frame.
 pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
   for e in game.enemies {
     if not(e.active) {
@@ -706,7 +706,7 @@ fn summon_skeleton(game : @types.Game, e : @types.Enemy) -> Unit {
   game.floor_info[game.current_floor].enemies_total += 1
 }
 
-///|
+/// Simulates projectile movement and resolves projectile collisions with walls, player, and enemies.
 pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
   for p in game.projectiles {
     if not(p.active) {
@@ -790,7 +790,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
   }
 }
 
-///|
+/// Advances particle lifetimes and kinematics for combat and ambient effects.
 pub fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
     if not(p.active) {
@@ -812,7 +812,7 @@ pub fn update_particles(game : @types.Game, dt : Float) -> Unit {
   }
 }
 
-///|
+/// Updates loot bobbing phase timers used by pickup idle animation.
 pub fn update_loot_bob(game : @types.Game, dt : Float) -> Unit {
   for l in game.loot {
     if not(l.active) {

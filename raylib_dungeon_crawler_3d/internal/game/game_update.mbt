@@ -1,6 +1,6 @@
 // Main game update dispatcher (FSM)
 
-///|
+/// Advances one frame of dungeon gameplay by dispatching updates for the active game state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   if game.state == @types.state_menu {

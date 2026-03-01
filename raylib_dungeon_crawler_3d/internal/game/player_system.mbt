@@ -1,6 +1,6 @@
 // Player movement and combat
 
-///|
+/// Updates player movement, combat input, spell usage, and interaction checks for one frame.
 pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   // Mouse look
   let mouse_delta = @raylib.get_mouse_delta()
@@ -585,7 +585,7 @@ fn cast_teleport(game : @types.Game) -> Unit {
   }
 }
 
-///|
+/// Handles enemy death rewards, drop generation, and related kill-side effects.
 pub fn kill_enemy(game : @types.Game, idx : Int) -> Unit {
   let e = game.enemies[idx]
   // Award XP
@@ -1062,7 +1062,7 @@ fn level_up(game : @types.Game) -> Unit {
   )
 }
 
-///|
+/// Applies incoming damage after defense, updates hit feedback, and clamps HP at zero.
 pub fn damage_player(game : @types.Game, raw_damage : Int) -> Unit {
   let total_def = @types.calc_player_defense(game)
   let damage = @types.maxi(1, raw_damage - total_def)
