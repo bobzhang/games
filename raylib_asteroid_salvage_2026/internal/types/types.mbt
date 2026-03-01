@@ -1,4 +1,5 @@
 ///|
+/// Projectile state for one bullet slot.
 pub(all) struct Bullet {
   mut active : Bool
   mut x : Float
@@ -9,11 +10,13 @@ pub(all) struct Bullet {
 }
 
 ///|
+/// Returns an inactive bullet placeholder.
 pub fn Bullet::new() -> Bullet {
   { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0 }
 }
 
 ///|
+/// Asteroid body state, including size tier and velocity.
 pub(all) struct Rock {
   mut active : Bool
   mut x : Float
@@ -25,11 +28,13 @@ pub(all) struct Rock {
 }
 
 ///|
+/// Returns an inactive rock placeholder.
 pub fn Rock::new() -> Rock {
   { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, radius: 0.0, size: 0 }
 }
 
 ///|
+/// Full runtime state for the asteroid salvage game loop.
 pub(all) struct Game {
   mut ship_x : Float
   mut ship_y : Float
@@ -48,6 +53,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a new game state with centered ship and empty entity pools.
 pub fn Game::new() -> Game {
   {
     ship_x: Float::from_int(screen_width) * 0.5,
