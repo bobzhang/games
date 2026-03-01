@@ -2,3 +2,7 @@ import {
   "tonyfettes/raylib",
   "tonyfettes/raylib-examples/raylib_skyline_parkour_trials_2026/internal/types",
 }
+
+warnings(
+  "+missing_doc",
+)
