@@ -1,4 +1,5 @@
 ///|
+/// Fish entity that can be hooked and scored.
 pub(all) struct Fish {
   mut active : Bool
   mut x : Float
@@ -13,6 +14,7 @@ pub(all) struct Fish {
 }
 
 ///|
+/// Hazard entity that damages line or resources.
 pub(all) struct Hazard {
   mut active : Bool
   mut x : Float
@@ -26,6 +28,7 @@ pub(all) struct Hazard {
 }
 
 ///|
+/// High-level game state of an ice fishing run.
 pub(all) enum GameState {
   Title
   Play
@@ -33,6 +36,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Pickup category available in the water.
 pub(all) enum PickupKind {
   Bait
   Repair
@@ -40,6 +44,7 @@ pub(all) enum PickupKind {
 } derive(Eq)
 
 ///|
+/// Pickup entity that grants utility resources.
 pub(all) struct Pickup {
   mut active : Bool
   mut x : Float
@@ -51,6 +56,7 @@ pub(all) struct Pickup {
 }
 
 ///|
+/// Particle entity used for splashes and UI effects.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -63,6 +69,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// Complete mutable state for one fishing run.
 pub(all) struct Game {
   fish : Array[Fish]
   hazards : Array[Hazard]
@@ -112,6 +119,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates an inactive fish slot for the fish pool.
 pub fn Fish::new() -> Fish {
   {
     active: false,
@@ -128,6 +136,7 @@ pub fn Fish::new() -> Fish {
 }
 
 ///|
+/// Creates an inactive hazard slot for the hazard pool.
 pub fn Hazard::new() -> Hazard {
   {
     active: false,
@@ -143,11 +152,13 @@ pub fn Hazard::new() -> Hazard {
 }
 
 ///|
+/// Creates an inactive pickup slot for the pickup pool.
 pub fn Pickup::new() -> Pickup {
   { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, kind: Bait, phase: 0.0 }
 }
 
 ///|
+/// Creates an inactive particle slot for the particle pool.
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -162,6 +173,7 @@ pub fn Particle::new() -> Particle {
 }
 
 ///|
+/// Creates a new game state with initialized pools and meters.
 pub fn Game::new() -> Game {
   {
     fish: Array::makei(max_fish, fn(_i) { Fish::new() }),
