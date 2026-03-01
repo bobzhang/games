@@ -966,6 +966,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances one simulation frame, including input handling and state transitions.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   match game.state {
     Title => {
