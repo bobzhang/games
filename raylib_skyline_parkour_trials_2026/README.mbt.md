@@ -4,6 +4,8 @@ A precision platformer where the player runs, jumps, and wall-climbs across roof
 
 The core loop is pure speedrun: navigate from start to goal as fast as possible, hitting checkpoints to extend the shared timer. Each stage has a unique time budget (42s, 36s, 32s) that carries over between stages. The timer is capped at 99.9 seconds. Fall off the skyline, hit a hazard, or run out of time and the run ends. Complete all three stages to achieve victory.
 
+Technically, the game features a comprehensive touch-input abstraction that unifies keyboard, mouse, and multi-touch controls with edge detection for button presses. The three-layer parallax city background with animated glow creates atmospheric depth, and the camera tracks the player with a 34% forward look-ahead for anticipatory platforming.
+
 ## Build and Run
 
 ```bash
@@ -25,11 +27,11 @@ moon build --target native raylib_skyline_parkour_trials_2026/
 
 Sprint across rooftop platforms in a neon-lit cityscape. Three stages of increasing difficulty must be completed in sequence with a shared countdown timer.
 
-**Movement**: Run left/right with A/D. The player accelerates differently on ground (2700) vs air (1650) and has separate drag values for each. Maximum run speed is 420 units/s.
+**Movement**: Run left/right with A/D. The player accelerates differently on ground (2700) vs air (1650) and has separate drag values for each (2300 ground, 820 air). Maximum run speed is 420 units/s. The `approachf` function applies drag when no input is pressed, smoothly decelerating toward zero.
 
 **Jumping**: Press Space to jump with an initial velocity of 780 units/s upward. Releasing the jump button early applies extra gravity (2400 vs normal 2140), enabling variable-height jumps. A jump buffer window of 0.13s catches early presses, and coyote time gives a 0.11s grace period after walking off an edge.
 
-**Wall mechanics**: Touching a wall sets a 0.17s wall-jump window. During this window the player slides down at a reduced speed of 210 instead of the normal max fall speed of 980. Pressing jump during the window executes a wall jump (820 upward, 470 horizontal push away from wall). Holding Shift/E while touching a wall activates wall climbing, which provides upward acceleration for up to 0.62s per ground-touch cycle. Climbing stamina resets when landing on the ground.
+**Wall mechanics**: Touching a wall sets a 0.17s wall-jump window. During this window the player slides down at a reduced speed of 210 instead of the normal max fall speed of 980. Pressing jump during the window executes a wall jump (820 upward, 470 horizontal push away from wall). Holding Shift/E while touching a wall activates wall climbing, which provides upward acceleration (1650 units/s^2, capped at 220 units/s upward) for up to 0.62s per ground-touch cycle. Climbing stamina resets when landing on the ground.
 
 **Checkpoints**: Blue pulsing markers scattered across each stage. Touching one adds bonus time (6-9 seconds depending on stage and position) and increments the checkpoint counter. A popup briefly shows the time gained.
 
@@ -37,7 +39,9 @@ Sprint across rooftop platforms in a neon-lit cityscape. Three stages of increas
 
 **Goal**: A green pulsing zone at the end of each stage. Reaching it clears the stage, awards a time bonus (9s for stage 1, 8s for stage 2, none for stage 3), and transitions to the next stage or victory.
 
-**Lose conditions**: Timer reaches zero (out of time), player falls below the stage boundary (missed the skyline), or player touches a hazard tile.
+**Stage layout**: Stage 1 (width 2800) has 9 platforms, 2 hazards, 2 checkpoints. Stage 2 (width 3200) has 14 platforms, 3 hazards, 3 checkpoints with more wall-jump corridors. Stage 3 (width 3600) has 18 platforms, 4 hazards, 3 checkpoints with extensive vertical climbing sections using narrow wall columns.
+
+**Lose conditions**: Timer reaches zero (out of time), player falls below the stage boundary (210 pixels below screen bottom), or player touches a hazard tile.
 
 ## Public API Reference
 
@@ -103,7 +107,7 @@ Sprint across rooftop platforms in a neon-lit cityscape. Three stages of increas
 | `Tile` | `kind`, `x`, `y`, `w`, `h` | A rectangular world tile with a collision type |
 | `Checkpoint` | `x`, `y`, `w`, `h`, `bonus_s`, `taken` | A collectible time bonus marker with position and value |
 | `Player` | `x`, `y`, `vx`, `vy`, `on_ground`, `wall_side`, `wall_window_t`, `wall_climb_t`, `coyote_t`, `jump_buffer_t`, `facing` | Player character with full physics and movement state |
-| `Game` | `tiles`, `checkpoints`, `hero`, `state`, `stage`, `timer_s`, `run_time_s`, `goal_x/y/w/h`, `input_*`, `touch_*` | Main game state container with world data, player, timers, and input fields |
+| `Game` | `tiles`, `checkpoints`, `hero`, `state`, `stage`, `timer_s`, `run_time_s`, `goal_x/y/w/h`, `input_*`, `touch_*`, `mouse_*` | Main game state container with world data, player, timers, and input fields |
 
 #### Functions
 
@@ -215,6 +219,7 @@ The code follows a clean three-layer architecture. `types` defines all data stru
 - **Shared timer across stages**: Unlike per-stage timers, the countdown carries between stages with bonuses from checkpoints and stage clears, creating a cumulative speedrun feel.
 - **Camera tracking**: A simple `camera_x` function positions the view at 34% of screen width behind the player, clamped to stage bounds, giving forward look-ahead for platforming.
 - **Touch-first input abstraction**: `pointer_on_rect` unifies mouse clicks and multi-touch input, while edge detection via `touch_*_prev` flags prevents repeat triggers on hold.
+- **Separate X/Y collision resolution**: `move_hero_x` and `move_hero_y` resolve collisions independently, preventing diagonal collision bugs and enabling reliable wall detection.
 
 ## Improvement & Refinement Plan
 
@@ -224,10 +229,12 @@ The code follows a clean three-layer architecture. `types` defines all data stru
 
 3. **Add mid-stage respawn at checkpoints**: When the player dies after hitting a checkpoint, offer the option to respawn at the last checkpoint with a time penalty instead of restarting the entire run. This would reduce frustration on later stages.
 
-4. **Create procedural stage generation**: The three hardcoded stages provide limited replayability. A procedural generator that creates valid platforming layouts from building blocks (wall-jump corridors, hazard gaps, checkpoint platforms) would extend longevity.
+4. **Create procedural stage generation**: The three hardcoded stages in `setup_stage_1/2/3` provide limited replayability. A procedural generator that creates valid platforming layouts from building blocks (wall-jump corridors, hazard gaps, checkpoint platforms) would extend longevity.
 
-5. **Add visual particle effects**: The game currently has no particle system for landings, wall slides, or speed. Adding dust particles on landing, sparks on wall contact, and wind streaks at high speed would significantly improve game feel.
+5. **Add visual particle effects**: The game currently has no particle system for landings, wall slides, or speed. Adding dust particles on landing (`move_hero_y` when `on_ground` transitions to true), sparks on wall contact (when `wall_side` is set), and wind streaks at high speed would significantly improve game feel.
 
-6. **Implement stage select after victory**: After completing all three stages, allow the player to replay individual stages from a stage select screen. This would support focused practice on specific stages.
+6. **Implement stage select after victory**: After completing all three stages, allow the player to replay individual stages from a stage select screen. This would support focused practice on specific stages without replaying earlier ones.
 
-7. **Add audio feedback for movement states**: Wall slides, landings, jumps, checkpoint pickups, and hazard deaths should each have distinct sounds. The wall climb mechanic in particular needs audio feedback since its time-limited nature is not visually obvious.
+7. **Add audio feedback for movement states**: Wall slides, landings, jumps, checkpoint pickups, and hazard deaths should each have distinct sounds. The wall climb mechanic in particular needs audio feedback since its time-limited nature (0.62s `wall_climb_t`) is not visually obvious.
+
+8. **Separate stage data from logic**: The three `setup_stage_*` functions in `logic.mbt` contain hardcoded coordinate data mixed with logic. Extracting stage layouts into a `stages.mbt` data file or even a declarative format would make level editing cleaner and open the door to a level editor.
