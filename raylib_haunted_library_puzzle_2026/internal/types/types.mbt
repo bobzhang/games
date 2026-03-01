@@ -1,4 +1,5 @@
 ///|
+/// High-level flow state for a haunted library run.
 pub(all) enum GameState {
   Title
   Play
@@ -6,6 +7,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Tile classification used by pathing and collision.
 pub(all) enum Tile {
   Floor
   Wall
@@ -13,6 +15,7 @@ pub(all) enum Tile {
 } derive(Eq)
 
 ///|
+/// Ghost behavior mode used by AI updates.
 pub(all) enum GhostMode {
   Patrol
   Hunt
@@ -20,6 +23,7 @@ pub(all) enum GhostMode {
 } derive(Eq)
 
 ///|
+/// Particle effect category for rendering.
 pub(all) enum ParticleKind {
   Dust
   Gold
@@ -27,6 +31,7 @@ pub(all) enum ParticleKind {
 } derive(Eq)
 
 ///|
+/// Grid actor state with interpolation fields for smooth movement.
 pub(all) struct Actor {
   mut x : Int
   mut y : Int
@@ -41,6 +46,7 @@ pub(all) struct Actor {
 }
 
 ///|
+/// Ghost entity state and behavior timers.
 pub(all) struct Ghost {
   mut active : Bool
   body : Actor
@@ -52,6 +58,7 @@ pub(all) struct Ghost {
 }
 
 ///|
+/// Transient particle entity for visual effects.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -64,6 +71,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// Complete runtime game state for one puzzle session.
 pub(all) struct Game {
   map : Array[Tile]
   shelf_x : Array[Int]
@@ -105,6 +113,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates an actor initialized at the starting tile.
 pub fn Actor::new() -> Actor {
   {
     x: start_x,
@@ -121,6 +130,7 @@ pub fn Actor::new() -> Actor {
 }
 
 ///|
+/// Creates an inactive ghost with default patrol state.
 pub fn Ghost::new() -> Ghost {
   {
     active: false,
@@ -134,6 +144,7 @@ pub fn Ghost::new() -> Ghost {
 }
 
 ///|
+/// Creates an inactive particle with default values.
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -148,6 +159,7 @@ pub fn Particle::new() -> Particle {
 }
 
 ///|
+/// Creates a new game state with preallocated arrays and defaults.
 pub fn Game::new() -> Game {
   {
     map: Array::make(grid_w * grid_h, Floor),

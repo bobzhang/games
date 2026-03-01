@@ -1,4 +1,5 @@
 ///|
+/// Handles title-screen input and starts a new run when confirmed.
 pub fn update_title_input(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
@@ -19,6 +20,7 @@ pub fn update_title_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles result-screen input and restarts the run when confirmed.
 pub fn update_result_input(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
@@ -40,6 +42,7 @@ pub fn update_result_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles active gameplay input from keyboard, mouse, and touch controls.
 pub fn update_play_input(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
