@@ -973,6 +973,7 @@ fn draw_game_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws one full frame of world, HUD, controls, and state overlays.
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@types.bg_haze())
 
