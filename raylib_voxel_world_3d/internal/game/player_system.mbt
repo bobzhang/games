@@ -1,6 +1,8 @@
 // Player movement and physics
 
 ///|
+/// Updates first-person player movement, gravity/jump physics, and collision
+/// against solid voxel blocks for the current frame.
 pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
   // Mouse look
@@ -187,6 +189,8 @@ fn check_player_collision(
 // Update camera to follow player
 
 ///|
+/// Rebuilds FPS camera position and look target from player transform, pitch/yaw,
+/// and head-bob/sprint sway offsets.
 pub fn update_camera_fps(game : @types.Game) -> Unit {
   let player = game.player
   let cos_yaw = @math.cosf(player.yaw)

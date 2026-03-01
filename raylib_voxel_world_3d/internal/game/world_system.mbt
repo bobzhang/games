@@ -1,6 +1,8 @@
 // World systems: day/night cycle, entity spawning, entity AI
 
 ///|
+/// Advances time-of-day state, updates day/night flags, and computes sky colors
+/// used by world and UI rendering.
 pub fn update_day_night(game : @types.Game, dt : Float) -> Unit {
   game.day_timer += dt
   if game.day_timer > @types.day_length {
@@ -52,6 +54,7 @@ pub fn update_day_night(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances transient message timer used for on-screen notifications.
 pub fn update_message(game : @types.Game, dt : Float) -> Unit {
   if game.message_timer > 0.0 {
     game.message_timer -= dt
@@ -64,6 +67,8 @@ pub fn update_message(game : @types.Game, dt : Float) -> Unit {
 // ========== Entity Spawning ==========
 
 ///|
+/// Periodically attempts biome-aware mob spawning near the player while honoring
+/// active-entity limits and valid terrain placement.
 pub fn update_entity_spawning(game : @types.Game, dt : Float) -> Unit {
   game.entity_spawn_timer -= dt
   if game.entity_spawn_timer > 0.0 {
@@ -160,6 +165,7 @@ fn spawn_entity_at(game : @types.Game, x : Float, y : Float, z : Float) -> Unit 
 // ========== Entity AI and physics ==========
 
 ///|
+/// Updates active entities (AI, physics, cooldowns, and despawn checks) each frame.
 pub fn update_entities(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
   for i in 0..<@types.entity_max {

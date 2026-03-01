@@ -1,6 +1,8 @@
 // Main game update dispatcher
 
 ///|
+/// Advances one frame of voxel gameplay by dispatching per-state update logic
+/// and ticking all active simulation systems while in play mode.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   if game.state == @types.state_menu {
@@ -450,6 +452,8 @@ fn update_player_stats(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Applies incoming damage to the player, respecting invulnerability windows,
+/// and transitions to game-over state on lethal hits.
 pub fn damage_player(game : @types.Game, amount : Int) -> Unit {
   let player = game.player
   if player.invulnerable_timer > 0.0 {

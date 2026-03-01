@@ -1,6 +1,8 @@
 // UI rendering: HUD, menus, crosshair, inventory, crafting, game over
 
 ///|
+/// Draws screen-space UI for all game states, including HUD, menus, inventory,
+/// crafting panels, and contextual overlays.
 pub fn draw_ui(game : @types.Game) -> Unit {
   if game.state == @types.state_menu {
     draw_menu(game)
