@@ -1,4 +1,4 @@
-///|
+/// Bell node orbiting the shrine and storing cooldown state.
 pub(all) struct Bell {
   mut x : Float
   mut y : Float
@@ -7,7 +7,7 @@ pub(all) struct Bell {
   mut charge : Float
 }
 
-///|
+/// Runtime foe record for hostile spirits and relic carriers.
 pub(all) struct Foe {
   mut active : Bool
   mut kind : Int
@@ -25,7 +25,7 @@ pub(all) struct Foe {
   mut marked : Bool
 }
 
-///|
+/// Runtime projectile record for bellkeeper bolts.
 pub(all) struct Bolt {
   mut active : Bool
   mut x : Float
@@ -37,7 +37,7 @@ pub(all) struct Bolt {
   mut kind : Int
 }
 
-///|
+/// Runtime spark effect record.
 pub(all) struct Spark {
   mut active : Bool
   mut x : Float
@@ -49,7 +49,7 @@ pub(all) struct Spark {
   mut kind : Int
 }
 
-///|
+/// Runtime expanding ring effect record.
 pub(all) struct Ring {
   mut active : Bool
   mut x : Float
@@ -59,7 +59,7 @@ pub(all) struct Ring {
   mut kind : Int
 }
 
-///|
+/// Runtime echo trail effect record.
 pub(all) struct Echo {
   mut active : Bool
   mut x : Float
@@ -70,7 +70,7 @@ pub(all) struct Echo {
   mut rot : Float
 }
 
-///|
+/// Mutable hero state for movement, dashing, and damage feedback.
 pub(all) struct Hero {
   mut x : Float
   mut y : Float
@@ -87,7 +87,7 @@ pub(all) struct Hero {
   mut anim_t : Float
 }
 
-///|
+/// High-level state machine for scene flow.
 pub(all) enum GameState {
   Title
   Play
@@ -95,7 +95,7 @@ pub(all) enum GameState {
   GameOver
 } derive(Eq)
 
-///|
+/// Global mutable game state for jade temple defense.
 pub(all) struct Game {
   bells : Array[Bell]
   foes : Array[Foe]
@@ -138,7 +138,7 @@ pub(all) struct Game {
   mut touch_count : Int
 }
 
-///|
+/// Creates an inactive foe record with default values.
 pub fn Foe::new() -> Foe {
   {
     active: false,
@@ -158,7 +158,7 @@ pub fn Foe::new() -> Foe {
   }
 }
 
-///|
+/// Creates an inactive bolt record.
 pub fn Bolt::new() -> Bolt {
   {
     active: false,
@@ -172,7 +172,7 @@ pub fn Bolt::new() -> Bolt {
   }
 }
 
-///|
+/// Creates an inactive spark effect record.
 pub fn Spark::new() -> Spark {
   {
     active: false,
@@ -186,17 +186,17 @@ pub fn Spark::new() -> Spark {
   }
 }
 
-///|
+/// Creates an inactive ring effect record.
 pub fn Ring::new() -> Ring {
   { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
 }
 
-///|
+/// Creates an inactive echo effect record.
 pub fn Echo::new() -> Echo {
   { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, rot: 0.0 }
 }
 
-///|
+/// Creates a hero positioned near the shrine with default stats.
 pub fn Hero::new() -> Hero {
   {
     x: shrine_x(),
@@ -215,7 +215,7 @@ pub fn Hero::new() -> Hero {
   }
 }
 
-///|
+/// Creates a fresh game state with pooled objects and title defaults.
 pub fn Game::new() -> Game {
   let bells = Array::makei(bell_count, fn(i) {
     let p = bell_pos(i)

@@ -1260,7 +1260,7 @@ fn update_game_over(game : @types.Game, dt : Float) -> Unit {
   }
 }
 
-///|
+/// Advances one simulation frame, including input and state updates.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.mouse_x = Float::from_int(@raylib.get_mouse_x())
   game.mouse_y = Float::from_int(@raylib.get_mouse_y())
