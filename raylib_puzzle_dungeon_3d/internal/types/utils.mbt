@@ -1,6 +1,7 @@
 // Math helpers
 
 ///|
+/// Returns absolute value for `Float` math used by animation and camera helpers.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -10,6 +11,7 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns absolute value for integer grid calculations.
 pub fn absi(v : Int) -> Int {
   if v < 0 {
     -v
@@ -19,6 +21,7 @@ pub fn absi(v : Int) -> Int {
 }
 
 ///|
+/// Clamps a float value into an inclusive `[low, high]` range.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
     low
@@ -30,6 +33,7 @@ pub fn clampf(v : Float, low : Float, high : Float) -> Float {
 }
 
 ///|
+/// Clamps an integer value into an inclusive `[low, high]` range.
 pub fn clampi(v : Int, low : Int, high : Int) -> Int {
   if v < low {
     low
@@ -41,6 +45,7 @@ pub fn clampi(v : Int, low : Int, high : Int) -> Int {
 }
 
 ///|
+/// Returns the smaller of two integer values.
 pub fn mini(a : Int, b : Int) -> Int {
   if a < b {
     a
@@ -50,6 +55,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the larger of two integer values.
 pub fn maxi(a : Int, b : Int) -> Int {
   if a > b {
     a
@@ -59,6 +65,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the smaller of two float values.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -68,6 +75,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two float values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -77,6 +85,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Linearly interpolates from `a` to `b` by normalized factor `t`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t
 }
@@ -84,6 +93,7 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 // Direction helpers
 
 ///|
+/// Returns the grid-x step (`-1`, `0`, `1`) represented by a direction.
 pub fn dir_dx(dir : Dir) -> Int {
   if dir == DirRight {
     1
@@ -95,6 +105,7 @@ pub fn dir_dx(dir : Dir) -> Int {
 }
 
 ///|
+/// Returns the grid-y step (`-1`, `0`, `1`) represented by a direction.
 pub fn dir_dy(dir : Dir) -> Int {
   if dir == DirDown {
     1
@@ -106,6 +117,7 @@ pub fn dir_dy(dir : Dir) -> Int {
 }
 
 ///|
+/// Returns the opposite cardinal direction.
 pub fn opposite_dir(dir : Dir) -> Dir {
   if dir == DirUp {
     DirDown
@@ -119,6 +131,7 @@ pub fn opposite_dir(dir : Dir) -> Dir {
 }
 
 ///|
+/// Rotates a direction 90 degrees clockwise.
 pub fn rotate_dir_cw(dir : Dir) -> Dir {
   if dir == DirUp {
     DirRight
@@ -134,16 +147,19 @@ pub fn rotate_dir_cw(dir : Dir) -> Dir {
 // Grid helpers
 
 ///|
+/// Checks whether a grid coordinate is inside the playable board bounds.
 pub fn in_bounds(gx : Int, gy : Int) -> Bool {
   gx >= 0 && gy >= 0 && gx < grid_w && gy < grid_h
 }
 
 ///|
+/// Converts `(gx, gy)` to the packed one-dimensional tile-array index.
 pub fn tile_index(gx : Int, gy : Int) -> Int {
   gy * grid_w + gx
 }
 
 ///|
+/// Reads a tile at grid coordinates, treating out-of-bounds as solid wall.
 pub fn get_tile(game : Game, gx : Int, gy : Int) -> Tile {
   if in_bounds(gx, gy) {
     game.tiles[tile_index(gx, gy)]
@@ -153,6 +169,7 @@ pub fn get_tile(game : Game, gx : Int, gy : Int) -> Tile {
 }
 
 ///|
+/// Writes a tile at grid coordinates if the destination is in bounds.
 pub fn set_tile(game : Game, gx : Int, gy : Int, tile : Tile) -> Unit {
   if in_bounds(gx, gy) {
     game.tiles[tile_index(gx, gy)] = tile
@@ -160,6 +177,7 @@ pub fn set_tile(game : Game, gx : Int, gy : Int, tile : Tile) -> Unit {
 }
 
 ///|
+/// Returns whether a tile can be occupied by the player.
 pub fn is_walkable(tile : Tile) -> Bool {
   tile == TileFloor ||
   tile == TilePlate ||
@@ -186,6 +204,7 @@ pub fn is_walkable(tile : Tile) -> Bool {
 }
 
 ///|
+/// Returns whether a tile can accept a pushed block entity.
 pub fn is_pushable_onto(tile : Tile) -> Bool {
   tile == TileFloor ||
   tile == TilePlate ||
@@ -203,6 +222,7 @@ pub fn is_pushable_onto(tile : Tile) -> Bool {
 }
 
 ///|
+/// Returns whether a tile blocks movement and collision checks.
 pub fn is_solid_tile(tile : Tile) -> Bool {
   tile == TileWall ||
   tile == TileExitClosed ||
@@ -213,6 +233,7 @@ pub fn is_solid_tile(tile : Tile) -> Bool {
 }
 
 ///|
+/// Returns whether a tile is one of the conveyor variants.
 pub fn is_conveyor(tile : Tile) -> Bool {
   tile == TileConveyorUp ||
   tile == TileConveyorRight ||
@@ -221,6 +242,7 @@ pub fn is_conveyor(tile : Tile) -> Bool {
 }
 
 ///|
+/// Returns conveyor travel direction encoded by a conveyor tile.
 pub fn conveyor_direction(tile : Tile) -> Dir {
   if tile == TileConveyorUp {
     DirUp
@@ -236,6 +258,7 @@ pub fn conveyor_direction(tile : Tile) -> Dir {
 }
 
 ///|
+/// Returns whether a tile is any reflective mirror tile.
 pub fn is_mirror(tile : Tile) -> Bool {
   tile == TileMirrorNe ||
   tile == TileMirrorNw ||
@@ -244,6 +267,7 @@ pub fn is_mirror(tile : Tile) -> Bool {
 }
 
 ///|
+/// Returns whether a tile is a laser source emitter.
 pub fn is_laser_source(tile : Tile) -> Bool {
   tile == TileLaserSourceRight ||
   tile == TileLaserSourceDown ||
@@ -252,6 +276,7 @@ pub fn is_laser_source(tile : Tile) -> Bool {
 }
 
 ///|
+/// Returns initial beam direction for a laser source tile.
 pub fn laser_source_direction(tile : Tile) -> Dir {
   if tile == TileLaserSourceRight {
     DirRight
@@ -269,6 +294,7 @@ pub fn laser_source_direction(tile : Tile) -> Dir {
 // Reflect a direction off a mirror tile
 
 ///|
+/// Reflects an incoming beam direction against a specific mirror tile.
 pub fn mirror_reflect(tile : Tile, incoming_dir : Dir) -> Dir {
   // NE mirror: / shape - reflects up<->right, down<->left
   if tile == TileMirrorNe {
@@ -330,6 +356,7 @@ pub fn mirror_reflect(tile : Tile, incoming_dir : Dir) -> Dir {
 // Entity helpers
 
 ///|
+/// Returns index of an active entity at `(gx, gy)`, or `-1` when empty.
 pub fn entity_at(game : Game, gx : Int, gy : Int) -> Int {
   for i in 0..<game.entities.length() {
     if game.entities[i].active &&
@@ -342,6 +369,7 @@ pub fn entity_at(game : Game, gx : Int, gy : Int) -> Int {
 }
 
 ///|
+/// Finds a free entity slot in the pooled entity array.
 pub fn alloc_entity(game : Game) -> Int {
   for i in 0..<game.entities.length() {
     if not(game.entities[i].active) {
@@ -352,6 +380,7 @@ pub fn alloc_entity(game : Game) -> Int {
 }
 
 ///|
+/// Finds a free particle slot in the pooled particle array.
 pub fn alloc_particle(game : Game) -> Int {
   for i in 0..<game.particles.length() {
     if not(game.particles[i].active) {
@@ -364,6 +393,7 @@ pub fn alloc_particle(game : Game) -> Int {
 // RNG
 
 ///|
+/// Advances the deterministic xorshift RNG and returns the next integer.
 pub fn rand_next(game : Game) -> Int {
   let mut x = game.rng_state
   x = x ^ (x << 13)
@@ -377,6 +407,7 @@ pub fn rand_next(game : Game) -> Int {
 }
 
 ///|
+/// Returns an integer random value in inclusive range `[low, high]`.
 pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
   if high <= low {
     low
@@ -386,6 +417,7 @@ pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
 }
 
 ///|
+/// Returns a float random value in range `[low, high]`.
 pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
   let n = Float::from_int(rand_next(game) % 10000) / 10000.0
   low + (high - low) * n
@@ -394,6 +426,7 @@ pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
 // Smooth step for animations
 
 ///|
+/// Smoothstep easing curve for animation progress values.
 pub fn smooth_step(t : Float) -> Float {
   let tc = clampf(t, 0.0, 1.0)
   tc * tc * (3.0 - 2.0 * tc)
@@ -402,6 +435,7 @@ pub fn smooth_step(t : Float) -> Float {
 // Easing for bounce
 
 ///|
+/// Bounce-style easing used for celebratory or impact animations.
 pub fn ease_out_bounce(t : Float) -> Float {
   let tc = clampf(t, 0.0, 1.0)
   if tc < 1.0 / 2.75 {
@@ -421,6 +455,7 @@ pub fn ease_out_bounce(t : Float) -> Float {
 // Ease out cubic
 
 ///|
+/// Cubic ease-out curve for quick start and soft finish motion.
 pub fn ease_out_cubic(t : Float) -> Float {
   let tc = clampf(t, 0.0, 1.0)
   let inv : Float = 1.0 - tc
@@ -431,6 +466,7 @@ pub fn ease_out_cubic(t : Float) -> Float {
 // Ease in out quad
 
 ///|
+/// Symmetric ease-in/ease-out curve for UI and movement tweens.
 pub fn ease_in_out_quad(t : Float) -> Float {
   let tc = clampf(t, 0.0, 1.0)
   if tc < 0.5 {
@@ -445,6 +481,7 @@ pub fn ease_in_out_quad(t : Float) -> Float {
 // Spawn particles at a position
 
 ///|
+/// Spawns burst particles around a world position with randomized velocity and life.
 pub fn spawn_particles(
   game : Game,
   wx : Float,
@@ -481,6 +518,7 @@ pub fn spawn_particles(
 // Spawn smaller ambient particles (for effects like portals, lasers)
 
 ///|
+/// Spawns lighter ambient particles for portal, torch, and laser decoration effects.
 pub fn spawn_ambient_particles(
   game : Game,
   wx : Float,
@@ -519,6 +557,7 @@ pub fn spawn_ambient_particles(
 // Count plates that have blocks on them
 
 ///|
+/// Counts pressure plates currently occupied by active block entities.
 pub fn count_active_plates(game : Game) -> Int {
   let mut count = 0
   for gy in 0..<grid_h {
@@ -537,6 +576,7 @@ pub fn count_active_plates(game : Game) -> Int {
 // Count total plates
 
 ///|
+/// Counts total pressure plates present in the current floor layout.
 pub fn count_plates(game : Game) -> Int {
   let mut count = 0
   for gy in 0..<grid_h {
@@ -552,6 +592,7 @@ pub fn count_plates(game : Game) -> Int {
 // Count total diamonds
 
 ///|
+/// Counts active diamond entities that remain on the floor.
 pub fn count_diamonds(game : Game) -> Int {
   let mut count = 0
   for entity in game.entities {
@@ -565,6 +606,7 @@ pub fn count_diamonds(game : Game) -> Int {
 // Count total laser targets
 
 ///|
+/// Counts laser target tiles present in the grid.
 pub fn count_laser_targets(game : Game) -> Int {
   let mut count = 0
   for gy in 0..<grid_h {
@@ -580,6 +622,7 @@ pub fn count_laser_targets(game : Game) -> Int {
 // Get current world from floor number
 
 ///|
+/// Maps a floor index to its world theme.
 pub fn get_world_for_floor(floor : Int) -> World {
   int_to_world(floor / floors_per_world)
 }
@@ -587,6 +630,7 @@ pub fn get_world_for_floor(floor : Int) -> World {
 // Get world theme colors
 
 ///|
+/// Returns the `(r, g, b)` floor color tuple for a world theme.
 pub fn get_world_floor_color(world : World) -> (Int, Int, Int) {
   if world == WorldIce {
     (ice_floor_r, ice_floor_g, ice_floor_b)
@@ -602,6 +646,7 @@ pub fn get_world_floor_color(world : World) -> (Int, Int, Int) {
 }
 
 ///|
+/// Returns the `(r, g, b)` wall color tuple for a world theme.
 pub fn get_world_wall_color(world : World) -> (Int, Int, Int) {
   if world == WorldIce {
     (ice_wall_r, ice_wall_g, ice_wall_b)
@@ -617,6 +662,7 @@ pub fn get_world_wall_color(world : World) -> (Int, Int, Int) {
 }
 
 ///|
+/// Returns the `(r, g, b)` accent color tuple for a world theme.
 pub fn get_world_accent_color(world : World) -> (Int, Int, Int) {
   if world == WorldIce {
     (ice_accent_r, ice_accent_g, ice_accent_b)
@@ -632,6 +678,7 @@ pub fn get_world_accent_color(world : World) -> (Int, Int, Int) {
 }
 
 ///|
+/// Returns the `(r, g, b)` background/fog color tuple for a world theme.
 pub fn get_world_bg_color(world : World) -> (Int, Int, Int) {
   if world == WorldIce {
     (ice_bg_r, ice_bg_g, ice_bg_b)
@@ -647,6 +694,7 @@ pub fn get_world_bg_color(world : World) -> (Int, Int, Int) {
 }
 
 ///|
+/// Returns localized world name text for menu and HUD displays.
 pub fn get_world_name(world : World) -> String {
   if world == WorldDungeon {
     world_name_0
@@ -667,6 +715,7 @@ pub fn get_world_name(world : World) -> String {
 // Traces laser beams from all sources, bouncing off mirrors
 
 ///|
+/// Rebuilds all active laser segments and target-hit counts from current tile state.
 pub fn calculate_laser_paths(game : Game) -> Unit {
   // Clear old segments
   for i in 0..<max_laser_segments {
@@ -793,6 +842,7 @@ fn add_laser_segment(
 // Conveyor chain resolution - move all entities on conveyors
 
 ///|
+/// Resolves one conveyor tick for all movable entities standing on conveyors.
 pub fn resolve_conveyors(game : Game) -> Unit {
   // Process each entity on a conveyor
   for e in game.entities {
@@ -832,6 +882,7 @@ pub fn resolve_conveyors(game : Game) -> Unit {
 // Ice sliding for an entity - slides until hitting something
 
 ///|
+/// Slides an entity across ice in `dir` until collision, pit, or non-ice tile.
 pub fn ice_slide_entity(game : Game, entity_idx : Int, dir : Dir) -> Unit {
   let e = game.entities[entity_idx]
   let dx = dir_dx(dir)
@@ -872,6 +923,7 @@ pub fn ice_slide_entity(game : Game, entity_idx : Int, dir : Dir) -> Unit {
 // Check if a position has a gate that should open/close
 
 ///|
+/// Opens or closes gate tiles based on current plate-completion conditions.
 pub fn update_gates(game : Game) -> Unit {
   let plates_ok = game.plates_total == 0 ||
     game.plates_active >= game.plates_total
@@ -904,6 +956,7 @@ pub fn update_gates(game : Game) -> Unit {
 // Toggle bridges via switch
 
 ///|
+/// Toggles all bridge tiles, respecting entities standing on active bridges.
 pub fn toggle_bridges(game : Game) -> Unit {
   for gy in 0..<grid_h {
     for gx in 0..<grid_w {
@@ -924,6 +977,7 @@ pub fn toggle_bridges(game : Game) -> Unit {
 // Get tutorial message for a floor
 
 ///|
+/// Returns tutorial hint text for a floor, or empty string when no hint applies.
 pub fn get_tutorial_for_floor(floor : Int) -> String {
   if floor == 0 {
     tutorial_msg_move
@@ -951,6 +1005,7 @@ pub fn get_tutorial_for_floor(floor : Int) -> String {
 // Decoration placement helpers
 
 ///|
+/// Procedurally populates decorative props based on nearby solid geometry and world.
 pub fn setup_decorations(game : Game) -> Unit {
   game.decoration_count = 0
   let world = game.current_world
@@ -996,6 +1051,7 @@ pub fn setup_decorations(game : Game) -> Unit {
 // Count total stars earned
 
 ///|
+/// Sums all earned stars across campaign floors.
 pub fn count_total_stars(game : Game) -> Int {
   let mut total = 0
   for i in 0..<max_floors {
@@ -1007,6 +1063,7 @@ pub fn count_total_stars(game : Game) -> Int {
 // Check if a world is unlocked
 
 ///|
+/// Returns whether a world index is unlocked based on prior-world completion.
 pub fn is_world_unlocked(game : Game, world : Int) -> Bool {
   if world == 0 {
     return true
@@ -1025,6 +1082,7 @@ pub fn is_world_unlocked(game : Game, world : Int) -> Bool {
 // Get the number of stars needed to unlock a world
 
 ///|
+/// Returns required total stars needed to unlock a world index.
 pub fn stars_to_unlock_world(world : Int) -> Int {
   if world == 0 {
     0

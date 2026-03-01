@@ -1,6 +1,8 @@
 // Main game update dispatcher (FSM)
 
 ///|
+/// Advances one frame of puzzle gameplay by dispatching the active state machine,
+/// then ticking shared timers (transitions, messages, and achievement popups).
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   update_particles(game, dt)

@@ -1,6 +1,7 @@
 // Enum types for categorical constants
 
 ///|
+/// Tile categories used by puzzle logic and world rendering for each grid cell.
 pub(all) enum Tile {
   TileEmpty
   TileWall
@@ -38,6 +39,7 @@ pub(all) enum Tile {
 } derive(Eq)
 
 ///|
+/// Entity kinds that can occupy tiles independently from base terrain.
 pub(all) enum EntityKind {
   EntityNone
   EntityBlock
@@ -47,6 +49,7 @@ pub(all) enum EntityKind {
 } derive(Eq)
 
 ///|
+/// Cardinal movement and facing directions used by player, conveyors, and lasers.
 pub(all) enum Dir {
   DirNone
   DirUp
@@ -56,6 +59,7 @@ pub(all) enum Dir {
 } derive(Eq)
 
 ///|
+/// High-level game states that drive update and UI render dispatch.
 pub(all) enum GameState {
   StateMenu
   StatePlaying
@@ -69,6 +73,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// The five campaign themes that map floors to mechanics and visual palettes.
 pub(all) enum World {
   WorldDungeon
   WorldIce
@@ -78,6 +83,7 @@ pub(all) enum World {
 } derive(Eq)
 
 ///|
+/// Maps a world-selection index to a `World` enum, defaulting to `WorldVoid`.
 pub fn int_to_world(i : Int) -> World {
   if i == 0 {
     WorldDungeon
@@ -93,6 +99,7 @@ pub fn int_to_world(i : Int) -> World {
 }
 
 ///|
+/// Converts a `World` enum to its stable integer index for save/UI usage.
 pub fn world_to_int(w : World) -> Int {
   if w == WorldDungeon {
     0
@@ -108,6 +115,7 @@ pub fn world_to_int(w : World) -> Int {
 }
 
 ///|
+/// Decorative prop categories used to flavor each world theme.
 pub(all) enum DecoKind {
   DecoTorch
   DecoCrystal
@@ -122,6 +130,7 @@ pub(all) enum DecoKind {
 // Entity on the grid (block, diamond, key, bomb)
 
 ///|
+/// Movable grid entity state (blocks, collectibles, and keys) with animation data.
 pub(all) struct Entity {
   mut active : Bool
   mut kind : EntityKind
@@ -136,6 +145,7 @@ pub(all) struct Entity {
 }
 
 ///|
+/// Creates an inactive entity slot used to initialize fixed-size entity pools.
 pub fn Entity::inactive() -> Entity {
   {
     active: false,
@@ -152,6 +162,7 @@ pub fn Entity::inactive() -> Entity {
 }
 
 ///|
+/// Creates an active push-block entity at grid coordinates `(gx, gy)`.
 pub fn Entity::new_block(gx : Int, gy : Int) -> Entity {
   {
     active: true,
@@ -168,6 +179,7 @@ pub fn Entity::new_block(gx : Int, gy : Int) -> Entity {
 }
 
 ///|
+/// Creates an active diamond pickup entity at grid coordinates `(gx, gy)`.
 pub fn Entity::new_diamond(gx : Int, gy : Int) -> Entity {
   {
     active: true,
@@ -184,6 +196,7 @@ pub fn Entity::new_diamond(gx : Int, gy : Int) -> Entity {
 }
 
 ///|
+/// Creates an active key pickup entity at grid coordinates `(gx, gy)`.
 pub fn Entity::new_key(gx : Int, gy : Int) -> Entity {
   {
     active: true,
@@ -202,6 +215,7 @@ pub fn Entity::new_key(gx : Int, gy : Int) -> Entity {
 // Particle effect
 
 ///|
+/// Particle record used by world effects such as teleports, gates, and celebration bursts.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -219,6 +233,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// Creates an inactive particle slot for pooled particle allocation.
 pub fn Particle::inactive() -> Particle {
   {
     active: false,
@@ -240,6 +255,7 @@ pub fn Particle::inactive() -> Particle {
 // Laser beam segment for rendering
 
 ///|
+/// One rendered laser segment between two grid points after mirror tracing.
 pub(all) struct LaserSegment {
   mut active : Bool
   mut start_gx : Int
@@ -250,6 +266,7 @@ pub(all) struct LaserSegment {
 }
 
 ///|
+/// Creates an inactive laser segment entry for reusable laser buffers.
 pub fn LaserSegment::inactive() -> LaserSegment {
   {
     active: false,
@@ -264,6 +281,7 @@ pub fn LaserSegment::inactive() -> LaserSegment {
 // Decoration for world ambiance
 
 ///|
+/// Ambient decoration instance used to enrich otherwise static dungeon spaces.
 pub(all) struct Decoration {
   mut active : Bool
   mut kind : DecoKind
@@ -275,6 +293,7 @@ pub(all) struct Decoration {
 }
 
 ///|
+/// Creates an inactive decoration slot for pooled world props.
 pub fn Decoration::inactive() -> Decoration {
   {
     active: false,
@@ -290,6 +309,7 @@ pub fn Decoration::inactive() -> Decoration {
 // Undo snapshot
 
 ///|
+/// Snapshot data captured before a move to support deterministic undo playback.
 pub(all) struct UndoState {
   mut player_gx : Int
   mut player_gy : Int
@@ -304,6 +324,7 @@ pub(all) struct UndoState {
 }
 
 ///|
+/// Creates a blank undo snapshot with tile/entity arrays sized to puzzle limits.
 pub fn UndoState::empty() -> UndoState {
   {
     player_gx: 0,
@@ -322,6 +343,7 @@ pub fn UndoState::empty() -> UndoState {
 // Floor completion info
 
 ///|
+/// Persistent completion metadata for a single floor.
 pub(all) struct FloorInfo {
   mut unlocked : Bool
   mut completed : Bool
@@ -330,6 +352,7 @@ pub(all) struct FloorInfo {
 }
 
 ///|
+/// Creates default floor progress (locked, incomplete, and no stars).
 pub fn FloorInfo::new() -> FloorInfo {
   { unlocked: false, completed: false, best_moves: 999, stars: 0 }
 }
@@ -337,12 +360,14 @@ pub fn FloorInfo::new() -> FloorInfo {
 // Achievement tracking
 
 ///|
+/// Runtime display state for one achievement badge.
 pub(all) struct AchievementInfo {
   mut unlocked : Bool
   mut show_timer : Float
 }
 
 ///|
+/// Creates a locked achievement entry with no active display timer.
 pub fn AchievementInfo::new() -> AchievementInfo {
   { unlocked: false, show_timer: 0.0 }
 }
@@ -350,6 +375,7 @@ pub fn AchievementInfo::new() -> AchievementInfo {
 // Main Game struct
 
 ///|
+/// Full mutable game runtime state shared across update, simulation, and rendering.
 pub(all) struct Game {
   // State
   mut state : GameState
@@ -450,6 +476,8 @@ pub(all) struct Game {
 }
 
 ///|
+/// Constructs a fresh campaign state with initialized pools, default UI cursors,
+/// and floor zero unlocked.
 pub fn Game::new() -> Game {
   let floor_info : Array[FloorInfo] = []
   for i in 0..<max_floors {

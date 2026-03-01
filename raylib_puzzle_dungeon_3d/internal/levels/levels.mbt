@@ -10,6 +10,8 @@
 // 'Q' = laser target, 'R' = rotate platform
 
 ///|
+/// Returns ASCII tile rows for a floor index, defining static geometry and
+/// entity placement used by the stage loader.
 pub fn get_floor_data(floor : Int) -> Array[String] {
   if floor == 0 {
     // World 1 Floor 1: Tutorial - push block onto plate
@@ -227,6 +229,7 @@ pub fn get_floor_data(floor : Int) -> Array[String] {
 // Floor names organized by world
 
 ///|
+/// Returns the display name shown in HUD and floor-select menus for a floor.
 pub fn get_floor_name(floor : Int) -> String {
   if floor == 0 {
     "First Steps"
@@ -294,6 +297,7 @@ pub fn get_floor_name(floor : Int) -> String {
 // Par moves for star ratings
 
 ///|
+/// Returns the par-move target used to award 1-3 stars on floor completion.
 pub fn get_par_moves(floor : Int) -> Int {
   if floor == 0 {
     8
@@ -361,6 +365,7 @@ pub fn get_par_moves(floor : Int) -> Int {
 // Get world description text
 
 ///|
+/// Returns flavor text describing the mechanics focus for a world index.
 pub fn get_world_description(world : Int) -> String {
   if world == 0 {
     "Ancient stone halls with push blocks and plates"
@@ -380,6 +385,7 @@ pub fn get_world_description(world : Int) -> String {
 // Get the number of completed levels in a world
 
 ///|
+/// Returns `(completed, total)` floor counts for a world in campaign progress UI.
 pub fn get_world_completion(game : @types.Game, world : Int) -> (Int, Int) {
   let start = world * @types.floors_per_world
   let mut completed = 0
@@ -395,6 +401,7 @@ pub fn get_world_completion(game : @types.Game, world : Int) -> (Int, Int) {
 // Get total stars for a world
 
 ///|
+/// Returns `(earned, total)` stars for a world to drive unlock and summary panels.
 pub fn get_world_stars(game : @types.Game, world : Int) -> (Int, Int) {
   let start = world * @types.floors_per_world
   let mut earned = 0
