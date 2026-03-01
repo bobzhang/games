@@ -675,6 +675,7 @@ fn update_game_over_state(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances one frame of detective gameplay and state transitions.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   update_input(game)
 
