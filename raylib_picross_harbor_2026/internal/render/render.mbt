@@ -1022,6 +1022,7 @@ fn draw_campaign_clear_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Render board, side panel, controls, and active overlay state.
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_bg(game)
 

@@ -1,4 +1,5 @@
 ///|
+/// One undo record capturing previous cell and counters.
 pub(all) struct UndoStep {
   valid : Bool
   x : Int
@@ -12,6 +13,7 @@ pub(all) struct UndoStep {
 }
 
 ///|
+/// Spark particle used for feedback effects.
 pub(all) struct Spark {
   mut active : Bool
   mut x : Float
@@ -24,6 +26,7 @@ pub(all) struct Spark {
 }
 
 ///|
+/// Full mutable campaign and level runtime state.
 pub(all) struct Game {
   solution : Array[Bool]
   cells : Array[Int]
@@ -73,6 +76,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Construct a fresh game with cleared boards and counters.
 pub fn Game::new() -> Game {
   let undo_arr : Array[UndoStep] = Array::makei(8192, fn(_i) {
     {

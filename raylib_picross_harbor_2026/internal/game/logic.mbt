@@ -885,6 +885,7 @@ fn advance_level(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Capture input and advance one frame of puzzle/campaign state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   let mouse = @raylib.get_mouse_position()
   game.mouse_x = mouse.x
