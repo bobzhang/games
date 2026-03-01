@@ -5,6 +5,7 @@
 // Helper: get wave enemy kind for current spawn index
 
 ///|
+/// Resolves the enemy kind for a specific spawn index inside a wave composition.
 pub fn get_wave_enemy_kind(wave : Int, spawn_idx : Int) -> Int {
   let kinds = get_wave_kinds(wave)
   let counts = get_wave_counts(wave)
@@ -20,6 +21,7 @@ pub fn get_wave_enemy_kind(wave : Int, spawn_idx : Int) -> Int {
 }
 
 ///|
+/// Returns total number of enemies scheduled for a wave.
 pub fn get_wave_total_enemies(wave : Int) -> Int {
   let counts = get_wave_counts(wave)
   let mut total = 0
@@ -30,6 +32,7 @@ pub fn get_wave_total_enemies(wave : Int) -> Int {
 }
 
 ///|
+/// Returns ordered enemy-kind buckets used by wave spawning logic.
 pub fn get_wave_kinds(wave : Int) -> Array[Int] {
   if wave == 0 {
     [0] // Zombies
@@ -95,6 +98,7 @@ pub fn get_wave_kinds(wave : Int) -> Array[Int] {
 }
 
 ///|
+/// Returns spawn counts matching `get_wave_kinds` for the same wave.
 pub fn get_wave_counts(wave : Int) -> Array[Int] {
   if wave == 0 {
     [6]
@@ -160,6 +164,7 @@ pub fn get_wave_counts(wave : Int) -> Array[Int] {
 }
 
 ///|
+/// Returns per-wave health multiplier for progressive difficulty scaling.
 pub fn get_wave_hp_mult(wave : Int) -> Float {
   let base : Float = 1.0
   let scale = Float::from_int(wave) * 0.08
@@ -167,6 +172,7 @@ pub fn get_wave_hp_mult(wave : Int) -> Float {
 }
 
 ///|
+/// Returns per-wave movement-speed multiplier with a capped upper bound.
 pub fn get_wave_speed_mult(wave : Int) -> Float {
   let base : Float = 1.0
   let scale = Float::from_int(wave) * 0.025
@@ -181,6 +187,7 @@ pub fn get_wave_speed_mult(wave : Int) -> Float {
 // Enemy base HP
 
 ///|
+/// Returns base hit points for an enemy archetype id.
 pub fn enemy_base_hp(kind : Int) -> Float {
   if kind == 0 {
     30.0 // Zombie
@@ -204,6 +211,7 @@ pub fn enemy_base_hp(kind : Int) -> Float {
 // Enemy base speed
 
 ///|
+/// Returns base movement speed for an enemy archetype id.
 pub fn enemy_base_speed(kind : Int) -> Float {
   if kind == 0 {
     3.0 // Zombie
@@ -227,6 +235,7 @@ pub fn enemy_base_speed(kind : Int) -> Float {
 // Enemy base damage per attack
 
 ///|
+/// Returns base attack damage for an enemy archetype id.
 pub fn enemy_base_damage(kind : Int) -> Float {
   if kind == 0 {
     8.0 // Zombie
@@ -250,6 +259,7 @@ pub fn enemy_base_damage(kind : Int) -> Float {
 // Enemy attack range
 
 ///|
+/// Returns attack range for an enemy archetype id.
 pub fn enemy_attack_range(kind : Int) -> Float {
   if kind == 0 {
     2.0 // Zombie (melee)
@@ -273,6 +283,7 @@ pub fn enemy_attack_range(kind : Int) -> Float {
 // Enemy size
 
 ///|
+/// Returns render/collision size scale for an enemy archetype id.
 pub fn enemy_size(kind : Int) -> Float {
   if kind == 0 {
     0.6 // Zombie
@@ -296,6 +307,7 @@ pub fn enemy_size(kind : Int) -> Float {
 // Enemy gold value
 
 ///|
+/// Returns gold payout granted when an enemy archetype is defeated.
 pub fn enemy_gold_value(kind : Int) -> Int {
   if kind == 0 {
     10 // Zombie
@@ -319,6 +331,7 @@ pub fn enemy_gold_value(kind : Int) -> Int {
 // Enemy score value
 
 ///|
+/// Returns score reward granted when an enemy archetype is defeated.
 pub fn enemy_score_value(kind : Int) -> Int {
   if kind == 0 {
     10 // Zombie
@@ -342,6 +355,7 @@ pub fn enemy_score_value(kind : Int) -> Int {
 // Spit cooldown for spitter type
 
 ///|
+/// Returns ranged-ability cooldown for enemy types that use projectiles or revive.
 pub fn enemy_spit_cooldown(kind : Int) -> Float {
   if kind == 3 {
     2.5 // Spitter
@@ -355,6 +369,7 @@ pub fn enemy_spit_cooldown(kind : Int) -> Float {
 // Wave gold bonus
 
 ///|
+/// Returns between-wave bonus gold for a cleared wave index.
 pub fn wave_bonus(wave : Int) -> Int {
   50 + wave * 20
 }
@@ -362,6 +377,7 @@ pub fn wave_bonus(wave : Int) -> Int {
 // Pickup drop chance by enemy kind
 
 ///|
+/// Returns pickup drop chance for a defeated enemy archetype.
 pub fn enemy_drop_chance(kind : Int) -> Float {
   if kind == 0 {
     0.08 // Zombie - low chance
@@ -385,6 +401,7 @@ pub fn enemy_drop_chance(kind : Int) -> Float {
 // Random pickup kind (weighted)
 
 ///|
+/// Maps a 0-99 roll to a weighted pickup type.
 pub fn random_pickup_kind(roll : Int) -> Int {
   let r = roll % 100
   if r < 35 {
@@ -405,6 +422,7 @@ pub fn random_pickup_kind(roll : Int) -> Int {
 // Shop item count
 
 ///|
+/// Returns the number of purchasable shop entries shown between waves.
 pub fn shop_item_count() -> Int {
   14
 }
@@ -412,6 +430,7 @@ pub fn shop_item_count() -> Int {
 // Shop item definition: (name, cost)
 
 ///|
+/// Returns display name for a shop item index.
 pub fn shop_item_name(idx : Int) -> String {
   if idx == 0 {
     "Heal +40 HP"
@@ -445,6 +464,7 @@ pub fn shop_item_name(idx : Int) -> String {
 }
 
 ///|
+/// Returns purchase cost for a shop item index.
 pub fn shop_item_cost(idx : Int) -> Int {
   if idx == 0 {
     50
@@ -480,6 +500,7 @@ pub fn shop_item_cost(idx : Int) -> Int {
 // Boss configurations
 
 ///|
+/// Returns normalized boss HP threshold where a phase transition occurs.
 pub fn boss_phase_hp_threshold(phase : Int) -> Float {
   if phase == 0 {
     0.75
@@ -493,6 +514,7 @@ pub fn boss_phase_hp_threshold(phase : Int) -> Float {
 }
 
 ///|
+/// Returns boss active ability cooldown for a phase.
 pub fn boss_ability_cooldown(phase : Int) -> Float {
   if phase == 0 {
     5.0
@@ -506,6 +528,7 @@ pub fn boss_ability_cooldown(phase : Int) -> Float {
 }
 
 ///|
+/// Returns boss charge-speed multiplier for a phase.
 pub fn boss_charge_speed_mult(phase : Int) -> Float {
   if phase == 0 {
     2.0

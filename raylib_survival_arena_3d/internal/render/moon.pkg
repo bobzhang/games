@@ -3,3 +3,5 @@ import {
   "tonyfettes/raylib",
   "tonyfettes/raylib-examples/raylib_survival_arena_3d/internal/types",
 }
+
+warnings = "+missing_doc"
