@@ -1,8 +1,8 @@
 import {
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/raylib_2048/types",
-  "tonyfettes/raylib-examples/raylib_2048/game",
-  "tonyfettes/raylib-examples/raylib_2048/render",
+  "tonyfettes/raylib-examples/raylib_2048/internal/types",
+  "tonyfettes/raylib-examples/raylib_2048/internal/game",
+  "tonyfettes/raylib-examples/raylib_2048/internal/render",
 }
 
 options(
