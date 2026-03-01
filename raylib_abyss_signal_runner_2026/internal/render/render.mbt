@@ -1069,6 +1069,7 @@ fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Renders one frame including cave world, HUD, and active overlays.
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@types.bg_top())
 

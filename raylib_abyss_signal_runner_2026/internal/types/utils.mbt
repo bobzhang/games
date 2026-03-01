@@ -1,4 +1,5 @@
 ///|
+/// Clamps an integer value to the inclusive `[lo, hi]` range.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -10,6 +11,7 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Clamps a float value to the inclusive `[lo, hi]` range.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -21,6 +23,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two float values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -30,6 +33,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two float values.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -39,6 +43,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -48,37 +53,44 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Computes `sin(v)` and returns the result as `Float`.
 pub fn sinf(v : Float) -> Float {
   Float::from_double(@math.sin(v.to_double()))
 }
 
 ///|
+/// Computes `cos(v)` and returns the result as `Float`.
 pub fn cosf(v : Float) -> Float {
   Float::from_double(@math.cos(v.to_double()))
 }
 
 ///|
+/// Returns the square root of `v`.
 pub fn sqrtf(v : Float) -> Float {
   v.sqrt()
 }
 
 ///|
+/// Returns a pseudo-random float sampled from `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let r = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns a pseudo-random integer sampled from `[lo, hi]`.
 pub fn randi(lo : Int, hi : Int) -> Int {
   @raylib.get_random_value(lo, hi)
 }
 
 ///|
+/// Returns true with probability `p` percent.
 pub fn chance(p : Int) -> Bool {
   randi(0, 99) < p
 }
 
 ///|
+/// Returns squared Euclidean distance between two points.
 pub fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx = x1 - x0
   let dy = y1 - y0
@@ -86,12 +98,14 @@ pub fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Quadratic ease-out curve clamped to input range `[0, 1]`.
 pub fn ease_out_quad(t : Float) -> Float {
   let x = clampf(t, 0.0, 1.0)
   1.0 - (1.0 - x) * (1.0 - x)
 }
 
 ///|
+/// Computes cave center X at depth `y` and time `t`.
 pub fn cave_center(y : Float, t : Float) -> Float {
   let base = Float::from_int(screen_w / 2)
   let s0 = sinf(y * 0.004 + t * 0.6) * 170.0
@@ -100,6 +114,7 @@ pub fn cave_center(y : Float, t : Float) -> Float {
 }
 
 ///|
+/// Computes cave half-width at depth/time with stage-based narrowing.
 pub fn cave_half_width(y : Float, t : Float, stage : Int) -> Float {
   let wobble = sinf(y * 0.0033 + t * 0.7 + 0.9) * 62.0
   let shrink = Float::from_int(stage - 1) * 8.0
@@ -107,51 +122,61 @@ pub fn cave_half_width(y : Float, t : Float, stage : Int) -> Float {
 }
 
 ///|
+/// Primary top background color for the abyss scene.
 pub fn bg_top() -> @raylib.Color {
   @raylib.Color::new(8, 14, 28, 255)
 }
 
 ///|
+/// Primary bottom background color for the abyss scene.
 pub fn bg_bottom() -> @raylib.Color {
   @raylib.Color::new(7, 28, 44, 255)
 }
 
 ///|
+/// Accent color used for cave glow rendering.
 pub fn cave_glow() -> @raylib.Color {
   @raylib.Color::new(82, 222, 255, 255)
 }
 
 ///|
+/// Accent color used for hazards.
 pub fn hazard_col() -> @raylib.Color {
   @raylib.Color::new(255, 98, 158, 255)
 }
 
 ///|
+/// Accent color used for collectible data nodes.
 pub fn data_col() -> @raylib.Color {
   @raylib.Color::new(146, 255, 190, 255)
 }
 
 ///|
+/// Accent color used for oxygen pickups and bars.
 pub fn oxygen_col() -> @raylib.Color {
   @raylib.Color::new(146, 218, 255, 255)
 }
 
 ///|
+/// Accent color used for sonar/phase visuals.
 pub fn phase_col() -> @raylib.Color {
   @raylib.Color::new(186, 146, 255, 255)
 }
 
 ///|
+/// Accent color used for hull/health indicators.
 pub fn hp_col() -> @raylib.Color {
   @raylib.Color::new(255, 116, 156, 255)
 }
 
 ///|
+/// Side length of on-screen touch control buttons.
 pub fn btn_size() -> Float {
   Float::from_int(102)
 }
 
 ///|
+/// Returns the touch rectangle for moving left.
 pub fn btn_left_rect() -> (Float, Float, Float, Float) {
   let s = btn_size()
   (
@@ -163,6 +188,7 @@ pub fn btn_left_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns the touch rectangle for moving right.
 pub fn btn_right_rect() -> (Float, Float, Float, Float) {
   let s = btn_size()
   (
@@ -174,6 +200,7 @@ pub fn btn_right_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns the touch rectangle for moving up.
 pub fn btn_up_rect() -> (Float, Float, Float, Float) {
   let s = btn_size()
   (
@@ -185,6 +212,7 @@ pub fn btn_up_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns the touch rectangle for moving down.
 pub fn btn_down_rect() -> (Float, Float, Float, Float) {
   let s = btn_size()
   (
@@ -196,6 +224,7 @@ pub fn btn_down_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns the touch rectangle for activating dash.
 pub fn btn_dash_rect() -> (Float, Float, Float, Float) {
   let s = btn_size()
   (
@@ -207,6 +236,7 @@ pub fn btn_dash_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns the touch rectangle for activating sonar.
 pub fn btn_sonar_rect() -> (Float, Float, Float, Float) {
   let s = btn_size()
   (
@@ -218,6 +248,7 @@ pub fn btn_sonar_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns whether point `(x, y)` lies inside a rectangle.
 pub fn point_in_rect(
   x : Float,
   y : Float,
@@ -230,6 +261,7 @@ pub fn point_in_rect(
 }
 
 ///|
+/// Returns whether mouse hold or touch input is inside a rectangle.
 pub fn pointer_on_rect(
   mx : Float,
   my : Float,
@@ -255,6 +287,7 @@ pub fn pointer_on_rect(
 }
 
 ///|
+/// Returns the title screen start button rectangle.
 pub fn title_start_rect() -> (Float, Float, Float, Float) {
   let w = Float::from_int(410)
   let h = Float::from_int(88)
@@ -267,6 +300,7 @@ pub fn title_start_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns the game-over restart button rectangle.
 pub fn restart_rect() -> (Float, Float, Float, Float) {
   let w = Float::from_int(180)
   let h = Float::from_int(56)
@@ -279,11 +313,13 @@ pub fn restart_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Converts a screen-space Y coordinate to world depth.
 pub fn depth_at_screen(game : Game, y : Float) -> Float {
   game.distance + (Float::from_int(screen_h) - y)
 }
 
 ///|
+/// Returns the left and right cave edges at a screen-space Y.
 pub fn cave_edges(game : Game, y : Float) -> (Float, Float) {
   let d = depth_at_screen(game, y)
   let c = cave_center(d, game.time_s)
@@ -292,6 +328,7 @@ pub fn cave_edges(game : Game, y : Float) -> (Float, Float) {
 }
 
 ///|
+/// Finds a free trail slot or reuses the shortest-lived active trail.
 pub fn alloc_trail(game : Game) -> Int {
   for i in 0..<game.trails.length() {
     if not(game.trails[i].active) {
@@ -311,6 +348,7 @@ pub fn alloc_trail(game : Game) -> Int {
 }
 
 ///|
+/// Writes a trail segment into the selected trail pool slot.
 pub fn emit_trail(
   game : Game,
   x : Float,
