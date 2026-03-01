@@ -1,8 +1,8 @@
 import {
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/raylib_fighter_97_lite/types",
-  "tonyfettes/raylib-examples/raylib_fighter_97_lite/game",
-  "tonyfettes/raylib-examples/raylib_fighter_97_lite/render",
+  "tonyfettes/raylib-examples/raylib_fighter_97_lite/internal/types",
+  "tonyfettes/raylib-examples/raylib_fighter_97_lite/internal/game",
+  "tonyfettes/raylib-examples/raylib_fighter_97_lite/internal/render",
 }
 
 options(
