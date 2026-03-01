@@ -1,4 +1,5 @@
 ///|
+/// Clamps an integer value to the inclusive range `[lo, hi]`.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -10,6 +11,7 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Clamps a float value to the inclusive range `[lo, hi]`.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -21,6 +23,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two float values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -30,6 +33,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two integer values.
 pub fn maxi(a : Int, b : Int) -> Int {
   if a > b {
     a
@@ -39,11 +43,13 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the square of a float value.
 pub fn squaref(v : Float) -> Float {
   v * v
 }
 
 ///|
+/// Returns squared distance between two 2D points.
 pub fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
   let dy = ay - by
@@ -51,17 +57,20 @@ pub fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 }
 
 ///|
+/// Returns a pseudo-random float sampled from `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let roll = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * roll
 }
 
 ///|
+/// Returns the sine of an angle in radians.
 pub fn sinf(v : Float) -> Float {
   Float::from_double(@math.sin(v.to_double()))
 }
 
 ///|
+/// Normalizes a 2D vector and returns `(x, y)` components.
 pub fn normalize2(x : Float, y : Float) -> (Float, Float) {
   let len2 = x * x + y * y
   if len2 <= 0.000001 {
@@ -73,6 +82,7 @@ pub fn normalize2(x : Float, y : Float) -> (Float, Float) {
 }
 
 ///|
+/// Returns world-space coordinates for lane y.
 pub fn lane_y(lane : Int) -> Float {
   match clampi(lane, 0, corridor_lanes - 1) {
     0 => Float::from_int(lane_top_y)
@@ -82,6 +92,7 @@ pub fn lane_y(lane : Int) -> Float {
 }
 
 ///|
+/// Returns world-space coordinates for beacon position.
 pub fn beacon_position(index : Int) -> (Float, Float) {
   match clampi(index, 0, beacon_count - 1) {
     0 => (Float::from_int(world_x + 760), lane_y(0))
@@ -91,6 +102,7 @@ pub fn beacon_position(index : Int) -> (Float, Float) {
 }
 
 ///|
+/// Returns world-space coordinates for trap slot position.
 pub fn trap_slot_position(index : Int) -> (Float, Float) {
   let normalized = clampi(index, 0, trap_slot_count - 1)
   let row = normalized / trap_slot_cols
@@ -101,6 +113,7 @@ pub fn trap_slot_position(index : Int) -> (Float, Float) {
 }
 
 ///|
+/// Returns derived layout data for spawn route count.
 pub fn spawn_route_count(night : Int) -> Int {
   if night >= 4 {
     8
@@ -110,6 +123,7 @@ pub fn spawn_route_count(night : Int) -> Int {
 }
 
 ///|
+/// Returns world-space coordinates for spawn route position.
 pub fn spawn_route_position(route : Int) -> (Float, Float) {
   let mid_x = world_x + world_w / 2
   match route {
@@ -125,6 +139,7 @@ pub fn spawn_route_position(route : Int) -> (Float, Float) {
 }
 
 ///|
+/// Returns derived layout data for spawn route target.
 pub fn spawn_route_target(route : Int) -> Int {
   match route {
     0 => 0
@@ -139,6 +154,7 @@ pub fn spawn_route_target(route : Int) -> Int {
 }
 
 ///|
+/// Returns derived layout data for spawn interval for night.
 pub fn spawn_interval_for_night(night : Int) -> Float {
   let level = Float::from_int(clampi(night - 1, 0, 999))
   clampf(
@@ -149,6 +165,7 @@ pub fn spawn_interval_for_night(night : Int) -> Float {
 }
 
 ///|
+/// Returns collision or positioning data for enemy hit radius.
 pub fn enemy_hit_radius(kind : Int) -> Float {
   match kind {
     1 => 12.0
@@ -158,6 +175,7 @@ pub fn enemy_hit_radius(kind : Int) -> Float {
 }
 
 ///|
+/// Returns a derived gameplay metric for active enemy count.
 pub fn active_enemy_count(game : Game) -> Int {
   let mut total = 0
   for enemy in game.enemies {
@@ -169,6 +187,7 @@ pub fn active_enemy_count(game : Game) -> Int {
 }
 
 ///|
+/// Returns a derived gameplay metric for living beacon count.
 pub fn living_beacon_count(game : Game) -> Int {
   let mut total = 0
   for beacon in game.beacons {
@@ -180,6 +199,7 @@ pub fn living_beacon_count(game : Game) -> Int {
 }
 
 ///|
+/// Returns a derived gameplay metric for beacon total integrity.
 pub fn beacon_total_integrity(game : Game) -> Float {
   let mut total : Float = 0.0
   for beacon in game.beacons {

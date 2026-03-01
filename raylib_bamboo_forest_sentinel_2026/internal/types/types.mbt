@@ -1,4 +1,5 @@
 ///|
+/// Enumerates high-level states in the game flow.
 pub(all) enum GameState {
   Title
   Playing
@@ -7,6 +8,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Stores runtime data for InputState.
 pub(all) struct InputState {
   mut move_x : Int
   mut move_y : Int
@@ -19,6 +21,7 @@ pub(all) struct InputState {
 }
 
 ///|
+/// Creates a default InputState value for a new session.
 pub fn InputState::new() -> InputState {
   {
     move_x: 0,
@@ -33,6 +36,7 @@ pub fn InputState::new() -> InputState {
 }
 
 ///|
+/// Stores runtime data for Player.
 pub(all) struct Player {
   mut x : Float
   mut y : Float
@@ -47,6 +51,7 @@ pub(all) struct Player {
 }
 
 ///|
+/// Creates a default Player value for a new session.
 pub fn Player::new() -> Player {
   {
     x: Float::from_int(world_x + 330),
@@ -63,6 +68,7 @@ pub fn Player::new() -> Player {
 }
 
 ///|
+/// Stores runtime data for Beacon.
 pub(all) struct Beacon {
   x : Float
   y : Float
@@ -71,12 +77,14 @@ pub(all) struct Beacon {
 }
 
 ///|
+/// Creates a default Beacon value for a new session.
 pub fn Beacon::new(index : Int) -> Beacon {
   let (x, y) = beacon_position(index)
   { x, y, integrity: beacon_integrity_max, pulse_t: 0.0 }
 }
 
 ///|
+/// Stores runtime data for Trap.
 pub(all) struct Trap {
   mut active : Bool
   x : Float
@@ -86,12 +94,14 @@ pub(all) struct Trap {
 }
 
 ///|
+/// Creates a default Trap value for a new session.
 pub fn Trap::new(index : Int) -> Trap {
   let (x, y) = trap_slot_position(index)
   { active: false, x, y, trigger_cd: 0.0, flash_t: 0.0 }
 }
 
 ///|
+/// Stores runtime data for Enemy.
 pub(all) struct Enemy {
   mut active : Bool
   mut x : Float
@@ -109,6 +119,7 @@ pub(all) struct Enemy {
 }
 
 ///|
+/// Creates a default Enemy value for a new session.
 pub fn Enemy::new() -> Enemy {
   {
     active: false,
@@ -128,6 +139,7 @@ pub fn Enemy::new() -> Enemy {
 }
 
 ///|
+/// Aggregates all mutable state needed to run one game session.
 pub(all) struct Game {
   input : InputState
   player : Player
@@ -154,6 +166,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a default Game value for a new session.
 pub fn Game::new() -> Game {
   let beacons = Array::makei(beacon_count, fn(i) { Beacon::new(i) })
   let traps = Array::makei(trap_slot_count, fn(i) { Trap::new(i) })
