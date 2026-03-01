@@ -1,4 +1,5 @@
 ///|
+/// High-level phase of a candy-crush session.
 pub(all) enum GameState {
   Title
   Play
@@ -7,6 +8,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Full mutable game state for board simulation, UI, and input.
 pub(all) struct Game {
   kinds : Array[Int]
   specials : Array[Int]
@@ -48,6 +50,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a new game state with default board buffers and counters.
 pub fn Game::new() -> Game {
   {
     kinds: Array::make(board_cells, 0),

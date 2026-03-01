@@ -747,6 +747,7 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances one frame of game timers and state-specific input handling.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   update_timers(game, dt)
   match game.state {
