@@ -1,4 +1,5 @@
 ///|
+/// Return the smaller of two integers.
 pub fn mini(a : Int, b : Int) -> Int {
   if a < b {
     a
@@ -8,6 +9,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Return the larger of two integers.
 pub fn maxi(a : Int, b : Int) -> Int {
   if a > b {
     a
@@ -17,6 +19,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Clamp an integer to the inclusive range `[lo, hi]`.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -28,6 +31,7 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Clamp a float to the inclusive range `[lo, hi]`.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -39,6 +43,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Return the smaller of two float values.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -48,6 +53,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Return the larger of two float values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -57,6 +63,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Return the absolute value of a float.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -66,42 +73,50 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Sine helper wrapping the math double API.
 pub fn sinf(v : Float) -> Float {
   Float::from_double(@math.sin(v.to_double()))
 }
 
 ///|
+/// Cosine helper wrapping the math double API.
 pub fn cosf(v : Float) -> Float {
   Float::from_double(@math.cos(v.to_double()))
 }
 
 ///|
+/// Uniform random float in `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// World left boundary as float.
 pub fn world_left() -> Float {
   Float::from_int(world_x0)
 }
 
 ///|
+/// World right boundary as float.
 pub fn world_right() -> Float {
   Float::from_int(world_x0 + world_w)
 }
 
 ///|
+/// World top boundary as float.
 pub fn world_top() -> Float {
   Float::from_int(world_y0)
 }
 
 ///|
+/// World bottom boundary as float.
 pub fn world_bottom() -> Float {
   Float::from_int(world_y0 + world_h)
 }
 
 ///|
+/// Squared Euclidean distance between two points.
 pub fn point_dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx : Float = x1 - x0
   let dy : Float = y1 - y0
@@ -109,6 +124,7 @@ pub fn point_dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Horizontal water current applied at a given y.
 pub fn water_current_x(game : Game, y : Float) -> Float {
   let n0 : Float = sinf(game.ui_t * 0.80 + y * 0.011)
   let n1 : Float = cosf(game.ui_t * 1.53 + y * 0.006)
@@ -116,6 +132,7 @@ pub fn water_current_x(game : Game, y : Float) -> Float {
 }
 
 ///|
+/// Vertical water current applied at a given x.
 pub fn water_current_y(game : Game, x : Float) -> Float {
   let n0 : Float = sinf(game.ui_t * 0.66 + x * 0.008)
   let n1 : Float = cosf(game.ui_t * 1.18 + x * 0.014)
@@ -123,12 +140,14 @@ pub fn water_current_y(game : Game, x : Float) -> Float {
 }
 
 ///|
+/// Set transient message text and display duration.
 pub fn set_msg(game : Game, msg : String, ttl : Float) -> Unit {
   game.msg = msg
   game.msg_t = ttl
 }
 
 ///|
+/// Test whether a point lies inside an integer rectangle.
 pub fn point_in_rect(
   x : Float,
   y : Float,
@@ -146,6 +165,7 @@ pub fn point_in_rect(
 }
 
 ///|
+/// Check pointer/touch hold intersection with a rectangle.
 pub fn pointer_on_rect(
   mx : Float,
   my : Float,

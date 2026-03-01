@@ -1,4 +1,5 @@
 ///|
+/// Dynamic obstacle entity in the river lane.
 pub(all) struct Obstacle {
   mut active : Bool
   mut x : Float
@@ -12,6 +13,7 @@ pub(all) struct Obstacle {
 }
 
 ///|
+/// Collectible pickup entity in the river lane.
 pub(all) struct Pickup {
   mut active : Bool
   mut x : Float
@@ -21,6 +23,7 @@ pub(all) struct Pickup {
 }
 
 ///|
+/// Generic particle used for water and collision effects.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -33,6 +36,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// Full mutable state for one raft run.
 pub(all) struct Game {
   obstacles : Array[Obstacle]
   pickups : Array[Pickup]
@@ -74,6 +78,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Create an inactive obstacle slot.
 pub fn Obstacle::new() -> Obstacle {
   {
     active: false,
@@ -89,11 +94,13 @@ pub fn Obstacle::new() -> Obstacle {
 }
 
 ///|
+/// Create an inactive pickup slot.
 pub fn Pickup::new() -> Pickup {
   { active: false, x: 0.0, y: 0.0, kind: pickup_coin, phase: 0.0 }
 }
 
 ///|
+/// Create an inactive particle slot.
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -108,6 +115,7 @@ pub fn Particle::new() -> Particle {
 }
 
 ///|
+/// Build a new run in title state with empty object pools.
 pub fn Game::new() -> Game {
   {
     obstacles: Array::makei(max_obstacles, fn(_i) { Obstacle::new() }),
