@@ -522,6 +522,7 @@ fn check_win(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Advances one simulation step for active play.
 pub fn update_play(game : @types.Game, dt : Float) -> Unit {
   game.ui_t = game.ui_t + dt
 

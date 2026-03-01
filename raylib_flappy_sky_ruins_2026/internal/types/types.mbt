@@ -1,4 +1,5 @@
 ///|
+/// Active obstacle instance in the scrolling world.
 pub(all) struct Obstacle {
   mut active : Bool
   mut x : Float
@@ -12,6 +13,7 @@ pub(all) struct Obstacle {
 }
 
 ///|
+/// Active collectible item in the scrolling world.
 pub(all) struct Pickup {
   mut active : Bool
   mut x : Float
@@ -21,6 +23,7 @@ pub(all) struct Pickup {
 }
 
 ///|
+/// Pooled particle used for impacts and pickup feedback.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -33,6 +36,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// High-level phase of a flappy run.
 pub(all) enum GameState {
   Title
   Play
@@ -40,6 +44,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Full mutable game state for world simulation, UI, and input.
 pub(all) struct Game {
   obstacles : Array[Obstacle]
   pickups : Array[Pickup]
@@ -78,6 +83,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates an inactive obstacle with default gate settings.
 pub fn Obstacle::new() -> Obstacle {
   {
     active: false,
@@ -93,11 +99,13 @@ pub fn Obstacle::new() -> Obstacle {
 }
 
 ///|
+/// Creates an inactive pickup with score type defaults.
 pub fn Pickup::new() -> Pickup {
   { active: false, x: 0.0, y: 0.0, kind: pickup_score, phase: 0.0 }
 }
 
 ///|
+/// Creates an inactive particle for the particle pool.
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -112,6 +120,7 @@ pub fn Particle::new() -> Particle {
 }
 
 ///|
+/// Creates a new game in title state with initialized object pools.
 pub fn Game::new() -> Game {
   {
     obstacles: Array::makei(max_obs, fn(_i) { Obstacle::new() }),

@@ -713,6 +713,7 @@ fn draw_world(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Renders the complete frame for the current game state.
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_bg(game)
   match game.state {
