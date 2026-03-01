@@ -3,6 +3,10 @@ import {
   "tonyfettes/raylib/rl",
 }
 
+warnings(
+  "+missing_doc",
+)
+
 options(
   "is-main": true,
 )
