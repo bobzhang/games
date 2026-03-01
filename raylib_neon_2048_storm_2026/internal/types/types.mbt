@@ -1,4 +1,5 @@
 ///|
+/// High-level phase of a Neon 2048 run.
 pub(all) enum GameState {
   Title
   Play
@@ -6,6 +7,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Input direction for slide operations.
 pub(all) enum Direction {
   DirLeft
   DirRight
@@ -14,6 +16,7 @@ pub(all) enum Direction {
 } derive(Eq)
 
 ///|
+/// Visual spark effect category.
 pub(all) enum SparkKind {
   SparkDefault
   SparkMerge
@@ -21,6 +24,7 @@ pub(all) enum SparkKind {
 } derive(Eq)
 
 ///|
+/// Single pooled particle used by board effects.
 pub(all) struct Spark {
   mut active : Bool
   mut x : Float
@@ -33,6 +37,7 @@ pub(all) struct Spark {
 }
 
 ///|
+/// Full mutable game state for simulation, UI, and input.
 pub(all) struct Game {
   board : Array[Int]
   prev_board : Array[Int]
@@ -75,6 +80,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates an inactive spark instance for the particle pool.
 pub fn Spark::new() -> Spark {
   {
     active: false,
@@ -89,6 +95,7 @@ pub fn Spark::new() -> Spark {
 }
 
 ///|
+/// Creates a new game in title state with initialized buffers and counters.
 pub fn Game::new() -> Game {
   {
     board: Array::make(max_cells, 0),

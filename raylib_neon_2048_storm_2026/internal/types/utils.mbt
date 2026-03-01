@@ -1,4 +1,5 @@
 ///|
+/// Returns the smaller of two integers.
 pub fn mini(a : Int, b : Int) -> Int {
   if a < b {
     a
@@ -8,6 +9,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the larger of two integers.
 pub fn maxi(a : Int, b : Int) -> Int {
   if a > b {
     a
@@ -17,6 +19,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Clamps an integer into the inclusive range [`lo`, `hi`].
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -28,6 +31,7 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Clamps a float into the inclusive range [`lo`, `hi`].
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -39,6 +43,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two floating-point values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -48,22 +53,26 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns a pseudo-random float in the inclusive range [`lo`, `hi`].
 pub fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Converts board coordinates into a flat row-major index.
 pub fn idx(x : Int, y : Int) -> Int {
   y * board_n + x
 }
 
 ///|
+/// Returns true when a board coordinate lies inside the grid.
 pub fn in_board(x : Int, y : Int) -> Bool {
   x >= 0 && x < board_n && y >= 0 && y < board_n
 }
 
 ///|
+/// Computes board origin and tile size, including active screen-shake offsets.
 pub fn board_metrics(game : Game) -> (Int, Int, Int) {
   let area_x : Int = board_area_x()
   let area_y : Int = board_area_y()
@@ -88,6 +97,7 @@ pub fn board_metrics(game : Game) -> (Int, Int, Int) {
 }
 
 ///|
+/// Returns the world-space center of a board cell.
 pub fn cell_world_center(game : Game, x : Int, y : Int) -> (Float, Float) {
   let (bx, by, tile) = board_metrics(game)
   (
@@ -97,12 +107,14 @@ pub fn cell_world_center(game : Game, x : Int, y : Int) -> (Float, Float) {
 }
 
 ///|
+/// Sets the transient HUD message and its remaining lifetime.
 pub fn set_msg(game : Game, msg : String, ttl : Float) -> Unit {
   game.msg = msg
   game.msg_t = ttl
 }
 
 ///|
+/// Checks whether an active pointer is currently inside a rectangle.
 pub fn pointer_on_rect(
   x : Float,
   y : Float,
@@ -126,6 +138,7 @@ pub fn pointer_on_rect(
 }
 
 ///|
+/// Converts pointer position to a board cell if the pointer is on the board.
 pub fn pointer_cell(game : Game, mx : Float, my : Float) -> (Bool, Int, Int) {
   let (bx, by, tile) = board_metrics(game)
 
@@ -140,6 +153,7 @@ pub fn pointer_cell(game : Game, mx : Float, my : Float) -> (Bool, Int, Int) {
 }
 
 ///|
+/// Returns zap charge gained by merging a tile of value `v`.
 pub fn charge_for_merge(v : Int) -> Int {
   if v >= 1024 {
     40
@@ -157,6 +171,7 @@ pub fn charge_for_merge(v : Int) -> Int {
 }
 
 ///|
+/// Returns bonus score for merge chains longer than one merge.
 pub fn bonus_for_chain(chain : Int) -> Int {
   if chain <= 1 {
     0
@@ -170,6 +185,7 @@ pub fn bonus_for_chain(chain : Int) -> Int {
 }
 
 ///|
+/// Maps tile value to an integer progression rank.
 pub fn tile_rank(v : Int) -> Int {
   if v <= 0 {
     0
@@ -205,6 +221,7 @@ pub fn tile_rank(v : Int) -> Int {
 }
 
 ///|
+/// Returns the display rank title for a computed tile rank.
 pub fn rank_name(rank : Int) -> String {
   if rank >= 13 {
     "Storm God"
@@ -224,6 +241,7 @@ pub fn rank_name(rank : Int) -> String {
 }
 
 ///|
+/// Returns the final letter grade from max tile and score.
 pub fn final_grade(game : Game) -> String {
   let rank : Int = tile_rank(game.max_tile)
   let score : Int = game.score
