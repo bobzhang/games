@@ -1,4 +1,5 @@
 ///|
+/// Enemy combat actor tracked in the arena.
 pub(all) struct Enemy {
   mut active : Bool
   mut x : Float
@@ -16,6 +17,7 @@ pub(all) struct Enemy {
 }
 
 ///|
+/// Complete mutable state for a wuxia rooftop duel run.
 pub(all) struct Game {
   enemies : Array[Enemy]
   mut state : Int
@@ -57,6 +59,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates an inactive enemy slot with default combat parameters.
 pub fn Enemy::new() -> Enemy {
   {
     active: false,
@@ -76,6 +79,7 @@ pub fn Enemy::new() -> Enemy {
 }
 
 ///|
+/// Creates a new game state with initialized player and wave counters.
 pub fn Game::new() -> Game {
   {
     enemies: Array::makei(max_enemy_slots, fn(_i) { Enemy::new() }),
