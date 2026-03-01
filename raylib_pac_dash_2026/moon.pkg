@@ -5,6 +5,8 @@ import {
   "tonyfettes/raylib-examples/raylib_pac_dash_2026/internal/types",
 }
 
+warnings = "+missing_doc"
+
 options(
   "is-main": true,
 )

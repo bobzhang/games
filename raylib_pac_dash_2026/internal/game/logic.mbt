@@ -105,6 +105,7 @@ fn reset_positions(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Initializes maze entities, counters, and spawn positions for a new run.
 pub fn init_game(game : @types.Game) -> Unit {
   game.ghosts.clear()
   game.ghosts.push(
@@ -318,6 +319,7 @@ fn update_phase(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances one frame of Pac Dash simulation and AI step timers.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   if game.game_over {
     if @raylib.is_key_pressed(@raylib.KeyR) {
