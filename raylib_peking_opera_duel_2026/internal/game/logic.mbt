@@ -422,11 +422,13 @@ fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Reset runtime state back to the title scene configuration.
 pub fn init_game(game : @types.Game) -> Unit {
   init_title_state(game)
 }
 
 ///|
+/// Advance one frame of input, timers, and state transitions.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   sample_input(game)
 

@@ -1,4 +1,5 @@
 ///|
+/// Return the larger of two integers.
 pub fn maxi(a : Int, b : Int) -> Int {
   if a > b {
     a
@@ -8,6 +9,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Clamp an integer to the inclusive range `[lo, hi]`.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -19,6 +21,7 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Clamp a float to the inclusive range `[lo, hi]`.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -30,6 +33,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Return the smaller of two float values.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -39,6 +43,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Return the larger of two float values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -48,6 +53,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Return the absolute value of a float.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -57,11 +63,13 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Sine helper that wraps the math double API.
 pub fn sinf(v : Float) -> Float {
   Float::from_double(@math.sin(v.to_double()))
 }
 
 ///|
+/// Convert a stance id to its HUD display name.
 pub fn stance_name(stance : Int) -> String {
   if stance == stance_spear {
     "Spear Lift"
@@ -75,6 +83,7 @@ pub fn stance_name(stance : Int) -> String {
 }
 
 ///|
+/// Map current acclaim score to a final grade label.
 pub fn grade_for_acclaim(acclaim : Int) -> String {
   if acclaim >= 1700 {
     "Legendary Curtain Call"
@@ -88,17 +97,20 @@ pub fn grade_for_acclaim(acclaim : Int) -> String {
 }
 
 ///|
+/// Set the transient message banner text and time-to-live.
 pub fn set_message(game : Game, text : String, ttl : Float) -> Unit {
   game.message = text
   game.message_t = ttl
 }
 
 ///|
+/// Build a raylib color from RGBA components.
 pub fn col(r : Int, g : Int, b : Int, a : Int) -> @raylib.Color {
   @raylib.Color::new(r, g, b, a)
 }
 
 ///|
+/// Select the UI color for a stance with the given alpha.
 pub fn stance_color(stance : Int, alpha : Int) -> @raylib.Color {
   if stance == stance_spear {
     col(231, 103, 80, alpha)
@@ -112,16 +124,19 @@ pub fn stance_color(stance : Int, alpha : Int) -> @raylib.Color {
 }
 
 ///|
+/// Convert lane x index to world x position.
 pub fn lane_to_x(lane_x : Int) -> Int {
   screen_w / 2 + lane_x * lane_step_x
 }
 
 ///|
+/// Convert lane y index to world y position.
 pub fn lane_to_y(lane_y : Int) -> Int {
   stage_top + stage_h / 2 + lane_y * lane_step_y
 }
 
 ///|
+/// Draw centered text horizontally at the given y coordinate.
 pub fn draw_center_text(
   text : String,
   y : Int,

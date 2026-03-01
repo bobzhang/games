@@ -569,6 +569,7 @@ fn draw_message_banner(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draw one full frame from world, HUD, overlays, and messages.
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_backdrop(game)
   draw_stage_actors(game)
