@@ -1,24 +1,44 @@
-# Core Input Gamepad
+# Input Gamepad
 
-Demonstrates gamepad input detection with a visual controller representation showing buttons, D-pad, analog sticks, and triggers in real time.
+This example demonstrates raylib's gamepad input API by rendering a visual gamepad representation on screen. When a gamepad is connected, buttons light up when pressed, analog sticks move their visual indicators, and trigger values fill progress bars. Detected axis values and button presses are shown as text.
 
 ## Build and Run
 
 ```bash
-cd examples && moon build --target native raylib_core_input_gamepad/
-cd examples && ./_build/native/debug/build/raylib_core_input_gamepad/raylib_core_input_gamepad.exe
+moon build --target native raylib_core_input_gamepad/
+./_build/native/debug/build/raylib_core_input_gamepad/raylib_core_input_gamepad.exe
 ```
 
 ## Controls
 
-- **Left / Right Arrow Keys**: Switch between gamepads
-- **Gamepad**: All buttons, sticks, and triggers are displayed visually
+- **Left/Right arrow keys** -- switch between gamepads (gamepad index 0, 1, 2, ...)
+- **Gamepad buttons/sticks/triggers** -- interact to see visual feedback on screen
 
-## Key Concepts
+## What It Demonstrates
 
-- `is_gamepad_available` to check gamepad connection status.
-- `get_gamepad_name` for device identification.
-- `is_gamepad_button_down` for button state polling.
-- `get_gamepad_axis_movement` for analog stick and trigger values.
-- `get_gamepad_button_pressed` for detecting the last pressed button.
-- Visual gamepad rendering with drawn shapes representing each control.
+- `@raylib.set_config_flags(@raylib.FlagMsaa4xHint)` to enable 4x multi-sample anti-aliasing before window creation
+- `@raylib.is_gamepad_available()` to check if a specific gamepad index is connected
+- `@raylib.get_gamepad_name()` to retrieve the gamepad's human-readable name
+- `@raylib.get_gamepad_axis_movement()` to read analog values for each axis (left stick X/Y, right stick X/Y, left/right triggers)
+- `@raylib.get_gamepad_axis_count()` to query how many axes the gamepad reports
+- `@raylib.is_gamepad_button_down()` to test individual button states (face buttons, d-pad, shoulders, thumbsticks, middle buttons)
+- `@raylib.get_gamepad_button_pressed()` to detect which button was just pressed this frame
+- Visual feedback with `draw_circle`, `draw_rectangle`, and `draw_rectangle_rounded` to render a gamepad diagram
+
+## Public API Reference
+
+### Package `raylib_core_input_gamepad`
+
+> Single-package example.
+
+No public API -- self-contained main function.
+
+## Architecture
+
+The program creates an 800x450 window with MSAA enabled. Each frame, it reads the selected gamepad's state: axis values for both sticks and triggers, and button states for all standard gamepad buttons. A stylized gamepad is drawn using basic shapes (rounded rectangles for the body, circles for buttons and sticks, rectangles for d-pad and triggers). Active buttons are highlighted in color, and stick positions are offset based on axis values.
+
+## Key Takeaways
+
+- Raylib provides a unified gamepad API that works across platforms, with support for multiple simultaneous gamepads selected by index.
+- Gamepad axes return floating-point values (typically -1.0 to 1.0 for sticks, -1.0 to 1.0 for triggers), which can be mapped directly to visual positions.
+- Building a visual gamepad diagram with basic shape primitives is an effective way to debug and verify input handling.
