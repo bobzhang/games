@@ -863,6 +863,7 @@ fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Render the complete frame, including world, HUD, and overlays.
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.black)
 

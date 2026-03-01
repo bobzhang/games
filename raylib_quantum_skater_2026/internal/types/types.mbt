@@ -1,4 +1,5 @@
 ///|
+/// Runtime track entity such as obstacle, orb, or gate.
 pub(all) struct TrackObj {
   mut active : Bool
   mut kind : Int
@@ -13,6 +14,7 @@ pub(all) struct TrackObj {
 }
 
 ///|
+/// Create an inactive default track object slot.
 pub fn TrackObj::new() -> TrackObj {
   {
     active: false,
@@ -29,6 +31,7 @@ pub fn TrackObj::new() -> TrackObj {
 }
 
 ///|
+/// Particle used for hit sparks, dust, and feedback.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -41,6 +44,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// Create an inactive default particle slot.
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -55,6 +59,7 @@ pub fn Particle::new() -> Particle {
 }
 
 ///|
+/// Visual trail segment following the player.
 pub(all) struct Trail {
   mut active : Bool
   mut x : Float
@@ -66,11 +71,13 @@ pub(all) struct Trail {
 }
 
 ///|
+/// Create an inactive default trail slot.
 pub fn Trail::new() -> Trail {
   { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, beta: false }
 }
 
 ///|
+/// Player kinematics and short-lived combat state.
 pub(all) struct Player {
   mut lane : Int
   mut lane_f : Float
@@ -84,6 +91,7 @@ pub(all) struct Player {
 }
 
 ///|
+/// Create the player centered on lane 2 and grounded.
 pub fn Player::new() -> Player {
   {
     lane: 2,
@@ -99,6 +107,7 @@ pub fn Player::new() -> Player {
 }
 
 ///|
+/// Full mutable game state for one run.
 pub(all) struct Game {
   objs : Array[TrackObj]
   particles : Array[Particle]
@@ -148,6 +157,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Construct a new game session in title state with empty pools.
 pub fn Game::new() -> Game {
   {
     objs: Array::makei(max_objs, fn(_i) { TrackObj::new() }),

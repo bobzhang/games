@@ -210,6 +210,7 @@ All other functions in this package are private:
 | `draw_title_overlay` | Renders the title screen with controls list and blinking start prompt |
 | `draw_stage_clear_overlay` | Shows stage clear banner with bonus score |
 | `draw_game_over_overlay` | Shows game over screen with final and best scores and retry prompt |
+| `draw_world` | Orchestrates drawing backdrop, grid, objects, trails, particles, and player |
 | `ui_text` | Returns white or muted text color based on button active state |
 | `point_in_rect` | Tests if a point is inside a rectangle |
 | `pointer_on_rect` | Tests if mouse or any touch point is inside a rectangle |
@@ -220,20 +221,20 @@ All other functions in this package are private:
 
 ```
 raylib_quantum_skater_2026/
-├── main.mbt              — Entry point: window init, input polling, game loop
-├── moon.pkg              — Package config, imports types/game/render
+├── main.mbt              -- Entry point: window init, input polling, game loop
+├── moon.pkg              -- Package config, imports types/game/render
 └── internal/
     ├── types/
-    │   ├── types.mbt     — Core structs: TrackObj, Particle, Trail, Player, Game
-    │   ├── constants.mbt — All tuning constants (speeds, damage, pool sizes, etc.)
-    │   ├── utils.mbt     — Math utilities, projection, lane mapping, color helpers
+    │   ├── types.mbt     -- Core structs: TrackObj, Particle, Trail, Player, Game
+    │   ├── constants.mbt -- All tuning constants (speeds, damage, pool sizes, etc.)
+    │   ├── utils.mbt     -- Math utilities, projection, lane mapping, color helpers
     │   └── moon.pkg
     ├── game/
-    │   ├── logic.mbt     — Spawning, physics, collision, scoring, state transitions
-    │   ├── input.mbt     — Keyboard/mouse/touch input handling per game state
+    │   ├── logic.mbt     -- Spawning, physics, collision, scoring, state transitions
+    │   ├── input.mbt     -- Keyboard/mouse/touch input handling per game state
     │   └── moon.pkg
     └── render/
-        ├── render.mbt    — All drawing: world, objects, player, HUD, overlays, touch UI
+        ├── render.mbt    -- All drawing: world, objects, player, HUD, overlays, touch UI
         └── moon.pkg
 ```
 
