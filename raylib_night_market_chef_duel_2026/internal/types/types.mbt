@@ -1,4 +1,5 @@
 ///|
+/// High-level game states for a session.
 pub(all) enum GameState {
   Title
   Play
@@ -7,6 +8,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Dish catalog identifiers used by orders and cooking.
 pub(all) enum Dish {
   DishNone
   Skewers
@@ -16,18 +18,21 @@ pub(all) enum Dish {
 } derive(Eq)
 
 ///|
+/// Cooking lane assignment for a dish.
 pub(all) enum Lane {
   Grill
   Wok
 } derive(Eq)
 
 ///|
+/// Two-step cooking phase state.
 pub(all) enum CookStage {
   Prep
   Heat
 } derive(Eq)
 
 ///|
+/// Active order ticket and timing data.
 pub(all) struct Order {
   mut active : Bool
   mut dish : Dish
@@ -38,6 +43,7 @@ pub(all) struct Order {
 }
 
 ///|
+/// Per-frame input snapshot for menu and cooking actions.
 pub(all) struct InputState {
   mut move_x : Int
   mut move_y : Int
@@ -50,6 +56,7 @@ pub(all) struct InputState {
 }
 
 ///|
+/// Current dish being worked on at stations.
 pub(all) struct CookingState {
   mut active : Bool
   mut dish : Dish
@@ -60,6 +67,7 @@ pub(all) struct CookingState {
 }
 
 ///|
+/// Full mutable run state for score, orders, and effects.
 pub(all) struct Game {
   orders : Array[Order]
   input : InputState
@@ -85,6 +93,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Create an inactive order slot.
 pub fn Order::new() -> Order {
   {
     active: false,
@@ -97,6 +106,7 @@ pub fn Order::new() -> Order {
 }
 
 ///|
+/// Create an empty input snapshot with no key presses.
 pub fn InputState::new() -> InputState {
   {
     move_x: 0,
@@ -111,6 +121,7 @@ pub fn InputState::new() -> InputState {
 }
 
 ///|
+/// Create a cleared cooking pipeline state.
 pub fn CookingState::new() -> CookingState {
   {
     active: false,
@@ -123,6 +134,7 @@ pub fn CookingState::new() -> CookingState {
 }
 
 ///|
+/// Build a fresh run at title state with empty orders.
 pub fn Game::new() -> Game {
   {
     orders: Array::makei(max_orders, fn(_i) { Order::new() }),

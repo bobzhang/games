@@ -3,6 +3,4 @@ import {
   "tonyfettes/raylib-examples/raylib_night_market_chef_duel_2026/internal/types",
 }
 
-warnings(
-  "+missing_doc",
-)
+warnings = "+missing_doc"

@@ -756,6 +756,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Render a full frame: kitchen, HUD, cursor, and overlays.
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(0, 0, 0, 255))
 
