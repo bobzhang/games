@@ -727,6 +727,7 @@ fn draw_campaign_clear_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the complete frame for the current museum heist state.
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_background(game)
   draw_board_tiles(game)
