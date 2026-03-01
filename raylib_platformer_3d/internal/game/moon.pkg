@@ -5,6 +5,4 @@ import {
   "tonyfettes/raylib-examples/raylib_platformer_3d/internal/types",
 }
 
-warnings(
-  "+missing_doc",
-)
+warnings = "+missing_doc"

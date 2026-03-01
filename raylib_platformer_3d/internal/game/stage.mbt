@@ -1,6 +1,6 @@
 // Level loading and stage management
 
-///|
+/// Resets runtime state and populates all level entities for the selected world and level.
 pub fn load_level(game : @types.Game, world : Int, level : Int) -> Unit {
   game.current_world = world
   game.current_level = level

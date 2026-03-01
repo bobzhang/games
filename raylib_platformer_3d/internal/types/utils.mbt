@@ -1,4 +1,4 @@
-///|
+/// Returns the absolute value of a float.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -7,7 +7,7 @@ pub fn absf(v : Float) -> Float {
   }
 }
 
-///|
+/// Clamps a float into the inclusive range `[low, high]`.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
     low
@@ -18,7 +18,7 @@ pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   }
 }
 
-///|
+/// Clamps an integer into the inclusive range `[low, high]`.
 pub fn clampi(v : Int, low : Int, high : Int) -> Int {
   if v < low {
     low
@@ -29,7 +29,7 @@ pub fn clampi(v : Int, low : Int, high : Int) -> Int {
   }
 }
 
-///|
+/// Returns the smaller of two float values.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -38,7 +38,7 @@ pub fn minf(a : Float, b : Float) -> Float {
   }
 }
 
-///|
+/// Returns the larger of two float values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -47,7 +47,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
   }
 }
 
-///|
+/// Returns the smaller of two integer values.
 pub fn mini(a : Int, b : Int) -> Int {
   if a < b {
     a
@@ -56,7 +56,7 @@ pub fn mini(a : Int, b : Int) -> Int {
   }
 }
 
-///|
+/// Returns the larger of two integer values.
 pub fn maxi(a : Int, b : Int) -> Int {
   if a > b {
     a
@@ -65,12 +65,12 @@ pub fn maxi(a : Int, b : Int) -> Int {
   }
 }
 
-///|
+/// Linearly interpolates from `a` to `b` using parameter `t`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t
 }
 
-///|
+/// Returns `-1.0`, `0.0`, or `1.0` based on the sign of `v`.
 pub fn signf(v : Float) -> Float {
   if v > 0.0 {
     1.0
@@ -81,14 +81,14 @@ pub fn signf(v : Float) -> Float {
   }
 }
 
-///|
+/// Computes Euclidean distance in the XZ plane.
 pub fn dist2d(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
   let dx = x1 - x2
   let dz = z1 - z2
   (dx * dx + dz * dz).sqrt()
 }
 
-///|
+/// Computes Euclidean distance in 3D space.
 pub fn dist3d(
   x1 : Float,
   y1 : Float,
@@ -105,7 +105,7 @@ pub fn dist3d(
 
 // Smoothstep interpolation (cubic ease in/out)
 
-///|
+/// Applies smoothstep interpolation between two edges.
 pub fn smoothstep(edge0 : Float, edge1 : Float, x : Float) -> Float {
   let t = clampf((x - edge0) / (edge1 - edge0), 0.0, 1.0)
   t * t * (3.0 - 2.0 * t)
@@ -113,21 +113,21 @@ pub fn smoothstep(edge0 : Float, edge1 : Float, x : Float) -> Float {
 
 // Ease-in quadratic
 
-///|
+/// Quadratic ease-in curve.
 pub fn ease_in_quad(t : Float) -> Float {
   t * t
 }
 
 // Ease-out quadratic
 
-///|
+/// Quadratic ease-out curve.
 pub fn ease_out_quad(t : Float) -> Float {
   t * (2.0 - t)
 }
 
 // Ease-in-out quadratic
 
-///|
+/// Quadratic ease-in-out curve.
 pub fn ease_in_out_quad(t : Float) -> Float {
   if t < 0.5 {
     2.0 * t * t
@@ -138,7 +138,7 @@ pub fn ease_in_out_quad(t : Float) -> Float {
 
 // Ease-out bounce
 
-///|
+/// Bounce-like ease-out curve for impact-style animation.
 pub fn ease_out_bounce(t_in : Float) -> Float {
   let n1 : Float = 7.5625
   let d1 : Float = 2.75
@@ -159,7 +159,7 @@ pub fn ease_out_bounce(t_in : Float) -> Float {
 
 // Ease-out elastic (simplified)
 
-///|
+/// Elastic ease-out curve with overshoot and damping.
 pub fn ease_out_elastic(t : Float) -> Float {
   if t <= 0.0 {
     return 0.0
@@ -201,7 +201,7 @@ pub fn ease_out_elastic(t : Float) -> Float {
 
 // Move toward value
 
-///|
+/// Moves `current` toward `target` by at most `max_delta`.
 pub fn move_toward(current : Float, target : Float, max_delta : Float) -> Float {
   let diff = target - current
   if absf(diff) <= max_delta {
@@ -213,7 +213,7 @@ pub fn move_toward(current : Float, target : Float, max_delta : Float) -> Float 
 
 // Wrap angle to 0..360
 
-///|
+/// Wraps an angle in degrees to the range `[0, 360)`.
 pub fn wrap_angle(angle : Float) -> Float {
   let mut a = angle
   for {
@@ -230,7 +230,7 @@ pub fn wrap_angle(angle : Float) -> Float {
 
 // Normalize a 2D vector, returning (nx, nz, length)
 
-///|
+/// Normalizes an XZ vector and returns `(nx, nz, length)`.
 pub fn normalize2d(x : Float, z : Float) -> (Float, Float, Float) {
   let len = (x * x + z * z).sqrt()
   if len > 0.001 {
@@ -242,14 +242,14 @@ pub fn normalize2d(x : Float, z : Float) -> (Float, Float, Float) {
 
 // Dot product 2d
 
-///|
+/// Computes the 2D dot product in XZ space.
 pub fn dot2d(ax : Float, az : Float, bx : Float, bz : Float) -> Float {
   ax * bx + az * bz
 }
 
 // Dot product 3d
 
-///|
+/// Computes the 3D dot product.
 pub fn dot3d(
   ax : Float,
   ay : Float,
@@ -263,7 +263,7 @@ pub fn dot3d(
 
 // Reflect 2d vector off normal
 
-///|
+/// Reflects a 2D velocity vector across a normalized surface normal.
 pub fn reflect2d(
   vx : Float,
   vz : Float,
@@ -277,7 +277,7 @@ pub fn reflect2d(
 
 // AABB overlap check
 
-///|
+/// Tests overlap between two axis-aligned 3D boxes.
 pub fn aabb_overlap(
   ax : Float,
   ay : Float,
@@ -314,7 +314,7 @@ pub fn aabb_overlap(
 
 // Sphere-AABB overlap
 
-///|
+/// Tests overlap between a sphere and an axis-aligned 3D box.
 pub fn sphere_aabb(
   sx : Float,
   sy : Float,
@@ -338,7 +338,7 @@ pub fn sphere_aabb(
 
 // Check if point is above a platform (for shadow casting)
 
-///|
+/// Returns whether an XZ point falls within a platform footprint.
 pub fn point_above_platform(
   px : Float,
   pz : Float,
@@ -355,7 +355,7 @@ pub fn point_above_platform(
 
 // Find highest platform below a point (for shadow y)
 
-///|
+/// Finds the highest platform top below a point for projected shadow placement.
 pub fn find_shadow_y(game : Game, px : Float, py : Float, pz : Float) -> Float {
   let mut best_y : Float = -25.0
   for plat in game.platforms {
@@ -374,7 +374,7 @@ pub fn find_shadow_y(game : Game, px : Float, py : Float, pz : Float) -> Float {
 
 // Calculate shadow alpha based on height above surface
 
-///|
+/// Computes shadow alpha (0-255) from vertical distance to the support surface.
 pub fn shadow_alpha(py : Float, shadow_y : Float) -> Int {
   let height = py - shadow_y
   if height < 0.0 {
@@ -393,7 +393,7 @@ pub fn shadow_alpha(py : Float, shadow_y : Float) -> Int {
 
 // Calculate shadow size based on height
 
-///|
+/// Computes a shadow scale factor from vertical distance to the support surface.
 pub fn shadow_scale(py : Float, shadow_y : Float) -> Float {
   let height = py - shadow_y
   if height < 0.0 {
@@ -403,7 +403,7 @@ pub fn shadow_scale(py : Float, shadow_y : Float) -> Float {
   shadow_size_base * (1.0 - t * 0.5)
 }
 
-///|
+/// Returns the first inactive particle slot index, or `-1` if full.
 pub fn alloc_particle(game : Game) -> Int {
   for i in 0..<game.particles.length() {
     if not(game.particles[i].active) {
@@ -413,7 +413,7 @@ pub fn alloc_particle(game : Game) -> Int {
   -1
 }
 
-///|
+/// Spawns a burst of particles at world position with random spread and velocity.
 pub fn spawn_particles(
   game : Game,
   wx : Float,
@@ -450,7 +450,7 @@ pub fn spawn_particles(
 
 // Spawn directional particles (e.g., for wall slide)
 
-///|
+/// Spawns particles biased toward a direction with configurable spread.
 pub fn spawn_particles_dir(
   game : Game,
   wx : Float,
@@ -491,7 +491,7 @@ pub fn spawn_particles_dir(
 
 // Spawn ring of particles (for power-up aura, checkpoint activation)
 
-///|
+/// Spawns particles distributed around a ring centered at world position.
 pub fn spawn_particle_ring(
   game : Game,
   wx : Float,
@@ -531,7 +531,7 @@ pub fn spawn_particle_ring(
 
 // Allocate enemy slot
 
-///|
+/// Returns the first inactive enemy slot index, or `-1` if full.
 pub fn alloc_enemy(game : Game) -> Int {
   for i in 0..<game.enemies.length() {
     if not(game.enemies[i].active) {
@@ -543,7 +543,7 @@ pub fn alloc_enemy(game : Game) -> Int {
 
 // Allocate projectile slot
 
-///|
+/// Returns the first inactive projectile slot index, or `-1` if full.
 pub fn alloc_projectile(game : Game) -> Int {
   for i in 0..<game.projectiles.length() {
     if not(game.projectiles[i].active) {
@@ -555,7 +555,7 @@ pub fn alloc_projectile(game : Game) -> Int {
 
 // Allocate score fly slot
 
-///|
+/// Returns the first inactive score-fly slot index, or `-1` if full.
 pub fn alloc_score_fly(game : Game) -> Int {
   for i in 0..<game.score_flies.length() {
     if not(game.score_flies[i].active) {
@@ -567,7 +567,7 @@ pub fn alloc_score_fly(game : Game) -> Int {
 
 // Spawn a score fly text
 
-///|
+/// Spawns a floating score popup at screen coordinates.
 pub fn spawn_score_fly(
   game : Game,
   screen_x : Float,
@@ -589,7 +589,7 @@ pub fn spawn_score_fly(
 
 // Add score with combo
 
-///|
+/// Adds score using the current combo multiplier and refreshes combo timing.
 pub fn add_score(game : Game, base : Int) -> Unit {
   let mult_score = Float::from_int(base) * game.combo_mult
   game.score = game.score + mult_score.to_int()
@@ -603,7 +603,7 @@ pub fn add_score(game : Game, base : Int) -> Unit {
 
 // Camera shake trigger
 
-///|
+/// Starts or refreshes camera shake with intensity and duration.
 pub fn trigger_cam_shake(
   game : Game,
   intensity : Float,
@@ -615,7 +615,7 @@ pub fn trigger_cam_shake(
 
 // RNG
 
-///|
+/// Advances the game RNG state and returns the next pseudo-random integer.
 pub fn rand_next(game : Game) -> Int {
   let mut x = game.rng_state
   x = x ^ (x << 13)
@@ -628,7 +628,7 @@ pub fn rand_next(game : Game) -> Int {
   x
 }
 
-///|
+/// Returns a random integer in the inclusive range `[low, high]`.
 pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
   if high <= low {
     low
@@ -637,7 +637,7 @@ pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
   }
 }
 
-///|
+/// Returns a random float in the range `[low, high]`.
 pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
   let n = Float::from_int(rand_next(game) % 10000) / 10000.0
   low + (high - low) * n
@@ -645,7 +645,7 @@ pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
 
 // Map a value from one range to another
 
-///|
+/// Maps a value from one numeric range into another with clamping.
 pub fn map_range(
   value : Float,
   in_low : Float,
@@ -659,7 +659,7 @@ pub fn map_range(
 
 // Approach float value at a given speed
 
-///|
+/// Moves `current` toward `target` at `speed` units per second.
 pub fn approach(
   current : Float,
   target : Float,
@@ -676,7 +676,7 @@ pub fn approach(
 
 // Color lerp helper (returns int 0-255)
 
-///|
+/// Linearly interpolates two color channels and clamps to `0..255`.
 pub fn lerp_color(a : Int, b : Int, t : Float) -> Int {
   let tc = clampf(t, 0.0, 1.0)
   let result = Float::from_int(a) +
@@ -686,14 +686,14 @@ pub fn lerp_color(a : Int, b : Int, t : Float) -> Int {
 
 // Pulse helper: returns 0..1 with sine wave
 
-///|
+/// Returns a normalized sine pulse in the range `0..1`.
 pub fn pulse(timer : Float, speed : Float) -> Float {
   (@math.sinf(timer * speed) + 1.0) * 0.5
 }
 
 // Flash helper: returns true for on_time, false for off_time
 
-///|
+/// Returns whether the current flash half-period is in the "on" phase.
 pub fn flash_on(timer : Float, period : Float) -> Bool {
   let ratio : Float = timer / period
   let floored : Float = Float::from_int(ratio.to_int())
@@ -703,7 +703,7 @@ pub fn flash_on(timer : Float, period : Float) -> Bool {
 
 // Calculate star rating for level completion
 
-///|
+/// Calculates a 1-3 star completion rating from time, gem completion, and deaths.
 pub fn calc_stars(
   time : Float,
   gems : Int,
