@@ -1,8 +1,8 @@
 import {
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/raylib_contra_1987_lite/game",
-  "tonyfettes/raylib-examples/raylib_contra_1987_lite/render",
-  "tonyfettes/raylib-examples/raylib_contra_1987_lite/types",
+  "tonyfettes/raylib-examples/raylib_contra_1987_lite/internal/game",
+  "tonyfettes/raylib-examples/raylib_contra_1987_lite/internal/render",
+  "tonyfettes/raylib-examples/raylib_contra_1987_lite/internal/types",
 }
 
 options(
