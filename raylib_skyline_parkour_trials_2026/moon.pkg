@@ -1,8 +1,8 @@
 import {
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/raylib_skyline_parkour_trials_2026/game",
-  "tonyfettes/raylib-examples/raylib_skyline_parkour_trials_2026/render",
-  "tonyfettes/raylib-examples/raylib_skyline_parkour_trials_2026/types",
+  "tonyfettes/raylib-examples/raylib_skyline_parkour_trials_2026/internal/game",
+  "tonyfettes/raylib-examples/raylib_skyline_parkour_trials_2026/internal/render",
+  "tonyfettes/raylib-examples/raylib_skyline_parkour_trials_2026/internal/types",
 }
 
 options(
