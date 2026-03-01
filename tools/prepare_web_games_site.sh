@@ -8,7 +8,7 @@ OUT_DIR="${2:-$ROOT_DIR/_build/web_pages_site}"
 
 if [[ ! -d "$WEB_ROOT" ]]; then
   echo "error: web build directory not found: $WEB_ROOT" >&2
-  echo "hint: run one or more tools/build_web_*.sh scripts first" >&2
+  echo "hint: run tools/build_web_games.sh first" >&2
   exit 1
 fi
 

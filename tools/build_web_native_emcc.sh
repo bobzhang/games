@@ -119,7 +119,7 @@ emcc \
   -sASSERTIONS=1 \
   -sEXPORTED_FUNCTIONS=_main \
   -sEXPORTED_RUNTIME_METHODS=ccall,cwrap,HEAPF32 \
-  "${EMBED_FLAGS[@]}" \
+  ${EMBED_FLAGS[@]+"${EMBED_FLAGS[@]}"} \
   --pre-js "$PRE_JS" \
   --post-js "$POST_JS" \
   -o "$OUTPUT_HTML"
