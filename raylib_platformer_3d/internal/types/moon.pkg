@@ -1,3 +1,7 @@
 import {
   "moonbitlang/core/math",
 }
+
+warnings(
+  "+missing_doc",
+)
