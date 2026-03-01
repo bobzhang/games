@@ -787,6 +787,7 @@ fn rival_total_score(game : @types.Game) -> Int {
 }
 
 ///|
+/// Render arena board, snakes, HUD panel, and result overlay.
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_bg(game)
 
