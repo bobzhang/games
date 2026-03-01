@@ -985,6 +985,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances one frame of rescue gameplay, input processing, and state flow.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   // Update mouse/touch state
   game.mouse_x = @raylib.get_mouse_x() |> Float::from_int

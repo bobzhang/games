@@ -1,4 +1,5 @@
 ///|
+/// Returns the smaller of two integers.
 pub fn mini(a : Int, b : Int) -> Int {
   if a < b {
     a
@@ -8,6 +9,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the larger of two integers.
 pub fn maxi(a : Int, b : Int) -> Int {
   if a > b {
     a
@@ -17,6 +19,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Clamps an integer to the inclusive `[lo, hi]` range.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -28,6 +31,7 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Clamps a float to the inclusive `[lo, hi]` range.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -39,6 +43,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two floating-point values.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -48,6 +53,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two floating-point values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -57,6 +63,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -66,52 +73,62 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Computes sine using the core math backend.
 pub fn sinf(v : Float) -> Float {
   Float::from_double(@math.sin(v.to_double()))
 }
 
 ///|
+/// Computes cosine using the core math backend.
 pub fn cosf(v : Float) -> Float {
   Float::from_double(@math.cos(v.to_double()))
 }
 
 ///|
+/// Returns a random float sampled uniformly from `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns the world-space left boundary.
 pub fn world_left() -> Float {
   Float::from_int(world_x0)
 }
 
 ///|
+/// Returns the world-space right boundary.
 pub fn world_right() -> Float {
   Float::from_int(world_x0 + world_w)
 }
 
 ///|
+/// Returns the world-space top boundary.
 pub fn world_top() -> Float {
   Float::from_int(world_y0)
 }
 
 ///|
+/// Returns the world-space bottom boundary.
 pub fn world_bottom() -> Float {
   Float::from_int(world_y0 + world_h)
 }
 
 ///|
+/// Returns the center x-coordinate of the safe zone.
 pub fn safe_cx() -> Float {
   Float::from_int(safe_zone_x() + safe_zone_w() / 2)
 }
 
 ///|
+/// Returns the center y-coordinate of the safe zone.
 pub fn safe_cy() -> Float {
   Float::from_int(safe_zone_y() + safe_zone_h() / 2)
 }
 
 ///|
+/// Returns squared distance between two points.
 pub fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx : Float = x1 - x0
   let dy : Float = y1 - y0
@@ -119,6 +136,7 @@ pub fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Tests whether a point is inside a float rectangle.
 pub fn point_in_rectf(
   x : Float,
   y : Float,
@@ -131,6 +149,7 @@ pub fn point_in_rectf(
 }
 
 ///|
+/// Tests whether a world point lies inside the safe zone.
 pub fn inside_safe_zone(x : Float, y : Float) -> Bool {
   point_in_rectf(
     x,
@@ -143,16 +162,19 @@ pub fn inside_safe_zone(x : Float, y : Float) -> Bool {
 }
 
 ///|
+/// Returns the hook tip x-position for the current helicopter state.
 pub fn hook_tip_x(game : Game) -> Float {
   game.heli_x
 }
 
 ///|
+/// Returns the hook tip y-position for the current helicopter state.
 pub fn hook_tip_y(game : Game) -> Float {
   game.heli_y + game.hook_len
 }
 
 ///|
+/// Tests whether a point is inside an integer rectangle.
 pub fn point_in_rect(
   x : Float,
   y : Float,
@@ -170,6 +192,7 @@ pub fn point_in_rect(
 }
 
 ///|
+/// Tests whether mouse hold or any touch point is inside a rectangle.
 pub fn pointer_on_rect(
   mx : Float,
   my : Float,
