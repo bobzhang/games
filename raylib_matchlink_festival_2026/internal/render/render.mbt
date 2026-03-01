@@ -937,6 +937,7 @@ fn draw_campaign_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Renders the complete frame for the current campaign state.
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_bg(game)
 
