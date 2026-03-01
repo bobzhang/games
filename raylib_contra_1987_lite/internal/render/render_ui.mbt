@@ -551,7 +551,7 @@ fn draw_campaign_clear_overlay(game : @types.Game) -> Unit {
   )
 }
 
-///|
+/// Draws right-panel HUD and state overlays.
 pub fn draw_ui(game : @types.Game) -> Unit {
   draw_panel(game)
 

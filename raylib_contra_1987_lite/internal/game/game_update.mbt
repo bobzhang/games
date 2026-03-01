@@ -278,7 +278,7 @@ fn update_paused(game : @types.Game, dt : Float) -> Unit {
   }
 }
 
-///|
+/// Advances one frame of campaign/menu simulation.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   update_starfield(game, dt)

@@ -1,195 +1,195 @@
-///|
+/// Window width in pixels.
 pub let screen_width : Int = 980
 
-///|
+/// Window height in pixels.
 pub let screen_height : Int = 760
 
-///|
+/// Map width in tiles.
 pub let map_tiles_w : Int = 26
 
-///|
+/// Map height in tiles.
 pub let map_tiles_h : Int = 26
 
-///|
+/// Size of one map tile in pixels.
 pub let tile_size : Int = 24
 
-///|
+/// Total map width in pixels.
 pub let map_pixel_w : Int = map_tiles_w * tile_size
 
-///|
+/// Total map height in pixels.
 pub let map_pixel_h : Int = map_tiles_h * tile_size
 
-///|
+/// Horizontal screen offset of the map.
 pub let map_offset_x : Int = 36
 
-///|
+/// Vertical screen offset of the map.
 pub let map_offset_y : Int = 50
 
-///|
+/// Left x-coordinate of the side panel.
 pub let panel_x : Int = map_offset_x + map_pixel_w + 20
 
-///|
+/// Width of the side panel.
 pub let panel_w : Int = screen_width - panel_x - 24
 
-///|
+/// Tank body size in pixels.
 pub let tank_size : Float = 20.0
 
-///|
+/// Half tank size for collision math.
 pub let tank_half : Float = tank_size / 2.0
 
-///|
+/// Bullet collision radius.
 pub let bullet_radius : Float = 3.0
 
-///|
+/// Maximum number of player tanks.
 pub let max_players : Int = 2
 
-///|
+/// Maximum enemy tank slots.
 pub let max_enemies : Int = 42
 
-///|
+/// Maximum bullet slots.
 pub let max_bullets : Int = 320
 
-///|
+/// Maximum particle slots.
 pub let max_particles : Int = 960
 
-///|
+/// Maximum powerup slots.
 pub let max_powerups : Int = 32
 
-///|
+/// Maximum bio-core slots.
 pub let max_cores : Int = 20
 
-///|
+/// Total number of tiles in the map array.
 pub let max_tiles : Int = map_tiles_w * map_tiles_h
 
-///|
+/// Maximum enemies allowed simultaneously on field.
 pub let enemy_on_field_limit : Int = 8
 
-///|
+/// Stage intro overlay duration.
 pub let stage_intro_time : Float = 1.6
 
-///|
+/// Delay before moving from stage clear state.
 pub let stage_clear_time : Float = 2.4
 
-///|
+/// Delay before leaving game over state.
 pub let game_over_delay : Float = 2.8
 
-///|
+/// Delay before leaving campaign clear state.
 pub let campaign_clear_delay : Float = 3.6
 
-///|
+/// Base interval between enemy spawns.
 pub let enemy_spawn_period : Float = 0.95
 
-///|
+/// Lifetime of spawned powerups.
 pub let powerup_life : Float = 11.0
 
-///|
+/// Duration of global freeze effect.
 pub let freeze_duration : Float = 6.0
 
-///|
+/// Duration of base-shield shovel effect.
 pub let shovel_duration : Float = 11.0
 
-///|
+/// Delay before a destroyed player respawns.
 pub let player_respawn_delay : Float = 1.2
 
-///|
+/// Spawn invulnerability duration for players.
 pub let player_invuln_spawn : Float = 2.0
 
-///|
+/// Base player reload delay.
 pub let player_reload_base : Float = 0.30
 
-///|
+/// Base enemy reload delay.
 pub let enemy_reload_base : Float = 0.68
 
-///|
+/// Bullet speed for player-fired shots.
 pub let bullet_speed_player : Float = 350.0
 
-///|
+/// Bullet speed for enemy-fired shots.
 pub let bullet_speed_enemy : Float = 290.0
 
-///|
+/// Default player tank move speed.
 pub let speed_player : Float = 128.0
 
-///|
+/// Move speed for basic enemies.
 pub let speed_enemy_basic : Float = 78.0
 
-///|
+/// Move speed for fast enemies.
 pub let speed_enemy_fast : Float = 110.0
 
-///|
+/// Move speed for heavy enemies.
 pub let speed_enemy_heavy : Float = 66.0
 
-///|
+/// Move speed for sniper enemies.
 pub let speed_enemy_sniper : Float = 84.0
 
-///|
+/// Base tile x-coordinate.
 pub let base_tile_x : Int = 12
 
-///|
+/// Base tile y-coordinate.
 pub let base_tile_y : Int = 24
 
-///|
+/// Blink speed for menu selection highlight.
 pub let menu_select_blink_speed : Float = 3.0
 
-///|
+/// Decay factor for camera shake.
 pub let camera_shake_decay : Float = 3.3
 
-///|
+/// Maximum camera shake amplitude.
 pub let camera_shake_power : Float = 7.5
 
-///|
+/// Total number of campaign stages.
 pub let level_count : Int = 96
 
-///|
+/// Number of unique map pattern templates.
 pub let map_pattern_count : Int = 48
 
-///|
+/// Collision radius of a bio-core target.
 pub let core_radius : Float = 14.0
 
-///|
+/// Base health of a spawned bio-core.
 pub let core_hp_base : Int = 18
 
-///|
+/// Base score rewarded for destroying a bio-core.
 pub let core_score_base : Int = 260
 
-///|
+/// Enemy spawn point x for left lane.
 pub let enemy_spawn_x0 : Float = 2.0 * Float::from_int(tile_size) + tank_half
 
-///|
+/// Enemy spawn point x for center lane.
 pub let enemy_spawn_x1 : Float = 12.0 * Float::from_int(tile_size) + tank_half
 
-///|
+/// Enemy spawn point x for right lane.
 pub let enemy_spawn_x2 : Float = 22.0 * Float::from_int(tile_size) + tank_half
 
-///|
+/// Enemy spawn point y-coordinate.
 pub let enemy_spawn_y : Float = 1.5 * Float::from_int(tile_size)
 
-///|
+/// Player 1 spawn x-coordinate.
 pub let player1_spawn_x : Float = 8.0 * Float::from_int(tile_size) + tank_half
 
-///|
+/// Player 1 spawn y-coordinate.
 pub let player1_spawn_y : Float = 24.0 * Float::from_int(tile_size) + tank_half
 
-///|
+/// Player 2 spawn x-coordinate.
 pub let player2_spawn_x : Float = 16.0 * Float::from_int(tile_size) + tank_half
 
-///|
+/// Player 2 spawn y-coordinate.
 pub let player2_spawn_y : Float = 24.0 * Float::from_int(tile_size) + tank_half
 
-///|
+/// Number of rows for enemy icon display.
 pub let enemy_icon_rows : Int = 10
 
-///|
+/// Number of columns for enemy icon display.
 pub let enemy_icon_cols : Int = 2
 
-///|
+/// Count of tiles surrounding the base ring.
 pub let base_ring_count : Int = 14
 
-///|
+/// X tile coordinates for protected base ring.
 pub let base_ring_x : Array[Int] = [
   11, 12, 13, 14, 11, 14, 11, 14, 11, 12, 13, 14, 12, 13,
 ]
 
-///|
+/// Y tile coordinates for protected base ring.
 pub let base_ring_y : Array[Int] = [
   22, 22, 22, 22, 23, 23, 24, 24, 25, 25, 25, 25, 24, 24,
 ]

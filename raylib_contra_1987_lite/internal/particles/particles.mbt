@@ -8,7 +8,7 @@ fn alloc_particle(game : @types.Game) -> Int {
   -1
 }
 
-///|
+/// Allocates and initializes a single particle entry.
 pub fn spawn_particle(
   game : @types.Game,
   x : Float,
@@ -35,7 +35,7 @@ pub fn spawn_particle(
   game.particles[idx].color = color
 }
 
-///|
+/// Spawns a radial spark burst at `x,y`.
 pub fn spawn_spark_burst(
   game : @types.Game,
   x : Float,
@@ -61,7 +61,7 @@ pub fn spawn_spark_burst(
   }
 }
 
-///|
+/// Spawns explosion particles and applies camera shake.
 pub fn spawn_explosion(
   game : @types.Game,
   x : Float,
@@ -108,7 +108,7 @@ pub fn spawn_explosion(
   @types.push_camera_shake(game, strength * 1.8)
 }
 
-///|
+/// Spawns a circular respawn burst effect.
 pub fn spawn_respawn_burst(game : @types.Game, x : Float, y : Float) -> Unit {
   for i in 0..<24 {
     let angle = Float::from_int(i) / Float::from_int(24) * 6.28318
@@ -128,7 +128,7 @@ pub fn spawn_respawn_burst(game : @types.Game, x : Float, y : Float) -> Unit {
   }
 }
 
-///|
+/// Advances active particle movement and lifetimes.
 pub fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
     if not(p.active) {

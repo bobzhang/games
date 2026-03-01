@@ -517,7 +517,7 @@ fn draw_powerups(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
   }
 }
 
-///|
+/// Draws battlefield layers, entities, and effects for one frame.
 pub fn draw_world(game : @types.Game) -> Unit {
   let (shake_x, shake_y) = @types.shake_offsets(game)
 
