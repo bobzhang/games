@@ -197,6 +197,7 @@ fn use_hold(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reinitializes board, bag state, scores, and active piece for a new game.
 pub fn reset_game(game : @types.Game) -> Unit {
   for i in 0..<game.board.length() {
     game.board[i] = 0
@@ -219,6 +220,7 @@ pub fn reset_game(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Advances one frame of Tetris input handling, gravity, and locking.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   if game.over {
     if @raylib.is_key_pressed(@raylib.KeyR) {

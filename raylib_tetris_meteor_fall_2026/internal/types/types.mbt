@@ -1,10 +1,12 @@
 ///|
+/// Relative block coordinate inside a tetromino.
 pub(all) struct Cell {
   x : Int
   y : Int
 }
 
 ///|
+/// Full mutable state for one Tetris match.
 pub(all) struct Game {
   board : Array[Int]
   mut piece_kind : Int
@@ -25,6 +27,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Allocates default game state and empty board buffers.
 pub fn Game::new() -> Game {
   {
     board: Array::make(board_cols * board_rows, 0),
