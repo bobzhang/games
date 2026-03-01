@@ -1,8 +1,8 @@
 import {
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/raylib_puzzle_dungeon_3d/game",
-  "tonyfettes/raylib-examples/raylib_puzzle_dungeon_3d/render",
-  "tonyfettes/raylib-examples/raylib_puzzle_dungeon_3d/types",
+  "tonyfettes/raylib-examples/raylib_puzzle_dungeon_3d/internal/game",
+  "tonyfettes/raylib-examples/raylib_puzzle_dungeon_3d/internal/render",
+  "tonyfettes/raylib-examples/raylib_puzzle_dungeon_3d/internal/types",
 }
 
 options(
