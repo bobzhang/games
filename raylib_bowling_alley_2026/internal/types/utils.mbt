@@ -1,4 +1,5 @@
 ///|
+/// Clamps a float into the inclusive range [`lo`, `hi`].
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -10,6 +11,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -19,6 +21,7 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two floating-point values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -28,12 +31,14 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns a pseudo-random float in the inclusive range [`lo`, `hi`].
 pub fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns squared distance between two points.
 pub fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
   let dy = ay - by
@@ -41,11 +46,13 @@ pub fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 }
 
 ///|
+/// Converts degrees to radians.
 pub fn deg_to_rad(d : Float) -> Float {
   d * 0.01745329252
 }
 
 ///|
+/// Approximates square root using Newton iterations.
 pub fn sqrtf(v : Float) -> Float {
   if v <= 0.0 {
     return 0.0
@@ -59,6 +66,7 @@ pub fn sqrtf(v : Float) -> Float {
 }
 
 ///|
+/// Checks whether an active pointer is currently inside a rectangle.
 pub fn pointer_on_rect(
   x : Float,
   y : Float,
@@ -82,6 +90,7 @@ pub fn pointer_on_rect(
 }
 
 ///|
+/// Returns true when the title start button is being pressed.
 pub fn title_start_hover(
   mouse_x : Float,
   mouse_y : Float,
@@ -93,6 +102,7 @@ pub fn title_start_hover(
 }
 
 ///|
+/// Returns true when the result retry button is being pressed.
 pub fn result_retry_hover(
   mouse_x : Float,
   mouse_y : Float,

@@ -3,3 +3,5 @@ import {
   "tonyfettes/raylib",
   "tonyfettes/raylib-examples/raylib_bowling_alley_2026/internal/types",
 }
+
+warnings = "+missing_doc"

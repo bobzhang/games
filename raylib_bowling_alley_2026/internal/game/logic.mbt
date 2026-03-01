@@ -603,6 +603,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances one frame of state updates, input, and bowling simulation.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   match game.state {
     Title => update_title_input(game)

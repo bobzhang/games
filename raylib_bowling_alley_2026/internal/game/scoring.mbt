@@ -145,6 +145,7 @@ fn frame_start_roll_idx(game : @types.Game, target : Int) -> Int {
 }
 
 ///|
+/// Returns formatted roll marks for a frame as displayed on the scoreboard.
 pub fn frame_marks(game : @types.Game, frame : Int) -> (String, String, String) {
   let idx : Int = frame_start_roll_idx(game, frame)
   let a : Int = maybe_roll(game.rolls, game.roll_count, idx)

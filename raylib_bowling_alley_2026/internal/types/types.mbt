@@ -1,4 +1,5 @@
 ///|
+/// High-level phase of a bowling run.
 pub(all) enum GameState {
   Title
   Play
@@ -6,6 +7,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Physical state of a single pin.
 pub(all) struct Pin {
   mut standing : Bool
   mut x : Float
@@ -17,6 +19,7 @@ pub(all) struct Pin {
 }
 
 ///|
+/// Pooled particle used for strike and collision effects.
 pub(all) struct Spark {
   mut active : Bool
   mut x : Float
@@ -29,6 +32,7 @@ pub(all) struct Spark {
 }
 
 ///|
+/// Full mutable game state for simulation, scoring, UI, and input.
 pub(all) struct Game {
   pins : Array[Pin]
   sparks : Array[Spark]
@@ -73,11 +77,13 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a standing pin with zero velocity.
 pub fn Pin::new() -> Pin {
   { standing: true, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ang: 0.0, ang_v: 0.0 }
 }
 
 ///|
+/// Creates an inactive spark instance for the particle pool.
 pub fn Spark::new() -> Spark {
   {
     active: false,
@@ -92,6 +98,7 @@ pub fn Spark::new() -> Spark {
 }
 
 ///|
+/// Creates a new game in title state with initialized pins and score buffers.
 pub fn Game::new() -> Game {
   let pins : Array[Pin] = Array::makei(10, fn(_i) { Pin::new() })
   let sparks : Array[Spark] = Array::makei(max_sparks, fn(_i) { Spark::new() })
