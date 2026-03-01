@@ -1,4 +1,5 @@
 ///|
+/// Stores runtime data for Enemy.
 pub(all) struct Enemy {
   mut active : Bool
   mut kind : Int
@@ -13,6 +14,7 @@ pub(all) struct Enemy {
 }
 
 ///|
+/// Stores runtime data for Bullet.
 pub(all) struct Bullet {
   mut active : Bool
   mut ring_f : Float
@@ -25,6 +27,7 @@ pub(all) struct Bullet {
 }
 
 ///|
+/// Stores runtime data for EnemyBullet.
 pub(all) struct EnemyBullet {
   mut active : Bool
   mut x : Float
@@ -37,6 +40,7 @@ pub(all) struct EnemyBullet {
 }
 
 ///|
+/// Stores runtime data for Flare.
 pub(all) struct Flare {
   mut active : Bool
   mut ring : Int
@@ -48,6 +52,7 @@ pub(all) struct Flare {
 }
 
 ///|
+/// Stores runtime data for Particle.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -60,6 +65,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// Stores runtime data for Shock.
 pub(all) struct Shock {
   mut active : Bool
   mut ring : Int
@@ -70,6 +76,7 @@ pub(all) struct Shock {
 }
 
 ///|
+/// Stores runtime data for Player.
 pub(all) struct Player {
   mut ring : Int
   mut ring_f : Float
@@ -84,6 +91,7 @@ pub(all) struct Player {
 }
 
 ///|
+/// Aggregates all mutable state needed to run one game session.
 pub(all) struct Game {
   enemies : Array[Enemy]
   bullets : Array[Bullet]
@@ -132,6 +140,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a default Enemy value for a new session.
 pub fn Enemy::new() -> Enemy {
   {
     active: false,
@@ -148,6 +157,7 @@ pub fn Enemy::new() -> Enemy {
 }
 
 ///|
+/// Creates a default Bullet value for a new session.
 pub fn Bullet::new() -> Bullet {
   {
     active: false,
@@ -162,6 +172,7 @@ pub fn Bullet::new() -> Bullet {
 }
 
 ///|
+/// Creates a default EnemyBullet value for a new session.
 pub fn EnemyBullet::new() -> EnemyBullet {
   {
     active: false,
@@ -176,6 +187,7 @@ pub fn EnemyBullet::new() -> EnemyBullet {
 }
 
 ///|
+/// Creates a default Flare value for a new session.
 pub fn Flare::new() -> Flare {
   {
     active: false,
@@ -189,6 +201,7 @@ pub fn Flare::new() -> Flare {
 }
 
 ///|
+/// Creates a default Particle value for a new session.
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -203,11 +216,13 @@ pub fn Particle::new() -> Particle {
 }
 
 ///|
+/// Creates a default Shock value for a new session.
 pub fn Shock::new() -> Shock {
   { active: false, ring: 0, a0: 0.0, a1: 0.0, life: 0.0, beta: false }
 }
 
 ///|
+/// Creates a default Player value for a new session.
 pub fn Player::new() -> Player {
   {
     ring: 1,
@@ -224,6 +239,7 @@ pub fn Player::new() -> Player {
 }
 
 ///|
+/// Creates a default Game value for a new session.
 pub fn Game::new() -> Game {
   {
     enemies: Array::makei(max_enemies, fn(_i) { Enemy::new() }),
