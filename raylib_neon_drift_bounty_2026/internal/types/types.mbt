@@ -1,4 +1,5 @@
 ///|
+/// Enumerates high-level states in the game flow.
 pub(all) enum GameState {
   Title
   Play
@@ -7,6 +8,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Enumerates EntityKind variants used by runtime state.
 pub(all) enum EntityKind {
   FoeBike
   FoeDrone
@@ -18,6 +20,7 @@ pub(all) enum EntityKind {
 } derive(Eq)
 
 ///|
+/// Stores runtime data for Entity.
 pub(all) struct Entity {
   mut active : Bool
   mut kind : EntityKind
@@ -35,6 +38,7 @@ pub(all) struct Entity {
 }
 
 ///|
+/// Stores runtime data for Bullet.
 pub(all) struct Bullet {
   mut active : Bool
   mut from_player : Bool
@@ -48,6 +52,7 @@ pub(all) struct Bullet {
 }
 
 ///|
+/// Stores runtime data for Spark.
 pub(all) struct Spark {
   mut active : Bool
   mut x : Float
@@ -60,6 +65,7 @@ pub(all) struct Spark {
 }
 
 ///|
+/// Stores runtime data for GlowRing.
 pub(all) struct GlowRing {
   mut active : Bool
   mut x : Float
@@ -70,6 +76,7 @@ pub(all) struct GlowRing {
 }
 
 ///|
+/// Stores runtime data for Afterimage.
 pub(all) struct Afterimage {
   mut active : Bool
   mut x : Float
@@ -82,6 +89,7 @@ pub(all) struct Afterimage {
 }
 
 ///|
+/// Stores runtime data for Player.
 pub(all) struct Player {
   mut x : Float
   mut y : Float
@@ -97,6 +105,7 @@ pub(all) struct Player {
 }
 
 ///|
+/// Aggregates all mutable state needed to run one game session.
 pub(all) struct Game {
   entities : Array[Entity]
   bullets : Array[Bullet]
@@ -145,6 +154,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a default Entity value for a new session.
 pub fn Entity::new() -> Entity {
   {
     active: false,
@@ -164,6 +174,7 @@ pub fn Entity::new() -> Entity {
 }
 
 ///|
+/// Creates a default Bullet value for a new session.
 pub fn Bullet::new() -> Bullet {
   {
     active: false,
@@ -179,6 +190,7 @@ pub fn Bullet::new() -> Bullet {
 }
 
 ///|
+/// Creates a default Spark value for a new session.
 pub fn Spark::new() -> Spark {
   {
     active: false,
@@ -193,11 +205,13 @@ pub fn Spark::new() -> Spark {
 }
 
 ///|
+/// Creates a default GlowRing value for a new session.
 pub fn GlowRing::new() -> GlowRing {
   { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
 }
 
 ///|
+/// Creates a default Afterimage value for a new session.
 pub fn Afterimage::new() -> Afterimage {
   {
     active: false,
@@ -212,6 +226,7 @@ pub fn Afterimage::new() -> Afterimage {
 }
 
 ///|
+/// Creates a default Player value for a new session.
 pub fn Player::new() -> Player {
   {
     x: Float::from_int(screen_w / 2),
@@ -229,6 +244,7 @@ pub fn Player::new() -> Player {
 }
 
 ///|
+/// Creates a default Game value for a new session.
 pub fn Game::new() -> Game {
   {
     entities: Array::makei(max_entities, fn(_i) { Entity::new() }),

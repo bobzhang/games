@@ -1273,6 +1273,7 @@ fn update_game_over(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances the game simulation by one frame using the current input state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt
   game.hint_t = game.hint_t + dt
