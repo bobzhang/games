@@ -506,6 +506,7 @@ fn update_game_over_state(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Sample input and advance one frame of simulation/state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   sample_input(game)
 
@@ -530,6 +531,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Reset game state into the title scene preset.
 pub fn init_title_scene_pub(game : @types.Game) -> Unit {
   init_title_scene(game)
 }

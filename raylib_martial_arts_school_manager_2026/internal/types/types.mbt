@@ -1,4 +1,5 @@
 ///|
+/// High-level lifecycle states for a school run.
 pub(all) enum GameState {
   Title
   Playing
@@ -7,6 +8,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Student profile with skill, fatigue, and current room.
 pub(all) struct Student {
   name : String
   mut skill : Float
@@ -15,6 +17,7 @@ pub(all) struct Student {
 }
 
 ///|
+/// Per-frame input actions consumed by game logic.
 pub(all) struct Input {
   mut move_x : Int
   mut move_y : Int
@@ -27,6 +30,7 @@ pub(all) struct Input {
 }
 
 ///|
+/// Full mutable state for school management gameplay.
 pub(all) struct Game {
   input : Input
   students : Array[Student]
@@ -54,6 +58,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Return the display name for a roster slot index.
 pub fn student_name(slot : Int) -> String {
   if slot == 0 {
     "Aiko"
@@ -71,6 +76,7 @@ pub fn student_name(slot : Int) -> String {
 }
 
 ///|
+/// Return starting skill for a roster slot index.
 pub fn starting_skill(slot : Int) -> Float {
   if slot == 0 {
     34.0
@@ -88,11 +94,13 @@ pub fn starting_skill(slot : Int) -> Float {
 }
 
 ///|
+/// Create a student starting in rest with low fatigue.
 pub fn Student::new(name : String, skill : Float) -> Student {
   { name, skill, fatigue: 12.0, room: room_rest }
 }
 
 ///|
+/// Build a zeroed input snapshot with no pressed actions.
 pub fn Input::new() -> Input {
   {
     move_x: 0,
@@ -107,6 +115,7 @@ pub fn Input::new() -> Input {
 }
 
 ///|
+/// Create a new run initialized to title state and starter roster.
 pub fn Game::new() -> Game {
   let roster : Array[Student] = []
 
