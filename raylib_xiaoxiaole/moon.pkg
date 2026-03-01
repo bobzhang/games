@@ -5,6 +5,8 @@ import {
   "tonyfettes/raylib-examples/raylib_xiaoxiaole/internal/render",
 }
 
+warnings = "+missing_doc"
+
 options(
   "is-main": true,
 )

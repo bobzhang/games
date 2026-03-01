@@ -1,4 +1,5 @@
 ///|
+/// Phase of a Xiao Xiao Le run.
 pub(all) enum GameState {
   Title
   Play
@@ -10,6 +11,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Logical gem identity stored in each board slot.
 pub(all) enum GemKind {
   Empty
   Red
@@ -21,6 +23,7 @@ pub(all) enum GemKind {
 } derive(Eq)
 
 ///|
+/// Maps a random integer bucket to a playable gem color.
 pub fn GemKind::from_int(i : Int) -> GemKind {
   match i {
     0 => Red
@@ -33,11 +36,13 @@ pub fn GemKind::from_int(i : Int) -> GemKind {
 }
 
 ///|
+/// Returns whether the gem kind represents an empty slot.
 pub fn GemKind::is_empty(self : GemKind) -> Bool {
   self == Empty
 }
 
 ///|
+/// Mutable gem cell with animation and match flags.
 pub(all) struct Gem {
   mut kind : GemKind
   mut anim_x : Float
@@ -49,6 +54,7 @@ pub(all) struct Gem {
 }
 
 ///|
+/// Constructs an empty gem cell with cleared animation state.
 pub fn Gem::empty() -> Gem {
   {
     kind: Empty,
@@ -62,6 +68,7 @@ pub fn Gem::empty() -> Gem {
 }
 
 ///|
+/// Runtime state container for one Xiao Xiao Le session.
 pub(all) struct Game {
   board : Array[Gem]
   mut state : GameState
@@ -88,6 +95,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Allocates a new level-1 game state with default counters.
 pub fn Game::new() -> Game {
   {
     board: Array::makei(cell_count, fn(_i) { Gem::empty() }),
