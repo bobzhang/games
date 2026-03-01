@@ -1,0 +1,1501 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Raylib MoonBit Web Games</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #111b30;
+      --card: #1a2640;
+      --text: #e7edf7;
+      --muted: #9fb1cb;
+      --accent: #4da3ff;
+      --border: #2c3d61;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #16264a 0%, var(--bg) 45%);
+      color: var(--text);
+      font-family: "Trebuchet MS", "Segoe UI", Tahoma, sans-serif;
+      min-height: 100vh;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #152240 0%, #1d3258 100%);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 30px;
+      letter-spacing: 0.2px;
+    }
+
+    .summary {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .filters {
+      margin-top: 14px;
+    }
+
+    .controls-guide {
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #0f1933;
+      padding: 10px 12px;
+    }
+
+    .controls-guide-title {
+      font-size: 14px;
+      color: var(--text);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .controls-guide-grid {
+      display: grid;
+      gap: 6px 10px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .controls-guide-grid code {
+      color: #d6e8ff;
+      font-family: "Cascadia Mono", "Consolas", "Menlo", monospace;
+      background: #132146;
+      border-radius: 6px;
+      padding: 1px 5px;
+    }
+
+    .filters input {
+      width: 100%;
+      background: #0f1830;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      padding: 11px 13px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .filters input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px #4da3ff33;
+    }
+
+    .games {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+
+    .game-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      color: var(--text);
+      background: linear-gradient(160deg, #182746 0%, var(--card) 100%);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 13px;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .game-card:hover {
+      transform: translateY(-2px);
+      border-color: #4d7ac4;
+    }
+
+    .game-id {
+      font-size: 14px;
+      line-height: 1.3;
+      word-break: break-word;
+      margin-right: 10px;
+    }
+
+    .play {
+      color: var(--accent);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    footer {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <h1>Raylib MoonBit Web Games</h1>
+      <div class="summary">
+        Lightweight playable builds generated from MoonBit native C output and compiled with Emscripten.
+      </div>
+      <div class="filters">
+        <input id="search" type="search" placeholder="Filter games (e.g. tank, kof, diablo)" />
+      </div>
+      <div class="controls-guide">
+        <div class="controls-guide-title">Mobile Touch Mapping</div>
+        <div class="controls-guide-grid">
+          <div><code>D-pad</code> => <code>W/A/S/D</code> + <code>Arrow Keys</code></div>
+          <div><code>A</code> => <code>J</code> + <code>Space</code></div>
+          <div><code>B</code> => <code>K</code> + <code>Enter</code></div>
+          <div><code>C</code> => <code>L</code> + <code>Shift</code></div>
+          <div><code>II</code> => <code>Esc</code> (menu/pause)</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="games" id="games">
+      <a class="game-card" href="games/raylib_2048/raylib_2048.html" data-id="raylib_2048">
+        <span class="game-id">raylib_2048</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_abyss_signal_runner_2026/raylib_abyss_signal_runner_2026.html" data-id="raylib_abyss_signal_runner_2026">
+        <span class="game-id">raylib_abyss_signal_runner_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_aftershock_rescue_convoy_2026/raylib_aftershock_rescue_convoy_2026.html" data-id="raylib_aftershock_rescue_convoy_2026">
+        <span class="game-id">raylib_aftershock_rescue_convoy_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_air_traffic_control_2026/raylib_air_traffic_control_2026.html" data-id="raylib_air_traffic_control_2026">
+        <span class="game-id">raylib_air_traffic_control_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_ancient_temple_trap_run_2026/raylib_ancient_temple_trap_run_2026.html" data-id="raylib_ancient_temple_trap_run_2026">
+        <span class="game-id">raylib_ancient_temple_trap_run_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_arcade_factory_defense_2026/raylib_arcade_factory_defense_2026.html" data-id="raylib_arcade_factory_defense_2026">
+        <span class="game-id">raylib_arcade_factory_defense_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_arcade_hacker_infiltration_2026/raylib_arcade_hacker_infiltration_2026.html" data-id="raylib_arcade_hacker_infiltration_2026">
+        <span class="game-id">raylib_arcade_hacker_infiltration_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_archery_tournament_2026/raylib_archery_tournament_2026.html" data-id="raylib_archery_tournament_2026">
+        <span class="game-id">raylib_archery_tournament_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_arctic_outpost_survival_2026/raylib_arctic_outpost_survival_2026.html" data-id="raylib_arctic_outpost_survival_2026">
+        <span class="game-id">raylib_arctic_outpost_survival_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_arctic_signal_relay_2026/raylib_arctic_signal_relay_2026.html" data-id="raylib_arctic_signal_relay_2026">
+        <span class="game-id">raylib_arctic_signal_relay_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_asteroid_salvage_2026/raylib_asteroid_salvage_2026.html" data-id="raylib_asteroid_salvage_2026">
+        <span class="game-id">raylib_asteroid_salvage_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_audio_mixed_processor/raylib_audio_mixed_processor.html" data-id="raylib_audio_mixed_processor">
+        <span class="game-id">raylib_audio_mixed_processor</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_audio_module_playing/raylib_audio_module_playing.html" data-id="raylib_audio_module_playing">
+        <span class="game-id">raylib_audio_module_playing</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_audio_music_stream/raylib_audio_music_stream.html" data-id="raylib_audio_music_stream">
+        <span class="game-id">raylib_audio_music_stream</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_audio_raw_stream/raylib_audio_raw_stream.html" data-id="raylib_audio_raw_stream">
+        <span class="game-id">raylib_audio_raw_stream</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_audio_sound_loading/raylib_audio_sound_loading.html" data-id="raylib_audio_sound_loading">
+        <span class="game-id">raylib_audio_sound_loading</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_audio_sound_multi/raylib_audio_sound_multi.html" data-id="raylib_audio_sound_multi">
+        <span class="game-id">raylib_audio_sound_multi</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_audio_stream_effects/raylib_audio_stream_effects.html" data-id="raylib_audio_stream_effects">
+        <span class="game-id">raylib_audio_stream_effects</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_auto_chess_micro_2026/raylib_auto_chess_micro_2026.html" data-id="raylib_auto_chess_micro_2026">
+        <span class="game-id">raylib_auto_chess_micro_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_bamboo_forest_sentinel_2026/raylib_bamboo_forest_sentinel_2026.html" data-id="raylib_bamboo_forest_sentinel_2026">
+        <span class="game-id">raylib_bamboo_forest_sentinel_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_battle_kart_arena_2026/raylib_battle_kart_arena_2026.html" data-id="raylib_battle_kart_arena_2026">
+        <span class="game-id">raylib_battle_kart_arena_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_bomber_grid_2026/raylib_bomber_grid_2026.html" data-id="raylib_bomber_grid_2026">
+        <span class="game-id">raylib_bomber_grid_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_bomberman_1983_lite/raylib_bomberman_1983_lite.html" data-id="raylib_bomberman_1983_lite">
+        <span class="game-id">raylib_bomberman_1983_lite</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_bowling_alley_2026/raylib_bowling_alley_2026.html" data-id="raylib_bowling_alley_2026">
+        <span class="game-id">raylib_bowling_alley_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_breakout_lab_2026/raylib_breakout_lab_2026.html" data-id="raylib_breakout_lab_2026">
+        <span class="game-id">raylib_breakout_lab_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_candy_crush_2026/raylib_candy_crush_2026.html" data-id="raylib_candy_crush_2026">
+        <span class="game-id">raylib_candy_crush_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_card_duel_2026/raylib_card_duel_2026.html" data-id="raylib_card_duel_2026">
+        <span class="game-id">raylib_card_duel_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_castle_siege_artillery_2026/raylib_castle_siege_artillery_2026.html" data-id="raylib_castle_siege_artillery_2026">
+        <span class="game-id">raylib_castle_siege_artillery_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_celestial_kite_festival_2026/raylib_celestial_kite_festival_2026.html" data-id="raylib_celestial_kite_festival_2026">
+        <span class="game-id">raylib_celestial_kite_festival_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_chef_rush_2026/raylib_chef_rush_2026.html" data-id="raylib_chef_rush_2026">
+        <span class="game-id">raylib_chef_rush_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_chrono_rail_shooter_2026/raylib_chrono_rail_shooter_2026.html" data-id="raylib_chrono_rail_shooter_2026">
+        <span class="game-id">raylib_chrono_rail_shooter_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_circuit_grid_operator_2026/raylib_circuit_grid_operator_2026.html" data-id="raylib_circuit_grid_operator_2026">
+        <span class="game-id">raylib_circuit_grid_operator_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_city_builder_mini_2026/raylib_city_builder_mini_2026.html" data-id="raylib_city_builder_mini_2026">
+        <span class="game-id">raylib_city_builder_mini_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_city_crossing_2026/raylib_city_crossing_2026.html" data-id="raylib_city_crossing_2026">
+        <span class="game-id">raylib_city_crossing_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_clocktower_heist_2026/raylib_clocktower_heist_2026.html" data-id="raylib_clocktower_heist_2026">
+        <span class="game-id">raylib_clocktower_heist_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_clockwork_city_chase_2026/raylib_clockwork_city_chase_2026.html" data-id="raylib_clockwork_city_chase_2026">
+        <span class="game-id">raylib_clockwork_city_chase_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_clockwork_train_heist_2026/raylib_clockwork_train_heist_2026.html" data-id="raylib_clockwork_train_heist_2026">
+        <span class="game-id">raylib_clockwork_train_heist_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_contra_1987_lite/raylib_contra_1987_lite.html" data-id="raylib_contra_1987_lite">
+        <span class="game-id">raylib_contra_1987_lite</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_2d_camera/raylib_core_2d_camera.html" data-id="raylib_core_2d_camera">
+        <span class="game-id">raylib_core_2d_camera</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_2d_camera_mouse_zoom/raylib_core_2d_camera_mouse_zoom.html" data-id="raylib_core_2d_camera_mouse_zoom">
+        <span class="game-id">raylib_core_2d_camera_mouse_zoom</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_2d_camera_platformer/raylib_core_2d_camera_platformer.html" data-id="raylib_core_2d_camera_platformer">
+        <span class="game-id">raylib_core_2d_camera_platformer</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_2d_camera_split_screen/raylib_core_2d_camera_split_screen.html" data-id="raylib_core_2d_camera_split_screen">
+        <span class="game-id">raylib_core_2d_camera_split_screen</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_3d_camera_first_person/raylib_core_3d_camera_first_person.html" data-id="raylib_core_3d_camera_first_person">
+        <span class="game-id">raylib_core_3d_camera_first_person</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_3d_camera_free/raylib_core_3d_camera_free.html" data-id="raylib_core_3d_camera_free">
+        <span class="game-id">raylib_core_3d_camera_free</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_3d_camera_mode/raylib_core_3d_camera_mode.html" data-id="raylib_core_3d_camera_mode">
+        <span class="game-id">raylib_core_3d_camera_mode</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_3d_camera_split_screen/raylib_core_3d_camera_split_screen.html" data-id="raylib_core_3d_camera_split_screen">
+        <span class="game-id">raylib_core_3d_camera_split_screen</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_3d_picking/raylib_core_3d_picking.html" data-id="raylib_core_3d_picking">
+        <span class="game-id">raylib_core_3d_picking</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_automation_events/raylib_core_automation_events.html" data-id="raylib_core_automation_events">
+        <span class="game-id">raylib_core_automation_events</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_basic_screen_manager/raylib_core_basic_screen_manager.html" data-id="raylib_core_basic_screen_manager">
+        <span class="game-id">raylib_core_basic_screen_manager</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_basic_window/raylib_core_basic_window.html" data-id="raylib_core_basic_window">
+        <span class="game-id">raylib_core_basic_window</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_clipboard_text/raylib_core_clipboard_text.html" data-id="raylib_core_clipboard_text">
+        <span class="game-id">raylib_core_clipboard_text</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_compute_hash/raylib_core_compute_hash.html" data-id="raylib_core_compute_hash">
+        <span class="game-id">raylib_core_compute_hash</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_custom_frame_control/raylib_core_custom_frame_control.html" data-id="raylib_core_custom_frame_control">
+        <span class="game-id">raylib_core_custom_frame_control</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_directory_files/raylib_core_directory_files.html" data-id="raylib_core_directory_files">
+        <span class="game-id">raylib_core_directory_files</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_drop_files/raylib_core_drop_files.html" data-id="raylib_core_drop_files">
+        <span class="game-id">raylib_core_drop_files</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_input_gamepad/raylib_core_input_gamepad.html" data-id="raylib_core_input_gamepad">
+        <span class="game-id">raylib_core_input_gamepad</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_input_gamepad_info/raylib_core_input_gamepad_info.html" data-id="raylib_core_input_gamepad_info">
+        <span class="game-id">raylib_core_input_gamepad_info</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_input_gestures/raylib_core_input_gestures.html" data-id="raylib_core_input_gestures">
+        <span class="game-id">raylib_core_input_gestures</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_input_keys/raylib_core_input_keys.html" data-id="raylib_core_input_keys">
+        <span class="game-id">raylib_core_input_keys</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_input_mouse/raylib_core_input_mouse.html" data-id="raylib_core_input_mouse">
+        <span class="game-id">raylib_core_input_mouse</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_input_mouse_wheel/raylib_core_input_mouse_wheel.html" data-id="raylib_core_input_mouse_wheel">
+        <span class="game-id">raylib_core_input_mouse_wheel</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_input_multitouch/raylib_core_input_multitouch.html" data-id="raylib_core_input_multitouch">
+        <span class="game-id">raylib_core_input_multitouch</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_input_virtual_controls/raylib_core_input_virtual_controls.html" data-id="raylib_core_input_virtual_controls">
+        <span class="game-id">raylib_core_input_virtual_controls</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_random_sequence/raylib_core_random_sequence.html" data-id="raylib_core_random_sequence">
+        <span class="game-id">raylib_core_random_sequence</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_random_values/raylib_core_random_values.html" data-id="raylib_core_random_values">
+        <span class="game-id">raylib_core_random_values</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_scissor_test/raylib_core_scissor_test.html" data-id="raylib_core_scissor_test">
+        <span class="game-id">raylib_core_scissor_test</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_smooth_pixelperfect/raylib_core_smooth_pixelperfect.html" data-id="raylib_core_smooth_pixelperfect">
+        <span class="game-id">raylib_core_smooth_pixelperfect</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_storage_values/raylib_core_storage_values.html" data-id="raylib_core_storage_values">
+        <span class="game-id">raylib_core_storage_values</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_vr_simulator/raylib_core_vr_simulator.html" data-id="raylib_core_vr_simulator">
+        <span class="game-id">raylib_core_vr_simulator</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_window_flags/raylib_core_window_flags.html" data-id="raylib_core_window_flags">
+        <span class="game-id">raylib_core_window_flags</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_window_letterbox/raylib_core_window_letterbox.html" data-id="raylib_core_window_letterbox">
+        <span class="game-id">raylib_core_window_letterbox</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_window_should_close/raylib_core_window_should_close.html" data-id="raylib_core_window_should_close">
+        <span class="game-id">raylib_core_window_should_close</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_core_world_screen/raylib_core_world_screen.html" data-id="raylib_core_world_screen">
+        <span class="game-id">raylib_core_world_screen</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_cyber_firewall_breach_2026/raylib_cyber_firewall_breach_2026.html" data-id="raylib_cyber_firewall_breach_2026">
+        <span class="game-id">raylib_cyber_firewall_breach_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_deep_sea_salvage_2026/raylib_deep_sea_salvage_2026.html" data-id="raylib_deep_sea_salvage_2026">
+        <span class="game-id">raylib_deep_sea_salvage_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_deep_tunnel_drill_rescue_2026/raylib_deep_tunnel_drill_rescue_2026.html" data-id="raylib_deep_tunnel_drill_rescue_2026">
+        <span class="game-id">raylib_deep_tunnel_drill_rescue_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_demo/raylib_demo.html" data-id="raylib_demo">
+        <span class="game-id">raylib_demo</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_desert_train_robbery_2026/raylib_desert_train_robbery_2026.html" data-id="raylib_desert_train_robbery_2026">
+        <span class="game-id">raylib_desert_train_robbery_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_dice_roguelite_arena_2026/raylib_dice_roguelite_arena_2026.html" data-id="raylib_dice_roguelite_arena_2026">
+        <span class="game-id">raylib_dice_roguelite_arena_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_dragon_boat_sprint_2026/raylib_dragon_boat_sprint_2026.html" data-id="raylib_dragon_boat_sprint_2026">
+        <span class="game-id">raylib_dragon_boat_sprint_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_dragon_scroll_keeper_2026/raylib_dragon_scroll_keeper_2026.html" data-id="raylib_dragon_scroll_keeper_2026">
+        <span class="game-id">raylib_dragon_scroll_keeper_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_drift_police_chase_2026/raylib_drift_police_chase_2026.html" data-id="raylib_drift_police_chase_2026">
+        <span class="game-id">raylib_drift_police_chase_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_drone_delivery_2026/raylib_drone_delivery_2026.html" data-id="raylib_drone_delivery_2026">
+        <span class="game-id">raylib_drone_delivery_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_drone_show_director_2026/raylib_drone_show_director_2026.html" data-id="raylib_drone_show_director_2026">
+        <span class="game-id">raylib_drone_show_director_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_dungeon_courier_escape_2026/raylib_dungeon_courier_escape_2026.html" data-id="raylib_dungeon_courier_escape_2026">
+        <span class="game-id">raylib_dungeon_courier_escape_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_dungeon_crawler_3d/raylib_dungeon_crawler_3d.html" data-id="raylib_dungeon_crawler_3d">
+        <span class="game-id">raylib_dungeon_crawler_3d</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_easings_testbed/raylib_easings_testbed.html" data-id="raylib_easings_testbed">
+        <span class="game-id">raylib_easings_testbed</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_festival_lion_dance_defense_2026/raylib_festival_lion_dance_defense_2026.html" data-id="raylib_festival_lion_dance_defense_2026">
+        <span class="game-id">raylib_festival_lion_dance_defense_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_fighter_97_lite/raylib_fighter_97_lite.html" data-id="raylib_fighter_97_lite">
+        <span class="game-id">raylib_fighter_97_lite</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_firefighting_command_2026/raylib_firefighting_command_2026.html" data-id="raylib_firefighting_command_2026">
+        <span class="game-id">raylib_firefighting_command_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_fishing_tycoon_2026/raylib_fishing_tycoon_2026.html" data-id="raylib_fishing_tycoon_2026">
+        <span class="game-id">raylib_fishing_tycoon_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_flappy_sky_ruins_2026/raylib_flappy_sky_ruins_2026.html" data-id="raylib_flappy_sky_ruins_2026">
+        <span class="game-id">raylib_flappy_sky_ruins_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_flight_sim_3d/raylib_flight_sim_3d.html" data-id="raylib_flight_sim_3d">
+        <span class="game-id">raylib_flight_sim_3d</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_fog_ferry_rescue_2026/raylib_fog_ferry_rescue_2026.html" data-id="raylib_fog_ferry_rescue_2026">
+        <span class="game-id">raylib_fog_ferry_rescue_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_food_truck_frenzy_2026/raylib_food_truck_frenzy_2026.html" data-id="raylib_food_truck_frenzy_2026">
+        <span class="game-id">raylib_food_truck_frenzy_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_ghost_mansion_investigation_2026/raylib_ghost_mansion_investigation_2026.html" data-id="raylib_ghost_mansion_investigation_2026">
+        <span class="game-id">raylib_ghost_mansion_investigation_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_glacier_rescue_2026/raylib_glacier_rescue_2026.html" data-id="raylib_glacier_rescue_2026">
+        <span class="game-id">raylib_glacier_rescue_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_gomoku_street_duel_2026/raylib_gomoku_street_duel_2026.html" data-id="raylib_gomoku_street_duel_2026">
+        <span class="game-id">raylib_gomoku_street_duel_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_grappling_tower_climb_2026/raylib_grappling_tower_climb_2026.html" data-id="raylib_grappling_tower_climb_2026">
+        <span class="game-id">raylib_grappling_tower_climb_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_gravity_golf_2026/raylib_gravity_golf_2026.html" data-id="raylib_gravity_golf_2026">
+        <span class="game-id">raylib_gravity_golf_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_harbor_defense_2026/raylib_harbor_defense_2026.html" data-id="raylib_harbor_defense_2026">
+        <span class="game-id">raylib_harbor_defense_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_harbor_smuggler_run_2026/raylib_harbor_smuggler_run_2026.html" data-id="raylib_harbor_smuggler_run_2026">
+        <span class="game-id">raylib_harbor_smuggler_run_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_haunted_library_puzzle_2026/raylib_haunted_library_puzzle_2026.html" data-id="raylib_haunted_library_puzzle_2026">
+        <span class="game-id">raylib_haunted_library_puzzle_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_hospital_triage_2026/raylib_hospital_triage_2026.html" data-id="raylib_hospital_triage_2026">
+        <span class="game-id">raylib_hospital_triage_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_hotpot_empire_rush_2026/raylib_hotpot_empire_rush_2026.html" data-id="raylib_hotpot_empire_rush_2026">
+        <span class="game-id">raylib_hotpot_empire_rush_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_ice_fishing_blitz_2026/raylib_ice_fishing_blitz_2026.html" data-id="raylib_ice_fishing_blitz_2026">
+        <span class="game-id">raylib_ice_fishing_blitz_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_icebreaker_convoy_command_2026/raylib_icebreaker_convoy_command_2026.html" data-id="raylib_icebreaker_convoy_command_2026">
+        <span class="game-id">raylib_icebreaker_convoy_command_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_ink_scroll_detective_2026/raylib_ink_scroll_detective_2026.html" data-id="raylib_ink_scroll_detective_2026">
+        <span class="game-id">raylib_ink_scroll_detective_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_jackal_1988_lite/raylib_jackal_1988_lite.html" data-id="raylib_jackal_1988_lite">
+        <span class="game-id">raylib_jackal_1988_lite</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_jade_temple_bellkeeper_2026/raylib_jade_temple_bellkeeper_2026.html" data-id="raylib_jade_temple_bellkeeper_2026">
+        <span class="game-id">raylib_jade_temple_bellkeeper_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_jetpack_cavern_rush_2026/raylib_jetpack_cavern_rush_2026.html" data-id="raylib_jetpack_cavern_rush_2026">
+        <span class="game-id">raylib_jetpack_cavern_rush_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_kart_racing_3d/raylib_kart_racing_3d.html" data-id="raylib_kart_racing_3d">
+        <span class="game-id">raylib_kart_racing_3d</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_lighthouse_supply_run_2026/raylib_lighthouse_supply_run_2026.html" data-id="raylib_lighthouse_supply_run_2026">
+        <span class="game-id">raylib_lighthouse_supply_run_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_lunar_lander_ops_2026/raylib_lunar_lander_ops_2026.html" data-id="raylib_lunar_lander_ops_2026">
+        <span class="game-id">raylib_lunar_lander_ops_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_magnet_lab_escape_2026/raylib_magnet_lab_escape_2026.html" data-id="raylib_magnet_lab_escape_2026">
+        <span class="game-id">raylib_magnet_lab_escape_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_magnet_maze_2026/raylib_magnet_maze_2026.html" data-id="raylib_magnet_maze_2026">
+        <span class="game-id">raylib_magnet_maze_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_mahjong_solitaire_pavilion_2026/raylib_mahjong_solitaire_pavilion_2026.html" data-id="raylib_mahjong_solitaire_pavilion_2026">
+        <span class="game-id">raylib_mahjong_solitaire_pavilion_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_martial_arts_school_manager_2026/raylib_martial_arts_school_manager_2026.html" data-id="raylib_martial_arts_school_manager_2026">
+        <span class="game-id">raylib_martial_arts_school_manager_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_match3_garden_2026/raylib_match3_garden_2026.html" data-id="raylib_match3_garden_2026">
+        <span class="game-id">raylib_match3_garden_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_matchlink_festival_2026/raylib_matchlink_festival_2026.html" data-id="raylib_matchlink_festival_2026">
+        <span class="game-id">raylib_matchlink_festival_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_mech_arena_duel_2026/raylib_mech_arena_duel_2026.html" data-id="raylib_mech_arena_duel_2026">
+        <span class="game-id">raylib_mech_arena_duel_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_meteor_miner_convoy_2026/raylib_meteor_miner_convoy_2026.html" data-id="raylib_meteor_miner_convoy_2026">
+        <span class="game-id">raylib_meteor_miner_convoy_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_metro_repair_dispatch_2026/raylib_metro_repair_dispatch_2026.html" data-id="raylib_metro_repair_dispatch_2026">
+        <span class="game-id">raylib_metro_repair_dispatch_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_mine_cart_mayhem_2026/raylib_mine_cart_mayhem_2026.html" data-id="raylib_mine_cart_mayhem_2026">
+        <span class="game-id">raylib_mine_cart_mayhem_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_minesweeper/raylib_minesweeper.html" data-id="raylib_minesweeper">
+        <span class="game-id">raylib_minesweeper</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_minesweeper_neon_ops_2026/raylib_minesweeper_neon_ops_2026.html" data-id="raylib_minesweeper_neon_ops_2026">
+        <span class="game-id">raylib_minesweeper_neon_ops_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_animation/raylib_models_animation.html" data-id="raylib_models_animation">
+        <span class="game-id">raylib_models_animation</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_billboard/raylib_models_billboard.html" data-id="raylib_models_billboard">
+        <span class="game-id">raylib_models_billboard</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_bone_socket/raylib_models_bone_socket.html" data-id="raylib_models_bone_socket">
+        <span class="game-id">raylib_models_bone_socket</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_box_collisions/raylib_models_box_collisions.html" data-id="raylib_models_box_collisions">
+        <span class="game-id">raylib_models_box_collisions</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_cubicmap/raylib_models_cubicmap.html" data-id="raylib_models_cubicmap">
+        <span class="game-id">raylib_models_cubicmap</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_draw_cube_texture/raylib_models_draw_cube_texture.html" data-id="raylib_models_draw_cube_texture">
+        <span class="game-id">raylib_models_draw_cube_texture</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_first_person_maze/raylib_models_first_person_maze.html" data-id="raylib_models_first_person_maze">
+        <span class="game-id">raylib_models_first_person_maze</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_geometric_shapes/raylib_models_geometric_shapes.html" data-id="raylib_models_geometric_shapes">
+        <span class="game-id">raylib_models_geometric_shapes</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_gpu_skinning/raylib_models_gpu_skinning.html" data-id="raylib_models_gpu_skinning">
+        <span class="game-id">raylib_models_gpu_skinning</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_heightmap/raylib_models_heightmap.html" data-id="raylib_models_heightmap">
+        <span class="game-id">raylib_models_heightmap</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_loading/raylib_models_loading.html" data-id="raylib_models_loading">
+        <span class="game-id">raylib_models_loading</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_loading_gltf/raylib_models_loading_gltf.html" data-id="raylib_models_loading_gltf">
+        <span class="game-id">raylib_models_loading_gltf</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_loading_m3d/raylib_models_loading_m3d.html" data-id="raylib_models_loading_m3d">
+        <span class="game-id">raylib_models_loading_m3d</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_loading_vox/raylib_models_loading_vox.html" data-id="raylib_models_loading_vox">
+        <span class="game-id">raylib_models_loading_vox</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_mesh_generation/raylib_models_mesh_generation.html" data-id="raylib_models_mesh_generation">
+        <span class="game-id">raylib_models_mesh_generation</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_mesh_picking/raylib_models_mesh_picking.html" data-id="raylib_models_mesh_picking">
+        <span class="game-id">raylib_models_mesh_picking</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_orthographic_projection/raylib_models_orthographic_projection.html" data-id="raylib_models_orthographic_projection">
+        <span class="game-id">raylib_models_orthographic_projection</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_point_rendering/raylib_models_point_rendering.html" data-id="raylib_models_point_rendering">
+        <span class="game-id">raylib_models_point_rendering</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_rlgl_solar_system/raylib_models_rlgl_solar_system.html" data-id="raylib_models_rlgl_solar_system">
+        <span class="game-id">raylib_models_rlgl_solar_system</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_skybox/raylib_models_skybox.html" data-id="raylib_models_skybox">
+        <span class="game-id">raylib_models_skybox</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_waving_cubes/raylib_models_waving_cubes.html" data-id="raylib_models_waving_cubes">
+        <span class="game-id">raylib_models_waving_cubes</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_models_yaw_pitch_roll/raylib_models_yaw_pitch_roll.html" data-id="raylib_models_yaw_pitch_roll">
+        <span class="game-id">raylib_models_yaw_pitch_roll</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_monsoon_bridge_rescue_2026/raylib_monsoon_bridge_rescue_2026.html" data-id="raylib_monsoon_bridge_rescue_2026">
+        <span class="game-id">raylib_monsoon_bridge_rescue_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_moon_gate_defense_2026/raylib_moon_gate_defense_2026.html" data-id="raylib_moon_gate_defense_2026">
+        <span class="game-id">raylib_moon_gate_defense_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_mountain_bike_downhill_2026/raylib_mountain_bike_downhill_2026.html" data-id="raylib_mountain_bike_downhill_2026">
+        <span class="game-id">raylib_mountain_bike_downhill_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_museum_heist_puzzle_2026/raylib_museum_heist_puzzle_2026.html" data-id="raylib_museum_heist_puzzle_2026">
+        <span class="game-id">raylib_museum_heist_puzzle_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_naval_combat_3d/raylib_naval_combat_3d.html" data-id="raylib_naval_combat_3d">
+        <span class="game-id">raylib_naval_combat_3d</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_neon_2048_storm_2026/raylib_neon_2048_storm_2026.html" data-id="raylib_neon_2048_storm_2026">
+        <span class="game-id">raylib_neon_2048_storm_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_neon_air_hockey_2026/raylib_neon_air_hockey_2026.html" data-id="raylib_neon_air_hockey_2026">
+        <span class="game-id">raylib_neon_air_hockey_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_neon_drift_bounty_2026/raylib_neon_drift_bounty_2026.html" data-id="raylib_neon_drift_bounty_2026">
+        <span class="game-id">raylib_neon_drift_bounty_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_neon_heist_extraction_2026/raylib_neon_heist_extraction_2026.html" data-id="raylib_neon_heist_extraction_2026">
+        <span class="game-id">raylib_neon_heist_extraction_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_neon_rooftop_rush_2026/raylib_neon_rooftop_rush_2026.html" data-id="raylib_neon_rooftop_rush_2026">
+        <span class="game-id">raylib_neon_rooftop_rush_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_neon_subway_sprint_2026/raylib_neon_subway_sprint_2026.html" data-id="raylib_neon_subway_sprint_2026">
+        <span class="game-id">raylib_neon_subway_sprint_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_neon_taxi_rush_2026/raylib_neon_taxi_rush_2026.html" data-id="raylib_neon_taxi_rush_2026">
+        <span class="game-id">raylib_neon_taxi_rush_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_night_market_chef_duel_2026/raylib_night_market_chef_duel_2026.html" data-id="raylib_night_market_chef_duel_2026">
+        <span class="game-id">raylib_night_market_chef_duel_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_ninja_rooftop_chase_2026/raylib_ninja_rooftop_chase_2026.html" data-id="raylib_ninja_rooftop_chase_2026">
+        <span class="game-id">raylib_ninja_rooftop_chase_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_orbital_salvage_ops_2026/raylib_orbital_salvage_ops_2026.html" data-id="raylib_orbital_salvage_ops_2026">
+        <span class="game-id">raylib_orbital_salvage_ops_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_orbital_shield_command_2026/raylib_orbital_shield_command_2026.html" data-id="raylib_orbital_shield_command_2026">
+        <span class="game-id">raylib_orbital_shield_command_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_pac_dash_2026/raylib_pac_dash_2026.html" data-id="raylib_pac_dash_2026">
+        <span class="game-id">raylib_pac_dash_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_paper_lantern_patrol_2026/raylib_paper_lantern_patrol_2026.html" data-id="raylib_paper_lantern_patrol_2026">
+        <span class="game-id">raylib_paper_lantern_patrol_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_peking_opera_duel_2026/raylib_peking_opera_duel_2026.html" data-id="raylib_peking_opera_duel_2026">
+        <span class="game-id">raylib_peking_opera_duel_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_picross_harbor_2026/raylib_picross_harbor_2026.html" data-id="raylib_picross_harbor_2026">
+        <span class="game-id">raylib_picross_harbor_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_pinball_workshop_2026/raylib_pinball_workshop_2026.html" data-id="raylib_pinball_workshop_2026">
+        <span class="game-id">raylib_pinball_workshop_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_pizza_delivery_mayhem_2026/raylib_pizza_delivery_mayhem_2026.html" data-id="raylib_pizza_delivery_mayhem_2026">
+        <span class="game-id">raylib_pizza_delivery_mayhem_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_platformer_3d/raylib_platformer_3d.html" data-id="raylib_platformer_3d">
+        <span class="game-id">raylib_platformer_3d</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_platformer_precision_2026/raylib_platformer_precision_2026.html" data-id="raylib_platformer_precision_2026">
+        <span class="game-id">raylib_platformer_precision_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_polar_train_heist_2026/raylib_polar_train_heist_2026.html" data-id="raylib_polar_train_heist_2026">
+        <span class="game-id">raylib_polar_train_heist_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_port_logistics_empire_2026/raylib_port_logistics_empire_2026.html" data-id="raylib_port_logistics_empire_2026">
+        <span class="game-id">raylib_port_logistics_empire_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_portal_billiards_2026/raylib_portal_billiards_2026.html" data-id="raylib_portal_billiards_2026">
+        <span class="game-id">raylib_portal_billiards_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_portal_blackout_escape_2026/raylib_portal_blackout_escape_2026.html" data-id="raylib_portal_blackout_escape_2026">
+        <span class="game-id">raylib_portal_blackout_escape_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_post_office_sorter_2026/raylib_post_office_sorter_2026.html" data-id="raylib_post_office_sorter_2026">
+        <span class="game-id">raylib_post_office_sorter_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_power_grid_operator_2026/raylib_power_grid_operator_2026.html" data-id="raylib_power_grid_operator_2026">
+        <span class="game-id">raylib_power_grid_operator_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_powerline_repair_patrol_2026/raylib_powerline_repair_patrol_2026.html" data-id="raylib_powerline_repair_patrol_2026">
+        <span class="game-id">raylib_powerline_repair_patrol_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_puzzle_dungeon_3d/raylib_puzzle_dungeon_3d.html" data-id="raylib_puzzle_dungeon_3d">
+        <span class="game-id">raylib_puzzle_dungeon_3d</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_quantum_skater_2026/raylib_quantum_skater_2026.html" data-id="raylib_quantum_skater_2026">
+        <span class="game-id">raylib_quantum_skater_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_radio_station_manager_2026/raylib_radio_station_manager_2026.html" data-id="raylib_radio_station_manager_2026">
+        <span class="game-id">raylib_radio_station_manager_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_raft_rapids_escape_2026/raylib_raft_rapids_escape_2026.html" data-id="raylib_raft_rapids_escape_2026">
+        <span class="game-id">raylib_raft_rapids_escape_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_raymath_vector_angle/raylib_raymath_vector_angle.html" data-id="raylib_raymath_vector_angle">
+        <span class="game-id">raylib_raymath_vector_angle</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_reactor_siege_2026/raylib_reactor_siege_2026.html" data-id="raylib_reactor_siege_2026">
+        <span class="game-id">raylib_reactor_siege_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_rhythm_street_beats_2026/raylib_rhythm_street_beats_2026.html" data-id="raylib_rhythm_street_beats_2026">
+        <span class="game-id">raylib_rhythm_street_beats_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_river_raid_2026/raylib_river_raid_2026.html" data-id="raylib_river_raid_2026">
+        <span class="game-id">raylib_river_raid_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_rocket_arena_soccer_2026/raylib_rocket_arena_soccer_2026.html" data-id="raylib_rocket_arena_soccer_2026">
+        <span class="game-id">raylib_rocket_arena_soccer_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_rogue_dungeon_2026/raylib_rogue_dungeon_2026.html" data-id="raylib_rogue_dungeon_2026">
+        <span class="game-id">raylib_rogue_dungeon_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_rooftop_mail_glider_2026/raylib_rooftop_mail_glider_2026.html" data-id="raylib_rooftop_mail_glider_2026">
+        <span class="game-id">raylib_rooftop_mail_glider_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_rooftop_volleyball_2026/raylib_rooftop_volleyball_2026.html" data-id="raylib_rooftop_volleyball_2026">
+        <span class="game-id">raylib_rooftop_volleyball_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_rts_skirmish_2026/raylib_rts_skirmish_2026.html" data-id="raylib_rts_skirmish_2026">
+        <span class="game-id">raylib_rts_skirmish_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_rush_hour_escape_2026/raylib_rush_hour_escape_2026.html" data-id="raylib_rush_hour_escape_2026">
+        <span class="game-id">raylib_rush_hour_escape_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_basic_lighting/raylib_shaders_basic_lighting.html" data-id="raylib_shaders_basic_lighting">
+        <span class="game-id">raylib_shaders_basic_lighting</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_basic_pbr/raylib_shaders_basic_pbr.html" data-id="raylib_shaders_basic_pbr">
+        <span class="game-id">raylib_shaders_basic_pbr</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_color_correction/raylib_shaders_color_correction.html" data-id="raylib_shaders_color_correction">
+        <span class="game-id">raylib_shaders_color_correction</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_custom_uniform/raylib_shaders_custom_uniform.html" data-id="raylib_shaders_custom_uniform">
+        <span class="game-id">raylib_shaders_custom_uniform</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_deferred_render/raylib_shaders_deferred_render.html" data-id="raylib_shaders_deferred_render">
+        <span class="game-id">raylib_shaders_deferred_render</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_eratosthenes/raylib_shaders_eratosthenes.html" data-id="raylib_shaders_eratosthenes">
+        <span class="game-id">raylib_shaders_eratosthenes</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_fog/raylib_shaders_fog.html" data-id="raylib_shaders_fog">
+        <span class="game-id">raylib_shaders_fog</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_hot_reloading/raylib_shaders_hot_reloading.html" data-id="raylib_shaders_hot_reloading">
+        <span class="game-id">raylib_shaders_hot_reloading</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_hybrid_render/raylib_shaders_hybrid_render.html" data-id="raylib_shaders_hybrid_render">
+        <span class="game-id">raylib_shaders_hybrid_render</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_julia_set/raylib_shaders_julia_set.html" data-id="raylib_shaders_julia_set">
+        <span class="game-id">raylib_shaders_julia_set</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_lightmap/raylib_shaders_lightmap.html" data-id="raylib_shaders_lightmap">
+        <span class="game-id">raylib_shaders_lightmap</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_mesh_instancing/raylib_shaders_mesh_instancing.html" data-id="raylib_shaders_mesh_instancing">
+        <span class="game-id">raylib_shaders_mesh_instancing</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_model_shader/raylib_shaders_model_shader.html" data-id="raylib_shaders_model_shader">
+        <span class="game-id">raylib_shaders_model_shader</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_multi_sample2d/raylib_shaders_multi_sample2d.html" data-id="raylib_shaders_multi_sample2d">
+        <span class="game-id">raylib_shaders_multi_sample2d</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_palette_switch/raylib_shaders_palette_switch.html" data-id="raylib_shaders_palette_switch">
+        <span class="game-id">raylib_shaders_palette_switch</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_postprocessing/raylib_shaders_postprocessing.html" data-id="raylib_shaders_postprocessing">
+        <span class="game-id">raylib_shaders_postprocessing</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_raymarching/raylib_shaders_raymarching.html" data-id="raylib_shaders_raymarching">
+        <span class="game-id">raylib_shaders_raymarching</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_shadowmap/raylib_shaders_shadowmap.html" data-id="raylib_shaders_shadowmap">
+        <span class="game-id">raylib_shaders_shadowmap</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_shapes_textures/raylib_shaders_shapes_textures.html" data-id="raylib_shaders_shapes_textures">
+        <span class="game-id">raylib_shaders_shapes_textures</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_simple_mask/raylib_shaders_simple_mask.html" data-id="raylib_shaders_simple_mask">
+        <span class="game-id">raylib_shaders_simple_mask</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_spotlight/raylib_shaders_spotlight.html" data-id="raylib_shaders_spotlight">
+        <span class="game-id">raylib_shaders_spotlight</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_texture_drawing/raylib_shaders_texture_drawing.html" data-id="raylib_shaders_texture_drawing">
+        <span class="game-id">raylib_shaders_texture_drawing</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_texture_outline/raylib_shaders_texture_outline.html" data-id="raylib_shaders_texture_outline">
+        <span class="game-id">raylib_shaders_texture_outline</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_texture_tiling/raylib_shaders_texture_tiling.html" data-id="raylib_shaders_texture_tiling">
+        <span class="game-id">raylib_shaders_texture_tiling</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_texture_waves/raylib_shaders_texture_waves.html" data-id="raylib_shaders_texture_waves">
+        <span class="game-id">raylib_shaders_texture_waves</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_vertex_displacement/raylib_shaders_vertex_displacement.html" data-id="raylib_shaders_vertex_displacement">
+        <span class="game-id">raylib_shaders_vertex_displacement</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shaders_write_depth/raylib_shaders_write_depth.html" data-id="raylib_shaders_write_depth">
+        <span class="game-id">raylib_shaders_write_depth</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shadow_puppet_theater_2026/raylib_shadow_puppet_theater_2026.html" data-id="raylib_shadow_puppet_theater_2026">
+        <span class="game-id">raylib_shadow_puppet_theater_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_basic_shapes/raylib_shapes_basic_shapes.html" data-id="raylib_shapes_basic_shapes">
+        <span class="game-id">raylib_shapes_basic_shapes</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_bouncing_ball/raylib_shapes_bouncing_ball.html" data-id="raylib_shapes_bouncing_ball">
+        <span class="game-id">raylib_shapes_bouncing_ball</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_collision_area/raylib_shapes_collision_area.html" data-id="raylib_shapes_collision_area">
+        <span class="game-id">raylib_shapes_collision_area</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_colors_palette/raylib_shapes_colors_palette.html" data-id="raylib_shapes_colors_palette">
+        <span class="game-id">raylib_shapes_colors_palette</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_draw_circle_sector/raylib_shapes_draw_circle_sector.html" data-id="raylib_shapes_draw_circle_sector">
+        <span class="game-id">raylib_shapes_draw_circle_sector</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_draw_rectangle_rounded/raylib_shapes_draw_rectangle_rounded.html" data-id="raylib_shapes_draw_rectangle_rounded">
+        <span class="game-id">raylib_shapes_draw_rectangle_rounded</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_draw_ring/raylib_shapes_draw_ring.html" data-id="raylib_shapes_draw_ring">
+        <span class="game-id">raylib_shapes_draw_ring</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_easings_ball_anim/raylib_shapes_easings_ball_anim.html" data-id="raylib_shapes_easings_ball_anim">
+        <span class="game-id">raylib_shapes_easings_ball_anim</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_easings_box_anim/raylib_shapes_easings_box_anim.html" data-id="raylib_shapes_easings_box_anim">
+        <span class="game-id">raylib_shapes_easings_box_anim</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_easings_rectangle_array/raylib_shapes_easings_rectangle_array.html" data-id="raylib_shapes_easings_rectangle_array">
+        <span class="game-id">raylib_shapes_easings_rectangle_array</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_following_eyes/raylib_shapes_following_eyes.html" data-id="raylib_shapes_following_eyes">
+        <span class="game-id">raylib_shapes_following_eyes</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_hilbert_curve/raylib_shapes_hilbert_curve.html" data-id="raylib_shapes_hilbert_curve">
+        <span class="game-id">raylib_shapes_hilbert_curve</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_kaleidoscope/raylib_shapes_kaleidoscope.html" data-id="raylib_shapes_kaleidoscope">
+        <span class="game-id">raylib_shapes_kaleidoscope</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_lines_bezier/raylib_shapes_lines_bezier.html" data-id="raylib_shapes_lines_bezier">
+        <span class="game-id">raylib_shapes_lines_bezier</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_logo_raylib/raylib_shapes_logo_raylib.html" data-id="raylib_shapes_logo_raylib">
+        <span class="game-id">raylib_shapes_logo_raylib</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_logo_raylib_anim/raylib_shapes_logo_raylib_anim.html" data-id="raylib_shapes_logo_raylib_anim">
+        <span class="game-id">raylib_shapes_logo_raylib_anim</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_math_sine_cosine/raylib_shapes_math_sine_cosine.html" data-id="raylib_shapes_math_sine_cosine">
+        <span class="game-id">raylib_shapes_math_sine_cosine</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_pie_chart/raylib_shapes_pie_chart.html" data-id="raylib_shapes_pie_chart">
+        <span class="game-id">raylib_shapes_pie_chart</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_rectangle_advanced/raylib_shapes_rectangle_advanced.html" data-id="raylib_shapes_rectangle_advanced">
+        <span class="game-id">raylib_shapes_rectangle_advanced</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_rectangle_scaling/raylib_shapes_rectangle_scaling.html" data-id="raylib_shapes_rectangle_scaling">
+        <span class="game-id">raylib_shapes_rectangle_scaling</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_recursive_tree/raylib_shapes_recursive_tree.html" data-id="raylib_shapes_recursive_tree">
+        <span class="game-id">raylib_shapes_recursive_tree</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_rlgl_color_wheel/raylib_shapes_rlgl_color_wheel.html" data-id="raylib_shapes_rlgl_color_wheel">
+        <span class="game-id">raylib_shapes_rlgl_color_wheel</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_rounded_rectangle_drawing/raylib_shapes_rounded_rectangle_drawing.html" data-id="raylib_shapes_rounded_rectangle_drawing">
+        <span class="game-id">raylib_shapes_rounded_rectangle_drawing</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_splines_drawing/raylib_shapes_splines_drawing.html" data-id="raylib_shapes_splines_drawing">
+        <span class="game-id">raylib_shapes_splines_drawing</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_top_down_lights/raylib_shapes_top_down_lights.html" data-id="raylib_shapes_top_down_lights">
+        <span class="game-id">raylib_shapes_top_down_lights</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_shapes_triangle_strip/raylib_shapes_triangle_strip.html" data-id="raylib_shapes_triangle_strip">
+        <span class="game-id">raylib_shapes_triangle_strip</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_silkroad_caravan_guard_2026/raylib_silkroad_caravan_guard_2026.html" data-id="raylib_silkroad_caravan_guard_2026">
+        <span class="game-id">raylib_silkroad_caravan_guard_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_ski_rescue_2026/raylib_ski_rescue_2026.html" data-id="raylib_ski_rescue_2026">
+        <span class="game-id">raylib_ski_rescue_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_sky_convoy_defense_2026/raylib_sky_convoy_defense_2026.html" data-id="raylib_sky_convoy_defense_2026">
+        <span class="game-id">raylib_sky_convoy_defense_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_skyforge_mining_convoy_2026/raylib_skyforge_mining_convoy_2026.html" data-id="raylib_skyforge_mining_convoy_2026">
+        <span class="game-id">raylib_skyforge_mining_convoy_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_skyhook_cargo_rescue_2026/raylib_skyhook_cargo_rescue_2026.html" data-id="raylib_skyhook_cargo_rescue_2026">
+        <span class="game-id">raylib_skyhook_cargo_rescue_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_skyline_fire_rescue_2026/raylib_skyline_fire_rescue_2026.html" data-id="raylib_skyline_fire_rescue_2026">
+        <span class="game-id">raylib_skyline_fire_rescue_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_skyline_parkour_trials_2026/raylib_skyline_parkour_trials_2026.html" data-id="raylib_skyline_parkour_trials_2026">
+        <span class="game-id">raylib_skyline_parkour_trials_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_snake_battle_arena_2026/raylib_snake_battle_arena_2026.html" data-id="raylib_snake_battle_arena_2026">
+        <span class="game-id">raylib_snake_battle_arena_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_snowboard_slalom_2026/raylib_snowboard_slalom_2026.html" data-id="raylib_snowboard_slalom_2026">
+        <span class="game-id">raylib_snowboard_slalom_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_sokoban_warehouse_master_2026/raylib_sokoban_warehouse_master_2026.html" data-id="raylib_sokoban_warehouse_master_2026">
+        <span class="game-id">raylib_sokoban_warehouse_master_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_solar_rail_breaker_2026/raylib_solar_rail_breaker_2026.html" data-id="raylib_solar_rail_breaker_2026">
+        <span class="game-id">raylib_solar_rail_breaker_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_space_combat_3d/raylib_space_combat_3d.html" data-id="raylib_space_combat_3d">
+        <span class="game-id">raylib_space_combat_3d</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_space_trader_2026/raylib_space_trader_2026.html" data-id="raylib_space_trader_2026">
+        <span class="game-id">raylib_space_trader_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_spellforge_arena_2026/raylib_spellforge_arena_2026.html" data-id="raylib_spellforge_arena_2026">
+        <span class="game-id">raylib_spellforge_arena_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_stealth_heist_2026/raylib_stealth_heist_2026.html" data-id="raylib_stealth_heist_2026">
+        <span class="game-id">raylib_stealth_heist_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_street_basketball_duel_2026/raylib_street_basketball_duel_2026.html" data-id="raylib_street_basketball_duel_2026">
+        <span class="game-id">raylib_street_basketball_duel_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_submarine_hunter_2026/raylib_submarine_hunter_2026.html" data-id="raylib_submarine_hunter_2026">
+        <span class="game-id">raylib_submarine_hunter_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_submarine_sonar_hunt_2026/raylib_submarine_sonar_hunt_2026.html" data-id="raylib_submarine_sonar_hunt_2026">
+        <span class="game-id">raylib_submarine_sonar_hunt_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_subway_signal_saboteur_2026/raylib_subway_signal_saboteur_2026.html" data-id="raylib_subway_signal_saboteur_2026">
+        <span class="game-id">raylib_subway_signal_saboteur_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_super_mario_1985_lite/raylib_super_mario_1985_lite.html" data-id="raylib_super_mario_1985_lite">
+        <span class="game-id">raylib_super_mario_1985_lite</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_survival_arena_3d/raylib_survival_arena_3d.html" data-id="raylib_survival_arena_3d">
+        <span class="game-id">raylib_survival_arena_3d</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_tank_1990/raylib_tank_1990.html" data-id="raylib_tank_1990">
+        <span class="game-id">raylib_tank_1990</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_tea_mountain_express_2026/raylib_tea_mountain_express_2026.html" data-id="raylib_tea_mountain_express_2026">
+        <span class="game-id">raylib_tea_mountain_express_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_teahouse_midnight_service_2026/raylib_teahouse_midnight_service_2026.html" data-id="raylib_teahouse_midnight_service_2026">
+        <span class="game-id">raylib_teahouse_midnight_service_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_temple_relic_run_2026/raylib_temple_relic_run_2026.html" data-id="raylib_temple_relic_run_2026">
+        <span class="game-id">raylib_temple_relic_run_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_tetris_meteor_fall_2026/raylib_tetris_meteor_fall_2026.html" data-id="raylib_tetris_meteor_fall_2026">
+        <span class="game-id">raylib_tetris_meteor_fall_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_text_codepoints_loading/raylib_text_codepoints_loading.html" data-id="raylib_text_codepoints_loading">
+        <span class="game-id">raylib_text_codepoints_loading</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_text_draw_3d/raylib_text_draw_3d.html" data-id="raylib_text_draw_3d">
+        <span class="game-id">raylib_text_draw_3d</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_text_font_filters/raylib_text_font_filters.html" data-id="raylib_text_font_filters">
+        <span class="game-id">raylib_text_font_filters</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_text_font_loading/raylib_text_font_loading.html" data-id="raylib_text_font_loading">
+        <span class="game-id">raylib_text_font_loading</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_text_font_sdf/raylib_text_font_sdf.html" data-id="raylib_text_font_sdf">
+        <span class="game-id">raylib_text_font_sdf</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_text_font_spritefont/raylib_text_font_spritefont.html" data-id="raylib_text_font_spritefont">
+        <span class="game-id">raylib_text_font_spritefont</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_text_format_text/raylib_text_format_text.html" data-id="raylib_text_format_text">
+        <span class="game-id">raylib_text_format_text</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_text_input_box/raylib_text_input_box.html" data-id="raylib_text_input_box">
+        <span class="game-id">raylib_text_input_box</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_text_raylib_fonts/raylib_text_raylib_fonts.html" data-id="raylib_text_raylib_fonts">
+        <span class="game-id">raylib_text_raylib_fonts</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_text_rectangle_bounds/raylib_text_rectangle_bounds.html" data-id="raylib_text_rectangle_bounds">
+        <span class="game-id">raylib_text_rectangle_bounds</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_text_unicode/raylib_text_unicode.html" data-id="raylib_text_unicode">
+        <span class="game-id">raylib_text_unicode</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_text_writing_anim/raylib_text_writing_anim.html" data-id="raylib_text_writing_anim">
+        <span class="game-id">raylib_text_writing_anim</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_background_scrolling/raylib_textures_background_scrolling.html" data-id="raylib_textures_background_scrolling">
+        <span class="game-id">raylib_textures_background_scrolling</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_blend_modes/raylib_textures_blend_modes.html" data-id="raylib_textures_blend_modes">
+        <span class="game-id">raylib_textures_blend_modes</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_bunnymark/raylib_textures_bunnymark.html" data-id="raylib_textures_bunnymark">
+        <span class="game-id">raylib_textures_bunnymark</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_draw_tiled/raylib_textures_draw_tiled.html" data-id="raylib_textures_draw_tiled">
+        <span class="game-id">raylib_textures_draw_tiled</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_fog_of_war/raylib_textures_fog_of_war.html" data-id="raylib_textures_fog_of_war">
+        <span class="game-id">raylib_textures_fog_of_war</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_gif_player/raylib_textures_gif_player.html" data-id="raylib_textures_gif_player">
+        <span class="game-id">raylib_textures_gif_player</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_image_channel/raylib_textures_image_channel.html" data-id="raylib_textures_image_channel">
+        <span class="game-id">raylib_textures_image_channel</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_image_drawing/raylib_textures_image_drawing.html" data-id="raylib_textures_image_drawing">
+        <span class="game-id">raylib_textures_image_drawing</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_image_generation/raylib_textures_image_generation.html" data-id="raylib_textures_image_generation">
+        <span class="game-id">raylib_textures_image_generation</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_image_kernel/raylib_textures_image_kernel.html" data-id="raylib_textures_image_kernel">
+        <span class="game-id">raylib_textures_image_kernel</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_image_loading/raylib_textures_image_loading.html" data-id="raylib_textures_image_loading">
+        <span class="game-id">raylib_textures_image_loading</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_image_processing/raylib_textures_image_processing.html" data-id="raylib_textures_image_processing">
+        <span class="game-id">raylib_textures_image_processing</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_image_rotate/raylib_textures_image_rotate.html" data-id="raylib_textures_image_rotate">
+        <span class="game-id">raylib_textures_image_rotate</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_image_text/raylib_textures_image_text.html" data-id="raylib_textures_image_text">
+        <span class="game-id">raylib_textures_image_text</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_logo_raylib/raylib_textures_logo_raylib.html" data-id="raylib_textures_logo_raylib">
+        <span class="game-id">raylib_textures_logo_raylib</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_mouse_painting/raylib_textures_mouse_painting.html" data-id="raylib_textures_mouse_painting">
+        <span class="game-id">raylib_textures_mouse_painting</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_npatch_drawing/raylib_textures_npatch_drawing.html" data-id="raylib_textures_npatch_drawing">
+        <span class="game-id">raylib_textures_npatch_drawing</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_particles_blending/raylib_textures_particles_blending.html" data-id="raylib_textures_particles_blending">
+        <span class="game-id">raylib_textures_particles_blending</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_polygon/raylib_textures_polygon.html" data-id="raylib_textures_polygon">
+        <span class="game-id">raylib_textures_polygon</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_raw_data/raylib_textures_raw_data.html" data-id="raylib_textures_raw_data">
+        <span class="game-id">raylib_textures_raw_data</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_sprite_anim/raylib_textures_sprite_anim.html" data-id="raylib_textures_sprite_anim">
+        <span class="game-id">raylib_textures_sprite_anim</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_sprite_button/raylib_textures_sprite_button.html" data-id="raylib_textures_sprite_button">
+        <span class="game-id">raylib_textures_sprite_button</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_sprite_explosion/raylib_textures_sprite_explosion.html" data-id="raylib_textures_sprite_explosion">
+        <span class="game-id">raylib_textures_sprite_explosion</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_srcrec_dstrec/raylib_textures_srcrec_dstrec.html" data-id="raylib_textures_srcrec_dstrec">
+        <span class="game-id">raylib_textures_srcrec_dstrec</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_textures_to_image/raylib_textures_to_image.html" data-id="raylib_textures_to_image">
+        <span class="game-id">raylib_textures_to_image</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_time_loop_arena_2026/raylib_time_loop_arena_2026.html" data-id="raylib_time_loop_arena_2026">
+        <span class="game-id">raylib_time_loop_arena_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_topdown_survivor_2026/raylib_topdown_survivor_2026.html" data-id="raylib_topdown_survivor_2026">
+        <span class="game-id">raylib_topdown_survivor_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_tower_defense_3d/raylib_tower_defense_3d.html" data-id="raylib_tower_defense_3d">
+        <span class="game-id">raylib_tower_defense_3d</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_tower_defense_frontier_2026/raylib_tower_defense_frontier_2026.html" data-id="raylib_tower_defense_frontier_2026">
+        <span class="game-id">raylib_tower_defense_frontier_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_train_dispatch_2026/raylib_train_dispatch_2026.html" data-id="raylib_train_dispatch_2026">
+        <span class="game-id">raylib_train_dispatch_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_treasure_map_expedition_2026/raylib_treasure_map_expedition_2026.html" data-id="raylib_treasure_map_expedition_2026">
+        <span class="game-id">raylib_treasure_map_expedition_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_ufo_cow_rescue_2026/raylib_ufo_cow_rescue_2026.html" data-id="raylib_ufo_cow_rescue_2026">
+        <span class="game-id">raylib_ufo_cow_rescue_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_urban_flood_evacuation_2026/raylib_urban_flood_evacuation_2026.html" data-id="raylib_urban_flood_evacuation_2026">
+        <span class="game-id">raylib_urban_flood_evacuation_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_void_anchor_raid_2026/raylib_void_anchor_raid_2026.html" data-id="raylib_void_anchor_raid_2026">
+        <span class="game-id">raylib_void_anchor_raid_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_volcano_airlift_2026/raylib_volcano_airlift_2026.html" data-id="raylib_volcano_airlift_2026">
+        <span class="game-id">raylib_volcano_airlift_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_volcano_rescue_ops_2026/raylib_volcano_rescue_ops_2026.html" data-id="raylib_volcano_rescue_ops_2026">
+        <span class="game-id">raylib_volcano_rescue_ops_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_voxel_world_3d/raylib_voxel_world_3d.html" data-id="raylib_voxel_world_3d">
+        <span class="game-id">raylib_voxel_world_3d</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_warehouse_forklift_2026/raylib_warehouse_forklift_2026.html" data-id="raylib_warehouse_forklift_2026">
+        <span class="game-id">raylib_warehouse_forklift_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_wildfire_airlift_command_2026/raylib_wildfire_airlift_command_2026.html" data-id="raylib_wildfire_airlift_command_2026">
+        <span class="game-id">raylib_wildfire_airlift_command_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_wuxia_rooftop_duel_2026/raylib_wuxia_rooftop_duel_2026.html" data-id="raylib_wuxia_rooftop_duel_2026">
+        <span class="game-id">raylib_wuxia_rooftop_duel_2026</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_xiaoxiaole/raylib_xiaoxiaole.html" data-id="raylib_xiaoxiaole">
+        <span class="game-id">raylib_xiaoxiaole</span>
+        <span class="play">Play</span>
+      </a>
+      <a class="game-card" href="games/raylib_zombie_safehouse_siege_2026/raylib_zombie_safehouse_siege_2026.html" data-id="raylib_zombie_safehouse_siege_2026">
+        <span class="game-id">raylib_zombie_safehouse_siege_2026</span>
+        <span class="play">Play</span>
+      </a>
+    </section>
+
+    <footer>
+      Tip: bookmark any game URL to open it directly.
+    </footer>
+  </main>
+
+  <script>
+    const search = document.getElementById("search");
+    const cards = Array.from(document.querySelectorAll(".game-card"));
+    search.addEventListener("input", () => {
+      const q = search.value.trim().toLowerCase();
+      for (const card of cards) {
+        const id = (card.dataset.id || "").toLowerCase();
+        card.style.display = q === "" || id.includes(q) ? "flex" : "none";
+      }
+    });
+  </script>
+</body>
+</html>
