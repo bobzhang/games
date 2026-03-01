@@ -904,6 +904,7 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the complete frame for the current train heist state.
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_background(game)
 
