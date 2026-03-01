@@ -4,6 +4,10 @@ import {
   "moonbitlang/async/http",
 }
 
+warnings(
+  "+missing_doc",
+)
+
 options(
   "is-main": true,
 )
