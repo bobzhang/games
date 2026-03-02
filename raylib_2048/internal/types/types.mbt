@@ -39,7 +39,9 @@ pub fn Tile::new() -> Tile {
 ///|
 /// Entire runtime state for one 2048 session.
 pub(all) struct Game {
+  ///
   tiles : Array[Tile]
+  ///
   prev_values : Array[Int]
   mut state : GameState
   mut score : Int

@@ -1,18 +1,20 @@
 ///|
-fn handle_input(game : @types.Game) -> Unit {
+#as_free_fn(deprecated)
+fn @types.Game::handle_input(game : @types.Game) -> Unit {
   match game.state {
-    Title => handle_title_input(game)
-    Play => handle_play_input(game)
-    Won => handle_won_input(game)
-    Over => handle_over_input(game)
+    Title => game.handle_title_input()
+    Play => game.handle_play_input()
+    Won => game.handle_won_input()
+    Over => game.handle_over_input()
   }
 }
 
 ///|
-fn handle_title_input(game : @types.Game) -> Unit {
+#as_free_fn(deprecated)
+fn @types.Game::handle_title_input(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    reset(game)
+    game.reset()
     return
   }
   if @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
@@ -24,35 +26,36 @@ fn handle_title_input(game : @types.Game) -> Unit {
     let bw = 240
     let bh = 60
     if mx >= bx && mx <= bx + bw && my >= by && my <= by + bh {
-      reset(game)
+      game.reset()
     }
   }
 }
 
 ///|
-fn handle_play_input(game : @types.Game) -> Unit {
+#as_free_fn(deprecated)
+fn @types.Game::handle_play_input(game : @types.Game) -> Unit {
   if game.animating {
     return
   }
   if @raylib.is_key_pressed(@raylib.KeyLeft) ||
     @raylib.is_key_pressed(@raylib.KeyA) {
-    ignore(try_move(game, 0, -1))
+    ignore(game.try_move(0, -1))
   } else if @raylib.is_key_pressed(@raylib.KeyRight) ||
     @raylib.is_key_pressed(@raylib.KeyD) {
-    ignore(try_move(game, 0, 1))
+    ignore(game.try_move(0, 1))
   } else if @raylib.is_key_pressed(@raylib.KeyUp) ||
     @raylib.is_key_pressed(@raylib.KeyW) {
-    ignore(try_move(game, -1, 0))
+    ignore(game.try_move(-1, 0))
   } else if @raylib.is_key_pressed(@raylib.KeyDown) ||
     @raylib.is_key_pressed(@raylib.KeyS) {
-    ignore(try_move(game, 1, 0))
+    ignore(game.try_move(1, 0))
   }
   if @raylib.is_key_pressed(@raylib.KeyZ) ||
     @raylib.is_key_pressed(@raylib.KeyU) {
-    undo(game)
+    game.undo()
   }
   if @raylib.is_key_pressed(@raylib.KeyR) {
-    reset(game)
+    game.reset()
   }
   if @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
     let mx = @raylib.get_mouse_x()
@@ -62,17 +65,18 @@ fn handle_play_input(game : @types.Game) -> Unit {
     let btn_w = 110
     let ngx = @types.screen_w - btn_w - @types.board_left
     if mx >= ngx && mx <= ngx + btn_w && my >= btn_y && my <= btn_y + btn_h {
-      reset(game)
+      game.reset()
     }
     let ux = @types.screen_w - btn_w * 2 - @types.board_left - 8
     if mx >= ux && mx <= ux + btn_w && my >= btn_y && my <= btn_y + btn_h {
-      undo(game)
+      game.undo()
     }
   }
 }
 
 ///|
-fn handle_won_input(game : @types.Game) -> Unit {
+#as_free_fn(deprecated)
+fn @types.Game::handle_won_input(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     game.keep_playing = true
@@ -80,7 +84,7 @@ fn handle_won_input(game : @types.Game) -> Unit {
     return
   }
   if @raylib.is_key_pressed(@raylib.KeyR) {
-    reset(game)
+    game.reset()
     return
   }
   if @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
@@ -102,14 +106,15 @@ fn handle_won_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn handle_over_input(game : @types.Game) -> Unit {
+#as_free_fn(deprecated)
+fn @types.Game::handle_over_input(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyR) ||
     @raylib.is_key_pressed(@raylib.KeyEnter) {
-    reset(game)
+    game.reset()
     return
   }
   if @raylib.is_key_pressed(@raylib.KeyZ) ||
     @raylib.is_key_pressed(@raylib.KeyU) {
-    undo(game)
+    game.undo()
   }
 }

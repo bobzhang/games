@@ -1,12 +1,13 @@
 ///|
 /// Advances 2048 simulation by one frame, including input and tile animation.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
-  handle_input(game)
-  update_animations(game, dt)
+  game.handle_input()
+  game.update_animations(dt)
 }
 
 ///|
-fn reset(game : @types.Game) -> Unit {
+#as_free_fn(deprecated)
+fn @types.Game::reset(game : @types.Game) -> Unit {
   for i in 0..<@types.cell_count {
     game.tiles[i].value = 0
     game.tiles[i].scale = 1.0
@@ -19,14 +20,15 @@ fn reset(game : @types.Game) -> Unit {
   game.keep_playing = false
   game.msg = ""
   game.msg_t = 0.0
-  spawn_tile(game)
-  spawn_tile(game)
-  snap_positions(game)
+  game.spawn_tile()
+  game.spawn_tile()
+  game.snap_positions()
   game.state = Play
 }
 
 ///|
-fn snap_positions(game : @types.Game) -> Unit {
+#as_free_fn(deprecated)
+fn @types.Game::snap_positions(game : @types.Game) -> Unit {
   for r in 0..<@types.grid_size {
     for c in 0..<@types.grid_size {
       let idx = r * @types.grid_size + c
@@ -41,7 +43,8 @@ fn snap_positions(game : @types.Game) -> Unit {
 }
 
 ///|
-fn spawn_tile(game : @types.Game) -> Unit {
+#as_free_fn(deprecated)
+fn @types.Game::spawn_tile(game : @types.Game) -> Unit {
   let empty : Array[Int] = []
   for i in 0..<@types.cell_count {
     if game.tiles[i].value == 0 {
@@ -66,7 +69,8 @@ fn spawn_tile(game : @types.Game) -> Unit {
 }
 
 ///|
-fn save_state(game : @types.Game) -> Unit {
+#as_free_fn(deprecated)
+fn @types.Game::save_state(game : @types.Game) -> Unit {
   for i in 0..<@types.cell_count {
     game.prev_values[i] = game.tiles[i].value
   }
@@ -75,7 +79,8 @@ fn save_state(game : @types.Game) -> Unit {
 }
 
 ///|
-fn undo(game : @types.Game) -> Unit {
+#as_free_fn(deprecated)
+fn @types.Game::undo(game : @types.Game) -> Unit {
   if not(game.can_undo) {
     return
   }
@@ -87,7 +92,7 @@ fn undo(game : @types.Game) -> Unit {
   }
   game.score = game.prev_score
   game.can_undo = false
-  snap_positions(game)
+  game.snap_positions()
   if game.state is Over {
     game.state = Play
   }
@@ -96,14 +101,15 @@ fn undo(game : @types.Game) -> Unit {
 }
 
 ///|
-fn try_move(game : @types.Game, dr : Int, dc : Int) -> Bool {
+#as_free_fn(deprecated)
+fn @types.Game::try_move(game : @types.Game, dr : Int, dc : Int) -> Bool {
   let old_can_undo = game.can_undo
   let old_prev_score = game.prev_score
   let old_prev : Array[Int] = Array::make(@types.cell_count, 0)
   for i in 0..<@types.cell_count {
     old_prev[i] = game.prev_values[i]
   }
-  save_state(game)
+  game.save_state()
   let mut moved = false
   let mut merge_score = 0
   for i in 0..<@types.cell_count {
@@ -218,7 +224,7 @@ fn try_move(game : @types.Game, dr : Int, dc : Int) -> Bool {
       }
     }
     game.animating = true
-    spawn_tile(game)
+    game.spawn_tile()
     if not(game.keep_playing) {
       for i in 0..<@types.cell_count {
         if game.tiles[i].value >= 2048 {
@@ -227,7 +233,7 @@ fn try_move(game : @types.Game, dr : Int, dc : Int) -> Bool {
         }
       }
     }
-    if !(has_moves(game)) && !(game.state is Won) {
+    if !(game.has_moves()) && !(game.state is Won) {
       game.state = Over
     }
   }
@@ -235,7 +241,8 @@ fn try_move(game : @types.Game, dr : Int, dc : Int) -> Bool {
 }
 
 ///|
-fn has_moves(game : @types.Game) -> Bool {
+#as_free_fn(deprecated)
+fn @types.Game::has_moves(game : @types.Game) -> Bool {
   for i in 0..<@types.cell_count {
     if game.tiles[i].value == 0 {
       return true
@@ -258,7 +265,8 @@ fn has_moves(game : @types.Game) -> Bool {
 }
 
 ///|
-fn update_animations(game : @types.Game, dt : Float) -> Unit {
+#as_free_fn(deprecated)
+fn @types.Game::update_animations(game : @types.Game, dt : Float) -> Unit {
   let mut all_done = true
   for i in 0..<@types.cell_count {
     let tile = game.tiles[i]
