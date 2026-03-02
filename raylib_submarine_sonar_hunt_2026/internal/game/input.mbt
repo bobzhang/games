@@ -175,8 +175,7 @@ fn update_result_input(game : @types.Game) -> Unit {
   let key_restart = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyR)
-  let key_next = game.state == @types.Win &&
-    @raylib.is_key_pressed(@raylib.KeyN)
+  let key_next = game.state == Win && @raylib.is_key_pressed(@raylib.KeyN)
   let key_title = @raylib.is_key_pressed(@raylib.KeyT) ||
     @raylib.is_key_pressed(@raylib.KeyEscape)
   let tap_restart = game.touch_cd <= 0.0 &&
@@ -190,7 +189,7 @@ fn update_result_input(game : @types.Game) -> Unit {
       restart_btn.2,
       restart_btn.3,
     )
-  let tap_next = game.state == @types.Win &&
+  let tap_next = game.state == Win &&
     game.touch_cd <= 0.0 &&
     @types.pointer_on_rect(
       mx,
