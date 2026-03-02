@@ -1,3 +1,4 @@
+///|
 /// High-level state machine for menu and campaign flow.
 pub(all) enum GameState {
   Menu
@@ -9,6 +10,7 @@ pub(all) enum GameState {
   CampaignClear
 } derive(Eq)
 
+///|
 /// Team affiliation used for friendly-fire and scoring.
 pub(all) enum Team {
   None
@@ -17,6 +19,7 @@ pub(all) enum Team {
   Enemy
 } derive(Eq)
 
+///|
 /// Tile categories used by map collision and rendering.
 pub(all) enum TileKind {
   Empty
@@ -28,6 +31,7 @@ pub(all) enum TileKind {
   Base
 } derive(Eq)
 
+///|
 /// Enemy behavior archetypes.
 pub(all) enum EnemyKind {
   Basic
@@ -36,6 +40,7 @@ pub(all) enum EnemyKind {
   Sniper
 } derive(Eq)
 
+///|
 /// Collectible powerup categories.
 pub(all) enum PowerupKind {
   Shield
@@ -46,6 +51,7 @@ pub(all) enum PowerupKind {
   ExtraLife
 } derive(Eq)
 
+///|
 /// Shared tank record used for players and enemies.
 pub(all) struct Tank {
   mut active : Bool
@@ -70,6 +76,7 @@ pub(all) struct Tank {
   mut skid_timer : Float
 }
 
+///|
 /// Creates an inactive tank slot.
 pub fn Tank::inactive() -> Tank {
   {
@@ -96,6 +103,7 @@ pub fn Tank::inactive() -> Tank {
   }
 }
 
+///|
 /// Creates a player-controlled tank at a spawn point.
 pub fn Tank::new_player(_index : Int, spawn_x : Float, spawn_y : Float) -> Tank {
   {
@@ -122,6 +130,7 @@ pub fn Tank::new_player(_index : Int, spawn_x : Float, spawn_y : Float) -> Tank 
   }
 }
 
+///|
 /// Creates an enemy tank configured by `kind`.
 pub fn Tank::new_enemy(
   kind : EnemyKind,
@@ -158,6 +167,7 @@ pub fn Tank::new_enemy(
   }
 }
 
+///|
 /// Projectile record for tank bullets.
 pub(all) struct Bullet {
   mut active : Bool
@@ -172,6 +182,7 @@ pub(all) struct Bullet {
   radius : Float
 }
 
+///|
 /// Creates an inactive bullet slot.
 pub fn Bullet::inactive() -> Bullet {
   {
@@ -188,6 +199,7 @@ pub fn Bullet::inactive() -> Bullet {
   }
 }
 
+///|
 /// Bomb record for timed and chained explosions.
 pub(all) struct Bomb {
   mut active : Bool
@@ -202,6 +214,7 @@ pub(all) struct Bomb {
   mut blast_range : Int
 }
 
+///|
 /// Creates an inactive bomb slot.
 pub fn Bomb::inactive() -> Bomb {
   {
@@ -218,6 +231,7 @@ pub fn Bomb::inactive() -> Bomb {
   }
 }
 
+///|
 /// Particle record for burst and smoke effects.
 pub(all) struct Particle {
   mut active : Bool
@@ -232,6 +246,7 @@ pub(all) struct Particle {
   mut color : @raylib.Color
 }
 
+///|
 /// Creates an inactive particle slot.
 pub fn Particle::inactive() -> Particle {
   {
@@ -248,6 +263,7 @@ pub fn Particle::inactive() -> Particle {
   }
 }
 
+///|
 /// Powerup record for map pickups.
 pub(all) struct Powerup {
   mut active : Bool
@@ -259,6 +275,7 @@ pub(all) struct Powerup {
   mut pulse : Float
 }
 
+///|
 /// Creates an inactive powerup slot.
 pub fn Powerup::inactive() -> Powerup {
   {
@@ -272,6 +289,7 @@ pub fn Powerup::inactive() -> Powerup {
   }
 }
 
+///|
 /// Decorative star used by the background starfield.
 pub(all) struct Star {
   mut x : Float
@@ -280,11 +298,13 @@ pub(all) struct Star {
   mut twinkle : Float
 }
 
+///|
 /// Creates a star entry for the background layer.
 pub fn Star::new(x : Float, y : Float, speed : Float, twinkle : Float) -> Star {
   { x, y, speed, twinkle }
 }
 
+///|
 /// Global mutable game state for Bomberman-lite.
 pub(all) struct Game {
   mut state : GameState
@@ -329,6 +349,7 @@ pub(all) struct Game {
   stars : Array[Star]
 }
 
+///|
 /// Creates a fresh game state with pooled entities and defaults.
 pub fn Game::new() -> Game {
   let stars : Array[Star] = []
@@ -387,6 +408,7 @@ pub fn Game::new() -> Game {
   }
 }
 
+///|
 /// Returns the team enum for a player index.
 pub fn team_of_player(index : Int) -> Team {
   if index == 0 {

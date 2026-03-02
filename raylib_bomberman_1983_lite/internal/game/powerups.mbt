@@ -40,17 +40,17 @@ fn spawn_powerup(
 fn spawn_random_powerup(game : @types.Game, x : Float, y : Float) -> Unit {
   let roll = @types.rand_range(game, 0, 99)
   let kind : @types.PowerupKind = if roll < 18 {
-    @types.Shield
+    Shield
   } else if roll < 36 {
-    @types.Star
+    Star
   } else if roll < 54 {
-    @types.Grenade
+    Grenade
   } else if roll < 71 {
-    @types.Clock
+    Clock
   } else if roll < 85 {
-    @types.Shovel
+    Shovel
   } else {
-    @types.ExtraLife
+    ExtraLife
   }
   spawn_powerup(game, kind, x, y)
 }
@@ -83,12 +83,12 @@ fn apply_powerup(
   let player = game.players[player_index]
   let team = @types.team_of_player(player_index)
   match kind {
-    @types.Shield => {
+    Shield => {
       player.shield_timer = 8.0
       player.invuln_timer = 2.0
       @particles.spawn_respawn_burst(game, player.x, player.y)
     }
-    @types.Star => {
+    Star => {
       player.weapon_level = @types.clampi(player.weapon_level + 1, 0, 3)
       player.reload_delay = @types.player_reload_base *
         (1.0 - Float::from_int(player.weapon_level) * 0.08)
@@ -97,15 +97,15 @@ fn apply_powerup(
       }
       @particles.spawn_spark_burst(game, player.x, player.y, 20)
     }
-    @types.Grenade => {
+    Grenade => {
       clear_all_enemies_by_grenade(game, team)
       @types.push_camera_shake(game, 2.2)
     }
-    @types.Clock => {
+    Clock => {
       game.freeze_all_timer = @types.freeze_duration
       @particles.spawn_spark_burst(game, player.x, player.y, 26)
     }
-    @types.Shovel => {
+    Shovel => {
       cache_base_ring(game)
       apply_shovel_fortress(game)
       game.shovel_timer = @types.shovel_duration
@@ -116,7 +116,7 @@ fn apply_powerup(
         24,
       )
     }
-    @types.ExtraLife => {
+    ExtraLife => {
       player.lives += 1
       @particles.spawn_respawn_burst(game, player.x, player.y)
     }
@@ -127,12 +127,12 @@ fn apply_powerup(
 ///|
 fn powerup_radius(kind : @types.PowerupKind) -> Float {
   match kind {
-    @types.Shield => 11.0
-    @types.Star => 10.0
-    @types.Grenade => 12.0
-    @types.Clock => 11.0
-    @types.Shovel => 11.0
-    @types.ExtraLife => 12.0
+    Shield => 11.0
+    Star => 10.0
+    Grenade => 12.0
+    Clock => 11.0
+    Shovel => 11.0
+    ExtraLife => 12.0
   }
 }
 

@@ -28,7 +28,7 @@ fn can_player_place_bomb(game : @types.Game, player_index : Int) -> Bool {
   let ty = @types.world_y_to_tile(player.y)
   let tile = @types.get_tile(game, tx, ty)
   match tile {
-    @types.Steel | @types.Water | @types.Base => return false
+    Steel | Water | Base => return false
     _ => ()
   }
 
@@ -77,8 +77,8 @@ fn place_player_bomb(game : @types.Game, player_index : Int) -> Unit {
 ///|
 fn is_blast_blocking_tile(tile : @types.TileKind) -> Bool {
   match tile {
-    @types.Brick | @types.Steel | @types.Water | @types.Base => true
-    @types.Empty | @types.Bush | @types.Ice => false
+    Brick | Steel | Water | Base => true
+    Empty | Bush | Ice => false
   }
 }
 
@@ -147,7 +147,7 @@ fn detonate_tile(
   let tile = @types.get_tile(game, tx, ty)
   match tile {
     Brick => {
-      @types.set_tile(game, tx, ty, @types.Empty, 0)
+      @types.set_tile(game, tx, ty, Empty, 0)
       @particles.spawn_explosion(game, cx, cy, 0.72)
       return false
     }

@@ -15,10 +15,10 @@ fn bullet_hit_enemy(game : @types.Game, bullet : @types.Bullet) -> Bool {
       enemy.hp -= bullet.damage
       @particles.spawn_spark_burst(game, bullet.x, bullet.y, 6)
       if enemy.hp <= 0 {
-        let team : @types.Team = if bullet.owner_team == @types.Player2 {
-          @types.Player2
+        let team : @types.Team = if bullet.owner_team == Player2 {
+          Player2
         } else {
-          @types.Player1
+          Player1
         }
         destroy_enemy(game, i, team)
       } else {
@@ -117,7 +117,7 @@ fn update_bullets(game : @types.Game, dt : Float) -> Unit {
         break
       }
 
-      if bullet.owner_team == @types.Enemy {
+      if bullet.owner_team == Enemy {
         if bullet_hit_player(game, bullet) {
           bullet.active = false
           hit_something = true

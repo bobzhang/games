@@ -188,7 +188,7 @@ fn draw_bush_layer(
 ) -> Unit {
   for ty in 0..<@types.map_tiles_h {
     for tx in 0..<@types.map_tiles_w {
-      if @types.get_tile(game, tx, ty) != @types.Bush {
+      if @types.get_tile(game, tx, ty) != Bush {
         continue
       }
       let sx = @types.tile_to_screen_x(tx, shake_x)
@@ -344,7 +344,7 @@ fn draw_enemies(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
     let trim = @raylib.Color::new(70, 30, 30, 255)
     draw_tank(enemy, body, trim, shake_x, shake_y)
 
-    if enemy.enemy_kind == @types.Heavy {
+    if enemy.enemy_kind == Heavy {
       for hp_i in 0..<enemy.hp {
         @raylib.draw_rectangle(
           @types.world_to_screen_x(enemy.x, shake_x) - 9 + hp_i * 4,
@@ -534,6 +534,7 @@ fn draw_powerups(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
   }
 }
 
+///|
 /// Draws battlefield layers, entities, and effects for one frame.
 pub fn draw_world(game : @types.Game) -> Unit {
   let (shake_x, shake_y) = @types.shake_offsets(game)

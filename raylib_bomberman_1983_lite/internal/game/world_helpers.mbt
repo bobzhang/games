@@ -21,7 +21,7 @@ fn damage_tile_at_point(
     Brick => {
       game.map_hp[idx] -= power
       if game.map_hp[idx] <= 0 {
-        @types.set_tile(game, tx, ty, @types.Empty, 0)
+        @types.set_tile(game, tx, ty, Empty, 0)
         @particles.spawn_explosion(
           game,
           @types.tile_center_x(tx),
@@ -34,7 +34,7 @@ fn damage_tile_at_point(
     }
     Steel =>
       if power >= 3 {
-        @types.set_tile(game, tx, ty, @types.Empty, 0)
+        @types.set_tile(game, tx, ty, Empty, 0)
         @particles.spawn_explosion(
           game,
           @types.tile_center_x(tx),
