@@ -39,36 +39,36 @@ fn stage_enemy_kind(
   let roll = @types.rand_range(game, 0, 99)
   if wave < 4 {
     if roll < 70 {
-      @types.Basic
+      Basic
     } else if roll < 88 {
-      @types.Fast
+      Fast
     } else if roll < 96 {
-      @types.Sniper
+      Sniper
     } else {
-      @types.Heavy
+      Heavy
     }
   } else if wave < 10 {
     if roll < 52 {
-      @types.Basic
+      Basic
     } else if roll < 72 {
-      @types.Fast
+      Fast
     } else if roll < 88 {
-      @types.Sniper
+      Sniper
     } else {
-      @types.Heavy
+      Heavy
     }
   } else {
     let bias = (spawned_index + wave) % 6
     if bias == 0 {
-      @types.Heavy
+      Heavy
     } else if roll < 36 {
-      @types.Basic
+      Basic
     } else if roll < 58 {
-      @types.Fast
+      Fast
     } else if roll < 80 {
-      @types.Sniper
+      Sniper
     } else {
-      @types.Heavy
+      Heavy
     }
   }
 }
@@ -76,19 +76,19 @@ fn stage_enemy_kind(
 ///|
 fn parse_level_char(ch : Byte) -> (@types.Tile, Int) {
   if ch == b'#' {
-    (@types.Brick, 1)
+    (Brick, 1)
   } else if ch == b'@' {
-    (@types.Steel, 999)
+    (Steel, 999)
   } else if ch == b'~' {
-    (@types.Water, 1)
+    (Water, 1)
   } else if ch == b'^' {
-    (@types.Bush, 1)
+    (Bush, 1)
   } else if ch == b'=' {
-    (@types.Ice, 1)
+    (Ice, 1)
   } else if ch == b'B' {
-    (@types.Base, 1)
+    (Base, 1)
   } else {
-    (@types.Empty, 0)
+    (Empty, 0)
   }
 }
 
@@ -107,8 +107,8 @@ fn apply_shovel_fortress(game : @types.Game) -> Unit {
     let tx = @types.base_ring_x[i]
     let ty = @types.base_ring_y[i]
     let tile = @types.get_tile(game, tx, ty)
-    if tile != @types.Base {
-      @types.set_tile(game, tx, ty, @types.Steel, 999)
+    if tile != Base {
+      @types.set_tile(game, tx, ty, Steel, 999)
     }
   }
 }
@@ -119,13 +119,13 @@ fn restore_base_ring(game : @types.Game) -> Unit {
     let tx = @types.base_ring_x[i]
     let ty = @types.base_ring_y[i]
     let cached = game.base_tiles_cached[i]
-    if @types.get_tile(game, tx, ty) != @types.Base {
-      if cached == @types.Steel {
-        @types.set_tile(game, tx, ty, @types.Steel, 999)
-      } else if cached == @types.Brick {
-        @types.set_tile(game, tx, ty, @types.Brick, 1)
-      } else if cached == @types.Empty {
-        @types.set_tile(game, tx, ty, @types.Empty, 0)
+    if @types.get_tile(game, tx, ty) != Base {
+      if cached == Steel {
+        @types.set_tile(game, tx, ty, Steel, 999)
+      } else if cached == Brick {
+        @types.set_tile(game, tx, ty, Brick, 1)
+      } else if cached == Empty {
+        @types.set_tile(game, tx, ty, Empty, 0)
       } else {
         @types.set_tile(game, tx, ty, cached, 1)
       }
@@ -157,7 +157,7 @@ fn respawn_player_tank(game : @types.Game, index : Int) -> Unit {
   player.ai_move_timer = 0.0
   player.ai_fire_timer = 0.0
   player.ai_stuck_timer = 0.0
-  player.dir = @types.Up
+  player.dir = Up
   player.invuln_timer = @types.player_invuln_spawn
   player.shield_timer = 0.0
   player.respawn_timer = 0.0
@@ -203,19 +203,13 @@ fn load_stage_map(game : @types.Game, stage : Int) -> Unit {
   for i in 0..<@types.base_ring_count {
     let tx = @types.base_ring_x[i]
     let ty = @types.base_ring_y[i]
-    if @types.get_tile(game, tx, ty) == @types.Empty {
-      @types.set_tile(game, tx, ty, @types.Brick, 1)
+    if @types.get_tile(game, tx, ty) == Empty {
+      @types.set_tile(game, tx, ty, Brick, 1)
     }
   }
 
-  @types.set_tile(game, @types.base_tile_x, @types.base_tile_y, @types.Base, 1)
-  @types.set_tile(
-    game,
-    @types.base_tile_x + 1,
-    @types.base_tile_y,
-    @types.Base,
-    1,
-  )
+  @types.set_tile(game, @types.base_tile_x, @types.base_tile_y, Base, 1)
+  @types.set_tile(game, @types.base_tile_x + 1, @types.base_tile_y, Base, 1)
 
   game.base_alive = true
   cache_base_ring(game)
@@ -238,6 +232,7 @@ fn reset_campaign(game : @types.Game) -> Unit {
   }
 }
 
+///|
 /// Loads stage content and resets runtime state for that stage.
 pub fn load_stage(game : @types.Game, stage : Int) -> Unit {
   game.profile = @levels.get_stage_profile(stage)
@@ -259,9 +254,10 @@ pub fn load_stage(game : @types.Game, stage : Int) -> Unit {
   game.stage_clear_timer = 0.0
   game.game_over_timer = 0.0
   game.campaign_clear_timer = 0.0
-  game.state = @types.StageIntro
+  game.state = StageIntro
 }
 
+///|
 /// Resets campaign progression and starts from stage 0.
 pub fn start_new_campaign(game : @types.Game) -> Unit {
   reset_campaign(game)

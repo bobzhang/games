@@ -551,21 +551,22 @@ fn draw_campaign_clear_overlay(game : @types.Game) -> Unit {
   )
 }
 
+///|
 /// Draws right-panel HUD and state overlays.
 pub fn draw_ui(game : @types.Game) -> Unit {
   draw_panel(game)
 
-  if game.state == @types.Menu {
+  if game.state == Menu {
     draw_menu_overlay(game)
-  } else if game.state == @types.StageIntro {
+  } else if game.state == StageIntro {
     draw_stage_intro_overlay(game)
-  } else if game.state == @types.Paused {
+  } else if game.state == Paused {
     draw_pause_overlay(game)
-  } else if game.state == @types.StageClear {
+  } else if game.state == StageClear {
     draw_stage_clear_overlay(game)
-  } else if game.state == @types.GameOver {
+  } else if game.state == GameOver {
     draw_game_over_overlay(game)
-  } else if game.state == @types.CampaignClear {
+  } else if game.state == CampaignClear {
     draw_campaign_clear_overlay(game)
   }
 }

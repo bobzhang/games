@@ -1,10 +1,10 @@
 ///|
 fn opposite_dir(dir : @types.Dir) -> @types.Dir {
   match dir {
-    Up => @types.Down
-    Down => @types.Up
-    Left => @types.Right
-    Right => @types.Left
+    Up => Down
+    Down => Up
+    Left => Right
+    Right => Left
   }
 }
 
@@ -109,8 +109,8 @@ fn demo_choose_move_dir(
   let dx = target_x - player.x
   let dy = target_y - player.y
 
-  let horiz : @types.Dir = if dx < 0.0 { @types.Left } else { @types.Right }
-  let vert : @types.Dir = if dy < 0.0 { @types.Up } else { @types.Down }
+  let horiz : @types.Dir = if dx < 0.0 { Left } else { Right }
+  let vert : @types.Dir = if dy < 0.0 { Up } else { Down }
 
   let mut move_dir : @types.Dir? = if @types.absf(dx) > @types.absf(dy) {
     demo_priority_dir(
@@ -158,11 +158,11 @@ fn demo_line_shot_dir(
   let dx = target_x - player_x
   let dy = target_y - player_y
   if @types.absf(dx) <= epsilon {
-    (if dy < 0.0 { @types.Up } else { @types.Down }, true)
+    (if dy < 0.0 { Up } else { Down }, true)
   } else if @types.absf(dy) <= epsilon {
-    (if dx < 0.0 { @types.Left } else { @types.Right }, true)
+    (if dx < 0.0 { Left } else { Right }, true)
   } else {
-    (@types.Up, false)
+    (Up, false)
   }
 }
 
@@ -279,7 +279,7 @@ fn sight_blocked(
       @types.world_x_to_tile(px),
       @types.world_y_to_tile(py),
     )
-    if tile == @types.Brick || tile == @types.Steel || tile == @types.Base {
+    if tile == Brick || tile == Steel || tile == Base {
       return true
     }
   }

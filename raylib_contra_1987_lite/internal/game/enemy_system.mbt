@@ -84,8 +84,8 @@ fn enemy_desired_dir(game : @types.Game, enemy : @types.Tank) -> @types.Dir {
 
   let dx = target_x - enemy.x
   let dy = target_y - enemy.y
-  let horiz : @types.Dir = if dx < 0.0 { @types.Left } else { @types.Right }
-  let vert : @types.Dir = if dy < 0.0 { @types.Up } else { @types.Down }
+  let horiz : @types.Dir = if dx < 0.0 { Left } else { Right }
+  let vert : @types.Dir = if dy < 0.0 { Up } else { Down }
 
   let r = @types.rand_range(game, 0, 99)
   if @types.absf(dx) > @types.absf(dy) {
@@ -163,11 +163,11 @@ fn enemy_shoot_if_ready(game : @types.Game, enemy_index : Int) -> Unit {
   }
 
   if not(should_fire) {
-    let chance = if enemy.enemy_kind == @types.Fast {
+    let chance = if enemy.enemy_kind == Fast {
       16
-    } else if enemy.enemy_kind == @types.Heavy {
+    } else if enemy.enemy_kind == Heavy {
       11
-    } else if enemy.enemy_kind == @types.Sniper {
+    } else if enemy.enemy_kind == Sniper {
       26
     } else {
       13
@@ -180,21 +180,13 @@ fn enemy_shoot_if_ready(game : @types.Game, enemy_index : Int) -> Unit {
       @types.dir_vector_x(enemy.dir) * (@types.tank_half + 3.0)
     let muzzle_y = enemy.y +
       @types.dir_vector_y(enemy.dir) * (@types.tank_half + 3.0)
-    let speed = if enemy.enemy_kind == @types.Sniper {
+    let speed = if enemy.enemy_kind == Sniper {
       @types.bullet_speed_enemy + 40.0
     } else {
       @types.bullet_speed_enemy
     }
-    let power = if enemy.enemy_kind == @types.Heavy { 2 } else { 1 }
-    spawn_bullet(
-      game,
-      @types.Enemy,
-      muzzle_x,
-      muzzle_y,
-      enemy.dir,
-      speed,
-      power,
-    )
+    let power = if enemy.enemy_kind == Heavy { 2 } else { 1 }
+    spawn_bullet(game, Enemy, muzzle_x, muzzle_y, enemy.dir, speed, power)
     enemy.reload_timer = enemy.reload_delay
     @particles.spawn_spark_burst(game, muzzle_x, muzzle_y, 4)
   }
@@ -290,7 +282,7 @@ fn destroy_enemy(
 
   // Chance to drop a powerup.
   let drop_roll = @types.rand_range(game, 0, 99)
-  let base_bias = if enemy.enemy_kind == @types.Heavy { 22 } else { 14 }
+  let base_bias = if enemy.enemy_kind == Heavy { 22 } else { 14 }
   let drop_bias = @types.clampi(base_bias + game.profile.drop_bonus, 4, 55)
   if drop_roll < drop_bias {
     spawn_random_powerup(game, enemy.x, enemy.y)

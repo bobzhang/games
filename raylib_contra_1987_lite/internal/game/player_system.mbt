@@ -11,24 +11,24 @@ fn is_player_enabled(game : @types.Game, index : Int) -> Bool {
 fn read_player_move_dir(index : Int) -> @types.Dir? {
   if index == 0 {
     if @raylib.is_key_down(@raylib.KeyUp) {
-      Some(@types.Up)
+      Some(Up)
     } else if @raylib.is_key_down(@raylib.KeyDown) {
-      Some(@types.Down)
+      Some(Down)
     } else if @raylib.is_key_down(@raylib.KeyLeft) {
-      Some(@types.Left)
+      Some(Left)
     } else if @raylib.is_key_down(@raylib.KeyRight) {
-      Some(@types.Right)
+      Some(Right)
     } else {
       None
     }
   } else if @raylib.is_key_down(@raylib.KeyW) {
-    Some(@types.Up)
+    Some(Up)
   } else if @raylib.is_key_down(@raylib.KeyS) {
-    Some(@types.Down)
+    Some(Down)
   } else if @raylib.is_key_down(@raylib.KeyA) {
-    Some(@types.Left)
+    Some(Left)
   } else if @raylib.is_key_down(@raylib.KeyD) {
-    Some(@types.Right)
+    Some(Right)
   } else {
     None
   }
@@ -48,7 +48,7 @@ fn is_player_shoot_pressed(index : Int) -> Bool {
 fn player_is_on_ice(game : @types.Game, player : @types.Tank) -> Bool {
   let tx = @types.world_x_to_tile(player.x)
   let ty = @types.world_y_to_tile(player.y)
-  @types.get_tile(game, tx, ty) == @types.Ice
+  @types.get_tile(game, tx, ty) == Ice
 }
 
 ///|

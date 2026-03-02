@@ -173,7 +173,7 @@ fn update_bullets(game : @types.Game, dt : Float) -> Unit {
         break
       }
 
-      if bullet.owner_team == @types.Enemy {
+      if bullet.owner_team == Enemy {
         if bullet_hit_player(game, bullet) {
           bullet.active = false
           hit_something = true
