@@ -56,6 +56,7 @@ fn update_playing(game : @types.Game, input : @types.Input, dt : Float) -> Unit 
   update_camera(game, dt)
 }
 
+///|
 /// Builds and initializes the level, then enters title state.
 pub fn init_game(game : @types.Game) -> Unit {
   build_level(game)
@@ -64,6 +65,7 @@ pub fn init_game(game : @types.Game) -> Unit {
   game.time_accum = 0.0
 }
 
+///|
 /// Advances one frame of game logic using input and delta time.
 pub fn update_game(
   game : @types.Game,

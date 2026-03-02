@@ -432,6 +432,7 @@ fn draw_particles(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
   }
 }
 
+///|
 /// Draws the scrolling world, entities, and particles for the current frame.
 pub fn draw_world(game : @types.Game) -> Unit {
   let shake_x = if game.shake_t > 0.0 { @types.randf(-5.0, 5.0) } else { 0.0 }
