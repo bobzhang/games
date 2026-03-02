@@ -399,7 +399,7 @@ fn hurt_hero(game : @types.Game, dmg : Float) -> Unit {
   clear_combo(game)
 
   if game.shrine_hp <= 0.0 {
-    game.state = @types.GameOver
+    game.state = GameOver
     game.result_t = 0.0
   }
 }
@@ -948,7 +948,7 @@ fn update_foes(game : @types.Game, dt : Float) -> Unit {
       clear_combo(game)
 
       if game.shrine_hp <= 0.0 {
-        game.state = @types.GameOver
+        game.state = GameOver
         game.result_t = 0.0
       }
       continue
@@ -1144,7 +1144,7 @@ fn init_title_scene(game : @types.Game) -> Unit {
   reset_bells(game)
   reset_hero(game)
 
-  game.state = @types.Title
+  game.state = Title
   game.stage = 1
   game.stage_goal = @types.stage_goal_base
   game.score = 0
@@ -1178,7 +1178,7 @@ fn start_stage(game : @types.Game, stage : Int) -> Unit {
   reset_bells(game)
   reset_hero(game)
 
-  game.state = @types.Play
+  game.state = Play
   game.stage = stage
   game.stage_goal = @types.stage_goal_base +
     (stage - 1) * @types.stage_goal_bonus
@@ -1233,17 +1233,17 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   )
 
   if game.time_left <= 0.0 {
-    game.state = @types.GameOver
+    game.state = GameOver
     game.result_t = 0.0
   }
 
   if game.shrine_hp <= 0.0 {
-    game.state = @types.GameOver
+    game.state = GameOver
     game.result_t = 0.0
   }
 
-  if game.state == @types.Play && game.score >= game.stage_goal {
-    game.state = @types.StageClear
+  if game.state == Play && game.score >= game.stage_goal {
+    game.state = StageClear
     game.result_t = 0.0
     add_score(game, 280 + game.stage * 120)
     game.shrine_hp = @types.minf(@types.shrine_max_hp, game.shrine_hp + 14.0)
@@ -1309,6 +1309,7 @@ fn update_game_over(game : @types.Game, dt : Float) -> Unit {
   }
 }
 
+///|
 /// Advances one simulation frame, including input and state updates.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.mouse_x = Float::from_int(@raylib.get_mouse_x())

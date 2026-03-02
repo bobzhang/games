@@ -1275,6 +1275,7 @@ fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   draw_fx(game, cam_x, cam_y)
 }
 
+///|
 /// Renders the complete frame for the current jade temple state.
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(6, 12, 24, 255))
