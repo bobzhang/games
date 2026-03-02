@@ -1,3 +1,4 @@
+///|
 /// Returns the absolute value of a float.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
@@ -7,6 +8,7 @@ pub fn absf(v : Float) -> Float {
   }
 }
 
+///|
 /// Clamps a float to the inclusive range `[low, high]`.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
@@ -18,6 +20,7 @@ pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   }
 }
 
+///|
 /// Clamps an integer to the inclusive range `[low, high]`.
 pub fn clampi(v : Int, low : Int, high : Int) -> Int {
   if v < low {
@@ -29,6 +32,7 @@ pub fn clampi(v : Int, low : Int, high : Int) -> Int {
   }
 }
 
+///|
 /// Returns the smaller of two float values.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
@@ -38,6 +42,7 @@ pub fn minf(a : Float, b : Float) -> Float {
   }
 }
 
+///|
 /// Returns the larger of two float values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
@@ -47,6 +52,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
   }
 }
 
+///|
 /// Returns the smaller of two integer values.
 pub fn mini(a : Int, b : Int) -> Int {
   if a < b {
@@ -56,6 +62,7 @@ pub fn mini(a : Int, b : Int) -> Int {
   }
 }
 
+///|
 /// Returns the larger of two integer values.
 pub fn maxi(a : Int, b : Int) -> Int {
   if a > b {
@@ -65,11 +72,13 @@ pub fn maxi(a : Int, b : Int) -> Int {
   }
 }
 
+///|
 /// Linearly interpolates from `a` to `b` by parameter `t`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t
 }
 
+///|
 /// Computes Euclidean distance in the XZ plane.
 pub fn distance2d(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
   let dx = x1 - x2
@@ -77,6 +86,7 @@ pub fn distance2d(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
   (dx * dx + dz * dz).sqrt()
 }
 
+///|
 /// Computes Euclidean distance in 3D space.
 pub fn distance3d(
   x1 : Float,
@@ -92,6 +102,7 @@ pub fn distance3d(
   (dx * dx + dy * dy + dz * dz).sqrt()
 }
 
+///|
 /// Normalizes an angle in radians to the `[-pi, pi]` range.
 pub fn normalize_angle(a : Float) -> Float {
   let mut angle = a
@@ -107,6 +118,7 @@ pub fn normalize_angle(a : Float) -> Float {
   angle
 }
 
+///|
 /// Returns shortest signed angular difference from `a` to `b`.
 pub fn angle_diff(a : Float, b : Float) -> Float {
   normalize_angle(b - a)
@@ -114,6 +126,7 @@ pub fn angle_diff(a : Float, b : Float) -> Float {
 
 // Calculate bearing from one point to another
 
+///|
 /// Returns bearing angle in radians from `(x1, z1)` to `(x2, z2)`.
 pub fn bearing(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
   @math.atan2f(x2 - x1, z2 - z1)
@@ -121,6 +134,7 @@ pub fn bearing(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
 
 // Check if angle b is within +/- range of angle a
 
+///|
 /// Returns whether angle `b` is within `range` radians of angle `a`.
 pub fn angle_within(a : Float, b : Float, range : Float) -> Bool {
   absf(angle_diff(a, b)) < range
@@ -129,6 +143,7 @@ pub fn angle_within(a : Float, b : Float, range : Float) -> Bool {
 // Sailing speed calculator - wind-based
 // Takes ship heading, wind direction, wind speed, sail amount, sail state, mast hp ratio
 
+///|
 /// Computes effective sailing speed from heading, wind, sail trim, and mast condition.
 pub fn calc_sailing_speed(
   heading : Float,
@@ -169,6 +184,7 @@ pub fn calc_sailing_speed(
 
 // Ship turning rate calculation
 
+///|
 /// Computes effective turn rate from rudder health and current speed.
 pub fn calc_turn_rate(
   base_rate : Float,
@@ -198,6 +214,7 @@ pub fn calc_turn_rate(
 
 // Water height at position (simple wave function)
 
+///|
 /// Returns procedural ocean surface height at world position and time.
 pub fn water_height(x : Float, z : Float, time : Float) -> Float {
   let w1 = @math.sinf(x * wave_frequency + time * wave_speed) * wave_amplitude
@@ -212,6 +229,7 @@ pub fn water_height(x : Float, z : Float, time : Float) -> Float {
 
 // Calculate wind crosswind drift
 
+///|
 /// Computes lateral wind drift vector applied to a moving ship.
 pub fn calc_wind_drift(
   heading : Float,
@@ -231,6 +249,7 @@ pub fn calc_wind_drift(
 
 // Cannon ballistic trajectory - calculate launch velocity for given range
 
+///|
 /// Returns cannonball launch velocity components for a shot profile.
 pub fn calc_cannon_launch(
   fire_angle : Float,
@@ -253,6 +272,7 @@ pub fn calc_cannon_launch(
 
 // Get cannon damage for a specific cannon type
 
+///|
 /// Returns base damage for a cannon type.
 pub fn get_cannon_damage(cannon_type : Int) -> Float {
   if cannon_type == cannon_light {
@@ -272,6 +292,7 @@ pub fn get_cannon_damage(cannon_type : Int) -> Float {
 
 // Get cannon reload time
 
+///|
 /// Returns reload time in seconds for a cannon type.
 pub fn get_cannon_reload(cannon_type : Int) -> Float {
   if cannon_type == cannon_light {
@@ -291,6 +312,7 @@ pub fn get_cannon_reload(cannon_type : Int) -> Float {
 
 // Get cannon speed
 
+///|
 /// Returns muzzle speed for a cannon type.
 pub fn get_cannon_speed(cannon_type : Int) -> Float {
   if cannon_type == cannon_light {
@@ -310,6 +332,7 @@ pub fn get_cannon_speed(cannon_type : Int) -> Float {
 
 // Get cannon arc
 
+///|
 /// Returns vertical launch arc factor for a cannon type.
 pub fn get_cannon_arc(cannon_type : Int) -> Float {
   if cannon_type == cannon_light {
@@ -329,6 +352,7 @@ pub fn get_cannon_arc(cannon_type : Int) -> Float {
 
 // Get damage multipliers for ammo type
 
+///|
 /// Returns hull damage multiplier for an ammo type.
 pub fn get_ammo_hull_mult(ammo_type : Int) -> Float {
   if ammo_type == ammo_round_shot {
@@ -342,6 +366,7 @@ pub fn get_ammo_hull_mult(ammo_type : Int) -> Float {
   }
 }
 
+///|
 /// Returns mast damage multiplier for an ammo type.
 pub fn get_ammo_mast_mult(ammo_type : Int) -> Float {
   if ammo_type == ammo_round_shot {
@@ -355,6 +380,7 @@ pub fn get_ammo_mast_mult(ammo_type : Int) -> Float {
   }
 }
 
+///|
 /// Returns crew damage multiplier for an ammo type.
 pub fn get_ammo_crew_mult(ammo_type : Int) -> Float {
   if ammo_type == ammo_round_shot {
@@ -370,6 +396,7 @@ pub fn get_ammo_crew_mult(ammo_type : Int) -> Float {
 
 // Ship class stats helpers
 
+///|
 /// Returns maximum hull HP for a ship class.
 pub fn get_class_max_hull(ship_class : Int) -> Float {
   if ship_class == class_sloop {
@@ -387,6 +414,7 @@ pub fn get_class_max_hull(ship_class : Int) -> Float {
   }
 }
 
+///|
 /// Returns maximum mast HP for a ship class.
 pub fn get_class_max_mast(ship_class : Int) -> Float {
   if ship_class == class_sloop {
@@ -404,6 +432,7 @@ pub fn get_class_max_mast(ship_class : Int) -> Float {
   }
 }
 
+///|
 /// Returns maximum rudder HP for a ship class.
 pub fn get_class_max_rudder(ship_class : Int) -> Float {
   if ship_class == class_sloop {
@@ -421,6 +450,7 @@ pub fn get_class_max_rudder(ship_class : Int) -> Float {
   }
 }
 
+///|
 /// Returns base sailing speed for a ship class.
 pub fn get_class_base_speed(ship_class : Int) -> Float {
   if ship_class == class_sloop {
@@ -438,6 +468,7 @@ pub fn get_class_base_speed(ship_class : Int) -> Float {
   }
 }
 
+///|
 /// Returns base turning rate for a ship class.
 pub fn get_class_turn_rate(ship_class : Int) -> Float {
   if ship_class == class_sloop {
@@ -455,6 +486,7 @@ pub fn get_class_turn_rate(ship_class : Int) -> Float {
   }
 }
 
+///|
 /// Returns broadside cannon count for a ship class.
 pub fn get_class_cannon_count(ship_class : Int) -> Int {
   if ship_class == class_sloop {
@@ -472,6 +504,7 @@ pub fn get_class_cannon_count(ship_class : Int) -> Int {
   }
 }
 
+///|
 /// Returns maximum crew capacity for a ship class.
 pub fn get_class_max_crew(ship_class : Int) -> Int {
   if ship_class == class_sloop {
@@ -489,6 +522,7 @@ pub fn get_class_max_crew(ship_class : Int) -> Int {
   }
 }
 
+///|
 /// Returns hull length in world units for a ship class.
 pub fn get_class_length(ship_class : Int) -> Float {
   if ship_class == class_sloop {
@@ -506,6 +540,7 @@ pub fn get_class_length(ship_class : Int) -> Float {
   }
 }
 
+///|
 /// Returns hull width in world units for a ship class.
 pub fn get_class_width(ship_class : Int) -> Float {
   if ship_class == class_sloop {
@@ -523,6 +558,7 @@ pub fn get_class_width(ship_class : Int) -> Float {
   }
 }
 
+///|
 /// Returns score reward for sinking a ship class.
 pub fn get_class_score(ship_class : Int) -> Int {
   if ship_class == class_sloop {
@@ -540,6 +576,7 @@ pub fn get_class_score(ship_class : Int) -> Int {
   }
 }
 
+///|
 /// Returns display name for a ship class id.
 pub fn get_class_name(ship_class : Int) -> String {
   if ship_class == class_sloop {
@@ -557,6 +594,7 @@ pub fn get_class_name(ship_class : Int) -> String {
   }
 }
 
+///|
 /// Returns reputation title string for a reputation score.
 pub fn get_reputation_title(rep : Int) -> String {
   if rep >= rep_legend {
@@ -574,6 +612,7 @@ pub fn get_reputation_title(rep : Int) -> String {
 
 // RNG
 
+///|
 /// Advances RNG state and returns the next pseudo-random integer.
 pub fn rand_next(game : Game) -> Int {
   let mut x = game.rng_state
@@ -587,6 +626,7 @@ pub fn rand_next(game : Game) -> Int {
   x
 }
 
+///|
 /// Returns random integer in inclusive range `[low, high]`.
 pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
   if high <= low {
@@ -596,6 +636,7 @@ pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
   }
 }
 
+///|
 /// Returns random float in inclusive range `[low, high]`.
 pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
   let n = Float::from_int(rand_next(game) % 10000) / 10000.0
@@ -604,6 +645,7 @@ pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
 
 // Pool allocators
 
+///|
 /// Returns the first inactive enemy slot index, or `-1` when full.
 pub fn alloc_enemy(game : Game) -> Int {
   for i in 0..<game.enemies.length() {
@@ -614,6 +656,7 @@ pub fn alloc_enemy(game : Game) -> Int {
   -1
 }
 
+///|
 /// Returns the first inactive cannonball slot index, or `-1` when full.
 pub fn alloc_cannonball(game : Game) -> Int {
   for i in 0..<game.cannonballs.length() {
@@ -624,6 +667,7 @@ pub fn alloc_cannonball(game : Game) -> Int {
   -1
 }
 
+///|
 /// Returns the first inactive particle slot index, or `-1` when full.
 pub fn alloc_particle(game : Game) -> Int {
   for i in 0..<game.particles.length() {
@@ -634,6 +678,7 @@ pub fn alloc_particle(game : Game) -> Int {
   -1
 }
 
+///|
 /// Returns the first inactive wake slot index, or `-1` when full.
 pub fn alloc_wake(game : Game) -> Int {
   for i in 0..<game.wakes.length() {
@@ -644,6 +689,7 @@ pub fn alloc_wake(game : Game) -> Int {
   -1
 }
 
+///|
 /// Returns the first inactive debris slot index, or `-1` when full.
 pub fn alloc_debris(game : Game) -> Int {
   for i in 0..<game.debris_pool.length() {
@@ -654,6 +700,7 @@ pub fn alloc_debris(game : Game) -> Int {
   -1
 }
 
+///|
 /// Returns a free battle-message slot, replacing the oldest if necessary.
 pub fn alloc_message(game : Game) -> Int {
   for i in 0..<game.messages.length() {
@@ -673,6 +720,7 @@ pub fn alloc_message(game : Game) -> Int {
   oldest_idx
 }
 
+///|
 /// Adds a transient colored battle message to the HUD queue.
 pub fn add_battle_message(
   game : Game,
@@ -692,6 +740,7 @@ pub fn add_battle_message(
   msg.color_b = b
 }
 
+///|
 /// Appends a line to the battle log history.
 pub fn add_battle_log(game : Game, text : String) -> Unit {
   if game.battle_log_count < game.battle_log.length() {
@@ -706,6 +755,7 @@ pub fn add_battle_log(game : Game, text : String) -> Unit {
   }
 }
 
+///|
 /// Spawns generic colored particles at world position.
 pub fn spawn_particles(
   game : Game,
@@ -741,6 +791,7 @@ pub fn spawn_particles(
   }
 }
 
+///|
 /// Spawns smoke particles at world position.
 pub fn spawn_smoke(
   game : Game,
@@ -773,6 +824,7 @@ pub fn spawn_smoke(
   }
 }
 
+///|
 /// Spawns fire particles at world position.
 pub fn spawn_fire(
   game : Game,
@@ -805,6 +857,7 @@ pub fn spawn_fire(
   }
 }
 
+///|
 /// Spawns water splash particles at sea level around a point.
 pub fn spawn_water_splash(
   game : Game,
@@ -836,6 +889,7 @@ pub fn spawn_water_splash(
   }
 }
 
+///|
 /// Spawns floating debris pieces around a wreck point.
 pub fn spawn_debris_cluster(
   game : Game,
@@ -885,6 +939,7 @@ pub fn spawn_debris_cluster(
   }
 }
 
+///|
 /// Spawns a wake segment behind a sufficiently fast ship.
 pub fn spawn_wake(
   game : Game,
@@ -913,6 +968,7 @@ pub fn spawn_wake(
 
 // Check collision with islands
 
+///|
 /// Checks whether a circular ship footprint intersects any active island.
 pub fn check_island_collision(
   game : Game,
@@ -935,6 +991,7 @@ pub fn check_island_collision(
 
 // Check ship-to-ship collision
 
+///|
 /// Checks overlap between two circular ship footprints.
 pub fn check_ship_collision(
   x1 : Float,
@@ -950,6 +1007,7 @@ pub fn check_ship_collision(
 
 // Get total HP ratio for player ship
 
+///|
 /// Returns normalized player survivability ratio from major HP pools.
 pub fn player_hp_ratio(game : Game) -> Float {
   let total = game.player.hull_hp + game.player.sail_hp + game.player.rudder_hp
@@ -963,6 +1021,7 @@ pub fn player_hp_ratio(game : Game) -> Float {
 
 // Check if player can board an enemy
 
+///|
 /// Returns whether the player is close enough to initiate boarding against an enemy.
 pub fn check_boarding_range(game : Game, enemy_idx : Int) -> Bool {
   if enemy_idx < 0 || enemy_idx >= game.enemies.length() {
@@ -978,6 +1037,7 @@ pub fn check_boarding_range(game : Game, enemy_idx : Int) -> Bool {
 
 // Resolve boarding combat
 
+///|
 /// Resolves boarding success using crew strength and randomness.
 pub fn resolve_boarding(
   player_crew : Int,
@@ -993,6 +1053,7 @@ pub fn resolve_boarding(
 
 // Count active fleet ships
 
+///|
 /// Counts active allied fleet ships.
 pub fn count_fleet_alive(game : Game) -> Int {
   let mut count = 0
@@ -1006,6 +1067,7 @@ pub fn count_fleet_alive(game : Game) -> Int {
 
 // Count active convoy ships
 
+///|
 /// Counts active convoy ships.
 pub fn count_convoy_alive(game : Game) -> Int {
   let mut count = 0
@@ -1019,6 +1081,7 @@ pub fn count_convoy_alive(game : Game) -> Int {
 
 // Sync wind helpers
 
+///|
 /// Mirrors wind state into legacy helper fields.
 pub fn sync_wind(game : Game) -> Unit {
   game.wind_angle = game.wind.direction

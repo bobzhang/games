@@ -1,6 +1,7 @@
 // Battle definitions - 12 scenarios
 // Returns (enemy_count, enemy_hp, enemy_speed, enemy_fire_rate, enemy_damage, detect_range, score_per_kill)
 
+///|
 /// Returns core battle tuning `(enemy_count, hp, speed, fire_rate, damage, detect_range, score_per_kill)`.
 pub fn get_battle_def(
   battle : Int,
@@ -46,6 +47,7 @@ pub fn get_battle_def(
 
 // Get battle name
 
+///|
 /// Returns the display name for a battle scenario index.
 pub fn get_battle_name(battle : Int) -> String {
   if battle == 0 {
@@ -77,6 +79,7 @@ pub fn get_battle_name(battle : Int) -> String {
 
 // Get battle description
 
+///|
 /// Returns a short objective flavor description for the battle scenario.
 pub fn get_battle_description(battle : Int) -> String {
   if battle == 0 {
@@ -108,6 +111,7 @@ pub fn get_battle_description(battle : Int) -> String {
 
 // Get battle difficulty (1-5 stars)
 
+///|
 /// Returns a difficulty rating from 1 to 5 for the battle scenario.
 pub fn get_battle_difficulty(battle : Int) -> Int {
   if battle <= 1 {
@@ -125,6 +129,7 @@ pub fn get_battle_difficulty(battle : Int) -> Int {
 
 // Get battle objective type
 
+///|
 /// Returns the objective type id used by battle win/fail logic.
 pub fn get_battle_objective_type(battle : Int) -> Int {
   if battle == 5 {
@@ -141,6 +146,7 @@ pub fn get_battle_objective_type(battle : Int) -> Int {
 
 // Get battle objective description
 
+///|
 /// Returns the player-facing objective text for a battle.
 pub fn get_battle_objective_desc(battle : Int) -> String {
   let obj_type = get_battle_objective_type(battle)
@@ -158,6 +164,7 @@ pub fn get_battle_objective_desc(battle : Int) -> String {
 // Get enemy ship classes per battle
 // Returns array of ship class IDs
 
+///|
 /// Returns enemy ship class ids to spawn for the battle.
 pub fn get_enemy_classes(battle : Int) -> Array[Int] {
   if battle == 0 {
@@ -216,6 +223,7 @@ pub fn get_enemy_classes(battle : Int) -> Array[Int] {
 
 // Get AI personalities per battle
 
+///|
 /// Returns AI personality ids for each spawned enemy ship.
 pub fn get_enemy_personalities(battle : Int) -> Array[Int] {
   if battle == 0 {
@@ -282,6 +290,7 @@ pub fn get_enemy_personalities(battle : Int) -> Array[Int] {
 
 // Which battle index has a fortress island
 
+///|
 /// Returns whether the battle includes a fortress island objective.
 pub fn battle_has_fortress(battle : Int) -> Bool {
   battle == 5 || battle == 9 || battle == 11
@@ -289,6 +298,7 @@ pub fn battle_has_fortress(battle : Int) -> Bool {
 
 // Get fortress island index for a battle (-1 if none)
 
+///|
 /// Returns the fortress island index for the battle, or `-1` when absent.
 pub fn get_fortress_island(battle : Int) -> Int {
   if battle == 5 {
@@ -304,6 +314,7 @@ pub fn get_fortress_island(battle : Int) -> Int {
 
 // Get fleet ship count for battle (allied ships)
 
+///|
 /// Returns the number of allied fleet ships available in this battle.
 pub fn get_fleet_count(battle : Int) -> Int {
   if battle <= 4 {
@@ -319,6 +330,7 @@ pub fn get_fleet_count(battle : Int) -> Int {
 
 // Get fleet ship classes
 
+///|
 /// Returns allied fleet ship class ids for this battle.
 pub fn get_fleet_classes(battle : Int) -> Array[Int] {
   if battle <= 4 {
@@ -342,6 +354,7 @@ pub fn get_fleet_classes(battle : Int) -> Array[Int] {
 
 // Get convoy ship count
 
+///|
 /// Returns the number of convoy ships to escort in this battle.
 pub fn get_convoy_count(battle : Int) -> Int {
   if battle == 7 {
@@ -353,6 +366,7 @@ pub fn get_convoy_count(battle : Int) -> Int {
 
 // Get starting wind conditions per battle
 
+///|
 /// Returns starting wind `(direction, speed, shift_interval_seconds)` for the battle.
 pub fn get_wind_conditions(battle : Int) -> (Float, Float, Float) {
   // Returns (direction, speed, shift_interval)
@@ -386,6 +400,7 @@ pub fn get_wind_conditions(battle : Int) -> (Float, Float, Float) {
 // Island layout per battle
 // Returns array of (x, z, radius, height, block_count)
 
+///|
 /// Returns island layout tuples `(x, z, radius, height, block_count)` for the battle map.
 pub fn get_island_layout(
   battle : Int,
@@ -499,6 +514,7 @@ pub fn get_island_layout(
 
 // Island types per battle (parallel to layout)
 
+///|
 /// Returns island type ids aligned with `get_island_layout` ordering.
 pub fn get_island_types(battle : Int) -> Array[Int] {
   if battle == 0 {
@@ -559,6 +575,7 @@ pub fn get_island_types(battle : Int) -> Array[Int] {
 
 // Enemy starting positions relative to center, returns (angle, distance)
 
+///|
 /// Returns spawn polar coordinates `(angle_radians, distance_units)` for an enemy index.
 pub fn get_enemy_spawn_angle(idx : Int, total : Int) -> (Float, Float) {
   let base_angle : Float = 6.28318 *
@@ -570,6 +587,7 @@ pub fn get_enemy_spawn_angle(idx : Int, total : Int) -> (Float, Float) {
 
 // Get flagship index for a battle (-1 if no flagship)
 
+///|
 /// Returns the flagship enemy index for the battle, or `-1` if none.
 pub fn get_flagship_index(battle : Int) -> Int {
   if battle >= 6 {
@@ -581,6 +599,7 @@ pub fn get_flagship_index(battle : Int) -> Int {
 
 // Get reward score multiplier for battle
 
+///|
 /// Returns reward multiplier applied to battle completion rewards.
 pub fn get_battle_reward_mult(battle : Int) -> Int {
   if battle <= 2 {
@@ -596,6 +615,7 @@ pub fn get_battle_reward_mult(battle : Int) -> Int {
 
 // Cannon type per enemy class for a given battle
 
+///|
 /// Returns cannon type id equipped by an enemy ship class for the battle context.
 pub fn get_enemy_cannon_type(ship_class : Int, battle : Int) -> Int {
   if ship_class == @types.class_sloop {
