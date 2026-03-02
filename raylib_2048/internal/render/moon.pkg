@@ -4,4 +4,4 @@ import {
   "tonyfettes/raylib-examples/raylib_2048/internal/types",
 }
 
-warnings = "+missing_doc"
+warnings = "+missing_doc+unnecessary_annotation"

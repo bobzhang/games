@@ -3,17 +3,17 @@
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@types.bg_color)
   match game.state {
-    @types.Title => draw_title(game)
-    @types.Play => {
+    Title => draw_title(game)
+    Play => {
       draw_header(game)
       draw_board(game)
     }
-    @types.Won => {
+    Won => {
       draw_header(game)
       draw_board(game)
       draw_overlay_won(game)
     }
-    @types.Over => {
+    Over => {
       draw_header(game)
       draw_board(game)
       draw_overlay_over()
