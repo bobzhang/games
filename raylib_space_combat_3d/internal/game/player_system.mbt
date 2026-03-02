@@ -1,6 +1,7 @@
 // Player movement and controls
 
 ///|
+/// Updates player ship movement, controls, weapon firing, boost, and shield regeneration.
 pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   let p = game.player
   let sc = p.ship_class
@@ -369,6 +370,7 @@ fn target_nearest(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Applies `damage` to the player ship, absorbing with shields first, and triggers game over on death.
 pub fn damage_player(game : @types.Game, damage : Float) -> Unit {
   let p = game.player
   p.shield_timer = @types.shield_regen_delay

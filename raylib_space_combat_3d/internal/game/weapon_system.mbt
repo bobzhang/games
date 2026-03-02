@@ -1,6 +1,7 @@
 // Projectile update and collision
 
 ///|
+/// Updates all active projectiles including homing, movement, trails, and collision detection.
 pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.projectiles.length() {
     let proj = game.projectiles[i]
@@ -301,6 +302,7 @@ fn missile_detonate(game : @types.Game, proj_idx : Int) -> Unit {
 }
 
 ///|
+/// Updates all active particles including lifetime decay, movement, and size changes.
 pub fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
     if not(p.active) {

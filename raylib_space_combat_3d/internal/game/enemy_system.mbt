@@ -1,6 +1,7 @@
 // Enemy AI and behavior
 
 ///|
+/// Updates all active enemy AI, movement, firing, and turret logic.
 pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
   let px = game.player.x
   let py = game.player.y
@@ -605,6 +606,7 @@ fn capital_turret_fire(
 }
 
 ///|
+/// Applies `damage` to the enemy at `idx`, absorbing with shields first, and handles destruction.
 pub fn damage_enemy(game : @types.Game, idx : Int, damage : Float) -> Unit {
   let e = game.enemies[idx]
 
@@ -710,6 +712,7 @@ pub fn damage_enemy(game : @types.Game, idx : Int, damage : Float) -> Unit {
 }
 
 ///|
+/// Updates all active asteroids including movement, rotation, and collision detection.
 pub fn update_asteroids(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.asteroids.length() {
     let a = game.asteroids[i]
@@ -819,6 +822,7 @@ fn destroy_asteroid(game : @types.Game, idx : Int) -> Unit {
 }
 
 ///|
+/// Applies `damage` to the asteroid at `idx` and destroys it if health reaches zero.
 pub fn damage_asteroid(game : @types.Game, idx : Int, damage : Float) -> Unit {
   let a = game.asteroids[idx]
   a.hp -= damage

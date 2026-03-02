@@ -2,6 +2,7 @@
 // Returns (num_fighters, num_cruisers, num_asteroids, hp_mult, speed_mult)
 
 ///|
+/// Returns the base mission definition as fighters, cruisers, asteroids, HP mult, and speed mult.
 pub fn get_mission_def(mission : Int) -> (Int, Int, Int, Float, Float) {
   if mission == 0 {
     (4, 0, 6, 1.0, 1.0)
@@ -34,6 +35,7 @@ pub fn get_mission_def(mission : Int) -> (Int, Int, Int, Float, Float) {
 // Returns (interceptors, bombers, capitals, num_stations_friendly, num_stations_enemy, num_powerups, num_waves)
 
 ///|
+/// Returns the extended mission definition with interceptors, bombers, capitals, stations, power-ups, and waves.
 pub fn get_mission_extended(
   mission : Int,
 ) -> (Int, Int, Int, Int, Int, Int, Int) {
@@ -79,6 +81,7 @@ pub fn get_mission_extended(
 // Mission names
 
 ///|
+/// Returns the display name for the given `mission` number.
 pub fn mission_name(mission : Int) -> String {
   if mission == 0 {
     "Patrol Sweep"
@@ -110,6 +113,7 @@ pub fn mission_name(mission : Int) -> String {
 // Mission briefing text
 
 ///|
+/// Returns the narrative briefing text for the given `mission` number.
 pub fn mission_briefing(mission : Int) -> String {
   if mission == 0 {
     "A routine patrol sweep of Sector 7. Clear out any hostiles you encounter. This should be straightforward - perfect for getting your bearings."
@@ -141,6 +145,7 @@ pub fn mission_briefing(mission : Int) -> String {
 // Mission objective type for each mission
 
 ///|
+/// Returns the objective type identifier for the given `mission` number.
 pub fn mission_objective_type(mission : Int) -> Int {
   if mission == 0 {
     0 // destroy_all
@@ -172,6 +177,7 @@ pub fn mission_objective_type(mission : Int) -> Int {
 // Objective target count (for destroy_count type)
 
 ///|
+/// Returns the target kill count for destroy-count objectives on the given `mission`.
 pub fn mission_objective_target(mission : Int) -> Int {
   if mission == 5 {
     15
@@ -185,6 +191,7 @@ pub fn mission_objective_target(mission : Int) -> Int {
 // Mission reward score bonus
 
 ///|
+/// Returns the bonus score reward for completing the given `mission`.
 pub fn mission_reward(mission : Int) -> Int {
   (mission + 1) * 500
 }
@@ -192,6 +199,7 @@ pub fn mission_reward(mission : Int) -> Int {
 // Enemy formation pattern for each mission
 
 ///|
+/// Returns the enemy formation pattern identifier for the given `mission`.
 pub fn mission_formation(mission : Int) -> Int {
   if mission == 0 {
     0 // formation_v
@@ -223,6 +231,7 @@ pub fn mission_formation(mission : Int) -> Int {
 // Asteroid field density multiplier per mission
 
 ///|
+/// Returns the asteroid field density multiplier for the given `mission`.
 pub fn mission_asteroid_density(mission : Int) -> Float {
   if mission == 1 {
     1.5
@@ -237,6 +246,7 @@ pub fn mission_asteroid_density(mission : Int) -> Float {
 // Returns (station_x, station_y, station_z)
 
 ///|
+/// Returns the spawn position for the station at the given `index` in the `mission`.
 pub fn mission_station_pos(mission : Int, index : Int) -> (Float, Float, Float) {
   if mission == 2 && index == 0 {
     (50.0, 0.0, 80.0)
@@ -269,6 +279,7 @@ pub fn mission_station_pos(mission : Int, index : Int) -> (Float, Float, Float) 
 // Returns (boss_x, boss_y, boss_z, boss_hp_mult)
 
 ///|
+/// Returns the boss spawn position and HP multiplier for boss fight missions.
 pub fn mission_boss_config(mission : Int) -> (Float, Float, Float, Float) {
   if mission == 7 {
     (0.0, 0.0, 200.0, 1.0)
@@ -284,6 +295,7 @@ pub fn mission_boss_config(mission : Int) -> (Float, Float, Float, Float) {
 // Wave spawn delay in seconds
 
 ///|
+/// Returns the delay in seconds before spawning the given `wave` number.
 pub fn wave_spawn_delay(mission : Int, wave : Int) -> Float {
   ignore(mission)
   if wave == 0 {
@@ -301,6 +313,7 @@ pub fn wave_spawn_delay(mission : Int, wave : Int) -> Float {
 // Returns (fighters, interceptors, bombers, cruisers)
 
 ///|
+/// Returns the enemy composition for a wave as fighters, interceptors, bombers, and cruisers.
 pub fn wave_composition(mission : Int, wave : Int) -> (Int, Int, Int, Int) {
   if wave == 0 {
     // First wave is the main mission def
@@ -332,6 +345,7 @@ pub fn wave_composition(mission : Int, wave : Int) -> (Int, Int, Int, Int) {
 // Power-up spawn positions for a mission
 
 ///|
+/// Returns the spawn position and type for the power-up at the given `index`.
 pub fn powerup_spawn_pos(
   mission : Int,
   index : Int,
@@ -356,6 +370,7 @@ pub fn powerup_spawn_pos(
 // Difficulty description for mission select
 
 ///|
+/// Returns the difficulty label for the given `mission` number.
 pub fn mission_difficulty_text(mission : Int) -> String {
   if mission < 3 {
     "Easy"
@@ -373,6 +388,7 @@ pub fn mission_difficulty_text(mission : Int) -> String {
 // Recommended ship class for each mission
 
 ///|
+/// Returns the recommended ship class for the given `mission` number.
 pub fn mission_recommended_ship(mission : Int) -> String {
   if mission < 3 {
     "Fighter"

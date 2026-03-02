@@ -1,6 +1,7 @@
 // Player ship
 
 ///|
+/// Player ship entity with position, orientation, weapons, shields, and combat stats.
 pub(all) struct Player {
   mut x : Float
   mut y : Float
@@ -37,6 +38,7 @@ pub(all) struct Player {
 }
 
 ///|
+/// Creates a new player ship with default fighter class stats.
 pub fn Player::new() -> Player {
   {
     x: 0.0,
@@ -77,6 +79,7 @@ pub fn Player::new() -> Player {
 // Enemy entity
 
 ///|
+/// Enemy ship entity with AI state, weapons, shields, and squad membership.
 pub(all) struct Enemy {
   mut active : Bool
   mut kind : Int
@@ -112,6 +115,7 @@ pub(all) struct Enemy {
 }
 
 ///|
+/// Creates an inactive enemy entity slot for pool allocation.
 pub fn Enemy::inactive() -> Enemy {
   {
     active: false,
@@ -151,6 +155,7 @@ pub fn Enemy::inactive() -> Enemy {
 // Projectile
 
 ///|
+/// Projectile entity with position, velocity, damage, and homing capability.
 pub(all) struct Projectile {
   mut active : Bool
   mut kind : Int
@@ -170,6 +175,7 @@ pub(all) struct Projectile {
 }
 
 ///|
+/// Creates an inactive projectile entity slot for pool allocation.
 pub fn Projectile::inactive() -> Projectile {
   {
     active: false,
@@ -193,6 +199,7 @@ pub fn Projectile::inactive() -> Projectile {
 // Particle effect
 
 ///|
+/// Visual particle effect with position, velocity, color, and lifetime.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -211,6 +218,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// Creates an inactive particle entity slot for pool allocation.
 pub fn Particle::inactive() -> Particle {
   {
     active: false,
@@ -233,6 +241,7 @@ pub fn Particle::inactive() -> Particle {
 // Asteroid
 
 ///|
+/// Asteroid entity with position, velocity, rotation, and breakable size tiers.
 pub(all) struct Asteroid {
   mut active : Bool
   mut x : Float
@@ -252,6 +261,7 @@ pub(all) struct Asteroid {
 }
 
 ///|
+/// Creates an inactive asteroid entity slot for pool allocation.
 pub fn Asteroid::inactive() -> Asteroid {
   {
     active: false,
@@ -275,6 +285,7 @@ pub fn Asteroid::inactive() -> Asteroid {
 // Power-up
 
 ///|
+/// Collectible power-up pickup with type, position, and animation state.
 pub(all) struct PowerUp {
   mut active : Bool
   mut kind : Int
@@ -287,6 +298,7 @@ pub(all) struct PowerUp {
 }
 
 ///|
+/// Creates an inactive power-up entity slot for pool allocation.
 pub fn PowerUp::inactive() -> PowerUp {
   {
     active: false,
@@ -303,6 +315,7 @@ pub fn PowerUp::inactive() -> PowerUp {
 // Space Station
 
 ///|
+/// Space station entity with allegiance, position, health, and rotation state.
 pub(all) struct SpaceStation {
   mut active : Bool
   mut kind : Int
@@ -316,6 +329,7 @@ pub(all) struct SpaceStation {
 }
 
 ///|
+/// Creates an inactive space station entity slot for pool allocation.
 pub fn SpaceStation::inactive() -> SpaceStation {
   {
     active: false,
@@ -333,6 +347,7 @@ pub fn SpaceStation::inactive() -> SpaceStation {
 // Debris piece from destroyed ships
 
 ///|
+/// Debris fragment from destroyed ships with position, velocity, and color.
 pub(all) struct Debris {
   mut active : Bool
   mut x : Float
@@ -352,6 +367,7 @@ pub(all) struct Debris {
 }
 
 ///|
+/// Creates an inactive debris entity slot for pool allocation.
 pub fn Debris::inactive() -> Debris {
   {
     active: false,
@@ -375,6 +391,7 @@ pub fn Debris::inactive() -> Debris {
 // Kill feed entry
 
 ///|
+/// Kill feed UI entry displaying scored kills with text and color.
 pub(all) struct KillFeedEntry {
   mut active : Bool
   mut text : String
@@ -385,6 +402,7 @@ pub(all) struct KillFeedEntry {
 }
 
 ///|
+/// Creates an inactive kill feed entry slot.
 pub fn KillFeedEntry::inactive() -> KillFeedEntry {
   { active: false, text: "", timer: 0.0, r: 255, g: 255, b: 255 }
 }
@@ -392,6 +410,7 @@ pub fn KillFeedEntry::inactive() -> KillFeedEntry {
 // Mission Objective
 
 ///|
+/// Mission objective tracking type, target count, and completion status.
 pub(all) struct MissionObjective {
   mut obj_type : Int
   mut target_count : Int
@@ -401,6 +420,7 @@ pub(all) struct MissionObjective {
 }
 
 ///|
+/// Creates a new mission objective with the given type, target count, and description.
 pub fn MissionObjective::new(
   obj_type : Int,
   target_count : Int,
@@ -412,6 +432,7 @@ pub fn MissionObjective::new(
 // Background star
 
 ///|
+/// Background star with position, brightness, and color.
 pub(all) struct Star {
   x : Float
   y : Float
@@ -425,6 +446,7 @@ pub(all) struct Star {
 // Main Game struct
 
 ///|
+/// Main game state holding all entity pools, player data, mission progress, and UI state.
 pub(all) struct Game {
   mut state : Int
 
@@ -505,6 +527,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a new game instance with all entity pools initialized and background stars generated.
 pub fn Game::new() -> Game {
   let stars_arr : Array[Star] = []
   let mut rng = 54321

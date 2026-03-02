@@ -1,6 +1,7 @@
 // 3D world rendering
 
 ///|
+/// Draws the 3D game world including ships, asteroids, stations, projectiles, and effects.
 pub fn draw_world(game : @types.Game) -> Unit {
   let camera = build_camera(game)
   @raylib.begin_mode_3d(camera)

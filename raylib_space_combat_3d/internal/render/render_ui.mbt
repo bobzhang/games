@@ -1,6 +1,7 @@
 // 2D UI overlay
 
 ///|
+/// Draws the 2D UI overlay for the current game state.
 pub fn draw_ui(game : @types.Game) -> Unit {
   if game.state == @types.state_menu {
     draw_menu(game)

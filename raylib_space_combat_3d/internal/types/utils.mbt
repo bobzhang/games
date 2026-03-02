@@ -1,4 +1,5 @@
 ///|
+/// Returns the absolute value of `v`.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -8,6 +9,7 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns `v` clamped between `low` and `high`.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
     low
@@ -19,6 +21,7 @@ pub fn clampf(v : Float, low : Float, high : Float) -> Float {
 }
 
 ///|
+/// Returns `v` clamped between `low` and `high` as integers.
 pub fn clampi(v : Int, low : Int, high : Int) -> Int {
   if v < low {
     low
@@ -30,6 +33,7 @@ pub fn clampi(v : Int, low : Int, high : Int) -> Int {
 }
 
 ///|
+/// Returns the smaller of `a` and `b`.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -39,6 +43,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of `a` and `b`.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -48,6 +53,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of `a` and `b` as integers.
 pub fn mini(a : Int, b : Int) -> Int {
   if a < b {
     a
@@ -57,6 +63,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the larger of `a` and `b` as integers.
 pub fn maxi(a : Int, b : Int) -> Int {
   if a > b {
     a
@@ -66,11 +73,13 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the linear interpolation between `a` and `b` by factor `t`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t
 }
 
 ///|
+/// Returns the sign of `v` as -1.0, 0.0, or 1.0.
 pub fn sign_f(v : Float) -> Float {
   if v > 0.0 {
     1.0
@@ -82,6 +91,7 @@ pub fn sign_f(v : Float) -> Float {
 }
 
 ///|
+/// Returns the Euclidean distance between two 3D points.
 pub fn distance3d(
   x1 : Float,
   y1 : Float,
@@ -97,6 +107,7 @@ pub fn distance3d(
 }
 
 ///|
+/// Returns the squared Euclidean distance between two 3D points.
 pub fn distance_squared_3d(
   x1 : Float,
   y1 : Float,
@@ -112,6 +123,7 @@ pub fn distance_squared_3d(
 }
 
 ///|
+/// Returns the Euclidean distance between two points on the XZ plane.
 pub fn distance2d(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
   let dx = x1 - x2
   let dz = z1 - z2
@@ -119,6 +131,7 @@ pub fn distance2d(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
 }
 
 ///|
+/// Returns the unit vector of the given 3D vector, or forward if near zero.
 pub fn normalize3d(x : Float, y : Float, z : Float) -> (Float, Float, Float) {
   let len = (x * x + y * y + z * z).sqrt()
   if len < 0.0001 {
@@ -129,11 +142,13 @@ pub fn normalize3d(x : Float, y : Float, z : Float) -> (Float, Float, Float) {
 }
 
 ///|
+/// Returns the magnitude of a 3D vector.
 pub fn length3d(x : Float, y : Float, z : Float) -> Float {
   (x * x + y * y + z * z).sqrt()
 }
 
 ///|
+/// Returns the dot product of two 3D vectors.
 pub fn dot3d(
   x1 : Float,
   y1 : Float,
@@ -148,6 +163,7 @@ pub fn dot3d(
 // Cross product
 
 ///|
+/// Returns the cross product of two 3D vectors.
 pub fn cross3d(
   x1 : Float,
   y1 : Float,
@@ -162,6 +178,7 @@ pub fn cross3d(
 // Rotate a vector around an axis by angle (Rodrigues rotation formula)
 
 ///|
+/// Returns a vector rotated around an axis by `angle` using Rodrigues formula.
 pub fn rotate_vector_around_axis(
   vx : Float,
   vy : Float,
@@ -184,6 +201,7 @@ pub fn rotate_vector_around_axis(
 // Forward direction from yaw and pitch
 
 ///|
+/// Returns the forward direction vector from `yaw` and `pitch` angles.
 pub fn forward_dir(yaw : Float, pitch : Float) -> (Float, Float, Float) {
   let cp = @math.cosf(pitch)
   let sp = @math.sinf(pitch)
@@ -195,6 +213,7 @@ pub fn forward_dir(yaw : Float, pitch : Float) -> (Float, Float, Float) {
 // Right direction from yaw
 
 ///|
+/// Returns the right-facing direction vector from `yaw` angle.
 pub fn right_dir(yaw : Float) -> (Float, Float, Float) {
   let cy = @math.cosf(yaw)
   let sy = @math.sinf(yaw)
@@ -204,6 +223,7 @@ pub fn right_dir(yaw : Float) -> (Float, Float, Float) {
 // Up direction from yaw and pitch
 
 ///|
+/// Returns the upward direction vector from `yaw` and `pitch` angles.
 pub fn up_dir(yaw : Float, pitch : Float) -> (Float, Float, Float) {
   let fwd = forward_dir(yaw, pitch)
   let rgt = right_dir(yaw)
@@ -214,6 +234,7 @@ pub fn up_dir(yaw : Float, pitch : Float) -> (Float, Float, Float) {
 // Returns the aim direction normalized
 
 ///|
+/// Returns the aim direction to intercept a moving target with a projectile.
 pub fn lead_target(
   shooter_x : Float,
   shooter_y : Float,
@@ -249,6 +270,7 @@ pub fn lead_target(
 // Sphere-sphere collision test
 
 ///|
+/// Returns whether two spheres at the given positions and radii are overlapping.
 pub fn sphere_collision(
   x1 : Float,
   y1 : Float,
@@ -267,6 +289,7 @@ pub fn sphere_collision(
 // Distance culling: check if object is within render distance
 
 ///|
+/// Returns whether an object is within the maximum render distance from the camera.
 pub fn within_render_distance(
   cam_x : Float,
   cam_y : Float,
@@ -283,6 +306,7 @@ pub fn within_render_distance(
 // Damage calculation with shield absorption
 
 ///|
+/// Returns the hull damage and remaining shield after applying damage with shield absorption.
 pub fn calc_damage(
   damage : Float,
   shield : Float,
@@ -303,6 +327,7 @@ pub fn calc_damage(
 // Angle difference (handles wrapping)
 
 ///|
+/// Returns the shortest signed angular difference from `a` to `b` with wrapping.
 pub fn angle_diff(a : Float, b : Float) -> Float {
   let mut d = b - a
   if d > pi {
@@ -317,6 +342,7 @@ pub fn angle_diff(a : Float, b : Float) -> Float {
 // Smooth damp (spring-like interpolation)
 
 ///|
+/// Returns a spring-damped interpolation from `current` toward `target`.
 pub fn smooth_damp(
   current : Float,
   target : Float,
@@ -330,6 +356,7 @@ pub fn smooth_damp(
 // RNG
 
 ///|
+/// Returns the next pseudo-random positive integer and advances the RNG state.
 pub fn rand_next(game : Game) -> Int {
   let mut x = game.rng_state
   x = x ^ (x << 13)
@@ -343,6 +370,7 @@ pub fn rand_next(game : Game) -> Int {
 }
 
 ///|
+/// Returns a random integer in the inclusive range [`low`, `high`].
 pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
   if high <= low {
     low
@@ -352,17 +380,20 @@ pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
 }
 
 ///|
+/// Returns a random float in the range [`low`, `high`].
 pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
   let n = Float::from_int(rand_next(game) % 10000) / 10000.0
   low + (high - low) * n
 }
 
 ///|
+/// Returns whether a random roll succeeds with the given `chance` probability.
 pub fn rand_bool(game : Game, chance : Float) -> Bool {
   rand_rangef(game, 0.0, 1.0) < chance
 }
 
 ///|
+/// Returns the index of the first inactive enemy slot, or -1 if the pool is full.
 pub fn alloc_enemy(game : Game) -> Int {
   for i in 0..<game.enemies.length() {
     if not(game.enemies[i].active) {
@@ -373,6 +404,7 @@ pub fn alloc_enemy(game : Game) -> Int {
 }
 
 ///|
+/// Returns the index of the first inactive projectile slot, or -1 if the pool is full.
 pub fn alloc_projectile(game : Game) -> Int {
   for i in 0..<game.projectiles.length() {
     if not(game.projectiles[i].active) {
@@ -383,6 +415,7 @@ pub fn alloc_projectile(game : Game) -> Int {
 }
 
 ///|
+/// Returns the index of the first inactive particle slot, or -1 if the pool is full.
 pub fn alloc_particle(game : Game) -> Int {
   for i in 0..<game.particles.length() {
     if not(game.particles[i].active) {
@@ -393,6 +426,7 @@ pub fn alloc_particle(game : Game) -> Int {
 }
 
 ///|
+/// Returns the index of the first inactive asteroid slot, or -1 if the pool is full.
 pub fn alloc_asteroid(game : Game) -> Int {
   for i in 0..<game.asteroids.length() {
     if not(game.asteroids[i].active) {
@@ -403,6 +437,7 @@ pub fn alloc_asteroid(game : Game) -> Int {
 }
 
 ///|
+/// Returns the index of the first inactive power-up slot, or -1 if the pool is full.
 pub fn alloc_powerup(game : Game) -> Int {
   for i in 0..<game.powerups.length() {
     if not(game.powerups[i].active) {
@@ -413,6 +448,7 @@ pub fn alloc_powerup(game : Game) -> Int {
 }
 
 ///|
+/// Returns the index of the first inactive station slot, or -1 if the pool is full.
 pub fn alloc_station(game : Game) -> Int {
   for i in 0..<game.stations.length() {
     if not(game.stations[i].active) {
@@ -423,6 +459,7 @@ pub fn alloc_station(game : Game) -> Int {
 }
 
 ///|
+/// Returns the index of the first inactive debris slot, or -1 if the pool is full.
 pub fn alloc_debris(game : Game) -> Int {
   for i in 0..<game.debris.length() {
     if not(game.debris[i].active) {
@@ -433,6 +470,7 @@ pub fn alloc_debris(game : Game) -> Int {
 }
 
 ///|
+/// Spawns colored particles scattered around a world position.
 pub fn spawn_particles(
   game : Game,
   wx : Float,
@@ -468,6 +506,7 @@ pub fn spawn_particles(
 }
 
 ///|
+/// Spawns an expanding explosion particle burst at a world position.
 pub fn spawn_explosion(
   game : Game,
   wx : Float,
@@ -505,6 +544,7 @@ pub fn spawn_explosion(
 // Spawn shield hit particles at a specific point
 
 ///|
+/// Spawns blue shield impact particles at a world position.
 pub fn spawn_shield_hit(
   game : Game,
   wx : Float,
@@ -539,6 +579,7 @@ pub fn spawn_shield_hit(
 // Spawn debris from destroyed ship
 
 ///|
+/// Spawns tumbling debris fragments from a destroyed ship at a world position.
 pub fn spawn_debris(
   game : Game,
   wx : Float,
@@ -577,6 +618,7 @@ pub fn spawn_debris(
 // Count active enemies
 
 ///|
+/// Returns the number of currently active enemies in the pool.
 pub fn count_active_enemies(game : Game) -> Int {
   let mut count = 0
   for enemy in game.enemies {
@@ -590,6 +632,7 @@ pub fn count_active_enemies(game : Game) -> Int {
 // Count active enemies of a type
 
 ///|
+/// Returns the number of active enemies matching the given `kind`.
 pub fn count_enemies_of_type(game : Game, kind : Int) -> Int {
   let mut count = 0
   for enemy in game.enemies {
@@ -603,6 +646,7 @@ pub fn count_enemies_of_type(game : Game, kind : Int) -> Int {
 // Find nearest enemy to a position
 
 ///|
+/// Returns the index of the nearest active enemy to the given position, or -1 if none.
 pub fn find_nearest_enemy(game : Game, x : Float, y : Float, z : Float) -> Int {
   let mut best_idx = -1
   let mut best_dist : Float = 999999.0
@@ -623,6 +667,7 @@ pub fn find_nearest_enemy(game : Game, x : Float, y : Float, z : Float) -> Int {
 // Weapon name
 
 ///|
+/// Returns the display name for the given `weapon` type.
 pub fn weapon_name(weapon : Int) -> String {
   if weapon == weapon_laser {
     "LASER"
@@ -640,6 +685,7 @@ pub fn weapon_name(weapon : Int) -> String {
 // Weapon cooldown
 
 ///|
+/// Returns the fire cooldown interval in seconds for the given `weapon` type.
 pub fn weapon_cooldown(weapon : Int) -> Float {
   if weapon == weapon_laser {
     laser_cooldown
@@ -657,6 +703,7 @@ pub fn weapon_cooldown(weapon : Int) -> Float {
 // Weapon energy cost
 
 ///|
+/// Returns the energy cost per shot for the given `weapon` type.
 pub fn weapon_energy_cost(weapon : Int) -> Float {
   if weapon == weapon_laser {
     laser_energy_cost
@@ -674,6 +721,7 @@ pub fn weapon_energy_cost(weapon : Int) -> Float {
 // Weapon speed
 
 ///|
+/// Returns the projectile speed for the given `weapon` type.
 pub fn weapon_proj_speed(weapon : Int) -> Float {
   if weapon == weapon_laser {
     laser_speed
@@ -691,6 +739,7 @@ pub fn weapon_proj_speed(weapon : Int) -> Float {
 // Enemy type name
 
 ///|
+/// Returns the display name for the given enemy `kind`.
 pub fn enemy_type_name(kind : Int) -> String {
   if kind == enemy_fighter {
     "Fighter"
@@ -710,6 +759,7 @@ pub fn enemy_type_name(kind : Int) -> String {
 // Wrap coordinate within world bounds
 
 ///|
+/// Returns `v` wrapped within the world boundary limits.
 pub fn wrap_coord(v : Float) -> Float {
   let half = world_size
   if v > half {
@@ -724,6 +774,7 @@ pub fn wrap_coord(v : Float) -> Float {
 // Add kill feed entry
 
 ///|
+/// Adds a new colored text entry to the top of the kill feed display.
 pub fn add_kill_feed(
   game : Game,
   text : String,
@@ -751,6 +802,7 @@ pub fn add_kill_feed(
 // Update combo system
 
 ///|
+/// Updates the combo timer and resets the multiplier when the combo expires.
 pub fn update_combo(game : Game, dt : Float) -> Unit {
   if game.combo_timer > 0.0 {
     game.combo_timer -= dt
@@ -764,6 +816,7 @@ pub fn update_combo(game : Game, dt : Float) -> Unit {
 // Register a kill for combo
 
 ///|
+/// Registers a kill in the combo system and updates the score multiplier.
 pub fn register_kill_combo(game : Game) -> Unit {
   game.combo_count += 1
   game.combo_timer = combo_timeout
@@ -783,6 +836,7 @@ pub fn register_kill_combo(game : Game) -> Unit {
 // Formation position calculation
 
 ///|
+/// Returns the 3D position offset for a unit at the given `index` in a formation `pattern`.
 pub fn formation_offset(
   pattern : Int,
   index : Int,
@@ -814,6 +868,7 @@ pub fn formation_offset(
 // Check and update mission objectives
 
 ///|
+/// Updates mission objectives of the given type by the specified increment.
 pub fn check_objective_progress(
   game : Game,
   obj_type : Int,
@@ -834,6 +889,7 @@ pub fn check_objective_progress(
 // Check if all objectives are complete
 
 ///|
+/// Returns whether all active mission objectives have been completed.
 pub fn all_objectives_complete(game : Game) -> Bool {
   if game.objectives_count == 0 {
     return false
@@ -849,6 +905,7 @@ pub fn all_objectives_complete(game : Game) -> Bool {
 // Accuracy percentage
 
 ///|
+/// Returns the hit accuracy as an integer percentage from 0 to 100.
 pub fn calc_accuracy(shots_fired : Int, shots_hit : Int) -> Int {
   if shots_fired <= 0 {
     0
@@ -861,6 +918,7 @@ pub fn calc_accuracy(shots_fired : Int, shots_hit : Int) -> Int {
 // Mission rank based on score, time, accuracy
 
 ///|
+/// Returns the mission performance rank from S to D based on score, time, and accuracy.
 pub fn calc_rank(score : Int, time : Float, accuracy : Int) -> String {
   let score_pts : Int = score / 100
   let time_bonus : Int = if time < 60.0 {
