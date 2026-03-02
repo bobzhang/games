@@ -1120,7 +1120,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
     )
   }
 
-  if not(game.state is @types.Title) {
+  if not(game.state is Title) {
     draw_hud(game)
   }
 

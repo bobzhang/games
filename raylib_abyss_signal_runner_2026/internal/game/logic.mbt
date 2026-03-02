@@ -3,7 +3,7 @@
 fn clear_objs(game : @types.Game) -> Unit {
   for obj in game.objs {
     obj.active = false
-    obj.kind = @types.Rock
+    obj.kind = Rock
     obj.x = 0.0
     obj.y = 0.0
     obj.vx = 0.0
@@ -273,7 +273,7 @@ fn hurt_hero(game : @types.Game, dmg : Float) -> Unit {
   burst(game, game.hero.x, game.hero.y, 22, 1)
 
   if game.hull <= 0.0 {
-    game.state = @types.GameOver
+    game.state = GameOver
     game.result_t = 0.0
   }
 }
@@ -288,7 +288,7 @@ fn start_new_stage(game : @types.Game, stage : Int) -> Unit {
 
   reset_hero(game.hero)
 
-  game.state = @types.Play
+  game.state = Play
   game.stage = stage
   game.distance = 0.0
   game.stage_goal = @types.stage_base_goal +
@@ -329,7 +329,7 @@ fn init_title_scene(game : @types.Game) -> Unit {
   clear_trails(game)
   reset_hero(game.hero)
 
-  game.state = @types.Title
+  game.state = Title
   game.stage = 1
   game.distance = 0.0
   game.stage_goal = @types.stage_base_goal
@@ -376,7 +376,7 @@ fn spawn_wave(game : @types.Game, y : Float) -> Unit {
       let r = @types.randf(18.0, 36.0)
       spawn_obj(
         game,
-        @types.Rock,
+        Rock,
         object_spawn_x(game, y, r),
         y + @types.randf(-24.0, 24.0),
         r,
@@ -389,7 +389,7 @@ fn spawn_wave(game : @types.Game, y : Float) -> Unit {
       let r = @types.randf(15.0, 24.0)
       spawn_obj(
         game,
-        @types.Mine,
+        Mine,
         object_spawn_x(game, y, r),
         y + @types.randf(-30.0, 22.0),
         r,
@@ -402,7 +402,7 @@ fn spawn_wave(game : @types.Game, y : Float) -> Unit {
       let r = @types.randf(12.0, 16.0)
       spawn_obj(
         game,
-        @types.Data,
+        Data,
         object_spawn_x(game, y, r),
         y + @types.randf(-20.0, 20.0),
         r,
@@ -417,7 +417,7 @@ fn spawn_wave(game : @types.Game, y : Float) -> Unit {
       let p = @types.randf(110.0, 190.0)
       spawn_obj(
         game,
-        @types.Current,
+        Current,
         object_spawn_x(game, y, r),
         y + @types.randf(-28.0, 28.0),
         r,
@@ -430,7 +430,7 @@ fn spawn_wave(game : @types.Game, y : Float) -> Unit {
       let r = @types.randf(12.0, 18.0)
       spawn_obj(
         game,
-        @types.Scrap,
+        Scrap,
         object_spawn_x(game, y, r),
         y + @types.randf(-18.0, 18.0),
         r,
@@ -443,7 +443,7 @@ fn spawn_wave(game : @types.Game, y : Float) -> Unit {
       let r = @types.randf(16.0, 22.0)
       spawn_obj(
         game,
-        @types.Oxygen,
+        Oxygen,
         object_spawn_x(game, y, r),
         y + @types.randf(-14.0, 14.0),
         r,
@@ -492,7 +492,7 @@ fn trigger_sonar(game : @types.Game) -> Unit {
       obj.cloak = false
     }
 
-    if obj.kind is @types.Mine && d2 <= destroy2 {
+    if obj.kind is Mine && d2 <= destroy2 {
       let ox = obj.x
       let oy = obj.y
       obj.active = false
@@ -676,7 +676,7 @@ fn update_objects(game : @types.Game, dt : Float) -> Unit {
     )
     let rr = (game.hero.r + game.objs[i].r) * (game.hero.r + game.objs[i].r)
 
-    if game.objs[i].kind is @types.Current {
+    if game.objs[i].kind is Current {
       let area = (game.objs[i].r + 80.0) * (game.objs[i].r + 80.0)
       if d2 <= area {
         let push_scale = @types.clampf(1.0 - d2 / area, 0.0, 1.0)
@@ -895,12 +895,12 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   emit_ambience(game, dt)
 
   if game.oxygen <= 0.0 {
-    game.state = @types.GameOver
+    game.state = GameOver
     game.result_t = 0.0
   }
 
-  if game.state is @types.Play && game.distance >= game.stage_goal {
-    game.state = @types.StageClear
+  if game.state is Play && game.distance >= game.stage_goal {
+    game.state = StageClear
     game.result_t = 0.0
     add_score(game, 300 + game.stage * 120)
     game.hull = @types.minf(100.0, game.hull + 12.0)
