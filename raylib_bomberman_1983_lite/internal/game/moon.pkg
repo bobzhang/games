@@ -8,4 +8,4 @@ import {
   "tonyfettes/raylib-examples/raylib_bomberman_1983_lite/internal/world",
 }
 
-warnings = "+missing_doc"
+warnings = "+missing_doc+unnecessary_annotation"
