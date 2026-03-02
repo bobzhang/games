@@ -1,3 +1,4 @@
+///|
 /// Draws the active 2D UI layer for the current game state and overlays score popups.
 pub fn draw_ui(game : @types.Game) -> Unit {
   if game.state == @types.state_menu {

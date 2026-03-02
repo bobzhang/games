@@ -1,3 +1,4 @@
+///|
 /// Runtime platform entity with movement, phase, and visual state used by level simulation.
 pub(all) struct Platform {
   mut active : Bool
@@ -33,6 +34,7 @@ pub(all) struct Platform {
   mut b : Int
 }
 
+///|
 /// Creates a disabled platform slot with default geometry and neutral colors.
 pub fn Platform::inactive() -> Platform {
   {
@@ -64,6 +66,7 @@ pub fn Platform::inactive() -> Platform {
   }
 }
 
+///|
 /// Runtime enemy entity storing movement, AI timers, hit state, and render tint.
 pub(all) struct Enemy {
   mut active : Bool
@@ -90,6 +93,7 @@ pub(all) struct Enemy {
   mut b : Int
 }
 
+///|
 /// Creates an inactive enemy slot initialized with patrol defaults.
 pub fn Enemy::inactive() -> Enemy {
   {
@@ -118,6 +122,7 @@ pub fn Enemy::inactive() -> Enemy {
   }
 }
 
+///|
 /// Runtime collectible entity with bobbing/rotation timers and collection flags.
 pub(all) struct Collectible {
   mut active : Bool
@@ -131,6 +136,7 @@ pub(all) struct Collectible {
   mut magnet_target : Bool
 }
 
+///|
 /// Creates an inactive collectible slot with gem defaults.
 pub fn Collectible::inactive() -> Collectible {
   {
@@ -146,6 +152,7 @@ pub fn Collectible::inactive() -> Collectible {
   }
 }
 
+///|
 /// Runtime power-up pickup entity with world transform and animation timers.
 pub(all) struct PowerUp {
   mut active : Bool
@@ -158,6 +165,7 @@ pub(all) struct PowerUp {
   mut collected : Bool
 }
 
+///|
 /// Creates an inactive power-up slot initialized to double-jump type.
 pub fn PowerUp::inactive() -> PowerUp {
   {
@@ -172,6 +180,7 @@ pub fn PowerUp::inactive() -> PowerUp {
   }
 }
 
+///|
 /// Runtime hazard entity with dimensions, activation state, and optional motion parameters.
 pub(all) struct Hazard {
   mut active : Bool
@@ -191,6 +200,7 @@ pub(all) struct Hazard {
   mut move_speed : Float
 }
 
+///|
 /// Creates an inactive hazard slot with spike defaults.
 pub fn Hazard::inactive() -> Hazard {
   {
@@ -212,6 +222,7 @@ pub fn Hazard::inactive() -> Hazard {
   }
 }
 
+///|
 /// Runtime checkpoint marker with activation and animation progress.
 pub(all) struct Checkpoint {
   mut active : Bool
@@ -222,11 +233,13 @@ pub(all) struct Checkpoint {
   mut anim_timer : Float
 }
 
+///|
 /// Creates an inactive checkpoint slot at the origin.
 pub fn Checkpoint::inactive() -> Checkpoint {
   { active: false, x: 0.0, y: 0.0, z: 0.0, activated: false, anim_timer: 0.0 }
 }
 
+///|
 /// Runtime particle entity used for jump, hit, pickup, and environment effects.
 pub(all) struct Particle {
   mut active : Bool
@@ -245,6 +258,7 @@ pub(all) struct Particle {
   mut kind : Int
 }
 
+///|
 /// Creates an inactive particle slot with neutral velocity and white color.
 pub fn Particle::inactive() -> Particle {
   {
@@ -265,6 +279,7 @@ pub fn Particle::inactive() -> Particle {
   }
 }
 
+///|
 /// Runtime decorative prop entity with transform, scale, and tint values.
 pub(all) struct Decoration {
   mut active : Bool
@@ -279,6 +294,7 @@ pub(all) struct Decoration {
   mut b : Int
 }
 
+///|
 /// Creates an inactive decoration slot initialized as a tree prop.
 pub fn Decoration::inactive() -> Decoration {
   {
@@ -295,6 +311,7 @@ pub fn Decoration::inactive() -> Decoration {
   }
 }
 
+///|
 /// Runtime projectile entity with velocity, lifetime, and tint data.
 pub(all) struct Projectile {
   mut active : Bool
@@ -311,6 +328,7 @@ pub(all) struct Projectile {
   mut b : Int
 }
 
+///|
 /// Creates an inactive projectile slot using enemy-shot defaults.
 pub fn Projectile::inactive() -> Projectile {
   {
@@ -329,6 +347,7 @@ pub fn Projectile::inactive() -> Projectile {
   }
 }
 
+///|
 /// Screen-space floating score indicator spawned on pickups and kills.
 pub(all) struct ScoreFly {
   mut active : Bool
@@ -339,11 +358,13 @@ pub(all) struct ScoreFly {
   mut max_time : Float
 }
 
+///|
 /// Creates an inactive score-fly slot with a one-second default lifetime.
 pub fn ScoreFly::inactive() -> ScoreFly {
   { active: false, x: 0.0, y: 0.0, value: 0, timer: 0.0, max_time: 1.0 }
 }
 
+///|
 /// Aggregated mutable game state for player, world entities, UI, and progression systems.
 pub(all) struct Game {
   mut state : Int
@@ -462,6 +483,7 @@ pub(all) struct Game {
   mut frame_counter : Int
 }
 
+///|
 /// Constructs a fresh game state with initialized pools and menu-start defaults.
 pub fn Game::new() -> Game {
   {
