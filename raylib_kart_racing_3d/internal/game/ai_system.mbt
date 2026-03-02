@@ -1,6 +1,7 @@
 // AI kart behavior
 
 ///|
+/// Updates steering, drifting, item usage, and physics for all AI-controlled karts.
 pub fn update_ai_karts(game : @types.Game, dt : Float) -> Unit {
   let player = game.karts[@types.player_kart]
   let player_progress = player.total_progress

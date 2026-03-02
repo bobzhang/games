@@ -1,6 +1,7 @@
 // Player kart physics and input
 
 ///|
+/// Updates the player kart's input, steering, drift mechanics, and physics each frame.
 pub fn update_player_kart(game : @types.Game, dt : Float) -> Unit {
   let kart = game.karts[@types.player_kart]
   if not(kart.active) || kart.finished {
@@ -241,6 +242,7 @@ fn update_kart_timers(kart : @types.Kart, dt : Float) -> Unit {
 // Apply physics movement for any kart
 
 ///|
+/// Applies steering rotation, forward movement, gravity, and track boundary clamping to a kart.
 pub fn apply_kart_physics(
   game : @types.Game,
   kart_idx : Int,
@@ -334,6 +336,7 @@ fn clamp_kart_to_track_bounds(game : @types.Game, kart_idx : Int) -> Unit {
 // Use held powerup
 
 ///|
+/// Activates the held powerup for the specified kart and clears it from inventory.
 pub fn use_powerup(game : @types.Game, kart_idx : Int) -> Unit {
   let kart = game.karts[kart_idx]
   if kart.held_powerup == @types.powerup_none {
@@ -497,6 +500,7 @@ fn activate_lightning(game : @types.Game, source_kart : Int) -> Unit {
 // Kart-kart collisions with weight-based bumping
 
 ///|
+/// Checks and resolves collisions between all kart pairs using weight-based bumping.
 pub fn check_kart_collisions(game : @types.Game) -> Unit {
   for i in 0..<@types.max_karts {
     let ka = game.karts[i]

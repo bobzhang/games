@@ -3,6 +3,7 @@
 // Draw all visual effects
 
 ///|
+/// Draws all visual effects including drift sparks, boost flames, hazards, speed lines, and shields.
 pub fn draw_effects(game : @types.Game) -> Unit {
   draw_drift_spark_trails(game)
   draw_boost_exhaust_flames(game)

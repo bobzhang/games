@@ -3,6 +3,7 @@
 // Update dropped items (bananas, oil slicks) on the track
 
 ///|
+/// Updates lifetime, animation, and gravity settling for all dropped track hazards.
 pub fn update_dropped_items(game : @types.Game, dt : Float) -> Unit {
   for item in game.dropped_items {
     if not(item.active) {
@@ -50,6 +51,7 @@ pub fn update_dropped_items(game : @types.Game, dt : Float) -> Unit {
 // Check collisions between karts and dropped items
 
 ///|
+/// Checks collisions between all karts and dropped hazard items on the track.
 pub fn check_dropped_item_collisions(game : @types.Game) -> Unit {
   for ki in 0..<@types.max_karts {
     let kart = game.karts[ki]
@@ -175,6 +177,7 @@ fn apply_oil_slick_hit(game : @types.Game, kart_idx : Int) -> Unit {
 // Update projectile homing behavior
 
 ///|
+/// Updates homing guidance and trail particles for all active missile projectiles.
 pub fn update_projectile_homing(game : @types.Game, dt : Float) -> Unit {
   for proj in game.projectiles {
     if not(proj.active) {
@@ -224,6 +227,7 @@ pub fn update_projectile_homing(game : @types.Game, dt : Float) -> Unit {
 // Enhanced powerup usage effects with more detailed behavior
 
 ///|
+/// Applies a speed boost powerup to the specified kart with exhaust flame particles.
 pub fn apply_speed_boost(game : @types.Game, kart_idx : Int) -> Unit {
   let kart = game.karts[kart_idx]
   kart.boost_timer = @types.boost_duration
@@ -252,6 +256,7 @@ pub fn apply_speed_boost(game : @types.Game, kart_idx : Int) -> Unit {
 // Apply shield activation with visual feedback
 
 ///|
+/// Activates the shield powerup on the specified kart with a ring particle effect.
 pub fn apply_shield_activation(game : @types.Game, kart_idx : Int) -> Unit {
   let kart = game.karts[kart_idx]
   kart.shield_timer = @types.shield_duration
@@ -279,6 +284,7 @@ pub fn apply_shield_activation(game : @types.Game, kart_idx : Int) -> Unit {
 // Launch missile with enhanced targeting
 
 ///|
+/// Launches a homing missile projectile from the specified kart toward the nearest target ahead.
 pub fn launch_missile(game : @types.Game, kart_idx : Int) -> Unit {
   let kart = game.karts[kart_idx]
   let idx = @types.alloc_projectile(game)
@@ -319,6 +325,7 @@ pub fn launch_missile(game : @types.Game, kart_idx : Int) -> Unit {
 // Drop banana behind kart with arc trajectory
 
 ///|
+/// Drops a banana peel hazard behind the specified kart.
 pub fn drop_banana(game : @types.Game, kart_idx : Int) -> Unit {
   let kart = game.karts[kart_idx]
   let idx = @types.alloc_dropped_item(game)
@@ -355,6 +362,7 @@ pub fn drop_banana(game : @types.Game, kart_idx : Int) -> Unit {
 // Drop oil slick behind kart
 
 ///|
+/// Drops an oil slick hazard behind the specified kart.
 pub fn drop_oil_slick(game : @types.Game, kart_idx : Int) -> Unit {
   let kart = game.karts[kart_idx]
   let idx = @types.alloc_dropped_item(game)
@@ -391,6 +399,7 @@ pub fn drop_oil_slick(game : @types.Game, kart_idx : Int) -> Unit {
 // Activate star power with full effect
 
 ///|
+/// Activates star power on the specified kart granting invincibility and a rainbow burst effect.
 pub fn activate_star_power(game : @types.Game, kart_idx : Int) -> Unit {
   let kart = game.karts[kart_idx]
   kart.star_timer = @types.star_duration
@@ -424,6 +433,7 @@ pub fn activate_star_power(game : @types.Game, kart_idx : Int) -> Unit {
 // Activate lightning bolt affecting all opponents
 
 ///|
+/// Activates a lightning bolt that shrinks and spins all opponent karts without invincibility.
 pub fn activate_lightning_bolt(game : @types.Game, source_kart : Int) -> Unit {
   game.lightning_active = true
   game.lightning_timer = @types.lightning_duration
@@ -492,6 +502,7 @@ pub fn activate_lightning_bolt(game : @types.Game, source_kart : Int) -> Unit {
 // Apply triple mushroom boost (one of three uses)
 
 ///|
+/// Applies one use of the triple mushroom boost powerup to the specified kart.
 pub fn apply_triple_mushroom(game : @types.Game, kart_idx : Int) -> Unit {
   let kart = game.karts[kart_idx]
   kart.boost_timer = @types.triple_mushroom_boost
@@ -516,6 +527,7 @@ pub fn apply_triple_mushroom(game : @types.Game, kart_idx : Int) -> Unit {
 // Item box respawn with enhanced variety
 
 ///|
+/// Updates respawn timers and bobbing animation for collected item box pickups.
 pub fn update_item_box_respawns(game : @types.Game, dt : Float) -> Unit {
   for pu in game.powerups {
     if not(pu.active) {
@@ -556,6 +568,7 @@ pub fn update_item_box_respawns(game : @types.Game, dt : Float) -> Unit {
 // Projectile-kart collision check with enhanced effects
 
 ///|
+/// Checks collisions between missile projectiles and karts, applying hit effects.
 pub fn check_projectile_impacts(game : @types.Game) -> Unit {
   for proj in game.projectiles {
     if not(proj.active) {
@@ -669,6 +682,7 @@ pub fn check_projectile_impacts(game : @types.Game) -> Unit {
 // Check if a kart has a defensive item ready
 
 ///|
+/// Returns whether the kart is holding a defensive powerup such as shield, banana, or star.
 pub fn has_defensive_item(kart : @types.Kart) -> Bool {
   kart.held_powerup == @types.powerup_shield ||
   kart.held_powerup == @types.powerup_banana ||
@@ -678,6 +692,7 @@ pub fn has_defensive_item(kart : @types.Kart) -> Bool {
 // Check if a kart has an offensive item ready
 
 ///|
+/// Returns whether the kart is holding an offensive powerup such as missile, lightning, or oil slick.
 pub fn has_offensive_item(kart : @types.Kart) -> Bool {
   kart.held_powerup == @types.powerup_missile ||
   kart.held_powerup == @types.powerup_lightning ||
@@ -687,6 +702,7 @@ pub fn has_offensive_item(kart : @types.Kart) -> Bool {
 // Get item name for display purposes
 
 ///|
+/// Returns the display name string for the given powerup type ID.
 pub fn get_item_name(item_type : Int) -> String {
   if item_type == @types.powerup_none {
     "NONE"
@@ -714,6 +730,7 @@ pub fn get_item_name(item_type : Int) -> String {
 // Get item color for UI display (r, g, b)
 
 ///|
+/// Returns the RGB display color tuple for the given powerup type ID.
 pub fn get_item_color(item_type : Int) -> (Int, Int, Int) {
   if item_type == @types.powerup_boost {
     (255, 200, 0)
@@ -739,6 +756,7 @@ pub fn get_item_color(item_type : Int) -> (Int, Int, Int) {
 // Calculate item effectiveness based on kart position
 
 ///|
+/// Returns the effectiveness multiplier for a powerup based on the kart's current race position.
 pub fn calc_item_effectiveness(place : Int, item_type : Int) -> Float {
   if item_type == @types.powerup_boost ||
     item_type == @types.powerup_triple_mushroom {

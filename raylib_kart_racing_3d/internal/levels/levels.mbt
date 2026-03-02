@@ -3,6 +3,7 @@
 // Cup 0-3, Race 0-3 within each cup (4 races per cup, 16 tracks total)
 
 ///|
+/// Returns the array of waypoint coordinates forming the closed-loop track for the given cup and race.
 pub fn get_track_waypoints(
   cup : Int,
   race : Int,
@@ -243,6 +244,7 @@ pub fn get_track_waypoints(
 // Get track segment metadata for each waypoint pair
 
 ///|
+/// Returns the segment metadata array for the given track specifying type, surface, width, and ramp flags.
 pub fn get_track_segments(
   cup : Int,
   race : Int,
@@ -484,6 +486,7 @@ pub fn get_track_segments(
 // Track names
 
 ///|
+/// Returns the display name of the track for the given cup and race index.
 pub fn get_track_name(cup : Int, race : Int) -> String {
   let track_id = cup * 4 + race
   if track_id == 0 {
@@ -524,6 +527,7 @@ pub fn get_track_name(cup : Int, race : Int) -> String {
 // Cup names
 
 ///|
+/// Returns the display name of the cup championship for the given cup index.
 pub fn get_cup_name(cup : Int) -> String {
   if cup == 0 {
     "Mushroom Cup"
@@ -539,6 +543,7 @@ pub fn get_cup_name(cup : Int) -> String {
 // Cup difficulty levels (AI difficulty for each cup)
 
 ///|
+/// Returns the AI difficulty level for the given cup index.
 pub fn get_cup_difficulty(cup : Int) -> Int {
   if cup == 0 {
     0 // Easy
@@ -554,6 +559,7 @@ pub fn get_cup_difficulty(cup : Int) -> Int {
 // Track theme index
 
 ///|
+/// Returns the visual theme index for the given track.
 pub fn get_track_theme(cup : Int, race : Int) -> Int {
   let track_id = cup * 4 + race
   if track_id == 0 {
@@ -607,6 +613,7 @@ pub fn get_track_theme(cup : Int, race : Int) -> Int {
 // Track ground colors for variety
 
 ///|
+/// Returns the RGB ground plane color for the given track based on its theme.
 pub fn get_track_ground_color(cup : Int, race : Int) -> (Int, Int, Int) {
   let theme = get_track_theme(cup, race)
   if theme < @types.theme_ground_colors.length() {
@@ -619,6 +626,7 @@ pub fn get_track_ground_color(cup : Int, race : Int) -> (Int, Int, Int) {
 // Track road colors
 
 ///|
+/// Returns the RGB road surface color for the given track.
 pub fn get_track_road_color(cup : Int, race : Int) -> (Int, Int, Int) {
   let track_id = cup * 4 + race
   if track_id == 9 {
@@ -641,6 +649,7 @@ pub fn get_track_road_color(cup : Int, race : Int) -> (Int, Int, Int) {
 // Track sky colors
 
 ///|
+/// Returns the RGB sky background color for the given track based on its theme.
 pub fn get_track_sky_color(cup : Int, race : Int) -> (Int, Int, Int) {
   let theme = get_track_theme(cup, race)
   if theme < @types.theme_sky_colors.length() {
@@ -653,6 +662,7 @@ pub fn get_track_sky_color(cup : Int, race : Int) -> (Int, Int, Int) {
 // Lap count per track (most are 3, some special tracks differ)
 
 ///|
+/// Returns the number of laps required to complete the given track.
 pub fn get_track_laps(cup : Int, race : Int) -> Int {
   let track_id = cup * 4 + race
   if track_id == 12 || track_id == 15 {
@@ -665,6 +675,7 @@ pub fn get_track_laps(cup : Int, race : Int) -> Int {
 // AI racing line offset per track (how far off center the ideal line is)
 
 ///|
+/// Returns the lateral racing line offset for AI karts at the given waypoint on the track.
 pub fn get_ai_line_offset(cup : Int, race : Int, waypoint_idx : Int) -> Float {
   let track_id = cup * 4 + race
   // Alternate slightly left/right for more natural driving
@@ -688,6 +699,7 @@ pub fn get_ai_line_offset(cup : Int, race : Int, waypoint_idx : Int) -> Float {
 // Cup race count descriptions
 
 ///|
+/// Returns a short description of the cup championship's track count and difficulty.
 pub fn get_cup_description(cup : Int) -> String {
   if cup == 0 {
     "4 beginner tracks"
@@ -703,6 +715,7 @@ pub fn get_cup_description(cup : Int) -> String {
 // Track description for preview
 
 ///|
+/// Returns a short flavor text description of the track for the preview screen.
 pub fn get_track_description(cup : Int, race : Int) -> String {
   let track_id = cup * 4 + race
   if track_id == 0 {
@@ -744,6 +757,7 @@ pub fn get_track_description(cup : Int, race : Int) -> String {
 // x_offset is relative to track edge, z_offset is along segment
 
 ///|
+/// Returns the trackside decoration placement data for the given track.
 pub fn get_track_decoration_data(
   cup : Int,
   race : Int,
@@ -910,6 +924,7 @@ pub fn get_track_decoration_data(
 // Positive = right side, negative = left side of track centerline
 
 ///|
+/// Returns the per-waypoint lateral offset array for AI racing line targeting on the given track.
 pub fn get_ai_waypoint_offsets(cup : Int, race : Int) -> Array[Float] {
   let track_id = cup * 4 + race
   if track_id == 0 {
@@ -966,6 +981,7 @@ pub fn get_ai_waypoint_offsets(cup : Int, race : Int) -> Array[Float] {
 // Track record holder names (fictional)
 
 ///|
+/// Returns the fictional record holder name for the given track.
 pub fn get_track_record_holder(cup : Int, race : Int) -> String {
   let track_id = cup * 4 + race
   if track_id == 0 {
@@ -1006,6 +1022,7 @@ pub fn get_track_record_holder(cup : Int, race : Int) -> String {
 // Get track record time for display
 
 ///|
+/// Returns the preset track record lap time in seconds for the given track.
 pub fn get_track_record_time(cup : Int, race : Int) -> Float {
   let track_id = cup * 4 + race
   if track_id < @types.track_record_times.length() {
@@ -1018,6 +1035,7 @@ pub fn get_track_record_time(cup : Int, race : Int) -> Float {
 // Get track difficulty rating (1-5)
 
 ///|
+/// Returns the difficulty rating from 1 to 5 for the given track.
 pub fn get_track_difficulty(cup : Int, race : Int) -> Int {
   let track_id = cup * 4 + race
   if track_id < @types.track_difficulty_ratings.length() {
@@ -1030,6 +1048,7 @@ pub fn get_track_difficulty(cup : Int, race : Int) -> Int {
 // Get track length estimate (sum of waypoint segment distances)
 
 ///|
+/// Returns the estimated track length in meters by summing all waypoint segment distances.
 pub fn get_track_length_estimate(cup : Int, race : Int) -> Float {
   let wps = get_track_waypoints(cup, race)
   let count = wps.length()
@@ -1052,6 +1071,7 @@ pub fn get_track_length_estimate(cup : Int, race : Int) -> Float {
 // Get track surface variety description
 
 ///|
+/// Returns a short description of the track's primary surface type.
 pub fn get_track_surface_info(cup : Int, race : Int) -> String {
   let track_id = cup * 4 + race
   if track_id == 0 || track_id == 2 {
@@ -1088,6 +1108,7 @@ pub fn get_track_surface_info(cup : Int, race : Int) -> String {
 // Get number of item boxes on track
 
 ///|
+/// Returns the number of item box pickups placed on the given track.
 pub fn get_track_item_box_count(cup : Int, race : Int) -> Int {
   let track_id = cup * 4 + race
   if track_id == 0 || track_id == 2 || track_id == 3 {
@@ -1110,6 +1131,7 @@ pub fn get_track_item_box_count(cup : Int, race : Int) -> Int {
 // Get track elevation change description
 
 ///|
+/// Returns a description of the track's elevation profile such as flat, hills, or steep climbs.
 pub fn get_track_elevation_info(cup : Int, race : Int) -> String {
   let track_id = cup * 4 + race
   if track_id == 0 ||
@@ -1137,6 +1159,7 @@ pub fn get_track_elevation_info(cup : Int, race : Int) -> String {
 // Get theme-specific sky gradient secondary color for rendering
 
 ///|
+/// Returns the RGB secondary sky gradient color for the given track's theme.
 pub fn get_sky_gradient_color(cup : Int, race : Int) -> (Int, Int, Int) {
   let theme = get_track_theme(cup, race)
   if theme == @types.theme_circuit {
@@ -1163,6 +1186,7 @@ pub fn get_sky_gradient_color(cup : Int, race : Int) -> (Int, Int, Int) {
 // Get horizon fog color per theme
 
 ///|
+/// Returns the RGB horizon fog color for the given track's theme.
 pub fn get_fog_color(cup : Int, race : Int) -> (Int, Int, Int) {
   let theme = get_track_theme(cup, race)
   if theme == @types.theme_circuit {

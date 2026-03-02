@@ -49,6 +49,7 @@ fn get_item_display_color(item_type : Int) -> (Int, Int, Int) {
 }
 
 ///|
+/// Draws all UI elements appropriate for the current game state.
 pub fn draw_ui(game : @types.Game) -> Unit {
   match game.state {
     Menu => draw_menu(game)
@@ -915,6 +916,7 @@ fn draw_cup_results(game : @types.Game) -> Unit {
 // Draw best lap time display during racing
 
 ///|
+/// Draws the current lap time, best lap, track record, and individual lap history during racing.
 pub fn draw_lap_times(game : @types.Game) -> Unit {
   if game.state != Racing {
     return
@@ -989,6 +991,7 @@ pub fn draw_lap_times(game : @types.Game) -> Unit {
 // Draw enhanced item indicator with icon and count
 
 ///|
+/// Draws the held powerup indicator box with item name, color, and usage hint.
 pub fn draw_item_indicator(game : @types.Game) -> Unit {
   let kart = game.karts[@types.player_kart]
   if not(kart.active) {
@@ -1049,6 +1052,7 @@ pub fn draw_item_indicator(game : @types.Game) -> Unit {
 // Draw race results with detailed breakdown
 
 ///|
+/// Draws the detailed player performance summary panel on the race complete screen.
 pub fn draw_detailed_race_results(game : @types.Game) -> Unit {
   if game.state != RaceComplete {
     return
@@ -1145,6 +1149,7 @@ pub fn draw_detailed_race_results(game : @types.Game) -> Unit {
 // Draw track preview info panel
 
 ///|
+/// Draws the track preview information panel with difficulty, surface, laps, and record data.
 pub fn draw_track_preview_panel(game : @types.Game) -> Unit {
   if game.state != TrackPreview {
     return
@@ -1341,6 +1346,7 @@ pub fn draw_track_preview_panel(game : @types.Game) -> Unit {
 // Draw position standings sidebar during race
 
 ///|
+/// Draws the race position standings sidebar showing all kart placements during racing.
 pub fn draw_standings_sidebar(game : @types.Game) -> Unit {
   if game.state != Racing {
     return

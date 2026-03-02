@@ -1,6 +1,7 @@
 // Main game update dispatcher
 
 ///|
+/// Updates all game systems for the current frame based on the active game state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   update_particles(game, dt)

@@ -1,6 +1,7 @@
 // Track loading and race management
 
 ///|
+/// Loads a track by cup and race index, resetting all entity pools and spawning karts and powerups.
 pub fn load_track(game : @types.Game, cup : Int, race : Int) -> Unit {
   let wp_data = @levels.get_track_waypoints(cup, race)
   game.waypoint_count = @types.clampi(wp_data.length(), 0, @types.max_waypoints)
@@ -139,6 +140,7 @@ fn spawn_track_powerups(game : @types.Game) -> Unit {
 // Update waypoint tracking for a kart
 
 ///|
+/// Updates the waypoint index, segment progress, and lap count for the specified kart.
 pub fn update_kart_waypoint(game : @types.Game, kart_idx : Int) -> Unit {
   let kart = game.karts[kart_idx]
   if not(kart.active) || kart.finished {
@@ -189,6 +191,7 @@ pub fn update_kart_waypoint(game : @types.Game, kart_idx : Int) -> Unit {
 // Update race positions
 
 ///|
+/// Updates race position rankings for all karts based on progress and finish times.
 pub fn update_positions(game : @types.Game) -> Unit {
   // Simple bubble sort by total_progress (descending = better position)
   let positions : Array[Int] = []
@@ -230,6 +233,7 @@ pub fn update_positions(game : @types.Game) -> Unit {
 // Check if all karts finished
 
 ///|
+/// Returns whether all active karts have crossed the finish line.
 pub fn all_karts_finished(game : @types.Game) -> Bool {
   for i in 0..<@types.max_karts {
     if game.karts[i].active && not(game.karts[i].finished) {
@@ -242,6 +246,7 @@ pub fn all_karts_finished(game : @types.Game) -> Bool {
 // Check if player finished
 
 ///|
+/// Returns whether the player's kart has finished the race.
 pub fn player_finished(game : @types.Game) -> Bool {
   game.karts[@types.player_kart].finished
 }
@@ -249,6 +254,7 @@ pub fn player_finished(game : @types.Game) -> Bool {
 // Get ground height at position (interpolate from nearby waypoints)
 
 ///|
+/// Returns the interpolated ground height at the given world position from nearby waypoints.
 pub fn get_ground_height(game : @types.Game, x : Float, z : Float) -> Float {
   let wc = game.waypoint_count
   if wc < 2 {
@@ -283,6 +289,7 @@ pub fn get_ground_height(game : @types.Game, x : Float, z : Float) -> Float {
 // Apply finish-race scoring
 
 ///|
+/// Awards cup championship points to all karts based on their finishing positions.
 pub fn apply_race_results(game : @types.Game) -> Unit {
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
@@ -293,6 +300,7 @@ pub fn apply_race_results(game : @types.Game) -> Unit {
 // Reset cup points
 
 ///|
+/// Resets all cup championship point totals to zero for a new cup series.
 pub fn reset_cup_points(game : @types.Game) -> Unit {
   for i in 0..<@types.max_karts {
     game.cup_points[i] = 0
@@ -302,6 +310,7 @@ pub fn reset_cup_points(game : @types.Game) -> Unit {
 // Update powerup respawns
 
 ///|
+/// Updates respawn countdown timers for collected powerup pickups on the track.
 pub fn update_powerup_respawns(game : @types.Game, dt : Float) -> Unit {
   for pu in game.powerups {
     if not(pu.active) {
@@ -320,6 +329,7 @@ pub fn update_powerup_respawns(game : @types.Game, dt : Float) -> Unit {
 // Check kart-powerup collisions
 
 ///|
+/// Checks collisions between karts and item box pickups, granting powerups on contact.
 pub fn check_powerup_collisions(game : @types.Game) -> Unit {
   for ki in 0..<@types.max_karts {
     let kart = game.karts[ki]
@@ -348,6 +358,7 @@ pub fn check_powerup_collisions(game : @types.Game) -> Unit {
 // Update projectiles
 
 ///|
+/// Updates movement, lifetime, and kart collision detection for all active projectiles.
 pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
   for proj in game.projectiles {
     if not(proj.active) {
@@ -413,6 +424,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
 // Update particles
 
 ///|
+/// Updates position, velocity, and lifetime for all active visual particles.
 pub fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
     if not(p.active) {

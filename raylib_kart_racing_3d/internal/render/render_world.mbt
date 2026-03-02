@@ -1,6 +1,7 @@
 // 3D world rendering
 
 ///|
+/// Draws the complete 3D world including track, karts, items, particles, and visual effects.
 pub fn draw_world(game : @types.Game) -> Unit {
   let camera = build_camera(game)
   @raylib.begin_mode_3d(camera)

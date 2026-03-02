@@ -1,6 +1,7 @@
 // Game states
 
 ///|
+/// Possible states of the game state machine.
 pub(all) enum GameState {
   Menu
   Countdown
@@ -15,6 +16,7 @@ pub(all) enum GameState {
 // Waypoint for track definition
 
 ///|
+/// A 3D position along the track centerline.
 pub(all) struct Waypoint {
   x : Float
   y : Float
@@ -24,6 +26,7 @@ pub(all) struct Waypoint {
 // Track segment metadata
 
 ///|
+/// Metadata for a segment between two waypoints describing surface, geometry, and features.
 pub(all) struct TrackSegment {
   mut seg_type : Int
   mut surface_type : Int
@@ -36,6 +39,7 @@ pub(all) struct TrackSegment {
 }
 
 ///|
+/// Creates a default track segment with straight road and standard width.
 pub fn TrackSegment::default() -> TrackSegment {
   {
     seg_type: seg_straight,
@@ -52,6 +56,7 @@ pub fn TrackSegment::default() -> TrackSegment {
 // Kart entity
 
 ///|
+/// Kart entity with physics, item state, drift mechanics, and AI fields.
 pub(all) struct Kart {
   mut active : Bool
   mut character_id : Int
@@ -106,6 +111,7 @@ pub(all) struct Kart {
 }
 
 ///|
+/// Creates an inactive kart with all fields zeroed.
 pub fn Kart::inactive() -> Kart {
   {
     active: false,
@@ -163,6 +169,7 @@ pub fn Kart::inactive() -> Kart {
 // Powerup pickup on track
 
 ///|
+/// Item box pickup placed on the track surface.
 pub(all) struct Powerup {
   mut active : Bool
   mut x : Float
@@ -175,6 +182,7 @@ pub(all) struct Powerup {
 }
 
 ///|
+/// Creates an inactive powerup pickup.
 pub fn Powerup::inactive() -> Powerup {
   {
     active: false,
@@ -191,6 +199,7 @@ pub fn Powerup::inactive() -> Powerup {
 // Dropped item on track (banana, oil slick)
 
 ///|
+/// A dropped hazard item placed on the track by a kart.
 pub(all) struct DroppedItem {
   mut active : Bool
   mut item_type : Int
@@ -203,6 +212,7 @@ pub(all) struct DroppedItem {
 }
 
 ///|
+/// Creates an inactive dropped item.
 pub fn DroppedItem::inactive() -> DroppedItem {
   {
     active: false,
@@ -219,6 +229,7 @@ pub fn DroppedItem::inactive() -> DroppedItem {
 // Projectile (missile)
 
 ///|
+/// A homing missile projectile in flight.
 pub(all) struct Projectile {
   mut active : Bool
   mut x : Float
@@ -233,6 +244,7 @@ pub(all) struct Projectile {
 }
 
 ///|
+/// Creates an inactive projectile.
 pub fn Projectile::inactive() -> Projectile {
   {
     active: false,
@@ -251,6 +263,7 @@ pub fn Projectile::inactive() -> Projectile {
 // Particle
 
 ///|
+/// A visual particle for effects like sparks, dust, and explosions.
 pub(all) struct Particle {
   mut active : Bool
   mut particle_type : Int
@@ -271,27 +284,35 @@ pub(all) struct Particle {
 // Particle types
 
 ///|
+/// Particle type ID for drift spark effects.
 pub let particle_drift_spark : Int = 0
 
 ///|
+/// Particle type ID for boost exhaust flame.
 pub let particle_boost_flame : Int = 1
 
 ///|
+/// Particle type ID for surface dust trail.
 pub let particle_dust : Int = 2
 
 ///|
+/// Particle type ID for liquid splash effect.
 pub let particle_splash : Int = 3
 
 ///|
+/// Particle type ID for explosion burst.
 pub let particle_explosion : Int = 4
 
 ///|
+/// Particle type ID for star power sparkle.
 pub let particle_star_sparkle : Int = 5
 
 ///|
+/// Particle type ID for lightning strike effect.
 pub let particle_lightning : Int = 6
 
 ///|
+/// Creates an inactive particle with default values.
 pub fn Particle::inactive() -> Particle {
   {
     active: false,
@@ -314,6 +335,7 @@ pub fn Particle::inactive() -> Particle {
 // Cup standings
 
 ///|
+/// Accumulated cup championship point totals.
 pub(all) struct CupStanding {
   mut points : Array[Int]
 }
@@ -321,6 +343,7 @@ pub(all) struct CupStanding {
 // Track data for a single track
 
 ///|
+/// Complete definition of a single race track.
 pub(all) struct TrackData {
   mut track_name : String
   mut theme : Int
@@ -330,6 +353,7 @@ pub(all) struct TrackData {
 }
 
 ///|
+/// Creates a default track data with placeholder values.
 pub fn TrackData::default() -> TrackData {
   {
     track_name: "Unknown",
@@ -343,6 +367,7 @@ pub fn TrackData::default() -> TrackData {
 // Race result for a single kart
 
 ///|
+/// Final result for a single kart at the end of a race.
 pub(all) struct RaceResult {
   mut kart_index : Int
   mut position : Int
@@ -352,6 +377,7 @@ pub(all) struct RaceResult {
 }
 
 ///|
+/// Creates a default race result with zeroed values.
 pub fn RaceResult::default() -> RaceResult {
   {
     kart_index: 0,
@@ -365,6 +391,7 @@ pub fn RaceResult::default() -> RaceResult {
 // Main Game struct
 
 ///|
+/// Root game state containing all race, entity, camera, and UI data.
 pub(all) struct Game {
   mut state : GameState
 
@@ -438,6 +465,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a new game instance with default initial state.
 pub fn Game::new() -> Game {
   {
     state: Menu,
