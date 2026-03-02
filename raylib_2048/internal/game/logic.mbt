@@ -6,7 +6,6 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-#as_free_fn(deprecated)
 fn @types.Game::reset(game : @types.Game) -> Unit {
   for i in 0..<@types.cell_count {
     game.tiles[i].value = 0
@@ -27,7 +26,6 @@ fn @types.Game::reset(game : @types.Game) -> Unit {
 }
 
 ///|
-#as_free_fn(deprecated)
 fn @types.Game::snap_positions(game : @types.Game) -> Unit {
   for r in 0..<@types.grid_size {
     for c in 0..<@types.grid_size {
@@ -43,7 +41,6 @@ fn @types.Game::snap_positions(game : @types.Game) -> Unit {
 }
 
 ///|
-#as_free_fn(deprecated)
 fn @types.Game::spawn_tile(game : @types.Game) -> Unit {
   let empty : Array[Int] = []
   for i in 0..<@types.cell_count {
@@ -69,7 +66,6 @@ fn @types.Game::spawn_tile(game : @types.Game) -> Unit {
 }
 
 ///|
-#as_free_fn(deprecated)
 fn @types.Game::save_state(game : @types.Game) -> Unit {
   for i in 0..<@types.cell_count {
     game.prev_values[i] = game.tiles[i].value
@@ -79,7 +75,6 @@ fn @types.Game::save_state(game : @types.Game) -> Unit {
 }
 
 ///|
-#as_free_fn(deprecated)
 fn @types.Game::undo(game : @types.Game) -> Unit {
   if not(game.can_undo) {
     return
@@ -101,7 +96,6 @@ fn @types.Game::undo(game : @types.Game) -> Unit {
 }
 
 ///|
-#as_free_fn(deprecated)
 fn @types.Game::try_move(game : @types.Game, dr : Int, dc : Int) -> Bool {
   let old_can_undo = game.can_undo
   let old_prev_score = game.prev_score
@@ -241,7 +235,6 @@ fn @types.Game::try_move(game : @types.Game, dr : Int, dc : Int) -> Bool {
 }
 
 ///|
-#as_free_fn(deprecated)
 fn @types.Game::has_moves(game : @types.Game) -> Bool {
   for i in 0..<@types.cell_count {
     if game.tiles[i].value == 0 {
@@ -265,7 +258,34 @@ fn @types.Game::has_moves(game : @types.Game) -> Bool {
 }
 
 ///|
-#as_free_fn(deprecated)
+/// Drives the per-frame animation that makes tiles slide and pop visually.
+///
+/// **How the animation system works:**
+/// `try_move` sets each tile's starting position (`anim_x/y`) and destination
+/// (`target_x/y`), plus an initial `scale` (0.0 for spawns, 1.15 for merges).
+/// This function is called every frame to lerp those values a little closer to
+/// their targets. `draw_board` then reads `anim_x/y` and `scale` to render
+/// each tile, so repeating this over many frames produces smooth motion.
+///
+/// **Two independent animations per tile:**
+///
+/// 1. **Slide** — `anim_x/y` lerp toward `target_x/y` at rate
+///    `anim_slide_speed * dt` (clamped to 0..1). Snaps when within 0.5 px.
+///
+/// 2. **Scale pop** — `scale` lerps toward 1.0 at rate `anim_pop_speed * dt`.
+///    Snaps and clears `is_new`/`is_merged` when within 0.02 of 1.0.
+///
+/// **Mutated state per tile:**
+/// - `tile.anim_x`, `tile.anim_y` — lerped toward `target_x/y` (slide)
+/// - `tile.scale` — lerped toward 1.0 (pop)
+/// - `tile.is_new` — cleared when scale settles
+/// - `tile.is_merged` — cleared when scale settles
+///
+/// **Mutated state on Game:**
+/// - `game.animating` — true while any tile still moving/scaling,
+///   blocks player input in `handle_play_input`
+/// - `game.msg_t` — decremented by `dt` each frame
+/// - `game.msg` — cleared when `msg_t` reaches zero
 fn @types.Game::update_animations(game : @types.Game, dt : Float) -> Unit {
   let mut all_done = true
   for i in 0..<@types.cell_count {

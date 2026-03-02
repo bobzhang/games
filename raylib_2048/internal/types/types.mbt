@@ -39,18 +39,27 @@ pub fn Tile::new() -> Tile {
 ///|
 /// Entire runtime state for one 2048 session.
 pub(all) struct Game {
-  ///
+  /// 4x4 board stored as a flat 16-element array (row-major order).
   tiles : Array[Tile]
-  ///
+  /// Snapshot of tile values before the last move, used for undo.
   prev_values : Array[Int]
+  /// Current phase of the game (title screen, playing, won, or game over).
   mut state : GameState
+  /// Points earned in the current session from merging tiles.
   mut score : Int
+  /// Highest score ever reached across all sessions.
   mut best_score : Int
+  /// Score before the last move, restored on undo.
   mut prev_score : Int
+  /// Whether an undo operation is available.
   mut can_undo : Bool
+  /// True while tile slide/pop animations are still interpolating.
   mut animating : Bool
+  /// Temporary status message shown to the player (e.g. "Undo").
   mut msg : String
+  /// Seconds remaining before the status message fades out.
   mut msg_t : Float
+  /// When true the player continues after reaching 2048.
   mut keep_playing : Bool
   fn new() -> Game
 }

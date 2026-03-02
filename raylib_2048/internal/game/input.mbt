@@ -1,5 +1,4 @@
 ///|
-#as_free_fn(deprecated)
 fn @types.Game::handle_input(game : @types.Game) -> Unit {
   match game.state {
     Title => game.handle_title_input()
@@ -10,7 +9,6 @@ fn @types.Game::handle_input(game : @types.Game) -> Unit {
 }
 
 ///|
-#as_free_fn(deprecated)
 fn @types.Game::handle_title_input(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
@@ -32,7 +30,6 @@ fn @types.Game::handle_title_input(game : @types.Game) -> Unit {
 }
 
 ///|
-#as_free_fn(deprecated)
 fn @types.Game::handle_play_input(game : @types.Game) -> Unit {
   if game.animating {
     return
@@ -75,7 +72,6 @@ fn @types.Game::handle_play_input(game : @types.Game) -> Unit {
 }
 
 ///|
-#as_free_fn(deprecated)
 fn @types.Game::handle_won_input(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
@@ -106,7 +102,6 @@ fn @types.Game::handle_won_input(game : @types.Game) -> Unit {
 }
 
 ///|
-#as_free_fn(deprecated)
 fn @types.Game::handle_over_input(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyR) ||
     @raylib.is_key_pressed(@raylib.KeyEnter) {

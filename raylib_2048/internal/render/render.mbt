@@ -22,7 +22,6 @@ pub fn draw_frame(game : @types.Game) -> Unit {
 }
 
 ///|
-#as_free_fn(deprecated)
 fn @types.Game::draw_title(_game : @types.Game) -> Unit {
   let cx = @types.screen_w / 2
   let title = "2048"
@@ -78,7 +77,6 @@ fn @types.Game::draw_title(_game : @types.Game) -> Unit {
 }
 
 ///|
-#as_free_fn(deprecated)
 fn @types.Game::draw_header(game : @types.Game) -> Unit {
   @raylib.draw_text(
     "2048",
@@ -180,7 +178,6 @@ fn draw_score_box(
 }
 
 ///|
-#as_free_fn(deprecated)
 fn @types.Game::draw_board(game : @types.Game) -> Unit {
   let bs = Float::from_int(@types.board_size)
   @raylib.draw_rectangle_rounded(
@@ -230,7 +227,6 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
 }
 
 ///|
-#as_free_fn(deprecated)
 fn @types.Game::draw_overlay_won(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.board_left,
