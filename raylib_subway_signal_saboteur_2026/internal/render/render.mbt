@@ -24,9 +24,9 @@ fn pulse(game : @types.Game, f : Float) -> Float {
 ///|
 fn train_target_color(id : @types.TrainColor) -> @raylib.Color {
   match id {
-    @types.Red => @raylib.Color::new(250, 154, 144, 246)
-    @types.Blue => @raylib.Color::new(144, 214, 254, 246)
-    @types.Green => @raylib.Color::new(182, 236, 166, 246)
+    Red => @raylib.Color::new(250, 154, 144, 246)
+    Blue => @raylib.Color::new(144, 214, 254, 246)
+    Green => @raylib.Color::new(182, 236, 166, 246)
   }
 }
 
@@ -71,7 +71,7 @@ fn draw_tiles(game : @types.Game, ox : Int, oy : Int) -> Unit {
       let ry : Int = @types.board_py(y) + oy
 
       match @types.tile_at(game, x, y) {
-        @types.Wall => {
+        Wall => {
           let tone : Int = if (x + y) % 2 == 0 { 56 } else { 64 }
           @raylib.draw_rectangle(
             rx,
@@ -88,7 +88,7 @@ fn draw_tiles(game : @types.Game, ox : Int, oy : Int) -> Unit {
             @raylib.Color::new(84, 66, 64, 226),
           )
         }
-        @types.Track => {
+        Track => {
           @raylib.draw_rectangle(
             rx,
             ry,
@@ -270,9 +270,9 @@ fn draw_inspectors(game : @types.Game, ox : Int, oy : Int) -> Unit {
     let cy : Int = @types.cell_center_y(inspector.body.fy) + oy
 
     let col = match inspector.mode {
-      @types.Stunned => @raylib.Color::new(164, 144, 248, 228)
-      @types.Hunt => @raylib.Color::new(250, 144, 164, 232)
-      @types.Patrol => @raylib.Color::new(238, 202, 154, 232)
+      Stunned => @raylib.Color::new(164, 144, 248, 228)
+      Hunt => @raylib.Color::new(250, 144, 164, 232)
+      Patrol => @raylib.Color::new(238, 202, 154, 232)
     }
 
     @raylib.draw_circle(cx, cy - 8, 13.0, col)
@@ -291,7 +291,7 @@ fn draw_inspectors(game : @types.Game, ox : Int, oy : Int) -> Unit {
       @raylib.Color::new(30, 42, 62, 255),
     )
 
-    if inspector.mode == @types.Hunt {
+    if inspector.mode == Hunt {
       @raylib.draw_circle_lines(
         cx,
         cy - 2,
@@ -334,9 +334,9 @@ fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
     }
 
     let col = match particle.kind {
-      @types.Smoke => @raylib.Color::new(194, 170, 246, 186)
-      @types.Gold => @raylib.Color::new(248, 224, 152, 192)
-      @types.Spark => @raylib.Color::new(170, 220, 252, 168)
+      Smoke => @raylib.Color::new(194, 170, 246, 186)
+      Gold => @raylib.Color::new(248, 224, 152, 192)
+      Spark => @raylib.Color::new(170, 220, 252, 168)
     }
 
     @raylib.draw_circle(
@@ -419,7 +419,7 @@ fn draw_touch_button(
 
 ///|
 fn draw_touch_controls(game : @types.Game) -> Unit {
-  if game.state != @types.Play {
+  if game.state != Play {
     return
   }
 
@@ -908,8 +908,8 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   draw_touch_controls(game)
 
   match game.state {
-    @types.Title => draw_title_overlay(game)
-    @types.Result => draw_result_overlay(game)
-    @types.Play => ()
+    Title => draw_title_overlay(game)
+    Result => draw_result_overlay(game)
+    Play => ()
   }
 }

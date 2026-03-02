@@ -8,7 +8,7 @@ fn clear_particles(game : @types.Game) -> Unit {
     particle.vy = 0.0
     particle.life = 0.0
     particle.size = 0.0
-    particle.kind = @types.Spark
+    particle.kind = Spark
   }
 }
 
@@ -79,12 +79,12 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
     particle.y = particle.y + particle.vy * dt
 
     let drag : Float = match particle.kind {
-      @types.Smoke => 2.8
+      Smoke => 2.8
       _ => 2.1
     }
     particle.vx = particle.vx * (1.0 - drag * dt)
     let gravity : Float = match particle.kind {
-      @types.Gold => 84.0
+      Gold => 84.0
       _ => 118.0
     }
     particle.vy = particle.vy * (1.0 - (drag - 0.4) * dt) + dt * gravity
@@ -96,9 +96,9 @@ fn build_map(game : @types.Game) -> Unit {
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
       if x == 0 || x == @types.grid_w - 1 || y == 0 || y == @types.grid_h - 1 {
-        @types.set_tile(game, x, y, @types.Wall)
+        @types.set_tile(game, x, y, Wall)
       } else {
-        @types.set_tile(game, x, y, @types.Floor)
+        @types.set_tile(game, x, y, Floor)
       }
     }
   }
@@ -106,7 +106,7 @@ fn build_map(game : @types.Game) -> Unit {
   for lane in 0..<@types.train_lane_n {
     let ry : Int = @types.lane_to_y(lane)
     for x in 1..<(@types.grid_w - 1) {
-      @types.set_tile(game, x, ry, @types.Track)
+      @types.set_tile(game, x, ry, Track)
     }
   }
 
@@ -115,20 +115,20 @@ fn build_map(game : @types.Game) -> Unit {
       continue
     }
 
-    @types.set_tile(game, x, 3, @types.Wall)
-    @types.set_tile(game, x, 9, @types.Wall)
+    @types.set_tile(game, x, 3, Wall)
+    @types.set_tile(game, x, 9, Wall)
   }
 
   for i in 0..<@types.junction_n {
     let jx : Int = @types.junction_x(i)
-    @types.set_tile(game, jx, @types.signal_panel_top_y(), @types.Floor)
-    @types.set_tile(game, jx, @types.signal_panel_bottom_y(), @types.Floor)
+    @types.set_tile(game, jx, @types.signal_panel_top_y(), Floor)
+    @types.set_tile(game, jx, @types.signal_panel_bottom_y(), Floor)
 
-    @types.set_tile(game, jx, 3, @types.Floor)
-    @types.set_tile(game, jx, 9, @types.Floor)
+    @types.set_tile(game, jx, 3, Floor)
+    @types.set_tile(game, jx, 9, Floor)
   }
 
-  @types.set_tile(game, @types.start_x, @types.start_y, @types.Floor)
+  @types.set_tile(game, @types.start_x, @types.start_y, Floor)
 }
 
 ///|
@@ -141,7 +141,7 @@ fn init_inspectors(game : @types.Game) -> Unit {
 
   for i in 0..<game.inspectors.length() {
     game.inspectors[i].active = i < plan.length()
-    game.inspectors[i].mode = @types.Patrol
+    game.inspectors[i].mode = Patrol
     game.inspectors[i].move_cd = @types.randf(0.05, 0.30)
     game.inspectors[i].stun_t = 0.0
     game.inspectors[i].alert_t = 0.0
@@ -173,7 +173,7 @@ fn clear_trains(game : @types.Game) -> Unit {
     train.target_lane = 0
     train.speed = 0.0
     train.passed_junction = -1
-    train.color_id = @types.Red
+    train.color_id = Red
   }
 }
 
@@ -190,7 +190,7 @@ fn start_run(game : @types.Game) -> Unit {
     game.switch_state[i] = 0
   }
 
-  game.state = @types.Play
+  game.state = Play
   game.win = false
   game.loss_reason = ""
 
@@ -226,7 +226,7 @@ fn start_run(game : @types.Game) -> Unit {
 
 ///|
 fn go_title(game : @types.Game) -> Unit {
-  game.state = @types.Title
+  game.state = Title
   game.req_dx = 0
   game.req_dy = 0
   game.action_down = false
@@ -238,11 +238,11 @@ fn go_title(game : @types.Game) -> Unit {
 
 ///|
 fn finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
-  if game.state != @types.Play {
+  if game.state != Play {
     return
   }
 
-  game.state = @types.Result
+  game.state = Result
   game.win = win
   game.loss_reason = reason
   game.req_dx = 0
@@ -259,7 +259,7 @@ fn finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
         @types.cell_center_y(Float::from_int(@types.lane_to_y(1))),
       ),
       72,
-      @types.Gold,
+      Gold,
     )
   } else {
     @types.set_msg(game, "Signal operation failed.", 2.6)
@@ -279,11 +279,11 @@ fn cycle_hint(game : @types.Game) -> Unit {
 ///|
 fn train_color_from_target(target_lane : Int) -> @types.TrainColor {
   if target_lane == 0 {
-    @types.Red
+    Red
   } else if target_lane == 1 {
-    @types.Blue
+    Blue
   } else {
-    @types.Green
+    Green
   }
 }
 
@@ -389,7 +389,7 @@ fn try_toggle_switch(game : @types.Game) -> Bool {
     ),
     Float::from_int(@types.cell_center_y(Float::from_int(game.player.y))),
     14,
-    @types.Spark,
+    Spark,
   )
 
   true
@@ -407,7 +407,7 @@ fn deploy_emp(game : @types.Game) -> Bool {
 
   let mut hits : Int = 0
   for inspector in game.inspectors {
-    if not(inspector.active) || inspector.mode == @types.Stunned {
+    if not(inspector.active) || inspector.mode == Stunned {
       continue
     }
 
@@ -419,7 +419,7 @@ fn deploy_emp(game : @types.Game) -> Bool {
     )
 
     if d <= 2 {
-      inspector.mode = @types.Stunned
+      inspector.mode = Stunned
       inspector.stun_t = 2.2
       inspector.move_cd = 0.12
       hits = hits + 1
@@ -444,7 +444,7 @@ fn deploy_emp(game : @types.Game) -> Bool {
     Float::from_int(@types.cell_center_x(game.player.fx)),
     Float::from_int(@types.cell_center_y(game.player.fy)),
     36,
-    @types.Smoke,
+    Smoke,
   )
 
   true
@@ -457,8 +457,8 @@ fn blocked_for_actor(game : @types.Game, x : Int, y : Int) -> Bool {
   }
 
   match @types.tile_at(game, x, y) {
-    @types.Wall | @types.Void | @types.Track => true
-    @types.Floor => false
+    Wall | Void | Track => true
+    Floor => false
   }
 }
 
@@ -497,7 +497,7 @@ fn line_of_sight(
     let y_max : Int = @types.maxi(y0, y1)
     for y in (y_min + 1)..<y_max {
       match @types.tile_at(game, x0, y) {
-        @types.Wall | @types.Track => return false
+        Wall | Track => return false
         _ => ()
       }
     }
@@ -509,7 +509,7 @@ fn line_of_sight(
     let x_max : Int = @types.maxi(x0, x1)
     for x in (x_min + 1)..<x_max {
       match @types.tile_at(game, x, y0) {
-        @types.Wall | @types.Track => return false
+        Wall | Track => return false
         _ => ()
       }
     }
@@ -560,16 +560,16 @@ fn choose_inspector_step(game : @types.Game, i : Int) -> (Int, Int) {
   let sees : Bool = line_of_sight(game, gx, gy, px, py)
 
   if d <= 4 || (sees && d <= 8) {
-    g.mode = @types.Hunt
+    g.mode = Hunt
     g.alert_t = 1.2
   } else {
     g.alert_t = g.alert_t - 0.16
     if g.alert_t <= 0.0 {
-      g.mode = @types.Patrol
+      g.mode = Patrol
     }
   }
 
-  if g.mode == @types.Hunt {
+  if g.mode == Hunt {
     let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
     let mut best_i : Int = -1
     let mut best_d : Int = 999999
@@ -634,10 +634,10 @@ fn update_inspectors(game : @types.Game, dt : Float) -> Unit {
 
     @types.actor_tick(game.inspectors[i].body, dt, @types.inspector_move_t)
 
-    if game.inspectors[i].mode == @types.Stunned {
+    if game.inspectors[i].mode == Stunned {
       game.inspectors[i].stun_t = game.inspectors[i].stun_t - dt
       if game.inspectors[i].stun_t <= 0.0 {
-        game.inspectors[i].mode = @types.Patrol
+        game.inspectors[i].mode = Patrol
         game.inspectors[i].stun_t = 0.0
       }
     }
@@ -655,7 +655,7 @@ fn update_inspectors(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    if game.inspectors[i].mode == @types.Stunned {
+    if game.inspectors[i].mode == Stunned {
       game.inspectors[i].move_cd = 0.14
       continue
     }
@@ -711,7 +711,7 @@ fn update_trains(game : @types.Game, dt : Float) -> Unit {
             @types.cell_center_y(Float::from_int(@types.lane_to_y(train.lane))),
           ),
           14,
-          @types.Gold,
+          Gold,
         )
       } else {
         game.routed_bad = game.routed_bad + 1
@@ -729,7 +729,7 @@ fn update_trains(game : @types.Game, dt : Float) -> Unit {
             @types.cell_center_y(Float::from_int(@types.lane_to_y(train.lane))),
           ),
           24,
-          @types.Smoke,
+          Smoke,
         )
       }
 
@@ -779,7 +779,7 @@ fn resolve_train_collisions(game : @types.Game) -> Unit {
         Float::from_int(@types.cell_center_x(crash_x)),
         Float::from_int(@types.cell_center_y(crash_y)),
         42,
-        @types.Smoke,
+        Smoke,
       )
 
       break
@@ -794,7 +794,7 @@ fn handle_player_spotted(game : @types.Game) -> Unit {
   }
 
   for inspector in game.inspectors {
-    if not(inspector.active) || inspector.mode == @types.Stunned {
+    if not(inspector.active) || inspector.mode == Stunned {
       continue
     }
 
@@ -808,7 +808,7 @@ fn handle_player_spotted(game : @types.Game) -> Unit {
         Float::from_int(@types.cell_center_x(game.player.fx)),
         Float::from_int(@types.cell_center_y(game.player.fy)),
         30,
-        @types.Smoke,
+        Smoke,
       )
 
       if game.lives <= 0 {
@@ -891,11 +891,11 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   handle_player_spotted(game)
   update_particles(game, dt)
 
-  if game.state == @types.Play && game.routed_ok >= @types.goal_routed {
+  if game.state == Play && game.routed_ok >= @types.goal_routed {
     finish_run(game, true, "")
   }
 
-  if game.state == @types.Play && (game.lives <= 0 || game.time_left <= 0.0) {
+  if game.state == Play && (game.lives <= 0 || game.time_left <= 0.0) {
     let why : String = if game.lives <= 0 {
       "No lives remaining"
     } else {
@@ -923,15 +923,15 @@ fn update_result(game : @types.Game, dt : Float) -> Unit {
 /// Processes one simulation step: input phase, state update, and edge resets.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   match game.state {
-    @types.Title => update_title_input(game)
-    @types.Play => update_play_input(game)
-    @types.Result => update_result_input(game)
+    Title => update_title_input(game)
+    Play => update_play_input(game)
+    Result => update_result_input(game)
   }
 
   match game.state {
-    @types.Title => update_title(game, dt)
-    @types.Play => update_play(game, dt)
-    @types.Result => update_result(game, dt)
+    Title => update_title(game, dt)
+    Play => update_play(game, dt)
+    Result => update_result(game, dt)
   }
 
   game.action_pressed = false
