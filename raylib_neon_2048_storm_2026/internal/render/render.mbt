@@ -242,7 +242,7 @@ fn draw_grid(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
 ///|
 /// Draws the cursor selection rectangle, tinted gold when zap is ready.
 fn draw_cursor(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
-  if game.state != @types.Play {
+  if game.state != Play {
     return
   }
 
@@ -282,9 +282,9 @@ fn draw_sparks(game : @types.Game) -> Unit {
     }
 
     let c : @raylib.Color = match spark.kind {
-      @types.SparkExplosion => @raylib.Color::new(255, 180, 126, alpha)
-      @types.SparkMerge => @raylib.Color::new(142, 214, 255, alpha)
-      @types.SparkDefault => @raylib.Color::new(190, 234, 255, alpha)
+      SparkExplosion => @raylib.Color::new(255, 180, 126, alpha)
+      SparkMerge => @raylib.Color::new(142, 214, 255, alpha)
+      SparkDefault => @raylib.Color::new(190, 234, 255, alpha)
     }
 
     @raylib.draw_circle(spark.x.to_int(), spark.y.to_int(), 1.0 + spark.size, c)
@@ -335,7 +335,7 @@ fn draw_touch_button(
 ///|
 /// Draws the full set of on-screen directional and action touch buttons during play.
 fn draw_controls(game : @types.Game) -> Unit {
-  if game.state != @types.Play {
+  if game.state != Play {
     return
   }
 
@@ -820,7 +820,7 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_bg(game)
 
-  if game.state == @types.Title {
+  if game.state == Title {
     draw_title(game)
     return
   }
@@ -834,7 +834,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   draw_panel(game)
   draw_controls(game)
 
-  if game.state == @types.Result {
+  if game.state == Result {
     draw_result_overlay(game)
   }
 }

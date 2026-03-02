@@ -9,7 +9,7 @@ fn clear_effects(game : @types.Game) -> Unit {
     spark.vy = 0.0
     spark.life = 0.0
     spark.size = 0.0
-    spark.kind = @types.SparkDefault
+    spark.kind = SparkDefault
   }
 }
 
@@ -148,10 +148,10 @@ fn restore_undo(game : @types.Game) -> Bool {
 /// Maps a slide direction and line/position pair to a flat board index.
 fn line_index(line : Int, pos : Int, dir : @types.Direction) -> Int {
   match dir {
-    @types.DirLeft => @types.idx(pos, line)
-    @types.DirRight => @types.idx(@types.board_n - 1 - pos, line)
-    @types.DirUp => @types.idx(line, pos)
-    @types.DirDown => @types.idx(line, @types.board_n - 1 - pos)
+    DirLeft => @types.idx(pos, line)
+    DirRight => @types.idx(@types.board_n - 1 - pos, line)
+    DirUp => @types.idx(line, pos)
+    DirDown => @types.idx(line, @types.board_n - 1 - pos)
   }
 }
 
@@ -203,7 +203,7 @@ fn spawn_tile(game : @types.Game, kind : @types.SparkKind) -> Bool {
           wx,
           wy,
           match kind {
-            @types.SparkDefault => 10
+            SparkDefault => 10
             _ => 8
           },
           kind,
@@ -248,7 +248,7 @@ fn spawn_blocker(game : @types.Game) -> Bool {
         game.blockers_spawned = game.blockers_spawned + 1
 
         let (wx, wy) = @types.cell_world_center(game, x, y)
-        burst(game, wx, wy, 18, @types.SparkExplosion)
+        burst(game, wx, wy, 18, SparkExplosion)
         game.shake_t = @types.maxf(game.shake_t, 0.14)
         @types.set_msg(game, "Storm debris dropped", 0.9)
         return true
@@ -267,7 +267,7 @@ fn start_match(game : @types.Game) -> Unit {
   clear_board(game)
   clear_effects(game)
 
-  game.state = @types.Play
+  game.state = Play
   game.score = 0
   game.moves = 0
   game.max_tile = 0
@@ -292,8 +292,8 @@ fn start_match(game : @types.Game) -> Unit {
   game.shake_t = 0.0
   game.touch_cd = 0.0
 
-  ignore(spawn_tile(game, @types.SparkDefault))
-  ignore(spawn_tile(game, @types.SparkDefault))
+  ignore(spawn_tile(game, SparkDefault))
+  ignore(spawn_tile(game, SparkDefault))
 
   @types.set_msg(game, "Merge to 2048 before the storm locks your board.", 2.2)
 }
@@ -335,7 +335,7 @@ fn board_has_move(game : @types.Game) -> Bool {
 ///|
 /// Transitions the game to the win result screen and updates the best score.
 fn finish_win(game : @types.Game) -> Unit {
-  game.state = @types.Result
+  game.state = Result
   game.win = true
 
   if game.score > game.best_score {
@@ -348,7 +348,7 @@ fn finish_win(game : @types.Game) -> Unit {
 ///|
 /// Transitions the game to the loss result screen and updates the best score.
 fn finish_lose(game : @types.Game) -> Unit {
-  game.state = @types.Result
+  game.state = Result
   game.win = false
 
   if game.score > game.best_score {
@@ -466,7 +466,7 @@ fn process_line(
 ///|
 /// Attempts a full board slide in a direction; spawns a tile and triggers the storm countdown if anything changed.
 fn try_move(game : @types.Game, dir : @types.Direction) -> Bool {
-  if game.state != @types.Play {
+  if game.state != Play {
     return false
   }
 
@@ -516,7 +516,7 @@ fn try_move(game : @types.Game, dir : @types.Direction) -> Bool {
     @types.set_msg(game, "Combo x\{merge_count}", 0.7)
   }
 
-  ignore(spawn_tile(game, @types.SparkMerge))
+  ignore(spawn_tile(game, SparkMerge))
 
   game.turns_to_storm = game.turns_to_storm - 1
   if game.turns_to_storm <= 0 {
@@ -531,7 +531,7 @@ fn try_move(game : @types.Game, dir : @types.Direction) -> Bool {
 ///|
 /// Consumes a full zap charge to destroy the cell at `(x, y)`, then advances the storm countdown.
 fn use_zap(game : @types.Game, x : Int, y : Int) -> Bool {
-  if game.state != @types.Play {
+  if game.state != Play {
     return false
   }
 
@@ -567,7 +567,7 @@ fn use_zap(game : @types.Game, x : Int, y : Int) -> Bool {
     } else {
       20
     },
-    @types.SparkExplosion,
+    SparkExplosion,
   )
   game.shake_t = @types.maxf(game.shake_t, 0.16)
 
@@ -579,7 +579,7 @@ fn use_zap(game : @types.Game, x : Int, y : Int) -> Bool {
   }
 
   game.moves = game.moves + 1
-  ignore(spawn_tile(game, @types.SparkDefault))
+  ignore(spawn_tile(game, SparkDefault))
 
   game.turns_to_storm = game.turns_to_storm - 1
   if game.turns_to_storm <= 0 {
@@ -623,15 +623,15 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     game.touch_count > 0
 
   match game.state {
-    @types.Title => {
+    Title => {
       update_title_input(game)
       update_play(game, dt)
     }
-    @types.Play => {
+    Play => {
       update_play_input(game, dt)
       update_play(game, dt)
     }
-    @types.Result => {
+    Result => {
       update_result_input(game)
       update_play(game, dt)
     }
