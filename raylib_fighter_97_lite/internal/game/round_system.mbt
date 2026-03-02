@@ -58,7 +58,7 @@ fn assign_selected_characters(game : @types.Game) -> Unit {
 
 ///|
 fn start_round_intro(game : @types.Game) -> Unit {
-  game.state = @types.StateIntro
+  game.state = StateIntro
   game.intro_timer = @types.intro_duration
   game.round_timer = if game.mode_training {
     -1.0
@@ -132,7 +132,7 @@ fn choose_round_winner(game : @types.Game) -> Int {
 
 ///|
 fn enter_round_over(game : @types.Game, winner : Int) -> Unit {
-  game.state = @types.StateRoundOver
+  game.state = StateRoundOver
   game.round_over_timer = @types.round_over_duration
   game.winner_slot = winner
 
@@ -141,19 +141,19 @@ fn enter_round_over(game : @types.Game, winner : Int) -> Unit {
 
   if winner == 0 {
     p1.round_wins += 1
-    p1.action = @types.ActionVictory
+    p1.action = ActionVictory
     p1.action_elapsed = 0.0
     p1.action_frame = 0
-    p2.action = @types.ActionKnockdown
+    p2.action = ActionKnockdown
     p2.knockdown = 80
     game.announcer_text = "P1 WINS THE ROUND"
     game.announcer_timer = 1.8
   } else if winner == 1 {
     p2.round_wins += 1
-    p2.action = @types.ActionVictory
+    p2.action = ActionVictory
     p2.action_elapsed = 0.0
     p2.action_frame = 0
-    p1.action = @types.ActionKnockdown
+    p1.action = ActionKnockdown
     p1.knockdown = 80
     game.announcer_text = "P2 WINS THE ROUND"
     game.announcer_timer = 1.8
@@ -165,7 +165,7 @@ fn enter_round_over(game : @types.Game, winner : Int) -> Unit {
 
 ///|
 fn enter_match_over(game : @types.Game) -> Unit {
-  game.state = @types.StateMatchOver
+  game.state = StateMatchOver
   game.match_over_timer = @types.match_over_duration
 
   if game.fighters[0].round_wins > game.fighters[1].round_wins {
@@ -188,7 +188,7 @@ fn update_title(game : @types.Game, dt : Float) -> Unit {
 
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    game.state = @types.StateSelect
+    game.state = StateSelect
     game.select_blink = 0.0
     game.p1_confirmed = false
     game.p2_confirmed = false
@@ -289,7 +289,7 @@ fn update_select(game : @types.Game, dt : Float) -> Unit {
   }
 
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.StateTitle
+    game.state = StateTitle
   }
 }
 
@@ -302,19 +302,19 @@ fn update_intro(game : @types.Game, dt : Float) -> Unit {
   game.intro_timer -= dt
   if game.intro_timer <= 0.0 {
     game.intro_timer = 0.0
-    game.state = @types.StateFight
+    game.state = StateFight
     game.announcer_text = if game.mode_training { "TRAINING" } else { "FIGHT!" }
     game.announcer_timer = if game.mode_training { 0.8 } else { 0.9 }
 
     let p1 = game.fighters[0]
     let p2 = game.fighters[1]
-    if p1.action == @types.ActionIntro {
-      p1.action = @types.ActionIdle
+    if p1.action == ActionIntro {
+      p1.action = ActionIdle
       p1.action_elapsed = 0.0
       p1.action_frame = 0
     }
-    if p2.action == @types.ActionIntro {
-      p2.action = @types.ActionIdle
+    if p2.action == ActionIntro {
+      p2.action = ActionIdle
       p2.action_elapsed = 0.0
       p2.action_frame = 0
     }
@@ -327,8 +327,7 @@ fn recover_fighter_resources(game : @types.Game, dt : Float) -> Unit {
     let fighter = game.fighters[i]
     let archetype = @types.fighter_archetype(game, fighter)
 
-    if fighter.action != @types.ActionBlockstun &&
-      fighter.action != @types.ActionHitstun {
+    if fighter.action != ActionBlockstun && fighter.action != ActionHitstun {
       @types.add_guard(fighter, @types.guard_recover_per_sec * dt, archetype)
     }
   }
@@ -383,13 +382,13 @@ fn reset_training_fight(game : @types.Game) -> Unit {
 ///|
 fn update_fight(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyP) {
-    game.state = @types.StatePause
+    game.state = StatePause
     game.pause_blink = 0.0
     return
   }
 
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.StateSelect
+    game.state = StateSelect
     game.p1_confirmed = false
     game.p2_confirmed = false
     return
@@ -490,7 +489,7 @@ fn update_match_over(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     game.match_over_timer <= 0.0 {
-    game.state = @types.StateSelect
+    game.state = StateSelect
     game.p1_confirmed = false
     game.p2_confirmed = false
   }
@@ -503,11 +502,11 @@ fn update_pause(game : @types.Game, dt : Float) -> Unit {
   @effects.update_camera(game, dt)
 
   if @raylib.is_key_pressed(@raylib.KeyP) {
-    game.state = @types.StateFight
+    game.state = StateFight
   }
 
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.StateSelect
+    game.state = StateSelect
     game.p1_confirmed = false
     game.p2_confirmed = false
   }
@@ -546,24 +545,25 @@ fn update_announcer(game : @types.Game, dt : Float) -> Unit {
   }
 }
 
+///|
 /// Advances one frame of state, round, and match logic.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_count += 1
   update_announcer(game, dt)
 
-  if game.state == @types.StateTitle {
+  if game.state == StateTitle {
     update_title(game, dt)
-  } else if game.state == @types.StateSelect {
+  } else if game.state == StateSelect {
     update_select(game, dt)
-  } else if game.state == @types.StateIntro {
+  } else if game.state == StateIntro {
     update_intro(game, dt)
-  } else if game.state == @types.StateFight {
+  } else if game.state == StateFight {
     update_fight(game, dt)
-  } else if game.state == @types.StateRoundOver {
+  } else if game.state == StateRoundOver {
     update_round_over(game, dt)
-  } else if game.state == @types.StateMatchOver {
+  } else if game.state == StateMatchOver {
     update_match_over(game, dt)
-  } else if game.state == @types.StatePause {
+  } else if game.state == StatePause {
     update_pause(game, dt)
   }
 }

@@ -45,20 +45,20 @@ fn encode_relative_direction(
   let rx = if facing == @types.facing_right { x } else { -x }
   if y > 0 {
     if rx < 0 {
-      @types.DirDownBack
+      DirDownBack
     } else if rx > 0 {
-      @types.DirDownForward
+      DirDownForward
     } else {
-      @types.DirDown
+      DirDown
     }
   } else if y < 0 {
-    @types.DirUp
+    DirUp
   } else if rx < 0 {
-    @types.DirBack
+    DirBack
   } else if rx > 0 {
-    @types.DirForward
+    DirForward
   } else {
-    @types.DirNeutral
+    DirNeutral
   }
 }
 
@@ -86,14 +86,12 @@ fn recent_direction(input : @types.InputState, age : Int) -> @types.Direction {
 
 ///|
 fn dir_is_forward(dir : @types.Direction) -> Bool {
-  dir == @types.DirForward || dir == @types.DirDownForward
+  dir == DirForward || dir == DirDownForward
 }
 
 ///|
 fn dir_is_down(dir : @types.Direction) -> Bool {
-  dir == @types.DirDown ||
-  dir == @types.DirDownBack ||
-  dir == @types.DirDownForward
+  dir == DirDown || dir == DirDownBack || dir == DirDownForward
 }
 
 ///|
@@ -107,7 +105,7 @@ fn detect_motion_qcf(input : @types.InputState) -> Bool {
         seen_down = true
       }
     } else if not(seen_diag) {
-      if d == @types.DirDownForward {
+      if d == DirDownForward {
         seen_diag = true
       } else if dir_is_forward(d) {
         return true
@@ -132,7 +130,7 @@ fn detect_motion_dp(input : @types.InputState) -> Bool {
       if dir_is_down(d) {
         stage = 2
       }
-    } else if d == @types.DirDownForward {
+    } else if d == DirDownForward {
       return true
     }
   }
@@ -157,7 +155,7 @@ fn tick_input_timers(input : @types.InputState, dt : Float) -> Unit {
     input.motion_timer -= dt
     if input.motion_timer <= 0.0 {
       input.motion_timer = 0.0
-      input.buffered_motion = @types.MotionNone
+      input.buffered_motion = MotionNone
     }
   }
   if input.attack_buffer_timer > 0.0 {
@@ -269,10 +267,10 @@ fn sample_human_input(fighter : @types.Fighter, slot : Int, dt : Float) -> Unit 
   if input.any_attack_pressed {
     input.attack_buffer_timer = 0.16
     if detect_motion_dp(input) {
-      input.buffered_motion = @types.MotionDp
+      input.buffered_motion = MotionDp
       input.motion_timer = 0.24
     } else if detect_motion_qcf(input) {
-      input.buffered_motion = @types.MotionQcf
+      input.buffered_motion = MotionQcf
       input.motion_timer = 0.24
     }
   }
@@ -346,7 +344,7 @@ fn input_press_super(fighter : @types.Fighter) -> Unit {
   input.hk_down = true
   input.any_attack_pressed = true
   input.attack_buffer_timer = 0.16
-  input.buffered_motion = @types.MotionQcf
+  input.buffered_motion = MotionQcf
   input.motion_timer = 0.24
 }
 
@@ -400,12 +398,12 @@ fn push_cpu_direction(
 fn finalize_cpu_input(fighter : @types.Fighter, dt : Float) -> Unit {
   let input = fighter.input
   if input.any_attack_pressed {
-    if input.buffered_motion == @types.MotionNone {
+    if input.buffered_motion == MotionNone {
       if detect_motion_dp(input) {
-        input.buffered_motion = @types.MotionDp
+        input.buffered_motion = MotionDp
         input.motion_timer = 0.24
       } else if detect_motion_qcf(input) {
-        input.buffered_motion = @types.MotionQcf
+        input.buffered_motion = MotionQcf
         input.motion_timer = 0.24
       }
     }
@@ -429,7 +427,7 @@ fn update_inputs(game : @types.Game, dt : Float) -> Unit {
     let fighter = game.fighters[slot]
     clear_input_edges(fighter)
 
-    if fighter.is_cpu && game.state == @types.StateFight {
+    if fighter.is_cpu && game.state == StateFight {
       reset_input_for_cpu(fighter, dt)
       update_cpu_input(game, slot, dt)
       finalize_cpu_input(fighter, dt)

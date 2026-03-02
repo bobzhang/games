@@ -897,29 +897,30 @@ fn draw_debug_overlay(game : @types.Game) -> Unit {
   )
 }
 
+///|
 /// Renders the full frame for current game state.
 pub fn draw_game(game : @types.Game) -> Unit {
   draw_stage(game)
 
-  if game.state == @types.StateTitle {
+  if game.state == StateTitle {
     draw_title_screen(game)
-  } else if game.state == @types.StateSelect {
+  } else if game.state == StateSelect {
     draw_select_screen(game)
   } else {
     draw_fighters(game)
     draw_fight_hud(game)
 
-    if game.state == @types.StateIntro {
+    if game.state == StateIntro {
       draw_intro_overlay(game)
-    } else if game.state == @types.StateRoundOver {
+    } else if game.state == StateRoundOver {
       draw_round_over_overlay(game)
-    } else if game.state == @types.StateMatchOver {
+    } else if game.state == StateMatchOver {
       draw_match_over_overlay(game)
     } else {
       draw_announcer(game)
     }
 
-    if game.state == @types.StatePause {
+    if game.state == StatePause {
       draw_pause_overlay(game)
     }
   }

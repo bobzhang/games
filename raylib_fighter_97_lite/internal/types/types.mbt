@@ -1,3 +1,4 @@
+///|
 /// High-level game state machine.
 pub(all) enum GameState {
   StateTitle
@@ -9,6 +10,7 @@ pub(all) enum GameState {
   StatePause
 } derive(Eq, Show)
 
+///|
 /// Fighter action state machine.
 pub(all) enum Action {
   ActionIdle
@@ -28,6 +30,7 @@ pub(all) enum Action {
   ActionThrow
 } derive(Eq)
 
+///|
 /// Attack identifiers used by move specs and hit logic.
 pub(all) enum AttackId {
   AttackNone
@@ -40,6 +43,7 @@ pub(all) enum AttackId {
   AttackSuper
 } derive(Eq)
 
+///|
 /// Move category for normal/special/super behavior.
 pub(all) enum MoveKind {
   MoveKindNormal
@@ -47,6 +51,7 @@ pub(all) enum MoveKind {
   MoveKindSuper
 } derive(Eq)
 
+///|
 /// CPU behavior mode selector.
 pub(all) enum AiMode {
   AiModeIdle
@@ -55,6 +60,7 @@ pub(all) enum AiMode {
   AiModeEvade
 } derive(Eq)
 
+///|
 /// Parsed directional motion command.
 pub(all) enum Motion {
   MotionNone
@@ -62,6 +68,7 @@ pub(all) enum Motion {
   MotionDp
 } derive(Eq)
 
+///|
 /// Direction entries stored in input history.
 pub(all) enum Direction {
   DirNeutral
@@ -73,6 +80,7 @@ pub(all) enum Direction {
   DirDownForward
 } derive(Eq)
 
+///|
 /// Hit spark visual category.
 pub(all) enum SparkKind {
   SparkKindHit
@@ -80,6 +88,7 @@ pub(all) enum SparkKind {
   SparkKindSuper
 } derive(Eq)
 
+///|
 /// Per-frame input state and motion buffers for one fighter.
 pub(all) struct InputState {
   mut x : Int
@@ -110,6 +119,7 @@ pub(all) struct InputState {
   mut attack_buffer_timer : Float
 }
 
+///|
 /// Creates a cleared input state with neutral buffers.
 pub fn InputState::new() -> InputState {
   {
@@ -142,6 +152,7 @@ pub fn InputState::new() -> InputState {
   }
 }
 
+///|
 /// Attack frame data and hitbox definition.
 pub(all) struct MoveSpec {
   mut attack_id : AttackId
@@ -177,6 +188,7 @@ pub(all) struct MoveSpec {
   mut auto_dash : Bool
 }
 
+///|
 /// Creates a default inert move spec.
 pub fn MoveSpec::empty() -> MoveSpec {
   {
@@ -214,6 +226,7 @@ pub fn MoveSpec::empty() -> MoveSpec {
   }
 }
 
+///|
 /// Character stat profile and move list.
 pub(all) struct CharacterArchetype {
   name : String
@@ -239,6 +252,7 @@ pub(all) struct CharacterArchetype {
   super_move : MoveSpec
 }
 
+///|
 /// Particle record for dust and spark effects.
 pub(all) struct Particle {
   mut active : Bool
@@ -253,6 +267,7 @@ pub(all) struct Particle {
   mut color : @raylib.Color
 }
 
+///|
 /// Creates an inactive particle slot.
 pub fn Particle::inactive() -> Particle {
   {
@@ -269,6 +284,7 @@ pub fn Particle::inactive() -> Particle {
   }
 }
 
+///|
 /// Runtime fighter state for one player slot.
 pub(all) struct Fighter {
   slot : Int
@@ -312,6 +328,7 @@ pub(all) struct Fighter {
   mut input : InputState
 }
 
+///|
 /// Creates a fighter with default stats and controls.
 pub fn Fighter::new(slot : Int, is_cpu : Bool) -> Fighter {
   {
@@ -365,6 +382,7 @@ pub fn Fighter::new(slot : Int, is_cpu : Bool) -> Fighter {
   }
 }
 
+///|
 /// Global mutable match state.
 pub(all) struct Game {
   mut state : GameState
@@ -405,6 +423,7 @@ pub(all) struct Game {
   mut debug_overlay : Bool
 }
 
+///|
 /// Creates a fresh game state with roster and fighters initialized.
 pub fn Game::new() -> Game {
   {

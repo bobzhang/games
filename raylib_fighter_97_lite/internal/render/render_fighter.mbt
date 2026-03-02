@@ -57,8 +57,8 @@ fn draw_fighter_body(
   }
 
   let body_w = @types.fighter_body_width
-  let bob_amp = if fighter.action == @types.ActionWalkForward ||
-    fighter.action == @types.ActionWalkBack {
+  let bob_amp = if fighter.action == ActionWalkForward ||
+    fighter.action == ActionWalkBack {
     @types.f(3.5)
   } else {
     @types.f(1.4)
@@ -119,7 +119,7 @@ fn draw_fighter_body(
   let arm_y = by + bh * 3 / 7
 
   let mut punch_ext = @types.f(0.0)
-  if fighter.action == @types.ActionAttack {
+  if fighter.action == ActionAttack {
     let mv = fighter.current_move
     if fighter.action_frame >= mv.startup_frames &&
       fighter.action_frame <= mv.startup_frames + mv.active_frames {
@@ -156,8 +156,8 @@ fn draw_fighter_body(
     },
   ).to_int()
 
-  let stride = if fighter.action == @types.ActionWalkForward ||
-    fighter.action == @types.ActionWalkBack {
+  let stride = if fighter.action == ActionWalkForward ||
+    fighter.action == ActionWalkBack {
     Float::from_double(
       @math.sin((fighter.action_elapsed * @types.f(12.0)).to_double()),
     ) *
@@ -181,7 +181,7 @@ fn draw_fighter_body(
     @raylib.color_alpha(trim_color, @types.f(0.95)),
   )
 
-  if fighter.action == @types.ActionAttack {
+  if fighter.action == ActionAttack {
     let mv = fighter.current_move
     if fighter.action_frame >= mv.startup_frames &&
       fighter.action_frame < mv.startup_frames + mv.active_frames {
@@ -193,7 +193,7 @@ fn draw_fighter_body(
 
       let aura = @raylib.color_alpha(
         archetype.aura_color,
-        if mv.move_kind == @types.MoveKindSuper {
+        if mv.move_kind == MoveKindSuper {
           @types.f(0.55)
         } else {
           @types.f(0.35)
@@ -216,7 +216,7 @@ fn draw_fighter_body(
     }
   }
 
-  if fighter.action == @types.ActionVictory {
+  if fighter.action == ActionVictory {
     let glow = Float::from_double(
         @math.sin((fighter.action_elapsed * @types.f(6.0)).to_double()),
       ) *

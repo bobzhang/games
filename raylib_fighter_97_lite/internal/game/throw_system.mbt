@@ -1,14 +1,14 @@
 ///|
 fn fighter_can_attempt_throw(fighter : @types.Fighter) -> Bool {
   fighter.on_ground &&
-  fighter.action != @types.ActionAttack &&
-  fighter.action != @types.ActionThrow &&
-  fighter.action != @types.ActionHitstun &&
-  fighter.action != @types.ActionBlockstun &&
-  fighter.action != @types.ActionKnockdown &&
-  fighter.action != @types.ActionWakeup &&
-  fighter.action != @types.ActionIntro &&
-  fighter.action != @types.ActionVictory
+  fighter.action != ActionAttack &&
+  fighter.action != ActionThrow &&
+  fighter.action != ActionHitstun &&
+  fighter.action != ActionBlockstun &&
+  fighter.action != ActionKnockdown &&
+  fighter.action != ActionWakeup &&
+  fighter.action != ActionIntro &&
+  fighter.action != ActionVictory
 }
 
 ///|
@@ -75,7 +75,7 @@ fn apply_throw_tech(
 
   let hit_x = (first.x + second.x) * 0.5
   let hit_y = (first.y + second.y) * 0.5 - 70.0
-  @effects.spawn_hit_spark(game, hit_x, hit_y, @types.SparkKindBlock, 24)
+  @effects.spawn_hit_spark(game, hit_x, hit_y, SparkKindBlock, 24)
 
   @types.add_meter(first, 5, first_archetype)
   @types.add_meter(second, 5, second_archetype)
@@ -99,7 +99,7 @@ fn apply_throw_hit(
   let attacker_archetype = @types.fighter_archetype(game, attacker)
   let defender_archetype = @types.fighter_archetype(game, defender)
 
-  attacker.action = @types.ActionThrow
+  attacker.action = ActionThrow
   attacker.action_elapsed = 0.0
   attacker.action_frame = 0
   attacker.current_move = @types.MoveSpec::empty()
@@ -114,7 +114,7 @@ fn apply_throw_hit(
     0,
     @types.health_max,
   )
-  defender.action = @types.ActionKnockdown
+  defender.action = ActionKnockdown
   defender.hitstun = 0
   defender.blockstun = 0
   defender.knockdown = @types.throw_knockdown_frames
@@ -131,7 +131,7 @@ fn apply_throw_hit(
 
   let hit_x = (attacker.x + defender.x) * 0.5
   let hit_y = defender.y - 70.0
-  @effects.spawn_hit_spark(game, hit_x, hit_y, @types.SparkKindHit, 24)
+  @effects.spawn_hit_spark(game, hit_x, hit_y, SparkKindHit, 24)
   @effects.spawn_ground_skid(game, defender)
 
   @types.add_meter(attacker, 10, attacker_archetype)
