@@ -1,4 +1,5 @@
 ///|
+/// Represents the player's ferry boat with position, velocity, heading, hull, fuel, passenger count, and sensor state.
 struct Player {
   mut x : Float
   mut y : Float
@@ -20,6 +21,7 @@ struct Player {
 }
 
 ///|
+/// Represents a stranded dock location with queue size, decay rate, and an identifier.
 struct Dock {
   mut active : Bool
   mut x : Float
@@ -30,6 +32,7 @@ struct Dock {
 }
 
 ///|
+/// Represents a stranded group of survivors with position, count, panic level, drift velocity, and flare timer.
 struct Group {
   mut active : Bool
   mut x : Float
@@ -43,6 +46,7 @@ struct Group {
 }
 
 ///|
+/// Represents a fog patch with position, velocity, radius, density, lifetime, and phase for animation.
 struct FogCell {
   mut active : Bool
   mut x : Float
@@ -56,6 +60,7 @@ struct FogCell {
 }
 
 ///|
+/// Represents a floating debris obstacle with position, velocity, size, hardness, and spin angle.
 struct Debris {
   mut active : Bool
   mut x : Float
@@ -68,6 +73,7 @@ struct Debris {
 }
 
 ///|
+/// Represents a visual particle effect with position, velocity, lifetime, size, and kind.
 struct Particle {
   mut active : Bool
   mut x : Float
@@ -80,6 +86,7 @@ struct Particle {
 }
 
 ///|
+/// Returns v clamped to the range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -91,6 +98,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two Float values.
 fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -100,6 +108,7 @@ fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two Float values.
 fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -109,6 +118,7 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a Float.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -118,6 +128,7 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two Int values.
 fn mini(a : Int, b : Int) -> Int {
   if a < b {
     a
@@ -127,12 +138,14 @@ fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns a random Float uniformly distributed in [lo, hi].
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns the squared Euclidean distance between two 2D points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx : Float = x1 - x0
   let dy : Float = y1 - y0
@@ -140,6 +153,7 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Returns true if point (px, py) lies within the Int-dimensioned rectangle at (x, y) with size (w, h).
 fn inside_rect(
   px : Float,
   py : Float,
@@ -155,6 +169,7 @@ fn inside_rect(
 }
 
 ///|
+/// Resets all dock slots to their inactive default state with sequential IDs.
 fn clear_docks(docks : Array[Dock]) -> Unit {
   for i in 0..<docks.length() {
     docks[i].active = false
@@ -167,6 +182,7 @@ fn clear_docks(docks : Array[Dock]) -> Unit {
 }
 
 ///|
+/// Resets all group slots to their inactive default state with sequential IDs.
 fn clear_groups(groups : Array[Group]) -> Unit {
   for i in 0..<groups.length() {
     groups[i].active = false
@@ -182,6 +198,7 @@ fn clear_groups(groups : Array[Group]) -> Unit {
 }
 
 ///|
+/// Resets all fog cell slots to their inactive default state.
 fn clear_fogs(fogs : Array[FogCell]) -> Unit {
   for fog in fogs {
     fog.active = false
@@ -197,6 +214,7 @@ fn clear_fogs(fogs : Array[FogCell]) -> Unit {
 }
 
 ///|
+/// Resets all debris slots to their inactive default state.
 fn clear_debris(debris : Array[Debris]) -> Unit {
   for debris in debris {
     debris.active = false
@@ -211,6 +229,7 @@ fn clear_debris(debris : Array[Debris]) -> Unit {
 }
 
 ///|
+/// Resets all particle slots to their inactive default state.
 fn clear_parts(parts : Array[Particle]) -> Unit {
   for part in parts {
     part.active = false
@@ -225,6 +244,7 @@ fn clear_parts(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Adds a single particle at (x, y) with kind-dependent random velocity, lifetime, and size.
 fn add_particle(
   parts : Array[Particle],
   x : Float,
@@ -265,6 +285,7 @@ fn add_particle(
 }
 
 ///|
+/// Spawns n particles in a burst at position (x, y) with the given kind.
 fn burst(
   parts : Array[Particle],
   x : Float,
@@ -278,6 +299,7 @@ fn burst(
 }
 
 ///|
+/// Updates all active particles by advancing position, applying kind-specific physics, and expiring finished ones.
 fn update_parts(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
     if not(part.active) {
@@ -307,6 +329,7 @@ fn update_parts(parts : Array[Particle], dt : Float) -> Unit {
 }
 
 ///|
+/// Initializes dock positions spread around the world area with preset queue sizes.
 fn init_docks(
   docks : Array[Dock],
   world_x : Int,
@@ -375,6 +398,7 @@ fn init_docks(
 }
 
 ///|
+/// Populates the debris array with randomly placed obstacles, avoiding the harbor and docks.
 fn init_debris(
   debris : Array[Debris],
   docks : Array[Dock],
@@ -441,6 +465,7 @@ fn init_debris(
 }
 
 ///|
+/// Spawns a new survivor group at a random world edge with tier-scaled count and panic.
 fn spawn_group(
   groups : Array[Group],
   world_l : Float,
@@ -490,6 +515,7 @@ fn spawn_group(
 }
 
 ///|
+/// Spawns a new fog cell entering from a random world edge with tier-scaled density.
 fn spawn_fog(
   fogs : Array[FogCell],
   world_l : Float,
@@ -538,6 +564,7 @@ fn spawn_fog(
 }
 
 ///|
+/// Returns the count of currently active survivor groups.
 fn active_groups(groups : Array[Group]) -> Int {
   let mut n : Int = 0
   for group in groups {
@@ -549,6 +576,7 @@ fn active_groups(groups : Array[Group]) -> Int {
 }
 
 ///|
+/// Returns the count of currently active fog cells.
 fn active_fogs(fogs : Array[FogCell]) -> Int {
   let mut n : Int = 0
   for fog in fogs {
@@ -560,6 +588,7 @@ fn active_fogs(fogs : Array[FogCell]) -> Int {
 }
 
 ///|
+/// Returns the count of active groups with panic level at or above 70.
 fn active_panic(groups : Array[Group]) -> Int {
   let mut n : Int = 0
   for group in groups {
@@ -571,6 +600,7 @@ fn active_panic(groups : Array[Group]) -> Int {
 }
 
 ///|
+/// Returns the highest panic value among all active survivor groups.
 fn peak_group_panic(groups : Array[Group]) -> Float {
   let mut best : Float = 0.0
   for group in groups {
@@ -582,6 +612,7 @@ fn peak_group_panic(groups : Array[Group]) -> Float {
 }
 
 ///|
+/// Advances all active fog cells by dt, bouncing them off world boundaries and expiring depleted ones.
 fn update_fogs(
   fogs : Array[FogCell],
   dt : Float,
@@ -626,6 +657,7 @@ fn update_fogs(
 }
 
 ///|
+/// Advances all active debris pieces by dt, spinning and bouncing them off world boundaries.
 fn update_debris(
   debris : Array[Debris],
   dt : Float,
@@ -666,6 +698,7 @@ fn update_debris(
 }
 
 ///|
+/// Advances all active groups by dt, accumulating panic from fog proximity and distance, and returns lost people and total panic.
 fn update_groups(
   groups : Array[Group],
   fogs : Array[FogCell],
@@ -736,6 +769,7 @@ fn update_groups(
 }
 
 ///|
+/// Rescues survivors from nearby groups into the player ferry and returns the count of rescued people and groups served.
 fn rescue_groups(
   player : Player,
   groups : Array[Group],
@@ -788,6 +822,7 @@ fn rescue_groups(
 }
 
 ///|
+/// Returns the position and panic level of the nearest active group with panic above 30, or false if none found.
 fn nearest_urgent_group(
   groups : Array[Group],
   x : Float,
@@ -818,6 +853,7 @@ fn nearest_urgent_group(
 }
 
 ///|
+/// Draws the animated water background with gradient wave strips and a border.
 fn draw_water(
   world_x : Int,
   world_y : Int,
@@ -863,6 +899,7 @@ fn draw_water(
 }
 
 ///|
+/// Draws the safe harbor rectangle with vertical stripe decoration and a label below.
 fn draw_harbor(hx : Int, hy : Int, hw : Int, hh : Int) -> Unit {
   @raylib.draw_rectangle(hx, hy, hw, hh, @raylib.Color::new(42, 78, 114, 236))
   @raylib.draw_rectangle_lines(
@@ -895,6 +932,7 @@ fn draw_harbor(hx : Int, hy : Int, hw : Int, hh : Int) -> Unit {
 }
 
 ///|
+/// Draws all active docks with queue-scaled beacon glow and ID labels.
 fn draw_docks(docks : Array[Dock], t : Float) -> Unit {
   for i in 0..<docks.length() {
     if not(docks[i].active) {
@@ -945,6 +983,7 @@ fn draw_docks(docks : Array[Dock], t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active survivor groups with panic-colored markers, flare pulses, and status labels.
 fn draw_groups(groups : Array[Group], t : Float) -> Unit {
   for group in groups {
     if not(group.active) {
@@ -996,6 +1035,7 @@ fn draw_groups(groups : Array[Group], t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active fog cells as translucent pulsing circles with density-scaled opacity.
 fn draw_fogs(fogs : Array[FogCell], t : Float) -> Unit {
   for fog in fogs {
     if not(fog.active) {
@@ -1026,6 +1066,7 @@ fn draw_fogs(fogs : Array[FogCell], t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active debris pieces as wobbling circles with hardness-based coloring.
 fn draw_debris(debris : Array[Debris], t : Float) -> Unit {
   for debris in debris {
     if not(debris.active) {
@@ -1056,6 +1097,7 @@ fn draw_debris(debris : Array[Debris], t : Float) -> Unit {
 }
 
 ///|
+/// Draws the player ferry with heading indicator, wake effect, passenger icons, and ping ring.
 fn draw_player(player : Player, t : Float) -> Unit {
   let x : Float = player.x
   let y : Float = player.y
@@ -1120,6 +1162,7 @@ fn draw_player(player : Player, t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active particles with kind-based colors as circles.
 fn draw_parts(parts : Array[Particle]) -> Unit {
   for part in parts {
     if not(part.active) {
@@ -1139,6 +1182,7 @@ fn draw_parts(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Draws the on-screen touch D-pad, boost, rescue, and ping buttons with visual active states.
 fn draw_touch_controls(
   sw : Int,
   sh : Int,
@@ -1271,6 +1315,7 @@ fn draw_touch_controls(
 }
 
 ///|
+/// Draws a labeled progress bar at (panel_x, y) showing value/maxv filled with the given color.
 fn draw_bar(
   panel_x : Int,
   y : Int,
@@ -1320,6 +1365,7 @@ fn draw_bar(
 }
 
 ///|
+/// Draws a rectangular button with a centered text label and highlighted active state.
 fn draw_button(
   x : Int,
   y : Int,
@@ -1352,6 +1398,7 @@ fn draw_button(
 }
 
 ///|
+/// Initializes and runs the Fog Ferry Rescue 2026 game loop.
 fn main {
   let sw : Int = 1680
   let sh : Int = 940

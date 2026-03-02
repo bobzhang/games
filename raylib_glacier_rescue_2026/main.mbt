@@ -1,37 +1,49 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 800
 
 ///|
+/// Total scrollable world width in pixels.
 let world_w : Float = 4200.0
 
 ///|
+/// Total scrollable world height in pixels.
 let world_h : Float = 2800.0
 
 ///|
+/// Maximum number of survivors that can exist in a mission.
 let max_survivors : Int = 44
 
 ///|
+/// Maximum number of environmental hazards that can be active at once.
 let max_hazards : Int = 52
 
 ///|
+/// Maximum number of visual particles that can be active simultaneously.
 let max_particles : Int = 1100
 
 ///|
+/// Maximum number of active flares that can exist at one time.
 let max_flares : Int = 8
 
 ///|
+/// Maximum number of simultaneous avalanche hazards allowed.
 let max_avalanches : Int = 10
 
 ///|
+/// X coordinate of the rescue base where survivors are dropped off.
 let base_x : Float = 280.0
 
 ///|
+/// Y coordinate of the rescue base where survivors are dropped off.
 let base_y : Float = world_h - 260.0
 
 ///|
+/// Represents the player-controlled helicopter with physics, fuel, hull integrity, temperature, and mission stats.
 struct Helicopter {
   mut x : Float
   mut y : Float
@@ -53,6 +65,7 @@ struct Helicopter {
 }
 
 ///|
+/// Represents a stranded survivor with position, freeze level, panic state, and carried status.
 struct Survivor {
   mut active : Bool
   mut carried : Bool
@@ -64,6 +77,7 @@ struct Survivor {
 }
 
 ///|
+/// Represents a moving environmental hazard such as ice chunks or rocks with position, velocity, and radius.
 struct Hazard {
   mut active : Bool
   kind : Int
@@ -77,6 +91,7 @@ struct Hazard {
 }
 
 ///|
+/// Represents a sweeping avalanche hazard with position, width, speed, and remaining lifetime.
 struct Avalanche {
   mut active : Bool
   mut x : Float
@@ -87,6 +102,7 @@ struct Avalanche {
 }
 
 ///|
+/// Represents a deployed heat flare that warms survivors and repels cold, with expanding radius and lifetime.
 struct Flare {
   mut active : Bool
   x : Float
@@ -97,6 +113,7 @@ struct Flare {
 }
 
 ///|
+/// Represents a short-lived visual particle with position, velocity, size, elapsed time, and type.
 struct Particle {
   mut active : Bool
   mut x : Float
@@ -110,6 +127,7 @@ struct Particle {
 }
 
 ///|
+/// Represents the active storm conditions including wind direction, gust timing, whiteout state, and severity.
 struct Storm {
   mut wind_x : Float
   mut wind_y : Float
@@ -120,6 +138,7 @@ struct Storm {
 }
 
 ///|
+/// Returns the value v clamped to the range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -131,27 +150,32 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the linear interpolation between a and b at parameter t.
 fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t
 }
 
 ///|
+/// Returns a random float uniformly distributed between lo and hi.
 fn randf(lo : Float, hi : Float) -> Float {
   let r = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns the sine of x in radians.
 fn sinf(x : Float) -> Float {
   @math.sinf(x)
 }
 
 ///|
+/// Returns the cosine of x in radians.
 fn cosf(x : Float) -> Float {
   @math.cosf(x)
 }
 
 ///|
+/// Returns the squared Euclidean distance between two 2D points.
 fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
   let dy = ay - by
@@ -159,6 +183,7 @@ fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 }
 
 ///|
+/// Returns true if the point (px, py) lies within the rectangle at (x, y) with dimensions w by h.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -175,6 +200,7 @@ fn inside_rect(
 }
 
 ///|
+/// Emits a single particle into the pool at the given position with specified velocity, size, lifetime, and type.
 fn emit_particle(
   particles : FixedArray[Particle],
   x : Float,
@@ -194,6 +220,7 @@ fn emit_particle(
 }
 
 ///|
+/// Emits a burst of count particles radiating outward from (x, y) with the given power and type.
 fn burst_particles(
   particles : FixedArray[Particle],
   x : Float,
@@ -219,6 +246,7 @@ fn burst_particles(
 }
 
 ///|
+/// Populates the survivors array with active survivors at scattered positions appropriate for the level.
 fn spawn_survivors(survivors : FixedArray[Survivor], level : Int) -> Unit {
   let total = clampf(
     Float::from_int(20 + level * 4),
@@ -250,6 +278,7 @@ fn spawn_survivors(survivors : FixedArray[Survivor], level : Int) -> Unit {
 }
 
 ///|
+/// Populates the hazards array with active hazards of varying types and speeds scaled to the level.
 fn spawn_hazards(hazards : FixedArray[Hazard], level : Int) -> Unit {
   let total = clampf(
     Float::from_int(18 + level * 5),
@@ -280,6 +309,7 @@ fn spawn_hazards(hazards : FixedArray[Hazard], level : Int) -> Unit {
 }
 
 ///|
+/// Spawns a new avalanche at a random vertical position with speed and width scaled to the level.
 fn spawn_avalanche(avalanches : FixedArray[Avalanche], level : Int) -> Unit {
   for i in 0..<avalanches.length() {
     if not(avalanches[i].active) {
@@ -299,6 +329,7 @@ fn spawn_avalanche(avalanches : FixedArray[Avalanche], level : Int) -> Unit {
 }
 
 ///|
+/// Spawns a flare at the given world position, activating it in the flare pool.
 fn spawn_flare(flares : FixedArray[Flare], x : Float, y : Float) -> Unit {
   for i in 0..<flares.length() {
     if not(flares[i].active) {
@@ -309,6 +340,7 @@ fn spawn_flare(flares : FixedArray[Flare], x : Float, y : Float) -> Unit {
 }
 
 ///|
+/// Draws a filled progress bar with a foreground and background colour at the specified position and size.
 fn draw_bar(
   x : Int,
   y : Int,
@@ -337,6 +369,7 @@ fn draw_bar(
 }
 
 ///|
+/// Draws the on-screen touch control buttons for movement, boost, and flare if show is true.
 fn draw_touch_controls(show : Bool) -> Unit {
   if not(show) {
     return
@@ -438,6 +471,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
 }
 
 ///|
+/// Initialises the window, runs the main game loop, and handles all update and draw logic.
 fn main {
   @raylib.init_window(sw, sh, "raylib [moonbit] example - glacier rescue 2026")
   defer @raylib.close_window()

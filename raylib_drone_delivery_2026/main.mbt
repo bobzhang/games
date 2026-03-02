@@ -1,10 +1,13 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1120
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 740
 
 ///|
+/// Represents a bouncing shock orb that damages the drone on contact.
 struct Orb {
   mut alive : Bool
   mut x : Float
@@ -14,6 +17,7 @@ struct Orb {
 }
 
 ///|
+/// Activates an inactive orb slot at the given position with a random velocity.
 fn spawn_orb(orbs : Array[Orb], cx : Float, cy : Float) -> Unit {
   for orb in orbs {
     if not(orb.alive) {
@@ -28,6 +32,7 @@ fn spawn_orb(orbs : Array[Orb], cx : Float, cy : Float) -> Unit {
 }
 
 ///|
+/// Deactivates all orbs, clearing the field of shock hazards.
 fn reset_orbs(orbs : Array[Orb]) -> Unit {
   for orb in orbs {
     orb.alive = false
@@ -35,6 +40,7 @@ fn reset_orbs(orbs : Array[Orb]) -> Unit {
 }
 
 ///|
+/// Returns a random screen coordinate with the given pixel margin from each edge.
 fn random_point(margin : Int) -> (Float, Float) {
   (
     Float::from_int(@raylib.get_random_value(margin, sw - margin)),
@@ -43,6 +49,7 @@ fn random_point(margin : Int) -> (Float, Float) {
 }
 
 ///|
+/// Returns the squared Euclidean distance between two points.
 fn dist_sq(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
   let dy = ay - by
@@ -50,6 +57,7 @@ fn dist_sq(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 }
 
 ///|
+/// Initializes the window and runs the drone delivery game loop.
 fn main {
   @raylib.init_window(sw, sh, "Drone Delivery 2026")
   @raylib.set_target_fps(60)

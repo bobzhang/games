@@ -1,37 +1,49 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 820
 
 ///|
+/// Y-coordinate of the ground surface where castles stand.
 let ground_y : Int = 640
 
 ///|
+/// Downward acceleration applied to projectiles in pixels per second squared.
 let gravity : Float = 360.0
 
 ///|
+/// Width of each castle in pixels.
 let castle_w : Int = 120
 
 ///|
+/// Height of each castle in pixels.
 let castle_h : Int = 130
 
 ///|
+/// X-coordinate of the player's castle.
 let player_x : Int = 90
 
 ///|
+/// X-coordinate of the enemy's castle.
 let enemy_x : Int = sw - 210
 
 ///|
+/// X-coordinate of the left edge of the central mountain obstacle.
 let mountain_x : Int = sw / 2 - 72
 
 ///|
+/// Width of the central mountain obstacle in pixels.
 let mountain_w : Int = 144
 
 ///|
+/// Height of the central mountain obstacle in pixels.
 let mountain_h : Int = 220
 
 ///|
+/// Returns the absolute value of a floating-point number.
 fn absf(x : Float) -> Float {
   if x < 0.0 {
     -x
@@ -41,6 +53,7 @@ fn absf(x : Float) -> Float {
 }
 
 ///|
+/// Clamps a float value to the inclusive range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -52,6 +65,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns true if the point (px, py) lies within the given integer-bounded rectangle.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -67,26 +81,31 @@ fn inside_rect(
 }
 
 ///|
+/// Converts an angle from degrees to radians.
 fn deg2rad(angle : Float) -> Double {
   angle.to_double() * 0.017453292519943295
 }
 
 ///|
+/// Returns the sine of an angle given in degrees as a Float.
 fn sinf_deg(angle : Float) -> Float {
   Float::from_double(@math.sin(deg2rad(angle)))
 }
 
 ///|
+/// Returns the cosine of an angle given in degrees as a Float.
 fn cosf_deg(angle : Float) -> Float {
   Float::from_double(@math.cos(deg2rad(angle)))
 }
 
 ///|
+/// Returns a random wind force value between -130 and 130.
 fn random_wind() -> Float {
   Float::from_int(@raylib.get_random_value(-130, 130))
 }
 
 ///|
+/// Computes the initial position and velocity components for a projectile launched at the given angle and power.
 fn launch(
   from_left : Bool,
   ox : Float,
@@ -102,6 +121,7 @@ fn launch(
 }
 
 ///|
+/// Calculates the blast damage dealt to a castle center based on the explosion's distance from it.
 fn blast_damage(ex : Float, ey : Float, cx : Float, cy : Float) -> Int {
   let dx = ex - cx
   let dy = ey - cy
@@ -114,6 +134,7 @@ fn blast_damage(ex : Float, ey : Float, cx : Float, cy : Float) -> Int {
 }
 
 ///|
+/// Estimates the launch power needed for the enemy to hit the player's castle given the distance, angle, and current wind.
 fn estimate_enemy_power(distance : Float, angle : Float, wind : Float) -> Float {
   let sin2 = sinf_deg(angle * 2.0)
   let mut p : Float = 560.0
@@ -126,6 +147,7 @@ fn estimate_enemy_power(distance : Float, angle : Float, wind : Float) -> Float 
 }
 
 ///|
+/// Initializes the game window and runs the Castle Siege Artillery 2026 main game loop.
 fn main {
   @raylib.init_window(sw, sh, "Castle Siege Artillery 2026")
   @raylib.set_target_fps(60)

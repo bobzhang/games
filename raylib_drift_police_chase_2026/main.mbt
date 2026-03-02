@@ -1,28 +1,37 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 800
 
 ///|
+/// Total scrollable world width in pixels.
 let world_w : Float = 4600.0
 
 ///|
+/// Total scrollable world height in pixels.
 let world_h : Float = 3200.0
 
 ///|
+/// Maximum number of cop cars in the pool.
 let max_cops : Int = 26
 
 ///|
+/// Maximum number of cash pickup items in the pool.
 let max_pickups : Int = 44
 
 ///|
+/// Maximum number of smoke screens active at once.
 let max_smokes : Int = 12
 
 ///|
+/// Maximum number of particles in the particle pool.
 let max_particles : Int = 1200
 
 ///|
+/// Represents the player's car with position, velocity, health, ability cooldowns, and score state.
 struct Player {
   mut x : Float
   mut y : Float
@@ -43,6 +52,7 @@ struct Player {
 }
 
 ///|
+/// Represents a pursuing police car with position, velocity, stun state, and aggression level.
 struct Cop {
   mut active : Bool
   kind : Int
@@ -56,6 +66,7 @@ struct Cop {
 }
 
 ///|
+/// Represents a collectible cash drop with position, value, and animation timers.
 struct Pickup {
   active : Bool
   x : Float
@@ -66,6 +77,7 @@ struct Pickup {
 }
 
 ///|
+/// Represents an expanding smoke screen that stuns cops and reduces heat.
 struct Smoke {
   mut active : Bool
   x : Float
@@ -76,6 +88,7 @@ struct Smoke {
 }
 
 ///|
+/// Represents a visual particle effect with position, velocity, size, lifetime, and kind.
 struct Particle {
   mut active : Bool
   mut x : Float
@@ -89,6 +102,7 @@ struct Particle {
 }
 
 ///|
+/// Returns v clamped to the inclusive range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -100,12 +114,14 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns a uniformly distributed random float in the range [lo, hi].
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns the squared Euclidean distance between two points.
 fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx : Float = ax - bx
   let dy : Float = ay - by
@@ -113,6 +129,7 @@ fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 }
 
 ///|
+/// Returns true if point (px, py) lies within the rectangle (x, y, w, h).
 fn inside_rect(
   px : Float,
   py : Float,
@@ -129,6 +146,7 @@ fn inside_rect(
 }
 
 ///|
+/// Adds a single particle with specified properties to the first available slot in the pool.
 fn emit_particle(
   particles : FixedArray[Particle],
   x : Float,
@@ -148,6 +166,7 @@ fn emit_particle(
 }
 
 ///|
+/// Emits count particles at (x, y) in random directions scaled by power.
 fn burst_particles(
   particles : FixedArray[Particle],
   x : Float,
@@ -183,6 +202,7 @@ fn burst_particles(
 }
 
 ///|
+/// Repositions a pickup at a random world location with a value scaled to the current level.
 fn respawn_pickup(pickups : FixedArray[Pickup], idx : Int, level : Int) -> Unit {
   let base_value : Int = 60 + level * 18
   let bonus : Int = @raylib.get_random_value(0, 80 + level * 20)
@@ -197,6 +217,7 @@ fn respawn_pickup(pickups : FixedArray[Pickup], idx : Int, level : Int) -> Unit 
 }
 
 ///|
+/// Spawns all pickups at random positions with values appropriate for the given level.
 fn init_pickups(pickups : FixedArray[Pickup], level : Int) -> Unit {
   for i in 0..<pickups.length() {
     respawn_pickup(pickups, i, level)
@@ -204,6 +225,7 @@ fn init_pickups(pickups : FixedArray[Pickup], level : Int) -> Unit {
 }
 
 ///|
+/// Activates and positions a number of cops scaled to the current level with random starting velocities.
 fn init_cops(cops : FixedArray[Cop], level : Int) -> Unit {
   let total : Int = clampf(
     Float::from_int(10 + level * 3),
@@ -231,6 +253,7 @@ fn init_cops(cops : FixedArray[Cop], level : Int) -> Unit {
 }
 
 ///|
+/// Activates an inactive smoke screen slot at the given world position.
 fn spawn_smoke(smokes : FixedArray[Smoke], x : Float, y : Float) -> Unit {
   for i in 0..<smokes.length() {
     if not(smokes[i].active) {
@@ -241,6 +264,7 @@ fn spawn_smoke(smokes : FixedArray[Smoke], x : Float, y : Float) -> Unit {
 }
 
 ///|
+/// Draws a filled progress bar at (x, y) with the given dimensions, fill ratio, foreground, and background colors.
 fn draw_bar(
   x : Int,
   y : Int,
@@ -269,6 +293,7 @@ fn draw_bar(
 }
 
 ///|
+/// Draws on-screen directional pad and action buttons for touch input when show is true.
 fn draw_touch_controls(show : Bool) -> Unit {
   if not(show) {
     return
@@ -370,6 +395,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
 }
 
 ///|
+/// Initializes the window and runs the Drift Police Chase game loop.
 fn main {
   @raylib.init_window(
     sw, sh, "raylib [moonbit] example - drift police chase 2026",

@@ -1,25 +1,33 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1200
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 820
 
 ///|
+/// Number of grid columns in the crossing board.
 let cols : Int = 11
 
 ///|
+/// Number of grid rows in the crossing board.
 let rows : Int = 11
 
 ///|
+/// Size of each grid cell in pixels.
 let cell : Int = 56
 
 ///|
+/// Horizontal pixel offset for the grid origin.
 let ox : Int = 292
 
 ///|
+/// Vertical pixel offset for the grid origin.
 let oy : Int = 120
 
 ///|
+/// Represents a traffic car with position, row, width, speed, and colour index.
 struct Car {
   mut x : Float
   row : Int
@@ -29,6 +37,7 @@ struct Car {
 }
 
 ///|
+/// Represents a floating log on the river with position, row, width, and speed.
 struct Log {
   mut x : Float
   row : Int
@@ -37,6 +46,7 @@ struct Log {
 }
 
 ///|
+/// Returns the absolute value of a float.
 fn absf(x : Float) -> Float {
   if x < 0.0 {
     -x
@@ -46,6 +56,7 @@ fn absf(x : Float) -> Float {
 }
 
 ///|
+/// Returns the value v clamped to the inclusive range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -57,6 +68,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns true if point (px, py) lies within the rectangle defined by rx, ry, rw, rh.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -72,6 +84,7 @@ fn inside_rect(
 }
 
 ///|
+/// Sets the properties of a car at index i in the cars array.
 fn set_car(
   cars : Array[Car],
   i : Int,
@@ -85,6 +98,7 @@ fn set_car(
 }
 
 ///|
+/// Sets the properties of a log at index i in the logs array.
 fn set_log(
   logs : Array[Log],
   i : Int,
@@ -97,6 +111,7 @@ fn set_log(
 }
 
 ///|
+/// Resets all cars and logs to their initial positions and speeds.
 fn reset_traffic(cars : Array[Car], logs : Array[Log]) -> Unit {
   set_log(logs, 0, Float::from_int(ox + 20), 1, 3, 88.0)
   set_log(logs, 1, Float::from_int(ox + 280), 1, 2, 88.0)
@@ -128,6 +143,7 @@ fn reset_traffic(cars : Array[Car], logs : Array[Log]) -> Unit {
 }
 
 ///|
+/// Resets all home slots to unoccupied.
 fn reset_homes(homes : Array[Bool]) -> Unit {
   for i in 0..<homes.length() {
     homes[i] = false
@@ -135,6 +151,7 @@ fn reset_homes(homes : Array[Bool]) -> Unit {
 }
 
 ///|
+/// Returns true if all home slots have been reached by the player.
 fn homes_done(homes : Array[Bool]) -> Bool {
   let mut ok = true
   for home in homes {
@@ -146,6 +163,7 @@ fn homes_done(homes : Array[Bool]) -> Bool {
 }
 
 ///|
+/// Returns the column index for home slot i.
 fn slot_col(i : Int) -> Int {
   if i == 0 {
     1
@@ -161,26 +179,31 @@ fn slot_col(i : Int) -> Int {
 }
 
 ///|
+/// Returns the pixel x-coordinate of the center of home slot i.
 fn slot_center_x(i : Int) -> Float {
   Float::from_int(ox + slot_col(i) * cell + cell / 2)
 }
 
 ///|
+/// Returns the grid row index for the given y pixel coordinate.
 fn row_from_y(y : Float) -> Int {
   (y - Float::from_int(oy)).to_int() / cell
 }
 
 ///|
+/// Returns true if the given row index is a river row.
 fn is_river_row(row : Int) -> Bool {
   row >= 1 && row <= 3
 }
 
 ///|
+/// Returns true if the given row index is a road row.
 fn is_road_row(row : Int) -> Bool {
   row == 5 || row == 6 || row == 7 || row == 9
 }
 
 ///|
+/// Returns the starting spawn position for the player at the bottom center of the grid.
 fn spawn_pos() -> (Float, Float) {
   (
     Float::from_int(ox + cols / 2 * cell + cell / 2),
@@ -189,6 +212,7 @@ fn spawn_pos() -> (Float, Float) {
 }
 
 ///|
+/// Initialises the window, runs the game loop, and cleans up on exit.
 fn main {
   @raylib.init_window(sw, sh, "City Crossing 2026")
   @raylib.set_target_fps(60)

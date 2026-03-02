@@ -1,18 +1,23 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1080
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 720
 
 ///|
+/// Total number of ingredient-drop lanes on the kitchen floor.
 let lane_count : Int = 5
 
 ///|
+/// Returns the horizontal center X position in pixels for the given lane index.
 fn lane_x(lane : Int) -> Float {
   160.0 + Float::from_int(lane) * 185.0
 }
 
 ///|
+/// Represents a falling ingredient or trash item dropping down a lane.
 struct Drop {
   mut alive : Bool
   mut lane : Int
@@ -23,6 +28,7 @@ struct Drop {
 }
 
 ///|
+/// Returns the display name of the ingredient identified by the given kind index.
 fn ingredient_name(kind : Int) -> String {
   if kind == 0 {
     "Tomato"
@@ -38,6 +44,7 @@ fn ingredient_name(kind : Int) -> String {
 }
 
 ///|
+/// Returns the display color associated with the given ingredient kind.
 fn ingredient_color(kind : Int) -> @raylib.Color {
   if kind == 0 {
     @raylib.red
@@ -53,6 +60,7 @@ fn ingredient_color(kind : Int) -> @raylib.Color {
 }
 
 ///|
+/// Deactivates all drops in the pool, clearing the screen of falling items.
 fn reset_drops(drops : Array[Drop]) -> Unit {
   for drop in drops {
     drop.alive = false
@@ -60,6 +68,7 @@ fn reset_drops(drops : Array[Drop]) -> Unit {
 }
 
 ///|
+/// Activates an idle drop from the pool, placing it at the top of the specified lane with the given kind and speed.
 fn spawn_drop(
   drops : Array[Drop],
   lane : Int,
@@ -80,11 +89,13 @@ fn spawn_drop(
 }
 
 ///|
+/// Generates a new random order specifying a required ingredient kind and the quantity needed.
 fn next_order() -> (Int, Int) {
   (@raylib.get_random_value(0, 3), @raylib.get_random_value(2, 4))
 }
 
 ///|
+/// Initializes the game window and runs the Chef Rush 2026 main game loop.
 fn main {
   @raylib.init_window(sw, sh, "Chef Rush 2026")
   @raylib.set_target_fps(60)

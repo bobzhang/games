@@ -1,4 +1,5 @@
 ///|
+/// Represents the player-controlled rescue convoy vehicle with position, velocity, hull, battery, cargo, and ability timers.
 struct Player {
   mut x : Float
   mut y : Float
@@ -22,6 +23,7 @@ struct Player {
 }
 
 ///|
+/// Represents the hospital base where survivors are dropped off, defined by position and dimensions.
 struct Hospital {
   x : Float
   y : Float
@@ -30,6 +32,7 @@ struct Hospital {
 }
 
 ///|
+/// Represents a city district with a survivor queue, stress level, and alarm state.
 struct District {
   mut active : Bool
   mut x : Float
@@ -41,6 +44,7 @@ struct District {
 }
 
 ///|
+/// Represents a group of survivors with position, count, panic level, and drift movement.
 struct SurvivorGroup {
   mut active : Bool
   mut x : Float
@@ -54,6 +58,7 @@ struct SurvivorGroup {
 }
 
 ///|
+/// Represents an active earthquake crack zone with position, velocity, radius, intensity, and lifetime.
 struct CrackZone {
   mut active : Bool
   mut x : Float
@@ -67,6 +72,7 @@ struct CrackZone {
 }
 
 ///|
+/// Represents a dust cloud effect with position, velocity, radius, density, and lifetime.
 struct DustCloud {
   mut active : Bool
   mut x : Float
@@ -80,6 +86,7 @@ struct DustCloud {
 }
 
 ///|
+/// Represents a moving debris obstacle with position, velocity, size, hardness, and spin.
 struct Obstacle {
   mut active : Bool
   mut x : Float
@@ -92,6 +99,7 @@ struct Obstacle {
 }
 
 ///|
+/// Represents a visual particle effect with position, velocity, lifetime, size, and kind.
 struct Particle {
   mut active : Bool
   mut x : Float
@@ -104,6 +112,7 @@ struct Particle {
 }
 
 ///|
+/// Returns the value clamped between lo and hi.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -115,6 +124,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two Float values.
 fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -124,6 +134,7 @@ fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two Float values.
 fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -133,6 +144,7 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two Int values.
 fn mini(a : Int, b : Int) -> Int {
   if a < b {
     a
@@ -142,6 +154,7 @@ fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the absolute value of a Float.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -151,12 +164,14 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns a random Float value uniformly distributed between lo and hi.
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns the squared Euclidean distance between two 2D points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx : Float = x1 - x0
   let dy : Float = y1 - y0
@@ -164,6 +179,7 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Returns true if the point (px, py) lies within the axis-aligned rectangle.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -179,6 +195,7 @@ fn inside_rect(
 }
 
 ///|
+/// Resets all districts to their inactive default state.
 fn clear_districts(districts : Array[District]) -> Unit {
   for district in districts {
     district.active = false
@@ -191,6 +208,7 @@ fn clear_districts(districts : Array[District]) -> Unit {
 }
 
 ///|
+/// Resets all survivor groups to their inactive default state.
 fn clear_groups(groups : Array[SurvivorGroup]) -> Unit {
   for i in 0..<groups.length() {
     groups[i].active = false
@@ -206,6 +224,7 @@ fn clear_groups(groups : Array[SurvivorGroup]) -> Unit {
 }
 
 ///|
+/// Resets all crack zones to their inactive default state.
 fn clear_cracks(cracks : Array[CrackZone]) -> Unit {
   for crack in cracks {
     crack.active = false
@@ -221,6 +240,7 @@ fn clear_cracks(cracks : Array[CrackZone]) -> Unit {
 }
 
 ///|
+/// Resets all dust clouds to their inactive default state.
 fn clear_dusts(dusts : Array[DustCloud]) -> Unit {
   for dust in dusts {
     dust.active = false
@@ -236,6 +256,7 @@ fn clear_dusts(dusts : Array[DustCloud]) -> Unit {
 }
 
 ///|
+/// Resets all obstacles to their inactive default state.
 fn clear_obstacles(obstacles : Array[Obstacle]) -> Unit {
   for obstacle in obstacles {
     obstacle.active = false
@@ -250,6 +271,7 @@ fn clear_obstacles(obstacles : Array[Obstacle]) -> Unit {
 }
 
 ///|
+/// Resets all particles to their inactive default state.
 fn clear_parts(parts : Array[Particle]) -> Unit {
   for part in parts {
     part.active = false
@@ -264,6 +286,7 @@ fn clear_parts(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Activates the first available particle slot at the given position with the specified kind.
 fn add_particle(
   parts : Array[Particle],
   x : Float,
@@ -308,6 +331,7 @@ fn add_particle(
 }
 
 ///|
+/// Emits n particles of the given kind at position (x, y).
 fn burst(
   parts : Array[Particle],
   x : Float,
@@ -321,6 +345,7 @@ fn burst(
 }
 
 ///|
+/// Updates all active particles by advancing their positions and applying physics each frame.
 fn update_parts(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
     if not(part.active) {
@@ -353,6 +378,7 @@ fn update_parts(parts : Array[Particle], dt : Float) -> Unit {
 }
 
 ///|
+/// Initialises all districts with preset positions and stress values within the world bounds.
 fn init_districts(
   districts : Array[District],
   world_x : Int,
@@ -428,6 +454,7 @@ fn init_districts(
 }
 
 ///|
+/// Populates the obstacles array with randomly placed debris, avoiding safe zones and district locations.
 fn init_obstacles(
   obstacles : Array[Obstacle],
   districts : Array[District],
@@ -494,6 +521,7 @@ fn init_obstacles(
 }
 
 ///|
+/// Spawns a survivor group at a random edge of the world with given tier and serial number.
 fn spawn_group(
   groups : Array[SurvivorGroup],
   world_l : Float,
@@ -543,6 +571,7 @@ fn spawn_group(
 }
 
 ///|
+/// Spawns a new crack zone entering from a random edge of the world at the given tier.
 fn spawn_crack(
   cracks : Array[CrackZone],
   world_l : Float,
@@ -591,6 +620,7 @@ fn spawn_crack(
 }
 
 ///|
+/// Spawns a dust cloud at the given position with randomised properties scaled by intensity.
 fn spawn_dust(
   dusts : Array[DustCloud],
   x : Float,
@@ -618,6 +648,7 @@ fn spawn_dust(
 }
 
 ///|
+/// Returns the count of currently active survivor groups.
 fn active_groups(groups : Array[SurvivorGroup]) -> Int {
   let mut n : Int = 0
   for group in groups {
@@ -629,6 +660,7 @@ fn active_groups(groups : Array[SurvivorGroup]) -> Int {
 }
 
 ///|
+/// Returns the count of currently active crack zones.
 fn active_cracks(cracks : Array[CrackZone]) -> Int {
   let mut n : Int = 0
   for crack in cracks {
@@ -640,6 +672,7 @@ fn active_cracks(cracks : Array[CrackZone]) -> Int {
 }
 
 ///|
+/// Returns the count of active survivor groups whose panic level is at or above the critical threshold.
 fn active_critical(groups : Array[SurvivorGroup]) -> Int {
   let mut n : Int = 0
   for group in groups {
@@ -651,6 +684,7 @@ fn active_critical(groups : Array[SurvivorGroup]) -> Int {
 }
 
 ///|
+/// Returns the highest panic value among all active survivor groups.
 fn peak_group_panic(groups : Array[SurvivorGroup]) -> Float {
   let mut best : Float = 0.0
   for group in groups {
@@ -662,6 +696,7 @@ fn peak_group_panic(groups : Array[SurvivorGroup]) -> Float {
 }
 
 ///|
+/// Returns the highest intensity value among all active crack zones.
 fn peak_crack_intensity(cracks : Array[CrackZone]) -> Float {
   let mut best : Float = 0.0
   for crack in cracks {
@@ -673,6 +708,7 @@ fn peak_crack_intensity(cracks : Array[CrackZone]) -> Float {
 }
 
 ///|
+/// Updates all active crack zones each frame, advancing movement, intensity, and spawning dust.
 fn update_cracks(
   cracks : Array[CrackZone],
   dusts : Array[DustCloud],
@@ -724,6 +760,7 @@ fn update_cracks(
 }
 
 ///|
+/// Updates all active dust clouds each frame, advancing their position and aging them out.
 fn update_dusts(
   dusts : Array[DustCloud],
   dt : Float,
@@ -755,6 +792,7 @@ fn update_dusts(
 }
 
 ///|
+/// Updates all active obstacles each frame, moving them and bouncing them off world boundaries.
 fn update_obstacles(
   obstacles : Array[Obstacle],
   dt : Float,
@@ -795,6 +833,7 @@ fn update_obstacles(
 }
 
 ///|
+/// Updates all active survivor groups each frame, accumulating panic from nearby hazards and returning lost count and total panic.
 fn update_groups(
   groups : Array[SurvivorGroup],
   cracks : Array[CrackZone],
@@ -879,6 +918,7 @@ fn update_groups(
 }
 
 ///|
+/// Picks up nearby survivors into the player's vehicle and returns the number of people and groups rescued.
 fn rescue_groups(
   player : Player,
   groups : Array[SurvivorGroup],
@@ -932,6 +972,7 @@ fn rescue_groups(
 }
 
 ///|
+/// Uses medkits to reduce the intensity of nearby crack zones and returns the number of hits and total intensity reduced.
 fn stabilize_cracks(
   player : Player,
   cracks : Array[CrackZone],
@@ -982,6 +1023,7 @@ fn stabilize_cracks(
 }
 
 ///|
+/// Returns the position and panic value of the nearest active survivor group with high panic, or false if none found.
 fn nearest_urgent_group(
   groups : Array[SurvivorGroup],
   x : Float,
@@ -1012,6 +1054,7 @@ fn nearest_urgent_group(
 }
 
 ///|
+/// Returns the position and intensity of the nearest high-intensity crack zone, or false if none found.
 fn nearest_hot_crack(
   cracks : Array[CrackZone],
   x : Float,
@@ -1042,6 +1085,7 @@ fn nearest_hot_crack(
 }
 
 ///|
+/// Draws the city background with a gradient, road grid, and animated lighting effects.
 fn draw_city(
   world_x : Int,
   world_y : Int,
@@ -1111,6 +1155,7 @@ fn draw_city(
 }
 
 ///|
+/// Draws the hospital building and its label on screen.
 fn draw_hospital(hospital : Hospital) -> Unit {
   @raylib.draw_rectangle(
     hospital.x.to_int(),
@@ -1149,6 +1194,7 @@ fn draw_hospital(hospital : Hospital) -> Unit {
 }
 
 ///|
+/// Draws all active districts with status indicators and alarm effects.
 fn draw_districts(districts : Array[District], t : Float) -> Unit {
   for i in 0..<districts.length() {
     if not(districts[i].active) {
@@ -1208,6 +1254,7 @@ fn draw_districts(districts : Array[District], t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active survivor groups with panic-coloured icons and flare effects.
 fn draw_groups(groups : Array[SurvivorGroup], t : Float) -> Unit {
   for group in groups {
     if not(group.active) {
@@ -1259,6 +1306,7 @@ fn draw_groups(groups : Array[SurvivorGroup], t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active crack zones as pulsing hazard circles with spark effects.
 fn draw_cracks(cracks : Array[CrackZone], t : Float) -> Unit {
   for crack in cracks {
     if not(crack.active) {
@@ -1300,6 +1348,7 @@ fn draw_cracks(cracks : Array[CrackZone], t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active dust clouds as semi-transparent pulsing circles.
 fn draw_dusts(dusts : Array[DustCloud], t : Float) -> Unit {
   for dust in dusts {
     if not(dust.active) {
@@ -1330,6 +1379,7 @@ fn draw_dusts(dusts : Array[DustCloud], t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active obstacles as wobbling circles coloured by hardness.
 fn draw_obstacles(obstacles : Array[Obstacle], t : Float) -> Unit {
   for obstacle in obstacles {
     if not(obstacle.active) {
@@ -1360,6 +1410,7 @@ fn draw_obstacles(obstacles : Array[Obstacle], t : Float) -> Unit {
 }
 
 ///|
+/// Draws the player's convoy vehicle with heading indicator, onboard survivors, and medkit bar.
 fn draw_player(player : Player, t : Float) -> Unit {
   let x : Float = player.x
   let y : Float = player.y
@@ -1443,6 +1494,7 @@ fn draw_player(player : Player, t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active particles as coloured circles.
 fn draw_parts(parts : Array[Particle]) -> Unit {
   for part in parts {
     if not(part.active) {
@@ -1464,6 +1516,7 @@ fn draw_parts(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Draws the on-screen touch controls including a d-pad and action buttons.
 fn draw_touch_controls(
   sw : Int,
   sh : Int,
@@ -1596,6 +1649,7 @@ fn draw_touch_controls(
 }
 
 ///|
+/// Draws a labelled progress bar at the specified panel position with the given value and colour.
 fn draw_bar(
   panel_x : Int,
   y : Int,
@@ -1645,6 +1699,7 @@ fn draw_bar(
 }
 
 ///|
+/// Draws a rectangular button with a label, highlighting it when hovered.
 fn draw_button(
   x : Int,
   y : Int,
@@ -1677,6 +1732,7 @@ fn draw_button(
 }
 
 ///|
+/// Initializes the window and runs the main aftershock rescue convoy game loop.
 fn main {
   let sw : Int = 1680
   let sh : Int = 940

@@ -1,18 +1,23 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1160
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 740
 
 ///|
+/// Number of runways available for landing.
 let runway_count : Int = 3
 
 ///|
+/// Returns the horizontal screen position of a runway by index.
 fn runway_x(idx : Int) -> Float {
   250.0 + Float::from_int(idx) * 330.0
 }
 
 ///|
+/// Represents an in-flight plane with position, velocity, fuel, and runway assignment.
 struct Plane {
   mut alive : Bool
   mut runway : Int
@@ -23,6 +28,7 @@ struct Plane {
 }
 
 ///|
+/// Spawns a new plane into the first inactive slot in the planes array.
 fn spawn_plane(planes : Array[Plane]) -> Unit {
   for plane in planes {
     if not(plane.alive) {
@@ -39,6 +45,7 @@ fn spawn_plane(planes : Array[Plane]) -> Unit {
 }
 
 ///|
+/// Deactivates all planes in the array, resetting the game state.
 fn reset_planes(planes : Array[Plane]) -> Unit {
   for plane in planes {
     plane.alive = false
@@ -46,6 +53,7 @@ fn reset_planes(planes : Array[Plane]) -> Unit {
 }
 
 ///|
+/// Initializes the window and runs the main air traffic control game loop.
 fn main {
   @raylib.init_window(sw, sh, "Air Traffic Control 2026")
   @raylib.set_target_fps(60)

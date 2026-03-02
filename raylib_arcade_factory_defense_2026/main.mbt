@@ -1,49 +1,65 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 760
 
 ///|
+/// Left boundary of the play arena.
 let arena_l : Float = 36.0
 
 ///|
+/// Right boundary of the play arena.
 let arena_r : Float = Float::from_int(sw) - 36.0
 
 ///|
+/// Top boundary of the play arena.
 let arena_t : Float = 92.0
 
 ///|
+/// Bottom boundary of the play arena.
 let arena_b : Float = Float::from_int(sh) - 40.0
 
 ///|
+/// Horizontal centre of the factory core.
 let core_x : Float = Float::from_int(sw) * 0.5
 
 ///|
+/// Vertical centre of the factory core.
 let core_y : Float = Float::from_int(sh) * 0.5 + 20.0
 
 ///|
+/// Collision radius of the factory core.
 let core_r : Float = 44.0
 
 ///|
+/// Maximum number of enemies that can exist simultaneously.
 let max_enemies : Int = 260
 
 ///|
+/// Maximum number of bullets that can exist simultaneously.
 let max_bullets : Int = 1200
 
 ///|
+/// Maximum number of player-placed turrets allowed.
 let max_turrets : Int = 120
 
 ///|
+/// Maximum number of scrap pickups that can exist simultaneously.
 let max_scraps : Int = 320
 
 ///|
+/// Maximum number of particles in the effects pool.
 let max_particles : Int = 1800
 
 ///|
+/// Total number of waves in a full game run.
 let max_waves : Int = 10
 
 ///|
+/// Represents the player character with position, velocity, aim direction, health, energy, and combat timers.
 struct Player {
   mut x : Float
   mut y : Float
@@ -66,6 +82,7 @@ struct Player {
 }
 
 ///|
+/// Represents an enemy unit with position, velocity, health, fire cooldown, and kind.
 struct Enemy {
   mut active : Bool
   mut kind : Int
@@ -79,6 +96,7 @@ struct Enemy {
 }
 
 ///|
+/// Represents a projectile with team, kind, position, velocity, damage, radius, and remaining lifetime.
 struct Bullet {
   mut active : Bool
   mut team : Int
@@ -93,6 +111,7 @@ struct Bullet {
 }
 
 ///|
+/// Represents a player-placed defensive turret with kind, position, health, and fire cooldown.
 struct Turret {
   mut active : Bool
   mut kind : Int
@@ -104,6 +123,7 @@ struct Turret {
 }
 
 ///|
+/// Represents a collectible scrap pickup dropped by defeated enemies with value and lifetime.
 struct Scrap {
   mut active : Bool
   mut kind : Int
@@ -117,6 +137,7 @@ struct Scrap {
 }
 
 ///|
+/// Represents a visual particle effect with kind, position, velocity, size, lifetime, and elapsed time.
 struct Particle {
   mut active : Bool
   mut kind : Int
@@ -130,6 +151,7 @@ struct Particle {
 }
 
 ///|
+/// Returns the value clamped between lo and hi.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -141,6 +163,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the squared Euclidean distance between two 2D points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx : Float = x1 - x0
   let dy : Float = y1 - y0
@@ -148,12 +171,14 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Returns a random Float value uniformly distributed between lo and hi.
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns true if the point (px, py) lies within the axis-aligned rectangle.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -169,6 +194,7 @@ fn inside_rect(
 }
 
 ///|
+/// Returns the collision radius for an enemy of the given kind.
 fn enemy_radius(kind : Int) -> Float {
   if kind == 0 {
     15.0
@@ -180,6 +206,7 @@ fn enemy_radius(kind : Int) -> Float {
 }
 
 ///|
+/// Returns the starting health points for an enemy of the given kind and current wave.
 fn enemy_hp(kind : Int, wave : Int) -> Float {
   if kind == 0 {
     24.0 + Float::from_int(wave) * 2.8
@@ -191,6 +218,7 @@ fn enemy_hp(kind : Int, wave : Int) -> Float {
 }
 
 ///|
+/// Returns the scrap cost to build a turret of the given kind.
 fn turret_cost(kind : Int) -> Int {
   if kind == 0 {
     12
@@ -200,6 +228,7 @@ fn turret_cost(kind : Int) -> Int {
 }
 
 ///|
+/// Returns the firing range for a turret of the given kind.
 fn turret_range(kind : Int) -> Float {
   if kind == 0 {
     220.0
@@ -209,6 +238,7 @@ fn turret_range(kind : Int) -> Float {
 }
 
 ///|
+/// Resets all enemies to their inactive default state.
 fn clear_enemies(enemies : Array[Enemy]) -> Unit {
   for enemy in enemies {
     enemy.active = false
@@ -224,6 +254,7 @@ fn clear_enemies(enemies : Array[Enemy]) -> Unit {
 }
 
 ///|
+/// Resets all bullets to their inactive default state.
 fn clear_bullets(bullets : Array[Bullet]) -> Unit {
   for bullet in bullets {
     bullet.active = false
@@ -240,6 +271,7 @@ fn clear_bullets(bullets : Array[Bullet]) -> Unit {
 }
 
 ///|
+/// Resets all turrets to their inactive default state.
 fn clear_turrets(turrets : Array[Turret]) -> Unit {
   for turret in turrets {
     turret.active = false
@@ -253,6 +285,7 @@ fn clear_turrets(turrets : Array[Turret]) -> Unit {
 }
 
 ///|
+/// Resets all scrap pickups to their inactive default state.
 fn clear_scraps(scraps : Array[Scrap]) -> Unit {
   for scrap in scraps {
     scrap.active = false
@@ -268,6 +301,7 @@ fn clear_scraps(scraps : Array[Scrap]) -> Unit {
 }
 
 ///|
+/// Resets all particles to their inactive default state.
 fn clear_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
     part.active = false
@@ -283,6 +317,7 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Activates the first available enemy slot with the specified kind, position, and wave-scaled stats.
 fn add_enemy(
   enemies : Array[Enemy],
   kind : Int,
@@ -314,6 +349,7 @@ fn add_enemy(
 }
 
 ///|
+/// Activates the first available bullet slot with the specified team, kind, position, velocity, damage, radius, and lifetime.
 fn add_bullet(
   bullets : Array[Bullet],
   team : Int,
@@ -345,6 +381,7 @@ fn add_bullet(
 }
 
 ///|
+/// Activates the first available turret slot with the specified kind and position.
 fn add_turret(
   turrets : Array[Turret],
   kind : Int,
@@ -372,6 +409,7 @@ fn add_turret(
 }
 
 ///|
+/// Activates the first available scrap slot with the specified kind, position, velocity, value, and lifetime.
 fn add_scrap(
   scraps : Array[Scrap],
   kind : Int,
@@ -400,6 +438,7 @@ fn add_scrap(
 }
 
 ///|
+/// Activates the first available particle slot with the specified properties.
 fn add_particle(
   parts : Array[Particle],
   kind : Int,
@@ -428,6 +467,7 @@ fn add_particle(
 }
 
 ///|
+/// Emits a burst of count particles of the given kind at position (x, y), scaled by the scale factor.
 fn burst(
   parts : Array[Particle],
   x : Float,
@@ -455,6 +495,7 @@ fn burst(
 }
 
 ///|
+/// Returns the number of currently active enemies.
 fn count_active_enemies(enemies : Array[Enemy]) -> Int {
   let mut cnt : Int = 0
   for enemy in enemies {
@@ -466,6 +507,7 @@ fn count_active_enemies(enemies : Array[Enemy]) -> Int {
 }
 
 ///|
+/// Returns true if a turret can be placed at (x, y) without overlapping arena edges, the core, or existing turrets.
 fn can_place_turret(turrets : Array[Turret], x : Float, y : Float) -> Bool {
   if x < arena_l + 40.0 ||
     x > arena_r - 40.0 ||
@@ -491,6 +533,7 @@ fn can_place_turret(turrets : Array[Turret], x : Float, y : Float) -> Bool {
 }
 
 ///|
+/// Draws the touch UI overlay with d-pad and action buttons when the game is in play state.
 fn draw_touch_ui(state : Int) -> Unit {
   if state != 1 {
     ignore(())
@@ -650,6 +693,7 @@ fn draw_touch_ui(state : Int) -> Unit {
 }
 
 ///|
+/// Initializes the window and runs the main arcade factory defense game loop.
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] arcade factory defense 2026")
   @raylib.set_target_fps(60)

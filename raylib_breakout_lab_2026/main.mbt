@@ -1,36 +1,47 @@
 ///|
+/// Width of the game arena in pixels.
 let arena_w : Int = 960
 
 ///|
+/// Height of the game arena in pixels.
 let arena_h : Int = 720
 
 ///|
+/// Number of brick columns in the brick grid layout.
 let bricks_cols : Int = 12
 
 ///|
+/// Number of brick rows in the brick grid layout.
 let bricks_rows : Int = 8
 
 ///|
+/// Width of a single brick in pixels.
 let brick_w : Int = 70
 
 ///|
+/// Height of a single brick in pixels.
 let brick_h : Int = 24
 
 ///|
+/// Pixel gap between adjacent bricks in the grid.
 let brick_gap : Int = 5
 
 ///|
+/// Horizontal pixel offset to the top-left corner of the brick grid.
 let bricks_x0 : Int = 36
 
 ///|
+/// Vertical pixel offset to the top-left corner of the brick grid.
 let bricks_y0 : Int = 80
 
 ///|
+/// Converts an integer to a Float for use in floating-point calculations.
 fn fi(v : Int) -> Float {
   Float::from_int(v)
 }
 
 ///|
+/// Represents a single brick with alive state, pixel position, and remaining hit points.
 struct Brick {
   mut alive : Bool
   x : Int
@@ -39,6 +50,7 @@ struct Brick {
 }
 
 ///|
+/// Creates and returns the full grid of bricks with positions and hit points assigned by row.
 fn make_bricks() -> Array[Brick] {
   let arr : Array[Brick] = []
   for r in 0..<bricks_rows {
@@ -53,11 +65,13 @@ fn make_bricks() -> Array[Brick] {
 }
 
 ///|
+/// Returns the initial ball position and velocity tuple for a fresh serve.
 fn reset_ball() -> (Float, Float, Float, Float) {
   (fi(arena_w) * (0.5 : Float), fi(arena_h - 120), 180.0, -250.0)
 }
 
 ///|
+/// Returns the display color for a brick based on its remaining hit points.
 fn brick_color(hp : Int) -> @raylib.Color {
   match hp {
     3 => @raylib.maroon
@@ -67,6 +81,7 @@ fn brick_color(hp : Int) -> @raylib.Color {
 }
 
 ///|
+/// Runs the main game loop for Breakout Lab 2026, handling paddle, ball physics, brick collision, and rendering.
 fn main {
   @raylib.init_window(arena_w, arena_h, "Breakout Lab 2026")
   @raylib.set_target_fps(60)

@@ -1,40 +1,53 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 760
 
 ///|
+/// Left boundary X coordinate of the tower play area.
 let tower_l : Float = 342.0
 
 ///|
+/// Right boundary X coordinate of the tower play area.
 let tower_r : Float = 938.0
 
 ///|
+/// Width of the tower play area in pixels.
 let tower_w : Float = tower_r - tower_l
 
 ///|
+/// Gravitational acceleration applied to the pilot in pixels per second squared.
 let gravity : Float = 760.0
 
 ///|
+/// Maximum number of platforms that can exist in the level at once.
 let max_platforms : Int = 260
 
 ///|
+/// Maximum number of grapple anchor points that can exist simultaneously.
 let max_anchors : Int = 260
 
 ///|
+/// Maximum number of enemy drones that can be active at one time.
 let max_drones : Int = 140
 
 ///|
+/// Maximum number of bullets that can be in flight simultaneously.
 let max_bullets : Int = 560
 
 ///|
+/// Maximum number of collectible crystals that can exist in the level at once.
 let max_crystals : Int = 200
 
 ///|
+/// Maximum number of visual particles that can be active at any one time.
 let max_particles : Int = 1000
 
 ///|
+/// Represents the player-controlled pilot with physics, health, energy, grapple state, and score tracking.
 struct Pilot {
   mut x : Float
   mut y : Float
@@ -61,6 +74,7 @@ struct Pilot {
 }
 
 ///|
+/// Represents a platform the pilot can land on, with optional horizontal oscillating movement.
 struct Platform {
   mut active : Bool
   mut x : Float
@@ -74,6 +88,7 @@ struct Platform {
 }
 
 ///|
+/// Represents a fixed grapple anchor point the pilot can attach to with position and active state.
 struct Anchor {
   mut active : Bool
   mut x : Float
@@ -81,6 +96,7 @@ struct Anchor {
 }
 
 ///|
+/// Represents an enemy drone with position, health, fire cooldown, stun state, and patrol behaviour.
 struct Drone {
   mut active : Bool
   mut kind : Int
@@ -95,6 +111,7 @@ struct Drone {
 }
 
 ///|
+/// Represents a projectile bullet with position, velocity, damage, lifetime, and team ownership.
 struct Bullet {
   mut active : Bool
   mut x : Float
@@ -107,6 +124,7 @@ struct Bullet {
 }
 
 ///|
+/// Represents a collectible crystal with position, point value, and a limited lifespan.
 struct Crystal {
   mut active : Bool
   mut x : Float
@@ -117,6 +135,7 @@ struct Crystal {
 }
 
 ///|
+/// Represents a short-lived visual particle with position, velocity, size, elapsed time, and type.
 struct Particle {
   mut active : Bool
   mut x : Float
@@ -130,6 +149,7 @@ struct Particle {
 }
 
 ///|
+/// Returns the value v clamped to the range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -141,6 +161,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -150,6 +171,7 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns the squared Euclidean distance between two 2D points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx = x1 - x0
   let dy = y1 - y0
@@ -157,12 +179,14 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Returns a random float uniformly distributed between lo and hi.
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns true if the point (px, py) lies within the rectangle at (x, y) with dimensions w by h.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -178,6 +202,7 @@ fn inside_rect(
 }
 
 ///|
+/// Resets all platforms in the array to their default inactive state.
 fn clear_platforms(platforms : Array[Platform]) -> Unit {
   for platform in platforms {
     platform.active = false
@@ -193,6 +218,7 @@ fn clear_platforms(platforms : Array[Platform]) -> Unit {
 }
 
 ///|
+/// Resets all anchors in the array to their default inactive state.
 fn clear_anchors(anchors : Array[Anchor]) -> Unit {
   for anchor in anchors {
     anchor.active = false
@@ -202,6 +228,7 @@ fn clear_anchors(anchors : Array[Anchor]) -> Unit {
 }
 
 ///|
+/// Resets all drones in the array to their default inactive state.
 fn clear_drones(drones : Array[Drone]) -> Unit {
   for drone in drones {
     drone.active = false
@@ -218,6 +245,7 @@ fn clear_drones(drones : Array[Drone]) -> Unit {
 }
 
 ///|
+/// Resets all bullets in the array to their default inactive state.
 fn clear_bullets(bullets : Array[Bullet]) -> Unit {
   for bullet in bullets {
     bullet.active = false
@@ -232,6 +260,7 @@ fn clear_bullets(bullets : Array[Bullet]) -> Unit {
 }
 
 ///|
+/// Resets all crystals in the array to their default inactive state.
 fn clear_crystals(crystals : Array[Crystal]) -> Unit {
   for crystal in crystals {
     crystal.active = false
@@ -244,6 +273,7 @@ fn clear_crystals(crystals : Array[Crystal]) -> Unit {
 }
 
 ///|
+/// Resets all particles in the array to their default inactive state.
 fn clear_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
     part.active = false
@@ -259,6 +289,7 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Adds a new platform to the first available slot and returns true on success.
 fn add_platform(
   platforms : Array[Platform],
   x : Float,
@@ -293,6 +324,7 @@ fn add_platform(
 }
 
 ///|
+/// Adds a new grapple anchor at (x, y) to the first available slot and returns true on success.
 fn add_anchor(anchors : Array[Anchor], x : Float, y : Float) -> Bool {
   let mut slot : Int = -1
   for i in 0..<anchors.length() {
@@ -313,6 +345,7 @@ fn add_anchor(anchors : Array[Anchor], x : Float, y : Float) -> Bool {
 }
 
 ///|
+/// Spawns a new drone of the given kind at (x, y) scaled to the level and returns true on success.
 fn add_drone(
   drones : Array[Drone],
   x : Float,
@@ -348,6 +381,7 @@ fn add_drone(
 }
 
 ///|
+/// Fires a new bullet into the pool with the given position, velocity, damage, lifetime, and team and returns true on success.
 fn add_bullet(
   bullets : Array[Bullet],
   x : Float,
@@ -382,6 +416,7 @@ fn add_bullet(
 }
 
 ///|
+/// Places a new crystal at (x, y) with the given point value into the pool and returns true on success.
 fn add_crystal(
   crystals : Array[Crystal],
   x : Float,
@@ -410,6 +445,7 @@ fn add_crystal(
 }
 
 ///|
+/// Spawns n particles in a burst at position (x, y) with the given speed and visual kind.
 fn burst(
   parts : Array[Particle],
   x : Float,
@@ -439,6 +475,7 @@ fn burst(
 }
 
 ///|
+/// Generates a new tower layer at height y with a platform, anchor, optional crystal, and optional drone.
 fn generate_layer(
   platforms : Array[Platform],
   anchors : Array[Anchor],
@@ -506,6 +543,7 @@ fn generate_layer(
 }
 
 ///|
+/// Initialises the window, runs the main game loop, and handles all update and draw logic.
 fn main {
   @raylib.init_window(sw, sh, "Grappling Tower Climb 2026")
   @raylib.set_target_fps(60)

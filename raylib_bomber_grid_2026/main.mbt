@@ -1,25 +1,33 @@
 ///|
+/// Number of tile columns in the grid.
 let cols : Int = 15
 
 ///|
+/// Number of tile rows in the grid.
 let rows : Int = 13
 
 ///|
+/// Pixel size of each grid tile.
 let tile : Int = 46
 
 ///|
+/// Horizontal pixel offset from the window edge to the grid origin.
 let off_x : Int = 38
 
 ///|
+/// Vertical pixel offset from the window top to the grid origin.
 let off_y : Int = 70
 
 ///|
+/// Total window width derived from grid columns, tile size, and horizontal offset.
 let screen_w : Int = off_x * 2 + cols * tile
 
 ///|
+/// Total window height derived from grid rows, tile size, and vertical offset.
 let screen_h : Int = off_y + rows * tile + 70
 
 ///|
+/// Represents an enemy with alive state, grid position, and movement step timer.
 struct Enemy {
   mut alive : Bool
   mut x : Int
@@ -28,6 +36,7 @@ struct Enemy {
 }
 
 ///|
+/// Represents the player's bomb with active state, grid position, fuse timer, and blast duration.
 struct Bomb {
   mut active : Bool
   mut x : Int
@@ -37,16 +46,19 @@ struct Bomb {
 }
 
 ///|
+/// Returns the flat array index for the given grid column and row.
 fn idx(x : Int, y : Int) -> Int {
   y * cols + x
 }
 
 ///|
+/// Returns true if the given coordinates are within the grid bounds.
 fn in_grid(x : Int, y : Int) -> Bool {
   x >= 0 && x < cols && y >= 0 && y < rows
 }
 
 ///|
+/// Generates and returns a new grid map with walls, breakable blocks, and cleared spawn zones.
 fn init_map() -> Array[Int] {
   let map : Array[Int] = Array::make(cols * rows, 0)
   for y in 0..<rows {
@@ -83,6 +95,7 @@ fn init_map() -> Array[Int] {
 }
 
 ///|
+/// Returns true if the given cell is within bounds, passable, and not blocked by an active bomb.
 fn is_walkable(map : Array[Int], x : Int, y : Int, bomb : Bomb) -> Bool {
   if not(in_grid(x, y)) {
     return false
@@ -97,6 +110,7 @@ fn is_walkable(map : Array[Int], x : Int, y : Int, bomb : Bomb) -> Bool {
 }
 
 ///|
+/// Returns true if the blast from an active exploding bomb reaches the target cell.
 fn fire_hits(map : Array[Int], bomb : Bomb, tx : Int, ty : Int) -> Bool {
   if not(bomb.active) || bomb.blast <= 0.0 {
     return false
@@ -132,6 +146,7 @@ fn fire_hits(map : Array[Int], bomb : Bomb, tx : Int, ty : Int) -> Bool {
 }
 
 ///|
+/// Destroys breakable blocks in the bomb's blast radius and returns the count of blocks destroyed.
 fn apply_explosion(map : Array[Int], bomb : Bomb) -> Int {
   if not(bomb.active) || bomb.blast <= 0.0 {
     return 0
@@ -164,6 +179,7 @@ fn apply_explosion(map : Array[Int], bomb : Bomb) -> Int {
 }
 
 ///|
+/// Draws the explosion fire tiles extending in one direction from the bomb until blocked.
 fn draw_fire_arm(
   map : Array[Int],
   bomb : Bomb,
@@ -193,6 +209,7 @@ fn draw_fire_arm(
 }
 
 ///|
+/// Runs the main game loop for Bomber Grid 2026, handling movement, bomb logic, enemy AI, and rendering.
 fn main {
   @raylib.init_window(screen_w, screen_h, "Bomber Grid 2026")
   @raylib.set_target_fps(60)

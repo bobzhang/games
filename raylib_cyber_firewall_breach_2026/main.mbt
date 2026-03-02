@@ -1,37 +1,49 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 820
 
 ///|
+/// Left edge x-coordinate of the gameplay arena.
 let arena_x : Int = 210
 
 ///|
+/// Top edge y-coordinate of the gameplay arena.
 let arena_y : Int = 118
 
 ///|
+/// Width of the gameplay arena in pixels.
 let arena_w : Int = 1020
 
 ///|
+/// Height of the gameplay arena in pixels.
 let arena_h : Int = 628
 
 ///|
+/// X-coordinate of the firewall core node.
 let core_x : Float = 150.0
 
 ///|
+/// X-coordinate of the player firewall node.
 let player_x : Float = 132.0
 
 ///|
+/// Maximum number of enemy entities that can be active simultaneously.
 let max_enemies : Int = 84
 
 ///|
+/// Maximum number of projectile shots in flight at one time.
 let max_shots : Int = 180
 
 ///|
+/// Maximum number of visual particle effects active at one time.
 let max_parts : Int = 220
 
 ///|
+/// Represents a malware enemy entity with position, velocity, health, and type.
 struct Enemy {
   mut x : Float
   mut y : Float
@@ -43,6 +55,7 @@ struct Enemy {
 }
 
 ///|
+/// Represents a player-fired projectile with position, velocity, and time-to-live.
 struct Shot {
   mut x : Float
   mut y : Float
@@ -52,6 +65,7 @@ struct Shot {
 }
 
 ///|
+/// Represents a visual debris particle emitted on explosions and hits.
 struct Part {
   mut x : Float
   mut y : Float
@@ -63,6 +77,7 @@ struct Part {
 }
 
 ///|
+/// Returns the value v clamped to the inclusive range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -74,6 +89,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -83,6 +99,7 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns true if point (px, py) lies within the rectangle defined by rx, ry, rw, rh.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -98,6 +115,7 @@ fn inside_rect(
 }
 
 ///|
+/// Returns the starting hit points for an enemy of the given kind.
 fn enemy_hp(kind : Int) -> Int {
   if kind == 0 {
     1
@@ -109,6 +127,7 @@ fn enemy_hp(kind : Int) -> Int {
 }
 
 ///|
+/// Returns the core damage dealt per hit by an enemy of the given kind.
 fn enemy_damage(kind : Int) -> Int {
   if kind == 0 {
     8
@@ -120,6 +139,7 @@ fn enemy_damage(kind : Int) -> Int {
 }
 
 ///|
+/// Returns the score points awarded for destroying an enemy of the given kind.
 fn enemy_score(kind : Int) -> Int {
   if kind == 0 {
     26
@@ -131,6 +151,7 @@ fn enemy_score(kind : Int) -> Int {
 }
 
 ///|
+/// Returns the collision radius for an enemy of the given kind.
 fn enemy_r(kind : Int) -> Float {
   if kind == 0 {
     11.0
@@ -142,6 +163,7 @@ fn enemy_r(kind : Int) -> Float {
 }
 
 ///|
+/// Resets all enemies in the array to their default inactive state.
 fn clear_enemies(enemies : Array[Enemy]) -> Unit {
   for enemy in enemies {
     enemy.x = 0.0
@@ -155,6 +177,7 @@ fn clear_enemies(enemies : Array[Enemy]) -> Unit {
 }
 
 ///|
+/// Resets all shots in the array to their default inactive state.
 fn clear_shots(shots : Array[Shot]) -> Unit {
   for shot in shots {
     shot.x = 0.0
@@ -166,6 +189,7 @@ fn clear_shots(shots : Array[Shot]) -> Unit {
 }
 
 ///|
+/// Resets all particles in the array to their default inactive state.
 fn clear_parts(parts : Array[Part]) -> Unit {
   for part in parts {
     part.x = 0.0
@@ -179,6 +203,7 @@ fn clear_parts(parts : Array[Part]) -> Unit {
 }
 
 ///|
+/// Spawns a single particle at (x, y) with random velocity scaled by speed_scale and the given kind.
 fn spawn_part(
   parts : Array[Part],
   x : Float,
@@ -208,6 +233,7 @@ fn spawn_part(
 }
 
 ///|
+/// Spawns n particles at (x, y) as a burst effect with the given speed scale and kind.
 fn burst(
   parts : Array[Part],
   x : Float,
@@ -222,6 +248,7 @@ fn burst(
 }
 
 ///|
+/// Spawns a new projectile shot at position (x, y) moving rightward.
 fn spawn_shot(shots : Array[Shot], x : Float, y : Float) -> Unit {
   let mut done = false
   for shot in shots {
@@ -240,6 +267,7 @@ fn spawn_shot(shots : Array[Shot], x : Float, y : Float) -> Unit {
 }
 
 ///|
+/// Spawns a new enemy of random kind at the right edge of the arena, scaled to the current sector.
 fn spawn_enemy(enemies : Array[Enemy], sector : Int) -> Unit {
   let kind_roll = @raylib.get_random_value(0, 99)
   let kind = if kind_roll < 56 { 0 } else if kind_roll < 86 { 1 } else { 2 }
@@ -275,6 +303,7 @@ fn spawn_enemy(enemies : Array[Enemy], sector : Int) -> Unit {
 }
 
 ///|
+/// Spawns two smaller fragment enemies at the given position when a large enemy is destroyed.
 fn spawn_split(
   enemies : Array[Enemy],
   x : Float,
@@ -304,6 +333,7 @@ fn spawn_split(
 }
 
 ///|
+/// Returns a random spawn interval in seconds, decreasing with higher sector numbers.
 fn spawn_interval(sector : Int) -> Float {
   let mut lo = 48 - sector * 8
   if lo < 16 {
@@ -317,6 +347,7 @@ fn spawn_interval(sector : Int) -> Float {
 }
 
 ///|
+/// Initialises the window, runs the game loop, and cleans up on exit.
 fn main {
   @raylib.init_window(sw, sh, "Cyber Firewall Breach 2026")
   @raylib.set_target_fps(60)

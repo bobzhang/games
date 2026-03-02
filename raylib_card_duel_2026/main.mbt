@@ -1,13 +1,17 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 980
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 700
 
 ///|
+/// Total number of distinct card types available in the deck.
 let card_count : Int = 5
 
 ///|
+/// Returns the display name of the card identified by the given index.
 fn card_name(card : Int) -> String {
   match card {
     0 => "Strike"
@@ -19,6 +23,7 @@ fn card_name(card : Int) -> String {
 }
 
 ///|
+/// Returns the energy cost required to play the given card.
 fn card_cost(card : Int) -> Int {
   match card {
     0 => 1
@@ -30,6 +35,7 @@ fn card_cost(card : Int) -> Int {
 }
 
 ///|
+/// Returns the short effect description for the given card index.
 fn card_desc(card : Int) -> String {
   match card {
     0 => "Deal 6"
@@ -41,6 +47,7 @@ fn card_desc(card : Int) -> String {
 }
 
 ///|
+/// Applies damage to a target, absorbing it through block first, and returns the updated HP and block values.
 fn deal_damage(hp : Int, block : Int, dmg : Int) -> (Int, Int) {
   let mut hp2 = hp
   let mut block2 = block
@@ -52,6 +59,7 @@ fn deal_damage(hp : Int, block : Int, dmg : Int) -> (Int, Int) {
 }
 
 ///|
+/// Clears the current hand and fills it with three randomly drawn cards.
 fn roll_hand(hand : Array[Int]) -> Unit {
   hand.clear()
   for i in 0..<3 {
@@ -60,6 +68,7 @@ fn roll_hand(hand : Array[Int]) -> Unit {
 }
 
 ///|
+/// Executes the enemy's two actions for the turn, applying damage or healing effects, and returns updated HP, block values, and an action log string.
 fn enemy_turn(
   p_hp : Int,
   p_block : Int,
@@ -99,6 +108,7 @@ fn enemy_turn(
 }
 
 ///|
+/// Initializes the game window and runs the Card Duel 2026 main game loop.
 fn main {
   @raylib.init_window(sw, sh, "Card Duel 2026")
   @raylib.set_target_fps(60)

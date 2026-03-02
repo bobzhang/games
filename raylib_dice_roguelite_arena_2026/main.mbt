@@ -1,16 +1,21 @@
 ///|
+/// Screen width in pixels.
 let sw = 1366
 
 ///|
+/// Screen height in pixels.
 let sh = 768
 
 ///|
+/// Maximum number of dice the player can roll per turn.
 let max_dice = 6
 
 ///|
+/// Maximum number of concurrent spark particles in the spark pool.
 let max_sparks = 180
 
 ///|
+/// Represents the player's combat state including health, shield, poison, energy, gold, and progression.
 struct Player {
   mut hp : Int
   mut max_hp : Int
@@ -23,6 +28,7 @@ struct Player {
 }
 
 ///|
+/// Represents an enemy with kind, health, shield, poison, rage, and declared next intent.
 struct Enemy {
   mut kind : Int
   mut hp : Int
@@ -35,6 +41,7 @@ struct Enemy {
 }
 
 ///|
+/// Represents a single die with its rolled value, face type, used state, position, and pulse animation timer.
 struct Dice {
   mut value : Int
   mut face : Int
@@ -45,6 +52,7 @@ struct Dice {
 }
 
 ///|
+/// Represents a post-battle upgrade card with kind, numeric value, title, and description text.
 struct RewardCard {
   mut kind : Int
   mut value : Int
@@ -53,6 +61,7 @@ struct RewardCard {
 }
 
 ///|
+/// Holds accumulated player artifact bonuses that modify dice face weights and combat values.
 struct Artifacts {
   mut atk_bonus : Int
   mut guard_bonus : Int
@@ -66,6 +75,7 @@ struct Artifacts {
 }
 
 ///|
+/// Represents a visual spark particle with position, velocity, lifetime, size, and color kind.
 struct Spark {
   mut active : Bool
   mut x : Float
@@ -78,6 +88,7 @@ struct Spark {
 }
 
 ///|
+/// Returns v clamped to the inclusive integer range [lo, hi].
 fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -89,6 +100,7 @@ fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Returns v clamped to the inclusive float range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -100,12 +112,14 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns a uniformly distributed random float in the range [lo, hi].
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns true if point (px, py) lies within the rectangle (x, y, w, h).
 fn inside_rect(
   px : Float,
   py : Float,
@@ -121,6 +135,7 @@ fn inside_rect(
 }
 
 ///|
+/// Returns the display name string for the given enemy kind index.
 fn enemy_name(kind : Int) -> String {
   if kind == 0 {
     "Scrap Berserker"
@@ -134,6 +149,7 @@ fn enemy_name(kind : Int) -> String {
 }
 
 ///|
+/// Returns the display name for the given dice face index.
 fn face_name(face : Int) -> String {
   if face == 0 {
     "STRIKE"
@@ -151,6 +167,7 @@ fn face_name(face : Int) -> String {
 }
 
 ///|
+/// Returns a short description of the effect for the given dice face index.
 fn face_desc(face : Int) -> String {
   if face == 0 {
     "Deal damage"
@@ -168,6 +185,7 @@ fn face_desc(face : Int) -> String {
 }
 
 ///|
+/// Deactivates and zeroes all spark particles in the pool.
 fn clear_sparks(sp : Array[Spark]) -> Unit {
   for sp_elem in sp {
     sp_elem.active = false
@@ -182,6 +200,7 @@ fn clear_sparks(sp : Array[Spark]) -> Unit {
 }
 
 ///|
+/// Activates an inactive spark at (x, y) with a random velocity and lifetime.
 fn add_spark(sp : Array[Spark], x : Float, y : Float, kind : Int) -> Unit {
   for sp_elem in sp {
     if not(sp_elem.active) {
@@ -201,6 +220,7 @@ fn add_spark(sp : Array[Spark], x : Float, y : Float, kind : Int) -> Unit {
 }
 
 ///|
+/// Emits n sparks at (x, y) with the given color kind.
 fn burst_sparks(
   sp : Array[Spark],
   x : Float,
@@ -214,6 +234,7 @@ fn burst_sparks(
 }
 
 ///|
+/// Advances all active sparks by dt, applying drag and deactivating expired ones.
 fn update_sparks(sp : Array[Spark], dt : Float) -> Unit {
   for sp_elem in sp {
     if not(sp_elem.active) {
@@ -232,6 +253,7 @@ fn update_sparks(sp : Array[Spark], dt : Float) -> Unit {
 }
 
 ///|
+/// Draws all active sparks as colored circles with size scaled to remaining lifetime.
 fn draw_sparks(sp : Array[Spark]) -> Unit {
   for sp_elem in sp {
     if not(sp_elem.active) {
@@ -258,6 +280,7 @@ fn draw_sparks(sp : Array[Spark]) -> Unit {
 }
 
 ///|
+/// Returns the display color for the given enemy kind index.
 fn enemy_color(kind : Int) -> @raylib.Color {
   if kind == 0 {
     @raylib.Color::new(242, 118, 106, 255)
@@ -271,6 +294,7 @@ fn enemy_color(kind : Int) -> @raylib.Color {
 }
 
 ///|
+/// Randomizes the enemy kind and sets HP and intent for the given floor level.
 fn set_enemy(enemy : Enemy, floor : Int) -> Unit {
   let mut kind : Int = @raylib.get_random_value(0, 3)
   if floor >= 9 && @raylib.get_random_value(0, 99) < 46 {
@@ -298,6 +322,7 @@ fn set_enemy(enemy : Enemy, floor : Int) -> Unit {
 }
 
 ///|
+/// Randomly selects and sets the enemy's next intended action based on its kind and the current floor.
 fn roll_enemy_intent(enemy : Enemy, floor : Int) -> Unit {
   let r : Int = @raylib.get_random_value(0, 99)
 
@@ -350,6 +375,7 @@ fn roll_enemy_intent(enemy : Enemy, floor : Int) -> Unit {
 }
 
 ///|
+/// Returns a human-readable string describing the enemy's current intended action.
 fn intent_text(enemy : Enemy) -> String {
   if enemy.intent_kind == 0 {
     "Attack \{enemy.intent_value}"
@@ -363,6 +389,7 @@ fn intent_text(enemy : Enemy) -> String {
 }
 
 ///|
+/// Returns a randomly weighted dice face index influenced by the player's artifact bonuses.
 fn roll_face(art : Artifacts) -> Int {
   let r : Int = @raylib.get_random_value(0, 999)
 
@@ -398,6 +425,7 @@ fn roll_face(art : Artifacts) -> Int {
 }
 
 ///|
+/// Resets all dice to their default unrolled state.
 fn init_dice(dice : Array[Dice]) -> Unit {
   for dice_elem in dice {
     dice_elem.value = 1
@@ -410,6 +438,7 @@ fn init_dice(dice : Array[Dice]) -> Unit {
 }
 
 ///|
+/// Rolls all unused dice (or all dice if force_all), assigning new random face and value.
 fn roll_dice(dice : Array[Dice], art : Artifacts, force_all : Bool) -> Unit {
   for i in 0..<dice.length() {
     if force_all || not(dice[i].used) {
@@ -422,6 +451,7 @@ fn roll_dice(dice : Array[Dice], art : Artifacts, force_all : Bool) -> Unit {
 }
 
 ///|
+/// Applies damage to the enemy, absorbing from shield first, and returns the HP damage dealt.
 fn compute_damage_to_enemy(enemy : Enemy, damage : Int) -> Int {
   if damage <= enemy.shield {
     enemy.shield = enemy.shield - damage
@@ -435,6 +465,7 @@ fn compute_damage_to_enemy(enemy : Enemy, damage : Int) -> Int {
 }
 
 ///|
+/// Applies damage to the player, absorbing from shield first, and returns the HP damage dealt.
 fn compute_damage_to_player(player : Player, damage : Int) -> Int {
   if damage <= player.shield {
     player.shield = player.shield - damage
@@ -448,6 +479,7 @@ fn compute_damage_to_player(player : Player, damage : Int) -> Int {
 }
 
 ///|
+/// Applies the effect of a played dice face to the player and enemy, returning a result message and damage dealt.
 fn apply_face(
   face : Int,
   value : Int,
@@ -511,6 +543,7 @@ fn apply_face(
 }
 
 ///|
+/// Sets the reward card's kind, value, title, and description for the given upgrade type.
 fn set_reward_card(card : RewardCard, kind : Int, value : Int) -> Unit {
   card.kind = kind
   card.value = value
@@ -549,6 +582,7 @@ fn set_reward_card(card : RewardCard, kind : Int, value : Int) -> Unit {
 }
 
 ///|
+/// Fills the reward card array with randomly chosen upgrade options scaled to the current floor.
 fn generate_rewards(cards : Array[RewardCard], floor : Int) -> Unit {
   for card in cards {
     let mut kind : Int = @raylib.get_random_value(0, 9)
@@ -583,6 +617,7 @@ fn generate_rewards(cards : Array[RewardCard], floor : Int) -> Unit {
 }
 
 ///|
+/// Applies the selected reward card's upgrade to the player or artifact and returns a confirmation message.
 fn apply_reward(card : RewardCard, player : Player, art : Artifacts) -> String {
   if card.kind == 0 {
     player.max_hp = player.max_hp + card.value
@@ -625,6 +660,7 @@ fn apply_reward(card : RewardCard, player : Player, art : Artifacts) -> String {
 }
 
 ///|
+/// Draws a dark filled rectangle panel with a colored border at the given bounds.
 fn draw_panel(
   x : Int,
   y : Int,
@@ -637,6 +673,7 @@ fn draw_panel(
 }
 
 ///|
+/// Draws a styled button at (x, y) with the given label, adjusting color for enabled and hover states.
 fn draw_button(
   x : Int,
   y : Int,
@@ -674,6 +711,7 @@ fn draw_button(
 }
 
 ///|
+/// Draws a filled health or resource bar at (x, y) proportional to value/max_v with the given fill color.
 fn draw_bar(
   x : Int,
   y : Int,
@@ -700,6 +738,7 @@ fn draw_bar(
 }
 
 ///|
+/// Draws the visual icon for a dice face inside a square of size s at (x, y) using the given color.
 fn draw_dice_face(
   face : Int,
   x : Int,
@@ -748,6 +787,7 @@ fn draw_dice_face(
 }
 
 ///|
+/// Draws a hint bar at the bottom of the screen describing mobile touch controls.
 fn draw_touch_help() -> Unit {
   @raylib.draw_rectangle(
     24,
@@ -766,6 +806,7 @@ fn draw_touch_help() -> Unit {
 }
 
 ///|
+/// Initializes the window and runs the Dice Roguelite Arena game loop.
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] dice roguelite arena 2026")
   @raylib.set_target_fps(60)

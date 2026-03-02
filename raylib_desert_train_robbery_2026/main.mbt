@@ -1,25 +1,33 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 820
 
 ///|
+/// Y coordinate of the ground surface where the player and train run.
 let ground_y : Float = 710.0
 
 ///|
+/// Number of train wagons in the level.
 let wagon_n : Int = 6
 
 ///|
+/// Maximum number of concurrent sheriff enemies.
 let sheriff_n : Int = 18
 
 ///|
+/// Maximum number of concurrent bullets in the bullet pool.
 let bullet_n : Int = 320
 
 ///|
+/// Maximum number of concurrent particles in the particle pool.
 let particle_n : Int = 620
 
 ///|
+/// Represents the player-controlled outlaw rider with position, health, ammo, and cooldown state.
 struct Rider {
   mut x : Float
   mut y : Float
@@ -37,6 +45,7 @@ struct Rider {
 }
 
 ///|
+/// Represents a train wagon with position, length, roof height, and available loot.
 struct Wagon {
   mut x : Float
   mut len : Float
@@ -45,6 +54,7 @@ struct Wagon {
 }
 
 ///|
+/// Represents a sheriff enemy patrolling a wagon with health and shooting cooldown state.
 struct Sheriff {
   mut wagon_idx : Int
   mut rel_x : Float
@@ -55,6 +65,7 @@ struct Sheriff {
 }
 
 ///|
+/// Represents an active projectile with position, velocity, lifetime, and owner tag.
 struct Bullet {
   mut x : Float
   mut y : Float
@@ -66,6 +77,7 @@ struct Bullet {
 }
 
 ///|
+/// Represents a visual particle with position, velocity, lifetime, kind, and active state.
 struct Particle {
   mut x : Float
   mut y : Float
@@ -77,6 +89,7 @@ struct Particle {
 }
 
 ///|
+/// Returns v clamped to the inclusive range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -88,6 +101,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -97,6 +111,7 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns the squared Euclidean distance between two points.
 fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
   let dy = ay - by
@@ -104,6 +119,7 @@ fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 }
 
 ///|
+/// Returns true if point (px, py) lies within the rectangle defined by (rx, ry, rw, rh).
 fn inside_rect(
   px : Float,
   py : Float,
@@ -119,6 +135,7 @@ fn inside_rect(
 }
 
 ///|
+/// Deactivates and resets all sheriffs in the pool.
 fn clear_sheriffs(ss : Array[Sheriff]) -> Unit {
   for ss_elem in ss {
     ss_elem.wagon_idx = 0
@@ -131,6 +148,7 @@ fn clear_sheriffs(ss : Array[Sheriff]) -> Unit {
 }
 
 ///|
+/// Deactivates and resets all bullets in the pool.
 fn clear_bullets(bs : Array[Bullet]) -> Unit {
   for bs_elem in bs {
     bs_elem.x = 0.0
@@ -144,6 +162,7 @@ fn clear_bullets(bs : Array[Bullet]) -> Unit {
 }
 
 ///|
+/// Deactivates and resets all particles in the pool.
 fn clear_particles(ps : Array[Particle]) -> Unit {
   for ps_elem in ps {
     ps_elem.x = 0.0
@@ -157,6 +176,7 @@ fn clear_particles(ps : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Activates an inactive particle slot at (x, y) with a random velocity scaled by speed.
 fn spawn_particle(
   ps : Array[Particle],
   x : Float,
@@ -184,6 +204,7 @@ fn spawn_particle(
 }
 
 ///|
+/// Spawns n particles at (x, y) in a burst with the given speed and kind.
 fn burst(
   ps : Array[Particle],
   x : Float,
@@ -198,6 +219,7 @@ fn burst(
 }
 
 ///|
+/// Activates an inactive bullet slot traveling in direction (dx, dy) at the given speed.
 fn spawn_bullet(
   bs : Array[Bullet],
   x : Float,
@@ -234,6 +256,7 @@ fn spawn_bullet(
 }
 
 ///|
+/// Returns the rightmost X coordinate among all wagon right edges.
 fn rightmost_wagon_x(wagons : Array[Wagon]) -> Float {
   let mut r : Float = -1000.0
   for wagon in wagons {
@@ -246,6 +269,7 @@ fn rightmost_wagon_x(wagons : Array[Wagon]) -> Float {
 }
 
 ///|
+/// Initializes wagons with random lengths, roof heights, and loot values spaced along the track.
 fn init_wagons(wagons : Array[Wagon]) -> Unit {
   let mut x : Float = -40.0
   for wagon in wagons {
@@ -263,6 +287,7 @@ fn init_wagons(wagons : Array[Wagon]) -> Unit {
 }
 
 ///|
+/// Resets the player rider to starting position and default stats.
 fn reset_player(p : Rider) -> Unit {
   p.x = 164.0
   p.y = ground_y
@@ -280,6 +305,7 @@ fn reset_player(p : Rider) -> Unit {
 }
 
 ///|
+/// Resets all entities for the given level and returns (target_loot, timer, train_speed, sheriff_cd).
 fn setup_level(
   level : Int,
   player : Rider,
@@ -304,6 +330,7 @@ fn setup_level(
 }
 
 ///|
+/// Activates an inactive sheriff on a random wagon with stats scaled to the current level.
 fn spawn_sheriff(
   sheriffs : Array[Sheriff],
   wagons : Array[Wagon],
@@ -333,6 +360,7 @@ fn spawn_sheriff(
 }
 
 ///|
+/// Returns the index of the wagon the player is standing on top of, or -1 if none.
 fn player_support_wagon(player : Rider, wagons : Array[Wagon]) -> Int {
   let mut idx = -1
   for i in 0..<wagons.length() {
@@ -348,6 +376,7 @@ fn player_support_wagon(player : Rider, wagons : Array[Wagon]) -> Int {
 }
 
 ///|
+/// Initializes the window and runs the Desert Train Robbery game loop.
 fn main {
   @raylib.init_window(sw, sh, "Desert Train Robbery 2026")
   @raylib.set_target_fps(60)

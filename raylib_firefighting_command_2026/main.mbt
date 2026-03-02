@@ -1,37 +1,46 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1120
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 740
 
 ///|
+/// Number of grid columns in the city zone layout.
 let cols : Int = 5
 
 ///|
+/// Number of grid rows in the city zone layout.
 let rows : Int = 3
 
 ///|
+/// Returns the pixel X coordinate for the center of grid column c.
 fn cell_x(c : Int) -> Float {
   150.0 + Float::from_int(c) * 180.0
 }
 
 ///|
+/// Returns the pixel Y coordinate for the center of grid row r.
 fn cell_y(r : Int) -> Float {
   200.0 + Float::from_int(r) * 170.0
 }
 
 ///|
+/// Represents a city zone with a fire intensity level and whether its building is intact.
 struct Zone {
   mut fire : Float
   mut has_house : Bool
 }
 
 ///|
+/// Returns the flat array index for grid cell at column c and row r.
 fn idx(c : Int, r : Int) -> Int {
   r * cols + c
 }
 
 ///|
+/// Resets all zones to their initial state with intact buildings and seeds random fires.
 fn reset_zones(zones : Array[Zone]) -> Unit {
   for r in 0..<rows {
     for c in 0..<cols {
@@ -49,6 +58,7 @@ fn reset_zones(zones : Array[Zone]) -> Unit {
 }
 
 ///|
+/// Returns the number of zones currently on fire.
 fn active_fire_count(zones : Array[Zone]) -> Int {
   let mut n = 0
   for zone in zones {
@@ -60,6 +70,7 @@ fn active_fire_count(zones : Array[Zone]) -> Int {
 }
 
 ///|
+/// Initializes and runs the Firefighting Command 2026 game loop.
 fn main {
   @raylib.init_window(sw, sh, "Firefighting Command 2026")
   @raylib.set_target_fps(60)

@@ -1,10 +1,13 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1200
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 760
 
 ///|
+/// Represents a gravitational well with position, gravitational mass, and collision radius.
 struct Well {
   x : Float
   y : Float
@@ -13,6 +16,7 @@ struct Well {
 }
 
 ///|
+/// Sets the well at index i to the specified position, mass, and radius.
 fn set_well(
   wells : Array[Well],
   i : Int,
@@ -25,6 +29,7 @@ fn set_well(
 }
 
 ///|
+/// Clears all wells in the array by resetting their mass to zero.
 fn clear_wells(wells : Array[Well]) -> Unit {
   for i in 0..<wells.length() {
     set_well(wells, i, 0.0, 0.0, 0.0, 0.0)
@@ -32,6 +37,7 @@ fn clear_wells(wells : Array[Well]) -> Unit {
 }
 
 ///|
+/// Configures gravity wells for the given level and returns the ball start position, hole position, and shot count.
 fn setup_level(
   level : Int,
   wells : Array[Well],
@@ -56,6 +62,7 @@ fn setup_level(
 }
 
 ///|
+/// Initialises the window, runs the main game loop, and handles all update and draw logic.
 fn main {
   @raylib.init_window(sw, sh, "Gravity Golf 2026")
   @raylib.set_target_fps(60)

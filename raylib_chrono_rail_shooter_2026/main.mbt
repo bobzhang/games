@@ -1,31 +1,41 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 720
 
 ///|
+/// Left boundary X coordinate of the player's movement rail.
 let rail_l : Float = 220.0
 
 ///|
+/// Right boundary X coordinate of the player's movement rail.
 let rail_r : Float = 1060.0
 
 ///|
+/// Maximum number of enemies that can be active simultaneously.
 let max_enemies : Int = 240
 
 ///|
+/// Maximum number of bullets that can be active simultaneously.
 let max_bullets : Int = 960
 
 ///|
+/// Maximum number of pickups that can be active simultaneously.
 let max_pickups : Int = 160
 
 ///|
+/// Maximum number of particle effects that can be active simultaneously.
 let max_particles : Int = 1300
 
 ///|
+/// Maximum number of track panels that can be active simultaneously.
 let max_panels : Int = 240
 
 ///|
+/// Represents the player ship with position, velocity, stats, cooldowns, and scoring state.
 struct Player {
   mut x : Float
   mut y : Float
@@ -48,6 +58,7 @@ struct Player {
 }
 
 ///|
+/// Represents an enemy unit with position, velocity, HP, and behavior state.
 struct Enemy {
   mut active : Bool
   mut kind : Int
@@ -62,6 +73,7 @@ struct Enemy {
 }
 
 ///|
+/// Represents a projectile with team ownership, position, velocity, damage, and remaining lifetime.
 struct Bullet {
   mut active : Bool
   mut team : Int
@@ -76,6 +88,7 @@ struct Bullet {
 }
 
 ///|
+/// Represents a collectible item dropped by enemies with position, kind, and fall velocity.
 struct Pickup {
   mut active : Bool
   mut kind : Int
@@ -86,6 +99,7 @@ struct Pickup {
 }
 
 ///|
+/// Represents a visual particle effect with position, velocity, size, and remaining lifetime.
 struct Particle {
   mut active : Bool
   mut kind : Int
@@ -99,6 +113,7 @@ struct Particle {
 }
 
 ///|
+/// Represents a track panel obstacle or boost zone with position, dimensions, and effect flags.
 struct Panel {
   mut active : Bool
   mut x : Float
@@ -111,6 +126,7 @@ struct Panel {
 }
 
 ///|
+/// Represents the boss enemy with position, HP, phase state, and fire/spawn cooldown timers.
 struct Boss {
   mut active : Bool
   mut x : Float
@@ -124,6 +140,7 @@ struct Boss {
 }
 
 ///|
+/// Clamps a float value to the inclusive range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -135,6 +152,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -144,6 +162,7 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns the squared Euclidean distance between two points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx = x1 - x0
   let dy = y1 - y0
@@ -151,12 +170,14 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Returns a random float uniformly distributed in the range [lo, hi].
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns true if the point (px, py) lies within the given integer-bounded rectangle.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -172,6 +193,7 @@ fn inside_rect(
 }
 
 ///|
+/// Returns the collision radius for an enemy of the given kind.
 fn enemy_radius(kind : Int) -> Float {
   if kind == 0 {
     16.0
@@ -183,6 +205,7 @@ fn enemy_radius(kind : Int) -> Float {
 }
 
 ///|
+/// Returns the starting HP for an enemy of the given kind and difficulty level.
 fn enemy_hp(kind : Int, level : Int) -> Float {
   if kind == 0 {
     22.0 + Float::from_int(level) * 2.0
@@ -194,6 +217,7 @@ fn enemy_hp(kind : Int, level : Int) -> Float {
 }
 
 ///|
+/// Deactivates all enemies in the pool and resets their fields to defaults.
 fn clear_enemies(enemies : Array[Enemy]) -> Unit {
   for enemy in enemies {
     enemy.active = false
@@ -210,6 +234,7 @@ fn clear_enemies(enemies : Array[Enemy]) -> Unit {
 }
 
 ///|
+/// Deactivates all bullets in the pool and resets their fields to defaults.
 fn clear_bullets(bullets : Array[Bullet]) -> Unit {
   for bullet in bullets {
     bullet.active = false
@@ -226,6 +251,7 @@ fn clear_bullets(bullets : Array[Bullet]) -> Unit {
 }
 
 ///|
+/// Deactivates all pickups in the pool and resets their fields to defaults.
 fn clear_pickups(pickups : Array[Pickup]) -> Unit {
   for pickup in pickups {
     pickup.active = false
@@ -238,6 +264,7 @@ fn clear_pickups(pickups : Array[Pickup]) -> Unit {
 }
 
 ///|
+/// Deactivates all particles in the pool and resets their fields to defaults.
 fn clear_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
     part.active = false
@@ -253,6 +280,7 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Deactivates all panels in the pool and resets their fields to defaults.
 fn clear_panels(panels : Array[Panel]) -> Unit {
   for panel in panels {
     panel.active = false
@@ -267,6 +295,7 @@ fn clear_panels(panels : Array[Panel]) -> Unit {
 }
 
 ///|
+/// Activates an idle enemy from the pool at the given position with the specified kind and level, returning true on success.
 fn add_enemy(
   enemies : Array[Enemy],
   kind : Int,
@@ -299,6 +328,7 @@ fn add_enemy(
 }
 
 ///|
+/// Activates an idle bullet from the pool with the given properties, returning true on success.
 fn add_bullet(
   bullets : Array[Bullet],
   team : Int,
@@ -330,6 +360,7 @@ fn add_bullet(
 }
 
 ///|
+/// Activates an idle pickup from the pool at the given position with the specified kind and fall velocity, returning true on success.
 fn add_pickup(
   pickups : Array[Pickup],
   kind : Int,
@@ -352,6 +383,7 @@ fn add_pickup(
 }
 
 ///|
+/// Activates an idle particle from the pool with the given position, velocity, size, and lifetime, returning true on success.
 fn add_particle(
   parts : Array[Particle],
   kind : Int,
@@ -380,6 +412,7 @@ fn add_particle(
 }
 
 ///|
+/// Activates an idle panel from the pool at the given position and size with hazard and boost flags, returning true on success.
 fn add_panel(
   panels : Array[Panel],
   x : Float,
@@ -406,6 +439,7 @@ fn add_panel(
 }
 
 ///|
+/// Spawns a burst of particles at (x, y) with random directions, applying a scale multiplier and visual kind.
 fn burst(
   parts : Array[Particle],
   x : Float,
@@ -433,6 +467,7 @@ fn burst(
 }
 
 ///|
+/// Draws the on-screen touch control pad and action buttons when the game is in the playing state.
 fn draw_touch_ui(state : Int) -> Unit {
   if state != 1 {
     ignore(())
@@ -591,6 +626,7 @@ fn draw_touch_ui(state : Int) -> Unit {
 }
 
 ///|
+/// Initializes the game window and runs the Chrono Rail Shooter 2026 main game loop.
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] chrono rail shooter 2026")
   @raylib.set_target_fps(60)

@@ -1,49 +1,65 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 820
 
 ///|
+/// Left boundary of the outer track rectangle.
 let outer_l : Float = 120.0
 
 ///|
+/// Top boundary of the outer track rectangle.
 let outer_t : Float = 110.0
 
 ///|
+/// Right boundary of the outer track rectangle.
 let outer_r : Float = 1160.0
 
 ///|
+/// Bottom boundary of the outer track rectangle.
 let outer_b : Float = 710.0
 
 ///|
+/// Left boundary of the inner obstacle rectangle forming the track hole.
 let inner_l : Float = 360.0
 
 ///|
+/// Top boundary of the inner obstacle rectangle forming the track hole.
 let inner_t : Float = 250.0
 
 ///|
+/// Right boundary of the inner obstacle rectangle forming the track hole.
 let inner_r : Float = 920.0
 
 ///|
+/// Bottom boundary of the inner obstacle rectangle forming the track hole.
 let inner_b : Float = 570.0
 
 ///|
+/// Number of waypoints defining the racing circuit.
 let wp_n : Int = 8
 
 ///|
+/// Total number of karts in the race (player plus AI).
 let kart_n : Int = 4
 
 ///|
+/// Maximum number of simultaneous projectile shots in the pool.
 let max_shots : Int = 200
 
 ///|
+/// Maximum number of pickup items on the track at one time.
 let max_pickups : Int = 6
 
 ///|
+/// Maximum number of simultaneous spark particles in the pool.
 let max_sparks : Int = 260
 
 ///|
+/// Represents a kart with position, orientation, speed, health, lap progress, and shoot cooldown.
 struct Kart {
   mut x : Float
   mut y : Float
@@ -56,6 +72,7 @@ struct Kart {
 }
 
 ///|
+/// Represents an active projectile with position, velocity, lifetime, owner index, and active flag.
 struct Shot {
   mut x : Float
   mut y : Float
@@ -67,6 +84,7 @@ struct Shot {
 }
 
 ///|
+/// Represents a collectible pickup item with position, kind, active state, and respawn timer.
 struct Pickup {
   x : Float
   y : Float
@@ -76,6 +94,7 @@ struct Pickup {
 }
 
 ///|
+/// Represents a visual spark particle with position, velocity, lifetime, kind, and active flag.
 struct Spark {
   mut x : Float
   mut y : Float
@@ -87,6 +106,7 @@ struct Spark {
 }
 
 ///|
+/// Returns the value clamped to the inclusive range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -98,6 +118,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -107,6 +128,7 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns true if the point (px, py) lies within the specified rectangle.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -122,21 +144,25 @@ fn inside_rect(
 }
 
 ///|
+/// Converts an angle in degrees to radians.
 fn deg2rad(a : Float) -> Double {
   a.to_double() * 0.017453292519943295
 }
 
 ///|
+/// Returns the sine of an angle given in degrees as a Float.
 fn sinf_deg(a : Float) -> Float {
   Float::from_double(@math.sin(deg2rad(a)))
 }
 
 ///|
+/// Returns the cosine of an angle given in degrees as a Float.
 fn cosf_deg(a : Float) -> Float {
   Float::from_double(@math.cos(deg2rad(a)))
 }
 
 ///|
+/// Returns true if the point is within the driveable track area with the given inset margin.
 fn track_contains(x : Float, y : Float, margin : Float) -> Bool {
   let in_outer = x >= outer_l + margin &&
     x <= outer_r - margin &&
@@ -150,6 +176,7 @@ fn track_contains(x : Float, y : Float, margin : Float) -> Bool {
 }
 
 ///|
+/// Sets the x and y coordinates of a single waypoint at the given index.
 fn set_wp(
   wx : Array[Float],
   wy : Array[Float],
@@ -162,6 +189,7 @@ fn set_wp(
 }
 
 ///|
+/// Populates the waypoint arrays with the fixed circuit checkpoint positions.
 fn init_waypoints(wx : Array[Float], wy : Array[Float]) -> Unit {
   set_wp(wx, wy, 0, 260.0, 180.0)
   set_wp(wx, wy, 1, 640.0, 160.0)
@@ -174,6 +202,7 @@ fn init_waypoints(wx : Array[Float], wy : Array[Float]) -> Unit {
 }
 
 ///|
+/// Resets all karts to their starting positions, angles, speed, and health.
 fn reset_karts(karts : Array[Kart]) -> Unit {
   karts[0] = {
     x: 236.0,
@@ -218,6 +247,7 @@ fn reset_karts(karts : Array[Kart]) -> Unit {
 }
 
 ///|
+/// Deactivates all shots and resets their state to idle in the pool.
 fn clear_shots(shots : Array[Shot]) -> Unit {
   for shot in shots {
     shot.x = 0.0
@@ -231,6 +261,7 @@ fn clear_shots(shots : Array[Shot]) -> Unit {
 }
 
 ///|
+/// Initialises a single pickup entry at the given index with position and kind.
 fn set_pickup(
   pickups : Array[Pickup],
   i : Int,
@@ -242,6 +273,7 @@ fn set_pickup(
 }
 
 ///|
+/// Resets all pickups to their default positions and activates them.
 fn reset_pickups(pickups : Array[Pickup]) -> Unit {
   set_pickup(pickups, 0, 640.0, 190.0, 0)
   set_pickup(pickups, 1, 1020.0, 410.0, 1)
@@ -252,6 +284,7 @@ fn reset_pickups(pickups : Array[Pickup]) -> Unit {
 }
 
 ///|
+/// Deactivates all spark particles and resets their state to idle in the pool.
 fn clear_sparks(sparks : Array[Spark]) -> Unit {
   for spark in sparks {
     spark.x = 0.0
@@ -265,6 +298,7 @@ fn clear_sparks(sparks : Array[Spark]) -> Unit {
 }
 
 ///|
+/// Activates an idle spark from the pool at the given position with randomised velocity.
 fn spawn_spark(
   sparks : Array[Spark],
   x : Float,
@@ -294,6 +328,7 @@ fn spawn_spark(
 }
 
 ///|
+/// Spawns n sparks in a burst at the given position with the specified speed scale and kind.
 fn burst(
   sparks : Array[Spark],
   x : Float,
@@ -308,6 +343,7 @@ fn burst(
 }
 
 ///|
+/// Activates an idle shot from the pool, setting its position and velocity from the given direction.
 fn spawn_shot(
   shots : Array[Shot],
   x : Float,
@@ -342,6 +378,7 @@ fn spawn_shot(
 }
 
 ///|
+/// Advances a kart's waypoint index when it reaches the current target waypoint.
 fn update_waypoint_progress(
   kart : Kart,
   wx : Array[Float],
@@ -361,6 +398,7 @@ fn update_waypoint_progress(
 }
 
 ///|
+/// Pushes a kart back inside track boundaries and reverses its speed on wall contact.
 fn resolve_track_collision(kart : Kart) -> Unit {
   if kart.x < outer_l + 16.0 {
     kart.x = outer_l + 16.0
@@ -403,6 +441,7 @@ fn resolve_track_collision(kart : Kart) -> Unit {
 }
 
 ///|
+/// Teleports a destroyed kart back to its starting position and resets its motion.
 fn respawn_kart(karts : Array[Kart], i : Int) -> Unit {
   if i == 0 {
     karts[i].x = 236.0
@@ -423,6 +462,7 @@ fn respawn_kart(karts : Array[Kart], i : Int) -> Unit {
 }
 
 ///|
+/// Runs the main game loop for Battle Kart Arena 2026, handling player input, AI, physics, and rendering.
 fn main {
   @raylib.init_window(sw, sh, "Battle Kart Arena 2026")
   @raylib.set_target_fps(60)

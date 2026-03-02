@@ -1,10 +1,13 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1100
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 720
 
 ///|
+/// Represents a fish with position, velocity, kind, size, and alive state.
 struct Fish {
   mut alive : Bool
   mut x : Float
@@ -15,6 +18,7 @@ struct Fish {
 }
 
 ///|
+/// Returns the display color for a fish based on its kind (0 common, 1 silver, 2 golden).
 fn fish_color(kind : Int) -> @raylib.Color {
   if kind == 0 {
     @raylib.lime
@@ -26,6 +30,7 @@ fn fish_color(kind : Int) -> @raylib.Color {
 }
 
 ///|
+/// Returns the coin value earned when selling a caught fish of the given kind.
 fn fish_value(kind : Int) -> Int {
   if kind == 0 {
     18
@@ -37,6 +42,7 @@ fn fish_value(kind : Int) -> Int {
 }
 
 ///|
+/// Spawns a new fish in the first available slot, choosing rarity based on rare_bonus.
 fn spawn_fish(fishes : Array[Fish], rare_bonus : Int) -> Unit {
   for fish in fishes {
     if not(fish.alive) {
@@ -63,6 +69,7 @@ fn spawn_fish(fishes : Array[Fish], rare_bonus : Int) -> Unit {
 }
 
 ///|
+/// Deactivates all fish in the pool, clearing the water for a new fishing session.
 fn reset_fishes(fishes : Array[Fish]) -> Unit {
   for fish in fishes {
     fish.alive = false
@@ -70,6 +77,7 @@ fn reset_fishes(fishes : Array[Fish]) -> Unit {
 }
 
 ///|
+/// Initializes and runs the Fishing Tycoon 2026 game loop.
 fn main {
   @raylib.init_window(sw, sh, "Fishing Tycoon 2026")
   @raylib.set_target_fps(60)

@@ -1,22 +1,29 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 820
 
 ///|
+/// Maximum number of guards that can be active simultaneously.
 let max_guards : Int = 28
 
 ///|
+/// Maximum number of keycards that can be placed in the level.
 let max_keycards : Int = 24
 
 ///|
+/// Maximum number of bullets in flight at one time.
 let max_bullets : Int = 320
 
 ///|
+/// Maximum number of visual particles for effects.
 let max_particles : Int = 640
 
 ///|
+/// Represents the player-controlled thief with position, health, and ability cooldowns.
 struct Thief {
   mut x : Float
   mut y : Float
@@ -31,6 +38,7 @@ struct Thief {
 }
 
 ///|
+/// Represents a guard enemy that patrols between two waypoints and can detect and shoot the thief.
 struct Guard {
   mut x : Float
   mut y : Float
@@ -50,6 +58,7 @@ struct Guard {
 }
 
 ///|
+/// Represents a collectible keycard pickup with position, colour kind, and active state.
 struct Keycard {
   mut x : Float
   mut y : Float
@@ -58,6 +67,7 @@ struct Keycard {
 }
 
 ///|
+/// Represents an in-flight bullet with position, velocity, time-to-live, and owner identifier.
 struct Bullet {
   mut x : Float
   mut y : Float
@@ -69,6 +79,7 @@ struct Bullet {
 }
 
 ///|
+/// Represents a short-lived visual effect particle with position, velocity, kind, and time-to-live.
 struct Particle {
   mut x : Float
   mut y : Float
@@ -80,6 +91,7 @@ struct Particle {
 }
 
 ///|
+/// Returns the value v clamped to the inclusive range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -91,6 +103,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the squared Euclidean distance between two points.
 fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
   let dy = ay - by
@@ -98,6 +111,7 @@ fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 }
 
 ///|
+/// Returns true if point (px, py) lies within the rectangle defined by rx, ry, rw, rh.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -113,6 +127,7 @@ fn inside_rect(
 }
 
 ///|
+/// Returns true if a circle overlaps an axis-aligned rectangle.
 fn circle_hits_rect(
   cx : Float,
   cy : Float,
@@ -128,6 +143,7 @@ fn circle_hits_rect(
 }
 
 ///|
+/// Returns true if a circle of radius r centered at (x, y) collides with any wall or boundary for the given level.
 fn blocked(level : Int, x : Float, y : Float, r : Float) -> Bool {
   if x - r < 24.0 ||
     x + r > Float::from_int(sw - 24) ||
@@ -167,6 +183,7 @@ fn blocked(level : Int, x : Float, y : Float, r : Float) -> Bool {
 }
 
 ///|
+/// Resets all guards in the array to their default inactive state.
 fn clear_guards(gs : Array[Guard]) -> Unit {
   for gs_elem in gs {
     gs_elem.x = 0.0
@@ -188,6 +205,7 @@ fn clear_guards(gs : Array[Guard]) -> Unit {
 }
 
 ///|
+/// Resets all keycards in the array to their default inactive state.
 fn clear_keycards(cards : Array[Keycard]) -> Unit {
   for card in cards {
     card.x = 0.0
@@ -198,6 +216,7 @@ fn clear_keycards(cards : Array[Keycard]) -> Unit {
 }
 
 ///|
+/// Resets all bullets in the array to their default inactive state.
 fn clear_bullets(bs : Array[Bullet]) -> Unit {
   for bs_elem in bs {
     bs_elem.x = 0.0
@@ -211,6 +230,7 @@ fn clear_bullets(bs : Array[Bullet]) -> Unit {
 }
 
 ///|
+/// Resets all particles in the array to their default inactive state.
 fn clear_particles(ps : Array[Particle]) -> Unit {
   for ps_elem in ps {
     ps_elem.x = 0.0
@@ -224,6 +244,7 @@ fn clear_particles(ps : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Spawns a single particle at (x, y) with random velocity scaled by speed and the given kind.
 fn spawn_particle(
   ps : Array[Particle],
   x : Float,
@@ -251,6 +272,7 @@ fn spawn_particle(
 }
 
 ///|
+/// Spawns n particles at (x, y) as a burst effect with the given speed and kind.
 fn burst(
   ps : Array[Particle],
   x : Float,
@@ -265,6 +287,7 @@ fn burst(
 }
 
 ///|
+/// Spawns a bullet fired from (x, y) toward direction (dx, dy) at the given speed.
 fn spawn_bullet(
   bs : Array[Bullet],
   x : Float,
@@ -299,6 +322,7 @@ fn spawn_bullet(
 }
 
 ///|
+/// Resets the thief to the starting position and restores all stats to their initial values.
 fn reset_player(p : Thief) -> Unit {
   p.x = 84.0
   p.y = 734.0
@@ -313,6 +337,7 @@ fn reset_player(p : Thief) -> Unit {
 }
 
 ///|
+/// Sets the position, kind, and active state for the keycard at the given index.
 fn set_keycard(
   cards : Array[Keycard],
   idx : Int,
@@ -327,6 +352,7 @@ fn set_keycard(
 }
 
 ///|
+/// Places all keycards for the given level and returns the number that must be collected to win.
 fn init_keycards(level : Int, cards : Array[Keycard]) -> Int {
   clear_keycards(cards)
 
@@ -370,6 +396,7 @@ fn init_keycards(level : Int, cards : Array[Keycard]) -> Int {
 }
 
 ///|
+/// Configures a guard at index i with patrol waypoints, movement speed, and detection radius.
 fn set_guard(
   gs : Array[Guard],
   i : Int,
@@ -399,6 +426,7 @@ fn set_guard(
 }
 
 ///|
+/// Initialises all guards with their patrol routes and stats for the given level.
 fn init_guards(level : Int, gs : Array[Guard]) -> Unit {
   clear_guards(gs)
 
@@ -427,6 +455,7 @@ fn init_guards(level : Int, gs : Array[Guard]) -> Unit {
 }
 
 ///|
+/// Sets up all entities and returns the keycard target count and guard detection radius scale for the given level.
 fn setup_level(
   level : Int,
   player : Thief,
@@ -452,6 +481,7 @@ fn setup_level(
 }
 
 ///|
+/// Initialises the window, runs the game loop, and cleans up on exit.
 fn main {
   @raylib.init_window(sw, sh, "Clocktower Heist 2026")
   @raylib.set_target_fps(60)

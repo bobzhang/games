@@ -1,31 +1,41 @@
 ///|
+/// Number of grid columns on the battle board.
 let gw : Int = 7
 
 ///|
+/// Number of grid rows on the battle board.
 let gh : Int = 5
 
 ///|
+/// Pixel size of each grid tile.
 let tile : Int = 86
 
 ///|
+/// Horizontal pixel offset for the grid origin.
 let ox : Int = 120
 
 ///|
+/// Vertical pixel offset for the grid origin.
 let oy : Int = 120
 
 ///|
+/// Screen width in pixels.
 let sw : Int = 980
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 680
 
 ///|
+/// Phase constant indicating the preparation/placement phase.
 let phase_prep : Int = 0
 
 ///|
+/// Phase constant indicating the active battle phase.
 let phase_battle : Int = 1
 
 ///|
+/// Represents a combat unit with team, role, grid position, stats, and attack cooldown.
 struct Piece {
   mut alive : Bool
   team : Int
@@ -39,6 +49,7 @@ struct Piece {
 }
 
 ///|
+/// Returns the display name string for the given role integer.
 fn role_name(role : Int) -> String {
   match role {
     0 => "Tank"
@@ -48,6 +59,7 @@ fn role_name(role : Int) -> String {
 }
 
 ///|
+/// Returns the gold cost to place a unit of the given role.
 fn role_cost(role : Int) -> Int {
   match role {
     0 => 5
@@ -57,6 +69,7 @@ fn role_cost(role : Int) -> Int {
 }
 
 ///|
+/// Returns the base hit points for a unit of the given role.
 fn role_hp(role : Int) -> Int {
   match role {
     0 => 24
@@ -66,6 +79,7 @@ fn role_hp(role : Int) -> Int {
 }
 
 ///|
+/// Returns the base attack damage for a unit of the given role.
 fn role_atk(role : Int) -> Int {
   match role {
     0 => 5
@@ -75,6 +89,7 @@ fn role_atk(role : Int) -> Int {
 }
 
 ///|
+/// Returns the attack range in grid tiles for a unit of the given role.
 fn role_rng(role : Int) -> Int {
   match role {
     0 => 1
@@ -84,6 +99,7 @@ fn role_rng(role : Int) -> Int {
 }
 
 ///|
+/// Creates and returns a new Piece with stats derived from the given team, role, and grid position.
 fn setup_piece(team : Int, role : Int, x : Int, y : Int) -> Piece {
   {
     alive: true,
@@ -99,11 +115,13 @@ fn setup_piece(team : Int, role : Int, x : Int, y : Int) -> Piece {
 }
 
 ///|
+/// Returns the Manhattan distance between two grid positions.
 fn manhattan(ax : Int, ay : Int, bx : Int, by : Int) -> Int {
   (ax - bx).abs() + (ay - by).abs()
 }
 
 ///|
+/// Returns the index of the nearest enemy unit to the unit at the given index, or -1 if none exists.
 fn find_target(units : Array[Piece], idx : Int) -> Int {
   let self = units[idx]
   let mut best = -1
@@ -122,6 +140,7 @@ fn find_target(units : Array[Piece], idx : Int) -> Int {
 }
 
 ///|
+/// Returns true if any alive unit currently occupies the given grid position.
 fn occupied(units : Array[Piece], x : Int, y : Int) -> Bool {
   for unit in units {
     if unit.alive && unit.x == x && unit.y == y {
@@ -132,6 +151,7 @@ fn occupied(units : Array[Piece], x : Int, y : Int) -> Bool {
 }
 
 ///|
+/// Converts the placement board state into live Piece units for the player team.
 fn copy_board_to_units(board : Array[Int], units : Array[Piece]) -> Unit {
   units.clear()
   for y in 0..<gh {
@@ -145,6 +165,7 @@ fn copy_board_to_units(board : Array[Int], units : Array[Piece]) -> Unit {
 }
 
 ///|
+/// Spawns enemy units scaled to the current round number and appends them to the units array.
 fn spawn_enemy_round(round : Int, units : Array[Piece]) -> Unit {
   let enemy_count = 2 + round
   for i in 0..<enemy_count {
@@ -156,6 +177,7 @@ fn spawn_enemy_round(round : Int, units : Array[Piece]) -> Unit {
 }
 
 ///|
+/// Returns the count of alive units belonging to the specified team.
 fn alive_team(units : Array[Piece], team : Int) -> Int {
   let mut n = 0
   for unit in units {
@@ -167,6 +189,7 @@ fn alive_team(units : Array[Piece], team : Int) -> Int {
 }
 
 ///|
+/// Runs the main game loop for Auto Chess Micro 2026, handling placement, battle simulation, and rendering.
 fn main {
   @raylib.init_window(sw, sh, "Auto Chess Micro 2026")
   @raylib.set_target_fps(60)

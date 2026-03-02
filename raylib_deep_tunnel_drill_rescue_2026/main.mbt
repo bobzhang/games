@@ -1,73 +1,97 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1366
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 768
 
 ///|
+/// Number of tile columns in the underground grid.
 let grid_w : Int = 42
 
 ///|
+/// Number of tile rows in the underground grid.
 let grid_h : Int = 28
 
 ///|
+/// Pixel size of each square tile.
 let tile_sz : Int = 24
 
 ///|
+/// Screen X offset in pixels where the tile grid begins.
 let world_x : Int = 24
 
 ///|
+/// Screen Y offset in pixels where the tile grid begins.
 let world_y : Int = 72
 
 ///|
+/// Total pixel width of the tile grid.
 let world_w : Int = grid_w * tile_sz
 
 ///|
+/// Total pixel height of the tile grid.
 let world_h : Int = grid_h * tile_sz
 
 ///|
+/// Left boundary of the tile grid as a float.
 let world_l : Float = Float::from_int(world_x)
 
 ///|
+/// Top boundary of the tile grid as a float.
 let world_t : Float = Float::from_int(world_y)
 
 ///|
+/// Right boundary of the tile grid as a float.
 let world_r : Float = Float::from_int(world_x + world_w)
 
 ///|
+/// Bottom boundary of the tile grid as a float.
 let world_b : Float = Float::from_int(world_y + world_h)
 
 ///|
+/// Screen X coordinate where the side UI panel begins.
 let panel_x : Int = world_x + world_w + 18
 
 ///|
+/// Width in pixels of the side UI panel.
 let panel_w : Int = sw - panel_x - 20
 
 ///|
+/// Maximum number of concurrent particles in the particle pool.
 let max_particles : Int = 420
 
 ///|
+/// Tile kind constant representing an empty tunnel cell.
 let tile_empty : Int = 0
 
 ///|
+/// Tile kind constant representing a drillable dirt cell.
 let tile_dirt : Int = 1
 
 ///|
+/// Tile kind constant representing an impassable rock cell.
 let tile_rock : Int = 2
 
 ///|
+/// Tile kind constant representing a hazardous gas pocket cell.
 let tile_gas : Int = 3
 
 ///|
+/// Tile kind constant representing a collectible crystal cell.
 let tile_crystal : Int = 4
 
 ///|
+/// Tile kind constant representing a trapped miner that the player must rescue.
 let tile_miner : Int = 5
 
 ///|
+/// Tile kind constant representing the player's rescue base at the top of the grid.
 let tile_base : Int = 6
 
 ///|
+/// Represents the player-controlled drill vehicle with position, fuel, oxygen, hull, heat, bombs, sonar, and carried miner state.
 struct Player {
   mut x : Float
   mut y : Float
@@ -94,6 +118,7 @@ struct Player {
 }
 
 ///|
+/// Represents a visual particle effect with position, velocity, size, lifetime, pulse phase, kind, and active state.
 struct Particle {
   mut active : Bool
   mut kind : Int
@@ -107,6 +132,7 @@ struct Particle {
 }
 
 ///|
+/// Returns v clamped to the inclusive float range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -118,6 +144,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns v clamped to the inclusive integer range [lo, hi].
 fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -129,6 +156,7 @@ fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Returns the larger of two float values.
 fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -138,6 +166,7 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two float values.
 fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -147,12 +176,14 @@ fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns a uniformly distributed random float in the range [lo, hi].
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns the squared Euclidean distance between two points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx : Float = x1 - x0
   let dy : Float = y1 - y0
@@ -160,16 +191,19 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Returns the flat array index for grid coordinates (gx, gy).
 fn idx(gx : Int, gy : Int) -> Int {
   gy * grid_w + gx
 }
 
 ///|
+/// Returns true if (gx, gy) is within the valid grid bounds.
 fn in_bounds(gx : Int, gy : Int) -> Bool {
   gx >= 0 && gx < grid_w && gy >= 0 && gy < grid_h
 }
 
 ///|
+/// Returns the tile kind at (gx, gy), or tile_rock if out of bounds.
 fn get_tile(tiles : Array[Int], gx : Int, gy : Int) -> Int {
   if in_bounds(gx, gy) {
     tiles[idx(gx, gy)]
@@ -179,6 +213,7 @@ fn get_tile(tiles : Array[Int], gx : Int, gy : Int) -> Int {
 }
 
 ///|
+/// Sets the tile kind at (gx, gy) if the coordinates are in bounds.
 fn set_tile(tiles : Array[Int], gx : Int, gy : Int, t : Int) -> Unit {
   if in_bounds(gx, gy) {
     tiles[idx(gx, gy)] = t
@@ -186,26 +221,31 @@ fn set_tile(tiles : Array[Int], gx : Int, gy : Int, t : Int) -> Unit {
 }
 
 ///|
+/// Converts a world X pixel coordinate to a grid column index.
 fn world_to_gx(x : Float) -> Int {
   ((x - world_l) / Float::from_int(tile_sz)).to_int()
 }
 
 ///|
+/// Converts a world Y pixel coordinate to a grid row index.
 fn world_to_gy(y : Float) -> Int {
   ((y - world_t) / Float::from_int(tile_sz)).to_int()
 }
 
 ///|
+/// Returns the world X pixel coordinate of the center of grid column gx.
 fn cell_center_x(gx : Int) -> Float {
   world_l + Float::from_int(gx * tile_sz + tile_sz / 2)
 }
 
 ///|
+/// Returns the world Y pixel coordinate of the center of grid row gy.
 fn cell_center_y(gy : Int) -> Float {
   world_t + Float::from_int(gy * tile_sz + tile_sz / 2)
 }
 
 ///|
+/// Returns true if point (px, py) lies within the rectangle (x, y, w, h).
 fn inside_rect(
   px : Float,
   py : Float,
@@ -221,6 +261,7 @@ fn inside_rect(
 }
 
 ///|
+/// Deactivates and resets all particles in the particle pool.
 fn clear_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
     part.active = false
@@ -236,6 +277,7 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Activates an inactive particle slot at (x, y) with a random velocity and lifetime.
 fn add_particle(
   parts : Array[Particle],
   x : Float,
@@ -261,6 +303,7 @@ fn add_particle(
 }
 
 ///|
+/// Emits n particles at (x, y) with the given kind in a radial burst.
 fn burst_particles(
   parts : Array[Particle],
   x : Float,
@@ -274,6 +317,7 @@ fn burst_particles(
 }
 
 ///|
+/// Advances all active particles by dt, applying drag, gravity, and deactivating expired ones.
 fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
     if not(part.active) {
@@ -295,6 +339,7 @@ fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
 }
 
 ///|
+/// Draws all active particles as colored circles sized by remaining life.
 fn draw_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
     if not(part.active) {
@@ -323,6 +368,7 @@ fn draw_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Fills the tile grid with terrain and places miners, returning the number of miners actually placed.
 fn setup_map(tiles : Array[Int], target_miners : Int) -> Int {
   for gy in 0..<grid_h {
     for gx in 0..<grid_w {
@@ -398,6 +444,7 @@ fn setup_map(tiles : Array[Int], target_miners : Int) -> Int {
 }
 
 ///|
+/// Returns the number of tiles in the grid that match the given kind.
 fn count_tiles(tiles : Array[Int], kind : Int) -> Int {
   let mut n : Int = 0
   for tile in tiles {
@@ -409,6 +456,7 @@ fn count_tiles(tiles : Array[Int], kind : Int) -> Int {
 }
 
 ///|
+/// Returns the (x, y, width, height) pixel bounds of the rescue base platform.
 fn base_bounds() -> (Int, Int, Int, Int) {
   let base_cx : Int = grid_w / 2
   let x : Int = world_x + (base_cx - 2) * tile_sz
@@ -419,12 +467,14 @@ fn base_bounds() -> (Int, Int, Int, Int) {
 }
 
 ///|
+/// Returns true if the pixel point (px, py) is within the rescue base bounds.
 fn is_in_base(px : Float, py : Float) -> Bool {
   let (x, y, w, h) = base_bounds()
   inside_rect(px, py, x, y, w, h)
 }
 
 ///|
+/// Returns the number of gas tiles in the 3x3 neighborhood surrounding the given world position.
 fn gas_near_count(tiles : Array[Int], px : Float, py : Float) -> Int {
   let gx : Int = world_to_gx(px)
   let gy : Int = world_to_gy(py)
@@ -443,6 +493,7 @@ fn gas_near_count(tiles : Array[Int], px : Float, py : Float) -> Int {
 }
 
 ///|
+/// Attempts to move the player to (nx, ny), drilling through dirt if possible, and returns the new position and whether drilling occurred.
 fn try_move_axis(
   player : Player,
   tiles : Array[Int],
@@ -472,6 +523,7 @@ fn try_move_axis(
 }
 
 ///|
+/// Detonates a bomb at the player's position, clearing nearby tiles and returning updated casualty and crystal counts.
 fn drop_bomb(
   player : Player,
   tiles : Array[Int],
@@ -525,6 +577,7 @@ fn drop_bomb(
 }
 
 ///|
+/// Returns the grid coordinates and squared distance of the nearest miner tile to position (px, py).
 fn nearest_miner(
   tiles : Array[Int],
   px : Float,
@@ -555,6 +608,7 @@ fn nearest_miner(
 }
 
 ///|
+/// Randomly triggers cave-in and gas-pocket events scaled to tier, updating the tile grid and returning counts of each.
 fn apply_hazard_events(
   tiles : Array[Int],
   tier : Int,
@@ -591,6 +645,7 @@ fn apply_hazard_events(
 }
 
 ///|
+/// Draws the animated background gradient and floating dust motes behind the tile grid.
 fn draw_world_bg(t : Float) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     world_x - 12,
@@ -617,6 +672,7 @@ fn draw_world_bg(t : Float) -> Unit {
 }
 
 ///|
+/// Draws all tiles in the grid with decorative detail sprites for each tile kind.
 fn draw_tiles(tiles : Array[Int], t : Float) -> Unit {
   for gy in 0..<grid_h {
     for gx in 0..<grid_w {
@@ -734,6 +790,7 @@ fn draw_tiles(tiles : Array[Int], t : Float) -> Unit {
 }
 
 ///|
+/// Draws the player's drill vehicle with a bobbing animation and carried-miner counter.
 fn draw_player(player : Player, t : Float) -> Unit {
   let bob : Float = @math.sinf(t * 8.0 + player.wobble) * 2.0
   let x : Float = player.x
@@ -772,6 +829,7 @@ fn draw_player(player : Player, t : Float) -> Unit {
 }
 
 ///|
+/// Draws the on-screen directional pad and ability buttons for touch input.
 fn draw_touch_ui() -> Unit {
   let pad_x : Int = 28
   let pad_y : Int = sh - 196
@@ -875,6 +933,7 @@ fn draw_touch_ui() -> Unit {
 }
 
 ///|
+/// Draws the side panel HUD showing player stats, mission progress, and game status.
 fn draw_ui(
   player : Player,
   timer : Float,
@@ -1126,6 +1185,7 @@ fn draw_ui(
 }
 
 ///|
+/// Initializes the window and runs the Deep Tunnel Drill Rescue game loop.
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] deep tunnel drill rescue 2026")
   @raylib.set_target_fps(60)

@@ -1,43 +1,57 @@
 ///|
+/// Screen width in pixels.
 let sw = 1366
 
 ///|
+/// Screen height in pixels.
 let sh = 768
 
 ///|
+/// Number of grid columns on the circuit board.
 let cols = 10
 
 ///|
+/// Number of grid rows on the circuit board.
 let rows = 7
 
 ///|
+/// Left X pixel coordinate of the circuit board on screen.
 let board_x = 26
 
 ///|
+/// Top Y pixel coordinate of the circuit board on screen.
 let board_y = 90
 
 ///|
+/// Pixel size of each square grid cell.
 let cell_sz = 84
 
 ///|
+/// Total pixel width of the circuit board.
 let board_w : Int = cols * cell_sz
 
 ///|
+/// Total pixel height of the circuit board.
 let board_h : Int = rows * cell_sz
 
 ///|
+/// Left X pixel coordinate of the side info panel.
 let panel_x = 900
 
 ///|
+/// Pixel width of the side info panel.
 let panel_w = 440
 
 ///|
+/// Maximum number of visual pulse particles active at once.
 let max_pulses = 340
 
 ///|
+/// Total number of cells in the grid (cols * rows).
 let max_cells : Int = cols * rows
 
 ///|
+/// Represents a single grid cell holding a wire tile with kind, rotation, health, charge, and demand state.
 struct Cell {
   mut kind : Int // 0 empty, 1 straight, 2 corner, 3 tee, 4 cross, 5 source, 6 sink
   mut rot : Int
@@ -51,6 +65,7 @@ struct Cell {
 }
 
 ///|
+/// Represents a visual spark particle emitted when cells charge or fault.
 struct Pulse {
   mut active : Bool
   mut x : Float
@@ -63,6 +78,7 @@ struct Pulse {
 }
 
 ///|
+/// Clamps an integer value to the inclusive range [lo, hi].
 fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -74,6 +90,7 @@ fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Clamps a float value to the inclusive range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -85,22 +102,26 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns a random float uniformly distributed in the range [lo, hi].
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns the flat array index for the grid cell at column x and row y.
 fn idx(x : Int, y : Int) -> Int {
   y * cols + x
 }
 
 ///|
+/// Returns true if the grid coordinates (x, y) are within the board boundaries.
 fn in_bounds(x : Int, y : Int) -> Bool {
   x >= 0 && x < cols && y >= 0 && y < rows
 }
 
 ///|
+/// Returns the direction index opposite to the given cardinal direction (0=up, 1=right, 2=down, 3=left).
 fn opposite(dir : Int) -> Int {
   if dir == 0 {
     2
@@ -114,6 +135,7 @@ fn opposite(dir : Int) -> Int {
 }
 
 ///|
+/// Returns the column delta (horizontal step) for the given cardinal direction index.
 fn dir_dx(dir : Int) -> Int {
   if dir == 0 {
     0
@@ -127,6 +149,7 @@ fn dir_dx(dir : Int) -> Int {
 }
 
 ///|
+/// Returns the row delta (vertical step) for the given cardinal direction index.
 fn dir_dy(dir : Int) -> Int {
   if dir == 0 {
     -1
@@ -140,26 +163,31 @@ fn dir_dy(dir : Int) -> Int {
 }
 
 ///|
+/// Returns the left pixel X coordinate of the grid cell at column x.
 fn cell_px(x : Int) -> Int {
   board_x + x * cell_sz
 }
 
 ///|
+/// Returns the top pixel Y coordinate of the grid cell at row y.
 fn cell_py(y : Int) -> Int {
   board_y + y * cell_sz
 }
 
 ///|
+/// Returns the center pixel X coordinate of the grid cell at column x as a Float.
 fn cell_cx(x : Int) -> Float {
   Float::from_int(cell_px(x) + cell_sz / 2)
 }
 
 ///|
+/// Returns the center pixel Y coordinate of the grid cell at row y as a Float.
 fn cell_cy(y : Int) -> Float {
   Float::from_int(cell_py(y) + cell_sz / 2)
 }
 
 ///|
+/// Returns true if the screen point (px, py) lies within the circuit board area.
 fn board_contains(px : Float, py : Float) -> Bool {
   px >= Float::from_int(board_x) &&
   px < Float::from_int(board_x + board_w) &&
@@ -168,6 +196,7 @@ fn board_contains(px : Float, py : Float) -> Bool {
 }
 
 ///|
+/// Returns true if the point (px, py) lies within the given integer-bounded rectangle.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -183,6 +212,7 @@ fn inside_rect(
 }
 
 ///|
+/// Returns the flat cell index at screen position (px, py), or -1 if outside the board.
 fn pick_cell(px : Float, py : Float) -> Int {
   if not(board_contains(px, py)) {
     return -1
@@ -199,6 +229,7 @@ fn pick_cell(px : Float, py : Float) -> Int {
 }
 
 ///|
+/// Returns the display name string for the given wire tile kind index.
 fn wire_name(kind : Int) -> String {
   if kind == 1 {
     "STRAIGHT"
@@ -218,6 +249,7 @@ fn wire_name(kind : Int) -> String {
 }
 
 ///|
+/// Returns a randomly selected wire tile kind (straight, corner, tee, or cross) with weighted probability.
 fn rand_wire_kind() -> Int {
   let r : Int = @raylib.get_random_value(0, 99)
   if r < 34 {
@@ -232,6 +264,7 @@ fn rand_wire_kind() -> Int {
 }
 
 ///|
+/// Returns true if a wire tile of the given kind and rotation has a connection port facing the specified direction.
 fn has_port(kind : Int, rot : Int, dir : Int) -> Bool {
   if kind == 0 {
     false
@@ -273,6 +306,7 @@ fn has_port(kind : Int, rot : Int, dir : Int) -> Bool {
 }
 
 ///|
+/// Deactivates all pulse particles in the pool and resets their fields to defaults.
 fn clear_pulses(ps : Array[Pulse]) -> Unit {
   for ps_elem in ps {
     ps_elem.active = false
@@ -287,6 +321,7 @@ fn clear_pulses(ps : Array[Pulse]) -> Unit {
 }
 
 ///|
+/// Activates an idle pulse particle at (x, y) with a random velocity and visual kind.
 fn add_pulse(ps : Array[Pulse], x : Float, y : Float, kind : Int) -> Unit {
   for ps_elem in ps {
     if not(ps_elem.active) {
@@ -306,6 +341,7 @@ fn add_pulse(ps : Array[Pulse], x : Float, y : Float, kind : Int) -> Unit {
 }
 
 ///|
+/// Spawns n pulse particles at (x, y) with the given visual kind.
 fn burst_pulses(
   ps : Array[Pulse],
   x : Float,
@@ -319,6 +355,7 @@ fn burst_pulses(
 }
 
 ///|
+/// Advances all active pulse particles by dt seconds, applying movement and drag, and deactivates expired ones.
 fn update_pulses(ps : Array[Pulse], dt : Float) -> Unit {
   for ps_elem in ps {
     if not(ps_elem.active) {
@@ -339,6 +376,7 @@ fn update_pulses(ps : Array[Pulse], dt : Float) -> Unit {
 }
 
 ///|
+/// Draws all active pulse particles as colored circles scaled by remaining lifetime.
 fn draw_pulses(ps : Array[Pulse]) -> Unit {
   for ps_elem in ps {
     if not(ps_elem.active) {
@@ -365,6 +403,7 @@ fn draw_pulses(ps : Array[Pulse]) -> Unit {
 }
 
 ///|
+/// Resets all grid cells to empty state with full health and zeroed charge and demand values.
 fn clear_grid(cells : Array[Cell]) -> Unit {
   for cell in cells {
     cell.kind = 0
@@ -380,6 +419,7 @@ fn clear_grid(cells : Array[Cell]) -> Unit {
 }
 
 ///|
+/// Populates the grid with random wire tiles and places fixed source, sink, hub, and void cells for the puzzle layout.
 fn setup_grid(cells : Array[Cell]) -> Unit {
   clear_grid(cells)
 
@@ -460,6 +500,7 @@ fn setup_grid(cells : Array[Cell]) -> Unit {
 }
 
 ///|
+/// Randomizes the wire kind and rotation of all non-fixed cells in the specified grid row.
 fn reroll_row(cells : Array[Cell], y : Int) -> Unit {
   for x in 1..<(cols - 1) {
     let id : Int = idx(x, y)
@@ -475,6 +516,7 @@ fn reroll_row(cells : Array[Cell], y : Int) -> Unit {
 }
 
 ///|
+/// Returns the number of non-empty grid cells that currently have an active fault timer.
 fn count_faults(cells : Array[Cell]) -> Int {
   let mut n : Int = 0
   for cell in cells {
@@ -486,6 +528,7 @@ fn count_faults(cells : Array[Cell]) -> Int {
 }
 
 ///|
+/// Reduces the fault timer of all faulted cells by the given amount and restores their health, returning the count of patched cells.
 fn patch_faults(cells : Array[Cell], amount : Float) -> Int {
   let mut patched : Int = 0
   for cell in cells {
@@ -502,6 +545,7 @@ fn patch_faults(cells : Array[Cell], amount : Float) -> Int {
 }
 
 ///|
+/// Randomly introduces up to count new faults on eligible grid cells scaled by tier difficulty, returning how many were created.
 fn induce_faults(cells : Array[Cell], count : Int, tier : Int) -> Int {
   let mut made : Int = 0
   let mut tries : Int = 0
@@ -529,6 +573,7 @@ fn induce_faults(cells : Array[Cell], count : Int, tier : Int) -> Int {
 }
 
 ///|
+/// Advances fault timers, degrades health on faulted cells, recovers health on healthy cells, and decays charge each frame.
 fn degrade_faults(cells : Array[Cell], dt : Float) -> Unit {
   for cell in cells {
     if cell.kind == 0 {
@@ -561,6 +606,7 @@ fn degrade_faults(cells : Array[Cell], dt : Float) -> Unit {
 }
 
 ///|
+/// Propagates charge from source cells through connected wires via BFS, delivers power to sinks, and returns gain, miss, and powered-sink counts.
 fn run_network_step(
   cells : Array[Cell],
   q : Array[Int],
@@ -671,6 +717,7 @@ fn run_network_step(
 }
 
 ///|
+/// Draws the visual glyph for a source or sink port cell centered at (cx, cy) with the given radius and color.
 fn draw_port_glyph(
   kind : Int,
   cx : Float,
@@ -706,6 +753,7 @@ fn draw_port_glyph(
 }
 
 ///|
+/// Draws the wire segments and center node for a tile of the given kind and rotation at pixel position (gx, gy).
 fn draw_cell_wires(
   kind : Int,
   rot : Int,
@@ -742,6 +790,7 @@ fn draw_cell_wires(
 }
 
 ///|
+/// Draws all grid cells including background, charge glow, fault flash, wire glyphs, labels, and selection highlight.
 fn draw_board(
   cells : Array[Cell],
   selected : Int,
@@ -912,6 +961,7 @@ fn draw_board(
 }
 
 ///|
+/// Draws a labeled UI button with enabled and hover visual states at the given position and size.
 fn draw_button(
   x : Int,
   y : Int,
@@ -949,6 +999,7 @@ fn draw_button(
 }
 
 ///|
+/// Draws the right-side info panel showing timer, stability, budget, delivery progress, tier, fault count, and selected cell details.
 fn draw_panel(
   timer : Float,
   stability : Float,
@@ -1244,6 +1295,7 @@ fn draw_panel(
 }
 
 ///|
+/// Initializes the game window and runs the Circuit Grid Operator 2026 main game loop.
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] circuit grid operator 2026")
   @raylib.set_target_fps(60)

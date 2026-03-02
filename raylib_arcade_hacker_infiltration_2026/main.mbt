@@ -1,40 +1,53 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 760
 
 ///|
+/// Number of tile columns in the map grid.
 let map_w : Int = 22
 
 ///|
+/// Number of tile rows in the map grid.
 let map_h : Int = 13
 
 ///|
+/// Pixel size of each map tile.
 let tile : Int = 48
 
 ///|
+/// Pixel offset from the left edge where the map is drawn.
 let map_x : Int = 112
 
 ///|
+/// Pixel offset from the top edge where the map is drawn.
 let map_y : Int = 72
 
 ///|
+/// Maximum number of data terminals that can exist on a stage.
 let max_terminals : Int = 20
 
 ///|
+/// Maximum number of guards that can exist simultaneously.
 let max_guards : Int = 64
 
 ///|
+/// Maximum number of surveillance cameras that can exist simultaneously.
 let max_cameras : Int = 30
 
 ///|
+/// Maximum number of pickups that can exist simultaneously.
 let max_pickups : Int = 30
 
 ///|
+/// Maximum number of particles in the effects pool.
 let max_particles : Int = 960
 
 ///|
+/// Represents the player hacker with grid position, health, energy, ability cooldowns, facing direction, and score.
 struct Player {
   mut gx : Int
   mut gy : Int
@@ -53,6 +66,7 @@ struct Player {
 }
 
 ///|
+/// Represents a hackable data terminal with grid position and hacked state.
 struct Terminal {
   mut active : Bool
   mut gx : Int
@@ -61,6 +75,7 @@ struct Terminal {
 }
 
 ///|
+/// Represents a security guard with grid position, health, movement and attack cooldowns, stun timer, and patrol direction.
 struct Guard {
   mut active : Bool
   mut kind : Int
@@ -75,6 +90,7 @@ struct Guard {
 }
 
 ///|
+/// Represents a surveillance camera with grid position, facing direction, rotation timer, and disable timer.
 struct Camera {
   mut active : Bool
   mut gx : Int
@@ -85,6 +101,7 @@ struct Camera {
 }
 
 ///|
+/// Represents a collectible pickup item with grid position and item kind.
 struct Pickup {
   mut active : Bool
   mut gx : Int
@@ -93,6 +110,7 @@ struct Pickup {
 }
 
 ///|
+/// Represents a visual particle effect with world position, velocity, size, elapsed time, lifetime, and kind.
 struct Particle {
   mut active : Bool
   mut x : Float
@@ -106,16 +124,19 @@ struct Particle {
 }
 
 ///|
+/// Returns the flat array index for a tile at grid coordinates (gx, gy).
 fn idx(gx : Int, gy : Int) -> Int {
   gy * map_w + gx
 }
 
 ///|
+/// Returns true if the grid coordinates (gx, gy) are within the map bounds.
 fn in_bounds(gx : Int, gy : Int) -> Bool {
   gx >= 0 && gy >= 0 && gx < map_w && gy < map_h
 }
 
 ///|
+/// Returns the integer value clamped between lo and hi.
 fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -127,6 +148,7 @@ fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Returns the Float value clamped between lo and hi.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -138,6 +160,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of an integer.
 fn absi(v : Int) -> Int {
   if v < 0 {
     -v
@@ -147,12 +170,14 @@ fn absi(v : Int) -> Int {
 }
 
 ///|
+/// Returns a random Float value uniformly distributed between lo and hi.
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns true if the point (px, py) lies within the axis-aligned rectangle.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -168,16 +193,19 @@ fn inside_rect(
 }
 
 ///|
+/// Returns the horizontal pixel centre of the tile at grid column gx.
 fn cell_center_x(gx : Int) -> Float {
   Float::from_int(map_x + gx * tile + tile / 2)
 }
 
 ///|
+/// Returns the vertical pixel centre of the tile at grid row gy.
 fn cell_center_y(gy : Int) -> Float {
   Float::from_int(map_y + gy * tile + tile / 2)
 }
 
 ///|
+/// Resets all terminals to their inactive default state.
 fn clear_terminals(terminals : Array[Terminal]) -> Unit {
   for terminal in terminals {
     terminal.active = false
@@ -188,6 +216,7 @@ fn clear_terminals(terminals : Array[Terminal]) -> Unit {
 }
 
 ///|
+/// Resets all guards to their inactive default state.
 fn clear_guards(guards : Array[Guard]) -> Unit {
   for guard_val in guards {
     guard_val.active = false
@@ -204,6 +233,7 @@ fn clear_guards(guards : Array[Guard]) -> Unit {
 }
 
 ///|
+/// Resets all cameras to their inactive default state.
 fn clear_cameras(cameras : Array[Camera]) -> Unit {
   for camera in cameras {
     camera.active = false
@@ -216,6 +246,7 @@ fn clear_cameras(cameras : Array[Camera]) -> Unit {
 }
 
 ///|
+/// Resets all pickups to their inactive default state.
 fn clear_pickups(pickups : Array[Pickup]) -> Unit {
   for pickup in pickups {
     pickup.active = false
@@ -226,6 +257,7 @@ fn clear_pickups(pickups : Array[Pickup]) -> Unit {
 }
 
 ///|
+/// Resets all particles to their inactive default state.
 fn clear_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
     part.active = false
@@ -241,6 +273,7 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Returns the index of the active guard at grid position (gx, gy), or -1 if none found.
 fn guard_at(guards : Array[Guard], gx : Int, gy : Int) -> Int {
   let mut found : Int = -1
   for i in 0..<guards.length() {
@@ -253,6 +286,7 @@ fn guard_at(guards : Array[Guard], gx : Int, gy : Int) -> Int {
 }
 
 ///|
+/// Returns the index of the active unhacked terminal at grid position (gx, gy), or -1 if none found.
 fn terminal_at(terminals : Array[Terminal], gx : Int, gy : Int) -> Int {
   let mut found : Int = -1
   for i in 0..<terminals.length() {
@@ -268,6 +302,7 @@ fn terminal_at(terminals : Array[Terminal], gx : Int, gy : Int) -> Int {
 }
 
 ///|
+/// Returns the index of the active pickup at grid position (gx, gy), or -1 if none found.
 fn pickup_at(pickups : Array[Pickup], gx : Int, gy : Int) -> Int {
   let mut found : Int = -1
   for i in 0..<pickups.length() {
@@ -280,6 +315,7 @@ fn pickup_at(pickups : Array[Pickup], gx : Int, gy : Int) -> Int {
 }
 
 ///|
+/// Returns the index of the active camera at grid position (gx, gy), or -1 if none found.
 fn camera_at(cameras : Array[Camera], gx : Int, gy : Int) -> Int {
   let mut found : Int = -1
   for i in 0..<cameras.length() {
@@ -292,11 +328,13 @@ fn camera_at(cameras : Array[Camera], gx : Int, gy : Int) -> Int {
 }
 
 ///|
+/// Returns true if the tile at (gx, gy) is within bounds and passable (not a wall).
 fn can_walk(tiles : Array[Int], gx : Int, gy : Int) -> Bool {
   in_bounds(gx, gy) && tiles[idx(gx, gy)] == 0
 }
 
 ///|
+/// Returns true if there are no wall tiles between two axially aligned grid positions.
 fn line_clear(
   tiles : Array[Int],
   x0 : Int,
@@ -334,6 +372,7 @@ fn line_clear(
 }
 
 ///|
+/// Returns true if two axially aligned grid positions are within max_dist tiles and have an unobstructed line of sight.
 fn visible_line(
   tiles : Array[Int],
   x0 : Int,
@@ -354,6 +393,7 @@ fn visible_line(
 }
 
 ///|
+/// Returns true if the target grid position is within the camera's current facing direction.
 fn camera_facing(cam : Camera, tx : Int, ty : Int) -> Bool {
   if cam.dir == 0 {
     tx == cam.gx && ty < cam.gy
@@ -367,6 +407,7 @@ fn camera_facing(cam : Camera, tx : Int, ty : Int) -> Bool {
 }
 
 ///|
+/// Spawns a guard of the given kind at the specified grid position with stage-scaled health.
 fn spawn_guard(
   guards : Array[Guard],
   gx : Int,
@@ -402,6 +443,7 @@ fn spawn_guard(
 }
 
 ///|
+/// Spawns a pickup of the given kind at the specified grid position.
 fn spawn_pickup(
   pickups : Array[Pickup],
   gx : Int,
@@ -428,6 +470,7 @@ fn spawn_pickup(
 }
 
 ///|
+/// Emits n particles of the given kind at world position (x, y) with the given speed scale.
 fn burst(
   parts : Array[Particle],
   x : Float,
@@ -458,6 +501,7 @@ fn burst(
 }
 
 ///|
+/// Draws a guard at its current grid position with body, head, and optional stun indicator.
 fn draw_guard(g : Guard) -> Unit {
   if not(g.active) {
     ignore(())
@@ -504,6 +548,7 @@ fn draw_guard(g : Guard) -> Unit {
 }
 
 ///|
+/// Draws a camera at its grid position with a direction indicator, greyed out when disabled.
 fn draw_camera(c : Camera) -> Unit {
   if not(c.active) {
     ignore(())
@@ -550,6 +595,7 @@ fn draw_camera(c : Camera) -> Unit {
 }
 
 ///|
+/// Initializes the window and runs the main arcade hacker infiltration game loop.
 fn main {
   @raylib.init_window(sw, sh, "Arcade Hacker Infiltration 2026")
   @raylib.set_target_fps(60)

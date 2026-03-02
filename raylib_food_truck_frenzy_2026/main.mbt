@@ -1,4 +1,5 @@
 ///|
+/// Represents the player-controlled chef with position, velocity, stamina, action cooldown, and boost state.
 struct Chef {
   mut x : Float
   mut y : Float
@@ -12,6 +13,7 @@ struct Chef {
 }
 
 ///|
+/// Represents a kitchen or service station with position, dimensions, and functional kind.
 struct Station {
   x : Float
   y : Float
@@ -21,6 +23,7 @@ struct Station {
 }
 
 ///|
+/// Represents a customer order with deadline, reward, recipe kind, and pulse animation state.
 struct Order {
   mut active : Bool
   mut id : Int
@@ -32,6 +35,7 @@ struct Order {
 }
 
 ///|
+/// Represents an active cooking slot on the stove with recipe kind, progress, and quality tracking.
 struct StoveSlot {
   mut active : Bool
   mut kind : Int
@@ -42,6 +46,7 @@ struct StoveSlot {
 }
 
 ///|
+/// Represents a timed supply box on the kitchen floor holding an ingredient kind and amount.
 struct SupplyBox {
   mut active : Bool
   mut x : Float
@@ -53,6 +58,7 @@ struct SupplyBox {
 }
 
 ///|
+/// Represents a visual particle effect with position, velocity, lifetime, size, and kind.
 struct Particle {
   mut active : Bool
   mut x : Float
@@ -65,6 +71,7 @@ struct Particle {
 }
 
 ///|
+/// Returns v clamped to the range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -76,6 +83,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two Float values.
 fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -85,6 +93,7 @@ fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two Float values.
 fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -94,6 +103,7 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two Int values.
 fn mini(a : Int, b : Int) -> Int {
   if a < b {
     a
@@ -103,6 +113,7 @@ fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the larger of two Int values.
 fn maxi(a : Int, b : Int) -> Int {
   if a > b {
     a
@@ -112,22 +123,26 @@ fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the sine of v (in radians) as a Float.
 fn sinf(v : Float) -> Float {
   Float::from_double(@math.sin(v.to_double()))
 }
 
 ///|
+/// Returns a random Float uniformly distributed in [lo, hi].
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns a random Int uniformly distributed in [lo, hi].
 fn randi(lo : Int, hi : Int) -> Int {
   @raylib.get_random_value(lo, hi)
 }
 
 ///|
+/// Returns the squared Euclidean distance between two 2D points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx : Float = x1 - x0
   let dy : Float = y1 - y0
@@ -135,6 +150,7 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Returns true if point (px, py) lies within the Float-dimensioned rectangle at (x, y) with size (w, h).
 fn inside_rectf(
   px : Float,
   py : Float,
@@ -147,6 +163,7 @@ fn inside_rectf(
 }
 
 ///|
+/// Returns true if point (px, py) lies within the Int-dimensioned rectangle at (x, y) with size (w, h).
 fn inside_rect(
   px : Float,
   py : Float,
@@ -162,6 +179,7 @@ fn inside_rect(
 }
 
 ///|
+/// Returns true if the mouse or any touch point is currently held inside the given rectangle.
 fn pointer_on_rect(
   mouse_x : Float,
   mouse_y : Float,
@@ -191,6 +209,7 @@ fn pointer_on_rect(
 }
 
 ///|
+/// Returns true if the mouse or any touch point is currently held inside the given circle.
 fn pointer_on_circle(
   mouse_x : Float,
   mouse_y : Float,
@@ -219,6 +238,7 @@ fn pointer_on_circle(
 }
 
 ///|
+/// Returns the display name for an ingredient by its kind index.
 fn ingredient_name(kind : Int) -> String {
   match kind {
     0 => "Bun"
@@ -230,6 +250,7 @@ fn ingredient_name(kind : Int) -> String {
 }
 
 ///|
+/// Returns the abbreviated display name for a recipe by its kind index.
 fn recipe_short(kind : Int) -> String {
   match kind {
     0 => "Burger"
@@ -241,6 +262,7 @@ fn recipe_short(kind : Int) -> String {
 }
 
 ///|
+/// Returns the base score reward for completing an order of the given recipe kind.
 fn recipe_reward(kind : Int) -> Int {
   match kind {
     0 => 110
@@ -252,6 +274,7 @@ fn recipe_reward(kind : Int) -> Int {
 }
 
 ///|
+/// Returns the cooking time in seconds required for the given recipe kind.
 fn recipe_cook_time(kind : Int) -> Float {
   match kind {
     0 => 5.2
@@ -263,6 +286,7 @@ fn recipe_cook_time(kind : Int) -> Float {
 }
 
 ///|
+/// Returns the display color associated with a recipe kind.
 fn recipe_color(kind : Int) -> @raylib.Color {
   match kind {
     0 => @raylib.Color::new(246, 180, 92, 232)
@@ -274,6 +298,7 @@ fn recipe_color(kind : Int) -> @raylib.Color {
 }
 
 ///|
+/// Returns the quantity of the given ingredient index needed to prepare a recipe of the given kind.
 fn recipe_need(kind : Int, ingredient : Int) -> Int {
   match kind {
     0 =>
@@ -320,6 +345,7 @@ fn recipe_need(kind : Int, ingredient : Int) -> Int {
 }
 
 ///|
+/// Returns true if the current ingredient inventory satisfies all requirements for the given recipe kind.
 fn recipe_can_make(kind : Int, ingredients : Array[Int]) -> Bool {
   let mut ok : Bool = true
   for i in 0..<ingredients.length() {
@@ -331,6 +357,7 @@ fn recipe_can_make(kind : Int, ingredients : Array[Int]) -> Bool {
 }
 
 ///|
+/// Deducts the required ingredients from inventory when preparing a recipe of the given kind.
 fn recipe_consume(kind : Int, ingredients : Array[Int]) -> Unit {
   for i in 0..<ingredients.length() {
     let need : Int = recipe_need(kind, i)
@@ -339,6 +366,7 @@ fn recipe_consume(kind : Int, ingredients : Array[Int]) -> Unit {
 }
 
 ///|
+/// Resets all order slots to their inactive default state with sequential IDs.
 fn clear_orders(orders : Array[Order]) -> Unit {
   for i in 0..<orders.length() {
     orders[i].active = false
@@ -352,6 +380,7 @@ fn clear_orders(orders : Array[Order]) -> Unit {
 }
 
 ///|
+/// Resets all stove slots to their inactive default state.
 fn clear_stoves(stoves : Array[StoveSlot]) -> Unit {
   for stove in stoves {
     stove.active = false
@@ -364,6 +393,7 @@ fn clear_stoves(stoves : Array[StoveSlot]) -> Unit {
 }
 
 ///|
+/// Resets all supply box slots to their inactive default state.
 fn clear_boxes(boxes : Array[SupplyBox]) -> Unit {
   for box in boxes {
     box.active = false
@@ -377,6 +407,7 @@ fn clear_boxes(boxes : Array[SupplyBox]) -> Unit {
 }
 
 ///|
+/// Resets all particle slots to their inactive default state.
 fn clear_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
     part.active = false
@@ -391,6 +422,7 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Spawns a single particle with the given position, velocity, lifetime, size, and kind.
 fn spawn_particle(
   parts : Array[Particle],
   x : Float,
@@ -418,6 +450,7 @@ fn spawn_particle(
 }
 
 ///|
+/// Spawns count particles in a burst at the given position with random directions.
 fn burst_particles(
   parts : Array[Particle],
   x : Float,
@@ -440,6 +473,7 @@ fn burst_particles(
 }
 
 ///|
+/// Updates all active particles by advancing position, applying drag and gravity, and expiring finished ones.
 fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
     if not(part.active) {
@@ -458,6 +492,7 @@ fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
 }
 
 ///|
+/// Spawns a new customer order in the first available slot with wave-scaled deadline and reward.
 fn spawn_order(orders : Array[Order], wave : Int, serial : Int) -> Bool {
   let mut placed : Bool = false
 
@@ -503,6 +538,7 @@ fn spawn_order(orders : Array[Order], wave : Int, serial : Int) -> Bool {
 }
 
 ///|
+/// Spawns a new supply box at a random position within the world area with a random ingredient kind and amount.
 fn spawn_supply_box(
   boxes : Array[SupplyBox],
   world_l : Float,
@@ -531,6 +567,7 @@ fn spawn_supply_box(
 }
 
 ///|
+/// Returns the count of active orders waiting for the given recipe kind.
 fn find_pending_for_kind(orders : Array[Order], kind : Int) -> Int {
   let mut c : Int = 0
   for order in orders {
@@ -542,6 +579,7 @@ fn find_pending_for_kind(orders : Array[Order], kind : Int) -> Int {
 }
 
 ///|
+/// Returns the count of active stove slots currently cooking the given recipe kind.
 fn find_cooking_for_kind(stoves : Array[StoveSlot], kind : Int) -> Int {
   let mut c : Int = 0
   for stove in stoves {
@@ -553,6 +591,7 @@ fn find_cooking_for_kind(stoves : Array[StoveSlot], kind : Int) -> Int {
 }
 
 ///|
+/// Returns the best recipe kind to start cooking based on pending orders, stove state, and available ingredients.
 fn choose_recipe_for_cook(
   orders : Array[Order],
   stoves : Array[StoveSlot],
@@ -597,6 +636,7 @@ fn choose_recipe_for_cook(
 }
 
 ///|
+/// Returns the index of the first inactive stove slot, or -1 if all slots are busy.
 fn open_stove_slot(stoves : Array[StoveSlot]) -> Int {
   let mut idx : Int = -1
   for i in 0..<stoves.length() {
@@ -609,6 +649,7 @@ fn open_stove_slot(stoves : Array[StoveSlot]) -> Int {
 }
 
 ///|
+/// Returns the index of the active order with the earliest deadline for which a ready meal exists, or -1 if none.
 fn earliest_servable_order_index(
   orders : Array[Order],
   meals : Array[Int],
@@ -633,6 +674,7 @@ fn earliest_servable_order_index(
 }
 
 ///|
+/// Draws an animated floor grid with pulsing cell borders over the kitchen area.
 fn draw_floor_grid(x : Int, y : Int, w : Int, h : Int, scene_t : Float) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     x,
@@ -667,6 +709,7 @@ fn draw_floor_grid(x : Int, y : Int, w : Int, h : Int, scene_t : Float) -> Unit 
 }
 
 ///|
+/// Draws a single kitchen station with kind-based color, label, and animated center pulse.
 fn draw_station(s : Station, active : Bool, scene_t : Float) -> Unit {
   let color = match s.kind {
     0 => @raylib.Color::new(250, 196, 118, if active { 236 } else { 162 })
@@ -731,6 +774,7 @@ fn draw_station(s : Station, active : Bool, scene_t : Float) -> Unit {
 }
 
 ///|
+/// Draws the chef character with bobbing animation and a boost aura when the boost is active.
 fn draw_chef(chef : Chef, scene_t : Float) -> Unit {
   let bob : Float = sinf(scene_t * 10.0 + chef.step_t * 0.08) * 1.2
   @raylib.draw_circle_v(
@@ -761,6 +805,7 @@ fn draw_chef(chef : Chef, scene_t : Float) -> Unit {
 }
 
 ///|
+/// Draws the orders panel listing all active customer orders with urgency bars and ready state indicators.
 fn draw_orders_panel(
   panel_x : Int,
   panel_y : Int,
@@ -892,6 +937,7 @@ fn draw_orders_panel(
 }
 
 ///|
+/// Draws the inventory panel showing current ingredient counts and ready meal quantities.
 fn draw_inventory_panel(
   panel_x : Int,
   panel_y : Int,
@@ -928,6 +974,7 @@ fn draw_inventory_panel(
 }
 
 ///|
+/// Draws the stove slots showing cooking progress bars and emits steam particles for active slots.
 fn draw_stoves(
   stoves : Array[StoveSlot],
   stove_x : Float,
@@ -994,6 +1041,7 @@ fn draw_stoves(
 }
 
 ///|
+/// Draws all active supply boxes with recipe-colored fill, an amount label, and a pulsing glow ring.
 fn draw_supply_boxes(boxes : Array[SupplyBox], scene_t : Float) -> Unit {
   for box in boxes {
     if not(box.active) {
@@ -1031,6 +1079,7 @@ fn draw_supply_boxes(boxes : Array[SupplyBox], scene_t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active particles with fade-out alpha based on remaining lifetime.
 fn draw_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
     if not(part.active) {
@@ -1053,6 +1102,7 @@ fn draw_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Draws the on-screen touch D-pad and action buttons with visual active states.
 fn draw_touch_controls(
   sw : Int,
   sh : Int,
@@ -1190,6 +1240,7 @@ fn draw_touch_controls(
 }
 
 ///|
+/// Draws the main HUD panel with score, timer, reputation and condition meters, and status message.
 fn draw_hud(
   panel_x : Int,
   panel_y : Int,
@@ -1373,6 +1424,7 @@ fn draw_hud(
 }
 
 ///|
+/// Draws the main menu screen with animated background and start prompt.
 fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 16, 26, 255))
 
@@ -1458,6 +1510,7 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
 }
 
 ///|
+/// Draws the end-of-shift screen with win/lose title, final score, reputation, and served/lost counts.
 fn draw_end(
   sw : Int,
   sh : Int,
@@ -1515,6 +1568,7 @@ fn draw_end(
 }
 
 ///|
+/// Initializes and runs the Food Truck Frenzy 2026 game loop.
 fn main {
   let sw : Int = 1680
   let sh : Int = 960

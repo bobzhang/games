@@ -1,13 +1,17 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1160
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 760
 
 ///|
+/// Y-coordinate of the water surface boundary.
 let surface_y : Float = 116.0
 
 ///|
+/// Represents a collectible relic on the seabed with position, size, and salvage value.
 struct Relic {
   mut alive : Bool
   mut x : Float
@@ -17,6 +21,7 @@ struct Relic {
 }
 
 ///|
+/// Represents a drifting underwater mine with position, horizontal velocity, and collision radius.
 struct Mine {
   mut alive : Bool
   mut x : Float
@@ -26,6 +31,7 @@ struct Mine {
 }
 
 ///|
+/// Spawns a new relic at a random underwater position in the first available slot.
 fn spawn_relic(rs : Array[Relic]) -> Unit {
   for rs_elem in rs {
     if not(rs_elem.alive) {
@@ -40,6 +46,7 @@ fn spawn_relic(rs : Array[Relic]) -> Unit {
 }
 
 ///|
+/// Spawns a new mine at a random underwater position in the first available slot.
 fn spawn_mine(ms : Array[Mine]) -> Unit {
   for ms_elem in ms {
     if not(ms_elem.alive) {
@@ -54,6 +61,7 @@ fn spawn_mine(ms : Array[Mine]) -> Unit {
 }
 
 ///|
+/// Deactivates all relics in the array, clearing the seabed.
 fn reset_relics(rs : Array[Relic]) -> Unit {
   for rs_elem in rs {
     rs_elem.alive = false
@@ -61,6 +69,7 @@ fn reset_relics(rs : Array[Relic]) -> Unit {
 }
 
 ///|
+/// Deactivates all mines in the array, clearing the underwater hazards.
 fn reset_mines(ms : Array[Mine]) -> Unit {
   for ms_elem in ms {
     ms_elem.alive = false
@@ -68,6 +77,7 @@ fn reset_mines(ms : Array[Mine]) -> Unit {
 }
 
 ///|
+/// Initialises the window, runs the game loop, and cleans up on exit.
 fn main {
   @raylib.init_window(sw, sh, "Deep Sea Salvage 2026")
   @raylib.set_target_fps(60)

@@ -1,13 +1,17 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1200
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 740
 
 ///|
+/// Y coordinate of the ground line separating sky from grass.
 let ground_y : Float = 640.0
 
 ///|
+/// Represents a fired arrow with position, velocity, and alive state.
 struct Arrow {
   mut alive : Bool
   mut x : Float
@@ -17,6 +21,7 @@ struct Arrow {
 }
 
 ///|
+/// Represents a moving archery target with position, radius, velocity, and point value.
 struct Target {
   mut alive : Bool
   mut x : Float
@@ -27,6 +32,7 @@ struct Target {
 }
 
 ///|
+/// Resets all targets to their initial positions, sizes, velocities, and point values.
 fn reset_targets(ts : Array[Target]) -> Unit {
   ts[0] = { alive: true, x: 920.0, y: 430.0, r: 34.0, vx: 90.0, points: 30 }
   ts[1] = { alive: true, x: 1040.0, y: 360.0, r: 26.0, vx: -120.0, points: 45 }
@@ -35,6 +41,7 @@ fn reset_targets(ts : Array[Target]) -> Unit {
 }
 
 ///|
+/// Runs the main game loop for Archery Tournament 2026, handling input, physics, collision, and rendering.
 fn main {
   @raylib.init_window(sw, sh, "Archery Tournament 2026")
   @raylib.set_target_fps(60)

@@ -1,19 +1,25 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 820
 
 ///|
+/// Maximum number of ghosts that can be active simultaneously.
 let max_ghosts : Int = 26
 
 ///|
+/// Maximum number of collectible clues that can exist in the level.
 let max_clues : Int = 42
 
 ///|
+/// Maximum number of visual particles that can be active at once.
 let max_particles : Int = 560
 
 ///|
+/// Represents the player-controlled investigator with position, velocity, health, sanity, and ability cooldowns.
 struct Investigator {
   mut x : Float
   mut y : Float
@@ -30,6 +36,7 @@ struct Investigator {
 }
 
 ///|
+/// Represents a ghost enemy with position, velocity, movement timers, stun state, and type variant.
 struct Ghost {
   mut x : Float
   mut y : Float
@@ -45,6 +52,7 @@ struct Ghost {
 }
 
 ///|
+/// Represents a collectible clue with position, type, and active status.
 struct Clue {
   mut x : Float
   mut y : Float
@@ -53,6 +61,7 @@ struct Clue {
 }
 
 ///|
+/// Represents a short-lived visual particle with position, velocity, remaining lifetime, and type.
 struct Particle {
   mut x : Float
   mut y : Float
@@ -64,6 +73,7 @@ struct Particle {
 }
 
 ///|
+/// Returns the value v clamped to the range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -75,6 +85,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the squared Euclidean distance between two 2D points.
 fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
   let dy = ay - by
@@ -82,6 +93,7 @@ fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 }
 
 ///|
+/// Returns true if the point (px, py) lies within the given rectangle.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -97,6 +109,7 @@ fn inside_rect(
 }
 
 ///|
+/// Returns true if a circle overlaps with an axis-aligned rectangle.
 fn circle_hits_rect(
   cx : Float,
   cy : Float,
@@ -112,6 +125,7 @@ fn circle_hits_rect(
 }
 
 ///|
+/// Returns true if a circle at (x, y) with radius r collides with any wall or obstacle for the given level.
 fn blocked(x : Float, y : Float, r : Float, level : Int) -> Bool {
   if x - r < 28.0 ||
     x + r > Float::from_int(sw - 28) ||
@@ -148,6 +162,7 @@ fn blocked(x : Float, y : Float, r : Float, level : Int) -> Bool {
 }
 
 ///|
+/// Resets all ghosts in the array to their default inactive state.
 fn clear_ghosts(gs : Array[Ghost]) -> Unit {
   for gs_elem in gs {
     gs_elem.x = 0.0
@@ -165,6 +180,7 @@ fn clear_ghosts(gs : Array[Ghost]) -> Unit {
 }
 
 ///|
+/// Resets all clues in the array to their default inactive state.
 fn clear_clues(cs : Array[Clue]) -> Unit {
   for cs_elem in cs {
     cs_elem.x = 0.0
@@ -175,6 +191,7 @@ fn clear_clues(cs : Array[Clue]) -> Unit {
 }
 
 ///|
+/// Resets all particles in the array to their default inactive state.
 fn clear_particles(ps : Array[Particle]) -> Unit {
   for ps_elem in ps {
     ps_elem.x = 0.0
@@ -188,6 +205,7 @@ fn clear_particles(ps : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Spawns a single particle at the given position with a random velocity and lifetime.
 fn spawn_particle(
   ps : Array[Particle],
   x : Float,
@@ -215,6 +233,7 @@ fn spawn_particle(
 }
 
 ///|
+/// Spawns n particles at position (x, y) in a burst pattern with the given speed and kind.
 fn burst(
   ps : Array[Particle],
   x : Float,
@@ -229,6 +248,7 @@ fn burst(
 }
 
 ///|
+/// Resets the investigator to the starting position with full health, sanity, and battery.
 fn reset_player(p : Investigator) -> Unit {
   p.x = 86.0
   p.y = 734.0
@@ -245,6 +265,7 @@ fn reset_player(p : Investigator) -> Unit {
 }
 
 ///|
+/// Sets a clue entry at the given index to the specified position, type, and active state.
 fn set_clue(
   cs : Array[Clue],
   idx : Int,
@@ -259,6 +280,7 @@ fn set_clue(
 }
 
 ///|
+/// Initialises clue positions for the given level and returns the number of clues required to complete it.
 fn init_clues(level : Int, cs : Array[Clue]) -> Int {
   clear_clues(cs)
 
@@ -304,6 +326,7 @@ fn init_clues(level : Int, cs : Array[Clue]) -> Int {
 }
 
 ///|
+/// Spawns a new ghost at a random valid position appropriate for the given level.
 fn spawn_ghost(gs : Array[Ghost], level : Int) -> Unit {
   let mut done = false
   for gs_elem in gs {
@@ -342,6 +365,7 @@ fn spawn_ghost(gs : Array[Ghost], level : Int) -> Unit {
 }
 
 ///|
+/// Initialises all game entities for the given level and returns the clue target, timer, and ghost spawn rate.
 fn setup_level(
   level : Int,
   player : Investigator,
@@ -365,6 +389,7 @@ fn setup_level(
 }
 
 ///|
+/// Returns true if the ghost at (gx, gy) is within the player's lantern cone.
 fn in_lantern(player : Investigator, gx : Float, gy : Float) -> Bool {
   if player.battery <= 4.0 {
     return false
@@ -386,6 +411,7 @@ fn in_lantern(player : Investigator, gx : Float, gy : Float) -> Bool {
 }
 
 ///|
+/// Initialises the window, runs the main game loop, and handles all update and draw logic.
 fn main {
   @raylib.init_window(sw, sh, "Ghost Mansion Investigation 2026")
   @raylib.set_target_fps(60)

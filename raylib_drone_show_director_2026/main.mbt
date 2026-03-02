@@ -1,4 +1,5 @@
 ///|
+/// Represents the player-controlled director with position, velocity, energy, and sync state.
 struct Director {
   mut x : Float
   mut y : Float
@@ -13,6 +14,7 @@ struct Director {
 }
 
 ///|
+/// Represents a drone with position, velocity, battery, temperature, state, and flash timer.
 struct Drone {
   mut active : Bool
   mut x : Float
@@ -26,6 +28,7 @@ struct Drone {
 }
 
 ///|
+/// Represents an audience show request with pattern, deadline, quality threshold, and reward.
 struct Request {
   mut active : Bool
   mut id : Int
@@ -39,6 +42,7 @@ struct Request {
 }
 
 ///|
+/// Represents a wind gust with position, velocity, radius, remaining lifetime, and strength.
 struct Gust {
   mut active : Bool
   mut x : Float
@@ -52,6 +56,7 @@ struct Gust {
 }
 
 ///|
+/// Represents a firework projectile with position, velocity, lifetime, burst timer, and color.
 struct Firework {
   mut active : Bool
   mut x : Float
@@ -64,6 +69,7 @@ struct Firework {
 }
 
 ///|
+/// Represents a visual particle effect with position, velocity, lifetime, size, and kind.
 struct Particle {
   mut active : Bool
   mut x : Float
@@ -76,6 +82,7 @@ struct Particle {
 }
 
 ///|
+/// Represents a ground station with position, dimensions, and functional kind.
 struct Station {
   x : Float
   y : Float
@@ -85,12 +92,14 @@ struct Station {
 }
 
 ///|
+/// Represents a 2D floating-point vector used for positions and target coordinates.
 struct Vec2f {
   x : Float
   y : Float
 }
 
 ///|
+/// Returns v clamped to the range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -102,6 +111,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two Float values.
 fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -111,6 +121,7 @@ fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two Float values.
 fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -120,6 +131,7 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two Int values.
 fn mini(a : Int, b : Int) -> Int {
   if a < b {
     a
@@ -129,6 +141,7 @@ fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the larger of two Int values.
 fn maxi(a : Int, b : Int) -> Int {
   if a > b {
     a
@@ -138,6 +151,7 @@ fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the absolute value of a Float.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -147,27 +161,32 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns the sine of v (in radians) as a Float.
 fn sinf(v : Float) -> Float {
   Float::from_double(@math.sin(v.to_double()))
 }
 
 ///|
+/// Returns the cosine of v (in radians) as a Float.
 fn cosf(v : Float) -> Float {
   Float::from_double(@math.cos(v.to_double()))
 }
 
 ///|
+/// Returns a random Float uniformly distributed in [lo, hi].
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns a random Int uniformly distributed in [lo, hi].
 fn randi(lo : Int, hi : Int) -> Int {
   @raylib.get_random_value(lo, hi)
 }
 
 ///|
+/// Returns the squared Euclidean distance between two 2D points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx : Float = x1 - x0
   let dy : Float = y1 - y0
@@ -175,6 +194,7 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Returns true if point (px, py) lies within the Float-dimensioned rectangle at (x, y) with size (w, h).
 fn inside_rectf(
   px : Float,
   py : Float,
@@ -187,6 +207,7 @@ fn inside_rectf(
 }
 
 ///|
+/// Returns true if point (px, py) lies within the Int-dimensioned rectangle at (x, y) with size (w, h).
 fn inside_rect(
   px : Float,
   py : Float,
@@ -202,6 +223,7 @@ fn inside_rect(
 }
 
 ///|
+/// Returns true if the mouse or any touch point is currently held inside the given rectangle.
 fn pointer_on_rect(
   mouse_x : Float,
   mouse_y : Float,
@@ -228,6 +250,7 @@ fn pointer_on_rect(
 }
 
 ///|
+/// Returns true if the mouse or any touch point is currently held inside the given circle.
 fn pointer_on_circle(
   mouse_x : Float,
   mouse_y : Float,
@@ -253,6 +276,7 @@ fn pointer_on_circle(
 }
 
 ///|
+/// Returns the full display name for a drone formation pattern index.
 fn pattern_name(pattern : Int) -> String {
   match pattern {
     0 => "Solar Ring"
@@ -264,6 +288,7 @@ fn pattern_name(pattern : Int) -> String {
 }
 
 ///|
+/// Returns the abbreviated display name for a drone formation pattern index.
 fn pattern_short(pattern : Int) -> String {
   match pattern {
     0 => "Ring"
@@ -275,6 +300,7 @@ fn pattern_short(pattern : Int) -> String {
 }
 
 ///|
+/// Returns the highlight color associated with a drone formation pattern index.
 fn pattern_color(pattern : Int) -> @raylib.Color {
   match pattern {
     0 => @raylib.Color::new(120, 206, 255, 220)
@@ -286,6 +312,7 @@ fn pattern_color(pattern : Int) -> @raylib.Color {
 }
 
 ///|
+/// Returns the target Vec2f position for drone idx within the given formation pattern centered at (cx, cy).
 fn pattern_target(
   pattern : Int,
   idx : Int,
@@ -329,6 +356,7 @@ fn pattern_target(
 }
 
 ///|
+/// Resets all request slots to their inactive default state.
 fn clear_requests(requests : Array[Request]) -> Unit {
   for i in 0..<requests.length() {
     requests[i].active = false
@@ -344,6 +372,7 @@ fn clear_requests(requests : Array[Request]) -> Unit {
 }
 
 ///|
+/// Resets all gust slots to their inactive default state.
 fn clear_gusts(gusts : Array[Gust]) -> Unit {
   for gust in gusts {
     gust.active = false
@@ -359,6 +388,7 @@ fn clear_gusts(gusts : Array[Gust]) -> Unit {
 }
 
 ///|
+/// Resets all firework slots to their inactive default state.
 fn clear_fireworks(fireworks : Array[Firework]) -> Unit {
   for firework in fireworks {
     firework.active = false
@@ -373,6 +403,7 @@ fn clear_fireworks(fireworks : Array[Firework]) -> Unit {
 }
 
 ///|
+/// Resets all particle slots to their inactive default state.
 fn clear_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
     part.active = false
@@ -387,6 +418,7 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Spawns a single particle with the given position, velocity, lifetime, size, and kind.
 fn spawn_particle(
   parts : Array[Particle],
   x : Float,
@@ -414,6 +446,7 @@ fn spawn_particle(
 }
 
 ///|
+/// Spawns n particles in a burst at the given position with random directions.
 fn burst_particles(
   parts : Array[Particle],
   x : Float,
@@ -436,6 +469,7 @@ fn burst_particles(
 }
 
 ///|
+/// Updates all active particles by advancing position, applying drag, and expiring finished ones.
 fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
     if not(part.active) {
@@ -454,6 +488,7 @@ fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
 }
 
 ///|
+/// Spawns a new show request in the first available slot with wave-scaled deadline and quality requirements.
 fn spawn_request(requests : Array[Request], wave : Int, serial : Int) -> Bool {
   let mut placed : Bool = false
   for request in requests {
@@ -479,6 +514,7 @@ fn spawn_request(requests : Array[Request], wave : Int, serial : Int) -> Bool {
 }
 
 ///|
+/// Spawns a new wind gust entering from a random world edge with pressure-scaled strength.
 fn spawn_gust(
   gusts : Array[Gust],
   world_l : Float,
@@ -528,6 +564,7 @@ fn spawn_gust(
 }
 
 ///|
+/// Spawns a new firework projectile from the bottom of the world with a random upward trajectory.
 fn spawn_firework(
   fireworks : Array[Firework],
   world_l : Float,
@@ -554,6 +591,7 @@ fn spawn_firework(
 }
 
 ///|
+/// Returns the current formation quality score (0-100) based on drone proximity to pattern targets.
 fn formation_quality(
   drones : Array[Drone],
   pattern : Int,
@@ -596,6 +634,7 @@ fn formation_quality(
 }
 
 ///|
+/// Returns the kind of the nearest station within radius of (x, y), or -1 if none found.
 fn nearest_station_kind(
   stations : Array[Station],
   x : Float,
@@ -617,6 +656,7 @@ fn nearest_station_kind(
 }
 
 ///|
+/// Returns the number of currently active show requests.
 fn active_requests_count(requests : Array[Request]) -> Int {
   let mut c : Int = 0
   for request in requests {
@@ -628,6 +668,7 @@ fn active_requests_count(requests : Array[Request]) -> Int {
 }
 
 ///|
+/// Draws the animated dark gradient background with horizontal light-wave bands.
 fn draw_background(
   world_x : Int,
   world_y : Int,
@@ -661,6 +702,7 @@ fn draw_background(
 }
 
 ///|
+/// Draws the circular performance stage with animated concentric ring overlays.
 fn draw_stage(cx : Float, cy : Float, radius : Float, scene_t : Float) -> Unit {
   @raylib.draw_circle_v(
     @raylib.Vector2::new(cx, cy),
@@ -687,6 +729,7 @@ fn draw_stage(cx : Float, cy : Float, radius : Float, scene_t : Float) -> Unit {
 }
 
 ///|
+/// Draws the target position markers for each drone in the current formation pattern.
 fn draw_targets(
   drones : Array[Drone],
   pattern : Int,
@@ -709,6 +752,7 @@ fn draw_targets(
 }
 
 ///|
+/// Draws all ground stations with labels and highlights the one nearest the director.
 fn draw_stations(
   stations : Array[Station],
   director : Director,
@@ -771,6 +815,7 @@ fn draw_stations(
 }
 
 ///|
+/// Draws all active wind gusts as pulsing concentric circles.
 fn draw_gusts(gusts : Array[Gust], scene_t : Float) -> Unit {
   for gust in gusts {
     if not(gust.active) {
@@ -794,6 +839,7 @@ fn draw_gusts(gusts : Array[Gust], scene_t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active drones with color-coded battery and temperature indicators.
 fn draw_drones(drones : Array[Drone], scene_t : Float) -> Unit {
   for d in drones {
     if not(d.active) {
@@ -840,6 +886,7 @@ fn draw_drones(drones : Array[Drone], scene_t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active firework projectiles as colored circles.
 fn draw_fireworks(fireworks : Array[Firework]) -> Unit {
   for firework in fireworks {
     if not(firework.active) {
@@ -860,6 +907,7 @@ fn draw_fireworks(fireworks : Array[Firework]) -> Unit {
 }
 
 ///|
+/// Draws all active particles with fade-out alpha based on remaining lifetime.
 fn draw_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
     if not(part.active) {
@@ -884,6 +932,7 @@ fn draw_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Draws the director character with a bobbing animation and sync pulse ring when active.
 fn draw_director(director : Director, scene_t : Float) -> Unit {
   let bob : Float = sinf(scene_t * 11.0 + director.step_t * 0.07) * 1.2
   @raylib.draw_circle_v(
@@ -909,6 +958,7 @@ fn draw_director(director : Director, scene_t : Float) -> Unit {
 }
 
 ///|
+/// Draws the audience requests panel showing active requests with progress bars and urgency indicators.
 fn draw_requests_panel(
   panel_x : Int,
   panel_y : Int,
@@ -1039,6 +1089,7 @@ fn draw_requests_panel(
 }
 
 ///|
+/// Draws the main HUD panel with score, timer, meter bars, controls reference, and status message.
 fn draw_hud(
   panel_x : Int,
   panel_y : Int,
@@ -1232,6 +1283,7 @@ fn draw_hud(
 }
 
 ///|
+/// Draws the on-screen touch D-pad and action buttons with visual active states.
 fn draw_touch_controls(
   sw : Int,
   sh : Int,
@@ -1375,6 +1427,7 @@ fn draw_touch_controls(
 }
 
 ///|
+/// Draws the main menu screen with animated background and start prompt.
 fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 16, 28, 255))
 
@@ -1448,6 +1501,7 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
 }
 
 ///|
+/// Draws the end-of-show screen with win/lose title, final score, reputation, and performance stats.
 fn draw_end(
   sw : Int,
   sh : Int,
@@ -1510,6 +1564,7 @@ fn draw_end(
 }
 
 ///|
+/// Initializes and runs the Drone Show Director 2026 game loop.
 fn main {
   let sw : Int = 1700
   let sh : Int = 960
