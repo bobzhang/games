@@ -1,4 +1,5 @@
 ///|
+/// Entry point: opens the window, runs the game loop updating input and game state each frame, and renders via draw_frame.
 fn main {
   @raylib.set_config_flags(@raylib.FlagMsaa4xHint)
   @raylib.init_window(

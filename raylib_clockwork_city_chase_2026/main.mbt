@@ -1,4 +1,5 @@
 ///|
+/// Entry point: initialises the raylib window and audio, then runs the game loop updating input/simulation and rendering each frame.
 fn main {
   @raylib.set_config_flags(@raylib.FlagMsaa4xHint)
   @raylib.init_window(

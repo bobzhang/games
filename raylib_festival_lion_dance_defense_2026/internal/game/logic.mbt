@@ -1,4 +1,5 @@
 ///|
+/// Resets a threat slot to its inactive default values.
 fn reset_threat(threat : @types.Threat) -> Unit {
   threat.active = false
   threat.kind = @types.threat_firecracker
@@ -11,6 +12,7 @@ fn reset_threat(threat : @types.Threat) -> Unit {
 }
 
 ///|
+/// Deactivates all threats in the pool by resetting each slot to its default state.
 fn clear_threats(game : @types.Game) -> Unit {
   for threat in game.threats {
     reset_threat(threat)
@@ -18,6 +20,7 @@ fn clear_threats(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Computes the current threat spawn interval in seconds based on elapsed time, clamped to the difficulty floor.
 fn spawn_interval(elapsed : Float) -> Float {
   @types.clampf(
     @types.spawn_time_start - elapsed * @types.spawn_difficulty_ramp,
@@ -27,11 +30,13 @@ fn spawn_interval(elapsed : Float) -> Float {
 }
 
 ///|
+/// Computes the extra threat speed bonus that scales with elapsed time, capped at the maximum bonus.
 fn speed_bonus(elapsed : Float) -> Float {
   @types.clampf(elapsed * 3.8, 0.0, @types.speed_scale_max_bonus)
 }
 
 ///|
+/// Resets all run-wide state, clears threats, and transitions to the Playing state.
 fn start_run(game : @types.Game) -> Unit {
   game.state = Playing
 
@@ -71,6 +76,7 @@ fn start_run(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Spawns a new threat into the first inactive slot, choosing kind, lane, speed, and radius based on elapsed time.
 fn spawn_threat(game : @types.Game) -> Unit {
   let mut slot = -1
   for i in 0..<game.threats.length() {
@@ -117,6 +123,7 @@ fn spawn_threat(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Computes score gained for clearing one threat, accounting for kind, current combo depth, action type, and stun bonus.
 fn score_for_clear(
   kind : Int,
   combo : Int,
@@ -149,6 +156,7 @@ fn score_for_clear(
 }
 
 ///|
+/// Computes hype gained for clearing one threat, accounting for kind, combo, action type, and stun bonus.
 fn hype_for_clear(
   kind : Int,
   combo : Int,
@@ -174,6 +182,7 @@ fn hype_for_clear(
 }
 
 ///|
+/// Records a successful threat clear: increments the combo counter, adds score and hype, and restores crowd order.
 fn register_clear(
   game : @types.Game,
   kind : Int,
@@ -209,6 +218,7 @@ fn register_clear(
 }
 
 ///|
+/// Deactivates the threat at index `i` and calls `register_clear` to update score, hype, and combo.
 fn clear_threat_at(game : @types.Game, i : Int, action : @types.Action) -> Unit {
   if i < 0 || i >= game.threats.length() {
     return
@@ -227,6 +237,7 @@ fn clear_threat_at(game : @types.Game, i : Int, action : @types.Action) -> Unit 
 }
 
 ///|
+/// Reduces crowd order and morale by the given amounts, resets the combo, and shows a breach message.
 fn lose_order(
   game : @types.Game,
   order_loss : Float,
@@ -250,6 +261,7 @@ fn lose_order(
 }
 
 ///|
+/// Applies the crowd-order and morale penalty for a threat that reached the left boundary without being stopped.
 fn breach_penalty(game : @types.Game, kind : Int) -> Unit {
   if kind == @types.threat_firecracker {
     lose_order(
@@ -265,6 +277,7 @@ fn breach_penalty(game : @types.Game, kind : Int) -> Unit {
 }
 
 ///|
+/// Applies the crowd-order and morale penalty for a threat that collided with the troupe while unguarded.
 fn contact_penalty(game : @types.Game, kind : Int) -> Unit {
   if kind == @types.threat_firecracker {
     lose_order(
@@ -278,6 +291,7 @@ fn contact_penalty(game : @types.Game, kind : Int) -> Unit {
 }
 
 ///|
+/// Moves the troupe according to input axes, applying diagonal speed normalization and clamping to street bounds.
 fn update_troupe(game : @types.Game, dt : Float) -> Unit {
   let mut vx = Float::from_int(game.input.move_x)
   let mut vy = Float::from_int(game.input.move_y)
@@ -301,6 +315,7 @@ fn update_troupe(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Executes the strike action, clearing firecracker threats and stunned incidents within strike radius.
 fn handle_strike(game : @types.Game) -> Unit {
   if game.strike_cd > 0.0 {
     return
@@ -347,6 +362,7 @@ fn handle_strike(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Executes the guard action, stunning all incident threats within guard radius and granting score and hype per stun.
 fn handle_guard(game : @types.Game) -> Unit {
   if game.guard_cd > 0.0 {
     return
@@ -405,6 +421,7 @@ fn handle_guard(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Activates the hype burst if enough hype is available and the cooldown has expired.
 fn trigger_burst(game : @types.Game) -> Unit {
   if game.burst_cd > 0.0 {
     @types.set_msg(game, "Hype burst recharging.", @types.msg_ttl)
@@ -425,6 +442,7 @@ fn trigger_burst(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Decrements all action cooldowns, effect timers, combo window, message, flash, and shake timers by `dt`.
 fn update_action_timers(game : @types.Game, dt : Float) -> Unit {
   if game.strike_cd > 0.0 {
     game.strike_cd = @types.maxf(0.0, game.strike_cd - dt)
@@ -465,6 +483,7 @@ fn update_action_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances the spawn timer and spawns one threat for each interval that has elapsed.
 fn update_spawn(game : @types.Game, dt : Float) -> Unit {
   game.spawn_t = game.spawn_t - dt
   while game.spawn_t <= 0.0 {
@@ -474,6 +493,7 @@ fn update_spawn(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances all active threats: decrements stun timers, moves threats leftward, resolves contact and breach events.
 fn update_threats(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.threats.length() {
     if not(game.threats[i].active) {
@@ -551,6 +571,7 @@ fn update_threats(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Clears all threats within burst radius while the burst action is active.
 fn apply_burst_field(game : @types.Game) -> Unit {
   if game.burst_t <= 0.0 {
     return
@@ -581,6 +602,7 @@ fn apply_burst_field(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Recovers crowd order passively and drains morale when order falls below the pressure threshold.
 fn apply_order_pressure(game : @types.Game, dt : Float) -> Unit {
   game.crowd_order = @types.clampf(
     game.crowd_order + @types.order_recover_rate * dt,
@@ -606,6 +628,7 @@ fn apply_order_pressure(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Transitions to the GameOver state when morale reaches zero.
 fn finish_if_needed(game : @types.Game) -> Unit {
   if game.morale > 0.0 {
     return
@@ -626,6 +649,7 @@ fn finish_if_needed(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles start input on the title screen to begin a new run.
 fn update_title_state(game : @types.Game) -> Unit {
   if game.input.press_start || game.input.press_restart {
     start_run(game)
@@ -633,6 +657,7 @@ fn update_title_state(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles input while the game is paused, allowing resume or full restart.
 fn update_paused_state(game : @types.Game) -> Unit {
   if game.input.press_restart {
     start_run(game)
@@ -646,6 +671,7 @@ fn update_paused_state(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles restart input on the game-over screen.
 fn update_game_over_state(game : @types.Game) -> Unit {
   if game.input.press_restart || game.input.press_start {
     start_run(game)
@@ -653,6 +679,7 @@ fn update_game_over_state(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Runs one frame of active gameplay: handles pause/restart, moves the troupe, processes actions, updates threats, and checks victory conditions.
 fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
   if game.input.press_restart {
     start_run(game)

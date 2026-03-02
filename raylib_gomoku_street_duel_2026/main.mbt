@@ -1,4 +1,5 @@
 ///|
+/// Entry point: initialises the window, runs the game loop collecting mouse/touch input then updating and rendering each frame, and shuts down on exit.
 fn main {
   @raylib.init_window(
     @types.screen_w, @types.screen_h, "raylib [game] gomoku street duel 2026",

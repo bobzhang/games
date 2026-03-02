@@ -1,4 +1,5 @@
 ///|
+/// Handles start input on the title screen via keyboard or pointer.
 fn update_title_input(game : @types.Game) -> Unit {
   if game.touch_count > 0 {
     game.touch_mode = true
@@ -27,6 +28,7 @@ fn update_title_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles all gameplay input including cursor movement, selection, hint, shuffle, and restart.
 fn update_play_input(game : @types.Game) -> Unit {
   if game.touch_count > 0 {
     game.touch_mode = true
@@ -132,6 +134,7 @@ fn update_play_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles input on level-clear and game-over screens to advance or restart.
 fn update_result_input(game : @types.Game) -> Unit {
   if game.touch_count > 0 {
     game.touch_mode = true

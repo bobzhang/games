@@ -1,16 +1,19 @@
 ///|
+/// Converts a normalised lane value `[-1, 1]` to a screen X pixel coordinate.
 fn lane_to_x(lane : Float) -> Float {
   Float::from_int(@types.river_x + @types.river_w / 2) +
   lane * @types.lane_span_px
 }
 
 ///|
+/// Converts a world distance value to a screen Y coordinate relative to the player's boat position.
 fn world_y(game : @types.Game, dist : Float) -> Float {
   Float::from_int(@types.boat_y) -
   (dist - game.distance) * @types.distance_to_px
 }
 
 ///|
+/// Clears the screen and draws pulsing ambient glow circles and tinted horizontal bands.
 fn draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 20, 34, 255))
 
@@ -54,6 +57,7 @@ fn draw_background(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the river rectangle, vertical lane dividers, and animated horizontal ripple lines.
 fn draw_river_surface(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.river_x,
@@ -100,6 +104,7 @@ fn draw_river_surface(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a labelled horizontal line across the river for each upcoming checkpoint in the visible range.
 fn draw_checkpoint_lines(game : @types.Game) -> Unit {
   for i in game.checkpoint_idx..<@types.checkpoint_count {
     let dist : Float = @types.checkpoint_distance(i)
@@ -135,6 +140,7 @@ fn draw_checkpoint_lines(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws all visible active hazards: rectangular debris logs or concentric wave rings.
 fn draw_hazards(game : @types.Game) -> Unit {
   for hazard in game.hazards {
     if not(hazard.active) {
@@ -203,6 +209,7 @@ fn draw_hazards(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a scaled dragon boat hull with paddler strokes and an optional mast flag.
 fn draw_boat(
   x : Int,
   y : Int,
@@ -271,6 +278,7 @@ fn draw_boat(
 }
 
 ///|
+/// Returns a unique hull color for a rival boat based on its id.
 fn rival_hull_color(id : Int) -> @raylib.Color {
   if id == 1 {
     @raylib.Color::new(230, 126, 98, 246)
@@ -284,6 +292,7 @@ fn rival_hull_color(id : Int) -> @raylib.Color {
 }
 
 ///|
+/// Draws all active rival boats visible within the scrolling viewport, scaled by relative distance.
 fn draw_rivals(game : @types.Game) -> Unit {
   for rival in game.rivals {
     if not(rival.active) {
@@ -318,6 +327,7 @@ fn draw_rivals(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the player's boat with burst and stabilise tints, a flag, and a rhythm-pulse ring.
 fn draw_player_boat(game : @types.Game) -> Unit {
   let x : Int = lane_to_x(game.lane).to_int()
   let y : Int = @types.boat_y
@@ -374,6 +384,7 @@ fn draw_player_boat(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the player's current race rank by counting rivals ahead of the player.
 fn current_rank(game : @types.Game) -> Int {
   let mut ahead : Int = 0
 
@@ -387,6 +398,7 @@ fn current_rank(game : @types.Game) -> Int {
 }
 
 ///|
+/// Draws the right-side HUD panel with distance, speed, rank, score, rhythm meter, beat lane, and control reference.
 fn draw_hud_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.hud_x,
@@ -663,6 +675,7 @@ fn draw_hud_panel(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a centred translucent banner with the current status message when it is active.
 fn draw_message_banner(game : @types.Game) -> Unit {
   if game.msg_t <= 0.0 || game.msg == "" {
     return
@@ -703,6 +716,7 @@ fn draw_message_banner(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the title screen overlay with game title, description, controls, and a start prompt.
 fn draw_title_overlay() -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -800,6 +814,7 @@ fn draw_title_overlay() -> Unit {
 }
 
 ///|
+/// Draws a semi-transparent pause overlay with a resume or restart prompt.
 fn draw_pause_overlay() -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -829,6 +844,7 @@ fn draw_pause_overlay() -> Unit {
 }
 
 ///|
+/// Draws the post-race result overlay with rank, score, time, streak, checkpoints, and a replay prompt.
 fn draw_result_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,

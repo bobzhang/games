@@ -1,4 +1,5 @@
 ///|
+/// Draws `text` horizontally centred on screen at the given vertical position, font size, and colour.
 fn draw_center_text(
   text : String,
   y : Int,
@@ -10,6 +11,7 @@ fn draw_center_text(
 }
 
 ///|
+/// Draws `text` right-aligned so its right edge sits at `x`, at the given vertical position, font size, and colour.
 fn draw_right_text(
   text : String,
   x : Int,
@@ -22,6 +24,7 @@ fn draw_right_text(
 }
 
 ///|
+/// Returns a random camera-shake offset scaled by the remaining shake intensity, or `(0, 0)` when the timer has expired.
 fn cam_shake(game : @types.Game) -> (Float, Float) {
   if game.shake_t <= 0.0 {
     (0.0, 0.0)
@@ -32,6 +35,7 @@ fn cam_shake(game : @types.Game) -> (Float, Float) {
 }
 
 ///|
+/// Draws the gradient night sky, animated moon, twinkling stars, and aurora ribbon bands with parallax camera offset.
 fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
@@ -111,6 +115,7 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws a layer of softly scrolling background clouds at slow parallax depth using triple overlapping circles.
 fn draw_far_clouds(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for i in 0..<24 {
     let fi = Float::from_int(i)
@@ -144,6 +149,7 @@ fn draw_far_clouds(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws horizontal wind-streak lines whose count and length vary with current wind intensity.
 fn draw_wind_lanes(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let intensity = @types.clampf(
     @types.absf(game.wind_x) /
@@ -175,6 +181,7 @@ fn draw_wind_lanes(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws the semi-transparent play-area rectangle and its border outline with a subtle parallax offset.
 fn draw_play_bounds(cam_x : Float, cam_y : Float) -> Unit {
   @raylib.draw_rectangle(
     @types.play_left.to_int(),
@@ -193,6 +200,7 @@ fn draw_play_bounds(cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws the string line from the anchor point at the bottom of the screen to the kite, thickening it when stretched past rope length.
 fn draw_anchor_and_rope(
   game : @types.Game,
   cam_x : Float,
@@ -236,6 +244,7 @@ fn draw_anchor_and_rope(
 }
 
 ///|
+/// Draws all active kite trail rectangles fading out as their lifetime decreases.
 fn draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for trail in game.trails {
     if not(trail.active) {
@@ -258,6 +267,7 @@ fn draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Maps an ObjKind to its canonical palette colour used for rendering and hit-ring tinting.
 fn obj_col(kind : @types.ObjKind) -> @raylib.Color {
   match kind {
     @types.Lantern => @types.amber()
@@ -269,6 +279,7 @@ fn obj_col(kind : @types.ObjKind) -> @raylib.Color {
 }
 
 ///|
+/// Draws a glowing lantern body with a pulsing halo, rectangular lamp, cap bar, and hanging tail line.
 fn draw_lantern(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
   let x = o.x + cam_x
   let y = o.y + cam_y
@@ -304,6 +315,7 @@ fn draw_lantern(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws a hostile bird as a triangle body with two animated wing lines that flap with a sine-wave cycle.
 fn draw_bird(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
   let x = o.x + cam_x
   let y = o.y + cam_y
@@ -338,6 +350,7 @@ fn draw_bird(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws a hostile storm cloud as overlapping blue circles with a pulsing lightning-bolt triangle beneath.
 fn draw_storm(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
   let x = o.x + cam_x
   let y = o.y + cam_y
@@ -371,6 +384,7 @@ fn draw_storm(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws a collectible energy orb as a pulsing outer glow ring, a solid filled circle, and a dark centre dot.
 fn draw_orb(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
   let x = o.x + cam_x
   let y = o.y + cam_y
@@ -392,6 +406,7 @@ fn draw_orb(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws a koi fish as a bullet-shaped body triangle and a swaying tail fin triangle with an eye dot.
 fn draw_koi(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
   let x = o.x + cam_x
   let y = o.y + cam_y
@@ -420,6 +435,7 @@ fn draw_koi(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Dispatches rendering for a single active sky object, then overlays an HP bar for hostiles and a warning ring when the lifetime is low.
 fn draw_obj(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
   if not(o.active) {
     return
@@ -480,6 +496,7 @@ fn draw_obj(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws the player kite as a diamond with burst glow, tilt, a flowing tail of alternating coloured beads, reel ring, and hurt flash circle.
 fn draw_kite(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let x = game.kite.x + cam_x
   let y = game.kite.y + cam_y
@@ -572,6 +589,7 @@ fn draw_kite(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Maps a spark kind integer to its display colour: 0 = amber, 1 = pink, 2 = cyan, 3+ = white-blue.
 fn spark_col(kind : Int) -> @raylib.Color {
   if kind == 0 {
     @types.amber()
@@ -585,6 +603,7 @@ fn spark_col(kind : Int) -> @raylib.Color {
 }
 
 ///|
+/// Draws all active sparks as fading circles and all active halos as expanding coloured ring outlines.
 fn draw_sparks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
@@ -640,6 +659,7 @@ fn draw_sparks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws a labelled horizontal progress bar with a dark background, a filled segment proportional to `value/maxv`, and a border.
 fn draw_hud_bar(
   x : Int,
   y : Int,
@@ -682,6 +702,7 @@ fn draw_hud_bar(
 }
 
 ///|
+/// Renders the HUD panel with calm, energy, score-goal, and time bars plus stage/score/wind text and the active combo display.
 fn draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -819,6 +840,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a touch button with background, border, and centred label, highlighting it when pressed or hovered.
 fn draw_button_visual(
   label : String,
   rect : (Float, Float, Float, Float),
@@ -875,6 +897,7 @@ fn draw_button_visual(
 }
 
 ///|
+/// Renders on-screen touch buttons when touch mode is active, showing the appropriate set for the current game state.
 fn draw_touch_controls(game : @types.Game) -> Unit {
   if not(game.touch_mode) {
     return
@@ -907,6 +930,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Renders the title screen overlay with game name, subtitle, controls reference panel, and a highlighted start button.
 fn draw_title_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
@@ -1020,6 +1044,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Renders the stage-clear overlay with an animated slide-in "STAGE CLEAR" heading, bonus score, and next-stage message.
 fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
   let t = @types.clampf(game.result_t / @types.stage_clear_wait, 0.0, 1.0)
   let y = @types.lerpf(230.0, 166.0, @types.ease_out_cubic(t)).to_int()
@@ -1048,6 +1073,7 @@ fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Renders the game-over screen with "FESTIVAL LOST" heading, final stats panel, and a highlighted retry button.
 fn draw_game_over_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
@@ -1149,6 +1175,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a full-screen pink flash overlay that fades quickly when the kite takes damage.
 fn draw_flash(game : @types.Game) -> Unit {
   if game.flash_t <= 0.0 {
     return
@@ -1165,6 +1192,7 @@ fn draw_flash(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Composites the full play-world: sky, clouds, wind lanes, bounds, rope, trails, all objects (collectibles then hostiles), kite, and sparks.
 fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   draw_sky(game, cam_x, cam_y)
   draw_far_clouds(game, cam_x, cam_y)

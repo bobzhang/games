@@ -1,4 +1,5 @@
 ///|
+/// Draws `text` horizontally centered on the screen at vertical position `y` with the given font size and color.
 fn draw_center_text(
   text : String,
   y : Int,
@@ -10,6 +11,7 @@ fn draw_center_text(
 }
 
 ///|
+/// Draws a labeled horizontal progress bar at `(x, y)` sized `w×h`, filled proportionally to `ratio` in `fill` color.
 fn draw_meter(
   label : String,
   x : Int,
@@ -41,6 +43,7 @@ fn draw_meter(
 }
 
 ///|
+/// Draws the dungeon floor with a scrolling grid, border walls, and decorative pillars.
 fn draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@types.col_bg_bottom())
 
@@ -118,6 +121,7 @@ fn draw_background(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws each active exit as a pulsing blue ring with an "EXIT" label.
 fn draw_exits(game : @types.Game) -> Unit {
   for i in 0..<game.exits.length() {
     if not(game.exits[i].active) {
@@ -158,6 +162,7 @@ fn draw_exits(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws each active trap as a blinking pink circle with a small center dot.
 fn draw_traps(game : @types.Game) -> Unit {
   for trap in game.traps {
     if not(trap.active) {
@@ -192,6 +197,7 @@ fn draw_traps(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws each active, undelivered parcel as a pulsing yellow box with a crossbar.
 fn draw_parcels(game : @types.Game) -> Unit {
   for parcel in game.parcels {
     if not(parcel.active) || parcel.delivered {
@@ -227,6 +233,7 @@ fn draw_parcels(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws each active smoke cloud as a translucent grey circle whose opacity fades with remaining life.
 fn draw_smokes(game : @types.Game) -> Unit {
   for smoke in game.smokes {
     if not(smoke.active) {
@@ -255,6 +262,7 @@ fn draw_smokes(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a single guard with its vision cone sector, body circle, facing line, and an alert ring when alerted.
 fn draw_guard(g : @types.Guard) -> Unit {
   let alert_boost = @types.clampf(g.alert_t / @types.guard_alert_hold, 0.0, 1.0)
   let cone_alpha = 44 + (alert_boost * 98.0).to_int()
@@ -306,6 +314,7 @@ fn draw_guard(g : @types.Guard) -> Unit {
 }
 
 ///|
+/// Draws all active guards by calling `draw_guard` for each.
 fn draw_guards(game : @types.Game) -> Unit {
   for guard_val in game.guards {
     if guard_val.active {
@@ -315,6 +324,7 @@ fn draw_guards(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the player circle with facing line, an optional carried-parcel indicator above the sprite, and a danger ring when stealth is critically low.
 fn draw_player(game : @types.Game) -> Unit {
   @raylib.draw_circle(
     game.player.x.to_int(),
@@ -368,6 +378,7 @@ fn draw_player(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the HUD bar with wave, delivery progress, score, smoke stock, countdown timer, health and stealth meters, control legend, and the transient hint banner.
 fn draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -486,6 +497,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a red tint over the play area whose opacity tracks `game.alarm_flash`.
 fn draw_alarm_overlay(game : @types.Game) -> Unit {
   if game.alarm_flash <= 0.0 {
     return
@@ -502,6 +514,7 @@ fn draw_alarm_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the title screen overlay with game title, mission summary, control reference, and a start prompt.
 fn draw_title_overlay() -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -632,6 +645,7 @@ fn draw_title_overlay() -> Unit {
 }
 
 ///|
+/// Draws the retry overlay with the failure reason, wave reached, best wave, final score, delivery count, and a retry prompt.
 fn draw_retry_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,

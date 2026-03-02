@@ -1,4 +1,5 @@
 ///|
+/// Resets all per-frame input fields to their neutral defaults before each input poll.
 fn clear_frame_input(game : @types.Game) -> Unit {
   game.input_x = 0.0
   game.input_y = 0.0
@@ -8,6 +9,7 @@ fn clear_frame_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads keyboard, mouse, and touch input on the title screen and sets `input_restart_press` when the player activates the start button.
 fn update_title_input(game : @types.Game) -> Unit {
   clear_frame_input(game)
 
@@ -35,6 +37,7 @@ fn update_title_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads keyboard, mouse, and touch d-pad/action input during play and writes normalized movement axes, dash press, sonar press, and restart press into the game state.
 fn update_play_input(game : @types.Game) -> Unit {
   clear_frame_input(game)
 
@@ -160,6 +163,7 @@ fn update_play_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads keyboard, mouse, and touch input on the result screen and sets `input_restart_press` when the player activates the retry button.
 fn update_result_input(game : @types.Game) -> Unit {
   clear_frame_input(game)
 

@@ -1,4 +1,5 @@
 ///|
+/// Deactivates all sky-object slots and resets every field to its zero value.
 fn clear_objs(game : @types.Game) -> Unit {
   for obj in game.objs {
     obj.active = false
@@ -18,6 +19,7 @@ fn clear_objs(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all spark slots and resets every field to its zero value.
 fn clear_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
     spark.active = false
@@ -32,6 +34,7 @@ fn clear_sparks(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all halo slots and resets every field to its zero value.
 fn clear_halos(game : @types.Game) -> Unit {
   for halo in game.halos {
     halo.active = false
@@ -44,6 +47,7 @@ fn clear_halos(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all trail slots and resets every field to its zero value.
 fn clear_trails(game : @types.Game) -> Unit {
   for trail in game.trails {
     trail.active = false
@@ -57,6 +61,7 @@ fn clear_trails(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Repositions the kite to the screen center and zeroes all velocity and glow timers.
 fn reset_kite(game : @types.Game) -> Unit {
   game.kite.x = Float::from_int(@types.screen_w) * 0.5
   game.kite.y = Float::from_int(@types.screen_h) * 0.54
@@ -75,6 +80,7 @@ fn reset_kite(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the index of a free obj slot, evicting the slot with the lowest remaining life if all are active.
 fn alloc_obj(game : @types.Game) -> Int {
   for i in 0..<game.objs.length() {
     if not(game.objs[i].active) {
@@ -94,6 +100,7 @@ fn alloc_obj(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free spark slot, evicting the slot with the lowest remaining life if all are active.
 fn alloc_spark(game : @types.Game) -> Int {
   for i in 0..<game.sparks.length() {
     if not(game.sparks[i].active) {
@@ -113,6 +120,7 @@ fn alloc_spark(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free halo slot, evicting the slot with the lowest remaining life if all are active.
 fn alloc_halo(game : @types.Game) -> Int {
   for i in 0..<game.halos.length() {
     if not(game.halos[i].active) {
@@ -132,6 +140,7 @@ fn alloc_halo(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free trail slot, evicting the slot with the lowest remaining life if all are active.
 fn alloc_trail(game : @types.Game) -> Int {
   for i in 0..<game.trails.length() {
     if not(game.trails[i].active) {
@@ -151,6 +160,7 @@ fn alloc_trail(game : @types.Game) -> Int {
 }
 
 ///|
+/// Allocates a spark slot and initialises it with the supplied position, velocity, lifetime, size, and kind.
 fn emit_spark(
   game : @types.Game,
   x : Float,
@@ -173,6 +183,7 @@ fn emit_spark(
 }
 
 ///|
+/// Emits `n` sparks scattered around `(x, y)` with randomised velocities of the given kind.
 fn burst_sparks(
   game : @types.Game,
   x : Float,
@@ -195,6 +206,7 @@ fn burst_sparks(
 }
 
 ///|
+/// Allocates a halo slot and initialises it with the given centre, starting radius, lifetime, and kind.
 fn spawn_halo(
   game : @types.Game,
   x : Float,
@@ -213,6 +225,7 @@ fn spawn_halo(
 }
 
 ///|
+/// Allocates a trail slot at `(x, y)` with a random short lifetime and the supplied size and rotation.
 fn spawn_trail(
   game : @types.Game,
   x : Float,
@@ -232,6 +245,7 @@ fn spawn_trail(
 }
 
 ///|
+/// Allocates a sky-object slot and populates it with the given kind, transform, HP, lifetime, and score value.
 fn spawn_obj(
   game : @types.Game,
   kind : @types.ObjKind,
@@ -262,12 +276,14 @@ fn spawn_obj(
 }
 
 ///|
+/// Returns the score delta for a collection event, scaling the base value by the current combo multiplier.
 fn score_gain(game : @types.Game, base : Int) -> Int {
   let bonus = base * game.combo / 5
   base + bonus
 }
 
 ///|
+/// Adds a combo-scaled score to the session total and updates the best-score if exceeded.
 fn add_score(game : @types.Game, base : Int) -> Unit {
   let g = score_gain(game, base)
   game.score = game.score + g
@@ -277,18 +293,21 @@ fn add_score(game : @types.Game, base : Int) -> Unit {
 }
 
 ///|
+/// Increments the combo counter by one (capped at 30) and resets the combo display timer.
 fn push_combo(game : @types.Game) -> Unit {
   game.combo = @types.clampi(game.combo + 1, 0, 30)
   game.combo_t = 4.0
 }
 
 ///|
+/// Resets the combo counter and display timer to zero.
 fn clear_combo(game : @types.Game) -> Unit {
   game.combo = 0
   game.combo_t = 0.0
 }
 
 ///|
+/// Applies damage to the kite's calm meter, triggers hurt flash and screen-shake, resets combo, and transitions to GameOver if calm reaches zero.
 fn hurt_kite(game : @types.Game, dmg : Float) -> Unit {
   if game.kite.invuln > 0.0 {
     return
@@ -312,6 +331,7 @@ fn hurt_kite(game : @types.Game, dmg : Float) -> Unit {
 }
 
 ///|
+/// Resets all simulation arrays, returns the game to the Title state, and restores wind and resource fields to their defaults.
 fn init_title_scene(game : @types.Game) -> Unit {
   clear_objs(game)
   clear_sparks(game)
@@ -351,6 +371,7 @@ fn init_title_scene(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Clears all entities, transitions to Play, sets stage-scaled goal, time limit, and wind power, then emits a spawn-in burst.
 fn start_stage(game : @types.Game, stage : Int) -> Unit {
   clear_objs(game)
   clear_sparks(game)
@@ -391,6 +412,7 @@ fn start_stage(game : @types.Game, stage : Int) -> Unit {
 }
 
 ///|
+/// Resets score and resource counters to full, then starts stage 1.
 fn start_run(game : @types.Game) -> Unit {
   game.score = 0
   game.rescued = 0
@@ -401,6 +423,7 @@ fn start_run(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Spawns a lantern sky-object above the play area with stage-scaled score value and randomised size and velocity.
 fn spawn_lantern(game : @types.Game) -> Unit {
   spawn_obj(
     game,
@@ -418,6 +441,7 @@ fn spawn_lantern(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Spawns a hostile bird from a random screen edge and aims it toward the play area with stage-scaled HP.
 fn spawn_bird(game : @types.Game) -> Unit {
   let side = if @types.chance(50) { 0 } else { 1 }
   let sx = if side == 0 {
@@ -447,6 +471,7 @@ fn spawn_bird(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Spawns a hostile storm cloud above the play area with stage-scaled HP and larger random dimensions.
 fn spawn_storm(game : @types.Game) -> Unit {
   spawn_obj(
     game,
@@ -464,6 +489,7 @@ fn spawn_storm(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Spawns a collectible energy orb above the play area with randomised position and drift velocity.
 fn spawn_orb(game : @types.Game) -> Unit {
   spawn_obj(
     game,
@@ -481,6 +507,7 @@ fn spawn_orb(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Spawns a high-value koi from a random horizontal edge flying across the play area.
 fn spawn_koi(game : @types.Game) -> Unit {
   let side = if @types.chance(50) { 0 } else { 1 }
   let sx = if side == 0 {
@@ -510,6 +537,7 @@ fn spawn_koi(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Spawns one to three sky objects chosen by weighted random roll, with a bonus lantern chance scaling with stage.
 fn spawn_wave(game : @types.Game) -> Unit {
   let count = 1 + @types.randi(0, 2)
 
@@ -534,6 +562,7 @@ fn spawn_wave(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Decrements the spawn countdown and triggers a new wave when it expires, with an interval that shortens at higher stages.
 fn spawn_step(game : @types.Game, dt : Float) -> Unit {
   game.spawn_t = game.spawn_t - dt
 
@@ -545,6 +574,7 @@ fn spawn_step(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances the gust timer, randomly resets wind direction and power when the timer expires, and adds sinusoidal turbulence each frame.
 fn update_wind(game : @types.Game, dt : Float) -> Unit {
   game.gust_t = game.gust_t - dt
   game.gust_phase = game.gust_phase + dt
@@ -565,6 +595,7 @@ fn update_wind(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Activates the burst ability: consumes energy, emits a shockwave halo, and damages or destroys hostile objects within burst radius.
 fn apply_burst(game : @types.Game) -> Unit {
   game.burst_cd = @types.burst_cd_time
   game.burst_t = 0.28
@@ -614,6 +645,7 @@ fn apply_burst(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Integrates kite acceleration from input and wind, enforces drag and rope-spring constraints, and emits a trail each frame.
 fn update_kite(game : @types.Game, dt : Float) -> Unit {
   if game.input_burst_press &&
     game.burst_cd <= 0.0 &&
@@ -703,6 +735,7 @@ fn update_kite(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Applies the on-collect effect for the given object kind: scores points, restores time or energy, and increments the rescue counter.
 fn collect_obj(game : @types.Game, kind : @types.ObjKind, value : Int) -> Unit {
   match kind {
     @types.Lantern => {
@@ -734,6 +767,7 @@ fn collect_obj(game : @types.Game, kind : @types.ObjKind, value : Int) -> Unit {
 }
 
 ///|
+/// Moves all active sky objects according to their kind-specific patterns, tests kite collision, and handles collection or damage.
 fn update_objs(game : @types.Game, dt : Float) -> Unit {
   let kite_rr = @types.kite_hit_r(game.kite)
 
@@ -840,6 +874,7 @@ fn update_objs(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances positions and lifetimes of all active sparks, halos, and trails, deactivating any that have expired.
 fn update_sparks(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
@@ -884,6 +919,7 @@ fn update_sparks(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Probabilistically emits wind-drifting snow-particle sparks from above the play area each frame.
 fn emit_snow(game : @types.Game, dt : Float) -> Unit {
   let tries = @types.clampi((dt * 260.0).to_int(), 1, 16)
   for _i in 0..<tries {
@@ -903,6 +939,7 @@ fn emit_snow(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Ticks down all per-frame timers: invulnerability, hurt flash, glow states, burst cooldown, screen-shake, and combo timeout.
 fn update_timers(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt
   game.hint_t = game.hint_t + dt
@@ -927,6 +964,7 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs one Play-state tick: decrements time and calm, calls all sub-systems, and checks for stage-clear or game-over transitions.
 fn update_play(game : @types.Game, dt : Float) -> Unit {
   game.time_left = @types.maxf(0.0, game.time_left - dt)
 
@@ -964,6 +1002,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs one Title-state tick: advances wind and snow effects, and starts a new run on restart input.
 fn update_title(game : @types.Game, dt : Float) -> Unit {
   game.wave_t = game.wave_t + dt
   update_wind(game, dt)
@@ -976,6 +1015,7 @@ fn update_title(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs one StageClear tick: advances result timer, emits celebration sparks, and proceeds to the next stage when the wait expires or the player confirms.
 fn update_stage_clear(game : @types.Game, dt : Float) -> Unit {
   game.result_t = game.result_t + dt
   emit_snow(game, dt)
@@ -1000,6 +1040,7 @@ fn update_stage_clear(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs one GameOver tick: keeps ambient snow and sparks alive, and returns to the title screen on restart input.
 fn update_game_over(game : @types.Game, dt : Float) -> Unit {
   game.result_t = game.result_t + dt
   emit_snow(game, dt)

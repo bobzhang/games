@@ -1,4 +1,5 @@
 ///|
+/// Clears the screen and draws pulsing gradient bands as the game background.
 fn draw_bg(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(8, 12, 22, 255))
 
@@ -37,6 +38,7 @@ fn draw_bg(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns a random horizontal screen-shake offset when the shake timer is active.
 fn lane_shake_x(game : @types.Game) -> Int {
   if game.shake_t > 0.0 {
     @raylib.get_random_value(-4, 4)
@@ -46,6 +48,7 @@ fn lane_shake_x(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns a random vertical screen-shake offset when the shake timer is active.
 fn lane_shake_y(game : @types.Game) -> Int {
   if game.shake_t > 0.0 {
     @raylib.get_random_value(-4, 4)
@@ -55,6 +58,7 @@ fn lane_shake_y(game : @types.Game) -> Int {
 }
 
 ///|
+/// Draws the lane, gutters, foul line, and pin deck with current shake offset; returns `(sx, sy)`.
 fn draw_lane(game : @types.Game) -> (Int, Int) {
   let sx : Int = lane_shake_x(game)
   let sy : Int = lane_shake_y(game)
@@ -135,6 +139,7 @@ fn draw_lane(game : @types.Game) -> (Int, Int) {
 }
 
 ///|
+/// Draws an aim line and target circle projected from the ball in the current aim direction.
 fn draw_aim_guide(game : @types.Game, sx : Int, sy : Int) -> Unit {
   if not(game.can_throw) {
     return
@@ -159,6 +164,7 @@ fn draw_aim_guide(game : @types.Game, sx : Int, sy : Int) -> Unit {
 }
 
 ///|
+/// Draws a single pin: upright with red stripe when standing, or a faded circle with motion trail when knocked.
 fn draw_pin(pin : @types.Pin, sx : Int, sy : Int) -> Unit {
   let px : Int = pin.x.to_int() + sx
   let py : Int = pin.y.to_int() + sy
@@ -215,6 +221,7 @@ fn draw_pin(pin : @types.Pin, sx : Int, sy : Int) -> Unit {
 }
 
 ///|
+/// Iterates the pin array and delegates each to `draw_pin`.
 fn draw_pins(game : @types.Game, sx : Int, sy : Int) -> Unit {
   for pin in game.pins {
     draw_pin(pin, sx, sy)
@@ -222,6 +229,7 @@ fn draw_pins(game : @types.Game, sx : Int, sy : Int) -> Unit {
 }
 
 ///|
+/// Draws the bowling ball as a dark sphere with a highlight circle and rim outline.
 fn draw_ball(game : @types.Game, sx : Int, sy : Int) -> Unit {
   let bx : Int = game.ball_x.to_int() + sx
   let by : Int = game.ball_y.to_int() + sy
@@ -247,6 +255,7 @@ fn draw_ball(game : @types.Game, sx : Int, sy : Int) -> Unit {
 }
 
 ///|
+/// Renders all active spark particles with color and alpha based on kind and remaining lifetime.
 fn draw_sparks(game : @types.Game, sx : Int, sy : Int) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
@@ -279,6 +288,7 @@ fn draw_sparks(game : @types.Game, sx : Int, sy : Int) -> Unit {
 }
 
 ///|
+/// Draws the ten-frame scorecard grid with roll marks and running totals.
 fn draw_score_grid(game : @types.Game, px : Int, py : Int, pw : Int) -> Unit {
   @raylib.draw_text(
     "Frames",
@@ -372,6 +382,7 @@ fn draw_score_grid(game : @types.Game, px : Int, py : Int, pw : Int) -> Unit {
 }
 
 ///|
+/// Draws the keyboard/touch control reference and the current status message if active.
 fn draw_control_hint(game : @types.Game, px : Int, py : Int) -> Unit {
   @raylib.draw_text(
     "Controls",
@@ -435,6 +446,7 @@ fn draw_control_hint(game : @types.Game, px : Int, py : Int) -> Unit {
 }
 
 ///|
+/// Draws the right-side HUD panel with score, frame info, aim/spin/power bars, and the scorecard.
 fn draw_side_panel(game : @types.Game) -> Unit {
   let (px, py, pw, ph) = @types.panel_rect()
 
@@ -555,6 +567,7 @@ fn draw_side_panel(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a labelled on-screen button, highlighted in `tint` when `active` is true.
 fn draw_touch_button(
   label : String,
   x : Int,
@@ -592,6 +605,7 @@ fn draw_touch_button(
 }
 
 ///|
+/// Renders the on-screen aim, spin, and power touch buttons with their active states.
 fn draw_touch_overlay(game : @types.Game) -> Unit {
   let (alx, aly, alw, alh) = @types.touch_aim_left_rect()
   let (arx, ary, arw, arh) = @types.touch_aim_right_rect()
@@ -698,6 +712,7 @@ fn draw_touch_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the title screen with game description, control hints, and a start button.
 fn draw_title(game : @types.Game) -> Unit {
   @raylib.draw_text(
     "Bowling Alley Showdown 2026",
@@ -762,6 +777,7 @@ fn draw_title(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the end-of-match result overlay showing final score, grade, and a play-again button.
 fn draw_result_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,

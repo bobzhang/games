@@ -1,10 +1,12 @@
 ///|
+/// Sets the on-screen hint text and its display duration.
 fn set_hint(game : @types.Game, text : String, ttl : Float) -> Unit {
   game.hint = text
   game.info_t = ttl
 }
 
 ///|
+/// Deactivates all smoke instances and resets their fields to defaults.
 fn clear_smokes(game : @types.Game) -> Unit {
   for smoke in game.smokes {
     smoke.active = false
@@ -16,6 +18,7 @@ fn clear_smokes(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all guards and resets their position, velocity, and AI state to defaults.
 fn clear_guards(game : @types.Game) -> Unit {
   for guard_val in game.guards {
     guard_val.active = false
@@ -40,6 +43,7 @@ fn clear_guards(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all traps and resets their position, radius, and timers to defaults.
 fn clear_traps(game : @types.Game) -> Unit {
   for trap in game.traps {
     trap.active = false
@@ -52,6 +56,7 @@ fn clear_traps(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all parcels and resets their position and pulse to defaults.
 fn clear_parcels(game : @types.Game) -> Unit {
   for parcel in game.parcels {
     parcel.active = false
@@ -63,6 +68,7 @@ fn clear_parcels(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns a random point within the world bounds inset by `margin`.
 fn random_world_point(margin : Float) -> (Float, Float) {
   (
     @types.randf(@types.world_left + margin, @types.world_right - margin),
@@ -71,6 +77,7 @@ fn random_world_point(margin : Float) -> (Float, Float) {
 }
 
 ///|
+/// Returns true if `(x, y)` is at least `min_dist` away from every active exit.
 fn far_from_exits(
   game : @types.Game,
   x : Float,
@@ -90,12 +97,14 @@ fn far_from_exits(
 }
 
 ///|
+/// Returns true if `(x, y)` is at least `min_dist` away from the player spawn point.
 fn far_from_spawn(x : Float, y : Float, min_dist : Float) -> Bool {
   @types.dist2(x, y, @types.player_spawn_x(), @types.player_spawn_y()) >=
   min_dist * min_dist
 }
 
 ///|
+/// Returns true if `(x, y)` is at least `min_dist` away from all active parcels with indices 0 to `upto-1`.
 fn far_from_active_parcels(
   game : @types.Game,
   x : Float,
@@ -116,6 +125,7 @@ fn far_from_active_parcels(
 }
 
 ///|
+/// Clears existing parcels and places `count` new ones at valid random world positions, with a fallback grid layout if placement fails.
 fn setup_parcels(game : @types.Game, count : Int) -> Unit {
   clear_parcels(game)
 
@@ -164,6 +174,7 @@ fn setup_parcels(game : @types.Game, count : Int) -> Unit {
 }
 
 ///|
+/// Clears existing guards and spawns `count` new patrol guards with speed, cone range, and cone angle scaled by `wave`.
 fn setup_guards(game : @types.Game, wave : Int, count : Int) -> Unit {
   clear_guards(game)
 
@@ -216,6 +227,7 @@ fn setup_guards(game : @types.Game, wave : Int, count : Int) -> Unit {
 }
 
 ///|
+/// Clears existing traps and places `count` new traps at random world positions away from exits and spawn, with a fallback grid layout if placement fails.
 fn setup_traps(game : @types.Game, _wave : Int, count : Int) -> Unit {
   clear_traps(game)
 
@@ -257,6 +269,7 @@ fn setup_traps(game : @types.Game, _wave : Int, count : Int) -> Unit {
 }
 
 ///|
+/// Initialises all wave-level state: resets player position, computes delivery targets and timer, and spawns parcels, guards, and traps for `wave`.
 fn setup_wave(game : @types.Game, wave : Int) -> Unit {
   game.state = Play
   game.wave = wave
@@ -312,6 +325,7 @@ fn setup_wave(game : @types.Game, wave : Int) -> Unit {
 }
 
 ///|
+/// Resets score, total deliveries, and fail reason, then starts the first wave of a new run.
 fn start_new_run(game : @types.Game) -> Unit {
   game.score = 0
   game.delivered_total = 0
@@ -321,6 +335,7 @@ fn start_new_run(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Awards wave-completion score (including time bonus), partially restores player health, updates best wave, and begins the next wave.
 fn advance_wave(game : @types.Game) -> Unit {
   let time_bonus = (@types.maxf(0.0, game.time_left) *
   @types.wave_clear_time_score_mult).to_int()
@@ -343,6 +358,7 @@ fn advance_wave(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Transitions the game to the Retry state, records the failure reason, and updates the best wave tracker.
 fn fail_mission(game : @types.Game, reason : String) -> Unit {
   if game.wave > game.best_wave {
     game.best_wave = game.wave
@@ -354,6 +370,7 @@ fn fail_mission(game : @types.Game, reason : String) -> Unit {
 }
 
 ///|
+/// Returns the index of a free smoke slot, or the slot with the least remaining life if none are available.
 fn alloc_smoke_slot(game : @types.Game) -> Int {
   for i in 0..<game.smokes.length() {
     if not(game.smokes[i].active) {
@@ -374,6 +391,7 @@ fn alloc_smoke_slot(game : @types.Game) -> Int {
 }
 
 ///|
+/// Deploys a smoke decoy at the player's current position, consuming one smoke charge and briefly raising the alarm flash.
 fn deploy_smoke(game : @types.Game) -> Unit {
   if game.smoke_stock <= 0 {
     set_hint(game, "No smoke decoys left this wave.", 1.2)
@@ -394,6 +412,7 @@ fn deploy_smoke(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the index of the closest active, undelivered parcel within squared distance `max_d2` of the player, or -1 if none qualify.
 fn nearest_parcel(game : @types.Game, max_d2 : Float) -> Int {
   let mut best = -1
   let mut best_d2 = max_d2
@@ -419,6 +438,7 @@ fn nearest_parcel(game : @types.Game, max_d2 : Float) -> Int {
 }
 
 ///|
+/// Returns the index of the closest active exit within squared distance `max_d2` of the player, or -1 if none qualify.
 fn nearest_exit(game : @types.Game, max_d2 : Float) -> Int {
   let mut best = -1
   let mut best_d2 = max_d2
@@ -444,6 +464,7 @@ fn nearest_exit(game : @types.Game, max_d2 : Float) -> Int {
 }
 
 ///|
+/// Handles the player's interact action: delivers a carried parcel to a nearby exit, drops it if no exit is close, or picks up the nearest parcel.
 fn try_interact(game : @types.Game) -> Unit {
   if game.player.carrying_parcel >= 0 {
     let exit_idx = nearest_exit(
@@ -512,6 +533,7 @@ fn try_interact(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Moves the player based on current input, applies sprint burn and carry penalty, updates facing direction, and returns the noise pressure generated this frame.
 fn update_player_motion(game : @types.Game, dt : Float) -> Float {
   let ix = game.input.move_x
   let iy = game.input.move_y
@@ -571,6 +593,7 @@ fn update_player_motion(game : @types.Game, dt : Float) -> Float {
 }
 
 ///|
+/// Advances each active smoke's lifetime and deactivates it when expired.
 fn update_smokes(game : @types.Game, dt : Float) -> Unit {
   for smoke in game.smokes {
     if not(smoke.active) {
@@ -586,6 +609,7 @@ fn update_smokes(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Returns a multiplier that reduces detection pressure when the player is inside an active smoke cloud (returns `smoke_cover_factor`), or 1.0 otherwise.
 fn player_smoke_cover(game : @types.Game) -> Float {
   let mut factor : Float = 1.0
 
@@ -604,6 +628,7 @@ fn player_smoke_cover(game : @types.Game) -> Float {
 }
 
 ///|
+/// Returns `(found, cx, cy, d2)` for the active smoke nearest to `(x, y)`, or `(false, 0, 0, 0)` if no active smokes exist.
 fn nearest_smoke_target(
   game : @types.Game,
   x : Float,
@@ -632,6 +657,7 @@ fn nearest_smoke_target(
 }
 
 ///|
+/// Sets every active guard's alert timer to at least `alert_time` and directs them toward the player's current position.
 fn alert_all_guards(game : @types.Game, alert_time : Float) -> Unit {
   for guard_val in game.guards {
     if guard_val.active {
@@ -643,6 +669,7 @@ fn alert_all_guards(game : @types.Game, alert_time : Float) -> Unit {
 }
 
 ///|
+/// Steps each active guard's patrol, alert, investigate, and smoke-lure AI; moves guards toward their current target; and returns the total detection pressure accumulated this frame.
 fn update_guards(game : @types.Game, dt : Float) -> Float {
   let mut pressure : Float = 0.0
   let wave_scale : Float = (1.0 : Float) +
@@ -769,6 +796,7 @@ fn update_guards(game : @types.Game, dt : Float) -> Float {
 }
 
 ///|
+/// Advances each active trap's blink and cooldown timers; deals damage, drains stealth, and alerts guards when the player overlaps a trap whose cooldown has expired; returns the total trap pressure this frame.
 fn update_traps(game : @types.Game, dt : Float) -> Float {
   let mut pressure : Float = 0.0
 
@@ -803,6 +831,7 @@ fn update_traps(game : @types.Game, dt : Float) -> Float {
 }
 
 ///|
+/// Advances the pulse animation phase on all active parcels.
 fn update_parcel_pulses(game : @types.Game, dt : Float) -> Unit {
   for parcel in game.parcels {
     if not(parcel.active) {
@@ -813,6 +842,7 @@ fn update_parcel_pulses(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs one frame of active gameplay: advances timers, processes smoke and interact actions, moves the player, updates smokes and guards and traps, applies stealth and health consequences, and checks for wave completion or failure.
 fn update_play(game : @types.Game, dt : Float) -> Unit {
   game.wave_clock = game.wave_clock + dt
   game.time_left = game.time_left - dt

@@ -1,4 +1,5 @@
 ///|
+/// Deactivates all particles and resets their fields to zero.
 fn clear_particles(game : @types.Game) -> Unit {
   for particle in game.particles {
     particle.active = false
@@ -13,6 +14,7 @@ fn clear_particles(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Activates the first available inactive particle slot with the given position, velocity, lifetime, size, and kind.
 fn spawn_particle(
   game : @types.Game,
   x : Float,
@@ -41,6 +43,7 @@ fn spawn_particle(
 }
 
 ///|
+/// Emits `n` particles of the given `kind` scattered randomly around `(x, y)`.
 fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
   for _i in 0..<n {
     spawn_particle(
@@ -57,6 +60,7 @@ fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit 
 }
 
 ///|
+/// Advances each active particle's position and velocity with drag, then deactivates particles whose lifetime has expired.
 fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
@@ -77,6 +81,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Deactivates all obstacles and pickups and resets their fields to defaults.
 fn clear_world(game : @types.Game) -> Unit {
   for obstacle in game.obstacles {
     obstacle.active = false
@@ -100,6 +105,7 @@ fn clear_world(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Positions the player at the default starting location and clears vertical velocity.
 fn init_player(game : @types.Game) -> Unit {
   game.px = Float::from_int(@types.world_x0 + @types.world_w / 4)
   game.py = Float::from_int(@types.world_y0 + @types.world_h / 2)
@@ -107,6 +113,7 @@ fn init_player(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets the entire game session: clears world objects and particles, re-initialises the player, sets all counters and timers to their starting values, and switches state to Play.
 fn start_match(game : @types.Game) -> Unit {
   clear_world(game)
   clear_particles(game)
@@ -146,6 +153,7 @@ fn start_match(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Applies a flap impulse to the player's vertical velocity and emits a small particle burst behind the bird.
 fn flap(game : @types.Game) -> Unit {
   if game.state != Play {
     return
@@ -158,6 +166,7 @@ fn flap(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Activates the first free obstacle slot with randomised width, speed, gap position, gap height, and kind (gate/beam/spinner); returns true on success.
 fn spawn_obstacle(game : @types.Game) -> Bool {
   for obstacle in game.obstacles {
     if obstacle.active {
@@ -197,6 +206,7 @@ fn spawn_obstacle(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Activates the first free pickup slot with a random position and weighted kind (score/boost/shield/heart); returns true on success.
 fn spawn_pickup(game : @types.Game) -> Bool {
   for pickup in game.pickups {
     if pickup.active {
@@ -230,6 +240,7 @@ fn spawn_pickup(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Awards score and increments the combo counter when the player's position has fully passed obstacle `i` for the first time.
 fn score_obstacle(game : @types.Game, i : Int) -> Unit {
   if game.obstacles[i].scored {
     return
@@ -257,6 +268,7 @@ fn score_obstacle(game : @types.Game, i : Int) -> Unit {
 }
 
 ///|
+/// Returns true if a circle of radius `pr` at `(px, py)` overlaps the top or bottom pillar of obstacle `ob`.
 fn point_hits_obstacle(
   ob : @types.Obstacle,
   px : Float,
@@ -287,6 +299,7 @@ fn point_hits_obstacle(
 }
 
 ///|
+/// Returns true if a circle of radius `pr` at `(px, py)` overlaps the pickup `pk`.
 fn point_hits_pickup(
   pk : @types.Pickup,
   px : Float,
@@ -304,6 +317,7 @@ fn point_hits_pickup(
 }
 
 ///|
+/// Reduces the player's lives by one (or breaks the shield if active), triggers a screen shake and death burst, and transitions to Result state if lives reach zero.
 fn damage_player(game : @types.Game, msg : String) -> Unit {
   if game.shield_t > 0.0 {
     game.shield_t = 0.0
@@ -334,6 +348,7 @@ fn damage_player(game : @types.Game, msg : String) -> Unit {
 }
 
 ///|
+/// Deactivates pickup `i`, emits a collection burst, and applies its effect: score bonus, boost refill, shield activation, or extra life.
 fn collect_pickup(game : @types.Game, i : Int) -> Unit {
   if not(game.pickups[i].active) {
     return
@@ -364,6 +379,7 @@ fn collect_pickup(game : @types.Game, i : Int) -> Unit {
 }
 
 ///|
+/// Spends one hint charge to highlight the nearest upcoming obstacle gap, moves the ring indicator to that y position, and returns true on success.
 fn use_hint(game : @types.Game) -> Bool {
   if game.state != Play {
     return false
@@ -402,6 +418,7 @@ fn use_hint(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Scrolls each active obstacle leftward, advances its phase, triggers scoring when passed, and deactivates obstacles that leave the screen.
 fn update_obstacles(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.obstacles.length() {
     if not(game.obstacles[i].active) {
@@ -420,6 +437,7 @@ fn update_obstacles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Scrolls each active pickup leftward with a sinusoidal vertical bob, and deactivates pickups that leave the screen.
 fn update_pickups(game : @types.Game, dt : Float) -> Unit {
   for pickup in game.pickups {
     if not(pickup.active) {
@@ -440,6 +458,7 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Applies gravity to vertical velocity, moves the player vertically, and calls `damage_player` when the player hits the ceiling or floor.
 fn update_physics(game : @types.Game, dt : Float) -> Unit {
   let speed_scale : Float = if game.boost_on { 1.22 } else { 1.0 }
 
@@ -462,6 +481,7 @@ fn update_physics(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Checks the player circle against all active obstacles and pickups, calling `damage_player` or `collect_pickup` on contact.
 fn update_collisions(game : @types.Game) -> Unit {
   for obstacle in game.obstacles {
     if not(obstacle.active) {
@@ -482,6 +502,7 @@ fn update_collisions(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Counts down obstacle and pickup timers, spawning a new obstacle or pickup when each timer expires and resetting the timer for the next spawn.
 fn update_spawns(game : @types.Game, dt : Float) -> Unit {
   game.spawn_t = game.spawn_t - dt
   if game.spawn_t <= 0.0 {
@@ -499,6 +520,7 @@ fn update_spawns(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Recalculates the current level from the score, updates `game.level`, and shows a level-up message when the level changes.
 fn check_level_up(game : @types.Game) -> Unit {
   let lv : Int = @types.clampi(1 + game.score / 520, 1, 10)
   if lv != game.level {
@@ -508,6 +530,7 @@ fn check_level_up(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Transitions to the Result state with a win flag when the run timer exceeds 180 seconds.
 fn check_win(game : @types.Game) -> Unit {
   if game.game_t < 180.0 {
     return

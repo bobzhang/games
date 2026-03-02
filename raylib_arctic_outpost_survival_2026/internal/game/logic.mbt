@@ -1,4 +1,5 @@
 ///|
+/// Deactivates all particles and zeros their position, velocity, life, size, and kind fields.
 fn clear_particles(game : @types.Game) -> Unit {
   for particle in game.particles {
     particle.active = false
@@ -13,6 +14,7 @@ fn clear_particles(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all enemies, pickups, and bullets, resetting their fields to safe defaults.
 fn clear_world(game : @types.Game) -> Unit {
   for enemy in game.enemies {
     enemy.active = false
@@ -49,6 +51,7 @@ fn clear_world(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Activates the first inactive particle slot and initializes it with the given position, velocity, lifetime, size, and kind.
 fn emit_particle(
   game : @types.Game,
   x : Float,
@@ -77,6 +80,7 @@ fn emit_particle(
 }
 
 ///|
+/// Emits `n` particles of the given kind in random directions from a jittered position around `(x, y)`.
 fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
   for _i in 0..<n {
     emit_particle(
@@ -93,6 +97,7 @@ fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit 
 }
 
 ///|
+/// Advances all active particles by `dt`: decays lifetime, moves by velocity, and applies kind-dependent velocity damping and gravity.
 fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
@@ -116,6 +121,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Repositions the player to the lower-center of the world and zeroes all movement and aim state.
 fn reset_player(game : @types.Game) -> Unit {
   game.player_x = Float::from_int(@types.world_x0 + @types.world_w / 2)
   game.player_y = Float::from_int(@types.world_y0 + @types.world_h - 180)
@@ -128,6 +134,7 @@ fn reset_player(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets the entire game state for a fresh run: clears world and particles, resets player, initializes all resource and timer fields to starting values, and shows the opening message.
 fn start_run(game : @types.Game) -> Unit {
   clear_world(game)
   clear_particles(game)
@@ -172,6 +179,7 @@ fn start_run(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Transitions to the Result state, updates the best score, emits a celebration or collapse burst, and shows the appropriate end message; does nothing if not in Play.
 fn finish_run(game : @types.Game, win : Bool) -> Unit {
   if game.state != @types.Play {
     return
@@ -196,6 +204,7 @@ fn finish_run(game : @types.Game, win : Bool) -> Unit {
 }
 
 ///|
+/// Finds the first inactive enemy slot and spawns a randomly-typed enemy (wolf, brute, or shard) at a random point on one of the four world-edge sides, with stats scaled by the current wave; returns false if all slots are occupied.
 fn spawn_enemy(game : @types.Game) -> Bool {
   for enemy in game.enemies {
     if enemy.active {
@@ -263,6 +272,7 @@ fn spawn_enemy(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Finds the first inactive pickup slot and spawns a randomly-typed supply drop (fuel, medkit, ammo, or overdrive) that falls from above the world; returns false if all slots are occupied.
 fn spawn_pickup(game : @types.Game) -> Bool {
   for pickup in game.pickups {
     if pickup.active {
@@ -297,6 +307,7 @@ fn spawn_pickup(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Finds the first inactive bullet slot and fires a projectile from `(x, y)` toward `(tx, ty)` with the given power and kind; returns false if all slots are occupied.
 fn spawn_bullet(
   game : @types.Game,
   x : Float,
@@ -330,6 +341,7 @@ fn spawn_bullet(
 }
 
 ///|
+/// Fires one bullet toward `(tx, ty)` if the game is in Play, ammo is available, and the fire cooldown has elapsed; uses pierce bullets and faster fire rate during overdrive; applies recoil to the player.
 fn try_fire(game : @types.Game, tx : Float, ty : Float) -> Bool {
   if game.state != @types.Play {
     return false
@@ -368,6 +380,7 @@ fn try_fire(game : @types.Game, tx : Float, ty : Float) -> Bool {
 }
 
 ///|
+/// Restores core heat, suit HP, and ammo by consuming fuel if the player is near the generator and the repair cooldown has elapsed; fails with a message if out of range or low on fuel.
 fn try_repair(game : @types.Game) -> Bool {
   if game.state != @types.Play {
     return false
@@ -410,6 +423,7 @@ fn try_repair(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Returns the suit damage dealt when an enemy of the given kind collides with the player.
 fn enemy_touch_damage(kind : Int) -> Float {
   if kind == @types.enemy_brute {
     34.0
@@ -421,6 +435,7 @@ fn enemy_touch_damage(kind : Int) -> Float {
 }
 
 ///|
+/// Returns the core heat damage dealt when an enemy of the given kind reaches the generator.
 fn enemy_core_damage(kind : Int) -> Float {
   if kind == @types.enemy_brute {
     14.0
@@ -432,6 +447,7 @@ fn enemy_core_damage(kind : Int) -> Float {
 }
 
 ///|
+/// Applies `dmg` to the player's suit HP (reduced by 28% during overdrive), resets combo, triggers camera shake, and deducts a life with player respawn if the suit is destroyed; calls `finish_run` if all lives are gone.
 fn hurt_player(game : @types.Game, dmg : Float) -> Unit {
   if game.overdrive_t > 0.0 {
     game.suit_hp = game.suit_hp - dmg * 0.72
@@ -462,6 +478,7 @@ fn hurt_player(game : @types.Game, dmg : Float) -> Unit {
 }
 
 ///|
+/// Applies the pickup effect by kind (fuel refills core heat, medkit heals suit, ammo crate restores ammo, overdrive activates pierce mode), adds score, increments combo, and shows a status message.
 fn collect_pickup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit {
   if kind == @types.pickup_fuel {
     game.fuel = @types.minf(100.0, game.fuel + 26.0)
@@ -491,6 +508,7 @@ fn collect_pickup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit 
 }
 
 ///|
+/// Applies movement acceleration from input axes, damps velocity, moves the player, clamps to world boundaries with bounce, and emits overdrive trail particles.
 fn update_player(game : @types.Game, dt : Float) -> Unit {
   let accel : Float = if game.overdrive_t > 0.0 { 940.0 } else { 720.0 }
 
@@ -539,6 +557,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Applies bullet damage to the target enemy, deactivates normal bullets on hit or degrades pierce bullets until below the kill threshold, and on enemy death awards combo-scaled score and may spawn a pickup.
 fn bullet_hit_enemy(game : @types.Game, bi : Int, ei : Int) -> Unit {
   game.enemies[ei].hp = game.enemies[ei].hp - game.bullets[bi].power
 
@@ -579,6 +598,7 @@ fn bullet_hit_enemy(game : @types.Game, bi : Int, ei : Int) -> Unit {
 }
 
 ///|
+/// Moves all active bullets, deactivates them on lifetime expiry or when they leave the world boundary, and checks each bullet for collision with all active enemies.
 fn update_bullets(game : @types.Game, dt : Float) -> Unit {
   for bi in 0..<game.bullets.length() {
     if not(game.bullets[bi].active) {
@@ -624,6 +644,7 @@ fn update_bullets(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Returns the base movement speed for an enemy of the given kind, scaled up by the current wave number.
 fn enemy_speed(game : @types.Game, kind : Int) -> Float {
   if kind == @types.enemy_wolf {
     130.0 + Float::from_int(game.wave) * 10.0
@@ -635,6 +656,7 @@ fn enemy_speed(game : @types.Game, kind : Int) -> Float {
 }
 
 ///|
+/// Advances all active enemies: updates their phase timer, steers toward the player (wolves) or core (brutes/shards) with a sinusoidal swirl offset, deactivates out-of-bounds enemies, and applies touch damage to the player or core heat damage on contact.
 fn update_enemies(game : @types.Game, dt : Float) -> Unit {
   for enemy in game.enemies {
     if not(enemy.active) {
@@ -741,6 +763,7 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Moves all active pickups with a sinusoidal horizontal drift and wave-scaled downward fall, bounces them off side walls, deactivates them when they fall below the world, and collects them on player contact.
 fn update_pickups(game : @types.Game, dt : Float) -> Unit {
   for pickup in game.pickups {
     if not(pickup.active) {
@@ -778,6 +801,7 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Consumes one hint charge and marks the nearest needed supply pickup (fuel or ammo when low) or the safest of five vertical lanes based on enemy threat weighting; deducts 6 score points.
 fn use_hint(game : @types.Game) -> Bool {
   if game.state != @types.Play || game.hint_left <= 0 {
     return false
@@ -864,6 +888,7 @@ fn use_hint(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Drains core heat each frame by a base rate plus wave-scaled enemy pressure and a sinusoidal storm intensity.
 fn passive_heat_decay(game : @types.Game, dt : Float) -> Unit {
   let storm : Float = 0.5 +
     @types.sinf(game.storm_t * 1.2) * 0.3 +
@@ -875,6 +900,7 @@ fn passive_heat_decay(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs the full play-state simulation step: ticks all timers and cooldowns, updates particles, advances game time and storm, scales wave difficulty, drains fuel and suit HP, spawns enemies and pickups, updates all entities, and triggers win or loss conditions.
 fn update_play(game : @types.Game, dt : Float) -> Unit {
   let step : Float = @types.clampf(dt, 0.0, 0.04)
 

@@ -1,4 +1,5 @@
 ///|
+/// Returns the roll value at `idx`, or 0 when the index is out of the recorded range.
 fn safe_roll(rolls : Array[Int], count : Int, idx : Int) -> Int {
   if idx >= 0 && idx < count {
     rolls[idx]
@@ -8,6 +9,7 @@ fn safe_roll(rolls : Array[Int], count : Int, idx : Int) -> Int {
 }
 
 ///|
+/// Returns the roll value at `idx`, or -2 when the index is beyond recorded rolls.
 fn maybe_roll(rolls : Array[Int], count : Int, idx : Int) -> Int {
   if idx >= 0 && idx < count {
     rolls[idx]
@@ -17,6 +19,7 @@ fn maybe_roll(rolls : Array[Int], count : Int, idx : Int) -> Int {
 }
 
 ///|
+/// Converts a pin-count integer to its display symbol: empty for pending, `-` for zero, or the digit.
 fn show_roll(v : Int) -> String {
   if v < 0 {
     ""
@@ -28,6 +31,7 @@ fn show_roll(v : Int) -> String {
 }
 
 ///|
+/// Resets the roll log, frame totals array, score, and roll count to zero.
 fn clear_rolls(game : @types.Game) -> Unit {
   game.roll_count = 0
   for i in 0..<game.rolls.length() {
@@ -40,6 +44,7 @@ fn clear_rolls(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Appends a knocked-pin count to the roll log if capacity allows.
 fn push_roll(game : @types.Game, knocked : Int) -> Unit {
   if game.roll_count >= game.rolls.length() {
     return
@@ -49,6 +54,7 @@ fn push_roll(game : @types.Game, knocked : Int) -> Unit {
 }
 
 ///|
+/// Walks the full roll log to recalculate per-frame running totals and the overall score using standard bowling rules.
 fn recompute_score(game : @types.Game) -> Unit {
   for i in 0..<10 {
     game.frame_totals[i] = -1
@@ -122,6 +128,7 @@ fn recompute_score(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the roll-log index of the first delivery in the given frame number.
 fn frame_start_roll_idx(game : @types.Game, target : Int) -> Int {
   let mut idx : Int = 0
 

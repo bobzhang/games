@@ -1,4 +1,5 @@
 ///|
+/// Initialises the window and audio device, then runs the bowling game loop.
 fn main {
   @raylib.set_config_flags(@raylib.FlagMsaa4xHint)
   @raylib.init_window(

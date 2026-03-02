@@ -1,4 +1,5 @@
 ///|
+/// Returns true if the pointer is currently over the title-screen start button.
 fn title_hover(game : @types.Game) -> Bool {
   let b = @types.start_button_rect()
   @types.pointer_on_rect(
@@ -14,6 +15,7 @@ fn title_hover(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Returns true if the pointer is currently over the result-screen retry button.
 fn result_hover(game : @types.Game) -> Bool {
   let b = @types.retry_button_rect()
   @types.pointer_on_rect(
@@ -29,6 +31,7 @@ fn result_hover(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Reads keyboard, mouse, and touch input on the title screen and starts a new run when any start action is detected.
 fn update_title_input(game : @types.Game) -> Unit {
   let key_start : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
@@ -44,6 +47,7 @@ fn update_title_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads keyboard, mouse, and touch input on the result screen and starts a new run when the retry action is detected.
 fn update_result_input(game : @types.Game) -> Unit {
   let key_retry : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
@@ -60,6 +64,7 @@ fn update_result_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the position of the nearest active enemy as an auto-aim target, or a point directly above the player if no enemies are active.
 fn best_auto_aim(game : @types.Game) -> (Float, Float) {
   let mut tx : Float = game.player_x
   let mut ty : Float = game.player_y - 180.0
@@ -89,6 +94,7 @@ fn best_auto_aim(game : @types.Game) -> (Float, Float) {
 }
 
 ///|
+/// Clamps the current aim position to remain within the playfield boundaries.
 fn clamp_aim_inside_world(game : @types.Game) -> Unit {
   game.aim_x = @types.clampf(
     game.aim_x,
@@ -103,6 +109,7 @@ fn clamp_aim_inside_world(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads all play-state input: movement axes from keyboard and touch d-pad, pointer-based aim, fire hold (with auto-aim fallback on touch), repair, hint, and restart actions.
 fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
     game.state = @types.Title

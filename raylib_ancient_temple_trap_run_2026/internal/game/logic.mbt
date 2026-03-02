@@ -1,4 +1,5 @@
 ///|
+/// Returns the hard-coded layout for stage one: three relics, three traps, two lava hazards, two pressure plates, and two vertical stone doors.
 fn stage_layout_one() -> @types.StageLayout {
   let relics : Array[@types.Relic] = [
     @types.make_relic(210.0, 220.0),
@@ -53,6 +54,7 @@ fn stage_layout_one() -> @types.StageLayout {
 }
 
 ///|
+/// Returns the hard-coded layout for stage two: four relics, four traps, two lava hazards, two pressure plates, and two horizontal stone doors.
 fn stage_layout_two() -> @types.StageLayout {
   let relics : Array[@types.Relic] = [
     @types.make_relic(920.0, 150.0),
@@ -111,6 +113,7 @@ fn stage_layout_two() -> @types.StageLayout {
 }
 
 ///|
+/// Returns the hard-coded layout for stage three: five relics, four traps, three lava hazards, three pressure plates, and three vertical stone doors.
 fn stage_layout_three() -> @types.StageLayout {
   let relics : Array[@types.Relic] = [
     @types.make_relic(190.0, 700.0),
@@ -175,6 +178,7 @@ fn stage_layout_three() -> @types.StageLayout {
 }
 
 ///|
+/// Returns the stage layout for the given zero-based index, defaulting to layout three for any out-of-range value.
 fn stage_layout(index : Int) -> @types.StageLayout {
   match index {
     0 => stage_layout_one()
@@ -184,6 +188,7 @@ fn stage_layout(index : Int) -> @types.StageLayout {
 }
 
 ///|
+/// Copies all layout fields into the game state, resets player position and stamina, zeroes the relic counter and stage timer, and transitions to the Play state.
 fn apply_layout(
   game : @types.Game,
   layout : @types.StageLayout,
@@ -212,6 +217,7 @@ fn apply_layout(
 }
 
 ///|
+/// Clamps the requested stage index to a valid range, retrieves the corresponding layout, and applies it to the game state.
 fn load_stage(game : @types.Game, stage_index : Int) -> Unit {
   let i : Int = if stage_index < 0 {
     0
@@ -226,16 +232,19 @@ fn load_stage(game : @types.Game, stage_index : Int) -> Unit {
 }
 
 ///|
+/// Begins a fresh run from stage zero.
 fn start_new_run(game : @types.Game) -> Unit {
   load_stage(game, 0)
 }
 
 ///|
+/// Reloads the current stage from the beginning, resetting all entities and the player.
 fn retry_stage(game : @types.Game) -> Unit {
   load_stage(game, game.stage_index)
 }
 
 ///|
+/// Advances to the next stage, or transitions to the Victory state if the last stage has been completed.
 fn start_next_stage(game : @types.Game) -> Unit {
   let next_index = game.stage_index + 1
   if next_index >= game.stage_count {
@@ -265,6 +274,7 @@ pub fn init_title_scene(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Advances each trap's cycle timer by `dt`, wrapping it back to zero whenever it exceeds the trap's period.
 fn update_trap_timers(game : @types.Game, dt : Float) -> Unit {
   for trap in game.traps {
     trap.timer = trap.timer + dt
@@ -275,6 +285,7 @@ fn update_trap_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Updates each pressure plate's `pressed` state by testing whether the player's bounding box overlaps the plate rectangle.
 fn refresh_plates(game : @types.Game) -> Unit {
   for plate in game.plates {
     plate.pressed = @types.player_hits_rect(
@@ -288,6 +299,7 @@ fn refresh_plates(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Ticks each door's hold timer based on whether its linked plate is pressed, opens or closes the door accordingly, and prevents the door from sealing while the player occupies the doorway.
 fn refresh_doors(game : @types.Game, dt : Float) -> Unit {
   for door in game.doors {
     let plate_index = door.plate_index
@@ -315,6 +327,7 @@ fn refresh_doors(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Returns true if the player placed at `(x, y)` would overlap any currently-closed door rectangle.
 fn collides_closed_door(game : @types.Game, x : Float, y : Float) -> Bool {
   let (px, py, pw, ph) = @types.player_rect_at(game, x, y)
 
@@ -329,6 +342,7 @@ fn collides_closed_door(game : @types.Game, x : Float, y : Float) -> Bool {
 }
 
 ///|
+/// Moves the player according to input axes, draining stamina during a dash hold and restoring it otherwise, and resolves world-boundary and closed-door collisions on each axis independently.
 fn move_player(game : @types.Game, dt : Float) -> Unit {
   let mut axis_x = @types.clampf(game.input_x, -1.0, 1.0)
   let mut axis_y = @types.clampf(game.input_y, -1.0, 1.0)
@@ -390,6 +404,7 @@ fn move_player(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Checks each active relic for proximity to the player and, on contact, deactivates it, increments the collected count, grants a stamina bonus, and shows a brief banner.
 fn collect_relics(game : @types.Game) -> Unit {
   for relic in game.relics {
     if not(relic.active) {
@@ -413,6 +428,7 @@ fn collect_relics(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Transitions the game to the Failed state with the given `reason` string and shows a failure banner; does nothing if the game is not currently in the Play state.
 fn fail_stage(game : @types.Game, reason : String) -> Unit {
   if not(game.state is @types.Play) {
     return
@@ -425,6 +441,7 @@ fn fail_stage(game : @types.Game, reason : String) -> Unit {
 }
 
 ///|
+/// Returns true and triggers a stage failure if the player overlaps any hazard rectangle; returns false otherwise.
 fn check_hazards(game : @types.Game) -> Bool {
   for hazard in game.hazards {
     if @types.player_hits_rect(game, hazard.x, hazard.y, hazard.w, hazard.h) {
@@ -437,6 +454,7 @@ fn check_hazards(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Returns true and triggers a stage failure if the player overlaps a trap that is currently in its "hot" (active) phase; returns false otherwise.
 fn check_traps(game : @types.Game) -> Bool {
   for trap in game.traps {
     if @types.trap_is_hot(trap) &&
@@ -450,6 +468,7 @@ fn check_traps(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Checks whether the player has reached the exit gate; if the exit is locked, shows a reminder banner; if unlocked, transitions to StageClear or Victory depending on whether more stages remain.
 fn reach_exit(game : @types.Game) -> Unit {
   if not(
       @types.player_hits_rect(
@@ -480,6 +499,7 @@ fn reach_exit(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles the Title state: starts a new run when the player presses the start button.
 fn update_title_state(game : @types.Game, _dt : Float) -> Unit {
   if game.input_start_press {
     start_new_run(game)
@@ -487,6 +507,7 @@ fn update_title_state(game : @types.Game, _dt : Float) -> Unit {
 }
 
 ///|
+/// Advances one play-state frame: handles restart, ticks trap timers, refreshes plates and doors, moves the player, collects relics, checks hazards and traps, and tests for exit.
 fn update_play_state(game : @types.Game, dt : Float) -> Unit {
   if game.input_restart_press {
     retry_stage(game)
@@ -519,6 +540,7 @@ fn update_play_state(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Handles the StageClear state: retries the current stage on `input_restart_press` or advances to the next stage on `input_next_press`.
 fn update_stage_clear_state(game : @types.Game, _dt : Float) -> Unit {
   if game.input_restart_press {
     retry_stage(game)
@@ -528,6 +550,7 @@ fn update_stage_clear_state(game : @types.Game, _dt : Float) -> Unit {
 }
 
 ///|
+/// Handles the Failed state: retries the current stage on `input_restart_press` or returns to the title on `input_next_press`.
 fn update_failed_state(game : @types.Game, _dt : Float) -> Unit {
   if game.input_restart_press {
     retry_stage(game)
@@ -537,6 +560,7 @@ fn update_failed_state(game : @types.Game, _dt : Float) -> Unit {
 }
 
 ///|
+/// Handles the Victory state: starts a new run on `input_next_press` or returns to the title on `input_restart_press`.
 fn update_victory_state(game : @types.Game, _dt : Float) -> Unit {
   if game.input_next_press {
     start_new_run(game)

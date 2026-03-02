@@ -1,9 +1,11 @@
 ///|
+/// Returns a sine wave value sampled from `game.ui_t` scaled by `k`, used to animate background elements.
 fn bg_wave(game : @types.Game, k : Float) -> Float {
   Float::from_double(@math.sin((game.ui_t * k).to_double()))
 }
 
 ///|
+/// Draws the animated background with pulsing ambient circles and layered horizontal gradient bands.
 fn draw_bg(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(8, 12, 22, 255))
 
@@ -41,6 +43,7 @@ fn draw_bg(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the world boundary rectangle with layered horizontal stripes and an animated horizon line.
 fn draw_world_back(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.world_x0,
@@ -85,6 +88,7 @@ fn draw_world_back(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws an obstacle's top and bottom pillars with color based on kind, and adds a rotating arm for spinner obstacles.
 fn draw_obstacle(ob : @types.Obstacle) -> Unit {
   if not(ob.active) {
     return
@@ -144,6 +148,7 @@ fn draw_obstacle(ob : @types.Obstacle) -> Unit {
 }
 
 ///|
+/// Returns the display color for a pickup based on its kind (score/boost/shield/heart).
 fn pickup_color(kind : Int) -> @raylib.Color {
   if kind == @types.pickup_score {
     @raylib.Color::new(120, 218, 255, 250)
@@ -157,6 +162,7 @@ fn pickup_color(kind : Int) -> @raylib.Color {
 }
 
 ///|
+/// Draws a pickup as a pulsing colored circle with an outer glow ring.
 fn draw_pickup(pk : @types.Pickup) -> Unit {
   if not(pk.active) {
     return
@@ -178,6 +184,7 @@ fn draw_pickup(pk : @types.Pickup) -> Unit {
 }
 
 ///|
+/// Draws the player bird with a tilt-based wing triangle, eye dot, and an optional shield ring when the shield is active.
 fn draw_player(game : @types.Game) -> Unit {
   let tilt : Float = @types.clampf(game.vy * 0.0014, -0.35, 0.45)
 
@@ -223,6 +230,7 @@ fn draw_player(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a pulsing golden ring at the hint target y position in the center of the world when a hint is active.
 fn draw_hint(game : @types.Game) -> Unit {
   if game.hint_t <= 0.0 {
     return
@@ -243,6 +251,7 @@ fn draw_hint(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws all active particles as small circles with color and opacity based on their kind and remaining life.
 fn draw_particles(game : @types.Game) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
@@ -275,6 +284,7 @@ fn draw_particles(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a touch button rectangle at `rect` with `label` centered inside, using `tint` when `active` and a default dark fill otherwise.
 fn draw_touch_button(
   label : String,
   rect : (Int, Int, Int, Int),
@@ -310,6 +320,7 @@ fn draw_touch_button(
 }
 
 ///|
+/// Draws the on-screen FLAP, BOOST, RESTART, and HINT touch buttons in the side panel area during active play.
 fn draw_controls(game : @types.Game) -> Unit {
   match game.state {
     @types.Play => ()
@@ -388,6 +399,7 @@ fn draw_controls(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the side panel with title, score, best score, lives, level, time, distance, combo, boost bar, shield status, control reference, and the transient message box.
 fn draw_panel(game : @types.Game) -> Unit {
   let px : Int = @types.panel_x0
   let py : Int = 20
@@ -574,6 +586,7 @@ fn draw_panel(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the title screen with game name, description lines, and a hoverable start button.
 fn draw_title(game : @types.Game) -> Unit {
   @raylib.draw_text(
     "Flappy Sky Ruins 2026",
@@ -620,6 +633,7 @@ fn draw_title(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the result overlay panel with win/fail heading, final score, distance, level, time, and a hoverable retry button.
 fn draw_result_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -697,6 +711,7 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the world background, all obstacles and pickups, the hint ring, and the player.
 fn draw_world(game : @types.Game) -> Unit {
   draw_world_back(game)
 

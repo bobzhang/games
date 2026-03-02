@@ -1,4 +1,5 @@
 ///|
+/// Draws `text` horizontally centered on screen at the given y coordinate.
 fn draw_center_text(
   text : String,
   y : Int,
@@ -10,6 +11,7 @@ fn draw_center_text(
 }
 
 ///|
+/// Draws `text` right-aligned so its rightmost character ends at x.
 fn draw_right_text(
   text : String,
   x : Int,
@@ -22,6 +24,7 @@ fn draw_right_text(
 }
 
 ///|
+/// Draws a labeled progress bar filled proportionally to `value` out of 100, with a dark background, colored fill, and a border outline.
 fn draw_value_bar(
   x : Int,
   y : Int,
@@ -57,6 +60,7 @@ fn draw_value_bar(
 }
 
 ///|
+/// Returns a random camera shake displacement proportional to the remaining shake timer, or `(0, 0)` when no shake is active.
 fn shake_offset(game : @types.Game) -> (Float, Float) {
   if game.shake_t <= 0.0 {
     (0.0, 0.0)
@@ -67,6 +71,7 @@ fn shake_offset(game : @types.Game) -> (Float, Float) {
 }
 
 ///|
+/// Draws the deep-sea gradient background, two ambient glow circles, and 120 pseudo-random pulsing star particles.
 fn draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
@@ -121,6 +126,7 @@ fn draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws the procedural cave walls row-by-row using dark fill rectangles on each side and glowing edge lines with a pulsing bioluminescent color.
 fn draw_cave(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let step = 14
 
@@ -202,6 +208,7 @@ fn draw_cave(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Maps an object kind to its base display color.
 fn obj_color(kind : @types.ObjKind) -> @raylib.Color {
   match kind {
     Rock => @raylib.Color::new(178, 198, 214, 255)
@@ -214,6 +221,7 @@ fn obj_color(kind : @types.ObjKind) -> @raylib.Color {
 }
 
 ///|
+/// Draws a Current object as two concentric pulsing rings with a directional arrow line indicating its velocity vector.
 fn draw_obj_current(
   o : @types.Obj,
   col : @raylib.Color,
@@ -264,6 +272,7 @@ fn draw_obj_current(
 }
 
 ///|
+/// Draws a Mine object as a pulsing filled circle with 8 radiating spike lines.
 fn draw_obj_mine(
   o : @types.Obj,
   col : @raylib.Color,
@@ -293,6 +302,7 @@ fn draw_obj_mine(
 }
 
 ///|
+/// Draws a Data object as a rotating diamond outline with a small bright center dot.
 fn draw_obj_data(
   o : @types.Obj,
   col : @raylib.Color,
@@ -323,6 +333,7 @@ fn draw_obj_data(
 }
 
 ///|
+/// Draws an Oxygen pickup as a semi-transparent filled circle with a colored outline and an "O2" label centered inside.
 fn draw_obj_oxygen(
   o : @types.Obj,
   col : @raylib.Color,
@@ -356,6 +367,7 @@ fn draw_obj_oxygen(
 }
 
 ///|
+/// Draws a Scrap pickup as a slowly rotating filled rectangle with a lighter outline.
 fn draw_obj_scrap(
   o : @types.Obj,
   col : @raylib.Color,
@@ -383,6 +395,7 @@ fn draw_obj_scrap(
 }
 
 ///|
+/// Iterates over all active objects and dispatches to the appropriate per-kind draw function, skipping cloaked objects while sonar is inactive.
 fn draw_objects(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for o in game.objs {
     if not(o.active) {
@@ -432,6 +445,7 @@ fn draw_objects(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws all active trail segments as small rectangles fading by their remaining life, using teal for dash trails and pale blue for wake trails.
 fn draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for t in game.trails {
     if not(t.active) {
@@ -456,6 +470,7 @@ fn draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws all active particles as small circles fading by remaining life, colored by kind: red-pink for damage, sky-blue for sonar, and mint-green for collection effects.
 fn draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for p in game.particles {
     if not(p.active) {
@@ -481,6 +496,7 @@ fn draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws all active ripples as expanding circle outlines fading by remaining life, colored violet for sonar ripples and cyan for standard wake ripples.
 fn draw_ripples(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for r in game.ripples {
     if not(r.active) {
@@ -504,6 +520,7 @@ fn draw_ripples(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws the player submarine with a pulsing body, highlight dot, velocity-scaled tail fin, active-dash ring, invulnerability shield flash, and a wake trail emitter.
 fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let px = game.hero.x + cam_x
   let py = game.hero.y + cam_y
@@ -572,6 +589,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Returns "READY" when `cd` is zero or negative, otherwise returns a percentage string showing how much of the cooldown remains.
 fn cooldown_text(cd : Float, total : Float) -> String {
   if cd <= 0.0 {
     "READY"
@@ -581,6 +599,7 @@ fn cooldown_text(cd : Float, total : Float) -> String {
 }
 
 ///|
+/// Draws the play HUD: hull and oxygen bars, dash and sonar cooldown panels, score/best/stage panel, depth progress bar, and the active combo multiplier banner.
 fn draw_hud(game : @types.Game) -> Unit {
   draw_value_bar(24, 20, 280, 26, game.hull, @types.hp_col(), "HULL")
   draw_value_bar(24, 54, 280, 26, game.oxygen, @types.oxygen_col(), "OXY")
@@ -721,6 +740,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a single touch control button as a filled rounded rectangle with a border and centered label, highlighted when `active` and using a primary or secondary color scheme.
 fn draw_button_hint(
   rect : (Float, Float, Float, Float),
   text : String,
@@ -760,6 +780,7 @@ fn draw_button_hint(
 }
 
 ///|
+/// Draws all six touch control buttons (left, right, up, down, dash, sonar) using the current input state to highlight active buttons.
 fn draw_touch_controls(game : @types.Game) -> Unit {
   let left = @types.btn_left_rect()
   let right = @types.btn_right_rect()
@@ -777,6 +798,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the title screen overlay with the game title, subtitle lines, a hoverable START DIVE button, a controls reference panel, and the best score if one exists.
 fn draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -893,6 +915,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the stage-clear overlay with an eased-in expanding panel showing the cleared stage number, a loading message, and a prompt to continue early.
 fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
   let t = @types.ease_out_quad(
     @types.clampf(game.result_t / @types.stage_clear_delay, 0.0, 1.0),
@@ -936,6 +959,7 @@ fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the game-over overlay with a darkened screen tint, "SIGNAL LOST" header, final score and stats, and a hoverable RETRY button.
 fn draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -1017,6 +1041,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws an expanding sonar ring centered on the player that fades out as the sonar timer elapses; does nothing when sonar is inactive.
 fn draw_signal_pulse(game : @types.Game) -> Unit {
   if game.sonar_t <= 0.0 {
     return
@@ -1035,6 +1060,7 @@ fn draw_signal_pulse(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a brief tutorial hint bar at the bottom of the screen that fades out after the first 15 seconds of play.
 fn draw_play_hint(game : @types.Game) -> Unit {
   if game.hint_t > 15.0 {
     return
@@ -1060,6 +1086,7 @@ fn draw_play_hint(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Composites the full world layer in depth order: trails, ripples, objects, particles, and the player.
 fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   draw_trails(game, cam_x, cam_y)
   draw_ripples(game, cam_x, cam_y)

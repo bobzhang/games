@@ -1,4 +1,5 @@
 ///|
+/// Returns a random horizontal screen-shake offset when the shake timer is active.
 fn shake_dx(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
@@ -8,6 +9,7 @@ fn shake_dx(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns a random vertical screen-shake offset when the shake timer is active.
 fn shake_dy(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
@@ -17,11 +19,13 @@ fn shake_dy(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns a time-based oscillating value in `[0, 1]` at frequency `f` Hz.
 fn pulse(game : @types.Game, f : Float) -> Float {
   0.5 + 0.5 * @types.sinf(game.time_s * f)
 }
 
 ///|
+/// Maps a guard color identifier to its base uniform color used in patrol mode.
 fn guard_base_color(id : Int) -> @raylib.Color {
   if id == 0 {
     @raylib.Color::new(220, 154, 120, 232)
@@ -35,6 +39,7 @@ fn guard_base_color(id : Int) -> @raylib.Color {
 }
 
 ///|
+/// Draws the gradient background, ambient glow circles, and board backing panel.
 fn draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 12, 20, 255))
 
@@ -68,6 +73,7 @@ fn draw_background(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws each grid cell according to its tile kind: wall, floor, door, or exit.
 fn draw_tile_map(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
@@ -157,6 +163,7 @@ fn draw_tile_map(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws the decorative train-car outlines and inter-car connector circles over the map.
 fn draw_train_shell(ox : Int, oy : Int) -> Unit {
   for car in 0..<5 {
     let x0 : Int = @types.board_px(1 + car * 5) + ox
@@ -189,6 +196,7 @@ fn draw_train_shell(ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws all active loot items on the map with kind-specific icons and a glow halo.
 fn draw_loot(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for loot in game.loots {
     if not(loot.active) {
@@ -272,6 +280,7 @@ fn draw_loot(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws all active smoke clouds with pulsing opacity based on their remaining lifetime.
 fn draw_smokes(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for i in 0..<game.smokes.length() {
     if not(game.smokes[i].active) {
@@ -300,6 +309,7 @@ fn draw_smokes(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws a single guard sprite at its interpolated position, coloring it by mode (patrol, hunt, stunned).
 fn draw_guard(
   g : @types.Guard,
   _game : @types.Game,
@@ -345,6 +355,7 @@ fn draw_guard(
 }
 
 ///|
+/// Draws the player sprite at its interpolated position, blinking when the flash invincibility timer is active.
 fn draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let blink : Bool = game.flash_t > 0.0 &&
     (game.flash_t * 14.0).to_int() % 2 == 0
@@ -377,6 +388,7 @@ fn draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws all active particles as colored circles sized by the particle's size field.
 fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
@@ -399,6 +411,7 @@ fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws all board layers in order: tiles, train shell, loot, smokes, guards, player, particles, and border.
 fn draw_board(game : @types.Game, ox : Int, oy : Int) -> Unit {
   draw_tile_map(game, ox, oy)
   draw_train_shell(ox, oy)
@@ -422,6 +435,7 @@ fn draw_board(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws a single touch button, switching between idle and pressed colors when the pointer is over it.
 fn draw_touch_button(
   game : @types.Game,
   rect : (Int, Int, Int, Int),
@@ -464,6 +478,7 @@ fn draw_touch_button(
 }
 
 ///|
+/// Draws the on-screen d-pad, action, hint, restart, and menu buttons when in Play state.
 fn draw_touch_controls(game : @types.Game) -> Unit {
   if game.state != @types.Play {
     return
@@ -532,6 +547,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the side information panel with loot count, lives, score, timer, vault status, smoke bar, and controls.
 fn draw_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.panel_x0,
@@ -724,6 +740,7 @@ fn draw_panel(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the title-screen overlay panel with game name, instructions, and the start button.
 fn draw_title_overlay(game : @types.Game) -> Unit {
   let b = @types.start_button_rect()
   let hot : Bool = @types.title_hover(game)
@@ -814,6 +831,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the heist result overlay showing success or failure, score summary, and the run-again button.
 fn draw_result_overlay(game : @types.Game) -> Unit {
   let b = @types.retry_button_rect()
   let hot : Bool = @types.retry_hover(game)

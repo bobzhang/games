@@ -1,4 +1,5 @@
 ///|
+/// Entry point: initialises the raylib window, then runs the game loop updating simulation and rendering each frame; F11 toggles borderless windowed mode.
 fn main {
   @raylib.set_config_flags(@raylib.FlagMsaa4xHint)
   @raylib.init_window(

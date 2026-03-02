@@ -1,10 +1,12 @@
 ///|
+/// Sets the HUD status text and starts its display timer.
 fn set_status(game : @types.Game, text : String, ttl : Float) -> Unit {
   game.status_text = text
   game.status_t = ttl
 }
 
 ///|
+/// Returns `preferred` if that beacon is still alive, otherwise returns the index of the beacon with the highest remaining integrity, or -1 if all beacons are destroyed.
 fn preferred_alive_beacon(game : @types.Game, preferred : Int) -> Int {
   if preferred >= 0 &&
     preferred < game.beacons.length() &&
@@ -30,6 +32,7 @@ fn preferred_alive_beacon(game : @types.Game, preferred : Int) -> Int {
 }
 
 ///|
+/// Repositions the player to the center-left of the middle lane and zeros all dash and combat cooldown state.
 fn reset_player(player : @types.Player) -> Unit {
   player.x = Float::from_int(@types.world_x + 330)
   player.y = @types.lane_y(1)
@@ -44,6 +47,7 @@ fn reset_player(player : @types.Player) -> Unit {
 }
 
 ///|
+/// Restores every beacon to full integrity and clears their pulse timers.
 fn reset_beacons(game : @types.Game) -> Unit {
   for beacon in game.beacons {
     beacon.integrity = @types.beacon_integrity_max
@@ -52,6 +56,7 @@ fn reset_beacons(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all traps and zeros their cooldown and flash timers.
 fn reset_traps(game : @types.Game) -> Unit {
   for trap in game.traps {
     trap.active = false
@@ -61,6 +66,7 @@ fn reset_traps(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all enemies and zeros their slow and animation timers.
 fn reset_enemies(game : @types.Game) -> Unit {
   for enemy in game.enemies {
     enemy.active = false
@@ -70,6 +76,7 @@ fn reset_enemies(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Sets up the given night number, computing its spawn pool size and resetting the spawn timer and night-banner display.
 fn begin_night(game : @types.Game, night : Int) -> Unit {
   game.night = night
   game.spawn_pool = @types.night_spawn_base +
@@ -79,6 +86,7 @@ fn begin_night(game : @types.Game, night : Int) -> Unit {
 }
 
 ///|
+/// Resets all game state fields to starting values, resets all entities, begins night 1, and shows the opening status message.
 fn start_new_run(game : @types.Game) -> Unit {
   game.state = @types.GameState::Playing
   game.score = 0
@@ -101,6 +109,7 @@ fn start_new_run(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Transitions to the GameOver state with the given reason string and shows a restart prompt.
 fn end_run_game_over(game : @types.Game, reason : String) -> Unit {
   game.state = @types.GameState::GameOver
   game.game_over_reason = reason
@@ -108,6 +117,7 @@ fn end_run_game_over(game : @types.Game, reason : String) -> Unit {
 }
 
 ///|
+/// Normalizes the input movement vector, updates the player's facing direction, moves via dash velocity during a dash or normal speed otherwise, and clamps the position to world boundaries.
 fn update_player_movement(game : @types.Game, dt : Float) -> Unit {
   let mut move_x = Float::from_int(game.input.move_x)
   let mut move_y = Float::from_int(game.input.move_y)
@@ -142,6 +152,7 @@ fn update_player_movement(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Returns the index of the closest trap slot within `max_distance` that matches the `want_active` state, or -1 if none is found.
 fn nearest_trap_slot(
   game : @types.Game,
   want_active : Bool,
@@ -171,6 +182,7 @@ fn nearest_trap_slot(
 }
 
 ///|
+/// Places a bamboo snare in the nearest empty slot within range if the cooldown has expired and the player has enough energy; returns false if placement is not possible.
 fn try_place_trap(game : @types.Game) -> Bool {
   if game.trap_place_cd > 0.0 || game.energy < @types.trap_place_energy_cost {
     return false
@@ -197,6 +209,7 @@ fn try_place_trap(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Removes the nearest active trap within range, refunds energy, and briefly flashes the slot; returns false if no eligible trap is found.
 fn try_remove_trap(game : @types.Game) -> Bool {
   let slot = nearest_trap_slot(game, true, @types.trap_remove_range)
   if slot < 0 {
@@ -218,6 +231,7 @@ fn try_remove_trap(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Increments the kill counter, awards night- and kind-scaled score, updates the best score, and grants a small energy and sweep-charge bonus.
 fn register_kill(game : @types.Game, enemy_kind : Int) -> Unit {
   game.kills = game.kills + 1
 
@@ -239,6 +253,7 @@ fn register_kill(game : @types.Game, enemy_kind : Int) -> Unit {
 }
 
 ///|
+/// Applies `damage` to the enemy at `enemy_index`, optionally extends its slow timer to `slow_t`, and deactivates and registers a kill if HP drops to zero; returns true on kill, false otherwise.
 fn damage_enemy(
   game : @types.Game,
   enemy_index : Int,
@@ -272,6 +287,7 @@ fn damage_enemy(
 }
 
 ///|
+/// Performs a melee slash in the player's facing direction: hits all enemies within the attack range and arc, briefly slows them, increments sweep charge per hit, and shows a status message for miss, connect, or kill.
 fn perform_basic_attack(game : @types.Game) -> Unit {
   if game.player.attack_cd > 0.0 ||
     game.energy < @types.basic_attack_energy_cost {
@@ -334,6 +350,7 @@ fn perform_basic_attack(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Initiates a dash in the input direction (or facing direction if no input), consuming energy and setting the dash velocity and timer; does nothing if the dash is already active or on cooldown, or if energy is insufficient.
 fn start_dash(game : @types.Game) -> Unit {
   if game.player.dash_t > 0.0 || game.player.dash_cd > 0.0 {
     return
@@ -371,6 +388,7 @@ fn start_dash(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Fires the full-charge moon sweep when the sweep charge bar is full: resets the charge, starts the sweep FX timer, damages all enemies within sweep radius with a slow, and triggers camera shake.
 fn trigger_sweep(game : @types.Game) -> Unit {
   if game.sweep_charge < @types.sweep_charge_max {
     return
@@ -419,6 +437,7 @@ fn trigger_sweep(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Dispatches player action inputs: K removes a nearby trap, J either places a trap or performs a basic attack if no slot is available, and Space triggers the moon sweep if charge is full or starts a dash otherwise.
 fn handle_player_actions(game : @types.Game) -> Unit {
   if game.input.press_k {
     ignore(try_remove_trap(game))
@@ -440,6 +459,7 @@ fn handle_player_actions(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the index of the first inactive enemy slot, or -1 if all slots are occupied.
 fn free_enemy_slot(game : @types.Game) -> Int {
   for i in 0..<game.enemies.length() {
     if not(game.enemies[i].active) {
@@ -450,6 +470,7 @@ fn free_enemy_slot(game : @types.Game) -> Int {
 }
 
 ///|
+/// Spawns one enemy into a free slot, choosing a random route and target beacon, a night-scaled stat set, and a kind biased toward heavy enemies from night 6 onward; returns false if no slot or alive beacon is available.
 fn spawn_enemy(game : @types.Game) -> Bool {
   let slot = free_enemy_slot(game)
   if slot < 0 {
@@ -512,6 +533,7 @@ fn spawn_enemy(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Ticks the spawn cooldown and, when it fires, attempts to spawn one enemy from the remaining pool; retries quickly if the pool is full.
 fn update_spawning(game : @types.Game, dt : Float) -> Unit {
   if game.spawn_pool <= 0 {
     return
@@ -531,6 +553,7 @@ fn update_spawning(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Ticks trap cooldown and flash timers, and for each armed active trap, hits the nearest enemy within trigger radius with night-scaled damage and a slow, then starts the rearm timer.
 fn update_traps(game : @types.Game, dt : Float) -> Unit {
   let power = @types.trap_damage +
     Float::from_int(@types.maxi(game.night - 1, 0)) * 1.8
@@ -581,6 +604,7 @@ fn update_traps(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances all active enemies: decays slow timers, re-targets to the best alive beacon, moves toward it with a sinusoidal sway, and applies beacon integrity damage on contact before deactivating.
 fn update_enemies(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.enemies.length() {
     if not(game.enemies[i].active) {
@@ -644,6 +668,7 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Checks for game-over (all beacons destroyed) and, if the spawn pool is empty and no enemies remain, awards the night-clear bonus and advances to the next night.
 fn evaluate_wave_and_loss(game : @types.Game) -> Unit {
   if @types.beacon_total_integrity(game) <= 0.0 ||
     @types.living_beacon_count(game) <= 0 {
@@ -681,6 +706,7 @@ fn evaluate_wave_and_loss(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Advances the elapsed time, regenerates energy and sweep charge passively, ticks all player cooldowns, ticks trap and sweep timers, decays the night banner and shake timers, and advances beacon pulse timers.
 fn tick_play_timers(game : @types.Game, dt : Float) -> Unit {
   game.elapsed = game.elapsed + dt
   game.energy = @types.clampf(
@@ -710,6 +736,7 @@ fn tick_play_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Handles the Title state: starts a new run when the player presses a start or restart key.
 fn update_title_state(game : @types.Game) -> Unit {
   if game.input.press_start || game.input.press_restart {
     start_new_run(game)
@@ -717,6 +744,7 @@ fn update_title_state(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles the Paused state: restarts the run on R or resumes play on P.
 fn update_paused_state(game : @types.Game) -> Unit {
   if game.input.press_restart {
     start_new_run(game)
@@ -730,6 +758,7 @@ fn update_paused_state(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles the GameOver state: starts a new run when the player presses a start or restart key.
 fn update_game_over_state(game : @types.Game) -> Unit {
   if game.input.press_start || game.input.press_restart {
     start_new_run(game)
@@ -737,6 +766,7 @@ fn update_game_over_state(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Runs one play-state frame: handles pause and restart shortcuts, ticks all timers, dispatches player actions, moves the player, updates spawning, traps, enemies, and evaluates wave-clear and loss conditions.
 fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
   if game.input.press_pause {
     game.state = @types.GameState::Paused

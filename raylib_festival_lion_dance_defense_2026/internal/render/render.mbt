@@ -1,4 +1,5 @@
 ///|
+/// Returns a random horizontal screen-shake offset when the shake timer is active.
 fn shake_x(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
@@ -8,6 +9,7 @@ fn shake_x(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns a random vertical screen-shake offset when the shake timer is active.
 fn shake_y(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
@@ -17,6 +19,7 @@ fn shake_y(game : @types.Game) -> Int {
 }
 
 ///|
+/// Draws a labeled progress meter bar filled to `ratio` of its width, with a percentage label.
 fn draw_meter(
   x : Int,
   y : Int,
@@ -49,6 +52,7 @@ fn draw_meter(
 }
 
 ///|
+/// Draws the gradient sky background with animated glow circles, the street area backing, and a flash overlay when hit.
 fn draw_background(game : @types.Game, ox : Int, oy : Int) -> Unit {
   @raylib.clear_background(@raylib.Color::new(14, 16, 24, 255))
 
@@ -105,6 +109,7 @@ fn draw_background(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws all parade lanes with alternating tone, center dash marks, lane number labels, and a border outline.
 fn draw_lanes(game : @types.Game, ox : Int, oy : Int) -> Unit {
   ignore(game)
 
@@ -164,6 +169,7 @@ fn draw_lanes(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws a firecracker threat as a spinning radiant circle with directional rays, tinting blue when stunned.
 fn draw_firecracker(threat : @types.Threat, ox : Int, oy : Int) -> Unit {
   let cx = threat.x.to_int() + ox
   let cy = threat.y.to_int() + oy
@@ -216,6 +222,7 @@ fn draw_firecracker(threat : @types.Threat, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws an incident threat as a crowd cluster shape, tinting blue and adding an aura ring when stunned.
 fn draw_incident(threat : @types.Threat, ox : Int, oy : Int) -> Unit {
   let cx = threat.x.to_int() + ox
   let cy = threat.y.to_int() + oy
@@ -251,6 +258,7 @@ fn draw_incident(threat : @types.Threat, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Dispatches rendering to the appropriate threat-specific draw function based on kind.
 fn draw_threat(threat : @types.Threat, ox : Int, oy : Int) -> Unit {
   if not(threat.active) {
     return
@@ -264,6 +272,7 @@ fn draw_threat(threat : @types.Threat, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws the lion dance troupe sprite, with color shifts for burst or guard states and a guard radius ring.
 fn draw_troupe(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let cx = game.troupe_x.to_int() + ox
   let cy = game.troupe_y.to_int() + oy
@@ -318,6 +327,7 @@ fn draw_troupe(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws expanding ring animations for active strike and burst action effects around the troupe center.
 fn draw_action_fx(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let cx = game.troupe_x.to_int() + ox
   let cy = game.troupe_y.to_int() + oy
@@ -367,6 +377,7 @@ fn draw_action_fx(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws the HUD panel with score, combo, stats, hype/order/morale meters, and action cooldown readouts.
 fn draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(20, 18, 560, 188, @raylib.Color::new(10, 16, 26, 214))
   @raylib.draw_rectangle_lines(
@@ -508,6 +519,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the keyboard controls reference bar at the bottom of the screen.
 fn draw_controls_legend() -> Unit {
   @raylib.draw_rectangle(
     20,
@@ -534,6 +546,7 @@ fn draw_controls_legend() -> Unit {
 }
 
 ///|
+/// Draws the transient HUD message with fade-out alpha when the message timer is active.
 fn draw_message(game : @types.Game) -> Unit {
   if game.msg_t <= 0.0 {
     return
@@ -565,6 +578,7 @@ fn draw_message(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the title-screen overlay with game name, instructions, and a blinking start prompt.
 fn draw_title_overlay(game : @types.Game) -> Unit {
   let p = @types.pulse(game, 1.2)
   let panel_w = 980
@@ -643,6 +657,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a semi-transparent pause overlay panel with resume and restart instructions.
 fn draw_pause_overlay() -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -683,6 +698,7 @@ fn draw_pause_overlay() -> Unit {
 }
 
 ///|
+/// Draws the game-over overlay with final score, cleared/leaked counts, and a restart prompt.
 fn draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,

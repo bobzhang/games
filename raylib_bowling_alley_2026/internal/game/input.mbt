@@ -1,4 +1,5 @@
 ///|
+/// Handles keyboard, mouse, and touch input on the title screen to start a match.
 fn update_title_input(game : @types.Game) -> Unit {
   let key_start : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
@@ -22,6 +23,7 @@ fn update_title_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles keyboard, mouse, and touch input on the result screen to retry a match.
 fn update_result_input(game : @types.Game) -> Unit {
   let key_retry : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
@@ -46,6 +48,7 @@ fn update_result_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads aim, spin, and power-charge inputs during play and triggers a throw on release.
 fn update_play_input(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyR) {
     start_match(game)

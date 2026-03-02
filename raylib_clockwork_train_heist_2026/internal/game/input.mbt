@@ -1,4 +1,5 @@
 ///|
+/// Handles start input on the title screen via keyboard, mouse click, or touch tap.
 fn update_title_input(game : @types.Game) -> Unit {
   let key_start : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
@@ -14,6 +15,7 @@ fn update_title_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles retry input on the result screen via keyboard, mouse click, or touch tap.
 fn update_result_input(game : @types.Game) -> Unit {
   let key_retry : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
@@ -30,6 +32,7 @@ fn update_result_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads keyboard and touch input during gameplay for movement direction, smoke action, hints, restart, and menu navigation.
 fn update_play_input(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
     go_title(game)

@@ -1,4 +1,5 @@
 ///|
+/// Resets all per-frame input fields to their neutral defaults before each input poll.
 fn clear_frame_input(game : @types.Game) -> Unit {
   game.input_x = 0.0
   game.input_y = 0.0
@@ -9,6 +10,7 @@ fn clear_frame_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Switches the game into touch mode when at least one touch point is detected, and never reverts during a session.
 fn update_touch_mode(game : @types.Game, touch_count : Int) -> Unit {
   if touch_count > 0 {
     game.touch_mode = true
@@ -16,6 +18,7 @@ fn update_touch_mode(game : @types.Game, touch_count : Int) -> Unit {
 }
 
 ///|
+/// Reads keyboard, mouse, and touch input on the title screen and sets `input_start_press` when the player activates the start button.
 fn update_title_input(game : @types.Game) -> Unit {
   clear_frame_input(game)
   update_touch_mode(game, game.touch_count)
@@ -49,6 +52,7 @@ fn update_title_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads keyboard, mouse, and touch d-pad/dash/restart input during play and writes clamped movement axes, dash hold, and restart press into the game state.
 fn update_play_input(game : @types.Game) -> Unit {
   clear_frame_input(game)
   update_touch_mode(game, game.touch_count)
@@ -167,6 +171,7 @@ fn update_play_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads keyboard, mouse, and touch input on the stage-clear screen and sets `input_next_press` for advancing and `input_restart_press` for retrying the current stage.
 fn update_stage_clear_input(game : @types.Game) -> Unit {
   clear_frame_input(game)
   update_touch_mode(game, game.touch_count)
@@ -227,6 +232,7 @@ fn update_stage_clear_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads keyboard, mouse, and touch input on the failure screen and sets `input_restart_press` to retry the stage or `input_next_press` to return to the title.
 fn update_failed_input(game : @types.Game) -> Unit {
   clear_frame_input(game)
   update_touch_mode(game, game.touch_count)
@@ -289,6 +295,7 @@ fn update_failed_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads keyboard, mouse, and touch input on the victory screen and sets `input_next_press` to run again or `input_restart_press` to return to the title.
 fn update_victory_input(game : @types.Game) -> Unit {
   clear_frame_input(game)
   update_touch_mode(game, game.touch_count)

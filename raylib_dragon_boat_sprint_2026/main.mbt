@@ -1,4 +1,5 @@
 ///|
+/// Initialises the window, clamps the delta time, and runs the dragon boat race loop.
 fn main {
   @raylib.set_config_flags(@raylib.FlagMsaa4xHint)
   @raylib.init_window(

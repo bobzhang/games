@@ -1,4 +1,5 @@
 ///|
+/// Deactivates all objects in the pool by resetting their `active` flag and clearing all movement and state fields.
 fn clear_objs(game : @types.Game) -> Unit {
   for obj in game.objs {
     obj.active = false
@@ -15,6 +16,7 @@ fn clear_objs(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all particles in the pool by resetting their `active` flag and clearing all position, velocity, and visual fields.
 fn clear_particles(game : @types.Game) -> Unit {
   for particle in game.particles {
     particle.active = false
@@ -29,6 +31,7 @@ fn clear_particles(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all ripple effects in the pool by resetting their `active` flag and clearing all positional and lifetime fields.
 fn clear_ripples(game : @types.Game) -> Unit {
   for ripple in game.ripples {
     ripple.active = false
@@ -41,6 +44,7 @@ fn clear_ripples(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all trail segments in the pool by resetting their `active` flag and clearing all geometry and lifetime fields.
 fn clear_trails(game : @types.Game) -> Unit {
   for trail in game.trails {
     trail.active = false
@@ -54,6 +58,7 @@ fn clear_trails(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets the player submarine to its default starting position and clears all velocity and timer fields.
 fn reset_hero(hero : @types.Player) -> Unit {
   hero.x = Float::from_int(@types.screen_w / 2)
   hero.y = Float::from_int(@types.screen_h) * 0.72
@@ -66,6 +71,7 @@ fn reset_hero(hero : @types.Player) -> Unit {
 }
 
 ///|
+/// Finds and returns the index of the first inactive object slot, or evicts the slot with the largest Y value if the pool is full.
 fn alloc_obj(game : @types.Game) -> Int {
   for i in 0..<game.objs.length() {
     if not(game.objs[i].active) {
@@ -85,6 +91,7 @@ fn alloc_obj(game : @types.Game) -> Int {
 }
 
 ///|
+/// Finds and returns the index of the first inactive particle slot, or evicts the slot with the shortest remaining lifetime if the pool is full.
 fn alloc_particle(game : @types.Game) -> Int {
   for i in 0..<game.particles.length() {
     if not(game.particles[i].active) {
@@ -104,6 +111,7 @@ fn alloc_particle(game : @types.Game) -> Int {
 }
 
 ///|
+/// Finds and returns the index of the first inactive ripple slot, or evicts the slot with the shortest remaining lifetime if the pool is full.
 fn alloc_ripple(game : @types.Game) -> Int {
   for i in 0..<game.ripples.length() {
     if not(game.ripples[i].active) {
@@ -123,6 +131,7 @@ fn alloc_ripple(game : @types.Game) -> Int {
 }
 
 ///|
+/// Allocates a particle slot and initializes it with the given position, velocity, lifetime, size, and kind.
 fn emit_particle(
   game : @types.Game,
   x : Float,
@@ -145,6 +154,7 @@ fn emit_particle(
 }
 
 ///|
+/// Emits `n` particles of the given kind in random directions from a jittered position around `(x, y)`.
 fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
   for _i in 0..<n {
     emit_particle(
@@ -161,6 +171,7 @@ fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit 
 }
 
 ///|
+/// Allocates a ripple slot and initializes it with the given position, radius, lifetime, and kind.
 fn spawn_ripple(
   game : @types.Game,
   x : Float,
@@ -179,6 +190,7 @@ fn spawn_ripple(
 }
 
 ///|
+/// Allocates an object slot and initializes it with the given kind, position, radius, velocity, cloak flag, and lifetime.
 fn spawn_obj(
   game : @types.Game,
   kind : @types.ObjKind,
@@ -204,6 +216,7 @@ fn spawn_obj(
 }
 
 ///|
+/// Returns a random X coordinate inside the cave corridor at depth `y`, keeping the object radius `r` clear of the cave walls.
 fn object_spawn_x(game : @types.Game, y : Float, r : Float) -> Float {
   let d = @types.depth_at_screen(game, y)
   let c = @types.cave_center(d, game.time_s)
@@ -219,12 +232,14 @@ fn object_spawn_x(game : @types.Game, y : Float, r : Float) -> Float {
 }
 
 ///|
+/// Computes the score gained for a base value scaled by the current combo multiplier.
 fn score_gain(game : @types.Game, base : Int) -> Int {
   let bonus = base * game.combo / 4
   base + bonus
 }
 
 ///|
+/// Adds combo-scaled score for a base reward and updates the all-time best if exceeded.
 fn add_score(game : @types.Game, base : Int) -> Unit {
   let gained = score_gain(game, base)
   game.score = game.score + gained
@@ -234,12 +249,14 @@ fn add_score(game : @types.Game, base : Int) -> Unit {
 }
 
 ///|
+/// Increments the combo counter by one (capped at 18) and resets the combo decay timer.
 fn push_combo(game : @types.Game) -> Unit {
   game.combo = @types.clampi(game.combo + 1, 0, 18)
   game.combo_t = 3.4
 }
 
 ///|
+/// Applies `dmg` hull damage, triggers invulnerability, camera shake, and combo reset; transitions to GameOver if hull drops to zero.
 fn hurt_hero(game : @types.Game, dmg : Float) -> Unit {
   if game.hero.invuln > 0.0 {
     return
@@ -262,6 +279,7 @@ fn hurt_hero(game : @types.Game, dmg : Float) -> Unit {
 }
 
 ///|
+/// Clears all pools, resets the hero, and initializes stage counters, scroll speed, and resource values for the given stage number.
 fn start_new_stage(game : @types.Game, stage : Int) -> Unit {
   clear_objs(game)
   clear_particles(game)
@@ -303,6 +321,7 @@ fn start_new_stage(game : @types.Game, stage : Int) -> Unit {
 }
 
 ///|
+/// Clears all pools and resets all game state fields to their title-screen defaults, including full hull, oxygen, and zeroed counters.
 fn init_title_scene(game : @types.Game) -> Unit {
   clear_objs(game)
   clear_particles(game)
@@ -333,11 +352,13 @@ fn init_title_scene(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Starts a fresh run by loading stage 1 from scratch.
 fn start_run(game : @types.Game) -> Unit {
   start_new_stage(game, 1)
 }
 
 ///|
+/// Spawns 1-3 random obstacles at vertical position `y` using weighted roll tables, with cloaked mines appearing from stage 2 and biased toward oxygen pickups when oxygen is critically low.
 fn spawn_wave(game : @types.Game, y : Float) -> Unit {
   let mut count = 1 + @types.randi(0, 2)
   if game.stage >= 3 {
@@ -436,6 +457,7 @@ fn spawn_wave(game : @types.Game, y : Float) -> Unit {
 }
 
 ///|
+/// Advances the spawn scheduler by `dt` and fires `spawn_wave` for every spacing interval that has been crossed, up to a guard limit of 16 waves per frame.
 fn spawn_step(game : @types.Game, dt : Float) -> Unit {
   game.next_spawn_y = game.next_spawn_y + game.scroll_speed * dt
 
@@ -449,6 +471,7 @@ fn spawn_step(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Activates the sonar pulse, decloaks objects within reveal range, destroys mines within destroy range, and awards score and combo for each destroyed mine.
 fn trigger_sonar(game : @types.Game) -> Unit {
   game.sonar_cd = @types.sonar_cd_time
   game.sonar_t = @types.sonar_time
@@ -482,6 +505,7 @@ fn trigger_sonar(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the normalized dash direction from the current input axes, defaulting to straight up if no directional input is held.
 fn dash_dir(game : @types.Game) -> (Float, Float) {
   let mut dx = game.input_x
   let mut dy = game.input_y
@@ -499,6 +523,7 @@ fn dash_dir(game : @types.Game) -> (Float, Float) {
 }
 
 ///|
+/// Processes sonar and dash actions, applies acceleration and drag from directional input during normal movement, or decays dash velocity while emitting trail effects, then moves and clamps the hero's position.
 fn apply_player_input(game : @types.Game, dt : Float) -> Unit {
   if game.input_sonar_press && game.sonar_cd <= 0.0 {
     trigger_sonar(game)
@@ -557,6 +582,7 @@ fn apply_player_input(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Pushes the hero back inside the cave corridor if they overlap a wall, bounces their velocity, and applies hull damage.
 fn resolve_cave_hit(game : @types.Game) -> Unit {
   let edges = @types.cave_edges(game, game.hero.y)
   let left = edges.0
@@ -576,6 +602,7 @@ fn resolve_cave_hit(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates the object at index `i`, awards combo-scaled score, and emits a particle burst and ripple at the object's position.
 fn hit_obj(
   game : @types.Game,
   i : Int,
@@ -593,6 +620,7 @@ fn hit_obj(
 }
 
 ///|
+/// Steps every active object's position, spin, and lifetime, applies kind-specific motion patterns (mine oscillation, data bob, current pulse), deactivates out-of-bounds objects, and resolves hero-object collisions including current push, dash destruction, and pickup collection.
 fn update_objects(game : @types.Game, dt : Float) -> Unit {
   let hero_dash_hit = game.dash_t > 0.0
 
@@ -729,6 +757,7 @@ fn update_objects(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Steps all active particles, ripples, and trail segments forward in time, expanding ripple radii and deactivating expired elements.
 fn update_particles(game : @types.Game, dt : Float) -> Unit {
   let flow = game.scroll_speed * 0.22
 
@@ -776,6 +805,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Ticks down all cooldown, active-effect, flash, shake, and combo timers, expiring the combo counter when its decay reaches zero.
 fn update_timers(game : @types.Game, dt : Float) -> Unit {
   game.hero.invuln = @types.maxf(0.0, game.hero.invuln - dt)
   game.hero.hurt_t = @types.maxf(0.0, game.hero.hurt_t - dt)
@@ -798,6 +828,7 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Randomly emits small ambient particles from near the cave walls each frame to create the impression of water flow and bioluminescent debris.
 fn emit_ambience(game : @types.Game, dt : Float) -> Unit {
   let mut n = 0
   let tries = @types.clampi((dt * 210.0).to_int(), 1, 8)
@@ -836,6 +867,7 @@ fn emit_ambience(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs the full play-state simulation step: advances scroll speed and distance, handles player input and cave collision, spawns objects, updates all entities, drains oxygen, emits ambient particles, and transitions to StageClear or GameOver when conditions are met.
 fn update_play(game : @types.Game, dt : Float) -> Unit {
   game.scroll_speed = @types.base_scroll +
     Float::from_int(game.stage - 1) * @types.stage_scroll_gain +
@@ -878,6 +910,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Scrolls the title-scene backdrop at a fixed speed, emits ambient particles, and starts the run when the player presses start.
 fn update_title(game : @types.Game, dt : Float) -> Unit {
   game.scroll_speed = 86.0
   game.distance = game.distance + game.scroll_speed * dt * 0.6
@@ -891,6 +924,7 @@ fn update_title(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances the stage-clear celebration timer, gradually slows scroll speed, emits celebratory particles, and transitions to the next stage when the delay elapses or the player presses continue.
 fn update_stage_clear(game : @types.Game, dt : Float) -> Unit {
   game.result_t = game.result_t + dt
   game.scroll_speed = @types.maxf(80.0, game.scroll_speed - 160.0 * dt)
@@ -916,6 +950,7 @@ fn update_stage_clear(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances the game-over result timer, gradually slows scroll speed, continues emitting ambient particles, and returns to the title when the player presses restart.
 fn update_game_over(game : @types.Game, dt : Float) -> Unit {
   game.result_t = game.result_t + dt
   game.scroll_speed = @types.maxf(46.0, game.scroll_speed - 120.0 * dt)

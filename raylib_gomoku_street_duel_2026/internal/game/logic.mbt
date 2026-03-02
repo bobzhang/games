@@ -1,4 +1,5 @@
 ///|
+/// Sets every cell on the board to `Empty`.
 fn clear_board(game : @types.Game) -> Unit {
   for i in 0..<game.board.length() {
     game.board[i] = @types.Empty
@@ -6,6 +7,7 @@ fn clear_board(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets the move history stack length to zero and clears all history entry fields.
 fn clear_history(game : @types.Game) -> Unit {
   game.hist_len = 0
   for i in 0..<game.hist_x.length() {
@@ -16,6 +18,7 @@ fn clear_history(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all sparks and resets their fields to defaults.
 fn clear_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
     spark.active = false
@@ -30,6 +33,7 @@ fn clear_sparks(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Clears the last-move marker coordinates for both the human and the AI.
 fn clear_last_moves(game : @types.Game) -> Unit {
   game.last_hx = -1
   game.last_hy = -1
@@ -38,6 +42,7 @@ fn clear_last_moves(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Appends a move `(x, y, p)` to the history stack, silently capping at the maximum capacity.
 fn push_history(
   game : @types.Game,
   x : Int,
@@ -55,6 +60,7 @@ fn push_history(
 }
 
 ///|
+/// Removes and returns the most recent history entry as `(true, x, y, player)`, or `(false, 0, 0, Empty)` if the stack is empty.
 fn pop_history(game : @types.Game) -> (Bool, Int, Int, @types.Player) {
   if game.hist_len <= 0 {
     return (false, 0, 0, @types.Empty)
@@ -70,6 +76,7 @@ fn pop_history(game : @types.Game) -> (Bool, Int, Int, @types.Player) {
 }
 
 ///|
+/// Counts consecutive cells belonging to `p` starting from `(x+dx, y+dy)` and advancing in direction `(dx, dy)`.
 fn count_one_side(
   game : @types.Game,
   x : Int,
@@ -92,6 +99,7 @@ fn count_one_side(
 }
 
 ///|
+/// Returns true if placing `p` at `(x, y)` forms a five-in-a-row in any of the four line directions.
 fn check_five_from(
   game : @types.Game,
   x : Int,
@@ -114,11 +122,13 @@ fn check_five_from(
 }
 
 ///|
+/// Returns true when the total move count equals the number of board cells.
 fn board_full(game : @types.Game) -> Bool {
   game.move_count >= @types.board_n * @types.board_n
 }
 
 ///|
+/// Places player `p`'s stone at `(x, y)`, records history, emits sparks, checks for a win or draw, and advances the turn; returns false if placement is invalid.
 fn place_stone(game : @types.Game, x : Int, y : Int, p : @types.Player) -> Bool {
   if game.state != @types.Play {
     return false
@@ -184,6 +194,7 @@ fn place_stone(game : @types.Game, x : Int, y : Int, p : @types.Player) -> Bool 
 }
 
 ///|
+/// Pops the most recent history entry, removes that stone from the board, decrements the move count, and emits undo sparks; returns false if history is empty.
 fn undo_round_step(game : @types.Game) -> Bool {
   let pop = pop_history(game)
   if not(pop.0) {
@@ -203,6 +214,7 @@ fn undo_round_step(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Rolls back one full human turn (and the preceding AI move if applicable), restores last-move markers from history, and returns the turn to the human; returns false if undo is not possible.
 fn undo_last_turn(game : @types.Game) -> Bool {
   if game.state != @types.Play {
     @types.set_message(game, "Undo only during play", 0.8)
@@ -256,6 +268,7 @@ fn undo_last_turn(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Moves the cursor one step in `dir`, clamping it within the board boundaries.
 fn move_cursor_once(game : @types.Game, dir : @types.Dir) -> Unit {
   if game.state != @types.Play {
     return
@@ -275,6 +288,7 @@ fn move_cursor_once(game : @types.Game, dir : @types.Dir) -> Unit {
 }
 
 ///|
+/// Handles held-direction key repeat: moves the cursor immediately on direction change, then again at a fixed repeat interval while the key remains held.
 fn update_cursor_hold(
   game : @types.Game,
   dt : Float,
@@ -306,6 +320,7 @@ fn update_cursor_hold(
 }
 
 ///|
+/// Advances each active spark's position and velocity with drag, then deactivates sparks whose lifetime has expired.
 fn update_sparks(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
@@ -326,6 +341,7 @@ fn update_sparks(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances all time-based fields — ui clock, game clock, AI delay, message TTL, shake timer, touch cooldown, and hint TTL — and steps spark simulation.
 fn update_timers(game : @types.Game, dt : Float) -> Unit {
   game.ui_t = game.ui_t + dt
 
@@ -372,6 +388,7 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Clears the board, history, sparks, hint, and last-move markers, then starts a new round with the human or AI moving first based on `human_first`.
 fn reset_round(game : @types.Game, human_first : Bool) -> Unit {
   clear_board(game)
   clear_history(game)

@@ -1,4 +1,5 @@
 ///|
+/// Initializes the window and audio, runs the main game loop, and tears down on exit.
 fn main {
   @raylib.set_config_flags(@raylib.FlagMsaa4xHint)
   @raylib.init_window(

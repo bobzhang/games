@@ -1,4 +1,5 @@
 ///|
+/// Represents a signal relay tower with delivery progress and visual pulse state.
 pub(all) struct Tower {
   mut active : Bool
   mut x : Float
@@ -9,6 +10,7 @@ pub(all) struct Tower {
 }
 
 ///|
+/// Represents an active storm cell that pushes the rover and drains its energy and heat.
 pub(all) struct Storm {
   mut active : Bool
   mut x : Float
@@ -21,6 +23,7 @@ pub(all) struct Storm {
 }
 
 ///|
+/// Top-level state machine for the arctic relay session.
 pub(all) enum GameState {
   Title
   Play
@@ -28,6 +31,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Holds the complete mutable state of one game session.
 pub(all) struct Game {
   towers : Array[Tower]
   storms : Array[Storm]
@@ -72,11 +76,13 @@ pub(all) struct Game {
 }
 
 ///|
+/// Allocates and returns a new inactive Tower with all fields zeroed.
 pub fn Tower::new() -> Tower {
   { active: false, x: 0.0, y: 0.0, need: 0, delivered: 0, pulse_t: 0.0 }
 }
 
 ///|
+/// Allocates and returns a new inactive Storm with all fields zeroed.
 pub fn Storm::new() -> Storm {
   {
     active: false,
@@ -91,6 +97,7 @@ pub fn Storm::new() -> Storm {
 }
 
 ///|
+/// Allocates and returns a new Game initialised to the Title state at stage 1 with full energy and heat.
 pub fn Game::new() -> Game {
   {
     towers: Array::makei(max_towers, fn(_i) { Tower::new() }),

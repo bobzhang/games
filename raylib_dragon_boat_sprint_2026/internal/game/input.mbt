@@ -1,4 +1,5 @@
 ///|
+/// Resets all input fields in the game's input snapshot to their neutral defaults.
 fn clear_input(game : @types.Game) -> Unit {
   game.input.steer = 0.0
   game.input.paddle_pressed = false
@@ -10,6 +11,7 @@ fn clear_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Polls all keyboard keys and writes the current frame's input into the game snapshot.
 fn sample_input(game : @types.Game) -> Unit {
   clear_input(game)
 

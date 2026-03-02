@@ -1,10 +1,12 @@
 ///|
+/// Sets the HUD message string and its display lifetime in seconds.
 fn set_message(game : @types.Game, text : String, ttl : Float) -> Unit {
   game.message = text
   game.message_t = ttl
 }
 
 ///|
+/// Resets every raider slot to its default inactive state.
 fn clear_raiders(game : @types.Game) -> Unit {
   for i in 0..<game.raiders.length() {
     game.raiders[i] = @types.Raider::new()
@@ -12,6 +14,7 @@ fn clear_raiders(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets every flame slot to its default inactive state.
 fn clear_flames(game : @types.Game) -> Unit {
   for i in 0..<game.flames.length() {
     game.flames[i] = @types.Flame::new()
@@ -19,6 +22,7 @@ fn clear_flames(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Zeroes the severity of every breach and resets their raider and ember spawn cooldowns to fresh random values.
 fn clear_breaches(game : @types.Game) -> Unit {
   for breach in game.breaches {
     breach.severity = 0.0
@@ -28,6 +32,7 @@ fn clear_breaches(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Repositions the keeper to the vault room centre and resets all keeper fields including stamina, ink shields, facing direction, and cooldown timers to their starting values.
 fn reset_keeper(game : @types.Game) -> Unit {
   game.keeper.room = @types.vault_room
   game.keeper.x = @types.chamber_center_x()
@@ -43,6 +48,7 @@ fn reset_keeper(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Increases the severity of the specified room's breach by `amount` (clamped to the max), and primes the raider and ember cooldowns if they are nearly expired.
 fn raise_breach(game : @types.Game, room : Int, amount : Float) -> Unit {
   let idx = @types.clampi(room, 0, @types.chamber_count - 1)
   game.breaches[idx].severity = @types.clampf(
@@ -60,6 +66,7 @@ fn raise_breach(game : @types.Game, room : Int, amount : Float) -> Unit {
 }
 
 ///|
+/// Clears all entities, resets the keeper and all session stats to wave-1 starting values, transitions to the Playing state, and raises initial breaches to begin the first wave.
 fn start_new_run(game : @types.Game) -> Unit {
   clear_breaches(game)
   clear_raiders(game)
@@ -86,6 +93,7 @@ fn start_new_run(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Clears all entities, resets the keeper and session state, transitions to the Title state, and sets the title-screen idle message.
 fn return_to_title(game : @types.Game) -> Unit {
   clear_breaches(game)
   clear_raiders(game)
@@ -103,6 +111,7 @@ fn return_to_title(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Transitions to the GameOver state (idempotent), updates best score, and sets the game-over message including the failure reason.
 fn enter_game_over(game : @types.Game, reason : String) -> Unit {
   if game.state == GameOver {
     return
@@ -117,6 +126,7 @@ fn enter_game_over(game : @types.Game, reason : String) -> Unit {
 }
 
 ///|
+/// Returns the index of the first inactive raider slot, or -1 if all slots are occupied.
 fn alloc_raider(game : @types.Game) -> Int {
   for i in 0..<game.raiders.length() {
     if not(game.raiders[i].active) {
@@ -127,6 +137,7 @@ fn alloc_raider(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the index of the first inactive flame slot, or -1 if all slots are occupied.
 fn alloc_flame(game : @types.Game) -> Int {
   for i in 0..<game.flames.length() {
     if not(game.flames[i].active) {
@@ -137,6 +148,7 @@ fn alloc_flame(game : @types.Game) -> Int {
 }
 
 ///|
+/// Allocates a raider slot, positions it near the specified room's breach anchor with wave-scaled HP, and returns whether the spawn succeeded.
 fn spawn_raider_from_room(game : @types.Game, room : Int) -> Bool {
   let slot = alloc_raider(game)
   if slot < 0 {
@@ -173,6 +185,7 @@ fn spawn_raider_from_room(game : @types.Game, room : Int) -> Bool {
 }
 
 ///|
+/// Allocates a flame slot, clamping the position inside chamber bounds and the intensity to [10, 120], and returns whether the spawn succeeded.
 fn spawn_flame(
   game : @types.Game,
   room : Int,
@@ -207,6 +220,7 @@ fn spawn_flame(
 }
 
 ///|
+/// Deactivates a raider, increments the defeat counter, adds the score bonus, and partially replenishes the keeper's ink shield stock.
 fn defeat_raider(game : @types.Game, idx : Int, score_bonus : Int) -> Unit {
   if idx < 0 || idx >= game.raiders.length() || not(game.raiders[idx].active) {
     return
@@ -222,6 +236,7 @@ fn defeat_raider(game : @types.Game, idx : Int, score_bonus : Int) -> Unit {
 }
 
 ///|
+/// Returns the index of the nearest breach with positive severity in the given room within squared distance `max_d2`, or -1 if none qualify.
 fn nearest_open_breach_index(
   game : @types.Game,
   room : Int,
@@ -253,6 +268,7 @@ fn nearest_open_breach_index(
 }
 
 ///|
+/// Returns the index of the nearest active raider in the given room within squared distance `max_d2`, or -1 if none qualify.
 fn nearest_raider_index(
   game : @types.Game,
   room : Int,
@@ -279,6 +295,7 @@ fn nearest_raider_index(
 }
 
 ///|
+/// Returns the index of the nearest active flame in the given room within squared distance `max_d2`, or -1 if none qualify.
 fn nearest_flame_index(
   game : @types.Game,
   room : Int,
@@ -305,6 +322,7 @@ fn nearest_flame_index(
 }
 
 ///|
+/// Moves the keeper by input axes at the appropriate speed, updates the facing direction, clamps position to chamber bounds, and handles room transitions through doorways on the left or right wall.
 fn update_keeper_motion(game : @types.Game, dt : Float) -> Unit {
   let mut speed = @types.keeper_speed
   if game.keeper.extinguisher_mode {
@@ -354,6 +372,7 @@ fn update_keeper_motion(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Decrements the action, shield cooldown, and shield duration timers, and regenerates stamina at the rate appropriate for the keeper's current mode.
 fn update_keeper_timers_and_resources(game : @types.Game, dt : Float) -> Unit {
   if game.keeper.action_cd > 0.0 {
     game.keeper.action_cd = @types.maxf(0.0, game.keeper.action_cd - dt)
@@ -378,6 +397,7 @@ fn update_keeper_timers_and_resources(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Toggles the keeper between extinguisher mode and combat/sealing mode, and posts a brief status message.
 fn toggle_extinguisher_mode(game : @types.Game) -> Unit {
   game.keeper.extinguisher_mode = not(game.keeper.extinguisher_mode)
   if game.keeper.extinguisher_mode {
@@ -388,6 +408,7 @@ fn toggle_extinguisher_mode(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Spends stamina to strike the nearest raider in attack range, dealing wave-scaled damage, panicking it briefly, and defeating it with a score bonus when HP reaches zero.
 fn perform_attack_action(game : @types.Game) -> Unit {
   if game.keeper.stamina < @types.stamina_attack_cost {
     set_message(game, "Stamina too low for a strike.", 0.55)
@@ -426,6 +447,7 @@ fn perform_attack_action(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Spends a seal charge and stamina to reduce the nearest breach's severity by a wave-scaled amount; awards score and replenishes ink shields when the breach is fully sealed.
 fn perform_seal_action(game : @types.Game) -> Unit {
   if game.seal_charges <= 0 {
     set_message(game, "No seal charges left for this wave.", 0.65)
@@ -479,6 +501,7 @@ fn perform_seal_action(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Spends stamina to reduce the nearest flame's intensity by the extinguisher power; awards score and clears the flame slot when intensity reaches zero.
 fn perform_extinguish_action(game : @types.Game) -> Unit {
   if game.keeper.stamina < @types.stamina_extinguish_cost {
     set_message(game, "Stamina too low to use extinguisher.", 0.55)
@@ -517,6 +540,7 @@ fn perform_extinguish_action(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Dispatches the action button press to extinguish, seal, or attack depending on the keeper's current mode and the targets within range.
 fn handle_action_input(game : @types.Game) -> Unit {
   if not(game.input_action_press) || game.keeper.action_cd > 0.0 {
     return
@@ -543,6 +567,7 @@ fn handle_action_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Consumes one ink shield stock to activate a burst that damages all raiders and quenches flames within the shield radius, partially restores scroll integrity, and awards score for each hit.
 fn trigger_ink_shield(game : @types.Game) -> Unit {
   if not(game.input_shield_press) {
     return
@@ -631,6 +656,7 @@ fn trigger_ink_shield(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Advances the wave timer and, when the wave duration elapses, increments the wave counter, replenishes seal charges and ink shields, restores stamina and scroll integrity, awards wave-completion score, and raises two new breaches.
 fn update_wave_progress(game : @types.Game, dt : Float) -> Unit {
   game.wave_t = game.wave_t + dt
 
@@ -679,6 +705,7 @@ fn update_wave_progress(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Fires periodic breach events to raise pressure in random rooms, grows existing breaches by wave-scaled rate, spawns raiders and flames from breaches on their cooldowns, and returns the total scroll integrity drain for this frame.
 fn update_breach_system(game : @types.Game, dt : Float) -> Float {
   game.breach_event_cd = game.breach_event_cd - dt
 
@@ -760,6 +787,7 @@ fn update_breach_system(game : @types.Game, dt : Float) -> Float {
 }
 
 ///|
+/// Moves all active raiders toward their room goal (or away from the keeper when panicked), advances them through doorways, inflicts integrity damage when they reach the vault core, drains keeper stamina on contact, and returns the total integrity loss for this frame.
 fn update_raiders(game : @types.Game, dt : Float) -> Float {
   let mut integrity_loss : Float = 0.0
   let wavef = Float::from_int(game.wave - 1)
@@ -854,6 +882,7 @@ fn update_raiders(game : @types.Game, dt : Float) -> Float {
 }
 
 ///|
+/// Decays flame intensity each frame, feeds adjacent breach severity, spreads child flames when spread cooldown elapses, deactivates spent flames, and returns the total scroll integrity drain weighted by room and flame intensity.
 fn update_flames(game : @types.Game, dt : Float) -> Float {
   let mut integrity_loss : Float = 0.0
 
@@ -915,6 +944,7 @@ fn update_flames(game : @types.Game, dt : Float) -> Float {
 }
 
 ///|
+/// Handles the Title state: starts a new run when any of the action, shield, or restart inputs is pressed.
 fn update_title_state(game : @types.Game) -> Unit {
   if game.input_action_press ||
     game.input_shield_press ||
@@ -924,6 +954,7 @@ fn update_title_state(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Runs one Playing-state tick: handles pause and mode-toggle input, updates keeper timers/motion/abilities, advances wave progress, accumulates integrity loss from breaches/raiders/flames (reduced by active ink shield), and triggers game over when scroll integrity reaches zero.
 fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
   if game.input_pause_press {
     game.state = Paused
@@ -963,6 +994,7 @@ fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Handles the Paused state: resumes play on pause input, returns to title on cancel, and starts a new run on action or restart input.
 fn update_paused_state(game : @types.Game) -> Unit {
   if game.input_pause_press {
     game.state = Playing
@@ -981,6 +1013,7 @@ fn update_paused_state(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles the GameOver state: starts a new run on action or restart input, or returns to title on cancel input.
 fn update_game_over_state(game : @types.Game) -> Unit {
   if game.input_action_press || game.input_restart_press {
     start_new_run(game)

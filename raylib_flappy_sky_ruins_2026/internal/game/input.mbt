@@ -1,4 +1,5 @@
 ///|
+/// Returns true if the active pointer is currently over the title-screen start button.
 fn title_hover(game : @types.Game) -> Bool {
   let r = @types.start_button_rect()
   @types.pointer_on_rect(
@@ -14,6 +15,7 @@ fn title_hover(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Returns true if the active pointer is currently over the result-screen retry button.
 fn result_hover(game : @types.Game) -> Bool {
   let r = @types.retry_button_rect()
   @types.pointer_on_rect(

@@ -1,4 +1,5 @@
 ///|
+/// Zeros all input flags and axes in the game's input state.
 fn clear_input(game : @types.Game) -> Unit {
   game.input.move_x = 0
   game.input.move_y = 0
@@ -11,6 +12,7 @@ fn clear_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads all keyboard input each frame and populates the game's InputState with movement axes and action presses.
 fn update_input(game : @types.Game) -> Unit {
   clear_input(game)
 

@@ -1,4 +1,5 @@
 ///|
+/// Draws `text` horizontally centred on the screen at the given Y position, font size, and colour.
 fn draw_center_text(
   text : String,
   y : Int,
@@ -10,6 +11,7 @@ fn draw_center_text(
 }
 
 ///|
+/// Draws `text` right-aligned so its rightmost pixel lands at `x`, at the given Y position, font size, and colour.
 fn draw_right_text(
   text : String,
   x : Int,
@@ -22,6 +24,7 @@ fn draw_right_text(
 }
 
 ///|
+/// Draws a filled progress bar with a dark background, coloured fill proportional to `value/maxv`, a border, and a left-aligned label inside the bar.
 fn draw_bar(
   x : Int,
   y : Int,
@@ -64,6 +67,7 @@ fn draw_bar(
 }
 
 ///|
+/// Returns a random (x, y) screen-shake offset scaled by the current shake timer, or (0, 0) when no shake is active.
 fn shake_offset(game : @types.Game) -> (Float, Float) {
   if game.shake_t <= 0.0 {
     (0.0, 0.0)
@@ -74,6 +78,7 @@ fn shake_offset(game : @types.Game) -> (Float, Float) {
 }
 
 ///|
+/// Draws the dark gradient sky background, two large animated glow blobs, and 140 parallax-scrolling twinkling stars with camera offset applied.
 fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
@@ -130,6 +135,7 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws scrolling cityscape silhouette buildings along the horizon line above the track, with pulsing neon accent bands on every third building.
 fn draw_horizon(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let base_y = Float::from_int(@types.hud_h) + 20.0
 
@@ -168,6 +174,7 @@ fn draw_horizon(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Renders the procedural road surface row-by-row, drawing off-road gutters in dark tones, the road fill with alternating mid stripes, cyan left and pink right border lines, and dashed lane dividers.
 fn draw_track(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let step = 12
 
@@ -263,6 +270,7 @@ fn draw_track(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Returns the primary display colour for a given object kind.
 fn obj_col(kind : @types.ObjKind) -> @raylib.Color {
   match kind {
     @types.Scout => @raylib.Color::new(255, 138, 198, 255)
@@ -276,6 +284,7 @@ fn obj_col(kind : @types.ObjKind) -> @raylib.Color {
 }
 
 ///|
+/// Draws a Scout enemy as a forward-pointing triangle hull with two dark wheel circles near the rear.
 fn draw_scout(
   o : @types.Obj,
   col : @raylib.Color,
@@ -306,6 +315,7 @@ fn draw_scout(
 }
 
 ///|
+/// Draws a Spinner enemy as a solid circle with a pulsing ring outline and a bright central highlight dot.
 fn draw_spinner(
   o : @types.Obj,
   col : @raylib.Color,
@@ -333,6 +343,7 @@ fn draw_spinner(
 }
 
 ///|
+/// Draws a Tank enemy as a large filled rectangle hull with a dark outline and a semi-transparent turret block across the mid section.
 fn draw_tank(
   o : @types.Obj,
   col : @raylib.Color,
@@ -367,6 +378,7 @@ fn draw_tank(
 }
 
 ///|
+/// Draws a GearWall barrier as a wide semi-transparent rectangle with a pulsing neon centre stripe.
 fn draw_gear_wall(
   o : @types.Obj,
   col : @raylib.Color,
@@ -394,6 +406,7 @@ fn draw_gear_wall(
 }
 
 ///|
+/// Draws a pickup item as a pulsing glow circle with a ring outline and an inner icon: "$" for Coin, a canister shape for Coolant, or "E" for EmpCell.
 fn draw_pickup(
   o : @types.Obj,
   col : @raylib.Color,
@@ -455,6 +468,7 @@ fn draw_pickup(
 }
 
 ///|
+/// Iterates all active objects, applies cloaking transparency where applicable, dispatches to the per-kind draw function, and draws a small HP bar above hostile enemies.
 fn draw_objs(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for o in game.objs {
     if not(o.active) {
@@ -501,6 +515,7 @@ fn draw_objs(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws each active projectile as a coloured dot (teal for player, violet/amber/pink for enemy types) with a short velocity-aligned trail line.
 fn draw_shots(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for s in game.shots {
     if not(s.active) {
@@ -539,6 +554,7 @@ fn draw_shots(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws all active spark particles as coloured circles that fade out as their life decreases; three visual kinds use teal, pink, and violet tones.
 fn draw_spark_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for s in game.sparks {
     if not(s.active) {
@@ -564,6 +580,7 @@ fn draw_spark_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws all active shock-ring effects as expanding circle outlines that fade out as their life decreases; three kinds use cyan, pink, and violet colours.
 fn draw_ring_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for r in game.rings {
     if not(r.active) {
@@ -589,6 +606,7 @@ fn draw_ring_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws all active ghost after-images as fading rotated rectangles in cyan (dash) or pale-blue (default) tones.
 fn draw_ghost_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for g in game.ghosts {
     if not(g.active) {
@@ -612,6 +630,7 @@ fn draw_ghost_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws the player car as a tilted rectangle body with a cockpit cutout, front headlight, twin engine flares, muzzle flashes, a dash aura ring, and an invulnerability flicker shield; body tints red while the hurt timer is active.
 fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let x = game.hero.x + cam_x
   let y = game.hero.y + cam_y
@@ -704,6 +723,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws the expanding EMP pulse circle centred on the player, fading out as the pulse radius grows toward `emp_radius`.
 fn draw_emp_wave(game : @types.Game) -> Unit {
   if game.emp_t <= 0.0 {
     return
@@ -722,6 +742,7 @@ fn draw_emp_wave(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns "READY" when the cooldown is zero, or a percentage string showing how far through the cooldown the ability is.
 fn cooldown_text(cd : Float, total : Float) -> String {
   if cd <= 0.0 {
     "READY"
@@ -731,6 +752,7 @@ fn cooldown_text(cd : Float, total : Float) -> String {
 }
 
 ///|
+/// Draws the top HUD panel with armor and heat bars, dash and EMP cooldown readouts, score/best/stage/coins/kills text, a distance progress bar, and the active combo label.
 fn draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -903,6 +925,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a touch-button rectangle with a dark fill, cyan or violet border depending on `primary`, and centred label text; border and fill opacity increase when the button is `active`.
 fn draw_btn(
   rect : (Float, Float, Float, Float),
   text : String,
@@ -942,6 +965,7 @@ fn draw_btn(
 }
 
 ///|
+/// Draws the on-screen D-pad and action buttons (fire, dash, EMP) for touch/mobile play, highlighting each button while its corresponding input is held.
 fn draw_touch(game : @types.Game) -> Unit {
   let left = @types.btn_left_rect()
   let right = @types.btn_right_rect()
@@ -961,6 +985,7 @@ fn draw_touch(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a fading hint banner at the bottom of the screen during the first 16 seconds of play explaining the dash and EMP mechanics.
 fn draw_play_hint(game : @types.Game) -> Unit {
   if game.hint_t > 16.0 {
     return
@@ -986,6 +1011,7 @@ fn draw_play_hint(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the Title screen overlay with game title, subtitle text, control instructions, a hoverable start button, and the best-score display.
 fn draw_title_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
@@ -1099,6 +1125,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the StageClear panel that slides in with an eased animation, showing the completed stage number and a continue prompt.
 fn draw_stage_clear(game : @types.Game) -> Unit {
   let t = @types.ease_out_cubic(
     @types.clampf(game.result_t / @types.stage_clear_wait, 0.0, 1.0),
@@ -1142,6 +1169,7 @@ fn draw_stage_clear(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the GameOver overlay with a dark tint, "CHASE LOST" headline, final score and stat summary, and a hoverable retry button.
 fn draw_game_over(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
@@ -1219,6 +1247,7 @@ fn draw_game_over(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Composites the play-world layer in depth order: ghost after-images, rings, objects, shots, spark particles, and then the player car.
 fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   draw_ghost_fx(game, cam_x, cam_y)
   draw_ring_fx(game, cam_x, cam_y)

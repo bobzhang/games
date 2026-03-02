@@ -1,4 +1,5 @@
 ///|
+/// Resets all input fields to their neutral/unpressed defaults.
 fn clear_input(game : @types.Game) -> Unit {
   game.input.move_x = 0.0
   game.input.move_y = 0.0
@@ -10,6 +11,7 @@ fn clear_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads keyboard state for movement, sprint, interact, smoke, and menu actions, then normalises the movement vector.
 fn update_input(game : @types.Game) -> Unit {
   clear_input(game)
 

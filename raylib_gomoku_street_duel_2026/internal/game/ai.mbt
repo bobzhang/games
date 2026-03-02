@@ -1,4 +1,5 @@
 ///|
+/// Returns true if any cell within Manhattan radius `r` of `(x, y)` is occupied.
 fn has_neighbor(game : @types.Game, x : Int, y : Int, r : Int) -> Bool {
   for yy in (y - r)..<=(y + r) {
     for xx in (x - r)..<=(x + r) {
@@ -16,6 +17,7 @@ fn has_neighbor(game : @types.Game, x : Int, y : Int, r : Int) -> Bool {
 }
 
 ///|
+/// Counts consecutive cells belonging to `p` from `(x, y)` in direction `(dx, dy)` and returns `(count, 1)` if the next cell is empty or `(count, 0)` otherwise.
 fn count_chain_and_open(
   game : @types.Game,
   x : Int,
@@ -45,6 +47,7 @@ fn count_chain_and_open(
 }
 
 ///|
+/// Returns a threat score for a line segment of length `total` with `open` open ends, using predefined thresholds for four, three, two, and one in a row.
 fn line_pattern_score(total : Int, open : Int) -> Int {
   if total >= 4 {
     220000
@@ -66,6 +69,7 @@ fn line_pattern_score(total : Int, open : Int) -> Int {
 }
 
 ///|
+/// Evaluates the threat score for player `p` along one axis direction `(dx, dy)` from `(x, y)` by combining counts on both sides with `line_pattern_score`.
 fn score_dir(
   game : @types.Game,
   x : Int,
@@ -84,6 +88,7 @@ fn score_dir(
 }
 
 ///|
+/// Returns a heuristic placement score for player `p` at empty cell `(x, y)`, summing directional threat scores and a center-proximity bonus; returns -1 if the cell is occupied.
 fn score_cell_for(
   game : @types.Game,
   x : Int,
@@ -109,6 +114,7 @@ fn score_cell_for(
 }
 
 ///|
+/// Returns true if placing player `p` at `(x, y)` would immediately complete a five-in-a-row.
 fn would_win_if_place(
   game : @types.Game,
   x : Int,
@@ -126,6 +132,7 @@ fn would_win_if_place(
 }
 
 ///|
+/// Returns `(found, x, y, score)` for the highest-scoring empty cell for player `p`, prioritising immediate wins, blocking the opponent's wins, and combined offensive/defensive heuristics.
 fn best_move_for(
   game : @types.Game,
   p : @types.Player,
@@ -188,6 +195,7 @@ fn best_move_for(
 }
 
 ///|
+/// Executes the AI's turn by selecting and placing the best move when it is the AI's turn and the delay timer has expired; declares a draw if no move is available.
 fn ai_step(game : @types.Game) -> Unit {
   if game.state != @types.Play || game.turn != @types.AI || game.ai_delay > 0.0 {
     return
@@ -212,6 +220,7 @@ fn ai_step(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Spends one hint charge to show the AI-recommended move for the human player, moves the cursor there, and emits hint sparks; returns true on success.
 fn use_hint(game : @types.Game) -> Bool {
   if game.state != @types.Play || game.turn != @types.Human {
     return false

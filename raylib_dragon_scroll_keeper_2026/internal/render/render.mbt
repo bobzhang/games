@@ -1,4 +1,5 @@
 ///|
+/// Draws `text` horizontally centred on the screen at the given Y position, font size, and colour.
 fn draw_center_text(
   text : String,
   y : Int,
@@ -10,6 +11,7 @@ fn draw_center_text(
 }
 
 ///|
+/// Returns a copy of colour `c` with its alpha channel replaced by `alpha` (clamped to [0, 255]).
 fn alpha_col(c : @raylib.Color, alpha : Int) -> @raylib.Color {
   @raylib.Color::new(
     c.r.to_int(),
@@ -20,6 +22,7 @@ fn alpha_col(c : @raylib.Color, alpha : Int) -> @raylib.Color {
 }
 
 ///|
+/// Returns the background fill colour for the given room index: warm red-brown for room 0, cool dark-blue for room 1, and deep purple for all others.
 fn room_fill_color(room : Int) -> @raylib.Color {
   if room == 0 {
     @raylib.Color::new(64, 34, 24, 255)
@@ -31,6 +34,7 @@ fn room_fill_color(room : Int) -> @raylib.Color {
 }
 
 ///|
+/// Draws a pulsing vertical gradient background and 120 twinkling star particles scattered across the screen.
 fn draw_background(game : @types.Game) -> Unit {
   let pulse : Float = 0.5 +
     0.5 * Float::from_int((game.time_s * 60.0).to_int() % 120) / 120.0
@@ -56,6 +60,7 @@ fn draw_background(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the current chamber as a filled rectangle with a border and room-name label, plus cyan doorway indicators and arrow glyphs for any adjacent rooms.
 fn draw_chamber_shell(game : @types.Game) -> Unit {
   let x = @types.chamber_left.to_int()
   let y = @types.chamber_top.to_int()
@@ -124,6 +129,7 @@ fn draw_chamber_shell(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the dragon scroll vault core as a pulsing glow halo, a solid blue circle, an outer ring, and a "Dragon Scroll" label; only rendered when the keeper is in the vault room.
 fn draw_vault_core(game : @types.Game) -> Unit {
   if game.keeper.room != @types.vault_room {
     return
@@ -152,6 +158,7 @@ fn draw_vault_core(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws each breach in the current room: an orange-red glow circle scaled to severity with a percentage label when open, or a green sealed ring when severity is zero.
 fn draw_breaches(game : @types.Game) -> Unit {
   for breach in game.breaches {
     if breach.room != game.keeper.room {
@@ -203,6 +210,7 @@ fn draw_breaches(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws each active flame in the current room as two overlapping circles — an outer orange halo and a brighter inner core — both sized and coloured by the flame's intensity.
 fn draw_flames(game : @types.Game) -> Unit {
   for flame in game.flames {
     if not(flame.active) || flame.room != game.keeper.room {
@@ -226,6 +234,7 @@ fn draw_flames(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws each active raider in the current room as a red circle with a bright ring outline, brightening when panicked, and a small HP bar above.
 fn draw_raiders(game : @types.Game) -> Unit {
   for raider in game.raiders {
     if not(raider.active) || raider.room != game.keeper.room {
@@ -261,6 +270,7 @@ fn draw_raiders(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the keeper as a coloured circle (teal in extinguisher mode, blue otherwise) with an outline, a facing direction line, an extinguisher range indicator when in that mode, and an ink-shield ring while the shield is active.
 fn draw_keeper(game : @types.Game) -> Unit {
   let x = game.keeper.x.to_int()
   let y = game.keeper.y.to_int()
@@ -316,6 +326,7 @@ fn draw_keeper(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the count of active raiders currently in the specified room.
 fn count_raiders_in_room(game : @types.Game, room : Int) -> Int {
   let mut count = 0
   for raider in game.raiders {
@@ -327,6 +338,7 @@ fn count_raiders_in_room(game : @types.Game, room : Int) -> Int {
 }
 
 ///|
+/// Returns the count of active flames currently in the specified room.
 fn count_flames_in_room(game : @types.Game, room : Int) -> Int {
   let mut count = 0
   for flame in game.flames {
@@ -338,6 +350,7 @@ fn count_flames_in_room(game : @types.Game, room : Int) -> Int {
 }
 
 ///|
+/// Draws the top-left minimap panel showing all rooms as small labelled cells with per-room breach severity bars and raider/flame counts; the current room is highlighted with a brighter border.
 fn draw_room_minimap(game : @types.Game) -> Unit {
   let panel_x = 24
   let panel_y = 20
@@ -430,6 +443,7 @@ fn draw_room_minimap(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a labelled meter bar with a dark background, coloured fill proportional to `ratio`, a border, and a right-side value text string.
 fn draw_meter(
   x : Int,
   y : Int,
@@ -467,6 +481,7 @@ fn draw_meter(
 }
 
 ///|
+/// Draws the bottom HUD panel with scroll integrity and stamina meters, ink shield cooldown bar, wave and time display, seal charges, ink shield stock, score/best, current mode, and keyboard hint text.
 fn draw_hud(game : @types.Game) -> Unit {
   let panel_x = 24
   let panel_y = @types.screen_h - 168
@@ -586,6 +601,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the current HUD message as a translucent banner above the HUD panel, fading in opacity with remaining message lifetime.
 fn draw_message(game : @types.Game) -> Unit {
   if game.message_t <= 0.0 {
     return
@@ -615,6 +631,7 @@ fn draw_message(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the Title screen overlay with a semi-transparent tint, game title, thematic subtitles, and control hints.
 fn draw_title_overlay() -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -658,6 +675,7 @@ fn draw_title_overlay() -> Unit {
 }
 
 ///|
+/// Draws a dark tinted overlay with a "PAUSED" headline and resume/restart control hints.
 fn draw_paused_overlay() -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -676,6 +694,7 @@ fn draw_paused_overlay() -> Unit {
 }
 
 ///|
+/// Draws the GameOver overlay with a dark tint, "ARCHIVE LOST" headline, wave/score/best summary, defeat statistics, and restart or title prompts.
 fn draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,

@@ -1,20 +1,24 @@
 ///|
+/// Returns a random candy kind index in the range `[0, candy_kinds)`.
 fn random_kind() -> Int {
   @raylib.get_random_value(0, @types.candy_kinds - 1)
 }
 
 ///|
+/// Deselects the currently selected board cell.
 fn clear_selection(game : @types.Game) -> Unit {
   game.selected = false
 }
 
 ///|
+/// Sets the HUD message text and resets its display timer.
 fn set_message(game : @types.Game, text : String) -> Unit {
   game.message = text
   game.message_t = @types.message_ttl_max
 }
 
 ///|
+/// Clears all match marks and pending special-spawn flags across the board.
 fn clear_marks(game : @types.Game) -> Unit {
   for i in 0..<@types.board_cells {
     game.marks[i] = false
@@ -23,6 +27,7 @@ fn clear_marks(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets all cell flash timers to zero.
 fn clear_effects(game : @types.Game) -> Unit {
   for i in 0..<@types.board_cells {
     game.flash[i] = 0.0
@@ -30,6 +35,7 @@ fn clear_effects(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Merges two special-candy markers, preferring bomb when types differ.
 fn merge_special(a : Int, b : Int) -> Int {
   if a == @types.special_bomb || b == @types.special_bomb {
     @types.special_bomb
@@ -45,6 +51,7 @@ fn merge_special(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Marks a horizontal run of `len` cells starting at `(start_x, y)` and queues a special spawn for runs of 4 or 5+.
 fn mark_horizontal_run(
   game : @types.Game,
   y : Int,
@@ -68,6 +75,7 @@ fn mark_horizontal_run(
 }
 
 ///|
+/// Marks a vertical run of `len` cells starting at `(x, start_y)` and queues a special spawn for runs of 4 or 5+.
 fn mark_vertical_run(
   game : @types.Game,
   x : Int,
@@ -91,6 +99,7 @@ fn mark_vertical_run(
 }
 
 ///|
+/// Scans all rows and columns for runs of 3+ matching candies, marks them, and returns the total count of marked cells.
 fn scan_and_mark_matches(game : @types.Game) -> Int {
   clear_marks(game)
 
@@ -148,6 +157,7 @@ fn scan_and_mark_matches(game : @types.Game) -> Int {
 }
 
 ///|
+/// Expands marks through any triggered special candies (row, column, or bomb) until no new cells are added.
 fn expand_special_marks(game : @types.Game) -> Unit {
   let mut changed = true
 
@@ -203,6 +213,7 @@ fn expand_special_marks(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Removes all marked cells from the board, decrementing jelly counters, and returns the count of removed candies.
 fn remove_marked_cells(game : @types.Game) -> Int {
   let mut removed = 0
 
@@ -239,6 +250,7 @@ fn remove_marked_cells(game : @types.Game) -> Int {
 }
 
 ///|
+/// Drops existing candies downward to fill gaps in each column and spawns new random candies at the top.
 fn collapse_and_refill(game : @types.Game) -> Unit {
   let col_kind : Array[Int] = Array::make(@types.board_rows, -1)
   let col_special : Array[Int] = Array::make(
@@ -276,6 +288,7 @@ fn collapse_and_refill(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns true if the given kinds array contains any horizontal or vertical run of 3+ matching candies.
 fn has_any_match(kinds : Array[Int]) -> Bool {
   for y in 0..<@types.board_rows {
     let mut x = 0
@@ -321,6 +334,7 @@ fn has_any_match(kinds : Array[Int]) -> Bool {
 }
 
 ///|
+/// Returns true if swapping two board cells would produce at least one match.
 fn would_swap_match(
   kinds : Array[Int],
   x0 : Int,
@@ -337,6 +351,7 @@ fn would_swap_match(
 }
 
 ///|
+/// Returns true if any adjacent pair of cells can be swapped to produce a match.
 fn has_possible_swap(kinds : Array[Int]) -> Bool {
   for y in 0..<@types.board_rows {
     for x in 0..<@types.board_cols {
@@ -352,6 +367,7 @@ fn has_possible_swap(kinds : Array[Int]) -> Bool {
 }
 
 ///|
+/// Randomly shuffles board candies until a valid board with no initial matches but at least one possible swap is found, returning true on success.
 fn shuffle_board(game : @types.Game) -> Bool {
   let bucket : Array[Int] = Array::make(@types.board_cells, 0)
 
@@ -382,6 +398,7 @@ fn shuffle_board(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Randomly assigns jelly markers to cells according to the level's target count.
 fn assign_jelly_targets(game : @types.Game) -> Unit {
   for i in 0..<@types.board_cells {
     game.jelly[i] = 0
@@ -406,6 +423,7 @@ fn assign_jelly_targets(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Fills the board with random candies while avoiding pre-existing runs of 3+ in any direction.
 fn fill_board_without_initial_matches(game : @types.Game) -> Unit {
   for y in 0..<@types.board_rows {
     for x in 0..<@types.board_cols {
@@ -447,6 +465,7 @@ fn fill_board_without_initial_matches(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets jelly targets and fills the board with a valid starting layout that has at least one possible swap.
 fn prepare_level_board(game : @types.Game) -> Unit {
   assign_jelly_targets(game)
   clear_effects(game)
@@ -465,6 +484,7 @@ fn prepare_level_board(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets all run-wide state back to level 1 and starts a new board.
 fn restart_run(game : @types.Game) -> Unit {
   game.level = 1
   game.score = 0
@@ -481,6 +501,7 @@ fn restart_run(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Advances to the next level, restores the move budget, and prepares a fresh board.
 fn start_next_level(game : @types.Game) -> Unit {
   game.level = game.level + 1
   game.moves_left = @types.moves_base +
@@ -496,6 +517,7 @@ fn start_next_level(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Restarts the current level, resetting moves and regenerating the board without changing the score.
 fn restart_level(game : @types.Game) -> Unit {
   game.moves_left = @types.moves_base +
     (game.level - 1) * @types.moves_level_bonus
@@ -510,6 +532,7 @@ fn restart_level(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Transitions to the LevelClear state and updates the best score if needed.
 fn begin_level_clear(game : @types.Game) -> Unit {
   game.state = LevelClear
   if game.score > game.best_score {
@@ -519,6 +542,7 @@ fn begin_level_clear(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Transitions to the GameOver state and updates the best score if needed.
 fn begin_game_over(game : @types.Game) -> Unit {
   game.state = GameOver
   if game.score > game.best_score {
@@ -528,6 +552,7 @@ fn begin_game_over(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Finds the first valid swap that produces a match and stores it as the active hint, returning true if found.
 fn find_hint(game : @types.Game) -> Bool {
   for y in 0..<@types.board_rows {
     for x in 0..<@types.board_cols {
@@ -559,6 +584,7 @@ fn find_hint(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Records the two cells involved in the last successful swap and starts their flash animation timer.
 fn set_swap_flash(
   game : @types.Game,
   x0 : Int,
@@ -574,6 +600,7 @@ fn set_swap_flash(
 }
 
 ///|
+/// Repeatedly scans, expands, removes, and refills until no more matches exist, accumulating score per chain step.
 fn run_cascade(game : @types.Game) -> Int {
   let mut chain = 0
 
@@ -603,6 +630,7 @@ fn run_cascade(game : @types.Game) -> Int {
 }
 
 ///|
+/// Attempts to swap two adjacent cells; runs the cascade if the swap creates a match, returns true on success.
 fn attempt_swap(
   game : @types.Game,
   x0 : Int,
@@ -660,6 +688,7 @@ fn attempt_swap(
 }
 
 ///|
+/// Selects a cell on first tap or attempts a swap if an adjacent cell is already selected.
 fn select_or_swap(game : @types.Game, x : Int, y : Int) -> Unit {
   if not(@types.in_board(x, y)) {
     return
@@ -692,12 +721,14 @@ fn select_or_swap(game : @types.Game, x : Int, y : Int) -> Unit {
 }
 
 ///|
+/// Moves the keyboard cursor by `(dx, dy)`, clamped to valid board bounds.
 fn move_cursor(game : @types.Game, dx : Int, dy : Int) -> Unit {
   game.cursor_x = @types.clampi(game.cursor_x + dx, 0, @types.board_cols - 1)
   game.cursor_y = @types.clampi(game.cursor_y + dy, 0, @types.board_rows - 1)
 }
 
 ///|
+/// Activates the next hint or shuffles the board if no valid hint exists.
 fn use_hint(game : @types.Game) -> Unit {
   if find_hint(game) {
     set_message(game, "Try this swap.")
@@ -708,6 +739,7 @@ fn use_hint(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Shuffles the board on player request, deducting one move; triggers game over if no valid arrangement is found.
 fn try_manual_shuffle(game : @types.Game) -> Unit {
   if shuffle_board(game) {
     game.moves_left = @types.clampi(game.moves_left - 1, 0, 9999)
@@ -721,6 +753,7 @@ fn try_manual_shuffle(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Advances all per-frame timers including flash, hint, message, touch cooldown, and swap flash.
 fn update_timers(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<@types.board_cells {
     game.flash[i] = @types.maxf(0.0, game.flash[i] - dt * 1.4)

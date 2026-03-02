@@ -1,4 +1,5 @@
 ///|
+/// Draws a labeled button with a caption sub-text, highlighting on hover and dimming when disabled.
 fn draw_button(
   label : String,
   caption : String,
@@ -53,6 +54,7 @@ fn draw_button(
 }
 
 ///|
+/// Draws the gradient background with ambient glow circles.
 fn draw_background() -> Unit {
   @raylib.clear_background(@raylib.Color::new(14, 20, 34, 255))
 
@@ -84,6 +86,7 @@ fn draw_background() -> Unit {
 }
 
 ///|
+/// Draws the decorative border and background panel behind the candy board.
 fn draw_board_frame() -> Unit {
   let bx = @types.board_x()
   let by = @types.board_y()
@@ -109,6 +112,7 @@ fn draw_board_frame() -> Unit {
 }
 
 ///|
+/// Draws the visual indicator for a special candy (row stripe, column stripe, or bomb ring) at the given center pixel.
 fn draw_special_overlay(cx : Int, cy : Int, sp : Int) -> Unit {
   if sp == @types.special_none {
     return
@@ -142,6 +146,7 @@ fn draw_special_overlay(cx : Int, cy : Int, sp : Int) -> Unit {
 }
 
 ///|
+/// Draws each board cell including its candy, jelly underlay, special overlay, and flash effect.
 fn draw_board_cells(game : @types.Game) -> Unit {
   let bx = @types.board_x()
   let by = @types.board_y()
@@ -212,6 +217,7 @@ fn draw_board_cells(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the cursor outline, selected-cell highlight, animated hint markers, and swap flash overlay.
 fn draw_selection(game : @types.Game) -> Unit {
   let bx = @types.board_x()
   let by = @types.board_y()
@@ -317,6 +323,7 @@ fn draw_selection(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the right-side UI panel with level, score, move/jelly counters, and action buttons.
 fn draw_side_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.panel_x(),
@@ -472,6 +479,7 @@ fn draw_side_panel(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the fading HUD message banner above the board when a message is active.
 fn draw_message(game : @types.Game) -> Unit {
   if game.message_t <= 0.0 {
     return
@@ -504,6 +512,7 @@ fn draw_message(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the full-screen title overlay with game name, instructions, and start button.
 fn draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -558,6 +567,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the level-clear or game-over overlay with score summary and the appropriate action button.
 fn draw_result_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,

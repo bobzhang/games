@@ -1,4 +1,5 @@
 ///|
+/// Activates the first inactive bullet slot and launches it from the ship's nose.
 fn fire_bullet(game : @types.Game) -> Unit {
   for bullet in game.bullets {
     if not(bullet.active) {
@@ -21,6 +22,7 @@ fn fire_bullet(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads rotation, thrust, and fire inputs and updates ship kinematics each frame.
 fn update_ship(game : @types.Game, dt : Float) -> Unit {
   let rotate_speed : Float = 4.5
   let thrust : Float = 180.0

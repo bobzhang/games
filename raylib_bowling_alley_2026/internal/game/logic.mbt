@@ -1,10 +1,12 @@
 ///|
+/// Sets the on-screen status message and starts its display timer.
 fn set_message(game : @types.Game, msg : String, ttl : Float) -> Unit {
   game.message = msg
   game.message_t = ttl
 }
 
 ///|
+/// Deactivates and zeroes every spark in the particle pool.
 fn clear_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
     spark.active = false
@@ -19,6 +21,7 @@ fn clear_sparks(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Activates the first inactive spark slot with the supplied position, velocity, lifetime, and kind.
 fn spawn_spark(
   game : @types.Game,
   x : Float,
@@ -47,6 +50,7 @@ fn spawn_spark(
 }
 
 ///|
+/// Emits `n` sparks with random positions and velocities around the given point.
 fn burst_sparks(
   game : @types.Game,
   x : Float,
@@ -69,6 +73,7 @@ fn burst_sparks(
 }
 
 ///|
+/// Advances each active spark position, applies drag, and deactivates expired ones.
 fn update_sparks(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
@@ -89,6 +94,7 @@ fn update_sparks(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Returns the bowling ball to its start position with zeroed velocity and spin.
 fn reset_ball(game : @types.Game) -> Unit {
   game.ball_x = @types.ball_start_x
   game.ball_y = @types.ball_start_y
@@ -100,6 +106,7 @@ fn reset_ball(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Positions all ten pins in standard triangular formation and zeroes their motion state.
 fn reset_full_rack(game : @types.Game) -> Unit {
   let cx : Float = @types.ball_start_x
   let mut idx : Int = 0
@@ -138,6 +145,7 @@ fn reset_full_rack(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the number of pins that are still standing.
 fn count_standing(game : @types.Game) -> Int {
   let mut n : Int = 0
   for pin in game.pins {
@@ -149,6 +157,7 @@ fn count_standing(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns true when all knocked-down pins have slowed below the settle threshold.
 fn pins_are_quiet(game : @types.Game) -> Bool {
   for pin in game.pins {
     if pin.standing {
@@ -165,6 +174,7 @@ fn pins_are_quiet(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Resets the ball and optionally the full rack, then allows the player to throw.
 fn prepare_roll(game : @types.Game, reset_rack : Bool) -> Unit {
   if reset_rack {
     reset_full_rack(game)
@@ -183,6 +193,7 @@ fn prepare_roll(game : @types.Game, reset_rack : Bool) -> Unit {
 }
 
 ///|
+/// Zeroes all frame counters, stat totals, and the roll log for a new match.
 fn reset_match_stats(game : @types.Game) -> Unit {
   game.frame = 0
   game.roll_in_frame = 0
@@ -200,6 +211,7 @@ fn reset_match_stats(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets all match stats, clears sparks, and begins the first roll of frame 1.
 fn start_match(game : @types.Game) -> Unit {
   reset_match_stats(game)
   game.state = Play
@@ -212,6 +224,7 @@ fn start_match(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Recomputes the final score, transitions to the result screen, and shows an end message.
 fn finalize_match(game : @types.Game) -> Unit {
   recompute_score(game)
   game.state = Result
@@ -228,6 +241,7 @@ fn finalize_match(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Topples pin `i` with the given impulse, spawns a spark burst, and triggers a screen shake.
 fn knock_pin(
   game : @types.Game,
   i : Int,
@@ -254,6 +268,7 @@ fn knock_pin(
 }
 
 ///|
+/// Launches the ball from the current aim and power settings; returns false when throwing is not allowed.
 fn throw_ball(game : @types.Game) -> Bool {
   if game.state != Play || not(game.can_throw) {
     return false
@@ -278,6 +293,7 @@ fn throw_ball(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Records a completed roll, updates frame progression and spare/strike counters, and prepares the next delivery.
 fn on_roll_scored(game : @types.Game, knocked : Int) -> Unit {
   let k : Int = if knocked < 0 {
     0
@@ -391,6 +407,7 @@ fn on_roll_scored(game : @types.Game, knocked : Int) -> Unit {
 }
 
 ///|
+/// Moves the live ball, applies spin drift and lane drag, and detects lane-edge and slow-stop conditions.
 fn update_ball(game : @types.Game, dt : Float) -> Unit {
   if not(game.ball_live) {
     return
@@ -429,6 +446,7 @@ fn update_ball(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Tests the live ball against every standing pin and knocks any pin within collision range.
 fn collide_ball_pins(game : @types.Game) -> Unit {
   if not(game.ball_live) {
     return
@@ -479,6 +497,7 @@ fn collide_ball_pins(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Integrates velocity and angular motion of knocked-down pins and clamps them within lane bounds.
 fn update_pin_motion(game : @types.Game, dt : Float) -> Unit {
   for pin in game.pins {
     if pin.standing {
@@ -516,6 +535,7 @@ fn update_pin_motion(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Propagates fast-moving knocked pins into nearby standing pins to simulate chain reactions.
 fn chain_pin_hits(game : @types.Game) -> Unit {
   let hit : Float = @types.pin_radius * 2.0
   let hit2 : Float = hit * hit
@@ -560,6 +580,7 @@ fn chain_pin_hits(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Drives the full play-state simulation: timers, ball physics, collisions, and roll resolution.
 fn update_play(game : @types.Game, dt : Float) -> Unit {
   game.game_t = game.game_t + dt
   game.ui_t = game.ui_t + dt

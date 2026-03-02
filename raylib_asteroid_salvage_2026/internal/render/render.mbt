@@ -1,4 +1,5 @@
 ///|
+/// Draws a static pattern of dark pixel stars across the screen background.
 fn draw_starfield() -> Unit {
   for i in 0..<70 {
     let x = (i * 97 + i * i * 7) % @types.screen_width
@@ -9,6 +10,7 @@ fn draw_starfield() -> Unit {
 }
 
 ///|
+/// Draws the player ship triangle and thrust flame, blinking during invulnerability.
 fn draw_ship(game : @types.Game) -> Unit {
   if game.ship_invuln > 0.0 {
     let blink = @raylib.get_time().to_int() % 2
@@ -57,6 +59,7 @@ fn draw_ship(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws all active rocks as overlapping circles, color-coded by size tier.
 fn draw_rocks(game : @types.Game) -> Unit {
   for rock in game.rocks {
     if not(rock.active) {
@@ -83,6 +86,7 @@ fn draw_rocks(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws all active bullets as small yellow circles.
 fn draw_bullets(game : @types.Game) -> Unit {
   for bullet in game.bullets {
     if not(bullet.active) {
@@ -98,6 +102,7 @@ fn draw_bullets(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the score, wave, lives counters, key hints, and game-over overlay.
 fn draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_text("ASTEROID SALVAGE 2026", 18, 14, 30, @raylib.skyblue)
   @raylib.draw_text("Score: \{game.score}", 18, 52, 24, @raylib.raywhite)

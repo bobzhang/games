@@ -1,14 +1,17 @@
 ///|
+/// Converts board grid coordinates to a flat row-major map index.
 fn idx(x : Int, y : Int) -> Int {
   y * @types.grid_w + x
 }
 
 ///|
+/// Returns true when `(x, y)` is within the grid boundaries.
 fn in_bounds(x : Int, y : Int) -> Bool {
   x >= 0 && x < @types.grid_w && y >= 0 && y < @types.grid_h
 }
 
 ///|
+/// Returns the tile kind at `(x, y)`, treating out-of-bounds positions as Wall.
 fn tile_at(game : @types.Game, x : Int, y : Int) -> @types.TileKind {
   if not(in_bounds(x, y)) {
     @types.Wall
@@ -18,6 +21,7 @@ fn tile_at(game : @types.Game, x : Int, y : Int) -> @types.TileKind {
 }
 
 ///|
+/// Writes a tile kind into the map at `(x, y)`, ignoring out-of-bounds positions.
 fn set_tile(game : @types.Game, x : Int, y : Int, t : @types.TileKind) -> Unit {
   if not(in_bounds(x, y)) {
     return
@@ -26,12 +30,14 @@ fn set_tile(game : @types.Game, x : Int, y : Int, t : @types.TileKind) -> Unit {
 }
 
 ///|
+/// Sets the on-screen message text and its display duration in seconds.
 fn set_msg(game : @types.Game, msg : String, ttl : Float) -> Unit {
   game.msg = msg
   game.msg_t = ttl
 }
 
 ///|
+/// Teleports an actor to `(x, y)` instantly, resetting all interpolation state.
 fn actor_place(a : @types.Actor, x : Int, y : Int) -> Unit {
   a.x = x
   a.y = y
@@ -46,6 +52,7 @@ fn actor_place(a : @types.Actor, x : Int, y : Int) -> Unit {
 }
 
 ///|
+/// Begins smooth tile-to-tile movement from the actor's current position toward `(tx, ty)`.
 fn actor_start_move(a : @types.Actor, tx : Int, ty : Int) -> Unit {
   if a.x == tx && a.y == ty {
     return
@@ -60,6 +67,7 @@ fn actor_start_move(a : @types.Actor, tx : Int, ty : Int) -> Unit {
 }
 
 ///|
+/// Advances the actor's movement interpolation by `dt` seconds, snapping to the target when complete.
 fn actor_tick(a : @types.Actor, dt : Float, move_t : Float) -> Unit {
   if not(a.moving) {
     a.fx = Float::from_int(a.x)
@@ -83,6 +91,7 @@ fn actor_tick(a : @types.Actor, dt : Float, move_t : Float) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes every particle slot in the pool.
 fn clear_particles(game : @types.Game) -> Unit {
   for particle in game.particles {
     particle.active = false
@@ -97,6 +106,7 @@ fn clear_particles(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Spawns a single particle into the first inactive slot, initializing all physics fields.
 fn emit_particle(
   game : @types.Game,
   x : Float,
@@ -125,6 +135,7 @@ fn emit_particle(
 }
 
 ///|
+/// Emits `n` particles of the given kind scattered randomly around pixel position `(x, y)`.
 fn burst(
   game : @types.Game,
   x : Float,
@@ -147,6 +158,7 @@ fn burst(
 }
 
 ///|
+/// Advances all active particles by `dt` seconds, applying velocity, drag, and gravity.
 fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
@@ -176,6 +188,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Returns true if any active smoke cloud covers the cell at `(x, y)` within Manhattan distance 1.
 fn smoke_cover_at(game : @types.Game, x : Int, y : Int) -> Bool {
   for smoke in game.smokes {
     if not(smoke.active) {
@@ -192,6 +205,7 @@ fn smoke_cover_at(game : @types.Game, x : Int, y : Int) -> Bool {
 }
 
 ///|
+/// Returns the index of an active guard occupying `(x, y)`, skipping guard `skip`, or -1 if none found.
 fn guard_index_at(game : @types.Game, x : Int, y : Int, skip : Int) -> Int {
   for i in 0..<game.guards.length() {
     if i == skip || not(game.guards[i].active) {
@@ -207,6 +221,7 @@ fn guard_index_at(game : @types.Game, x : Int, y : Int, skip : Int) -> Int {
 }
 
 ///|
+/// Returns the index of an active loot item at `(x, y)`, or -1 if none is present.
 fn loot_index_at(game : @types.Game, x : Int, y : Int) -> Int {
   for i in 0..<game.loots.length() {
     if not(game.loots[i].active) {
@@ -222,6 +237,7 @@ fn loot_index_at(game : @types.Game, x : Int, y : Int) -> Int {
 }
 
 ///|
+/// Returns true if the tile at `(x, y)` is impassable for the player, considering the vault-open state for the exit.
 fn blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
   if not(in_bounds(x, y)) {
     return true
@@ -235,6 +251,7 @@ fn blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
 }
 
 ///|
+/// Returns true if the cell `(x, y)` is impassable for guard `gid`, accounting for map tiles and other guards.
 fn blocked_for_guard(game : @types.Game, gid : Int, x : Int, y : Int) -> Bool {
   if blocked_by_map(game, x, y) {
     return true
@@ -245,6 +262,7 @@ fn blocked_for_guard(game : @types.Game, gid : Int, x : Int, y : Int) -> Bool {
 }
 
 ///|
+/// Resets the tile map to all walls then carves train-car floor layouts, corridors, crates, and the exit.
 fn clear_map(game : @types.Game) -> Unit {
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
@@ -294,6 +312,7 @@ fn clear_map(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the score value associated with a particular loot kind.
 fn loot_score(kind : @types.LootKind) -> Int {
   match kind {
     Blueprint => @types.score_blueprint
@@ -303,6 +322,7 @@ fn loot_score(kind : @types.LootKind) -> Int {
 }
 
 ///|
+/// Places loot items on the map according to the predefined loot layout plan.
 fn load_loot(game : @types.Game) -> Unit {
   let loot_plan : Array[(Int, Int, @types.LootKind)] = [
     (3, 3, @types.Blueprint),
@@ -333,6 +353,7 @@ fn load_loot(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Initializes all guard entities from the predefined patrol plan, positioning and seeding each one.
 fn load_guards(game : @types.Game) -> Unit {
   let plan : Array[(Int, Int, Int, Int, Int, Int, Int)] = [
     (6, 6, 1, 0, 6, 9, 0),
@@ -373,6 +394,7 @@ fn load_guards(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets all run state, builds the map, places loot and guards, and transitions to the Play state.
 fn start_run(game : @types.Game) -> Unit {
   clear_map(game)
   load_loot(game)
@@ -420,6 +442,7 @@ fn start_run(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Transitions to the Title state, resetting input and transient visual effects.
 fn go_title(game : @types.Game) -> Unit {
   game.state = @types.Title
   game.req_dx = 0
@@ -432,6 +455,7 @@ fn go_title(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Ends the current run, recording win/loss and reason, updating the best score, and emitting a particle burst.
 fn finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
   if game.state != @types.Play {
     return
@@ -471,12 +495,14 @@ fn finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
 }
 
 ///|
+/// Advances to the next hint message and displays it in the message area.
 fn cycle_hint(game : @types.Game) -> Unit {
   game.hint_i = (game.hint_i + 1) % 4
   set_msg(game, @types.hint_text(game.hint_i), 2.8)
 }
 
 ///|
+/// Deploys a smoke cloud at the player's position, stunning nearby guards and spending smoke energy; returns true on success.
 fn deploy_smoke(game : @types.Game) -> Bool {
   if game.action_cd > 0.0 || game.smoke_energy < @types.smoke_cost {
     return false
@@ -550,6 +576,7 @@ fn deploy_smoke(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Advances all active smoke cloud timers and emits ambient smoke particles each frame.
 fn update_smokes(game : @types.Game, dt : Float) -> Unit {
   for smoke in game.smokes {
     if not(smoke.active) {
@@ -580,6 +607,7 @@ fn update_smokes(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Returns true if two axis-aligned positions share an unobstructed straight line, considering walls and smoke.
 fn line_of_sight(
   game : @types.Game,
   x0 : Int,
@@ -619,6 +647,7 @@ fn line_of_sight(
 }
 
 ///|
+/// Advances the guard's pseudo-random seed using a linear congruential step.
 fn guard_seed_next(seed : Int) -> Int {
   let n : Int = (seed * 48271 + 131) % 2147483647
   if n <= 0 {
@@ -629,6 +658,7 @@ fn guard_seed_next(seed : Int) -> Int {
 }
 
 ///|
+/// Selects the best adjacent step toward the player for a guard in Hunt mode using Manhattan distance.
 fn guard_choose_chase_step(game : @types.Game, gid : Int) -> (Int, Int) {
   let gx : Int = game.guards[gid].body.x
   let gy : Int = game.guards[gid].body.y
@@ -664,6 +694,7 @@ fn guard_choose_chase_step(game : @types.Game, gid : Int) -> (Int, Int) {
 }
 
 ///|
+/// Selects the next patrol step for a guard, reversing direction at patrol boundaries or when blocked.
 fn guard_choose_patrol_step(game : @types.Game, gid : Int) -> (Int, Int) {
   let g = game.guards[gid]
   let gx : Int = g.body.x
@@ -720,6 +751,7 @@ fn guard_choose_patrol_step(game : @types.Game, gid : Int) -> (Int, Int) {
 }
 
 ///|
+/// Advances all active guards: ticks movement interpolation, updates stun and alert timers, and chooses the next step.
 fn update_guards(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.guards.length() {
     if not(game.guards[i].active) {
@@ -794,6 +826,7 @@ fn update_guards(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Attempts to move the player one tile in direction `(dx, dy)`, emitting a spark burst on success; returns true if moved.
 fn try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool {
   if dx == 0 && dy == 0 {
     return false
@@ -824,6 +857,7 @@ fn try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool {
 }
 
 ///|
+/// Picks up any loot item on the player's current tile, updating score and unlocking the exit when enough is collected.
 fn collect_loot(game : @types.Game) -> Unit {
   if game.player.moving {
     return
@@ -882,6 +916,7 @@ fn collect_loot(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Checks whether the player shares a tile with a non-stunned guard and applies a life penalty or ends the run.
 fn handle_player_caught(game : @types.Game) -> Unit {
   if game.flash_t > 0.0 {
     return
@@ -936,6 +971,7 @@ fn handle_player_caught(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Decrements all gameplay cooldown and visual effect timers by `dt` seconds.
 fn update_timers(game : @types.Game, dt : Float) -> Unit {
   if game.msg_t > 0.0 {
     game.msg_t = game.msg_t - dt
@@ -963,6 +999,7 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances time-based animations on the title screen.
 fn update_title(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt
   update_timers(game, dt)
@@ -970,6 +1007,7 @@ fn update_title(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances time-based animations on the result screen.
 fn update_result(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt
   update_timers(game, dt)
@@ -977,6 +1015,7 @@ fn update_result(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs one frame of gameplay: ticks timers, moves actors, processes input actions, checks loot and capture, and advances particles.
 fn update_play(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt
   game.time_left = game.time_left - dt

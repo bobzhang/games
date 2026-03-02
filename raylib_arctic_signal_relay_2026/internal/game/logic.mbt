@@ -1,4 +1,5 @@
 ///|
+/// Deactivates all towers and resets their fields to zero.
 fn clear_towers(game : @types.Game) -> Unit {
   for tower in game.towers {
     tower.active = false
@@ -11,6 +12,7 @@ fn clear_towers(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all storms and resets their fields to zero.
 fn clear_storms(game : @types.Game) -> Unit {
   for storm in game.storms {
     storm.active = false
@@ -25,34 +27,40 @@ fn clear_storms(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the mission time limit in seconds for the given stage, clamped to `timer_floor`.
 fn stage_timer_limit(stage : Int) -> Float {
   let raw = @types.timer_base - Float::from_int(stage - 1) * @types.timer_step
   @types.maxf(@types.timer_floor, raw)
 }
 
 ///|
+/// Returns the number of relay towers to spawn for the given stage, clamped to `[3, max_towers]`.
 fn stage_tower_count(stage : Int) -> Int {
   @types.clampi(2 + stage, 3, @types.max_towers)
 }
 
 ///|
+/// Returns the number of storm cells to spawn for the given stage, clamped to `[1, max_storms]`.
 fn stage_storm_count(stage : Int) -> Int {
   @types.clampi(1 + stage / 2, 1, @types.max_storms)
 }
 
 ///|
+/// Returns the number of power cells a tower at `idx` requires for the given stage.
 fn stage_tower_need(stage : Int, idx : Int) -> Int {
   let base = 1 + (stage - 1) / 2
   @types.clampi(base + idx % 2, 1, 4)
 }
 
 ///|
+/// Sets the in-game hint text and its display duration in seconds.
 fn set_hint(game : @types.Game, text : String, ttl : Float) -> Unit {
   game.hint_text = text
   game.hint_t = ttl
 }
 
 ///|
+/// Returns true if the candidate position `(x, y)` is far enough from the depot and all previously placed towers to be a valid tower spawn location.
 fn tower_spot_ok(
   game : @types.Game,
   placed : Int,
@@ -77,6 +85,7 @@ fn tower_spot_ok(
 }
 
 ///|
+/// Resets and configures towers, storms, rover state, and objectives for the given stage number, then transitions the game to the Play state.
 fn setup_stage(game : @types.Game, stage : Int) -> Unit {
   clear_towers(game)
   clear_storms(game)
@@ -191,6 +200,7 @@ fn setup_stage(game : @types.Game, stage : Int) -> Unit {
 }
 
 ///|
+/// Initialises the game to the Title state with decorative towers and storms for the title screen backdrop.
 pub fn init_title_scene(game : @types.Game) -> Unit {
   clear_towers(game)
   clear_storms(game)
@@ -240,6 +250,7 @@ pub fn init_title_scene(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the index of the nearest active, incomplete tower within interaction range of `(x, y)`, or -1 if none is found.
 fn closest_pending_tower(game : @types.Game, x : Float, y : Float) -> Int {
   let mut best_idx = -1
   let mut best_d2 = @types.tower_interact_r() * @types.tower_interact_r()
@@ -263,6 +274,7 @@ fn closest_pending_tower(game : @types.Game, x : Float, y : Float) -> Int {
 }
 
 ///|
+/// Updates the rover's `in_depot` flag and `nearby_tower` index based on its current position.
 fn update_proximity(game : @types.Game) -> Unit {
   game.in_depot = @types.dist2(
       game.rover_x,
@@ -275,6 +287,7 @@ fn update_proximity(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Advances all active storm cells by `dt` seconds, applying oscillating drift and bouncing them off the world boundary.
 fn update_storms(game : @types.Game, dt : Float) -> Unit {
   let left = @types.world_left() + 20.0
   let right = @types.world_right() - 20.0
@@ -313,6 +326,7 @@ fn update_storms(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Returns the combined storm intensity, wind X, and wind Y acting on position `(x, y)` from all active storms.
 fn storm_effect_at(
   game : @types.Game,
   x : Float,
@@ -352,6 +366,7 @@ fn storm_effect_at(
 }
 
 ///|
+/// Applies player input and storm wind forces to the rover's velocity, clamps speed, and moves the rover while keeping it within the world boundary.
 fn update_rover(
   game : @types.Game,
   dt : Float,
@@ -421,6 +436,7 @@ fn update_rover(
 }
 
 ///|
+/// Drains rover energy and heat based on movement speed and storm intensity, and recharges both while the rover is in the depot.
 fn update_resources(game : @types.Game, dt : Float, intensity : Float) -> Unit {
   let speed = @types.absf(game.rover_vx) + @types.absf(game.rover_vy)
   let energy_drain = @types.energy_idle_drain +
@@ -441,6 +457,7 @@ fn update_resources(game : @types.Game, dt : Float, intensity : Float) -> Unit {
 }
 
 ///|
+/// Processes a player action press: loads a power cell at the depot or delivers one to a nearby tower, updating cargo, objectives, timer bonus, and hint text accordingly.
 fn apply_action(game : @types.Game) -> Unit {
   if not(game.input_action_press) {
     return
@@ -486,6 +503,7 @@ fn apply_action(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Transitions the game to the Result state, records the win/loss outcome with a note, triggers a flash effect, and updates `best_stage` on a win.
 fn set_result(game : @types.Game, win : Bool, note : String) -> Unit {
   game.state = Result
   game.result_win = win
@@ -500,6 +518,7 @@ fn set_result(game : @types.Game, win : Bool, note : String) -> Unit {
 }
 
 ///|
+/// Advances the Play state by one frame: ticks the mission timer, updates storms, applies storm effects to the rover, updates resources, animates tower pulses, processes action input, and checks win/loss conditions.
 fn update_play_state(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
     init_title_scene(game)
@@ -548,6 +567,7 @@ fn update_play_state(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances the game by one frame: clamps `dt`, ticks UI timers, dispatches input and state logic for the current game state, and handles stage transitions.
 pub fn update_game(game : @types.Game, dt0 : Float) -> Unit {
   let dt = @types.clampf(dt0, 0.0, 0.05)
   game.ui_t = game.ui_t + dt

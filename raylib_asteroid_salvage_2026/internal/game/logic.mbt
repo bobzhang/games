@@ -1,4 +1,5 @@
 ///|
+/// Moves all active bullets, wrapping at screen edges, and deactivates expired ones.
 fn update_bullets(game : @types.Game, dt : Float) -> Unit {
   for bullet in game.bullets {
     if not(bullet.active) {
@@ -14,6 +15,7 @@ fn update_bullets(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Moves all active rocks forward by their velocity, wrapping at screen edges.
 fn update_rocks(game : @types.Game, dt : Float) -> Unit {
   for rock in game.rocks {
     if not(rock.active) {
@@ -25,6 +27,7 @@ fn update_rocks(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Awards score for the hit rock and spawns two smaller fragments if the rock is not the smallest size.
 fn split_rock(
   game : @types.Game,
   rock : @types.Rock,
@@ -55,6 +58,7 @@ fn split_rock(
 }
 
 ///|
+/// Tests each active bullet against each active rock and calls `split_rock` on a hit.
 fn bullet_vs_rocks(game : @types.Game) -> Unit {
   for bullet in game.bullets {
     if not(bullet.active) {
@@ -80,6 +84,7 @@ fn bullet_vs_rocks(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Detects ship-rock collisions and reduces lives or triggers game-over when hit.
 fn ship_vs_rocks(game : @types.Game) -> Unit {
   if game.ship_invuln > 0.0 {
     return
@@ -106,6 +111,7 @@ fn ship_vs_rocks(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Checks whether all rocks are cleared and spawns the next wave if so.
 fn maybe_advance_wave(game : @types.Game) -> Unit {
   let mut alive = 0
   for rock in game.rocks {
