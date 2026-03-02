@@ -227,7 +227,7 @@ fn @types.Game::try_move(game : @types.Game, dr : Int, dc : Int) -> Bool {
         }
       }
     }
-    if !(game.has_moves()) && !(game.state is Won) {
+    if !game.has_moves() && !(game.state is Won) {
       game.state = Over
     }
   }

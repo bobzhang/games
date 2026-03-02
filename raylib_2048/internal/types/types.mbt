@@ -18,7 +18,8 @@ pub(all) struct Tile {
   mut scale : Float
   mut is_new : Bool
   mut is_merged : Bool
-  fn new () -> Tile
+
+  fn new() -> Tile
 }
 
 ///|
@@ -61,6 +62,7 @@ pub(all) struct Game {
   mut msg_t : Float
   /// When true the player continues after reaching 2048.
   mut keep_playing : Bool
+
   fn new() -> Game
 }
 
@@ -68,7 +70,7 @@ pub(all) struct Game {
 /// Allocates a fresh game state with cleared board and score counters.
 pub fn Game::new() -> Game {
   let g : Game = {
-    tiles: Array::makei(cell_count, (_i) => { Tile() }),
+    tiles: Array::makei(cell_count, _i => Tile()),
     prev_values: Array::make(cell_count, 0),
     state: Title,
     score: 0,

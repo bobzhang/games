@@ -42,9 +42,7 @@ fn make_play_game() -> @types.Game {
   game.best_score = 5678
   game.can_undo = true
   // Place some tiles: 2, 4, 8, 16 on row 0; 32, 64 on row 1; 128, 256 on row 2; 2048 on row 3
-  let values = [
-    2, 4, 8, 16, 32, 64, 0, 0, 128, 256, 0, 0, 0, 0, 0, 2048,
-  ]
+  let values = [2, 4, 8, 16, 32, 64, 0, 0, 128, 256, 0, 0, 0, 0, 0, 2048]
   for i in 0..<@types.cell_count {
     game.tiles[i].value = values[i]
     game.tiles[i].scale = 1.0
@@ -74,9 +72,7 @@ fn make_over_game() -> @types.Game {
   game.score = 9876
   game.best_score = 9876
   // Fill board completely with alternating values so no moves remain.
-  let values = [
-    2, 4, 2, 4, 4, 2, 4, 2, 2, 4, 2, 4, 4, 2, 4, 2,
-  ]
+  let values = [2, 4, 2, 4, 4, 2, 4, 2, 2, 4, 2, 4, 4, 2, 4, 2]
   for i in 0..<@types.cell_count {
     game.tiles[i].value = values[i]
     game.tiles[i].scale = 1.0
@@ -90,6 +86,7 @@ fn make_over_game() -> @types.Game {
   game
 }
 
+///|
 test "render title screen to PNG" {
   with_render_window(fn() {
     let game = make_title_game()
@@ -97,6 +94,7 @@ test "render title screen to PNG" {
   })
 }
 
+///|
 test "render play state to PNG" {
   with_render_window(fn() {
     let game = make_play_game()
@@ -104,6 +102,7 @@ test "render play state to PNG" {
   })
 }
 
+///|
 test "render won overlay to PNG" {
   with_render_window(fn() {
     let game = make_won_game()
@@ -111,6 +110,7 @@ test "render won overlay to PNG" {
   })
 }
 
+///|
 test "render game over overlay to PNG" {
   with_render_window(fn() {
     let game = make_over_game()
