@@ -242,6 +242,7 @@ fn reset_campaign(game : @types.Game) -> Unit {
   }
 }
 
+///|
 /// Loads stage content and resets runtime state for that stage.
 pub fn load_stage(game : @types.Game, stage : Int) -> Unit {
   game.profile = @levels.get_stage_profile(stage)
@@ -266,6 +267,7 @@ pub fn load_stage(game : @types.Game, stage : Int) -> Unit {
   game.state = @types.state_stage_intro
 }
 
+///|
 /// Resets campaign progression and starts from stage 0.
 pub fn start_new_campaign(game : @types.Game) -> Unit {
   reset_campaign(game)

@@ -1,3 +1,4 @@
+///|
 /// Returns the absolute value of `v`.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
@@ -7,6 +8,7 @@ pub fn absf(v : Float) -> Float {
   }
 }
 
+///|
 /// Clamps a float to the inclusive `[low, high]` range.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
@@ -18,6 +20,7 @@ pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   }
 }
 
+///|
 /// Clamps an integer to the inclusive `[low, high]` range.
 pub fn clampi(v : Int, low : Int, high : Int) -> Int {
   if v < low {
@@ -29,6 +32,7 @@ pub fn clampi(v : Int, low : Int, high : Int) -> Int {
   }
 }
 
+///|
 /// Advances and returns the PRNG state.
 pub fn rand_next(game : Game) -> Int {
   let mut x = game.rng_state
@@ -42,6 +46,7 @@ pub fn rand_next(game : Game) -> Int {
   x
 }
 
+///|
 /// Returns a random integer in `[low, high]`.
 pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
   if high <= low {
@@ -51,22 +56,26 @@ pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
   }
 }
 
+///|
 /// Returns a random float in `[low, high]`.
 pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
   let n = Float::from_int(rand_next(game) % 10000) / 10000.0
   low + (high - low) * n
 }
 
+///|
 /// Converts tile coordinates to a linear map index.
 pub fn tile_index(tx : Int, ty : Int) -> Int {
   ty * map_tiles_w + tx
 }
 
+///|
 /// Returns whether tile coordinates are inside map bounds.
 pub fn in_tile_bounds(tx : Int, ty : Int) -> Bool {
   tx >= 0 && ty >= 0 && tx < map_tiles_w && ty < map_tiles_h
 }
 
+///|
 /// Reads a tile at coordinates, treating out-of-bounds as steel.
 pub fn get_tile(game : Game, tx : Int, ty : Int) -> Int {
   if in_tile_bounds(tx, ty) {
@@ -76,6 +85,7 @@ pub fn get_tile(game : Game, tx : Int, ty : Int) -> Int {
   }
 }
 
+///|
 /// Writes tile type and hp when coordinates are in bounds.
 pub fn set_tile(game : Game, tx : Int, ty : Int, tile : Int, hp : Int) -> Unit {
   if in_tile_bounds(tx, ty) {
@@ -85,46 +95,55 @@ pub fn set_tile(game : Game, tx : Int, ty : Int, tile : Int, hp : Int) -> Unit {
   }
 }
 
+///|
 /// Converts world x-coordinate to tile x index.
 pub fn world_x_to_tile(x : Float) -> Int {
   clampi((x / Float::from_int(tile_size)).to_int(), 0, map_tiles_w - 1)
 }
 
+///|
 /// Converts world y-coordinate to tile y index.
 pub fn world_y_to_tile(y : Float) -> Int {
   clampi((y / Float::from_int(tile_size)).to_int(), 0, map_tiles_h - 1)
 }
 
+///|
 /// Returns world x-coordinate of tile center.
 pub fn tile_center_x(tx : Int) -> Float {
   Float::from_int(tx * tile_size + tile_size / 2)
 }
 
+///|
 /// Returns world y-coordinate of tile center.
 pub fn tile_center_y(ty : Int) -> Float {
   Float::from_int(ty * tile_size + tile_size / 2)
 }
 
+///|
 /// Converts world x to screen x with shake offset.
 pub fn world_to_screen_x(x : Float, shake_x : Float) -> Int {
   map_offset_x + x.to_int() + shake_x.to_int()
 }
 
+///|
 /// Converts world y to screen y with shake offset.
 pub fn world_to_screen_y(y : Float, shake_y : Float) -> Int {
   map_offset_y + y.to_int() + shake_y.to_int()
 }
 
+///|
 /// Converts tile x to screen x with shake offset.
 pub fn tile_to_screen_x(tx : Int, shake_x : Float) -> Int {
   map_offset_x + tx * tile_size + shake_x.to_int()
 }
 
+///|
 /// Converts tile y to screen y with shake offset.
 pub fn tile_to_screen_y(ty : Int, shake_y : Float) -> Int {
   map_offset_y + ty * tile_size + shake_y.to_int()
 }
 
+///|
 /// Returns unit x direction for a direction id.
 pub fn dir_vector_x(dir : Int) -> Float {
   if dir == dir_left {
@@ -136,6 +155,7 @@ pub fn dir_vector_x(dir : Int) -> Float {
   }
 }
 
+///|
 /// Returns unit y direction for a direction id.
 pub fn dir_vector_y(dir : Int) -> Float {
   if dir == dir_up {
@@ -147,21 +167,25 @@ pub fn dir_vector_y(dir : Int) -> Float {
   }
 }
 
+///|
 /// Builds a tank collision rectangle at world coordinates.
 pub fn tank_rect_at(x : Float, y : Float) -> @raylib.Rectangle {
   @raylib.Rectangle::new(x - tank_half, y - tank_half, tank_size, tank_size)
 }
 
+///|
 /// Builds the collision rectangle for a tank.
 pub fn tank_rect(tank : Tank) -> @raylib.Rectangle {
   tank_rect_at(tank.x, tank.y)
 }
 
+///|
 /// Returns whether two rectangles overlap.
 pub fn rects_overlap(a : @raylib.Rectangle, b : @raylib.Rectangle) -> Bool {
   @raylib.check_collision_recs(a, b)
 }
 
+///|
 /// Returns squared distance between two points.
 pub fn distance_sq(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
@@ -169,6 +193,7 @@ pub fn distance_sq(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   dx * dx + dy * dy
 }
 
+///|
 /// Returns whether a tile blocks tank movement.
 pub fn is_tile_solid_for_tank(tile : Int) -> Bool {
   tile == tile_brick ||
@@ -177,11 +202,13 @@ pub fn is_tile_solid_for_tank(tile : Int) -> Bool {
   tile == tile_base
 }
 
+///|
 /// Returns whether a tile blocks bullets.
 pub fn is_tile_solid_for_bullet(tile : Int) -> Bool {
   tile == tile_brick || tile == tile_steel || tile == tile_base
 }
 
+///|
 /// Returns score awarded for defeating an enemy kind.
 pub fn enemy_score(kind : Int) -> Int {
   if kind == enemy_fast {
@@ -195,6 +222,7 @@ pub fn enemy_score(kind : Int) -> Int {
   }
 }
 
+///|
 /// Returns display color for an enemy kind.
 pub fn enemy_color(kind : Int) -> @raylib.Color {
   if kind == enemy_fast {
@@ -208,6 +236,7 @@ pub fn enemy_color(kind : Int) -> @raylib.Color {
   }
 }
 
+///|
 /// Draws centered text at `center_x`.
 pub fn draw_centered_text(
   text : String,
@@ -220,6 +249,7 @@ pub fn draw_centered_text(
   @raylib.draw_text(text, center_x - w / 2, y, font_size, color)
 }
 
+///|
 /// Draws text with a black shadow offset.
 pub fn draw_shadow_text(
   text : String,
@@ -232,6 +262,7 @@ pub fn draw_shadow_text(
   @raylib.draw_text(text, x, y, size, color)
 }
 
+///|
 /// Returns camera shake x/y offsets for current shake state.
 pub fn shake_offsets(game : Game) -> (Float, Float) {
   if game.camera_shake <= 0.0 {
@@ -246,6 +277,7 @@ pub fn shake_offsets(game : Game) -> (Float, Float) {
   }
 }
 
+///|
 /// Decays camera shake over time.
 pub fn update_camera_shake(game : Game, dt : Float) -> Unit {
   if game.camera_shake > 0.0 {
@@ -256,6 +288,7 @@ pub fn update_camera_shake(game : Game, dt : Float) -> Unit {
   }
 }
 
+///|
 /// Adds camera shake up to configured cap.
 pub fn push_camera_shake(game : Game, amount : Float) -> Unit {
   let next = game.camera_shake + amount
@@ -266,6 +299,7 @@ pub fn push_camera_shake(game : Game, amount : Float) -> Unit {
   }
 }
 
+///|
 /// Returns a pulsing tint derived from `base`.
 pub fn pulse_color(base : @raylib.Color, phase : Float) -> @raylib.Color {
   let p = Float::from_double(@math.sin(phase.to_double())) * 0.5 + 0.5
