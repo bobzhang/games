@@ -1,4 +1,5 @@
 ///|
+/// Returns whether the point `(x, y)` is within the world map boundaries.
 pub fn point_in_world(x : Float, y : Float) -> Bool {
   x >= 0.0 &&
   y >= 0.0 &&
@@ -7,6 +8,7 @@ pub fn point_in_world(x : Float, y : Float) -> Bool {
 }
 
 ///|
+/// Returns whether a tank centered at `(x, y)` collides with world boundaries or solid tiles.
 pub fn tank_hits_world(game : @types.Game, x : Float, y : Float) -> Bool {
   let half = @types.tank_half - 1.0
   if x - half < 0.0 ||
@@ -33,6 +35,7 @@ pub fn tank_hits_world(game : @types.Game, x : Float, y : Float) -> Bool {
 }
 
 ///|
+/// Returns whether a tank at `(x, y)` overlaps any active player except `ignore_player`.
 pub fn tank_hits_players(
   game : @types.Game,
   x : Float,
@@ -54,6 +57,7 @@ pub fn tank_hits_players(
 }
 
 ///|
+/// Returns whether a tank at `(x, y)` overlaps any active enemy except `ignore_enemy_index`.
 pub fn tank_hits_enemies(
   game : @types.Game,
   x : Float,
@@ -75,6 +79,7 @@ pub fn tank_hits_enemies(
 }
 
 ///|
+/// Returns whether line of sight between two points is blocked by solid terrain.
 pub fn sight_blocked(
   game : @types.Game,
   ax : Float,

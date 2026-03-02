@@ -9,6 +9,7 @@ fn alloc_particle(game : @types.Game) -> Int {
 }
 
 ///|
+/// Spawns a single particle with the given position, velocity, lifetime, size, and color.
 pub fn spawn_particle(
   game : @types.Game,
   x : Float,
@@ -38,6 +39,7 @@ pub fn spawn_particle(
 }
 
 ///|
+/// Spawns a burst of gold sparks radiating outward from `(x, y)`.
 pub fn spawn_spark_burst(
   game : @types.Game,
   x : Float,
@@ -64,6 +66,7 @@ pub fn spawn_spark_burst(
 }
 
 ///|
+/// Spawns a full explosion with sparks and smoke puffs scaled by `strength`.
 pub fn spawn_explosion(
   game : @types.Game,
   x : Float,
@@ -111,6 +114,7 @@ pub fn spawn_explosion(
 }
 
 ///|
+/// Spawns a circular ring of particles at a tank respawn location.
 pub fn spawn_respawn_burst(game : @types.Game, x : Float, y : Float) -> Unit {
   for i in 0..<24 {
     let angle = Float::from_int(i) / Float::from_int(24) * 6.28318
@@ -131,6 +135,7 @@ pub fn spawn_respawn_burst(game : @types.Game, x : Float, y : Float) -> Unit {
 }
 
 ///|
+/// Updates all active particles by advancing position, applying drag and gravity, and removing expired ones.
 pub fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
     if not(p.active) {

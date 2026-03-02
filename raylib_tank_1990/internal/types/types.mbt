@@ -1,4 +1,5 @@
 ///|
+/// Shared tank record used for players and enemies.
 pub(all) struct Tank {
   mut active : Bool
   mut is_player : Bool
@@ -29,6 +30,7 @@ pub(all) struct Tank {
 }
 
 ///|
+/// Creates an inactive tank slot with default values.
 pub fn Tank::inactive() -> Tank {
   {
     active: false,
@@ -61,6 +63,7 @@ pub fn Tank::inactive() -> Tank {
 }
 
 ///|
+/// Creates a new player tank at the given spawn position.
 pub fn Tank::new_player(index : Int, spawn_x : Float, spawn_y : Float) -> Tank {
   {
     active: true,
@@ -93,6 +96,7 @@ pub fn Tank::new_player(index : Int, spawn_x : Float, spawn_y : Float) -> Tank {
 }
 
 ///|
+/// Creates a new enemy tank of the given `kind` at the spawn position.
 pub fn Tank::new_enemy(kind : Int, spawn_x : Float, spawn_y : Float) -> Tank {
   let (speed, hp, reload) = if kind == enemy_fast {
     (speed_enemy_fast, 1, enemy_reload_base * 0.85)
@@ -134,6 +138,7 @@ pub fn Tank::new_enemy(kind : Int, spawn_x : Float, spawn_y : Float) -> Tank {
 }
 
 ///|
+/// Projectile fired by tanks.
 pub(all) struct Bullet {
   mut active : Bool
   mut owner_team : Int
@@ -148,6 +153,7 @@ pub(all) struct Bullet {
 }
 
 ///|
+/// Creates an inactive bullet slot with default values.
 pub fn Bullet::inactive() -> Bullet {
   {
     active: false,
@@ -164,6 +170,7 @@ pub fn Bullet::inactive() -> Bullet {
 }
 
 ///|
+/// Visual particle for explosions, sparks, and smoke effects.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -180,6 +187,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// Creates an inactive particle slot with default values.
 pub fn Particle::inactive() -> Particle {
   {
     active: false,
@@ -198,6 +206,7 @@ pub fn Particle::inactive() -> Particle {
 }
 
 ///|
+/// Collectible powerup item on the battlefield.
 pub(all) struct Powerup {
   mut active : Bool
   mut kind : Int
@@ -209,6 +218,7 @@ pub(all) struct Powerup {
 }
 
 ///|
+/// Creates an inactive powerup slot with default values.
 pub fn Powerup::inactive() -> Powerup {
   {
     active: false,
@@ -222,6 +232,7 @@ pub fn Powerup::inactive() -> Powerup {
 }
 
 ///|
+/// Background star for the parallax starfield effect.
 pub(all) struct Star {
   mut x : Float
   mut y : Float
@@ -230,11 +241,13 @@ pub(all) struct Star {
 }
 
 ///|
+/// Creates a new background star at the given position with speed and twinkle phase.
 pub fn Star::new(x : Float, y : Float, speed : Float, twinkle : Float) -> Star {
   { x, y, speed, twinkle }
 }
 
 ///|
+/// Visual and gameplay profile for a campaign stage.
 pub(all) struct StageProfile {
   title : String
   subtitle : String
@@ -248,6 +261,7 @@ pub(all) struct StageProfile {
 }
 
 ///|
+/// Creates a new stage profile with all visual and gameplay parameters.
 pub fn StageProfile::new(
   title : String,
   subtitle : String,
@@ -273,6 +287,7 @@ pub fn StageProfile::new(
 }
 
 ///|
+/// Returns the default stage profile for unmatched stage indices.
 pub fn default_stage_profile() -> StageProfile {
   StageProfile::new(
     "Border Skirmish",
@@ -288,6 +303,7 @@ pub fn default_stage_profile() -> StageProfile {
 }
 
 ///|
+/// Global mutable game state for Tank 1990.
 pub(all) struct Game {
   mut state : Int
   mut coop_enabled : Bool
@@ -331,6 +347,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a new game instance with all pools allocated and default menu state.
 pub fn Game::new() -> Game {
   let stars : Array[Star] = []
   for i in 0..<120 {

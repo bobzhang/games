@@ -149,6 +149,7 @@ fn unload_texture_list(textures : Array[@raylib.Texture]) -> Unit {
 }
 
 ///|
+/// Loads all game textures and fonts from disk into the asset cache.
 pub fn init_assets() -> Unit {
   if assets.loaded {
     return
@@ -251,6 +252,7 @@ pub fn init_assets() -> Unit {
 }
 
 ///|
+/// Unloads all cached textures and fonts, freeing GPU resources.
 pub fn unload_assets() -> Unit {
   if not(assets.loaded) {
     return
@@ -378,6 +380,7 @@ fn pick_turret(
 }
 
 ///|
+/// Returns the texture for a map tile based on type, position, and animation frame.
 pub fn tile_texture(
   tile : Int,
   tx : Int,
@@ -400,6 +403,7 @@ pub fn tile_texture(
 }
 
 ///|
+/// Returns the body texture for the given player `index`.
 pub fn player_body_texture(index : Int) -> @raylib.Texture? {
   if index == 0 {
     assets.body_p1
@@ -409,6 +413,7 @@ pub fn player_body_texture(index : Int) -> @raylib.Texture? {
 }
 
 ///|
+/// Returns the turret texture for the given player `index` and `weapon_level`.
 pub fn player_turret_texture(
   index : Int,
   weapon_level : Int,
@@ -421,6 +426,7 @@ pub fn player_turret_texture(
 }
 
 ///|
+/// Returns the body texture for an enemy of the given `kind`.
 pub fn enemy_body_texture(kind : Int) -> @raylib.Texture? {
   if kind == @types.enemy_fast {
     assets.body_enemy_fast
@@ -434,6 +440,7 @@ pub fn enemy_body_texture(kind : Int) -> @raylib.Texture? {
 }
 
 ///|
+/// Returns the turret texture for an enemy of the given `kind`.
 pub fn enemy_turret_texture(kind : Int) -> @raylib.Texture? {
   if kind == @types.enemy_fast {
     assets.turret_enemy_fast
@@ -447,6 +454,7 @@ pub fn enemy_turret_texture(kind : Int) -> @raylib.Texture? {
 }
 
 ///|
+/// Returns the bullet texture for the given `team`.
 pub fn bullet_texture(team : Int) -> @raylib.Texture? {
   if team == @types.team_enemy {
     assets.bullet_enemy
@@ -458,86 +466,103 @@ pub fn bullet_texture(team : Int) -> @raylib.Texture? {
 }
 
 ///|
+/// Returns the tank tread tracks texture.
 pub fn tracks_texture() -> @raylib.Texture? {
   assets.tracks_small
 }
 
 ///|
+/// Returns the small enemy marker icon texture.
 pub fn enemy_marker_texture() -> @raylib.Texture? {
   assets.enemy_marker
 }
 
 ///|
+/// Returns the explosion animation frame at `index`.
 pub fn explosion_frame(index : Int) -> @raylib.Texture? {
   pick_texture(assets.explosion_frames, index)
 }
 
 ///|
+/// Returns the smoke animation frame at `index`.
 pub fn smoke_frame(index : Int) -> @raylib.Texture? {
   pick_texture(assets.smoke_frames, index)
 }
 
 ///|
+/// Returns the muzzle flash particle texture.
 pub fn fx_muzzle_texture() -> @raylib.Texture? {
   assets.fx_muzzle
 }
 
 ///|
+/// Returns the smoke puff particle texture.
 pub fn fx_smoke_texture() -> @raylib.Texture? {
   assets.fx_smoke
 }
 
 ///|
+/// Returns the bullet trace particle texture.
 pub fn fx_trace_texture() -> @raylib.Texture? {
   assets.fx_trace
 }
 
 ///|
+/// Returns the spark particle texture.
 pub fn fx_spark_texture() -> @raylib.Texture? {
   assets.fx_spark
 }
 
 ///|
+/// Returns the UI panel card background texture.
 pub fn ui_panel_card_texture() -> @raylib.Texture? {
   assets.ui_panel_card
 }
 
 ///|
+/// Returns the UI panel line border texture.
 pub fn ui_panel_line_texture() -> @raylib.Texture? {
   assets.ui_panel_line
 }
 
 ///|
+/// Returns the UI menu button texture.
 pub fn ui_menu_button_texture() -> @raylib.Texture? {
   assets.ui_menu_button
 }
 
 ///|
+/// Returns the UI focused menu button texture.
 pub fn ui_menu_button_focus_texture() -> @raylib.Texture? {
   assets.ui_menu_button_focus
 }
 
 ///|
+/// Returns the UI arrow-up icon texture.
 pub fn ui_icon_arrow_up_texture() -> @raylib.Texture? {
   assets.ui_icon_arrow_up
 }
 
 ///|
+/// Returns the UI arrow-down icon texture.
 pub fn ui_icon_arrow_down_texture() -> @raylib.Texture? {
   assets.ui_icon_arrow_down
 }
 
 ///|
+/// Returns the UI play icon texture.
 pub fn ui_icon_play_texture() -> @raylib.Texture? {
   assets.ui_icon_play
 }
 
 ///|
+/// Returns the loaded UI font, if available.
 pub fn ui_font() -> @raylib.Font? {
   assets.ui_font
 }
 
 ///|
+/// Draws a texture centered at `(center_x, center_y)` with the given dimensions and rotation.
 pub fn draw_texture_centered(
   texture : @raylib.Texture,
   center_x : Float,
@@ -570,6 +595,7 @@ pub fn draw_texture_centered(
 }
 
 ///|
+/// Draws an optional texture centered, returning whether the texture was present.
 pub fn draw_texture_centered_opt(
   texture : @raylib.Texture?,
   center_x : Float,
@@ -591,6 +617,7 @@ pub fn draw_texture_centered_opt(
 }
 
 ///|
+/// Draws an optional texture stretched to fill a box at `(x, y)` with given dimensions.
 pub fn draw_texture_box_opt(
   texture : @raylib.Texture?,
   x : Int,
@@ -611,6 +638,7 @@ pub fn draw_texture_box_opt(
 }
 
 ///|
+/// Draws text using the UI font with a black drop shadow, falling back to the default font.
 pub fn draw_text_shadow(
   text : String,
   x : Int,
@@ -640,6 +668,7 @@ pub fn draw_text_shadow(
 }
 
 ///|
+/// Draws text horizontally centered using the UI font with a drop shadow.
 pub fn draw_text_centered(
   text : String,
   center_x : Int,

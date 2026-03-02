@@ -1,4 +1,5 @@
 ///|
+/// Draws the enemy remaining counter with icon grid on the side panel.
 fn draw_enemy_counter(game : @types.Game, x : Int, y : Int) -> Unit {
   let pending = game.enemies_to_spawn - game.enemies_spawned
   let remaining = game.enemies_alive + (if pending > 0 { pending } else { 0 })
@@ -19,6 +20,7 @@ fn draw_enemy_counter(game : @types.Game, x : Int, y : Int) -> Unit {
 }
 
 ///|
+/// Draws a player status card showing score, lives, weapon level, and status indicators.
 fn draw_player_card(
   game : @types.Game,
   player_index : Int,
@@ -78,6 +80,7 @@ fn draw_player_card(
 }
 
 ///|
+/// Draws the right-side information panel with stage info, scores, and player cards.
 fn draw_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.panel_x,
@@ -257,6 +260,7 @@ fn draw_panel(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the main menu overlay with title, options, and control hints.
 fn draw_menu_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -341,6 +345,7 @@ fn draw_menu_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the stage introduction overlay showing stage number, title, and enemy count.
 fn draw_stage_intro_overlay(game : @types.Game) -> Unit {
   let alpha = @types.clampf(
     game.stage_intro_timer / @types.stage_intro_time,
@@ -394,6 +399,7 @@ fn draw_stage_intro_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the pause overlay with pulsing text and resume instructions.
 fn draw_pause_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -424,6 +430,7 @@ fn draw_pause_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the stage clear overlay with animated success message.
 fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
   let t = @types.clampf(
     1.0 - game.stage_clear_timer / @types.stage_clear_time,
@@ -458,6 +465,7 @@ fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the game over overlay with final score.
 fn draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -483,6 +491,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the campaign completion overlay with final and best scores.
 fn draw_campaign_clear_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -519,6 +528,7 @@ fn draw_campaign_clear_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the full UI layer including the side panel and any active overlay.
 pub fn draw_ui(game : @types.Game) -> Unit {
   draw_panel(game)
 

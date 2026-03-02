@@ -1,4 +1,5 @@
 ///|
+/// Returns the tile pattern strings for the level at the given `index`.
 pub fn level_pattern(index : Int) -> Array[String] {
   match index % @types.map_pattern_count {
     0 =>

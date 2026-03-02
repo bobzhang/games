@@ -1,4 +1,5 @@
 ///|
+/// Draws the animated parallax starfield background.
 fn draw_starfield(game : @types.Game) -> Unit {
   @raylib.clear_background(game.profile.sky_bottom)
   @raylib.draw_rectangle_gradient_v(
@@ -20,6 +21,7 @@ fn draw_starfield(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the bordered backdrop rectangle behind the map area.
 fn draw_world_backdrop(shake_x : Float, shake_y : Float) -> Unit {
   @raylib.draw_rectangle(
     @types.map_offset_x - 6 + shake_x.to_int(),
@@ -38,6 +40,7 @@ fn draw_world_backdrop(shake_x : Float, shake_y : Float) -> Unit {
 }
 
 ///|
+/// Draws a single map tile at the given tile coordinates.
 fn draw_single_tile(
   game : @types.Game,
   tx : Int,
@@ -157,6 +160,7 @@ fn draw_single_tile(
 }
 
 ///|
+/// Draws all non-bush, non-empty terrain tiles.
 fn draw_terrain_layer(
   game : @types.Game,
   shake_x : Float,
@@ -174,6 +178,7 @@ fn draw_terrain_layer(
 }
 
 ///|
+/// Draws all bush tiles as the top foliage layer above tanks.
 fn draw_bush_layer(
   game : @types.Game,
   shake_x : Float,
@@ -216,6 +221,7 @@ fn draw_bush_layer(
 }
 
 ///|
+/// Draws a single tank with body, turret barrel, and center dot.
 fn draw_tank(
   tank : @types.Tank,
   body_color : @raylib.Color,
@@ -280,6 +286,7 @@ fn draw_tank(
 }
 
 ///|
+/// Draws all active player tanks with invulnerability blink and shield rings.
 fn draw_players(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
   for i in 0..<@types.max_players {
     if not(game.players[i].active) {
@@ -322,6 +329,7 @@ fn draw_players(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
 }
 
 ///|
+/// Draws all active enemy tanks with spawn blink and heavy-type HP indicators.
 fn draw_enemies(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
   for enemy in game.enemies {
     if not(enemy.active) {
@@ -353,6 +361,7 @@ fn draw_enemies(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
 }
 
 ///|
+/// Draws all active bullets as colored circles.
 fn draw_bullets(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
   for bullet in game.bullets {
     if not(bullet.active) {
@@ -375,6 +384,7 @@ fn draw_bullets(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
 }
 
 ///|
+/// Draws all active particles with alpha fading based on remaining life.
 fn draw_particles(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
   for p in game.particles {
     if not(p.active) {
@@ -392,6 +402,7 @@ fn draw_particles(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit 
 }
 
 ///|
+/// Draws all active powerups with pulsing glow and blinking when near expiry.
 fn draw_powerups(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
   for p in game.powerups {
     if not(p.active) {
@@ -415,6 +426,7 @@ fn draw_powerups(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
 }
 
 ///|
+/// Draws the entire game world including background, terrain, entities, particles, and fog.
 pub fn draw_world(game : @types.Game) -> Unit {
   let (shake_x, shake_y) = @types.shake_offsets(game)
 
