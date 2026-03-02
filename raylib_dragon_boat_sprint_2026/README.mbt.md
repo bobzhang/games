@@ -33,7 +33,7 @@ moon build --target native raylib_dragon_boat_sprint_2026/
 
 Entry point. Initialises a 1720x980 window at 120 fps, allocates `Game::new()`, and drives the game loop by calling `update_game` and `draw_frame` each frame inside `@raylib.begin_drawing` / `@raylib.end_drawing`.
 
-### Package `.../internal/types`
+### Package `tonyfettes/raylib-examples/raylib_dragon_boat_sprint_2026/internal/types`
 
 #### Enums
 
@@ -91,7 +91,7 @@ Entry point. Initialises a 1720x980 window at 120 fps, allocates `Game::new()`, 
 
 Utility functions (`mini`, `maxi`, `minf`, `maxf`, `clampi`, `clampf`, `absf`, `sinf`, `cosf`, `randf`) provide math helpers used across the game and render packages.
 
-### Package `.../internal/game`
+### Package `tonyfettes/raylib-examples/raylib_dragon_boat_sprint_2026/internal/game`
 
 #### Functions
 
@@ -101,7 +101,7 @@ Utility functions (`mini`, `maxi`, `minf`, `maxf`, `clampi`, `clampf`, `absf`, `
 
 Internal helpers (not exported): `sample_input`, `clear_input`, `reset_run`, `setup_rivals`, `clear_hazards`, `update_rhythm`, `apply_paddle`, `try_burst`, `update_wave_lane`, `update_speed_distance`, `update_hazard_spawning`, `update_hazards`, `update_rivals`, `update_checkpoints`, `finish_run`, `tick_message`, `add_score`, `set_message`, `current_rank`, `spawn_hazard`.
 
-### Package `.../internal/render`
+### Package `tonyfettes/raylib-examples/raylib_dragon_boat_sprint_2026/internal/render`
 
 #### Functions
 

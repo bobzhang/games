@@ -33,7 +33,7 @@ moon build --target native raylib_dragon_scroll_keeper_2026/
 
 Entry point. Initialises a 1366x768 window at 120 fps, allocates `Game::new()`, and drives the game loop by calling `update_game` and `draw_frame` each frame inside `@raylib.begin_drawing` / `@raylib.end_drawing`.
 
-### Package `.../internal/types`
+### Package `tonyfettes/raylib-examples/raylib_dragon_scroll_keeper_2026/internal/types`
 
 #### Enums
 
@@ -150,7 +150,7 @@ Entry point. Initialises a 1366x768 window at 120 fps, allocates `Game::new()`, 
 | `max_raiders` | `160` | Raider object-pool capacity |
 | `max_flames` | `220` | Flame object-pool capacity |
 
-### Package `.../internal/game`
+### Package `tonyfettes/raylib-examples/raylib_dragon_scroll_keeper_2026/internal/game`
 
 #### Functions
 
@@ -160,7 +160,7 @@ Entry point. Initialises a 1366x768 window at 120 fps, allocates `Game::new()`, 
 
 Internal helpers (not exported): `update_input`, `clear_input`, `start_new_run`, `return_to_title`, `enter_game_over`, `reset_keeper`, `clear_raiders`, `clear_flames`, `clear_breaches`, `raise_breach`, `alloc_raider`, `alloc_flame`, `spawn_raider_from_room`, `spawn_flame`, `defeat_raider`, `set_message`, `handle_action_input`, `perform_attack_action`, `perform_seal_action`, `perform_extinguish_action`, `trigger_ink_shield`, `toggle_extinguisher_mode`, `update_keeper_motion`, `update_keeper_timers_and_resources`, `update_wave_progress`, `update_breach_system`, `update_raiders`, `update_flames`, `nearest_raider_index`, `nearest_flame_index`, `nearest_open_breach_index`.
 
-### Package `.../internal/render`
+### Package `tonyfettes/raylib-examples/raylib_dragon_scroll_keeper_2026/internal/render`
 
 #### Functions
 
