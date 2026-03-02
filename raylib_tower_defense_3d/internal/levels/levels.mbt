@@ -4,6 +4,7 @@
 // Legend: '.' = grass, '#' = path, 'S' = start, 'E' = end, '~' = water, 'R' = rock
 
 ///|
+/// Returns the tile layout strings for the map at `map_idx`.
 pub fn get_map_data(map_idx : Int) -> Array[String] {
   if map_idx == 0 {
     // Map 1: Serpentine - Classic zigzag path
@@ -51,6 +52,7 @@ pub fn get_map_data(map_idx : Int) -> Array[String] {
 // Map info for display
 
 ///|
+/// Returns the metadata for the map at `map_idx` including name and difficulty.
 pub fn get_map_info(map_idx : Int) -> @types.MapInfo {
   if map_idx == 0 {
     {
@@ -98,6 +100,7 @@ pub fn get_map_info(map_idx : Int) -> @types.MapInfo {
 // Wave definitions - 30 waves
 
 ///|
+/// Returns the enemy kind, count, HP multiplier, and speed multiplier for `wave`.
 pub fn get_wave_def(wave : Int) -> (Int, Int, Float, Float) {
   // Returns (enemy_kind, count, hp_mult, speed_mult)
   if wave == 0 {
@@ -166,6 +169,7 @@ pub fn get_wave_def(wave : Int) -> (Int, Int, Float, Float) {
 // Extended wave info for multi-group waves
 
 ///|
+/// Returns the extended wave info with spawn groups and bonus gold for `wave`.
 pub fn get_wave_info(wave : Int) -> @types.WaveInfo {
   if wave == 0 {
     {
@@ -382,6 +386,7 @@ pub fn get_wave_info(wave : Int) -> @types.WaveInfo {
 }
 
 ///|
+/// Returns the base hit points for an enemy of the given `kind`.
 pub fn enemy_base_hp(kind : Int) -> Float {
   if kind == 0 {
     30.0
@@ -409,6 +414,7 @@ pub fn enemy_base_hp(kind : Int) -> Float {
 }
 
 ///|
+/// Returns the base movement speed for an enemy of the given `kind`.
 pub fn enemy_base_speed(kind : Int) -> Float {
   if kind == 0 {
     2.5
@@ -436,6 +442,7 @@ pub fn enemy_base_speed(kind : Int) -> Float {
 }
 
 ///|
+/// Returns the gold reward for killing an enemy of the given `kind`.
 pub fn enemy_gold_value(kind : Int) -> Int {
   if kind == 0 {
     10
@@ -465,6 +472,7 @@ pub fn enemy_gold_value(kind : Int) -> Int {
 // Enemy score value (may differ from gold)
 
 ///|
+/// Returns the score points awarded for killing an enemy of the given `kind`.
 pub fn enemy_score_value(kind : Int) -> Int {
   if kind == 0 {
     10
@@ -494,6 +502,7 @@ pub fn enemy_score_value(kind : Int) -> Int {
 // Check if enemy type is flying
 
 ///|
+/// Returns whether the enemy `kind` is an airborne flying type.
 pub fn enemy_is_flying(kind : Int) -> Bool {
   kind == 3
 }
@@ -501,6 +510,7 @@ pub fn enemy_is_flying(kind : Int) -> Bool {
 // Check if enemy type is a boss
 
 ///|
+/// Returns whether the enemy `kind` is a boss type.
 pub fn enemy_is_boss(kind : Int) -> Bool {
   kind == 4
 }
@@ -508,6 +518,7 @@ pub fn enemy_is_boss(kind : Int) -> Bool {
 // Check if enemy type is camo
 
 ///|
+/// Returns whether the enemy `kind` is a camouflaged stealth type.
 pub fn enemy_is_camo(kind : Int) -> Bool {
   kind == 8
 }
@@ -515,6 +526,7 @@ pub fn enemy_is_camo(kind : Int) -> Bool {
 // Check if enemy type spawns children on death
 
 ///|
+/// Returns whether the enemy `kind` splits into children on death.
 pub fn enemy_spawns_children(kind : Int) -> Bool {
   kind == 9
 }
@@ -522,6 +534,7 @@ pub fn enemy_spawns_children(kind : Int) -> Bool {
 // Check if enemy type heals others
 
 ///|
+/// Returns whether the enemy `kind` heals nearby allies.
 pub fn enemy_is_healer(kind : Int) -> Bool {
   kind == 5
 }
@@ -529,6 +542,7 @@ pub fn enemy_is_healer(kind : Int) -> Bool {
 // Check if enemy type has shield
 
 ///|
+/// Returns whether the enemy `kind` has a regenerating energy shield.
 pub fn enemy_has_shield(kind : Int) -> Bool {
   kind == 7
 }
@@ -536,6 +550,7 @@ pub fn enemy_has_shield(kind : Int) -> Bool {
 // Get shield HP for shield enemies
 
 ///|
+/// Returns the initial shield HP for an enemy of `kind` scaled by `hp_mult`.
 pub fn enemy_shield_hp(kind : Int, hp_mult : Float) -> Float {
   if kind == 7 {
     let base_hp = enemy_base_hp(kind) * hp_mult

@@ -1,6 +1,7 @@
 // 3D world rendering
 
 ///|
+/// Draws the full 3D world including map, towers, enemies, and projectiles.
 pub fn draw_world(game : @types.Game) -> Unit {
   let camera = build_camera(game)
   @raylib.begin_mode_3d(camera)
@@ -26,6 +27,7 @@ pub fn draw_world(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Builds a 3D camera from the current camera angle, pitch, distance, and target position.
 fn build_camera(game : @types.Game) -> @raylib.Camera3D {
   let angle_rad = game.camera_angle * @types.pi / 180.0
   let pitch_rad = game.camera_pitch * @types.pi / 180.0
@@ -46,6 +48,7 @@ fn build_camera(game : @types.Game) -> @raylib.Camera3D {
 }
 
 ///|
+/// Draws all map tiles including grass, path, start, end, water, and rock terrain.
 fn draw_map(game : @types.Game) -> Unit {
   for gy in 0..<@types.map_h {
     for gx in 0..<@types.map_w {
@@ -175,6 +178,7 @@ fn draw_map(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a subtle grid overlay on buildable grass tiles when in building mode.
 fn draw_grid_overlay(game : @types.Game) -> Unit {
   // Draw subtle grid lines when in building mode
   if game.state != @types.state_building {
@@ -199,6 +203,7 @@ fn draw_grid_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws directional arrow markers along the enemy path to indicate movement direction.
 fn draw_path_markers(game : @types.Game) -> Unit {
   // Draw subtle path direction indicators
   for i in 0..<(game.path_count - 1) {
@@ -233,6 +238,7 @@ fn draw_path_markers(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws all active towers with type-specific models, level indicators, and buff auras.
 fn draw_towers(game : @types.Game) -> Unit {
   for tower in game.towers {
     if not(tower.active) {
@@ -279,6 +285,7 @@ fn draw_towers(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws an arrow tower with tall body, pointed cap, and arrow slit detail.
 fn draw_arrow_tower(
   wx : Float,
   wz : Float,
@@ -328,6 +335,7 @@ fn draw_arrow_tower(
 }
 
 ///|
+/// Draws a cannon tower with heavy base, turret body, and rotating barrel.
 fn draw_cannon_tower(
   wx : Float,
   wz : Float,
@@ -369,6 +377,7 @@ fn draw_cannon_tower(
 }
 
 ///|
+/// Draws a frost tower with crystal spire, glowing tip, and orbiting ice shards.
 fn draw_frost_tower(
   wx : Float,
   wz : Float,
@@ -422,6 +431,7 @@ fn draw_frost_tower(
 }
 
 ///|
+/// Draws a lightning tower with metal rod, pulsing sphere tip, and flickering electric arcs.
 fn draw_lightning_tower(
   wx : Float,
   wz : Float,
@@ -468,6 +478,7 @@ fn draw_lightning_tower(
 }
 
 ///|
+/// Draws a flame tower with stone brazier, animated fire effect, and level-3 fire aura ring.
 fn draw_flame_tower(
   wx : Float,
   wz : Float,
@@ -529,6 +540,7 @@ fn draw_flame_tower(
 }
 
 ///|
+/// Draws a sniper tower with tall thin body, rotating barrel, and scope lens.
 fn draw_sniper_tower(
   wx : Float,
   wz : Float,
@@ -581,6 +593,7 @@ fn draw_sniper_tower(
 }
 
 ///|
+/// Draws a splash tower with wide base, central body, and multiple outward-facing barrels.
 fn draw_splash_tower(
   wx : Float,
   wz : Float,
@@ -637,6 +650,7 @@ fn draw_splash_tower(
 }
 
 ///|
+/// Draws a buff tower with aura pillar, glowing orb, rotating rings, and buff range indicator.
 fn draw_buff_tower(
   wx : Float,
   wz : Float,
@@ -707,6 +721,7 @@ fn draw_buff_tower(
 }
 
 ///|
+/// Draws silver and gold base rings to indicate tower upgrade level.
 fn draw_level_indicators(
   wx : Float,
   wz : Float,
@@ -737,6 +752,7 @@ fn draw_level_indicators(
 }
 
 ///|
+/// Draws range circles around all active towers when range display is enabled.
 fn draw_tower_range_indicators(game : @types.Game) -> Unit {
   if not(game.show_ranges) {
     return
@@ -767,6 +783,7 @@ fn draw_tower_range_indicators(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a pulsing selection highlight and range circle around the currently selected tower.
 fn draw_selected_tower_highlight(game : @types.Game) -> Unit {
   if game.selected_tower_idx < 0 {
     return
@@ -805,6 +822,7 @@ fn draw_selected_tower_highlight(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the display color for the given tower type `kind`.
 fn tower_color(kind : Int) -> @raylib.Color {
   if kind == @types.tower_arrow {
     @raylib.Color::new(150, 100, 50, 255)
@@ -828,6 +846,7 @@ fn tower_color(kind : Int) -> @raylib.Color {
 }
 
 ///|
+/// Draws all active enemies with type-specific models, health bars, and shield bars.
 fn draw_enemies(game : @types.Game) -> Unit {
   for enemy in game.enemies {
     if not(enemy.active) {
@@ -866,6 +885,7 @@ fn draw_enemies(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a basic enemy as a simple cube with wireframe outline.
 fn draw_basic_enemy(enemy : @types.Enemy, color : @raylib.Color) -> Unit {
   let size : Float = 0.6
   @raylib.draw_cube(
@@ -890,6 +910,7 @@ fn draw_basic_enemy(enemy : @types.Enemy, color : @raylib.Color) -> Unit {
 }
 
 ///|
+/// Draws a fast enemy as a small elongated shape with a speed trail.
 fn draw_fast_enemy(enemy : @types.Enemy, color : @raylib.Color) -> Unit {
   // Small elongated shape
   @raylib.draw_cube(
@@ -915,6 +936,7 @@ fn draw_fast_enemy(enemy : @types.Enemy, color : @raylib.Color) -> Unit {
 }
 
 ///|
+/// Draws a tank enemy as a large heavy body with top and side armor plates.
 fn draw_tank_enemy(enemy : @types.Enemy, color : @raylib.Color) -> Unit {
   let size : Float = 0.9
   // Heavy body
@@ -951,6 +973,7 @@ fn draw_tank_enemy(enemy : @types.Enemy, color : @raylib.Color) -> Unit {
 }
 
 ///|
+/// Draws a flying enemy as a sphere with animated flapping wings and a ground shadow.
 fn draw_flying_enemy(
   enemy : @types.Enemy,
   color : @raylib.Color,
@@ -1001,6 +1024,7 @@ fn draw_flying_enemy(
 }
 
 ///|
+/// Draws a boss enemy as a large cube with crown, crown points, and menacing aura.
 fn draw_boss_enemy(
   enemy : @types.Enemy,
   color : @raylib.Color,
@@ -1064,6 +1088,7 @@ fn draw_boss_enemy(
 }
 
 ///|
+/// Draws a healer enemy with a green cross symbol and pulsing healing aura.
 fn draw_healer_enemy(
   enemy : @types.Enemy,
   color : @raylib.Color,
@@ -1105,6 +1130,7 @@ fn draw_healer_enemy(
 }
 
 ///|
+/// Draws a swarm enemy as a very small cube.
 fn draw_swarm_enemy(enemy : @types.Enemy, color : @raylib.Color) -> Unit {
   // Very small cube
   let size : Float = 0.3
@@ -1118,6 +1144,7 @@ fn draw_swarm_enemy(enemy : @types.Enemy, color : @raylib.Color) -> Unit {
 }
 
 ///|
+/// Draws a shield enemy with a body cube and a translucent shield bubble when shields are active.
 fn draw_shield_enemy(enemy : @types.Enemy, color : @raylib.Color) -> Unit {
   let size : Float = 0.7
   // Body
@@ -1141,6 +1168,7 @@ fn draw_shield_enemy(enemy : @types.Enemy, color : @raylib.Color) -> Unit {
 }
 
 ///|
+/// Draws a camo enemy as a semi-transparent cube with a stealth shimmer wireframe.
 fn draw_camo_enemy(enemy : @types.Enemy, color : @raylib.Color) -> Unit {
   let size : Float = 0.5
   // Semi-transparent body
@@ -1167,6 +1195,7 @@ fn draw_camo_enemy(enemy : @types.Enemy, color : @raylib.Color) -> Unit {
 }
 
 ///|
+/// Draws a splitter enemy as a cube with visible crack lines indicating it will split on death.
 fn draw_splitter_enemy(enemy : @types.Enemy, color : @raylib.Color) -> Unit {
   let size : Float = 0.7
   // Cracked body
@@ -1195,6 +1224,7 @@ fn draw_splitter_enemy(enemy : @types.Enemy, color : @raylib.Color) -> Unit {
 }
 
 ///|
+/// Draws a color-coded health bar above the enemy that changes from green to yellow to red.
 fn draw_enemy_health_bar(enemy : @types.Enemy) -> Unit {
   let size : Float = if enemy.is_boss {
     1.2
@@ -1240,6 +1270,7 @@ fn draw_enemy_health_bar(enemy : @types.Enemy) -> Unit {
 }
 
 ///|
+/// Draws a blue shield bar above the enemy health bar when shields are present.
 fn draw_enemy_shield_bar(enemy : @types.Enemy) -> Unit {
   if enemy.shield_max <= 0.0 {
     return
@@ -1264,6 +1295,7 @@ fn draw_enemy_shield_bar(enemy : @types.Enemy) -> Unit {
 }
 
 ///|
+/// Draws visual indicators for active status effects including slow, burn, stun, and armor break.
 fn draw_enemy_status_visuals(game : @types.Game) -> Unit {
   for enemy in game.enemies {
     if not(enemy.active) {
@@ -1344,6 +1376,7 @@ fn draw_enemy_status_visuals(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the display color for the given enemy type `kind`.
 fn enemy_color(kind : Int) -> @raylib.Color {
   if kind == @types.enemy_basic {
     @raylib.Color::new(180, 60, 60, 255)
@@ -1371,6 +1404,7 @@ fn enemy_color(kind : Int) -> @raylib.Color {
 }
 
 ///|
+/// Draws all active projectiles with type-specific shapes and visual effects.
 fn draw_projectiles(game : @types.Game) -> Unit {
   for proj in game.projectiles {
     if not(proj.active) {
@@ -1465,6 +1499,7 @@ fn draw_projectiles(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws chain lightning visual lines as interpolated cube segments between source and target.
 fn draw_chain_lightning_lines(game : @types.Game) -> Unit {
   for cl in game.chain_lines {
     if not(cl.active) {
@@ -1492,6 +1527,7 @@ fn draw_chain_lightning_lines(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws all active 3D particles as small cubes with lifetime-based alpha fade.
 fn draw_particles_3d(game : @types.Game) -> Unit {
   for p in game.particles {
     if not(p.active) {
@@ -1510,6 +1546,7 @@ fn draw_particles_3d(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the pulsing build cursor at the hovered grid cell with validity color and range preview.
 fn draw_build_cursor(game : @types.Game) -> Unit {
   let wx = @types.grid_to_world_x(game.hover_gx)
   let wz = @types.grid_to_world_z(game.hover_gy)

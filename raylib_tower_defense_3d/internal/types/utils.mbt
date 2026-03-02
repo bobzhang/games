@@ -1,4 +1,5 @@
 ///|
+/// Returns the absolute value of `v`.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -8,6 +9,7 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns `v` clamped between `low` and `high`.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
     low
@@ -19,6 +21,7 @@ pub fn clampf(v : Float, low : Float, high : Float) -> Float {
 }
 
 ///|
+/// Returns `v` clamped between `low` and `high` as an integer.
 pub fn clampi(v : Int, low : Int, high : Int) -> Int {
   if v < low {
     low
@@ -30,6 +33,7 @@ pub fn clampi(v : Int, low : Int, high : Int) -> Int {
 }
 
 ///|
+/// Returns the smaller of `a` and `b`.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -39,6 +43,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of `a` and `b`.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -48,6 +53,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of `a` and `b` as an integer.
 pub fn mini(a : Int, b : Int) -> Int {
   if a < b {
     a
@@ -57,6 +63,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the larger of `a` and `b` as an integer.
 pub fn maxi(a : Int, b : Int) -> Int {
   if a > b {
     a
@@ -66,11 +73,13 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the linear interpolation between `a` and `b` at parameter `t`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t
 }
 
 ///|
+/// Returns the Euclidean distance between two points on the XZ plane.
 pub fn distance2d(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
   let dx = x1 - x2
   let dz = z1 - z2
@@ -78,6 +87,7 @@ pub fn distance2d(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
 }
 
 ///|
+/// Returns the Euclidean distance between two points in 3D space.
 pub fn distance3d(
   x1 : Float,
   y1 : Float,
@@ -93,6 +103,7 @@ pub fn distance3d(
 }
 
 ///|
+/// Returns the squared distance between two points on the XZ plane.
 pub fn distance2d_sq(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
   let dx = x1 - x2
   let dz = z1 - z2
@@ -100,16 +111,19 @@ pub fn distance2d_sq(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
 }
 
 ///|
+/// Returns whether grid coordinates (`gx`, `gy`) are within the map bounds.
 pub fn in_bounds(gx : Int, gy : Int) -> Bool {
   gx >= 0 && gy >= 0 && gx < map_w && gy < map_h
 }
 
 ///|
+/// Returns the flat array index for grid coordinates (`gx`, `gy`).
 pub fn tile_index(gx : Int, gy : Int) -> Int {
   gy * map_w + gx
 }
 
 ///|
+/// Returns the tile type at grid position (`gx`, `gy`), or rock if out of bounds.
 pub fn get_tile(game : Game, gx : Int, gy : Int) -> Int {
   if in_bounds(gx, gy) {
     game.tiles[tile_index(gx, gy)]
@@ -119,6 +133,7 @@ pub fn get_tile(game : Game, gx : Int, gy : Int) -> Int {
 }
 
 ///|
+/// Sets the tile type at grid position (`gx`, `gy`) to `tile`.
 pub fn set_tile(game : Game, gx : Int, gy : Int, tile : Int) -> Unit {
   if in_bounds(gx, gy) {
     game.tiles[tile_index(gx, gy)] = tile
@@ -126,26 +141,31 @@ pub fn set_tile(game : Game, gx : Int, gy : Int, tile : Int) -> Unit {
 }
 
 ///|
+/// Returns the world-space X coordinate for grid column `gx`.
 pub fn grid_to_world_x(gx : Int) -> Float {
   Float::from_int(gx) * cell_size + cell_size / 2.0
 }
 
 ///|
+/// Returns the world-space Z coordinate for grid row `gy`.
 pub fn grid_to_world_z(gy : Int) -> Float {
   Float::from_int(gy) * cell_size + cell_size / 2.0
 }
 
 ///|
+/// Returns the grid column for world-space X coordinate `wx`.
 pub fn world_to_grid_x(wx : Float) -> Int {
   (wx / cell_size).to_int()
 }
 
 ///|
+/// Returns the grid row for world-space Z coordinate `wz`.
 pub fn world_to_grid_y(wz : Float) -> Int {
   (wz / cell_size).to_int()
 }
 
 ///|
+/// Returns the tower pool index at grid position (`gx`, `gy`), or -1 if none.
 pub fn tower_at(game : Game, gx : Int, gy : Int) -> Int {
   for i in 0..<game.towers.length() {
     if game.towers[i].active &&
@@ -158,6 +178,7 @@ pub fn tower_at(game : Game, gx : Int, gy : Int) -> Int {
 }
 
 ///|
+/// Returns the index of the first inactive tower slot, or -1 if full.
 pub fn alloc_tower(game : Game) -> Int {
   for i in 0..<game.towers.length() {
     if not(game.towers[i].active) {
@@ -168,6 +189,7 @@ pub fn alloc_tower(game : Game) -> Int {
 }
 
 ///|
+/// Returns the index of the first inactive enemy slot, or -1 if full.
 pub fn alloc_enemy(game : Game) -> Int {
   for i in 0..<game.enemies.length() {
     if not(game.enemies[i].active) {
@@ -178,6 +200,7 @@ pub fn alloc_enemy(game : Game) -> Int {
 }
 
 ///|
+/// Returns the index of the first inactive projectile slot, or -1 if full.
 pub fn alloc_projectile(game : Game) -> Int {
   for i in 0..<game.projectiles.length() {
     if not(game.projectiles[i].active) {
@@ -188,6 +211,7 @@ pub fn alloc_projectile(game : Game) -> Int {
 }
 
 ///|
+/// Returns the index of the first inactive particle slot, or -1 if full.
 pub fn alloc_particle(game : Game) -> Int {
   for i in 0..<game.particles.length() {
     if not(game.particles[i].active) {
@@ -200,6 +224,7 @@ pub fn alloc_particle(game : Game) -> Int {
 // Tower cost lookup (base cost)
 
 ///|
+/// Returns the base gold cost for building a tower of the given `kind`.
 pub fn tower_cost_for(kind : Int) -> Int {
   if kind == tower_arrow {
     cost_arrow
@@ -225,6 +250,7 @@ pub fn tower_cost_for(kind : Int) -> Int {
 // Keep old name for backward compatibility
 
 ///|
+/// Returns the base gold cost for a tower type (backward-compatible alias).
 pub fn tower_cost(kind : Int) -> Int {
   tower_cost_for(kind)
 }
@@ -232,6 +258,7 @@ pub fn tower_cost(kind : Int) -> Int {
 // Tower upgrade cost for a given level
 
 ///|
+/// Returns the gold cost to upgrade a tower of `kind` from `current_level`.
 pub fn tower_upgrade_cost(kind : Int, current_level : Int) -> Int {
   let base = tower_cost_for(kind)
   if current_level == 1 {
@@ -248,6 +275,7 @@ pub fn tower_upgrade_cost(kind : Int, current_level : Int) -> Int {
 // Total investment in a tower (base + upgrades)
 
 ///|
+/// Returns the total gold invested in a tower of `kind` at the given `level`.
 pub fn tower_total_investment(kind : Int, level : Int) -> Int {
   let mut total = tower_cost_for(kind)
   if level >= 2 {
@@ -266,6 +294,7 @@ pub fn tower_total_investment(kind : Int, level : Int) -> Int {
 // Tower sell value
 
 ///|
+/// Returns the gold refund for selling a tower of `kind` at the given `level`.
 pub fn tower_sell_value(kind : Int, level : Int) -> Int {
   let invested = tower_total_investment(kind, level)
   let value : Float = Float::from_int(invested) * sell_value_pct
@@ -273,6 +302,7 @@ pub fn tower_sell_value(kind : Int, level : Int) -> Int {
 }
 
 ///|
+/// Returns the base attack range for a tower of the given `kind`.
 pub fn tower_range(kind : Int) -> Float {
   if kind == tower_arrow {
     range_arrow
@@ -298,6 +328,7 @@ pub fn tower_range(kind : Int) -> Float {
 // Tower range with level scaling and buff bonus
 
 ///|
+/// Returns the actual range of `tower` including level scaling and buff bonuses.
 pub fn tower_effective_range(tower : Tower) -> Float {
   let base = tower_range(tower.kind)
   let level_mult : Float = 1.0 +
@@ -307,6 +338,7 @@ pub fn tower_effective_range(tower : Tower) -> Float {
 }
 
 ///|
+/// Returns the base damage per shot for a tower of the given `kind`.
 pub fn tower_damage(kind : Int) -> Float {
   if kind == tower_arrow {
     dmg_arrow
@@ -332,6 +364,7 @@ pub fn tower_damage(kind : Int) -> Float {
 // Tower damage with level scaling and buff bonus
 
 ///|
+/// Returns the actual damage of `tower` including level scaling and buff bonuses.
 pub fn tower_effective_damage(tower : Tower) -> Float {
   let base = tower_damage(tower.kind)
   let level_mult : Float = 1.0 +
@@ -341,6 +374,7 @@ pub fn tower_effective_damage(tower : Tower) -> Float {
 }
 
 ///|
+/// Returns the base fire rate in seconds between shots for a tower of `kind`.
 pub fn tower_fire_rate(kind : Int) -> Float {
   if kind == tower_arrow {
     rate_arrow
@@ -366,6 +400,7 @@ pub fn tower_fire_rate(kind : Int) -> Float {
 // Tower fire rate with level scaling and buff bonus (lower = faster)
 
 ///|
+/// Returns the actual fire rate of `tower` including level scaling and buff bonuses.
 pub fn tower_effective_rate(tower : Tower) -> Float {
   let base = tower_fire_rate(tower.kind)
   let level_mult : Float = 1.0 -
@@ -376,6 +411,7 @@ pub fn tower_effective_rate(tower : Tower) -> Float {
 }
 
 ///|
+/// Returns the display name for a tower of the given `kind`.
 pub fn tower_name(kind : Int) -> String {
   if kind == tower_arrow {
     "Arrow"
@@ -399,6 +435,7 @@ pub fn tower_name(kind : Int) -> String {
 }
 
 ///|
+/// Returns a short combat description for a tower of the given `kind`.
 pub fn tower_description(kind : Int) -> String {
   if kind == tower_arrow {
     "Fast single-target"
@@ -422,6 +459,7 @@ pub fn tower_description(kind : Int) -> String {
 }
 
 ///|
+/// Returns the display name for an enemy of the given `kind`.
 pub fn enemy_name(kind : Int) -> String {
   if kind == enemy_basic {
     "Soldier"
@@ -449,6 +487,7 @@ pub fn enemy_name(kind : Int) -> String {
 }
 
 ///|
+/// Returns the display name for the given targeting `mode`.
 pub fn targeting_mode_name(mode : Int) -> String {
   if mode == target_first {
     "First"
@@ -467,6 +506,7 @@ pub fn targeting_mode_name(mode : Int) -> String {
 // Returns a multiplier: <1.0 = resistant, 1.0 = normal, >1.0 = weak
 
 ///|
+/// Returns the damage resistance multiplier for `enemy_kind` against `tower_kind`.
 pub fn enemy_resistance(enemy_kind : Int, tower_kind : Int) -> Float {
   // Flying enemies are weak to arrow, resistant to flame
   if enemy_kind == enemy_flying {
@@ -528,6 +568,7 @@ pub fn enemy_resistance(enemy_kind : Int, tower_kind : Int) -> Float {
 // Enemy armor value by type
 
 ///|
+/// Returns the flat damage reduction armor value for an enemy of `kind`.
 pub fn enemy_armor_value(kind : Int) -> Float {
   if kind == enemy_basic {
     armor_basic
@@ -557,6 +598,7 @@ pub fn enemy_armor_value(kind : Int) -> Float {
 // Calculate actual damage after armor and resistance
 
 ///|
+/// Returns the final damage after applying armor and resistance modifiers.
 pub fn calc_damage(
   base_damage : Float,
   tower_kind : Int,
@@ -571,6 +613,7 @@ pub fn calc_damage(
 // Path interpolation: get world position at a given path progress
 
 ///|
+/// Returns the interpolated world X position along the path at `path_idx` and `progress`.
 pub fn path_position_x(game : Game, path_idx : Int, progress : Float) -> Float {
   if path_idx >= game.path_count - 1 {
     if game.path_count > 0 {
@@ -584,6 +627,7 @@ pub fn path_position_x(game : Game, path_idx : Int, progress : Float) -> Float {
 }
 
 ///|
+/// Returns the interpolated world Z position along the path at `path_idx` and `progress`.
 pub fn path_position_z(game : Game, path_idx : Int, progress : Float) -> Float {
   if path_idx >= game.path_count - 1 {
     if game.path_count > 0 {
@@ -599,6 +643,7 @@ pub fn path_position_z(game : Game, path_idx : Int, progress : Float) -> Float {
 // Get total path progress for an enemy (for targeting comparison)
 
 ///|
+/// Returns the combined path progress of `enemy` for targeting priority comparison.
 pub fn enemy_total_progress(enemy : Enemy) -> Float {
   Float::from_int(enemy.path_index) + enemy.path_progress
 }
@@ -606,6 +651,7 @@ pub fn enemy_total_progress(enemy : Enemy) -> Float {
 // Target selection: find best enemy in range based on targeting mode
 
 ///|
+/// Returns the index of the best enemy target in `range` based on targeting `mode`.
 pub fn find_target(
   game : Game,
   wx : Float,
@@ -652,6 +698,7 @@ pub fn find_target(
 // Count active enemies
 
 ///|
+/// Returns the number of currently active enemies on the field.
 pub fn count_active_enemies(game : Game) -> Int {
   let mut count = 0
   for enemy in game.enemies {
@@ -665,6 +712,7 @@ pub fn count_active_enemies(game : Game) -> Int {
 // Count active towers
 
 ///|
+/// Returns the number of currently active towers on the map.
 pub fn count_active_towers(game : Game) -> Int {
   let mut count = 0
   for tower in game.towers {
@@ -678,6 +726,7 @@ pub fn count_active_towers(game : Game) -> Int {
 // Check if any tower can detect camo (sniper towers and lightning towers can detect camo)
 
 ///|
+/// Returns whether a tower of `kind` can detect camouflaged enemies.
 pub fn tower_can_detect_camo(kind : Int) -> Bool {
   kind == tower_sniper || kind == tower_lightning
 }
@@ -685,6 +734,7 @@ pub fn tower_can_detect_camo(kind : Int) -> Bool {
 // Get projectile speed for tower type
 
 ///|
+/// Returns the projectile travel speed for a tower of the given `kind`.
 pub fn projectile_speed_for(kind : Int) -> Float {
   if kind == tower_arrow {
     proj_speed_bullet
@@ -708,6 +758,7 @@ pub fn projectile_speed_for(kind : Int) -> Float {
 // Get splash radius for tower type
 
 ///|
+/// Returns the area-of-effect splash radius for a tower of the given `kind`.
 pub fn splash_radius_for(kind : Int) -> Float {
   if kind == tower_cannon {
     splash_radius_cannon
@@ -723,6 +774,7 @@ pub fn splash_radius_for(kind : Int) -> Float {
 // RNG
 
 ///|
+/// Returns the next pseudorandom integer and advances the RNG state.
 pub fn rand_next(game : Game) -> Int {
   let mut x = game.rng_state
   x = x ^ (x << 13)
@@ -736,6 +788,7 @@ pub fn rand_next(game : Game) -> Int {
 }
 
 ///|
+/// Returns a random integer between `low` and `high` inclusive.
 pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
   if high <= low {
     low
@@ -745,17 +798,20 @@ pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
 }
 
 ///|
+/// Returns a random float between `low` and `high`.
 pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
   let n = Float::from_int(rand_next(game) % 10000) / 10000.0
   low + (high - low) * n
 }
 
 ///|
+/// Returns whether a random roll succeeds given the probability `chance`.
 pub fn rand_bool(game : Game, chance : Float) -> Bool {
   rand_rangef(game, 0.0, 1.0) < chance
 }
 
 ///|
+/// Creates `count` particles at the given world position with the specified color.
 pub fn spawn_particles(
   game : Game,
   wx : Float,
@@ -791,6 +847,7 @@ pub fn spawn_particles(
 }
 
 ///|
+/// Creates `count` typed particles at the given world position with color and `kind`.
 pub fn spawn_particles_typed(
   game : Game,
   wx : Float,
@@ -829,6 +886,7 @@ pub fn spawn_particles_typed(
 // Spawn gold collection particles
 
 ///|
+/// Creates gold-colored floating particles at the given world position.
 pub fn spawn_gold_particles(
   game : Game,
   wx : Float,
@@ -841,6 +899,7 @@ pub fn spawn_gold_particles(
 // Spawn explosion particles
 
 ///|
+/// Creates explosion particles at the given world position with variable `size`.
 pub fn spawn_explosion_particles(
   game : Game,
   wx : Float,
@@ -856,6 +915,7 @@ pub fn spawn_explosion_particles(
 // Spawn ice particles
 
 ///|
+/// Creates blue ice particles at the given world position.
 pub fn spawn_ice_particles(
   game : Game,
   wx : Float,
@@ -868,6 +928,7 @@ pub fn spawn_ice_particles(
 // Spawn fire particles
 
 ///|
+/// Creates orange fire particles at the given world position.
 pub fn spawn_fire_particles(
   game : Game,
   wx : Float,
@@ -880,6 +941,7 @@ pub fn spawn_fire_particles(
 // Spawn lightning particles
 
 ///|
+/// Creates yellow lightning particles at the given world position.
 pub fn spawn_lightning_particles(
   game : Game,
   wx : Float,
@@ -892,6 +954,7 @@ pub fn spawn_lightning_particles(
 // Spawn build effect particles
 
 ///|
+/// Creates blue construction particles at the given world position.
 pub fn spawn_build_particles(
   game : Game,
   wx : Float,
@@ -902,6 +965,7 @@ pub fn spawn_build_particles(
 }
 
 ///|
+/// Returns whether a tower can be placed at grid position (`gx`, `gy`).
 pub fn can_place_tower(game : Game, gx : Int, gy : Int) -> Bool {
   if not(in_bounds(gx, gy)) {
     return false
@@ -919,6 +983,7 @@ pub fn can_place_tower(game : Game, gx : Int, gy : Int) -> Bool {
 // Set notification message
 
 ///|
+/// Sets the on-screen notification `text` to display for `duration` seconds.
 pub fn set_notification(game : Game, text : String, duration : Float) -> Unit {
   game.notification_text = text
   game.notification_timer = duration
@@ -927,6 +992,7 @@ pub fn set_notification(game : Game, text : String, duration : Float) -> Unit {
 // Difficulty HP multiplier
 
 ///|
+/// Returns the enemy HP multiplier for the given `difficulty` level.
 pub fn difficulty_hp_mult(difficulty : Int) -> Float {
   if difficulty == 0 {
     difficulty_easy_hp
@@ -940,6 +1006,7 @@ pub fn difficulty_hp_mult(difficulty : Int) -> Float {
 // Difficulty speed multiplier
 
 ///|
+/// Returns the enemy speed multiplier for the given `difficulty` level.
 pub fn difficulty_speed_mult(difficulty : Int) -> Float {
   if difficulty == 0 {
     difficulty_easy_speed
@@ -951,6 +1018,7 @@ pub fn difficulty_speed_mult(difficulty : Int) -> Float {
 }
 
 ///|
+/// Returns the display name for the given `difficulty` level.
 pub fn difficulty_name(difficulty : Int) -> String {
   if difficulty == 0 {
     "Easy"
@@ -964,6 +1032,7 @@ pub fn difficulty_name(difficulty : Int) -> String {
 // Get upgrade info for tower at given level
 
 ///|
+/// Returns the upgrade cost and stat preview for a tower of `kind` at `level`.
 pub fn get_upgrade_info(kind : Int, level : Int) -> UpgradeInfo {
   let cost = tower_upgrade_cost(kind, level)
   let dmg_mult : Float = 1.0 + Float::from_int(level) * upgrade_damage_mult
@@ -988,6 +1057,7 @@ pub fn get_upgrade_info(kind : Int, level : Int) -> UpgradeInfo {
 // Level 3 special ability descriptions
 
 ///|
+/// Returns the special ability description for level 3 of a tower of `kind`.
 fn get_level3_special_desc(kind : Int) -> String {
   if kind == tower_arrow {
     "Double shot"
@@ -1013,6 +1083,7 @@ fn get_level3_special_desc(kind : Int) -> String {
 // Add chain line visual effect
 
 ///|
+/// Adds a chain lightning visual arc between two 3D points.
 pub fn add_chain_line(
   game : Game,
   x1 : Float,
@@ -1040,6 +1111,7 @@ pub fn add_chain_line(
 // Speed setting name
 
 ///|
+/// Returns the display label for the given speed `setting`.
 pub fn speed_name(setting : Int) -> String {
   if setting == 0 {
     "1x"
@@ -1053,6 +1125,7 @@ pub fn speed_name(setting : Int) -> String {
 // Speed multiplier from setting
 
 ///|
+/// Returns the time multiplier for the given speed `setting`.
 pub fn speed_from_setting(setting : Int) -> Float {
   if setting == 0 {
     speed_1x

@@ -1,6 +1,7 @@
 // Status effect on an enemy
 
 ///|
+/// Active debuff or buff applied to an enemy with duration and strength.
 pub(all) struct StatusEffect {
   mut kind : Int
   mut duration : Float
@@ -9,11 +10,13 @@ pub(all) struct StatusEffect {
 }
 
 ///|
+/// Creates an empty status effect with no active debuff.
 pub fn StatusEffect::none() -> StatusEffect {
   { kind: effect_none, duration: 0.0, strength: 0.0, tick_timer: 0.0 }
 }
 
 ///|
+/// Creates a status effect with the given `kind`, `duration`, and `strength`.
 pub fn StatusEffect::new(
   kind : Int,
   duration : Float,
@@ -25,6 +28,7 @@ pub fn StatusEffect::new(
 // Tower entity
 
 ///|
+/// Tower entity with targeting, upgrade level, and attack state.
 pub(all) struct Tower {
   mut active : Bool
   mut kind : Int
@@ -46,6 +50,7 @@ pub(all) struct Tower {
 }
 
 ///|
+/// Creates an inactive tower slot for use in the entity pool.
 pub fn Tower::inactive() -> Tower {
   {
     active: false,
@@ -69,6 +74,7 @@ pub fn Tower::inactive() -> Tower {
 }
 
 ///|
+/// Creates a new active tower of the given `kind` at grid position (`gx`, `gy`).
 pub fn Tower::new(kind : Int, gx : Int, gy : Int) -> Tower {
   {
     active: true,
@@ -94,6 +100,7 @@ pub fn Tower::new(kind : Int, gx : Int, gy : Int) -> Tower {
 // Enemy entity
 
 ///|
+/// Enemy entity with HP, movement, status effects, and special traits.
 pub(all) struct Enemy {
   mut active : Bool
   mut kind : Int
@@ -127,6 +134,7 @@ pub(all) struct Enemy {
 }
 
 ///|
+/// Creates an inactive enemy slot for use in the entity pool.
 pub fn Enemy::inactive() -> Enemy {
   {
     active: false,
@@ -164,6 +172,7 @@ pub fn Enemy::inactive() -> Enemy {
 // Projectile
 
 ///|
+/// Projectile entity with position, damage, and on-hit effect properties.
 pub(all) struct Projectile {
   mut active : Bool
   mut kind : Int
@@ -187,6 +196,7 @@ pub(all) struct Projectile {
 }
 
 ///|
+/// Creates an inactive projectile slot for use in the entity pool.
 pub fn Projectile::inactive() -> Projectile {
   {
     active: false,
@@ -214,6 +224,7 @@ pub fn Projectile::inactive() -> Projectile {
 // Particle
 
 ///|
+/// Visual particle with position, velocity, color, and lifetime.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -232,6 +243,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// Creates an inactive particle slot for use in the particle pool.
 pub fn Particle::inactive() -> Particle {
   {
     active: false,
@@ -254,29 +266,37 @@ pub fn Particle::inactive() -> Particle {
 // Particle kinds
 
 ///|
+/// Particle kind for generic visual effects.
 pub let particle_normal : Int = 0
 
 ///|
+/// Particle kind for flame and burn effects.
 pub let particle_fire : Int = 1
 
 ///|
+/// Particle kind for frost and ice effects.
 pub let particle_ice : Int = 2
 
 ///|
+/// Particle kind for electrical discharge effects.
 pub let particle_lightning : Int = 3
 
 ///|
+/// Particle kind for gold collection visual feedback.
 pub let particle_gold : Int = 4
 
 ///|
+/// Particle kind for tower construction effects.
 pub let particle_build : Int = 5
 
 ///|
+/// Particle kind for explosion and impact effects.
 pub let particle_explosion : Int = 6
 
 // Path node
 
 ///|
+/// Waypoint on the enemy movement path with world-space coordinates.
 pub(all) struct PathNode {
   x : Float
   z : Float
@@ -285,6 +305,7 @@ pub(all) struct PathNode {
 // Wave spawn entry: one type of enemy within a wave
 
 ///|
+/// Single enemy group within a wave with type, count, and spawn timing.
 pub(all) struct WaveSpawnEntry {
   enemy_kind : Int
   count : Int
@@ -296,6 +317,7 @@ pub(all) struct WaveSpawnEntry {
 // Wave definition
 
 ///|
+/// Simple wave definition with enemy type, count, and scaling multipliers.
 pub(all) struct WaveDef {
   enemy_kind : Int
   count : Int
@@ -306,6 +328,7 @@ pub(all) struct WaveDef {
 // Extended wave definition with multiple spawn groups
 
 ///|
+/// Extended wave definition with multiple spawn groups and bonus rewards.
 pub(all) struct WaveInfo {
   entries : Array[WaveSpawnEntry]
   is_boss_wave : Bool
@@ -316,6 +339,7 @@ pub(all) struct WaveInfo {
 // Map data definition
 
 ///|
+/// Map metadata including name, difficulty rating, and layout data.
 pub(all) struct MapInfo {
   name : String
   difficulty : Int
@@ -327,6 +351,7 @@ pub(all) struct MapInfo {
 // Tower upgrade info
 
 ///|
+/// Tower upgrade details including cost, stat multipliers, and description.
 pub(all) struct UpgradeInfo {
   cost : Int
   damage_mult : Float
@@ -338,6 +363,7 @@ pub(all) struct UpgradeInfo {
 // Main Game struct
 
 ///|
+/// Main game state holding all entity pools, economy, wave, camera, and UI data.
 pub(all) struct Game {
   mut state : Int
   mut prev_state : Int
@@ -437,6 +463,7 @@ pub(all) struct Game {
 // Chain lightning visual line
 
 ///|
+/// Visual line segment for rendering chain lightning arcs between enemies.
 pub(all) struct ChainLine {
   mut active : Bool
   mut x1 : Float
@@ -449,6 +476,7 @@ pub(all) struct ChainLine {
 }
 
 ///|
+/// Creates an inactive chain line slot for use in the visual effect pool.
 pub fn ChainLine::inactive() -> ChainLine {
   {
     active: false,
@@ -463,6 +491,7 @@ pub fn ChainLine::inactive() -> ChainLine {
 }
 
 ///|
+/// Creates a new game instance with default settings and empty entity pools.
 pub fn Game::new() -> Game {
   {
     state: state_menu,

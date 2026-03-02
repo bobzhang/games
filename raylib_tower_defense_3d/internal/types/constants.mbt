@@ -1,416 +1,539 @@
 // Screen
 
 ///|
+/// Window width in pixels.
 pub let screen_width : Int = 1024
 
 ///|
+/// Window height in pixels.
 pub let screen_height : Int = 768
 
 // Map grid
 
 ///|
+/// Map grid width in cells.
 pub let map_w : Int = 20
 
 ///|
+/// Map grid height in cells.
 pub let map_h : Int = 15
 
 ///|
+/// World-space size of each grid cell.
 pub let cell_size : Float = 2.0
 
 ///|
+/// Total number of cells in the map grid.
 pub let map_total : Int = 300 // map_w * map_h
 
 // Tile types
 
 ///|
+/// Tile type for buildable grass terrain.
 pub let tile_grass : Int = 0
 
 ///|
+/// Tile type for the enemy movement path.
 pub let tile_path : Int = 1
 
 ///|
+/// Tile type for the enemy spawn point.
 pub let tile_start : Int = 2
 
 ///|
+/// Tile type for the player base that enemies target.
 pub let tile_end : Int = 3
 
 ///|
+/// Tile type for impassable water terrain.
 pub let tile_water : Int = 4
 
 ///|
+/// Tile type for impassable rock terrain.
 pub let tile_rock : Int = 5
 
 // Tower types (8 tower types)
 
 ///|
+/// Tower type identifier for the fast single-target arrow tower.
 pub let tower_arrow : Int = 0
 
 ///|
+/// Tower type identifier for the slow splash-damage cannon tower.
 pub let tower_cannon : Int = 1
 
 ///|
+/// Tower type identifier for the enemy-slowing frost tower.
 pub let tower_frost : Int = 2
 
 ///|
+/// Tower type identifier for the chain-lightning tower.
 pub let tower_lightning : Int = 3
 
 ///|
+/// Tower type identifier for the rapid-fire burn-damage flame tower.
 pub let tower_flame : Int = 4
 
 ///|
+/// Tower type identifier for the long-range critical-hit sniper tower.
 pub let tower_sniper : Int = 5
 
 ///|
+/// Tower type identifier for the wide area-of-effect splash tower.
 pub let tower_splash : Int = 6
 
 ///|
+/// Tower type identifier for the support tower that boosts nearby towers.
 pub let tower_buff : Int = 7
 
 ///|
+/// Total number of distinct tower types available.
 pub let tower_type_count : Int = 8
 
 // Tower costs (base cost for level 1)
 
 ///|
+/// Base gold cost to build an arrow tower.
 pub let cost_arrow : Int = 50
 
 ///|
+/// Base gold cost to build a cannon tower.
 pub let cost_cannon : Int = 100
 
 ///|
+/// Base gold cost to build a frost tower.
 pub let cost_frost : Int = 75
 
 ///|
+/// Base gold cost to build a lightning tower.
 pub let cost_lightning : Int = 150
 
 ///|
+/// Base gold cost to build a flame tower.
 pub let cost_flame : Int = 120
 
 ///|
+/// Base gold cost to build a sniper tower.
 pub let cost_sniper : Int = 200
 
 ///|
+/// Base gold cost to build a splash tower.
 pub let cost_splash : Int = 130
 
 ///|
+/// Base gold cost to build a buff tower.
 pub let cost_buff : Int = 175
 
 // Tower ranges (base range)
 
 ///|
+/// Base attack range for arrow towers.
 pub let range_arrow : Float = 5.0
 
 ///|
+/// Base attack range for cannon towers.
 pub let range_cannon : Float = 4.5
 
 ///|
+/// Base attack range for frost towers.
 pub let range_frost : Float = 4.0
 
 ///|
+/// Base attack range for lightning towers.
 pub let range_lightning : Float = 6.0
 
 ///|
+/// Base attack range for flame towers.
 pub let range_flame : Float = 3.5
 
 ///|
+/// Base attack range for sniper towers.
 pub let range_sniper : Float = 9.0
 
 ///|
+/// Base attack range for splash towers.
 pub let range_splash : Float = 4.0
 
 ///|
+/// Base buff range for support towers.
 pub let range_buff : Float = 5.0
 
 // Tower damage (base damage)
 
 ///|
+/// Base damage per shot for arrow towers.
 pub let dmg_arrow : Float = 10.0
 
 ///|
+/// Base damage per shot for cannon towers.
 pub let dmg_cannon : Float = 30.0
 
 ///|
+/// Base damage per shot for frost towers.
 pub let dmg_frost : Float = 5.0
 
 ///|
+/// Base damage per shot for lightning towers.
 pub let dmg_lightning : Float = 20.0
 
 ///|
+/// Base damage per shot for flame towers.
 pub let dmg_flame : Float = 15.0
 
 ///|
+/// Base damage per shot for sniper towers.
 pub let dmg_sniper : Float = 60.0
 
 ///|
+/// Base damage per shot for splash towers.
 pub let dmg_splash : Float = 18.0
 
 ///|
+/// Base damage per shot for buff towers (zero since they only support).
 pub let dmg_buff : Float = 0.0
 
 // Tower fire rates (seconds between shots)
 
 ///|
+/// Seconds between shots for arrow towers.
 pub let rate_arrow : Float = 0.8
 
 ///|
+/// Seconds between shots for cannon towers.
 pub let rate_cannon : Float = 2.0
 
 ///|
+/// Seconds between shots for frost towers.
 pub let rate_frost : Float = 1.0
 
 ///|
+/// Seconds between shots for lightning towers.
 pub let rate_lightning : Float = 1.5
 
 ///|
+/// Seconds between shots for flame towers.
 pub let rate_flame : Float = 0.3
 
 ///|
+/// Seconds between shots for sniper towers.
 pub let rate_sniper : Float = 3.0
 
 ///|
+/// Seconds between shots for splash towers.
 pub let rate_splash : Float = 1.8
 
 ///|
+/// Seconds between buff pulses for support towers.
 pub let rate_buff : Float = 4.0
 
 // Tower upgrade costs (level 2 and level 3)
 
 ///|
+/// Cost multiplier for upgrading a tower to level 2.
 pub let upgrade_cost_mult_2 : Float = 0.6
 
 ///|
+/// Cost multiplier for upgrading a tower to level 3.
 pub let upgrade_cost_mult_3 : Float = 1.0
 
 // Tower upgrade stat multipliers per level
 
 ///|
+/// Range increase fraction per tower upgrade level.
 pub let upgrade_range_mult : Float = 0.12
 
 ///|
+/// Damage increase fraction per tower upgrade level.
 pub let upgrade_damage_mult : Float = 0.25
 
 ///|
+/// Fire rate improvement fraction per tower upgrade level.
 pub let upgrade_rate_mult : Float = 0.10
 
 // Tower sell value (percentage of total investment)
 
 ///|
+/// Percentage of total gold investment returned when selling a tower.
 pub let sell_value_pct : Float = 0.6
 
 // Targeting modes
 
 ///|
+/// Targeting mode that prioritizes the enemy furthest along the path.
 pub let target_first : Int = 0
 
 ///|
+/// Targeting mode that prioritizes the enemy least far along the path.
 pub let target_last : Int = 1
 
 ///|
+/// Targeting mode that prioritizes the enemy with the most HP.
 pub let target_strongest : Int = 2
 
 ///|
+/// Targeting mode that prioritizes the nearest enemy to the tower.
 pub let target_closest : Int = 3
 
 ///|
+/// Total number of available targeting modes.
 pub let target_mode_count : Int = 4
 
 // Projectile types
 
 ///|
+/// Projectile type for arrow tower bullets.
 pub let proj_bullet : Int = 0
 
 ///|
+/// Projectile type for cannon tower shells.
 pub let proj_cannonball : Int = 1
 
 ///|
+/// Projectile type for frost tower ice shards.
 pub let proj_ice_shard : Int = 2
 
 ///|
+/// Projectile type for lightning tower bolts.
 pub let proj_lightning_bolt : Int = 3
 
 ///|
+/// Projectile type for flame tower fireballs.
 pub let proj_fireball : Int = 4
 
 ///|
+/// Projectile type for sniper tower rounds.
 pub let proj_sniper_round : Int = 5
 
 ///|
+/// Projectile type for splash tower bombs.
 pub let proj_splash_bomb : Int = 6
 
 // Projectile speeds
 
 ///|
+/// Travel speed for arrow tower bullets.
 pub let proj_speed_bullet : Float = 14.0
 
 ///|
+/// Travel speed for cannon tower shells.
 pub let proj_speed_cannonball : Float = 10.0
 
 ///|
+/// Travel speed for frost tower ice shards.
 pub let proj_speed_ice_shard : Float = 12.0
 
 ///|
+/// Travel speed for lightning tower bolts.
 pub let proj_speed_lightning : Float = 20.0
 
 ///|
+/// Travel speed for flame tower fireballs.
 pub let proj_speed_fireball : Float = 8.0
 
 ///|
+/// Travel speed for sniper tower rounds.
 pub let proj_speed_sniper : Float = 25.0
 
 ///|
+/// Travel speed for splash tower bombs.
 pub let proj_speed_splash : Float = 9.0
 
 // Splash radii
 
 ///|
+/// Area-of-effect blast radius for cannon projectiles.
 pub let splash_radius_cannon : Float = 2.0
 
 ///|
+/// Area-of-effect blast radius for splash tower bombs.
 pub let splash_radius_splash : Float = 3.0
 
 ///|
+/// Area-of-effect blast radius for flame tower fireballs.
 pub let splash_radius_flame : Float = 1.5
 
 // Status effect types
 
 ///|
+/// Status effect type for no active effect.
 pub let effect_none : Int = 0
 
 ///|
+/// Status effect type for movement speed reduction.
 pub let effect_slow : Int = 1
 
 ///|
+/// Status effect type for damage-over-time burn.
 pub let effect_burn : Int = 2
 
 ///|
+/// Status effect type for complete movement stun.
 pub let effect_stun : Int = 3
 
 ///|
+/// Status effect type for lightning chain damage propagation.
 pub let effect_chain : Int = 4
 
 ///|
+/// Status effect type for temporary armor reduction.
 pub let effect_armor_break : Int = 5
 
 // Status effect durations
 
 ///|
+/// Duration in seconds of the slow debuff on enemies.
 pub let slow_duration : Float = 2.5
 
 ///|
+/// Duration in seconds of the burn damage-over-time effect.
 pub let burn_duration : Float = 3.0
 
 ///|
+/// Duration in seconds of the stun immobilization effect.
 pub let stun_duration : Float = 1.0
 
 ///|
+/// Duration in seconds of the armor break debuff.
 pub let armor_break_duration : Float = 4.0
 
 // Status effect strengths
 
 ///|
+/// Movement speed multiplier applied during slow (0.4 = 60% speed reduction).
 pub let slow_strength : Float = 0.4
 
 ///|
+/// Damage per second dealt by the burn status effect.
 pub let burn_dps : Float = 5.0
 
 ///|
+/// Armor effectiveness multiplier during armor break (0.5 = halved armor).
 pub let armor_break_amount : Float = 0.5
 
 // Lightning chain parameters
 
 ///|
+/// Number of additional enemies hit by lightning chain bounces.
 pub let chain_count : Int = 3
 
 ///|
+/// Maximum distance a lightning chain can jump between enemies.
 pub let chain_range : Float = 4.0
 
 ///|
+/// Damage multiplier applied to each successive lightning chain bounce.
 pub let chain_damage_decay : Float = 0.7
 
 // Sniper crit parameters
 
 ///|
+/// Probability that a sniper shot deals critical damage.
 pub let sniper_crit_chance : Float = 0.25
 
 ///|
+/// Damage multiplier applied on a sniper critical hit.
 pub let sniper_crit_mult : Float = 2.5
 
 // Buff tower parameters
 
 ///|
+/// Damage bonus fraction applied to towers in buff range.
 pub let buff_damage_bonus : Float = 0.25
 
 ///|
+/// Range bonus fraction applied to towers in buff range.
 pub let buff_range_bonus : Float = 0.15
 
 ///|
+/// Fire rate bonus fraction applied to towers in buff range.
 pub let buff_rate_bonus : Float = 0.10
 
 // Enemy types (10+ enemy types)
 
 ///|
+/// Enemy type identifier for standard soldiers.
 pub let enemy_basic : Int = 0
 
 ///|
+/// Enemy type identifier for fast-moving scouts.
 pub let enemy_fast : Int = 1
 
 ///|
+/// Enemy type identifier for heavily armored tanks.
 pub let enemy_tank : Int = 2
 
 ///|
+/// Enemy type identifier for airborne flyers that bypass ground obstacles.
 pub let enemy_flying : Int = 3
 
 ///|
+/// Enemy type identifier for powerful boss enemies.
 pub let enemy_boss : Int = 4
 
 ///|
+/// Enemy type identifier for medics that heal nearby allies.
 pub let enemy_healer : Int = 5
 
 ///|
+/// Enemy type identifier for weak but numerous swarm units.
 pub let enemy_swarm : Int = 6
 
 ///|
+/// Enemy type identifier for shield-bearing units with regenerating barriers.
 pub let enemy_shield : Int = 7
 
 ///|
+/// Enemy type identifier for camouflaged stealth units.
 pub let enemy_camo : Int = 8
 
 ///|
+/// Enemy type identifier for splitters that spawn children on death.
 pub let enemy_splitter : Int = 9
 
 ///|
+/// Total number of distinct enemy types.
 pub let enemy_type_count : Int = 10
 
 // Enemy armor values (damage reduction flat amount)
 
 ///|
+/// Flat damage reduction for basic enemies.
 pub let armor_basic : Float = 0.0
 
 ///|
+/// Flat damage reduction for fast enemies.
 pub let armor_fast : Float = 0.0
 
 ///|
+/// Flat damage reduction for tank enemies.
 pub let armor_tank : Float = 5.0
 
 ///|
+/// Flat damage reduction for flying enemies.
 pub let armor_flying : Float = 0.0
 
 ///|
+/// Flat damage reduction for boss enemies.
 pub let armor_boss : Float = 8.0
 
 ///|
+/// Flat damage reduction for healer enemies.
 pub let armor_healer : Float = 1.0
 
 ///|
+/// Flat damage reduction for swarm enemies.
 pub let armor_swarm : Float = 0.0
 
 ///|
+/// Flat damage reduction for shield enemies.
 pub let armor_shield : Float = 10.0
 
 ///|
+/// Flat damage reduction for camouflaged enemies.
 pub let armor_camo : Float = 0.0
 
 ///|
+/// Flat damage reduction for splitter enemies.
 pub let armor_splitter : Float = 2.0
 
 // Enemy resistance system: 0.0 = immune, 0.5 = resistant, 1.0 = normal, 1.5 = weak, 2.0 = very weak
@@ -420,205 +543,265 @@ pub let armor_splitter : Float = 2.0
 // Healer parameters
 
 ///|
+/// Radius within which healer enemies restore HP to allies.
 pub let healer_range : Float = 4.0
 
 ///|
+/// HP restored per heal tick by healer enemies.
 pub let healer_heal_rate : Float = 8.0
 
 ///|
+/// Seconds between healer enemy heal ticks.
 pub let healer_heal_interval : Float = 1.5
 
 // Splitter parameters
 
 ///|
+/// Number of child enemies spawned when a splitter dies.
 pub let splitter_children : Int = 3
 
 ///|
+/// HP fraction of parent that each splitter child inherits.
 pub let splitter_child_hp_pct : Float = 0.3
 
 // Shield enemy parameters
 
 ///|
+/// Seconds after taking damage before shield regeneration begins.
 pub let shield_regen_delay : Float = 3.0
 
 ///|
+/// Shield HP restored per second during regeneration.
 pub let shield_regen_rate : Float = 5.0
 
 ///|
+/// Maximum shield HP as a fraction of the enemy base HP.
 pub let shield_max_pct : Float = 0.4
 
 // Game states
 
 ///|
+/// Game state for the main menu screen.
 pub let state_menu : Int = 0
 
 ///|
+/// Game state for active gameplay with enemies spawning and moving.
 pub let state_playing : Int = 1
 
 ///|
+/// Game state for paused gameplay.
 pub let state_paused : Int = 2
 
 ///|
+/// Game state for the countdown before a new wave starts.
 pub let state_wave_prep : Int = 3
 
 ///|
+/// Game state for the defeat screen when all lives are lost.
 pub let state_game_over : Int = 4
 
 ///|
+/// Game state for the victory screen after surviving all waves.
 pub let state_victory : Int = 5
 
 ///|
+/// Game state for tower placement building mode.
 pub let state_building : Int = 6
 
 ///|
+/// Game state for the map selection screen.
 pub let state_map_select : Int = 7
 
 ///|
+/// Game state for the tower inspection and upgrade panel.
 pub let state_tower_info : Int = 8
 
 // Pools
 
 ///|
+/// Maximum number of towers that can exist simultaneously.
 pub let max_towers : Int = 64
 
 ///|
+/// Maximum number of enemies that can exist simultaneously.
 pub let max_enemies : Int = 200
 
 ///|
+/// Maximum number of projectiles that can exist simultaneously.
 pub let max_projectiles : Int = 300
 
 ///|
+/// Maximum number of visual particles that can exist simultaneously.
 pub let max_particles : Int = 600
 
 ///|
+/// Maximum number of waypoints in an enemy path.
 pub let max_path_nodes : Int = 64
 
 ///|
+/// Total number of enemy waves per game session.
 pub let max_waves : Int = 30
 
 ///|
+/// Maximum number of concurrent status effects on a single enemy.
 pub let max_status_effects : Int = 4
 
 // Camera
 
 ///|
+/// Camera vertical field of view in degrees.
 pub let camera_fovy : Float = 45.0
 
 ///|
+/// Minimum camera distance when zoomed in.
 pub let camera_min_dist : Float = 10.0
 
 ///|
+/// Maximum camera distance when zoomed out.
 pub let camera_max_dist : Float = 40.0
 
 // Economy
 
 ///|
+/// Gold amount the player starts with.
 pub let starting_gold : Int = 250
 
 ///|
+/// Number of lives the player starts with.
 pub let starting_lives : Int = 25
 
 ///|
+/// Base gold reward for killing a standard enemy.
 pub let kill_gold_base : Int = 10
 
 ///|
+/// Fraction of current gold awarded as interest each interval.
 pub let interest_rate : Float = 0.05
 
 ///|
+/// Seconds between gold interest payouts.
 pub let interest_interval : Float = 10.0
 
 ///|
+/// Maximum gold gained from a single interest payout.
 pub let interest_cap : Int = 50
 
 ///|
+/// Bonus gold awarded for completing a wave.
 pub let wave_completion_bonus : Int = 25
 
 // Wave timing
 
 ///|
+/// Seconds of preparation time before each wave begins.
 pub let wave_prep_time : Float = 8.0
 
 ///|
+/// Default seconds between spawning consecutive enemies.
 pub let spawn_interval : Float = 0.8
 
 ///|
+/// Reduced spawn interval for fast-arriving enemy waves.
 pub let fast_spawn_interval : Float = 0.3
 
 // Speed multiplier options
 
 ///|
+/// Normal game speed multiplier.
 pub let speed_1x : Float = 1.0
 
 ///|
+/// Double game speed multiplier.
 pub let speed_2x : Float = 2.0
 
 ///|
+/// Triple game speed multiplier.
 pub let speed_3x : Float = 3.0
 
 // Difficulty multipliers
 
 ///|
+/// Enemy HP multiplier on easy difficulty.
 pub let difficulty_easy_hp : Float = 0.7
 
 ///|
+/// Enemy speed multiplier on easy difficulty.
 pub let difficulty_easy_speed : Float = 0.9
 
 ///|
+/// Enemy HP multiplier on normal difficulty.
 pub let difficulty_normal_hp : Float = 1.0
 
 ///|
+/// Enemy speed multiplier on normal difficulty.
 pub let difficulty_normal_speed : Float = 1.0
 
 ///|
+/// Enemy HP multiplier on hard difficulty.
 pub let difficulty_hard_hp : Float = 1.4
 
 ///|
+/// Enemy speed multiplier on hard difficulty.
 pub let difficulty_hard_speed : Float = 1.15
 
 // Map count
 
 ///|
+/// Total number of available maps.
 pub let map_count : Int = 5
 
 // Special ability cooldowns
 
 ///|
+/// Cooldown in seconds for the lightning chain special ability.
 pub let ability_lightning_chain_cd : Float = 5.0
 
 ///|
+/// Cooldown in seconds for the sniper critical shot ability.
 pub let ability_sniper_crit_cd : Float = 0.0
 
 ///|
+/// Cooldown in seconds for the flame aura special ability.
 pub let ability_flame_aura_cd : Float = 3.0
 
 ///|
+/// Cooldown in seconds for the frost freeze special ability.
 pub let ability_frost_freeze_cd : Float = 8.0
 
 ///|
+/// Cooldown in seconds for the buff pulse special ability.
 pub let ability_buff_pulse_cd : Float = 12.0
 
 // Visual constants
 
 ///|
+/// Mathematical constant pi for angle calculations.
 pub let pi : Float = 3.14159
 
 ///|
+/// Width of the enemy health bar relative to enemy size.
 pub let health_bar_width : Float = 1.2
 
 ///|
+/// Height of the enemy health bar in world units.
 pub let health_bar_height : Float = 0.08
 
 ///|
+/// Height of the tower base platform in world units.
 pub let tower_base_height : Float = 0.6
 
 ///|
+/// Height of the tower body in world units.
 pub let tower_body_height : Float = 1.4
 
 ///|
+/// Side length of the minimap overlay in pixels.
 pub let minimap_size : Int = 150
 
 ///|
+/// Horizontal screen position of the minimap in pixels.
 pub let minimap_x : Int = 10
 
 ///|
+/// Vertical screen position of the minimap in pixels.
 pub let minimap_y : Int = 60

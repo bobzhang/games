@@ -1,6 +1,7 @@
 // Map loading, game reset, and stage management
 
 ///|
+/// Loads the map at `map_idx`, resetting all game state and tracing the enemy path.
 pub fn load_map(game : @types.Game, map_idx : Int) -> Unit {
   // Reset state
   let map_info = @levels.get_map_info(map_idx)
@@ -109,6 +110,7 @@ pub fn load_map(game : @types.Game, map_idx : Int) -> Unit {
 }
 
 ///|
+/// Traces the enemy movement path from the start tile using neighbor walking.
 fn trace_path(
   game : @types.Game,
   data : Array[String],
@@ -155,6 +157,7 @@ fn trace_path(
 }
 
 ///|
+/// Resets all game state to initial values and clears all entity pools.
 fn reset_game(game : @types.Game) -> Unit {
   game.gold = @types.starting_gold
   game.lives = @types.starting_lives

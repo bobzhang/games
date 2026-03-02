@@ -1,6 +1,7 @@
 // 2D UI overlay
 
 ///|
+/// Draws all 2D UI overlays based on the current game state.
 pub fn draw_ui(game : @types.Game) -> Unit {
   if game.state == @types.state_menu {
     draw_menu(game)
@@ -38,6 +39,7 @@ pub fn draw_ui(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the main menu screen with title, menu items, difficulty selector, and feature list.
 fn draw_menu(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -155,6 +157,7 @@ fn draw_menu(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the map selection screen with map entries, descriptions, difficulty ratings, and previews.
 fn draw_map_select(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -251,6 +254,7 @@ fn draw_map_select(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns a star string representation for the given difficulty level `diff`.
 fn difficulty_stars(diff : Int) -> String {
   if diff == 1 {
     "*"
@@ -264,6 +268,7 @@ fn difficulty_stars(diff : Int) -> String {
 }
 
 ///|
+/// Draws a miniature map layout preview at the specified screen position and size.
 fn draw_map_preview(
   info : @types.MapInfo,
   px : Int,
@@ -341,6 +346,7 @@ fn draw_map_preview(
 }
 
 ///|
+/// Draws the in-game heads-up display showing gold, lives, wave, score, and controls.
 fn draw_hud(game : @types.Game) -> Unit {
   // Top bar background
   @raylib.draw_rectangle(
@@ -421,6 +427,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the economy info panel showing interest timer, wave kills, and total kills.
 fn draw_economy_panel(game : @types.Game) -> Unit {
   // Small economy info in top-right
   let px = @types.screen_width - 160
@@ -477,6 +484,7 @@ fn draw_economy_panel(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the minimap overlay showing tiles, tower positions, and enemy locations.
 fn draw_minimap(game : @types.Game) -> Unit {
   let mx = @types.minimap_x
   let my = @types.minimap_y
@@ -599,6 +607,7 @@ fn draw_minimap(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the wave preparation overlay with countdown timer and next wave preview.
 fn draw_wave_prep_overlay(game : @types.Game) -> Unit {
   let timer_text = "Next wave in: \{game.wave_timer.to_int() + 1}"
   let tw = @raylib.measure_text(timer_text, 30)
@@ -668,6 +677,7 @@ fn draw_wave_prep_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the tower build panel with tower type selection, costs, stats, and placement cursor info.
 fn draw_build_ui(game : @types.Game) -> Unit {
   // Tower selection panel on right
   let panel_x = @types.screen_width - 230
@@ -790,6 +800,7 @@ fn draw_build_ui(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the selected tower info panel with stats, upgrade options, sell value, and targeting mode.
 fn draw_tower_info_panel(game : @types.Game) -> Unit {
   if game.selected_tower_idx < 0 {
     return
@@ -1000,6 +1011,7 @@ fn draw_tower_info_panel(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the centered wave announcement message with fade-out animation.
 fn draw_wave_message(game : @types.Game) -> Unit {
   if game.wave_message_timer <= 0.0 {
     return
@@ -1030,6 +1042,7 @@ fn draw_wave_message(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the bottom notification bar with fade-out animation.
 fn draw_notification(game : @types.Game) -> Unit {
   if game.notification_timer <= 0.0 {
     return
@@ -1056,6 +1069,7 @@ fn draw_notification(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the current game speed indicator in the bottom-right corner.
 fn draw_speed_indicator(game : @types.Game) -> Unit {
   let speed_text = @types.speed_name(game.speed_setting)
   let sx = @types.screen_width - 60
@@ -1078,6 +1092,7 @@ fn draw_speed_indicator(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the pause screen overlay with game statistics and resume/quit controls.
 fn draw_pause_overlay(game : @types.Game) -> Unit {
   ignore(game)
   @raylib.draw_rectangle(
@@ -1147,6 +1162,7 @@ fn draw_pause_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the game over screen with final score, wave reached, and performance statistics.
 fn draw_game_over(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -1227,6 +1243,7 @@ fn draw_game_over(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the victory screen with final score, remaining lives, and complete game statistics.
 fn draw_victory(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
