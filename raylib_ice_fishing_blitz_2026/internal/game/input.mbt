@@ -67,7 +67,7 @@ fn update_result_input(game : @types.Game) -> Unit {
 /// Handles play input: escape/restart, movement, boost, grab, repair, hint, and touch controls.
 fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.Title
+    game.state = Title
     return
   }
 

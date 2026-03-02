@@ -314,9 +314,9 @@ fn draw_hazard(h : @types.Hazard, ox : Int, oy : Int) -> Unit {
 /// Returns the fill color for a pickup kind.
 fn pickup_color(kind : @types.PickupKind) -> @raylib.Color {
   match kind {
-    @types.Bait => @raylib.Color::new(255, 200, 116, 244)
-    @types.Repair => @raylib.Color::new(255, 138, 162, 244)
-    @types.Thermos => @raylib.Color::new(206, 162, 255, 244)
+    Bait => @raylib.Color::new(255, 200, 116, 244)
+    Repair => @raylib.Color::new(255, 138, 162, 244)
+    Thermos => @raylib.Color::new(206, 162, 255, 244)
   }
 }
 
@@ -343,7 +343,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
   )
 
   match p.kind {
-    @types.Bait =>
+    Bait =>
       @raylib.draw_rectangle(
         x - 5,
         y - 8,
@@ -351,7 +351,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
         16,
         @raylib.Color::new(58, 36, 20, 230),
       )
-    @types.Repair => {
+    Repair => {
       @raylib.draw_line(
         x - 6,
         y,
@@ -367,7 +367,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
         @raylib.Color::new(250, 248, 248, 240),
       )
     }
-    @types.Thermos =>
+    Thermos =>
       @raylib.draw_circle_lines(
         x,
         y,
@@ -765,7 +765,7 @@ fn draw_touch_button(
 ///|
 /// Draws the D-pad and action button overlay for touch/mobile controls.
 fn draw_touch_controls(game : @types.Game) -> Unit {
-  if game.state != @types.Play {
+  if game.state != Play {
     return
   }
 
@@ -1108,8 +1108,8 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   draw_msg(game)
 
   match game.state {
-    @types.Title => draw_title_overlay(game)
-    @types.Play => ()
-    @types.Result => draw_result_overlay(game)
+    Title => draw_title_overlay(game)
+    Play => ()
+    Result => draw_result_overlay(game)
   }
 }

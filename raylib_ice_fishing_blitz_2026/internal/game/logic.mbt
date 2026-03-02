@@ -47,7 +47,7 @@ fn clear_world(game : @types.Game) -> Unit {
     pickup.y = 0.0
     pickup.vx = 0.0
     pickup.vy = 0.0
-    pickup.kind = @types.Bait
+    pickup.kind = Bait
     pickup.phase = 0.0
   }
 }
@@ -142,7 +142,7 @@ fn start_run(game : @types.Game) -> Unit {
   clear_world(game)
   clear_particles(game)
 
-  game.state = @types.Play
+  game.state = Play
 
   reset_rig(game)
 
@@ -184,11 +184,11 @@ fn start_run(game : @types.Game) -> Unit {
 ///|
 /// Transitions the game to the Result state, recording win/loss and triggering burst effect.
 fn finish_run(game : @types.Game, win : Bool) -> Unit {
-  if game.state != @types.Play {
+  if game.state != Play {
     return
   }
 
-  game.state = @types.Result
+  game.state = Result
   game.win = win
 
   game.move_x = 0.0
@@ -339,11 +339,11 @@ fn spawn_pickup(game : @types.Game) -> Bool {
 
     let roll : Int = @raylib.get_random_value(0, 99)
     pickup.kind = if roll < 46 {
-      @types.Bait
+      Bait
     } else if roll < 80 {
-      @types.Repair
+      Repair
     } else {
-      @types.Thermos
+      Thermos
     }
 
     return true
@@ -355,7 +355,7 @@ fn spawn_pickup(game : @types.Game) -> Bool {
 ///|
 /// Toggles grab-on state; only active during play; shows HUD message.
 fn try_toggle_grab(game : @types.Game) -> Bool {
-  if game.state != @types.Play {
+  if game.state != Play {
     return false
   }
 
@@ -373,7 +373,7 @@ fn try_toggle_grab(game : @types.Game) -> Bool {
 ///|
 /// Attempts a line repair: requires hook near hole and sufficient bait; applies cost and heal.
 fn try_repair(game : @types.Game) -> Bool {
-  if game.state != @types.Play {
+  if game.state != Play {
     return false
   }
   if game.repair_cd > 0.0 {
@@ -467,19 +467,19 @@ fn collect_pickup(
   y : Float,
 ) -> Unit {
   match kind {
-    @types.Bait => {
+    Bait => {
       game.bait = @types.minf(100.0, game.bait + 34.0)
       game.score = game.score + 10
       @types.set_msg(game, "Bait crate collected.", 1.0)
       burst(game, x, y, 16, 0)
     }
-    @types.Repair => {
+    Repair => {
       game.line_hp = @types.minf(100.0, game.line_hp + 26.0)
       game.score = game.score + 10
       @types.set_msg(game, "Line reinforced.", 1.0)
       burst(game, x, y, 16, 2)
     }
-    @types.Thermos => {
+    Thermos => {
       game.turbo_t = @types.maxf(game.turbo_t, 7.0)
       game.score = game.score + 16
       @types.set_msg(game, "Thermos boost activated.", 1.0)
@@ -780,7 +780,7 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
 ///|
 /// Uses a hint charge to mark the nearest relevant target; costs one hint and deducts 5 score.
 fn use_hint(game : @types.Game) -> Bool {
-  if game.state != @types.Play || game.hint_left <= 0 {
+  if game.state != Play || game.hint_left <= 0 {
     return false
   }
 
@@ -795,7 +795,7 @@ fn use_hint(game : @types.Game) -> Bool {
   } else if game.bait < 40.0 {
     let mut best_d2 : Float = 1000000000.0
     for pickup in game.pickups {
-      if not(pickup.active) || pickup.kind != @types.Bait {
+      if not(pickup.active) || pickup.kind != Bait {
         continue
       }
 
@@ -872,7 +872,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
 
   update_particles(game, step)
 
-  if game.state != @types.Play {
+  if game.state != Play {
     return
   }
 
@@ -965,15 +965,15 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     game.touch_count > 0
 
   match game.state {
-    @types.Title => {
+    Title => {
       update_title_input(game)
       update_play(game, dt)
     }
-    @types.Play => {
+    Play => {
       update_play_input(game, dt)
       update_play(game, dt)
     }
-    @types.Result => {
+    Result => {
       update_result_input(game)
       update_play(game, dt)
     }
