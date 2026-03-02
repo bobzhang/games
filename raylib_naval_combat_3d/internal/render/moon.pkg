@@ -4,3 +4,5 @@ import {
   "tonyfettes/raylib-examples/raylib_naval_combat_3d/internal/levels",
   "tonyfettes/raylib-examples/raylib_naval_combat_3d/internal/types",
 }
+
+warnings = "+missing_doc+unnecessary_annotation"
