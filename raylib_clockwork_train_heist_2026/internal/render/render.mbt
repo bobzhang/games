@@ -335,7 +335,7 @@ fn draw_guard(
   @raylib.draw_circle(cx - 4, cy - 10, 2.0, @raylib.Color::new(30, 42, 62, 255))
   @raylib.draw_circle(cx + 4, cy - 10, 2.0, @raylib.Color::new(30, 42, 62, 255))
 
-  if g.mode == @types.Hunt {
+  if g.mode == Hunt {
     @raylib.draw_circle_lines(
       cx,
       cy - 2,
@@ -344,7 +344,7 @@ fn draw_guard(
     )
   }
 
-  if g.mode == @types.Stunned {
+  if g.mode == Stunned {
     @raylib.draw_circle_lines(
       cx,
       cy - 2,
@@ -480,7 +480,7 @@ fn draw_touch_button(
 ///|
 /// Draws the on-screen d-pad, action, hint, restart, and menu buttons when in Play state.
 fn draw_touch_controls(game : @types.Game) -> Unit {
-  if game.state != @types.Play {
+  if game.state != Play {
     return
   }
 

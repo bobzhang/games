@@ -14,7 +14,7 @@ fn in_bounds(x : Int, y : Int) -> Bool {
 /// Returns the tile kind at `(x, y)`, treating out-of-bounds positions as Wall.
 fn tile_at(game : @types.Game, x : Int, y : Int) -> @types.TileKind {
   if not(in_bounds(x, y)) {
-    @types.Wall
+    Wall
   } else {
     game.map[idx(x, y)]
   }
@@ -101,7 +101,7 @@ fn clear_particles(game : @types.Game) -> Unit {
     particle.vy = 0.0
     particle.life = 0.0
     particle.size = 0.0
-    particle.kind = @types.Spark
+    particle.kind = Spark
   }
 }
 
@@ -266,7 +266,7 @@ fn blocked_for_guard(game : @types.Game, gid : Int, x : Int, y : Int) -> Bool {
 fn clear_map(game : @types.Game) -> Unit {
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
-      set_tile(game, x, y, @types.Wall)
+      set_tile(game, x, y, Wall)
     }
   }
 
@@ -276,16 +276,16 @@ fn clear_map(game : @types.Game) -> Unit {
 
     for y in 2..<=10 {
       for x in x0..<=x1 {
-        set_tile(game, x, y, @types.Floor)
+        set_tile(game, x, y, Floor)
       }
     }
   }
 
   for car in 0..<4 {
     let door_x : Int = 5 + car * 5
-    set_tile(game, door_x, 6, @types.Door)
-    set_tile(game, door_x, 5, @types.Floor)
-    set_tile(game, door_x, 7, @types.Floor)
+    set_tile(game, door_x, 6, Door)
+    set_tile(game, door_x, 5, Floor)
+    set_tile(game, door_x, 7, Floor)
   }
 
   let crate_cells : Array[(Int, Int)] = [
@@ -304,11 +304,11 @@ fn clear_map(game : @types.Game) -> Unit {
   ]
 
   for crate_cell in crate_cells {
-    set_tile(game, crate_cell.0, crate_cell.1, @types.Wall)
+    set_tile(game, crate_cell.0, crate_cell.1, Wall)
   }
 
-  set_tile(game, @types.start_x, @types.start_y, @types.Floor)
-  set_tile(game, @types.exit_x, @types.exit_y, @types.Exit)
+  set_tile(game, @types.start_x, @types.start_y, Floor)
+  set_tile(game, @types.exit_x, @types.exit_y, Exit)
 }
 
 ///|
@@ -325,14 +325,14 @@ fn loot_score(kind : @types.LootKind) -> Int {
 /// Places loot items on the map according to the predefined loot layout plan.
 fn load_loot(game : @types.Game) -> Unit {
   let loot_plan : Array[(Int, Int, @types.LootKind)] = [
-    (3, 3, @types.Blueprint),
-    (8, 8, @types.Gold),
-    (12, 6, @types.Keycard),
-    (13, 3, @types.Gold),
-    (17, 7, @types.Keycard),
-    (22, 6, @types.Blueprint),
-    (23, 9, @types.Gold),
-    (7, 6, @types.Gold),
+    (3, 3, Blueprint),
+    (8, 8, Gold),
+    (12, 6, Keycard),
+    (13, 3, Gold),
+    (17, 7, Keycard),
+    (22, 6, Blueprint),
+    (23, 9, Gold),
+    (7, 6, Gold),
   ]
 
   for i in 0..<game.loots.length() {
@@ -346,7 +346,7 @@ fn load_loot(game : @types.Game) -> Unit {
       game.loots[i].active = false
       game.loots[i].x = 0
       game.loots[i].y = 0
-      game.loots[i].kind = @types.Gold
+      game.loots[i].kind = Gold
       game.loots[i].value = 0
     }
   }
@@ -366,7 +366,7 @@ fn load_guards(game : @types.Game) -> Unit {
 
   for i in 0..<game.guards.length() {
     game.guards[i].active = i < plan.length()
-    game.guards[i].mode = @types.Patrol
+    game.guards[i].mode = Patrol
     game.guards[i].move_cd = @types.randf(0.02, 0.25)
     game.guards[i].stun_t = 0.0
     game.guards[i].seed = 101 + i * 269
@@ -410,7 +410,7 @@ fn start_run(game : @types.Game) -> Unit {
 
   actor_place(game.player, @types.start_x, @types.start_y)
 
-  game.state = @types.Play
+  game.state = Play
   game.win = false
   game.loss_reason = ""
 
@@ -444,7 +444,7 @@ fn start_run(game : @types.Game) -> Unit {
 ///|
 /// Transitions to the Title state, resetting input and transient visual effects.
 fn go_title(game : @types.Game) -> Unit {
-  game.state = @types.Title
+  game.state = Title
   game.req_dx = 0
   game.req_dy = 0
   game.action_down = false
@@ -457,11 +457,11 @@ fn go_title(game : @types.Game) -> Unit {
 ///|
 /// Ends the current run, recording win/loss and reason, updating the best score, and emitting a particle burst.
 fn finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
-  if game.state != @types.Play {
+  if game.state != Play {
     return
   }
 
-  game.state = @types.Result
+  game.state = Result
   game.win = win
   game.loss_reason = reason
   game.req_dx = 0
@@ -476,7 +476,7 @@ fn finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
       Float::from_int(@types.cell_center_x(Float::from_int(@types.exit_x))),
       Float::from_int(@types.cell_center_y(Float::from_int(@types.exit_y))),
       72,
-      @types.Glitter,
+      Glitter,
     )
   } else {
     set_msg(game, "Heist failed. Railway security locked down.", 2.8)
@@ -485,7 +485,7 @@ fn finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
       Float::from_int(@types.cell_center_x(game.player.fx)),
       Float::from_int(@types.cell_center_y(game.player.fy)),
       44,
-      @types.Smoke,
+      Smoke,
     )
   }
 
@@ -534,7 +534,7 @@ fn deploy_smoke(game : @types.Game) -> Bool {
 
   let mut stunned : Int = 0
   for guard_val in game.guards {
-    if not(guard_val.active) || guard_val.mode == @types.Stunned {
+    if not(guard_val.active) || guard_val.mode == Stunned {
       continue
     }
 
@@ -546,7 +546,7 @@ fn deploy_smoke(game : @types.Game) -> Bool {
     )
 
     if d <= 2 {
-      guard_val.mode = @types.Stunned
+      guard_val.mode = Stunned
       guard_val.stun_t = 2.3
       guard_val.move_cd = 0.18
       stunned = stunned + 1
@@ -569,7 +569,7 @@ fn deploy_smoke(game : @types.Game) -> Bool {
     Float::from_int(@types.cell_center_x(game.player.fx)),
     Float::from_int(@types.cell_center_y(game.player.fy)),
     36,
-    @types.Smoke,
+    Smoke,
   )
 
   true
@@ -600,7 +600,7 @@ fn update_smokes(game : @types.Game, dt : Float) -> Unit {
         @types.randf(-26.0, -8.0),
         @types.randf(0.35, 0.9),
         @types.randf(4.0, 9.0),
-        @types.Smoke,
+        Smoke,
       )
     }
   }
@@ -621,7 +621,7 @@ fn line_of_sight(
 
     for y in (y_min + 1)..<y_max {
       let t = tile_at(game, x0, y)
-      if t == @types.Wall || smoke_cover_at(game, x0, y) {
+      if t == Wall || smoke_cover_at(game, x0, y) {
         return false
       }
     }
@@ -635,7 +635,7 @@ fn line_of_sight(
 
     for x in (x_min + 1)..<x_max {
       let t = tile_at(game, x, y0)
-      if t == @types.Wall || smoke_cover_at(game, x, y0) {
+      if t == Wall || smoke_cover_at(game, x, y0) {
         return false
       }
     }
@@ -760,10 +760,10 @@ fn update_guards(game : @types.Game, dt : Float) -> Unit {
 
     actor_tick(game.guards[i].body, dt, @types.guard_move_t)
 
-    if game.guards[i].mode == @types.Stunned {
+    if game.guards[i].mode == Stunned {
       game.guards[i].stun_t = game.guards[i].stun_t - dt
       if game.guards[i].stun_t <= 0.0 {
-        game.guards[i].mode = @types.Patrol
+        game.guards[i].mode = Patrol
         game.guards[i].stun_t = 0.0
       }
     }
@@ -781,7 +781,7 @@ fn update_guards(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    if game.guards[i].mode == @types.Stunned {
+    if game.guards[i].mode == Stunned {
       game.guards[i].move_cd = 0.10
       continue
     }
@@ -802,10 +802,10 @@ fn update_guards(game : @types.Game, dt : Float) -> Unit {
 
     if not(smoke_cover_at(game, game.player.x, game.player.y)) &&
       (d <= 3 || (sees && d <= 8)) {
-      game.guards[i].mode = @types.Hunt
+      game.guards[i].mode = Hunt
       game.guards[i].alert_t = 1.1
     } else if game.guards[i].alert_t <= 0.0 {
-      game.guards[i].mode = @types.Patrol
+      game.guards[i].mode = Patrol
     }
 
     let step = match game.guards[i].mode {
@@ -850,7 +850,7 @@ fn try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool {
     Float::from_int(@types.cell_center_x(Float::from_int(tx))),
     Float::from_int(@types.cell_center_y(Float::from_int(ty))),
     8,
-    @types.Spark,
+    Spark,
   )
 
   true
@@ -896,7 +896,7 @@ fn collect_loot(game : @types.Game) -> Unit {
     Float::from_int(@types.cell_center_x(game.player.fx)),
     Float::from_int(@types.cell_center_y(game.player.fy)),
     24,
-    @types.Glitter,
+    Glitter,
   )
 
   if game.loot_taken >= @types.loot_need && not(game.vault_open) {
@@ -910,7 +910,7 @@ fn collect_loot(game : @types.Game) -> Unit {
       Float::from_int(@types.cell_center_x(Float::from_int(@types.exit_x))),
       Float::from_int(@types.cell_center_y(Float::from_int(@types.exit_y))),
       42,
-      @types.Smoke,
+      Smoke,
     )
   }
 }
@@ -927,7 +927,7 @@ fn handle_player_caught(game : @types.Game) -> Unit {
   }
 
   for i in 0..<game.guards.length() {
-    if not(game.guards[i].active) || game.guards[i].mode == @types.Stunned {
+    if not(game.guards[i].active) || game.guards[i].mode == Stunned {
       continue
     }
 
@@ -945,7 +945,7 @@ fn handle_player_caught(game : @types.Game) -> Unit {
       Float::from_int(@types.cell_center_x(game.player.fx)),
       Float::from_int(@types.cell_center_y(game.player.fy)),
       34,
-      @types.Smoke,
+      Smoke,
     )
 
     if game.lives <= 0 {
@@ -960,7 +960,7 @@ fn handle_player_caught(game : @types.Game) -> Unit {
       if not(guard_val.active) {
         continue
       }
-      guard_val.mode = @types.Stunned
+      guard_val.mode = Stunned
       guard_val.stun_t = 1.1
       guard_val.move_cd = 0.18
     }
@@ -1039,7 +1039,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   collect_loot(game)
   handle_player_caught(game)
 
-  if game.state == @types.Play &&
+  if game.state == Play &&
     not(game.player.moving) &&
     game.vault_open &&
     game.player.x == @types.exit_x &&
@@ -1047,7 +1047,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
     finish_run(game, true, "")
   }
 
-  if game.state == @types.Play && game.time_left <= 0.0 {
+  if game.state == Play && game.time_left <= 0.0 {
     finish_run(game, false, "Clockwork engine reached lockdown")
   }
 
