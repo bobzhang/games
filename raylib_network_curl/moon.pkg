@@ -4,7 +4,7 @@ import {
   "moonbitlang/async/http",
 }
 
-warnings = "+missing_doc"
+warnings = "+missing_doc+unnecessary_annotation"
 
 options(
   "is-main": true,
