@@ -14,11 +14,11 @@ fn draw_center_text(
 /// Returns the display colour associated with the given dish type.
 fn dish_color(dish : @types.Dish) -> @raylib.Color {
   match dish {
-    @types.Skewers => @raylib.Color::new(243, 139, 78, 255)
-    @types.Noodles => @raylib.Color::new(247, 208, 82, 255)
-    @types.Squid => @raylib.Color::new(232, 104, 115, 255)
-    @types.FriedRice => @raylib.Color::new(115, 205, 124, 255)
-    @types.DishNone => @raylib.Color::new(210, 210, 210, 255)
+    Skewers => @raylib.Color::new(243, 139, 78, 255)
+    Noodles => @raylib.Color::new(247, 208, 82, 255)
+    Squid => @raylib.Color::new(232, 104, 115, 255)
+    FriedRice => @raylib.Color::new(115, 205, 124, 255)
+    DishNone => @raylib.Color::new(210, 210, 210, 255)
   }
 }
 
@@ -240,7 +240,7 @@ fn draw_station_base(
 /// Draws the prep station with active dish name and prep progress bar when cooking is in progress.
 fn draw_prep_station(game : @types.Game) -> Unit {
   let hot = game.cursor == @types.node_prep
-  let working = game.cooking.active && game.cooking.stage == @types.Prep
+  let working = game.cooking.active && game.cooking.stage == Prep
 
   draw_station_base(
     "Prep",
@@ -309,8 +309,8 @@ fn draw_prep_station(game : @types.Game) -> Unit {
 fn draw_grill_station(game : @types.Game) -> Unit {
   let hot = game.cursor == @types.node_grill
   let working = game.cooking.active &&
-    game.cooking.stage == @types.Heat &&
-    game.cooking.lane == @types.Grill
+    game.cooking.stage == Heat &&
+    game.cooking.lane == Grill
 
   draw_station_base(
     "Grill",
@@ -367,8 +367,8 @@ fn draw_grill_station(game : @types.Game) -> Unit {
 fn draw_wok_station(game : @types.Game) -> Unit {
   let hot = game.cursor == @types.node_wok
   let working = game.cooking.active &&
-    game.cooking.stage == @types.Heat &&
-    game.cooking.lane == @types.Wok
+    game.cooking.stage == Heat &&
+    game.cooking.lane == Wok
 
   draw_station_base(
     "Wok",
@@ -431,7 +431,7 @@ fn draw_pass_station(game : @types.Game) -> Unit {
     @types.pass_y,
     236,
     140,
-    if game.ready_dish != @types.DishNone {
+    if game.ready_dish != DishNone {
       @raylib.Color::new(86, 84, 58, 232)
     } else {
       @raylib.Color::new(63, 61, 48, 220)
@@ -443,7 +443,7 @@ fn draw_pass_station(game : @types.Game) -> Unit {
     },
   )
 
-  if game.ready_dish != @types.DishNone {
+  if game.ready_dish != DishNone {
     @raylib.draw_circle(
       (@types.pass_x - 78.0).to_int(),
       (@types.pass_y + 8.0).to_int(),
@@ -620,11 +620,11 @@ fn draw_hud(game : @types.Game) -> Unit {
 
   if game.cooking.active {
     let stage = match game.cooking.stage {
-      @types.Prep => "PREP"
-      @types.Heat =>
+      Prep => "PREP"
+      Heat =>
         match game.cooking.lane {
-          @types.Grill => "GRILL"
-          @types.Wok => "WOK"
+          Grill => "GRILL"
+          Wok => "WOK"
         }
     }
     @raylib.draw_text(
@@ -634,7 +634,7 @@ fn draw_hud(game : @types.Game) -> Unit {
       20,
       @raylib.Color::new(255, 232, 176, 236),
     )
-  } else if game.ready_dish != @types.DishNone {
+  } else if game.ready_dish != DishNone {
     @raylib.draw_text(
       "Dish Ready: " + @types.dish_name(game.ready_dish) + " (Serve at pass)",
       558,
@@ -790,9 +790,9 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   draw_hint_line()
 
   match game.state {
-    @types.Title => draw_title_overlay(game)
-    @types.Paused => draw_pause_overlay(game)
-    @types.GameOver => draw_game_over_overlay(game)
-    @types.Play => ()
+    Title => draw_title_overlay(game)
+    Paused => draw_pause_overlay(game)
+    GameOver => draw_game_over_overlay(game)
+    Play => ()
   }
 }
