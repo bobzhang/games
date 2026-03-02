@@ -163,7 +163,7 @@ fn find_any_move(game : @types.Game) -> (Bool, Int, Int, Int, Int) {
 ///|
 /// Shuffles all remaining tile kinds on the board up to 32 times until a valid move exists, optionally spending a shuffle ticket.
 fn reshuffle(game : @types.Game, consume_ticket : Bool) -> Bool {
-  if game.state != @types.Play {
+  if game.state != Play {
     return false
   }
 
@@ -230,7 +230,7 @@ fn reshuffle(game : @types.Game, consume_ticket : Bool) -> Bool {
 ///|
 /// Checks whether any move remains and auto-shuffles or transitions to Fail state when none are available.
 fn ensure_moves(game : @types.Game) -> Unit {
-  if game.state != @types.Play || game.remaining <= 0 {
+  if game.state != Play || game.remaining <= 0 {
     return
   }
 
@@ -250,7 +250,7 @@ fn ensure_moves(game : @types.Game) -> Unit {
     return
   }
 
-  game.state = @types.Fail
+  game.state = Fail
   game.message = "No possible pairs"
   game.message_t = 1.2
 }
@@ -328,9 +328,9 @@ fn on_match(
     game.total_time = game.total_time + (game.time_limit - game.timer)
 
     if game.level_index + 1 >= game.level_count {
-      game.state = @types.CampaignClear
+      game.state = CampaignClear
     } else {
-      game.state = @types.LevelClear
+      game.state = LevelClear
     }
 
     game.message = "Board cleared"
@@ -355,7 +355,7 @@ fn on_bad_pick(game : @types.Game, x : Int, y : Int) -> Unit {
 ///|
 /// Handles a player tile selection at (x, y), either setting the first tile or attempting a match with the previously selected tile.
 fn pick_tile(game : @types.Game, x : Int, y : Int) -> Unit {
-  if game.state != @types.Play {
+  if game.state != Play {
     return
   }
 
@@ -420,7 +420,7 @@ fn pick_cursor(game : @types.Game) -> Unit {
 ///|
 /// Spends a hint ticket to highlight a valid free-tile pair on the board, returning false if none are available.
 fn use_hint(game : @types.Game) -> Bool {
-  if game.state != @types.Play {
+  if game.state != Play {
     return false
   }
 
@@ -471,7 +471,7 @@ fn undo_last(game : @types.Game) -> Bool {
     return false
   }
 
-  if game.state != @types.Play {
+  if game.state != Play {
     game.message = "Undo during play only"
     game.message_t = 0.8
     return false
@@ -511,20 +511,16 @@ fn undo_last(game : @types.Game) -> Bool {
 ///|
 /// Moves the cursor one cell in the specified direction, clamping to board bounds.
 fn move_cursor_once(game : @types.Game, dir : @types.Dir) -> Unit {
-  if game.state != @types.Play {
+  if game.state != Play {
     return
   }
 
   match dir {
-    @types.Left =>
-      game.cursor_x = @types.clampi(game.cursor_x - 1, 1, game.board_w)
-    @types.Right =>
-      game.cursor_x = @types.clampi(game.cursor_x + 1, 1, game.board_w)
-    @types.Up =>
-      game.cursor_y = @types.clampi(game.cursor_y - 1, 1, game.board_h)
-    @types.Down =>
-      game.cursor_y = @types.clampi(game.cursor_y + 1, 1, game.board_h)
-    @types.DirNone => ()
+    Left => game.cursor_x = @types.clampi(game.cursor_x - 1, 1, game.board_w)
+    Right => game.cursor_x = @types.clampi(game.cursor_x + 1, 1, game.board_w)
+    Up => game.cursor_y = @types.clampi(game.cursor_y - 1, 1, game.board_h)
+    Down => game.cursor_y = @types.clampi(game.cursor_y + 1, 1, game.board_h)
+    DirNone => ()
   }
 }
 
@@ -535,14 +531,14 @@ fn update_cursor_hold(
   dt : Float,
   held_dir : @types.Dir,
 ) -> Unit {
-  if game.state != @types.Play {
-    game.hold_dir = @types.DirNone
+  if game.state != Play {
+    game.hold_dir = DirNone
     game.repeat_t = 0.0
     return
   }
 
-  if held_dir == @types.DirNone {
-    game.hold_dir = @types.DirNone
+  if held_dir == DirNone {
+    game.hold_dir = DirNone
     game.repeat_t = 0.0
     return
   }
@@ -593,11 +589,11 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
     }
   }
 
-  if game.state == @types.Play {
+  if game.state == Play {
     game.timer = game.timer - dt
     if game.timer <= 0.0 {
       game.timer = 0.0
-      game.state = @types.Fail
+      game.state = Fail
       game.combo = 0
       @types.clear_selection(game)
       @types.clear_hint(game)
@@ -659,7 +655,7 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
   game.undos_left = undos
 
   game.combo = 0
-  game.hold_dir = @types.DirNone
+  game.hold_dir = DirNone
   game.repeat_t = 0.0
   game.touch_action_cd = 0.0
 
@@ -680,7 +676,7 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
 
   place_cursor_on_first_tile(game)
 
-  game.state = @types.Play
+  game.state = Play
   game.message = "Level \{id + 1}: \{name}"
   game.message_t = 1.2
 }
@@ -704,7 +700,7 @@ fn restart_campaign(game : @types.Game) -> Unit {
 /// Advances to the next campaign level, or transitions to CampaignClear if all levels are complete.
 fn next_level(game : @types.Game) -> Unit {
   if game.level_index + 1 >= game.level_count {
-    game.state = @types.CampaignClear
+    game.state = CampaignClear
     return
   }
 
@@ -737,8 +733,8 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   let reset_press : Bool = detect_reset_press(game)
 
   match game.state {
-    @types.Title => if start_press { restart_campaign(game) }
-    @types.Play => {
+    Title => if start_press { restart_campaign(game) }
+    Play => {
       let held_dir : @types.Dir = detect_held_dir(game)
       update_cursor_hold(game, dt, held_dir)
 
@@ -775,8 +771,8 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
         pick_cursor(game)
       }
     }
-    @types.LevelClear => if next_press { next_level(game) }
-    @types.CampaignClear => if next_press { restart_campaign(game) }
-    @types.Fail => if reset_press || next_press { reload_level(game) }
+    LevelClear => if next_press { next_level(game) }
+    CampaignClear => if next_press { restart_campaign(game) }
+    Fail => if reset_press || next_press { reload_level(game) }
   }
 }
