@@ -1011,6 +1011,7 @@ fn update_game_over(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances the game simulation by one frame using the current input state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   // Handle input based on current state
   match game.state {
@@ -1034,6 +1035,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Initializes and returns title-scene data exposed to the renderer.
 pub fn init_title_scene_pub(game : @types.Game) -> Unit {
   init_title_scene(game)
 }

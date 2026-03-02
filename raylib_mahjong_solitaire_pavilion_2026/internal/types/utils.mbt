@@ -1,4 +1,5 @@
 ///|
+/// Returns the smaller of two integers.
 pub fn mini(a : Int, b : Int) -> Int {
   if a < b {
     a
@@ -8,6 +9,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the larger of two integers.
 pub fn maxi(a : Int, b : Int) -> Int {
   if a > b {
     a
@@ -17,6 +19,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Clamps an integer into the inclusive range [`lo`, `hi`].
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -28,6 +31,7 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Returns the larger of two floating-point values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -37,6 +41,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -46,22 +51,26 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns a pseudo-random float in the inclusive range [`lo`, `hi`].
 pub fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Converts 1-based board coordinates into a flat row-major index.
 pub fn idx(x : Int, y : Int) -> Int {
   (y - 1) * max_cols + (x - 1)
 }
 
 ///|
+/// Returns true when `(x, y)` is inside the active board bounds.
 pub fn in_board(game : Game, x : Int, y : Int) -> Bool {
   x >= 1 && x <= game.board_w && y >= 1 && y <= game.board_h
 }
 
 ///|
+/// Returns whether a board slot is active in the current layout.
 pub fn active_at(game : Game, x : Int, y : Int) -> Bool {
   if in_board(game, x, y) {
     game.active[idx(x, y)]
@@ -71,6 +80,7 @@ pub fn active_at(game : Game, x : Int, y : Int) -> Bool {
 }
 
 ///|
+/// Reads an active tile kind, returning `0` for empty/inactive/out-of-bounds.
 pub fn cell_at(game : Game, x : Int, y : Int) -> Int {
   if in_board(game, x, y) && game.active[idx(x, y)] {
     game.cells[idx(x, y)]
@@ -80,6 +90,7 @@ pub fn cell_at(game : Game, x : Int, y : Int) -> Int {
 }
 
 ///|
+/// Writes a tile value when coordinates refer to an active board slot.
 pub fn set_cell(game : Game, x : Int, y : Int, value : Int) -> Unit {
   if in_board(game, x, y) && game.active[idx(x, y)] {
     game.cells[idx(x, y)] = value
@@ -87,6 +98,7 @@ pub fn set_cell(game : Game, x : Int, y : Int, value : Int) -> Unit {
 }
 
 ///|
+/// Clears both active-mask and tile-kind buffers.
 pub fn clear_board(game : Game) -> Unit {
   for i in 0..<game.active.length() {
     game.active[i] = false
@@ -95,6 +107,7 @@ pub fn clear_board(game : Game) -> Unit {
 }
 
 ///|
+/// Clears all undo history entries.
 pub fn clear_undo(game : Game) -> Unit {
   game.undo_len = 0
   for i in 0..<game.undo.length() {
@@ -115,6 +128,7 @@ pub fn clear_undo(game : Game) -> Unit {
 }
 
 ///|
+/// Resets all spark particles to inactive.
 pub fn clear_sparks(game : Game) -> Unit {
   for spark in game.sparks {
     spark.active = false
@@ -129,6 +143,7 @@ pub fn clear_sparks(game : Game) -> Unit {
 }
 
 ///|
+/// Clears current tile selection and resets selection coordinates.
 pub fn clear_selection(game : Game) -> Unit {
   game.select_active = false
   game.select_x = 1
@@ -136,12 +151,14 @@ pub fn clear_selection(game : Game) -> Unit {
 }
 
 ///|
+/// Clears active hint highlight state.
 pub fn clear_hint(game : Game) -> Unit {
   game.hint_active = false
   game.hint_ttl = 0.0
 }
 
 ///|
+/// Computes board origin and tile size, including active shake offsets.
 pub fn board_metrics(game : Game) -> (Int, Int, Int) {
   let area_x : Int = 24
   let area_y : Int = 22
@@ -168,6 +185,7 @@ pub fn board_metrics(game : Game) -> (Int, Int, Int) {
 }
 
 ///|
+/// Returns tile center in world space and tile size as float.
 pub fn world_center(game : Game, x : Int, y : Int) -> (Float, Float, Float) {
   let (board_x, board_y, tile) = board_metrics(game)
   let cx : Float = Float::from_int(board_x + (x - 1) * tile + tile / 2)
@@ -176,6 +194,7 @@ pub fn world_center(game : Game, x : Int, y : Int) -> (Float, Float, Float) {
 }
 
 ///|
+/// Activates one available spark particle with the provided parameters.
 pub fn spawn_spark(
   game : Game,
   x : Float,
@@ -204,6 +223,7 @@ pub fn spawn_spark(
 }
 
 ///|
+/// Emits a burst of spark particles around a tile center.
 pub fn burst_tile(
   game : Game,
   x : Int,
@@ -229,6 +249,7 @@ pub fn burst_tile(
 }
 
 ///|
+/// Advances spark particle simulation and lifetimes.
 pub fn update_sparks(game : Game, dt : Float) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
@@ -249,6 +270,7 @@ pub fn update_sparks(game : Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Shuffles an integer array in place using Fisher-Yates.
 pub fn shuffle_ints(arr : Array[Int]) -> Unit {
   let mut i : Int = arr.length() - 1
   while i > 0 {
@@ -261,6 +283,7 @@ pub fn shuffle_ints(arr : Array[Int]) -> Unit {
 }
 
 ///|
+/// Counts currently active board slots.
 pub fn active_count(game : Game) -> Int {
   let mut n : Int = 0
   for y in 1..<=game.board_h {
@@ -274,6 +297,7 @@ pub fn active_count(game : Game) -> Int {
 }
 
 ///|
+/// Returns true when a tile is free (not blocked on both left and right).
 pub fn free_tile(game : Game, x : Int, y : Int) -> Bool {
   let k : Int = cell_at(game, x, y)
   if k <= 0 {
@@ -291,6 +315,7 @@ pub fn free_tile(game : Game, x : Int, y : Int) -> Bool {
 }
 
 ///|
+/// Returns level configuration tuple for campaign level `id`.
 pub fn configure_level(
   id : Int,
 ) -> (Int, Int, Int, Float, Int, Int, Int, Int, String) {
@@ -318,6 +343,7 @@ pub fn configure_level(
 }
 
 ///|
+/// Checks if a point lies inside an axis-aligned rectangle.
 pub fn inside_rect(
   px : Float,
   py : Float,
@@ -333,6 +359,7 @@ pub fn inside_rect(
 }
 
 ///|
+/// Returns true if mouse/touch input currently hits a rectangle.
 pub fn pointer_on_rect(
   mouse_x : Float,
   mouse_y : Float,
@@ -362,61 +389,73 @@ pub fn pointer_on_rect(
 }
 
 ///|
+/// Returns the x origin of the side panel.
 pub fn panel_x() -> Int {
   screen_w - 420
 }
 
 ///|
+/// Returns the x center of the touch D-pad.
 pub fn dpad_center_x() -> Int {
   162
 }
 
 ///|
+/// Returns the y center of the touch D-pad.
 pub fn dpad_center_y() -> Int {
   screen_h - 184
 }
 
 ///|
+/// Returns the half-size used to draw D-pad arms.
 pub fn dpad_size() -> Int {
   78
 }
 
 ///|
+/// Returns the rectangle for the select action button.
 pub fn select_button_rect() -> (Int, Int, Int, Int) {
   (panel_x() + 24, screen_h - 256, 170, 72)
 }
 
 ///|
+/// Returns the rectangle for the hint action button.
 pub fn hint_button_rect() -> (Int, Int, Int, Int) {
   (panel_x() + 214, screen_h - 256, 170, 72)
 }
 
 ///|
+/// Returns the rectangle for the shuffle action button.
 pub fn shuffle_button_rect() -> (Int, Int, Int, Int) {
   (panel_x() + 24, screen_h - 172, 170, 72)
 }
 
 ///|
+/// Returns the rectangle for the undo action button.
 pub fn undo_button_rect() -> (Int, Int, Int, Int) {
   (panel_x() + 214, screen_h - 172, 170, 72)
 }
 
 ///|
+/// Returns the rectangle for resetting the current level.
 pub fn reset_button_rect() -> (Int, Int, Int, Int) {
   (panel_x() + 24, screen_h - 88, 170, 72)
 }
 
 ///|
+/// Returns the rectangle for clearing selection state.
 pub fn clear_button_rect() -> (Int, Int, Int, Int) {
   (panel_x() + 214, screen_h - 88, 170, 72)
 }
 
 ///|
+/// Returns the rectangle for next/restart campaign actions in overlays.
 pub fn next_button_rect() -> (Int, Int, Int, Int) {
   (panel_x() + 24, screen_h - 88, 360, 72)
 }
 
 ///|
+/// Returns the title-screen start button rectangle.
 pub fn start_button_rect() -> (Int, Int, Int, Int) {
   (screen_w / 2 - 230, screen_h - 158, 460, 96)
 }

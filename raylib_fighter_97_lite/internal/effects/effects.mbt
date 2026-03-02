@@ -1,4 +1,4 @@
-///|
+/// Adds camera shake up to configured maximum.
 pub fn push_camera_shake(game : @types.Game, amount : Float) -> Unit {
   let next = game.camera_shake + amount
   if next > @types.camera_shake_max {
@@ -8,7 +8,7 @@ pub fn push_camera_shake(game : @types.Game, amount : Float) -> Unit {
   }
 }
 
-///|
+/// Returns an available particle slot index, or `-1` if full.
 pub fn allocate_particle_slot(list : Array[@types.Particle]) -> Int {
   for i in 0..<list.length() {
     if not(list[i].active) {
@@ -18,7 +18,7 @@ pub fn allocate_particle_slot(list : Array[@types.Particle]) -> Int {
   -1
 }
 
-///|
+/// Spawns a generic stage dust particle.
 pub fn spawn_stage_dust(
   game : @types.Game,
   x : Float,
@@ -44,7 +44,7 @@ pub fn spawn_stage_dust(
   p.color = color
 }
 
-///|
+/// Spawns hit spark particles at impact position.
 pub fn spawn_hit_spark(
   game : @types.Game,
   x : Float,
@@ -102,7 +102,7 @@ pub fn spawn_hit_spark(
   }
 }
 
-///|
+/// Spawns ground skid dust from fighter movement.
 pub fn spawn_ground_skid(game : @types.Game, fighter : @types.Fighter) -> Unit {
   let archetype = @types.fighter_archetype(game, fighter)
   for i in 0..<3 {
@@ -120,7 +120,7 @@ pub fn spawn_ground_skid(game : @types.Game, fighter : @types.Fighter) -> Unit {
   }
 }
 
-///|
+/// Updates movement and lifetime for a particle array.
 pub fn update_particle_list(list : Array[@types.Particle], dt : Float) -> Unit {
   for p in list {
     if not(p.active) {
@@ -148,7 +148,7 @@ pub fn update_particle_list(list : Array[@types.Particle], dt : Float) -> Unit {
   }
 }
 
-///|
+/// Draws all active particles in a particle array.
 pub fn draw_particle_list(
   list : Array[@types.Particle],
   camera_x : Float,
@@ -170,19 +170,19 @@ pub fn draw_particle_list(
   }
 }
 
-///|
+/// Updates both stage dust and hit spark particle systems.
 pub fn update_particles(game : @types.Game, dt : Float) -> Unit {
   update_particle_list(game.particles, dt)
   update_particle_list(game.hit_sparks, dt)
 }
 
-///|
+/// Draws both stage dust and hit spark particle systems.
 pub fn draw_particles(game : @types.Game) -> Unit {
   draw_particle_list(game.particles, game.camera_x, game.camera_y)
   draw_particle_list(game.hit_sparks, game.camera_x, game.camera_y)
 }
 
-///|
+/// Updates camera position, zoom, and shake based on fighters.
 pub fn update_camera(game : @types.Game, dt : Float) -> Unit {
   let p1 = game.fighters[0]
   let p2 = game.fighters[1]

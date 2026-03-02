@@ -984,6 +984,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances one frame of blackout gameplay, input, and state transitions.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   // Process input at the start of each frame
   if game.state == @types.state_title {

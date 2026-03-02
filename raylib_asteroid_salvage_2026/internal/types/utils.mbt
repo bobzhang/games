@@ -1,14 +1,17 @@
 ///|
+/// Returns a random float in `[0.0, 1.0]`.
 pub fn random01() -> Float {
   Float::from_int(@raylib.get_random_value(0, 10_000)) / (10_000.0 : Float)
 }
 
 ///|
+/// Returns a random float in `[min, max]`.
 pub fn random_range(min : Float, max : Float) -> Float {
   min + (max - min) * random01()
 }
 
 ///|
+/// Wraps an X position around horizontal screen bounds.
 pub fn wrap_x(x : Float) -> Float {
   let w = Float::from_int(screen_width)
   if x < (0.0 : Float) {
@@ -21,6 +24,7 @@ pub fn wrap_x(x : Float) -> Float {
 }
 
 ///|
+/// Wraps a Y position around vertical screen bounds.
 pub fn wrap_y(y : Float) -> Float {
   let h = Float::from_int(screen_height)
   if y < (0.0 : Float) {
@@ -33,11 +37,13 @@ pub fn wrap_y(y : Float) -> Float {
 }
 
 ///|
+/// Returns squared vector length without a square root.
 pub fn length_sq(dx : Float, dy : Float) -> Float {
   dx * dx + dy * dy
 }
 
 ///|
+/// Resets ship position, velocity, heading, and invulnerability timer.
 pub fn ship_reset(game : Game) -> Unit {
   game.ship_x = Float::from_int(screen_width) * (0.5 : Float)
   game.ship_y = Float::from_int(screen_height) * (0.5 : Float)
@@ -48,6 +54,7 @@ pub fn ship_reset(game : Game) -> Unit {
 }
 
 ///|
+/// Deactivates all pooled bullets and rocks.
 pub fn clear_entities(game : Game) -> Unit {
   for bullet in game.bullets {
     bullet.active = false
@@ -58,6 +65,7 @@ pub fn clear_entities(game : Game) -> Unit {
 }
 
 ///|
+/// Activates one free rock slot with provided kinematic parameters.
 pub fn spawn_rock(
   game : Game,
   size : Int,
@@ -85,6 +93,7 @@ pub fn spawn_rock(
 }
 
 ///|
+/// Spawns a new asteroid wave using current wave difficulty.
 pub fn spawn_wave(game : Game) -> Unit {
   let count = 4 + game.wave
   for i in 0..<count {
@@ -122,6 +131,7 @@ pub fn spawn_wave(game : Game) -> Unit {
 }
 
 ///|
+/// Resets score, lives, and entities for a fresh run.
 pub fn reset_game(game : Game) -> Unit {
   game.score = 0
   game.lives = 3

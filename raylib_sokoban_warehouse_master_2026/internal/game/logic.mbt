@@ -690,6 +690,7 @@ fn restart_campaign(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Advances one frame of Sokoban input handling, animation, and progression.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   // Read input state into game struct
   let mouse = @raylib.get_mouse_position()

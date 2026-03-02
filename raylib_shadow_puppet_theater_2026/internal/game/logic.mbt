@@ -319,11 +319,13 @@ fn update_result_state(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Initializes the game into a fresh title-scene state.
 pub fn init_game(game : @types.Game) -> Unit {
   init_title_scene(game)
 }
 
 ///|
+/// Advances one frame of input sampling and state-specific gameplay updates.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   sample_input(game)
 

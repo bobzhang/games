@@ -1,4 +1,5 @@
 ///|
+/// Top-level phase of the Sokoban campaign.
 pub(all) enum GameState {
   Title
   Play
@@ -7,6 +8,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Cardinal movement direction plus no-input state.
 pub(all) enum Direction {
   None
   Left
@@ -16,6 +18,7 @@ pub(all) enum Direction {
 } derive(Eq)
 
 ///|
+/// Base terrain tile kind for each cell.
 pub(all) enum Tile {
   Void
   Floor
@@ -24,6 +27,7 @@ pub(all) enum Tile {
 } derive(Eq)
 
 ///|
+/// Visual style for transient spark particles.
 pub(all) enum SparkKind {
   Gold
   Orange
@@ -32,6 +36,7 @@ pub(all) enum SparkKind {
 } derive(Eq)
 
 ///|
+/// Snapshot used by the undo stack for one move.
 pub(all) struct UndoStep {
   mut valid : Bool
   player_x : Int
@@ -46,6 +51,7 @@ pub(all) struct UndoStep {
 }
 
 ///|
+/// Runtime particle used for push and completion effects.
 pub(all) struct Spark {
   mut active : Bool
   mut x : Float
@@ -58,6 +64,7 @@ pub(all) struct Spark {
 }
 
 ///|
+/// Entire mutable game state for the warehouse campaign.
 pub(all) struct Game {
   tiles : Array[Tile]
   boxes : Array[Bool]
@@ -97,6 +104,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates an empty campaign state with preallocated undo and spark pools.
 pub fn Game::new() -> Game {
   let undo_arr : Array[UndoStep] = Array::makei(4096, fn(_i) {
     {

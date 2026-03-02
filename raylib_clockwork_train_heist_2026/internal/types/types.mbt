@@ -1,4 +1,5 @@
 ///|
+/// High-level flow state for a train heist run.
 pub(all) enum GameState {
   Title
   Play
@@ -6,6 +7,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Board tile classification used for movement and collision.
 pub(all) enum TileKind {
   Wall
   Floor
@@ -14,6 +16,7 @@ pub(all) enum TileKind {
 } derive(Eq)
 
 ///|
+/// AI behavior mode for guard updates.
 pub(all) enum GuardMode {
   Patrol
   Hunt
@@ -21,6 +24,7 @@ pub(all) enum GuardMode {
 } derive(Eq)
 
 ///|
+/// Loot category used for scoring and progression.
 pub(all) enum LootKind {
   Blueprint
   Keycard
@@ -28,6 +32,7 @@ pub(all) enum LootKind {
 } derive(Eq)
 
 ///|
+/// Particle effect category for rendering.
 pub(all) enum ParticleKind {
   Spark
   Glitter
@@ -35,6 +40,7 @@ pub(all) enum ParticleKind {
 } derive(Eq)
 
 ///|
+/// Grid actor state with interpolation data for smooth movement.
 pub(all) struct Actor {
   mut x : Int
   mut y : Int
@@ -49,6 +55,7 @@ pub(all) struct Actor {
 }
 
 ///|
+/// Guard entity state, including patrol and alert metadata.
 pub(all) struct Guard {
   mut active : Bool
   body : Actor
@@ -65,6 +72,7 @@ pub(all) struct Guard {
 }
 
 ///|
+/// Collectible loot entity placed on the map.
 pub(all) struct Loot {
   mut active : Bool
   mut x : Int
@@ -74,6 +82,7 @@ pub(all) struct Loot {
 }
 
 ///|
+/// Smoke cloud entity used for stealth and stun interactions.
 pub(all) struct Smoke {
   mut active : Bool
   mut x : Int
@@ -82,6 +91,7 @@ pub(all) struct Smoke {
 }
 
 ///|
+/// Visual particle state for transient effects.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -94,6 +104,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// Complete runtime game state for one heist session.
 pub(all) struct Game {
   map : Array[TileKind]
   guards : Array[Guard]
@@ -131,6 +142,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates an actor initialized at the starting tile.
 pub fn Actor::new() -> Actor {
   {
     x: start_x,
@@ -147,6 +159,7 @@ pub fn Actor::new() -> Actor {
 }
 
 ///|
+/// Creates an inactive guard with default patrol parameters.
 pub fn Guard::new() -> Guard {
   {
     active: false,
@@ -165,16 +178,19 @@ pub fn Guard::new() -> Guard {
 }
 
 ///|
+/// Creates an inactive loot slot.
 pub fn Loot::new() -> Loot {
   { active: false, x: 0, y: 0, kind: Gold, value: 0 }
 }
 
 ///|
+/// Creates an inactive smoke slot.
 pub fn Smoke::new() -> Smoke {
   { active: false, x: 0, y: 0, t: 0.0 }
 }
 
 ///|
+/// Creates an inactive particle slot.
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -189,6 +205,7 @@ pub fn Particle::new() -> Particle {
 }
 
 ///|
+/// Creates a new game state with all pools preallocated.
 pub fn Game::new() -> Game {
   {
     map: Array::make(grid_w * grid_h, Wall),

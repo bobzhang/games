@@ -2,6 +2,7 @@
 // Expanded to cover all 24 block types
 
 ///|
+/// Returns red channel for top-face color of a block id.
 pub fn block_color_r(kind : Int) -> Int {
   if kind == @types.block_dirt {
     139
@@ -55,6 +56,7 @@ pub fn block_color_r(kind : Int) -> Int {
 }
 
 ///|
+/// Returns green channel for top-face color of a block id.
 pub fn block_color_g(kind : Int) -> Int {
   if kind == @types.block_dirt {
     90
@@ -108,6 +110,7 @@ pub fn block_color_g(kind : Int) -> Int {
 }
 
 ///|
+/// Returns blue channel for top-face color of a block id.
 pub fn block_color_b(kind : Int) -> Int {
   if kind == @types.block_dirt {
     43
@@ -163,18 +166,21 @@ pub fn block_color_b(kind : Int) -> Int {
 // Darker shade for block sides
 
 ///|
+/// Returns red channel for side-face shading of a block id.
 pub fn block_side_color_r(kind : Int) -> Int {
   let r = block_color_r(kind)
   r * 4 / 5
 }
 
 ///|
+/// Returns green channel for side-face shading of a block id.
 pub fn block_side_color_g(kind : Int) -> Int {
   let g = block_color_g(kind)
   g * 4 / 5
 }
 
 ///|
+/// Returns blue channel for side-face shading of a block id.
 pub fn block_side_color_b(kind : Int) -> Int {
   let b = block_color_b(kind)
   b * 4 / 5
@@ -183,18 +189,21 @@ pub fn block_side_color_b(kind : Int) -> Int {
 // Even darker shade for block bottom
 
 ///|
+/// Returns red channel for bottom-face shading of a block id.
 pub fn block_bottom_color_r(kind : Int) -> Int {
   let r = block_color_r(kind)
   r * 3 / 5
 }
 
 ///|
+/// Returns green channel for bottom-face shading of a block id.
 pub fn block_bottom_color_g(kind : Int) -> Int {
   let g = block_color_g(kind)
   g * 3 / 5
 }
 
 ///|
+/// Returns blue channel for bottom-face shading of a block id.
 pub fn block_bottom_color_b(kind : Int) -> Int {
   let b = block_color_b(kind)
   b * 3 / 5
@@ -203,6 +212,7 @@ pub fn block_bottom_color_b(kind : Int) -> Int {
 // Block alpha (water and glass are semi-transparent)
 
 ///|
+/// Returns alpha channel for a block id (`255` opaque, lower for translucency).
 pub fn block_alpha(kind : Int) -> Int {
   if kind == @types.block_water {
     160
@@ -218,6 +228,7 @@ pub fn block_alpha(kind : Int) -> Int {
 // ========== Biome Definitions ==========
 
 ///|
+/// Returns biome-specific tree density scalar used by world generation.
 pub fn biome_tree_density(biome : Int) -> Float {
   if biome == @types.biome_plains {
     0.02
@@ -237,6 +248,7 @@ pub fn biome_tree_density(biome : Int) -> Float {
 }
 
 ///|
+/// Returns biome-specific grass/foliage density scalar.
 pub fn biome_grass_density(biome : Int) -> Float {
   if biome == @types.biome_plains {
     0.15
@@ -258,6 +270,7 @@ pub fn biome_grass_density(biome : Int) -> Float {
 // ========== Fog colors per time of day ==========
 
 ///|
+/// Returns fog red channel for day/night state.
 pub fn fog_color_r(is_night : Bool) -> Int {
   if is_night {
     15
@@ -267,6 +280,7 @@ pub fn fog_color_r(is_night : Bool) -> Int {
 }
 
 ///|
+/// Returns fog green channel for day/night state.
 pub fn fog_color_g(is_night : Bool) -> Int {
   if is_night {
     15
@@ -276,6 +290,7 @@ pub fn fog_color_g(is_night : Bool) -> Int {
 }
 
 ///|
+/// Returns fog blue channel for day/night state.
 pub fn fog_color_b(is_night : Bool) -> Int {
   if is_night {
     40
@@ -287,6 +302,7 @@ pub fn fog_color_b(is_night : Bool) -> Int {
 // ========== Crafting Recipes ==========
 
 ///|
+/// Returns full crafting recipe catalog used by crafting UI and execution.
 pub fn get_crafting_recipes() -> Array[@types.CraftingRecipe] {
   let recipes : Array[@types.CraftingRecipe] = []
   // Wood -> Planks (1 wood = 4 planks)
@@ -396,6 +412,7 @@ pub fn get_crafting_recipes() -> Array[@types.CraftingRecipe] {
 // Returns a mob type suitable for this biome; 0 = no spawn
 
 ///|
+/// Chooses spawn mob type for biome/night context from RNG roll.
 pub fn get_spawn_type_for_biome(
   biome : Int,
   is_night : Bool,
@@ -471,6 +488,7 @@ pub fn get_spawn_type_for_biome(
 // ========== Ore distribution ==========
 
 ///|
+/// Returns typical ore vein size for a given ore block id.
 pub fn ore_vein_size(ore : Int) -> Int {
   if ore == @types.block_ore_iron {
     4
@@ -488,16 +506,19 @@ pub fn ore_vein_size(ore : Int) -> Int {
 // Simple house dimensions
 
 ///|
+/// Returns generated house structure width in blocks.
 pub fn structure_house_width() -> Int {
   7
 }
 
 ///|
+/// Returns generated house structure depth in blocks.
 pub fn structure_house_depth() -> Int {
   7
 }
 
 ///|
+/// Returns generated house structure height in blocks.
 pub fn structure_house_height() -> Int {
   5
 }
@@ -505,6 +526,7 @@ pub fn structure_house_height() -> Int {
 // Get block for a house at relative position
 
 ///|
+/// Returns block id at local coordinates for procedural house blueprint.
 pub fn structure_house_block(rx : Int, ry : Int, rz : Int) -> Int {
   let w = structure_house_width() - 1
   let d = structure_house_depth() - 1
@@ -549,6 +571,7 @@ pub fn structure_house_block(rx : Int, ry : Int, rz : Int) -> Int {
 // ========== Biome parameters definitions ==========
 
 ///|
+/// Returns full biome parameter record for terrain and decoration generation.
 pub fn get_biome_params(biome : Int) -> @types.BiomeParams {
   if biome == @types.biome_plains {
     {
@@ -649,6 +672,7 @@ pub fn get_biome_params(biome : Int) -> @types.BiomeParams {
 // Get ore spawn chance at a given depth for each ore type
 
 ///|
+/// Returns ore spawn chance modifier by ore type and depth.
 pub fn ore_chance_at_depth(ore : Int, depth : Int) -> Float {
   if ore == @types.block_ore_iron {
     if depth < 5 {
@@ -694,6 +718,7 @@ pub fn ore_chance_at_depth(ore : Int, depth : Int) -> Float {
 // Get ore vein maximum size at given depth
 
 ///|
+/// Returns max ore vein size by ore type and depth.
 pub fn ore_vein_max_at_depth(ore : Int, depth : Int) -> Int {
   if ore == @types.block_ore_iron {
     if depth < 10 {
@@ -729,16 +754,19 @@ pub fn ore_vein_max_at_depth(ore : Int, depth : Int) -> Int {
 // Large tree template: oak tree with wider canopy
 
 ///|
+/// Returns procedural large-tree trunk height.
 pub fn structure_large_tree_height() -> Int {
   7
 }
 
 ///|
+/// Returns canopy radius for large-tree structure generation.
 pub fn structure_large_tree_canopy_radius() -> Int {
   3
 }
 
 ///|
+/// Returns block id at local coordinates for large-tree blueprint.
 pub fn structure_large_tree_block(rx : Int, ry : Int, rz : Int) -> Int {
   let trunk_h = 5
   let canopy_start = 3
@@ -777,21 +805,25 @@ pub fn structure_large_tree_block(rx : Int, ry : Int, rz : Int) -> Int {
 // Ruin structure template: small ruined stone walls
 
 ///|
+/// Returns generated ruin structure width in blocks.
 pub fn structure_ruin_width() -> Int {
   5
 }
 
 ///|
+/// Returns generated ruin structure depth in blocks.
 pub fn structure_ruin_depth() -> Int {
   5
 }
 
 ///|
+/// Returns generated ruin structure height in blocks.
 pub fn structure_ruin_height() -> Int {
   3
 }
 
 ///|
+/// Returns block id at local coordinates for ruin blueprint.
 pub fn structure_ruin_block(rx : Int, ry : Int, rz : Int) -> Int {
   let w = structure_ruin_width() - 1
   let d = structure_ruin_depth() - 1
@@ -814,16 +846,19 @@ pub fn structure_ruin_block(rx : Int, ry : Int, rz : Int) -> Int {
 // Watchtower template
 
 ///|
+/// Returns generated tower structure width in blocks.
 pub fn structure_tower_width() -> Int {
   3
 }
 
 ///|
+/// Returns generated tower structure height in blocks.
 pub fn structure_tower_height() -> Int {
   8
 }
 
 ///|
+/// Returns block id at local coordinates for tower blueprint.
 pub fn structure_tower_block(rx : Int, ry : Int, rz : Int) -> Int {
   let w = structure_tower_width() - 1
   // Base and top platform
@@ -857,6 +892,7 @@ pub fn structure_tower_block(rx : Int, ry : Int, rz : Int) -> Int {
 // Get the spawn rate modifier for a biome
 
 ///|
+/// Returns baseline spawn-rate multiplier for biome wildlife/mobs.
 pub fn biome_spawn_rate(biome : Int) -> Float {
   if biome == @types.biome_plains {
     1.0
@@ -878,6 +914,7 @@ pub fn biome_spawn_rate(biome : Int) -> Float {
 // Night-specific spawn multiplier
 
 ///|
+/// Returns global hostile-spawn multiplier applied at night.
 pub fn night_spawn_multiplier() -> Float {
   1.8
 }
@@ -885,6 +922,7 @@ pub fn night_spawn_multiplier() -> Float {
 // Get the hostile mob pool for a biome at night
 
 ///|
+/// Picks hostile mob type for nighttime biome pool from RNG value.
 pub fn get_night_hostile_pool(biome : Int, rng_val : Int) -> Int {
   let r = rng_val % 100
   if biome == @types.biome_swamp {
@@ -946,6 +984,7 @@ pub fn get_night_hostile_pool(biome : Int, rng_val : Int) -> Int {
 // ========== Damage amounts for weapons ==========
 
 ///|
+/// Returns melee damage dealt by a tool when used as a weapon.
 pub fn get_weapon_damage(tool : Int) -> Int {
   if tool == @types.tool_wooden_sword {
     4
@@ -967,6 +1006,7 @@ pub fn get_weapon_damage(tool : Int) -> Int {
 // ========== Light emitting blocks ==========
 
 ///|
+/// Returns emitted light level for luminous blocks (e.g. torches).
 pub fn block_light_level(kind : Int) -> Int {
   if kind == @types.block_torch {
     @types.torch_light_level
@@ -978,6 +1018,7 @@ pub fn block_light_level(kind : Int) -> Int {
 // ========== Block hardness (for explosion/damage resistance) ==========
 
 ///|
+/// Returns relative block hardness tier for mining progression logic.
 pub fn block_hardness(kind : Int) -> Int {
   if kind == @types.block_bedrock {
     999

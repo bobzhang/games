@@ -1252,6 +1252,7 @@ fn update_game_over(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances the game simulation by one frame using the current input state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   // Read input first
   match game.state {
@@ -1278,6 +1279,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Initializes the title-screen state and presentation values.
 pub fn init_title(game : @types.Game) -> Unit {
   init_title_scene(game)
 }

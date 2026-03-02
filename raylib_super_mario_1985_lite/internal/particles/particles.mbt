@@ -1,4 +1,4 @@
-///|
+/// Deactivates all particle slots.
 pub fn clear_particles(game : @types.Game) -> Unit {
   for i in 0..<game.particles.length() {
     game.particles[i] = @types.Particle::inactive()
@@ -42,7 +42,7 @@ fn spawn_particle(
   p.color = color
 }
 
-///|
+/// Spawns a golden burst used when collecting a coin.
 pub fn spawn_coin_burst(game : @types.Game, x : Float, y : Float) -> Unit {
   for i in 0..<10 {
     let a = @types.randf(0.0, 6.28)
@@ -60,7 +60,7 @@ pub fn spawn_coin_burst(game : @types.Game, x : Float, y : Float) -> Unit {
   }
 }
 
-///|
+/// Spawns debris burst particles for a block impact.
 pub fn spawn_block_burst(
   game : @types.Game,
   x : Float,
@@ -83,7 +83,7 @@ pub fn spawn_block_burst(
   }
 }
 
-///|
+/// Spawns a brown impact burst for enemy stomps.
 pub fn spawn_stomp_burst(game : @types.Game, x : Float, y : Float) -> Unit {
   for i in 0..<15 {
     let a = @types.randf(0.0, 6.28)
@@ -101,7 +101,7 @@ pub fn spawn_stomp_burst(game : @types.Game, x : Float, y : Float) -> Unit {
   }
 }
 
-///|
+/// Spawns a red burst to signal player damage.
 pub fn spawn_hurt_burst(game : @types.Game, x : Float, y : Float) -> Unit {
   for i in 0..<18 {
     let a = @types.randf(0.0, 6.28)
@@ -119,7 +119,7 @@ pub fn spawn_hurt_burst(game : @types.Game, x : Float, y : Float) -> Unit {
   }
 }
 
-///|
+/// Advances active particle motion and lifetime.
 pub fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
     if not(p.active) {

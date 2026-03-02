@@ -1131,11 +1131,13 @@ fn update_title(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Initializes runtime state for a new game session.
 pub fn init_game(game : @types.Game) -> Unit {
   init_title_scene(game)
 }
 
 ///|
+/// Advances the game simulation by one frame using the current input state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   if game.state == @types.state_title {
     update_title_input(game)

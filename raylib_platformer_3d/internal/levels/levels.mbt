@@ -2,7 +2,7 @@
 // Each level is defined by spawning platforms, collectibles, hazards procedurally
 // 4 worlds x 5 levels = 20 total levels
 
-///|
+/// Returns the localized display name for a world index.
 pub fn get_world_name(world : Int) -> String {
   if world == 0 {
     "Green Hills"
@@ -15,7 +15,7 @@ pub fn get_world_name(world : Int) -> String {
   }
 }
 
-///|
+/// Returns the display title for a level index inside a world.
 pub fn get_level_name(world : Int, level : Int) -> String {
   if world == 0 {
     if level == 0 {
@@ -68,7 +68,7 @@ pub fn get_level_name(world : Int, level : Int) -> String {
 
 // World color themes
 
-///|
+/// Returns the base platform RGB color tuple for a world theme.
 pub fn world_platform_color(world : Int) -> (Int, Int, Int) {
   if world == 0 {
     (80, 160, 60)
@@ -81,7 +81,7 @@ pub fn world_platform_color(world : Int) -> (Int, Int, Int) {
   }
 }
 
-///|
+/// Returns the background RGB color tuple for a world theme.
 pub fn world_bg_color(world : Int) -> (Int, Int, Int) {
   if world == 0 {
     (100, 180, 255)
@@ -96,7 +96,7 @@ pub fn world_bg_color(world : Int) -> (Int, Int, Int) {
 
 // Decoration theme colors
 
-///|
+/// Returns the primary decoration RGB color tuple for a world.
 pub fn world_deco_color_1(world : Int) -> (Int, Int, Int) {
   if world == 0 {
     (60, 130, 40)
@@ -109,7 +109,7 @@ pub fn world_deco_color_1(world : Int) -> (Int, Int, Int) {
   }
 }
 
-///|
+/// Returns the secondary decoration RGB color tuple for a world.
 pub fn world_deco_color_2(world : Int) -> (Int, Int, Int) {
   if world == 0 {
     (100, 70, 40)
@@ -125,7 +125,7 @@ pub fn world_deco_color_2(world : Int) -> (Int, Int, Int) {
 // Platform layout data per level
 // Returns array of (kind, x, y, z, w, d, move_range, move_speed)
 
-///|
+/// Builds platform spawn tuples `(kind, x, y, z, w, d, move_range, move_speed)` for a level.
 pub fn get_platform_data(
   world : Int,
   level : Int,
@@ -484,7 +484,7 @@ fn build_sky_level(
 
 // Collectible positions for a level
 
-///|
+/// Builds collectible spawn tuples `(kind, x, y, z)` for a level.
 pub fn get_collectible_data(
   world : Int,
   level : Int,
@@ -526,7 +526,7 @@ pub fn get_collectible_data(
 // Enemy data for a level
 // Returns array of (kind, x, y, z, patrol_range)
 
-///|
+/// Builds enemy spawn tuples `(kind, x, y, z, patrol_range)` for a level.
 pub fn get_enemy_data(
   world : Int,
   level : Int,
@@ -567,7 +567,7 @@ pub fn get_enemy_data(
 // Hazard data for a level
 // Returns array of (kind, x, y, z, w, h, d)
 
-///|
+/// Builds hazard spawn tuples `(kind, x, y, z, w, h, d)` for a level.
 pub fn get_hazard_data(
   world : Int,
   level : Int,
@@ -613,7 +613,7 @@ pub fn get_hazard_data(
 // Power-up data for a level
 // Returns array of (kind, x, y, z)
 
-///|
+/// Builds power-up spawn tuples `(kind, x, y, z)` for a level.
 pub fn get_powerup_data(
   world : Int,
   level : Int,
@@ -658,7 +658,7 @@ pub fn get_powerup_data(
 // Decoration data for a level
 // Returns array of (kind, x, y, z, scale)
 
-///|
+/// Builds decorative prop tuples `(kind, x, y, z, scale)` for a level.
 pub fn get_decoration_data(
   world : Int,
   level : Int,
@@ -719,7 +719,7 @@ pub fn get_decoration_data(
 
 // Goal position (last platform)
 
-///|
+/// Returns the 3D goal location, anchored above the final platform in the level path.
 pub fn get_goal_position(world : Int, level : Int) -> (Float, Float, Float) {
   let plats = get_platform_data(world, level)
   let last = plats[plats.length() - 1]
@@ -728,7 +728,7 @@ pub fn get_goal_position(world : Int, level : Int) -> (Float, Float, Float) {
 
 // Get level difficulty rating (1-5)
 
-///|
+/// Computes a clamped difficulty rating from `1` to `5` using world and level progression.
 pub fn get_level_difficulty(world : Int, level : Int) -> Int {
   let base : Int = world + 1
   let lvl_add : Int = level / 2
@@ -744,14 +744,14 @@ pub fn get_level_difficulty(world : Int, level : Int) -> Int {
 
 // Check if a level should have a key requirement
 
-///|
+/// Returns whether the level requires key collection before completion.
 pub fn level_has_key(world : Int, level : Int) -> Bool {
   level == 4 && world >= 1
 }
 
 // Get recommended star count to unlock a world
 
-///|
+/// Returns the minimum campaign stars required to unlock a world.
 pub fn world_unlock_stars(world : Int) -> Int {
   if world == 0 {
     0

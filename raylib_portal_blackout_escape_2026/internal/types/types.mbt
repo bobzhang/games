@@ -1,4 +1,5 @@
 ///|
+/// Grid actor with integer tile coordinates and interpolation fields.
 pub(all) struct Actor {
   mut x : Int
   mut y : Int
@@ -13,6 +14,7 @@ pub(all) struct Actor {
 }
 
 ///|
+/// Patrol drone state including behavior mode and movement cooldowns.
 pub(all) struct Drone {
   mut active : Bool
   body : Actor
@@ -29,6 +31,7 @@ pub(all) struct Drone {
 }
 
 ///|
+/// Collectible core used to power the portal exit.
 pub(all) struct Core {
   mut active : Bool
   mut x : Int
@@ -37,6 +40,7 @@ pub(all) struct Core {
 }
 
 ///|
+/// Active flare beacon dropped by the player.
 pub(all) struct Flare {
   mut active : Bool
   mut x : Int
@@ -45,6 +49,7 @@ pub(all) struct Flare {
 }
 
 ///|
+/// Particle entry used for sparks, smoke, and feedback effects.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -57,6 +62,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// Complete mutable game state for a blackout escape run.
 pub(all) struct Game {
   map : Array[Int]
   drones : Array[Drone]
@@ -95,6 +101,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a player actor at the configured start tile.
 pub fn Actor::new() -> Actor {
   {
     x: start_x,
@@ -111,6 +118,7 @@ pub fn Actor::new() -> Actor {
 }
 
 ///|
+/// Creates an inactive drone entry for the drone pool.
 pub fn Drone::new() -> Drone {
   {
     active: false,
@@ -129,16 +137,19 @@ pub fn Drone::new() -> Drone {
 }
 
 ///|
+/// Creates an inactive core entry for the core pool.
 pub fn Core::new() -> Core {
   { active: false, x: 0, y: 0, kind: 0 }
 }
 
 ///|
+/// Creates an inactive flare entry for the flare pool.
 pub fn Flare::new() -> Flare {
   { active: false, x: 0, y: 0, t: 0.0 }
 }
 
 ///|
+/// Creates an inactive particle entry for the particle pool.
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -153,6 +164,7 @@ pub fn Particle::new() -> Particle {
 }
 
 ///|
+/// Creates a new game state with initialized pools and counters.
 pub fn Game::new() -> Game {
   {
     map: Array::make(grid_w * grid_h, tile_wall),

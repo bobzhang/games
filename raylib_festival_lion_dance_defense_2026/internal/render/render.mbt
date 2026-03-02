@@ -741,6 +741,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws one complete frame of street action, HUD, and overlays.
 pub fn draw_frame(game : @types.Game) -> Unit {
   let ox = shake_x(game)
   let oy = shake_y(game)

@@ -365,6 +365,7 @@ fn update_gate(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets the puzzle state and starts a fresh gameplay run.
 pub fn start_run(game : @types.Game) -> Unit {
   clear_map(game)
   load_layout(game)
@@ -405,6 +406,7 @@ pub fn start_run(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the game to title state and clears transient runtime effects.
 pub fn go_title(game : @types.Game) -> Unit {
   game.state = @types.Title
   game.req_dx = 0
@@ -453,6 +455,7 @@ fn finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
 }
 
 ///|
+/// Cycles the contextual hint index and updates the message banner.
 pub fn cycle_hint(game : @types.Game) -> Unit {
   game.hint_i = (game.hint_i + 1) % 4
   set_msg(game, @types.seal_hint(game.hint_i), 2.8)
@@ -868,6 +871,7 @@ fn update_result(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances one frame of game simulation based on the active flow state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   match game.state {
     @types.Title => update_title(game, dt)

@@ -121,6 +121,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Renders the playfield, active piece, previews, and HUD for one frame.
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.begin_drawing()
   @raylib.clear_background(@raylib.Color::new(12, 12, 20, 255))

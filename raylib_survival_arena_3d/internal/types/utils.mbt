@@ -1,4 +1,5 @@
 ///|
+/// Returns absolute value for float arithmetic.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -8,6 +9,7 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Clamps a float value to inclusive range `[low, high]`.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
     low
@@ -19,6 +21,7 @@ pub fn clampf(v : Float, low : Float, high : Float) -> Float {
 }
 
 ///|
+/// Clamps an integer value to inclusive range `[low, high]`.
 pub fn clampi(v : Int, low : Int, high : Int) -> Int {
   if v < low {
     low
@@ -30,6 +33,7 @@ pub fn clampi(v : Int, low : Int, high : Int) -> Int {
 }
 
 ///|
+/// Returns the smaller of two float values.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -39,6 +43,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two float values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -48,11 +53,13 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Linearly interpolates from `a` to `b` by factor `t`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t
 }
 
 ///|
+/// Returns the sign of a float as `-1.0`, `0.0`, or `1.0`.
 pub fn sign(v : Float) -> Float {
   if v > 0.0 {
     1.0
@@ -64,6 +71,7 @@ pub fn sign(v : Float) -> Float {
 }
 
 ///|
+/// Computes planar distance on the arena floor (`x/z` axes).
 pub fn distance2d(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
   let dx = x1 - x2
   let dz = z1 - z2
@@ -71,6 +79,7 @@ pub fn distance2d(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
 }
 
 ///|
+/// Computes full 3D Euclidean distance.
 pub fn distance3d(
   x1 : Float,
   y1 : Float,
@@ -86,6 +95,7 @@ pub fn distance3d(
 }
 
 ///|
+/// Normalizes a 3D vector, returning zero vector for near-zero length input.
 pub fn normalize3d(x : Float, y : Float, z : Float) -> (Float, Float, Float) {
   let len = (x * x + y * y + z * z).sqrt()
   if len < 0.0001 {
@@ -98,6 +108,7 @@ pub fn normalize3d(x : Float, y : Float, z : Float) -> (Float, Float, Float) {
 // Dot product of two 3d vectors
 
 ///|
+/// Computes 3D dot product.
 pub fn dot3d(
   ax : Float,
   ay : Float,
@@ -112,6 +123,7 @@ pub fn dot3d(
 // Angle between two 2d vectors (returns radians)
 
 ///|
+/// Returns angle (radians) from point `(x1, z1)` toward `(x2, z2)`.
 pub fn angle_between(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
   @math.atan2f(z2 - z1, x2 - x1)
 }
@@ -119,6 +131,7 @@ pub fn angle_between(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
 // Check if angle difference is within threshold (for shield check)
 
 ///|
+/// Returns whether two angles differ by less than `threshold` radians.
 pub fn angle_within(angle1 : Float, angle2 : Float, threshold : Float) -> Bool {
   let mut diff = angle1 - angle2
   if diff > pi {
@@ -133,6 +146,7 @@ pub fn angle_within(angle1 : Float, angle2 : Float, threshold : Float) -> Bool {
 // RNG
 
 ///|
+/// Advances xorshift RNG state and returns next random integer.
 pub fn rand_next(game : Game) -> Int {
   let mut x = game.rng_state
   x = x ^ (x << 13)
@@ -146,6 +160,7 @@ pub fn rand_next(game : Game) -> Int {
 }
 
 ///|
+/// Returns integer random value in inclusive range `[low, high]`.
 pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
   if high <= low {
     low
@@ -155,12 +170,14 @@ pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
 }
 
 ///|
+/// Returns float random value in range `[low, high]`.
 pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
   let n = Float::from_int(rand_next(game) % 10000) / 10000.0
   low + (high - low) * n
 }
 
 ///|
+/// Bernoulli helper that returns true with probability `chance`.
 pub fn rand_bool(game : Game, chance : Float) -> Bool {
   rand_rangef(game, 0.0, 1.0) < chance
 }
@@ -168,6 +185,7 @@ pub fn rand_bool(game : Game, chance : Float) -> Bool {
 // Allocators
 
 ///|
+/// Finds a free enemy slot in the enemy pool.
 pub fn alloc_enemy(game : Game) -> Int {
   for i in 0..<game.enemies.length() {
     if not(game.enemies[i].active) {
@@ -178,6 +196,7 @@ pub fn alloc_enemy(game : Game) -> Int {
 }
 
 ///|
+/// Finds a free projectile slot in the projectile pool.
 pub fn alloc_projectile(game : Game) -> Int {
   for i in 0..<game.projectiles.length() {
     if not(game.projectiles[i].active) {
@@ -188,6 +207,7 @@ pub fn alloc_projectile(game : Game) -> Int {
 }
 
 ///|
+/// Finds a free particle slot in the particle pool.
 pub fn alloc_particle(game : Game) -> Int {
   for i in 0..<game.particles.length() {
     if not(game.particles[i].active) {
@@ -198,6 +218,7 @@ pub fn alloc_particle(game : Game) -> Int {
 }
 
 ///|
+/// Finds a free pickup slot in the pickup pool.
 pub fn alloc_pickup(game : Game) -> Int {
   for i in 0..<game.pickups.length() {
     if not(game.pickups[i].active) {
@@ -208,6 +229,7 @@ pub fn alloc_pickup(game : Game) -> Int {
 }
 
 ///|
+/// Finds a free barricade slot in the barricade pool.
 pub fn alloc_barricade(game : Game) -> Int {
   for i in 0..<game.barricades.length() {
     if not(game.barricades[i].active) {
@@ -218,6 +240,7 @@ pub fn alloc_barricade(game : Game) -> Int {
 }
 
 ///|
+/// Finds a free trap slot in the trap pool.
 pub fn alloc_trap(game : Game) -> Int {
   for i in 0..<game.traps.length() {
     if not(game.traps[i].active) {
@@ -230,6 +253,7 @@ pub fn alloc_trap(game : Game) -> Int {
 // Spawn particles
 
 ///|
+/// Spawns a burst of generic particles around a world-space position.
 pub fn spawn_particles(
   game : Game,
   wx : Float,
@@ -267,6 +291,7 @@ pub fn spawn_particles(
 // Spawn typed particles
 
 ///|
+/// Spawns particles tagged with an explicit particle kind.
 pub fn spawn_particles_typed(
   game : Game,
   wx : Float,
@@ -305,6 +330,7 @@ pub fn spawn_particles_typed(
 // Spawn directional particles (for muzzle flash etc)
 
 ///|
+/// Spawns directional particles (e.g. muzzle flash streaks) biased by `(dx, dy, dz)`.
 pub fn spawn_particles_dir(
   game : Game,
   wx : Float,
@@ -345,6 +371,7 @@ pub fn spawn_particles_dir(
 // Spawn shell casing particle
 
 ///|
+/// Spawns one shell-casing particle ejected to the weapon's right side.
 pub fn spawn_shell_casing(
   game : Game,
   x : Float,
@@ -377,6 +404,7 @@ pub fn spawn_shell_casing(
 // Check if point is inside arena bounds
 
 ///|
+/// Checks whether a position lies within playable arena bounds.
 pub fn in_arena(x : Float, z : Float) -> Bool {
   let half_w = arena_width / 2.0 - arena_wall_thickness
   let half_d = arena_depth / 2.0 - arena_wall_thickness
@@ -386,6 +414,7 @@ pub fn in_arena(x : Float, z : Float) -> Bool {
 // Clamp position to arena bounds
 
 ///|
+/// Clamps a position to valid arena bounds with wall margin.
 pub fn clamp_to_arena(x : Float, z : Float) -> (Float, Float) {
   let half_w = arena_width / 2.0 - arena_wall_thickness - 0.3
   let half_d = arena_depth / 2.0 - arena_wall_thickness - 0.3
@@ -395,6 +424,7 @@ pub fn clamp_to_arena(x : Float, z : Float) -> (Float, Float) {
 // Check circle vs pillar collision, return pushed position
 
 ///|
+/// Resolves circle-vs-pillar overlap and returns pushed position plus collision flag.
 pub fn push_from_pillar(
   x : Float,
   z : Float,
@@ -420,6 +450,7 @@ pub fn push_from_pillar(
 // Check circle vs box collision (for low walls, barricades)
 
 ///|
+/// Resolves circle-vs-box overlap and returns pushed position plus collision flag.
 pub fn push_from_box(
   x : Float,
   z : Float,
@@ -463,6 +494,7 @@ pub fn push_from_box(
 // Weapon name
 
 ///|
+/// Returns full display name for weapon type id.
 pub fn weapon_name(kind : Int) -> String {
   if kind == weapon_pistol {
     "Pistol"
@@ -484,6 +516,7 @@ pub fn weapon_name(kind : Int) -> String {
 // Weapon short name for UI slots
 
 ///|
+/// Returns compact short label for weapon-slot UI.
 pub fn weapon_short_name(kind : Int) -> String {
   if kind == weapon_pistol {
     "P"
@@ -505,6 +538,7 @@ pub fn weapon_short_name(kind : Int) -> String {
 // Weapon fire rate (base)
 
 ///|
+/// Returns base fire interval (seconds between shots) for a weapon type.
 pub fn weapon_fire_rate(kind : Int) -> Float {
   if kind == weapon_pistol {
     rate_pistol
@@ -526,6 +560,7 @@ pub fn weapon_fire_rate(kind : Int) -> Float {
 // Weapon damage (base)
 
 ///|
+/// Returns base damage for a weapon type.
 pub fn weapon_damage(kind : Int) -> Float {
   if kind == weapon_pistol {
     dmg_pistol
@@ -547,6 +582,7 @@ pub fn weapon_damage(kind : Int) -> Float {
 // Weapon projectile speed
 
 ///|
+/// Returns base projectile speed for a weapon type.
 pub fn weapon_proj_speed(kind : Int) -> Float {
   if kind == weapon_pistol {
     speed_pistol
@@ -568,6 +604,7 @@ pub fn weapon_proj_speed(kind : Int) -> Float {
 // Weapon reload time (base)
 
 ///|
+/// Returns base reload time for a weapon type.
 pub fn weapon_reload_time(kind : Int) -> Float {
   if kind == weapon_pistol {
     reload_pistol
@@ -589,6 +626,7 @@ pub fn weapon_reload_time(kind : Int) -> Float {
 // Weapon magazine size (base)
 
 ///|
+/// Returns base magazine size for a weapon type.
 pub fn weapon_mag_size(kind : Int) -> Int {
   if kind == weapon_pistol {
     mag_pistol
@@ -610,6 +648,7 @@ pub fn weapon_mag_size(kind : Int) -> Int {
 // Get effective fire rate with upgrades
 
 ///|
+/// Returns player-adjusted fire interval after weapon upgrades.
 pub fn effective_fire_rate(player : Player, kind : Int) -> Float {
   let base = weapon_fire_rate(kind)
   let lvl = Float::from_int(player.weapon_rate_level[kind])
@@ -620,6 +659,7 @@ pub fn effective_fire_rate(player : Player, kind : Int) -> Float {
 // Get effective damage with upgrades and boosts
 
 ///|
+/// Returns effective damage after upgrades and temporary buffs.
 pub fn effective_damage(player : Player, kind : Int) -> Float {
   let base = weapon_damage(kind)
   let lvl = Float::from_int(player.weapon_damage_level[kind])
@@ -635,6 +675,7 @@ pub fn effective_damage(player : Player, kind : Int) -> Float {
 // Get effective magazine size with upgrades
 
 ///|
+/// Returns effective magazine size after magazine upgrades.
 pub fn effective_mag_size(player : Player, kind : Int) -> Int {
   let base = weapon_mag_size(kind)
   let lvl = player.weapon_mag_level[kind]
@@ -645,6 +686,7 @@ pub fn effective_mag_size(player : Player, kind : Int) -> Int {
 // Enemy name
 
 ///|
+/// Returns enemy archetype display name for HUD and kill feed.
 pub fn enemy_name(kind : Int) -> String {
   if kind == enemy_zombie {
     "Zombie"
@@ -670,6 +712,7 @@ pub fn enemy_name(kind : Int) -> String {
 // Pickup name
 
 ///|
+/// Returns pickup display name for notifications/UI.
 pub fn pickup_name(kind : Int) -> String {
   if kind == pickup_health {
     "Health Pack"
@@ -691,6 +734,7 @@ pub fn pickup_name(kind : Int) -> String {
 // Count active enemies
 
 ///|
+/// Counts currently active enemies in the arena.
 pub fn count_active_enemies(game : Game) -> Int {
   let mut count = 0
   for enemy in game.enemies {
@@ -704,6 +748,7 @@ pub fn count_active_enemies(game : Game) -> Int {
 // Show temporary message
 
 ///|
+/// Displays a temporary center-screen message for `duration` seconds.
 pub fn show_message(game : Game, text : String, duration : Float) -> Unit {
   game.message_text = text
   game.message_timer = duration
@@ -712,6 +757,7 @@ pub fn show_message(game : Game, text : String, duration : Float) -> Unit {
 // Add kill feed entry
 
 ///|
+/// Pushes a new line into the kill feed and shifts older entries down.
 pub fn add_kill_feed(
   game : Game,
   text : String,
@@ -740,6 +786,7 @@ pub fn add_kill_feed(
 // Update kill feed timers
 
 ///|
+/// Advances and expires kill-feed entry timers.
 pub fn update_kill_feed(game : Game, dt : Float) -> Unit {
   for i in 0..<max_kill_feed {
     if game.kill_feed[i].active {
@@ -754,6 +801,7 @@ pub fn update_kill_feed(game : Game, dt : Float) -> Unit {
 // Update damage indicators
 
 ///|
+/// Advances and expires directional damage indicator timers.
 pub fn update_damage_indicators(game : Game, dt : Float) -> Unit {
   for damage_indicator in game.damage_indicators {
     if damage_indicator.active {
@@ -768,6 +816,7 @@ pub fn update_damage_indicators(game : Game, dt : Float) -> Unit {
 // Add damage indicator from a direction
 
 ///|
+/// Adds a directional damage indicator pointing from attacker to player.
 pub fn add_damage_indicator(
   game : Game,
   from_x : Float,
@@ -792,6 +841,7 @@ pub fn add_damage_indicator(
 // Check if a hit is a headshot based on projectile Y vs enemy center
 
 ///|
+/// Returns whether projectile Y intercept falls in the enemy head region.
 pub fn is_headshot_hit(
   proj_y : Float,
   enemy_y : Float,
@@ -804,6 +854,7 @@ pub fn is_headshot_hit(
 // Get combo multiplier text
 
 ///|
+/// Returns stylized combo text for UI based on current combo count.
 pub fn combo_text(combo : Int) -> String {
   if combo >= 10 {
     "UNSTOPPABLE x\{combo}"
@@ -821,6 +872,7 @@ pub fn combo_text(combo : Int) -> String {
 // Collision push against barricades
 
 ///|
+/// Applies collision pushes against all active barricades and returns resolved position.
 pub fn push_from_barricades(
   game : Game,
   x : Float,
@@ -851,6 +903,7 @@ pub fn push_from_barricades(
 // Collision push against low walls
 
 ///|
+/// Applies collision pushes against all low-wall obstacles and returns resolved position.
 pub fn push_from_low_walls(
   game : Game,
   x : Float,

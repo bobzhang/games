@@ -688,6 +688,7 @@ fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances one frame of defense simulation and state transitions.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   update_input(game)
 

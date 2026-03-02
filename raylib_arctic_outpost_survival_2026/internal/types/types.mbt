@@ -1,4 +1,5 @@
 ///|
+/// Mutable enemy entity stored in the combat simulation pool.
 pub(all) struct Enemy {
   mut active : Bool
   mut x : Float
@@ -12,6 +13,7 @@ pub(all) struct Enemy {
 }
 
 ///|
+/// Mutable pickup entity stored in the world object pool.
 pub(all) struct Pickup {
   mut active : Bool
   mut x : Float
@@ -23,6 +25,7 @@ pub(all) struct Pickup {
 }
 
 ///|
+/// Mutable projectile entity stored in the bullet pool.
 pub(all) struct Bullet {
   mut active : Bool
   mut x : Float
@@ -35,6 +38,7 @@ pub(all) struct Bullet {
 }
 
 ///|
+/// Mutable particle used for lightweight visual effects.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -47,6 +51,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// High-level state of the game flow.
 pub(all) enum GameState {
   Title
   Play
@@ -54,6 +59,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Complete runtime state for one arctic outpost session.
 pub(all) struct Game {
   enemies : Array[Enemy]
   pickups : Array[Pickup]
@@ -102,6 +108,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates an inactive enemy with default field values.
 pub fn Enemy::new() -> Enemy {
   {
     active: false,
@@ -117,6 +124,7 @@ pub fn Enemy::new() -> Enemy {
 }
 
 ///|
+/// Creates an inactive pickup with default field values.
 pub fn Pickup::new() -> Pickup {
   {
     active: false,
@@ -130,6 +138,7 @@ pub fn Pickup::new() -> Pickup {
 }
 
 ///|
+/// Creates an inactive bullet with default field values.
 pub fn Bullet::new() -> Bullet {
   {
     active: false,
@@ -144,6 +153,7 @@ pub fn Bullet::new() -> Bullet {
 }
 
 ///|
+/// Creates an inactive particle with default field values.
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -158,6 +168,7 @@ pub fn Particle::new() -> Particle {
 }
 
 ///|
+/// Creates a new game state with preallocated object pools.
 pub fn Game::new() -> Game {
   {
     enemies: Array::makei(max_enemies, fn(_i) { Enemy::new() }),

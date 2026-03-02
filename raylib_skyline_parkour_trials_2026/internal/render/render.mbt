@@ -725,6 +725,7 @@ fn draw_victory_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws one full frame of stage geometry, player, HUD, and overlays.
 pub fn draw_frame(game : @types.Game) -> Unit {
   let cam_x = camera_x(game)
 

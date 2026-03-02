@@ -3,6 +3,8 @@
 // DDA ray march to find the block the player is looking at
 
 ///|
+/// Ray-marches from the camera through the world to find the currently targeted
+/// solid block face and stores hit position/normal in `game.target`.
 pub fn update_block_target(game : @types.Game) -> Unit {
   let target = game.target
   target.hit = false
@@ -73,6 +75,8 @@ pub fn update_block_target(game : @types.Game) -> Unit {
 // Handle block breaking (with mining time) and placing
 
 ///|
+/// Handles mining progress, block breaking drops, and block placement using current
+/// input state and targeted block data.
 pub fn handle_block_interaction(game : @types.Game, dt : Float) -> Unit {
   let target = game.target
   let player = game.player
@@ -199,6 +203,8 @@ pub fn handle_block_interaction(game : @types.Game, dt : Float) -> Unit {
 // Handle block selection via number keys and scroll wheel
 
 ///|
+/// Updates hotbar slot selection from number keys and mouse wheel, then syncs
+/// `selected_block` from the chosen inventory slot.
 pub fn handle_block_selection(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyOne) {
     game.player.inventory.selected = 0

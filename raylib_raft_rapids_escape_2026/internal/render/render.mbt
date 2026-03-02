@@ -968,6 +968,7 @@ fn draw_msg(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Render world layers, objects, HUD panel, and overlays.
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_background(game)
 

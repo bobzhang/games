@@ -1,4 +1,5 @@
 ///|
+/// High-level phase of the match-link campaign.
 pub(all) enum GameState {
   Title
   Play
@@ -8,6 +9,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Directional input used for cursor movement repeat logic.
 pub(all) enum Direction {
   DirNone
   Left
@@ -17,6 +19,7 @@ pub(all) enum Direction {
 } derive(Eq)
 
 ///|
+/// Polyline result for a valid tile link path (up to 4 points).
 pub(all) struct LinkPath {
   found : Bool
   points : Int
@@ -31,6 +34,7 @@ pub(all) struct LinkPath {
 }
 
 ///|
+/// Returns a path object that represents "no link found".
 pub fn empty_path() -> LinkPath {
   {
     found: false,
@@ -47,6 +51,7 @@ pub fn empty_path() -> LinkPath {
 }
 
 ///|
+/// Pooled spark particle used for clear effects.
 pub(all) struct Spark {
   mut active : Bool
   mut x : Float
@@ -59,6 +64,7 @@ pub(all) struct Spark {
 }
 
 ///|
+/// Full mutable game state for board logic, campaign progress, and input.
 pub(all) struct Game {
   cells : Array[Int]
   sparks : Array[Spark]
@@ -115,6 +121,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a new campaign state with cleared board buffers.
 pub fn Game::new() -> Game {
   let sparks_arr : Array[Spark] = Array::makei(1200, fn(_i) {
     {

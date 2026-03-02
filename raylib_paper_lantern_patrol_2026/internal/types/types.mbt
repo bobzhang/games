@@ -1,4 +1,5 @@
 ///|
+/// Enumerates high-level states in the game flow.
 pub(all) enum GameState {
   Title
   Playing
@@ -7,6 +8,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Stores runtime data for InputState.
 pub(all) struct InputState {
   mut move_x : Int
   mut move_y : Int
@@ -19,6 +21,7 @@ pub(all) struct InputState {
 }
 
 ///|
+/// Creates a default InputState value for a new session.
 pub fn InputState::new() -> InputState {
   {
     move_x: 0,
@@ -33,6 +36,7 @@ pub fn InputState::new() -> InputState {
 }
 
 ///|
+/// Stores runtime data for Patrol.
 pub(all) struct Patrol {
   mut x : Float
   mut y : Float
@@ -45,6 +49,7 @@ pub(all) struct Patrol {
 }
 
 ///|
+/// Creates a default Patrol value for a new session.
 pub fn Patrol::new() -> Patrol {
   let gate = gate_position()
   {
@@ -60,6 +65,7 @@ pub fn Patrol::new() -> Patrol {
 }
 
 ///|
+/// Stores runtime data for Lantern.
 pub(all) struct Lantern {
   mut active : Bool
   mut x : Float
@@ -73,6 +79,7 @@ pub(all) struct Lantern {
 }
 
 ///|
+/// Creates a default Lantern value for a new session.
 pub fn Lantern::new() -> Lantern {
   {
     active: false,
@@ -88,6 +95,7 @@ pub fn Lantern::new() -> Lantern {
 }
 
 ///|
+/// Stores runtime data for Gust.
 pub(all) struct Gust {
   mut active : Bool
   mut x : Float
@@ -100,6 +108,7 @@ pub(all) struct Gust {
 }
 
 ///|
+/// Creates a default Gust value for a new session.
 pub fn Gust::new() -> Gust {
   {
     active: false,
@@ -114,6 +123,7 @@ pub fn Gust::new() -> Gust {
 }
 
 ///|
+/// Stores runtime data for Spark.
 pub(all) struct Spark {
   mut active : Bool
   mut x : Float
@@ -126,6 +136,7 @@ pub(all) struct Spark {
 }
 
 ///|
+/// Creates a default Spark value for a new session.
 pub fn Spark::new() -> Spark {
   {
     active: false,
@@ -140,6 +151,7 @@ pub fn Spark::new() -> Spark {
 }
 
 ///|
+/// Stores runtime data for Thief.
 pub(all) struct Thief {
   mut active : Bool
   mut x : Float
@@ -153,6 +165,7 @@ pub(all) struct Thief {
 }
 
 ///|
+/// Creates a default Thief value for a new session.
 pub fn Thief::new() -> Thief {
   {
     active: false,
@@ -168,6 +181,7 @@ pub fn Thief::new() -> Thief {
 }
 
 ///|
+/// Aggregates all mutable state needed to run one game session.
 pub(all) struct Game {
   input : InputState
   patrol : Patrol
@@ -194,6 +208,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a default Game value for a new session.
 pub fn Game::new() -> Game {
   {
     input: InputState::new(),
@@ -222,6 +237,7 @@ pub fn Game::new() -> Game {
 }
 
 ///|
+/// Returns a derived gameplay metric for active lantern count.
 pub fn active_lantern_count(game : Game) -> Int {
   let mut total = 0
   for lantern in game.lanterns {
@@ -233,6 +249,7 @@ pub fn active_lantern_count(game : Game) -> Int {
 }
 
 ///|
+/// Returns a derived gameplay metric for active gust count.
 pub fn active_gust_count(game : Game) -> Int {
   let mut total = 0
   for gust in game.gusts {
@@ -244,6 +261,7 @@ pub fn active_gust_count(game : Game) -> Int {
 }
 
 ///|
+/// Returns a derived gameplay metric for active thief count.
 pub fn active_thief_count(game : Game) -> Int {
   let mut total = 0
   for thief in game.thieves {

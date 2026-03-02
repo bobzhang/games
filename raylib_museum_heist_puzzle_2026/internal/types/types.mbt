@@ -1,4 +1,5 @@
 ///|
+/// High-level flow state for museum campaign progression.
 pub(all) enum GameState {
   Title
   Play
@@ -8,6 +9,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Direction input used for grid movement.
 pub(all) enum Direction {
   DirNone
   Left
@@ -17,12 +19,14 @@ pub(all) enum Direction {
 } derive(Eq)
 
 ///|
+/// Board tile kind used for movement and visibility checks.
 pub(all) enum TileKind {
   Floor
   Wall
 } derive(Eq)
 
 ///|
+/// Collectible artifact placed on the board.
 pub(all) struct Artifact {
   x : Int
   y : Int
@@ -30,6 +34,7 @@ pub(all) struct Artifact {
 }
 
 ///|
+/// Guard patrol state and viewing parameters.
 pub(all) struct Guard {
   mut x : Int
   mut y : Int
@@ -42,6 +47,7 @@ pub(all) struct Guard {
 }
 
 ///|
+/// Per-frame user input snapshot consumed by game logic.
 pub(all) struct FrameInput {
   move_dir : Direction
   start_pressed : Bool
@@ -51,6 +57,7 @@ pub(all) struct FrameInput {
 }
 
 ///|
+/// Complete runtime state for one museum heist session.
 pub(all) struct Game {
   tiles : Array[TileKind]
   mut artifacts : Array[Artifact]
@@ -77,6 +84,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a new game state with defaults and empty entity lists.
 pub fn Game::new() -> Game {
   {
     tiles: Array::make(board_cells, Floor),

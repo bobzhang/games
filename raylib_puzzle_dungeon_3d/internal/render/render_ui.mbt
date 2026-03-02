@@ -1,6 +1,8 @@
 // 2D UI overlay rendering
 
 ///|
+/// Draws the screen-space HUD and menu overlays that correspond to the current
+/// puzzle state, including transient message text and completion banners.
 pub fn draw_ui(game : @types.Game) -> Unit {
   if game.state == @types.StateMenu {
     draw_menu(game)

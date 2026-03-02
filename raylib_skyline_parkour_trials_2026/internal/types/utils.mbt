@@ -1,4 +1,5 @@
 ///|
+/// Clamps an integer to the inclusive `[lo, hi]` range.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -10,6 +11,7 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Clamps a float to the inclusive `[lo, hi]` range.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -21,6 +23,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two float values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -30,6 +33,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two float values.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -39,6 +43,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -48,6 +53,7 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Moves `v` toward `target` by at most `step`.
 pub fn approachf(v : Float, target : Float, step : Float) -> Float {
   if v < target {
     minf(v + step, target)
@@ -57,16 +63,19 @@ pub fn approachf(v : Float, target : Float, step : Float) -> Float {
 }
 
 ///|
+/// Computes `sin(v)` and returns a `Float`.
 pub fn sinf(v : Float) -> Float {
   Float::from_double(@math.sin(v.to_double()))
 }
 
 ///|
+/// Computes `cos(v)` and returns a `Float`.
 pub fn cosf(v : Float) -> Float {
   Float::from_double(@math.cos(v.to_double()))
 }
 
 ///|
+/// Returns whether point `(x, y)` lies inside a rectangle.
 pub fn point_in_rect(
   x : Float,
   y : Float,
@@ -79,6 +88,7 @@ pub fn point_in_rect(
 }
 
 ///|
+/// Returns whether mouse/touch input is inside a rectangle.
 pub fn pointer_on_rect(
   mx : Float,
   my : Float,
@@ -104,6 +114,7 @@ pub fn pointer_on_rect(
 }
 
 ///|
+/// Returns whether two axis-aligned rectangles overlap.
 pub fn overlap_rect(
   ax : Float,
   ay : Float,
@@ -118,6 +129,7 @@ pub fn overlap_rect(
 }
 
 ///|
+/// Returns whether left mouse was clicked inside a rectangle.
 pub fn mouse_click_on_rect(
   mx : Float,
   my : Float,
@@ -131,6 +143,7 @@ pub fn mouse_click_on_rect(
 }
 
 ///|
+/// Formats timer seconds with one decimal place.
 pub fn timer_string(v : Float) -> String {
   let ds = clampi((maxf(0.0, v) * 10.0).to_int(), 0, 9999)
   let sec = ds / 10
@@ -139,6 +152,7 @@ pub fn timer_string(v : Float) -> String {
 }
 
 ///|
+/// Formats run time seconds with one decimal place.
 pub fn run_string(v : Float) -> String {
   let ds = clampi((maxf(0.0, v) * 10.0).to_int(), 0, 99999)
   let sec = ds / 10

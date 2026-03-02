@@ -1,4 +1,4 @@
-///|
+/// Buildable defense node placed on a board cell.
 pub(all) struct Node {
   active : Bool
   gx : Int
@@ -9,7 +9,7 @@ pub(all) struct Node {
   mut pulse : Float
 }
 
-///|
+/// Active enemy marching toward the moon gate.
 pub(all) struct Enemy {
   mut active : Bool
   kind : Int
@@ -26,7 +26,7 @@ pub(all) struct Enemy {
   mut phase : Float
 }
 
-///|
+/// Projectile emitted by a node attack.
 pub(all) struct Bolt {
   mut active : Bool
   mut x : Float
@@ -37,7 +37,7 @@ pub(all) struct Bolt {
   dmg : Float
 }
 
-///|
+/// Expanding pulse visual effect used for impacts and barrier bursts.
 pub(all) struct PulseFx {
   mut active : Bool
   x : Float
@@ -48,7 +48,7 @@ pub(all) struct PulseFx {
   kind : Int
 }
 
-///|
+/// Mutable game state for moon gate defense.
 pub(all) struct Game {
   nodes : Array[Node]
   enemies : Array[Enemy]
@@ -84,7 +84,7 @@ pub(all) struct Game {
   mut input_restart_press : Bool
 }
 
-///|
+/// Creates an inactive node with default targeting values.
 pub fn Node::new() -> Node {
   {
     active: false,
@@ -97,7 +97,7 @@ pub fn Node::new() -> Node {
   }
 }
 
-///|
+/// Creates an inactive enemy record with zeroed runtime state.
 pub fn Enemy::new() -> Enemy {
   {
     active: false,
@@ -116,12 +116,12 @@ pub fn Enemy::new() -> Enemy {
   }
 }
 
-///|
+/// Creates an inactive projectile record.
 pub fn Bolt::new() -> Bolt {
   { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, life: 0.0, dmg: 0.0 }
 }
 
-///|
+/// Creates an inactive pulse effect record.
 pub fn PulseFx::new() -> PulseFx {
   {
     active: false,
@@ -134,7 +134,7 @@ pub fn PulseFx::new() -> PulseFx {
   }
 }
 
-///|
+/// Creates a fresh game state with pooled entity arrays and title-screen defaults.
 pub fn Game::new() -> Game {
   let nodes = Array::makei(max_nodes, fn(_i) { Node::new() })
   let enemies = Array::makei(max_enemies, fn(_i) { Enemy::new() })

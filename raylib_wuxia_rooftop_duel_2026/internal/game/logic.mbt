@@ -859,6 +859,7 @@ fn update_logic(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances one frame of duel simulation and input-driven state changes.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   update_input(game, dt)
   update_logic(game, dt)

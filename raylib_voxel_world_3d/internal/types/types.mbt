@@ -1,6 +1,7 @@
 // A single chunk of blocks
 
 ///|
+/// Voxel chunk data for one `(cx, cz)` column, including block storage and biome tag.
 pub(all) struct Chunk {
   blocks : Array[Int]
   cx : Int
@@ -10,6 +11,7 @@ pub(all) struct Chunk {
 }
 
 ///|
+/// Creates a new empty chunk initialized with `block_air`.
 pub fn Chunk::new(cx : Int, cz : Int) -> Chunk {
   let size = chunk_x * chunk_y * chunk_z
   {
@@ -22,6 +24,7 @@ pub fn Chunk::new(cx : Int, cz : Int) -> Chunk {
 }
 
 ///|
+/// Returns block id at local chunk coordinates, treating out-of-bounds as air.
 pub fn Chunk::get_block(self : Chunk, x : Int, y : Int, z : Int) -> Int {
   if x < 0 || x >= chunk_x || y < 0 || y >= chunk_y || z < 0 || z >= chunk_z {
     block_air
@@ -31,6 +34,7 @@ pub fn Chunk::get_block(self : Chunk, x : Int, y : Int, z : Int) -> Int {
 }
 
 ///|
+/// Writes a block id at local chunk coordinates and marks the chunk as dirty.
 pub fn Chunk::set_block(
   self : Chunk,
   x : Int,
@@ -47,17 +51,20 @@ pub fn Chunk::set_block(
 // Inventory item slot
 
 ///|
+/// One inventory slot containing an item id and stack count.
 pub(all) struct ItemSlot {
   mut item_id : Int
   mut count : Int
 }
 
 ///|
+/// Creates an empty item slot.
 pub fn ItemSlot::empty() -> ItemSlot {
   { item_id: 0, count: 0 }
 }
 
 ///|
+/// Creates an item slot with `item_id` and `count`.
 pub fn ItemSlot::make(item_id : Int, count : Int) -> ItemSlot {
   { item_id, count }
 }
@@ -65,12 +72,14 @@ pub fn ItemSlot::make(item_id : Int, count : Int) -> ItemSlot {
 // Inventory system
 
 ///|
+/// Player inventory model with fixed slot array and selected hotbar index.
 pub(all) struct Inventory {
   slots : Array[ItemSlot]
   mut selected : Int
 }
 
 ///|
+/// Creates a new inventory with starter blocks/tools in the hotbar.
 pub fn Inventory::new() -> Inventory {
   let slots : Array[ItemSlot] = []
   for i in 0..<inventory_slots {
@@ -93,6 +102,7 @@ pub fn Inventory::new() -> Inventory {
 // Add item to inventory, returns count that could not be added
 
 ///|
+/// Attempts to add stackable items, returning any leftover count that could not fit.
 pub fn Inventory::add_item(self : Inventory, item_id : Int, count : Int) -> Int {
   let mut remaining = count
   // First try to stack with existing slots
@@ -130,6 +140,7 @@ pub fn Inventory::add_item(self : Inventory, item_id : Int, count : Int) -> Int 
 // Remove one item from the selected hotbar slot
 
 ///|
+/// Consumes one item from selected slot and returns consumed item id (or `0` if empty).
 pub fn Inventory::use_selected(self : Inventory) -> Int {
   let slot = self.slots[self.selected]
   if slot.count > 0 {
@@ -147,6 +158,7 @@ pub fn Inventory::use_selected(self : Inventory) -> Int {
 // Get the item id in the selected slot
 
 ///|
+/// Returns item id currently selected in hotbar (or `0` when empty).
 pub fn Inventory::selected_item(self : Inventory) -> Int {
   let slot = self.slots[self.selected]
   if slot.count > 0 {
@@ -159,6 +171,7 @@ pub fn Inventory::selected_item(self : Inventory) -> Int {
 // Player entity
 
 ///|
+/// Full player runtime state for movement, survival stats, mining, combat, and inventory.
 pub(all) struct Player {
   mut x : Float
   mut y : Float
@@ -202,6 +215,7 @@ pub(all) struct Player {
 }
 
 ///|
+/// Creates a new player with default survival stats and starter inventory.
 pub fn Player::new() -> Player {
   let spawn_x = Float::from_int(world_chunks_x * chunk_x) / 2.0
   let spawn_z = Float::from_int(world_chunks_z * chunk_z) / 2.0
@@ -243,6 +257,7 @@ pub fn Player::new() -> Player {
 // Ray hit result for block targeting
 
 ///|
+/// Result of raycast block targeting, including hit block and face normal.
 pub(all) struct BlockHit {
   mut hit : Bool
   mut bx : Int
@@ -255,6 +270,7 @@ pub(all) struct BlockHit {
 }
 
 ///|
+/// Creates an empty block-hit record.
 pub fn BlockHit::new() -> BlockHit {
   { hit: false, bx: 0, by: 0, bz: 0, nx: 0, ny: 0, nz: 0, distance: 0.0 }
 }
@@ -262,6 +278,7 @@ pub fn BlockHit::new() -> BlockHit {
 // Entity (mob) struct
 
 ///|
+/// Runtime mob/entity state used by world AI and combat systems.
 pub(all) struct Entity {
   mut active : Bool
   mut kind : Int
@@ -285,6 +302,7 @@ pub(all) struct Entity {
 }
 
 ///|
+/// Creates an inactive entity slot for the entity pool.
 pub fn Entity::inactive() -> Entity {
   {
     active: false,
@@ -312,6 +330,7 @@ pub fn Entity::inactive() -> Entity {
 // Particle struct for block break effects etc.
 
 ///|
+/// Particle state for block break and world VFX pools.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -329,6 +348,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// Creates an inactive particle slot.
 pub fn Particle::inactive() -> Particle {
   {
     active: false,
@@ -350,6 +370,7 @@ pub fn Particle::inactive() -> Particle {
 // Crafting recipe
 
 ///|
+/// Crafting recipe definition with up to two inputs and one output.
 pub(all) struct CraftingRecipe {
   input1_id : Int
   input1_count : Int
@@ -361,6 +382,7 @@ pub(all) struct CraftingRecipe {
 }
 
 ///|
+/// Constructs a crafting recipe record.
 pub fn CraftingRecipe::new(
   in1_id : Int,
   in1_count : Int,
@@ -384,6 +406,7 @@ pub fn CraftingRecipe::new(
 // Biome parameters
 
 ///|
+/// Biome generation/render parameters for terrain shaping and coloring.
 pub(all) struct BiomeParams {
   id : Int
   name : String
@@ -402,6 +425,7 @@ pub(all) struct BiomeParams {
 // Main Game struct
 
 ///|
+/// Top-level mutable game state shared by update, simulation, and rendering.
 pub(all) struct Game {
   mut state : Int
 
@@ -472,6 +496,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a new voxel world game state, allocates pools, and generates initial chunk terrain.
 pub fn Game::new() -> Game {
   // Create chunks
   let total_chunks = world_chunks_x * world_chunks_z

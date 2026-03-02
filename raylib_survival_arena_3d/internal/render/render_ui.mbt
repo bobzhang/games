@@ -1,6 +1,8 @@
 // 2D UI overlay
 
 ///|
+/// Draws all screen-space UI for the current game state, including combat HUD,
+/// shop/wave summary panels, and menu/pause/game-over overlays.
 pub fn draw_ui(game : @types.Game) -> Unit {
   match game.state {
     @types.Menu => draw_menu(game)

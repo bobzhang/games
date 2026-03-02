@@ -1,6 +1,8 @@
 // 3D world rendering
 
 ///|
+/// Renders the full arena scene for the current frame, including static geometry,
+/// enemies, projectiles, pickups, traps, and particles.
 pub fn draw_world(game : @types.Game) -> Unit {
   let camera = build_camera(game)
   @raylib.begin_mode_3d(camera)

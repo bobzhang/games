@@ -1,6 +1,6 @@
 // Main game update dispatcher
 
-///|
+/// Advances one frame of naval gameplay by dispatching state-specific update logic.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   update_particles(game, dt)

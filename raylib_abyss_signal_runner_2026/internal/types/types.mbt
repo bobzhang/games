@@ -1,4 +1,5 @@
 ///|
+/// High-level state of the abyss run flow.
 pub(all) enum GameState {
   Title
   Play
@@ -7,6 +8,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Spawnable world object category.
 pub(all) enum ObjKind {
   Rock
   Mine
@@ -17,6 +19,7 @@ pub(all) enum ObjKind {
 } derive(Eq)
 
 ///|
+/// Dynamic obstacle or pickup instance in the scrolling world.
 pub(all) struct Obj {
   mut active : Bool
   mut kind : ObjKind
@@ -31,6 +34,7 @@ pub(all) struct Obj {
 }
 
 ///|
+/// Lightweight particle used for impacts and ambient effects.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -43,6 +47,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// Expanding ring effect used by sonar and hits.
 pub(all) struct Ripple {
   mut active : Bool
   mut x : Float
@@ -53,6 +58,7 @@ pub(all) struct Ripple {
 }
 
 ///|
+/// Short-lived trail quad used for movement streak rendering.
 pub(all) struct Trail {
   mut active : Bool
   mut x : Float
@@ -64,6 +70,7 @@ pub(all) struct Trail {
 }
 
 ///|
+/// Player submarine state and kinematic values.
 pub(all) struct Player {
   mut x : Float
   mut y : Float
@@ -76,6 +83,7 @@ pub(all) struct Player {
 }
 
 ///|
+/// Full mutable game state for one abyss signal run.
 pub(all) struct Game {
   objs : Array[Obj]
   particles : Array[Particle]
@@ -120,6 +128,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates an inactive object slot for the object pool.
 pub fn Obj::new() -> Obj {
   {
     active: false,
@@ -136,6 +145,7 @@ pub fn Obj::new() -> Obj {
 }
 
 ///|
+/// Creates an inactive particle slot for the particle pool.
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -150,16 +160,19 @@ pub fn Particle::new() -> Particle {
 }
 
 ///|
+/// Creates an inactive ripple slot for the ripple pool.
 pub fn Ripple::new() -> Ripple {
   { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
 }
 
 ///|
+/// Creates an inactive trail slot for the trail pool.
 pub fn Trail::new() -> Trail {
   { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, kind: 0 }
 }
 
 ///|
+/// Creates a player initialized at the default on-screen start position.
 pub fn Player::new() -> Player {
   {
     x: Float::from_int(screen_w / 2),
@@ -174,6 +187,7 @@ pub fn Player::new() -> Player {
 }
 
 ///|
+/// Creates a new game state with initialized pools and stage counters.
 pub fn Game::new() -> Game {
   {
     objs: Array::makei(max_objs, fn(_i) { Obj::new() }),

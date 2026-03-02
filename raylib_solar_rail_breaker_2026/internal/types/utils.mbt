@@ -1,9 +1,11 @@
 ///|
+/// Returns a computed helper value for f.
 pub fn f(i : Int) -> Float {
   Float::from_int(i)
 }
 
 ///|
+/// Clamps an integer value to the inclusive range `[lo, hi]`.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -15,6 +17,7 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Clamps a float value to the inclusive range `[lo, hi]`.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -26,6 +29,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two float values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -35,6 +39,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two float values.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -44,6 +49,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -53,37 +59,44 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Linearly interpolates between two floats using `t` in `[0, 1]`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t
 }
 
 ///|
+/// Returns the sine of an angle in radians.
 pub fn sinf(v : Float) -> Float {
   Float::from_double(@math.sin(v.to_double()))
 }
 
 ///|
+/// Returns the cosine of an angle in radians.
 pub fn cosf(v : Float) -> Float {
   Float::from_double(@math.cos(v.to_double()))
 }
 
 ///|
+/// Returns the square root of a non-negative float.
 pub fn sqrtf(v : Float) -> Float {
   v.sqrt()
 }
 
 ///|
+/// Returns a pseudo-random float sampled from `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let r = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns a pseudo-random integer sampled from `[lo, hi]`.
 pub fn randi(lo : Int, hi : Int) -> Int {
   @raylib.get_random_value(lo, hi)
 }
 
 ///|
+/// Wraps an angle into the canonical gameplay range.
 pub fn wrap_angle(a : Float) -> Float {
   let mut v = a
   while v > pi {
@@ -96,31 +109,37 @@ pub fn wrap_angle(a : Float) -> Float {
 }
 
 ///|
+/// Returns the signed shortest angular difference in degrees.
 pub fn shortest_angle(from : Float, to : Float) -> Float {
   wrap_angle(to - from)
 }
 
 ///|
+/// Returns the smallest angular difference in degrees.
 pub fn angle_dist(a : Float, b : Float) -> Float {
   absf(shortest_angle(a, b))
 }
 
 ///|
+/// Returns a computed helper value for ring radius.
 pub fn ring_radius(ring : Int) -> Float {
   base_radius + Float::from_int(ring) * ring_gap
 }
 
 ///|
+/// Returns world-space coordinates for world x.
 pub fn world_x(radius : Float, angle : Float) -> Float {
   radius * cosf(angle)
 }
 
 ///|
+/// Returns world-space coordinates for world y.
 pub fn world_y(radius : Float, angle : Float) -> Float {
   radius * sinf(angle)
 }
 
 ///|
+/// Returns squared distance between two 2D points.
 pub fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx = x1 - x0
   let dy = y1 - y0
@@ -128,6 +147,7 @@ pub fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Applies an ease-in-out curve to a normalized input value.
 pub fn ease_in_out(t : Float) -> Float {
   let x = clampf(t, 0.0, 1.0)
   if x < 0.5 {
@@ -138,51 +158,61 @@ pub fn ease_in_out(t : Float) -> Float {
 }
 
 ///|
+/// Returns world-space coordinates for center x.
 pub fn center_x() -> Float {
   Float::from_int(screen_w / 2)
 }
 
 ///|
+/// Returns world-space coordinates for center y.
 pub fn center_y() -> Float {
   Float::from_int(screen_h / 2)
 }
 
 ///|
+/// Returns helper data for bg top.
 pub fn bg_top() -> @raylib.Color {
   @raylib.Color::new(10, 8, 24, 255)
 }
 
 ///|
+/// Returns helper data for bg bottom.
 pub fn bg_bottom() -> @raylib.Color {
   @raylib.Color::new(20, 18, 42, 255)
 }
 
 ///|
+/// Returns a computed helper value for ring alpha.
 pub fn ring_alpha() -> @raylib.Color {
   @raylib.Color::new(88, 226, 255, 255)
 }
 
 ///|
+/// Returns a computed helper value for ring beta.
 pub fn ring_beta() -> @raylib.Color {
   @raylib.Color::new(255, 136, 230, 255)
 }
 
 ///|
+/// Returns the configured UI or gameplay color for phase bar col.
 pub fn phase_bar_col() -> @raylib.Color {
   @raylib.Color::new(146, 236, 255, 255)
 }
 
 ///|
+/// Returns the configured UI or gameplay color for hp bar col.
 pub fn hp_bar_col() -> @raylib.Color {
   @raylib.Color::new(255, 126, 154, 255)
 }
 
 ///|
+/// Returns helper data for button size.
 pub fn button_size() -> Float {
   Float::from_int(102)
 }
 
 ///|
+/// Returns the touch or HUD hit area for button left rect.
 pub fn button_left_rect() -> (Float, Float, Float, Float) {
   let s = button_size()
   (
@@ -194,6 +224,7 @@ pub fn button_left_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns the touch or HUD hit area for button right rect.
 pub fn button_right_rect() -> (Float, Float, Float, Float) {
   let s = button_size()
   (
@@ -205,6 +236,7 @@ pub fn button_right_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns the touch or HUD hit area for button in rect.
 pub fn button_in_rect() -> (Float, Float, Float, Float) {
   let s = button_size()
   (
@@ -216,6 +248,7 @@ pub fn button_in_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns the touch or HUD hit area for button out rect.
 pub fn button_out_rect() -> (Float, Float, Float, Float) {
   let s = button_size()
   (
@@ -227,6 +260,7 @@ pub fn button_out_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns the touch or HUD hit area for button fire rect.
 pub fn button_fire_rect() -> (Float, Float, Float, Float) {
   let s = button_size()
   (
@@ -238,18 +272,21 @@ pub fn button_fire_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns world-space coordinates for enemy world xy.
 pub fn enemy_world_xy(e : Enemy) -> (Float, Float) {
   let r = ring_radius(e.ring)
   (world_x(r, e.angle), world_y(r, e.angle))
 }
 
 ///|
+/// Returns world-space coordinates for player world xy.
 pub fn player_world_xy(player : Player) -> (Float, Float) {
   let r = ring_radius(player.ring)
   (world_x(r, player.angle), world_y(r, player.angle))
 }
 
 ///|
+/// Returns whether phase mask active is true for the current query.
 pub fn phase_mask_active(mask : Int, beta : Bool) -> Bool {
   if mask == 1 {
     not(beta)
@@ -261,6 +298,7 @@ pub fn phase_mask_active(mask : Int, beta : Bool) -> Bool {
 }
 
 ///|
+/// Returns the rectangle used for point in rect.
 pub fn point_in_rect(
   x : Float,
   y : Float,
@@ -273,6 +311,7 @@ pub fn point_in_rect(
 }
 
 ///|
+/// Returns the rectangle used for pointer on rect.
 pub fn pointer_on_rect(
   mx : Float,
   my : Float,

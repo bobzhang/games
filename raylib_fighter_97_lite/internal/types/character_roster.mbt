@@ -1,4 +1,4 @@
-///|
+/// Builds a move specification from frame and hitbox parameters.
 pub fn make_move(
   _name : String,
   attack_id : AttackId,
@@ -65,7 +65,7 @@ pub fn make_move(
   mv
 }
 
-///|
+/// Returns character archetype data for Kai.
 pub fn roster_kai() -> CharacterArchetype {
   let lp = make_move(
     "flash jab",
@@ -250,7 +250,7 @@ pub fn roster_kai() -> CharacterArchetype {
   }
 }
 
-///|
+/// Returns character archetype data for Yun.
 pub fn roster_yun() -> CharacterArchetype {
   let lp = make_move(
     "needle jab",
@@ -431,7 +431,7 @@ pub fn roster_yun() -> CharacterArchetype {
   }
 }
 
-///|
+/// Returns character archetype data for Lei.
 pub fn roster_lei() -> CharacterArchetype {
   let lp = make_move(
     "iron jab",
@@ -614,7 +614,7 @@ pub fn roster_lei() -> CharacterArchetype {
   }
 }
 
-///|
+/// Returns character archetype data for Qin.
 pub fn roster_qin() -> CharacterArchetype {
   let lp = make_move(
     "shadow needle",
@@ -795,7 +795,7 @@ pub fn roster_qin() -> CharacterArchetype {
   }
 }
 
-///|
+/// Returns character archetype data for Tora.
 pub fn roster_tora() -> CharacterArchetype {
   let lp = make_move(
     "claw jab",
@@ -977,7 +977,7 @@ pub fn roster_tora() -> CharacterArchetype {
   }
 }
 
-///|
+/// Returns character archetype data for Mei.
 pub fn roster_mei() -> CharacterArchetype {
   let lp = make_move(
     "lotus jab",
@@ -1158,7 +1158,7 @@ pub fn roster_mei() -> CharacterArchetype {
   }
 }
 
-///|
+/// Builds the full selectable character roster.
 pub fn build_roster() -> Array[CharacterArchetype] {
   [
     roster_kai(),

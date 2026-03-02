@@ -760,6 +760,7 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Renders board, HUD, and overlays for the current duel state.
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_bg(game)
 

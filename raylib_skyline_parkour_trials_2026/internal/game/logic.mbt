@@ -220,6 +220,7 @@ fn load_stage(game : @types.Game, stage : Int) -> Unit {
 }
 
 ///|
+/// Builds stage 1 and resets the game into title presentation state.
 pub fn init_title_scene(game : @types.Game) -> Unit {
   load_stage(game, 1)
   game.state = @types.GameState::Title
@@ -578,6 +579,7 @@ fn update_victory_state(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Advances one frame of platforming simulation and state transitions.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   // Gather input first
   match game.state {

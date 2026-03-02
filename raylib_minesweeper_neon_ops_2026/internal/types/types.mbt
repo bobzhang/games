@@ -1,4 +1,5 @@
 ///|
+/// High-level phase of a minesweeper session.
 pub(all) enum GameState {
   Title
   Play
@@ -6,12 +7,14 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Action mode used when selecting a board cell.
 pub(all) enum PlayMode {
   Reveal
   Flag
 } derive(Eq)
 
 ///|
+/// End-of-run performance grade.
 pub(all) enum Grade {
   GradeS
   GradeA
@@ -21,6 +24,7 @@ pub(all) enum Grade {
 } derive(Eq)
 
 ///|
+/// Single board cell state.
 pub(all) struct Cell {
   mut mine : Bool
   mut revealed : Bool
@@ -30,6 +34,7 @@ pub(all) struct Cell {
 }
 
 ///|
+/// Pooled particle used for reveal and explosion effects.
 pub(all) struct Spark {
   mut active : Bool
   mut x : Float
@@ -42,6 +47,7 @@ pub(all) struct Spark {
 }
 
 ///|
+/// Full mutable game state, including board, UI, and input tracking.
 pub(all) struct Game {
   cells : Array[Cell]
   sparks : Array[Spark]
@@ -81,11 +87,13 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a fresh unrevealed, non-mined cell.
 pub fn Cell::new() -> Cell {
   { mine: false, revealed: false, flagged: false, exploded: false, around: 0 }
 }
 
 ///|
+/// Creates an inactive spark instance for the particle pool.
 pub fn Spark::new() -> Spark {
   {
     active: false,
@@ -100,6 +108,7 @@ pub fn Spark::new() -> Spark {
 }
 
 ///|
+/// Creates a new game in title state with default resources and counters.
 pub fn Game::new() -> Game {
   {
     cells: Array::makei(max_cells, fn(_i) { Cell::new() }),

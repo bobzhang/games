@@ -1,4 +1,5 @@
 ///|
+/// Stores runtime data for Breach.
 pub(all) struct Breach {
   room : Int
   mut severity : Float
@@ -7,6 +8,7 @@ pub(all) struct Breach {
 }
 
 ///|
+/// Stores runtime data for Raider.
 pub(all) struct Raider {
   active : Bool
   mut room : Int
@@ -19,6 +21,7 @@ pub(all) struct Raider {
 }
 
 ///|
+/// Stores runtime data for Flame.
 pub(all) struct Flame {
   active : Bool
   room : Int
@@ -29,6 +32,7 @@ pub(all) struct Flame {
 }
 
 ///|
+/// Enumerates high-level states in the game flow.
 pub(all) enum GameState {
   Title
   Playing
@@ -37,6 +41,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Stores runtime data for Keeper.
 pub(all) struct Keeper {
   mut room : Int
   mut x : Float
@@ -52,6 +57,7 @@ pub(all) struct Keeper {
 }
 
 ///|
+/// Aggregates all mutable state needed to run one game session.
 pub(all) struct Game {
   breaches : Array[Breach]
   raiders : Array[Raider]
@@ -82,11 +88,13 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a default Breach value for a new session.
 pub fn Breach::new(room : Int) -> Breach {
   { room, severity: 0.0, raider_cd: randf(0.8, 1.6), ember_cd: randf(0.7, 1.4) }
 }
 
 ///|
+/// Creates a default Raider value for a new session.
 pub fn Raider::new() -> Raider {
   {
     active: false,
@@ -101,11 +109,13 @@ pub fn Raider::new() -> Raider {
 }
 
 ///|
+/// Creates a default Flame value for a new session.
 pub fn Flame::new() -> Flame {
   { active: false, room: 0, x: 0.0, y: 0.0, intensity: 0.0, spread_cd: 0.0 }
 }
 
 ///|
+/// Creates a default Keeper value for a new session.
 pub fn Keeper::new() -> Keeper {
   {
     room: vault_room,
@@ -123,6 +133,7 @@ pub fn Keeper::new() -> Keeper {
 }
 
 ///|
+/// Creates a default Game value for a new session.
 pub fn Game::new() -> Game {
   {
     breaches: Array::makei(chamber_count, fn(room) { Breach::new(room) }),

@@ -1,4 +1,5 @@
 ///|
+/// Rooftop platform segment used to build the scrolling path.
 pub(all) struct Segment {
   mut active : Bool
   mut x : Float
@@ -11,6 +12,7 @@ pub(all) struct Segment {
 }
 
 ///|
+/// Hazard entity that can collide with the runner.
 pub(all) struct Obstacle {
   mut active : Bool
   mut kind : Int
@@ -24,6 +26,7 @@ pub(all) struct Obstacle {
 }
 
 ///|
+/// Collectible chip entity used for score and combo.
 pub(all) struct Chip {
   mut active : Bool
   mut x : Float
@@ -33,6 +36,7 @@ pub(all) struct Chip {
 }
 
 ///|
+/// Grapple anchor point available on rooftops.
 pub(all) struct Anchor {
   mut active : Bool
   mut x : Float
@@ -41,6 +45,7 @@ pub(all) struct Anchor {
 }
 
 ///|
+/// Particle entry used for spark, glow, and hurt effects.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -53,6 +58,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// Afterimage ghost used for fast-motion visual trails.
 pub(all) struct Ghost {
   mut active : Bool
   mut x : Float
@@ -64,6 +70,7 @@ pub(all) struct Ghost {
 }
 
 ///|
+/// Player movement and animation state.
 pub(all) struct Player {
   mut x : Float
   mut y : Float
@@ -84,6 +91,7 @@ pub(all) struct Player {
 }
 
 ///|
+/// Full mutable state for a neon rooftop run.
 pub(all) struct Game {
   segments : Array[Segment]
   obstacles : Array[Obstacle]
@@ -133,6 +141,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates an inactive segment slot for the segment pool.
 pub fn Segment::new() -> Segment {
   {
     active: false,
@@ -147,6 +156,7 @@ pub fn Segment::new() -> Segment {
 }
 
 ///|
+/// Creates an inactive obstacle slot for the obstacle pool.
 pub fn Obstacle::new() -> Obstacle {
   {
     active: false,
@@ -162,16 +172,19 @@ pub fn Obstacle::new() -> Obstacle {
 }
 
 ///|
+/// Creates an inactive chip slot for the chip pool.
 pub fn Chip::new() -> Chip {
   { active: false, x: 0.0, y: 0.0, bob_t: 0.0, spin_t: 0.0 }
 }
 
 ///|
+/// Creates an inactive anchor slot for the anchor pool.
 pub fn Anchor::new() -> Anchor {
   { active: false, x: 0.0, y: 0.0, glow_t: 0.0 }
 }
 
 ///|
+/// Creates an inactive particle slot for the particle pool.
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -186,11 +199,13 @@ pub fn Particle::new() -> Particle {
 }
 
 ///|
+/// Creates an inactive ghost trail slot.
 pub fn Ghost::new() -> Ghost {
   { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, hue: 0.0 }
 }
 
 ///|
+/// Creates the player with default dimensions and spawn state.
 pub fn Player::new() -> Player {
   {
     x: player_spawn_x,
@@ -213,6 +228,7 @@ pub fn Player::new() -> Player {
 }
 
 ///|
+/// Creates a new game state with initialized pools and counters.
 pub fn Game::new() -> Game {
   {
     segments: Array::makei(max_segments, fn(_i) { Segment::new() }),

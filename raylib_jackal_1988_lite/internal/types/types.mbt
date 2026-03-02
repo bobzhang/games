@@ -1,4 +1,4 @@
-///|
+/// Shared tank record used for players and enemies.
 pub(all) struct Tank {
   mut active : Bool
   enemy_kind : Int
@@ -22,7 +22,7 @@ pub(all) struct Tank {
   mut skid_timer : Float
 }
 
-///|
+/// Creates an inactive tank slot.
 pub fn Tank::inactive() -> Tank {
   {
     active: false,
@@ -48,7 +48,7 @@ pub fn Tank::inactive() -> Tank {
   }
 }
 
-///|
+/// Creates a player-controlled tank at a spawn point.
 pub fn Tank::new_player(_index : Int, spawn_x : Float, spawn_y : Float) -> Tank {
   {
     active: true,
@@ -74,7 +74,7 @@ pub fn Tank::new_player(_index : Int, spawn_x : Float, spawn_y : Float) -> Tank 
   }
 }
 
-///|
+/// Creates an enemy tank configured by `kind`.
 pub fn Tank::new_enemy(kind : Int, spawn_x : Float, spawn_y : Float) -> Tank {
   let (speed, hp, reload) = if kind == enemy_fast {
     (speed_enemy_fast, 1, enemy_reload_base * 0.85)
@@ -109,7 +109,7 @@ pub fn Tank::new_enemy(kind : Int, spawn_x : Float, spawn_y : Float) -> Tank {
   }
 }
 
-///|
+/// Projectile record for fired bullets.
 pub(all) struct Bullet {
   mut active : Bool
   mut owner_team : Int
@@ -123,7 +123,7 @@ pub(all) struct Bullet {
   mut radius : Float
 }
 
-///|
+/// Creates an inactive bullet slot.
 pub fn Bullet::inactive() -> Bullet {
   {
     active: false,
@@ -139,7 +139,7 @@ pub fn Bullet::inactive() -> Bullet {
   }
 }
 
-///|
+/// Particle record for hit and explosion effects.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -153,7 +153,7 @@ pub(all) struct Particle {
   mut color : @raylib.Color
 }
 
-///|
+/// Creates an inactive particle slot.
 pub fn Particle::inactive() -> Particle {
   {
     active: false,
@@ -169,7 +169,7 @@ pub fn Particle::inactive() -> Particle {
   }
 }
 
-///|
+/// Powerup record for map pickups.
 pub(all) struct Powerup {
   mut active : Bool
   mut kind : Int
@@ -180,7 +180,7 @@ pub(all) struct Powerup {
   mut pulse : Float
 }
 
-///|
+/// Creates an inactive powerup slot.
 pub fn Powerup::inactive() -> Powerup {
   {
     active: false,
@@ -193,7 +193,7 @@ pub fn Powerup::inactive() -> Powerup {
   }
 }
 
-///|
+/// Hostage objective record.
 pub(all) struct Hostage {
   mut active : Bool
   mut x : Float
@@ -202,12 +202,12 @@ pub(all) struct Hostage {
   mut blink : Float
 }
 
-///|
+/// Creates an inactive hostage slot.
 pub fn Hostage::inactive() -> Hostage {
   { active: false, x: 0.0, y: 0.0, bob: 0.0, blink: 0.0 }
 }
 
-///|
+/// Decorative star used by the background starfield.
 pub(all) struct Star {
   mut x : Float
   mut y : Float
@@ -215,12 +215,12 @@ pub(all) struct Star {
   mut twinkle : Float
 }
 
-///|
+/// Creates a star entry for the background layer.
 pub fn Star::new(x : Float, y : Float, speed : Float, twinkle : Float) -> Star {
   { x, y, speed, twinkle }
 }
 
-///|
+/// Global mutable game state for Jackal-lite campaign simulation.
 pub(all) struct Game {
   mut state : Int
   mut coop_enabled : Bool
@@ -267,7 +267,7 @@ pub(all) struct Game {
   stars : Array[Star]
 }
 
-///|
+/// Creates a fresh game state with pooled entities and defaults.
 pub fn Game::new() -> Game {
   let stars : Array[Star] = []
   for i in 0..<120 {
@@ -328,7 +328,7 @@ pub fn Game::new() -> Game {
   }
 }
 
-///|
+/// Returns the team id for a player index.
 pub fn team_of_player(index : Int) -> Int {
   if index == 0 {
     team_player1
@@ -337,7 +337,7 @@ pub fn team_of_player(index : Int) -> Int {
   }
 }
 
-///|
+/// Stage metadata and visual tuning for a campaign mission.
 pub(all) struct StageProfile {
   title : String
   subtitle : String
@@ -350,7 +350,7 @@ pub(all) struct StageProfile {
   ui_accent : @raylib.Color
 }
 
-///|
+/// Creates a stage profile with gameplay and palette parameters.
 pub fn StageProfile::new(
   title : String,
   subtitle : String,
@@ -375,7 +375,7 @@ pub fn StageProfile::new(
   }
 }
 
-///|
+/// Returns baseline profile values used as defaults.
 pub fn default_stage_profile() -> StageProfile {
   StageProfile::new(
     "Border Skirmish",

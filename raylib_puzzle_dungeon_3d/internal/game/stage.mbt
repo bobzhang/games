@@ -1,6 +1,8 @@
 // Stage/floor loading and undo system
 
 ///|
+/// Loads a floor layout into runtime state, resets per-floor progress trackers,
+/// and rebuilds derived systems such as decorations, lasers, and tutorial prompts.
 pub fn load_floor(game : @types.Game, floor : Int) -> Unit {
   game.current_floor = floor
   game.current_world = @types.get_world_for_floor(floor)

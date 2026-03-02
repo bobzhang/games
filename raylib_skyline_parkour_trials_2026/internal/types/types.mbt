@@ -1,4 +1,5 @@
 ///|
+/// High-level progression state for the trial flow.
 pub(all) enum GameState {
   Title
   Play
@@ -8,12 +9,14 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Tile category used for collision and hazards.
 pub(all) enum TileKind {
   Solid
   Hazard
 } derive(Eq)
 
 ///|
+/// Reason a run ended in failure.
 pub(all) enum LoseReason {
   None
   Time
@@ -22,6 +25,7 @@ pub(all) enum LoseReason {
 } derive(Eq)
 
 ///|
+/// Axis-aligned stage tile collider.
 pub(all) struct Tile {
   mut kind : TileKind
   mut x : Float
@@ -31,6 +35,7 @@ pub(all) struct Tile {
 }
 
 ///|
+/// Checkpoint region that can add bonus time once.
 pub(all) struct Checkpoint {
   mut x : Float
   mut y : Float
@@ -41,6 +46,7 @@ pub(all) struct Checkpoint {
 }
 
 ///|
+/// Player kinematic state and wall-jump timers.
 pub(all) struct Player {
   mut x : Float
   mut y : Float
@@ -56,6 +62,7 @@ pub(all) struct Player {
 }
 
 ///|
+/// Complete mutable state for skyline parkour trials.
 pub(all) struct Game {
   tiles : Array[Tile]
   checkpoints : Array[Checkpoint]
@@ -97,16 +104,19 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates an empty solid tile placeholder.
 pub fn Tile::new() -> Tile {
   { kind: Solid, x: 0.0, y: 0.0, w: 0.0, h: 0.0 }
 }
 
 ///|
+/// Creates an unchecked checkpoint placeholder.
 pub fn Checkpoint::new() -> Checkpoint {
   { x: 0.0, y: 0.0, w: 0.0, h: 0.0, bonus_s: 0, taken: false }
 }
 
 ///|
+/// Creates player state with default movement timers.
 pub fn Player::new() -> Player {
   {
     x: 0.0,
@@ -124,6 +134,7 @@ pub fn Player::new() -> Player {
 }
 
 ///|
+/// Creates a new game state with preallocated tiles and checkpoints.
 pub fn Game::new() -> Game {
   {
     tiles: Array::makei(max_tiles, fn(_i) { Tile::new() }),

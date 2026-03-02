@@ -1,4 +1,5 @@
 ///|
+/// Returns the smaller of two integers.
 pub fn mini(a : Int, b : Int) -> Int {
   if a < b {
     a
@@ -8,6 +9,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the larger of two integers.
 pub fn maxi(a : Int, b : Int) -> Int {
   if a > b {
     a
@@ -17,6 +19,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Clamps an integer into `[lo, hi]`.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -28,6 +31,7 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Returns the larger of two floats.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -37,6 +41,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns absolute value of a float.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -46,22 +51,26 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns a random float in `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Converts board coordinates to linear index.
 pub fn board_index(x : Int, y : Int) -> Int {
   y * board_n + x
 }
 
 ///|
+/// Returns whether `(x, y)` lies inside the gomoku board.
 pub fn in_board(x : Int, y : Int) -> Bool {
   x >= 0 && x < board_n && y >= 0 && y < board_n
 }
 
 ///|
+/// Reads cell occupant at `(x, y)` or `Empty` when out of bounds.
 pub fn cell_at(game : Game, x : Int, y : Int) -> Player {
   if in_board(x, y) {
     game.board[board_index(x, y)]
@@ -71,6 +80,7 @@ pub fn cell_at(game : Game, x : Int, y : Int) -> Player {
 }
 
 ///|
+/// Writes cell occupant when `(x, y)` is inside the board.
 pub fn set_cell(game : Game, x : Int, y : Int, p : Player) -> Unit {
   if in_board(x, y) {
     game.board[board_index(x, y)] = p
@@ -78,12 +88,14 @@ pub fn set_cell(game : Game, x : Int, y : Int, p : Player) -> Unit {
 }
 
 ///|
+/// Updates transient message text and its time-to-live.
 pub fn set_message(game : Game, msg : String, ttl : Float) -> Unit {
   game.message = msg
   game.message_t = ttl
 }
 
 ///|
+/// Clears current hint marker and timer.
 pub fn clear_hint(game : Game) -> Unit {
   game.hint_active = false
   game.hint_ttl = 0.0
@@ -92,6 +104,7 @@ pub fn clear_hint(game : Game) -> Unit {
 }
 
 ///|
+/// Spawns one spark particle in the shared spark pool.
 pub fn spawn_spark(
   game : Game,
   x : Float,
@@ -120,6 +133,7 @@ pub fn spawn_spark(
 }
 
 ///|
+/// Calculates board placement metrics `(x, y, tile_size)` for rendering.
 pub fn board_metrics(game : Game) -> (Int, Int, Int) {
   let area_x : Int = 24
   let area_y : Int = 22
@@ -144,6 +158,7 @@ pub fn board_metrics(game : Game) -> (Int, Int, Int) {
 }
 
 ///|
+/// Returns world-space center and tile size for a board cell.
 pub fn world_center(game : Game, x : Int, y : Int) -> (Float, Float, Float) {
   let (bx, by, tile) = board_metrics(game)
   let cx : Float = Float::from_int(bx + x * tile + tile / 2)
@@ -152,6 +167,7 @@ pub fn world_center(game : Game, x : Int, y : Int) -> (Float, Float, Float) {
 }
 
 ///|
+/// Emits a burst of move-feedback sparks at board coordinates.
 pub fn burst_move(
   game : Game,
   x : Int,
@@ -177,6 +193,7 @@ pub fn burst_move(
 }
 
 ///|
+/// Returns whether point `(px, py)` is inside a rectangle.
 pub fn inside_rect(
   px : Float,
   py : Float,
@@ -192,6 +209,7 @@ pub fn inside_rect(
 }
 
 ///|
+/// Returns whether mouse/touch input activated a rectangle.
 pub fn pointer_on_rect(
   mouse_x : Float,
   mouse_y : Float,
@@ -221,56 +239,67 @@ pub fn pointer_on_rect(
 }
 
 ///|
+/// Left X coordinate of the side panel.
 pub fn panel_x() -> Int {
   screen_w - 420
 }
 
 ///|
+/// X center of the mobile D-pad.
 pub fn dpad_center_x() -> Int {
   162
 }
 
 ///|
+/// Y center of the mobile D-pad.
 pub fn dpad_center_y() -> Int {
   screen_h - 184
 }
 
 ///|
+/// Radius-like size unit for D-pad buttons.
 pub fn dpad_size() -> Int {
   78
 }
 
 ///|
+/// Returns `(x, y, w, h)` for the place button.
 pub fn place_button_rect() -> (Int, Int, Int, Int) {
   (panel_x() + 24, screen_h - 256, 170, 72)
 }
 
 ///|
+/// Returns `(x, y, w, h)` for the hint button.
 pub fn hint_button_rect() -> (Int, Int, Int, Int) {
   (panel_x() + 214, screen_h - 256, 170, 72)
 }
 
 ///|
+/// Returns `(x, y, w, h)` for the undo button.
 pub fn undo_button_rect() -> (Int, Int, Int, Int) {
   (panel_x() + 24, screen_h - 172, 170, 72)
 }
 
 ///|
+/// Returns `(x, y, w, h)` for the clear-hint button.
 pub fn clear_button_rect() -> (Int, Int, Int, Int) {
   (panel_x() + 214, screen_h - 172, 170, 72)
 }
 
 ///|
+/// Returns `(x, y, w, h)` for the reset button.
 pub fn reset_button_rect() -> (Int, Int, Int, Int) {
   (panel_x() + 24, screen_h - 88, 170, 72)
 }
 
 ///|
+/// Returns `(x, y, w, h)` for the next-round button.
 pub fn next_button_rect() -> (Int, Int, Int, Int) {
   (panel_x() + 24, screen_h - 88, 360, 72)
 }
 
 ///|
+/// Returns `(x, y, w, h)` for the title start button.
 pub fn start_button_rect() -> (Int, Int, Int, Int) {
   (screen_w / 2 - 230, screen_h - 158, 460, 96)
 }

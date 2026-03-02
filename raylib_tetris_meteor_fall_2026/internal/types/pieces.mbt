@@ -1,4 +1,5 @@
 ///|
+/// Normalizes rotation index to the range `0..3`.
 pub fn normalize_rot(rot : Int) -> Int {
   let mut r = rot % 4
   if r < 0 {
@@ -8,11 +9,13 @@ pub fn normalize_rot(rot : Int) -> Int {
 }
 
 ///|
+/// Helper constructor for tetromino block offsets.
 pub fn make_cell(x : Int, y : Int) -> Cell {
   { x, y }
 }
 
 ///|
+/// Returns block offset for `block` within a piece kind and rotation.
 pub fn piece_cell(kind : Int, rot : Int, block : Int) -> Cell {
   let r = normalize_rot(rot)
   match kind {
@@ -178,6 +181,7 @@ pub fn piece_cell(kind : Int, rot : Int, block : Int) -> Cell {
 }
 
 ///|
+/// Returns display color for a board cell id.
 pub fn piece_color(id : Int) -> @raylib.Color {
   match id {
     1 => @raylib.skyblue

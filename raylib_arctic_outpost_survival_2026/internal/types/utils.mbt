@@ -1,4 +1,5 @@
 ///|
+/// Returns the smaller of two integers.
 pub fn mini(a : Int, b : Int) -> Int {
   if a < b {
     a
@@ -8,6 +9,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the larger of two integers.
 pub fn maxi(a : Int, b : Int) -> Int {
   if a > b {
     a
@@ -17,6 +19,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Clamps an integer value to the inclusive `[lo, hi]` range.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -28,6 +31,7 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Clamps a float value to the inclusive `[lo, hi]` range.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -39,6 +43,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two floating-point values.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -48,6 +53,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two floating-point values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -57,6 +63,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -66,42 +73,50 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Computes sine using the core math backend.
 pub fn sinf(v : Float) -> Float {
   Float::from_double(@math.sin(v.to_double()))
 }
 
 ///|
+/// Computes cosine using the core math backend.
 pub fn cosf(v : Float) -> Float {
   Float::from_double(@math.cos(v.to_double()))
 }
 
 ///|
+/// Returns a random float sampled uniformly from `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns the world-space left boundary.
 pub fn world_left() -> Float {
   Float::from_int(world_x0)
 }
 
 ///|
+/// Returns the world-space right boundary.
 pub fn world_right() -> Float {
   Float::from_int(world_x0 + world_w)
 }
 
 ///|
+/// Returns the world-space top boundary.
 pub fn world_top() -> Float {
   Float::from_int(world_y0)
 }
 
 ///|
+/// Returns the world-space bottom boundary.
 pub fn world_bottom() -> Float {
   Float::from_int(world_y0 + world_h)
 }
 
 ///|
+/// Returns squared distance between two points.
 pub fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx : Float = x1 - x0
   let dy : Float = y1 - y0
@@ -109,6 +124,7 @@ pub fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Returns an L1-normalized direction vector from `(dx, dy)`.
 pub fn normalize(dx : Float, dy : Float) -> (Float, Float) {
   let d1 : Float = absf(dx) + absf(dy)
   if d1 <= 0.00001 {
@@ -119,6 +135,7 @@ pub fn normalize(dx : Float, dy : Float) -> (Float, Float) {
 }
 
 ///|
+/// Tests whether a point lies inside an integer rectangle.
 pub fn point_in_rect(
   x : Float,
   y : Float,
@@ -136,6 +153,7 @@ pub fn point_in_rect(
 }
 
 ///|
+/// Tests whether mouse hold or any touch point is inside a rectangle.
 pub fn pointer_on_rect(
   mx : Float,
   my : Float,
@@ -161,12 +179,14 @@ pub fn pointer_on_rect(
 }
 
 ///|
+/// Sets the transient UI message and its remaining lifetime.
 pub fn set_msg(game : Game, msg : String, ttl : Float) -> Unit {
   game.msg = msg
   game.msg_t = ttl
 }
 
 ///|
+/// Returns collision radius used for a pickup kind.
 pub fn pickup_radius(kind : Int) -> Float {
   if kind == pickup_overdrive {
     21.0

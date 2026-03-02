@@ -911,7 +911,7 @@ fn update_game_over(game : @types.Game, dt : Float) -> Unit {
   }
 }
 
-///|
+/// Advances one frame of simulation, input handling, and state transitions.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   // Read mouse/touch state and store in game fields
   game.mouse_x = Float::from_int(@raylib.get_mouse_x())

@@ -546,7 +546,7 @@ fn update_announcer(game : @types.Game, dt : Float) -> Unit {
   }
 }
 
-///|
+/// Advances one frame of state, round, and match logic.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_count += 1
   update_announcer(game, dt)

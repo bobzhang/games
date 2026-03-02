@@ -1,4 +1,5 @@
 ///|
+/// High-level phase of a puppet-theater show.
 pub(all) enum GameState {
   Title
   Play
@@ -7,12 +8,14 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Two-axis puppet pose state.
 pub(all) struct Pose {
   mut ax : Int
   mut ay : Int
 }
 
 ///|
+/// Per-frame sampled input actions.
 pub(all) struct Input {
   mut axis_dx : Int
   mut axis_dy : Int
@@ -25,6 +28,7 @@ pub(all) struct Input {
 }
 
 ///|
+/// Full mutable game state for sequence logic, scoring, and UI.
 pub(all) struct Game {
   input : Input
   sequence : Array[Pose]
@@ -54,11 +58,13 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a pose with explicit axis values.
 pub fn Pose::new(ax : Int, ay : Int) -> Pose {
   { ax, ay }
 }
 
 ///|
+/// Creates an empty input snapshot with all actions released.
 pub fn Input::new() -> Input {
   {
     axis_dx: 0,
@@ -73,6 +79,7 @@ pub fn Input::new() -> Input {
 }
 
 ///|
+/// Creates a new game in title state with default meters and timers.
 pub fn Game::new() -> Game {
   {
     input: Input::new(),

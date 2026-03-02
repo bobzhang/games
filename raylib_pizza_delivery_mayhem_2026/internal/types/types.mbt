@@ -1,4 +1,5 @@
 ///|
+/// Traffic entity used for road hazards and collisions.
 pub(all) struct Traffic {
   mut active : Bool
   mut x : Float
@@ -12,6 +13,7 @@ pub(all) struct Traffic {
 }
 
 ///|
+/// Creates an inactive traffic entity with default values.
 pub fn Traffic::new() -> Traffic {
   {
     active: false,
@@ -27,6 +29,7 @@ pub fn Traffic::new() -> Traffic {
 }
 
 ///|
+/// Delivery order entity tracking pickup and drop-off points.
 pub(all) struct Order {
   mut active : Bool
   mut picked : Bool
@@ -39,6 +42,7 @@ pub(all) struct Order {
 }
 
 ///|
+/// Creates an inactive order entity with default values.
 pub fn Order::new() -> Order {
   {
     active: false,
@@ -53,6 +57,7 @@ pub fn Order::new() -> Order {
 }
 
 ///|
+/// Pickup entity for temporary rider bonuses.
 pub(all) struct Pickup {
   mut active : Bool
   mut x : Float
@@ -64,6 +69,7 @@ pub(all) struct Pickup {
 }
 
 ///|
+/// Creates an inactive pickup entity with default values.
 pub fn Pickup::new() -> Pickup {
   {
     active: false,
@@ -77,6 +83,7 @@ pub fn Pickup::new() -> Pickup {
 }
 
 ///|
+/// Lightweight particle entity for visual effects.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -89,6 +96,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// Creates an inactive particle entity with default values.
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -103,6 +111,7 @@ pub fn Particle::new() -> Particle {
 }
 
 ///|
+/// Complete runtime state for one pizza delivery session.
 pub(all) struct Game {
   traffic : Array[Traffic]
   orders : Array[Order]
@@ -151,6 +160,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a new game state with preallocated object pools.
 pub fn Game::new() -> Game {
   {
     traffic: Array::makei(max_traffic, fn(_i) { Traffic::new() }),

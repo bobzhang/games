@@ -920,6 +920,7 @@ fn update_result(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Processes one simulation step: input phase, state update, and edge resets.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   match game.state {
     @types.Title => update_title_input(game)

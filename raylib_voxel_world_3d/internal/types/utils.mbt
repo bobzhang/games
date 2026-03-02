@@ -1,4 +1,5 @@
 ///|
+/// Returns absolute value for float math utilities.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -8,6 +9,7 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Clamps float value into inclusive range `[low, high]`.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
     low
@@ -19,6 +21,7 @@ pub fn clampf(v : Float, low : Float, high : Float) -> Float {
 }
 
 ///|
+/// Clamps integer value into inclusive range `[low, high]`.
 pub fn clampi(v : Int, low : Int, high : Int) -> Int {
   if v < low {
     low
@@ -30,6 +33,7 @@ pub fn clampi(v : Int, low : Int, high : Int) -> Int {
 }
 
 ///|
+/// Returns minimum of two floats.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -39,6 +43,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns maximum of two floats.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -48,6 +53,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns minimum of two integers.
 pub fn mini(a : Int, b : Int) -> Int {
   if a < b {
     a
@@ -57,6 +63,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns maximum of two integers.
 pub fn maxi(a : Int, b : Int) -> Int {
   if a > b {
     a
@@ -66,16 +73,19 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Linearly interpolates from `a` to `b` by factor `t`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t
 }
 
 ///|
+/// Integer interpolation helper based on float interpolation.
 pub fn lerpi(a : Int, b : Int, t : Float) -> Int {
   (Float::from_int(a) + Float::from_int(b - a) * t).to_int()
 }
 
 ///|
+/// Floors a float to integer, handling negatives consistently.
 pub fn floorf(v : Float) -> Int {
   let i = v.to_int()
   if Float::from_int(i) > v {
@@ -86,6 +96,7 @@ pub fn floorf(v : Float) -> Int {
 }
 
 ///|
+/// Returns sign of float as `-1.0`, `0.0`, or `1.0`.
 pub fn signf(v : Float) -> Float {
   if v > 0.0 {
     1.0
@@ -97,6 +108,7 @@ pub fn signf(v : Float) -> Float {
 }
 
 ///|
+/// Float modulo helper.
 pub fn fmodf(a : Float, b : Float) -> Float {
   a - Float::from_int((a / b).to_int()) * b
 }
@@ -104,6 +116,7 @@ pub fn fmodf(a : Float, b : Float) -> Float {
 // Smoothstep interpolation
 
 ///|
+/// Smoothstep interpolation between `edge0` and `edge1`.
 pub fn smoothstep(edge0 : Float, edge1 : Float, x : Float) -> Float {
   let t = clampf((x - edge0) / (edge1 - edge0), 0.0, 1.0)
   t * t * (3.0 - 2.0 * t)
@@ -139,6 +152,7 @@ fn hash_2d(x : Int, z : Int) -> Int {
 // Simple noise function for terrain generation using sin/cos
 
 ///|
+/// Deterministic hash-like 2D noise sample in range `[-1, 1]`.
 pub fn noise2d(x : Float, z : Float) -> Float {
   let v1 = @math.sinf(x * 0.1 + z * 0.3) * 0.5
   let v2 = @math.cosf(x * 0.2 - z * 0.1) * 0.3
@@ -149,6 +163,7 @@ pub fn noise2d(x : Float, z : Float) -> Float {
 // Value noise with smooth interpolation
 
 ///|
+/// Bilinearly blended value noise sample for terrain generation.
 pub fn value_noise_2d(x : Float, z : Float) -> Float {
   let ix = floorf(x)
   let iz = floorf(z)
@@ -171,6 +186,7 @@ pub fn value_noise_2d(x : Float, z : Float) -> Float {
 // Multi-octave noise for terrain
 
 ///|
+/// Multi-octave fractal noise over value noise base.
 pub fn fractal_noise_2d(x : Float, z : Float, octaves : Int) -> Float {
   let mut amplitude : Float = 1.0
   let mut frequency : Float = 1.0
@@ -189,6 +205,7 @@ pub fn fractal_noise_2d(x : Float, z : Float, octaves : Int) -> Float {
 // 3D noise for cave generation
 
 ///|
+/// Deterministic 3D noise sample in range `[-1, 1]`.
 pub fn noise3d(x : Float, y : Float, z : Float) -> Float {
   let v1 = @math.sinf(x * 0.1 + y * 0.2 + z * 0.3) * 0.3
   let v2 = @math.cosf(x * 0.15 - z * 0.1 + y * 0.25) * 0.25
@@ -200,6 +217,7 @@ pub fn noise3d(x : Float, y : Float, z : Float) -> Float {
 // Cave noise using 3D value noise approximation
 
 ///|
+/// 3D cave-noise helper tuned for subterranean carving.
 pub fn cave_noise_3d(x : Float, y : Float, z : Float) -> Float {
   let freq = cave_frequency
   let n1 = @math.sinf(x * freq + y * freq * 0.7) *
@@ -214,6 +232,7 @@ pub fn cave_noise_3d(x : Float, y : Float, z : Float) -> Float {
 // Better noise combining multiple octaves
 
 ///|
+/// Terrain height noise contribution at world `(wx, wz)`.
 pub fn terrain_noise(wx : Float, wz : Float) -> Float {
   let freq = terrain_frequency
   let n1 = @math.sinf(wx * freq) * @math.cosf(wz * freq * 1.3) * 0.5
@@ -230,6 +249,7 @@ pub fn terrain_noise(wx : Float, wz : Float) -> Float {
 // Biome noise - determines which biome at a given position
 
 ///|
+/// Low-frequency biome classifier noise at world `(wx, wz)`.
 pub fn biome_noise(wx : Float, wz : Float) -> Float {
   let freq : Float = 0.008
   let n1 = @math.sinf(wx * freq + 5.3) * @math.cosf(wz * freq * 0.8 + 2.1) * 0.5 +
@@ -241,6 +261,7 @@ pub fn biome_noise(wx : Float, wz : Float) -> Float {
 // Temperature noise - for biome blending
 
 ///|
+/// Temperature field noise used by biome selection.
 pub fn temperature_noise(wx : Float, wz : Float) -> Float {
   let freq : Float = 0.005
   let n = @math.sinf(wx * freq + 10.0) * @math.cosf(wz * freq * 1.1 + 7.0)
@@ -250,6 +271,7 @@ pub fn temperature_noise(wx : Float, wz : Float) -> Float {
 // Moisture noise - for biome blending
 
 ///|
+/// Moisture field noise used by biome selection.
 pub fn moisture_noise(wx : Float, wz : Float) -> Float {
   let freq : Float = 0.006
   let n = @math.cosf(wx * freq + 3.0) * @math.sinf(wz * freq * 0.9 + 5.0)
@@ -259,6 +281,7 @@ pub fn moisture_noise(wx : Float, wz : Float) -> Float {
 // ========== Biome determination ==========
 
 ///|
+/// Returns biome id for world coordinates `(wx, wz)`.
 pub fn get_biome_at(wx : Int, wz : Int) -> Int {
   let fx = Float::from_int(wx)
   let fz = Float::from_int(wz)
@@ -282,6 +305,7 @@ pub fn get_biome_at(wx : Int, wz : Int) -> Int {
 // Get terrain height considering biome
 
 ///|
+/// Returns biome-specific terrain height at `(wx, wz)` for known biome id.
 pub fn get_biome_terrain_height(wx : Int, wz : Int, biome : Int) -> Int {
   let fx = Float::from_int(wx)
   let fz = Float::from_int(wz)
@@ -316,6 +340,7 @@ pub fn get_biome_terrain_height(wx : Int, wz : Int, biome : Int) -> Int {
 // Get height at a world position
 
 ///|
+/// Returns final terrain surface height at world coordinates `(wx, wz)`.
 pub fn get_terrain_height(wx : Int, wz : Int) -> Int {
   let fx = Float::from_int(wx)
   let fz = Float::from_int(wz)
@@ -328,6 +353,7 @@ pub fn get_terrain_height(wx : Int, wz : Int) -> Int {
 // Determine if a tree should be placed at world position
 
 ///|
+/// Returns whether a tree should spawn at `(wx, wz)` for a biome.
 pub fn should_place_tree(wx : Int, wz : Int, biome : Int) -> Bool {
   let fx = Float::from_int(wx)
   let fz = Float::from_int(wz)
@@ -351,6 +377,7 @@ pub fn should_place_tree(wx : Int, wz : Int, biome : Int) -> Bool {
 // Check if this spot should have a cave opening
 
 ///|
+/// Returns whether `(wx, wy, wz)` should be carved as cave space.
 pub fn is_cave(wx : Int, wy : Int, wz : Int) -> Bool {
   if wy < cave_min_height || wy > cave_max_height {
     return false
@@ -366,6 +393,7 @@ pub fn is_cave(wx : Int, wy : Int, wz : Int) -> Bool {
 // Check if should generate ore at this position
 
 ///|
+/// Returns whether ore block `ore` should spawn at `(wx, wy, wz)`.
 pub fn should_place_ore(
   wx : Int,
   wy : Int,
@@ -404,6 +432,7 @@ pub fn should_place_ore(
 // Generate terrain for a single chunk
 
 ///|
+/// Generates base terrain, caves, ores, and vegetation for a chunk.
 pub fn generate_chunk_terrain(chunk : Chunk, game : Game) -> Unit {
   let base_wx = chunk.cx * chunk_x
   let base_wz = chunk.cz * chunk_z
@@ -583,6 +612,7 @@ pub fn generate_chunk_terrain(chunk : Chunk, game : Game) -> Unit {
 // Get chunk from world
 
 ///|
+/// Returns chunk option at chunk coordinates `(cx, cz)`.
 pub fn get_chunk(game : Game, cx : Int, cz : Int) -> Chunk? {
   if cx < 0 || cx >= world_chunks_x || cz < 0 || cz >= world_chunks_z {
     None
@@ -594,6 +624,7 @@ pub fn get_chunk(game : Game, cx : Int, cz : Int) -> Chunk? {
 // Get block at world coordinates
 
 ///|
+/// Reads world block id at absolute coordinates, returning air out of bounds.
 pub fn get_world_block(game : Game, wx : Int, wy : Int, wz : Int) -> Int {
   if wy < 0 || wy >= chunk_y {
     return block_air
@@ -611,6 +642,7 @@ pub fn get_world_block(game : Game, wx : Int, wy : Int, wz : Int) -> Int {
 // Set block at world coordinates
 
 ///|
+/// Writes world block id at absolute coordinates if in bounds.
 pub fn set_world_block(
   game : Game,
   wx : Int,
@@ -635,6 +667,7 @@ pub fn set_world_block(
 // Check if a block is solid (not air, not water, not flowers/grass)
 
 ///|
+/// Returns whether a block id is considered collision-solid.
 pub fn is_solid(block : Int) -> Bool {
   block != block_air &&
   block != block_water &&
@@ -646,6 +679,7 @@ pub fn is_solid(block : Int) -> Bool {
 // Check if a block is transparent (used for face culling)
 
 ///|
+/// Returns whether a block id should be rendered as transparent/translucent.
 pub fn is_transparent(block : Int) -> Bool {
   block == block_air ||
   block == block_water ||
@@ -660,6 +694,7 @@ pub fn is_transparent(block : Int) -> Bool {
 // Check if a block is a decoration (flower, grass, torch)
 
 ///|
+/// Returns whether a block id is decorative foliage/prop content.
 pub fn is_decoration(block : Int) -> Bool {
   block == block_flower_red ||
   block == block_flower_yellow ||
@@ -670,6 +705,7 @@ pub fn is_decoration(block : Int) -> Bool {
 // Check if a block is affected by gravity
 
 ///|
+/// Returns whether a block id is affected by gravity physics.
 pub fn is_gravity_block(block : Int) -> Bool {
   block == block_sand || block == block_gravel
 }
@@ -677,6 +713,7 @@ pub fn is_gravity_block(block : Int) -> Bool {
 // Block name for UI display
 
 ///|
+/// Returns display name for a block id.
 pub fn block_name(kind : Int) -> String {
   if kind == block_air {
     "Air"
@@ -734,6 +771,7 @@ pub fn block_name(kind : Int) -> String {
 // Get tool name
 
 ///|
+/// Returns display name for a tool id.
 pub fn tool_name(kind : Int) -> String {
   if kind == tool_hand {
     "Hand"
@@ -769,6 +807,7 @@ pub fn tool_name(kind : Int) -> String {
 // Get entity type name
 
 ///|
+/// Returns display name for an entity/mob id.
 pub fn entity_name(kind : Int) -> String {
   if kind == entity_pig {
     "Pig"
@@ -790,6 +829,7 @@ pub fn entity_name(kind : Int) -> String {
 // Get biome name
 
 ///|
+/// Returns display name for a biome id.
 pub fn biome_name(kind : Int) -> String {
   if kind == biome_plains {
     "Plains"
@@ -811,6 +851,7 @@ pub fn biome_name(kind : Int) -> String {
 // Get mining time for a block with a given tool
 
 ///|
+/// Returns mining duration (seconds) for block/tool pair.
 pub fn get_mining_time(block : Int, tool : Int) -> Float {
   let base : Float = if block == block_dirt ||
     block == block_sand ||
@@ -863,6 +904,7 @@ pub fn get_mining_time(block : Int, tool : Int) -> Float {
 // Get drop from breaking a block
 
 ///|
+/// Returns dropped item id when a block is mined.
 pub fn get_block_drop(block : Int) -> Int {
   if block == block_stone {
     block_cobblestone
@@ -885,6 +927,7 @@ pub fn get_block_drop(block : Int) -> Int {
 // Check if entity is hostile
 
 ///|
+/// Returns whether an entity kind is hostile toward player.
 pub fn is_hostile(kind : Int) -> Bool {
   kind == entity_zombie || kind == entity_skeleton || kind == entity_spider
 }
@@ -892,6 +935,7 @@ pub fn is_hostile(kind : Int) -> Bool {
 // Get max health for entity type
 
 ///|
+/// Returns max health value for a given entity kind.
 pub fn get_entity_max_health(kind : Int) -> Int {
   if kind == entity_pig {
     pig_health
@@ -913,6 +957,7 @@ pub fn get_entity_max_health(kind : Int) -> Int {
 // RNG
 
 ///|
+/// Advances game RNG and returns next pseudo-random integer.
 pub fn rand_next(game : Game) -> Int {
   let mut x = game.rng_state
   x = x ^ (x << 13)
@@ -928,6 +973,7 @@ pub fn rand_next(game : Game) -> Int {
 // Random float 0..1
 
 ///|
+/// Returns random float in `[0, 1)`.
 pub fn rand_float(game : Game) -> Float {
   let r = rand_next(game)
   Float::from_int(r % 10000) / 10000.0
@@ -936,6 +982,7 @@ pub fn rand_float(game : Game) -> Float {
 // Random int in range [low, high)
 
 ///|
+/// Returns random integer in inclusive range `[low, high]`.
 pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
   if high <= low {
     return low
@@ -947,6 +994,7 @@ pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
 // Show temporary message
 
 ///|
+/// Shows a temporary gameplay message on HUD.
 pub fn show_message(game : Game, text : String, duration : Float) -> Unit {
   game.message_text = text
   game.message_timer = duration
@@ -955,6 +1003,7 @@ pub fn show_message(game : Game, text : String, duration : Float) -> Unit {
 // Check if a face of a block is visible (neighbor is transparent)
 
 ///|
+/// Returns whether face adjacent to block at `(wx, wy, wz)` should be visible.
 pub fn is_face_visible(game : Game, wx : Int, wy : Int, wz : Int) -> Bool {
   let block = get_world_block(game, wx, wy, wz)
   is_transparent(block)
@@ -963,6 +1012,7 @@ pub fn is_face_visible(game : Game, wx : Int, wy : Int, wz : Int) -> Bool {
 // Spawn a particle
 
 ///|
+/// Spawns one particle with explicit position, velocity, color, lifetime, and size.
 pub fn spawn_particle(
   game : Game,
   px : Float,
@@ -1001,6 +1051,7 @@ pub fn spawn_particle(
 // Spawn block break particles (color provided by caller)
 
 ///|
+/// Spawns a burst of break particles centered on a broken block.
 pub fn spawn_break_particles(
   game : Game,
   wx : Int,
@@ -1026,6 +1077,7 @@ pub fn spawn_break_particles(
 // Distance between two 3D points
 
 ///|
+/// Computes 3D Euclidean distance.
 pub fn distance3d(
   x1 : Float,
   y1 : Float,
@@ -1043,6 +1095,7 @@ pub fn distance3d(
 // Horizontal distance (xz plane)
 
 ///|
+/// Computes horizontal (`x/z`) distance.
 pub fn distance_xz(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
   let dx = x2 - x1
   let dz = z2 - z1
@@ -1052,6 +1105,7 @@ pub fn distance_xz(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
 // Direction facing text
 
 ///|
+/// Returns cardinal-facing label based on yaw angle.
 pub fn facing_direction(yaw : Float) -> String {
   let normalized = fmodf(yaw + two_pi, two_pi)
   if normalized < 0.393 || normalized > 5.89 {

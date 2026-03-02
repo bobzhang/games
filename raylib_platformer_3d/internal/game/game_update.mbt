@@ -1,4 +1,4 @@
-///|
+/// Updates timers, effects, and state-specific logic for one frame of the platformer.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   update_particles(game, dt)

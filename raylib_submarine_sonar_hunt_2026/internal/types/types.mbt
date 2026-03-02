@@ -1,4 +1,5 @@
 ///|
+/// Enumerates high-level states in the game flow.
 pub(all) enum GameState {
   Title
   Play
@@ -7,6 +8,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Enumerates LoseReason variants used by runtime state.
 pub(all) enum LoseReason {
   None
   Oxygen
@@ -15,6 +17,7 @@ pub(all) enum LoseReason {
 } derive(Eq)
 
 ///|
+/// Stores runtime data for Mine.
 pub(all) struct Mine {
   mut active : Bool
   mut x : Float
@@ -25,6 +28,7 @@ pub(all) struct Mine {
 }
 
 ///|
+/// Stores runtime data for Target.
 pub(all) struct Target {
   mut active : Bool
   mut x : Float
@@ -34,6 +38,7 @@ pub(all) struct Target {
 }
 
 ///|
+/// Aggregates all mutable state needed to run one game session.
 pub(all) struct Game {
   mines : Array[Mine]
   targets : Array[Target]
@@ -69,16 +74,19 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a default Mine value for a new session.
 pub fn Mine::new() -> Mine {
   { active: false, x: 0.0, y: 0.0, r: 0.0, reveal_t: 0.0, armed: true }
 }
 
 ///|
+/// Creates a default Target value for a new session.
 pub fn Target::new() -> Target {
   { active: false, x: 0.0, y: 0.0, detected: false, pulse_t: 0.0 }
 }
 
 ///|
+/// Creates a default Game value for a new session.
 pub fn Game::new() -> Game {
   {
     mines: Array::makei(max_mines, fn(_i) { Mine::new() }),

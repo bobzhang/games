@@ -1,4 +1,5 @@
 ///|
+/// Returns the fill color for a tile value in the 2048 palette.
 pub fn tile_color(value : Int) -> @raylib.Color {
   match value {
     2 => @raylib.Color::new(238, 228, 218, 255)
@@ -17,6 +18,7 @@ pub fn tile_color(value : Int) -> @raylib.Color {
 }
 
 ///|
+/// Returns a readable text color for the given tile value.
 pub fn tile_text_color(value : Int) -> @raylib.Color {
   if value <= 4 {
     @raylib.Color::new(119, 110, 101, 255)
@@ -26,6 +28,7 @@ pub fn tile_text_color(value : Int) -> @raylib.Color {
 }
 
 ///|
+/// Chooses tile font size based on number of digits.
 pub fn tile_font_size(value : Int) -> Int {
   if value < 100 {
     40
@@ -39,6 +42,7 @@ pub fn tile_font_size(value : Int) -> Int {
 }
 
 ///|
+/// Clamps `v` into the inclusive range `[lo, hi]`.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -50,6 +54,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns absolute value for a float.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -59,21 +64,25 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Linearly interpolates between `a` and `b` with factor `t`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t
 }
 
 ///|
+/// Converts a board column index to screen-space X.
 pub fn cell_screen_x(col : Int) -> Float {
   Float::from_int(board_left + board_padding + col * (cell_size + cell_gap))
 }
 
 ///|
+/// Converts a board row index to screen-space Y.
 pub fn cell_screen_y(row : Int) -> Float {
   Float::from_int(board_top + board_padding + row * (cell_size + cell_gap))
 }
 
 ///|
+/// Builds a rectangle from integer pixel coordinates.
 pub fn rect(x : Int, y : Int, w : Int, h : Int) -> @raylib.Rectangle {
   @raylib.Rectangle::new(
     Float::from_int(x),
@@ -84,6 +93,7 @@ pub fn rect(x : Int, y : Int, w : Int, h : Int) -> @raylib.Rectangle {
 }
 
 ///|
+/// Builds a rectangle from float coordinates.
 pub fn rectf(x : Float, y : Float, w : Float, h : Float) -> @raylib.Rectangle {
   @raylib.Rectangle::new(x, y, w, h)
 }

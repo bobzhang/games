@@ -1,6 +1,6 @@
 // Player ship
 
-///|
+/// Player-controlled ship state with hull sections, sailing, armament, and crew metrics.
 pub(all) struct Ship {
   mut x : Float
   mut z : Float
@@ -48,7 +48,7 @@ pub(all) struct Ship {
   mut damage_taken : Float
 }
 
-///|
+/// Creates the default player flagship with balanced frigate-style starting stats.
 pub fn Ship::new_player() -> Ship {
   {
     x: 0.0,
@@ -100,7 +100,7 @@ pub fn Ship::new_player() -> Ship {
 
 // Enemy ship
 
-///|
+/// Enemy ship state used by AI, combat, damage modeling, and formation control.
 pub(all) struct EnemyShip {
   mut active : Bool
   mut x : Float
@@ -149,7 +149,7 @@ pub(all) struct EnemyShip {
   mut formation_offset_z : Float
 }
 
-///|
+/// Creates an inactive enemy ship slot with baseline sloop parameters.
 pub fn EnemyShip::inactive() -> EnemyShip {
   {
     active: false,
@@ -202,7 +202,7 @@ pub fn EnemyShip::inactive() -> EnemyShip {
 
 // Cannonball
 
-///|
+/// Active cannonball projectile with ballistic state and damage metadata.
 pub(all) struct Cannonball {
   mut active : Bool
   mut x : Float
@@ -220,7 +220,7 @@ pub(all) struct Cannonball {
   mut trail_timer : Float
 }
 
-///|
+/// Creates an inactive cannonball slot.
 pub fn Cannonball::inactive() -> Cannonball {
   {
     active: false,
@@ -242,7 +242,7 @@ pub fn Cannonball::inactive() -> Cannonball {
 
 // Particle
 
-///|
+/// Generic particle used for smoke, fire, splashes, sparks, and debris effects.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -260,25 +260,25 @@ pub(all) struct Particle {
   mut particle_type : Int
 }
 
-///|
+/// Particle type id for generic impact/splash particles.
 pub let particle_generic : Int = 0
 
-///|
+/// Particle type id for smoke particles.
 pub let particle_smoke : Int = 1
 
-///|
+/// Particle type id for fire particles.
 pub let particle_fire : Int = 2
 
-///|
+/// Particle type id for water splash particles.
 pub let particle_splash : Int = 3
 
-///|
+/// Particle type id for debris dust particles.
 pub let particle_debris : Int = 4
 
-///|
+/// Particle type id for spark particles.
 pub let particle_spark : Int = 5
 
-///|
+/// Creates an inactive particle slot with neutral defaults.
 pub fn Particle::inactive() -> Particle {
   {
     active: false,
@@ -300,7 +300,7 @@ pub fn Particle::inactive() -> Particle {
 
 // Island obstacle
 
-///|
+/// Island obstacle and fortress metadata used for navigation and objectives.
 pub(all) struct Island {
   mut active : Bool
   mut x : Float
@@ -320,7 +320,7 @@ pub(all) struct Island {
   mut vegetation_density : Int
 }
 
-///|
+/// Creates an inactive island slot with small-island defaults.
 pub fn Island::inactive() -> Island {
   {
     active: false,
@@ -344,7 +344,7 @@ pub fn Island::inactive() -> Island {
 
 // Water wake trail
 
-///|
+/// Wake trail segment emitted behind moving ships.
 pub(all) struct WaterWake {
   mut active : Bool
   mut x : Float
@@ -356,7 +356,7 @@ pub(all) struct WaterWake {
   mut speed_at_spawn : Float
 }
 
-///|
+/// Creates an inactive wake segment.
 pub fn WaterWake::inactive() -> WaterWake {
   {
     active: false,
@@ -372,7 +372,7 @@ pub fn WaterWake::inactive() -> WaterWake {
 
 // Floating debris from destroyed ships
 
-///|
+/// Floating shipwreck debris fragment with lifetime, drift, and tint state.
 pub(all) struct Debris {
   mut active : Bool
   mut x : Float
@@ -390,19 +390,19 @@ pub(all) struct Debris {
   mut b : Int
 }
 
-///|
+/// Debris type id for wooden planks.
 pub let debris_plank : Int = 0
 
-///|
+/// Debris type id for barrels.
 pub let debris_barrel : Int = 1
 
-///|
+/// Debris type id for torn sail cloth.
 pub let debris_sail_scrap : Int = 2
 
-///|
+/// Debris type id for broken mast pieces.
 pub let debris_mast_piece : Int = 3
 
-///|
+/// Creates an inactive debris slot.
 pub fn Debris::inactive() -> Debris {
   {
     active: false,
@@ -424,7 +424,7 @@ pub fn Debris::inactive() -> Debris {
 
 // Wind system
 
-///|
+/// Dynamic wind model including gusts and gradual shifts.
 pub(all) struct Wind {
   mut direction : Float
   mut speed : Float
@@ -438,7 +438,7 @@ pub(all) struct Wind {
   mut turbulence : Float
 }
 
-///|
+/// Creates a moderate default wind profile.
 pub fn Wind::new() -> Wind {
   {
     direction: 0.5,
@@ -456,7 +456,7 @@ pub fn Wind::new() -> Wind {
 
 // Battle message
 
-///|
+/// Timed HUD/battle notification entry.
 pub(all) struct BattleMessage {
   mut active : Bool
   mut text : String
@@ -467,7 +467,7 @@ pub(all) struct BattleMessage {
   mut color_b : Int
 }
 
-///|
+/// Creates an inactive battle message entry.
 pub fn BattleMessage::inactive() -> BattleMessage {
   {
     active: false,
@@ -482,7 +482,7 @@ pub fn BattleMessage::inactive() -> BattleMessage {
 
 // Battle objective
 
-///|
+/// Tracks objective type, progress counters, and completion state for a battle.
 pub(all) struct BattleObjective {
   mut objective_type : Int
   mut target_count : Int
@@ -494,7 +494,7 @@ pub(all) struct BattleObjective {
   mut description : String
 }
 
-///|
+/// Creates a default "destroy all" objective.
 pub fn BattleObjective::new() -> BattleObjective {
   {
     objective_type: objective_destroy_all,
@@ -510,7 +510,7 @@ pub fn BattleObjective::new() -> BattleObjective {
 
 // Battle statistics
 
-///|
+/// Per-battle performance statistics for scoring and summary screens.
 pub(all) struct BattleStats {
   mut ships_sunk : Int
   mut damage_dealt : Float
@@ -524,7 +524,7 @@ pub(all) struct BattleStats {
   mut fortresses_destroyed : Int
 }
 
-///|
+/// Creates zeroed battle statistics.
 pub fn BattleStats::new() -> BattleStats {
   {
     ships_sunk: 0,
@@ -542,7 +542,7 @@ pub fn BattleStats::new() -> BattleStats {
 
 // Convoy ship (for escort missions)
 
-///|
+/// Escort convoy ship state used in convoy protection scenarios.
 pub(all) struct ConvoyShip {
   mut active : Bool
   mut x : Float
@@ -554,7 +554,7 @@ pub(all) struct ConvoyShip {
   mut arrived : Bool
 }
 
-///|
+/// Creates an inactive convoy ship slot.
 pub fn ConvoyShip::inactive() -> ConvoyShip {
   {
     active: false,
@@ -570,7 +570,7 @@ pub fn ConvoyShip::inactive() -> ConvoyShip {
 
 // Fleet ally ship (player-commanded)
 
-///|
+/// Allied fleet ship state for commandable support vessels.
 pub(all) struct FleetShip {
   mut active : Bool
   mut x : Float
@@ -598,19 +598,19 @@ pub(all) struct FleetShip {
   mut target_z : Float
 }
 
-///|
+/// Fleet order id to follow the player ship.
 pub let fleet_order_follow : Int = 0
 
-///|
+/// Fleet order id to attack designated enemies.
 pub let fleet_order_attack : Int = 1
 
-///|
+/// Fleet order id to defend nearby allies/objectives.
 pub let fleet_order_defend : Int = 2
 
-///|
+/// Fleet order id to hold current position.
 pub let fleet_order_hold : Int = 3
 
-///|
+/// Creates an inactive allied fleet ship slot.
 pub fn FleetShip::inactive() -> FleetShip {
   {
     active: false,
@@ -640,15 +640,15 @@ pub fn FleetShip::inactive() -> FleetShip {
   }
 }
 
-///|
+/// Maximum number of simultaneously tracked allied fleet ships.
 pub let max_fleet_ships : Int = 4
 
-///|
+/// Maximum number of simultaneously tracked convoy ships.
 pub let max_convoy_ships : Int = 4
 
 // Main Game struct
 
-///|
+/// Aggregated naval game state for battle flow, entities, UI, and progression.
 pub(all) struct Game {
   mut state : Int
 
@@ -724,7 +724,7 @@ pub(all) struct Game {
   mut convoy_arrived_count : Int
 }
 
-///|
+/// Constructs a fresh naval game state with initialized pools and menu defaults.
 pub fn Game::new() -> Game {
   {
     state: state_menu,

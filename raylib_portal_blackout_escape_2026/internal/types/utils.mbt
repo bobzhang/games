@@ -1,4 +1,5 @@
 ///|
+/// Returns the smaller of two integers.
 pub fn mini(a : Int, b : Int) -> Int {
   if a < b {
     a
@@ -8,6 +9,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the larger of two integers.
 pub fn maxi(a : Int, b : Int) -> Int {
   if a > b {
     a
@@ -17,6 +19,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Clamps an integer to the inclusive `[lo, hi]` range.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -28,6 +31,7 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Clamps a float to the inclusive `[lo, hi]` range.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -39,6 +43,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of an integer.
 pub fn absi(v : Int) -> Int {
   if v < 0 {
     -v
@@ -48,57 +53,68 @@ pub fn absi(v : Int) -> Int {
 }
 
 ///|
+/// Linearly interpolates between `a` and `b` with factor `t`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t
 }
 
 ///|
+/// Computes `sin(v)` and returns it as `Float`.
 pub fn sinf(v : Float) -> Float {
   Float::from_double(@math.sin(v.to_double()))
 }
 
 ///|
+/// Returns a pseudo-random float sampled from `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Computes Manhattan distance between two grid cells.
 pub fn manhattan(x0 : Int, y0 : Int, x1 : Int, y1 : Int) -> Int {
   absi(x1 - x0) + absi(y1 - y0)
 }
 
 ///|
+/// Converts a grid X coordinate into board pixel X.
 pub fn board_px(x : Int) -> Int {
   board_x0 + x * cell
 }
 
 ///|
+/// Converts a grid Y coordinate into board pixel Y.
 pub fn board_py(y : Int) -> Int {
   board_y0 + y * cell
 }
 
 ///|
+/// Converts float grid X to pixel X at cell center.
 pub fn cell_center_x(x : Float) -> Int {
   board_x0 + (x * Float::from_int(cell)).to_int() + cell / 2
 }
 
 ///|
+/// Converts float grid Y to pixel Y at cell center.
 pub fn cell_center_y(y : Float) -> Int {
   board_y0 + (y * Float::from_int(cell)).to_int() + cell / 2
 }
 
 ///|
+/// Returns the rectangle for the title start button.
 pub fn start_button_rect() -> (Int, Int, Int, Int) {
   (panel_x0 + 26, screen_h - 192, panel_w - 52, 72)
 }
 
 ///|
+/// Returns the rectangle for the result retry button.
 pub fn retry_button_rect() -> (Int, Int, Int, Int) {
   (panel_x0 + 26, screen_h - 192, panel_w - 52, 72)
 }
 
 ///|
+/// Returns the touch rectangle for left movement.
 pub fn btn_left() -> (Int, Int, Int, Int) {
   let x0 : Int = 38
   let y0 : Int = screen_h - 244
@@ -106,6 +122,7 @@ pub fn btn_left() -> (Int, Int, Int, Int) {
 }
 
 ///|
+/// Returns the touch rectangle for right movement.
 pub fn btn_right() -> (Int, Int, Int, Int) {
   let x0 : Int = 38
   let y0 : Int = screen_h - 244
@@ -113,6 +130,7 @@ pub fn btn_right() -> (Int, Int, Int, Int) {
 }
 
 ///|
+/// Returns the touch rectangle for up movement.
 pub fn btn_up() -> (Int, Int, Int, Int) {
   let x0 : Int = 38
   let y0 : Int = screen_h - 244
@@ -120,6 +138,7 @@ pub fn btn_up() -> (Int, Int, Int, Int) {
 }
 
 ///|
+/// Returns the touch rectangle for down movement.
 pub fn btn_down() -> (Int, Int, Int, Int) {
   let x0 : Int = 38
   let y0 : Int = screen_h - 244
@@ -127,26 +146,31 @@ pub fn btn_down() -> (Int, Int, Int, Int) {
 }
 
 ///|
+/// Returns the touch rectangle for the primary action button.
 pub fn btn_action() -> (Int, Int, Int, Int) {
   (screen_w - 192, screen_h - 226, 128, 128)
 }
 
 ///|
+/// Returns the touch rectangle for the hint button.
 pub fn btn_hint() -> (Int, Int, Int, Int) {
   (screen_w - 338, screen_h - 182, 118, 70)
 }
 
 ///|
+/// Returns the touch rectangle for the restart shortcut button.
 pub fn btn_restart() -> (Int, Int, Int, Int) {
   (screen_w - 338, screen_h - 266, 118, 70)
 }
 
 ///|
+/// Returns the touch rectangle for the menu shortcut button.
 pub fn btn_menu() -> (Int, Int, Int, Int) {
   (screen_w - 338, screen_h - 350, 118, 70)
 }
 
 ///|
+/// Returns one rotating hint message by index.
 pub fn hint_text(i : Int) -> String {
   if i == 0 {
     "Recover 6 energy cores to power the portal network."
@@ -160,6 +184,7 @@ pub fn hint_text(i : Int) -> String {
 }
 
 ///|
+/// Returns whether a point lies inside a rectangle (inclusive bounds).
 pub fn point_in_rect(
   x : Float,
   y : Float,
@@ -176,6 +201,7 @@ pub fn point_in_rect(
 }
 
 ///|
+/// Returns whether current mouse/touch input is inside a rectangle.
 pub fn pointer_on_rect(
   mx : Float,
   my : Float,

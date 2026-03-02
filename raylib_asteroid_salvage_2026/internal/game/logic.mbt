@@ -120,6 +120,7 @@ fn maybe_advance_wave(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Advances one frame of ship control, projectiles, collisions, and waves.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   if game.game_over {
     game.thrusting = false

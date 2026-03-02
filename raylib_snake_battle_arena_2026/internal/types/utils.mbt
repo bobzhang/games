@@ -1,4 +1,5 @@
 ///|
+/// Return the smaller of two integers.
 pub fn mini(a : Int, b : Int) -> Int {
   if a < b {
     a
@@ -8,6 +9,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Return the larger of two integers.
 pub fn maxi(a : Int, b : Int) -> Int {
   if a > b {
     a
@@ -17,6 +19,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Clamp an integer to the inclusive range `[lo, hi]`.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -28,6 +31,7 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Clamp a float to the inclusive range `[lo, hi]`.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -39,6 +43,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Return the larger of two float values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -48,6 +53,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Return the absolute value of a float.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -57,12 +63,14 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Uniform random float in `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Return x-step delta for a direction id.
 pub fn dir_dx(dir : Int) -> Int {
   if dir == dir_left {
     -1
@@ -74,6 +82,7 @@ pub fn dir_dx(dir : Int) -> Int {
 }
 
 ///|
+/// Return y-step delta for a direction id.
 pub fn dir_dy(dir : Int) -> Int {
   if dir == dir_up {
     -1
@@ -85,6 +94,7 @@ pub fn dir_dy(dir : Int) -> Int {
 }
 
 ///|
+/// Return true when directions are exact opposites.
 pub fn opposite_dir(a : Int, b : Int) -> Bool {
   (a == dir_left && b == dir_right) ||
   (a == dir_right && b == dir_left) ||
@@ -93,6 +103,7 @@ pub fn opposite_dir(a : Int, b : Int) -> Bool {
 }
 
 ///|
+/// Wrap x coordinate around horizontal grid bounds.
 pub fn wrap_x(x : Int) -> Int {
   if x < 0 {
     grid_w - 1
@@ -104,6 +115,7 @@ pub fn wrap_x(x : Int) -> Int {
 }
 
 ///|
+/// Wrap y coordinate around vertical grid bounds.
 pub fn wrap_y(y : Int) -> Int {
   if y < 0 {
     grid_h - 1
@@ -115,6 +127,7 @@ pub fn wrap_y(y : Int) -> Int {
 }
 
 ///|
+/// Compute board origin and tile size for rendering.
 pub fn board_metrics(shake_t : Float) -> (Int, Int, Int) {
   let tile_x : Int = board_area_w / grid_w
   let tile_y : Int = board_area_h / grid_h
@@ -134,6 +147,7 @@ pub fn board_metrics(shake_t : Float) -> (Int, Int, Int) {
 }
 
 ///|
+/// Return world-space center of a grid cell.
 pub fn cell_world_center(game : Game, x : Int, y : Int) -> (Float, Float) {
   let (bx, by, tile) = board_metrics(game.shake_t)
   (
@@ -143,12 +157,14 @@ pub fn cell_world_center(game : Game, x : Int, y : Int) -> (Float, Float) {
 }
 
 ///|
+/// Set transient message text and display duration.
 pub fn set_msg(game : Game, msg : String, ttl : Float) -> Unit {
   game.msg = msg
   game.msg_t = ttl
 }
 
 ///|
+/// Return true when pointer/touch is inside a rectangle.
 pub fn pointer_on_rect(
   x : Float,
   y : Float,

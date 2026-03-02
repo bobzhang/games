@@ -897,7 +897,7 @@ fn draw_debug_overlay(game : @types.Game) -> Unit {
   )
 }
 
-///|
+/// Renders the full frame for current game state.
 pub fn draw_game(game : @types.Game) -> Unit {
   draw_stage(game)
 

@@ -6,6 +6,7 @@
 // Maximum durability for each tool tier
 
 ///|
+/// Returns max durability for a tool id.
 pub fn get_tool_max_durability(tool : Int) -> Int {
   if tool == @types.tool_hand {
     999999
@@ -32,6 +33,7 @@ pub fn get_tool_max_durability(tool : Int) -> Int {
 // Get the tier level of a tool (0=hand, 1=wood, 2=stone, 3=iron)
 
 ///|
+/// Returns mining tier for a tool id (`0` hand, higher is stronger).
 pub fn get_tool_tier(tool : Int) -> Int {
   if tool == @types.tool_hand {
     0
@@ -58,6 +60,7 @@ pub fn get_tool_tier(tool : Int) -> Int {
 // Check if a tool is a pickaxe type
 
 ///|
+/// Returns whether a tool id is any pickaxe variant.
 pub fn is_pickaxe(tool : Int) -> Bool {
   tool == @types.tool_wooden_pickaxe ||
   tool == @types.tool_stone_pickaxe ||
@@ -67,6 +70,7 @@ pub fn is_pickaxe(tool : Int) -> Bool {
 // Check if a tool is an axe type
 
 ///|
+/// Returns whether a tool id is any axe variant.
 pub fn is_axe(tool : Int) -> Bool {
   tool == @types.tool_wooden_axe ||
   tool == @types.tool_stone_axe ||
@@ -76,6 +80,7 @@ pub fn is_axe(tool : Int) -> Bool {
 // Check if a tool is a shovel type
 
 ///|
+/// Returns whether a tool id is any shovel variant.
 pub fn is_shovel(tool : Int) -> Bool {
   tool == @types.tool_wooden_shovel ||
   tool == @types.tool_stone_shovel ||
@@ -85,6 +90,7 @@ pub fn is_shovel(tool : Int) -> Bool {
 // Check if a tool is a sword type
 
 ///|
+/// Returns whether a tool id is any sword variant.
 pub fn is_sword(tool : Int) -> Bool {
   tool == @types.tool_wooden_sword ||
   tool == @types.tool_stone_sword ||
@@ -94,6 +100,7 @@ pub fn is_sword(tool : Int) -> Bool {
 // Get the best tool type for breaking a given block
 
 ///|
+/// Returns preferred tool class for efficiently mining a block id.
 pub fn get_best_tool_class_for_block(block : Int) -> Int {
   // Returns: 0=any, 1=pickaxe, 2=axe, 3=shovel, 4=sword
   if block == @types.block_stone ||
@@ -122,6 +129,7 @@ pub fn get_best_tool_class_for_block(block : Int) -> Int {
 // Check if the equipped tool matches the best tool class for a block
 
 ///|
+/// Returns whether a tool class matches the block's preferred class.
 pub fn is_correct_tool_for_block(tool : Int, block : Int) -> Bool {
   let best_class = get_best_tool_class_for_block(block)
   if best_class == 0 {
@@ -140,6 +148,7 @@ pub fn is_correct_tool_for_block(tool : Int, block : Int) -> Bool {
 // Get the effective mining speed multiplier when using the correct tool
 
 ///|
+/// Returns mining speed multiplier for tool/block combination.
 pub fn get_tool_effectiveness(tool : Int, block : Int) -> Float {
   let correct = is_correct_tool_for_block(tool, block)
   let tier = get_tool_tier(tool)
@@ -172,6 +181,7 @@ pub fn get_tool_effectiveness(tool : Int, block : Int) -> Float {
 // Check if inventory has enough of a specific item
 
 ///|
+/// Counts total quantity of `item_id` across player inventory slots.
 pub fn count_item_in_inventory(game : @types.Game, item_id : Int) -> Int {
   let inv = game.player.inventory
   let mut total = 0
@@ -186,6 +196,7 @@ pub fn count_item_in_inventory(game : @types.Game, item_id : Int) -> Int {
 // Check if a recipe can be crafted with current inventory
 
 ///|
+/// Returns whether current inventory contains all ingredients for a recipe.
 pub fn can_craft_recipe(
   game : @types.Game,
   recipe : @types.CraftingRecipe,
@@ -206,6 +217,7 @@ pub fn can_craft_recipe(
 // Remove a specific amount of an item from inventory
 
 ///|
+/// Removes up to `count` of `item_id` from inventory and returns amount removed.
 pub fn remove_item_from_inventory(
   game : @types.Game,
   item_id : Int,
@@ -237,6 +249,7 @@ pub fn remove_item_from_inventory(
 // Execute a crafting recipe: consume inputs and produce outputs
 
 ///|
+/// Consumes recipe inputs and awards outputs, returning whether craft succeeded.
 pub fn execute_craft(
   game : @types.Game,
   recipe : @types.CraftingRecipe,
@@ -282,6 +295,7 @@ pub fn execute_craft(
 // Cycle through tools the player owns (simplified: just cycle equipped_tool)
 
 ///|
+/// Cycles equipped tool forward through available tools.
 pub fn cycle_tool_forward(game : @types.Game) -> Unit {
   let mut next = game.player.equipped_tool + 1
   if next >= @types.tool_count {
@@ -293,6 +307,7 @@ pub fn cycle_tool_forward(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Cycles equipped tool backward through available tools.
 pub fn cycle_tool_backward(game : @types.Game) -> Unit {
   let mut prev = game.player.equipped_tool - 1
   if prev < 0 {
@@ -306,6 +321,7 @@ pub fn cycle_tool_backward(game : @types.Game) -> Unit {
 // Handle tool equip keys (T to cycle, number + T for specific)
 
 ///|
+/// Processes tool-cycling input bindings for the current frame.
 pub fn handle_tool_input(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyT) {
     cycle_tool_forward(game)
@@ -324,6 +340,7 @@ pub fn handle_tool_input(game : @types.Game) -> Unit {
 // Get smelting result for a given input block (0 if not smeltable)
 
 ///|
+/// Returns smelting output item id for a given input id.
 pub fn get_smelting_result(input : Int) -> Int {
   if input == @types.block_sand {
     @types.block_glass
@@ -342,6 +359,7 @@ pub fn get_smelting_result(input : Int) -> Int {
 // Get smelting time in seconds for a given input
 
 ///|
+/// Returns smelting time in seconds for a given smeltable input id.
 pub fn get_smelting_time(input : Int) -> Float {
   if input == @types.block_sand {
     8.0
@@ -359,6 +377,7 @@ pub fn get_smelting_time(input : Int) -> Float {
 // Check if a block is smeltable
 
 ///|
+/// Returns whether a block/item id can be smelted.
 pub fn is_smeltable(block : Int) -> Bool {
   get_smelting_result(block) != 0
 }
@@ -368,6 +387,7 @@ pub fn is_smeltable(block : Int) -> Bool {
 // Find the first available recipe the player can craft
 
 ///|
+/// Returns index of first craftable recipe, or `-1` if none are craftable.
 pub fn find_first_craftable(game : @types.Game) -> Int {
   let recipes = @levels.get_crafting_recipes()
   for i in 0..<recipes.length() {
@@ -381,6 +401,7 @@ pub fn find_first_craftable(game : @types.Game) -> Int {
 // Count how many recipes the player can currently craft
 
 ///|
+/// Counts number of recipes currently craftable from inventory state.
 pub fn count_craftable_recipes(game : @types.Game) -> Int {
   let recipes = @levels.get_crafting_recipes()
   let mut count = 0
@@ -397,6 +418,7 @@ pub fn count_craftable_recipes(game : @types.Game) -> Int {
 // Check if the player has the required tool tier to mine certain ores
 
 ///|
+/// Returns whether a tool can mine a block without tier mismatch penalties.
 pub fn can_mine_with_tool(block : Int, tool : Int) -> Bool {
   let tier = get_tool_tier(tool)
   if block == @types.block_ore_diamond {
@@ -419,6 +441,7 @@ pub fn can_mine_with_tool(block : Int, tool : Int) -> Bool {
 // Get bonus drops when using correct tool
 
 ///|
+/// Returns extra-drop chance bonus for tool/block pair.
 pub fn get_bonus_drop_chance(tool : Int, block : Int) -> Float {
   let tier = get_tool_tier(tool)
   let correct = is_correct_tool_for_block(tool, block)
@@ -441,6 +464,7 @@ pub fn get_bonus_drop_chance(tool : Int, block : Int) -> Float {
 // When player interacts with a workbench block, open crafting UI
 
 ///|
+/// Returns whether player is interacting with a nearby workbench block.
 pub fn check_workbench_interaction(game : @types.Game) -> Bool {
   let target = game.target
   if target.hit {
@@ -458,6 +482,7 @@ pub fn check_workbench_interaction(game : @types.Game) -> Bool {
 // Get the category of a recipe for UI grouping
 
 ///|
+/// Returns recipe category id used by crafting UI tabs/grouping.
 pub fn get_recipe_category(recipe : @types.CraftingRecipe) -> Int {
   // 0=blocks, 1=tools, 2=materials, 3=decorations
   let out = recipe.output_id
@@ -477,6 +502,7 @@ pub fn get_recipe_category(recipe : @types.CraftingRecipe) -> Int {
 // Get category name
 
 ///|
+/// Returns display name for recipe category id.
 pub fn recipe_category_name(cat : Int) -> String {
   if cat == 0 {
     "Blocks"

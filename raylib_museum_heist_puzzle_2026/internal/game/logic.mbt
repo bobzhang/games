@@ -169,6 +169,7 @@ fn load_level(game : @types.Game, level_idx : Int) -> Unit {
 }
 
 ///|
+/// Loads the first level and returns the game to title state.
 pub fn reset_to_title(game : @types.Game) -> Unit {
   load_level(game, 0)
   game.state = @types.Title
@@ -418,6 +419,7 @@ fn update_campaign_clear(game : @types.Game, input : @types.FrameInput) -> Unit 
 }
 
 ///|
+/// Advances one frame of museum gameplay and campaign menu state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   let input = gather_input(game)
 

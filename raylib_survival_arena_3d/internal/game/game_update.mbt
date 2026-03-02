@@ -1,6 +1,8 @@
 // Main game update dispatcher
 
 ///|
+/// Advances one simulation frame for the survival loop, updating shared systems
+/// and dispatching behavior for menu, combat, shop-between-waves, pause, and game-over states.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   update_particles(game, dt)

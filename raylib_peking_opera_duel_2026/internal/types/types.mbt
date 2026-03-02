@@ -1,4 +1,5 @@
 ///|
+/// Top-level flow states for a duel session.
 pub(all) enum GameState {
   Title
   Playing
@@ -7,6 +8,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Per-frame input snapshot used by game logic.
 pub(all) struct InputState {
   mut axis_x : Int
   mut axis_y : Int
@@ -19,6 +21,7 @@ pub(all) struct InputState {
 }
 
 ///|
+/// Active opponent prompt with lane, stance, and remaining time.
 pub(all) struct Prompt {
   lane_x : Int
   lane_y : Int
@@ -27,6 +30,7 @@ pub(all) struct Prompt {
 }
 
 ///|
+/// Mutable runtime model for duel progression and scoring.
 pub(all) struct Game {
   input : InputState
   mut state : GameState
@@ -57,6 +61,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Build an empty input state with all controls released.
 pub fn InputState::new() -> InputState {
   {
     axis_x: 0,
@@ -71,6 +76,7 @@ pub fn InputState::new() -> InputState {
 }
 
 ///|
+/// Construct a prompt at the given lane and stance.
 pub fn Prompt::new(
   lane_x : Int,
   lane_y : Int,
@@ -81,6 +87,7 @@ pub fn Prompt::new(
 }
 
 ///|
+/// Create a fresh duel state initialized to the title screen.
 pub fn Game::new() -> Game {
   {
     input: InputState::new(),

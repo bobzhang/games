@@ -1,4 +1,5 @@
 ///|
+/// High-level flow state for the tea delivery run.
 pub(all) enum GameState {
   Title
   Playing
@@ -7,6 +8,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Kind of route hazard the cart can encounter.
 pub(all) enum HazardKind {
   Rock
   Landslide
@@ -14,6 +16,7 @@ pub(all) enum HazardKind {
 } derive(Eq)
 
 ///|
+/// Hazard entity moving down a lane toward the cart.
 pub(all) struct Hazard {
   mut active : Bool
   mut lane : Int
@@ -25,6 +28,7 @@ pub(all) struct Hazard {
 }
 
 ///|
+/// Complete mutable game state for tea mountain express.
 pub(all) struct Game {
   hazards : Array[Hazard]
   mut state : GameState
@@ -63,6 +67,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates an inactive hazard slot for the hazard pool.
 pub fn Hazard::new() -> Hazard {
   {
     active: false,
@@ -76,6 +81,7 @@ pub fn Hazard::new() -> Hazard {
 }
 
 ///|
+/// Creates a new game state with initialized route and resources.
 pub fn Game::new() -> Game {
   {
     hazards: Array::makei(max_hazards, fn(_i) { Hazard::new() }),

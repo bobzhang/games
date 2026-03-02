@@ -682,7 +682,7 @@ fn draw_state_overlay(game : @types.Game) -> Unit {
   }
 }
 
-///|
+/// Draws a complete frame for the current moon gate defense state.
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_background(game)
 

@@ -599,6 +599,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Capture input and advance one frame of chef-duel simulation.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   capture_input(game)
   let frame_dt = @types.clampf(dt, 0.0, 0.05)

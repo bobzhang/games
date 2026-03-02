@@ -1,4 +1,5 @@
 ///|
+/// Survivor entity tracked by the rescue simulation.
 pub(all) struct Survivor {
   mut active : Bool
   mut x : Float
@@ -11,6 +12,7 @@ pub(all) struct Survivor {
 }
 
 ///|
+/// Hazard entity used by wave and collision systems.
 pub(all) struct Hazard {
   mut active : Bool
   mut x : Float
@@ -24,6 +26,7 @@ pub(all) struct Hazard {
 }
 
 ///|
+/// Pickup entity carrying temporary resource bonuses.
 pub(all) struct Pickup {
   mut active : Bool
   mut x : Float
@@ -35,6 +38,7 @@ pub(all) struct Pickup {
 }
 
 ///|
+/// Lightweight particle entity for visual effects.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -47,6 +51,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// Complete runtime state for one skyhook rescue session.
 pub(all) struct Game {
   survivors : Array[Survivor]
   hazards : Array[Hazard]
@@ -98,6 +103,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates an inactive survivor with default values.
 pub fn Survivor::new() -> Survivor {
   {
     active: false,
@@ -112,6 +118,7 @@ pub fn Survivor::new() -> Survivor {
 }
 
 ///|
+/// Creates an inactive hazard with default values.
 pub fn Hazard::new() -> Hazard {
   {
     active: false,
@@ -127,6 +134,7 @@ pub fn Hazard::new() -> Hazard {
 }
 
 ///|
+/// Creates an inactive pickup with default values.
 pub fn Pickup::new() -> Pickup {
   {
     active: false,
@@ -140,6 +148,7 @@ pub fn Pickup::new() -> Pickup {
 }
 
 ///|
+/// Creates an inactive particle with default values.
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -154,6 +163,7 @@ pub fn Particle::new() -> Particle {
 }
 
 ///|
+/// Creates a new game state with preallocated object pools.
 pub fn Game::new() -> Game {
   {
     survivors: Array::makei(max_survivors, fn(_i) { Survivor::new() }),

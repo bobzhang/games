@@ -435,6 +435,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances one frame of route simulation and delivery state logic.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   update_input(game)
 

@@ -468,6 +468,7 @@ fn update_play_state(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances the game simulation by one frame using the current input state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   let d = @types.clampf(dt, 0.0, 0.05)
 

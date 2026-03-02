@@ -1,4 +1,5 @@
 ///|
+/// Enumerates ObjKind variants used by runtime state.
 pub(all) enum ObjKind {
   Lantern
   Bird
@@ -8,6 +9,7 @@ pub(all) enum ObjKind {
 } derive(Eq)
 
 ///|
+/// Stores runtime data for SkyObj.
 pub(all) struct SkyObj {
   mut active : Bool
   mut kind : ObjKind
@@ -25,6 +27,7 @@ pub(all) struct SkyObj {
 }
 
 ///|
+/// Stores runtime data for Spark.
 pub(all) struct Spark {
   mut active : Bool
   mut x : Float
@@ -37,6 +40,7 @@ pub(all) struct Spark {
 }
 
 ///|
+/// Stores runtime data for Halo.
 pub(all) struct Halo {
   mut active : Bool
   mut x : Float
@@ -47,6 +51,7 @@ pub(all) struct Halo {
 }
 
 ///|
+/// Stores runtime data for Trail.
 pub(all) struct Trail {
   mut active : Bool
   mut x : Float
@@ -58,6 +63,7 @@ pub(all) struct Trail {
 }
 
 ///|
+/// Enumerates high-level states in the game flow.
 pub(all) enum GameState {
   Title
   Play
@@ -66,6 +72,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Stores runtime data for Kite.
 pub(all) struct Kite {
   mut x : Float
   mut y : Float
@@ -82,6 +89,7 @@ pub(all) struct Kite {
 }
 
 ///|
+/// Aggregates all mutable state needed to run one game session.
 pub(all) struct Game {
   objs : Array[SkyObj]
   sparks : Array[Spark]
@@ -130,6 +138,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a default SkyObj value for a new session.
 pub fn SkyObj::new() -> SkyObj {
   {
     active: false,
@@ -149,6 +158,7 @@ pub fn SkyObj::new() -> SkyObj {
 }
 
 ///|
+/// Creates a default Spark value for a new session.
 pub fn Spark::new() -> Spark {
   {
     active: false,
@@ -163,16 +173,19 @@ pub fn Spark::new() -> Spark {
 }
 
 ///|
+/// Creates a default Halo value for a new session.
 pub fn Halo::new() -> Halo {
   { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
 }
 
 ///|
+/// Creates a default Trail value for a new session.
 pub fn Trail::new() -> Trail {
   { active: false, x: 0.0, y: 0.0, life: 0.0, w: 0.0, h: 0.0, rot: 0.0 }
 }
 
 ///|
+/// Creates a default Kite value for a new session.
 pub fn Kite::new() -> Kite {
   {
     x: Float::from_int(screen_w) * 0.5,
@@ -191,6 +204,7 @@ pub fn Kite::new() -> Kite {
 }
 
 ///|
+/// Creates a default Game value for a new session.
 pub fn Game::new() -> Game {
   {
     objs: Array::makei(max_objs, fn(_i) { SkyObj::new() }),

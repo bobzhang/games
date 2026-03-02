@@ -929,6 +929,7 @@ fn update_game_over(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances the game by one frame across input, simulation, and state flow.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt
   game.hint_t = game.hint_t + dt
@@ -955,6 +956,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Initializes a game instance into its title-scene state.
 pub fn init_game(game : @types.Game) -> Unit {
   init_title_scene(game)
 }

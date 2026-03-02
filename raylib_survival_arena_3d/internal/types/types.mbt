@@ -1,6 +1,7 @@
 // Game state enum
 
 ///|
+/// Global gameplay states for menu, active waves, downtime shop, pause, and defeat.
 pub(all) enum GameState {
   Menu
   Playing
@@ -12,6 +13,7 @@ pub(all) enum GameState {
 // Player entity
 
 ///|
+/// Player runtime state including movement, combat stats, progression, and UI-facing counters.
 pub(all) struct Player {
   mut x : Float
   mut y : Float
@@ -62,6 +64,7 @@ pub(all) struct Player {
 }
 
 ///|
+/// Constructs a fresh player with starter weapons, base stats, and empty combo/boost timers.
 pub fn Player::new() -> Player {
   let ammo : Array[Int] = [
     ammo_pistol, ammo_shotgun, ammo_rifle, ammo_sniper, ammo_rocket, ammo_minigun,
@@ -119,6 +122,7 @@ pub fn Player::new() -> Player {
 // Enemy entity
 
 ///|
+/// Enemy runtime state covering locomotion, attacks, special abilities, and state-machine timers.
 pub(all) struct Enemy {
   mut active : Bool
   mut kind : Int
@@ -163,6 +167,7 @@ pub(all) struct Enemy {
 }
 
 ///|
+/// Creates an inactive enemy slot used by pooled enemy arrays.
 pub fn Enemy::inactive() -> Enemy {
   {
     active: false,
@@ -204,6 +209,7 @@ pub fn Enemy::inactive() -> Enemy {
 // Projectile (player bullets and enemy spits)
 
 ///|
+/// Projectile state for both player shots and enemy ranged attacks.
 pub(all) struct Projectile {
   mut active : Bool
   mut kind : Int
@@ -223,6 +229,7 @@ pub(all) struct Projectile {
 }
 
 ///|
+/// Creates an inactive projectile slot for the projectile pool.
 pub fn Projectile::inactive() -> Projectile {
   {
     active: false,
@@ -246,6 +253,7 @@ pub fn Projectile::inactive() -> Projectile {
 // Particle
 
 ///|
+/// Particle state for blood, muzzle, explosion, shell, and heal effects.
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -264,6 +272,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// Creates an inactive particle slot for pooled VFX.
 pub fn Particle::inactive() -> Particle {
   {
     active: false,
@@ -286,6 +295,7 @@ pub fn Particle::inactive() -> Particle {
 // Arena pillar (static obstacle)
 
 ///|
+/// Static cylindrical arena obstacle used for navigation and cover.
 pub(all) struct Pillar {
   x : Float
   z : Float
@@ -296,6 +306,7 @@ pub(all) struct Pillar {
 // Arena crate (ammo pickup)
 
 ///|
+/// Crate spawn state that can respawn and provide weapon-related resources.
 pub(all) struct Crate {
   mut active : Bool
   mut x : Float
@@ -305,6 +316,7 @@ pub(all) struct Crate {
 }
 
 ///|
+/// Creates an active crate instance at world position `(x, z)` with a crate kind id.
 pub fn Crate::new(x : Float, z : Float, kind : Int) -> Crate {
   { active: true, x, z, respawn_timer: 0.0, kind }
 }
@@ -312,6 +324,7 @@ pub fn Crate::new(x : Float, z : Float, kind : Int) -> Crate {
 // Low wall (half-cover)
 
 ///|
+/// Low half-cover wall geometry used for tactical line-of-sight breaks.
 pub(all) struct LowWall {
   x : Float
   z : Float
@@ -324,6 +337,7 @@ pub(all) struct LowWall {
 // Ramp structure
 
 ///|
+/// Raised ramp geometry providing vertical combat routes.
 pub(all) struct Ramp {
   x : Float
   z : Float
@@ -336,6 +350,7 @@ pub(all) struct Ramp {
 // Pickup (dropped by enemies or spawned)
 
 ///|
+/// Temporary pickup entity dropped in the arena.
 pub(all) struct Pickup {
   mut active : Bool
   mut kind : Int
@@ -347,6 +362,7 @@ pub(all) struct Pickup {
 }
 
 ///|
+/// Creates an inactive pickup slot for pooled pickup allocation.
 pub fn Pickup::inactive() -> Pickup {
   {
     active: false,
@@ -362,6 +378,7 @@ pub fn Pickup::inactive() -> Pickup {
 // Arena trap
 
 ///|
+/// Trap state for placeable arena hazards with cooldown/active windows.
 pub(all) struct ArenaTrap {
   mut active : Bool
   mut kind : Int
@@ -373,6 +390,7 @@ pub(all) struct ArenaTrap {
 }
 
 ///|
+/// Creates an inactive trap slot for pooled trap allocation.
 pub fn ArenaTrap::inactive() -> ArenaTrap {
   {
     active: false,
@@ -388,6 +406,7 @@ pub fn ArenaTrap::inactive() -> ArenaTrap {
 // Barricade
 
 ///|
+/// Placeable barricade state used to block and redirect enemies.
 pub(all) struct Barricade {
   mut active : Bool
   mut x : Float
@@ -397,6 +416,7 @@ pub(all) struct Barricade {
 }
 
 ///|
+/// Creates an inactive barricade slot with default max HP.
 pub fn Barricade::inactive() -> Barricade {
   { active: false, x: 0.0, z: 0.0, hp: 0.0, max_hp: barricade_max_hp }
 }
@@ -404,6 +424,7 @@ pub fn Barricade::inactive() -> Barricade {
 // Kill feed entry
 
 ///|
+/// One fading kill-feed line shown in the HUD.
 pub(all) struct KillFeedEntry {
   mut active : Bool
   mut text : String
@@ -414,6 +435,7 @@ pub(all) struct KillFeedEntry {
 }
 
 ///|
+/// Creates an inactive kill-feed entry.
 pub fn KillFeedEntry::inactive() -> KillFeedEntry {
   {
     active: false,
@@ -428,6 +450,7 @@ pub fn KillFeedEntry::inactive() -> KillFeedEntry {
 // Weapon state
 
 ///|
+/// Per-weapon reload status tracked independently from player stats.
 pub(all) struct WeaponState {
   mut reload_timer : Float
   mut reloading : Bool
@@ -435,6 +458,7 @@ pub(all) struct WeaponState {
 }
 
 ///|
+/// Creates default weapon reload state.
 pub fn WeaponState::new() -> WeaponState {
   { reload_timer: 0.0, reloading: false, reload_time: 0.0 }
 }
@@ -442,6 +466,7 @@ pub fn WeaponState::new() -> WeaponState {
 // Shop item
 
 ///|
+/// Shop catalog entry containing label, price, and effect kind id.
 pub(all) struct ShopItem {
   name : String
   cost : Int
@@ -451,6 +476,7 @@ pub(all) struct ShopItem {
 // Damage indicator direction
 
 ///|
+/// Directional damage indicator shown around the crosshair.
 pub(all) struct DamageIndicator {
   mut active : Bool
   mut angle : Float
@@ -458,6 +484,7 @@ pub(all) struct DamageIndicator {
 }
 
 ///|
+/// Creates an inactive damage indicator slot.
 pub fn DamageIndicator::inactive() -> DamageIndicator {
   { active: false, angle: 0.0, timer: 0.0 }
 }
@@ -465,6 +492,7 @@ pub fn DamageIndicator::inactive() -> DamageIndicator {
 // Main Game struct
 
 ///|
+/// Full shared game runtime state for simulation, rendering, and progression systems.
 pub(all) struct Game {
   mut state : GameState
 
@@ -543,6 +571,8 @@ pub(all) struct Game {
 }
 
 ///|
+/// Constructs a new match state with initialized arena layout, pooled entities,
+/// player defaults, and zeroed runtime statistics.
 pub fn Game::new() -> Game {
   // Create weapons array
   let weapons : Array[WeaponState] = []

@@ -856,6 +856,7 @@ fn update_title_scene(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advance one simulation step based on current game state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   // Handle input first based on current state
   if game.state == @types.state_title {
@@ -888,6 +889,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Initialize the game state to the animated title scene.
 pub fn init_game(game : @types.Game) -> Unit {
   init_title_scene(game)
 }

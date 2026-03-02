@@ -29,6 +29,7 @@ fn result_hover(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Handles title-screen input and starts a new run when confirmed.
 pub fn update_title_input(game : @types.Game) -> Unit {
   let key_start : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
@@ -44,6 +45,7 @@ pub fn update_title_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles result-screen retry input and restarts the run.
 pub fn update_result_input(game : @types.Game) -> Unit {
   let key_retry : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
@@ -60,6 +62,7 @@ pub fn update_result_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles in-run keyboard, mouse, and touch controls.
 pub fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
     game.state = Title

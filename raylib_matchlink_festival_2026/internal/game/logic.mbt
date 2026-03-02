@@ -776,6 +776,7 @@ fn next_level(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Advances one frame of input handling and state-specific game updates.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   // Read input state into game struct
   let mouse = @raylib.get_mouse_position()

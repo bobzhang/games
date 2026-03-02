@@ -1,4 +1,5 @@
 ///|
+/// Ghost actor state, including movement direction and scatter home.
 pub(all) struct Ghost {
   mut x : Int
   mut y : Int
@@ -12,6 +13,7 @@ pub(all) struct Ghost {
 }
 
 ///|
+/// Creates a ghost at spawn with its scatter target and color.
 pub fn Ghost::new(
   x : Int,
   y : Int,
@@ -33,6 +35,7 @@ pub fn Ghost::new(
 }
 
 ///|
+/// Complete runtime state for one Pac Dash session.
 pub(all) struct Game {
   walls : Array[Int]
   pellets : Array[Int]
@@ -56,6 +59,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Allocates a fresh game state with empty maze layers and default counters.
 pub fn Game::new() -> Game {
   {
     walls: Array::make(maze_cols * maze_rows, 0),

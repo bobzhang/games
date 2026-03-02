@@ -2,3 +2,5 @@ import {
   "tonyfettes/raylib",
   "tonyfettes/raylib-examples/raylib_tetris_meteor_fall_2026/internal/types",
 }
+
+warnings = "+missing_doc"

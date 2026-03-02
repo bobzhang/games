@@ -711,6 +711,7 @@ fn draw_retry_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Renders the full frame for the current game state.
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_background(game)
   draw_exits(game)

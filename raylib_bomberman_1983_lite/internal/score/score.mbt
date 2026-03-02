@@ -1,4 +1,4 @@
-///|
+/// Adds points to totals and updates high score.
 pub fn grant_score(
   game : @types.Game,
   team : @types.Team,
@@ -15,7 +15,7 @@ pub fn grant_score(
   }
 }
 
-///|
+/// Increments kill combo and refreshes combo timer.
 pub fn bump_combo(game : @types.Game) -> Unit {
   game.kill_combo += 1
   if game.kill_combo > 9 {
@@ -24,7 +24,7 @@ pub fn bump_combo(game : @types.Game) -> Unit {
   game.combo_timer = 2.1
 }
 
-///|
+/// Returns score multiplier derived from current combo.
 pub fn combo_multiplier(game : @types.Game) -> Int {
   if game.kill_combo <= 1 {
     1
@@ -37,7 +37,7 @@ pub fn combo_multiplier(game : @types.Game) -> Int {
   }
 }
 
-///|
+/// Updates combo timeout and clears expired combos.
 pub fn update_combo(game : @types.Game, dt : Float) -> Unit {
   if game.combo_timer > 0.0 {
     game.combo_timer -= dt

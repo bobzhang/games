@@ -114,6 +114,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws maze, actors, and HUD for the current Pac Dash frame.
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.begin_drawing()
   @raylib.clear_background(@raylib.Color::new(5, 5, 10, 255))

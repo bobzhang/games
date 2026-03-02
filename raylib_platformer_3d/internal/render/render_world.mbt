@@ -1,4 +1,4 @@
-///|
+/// Renders the full 3D scene, including world geometry, actors, effects, and player avatar.
 pub fn draw_world(game : @types.Game) -> Unit {
   let camera = @raylib.Camera3D::new(
     @raylib.Vector3::new(game.cam_x, game.cam_y, game.cam_z),

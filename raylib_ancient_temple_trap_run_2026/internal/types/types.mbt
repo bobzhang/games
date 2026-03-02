@@ -1,4 +1,5 @@
 ///|
+/// Main state machine for title, run, and outcomes.
 pub(all) enum GameState {
   Title
   Play
@@ -8,6 +9,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Collectible relic placed in a stage.
 pub(all) struct Relic {
   mut active : Bool
   x : Float
@@ -16,6 +18,7 @@ pub(all) struct Relic {
 }
 
 ///|
+/// Periodic trap hazard with hot/cool timing window.
 pub(all) struct Trap {
   x : Float
   y : Float
@@ -30,6 +33,7 @@ pub(all) struct Trap {
 }
 
 ///|
+/// Static hazard zone that fails the run on contact.
 pub(all) struct Hazard {
   x : Float
   y : Float
@@ -40,6 +44,7 @@ pub(all) struct Hazard {
 }
 
 ///|
+/// Pressure plate that controls one or more doors.
 pub(all) struct Plate {
   x : Float
   y : Float
@@ -49,6 +54,7 @@ pub(all) struct Plate {
 }
 
 ///|
+/// Door controlled by a plate timer.
 pub(all) struct Door {
   x : Float
   y : Float
@@ -61,6 +67,7 @@ pub(all) struct Door {
 }
 
 ///|
+/// Immutable stage blueprint for spawn and hazard layout.
 pub(all) struct StageLayout {
   start_x : Float
   start_y : Float
@@ -76,6 +83,7 @@ pub(all) struct StageLayout {
 }
 
 ///|
+/// Player position, bounds, and stamina state.
 pub(all) struct Player {
   mut x : Float
   mut y : Float
@@ -86,6 +94,7 @@ pub(all) struct Player {
 }
 
 ///|
+/// Mutable runtime state for the full game session.
 pub(all) struct Game {
   player : Player
   mut relics : Array[Relic]
@@ -123,6 +132,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Create a player at default spawn with full stamina.
 pub fn Player::new() -> Player {
   {
     x: world_x + 90.0,
@@ -135,6 +145,7 @@ pub fn Player::new() -> Player {
 }
 
 ///|
+/// Build a fresh game initialized to title state.
 pub fn Game::new() -> Game {
   {
     player: Player::new(),
@@ -174,11 +185,13 @@ pub fn Game::new() -> Game {
 }
 
 ///|
+/// Create an active relic at world position `(x, y)`.
 pub fn make_relic(x : Float, y : Float) -> Relic {
   { active: true, x, y, r: 13.0 }
 }
 
 ///|
+/// Create a timed trap hazard definition.
 pub fn make_trap(
   x : Float,
   y : Float,
@@ -194,6 +207,7 @@ pub fn make_trap(
 }
 
 ///|
+/// Create a static hazard rectangle.
 pub fn make_hazard(
   x : Float,
   y : Float,
@@ -206,11 +220,13 @@ pub fn make_hazard(
 }
 
 ///|
+/// Create a pressure plate with default unpressed state.
 pub fn make_plate(x : Float, y : Float, w : Float, h : Float) -> Plate {
   { x, y, w, h, pressed: false }
 }
 
 ///|
+/// Create a door controlled by `plate_index` and hold timer.
 pub fn make_door(
   x : Float,
   y : Float,

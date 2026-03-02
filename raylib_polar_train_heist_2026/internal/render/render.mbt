@@ -1499,7 +1499,7 @@ fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   draw_fx(game, cam_x, cam_y)
 }
 
-///|
+/// Renders the full frame for the current polar train heist state.
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(4, 10, 20, 255))
 

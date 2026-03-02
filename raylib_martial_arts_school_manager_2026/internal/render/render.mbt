@@ -591,6 +591,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Render world panels, HUD, and state overlays for the frame.
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_background(game)
   draw_hud(game)

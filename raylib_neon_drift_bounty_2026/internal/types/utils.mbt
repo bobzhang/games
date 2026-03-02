@@ -1,4 +1,5 @@
 ///|
+/// Clamps an integer value to the inclusive range `[lo, hi]`.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -10,6 +11,7 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Clamps a float value to the inclusive range `[lo, hi]`.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -21,6 +23,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two float values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -30,6 +33,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two float values.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -39,6 +43,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -48,42 +53,50 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Linearly interpolates between two floats using `t` in `[0, 1]`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t
 }
 
 ///|
+/// Returns the sine of an angle in radians.
 pub fn sinf(v : Float) -> Float {
   Float::from_double(@math.sin(v.to_double()))
 }
 
 ///|
+/// Returns the cosine of an angle in radians.
 pub fn cosf(v : Float) -> Float {
   Float::from_double(@math.cos(v.to_double()))
 }
 
 ///|
+/// Returns the square root of a non-negative float.
 pub fn sqrtf(v : Float) -> Float {
   v.sqrt()
 }
 
 ///|
+/// Returns a pseudo-random float sampled from `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let n = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * n
 }
 
 ///|
+/// Returns a pseudo-random integer sampled from `[lo, hi]`.
 pub fn randi(lo : Int, hi : Int) -> Int {
   @raylib.get_random_value(lo, hi)
 }
 
 ///|
+/// Returns a computed helper value for chance.
 pub fn chance(pct : Int) -> Bool {
   randi(0, 99) < pct
 }
 
 ///|
+/// Returns squared distance between two 2D points.
 pub fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx = x1 - x0
   let dy = y1 - y0
@@ -91,6 +104,7 @@ pub fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Applies a cubic ease-out curve to a normalized input value.
 pub fn ease_out_cubic(t : Float) -> Float {
   let x = clampf(t, 0.0, 1.0)
   Float::from_int(1) -
@@ -98,6 +112,7 @@ pub fn ease_out_cubic(t : Float) -> Float {
 }
 
 ///|
+/// Returns geometry information for road center at.
 pub fn road_center_at(depth : Float, time_s : Float) -> Float {
   let cx = Float::from_int(screen_w / 2)
   let sway0 = sinf(depth * 0.0024 + time_s * 0.72) * 146.0
@@ -106,6 +121,7 @@ pub fn road_center_at(depth : Float, time_s : Float) -> Float {
 }
 
 ///|
+/// Returns geometry information for road half width.
 pub fn road_half_width(stage : Int, depth : Float, time_s : Float) -> Float {
   let pulse = sinf(depth * 0.0037 + time_s * 0.95 + 0.7) * 62.0
   let shrink = Float::from_int(stage - 1) * 10.0
@@ -117,16 +133,19 @@ pub fn road_half_width(stage : Int, depth : Float, time_s : Float) -> Float {
 }
 
 ///|
+/// Returns derived layout data for lane to offset.
 pub fn lane_to_offset(lane : Int) -> Float {
   (Float::from_int(lane) - Float::from_int(lanes_count - 1) * 0.5) * lane_gap
 }
 
 ///|
+/// Returns world-space coordinates for lane x.
 pub fn lane_x(lane : Int, center : Float) -> Float {
   center + lane_to_offset(clampi(lane, 0, lanes_count - 1))
 }
 
 ///|
+/// Returns geometry information for road edges.
 pub fn road_edges(stage : Int, depth : Float, time_s : Float) -> (Float, Float) {
   let c = road_center_at(depth, time_s)
   let hw = road_half_width(stage, depth, time_s)
@@ -134,6 +153,7 @@ pub fn road_edges(stage : Int, depth : Float, time_s : Float) -> (Float, Float) 
 }
 
 ///|
+/// Returns world-space coordinates for road spawn x.
 pub fn road_spawn_x(
   game_depth : Float,
   game_time : Float,
@@ -149,46 +169,55 @@ pub fn road_spawn_x(
 }
 
 ///|
+/// Returns helper data for bg top.
 pub fn bg_top() -> @raylib.Color {
   @raylib.Color::new(8, 8, 24, 255)
 }
 
 ///|
+/// Returns helper data for bg bottom.
 pub fn bg_bottom() -> @raylib.Color {
   @raylib.Color::new(10, 24, 46, 255)
 }
 
 ///|
+/// Returns geometry information for road dark.
 pub fn road_dark() -> @raylib.Color {
   @raylib.Color::new(14, 20, 34, 255)
 }
 
 ///|
+/// Returns geometry information for road mid.
 pub fn road_mid() -> @raylib.Color {
   @raylib.Color::new(20, 30, 52, 255)
 }
 
 ///|
+/// Returns the predefined palette color neon yellow.
 pub fn neon_yellow() -> @raylib.Color {
   @raylib.Color::new(255, 222, 118, 255)
 }
 
 ///|
+/// Returns the configured UI or gameplay color for shield col.
 pub fn shield_col() -> @raylib.Color {
   @raylib.Color::new(255, 116, 152, 255)
 }
 
 ///|
+/// Returns the configured UI or gameplay color for energy col.
 pub fn energy_col() -> @raylib.Color {
   @raylib.Color::new(112, 244, 196, 255)
 }
 
 ///|
+/// Returns helper data for btn size.
 pub fn btn_size() -> Float {
   Float::from_int(104)
 }
 
 ///|
+/// Returns the touch or HUD hit area for btn left rect.
 pub fn btn_left_rect() -> (Float, Float, Float, Float) {
   let s = btn_size()
   (
@@ -200,6 +229,7 @@ pub fn btn_left_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns the touch or HUD hit area for btn right rect.
 pub fn btn_right_rect() -> (Float, Float, Float, Float) {
   let s = btn_size()
   (
@@ -211,6 +241,7 @@ pub fn btn_right_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns the touch or HUD hit area for btn up rect.
 pub fn btn_up_rect() -> (Float, Float, Float, Float) {
   let s = btn_size()
   (
@@ -222,6 +253,7 @@ pub fn btn_up_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns the touch or HUD hit area for btn down rect.
 pub fn btn_down_rect() -> (Float, Float, Float, Float) {
   let s = btn_size()
   (
@@ -233,6 +265,7 @@ pub fn btn_down_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns the touch or HUD hit area for btn fire rect.
 pub fn btn_fire_rect() -> (Float, Float, Float, Float) {
   let s = btn_size()
   (
@@ -244,6 +277,7 @@ pub fn btn_fire_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns the touch or HUD hit area for btn boost rect.
 pub fn btn_boost_rect() -> (Float, Float, Float, Float) {
   let s = btn_size()
   (
@@ -255,6 +289,7 @@ pub fn btn_boost_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns the touch or HUD hit area for btn hack rect.
 pub fn btn_hack_rect() -> (Float, Float, Float, Float) {
   let s = btn_size()
   (
@@ -266,6 +301,7 @@ pub fn btn_hack_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns the touch or HUD hit area for title start rect.
 pub fn title_start_rect() -> (Float, Float, Float, Float) {
   let w = Float::from_int(420)
   let h = Float::from_int(90)
@@ -278,6 +314,7 @@ pub fn title_start_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns the touch or HUD hit area for result retry rect.
 pub fn result_retry_rect() -> (Float, Float, Float, Float) {
   let w = Float::from_int(220)
   let h = Float::from_int(64)
@@ -290,6 +327,7 @@ pub fn result_retry_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+/// Returns whether entity is hostile is true for the current query.
 pub fn entity_is_hostile(kind : EntityKind) -> Bool {
   match kind {
     FoeBike | FoeDrone | FoeTruck | FoeLaser => true
@@ -298,6 +336,7 @@ pub fn entity_is_hostile(kind : EntityKind) -> Bool {
 }
 
 ///|
+/// Returns whether is pickup is true for the current query.
 pub fn is_pickup(kind : EntityKind) -> Bool {
   match kind {
     ItemCredit | ItemBattery | ItemHackcell => true
@@ -306,16 +345,19 @@ pub fn is_pickup(kind : EntityKind) -> Bool {
 }
 
 ///|
+/// Returns collision or positioning data for entity hit radius.
 pub fn entity_hit_radius(e : Entity) -> Float {
   maxf(e.w, e.h) * 0.38
 }
 
 ///|
+/// Returns collision or positioning data for player hit radius.
 pub fn player_hit_radius(hero : Player) -> Float {
   maxf(hero.w, hero.h) * 0.34
 }
 
 ///|
+/// Returns the rectangle used for point in rect.
 pub fn point_in_rect(
   x : Float,
   y : Float,
@@ -328,6 +370,7 @@ pub fn point_in_rect(
 }
 
 ///|
+/// Returns the rectangle used for pointer on rect.
 pub fn pointer_on_rect(
   mx : Float,
   my : Float,

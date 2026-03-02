@@ -1,4 +1,5 @@
 ///|
+/// Top-level game phase for the gomoku duel flow.
 pub(all) enum GameState {
   Title
   Play
@@ -6,6 +7,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Occupant of a board cell.
 pub(all) enum Player {
   Empty
   Human
@@ -13,6 +15,7 @@ pub(all) enum Player {
 } derive(Eq)
 
 ///|
+/// Direction used for cursor movement and hold-repeat input.
 pub(all) enum Dir {
   DirNone
   Left
@@ -22,6 +25,7 @@ pub(all) enum Dir {
 } derive(Eq)
 
 ///|
+/// Visual category for spark effects.
 pub(all) enum SparkKind {
   SparkAI
   SparkHuman
@@ -30,6 +34,7 @@ pub(all) enum SparkKind {
 } derive(Eq)
 
 ///|
+/// Runtime particle used for move, hint, and undo effects.
 pub(all) struct Spark {
   mut active : Bool
   mut x : Float
@@ -42,6 +47,7 @@ pub(all) struct Spark {
 }
 
 ///|
+/// Entire mutable state for one gomoku street duel.
 pub(all) struct Game {
   board : Array[Player]
   hist_x : Array[Int]
@@ -84,6 +90,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a fresh game state with empty board and history buffers.
 pub fn Game::new() -> Game {
   let sparks_arr : Array[Spark] = Array::makei(900, fn(_i) {
     {

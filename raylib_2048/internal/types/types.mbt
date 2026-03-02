@@ -1,4 +1,5 @@
 ///|
+/// High-level phase of a 2048 run.
 pub(all) enum GameState {
   Title
   Play
@@ -7,6 +8,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Mutable tile data used for value storage and render animation.
 pub(all) struct Tile {
   mut value : Int
   mut anim_x : Float
@@ -19,6 +21,7 @@ pub(all) struct Tile {
 }
 
 ///|
+/// Creates an empty tile with neutral animation state.
 pub fn Tile::empty() -> Tile {
   {
     value: 0,
@@ -33,6 +36,7 @@ pub fn Tile::empty() -> Tile {
 }
 
 ///|
+/// Entire runtime state for one 2048 session.
 pub(all) struct Game {
   tiles : Array[Tile]
   prev_values : Array[Int]
@@ -48,6 +52,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Allocates a fresh game state with cleared board and score counters.
 pub fn Game::new() -> Game {
   let g : Game = {
     tiles: Array::makei(cell_count, fn(_i) { Tile::empty() }),

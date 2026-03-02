@@ -1,23 +1,43 @@
-# Core Custom Frame Control
+# Custom Frame Control
 
-Demonstrates manual frame timing control without `set_target_fps`, using `poll_input_events`, `swap_screen_buffer`, and `wait_time` for precise frame pacing.
+This example demonstrates how to implement custom frame timing in raylib instead of relying on the built-in `set_target_fps`. A red circle moves across the screen at a constant 200 pixels per second, independent of the frame rate, which the user can adjust dynamically. The current and target FPS are displayed in real time.
 
 ## Build and Run
 
 ```bash
-cd examples && moon build --target native raylib_core_custom_frame_control/
-cd examples && ./_build/native/debug/build/raylib_core_custom_frame_control/raylib_core_custom_frame_control.exe
+moon build --target native raylib_core_custom_frame_control/
+./_build/native/debug/build/raylib_core_custom_frame_control/raylib_core_custom_frame_control.exe
 ```
 
 ## Controls
 
-- **Space**: Pause/unpause circle movement
-- **Up / Down**: Increase/decrease target FPS by 20
+- **Space** -- pause/resume circle movement
+- **Up arrow** -- increase target FPS by 20
+- **Down arrow** -- decrease target FPS by 20
 
-## Key Concepts
+## What It Demonstrates
 
-- Manual frame loop: `poll_input_events` -> update -> draw -> `swap_screen_buffer` -> `wait_time`.
-- Custom delta time calculation using `get_time`.
-- Frame-rate-independent movement (200 pixels/second regardless of FPS).
-- Adjustable target FPS at runtime with visual feedback of actual vs target FPS.
-- Demonstrates `SUPPORT_CUSTOM_FRAME_CONTROL` pattern.
+- `@raylib.poll_input_events()` for manual input polling when using custom frame control (SUPPORT_CUSTOM_FRAME_CONTROL)
+- `@raylib.swap_screen_buffer()` for manually flipping the back buffer to the screen
+- `@raylib.get_time()` for high-resolution time measurement to compute frame deltas
+- `@raylib.wait_time()` for sleeping the remaining frame budget to achieve a target frame rate
+- Frame-rate-independent movement using `delta_time` multiplication (200 pixels/sec regardless of FPS)
+- Manual frame timing loop: measure update+draw time, compute wait time, sleep, then record the actual delta
+
+## Public API Reference
+
+### Package `raylib_core_custom_frame_control`
+
+> Single-package example.
+
+No public API -- self-contained main function.
+
+## Architecture
+
+The program bypasses `set_target_fps` entirely and implements its own timing loop. Each iteration: (1) polls input events, (2) updates position using delta time, (3) draws the scene, (4) swaps the screen buffer, (5) measures how long the update+draw took, (6) sleeps for the remaining time to hit the target FPS, and (7) records the actual delta time for the next frame. Vertical grid lines are drawn every 200 pixels to visualize the circle's movement.
+
+## Key Takeaways
+
+- Raylib supports custom frame control via `poll_input_events`, `swap_screen_buffer`, and `wait_time`, giving full control over the rendering loop timing.
+- Multiplying movement speed by delta time ensures consistent behavior across any frame rate, which is the standard approach for frame-rate-independent game logic.
+- The pattern of measuring elapsed time, sleeping for the remainder, then measuring actual delta is fundamental to game engine timing.

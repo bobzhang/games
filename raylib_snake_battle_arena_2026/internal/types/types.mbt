@@ -1,4 +1,5 @@
 ///|
+/// Spark particle used for hits, food, and deaths.
 pub(all) struct Spark {
   mut active : Bool
   mut x : Float
@@ -11,6 +12,7 @@ pub(all) struct Spark {
 }
 
 ///|
+/// AI-controlled rival snake state and segment buffers.
 pub(all) struct Rival {
   mut alive : Bool
   mut len : Int
@@ -25,6 +27,7 @@ pub(all) struct Rival {
 }
 
 ///|
+/// Full mutable state for one snake battle match.
 pub(all) struct Game {
   p_seg_x : Array[Int]
   p_seg_y : Array[Int]
@@ -71,6 +74,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Create an inactive spark slot.
 pub fn Spark::new() -> Spark {
   {
     active: false,
@@ -85,6 +89,7 @@ pub fn Spark::new() -> Spark {
 }
 
 ///|
+/// Create a rival snake with initial direction and buffers.
 pub fn Rival::new(kind : Int) -> Rival {
   {
     alive: true,
@@ -109,6 +114,7 @@ pub fn Rival::new(kind : Int) -> Rival {
 }
 
 ///|
+/// Build a new run in title state with initialized pools.
 pub fn Game::new() -> Game {
   {
     p_seg_x: Array::make(max_segments, 0),

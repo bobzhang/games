@@ -4,3 +4,5 @@ import {
   "tonyfettes/raylib-examples/raylib_contra_1987_lite/internal/score",
   "tonyfettes/raylib-examples/raylib_contra_1987_lite/internal/types",
 }
+
+warnings = "+missing_doc"

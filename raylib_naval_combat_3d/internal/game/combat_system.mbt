@@ -356,7 +356,7 @@ fn check_cannonball_vs_fortress(game : @types.Game, cb_idx : Int) -> Unit {
 
 // Boarding combat system
 
-///|
+/// Updates ongoing boarding actions and resolves outcomes when the boarding timer completes.
 pub fn update_boarding(game : @types.Game, dt : Float) -> Unit {
   let ship = game.player
   if ship.boarding_target < 0 {

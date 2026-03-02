@@ -1,4 +1,4 @@
-///|
+/// Returns whether world coordinates are inside map bounds.
 pub fn point_in_world(x : Float, y : Float) -> Bool {
   x >= 0.0 &&
   y >= 0.0 &&
@@ -6,7 +6,7 @@ pub fn point_in_world(x : Float, y : Float) -> Bool {
   y < Float::from_int(@types.map_pixel_h)
 }
 
-///|
+/// Returns whether a tank at `x,y` collides with solid world tiles.
 pub fn tank_hits_world(game : @types.Game, x : Float, y : Float) -> Bool {
   let half = @types.tank_half - 1.0
   if x - half < 0.0 ||
@@ -32,7 +32,7 @@ pub fn tank_hits_world(game : @types.Game, x : Float, y : Float) -> Bool {
   false
 }
 
-///|
+/// Returns whether a tank at `x,y` overlaps any other active player.
 pub fn tank_hits_players(
   game : @types.Game,
   x : Float,
@@ -53,7 +53,7 @@ pub fn tank_hits_players(
   false
 }
 
-///|
+/// Returns whether a tank at `x,y` overlaps any active enemy.
 pub fn tank_hits_enemies(
   game : @types.Game,
   x : Float,

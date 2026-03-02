@@ -896,6 +896,7 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws one full frame including world, panel, controls, and overlays.
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_background(game)
 

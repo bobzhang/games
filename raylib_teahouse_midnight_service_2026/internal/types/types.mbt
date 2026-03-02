@@ -1,4 +1,4 @@
-///|
+/// Runtime record for an active or queued customer.
 pub(all) struct Customer {
   mut active : Bool
   mut tea_type : Int
@@ -14,7 +14,7 @@ pub(all) struct Customer {
   mut angry : Bool
 }
 
-///|
+/// Small particle used for feedback effects.
 pub(all) struct Spark {
   mut active : Bool
   mut x : Float
@@ -26,7 +26,7 @@ pub(all) struct Spark {
   mut kind : Int
 }
 
-///|
+/// Expanding ring effect for hits and dashes.
 pub(all) struct Ring {
   mut active : Bool
   mut x : Float
@@ -36,7 +36,7 @@ pub(all) struct Ring {
   mut kind : Int
 }
 
-///|
+/// Soft shadow decal rendered under moving elements.
 pub(all) struct Shadow {
   mut active : Bool
   mut x : Float
@@ -47,7 +47,7 @@ pub(all) struct Shadow {
   mut rot : Float
 }
 
-///|
+/// Mutable player state for movement and carried ingredients.
 pub(all) struct Player {
   mut x : Float
   mut y : Float
@@ -64,7 +64,7 @@ pub(all) struct Player {
   mut carry_leaf : Int
 }
 
-///|
+/// Global mutable game state for the teahouse loop.
 pub(all) struct Game {
   customers : Array[Customer]
   sparks : Array[Spark]
@@ -110,7 +110,7 @@ pub(all) struct Game {
   mut touch_count : Int
 }
 
-///|
+/// Creates an inactive customer record with default values.
 pub fn Customer::new() -> Customer {
   {
     active: false,
@@ -128,7 +128,7 @@ pub fn Customer::new() -> Customer {
   }
 }
 
-///|
+/// Creates an inactive spark effect record.
 pub fn Spark::new() -> Spark {
   {
     active: false,
@@ -142,17 +142,17 @@ pub fn Spark::new() -> Spark {
   }
 }
 
-///|
+/// Creates an inactive ring effect record.
 pub fn Ring::new() -> Ring {
   { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
 }
 
-///|
+/// Creates an inactive shadow effect record.
 pub fn Shadow::new() -> Shadow {
   { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, rot: 0.0 }
 }
 
-///|
+/// Creates a player at the starting position with empty hands.
 pub fn Player::new() -> Player {
   {
     x: 628.0,
@@ -171,7 +171,7 @@ pub fn Player::new() -> Player {
   }
 }
 
-///|
+/// Creates a new game state with preallocated pools and title defaults.
 pub fn Game::new() -> Game {
   {
     customers: Array::makei(max_customers, fn(_i) { Customer::new() }),
@@ -219,7 +219,7 @@ pub fn Game::new() -> Game {
   }
 }
 
-///|
+/// Resets all runtime systems and enters the title scene.
 pub fn init_title_scene(game : Game) -> Unit {
   clear_customers(game)
   clear_sparks(game)

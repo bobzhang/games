@@ -877,6 +877,7 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances one frame of mission logic, input, and state transitions.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   // Handle F11 toggle
   if @raylib.is_key_pressed(@raylib.KeyF11) {

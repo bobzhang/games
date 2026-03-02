@@ -1,21 +1,39 @@
-# raylib_shaders_multi_sample2d
+# Shaders - Multiple Sample2D
 
-Demonstrates using multiple `sampler2D` texture units in a single fragment shader. A red texture and a blue texture are blended together with an adjustable divider parameter.
+This example demonstrates how to use multiple `sampler2D` texture units in a single fragment shader to blend two textures together. It creates a red and a blue texture, then uses a custom shader to mix them based on a controllable divider value. When you run it, you see a screen that transitions from red to blue (or vice versa) as you press the arrow keys.
 
 ## Build and Run
 
 ```bash
-cd examples && moon build --target native raylib_shaders_multi_sample2d/
-cd examples && ./_build/native/debug/build/raylib_shaders_multi_sample2d/raylib_shaders_multi_sample2d.exe
+moon build --target native raylib_shaders_multi_sample2d/
+./_build/native/debug/build/raylib_shaders_multi_sample2d/raylib_shaders_multi_sample2d.exe
 ```
 
 ## Controls
 
-- **Left/Right arrows**: Adjust the mix ratio between the two textures (0.0 to 1.0)
+- **Left/Right arrow keys**: Adjust the texture mixing divider (0.0 = fully texture0, 1.0 = fully texture1)
 
-## Key Concepts
+## What It Demonstrates
 
-- Binding a second texture to a shader via `set_shader_value_texture`
-- Using `get_shader_location` to obtain a `sampler2D` uniform location for an additional texture unit
-- Controlling texture blending with a `divider` float uniform
-- Generating solid-color textures programmatically with `gen_image_color` and `load_texture_from_image`
+- **Multiple sampler2D textures in a shader**: Uses `set_shader_value_texture` to bind a second texture (`texture1`) to the shader alongside the default `texture0`, enabling multi-texture blending in the fragment shader.
+- **Shader uniform for mix control**: Uses `get_shader_location` to find the `divider` uniform and `set_shader_value` with `ShaderUniformFloat` to control the blend ratio each frame.
+- **Procedural texture generation**: Creates solid-color textures at runtime using `gen_image_color` and `load_texture_from_image`, then frees the CPU-side image data with `unload_image`.
+- **Float-to-bytes serialization**: Implements `float_to_bytes` using `reinterpret_as_int` for bit-level conversion to little-endian bytes, required by the raylib shader uniform API.
+
+## Public API Reference
+
+### Package `raylib_shaders_multi_sample2d`
+
+> Single-package example.
+
+No public API -- self-contained main function.
+
+## Architecture
+
+The program creates two full-screen textures (red and blue) from generated images. It loads a `color_mix.fs` fragment shader and locates two uniforms: `texture1` (the second sampler) and `divider` (the blend ratio). Each frame, arrow key input adjusts the divider value (clamped to 0.0-1.0), which is sent to the shader. The red texture is drawn as the primary texture (`texture0`), while the blue texture is bound to the `texture1` sampler via `set_shader_value_texture`. The fragment shader mixes both based on the divider. On exit, the shader and both textures are unloaded.
+
+## Key Takeaways
+
+- Raylib supports multiple texture units in shaders via `set_shader_value_texture`, which binds additional textures beyond the default `texture0`.
+- The divider/mix pattern is a common technique for shader-based transitions, crossfades, and texture blending effects.
+- Procedural texture creation with `gen_image_color` and `load_texture_from_image` is useful for testing shader behavior without external assets.

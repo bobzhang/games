@@ -1,4 +1,5 @@
 ///|
+/// Return the smaller of two float values.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -8,6 +9,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Return the larger of two float values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -17,6 +19,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Clamp a float to the inclusive range `[lo, hi]`.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -28,6 +31,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Return the absolute value of a float.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -37,11 +41,13 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Return the square of a float.
 pub fn sq(v : Float) -> Float {
   v * v
 }
 
 ///|
+/// Check whether two axis-aligned rectangles overlap.
 pub fn rects_overlap(
   ax : Float,
   ay : Float,
@@ -56,6 +62,7 @@ pub fn rects_overlap(
 }
 
 ///|
+/// Check whether a point lies inside an integer rectangle.
 pub fn inside_rect(
   px : Float,
   py : Float,
@@ -71,6 +78,7 @@ pub fn inside_rect(
 }
 
 ///|
+/// Return true when pointer/touch is pressing inside a rectangle.
 pub fn pointer_on_rect(
   mouse_x : Float,
   mouse_y : Float,
@@ -96,6 +104,7 @@ pub fn pointer_on_rect(
 }
 
 ///|
+/// Return true when the mouse press occurred inside a rectangle.
 pub fn mouse_click_on_rect(
   mouse_x : Float,
   mouse_y : Float,
@@ -109,6 +118,7 @@ pub fn mouse_click_on_rect(
 }
 
 ///|
+/// Compute player rectangle at a candidate center position.
 pub fn player_rect_at(
   game : Game,
   px : Float,
@@ -123,6 +133,7 @@ pub fn player_rect_at(
 }
 
 ///|
+/// Check whether player collider overlaps a rectangle.
 pub fn player_hits_rect(
   game : Game,
   x : Float,
@@ -135,6 +146,7 @@ pub fn player_hits_rect(
 }
 
 ///|
+/// Return true while a trap is inside its hot window.
 pub fn trap_is_hot(trap : Trap) -> Bool {
   let mut t : Float = trap.timer + trap.phase
   while t >= trap.cycle {
@@ -144,11 +156,13 @@ pub fn trap_is_hot(trap : Trap) -> Bool {
 }
 
 ///|
+/// Return true when required relics for exit are collected.
 pub fn exit_unlocked(game : Game) -> Bool {
   game.collected_relics >= game.required_relics
 }
 
 ///|
+/// Display name for stage index.
 pub fn stage_name(index : Int) -> String {
   match index {
     0 => "Sunken Antechamber"
@@ -158,6 +172,7 @@ pub fn stage_name(index : Int) -> String {
 }
 
 ///|
+/// Set banner text and its remaining display duration.
 pub fn set_banner(game : Game, text : String, ttl : Float) -> Unit {
   game.banner_text = text
   game.banner_t = ttl

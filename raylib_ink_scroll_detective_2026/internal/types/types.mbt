@@ -1,4 +1,5 @@
 ///|
+/// One clue marker placed in the city grid.
 pub(all) struct Clue {
   x : Int
   y : Int
@@ -9,6 +10,7 @@ pub(all) struct Clue {
 }
 
 ///|
+/// Suspect profile and deduction progress state.
 pub(all) struct Suspect {
   name : String
   home_x : Int
@@ -18,6 +20,7 @@ pub(all) struct Suspect {
 }
 
 ///|
+/// Active incident state that can be resolved by the player.
 pub(all) struct Incident {
   mut active : Bool
   mut x : Int
@@ -29,12 +32,14 @@ pub(all) struct Incident {
 }
 
 ///|
+/// Ambient district heat value used for visual pulse effects.
 pub(all) struct DistrictPulse {
   mut heat : Float
   drift : Float
 }
 
 ///|
+/// High-level flow state for the detective game.
 pub(all) enum GameState {
   Title
   Playing
@@ -43,6 +48,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Complete runtime state for one detective case session.
 pub(all) struct Game {
   clues : Array[Clue]
   suspects : Array[Suspect]
@@ -129,6 +135,7 @@ fn is_reserved_cell(cell_x : Int, cell_y : Int) -> Bool {
 }
 
 ///|
+/// Creates a clue at a deterministic grid position for `index`.
 pub fn Clue::new(index : Int) -> Clue {
   let suspect = index % suspect_count
   let chain = index / suspect_count % chains_per_suspect
@@ -148,6 +155,7 @@ pub fn Clue::new(index : Int) -> Clue {
 }
 
 ///|
+/// Creates a suspect profile from a suspect index.
 pub fn Suspect::new(index : Int) -> Suspect {
   {
     name: suspect_name(index),
@@ -159,6 +167,7 @@ pub fn Suspect::new(index : Int) -> Suspect {
 }
 
 ///|
+/// Creates an inactive incident with default values.
 pub fn Incident::new() -> Incident {
   {
     active: false,
@@ -172,12 +181,14 @@ pub fn Incident::new() -> Incident {
 }
 
 ///|
+/// Creates a district pulse state seeded by district index.
 pub fn DistrictPulse::new(index : Int) -> DistrictPulse {
   let drift_seed = Float::from_int((index * 71 + 17) % 1000) / 1000.0
   { heat: 0.0, drift: drift_seed * tau }
 }
 
 ///|
+/// Creates a new case state with clues, suspects, and timers initialized.
 pub fn Game::new() -> Game {
   {
     clues: Array::makei(clue_count, fn(i) { Clue::new(i) }),

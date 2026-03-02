@@ -1,4 +1,5 @@
 ///|
+/// Advances one frame of Xiao Xiao Le gameplay, input, and state transitions.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   handle_input(game)
   update_game_logic(game, dt)

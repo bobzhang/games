@@ -957,6 +957,7 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the full frame for the current haunted library game state.
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_background(game)
 
