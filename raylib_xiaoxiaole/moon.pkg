@@ -5,7 +5,7 @@ import {
   "tonyfettes/raylib-examples/raylib_xiaoxiaole/internal/render",
 }
 
-warnings = "+missing_doc"
+warnings = "+missing_doc+unnecessary_annotation"
 
 options(
   "is-main": true,
