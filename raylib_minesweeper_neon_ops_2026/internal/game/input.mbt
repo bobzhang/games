@@ -81,8 +81,8 @@ fn board_hover_cell(
 /// Performs the current action mode (reveal or flag) on the cell at (`x`, `y`).
 fn do_action_on_cell(game : @types.Game, x : Int, y : Int) -> Bool {
   match game.mode {
-    @types.Reveal => reveal_cell(game, x, y)
-    @types.Flag => toggle_flag(game, x, y)
+    Reveal => reveal_cell(game, x, y)
+    Flag => toggle_flag(game, x, y)
   }
 }
 
@@ -115,14 +115,14 @@ fn handle_keyboard(game : @types.Game) -> Unit {
 
   if @raylib.is_key_pressed(@raylib.KeyM) {
     game.mode = match game.mode {
-      @types.Reveal => @types.Flag
-      @types.Flag => @types.Reveal
+      Reveal => Flag
+      Flag => Reveal
     }
     @types.set_msg(
       game,
       match game.mode {
-        @types.Reveal => "Reveal mode"
-        @types.Flag => "Flag mode"
+        Reveal => "Reveal mode"
+        Flag => "Flag mode"
       },
       0.8,
     )
@@ -157,14 +157,14 @@ fn handle_touch_buttons(game : @types.Game) -> Bool {
   if game.touch_cd <= 0.0 &&
     @types.pointer_on_rect(mx, my, hold, touch_count, mx0, my0, mw0, mh0) {
     game.mode = match game.mode {
-      @types.Reveal => @types.Flag
-      @types.Flag => @types.Reveal
+      Reveal => Flag
+      Flag => Reveal
     }
     @types.set_msg(
       game,
       match game.mode {
-        @types.Reveal => "Reveal mode"
-        @types.Flag => "Flag mode"
+        Reveal => "Reveal mode"
+        Flag => "Flag mode"
       },
       0.8,
     )
@@ -203,7 +203,7 @@ fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
   let my = game.mouse_y
 
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.Title
+    game.state = Title
     return
   }
 
@@ -247,12 +247,12 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     game.touch_count > 0
 
   match game.state {
-    @types.Title => update_title_input(game)
-    @types.Play => {
+    Title => update_title_input(game)
+    Play => {
       update_play_input(game, dt)
       update_play(game, dt)
     }
-    @types.Result => {
+    Result => {
       update_result_input(game)
       update_play(game, dt)
     }

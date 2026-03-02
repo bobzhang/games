@@ -169,8 +169,8 @@ fn start_match(game : @types.Game) -> Unit {
   clear_board(game)
   clear_effects(game)
 
-  game.state = @types.Play
-  game.mode = @types.Reveal
+  game.state = Play
+  game.mode = Reveal
   game.first_move = true
   game.frame_seed = game.frame_seed + 1
 
@@ -194,7 +194,7 @@ fn start_match(game : @types.Game) -> Unit {
   game.combo_t = 0.0
   game.shake_t = 0.0
 
-  game.grade = @types.GradeD
+  game.grade = GradeD
   game.win = false
   game.touch_cd = 0.0
 
@@ -283,7 +283,7 @@ fn reveal_single(game : @types.Game, x : Int, y : Int) -> Bool {
         game.lives,
       )
       reveal_all_mines(game)
-      game.state = @types.Result
+      game.state = Result
       @types.set_msg(game, "Mission failed.", 2.0)
     }
 
@@ -328,7 +328,7 @@ fn flood_reveal(game : @types.Game, sx : Int, sy : Int) -> Unit {
       continue
     }
 
-    if game.state != @types.Play {
+    if game.state != Play {
       return
     }
 
@@ -363,7 +363,7 @@ fn flood_reveal(game : @types.Game, sx : Int, sy : Int) -> Unit {
 fn check_clear(game : @types.Game) -> Bool {
   if game.revealed_safe >= @types.safe_cells_total(game) {
     game.win = true
-    game.state = @types.Result
+    game.state = Result
 
     // Bonus for remaining resources.
     game.score = game.score + game.lives * 180 + game.hints * 120
@@ -388,7 +388,7 @@ fn check_clear(game : @types.Game) -> Bool {
 ///|
 /// Attempts to reveal cell (`x`, `y`): places mines on first move, flood-reveals if around == 0, and checks for board clear.
 fn reveal_cell(game : @types.Game, x : Int, y : Int) -> Bool {
-  if game.state != @types.Play {
+  if game.state != Play {
     return false
   }
 
@@ -417,7 +417,7 @@ fn reveal_cell(game : @types.Game, x : Int, y : Int) -> Bool {
     ignore(reveal_single(game, x, y))
   }
 
-  if game.state == @types.Play {
+  if game.state == Play {
     ignore(check_clear(game))
   }
 
@@ -427,7 +427,7 @@ fn reveal_cell(game : @types.Game, x : Int, y : Int) -> Bool {
 ///|
 /// Toggles the flag on the unrevealed cell at (`x`, `y`), enforcing the mine count budget.
 fn toggle_flag(game : @types.Game, x : Int, y : Int) -> Bool {
-  if game.state != @types.Play {
+  if game.state != Play {
     return false
   }
   if not(@types.in_board(x, y)) {
@@ -497,7 +497,7 @@ fn safe_hint_target(game : @types.Game) -> (Bool, Int, Int) {
 ///|
 /// Spends one hint to reveal a guaranteed safe cell, moving the cursor to it and deducting 60 points.
 fn use_hint(game : @types.Game) -> Bool {
-  if game.state != @types.Play {
+  if game.state != Play {
     return false
   }
 

@@ -222,8 +222,7 @@ fn draw_cells(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
       let px : Int = bx + x * tile
       let py : Int = by + y * tile
 
-      if game.cells[i].revealed ||
-        (game.state == @types.Result && game.cells[i].mine) {
+      if game.cells[i].revealed || (game.state == Result && game.cells[i].mine) {
         draw_cell_revealed(
           px,
           py,
@@ -266,7 +265,7 @@ fn draw_last_reveal(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit 
 ///|
 /// Draws the keyboard navigation cursor outline on the current cursor cell during Play state; colour reflects the active mode.
 fn draw_cursor(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
-  if game.state != @types.Play {
+  if game.state != Play {
     return
   }
 
@@ -282,8 +281,8 @@ fn draw_cursor(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
     ),
     2.0,
     match game.mode {
-      @types.Reveal => @raylib.Color::new(254, 254, 254, 250)
-      @types.Flag => @raylib.Color::new(255, 202, 132, 250)
+      Reveal => @raylib.Color::new(254, 254, 254, 250)
+      Flag => @raylib.Color::new(255, 202, 132, 250)
     },
   )
 }
@@ -395,7 +394,7 @@ fn draw_touch_button(
 ///|
 /// Draws the on-screen mode, hint, reset, and reveal/flag action buttons during Play state.
 fn draw_touch_ui(game : @types.Game) -> Unit {
-  if game.state != @types.Play {
+  if game.state != Play {
     return
   }
 
@@ -423,8 +422,8 @@ fn draw_touch_ui(game : @types.Game) -> Unit {
 
   draw_touch_button(
     match game.mode {
-      @types.Reveal => "MODE: REVEAL"
-      @types.Flag => "MODE: FLAG"
+      Reveal => "MODE: REVEAL"
+      Flag => "MODE: FLAG"
     },
     mx0,
     my0,
@@ -453,8 +452,8 @@ fn draw_touch_ui(game : @types.Game) -> Unit {
   )
   draw_touch_button(
     match game.mode {
-      @types.Reveal => "REVEAL CELL"
-      @types.Flag => "TOGGLE FLAG"
+      Reveal => "REVEAL CELL"
+      Flag => "TOGGLE FLAG"
     },
     ax0,
     ay0,
@@ -567,8 +566,8 @@ fn draw_panel(game : @types.Game) -> Unit {
   )
 
   let mode_name : String = match game.mode {
-    @types.Reveal => "Reveal"
-    @types.Flag => "Flag"
+    Reveal => "Reveal"
+    Flag => "Flag"
   }
 
   @raylib.draw_text(
@@ -821,7 +820,7 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_bg(game)
 
-  if game.state == @types.Title {
+  if game.state == Title {
     draw_title(game)
     return
   }
@@ -836,7 +835,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   draw_panel(game)
   draw_touch_ui(game)
 
-  if game.state == @types.Result {
+  if game.state == Result {
     draw_result_overlay(game)
   }
 }
