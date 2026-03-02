@@ -1,5 +1,6 @@
 // Enemy entity
 
+///|
 /// Runtime enemy entity used by AI, combat, and rendering systems.
 pub(all) struct Enemy {
   mut active : Bool
@@ -25,6 +26,7 @@ pub(all) struct Enemy {
   mut facing_angle : Float
 }
 
+///|
 /// Creates an inactive enemy slot with safe default stats.
 pub fn Enemy::inactive() -> Enemy {
   {
@@ -54,6 +56,7 @@ pub fn Enemy::inactive() -> Enemy {
 
 // Projectile (from archers, spells, traps)
 
+///|
 /// Runtime projectile entity for enemy attacks and player spells.
 pub(all) struct Projectile {
   mut active : Bool
@@ -69,6 +72,7 @@ pub(all) struct Projectile {
   mut slow_on_hit : Bool
 }
 
+///|
 /// Creates an inactive projectile slot with zero motion and no effects.
 pub fn Projectile::inactive() -> Projectile {
   {
@@ -88,6 +92,7 @@ pub fn Projectile::inactive() -> Projectile {
 
 // Particle effect
 
+///|
 /// Runtime particle entity used for hit, spell, and environment VFX.
 pub(all) struct Particle {
   mut active : Bool
@@ -105,6 +110,7 @@ pub(all) struct Particle {
   mut size : Float
 }
 
+///|
 /// Creates an inactive particle slot with neutral white defaults.
 pub fn Particle::inactive() -> Particle {
   {
@@ -126,6 +132,7 @@ pub fn Particle::inactive() -> Particle {
 
 // Loot item on ground
 
+///|
 /// Ground loot entity with pickup metadata and bobbing animation state.
 pub(all) struct Loot {
   mut active : Bool
@@ -137,6 +144,7 @@ pub(all) struct Loot {
   mut value : Int
 }
 
+///|
 /// Creates an inactive loot slot with common-rarity defaults.
 pub fn Loot::inactive() -> Loot {
   {
@@ -152,6 +160,7 @@ pub fn Loot::inactive() -> Loot {
 
 // Inventory item
 
+///|
 /// Inventory entry containing item identity, rarity, and stat bonuses.
 pub(all) struct InvItem {
   mut kind : Int
@@ -161,6 +170,7 @@ pub(all) struct InvItem {
   mut name_idx : Int
 }
 
+///|
 /// Creates an empty inventory slot.
 pub fn InvItem::empty() -> InvItem {
   { kind: 0, active: false, rarity: rarity_common, stat_bonus: 0, name_idx: 0 }
@@ -168,6 +178,7 @@ pub fn InvItem::empty() -> InvItem {
 
 // Trap entity
 
+///|
 /// Trap entity placed on the dungeon grid with arming and trigger state.
 pub(all) struct Trap {
   mut active : Bool
@@ -180,6 +191,7 @@ pub(all) struct Trap {
   mut visible : Bool
 }
 
+///|
 /// Creates an inactive trap slot initialized as an armed spike trap.
 pub fn Trap::inactive() -> Trap {
   {
@@ -196,6 +208,7 @@ pub fn Trap::inactive() -> Trap {
 
 // Torch for lighting
 
+///|
 /// Torch entity used to drive dungeon lighting and flicker effects.
 pub(all) struct Torch {
   mut active : Bool
@@ -204,6 +217,7 @@ pub(all) struct Torch {
   mut flicker_phase : Float
 }
 
+///|
 /// Creates an inactive torch slot.
 pub fn Torch::inactive() -> Torch {
   { active: false, gx: 0, gz: 0, flicker_phase: 0.0 }
@@ -211,6 +225,7 @@ pub fn Torch::inactive() -> Torch {
 
 // Message log entry
 
+///|
 /// One timed UI message entry with text and RGB color.
 pub(all) struct MessageEntry {
   mut text : String
@@ -220,6 +235,7 @@ pub(all) struct MessageEntry {
   mut b : Int
 }
 
+///|
 /// Creates an empty message entry with neutral text color.
 pub fn MessageEntry::empty() -> MessageEntry {
   { text: "", timer: 0.0, r: 200, g: 200, b: 200 }
@@ -227,6 +243,7 @@ pub fn MessageEntry::empty() -> MessageEntry {
 
 // Shop item
 
+///|
 /// Shop entry containing item type, price, and bonus metadata.
 pub(all) struct ShopItem {
   mut active : Bool
@@ -236,6 +253,7 @@ pub(all) struct ShopItem {
   mut stat_bonus : Int
 }
 
+///|
 /// Creates an empty shop item slot.
 pub fn ShopItem::empty() -> ShopItem {
   { active: false, kind: 0, price: 0, name_idx: 0, stat_bonus: 0 }
@@ -243,6 +261,7 @@ pub fn ShopItem::empty() -> ShopItem {
 
 // Room for BSP dungeon generation
 
+///|
 /// Axis-aligned dungeon room rectangle used during generation and exploration.
 pub(all) struct Room {
   mut x : Int
@@ -254,16 +273,19 @@ pub(all) struct Room {
   mut enemies_cleared : Bool
 }
 
+///|
 /// Constructs a room with bounds and default room-state flags.
 pub fn Room::new(x : Int, y : Int, w : Int, h : Int) -> Room {
   { x, y, w, h, kind: 0, explored: false, enemies_cleared: false }
 }
 
+///|
 /// Returns the room center X coordinate in grid space.
 pub fn Room::center_x(self : Room) -> Int {
   self.x + self.w / 2
 }
 
+///|
 /// Returns the room center Y coordinate in grid space.
 pub fn Room::center_y(self : Room) -> Int {
   self.y + self.h / 2
@@ -271,23 +293,29 @@ pub fn Room::center_y(self : Room) -> Int {
 
 // Room types
 
+///|
 /// Room kind id for standard combat/exploration rooms.
 pub let room_normal : Int = 0
 
+///|
 /// Room kind id for treasure-focused rooms.
 pub let room_treasure : Int = 1
 
+///|
 /// Room kind id for boss encounter rooms.
 pub let room_boss : Int = 2
 
+///|
 /// Room kind id for merchant/shop rooms.
 pub let room_shop : Int = 3
 
+///|
 /// Room kind id for shrine/boon rooms.
 pub let room_shrine : Int = 4
 
 // Floor info
 
+///|
 /// Per-floor progress summary stored across dungeon runs.
 pub(all) struct FloorInfo {
   mut cleared : Bool
@@ -295,6 +323,7 @@ pub(all) struct FloorInfo {
   mut enemies_total : Int
 }
 
+///|
 /// Creates an uncleared floor info record.
 pub fn FloorInfo::new() -> FloorInfo {
   { cleared: false, enemies_killed: 0, enemies_total: 0 }
@@ -302,12 +331,14 @@ pub fn FloorInfo::new() -> FloorInfo {
 
 // Player spell slot
 
+///|
 /// Spell slot in the player's loadout bar.
 pub(all) struct SpellSlot {
   mut spell_type : Int
   mut active : Bool
 }
 
+///|
 /// Creates an inactive spell slot.
 pub fn SpellSlot::empty() -> SpellSlot {
   { spell_type: spell_none, active: false }
@@ -315,6 +346,7 @@ pub fn SpellSlot::empty() -> SpellSlot {
 
 // Active buff on player
 
+///|
 /// Active timed buff with effect kind, value, and remaining duration.
 pub(all) struct Buff {
   mut kind : Int
@@ -323,6 +355,7 @@ pub(all) struct Buff {
   mut active : Bool
 }
 
+///|
 /// Creates an inactive buff entry.
 pub fn Buff::inactive() -> Buff {
   { kind: 0, timer: 0.0, value: 0, active: false }
@@ -330,23 +363,29 @@ pub fn Buff::inactive() -> Buff {
 
 // Buff kinds
 
+///|
 /// Buff kind id for movement speed effects.
 pub let buff_speed : Int = 0
 
+///|
 /// Buff kind id for attack-strength effects.
 pub let buff_strength : Int = 1
 
+///|
 /// Buff kind id for defensive shield effects.
 pub let buff_shield : Int = 2
 
+///|
 /// Buff kind id for poison damage-over-time effects.
 pub let buff_poison : Int = 3
 
+///|
 /// Maximum number of simultaneously tracked buffs.
 pub let max_buffs : Int = 4
 
 // Main Game struct
 
+///|
 /// Aggregated mutable game state for player stats, dungeon data, and UI flow.
 pub(all) struct Game {
   // State
@@ -472,6 +511,7 @@ pub(all) struct Game {
   mut frame_counter : Int
 }
 
+///|
 /// Constructs a fresh game state with initialized pools and class-select defaults.
 pub fn Game::new() -> Game {
   let floor_info : Array[FloorInfo] = []

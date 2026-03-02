@@ -1,5 +1,6 @@
 // 2D UI overlay rendering
 
+///|
 /// Draws the 2D HUD and state overlays, including transient damage and message effects.
 pub fn draw_ui(game : @types.Game) -> Unit {
   if game.state == @types.state_menu {

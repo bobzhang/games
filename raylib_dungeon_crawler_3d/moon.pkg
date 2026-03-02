@@ -5,8 +5,8 @@ import {
   "tonyfettes/raylib-examples/raylib_dungeon_crawler_3d/internal/types",
 }
 
+warnings = "+missing_doc+unnecessary_annotation"
+
 options(
   "is-main": true,
 )
-
-warnings = "+missing_doc+unnecessary_annotation"

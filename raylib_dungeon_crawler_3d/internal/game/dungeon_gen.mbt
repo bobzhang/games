@@ -1,5 +1,6 @@
 // BSP-style dungeon generation
 
+///|
 /// Generates a fresh dungeon floor: rooms, corridors, entities, and floor objectives.
 pub fn generate_dungeon(game : @types.Game) -> Unit {
   // Clear all tiles to wall
