@@ -996,7 +996,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
     _ => {
       draw_world(game)
       draw_hud(game)
-      if game.state is @types.Play && game.touch_mode {
+      if game.state is Play && game.touch_mode {
         draw_touch_controls(game)
       }
       draw_banner(game)

@@ -212,7 +212,7 @@ fn apply_layout(
   game.player.y = layout.start_y
   game.player.stamina = @types.stamina_max
   game.player.dash_on = false
-  game.state = @types.Play
+  game.state = Play
   @types.set_banner(game, "Relics power the exit seal", 2.2)
 }
 
@@ -248,7 +248,7 @@ fn retry_stage(game : @types.Game) -> Unit {
 fn start_next_stage(game : @types.Game) -> Unit {
   let next_index = game.stage_index + 1
   if next_index >= game.stage_count {
-    game.state = @types.Victory
+    game.state = Victory
     @types.set_banner(game, "Temple mastered", 2.6)
   } else {
     load_stage(game, next_index)
@@ -258,7 +258,7 @@ fn start_next_stage(game : @types.Game) -> Unit {
 ///|
 /// Reset state variables to the title-screen scene.
 pub fn init_title_scene(game : @types.Game) -> Unit {
-  game.state = @types.Title
+  game.state = Title
   game.stage_index = 0
   game.required_relics = 0
   game.collected_relics = 0
@@ -430,11 +430,11 @@ fn collect_relics(game : @types.Game) -> Unit {
 ///|
 /// Transitions the game to the Failed state with the given `reason` string and shows a failure banner; does nothing if the game is not currently in the Play state.
 fn fail_stage(game : @types.Game, reason : String) -> Unit {
-  if not(game.state is @types.Play) {
+  if not(game.state is Play) {
     return
   }
 
-  game.state = @types.Failed
+  game.state = Failed
   game.fail_reason = reason
   game.player.dash_on = false
   @types.set_banner(game, "Run failed", 1.3)
@@ -490,10 +490,10 @@ fn reach_exit(game : @types.Game) -> Unit {
   }
 
   if game.stage_index + 1 < game.stage_count {
-    game.state = @types.StageClear
+    game.state = StageClear
     @types.set_banner(game, "Chamber cleared", 1.6)
   } else {
-    game.state = @types.Victory
+    game.state = Victory
     @types.set_banner(game, "Temple mastered", 2.6)
   }
 }
