@@ -273,7 +273,7 @@ fn @types.Game::has_moves(game : @types.Game) -> Bool {
 ///    `anim_slide_speed * dt` (clamped to 0..1). Snaps when within 0.5 px.
 ///
 /// 2. **Scale pop** — `scale` lerps toward 1.0 at rate `anim_pop_speed * dt`.
-///    Snaps and clears `is_new`/`is_merged` when within 0.02 of 1.0.
+///    Snaps and clears `is_new`/`is_merged` when `(scale - 1.0).abs() < 0.02`.
 ///
 /// **Mutated state per tile:**
 /// - `tile.anim_x`, `tile.anim_y` — lerped toward `target_x/y` (slide)
@@ -292,7 +292,7 @@ fn @types.Game::update_animations(game : @types.Game, dt : Float) -> Unit {
     let tile = game.tiles[i]
     let dx = tile.target_x - tile.anim_x
     let dy = tile.target_y - tile.anim_y
-    if @types.absf(dx) > 0.5 || @types.absf(dy) > 0.5 {
+    if dx.abs() > 0.5 || dy.abs() > 0.5 {
       tile.anim_x = @types.lerpf(
         tile.anim_x,
         tile.target_x,
@@ -314,7 +314,7 @@ fn @types.Game::update_animations(game : @types.Game, dt : Float) -> Unit {
         1.0,
         @types.clampf(@types.anim_pop_speed * dt, 0.0, 1.0),
       )
-      if @types.absf(tile.scale - 1.0) < 0.02 {
+      if (tile.scale - 1.0).abs() < 0.02 {
         tile.scale = 1.0
         tile.is_new = false
       } else {
@@ -327,7 +327,7 @@ fn @types.Game::update_animations(game : @types.Game, dt : Float) -> Unit {
         1.0,
         @types.clampf(@types.anim_pop_speed * dt, 0.0, 1.0),
       )
-      if @types.absf(tile.scale - 1.0) < 0.02 {
+      if (tile.scale - 1.0).abs() < 0.02 {
         tile.scale = 1.0
         tile.is_merged = false
       } else {
