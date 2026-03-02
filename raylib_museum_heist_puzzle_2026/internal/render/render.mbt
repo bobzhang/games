@@ -72,7 +72,7 @@ fn draw_board_tiles(game : @types.Game) -> Unit {
       let px = @types.cell_px(x)
       let py = @types.cell_py(y)
       match @types.tile_at(game, x, y) {
-        @types.Wall => {
+        Wall => {
           @raylib.draw_rectangle(
             px,
             py,
@@ -95,7 +95,7 @@ fn draw_board_tiles(game : @types.Game) -> Unit {
             @raylib.Color::new(144, 158, 178, 170),
           )
         }
-        @types.Floor => {
+        Floor => {
           let c = if (x + y) % 2 == 0 {
             @raylib.Color::new(24, 30, 42, 255)
           } else {
@@ -114,7 +114,7 @@ fn draw_guard_fov(game : @types.Game) -> Unit {
   for g in game.guards {
     for y in 0..<@types.board_rows {
       for x in 0..<@types.board_cols {
-        if @types.tile_at(game, x, y) == @types.Wall {
+        if @types.tile_at(game, x, y) == Wall {
           continue
         }
         if @types.guard_sees_cell(game, g, x, y) {
@@ -329,7 +329,7 @@ fn draw_side_panel(game : @types.Game) -> Unit {
   )
 
   let stealth_status = match game.state {
-    @types.Lose => "Status: Caught"
+    Lose => "Status: Caught"
     _ => if game.alarm_t > 0.0 { "Status: Alert" } else { "Status: Hidden" }
   }
   @raylib.draw_text(
@@ -765,17 +765,17 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   )
 
   match game.state {
-    @types.Play => draw_play_controls(game)
+    Play => draw_play_controls(game)
     _ => ()
   }
 
   draw_alarm_flash(game)
 
   match game.state {
-    @types.Title => draw_title_overlay(game)
-    @types.Win => draw_win_overlay(game)
-    @types.Lose => draw_lose_overlay(game)
-    @types.CampaignClear => draw_campaign_clear_overlay(game)
-    @types.Play => ()
+    Title => draw_title_overlay(game)
+    Win => draw_win_overlay(game)
+    Lose => draw_lose_overlay(game)
+    CampaignClear => draw_campaign_clear_overlay(game)
+    Play => ()
   }
 }

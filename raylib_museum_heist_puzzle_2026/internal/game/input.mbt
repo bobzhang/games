@@ -1,19 +1,19 @@
 ///|
 /// Returns the movement direction derived from keyboard keys or on-screen D-pad buttons.
 fn detect_move_dir(game : @types.Game) -> @types.Direction {
-  let mut dir : @types.Direction = @types.DirNone
+  let mut dir : @types.Direction = DirNone
 
   if @raylib.is_key_down(@raylib.KeyLeft) || @raylib.is_key_down(@raylib.KeyA) {
-    dir = @types.Left
+    dir = Left
   }
   if @raylib.is_key_down(@raylib.KeyRight) || @raylib.is_key_down(@raylib.KeyD) {
-    dir = @types.Right
+    dir = Right
   }
   if @raylib.is_key_down(@raylib.KeyUp) || @raylib.is_key_down(@raylib.KeyW) {
-    dir = @types.Up
+    dir = Up
   }
   if @raylib.is_key_down(@raylib.KeyDown) || @raylib.is_key_down(@raylib.KeyS) {
-    dir = @types.Down
+    dir = Down
   }
 
   let (lx, ly, lw, lh) = @types.dpad_left_rect()
@@ -31,7 +31,7 @@ fn detect_move_dir(game : @types.Game) -> @types.Direction {
       lw,
       lh,
     ) {
-    dir = @types.Left
+    dir = Left
   }
   if @types.pointer_on_rect(
       game.mouse_x,
@@ -43,7 +43,7 @@ fn detect_move_dir(game : @types.Game) -> @types.Direction {
       rw,
       rh,
     ) {
-    dir = @types.Right
+    dir = Right
   }
   if @types.pointer_on_rect(
       game.mouse_x,
@@ -55,7 +55,7 @@ fn detect_move_dir(game : @types.Game) -> @types.Direction {
       uw,
       uh,
     ) {
-    dir = @types.Up
+    dir = Up
   }
   if @types.pointer_on_rect(
       game.mouse_x,
@@ -67,7 +67,7 @@ fn detect_move_dir(game : @types.Game) -> @types.Direction {
       dw,
       dh,
     ) {
-    dir = @types.Down
+    dir = Down
   }
 
   dir
@@ -167,8 +167,8 @@ fn detect_restart_play_press(game : @types.Game) -> Bool {
 /// Collects all input for the current frame into a `FrameInput` snapshot.
 fn gather_input(game : @types.Game) -> @types.FrameInput {
   let move_dir = match game.state {
-    @types.Play => detect_move_dir(game)
-    _ => @types.DirNone
+    Play => detect_move_dir(game)
+    _ => DirNone
   }
 
   {

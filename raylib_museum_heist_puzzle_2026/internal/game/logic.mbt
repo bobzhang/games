@@ -176,7 +176,7 @@ fn load_level(game : @types.Game, level_idx : Int) -> Unit {
 /// Loads the first level and returns the game to title state.
 pub fn reset_to_title(game : @types.Game) -> Unit {
   load_level(game, 0)
-  game.state = @types.Title
+  game.state = Title
   game.state_t = 0.0
 }
 
@@ -184,7 +184,7 @@ pub fn reset_to_title(game : @types.Game) -> Unit {
 /// Loads level 0 and transitions the game to the play state.
 fn start_campaign(game : @types.Game) -> Unit {
   load_level(game, 0)
-  game.state = @types.Play
+  game.state = Play
   game.state_t = 0.0
 }
 
@@ -192,7 +192,7 @@ fn start_campaign(game : @types.Game) -> Unit {
 /// Reloads the current level index and restarts play.
 fn retry_level(game : @types.Game) -> Unit {
   load_level(game, game.level_index)
-  game.state = @types.Play
+  game.state = Play
   game.state_t = 0.0
 }
 
@@ -202,10 +202,10 @@ fn go_to_next_level(game : @types.Game) -> Unit {
   let next_level = game.level_index + 1
   if next_level < game.level_count {
     load_level(game, next_level)
-    game.state = @types.Play
+    game.state = Play
     game.state_t = 0.0
   } else {
-    game.state = @types.CampaignClear
+    game.state = CampaignClear
     game.state_t = 0.0
   }
 }
@@ -215,14 +215,14 @@ fn go_to_next_level(game : @types.Game) -> Unit {
 fn preview_next_title_level(game : @types.Game) -> Unit {
   let next_level = (game.level_index + 1) % game.level_count
   load_level(game, next_level)
-  game.state = @types.Title
+  game.state = Title
 }
 
 ///|
 /// Moves the player one step in the given direction if the target cell is walkable and the step timer is ready.
 fn try_move_player(game : @types.Game, dir : @types.Direction) -> Unit {
   match dir {
-    @types.DirNone => return
+    DirNone => return
     _ => ()
   }
   if game.player_step_t > 0.0 {
@@ -331,9 +331,9 @@ fn current_level_is_last(game : @types.Game) -> Bool {
 /// Transitions to the campaign-clear or win state depending on whether this is the final level.
 fn complete_level(game : @types.Game) -> Unit {
   if current_level_is_last(game) {
-    game.state = @types.CampaignClear
+    game.state = CampaignClear
   } else {
-    game.state = @types.Win
+    game.state = Win
   }
   game.state_t = 0.0
 }
@@ -341,7 +341,7 @@ fn complete_level(game : @types.Game) -> Unit {
 ///|
 /// Transitions to the lose state and starts the alarm flash timer.
 fn trigger_loss(game : @types.Game) -> Unit {
-  game.state = @types.Lose
+  game.state = Lose
   game.state_t = 0.0
   game.alarm_t = @types.alarm_flash_time
 }
@@ -463,10 +463,10 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   }
 
   match game.state {
-    @types.Title => update_title(game, input)
-    @types.Play => update_play(game, capped_dt, input)
-    @types.Win => update_win(game, input)
-    @types.Lose => update_lose(game, input)
-    @types.CampaignClear => update_campaign_clear(game, input)
+    Title => update_title(game, input)
+    Play => update_play(game, capped_dt, input)
+    Win => update_win(game, input)
+    Lose => update_lose(game, input)
+    CampaignClear => update_campaign_clear(game, input)
   }
 }
