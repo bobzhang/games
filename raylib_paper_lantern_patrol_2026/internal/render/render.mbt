@@ -817,10 +817,10 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   draw_hud(game)
 
   match game.state {
-    @types.Title => draw_title_overlay()
-    @types.Paused => draw_paused_overlay()
-    @types.GameOver => draw_game_over_overlay(game)
-    @types.Playing => ()
+    Title => draw_title_overlay()
+    Paused => draw_paused_overlay()
+    GameOver => draw_game_over_overlay(game)
+    Playing => ()
   }
 
   draw_flash(game)

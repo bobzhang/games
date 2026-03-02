@@ -84,7 +84,7 @@ fn reset_thieves(game : @types.Game) -> Unit {
 ///|
 /// Resets all game counters and entities and transitions to the Playing state to begin a fresh run.
 fn start_new_run(game : @types.Game) -> Unit {
-  game.state = @types.Playing
+  game.state = Playing
   game.score = 0
   game.deliveries = 0
   game.extinguished = 0
@@ -113,7 +113,7 @@ fn start_new_run(game : @types.Game) -> Unit {
 ///|
 /// Transitions the game to GameOver state and records the reason the run ended.
 fn end_run_game_over(game : @types.Game, reason : String) -> Unit {
-  game.state = @types.GameOver
+  game.state = GameOver
   game.game_over_reason = reason
   set_status(game, "Run ended. Press R to patrol again.", 2.0)
 }
@@ -910,7 +910,7 @@ fn update_lanterns(game : @types.Game, dt : Float) -> Unit {
 
     if game.lanterns[i].flame <= 0.0 {
       extinguish_lantern(game, i)
-      if game.state == @types.GameOver {
+      if game.state == GameOver {
         return
       }
       continue
@@ -945,7 +945,7 @@ fn update_paused_state(game : @types.Game) -> Unit {
   }
 
   if game.input.press_pause {
-    game.state = @types.Playing
+    game.state = Playing
     set_status(game, "Patrol resumed.", 0.7)
   }
 }
@@ -962,7 +962,7 @@ fn update_game_over_state(game : @types.Game) -> Unit {
 /// Runs one frame of the Playing state: advances timers, patrol, actions, spawning, hazards, and lanterns.
 fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
   if game.input.press_pause {
-    game.state = @types.Paused
+    game.state = Paused
     set_status(game, "Patrol paused.", 0.7)
     return
   }
@@ -1003,9 +1003,9 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   }
 
   match game.state {
-    @types.Title => update_title_state(game)
-    @types.Playing => update_playing_state(game, dt)
-    @types.Paused => update_paused_state(game)
-    @types.GameOver => update_game_over_state(game)
+    Title => update_title_state(game)
+    Playing => update_playing_state(game, dt)
+    Paused => update_paused_state(game)
+    GameOver => update_game_over_state(game)
   }
 }
