@@ -5,8 +5,8 @@ import {
   "tonyfettes/raylib-examples/raylib_skyhook_cargo_rescue_2026/internal/types",
 }
 
+warnings = "+missing_doc+unnecessary_annotation"
+
 options(
   "is-main": true,
 )
-
-warnings = "+missing_doc+unnecessary_annotation"
