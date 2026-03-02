@@ -3,26 +3,27 @@
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@types.bg_color)
   match game.state {
-    Title => draw_title(game)
+    Title => game.draw_title()
     Play => {
-      draw_header(game)
-      draw_board(game)
+      game.draw_header()
+      game.draw_board()
     }
     Won => {
-      draw_header(game)
-      draw_board(game)
-      draw_overlay_won(game)
+      game.draw_header()
+      game.draw_board()
+      game.draw_overlay_won()
     }
     Over => {
-      draw_header(game)
-      draw_board(game)
+      game.draw_header()
+      game.draw_board()
       draw_overlay_over()
     }
   }
 }
 
 ///|
-fn draw_title(_game : @types.Game) -> Unit {
+#as_free_fn(deprecated)
+fn @types.Game::draw_title(_game : @types.Game) -> Unit {
   let cx = @types.screen_w / 2
   let title = "2048"
   let title_size = 90
@@ -77,7 +78,8 @@ fn draw_title(_game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_header(game : @types.Game) -> Unit {
+#as_free_fn(deprecated)
+fn @types.Game::draw_header(game : @types.Game) -> Unit {
   @raylib.draw_text(
     "2048",
     @types.board_left + 4,
@@ -178,7 +180,8 @@ fn draw_score_box(
 }
 
 ///|
-fn draw_board(game : @types.Game) -> Unit {
+#as_free_fn(deprecated)
+fn @types.Game::draw_board(game : @types.Game) -> Unit {
   let bs = Float::from_int(@types.board_size)
   @raylib.draw_rectangle_rounded(
     @types.rectf(
@@ -227,7 +230,8 @@ fn draw_board(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_overlay_won(game : @types.Game) -> Unit {
+#as_free_fn(deprecated)
+fn @types.Game::draw_overlay_won(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.board_left,
     @types.board_top,
