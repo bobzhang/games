@@ -5,9 +5,8 @@ import {
   "tonyfettes/raylib-examples/raylib_2048/internal/render",
 }
 
+warnings = "+missing_doc"
+
 options(
   "is-main": true,
 )
-
-warnings = "+missing_doc"
-

@@ -18,11 +18,12 @@ pub(all) struct Tile {
   mut scale : Float
   mut is_new : Bool
   mut is_merged : Bool
+  fn new () -> Tile
 }
 
 ///|
 /// Creates an empty tile with neutral animation state.
-pub fn Tile::empty() -> Tile {
+pub fn Tile::new() -> Tile {
   {
     value: 0,
     anim_x: 0.0,
@@ -49,13 +50,14 @@ pub(all) struct Game {
   mut msg : String
   mut msg_t : Float
   mut keep_playing : Bool
+  fn new() -> Game
 }
 
 ///|
 /// Allocates a fresh game state with cleared board and score counters.
 pub fn Game::new() -> Game {
   let g : Game = {
-    tiles: Array::makei(cell_count, fn(_i) { Tile::empty() }),
+    tiles: Array::makei(cell_count, (_i) => { Tile() }),
     prev_values: Array::make(cell_count, 0),
     state: Title,
     score: 0,

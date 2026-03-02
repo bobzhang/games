@@ -1,10 +1,10 @@
 ///|
 fn handle_input(game : @types.Game) -> Unit {
   match game.state {
-    @types.Title => handle_title_input(game)
-    @types.Play => handle_play_input(game)
-    @types.Won => handle_won_input(game)
-    @types.Over => handle_over_input(game)
+    Title => handle_title_input(game)
+    Play => handle_play_input(game)
+    Won => handle_won_input(game)
+    Over => handle_over_input(game)
   }
 }
 
@@ -76,7 +76,7 @@ fn handle_won_input(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     game.keep_playing = true
-    game.state = @types.Play
+    game.state = Play
     return
   }
   if @raylib.is_key_pressed(@raylib.KeyR) {
@@ -96,7 +96,7 @@ fn handle_won_input(game : @types.Game) -> Unit {
     let by = cy + 10
     if mx >= bx && mx <= bx + bw && my >= by && my <= by + bh {
       game.keep_playing = true
-      game.state = @types.Play
+      game.state = Play
     }
   }
 }

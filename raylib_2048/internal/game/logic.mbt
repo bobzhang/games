@@ -22,7 +22,7 @@ fn reset(game : @types.Game) -> Unit {
   spawn_tile(game)
   spawn_tile(game)
   snap_positions(game)
-  game.state = @types.Play
+  game.state = Play
 }
 
 ///|
@@ -88,8 +88,8 @@ fn undo(game : @types.Game) -> Unit {
   game.score = game.prev_score
   game.can_undo = false
   snap_positions(game)
-  if game.state is @types.Over {
-    game.state = @types.Play
+  if game.state is Over {
+    game.state = Play
   }
   game.msg = "Undo"
   game.msg_t = 1.5
@@ -222,13 +222,13 @@ fn try_move(game : @types.Game, dr : Int, dc : Int) -> Bool {
     if not(game.keep_playing) {
       for i in 0..<@types.cell_count {
         if game.tiles[i].value >= 2048 {
-          game.state = @types.Won
+          game.state = Won
           break
         }
       }
     }
-    if not(has_moves(game)) && not(game.state is @types.Won) {
-      game.state = @types.Over
+    if !(has_moves(game)) && !(game.state is Won) {
+      game.state = Over
     }
   }
   true
