@@ -80,7 +80,7 @@ fn handle_play_input(game : @types.Game) -> Unit {
 fn handle_end_input(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    if game.state == @types.GameState::Clear {
+    if game.state == Clear {
       game.level = game.level + 1
     }
     reset(game)
@@ -92,6 +92,6 @@ fn handle_end_input(game : @types.Game) -> Unit {
     return
   }
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.GameState::Title
+    game.state = Title
   }
 }

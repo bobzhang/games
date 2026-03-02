@@ -57,7 +57,7 @@ fn reset(game : @types.Game) -> Unit {
     return
   }
   snap_positions(game)
-  game.state = @types.GameState::Play
+  game.state = Play
 }
 
 ///|
@@ -114,7 +114,7 @@ fn try_swap(game : @types.Game, r1 : Int, c1 : Int, r2 : Int, c2 : Int) -> Unit 
   game.board[i2].target_x = @types.cell_x(c2)
   game.board[i2].target_y = @types.cell_y(r2)
   game.combo = 0
-  game.state = @types.GameState::Swap
+  game.state = Swap
 }
 
 ///|
@@ -190,7 +190,7 @@ fn remove_matched(game : @types.Game) -> Int {
   let mut removed = 0
   for i in 0..<@types.cell_count {
     if game.board[i].matched {
-      game.board[i].kind = @types.GemKind::Empty
+      game.board[i].kind = Empty
       game.board[i].matched = false
       game.board[i].flash_t = @types.flash_duration
       removed = removed + 1
@@ -211,7 +211,7 @@ fn apply_gravity(game : @types.Game) -> Bool {
           let wi = @types.idx(write_r, c)
           let ri = @types.idx(r, c)
           game.board[wi].kind = game.board[ri].kind
-          game.board[ri].kind = @types.GemKind::Empty
+          game.board[ri].kind = Empty
           // Animate from old position
           game.board[wi].anim_x = @types.cell_x(c)
           game.board[wi].anim_y = @types.cell_y(r)
@@ -334,7 +334,7 @@ fn update_animations(game : @types.Game, dt : Float) -> Bool {
     let g = game.board[i]
     let dx = g.target_x - g.anim_x
     let dy = g.target_y - g.anim_y
-    let speed = if game.state == @types.GameState::Swap {
+    let speed = if game.state == Swap {
       @types.swap_speed
     } else {
       @types.fall_speed
@@ -382,17 +382,17 @@ fn update_game_logic(game : @types.Game, dt : Float) -> Unit {
         let m = find_matches(game)
         if m > 0 {
           game.moves_left = game.moves_left - 1
-          game.state = @types.GameState::Remove
+          game.state = Remove
         } else {
           // Invalid swap: undo
           undo_swap(game)
-          game.state = @types.GameState::Swap // animate the undo
+          game.state = Swap // animate the undo
           // After undo animation finishes, go back to play
           // We detect this next frame when done=true and no matches
           // Actually we need a flag to know we're in undo mode
           // Simpler: just snap and return to play
           snap_positions(game)
-          game.state = @types.GameState::Play
+          game.state = Play
           game.msg = "No match!"
           game.msg_t = 0.8
         }
@@ -413,20 +413,20 @@ fn update_game_logic(game : @types.Game, dt : Float) -> Unit {
         game.msg_t = 1.2
       }
       ignore(apply_gravity(game))
-      game.state = @types.GameState::Fall
+      game.state = Fall
     }
     Fall =>
       if done {
         let m = find_matches(game)
         if m > 0 {
-          game.state = @types.GameState::Remove // cascade
+          game.state = Remove // cascade
           // Check win/lose
         } else if game.score >= game.target_score {
-          game.state = @types.GameState::Clear
+          game.state = Clear
         } else if game.moves_left <= 0 {
-          game.state = @types.GameState::Over
+          game.state = Over
         } else {
-          game.state = @types.GameState::Play
+          game.state = Play
           game.combo = 0
           // Find hint
           find_hint(game)

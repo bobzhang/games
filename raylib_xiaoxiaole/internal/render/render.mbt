@@ -7,10 +7,10 @@ pub fn draw_frame(game : @types.Game) -> Unit {
     _ => {
       draw_panel(game)
       draw_board(game)
-      if game.state == @types.GameState::Over {
+      if game.state == Over {
         draw_overlay_over(game)
       }
-      if game.state == @types.GameState::Clear {
+      if game.state == Clear {
         draw_overlay_clear(game)
       }
     }
@@ -187,9 +187,7 @@ fn draw_board(game : @types.Game) -> Unit {
     ignore(c)
   }
   // Hint animation
-  if game.state == @types.GameState::Play &&
-    game.hint_r1 >= 0 &&
-    game.hint_t > 2.0 {
+  if game.state == Play && game.hint_r1 >= 0 && game.hint_t > 2.0 {
     let pulse = Float::from_double(
         @math.sin((game.hint_t - 2.0).to_double() * 4.0),
       ) *
