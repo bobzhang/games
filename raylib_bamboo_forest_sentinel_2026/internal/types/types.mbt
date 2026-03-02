@@ -178,7 +178,7 @@ pub fn Game::new() -> Game {
     beacons,
     traps,
     enemies,
-    state: GameState::Title,
+    state: Title,
     night: 1,
     score: 0,
     best_score: 0,

@@ -543,7 +543,7 @@ fn draw_status_strip(game : @types.Game) -> Unit {
 ///|
 /// Draws the "Night N" banner centered in the world area, fading out as the night-banner timer elapses; does nothing outside the Playing state or when the timer has expired.
 fn draw_night_banner(game : @types.Game) -> Unit {
-  if game.state != @types.GameState::Playing || game.night_banner_t <= 0.0 {
+  if game.state != Playing || game.night_banner_t <= 0.0 {
     return
   }
 
@@ -679,9 +679,9 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   }
 
   match game.state {
-    @types.GameState::Title => draw_title_overlay()
-    @types.GameState::Paused => draw_paused_overlay()
-    @types.GameState::GameOver => draw_game_over_overlay(game)
-    @types.GameState::Playing => ()
+    Title => draw_title_overlay()
+    Paused => draw_paused_overlay()
+    GameOver => draw_game_over_overlay(game)
+    Playing => ()
   }
 }

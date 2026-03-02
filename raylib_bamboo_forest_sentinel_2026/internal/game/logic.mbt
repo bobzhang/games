@@ -88,7 +88,7 @@ fn begin_night(game : @types.Game, night : Int) -> Unit {
 ///|
 /// Resets all game state fields to starting values, resets all entities, begins night 1, and shows the opening status message.
 fn start_new_run(game : @types.Game) -> Unit {
-  game.state = @types.GameState::Playing
+  game.state = Playing
   game.score = 0
   game.kills = 0
   game.elapsed = 0.0
@@ -111,7 +111,7 @@ fn start_new_run(game : @types.Game) -> Unit {
 ///|
 /// Transitions to the GameOver state with the given reason string and shows a restart prompt.
 fn end_run_game_over(game : @types.Game, reason : String) -> Unit {
-  game.state = @types.GameState::GameOver
+  game.state = GameOver
   game.game_over_reason = reason
   set_status(game, "Sanctum fallen. Press R to restart.", 2.2)
 }
@@ -752,7 +752,7 @@ fn update_paused_state(game : @types.Game) -> Unit {
   }
 
   if game.input.press_pause {
-    game.state = @types.GameState::Playing
+    game.state = Playing
     set_status(game, "Resumed.", 0.7)
   }
 }
@@ -769,7 +769,7 @@ fn update_game_over_state(game : @types.Game) -> Unit {
 /// Runs one play-state frame: handles pause and restart shortcuts, ticks all timers, dispatches player actions, moves the player, updates spawning, traps, enemies, and evaluates wave-clear and loss conditions.
 fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
   if game.input.press_pause {
-    game.state = @types.GameState::Paused
+    game.state = Paused
     set_status(game, "Paused.", 0.7)
     return
   }
@@ -798,9 +798,9 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   }
 
   match game.state {
-    @types.GameState::Title => update_title_state(game)
-    @types.GameState::Playing => update_playing_state(game, dt)
-    @types.GameState::Paused => update_paused_state(game)
-    @types.GameState::GameOver => update_game_over_state(game)
+    Title => update_title_state(game)
+    Playing => update_playing_state(game, dt)
+    Paused => update_paused_state(game)
+    GameOver => update_game_over_state(game)
   }
 }
