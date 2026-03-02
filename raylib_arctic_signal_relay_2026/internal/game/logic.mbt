@@ -575,18 +575,18 @@ pub fn update_game(game : @types.Game, dt0 : Float) -> Unit {
   game.hint_t = @types.maxf(0.0, game.hint_t - dt)
 
   match game.state {
-    @types.Title => {
+    Title => {
       update_title_input(game)
       update_storms(game, dt)
       if game.input_start_press {
         setup_stage(game, 1)
       }
     }
-    @types.Play => {
+    Play => {
       update_play_input(game)
       update_play_state(game, dt)
     }
-    @types.Result => {
+    Result => {
       update_result_input(game)
       if game.input_next_press {
         let next_stage = if game.result_win {
