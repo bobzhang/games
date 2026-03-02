@@ -4,23 +4,23 @@
 /// Draws the screen-space HUD and menu overlays that correspond to the current
 /// puzzle state, including transient message text and completion banners.
 pub fn draw_ui(game : @types.Game) -> Unit {
-  if game.state == @types.StateMenu {
+  if game.state == StateMenu {
     draw_menu(game)
-  } else if game.state == @types.StatePlaying {
+  } else if game.state == StatePlaying {
     draw_hud(game)
-  } else if game.state == @types.StatePaused {
+  } else if game.state == StatePaused {
     draw_hud(game)
     draw_pause_overlay(game)
-  } else if game.state == @types.StateLevelComplete {
+  } else if game.state == StateLevelComplete {
     draw_hud(game)
     draw_level_complete(game)
-  } else if game.state == @types.StateGameOver {
+  } else if game.state == StateGameOver {
     draw_game_over(game)
-  } else if game.state == @types.StateWorldSelect {
+  } else if game.state == StateWorldSelect {
     draw_world_select(game)
-  } else if game.state == @types.StateFloorSelect {
+  } else if game.state == StateFloorSelect {
     draw_floor_select(game)
-  } else if game.state == @types.StateCampaignComplete {
+  } else if game.state == StateCampaignComplete {
     draw_campaign_complete(game)
   }
   // Message overlay

@@ -52,7 +52,7 @@ pub fn load_floor(game : @types.Game, floor : Int) -> Unit {
     if gy >= data.length() {
       // Fill rest with walls
       for gx in 0..<@types.grid_w {
-        @types.set_tile(game, gx, gy, @types.TileWall)
+        @types.set_tile(game, gx, gy, TileWall)
       }
       continue
     }
@@ -62,13 +62,13 @@ pub fn load_floor(game : @types.Game, floor : Int) -> Unit {
       let ch : Byte = if gx < row_bytes.length() { row_bytes[gx] } else { b'#' }
       let result = parse_tile_char(ch, gx, gy)
       @types.set_tile(game, gx, gy, result.0)
-      if result.1 != @types.EntityNone && entity_count < @types.max_entities {
+      if result.1 != EntityNone && entity_count < @types.max_entities {
         // Spawn entity
-        if result.1 == @types.EntityBlock {
+        if result.1 == EntityBlock {
           game.entities[entity_count] = @types.Entity::new_block(gx, gy)
-        } else if result.1 == @types.EntityDiamond {
+        } else if result.1 == EntityDiamond {
           game.entities[entity_count] = @types.Entity::new_diamond(gx, gy)
-        } else if result.1 == @types.EntityKey {
+        } else if result.1 == EntityKey {
           game.entities[entity_count] = @types.Entity::new_key(gx, gy)
         }
         entity_count += 1
@@ -116,71 +116,71 @@ fn parse_tile_char(
 ) -> (@types.Tile, @types.EntityKind, Bool) {
   // Returns (tile_type, entity_type (EntityNone for none), is_player_spawn)
   if ch == b'#' {
-    (@types.TileWall, @types.EntityNone, false)
+    (TileWall, EntityNone, false)
   } else if ch == b'.' {
-    (@types.TileFloor, @types.EntityNone, false)
+    (TileFloor, EntityNone, false)
   } else if ch == b'P' {
-    (@types.TileFloor, @types.EntityNone, true)
+    (TileFloor, EntityNone, true)
   } else if ch == b'B' {
-    (@types.TileFloor, @types.EntityBlock, false)
+    (TileFloor, EntityBlock, false)
   } else if ch == b'O' {
-    (@types.TilePlate, @types.EntityNone, false)
+    (TilePlate, EntityNone, false)
   } else if ch == b'E' {
-    (@types.TileExitClosed, @types.EntityNone, false)
+    (TileExitClosed, EntityNone, false)
   } else if ch == b'D' {
-    (@types.TileFloor, @types.EntityDiamond, false)
+    (TileFloor, EntityDiamond, false)
   } else if ch == b'K' {
-    (@types.TileFloor, @types.EntityKey, false)
+    (TileFloor, EntityKey, false)
   } else if ch == b'I' {
-    (@types.TileIce, @types.EntityNone, false)
+    (TileIce, EntityNone, false)
   } else if ch == b'T' {
-    (@types.TileTeleportA, @types.EntityNone, false)
+    (TileTeleportA, EntityNone, false)
   } else if ch == b'U' {
-    (@types.TileTeleportB, @types.EntityNone, false)
+    (TileTeleportB, EntityNone, false)
   } else if ch == b'C' {
-    (@types.TileCracked, @types.EntityNone, false)
+    (TileCracked, EntityNone, false)
   } else if ch == b'X' {
-    (@types.TilePit, @types.EntityNone, false)
+    (TilePit, EntityNone, false)
   } else if ch == b'S' {
-    (@types.TileSwitchOff, @types.EntityNone, false)
+    (TileSwitchOff, EntityNone, false)
   } else if ch == b'^' {
-    (@types.TileConveyorUp, @types.EntityNone, false)
+    (TileConveyorUp, EntityNone, false)
   } else if ch == b'>' {
-    (@types.TileConveyorRight, @types.EntityNone, false)
+    (TileConveyorRight, EntityNone, false)
   } else if ch == b'v' {
-    (@types.TileConveyorDown, @types.EntityNone, false)
+    (TileConveyorDown, EntityNone, false)
   } else if ch == b'<' {
-    (@types.TileConveyorLeft, @types.EntityNone, false)
+    (TileConveyorLeft, EntityNone, false)
   } else if ch == b'b' {
-    (@types.TileBridgeOff, @types.EntityNone, false)
+    (TileBridgeOff, EntityNone, false)
   } else if ch == b'w' {
-    (@types.TileBridgeOn, @types.EntityNone, false)
+    (TileBridgeOn, EntityNone, false)
   } else if ch == b'G' {
-    (@types.TileGateClosed, @types.EntityNone, false)
+    (TileGateClosed, EntityNone, false)
   } else if ch == b'/' {
-    (@types.TileMirrorNe, @types.EntityNone, false)
+    (TileMirrorNe, EntityNone, false)
   } else if ch == b'\\' {
-    (@types.TileMirrorNw, @types.EntityNone, false)
+    (TileMirrorNw, EntityNone, false)
   } else if ch == b'L' {
-    (@types.TileLaserSourceRight, @types.EntityNone, false)
+    (TileLaserSourceRight, EntityNone, false)
   } else if ch == b'J' {
-    (@types.TileLaserSourceDown, @types.EntityNone, false)
+    (TileLaserSourceDown, EntityNone, false)
   } else if ch == b'H' {
-    (@types.TileLaserSourceLeft, @types.EntityNone, false)
+    (TileLaserSourceLeft, EntityNone, false)
   } else if ch == b'F' {
-    (@types.TileLaserSourceUp, @types.EntityNone, false)
+    (TileLaserSourceUp, EntityNone, false)
   } else if ch == b'Q' {
-    (@types.TileLaserTarget, @types.EntityNone, false)
+    (TileLaserTarget, EntityNone, false)
   } else if ch == b'R' {
-    (@types.TileRotatePlatform, @types.EntityNone, false)
+    (TileRotatePlatform, EntityNone, false)
   } else if ch == b'Y' {
     // Block on conveyor up
-    (@types.TileConveyorUp, @types.EntityBlock, false)
+    (TileConveyorUp, EntityBlock, false)
   } else if ch == b'Z' {
     // Block on plate
-    (@types.TilePlate, @types.EntityBlock, false)
+    (TilePlate, EntityBlock, false)
   } else {
-    (@types.TileWall, @types.EntityNone, false)
+    (TileWall, EntityNone, false)
   }
 }
 

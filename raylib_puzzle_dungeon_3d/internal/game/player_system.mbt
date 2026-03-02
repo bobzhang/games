@@ -13,27 +13,27 @@ fn try_move_player(game : @types.Game, dir : @types.Dir) -> Unit {
   }
   let target_tile = @types.get_tile(game, nx, ny)
   // Check for wall
-  if target_tile == @types.TileWall {
+  if target_tile == TileWall {
     return
   }
   // Check for exit
-  if target_tile == @types.TileExitClosed {
+  if target_tile == TileExitClosed {
     return
   }
   // Check for pit
-  if target_tile == @types.TilePit {
+  if target_tile == TilePit {
     return
   }
   // Check for active spikes
-  if target_tile == @types.TileSpikesOn {
+  if target_tile == TileSpikesOn {
     return
   }
   // Check for closed gate
-  if target_tile == @types.TileGateClosed {
+  if target_tile == TileGateClosed {
     return
   }
   // Check for bridge off (gap)
-  if target_tile == @types.TileBridgeOff {
+  if target_tile == TileBridgeOff {
     return
   }
   // Check for laser source (wall-like)
@@ -44,7 +44,7 @@ fn try_move_player(game : @types.Game, dir : @types.Dir) -> Unit {
   let eidx = @types.entity_at(game, nx, ny)
   if eidx >= 0 {
     let entity = game.entities[eidx]
-    if entity.kind == @types.EntityBlock {
+    if entity.kind == EntityBlock {
       // Try to push block
       let bx = nx + dx
       let by = ny + dy
@@ -56,7 +56,7 @@ fn try_move_player(game : @types.Game, dir : @types.Dir) -> Unit {
       if behind_entity >= 0 {
         // Check push chain: can we push the second block too?
         let chain_entity = game.entities[behind_entity]
-        if chain_entity.kind == @types.EntityBlock {
+        if chain_entity.kind == EntityBlock {
           let cx = bx + dx
           let cy = by + dy
           if @types.in_bounds(cx, cy) {
@@ -95,14 +95,14 @@ fn try_move_player(game : @types.Game, dir : @types.Dir) -> Unit {
       entity.anim_timer = @types.push_anim_duration
       handle_block_land(game, entity, behind_tile, bx, by)
       // If block lands on ice, slide it
-      if behind_tile == @types.TileIce {
+      if behind_tile == TileIce {
         @types.ice_slide_entity(game, eidx, dir)
       }
       // Move player
       move_player_to(game, nx, ny, dir)
       game.player_push_anim = @types.push_anim_duration
       after_move(game)
-    } else if entity.kind == @types.EntityDiamond {
+    } else if entity.kind == EntityDiamond {
       // Collect diamond
       save_undo(game)
       entity.active = false
@@ -120,7 +120,7 @@ fn try_move_player(game : @types.Game, dir : @types.Dir) -> Unit {
         @types.color_diamond_b,
       )
       after_move(game)
-    } else if entity.kind == @types.EntityKey {
+    } else if entity.kind == EntityKey {
       // Collect key
       save_undo(game)
       entity.active = false
@@ -177,11 +177,11 @@ fn handle_block_land(
   by : Int,
 ) -> Unit {
   // Check if block falls into pit
-  if tile == @types.TilePit {
+  if tile == TilePit {
     entity.falling = true
     entity.fall_timer = @types.fall_anim_duration
     // Fill the pit
-    @types.set_tile(game, bx, by, @types.TileFloor)
+    @types.set_tile(game, bx, by, TileFloor)
     @types.spawn_particles(
       game,
       Float::from_int(bx),
@@ -194,8 +194,8 @@ fn handle_block_land(
     )
   }
   // Check if block is on cracked floor
-  if tile == @types.TileCracked {
-    @types.set_tile(game, bx, by, @types.TilePit)
+  if tile == TileCracked {
+    @types.set_tile(game, bx, by, TilePit)
     entity.falling = true
     entity.fall_timer = @types.fall_anim_duration
   }
@@ -209,8 +209,8 @@ fn handle_tile_effect(
   ny : Int,
   dir : @types.Dir,
 ) -> Unit {
-  if target_tile == @types.TileSwitchOff {
-    @types.set_tile(game, nx, ny, @types.TileSwitchOn)
+  if target_tile == TileSwitchOff {
+    @types.set_tile(game, nx, ny, TileSwitchOn)
     toggle_spikes(game)
     @types.toggle_bridges(game)
     @types.spawn_ambient_particles(
@@ -225,8 +225,8 @@ fn handle_tile_effect(
       0.2,
       1.0,
     )
-  } else if target_tile == @types.TileSwitchOn {
-    @types.set_tile(game, nx, ny, @types.TileSwitchOff)
+  } else if target_tile == TileSwitchOn {
+    @types.set_tile(game, nx, ny, TileSwitchOff)
     toggle_spikes(game)
     @types.toggle_bridges(game)
     @types.spawn_ambient_particles(
@@ -241,9 +241,9 @@ fn handle_tile_effect(
       0.2,
       1.0,
     )
-  } else if target_tile == @types.TileTeleportA {
+  } else if target_tile == TileTeleportA {
     // Find teleport B
-    let pos = find_tile(game, @types.TileTeleportB)
+    let pos = find_tile(game, TileTeleportB)
     if pos.0 >= 0 {
       game.player_gx = pos.0
       game.player_gy = pos.1
@@ -268,8 +268,8 @@ fn handle_tile_effect(
         255,
       )
     }
-  } else if target_tile == @types.TileTeleportB {
-    let pos = find_tile(game, @types.TileTeleportA)
+  } else if target_tile == TileTeleportB {
+    let pos = find_tile(game, TileTeleportA)
     if pos.0 >= 0 {
       game.player_gx = pos.0
       game.player_gy = pos.1
@@ -294,8 +294,8 @@ fn handle_tile_effect(
         255,
       )
     }
-  } else if target_tile == @types.TileCracked {
-    @types.set_tile(game, nx, ny, @types.TilePit)
+  } else if target_tile == TileCracked {
+    @types.set_tile(game, nx, ny, TilePit)
     @types.spawn_ambient_particles(
       game,
       Float::from_int(nx),
@@ -308,7 +308,7 @@ fn handle_tile_effect(
       0.3,
       0.5,
     )
-  } else if target_tile == @types.TileExitOpen {
+  } else if target_tile == TileExitOpen {
     // Level complete!
     complete_floor(game)
     return
@@ -316,7 +316,7 @@ fn handle_tile_effect(
     // Player can walk on mirrors (they just affect lasers)
     // Nothing special happens
     ignore(target_tile)
-  } else if target_tile == @types.TileRotatePlatform {
+  } else if target_tile == TileRotatePlatform {
     // Rotate adjacent mirrors when stepping on rotating platform
     rotate_adjacent_mirrors(game, nx, ny)
     @types.spawn_ambient_particles(
@@ -333,7 +333,7 @@ fn handle_tile_effect(
     )
   }
   // Ice sliding
-  if target_tile == @types.TileIce {
+  if target_tile == TileIce {
     handle_ice_sliding(game, nx, ny, dir)
   }
   // Conveyor effect on player
@@ -349,7 +349,7 @@ fn handle_tile_effect(
       if @types.is_walkable(slide_tile) && slide_entity < 0 {
         game.player_gx = slide_x
         game.player_gy = slide_y
-        if slide_tile == @types.TileExitOpen {
+        if slide_tile == TileExitOpen {
           complete_floor(game)
           return
         }
@@ -384,11 +384,11 @@ fn handle_ice_sliding(
         game.player_gx = slide_x
         game.player_gy = slide_y
         // Check the slid-to tile
-        if slide_tile == @types.TileExitOpen {
+        if slide_tile == TileExitOpen {
           complete_floor(game)
           return
         }
-        if slide_tile != @types.TileIce {
+        if slide_tile != TileIce {
           sliding = false
         }
       } else {
@@ -422,14 +422,14 @@ fn rotate_adjacent_mirrors(game : @types.Game, gx : Int, gy : Int) -> Unit {
 
 ///|
 fn rotate_mirror(tile : @types.Tile) -> @types.Tile {
-  if tile == @types.TileMirrorNe {
-    @types.TileMirrorNw
-  } else if tile == @types.TileMirrorNw {
-    @types.TileMirrorSw
-  } else if tile == @types.TileMirrorSw {
-    @types.TileMirrorSe
-  } else if tile == @types.TileMirrorSe {
-    @types.TileMirrorNe
+  if tile == TileMirrorNe {
+    TileMirrorNw
+  } else if tile == TileMirrorNw {
+    TileMirrorSw
+  } else if tile == TileMirrorSw {
+    TileMirrorSe
+  } else if tile == TileMirrorSe {
+    TileMirrorNe
   } else {
     tile
   }
@@ -559,8 +559,8 @@ fn check_exit(game : @types.Game) -> Unit {
     // Set exit tiles to open
     for gy in 0..<@types.grid_h {
       for gx in 0..<@types.grid_w {
-        if @types.get_tile(game, gx, gy) == @types.TileExitClosed {
-          @types.set_tile(game, gx, gy, @types.TileExitOpen)
+        if @types.get_tile(game, gx, gy) == TileExitClosed {
+          @types.set_tile(game, gx, gy, TileExitOpen)
           @types.spawn_particles(
             game,
             Float::from_int(gx),
@@ -578,8 +578,8 @@ fn check_exit(game : @types.Game) -> Unit {
     game.exit_open = false
     for gy in 0..<@types.grid_h {
       for gx in 0..<@types.grid_w {
-        if @types.get_tile(game, gx, gy) == @types.TileExitOpen {
-          @types.set_tile(game, gx, gy, @types.TileExitClosed)
+        if @types.get_tile(game, gx, gy) == TileExitOpen {
+          @types.set_tile(game, gx, gy, TileExitClosed)
         }
       }
     }
@@ -617,7 +617,7 @@ fn complete_floor(game : @types.Game) -> Unit {
   }
   // Check achievements
   check_achievements(game)
-  game.state = @types.StateLevelComplete
+  game.state = StateLevelComplete
   // Celebration particles
   @types.spawn_particles(
     game,
@@ -690,10 +690,10 @@ fn toggle_spikes(game : @types.Game) -> Unit {
   for gy in 0..<@types.grid_h {
     for gx in 0..<@types.grid_w {
       let tile = @types.get_tile(game, gx, gy)
-      if tile == @types.TileSpikesOff {
-        @types.set_tile(game, gx, gy, @types.TileSpikesOn)
-      } else if tile == @types.TileSpikesOn {
-        @types.set_tile(game, gx, gy, @types.TileSpikesOff)
+      if tile == TileSpikesOff {
+        @types.set_tile(game, gx, gy, TileSpikesOn)
+      } else if tile == TileSpikesOn {
+        @types.set_tile(game, gx, gy, TileSpikesOff)
       }
     }
   }

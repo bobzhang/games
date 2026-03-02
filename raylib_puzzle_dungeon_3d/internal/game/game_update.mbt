@@ -6,21 +6,21 @@
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   update_particles(game, dt)
-  if game.state == @types.StateMenu {
+  if game.state == StateMenu {
     update_menu(game, dt)
-  } else if game.state == @types.StatePlaying {
+  } else if game.state == StatePlaying {
     update_playing(game, dt)
-  } else if game.state == @types.StatePaused {
+  } else if game.state == StatePaused {
     update_paused(game, dt)
-  } else if game.state == @types.StateLevelComplete {
+  } else if game.state == StateLevelComplete {
     update_level_complete(game, dt)
-  } else if game.state == @types.StateGameOver {
+  } else if game.state == StateGameOver {
     update_game_over(game, dt)
-  } else if game.state == @types.StateFloorSelect {
+  } else if game.state == StateFloorSelect {
     update_floor_select(game, dt)
-  } else if game.state == @types.StateCampaignComplete {
+  } else if game.state == StateCampaignComplete {
     update_campaign_complete(game, dt)
-  } else if game.state == @types.StateWorldSelect {
+  } else if game.state == StateWorldSelect {
     update_world_select(game, dt)
   }
   // Update transition
@@ -67,13 +67,13 @@ fn update_menu(game : @types.Game, dt : Float) -> Unit {
       // New game
       reset_progress(game)
       load_floor(game, 0)
-      game.state = @types.StatePlaying
+      game.state = StatePlaying
     } else if game.menu_cursor == 1 {
       // World select
-      game.state = @types.StateWorldSelect
+      game.state = StateWorldSelect
     } else {
       // Floor select
-      game.state = @types.StateFloorSelect
+      game.state = StateFloorSelect
     }
   }
 }
@@ -85,7 +85,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   // Pause
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
-    game.state = @types.StatePaused
+    game.state = StatePaused
     return
   }
   // Undo
@@ -103,7 +103,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   update_player_animation(game, dt)
   update_entity_animations(game, dt)
   // Update spike timer (timed spikes in lava world)
-  if game.current_world == @types.WorldLava {
+  if game.current_world == WorldLava {
     update_timed_spikes(game, dt)
   }
   // Ambient particles for decorations
@@ -128,21 +128,21 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   }
   // Player input (only when not moving)
   if not(game.player_moving) {
-    let mut dir : @types.Dir = @types.DirNone
+    let mut dir : @types.Dir = DirNone
     if @raylib.is_key_pressed(@raylib.KeyUp) ||
       @raylib.is_key_pressed(@raylib.KeyW) {
-      dir = @types.DirUp
+      dir = DirUp
     } else if @raylib.is_key_pressed(@raylib.KeyDown) ||
       @raylib.is_key_pressed(@raylib.KeyS) {
-      dir = @types.DirDown
+      dir = DirDown
     } else if @raylib.is_key_pressed(@raylib.KeyLeft) ||
       @raylib.is_key_pressed(@raylib.KeyA) {
-      dir = @types.DirLeft
+      dir = DirLeft
     } else if @raylib.is_key_pressed(@raylib.KeyRight) ||
       @raylib.is_key_pressed(@raylib.KeyD) {
-      dir = @types.DirRight
+      dir = DirRight
     }
-    if dir != @types.DirNone {
+    if dir != DirNone {
       try_move_player(game, dir)
     }
   }
@@ -176,7 +176,7 @@ fn update_decoration_particles(game : @types.Game, dt : Float) -> Unit {
       if not(d.active) {
         continue
       }
-      if d.kind == @types.DecoTorch {
+      if d.kind == DecoTorch {
         @types.spawn_ambient_particles(
           game,
           d.x,
@@ -189,7 +189,7 @@ fn update_decoration_particles(game : @types.Game, dt : Float) -> Unit {
           0.1,
           0.8,
         )
-      } else if d.kind == @types.DecoCrystal {
+      } else if d.kind == DecoCrystal {
         @types.spawn_ambient_particles(
           game,
           d.x,
@@ -202,7 +202,7 @@ fn update_decoration_particles(game : @types.Game, dt : Float) -> Unit {
           0.1,
           0.4,
         )
-      } else if d.kind == @types.DecoMagmaPool {
+      } else if d.kind == DecoMagmaPool {
         @types.spawn_ambient_particles(
           game,
           d.x,
@@ -215,7 +215,7 @@ fn update_decoration_particles(game : @types.Game, dt : Float) -> Unit {
           0.15,
           0.3,
         )
-      } else if d.kind == @types.DecoFloatingRock {
+      } else if d.kind == DecoFloatingRock {
         @types.spawn_ambient_particles(
           game,
           d.x,
@@ -237,17 +237,17 @@ fn update_decoration_particles(game : @types.Game, dt : Float) -> Unit {
 fn update_paused(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
-    game.state = @types.StatePlaying
+    game.state = StatePlaying
   }
   if @raylib.is_key_pressed(@raylib.KeyM) {
-    game.state = @types.StateMenu
+    game.state = StateMenu
   }
   if @raylib.is_key_pressed(@raylib.KeyR) {
     load_floor(game, game.current_floor)
-    game.state = @types.StatePlaying
+    game.state = StatePlaying
   }
   if @raylib.is_key_pressed(@raylib.KeyL) {
-    game.state = @types.StateFloorSelect
+    game.state = StateFloorSelect
   }
 }
 
@@ -269,17 +269,17 @@ fn update_level_complete(game : @types.Game, dt : Float) -> Unit {
     @raylib.is_key_pressed(@raylib.KeySpace) {
     let next = game.current_floor + 1
     if next >= @types.max_floors {
-      game.state = @types.StateCampaignComplete
+      game.state = StateCampaignComplete
     } else {
       load_floor(game, next)
-      game.state = @types.StatePlaying
+      game.state = StatePlaying
     }
   }
   if @raylib.is_key_pressed(@raylib.KeyM) {
-    game.state = @types.StateMenu
+    game.state = StateMenu
   }
   if @raylib.is_key_pressed(@raylib.KeyL) {
-    game.state = @types.StateFloorSelect
+    game.state = StateFloorSelect
   }
 }
 
@@ -288,17 +288,17 @@ fn update_game_over(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     load_floor(game, game.current_floor)
-    game.state = @types.StatePlaying
+    game.state = StatePlaying
   }
   if @raylib.is_key_pressed(@raylib.KeyM) {
-    game.state = @types.StateMenu
+    game.state = StateMenu
   }
 }
 
 ///|
 fn update_floor_select(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.StateMenu
+    game.state = StateMenu
     return
   }
   if @raylib.is_key_pressed(@raylib.KeyLeft) {
@@ -329,7 +329,7 @@ fn update_floor_select(game : @types.Game, _dt : Float) -> Unit {
     @raylib.is_key_pressed(@raylib.KeySpace) {
     if game.floor_info[game.floor_select_cursor].unlocked {
       load_floor(game, game.floor_select_cursor)
-      game.state = @types.StatePlaying
+      game.state = StatePlaying
     }
   }
 }
@@ -337,7 +337,7 @@ fn update_floor_select(game : @types.Game, _dt : Float) -> Unit {
 ///|
 fn update_world_select(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.StateMenu
+    game.state = StateMenu
     return
   }
   if @raylib.is_key_pressed(@raylib.KeyLeft) {
@@ -357,7 +357,7 @@ fn update_world_select(game : @types.Game, _dt : Float) -> Unit {
     if @types.is_world_unlocked(game, game.world_select_cursor) {
       let first_floor = game.world_select_cursor * @types.floors_per_world
       game.floor_select_cursor = first_floor
-      game.state = @types.StateFloorSelect
+      game.state = StateFloorSelect
     }
   }
 }
@@ -367,6 +367,6 @@ fn update_campaign_complete(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyM) {
-    game.state = @types.StateMenu
+    game.state = StateMenu
   }
 }
