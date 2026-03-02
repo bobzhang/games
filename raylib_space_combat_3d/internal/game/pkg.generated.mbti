@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_space_combat_3d/game"
+package "tonyfettes/raylib-examples/raylib_space_combat_3d/internal/game"
 
 import {
-  "tonyfettes/raylib-examples/raylib_space_combat_3d/types",
+  "tonyfettes/raylib-examples/raylib_space_combat_3d/internal/types",
 }
 
 // Values

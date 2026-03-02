@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_teahouse_midnight_service_2026/render"
+package "tonyfettes/raylib-examples/raylib_teahouse_midnight_service_2026/internal/render"
 
 import {
-  "tonyfettes/raylib-examples/raylib_teahouse_midnight_service_2026/types",
+  "tonyfettes/raylib-examples/raylib_teahouse_midnight_service_2026/internal/types",
 }
 
 // Values

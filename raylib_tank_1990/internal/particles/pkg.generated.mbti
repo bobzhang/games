@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_tank_1990/particles"
+package "tonyfettes/raylib-examples/raylib_tank_1990/internal/particles"
 
 import {
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/raylib_tank_1990/types",
+  "tonyfettes/raylib-examples/raylib_tank_1990/internal/types",
 }
 
 // Values

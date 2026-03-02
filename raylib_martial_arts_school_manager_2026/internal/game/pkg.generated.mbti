@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_martial_arts_school_manager_2026/game"
+package "tonyfettes/raylib-examples/raylib_martial_arts_school_manager_2026/internal/game"
 
 import {
-  "tonyfettes/raylib-examples/raylib_martial_arts_school_manager_2026/types",
+  "tonyfettes/raylib-examples/raylib_martial_arts_school_manager_2026/internal/types",
 }
 
 // Values

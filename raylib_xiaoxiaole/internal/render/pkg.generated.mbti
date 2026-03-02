@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_xiaoxiaole/render"
+package "tonyfettes/raylib-examples/raylib_xiaoxiaole/internal/render"
 
 import {
-  "tonyfettes/raylib-examples/raylib_xiaoxiaole/types",
+  "tonyfettes/raylib-examples/raylib_xiaoxiaole/internal/types",
 }
 
 // Values

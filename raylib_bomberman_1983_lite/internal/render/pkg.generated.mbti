@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_bomberman_1983_lite/render"
+package "tonyfettes/raylib-examples/raylib_bomberman_1983_lite/internal/render"
 
 import {
-  "tonyfettes/raylib-examples/raylib_bomberman_1983_lite/types",
+  "tonyfettes/raylib-examples/raylib_bomberman_1983_lite/internal/types",
 }
 
 // Values

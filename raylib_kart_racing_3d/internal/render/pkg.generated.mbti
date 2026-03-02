@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_kart_racing_3d/render"
+package "tonyfettes/raylib-examples/raylib_kart_racing_3d/internal/render"
 
 import {
-  "tonyfettes/raylib-examples/raylib_kart_racing_3d/types",
+  "tonyfettes/raylib-examples/raylib_kart_racing_3d/internal/types",
 }
 
 // Values

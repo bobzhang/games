@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_jackal_1988_lite/levels"
+package "tonyfettes/raylib-examples/raylib_jackal_1988_lite/internal/levels"
 
 import {
-  "tonyfettes/raylib-examples/raylib_jackal_1988_lite/types",
+  "tonyfettes/raylib-examples/raylib_jackal_1988_lite/internal/types",
 }
 
 // Values
