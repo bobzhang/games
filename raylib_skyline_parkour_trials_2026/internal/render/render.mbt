@@ -134,7 +134,7 @@ fn draw_world_tiles(game : @types.Game, cam_x : Float) -> Unit {
     }
 
     match t.kind {
-      @types.TileKind::Solid => {
+      Solid => {
         @raylib.draw_rectangle(
           sx.to_int(),
           t.y.to_int(),
@@ -157,7 +157,7 @@ fn draw_world_tiles(game : @types.Game, cam_x : Float) -> Unit {
           @raylib.Color::new(22, 26, 34, 210),
         )
       }
-      @types.TileKind::Hazard => {
+      Hazard => {
         let pulse : Float = 0.5 +
           0.5 * @types.sinf(game.run_time_s * 7.2 + t.x * 0.02)
         let glow = 120 + (pulse * 96.0).to_int()
@@ -385,7 +385,7 @@ fn draw_hud(game : @types.Game) -> Unit {
     @types.col_text_dim(),
   )
 
-  if game.state == @types.GameState::Play {
+  if game.state == Play {
     @raylib.draw_text(
       "A/D or Arrow: move   SPACE: jump   SHIFT: wall climb",
       22,
@@ -559,10 +559,10 @@ fn draw_panel(title : String, subtitle : String) -> Unit {
 ///|
 fn lose_reason_text(reason : @types.LoseReason) -> String {
   match reason {
-    @types.LoseReason::Time => "Out of time"
-    @types.LoseReason::Fall => "Missed the skyline"
-    @types.LoseReason::HitHazard => "Hit a hazard"
-    @types.LoseReason::None => "Run failed"
+    Time => "Out of time"
+    Fall => "Missed the skyline"
+    HitHazard => "Hit a hazard"
+    None => "Run failed"
   }
 }
 
@@ -737,14 +737,14 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   draw_hud(game)
 
   match game.state {
-    @types.GameState::Title => draw_title_overlay(game)
-    @types.GameState::StageClear => draw_stage_clear_overlay(game)
-    @types.GameState::GameOver => draw_game_over_overlay(game)
-    @types.GameState::Victory => draw_victory_overlay(game)
-    @types.GameState::Play => ()
+    Title => draw_title_overlay(game)
+    StageClear => draw_stage_clear_overlay(game)
+    GameOver => draw_game_over_overlay(game)
+    Victory => draw_victory_overlay(game)
+    Play => ()
   }
 
-  if game.touch_mode && game.state == @types.GameState::Play {
+  if game.touch_mode && game.state == Play {
     draw_play_touch_controls(game)
   }
 }

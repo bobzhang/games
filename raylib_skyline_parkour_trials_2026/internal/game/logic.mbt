@@ -34,7 +34,7 @@ fn push_solid(
   w : Float,
   h : Float,
 ) -> Unit {
-  push_tile(game, @types.TileKind::Solid, x, y, w, h)
+  push_tile(game, Solid, x, y, w, h)
 }
 
 ///|
@@ -45,7 +45,7 @@ fn push_hazard(
   w : Float,
   h : Float,
 ) -> Unit {
-  push_tile(game, @types.TileKind::Hazard, x, y, w, h)
+  push_tile(game, Hazard, x, y, w, h)
 }
 
 ///|
@@ -206,7 +206,7 @@ fn load_stage(game : @types.Game, stage : Int) -> Unit {
   game.stage_time_s = 0.0
   game.bonus_popup_t = 0.0
   game.bonus_popup_value = 0
-  game.lose_reason = @types.LoseReason::None
+  game.lose_reason = None
 
   if game.stage == 1 {
     setup_stage_1(game)
@@ -223,7 +223,7 @@ fn load_stage(game : @types.Game, stage : Int) -> Unit {
 /// Builds stage 1 and resets the game into title presentation state.
 pub fn init_title_scene(game : @types.Game) -> Unit {
   load_stage(game, 1)
-  game.state = @types.GameState::Title
+  game.state = Title
   game.timer_s = @types.stage_initial_time(1)
   game.run_time_s = 0.0
   game.checkpoints_hit = 0
@@ -235,13 +235,13 @@ fn begin_new_run(game : @types.Game) -> Unit {
   game.run_time_s = 0.0
   game.checkpoints_hit = 0
   load_stage(game, 1)
-  game.state = @types.GameState::Play
+  game.state = Play
 }
 
 ///|
 fn fail_run(game : @types.Game, reason : @types.LoseReason) -> Unit {
   game.lose_reason = reason
-  game.state = @types.GameState::GameOver
+  game.state = GameOver
   game.pending_next_stage = 0
 }
 
@@ -260,7 +260,7 @@ fn hero_hits_hazard(game : @types.Game) -> Bool {
   let hero = game.hero
   for i in 0..<game.tile_count {
     let t = game.tiles[i]
-    if t.kind != @types.TileKind::Hazard {
+    if t.kind != Hazard {
       continue
     }
 
@@ -344,7 +344,7 @@ fn move_hero_x(game : @types.Game, dt : Float) -> Unit {
 
   for i in 0..<game.tile_count {
     let t = game.tiles[i]
-    if t.kind != @types.TileKind::Solid {
+    if t.kind != Solid {
       continue
     }
 
@@ -381,7 +381,7 @@ fn move_hero_y(game : @types.Game, dt : Float) -> Unit {
 
   for i in 0..<game.tile_count {
     let t = game.tiles[i]
-    if t.kind != @types.TileKind::Solid {
+    if t.kind != Solid {
       continue
     }
 
@@ -502,10 +502,10 @@ fn finish_stage(game : @types.Game) -> Unit {
       add_bonus_time(game, bonus)
     }
     game.pending_next_stage = game.stage + 1
-    game.state = @types.GameState::StageClear
+    game.state = StageClear
   } else {
     game.pending_next_stage = 0
-    game.state = @types.GameState::Victory
+    game.state = Victory
   }
 }
 
@@ -522,19 +522,19 @@ fn update_play_state(game : @types.Game, dt : Float) -> Unit {
   game.bonus_popup_t = @types.maxf(0.0, game.bonus_popup_t - dt)
 
   if game.timer_s <= 0.0 {
-    fail_run(game, @types.LoseReason::Time)
+    fail_run(game, Time)
     return
   }
 
   update_hero_movement(game, dt)
 
   if game.hero.y > game.stage_fail_y {
-    fail_run(game, @types.LoseReason::Fall)
+    fail_run(game, Fall)
     return
   }
 
   if hero_hits_hazard(game) {
-    fail_run(game, @types.LoseReason::HitHazard)
+    fail_run(game, HitHazard)
     return
   }
 
@@ -557,9 +557,9 @@ fn update_stage_clear_state(game : @types.Game) -> Unit {
       game.pending_next_stage <= @types.stage_count {
       let next_stage = game.pending_next_stage
       load_stage(game, next_stage)
-      game.state = @types.GameState::Play
+      game.state = Play
     } else {
-      game.state = @types.GameState::Victory
+      game.state = Victory
     }
   }
 }
@@ -583,23 +583,23 @@ fn update_victory_state(game : @types.Game) -> Unit {
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   // Gather input first
   match game.state {
-    @types.GameState::Title => update_title_input(game)
-    @types.GameState::Play => update_play_input(game)
-    @types.GameState::StageClear => update_stage_clear_input(game)
-    @types.GameState::GameOver => update_game_over_input(game)
-    @types.GameState::Victory => update_victory_input(game)
+    Title => update_title_input(game)
+    Play => update_play_input(game)
+    StageClear => update_stage_clear_input(game)
+    GameOver => update_game_over_input(game)
+    Victory => update_victory_input(game)
   }
 
   // Then update game state
   match game.state {
-    @types.GameState::Title => if game.input_next_press { begin_new_run(game) }
-    @types.GameState::Play => update_play_state(game, dt)
+    Title => if game.input_next_press { begin_new_run(game) }
+    Play => update_play_state(game, dt)
     _ => {
       game.bonus_popup_t = @types.maxf(0.0, game.bonus_popup_t - dt)
       match game.state {
-        @types.GameState::StageClear => update_stage_clear_state(game)
-        @types.GameState::GameOver => update_game_over_state(game)
-        @types.GameState::Victory => update_victory_state(game)
+        StageClear => update_stage_clear_state(game)
+        GameOver => update_game_over_state(game)
+        Victory => update_victory_state(game)
         _ => ()
       }
     }
