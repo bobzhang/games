@@ -9,4 +9,4 @@ options(
   "is-main": true,
 )
 
-warnings = "+missing_doc"
+warnings = "+missing_doc+unnecessary_annotation"
