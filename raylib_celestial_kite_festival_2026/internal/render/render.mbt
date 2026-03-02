@@ -270,11 +270,11 @@ fn draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 /// Maps an ObjKind to its canonical palette colour used for rendering and hit-ring tinting.
 fn obj_col(kind : @types.ObjKind) -> @raylib.Color {
   match kind {
-    @types.Lantern => @types.amber()
-    @types.Bird => @types.pink()
-    @types.Storm => @raylib.Color::new(116, 186, 255, 255)
-    @types.Orb => @types.energy_col()
-    @types.Koi => @raylib.Color::new(255, 200, 146, 255)
+    Lantern => @types.amber()
+    Bird => @types.pink()
+    Storm => @raylib.Color::new(116, 186, 255, 255)
+    Orb => @types.energy_col()
+    Koi => @raylib.Color::new(255, 200, 146, 255)
   }
 }
 
@@ -444,11 +444,11 @@ fn draw_obj(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
   let base = obj_col(o.kind)
 
   match o.kind {
-    @types.Lantern => draw_lantern(o, cam_x, cam_y)
-    @types.Bird => draw_bird(o, cam_x, cam_y)
-    @types.Storm => draw_storm(o, cam_x, cam_y)
-    @types.Orb => draw_orb(o, cam_x, cam_y)
-    @types.Koi => draw_koi(o, cam_x, cam_y)
+    Lantern => draw_lantern(o, cam_x, cam_y)
+    Bird => draw_bird(o, cam_x, cam_y)
+    Storm => draw_storm(o, cam_x, cam_y)
+    Orb => draw_orb(o, cam_x, cam_y)
+    Koi => draw_koi(o, cam_x, cam_y)
   }
 
   if @types.is_hostile(o.kind) {
@@ -461,7 +461,7 @@ fn draw_obj(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
       @types.maxf(
         1.0,
         match o.kind {
-          @types.Storm => 30.0 + Float::from_int(6 * 1)
+          Storm => 30.0 + Float::from_int(6 * 1)
           _ => 20.0 + Float::from_int(4 * 1)
         },
       ),
@@ -827,7 +827,7 @@ fn draw_hud(game : @types.Game) -> Unit {
   }
 
   match game.state {
-    @types.Play =>
+    Play =>
       @raylib.draw_text(
         "WASD move  SPACE burst  J/SHIFT reel",
         20,
@@ -904,7 +904,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
   }
 
   match game.state {
-    @types.Play => {
+    Play => {
       draw_button_visual("<", @types.btn_left_rect(), game.input_x < -0.2, game)
       draw_button_visual(">", @types.btn_right_rect(), game.input_x > 0.2, game)
       draw_button_visual("^", @types.btn_up_rect(), game.input_y < -0.2, game)
@@ -922,9 +922,8 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
         game,
       )
     }
-    @types.Title =>
-      draw_button_visual("START", @types.title_start_rect(), false, game)
-    @types.StageClear | @types.GameOver =>
+    Title => draw_button_visual("START", @types.title_start_rect(), false, game)
+    StageClear | GameOver =>
       draw_button_visual("RETRY", @types.retry_rect(), false, game)
   }
 }
@@ -1227,16 +1226,16 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   draw_hud(game)
 
   match game.state {
-    @types.Title => draw_title_overlay(game)
-    @types.StageClear => draw_stage_clear_overlay(game)
-    @types.GameOver => draw_game_over_overlay(game)
-    @types.Play => ()
+    Title => draw_title_overlay(game)
+    StageClear => draw_stage_clear_overlay(game)
+    GameOver => draw_game_over_overlay(game)
+    Play => ()
   }
 
   draw_touch_controls(game)
   draw_flash(game)
 
-  if game.state == @types.Play && game.touch_mode {
+  if game.state == Play && game.touch_mode {
     draw_center_text(
       "Mobile: tap directional and action pads",
       @types.screen_h - 24,

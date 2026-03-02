@@ -3,7 +3,7 @@
 fn clear_objs(game : @types.Game) -> Unit {
   for obj in game.objs {
     obj.active = false
-    obj.kind = @types.Lantern
+    obj.kind = Lantern
     obj.x = 0.0
     obj.y = 0.0
     obj.vx = 0.0
@@ -325,7 +325,7 @@ fn hurt_kite(game : @types.Game, dmg : Float) -> Unit {
   spawn_halo(game, game.kite.x, game.kite.y, 12.0, 0.52, 1)
 
   if game.calm <= 0.0 {
-    game.state = @types.GameOver
+    game.state = GameOver
     game.result_t = 0.0
   }
 }
@@ -339,7 +339,7 @@ fn init_title_scene(game : @types.Game) -> Unit {
   clear_trails(game)
   reset_kite(game)
 
-  game.state = @types.Title
+  game.state = Title
   game.stage = 1
   game.stage_goal = @types.stage_goal_base
   game.score = 0
@@ -379,7 +379,7 @@ fn start_stage(game : @types.Game, stage : Int) -> Unit {
   clear_trails(game)
   reset_kite(game)
 
-  game.state = @types.Play
+  game.state = Play
   game.stage = stage
   game.stage_goal = @types.stage_goal_base +
     (stage - 1) * @types.stage_goal_bonus
@@ -427,7 +427,7 @@ fn start_run(game : @types.Game) -> Unit {
 fn spawn_lantern(game : @types.Game) -> Unit {
   spawn_obj(
     game,
-    @types.Lantern,
+    Lantern,
     @types.randf(@types.play_left + 40.0, @types.play_right - 40.0),
     @types.play_top - @types.randf(20.0, 120.0),
     @types.randf(-20.0, 20.0),
@@ -457,7 +457,7 @@ fn spawn_bird(game : @types.Game) -> Unit {
 
   spawn_obj(
     game,
-    @types.Bird,
+    Bird,
     sx,
     @types.randf(@types.play_top + 36.0, @types.play_bottom - 120.0),
     tx,
@@ -475,7 +475,7 @@ fn spawn_bird(game : @types.Game) -> Unit {
 fn spawn_storm(game : @types.Game) -> Unit {
   spawn_obj(
     game,
-    @types.Storm,
+    Storm,
     @types.randf(@types.play_left + 80.0, @types.play_right - 80.0),
     @types.play_top - @types.randf(60.0, 140.0),
     @types.randf(-40.0, 40.0),
@@ -493,7 +493,7 @@ fn spawn_storm(game : @types.Game) -> Unit {
 fn spawn_orb(game : @types.Game) -> Unit {
   spawn_obj(
     game,
-    @types.Orb,
+    Orb,
     @types.randf(@types.play_left + 30.0, @types.play_right - 30.0),
     @types.play_top - @types.randf(20.0, 100.0),
     @types.randf(-30.0, 30.0),
@@ -523,7 +523,7 @@ fn spawn_koi(game : @types.Game) -> Unit {
 
   spawn_obj(
     game,
-    @types.Koi,
+    Koi,
     sx,
     @types.randf(@types.play_top + 50.0, @types.play_bottom - 90.0),
     vx,
@@ -617,7 +617,7 @@ fn apply_burst(game : @types.Game) -> Unit {
     }
 
     match obj.kind {
-      @types.Bird => {
+      Bird => {
         obj.hp = obj.hp - 30.0
         if obj.hp <= 0.0 {
           let x = obj.x
@@ -628,7 +628,7 @@ fn apply_burst(game : @types.Game) -> Unit {
           burst_sparks(game, x, y, 18, 0)
         }
       }
-      @types.Storm => {
+      Storm => {
         obj.hp = obj.hp - 26.0
         if obj.hp <= 0.0 {
           let x = obj.x
@@ -639,7 +639,7 @@ fn apply_burst(game : @types.Game) -> Unit {
           burst_sparks(game, x, y, 28, 2)
         }
       }
-      @types.Lantern | @types.Orb | @types.Koi => ()
+      Lantern | Orb | Koi => ()
     }
   }
 }
@@ -738,7 +738,7 @@ fn update_kite(game : @types.Game, dt : Float) -> Unit {
 /// Applies the on-collect effect for the given object kind: scores points, restores time or energy, and increments the rescue counter.
 fn collect_obj(game : @types.Game, kind : @types.ObjKind, value : Int) -> Unit {
   match kind {
-    @types.Lantern => {
+    Lantern => {
       add_score(game, value)
       game.time_left = @types.minf(
         @types.stage_time_base +
@@ -748,13 +748,13 @@ fn collect_obj(game : @types.Game, kind : @types.ObjKind, value : Int) -> Unit {
       game.rescued = game.rescued + 1
       push_combo(game)
     }
-    @types.Orb => {
+    Orb => {
       add_score(game, value)
       game.energy = @types.minf(@types.energy_max, game.energy + 28.0)
       game.calm = @types.minf(@types.calm_max, game.calm + 10.0)
       burst_sparks(game, game.kite.x, game.kite.y, 10, 2)
     }
-    @types.Koi => {
+    Koi => {
       add_score(game, value)
       game.energy = @types.minf(@types.energy_max, game.energy + 18.0)
       game.calm = @types.minf(@types.calm_max, game.calm + 18.0)
@@ -762,7 +762,7 @@ fn collect_obj(game : @types.Game, kind : @types.ObjKind, value : Int) -> Unit {
       game.rescued = game.rescued + 2
       push_combo(game)
     }
-    @types.Bird | @types.Storm => ()
+    Bird | Storm => ()
   }
 }
 
@@ -781,12 +781,12 @@ fn update_objs(game : @types.Game, dt : Float) -> Unit {
     obj.flagged = obj.life < 1.2
 
     match obj.kind {
-      @types.Lantern => {
+      Lantern => {
         obj.x = obj.x + (obj.vx + game.wind_x * 0.4) * dt
         obj.y = obj.y + (obj.vy + game.wind_y * 0.5) * dt
         obj.y = obj.y + @types.sinf(obj.phase * 4.2) * 10.0 * dt
       }
-      @types.Bird => {
+      Bird => {
         let tx = game.kite.x - obj.x
         let ty = game.kite.y - obj.y
         let d2 = @types.maxf(20.0, tx * tx + ty * ty)
@@ -798,7 +798,7 @@ fn update_objs(game : @types.Game, dt : Float) -> Unit {
         obj.x = obj.x + (obj.vx + game.wind_x * 0.2) * dt
         obj.y = obj.y + (obj.vy + game.wind_y * 0.2) * dt
       }
-      @types.Storm => {
+      Storm => {
         obj.x = obj.x + (obj.vx + game.wind_x * 0.6) * dt
         obj.y = obj.y + (obj.vy + game.wind_y * 0.4) * dt
         obj.w = @types.maxf(
@@ -822,12 +822,12 @@ fn update_objs(game : @types.Game, dt : Float) -> Unit {
           )
         }
       }
-      @types.Orb => {
+      Orb => {
         obj.x = obj.x + (obj.vx + game.wind_x * 0.48) * dt
         obj.y = obj.y + (obj.vy + game.wind_y * 0.48) * dt
         obj.x = obj.x + @types.sinf(obj.phase * 6.0) * 26.0 * dt
       }
-      @types.Koi => {
+      Koi => {
         obj.x = obj.x + (obj.vx + game.wind_x * 0.3) * dt
         obj.y = obj.y + (obj.vy + game.wind_y * 0.2) * dt
         obj.y = obj.y + @types.sinf(obj.phase * 8.0) * 18.0 * dt
@@ -856,7 +856,7 @@ fn update_objs(game : @types.Game, dt : Float) -> Unit {
         burst_sparks(game, game.kite.x, game.kite.y, 12, 0)
       } else {
         let dmg : Float = match obj.kind {
-          @types.Storm => 18.0
+          Storm => 18.0
           _ => 12.0
         }
         hurt_kite(game, dmg)
@@ -986,12 +986,12 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.calm <= 0.0 || game.time_left <= 0.0 {
-    game.state = @types.GameOver
+    game.state = GameOver
     game.result_t = 0.0
   }
 
-  if game.state == @types.Play && game.score >= game.stage_goal {
-    game.state = @types.StageClear
+  if game.state == Play && game.score >= game.stage_goal {
+    game.state = StageClear
     game.result_t = 0.0
     add_score(game, 220 + game.stage * 90)
     game.energy = @types.minf(@types.energy_max, game.energy + 22.0)
@@ -1056,18 +1056,18 @@ fn update_game_over(game : @types.Game, dt : Float) -> Unit {
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   // Handle input based on current state
   match game.state {
-    @types.Title => update_title_input(game)
-    @types.Play => update_play_input(game)
-    @types.StageClear | @types.GameOver => update_result_input(game)
+    Title => update_title_input(game)
+    Play => update_play_input(game)
+    StageClear | GameOver => update_result_input(game)
   }
 
   update_timers(game, dt)
 
   match game.state {
-    @types.Title => update_title(game, dt)
-    @types.Play => update_play(game, dt)
-    @types.StageClear => update_stage_clear(game, dt)
-    @types.GameOver => update_game_over(game, dt)
+    Title => update_title(game, dt)
+    Play => update_play(game, dt)
+    StageClear => update_stage_clear(game, dt)
+    GameOver => update_game_over(game, dt)
   }
 
   if game.score > game.best_score {
