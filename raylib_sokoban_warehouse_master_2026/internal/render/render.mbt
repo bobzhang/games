@@ -205,7 +205,7 @@ fn draw_board(game : @types.Game) -> Unit {
       let px : Int = left + x * tile
       let py : Int = top + y * tile
 
-      if t == @types.Tile::Void {
+      if t == Void {
         @raylib.draw_rectangle(
           px,
           py,
@@ -216,14 +216,14 @@ fn draw_board(game : @types.Game) -> Unit {
         continue
       }
 
-      if t == @types.Tile::Wall {
+      if t == Wall {
         draw_cell_wall(px, py, tile)
       } else {
-        draw_cell_floor(px, py, tile, t == @types.Tile::Goal)
+        draw_cell_floor(px, py, tile, t == Goal)
       }
 
       if @types.box_at(game, x, y) {
-        draw_box(px, py, tile, t == @types.Tile::Goal)
+        draw_box(px, py, tile, t == Goal)
       }
     }
   }
@@ -241,11 +241,11 @@ fn draw_board(game : @types.Game) -> Unit {
     let sy : Int = top + (spark.y * Float::from_int(tile)).to_int()
     let sr : Float = @types.maxf(1.0, Float::from_int(tile) * spark.size)
 
-    let c = if spark.kind == @types.SparkKind::Gold {
+    let c = if spark.kind == Gold {
       @raylib.Color::new(255, 218, 102, 235)
-    } else if spark.kind == @types.SparkKind::Orange {
+    } else if spark.kind == Orange {
       @raylib.Color::new(248, 164, 78, 225)
-    } else if spark.kind == @types.SparkKind::Red {
+    } else if spark.kind == Red {
       @raylib.Color::new(236, 100, 86, 214)
     } else {
       @raylib.Color::new(118, 222, 254, 228)
@@ -884,7 +884,7 @@ fn draw_campaign_clear(game : @types.Game) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_bg(game)
 
-  if game.state == @types.GameState::Title {
+  if game.state == Title {
     draw_title(game)
     return
   }
@@ -893,9 +893,9 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   draw_side_panel(game)
   draw_touch_overlay(game)
 
-  if game.state == @types.GameState::LevelClear {
+  if game.state == LevelClear {
     draw_level_clear_panel(game)
-  } else if game.state == @types.GameState::CampaignClear {
+  } else if game.state == CampaignClear {
     draw_campaign_clear(game)
   }
 }
