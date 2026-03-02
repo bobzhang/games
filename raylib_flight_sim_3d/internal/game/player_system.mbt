@@ -1,6 +1,7 @@
 // Player aircraft controls and physics
 
 ///|
+/// Updates player aircraft controls, physics, fuel consumption, and weapon firing.
 pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
   if not(player.alive) {
@@ -169,6 +170,7 @@ fn crash_player(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Applies `amount` damage to the player, triggering damage flash or destruction if HP reaches zero.
 pub fn damage_player(game : @types.Game, amount : Float) -> Unit {
   let player = game.player
   if not(player.alive) {

@@ -1,6 +1,7 @@
 // Main game update dispatcher
 
 ///|
+/// Advances the game state by one frame, dispatching to the appropriate update handler.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   update_particles(game, dt)
@@ -627,6 +628,7 @@ fn update_weather_effects(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Initializes and starts the mission at `mission_idx`, resetting all entities and spawning level data.
 pub fn start_mission(game : @types.Game, mission_idx : Int) -> Unit {
   game.current_mission = mission_idx
   let mission = game.missions[mission_idx]

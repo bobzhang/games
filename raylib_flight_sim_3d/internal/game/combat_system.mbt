@@ -3,6 +3,7 @@
 // Advanced patrol: enemies follow waypoint routes
 
 ///|
+/// Updates the enemy `e` along its waypoint patrol route.
 pub fn ai_patrol_advanced(
   game : @types.Game,
   e : @types.Enemy,
@@ -49,6 +50,7 @@ pub fn ai_patrol_advanced(
 // Engage behavior with lead pursuit and firing solutions
 
 ///|
+/// Steers the enemy `e` towards the player using lead pursuit and velocity prediction.
 pub fn ai_engage_advanced(
   game : @types.Game,
   e : @types.Enemy,
@@ -112,6 +114,7 @@ pub fn ai_engage_advanced(
 // Evasive maneuvers: barrel roll, split-S, break turn
 
 ///|
+/// Executes an evasive maneuver for enemy `e` such as break turns, dives, or weaves.
 pub fn ai_evasive_maneuver(
   game : @types.Game,
   e : @types.Enemy,
@@ -170,6 +173,7 @@ pub fn ai_evasive_maneuver(
 // Formation flying: enemies maintain spacing from leader
 
 ///|
+/// Steers enemy `e` to maintain V-formation spacing relative to the leader position.
 pub fn ai_formation_fly(
   game : @types.Game,
   e : @types.Enemy,
@@ -233,6 +237,7 @@ pub fn ai_formation_fly(
 // Turret tracking: smooth tracking of player with prediction
 
 ///|
+/// Smoothly rotates turret `t` to track the player with position prediction.
 pub fn turret_track_player(
   t : @types.Turret,
   player : @types.Player,
@@ -289,6 +294,7 @@ pub fn turret_track_player(
 // Turret burst fire: fires a short burst of shells
 
 ///|
+/// Fires a burst of `burst_count` shells from turret `t` towards the player.
 pub fn turret_burst_fire(
   game : @types.Game,
   t : @types.Turret,
@@ -333,6 +339,7 @@ pub fn turret_burst_fire(
 // Calculate damage falloff based on distance
 
 ///|
+/// Returns the effective damage after applying quadratic falloff over `distance`.
 pub fn calculate_damage_falloff(
   base_damage : Float,
   distance : Float,
@@ -354,6 +361,7 @@ pub fn calculate_damage_falloff(
 // Check if shooter has line of sight to target (simple terrain check)
 
 ///|
+/// Returns whether there is an unobstructed line of sight from shooter to target.
 pub fn has_line_of_sight(
   sx : Float,
   sy : Float,
@@ -381,6 +389,7 @@ pub fn has_line_of_sight(
 // Score calculation for a kill based on difficulty and conditions
 
 ///|
+/// Returns the total score for a kill, including distance, difficulty, and weather bonuses.
 pub fn calculate_kill_score(
   base_score : Int,
   distance : Float,
@@ -414,6 +423,7 @@ pub fn calculate_kill_score(
 // Check if enemy is behind player (for tail warning)
 
 ///|
+/// Returns whether the enemy at the given position is behind the player.
 pub fn is_enemy_behind_player(
   player : @types.Player,
   enemy_x : Float,
@@ -429,6 +439,7 @@ pub fn is_enemy_behind_player(
 // Count enemies in engagement range
 
 ///|
+/// Returns the number of air enemies within engagement range of the player.
 pub fn count_engaged_enemies(game : @types.Game) -> Int {
   let mut count = 0
   let player = game.player
@@ -450,6 +461,7 @@ pub fn count_engaged_enemies(game : @types.Game) -> Int {
 // Check if any enemy has missile lock on player
 
 ///|
+/// Returns a cumulative threat level score based on nearby enemies and turrets.
 pub fn check_enemy_threat_level(game : @types.Game) -> Int {
   let player = game.player
   let mut threat = 0
@@ -484,6 +496,7 @@ pub fn check_enemy_threat_level(game : @types.Game) -> Int {
 // Calculate accuracy bonus score
 
 ///|
+/// Returns the bonus score awarded based on shot accuracy.
 pub fn accuracy_bonus_score(shots_fired : Int, shots_hit : Int) -> Int {
   if shots_fired <= 0 {
     0
@@ -506,6 +519,7 @@ pub fn accuracy_bonus_score(shots_fired : Int, shots_hit : Int) -> Int {
 // Calculate time bonus for mission completion
 
 ///|
+/// Returns the bonus score for completing a mission faster than `par_time`.
 pub fn time_bonus_score(time_taken : Float, par_time : Float) -> Int {
   if par_time <= 0.0 {
     0
@@ -523,6 +537,7 @@ pub fn time_bonus_score(time_taken : Float, par_time : Float) -> Int {
 // Calculate no-damage bonus
 
 ///|
+/// Returns the bonus score based on how much hull integrity the player retained.
 pub fn no_damage_bonus(current_hp : Float, max_hp : Float) -> Int {
   let ratio = current_hp / max_hp
   if ratio >= 1.0 {
@@ -539,6 +554,7 @@ pub fn no_damage_bonus(current_hp : Float, max_hp : Float) -> Int {
 // Determine if enemy should attempt evasion based on incoming projectiles
 
 ///|
+/// Returns whether enemy `e` should begin evasive maneuvers due to incoming projectiles.
 pub fn should_enemy_evade(game : @types.Game, e : @types.Enemy) -> Bool {
   for proj in game.projectiles {
     if not(proj.active) {
@@ -567,6 +583,7 @@ pub fn should_enemy_evade(game : @types.Game, e : @types.Enemy) -> Bool {
 // Calculate lead angle for AI firing
 
 ///|
+/// Returns the heading angle the shooter should aim at to lead a moving target.
 pub fn calculate_lead_angle(
   shooter_x : Float,
   shooter_z : Float,
@@ -592,6 +609,7 @@ pub fn calculate_lead_angle(
 // Enemy collision avoidance: steer away from other enemies
 
 ///|
+/// Applies separation steering to enemy `e` to avoid collisions with other enemies.
 pub fn avoid_collision(
   game : @types.Game,
   e : @types.Enemy,
@@ -634,6 +652,7 @@ pub fn avoid_collision(
 // Determine threat direction for HUD indicator
 
 ///|
+/// Returns the direction of the closest engaging enemy for the HUD threat indicator.
 pub fn get_threat_direction(game : @types.Game) -> Int {
   let player = game.player
   let (fx, _fy, fz) = @types.get_forward(player.pitch, player.yaw)

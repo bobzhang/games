@@ -3,6 +3,7 @@
 // Draw cloud layer
 
 ///|
+/// Draws the volumetric cloud layer around the player with weather-dependent coloring.
 pub fn draw_clouds(game : @types.Game) -> Unit {
   for i in 0..<game.clouds.length() {
     let c = game.clouds[i]
@@ -80,6 +81,7 @@ pub fn draw_clouds(game : @types.Game) -> Unit {
 // Draw rain effect lines in 3D
 
 ///|
+/// Draws 3D rain streaks around the player with wind-affected trajectories.
 pub fn draw_rain_effect(game : @types.Game) -> Unit {
   let ws = game.weather_state
   if ws.rain_intensity <= 0.0 {
@@ -116,6 +118,7 @@ pub fn draw_rain_effect(game : @types.Game) -> Unit {
 // Draw fog gradient overlay
 
 ///|
+/// Draws ground-level fog volumes near the player during fog or storm weather.
 pub fn draw_fog_overlay(game : @types.Game) -> Unit {
   let ws = game.weather_state
   let visibility = ws.visibility
@@ -148,6 +151,7 @@ pub fn draw_fog_overlay(game : @types.Game) -> Unit {
 // Draw engine exhaust trail behind player
 
 ///|
+/// Draws the engine exhaust trail behind the player aircraft.
 pub fn draw_engine_trail(game : @types.Game) -> Unit {
   let player = game.player
   if not(player.alive) {
@@ -193,6 +197,7 @@ pub fn draw_engine_trail(game : @types.Game) -> Unit {
 // Draw smoke trail from damaged aircraft
 
 ///|
+/// Draws smoke and fire trails behind the player aircraft when damaged.
 pub fn draw_damage_smoke(game : @types.Game) -> Unit {
   let player = game.player
   if not(player.alive) {
@@ -255,6 +260,7 @@ pub fn draw_damage_smoke(game : @types.Game) -> Unit {
 // Draw tracer bullet trails
 
 ///|
+/// Draws extended tracer lines and bright tips behind all active projectiles.
 pub fn draw_tracer_trails(game : @types.Game) -> Unit {
   for proj in game.projectiles {
     if not(proj.active) {
@@ -292,6 +298,7 @@ pub fn draw_tracer_trails(game : @types.Game) -> Unit {
 // Draw sun or moon based on time of day
 
 ///|
+/// Draws the sun or moon in the sky based on the current time of day.
 pub fn draw_celestial_body(game : @types.Game) -> Unit {
   let tod = game.weather_state.time_of_day
   let player = game.player
@@ -356,6 +363,7 @@ pub fn draw_celestial_body(game : @types.Game) -> Unit {
 // Draw enemy smoke trails when damaged
 
 ///|
+/// Draws smoke and fire trails behind damaged air enemies.
 pub fn draw_enemy_damage_trails(game : @types.Game) -> Unit {
   for e in game.enemies {
     if not(e.active) {

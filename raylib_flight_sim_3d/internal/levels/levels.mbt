@@ -2,6 +2,7 @@
 // Returns (x, y, z) for checkpoint index in a given mission
 
 ///|
+/// Returns the world position of checkpoint `index` for the given `mission`.
 pub fn get_checkpoint_pos(mission : Int, index : Int) -> (Float, Float, Float) {
   if mission == 0 {
     // Training: simple ring around start
@@ -81,6 +82,7 @@ pub fn get_checkpoint_pos(mission : Int, index : Int) -> (Float, Float, Float) {
 // Enemy spawn positions for ground targets
 
 ///|
+/// Returns the spawn position of ground enemy `index` for the given `mission`.
 pub fn get_ground_enemy_pos(
   mission : Int,
   index : Int,
@@ -96,6 +98,7 @@ pub fn get_ground_enemy_pos(
 // Enemy spawn positions for air targets
 
 ///|
+/// Returns the spawn position of air enemy `index` for the given `mission`.
 pub fn get_air_enemy_pos(mission : Int, index : Int) -> (Float, Float, Float) {
   let denom = if index + 1 > 1 { index + 1 } else { 1 }
   let angle : Float = 3.14159265 *
@@ -110,6 +113,7 @@ pub fn get_air_enemy_pos(mission : Int, index : Int) -> (Float, Float, Float) {
 }
 
 ///|
+/// Returns the spawn position of turret `index` for the given `mission`.
 pub fn get_turret_pos(mission : Int, index : Int) -> (Float, Float, Float) {
   let angle : Float = 3.14159265 * 2.0 * Float::from_int(index) / 6.0
   let dist : Float = 20.0 + Float::from_int(mission) * 3.0
@@ -120,6 +124,7 @@ pub fn get_turret_pos(mission : Int, index : Int) -> (Float, Float, Float) {
 }
 
 ///|
+/// Returns the position and building type of building `index` for the given `mission`.
 pub fn get_building_info(
   mission : Int,
   index : Int,
@@ -231,6 +236,7 @@ pub fn get_building_info(
 // Turret placement data per mission
 
 ///|
+/// Returns the position and range of turret placement `index` for the given `mission`.
 pub fn get_turret_placement(
   mission : Int,
   index : Int,
@@ -308,6 +314,7 @@ pub fn get_turret_placement(
 // Mission briefing text (extended descriptions)
 
 ///|
+/// Returns the briefing text lines displayed before the given `mission` starts.
 pub fn get_mission_briefing_lines(mission : Int) -> Array[String] {
   if mission == 0 {
     [
@@ -398,6 +405,7 @@ pub fn get_mission_briefing_lines(mission : Int) -> Array[String] {
 // Get mission par time for scoring
 
 ///|
+/// Returns the par time in seconds for scoring the given `mission`.
 pub fn get_mission_par_time(mission : Int) -> Float {
   if mission == 0 {
     60.0
@@ -435,6 +443,7 @@ pub fn get_mission_par_time(mission : Int) -> Float {
 // Scoring criteria per mission
 
 ///|
+/// Returns the S-rank threshold, A-rank threshold, and base bonus for the given `mission`.
 pub fn get_mission_scoring_info(mission : Int) -> (Int, Int, Int) {
   // Returns (s_threshold, a_threshold, base_bonus)
   if mission == 0 {

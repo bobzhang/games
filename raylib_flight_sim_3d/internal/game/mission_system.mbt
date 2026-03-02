@@ -1,6 +1,7 @@
 // Mission logic update
 
 ///|
+/// Updates mission objective progress, checks completion or failure conditions, and shows status messages.
 pub fn update_mission_logic(game : @types.Game, dt : Float) -> Unit {
   let mission = game.missions[game.current_mission]
   game.mission_timer += dt
@@ -117,6 +118,7 @@ fn complete_mission(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Updates all active enemies, running AI state transitions and combat behaviors.
 pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
   for e in game.enemies {
@@ -361,6 +363,7 @@ fn enemy_fire(
 }
 
 ///|
+/// Updates all active projectiles including movement, collisions, and hit detection.
 pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
   for proj in game.projectiles {

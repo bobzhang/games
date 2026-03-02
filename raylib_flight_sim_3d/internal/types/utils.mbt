@@ -1,4 +1,5 @@
 ///|
+/// Returns the absolute value of `v`.
 pub fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -8,6 +9,7 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns `v` clamped between `low` and `high`.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
     low
@@ -19,6 +21,7 @@ pub fn clampf(v : Float, low : Float, high : Float) -> Float {
 }
 
 ///|
+/// Returns integer `v` clamped between `low` and `high`.
 pub fn clampi(v : Int, low : Int, high : Int) -> Int {
   if v < low {
     low
@@ -30,6 +33,7 @@ pub fn clampi(v : Int, low : Int, high : Int) -> Int {
 }
 
 ///|
+/// Returns the smaller of `a` and `b`.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -39,6 +43,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of `a` and `b`.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -48,11 +53,13 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the linear interpolation between `a` and `b` at factor `t`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t
 }
 
 ///|
+/// Returns the sign of `v` as -1.0, 0.0, or 1.0.
 pub fn sign(v : Float) -> Float {
   if v > 0.0 {
     1.0
@@ -64,6 +71,7 @@ pub fn sign(v : Float) -> Float {
 }
 
 ///|
+/// Returns `current` smoothly interpolated toward `target` at the given `speed` and `dt`.
 pub fn smooth_damp(
   current : Float,
   target : Float,
@@ -80,6 +88,7 @@ pub fn smooth_damp(
 }
 
 ///|
+/// Returns the angle wrapped to the range (-pi, pi].
 pub fn angle_wrap(angle : Float) -> Float {
   let mut a = angle
   if a > pi {
@@ -92,11 +101,13 @@ pub fn angle_wrap(angle : Float) -> Float {
 }
 
 ///|
+/// Returns the shortest signed angular difference from `a` to `b`.
 pub fn angle_diff(a : Float, b : Float) -> Float {
   angle_wrap(b - a)
 }
 
 ///|
+/// Returns the Euclidean distance between two 3D points.
 pub fn distance3d(
   x1 : Float,
   y1 : Float,
@@ -112,6 +123,7 @@ pub fn distance3d(
 }
 
 ///|
+/// Returns the Euclidean distance between two points on the XZ plane.
 pub fn distance2d(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
   let dx = x1 - x2
   let dz = z1 - z2
@@ -119,6 +131,7 @@ pub fn distance2d(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
 }
 
 ///|
+/// Returns the unit vector of the given 3D vector, or zero if too short.
 pub fn normalize3d(x : Float, y : Float, z : Float) -> (Float, Float, Float) {
   let len = (x * x + y * y + z * z).sqrt()
   if len < 0.0001 {
@@ -129,6 +142,7 @@ pub fn normalize3d(x : Float, y : Float, z : Float) -> (Float, Float, Float) {
 }
 
 ///|
+/// Returns the dot product of two 3D vectors.
 pub fn dot3d(
   x1 : Float,
   y1 : Float,
@@ -141,6 +155,7 @@ pub fn dot3d(
 }
 
 ///|
+/// Returns the cross product of two 3D vectors.
 pub fn cross3d(
   x1 : Float,
   y1 : Float,
@@ -155,6 +170,7 @@ pub fn cross3d(
 // Terrain height at world position using noise-like function
 
 ///|
+/// Returns the procedural terrain height at world position (`wx`, `wz`).
 pub fn terrain_height_at(wx : Float, wz : Float) -> Float {
   let freq1 : Float = 0.02
   let freq2 : Float = 0.05
@@ -182,6 +198,7 @@ pub fn terrain_height_at(wx : Float, wz : Float) -> Float {
 // Terrain height with bilinear interpolation for smoother results
 
 ///|
+/// Returns the bilinearly interpolated terrain height for smoother results.
 pub fn terrain_height_smooth(wx : Float, wz : Float) -> Float {
   let step : Float = 2.0
   let gx_raw : Float = wx / step
@@ -206,6 +223,7 @@ pub fn terrain_height_smooth(wx : Float, wz : Float) -> Float {
 // Terrain normal (approximate via finite differences)
 
 ///|
+/// Returns the approximate terrain surface normal at world position (`wx`, `wz`).
 pub fn terrain_normal(wx : Float, wz : Float) -> (Float, Float, Float) {
   let eps : Float = 1.0
   let hc = terrain_height_at(wx, wz)
@@ -219,6 +237,7 @@ pub fn terrain_normal(wx : Float, wz : Float) -> (Float, Float, Float) {
 // Altitude above terrain
 
 ///|
+/// Returns the altitude above ground level at position (`x`, `y`, `z`).
 pub fn altitude_above_terrain(x : Float, y : Float, z : Float) -> Float {
   let ground = terrain_height_at(x, z)
   y - ground
@@ -227,6 +246,7 @@ pub fn altitude_above_terrain(x : Float, y : Float, z : Float) -> Float {
 // Altitude effect on engine and control (thinner air at high altitude)
 
 ///|
+/// Returns the thin-air performance factor for the given `altitude`.
 pub fn altitude_factor(altitude : Float) -> Float {
   if altitude < altitude_thin_air_start {
     1.0
@@ -242,6 +262,7 @@ pub fn altitude_factor(altitude : Float) -> Float {
 // Calculate lift based on speed and aircraft min speed
 
 ///|
+/// Returns the lift force based on current `speed` and `min_speed`.
 pub fn calculate_lift(speed : Float, min_speed : Float) -> Float {
   let ratio = speed / (min_speed + 1.0)
   let lift_base : Float = ratio * ratio * aircraft_gravity
@@ -255,6 +276,7 @@ pub fn calculate_lift(speed : Float, min_speed : Float) -> Float {
 // Calculate drag based on speed
 
 ///|
+/// Returns the aerodynamic drag force based on `speed` and `max_speed`.
 pub fn calculate_drag(speed : Float, max_speed : Float) -> Float {
   let ratio = speed / max_speed
   aircraft_drag * ratio * ratio * speed
@@ -263,6 +285,7 @@ pub fn calculate_drag(speed : Float, max_speed : Float) -> Float {
 // Calculate thrust from throttle and altitude
 
 ///|
+/// Returns the engine thrust from `throttle`, `max_speed`, and `altitude`.
 pub fn calculate_thrust(
   throttle : Float,
   max_speed : Float,
@@ -275,6 +298,7 @@ pub fn calculate_thrust(
 // Check if aircraft is in stall condition
 
 ///|
+/// Returns whether the aircraft is in a stall at the given `speed` and `min_speed`.
 pub fn is_stalling(speed : Float, min_speed : Float) -> Bool {
   speed < min_speed * stall_speed_threshold
 }
@@ -282,6 +306,7 @@ pub fn is_stalling(speed : Float, min_speed : Float) -> Bool {
 // Fuel consumption rate based on throttle
 
 ///|
+/// Returns the fuel consumption rate for the given `throttle` level.
 pub fn fuel_consumption(throttle : Float) -> Float {
   if throttle < 0.1 {
     fuel_idle_rate
@@ -295,6 +320,7 @@ pub fn fuel_consumption(throttle : Float) -> Float {
 // Lead targeting: predict where target will be
 
 ///|
+/// Returns the predicted position of a moving target for lead aiming.
 pub fn lead_target(
   shooter_x : Float,
   shooter_y : Float,
@@ -321,6 +347,7 @@ pub fn lead_target(
 // Bomb trajectory prediction: where will bomb land given current position/velocity
 
 ///|
+/// Returns the predicted ground impact point for a bomb dropped at the given position and velocity.
 pub fn bomb_impact_point(
   x : Float,
   y : Float,
@@ -341,6 +368,7 @@ pub fn bomb_impact_point(
 // Wind effect on aircraft
 
 ///|
+/// Returns the position after applying wind displacement over `dt`.
 pub fn apply_wind(
   x : Float,
   z : Float,
@@ -357,6 +385,7 @@ pub fn apply_wind(
 // Turbulence jitter
 
 ///|
+/// Returns random pitch and roll jitter values from turbulence.
 pub fn turbulence_jitter(
   game : Game,
   strength : Float,
@@ -374,6 +403,7 @@ pub fn turbulence_jitter(
 // Collision: point vs sphere
 
 ///|
+/// Returns whether the point is inside the sphere at the given center and `radius`.
 pub fn point_in_sphere(
   px : Float,
   py : Float,
@@ -390,6 +420,7 @@ pub fn point_in_sphere(
 // Collision: point vs AABB (axis-aligned bounding box)
 
 ///|
+/// Returns whether the point is inside the axis-aligned bounding box.
 pub fn point_in_aabb(
   px : Float,
   py : Float,
@@ -407,6 +438,7 @@ pub fn point_in_aabb(
 // Distance and bearing to waypoint
 
 ///|
+/// Returns the bearing angle from one XZ position to another.
 pub fn bearing_to(
   from_x : Float,
   from_z : Float,
@@ -419,6 +451,7 @@ pub fn bearing_to(
 // Landing approach calculation
 
 ///|
+/// Returns the absolute angular deviation between the player heading and the runway bearing.
 pub fn landing_alignment(
   player_x : Float,
   player_z : Float,
@@ -434,6 +467,7 @@ pub fn landing_alignment(
 // Glide slope check for landing
 
 ///|
+/// Returns the altitude deviation from the ideal glide slope to the runway.
 pub fn glide_slope_deviation(
   player_x : Float,
   player_y : Float,
@@ -450,6 +484,7 @@ pub fn glide_slope_deviation(
 // Calculate G-force from vertical acceleration change
 
 ///|
+/// Returns the G-force from the change in vertical velocity over `dt`.
 pub fn calculate_gforce(
   current_vy : Float,
   prev_vy : Float,
@@ -467,6 +502,7 @@ pub fn calculate_gforce(
 // Camera chase position calculation
 
 ///|
+/// Returns the chase camera world position behind and above the player.
 pub fn chase_camera_pos(
   player_x : Float,
   player_y : Float,
@@ -486,6 +522,7 @@ pub fn chase_camera_pos(
 // RNG
 
 ///|
+/// Returns the next pseudo-random integer and advances the RNG state.
 pub fn rand_next(game : Game) -> Int {
   let mut x = game.rng_state
   x = x ^ (x << 13)
@@ -499,6 +536,7 @@ pub fn rand_next(game : Game) -> Int {
 }
 
 ///|
+/// Returns a random integer in the inclusive range [`low`, `high`].
 pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
   if high <= low {
     low
@@ -508,6 +546,7 @@ pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
 }
 
 ///|
+/// Returns a random float in the range [`low`, `high`].
 pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
   let n = Float::from_int(rand_next(game) % 10000) / 10000.0
   low + (high - low) * n
@@ -516,6 +555,7 @@ pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
 // Allocators
 
 ///|
+/// Returns the index of a free enemy slot, or -1 if none available.
 pub fn alloc_enemy(game : Game) -> Int {
   for i in 0..<game.enemies.length() {
     if not(game.enemies[i].active) {
@@ -526,6 +566,7 @@ pub fn alloc_enemy(game : Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free turret slot, or -1 if none available.
 pub fn alloc_turret(game : Game) -> Int {
   for i in 0..<game.turrets.length() {
     if not(game.turrets[i].active) {
@@ -536,6 +577,7 @@ pub fn alloc_turret(game : Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free projectile slot, or -1 if none available.
 pub fn alloc_projectile(game : Game) -> Int {
   for i in 0..<game.projectiles.length() {
     if not(game.projectiles[i].active) {
@@ -546,6 +588,7 @@ pub fn alloc_projectile(game : Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free particle slot, or -1 if none available.
 pub fn alloc_particle(game : Game) -> Int {
   for i in 0..<game.particles.length() {
     if not(game.particles[i].active) {
@@ -556,6 +599,7 @@ pub fn alloc_particle(game : Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free checkpoint slot, or -1 if none available.
 pub fn alloc_checkpoint(game : Game) -> Int {
   for i in 0..<game.checkpoints.length() {
     if not(game.checkpoints[i].active) {
@@ -566,6 +610,7 @@ pub fn alloc_checkpoint(game : Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free building slot, or -1 if none available.
 pub fn alloc_building(game : Game) -> Int {
   for i in 0..<game.buildings.length() {
     if not(game.buildings[i].active) {
@@ -576,6 +621,7 @@ pub fn alloc_building(game : Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free terrain chunk slot, or -1 if none available.
 pub fn alloc_terrain(game : Game) -> Int {
   for i in 0..<game.terrain.length() {
     if not(game.terrain[i].active) {
@@ -586,6 +632,7 @@ pub fn alloc_terrain(game : Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free cloud slot, or -1 if none available.
 pub fn alloc_cloud(game : Game) -> Int {
   for i in 0..<game.clouds.length() {
     if not(game.clouds[i].active) {
@@ -598,6 +645,7 @@ pub fn alloc_cloud(game : Game) -> Int {
 // Spawn particles at position
 
 ///|
+/// Spawns explosion particles at the given world position with the specified color.
 pub fn spawn_particles(
   game : Game,
   wx : Float,
@@ -635,6 +683,7 @@ pub fn spawn_particles(
 // Spawn smoke trail particles
 
 ///|
+/// Spawns smoke trail particles at the given world position.
 pub fn spawn_smoke(
   game : Game,
   wx : Float,
@@ -669,6 +718,7 @@ pub fn spawn_smoke(
 // Spawn fire particles
 
 ///|
+/// Spawns fire particles at the given world position.
 pub fn spawn_fire(
   game : Game,
   wx : Float,
@@ -703,6 +753,7 @@ pub fn spawn_fire(
 // Spawn debris particles
 
 ///|
+/// Spawns debris particles at the given world position.
 pub fn spawn_debris(
   game : Game,
   wx : Float,
@@ -737,6 +788,7 @@ pub fn spawn_debris(
 // Spawn rocket trail
 
 ///|
+/// Spawns a single smoke particle for a rocket exhaust trail.
 pub fn spawn_rocket_trail(
   game : Game,
   wx : Float,
@@ -767,6 +819,7 @@ pub fn spawn_rocket_trail(
 // Spawn explosion
 
 ///|
+/// Spawns a full explosion effect with fire, debris, and smoke at the given position.
 pub fn spawn_explosion(game : Game, wx : Float, wy : Float, wz : Float) -> Unit {
   spawn_particles(game, wx, wy, wz, 20, 255, 180, 50)
   spawn_particles(game, wx, wy, wz, 10, 255, 80, 20)
@@ -778,6 +831,7 @@ pub fn spawn_explosion(game : Game, wx : Float, wy : Float, wz : Float) -> Unit 
 // Spawn large explosion (for buildings/bases)
 
 ///|
+/// Spawns an oversized explosion effect for buildings and bases.
 pub fn spawn_large_explosion(
   game : Game,
   wx : Float,
@@ -794,6 +848,7 @@ pub fn spawn_large_explosion(
 // Show message
 
 ///|
+/// Sets the primary on-screen message with the given `text` and `duration`.
 pub fn show_message(game : Game, text : String, duration : Float) -> Unit {
   game.message_text = text
   game.message_timer = duration
@@ -802,6 +857,7 @@ pub fn show_message(game : Game, text : String, duration : Float) -> Unit {
 // Add message to message queue
 
 ///|
+/// Adds a prioritized message to the message queue.
 pub fn push_message(
   game : Game,
   text : String,
@@ -834,6 +890,7 @@ pub fn push_message(
 // Count active enemies
 
 ///|
+/// Returns the number of currently active enemies.
 pub fn count_active_enemies(game : Game) -> Int {
   let mut count = 0
   for enemy in game.enemies {
@@ -847,6 +904,7 @@ pub fn count_active_enemies(game : Game) -> Int {
 // Count active turrets
 
 ///|
+/// Returns the number of currently active turrets.
 pub fn count_active_turrets(game : Game) -> Int {
   let mut count = 0
   for turret in game.turrets {
@@ -860,6 +918,7 @@ pub fn count_active_turrets(game : Game) -> Int {
 // Count active buildings
 
 ///|
+/// Returns the number of currently active buildings.
 pub fn count_active_buildings(game : Game) -> Int {
   let mut count = 0
   for building in game.buildings {
@@ -873,6 +932,7 @@ pub fn count_active_buildings(game : Game) -> Int {
 // Count active checkpoints not collected
 
 ///|
+/// Returns the number of active checkpoints not yet collected.
 pub fn count_remaining_checkpoints(game : Game) -> Int {
   let mut count = 0
   for checkpoint in game.checkpoints {
@@ -886,6 +946,7 @@ pub fn count_remaining_checkpoints(game : Game) -> Int {
 // Get forward direction from pitch and yaw
 
 ///|
+/// Returns the forward direction unit vector from `pitch` and `yaw` angles.
 pub fn get_forward(pitch : Float, yaw : Float) -> (Float, Float, Float) {
   let cp = @math.cosf(pitch)
   let sp = @math.sinf(pitch)
@@ -897,6 +958,7 @@ pub fn get_forward(pitch : Float, yaw : Float) -> (Float, Float, Float) {
 // Get right direction from yaw and roll
 
 ///|
+/// Returns the right direction unit vector from `yaw` and `roll` angles.
 pub fn get_right(yaw : Float, roll : Float) -> (Float, Float, Float) {
   let cy = @math.cosf(yaw)
   let sy = @math.sinf(yaw)
@@ -908,6 +970,7 @@ pub fn get_right(yaw : Float, roll : Float) -> (Float, Float, Float) {
 // Find nearest enemy to position
 
 ///|
+/// Returns the index of the nearest active enemy to the given position, or -1 if none.
 pub fn find_nearest_enemy(game : Game, x : Float, y : Float, z : Float) -> Int {
   let mut best_idx = -1
   let mut best_dist : Float = 99999.0
@@ -934,6 +997,7 @@ pub fn find_nearest_enemy(game : Game, x : Float, y : Float, z : Float) -> Int {
 // Calculate mission accuracy percentage
 
 ///|
+/// Returns the hit accuracy as a percentage from `shots_fired` and `shots_hit`.
 pub fn calculate_accuracy(shots_fired : Int, shots_hit : Int) -> Float {
   if shots_fired <= 0 {
     0.0
@@ -945,6 +1009,7 @@ pub fn calculate_accuracy(shots_fired : Int, shots_hit : Int) -> Float {
 // Calculate mission rating based on score
 
 ///|
+/// Returns the letter rating grade for a mission based on `score`.
 pub fn calculate_rating(score : Int) -> String {
   if score >= rating_s_threshold {
     "S"
@@ -962,6 +1027,7 @@ pub fn calculate_rating(score : Int) -> String {
 // Weapon name for display
 
 ///|
+/// Returns the short display name for the weapon type `kind`.
 pub fn weapon_name(kind : Int) -> String {
   if kind == weapon_machine_gun {
     "MG"
@@ -977,6 +1043,7 @@ pub fn weapon_name(kind : Int) -> String {
 // Get ammo count for current weapon
 
 ///|
+/// Returns the remaining ammo count for the player's currently equipped weapon.
 pub fn get_ammo(player : Player) -> Int {
   if player.current_weapon == weapon_machine_gun {
     player.ammo_mg
@@ -990,6 +1057,7 @@ pub fn get_ammo(player : Player) -> Int {
 // Weather name
 
 ///|
+/// Returns the display name string for the weather type `kind`.
 pub fn weather_name(kind : Int) -> String {
   if kind == weather_clear {
     "CLEAR"
@@ -1011,6 +1079,7 @@ pub fn weather_name(kind : Int) -> String {
 // Difficulty stars string
 
 ///|
+/// Returns a star-rating string representing the difficulty `level`.
 pub fn difficulty_str(level : Int) -> String {
   if level <= 1 {
     "*"

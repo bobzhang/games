@@ -1,6 +1,7 @@
 // Aircraft type definition with flight characteristics
 
 ///|
+/// Aircraft configuration with flight characteristics and loadout.
 pub(all) struct AircraftStats {
   kind : Int
   name : String
@@ -17,6 +18,7 @@ pub(all) struct AircraftStats {
 }
 
 ///|
+/// Creates a trainer aircraft stats configuration.
 pub fn AircraftStats::trainer() -> AircraftStats {
   {
     kind: aircraft_trainer,
@@ -35,6 +37,7 @@ pub fn AircraftStats::trainer() -> AircraftStats {
 }
 
 ///|
+/// Creates a fighter aircraft stats configuration.
 pub fn AircraftStats::fighter() -> AircraftStats {
   {
     kind: aircraft_fighter,
@@ -53,6 +56,7 @@ pub fn AircraftStats::fighter() -> AircraftStats {
 }
 
 ///|
+/// Creates a bomber aircraft stats configuration.
 pub fn AircraftStats::bomber() -> AircraftStats {
   {
     kind: aircraft_bomber,
@@ -71,6 +75,7 @@ pub fn AircraftStats::bomber() -> AircraftStats {
 }
 
 ///|
+/// Creates an interceptor aircraft stats configuration.
 pub fn AircraftStats::interceptor() -> AircraftStats {
   {
     kind: aircraft_interceptor,
@@ -89,6 +94,7 @@ pub fn AircraftStats::interceptor() -> AircraftStats {
 }
 
 ///|
+/// Returns the stats configuration for the given aircraft type `kind`.
 pub fn get_aircraft_stats(kind : Int) -> AircraftStats {
   if kind == aircraft_trainer {
     AircraftStats::trainer()
@@ -104,6 +110,7 @@ pub fn get_aircraft_stats(kind : Int) -> AircraftStats {
 // Player aircraft
 
 ///|
+/// Player aircraft state including position, orientation, weapons, and status.
 pub(all) struct Player {
   mut x : Float
   mut y : Float
@@ -140,6 +147,7 @@ pub(all) struct Player {
 }
 
 ///|
+/// Creates a new player with default fighter stats and starting position.
 pub fn Player::new() -> Player {
   {
     x: 0.0,
@@ -178,6 +186,7 @@ pub fn Player::new() -> Player {
 }
 
 ///|
+/// Applies aircraft `stats` to the player, resetting HP, fuel, and ammo.
 pub fn Player::apply_stats(self : Player, stats : AircraftStats) -> Unit {
   self.aircraft_type = stats.kind
   self.max_hp = stats.max_hp
@@ -192,6 +201,7 @@ pub fn Player::apply_stats(self : Player, stats : AircraftStats) -> Unit {
 // Enemy entity
 
 ///|
+/// Enemy entity with position, velocity, AI state, and combat attributes.
 pub(all) struct Enemy {
   mut active : Bool
   mut kind : Int
@@ -221,6 +231,7 @@ pub(all) struct Enemy {
 }
 
 ///|
+/// Creates an inactive enemy slot.
 pub fn Enemy::inactive() -> Enemy {
   {
     active: false,
@@ -254,6 +265,7 @@ pub fn Enemy::inactive() -> Enemy {
 // Turret (anti-aircraft emplacement)
 
 ///|
+/// Anti-aircraft turret emplacement with tracking and firing state.
 pub(all) struct Turret {
   mut active : Bool
   mut x : Float
@@ -269,6 +281,7 @@ pub(all) struct Turret {
 }
 
 ///|
+/// Creates an inactive turret slot.
 pub fn Turret::inactive() -> Turret {
   {
     active: false,
@@ -288,6 +301,7 @@ pub fn Turret::inactive() -> Turret {
 // Projectile
 
 ///|
+/// Projectile entity with position, direction, and damage properties.
 pub(all) struct Projectile {
   mut active : Bool
   mut kind : Int
@@ -306,6 +320,7 @@ pub(all) struct Projectile {
 }
 
 ///|
+/// Creates an inactive projectile slot.
 pub fn Projectile::inactive() -> Projectile {
   {
     active: false,
@@ -328,6 +343,7 @@ pub fn Projectile::inactive() -> Projectile {
 // Building / structure
 
 ///|
+/// Building or structure with dimensions, type, and destructibility.
 pub(all) struct Building {
   mut active : Bool
   mut kind : Int
@@ -344,6 +360,7 @@ pub(all) struct Building {
 }
 
 ///|
+/// Creates an inactive building slot.
 pub fn Building::inactive() -> Building {
   {
     active: false,
@@ -364,6 +381,7 @@ pub fn Building::inactive() -> Building {
 // Particle
 
 ///|
+/// Visual particle with position, velocity, color, and lifetime.
 pub(all) struct Particle {
   mut active : Bool
   mut kind : Int
@@ -382,6 +400,7 @@ pub(all) struct Particle {
 }
 
 ///|
+/// Creates an inactive particle slot.
 pub fn Particle::inactive() -> Particle {
   {
     active: false,
@@ -404,6 +423,7 @@ pub fn Particle::inactive() -> Particle {
 // Checkpoint ring
 
 ///|
+/// Checkpoint ring that the player must fly through.
 pub(all) struct Checkpoint {
   mut active : Bool
   mut x : Float
@@ -415,6 +435,7 @@ pub(all) struct Checkpoint {
 }
 
 ///|
+/// Creates an inactive checkpoint slot.
 pub fn Checkpoint::inactive() -> Checkpoint {
   {
     active: false,
@@ -430,6 +451,7 @@ pub fn Checkpoint::inactive() -> Checkpoint {
 // Terrain chunk (one column of terrain)
 
 ///|
+/// Single terrain column with height and color data.
 pub(all) struct TerrainChunk {
   mut active : Bool
   mut grid_x : Int
@@ -441,6 +463,7 @@ pub(all) struct TerrainChunk {
 }
 
 ///|
+/// Creates an inactive terrain chunk slot.
 pub fn TerrainChunk::inactive() -> TerrainChunk {
   {
     active: false,
@@ -456,6 +479,7 @@ pub fn TerrainChunk::inactive() -> TerrainChunk {
 // Cloud entity
 
 ///|
+/// Volumetric cloud entity with position and size.
 pub(all) struct Cloud {
   mut active : Bool
   mut x : Float
@@ -468,6 +492,7 @@ pub(all) struct Cloud {
 }
 
 ///|
+/// Creates an inactive cloud slot.
 pub fn Cloud::inactive() -> Cloud {
   {
     active: false,
@@ -484,6 +509,7 @@ pub fn Cloud::inactive() -> Cloud {
 // Weather state
 
 ///|
+/// Current weather conditions including visibility, wind, and precipitation.
 pub(all) struct WeatherState {
   mut kind : Int
   mut visibility : Float
@@ -497,6 +523,7 @@ pub(all) struct WeatherState {
 }
 
 ///|
+/// Creates a new weather state defaulting to clear skies.
 pub fn WeatherState::new() -> WeatherState {
   {
     kind: weather_clear,
@@ -512,6 +539,7 @@ pub fn WeatherState::new() -> WeatherState {
 }
 
 ///|
+/// Sets all weather parameters based on the given weather type `kind`.
 pub fn WeatherState::set_weather(self : WeatherState, kind : Int) -> Unit {
   self.kind = kind
   if kind == weather_clear {
@@ -556,6 +584,7 @@ pub fn WeatherState::set_weather(self : WeatherState, kind : Int) -> Unit {
 // Message for radio/event display
 
 ///|
+/// Timed on-screen message for radio or event display.
 pub(all) struct GameMessage {
   mut text : String
   mut timer : Float
@@ -563,6 +592,7 @@ pub(all) struct GameMessage {
 }
 
 ///|
+/// Creates an empty game message with no text or timer.
 pub fn GameMessage::empty() -> GameMessage {
   { text: "", timer: 0.0, priority: 0 }
 }
@@ -570,6 +600,7 @@ pub fn GameMessage::empty() -> GameMessage {
 // Mission definition
 
 ///|
+/// Mission definition with objectives, weather, enemy counts, and scoring.
 pub(all) struct Mission {
   name : String
   kind : Int
@@ -593,6 +624,7 @@ pub(all) struct Mission {
 // Main Game struct
 
 ///|
+/// Top-level game state containing all entities, UI, scoring, and world data.
 pub(all) struct Game {
   mut state : Int
 
@@ -672,6 +704,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Creates a new game with default state, entity pools, and all missions.
 pub fn Game::new() -> Game {
   let missions = build_missions()
   {
