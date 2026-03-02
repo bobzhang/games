@@ -185,9 +185,9 @@ fn draw_road(game : @types.Game) -> Unit {
 ///|
 fn hazard_color(kind : @types.HazardKind) -> @raylib.Color {
   match kind {
-    @types.Rock => @raylib.Color::new(176, 188, 198, 255)
-    @types.Landslide => @raylib.Color::new(206, 134, 90, 255)
-    @types.Crosswind => @raylib.Color::new(120, 204, 248, 255)
+    Rock => @raylib.Color::new(176, 188, 198, 255)
+    Landslide => @raylib.Color::new(206, 134, 90, 255)
+    Crosswind => @raylib.Color::new(120, 204, 248, 255)
   }
 }
 
@@ -208,7 +208,7 @@ fn draw_hazards(game : @types.Game) -> Unit {
     let col = hazard_color(hazard.kind)
 
     match hazard.kind {
-      @types.Rock => {
+      Rock => {
         @raylib.draw_circle(x.to_int(), y.to_int(), size, col)
         @raylib.draw_circle_lines(
           x.to_int(),
@@ -217,7 +217,7 @@ fn draw_hazards(game : @types.Game) -> Unit {
           @raylib.Color::new(240, 244, 252, 180),
         )
       }
-      @types.Landslide => {
+      Landslide => {
         @raylib.draw_triangle(
           @raylib.Vector2::new(x - size, y + size * 0.8),
           @raylib.Vector2::new(x + size, y + size * 0.8),
@@ -232,7 +232,7 @@ fn draw_hazards(game : @types.Game) -> Unit {
           @raylib.Color::new(126, 74, 52, 220),
         )
       }
-      @types.Crosswind => {
+      Crosswind => {
         @raylib.draw_circle_lines(
           x.to_int(),
           y.to_int(),
@@ -688,9 +688,9 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   draw_hud(game)
 
   match game.state {
-    @types.Title => draw_title_overlay()
-    @types.Paused => draw_pause_overlay()
-    @types.GameOver => draw_game_over_overlay(game)
-    @types.Playing => ()
+    Title => draw_title_overlay()
+    Paused => draw_pause_overlay()
+    GameOver => draw_game_over_overlay(game)
+    Playing => ()
   }
 }

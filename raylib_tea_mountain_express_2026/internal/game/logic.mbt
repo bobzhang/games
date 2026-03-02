@@ -12,7 +12,7 @@ fn clear_hazards(game : @types.Game) -> Unit {
     hazard.y = 0.0
     hazard.speed = 0.0
     hazard.size = 0.0
-    hazard.kind = @types.Rock
+    hazard.kind = Rock
     hazard.near_miss_awarded = false
   }
 }
@@ -21,7 +21,7 @@ fn clear_hazards(game : @types.Game) -> Unit {
 fn reset_run(game : @types.Game) -> Unit {
   clear_hazards(game)
 
-  game.state = @types.Playing
+  game.state = Playing
   game.lane = @types.lane_count / 2
   game.tilt = 0.0
   game.speed = @types.speed_base
@@ -52,11 +52,11 @@ fn reset_run(game : @types.Game) -> Unit {
 
 ///|
 fn enter_game_over(game : @types.Game, reason : String) -> Unit {
-  if game.state == @types.GameOver {
+  if game.state == GameOver {
     return
   }
 
-  game.state = @types.GameOver
+  game.state = GameOver
   if game.score > game.best_score {
     game.best_score = game.score
   }
@@ -88,11 +88,11 @@ fn spawn_hazard(game : @types.Game) -> Unit {
   let slot = alloc_hazard_slot(game)
   let roll = @types.randi(0, 99)
   let kind : @types.HazardKind = if roll < 45 {
-    @types.Rock
+    Rock
   } else if roll < 79 {
-    @types.Landslide
+    Landslide
   } else {
-    @types.Crosswind
+    Crosswind
   }
 
   let mut lane = @types.randi(0, @types.lane_count - 1)
@@ -108,9 +108,9 @@ fn spawn_hazard(game : @types.Game) -> Unit {
     @types.randf(90.0, 280.0)
   game.hazards[slot].speed = @types.randf(210.0, 340.0) + difficulty * 13.0
   game.hazards[slot].size = match kind {
-    @types.Rock => @types.randf(26.0, 40.0)
-    @types.Landslide => @types.randf(30.0, 46.0)
-    @types.Crosswind => @types.randf(22.0, 34.0)
+    Rock => @types.randf(26.0, 40.0)
+    Landslide => @types.randf(30.0, 46.0)
+    Crosswind => @types.randf(22.0, 34.0)
   }
   game.hazards[slot].kind = kind
   game.hazards[slot].near_miss_awarded = false
@@ -447,33 +447,33 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   }
 
   match game.state {
-    @types.Title =>
+    Title =>
       if game.input_confirm_press || game.input_restart_press {
         reset_run(game)
       }
-    @types.Playing => {
+    Playing => {
       if game.input_restart_press {
         reset_run(game)
         return
       }
       if game.input_pause_press {
-        game.state = @types.Paused
+        game.state = Paused
         set_message(game, "Paused", 99.0)
         return
       }
       update_playing(game, frame_dt)
     }
-    @types.Paused => {
+    Paused => {
       if game.input_restart_press {
         reset_run(game)
         return
       }
       if game.input_pause_press || game.input_confirm_press {
-        game.state = @types.Playing
+        game.state = Playing
         set_message(game, "Caravan rolling.", 1.0)
       }
     }
-    @types.GameOver =>
+    GameOver =>
       if game.input_restart_press || game.input_confirm_press {
         reset_run(game)
       }
