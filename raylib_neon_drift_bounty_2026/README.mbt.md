@@ -183,7 +183,6 @@ cd examples && ./_build/native/debug/build/raylib_neon_drift_bounty_2026/raylib_
 | Symbol | Description |
 |--------|-------------|
 | `pub fn update_game(game, dt)` | Dispatches input and simulation for the current game state each frame. |
-| `pub fn init_title(game)` | Initializes the game into the title scene. |
 
 ### Package `internal/render`
 
@@ -214,7 +213,7 @@ cd examples && ./_build/native/debug/build/raylib_neon_drift_bounty_2026/raylib_
 | `draw_title_overlay(game)` | Draws the title screen with game name, controls, and start prompt. |
 | `draw_stage_clear_overlay(game)` | Draws the stage-clear banner and next-stage transition. |
 | `draw_game_over_overlay(game)` | Draws the game-over screen with final score and retry prompt. |
-| `pub fn draw_world(game)` | Top-level render function: composes sky, city, road, entities, HUD, and overlays. |
+| `pub fn draw_frame(game)` | Top-level render entry point: composes sky, city, road, entities, HUD, and state overlays. |
 
 ## Architecture
 
@@ -248,7 +247,7 @@ main.mbt
             ├─ update_effects       → sparks, rings, afterimages
             └─ update_timers        → cooldowns, combos, stage clear
 
-  └─ draw_world(game)               [internal/render/render.mbt]
+  └─ draw_frame(game)               [internal/render/render.mbt]
        ├─ draw_sky_backdrop
        ├─ draw_city_horizon         (parallax layers)
        ├─ draw_road_surface         (procedural swaying road)
