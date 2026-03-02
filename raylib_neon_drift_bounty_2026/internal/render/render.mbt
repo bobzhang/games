@@ -285,13 +285,13 @@ fn draw_road_surface(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 /// Returns the primary body color for an entity based on its kind.
 fn entity_body_col(kind : @types.EntityKind) -> @raylib.Color {
   match kind {
-    @types.FoeBike => @raylib.Color::new(255, 138, 198, 255)
-    @types.FoeDrone => @raylib.Color::new(132, 246, 255, 255)
-    @types.FoeTruck => @raylib.Color::new(255, 178, 110, 255)
-    @types.FoeLaser => @raylib.Color::new(255, 106, 154, 255)
-    @types.ItemCredit => @types.neon_yellow()
-    @types.ItemBattery => @types.energy_col()
-    @types.ItemHackcell => @raylib.Color::new(170, 140, 255, 255)
+    FoeBike => @raylib.Color::new(255, 138, 198, 255)
+    FoeDrone => @raylib.Color::new(132, 246, 255, 255)
+    FoeTruck => @raylib.Color::new(255, 178, 110, 255)
+    FoeLaser => @raylib.Color::new(255, 106, 154, 255)
+    ItemCredit => @types.neon_yellow()
+    ItemBattery => @types.energy_col()
+    ItemHackcell => @raylib.Color::new(170, 140, 255, 255)
   }
 }
 
@@ -446,7 +446,7 @@ fn draw_entity_pickup(
   )
 
   match e.kind {
-    @types.ItemCredit =>
+    ItemCredit =>
       @raylib.draw_text(
         "$",
         (x - 8.0).to_int(),
@@ -454,7 +454,7 @@ fn draw_entity_pickup(
         24,
         @raylib.Color::new(255, 242, 162, 230),
       )
-    @types.ItemBattery => {
+    ItemBattery => {
       @raylib.draw_rectangle(
         (x - 10.0).to_int(),
         (y - 14.0).to_int(),
@@ -497,10 +497,10 @@ fn draw_entities(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     }
 
     match e.kind {
-      @types.FoeBike => draw_entity_bike(e, col, cam_x, cam_y)
-      @types.FoeDrone => draw_entity_drone(e, col, cam_x, cam_y)
-      @types.FoeTruck => draw_entity_truck(e, col, cam_x, cam_y)
-      @types.FoeLaser => draw_entity_laser(e, col, cam_x, cam_y)
+      FoeBike => draw_entity_bike(e, col, cam_x, cam_y)
+      FoeDrone => draw_entity_drone(e, col, cam_x, cam_y)
+      FoeTruck => draw_entity_truck(e, col, cam_x, cam_y)
+      FoeLaser => draw_entity_laser(e, col, cam_x, cam_y)
       _ => draw_entity_pickup(e, col, cam_x, cam_y)
     }
 
@@ -508,7 +508,7 @@ fn draw_entities(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       let hp_ratio = @types.clampf(
         e.hp /
         (match e.kind {
-          @types.FoeTruck => 50.0
+          FoeTruck => 50.0
           _ => 20.0
         }),
         0.0,
@@ -1319,19 +1319,19 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   }
 
   match game.state {
-    @types.Title => ()
+    Title => ()
     _ => draw_hud(game)
   }
 
   match game.state {
-    @types.Title => draw_title_overlay(game)
-    @types.Play => {
+    Title => draw_title_overlay(game)
+    Play => {
       draw_play_hint(game)
       if game.touch_mode {
         draw_touch_controls(game)
       }
     }
-    @types.StageClear => draw_stage_clear_overlay(game)
-    @types.GameOver => draw_game_over_overlay(game)
+    StageClear => draw_stage_clear_overlay(game)
+    GameOver => draw_game_over_overlay(game)
   }
 }

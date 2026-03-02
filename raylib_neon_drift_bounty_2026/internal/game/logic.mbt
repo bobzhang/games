@@ -3,7 +3,7 @@
 fn clear_entities(game : @types.Game) -> Unit {
   for entity in game.entities {
     entity.active = false
-    entity.kind = @types.FoeBike
+    entity.kind = FoeBike
     entity.x = 0.0
     entity.y = 0.0
     entity.vx = 0.0
@@ -386,7 +386,7 @@ fn damage_player(game : @types.Game, dmg : Float) -> Unit {
   reset_combo(game)
 
   if game.shield <= 0.0 {
-    game.state = @types.GameOver
+    game.state = GameOver
     game.result_t = 0.0
   }
 }
@@ -402,7 +402,7 @@ fn start_stage(game : @types.Game, stage : Int) -> Unit {
 
   reset_player(game.hero)
 
-  game.state = @types.Play
+  game.state = Play
   game.stage = stage
   game.distance = 0.0
   game.stage_goal = @types.stage_distance_base +
@@ -446,7 +446,7 @@ fn init_title_scene(game : @types.Game) -> Unit {
   clear_images(game)
   reset_player(game.hero)
 
-  game.state = @types.Title
+  game.state = Title
   game.stage = 1
   game.distance = 0.0
   game.stage_goal = @types.stage_distance_base
@@ -495,7 +495,7 @@ fn spawn_enemy_pack(game : @types.Game, y : Float) -> Unit {
       let x = @types.lane_x(lane, center) + @types.randf(-12.0, 12.0)
       spawn_entity(
         game,
-        @types.FoeBike,
+        FoeBike,
         x,
         y + @types.randf(-28.0, 20.0),
         @types.randf(-44.0, 44.0),
@@ -512,7 +512,7 @@ fn spawn_enemy_pack(game : @types.Game, y : Float) -> Unit {
       let x = @types.lane_x(lane, center) + @types.randf(-16.0, 16.0)
       spawn_entity(
         game,
-        @types.FoeDrone,
+        FoeDrone,
         x,
         y + @types.randf(-26.0, 24.0),
         @types.randf(-60.0, 60.0),
@@ -529,7 +529,7 @@ fn spawn_enemy_pack(game : @types.Game, y : Float) -> Unit {
       let x = @types.lane_x(lane, center)
       spawn_entity(
         game,
-        @types.FoeTruck,
+        FoeTruck,
         x,
         y + @types.randf(-32.0, 22.0),
         @types.randf(-18.0, 18.0),
@@ -546,7 +546,7 @@ fn spawn_enemy_pack(game : @types.Game, y : Float) -> Unit {
       let x = @types.lane_x(lane, center)
       spawn_entity(
         game,
-        @types.FoeLaser,
+        FoeLaser,
         x,
         y + @types.randf(-14.0, 12.0),
         0.0,
@@ -562,7 +562,7 @@ fn spawn_enemy_pack(game : @types.Game, y : Float) -> Unit {
       let x = @types.road_spawn_x(game.distance, game.time_s, game.stage, y)
       spawn_entity(
         game,
-        @types.ItemCredit,
+        ItemCredit,
         x,
         y + @types.randf(-18.0, 18.0),
         @types.randf(-34.0, 34.0),
@@ -578,7 +578,7 @@ fn spawn_enemy_pack(game : @types.Game, y : Float) -> Unit {
       let x = @types.road_spawn_x(game.distance, game.time_s, game.stage, y)
       spawn_entity(
         game,
-        @types.ItemBattery,
+        ItemBattery,
         x,
         y + @types.randf(-18.0, 18.0),
         @types.randf(-28.0, 28.0),
@@ -594,7 +594,7 @@ fn spawn_enemy_pack(game : @types.Game, y : Float) -> Unit {
       let x = @types.road_spawn_x(game.distance, game.time_s, game.stage, y)
       spawn_entity(
         game,
-        @types.ItemHackcell,
+        ItemHackcell,
         x,
         y + @types.randf(-14.0, 14.0),
         @types.randf(-20.0, 20.0),
@@ -653,7 +653,7 @@ fn apply_hack_pulse(game : @types.Game) -> Unit {
       let x = entity.x
       let y = entity.y
       entity.active = false
-      add_score(game, if kind == @types.FoeTruck { 140 } else { 88 })
+      add_score(game, if kind == FoeTruck { 140 } else { 88 })
       push_combo(game)
       burst(game, x, y, 18, 1)
       spawn_ring(game, x, y, 10.0, 0.52, 1)
@@ -839,7 +839,7 @@ fn constrain_player_to_road(game : @types.Game) -> Unit {
 /// Fires a bullet from entity `e` toward the player using the firing pattern appropriate for its kind.
 fn entity_fire(game : @types.Game, e : @types.Entity) -> Unit {
   match e.kind {
-    @types.FoeBike =>
+    FoeBike =>
       spawn_bullet(
         game,
         false,
@@ -851,7 +851,7 @@ fn entity_fire(game : @types.Game, e : @types.Entity) -> Unit {
         9.0,
         0,
       )
-    @types.FoeDrone => {
+    FoeDrone => {
       let dx = game.hero.x - e.x
       let dy = game.hero.y - e.y
       let n2 = @types.maxf(dx * dx + dy * dy, 1.0)
@@ -868,7 +868,7 @@ fn entity_fire(game : @types.Game, e : @types.Entity) -> Unit {
         1,
       )
     }
-    @types.FoeTruck => {
+    FoeTruck => {
       spawn_bullet(
         game,
         false,
@@ -918,12 +918,12 @@ fn kill_entity(
 /// Applies the effect of collecting a pickup item: credits add score and combo, batteries restore energy, and hackcells reduce hack cooldown.
 fn collect_pickup(game : @types.Game, kind : @types.EntityKind) -> Unit {
   match kind {
-    @types.ItemCredit => {
+    ItemCredit => {
       game.credits = game.credits + 1
       add_score(game, 60)
       push_combo(game)
     }
-    @types.ItemBattery => {
+    ItemBattery => {
       game.energy = @types.minf(
         @types.player_energy_max,
         game.energy + @types.energy_pickup,
@@ -956,16 +956,16 @@ fn update_entities(game : @types.Game, dt : Float) -> Unit {
     game.entities[i].shot_cd = game.entities[i].shot_cd - dt
 
     match game.entities[i].kind {
-      @types.FoeBike =>
+      FoeBike =>
         game.entities[i].x = game.entities[i].x +
           @types.sinf(game.entities[i].spin * 2.2) * 34.0 * dt
-      @types.FoeDrone =>
+      FoeDrone =>
         game.entities[i].y = game.entities[i].y +
           @types.cosf(game.entities[i].spin * 2.8) * 26.0 * dt
-      @types.FoeTruck =>
+      FoeTruck =>
         game.entities[i].x = game.entities[i].x +
           @types.sinf(game.entities[i].spin * 1.4) * 18.0 * dt
-      @types.FoeLaser => {
+      FoeLaser => {
         game.entities[i].w = 118.0 +
           @types.sinf(game.entities[i].spin * 3.4) * 26.0
         game.entities[i].h = 18.0 +
@@ -988,9 +988,9 @@ fn update_entities(game : @types.Game, dt : Float) -> Unit {
       game.entities[i].shot_cd <= 0.0 {
       entity_fire(game, game.entities[i])
       game.entities[i].shot_cd = match game.entities[i].kind {
-        @types.FoeBike => @types.randf(0.74, 1.44)
-        @types.FoeDrone => @types.randf(0.48, 1.02)
-        @types.FoeTruck => @types.randf(1.18, 2.1)
+        FoeBike => @types.randf(0.74, 1.44)
+        FoeDrone => @types.randf(0.48, 1.02)
+        FoeTruck => @types.randf(1.18, 2.1)
         _ => @types.randf(1.0, 1.8)
       }
     }
@@ -1014,12 +1014,12 @@ fn update_entities(game : @types.Game, dt : Float) -> Unit {
         kill_entity(game, i, game.entities[i].reward, 0)
       } else {
         let dmg : Float = match kind {
-          @types.FoeTruck => 24.0
-          @types.FoeLaser => 16.0
+          FoeTruck => 24.0
+          FoeLaser => 16.0
           _ => 14.0
         }
         damage_player(game, dmg)
-        if kind != @types.FoeLaser {
+        if kind != FoeLaser {
           game.entities[i].active = false
         }
       }
@@ -1249,8 +1249,8 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
     damage_player(game, 100.0)
   }
 
-  if game.state == @types.Play && game.distance >= game.stage_goal {
-    game.state = @types.StageClear
+  if game.state == Play && game.distance >= game.stage_goal {
+    game.state = StageClear
     game.result_t = 0.0
     add_score(game, 320 + game.stage * 120)
     game.shield = @types.minf(@types.player_shield_max, game.shield + 14.0)
@@ -1330,18 +1330,18 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 
   // Process input based on state
   match game.state {
-    @types.Title => update_title_input(game)
-    @types.Play => update_play_input(game)
-    @types.StageClear | @types.GameOver => update_result_input(game)
+    Title => update_title_input(game)
+    Play => update_play_input(game)
+    StageClear | GameOver => update_result_input(game)
   }
 
   update_timers(game, dt)
 
   match game.state {
-    @types.Title => update_title(game, dt)
-    @types.Play => update_play(game, dt)
-    @types.StageClear => update_stage_clear(game, dt)
-    @types.GameOver => update_game_over(game, dt)
+    Title => update_title(game, dt)
+    Play => update_play(game, dt)
+    StageClear => update_stage_clear(game, dt)
+    GameOver => update_game_over(game, dt)
   }
 
   if game.score > game.best_score {
