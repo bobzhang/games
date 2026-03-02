@@ -4,4 +4,4 @@ import {
   "tonyfettes/raylib-examples/raylib_arctic_outpost_survival_2026/internal/types",
 }
 
-warnings = "+missing_doc"
+warnings = "+missing_doc+unnecessary_annotation"
