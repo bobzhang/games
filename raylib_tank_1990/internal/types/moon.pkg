@@ -2,3 +2,5 @@ import {
   "moonbitlang/core/math",
   "tonyfettes/raylib",
 }
+
+warnings = "+missing_doc+unnecessary_annotation"
