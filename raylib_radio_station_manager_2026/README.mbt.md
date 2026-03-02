@@ -4,6 +4,8 @@ A radio DJ simulation where you manage a 180-second broadcast shift, selecting s
 
 Each song has a mood (Chill, Pop, Rock, or Classic) and an energy level. The audience's desired mood changes as the shift progresses -- starting with Chill, moving to Pop in the middle, then Rock toward the end. Playing songs that match the desired mood and energy range grows your listener base and rating, while mismatches drive listeners away. Ad breaks generate budget but cost listeners and rating, and have a 9-second cooldown between uses. The shift ends when the timer hits zero or all listeners tune out.
 
+The game is implemented as a compact single-file design with the entire simulation model, input handling, and rendering contained in `main.mbt`. The listener model uses a trend accumulator that must cross a threshold before causing discrete listener changes, creating smooth audience behavior rather than jittery per-frame fluctuations.
+
 ## Build and Run
 
 ```bash
@@ -56,8 +58,8 @@ The shift ends when the timer reaches zero ("Broadcast complete") or when listen
 
 ```
 raylib_radio_station_manager_2026/
-├── main.mbt    — All game logic, rendering, and types in a single file
-└── moon.pkg    — Package config with raylib import
+├── main.mbt    -- All game logic, rendering, and types in a single file
+└── moon.pkg    -- Package config with raylib import
 ```
 
 This is a compact single-file game. The `main` function contains the entire game loop: initialization of the song queue and game variables, input handling, the listener/rating simulation model, and all rendering code. There are no internal packages.
