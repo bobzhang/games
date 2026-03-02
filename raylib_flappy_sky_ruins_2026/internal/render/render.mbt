@@ -323,8 +323,8 @@ fn draw_touch_button(
 /// Draws the on-screen FLAP, BOOST, RESTART, and HINT touch buttons in the side panel area during active play.
 fn draw_controls(game : @types.Game) -> Unit {
   match game.state {
-    @types.Play => ()
-    @types.Title | @types.Result => return
+    Play => ()
+    Title | Result => return
   }
 
   let flap = @types.btn_flap_rect()
@@ -732,14 +732,14 @@ fn draw_world(game : @types.Game) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_bg(game)
   match game.state {
-    @types.Title => draw_title(game)
-    @types.Play => {
+    Title => draw_title(game)
+    Play => {
       draw_world(game)
       draw_particles(game)
       draw_panel(game)
       draw_controls(game)
     }
-    @types.Result => {
+    Result => {
       draw_world(game)
       draw_particles(game)
       draw_panel(game)
