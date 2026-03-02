@@ -5,8 +5,8 @@ import {
   "tonyfettes/raylib-examples/raylib_space_combat_3d/internal/types",
 }
 
+warnings = "+missing_doc+unnecessary_annotation"
+
 options(
   "is-main": true,
 )
-
-warnings = "+missing_doc+unnecessary_annotation"
