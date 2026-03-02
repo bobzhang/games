@@ -112,7 +112,7 @@ fn clamp_aim_inside_world(game : @types.Game) -> Unit {
 /// Reads all play-state input: movement axes from keyboard and touch d-pad, pointer-based aim, fire hold (with auto-aim fallback on touch), repair, hint, and restart actions.
 fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.Title
+    game.state = Title
     return
   }
 

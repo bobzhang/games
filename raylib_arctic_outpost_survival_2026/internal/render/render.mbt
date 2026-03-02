@@ -762,7 +762,7 @@ fn draw_touch_button(
 ///|
 /// Draws all eight on-screen touch buttons (left, right, up, down, fire, repair, hint, restart) only during the Play state.
 fn draw_touch_controls(game : @types.Game) -> Unit {
-  if game.state != @types.Play {
+  if game.state != Play {
     return
   }
 

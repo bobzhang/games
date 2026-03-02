@@ -139,7 +139,7 @@ fn start_run(game : @types.Game) -> Unit {
   clear_world(game)
   clear_particles(game)
 
-  game.state = @types.Play
+  game.state = Play
   reset_player(game)
 
   game.lives = 3
@@ -181,11 +181,11 @@ fn start_run(game : @types.Game) -> Unit {
 ///|
 /// Transitions to the Result state, updates the best score, emits a celebration or collapse burst, and shows the appropriate end message; does nothing if not in Play.
 fn finish_run(game : @types.Game, win : Bool) -> Unit {
-  if game.state != @types.Play {
+  if game.state != Play {
     return
   }
 
-  game.state = @types.Result
+  game.state = Result
   game.win = win
   game.move_x = 0.0
   game.move_y = 0.0
@@ -343,7 +343,7 @@ fn spawn_bullet(
 ///|
 /// Fires one bullet toward `(tx, ty)` if the game is in Play, ammo is available, and the fire cooldown has elapsed; uses pierce bullets and faster fire rate during overdrive; applies recoil to the player.
 fn try_fire(game : @types.Game, tx : Float, ty : Float) -> Bool {
-  if game.state != @types.Play {
+  if game.state != Play {
     return false
   }
   if game.fire_cd > 0.0 {
@@ -382,7 +382,7 @@ fn try_fire(game : @types.Game, tx : Float, ty : Float) -> Bool {
 ///|
 /// Restores core heat, suit HP, and ammo by consuming fuel if the player is near the generator and the repair cooldown has elapsed; fails with a message if out of range or low on fuel.
 fn try_repair(game : @types.Game) -> Bool {
-  if game.state != @types.Play {
+  if game.state != Play {
     return false
   }
   if game.repair_cd > 0.0 {
@@ -730,7 +730,7 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
       enemy.vx = -enemy.vx * 0.5
       enemy.vy = -enemy.vy * 0.5
 
-      if game.state != @types.Play {
+      if game.state != Play {
         return
       }
     }
@@ -803,7 +803,7 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
 ///|
 /// Consumes one hint charge and marks the nearest needed supply pickup (fuel or ammo when low) or the safest of five vertical lanes based on enemy threat weighting; deducts 6 score points.
 fn use_hint(game : @types.Game) -> Bool {
-  if game.state != @types.Play || game.hint_left <= 0 {
+  if game.state != Play || game.hint_left <= 0 {
     return false
   }
 
@@ -921,7 +921,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
 
   update_particles(game, step)
 
-  if game.state != @types.Play {
+  if game.state != Play {
     return
   }
 
@@ -947,7 +947,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
 
   if game.suit_hp <= 0.0 {
     hurt_player(game, 100.0)
-    if game.state != @types.Play {
+    if game.state != Play {
       return
     }
   }
@@ -971,7 +971,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   update_player(game, step)
   update_bullets(game, step)
   update_enemies(game, step)
-  if game.state != @types.Play {
+  if game.state != Play {
     return
   }
   update_pickups(game, step)
