@@ -1,19 +1,19 @@
 ///|
 /// Returns the currently held directional input from keyboard arrow/WASD keys or the on-screen D-pad.
 fn detect_held_dir(game : @types.Game) -> @types.Dir {
-  let mut dir : @types.Dir = @types.DirNone
+  let mut dir : @types.Dir = DirNone
 
   if @raylib.is_key_down(@raylib.KeyLeft) || @raylib.is_key_down(@raylib.KeyA) {
-    dir = @types.Left
+    dir = Left
   }
   if @raylib.is_key_down(@raylib.KeyRight) || @raylib.is_key_down(@raylib.KeyD) {
-    dir = @types.Right
+    dir = Right
   }
   if @raylib.is_key_down(@raylib.KeyUp) || @raylib.is_key_down(@raylib.KeyW) {
-    dir = @types.Up
+    dir = Up
   }
   if @raylib.is_key_down(@raylib.KeyDown) || @raylib.is_key_down(@raylib.KeyS) {
-    dir = @types.Down
+    dir = Down
   }
 
   let cx : Int = @types.dpad_center_x()
@@ -30,7 +30,7 @@ fn detect_held_dir(game : @types.Game) -> @types.Dir {
       s,
       s,
     ) {
-    dir = @types.Left
+    dir = Left
   }
   if @types.pointer_on_rect(
       game.mouse_x,
@@ -42,7 +42,7 @@ fn detect_held_dir(game : @types.Game) -> @types.Dir {
       s,
       s,
     ) {
-    dir = @types.Right
+    dir = Right
   }
   if @types.pointer_on_rect(
       game.mouse_x,
@@ -54,7 +54,7 @@ fn detect_held_dir(game : @types.Game) -> @types.Dir {
       s,
       s,
     ) {
-    dir = @types.Up
+    dir = Up
   }
   if @types.pointer_on_rect(
       game.mouse_x,
@@ -66,7 +66,7 @@ fn detect_held_dir(game : @types.Game) -> @types.Dir {
       s,
       s,
     ) {
-    dir = @types.Down
+    dir = Down
   }
 
   dir

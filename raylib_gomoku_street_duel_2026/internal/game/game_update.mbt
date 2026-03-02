@@ -8,12 +8,12 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   let reset_press : Bool = detect_reset_press(game)
 
   match game.state {
-    @types.Title => if start_press { reset_round(game, true) }
-    @types.Play => {
+    Title => if start_press { reset_round(game, true) }
+    Play => {
       let held_dir : @types.Dir = detect_held_dir(game)
       update_cursor_hold(game, dt, held_dir)
 
-      if game.turn == @types.Human {
+      if game.turn == Human {
         let place_press : Bool = detect_place_press(game)
         let hint_press : Bool = detect_hint_press(game)
         let undo_press : Bool = detect_undo_press(game)
@@ -36,17 +36,17 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
         } else if board_tap.0 && game.touch_action_cd <= 0.0 {
           game.touch_action_cd = 0.1
           @types.clear_hint(game)
-          ignore(place_stone(game, board_tap.1, board_tap.2, @types.Human))
+          ignore(place_stone(game, board_tap.1, board_tap.2, Human))
         } else if place_press && game.touch_action_cd <= 0.0 {
           game.touch_action_cd = 0.1
           @types.clear_hint(game)
-          ignore(place_stone(game, game.cursor_x, game.cursor_y, @types.Human))
+          ignore(place_stone(game, game.cursor_x, game.cursor_y, Human))
         }
       }
 
       ai_step(game)
     }
-    @types.Result =>
+    Result =>
       if next_press || reset_press {
         let odd_round : Bool = (game.human_wins + game.ai_wins + game.draws) % 2 ==
           1

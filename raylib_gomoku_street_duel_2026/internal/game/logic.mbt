@@ -2,7 +2,7 @@
 /// Sets every cell on the board to `Empty`.
 fn clear_board(game : @types.Game) -> Unit {
   for i in 0..<game.board.length() {
-    game.board[i] = @types.Empty
+    game.board[i] = Empty
   }
 }
 
@@ -13,7 +13,7 @@ fn clear_history(game : @types.Game) -> Unit {
   for i in 0..<game.hist_x.length() {
     game.hist_x[i] = 0
     game.hist_y[i] = 0
-    game.hist_p[i] = @types.Empty
+    game.hist_p[i] = Empty
   }
 }
 
@@ -28,7 +28,7 @@ fn clear_sparks(game : @types.Game) -> Unit {
     spark.vy = 0.0
     spark.life = 0.0
     spark.size = 0.0
-    spark.kind = @types.SparkAI
+    spark.kind = SparkAI
   }
 }
 
@@ -63,7 +63,7 @@ fn push_history(
 /// Removes and returns the most recent history entry as `(true, x, y, player)`, or `(false, 0, 0, Empty)` if the stack is empty.
 fn pop_history(game : @types.Game) -> (Bool, Int, Int, @types.Player) {
   if game.hist_len <= 0 {
-    return (false, 0, 0, @types.Empty)
+    return (false, 0, 0, Empty)
   }
 
   game.hist_len = game.hist_len - 1
@@ -130,7 +130,7 @@ fn board_full(game : @types.Game) -> Bool {
 ///|
 /// Places player `p`'s stone at `(x, y)`, records history, emits sparks, checks for a win or draw, and advances the turn; returns false if placement is invalid.
 fn place_stone(game : @types.Game, x : Int, y : Int, p : @types.Player) -> Bool {
-  if game.state != @types.Play {
+  if game.state != Play {
     return false
   }
 
@@ -138,7 +138,7 @@ fn place_stone(game : @types.Game, x : Int, y : Int, p : @types.Player) -> Bool 
     return false
   }
 
-  if @types.cell_at(game, x, y) != @types.Empty {
+  if @types.cell_at(game, x, y) != Empty {
     return false
   }
 
@@ -147,23 +147,23 @@ fn place_stone(game : @types.Game, x : Int, y : Int, p : @types.Player) -> Bool 
   game.move_count = game.move_count + 1
 
   match p {
-    @types.Human => {
+    Human => {
       game.last_hx = x
       game.last_hy = y
-      @types.burst_move(game, x, y, 12, @types.SparkHuman)
+      @types.burst_move(game, x, y, 12, SparkHuman)
     }
     _ => {
       game.last_ax = x
       game.last_ay = y
-      @types.burst_move(game, x, y, 12, @types.SparkAI)
+      @types.burst_move(game, x, y, 12, SparkAI)
     }
   }
 
   if check_five_from(game, x, y, p) {
-    game.state = @types.Result
+    game.state = Result
     game.winner = p
     match p {
-      @types.Human => {
+      Human => {
         game.human_wins = game.human_wins + 1
         @types.set_message(game, "You win!", 1.6)
       }
@@ -177,18 +177,18 @@ fn place_stone(game : @types.Game, x : Int, y : Int, p : @types.Player) -> Bool 
   }
 
   if board_full(game) {
-    game.state = @types.Result
-    game.winner = @types.Empty
+    game.state = Result
+    game.winner = Empty
     game.draws = game.draws + 1
     @types.set_message(game, "Draw", 1.4)
     return true
   }
 
   game.turn = match p {
-    @types.Human => @types.AI
-    _ => @types.Human
+    Human => AI
+    _ => Human
   }
-  game.ai_delay = if game.turn == @types.AI { 0.26 } else { 0.0 }
+  game.ai_delay = if game.turn == AI { 0.26 } else { 0.0 }
 
   true
 }
@@ -204,10 +204,10 @@ fn undo_round_step(game : @types.Game) -> Bool {
   let x : Int = pop.1
   let y : Int = pop.2
 
-  if @types.in_board(x, y) && @types.cell_at(game, x, y) != @types.Empty {
-    @types.set_cell(game, x, y, @types.Empty)
+  if @types.in_board(x, y) && @types.cell_at(game, x, y) != Empty {
+    @types.set_cell(game, x, y, Empty)
     game.move_count = @types.maxi(0, game.move_count - 1)
-    @types.burst_move(game, x, y, 8, @types.SparkUndo)
+    @types.burst_move(game, x, y, 8, SparkUndo)
   }
 
   true
@@ -216,7 +216,7 @@ fn undo_round_step(game : @types.Game) -> Bool {
 ///|
 /// Rolls back one full human turn (and the preceding AI move if applicable), restores last-move markers from history, and returns the turn to the human; returns false if undo is not possible.
 fn undo_last_turn(game : @types.Game) -> Bool {
-  if game.state != @types.Play {
+  if game.state != Play {
     @types.set_message(game, "Undo only during play", 0.8)
     return false
   }
@@ -226,19 +226,19 @@ fn undo_last_turn(game : @types.Game) -> Bool {
     return false
   }
 
-  if game.turn == @types.AI {
+  if game.turn == AI {
     // Human just moved, rollback one move.
     if not(undo_round_step(game)) {
       return false
     }
-    game.turn = @types.Human
+    game.turn = Human
   } else {
     // AI just moved, rollback AI + previous human when possible.
     if not(undo_round_step(game)) {
       return false
     }
     ignore(undo_round_step(game))
-    game.turn = @types.Human
+    game.turn = Human
   }
 
   @types.clear_hint(game)
@@ -249,11 +249,11 @@ fn undo_last_turn(game : @types.Game) -> Bool {
   for i in 0..<game.hist_len {
     let p : @types.Player = game.hist_p[i]
     match p {
-      @types.Human => {
+      Human => {
         game.last_hx = game.hist_x[i]
         game.last_hy = game.hist_y[i]
       }
-      @types.AI => {
+      AI => {
         game.last_ax = game.hist_x[i]
         game.last_ay = game.hist_y[i]
       }
@@ -270,20 +270,20 @@ fn undo_last_turn(game : @types.Game) -> Bool {
 ///|
 /// Moves the cursor one step in `dir`, clamping it within the board boundaries.
 fn move_cursor_once(game : @types.Game, dir : @types.Dir) -> Unit {
-  if game.state != @types.Play {
+  if game.state != Play {
     return
   }
 
   match dir {
-    @types.Left =>
+    Left =>
       game.cursor_x = @types.clampi(game.cursor_x - 1, 0, @types.board_n - 1)
-    @types.Right =>
+    Right =>
       game.cursor_x = @types.clampi(game.cursor_x + 1, 0, @types.board_n - 1)
-    @types.Up =>
+    Up =>
       game.cursor_y = @types.clampi(game.cursor_y - 1, 0, @types.board_n - 1)
-    @types.Down =>
+    Down =>
       game.cursor_y = @types.clampi(game.cursor_y + 1, 0, @types.board_n - 1)
-    @types.DirNone => ()
+    DirNone => ()
   }
 }
 
@@ -294,14 +294,14 @@ fn update_cursor_hold(
   dt : Float,
   held_dir : @types.Dir,
 ) -> Unit {
-  if game.state != @types.Play {
-    game.hold_dir = @types.DirNone
+  if game.state != Play {
+    game.hold_dir = DirNone
     game.repeat_t = 0.0
     return
   }
 
-  if held_dir == @types.DirNone {
-    game.hold_dir = @types.DirNone
+  if held_dir == DirNone {
+    game.hold_dir = DirNone
     game.repeat_t = 0.0
     return
   }
@@ -345,7 +345,7 @@ fn update_sparks(game : @types.Game, dt : Float) -> Unit {
 fn update_timers(game : @types.Game, dt : Float) -> Unit {
   game.ui_t = game.ui_t + dt
 
-  if game.state == @types.Play {
+  if game.state == Play {
     game.game_time = game.game_time + dt
   }
 
@@ -396,19 +396,19 @@ fn reset_round(game : @types.Game, human_first : Bool) -> Unit {
   @types.clear_hint(game)
   clear_last_moves(game)
 
-  game.state = @types.Play
-  game.turn = if human_first { @types.Human } else { @types.AI }
-  game.winner = @types.Empty
+  game.state = Play
+  game.turn = if human_first { Human } else { AI }
+  game.winner = Empty
   game.move_count = 0
 
   game.cursor_x = @types.board_n / 2
   game.cursor_y = @types.board_n / 2
 
   game.hints_left = 4
-  game.ai_delay = if game.turn == @types.AI { 0.35 } else { 0.0 }
+  game.ai_delay = if game.turn == AI { 0.35 } else { 0.0 }
   game.game_time = 0.0
 
-  game.hold_dir = @types.DirNone
+  game.hold_dir = DirNone
   game.repeat_t = 0.0
   game.touch_action_cd = 0.0
 

@@ -7,7 +7,7 @@ fn has_neighbor(game : @types.Game, x : Int, y : Int, r : Int) -> Bool {
         continue
       }
 
-      if @types.in_board(xx, yy) && @types.cell_at(game, xx, yy) != @types.Empty {
+      if @types.in_board(xx, yy) && @types.cell_at(game, xx, yy) != Empty {
         return true
       }
     }
@@ -37,7 +37,7 @@ fn count_chain_and_open(
   }
 
   let open : Int = if @types.in_board(cx, cy) &&
-    @types.cell_at(game, cx, cy) == @types.Empty {
+    @types.cell_at(game, cx, cy) == Empty {
     1
   } else {
     0
@@ -95,7 +95,7 @@ fn score_cell_for(
   y : Int,
   p : @types.Player,
 ) -> Int {
-  if @types.cell_at(game, x, y) != @types.Empty {
+  if @types.cell_at(game, x, y) != Empty {
     return -1
   }
 
@@ -121,13 +121,13 @@ fn would_win_if_place(
   y : Int,
   p : @types.Player,
 ) -> Bool {
-  if @types.cell_at(game, x, y) != @types.Empty {
+  if @types.cell_at(game, x, y) != Empty {
     return false
   }
 
   @types.set_cell(game, x, y, p)
   let win : Bool = check_five_from(game, x, y, p)
-  @types.set_cell(game, x, y, @types.Empty)
+  @types.set_cell(game, x, y, Empty)
   win
 }
 
@@ -149,7 +149,7 @@ fn best_move_for(
 
   for y in 0..<@types.board_n {
     for x in 0..<@types.board_n {
-      if @types.cell_at(game, x, y) != @types.Empty {
+      if @types.cell_at(game, x, y) != Empty {
         continue
       }
 
@@ -183,7 +183,7 @@ fn best_move_for(
   if not(found) {
     for y in 0..<@types.board_n {
       for x in 0..<@types.board_n {
-        if @types.cell_at(game, x, y) == @types.Empty {
+        if @types.cell_at(game, x, y) == Empty {
           return (true, x, y, 1)
         }
       }
@@ -197,14 +197,14 @@ fn best_move_for(
 ///|
 /// Executes the AI's turn by selecting and placing the best move when it is the AI's turn and the delay timer has expired; declares a draw if no move is available.
 fn ai_step(game : @types.Game) -> Unit {
-  if game.state != @types.Play || game.turn != @types.AI || game.ai_delay > 0.0 {
+  if game.state != Play || game.turn != AI || game.ai_delay > 0.0 {
     return
   }
 
-  let mv = best_move_for(game, @types.AI, @types.Human)
+  let mv = best_move_for(game, AI, Human)
   if not(mv.0) {
-    game.state = @types.Result
-    game.winner = @types.Empty
+    game.state = Result
+    game.winner = Empty
     game.draws = game.draws + 1
     @types.set_message(game, "No move, draw", 1.4)
     return
@@ -212,9 +212,9 @@ fn ai_step(game : @types.Game) -> Unit {
 
   let x : Int = mv.1
   let y : Int = mv.2
-  ignore(place_stone(game, x, y, @types.AI))
+  ignore(place_stone(game, x, y, AI))
 
-  if game.state == @types.Play {
+  if game.state == Play {
     @types.set_message(game, "AI moved", 0.45)
   }
 }
@@ -222,7 +222,7 @@ fn ai_step(game : @types.Game) -> Unit {
 ///|
 /// Spends one hint charge to show the AI-recommended move for the human player, moves the cursor there, and emits hint sparks; returns true on success.
 fn use_hint(game : @types.Game) -> Bool {
-  if game.state != @types.Play || game.turn != @types.Human {
+  if game.state != Play || game.turn != Human {
     return false
   }
 
@@ -231,7 +231,7 @@ fn use_hint(game : @types.Game) -> Bool {
     return false
   }
 
-  let mv = best_move_for(game, @types.Human, @types.AI)
+  let mv = best_move_for(game, Human, AI)
   if not(mv.0) {
     @types.set_message(game, "No suggestion", 0.8)
     return false
@@ -247,7 +247,7 @@ fn use_hint(game : @types.Game) -> Bool {
   game.cursor_y = mv.2
 
   @types.set_message(game, "Hint suggested", 0.9)
-  @types.burst_move(game, mv.1, mv.2, 10, @types.SparkHint)
+  @types.burst_move(game, mv.1, mv.2, 10, SparkHint)
 
   true
 }

@@ -116,7 +116,7 @@ fn draw_stone(
   let r : Float = Float::from_int(tile) * 0.42
 
   match p {
-    @types.Human => {
+    Human => {
       @raylib.draw_circle(cx, cy, r, @raylib.Color::new(28, 34, 46, 255))
       @raylib.draw_circle(
         cx - 4,
@@ -210,7 +210,7 @@ fn draw_board(game : @types.Game) -> Unit {
   for y in 0..<@types.board_n {
     for x in 0..<@types.board_n {
       let p : @types.Player = @types.cell_at(game, x, y)
-      if p != @types.Empty {
+      if p != Empty {
         draw_stone(x, y, p, board_x, board_y, tile)
       }
     }
@@ -219,7 +219,7 @@ fn draw_board(game : @types.Game) -> Unit {
   draw_hint(game, board_x, board_y, tile)
   draw_last_markers(game, board_x, board_y, tile)
 
-  if game.state == @types.Play {
+  if game.state == Play {
     let cx : Int = board_x + game.cursor_x * tile
     let cy : Int = board_y + game.cursor_y * tile
     @raylib.draw_circle_lines(
@@ -304,7 +304,7 @@ fn draw_side_panel(game : @types.Game) -> Unit {
   )
 
   @raylib.draw_text(
-    if game.turn == @types.Human {
+    if game.turn == Human {
       "Turn: You"
     } else {
       "Turn: AI"
@@ -624,14 +624,14 @@ fn draw_sparks(game : @types.Game) -> Unit {
     }
 
     let core : @raylib.Color = match spark.kind {
-      @types.SparkHuman => @raylib.Color::new(255, 214, 108, alpha)
-      @types.SparkAI => @raylib.Color::new(130, 208, 255, alpha)
+      SparkHuman => @raylib.Color::new(255, 214, 108, alpha)
+      SparkAI => @raylib.Color::new(130, 208, 255, alpha)
       _ => @raylib.Color::new(210, 196, 255, alpha)
     }
 
     let edge : @raylib.Color = match spark.kind {
-      @types.SparkHuman => @raylib.Color::new(255, 242, 196, alpha - 44)
-      @types.SparkAI => @raylib.Color::new(206, 236, 255, alpha - 44)
+      SparkHuman => @raylib.Color::new(255, 242, 196, alpha - 44)
+      SparkAI => @raylib.Color::new(206, 236, 255, alpha - 44)
       _ => @raylib.Color::new(230, 220, 255, alpha - 44)
     }
 
@@ -722,9 +722,9 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
   )
 
   let title : String = match game.winner {
-    @types.Human => "You Win"
-    @types.AI => "AI Wins"
-    @types.Empty => "Draw"
+    Human => "You Win"
+    AI => "AI Wins"
+    Empty => "Draw"
   }
 
   @raylib.draw_text(
@@ -777,12 +777,12 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   draw_bg(game)
 
   match game.state {
-    @types.Title => {
+    Title => {
       draw_title(game)
       return
     }
-    @types.Play => ()
-    @types.Result => ()
+    Play => ()
+    Result => ()
   }
 
   draw_board(game)
@@ -790,7 +790,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   draw_touch_overlay(game)
   draw_sparks(game)
 
-  if game.state == @types.Result {
+  if game.state == Result {
     draw_result_overlay(game)
   }
 }
