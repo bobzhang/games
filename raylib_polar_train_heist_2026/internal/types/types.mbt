@@ -1,3 +1,4 @@
+///|
 /// Runtime entity record for enemies and pickups.
 pub(all) struct Ent {
   mut active : Bool
@@ -16,6 +17,7 @@ pub(all) struct Ent {
   mut reward : Int
 }
 
+///|
 /// Runtime projectile record for player and enemy shots.
 pub(all) struct Shot {
   mut active : Bool
@@ -29,6 +31,7 @@ pub(all) struct Shot {
   mut kind : Int
 }
 
+///|
 /// Runtime particle effect record.
 pub(all) struct Fx {
   mut active : Bool
@@ -41,6 +44,7 @@ pub(all) struct Fx {
   mut kind : Int
 }
 
+///|
 /// Expanding ring effect record.
 pub(all) struct Ring {
   mut active : Bool
@@ -51,6 +55,7 @@ pub(all) struct Ring {
   mut kind : Int
 }
 
+///|
 /// Soft shadow effect record.
 pub(all) struct Shadow {
   mut active : Bool
@@ -63,6 +68,7 @@ pub(all) struct Shadow {
   mut kind : Int
 }
 
+///|
 /// Mutable player state for movement, combat, and invulnerability.
 pub(all) struct Player {
   mut x : Float
@@ -83,6 +89,7 @@ pub(all) struct Player {
   mut anim_t : Float
 }
 
+///|
 /// Global mutable game state for the polar train heist.
 pub(all) struct Game {
   ents : Array[Ent]
@@ -132,6 +139,7 @@ pub(all) struct Game {
   mut touch_count : Int
 }
 
+///|
 /// Creates an inactive entity record with default fields.
 pub fn Ent::new() -> Ent {
   {
@@ -152,6 +160,7 @@ pub fn Ent::new() -> Ent {
   }
 }
 
+///|
 /// Creates an inactive shot record.
 pub fn Shot::new() -> Shot {
   {
@@ -167,6 +176,7 @@ pub fn Shot::new() -> Shot {
   }
 }
 
+///|
 /// Creates an inactive particle effect record.
 pub fn Fx::new() -> Fx {
   {
@@ -181,11 +191,13 @@ pub fn Fx::new() -> Fx {
   }
 }
 
+///|
 /// Creates an inactive ring effect record.
 pub fn Ring::new() -> Ring {
   { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
 }
 
+///|
 /// Creates an inactive shadow effect record.
 pub fn Shadow::new() -> Shadow {
   {
@@ -200,6 +212,7 @@ pub fn Shadow::new() -> Shadow {
   }
 }
 
+///|
 /// Creates a player initialized on the middle lane.
 pub fn Player::new() -> Player {
   let lane = 1
@@ -223,6 +236,7 @@ pub fn Player::new() -> Player {
   }
 }
 
+///|
 /// Creates a fresh game state with pooled objects and title defaults.
 pub fn Game::new() -> Game {
   {
