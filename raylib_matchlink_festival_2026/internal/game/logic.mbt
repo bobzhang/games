@@ -1,4 +1,5 @@
 ///|
+/// Fills the board with shuffled paired tile kinds and sets the remaining count to the total cell count.
 fn build_level_board(game : @types.Game) -> Unit {
   let total : Int = game.board_w * game.board_h
   let pair_count : Int = total / 2
@@ -25,6 +26,7 @@ fn build_level_board(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Appends (x, y) to the path coordinate arrays, skipping the push if it duplicates the last point.
 fn push_point(xs : Array[Int], ys : Array[Int], x : Int, y : Int) -> Unit {
   if xs.length() > 0 {
     let last : Int = xs.length() - 1
@@ -38,6 +40,7 @@ fn push_point(xs : Array[Int], ys : Array[Int], x : Int, y : Int) -> Unit {
 }
 
 ///|
+/// Constructs a `LinkPath` struct from coordinate arrays, returning an empty path when fewer than two points are present.
 fn make_path(xs : Array[Int], ys : Array[Int]) -> @types.LinkPath {
   let n : Int = xs.length()
   if n < 2 {
@@ -83,6 +86,7 @@ fn make_path(xs : Array[Int], ys : Array[Int]) -> @types.LinkPath {
 }
 
 ///|
+/// Returns true when the axis-aligned segment from (x1, y1) to (x2, y2) contains no non-empty cells between the endpoints.
 fn line_clear(
   game : @types.Game,
   x1 : Int,
@@ -123,6 +127,7 @@ fn line_clear(
 }
 
 ///|
+/// Returns true when cell (x, y) is the target tile or is empty, used to validate corner waypoints.
 fn empty_or_target(
   game : @types.Game,
   x : Int,
@@ -134,6 +139,7 @@ fn empty_or_target(
 }
 
 ///|
+/// Tries to connect anchor (ax, ay) to (bx, by) via a straight line or a single L-shaped turn, returning the path if found.
 fn direct_or_one_turn_from_anchor(
   game : @types.Game,
   ax : Int,
@@ -179,6 +185,7 @@ fn direct_or_one_turn_from_anchor(
 }
 
 ///|
+/// Prepends point (ax, ay) to a tail path, building a combined polyline.
 fn compose_with_start(
   ax : Int,
   ay : Int,
@@ -201,6 +208,7 @@ fn compose_with_start(
 }
 
 ///|
+/// Searches for a valid link path between (ax, ay) and (bx, by) using direct, one-turn, and two-turn routes, returning the path if found.
 fn find_link_path(
   game : @types.Game,
   ax : Int,
@@ -271,6 +279,7 @@ fn find_link_path(
 }
 
 ///|
+/// Stores a link path into the game state for a brief flash animation, or clears it if the path was not found.
 fn set_path_flash(game : @types.Game, path : @types.LinkPath) -> Unit {
   if not(path.found) {
     @types.clear_path_flash(game)
@@ -291,6 +300,7 @@ fn set_path_flash(game : @types.Game, path : @types.LinkPath) -> Unit {
 }
 
 ///|
+/// Activates a hint highlight for the tile pair at (x0, y0) and (x1, y1) with a fixed display TTL.
 fn set_hint_pair(
   game : @types.Game,
   x0 : Int,
@@ -307,6 +317,7 @@ fn set_hint_pair(
 }
 
 ///|
+/// Scans the entire board for any linkable matching tile pair, returning found status, the two coordinates, and the path.
 fn find_any_move(
   game : @types.Game,
 ) -> (Bool, Int, Int, Int, Int, @types.LinkPath) {
@@ -339,6 +350,7 @@ fn find_any_move(
 }
 
 ///|
+/// Repeatedly reshuffles remaining tile values until a valid move exists, optionally spending a shuffle ticket.
 fn reshuffle_board(game : @types.Game, consume_ticket : Bool) -> Bool {
   if game.state != Play {
     return false
@@ -407,12 +419,14 @@ fn reshuffle_board(game : @types.Game, consume_ticket : Bool) -> Bool {
 }
 
 ///|
+/// Records level completion by incrementing the cleared level counter and accumulating elapsed time.
 fn finalize_level_clear(game : @types.Game) -> Unit {
   game.total_levels = game.total_levels + 1
   game.total_time = game.total_time + (game.time_limit - game.timer)
 }
 
 ///|
+/// Finalises a cleared level and transitions to LevelClear or CampaignClear state depending on progress.
 fn complete_level(game : @types.Game) -> Unit {
   if game.state != Play {
     return
@@ -431,6 +445,7 @@ fn complete_level(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Transitions to Fail state when time runs out, resetting combo and triggering a shake effect.
 fn fail_level(game : @types.Game) -> Unit {
   if game.state != Play {
     return
@@ -444,6 +459,7 @@ fn fail_level(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Checks whether any valid move exists, and if not auto-shuffles or forces a shuffle; fails the level if no valid arrangement can be found.
 fn ensure_move_exists(game : @types.Game) -> Unit {
   if game.state != Play || game.remaining <= 0 {
     return
@@ -470,6 +486,7 @@ fn ensure_move_exists(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Removes the matched pair from the board, updates score and combo, grants bonus time, triggers sparks and path flash, and checks for level completion or a follow-up ensure_move_exists.
 fn on_pair_matched(
   game : @types.Game,
   x0 : Int,
@@ -512,6 +529,7 @@ fn on_pair_matched(
 }
 
 ///|
+/// Resets the combo, shows a "Path blocked" message, and emits a shake and spark effect at the attempted cell.
 fn on_pair_failed(game : @types.Game, x : Int, y : Int) -> Unit {
   game.combo = 0
   game.message = "Path blocked"
@@ -521,6 +539,7 @@ fn on_pair_failed(game : @types.Game, x : Int, y : Int) -> Unit {
 }
 
 ///|
+/// Handles a tile pick at (x, y): selects the first tile, deselects on re-tap, switches selection to a different kind, or attempts to match the pair if kinds match.
 fn pick_cell(game : @types.Game, x : Int, y : Int) -> Unit {
   if game.state != Play {
     return
@@ -573,11 +592,13 @@ fn pick_cell(game : @types.Game, x : Int, y : Int) -> Unit {
 }
 
 ///|
+/// Picks the tile at the current cursor position.
 fn pick_cursor_cell(game : @types.Game) -> Unit {
   pick_cell(game, game.cursor_x, game.cursor_y)
 }
 
 ///|
+/// Consumes one hint ticket to highlight the first available matching pair and moves the cursor to it; returns false if no hints remain or no pair is available.
 fn use_hint(game : @types.Game) -> Bool {
   if game.state != Play || game.hints_left <= 0 {
     game.message = "No hints left"
@@ -605,6 +626,7 @@ fn use_hint(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Moves the cursor one step in the given direction, clamping to the board boundaries.
 fn move_cursor_once(game : @types.Game, dir : @types.Direction) -> Unit {
   if game.state != Play {
     return
@@ -620,6 +642,7 @@ fn move_cursor_once(game : @types.Game, dir : @types.Direction) -> Unit {
 }
 
 ///|
+/// Handles directional key/button hold with initial delay and repeat rate to move the cursor smoothly while a direction is held.
 fn update_cursor_hold(
   game : @types.Game,
   dt : Float,
@@ -651,6 +674,7 @@ fn update_cursor_hold(
 }
 
 ///|
+/// Advances all time-based game fields each frame: ui_t, message fade, shake, path flash, hint flash, touch cooldown, level countdown timer, and spark particles.
 fn update_timers(game : @types.Game, dt : Float) -> Unit {
   game.ui_t = game.ui_t + dt
 
@@ -701,6 +725,7 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Configures and initialises a campaign level by id: sets board dimensions, time limit, hint and shuffle counts, builds the board, and ensures at least one valid move exists before entering Play state.
 fn load_level(game : @types.Game, level_id : Int) -> Unit {
   let mut id : Int = level_id
   if id < 0 {
@@ -754,11 +779,13 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
 }
 
 ///|
+/// Reloads the current level by index, resetting the board and all level state.
 fn reload_level(game : @types.Game) -> Unit {
   load_level(game, game.level_index)
 }
 
 ///|
+/// Resets cumulative score and statistics then loads level 0 to start a fresh campaign run.
 fn restart_campaign(game : @types.Game) -> Unit {
   game.score = 0
   game.total_levels = 0
@@ -767,6 +794,7 @@ fn restart_campaign(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Advances to the next campaign level, or transitions to CampaignClear if the last level has already been completed.
 fn next_level(game : @types.Game) -> Unit {
   if game.level_index + 1 >= game.level_count {
     game.state = CampaignClear

@@ -1,4 +1,5 @@
 ///|
+/// Draws text centered horizontally at the given y position.
 fn draw_center_text(
   text : String,
   y : Int,
@@ -10,6 +11,7 @@ fn draw_center_text(
 }
 
 ///|
+/// Draws text right-aligned so its rightmost pixel aligns with `x`.
 fn draw_right_text(
   text : String,
   x : Int,
@@ -22,6 +24,7 @@ fn draw_right_text(
 }
 
 ///|
+/// Returns a copy of `c` with its alpha channel replaced by `a`.
 fn a_col(c : @raylib.Color, a : Int) -> @raylib.Color {
   @raylib.Color::new(
     c.r.to_int(),
@@ -32,6 +35,7 @@ fn a_col(c : @raylib.Color, a : Int) -> @raylib.Color {
 }
 
 ///|
+/// Returns a random camera offset scaled by the current shake timer.
 fn cam_shake(game : @types.Game) -> (Float, Float) {
   if game.shake_t <= 0.0 {
     (0.0, 0.0)
@@ -42,6 +46,7 @@ fn cam_shake(game : @types.Game) -> (Float, Float) {
 }
 
 ///|
+/// Returns a blue-tinted overlay color whose intensity increases as the heat meter drains.
 fn scene_tint(game : @types.Game) -> @raylib.Color {
   let cold = @types.clampf(
     1.0 - game.heat / @types.maxf(@types.heat_max, 1.0),
@@ -57,6 +62,7 @@ fn scene_tint(game : @types.Game) -> @raylib.Color {
 }
 
 ///|
+/// Draws the background gradient, heat tint, animated moon, stars, and aurora light bands.
 fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
@@ -140,6 +146,7 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Returns the fill color for a parallax mountain layer at the given depth index.
 fn mountain_col(depth : Int) -> @raylib.Color {
   if depth == 0 {
     @raylib.Color::new(20, 34, 58, 220)
@@ -151,6 +158,7 @@ fn mountain_col(depth : Int) -> @raylib.Color {
 }
 
 ///|
+/// Draws three parallax mountain layers with snow-capped peaks scrolling at different speeds.
 fn draw_mountains(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let horizon = Float::from_int(@types.hud_h) + 156.0
 
@@ -208,26 +216,31 @@ fn draw_mountains(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Returns the y coordinate of the top edge of the train roof.
 fn roof_y() -> Float {
   @types.lane_top - 76.0
 }
 
 ///|
+/// Returns the pixel height of the train body from roof to bottom of screen.
 fn roof_h() -> Float {
   Float::from_int(@types.screen_h) - roof_y() - 30.0
 }
 
 ///|
+/// Returns the color used for vertical car-seam dividers on the train body.
 fn car_seam_col() -> @raylib.Color {
   @raylib.Color::new(24, 52, 82, 220)
 }
 
 ///|
+/// Returns the color used for the horizontal lane rail lines.
 fn rail_col() -> @raylib.Color {
   @raylib.Color::new(90, 174, 230, 184)
 }
 
 ///|
+/// Draws the scrolling train car body with seam lines, rivet dots, lane rails, and edge stripes.
 fn draw_train_body(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let y = roof_y()
   let h = roof_h()
@@ -322,6 +335,7 @@ fn draw_train_body(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws horizontal speed streak lines whose count and length scale with the current scroll speed.
 fn draw_speed_lines(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let intensity = @types.clampf(
     (game.scroll - @types.base_scroll) / 120.0,
@@ -349,6 +363,7 @@ fn draw_speed_lines(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Returns the base display color for an entity kind id.
 fn ent_base_col(kind : Int) -> @raylib.Color {
   if kind == @types.ent_guard {
     @raylib.Color::new(255, 136, 162, 255)
@@ -368,6 +383,7 @@ fn ent_base_col(kind : Int) -> @raylib.Color {
 }
 
 ///|
+/// Draws all active shadow afterimage blobs as fading translucent rectangles.
 fn draw_shadow_blobs(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for shadow in game.shadows {
     if not(shadow.active) {
@@ -392,6 +408,7 @@ fn draw_shadow_blobs(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws a guard entity as a body rectangle, head circle, and gun barrel.
 fn draw_guard(
   e : @types.Ent,
   col : @raylib.Color,
@@ -437,6 +454,7 @@ fn draw_guard(
 }
 
 ///|
+/// Draws a drone entity as a pulsing circle body with cross arms and an orbiting light dot.
 fn draw_drone(
   e : @types.Ent,
   col : @raylib.Color,
@@ -477,6 +495,7 @@ fn draw_drone(
 }
 
 ///|
+/// Draws a turret entity as a base rectangle, dome cap, and two gun barrels.
 fn draw_turret(
   e : @types.Ent,
   col : @raylib.Color,
@@ -519,6 +538,7 @@ fn draw_turret(
 }
 
 ///|
+/// Draws a crate entity as a filled rectangle with cross divider lines and an outline.
 fn draw_crate(
   e : @types.Ent,
   col : @raylib.Color,
@@ -560,6 +580,7 @@ fn draw_crate(
 }
 
 ///|
+/// Draws a pickup entity with a distinct shape for medkit, battery, and signal kinds.
 fn draw_pickup(
   e : @types.Ent,
   col : @raylib.Color,
@@ -632,6 +653,7 @@ fn draw_pickup(
 }
 
 ///|
+/// Draws a single active entity dispatching to the appropriate shape renderer and overlays a health bar for hostile kinds.
 fn draw_ent(e : @types.Ent, cam_x : Float, cam_y : Float) -> Unit {
   if not(e.active) {
     return
@@ -682,6 +704,7 @@ fn draw_ent(e : @types.Ent, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws the player character with animated body, coat, legs, arm, muzzle flash, hook ring, and hurt overlay.
 fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let h = game.hero
   let x = h.x + cam_x
@@ -807,6 +830,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Returns the display color for a shot based on whether it is from the player and its kind.
 fn shot_col(s : @types.Shot) -> @raylib.Color {
   if s.from_player {
     if s.kind == 1 {
@@ -824,6 +848,7 @@ fn shot_col(s : @types.Shot) -> @raylib.Color {
 }
 
 ///|
+/// Draws all active projectiles as velocity-oriented line segments with a bright dot at the tip.
 fn draw_shots(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for shot in game.shots {
     if not(shot.active) {
@@ -866,6 +891,7 @@ fn draw_shots(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Returns the display color for a particle effect based on its kind.
 fn fx_col(kind : Int) -> @raylib.Color {
   if kind == 0 {
     @types.cyan()
@@ -879,6 +905,7 @@ fn fx_col(kind : Int) -> @raylib.Color {
 }
 
 ///|
+/// Draws all active particle sparks and expanding ring effects with alpha fading by lifetime.
 fn draw_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for fx in game.fxs {
     if not(fx.active) {
@@ -940,6 +967,7 @@ fn draw_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws a filled progress bar with a label, dark background, colored fill, and outlined border.
 fn draw_hud_bar(
   x : Int,
   y : Int,
@@ -982,6 +1010,7 @@ fn draw_hud_bar(
 }
 
 ///|
+/// Draws a small cooldown bar that fills from left to right as a cooldown timer expires.
 fn draw_cooldown(
   label : String,
   value : Float,
@@ -1021,6 +1050,7 @@ fn draw_cooldown(
 }
 
 ///|
+/// Draws the full HUD panel with armor and heat bars, stage progress, cooldown indicators, score, and combo display.
 fn draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -1131,6 +1161,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a touch control button rectangle with pressed and hover visual states and a centered label.
 fn draw_button_visual(
   label : String,
   rect : (Float, Float, Float, Float),
@@ -1182,6 +1213,7 @@ fn draw_button_visual(
 }
 
 ///|
+/// Draws on-screen touch control buttons when touch mode is active, adapting layout to the current game state.
 fn draw_touch_controls(game : @types.Game) -> Unit {
   if not(game.touch_mode) {
     return
@@ -1222,6 +1254,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the title screen overlay with game title, tagline, controls panel, and start button.
 fn draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -1333,6 +1366,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the stage-clear overlay with an animated slide-in title, bonus score, and next-stage message.
 fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
   let t = @types.clampf(game.result_t / @types.stage_clear_wait, 0.0, 1.0)
   let y = @types.lerpf(234.0, 170.0, @types.ease_out_cubic(t)).to_int()
@@ -1361,6 +1395,7 @@ fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the game-over overlay with failure title, summary stats, and a retry button.
 fn draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -1458,6 +1493,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a full-screen red flash overlay that fades out when the player takes damage.
 fn draw_flash(game : @types.Game) -> Unit {
   if game.flash_t <= 0.0 {
     return
@@ -1474,6 +1510,7 @@ fn draw_flash(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the complete game world: sky, mountains, speed lines, train body, shadows, entities, player, shots, and effects.
 fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   draw_sky(game, cam_x, cam_y)
   draw_mountains(game, cam_x, cam_y)

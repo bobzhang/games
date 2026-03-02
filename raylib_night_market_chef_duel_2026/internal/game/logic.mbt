@@ -1,4 +1,5 @@
 ///|
+/// Resets an order slot to inactive with zeroed fields.
 fn clear_order(order : @types.Order) -> Unit {
   order.active = false
   order.dish = @types.Skewers
@@ -9,6 +10,7 @@ fn clear_order(order : @types.Order) -> Unit {
 }
 
 ///|
+/// Clears the active cooking pipeline, resetting dish, lane, stage, and progress.
 fn clear_cooking(game : @types.Game) -> Unit {
   game.cooking.active = false
   game.cooking.dish = @types.DishNone
@@ -19,6 +21,7 @@ fn clear_cooking(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Clears all orders and the cooking pipeline, and resets cursor and selection.
 fn clear_round_entities(game : @types.Game) -> Unit {
   for order in game.orders {
     clear_order(order)
@@ -31,6 +34,7 @@ fn clear_round_entities(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets all run state to initial values including score, combo, timers, and entities.
 fn init_game(game : @types.Game) -> Unit {
   game.state = @types.Title
   game.score = 0
@@ -49,6 +53,7 @@ fn init_game(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Initialises a new round, preserving the best score, and spawns the first two orders.
 fn start_round(game : @types.Game) -> Unit {
   let keep_best = game.best_score
   init_game(game)
@@ -59,6 +64,7 @@ fn start_round(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns a randomly chosen dish whose distribution shifts toward harder dishes as elapsed time grows.
 fn choose_dish_for_wave(elapsed_t : Float) -> @types.Dish {
   let r = @types.randi(0, 999)
   let late = @types.clampf(elapsed_t / 95.0, 0.0, 1.0)
@@ -78,6 +84,7 @@ fn choose_dish_for_wave(elapsed_t : Float) -> @types.Dish {
 }
 
 ///|
+/// Returns the starting patience time for a new order, reduced by round pressure and dish difficulty.
 fn base_patience(game : @types.Game, dish : @types.Dish) -> Float {
   let rush = Float::from_int(game.served_orders + game.failed_orders) * 0.1
   let lane_bias : Float = match dish {
@@ -93,6 +100,7 @@ fn base_patience(game : @types.Game, dish : @types.Dish) -> Float {
 }
 
 ///|
+/// Returns the index of the first inactive order slot, or -1 if all slots are occupied.
 fn find_free_order_slot(game : @types.Game) -> Int {
   for i in 0..<game.orders.length() {
     if not(game.orders[i].active) {
@@ -103,6 +111,7 @@ fn find_free_order_slot(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the time until the next order spawn, decreasing as total orders processed increases.
 fn next_spawn_interval(game : @types.Game) -> Float {
   let pressure = Float::from_int(game.served_orders + game.failed_orders) * 0.07
   let base = @types.maxf(
@@ -117,6 +126,7 @@ fn next_spawn_interval(game : @types.Game) -> Float {
 }
 
 ///|
+/// Fills the next free order slot with a dish, patience, and reward based on current wave progression.
 fn spawn_order(game : @types.Game) -> Unit {
   let slot = find_free_order_slot(game)
   if slot < 0 {
@@ -139,6 +149,7 @@ fn spawn_order(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns true if `selected_order` refers to an active order slot.
 fn selected_is_valid(game : @types.Game) -> Bool {
   game.selected_order >= 0 &&
   game.selected_order < @types.max_orders &&
@@ -146,6 +157,7 @@ fn selected_is_valid(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Clears `selected_order` if the referenced order is no longer active.
 fn ensure_selected_order(game : @types.Game) -> Unit {
   if not(selected_is_valid(game)) {
     game.selected_order = -1
@@ -153,6 +165,7 @@ fn ensure_selected_order(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the selected order index if valid, otherwise the active order with the least patience remaining.
 fn choose_target_order(game : @types.Game) -> Int {
   ensure_selected_order(game)
   if game.selected_order >= 0 {
@@ -171,6 +184,7 @@ fn choose_target_order(game : @types.Game) -> Int {
 }
 
 ///|
+/// Increments the failed-order count, resets combo, triggers screen flash/shake, and transitions to GameOver if limit is reached.
 fn register_failure(game : @types.Game) -> Unit {
   game.failed_orders = game.failed_orders + 1
   game.combo = 0
@@ -185,6 +199,7 @@ fn register_failure(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Ticks patience timers for all active orders and calls `register_failure` for any that expire.
 fn update_orders(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.orders.length() {
     if game.orders[i].active {
@@ -203,6 +218,7 @@ fn update_orders(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Returns the order index matching the given dish with the least patience, preferring the selected order.
 fn find_matching_order(game : @types.Game, dish : @types.Dish) -> Int {
   ensure_selected_order(game)
 
@@ -227,6 +243,7 @@ fn find_matching_order(game : @types.Game, dish : @types.Dish) -> Int {
 }
 
 ///|
+/// Returns 1.7 when boost is active, 1.0 otherwise.
 fn boost_multiplier(game : @types.Game) -> Float {
   if game.boost_t > 0.0 {
     1.7
@@ -236,6 +253,7 @@ fn boost_multiplier(game : @types.Game) -> Float {
 }
 
 ///|
+/// Moves the cooked dish to the ready slot if cook progress has met the required threshold.
 fn finish_cooking_if_ready(game : @types.Game) -> Unit {
   if not(game.cooking.active) || game.cooking.stage != @types.Heat {
     return
@@ -252,6 +270,7 @@ fn finish_cooking_if_ready(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles J press at the prep station: advances prep progress or starts a new dish if the pipeline is idle.
 fn apply_press_j_at_prep(game : @types.Game) -> Unit {
   if game.cooking.active {
     if game.cooking.stage == @types.Prep {
@@ -287,6 +306,7 @@ fn apply_press_j_at_prep(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles J press at a heat station: advances cook progress if the active dish matches the station lane.
 fn apply_press_j_at_heat(game : @types.Game, lane : @types.Lane) -> Unit {
   if not(game.cooking.active) || game.cooking.stage != @types.Heat {
     return
@@ -305,6 +325,7 @@ fn apply_press_j_at_heat(game : @types.Game, lane : @types.Lane) -> Unit {
 }
 
 ///|
+/// Attempts to serve the ready dish: finds a matching order, calculates payout with bonuses, updates score and combo.
 fn try_serve_ready_dish(game : @types.Game) -> Unit {
   if game.ready_dish == @types.DishNone {
     return
@@ -357,6 +378,7 @@ fn try_serve_ready_dish(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Dispatches J press to the appropriate handler based on the current cursor position.
 fn apply_press_j(game : @types.Game) -> Unit {
   if game.cursor < @types.max_orders {
     if game.orders[game.cursor].active {
@@ -375,6 +397,7 @@ fn apply_press_j(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles K press: serves a ready dish at the pass, deselects an order, or cancels active cooking.
 fn apply_press_k(game : @types.Game) -> Unit {
   if game.cursor == @types.node_pass {
     try_serve_ready_dish(game)
@@ -403,6 +426,7 @@ fn apply_press_k(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Moves the navigation cursor to the nearest node in the given direction using a distance-and-alignment heuristic.
 fn move_cursor(game : @types.Game, dir_x : Int, dir_y : Int) -> Unit {
   if dir_x == 0 && dir_y == 0 {
     return
@@ -456,6 +480,7 @@ fn move_cursor(game : @types.Game, dir_x : Int, dir_y : Int) -> Unit {
 }
 
 ///|
+/// Starts a boost session if the cooldown has expired, setting boost timer and cooldown.
 fn activate_boost(game : @types.Game) -> Unit {
   if game.boost_cd <= 0.0 {
     game.boost_t = @types.boost_time
@@ -465,12 +490,14 @@ fn activate_boost(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Ticks down the active boost timer and cooldown each frame.
 fn update_boost(game : @types.Game, dt : Float) -> Unit {
   game.boost_t = @types.maxf(0.0, game.boost_t - dt)
   game.boost_cd = @types.maxf(0.0, game.boost_cd - dt)
 }
 
 ///|
+/// Passively advances cooking progress during an active boost and finalises the dish when complete.
 fn update_cooking_passive(game : @types.Game, dt : Float) -> Unit {
   if not(game.cooking.active) {
     return
@@ -501,6 +528,7 @@ fn update_cooking_passive(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Slowly degrades the ready dish quality over time until it is served.
 fn update_ready_dish(game : @types.Game, dt : Float) -> Unit {
   if game.ready_dish != @types.DishNone {
     game.ready_quality = @types.maxf(0.55, game.ready_quality - dt * 0.045)
@@ -508,6 +536,7 @@ fn update_ready_dish(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Counts down the combo window timer and resets combo to zero when it expires.
 fn update_combo_timer(game : @types.Game, dt : Float) -> Unit {
   if game.combo > 0 {
     game.combo_timer = game.combo_timer - dt
@@ -519,6 +548,7 @@ fn update_combo_timer(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Counts down the spawn interval timer and triggers `spawn_order` when it reaches zero.
 fn update_spawn(game : @types.Game, dt : Float) -> Unit {
   game.spawn_t = game.spawn_t - dt
   if game.spawn_t <= 0.0 {
@@ -527,12 +557,14 @@ fn update_spawn(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Decrements flash and shake effect timers toward zero each frame.
 fn update_effects(game : @types.Game, dt : Float) -> Unit {
   game.flash_t = @types.maxf(0.0, game.flash_t - dt)
   game.shake_t = @types.maxf(0.0, game.shake_t - dt)
 }
 
 ///|
+/// Checks for start input on the title screen and transitions to Play.
 fn update_title(game : @types.Game) -> Unit {
   if game.input.press_start ||
     game.input.press_restart ||
@@ -542,6 +574,7 @@ fn update_title(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles input while paused: R restarts the round, P or J resumes play.
 fn update_paused(game : @types.Game) -> Unit {
   if game.input.press_restart {
     start_round(game)
@@ -551,6 +584,7 @@ fn update_paused(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Checks for restart or start input on the game-over screen and begins a new round.
 fn update_game_over(game : @types.Game) -> Unit {
   if game.input.press_restart || game.input.press_start {
     start_round(game)
@@ -558,6 +592,7 @@ fn update_game_over(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Processes all play-state logic: cursor movement, cooking, order updates, combo, spawning, and effect timers.
 fn update_play(game : @types.Game, dt : Float) -> Unit {
   if game.input.press_restart {
     start_round(game)

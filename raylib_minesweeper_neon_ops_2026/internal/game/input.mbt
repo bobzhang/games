@@ -1,4 +1,5 @@
 ///|
+/// Returns true when the pointer is hovering over the title-screen start button.
 fn title_hover(game : @types.Game) -> Bool {
   let (x, y, w, h) = @types.title_start_button()
   @types.pointer_on_rect(
@@ -14,6 +15,7 @@ fn title_hover(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Returns true when the pointer is hovering over the result-screen retry button.
 fn result_hover(game : @types.Game) -> Bool {
   let (x, y, w, h) = @types.result_retry_button()
   @types.pointer_on_rect(
@@ -29,6 +31,7 @@ fn result_hover(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Handles keyboard, click, and touch input on the title screen, starting a match when triggered.
 fn update_title_input(game : @types.Game) -> Unit {
   let key_start : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
@@ -46,6 +49,7 @@ fn update_title_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles keyboard, click, and touch input on the result screen, restarting the match when triggered.
 fn update_result_input(game : @types.Game) -> Unit {
   let key_retry : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
@@ -64,6 +68,7 @@ fn update_result_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Converts pointer coordinates to a board cell, returning whether the point is inside the board and the cell coordinates.
 fn board_hover_cell(
   game : @types.Game,
   mx : Float,
@@ -73,6 +78,7 @@ fn board_hover_cell(
 }
 
 ///|
+/// Performs the current action mode (reveal or flag) on the cell at (`x`, `y`).
 fn do_action_on_cell(game : @types.Game, x : Int, y : Int) -> Bool {
   match game.mode {
     @types.Reveal => reveal_cell(game, x, y)
@@ -81,12 +87,14 @@ fn do_action_on_cell(game : @types.Game, x : Int, y : Int) -> Bool {
 }
 
 ///|
+/// Moves the keyboard cursor by (`dx`, `dy`) clamped to the board bounds.
 fn move_cursor(game : @types.Game, dx : Int, dy : Int) -> Unit {
   game.cursor_x = @types.clampi(game.cursor_x + dx, 0, @types.board_w - 1)
   game.cursor_y = @types.clampi(game.cursor_y + dy, 0, @types.board_h - 1)
 }
 
 ///|
+/// Processes keyboard input during play: cursor movement, mode toggle, flag, hint, and reveal actions.
 fn handle_keyboard(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyLeft) ||
     @raylib.is_key_pressed(@raylib.KeyA) {
@@ -135,6 +143,7 @@ fn handle_keyboard(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles touch/mouse presses on the on-screen mode, hint, reset, and reveal buttons; returns true if a button was activated.
 fn handle_touch_buttons(game : @types.Game) -> Bool {
   let mx = game.mouse_x
   let my = game.mouse_y
@@ -188,6 +197,7 @@ fn handle_touch_buttons(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Processes all play-state input: keyboard, mouse click/right-click, and touch button handling.
 fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y

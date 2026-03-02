@@ -1,4 +1,5 @@
 ///|
+/// Returns the background fill color for a given station id.
 fn station_color(station : Int) -> @raylib.Color {
   if station == @types.station_broth {
     @raylib.Color::new(120, 62, 48, 255)
@@ -28,6 +29,7 @@ fn station_color(station : Int) -> @raylib.Color {
 }
 
 ///|
+/// Draws a horizontal progress bar with background, foreground fill, and outline.
 fn draw_meter(
   x : Int,
   y : Int,
@@ -50,6 +52,7 @@ fn draw_meter(
 }
 
 ///|
+/// Returns the broth name for a slot value, or "--" when empty.
 fn broth_slot_text(v : Int) -> String {
   if v >= 0 {
     @types.broth_name(v)
@@ -59,6 +62,7 @@ fn broth_slot_text(v : Int) -> String {
 }
 
 ///|
+/// Returns the protein name for a slot value, or "--" when empty.
 fn protein_slot_text(v : Int) -> String {
   if v >= 0 {
     @types.protein_name(v)
@@ -68,6 +72,7 @@ fn protein_slot_text(v : Int) -> String {
 }
 
 ///|
+/// Returns the veg name for a slot value, or "--" when empty.
 fn veg_slot_text(v : Int) -> String {
   if v >= 0 {
     @types.veg_name(v)
@@ -77,6 +82,7 @@ fn veg_slot_text(v : Int) -> String {
 }
 
 ///|
+/// Returns a display string for the item currently held in hand.
 fn hand_text(game : @types.Game) -> String {
   if game.hand.kind == @types.ingredient_none {
     "Empty"
@@ -94,6 +100,7 @@ fn hand_text(game : @types.Game) -> String {
 }
 
 ///|
+/// Draws the animated dark background and full-screen flash overlay.
 fn draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(14, 16, 24, 255))
 
@@ -142,6 +149,7 @@ fn draw_background(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws contextual status text and controls inside a station tile.
 fn draw_station_info(
   game : @types.Game,
   station : Int,
@@ -335,6 +343,7 @@ fn draw_station_info(
 }
 
 ///|
+/// Draws the kitchen grid: background panel, all station tiles, cursor highlight.
 fn draw_kitchen(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.kitchen_left - 16,
@@ -407,6 +416,7 @@ fn draw_kitchen(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a single customer order card at the given screen position.
 fn draw_order_card(
   game : @types.Game,
   i : Int,
@@ -501,6 +511,7 @@ fn draw_order_card(
 }
 
 ///|
+/// Draws the right-side panel: scores, meters, hand status, and order queue.
 fn draw_side_panel(game : @types.Game) -> Unit {
   let x = @types.panel_x()
   let w = @types.panel_w()
@@ -627,6 +638,7 @@ fn draw_side_panel(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the bottom controls bar and the current HUD message.
 fn draw_controls_bar(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.kitchen_left,
@@ -663,6 +675,7 @@ fn draw_controls_bar(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the full-screen title overlay with instructions and start prompt.
 fn draw_title_overlay(_game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -746,6 +759,7 @@ fn draw_title_overlay(_game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the pause overlay dialog.
 fn draw_pause_overlay() -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -786,6 +800,7 @@ fn draw_pause_overlay() -> Unit {
 }
 
 ///|
+/// Draws the game-over overlay with final score and stats.
 fn draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,

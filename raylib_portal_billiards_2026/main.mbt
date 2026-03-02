@@ -1,31 +1,41 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 820
 
 ///|
+/// Left edge of the billiard table in pixels.
 let table_x : Int = 90
 
 ///|
+/// Top edge of the billiard table in pixels.
 let table_y : Int = 120
 
 ///|
+/// Width of the billiard table in pixels.
 let table_w : Int = 1100
 
 ///|
+/// Height of the billiard table in pixels.
 let table_h : Int = 620
 
 ///|
+/// Radius of each billiard ball in pixels.
 let ball_r : Float = 15.0
 
 ///|
+/// Radius of each portal circle in pixels.
 let portal_r : Float = 30.0
 
 ///|
+/// Maximum number of balls in the simulation pool (cue ball + target balls).
 let max_balls : Int = 12
 
 ///|
+/// A billiard ball with position, velocity, active state, identity, and portal cooldown.
 struct Ball {
   mut x : Float
   mut y : Float
@@ -37,6 +47,7 @@ struct Ball {
 }
 
 ///|
+/// Returns the absolute value of a float.
 fn absf(x : Float) -> Float {
   if x < 0.0 {
     -x
@@ -46,6 +57,7 @@ fn absf(x : Float) -> Float {
 }
 
 ///|
+/// Clamps a float to the inclusive `[lo, hi]` range.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -57,6 +69,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns true if point `(px, py)` lies within the axis-aligned rectangle at `(rx, ry)` with size `(rw, rh)`.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -72,16 +85,19 @@ fn inside_rect(
 }
 
 ///|
+/// Computes sin(x) and returns it as Float.
 fn sinf(x : Float) -> Float {
   Float::from_double(@math.sin(x.to_double()))
 }
 
 ///|
+/// Computes cos(x) and returns it as Float.
 fn cosf(x : Float) -> Float {
   Float::from_double(@math.cos(x.to_double()))
 }
 
 ///|
+/// Writes a new ball entry at index `i` with the given position, active flag, and id; velocities and portal cooldown reset to zero.
 fn set_ball(
   balls : Array[Ball],
   i : Int,
@@ -94,6 +110,7 @@ fn set_ball(
 }
 
 ///|
+/// Deactivates all balls in the pool by resetting each to its default inactive state.
 fn clear_balls(balls : Array[Ball]) -> Unit {
   for i in 0..<balls.length() {
     set_ball(balls, i, 0.0, 0.0, false, i)
@@ -101,16 +118,19 @@ fn clear_balls(balls : Array[Ball]) -> Unit {
 }
 
 ///|
+/// Returns the X pixel coordinate where the cue ball spawns at the start of a level.
 fn cue_spawn_x() -> Float {
   Float::from_int(table_x + 230)
 }
 
 ///|
+/// Returns the Y pixel coordinate where the cue ball spawns at the start of a level.
 fn cue_spawn_y() -> Float {
   Float::from_int(table_y + table_h / 2)
 }
 
 ///|
+/// Clears all balls, places the cue ball, arranges target balls in a triangle rack sized for the given level, and returns the shot allowance.
 fn reset_level(level : Int, balls : Array[Ball]) -> Int {
   clear_balls(balls)
 
@@ -149,6 +169,7 @@ fn reset_level(level : Int, balls : Array[Ball]) -> Int {
 }
 
 ///|
+/// Returns true when every non-cue ball (index 1 onward) has been pocketed.
 fn all_targets_cleared(balls : Array[Ball]) -> Bool {
   let mut clear = true
   for i in 1..<balls.length() {
@@ -160,6 +181,7 @@ fn all_targets_cleared(balls : Array[Ball]) -> Bool {
 }
 
 ///|
+/// Returns true if any active ball has speed squared above 64, indicating the table is still in motion.
 fn moving_any(balls : Array[Ball]) -> Bool {
   let mut moving = false
   for ball in balls {
@@ -174,6 +196,7 @@ fn moving_any(balls : Array[Ball]) -> Bool {
 }
 
 ///|
+/// Returns the X pixel coordinate of pocket `i` (0-2 top row, 3-5 bottom row).
 fn pocket_x(i : Int) -> Float {
   if i == 0 {
     Float::from_int(table_x + 8)
@@ -191,6 +214,7 @@ fn pocket_x(i : Int) -> Float {
 }
 
 ///|
+/// Returns the Y pixel coordinate of pocket `i` (top rail for 0-2, bottom rail for 3-5).
 fn pocket_y(i : Int) -> Float {
   if i <= 2 {
     Float::from_int(table_y + 8)
@@ -200,6 +224,7 @@ fn pocket_y(i : Int) -> Float {
 }
 
 ///|
+/// Returns true if the ball at `(x, y)` overlaps any of the six pockets within their 24-pixel capture radius.
 fn ball_in_pocket(x : Float, y : Float) -> Bool {
   let mut p = false
   for i in 0..<6 {
@@ -213,21 +238,25 @@ fn ball_in_pocket(x : Float, y : Float) -> Bool {
 }
 
 ///|
+/// Returns the top Y coordinate of the goal opening on the left wall.
 fn goal_top() -> Float {
   Float::from_int(table_y + (table_h - 220) / 2)
 }
 
 ///|
+/// Returns the bottom Y coordinate of the goal opening on the left wall.
 fn goal_bottom() -> Float {
   goal_top() + 220.0
 }
 
 ///|
+/// Returns true if Y position `y` falls within the left-wall goal opening, allowing balls to pass through.
 fn goal_opening(y : Float) -> Bool {
   y >= goal_top() && y <= goal_bottom()
 }
 
 ///|
+/// Returns the paired portal index for the given portal (0↔1 and 2↔3).
 fn portal_pair(idx : Int) -> Int {
   if idx == 0 {
     1
@@ -241,6 +270,7 @@ fn portal_pair(idx : Int) -> Int {
 }
 
 ///|
+/// Returns the current pixel position `(x, y)` of portal `idx` using sinusoidal drift driven by time `t`.
 fn portal_pos(t : Float, idx : Int) -> (Float, Float) {
   let left = Float::from_int(table_x)
   let top = Float::from_int(table_y)
@@ -263,6 +293,7 @@ fn portal_pos(t : Float, idx : Int) -> (Float, Float) {
 }
 
 ///|
+/// Returns the index of the first portal whose center is within `portal_r` of `(x, y)`, or -1 if none.
 fn nearest_portal_idx(t : Float, x : Float, y : Float) -> Int {
   let mut result = -1
   for i in 0..<4 {
@@ -278,6 +309,7 @@ fn nearest_portal_idx(t : Float, x : Float, y : Float) -> Int {
 }
 
 ///|
+/// Returns the render color for ball `i` (0=white cue, 1-5 cycling through gold/cyan/red/green/pink, 6=yellow).
 fn color_for_id(i : Int) -> @raylib.Color {
   if i == 0 {
     @raylib.Color::new(246, 246, 250, 255)
@@ -297,6 +329,7 @@ fn color_for_id(i : Int) -> @raylib.Color {
 }
 
 ///|
+/// Entry point: initializes the window, creates game state, and runs the portal billiards frame loop.
 fn main {
   @raylib.init_window(sw, sh, "Portal Billiards 2026")
   @raylib.set_target_fps(60)

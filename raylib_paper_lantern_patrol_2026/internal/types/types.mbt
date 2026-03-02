@@ -8,7 +8,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
-/// Stores runtime data for InputState.
+/// Per-frame input snapshot holding movement axes and action button press flags.
 pub(all) struct InputState {
   mut move_x : Int
   mut move_y : Int
@@ -36,7 +36,7 @@ pub fn InputState::new() -> InputState {
 }
 
 ///|
-/// Stores runtime data for Patrol.
+/// Player-controlled patrol character with position, velocity, escort index, and ability cooldown state.
 pub(all) struct Patrol {
   mut x : Float
   mut y : Float
@@ -65,7 +65,7 @@ pub fn Patrol::new() -> Patrol {
 }
 
 ///|
-/// Stores runtime data for Lantern.
+/// A paper lantern entity with position, velocity, flame meter, shrine target, and escort state.
 pub(all) struct Lantern {
   mut active : Bool
   mut x : Float
@@ -95,7 +95,7 @@ pub fn Lantern::new() -> Lantern {
 }
 
 ///|
-/// Stores runtime data for Gust.
+/// A wind gust hazard with position, velocity, influence radius, power, and remaining lifetime.
 pub(all) struct Gust {
   mut active : Bool
   mut x : Float
@@ -123,7 +123,7 @@ pub fn Gust::new() -> Gust {
 }
 
 ///|
-/// Stores runtime data for Spark.
+/// A drifting ember hazard with position, velocity, lifetime, drain power, and visual size.
 pub(all) struct Spark {
   mut active : Bool
   mut x : Float
@@ -151,7 +151,7 @@ pub fn Spark::new() -> Spark {
 }
 
 ///|
-/// Stores runtime data for Thief.
+/// An enemy thief that chases active lanterns and periodically drains their flame.
 pub(all) struct Thief {
   mut active : Bool
   mut x : Float

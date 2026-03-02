@@ -1,31 +1,41 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 820
 
 ///|
+/// Horizontal center of the screen in pixels.
 let cx : Float = 640.0
 
 ///|
+/// Vertical center of the screen in pixels.
 let cy : Float = 410.0
 
 ///|
+/// Radius of the central planet in pixels.
 let planet_r : Float = 74.0
 
 ///|
+/// Orbital radius of the shield arc around the planet.
 let shield_r : Float = 148.0
 
 ///|
+/// Maximum number of enemies that can be active simultaneously.
 let max_enemies : Int = 96
 
 ///|
+/// Maximum number of player shots that can be active simultaneously.
 let max_shots : Int = 180
 
 ///|
+/// Maximum number of particle sparks that can be active simultaneously.
 let max_sparks : Int = 220
 
 ///|
+/// An enemy entity approaching the planet from outside the screen.
 struct Enemy {
   mut x : Float
   mut y : Float
@@ -37,6 +47,7 @@ struct Enemy {
 }
 
 ///|
+/// A player-fired projectile that travels outward from the shield position.
 struct Shot {
   mut x : Float
   mut y : Float
@@ -47,6 +58,7 @@ struct Shot {
 }
 
 ///|
+/// A short-lived neon particle emitted on enemy destruction or planet impact.
 struct Spark {
   mut x : Float
   mut y : Float
@@ -58,6 +70,7 @@ struct Spark {
 }
 
 ///|
+/// Returns whether point `(px, py)` lies within the rectangle at `(rx, ry)` with size `(rw, rh)`.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -73,21 +86,25 @@ fn inside_rect(
 }
 
 ///|
+/// Converts degrees to radians.
 fn deg2rad(a : Float) -> Double {
   a.to_double() * 0.017453292519943295
 }
 
 ///|
+/// Returns the sine of an angle given in degrees.
 fn sinf_deg(a : Float) -> Float {
   Float::from_double(@math.sin(deg2rad(a)))
 }
 
 ///|
+/// Returns the cosine of an angle given in degrees.
 fn cosf_deg(a : Float) -> Float {
   Float::from_double(@math.cos(deg2rad(a)))
 }
 
 ///|
+/// Returns the collision radius of an enemy based on its kind (0=small, 1=medium, 2=large).
 fn enemy_radius(kind : Int) -> Float {
   if kind == 0 {
     12.0
@@ -99,6 +116,7 @@ fn enemy_radius(kind : Int) -> Float {
 }
 
 ///|
+/// Returns the score awarded for destroying an enemy of the given kind.
 fn enemy_score(kind : Int) -> Int {
   if kind == 0 {
     24
@@ -110,6 +128,7 @@ fn enemy_score(kind : Int) -> Int {
 }
 
 ///|
+/// Returns the planet HP damage dealt when an enemy of the given kind reaches the planet.
 fn enemy_damage(kind : Int) -> Int {
   if kind == 0 {
     10
@@ -121,6 +140,7 @@ fn enemy_damage(kind : Int) -> Int {
 }
 
 ///|
+/// Returns the starting hit-points for an enemy of the given kind.
 fn enemy_hp(kind : Int) -> Int {
   if kind == 0 {
     1
@@ -132,6 +152,7 @@ fn enemy_hp(kind : Int) -> Int {
 }
 
 ///|
+/// Deactivates and resets all shots in the pool.
 fn clear_shots(shots : Array[Shot]) -> Unit {
   for shot in shots {
     shot.x = 0.0
@@ -144,6 +165,7 @@ fn clear_shots(shots : Array[Shot]) -> Unit {
 }
 
 ///|
+/// Deactivates and resets all enemies in the pool.
 fn clear_enemies(enemies : Array[Enemy]) -> Unit {
   for enemy in enemies {
     enemy.x = 0.0
@@ -157,6 +179,7 @@ fn clear_enemies(enemies : Array[Enemy]) -> Unit {
 }
 
 ///|
+/// Deactivates and resets all sparks in the particle pool.
 fn clear_sparks(sparks : Array[Spark]) -> Unit {
   for spark in sparks {
     spark.x = 0.0
@@ -170,6 +193,7 @@ fn clear_sparks(sparks : Array[Spark]) -> Unit {
 }
 
 ///|
+/// Activates a single spark from the pool at `(x, y)` with randomised velocity scaled by `speed_scale`.
 fn spawn_spark(
   sparks : Array[Spark],
   x : Float,
@@ -199,6 +223,7 @@ fn spawn_spark(
 }
 
 ///|
+/// Spawns `n` sparks at `(x, y)` to create an explosion burst effect.
 fn spawn_burst(
   sparks : Array[Spark],
   x : Float,
@@ -213,6 +238,7 @@ fn spawn_burst(
 }
 
 ///|
+/// Fires a new shot from `(x, y)` aimed toward `(tx, ty)` using the first inactive slot.
 fn spawn_shot(
   shots : Array[Shot],
   x : Float,
@@ -247,6 +273,7 @@ fn spawn_shot(
 }
 
 ///|
+/// Spawns a new enemy from a random screen edge aimed toward the planet, with speed scaled by sector.
 fn spawn_enemy(enemies : Array[Enemy], sector : Int) -> Unit {
   let side = @raylib.get_random_value(0, 3)
   let kind_roll = @raylib.get_random_value(0, 99)
@@ -305,6 +332,7 @@ fn spawn_enemy(enemies : Array[Enemy], sector : Int) -> Unit {
 }
 
 ///|
+/// Initializes the window, creates all game state arrays, and runs the main game loop until the window closes.
 fn main {
   @raylib.init_window(sw, sh, "Orbital Shield Command 2026")
   @raylib.set_target_fps(60)

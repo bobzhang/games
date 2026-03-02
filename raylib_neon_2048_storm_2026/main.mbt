@@ -1,4 +1,5 @@
 ///|
+/// Initialises Raylib, runs the game loop, and shuts down on exit.
 fn main {
   @raylib.set_config_flags(@raylib.FlagMsaa4xHint)
   @raylib.init_window(

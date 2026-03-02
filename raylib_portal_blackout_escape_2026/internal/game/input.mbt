@@ -1,4 +1,5 @@
 ///|
+/// Returns true if the mouse or a touch point is over the title start button.
 fn title_hover(game : @types.Game) -> Bool {
   let b = @types.start_button_rect()
   @types.pointer_on_rect(
@@ -14,6 +15,7 @@ fn title_hover(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Returns true if the mouse or a touch point is over the result retry button.
 fn retry_hover(game : @types.Game) -> Bool {
   let b = @types.retry_button_rect()
   @types.pointer_on_rect(
@@ -29,6 +31,7 @@ fn retry_hover(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Reads keyboard, mouse, and touch input on the title screen and starts a run on confirmation.
 fn update_title_input(game : @types.Game) -> Unit {
   let key_start : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
@@ -44,6 +47,7 @@ fn update_title_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads keyboard, mouse, and touch input on the result screen and restarts a run on confirmation.
 fn update_result_input(game : @types.Game) -> Unit {
   let key_retry : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
@@ -60,6 +64,7 @@ fn update_result_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads WASD/arrow keys and on-screen D-pad for movement, action button for portal/flare, and hint/restart/menu shortcuts.
 fn update_play_input(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y

@@ -1,10 +1,13 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1120
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 740
 
 ///|
+/// A projectile fired by either the player mech or an enemy bot.
 struct Shot {
   mut alive : Bool
   mut x : Float
@@ -15,6 +18,7 @@ struct Shot {
 }
 
 ///|
+/// An enemy mech bot that bounces around the arena and fires at the player.
 struct Bot {
   mut alive : Bool
   mut x : Float
@@ -26,6 +30,7 @@ struct Bot {
 }
 
 ///|
+/// Activates the first inactive slot in the shot pool and initialises it at the given position and velocity.
 fn spawn_shot(
   shots : Array[Shot],
   x : Float,
@@ -48,6 +53,7 @@ fn spawn_shot(
 }
 
 ///|
+/// Activates the first inactive bot slot, placing it at a random arena position with HP and fire cooldown scaled to the current wave.
 fn spawn_bot(bots : Array[Bot], wave : Int) -> Unit {
   for bot in bots {
     if not(bot.alive) {
@@ -64,6 +70,7 @@ fn spawn_bot(bots : Array[Bot], wave : Int) -> Unit {
 }
 
 ///|
+/// Marks all bots as inactive, clearing the arena for a new wave or restart.
 fn reset_bots(bots : Array[Bot]) -> Unit {
   for bot in bots {
     bot.alive = false
@@ -71,6 +78,7 @@ fn reset_bots(bots : Array[Bot]) -> Unit {
 }
 
 ///|
+/// Marks all shots as inactive, removing all projectiles from play.
 fn reset_shots(shots : Array[Shot]) -> Unit {
   for shot in shots {
     shot.alive = false
@@ -78,6 +86,7 @@ fn reset_shots(shots : Array[Shot]) -> Unit {
 }
 
 ///|
+/// Entry point: opens the window, runs the game loop handling input, physics, AI, collision, and rendering each frame.
 fn main {
   @raylib.init_window(sw, sh, "Mech Arena Duel 2026")
   @raylib.set_target_fps(60)

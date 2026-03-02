@@ -1,4 +1,5 @@
 ///|
+/// Resets all entity pool records to their inactive defaults.
 fn clear_ents(game : @types.Game) -> Unit {
   for ent in game.ents {
     ent.active = false
@@ -19,6 +20,7 @@ fn clear_ents(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets all shot pool records to their inactive defaults.
 fn clear_shots(game : @types.Game) -> Unit {
   for shot in game.shots {
     shot.active = false
@@ -34,6 +36,7 @@ fn clear_shots(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets all particle effect pool records to their inactive defaults.
 fn clear_fx(game : @types.Game) -> Unit {
   for fx in game.fxs {
     fx.active = false
@@ -48,6 +51,7 @@ fn clear_fx(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets all ring effect pool records to their inactive defaults.
 fn clear_rings(game : @types.Game) -> Unit {
   for ring in game.rings {
     ring.active = false
@@ -60,6 +64,7 @@ fn clear_rings(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets all shadow effect pool records to their inactive defaults.
 fn clear_shadows(game : @types.Game) -> Unit {
   for shadow in game.shadows {
     shadow.active = false
@@ -74,6 +79,7 @@ fn clear_shadows(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets the player to the start position on the middle lane with zero velocity.
 fn reset_player(hero : @types.Player) -> Unit {
   hero.x = Float::from_int(@types.screen_w / 2) - 220.0
   hero.lane = 1
@@ -94,6 +100,7 @@ fn reset_player(hero : @types.Player) -> Unit {
 }
 
 ///|
+/// Returns the index of a free entity slot, evicting the leftmost active entity if the pool is full.
 fn alloc_ent(game : @types.Game) -> Int {
   for i in 0..<game.ents.length() {
     if not(game.ents[i].active) {
@@ -113,6 +120,7 @@ fn alloc_ent(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free shot slot, evicting the shortest-lived active shot if the pool is full.
 fn alloc_shot(game : @types.Game) -> Int {
   for i in 0..<game.shots.length() {
     if not(game.shots[i].active) {
@@ -132,6 +140,7 @@ fn alloc_shot(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free particle slot, evicting the shortest-lived active particle if the pool is full.
 fn alloc_fx(game : @types.Game) -> Int {
   for i in 0..<game.fxs.length() {
     if not(game.fxs[i].active) {
@@ -151,6 +160,7 @@ fn alloc_fx(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free ring slot, evicting the shortest-lived active ring if the pool is full.
 fn alloc_ring(game : @types.Game) -> Int {
   for i in 0..<game.rings.length() {
     if not(game.rings[i].active) {
@@ -170,6 +180,7 @@ fn alloc_ring(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free shadow slot, evicting the shortest-lived active shadow if the pool is full.
 fn alloc_shadow(game : @types.Game) -> Int {
   for i in 0..<game.shadows.length() {
     if not(game.shadows[i].active) {
@@ -189,6 +200,7 @@ fn alloc_shadow(game : @types.Game) -> Int {
 }
 
 ///|
+/// Emits a single particle with the given position, velocity, lifetime, size, and kind.
 fn emit_fx(
   game : @types.Game,
   x : Float,
@@ -211,6 +223,7 @@ fn emit_fx(
 }
 
 ///|
+/// Emits `count` particles scattered around `(x, y)` with random velocities and lifetimes.
 fn burst(
   game : @types.Game,
   x : Float,
@@ -233,6 +246,7 @@ fn burst(
 }
 
 ///|
+/// Spawns an expanding ring effect at `(x, y)` with the given initial radius, lifetime, and kind.
 fn spawn_ring(
   game : @types.Game,
   x : Float,
@@ -251,6 +265,7 @@ fn spawn_ring(
 }
 
 ///|
+/// Emits a shadow afterimage at the given position and size for use during the dash animation.
 fn emit_shadow(
   game : @types.Game,
   x : Float,
@@ -273,6 +288,7 @@ fn emit_shadow(
 }
 
 ///|
+/// Spawns a projectile with the given origin, velocity, lifetime, damage, and kind.
 fn spawn_shot(
   game : @types.Game,
   from_player : Bool,
@@ -297,6 +313,7 @@ fn spawn_shot(
 }
 
 ///|
+/// Activates an entity slot and initializes it with the given kind, lane, position, and combat stats.
 fn spawn_ent(
   game : @types.Game,
   kind : Int,
@@ -329,12 +346,14 @@ fn spawn_ent(
 }
 
 ///|
+/// Returns the score gain for a base value scaled by the current combo multiplier.
 fn score_gain(game : @types.Game, base : Int) -> Int {
   let bonus = base * game.combo / 5
   base + bonus
 }
 
 ///|
+/// Adds combo-scaled score to the game total and updates the best score if exceeded.
 fn add_score(game : @types.Game, base : Int) -> Unit {
   let g = score_gain(game, base)
   game.score = game.score + g
@@ -344,18 +363,21 @@ fn add_score(game : @types.Game, base : Int) -> Unit {
 }
 
 ///|
+/// Increments the combo counter and resets the combo timer.
 fn push_combo(game : @types.Game) -> Unit {
   game.combo = @types.clampi(game.combo + 1, 0, 24)
   game.combo_t = 3.5
 }
 
 ///|
+/// Resets the combo counter and timer to zero.
 fn clear_combo(game : @types.Game) -> Unit {
   game.combo = 0
   game.combo_t = 0.0
 }
 
 ///|
+/// Applies damage to the player's armor, triggers screen shake and flash, and transitions to game-over if armor reaches zero.
 fn hurt_player(game : @types.Game, dmg : Float) -> Unit {
   if game.hero.invuln > 0.0 {
     return
@@ -377,6 +399,7 @@ fn hurt_player(game : @types.Game, dmg : Float) -> Unit {
 }
 
 ///|
+/// Clears all pools, resets the player, and initializes game state for the given stage number.
 fn start_stage(game : @types.Game, stage : Int) -> Unit {
   clear_ents(game)
   clear_shots(game)
@@ -421,6 +444,7 @@ fn start_stage(game : @types.Game, stage : Int) -> Unit {
 }
 
 ///|
+/// Resets the entire game state to the title screen with no active entities.
 fn init_title_scene(game : @types.Game) -> Unit {
   clear_ents(game)
   clear_shots(game)
@@ -458,11 +482,13 @@ fn init_title_scene(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Starts a new heist run from stage 1.
 fn start_run(game : @types.Game) -> Unit {
   start_stage(game, 1)
 }
 
 ///|
+/// Spawns a random group of one to three enemies or pickups at the given x position.
 fn spawn_pack(game : @types.Game, x : Float) -> Unit {
   let c = 1 + @types.randi(0, 2)
 
@@ -580,6 +606,7 @@ fn spawn_pack(game : @types.Game, x : Float) -> Unit {
 }
 
 ///|
+/// Advances the spawn cursor by the scroll speed and emits new entity packs as it crosses the screen edge.
 fn spawn_step(game : @types.Game, dt : Float) -> Unit {
   game.next_spawn_x = game.next_spawn_x - game.scroll * dt
 
@@ -593,6 +620,7 @@ fn spawn_step(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Activates the grappling hook: clears nearby enemy projectiles and instantly kills enemies within the kill radius.
 fn apply_hook(game : @types.Game) -> Unit {
   game.hook_cd = @types.hook_cd_time
   game.hook_t = @types.hook_time
@@ -651,6 +679,7 @@ fn apply_hook(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Fires one or two player projectiles from the muzzle position with random spread.
 fn shoot_player(game : @types.Game) -> Unit {
   let spread : Float = if game.dash_t > 0.0 { 15.0 } else { 8.0 }
   let vy0 : Float = if game.hero.grounded { 0.0 } else { game.hero.vy * 0.2 }
@@ -685,6 +714,7 @@ fn shoot_player(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Applies jump velocity to the player and emits a landing dust burst.
 fn apply_jump(game : @types.Game) -> Unit {
   game.hero.vy = -@types.jump_speed
   game.hero.grounded = false
@@ -704,6 +734,7 @@ fn apply_jump(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Processes player input, applies dash/hook/jump/shoot actions, integrates velocity, and enforces bounds.
 fn update_player(game : @types.Game, dt : Float) -> Unit {
   if game.input_jump_press {
     game.hero.jump_buf_t = 0.16
@@ -814,6 +845,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Fires one or two enemy projectiles from the given entity based on its kind.
 fn enemy_fire(game : @types.Game, e : @types.Ent) -> Unit {
   if e.kind == @types.ent_guard {
     spawn_shot(
@@ -870,6 +902,7 @@ fn enemy_fire(game : @types.Game, e : @types.Ent) -> Unit {
 }
 
 ///|
+/// Deactivates an entity, awards score with combo scaling, increments kill count, and emits death effects.
 fn kill_ent(game : @types.Game, i : Int, base : Int, burst_kind : Int) -> Unit {
   let x = game.ents[i].x
   let y = game.ents[i].y
@@ -882,6 +915,7 @@ fn kill_ent(game : @types.Game, i : Int, base : Int, burst_kind : Int) -> Unit {
 }
 
 ///|
+/// Applies the effect of a collected pickup: medkits restore armor, batteries restore heat, signals reduce hook cooldown and add loot.
 fn collect_pickup(game : @types.Game, kind : Int) -> Unit {
   if kind == @types.ent_medkit {
     game.armor = @types.minf(@types.armor_max, game.armor + 18.0)
@@ -899,6 +933,7 @@ fn collect_pickup(game : @types.Game, kind : Int) -> Unit {
 }
 
 ///|
+/// Advances all active entities: moves them by scroll speed, animates kind-specific motion, fires shots, and resolves player collision.
 fn update_ents(game : @types.Game, dt : Float) -> Unit {
   let dash_hit = game.dash_t > 0.0
 
@@ -979,6 +1014,7 @@ fn update_ents(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances all active projectiles, expires those out of bounds, and resolves player and enemy hit detection.
 fn update_shots(game : @types.Game, dt : Float) -> Unit {
   for shot in game.shots {
     if not(shot.active) {
@@ -1049,6 +1085,7 @@ fn update_shots(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances all active particles, rings, and shadows, expiring those whose lifetime has elapsed.
 fn update_fx(game : @types.Game, dt : Float) -> Unit {
   for fx in game.fxs {
     if not(fx.active) {
@@ -1090,6 +1127,7 @@ fn update_fx(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Randomly emits snow particle effects drifting in from the right edge of the screen.
 fn emit_snow(game : @types.Game, dt : Float) -> Unit {
   let tries = @types.clampi((dt * 230.0).to_int(), 1, 10)
   let mut i = 0
@@ -1114,6 +1152,7 @@ fn emit_snow(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Decrements all cooldown and effect timers by `dt`, clamping them at zero.
 fn update_timers(game : @types.Game, dt : Float) -> Unit {
   game.hero.invuln = @types.maxf(0.0, game.hero.invuln - dt)
   game.hero.hurt_t = @types.maxf(0.0, game.hero.hurt_t - dt)
@@ -1138,6 +1177,7 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs one frame of gameplay: advances scroll distance, updates player, entities, shots, effects, heat, and stage-clear checks.
 fn update_play(game : @types.Game, dt : Float) -> Unit {
   game.scroll = @types.base_scroll +
     Float::from_int(game.stage - 1) * @types.stage_scroll_bonus +
@@ -1182,6 +1222,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances the title screen: slowly scrolls the background, emits snow, and waits for the start input.
 fn update_title(game : @types.Game, dt : Float) -> Unit {
   game.scroll = 86.0
   game.distance = game.distance + game.scroll * dt * 0.7
@@ -1195,6 +1236,7 @@ fn update_title(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs the stage-clear transition: decelerates scroll, emits celebration effects, and advances to the next stage after a delay.
 fn update_stage_clear(game : @types.Game, dt : Float) -> Unit {
   game.result_t = game.result_t + dt
   game.scroll = @types.maxf(88.0, game.scroll - 140.0 * dt)
@@ -1221,6 +1263,7 @@ fn update_stage_clear(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs the game-over state: decelerates scroll, emits snow, and waits for the restart input.
 fn update_game_over(game : @types.Game, dt : Float) -> Unit {
   game.result_t = game.result_t + dt
   game.scroll = @types.maxf(52.0, game.scroll - 120.0 * dt)

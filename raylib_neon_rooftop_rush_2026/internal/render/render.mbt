@@ -1,4 +1,5 @@
 ///|
+/// Draws `text` horizontally centered on screen at the given `y` position with the specified font size and color.
 fn draw_center_text(
   text : String,
   y : Int,
@@ -10,6 +11,7 @@ fn draw_center_text(
 }
 
 ///|
+/// Returns a random camera offset scaled by the current shake intensity, or `(0, 0)` when no shake is active.
 fn shake_offset(game : @types.Game) -> (Float, Float) {
   if game.shake_t <= 0.0 {
     (0.0, 0.0)
@@ -20,6 +22,7 @@ fn shake_offset(game : @types.Game) -> (Float, Float) {
 }
 
 ///|
+/// Draws the background sky gradient, parallax city building layers, glowing windows, and twinkling stars.
 fn draw_skyline(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let top_a = @types.bg_night()
   let top_b = @raylib.Color::new(24, 24, 52, 255)
@@ -86,6 +89,7 @@ fn draw_skyline(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Returns the dark base fill color for a segment based on its skin index.
 fn segment_color_base(seg : @types.Segment) -> @raylib.Color {
   if seg.skin == 0 {
     @raylib.Color::new(34, 40, 58, 255)
@@ -99,6 +103,7 @@ fn segment_color_base(seg : @types.Segment) -> @raylib.Color {
 }
 
 ///|
+/// Returns the neon accent color for a segment based on its neon index, used for edge glow and window tinting.
 fn segment_color_glow(seg : @types.Segment) -> @raylib.Color {
   if seg.neon == 0 {
     @types.neon_blue()
@@ -112,6 +117,7 @@ fn segment_color_glow(seg : @types.Segment) -> @raylib.Color {
 }
 
 ///|
+/// Draws all active rooftop segments as neon-lit buildings with a colored top edge and procedural window grid.
 fn draw_segments(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for segment in game.segments {
     if not(segment.active) {
@@ -180,6 +186,7 @@ fn draw_segments(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws a single grapple anchor as a pulsing neon orb with a halo ring, blending blue and pink based on its glow phase.
 fn draw_anchor(a : @types.Anchor, cam_x : Float, cam_y : Float) -> Unit {
   if not(a.active) {
     return
@@ -211,6 +218,7 @@ fn draw_anchor(a : @types.Anchor, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws a single obstacle using its kind-specific visual: a vented box for vents, a neon signpost for signs, a glowing ellipse for drones, and dual pulsing laser beams for lasers.
 fn draw_obstacle(ob : @types.Obstacle, cam_x : Float, cam_y : Float) -> Unit {
   if not(ob.active) {
     return
@@ -332,6 +340,7 @@ fn draw_obstacle(ob : @types.Obstacle, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws all active collectible chips as spinning neon squares with a bobbing glow halo, blending lime and blue.
 fn draw_chips(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for chip in game.chips {
     if not(chip.active) {
@@ -365,6 +374,7 @@ fn draw_chips(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws all active particles as colored circles fading with their remaining life, followed by ghost trail rectangles that fade by their remaining life time.
 fn draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for p in game.particles {
     if not(p.active) {
@@ -411,6 +421,7 @@ fn draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws the player character with a grapple line when latched, an animated running/sliding body, leg animation, hurt flash tint, and an invulnerability blink outline.
 fn draw_hero(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let hero = game.hero
 
@@ -498,6 +509,7 @@ fn draw_hero(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Returns true when the point `(x, y)` lies inside the rectangle `(rx, ry, rw, rh)`.
 fn point_in_rect(
   x : Float,
   y : Float,
@@ -510,6 +522,7 @@ fn point_in_rect(
 }
 
 ///|
+/// Returns true when the mouse pointer (if held) or any active touch point overlaps the given rectangle.
 fn pointer_on_rect(
   mx : Float,
   my : Float,
@@ -535,6 +548,7 @@ fn pointer_on_rect(
 }
 
 ///|
+/// Draws the three on-screen touch buttons (Jump, Slide, Hook) with highlighted borders when each button is actively pressed.
 fn draw_touch_controls(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
@@ -670,6 +684,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the gameplay HUD: score panel, health bar, stamina bar, stage progress meter, restart button, stage intro banner, and the combo hint overlay.
 fn draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(16, 14, 450, 108, @types.ui_dark())
   @raylib.draw_rectangle_lines(
@@ -825,6 +840,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the title screen overlay with the game title, tagline, controls reference panel, and a blinking start prompt.
 fn draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -883,6 +899,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the stage-clear overlay: a darkening vignette, the "STAGE CLEAR" banner, the bonus points earned, and a transition message.
 fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
   let p = @types.ease_in_out(1.0 - game.stage_intro_t / 1.5)
   let alpha = @types.clampi(
@@ -908,6 +925,7 @@ fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the game-over overlay with a "RUN FAILED" header, the run score, the all-time best score, and a retry prompt panel.
 fn draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -954,6 +972,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the full game world layer stack: skyline backdrop, grapple anchors, rooftop segments, obstacles, chips, particles, ghost trails, and the hero.
 fn draw_game_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   draw_skyline(game, cam_x, cam_y)
 

@@ -1,4 +1,5 @@
 ///|
+/// Entry point: initialises the window, creates the Game struct, and runs the frame loop.
 fn main {
   @raylib.set_config_flags(@raylib.FlagMsaa4xHint)
   @raylib.init_window(

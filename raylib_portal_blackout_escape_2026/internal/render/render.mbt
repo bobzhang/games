@@ -1,4 +1,5 @@
 ///|
+/// Returns a random horizontal screen shake offset when the shake timer is active, or 0 when idle.
 fn shake_dx(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
@@ -8,6 +9,7 @@ fn shake_dx(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns a random vertical screen shake offset when the shake timer is active, or 0 when idle.
 fn shake_dy(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
@@ -17,11 +19,13 @@ fn shake_dy(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns a value in [0, 1] oscillating at frequency `f` Hz using the elapsed game time.
 fn pulse(game : @types.Game, f : Float) -> Float {
   0.5 + 0.5 * @types.sinf(game.time_s * f)
 }
 
 ///|
+/// Returns the display color for a core based on its kind (0=orange, 1=blue, 2=green).
 fn core_color(kind : Int) -> @raylib.Color {
   if kind == 1 {
     @raylib.Color::new(130, 214, 252, 242)
@@ -33,6 +37,7 @@ fn core_color(kind : Int) -> @raylib.Color {
 }
 
 ///|
+/// Returns the display color for a drone in patrol mode based on its color ID (0=pink, 1=blue, 2=tan).
 fn drone_color(id : Int) -> @raylib.Color {
   if id == 1 {
     @raylib.Color::new(164, 194, 252, 232)
@@ -44,6 +49,7 @@ fn drone_color(id : Int) -> @raylib.Color {
 }
 
 ///|
+/// Draws the dark gradient background and ambient glow circles behind the board.
 fn draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(8, 10, 18, 255))
 
@@ -77,6 +83,7 @@ fn draw_background(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws all grid tiles (walls, floor, exit) with checkerboard shading and grid lines, offset by `(ox, oy)`.
 fn draw_tiles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
@@ -144,6 +151,7 @@ fn draw_tiles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws both portal pads with pulsing glow rings; glows are dim when the portal is offline and bright when online.
 fn draw_portals(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let a_cx : Int = @types.board_px(@types.portal_ax) + @types.cell / 2 + ox
   let a_cy : Int = @types.board_py(@types.portal_ay) + @types.cell / 2 + oy
@@ -203,6 +211,7 @@ fn draw_portals(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws all active energy cores as colored circles with a soft glow halo.
 fn draw_cores(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for core in game.cores {
     if not(core.active) {
@@ -231,6 +240,7 @@ fn draw_cores(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws all active flare beacons as fading light pools with alpha proportional to remaining lifetime.
 fn draw_flares(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for flare in game.flares {
     if not(flare.active) {
@@ -247,6 +257,7 @@ fn draw_flares(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws all active drones with mode-dependent color (stunned=purple, hunting=red, patrol=color_id).
 fn draw_drones(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for drone in game.drones {
     if not(drone.active) {
@@ -289,6 +300,7 @@ fn draw_drones(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws the player sprite at its interpolated position, blinking when the damage flash timer is active.
 fn draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let blink : Bool = game.flash_t > 0.0 &&
     (game.flash_t * 14.0).to_int() % 2 == 0
@@ -313,6 +325,7 @@ fn draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws all active particles as colored circles colored by kind (0=blue, 1=yellow, 2=purple).
 fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
@@ -337,6 +350,7 @@ fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Computes the blackout overlay alpha for tile `(x, y)` based on Manhattan distance to the player and any active flares.
 fn light_alpha(game : @types.Game, x : Int, y : Int) -> Int {
   let mut best : Int = @types.manhattan(x, y, game.player.x, game.player.y)
 
@@ -365,6 +379,7 @@ fn light_alpha(game : @types.Game, x : Int, y : Int) -> Int {
 }
 
 ///|
+/// Overlays dark rectangles on each interior tile to simulate blackout visibility, with alpha from `light_alpha`.
 fn draw_blackout(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for y in 1..<(@types.grid_h - 1) {
     for x in 1..<(@types.grid_w - 1) {
@@ -381,6 +396,7 @@ fn draw_blackout(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws the complete board layer: tiles, portals, cores, flares, drones, player, particles, blackout, and border.
 fn draw_board(game : @types.Game, ox : Int, oy : Int) -> Unit {
   draw_tiles(game, ox, oy)
   draw_portals(game, ox, oy)
@@ -401,6 +417,7 @@ fn draw_board(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws a labeled touch button that highlights with `c_on` when pressed and `c_idle` otherwise.
 fn draw_touch_button(
   game : @types.Game,
   rect : (Int, Int, Int, Int),
@@ -452,6 +469,7 @@ fn draw_touch_button(
 }
 
 ///|
+/// Draws the on-screen D-pad, action button, and hint/restart/menu shortcut buttons during gameplay.
 fn draw_touch_controls(game : @types.Game) -> Unit {
   if game.state != @types.state_play {
     return
@@ -520,6 +538,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the side panel with core count, portal status, lives, score, timer, flare energy bar, and control hints.
 fn draw_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.panel_x0,
@@ -714,6 +733,7 @@ fn draw_panel(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the title screen overlay with game name, tagline, and the start button.
 fn draw_title_overlay(game : @types.Game) -> Unit {
   let b = @types.start_button_rect()
   let hot : Bool = @types.pointer_on_rect(
@@ -804,6 +824,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the result screen overlay with win/fail title, outcome reason, score summary, and the retry button.
 fn draw_result_overlay(game : @types.Game) -> Unit {
   let b = @types.retry_button_rect()
   let hot : Bool = @types.pointer_on_rect(

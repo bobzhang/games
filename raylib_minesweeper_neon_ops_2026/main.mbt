@@ -1,4 +1,5 @@
 ///|
+/// Entry point: initialises the window and audio, then runs the frame loop delegating to update and render.
 fn main {
   @raylib.set_config_flags(@raylib.FlagMsaa4xHint)
   @raylib.init_window(

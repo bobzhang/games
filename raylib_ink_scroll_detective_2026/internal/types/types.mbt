@@ -84,6 +84,7 @@ pub(all) struct Game {
 }
 
 ///|
+/// Returns the display name for a suspect index (0-3).
 fn suspect_name(index : Int) -> String {
   if index == 0 {
     "Mara Quill"
@@ -97,6 +98,7 @@ fn suspect_name(index : Int) -> String {
 }
 
 ///|
+/// Returns the grid column of a suspect's home district by index.
 fn suspect_home_x(index : Int) -> Int {
   if index == 0 {
     1
@@ -110,6 +112,7 @@ fn suspect_home_x(index : Int) -> Int {
 }
 
 ///|
+/// Returns the grid row of a suspect's home district by index.
 fn suspect_home_y(index : Int) -> Int {
   if index == 0 {
     1
@@ -123,6 +126,7 @@ fn suspect_home_y(index : Int) -> Int {
 }
 
 ///|
+/// Returns true when the cell is reserved as a suspect home district.
 fn is_reserved_cell(cell_x : Int, cell_y : Int) -> Bool {
   let mut i = 0
   while i < suspect_count {

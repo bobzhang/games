@@ -1,25 +1,33 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 820
 
 ///|
+/// Top edge of the navigable water area in pixels.
 let water_top : Float = 122.0
 
 ///|
+/// Bottom edge of the navigable water area in pixels.
 let water_bottom : Float = 760.0
 
 ///|
+/// Maximum number of simultaneous patrol boat slots.
 let max_patrol : Int = 24
 
 ///|
+/// Maximum number of simultaneous cargo crate slots.
 let max_crates : Int = 56
 
 ///|
+/// Maximum number of simultaneous particle slots.
 let max_particles : Int = 520
 
 ///|
+/// Player-controlled smuggler boat with position, velocity, HP, fuel gauge, held cargo value, and cooldown timers for turbo/stealth/hit/flash/delivery.
 struct Smuggler {
   mut x : Float
   mut y : Float
@@ -36,6 +44,7 @@ struct Smuggler {
 }
 
 ///|
+/// Enemy patrol vessel with position, velocity, base speed, detection radius, type, alert timer, and activation flag.
 struct Patrol {
   mut x : Float
   mut y : Float
@@ -49,6 +58,7 @@ struct Patrol {
 }
 
 ///|
+/// Floating cargo item with position, drifting velocity, point value, and activation flag.
 struct Crate {
   mut x : Float
   mut y : Float
@@ -59,6 +69,7 @@ struct Crate {
 }
 
 ///|
+/// Short-lived visual spark with position, velocity, time-to-live, visual kind, and activation flag.
 struct Particle {
   mut x : Float
   mut y : Float
@@ -70,6 +81,7 @@ struct Particle {
 }
 
 ///|
+/// Clamps a float value to the inclusive `[lo, hi]` range.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -81,6 +93,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -90,6 +103,7 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns the squared Euclidean distance between two 2D points.
 fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
   let dy = ay - by
@@ -97,6 +111,7 @@ fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 }
 
 ///|
+/// Tests whether the point `(px, py)` lies inside the integer-defined rectangle `(rx, ry, rw, rh)`.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -112,6 +127,7 @@ fn inside_rect(
 }
 
 ///|
+/// Deactivates and zeroes all fields in every patrol boat slot.
 fn clear_patrols(ps : Array[Patrol]) -> Unit {
   for ps_elem in ps {
     ps_elem.x = 0.0
@@ -127,6 +143,7 @@ fn clear_patrols(ps : Array[Patrol]) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes all fields in every cargo crate slot.
 fn clear_crates(cs : Array[Crate]) -> Unit {
   for cs_elem in cs {
     cs_elem.x = 0.0
@@ -139,6 +156,7 @@ fn clear_crates(cs : Array[Crate]) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes all fields in every particle slot.
 fn clear_particles(ps : Array[Particle]) -> Unit {
   for ps_elem in ps {
     ps_elem.x = 0.0
@@ -152,6 +170,7 @@ fn clear_particles(ps : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Finds the first inactive particle slot and initialises it with a random velocity scaled by `speed` and the given visual `kind`.
 fn spawn_particle(
   ps : Array[Particle],
   x : Float,
@@ -180,6 +199,7 @@ fn spawn_particle(
 }
 
 ///|
+/// Emits `n` particles at position `(x, y)` by calling `spawn_particle` repeatedly.
 fn burst(
   ps : Array[Particle],
   x : Float,
@@ -194,6 +214,7 @@ fn burst(
 }
 
 ///|
+/// Resets all player fields to their starting position and default stat values.
 fn reset_player(p : Smuggler) -> Unit {
   p.x = 174.0
   p.y = 442.0
@@ -210,6 +231,7 @@ fn reset_player(p : Smuggler) -> Unit {
 }
 
 ///|
+/// Spawns a patrol boat from a random screen side at a random vertical position with speed and detection radius scaled to the current level.
 fn spawn_patrol(ps : Array[Patrol], level : Int, wave_t : Float) -> Unit {
   let side = @raylib.get_random_value(0, 1)
   let y = Float::from_int(
@@ -251,6 +273,7 @@ fn spawn_patrol(ps : Array[Patrol], level : Int, wave_t : Float) -> Unit {
 }
 
 ///|
+/// Spawns a cargo crate at a random horizontal lane position with a value weighted by the current level.
 fn spawn_crate(cs : Array[Crate], level : Int, wave_t : Float) -> Unit {
   let lane = @raylib.get_random_value(0, 4)
   let y : Float = if lane == 0 {
@@ -293,6 +316,7 @@ fn spawn_crate(cs : Array[Crate], level : Int, wave_t : Float) -> Unit {
 }
 
 ///|
+/// Resets all entities and returns `(quota, timer, patrol_cd, crate_cd)` tuned for the given level (1-3).
 fn setup_level(
   level : Int,
   player : Smuggler,
@@ -315,6 +339,7 @@ fn setup_level(
 }
 
 ///|
+/// Initialises the Raylib window, pre-allocates all entity arrays, runs the 3-night game loop, and closes the window on exit.
 fn main {
   @raylib.init_window(sw, sh, "Harbor Smuggler Run 2026")
   @raylib.set_target_fps(60)

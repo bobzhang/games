@@ -1,18 +1,23 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1120
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 720
 
 ///|
+/// Number of parallel track lanes the cart can occupy.
 let lane_count : Int = 3
 
 ///|
+/// Returns the vertical screen position of the given track lane index.
 fn lane_y(lane : Int) -> Float {
   250.0 + Float::from_int(lane) * 140.0
 }
 
 ///|
+/// An obstacle or coin on the track: kind 0 = low rock, 1 = high wall, 2 = coin.
 struct Hazard {
   mut alive : Bool
   mut x : Float
@@ -21,6 +26,7 @@ struct Hazard {
 }
 
 ///|
+/// Marks all hazards as inactive, clearing the track.
 fn reset_hazards(hazards : Array[Hazard]) -> Unit {
   for hazard in hazards {
     hazard.alive = false
@@ -28,6 +34,7 @@ fn reset_hazards(hazards : Array[Hazard]) -> Unit {
 }
 
 ///|
+/// Activates the first free hazard slot and places it off the right edge of the screen on the specified lane.
 fn spawn_hazard(hazards : Array[Hazard], lane : Int, kind : Int) -> Unit {
   for hazard in hazards {
     if not(hazard.alive) {
@@ -41,6 +48,7 @@ fn spawn_hazard(hazards : Array[Hazard], lane : Int, kind : Int) -> Unit {
 }
 
 ///|
+/// Entry point: opens the window, runs the game loop handling cart movement, jumping, hazard spawning, collision, and rendering each frame.
 fn main {
   @raylib.init_window(sw, sh, "Mine Cart Mayhem 2026")
   @raylib.set_target_fps(60)

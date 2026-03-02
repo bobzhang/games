@@ -1,4 +1,5 @@
 ///|
+/// Zeroes the solution, cell, row-clue, and column-clue arrays along with their count arrays to prepare for a new level load.
 fn clear_solution_and_cells(game : @types.Game) -> Unit {
   for i in 0..<@types.max_cells {
     game.solution[i] = false
@@ -14,6 +15,7 @@ fn clear_solution_and_cells(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets the undo stack length to zero and clears every undo slot to its invalid default state.
 fn clear_undo(game : @types.Game) -> Unit {
   game.undo_len = 0
   for i in 0..<game.undo.length() {
@@ -32,6 +34,7 @@ fn clear_undo(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all spark particles and resets their position, velocity, life, size, and kind fields.
 fn clear_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
     spark.active = false
@@ -46,6 +49,7 @@ fn clear_sparks(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns 1 if the cell is filled and the solution requires it to be filled, otherwise 0.
 fn contribution_correct(cell_state : Int, sol : Bool) -> Int {
   if cell_state == @types.cell_fill {
     if sol {
@@ -59,6 +63,7 @@ fn contribution_correct(cell_state : Int, sol : Bool) -> Int {
 }
 
 ///|
+/// Returns 1 if the cell is filled but the solution requires it to be empty, otherwise 0.
 fn contribution_wrong(cell_state : Int, sol : Bool) -> Int {
   if cell_state == @types.cell_fill {
     if not(sol) {
@@ -72,6 +77,7 @@ fn contribution_wrong(cell_state : Int, sol : Bool) -> Int {
 }
 
 ///|
+/// Computes the nonogram run-length clues for the given row and stores them in the row_clues array along with the clue count.
 fn compute_row_clues(game : @types.Game, y : Int) -> Unit {
   let base : Int = y * @types.max_board
 
@@ -106,6 +112,7 @@ fn compute_row_clues(game : @types.Game, y : Int) -> Unit {
 }
 
 ///|
+/// Computes the nonogram run-length clues for the given column and stores them in the col_clues array along with the clue count.
 fn compute_col_clues(game : @types.Game, x : Int) -> Unit {
   let base : Int = x * @types.max_board
 
@@ -140,6 +147,7 @@ fn compute_col_clues(game : @types.Game, x : Int) -> Unit {
 }
 
 ///|
+/// Recomputes clues for every row and every column of the current grid.
 fn compute_all_clues(game : @types.Game) -> Unit {
   for y in 0..<game.grid_h {
     compute_row_clues(game, y)
@@ -151,6 +159,7 @@ fn compute_all_clues(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Loads a level from a row-major binary grid, computes all clues, places the cursor at the board center, and resets all per-level counters.
 fn apply_level_rows(
   game : @types.Game,
   rows : Array[Array[Int]],
@@ -212,6 +221,7 @@ fn apply_level_rows(
 }
 
 ///|
+/// Activates the first available spark slot with the given position, velocity, lifetime, size, and visual kind.
 fn spawn_spark(
   game : @types.Game,
   x : Float,
@@ -240,6 +250,7 @@ fn spawn_spark(
 }
 
 ///|
+/// Spawns a burst of spark particles centred on the world position of the given board cell.
 fn burst_cell(
   game : @types.Game,
   x : Int,
@@ -265,6 +276,7 @@ fn burst_cell(
 }
 
 ///|
+/// Advances all active spark particles by dt: integrates velocity, applies drag and gravity, and deactivates expired sparks.
 fn update_sparks(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
@@ -285,6 +297,7 @@ fn update_sparks(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Appends an undo step to the ring buffer, evicting the oldest entry if the buffer is full.
 fn push_undo(game : @types.Game, step : @types.UndoStep) -> Unit {
   if game.undo_len >= game.undo.length() {
     for i in 1..<game.undo.length() {
@@ -298,6 +311,7 @@ fn push_undo(game : @types.Game, step : @types.UndoStep) -> Unit {
 }
 
 ///|
+/// Returns 1 to 3 stars based on whether the player beat the par time, made no mistakes, and used no hints.
 fn score_stars(game : @types.Game) -> Int {
   let mut stars : Int = 3
 
@@ -321,6 +335,7 @@ fn score_stars(game : @types.Game) -> Int {
 }
 
 ///|
+/// Scores the completed level, stores the star result, and accumulates campaign-wide totals for time, mistakes, hints, stars, and completed count.
 fn finalize_level_success(game : @types.Game) -> Unit {
   let stars : Int = score_stars(game)
   game.last_level_stars = stars
@@ -333,6 +348,7 @@ fn finalize_level_success(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Finalizes a solved puzzle: scores the run, triggers a spark burst on all filled cells, and transitions to the level-clear or campaign-clear state.
 fn complete_level(game : @types.Game) -> Unit {
   if game.state != @types.state_play {
     return
@@ -359,6 +375,7 @@ fn complete_level(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Triggers a level failure: sets the fail state, shows a shake effect, and bursts sparks on every incorrectly filled cell.
 fn fail_level(game : @types.Game) -> Unit {
   if game.state != @types.state_play {
     return
@@ -380,6 +397,7 @@ fn fail_level(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Applies a new cell state at (x, y), records an undo step, updates correct/wrong fill counts, optionally counts mistakes or consumes a hint, spawns a spark burst, and checks for puzzle completion or failure.
 fn apply_cell_state(
   game : @types.Game,
   x : Int,
@@ -465,6 +483,7 @@ fn apply_cell_state(
 }
 
 ///|
+/// Applies the fill or mark tool to the cell at (x, y): toggles the state between filled/unknown or crossed/unknown, moves the cursor, and returns whether the cell changed.
 fn apply_tool_on_cell(game : @types.Game, x : Int, y : Int, tool : Int) -> Bool {
   if game.state != @types.state_play {
     return false
@@ -498,11 +517,13 @@ fn apply_tool_on_cell(game : @types.Game, x : Int, y : Int, tool : Int) -> Bool 
 }
 
 ///|
+/// Applies the given tool to the cell under the current cursor position.
 fn apply_tool_at_cursor(game : @types.Game, tool : Int) -> Bool {
   apply_tool_on_cell(game, game.cursor_x, game.cursor_y, tool)
 }
 
 ///|
+/// Consumes one hint: reveals the first unfilled required cell, then the first incorrect fill, then the first unmarked empty cell; returns false if no hints remain.
 fn use_hint(game : @types.Game) -> Bool {
   if game.state != @types.state_play {
     return false
@@ -548,6 +569,7 @@ fn use_hint(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Pops the most recent undo step and restores the cell state, mistake count, fill counts, hint counts, and cursor position to their previous values.
 fn undo_action(game : @types.Game) -> Bool {
   if game.undo_len <= 0 {
     return false
@@ -581,6 +603,7 @@ fn undo_action(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Advances the UI animation clock, level timer, message countdown, shake countdown, touch-action cooldown, and spark particle system by dt.
 fn update_frame_timers(game : @types.Game, dt : Float) -> Unit {
   game.ui_t = game.ui_t + dt
 
@@ -613,6 +636,7 @@ fn update_frame_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Moves the cursor one step in the given direction, clamping it within the current grid bounds.
 fn move_cursor_once(game : @types.Game, dir : Int) -> Unit {
   if game.state != @types.state_play {
     return
@@ -630,6 +654,7 @@ fn move_cursor_once(game : @types.Game, dir : Int) -> Unit {
 }
 
 ///|
+/// Handles cursor auto-repeat movement: on first frame of a new held direction the cursor moves once, then repeats at a faster interval while the direction is held.
 fn update_cursor_hold(game : @types.Game, dt : Float, held_dir : Int) -> Unit {
   if game.state != @types.state_play {
     game.hold_dir = @types.dir_none
@@ -657,6 +682,7 @@ fn update_cursor_hold(game : @types.Game, dt : Float, held_dir : Int) -> Unit {
 }
 
 ///|
+/// Toggles the active tool between fill and mark and shows a brief status message.
 fn switch_tool(game : @types.Game) -> Unit {
   if game.tool_mode == @types.tool_fill {
     game.tool_mode = @types.tool_cross
@@ -669,6 +695,7 @@ fn switch_tool(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Loads the puzzle for the given level ID by calling apply_level_rows with the appropriate hardcoded grid, then transitions to the play state.
 fn load_level(game : @types.Game, level_id : Int) -> Unit {
   let mut id : Int = level_id
   if id < 0 {
@@ -861,11 +888,13 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
 }
 
 ///|
+/// Reloads the current level from scratch, resetting all cell states and counters.
 fn reload_level(game : @types.Game) -> Unit {
   load_level(game, game.level_index)
 }
 
 ///|
+/// Resets all campaign-wide totals and reloads the first level to begin a fresh playthrough.
 fn restart_campaign(game : @types.Game) -> Unit {
   game.total_time = 0.0
   game.total_mistakes = 0
@@ -876,6 +905,7 @@ fn restart_campaign(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Loads the next level in the campaign, or transitions to the campaign-clear state if all levels have been completed.
 fn advance_level(game : @types.Game) -> Unit {
   if game.level_index + 1 >= game.level_count {
     game.state = @types.state_campaign_clear

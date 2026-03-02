@@ -1,4 +1,5 @@
 ///|
+/// Draws text centered horizontally at the given y position.
 fn draw_center_text(
   text : String,
   y : Int,
@@ -10,6 +11,7 @@ fn draw_center_text(
 }
 
 ///|
+/// Draws text right-aligned so its right edge touches x.
 fn draw_right_text(
   text : String,
   x : Int,
@@ -22,6 +24,7 @@ fn draw_right_text(
 }
 
 ///|
+/// Returns a copy of `c` with alpha clamped to `[0, 255]`.
 fn a_col(c : @raylib.Color, alpha : Int) -> @raylib.Color {
   @raylib.Color::new(
     c.r.to_int(),
@@ -32,6 +35,7 @@ fn a_col(c : @raylib.Color, alpha : Int) -> @raylib.Color {
 }
 
 ///|
+/// Returns the distinctive color assigned to a suspect index.
 fn suspect_col(index : Int) -> @raylib.Color {
   if index == 0 {
     @raylib.Color::new(236, 118, 124, 255)
@@ -45,6 +49,7 @@ fn suspect_col(index : Int) -> @raylib.Color {
 }
 
 ///|
+/// Returns a display label string for the current game state.
 fn state_label(state : @types.GameState) -> String {
   match state {
     Title => "TITLE"
@@ -55,6 +60,7 @@ fn state_label(state : @types.GameState) -> String {
 }
 
 ///|
+/// Draws the dark gradient background, animated scan lines, and city panel underlay.
 fn draw_background(game : @types.Game) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
@@ -90,6 +96,7 @@ fn draw_background(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws all district cells with heat-based color, focus highlight, and grid lines.
 fn draw_districts(game : @types.Game) -> Unit {
   for y in 0..<@types.city_rows {
     for x in 0..<@types.city_cols {
@@ -144,6 +151,7 @@ fn draw_districts(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the numeric district id in the top-left corner of each cell.
 fn draw_district_ids() -> Unit {
   for y in 0..<@types.city_rows {
     for x in 0..<@types.city_cols {
@@ -160,6 +168,7 @@ fn draw_district_ids() -> Unit {
 }
 
 ///|
+/// Draws undiscovered clue dots with pulsing radius and color, plus glow rings on newly found clues.
 fn draw_clues(game : @types.Game) -> Unit {
   for i in 0..<game.clues.length() {
     if game.clues[i].discovered {
@@ -212,6 +221,7 @@ fn draw_clues(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws suspect circles with name label, deduction badge, and marked-suspect pulsing ring.
 fn draw_suspects(game : @types.Game) -> Unit {
   for i in 0..<game.suspects.length() {
     let x = @types.cell_center_x(game.suspects[i].home_x)
@@ -257,6 +267,7 @@ fn draw_suspects(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws active incidents with severity-scaled pulsing circles and countdown timer.
 fn draw_incidents(game : @types.Game) -> Unit {
   for incident in game.incidents {
     if not(incident.active) {
@@ -304,6 +315,7 @@ fn draw_incidents(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the cursor highlight rectangle with pulsing glow and focus overlay.
 fn draw_cursor(game : @types.Game) -> Unit {
   let lx = @types.cell_left_i(game.cursor_x)
   let ty = @types.cell_top_i(game.cursor_y)
@@ -339,6 +351,7 @@ fn draw_cursor(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a labeled horizontal progress bar with background, fill, and outline.
 fn draw_meter(
   x : Int,
   y : Int,
@@ -373,6 +386,7 @@ fn draw_meter(
 }
 
 ///|
+/// Returns the count of currently active incidents.
 fn active_incident_count(game : @types.Game) -> Int {
   let mut count = 0
   for incident in game.incidents {
@@ -384,6 +398,7 @@ fn active_incident_count(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the number of fully completed evidence chains for `suspect`.
 fn completed_chains(game : @types.Game, suspect : Int) -> Int {
   if suspect < 0 || suspect >= @types.suspect_count {
     return 0
@@ -400,6 +415,7 @@ fn completed_chains(game : @types.Game, suspect : Int) -> Int {
 }
 
 ///|
+/// Returns the total confidence score for `suspect`.
 fn suspect_confidence(game : @types.Game, suspect : Int) -> Int {
   if suspect < 0 || suspect >= @types.suspect_count {
     return 0
@@ -414,6 +430,7 @@ fn suspect_confidence(game : @types.Game, suspect : Int) -> Int {
 }
 
 ///|
+/// Draws the top HUD strip: title, state label, trust/time meters, score, focus status, and message bar.
 fn draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -538,6 +555,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the right-side evidence board panel with per-suspect confidence bars, chains, and deduction status.
 fn draw_suspect_board(game : @types.Game) -> Unit {
   let panel_x = @types.city_origin_x_i + @types.city_w_i() + 18
   let panel_w = @types.screen_w - panel_x - 18
@@ -638,6 +656,7 @@ fn draw_suspect_board(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the title screen overlay with game title, instructions, and start prompt.
 fn draw_title_overlay() -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -677,6 +696,7 @@ fn draw_title_overlay() -> Unit {
 }
 
 ///|
+/// Draws the pause overlay dialog.
 fn draw_paused_overlay() -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -695,6 +715,7 @@ fn draw_paused_overlay() -> Unit {
 }
 
 ///|
+/// Draws the game-over overlay with score summary, incident stats, and clue collection count.
 fn draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,

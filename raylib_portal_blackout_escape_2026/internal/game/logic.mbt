@@ -1,14 +1,17 @@
 ///|
+/// Converts grid coordinates to a flat map array index.
 fn idx(x : Int, y : Int) -> Int {
   y * @types.grid_w + x
 }
 
 ///|
+/// Returns true if `(x, y)` is within the grid dimensions.
 fn in_bounds(x : Int, y : Int) -> Bool {
   x >= 0 && x < @types.grid_w && y >= 0 && y < @types.grid_h
 }
 
 ///|
+/// Returns the tile type at `(x, y)`, returning `tile_wall` for out-of-bounds coordinates.
 fn tile_at(game : @types.Game, x : Int, y : Int) -> Int {
   if not(in_bounds(x, y)) {
     @types.tile_wall
@@ -18,6 +21,7 @@ fn tile_at(game : @types.Game, x : Int, y : Int) -> Int {
 }
 
 ///|
+/// Writes tile type `t` into the map at `(x, y)`, ignoring out-of-bounds coordinates.
 fn set_tile(game : @types.Game, x : Int, y : Int, t : Int) -> Unit {
   if not(in_bounds(x, y)) {
     return
@@ -26,12 +30,14 @@ fn set_tile(game : @types.Game, x : Int, y : Int, t : Int) -> Unit {
 }
 
 ///|
+/// Sets the HUD status message with a display duration of `ttl` seconds.
 fn set_msg(game : @types.Game, msg : String, ttl : Float) -> Unit {
   game.msg = msg
   game.msg_t = ttl
 }
 
 ///|
+/// Instantly places actor `a` at tile `(x, y)`, clearing all interpolation state.
 fn actor_place(a : @types.Actor, x : Int, y : Int) -> Unit {
   a.x = x
   a.y = y
@@ -46,6 +52,7 @@ fn actor_place(a : @types.Actor, x : Int, y : Int) -> Unit {
 }
 
 ///|
+/// Begins smooth movement of actor `a` toward tile `(tx, ty)`, resetting the interpolation counter.
 fn actor_start_move(a : @types.Actor, tx : Int, ty : Int) -> Unit {
   if a.x == tx && a.y == ty {
     return
@@ -60,6 +67,7 @@ fn actor_start_move(a : @types.Actor, tx : Int, ty : Int) -> Unit {
 }
 
 ///|
+/// Advances the actor's interpolated float position each frame, committing tile coordinates when `t` reaches 1.0.
 fn actor_tick(a : @types.Actor, dt : Float, move_t : Float) -> Unit {
   if not(a.moving) {
     a.fx = Float::from_int(a.x)
@@ -83,6 +91,7 @@ fn actor_tick(a : @types.Actor, dt : Float, move_t : Float) -> Unit {
 }
 
 ///|
+/// Deactivates and resets all particles in the pool.
 fn clear_particles(game : @types.Game) -> Unit {
   for particle in game.particles {
     particle.active = false
@@ -97,6 +106,7 @@ fn clear_particles(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Activates the first free slot in the particle pool with the given position, velocity, lifetime, size, and kind.
 fn emit_particle(
   game : @types.Game,
   x : Float,
@@ -125,6 +135,7 @@ fn emit_particle(
 }
 
 ///|
+/// Emits `n` particles of the given kind around pixel position `(x, y)` with random velocities.
 fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
   for _i in 0..<n {
     emit_particle(
@@ -141,6 +152,7 @@ fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit 
 }
 
 ///|
+/// Advances all active particles by `dt`, applying drag and gravity, and deactivates expired ones.
 fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
@@ -164,6 +176,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Returns true if any active flare is within Manhattan distance 2 of `(x, y)`, hiding the player from drone detection.
 fn flare_cover_at(game : @types.Game, x : Int, y : Int) -> Bool {
   for flare in game.flares {
     if not(flare.active) {
@@ -180,6 +193,7 @@ fn flare_cover_at(game : @types.Game, x : Int, y : Int) -> Bool {
 }
 
 ///|
+/// Returns the index of the active core at tile `(x, y)`, or -1 if none present.
 fn core_index_at(game : @types.Game, x : Int, y : Int) -> Int {
   for i in 0..<game.cores.length() {
     if not(game.cores[i].active) {
@@ -195,6 +209,7 @@ fn core_index_at(game : @types.Game, x : Int, y : Int) -> Int {
 }
 
 ///|
+/// Returns the index of an active drone occupying tile `(x, y)`, skipping drone index `skip`, or -1 if none.
 fn drone_index_at(game : @types.Game, x : Int, y : Int, skip : Int) -> Int {
   for i in 0..<game.drones.length() {
     if i == skip || not(game.drones[i].active) {
@@ -210,6 +225,7 @@ fn drone_index_at(game : @types.Game, x : Int, y : Int, skip : Int) -> Int {
 }
 
 ///|
+/// Generates the facility map with perimeter walls, corridor wall columns and rows, extra wall blocks, exit tile, and start tile.
 fn build_map(game : @types.Game) -> Unit {
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
@@ -263,6 +279,7 @@ fn build_map(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Places eight energy cores at their fixed tile positions and activates them in the pool.
 fn init_cores(game : @types.Game) -> Unit {
   let plan : Array[(Int, Int, Int)] = [
     (5, 11, 0),
@@ -290,6 +307,7 @@ fn init_cores(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Places five patrol drones at their fixed starting tiles with individual patrol ranges and colors.
 fn init_drones(game : @types.Game) -> Unit {
   let plan : Array[(Int, Int, Int, Int, Int, Int, Int)] = [
     (6, 2, 1, 0, 5, 9, 0),
@@ -326,6 +344,7 @@ fn init_drones(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all flare entries in the pool.
 fn clear_flares(game : @types.Game) -> Unit {
   for flare in game.flares {
     flare.active = false
@@ -336,6 +355,7 @@ fn clear_flares(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets the entire game state, rebuilds the map, places all entities, and transitions to the play state.
 fn start_run(game : @types.Game) -> Unit {
   build_map(game)
   init_cores(game)
@@ -378,6 +398,7 @@ fn start_run(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Transitions to the title screen and clears transient input and effect state.
 fn go_title(game : @types.Game) -> Unit {
   game.state = @types.state_title
   game.req_dx = 0
@@ -390,6 +411,7 @@ fn go_title(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Ends the current run, records win/loss outcome, applies score bonuses, and transitions to the result screen.
 fn finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
   if game.state != @types.state_play {
     return
@@ -422,12 +444,14 @@ fn finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
 }
 
 ///|
+/// Advances the hint index and displays the next rotating hint message in the HUD.
 fn cycle_hint(game : @types.Game) -> Unit {
   game.hint_i = (game.hint_i + 1) % 4
   set_msg(game, @types.hint_text(game.hint_i), 2.8)
 }
 
 ///|
+/// Returns true if tile `(x, y)` is a wall or a locked exit (exit tile when portal is offline).
 fn blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
   if not(in_bounds(x, y)) {
     return true
@@ -442,6 +466,7 @@ fn blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
 }
 
 ///|
+/// Returns true if the given tile is impassable for the player (currently delegates to `blocked_by_map`).
 fn blocked_for_actor(game : @types.Game, x : Int, y : Int) -> Bool {
   if blocked_by_map(game, x, y) {
     return true
@@ -451,6 +476,7 @@ fn blocked_for_actor(game : @types.Game, x : Int, y : Int) -> Bool {
 }
 
 ///|
+/// Attempts to move the player one tile in direction `(dx, dy)`, returning true if the move was accepted.
 fn try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool {
   if dx == 0 && dy == 0 {
     return false
@@ -473,6 +499,7 @@ fn try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool {
 }
 
 ///|
+/// Collects the energy core at the player's current tile, adds score, and activates the portal network once 6 cores are gathered.
 fn collect_core(game : @types.Game) -> Unit {
   if game.player.moving {
     return
@@ -530,6 +557,7 @@ fn collect_core(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns true if there is an unobstructed horizontal or vertical line of sight between `(x0, y0)` and `(x1, y1)`.
 fn line_of_sight(
   game : @types.Game,
   x0 : Int,
@@ -567,6 +595,7 @@ fn line_of_sight(
 }
 
 ///|
+/// Advances a drone's LCG pseudo-random seed and returns the next value (always positive).
 fn drone_seed_next(seed : Int) -> Int {
   let n : Int = (seed * 48271 + 97) % 2147483647
   if n <= 0 {
@@ -577,6 +606,7 @@ fn drone_seed_next(seed : Int) -> Int {
 }
 
 ///|
+/// Returns true if tile `(x, y)` is impassable for drone `gid` (wall, locked exit, or occupied by another drone).
 fn blocked_for_drone(game : @types.Game, gid : Int, x : Int, y : Int) -> Bool {
   if blocked_by_map(game, x, y) {
     return true
@@ -587,6 +617,7 @@ fn blocked_for_drone(game : @types.Game, gid : Int, x : Int, y : Int) -> Bool {
 }
 
 ///|
+/// Determines the next movement step for drone `i`: hunts toward the player when in range or line-of-sight, otherwise bounces along its patrol axis.
 fn choose_drone_step(game : @types.Game, i : Int) -> (Int, Int) {
   let d = game.drones[i]
   let gx : Int = d.body.x
@@ -683,6 +714,7 @@ fn choose_drone_step(game : @types.Game, i : Int) -> (Int, Int) {
 }
 
 ///|
+/// Ticks all active drones each frame: advances interpolation, drains stun timers, and issues movement steps when cooldown expires.
 fn update_drones(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.drones.length() {
     if not(game.drones[i].active) {
@@ -731,6 +763,7 @@ fn update_drones(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Counts down flare lifetimes each frame and emits smoke particles; deactivates flares whose time has expired.
 fn update_flares(game : @types.Game, dt : Float) -> Unit {
   for flare in game.flares {
     if not(flare.active) {
@@ -761,6 +794,7 @@ fn update_flares(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Deploys a flare at the player's current tile, consuming energy, stunning nearby drones, and emitting a burst of particles.
 fn deploy_flare(game : @types.Game) -> Bool {
   if game.action_cd > 0.0 || game.flare_energy < @types.flare_cost {
     return false
@@ -830,6 +864,7 @@ fn deploy_flare(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Teleports the player between portal A and B if standing on one and the portal is active; returns true on success.
 fn try_portal(game : @types.Game) -> Bool {
   if not(game.portal_on) || game.teleport_cd > 0.0 {
     return false
@@ -862,6 +897,7 @@ fn try_portal(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Checks if a non-stunned drone shares the player's tile, reduces lives, triggers flash and shake effects, and ends the run on last life.
 fn handle_player_hit(game : @types.Game) -> Unit {
   if game.flash_t > 0.0 {
     return
@@ -899,6 +935,7 @@ fn handle_player_hit(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Decrements all per-frame timers: message display, flash, shake, movement cooldown, action cooldown, teleport cooldown, and touch debounce.
 fn update_timers(game : @types.Game, dt : Float) -> Unit {
   if game.msg_t > 0.0 {
     game.msg_t = game.msg_t - dt
@@ -930,6 +967,7 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances the title screen each frame: increments the animation timer and ticks timers and particles.
 fn update_title(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt
   update_timers(game, dt)
@@ -937,6 +975,7 @@ fn update_title(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances the result screen each frame: increments the animation timer and ticks timers and particles.
 fn update_result(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt
   update_timers(game, dt)
@@ -944,6 +983,7 @@ fn update_result(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs one gameplay frame: decrements the countdown timer, moves the player, handles action input, updates flares/drones/cores/hits/particles, and checks win/loss conditions.
 fn update_play(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt
   game.time_left = game.time_left - dt

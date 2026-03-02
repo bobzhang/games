@@ -1,4 +1,5 @@
 ///|
+/// Returns true when the point `(x, y)` lies inside the rectangle `(rx, ry, rw, rh)`.
 fn point_in_rect(
   x : Float,
   y : Float,
@@ -11,6 +12,7 @@ fn point_in_rect(
 }
 
 ///|
+/// Returns true when the mouse or any active touch point overlaps the given rectangle.
 fn pointer_on_rect(
   mx : Float,
   my : Float,
@@ -36,6 +38,7 @@ fn pointer_on_rect(
 }
 
 ///|
+/// Resets all per-frame input flags on the game state to their default off values.
 fn clear_frame_input(game : @types.Game) -> Unit {
   game.input_jump_press = false
   game.input_jump_hold = false
@@ -46,6 +49,7 @@ fn clear_frame_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Updates the game pointer coordinates from the mouse position or the first active touch point.
 fn update_pointer(game : @types.Game) -> Unit {
   game.pointer_x = game.mouse_x
   game.pointer_y = game.mouse_y
@@ -59,6 +63,7 @@ fn update_pointer(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads title screen input and immediately starts a run when any start key, mouse button, or touch event is detected.
 fn update_title_input(game : @types.Game) -> Unit {
   clear_frame_input(game)
   update_pointer(game)
@@ -83,6 +88,7 @@ fn update_title_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads gameplay input for jump, slide, grapple, and restart actions from keyboard, mouse, and touch sources.
 fn update_play_input(game : @types.Game) -> Unit {
   clear_frame_input(game)
   update_pointer(game)
@@ -182,6 +188,7 @@ fn update_play_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads stage-clear screen input and sets restart or jump-press flags to advance to the next stage.
 fn update_stage_clear_input(game : @types.Game) -> Unit {
   clear_frame_input(game)
   update_pointer(game)
@@ -201,6 +208,7 @@ fn update_stage_clear_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads game-over screen input and sets the restart flag when a retry key, click, or touch event is detected.
 fn update_result_input(game : @types.Game) -> Unit {
   clear_frame_input(game)
   update_pointer(game)

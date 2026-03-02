@@ -1,31 +1,41 @@
 ///|
+/// Window width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Window height in pixels.
 let sh : Int = 760
 
 ///|
+/// World width in pixels (matches window width).
 let world_w : Float = 1280.0
 
 ///|
+/// World height in pixels (matches window height).
 let world_h : Float = 760.0
 
 ///|
+/// Maximum simultaneous active traffic vehicles.
 let max_traffic : Int = 120
 
 ///|
+/// Maximum simultaneous active passenger entities.
 let max_passengers : Int = 36
 
 ///|
+/// Maximum simultaneous active fuel pickup items.
 let max_fuels : Int = 24
 
 ///|
+/// Maximum simultaneous active particles.
 let max_particles : Int = 760
 
 ///|
+/// Maximum road intersection marker slots.
 let max_markers : Int = 32
 
 ///|
+/// Player taxi state: position, velocity, HP, fuel, cash, combo, rating, boosts, and carried passenger.
 struct Taxi {
   mut x : Float
   mut y : Float
@@ -47,6 +57,7 @@ struct Taxi {
 }
 
 ///|
+/// NPC traffic vehicle: position, velocity, speed, lane, size, and horn reaction timer.
 struct Traffic {
   mut active : Bool
   mut x : Float
@@ -60,6 +71,7 @@ struct Traffic {
 }
 
 ///|
+/// Pickup passenger: spawn position, destination, fare, waiting timer, pickup state, and pulse animation.
 struct Passenger {
   mut active : Bool
   mut x : Float
@@ -73,6 +85,7 @@ struct Passenger {
 }
 
 ///|
+/// Fuel canister pickup: position, amount, animation timer, and remaining lifetime.
 struct FuelPickup {
   mut active : Bool
   mut x : Float
@@ -83,6 +96,7 @@ struct FuelPickup {
 }
 
 ///|
+/// Short-lived visual effect particle with position, velocity, size, lifetime, and kind.
 struct Particle {
   mut active : Bool
   mut x : Float
@@ -96,12 +110,14 @@ struct Particle {
 }
 
 ///|
+/// Road intersection navigation marker: screen position used for passenger spawning and pathfinding.
 struct Marker {
   mut x : Float
   mut y : Float
 }
 
 ///|
+/// Clamps a float value to the inclusive range `[lo, hi]`.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -113,6 +129,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -122,6 +139,7 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns the squared Euclidean distance between two points.
 fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
   let dy = ay - by
@@ -129,6 +147,7 @@ fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 }
 
 ///|
+/// Returns true if point `(px, py)` lies within the rectangle at `(rx, ry)` with size `rw x rh`.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -145,18 +164,21 @@ fn inside_rect(
 }
 
 ///|
+/// Returns a uniform random float in `[lo, hi]` using raylib RNG.
 fn randf(lo : Float, hi : Float) -> Float {
   let r = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Formats a driver rating float as a one-decimal string (e.g. 4.2).
 fn rating_str(r : Float) -> String {
   let v : Int = (r * 10.0).to_int()
   "\{v / 10}.\{v % 10}"
 }
 
 ///|
+/// Returns true if position `(x, y)` lies on a horizontal or vertical road lane.
 fn road_hit(x : Float, y : Float) -> Bool {
   let mut on_h : Bool = false
   let mut on_v : Bool = false
@@ -180,6 +202,7 @@ fn road_hit(x : Float, y : Float) -> Bool {
 }
 
 ///|
+/// Deactivates and resets all traffic vehicles in the array.
 fn clear_traffic(ts : Array[Traffic]) -> Unit {
   for ts_elem in ts {
     ts_elem.active = false
@@ -195,6 +218,7 @@ fn clear_traffic(ts : Array[Traffic]) -> Unit {
 }
 
 ///|
+/// Deactivates and resets all passenger entities in the array.
 fn clear_passengers(ps : Array[Passenger]) -> Unit {
   for ps_elem in ps {
     ps_elem.active = false
@@ -210,6 +234,7 @@ fn clear_passengers(ps : Array[Passenger]) -> Unit {
 }
 
 ///|
+/// Deactivates and resets all fuel pickups in the array.
 fn clear_fuels(fs : Array[FuelPickup]) -> Unit {
   for fs_elem in fs {
     fs_elem.active = false
@@ -222,6 +247,7 @@ fn clear_fuels(fs : Array[FuelPickup]) -> Unit {
 }
 
 ///|
+/// Deactivates and resets all particles in the array.
 fn clear_particles(ps : Array[Particle]) -> Unit {
   for ps_elem in ps {
     ps_elem.active = false
@@ -237,6 +263,7 @@ fn clear_particles(ps : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Zeroes all marker positions in the array.
 fn clear_markers(ms : Array[Marker]) -> Unit {
   for ms_elem in ms {
     ms_elem.x = 0.0
@@ -245,6 +272,7 @@ fn clear_markers(ms : Array[Marker]) -> Unit {
 }
 
 ///|
+/// Activates a single particle from the pool at `(x, y)` with random velocity at the given speed scale.
 fn spawn_particle(
   ps : Array[Particle],
   x : Float,
@@ -274,6 +302,7 @@ fn spawn_particle(
 }
 
 ///|
+/// Spawns `count` particles in random directions from `(x, y)` at the given speed scale and kind.
 fn burst(
   ps : Array[Particle],
   x : Float,
@@ -289,6 +318,7 @@ fn burst(
 }
 
 ///|
+/// Populates the marker array with the 20 road intersection positions and returns the count.
 fn setup_markers(ms : Array[Marker]) -> Int {
   clear_markers(ms)
   let mut n = 0
@@ -329,6 +359,7 @@ fn setup_markers(ms : Array[Marker]) -> Int {
 }
 
 ///|
+/// Activates a new traffic vehicle in a random lane with speed scaled to the current wave.
 fn spawn_traffic(ts : Array[Traffic], wave : Int) -> Bool {
   let mut slot = -1
   for i in 0..<ts.length() {
@@ -410,6 +441,7 @@ fn spawn_traffic(ts : Array[Traffic], wave : Int) -> Bool {
 }
 
 ///|
+/// Activates a new passenger at a random intersection with a fare and destination, scaled to wave.
 fn spawn_passenger(
   ps : Array[Passenger],
   markers : Array[Marker],
@@ -454,6 +486,7 @@ fn spawn_passenger(
 }
 
 ///|
+/// Activates a new fuel canister near a random intersection with a random amount and lifetime.
 fn spawn_fuel(
   fs : Array[FuelPickup],
   markers : Array[Marker],
@@ -481,6 +514,7 @@ fn spawn_fuel(
 }
 
 ///|
+/// Entry point: initialises the window, creates all game entities, and runs the main game loop.
 fn main {
   @raylib.init_window(sw, sh, "Neon Taxi Rush 2026")
   @raylib.set_target_fps(60)

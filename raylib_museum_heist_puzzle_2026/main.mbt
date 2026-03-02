@@ -1,4 +1,5 @@
 ///|
+/// Initialises the Raylib window, resets the game to the title screen, and runs the main game loop.
 fn main {
   @raylib.init_window(
     @types.screen_w, @types.screen_h, "raylib [moonbit] museum heist stealth puzzle 2026",

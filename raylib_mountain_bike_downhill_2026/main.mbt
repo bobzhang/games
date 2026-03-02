@@ -1,28 +1,37 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 760
 
 ///|
+/// Horizontal world bounds matching screen width.
 let world_w : Float = 1280.0
 
 ///|
+/// Fixed vertical screen position used to anchor the rider's viewport.
 let rider_screen_y : Float = 538.0
 
 ///|
+/// Maximum number of checkpoint slots in the pool.
 let max_checkpoints : Int = 80
 
 ///|
+/// Maximum number of hazard slots in the pool.
 let max_hazards : Int = 320
 
 ///|
+/// Maximum number of pickup slots in the pool.
 let max_pickups : Int = 140
 
 ///|
+/// Maximum number of particle slots in the pool.
 let max_particles : Int = 980
 
 ///|
+/// Player-controlled mountain bike rider with position, physics, and stats.
 struct Rider {
   mut x : Float
   mut y : Float
@@ -42,6 +51,7 @@ struct Rider {
 }
 
 ///|
+/// Gate checkpoint that the rider must pass through within its width to score.
 struct Checkpoint {
   mut active : Bool
   mut x : Float
@@ -52,6 +62,7 @@ struct Checkpoint {
 }
 
 ///|
+/// Obstacle on the course that damages the rider on contact.
 struct Hazard {
   mut active : Bool
   mut x : Float
@@ -61,6 +72,7 @@ struct Hazard {
 }
 
 ///|
+/// Collectible item that provides a repair, stamina refill, or coin bonus.
 struct Pickup {
   mut active : Bool
   mut x : Float
@@ -70,6 +82,7 @@ struct Pickup {
 }
 
 ///|
+/// Pooled visual particle used for burst effects on jumps, boosts, and hits.
 struct Particle {
   mut active : Bool
   mut x : Float
@@ -83,6 +96,7 @@ struct Particle {
 }
 
 ///|
+/// Clamps a float into the inclusive range `[lo, hi]`.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -94,6 +108,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -103,6 +118,7 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns the squared Euclidean distance between two points.
 fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
   let dy = ay - by
@@ -110,6 +126,7 @@ fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 }
 
 ///|
+/// Returns true when `(px, py)` is inside the axis-aligned rectangle defined by `(rx, ry, rw, rh)`.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -126,17 +143,20 @@ fn inside_rect(
 }
 
 ///|
+/// Returns a pseudo-random float uniformly distributed in `[lo, hi]`.
 fn randf(lo : Float, hi : Float) -> Float {
   let r = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Converts a world-space y coordinate to screen-space by subtracting the rider camera offset.
 fn world_to_screen_y(obj_y : Float, rider_y : Float) -> Float {
   obj_y - rider_y + rider_screen_y
 }
 
 ///|
+/// Resets all checkpoint slots to their default inactive state.
 fn clear_checkpoints(cps : Array[Checkpoint]) -> Unit {
   for cp in cps {
     cp.active = false
@@ -149,6 +169,7 @@ fn clear_checkpoints(cps : Array[Checkpoint]) -> Unit {
 }
 
 ///|
+/// Resets all hazard slots to their default inactive state.
 fn clear_hazards(hs : Array[Hazard]) -> Unit {
   for hs_elem in hs {
     hs_elem.active = false
@@ -160,6 +181,7 @@ fn clear_hazards(hs : Array[Hazard]) -> Unit {
 }
 
 ///|
+/// Resets all pickup slots to their default inactive state.
 fn clear_pickups(ps : Array[Pickup]) -> Unit {
   for ps_elem in ps {
     ps_elem.active = false
@@ -171,6 +193,7 @@ fn clear_pickups(ps : Array[Pickup]) -> Unit {
 }
 
 ///|
+/// Resets all particle slots to their default inactive state.
 fn clear_particles(ps : Array[Particle]) -> Unit {
   for ps_elem in ps {
     ps_elem.active = false
@@ -186,6 +209,7 @@ fn clear_particles(ps : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Activates the first free particle slot at `(x, y)` with the given speed and kind.
 fn spawn_particle(
   ps : Array[Particle],
   x : Float,
@@ -215,6 +239,7 @@ fn spawn_particle(
 }
 
 ///|
+/// Spawns `count` particles at `(x, y)` using `spawn_particle`.
 fn burst(
   ps : Array[Particle],
   x : Float,
@@ -230,6 +255,7 @@ fn burst(
 }
 
 ///|
+/// Returns the smallest positive y-distance to the next unhit checkpoint, or a large sentinel value.
 fn nearest_checkpoint_dy(
   cps : Array[Checkpoint],
   cp_count : Int,
@@ -250,6 +276,7 @@ fn nearest_checkpoint_dy(
 }
 
 ///|
+/// Builds the course: places checkpoints in a downhill chain, scatters hazards, and adds pickups near every other checkpoint.
 fn generate_course(
   cps : Array[Checkpoint],
   hs : Array[Hazard],
@@ -307,6 +334,7 @@ fn generate_course(
 }
 
 ///|
+/// Initialises the Raylib window and runs the full mountain-bike game loop including physics, collision, and rendering.
 fn main {
   @raylib.init_window(sw, sh, "Mountain Bike Downhill 2026")
   @raylib.set_target_fps(60)

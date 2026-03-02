@@ -1,4 +1,5 @@
 ///|
+/// Entry point: creates the window, initialises the title scene, and runs the main update-and-draw loop.
 fn main {
   @raylib.set_config_flags(@raylib.FlagMsaa4xHint)
   @raylib.init_window(

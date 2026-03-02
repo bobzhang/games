@@ -1,14 +1,17 @@
 ///|
+/// Converts grid coordinates `(x, y)` to a flat array index for `game.map`.
 fn idx(x : Int, y : Int) -> Int {
   y * @types.grid_w + x
 }
 
 ///|
+/// Returns true if the grid cell `(x, y)` is within the 21x13 board bounds.
 fn in_bounds(x : Int, y : Int) -> Bool {
   x >= 0 && x < @types.grid_w && y >= 0 && y < @types.grid_h
 }
 
 ///|
+/// Returns the tile type at `(x, y)`, treating out-of-bounds cells as `Wall`.
 fn tile_at(game : @types.Game, x : Int, y : Int) -> @types.Tile {
   if not(in_bounds(x, y)) {
     @types.Wall
@@ -18,6 +21,7 @@ fn tile_at(game : @types.Game, x : Int, y : Int) -> @types.Tile {
 }
 
 ///|
+/// Sets the tile at `(x, y)` to `t`; silently ignores out-of-bounds coordinates.
 fn set_tile(game : @types.Game, x : Int, y : Int, t : @types.Tile) -> Unit {
   if not(in_bounds(x, y)) {
     return
@@ -26,12 +30,14 @@ fn set_tile(game : @types.Game, x : Int, y : Int, t : @types.Tile) -> Unit {
 }
 
 ///|
+/// Sets the game message string and its display duration.
 fn set_msg(game : @types.Game, msg : String, ttl : Float) -> Unit {
   game.msg = msg
   game.msg_t = ttl
 }
 
 ///|
+/// Teleports an actor to `(x, y)` and resets all interpolation fields to the new position.
 fn actor_place(a : @types.Actor, x : Int, y : Int) -> Unit {
   a.x = x
   a.y = y
@@ -46,6 +52,7 @@ fn actor_place(a : @types.Actor, x : Int, y : Int) -> Unit {
 }
 
 ///|
+/// Initiates a smooth grid move for actor `a` towards target cell `(tx, ty)`.
 fn actor_start_move(a : @types.Actor, tx : Int, ty : Int) -> Unit {
   if a.x == tx && a.y == ty {
     return
@@ -59,6 +66,7 @@ fn actor_start_move(a : @types.Actor, tx : Int, ty : Int) -> Unit {
 }
 
 ///|
+/// Advances actor interpolation for one frame; updates `fx`/`fy` and snaps to target when `t` reaches 1.
 fn actor_tick(a : @types.Actor, dt : Float, move_t : Float) -> Unit {
   if not(a.moving) {
     a.fx = Float::from_int(a.x)
@@ -82,6 +90,7 @@ fn actor_tick(a : @types.Actor, dt : Float, move_t : Float) -> Unit {
 }
 
 ///|
+/// Deactivates all particles and zeroes their fields.
 fn clear_particles(game : @types.Game) -> Unit {
   for particle in game.particles {
     particle.active = false
@@ -96,6 +105,7 @@ fn clear_particles(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Finds the first inactive particle slot and initialises it with the given position, velocity, lifetime, size, and kind.
 fn emit_particle(
   game : @types.Game,
   x : Float,
@@ -124,6 +134,7 @@ fn emit_particle(
 }
 
 ///|
+/// Emits `n` particles centred near `(x, y)` with random velocity and lifetime using `emit_particle`.
 fn burst(
   game : @types.Game,
   x : Float,
@@ -146,6 +157,7 @@ fn burst(
 }
 
 ///|
+/// Advances all active particles: decrements lifetime, applies velocity, and applies per-kind drag and gravity.
 fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
@@ -175,6 +187,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Returns the index of the shelf located at grid cell `(x, y)`, or -1 if none exists.
 fn shelf_index_at(game : @types.Game, x : Int, y : Int) -> Int {
   for i in 0..<game.shelf_n {
     if game.shelf_x[i] == x && game.shelf_y[i] == y {
@@ -185,6 +198,7 @@ fn shelf_index_at(game : @types.Game, x : Int, y : Int) -> Int {
 }
 
 ///|
+/// Returns the index of an uncollected page at grid cell `(x, y)`, or -1 if none exists.
 fn page_index_at(game : @types.Game, x : Int, y : Int) -> Int {
   for i in 0..<@types.max_pages {
     if not(game.page_taken[i]) && game.page_x[i] == x && game.page_y[i] == y {
@@ -195,6 +209,7 @@ fn page_index_at(game : @types.Game, x : Int, y : Int) -> Int {
 }
 
 ///|
+/// Returns the index of an active ghost at `(x, y)` other than `skip`, or -1 if none exists.
 fn ghost_index_at(game : @types.Game, x : Int, y : Int, skip : Int) -> Int {
   for i in 0..<game.ghosts.length() {
     if i == skip || not(game.ghosts[i].active) {
@@ -210,6 +225,7 @@ fn ghost_index_at(game : @types.Game, x : Int, y : Int, skip : Int) -> Int {
 }
 
 ///|
+/// Returns true if `(x, y)` is out of bounds, a wall tile, or a locked exit tile.
 fn blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
   if not(in_bounds(x, y)) {
     return true
@@ -224,6 +240,7 @@ fn blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
 }
 
 ///|
+/// Returns true if `(x, y)` is blocked for ghost `gid` by the map, a shelf, or another ghost.
 fn blocked_for_actor(game : @types.Game, gid : Int, x : Int, y : Int) -> Bool {
   if blocked_by_map(game, x, y) {
     return true
@@ -237,6 +254,7 @@ fn blocked_for_actor(game : @types.Game, gid : Int, x : Int, y : Int) -> Bool {
 }
 
 ///|
+/// Fills the map with border walls, interior wall columns with gaps, horizontal wall rows with corridor openings, and places the exit tile.
 fn clear_map(game : @types.Game) -> Unit {
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
@@ -271,6 +289,7 @@ fn clear_map(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Populates shelves, pages, and ghost spawn positions from hard-coded layout data for the puzzle.
 fn load_layout(game : @types.Game) -> Unit {
   let shelf_list : Array[(Int, Int)] = [
     (5, 9),
@@ -331,6 +350,7 @@ fn load_layout(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Counts and returns how many seals currently have a shelf pushed onto their position.
 fn count_seals_on(game : @types.Game) -> Int {
   let mut n : Int = 0
   for i in 0..<@types.seal_need {
@@ -343,6 +363,7 @@ fn count_seals_on(game : @types.Game) -> Int {
 }
 
 ///|
+/// Recomputes `seals_on`, updates `gate_open`, and triggers flash/shake/score effects when the gate first opens.
 fn update_gate(game : @types.Game) -> Unit {
   let old_open : Bool = game.gate_open
   game.seals_on = count_seals_on(game)
@@ -420,6 +441,7 @@ pub fn go_title(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Transitions to the Result state, records the win/loss reason, applies escape bonus on win, and emits particle burst.
 fn finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
   if game.state != @types.Play {
     return
@@ -462,6 +484,7 @@ pub fn cycle_hint(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Attempts to push shelf `sidx` one step in direction `(dx, dy)`; returns false if the destination is blocked.
 fn push_shelf(game : @types.Game, sidx : Int, dx : Int, dy : Int) -> Bool {
   let nx : Int = game.shelf_x[sidx] + dx
   let ny : Int = game.shelf_y[sidx] + dy
@@ -484,6 +507,7 @@ fn push_shelf(game : @types.Game, sidx : Int, dx : Int, dy : Int) -> Bool {
 }
 
 ///|
+/// Attempts to move the player one step in direction `(dx, dy)`, pushing a shelf if one is in the way; returns false if blocked.
 fn try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool {
   if dx == 0 && dy == 0 {
     return false
@@ -524,6 +548,7 @@ fn try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool {
 }
 
 ///|
+/// Collects the page at the player's current tile if one exists and the player is not mid-move.
 fn collect_page_if_needed(game : @types.Game) -> Unit {
   if game.player.moving {
     return
@@ -551,6 +576,7 @@ fn collect_page_if_needed(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns true if the axis-aligned line between `(x0,y0)` and `(x1,y1)` is unobstructed by walls and shelves.
 fn line_of_sight(
   game : @types.Game,
   x0 : Int,
@@ -584,6 +610,7 @@ fn line_of_sight(
 }
 
 ///|
+/// Advances a deterministic LCG seed value for ghost pseudo-random patrol direction selection.
 fn ghost_seed_next(seed : Int) -> Int {
   let n : Int = (seed * 48271 + 97) % 2147483647
   if n <= 0 {
@@ -594,6 +621,7 @@ fn ghost_seed_next(seed : Int) -> Int {
 }
 
 ///|
+/// Selects the next move direction for ghost `gid`: greedy Manhattan minimisation when hunting, or seeded pseudo-random patrol otherwise.
 fn ghost_choose_step(game : @types.Game, gid : Int) -> (Int, Int) {
   let g = game.ghosts[gid]
   let gx : Int = g.body.x
@@ -659,6 +687,7 @@ fn ghost_choose_step(game : @types.Game, gid : Int) -> (Int, Int) {
 }
 
 ///|
+/// Ticks all active ghost actors, handles stun countdowns and alert decay, and triggers ghost movement decisions.
 fn update_ghosts(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.ghosts.length() {
     if not(game.ghosts[i].active) {
@@ -707,6 +736,7 @@ fn update_ghosts(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Attempts a stun pulse: stuns all ghosts within Manhattan distance 2, costs 30 energy, and awards score per hit.
 fn try_stun_pulse(game : @types.Game) -> Bool {
   if game.action_cd > 0.0 || game.stun_energy < 30.0 {
     return false
@@ -755,6 +785,7 @@ fn try_stun_pulse(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Checks whether any non-stunned active ghost occupies the player's cell and applies a life penalty with respawn or game-over.
 fn handle_player_hit(game : @types.Game) -> Unit {
   if game.flash_t > 0.0 {
     return
@@ -794,6 +825,7 @@ fn handle_player_hit(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Decrements all time-based counters: msg_t, flash_t, shake_t, move_cd, action_cd, touch_cd.
 fn update_timers(game : @types.Game, dt : Float) -> Unit {
   if game.msg_t > 0.0 {
     game.msg_t = game.msg_t - dt
@@ -821,6 +853,7 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs one frame of active gameplay: advances timers, ticks player and ghosts, handles input, collects pages, updates gate, checks win/loss.
 fn update_play(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt
 
@@ -857,6 +890,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs one frame of title-screen logic: advances timers, increments time_s, and ticks particles.
 fn update_title(game : @types.Game, dt : Float) -> Unit {
   update_timers(game, dt)
   game.time_s = game.time_s + dt
@@ -864,6 +898,7 @@ fn update_title(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs one frame of result-screen logic: advances timers, increments time_s, and ticks particles.
 fn update_result(game : @types.Game, dt : Float) -> Unit {
   update_timers(game, dt)
   game.time_s = game.time_s + dt

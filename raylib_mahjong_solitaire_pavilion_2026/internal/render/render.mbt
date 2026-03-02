@@ -1,4 +1,5 @@
 ///|
+/// Generates a deterministic display colour from a tile kind integer.
 fn color_for_kind(kind : Int) -> @raylib.Color {
   let r : Int = 70 + kind * 37 % 168
   let g : Int = 78 + kind * 61 % 158
@@ -7,6 +8,7 @@ fn color_for_kind(kind : Int) -> @raylib.Color {
 }
 
 ///|
+/// Returns a short suit+rank label string for a tile kind integer.
 fn tile_label(kind : Int) -> String {
   let suit : Int = kind % 4
   let rank : Int = kind % 9 + 1
@@ -22,6 +24,7 @@ fn tile_label(kind : Int) -> String {
 }
 
 ///|
+/// Clears the background and draws animated decorative circles and horizontal bands.
 fn draw_bg(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 14, 22, 255))
 
@@ -60,6 +63,7 @@ fn draw_bg(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws all active spark particles with kind-dependent colours.
 fn draw_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
@@ -86,6 +90,7 @@ fn draw_sparks(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws golden highlight rectangles around the two hinted tile positions when a hint is active.
 fn draw_hint(game : @types.Game) -> Unit {
   if not(game.hint_active) {
     return
@@ -122,6 +127,7 @@ fn draw_hint(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Renders all board cells with tile colours, free/blocked overlays, cursor, selection highlight, and hint markers.
 fn draw_board(game : @types.Game) -> Unit {
   let (board_x, board_y, tile) = @types.board_metrics(game)
 
@@ -251,6 +257,7 @@ fn draw_board(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a labelled UI button with an optional active accent fill and a border.
 fn draw_button(
   label : String,
   x : Int,
@@ -290,6 +297,7 @@ fn draw_button(
 }
 
 ///|
+/// Draws the right-side panel with game stats, keyboard help text, action buttons, and the status message.
 fn draw_side_panel(game : @types.Game) -> Unit {
   let px : Int = @types.panel_x()
   let py : Int = 20
@@ -552,6 +560,7 @@ fn draw_side_panel(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the on-screen D-pad directional buttons with active highlight when pressed.
 fn draw_touch_overlay(game : @types.Game) -> Unit {
   let cx : Int = @types.dpad_center_x()
   let cy : Int = @types.dpad_center_y()
@@ -683,6 +692,7 @@ fn draw_touch_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the title-screen layout with game name, instructions, and the start button.
 fn draw_title(game : @types.Game) -> Unit {
   @raylib.draw_text(
     "Mahjong Solitaire Pavilion 2026",
@@ -736,6 +746,7 @@ fn draw_title(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the level-clear overlay showing score, remaining time, and the next-stage button.
 fn draw_level_clear_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -804,6 +815,7 @@ fn draw_level_clear_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the stage-failed overlay with the player score and a retry button.
 fn draw_fail_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -872,6 +884,7 @@ fn draw_fail_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the campaign-complete overlay showing final score, stages cleared, play time, and a restart button.
 fn draw_campaign_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,

@@ -1,4 +1,5 @@
 ///|
+/// Draws text centred horizontally at the given Y position, size, and colour.
 fn draw_center_text(
   text : String,
   y : Int,
@@ -10,6 +11,7 @@ fn draw_center_text(
 }
 
 ///|
+/// Returns the display colour associated with the given dish type.
 fn dish_color(dish : @types.Dish) -> @raylib.Color {
   match dish {
     @types.Skewers => @raylib.Color::new(243, 139, 78, 255)
@@ -21,6 +23,7 @@ fn dish_color(dish : @types.Dish) -> @raylib.Color {
 }
 
 ///|
+/// Returns a traffic-light colour (green/yellow/red) based on remaining patience ratio.
 fn patience_color(ratio : Float) -> @raylib.Color {
   if ratio >= 0.65 {
     @raylib.Color::new(116, 226, 142, 255)
@@ -32,6 +35,7 @@ fn patience_color(ratio : Float) -> @raylib.Color {
 }
 
 ///|
+/// Draws a filled progress bar with an inner fill rectangle and border.
 fn progress_bar(
   x : Int,
   y : Int,
@@ -48,6 +52,7 @@ fn progress_bar(
 }
 
 ///|
+/// Draws the gradient background, decorative lanterns, station area panels, and flash overlay.
 fn draw_background(game : @types.Game) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
@@ -114,6 +119,7 @@ fn draw_background(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a single order slot showing dish name, ticket number, and patience bar.
 fn draw_order_slot(game : @types.Game, slot : Int) -> Unit {
   let x = @types.orders_x - 122.0
   let y = @types.order_node_y(slot) - 28.0
@@ -188,6 +194,7 @@ fn draw_order_slot(game : @types.Game, slot : Int) -> Unit {
 }
 
 ///|
+/// Draws the QUEUE label and all order slot rows in the left panel.
 fn draw_orders_panel(game : @types.Game) -> Unit {
   @raylib.draw_text(
     "QUEUE",
@@ -203,6 +210,7 @@ fn draw_orders_panel(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a station rectangle with a centred label above it and a highlighted border when selected.
 fn draw_station_base(
   label : String,
   x : Float,
@@ -229,6 +237,7 @@ fn draw_station_base(
 }
 
 ///|
+/// Draws the prep station with active dish name and prep progress bar when cooking is in progress.
 fn draw_prep_station(game : @types.Game) -> Unit {
   let hot = game.cursor == @types.node_prep
   let working = game.cooking.active && game.cooking.stage == @types.Prep
@@ -296,6 +305,7 @@ fn draw_prep_station(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the grill station with animated flame effects and a cook progress bar for grill-lane dishes.
 fn draw_grill_station(game : @types.Game) -> Unit {
   let hot = game.cursor == @types.node_grill
   let working = game.cooking.active &&
@@ -353,6 +363,7 @@ fn draw_grill_station(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the wok station with a circular wok graphic and a cook progress bar for wok-lane dishes.
 fn draw_wok_station(game : @types.Game) -> Unit {
   let hot = game.cursor == @types.node_wok
   let working = game.cooking.active &&
@@ -410,6 +421,7 @@ fn draw_wok_station(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the serve-pass station showing the ready dish and its quality bar, or an idle prompt.
 fn draw_pass_station(game : @types.Game) -> Unit {
   let hot = game.cursor == @types.node_pass
 
@@ -468,6 +480,7 @@ fn draw_pass_station(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws an animated pulsing ring around the current navigation cursor position.
 fn draw_cursor(game : @types.Game) -> Unit {
   let p = @types.node_pos(game.cursor)
   let r : Float = 28.0 + 6.0 * (0.5 + 0.5 * @types.sinf(game.elapsed_t * 8.0))
@@ -487,6 +500,7 @@ fn draw_cursor(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns a HUD string describing the currently targeted order, or "Target: none".
 fn selected_order_line(game : @types.Game) -> String {
   if game.selected_order >= 0 &&
     game.selected_order < @types.max_orders &&
@@ -501,6 +515,7 @@ fn selected_order_line(game : @types.Game) -> String {
 }
 
 ///|
+/// Draws the top HUD band with score, best score, combo, served/failed counts, boost bar, and cooking status.
 fn draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -639,6 +654,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the bottom control hint bar with keyboard shortcut reminders.
 fn draw_hint_line() -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -657,6 +673,7 @@ fn draw_hint_line() -> Unit {
 }
 
 ///|
+/// Draws a semi-transparent title screen overlay with game name, description, and start prompt.
 fn draw_title_overlay(_game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -692,6 +709,7 @@ fn draw_title_overlay(_game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a semi-transparent pause overlay with resume and restart instructions.
 fn draw_pause_overlay(_game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -716,6 +734,7 @@ fn draw_pause_overlay(_game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the game-over overlay showing final score, served and failed counts, and best score.
 fn draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,

@@ -1,4 +1,5 @@
 ///|
+/// Initializes the window, creates the game state, and runs the update-draw loop until the window closes.
 fn main {
   @raylib.init_window(
     @types.screen_w, @types.screen_h, "raylib [game] picross harbor 2026",

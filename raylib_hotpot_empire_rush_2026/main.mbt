@@ -1,4 +1,5 @@
 ///|
+/// Initializes the window, sets target fps, creates the game, and runs the main loop.
 fn main {
   @raylib.set_config_flags(@raylib.FlagMsaa4xHint)
   @raylib.init_window(

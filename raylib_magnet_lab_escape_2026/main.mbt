@@ -1,49 +1,65 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 760
 
 ///|
+/// Total world width in game units.
 let world_w : Float = 5600.0
 
 ///|
+/// Y position of the floor in world coordinates.
 let floor_y : Float = 680.0
 
 ///|
+/// Gravitational acceleration applied to physics objects.
 let gravity : Float = 920.0
 
 ///|
+/// Maximum number of platform records in the pool.
 let max_platforms : Int = 280
 
 ///|
+/// Maximum number of gate records in the pool.
 let max_gates : Int = 8
 
 ///|
+/// Maximum number of energy core records in the pool.
 let max_cores : Int = 340
 
 ///|
+/// Maximum number of box records in the pool.
 let max_boxes : Int = 220
 
 ///|
+/// Maximum number of drone records in the pool.
 let max_drones : Int = 180
 
 ///|
+/// Maximum number of bolt projectile records in the pool.
 let max_bolts : Int = 1100
 
 ///|
+/// Maximum number of particle effect records in the pool.
 let max_particles : Int = 1700
 
 ///|
+/// X position of the reactor delivery zone (world_w - 220).
 let reactor_x : Float = world_w - 220.0
 
 ///|
+/// Y position of the reactor delivery zone (floor_y - 100).
 let reactor_y : Float = floor_y - 100.0
 
 ///|
+/// Number of cores that must be delivered to win the level.
 let target_cores : Int = 120
 
 ///|
+/// Player state including position, physics, resources (HP, energy, weapon heat), cooldowns, jump state, magnet, scoring, and cargo.
 struct Player {
   mut x : Float
   mut y : Float
@@ -70,6 +86,7 @@ struct Player {
 }
 
 ///|
+/// Static or oscillating platform with pooling flag, position, size, and optional movement parameters.
 struct Platform {
   mut active : Bool
   mut x : Float
@@ -83,6 +100,7 @@ struct Platform {
 }
 
 ///|
+/// World gate that blocks passage until a minimum core delivery count `req` is reached.
 struct Gate {
   mut active : Bool
   mut x : Float
@@ -91,6 +109,7 @@ struct Gate {
 }
 
 ///|
+/// Collectible energy core with physics, magnetic state, point value, and animation timer.
 struct Core {
   mut active : Bool
   mut kind : Int
@@ -105,6 +124,7 @@ struct Core {
 }
 
 ///|
+/// Destructible metal box with physics, HP, magnetic state, and animation timer; drops cores when destroyed.
 struct Box {
   mut active : Bool
   mut kind : Int
@@ -119,6 +139,7 @@ struct Box {
 }
 
 ///|
+/// Enemy drone with kind-specific AI (0=chaser, 1=orbiter, 2=heavy), HP, fire cooldown, and animation timer.
 struct Drone {
   mut active : Bool
   mut kind : Int
@@ -132,6 +153,7 @@ struct Drone {
 }
 
 ///|
+/// Projectile with team affiliation (1=player, 2=enemy), kind, physics, damage, collision radius, and lifetime.
 struct Bolt {
   mut active : Bool
   mut team : Int
@@ -146,6 +168,7 @@ struct Bolt {
 }
 
 ///|
+/// Visual particle with pooling flag, kind, physics, size, lifetime, and age timer.
 struct Particle {
   mut active : Bool
   mut kind : Int
@@ -159,6 +182,7 @@ struct Particle {
 }
 
 ///|
+/// Clamps `v` to the inclusive `[lo, hi]` range.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -170,6 +194,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of `v`.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -179,6 +204,7 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns the squared Euclidean distance between two points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx : Float = x1 - x0
   let dy : Float = y1 - y0
@@ -186,12 +212,14 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Returns a random float in `[lo, hi]` using raylib's RNG.
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns true if the floating-point point lies within the given integer rectangle bounds.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -207,6 +235,7 @@ fn inside_rect(
 }
 
 ///|
+/// Returns the collision radius for a drone based on its kind: 16 for chasers, 21 for orbiters, 27 for heavies.
 fn drone_radius(kind : Int) -> Float {
   if kind == 0 {
     16.0
@@ -218,6 +247,7 @@ fn drone_radius(kind : Int) -> Float {
 }
 
 ///|
+/// Returns the starting HP for a drone scaled by its kind and the current difficulty level.
 fn drone_hp(kind : Int, level : Int) -> Float {
   if kind == 0 {
     34.0 + Float::from_int(level) * 3.0
@@ -229,6 +259,7 @@ fn drone_hp(kind : Int, level : Int) -> Float {
 }
 
 ///|
+/// Deactivates all platform records in the pool.
 fn clear_platforms(platforms : Array[Platform]) -> Unit {
   for platform in platforms {
     platform.active = false
@@ -244,6 +275,7 @@ fn clear_platforms(platforms : Array[Platform]) -> Unit {
 }
 
 ///|
+/// Deactivates all gate records in the pool.
 fn clear_gates(gates : Array[Gate]) -> Unit {
   for gate in gates {
     gate.active = false
@@ -254,6 +286,7 @@ fn clear_gates(gates : Array[Gate]) -> Unit {
 }
 
 ///|
+/// Deactivates all core records in the pool.
 fn clear_cores(cores : Array[Core]) -> Unit {
   for core in cores {
     core.active = false
@@ -270,6 +303,7 @@ fn clear_cores(cores : Array[Core]) -> Unit {
 }
 
 ///|
+/// Deactivates all box records in the pool.
 fn clear_boxes(boxes : Array[Box]) -> Unit {
   for box in boxes {
     box.active = false
@@ -286,6 +320,7 @@ fn clear_boxes(boxes : Array[Box]) -> Unit {
 }
 
 ///|
+/// Deactivates all drone records in the pool.
 fn clear_drones(drones : Array[Drone]) -> Unit {
   for drone in drones {
     drone.active = false
@@ -301,6 +336,7 @@ fn clear_drones(drones : Array[Drone]) -> Unit {
 }
 
 ///|
+/// Deactivates all bolt records in the pool.
 fn clear_bolts(bolts : Array[Bolt]) -> Unit {
   for bolt in bolts {
     bolt.active = false
@@ -317,6 +353,7 @@ fn clear_bolts(bolts : Array[Bolt]) -> Unit {
 }
 
 ///|
+/// Deactivates all particle records in the pool.
 fn clear_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
     part.active = false
@@ -332,6 +369,7 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Activates an inactive platform with position, size, and optional oscillation amplitude and speed.
 fn add_platform(
   platforms : Array[Platform],
   x : Float,
@@ -360,6 +398,7 @@ fn add_platform(
 }
 
 ///|
+/// Activates an inactive gate at position `x` requiring `req` delivered cores to open.
 fn add_gate(gates : Array[Gate], x : Float, req : Int) -> Bool {
   for gate in gates {
     if not(gate.active) {
@@ -374,6 +413,7 @@ fn add_gate(gates : Array[Gate], x : Float, req : Int) -> Bool {
 }
 
 ///|
+/// Activates an inactive energy core with kind, position, velocity, and point value.
 fn add_core(
   cores : Array[Core],
   kind : Int,
@@ -408,6 +448,7 @@ fn add_core(
 }
 
 ///|
+/// Activates an inactive box with kind, position, and initial velocity.
 fn add_box(
   boxes : Array[Box],
   kind : Int,
@@ -439,6 +480,7 @@ fn add_box(
 }
 
 ///|
+/// Activates an inactive drone with the given kind, position, and level-scaled HP.
 fn add_drone(
   drones : Array[Drone],
   kind : Int,
@@ -470,6 +512,7 @@ fn add_drone(
 }
 
 ///|
+/// Activates an inactive bolt with team, kind, position, velocity, damage, collision radius, and lifetime.
 fn add_bolt(
   bolts : Array[Bolt],
   team : Int,
@@ -501,6 +544,7 @@ fn add_bolt(
 }
 
 ///|
+/// Activates an inactive particle with kind, position, velocity, size, and lifetime.
 fn add_particle(
   parts : Array[Particle],
   kind : Int,
@@ -529,6 +573,7 @@ fn add_particle(
 }
 
 ///|
+/// Emits `n` particles radiating outward from a point with randomized velocities scaled by `speed`.
 fn burst(
   parts : Array[Particle],
   x : Float,
@@ -556,6 +601,7 @@ fn burst(
 }
 
 ///|
+/// Prevents a circle at (`cx`, `cy`) with radius `cr` from passing through any closed gate, returning adjusted position and zeroed x-velocity.
 fn gate_block_circle(
   gates : Array[Gate],
   x : Float,
@@ -588,6 +634,7 @@ fn gate_block_circle(
 }
 
 ///|
+/// Generates the level layout: 18 platform sectors, 5 gates, 95 initial cores, and 68 boxes across the world.
 fn setup_world(
   platforms : Array[Platform],
   gates : Array[Gate],
@@ -685,6 +732,7 @@ fn setup_world(
 }
 
 ///|
+/// Renders on-screen touch controls (D-pad and action buttons) for the given game state.
 fn draw_touch_ui(state : Int) -> Unit {
   if state != 1 {
     ignore(())
@@ -830,6 +878,7 @@ fn draw_touch_ui(state : Int) -> Unit {
 }
 
 ///|
+/// Initializes the window, allocates object pools, calls `setup_world`, and runs the full game loop.
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] magnet lab escape 2026")
   @raylib.set_target_fps(60)

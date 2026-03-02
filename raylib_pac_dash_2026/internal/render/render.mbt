@@ -1,4 +1,5 @@
 ///|
+/// Draws the maze background, wall tiles, normal pellets, and power pellets.
 fn draw_maze(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.maze_x - 4,
@@ -52,6 +53,7 @@ fn draw_maze(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the player character as a yellow circle at its current tile position.
 fn draw_player(game : @types.Game) -> Unit {
   let cx = @types.tile_center_x(game.player_x)
   let cy = @types.tile_center_y(game.player_y)
@@ -60,6 +62,7 @@ fn draw_player(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws all ghosts in their team color, or blue when frightened mode is active.
 fn draw_ghosts(game : @types.Game) -> Unit {
   for ghost in game.ghosts {
     let cx = @types.tile_center_x(ghost.x)
@@ -77,6 +80,7 @@ fn draw_ghosts(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the HUD panel showing score, lives, pellet count, ghost mode, and controls.
 fn draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_text("PAC DASH 2026", @types.hud_x, 30, 30, @raylib.raywhite)
   @raylib.draw_text("Score", @types.hud_x, 90, 24, @raylib.lightgray)

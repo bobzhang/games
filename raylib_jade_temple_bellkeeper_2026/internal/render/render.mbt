@@ -1,4 +1,5 @@
 ///|
+/// Draws `text` horizontally centered on screen at the given y position, size, and color.
 fn draw_center_text(
   text : String,
   y : Int,
@@ -10,6 +11,7 @@ fn draw_center_text(
 }
 
 ///|
+/// Draws `text` right-aligned so its right edge is at `x`, at the given y position, size, and color.
 fn draw_right_text(
   text : String,
   x : Int,
@@ -22,6 +24,7 @@ fn draw_right_text(
 }
 
 ///|
+/// Returns a random camera offset based on the current shake timer amplitude.
 fn cam_shake(game : @types.Game) -> (Float, Float) {
   if game.shake_t <= 0.0 {
     (0.0, 0.0)
@@ -32,6 +35,7 @@ fn cam_shake(game : @types.Game) -> (Float, Float) {
 }
 
 ///|
+/// Draws the background gradient, animated moon, twinkling stars, and layered wave clouds.
 fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
@@ -110,6 +114,7 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws the play area floor with an animated scrolling grid overlay.
 fn draw_floor_grid(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   @raylib.draw_rectangle(
     @types.play_left.to_int(),
@@ -156,6 +161,7 @@ fn draw_floor_grid(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws the central shrine with aura glow, HP-scaled inner gem, and connector lines to each bell.
 fn draw_shrine(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let x = @types.shrine_x() + cam_x
   let y = @types.shrine_y() + cam_y
@@ -207,6 +213,7 @@ fn draw_shrine(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws a single bell with glow halo, body, clapper, and charge bar beneath it.
 fn draw_bell(b : @types.Bell, i : Int, cam_x : Float, cam_y : Float) -> Unit {
   let x = b.x + cam_x
   let y = b.y + cam_y
@@ -265,6 +272,7 @@ fn draw_bell(b : @types.Bell, i : Int, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws a wisp foe as a pulsing pink circle with a dark hollow center.
 fn draw_wisp(
   f : @types.Foe,
   cam_x : Float,
@@ -290,6 +298,7 @@ fn draw_wisp(
 }
 
 ///|
+/// Draws a brute foe as an orange rectangle with a dark eye circle.
 fn draw_brute(
   f : @types.Foe,
   cam_x : Float,
@@ -323,6 +332,7 @@ fn draw_brute(
 }
 
 ///|
+/// Draws a shaman foe as a blue triangle with a pulsing dark core.
 fn draw_shaman(
   f : @types.Foe,
   cam_x : Float,
@@ -347,6 +357,7 @@ fn draw_shaman(
 }
 
 ///|
+/// Draws a relic pickup as a pulsing jade rectangle with a cross overlay.
 fn draw_relic(
   f : @types.Foe,
   cam_x : Float,
@@ -384,6 +395,7 @@ fn draw_relic(
 }
 
 ///|
+/// Dispatches to the correct per-kind draw function and renders the hit ring and HP bar for hostile foes.
 fn draw_foe(f : @types.Foe, cam_x : Float, cam_y : Float) -> Unit {
   if not(f.active) {
     return
@@ -442,6 +454,7 @@ fn draw_foe(f : @types.Foe, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws the hero sprite with aura, body triangles, animated tail orbs, invulnerability tint, and hurt flash.
 fn draw_hero(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let h = game.hero
   let x = h.x + cam_x
@@ -512,6 +525,7 @@ fn draw_hero(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws all active bolts as directional line segments with a bright tip circle.
 fn draw_bolts(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for bolt in game.bolts {
     if not(bolt.active) {
@@ -547,6 +561,7 @@ fn draw_bolts(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws all active spark, ring, and echo visual effects with alpha fading based on remaining life.
 fn draw_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
@@ -623,6 +638,7 @@ fn draw_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws a labeled progress bar filled proportionally to `value / maxv` in the given color.
 fn draw_bar(
   x : Int,
   y : Int,
@@ -665,6 +681,7 @@ fn draw_bar(
 }
 
 ///|
+/// Draws the HUD strip with shrine HP, spirit, score/goal, timer, stage info, bell charge bars, combo counter, and key hints.
 fn draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -820,6 +837,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a touch button rectangle with label, changing fill color when pressed or hovered.
 fn draw_button_visual(
   label : String,
   rect : (Float, Float, Float, Float),
@@ -874,6 +892,7 @@ fn draw_button_visual(
 }
 
 ///|
+/// Renders all on-screen touch buttons appropriate for the current game state, only when touch mode is active.
 fn draw_touch_controls(game : @types.Game) -> Unit {
   if not(game.touch_mode) {
     return
@@ -957,6 +976,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the title screen overlay with game name, how-to-play panel, and start button.
 fn draw_title_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
@@ -1076,6 +1096,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the stage-clear overlay with an ease-in animated title, bonus score, and next-stage message.
 fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
   let t = @types.clampf(game.result_t / @types.stage_clear_wait, 0.0, 1.0)
   let y = @types.lerpf(232.0, 166.0, @types.ease_out_cubic(t)).to_int()
@@ -1104,6 +1125,7 @@ fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the game-over overlay with final stats panel, "SHRINE FALLEN" heading, and retry button.
 fn draw_game_over_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
@@ -1209,6 +1231,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a full-screen red-pink flash overlay that fades out with the flash timer.
 fn draw_flash(game : @types.Game) -> Unit {
   if game.flash_t <= 0.0 {
     return
@@ -1225,6 +1248,7 @@ fn draw_flash(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws all world layers in order: sky, floor grid, shrine, bells, relics, hostile foes, hero, bolts, and effects.
 fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   draw_sky(game, cam_x, cam_y)
   draw_floor_grid(game, cam_x, cam_y)

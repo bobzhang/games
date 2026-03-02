@@ -1,18 +1,23 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1120
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 740
 
 ///|
+/// Number of hospital ward columns displayed on screen.
 let ward_count : Int = 4
 
 ///|
+/// Returns the horizontal centre pixel coordinate for the given ward index.
 fn ward_x(ward : Int) -> Float {
   170.0 + Float::from_int(ward) * 240.0
 }
 
 ///|
+/// A hospital patient with liveness flag, assigned ward, screen position, severity level (0=mild/1=medium/2=critical), and elapsed wait time.
 struct Patient {
   mut alive : Bool
   mut ward : Int
@@ -23,6 +28,7 @@ struct Patient {
 }
 
 ///|
+/// Marks every patient slot as inactive, effectively clearing the ward.
 fn reset_patients(ps : Array[Patient]) -> Unit {
   for ps_elem in ps {
     ps_elem.alive = false
@@ -30,6 +36,7 @@ fn reset_patients(ps : Array[Patient]) -> Unit {
 }
 
 ///|
+/// Finds the first inactive patient slot and spawns a new patient in a random ward with probability-weighted severity.
 fn spawn_patient(ps : Array[Patient]) -> Unit {
   for ps_elem in ps {
     if not(ps_elem.alive) {
@@ -48,6 +55,7 @@ fn spawn_patient(ps : Array[Patient]) -> Unit {
 }
 
 ///|
+/// Returns the treatment duration in seconds for the given severity (2.2s mild, 3.4s medium, 4.8s critical).
 fn treat_time(sev : Int) -> Float {
   if sev == 0 {
     2.2
@@ -59,6 +67,7 @@ fn treat_time(sev : Int) -> Float {
 }
 
 ///|
+/// Returns the score awarded for successfully treating a patient of the given severity (28/48/92).
 fn treat_score(sev : Int) -> Int {
   if sev == 0 {
     28
@@ -70,6 +79,7 @@ fn treat_score(sev : Int) -> Int {
 }
 
 ///|
+/// Maps a severity index to its display colour (lime=mild, orange=medium, red=critical).
 fn severity_color(sev : Int) -> @raylib.Color {
   if sev == 0 {
     @raylib.lime
@@ -81,6 +91,7 @@ fn severity_color(sev : Int) -> @raylib.Color {
 }
 
 ///|
+/// Maps a severity index to a short label string ("MILD"/"MED"/"CRIT").
 fn severity_name(sev : Int) -> String {
   if sev == 0 {
     "MILD"
@@ -92,6 +103,7 @@ fn severity_name(sev : Int) -> String {
 }
 
 ///|
+/// Initialises the Raylib window, pre-allocates the patient array, runs the triage game loop, and closes the window on exit.
 fn main {
   @raylib.init_window(sw, sh, "Hospital Triage 2026")
   @raylib.set_target_fps(60)

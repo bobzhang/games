@@ -1,4 +1,5 @@
 ///|
+/// Initializes the window and audio, then runs the pizza delivery game loop.
 fn main {
   @raylib.set_config_flags(@raylib.FlagMsaa4xHint)
   @raylib.init_window(

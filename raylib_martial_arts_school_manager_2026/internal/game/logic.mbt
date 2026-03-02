@@ -1,15 +1,18 @@
 ///|
+/// Sets the HUD message text with a display duration in seconds.
 fn set_message(game : @types.Game, text : String, ttl : Float) -> Unit {
   game.message = text
   game.message_t = ttl
 }
 
 ///|
+/// Returns a pseudo-random float in [0.0, 1.0].
 fn random_unit() -> Float {
   Float::from_int(@raylib.get_random_value(0, 1000)) / 1000.0
 }
 
 ///|
+/// Computes a random delay until the next incident for the given week, using base gap plus random jitter.
 fn random_incident_delay(week : Int) -> Float {
   let base = @types.incident_gap_for(week)
   let jitter = (random_unit() * 2.0 - 1.0) * @types.incident_gap_jitter
@@ -17,6 +20,7 @@ fn random_incident_delay(week : Int) -> Float {
 }
 
 ///|
+/// Returns the average skill value across all students.
 fn mean_skill(game : @types.Game) -> Float {
   let mut sum : Float = 0.0
 
@@ -28,6 +32,7 @@ fn mean_skill(game : @types.Game) -> Float {
 }
 
 ///|
+/// Returns the average fatigue value across all students.
 fn mean_fatigue(game : @types.Game) -> Float {
   let mut sum : Float = 0.0
 
@@ -39,6 +44,7 @@ fn mean_fatigue(game : @types.Game) -> Float {
 }
 
 ///|
+/// Computes total defensive strength from students assigned to the defense room, scaled by freshness.
 fn defense_power(game : @types.Game) -> Float {
   let mut power : Float = 0.0
 
@@ -55,6 +61,7 @@ fn defense_power(game : @types.Game) -> Float {
 }
 
 ///|
+/// Resets all students to their starting skill levels, a random low fatigue, and the rest room assignment.
 fn reset_students(game : @types.Game) -> Unit {
   for i in 0..<@types.student_count {
     game.students[i].skill = @types.starting_skill(i)
@@ -64,6 +71,7 @@ fn reset_students(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Transitions the game to GameOver state, recording the defeat reason and updating the best-week record.
 fn set_game_over(game : @types.Game, reason : String) -> Unit {
   if game.state == GameOver {
     return
@@ -83,6 +91,7 @@ fn set_game_over(game : @types.Game, reason : String) -> Unit {
 }
 
 ///|
+/// Checks if funds or reputation have reached zero and triggers game-over if so, returning true on failure.
 fn check_failure(game : @types.Game) -> Bool {
   if game.funds <= 0.0 {
     set_game_over(
@@ -104,6 +113,7 @@ fn check_failure(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Resets all game state to title-screen defaults and shows the help message.
 fn init_title_scene(game : @types.Game) -> Unit {
   reset_students(game)
 
@@ -132,6 +142,7 @@ fn init_title_scene(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Starts a fresh school run from week 1 with default funds and reputation.
 fn start_new_run(game : @types.Game) -> Unit {
   reset_students(game)
 
@@ -159,6 +170,7 @@ fn start_new_run(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Moves the assignment grid cursor by (dx, dy), clamping to valid row and column ranges.
 fn move_cursor(game : @types.Game, dx : Int, dy : Int) -> Unit {
   game.cursor_col = @types.clampi(
     game.cursor_col + dx,
@@ -173,6 +185,7 @@ fn move_cursor(game : @types.Game, dx : Int, dy : Int) -> Unit {
 }
 
 ///|
+/// Assigns the student at the current cursor row to the room at the current cursor column.
 fn assign_selected_room(game : @types.Game) -> Unit {
   let row = @types.clampi(game.cursor_row, 0, @types.student_count - 1)
   let room = @types.clampi(game.cursor_col, 0, @types.room_count - 1)
@@ -186,6 +199,7 @@ fn assign_selected_room(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Moves the selected student to the rest room and immediately reduces their fatigue by a fixed amount.
 fn rest_selected_student(game : @types.Game) -> Unit {
   let row = @types.clampi(game.cursor_row, 0, @types.student_count - 1)
   game.students[row].room = @types.room_rest
@@ -197,6 +211,7 @@ fn rest_selected_student(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the current simulation time multiplier: burst speed when burst is active, otherwise 1.0.
 fn burst_time_scale(game : @types.Game) -> Float {
   if game.speed_burst_t > 0.0 {
     @types.burst_time_multiplier
@@ -206,6 +221,7 @@ fn burst_time_scale(game : @types.Game) -> Float {
 }
 
 ///|
+/// Activates time-burst mode if the burst key is pressed and the cooldown has expired.
 fn try_activate_burst(game : @types.Game) -> Unit {
   if not(game.input.burst_pressed) {
     return
@@ -222,6 +238,7 @@ fn try_activate_burst(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Runs per-second simulation for all room assignments: deducts operating costs, applies training, sparring, defense, and rest effects to funds, reputation, skill, and fatigue.
 fn apply_room_simulation(game : @types.Game, sim_dt : Float) -> Unit {
   let ops_cost = (
       @types.operation_cost_per_sec +
@@ -292,6 +309,7 @@ fn apply_room_simulation(game : @types.Game, sim_dt : Float) -> Unit {
 }
 
 ///|
+/// Applies reputation and funds penalties when average student fatigue exceeds the threshold, and triggers burnout game-over if critical.
 fn apply_fatigue_pressure(game : @types.Game, sim_dt : Float) -> Unit {
   let avg_fatigue = mean_fatigue(game)
 
@@ -314,6 +332,7 @@ fn apply_fatigue_pressure(game : @types.Game, sim_dt : Float) -> Unit {
 }
 
 ///|
+/// Fires a random incident scaled by week severity, deducting funds and reputation and adding fatigue to all students, partially blocked by defense power.
 fn trigger_incident(game : @types.Game) -> Unit {
   let severity = @types.incident_severity_for(game.week) *
     (0.8 + random_unit() * 0.5)
@@ -368,6 +387,7 @@ fn trigger_incident(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Processes end-of-week: deducts upkeep, evaluates reputation, grants recovery, checks failure, and advances to the next week with increased difficulty.
 fn advance_week(game : @types.Game) -> Unit {
   let avg_skill = mean_skill(game)
   let avg_fatigue = mean_fatigue(game)
@@ -436,6 +456,7 @@ fn advance_week(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles input for the title state: starts a new run when start is pressed.
 fn update_title_state(game : @types.Game) -> Unit {
   if game.input.start_pressed {
     start_new_run(game)
@@ -443,6 +464,7 @@ fn update_title_state(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Processes one frame of gameplay: handles pause, cursor movement, room assignment, burst, simulation, incidents, and week advancement.
 fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
   if game.input.pause_pressed {
     game.state = Paused
@@ -491,6 +513,7 @@ fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Handles input for the paused state: resumes gameplay when pause is pressed again.
 fn update_paused_state(game : @types.Game) -> Unit {
   if game.input.pause_pressed {
     game.state = Playing
@@ -499,6 +522,7 @@ fn update_paused_state(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles input for the game-over state: starts a new run when start is pressed.
 fn update_game_over_state(game : @types.Game) -> Unit {
   if game.input.start_pressed {
     start_new_run(game)

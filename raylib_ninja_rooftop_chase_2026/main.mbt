@@ -1,34 +1,45 @@
 ///|
+/// Window width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Window height in pixels.
 let sh : Int = 760
 
 ///|
+/// Horizontal extent of the rooftop run world.
 let world_w : Float = 1280.0
 
 ///|
+/// Fixed horizontal screen position of the player character.
 let player_x : Float = 220.0
 
 ///|
+/// Number of parallel rooftop running lanes.
 let lane_count : Int = 3
 
 ///|
+/// Maximum simultaneous active obstacles.
 let max_obstacles : Int = 260
 
 ///|
+/// Maximum simultaneous active projectile shots.
 let max_shots : Int = 420
 
 ///|
+/// Maximum simultaneous active pickup items.
 let max_pickups : Int = 140
 
 ///|
+/// Maximum simultaneous active particles.
 let max_particles : Int = 920
 
 ///|
+/// Distance in metres required to complete the run.
 let target_distance : Float = 5600.0
 
 ///|
+/// Player ninja state: lane, jump height, velocity, cooldowns, HP, energy, score, combo, coins, and distance.
 struct Player {
   mut lane : Int
   mut z : Float
@@ -50,6 +61,7 @@ struct Player {
 }
 
 ///|
+/// A rooftop obstacle or enemy: position, lane, kind, HP, attack cooldown, and pulse timer.
 struct Obstacle {
   mut active : Bool
   mut kind : Int
@@ -61,6 +73,7 @@ struct Obstacle {
 }
 
 ///|
+/// A projectile from player or enemy guard: position, lane, height, velocity, damage, and lifetime.
 struct Shot {
   mut active : Bool
   mut from_player : Bool
@@ -73,6 +86,7 @@ struct Shot {
 }
 
 ///|
+/// A collectible item on a lane: position, kind (coin/medpack/energy), and animation timer.
 struct Pickup {
   mut active : Bool
   mut kind : Int
@@ -82,6 +96,7 @@ struct Pickup {
 }
 
 ///|
+/// Short-lived visual effect particle with position, velocity, size, lifetime, and kind.
 struct Particle {
   mut active : Bool
   mut x : Float
@@ -95,6 +110,7 @@ struct Particle {
 }
 
 ///|
+/// Returns the absolute value of a float.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -104,6 +120,7 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns true if point `(px, py)` lies within the rectangle at `(rx, ry)` with size `rw x rh`.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -120,12 +137,14 @@ fn inside_rect(
 }
 
 ///|
+/// Returns a uniform random float in `[lo, hi]` using raylib RNG.
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns the screen Y coordinate for the ground level of the given lane.
 fn lane_y(lane : Int) -> Float {
   if lane == 0 {
     248.0
@@ -137,6 +156,7 @@ fn lane_y(lane : Int) -> Float {
 }
 
 ///|
+/// Returns the hover height of an obstacle (nonzero only for floating drone kind 3).
 fn obstacle_z(obs : Obstacle) -> Float {
   if obs.kind == 3 {
     let phase : Int = (obs.pulse_t * 4.0).to_int() % 2
@@ -151,6 +171,7 @@ fn obstacle_z(obs : Obstacle) -> Float {
 }
 
 ///|
+/// Deactivates and resets all obstacles in the array.
 fn clear_obstacles(obs : Array[Obstacle]) -> Unit {
   for ob in obs {
     ob.active = false
@@ -164,6 +185,7 @@ fn clear_obstacles(obs : Array[Obstacle]) -> Unit {
 }
 
 ///|
+/// Deactivates and resets all shots in the array.
 fn clear_shots(shots : Array[Shot]) -> Unit {
   for shot in shots {
     shot.active = false
@@ -178,6 +200,7 @@ fn clear_shots(shots : Array[Shot]) -> Unit {
 }
 
 ///|
+/// Deactivates and resets all pickups in the array.
 fn clear_pickups(items : Array[Pickup]) -> Unit {
   for item in items {
     item.active = false
@@ -189,6 +212,7 @@ fn clear_pickups(items : Array[Pickup]) -> Unit {
 }
 
 ///|
+/// Deactivates and resets all particles in the array.
 fn clear_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
     part.active = false
@@ -204,6 +228,7 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Activates a single particle from the pool at `(x, y)` with random velocity at the given speed scale.
 fn spawn_particle(
   parts : Array[Particle],
   x : Float,
@@ -233,6 +258,7 @@ fn spawn_particle(
 }
 
 ///|
+/// Spawns `count` particles in random directions from `(x, y)` at the given speed scale and kind.
 fn burst(
   parts : Array[Particle],
   x : Float,
@@ -248,6 +274,7 @@ fn burst(
 }
 
 ///|
+/// Activates a new shot in the pool with full position, velocity, damage, and lifetime parameters.
 fn spawn_shot(
   shots : Array[Shot],
   from_player : Bool,
@@ -281,6 +308,7 @@ fn spawn_shot(
 }
 
 ///|
+/// Activates a new obstacle of a random kind at the right edge of the world, scaled to the current level.
 fn spawn_obstacle(obs : Array[Obstacle], level : Int) -> Bool {
   let mut slot : Int = -1
   for i in 0..<obs.length() {
@@ -321,6 +349,7 @@ fn spawn_obstacle(obs : Array[Obstacle], level : Int) -> Bool {
 }
 
 ///|
+/// Activates a new pickup of a random kind at a random lane and off-screen position.
 fn spawn_pickup(items : Array[Pickup]) -> Bool {
   let mut slot : Int = -1
   for i in 0..<items.length() {
@@ -345,6 +374,7 @@ fn spawn_pickup(items : Array[Pickup]) -> Bool {
 }
 
 ///|
+/// Returns the pixel distance to the nearest active obstacle ahead of the player.
 fn nearest_obstacle_dy(obs : Array[Obstacle], player_dist : Float) -> Int {
   ignore(player_dist)
   let mut closest : Int = 9999
@@ -361,6 +391,7 @@ fn nearest_obstacle_dy(obs : Array[Obstacle], player_dist : Float) -> Int {
 }
 
 ///|
+/// Entry point: initialises the window, creates all game entities, and runs the main game loop.
 fn main {
   @raylib.init_window(sw, sh, "Ninja Rooftop Chase 2026")
   @raylib.set_target_fps(60)

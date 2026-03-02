@@ -1,16 +1,21 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 820
 
 ///|
+/// Number of terrain height sample points defining the lunar surface.
 let points : Int = 17
 
 ///|
+/// Maximum number of active meteor objects in the pool.
 let max_meteors : Int = 24
 
 ///|
+/// Returns the absolute value of `x`.
 fn absf(x : Float) -> Float {
   if x < 0.0 {
     -x
@@ -20,6 +25,7 @@ fn absf(x : Float) -> Float {
 }
 
 ///|
+/// Clamps `v` to the inclusive `[lo, hi]` range.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -31,6 +37,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns true if point (`px`, `py`) lies within the rectangle at (`rx`, `ry`) with size (`rw`, `rh`).
 fn inside_rect(
   px : Float,
   py : Float,
@@ -46,26 +53,31 @@ fn inside_rect(
 }
 
 ///|
+/// Converts degrees to radians.
 fn deg2rad(angle : Float) -> Double {
   angle.to_double() * 0.017453292519943295
 }
 
 ///|
+/// Returns the sine of `angle` given in degrees.
 fn sinf_deg(angle : Float) -> Float {
   Float::from_double(@math.sin(deg2rad(angle)))
 }
 
 ///|
+/// Returns the cosine of `angle` given in degrees.
 fn cosf_deg(angle : Float) -> Float {
   Float::from_double(@math.cos(deg2rad(angle)))
 }
 
 ///|
+/// Returns the sine of `x` in radians.
 fn sinf(x : Float) -> Float {
   Float::from_double(@math.sin(x.to_double()))
 }
 
 ///|
+/// Active meteor falling from above that destroys the lander on contact.
 struct Meteor {
   mut x : Float
   mut y : Float
@@ -74,11 +86,13 @@ struct Meteor {
 }
 
 ///|
+/// Sets the terrain height sample at index `i` to `y`.
 fn set_height(heights : Array[Float], i : Int, y : Float) -> Unit {
   heights[i] = y
 }
 
 ///|
+/// Returns the interpolated terrain height at horizontal position `x` by sampling between adjacent points.
 fn sample_height(heights : Array[Float], x : Float) -> Float {
   let segs = heights.length() - 1
   let step = Float::from_int(sw) / Float::from_int(segs)
@@ -96,6 +110,7 @@ fn sample_height(heights : Array[Float], x : Float) -> Float {
 }
 
 ///|
+/// Deactivates all meteors in the pool and resets their positions and velocities.
 fn clear_meteors(meteors : Array[Meteor]) -> Unit {
   for meteor in meteors {
     meteor.x = 0.0
@@ -106,6 +121,7 @@ fn clear_meteors(meteors : Array[Meteor]) -> Unit {
 }
 
 ///|
+/// Activates an inactive meteor at a random horizontal position with downward speed scaled by `level`.
 fn spawn_meteor(meteors : Array[Meteor], level : Int) -> Unit {
   let mut placed = false
   for meteor in meteors {
@@ -125,6 +141,7 @@ fn spawn_meteor(meteors : Array[Meteor], level : Int) -> Unit {
 }
 
 ///|
+/// Configures terrain heights for the given level and returns spawn x/y, pad x/width/y, and base wind speed.
 fn set_level(
   level : Int,
   heights : Array[Float],
@@ -209,6 +226,7 @@ fn set_level(
 }
 
 ///|
+/// Initializes the window and runs the full game loop for Lunar Lander Ops 2026.
 fn main {
   @raylib.init_window(sw, sh, "Lunar Lander Ops 2026")
   @raylib.set_target_fps(60)

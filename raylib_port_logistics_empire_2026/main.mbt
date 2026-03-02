@@ -1,34 +1,45 @@
 ///|
+/// Screen width in pixels.
 let sw = 1366
 
 ///|
+/// Screen height in pixels.
 let sh = 768
 
 ///|
+/// Left edge of the world viewport in pixels.
 let world_l : Float = 24.0
 
 ///|
+/// Top edge of the world viewport in pixels.
 let world_t : Float = 24.0
 
 ///|
+/// Right edge of the world viewport in pixels.
 let world_r : Float = 950.0
 
 ///|
+/// Bottom edge of the world viewport in pixels.
 let world_b : Float = 744.0
 
 ///|
+/// Maximum number of nodes (port, factory, market, hub) in the simulation pool.
 let max_nodes = 12
 
 ///|
+/// Maximum number of cargo routes in the simulation pool.
 let max_routes = 40
 
 ///|
+/// Maximum number of trucks in the simulation pool.
 let max_trucks = 140
 
 ///|
+/// Maximum number of spark particles in the visual effects pool.
 let max_sparks = 280
 
 ///|
+/// Represents a port, factory, market, or hub node with stock, demand, production, and outage state.
 struct Node {
   mut active : Bool
   mut kind : Int
@@ -46,6 +57,7 @@ struct Node {
 }
 
 ///|
+/// Represents a bidirectional cargo route between two nodes with level, integrity, and truck spawn cooldown.
 struct Route {
   mut active : Bool
   mut a : Int
@@ -57,6 +69,7 @@ struct Route {
 }
 
 ///|
+/// Represents a truck moving along a route with cargo, direction, speed, and stuck state.
 struct Truck {
   mut active : Bool
   mut route : Int
@@ -70,6 +83,7 @@ struct Truck {
 }
 
 ///|
+/// A short-lived visual spark particle with position, velocity, size, lifetime, and kind.
 struct Spark {
   mut active : Bool
   mut x : Float
@@ -82,6 +96,7 @@ struct Spark {
 }
 
 ///|
+/// Clamps an integer value to the inclusive range [lo, hi].
 fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -93,6 +108,7 @@ fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Clamps a float value to the inclusive range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -104,6 +120,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the squared Euclidean distance between two points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx : Float = x1 - x0
   let dy : Float = y1 - y0
@@ -111,12 +128,14 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Returns a random float uniformly distributed in [lo, hi].
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns true when the point (px, py) lies within the axis-aligned rectangle (x, y, w, h).
 fn inside_rect(
   px : Float,
   py : Float,
@@ -132,6 +151,7 @@ fn inside_rect(
 }
 
 ///|
+/// Returns the smaller of two float values.
 fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -141,6 +161,7 @@ fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two float values.
 fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -150,6 +171,7 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the display label for a node kind (0=PORT, 1=FACTORY, 2=MARKET, 3=HUB).
 fn node_kind_name(kind : Int) -> String {
   if kind == 0 {
     "PORT"
@@ -163,6 +185,7 @@ fn node_kind_name(kind : Int) -> String {
 }
 
 ///|
+/// Returns the fill colour for a node based on its kind (port=blue, factory=orange, market=green, hub=purple).
 fn node_color(kind : Int) -> @raylib.Color {
   if kind == 0 {
     @raylib.Color::new(98, 190, 250, 255)
@@ -176,6 +199,7 @@ fn node_color(kind : Int) -> @raylib.Color {
 }
 
 ///|
+/// Returns the colour for a cargo kind (0=empty/grey, 1=raw/blue, 2=goods/yellow).
 fn cargo_color(kind : Int) -> @raylib.Color {
   if kind == 1 {
     @raylib.Color::new(112, 206, 252, 252)
@@ -187,6 +211,7 @@ fn cargo_color(kind : Int) -> @raylib.Color {
 }
 
 ///|
+/// Deactivates all nodes and resets every field to its default zero state.
 fn clear_nodes(nodes : Array[Node]) -> Unit {
   for node in nodes {
     node.active = false
@@ -206,6 +231,7 @@ fn clear_nodes(nodes : Array[Node]) -> Unit {
 }
 
 ///|
+/// Deactivates all routes and resets every field to its default zero state.
 fn clear_routes(routes : Array[Route]) -> Unit {
   for route in routes {
     route.active = false
@@ -219,6 +245,7 @@ fn clear_routes(routes : Array[Route]) -> Unit {
 }
 
 ///|
+/// Deactivates all trucks and resets every field to its default zero state.
 fn clear_trucks(trucks : Array[Truck]) -> Unit {
   for truck in trucks {
     truck.active = false
@@ -234,6 +261,7 @@ fn clear_trucks(trucks : Array[Truck]) -> Unit {
 }
 
 ///|
+/// Deactivates all spark particles and resets every field to its default zero state.
 fn clear_sparks(sp : Array[Spark]) -> Unit {
   for sp_elem in sp {
     sp_elem.active = false
@@ -248,6 +276,7 @@ fn clear_sparks(sp : Array[Spark]) -> Unit {
 }
 
 ///|
+/// Activates the first free node slot with the given kind, position, radius, and name.
 fn add_node(
   nodes : Array[Node],
   kind : Int,
@@ -278,6 +307,7 @@ fn add_node(
 }
 
 ///|
+/// Returns the index of an active route connecting nodes a and b (either direction), or -1 if none exists.
 fn find_route(routes : Array[Route], a : Int, b : Int) -> Int {
   for i in 0..<routes.length() {
     if not(routes[i].active) {
@@ -293,6 +323,7 @@ fn find_route(routes : Array[Route], a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Activates the first free route slot connecting nodes a and b at level 1 with full HP.
 fn add_route(routes : Array[Route], a : Int, b : Int) -> Int {
   for i in 0..<routes.length() {
     if not(routes[i].active) {
@@ -310,6 +341,7 @@ fn add_route(routes : Array[Route], a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the number of currently active routes.
 fn count_active_routes(routes : Array[Route]) -> Int {
   let mut n : Int = 0
   for route in routes {
@@ -321,6 +353,7 @@ fn count_active_routes(routes : Array[Route]) -> Int {
 }
 
 ///|
+/// Returns the number of currently active trucks.
 fn count_active_trucks(trucks : Array[Truck]) -> Int {
   let mut n : Int = 0
   for truck in trucks {
@@ -332,6 +365,7 @@ fn count_active_trucks(trucks : Array[Truck]) -> Int {
 }
 
 ///|
+/// Activates the first free truck slot assigned to the given route, direction, and upgrade level.
 fn add_truck(
   trucks : Array[Truck],
   route_id : Int,
@@ -356,6 +390,7 @@ fn add_truck(
 }
 
 ///|
+/// Activates the first free spark slot at position (x, y) with a random velocity, lifetime, and size.
 fn add_spark(sp : Array[Spark], x : Float, y : Float, kind : Int) -> Unit {
   for sp_elem in sp {
     if not(sp_elem.active) {
@@ -375,6 +410,7 @@ fn add_spark(sp : Array[Spark], x : Float, y : Float, kind : Int) -> Unit {
 }
 
 ///|
+/// Emits n sparks of the given kind in a burst around position (x, y).
 fn burst_sparks(
   sp : Array[Spark],
   x : Float,
@@ -388,6 +424,7 @@ fn burst_sparks(
 }
 
 ///|
+/// Advances all active sparks by dt, applying drag and gravity, and deactivates expired ones.
 fn update_sparks(sp : Array[Spark], dt : Float) -> Unit {
   for sp_elem in sp {
     if not(sp_elem.active) {
@@ -406,6 +443,7 @@ fn update_sparks(sp : Array[Spark], dt : Float) -> Unit {
 }
 
 ///|
+/// Draws all active sparks as colour-coded circles that shrink as their lifetime expires.
 fn draw_sparks(sp : Array[Spark]) -> Unit {
   for sp_elem in sp {
     if not(sp_elem.active) {
@@ -430,6 +468,7 @@ fn draw_sparks(sp : Array[Spark]) -> Unit {
 }
 
 ///|
+/// Returns the squared distance from point (px, py) to the nearest point on segment (ax, ay)-(bx, by).
 fn point_seg_dist2(
   px : Float,
   py : Float,
@@ -454,6 +493,7 @@ fn point_seg_dist2(
 }
 
 ///|
+/// Returns the index of the first active node whose radius contains the pointer position, or -1.
 fn pick_node(nodes : Array[Node], mx : Float, my : Float) -> Int {
   for i in 0..<nodes.length() {
     if not(nodes[i].active) {
@@ -467,6 +507,7 @@ fn pick_node(nodes : Array[Node], mx : Float, my : Float) -> Int {
 }
 
 ///|
+/// Returns the index of the active route closest to the pointer within 17 pixels, or -1.
 fn pick_route(
   routes : Array[Route],
   nodes : Array[Node],
@@ -506,6 +547,7 @@ fn pick_route(
 }
 
 ///|
+/// Clears all entities and builds the initial map with 9 named nodes, starting stocks, demands, and 7 starter routes.
 fn setup_map(
   nodes : Array[Node],
   routes : Array[Route],
@@ -564,6 +606,7 @@ fn setup_map(
 }
 
 ///|
+/// Loads the appropriate cargo type onto a truck based on the destination node's kind and the source node's available stock.
 fn load_from_node_to_target(
   nodes : Array[Node],
   truck : Truck,
@@ -639,6 +682,7 @@ fn load_from_node_to_target(
 }
 
 ///|
+/// Advances all active node production cycles by dt and returns the delivery gain and bonus cash earned this frame.
 fn update_nodes(nodes : Array[Node], dt : Float, cycle : Int) -> (Int, Int) {
   let mut delivery_gain : Int = 0
   let mut bonus_cash : Int = 0
@@ -707,6 +751,7 @@ fn update_nodes(nodes : Array[Node], dt : Float, cycle : Int) -> (Int, Int) {
 }
 
 ///|
+/// Ticks route blink timers and storm damage, deactivates broken routes, and returns the number of routes destroyed this frame.
 fn update_routes(routes : Array[Route], dt : Float, storm_t : Float) -> Int {
   let mut broken_n : Int = 0
 
@@ -745,6 +790,7 @@ fn update_routes(routes : Array[Route], dt : Float, storm_t : Float) -> Int {
 }
 
 ///|
+/// Advances all active trucks along their routes, handles cargo delivery at endpoints, and applies storm stutter delays.
 fn update_trucks(
   trucks : Array[Truck],
   routes : Array[Route],
@@ -824,6 +870,7 @@ fn update_trucks(
 }
 
 ///|
+/// Randomly picks an active route and reduces its HP by amount, deactivating it if HP drops to zero.
 fn damage_random_route(routes : Array[Route], amount : Float) -> Int {
   for _try_i in 0..<48 {
     let idx : Int = @raylib.get_random_value(0, routes.length() - 1)
@@ -844,6 +891,7 @@ fn damage_random_route(routes : Array[Route], amount : Float) -> Int {
 }
 
 ///|
+/// Returns the interpolated world position of a truck along its route segment based on its t parameter.
 fn truck_pos(
   truck : Truck,
   route : Route,
@@ -860,6 +908,7 @@ fn truck_pos(
 }
 
 ///|
+/// Draws a labelled rectangular button with enabled/hover colour variants and centred text.
 fn draw_button(
   x : Int,
   y : Int,
@@ -897,6 +946,7 @@ fn draw_button(
 }
 
 ///|
+/// Draws the animated world background with a gradient fill, drifting dots, and scrolling ship-lane bars.
 fn draw_world_bg(t : Float) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     world_l.to_int(),
@@ -941,6 +991,7 @@ fn draw_world_bg(t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active routes as coloured lines whose thickness and colour reflect level, integrity, storm, and selection state.
 fn draw_routes(
   routes : Array[Route],
   nodes : Array[Node],
@@ -1009,6 +1060,7 @@ fn draw_routes(
 }
 
 ///|
+/// Draws all active nodes as pulsing coloured circles with name, kind label, stock counts, and selection ring.
 fn draw_nodes(nodes : Array[Node], selected_node : Int) -> Unit {
   for i in 0..<nodes.length() {
     if not(nodes[i].active) {
@@ -1158,6 +1210,7 @@ fn draw_nodes(nodes : Array[Node], selected_node : Int) -> Unit {
 }
 
 ///|
+/// Draws all active trucks as small rectangles with a cargo dot and a delivery blink flash.
 fn draw_trucks(
   trucks : Array[Truck],
   routes : Array[Route],
@@ -1211,6 +1264,7 @@ fn draw_trucks(
 }
 
 ///|
+/// Draws the right-side HUD panel showing timer, budget, deliveries, load tier, storm bar, selected route info, and instructions.
 fn draw_ui_panel(
   timer : Float,
   budget : Int,
@@ -1450,16 +1504,19 @@ fn draw_ui_panel(
 }
 
 ///|
+/// Returns the budget cost to build a new route given the current number of existing routes.
 fn route_build_cost(route_n : Int) -> Int {
   34 + route_n * 2
 }
 
 ///|
+/// Returns the budget cost to upgrade a route to the next level given its current level.
 fn route_upgrade_cost(level : Int) -> Int {
   42 + level * 34
 }
 
 ///|
+/// Initializes the window, sets up the map, and runs the port logistics empire game loop.
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] port logistics empire 2026")
   @raylib.set_target_fps(60)

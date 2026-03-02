@@ -1,10 +1,12 @@
 ///|
+/// Sets the HUD status text and its display lifetime in seconds.
 fn set_status(game : @types.Game, text : String, ttl : Float) -> Unit {
   game.status_text = text
   game.status_t = ttl
 }
 
 ///|
+/// Deactivates all node slots, resetting them to default values.
 fn clear_nodes(game : @types.Game) -> Unit {
   for i in 0..<game.nodes.length() {
     game.nodes[i] = @types.Node::new()
@@ -12,6 +14,7 @@ fn clear_nodes(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all enemy slots, resetting them to default values.
 fn clear_enemies(game : @types.Game) -> Unit {
   for i in 0..<game.enemies.length() {
     game.enemies[i] = @types.Enemy::new()
@@ -19,6 +22,7 @@ fn clear_enemies(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all bolt projectile slots, resetting them to default values.
 fn clear_bolts(game : @types.Game) -> Unit {
   for i in 0..<game.bolts.length() {
     game.bolts[i] = @types.Bolt::new()
@@ -26,6 +30,7 @@ fn clear_bolts(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all pulse effect slots, resetting them to default values.
 fn clear_pulses(game : @types.Game) -> Unit {
   for i in 0..<game.pulses.length() {
     game.pulses[i] = @types.PulseFx::new()
@@ -33,6 +38,7 @@ fn clear_pulses(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the index of the first inactive node slot, or -1 if the pool is full.
 fn alloc_node(game : @types.Game) -> Int {
   for i in 0..<game.nodes.length() {
     if not(game.nodes[i].active) {
@@ -43,6 +49,7 @@ fn alloc_node(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the index of the first inactive enemy slot, or -1 if the pool is full.
 fn alloc_enemy(game : @types.Game) -> Int {
   for i in 0..<game.enemies.length() {
     if not(game.enemies[i].active) {
@@ -53,6 +60,7 @@ fn alloc_enemy(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the index of the first inactive bolt slot, or -1 if the pool is full.
 fn alloc_bolt(game : @types.Game) -> Int {
   for i in 0..<game.bolts.length() {
     if not(game.bolts[i].active) {
@@ -63,6 +71,7 @@ fn alloc_bolt(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the index of the first inactive pulse slot, or -1 if the pool is full.
 fn alloc_pulse(game : @types.Game) -> Int {
   for i in 0..<game.pulses.length() {
     if not(game.pulses[i].active) {
@@ -73,6 +82,7 @@ fn alloc_pulse(game : @types.Game) -> Int {
 }
 
 ///|
+/// Spawns a ring pulse effect at the given world position with the specified radius, lifetime, and kind.
 fn emit_pulse(
   game : @types.Game,
   x : Float,
@@ -98,6 +108,7 @@ fn emit_pulse(
 }
 
 ///|
+/// Returns the number of currently active enemies.
 fn active_enemy_count(game : @types.Game) -> Int {
   let mut count = 0
   for enemy in game.enemies {
@@ -109,6 +120,7 @@ fn active_enemy_count(game : @types.Game) -> Int {
 }
 
 ///|
+/// Increments the wave counter, queues enemy spawns, awards wave energy, and sets status text.
 fn begin_next_wave(game : @types.Game) -> Unit {
   game.wave = game.wave + 1
   game.pending_spawns = @types.wave_spawn_count(game.wave)
@@ -122,6 +134,7 @@ fn begin_next_wave(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets all pools and counters, then begins wave 1 of a new defense run.
 fn start_new_run(game : @types.Game) -> Unit {
   clear_nodes(game)
   clear_enemies(game)
@@ -151,6 +164,7 @@ fn start_new_run(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Transitions to the game-over state, finalises the best score, and sets status text.
 fn enter_game_over(game : @types.Game) -> Unit {
   if game.state == @types.state_game_over {
     return
@@ -171,6 +185,7 @@ fn enter_game_over(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the index of the node at grid cell `(gx, gy)`, or -1 if none exists.
 fn find_node_at(game : @types.Game, gx : Int, gy : Int) -> Int {
   for i in 0..<game.nodes.length() {
     if game.nodes[i].active && game.nodes[i].gx == gx && game.nodes[i].gy == gy {
@@ -181,6 +196,7 @@ fn find_node_at(game : @types.Game, gx : Int, gy : Int) -> Int {
 }
 
 ///|
+/// Moves the placement cursor one cell in the input direction and updates the last-moved direction.
 fn move_cursor(game : @types.Game) -> Unit {
   if game.input_move_x < 0 {
     game.cursor_x = @types.clampi(game.cursor_x - 1, 0, @types.grid_cols - 1)
@@ -200,6 +216,7 @@ fn move_cursor(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Builds a new guardian node, rotates or upgrades an existing one at the cursor cell, spending energy as needed.
 fn try_build_or_upgrade(game : @types.Game) -> Unit {
   let gx = game.cursor_x
   let gy = game.cursor_y
@@ -295,6 +312,7 @@ fn try_build_or_upgrade(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Removes the node at the cursor cell and refunds its energy value.
 fn try_sell_node(game : @types.Game) -> Unit {
   let node_index = find_node_at(game, game.cursor_x, game.cursor_y)
   if node_index < 0 {
@@ -318,6 +336,7 @@ fn try_sell_node(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Allocates a new enemy at a random screen edge with stats scaled to the current wave.
 fn spawn_enemy(game : @types.Game) -> Bool {
   let slot = alloc_enemy(game)
   if slot < 0 {
@@ -409,6 +428,7 @@ fn spawn_enemy(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Manages the wave intro delay, per-spawn cooldown, and triggers the next wave when all enemies are defeated.
 fn update_wave_spawner(game : @types.Game, dt : Float) -> Unit {
   if game.wave_delay > 0.0 {
     game.wave_delay = @types.maxf(0.0, game.wave_delay - dt)
@@ -435,6 +455,7 @@ fn update_wave_spawner(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Fires a new bolt projectile from position `(x, y)` towards target `(tx, ty)` with the given damage.
 fn spawn_bolt(
   game : @types.Game,
   x : Float,
@@ -468,6 +489,7 @@ fn spawn_bolt(
 }
 
 ///|
+/// Deactivates an enemy, awards score with combo multiplier, restores energy, and contributes to barrier charge.
 fn kill_enemy(game : @types.Game, enemy_index : Int, by_barrier : Bool) -> Unit {
   if enemy_index < 0 || not(game.enemies[enemy_index].active) {
     return
@@ -518,6 +540,7 @@ fn kill_enemy(game : @types.Game, enemy_index : Int, by_barrier : Bool) -> Unit 
 }
 
 ///|
+/// Ticks guardian cooldowns and fires bolts at the nearest in-cone enemy within range.
 fn update_nodes(game : @types.Game, dt : Float) -> Unit {
   for node in game.nodes {
     if not(node.active) {
@@ -585,6 +608,7 @@ fn update_nodes(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances all bolts, deactivates out-of-bounds ones, and applies damage and pulses on enemy hit.
 fn update_bolts(game : @types.Game, dt : Float) -> Unit {
   for bolt in game.bolts {
     if not(bolt.active) {
@@ -631,6 +655,7 @@ fn update_bolts(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Moves all enemies toward the gate with wobble and handles contact damage and gate breach.
 fn update_enemies(game : @types.Game, dt : Float) -> Unit {
   let gx = @types.gate_x()
   let gy = @types.gate_y()
@@ -693,6 +718,7 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Consumes a full barrier charge to deal damage and push all enemies within barrier radius.
 fn trigger_barrier(game : @types.Game) -> Unit {
   if game.barrier_charge < @types.barrier_charge_goal {
     set_status(game, "Barrier not charged", 0.5)
@@ -740,6 +766,7 @@ fn trigger_barrier(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Expands and expires all active ring pulse effects each frame.
 fn update_pulses(game : @types.Game, dt : Float) -> Unit {
   for pulse in game.pulses {
     if not(pulse.active) {
@@ -764,6 +791,7 @@ fn update_pulses(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Decrements the status, shake, and barrier flash timers by `dt`.
 fn decay_overlay_timers(game : @types.Game, dt : Float) -> Unit {
   if game.status_t > 0.0 {
     game.status_t = @types.maxf(0.0, game.status_t - dt)
@@ -777,6 +805,7 @@ fn decay_overlay_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Handles input on the title screen to start a new run.
 fn update_title_state(game : @types.Game) -> Unit {
   if game.input_place_press ||
     game.input_barrier_press ||
@@ -786,6 +815,7 @@ fn update_title_state(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Runs one frame of active gameplay: cursor movement, building, barrier, energy regen, and combat updates.
 fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
   if game.input_pause_press {
     game.state = @types.state_paused
@@ -826,6 +856,7 @@ fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Handles input while paused to resume play.
 fn update_paused_state(game : @types.Game) -> Unit {
   if game.input_pause_press || game.input_cancel_press {
     game.state = @types.state_playing
@@ -834,6 +865,7 @@ fn update_paused_state(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles input on the game-over screen to restart or return to title.
 fn update_game_over_state(game : @types.Game) -> Unit {
   if game.input_place_press || game.input_restart_press {
     start_new_run(game)

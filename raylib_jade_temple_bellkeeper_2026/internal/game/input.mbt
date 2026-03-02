@@ -1,4 +1,5 @@
 ///|
+/// Resets all input fields on the game state to neutral for the current frame.
 fn clear_input(game : @types.Game) -> Unit {
   game.input_x = 0.0
   game.input_y = 0.0
@@ -8,6 +9,7 @@ fn clear_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads keyboard, mouse, and touch input for the title screen and sets `input_restart_press`.
 fn update_title_input(game : @types.Game) -> Unit {
   clear_input(game)
   game.touch_mode = game.touch_count > 0
@@ -37,6 +39,7 @@ fn update_title_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads movement, bell-ring, dash, and restart inputs during gameplay from keyboard, mouse, and touch.
 fn update_play_input(game : @types.Game) -> Unit {
   clear_input(game)
   game.touch_mode = game.touch_count > 0
@@ -148,6 +151,7 @@ fn update_play_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads retry input for the stage-clear and game-over result screens.
 fn update_result_input(game : @types.Game) -> Unit {
   clear_input(game)
   game.touch_mode = game.touch_count > 0

@@ -1,4 +1,5 @@
 ///|
+/// Returns a copy of `color` with the alpha channel replaced by `alpha`.
 fn with_alpha(color : @raylib.Color, alpha : Int) -> @raylib.Color {
   @raylib.Color::new(
     color.r.to_int(),
@@ -9,6 +10,7 @@ fn with_alpha(color : @raylib.Color, alpha : Int) -> @raylib.Color {
 }
 
 ///|
+/// Returns the theme colour associated with a room id.
 fn room_color(room : Int) -> @raylib.Color {
   if room == @types.room_rest {
     @raylib.Color::new(96, 182, 128, 255)
@@ -22,6 +24,7 @@ fn room_color(room : Int) -> @raylib.Color {
 }
 
 ///|
+/// Returns a green, yellow, or red colour depending on whether fatigue is low, moderate, or high.
 fn fatigue_color(value : Float) -> @raylib.Color {
   if value < 45.0 {
     @raylib.Color::new(104, 210, 128, 255)
@@ -33,6 +36,7 @@ fn fatigue_color(value : Float) -> @raylib.Color {
 }
 
 ///|
+/// Draws a horizontal progress bar filled proportionally to `ratio` (0.0–1.0) with the given fill colour.
 fn draw_meter(
   x : Int,
   y : Int,
@@ -58,6 +62,7 @@ fn draw_meter(
 }
 
 ///|
+/// Returns the average fatigue across all students for HUD display.
 fn mean_fatigue(game : @types.Game) -> Float {
   let mut sum : Float = 0.0
 
@@ -69,6 +74,7 @@ fn mean_fatigue(game : @types.Game) -> Float {
 }
 
 ///|
+/// Clears and draws the animated background with waving stripe bands, decorative circles, and incident flash overlay.
 fn draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(16, 20, 30, 255))
 
@@ -108,6 +114,7 @@ fn draw_background(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the top HUD bar showing title, week number, funds, reputation, average fatigue, and week-progress meter.
 fn draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     28,
@@ -223,6 +230,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the student assignment grid with room column headers, per-student skill/fatigue meters, and cursor/assignment highlights.
 fn draw_student_table(game : @types.Game) -> Unit {
   let panel_x = 40
   let panel_y = 164
@@ -406,6 +414,7 @@ fn draw_student_table(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the bottom footer bar with keyboard shortcut reference text.
 fn draw_footer_help() -> Unit {
   let footer = "WASD/Arrows: move cursor   J: assign/train   K: cancel to rest   SPACE: burst   P: pause   R: restart"
   @raylib.draw_rectangle(
@@ -425,6 +434,7 @@ fn draw_footer_help() -> Unit {
 }
 
 ///|
+/// Draws the floating status message box with fade-in/out alpha when a message is active.
 fn draw_message(game : @types.Game) -> Unit {
   if game.message_t <= 0.0 {
     return
@@ -459,6 +469,7 @@ fn draw_message(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the animated week-number banner that pulses briefly when a new week begins.
 fn draw_week_banner(game : @types.Game) -> Unit {
   if game.week_banner_t <= 0.0 || game.state != Playing {
     return
@@ -481,6 +492,7 @@ fn draw_week_banner(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a centred overlay card with a title and multiple lines of body text, using the given border colour.
 fn draw_overlay_card(
   title : String,
   lines : Array[String],
@@ -512,6 +524,7 @@ fn draw_overlay_card(
 }
 
 ///|
+/// Draws the title-screen overlay with game instructions and the best-week record.
 fn draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -537,6 +550,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a semi-transparent pause overlay with "PAUSED" text and resume instructions.
 fn draw_paused_overlay() -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -566,6 +580,7 @@ fn draw_paused_overlay() -> Unit {
 }
 
 ///|
+/// Draws the game-over overlay card showing the defeat reason, final stats, and a restart prompt.
 fn draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,

@@ -1,4 +1,5 @@
 ///|
+/// Resets all entity slots in the pool to their inactive default state.
 fn clear_entities(game : @types.Game) -> Unit {
   for entity in game.entities {
     entity.active = false
@@ -18,6 +19,7 @@ fn clear_entities(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets all bullet slots in the pool to their inactive default state.
 fn clear_bullets(game : @types.Game) -> Unit {
   for bullet in game.bullets {
     bullet.active = false
@@ -33,6 +35,7 @@ fn clear_bullets(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets all spark slots in the pool to their inactive default state.
 fn clear_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
     spark.active = false
@@ -47,6 +50,7 @@ fn clear_sparks(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets all glow ring slots in the pool to their inactive default state.
 fn clear_rings(game : @types.Game) -> Unit {
   for ring in game.rings {
     ring.active = false
@@ -59,6 +63,7 @@ fn clear_rings(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets all afterimage slots in the pool to their inactive default state.
 fn clear_images(game : @types.Game) -> Unit {
   for image in game.images {
     image.active = false
@@ -73,6 +78,7 @@ fn clear_images(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets all player fields to their starting values at the center-bottom of the screen.
 fn reset_player(hero : @types.Player) -> Unit {
   hero.x = Float::from_int(@types.screen_w / 2)
   hero.y = Float::from_int(@types.screen_h) * 0.76
@@ -88,6 +94,7 @@ fn reset_player(hero : @types.Player) -> Unit {
 }
 
 ///|
+/// Returns the index of a free entity slot, or evicts the lowest-priority active entity if the pool is full.
 fn alloc_entity(game : @types.Game) -> Int {
   for i in 0..<game.entities.length() {
     if not(game.entities[i].active) {
@@ -107,6 +114,7 @@ fn alloc_entity(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free bullet slot, or evicts the shortest-lived active bullet if the pool is full.
 fn alloc_bullet(game : @types.Game) -> Int {
   for i in 0..<game.bullets.length() {
     if not(game.bullets[i].active) {
@@ -126,6 +134,7 @@ fn alloc_bullet(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free spark slot, or evicts the shortest-lived active spark if the pool is full.
 fn alloc_spark(game : @types.Game) -> Int {
   for i in 0..<game.sparks.length() {
     if not(game.sparks[i].active) {
@@ -145,6 +154,7 @@ fn alloc_spark(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free glow ring slot, or evicts the shortest-lived active ring if the pool is full.
 fn alloc_ring(game : @types.Game) -> Int {
   for i in 0..<game.rings.length() {
     if not(game.rings[i].active) {
@@ -164,6 +174,7 @@ fn alloc_ring(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free afterimage slot, or evicts the shortest-lived active afterimage if the pool is full.
 fn alloc_image(game : @types.Game) -> Int {
   for i in 0..<game.images.length() {
     if not(game.images[i].active) {
@@ -183,6 +194,7 @@ fn alloc_image(game : @types.Game) -> Int {
 }
 
 ///|
+/// Activates a spark slot with the given position, velocity, lifetime, size, and visual kind.
 fn emit_spark(
   game : @types.Game,
   x : Float,
@@ -205,6 +217,7 @@ fn emit_spark(
 }
 
 ///|
+/// Spawns `count` sparks with randomized offsets and velocities around position `(x, y)`.
 fn burst(
   game : @types.Game,
   x : Float,
@@ -227,6 +240,7 @@ fn burst(
 }
 
 ///|
+/// Activates a glow ring slot at position `(x, y)` with the given initial radius, lifetime, and visual kind.
 fn spawn_ring(
   game : @types.Game,
   x : Float,
@@ -245,6 +259,7 @@ fn spawn_ring(
 }
 
 ///|
+/// Activates an afterimage slot at position `(x, y)` with the given dimensions, rotation, lifetime, and visual kind.
 fn emit_image(
   game : @types.Game,
   x : Float,
@@ -267,6 +282,7 @@ fn emit_image(
 }
 
 ///|
+/// Activates a bullet slot with team, position, velocity, lifetime, damage, and visual kind.
 fn spawn_bullet(
   game : @types.Game,
   from_player : Bool,
@@ -291,6 +307,7 @@ fn spawn_bullet(
 }
 
 ///|
+/// Activates an entity slot with all required spawn parameters including kind, position, size, HP, and behavior tuning.
 fn spawn_entity(
   game : @types.Game,
   kind : @types.EntityKind,
@@ -322,12 +339,14 @@ fn spawn_entity(
 }
 
 ///|
+/// Computes the combo-scaled score gain for a base point value.
 fn score_gain(game : @types.Game, base : Int) -> Int {
   let bonus = base * game.combo / 5
   base + bonus
 }
 
 ///|
+/// Adds combo-scaled points to the running score and updates the best score if exceeded.
 fn add_score(game : @types.Game, base : Int) -> Unit {
   let gained = score_gain(game, base)
   game.score = game.score + gained
@@ -337,18 +356,21 @@ fn add_score(game : @types.Game, base : Int) -> Unit {
 }
 
 ///|
+/// Increments the combo counter by one (capped at 24) and resets the combo decay timer.
 fn push_combo(game : @types.Game) -> Unit {
   game.combo = @types.clampi(game.combo + 1, 0, 24)
   game.combo_t = 3.6
 }
 
 ///|
+/// Resets the combo counter and decay timer to zero.
 fn reset_combo(game : @types.Game) -> Unit {
   game.combo = 0
   game.combo_t = 0.0
 }
 
 ///|
+/// Applies damage to the player's shield, triggers hurt effects and invulnerability, and transitions to GameOver if shield reaches zero.
 fn damage_player(game : @types.Game, dmg : Float) -> Unit {
   if game.hero.invuln > 0.0 {
     return
@@ -370,6 +392,7 @@ fn damage_player(game : @types.Game, dmg : Float) -> Unit {
 }
 
 ///|
+/// Clears all pools, resets the player, and configures speed, distance goal, and resource levels for the given stage number.
 fn start_stage(game : @types.Game, stage : Int) -> Unit {
   clear_entities(game)
   clear_bullets(game)
@@ -414,6 +437,7 @@ fn start_stage(game : @types.Game, stage : Int) -> Unit {
 }
 
 ///|
+/// Clears all pools, resets game counters, and transitions the game to the title screen state.
 fn init_title_scene(game : @types.Game) -> Unit {
   clear_entities(game)
   clear_bullets(game)
@@ -451,11 +475,13 @@ fn init_title_scene(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Starts a new run from stage 1.
 fn start_run(game : @types.Game) -> Unit {
   start_stage(game, 1)
 }
 
 ///|
+/// Spawns a random pack of 1-3 enemies or items at vertical position `y`, using stage-appropriate types and parameters.
 fn spawn_enemy_pack(game : @types.Game, y : Float) -> Unit {
   let depth = game.distance + (Float::from_int(@types.screen_h) - y)
   let center = @types.road_center_at(depth, game.time_s)
@@ -585,6 +611,7 @@ fn spawn_enemy_pack(game : @types.Game, y : Float) -> Unit {
 }
 
 ///|
+/// Advances the spawn cursor by scroll speed and spawns enemy packs whenever the cursor crosses the screen top.
 fn spawn_step(game : @types.Game, dt : Float) -> Unit {
   game.next_spawn_y = game.next_spawn_y + game.scroll_speed * dt
 
@@ -598,6 +625,7 @@ fn spawn_step(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Triggers the hack pulse: disables nearby enemy cloaks, destroys close-range enemies, and sweeps enemy bullets within the hack radius.
 fn apply_hack_pulse(game : @types.Game) -> Unit {
   game.hack_cd = @types.hack_cd_time
   game.hack_t = @types.hack_time
@@ -656,6 +684,7 @@ fn apply_hack_pulse(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Fires two parallel bullets from the player's gun ports and optionally a center bullet on higher stages.
 fn shoot_player_bullet(game : @types.Game) -> Unit {
   let spread : Float = if game.boost_t > 0.0 { 16.0 } else { 8.0 }
 
@@ -700,6 +729,7 @@ fn shoot_player_bullet(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Processes boost, hack, fire, and movement inputs, applies drag and velocity clamping, and moves the player for this frame.
 fn apply_player_input(game : @types.Game, dt : Float) -> Unit {
   if game.input_boost_press && game.boost_cd <= 0.0 && game.energy >= 14.0 {
     game.boost_t = @types.boost_time
@@ -783,6 +813,7 @@ fn apply_player_input(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Pushes the player back inside the road edges if they stray past the curb and applies damage for colliding with the barrier.
 fn constrain_player_to_road(game : @types.Game) -> Unit {
   let d = game.distance + (Float::from_int(@types.screen_h) - game.hero.y)
   let edges = @types.road_edges(game.stage, d, game.time_s)
@@ -805,6 +836,7 @@ fn constrain_player_to_road(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Fires a bullet from entity `e` toward the player using the firing pattern appropriate for its kind.
 fn entity_fire(game : @types.Game, e : @types.Entity) -> Unit {
   match e.kind {
     @types.FoeBike =>
@@ -865,6 +897,7 @@ fn entity_fire(game : @types.Game, e : @types.Entity) -> Unit {
 }
 
 ///|
+/// Deactivates entity `i`, awards score, increments the kill count, and spawns a burst and glow ring at the kill position.
 fn kill_entity(
   game : @types.Game,
   i : Int,
@@ -882,6 +915,7 @@ fn kill_entity(
 }
 
 ///|
+/// Applies the effect of collecting a pickup item: credits add score and combo, batteries restore energy, and hackcells reduce hack cooldown.
 fn collect_pickup(game : @types.Game, kind : @types.EntityKind) -> Unit {
   match kind {
     @types.ItemCredit => {
@@ -906,6 +940,7 @@ fn collect_pickup(game : @types.Game, kind : @types.EntityKind) -> Unit {
 }
 
 ///|
+/// Moves all active entities by scroll speed and their own velocity, runs their firing timers, checks player collision, and deactivates out-of-bounds entities.
 fn update_entities(game : @types.Game, dt : Float) -> Unit {
   let ram_hit = game.boost_t > 0.0
 
@@ -993,6 +1028,7 @@ fn update_entities(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Moves all active bullets, deactivates expired or out-of-bounds bullets, and resolves player-bullet and entity-bullet hit detection.
 fn update_bullets(game : @types.Game, dt : Float) -> Unit {
   for bullet in game.bullets {
     if not(bullet.active) {
@@ -1067,6 +1103,7 @@ fn update_bullets(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Updates sparks, glow rings, and afterimages: advances their positions and lifetimes, and deactivates expired entries.
 fn update_effects(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
@@ -1108,6 +1145,7 @@ fn update_effects(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Probabilistically emits small spark particles along the road edges each frame to simulate ambient neon traffic glow.
 fn emit_ambient_traffic_glow(game : @types.Game, dt : Float) -> Unit {
   let tries = @types.clampi((dt * 230.0).to_int(), 1, 10)
   let mut i = 0
@@ -1150,6 +1188,7 @@ fn emit_ambient_traffic_glow(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Decrements all per-frame cooldown and effect timers on the player and game state.
 fn update_timers(game : @types.Game, dt : Float) -> Unit {
   game.hero.invuln = @types.maxf(0.0, game.hero.invuln - dt)
   game.hero.hurt_t = @types.maxf(0.0, game.hero.hurt_t - dt)
@@ -1174,6 +1213,7 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs one frame of active gameplay: advances distance, processes player input, spawns enemies, updates entities, bullets, effects, and drains energy.
 fn update_play(game : @types.Game, dt : Float) -> Unit {
   game.scroll_speed = @types.base_scroll_speed +
     Float::from_int(game.stage - 1) * @types.stage_scroll_gain +
@@ -1221,6 +1261,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances the title screen: scrolls ambient effects and starts a run when the player presses start.
 fn update_title(game : @types.Game, dt : Float) -> Unit {
   game.scroll_speed = 96.0
   game.distance = game.distance + game.scroll_speed * dt * 0.7
@@ -1234,6 +1275,7 @@ fn update_title(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs the stage-clear intermission: decelerates scroll speed, emits celebration sparks, and advances to the next stage after the delay.
 fn update_stage_clear(game : @types.Game, dt : Float) -> Unit {
   game.result_t = game.result_t + dt
   game.scroll_speed = @types.maxf(90.0, game.scroll_speed - 140.0 * dt)
@@ -1260,6 +1302,7 @@ fn update_stage_clear(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs the game-over state: decelerates scroll speed, keeps effects alive, and returns to the title when the player presses restart.
 fn update_game_over(game : @types.Game, dt : Float) -> Unit {
   game.result_t = game.result_t + dt
   game.scroll_speed = @types.maxf(52.0, game.scroll_speed - 120.0 * dt)

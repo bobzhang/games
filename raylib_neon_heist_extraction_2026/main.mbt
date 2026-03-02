@@ -1,58 +1,77 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 760
 
 ///|
+/// Left boundary X of the playfield in pixels.
 let world_l : Float = 34.0
 
 ///|
+/// Right boundary X of the playfield in pixels.
 let world_r : Float = Float::from_int(sw) - 34.0
 
 ///|
+/// Top boundary Y of the playfield in pixels.
 let world_t : Float = 90.0
 
 ///|
+/// Bottom boundary Y of the playfield in pixels.
 let world_b : Float = Float::from_int(sh) - 34.0
 
 ///|
+/// Maximum number of guard slots in the guard pool.
 let max_guards : Int = 220
 
 ///|
+/// Maximum number of bullet slots in the bullet pool.
 let max_bullets : Int = 1200
 
 ///|
+/// Maximum number of surveillance camera units in the camera pool.
 let max_cameras : Int = 18
 
 ///|
+/// Maximum number of hackable terminal slots.
 let max_terminals : Int = 8
 
 ///|
+/// Maximum number of vault slots that can hold loot.
 let max_vaults : Int = 8
 
 ///|
+/// Maximum number of loot item slots in the loot pool.
 let max_loot : Int = 360
 
 ///|
+/// Maximum number of wall segments in the wall pool.
 let max_walls : Int = 80
 
 ///|
+/// Maximum number of visual particle slots in the particle pool.
 let max_particles : Int = 1800
 
 ///|
+/// X coordinate of the extraction zone center.
 let extraction_x : Float = world_r - 80.0
 
 ///|
+/// Y coordinate of the extraction zone center.
 let extraction_y : Float = world_t + 80.0
 
 ///|
+/// Radius of the extraction zone circle in pixels.
 let extraction_r : Float = 72.0
 
 ///|
+/// Total loot pieces the player must deliver to the extraction zone to win the run.
 let loot_goal : Int = 42
 
 ///|
+/// Holds all mutable runtime state for the player character including position, velocity, aim, resources, cooldowns, and score.
 struct Player {
   mut x : Float
   mut y : Float
@@ -76,6 +95,7 @@ struct Player {
 }
 
 ///|
+/// Holds runtime state for a single guard enemy including kind, position, velocity, HP, AI state, home position, stun timer, and targeting data.
 struct Guard {
   mut active : Bool
   mut kind : Int
@@ -95,6 +115,7 @@ struct Guard {
 }
 
 ///|
+/// Holds runtime state for a projectile including team, kind, position, velocity, damage, radius, and remaining lifetime.
 struct Bullet {
   mut active : Bool
   mut team : Int
@@ -109,6 +130,7 @@ struct Bullet {
 }
 
 ///|
+/// Holds runtime state for a surveillance camera including position, sweep arc, speed, detection range, alert gain rate, HP, and disable timer.
 struct CameraUnit {
   mut active : Bool
   mut x : Float
@@ -124,6 +146,7 @@ struct CameraUnit {
 }
 
 ///|
+/// Holds runtime state for a hackable terminal including position, hacked flag, and hack progress value.
 struct Terminal {
   mut active : Bool
   mut x : Float
@@ -133,6 +156,7 @@ struct Terminal {
 }
 
 ///|
+/// Holds runtime state for a loot vault including position, open flag, and a flag indicating whether loot has been spawned from it.
 struct Vault {
   mut active : Bool
   mut x : Float
@@ -142,6 +166,7 @@ struct Vault {
 }
 
 ///|
+/// Holds runtime state for a loot piece including kind, position, velocity, point value, remaining lifetime, and animation timer.
 struct Loot {
   mut active : Bool
   mut kind : Int
@@ -155,6 +180,7 @@ struct Loot {
 }
 
 ///|
+/// Holds runtime state for an axis-aligned wall segment used for collision and pathfinding.
 struct Wall {
   mut active : Bool
   mut x : Float
@@ -164,6 +190,7 @@ struct Wall {
 }
 
 ///|
+/// Holds runtime state for a visual particle including kind, position, velocity, size, remaining lifetime, and animation timer.
 struct Particle {
   mut active : Bool
   mut kind : Int
@@ -177,6 +204,7 @@ struct Particle {
 }
 
 ///|
+/// Clamps a float value to the inclusive `[lo, hi]` range.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -188,6 +216,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -197,6 +226,7 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns the squared Euclidean distance between two 2D points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx : Float = x1 - x0
   let dy : Float = y1 - y0
@@ -204,12 +234,14 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Returns a pseudo-random float uniformly sampled from `[lo, hi]`.
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns true when the point `(px, py)` lies inside the integer rectangle `(x, y, w, h)`.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -225,6 +257,7 @@ fn inside_rect(
 }
 
 ///|
+/// Returns the collision radius for a guard based on its kind: 15 for kind 0, 20 for kind 1, 26 for kind 2.
 fn guard_radius(kind : Int) -> Float {
   if kind == 0 {
     15.0
@@ -236,6 +269,7 @@ fn guard_radius(kind : Int) -> Float {
 }
 
 ///|
+/// Returns the starting HP for a guard based on its kind and current wave number, scaling linearly with wave.
 fn guard_hp(kind : Int, wave : Int) -> Float {
   if kind == 0 {
     26.0 + Float::from_int(wave) * 2.8
@@ -247,6 +281,7 @@ fn guard_hp(kind : Int, wave : Int) -> Float {
 }
 
 ///|
+/// Returns true when a circle at `(cx, cy)` with radius `r` overlaps the axis-aligned rectangle `(rx, ry, rw, rh)`.
 fn circle_rect_hit(
   cx : Float,
   cy : Float,
@@ -264,6 +299,7 @@ fn circle_rect_hit(
 }
 
 ///|
+/// Resolves circle-wall collisions and returns corrected position and velocity after bouncing off any overlapping wall.
 fn bounce_from_walls(
   x : Float,
   y : Float,
@@ -297,6 +333,7 @@ fn bounce_from_walls(
 }
 
 ///|
+/// Resets all guard slots in the pool to their inactive default state.
 fn clear_guards(guards : Array[Guard]) -> Unit {
   for guard_val in guards {
     guard_val.active = false
@@ -318,6 +355,7 @@ fn clear_guards(guards : Array[Guard]) -> Unit {
 }
 
 ///|
+/// Resets all bullet slots in the pool to their inactive default state.
 fn clear_bullets(bullets : Array[Bullet]) -> Unit {
   for bullet in bullets {
     bullet.active = false
@@ -334,6 +372,7 @@ fn clear_bullets(bullets : Array[Bullet]) -> Unit {
 }
 
 ///|
+/// Resets all camera unit slots in the pool to their inactive default state.
 fn clear_cameras(cameras : Array[CameraUnit]) -> Unit {
   for camera in cameras {
     camera.active = false
@@ -351,6 +390,7 @@ fn clear_cameras(cameras : Array[CameraUnit]) -> Unit {
 }
 
 ///|
+/// Resets all terminal slots in the pool to their inactive default state.
 fn clear_terminals(terminals : Array[Terminal]) -> Unit {
   for terminal in terminals {
     terminal.active = false
@@ -362,6 +402,7 @@ fn clear_terminals(terminals : Array[Terminal]) -> Unit {
 }
 
 ///|
+/// Resets all vault slots in the pool to their inactive default state.
 fn clear_vaults(vaults : Array[Vault]) -> Unit {
   for vault in vaults {
     vault.active = false
@@ -373,6 +414,7 @@ fn clear_vaults(vaults : Array[Vault]) -> Unit {
 }
 
 ///|
+/// Resets all loot item slots in the pool to their inactive default state.
 fn clear_loot(loot : Array[Loot]) -> Unit {
   for loot_elem in loot {
     loot_elem.active = false
@@ -388,6 +430,7 @@ fn clear_loot(loot : Array[Loot]) -> Unit {
 }
 
 ///|
+/// Resets all wall slots in the pool to their inactive default state.
 fn clear_walls(walls : Array[Wall]) -> Unit {
   for wall in walls {
     wall.active = false
@@ -399,6 +442,7 @@ fn clear_walls(walls : Array[Wall]) -> Unit {
 }
 
 ///|
+/// Resets all particle slots in the pool to their inactive default state.
 fn clear_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
     part.active = false
@@ -414,6 +458,7 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Activates the first free guard slot with the given kind, position, home position, and wave-scaled HP.
 fn add_guard(
   guards : Array[Guard],
   kind : Int,
@@ -447,6 +492,7 @@ fn add_guard(
 }
 
 ///|
+/// Activates the first free bullet slot with the given team, kind, position, velocity, damage, radius, and lifetime.
 fn add_bullet(
   bullets : Array[Bullet],
   team : Int,
@@ -478,6 +524,7 @@ fn add_bullet(
 }
 
 ///|
+/// Activates the first free camera slot with the given position, sweep arc parameters, detection range, and alert gain rate.
 fn add_camera(
   cameras : Array[CameraUnit],
   x : Float,
@@ -508,6 +555,7 @@ fn add_camera(
 }
 
 ///|
+/// Activates the first free terminal slot at position `(x, y)` with unhacked state and zero hack progress.
 fn add_terminal(terminals : Array[Terminal], x : Float, y : Float) -> Bool {
   for terminal in terminals {
     if not(terminal.active) {
@@ -523,6 +571,7 @@ fn add_terminal(terminals : Array[Terminal], x : Float, y : Float) -> Bool {
 }
 
 ///|
+/// Activates the first free vault slot at position `(x, y)` in a closed, unlooted state.
 fn add_vault(vaults : Array[Vault], x : Float, y : Float) -> Bool {
   for vault in vaults {
     if not(vault.active) {
@@ -538,6 +587,7 @@ fn add_vault(vaults : Array[Vault], x : Float, y : Float) -> Bool {
 }
 
 ///|
+/// Activates the first free loot slot at position `(x, y)` with the given kind, velocity, point value, and lifetime.
 fn add_loot(
   loot : Array[Loot],
   kind : Int,
@@ -566,6 +616,7 @@ fn add_loot(
 }
 
 ///|
+/// Activates the first free wall slot at position `(x, y)` with the given dimensions.
 fn add_wall(
   walls : Array[Wall],
   x : Float,
@@ -587,6 +638,7 @@ fn add_wall(
 }
 
 ///|
+/// Activates the first free particle slot with the given kind, position, velocity, size, and lifetime.
 fn add_particle(
   parts : Array[Particle],
   kind : Int,
@@ -615,6 +667,7 @@ fn add_particle(
 }
 
 ///|
+/// Spawns `count` particles at `(x, y)` with randomized angles, speeds scaled by `scale`, and the given visual kind.
 fn burst(
   parts : Array[Particle],
   x : Float,
@@ -642,6 +695,7 @@ fn burst(
 }
 
 ///|
+/// Returns the number of active terminals that have been fully hacked.
 fn count_hacked(terminals : Array[Terminal]) -> Int {
   let mut n : Int = 0
   for terminal in terminals {
@@ -653,6 +707,7 @@ fn count_hacked(terminals : Array[Terminal]) -> Int {
 }
 
 ///|
+/// Returns the total number of active terminals in the pool.
 fn count_terminals(terminals : Array[Terminal]) -> Int {
   let mut n : Int = 0
   for terminal in terminals {
@@ -664,6 +719,7 @@ fn count_terminals(terminals : Array[Terminal]) -> Int {
 }
 
 ///|
+/// Returns the total number of currently active guards in the pool.
 fn count_active_guards(guards : Array[Guard]) -> Int {
   let mut n : Int = 0
   for guard_val in guards {
@@ -675,6 +731,7 @@ fn count_active_guards(guards : Array[Guard]) -> Int {
 }
 
 ///|
+/// Clears and repopulates walls, terminals, vaults, and cameras with the fixed heist facility layout.
 fn setup_map(
   walls : Array[Wall],
   terminals : Array[Terminal],
@@ -727,6 +784,7 @@ fn setup_map(
 }
 
 ///|
+/// Draws on-screen touch control buttons for movement and actions when the game state is active play.
 fn draw_touch_ui(state : Int) -> Unit {
   if state != 1 {
     ignore(())
@@ -886,6 +944,7 @@ fn draw_touch_ui(state : Int) -> Unit {
 }
 
 ///|
+/// Initializes the window, allocates all game pools, sets up the map, and runs the main frame loop until the window is closed.
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] neon heist extraction 2026")
   @raylib.set_target_fps(60)

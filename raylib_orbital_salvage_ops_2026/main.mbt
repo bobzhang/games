@@ -1,46 +1,61 @@
 ///|
+/// Window width in pixels.
 let sw : Int = 1366
 
 ///|
+/// Window height in pixels.
 let sh : Int = 768
 
 ///|
+/// Scrollable world width in pixels.
 let world_w : Float = 3600.0
 
 ///|
+/// Scrollable world height in pixels.
 let world_h : Float = 2600.0
 
 ///|
+/// Maximum simultaneous active drones.
 let max_drones : Int = 240
 
 ///|
+/// Maximum simultaneous active bullets.
 let max_bullets : Int = 980
 
 ///|
+/// Maximum simultaneous active scrap pieces.
 let max_scrap : Int = 360
 
 ///|
+/// Maximum simultaneous active mines.
 let max_mines : Int = 220
 
 ///|
+/// Maximum simultaneous active particles.
 let max_particles : Int = 1700
 
 ///|
+/// Number of static wreck obstacles on the map.
 let max_wrecks : Int = 120
 
 ///|
+/// Collision radius of the player ship.
 let player_radius : Float = 18.0
 
 ///|
+/// Scrap units that must be deposited to win.
 let target_salvage : Int = 120
 
 ///|
+/// X position of the salvage deposit beacon.
 let beacon_x : Float = world_w - 260.0
 
 ///|
+/// Y position of the salvage deposit beacon.
 let beacon_y : Float = 250.0
 
 ///|
+/// Player ship state: position, velocity, facing direction, HP, energy, weapon heat, cooldowns, cargo, score, and combo.
 struct Player {
   mut x : Float
   mut y : Float
@@ -65,6 +80,7 @@ struct Player {
 }
 
 ///|
+/// Enemy drone: position, velocity, HP, fire cooldown, and kind (0=scout, 1=fighter, 2=heavy).
 struct Drone {
   mut active : Bool
   mut kind : Int
@@ -78,6 +94,7 @@ struct Drone {
 }
 
 ///|
+/// Projectile for both player and drone teams: position, velocity, damage, radius, and remaining lifetime.
 struct Bullet {
   mut active : Bool
   mut team : Int
@@ -92,6 +109,7 @@ struct Bullet {
 }
 
 ///|
+/// Collectible salvage piece: position, velocity, value, animation timer, and tractor-beam magnet flag.
 struct Scrap {
   mut active : Bool
   mut kind : Int
@@ -105,6 +123,7 @@ struct Scrap {
 }
 
 ///|
+/// Proximity explosive: position, velocity, blast radius, arming timer, and lifetime.
 struct Mine {
   mut active : Bool
   mut x : Float
@@ -117,6 +136,7 @@ struct Mine {
 }
 
 ///|
+/// Static debris obstacle with a collision radius.
 struct Wreck {
   mut active : Bool
   mut x : Float
@@ -125,6 +145,7 @@ struct Wreck {
 }
 
 ///|
+/// Visual effect particle: position, velocity, size, lifetime, and kind for colour selection.
 struct Particle {
   mut active : Bool
   mut kind : Int
@@ -138,6 +159,7 @@ struct Particle {
 }
 
 ///|
+/// Boss ship: position, velocity, HP, max HP, fire cooldown, drone-spawn cooldown, and animation timer.
 struct Boss {
   mut active : Bool
   mut x : Float
@@ -152,6 +174,7 @@ struct Boss {
 }
 
 ///|
+/// Clamps a float value to the inclusive range `[lo, hi]`.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -163,6 +186,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -172,6 +196,7 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns the squared Euclidean distance between two points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx = x1 - x0
   let dy = y1 - y0
@@ -179,12 +204,14 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Returns a uniform random float in `[lo, hi]` using raylib RNG.
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns true if point `(px, py)` lies within the rectangle at `(rx, ry)` with size `rw x rh`.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -200,6 +227,7 @@ fn inside_rect(
 }
 
 ///|
+/// Returns the collision radius for a drone of the given kind.
 fn drone_radius(kind : Int) -> Float {
   if kind == 0 {
     16.0
@@ -211,6 +239,7 @@ fn drone_radius(kind : Int) -> Float {
 }
 
 ///|
+/// Returns the starting HP for a drone of the given kind at the given level.
 fn drone_hp(kind : Int, level : Int) -> Float {
   if kind == 0 {
     38.0 + Float::from_int(level) * 3.0
@@ -222,6 +251,7 @@ fn drone_hp(kind : Int, level : Int) -> Float {
 }
 
 ///|
+/// Deactivates and zeroes all drones in the array.
 fn clear_drones(drones : Array[Drone]) -> Unit {
   for drone in drones {
     drone.active = false
@@ -237,6 +267,7 @@ fn clear_drones(drones : Array[Drone]) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes all bullets in the array.
 fn clear_bullets(bullets : Array[Bullet]) -> Unit {
   for bullet in bullets {
     bullet.active = false
@@ -253,6 +284,7 @@ fn clear_bullets(bullets : Array[Bullet]) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes all scrap pieces in the array.
 fn clear_scrap(scraps : Array[Scrap]) -> Unit {
   for scrap in scraps {
     scrap.active = false
@@ -268,6 +300,7 @@ fn clear_scrap(scraps : Array[Scrap]) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes all mines in the array.
 fn clear_mines(mines : Array[Mine]) -> Unit {
   for mine in mines {
     mine.active = false
@@ -282,6 +315,7 @@ fn clear_mines(mines : Array[Mine]) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes all particles in the array.
 fn clear_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
     part.active = false
@@ -297,6 +331,7 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes all wrecks in the array.
 fn clear_wrecks(wrecks : Array[Wreck]) -> Unit {
   for wreck in wrecks {
     wreck.active = false
@@ -307,6 +342,7 @@ fn clear_wrecks(wrecks : Array[Wreck]) -> Unit {
 }
 
 ///|
+/// Activates the first free drone slot at position `(x, y)` with stats for the given kind and level.
 fn add_drone(
   drones : Array[Drone],
   kind : Int,
@@ -338,6 +374,7 @@ fn add_drone(
 }
 
 ///|
+/// Activates the first free bullet slot with full physics and damage parameters.
 fn add_bullet(
   bullets : Array[Bullet],
   team : Int,
@@ -369,6 +406,7 @@ fn add_bullet(
 }
 
 ///|
+/// Activates the first free scrap slot at position `(x, y)` with velocity and value.
 fn add_scrap(
   scraps : Array[Scrap],
   kind : Int,
@@ -396,6 +434,7 @@ fn add_scrap(
 }
 
 ///|
+/// Activates the first free mine slot at position `(x, y)` with velocity and blast radius.
 fn add_mine(
   mines : Array[Mine],
   x : Float,
@@ -421,6 +460,7 @@ fn add_mine(
 }
 
 ///|
+/// Activates the first free particle slot with full visual parameters.
 fn add_particle(
   parts : Array[Particle],
   kind : Int,
@@ -449,6 +489,7 @@ fn add_particle(
 }
 
 ///|
+/// Spawns `count` particles in random directions from `(x, y)` at the given speed scale and kind.
 fn burst(
   parts : Array[Particle],
   x : Float,
@@ -476,6 +517,7 @@ fn burst(
 }
 
 ///|
+/// Returns a push impulse vector directed away from center `(cx, cy)` with the given force magnitude.
 fn push_from_center(
   x : Float,
   y : Float,
@@ -494,6 +536,7 @@ fn push_from_center(
 }
 
 ///|
+/// Clears and randomly places all wreck obstacles across the world, avoiding the spawn zone and beacon area.
 fn spawn_map_wrecks(wrecks : Array[Wreck]) -> Unit {
   clear_wrecks(wrecks)
   for wreck in wrecks {
@@ -519,6 +562,7 @@ fn spawn_map_wrecks(wrecks : Array[Wreck]) -> Unit {
 }
 
 ///|
+/// Draws the on-screen touch control overlay (movement pad and action buttons) during play state.
 fn draw_touch_ui(state : Int) -> Unit {
   if state != 1 {
     ignore(())
@@ -678,6 +722,7 @@ fn draw_touch_ui(state : Int) -> Unit {
 }
 
 ///|
+/// Entry point: initialises the window, allocates all entity arrays, and runs the main game loop.
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] orbital salvage ops 2026")
   @raylib.set_target_fps(60)

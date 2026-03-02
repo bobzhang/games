@@ -1,4 +1,5 @@
 ///|
+/// Entry point: opens the window, creates game state, and runs the main update-and-draw loop.
 fn main {
   @raylib.init_window(
     @types.screen_w, @types.screen_h, "raylib [game] mahjong solitaire pavilion 2026",

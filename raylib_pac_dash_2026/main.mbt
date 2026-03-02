@@ -1,4 +1,5 @@
 ///|
+/// Initializes the window, creates the game state, and runs the frame loop until the window closes.
 fn main {
   @raylib.init_window(
     @types.screen_width, @types.screen_height, "Pac Dash 2026",

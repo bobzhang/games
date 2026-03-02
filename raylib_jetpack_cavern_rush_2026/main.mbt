@@ -1,34 +1,45 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 820
 
 ///|
+/// Width of each cave segment in world units.
 let seg_w : Float = 40.0
 
 ///|
+/// Number of horizontal cave segments in the generated level.
 let seg_count : Int = 210
 
 ///|
+/// Total world width derived from segment count and segment width.
 let world_w : Float = seg_w * Float::from_int(seg_count)
 
 ///|
+/// World height in pixels, matching the screen height.
 let world_h : Float = 820.0
 
 ///|
+/// Maximum number of active enemy objects in the pool.
 let max_enemies : Int = 64
 
 ///|
+/// Maximum number of active projectile objects in the pool.
 let max_projectiles : Int = 620
 
 ///|
+/// Maximum number of crystal collectibles in the pool.
 let max_crystals : Int = 120
 
 ///|
+/// Maximum number of active particle effect objects in the pool.
 let max_particles : Int = 1600
 
 ///|
+/// Player state including position, velocity, aim direction, resources, ability cooldowns, and score.
 struct Player {
   mut x : Float
   mut y : Float
@@ -52,6 +63,7 @@ struct Player {
 }
 
 ///|
+/// Enemy state with pooling flag, kind, physics, HP, and status effect timers.
 struct Enemy {
   mut active : Bool
   kind : Int
@@ -68,6 +80,7 @@ struct Enemy {
 }
 
 ///|
+/// Projectile state with pooling flag, kind, team affiliation, physics, damage, and remaining lifetime.
 struct Projectile {
   mut active : Bool
   kind : Int
@@ -81,6 +94,7 @@ struct Projectile {
 }
 
 ///|
+/// Crystal collectible with pooling flag, fixed position, point value, and spin animation timer.
 struct Crystal {
   mut active : Bool
   x : Float
@@ -90,6 +104,7 @@ struct Crystal {
 }
 
 ///|
+/// Visual particle effect with pooling flag, physics, size, age and lifetime, and kind for color selection.
 struct Particle {
   mut active : Bool
   mut x : Float
@@ -103,6 +118,7 @@ struct Particle {
 }
 
 ///|
+/// Clamps `v` to the inclusive `[lo, hi]` range.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -114,6 +130,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Clamps integer `v` to the inclusive `[lo, hi]` range.
 fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -125,12 +142,14 @@ fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Returns a random float in `[lo, hi]` using raylib's RNG.
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns the squared Euclidean distance between two points.
 fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx : Float = ax - bx
   let dy : Float = ay - by
@@ -138,6 +157,7 @@ fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 }
 
 ///|
+/// Returns true if point (`px`, `py`) lies within the rectangle at (`x`, `y`) with size (`w`, `h`).
 fn inside_rect(
   px : Float,
   py : Float,
@@ -154,6 +174,7 @@ fn inside_rect(
 }
 
 ///|
+/// Returns the linearly interpolated value from a cave boundary array at world x-coordinate `x`.
 fn sample_line(line : FixedArray[Float], x : Float) -> Float {
   let fx : Float = x / seg_w
   let i0 : Int = clampi(fx.to_int(), 0, seg_count - 1)
@@ -163,6 +184,7 @@ fn sample_line(line : FixedArray[Float], x : Float) -> Float {
 }
 
 ///|
+/// Procedurally generates cave top and bottom boundary arrays using random walks with clamped values.
 fn generate_cave(
   cave_top : FixedArray[Float],
   cave_bottom : FixedArray[Float],
@@ -192,6 +214,7 @@ fn generate_cave(
 }
 
 ///|
+/// Activates an inactive particle slot with the given position, velocity, size, lifetime, and kind.
 fn emit_particle(
   particles : FixedArray[Particle],
   x : Float,
@@ -211,6 +234,7 @@ fn emit_particle(
 }
 
 ///|
+/// Emits `count` particles radiating outward from a point with randomized speed and direction.
 fn burst_particles(
   particles : FixedArray[Particle],
   x : Float,
@@ -246,6 +270,7 @@ fn burst_particles(
 }
 
 ///|
+/// Activates an inactive projectile slot with the given kind, origin flag, position, velocity, damage, and lifetime.
 fn spawn_projectile(
   projectiles : FixedArray[Projectile],
   kind : Int,
@@ -276,6 +301,7 @@ fn spawn_projectile(
 }
 
 ///|
+/// Places crystals evenly across the cave with randomized positions within cave bounds; activates `target + 20` of them.
 fn init_crystals(
   crystals : FixedArray[Crystal],
   cave_top : FixedArray[Float],
@@ -300,6 +326,7 @@ fn init_crystals(
 }
 
 ///|
+/// Activates an inactive enemy ahead of the player, choosing kind by level-scaled probability and placing it within cave bounds.
 fn spawn_enemy(
   enemies : FixedArray[Enemy],
   level : Int,
@@ -347,6 +374,7 @@ fn spawn_enemy(
 }
 
 ///|
+/// Clears all active enemies and spawns an initial batch scaled by `level` around the player's position.
 fn init_wave(
   enemies : FixedArray[Enemy],
   level : Int,
@@ -364,6 +392,7 @@ fn init_wave(
 }
 
 ///|
+/// Draws a rectangular progress bar filled to `ratio` in `fg` color on a `bg` background with a border.
 fn draw_bar(
   x : Int,
   y : Int,
@@ -392,6 +421,7 @@ fn draw_bar(
 }
 
 ///|
+/// Renders on-screen touch control buttons for movement, firing, and abilities if `show` is true.
 fn draw_touch_controls(show : Bool) -> Unit {
   if not(show) {
     return
@@ -508,6 +538,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
 }
 
 ///|
+/// Initializes the window, generates the cave and game objects, and runs the full game loop.
 fn main {
   @raylib.init_window(
     sw, sh, "raylib [moonbit] example - jetpack cavern rush 2026",

@@ -1,4 +1,5 @@
 ///|
+/// Initialises the window with MSAA, audio device, and target FPS; creates the Game struct; runs the frame loop dispatching input, update, and render.
 fn main {
   @raylib.set_config_flags(@raylib.FlagMsaa4xHint)
   @raylib.init_window(

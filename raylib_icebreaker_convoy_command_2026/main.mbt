@@ -1,4 +1,5 @@
 ///|
+/// Player-controlled icebreaker ship with hull, energy, cutter, sonar, and wake state.
 struct PlayerShip {
   mut x : Float
   mut y : Float
@@ -20,6 +21,7 @@ struct PlayerShip {
 }
 
 ///|
+/// Drifting ice chunk that can be cleared by the cutter or block convoy ships.
 struct IceChunk {
   mut active : Bool
   mut x : Float
@@ -33,6 +35,7 @@ struct IceChunk {
 }
 
 ///|
+/// Cargo convoy vessel following a waypoint route; tracks hp, panic, and cargo value.
 struct ConvoyShip {
   mut active : Bool
   mut x : Float
@@ -50,6 +53,7 @@ struct ConvoyShip {
 }
 
 ///|
+/// Roaming storm cell that drains ship energy and slows convoys within its radius.
 struct StormCell {
   mut active : Bool
   mut x : Float
@@ -63,6 +67,7 @@ struct StormCell {
 }
 
 ///|
+/// Visual particle used for cutter sparks, explosions, and repair flashes.
 struct Particle {
   mut active : Bool
   mut x : Float
@@ -75,12 +80,14 @@ struct Particle {
 }
 
 ///|
+/// Immutable waypoint coordinate used to define the convoy route.
 struct Waypoint {
   x : Float
   y : Float
 }
 
 ///|
+/// Clamps a float to the inclusive `[lo, hi]` range.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -92,6 +99,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two float values.
 fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -101,6 +109,7 @@ fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two float values.
 fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -110,6 +119,7 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -119,12 +129,14 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns a random float uniformly sampled from `[lo, hi]`.
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns squared Euclidean distance between two points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx : Float = x1 - x0
   let dy : Float = y1 - y0
@@ -132,6 +144,7 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Returns true when point `(px, py)` lies inside the rectangle at `(x, y, w, h)`.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -147,6 +160,7 @@ fn inside_rect(
 }
 
 ///|
+/// Deactivates all ice chunks and zeroes their fields.
 fn clear_ice(ice : Array[IceChunk]) -> Unit {
   for ice_elem in ice {
     ice_elem.active = false
@@ -162,6 +176,7 @@ fn clear_ice(ice : Array[IceChunk]) -> Unit {
 }
 
 ///|
+/// Deactivates all convoy ships and zeroes their fields.
 fn clear_convoys(convoys : Array[ConvoyShip]) -> Unit {
   for convoy in convoys {
     convoy.active = false
@@ -181,6 +196,7 @@ fn clear_convoys(convoys : Array[ConvoyShip]) -> Unit {
 }
 
 ///|
+/// Deactivates all storm cells and zeroes their fields.
 fn clear_storms(storms : Array[StormCell]) -> Unit {
   for storm in storms {
     storm.active = false
@@ -196,6 +212,7 @@ fn clear_storms(storms : Array[StormCell]) -> Unit {
 }
 
 ///|
+/// Deactivates all particles and zeroes their fields.
 fn clear_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
     part.active = false
@@ -210,6 +227,7 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Emits one particle from the pool at `(x, y)` with randomised velocity, lifetime, and size by kind.
 fn add_particle(
   parts : Array[Particle],
   x : Float,
@@ -246,6 +264,7 @@ fn add_particle(
 }
 
 ///|
+/// Emits `n` particles from the pool at `(x, y)` with the given kind.
 fn burst(
   parts : Array[Particle],
   x : Float,
@@ -259,6 +278,7 @@ fn burst(
 }
 
 ///|
+/// Advances all active particles: move, apply kind-specific drag and gravity, deactivate on expiry.
 fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
     if not(part.active) {
@@ -287,6 +307,7 @@ fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
 }
 
 ///|
+/// Fills the route array with eight waypoints that form an S-curve path across the world.
 fn init_route(
   route : Array[Waypoint],
   world_x : Int,
@@ -331,6 +352,7 @@ fn init_route(
 }
 
 ///|
+/// Places randomly-sized ice chunks across the world, clearing route corridors and overlaps.
 fn setup_ice_field(
   ice : Array[IceChunk],
   world_l : Float,
@@ -391,6 +413,7 @@ fn setup_ice_field(
 }
 
 ///|
+/// Activates a convoy ship at the start of the route with tier-scaled cargo and speed.
 fn spawn_convoy(
   convoys : Array[ConvoyShip],
   route : Array[Waypoint],
@@ -422,6 +445,7 @@ fn spawn_convoy(
 }
 
 ///|
+/// Spawns a storm cell from a random world edge with tier-scaled intensity and lifetime.
 fn spawn_storm(
   storms : Array[StormCell],
   world_l : Float,
@@ -469,6 +493,7 @@ fn spawn_storm(
 }
 
 ///|
+/// Returns the count of active ice chunks.
 fn active_ice_count(ice : Array[IceChunk]) -> Int {
   let mut n : Int = 0
   for ice_elem in ice {
@@ -480,6 +505,7 @@ fn active_ice_count(ice : Array[IceChunk]) -> Int {
 }
 
 ///|
+/// Returns the count of active convoy ships.
 fn active_convoy_count(convoys : Array[ConvoyShip]) -> Int {
   let mut n : Int = 0
   for convoy in convoys {
@@ -491,6 +517,7 @@ fn active_convoy_count(convoys : Array[ConvoyShip]) -> Int {
 }
 
 ///|
+/// Returns the count of active storm cells.
 fn active_storm_count(storms : Array[StormCell]) -> Int {
   let mut n : Int = 0
   for storm in storms {
@@ -502,6 +529,7 @@ fn active_storm_count(storms : Array[StormCell]) -> Int {
 }
 
 ///|
+/// Advances all active ice chunks: drift, bounce, decay hardness, update crack timer; returns hazard sum.
 fn update_ice(
   ice : Array[IceChunk],
   dt : Float,
@@ -561,6 +589,7 @@ fn update_ice(
 }
 
 ///|
+/// Advances all active storms: tick lifetime, pulse movement, bounce off world edges.
 fn update_storms(
   storms : Array[StormCell],
   dt : Float,
@@ -605,6 +634,7 @@ fn update_storms(
 }
 
 ///|
+/// Computes hull damage from storm and ice contacts per frame; applies ice push to player ship.
 fn update_player_damage_from_hazards(
   ship : PlayerShip,
   ice : Array[IceChunk],
@@ -654,6 +684,7 @@ fn update_player_damage_from_hazards(
 }
 
 ///|
+/// Runs the cutter for one frame: heats up, drains energy, reduces ice hardness, awards score.
 fn carve_ice_with_cutter(
   ship : PlayerShip,
   ice : Array[IceChunk],
@@ -704,6 +735,7 @@ fn carve_ice_with_cutter(
 }
 
 ///|
+/// Applies repair to nearby damaged convoys costing energy; returns number of ships repaired.
 fn repair_nearby_convoys(
   ship : PlayerShip,
   convoys : Array[ConvoyShip],
@@ -744,6 +776,7 @@ fn repair_nearby_convoys(
 }
 
 ///|
+/// Pings sonar to locate the nearest hard ice or storm; sets sonar display and returns result.
 fn scan_hazards(
   ship : PlayerShip,
   ice : Array[IceChunk],
@@ -797,6 +830,7 @@ fn scan_hazards(
 }
 
 ///|
+/// Advances all convoy ships along the route: collision avoidance, storm drag, delivery, and sinking.
 fn update_convoys(
   convoys : Array[ConvoyShip],
   route : Array[Waypoint],
@@ -917,6 +951,7 @@ fn update_convoys(
 }
 
 ///|
+/// Draws the ocean background with animated horizontal gradient bands.
 fn draw_ocean(
   world_x : Int,
   world_y : Int,
@@ -963,6 +998,7 @@ fn draw_ocean(
 }
 
 ///|
+/// Draws all route waypoints as dots connected by a blue guide line.
 fn draw_route(route : Array[Waypoint]) -> Unit {
   for i in 0..<(route.length() - 1) {
     let ax : Int = route[i].x.to_int()
@@ -991,6 +1027,7 @@ fn draw_route(route : Array[Waypoint]) -> Unit {
 }
 
 ///|
+/// Draws all active ice chunks with hardness-colored fill and crack glow.
 fn draw_ice(ice : Array[IceChunk], scene_t : Float) -> Unit {
   for ice_elem in ice {
     if not(ice_elem.active) {
@@ -1040,6 +1077,7 @@ fn draw_ice(ice : Array[IceChunk], scene_t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active storm cells with pulsing translucent circles and lightning bolt.
 fn draw_storms(storms : Array[StormCell], scene_t : Float) -> Unit {
   for storm in storms {
     if not(storm.active) {
@@ -1081,6 +1119,7 @@ fn draw_storms(storms : Array[StormCell], scene_t : Float) -> Unit {
 }
 
 ///|
+/// Returns a color blending red/green by hull percentage and orange tint by panic level.
 fn convoy_color(hp : Float, panic : Float) -> @raylib.Color {
   let hp01 : Float = clampf(hp / 100.0, 0.0, 1.0)
   let panic01 : Float = clampf(panic / 4.0, 0.0, 1.0)
@@ -1097,6 +1136,7 @@ fn convoy_color(hp : Float, panic : Float) -> @raylib.Color {
 }
 
 ///|
+/// Draws all active convoy ships with blink-on-repair highlight and status text.
 fn draw_convoys(convoys : Array[ConvoyShip]) -> Unit {
   for convoy in convoys {
     if not(convoy.active) {
@@ -1139,6 +1179,7 @@ fn draw_convoys(convoys : Array[ConvoyShip]) -> Unit {
 }
 
 ///|
+/// Draws the player ship: hull, heading line, cutter glow, sonar ring, and wake circle.
 fn draw_player(ship : PlayerShip, scene_t : Float) -> Unit {
   let hull_col : @raylib.Color = if ship.hull < 35.0 {
     @raylib.Color::new(242, 146, 148, 250)
@@ -1229,6 +1270,7 @@ fn draw_player(ship : PlayerShip, scene_t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active particles with kind-specific fill color.
 fn draw_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
     if not(part.active) {
@@ -1248,6 +1290,7 @@ fn draw_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Draws the left harbor and right destination port with berth columns and labels.
 fn draw_harbors(
   world_x : Int,
   world_y : Int,
@@ -1333,6 +1376,7 @@ fn draw_harbors(
 }
 
 ///|
+/// Draws the D-pad and action button overlay for touch/mouse controls.
 fn draw_touch_controls(
   sw : Int,
   sh : Int,
@@ -1465,6 +1509,7 @@ fn draw_touch_controls(
 }
 
 ///|
+/// Draws a labeled horizontal status bar with value and max for hull, energy, or cooldowns.
 fn draw_action_bar(
   panel_x : Int,
   y : Int,
@@ -1511,6 +1556,7 @@ fn draw_action_bar(
 }
 
 ///|
+/// Draws a rectangular push button with active/idle fill and centered label.
 fn draw_button(
   x : Int,
   y : Int,
@@ -1543,6 +1589,7 @@ fn draw_button(
 }
 
 ///|
+/// Initializes the window, allocates all entity arrays, runs the game loop, and handles input and rendering.
 fn main {
   let sw : Int = 1680
   let sh : Int = 940

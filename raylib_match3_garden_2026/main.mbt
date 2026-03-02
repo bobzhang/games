@@ -1,33 +1,43 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1080
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 720
 
 ///|
+/// Number of columns on the match-3 board.
 let board_w : Int = 8
 
 ///|
+/// Number of rows on the match-3 board.
 let board_h : Int = 8
 
 ///|
+/// Number of distinct tile colours.
 let tile_count : Int = 6
 
 ///|
+/// Size of each board cell in pixels.
 let cell : Int = 64
 
 ///|
+/// Horizontal pixel offset of the board origin.
 let board_px : Int = 220
 
 ///|
+/// Vertical pixel offset of the board origin.
 let board_py : Int = 96
 
 ///|
+/// Converts 2D board coordinates into a flat row-major index.
 fn idx(x : Int, y : Int) -> Int {
   y * board_w + x
 }
 
 ///|
+/// Returns the display colour for a tile type integer.
 fn tile_color(t : Int) -> @raylib.Color {
   if t == 0 {
     @raylib.red
@@ -45,11 +55,13 @@ fn tile_color(t : Int) -> @raylib.Color {
 }
 
 ///|
+/// Returns a random tile type in the range [0, tile_count - 1].
 fn random_tile() -> Int {
   @raylib.get_random_value(0, tile_count - 1)
 }
 
 ///|
+/// Fills the board with random tiles, retrying each cell up to 30 times to avoid placing an immediate 3-in-a-row.
 fn fill_board_no_matches(board : Array[Int]) -> Unit {
   for y in 0..<board_h {
     for x in 0..<board_w {
@@ -83,6 +95,7 @@ fn fill_board_no_matches(board : Array[Int]) -> Unit {
 }
 
 ///|
+/// Scans the board for horizontal and vertical runs of 3 or more identical tiles, marking them in `marks`, and returns the total count of marked tiles.
 fn mark_matches(board : Array[Int], marks : Array[Bool]) -> Int {
   for i in 0..<marks.length() {
     marks[i] = false
@@ -140,6 +153,7 @@ fn mark_matches(board : Array[Int], marks : Array[Bool]) -> Int {
 }
 
 ///|
+/// Removes all marked tiles, drops remaining tiles downward per column, fills empty top slots with new random tiles, and returns the number of tiles removed.
 fn apply_matches_and_refill(board : Array[Int], marks : Array[Bool]) -> Int {
   let mut removed = 0
   for i in 0..<board.length() {
@@ -168,6 +182,7 @@ fn apply_matches_and_refill(board : Array[Int], marks : Array[Bool]) -> Int {
 }
 
 ///|
+/// Swaps the tile values at board positions (x1, y1) and (x2, y2).
 fn swap_tiles(
   board : Array[Int],
   x1 : Int,
@@ -183,6 +198,7 @@ fn swap_tiles(
 }
 
 ///|
+/// Entry point: opens the window and runs the main game loop handling input, match resolution, and rendering.
 fn main {
   @raylib.init_window(sw, sh, "Match-3 Garden 2026")
   @raylib.set_target_fps(60)

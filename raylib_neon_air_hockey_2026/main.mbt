@@ -1,34 +1,45 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 800
 
 ///|
+/// Left edge X position of the play table in screen coordinates.
 let table_x : Int = 80
 
 ///|
+/// Top edge Y position of the play table in screen coordinates.
 let table_y : Int = 110
 
 ///|
+/// Width of the play table in pixels.
 let table_w : Int = 1120
 
 ///|
+/// Height of the play table in pixels.
 let table_h : Int = 620
 
 ///|
+/// Vertical height of each goal opening on the left and right sides.
 let goal_h : Int = 220
 
 ///|
+/// Radius of each paddle circle in pixels.
 let paddle_r : Float = 34.0
 
 ///|
+/// Radius of the puck circle in pixels.
 let puck_r : Float = 14.0
 
 ///|
+/// Maximum number of spark particles in the pool.
 let max_sparks : Int = 180
 
 ///|
+/// A spark particle emitted on puck collisions, holding position, velocity, time-to-live, and active state.
 struct Spark {
   mut x : Float
   mut y : Float
@@ -39,6 +50,7 @@ struct Spark {
 }
 
 ///|
+/// Returns the absolute value of a float.
 fn absf(x : Float) -> Float {
   if x < 0.0 {
     -x
@@ -48,6 +60,7 @@ fn absf(x : Float) -> Float {
 }
 
 ///|
+/// Clamps a float value to the inclusive `[lo, hi]` range.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -59,6 +72,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns true when the point `(px, py)` lies inside the axis-aligned rectangle defined by `(rx, ry, rw, rh)`.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -74,36 +88,43 @@ fn inside_rect(
 }
 
 ///|
+/// Returns the left edge X coordinate of the play table as a float.
 fn table_left() -> Float {
   Float::from_int(table_x)
 }
 
 ///|
+/// Returns the right edge X coordinate of the play table as a float.
 fn table_right() -> Float {
   Float::from_int(table_x + table_w)
 }
 
 ///|
+/// Returns the top edge Y coordinate of the play table as a float.
 fn table_top() -> Float {
   Float::from_int(table_y)
 }
 
 ///|
+/// Returns the bottom edge Y coordinate of the play table as a float.
 fn table_bottom() -> Float {
   Float::from_int(table_y + table_h)
 }
 
 ///|
+/// Returns the top Y coordinate of the goal opening, centered vertically on the table.
 fn goal_top() -> Float {
   Float::from_int(table_y + (table_h - goal_h) / 2)
 }
 
 ///|
+/// Returns the bottom Y coordinate of the goal opening.
 fn goal_bottom() -> Float {
   goal_top() + Float::from_int(goal_h)
 }
 
 ///|
+/// Deactivates all spark particles in the pool and resets their fields to zero.
 fn clear_sparks(sparks : Array[Spark]) -> Unit {
   for spark in sparks {
     spark.x = 0.0
@@ -116,6 +137,7 @@ fn clear_sparks(sparks : Array[Spark]) -> Unit {
 }
 
 ///|
+/// Activates the first idle spark in the pool with randomized velocity and lifetime at position `(x, y)`.
 fn spawn_spark(
   sparks : Array[Spark],
   x : Float,
@@ -153,6 +175,7 @@ fn spawn_spark(
 }
 
 ///|
+/// Spawns `n` spark particles at position `(x, y)` for burst collision feedback.
 fn spawn_burst(
   sparks : Array[Spark],
   x : Float,
@@ -167,6 +190,7 @@ fn spawn_burst(
 }
 
 ///|
+/// Returns initial positions for both paddles and the puck, plus zero velocities and a faceoff countdown of 1.0 second.
 fn reset_round() -> (
   Float,
   Float,
@@ -194,11 +218,13 @@ fn reset_round() -> (
 }
 
 ///|
+/// Returns true when the Y coordinate falls within the vertical goal slot.
 fn goal_opening(y : Float) -> Bool {
   y >= goal_top() && y <= goal_bottom()
 }
 
 ///|
+/// Returns true when the puck's center overlaps the combined radius of the paddle and puck.
 fn paddle_hit(
   px : Float,
   py : Float,
@@ -213,6 +239,7 @@ fn paddle_hit(
 }
 
 ///|
+/// Initializes the window, creates the game state, and runs the main frame loop until the window is closed.
 fn main {
   @raylib.init_window(sw, sh, "Neon Air Hockey 2026")
   @raylib.set_target_fps(60)

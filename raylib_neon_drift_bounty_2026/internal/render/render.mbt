@@ -1,4 +1,5 @@
 ///|
+/// Draws text horizontally centered on the screen at the given Y position, font size, and color.
 fn draw_center_text(
   text : String,
   y : Int,
@@ -10,6 +11,7 @@ fn draw_center_text(
 }
 
 ///|
+/// Draws text right-aligned so that its right edge is at `x`.
 fn draw_right_text(
   text : String,
   x : Int,
@@ -22,6 +24,7 @@ fn draw_right_text(
 }
 
 ///|
+/// Draws a labeled progress bar at `(x, y)` showing `value / maxv` filled with `col`, with a dark background and outline.
 fn draw_bar(
   x : Int,
   y : Int,
@@ -64,6 +67,7 @@ fn draw_bar(
 }
 
 ///|
+/// Returns a copy of color `c` with its alpha channel replaced by the clamped value `a`.
 fn alpha_color(c : @raylib.Color, a : Int) -> @raylib.Color {
   @raylib.Color::new(
     c.r.to_int(),
@@ -74,6 +78,7 @@ fn alpha_color(c : @raylib.Color, a : Int) -> @raylib.Color {
 }
 
 ///|
+/// Returns a random `(dx, dy)` camera shake offset scaled by the remaining shake time, or `(0, 0)` when shake has expired.
 fn shake_offset(game : @types.Game) -> (Float, Float) {
   if game.shake_t <= 0.0 {
     (0.0, 0.0)
@@ -84,6 +89,7 @@ fn shake_offset(game : @types.Game) -> (Float, Float) {
 }
 
 ///|
+/// Draws the gradient sky background, two large ambient glow circles, and a field of twinkling star particles.
 fn draw_sky_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
@@ -140,6 +146,7 @@ fn draw_sky_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws a scrolling parallax city skyline of dark building silhouettes with neon accent lines at the top of the play area.
 fn draw_city_horizon(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let base_y = Float::from_int(@types.ui_panel_h) + 20.0
 
@@ -178,6 +185,7 @@ fn draw_city_horizon(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws the scrolling road surface strip by strip, including off-road fill, lane dividers, and neon edge lines.
 fn draw_road_surface(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let step = 12
 
@@ -274,6 +282,7 @@ fn draw_road_surface(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Returns the primary body color for an entity based on its kind.
 fn entity_body_col(kind : @types.EntityKind) -> @raylib.Color {
   match kind {
     @types.FoeBike => @raylib.Color::new(255, 138, 198, 255)
@@ -287,6 +296,7 @@ fn entity_body_col(kind : @types.EntityKind) -> @raylib.Color {
 }
 
 ///|
+/// Draws the enemy bike as a colored triangle with two dark wheel circles.
 fn draw_entity_bike(
   e : @types.Entity,
   col : @raylib.Color,
@@ -319,6 +329,7 @@ fn draw_entity_bike(
 }
 
 ///|
+/// Draws the enemy drone as a filled circle with a pulsing ring outline and a bright center dot.
 fn draw_entity_drone(
   e : @types.Entity,
   col : @raylib.Color,
@@ -346,6 +357,7 @@ fn draw_entity_drone(
 }
 
 ///|
+/// Draws the enemy truck as a large filled rectangle with an outlined border and a translucent windshield stripe.
 fn draw_entity_truck(
   e : @types.Entity,
   col : @raylib.Color,
@@ -380,6 +392,7 @@ fn draw_entity_truck(
 }
 
 ///|
+/// Draws the laser barrier as a wide colored rectangle with a pulsing bright center line.
 fn draw_entity_laser(
   e : @types.Entity,
   col : @raylib.Color,
@@ -407,6 +420,7 @@ fn draw_entity_laser(
 }
 
 ///|
+/// Draws a collectible pickup as a pulsing circle with an icon indicating its type (credit, battery, or hack cell).
 fn draw_entity_pickup(
   e : @types.Entity,
   col : @raylib.Color,
@@ -468,6 +482,7 @@ fn draw_entity_pickup(
 }
 
 ///|
+/// Draws all active entities using their kind-appropriate draw function, applying cloak transparency and HP bars for hostiles.
 fn draw_entities(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for e in game.entities {
     if not(e.active) {
@@ -518,6 +533,7 @@ fn draw_entities(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws all active bullets as small colored circles with a trailing line segment indicating direction.
 fn draw_bullets(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for b in game.bullets {
     if not(b.active) {
@@ -556,6 +572,7 @@ fn draw_bullets(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws all active sparks as small colored circles that fade out as their lifetime expires.
 fn draw_sparks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for s in game.sparks {
     if not(s.active) {
@@ -581,6 +598,7 @@ fn draw_sparks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws all active glow rings as expanding colored circle outlines that fade as their lifetime expires.
 fn draw_rings(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for r in game.rings {
     if not(r.active) {
@@ -606,6 +624,7 @@ fn draw_rings(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws all active afterimage ghosts as fading rotated rectangles at their stored positions.
 fn draw_afterimages(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for it in game.images {
     if not(it.active) {
@@ -629,6 +648,7 @@ fn draw_afterimages(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws the player vehicle with body lean, engine glow, muzzle flash, boost ring, and invulnerability flicker.
 fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let x = game.hero.x + cam_x
   let y = game.hero.y + cam_y
@@ -721,6 +741,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws the expanding hack pulse ring around the player when the hack ability is active.
 fn draw_hack_pulse(game : @types.Game) -> Unit {
   if game.hack_t <= 0.0 {
     return
@@ -739,6 +760,7 @@ fn draw_hack_pulse(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns `"READY"` when a cooldown has expired, or a percentage string showing how far through the cooldown the ability is.
 fn cooldown_text(cd : Float, total : Float) -> String {
   if cd <= 0.0 {
     "READY"
@@ -748,6 +770,7 @@ fn cooldown_text(cd : Float, total : Float) -> String {
 }
 
 ///|
+/// Draws the HUD panel with shield and energy bars, boost and hack cooldowns, score, stage, and distance progress bar.
 fn draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -926,6 +949,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a touch button rectangle with a label, highlighting it when active and choosing a primary or secondary color scheme.
 fn draw_button(
   rect : (Float, Float, Float, Float),
   text : String,
@@ -965,6 +989,7 @@ fn draw_button(
 }
 
 ///|
+/// Draws the seven on-screen touch buttons for directional movement, fire, boost, and hack, highlighting active inputs.
 fn draw_touch_controls(game : @types.Game) -> Unit {
   let left = @types.btn_left_rect()
   let right = @types.btn_right_rect()
@@ -984,6 +1009,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a fading hint message at the bottom of the screen during the first sixteen seconds of gameplay.
 fn draw_play_hint(game : @types.Game) -> Unit {
   if game.hint_t > 16.0 {
     return
@@ -1009,6 +1035,7 @@ fn draw_play_hint(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the title screen overlay with the game title, description, start button, control reference panel, and best score.
 fn draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -1126,6 +1153,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws an animated stage-clear panel that expands into view and prompts the player to continue to the next stage.
 fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
   let t = @types.ease_out_cubic(
     @types.clampf(game.result_t / @types.stage_clear_delay, 0.0, 1.0),
@@ -1169,6 +1197,7 @@ fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the game-over overlay showing the final score, credits, kills, stage reached, and a retry button.
 fn draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -1253,6 +1282,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws all world-space game objects in the correct painter's order: afterimages, rings, entities, bullets, sparks, and the player.
 fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   draw_afterimages(game, cam_x, cam_y)
   draw_rings(game, cam_x, cam_y)

@@ -1,4 +1,5 @@
 ///|
+/// Draws a stick-figure duelist at the given position, adjusting arm and prop geometry based on stance and lane lean, with an optional guard-flash glow ring.
 fn draw_duelist(
   x : Int,
   y : Int,
@@ -96,6 +97,7 @@ fn draw_duelist(
 }
 
 ///|
+/// Clears the screen and draws the animated crowd-stripe background, the stage rectangle, and its decorative border frames.
 fn draw_backdrop(game : @types.Game) -> Unit {
   @raylib.clear_background(@types.col(14, 15, 24, 255))
 
@@ -147,6 +149,7 @@ fn draw_backdrop(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the 3x3 lane-focus grid as circles, highlighting the lane currently targeted by the player.
 fn draw_lane_grid(game : @types.Game) -> Unit {
   for yi in 0..<3 {
     let ly = yi - 1
@@ -167,6 +170,7 @@ fn draw_lane_grid(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the player's duelist and the rival duelist on stage, including their background glow circles and troupe name labels.
 fn draw_stage_actors(game : @types.Game) -> Unit {
   let rival_stance = if game.prompt_active {
     game.prompt.stance
@@ -214,6 +218,7 @@ fn draw_stage_actors(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws two pulsing concentric rings at the player's currently focused lane position, labelled with the active stance name.
 fn draw_focus_cursor(game : @types.Game) -> Unit {
   let x = @types.lane_to_x(game.lane_x)
   let y = @types.lane_to_y(game.lane_y)
@@ -240,6 +245,7 @@ fn draw_focus_cursor(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the active rhythm prompt as a shrinking circle at the target lane position with urgency-tinted color and timing label, or a waiting message when no prompt is live.
 fn draw_active_prompt(game : @types.Game) -> Unit {
   if not(game.prompt_active) {
     @types.draw_center_text(
@@ -306,6 +312,7 @@ fn draw_active_prompt(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a labeled progress bar at the specified position showing the ratio of value to max_value with the given fill color.
 fn draw_meter(
   x : Int,
   y : Int,
@@ -334,6 +341,7 @@ fn draw_meter(
 }
 
 ///|
+/// Draws the full HUD: health, harmony, burst, and time meters, plus acclaim, combo, and hit/miss counters.
 fn draw_hud(game : @types.Game) -> Unit {
   draw_meter(
     46,
@@ -423,6 +431,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the title screen overlay with the game title, gameplay instructions, and the prompt to begin.
 fn draw_title_overlay() -> Unit {
   @raylib.draw_rectangle(270, 148, 1060, 650, @types.col(8, 8, 12, 204))
   @raylib.draw_rectangle_lines(
@@ -477,6 +486,7 @@ fn draw_title_overlay() -> Unit {
 }
 
 ///|
+/// Draws a semi-transparent pause overlay with a "PAUSED" header and a resume hint.
 fn draw_paused_overlay() -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -495,6 +505,7 @@ fn draw_paused_overlay() -> Unit {
 }
 
 ///|
+/// Draws the curtain-fall overlay showing the duel outcome reason, final acclaim, best combo, and earned grade.
 fn draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(220, 136, 1160, 690, @types.col(6, 6, 10, 214))
   @raylib.draw_rectangle_lines(
@@ -551,6 +562,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the bottom message banner displaying the current game feedback text while message_t is positive.
 fn draw_message_banner(game : @types.Game) -> Unit {
   if game.message_t <= 0.0 {
     return

@@ -1,4 +1,5 @@
 ///|
+/// Resets all input fields in the game's input snapshot to neutral for the new frame.
 fn clear_frame_input(game : @types.Game) -> Unit {
   game.input.move_x = 0
   game.input.move_y = 0
@@ -11,6 +12,7 @@ fn clear_frame_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Polls keyboard state and writes the current frame's directional and action inputs into `game.input`.
 fn capture_input(game : @types.Game) -> Unit {
   clear_frame_input(game)
 

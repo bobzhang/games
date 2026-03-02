@@ -1,25 +1,33 @@
 ///|
+/// Window width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Window height in pixels.
 let sh : Int = 820
 
 ///|
+/// Number of parallel running lanes.
 let lane_n : Int = 3
 
 ///|
+/// Maximum simultaneous active obstacles.
 let max_obstacles : Int = 150
 
 ///|
+/// Maximum simultaneous active coins.
 let max_coins : Int = 220
 
 ///|
+/// Maximum simultaneous active powerup items.
 let max_powerups : Int = 32
 
 ///|
+/// Maximum simultaneous active particles.
 let max_particles : Int = 420
 
 ///|
+/// Player runner state: position, lane, vertical velocity, HP, and ability timers.
 struct Runner {
   x : Float
   mut y : Float
@@ -32,6 +40,7 @@ struct Runner {
 }
 
 ///|
+/// A scrolling obstacle on a lane: position, size, kind, HP, and active flag.
 struct Obstacle {
   mut x : Float
   mut lane : Int
@@ -44,6 +53,7 @@ struct Obstacle {
 }
 
 ///|
+/// A collectible coin on a lane: position, vertical offset, value, and active flag.
 struct Coin {
   mut x : Float
   mut lane : Int
@@ -53,6 +63,7 @@ struct Coin {
 }
 
 ///|
+/// A powerup item on a lane: position, kind (heal/battery/magnet), and active flag.
 struct Powerup {
   mut x : Float
   mut lane : Int
@@ -62,6 +73,7 @@ struct Powerup {
 }
 
 ///|
+/// A short-lived visual effect particle with velocity and time-to-live.
 struct Particle {
   mut x : Float
   mut y : Float
@@ -73,6 +85,7 @@ struct Particle {
 }
 
 ///|
+/// A high-speed express train event with warning period and sweep position.
 struct TrainEvent {
   mut active : Bool
   mut lane : Int
@@ -82,6 +95,7 @@ struct TrainEvent {
 }
 
 ///|
+/// Clamps a float value to the inclusive range `[lo, hi]`.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -93,6 +107,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -102,6 +117,7 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns the squared Euclidean distance between two points.
 fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
   let dy = ay - by
@@ -109,6 +125,7 @@ fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 }
 
 ///|
+/// Returns true if point `(px, py)` lies within the rectangle at `(rx, ry)` with size `rw x rh`.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -124,6 +141,7 @@ fn inside_rect(
 }
 
 ///|
+/// Returns the screen Y coordinate for the centre of the given lane index.
 fn lane_y(lane : Int) -> Float {
   if lane <= 0 {
     490.0
@@ -135,6 +153,7 @@ fn lane_y(lane : Int) -> Float {
 }
 
 ///|
+/// Deactivates and resets all obstacles in the array.
 fn clear_obstacles(obstacles : Array[Obstacle]) -> Unit {
   for obstacle in obstacles {
     obstacle.x = 0.0
@@ -149,6 +168,7 @@ fn clear_obstacles(obstacles : Array[Obstacle]) -> Unit {
 }
 
 ///|
+/// Deactivates and resets all coins in the array.
 fn clear_coins(coins : Array[Coin]) -> Unit {
   for coin in coins {
     coin.x = 0.0
@@ -160,6 +180,7 @@ fn clear_coins(coins : Array[Coin]) -> Unit {
 }
 
 ///|
+/// Deactivates and resets all powerups in the array.
 fn clear_powerups(powerups : Array[Powerup]) -> Unit {
   for powerup in powerups {
     powerup.x = 0.0
@@ -171,6 +192,7 @@ fn clear_powerups(powerups : Array[Powerup]) -> Unit {
 }
 
 ///|
+/// Deactivates and resets all particles in the array.
 fn clear_particles(particles : Array[Particle]) -> Unit {
   for particle in particles {
     particle.x = 0.0
@@ -184,6 +206,7 @@ fn clear_particles(particles : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Resets the runner to the starting position and default stats for a new level.
 fn reset_runner(runner : Runner) -> Unit {
   runner.y = lane_y(1)
   runner.lane = 1
@@ -195,6 +218,7 @@ fn reset_runner(runner : Runner) -> Unit {
 }
 
 ///|
+/// Activates a single particle from the pool at `(x, y)` with a random velocity at the given speed scale and kind.
 fn burst_particle(
   particles : Array[Particle],
   x : Float,
@@ -222,6 +246,7 @@ fn burst_particle(
 }
 
 ///|
+/// Spawns `n` particles in random directions from `(x, y)` at the given speed scale and kind.
 fn burst(
   particles : Array[Particle],
   x : Float,
@@ -236,6 +261,7 @@ fn burst(
 }
 
 ///|
+/// Sets the size, vertical offset, and HP of an obstacle based on its kind index.
 fn set_obstacle_shape(ob : Obstacle, kind : Int) -> Unit {
   ob.kind = kind
   if kind == 0 {
@@ -262,6 +288,7 @@ fn set_obstacle_shape(ob : Obstacle, kind : Int) -> Unit {
 }
 
 ///|
+/// Activates a new obstacle from the pool in a random lane, with kind constrained by level and a wave wobble offset.
 fn spawn_obstacle(
   obstacles : Array[Obstacle],
   level : Int,
@@ -292,6 +319,7 @@ fn spawn_obstacle(
 }
 
 ///|
+/// Activates a new coin from the pool in a random lane, with value weighted by level and a bob offset.
 fn spawn_coin(coins : Array[Coin], level : Int, wave_t : Float) -> Unit {
   let lane = @raylib.get_random_value(0, lane_n - 1)
   let mut y_off = Float::from_int(@raylib.get_random_value(-62, -18))
@@ -326,6 +354,7 @@ fn spawn_coin(coins : Array[Coin], level : Int, wave_t : Float) -> Unit {
 }
 
 ///|
+/// Activates a new powerup from the pool in a random lane with a kind-specific vertical offset.
 fn spawn_powerup(powerups : Array[Powerup]) -> Unit {
   let lane = @raylib.get_random_value(0, lane_n - 1)
   let kind = @raylib.get_random_value(0, 2)
@@ -354,6 +383,7 @@ fn spawn_powerup(powerups : Array[Powerup]) -> Unit {
 }
 
 ///|
+/// Initialises a train event on a random lane with a warning period and speed scaled to the current level.
 fn spawn_train(train : TrainEvent, level : Int) -> Unit {
   train.active = true
   train.lane = @raylib.get_random_value(0, lane_n - 1)
@@ -365,6 +395,7 @@ fn spawn_train(train : TrainEvent, level : Int) -> Unit {
 }
 
 ///|
+/// Resets all entities and returns `(target_score, timer, speed, spawn_factor)` tuned for the given level.
 fn setup_level(
   level : Int,
   runner : Runner,
@@ -396,11 +427,13 @@ fn setup_level(
 }
 
 ///|
+/// Returns the vertical centre of an obstacle's collision box in screen coordinates.
 fn obstacle_hit_center_y(ob : Obstacle) -> Float {
   lane_y(ob.lane) + ob.y_off - ob.h * 0.5
 }
 
 ///|
+/// Entry point: initialises the window, creates all game entities, and runs the main game loop.
 fn main {
   @raylib.init_window(sw, sh, "Neon Subway Sprint 2026")
   @raylib.set_target_fps(60)

@@ -1,4 +1,5 @@
 ///|
+/// Returns true when the pointer is currently over the title screen start button.
 fn title_hover(game : @types.Game) -> Bool {
   let (x, y, w, h) = @types.title_start_button()
   @types.pointer_on_rect(
@@ -14,6 +15,7 @@ fn title_hover(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Returns true when the pointer is currently over the result screen retry button.
 fn result_hover(game : @types.Game) -> Bool {
   let (x, y, w, h) = @types.retry_button()
   @types.pointer_on_rect(
@@ -29,6 +31,7 @@ fn result_hover(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Handles start-game transitions from the title screen via keyboard, mouse, or touch.
 fn update_title_input(game : @types.Game) -> Unit {
   let key_start : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
@@ -44,6 +47,7 @@ fn update_title_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles retry transitions from the result screen via keyboard, mouse, or touch.
 fn update_result_input(game : @types.Game) -> Unit {
   let key_retry : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
@@ -60,6 +64,7 @@ fn update_result_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns true when the pointer is inside `rect` and the touch cooldown has fully expired.
 fn btn_pressed(game : @types.Game, rect : (Int, Int, Int, Int)) -> Bool {
   if game.touch_cd > 0.0 {
     return false
@@ -78,6 +83,7 @@ fn btn_pressed(game : @types.Game, rect : (Int, Int, Int, Int)) -> Bool {
 }
 
 ///|
+/// Checks all on-screen directional and action buttons and dispatches the corresponding move or action.
 fn handle_buttons(game : @types.Game) -> Bool {
   if btn_pressed(game, @types.btn_left()) {
     ignore(try_move(game, @types.DirLeft))
@@ -119,6 +125,7 @@ fn handle_buttons(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Processes all keyboard, mouse, and touch input for the play state during one frame.
 fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
     game.state = @types.Title

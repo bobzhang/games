@@ -1,10 +1,12 @@
 ///|
+/// Sets the HUD message string and its display duration in seconds.
 fn set_msg(game : @types.Game, msg : String, ttl : Float) -> Unit {
   game.msg = msg
   game.msg_t = ttl
 }
 
 ///|
+/// Deactivates all particles and resets their fields to defaults.
 fn clear_particles(game : @types.Game) -> Unit {
   for particle in game.particles {
     particle.active = false
@@ -19,6 +21,7 @@ fn clear_particles(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all traffic vehicles, orders, and pickups and resets their fields.
 fn clear_world(game : @types.Game) -> Unit {
   for traffic_elem in game.traffic {
     traffic_elem.active = false
@@ -53,6 +56,7 @@ fn clear_world(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Allocates the first inactive particle slot and initialises it with the given position, velocity, lifetime, size, and kind.
 fn emit_particle(
   game : @types.Game,
   x : Float,
@@ -80,6 +84,7 @@ fn emit_particle(
 }
 
 ///|
+/// Emits n particles of the given kind in a random burst around position (x, y).
 fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
   for _i in 0..<n {
     emit_particle(
@@ -96,6 +101,7 @@ fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit 
 }
 
 ///|
+/// Advances all active particles by dt, applying drag and gravity, and deactivates expired ones.
 fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
@@ -116,6 +122,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Repositions the rider to the world centre and zeroes all movement and cargo state.
 fn reset_rider(game : @types.Game) -> Unit {
   game.rider_x = Float::from_int(@types.world_x0 + @types.world_w / 2)
   game.rider_y = Float::from_int(@types.world_y0 + @types.world_h / 2)
@@ -129,6 +136,7 @@ fn reset_rider(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets all game state and starts a fresh delivery run from wave 1.
 fn start_run(game : @types.Game) -> Unit {
   clear_world(game)
   clear_particles(game)
@@ -163,6 +171,7 @@ fn start_run(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Ends the current run, sets the win or lose outcome, updates best score, and triggers the result burst effect.
 fn finish_run(game : @types.Game, win : Bool) -> Unit {
   if game.state != @types.state_play {
     return
@@ -186,6 +195,7 @@ fn finish_run(game : @types.Game, win : Bool) -> Unit {
 }
 
 ///|
+/// Returns the number of currently active delivery orders.
 fn active_orders(game : @types.Game) -> Int {
   let mut n : Int = 0
   for order in game.orders {
@@ -197,6 +207,7 @@ fn active_orders(game : @types.Game) -> Int {
 }
 
 ///|
+/// Activates the first free order slot with a random restaurant source, road-snapped destination, and scaled timer.
 fn spawn_order(game : @types.Game) -> Bool {
   for order in game.orders {
     if order.active {
@@ -238,6 +249,7 @@ fn spawn_order(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Activates the first free traffic slot with a random kind, lane, direction, size, and entry position.
 fn spawn_traffic(game : @types.Game) -> Bool {
   for traffic_elem in game.traffic {
     if traffic_elem.active {
@@ -322,6 +334,7 @@ fn spawn_traffic(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Activates the first free pickup slot with a random position, velocity, phase, and weighted kind.
 fn spawn_pickup(game : @types.Game) -> Bool {
   for pickup in game.pickups {
     if pickup.active {
@@ -353,6 +366,7 @@ fn spawn_pickup(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Attempts a scooter repair at the depot, consuming fuel and restoring HP if conditions are met.
 fn try_repair(game : @types.Game) -> Bool {
   if game.state != @types.state_play {
     return false
@@ -388,6 +402,7 @@ fn try_repair(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Returns the collection radius for a pickup based on its kind.
 fn pickup_distance(kind : Int) -> Float {
   if kind == @types.pickup_speed {
     28.0
@@ -397,6 +412,7 @@ fn pickup_distance(kind : Int) -> Float {
 }
 
 ///|
+/// Applies a collected pickup's effect (fuel, HP, or turbo boost) and spawns a burst particle effect.
 fn collect_pickup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit {
   if kind == @types.pickup_fuel {
     game.fuel = @types.minf(100.0, game.fuel + 30.0)
@@ -417,6 +433,7 @@ fn collect_pickup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit 
 }
 
 ///|
+/// Applies damage to the rider's scooter HP, resets combo, triggers screen shake, and handles life loss or game over.
 fn hurt_rider(game : @types.Game, dmg : Float) -> Unit {
   game.scooter_hp = game.scooter_hp - dmg
   game.combo = 0
@@ -450,6 +467,7 @@ fn hurt_rider(game : @types.Game, dmg : Float) -> Unit {
 }
 
 ///|
+/// Advances the rider's velocity and position by dt, applying boost, drift, drag, and world boundary clamping.
 fn update_rider(game : @types.Game, dt : Float) -> Unit {
   let boost_mul : Float = if game.boost_on || game.turbo_t > 0.0 {
     1.55
@@ -497,6 +515,7 @@ fn update_rider(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances all active traffic vehicles by dt with sway motion, removes out-of-bounds vehicles, and applies collision damage to the rider.
 fn update_traffic(game : @types.Game, dt : Float) -> Unit {
   for traffic_elem in game.traffic {
     if not(traffic_elem.active) {
@@ -542,6 +561,7 @@ fn update_traffic(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances all active pickups by dt with sinusoidal drift, bounces them off world edges, and collects any within range of the rider.
 fn update_pickups(game : @types.Game, dt : Float) -> Unit {
   for pickup in game.pickups {
     if not(pickup.active) {
@@ -580,6 +600,7 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Returns true when the rider is within pickup range of order i's source restaurant.
 fn near_order_pick(game : @types.Game, i : Int) -> Bool {
   @types.dist2(
     game.rider_x,
@@ -591,6 +612,7 @@ fn near_order_pick(game : @types.Game, i : Int) -> Bool {
 }
 
 ///|
+/// Returns true when the rider is within drop-off range of order i's delivery destination.
 fn near_order_drop(game : @types.Game, i : Int) -> Bool {
   @types.dist2(
     game.rider_x,
@@ -602,6 +624,7 @@ fn near_order_drop(game : @types.Game, i : Int) -> Bool {
 }
 
 ///|
+/// Returns a time-bonus score based on how much time remains on an order when it is delivered.
 fn order_time_bonus(timer_left : Float) -> Int {
   if timer_left > 24.0 {
     36
@@ -615,6 +638,7 @@ fn order_time_bonus(timer_left : Float) -> Int {
 }
 
 ///|
+/// Ticks order timers, expires late orders, handles pickup and drop-off interactions, and updates score and combo.
 fn update_orders(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.orders.length() {
     if not(game.orders[i].active) {
@@ -661,6 +685,7 @@ fn update_orders(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Spends a hint to mark the nearest relevant target (drop-off, fuel pickup, or restaurant) and displays a guidance message.
 fn use_hint(game : @types.Game) -> Bool {
   if game.state != @types.state_play || game.hint_left <= 0 {
     return false
@@ -726,6 +751,7 @@ fn use_hint(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Advances timers, spawns orders, traffic, and pickups, updates all entities, drains fuel, and checks win or lose conditions.
 fn update_play(game : @types.Game, dt : Float) -> Unit {
   let step : Float = @types.clampf(dt, 0.0, 0.04)
   game.ui_t = game.ui_t + step

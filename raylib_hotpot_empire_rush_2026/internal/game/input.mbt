@@ -1,4 +1,5 @@
 ///|
+/// Resets all input fields on the game to zero/false for the current frame.
 fn clear_input(game : @types.Game) -> Unit {
   game.input.move_x = 0
   game.input.move_y = 0
@@ -11,6 +12,7 @@ fn clear_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reads keyboard state and fills in the per-frame input fields on the game.
 fn update_input(game : @types.Game) -> Unit {
   clear_input(game)
 

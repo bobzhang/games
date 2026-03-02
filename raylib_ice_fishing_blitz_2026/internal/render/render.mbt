@@ -1,9 +1,11 @@
 ///|
+/// Returns a sinusoidal background wave amplitude value for frequency `k`.
 fn bg_wave(game : @types.Game, k : Float) -> Float {
   @types.sinf(game.ui_t * k)
 }
 
 ///|
+/// Returns a random horizontal shake offset when shake is active, else 0.
 fn shake_x(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
@@ -13,6 +15,7 @@ fn shake_x(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns a random vertical shake offset when shake is active, else 0.
 fn shake_y(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
@@ -22,6 +25,7 @@ fn shake_y(game : @types.Game) -> Int {
 }
 
 ///|
+/// Draws the dark ocean background with animated gradient circles.
 fn draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(9, 18, 30, 255))
 
@@ -65,6 +69,7 @@ fn draw_background(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the ice sheet, water area, grid lines, hole, and catch zone with shake offset.
 fn draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit {
   @raylib.draw_rectangle(
     @types.world_x0 + ox,
@@ -166,6 +171,7 @@ fn draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Returns the fill color for a fish kind.
 fn fish_color(kind : Int) -> @raylib.Color {
   if kind == @types.fish_trout {
     @raylib.Color::new(154, 224, 252, 244)
@@ -177,6 +183,7 @@ fn fish_color(kind : Int) -> @raylib.Color {
 }
 
 ///|
+/// Draws one fish entity with body, tail, eye, and hook glow if hooked.
 fn draw_fish(f : @types.Fish, ox : Int, oy : Int) -> Unit {
   if not(f.active) {
     return
@@ -230,6 +237,7 @@ fn draw_fish(f : @types.Fish, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Returns the fill color for a hazard kind.
 fn hazard_color(kind : Int) -> @raylib.Color {
   if kind == @types.hazard_jelly {
     @raylib.Color::new(186, 168, 224, 234)
@@ -241,6 +249,7 @@ fn hazard_color(kind : Int) -> @raylib.Color {
 }
 
 ///|
+/// Draws one hazard entity with kind-specific shape: jellyfish, eel, or ice chunk.
 fn draw_hazard(h : @types.Hazard, ox : Int, oy : Int) -> Unit {
   if not(h.active) {
     return
@@ -302,6 +311,7 @@ fn draw_hazard(h : @types.Hazard, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Returns the fill color for a pickup kind.
 fn pickup_color(kind : @types.PickupKind) -> @raylib.Color {
   match kind {
     @types.Bait => @raylib.Color::new(255, 200, 116, 244)
@@ -311,6 +321,7 @@ fn pickup_color(kind : @types.PickupKind) -> @raylib.Color {
 }
 
 ///|
+/// Draws one pickup entity with pulsing circle and kind-specific icon.
 fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
   if not(p.active) {
     return
@@ -367,6 +378,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws all active particles with opacity based on remaining lifetime.
 fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
@@ -399,6 +411,7 @@ fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws the fishing line, hook circle, barb lines, and boost glow.
 fn draw_hook(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let hx : Int = game.hook_x.to_int() + ox
   let hy : Int = game.hook_y.to_int() + oy
@@ -457,6 +470,7 @@ fn draw_hook(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws the hint marker circle and guide line to the hook if hint timer is active.
 fn draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
   if game.hint_t <= 0.0 {
     return
@@ -485,6 +499,7 @@ fn draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws a labeled horizontal progress bar with background, fill, and outline.
 fn draw_bar(
   x : Int,
   y : Int,
@@ -512,6 +527,7 @@ fn draw_bar(
 }
 
 ///|
+/// Draws the right-side panel: title, scores, stats, resource bars, and controls text.
 fn draw_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.panel_x0,
@@ -697,6 +713,7 @@ fn draw_panel(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a single touch button with active/idle fill color and centered label.
 fn draw_touch_button(
   game : @types.Game,
   rect : (Int, Int, Int, Int),
@@ -746,6 +763,7 @@ fn draw_touch_button(
 }
 
 ///|
+/// Draws the D-pad and action button overlay for touch/mobile controls.
 fn draw_touch_controls(game : @types.Game) -> Unit {
   if game.state != @types.Play {
     return
@@ -826,6 +844,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the HUD message toast if message timer is active.
 fn draw_msg(game : @types.Game) -> Unit {
   if game.msg_t <= 0.0 || game.msg == "" {
     return
@@ -859,6 +878,7 @@ fn draw_msg(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the title overlay with game title, instructions, and start button.
 fn draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -936,6 +956,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the result overlay with win/loss header, score summary, and retry button.
 fn draw_result_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,

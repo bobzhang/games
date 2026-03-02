@@ -1,4 +1,5 @@
 ///|
+/// Supply vessel state including position, velocity, heading, hull integrity, energy, cargo, and sonar ping.
 struct Player {
   mut x : Float
   mut y : Float
@@ -19,6 +20,7 @@ struct Player {
 }
 
 ///|
+/// Lighthouse state with position, demand level, warning timer, priority, delivery count, and identifier.
 struct Lighthouse {
   mut active : Bool
   mut x : Float
@@ -31,6 +33,7 @@ struct Lighthouse {
 }
 
 ///|
+/// Coral reef hazard with position, collision radius, hardness, and animated pulse timer.
 struct Reef {
   mut active : Bool
   mut x : Float
@@ -41,6 +44,7 @@ struct Reef {
 }
 
 ///|
+/// Moving ocean storm with position, velocity, influence radius, intensity, remaining lifetime, and phase for animation.
 struct Storm {
   mut active : Bool
   mut x : Float
@@ -54,6 +58,7 @@ struct Storm {
 }
 
 ///|
+/// Pirate vessel that pursues the player, with position, velocity, speed, attack cooldown, blink timer, and target index.
 struct Pirate {
   mut active : Bool
   mut x : Float
@@ -68,6 +73,7 @@ struct Pirate {
 }
 
 ///|
+/// Visual particle with pooling flag, position, velocity, remaining lifetime, size, and kind for color selection.
 struct Particle {
   mut active : Bool
   mut x : Float
@@ -80,6 +86,7 @@ struct Particle {
 }
 
 ///|
+/// Clamps `v` to the inclusive `[lo, hi]` range.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -91,6 +98,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two floats.
 fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -100,6 +108,7 @@ fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two floats.
 fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -109,6 +118,7 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of `v`.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -118,6 +128,7 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two integers.
 fn mini(a : Int, b : Int) -> Int {
   if a < b {
     a
@@ -127,12 +138,14 @@ fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns a random float in `[lo, hi]` using raylib's RNG.
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns the squared Euclidean distance between two points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx : Float = x1 - x0
   let dy : Float = y1 - y0
@@ -140,6 +153,7 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Returns true if point (`px`, `py`) lies within the rectangle at (`rx`, `ry`) with size (`rw`, `rh`).
 fn inside_rect(
   px : Float,
   py : Float,
@@ -155,6 +169,7 @@ fn inside_rect(
 }
 
 ///|
+/// Deactivates all lighthouse records and resets their demand and served counters.
 fn clear_lights(lights : Array[Lighthouse]) -> Unit {
   for i in 0..<lights.length() {
     lights[i].active = false
@@ -169,6 +184,7 @@ fn clear_lights(lights : Array[Lighthouse]) -> Unit {
 }
 
 ///|
+/// Deactivates all reef records in the pool.
 fn clear_reefs(reefs : Array[Reef]) -> Unit {
   for reef in reefs {
     reef.active = false
@@ -181,6 +197,7 @@ fn clear_reefs(reefs : Array[Reef]) -> Unit {
 }
 
 ///|
+/// Deactivates all storm records in the pool.
 fn clear_storms(storms : Array[Storm]) -> Unit {
   for storm in storms {
     storm.active = false
@@ -196,6 +213,7 @@ fn clear_storms(storms : Array[Storm]) -> Unit {
 }
 
 ///|
+/// Deactivates all pirate records in the pool.
 fn clear_pirates(pirates : Array[Pirate]) -> Unit {
   for i in 0..<pirates.length() {
     pirates[i].active = false
@@ -212,6 +230,7 @@ fn clear_pirates(pirates : Array[Pirate]) -> Unit {
 }
 
 ///|
+/// Deactivates all particle records in the pool.
 fn clear_parts(parts : Array[Particle]) -> Unit {
   for part in parts {
     part.active = false
@@ -226,6 +245,7 @@ fn clear_parts(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Activates an inactive particle with the given position, velocity, lifetime, size, and kind.
 fn add_particle(
   parts : Array[Particle],
   x : Float,
@@ -264,6 +284,7 @@ fn add_particle(
 }
 
 ///|
+/// Emits `n` particles radiating outward from a point with randomized velocities and the given kind.
 fn burst(
   parts : Array[Particle],
   x : Float,
@@ -277,6 +298,7 @@ fn burst(
 }
 
 ///|
+/// Advances all active particles by `dt`, applying drag and gravity by kind, and deactivating expired ones.
 fn update_parts(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
     if not(part.active) {
@@ -306,6 +328,7 @@ fn update_parts(parts : Array[Particle], dt : Float) -> Unit {
 }
 
 ///|
+/// Places and activates lighthouses at fixed positions with initial demand values and priorities.
 fn init_lights(
   lights : Array[Lighthouse],
   world_x : Int,
@@ -346,6 +369,7 @@ fn init_lights(
 }
 
 ///|
+/// Places and activates reef hazards with randomized positions, radii, and hardness values across the map.
 fn init_reefs(
   reefs : Array[Reef],
   lights : Array[Lighthouse],
@@ -412,6 +436,7 @@ fn init_reefs(
 }
 
 ///|
+/// Returns the count of currently active storm records.
 fn active_storms(storms : Array[Storm]) -> Int {
   let mut n : Int = 0
   for storm in storms {
@@ -423,6 +448,7 @@ fn active_storms(storms : Array[Storm]) -> Int {
 }
 
 ///|
+/// Returns the count of currently active pirate records.
 fn active_pirates(pirates : Array[Pirate]) -> Int {
   let mut n : Int = 0
   for pirate in pirates {
@@ -434,6 +460,7 @@ fn active_pirates(pirates : Array[Pirate]) -> Int {
 }
 
 ///|
+/// Returns the highest demand value among all active lighthouses.
 fn peak_demand(lights : Array[Lighthouse]) -> Float {
   let mut best : Float = 0.0
   for light in lights {
@@ -448,6 +475,7 @@ fn peak_demand(lights : Array[Lighthouse]) -> Float {
 }
 
 ///|
+/// Returns the sum of demand values across all active lighthouses.
 fn total_demand(lights : Array[Lighthouse]) -> Float {
   let mut sum : Float = 0.0
   for light in lights {
@@ -459,6 +487,7 @@ fn total_demand(lights : Array[Lighthouse]) -> Float {
 }
 
 ///|
+/// Activates an inactive storm with randomized position on a map edge, velocity, radius, and intensity.
 fn spawn_storm(
   storms : Array[Storm],
   world_l : Float,
@@ -506,6 +535,7 @@ fn spawn_storm(
 }
 
 ///|
+/// Activates an inactive pirate at a map edge position and assigns it a random speed and target lighthouse.
 fn spawn_pirate(
   pirates : Array[Pirate],
   world_l : Float,
@@ -549,6 +579,7 @@ fn spawn_pirate(
 }
 
 ///|
+/// Advances all active storms by `dt`, moves them, applies wind push to the player within range, and expires old storms.
 fn update_storms(
   storms : Array[Storm],
   dt : Float,
@@ -593,6 +624,7 @@ fn update_storms(
 }
 
 ///|
+/// Returns the index of the active lighthouse with the highest current demand, or -1 if none are active.
 fn highest_demand_light(lights : Array[Lighthouse]) -> Int {
   let mut best_i : Int = -1
   let mut best : Float = -1.0
@@ -609,6 +641,7 @@ fn highest_demand_light(lights : Array[Lighthouse]) -> Int {
 }
 
 ///|
+/// Advances all active pirates by `dt`: steers toward target, attacks player on collision, and applies hull damage.
 fn update_pirates(
   pirates : Array[Pirate],
   lights : Array[Lighthouse],
@@ -691,6 +724,7 @@ fn update_pirates(
 }
 
 ///|
+/// Increases demand on all active lighthouses over time and triggers warning effects when demand reaches critical levels.
 fn update_light_demands(
   lights : Array[Lighthouse],
   dt : Float,
@@ -737,6 +771,7 @@ fn update_light_demands(
 }
 
 ///|
+/// Checks if the player is close enough to any lighthouse and delivers cargo, reducing demand and awarding score.
 fn deliver_to_lights(
   player : Player,
   lights : Array[Lighthouse],
@@ -779,6 +814,7 @@ fn deliver_to_lights(
 }
 
 ///|
+/// Returns the index of the nearest active lighthouse whose demand exceeds a threshold, for navigation display.
 fn nearest_urgent_light(
   lights : Array[Lighthouse],
   x : Float,
@@ -809,6 +845,7 @@ fn nearest_urgent_light(
 }
 
 ///|
+/// Draws the animated ocean background with gradient waves and scrolling ripple lines.
 fn draw_ocean(
   world_x : Int,
   world_y : Int,
@@ -853,6 +890,7 @@ fn draw_ocean(
 }
 
 ///|
+/// Draws the home harbor dock area with pier structures and a cargo loading zone indicator.
 fn draw_harbor(
   harbor_x : Int,
   harbor_y : Int,
@@ -896,6 +934,7 @@ fn draw_harbor(
 }
 
 ///|
+/// Draws all active lighthouses with animated beams, demand bars, and warning pulse effects.
 fn draw_lights(lights : Array[Lighthouse], t : Float) -> Unit {
   for i in 0..<lights.length() {
     if not(lights[i].active) {
@@ -955,6 +994,7 @@ fn draw_lights(lights : Array[Lighthouse], t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active reef hazards as pulsing jagged shapes with animated radius.
 fn draw_reefs(reefs : Array[Reef], t : Float) -> Unit {
   for reef in reefs {
     if not(reef.active) {
@@ -986,6 +1026,7 @@ fn draw_reefs(reefs : Array[Reef], t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active storms as swirling translucent circles with animated radial lines.
 fn draw_storms(storms : Array[Storm], t : Float) -> Unit {
   for storm in storms {
     if not(storm.active) {
@@ -1027,6 +1068,7 @@ fn draw_storms(storms : Array[Storm], t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active pirate vessels with blinking warning indicators and wake trails.
 fn draw_pirates(pirates : Array[Pirate], t : Float) -> Unit {
   for i in 0..<pirates.length() {
     if not(pirates[i].active) {
@@ -1077,6 +1119,7 @@ fn draw_pirates(pirates : Array[Pirate], t : Float) -> Unit {
 }
 
 ///|
+/// Draws the supply vessel hull, wake, sonar ping ring, and cargo count indicator.
 fn draw_player(player : Player, t : Float) -> Unit {
   let x : Float = player.x
   let y : Float = player.y
@@ -1142,6 +1185,7 @@ fn draw_player(player : Player, t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active particles with alpha fading based on remaining lifetime and kind-based color.
 fn draw_parts(parts : Array[Particle]) -> Unit {
   for part in parts {
     if not(part.active) {
@@ -1161,6 +1205,7 @@ fn draw_parts(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Renders on-screen touch buttons for directional steering and action inputs.
 fn draw_touch_controls(
   sw : Int,
   sh : Int,
@@ -1295,6 +1340,7 @@ fn draw_touch_controls(
 }
 
 ///|
+/// Draws a labeled horizontal progress bar filled proportionally to the given value and maximum.
 fn draw_bar(
   panel_x : Int,
   y : Int,
@@ -1344,6 +1390,7 @@ fn draw_bar(
 }
 
 ///|
+/// Draws a rectangular button with label and highlight state based on whether it is currently pressed.
 fn draw_button(
   x : Int,
   y : Int,
@@ -1376,6 +1423,7 @@ fn draw_button(
 }
 
 ///|
+/// Initializes the window, creates all game objects, and runs the full lighthouse supply run game loop.
 fn main {
   let sw : Int = 1680
   let sh : Int = 940

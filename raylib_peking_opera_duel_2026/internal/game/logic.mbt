@@ -1,4 +1,5 @@
 ///|
+/// Returns the simulation speed multiplier: burst slow factor when burst is active, otherwise 1.0.
 fn active_slow_factor(game : @types.Game) -> Float {
   if game.burst_t > 0.0 {
     @types.burst_slow_factor
@@ -8,6 +9,7 @@ fn active_slow_factor(game : @types.Game) -> Float {
 }
 
 ///|
+/// Returns the current beat spawn interval, decreasing linearly with elapsed time down to the minimum.
 fn cadence_for_elapsed(elapsed : Float) -> Float {
   let raw = @types.beat_start_interval - elapsed * @types.beat_accel_per_sec
   if raw < @types.beat_min_interval {
@@ -18,6 +20,7 @@ fn cadence_for_elapsed(elapsed : Float) -> Float {
 }
 
 ///|
+/// Resets all game fields to defaults and sets the state to Title with the curtain-raise prompt message.
 fn init_title_state(game : @types.Game) -> Unit {
   game.state = @types.Title
   game.lane_x = 0
@@ -44,6 +47,7 @@ fn init_title_state(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets all game fields to fresh duel values and transitions to the Playing state.
 fn start_duel(game : @types.Game) -> Unit {
   game.state = @types.Playing
   game.lane_x = 0
@@ -73,6 +77,7 @@ fn start_duel(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Transitions to GameOver state, deactivates the active prompt, and stores the duel end reason.
 fn finish_duel(game : @types.Game, reason : String) -> Unit {
   game.state = @types.GameOver
   game.prompt_active = false
@@ -81,6 +86,7 @@ fn finish_duel(game : @types.Game, reason : String) -> Unit {
 }
 
 ///|
+/// Updates the player's lane focus position and derives the active stance from the directional axis input.
 fn apply_axis_focus_and_stance(game : @types.Game) -> Unit {
   if game.input.axis_x != 0 {
     game.lane_x = @types.clampi(
@@ -109,6 +115,7 @@ fn apply_axis_focus_and_stance(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Generates a new rhythm prompt with a random lane and stance, avoiding exact repeats of the previous one.
 fn spawn_prompt(game : @types.Game) -> Unit {
   let prev_lane_x = game.prompt.lane_x
   let prev_lane_y = game.prompt.lane_y
@@ -140,6 +147,7 @@ fn spawn_prompt(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Awards acclaim, combo, health, and harmony for a successful hit, with bonus values for perfect timing.
 fn apply_hit_success(game : @types.Game, perfect : Bool) -> Unit {
   game.hits = game.hits + 1
   game.combo = game.combo + 1
@@ -178,6 +186,7 @@ fn apply_hit_success(game : @types.Game, perfect : Bool) -> Unit {
 }
 
 ///|
+/// Applies a miss penalty: increments miss count, resets combo, drains health and harmony, and ends the duel if either reaches zero.
 fn apply_miss(
   game : @types.Game,
   reason : String,
@@ -202,6 +211,7 @@ fn apply_miss(
 }
 
 ///|
+/// Penalizes the player for striking outside an active prompt window: resets combo, drains harmony, and ends the duel if harmony reaches zero.
 fn apply_offbeat_penalty(game : @types.Game) -> Unit {
   game.combo = 0
   game.harmony = @types.maxf(0.0, game.harmony - @types.offbeat_harmony_penalty)
@@ -214,6 +224,7 @@ fn apply_offbeat_penalty(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Attempts to register a hit against the active prompt: checks timing, lane, and stance alignment, applying a perfect/good hit or a miss accordingly.
 fn try_hit_prompt(game : @types.Game) -> Unit {
   if not(game.prompt_active) {
     apply_offbeat_penalty(game)
@@ -247,6 +258,7 @@ fn try_hit_prompt(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Attempts a defensive transition: if a prompt is active and within the deflect window, cancels it with a harmony cost; otherwise falls back to a plain guard stance.
 fn try_deflect(game : @types.Game) -> Unit {
   if game.prompt_active {
     let timing = @types.absf(game.prompt.time_left)
@@ -282,6 +294,7 @@ fn try_deflect(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Activates the focus burst if the burst button is pressed and the cooldown has expired, or shows a cooldown message if it is still recharging.
 fn try_activate_burst(game : @types.Game) -> Unit {
   if not(game.input.burst_pressed) {
     return
@@ -303,6 +316,7 @@ fn try_activate_burst(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Animates the title screen health and harmony meters with a sine wave and transitions to a new duel when the player confirms.
 fn update_title_state(game : @types.Game) -> Unit {
   let wave : Float = 0.5 + 0.5 * @types.sinf(game.crowd_wave_t * 0.9)
   game.health = 80.0 + wave * 14.0
@@ -314,6 +328,7 @@ fn update_title_state(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles input in the Paused state: restarts the duel on R, or resumes play on P or confirm.
 fn update_paused_state(game : @types.Game) -> Unit {
   if game.input.restart_pressed {
     start_duel(game)
@@ -327,6 +342,7 @@ fn update_paused_state(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles input in the GameOver state: restarts the duel on R, or returns to the title screen on confirm.
 fn update_game_over_state(game : @types.Game) -> Unit {
   if game.input.restart_pressed {
     start_duel(game)
@@ -339,6 +355,7 @@ fn update_game_over_state(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Advances one frame of the playing state: processes input, applies time-scaled simulation, ticks the prompt lifecycle, spawns new prompts, and checks end conditions.
 fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
   if game.input.pause_pressed {
     game.state = @types.Paused

@@ -1,19 +1,24 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1140
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 740
 
 ///|
+/// Number of city sectors tracked for power demand.
 let sector_n : Int = 4
 
 ///|
+/// A city sector with a current demand value and a drift trend.
 struct Sector {
   mut demand : Int
   mut trend : Int
 }
 
 ///|
+/// Clamps an integer to the inclusive `[lo, hi]` range.
 fn clamp_int(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -25,6 +30,7 @@ fn clamp_int(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Returns the sum of demand across all sectors.
 fn total_demand(sectors : Array[Sector]) -> Int {
   let mut t = 0
   for sector in sectors {
@@ -34,6 +40,7 @@ fn total_demand(sectors : Array[Sector]) -> Int {
 }
 
 ///|
+/// Returns total supply from all plants, adding 90 if emergency battery is active.
 fn total_supply(plant_output : Array[Int], emergency_time : Float) -> Int {
   let mut t = 0
   for plant_output_elem in plant_output {
@@ -47,6 +54,7 @@ fn total_supply(plant_output : Array[Int], emergency_time : Float) -> Int {
 }
 
 ///|
+/// Randomizes demand and trend for all sectors to start a new shift.
 fn reset_sector_values(sectors : Array[Sector]) -> Unit {
   for sector in sectors {
     sector.demand = @raylib.get_random_value(70, 130)
@@ -55,6 +63,7 @@ fn reset_sector_values(sectors : Array[Sector]) -> Unit {
 }
 
 ///|
+/// Entry point: initializes the window and runs the power grid balancing game loop.
 fn main {
   @raylib.init_window(sw, sh, "Power Grid Operator 2026")
   @raylib.set_target_fps(60)

@@ -1,4 +1,5 @@
 ///|
+/// Initialises the Raylib window, creates the game state, and runs the main game loop.
 fn main {
   @raylib.set_config_flags(@raylib.FlagMsaa4xHint)
   @raylib.init_window(

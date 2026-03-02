@@ -1,4 +1,5 @@
 ///|
+/// Deactivates all particles and zeroes their fields.
 fn clear_particles(game : @types.Game) -> Unit {
   for particle in game.particles {
     particle.active = false
@@ -13,6 +14,7 @@ fn clear_particles(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates all fish, hazards, and pickups and zeroes their fields.
 fn clear_world(game : @types.Game) -> Unit {
   for fish_elem in game.fish {
     fish_elem.active = false
@@ -51,6 +53,7 @@ fn clear_world(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Emits one particle from the pool with the given position, velocity, lifetime, size, and kind.
 fn emit_particle(
   game : @types.Game,
   x : Float,
@@ -79,6 +82,7 @@ fn emit_particle(
 }
 
 ///|
+/// Emits `n` particles from the pool scattered around `(x, y)` with the given kind.
 fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
   for _i in 0..<n {
     emit_particle(
@@ -95,6 +99,7 @@ fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit 
 }
 
 ///|
+/// Advances all active particles: move, apply drag and gravity, deactivate on expiry.
 fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
@@ -118,6 +123,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Resets the hook to the ice hole position with zeroed velocity and no carried fish.
 fn reset_rig(game : @types.Game) -> Unit {
   game.hook_x = @types.hole_xf()
   game.hook_y = @types.topf() + 70.0
@@ -131,6 +137,7 @@ fn reset_rig(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets the full game state and starts a new fishing run in the Play state.
 fn start_run(game : @types.Game) -> Unit {
   clear_world(game)
   clear_particles(game)
@@ -175,6 +182,7 @@ fn start_run(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Transitions the game to the Result state, recording win/loss and triggering burst effect.
 fn finish_run(game : @types.Game, win : Bool) -> Unit {
   if game.state != @types.Play {
     return
@@ -202,6 +210,7 @@ fn finish_run(game : @types.Game, win : Bool) -> Unit {
 }
 
 ///|
+/// Spawns a fish of random kind and velocity from either side of the world; returns false if full.
 fn spawn_fish(game : @types.Game) -> Bool {
   for fish_elem in game.fish {
     if fish_elem.active {
@@ -252,6 +261,7 @@ fn spawn_fish(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Spawns a hazard of random kind with appropriate starting position; returns false if full.
 fn spawn_hazard(game : @types.Game) -> Bool {
   for hazard in game.hazards {
     if hazard.active {
@@ -310,6 +320,7 @@ fn spawn_hazard(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Spawns a pickup of random kind at a random underwater position; returns false if full.
 fn spawn_pickup(game : @types.Game) -> Bool {
   for pickup in game.pickups {
     if pickup.active {
@@ -342,6 +353,7 @@ fn spawn_pickup(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Toggles grab-on state; only active during play; shows HUD message.
 fn try_toggle_grab(game : @types.Game) -> Bool {
   if game.state != @types.Play {
     return false
@@ -359,6 +371,7 @@ fn try_toggle_grab(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Attempts a line repair: requires hook near hole and sufficient bait; applies cost and heal.
 fn try_repair(game : @types.Game) -> Bool {
   if game.state != @types.Play {
     return false
@@ -391,6 +404,7 @@ fn try_repair(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Drops the currently carried fish without scoring: marks it escaped, penalises score.
 fn drop_carrying_fish(game : @types.Game) -> Unit {
   if game.carrying_idx < 0 || game.carrying_idx >= game.fish.length() {
     game.carrying_idx = -1
@@ -412,6 +426,7 @@ fn drop_carrying_fish(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Lands the hooked fish into the catch zone: increments caught, combo, and score.
 fn land_carrying_fish(game : @types.Game) -> Unit {
   if game.carrying_idx < 0 || game.carrying_idx >= game.fish.length() {
     game.carrying_idx = -1
@@ -444,6 +459,7 @@ fn land_carrying_fish(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Applies the effect of collecting a pickup item: bait, repair, or thermos bonus.
 fn collect_pickup(
   game : @types.Game,
   kind : @types.PickupKind,
@@ -473,6 +489,7 @@ fn collect_pickup(
 }
 
 ///|
+/// Returns the movement speed multiplier for a fish kind.
 fn fish_speed_mul(kind : Int) -> Float {
   if kind == @types.fish_trout {
     1.0
@@ -484,6 +501,7 @@ fn fish_speed_mul(kind : Int) -> Float {
 }
 
 ///|
+/// Applies player input and ocean sway to the hook; enforces line length limit and emits wake particles.
 fn update_hook(game : @types.Game, dt : Float) -> Unit {
   let boost_mul : Float = if game.boost_on || game.turbo_t > 0.0 {
     1.55
@@ -546,6 +564,7 @@ fn update_hook(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances all active fish: follows hook if hooked, swims with sway, bounces off walls, detects hook collision.
 fn update_fish(game : @types.Game, dt : Float) -> Unit {
   let mut active_count : Int = 0
 
@@ -629,6 +648,7 @@ fn update_fish(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances all active hazards: applies kind-specific movement, bounces or despawns, applies line damage on hit.
 fn update_hazards(game : @types.Game, dt : Float) -> Unit {
   for hazard in game.hazards {
     if not(hazard.active) {
@@ -714,6 +734,7 @@ fn update_hazards(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances all active pickups: applies drift and wave motion, bounces off walls, detects hook collection.
 fn update_pickups(game : @types.Game, dt : Float) -> Unit {
   for pickup in game.pickups {
     if not(pickup.active) {
@@ -757,6 +778,7 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Uses a hint charge to mark the nearest relevant target; costs one hint and deducts 5 score.
 fn use_hint(game : @types.Game) -> Bool {
   if game.state != @types.Play || game.hint_left <= 0 {
     return false
@@ -830,6 +852,7 @@ fn use_hint(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Runs one frame of play simulation: timers, spawning, hook/fish/hazard/pickup updates, win/loss checks.
 fn update_play(game : @types.Game, dt : Float) -> Unit {
   let step : Float = @types.clampf(dt, 0.0, 0.04)
 

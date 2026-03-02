@@ -1,4 +1,5 @@
 ///|
+/// Returns a deterministic RGB colour for a given tile kind index, used to visually distinguish tile types on the board.
 fn color_for_kind(kind : Int) -> @raylib.Color {
   let r : Int = 72 + kind * 41 % 166
   let g : Int = 74 + kind * 67 % 158
@@ -7,6 +8,7 @@ fn color_for_kind(kind : Int) -> @raylib.Color {
 }
 
 ///|
+/// Draws the background: a dark fill, two pulsing ambient circles, and subtle horizontal stripe bands.
 fn draw_bg(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 14, 22, 255))
 
@@ -45,6 +47,7 @@ fn draw_bg(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws all active spark particles as coloured circles, using kind-specific colours for match, link, fail, and hint effects.
 fn draw_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
@@ -71,6 +74,7 @@ fn draw_sparks(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the active link path flash as a sequence of thick yellow line segments with dot markers at each waypoint.
 fn draw_link_path(game : @types.Game) -> Unit {
   if not(game.path_active) || game.path_points < 2 {
     return
@@ -98,6 +102,7 @@ fn draw_link_path(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws yellow highlight rectangles around the two tiles indicated by the active hint.
 fn draw_hint_pair(game : @types.Game) -> Unit {
   if not(game.hint_active) {
     return
@@ -134,6 +139,7 @@ fn draw_hint_pair(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the tile grid with alternating cell shading, coloured tiles with kind labels, selection highlight, cursor ring, hint pair, and link path.
 fn draw_board(game : @types.Game) -> Unit {
   let (board_x, board_y, tile) = @types.board_metrics(game)
 
@@ -241,6 +247,7 @@ fn draw_board(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a labelled button rectangle, filling with the accent colour when active and a default dark colour otherwise.
 fn draw_button(
   label : String,
   x : Int,
@@ -280,6 +287,7 @@ fn draw_button(
 }
 
 ///|
+/// Draws the right-side panel showing level info, score, combo, timer, remaining tiles, time bar, hint/shuffle counts, keyboard help, action buttons, and the current message.
 fn draw_side_panel(game : @types.Game) -> Unit {
   let px : Int = @types.panel_x()
   let py : Int = 20
@@ -525,6 +533,7 @@ fn draw_side_panel(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the on-screen D-pad directional buttons with active-state highlighting for touch and mouse input.
 fn draw_touch_overlay(game : @types.Game) -> Unit {
   let cx : Int = @types.dpad_center_x()
   let cy : Int = @types.dpad_center_y()
@@ -656,6 +665,7 @@ fn draw_touch_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the title screen with game name, subtitle, instruction lines, and the Start Festival button.
 fn draw_title(game : @types.Game) -> Unit {
   @raylib.draw_text(
     "MatchLink Festival 2026",
@@ -711,6 +721,7 @@ fn draw_title(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the level-clear modal overlay showing score, time left, hints left, and a Next Stage button.
 fn draw_level_clear_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -786,6 +797,7 @@ fn draw_level_clear_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the game-over failure overlay showing the final score and a Retry button.
 fn draw_fail_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -854,6 +866,7 @@ fn draw_fail_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the campaign-complete overlay showing final score, stages cleared, total play time, and a Restart Festival button.
 fn draw_campaign_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,

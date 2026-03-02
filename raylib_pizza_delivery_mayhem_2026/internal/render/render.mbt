@@ -1,9 +1,11 @@
 ///|
+/// Returns a sine wave value oscillating at frequency k based on the game's UI timer.
 fn bg_wave(game : @types.Game, k : Float) -> Float {
   @types.sinf(game.ui_t * k)
 }
 
 ///|
+/// Returns a random horizontal screen-shake offset when the shake timer is active.
 fn shake_x(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
@@ -13,6 +15,7 @@ fn shake_x(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns a random vertical screen-shake offset when the shake timer is active.
 fn shake_y(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
@@ -22,6 +25,7 @@ fn shake_y(game : @types.Game) -> Int {
 }
 
 ///|
+/// Clears the screen and draws the animated dark-blue background with soft glowing circles.
 fn draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(14, 22, 34, 255))
   let w0 : Float = bg_wave(game, 0.44)
@@ -47,6 +51,7 @@ fn draw_background(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the city grid background including road lanes, dashes, restaurant buildings, and the depot.
 fn draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit {
   @raylib.draw_rectangle(
     @types.world_x0 + ox,
@@ -152,6 +157,7 @@ fn draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Returns the fill colour for a traffic vehicle based on its kind (sedan, van, or bus).
 fn traffic_color(kind : Int) -> @raylib.Color {
   if kind == @types.traffic_sedan {
     @raylib.Color::new(204, 112, 104, 244)
@@ -163,6 +169,7 @@ fn traffic_color(kind : Int) -> @raylib.Color {
 }
 
 ///|
+/// Draws a traffic vehicle as a filled rectangle with an outline and a centre dot.
 fn draw_traffic(t : @types.Traffic, ox : Int, oy : Int) -> Unit {
   if not(t.active) {
     return
@@ -187,6 +194,7 @@ fn draw_traffic(t : @types.Traffic, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws an active delivery order as a line between source and destination, with pickup or drop-off circle and label.
 fn draw_order(o : @types.Order, highlight : Bool, ox : Int, oy : Int) -> Unit {
   if not(o.active) {
     return
@@ -242,6 +250,7 @@ fn draw_order(o : @types.Order, highlight : Bool, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Returns the fill colour for a pickup item based on its kind (fuel, repair, or speed).
 fn pickup_color(kind : Int) -> @raylib.Color {
   if kind == @types.pickup_fuel {
     @raylib.Color::new(255, 198, 110, 244)
@@ -253,6 +262,7 @@ fn pickup_color(kind : Int) -> @raylib.Color {
 }
 
 ///|
+/// Draws a pulsing pickup circle with a kind-specific icon (fuel canister, repair cross, or speed ring).
 fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
   if not(p.active) {
     return
@@ -303,6 +313,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws all active particles as circles with alpha that fades as their lifetime decreases.
 fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
@@ -332,6 +343,7 @@ fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws the player's delivery rider as a circle with a tilt-offset head, a scooter base, and optional boost flame or cargo box.
 fn draw_rider(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let x : Int = game.rider_x.to_int() + ox
   let y : Int = game.rider_y.to_int() + oy
@@ -381,6 +393,7 @@ fn draw_rider(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws the active hint as a pulsing ring and a line from the rider to the hint target.
 fn draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
   if game.hint_t <= 0.0 {
     return
@@ -407,6 +420,7 @@ fn draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
+/// Draws a filled progress bar clipped to ratio, with a background, fill colour, and border.
 fn draw_bar(
   x : Int,
   y : Int,
@@ -432,6 +446,7 @@ fn draw_bar(
 }
 
 ///|
+/// Draws the side HUD panel showing score, best score, deliveries, lives, combo, status bars, and key bindings.
 fn draw_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.panel_x0,
@@ -607,6 +622,7 @@ fn draw_panel(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a labelled touch button that highlights when the pointer is over its rectangle.
 fn draw_touch_button(
   game : @types.Game,
   rect : (Int, Int, Int, Int),
@@ -654,6 +670,7 @@ fn draw_touch_button(
 }
 
 ///|
+/// Draws all on-screen touch control buttons for directional movement, boost, action, hint, and restart.
 fn draw_touch_controls(game : @types.Game) -> Unit {
   if game.state != @types.state_play {
     return
@@ -725,6 +742,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the current HUD notification message as a fade-out banner near the top of the world area.
 fn draw_msg(game : @types.Game) -> Unit {
   if game.msg_t <= 0.0 || game.msg == "" {
     return
@@ -755,6 +773,7 @@ fn draw_msg(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the title screen overlay with game title, instructions, and a hoverable start button.
 fn draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -827,6 +846,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the result screen overlay showing win or lose outcome, score summary, and a retry button.
 fn draw_result_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,

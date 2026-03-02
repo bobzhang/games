@@ -1,10 +1,12 @@
 ///|
+/// Sets the HUD message text and resets its display timer to `ttl` seconds.
 fn set_message(game : @types.Game, text : String, ttl : Float) -> Unit {
   game.message = text
   game.message_t = ttl
 }
 
 ///|
+/// Deactivates all incident slots and zeroes their fields.
 fn clear_incidents(game : @types.Game) -> Unit {
   for incident in game.incidents {
     incident.active = false
@@ -18,6 +20,7 @@ fn clear_incidents(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets the full case state: clues, suspects, chain progress, incidents, timers, and message.
 fn reset_case(game : @types.Game) -> Unit {
   for clue in game.clues {
     clue.discovered = false
@@ -58,6 +61,7 @@ fn reset_case(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the index of the suspect whose home district is at `(cell_x, cell_y)`, or -1.
 fn suspect_index_at_cell(game : @types.Game, cell_x : Int, cell_y : Int) -> Int {
   for i in 0..<game.suspects.length() {
     if game.suspects[i].home_x == cell_x && game.suspects[i].home_y == cell_y {
@@ -68,6 +72,7 @@ fn suspect_index_at_cell(game : @types.Game, cell_x : Int, cell_y : Int) -> Int 
 }
 
 ///|
+/// Returns the index of a clue at the given cell; optionally filters to undiscovered only.
 fn clue_index_at_cell(
   game : @types.Game,
   cell_x : Int,
@@ -87,6 +92,7 @@ fn clue_index_at_cell(
 }
 
 ///|
+/// Returns the index of an active incident at the given cell, or -1 if none.
 fn incident_index_at_cell(
   game : @types.Game,
   cell_x : Int,
@@ -103,6 +109,7 @@ fn incident_index_at_cell(
 }
 
 ///|
+/// Returns the number of fully completed evidence chains for `suspect`.
 fn completed_chains(game : @types.Game, suspect : Int) -> Int {
   if suspect < 0 || suspect >= @types.suspect_count {
     return 0
@@ -119,6 +126,7 @@ fn completed_chains(game : @types.Game, suspect : Int) -> Int {
 }
 
 ///|
+/// Returns the total confidence score for `suspect` based on evidence, chains, and deduction.
 fn suspect_confidence(game : @types.Game, suspect : Int) -> Int {
   if suspect < 0 || suspect >= @types.suspect_count {
     return 0
@@ -133,6 +141,7 @@ fn suspect_confidence(game : @types.Game, suspect : Int) -> Int {
 }
 
 ///|
+/// Recalculates each suspect's suspicion float from their current confidence score.
 fn update_suspect_suspicion(game : @types.Game) -> Unit {
   for i in 0..<game.suspects.length() {
     let conf = Float::from_int(suspect_confidence(game, i))
@@ -141,6 +150,7 @@ fn update_suspect_suspicion(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Unlocks the deduction for `suspect` if enough chains are complete; awards score and trust.
 fn unlock_deduction_if_ready(game : @types.Game, suspect : Int) -> Unit {
   if suspect < 0 || suspect >= @types.suspect_count {
     return
@@ -165,6 +175,7 @@ fn unlock_deduction_if_ready(game : @types.Game, suspect : Int) -> Unit {
 }
 
 ///|
+/// Discovers a clue at `clue_index`: awards evidence, advances chain progress, and triggers deduction check.
 fn discover_clue(game : @types.Game, clue_index : Int) -> Unit {
   if clue_index < 0 || clue_index >= game.clues.length() {
     return
@@ -220,6 +231,7 @@ fn discover_clue(game : @types.Game, clue_index : Int) -> Unit {
 }
 
 ///|
+/// Returns the index of a free incident slot, or the slot with the highest remaining timer.
 fn alloc_incident_slot(game : @types.Game) -> Int {
   for i in 0..<game.incidents.length() {
     if not(game.incidents[i].active) {
@@ -239,6 +251,7 @@ fn alloc_incident_slot(game : @types.Game) -> Int {
 }
 
 ///|
+/// Spawns a new incident at a random unoccupied cell with severity-scaled timer.
 fn spawn_incident(game : @types.Game) -> Unit {
   let slot = alloc_incident_slot(game)
   let roll = @types.randi(0, 99)
@@ -279,6 +292,7 @@ fn spawn_incident(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Ticks all active incident timers; deactivates and penalises on timeout.
 fn update_incidents(game : @types.Game, dt : Float) -> Unit {
   let slowdown : Float = if game.focus_t > 0.0 { 0.72 } else { 1.0 }
 
@@ -307,6 +321,7 @@ fn update_incidents(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Returns the cumulative trust drain pressure from all currently active incidents.
 fn incident_pressure(game : @types.Game) -> Float {
   let mut pressure : Float = 0.0
   for incident in game.incidents {
@@ -318,6 +333,7 @@ fn incident_pressure(game : @types.Game) -> Float {
 }
 
 ///|
+/// Updates each district's heat value based on cursor, incidents, undiscovered clues, and focus.
 fn update_district_pulses(game : @types.Game, dt : Float) -> Unit {
   game.city_time = game.city_time + dt
 
@@ -368,6 +384,7 @@ fn update_district_pulses(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Moves the cursor by the current frame input delta, clamping within grid bounds.
 fn move_cursor(game : @types.Game) -> Unit {
   if game.input_dx == 0 && game.input_dy == 0 {
     return
@@ -386,6 +403,7 @@ fn move_cursor(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Activates focus or shows cooldown message when the focus key is pressed.
 fn handle_focus_input(game : @types.Game) -> Unit {
   if not(game.input_focus_press) {
     return
@@ -405,6 +423,7 @@ fn handle_focus_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Marks or clears the marked suspect when K is pressed at a suspect or empty cell.
 fn handle_cancel_or_mark(game : @types.Game) -> Unit {
   if not(game.input_cancel_press) {
     return
@@ -427,6 +446,7 @@ fn handle_cancel_or_mark(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Attempts to resolve an incident using the marked suspect; handles correct, blocked, and wrong cases.
 fn attempt_incident_resolution(
   game : @types.Game,
   incident_index : Int,
@@ -503,6 +523,7 @@ fn attempt_incident_resolution(
 }
 
 ///|
+/// Prints a confidence/chains/deduction summary for `suspect` as a HUD message.
 fn inspect_suspect(game : @types.Game, suspect : Int) -> Unit {
   if suspect < 0 || suspect >= @types.suspect_count {
     return
@@ -531,6 +552,7 @@ fn inspect_suspect(game : @types.Game, suspect : Int) -> Unit {
 }
 
 ///|
+/// Dispatches J input: resolve incident, discover clue, inspect suspect, or show no-lead message.
 fn handle_inspect(game : @types.Game) -> Unit {
   if not(game.input_inspect_press) {
     return
@@ -558,6 +580,7 @@ fn handle_inspect(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Decrements the glow timer for all discovered clues with active glow.
 fn update_clue_glow(game : @types.Game, dt : Float) -> Unit {
   for clue in game.clues {
     if clue.glow_t > 0.0 {
@@ -567,6 +590,7 @@ fn update_clue_glow(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Counts down the spawn timer and spawns a new incident when it reaches zero.
 fn update_spawn_timer(game : @types.Game, dt : Float) -> Unit {
   game.spawn_t = game.spawn_t - dt
   if game.spawn_t > 0.0 {
@@ -589,6 +613,7 @@ fn update_spawn_timer(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Ticks focus timer, focus cooldown, case timer, and trust decay per frame.
 fn update_runtime_meters(game : @types.Game, dt : Float) -> Unit {
   if game.focus_t > 0.0 {
     game.focus_t = @types.maxf(0.0, game.focus_t - dt)
@@ -608,6 +633,7 @@ fn update_runtime_meters(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Saves best score and transitions to game-over state with a reason message.
 fn transition_to_game_over(game : @types.Game, reason : String) -> Unit {
   if game.score > game.best_score {
     game.best_score = game.score
@@ -617,6 +643,7 @@ fn transition_to_game_over(game : @types.Game, reason : String) -> Unit {
 }
 
 ///|
+/// Handles one tick in Title state: animates district pulses and starts case on J.
 fn update_title_state(game : @types.Game, dt : Float) -> Unit {
   update_district_pulses(game, dt)
 
@@ -626,6 +653,7 @@ fn update_title_state(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Handles one tick in Playing state: processes all input, timers, and checks win/loss conditions.
 fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
   if game.input_pause_press {
     game.state = Paused
@@ -653,6 +681,7 @@ fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Handles one tick in Paused state: animates district pulses and resumes on P or K.
 fn update_paused_state(game : @types.Game, dt : Float) -> Unit {
   update_district_pulses(game, dt)
 
@@ -663,6 +692,7 @@ fn update_paused_state(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Handles one tick in GameOver state: animates district pulses and handles restart or title.
 fn update_game_over_state(game : @types.Game, dt : Float) -> Unit {
   update_district_pulses(game, dt)
 

@@ -1,4 +1,5 @@
 ///|
+/// Draws text horizontally centred on the screen at the given y coordinate.
 fn draw_center_text(
   text : String,
   y : Int,
@@ -10,6 +11,7 @@ fn draw_center_text(
 }
 
 ///|
+/// Returns a copy of `c` with the alpha channel set to the clamped `alpha` value.
 fn alpha_col(c : @raylib.Color, alpha : Int) -> @raylib.Color {
   @raylib.Color::new(
     c.r.to_int(),
@@ -20,12 +22,14 @@ fn alpha_col(c : @raylib.Color, alpha : Int) -> @raylib.Color {
 }
 
 ///|
+/// Returns `base` with its alpha modulated by `ratio` to represent a fill level.
 fn meter_col(base : @raylib.Color, ratio : Float) -> @raylib.Color {
   let r = @types.clampf(ratio, 0.0, 1.0)
   alpha_col(base, 100 + (r * 155.0).to_int())
 }
 
 ///|
+/// Returns a small random shake offset when `shake_t > 0`, otherwise `(0, 0)`.
 fn camera_offset(game : @types.Game) -> (Float, Float) {
   if game.shake_t <= 0.0 {
     (0.0, 0.0)
@@ -36,6 +40,7 @@ fn camera_offset(game : @types.Game) -> (Float, Float) {
 }
 
 ///|
+/// Draws the animated starfield background with a moon accent and a vertical gradient.
 fn draw_background(game : @types.Game) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
@@ -82,6 +87,7 @@ fn draw_background(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the board area, grid lines, and the highlighted gate cell.
 fn draw_grid_and_gate_cell(cam_x : Float, cam_y : Float) -> Unit {
   @raylib.draw_rectangle(
     (@types.board_left() + cam_x).to_int(),
@@ -131,6 +137,7 @@ fn draw_grid_and_gate_cell(cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws the moon gate with a pulsing ring, health-tinted colour, and barrier flash ring.
 fn draw_gate(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let gx = @types.gate_x() + cam_x
   let gy = @types.gate_y() + cam_y
@@ -175,6 +182,7 @@ fn draw_gate(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws all active guardian nodes with level-scaled radius, facing arrow, and range arc.
 fn draw_nodes(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for node in game.nodes {
     if not(node.active) {
@@ -229,6 +237,7 @@ fn draw_nodes(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws all active enemies with health bars and wraith aura effects.
 fn draw_enemies(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for enemy in game.enemies {
     if not(enemy.active) {
@@ -279,6 +288,7 @@ fn draw_enemies(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws all active bolt projectiles as a short trailing line with a bright tip.
 fn draw_bolts(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for bolt in game.bolts {
     if not(bolt.active) {
@@ -307,6 +317,7 @@ fn draw_bolts(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Returns the colour for a ring pulse of the given kind (gate, energy, or barrier).
 fn pulse_col(kind : Int) -> @raylib.Color {
   if kind == 0 {
     @types.col_gate()
@@ -318,6 +329,7 @@ fn pulse_col(kind : Int) -> @raylib.Color {
 }
 
 ///|
+/// Draws all active ring pulse effects with alpha fading as they expire.
 fn draw_pulses(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for pulse in game.pulses {
     if not(pulse.active) {
@@ -339,6 +351,7 @@ fn draw_pulses(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws the tile cursor rectangle and a directional facing indicator.
 fn draw_cursor(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let x = @types.board_x + game.cursor_x * @types.cell_size
   let y = @types.board_y + game.cursor_y * @types.cell_size
@@ -379,6 +392,7 @@ fn draw_cursor(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
+/// Draws a labelled horizontal progress bar at the given position.
 fn draw_meter(
   label : String,
   value_text : String,
@@ -420,6 +434,7 @@ fn draw_meter(
 }
 
 ///|
+/// Draws the top HUD bar with gate HP, energy, barrier charge, score, kill count, and controls.
 fn draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -553,6 +568,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the translucent title screen overlay with game name, instructions, and start prompt.
 fn draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -603,6 +619,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a semi-transparent pause overlay with resume instructions.
 fn draw_paused_overlay() -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -627,6 +644,7 @@ fn draw_paused_overlay() -> Unit {
 }
 
 ///|
+/// Draws the game-over overlay with final score, wave, kills, best score, and restart options.
 fn draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
@@ -672,6 +690,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Dispatches to the correct overlay (title, paused, or game-over) based on the current state.
 fn draw_state_overlay(game : @types.Game) -> Unit {
   if game.state == @types.state_title {
     draw_title_overlay(game)

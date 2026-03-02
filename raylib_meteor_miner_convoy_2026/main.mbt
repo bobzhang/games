@@ -1,28 +1,37 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 820
 
 ///|
+/// Number of horizontal convoy lanes.
 let lane_n : Int = 3
 
 ///|
+/// Number of convoy trucks.
 let truck_n : Int = 3
 
 ///|
+/// Maximum meteors tracked simultaneously.
 let max_meteors : Int = 120
 
 ///|
+/// Maximum player bullets tracked simultaneously.
 let max_bullets : Int = 260
 
 ///|
+/// Maximum ore fragments tracked simultaneously.
 let max_ores : Int = 140
 
 ///|
+/// Maximum spark particles tracked simultaneously.
 let max_sparks : Int = 360
 
 ///|
+/// A convoy transport truck that travels rightward along its lane delivering ore to the refinery.
 struct Truck {
   mut x : Float
   mut lane : Int
@@ -33,6 +42,7 @@ struct Truck {
 }
 
 ///|
+/// An incoming meteor with physics, radius, HP, and ore value.
 struct Meteor {
   mut x : Float
   mut y : Float
@@ -45,6 +55,7 @@ struct Meteor {
 }
 
 ///|
+/// A player-fired projectile with velocity, position, and time-to-live.
 struct Bullet {
   mut x : Float
   mut y : Float
@@ -55,6 +66,7 @@ struct Bullet {
 }
 
 ///|
+/// An ore fragment released when a meteor is destroyed; falls under gravity and can be collected by the player or a truck.
 struct Ore {
   mut x : Float
   mut y : Float
@@ -66,6 +78,7 @@ struct Ore {
 }
 
 ///|
+/// A short-lived visual particle used for explosions and impact effects.
 struct Spark {
   mut x : Float
   mut y : Float
@@ -77,6 +90,7 @@ struct Spark {
 }
 
 ///|
+/// Clamps `v` to the inclusive range [`lo`, `hi`].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -88,6 +102,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -97,6 +112,7 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns the squared Euclidean distance between two points.
 fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
   let dy = ay - by
@@ -104,6 +120,7 @@ fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 }
 
 ///|
+/// Returns true if point (`px`, `py`) lies inside the axis-aligned rectangle defined by origin (`rx`, `ry`) and size (`rw`, `rh`).
 fn inside_rect(
   px : Float,
   py : Float,
@@ -119,6 +136,7 @@ fn inside_rect(
 }
 
 ///|
+/// Returns the vertical screen position of the given convoy lane index.
 fn lane_y(lane : Int) -> Float {
   if lane == 0 {
     560.0
@@ -130,6 +148,7 @@ fn lane_y(lane : Int) -> Float {
 }
 
 ///|
+/// Resets all trucks to their starting lane, position, and HP scaled to the given level.
 fn reset_trucks(trucks : Array[Truck], level : Int) -> Unit {
   for i in 0..<trucks.length() {
     trucks[i].lane = i
@@ -142,6 +161,7 @@ fn reset_trucks(trucks : Array[Truck], level : Int) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes all meteor slots.
 fn clear_meteors(meteors : Array[Meteor]) -> Unit {
   for meteor in meteors {
     meteor.x = 0.0
@@ -156,6 +176,7 @@ fn clear_meteors(meteors : Array[Meteor]) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes all bullet slots.
 fn clear_bullets(bullets : Array[Bullet]) -> Unit {
   for bullet in bullets {
     bullet.x = 0.0
@@ -168,6 +189,7 @@ fn clear_bullets(bullets : Array[Bullet]) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes all ore fragment slots.
 fn clear_ores(ores : Array[Ore]) -> Unit {
   for ore in ores {
     ore.x = 0.0
@@ -181,6 +203,7 @@ fn clear_ores(ores : Array[Ore]) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes all spark particle slots.
 fn clear_sparks(sparks : Array[Spark]) -> Unit {
   for spark in sparks {
     spark.x = 0.0
@@ -194,6 +217,7 @@ fn clear_sparks(sparks : Array[Spark]) -> Unit {
 }
 
 ///|
+/// Activates the first inactive spark slot at (`x`, `y`) with a random velocity scaled by `speed` and the given visual kind.
 fn spawn_spark(
   sparks : Array[Spark],
   x : Float,
@@ -221,6 +245,7 @@ fn spawn_spark(
 }
 
 ///|
+/// Spawns `n` sparks at (`x`, `y`) in a single burst with the given speed and kind.
 fn burst(
   sparks : Array[Spark],
   x : Float,
@@ -235,6 +260,7 @@ fn burst(
 }
 
 ///|
+/// Activates the first inactive bullet slot, normalising the direction (`dx`, `dy`) and applying a fixed speed of 720 px/s.
 fn spawn_bullet(
   bullets : Array[Bullet],
   x : Float,
@@ -267,6 +293,7 @@ fn spawn_bullet(
 }
 
 ///|
+/// Activates the first inactive meteor slot, setting a random size, HP, ore value, and trajectory aimed at a random convoy lane.
 fn spawn_meteor(meteors : Array[Meteor], level : Int) -> Unit {
   let mut done = false
   for meteor in meteors {
@@ -308,6 +335,7 @@ fn spawn_meteor(meteors : Array[Meteor], level : Int) -> Unit {
 }
 
 ///|
+/// Activates the first inactive ore fragment slot at (`x`, `y`) with a random upward velocity and the given ore amount.
 fn spawn_ore(ores : Array[Ore], x : Float, y : Float, amount : Int) -> Unit {
   let mut done = false
   for ore in ores {
@@ -328,6 +356,7 @@ fn spawn_ore(ores : Array[Ore], x : Float, y : Float, amount : Int) -> Unit {
 }
 
 ///|
+/// Resets all entity pools for the given level and returns the delivery target count, time limit, and meteor spawn interval.
 fn setup_level(
   level : Int,
   trucks : Array[Truck],
@@ -352,6 +381,7 @@ fn setup_level(
 }
 
 ///|
+/// Returns the number of trucks that are currently alive.
 fn alive_truck_count(trucks : Array[Truck]) -> Int {
   let mut c = 0
   for truck in trucks {
@@ -363,6 +393,7 @@ fn alive_truck_count(trucks : Array[Truck]) -> Int {
 }
 
 ///|
+/// Returns the index of the nearest damaged truck within repair range (130 px) of (`px`, `py`), or -1 if none qualifies.
 fn nearest_truck_for_repair(
   trucks : Array[Truck],
   px : Float,
@@ -387,6 +418,7 @@ fn nearest_truck_for_repair(
 }
 
 ///|
+/// Entry point: opens the window, runs the three-level game loop managing player, convoy, meteors, ore, and particles each frame.
 fn main {
   @raylib.init_window(sw, sh, "Meteor Miner Convoy 2026")
   @raylib.set_target_fps(60)

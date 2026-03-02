@@ -1,18 +1,23 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1140
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 720
 
 ///|
+/// Number of conveyor lanes on the sorting floor.
 let lane_count : Int = 4
 
 ///|
+/// Returns the vertical pixel center for a given lane index.
 fn lane_y(lane : Int) -> Float {
   220.0 + Float::from_int(lane) * 105.0
 }
 
 ///|
+/// A package traveling down a conveyor lane toward the sorter gate.
 struct Package {
   mut alive : Bool
   mut x : Float
@@ -23,6 +28,7 @@ struct Package {
 }
 
 ///|
+/// Deactivates all packages in the pool, clearing the conveyor.
 fn reset_packages(ps : Array[Package]) -> Unit {
   for ps_elem in ps {
     ps_elem.alive = false
@@ -30,6 +36,7 @@ fn reset_packages(ps : Array[Package]) -> Unit {
 }
 
 ///|
+/// Activates the first available slot in the pool with a randomized lane, destination code, and speed.
 fn spawn_package(ps : Array[Package]) -> Unit {
   for ps_elem in ps {
     if not(ps_elem.alive) {
@@ -46,6 +53,7 @@ fn spawn_package(ps : Array[Package]) -> Unit {
 }
 
 ///|
+/// Returns the display color associated with a destination code (0=red, 1=sky, 2=lime, 3=gold).
 fn code_color(code : Int) -> @raylib.Color {
   if code == 0 {
     @raylib.red
@@ -59,6 +67,7 @@ fn code_color(code : Int) -> @raylib.Color {
 }
 
 ///|
+/// Returns the single-letter label for a destination code (0=A, 1=B, 2=C, 3=D).
 fn code_label(code : Int) -> String {
   if code == 0 {
     "A"
@@ -72,6 +81,7 @@ fn code_label(code : Int) -> String {
 }
 
 ///|
+/// Entry point: initializes the window and runs the conveyor sorting game loop.
 fn main {
   @raylib.init_window(sw, sh, "Post Office Sorter 2026")
   @raylib.set_target_fps(60)

@@ -1,4 +1,5 @@
 ///|
+/// Deactivates all sparks in the particle pool.
 fn clear_effects(game : @types.Game) -> Unit {
   for spark in game.sparks {
     spark.active = false
@@ -13,6 +14,7 @@ fn clear_effects(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Activates the first free spark slot with the given position, velocity, lifetime, size, and kind.
 fn spawn_spark(
   game : @types.Game,
   x : Float,
@@ -41,6 +43,7 @@ fn spawn_spark(
 }
 
 ///|
+/// Emits `n` randomly scattered sparks centred near `(x, y)` of the given kind.
 fn burst(
   game : @types.Game,
   x : Float,
@@ -63,6 +66,7 @@ fn burst(
 }
 
 ///|
+/// Advances all active sparks one frame: moves, damps velocity, and expires them.
 fn update_sparks(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
@@ -83,6 +87,7 @@ fn update_sparks(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Zeroes every cell in the board array.
 fn clear_board(game : @types.Game) -> Unit {
   for i in 0..<game.board.length() {
     game.board[i] = 0
@@ -90,6 +95,7 @@ fn clear_board(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Copies all cells from `src` into `dst`.
 fn copy_board(dst : Array[Int], src : Array[Int]) -> Unit {
   for i in 0..<dst.length() {
     dst[i] = src[i]
@@ -97,6 +103,7 @@ fn copy_board(dst : Array[Int], src : Array[Int]) -> Unit {
 }
 
 ///|
+/// Snapshots the current board and all counters into the single-step undo buffer.
 fn save_undo(game : @types.Game) -> Unit {
   copy_board(game.prev_board, game.board)
 
@@ -113,6 +120,7 @@ fn save_undo(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Restores the last saved undo snapshot; returns false if undo is unavailable.
 fn restore_undo(game : @types.Game) -> Bool {
   if not(game.can_undo) {
     @types.set_msg(game, "Nothing to undo", 0.7)
@@ -137,6 +145,7 @@ fn restore_undo(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Maps a slide direction and line/position pair to a flat board index.
 fn line_index(line : Int, pos : Int, dir : @types.Direction) -> Int {
   match dir {
     @types.DirLeft => @types.idx(pos, line)
@@ -147,6 +156,7 @@ fn line_index(line : Int, pos : Int, dir : @types.Direction) -> Int {
 }
 
 ///|
+/// Places a new tile (2, 4, 8, or 16) in a random empty cell and emits a burst.
 fn spawn_tile(game : @types.Game, kind : @types.SparkKind) -> Bool {
   let mut empty_count : Int = 0
 
@@ -209,6 +219,7 @@ fn spawn_tile(game : @types.Game, kind : @types.SparkKind) -> Bool {
 }
 
 ///|
+/// Places a storm debris blocker in a random empty cell and triggers screen shake.
 fn spawn_blocker(game : @types.Game) -> Bool {
   let mut empty_count : Int = 0
 
@@ -251,6 +262,7 @@ fn spawn_blocker(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Resets all state and begins a new game from the play state.
 fn start_match(game : @types.Game) -> Unit {
   clear_board(game)
   clear_effects(game)
@@ -287,6 +299,7 @@ fn start_match(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns true when the board still contains an empty cell or an adjacent matching pair.
 fn board_has_move(game : @types.Game) -> Bool {
   for y in 0..<@types.board_n {
     for x in 0..<@types.board_n {
@@ -320,6 +333,7 @@ fn board_has_move(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Transitions the game to the win result screen and updates the best score.
 fn finish_win(game : @types.Game) -> Unit {
   game.state = @types.Result
   game.win = true
@@ -332,6 +346,7 @@ fn finish_win(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Transitions the game to the loss result screen and updates the best score.
 fn finish_lose(game : @types.Game) -> Unit {
   game.state = @types.Result
   game.win = false
@@ -344,6 +359,7 @@ fn finish_lose(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Checks win/loss conditions after each completed move.
 fn apply_post_turn(game : @types.Game) -> Unit {
   if game.max_tile >= @types.target_tile {
     game.target_reached = true
@@ -357,6 +373,7 @@ fn apply_post_turn(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Slides and merges one row or column segment-by-segment; returns changed flag, score delta, max tile seen, zap charge delta, and merge count.
 fn process_line(
   game : @types.Game,
   line : Int,
@@ -447,6 +464,7 @@ fn process_line(
 }
 
 ///|
+/// Attempts a full board slide in a direction; spawns a tile and triggers the storm countdown if anything changed.
 fn try_move(game : @types.Game, dir : @types.Direction) -> Bool {
   if game.state != @types.Play {
     return false
@@ -511,6 +529,7 @@ fn try_move(game : @types.Game, dir : @types.Direction) -> Bool {
 }
 
 ///|
+/// Consumes a full zap charge to destroy the cell at `(x, y)`, then advances the storm countdown.
 fn use_zap(game : @types.Game, x : Int, y : Int) -> Bool {
   if game.state != @types.Play {
     return false
@@ -573,6 +592,7 @@ fn use_zap(game : @types.Game, x : Int, y : Int) -> Bool {
 }
 
 ///|
+/// Advances all per-frame timers (game time, UI, messages, combo, shake, touch cooldown) and ticks spark particles.
 fn update_play(game : @types.Game, dt : Float) -> Unit {
   game.game_t = game.game_t + dt
   game.ui_t = game.ui_t + dt

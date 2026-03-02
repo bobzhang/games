@@ -1,4 +1,5 @@
 ///|
+/// Entry point: initializes the window and audio device, creates game state, and runs the blackout escape frame loop.
 fn main {
   @raylib.set_config_flags(@raylib.FlagMsaa4xHint)
   @raylib.init_window(

@@ -1,10 +1,13 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1100
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 700
 
 ///|
+/// Axis-aligned rectangle representing a solid platform.
 struct Platform {
   x : Int
   y : Int
@@ -13,6 +16,7 @@ struct Platform {
 }
 
 ///|
+/// Axis-aligned rectangle representing an instant-death spike zone.
 struct Spike {
   x : Int
   y : Int
@@ -21,6 +25,7 @@ struct Spike {
 }
 
 ///|
+/// Returns true when two axis-aligned rectangles overlap.
 fn hit(
   ax : Int,
   ay : Int,
@@ -35,6 +40,7 @@ fn hit(
 }
 
 ///|
+/// Initializes the window and runs the platformer game loop until the window is closed.
 fn main {
   @raylib.init_window(sw, sh, "Platformer Precision 2026")
   @raylib.set_target_fps(60)

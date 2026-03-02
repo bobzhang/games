@@ -1,4 +1,5 @@
 ///|
+/// Resets all input fields on the game's input struct to their zero/false defaults.
 fn clear_input(game : @types.Game) -> Unit {
   game.input.move_x = 0
   game.input.move_y = 0
@@ -11,6 +12,7 @@ fn clear_input(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Clears input then polls keyboard for movement, confirm, cancel, burst, pause, restart, and start actions.
 fn sample_input(game : @types.Game) -> Unit {
   clear_input(game)
 

@@ -1,28 +1,37 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1220
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 820
 
 ///|
+/// Grid width in cells.
 let gw : Int = 14
 
 ///|
+/// Grid height in cells.
 let gh : Int = 10
 
 ///|
+/// Size of each grid cell in pixels.
 let cell : Int = 64
 
 ///|
+/// Horizontal pixel offset of the grid origin.
 let ox : Int = 162
 
 ///|
+/// Vertical pixel offset of the grid origin.
 let oy : Int = 104
 
 ///|
+/// Maximum number of magnetic orbs on the board at once.
 let max_orbs : Int = 4
 
 ///|
+/// Represents a magnetic orb with its board position and active state.
 struct Orb {
   mut x : Int
   mut y : Int
@@ -30,11 +39,13 @@ struct Orb {
 }
 
 ///|
+/// Converts 2D grid coordinates into a flat array index.
 fn idx(x : Int, y : Int) -> Int {
   y * gw + x
 }
 
 ///|
+/// Returns the absolute value of an integer.
 fn absi(x : Int) -> Int {
   if x < 0 {
     -x
@@ -44,6 +55,7 @@ fn absi(x : Int) -> Int {
 }
 
 ///|
+/// Returns the sign of an integer as -1, 0, or 1.
 fn signi(x : Int) -> Int {
   if x < 0 {
     -1
@@ -55,11 +67,13 @@ fn signi(x : Int) -> Int {
 }
 
 ///|
+/// Returns true when the given grid coordinates are within the playfield.
 fn in_bounds(x : Int, y : Int) -> Bool {
   x >= 0 && x < gw && y >= 0 && y < gh
 }
 
 ///|
+/// Returns true when the point (px, py) lies inside the axis-aligned rectangle defined by (rx, ry, rw, rh).
 fn inside_rect(
   px : Float,
   py : Float,
@@ -75,6 +89,7 @@ fn inside_rect(
 }
 
 ///|
+/// Sets every wall cell to false, clearing all walls on the board.
 fn clear_walls(walls : Array[Bool]) -> Unit {
   for i in 0..<walls.length() {
     walls[i] = false
@@ -82,6 +97,7 @@ fn clear_walls(walls : Array[Bool]) -> Unit {
 }
 
 ///|
+/// Resets every orb to the inactive default state at position (0, 0).
 fn clear_orbs(orbs : Array[Orb]) -> Unit {
   for i in 0..<orbs.length() {
     orbs[i] = { x: 0, y: 0, active: false }
@@ -89,11 +105,13 @@ fn clear_orbs(orbs : Array[Orb]) -> Unit {
 }
 
 ///|
+/// Places orb `i` at board position (x, y) and marks it active.
 fn set_orb(orbs : Array[Orb], i : Int, x : Int, y : Int) -> Unit {
   orbs[i] = { x, y, active: true }
 }
 
 ///|
+/// Records goal position `i` at board coordinates (x, y).
 fn set_goal(
   goals_x : Array[Int],
   goals_y : Array[Int],
@@ -106,6 +124,7 @@ fn set_goal(
 }
 
 ///|
+/// Returns true when (x, y) is out of bounds or occupied by a wall.
 fn is_wall(walls : Array[Bool], x : Int, y : Int) -> Bool {
   if not(in_bounds(x, y)) {
     true
@@ -115,6 +134,7 @@ fn is_wall(walls : Array[Bool], x : Int, y : Int) -> Bool {
 }
 
 ///|
+/// Returns true if any active orb other than `skip` occupies position (x, y).
 fn orb_at(orbs : Array[Orb], skip : Int, x : Int, y : Int) -> Bool {
   let mut found = false
   for i in 0..<orbs.length() {
@@ -129,6 +149,7 @@ fn orb_at(orbs : Array[Orb], skip : Int, x : Int, y : Int) -> Bool {
 }
 
 ///|
+/// Returns true if any goal position matches (x, y).
 fn goal_at(
   goals_x : Array[Int],
   goals_y : Array[Int],
@@ -145,6 +166,7 @@ fn goal_at(
 }
 
 ///|
+/// Counts how many active orbs are currently sitting on a goal position.
 fn goals_completed(
   orbs : Array[Orb],
   goals_x : Array[Int],
@@ -160,6 +182,7 @@ fn goals_completed(
 }
 
 ///|
+/// Returns true when every active orb rests on a goal, completing the level.
 fn all_orbs_on_goals(
   orbs : Array[Orb],
   goals_x : Array[Int],
@@ -169,6 +192,7 @@ fn all_orbs_on_goals(
 }
 
 ///|
+/// Initialises walls, orbs, and goals for the given level, returning the player start position and turn budget.
 fn setup_level(
   level : Int,
   walls : Array[Bool],
@@ -269,6 +293,7 @@ fn setup_level(
 }
 
 ///|
+/// Attempts to move the player one step in direction (dx, dy), returning the new position and whether movement succeeded.
 fn try_move_player(
   walls : Array[Bool],
   orbs : Array[Orb],
@@ -289,6 +314,7 @@ fn try_move_player(
 }
 
 ///|
+/// Moves each orb one step toward or away from the player depending on attract mode, returning the number of orbs that moved.
 fn apply_pulse(
   orbs : Array[Orb],
   walls : Array[Bool],
@@ -343,6 +369,7 @@ fn apply_pulse(
 }
 
 ///|
+/// Entry point: initialises the window, runs the game loop, and handles input, physics, and rendering each frame.
 fn main {
   @raylib.init_window(sw, sh, "Magnet Maze 2026")
   @raylib.set_target_fps(60)

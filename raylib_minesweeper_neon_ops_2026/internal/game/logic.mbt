@@ -1,4 +1,5 @@
 ///|
+/// Deactivates and zeroes all spark particle slots in the game state.
 fn clear_effects(game : @types.Game) -> Unit {
   for spark in game.sparks {
     spark.active = false
@@ -13,6 +14,7 @@ fn clear_effects(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Activates the first inactive spark in the pool with the given position, velocity, lifetime, size, and visual kind.
 fn spawn_spark(
   game : @types.Game,
   x : Float,
@@ -41,6 +43,7 @@ fn spawn_spark(
 }
 
 ///|
+/// Spawns `n` sparks in a burst at (`x`, `y`) with random velocities and the given kind.
 fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
   for _i in 0..<n {
     spawn_spark(
@@ -57,6 +60,7 @@ fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit 
 }
 
 ///|
+/// Advances all active sparks by `dt` seconds, applying drag and gravity, deactivating expired ones.
 fn update_sparks(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
@@ -77,6 +81,7 @@ fn update_sparks(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Resets every cell on the board to the unrevealed, non-mined, unflagged state.
 fn clear_board(game : @types.Game) -> Unit {
   for cell in game.cells {
     cell.mine = false
@@ -88,6 +93,7 @@ fn clear_board(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Counts the number of mines in the eight neighbours of cell (`x`, `y`).
 fn adjacent_mines(game : @types.Game, x : Int, y : Int) -> Int {
   let mut n : Int = 0
 
@@ -111,6 +117,7 @@ fn adjacent_mines(game : @types.Game, x : Int, y : Int) -> Int {
 }
 
 ///|
+/// Recalculates the `around` field for every cell after mines have been placed.
 fn recompute_around(game : @types.Game) -> Unit {
   for y in 0..<@types.board_h {
     for x in 0..<@types.board_w {
@@ -125,12 +132,14 @@ fn recompute_around(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns true if (`x`, `y`) is within the 3x3 safe zone around the first-click seed cell.
 fn is_safe_seed_cell(seed_x : Int, seed_y : Int, x : Int, y : Int) -> Bool {
   @types.absf(Float::from_int(seed_x - x)) <= 1.0 &&
   @types.absf(Float::from_int(seed_y - y)) <= 1.0
 }
 
 ///|
+/// Randomly places the required number of mines, guaranteeing the 3x3 area around (`safe_x`, `safe_y`) is mine-free.
 fn place_mines(game : @types.Game, safe_x : Int, safe_y : Int) -> Unit {
   let mut placed : Int = 0
 
@@ -155,6 +164,7 @@ fn place_mines(game : @types.Game, safe_x : Int, safe_y : Int) -> Unit {
 }
 
 ///|
+/// Resets all game counters, clears the board and effects, and transitions to the Play state.
 fn start_match(game : @types.Game) -> Unit {
   clear_board(game)
   clear_effects(game)
@@ -192,6 +202,7 @@ fn start_match(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Reveals every mine cell on the board, used when the game ends.
 fn reveal_all_mines(game : @types.Game) -> Unit {
   for cell in game.cells {
     if cell.mine {
@@ -201,12 +212,14 @@ fn reveal_all_mines(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Calculates the score awarded for revealing a safe cell, scaled by adjacency count and current combo.
 fn score_for_reveal(around : Int, combo : Int) -> Int {
   let base : Int = if around <= 0 { 18 } else { 12 + around * 8 }
   base + combo * 5
 }
 
 ///|
+/// Increments the combo counter, updates the best combo record, and refreshes the combo display timer.
 fn award_combo(game : @types.Game) -> Unit {
   game.combo = game.combo + 1
   if game.combo > game.combo_best {
@@ -216,12 +229,14 @@ fn award_combo(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets the combo counter and its display timer to zero.
 fn reset_combo(game : @types.Game) -> Unit {
   game.combo = 0
   game.combo_t = 0.0
 }
 
 ///|
+/// Returns the pixel centre of cell (`x`, `y`) in world coordinates, using the current board metrics.
 fn cell_world_center(game : @types.Game, x : Int, y : Int) -> (Float, Float) {
   let (bx, by, tile) = @types.board_metrics(game)
   (
@@ -231,6 +246,7 @@ fn cell_world_center(game : @types.Game, x : Int, y : Int) -> (Float, Float) {
 }
 
 ///|
+/// Reveals a single cell at (`x`, `y`): awards score or deducts a life on mine hit, emits particles, and may trigger game over.
 fn reveal_single(game : @types.Game, x : Int, y : Int) -> Bool {
   if not(@types.in_board(x, y)) {
     return false
@@ -285,6 +301,7 @@ fn reveal_single(game : @types.Game, x : Int, y : Int) -> Bool {
 }
 
 ///|
+/// BFS flood-reveals all connected zero-adjacency cells starting from (`sx`, `sy`), stopping if the game ends mid-flood.
 fn flood_reveal(game : @types.Game, sx : Int, sy : Int) -> Unit {
   let mut qh : Int = 0
   let mut qt : Int = 0
@@ -342,6 +359,7 @@ fn flood_reveal(game : @types.Game, sx : Int, sy : Int) -> Unit {
 }
 
 ///|
+/// Checks whether all safe cells have been revealed; if so, computes the final score and grade and transitions to Result state.
 fn check_clear(game : @types.Game) -> Bool {
   if game.revealed_safe >= @types.safe_cells_total(game) {
     game.win = true
@@ -368,6 +386,7 @@ fn check_clear(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Attempts to reveal cell (`x`, `y`): places mines on first move, flood-reveals if around == 0, and checks for board clear.
 fn reveal_cell(game : @types.Game, x : Int, y : Int) -> Bool {
   if game.state != @types.Play {
     return false
@@ -406,6 +425,7 @@ fn reveal_cell(game : @types.Game, x : Int, y : Int) -> Bool {
 }
 
 ///|
+/// Toggles the flag on the unrevealed cell at (`x`, `y`), enforcing the mine count budget.
 fn toggle_flag(game : @types.Game, x : Int, y : Int) -> Bool {
   if game.state != @types.Play {
     return false
@@ -442,6 +462,7 @@ fn toggle_flag(game : @types.Game, x : Int, y : Int) -> Bool {
 }
 
 ///|
+/// Searches for a random unrevealed, unflagged, safe cell to use as a hint target; falls back to a sequential scan if random probing fails.
 fn safe_hint_target(game : @types.Game) -> (Bool, Int, Int) {
   let mut tries : Int = 0
 
@@ -474,6 +495,7 @@ fn safe_hint_target(game : @types.Game) -> (Bool, Int, Int) {
 }
 
 ///|
+/// Spends one hint to reveal a guaranteed safe cell, moving the cursor to it and deducting 60 points.
 fn use_hint(game : @types.Game) -> Bool {
   if game.state != @types.Play {
     return false
@@ -510,6 +532,7 @@ fn use_hint(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Converts pixel mouse coordinates to board cell coordinates using the current board metrics.
 fn click_to_cell(
   game : @types.Game,
   mx : Float,
@@ -528,6 +551,7 @@ fn click_to_cell(
 }
 
 ///|
+/// Ticks timers for elapsed time, message display, combo decay, screen shake, touch cooldown, and spark particles.
 fn update_play(game : @types.Game, dt : Float) -> Unit {
   game.game_t = game.game_t + dt
   game.ui_t = game.ui_t + dt

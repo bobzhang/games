@@ -1,4 +1,5 @@
 ///|
+/// Initializes the window and audio, then runs the main game loop with update and draw each frame.
 fn main {
   @raylib.set_config_flags(@raylib.FlagMsaa4xHint)
   @raylib.init_window(

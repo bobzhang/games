@@ -1,4 +1,5 @@
 ///|
+/// Player-controlled rescue boat with physics state, hull, fuel, kit, and cooldown fields.
 struct RescueBoat {
   mut x : Float
   mut y : Float
@@ -21,6 +22,7 @@ struct RescueBoat {
 }
 
 ///|
+/// Rectangular zone on the world map where the boat can refuel and restock kits.
 struct SupplyDock {
   x : Float
   y : Float
@@ -29,6 +31,7 @@ struct SupplyDock {
 }
 
 ///|
+/// Rectangular evacuation camp zone where the boat unloads rescued survivors.
 struct EvacCamp {
   x : Float
   y : Float
@@ -37,6 +40,7 @@ struct EvacCamp {
 }
 
 ///|
+/// One structural segment of the flood-threatened bridge with position, size, integrity, and alarm state.
 struct BridgeSpan {
   mut x : Float
   mut y : Float
@@ -49,6 +53,7 @@ struct BridgeSpan {
 }
 
 ///|
+/// Rectangular grid cell that stores a local river current velocity and pulse phase for flow simulation.
 struct CurrentCell {
   mut x : Float
   mut y : Float
@@ -60,6 +65,7 @@ struct CurrentCell {
 }
 
 ///|
+/// Sampled river flow velocity and turbulence at a point in the world.
 struct FlowSample {
   vx : Float
   vy : Float
@@ -67,6 +73,7 @@ struct FlowSample {
 }
 
 ///|
+/// Pooled survivor raft with position, velocity, passenger count, panic level, and flare timer.
 struct RaftGroup {
   mut active : Bool
   mut x : Float
@@ -79,6 +86,7 @@ struct RaftGroup {
 }
 
 ///|
+/// Pooled floating debris obstacle with position, velocity, size, hardness, and spin.
 struct Debris {
   mut active : Bool
   mut x : Float
@@ -91,6 +99,7 @@ struct Debris {
 }
 
 ///|
+/// Pooled lightning strike with position, blast radius, telegraph countdown, life, power, and pulse phase.
 struct LightningStrike {
   mut active : Bool
   mut x : Float
@@ -103,6 +112,7 @@ struct LightningStrike {
 }
 
 ///|
+/// Pooled supply crate floating on the river that can be collected for kits or fuel.
 struct SupplyCrate {
   mut active : Bool
   mut x : Float
@@ -115,6 +125,7 @@ struct SupplyCrate {
 }
 
 ///|
+/// Pooled rain drop particle with position, downward velocity, streak length, and opacity.
 struct RainDrop {
   mut active : Bool
   mut x : Float
@@ -126,6 +137,7 @@ struct RainDrop {
 }
 
 ///|
+/// Pooled wake particle emitted by the boat and rafts as a water-disturbance visual effect.
 struct WakeParticle {
   mut active : Bool
   mut x : Float
@@ -138,6 +150,7 @@ struct WakeParticle {
 }
 
 ///|
+/// Clamps a float value into the inclusive range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -149,6 +162,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two floating-point values.
 fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -158,6 +172,7 @@ fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of two floating-point values.
 fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -167,6 +182,7 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two integer values.
 fn mini(a : Int, b : Int) -> Int {
   if a < b {
     a
@@ -176,6 +192,7 @@ fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the larger of two integer values.
 fn maxi(a : Int, b : Int) -> Int {
   if a > b {
     a
@@ -185,6 +202,7 @@ fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the absolute value of a float.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -194,22 +212,26 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Wraps the standard library sine function for float arguments.
 fn sinf(v : Float) -> Float {
   Float::from_double(@math.sin(v.to_double()))
 }
 
 ///|
+/// Returns a pseudo-random float in the inclusive range [lo, hi].
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns a pseudo-random integer in the inclusive range [lo, hi].
 fn randi(lo : Int, hi : Int) -> Int {
   @raylib.get_random_value(lo, hi)
 }
 
 ///|
+/// Returns the squared Euclidean distance between two 2-D points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx : Float = x1 - x0
   let dy : Float = y1 - y0
@@ -217,6 +239,7 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Returns true when a point lies inside an integer-coordinate rectangle.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -232,6 +255,7 @@ fn inside_rect(
 }
 
 ///|
+/// Returns true when a point lies inside a float-coordinate rectangle.
 fn inside_rectf(
   px : Float,
   py : Float,
@@ -244,6 +268,7 @@ fn inside_rectf(
 }
 
 ///|
+/// Returns true when a point lies inside or on the boundary of a circle.
 fn point_in_circle(
   px : Float,
   py : Float,
@@ -255,6 +280,7 @@ fn point_in_circle(
 }
 
 ///|
+/// Returns true when the active mouse or any touch point is inside an integer rectangle.
 fn pointer_on_rect(
   mouse_x : Float,
   mouse_y : Float,
@@ -284,6 +310,7 @@ fn pointer_on_rect(
 }
 
 ///|
+/// Returns true when the active mouse or any touch point is inside a circle.
 fn pointer_on_circle(
   mouse_x : Float,
   mouse_y : Float,
@@ -312,6 +339,7 @@ fn pointer_on_circle(
 }
 
 ///|
+/// Deactivates and zeroes every raft in the pool.
 fn clear_rafts(rafts : Array[RaftGroup]) -> Unit {
   for i in 0..<rafts.length() {
     rafts[i].active = false
@@ -326,6 +354,7 @@ fn clear_rafts(rafts : Array[RaftGroup]) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes every debris obstacle in the pool.
 fn clear_debris(obstacles : Array[Debris]) -> Unit {
   for obstacle in obstacles {
     obstacle.active = false
@@ -340,6 +369,7 @@ fn clear_debris(obstacles : Array[Debris]) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes every lightning strike in the pool.
 fn clear_lightning(strikes : Array[LightningStrike]) -> Unit {
   for strike in strikes {
     strike.active = false
@@ -354,6 +384,7 @@ fn clear_lightning(strikes : Array[LightningStrike]) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes every supply crate in the pool.
 fn clear_supplies(supplies : Array[SupplyCrate]) -> Unit {
   for supply in supplies {
     supply.active = false
@@ -368,6 +399,7 @@ fn clear_supplies(supplies : Array[SupplyCrate]) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes every rain drop in the pool.
 fn clear_rain(rain : Array[RainDrop]) -> Unit {
   for rain_elem in rain {
     rain_elem.active = false
@@ -381,6 +413,7 @@ fn clear_rain(rain : Array[RainDrop]) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes every wake particle in the pool.
 fn clear_wakes(wakes : Array[WakeParticle]) -> Unit {
   for wake in wakes {
     wake.active = false
@@ -395,6 +428,7 @@ fn clear_wakes(wakes : Array[WakeParticle]) -> Unit {
 }
 
 ///|
+/// Initialises the river current grid cells with position, size, and randomised velocity.
 fn init_currents(
   cells : Array[CurrentCell],
   world_x : Int,
@@ -425,6 +459,7 @@ fn init_currents(
 }
 
 ///|
+/// Initialises bridge span positions and starting integrity values within the world area.
 fn init_bridge(
   spans : Array[BridgeSpan],
   world_x : Int,
@@ -447,6 +482,7 @@ fn init_bridge(
 }
 
 ///|
+/// Activates every rain drop with randomised position and velocity to seed the rain effect.
 fn refill_rain(
   rain : Array[RainDrop],
   world_l : Float,
@@ -466,6 +502,7 @@ fn refill_rain(
 }
 
 ///|
+/// Samples the river current at a world position, returning a FlowSample with velocity and turbulence.
 fn find_flow(
   cells : Array[CurrentCell],
   x : Float,
@@ -489,6 +526,7 @@ fn find_flow(
 }
 
 ///|
+/// Activates the first free raft slot at a random lane position on the right edge of the world.
 fn spawn_raft(
   rafts : Array[RaftGroup],
   _world_l : Float,
@@ -532,6 +570,7 @@ fn spawn_raft(
 }
 
 ///|
+/// Activates the first free debris slot at the right edge with velocity scaled by storm intensity.
 fn spawn_debris(
   debris : Array[Debris],
   _world_l : Float,
@@ -562,6 +601,7 @@ fn spawn_debris(
 }
 
 ///|
+/// Activates the first free lightning strike slot with random position and storm-scaled radius.
 fn spawn_lightning(
   strikes : Array[LightningStrike],
   world_l : Float,
@@ -592,6 +632,7 @@ fn spawn_lightning(
 }
 
 ///|
+/// Activates the first free supply crate slot at a random interior world position.
 fn spawn_supply(
   supplies : Array[SupplyCrate],
   world_l : Float,
@@ -621,6 +662,7 @@ fn spawn_supply(
 }
 
 ///|
+/// Activates the first free wake particle slot near the given position with velocity derived from speed.
 fn spawn_wake(
   wakes : Array[WakeParticle],
   x : Float,
@@ -647,6 +689,7 @@ fn spawn_wake(
 }
 
 ///|
+/// Advances all active wake particles one frame: moves them and decays velocity, deactivates expired ones.
 fn update_wakes(wakes : Array[WakeParticle], dt : Float) -> Unit {
   for wake in wakes {
     if not(wake.active) {
@@ -665,6 +708,7 @@ fn update_wakes(wakes : Array[WakeParticle], dt : Float) -> Unit {
 }
 
 ///|
+/// Advances all rain drops one frame: moves them with gravity and wind, respawns ones that leave the world.
 fn update_rain(
   rain : Array[RainDrop],
   dt : Float,
@@ -698,6 +742,7 @@ fn update_rain(
 }
 
 ///|
+/// Reduces the panic level of all rafts within a given radius of a siren position.
 fn calm_rafts(
   rafts : Array[RaftGroup],
   x : Float,
@@ -722,6 +767,7 @@ fn calm_rafts(
 }
 
 ///|
+/// Returns the index of the bridge span whose centre is closest to a point within a given radius.
 fn nearest_span_index(
   spans : Array[BridgeSpan],
   x : Float,
@@ -743,6 +789,7 @@ fn nearest_span_index(
 }
 
 ///|
+/// Returns the lowest integrity value across all bridge spans.
 fn min_bridge_integrity(spans : Array[BridgeSpan]) -> Float {
   let mut out : Float = 100.0
   for span in spans {
@@ -752,6 +799,7 @@ fn min_bridge_integrity(spans : Array[BridgeSpan]) -> Float {
 }
 
 ///|
+/// Draws the animated river background with gradient fill, scrolling wave stripes, and storm tinting.
 fn draw_river(
   x : Int,
   y : Int,
@@ -784,6 +832,7 @@ fn draw_river(
 }
 
 ///|
+/// Draws the river current grid overlay showing cell outlines and flow direction arrows.
 fn draw_current_grid(cells : Array[CurrentCell], storm : Float) -> Unit {
   for cell in cells {
     let wave : Float = sinf(cell.pulse)
@@ -817,6 +866,7 @@ fn draw_current_grid(cells : Array[CurrentCell], storm : Float) -> Unit {
 }
 
 ///|
+/// Draws all bridge spans with integrity fill bars, border outlines, and low-integrity alarm icons.
 fn draw_spans(spans : Array[BridgeSpan], scene_t : Float) -> Unit {
   for i in 0..<spans.length() {
     let p : Float = clampf(spans[i].integrity / 100.0, 0.0, 1.0)
@@ -868,6 +918,7 @@ fn draw_spans(spans : Array[BridgeSpan], scene_t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active rafts as coloured circles with panic-tinted fills and blinking flare indicators.
 fn draw_rafts(rafts : Array[RaftGroup], scene_t : Float) -> Unit {
   for raft in rafts {
     if not(raft.active) {
@@ -902,6 +953,7 @@ fn draw_rafts(rafts : Array[RaftGroup], scene_t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active debris pieces as filled rectangles with lighter border outlines.
 fn draw_debris_field(debris : Array[Debris]) -> Unit {
   for debris in debris {
     if not(debris.active) {
@@ -927,6 +979,7 @@ fn draw_debris_field(debris : Array[Debris]) -> Unit {
 }
 
 ///|
+/// Draws all active lightning strikes: telegraph ring while charging, flash blast when triggered.
 fn draw_strikes(strikes : Array[LightningStrike], scene_t : Float) -> Unit {
   for strike in strikes {
     if not(strike.active) {
@@ -971,6 +1024,7 @@ fn draw_strikes(strikes : Array[LightningStrike], scene_t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active supply crates as blinking labelled squares with a glow halo effect.
 fn draw_supplies(supplies : Array[SupplyCrate], scene_t : Float) -> Unit {
   for supply in supplies {
     if not(supply.active) {
@@ -1016,6 +1070,7 @@ fn draw_supplies(supplies : Array[SupplyCrate], scene_t : Float) -> Unit {
 }
 
 ///|
+/// Draws all active rain drops as short angled line segments with wind-driven horizontal offset.
 fn draw_rain(rain : Array[RainDrop], wind_x : Float) -> Unit {
   for rain_elem in rain {
     if not(rain_elem.active) {
@@ -1035,6 +1090,7 @@ fn draw_rain(rain : Array[RainDrop], wind_x : Float) -> Unit {
 }
 
 ///|
+/// Draws all active wake particles as translucent circles that fade with remaining life.
 fn draw_wakes(wakes : Array[WakeParticle]) -> Unit {
   for wake in wakes {
     if not(wake.active) {
@@ -1055,6 +1111,7 @@ fn draw_wakes(wakes : Array[WakeParticle]) -> Unit {
 }
 
 ///|
+/// Draws the rescue boat as a triangle with a bobbing animation, interior highlight, and boost heat glow.
 fn draw_boat(boat : RescueBoat, scene_t : Float) -> Unit {
   let bob : Float = sinf(scene_t * 7.2) * 1.4
   let x : Float = boat.x
@@ -1088,6 +1145,7 @@ fn draw_boat(boat : RescueBoat, scene_t : Float) -> Unit {
 }
 
 ///|
+/// Draws the supply dock and evacuation camp rectangles with labels and pulsing highlight circles.
 fn draw_world_panels(
   dock : SupplyDock,
   camp : EvacCamp,
@@ -1157,6 +1215,7 @@ fn draw_world_panels(
 }
 
 ///|
+/// Draws a labelled progress bar showing a value as a fraction of its maximum.
 fn draw_hud_meter(
   title : String,
   value : Float,
@@ -1198,6 +1257,7 @@ fn draw_hud_meter(
 }
 
 ///|
+/// Draws the on-screen D-pad and circular action buttons with active-state highlighting.
 fn draw_touch_controls(
   sw : Int,
   sh : Int,
@@ -1341,6 +1401,7 @@ fn draw_touch_controls(
 }
 
 ///|
+/// Draws the right-side HUD panel with all meters, mission stats, control legend, and status message.
 fn draw_panel(
   panel_x : Int,
   panel_y : Int,
@@ -1497,6 +1558,7 @@ fn draw_panel(
 }
 
 ///|
+/// Draws the animated title / menu screen with instructions and a pulsing start button.
 fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
   @raylib.clear_background(@raylib.Color::new(9, 16, 26, 255))
   for i in 0..<26 {
@@ -1584,6 +1646,7 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
 }
 
 ///|
+/// Draws the win or loss end screen overlay showing rescue stats and mission outcome.
 fn draw_end_screen(
   sw : Int,
   sh : Int,
@@ -1650,6 +1713,7 @@ fn draw_end_screen(
 }
 
 ///|
+/// Initialises the Raylib window, sets up all game state, and drives the main game loop until close.
 fn main {
   let sw : Int = 1700
   let sh : Int = 960

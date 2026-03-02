@@ -1,37 +1,49 @@
 ///|
+/// Screen width in pixels.
 let screen_w : Int = 900
 
 ///|
+/// Screen height in pixels.
 let screen_h : Int = 700
 
 ///|
+/// Downward acceleration applied to the ball each frame.
 let gravity : Float = 680.0
 
 ///|
+/// Radius of the pinball in pixels.
 let ball_r : Float = 10.0
 
 ///|
+/// Left boundary of the playfield.
 let table_left : Float = 70.0
 
 ///|
+/// Right boundary of the playfield.
 let table_right : Float = 830.0
 
 ///|
+/// Top boundary of the playfield.
 let table_top : Float = 40.0
 
 ///|
+/// Y coordinate below which the ball is considered drained.
 let drain_y : Float = 650.0
 
 ///|
+/// Length of each flipper segment in pixels.
 let flipper_len : Float = 110.0
 
 ///|
+/// Angular speed at which flippers rotate, in radians per second.
 let flipper_speed : Float = 12.0
 
 ///|
+/// Approximation of pi used for flipper angle calculations.
 let pi : Float = 3.141592653589793
 
 ///|
+/// Mutable state for the pinball: position, velocity, and live flag.
 struct Ball {
   mut x : Float
   mut y : Float
@@ -41,6 +53,7 @@ struct Ball {
 }
 
 ///|
+/// Flipper with a pivot point, rest angle, active angle, and current angle.
 struct Flipper {
   pivot_x : Float
   pivot_y : Float
@@ -50,6 +63,7 @@ struct Flipper {
 }
 
 ///|
+/// Clamps `v` to the inclusive range `[lo, hi]`.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -61,16 +75,19 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the x coordinate of the far end of a flipper segment.
 fn seg_end_x(f : Flipper) -> Float {
   f.pivot_x + Float::from_double(@math.cos(f.angle.to_double())) * flipper_len
 }
 
 ///|
+/// Returns the y coordinate of the far end of a flipper segment.
 fn seg_end_y(f : Flipper) -> Float {
   f.pivot_y + Float::from_double(@math.sin(f.angle.to_double())) * flipper_len
 }
 
 ///|
+/// Resets the ball to the launch position and marks it as not live.
 fn reset_ball(ball : Ball) -> Unit {
   ball.x = 780.0
   ball.y = 120.0
@@ -80,6 +97,7 @@ fn reset_ball(ball : Ball) -> Unit {
 }
 
 ///|
+/// Tests and resolves collision between the ball and a flipper segment, applying a speed boost on contact.
 fn collide_ball_with_segment(ball : Ball, f : Flipper, boost : Float) -> Bool {
   let x1 = f.pivot_x
   let y1 = f.pivot_y
@@ -117,6 +135,7 @@ fn collide_ball_with_segment(ball : Ball, f : Flipper, boost : Float) -> Bool {
 }
 
 ///|
+/// Tests and resolves collision between the ball and a circular bumper, reflecting with a speed boost.
 fn ball_vs_bumper(ball : Ball, bx : Float, by : Float, r : Float) -> Bool {
   let dx = ball.x - bx
   let dy = ball.y - by
@@ -140,6 +159,7 @@ fn ball_vs_bumper(ball : Ball, bx : Float, by : Float, r : Float) -> Bool {
 }
 
 ///|
+/// Initializes the window and runs the pinball game loop until the window is closed.
 fn main {
   @raylib.init_window(screen_w, screen_h, "Pinball Workshop 2026")
   @raylib.set_target_fps(60)

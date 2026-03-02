@@ -1,34 +1,45 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1280
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 760
 
 ///|
+/// World width used for entity boundary clamping.
 let world_w : Float = 1280.0
 
 ///|
+/// World height used for entity boundary clamping.
 let world_h : Float = 760.0
 
 ///|
+/// Y-coordinate of the harbor waterline; enemies crossing below this line breach the harbor.
 let harbor_y : Float = 632.0
 
 ///|
+/// Maximum number of simultaneous enemy ship slots.
 let max_enemies : Int = 120
 
 ///|
+/// Maximum number of simultaneous civilian boat slots.
 let max_boats : Int = 42
 
 ///|
+/// Maximum number of simultaneous projectile slots.
 let max_projectiles : Int = 520
 
 ///|
+/// Maximum number of simultaneous pickup slots.
 let max_pickups : Int = 92
 
 ///|
+/// Maximum number of simultaneous particle slots.
 let max_particles : Int = 980
 
 ///|
+/// Player-controlled harbor cannon with position, velocity, HP, heat gauge, cooldowns, overheat flag, score, kill count, and combo multiplier.
 struct Cannon {
   mut x : Float
   mut y : Float
@@ -46,6 +57,7 @@ struct Cannon {
 }
 
 ///|
+/// Enemy vessel descending from above; tracks type, position, velocity, HP, fire cooldown, and elapsed time for lateral phase-drift.
 struct EnemyShip {
   mut active : Bool
   mut kind : Int
@@ -59,6 +71,7 @@ struct EnemyShip {
 }
 
 ///|
+/// Friendly boat crossing the harbor waterline; tracks position, velocity, HP, point value, and panic timer when hit.
 struct CivilianBoat {
   mut active : Bool
   mut x : Float
@@ -70,6 +83,7 @@ struct CivilianBoat {
 }
 
 ///|
+/// Active ballistic entity with position, velocity, damage, remaining lifetime, owner flag, and visual kind.
 struct Projectile {
   mut active : Bool
   mut x : Float
@@ -83,6 +97,7 @@ struct Projectile {
 }
 
 ///|
+/// Falling collectible dropped by destroyed enemies; tracks position, downward velocity, type, and elapsed time for blinking.
 struct Pickup {
   mut active : Bool
   mut x : Float
@@ -93,6 +108,7 @@ struct Pickup {
 }
 
 ///|
+/// Short-lived visual spark with position, velocity, size, elapsed and total lifetime, and color kind.
 struct Particle {
   mut active : Bool
   mut x : Float
@@ -106,6 +122,7 @@ struct Particle {
 }
 
 ///|
+/// Clamps a float value to the inclusive `[lo, hi]` range.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -117,6 +134,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Returns the absolute value of a float.
 fn absf(v : Float) -> Float {
   if v < 0.0 {
     -v
@@ -126,6 +144,7 @@ fn absf(v : Float) -> Float {
 }
 
 ///|
+/// Returns the squared Euclidean distance between two 2D points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx = x1 - x0
   let dy = y1 - y0
@@ -133,12 +152,14 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Returns a random float uniformly sampled from `[lo, hi]`.
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Tests whether the point `(px, py)` lies inside the rectangle defined by `(x, y, w, h)`.
 fn inside_rect(
   px : Float,
   py : Float,
@@ -154,6 +175,7 @@ fn inside_rect(
 }
 
 ///|
+/// Deactivates and zeroes all fields in every enemy ship slot.
 fn clear_enemies(enemies : Array[EnemyShip]) -> Unit {
   for enemy in enemies {
     enemy.active = false
@@ -169,6 +191,7 @@ fn clear_enemies(enemies : Array[EnemyShip]) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes all fields in every civilian boat slot.
 fn clear_boats(boats : Array[CivilianBoat]) -> Unit {
   for boat in boats {
     boat.active = false
@@ -182,6 +205,7 @@ fn clear_boats(boats : Array[CivilianBoat]) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes all fields in every projectile slot.
 fn clear_projectiles(projectiles : Array[Projectile]) -> Unit {
   for projectile in projectiles {
     projectile.active = false
@@ -197,6 +221,7 @@ fn clear_projectiles(projectiles : Array[Projectile]) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes all fields in every pickup slot.
 fn clear_pickups(pickups : Array[Pickup]) -> Unit {
   for pickup in pickups {
     pickup.active = false
@@ -209,6 +234,7 @@ fn clear_pickups(pickups : Array[Pickup]) -> Unit {
 }
 
 ///|
+/// Deactivates and zeroes all fields in every particle slot.
 fn clear_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
     part.active = false
@@ -224,6 +250,7 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Finds a free enemy slot and initialises a random enemy ship scaled to the current wave; returns false if no slot is available.
 fn spawn_enemy(enemies : Array[EnemyShip], wave : Int) -> Bool {
   let mut slot : Int = -1
   for i in 0..<enemies.length() {
@@ -263,6 +290,7 @@ fn spawn_enemy(enemies : Array[EnemyShip], wave : Int) -> Bool {
 }
 
 ///|
+/// Finds a free slot and spawns a civilian boat entering from a random screen side; returns false if no slot is available.
 fn spawn_boat(boats : Array[CivilianBoat]) -> Bool {
   let mut slot : Int = -1
   for i in 0..<boats.length() {
@@ -292,6 +320,7 @@ fn spawn_boat(boats : Array[CivilianBoat]) -> Bool {
 }
 
 ///|
+/// Finds a free slot and initialises a projectile with the given kinematics, damage, owner flag, visual kind, and lifetime; returns false if no slot is available.
 fn spawn_projectile(
   projectiles : Array[Projectile],
   x : Float,
@@ -328,6 +357,7 @@ fn spawn_projectile(
 }
 
 ///|
+/// Finds a free slot and spawns a randomly-typed pickup near the given position with downward velocity and blinking timer; returns false if no slot is available.
 fn spawn_pickup(pickups : Array[Pickup], x : Float, y : Float) -> Bool {
   let mut slot : Int = -1
   for i in 0..<pickups.length() {
@@ -351,6 +381,7 @@ fn spawn_pickup(pickups : Array[Pickup], x : Float, y : Float) -> Bool {
 }
 
 ///|
+/// Emits `n` particles at position `(x, y)` with random velocities scaled by `speed` and the specified visual `kind`.
 fn burst(
   parts : Array[Particle],
   x : Float,
@@ -380,6 +411,7 @@ fn burst(
 }
 
 ///|
+/// Draws an active enemy ship using layered rectangles sized by kind; silently no-ops if the ship is inactive.
 fn draw_enemy(e : EnemyShip) -> Unit {
   if not(e.active) {
     ignore(())
@@ -448,6 +480,7 @@ fn draw_enemy(e : EnemyShip) -> Unit {
 }
 
 ///|
+/// Draws an active civilian boat with a panic colour tint when recently struck; silently no-ops if the boat is inactive.
 fn draw_boat(boat : CivilianBoat) -> Unit {
   if not(boat.active) {
     ignore(())
@@ -478,6 +511,7 @@ fn draw_boat(boat : CivilianBoat) -> Unit {
 }
 
 ///|
+/// Draws the cannon body, turret barrel, wheel, and a shield ring overlay when the shield timer is active.
 fn draw_cannon(c : Cannon) -> Unit {
   @raylib.draw_rectangle(
     (c.x - 44.0).to_int(),
@@ -524,6 +558,7 @@ fn draw_cannon(c : Cannon) -> Unit {
 }
 
 ///|
+/// Initialises the Raylib window, pre-allocates all entity arrays, runs the game loop with update and draw logic, and closes the window on exit.
 fn main {
   @raylib.init_window(sw, sh, "Harbor Defense 2026")
   @raylib.set_target_fps(60)

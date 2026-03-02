@@ -1,52 +1,69 @@
 ///|
+/// Screen width in pixels.
 let sw : Int = 1366
 
 ///|
+/// Screen height in pixels.
 let sh : Int = 768
 
 ///|
+/// Left x coordinate of the metro network world area.
 let world_x : Int = 24
 
 ///|
+/// Top y coordinate of the metro network world area.
 let world_y : Int = 24
 
 ///|
+/// Width of the metro network world area in pixels.
 let world_w : Int = 930
 
 ///|
+/// Height of the metro network world area in pixels.
 let world_h : Int = 720
 
 ///|
+/// Left boundary of the world area as a float.
 let world_l : Float = Float::from_int(world_x)
 
 ///|
+/// Top boundary of the world area as a float.
 let world_t : Float = Float::from_int(world_y)
 
 ///|
+/// Right boundary of the world area as a float.
 let world_r : Float = Float::from_int(world_x + world_w)
 
 ///|
+/// Bottom boundary of the world area as a float.
 let world_b : Float = Float::from_int(world_y + world_h)
 
 ///|
+/// Left x coordinate of the right-side information panel.
 let panel_x : Int = world_x + world_w + 16
 
 ///|
+/// Width of the right-side information panel in pixels.
 let panel_w : Int = sw - panel_x - 20
 
 ///|
+/// Maximum number of metro stations.
 let max_stations : Int = 16
 
 ///|
+/// Maximum number of track segments.
 let max_segments : Int = 36
 
 ///|
+/// Maximum number of active trains.
 let max_trains : Int = 14
 
 ///|
+/// Maximum particle pool size for visual effects.
 let max_particles : Int = 420
 
 ///|
+/// The player-controlled maintenance drone with physics, energy, hull, repair cooldown, and scan state.
 struct Drone {
   mut x : Float
   mut y : Float
@@ -64,6 +81,7 @@ struct Drone {
 }
 
 ///|
+/// A metro station with position, line membership, crowd count, strain, and passenger spawn timing.
 struct Station {
   mut active : Bool
   mut x : Float
@@ -77,6 +95,7 @@ struct Station {
 }
 
 ///|
+/// A track segment between two stations with health, fault timer, wear, and traffic load.
 struct Segment {
   mut active : Bool
   mut a : Int
@@ -90,6 +109,7 @@ struct Segment {
 }
 
 ///|
+/// A train travelling a route with passenger capacity, delay accumulation, and visual blink state.
 struct Train {
   mut active : Bool
   mut route_id : Int
@@ -105,6 +125,7 @@ struct Train {
 }
 
 ///|
+/// A short-lived visual particle with kind, velocity, size, life, and pulse phase.
 struct Particle {
   mut active : Bool
   mut kind : Int
@@ -118,6 +139,7 @@ struct Particle {
 }
 
 ///|
+/// Clamps `v` to the inclusive float range [`lo`, `hi`].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
     lo
@@ -129,6 +151,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
+/// Clamps `v` to the inclusive integer range [`lo`, `hi`].
 fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   if v < lo {
     lo
@@ -140,6 +163,7 @@ fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+/// Returns the larger of two float values.
 fn maxf(a : Float, b : Float) -> Float {
   if a > b {
     a
@@ -149,6 +173,7 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the smaller of two float values.
 fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -158,12 +183,14 @@ fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns a pseudo-random float uniformly distributed in [`lo`, `hi`].
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
 }
 
 ///|
+/// Returns the squared Euclidean distance between two points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx : Float = x1 - x0
   let dy : Float = y1 - y0
@@ -171,6 +198,7 @@ fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 }
 
 ///|
+/// Returns true if (`px`, `py`) is inside the rectangle at (`x`, `y`) with size (`w`, `h`).
 fn inside_rect(
   px : Float,
   py : Float,
@@ -186,6 +214,7 @@ fn inside_rect(
 }
 
 ///|
+/// Resets all station slots to their zero/inactive state.
 fn clear_stations(stations : Array[Station]) -> Unit {
   for station in stations {
     station.active = false
@@ -201,6 +230,7 @@ fn clear_stations(stations : Array[Station]) -> Unit {
 }
 
 ///|
+/// Resets all segment slots to their zero/inactive state.
 fn clear_segments(segments : Array[Segment]) -> Unit {
   for segment in segments {
     segment.active = false
@@ -216,6 +246,7 @@ fn clear_segments(segments : Array[Segment]) -> Unit {
 }
 
 ///|
+/// Resets all train slots to their zero/inactive state.
 fn clear_trains(trains : Array[Train]) -> Unit {
   for train in trains {
     train.active = false
@@ -233,6 +264,7 @@ fn clear_trains(trains : Array[Train]) -> Unit {
 }
 
 ///|
+/// Resets all particle slots to their zero/inactive state.
 fn clear_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
     part.active = false
@@ -248,6 +280,7 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Activates the first free station slot, sets its properties, and returns its index (or -1 if full).
 fn add_station(
   stations : Array[Station],
   x : Float,
@@ -274,6 +307,7 @@ fn add_station(
 }
 
 ///|
+/// Activates the first free segment slot connecting stations `a` and `b` on the given line, and returns its index.
 fn add_segment(segments : Array[Segment], a : Int, b : Int, line : Int) -> Int {
   for i in 0..<segments.length() {
     if not(segments[i].active) {
@@ -293,6 +327,7 @@ fn add_segment(segments : Array[Segment], a : Int, b : Int, line : Int) -> Int {
 }
 
 ///|
+/// Activates the first free train slot with the given route, position, direction, speed, capacity, and color, returning its index.
 fn add_train(
   trains : Array[Train],
   route_id : Int,
@@ -322,6 +357,7 @@ fn add_train(
 }
 
 ///|
+/// Activates the first free particle slot at (`x`, `y`) with a random velocity, size, and lifetime.
 fn add_particle(
   parts : Array[Particle],
   x : Float,
@@ -347,6 +383,7 @@ fn add_particle(
 }
 
 ///|
+/// Spawns `n` particles in a burst at (`x`, `y`) with the given kind.
 fn burst_particles(
   parts : Array[Particle],
   x : Float,
@@ -360,6 +397,7 @@ fn burst_particles(
 }
 
 ///|
+/// Advances all active particles by `dt` seconds, applying drag and fading them out when their life reaches zero.
 fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
     if not(part.active) {
@@ -381,6 +419,7 @@ fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
 }
 
 ///|
+/// Renders all active particles as circles sized by their remaining life.
 fn draw_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
     if not(part.active) {
@@ -409,16 +448,19 @@ fn draw_particles(parts : Array[Particle]) -> Unit {
 }
 
 ///|
+/// Returns the number of stations in the given route array.
 fn route_len(route : Array[Int]) -> Int {
   route.length()
 }
 
 ///|
+/// Returns the station index at position `pos` in the route, clamped to valid bounds.
 fn route_station(route : Array[Int], pos : Int) -> Int {
   route[clampi(pos, 0, route.length() - 1)]
 }
 
 ///|
+/// Advances the route position by `dir`, reversing direction at the ends; returns the new position and direction.
 fn next_route_pos(route : Array[Int], pos : Int, dir : Int) -> (Int, Int) {
   let mut ndir : Int = if dir >= 0 { 1 } else { -1 }
   let mut npos : Int = pos + ndir
@@ -432,6 +474,7 @@ fn next_route_pos(route : Array[Int], pos : Int, dir : Int) -> (Int, Int) {
 }
 
 ///|
+/// Returns the index of the active segment connecting stations `a` and `b` (in either order), or -1 if not found.
 fn find_segment(segments : Array[Segment], a : Int, b : Int) -> Int {
   for i in 0..<segments.length() {
     if not(segments[i].active) {
@@ -447,11 +490,13 @@ fn find_segment(segments : Array[Segment], a : Int, b : Int) -> Int {
 }
 
 ///|
+/// Returns the world position `(x, y)` of the station at index `sid`.
 fn station_pos(stations : Array[Station], sid : Int) -> (Float, Float) {
   (stations[sid].x, stations[sid].y)
 }
 
 ///|
+/// Returns the world endpoints of the train's current segment as `(ax, ay, bx, by, cur_sid, next_sid)`.
 fn train_segment_points(
   train : Train,
   stations : Array[Station],
@@ -471,6 +516,7 @@ fn train_segment_points(
 }
 
 ///|
+/// Clears all entities and builds the two-line metro network with stations, track segments, and initial trains; returns route arrays for lines A and B.
 fn setup_network(
   stations : Array[Station],
   segments : Array[Segment],
@@ -521,6 +567,7 @@ fn setup_network(
 }
 
 ///|
+/// Returns the number of active segments that currently have an active fault.
 fn count_faults(segments : Array[Segment]) -> Int {
   let mut n : Int = 0
   for segment in segments {
@@ -532,6 +579,7 @@ fn count_faults(segments : Array[Segment]) -> Int {
 }
 
 ///|
+/// Returns the total number of active track segments.
 fn count_active_segments(segments : Array[Segment]) -> Int {
   let mut n : Int = 0
   for segment in segments {
@@ -543,6 +591,7 @@ fn count_active_segments(segments : Array[Segment]) -> Int {
 }
 
 ///|
+/// Ticks all stations: accumulates crowd passengers, updates strain, and returns the total network strain.
 fn update_stations(stations : Array[Station], dt : Float, tier : Int) -> Float {
   let mut total_strain : Float = 0.0
 
@@ -579,6 +628,7 @@ fn update_stations(stations : Array[Station], dt : Float, tier : Int) -> Float {
 }
 
 ///|
+/// Ticks all segments: degrades health by wear and traffic, probabilistically spawns faults, emits spark particles; returns new fault count and total health sum.
 fn update_segments(
   segments : Array[Segment],
   stations : Array[Station],
@@ -646,6 +696,7 @@ fn update_segments(
 }
 
 ///|
+/// Ticks all trains: moves them along their routes, handles station boarding/alighting, accumulates delay on faults; returns delivered passengers, total delay, and boarded count.
 fn update_trains(
   trains : Array[Train],
   segments : Array[Segment],
@@ -744,6 +795,7 @@ fn update_trains(
 }
 
 ///|
+/// Returns the index, squared distance, and midpoint of the nearest faulted segment to (`x`, `y`), or (-1, ...) if none exist.
 fn nearest_faulty_segment(
   segments : Array[Segment],
   stations : Array[Station],
@@ -777,6 +829,7 @@ fn nearest_faulty_segment(
 }
 
 ///|
+/// Attempts to repair any segments within 64 px of the drone, reducing fault time and restoring health; costs drone energy and sets repair cooldown.
 fn apply_repair(
   drone : Drone,
   segments : Array[Segment],
@@ -829,6 +882,7 @@ fn apply_repair(
 }
 
 ///|
+/// Draws the world background: gradient fill, drifting city-light dots, and a faint road grid overlay.
 fn draw_world_bg(t : Float) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     world_x - 10,
@@ -877,6 +931,7 @@ fn draw_world_bg(t : Float) -> Unit {
 }
 
 ///|
+/// Returns the display colour for a segment based on its fault status, health level, and whether it is currently selected by the drone.
 fn segment_color(seg : Segment, selected : Bool) -> @raylib.Color {
   if seg.fault_t > 0.0 {
     if selected {
@@ -904,6 +959,7 @@ fn segment_color(seg : Segment, selected : Bool) -> @raylib.Color {
 }
 
 ///|
+/// Draws all active track segments as colour-coded lines with health labels and pulsing fault indicators.
 fn draw_segments(
   segments : Array[Segment],
   stations : Array[Station],
@@ -963,6 +1019,7 @@ fn draw_segments(
 }
 
 ///|
+/// Draws all active stations as line-coloured circles scaled by crowd size, with name and crowd count labels.
 fn draw_stations(stations : Array[Station]) -> Unit {
   for station in stations {
     if not(station.active) {
@@ -1006,6 +1063,7 @@ fn draw_stations(stations : Array[Station]) -> Unit {
 }
 
 ///|
+/// Returns the display colour for a train based on its color_id index.
 fn train_color(id : Int) -> @raylib.Color {
   if id % 5 == 0 {
     @raylib.Color::new(246, 194, 118, 252)
@@ -1021,6 +1079,7 @@ fn train_color(id : Int) -> @raylib.Color {
 }
 
 ///|
+/// Draws all active trains interpolated along their current segment, showing passenger count and a blink highlight when delayed.
 fn draw_trains(
   trains : Array[Train],
   stations : Array[Station],
@@ -1074,6 +1133,7 @@ fn draw_trains(
 }
 
 ///|
+/// Draws the maintenance drone with a bobbing animation, rotor arm oscillation, and its current position.
 fn draw_drone(drone : Drone, t : Float) -> Unit {
   let bob : Float = @math.sinf(t * 10.0 + drone.wobble) * 2.0
   let x : Float = drone.x
@@ -1109,6 +1169,7 @@ fn draw_drone(drone : Drone, t : Float) -> Unit {
 }
 
 ///|
+/// Draws the on-screen directional pad and FIX/SCAN action buttons for touch/mouse input.
 fn draw_touch_ui() -> Unit {
   let pad_x : Int = 30
   let pad_y : Int = sh - 194
@@ -1212,6 +1273,7 @@ fn draw_touch_ui() -> Unit {
 }
 
 ///|
+/// Draws a labelled rectangular button with enabled/disabled and hover highlight states.
 fn draw_button(
   x : Int,
   y : Int,
@@ -1248,6 +1310,7 @@ fn draw_button(
 }
 
 ///|
+/// Entry point: opens the window, initialises the network, and runs the frame loop handling drone input, network simulation, and rendering.
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] metro repair dispatch 2026")
   @raylib.set_target_fps(60)

@@ -1,9 +1,11 @@
 ///|
+/// Returns a sine wave value driven by `game.ui_t` scaled by frequency `k`, used for animated background elements.
 fn bg_wave(game : @types.Game, k : Float) -> Float {
   Float::from_double(@math.sin((game.ui_t * k).to_double()))
 }
 
 ///|
+/// Clears the screen and draws the animated dark background with pulsing glow circles and horizontal scanline bands.
 fn draw_bg(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(8, 12, 20, 255))
 
@@ -41,6 +43,7 @@ fn draw_bg(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the background panel and border rectangle behind the minefield.
 fn draw_board_back(bx : Int, by : Int, tile : Int) -> Unit {
   let bw : Int = @types.board_w * tile
   let bh : Int = @types.board_h * tile
@@ -64,6 +67,7 @@ fn draw_board_back(bx : Int, by : Int, tile : Int) -> Unit {
 }
 
 ///|
+/// Draws an unrevealed cell tile with a highlight bevel; includes a flag triangle when flagged.
 fn draw_cell_hidden(x : Int, y : Int, tile : Int, flagged : Bool) -> Unit {
   @raylib.draw_rectangle(
     x + 1,
@@ -108,6 +112,7 @@ fn draw_cell_hidden(x : Int, y : Int, tile : Int, flagged : Bool) -> Unit {
 }
 
 ///|
+/// Returns the themed colour for the adjacency number `v` (1–8+).
 fn number_color(v : Int) -> @raylib.Color {
   if v == 1 {
     @raylib.Color::new(120, 188, 255, 255)
@@ -129,6 +134,7 @@ fn number_color(v : Int) -> @raylib.Color {
 }
 
 ///|
+/// Draws a revealed cell: explosion background for detonated mines, mine glyph for all mines, or an adjacency number for safe cells.
 fn draw_cell_revealed(
   x : Int,
   y : Int,
@@ -179,6 +185,7 @@ fn draw_cell_revealed(
 }
 
 ///|
+/// Draws the grid line overlay across the full board area.
 fn draw_grid_lines(bx : Int, by : Int, tile : Int) -> Unit {
   let bw : Int = @types.board_w * tile
   let bh : Int = @types.board_h * tile
@@ -207,6 +214,7 @@ fn draw_grid_lines(bx : Int, by : Int, tile : Int) -> Unit {
 }
 
 ///|
+/// Iterates every board cell and draws it as either revealed or hidden, then draws the grid lines on top.
 fn draw_cells(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
   for y in 0..<@types.board_h {
     for x in 0..<@types.board_w {
@@ -234,6 +242,7 @@ fn draw_cells(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
 }
 
 ///|
+/// Draws a highlight rectangle around the most recently revealed cell.
 fn draw_last_reveal(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
   if game.last_reveal_x < 0 || game.last_reveal_y < 0 {
     return
@@ -255,6 +264,7 @@ fn draw_last_reveal(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit 
 }
 
 ///|
+/// Draws the keyboard navigation cursor outline on the current cursor cell during Play state; colour reflects the active mode.
 fn draw_cursor(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
   if game.state != @types.Play {
     return
@@ -279,6 +289,7 @@ fn draw_cursor(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
 }
 
 ///|
+/// Draws all active spark particles as alpha-faded circles colour-coded by kind.
 fn draw_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
@@ -306,6 +317,7 @@ fn draw_sparks(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a board-clear progress bar at the given position showing the current reveal percentage.
 fn draw_progress_bar(
   game : @types.Game,
   x : Int,
@@ -342,6 +354,7 @@ fn draw_progress_bar(
 }
 
 ///|
+/// Draws a labelled touch button, highlighted in `color` when `active` or using the default dim style otherwise.
 fn draw_touch_button(
   label : String,
   x : Int,
@@ -380,6 +393,7 @@ fn draw_touch_button(
 }
 
 ///|
+/// Draws the on-screen mode, hint, reset, and reveal/flag action buttons during Play state.
 fn draw_touch_ui(game : @types.Game) -> Unit {
   if game.state != @types.Play {
     return
@@ -452,6 +466,7 @@ fn draw_touch_ui(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the right-side information panel with score, lives, mines, flags, time, combo, progress bar, controls, and the current HUD message.
 fn draw_panel(game : @types.Game) -> Unit {
   let px : Int = @types.panel_x()
   let py : Int = 20
@@ -643,6 +658,7 @@ fn draw_panel(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the title screen with game name, subtitle, start button, and a gameplay tip.
 fn draw_title(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
@@ -706,6 +722,7 @@ fn draw_title(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the result screen overlay showing win/fail status, final score, grade, time, mistakes, best combo, and a retry button.
 fn draw_result_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y

@@ -1,4 +1,5 @@
 ///|
+/// Deactivates and resets all foe records in the pool.
 fn clear_foes(game : @types.Game) -> Unit {
   for foe in game.foes {
     foe.active = false
@@ -19,6 +20,7 @@ fn clear_foes(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates and resets all bolt projectile records in the pool.
 fn clear_bolts(game : @types.Game) -> Unit {
   for bolt in game.bolts {
     bolt.active = false
@@ -33,6 +35,7 @@ fn clear_bolts(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates and resets all spark particle records in the pool.
 fn clear_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
     spark.active = false
@@ -47,6 +50,7 @@ fn clear_sparks(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates and resets all expanding ring effect records in the pool.
 fn clear_rings(game : @types.Game) -> Unit {
   for ring in game.rings {
     ring.active = false
@@ -59,6 +63,7 @@ fn clear_rings(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Deactivates and resets all echo trail effect records in the pool.
 fn clear_echoes(game : @types.Game) -> Unit {
   for echo_item in game.echoes {
     echo_item.active = false
@@ -72,6 +77,7 @@ fn clear_echoes(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Restores all bells to their orbiting positions with full charge and no cooldown.
 fn reset_bells(game : @types.Game) -> Unit {
   for i in 0..<@types.bell_count {
     let p = @types.bell_pos(i)
@@ -84,6 +90,7 @@ fn reset_bells(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Repositions and resets all hero fields to their initial values.
 fn reset_hero(game : @types.Game) -> Unit {
   game.hero.x = @types.shrine_x()
   game.hero.y = @types.shrine_y() + 130.0
@@ -101,6 +108,7 @@ fn reset_hero(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Returns the index of a free foe slot, or the slot with the shortest remaining life if the pool is full.
 fn alloc_foe(game : @types.Game) -> Int {
   for i in 0..<game.foes.length() {
     if not(game.foes[i].active) {
@@ -120,6 +128,7 @@ fn alloc_foe(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free bolt slot, or the slot with the shortest remaining life if the pool is full.
 fn alloc_bolt(game : @types.Game) -> Int {
   for i in 0..<game.bolts.length() {
     if not(game.bolts[i].active) {
@@ -139,6 +148,7 @@ fn alloc_bolt(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free spark slot, or the slot with the shortest remaining life if the pool is full.
 fn alloc_spark(game : @types.Game) -> Int {
   for i in 0..<game.sparks.length() {
     if not(game.sparks[i].active) {
@@ -158,6 +168,7 @@ fn alloc_spark(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free ring slot, or the slot with the shortest remaining life if the pool is full.
 fn alloc_ring(game : @types.Game) -> Int {
   for i in 0..<game.rings.length() {
     if not(game.rings[i].active) {
@@ -177,6 +188,7 @@ fn alloc_ring(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns the index of a free echo slot, or the slot with the shortest remaining life if the pool is full.
 fn alloc_echo(game : @types.Game) -> Int {
   for i in 0..<game.echoes.length() {
     if not(game.echoes[i].active) {
@@ -196,6 +208,7 @@ fn alloc_echo(game : @types.Game) -> Int {
 }
 
 ///|
+/// Allocates a spark particle and initializes it with the given position, velocity, lifetime, size, and kind.
 fn emit_spark(
   game : @types.Game,
   x : Float,
@@ -218,6 +231,7 @@ fn emit_spark(
 }
 
 ///|
+/// Emits `n` sparks radiating randomly outward from a point with the given kind.
 fn burst_sparks(
   game : @types.Game,
   x : Float,
@@ -240,6 +254,7 @@ fn burst_sparks(
 }
 
 ///|
+/// Allocates a ring effect and initializes it with the given position, initial radius, lifetime, and kind.
 fn spawn_ring(
   game : @types.Game,
   x : Float,
@@ -258,6 +273,7 @@ fn spawn_ring(
 }
 
 ///|
+/// Allocates an echo trail effect and initializes it with the given position, size, lifetime, and rotation.
 fn spawn_echo(
   game : @types.Game,
   x : Float,
@@ -278,6 +294,7 @@ fn spawn_echo(
 }
 
 ///|
+/// Allocates a bolt projectile and initializes it with the given position, velocity, lifetime, damage, and kind.
 fn spawn_bolt(
   game : @types.Game,
   x : Float,
@@ -300,6 +317,7 @@ fn spawn_bolt(
 }
 
 ///|
+/// Allocates a foe and initializes all its fields including position, velocity, size, HP, lifetime, shot cooldown, and score reward.
 fn spawn_foe(
   game : @types.Game,
   kind : Int,
@@ -332,12 +350,14 @@ fn spawn_foe(
 }
 
 ///|
+/// Computes the actual score gained from a base value, scaled by the current combo multiplier.
 fn score_gain(game : @types.Game, base : Int) -> Int {
   let bonus = base * game.combo / 6
   base + bonus
 }
 
 ///|
+/// Adds combo-scaled score to the game total and updates the best score if exceeded.
 fn add_score(game : @types.Game, base : Int) -> Unit {
   let g = score_gain(game, base)
   game.score = game.score + g
@@ -347,18 +367,21 @@ fn add_score(game : @types.Game, base : Int) -> Unit {
 }
 
 ///|
+/// Increments the combo counter (capped at 28) and resets the combo decay timer.
 fn push_combo(game : @types.Game) -> Unit {
   game.combo = @types.clampi(game.combo + 1, 0, 28)
   game.combo_t = 3.6
 }
 
 ///|
+/// Resets the combo counter and decay timer to zero.
 fn clear_combo(game : @types.Game) -> Unit {
   game.combo = 0
   game.combo_t = 0.0
 }
 
 ///|
+/// Applies damage to the shrine and hero if not invulnerable, triggering flash, shake, and spark effects.
 fn hurt_hero(game : @types.Game, dmg : Float) -> Unit {
   if game.hero.invuln > 0.0 {
     return
@@ -382,6 +405,7 @@ fn hurt_hero(game : @types.Game, dmg : Float) -> Unit {
 }
 
 ///|
+/// Triggers a bell shockwave if not on cooldown and sufficient spirit is available, damaging foes and destroying bolts in range.
 fn ring_bell(game : @types.Game, bell_i : Int) -> Unit {
   if bell_i < 0 || bell_i >= @types.bell_count {
     return
@@ -486,6 +510,7 @@ fn ring_bell(game : @types.Game, bell_i : Int) -> Unit {
 }
 
 ///|
+/// Returns the index of the bell within ring reach of the hero, or -1 if none is close enough.
 fn find_nearest_bell(game : @types.Game) -> Int {
   let mut best = -1
   let mut best_d2 = @types.bell_ring_reach * @types.bell_ring_reach
@@ -507,6 +532,7 @@ fn find_nearest_bell(game : @types.Game) -> Int {
 }
 
 ///|
+/// Returns a random spawn position along one of the four edges of the play area.
 fn edge_spawn() -> (Float, Float) {
   let side = @types.randi(0, 3)
 
@@ -534,6 +560,7 @@ fn edge_spawn() -> (Float, Float) {
 }
 
 ///|
+/// Spawns a wisp foe at a random edge position with stage-scaled HP.
 fn spawn_wisp(game : @types.Game) -> Unit {
   let p = edge_spawn()
 
@@ -554,6 +581,7 @@ fn spawn_wisp(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Spawns a brute foe at a random edge position with stage-scaled HP.
 fn spawn_brute(game : @types.Game) -> Unit {
   let p = edge_spawn()
 
@@ -574,6 +602,7 @@ fn spawn_brute(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Spawns a shaman foe at a random edge position with stage-scaled HP.
 fn spawn_shaman(game : @types.Game) -> Unit {
   let p = edge_spawn()
 
@@ -594,6 +623,7 @@ fn spawn_shaman(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Spawns a relic pickup at a random edge position that can be rescued for spirit and shrine HP.
 fn spawn_relic(game : @types.Game) -> Unit {
   let p = edge_spawn()
 
@@ -614,6 +644,7 @@ fn spawn_relic(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Spawns a randomly composed wave of foes, with count and type mix scaled by current stage.
 fn spawn_wave(game : @types.Game) -> Unit {
   let n = 1 + @types.randi(0, 1 + game.stage / 2)
 
@@ -636,6 +667,7 @@ fn spawn_wave(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Advances the spawn cooldown and triggers a new wave when it expires, scaling pressure by stage.
 fn spawn_step(game : @types.Game, dt : Float) -> Unit {
   game.spawn_cd = game.spawn_cd - dt
 
@@ -651,6 +683,7 @@ fn spawn_step(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Initiates a dash in the input direction, spending spirit and granting brief invulnerability.
 fn apply_dash(game : @types.Game) -> Unit {
   game.hero.dash_cd = @types.dash_cd_time
   game.hero.dash_t = @types.dash_time
@@ -676,6 +709,7 @@ fn apply_dash(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Processes hero movement, dash, bell-ring input, speed clamping, boundary clamping, and echo trails.
 fn update_hero(game : @types.Game, dt : Float) -> Unit {
   if game.input_dash_press &&
     game.hero.dash_cd <= 0.0 &&
@@ -735,6 +769,7 @@ fn update_hero(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Fires a bolt from the given shaman foe aimed at the hero's current position.
 fn fire_shaman_bolt(game : @types.Game, f : @types.Foe) -> Unit {
   let dx = game.hero.x - f.x
   let dy = game.hero.y - f.y
@@ -754,6 +789,7 @@ fn fire_shaman_bolt(game : @types.Game, f : @types.Foe) -> Unit {
 }
 
 ///|
+/// Deactivates foe at index `i`, awards score, pushes the combo, and spawns death ring and spark effects.
 fn kill_foe(game : @types.Game, i : Int, reward : Int, kind : Int) -> Unit {
   let x = game.foes[i].x
   let y = game.foes[i].y
@@ -766,6 +802,7 @@ fn kill_foe(game : @types.Game, i : Int, reward : Int, kind : Int) -> Unit {
 }
 
 ///|
+/// Advances all active foes: movement, AI targeting, shrine contact damage, hero collision, and out-of-bounds removal.
 fn update_foes(game : @types.Game, dt : Float) -> Unit {
   let dash_hit = game.hero.dash_t > 0.0
 
@@ -944,6 +981,7 @@ fn update_foes(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances all active bolts, removing those that expire or leave bounds, and applies damage on hero collision.
 fn update_bolts(game : @types.Game, dt : Float) -> Unit {
   for bolt in game.bolts {
     if not(bolt.active) {
@@ -985,6 +1023,7 @@ fn update_bolts(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances all active spark, ring, and echo effects, expiring those whose lifetimes reach zero.
 fn update_effects(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
@@ -1030,6 +1069,7 @@ fn update_effects(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Decrements bell cooldowns and glow timers, and recomputes the charge fraction for each bell.
 fn update_bells(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<@types.bell_count {
     game.bells[i].cooldown = @types.maxf(0.0, game.bells[i].cooldown - dt)
@@ -1048,6 +1088,7 @@ fn update_bells(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Randomly emits upward-drifting ambient spark particles along the top of the play area.
 fn emit_ambient(game : @types.Game, dt : Float) -> Unit {
   let tries = @types.clampi((dt * 200.0).to_int(), 1, 12)
 
@@ -1068,6 +1109,7 @@ fn emit_ambient(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Advances global timers and hero sub-timers by `dt`, including combo decay.
 fn update_timers(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt
   game.hint_t = game.hint_t + dt
@@ -1092,6 +1134,7 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Clears all entities, resets all counters, and sets the game to the Title state.
 fn init_title_scene(game : @types.Game) -> Unit {
   clear_foes(game)
   clear_bolts(game)
@@ -1125,6 +1168,7 @@ fn init_title_scene(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Resets entities, sets the Play state for the given stage, and scales goal, time, and starting resources.
 fn start_stage(game : @types.Game, stage : Int) -> Unit {
   clear_foes(game)
   clear_bolts(game)
@@ -1158,6 +1202,7 @@ fn start_stage(game : @types.Game, stage : Int) -> Unit {
 }
 
 ///|
+/// Resets the run score and statistics, then starts stage 1.
 fn start_run(game : @types.Game) -> Unit {
   game.score = 0
   game.defeats = 0
@@ -1168,6 +1213,7 @@ fn start_run(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Runs one play-state simulation tick: ticks time, updates hero, bells, spawns, foes, bolts, effects, and checks win/lose conditions.
 fn update_play(game : @types.Game, dt : Float) -> Unit {
   game.time_left = @types.maxf(0.0, game.time_left - dt)
 
@@ -1208,6 +1254,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Updates ambient effects and bells during the title screen, and starts a run on start input.
 fn update_title(game : @types.Game, dt : Float) -> Unit {
   emit_ambient(game, dt)
   update_effects(game, dt)
@@ -1224,6 +1271,7 @@ fn update_title(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs the stage-clear celebration state, emitting sparks and advancing to the next stage when ready.
 fn update_stage_clear(game : @types.Game, dt : Float) -> Unit {
   game.result_t = game.result_t + dt
   emit_ambient(game, dt)
@@ -1249,6 +1297,7 @@ fn update_stage_clear(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Updates ambient effects during the game-over state and returns to the title on restart input.
 fn update_game_over(game : @types.Game, dt : Float) -> Unit {
   game.result_t = game.result_t + dt
   emit_ambient(game, dt)
