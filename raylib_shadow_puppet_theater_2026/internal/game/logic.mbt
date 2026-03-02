@@ -35,7 +35,7 @@ fn generate_sequence(game : @types.Game) -> Unit {
 
 ///|
 fn init_title_scene(game : @types.Game) -> Unit {
-  game.state = @types.Title
+  game.state = Title
   game.stage = 1
   game.score = 0
   game.combo = 0
@@ -62,7 +62,7 @@ fn init_title_scene(game : @types.Game) -> Unit {
 
 ///|
 fn start_show(game : @types.Game) -> Unit {
-  game.state = @types.Play
+  game.state = Play
   game.stage = 1
   game.score = 0
   game.combo = 0
@@ -255,7 +255,7 @@ fn update_title_state(game : @types.Game) -> Unit {
 ///|
 fn update_play_state(game : @types.Game, dt : Float) -> Unit {
   if game.input.pause_pressed {
-    game.state = @types.Paused
+    game.state = Paused
     @types.set_message(game, "Show paused. Press P to resume.", 99.0)
     return
   }
@@ -295,7 +295,7 @@ fn update_play_state(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.spotlight <= 0.0 {
-    game.state = @types.Result
+    game.state = Result
     game.result_t = 0.0
     @types.set_message(game, "Spotlight faded. Press R to restart.", 99.0)
   }
@@ -304,7 +304,7 @@ fn update_play_state(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn update_paused_state(game : @types.Game) -> Unit {
   if game.input.pause_pressed {
-    game.state = @types.Play
+    game.state = Play
     @types.set_message(game, "Show resumed.", 0.8)
   }
 }
@@ -341,9 +341,9 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   }
 
   match game.state {
-    @types.Title => update_title_state(game)
-    @types.Play => update_play_state(game, dt)
-    @types.Paused => update_paused_state(game)
-    @types.Result => update_result_state(game, dt)
+    Title => update_title_state(game)
+    Play => update_play_state(game, dt)
+    Paused => update_paused_state(game)
+    Result => update_result_state(game, dt)
   }
 }

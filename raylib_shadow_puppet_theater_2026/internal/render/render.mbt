@@ -221,8 +221,8 @@ fn draw_active_stage_pose(game : @types.Game) -> Unit {
   let target = @types.target_pose(game)
 
   let target_alpha = match game.state {
-    @types.Play | @types.Paused => 132
-    @types.Title | @types.Result => 96
+    Play | Paused => 132
+    Title | Result => 96
   }
 
   draw_pose_shadow(
@@ -235,9 +235,8 @@ fn draw_active_stage_pose(game : @types.Game) -> Unit {
   )
 
   let body_color = match game.state {
-    @types.Result => @raylib.Color::new(20, 20, 24, 190)
-    @types.Title | @types.Play | @types.Paused =>
-      @raylib.Color::new(16, 16, 22, 238)
+    Result => @raylib.Color::new(20, 20, 24, 190)
+    Title | Play | Paused => @raylib.Color::new(16, 16, 22, 238)
   }
   draw_pose_shadow(
     cx,
@@ -314,7 +313,7 @@ fn draw_sequence_strip(game : @types.Game) -> Unit {
 
     let frame = if i < game.target_idx {
       @raylib.Color::new(122, 234, 156, 240)
-    } else if i == game.target_idx && game.state == @types.Play {
+    } else if i == game.target_idx && game.state == Play {
       @raylib.Color::new(246, 222, 142, 244)
     } else {
       @raylib.Color::new(162, 150, 136, 220)
@@ -322,7 +321,7 @@ fn draw_sequence_strip(game : @types.Game) -> Unit {
 
     let fill = if i < game.target_idx {
       @raylib.Color::new(24, 56, 38, 210)
-    } else if i == game.target_idx && game.state == @types.Play {
+    } else if i == game.target_idx && game.state == Play {
       @raylib.Color::new(64, 46, 24, 210)
     } else {
       @raylib.Color::new(42, 34, 32, 186)
@@ -752,9 +751,9 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   draw_message_banner(game)
 
   match game.state {
-    @types.Title => draw_title_overlay(game)
-    @types.Paused => draw_paused_overlay()
-    @types.Result => draw_result_overlay(game)
-    @types.Play => ()
+    Title => draw_title_overlay(game)
+    Paused => draw_paused_overlay()
+    Result => draw_result_overlay(game)
+    Play => ()
   }
 }
