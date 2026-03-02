@@ -273,13 +273,13 @@ fn draw_track(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 /// Returns the primary display colour for a given object kind.
 fn obj_col(kind : @types.ObjKind) -> @raylib.Color {
   match kind {
-    @types.Scout => @raylib.Color::new(255, 138, 198, 255)
-    @types.Spinner => @raylib.Color::new(132, 246, 255, 255)
-    @types.Tank => @raylib.Color::new(255, 178, 110, 255)
-    @types.GearWall => @raylib.Color::new(255, 106, 154, 255)
-    @types.Coin => @types.amber()
-    @types.Coolant => @types.heat_col()
-    @types.EmpCell => @raylib.Color::new(170, 140, 255, 255)
+    Scout => @raylib.Color::new(255, 138, 198, 255)
+    Spinner => @raylib.Color::new(132, 246, 255, 255)
+    Tank => @raylib.Color::new(255, 178, 110, 255)
+    GearWall => @raylib.Color::new(255, 106, 154, 255)
+    Coin => @types.amber()
+    Coolant => @types.heat_col()
+    EmpCell => @raylib.Color::new(170, 140, 255, 255)
   }
 }
 
@@ -432,7 +432,7 @@ fn draw_pickup(
   )
 
   match o.kind {
-    @types.Coin =>
+    Coin =>
       @raylib.draw_text(
         "$",
         (x - 8.0).to_int(),
@@ -440,7 +440,7 @@ fn draw_pickup(
         24,
         @raylib.Color::new(255, 242, 162, 230),
       )
-    @types.Coolant => {
+    Coolant => {
       @raylib.draw_rectangle(
         (x - 10.0).to_int(),
         (y - 14.0).to_int(),
@@ -483,16 +483,16 @@ fn draw_objs(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     }
 
     match o.kind {
-      @types.Scout => draw_scout(o, col, cam_x, cam_y)
-      @types.Spinner => draw_spinner(o, col, cam_x, cam_y)
-      @types.Tank => draw_tank(o, col, cam_x, cam_y)
-      @types.GearWall => draw_gear_wall(o, col, cam_x, cam_y)
+      Scout => draw_scout(o, col, cam_x, cam_y)
+      Spinner => draw_spinner(o, col, cam_x, cam_y)
+      Tank => draw_tank(o, col, cam_x, cam_y)
+      GearWall => draw_gear_wall(o, col, cam_x, cam_y)
       _ => draw_pickup(o, col, cam_x, cam_y)
     }
 
     if @types.is_hostile(o.kind) && o.hp > 0.0 {
       let hp_ratio = @types.clampf(
-        o.hp / (if o.kind == @types.Tank { 50.0 } else { 20.0 }),
+        o.hp / (if o.kind == Tank { 50.0 } else { 20.0 }),
         0.0,
         1.0,
       )
@@ -1284,19 +1284,19 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   }
 
   match game.state {
-    @types.Title => ()
+    Title => ()
     _ => draw_hud(game)
   }
 
   match game.state {
-    @types.Title => draw_title_overlay(game)
-    @types.Play => {
+    Title => draw_title_overlay(game)
+    Play => {
       draw_play_hint(game)
       if game.touch_mode {
         draw_touch(game)
       }
     }
-    @types.StageClear => draw_stage_clear(game)
-    @types.GameOver => draw_game_over(game)
+    StageClear => draw_stage_clear(game)
+    GameOver => draw_game_over(game)
   }
 }
