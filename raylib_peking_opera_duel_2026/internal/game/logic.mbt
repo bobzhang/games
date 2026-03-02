@@ -22,7 +22,7 @@ fn cadence_for_elapsed(elapsed : Float) -> Float {
 ///|
 /// Resets all game fields to defaults and sets the state to Title with the curtain-raise prompt message.
 fn init_title_state(game : @types.Game) -> Unit {
-  game.state = @types.Title
+  game.state = Title
   game.lane_x = 0
   game.lane_y = 0
   game.stance = @types.stance_spear
@@ -49,7 +49,7 @@ fn init_title_state(game : @types.Game) -> Unit {
 ///|
 /// Resets all game fields to fresh duel values and transitions to the Playing state.
 fn start_duel(game : @types.Game) -> Unit {
-  game.state = @types.Playing
+  game.state = Playing
   game.lane_x = 0
   game.lane_y = 0
   game.stance = @types.stance_spear
@@ -79,7 +79,7 @@ fn start_duel(game : @types.Game) -> Unit {
 ///|
 /// Transitions to GameOver state, deactivates the active prompt, and stores the duel end reason.
 fn finish_duel(game : @types.Game, reason : String) -> Unit {
-  game.state = @types.GameOver
+  game.state = GameOver
   game.prompt_active = false
   game.game_over_reason = reason
   @types.set_message(game, "Press R to restart, J to return to title.", 99.0)
@@ -336,7 +336,7 @@ fn update_paused_state(game : @types.Game) -> Unit {
   }
 
   if game.input.pause_pressed || game.input.confirm_pressed {
-    game.state = @types.Playing
+    game.state = Playing
     @types.set_message(game, "Performance resumed.", 0.8)
   }
 }
@@ -358,7 +358,7 @@ fn update_game_over_state(game : @types.Game) -> Unit {
 /// Advances one frame of the playing state: processes input, applies time-scaled simulation, ticks the prompt lifecycle, spawns new prompts, and checks end conditions.
 fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
   if game.input.pause_pressed {
-    game.state = @types.Paused
+    game.state = Paused
     @types.set_message(game, "Paused. Press P or J to resume.", 99.0)
     return
   }
@@ -374,7 +374,7 @@ fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
     try_deflect(game)
   }
 
-  if game.state != @types.Playing {
+  if game.state != Playing {
     return
   }
 
@@ -382,7 +382,7 @@ fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
     try_hit_prompt(game)
   }
 
-  if game.state != @types.Playing {
+  if game.state != Playing {
     return
   }
 
@@ -409,7 +409,7 @@ fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
     }
   }
 
-  if game.state != @types.Playing {
+  if game.state != Playing {
     return
   }
 
