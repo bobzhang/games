@@ -5,7 +5,7 @@ import {
   "moonbitlang/core/math",
 }
 
-warnings = "+missing_doc"
+warnings = "+missing_doc+unnecessary_annotation"
 
 options(
   "is-main": true,
