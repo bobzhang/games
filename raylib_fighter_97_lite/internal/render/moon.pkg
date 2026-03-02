@@ -5,4 +5,4 @@ import {
   "tonyfettes/raylib-examples/raylib_fighter_97_lite/internal/effects",
 }
 
-warnings = "+missing_doc"
+warnings = "+missing_doc+unnecessary_annotation"
