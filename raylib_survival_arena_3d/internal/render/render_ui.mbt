@@ -5,26 +5,26 @@
 /// shop/wave summary panels, and menu/pause/game-over overlays.
 pub fn draw_ui(game : @types.Game) -> Unit {
   match game.state {
-    @types.Menu => draw_menu(game)
-    @types.Playing => {
+    Menu => draw_menu(game)
+    Playing => {
       draw_hud(game)
       draw_crosshair(game)
       draw_weapon_display(game)
       draw_damage_flash(game)
       draw_message(game)
     }
-    @types.WaveComplete => {
+    WaveComplete => {
       draw_hud(game)
       draw_crosshair(game)
       draw_weapon_display(game)
       draw_shop_ui(game)
       draw_message(game)
     }
-    @types.Paused => {
+    Paused => {
       draw_hud(game)
       draw_pause_overlay(game)
     }
-    @types.GameOver => draw_game_over(game)
+    GameOver => draw_game_over(game)
   }
 }
 

@@ -9,11 +9,11 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   @types.update_kill_feed(game, dt)
   @types.update_damage_indicators(game, dt)
   match game.state {
-    @types.Menu => update_menu(game, dt)
-    @types.Playing => update_playing(game, dt)
-    @types.WaveComplete => update_wave_complete(game, dt)
-    @types.Paused => update_paused(game, dt)
-    @types.GameOver => update_game_over(game, dt)
+    Menu => update_menu(game, dt)
+    Playing => update_playing(game, dt)
+    WaveComplete => update_wave_complete(game, dt)
+    Paused => update_paused(game, dt)
+    GameOver => update_game_over(game, dt)
   }
 }
 
@@ -23,7 +23,7 @@ fn update_menu(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     start_new_game(game)
-    game.state = @types.WaveComplete
+    game.state = WaveComplete
     game.wave_timer = @types.wave_shop_time
     @types.show_message(game, "Wave 1 starting soon! Press SPACE to skip.", 3.0)
     @raylib.disable_cursor()
@@ -33,7 +33,7 @@ fn update_menu(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn update_playing(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.Paused
+    game.state = Paused
     @raylib.enable_cursor()
     return
   }
@@ -79,7 +79,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   // Check player death
   if game.player.hp <= 0.0 {
     game.player.hp = 0.0
-    game.state = @types.GameOver
+    game.state = GameOver
     @raylib.enable_cursor()
   }
 }
@@ -119,7 +119,7 @@ fn cycle_weapon(game : @types.Game, direction : Int) -> Unit {
 ///|
 fn update_wave_complete(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.Paused
+    game.state = Paused
     @raylib.enable_cursor()
     return
   }
@@ -178,7 +178,7 @@ fn update_wave_complete(game : @types.Game, dt : Float) -> Unit {
   game.wave_timer -= dt
   if game.wave_timer <= 0.0 || @raylib.is_key_pressed(@raylib.KeySpace) {
     start_wave(game, game.current_wave)
-    game.state = @types.Playing
+    game.state = Playing
     @types.show_message(game, "Wave \{game.current_wave + 1} incoming!", 2.5)
   }
 }
@@ -189,15 +189,15 @@ fn update_paused(game : @types.Game, _dt : Float) -> Unit {
     @raylib.is_key_pressed(@raylib.KeyP) {
     // Return to previous playing state
     if game.wave_active {
-      game.state = @types.Playing
+      game.state = Playing
     } else {
-      game.state = @types.WaveComplete
+      game.state = WaveComplete
     }
     @raylib.disable_cursor()
   }
   if @raylib.is_key_pressed(@raylib.KeyQ) {
     // Quit to menu
-    game.state = @types.Menu
+    game.state = Menu
   }
 }
 
@@ -205,7 +205,7 @@ fn update_paused(game : @types.Game, _dt : Float) -> Unit {
 fn update_game_over(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    game.state = @types.Menu
+    game.state = Menu
   }
 }
 
@@ -381,11 +381,11 @@ fn check_wave_status(game : @types.Game) -> Unit {
       game.current_wave += 1
       if game.current_wave >= @types.max_waves {
         // Victory! Just go to game over with high score
-        game.state = @types.GameOver
+        game.state = GameOver
         @raylib.enable_cursor()
         @types.show_message(game, "VICTORY! All waves survived!", 5.0)
       } else {
-        game.state = @types.WaveComplete
+        game.state = WaveComplete
         game.wave_timer = @types.wave_shop_time
         game.shop_cursor = 0
         @types.show_message(
