@@ -68,7 +68,7 @@ fn draw_grid_base(game : @types.Game, ox : Int, oy : Int) -> Unit {
       let t : @types.Tile = game.map[y * @types.grid_w + x]
 
       match t {
-        @types.Wall => {
+        Wall => {
           let shade : Int = if (x + y) % 2 == 0 { 62 } else { 72 }
           @raylib.draw_rectangle(
             rx,
@@ -92,7 +92,7 @@ fn draw_grid_base(game : @types.Game, ox : Int, oy : Int) -> Unit {
             @raylib.Color::new(34, 28, 36, 180),
           )
         }
-        @types.Floor | @types.Exit => {
+        Floor | Exit => {
           let floor_tint : Int = if (x + y) % 2 == 0 { 34 } else { 38 }
           @raylib.draw_rectangle(
             rx,
@@ -374,9 +374,9 @@ fn draw_ghost(
   let bob : Int = (pulse(game, 4.6 + Float::from_int(i)) * 5.0).to_int()
 
   let body_col = match g.mode {
-    @types.Stunned => @raylib.Color::new(146, 132, 248, 214)
-    @types.Hunt => @raylib.Color::new(250, 152, 164, 230)
-    @types.Patrol => @raylib.Color::new(226, 232, 248, 222)
+    Stunned => @raylib.Color::new(146, 132, 248, 214)
+    Hunt => @raylib.Color::new(250, 152, 164, 230)
+    Patrol => @raylib.Color::new(226, 232, 248, 222)
   }
 
   @raylib.draw_circle(cx, cy - 8 + bob, 16.0, body_col)
@@ -395,7 +395,7 @@ fn draw_ghost(
     @raylib.Color::new(34, 44, 66, 255),
   )
 
-  if g.mode == @types.Stunned {
+  if g.mode == Stunned {
     @raylib.draw_circle_lines(
       cx,
       cy - 3 + bob,
@@ -414,9 +414,9 @@ fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
     }
 
     let c = match particle.kind {
-      @types.Purple => @raylib.Color::new(206, 154, 248, 196)
-      @types.Gold => @raylib.Color::new(255, 224, 146, 192)
-      @types.Dust => @raylib.Color::new(156, 212, 255, 170)
+      Purple => @raylib.Color::new(206, 154, 248, 196)
+      Gold => @raylib.Color::new(255, 224, 146, 192)
+      Dust => @raylib.Color::new(156, 212, 255, 170)
     }
 
     @raylib.draw_circle(
@@ -510,7 +510,7 @@ fn draw_touch_button(
 ///|
 /// Draws all on-screen D-pad, action, hint, restart, and menu touch buttons during Play state.
 fn draw_touch_controls(game : @types.Game) -> Unit {
-  if game.state != @types.Play {
+  if game.state != Play {
     return
   }
 
@@ -989,8 +989,8 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   draw_touch_controls(game)
 
   match game.state {
-    @types.Title => draw_title_overlay(game)
-    @types.Result => draw_result_overlay(game)
-    @types.Play => ()
+    Title => draw_title_overlay(game)
+    Result => draw_result_overlay(game)
+    Play => ()
   }
 }

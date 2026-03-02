@@ -24,9 +24,9 @@ fn main {
       game.touch_count > 0
 
     match game.state {
-      @types.Title => @game.update_title_input(game)
-      @types.Play => @game.update_play_input(game)
-      @types.Result => @game.update_result_input(game)
+      Title => @game.update_title_input(game)
+      Play => @game.update_play_input(game)
+      Result => @game.update_result_input(game)
     }
 
     @game.update_game(game, dt)
