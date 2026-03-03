@@ -364,52 +364,6 @@ pub fn get_par_moves(floor : Int) -> Int {
 
 // Get world description text
 
-///|
-/// Returns flavor text describing the mechanics focus for a world index.
-pub fn get_world_description(world : Int) -> String {
-  if world == 0 {
-    "Ancient stone halls with push blocks and plates"
-  } else if world == 1 {
-    "Frozen caverns where everything slides on ice"
-  } else if world == 2 {
-    "Volcanic fortress with conveyors and bridges"
-  } else if world == 3 {
-    "Lush gardens with mirrors and laser beams"
-  } else if world == 4 {
-    "The void between worlds - all mechanics combined"
-  } else {
-    "Unknown realm"
-  }
-}
-
 // Get the number of completed levels in a world
 
-///|
-/// Returns `(completed, total)` floor counts for a world in campaign progress UI.
-pub fn get_world_completion(game : @types.Game, world : Int) -> (Int, Int) {
-  let start = world * @types.floors_per_world
-  let mut completed = 0
-  let total = @types.floors_per_world
-  for i in start..<(start + total) {
-    if i < @types.max_floors && game.floor_info[i].completed {
-      completed += 1
-    }
-  }
-  (completed, total)
-}
-
 // Get total stars for a world
-
-///|
-/// Returns `(earned, total)` stars for a world to drive unlock and summary panels.
-pub fn get_world_stars(game : @types.Game, world : Int) -> (Int, Int) {
-  let start = world * @types.floors_per_world
-  let mut earned = 0
-  let total = @types.floors_per_world * @types.max_stars
-  for i in start..<(start + @types.floors_per_world) {
-    if i < @types.max_floors {
-      earned += game.floor_info[i].stars
-    }
-  }
-  (earned, total)
-}

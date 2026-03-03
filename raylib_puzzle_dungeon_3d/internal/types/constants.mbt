@@ -18,10 +18,6 @@ pub let grid_w : Int = 12
 /// Number of logical rows in each floor grid.
 pub let grid_h : Int = 12
 
-///|
-/// World-space size of one grid cell used for 3D placement.
-pub let cell_size : Float = 1.0
-
 // World counts
 
 ///|
@@ -47,34 +43,6 @@ pub let push_anim_duration : Float = 0.15
 pub let fall_anim_duration : Float = 0.3
 
 ///|
-/// Duration of ice sliding settle animation in seconds.
-pub let slide_anim_duration : Float = 0.08
-
-///|
-/// Duration of gate open/close motion in seconds.
-pub let gate_anim_duration : Float = 0.4
-
-///|
-/// Duration of teleport transition animation in seconds.
-pub let teleport_anim_duration : Float = 0.25
-
-///|
-/// Duration of bridge toggle animation in seconds.
-pub let bridge_anim_duration : Float = 0.35
-
-///|
-/// Duration of rotate-platform turn animation in seconds.
-pub let rotate_anim_duration : Float = 0.3
-
-///|
-/// Pulse speed used for emissive laser visuals.
-pub let laser_pulse_speed : Float = 4.0
-
-///|
-/// Scroll speed used for conveyor belt texture/arrow animation.
-pub let conveyor_anim_speed : Float = 3.0
-
-///|
 /// Full cycle time for timed spike traps in seconds.
 pub let spike_cycle_time : Float = 2.0
 
@@ -87,10 +55,6 @@ pub let max_stars : Int = 3
 ///|
 /// Move-count threshold for earning exactly two stars.
 pub let star_threshold_2 : Int = 15
-
-///|
-/// Move-count threshold for earning three stars.
-pub let star_threshold_3 : Int = 8
 
 // Camera
 
@@ -142,14 +106,6 @@ pub let menu_blink_speed : Float = 3.5
 /// Duration of fade/transition overlays in seconds.
 pub let transition_time : Float = 0.5
 
-///|
-/// Alpha fade speed used by tutorial prompt panels.
-pub let tutorial_fade_speed : Float = 2.0
-
-///|
-/// Delay between sequential star pop-ins during completion screen.
-pub let star_anim_delay : Float = 0.3
-
 // Level dimensions for undo state
 
 ///|
@@ -181,10 +137,6 @@ pub let complete_particle_count : Int = 32
 ///|
 /// Number of particles emitted when collecting key objectives.
 pub let collect_particle_count : Int = 12
-
-///|
-/// Number of particles emitted per laser impact event.
-pub let laser_particle_count : Int = 4
 
 // World theme: Dungeon colors
 
@@ -439,30 +391,6 @@ pub let void_bg_b : Int = 20
 // Common colors
 
 ///|
-/// Red channel for generic floor color fallback.
-pub let color_floor_r : Int = 80
-
-///|
-/// Green channel for generic floor color fallback.
-pub let color_floor_g : Int = 90
-
-///|
-/// Blue channel for generic floor color fallback.
-pub let color_floor_b : Int = 110
-
-///|
-/// Red channel for generic wall color fallback.
-pub let color_wall_r : Int = 45
-
-///|
-/// Green channel for generic wall color fallback.
-pub let color_wall_g : Int = 50
-
-///|
-/// Blue channel for generic wall color fallback.
-pub let color_wall_b : Int = 65
-
-///|
 /// Red channel for pressure plate highlight.
 pub let color_plate_r : Int = 200
 
@@ -649,32 +577,12 @@ pub let tutorial_msg_teleport : String = "Step on a portal to teleport to its pa
 pub let tutorial_msg_switch : String = "Switches toggle spikes on and off"
 
 ///|
-/// Tutorial prompt introducing conveyor turn movement.
-pub let tutorial_msg_conveyor : String = "Conveyors push blocks in their direction each turn"
-
-///|
-/// Tutorial prompt introducing mirror reflections.
-pub let tutorial_msg_mirror : String = "Mirrors reflect laser beams at 90 degrees"
-
-///|
-/// Tutorial prompt for bridge toggle mechanics.
-pub let tutorial_msg_bridge : String = "Switches can raise and lower bridges"
-
-///|
-/// Tutorial prompt for plate-gated door behavior.
-pub let tutorial_msg_gate : String = "Gates open when all plates are filled"
-
-///|
 /// Tutorial prompt for collapsing cracked tiles.
 pub let tutorial_msg_cracked : String = "Cracked floors collapse after you step off them"
 
 ///|
 /// Tutorial prompt for diamond collection objective.
 pub let tutorial_msg_diamond : String = "Collect all gems to open the exit"
-
-///|
-/// Final tutorial prompt for floor completion goal.
-pub let tutorial_msg_complete : String = "Reach the green exit portal to complete the floor"
 
 // Achievement thresholds
 
@@ -685,30 +593,6 @@ pub let achievement_first_clear : Int = 0
 ///|
 /// Achievement id granted for completing world 1.
 pub let achievement_world_1 : Int = 1
-
-///|
-/// Achievement id granted for completing world 2.
-pub let achievement_world_2 : Int = 2
-
-///|
-/// Achievement id granted for completing world 3.
-pub let achievement_world_3 : Int = 3
-
-///|
-/// Achievement id granted for completing world 4.
-pub let achievement_world_4 : Int = 4
-
-///|
-/// Achievement id granted for completing world 5.
-pub let achievement_world_5 : Int = 5
-
-///|
-/// Achievement id granted for collecting all stars.
-pub let achievement_all_stars : Int = 6
-
-///|
-/// Achievement id for fast overall campaign clear.
-pub let achievement_speed_run : Int = 7
 
 ///|
 /// Achievement id for clearing while avoiding undo usage.

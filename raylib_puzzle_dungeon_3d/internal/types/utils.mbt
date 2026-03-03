@@ -64,34 +64,6 @@ pub fn dir_dy(dir : Dir) -> Int {
   }
 }
 
-///|
-/// Returns the opposite cardinal direction.
-pub fn opposite_dir(dir : Dir) -> Dir {
-  if dir == DirUp {
-    DirDown
-  } else if dir == DirDown {
-    DirUp
-  } else if dir == DirLeft {
-    DirRight
-  } else {
-    DirLeft
-  }
-}
-
-///|
-/// Rotates a direction 90 degrees clockwise.
-pub fn rotate_dir_cw(dir : Dir) -> Dir {
-  if dir == DirUp {
-    DirRight
-  } else if dir == DirRight {
-    DirDown
-  } else if dir == DirDown {
-    DirLeft
-  } else {
-    DirUp
-  }
-}
-
 // Grid helpers
 
 ///|
@@ -317,17 +289,6 @@ pub fn entity_at(game : Game, gx : Int, gy : Int) -> Int {
 }
 
 ///|
-/// Finds a free entity slot in the pooled entity array.
-pub fn alloc_entity(game : Game) -> Int {
-  for i in 0..<game.entities.length() {
-    if not(game.entities[i].active) {
-      return i
-    }
-  }
-  -1
-}
-
-///|
 /// Finds a free particle slot in the pooled particle array.
 pub fn alloc_particle(game : Game) -> Int {
   for i in 0..<game.particles.length() {
@@ -382,49 +343,9 @@ pub fn smooth_step(t : Float) -> Float {
 
 // Easing for bounce
 
-///|
-/// Bounce-style easing used for celebratory or impact animations.
-pub fn ease_out_bounce(t : Float) -> Float {
-  let tc = clampf(t, 0.0, 1.0)
-  if tc < 1.0 / 2.75 {
-    7.5625 * tc * tc
-  } else if tc < 2.0 / 2.75 {
-    let t2 = tc - 1.5 / 2.75
-    7.5625 * t2 * t2 + 0.75
-  } else if tc < 2.5 / 2.75 {
-    let t2 = tc - 2.25 / 2.75
-    7.5625 * t2 * t2 + 0.9375
-  } else {
-    let t2 = tc - 2.625 / 2.75
-    7.5625 * t2 * t2 + 0.984375
-  }
-}
-
 // Ease out cubic
 
-///|
-/// Cubic ease-out curve for quick start and soft finish motion.
-pub fn ease_out_cubic(t : Float) -> Float {
-  let tc = clampf(t, 0.0, 1.0)
-  let inv : Float = 1.0 - tc
-  let result : Float = 1.0 - inv * inv * inv
-  result
-}
-
 // Ease in out quad
-
-///|
-/// Symmetric ease-in/ease-out curve for UI and movement tweens.
-pub fn ease_in_out_quad(t : Float) -> Float {
-  let tc = clampf(t, 0.0, 1.0)
-  if tc < 0.5 {
-    2.0 * tc * tc
-  } else {
-    let v : Float = -2.0 * tc + 2.0
-    let result : Float = 1.0 - v * v / 2.0
-    result
-  }
-}
 
 // Spawn particles at a position
 
@@ -622,22 +543,6 @@ pub fn get_world_accent_color(world : World) -> (Int, Int, Int) {
     (void_accent_r, void_accent_g, void_accent_b)
   } else {
     (dungeon_accent_r, dungeon_accent_g, dungeon_accent_b)
-  }
-}
-
-///|
-/// Returns the `(r, g, b)` background/fog color tuple for a world theme.
-pub fn get_world_bg_color(world : World) -> (Int, Int, Int) {
-  if world == WorldIce {
-    (ice_bg_r, ice_bg_g, ice_bg_b)
-  } else if world == WorldLava {
-    (lava_bg_r, lava_bg_g, lava_bg_b)
-  } else if world == WorldGarden {
-    (garden_bg_r, garden_bg_g, garden_bg_b)
-  } else if world == WorldVoid {
-    (void_bg_r, void_bg_g, void_bg_b)
-  } else {
-    (dungeon_bg_r, dungeon_bg_g, dungeon_bg_b)
   }
 }
 
@@ -1028,21 +933,3 @@ pub fn is_world_unlocked(game : Game, world : Int) -> Bool {
 }
 
 // Get the number of stars needed to unlock a world
-
-///|
-/// Returns required total stars needed to unlock a world index.
-pub fn stars_to_unlock_world(world : Int) -> Int {
-  if world == 0 {
-    0
-  } else if world == 1 {
-    6
-  } else if world == 2 {
-    15
-  } else if world == 3 {
-    27
-  } else if world == 4 {
-    42
-  } else {
-    999
-  }
-}
