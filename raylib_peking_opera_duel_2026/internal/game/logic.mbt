@@ -231,7 +231,7 @@ fn try_hit_prompt(game : @types.Game) -> Unit {
     return
   }
 
-  let timing = @types.absf(game.prompt.time_left)
+  let timing = game.prompt.time_left.abs()
   let lane_ok = game.lane_x == game.prompt.lane_x &&
     game.lane_y == game.prompt.lane_y
   let stance_ok = game.stance == game.prompt.stance
@@ -261,7 +261,7 @@ fn try_hit_prompt(game : @types.Game) -> Unit {
 /// Attempts a defensive transition: if a prompt is active and within the deflect window, cancels it with a harmony cost; otherwise falls back to a plain guard stance.
 fn try_deflect(game : @types.Game) -> Unit {
   if game.prompt_active {
-    let timing = @types.absf(game.prompt.time_left)
+    let timing = game.prompt.time_left.abs()
     if timing <= @types.timing_deflect {
       game.prompt_active = false
       game.combo = @types.maxi(0, game.combo - 1)

@@ -129,12 +129,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns the squared Euclidean distance between two points.
 fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
@@ -179,18 +173,18 @@ fn road_hit(x : Float, y : Float) -> Bool {
   let mut on_h : Bool = false
   let mut on_v : Bool = false
 
-  if absf(y - 140.0) <= 40.0 ||
-    absf(y - 300.0) <= 40.0 ||
-    absf(y - 460.0) <= 40.0 ||
-    absf(y - 620.0) <= 40.0 {
+  if (y - 140.0).abs() <= 40.0 ||
+    (y - 300.0).abs() <= 40.0 ||
+    (y - 460.0).abs() <= 40.0 ||
+    (y - 620.0).abs() <= 40.0 {
     on_h = true
   }
 
-  if absf(x - 180.0) <= 40.0 ||
-    absf(x - 380.0) <= 40.0 ||
-    absf(x - 640.0) <= 40.0 ||
-    absf(x - 900.0) <= 40.0 ||
-    absf(x - 1100.0) <= 40.0 {
+  if (x - 180.0).abs() <= 40.0 ||
+    (x - 380.0).abs() <= 40.0 ||
+    (x - 640.0).abs() <= 40.0 ||
+    (x - 900.0).abs() <= 40.0 ||
+    (x - 1100.0).abs() <= 40.0 {
     on_v = true
   }
 

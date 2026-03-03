@@ -140,8 +140,8 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
       for dz in -1..<=1 {
         let block = @types.get_world_block(game, px + dx, cy, pz + dz)
         if block == @types.block_cactus {
-          let dist_x = @types.absf(player.x - Float::from_int(px + dx) - 0.5)
-          let dist_z = @types.absf(player.z - Float::from_int(pz + dz) - 0.5)
+          let dist_x = (player.x - Float::from_int(px + dx) - 0.5).abs()
+          let dist_z = (player.z - Float::from_int(pz + dz) - 0.5).abs()
           if dist_x < @types.player_radius + 0.4 &&
             dist_z < @types.player_radius + 0.4 {
             if game.frame_counter % 30 == 0 {

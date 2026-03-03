@@ -93,12 +93,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns the squared Euclidean distance between two 2D points.
 fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
@@ -670,19 +664,19 @@ fn main {
 
         if crate.x < 60.0 {
           crate.x = 60.0
-          crate.vx = absf(crate.vx)
+          crate.vx = crate.vx.abs()
         }
         if crate.x > Float::from_int(sw - 220) {
           crate.x = Float::from_int(sw - 220)
-          crate.vx = -absf(crate.vx)
+          crate.vx = -crate.vx.abs()
         }
         if crate.y < water_top + 20.0 {
           crate.y = water_top + 20.0
-          crate.vy = absf(crate.vy)
+          crate.vy = crate.vy.abs()
         }
         if crate.y > water_bottom - 20.0 {
           crate.y = water_bottom - 20.0
-          crate.vy = -absf(crate.vy)
+          crate.vy = -crate.vy.abs()
         }
 
         if player.cargo < 7 &&
@@ -725,19 +719,19 @@ fn main {
 
         if patrol.x < 26.0 {
           patrol.x = 26.0
-          patrol.vx = absf(patrol.vx)
+          patrol.vx = patrol.vx.abs()
         }
         if patrol.x > Float::from_int(sw - 26) {
           patrol.x = Float::from_int(sw - 26)
-          patrol.vx = -absf(patrol.vx)
+          patrol.vx = -patrol.vx.abs()
         }
         if patrol.y < water_top + 26.0 {
           patrol.y = water_top + 26.0
-          patrol.vy = absf(patrol.vy)
+          patrol.vy = patrol.vy.abs()
         }
         if patrol.y > water_bottom - 26.0 {
           patrol.y = water_bottom - 26.0
-          patrol.vy = -absf(patrol.vy)
+          patrol.vy = -patrol.vy.abs()
         }
 
         if patrol.alert_t > 0.0 {
@@ -782,7 +776,7 @@ fn main {
 
         let hit_r = patrol.radius + 18.0
         if d2 <= hit_r * hit_r {
-          if player.dash_t > 0.0 && absf(player.vx) + absf(player.vy) > 220.0 {
+          if player.dash_t > 0.0 && player.vx.abs() + player.vy.abs() > 220.0 {
             patrol.active = false
             score = score + 44
             msg = "Patrol disabled"

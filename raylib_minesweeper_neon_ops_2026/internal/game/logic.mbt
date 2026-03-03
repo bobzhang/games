@@ -134,8 +134,8 @@ fn recompute_around(game : @types.Game) -> Unit {
 ///|
 /// Returns true if (`x`, `y`) is within the 3x3 safe zone around the first-click seed cell.
 fn is_safe_seed_cell(seed_x : Int, seed_y : Int, x : Int, y : Int) -> Bool {
-  @types.absf(Float::from_int(seed_x - x)) <= 1.0 &&
-  @types.absf(Float::from_int(seed_y - y)) <= 1.0
+  Float::from_int(seed_x - x).abs() <= 1.0 &&
+  Float::from_int(seed_y - y).abs() <= 1.0
 }
 
 ///|

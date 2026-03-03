@@ -89,12 +89,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns true if point (px, py) lies within the rectangle defined by rx, ry, rw, rh.
 fn inside_rect(
   px : Float,
@@ -576,11 +570,11 @@ fn main {
 
         if enemy.y < Float::from_int(arena_y + 16) {
           enemy.y = Float::from_int(arena_y + 16)
-          enemy.vy = absf(enemy.vy)
+          enemy.vy = enemy.vy.abs()
         }
         if enemy.y > Float::from_int(arena_y + arena_h - 16) {
           enemy.y = Float::from_int(arena_y + arena_h - 16)
-          enemy.vy = -absf(enemy.vy)
+          enemy.vy = -enemy.vy.abs()
         }
 
         if enemy.x <= core_x + enemy_r(enemy.kind) {

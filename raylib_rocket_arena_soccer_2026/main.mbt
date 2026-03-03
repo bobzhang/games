@@ -99,11 +99,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 fn deg2rad(a : Float) -> Double {
   a.to_double() * 0.017453292519943295
 }
@@ -368,8 +363,8 @@ fn collide_cars(a : Car, b : Car, parts : Array[Particle]) -> Unit {
     b.x = b.x + nx * push * 0.5
     b.y = b.y + ny * push * 0.5
 
-    let a_speed = absf(a.speed)
-    let b_speed = absf(b.speed)
+    let a_speed = a.speed.abs()
+    let b_speed = b.speed.abs()
     let shock = a_speed + b_speed
 
     a.speed = a.speed * 0.70
@@ -403,11 +398,11 @@ fn update_ball(ball : Ball, dt : Float) -> Int {
 
   if ball.y < field_t + ball.r {
     ball.y = field_t + ball.r
-    ball.vy = absf(ball.vy) * 0.86
+    ball.vy = ball.vy.abs() * 0.86
   }
   if ball.y > field_b - ball.r {
     ball.y = field_b - ball.r
-    ball.vy = -absf(ball.vy) * 0.86
+    ball.vy = -ball.vy.abs() * 0.86
   }
 
   let in_goal_band = ball.y >= goal_t && ball.y <= goal_b
@@ -421,7 +416,7 @@ fn update_ball(ball : Ball, dt : Float) -> Int {
       }
     } else {
       ball.x = field_l + ball.r
-      ball.vx = absf(ball.vx) * 0.86
+      ball.vx = ball.vx.abs() * 0.86
       0
     }
   } else if ball.x > field_r - ball.r {
@@ -433,7 +428,7 @@ fn update_ball(ball : Ball, dt : Float) -> Int {
       }
     } else {
       ball.x = field_r - ball.r
-      ball.vx = -absf(ball.vx) * 0.86
+      ball.vx = -ball.vx.abs() * 0.86
       0
     }
   } else {
@@ -883,7 +878,7 @@ fn main {
 
           let dx = field_r + 180.0 - ball.x
           let dy = center_y - ball.y
-          let inv : Float = 1.0 / clampf(absf(dx) + absf(dy), 24.0, 4000.0)
+          let inv : Float = 1.0 / clampf(dx.abs() + dy.abs(), 24.0, 4000.0)
           ball.vx = ball.vx + dx * inv * 420.0
           ball.vy = ball.vy + dy * inv * 420.0
           ball.last_touch = 1
@@ -895,13 +890,13 @@ fn main {
         }
 
         player.speed = player.speed + throttle * player_engine * dt
-        let drag : Float = if absf(throttle) > 0.01 { 1.7 } else { 2.5 }
+        let drag : Float = if throttle.abs() > 0.01 { 1.7 } else { 2.5 }
         player.speed = player.speed * (1.0 - dt * drag)
-        if absf(player.speed) < 4.0 {
+        if player.speed.abs() < 4.0 {
           player.speed = 0.0
         }
 
-        let turn_rate : Float = 220.0 + absf(player.speed) * 0.30
+        let turn_rate : Float = 220.0 + player.speed.abs() * 0.30
         player.angle = player.angle + steer * turn_rate * dt
         player.angle = wrap_deg(player.angle)
 
@@ -910,7 +905,7 @@ fn main {
         player.y = player.y + car_forward_y(player) * player.speed * dt
 
         let p_bounced = cap_car_in_field(player)
-        if p_bounced && absf(player.speed) > 160.0 {
+        if p_bounced && player.speed.abs() > 160.0 {
           player.stun_t = 0.16
           player.flash_t = 0.16
           burst(particles, player.x, player.y, 8, 0.10, 1)
@@ -948,14 +943,14 @@ fn main {
         }
 
         let mut ai_throttle : Float = 1.0
-        if absf(delta) > 120.0 {
+        if delta.abs() > 120.0 {
           ai_throttle = -0.35
-        } else if absf(delta) > 72.0 {
+        } else if delta.abs() > 72.0 {
           ai_throttle = 0.55
         }
 
         let mut ai_boosting = false
-        if dist_ball > 280.0 && ai.boost > 28.0 && absf(delta) < 28.0 {
+        if dist_ball > 280.0 && ai.boost > 28.0 && delta.abs() < 28.0 {
           ai_boosting = true
         }
 
@@ -977,7 +972,7 @@ fn main {
         if dist_ball < 124.0 &&
           ai.dash_cd <= 0.0 &&
           ai.boost >= 12.0 &&
-          absf(delta) < 22.0 {
+          delta.abs() < 22.0 {
           ai.speed = ai.speed + 210.0
           ai.dash_cd = 1.4
           ai.boost = ai.boost - 12.0
@@ -994,7 +989,7 @@ fn main {
 
           let dx = field_l - 180.0 - ball.x
           let dy = center_y - ball.y
-          let inv : Float = 1.0 / clampf(absf(dx) + absf(dy), 24.0, 4000.0)
+          let inv : Float = 1.0 / clampf(dx.abs() + dy.abs(), 24.0, 4000.0)
           ball.vx = ball.vx + dx * inv * 380.0
           ball.vy = ball.vy + dy * inv * 380.0
           ball.last_touch = 2
@@ -1003,13 +998,13 @@ fn main {
         }
 
         ai.speed = ai.speed + ai_throttle * ai_engine * dt
-        let ai_drag : Float = if absf(ai_throttle) > 0.01 { 1.8 } else { 2.3 }
+        let ai_drag : Float = if ai_throttle.abs() > 0.01 { 1.8 } else { 2.3 }
         ai.speed = ai.speed * (1.0 - dt * ai_drag)
-        if absf(ai.speed) < 4.0 {
+        if ai.speed.abs() < 4.0 {
           ai.speed = 0.0
         }
 
-        let ai_turn : Float = 205.0 + absf(ai.speed) * 0.28
+        let ai_turn : Float = 205.0 + ai.speed.abs() * 0.28
         ai.angle = ai.angle + ai_steer * ai_turn * dt
         ai.angle = wrap_deg(ai.angle)
 
@@ -1018,7 +1013,7 @@ fn main {
         ai.y = ai.y + car_forward_y(ai) * ai.speed * dt
 
         let ai_bounced = cap_car_in_field(ai)
-        if ai_bounced && absf(ai.speed) > 160.0 {
+        if ai_bounced && ai.speed.abs() > 160.0 {
           ai.stun_t = 0.14
           ai.flash_t = 0.14
           burst(particles, ai.x, ai.y, 7, 0.09, 1)

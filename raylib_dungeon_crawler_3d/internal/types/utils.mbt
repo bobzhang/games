@@ -1,16 +1,6 @@
 // Math helpers
 
 ///|
-/// Returns the absolute value of a float.
-pub fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
-}
-
-///|
 /// Clamps a float to the inclusive range `[low, high]`.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {

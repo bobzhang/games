@@ -15,12 +15,6 @@ let points : Int = 17
 let max_meteors : Int = 24
 
 ///|
-/// Returns the absolute value of `x`.
-fn absf(x : Float) -> Float {
-  x.abs()
-}
-
-///|
 /// Clamps `v` to the inclusive `[lo, hi]` range.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -452,9 +446,9 @@ fn main {
           if y >= ground - 13.0 {
             let on_pad = x >= pad_x + 8.0 && x <= pad_x + pad_w - 8.0
             let safe = on_pad &&
-              absf(vx) <= 34.0 &&
-              absf(vy) <= 46.0 &&
-              absf(angle) <= 12.0
+              vx.abs() <= 34.0 &&
+              vy.abs() <= 46.0 &&
+              angle.abs() <= 12.0
 
             if safe {
               let mut bonus = 320 + fuel.to_int() / 2

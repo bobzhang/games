@@ -134,12 +134,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns the squared Euclidean distance between two 2D points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx = x1 - x0
@@ -920,11 +914,11 @@ fn main {
 
         enemy.fire_cd = enemy.fire_cd - dt
         if enemy.fire_cd <= 0.0 &&
-          absf(enemy.x - cannon.x) < 360.0 &&
+          (enemy.x - cannon.x).abs() < 360.0 &&
           enemy.y < harbor_y - 40.0 {
           let dx : Float = cannon.x - enemy.x + randf(-20.0, 20.0)
           let dy : Float = cannon.y - enemy.y
-          let inv : Float = 1.0 / clampf(absf(dx) + absf(dy), 32.0, 2000.0)
+          let inv : Float = 1.0 / clampf(dx.abs() + dy.abs(), 32.0, 2000.0)
           let speed : Float = 220.0 +
             Float::from_int(enemy.kind) * 42.0 +
             Float::from_int(wave) * 6.0

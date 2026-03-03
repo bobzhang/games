@@ -511,7 +511,7 @@ fn apply_dash(game : @types.Game) -> Unit {
   let mut dx = game.input_x
   let mut dy = game.input_y
 
-  if @types.absf(dx) < 0.01 && @types.absf(dy) < 0.01 {
+  if dx.abs() < 0.01 && dy.abs() < 0.01 {
     dx = @types.sinf(game.player.angle * 0.017)
     dy = -@types.cosf(game.player.angle * 0.017)
   }

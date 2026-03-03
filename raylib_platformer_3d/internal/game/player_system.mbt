@@ -380,9 +380,7 @@ fn apply_conveyor_force(game : @types.Game, dt : Float) -> Unit {
       game.px < plat.x + plat.w / 2.0 &&
       game.pz > plat.z - plat.d / 2.0 &&
       game.pz < plat.z + plat.d / 2.0
-    let py_check = @types.absf(
-      game.py - @types.player_height / 2.0 - plat.y - plat.h / 2.0,
-    )
+    let py_check = (game.py - @types.player_height / 2.0 - plat.y - plat.h / 2.0).abs()
     if on_plat && py_check < 0.2 {
       let dir : Float = if plat.kind == @types.plat_conveyor_l {
         -1.0

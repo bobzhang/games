@@ -1103,7 +1103,7 @@ fn draw_player(game : @types.Game) -> Unit {
   let wz = game.player_anim_z
   let world = game.current_world
   let walk_bob : Float = if game.player_moving {
-    @types.absf(@math.sinf(game.player_walk_cycle)) * 0.05
+    @math.sinf(game.player_walk_cycle).abs() * 0.05
   } else {
     0.0
   }

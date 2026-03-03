@@ -413,7 +413,7 @@ fn draw_coin(
   b : Int,
 ) -> Unit {
   // Coin is a flat cylinder
-  let scale = @types.absf(@math.cosf(spin)) * 0.15 + 0.05
+  let scale = @math.cosf(spin).abs() * 0.15 + 0.05
   @raylib.draw_cylinder(
     @raylib.Vector3::new(x, y - 0.1, z),
     scale,

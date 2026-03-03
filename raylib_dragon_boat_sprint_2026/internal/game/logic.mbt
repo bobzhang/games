@@ -307,8 +307,8 @@ fn update_hazards(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    let lane_delta : Float = @types.absf(hazard.lane - game.lane)
-    let dist_delta : Float = @types.absf(hazard.dist - game.distance)
+    let lane_delta : Float = (hazard.lane - game.lane).abs()
+    let dist_delta : Float = (hazard.dist - game.distance).abs()
 
     let lane_hit_w : Float = if hazard.kind == @types.hazard_debris {
       0.2
@@ -383,8 +383,8 @@ fn update_rivals(game : @types.Game, dt : Float) -> Unit {
       1.02,
     )
 
-    let near_dist : Float = @types.absf(rival.dist - game.distance)
-    let near_lane : Float = @types.absf(rival.lane - game.lane)
+    let near_dist : Float = (rival.dist - game.distance).abs()
+    let near_lane : Float = (rival.lane - game.lane).abs()
 
     if near_dist < 15.0 && near_lane < 0.2 {
       if game.speed >= rival_speed {

@@ -187,8 +187,7 @@ fn draw_stage_floor(game : @types.Game) -> Unit {
       i * 48 +
       (game.bg_scroll * @types.f(0.8)).to_int() % 48
     let alpha = @types.f(0.2) -
-      Float::from_int(@types.absf(Float::from_int(i)).to_int()) *
-      @types.f(0.008)
+      Float::from_int(Float::from_int(i).abs().to_int()) * @types.f(0.008)
     @raylib.draw_line(
       x,
       floor_top,

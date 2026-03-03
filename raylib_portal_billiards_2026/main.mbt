@@ -47,12 +47,6 @@ struct Ball {
 }
 
 ///|
-/// Returns the absolute value of a float.
-fn absf(x : Float) -> Float {
-  x.abs()
-}
-
-///|
 /// Clamps a float to the inclusive `[lo, hi]` range.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -446,10 +440,10 @@ fn main {
         ball.vx = ball.vx * friction
         ball.vy = ball.vy * friction
 
-        if absf(ball.vx) < 6.0 {
+        if ball.vx.abs() < 6.0 {
           ball.vx = 0.0
         }
-        if absf(ball.vy) < 6.0 {
+        if ball.vy.abs() < 6.0 {
           ball.vy = 0.0
         }
 
@@ -480,22 +474,22 @@ fn main {
         if ball.x <= left {
           if not(goal_opening(ball.y)) {
             ball.x = left
-            ball.vx = absf(ball.vx) * 0.94
+            ball.vx = ball.vx.abs() * 0.94
           }
         }
         if ball.x >= right {
           if not(goal_opening(ball.y)) {
             ball.x = right
-            ball.vx = -absf(ball.vx) * 0.94
+            ball.vx = -ball.vx.abs() * 0.94
           }
         }
         if ball.y <= top {
           ball.y = top
-          ball.vy = absf(ball.vy) * 0.94
+          ball.vy = ball.vy.abs() * 0.94
         }
         if ball.y >= bottom {
           ball.y = bottom
-          ball.vy = -absf(ball.vy) * 0.94
+          ball.vy = -ball.vy.abs() * 0.94
         }
 
         if ball.portal_cd <= 0.0 {

@@ -424,11 +424,11 @@ fn update_ball(game : @types.Game, dt : Float) -> Unit {
 
   if game.ball_x < min_x {
     game.ball_x = min_x
-    game.ball_vx = @types.absf(game.ball_vx) * 0.76
+    game.ball_vx = game.ball_vx.abs() * 0.76
     burst_sparks(game, game.ball_x, game.ball_y, 8, 2)
   } else if game.ball_x > max_x {
     game.ball_x = max_x
-    game.ball_vx = -@types.absf(game.ball_vx) * 0.76
+    game.ball_vx = -game.ball_vx.abs() * 0.76
     burst_sparks(game, game.ball_x, game.ball_y, 8, 2)
   }
 
@@ -516,19 +516,19 @@ fn update_pin_motion(game : @types.Game, dt : Float) -> Unit {
 
     if pin.x < min_x {
       pin.x = min_x
-      pin.vx = @types.absf(pin.vx) * 0.48
+      pin.vx = pin.vx.abs() * 0.48
     } else if pin.x > max_x {
       pin.x = max_x
-      pin.vx = -@types.absf(pin.vx) * 0.48
+      pin.vx = -pin.vx.abs() * 0.48
     }
 
     if pin.y < @types.lane_top + 12.0 {
       pin.y = @types.lane_top + 12.0
-      pin.vy = @types.absf(pin.vy) * 0.38
+      pin.vy = pin.vy.abs() * 0.38
     }
     if pin.y > @types.lane_bottom - 6.0 {
       pin.y = @types.lane_bottom - 6.0
-      pin.vy = -@types.absf(pin.vy) * 0.28
+      pin.vy = -pin.vy.abs() * 0.28
     }
   }
 }

@@ -194,12 +194,6 @@ fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-/// Returns the absolute value of a float.
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Wraps the standard library sine function for float arguments.
 fn sinf(v : Float) -> Float {
   @math.sinf(v)
@@ -506,7 +500,7 @@ fn find_flow(
       let wave : Float = sinf(cell.pulse + x * 0.0017 + y * 0.0023)
       out_vx = cell.vx + wave * (6.0 + storm * 7.0)
       out_vy = cell.vy + wave * (4.0 + storm * 5.0)
-      out_t = absf(wave) * (0.2 + storm * 0.5)
+      out_t = wave.abs() * (0.2 + storm * 0.5)
     }
   }
 
@@ -2151,19 +2145,19 @@ fn main {
 
       if boat.x < world_l + 14.0 {
         boat.x = world_l + 14.0
-        boat.vx = absf(boat.vx) * 0.3
+        boat.vx = boat.vx.abs() * 0.3
       }
       if boat.x > world_r - 14.0 {
         boat.x = world_r - 14.0
-        boat.vx = -absf(boat.vx) * 0.3
+        boat.vx = -boat.vx.abs() * 0.3
       }
       if boat.y < world_t + 14.0 {
         boat.y = world_t + 14.0
-        boat.vy = absf(boat.vy) * 0.3
+        boat.vy = boat.vy.abs() * 0.3
       }
       if boat.y > world_b - 14.0 {
         boat.y = world_b - 14.0
-        boat.vy = -absf(boat.vy) * 0.3
+        boat.vy = -boat.vy.abs() * 0.3
       }
 
       boat.fuel = boat.fuel - dt * fuel_drain

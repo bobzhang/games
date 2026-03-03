@@ -329,7 +329,7 @@ fn update_keeper_motion(game : @types.Game, dt : Float) -> Unit {
     speed = speed * @types.keeper_mode_speed_scale
   }
 
-  if @types.absf(game.input_x) > 0.01 || @types.absf(game.input_y) > 0.01 {
+  if game.input_x.abs() > 0.01 || game.input_y.abs() > 0.01 {
     game.keeper.facing_x = game.input_x
     game.keeper.facing_y = game.input_y
   }
@@ -349,7 +349,7 @@ fn update_keeper_motion(game : @types.Game, dt : Float) -> Unit {
   if next_x < left_wall {
     if game.input_x < 0.0 &&
       game.keeper.room > 0 &&
-      @types.absf(game.keeper.y - @types.door_center_y) <= @types.door_half_h {
+      (game.keeper.y - @types.door_center_y).abs() <= @types.door_half_h {
       game.keeper.room = game.keeper.room - 1
       next_x = right_wall - 1.0
       set_message(game, "Entered " + @types.room_name(game.keeper.room), 0.45)
@@ -359,7 +359,7 @@ fn update_keeper_motion(game : @types.Game, dt : Float) -> Unit {
   } else if next_x > right_wall {
     if game.input_x > 0.0 &&
       game.keeper.room < @types.chamber_count - 1 &&
-      @types.absf(game.keeper.y - @types.door_center_y) <= @types.door_half_h {
+      (game.keeper.y - @types.door_center_y).abs() <= @types.door_half_h {
       game.keeper.room = game.keeper.room + 1
       next_x = left_wall + 1.0
       set_message(game, "Entered " + @types.room_name(game.keeper.room), 0.45)
@@ -839,12 +839,12 @@ fn update_raiders(game : @types.Game, dt : Float) -> Float {
 
     if raider.room < @types.vault_room &&
       raider.x >= @types.chamber_right() - 10.0 &&
-      @types.absf(raider.y - @types.door_center_y) <= @types.door_half_h {
+      (raider.y - @types.door_center_y).abs() <= @types.door_half_h {
       raider.room = raider.room + 1
       raider.x = @types.chamber_left + 12.0
     } else if raider.room > @types.vault_room &&
       raider.x <= @types.chamber_left + 10.0 &&
-      @types.absf(raider.y - @types.door_center_y) <= @types.door_half_h {
+      (raider.y - @types.door_center_y).abs() <= @types.door_half_h {
       raider.room = raider.room - 1
       raider.x = @types.chamber_right() - 12.0
     }

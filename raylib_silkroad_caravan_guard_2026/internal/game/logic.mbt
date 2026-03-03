@@ -614,7 +614,7 @@ fn clamp_hero_ring(hero : @types.Player) -> Unit {
   let mut dx = hero.x - @types.caravan_center_x
   let mut dy = hero.y - @types.caravan_center_y
 
-  if @types.absf(dx) < 0.001 && @types.absf(dy) < 0.001 {
+  if dx.abs() < 0.001 && dy.abs() < 0.001 {
     dx = @types.perimeter_outer_rx
   }
 
@@ -650,7 +650,7 @@ fn update_hero(game : @types.Game, dt : Float) -> Unit {
     let mut dx = game.input_x
     let mut dy = game.input_y
 
-    if @types.absf(dx) + @types.absf(dy) < 0.01 {
+    if dx.abs() + dy.abs() < 0.01 {
       dx = game.hero.facing_x
       dy = game.hero.facing_y
     }

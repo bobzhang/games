@@ -23,16 +23,6 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of `v`.
-pub fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
-}
-
-///|
 /// Returns the sign of `v` as `-1`, `0`, or `1`.
 pub fn signf(v : Float) -> Int {
   if v < 0.0 {

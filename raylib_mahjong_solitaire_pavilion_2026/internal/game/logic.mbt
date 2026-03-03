@@ -22,11 +22,9 @@ fn set_pattern_active(game : @types.Game, pattern : Int) -> Unit {
       } else if pattern == 1 {
         on = nx * nx + ny * ny <= 1.05
       } else if pattern == 2 {
-        on = @types.absf(nx) + @types.absf(ny) <= 1.05
+        on = nx.abs() + ny.abs() <= 1.05
       } else if pattern == 3 {
-        on = @types.absf(nx) <= 0.36 ||
-          @types.absf(ny) <= 0.32 ||
-          @types.absf(nx) + @types.absf(ny) <= 1.0
+        on = nx.abs() <= 0.36 || ny.abs() <= 0.32 || nx.abs() + ny.abs() <= 1.0
       } else if pattern == 4 {
         let edge : Bool = x <= 2 ||
           x >= game.board_w - 1 ||
@@ -35,16 +33,16 @@ fn set_pattern_active(game : @types.Game, pattern : Int) -> Unit {
         let core : Bool = nx * nx + ny * ny <= 0.5
         on = edge || core
       } else if pattern == 5 {
-        let wing_l : Bool = x <= game.board_w / 2 - 1 && @types.absf(ny) <= 0.72
-        let wing_r : Bool = x >= game.board_w / 2 + 2 && @types.absf(ny) <= 0.72
-        let spine : Bool = @types.absf(nx) <= 0.18
+        let wing_l : Bool = x <= game.board_w / 2 - 1 && ny.abs() <= 0.72
+        let wing_r : Bool = x >= game.board_w / 2 + 2 && ny.abs() <= 0.72
+        let spine : Bool = nx.abs() <= 0.18
         on = wing_l || wing_r || spine
       } else if pattern == 6 {
         let band : Float = Float::from_double(
             @math.sin((xf * 0.62).to_double()),
           ) *
           0.36
-        on = @types.absf(ny - band) <= 0.44 || @types.absf(nx) <= 0.18
+        on = (ny - band).abs() <= 0.44 || nx.abs() <= 0.18
       } else if pattern == 7 {
         let stair_a : Bool = y <=
           x * game.board_h / @types.maxi(1, game.board_w) + 2
@@ -53,15 +51,13 @@ fn set_pattern_active(game : @types.Game, pattern : Int) -> Unit {
         on = stair_a && stair_b
       } else if pattern == 8 {
         let r2 : Float = nx * nx + ny * ny
-        on = (r2 >= 0.18 && r2 <= 1.08) ||
-          @types.absf(nx) <= 0.12 ||
-          @types.absf(ny) <= 0.12
+        on = (r2 >= 0.18 && r2 <= 1.08) || nx.abs() <= 0.12 || ny.abs() <= 0.12
       } else {
         let ring : Bool = nx * nx + ny * ny <= 1.08
-        let cut1 : Bool = not(@types.absf(nx) < 0.22 && ny < -0.32)
-        let cut2 : Bool = not(@types.absf(nx) < 0.22 && ny > 0.32)
-        let cut3 : Bool = not(@types.absf(ny) < 0.2 && nx < -0.42)
-        let cut4 : Bool = not(@types.absf(ny) < 0.2 && nx > 0.42)
+        let cut1 : Bool = not(nx.abs() < 0.22 && ny < -0.32)
+        let cut2 : Bool = not(nx.abs() < 0.22 && ny > 0.32)
+        let cut3 : Bool = not(ny.abs() < 0.2 && nx < -0.42)
+        let cut4 : Bool = not(ny.abs() < 0.2 && nx > 0.42)
         on = ring && cut1 && cut2 && cut3 && cut4
       }
 

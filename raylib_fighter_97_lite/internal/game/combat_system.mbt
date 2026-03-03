@@ -4,7 +4,7 @@ fn defender_holding_away(
   defender : @types.Fighter,
 ) -> Bool {
   let dx = attacker.x - defender.x
-  if @types.absf(dx) <= 1.0 {
+  if dx.abs() <= 1.0 {
     defender.input.hold_back
   } else if dx > 0.0 {
     defender.input.x < 0

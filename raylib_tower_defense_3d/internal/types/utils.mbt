@@ -1,14 +1,4 @@
 ///|
-/// Returns the absolute value of `v`.
-pub fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
-}
-
-///|
 /// Returns `v` clamped between `low` and `high`.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {

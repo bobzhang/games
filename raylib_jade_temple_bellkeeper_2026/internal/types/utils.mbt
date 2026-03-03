@@ -37,12 +37,6 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of `v`.
-pub fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Linearly interpolates from `a` to `b` by `t`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t

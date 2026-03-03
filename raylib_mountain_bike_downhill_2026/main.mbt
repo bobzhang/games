@@ -108,12 +108,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns the squared Euclidean distance between two points.
 fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
@@ -625,7 +619,7 @@ fn main {
         checkpoints[i].pulse_t = checkpoints[i].pulse_t + dt
 
         if checkpoints[i].state == 0 && rider.y >= checkpoints[i].y {
-          let dx = absf(rider.x - checkpoints[i].x)
+          let dx = (rider.x - checkpoints[i].x).abs()
           if dx <= checkpoints[i].width * 0.5 {
             checkpoints[i].state = 1
             clean_count = clean_count + 1
@@ -665,8 +659,8 @@ fn main {
           continue
         }
 
-        let touch_x = absf(hazard.x - rider.x)
-        let touch_y = absf(hazard.y - rider.y)
+        let touch_x = (hazard.x - rider.x).abs()
+        let touch_y = (hazard.y - rider.y).abs()
         if touch_x <= hazard.size + 16.0 && touch_y <= hazard.size + 24.0 {
           let hit_dmg : Float = if hazard.kind == 1 {
             22.0

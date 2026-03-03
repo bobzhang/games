@@ -160,11 +160,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx = x1 - x0
   let dy = y1 - y0
@@ -855,12 +850,12 @@ fn main {
 
       if shoot_down && pilot.fire_cd <= 0.0 {
         pilot.fire_cd = 0.105
-        let aim_x : Float = if absf(ax) + absf(ay) > 0.01 {
+        let aim_x : Float = if ax.abs() + ay.abs() > 0.01 {
           ax
         } else {
           pilot.vx
         }
-        let aim_y : Float = if absf(ax) + absf(ay) > 0.01 {
+        let aim_y : Float = if ax.abs() + ay.abs() > 0.01 {
           ay
         } else {
           pilot.vy
@@ -894,21 +889,21 @@ fn main {
       pilot.y = pilot.y + pilot.vy * dt
       if pilot.x < arena_l + 20.0 {
         pilot.x = arena_l + 20.0
-        pilot.vx = absf(pilot.vx) * 0.35
+        pilot.vx = pilot.vx.abs() * 0.35
       }
       if pilot.x > arena_r - 20.0 {
         pilot.x = arena_r - 20.0
-        pilot.vx = -absf(pilot.vx) * 0.35
+        pilot.vx = -pilot.vx.abs() * 0.35
       }
       if pilot.y < arena_t + 20.0 {
         pilot.y = arena_t + 20.0
-        pilot.vy = absf(pilot.vy) * 0.35
+        pilot.vy = pilot.vy.abs() * 0.35
       }
       if pilot.y > arena_b - 20.0 {
         pilot.y = arena_b - 20.0
-        pilot.vy = -absf(pilot.vy) * 0.35
+        pilot.vy = -pilot.vy.abs() * 0.35
       }
-      if absf(pilot.vx) + absf(pilot.vy) > 0.2 {
+      if pilot.vx.abs() + pilot.vy.abs() > 0.2 {
         pilot.angle = Float::from_double(
           @math.atan2(pilot.vy.to_double(), pilot.vx.to_double()) *
           57.29577951308232,
@@ -972,12 +967,12 @@ fn main {
 
         if has_flag(gmask, bit_shoot) && ghosts[g].fire_cd <= 0.0 {
           ghosts[g].fire_cd = 0.14
-          let aim_x = if absf(gx_axis) + absf(gy_axis) > 0.01 {
+          let aim_x = if gx_axis.abs() + gy_axis.abs() > 0.01 {
             gx_axis
           } else {
             ghosts[g].vx
           }
-          let aim_y = if absf(gx_axis) + absf(gy_axis) > 0.01 {
+          let aim_y = if gx_axis.abs() + gy_axis.abs() > 0.01 {
             gy_axis
           } else {
             ghosts[g].vy
@@ -1012,7 +1007,7 @@ fn main {
         ghosts[g].y = ghosts[g].y + ghosts[g].vy * dt
         ghosts[g].x = clampf(ghosts[g].x, arena_l + 16.0, arena_r - 16.0)
         ghosts[g].y = clampf(ghosts[g].y, arena_t + 16.0, arena_b - 16.0)
-        if absf(ghosts[g].vx) + absf(ghosts[g].vy) > 0.2 {
+        if ghosts[g].vx.abs() + ghosts[g].vy.abs() > 0.2 {
           ghosts[g].angle = Float::from_double(
             @math.atan2(ghosts[g].vy.to_double(), ghosts[g].vx.to_double()) *
             57.29577951308232,

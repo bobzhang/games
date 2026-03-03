@@ -43,12 +43,6 @@ let mountain_w : Int = 144
 let mountain_h : Int = 220
 
 ///|
-/// Returns the absolute value of a floating-point number.
-fn absf(x : Float) -> Float {
-  x.abs()
-}
-
-///|
 /// Clamps a float value to the inclusive range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -134,7 +128,7 @@ fn blast_damage(ex : Float, ey : Float, cx : Float, cy : Float) -> Int {
 fn estimate_enemy_power(distance : Float, angle : Float, wind : Float) -> Float {
   let sin2 = sinf_deg(angle * 2.0)
   let mut p : Float = 560.0
-  if absf(sin2) > 0.2 {
+  if sin2.abs() > 0.2 {
     let calc = (distance * gravity / sin2).abs()
     p = calc.sqrt()
   }

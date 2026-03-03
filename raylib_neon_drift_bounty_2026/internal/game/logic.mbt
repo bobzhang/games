@@ -824,13 +824,13 @@ fn constrain_player_to_road(game : @types.Game) -> Unit {
 
   if game.hero.x - rr < left {
     game.hero.x = left + rr
-    game.hero.vx = @types.absf(game.hero.vx) * 0.2
+    game.hero.vx = game.hero.vx.abs() * 0.2
     damage_player(game, 10.0)
   }
 
   if game.hero.x + rr > right {
     game.hero.x = right - rr
-    game.hero.vx = -@types.absf(game.hero.vx) * 0.2
+    game.hero.vx = -game.hero.vx.abs() * 0.2
     damage_player(game, 10.0)
   }
 }
@@ -1232,7 +1232,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
     0.0,
     game.energy -
     @types.energy_drain_base * dt -
-    @types.absf(game.hero.vx) / @types.player_max_speed_x * 1.2 * dt,
+    game.hero.vx.abs() / @types.player_max_speed_x * 1.2 * dt,
   )
   if game.boost_t > 0.0 {
     game.energy = @types.maxf(0.0, game.energy - @types.energy_drain_boost * dt)

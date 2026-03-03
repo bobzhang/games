@@ -194,12 +194,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of `v`.
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns the squared Euclidean distance between two points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx : Float = x1 - x0
@@ -619,11 +613,11 @@ fn gate_block_circle(
     let gx : Float = gate.x
     if nx < gx && nx + r > gx - 6.0 && nvx > 0.0 {
       nx = gx - r - 6.0
-      nvx = -absf(nvx) * 0.46
+      nvx = -nvx.abs() * 0.46
     }
     if nx > gx && nx - r < gx + 6.0 && nvx < 0.0 {
       nx = gx + r + 6.0
-      nvx = absf(nvx) * 0.46
+      nvx = nvx.abs() * 0.46
     }
   }
   (nx, nvx)
@@ -1527,11 +1521,11 @@ fn main {
         // world bounds
         if core.x < core.r {
           core.x = core.r
-          core.vx = absf(core.vx) * 0.56
+          core.vx = core.vx.abs() * 0.56
         }
         if core.x > world_w - core.r {
           core.x = world_w - core.r
-          core.vx = -absf(core.vx) * 0.56
+          core.vx = -core.vx.abs() * 0.56
         }
 
         let (cx, cvx) = gate_block_circle(
@@ -1549,7 +1543,7 @@ fn main {
           if core.vy > 0.0 {
             core.vy = -core.vy * 0.42
           }
-          if absf(core.vy) < 24.0 {
+          if core.vy.abs() < 24.0 {
             core.vy = 0.0
           }
         }
@@ -1567,7 +1561,7 @@ fn main {
               core.y + core.r >= top {
               core.y = top - core.r
               core.vy = -core.vy * 0.36
-              if absf(core.vy) < 20.0 {
+              if core.vy.abs() < 20.0 {
                 core.vy = 0.0
               }
             }
@@ -1576,7 +1570,7 @@ fn main {
 
         // Core delivery.
         if dist2(core.x, core.y, reactor_x, reactor_y) <= 80.0 * 80.0 {
-          if absf(core.vx) + absf(core.vy) < 210.0 {
+          if core.vx.abs() + core.vy.abs() < 210.0 {
             player.delivered = player.delivered + core.value
             player.score = player.score + 28 + core.value * 8 + player.combo
             player.cargo = player.cargo + core.value
@@ -1631,11 +1625,11 @@ fn main {
 
         if box.x < box.r {
           box.x = box.r
-          box.vx = absf(box.vx) * 0.44
+          box.vx = box.vx.abs() * 0.44
         }
         if box.x > world_w - box.r {
           box.x = world_w - box.r
-          box.vx = -absf(box.vx) * 0.44
+          box.vx = -box.vx.abs() * 0.44
         }
 
         let (bx, bvx) = gate_block_circle(gates, box.x, box.y, box.r, box.vx)
@@ -1647,7 +1641,7 @@ fn main {
           if box.vy > 0.0 {
             box.vy = -box.vy * 0.28
           }
-          if absf(box.vy) < 16.0 {
+          if box.vy.abs() < 16.0 {
             box.vy = 0.0
           }
         }
@@ -1665,7 +1659,7 @@ fn main {
               box.y + box.r >= top {
               box.y = top - box.r
               box.vy = -box.vy * 0.22
-              if absf(box.vy) < 12.0 {
+              if box.vy.abs() < 12.0 {
                 box.vy = 0.0
               }
             }

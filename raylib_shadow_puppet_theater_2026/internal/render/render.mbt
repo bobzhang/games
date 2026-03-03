@@ -184,7 +184,7 @@ fn draw_pose_shadow(
   @raylib.draw_circle(right_hand_x, right_hand_y, 8.0 * scale, body)
 
   let hip_y = (fy + 62.0 * scale).to_int()
-  let foot_y = (fy + (150.0 + @types.absf(ax) * 8.0) * scale).to_int()
+  let foot_y = (fy + (150.0 + ax.abs() * 8.0) * scale).to_int()
   let left_foot_x = (fx - (40.0 + ay * 9.0) * scale).to_int()
   let right_foot_x = (fx + (40.0 + ay * 9.0) * scale).to_int()
   let hip_offset_f : Float = 20.0 * scale

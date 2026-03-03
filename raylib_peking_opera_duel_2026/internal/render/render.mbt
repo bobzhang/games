@@ -267,11 +267,7 @@ fn draw_active_prompt(game : @types.Game) -> Unit {
   )
   let radius : Float = 196.0 - progress * 156.0
   let urgency : Float = 1.0 -
-    @types.clampf(
-      @types.absf(game.prompt.time_left) / @types.timing_miss,
-      0.0,
-      1.0,
-    )
+    @types.clampf(game.prompt.time_left.abs() / @types.timing_miss, 0.0, 1.0)
   let glow_f : Float = 96.0 + urgency * 150.0
   let glow = @types.clampi(glow_f.to_int(), 86, 246)
 
@@ -300,10 +296,9 @@ fn draw_active_prompt(game : @types.Game) -> Unit {
     @types.col(24, 20, 28, 230),
   )
 
-  let timing_text = if @types.absf(game.prompt.time_left) <=
-    @types.timing_perfect {
+  let timing_text = if game.prompt.time_left.abs() <= @types.timing_perfect {
     "PERFECT"
-  } else if @types.absf(game.prompt.time_left) <= @types.timing_good {
+  } else if game.prompt.time_left.abs() <= @types.timing_good {
     "GOOD"
   } else {
     "INCOMING"

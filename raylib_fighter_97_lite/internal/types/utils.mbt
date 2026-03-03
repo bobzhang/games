@@ -1,14 +1,4 @@
 ///|
-/// Returns the absolute value of `v`.
-pub fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
-}
-
-///|
 /// Clamps a float to the inclusive `[low, high]` range.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
@@ -146,7 +136,7 @@ pub fn stage_clamp_x(x : Float) -> Float {
 ///|
 /// Returns absolute horizontal distance between fighters.
 pub fn fighter_distance_x(a : Fighter, b : Fighter) -> Float {
-  absf(a.x - b.x)
+  (a.x - b.x).abs()
 }
 
 ///|

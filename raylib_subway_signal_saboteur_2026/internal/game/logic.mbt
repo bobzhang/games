@@ -754,7 +754,7 @@ fn resolve_train_collisions(game : @types.Game) -> Unit {
         continue
       }
 
-      if @types.absf(game.trains[i].x - game.trains[j].x) > 0.38 {
+      if (game.trains[i].x - game.trains[j].x).abs() > 0.38 {
         continue
       }
 

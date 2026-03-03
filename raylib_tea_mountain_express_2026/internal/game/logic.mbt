@@ -119,7 +119,7 @@ fn spawn_hazard(game : @types.Game) -> Unit {
 ///|
 fn handle_hazard_collision(game : @types.Game, i : Int) -> Unit {
   let kind = game.hazards[i].kind
-  let tilt_gap = @types.absf(game.tilt - @types.hazard_tilt_bias(kind))
+  let tilt_gap = (game.tilt - @types.hazard_tilt_bias(kind)).abs()
 
   let tilt_scale : Float = if tilt_gap < 0.36 {
     0.64
@@ -188,7 +188,7 @@ fn update_hazards(game : @types.Game, dt : Float) -> Unit {
     }
 
     if game.hazards[i].lane == game.lane &&
-      @types.absf(game.hazards[i].y - @types.cart_y) <=
+      (game.hazards[i].y - @types.cart_y).abs() <=
       @types.hazard_collision_window {
       handle_hazard_collision(game, i)
     }
@@ -377,7 +377,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   }
 
   let speed_factor = game.speed / @types.speed_max
-  let tilt_factor : Float = 0.65 + @types.absf(game.tilt)
+  let tilt_factor : Float = 0.65 + game.tilt.abs()
 
   game.cargo_quality = game.cargo_quality -
     @types.route_wear_cargo_dps * dt * tilt_factor

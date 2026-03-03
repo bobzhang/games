@@ -91,7 +91,7 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
     @types.aircraft_min_altitude
   if player.y < ground {
     // Crash if going too fast or too steep
-    if player.speed > 25.0 || @types.absf(player.pitch) > 0.3 {
+    if player.speed > 25.0 || player.pitch.abs() > 0.3 {
       crash_player(game)
       return
     }
@@ -212,8 +212,8 @@ fn check_landing(game : @types.Game, dt : Float) -> Unit {
     // Check successful landing conditions
     if altitude_above_ground < 1.0 &&
       player.speed < 25.0 &&
-      @types.absf(player.pitch) < 0.2 &&
-      @types.absf(player.roll) < 0.3 {
+      player.pitch.abs() < 0.2 &&
+      player.roll.abs() < 0.3 {
       game.landing_timer += dt
       if game.landing_timer > 1.5 {
         mission.targets_done = mission.target_count

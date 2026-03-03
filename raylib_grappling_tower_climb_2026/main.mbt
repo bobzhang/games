@@ -161,12 +161,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns the squared Euclidean distance between two 2D points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx = x1 - x0
@@ -1048,11 +1042,11 @@ fn main {
 
       if pilot.x < tower_l + 18.0 {
         pilot.x = tower_l + 18.0
-        pilot.vx = absf(pilot.vx) * 0.24
+        pilot.vx = pilot.vx.abs() * 0.24
       }
       if pilot.x > tower_r - 18.0 {
         pilot.x = tower_r - 18.0
-        pilot.vx = -absf(pilot.vx) * 0.24
+        pilot.vx = -pilot.vx.abs() * 0.24
       }
 
       pilot.grounded = false

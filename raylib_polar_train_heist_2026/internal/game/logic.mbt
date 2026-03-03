@@ -1195,7 +1195,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
     0.0,
     game.heat -
     @types.heat_drain_base * dt -
-    @types.absf(game.hero.vx) / @types.player_max_vx * 1.1 * dt,
+    game.hero.vx.abs() / @types.player_max_vx * 1.1 * dt,
   )
 
   if game.dash_t > 0.0 {

@@ -50,14 +50,14 @@ fn direction_to_cell(game : @types.Game, tx : Int, ty : Int) -> Int {
   let mut dx : Int = tx - hx
   let mut dy : Int = ty - hy
 
-  if @types.absf(Float::from_int(dx)) > Float::from_int(@types.grid_w / 2) {
+  if Float::from_int(dx).abs() > Float::from_int(@types.grid_w / 2) {
     dx = if dx > 0 { dx - @types.grid_w } else { dx + @types.grid_w }
   }
-  if @types.absf(Float::from_int(dy)) > Float::from_int(@types.grid_h / 2) {
+  if Float::from_int(dy).abs() > Float::from_int(@types.grid_h / 2) {
     dy = if dy > 0 { dy - @types.grid_h } else { dy + @types.grid_h }
   }
 
-  if @types.absf(Float::from_int(dx)) > @types.absf(Float::from_int(dy)) {
+  if Float::from_int(dx).abs() > Float::from_int(dy).abs() {
     if dx < 0 {
       @types.dir_left
     } else {

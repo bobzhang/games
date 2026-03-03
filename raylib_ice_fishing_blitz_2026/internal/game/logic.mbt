@@ -534,8 +534,8 @@ fn update_hook(game : @types.Game, dt : Float) -> Unit {
     @types.bottomf() - 12.0,
   )
 
-  let line_raw : Float = @types.absf(game.hook_y - @types.hole_yf()) +
-    @types.absf(game.hook_x - @types.hole_xf()) * 0.22
+  let line_raw : Float = (game.hook_y - @types.hole_yf()).abs() +
+    (game.hook_x - @types.hole_xf()).abs() * 0.22
   game.line_len = @types.clampf(
     line_raw, @types.min_line_len, @types.max_line_len,
   )
@@ -608,20 +608,20 @@ fn update_fish(game : @types.Game, dt : Float) -> Unit {
 
     if game.fish[i].x < @types.world_left() + game.fish[i].r {
       game.fish[i].x = @types.world_left() + game.fish[i].r
-      game.fish[i].vx = @types.absf(game.fish[i].vx) * 0.8
+      game.fish[i].vx = game.fish[i].vx.abs() * 0.8
     }
     if game.fish[i].x > @types.world_right() - game.fish[i].r {
       game.fish[i].x = @types.world_right() - game.fish[i].r
-      game.fish[i].vx = -@types.absf(game.fish[i].vx) * 0.8
+      game.fish[i].vx = -game.fish[i].vx.abs() * 0.8
     }
 
     if game.fish[i].y < @types.topf() + game.fish[i].r + 20.0 {
       game.fish[i].y = @types.topf() + game.fish[i].r + 20.0
-      game.fish[i].vy = @types.absf(game.fish[i].vy) * 0.8
+      game.fish[i].vy = game.fish[i].vy.abs() * 0.8
     }
     if game.fish[i].y > @types.bottomf() - game.fish[i].r - 8.0 {
       game.fish[i].y = @types.bottomf() - game.fish[i].r - 8.0
-      game.fish[i].vy = -@types.absf(game.fish[i].vy) * 0.8
+      game.fish[i].vy = -game.fish[i].vy.abs() * 0.8
     }
 
     let rr : Float = game.fish[i].r + @types.hook_r + 8.0
@@ -664,7 +664,7 @@ fn update_hazards(game : @types.Game, dt : Float) -> Unit {
     } else if hazard.kind == @types.hazard_eel {
       let dx : Float = game.hook_x - hazard.x
       let dy : Float = game.hook_y - hazard.y
-      let d : Float = @types.absf(dx) + @types.absf(dy)
+      let d : Float = dx.abs() + dy.abs()
       let nx : Float = if d <= 0.001 { 0.0 } else { dx / d }
       let ny : Float = if d <= 0.001 { 0.0 } else { dy / d }
 
@@ -750,20 +750,20 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
 
     if pickup.x < @types.world_left() + 16.0 {
       pickup.x = @types.world_left() + 16.0
-      pickup.vx = @types.absf(pickup.vx) * 0.6
+      pickup.vx = pickup.vx.abs() * 0.6
     }
     if pickup.x > @types.world_right() - 16.0 {
       pickup.x = @types.world_right() - 16.0
-      pickup.vx = -@types.absf(pickup.vx) * 0.6
+      pickup.vx = -pickup.vx.abs() * 0.6
     }
 
     if pickup.y < @types.topf() + 20.0 {
       pickup.y = @types.topf() + 20.0
-      pickup.vy = @types.absf(pickup.vy) * 0.6
+      pickup.vy = pickup.vy.abs() * 0.6
     }
     if pickup.y > @types.bottomf() - 16.0 {
       pickup.y = @types.bottomf() - 16.0
-      pickup.vy = -@types.absf(pickup.vy) * 0.6
+      pickup.vy = -pickup.vy.abs() * 0.6
     }
 
     let rr : Float = @types.hook_r + 16.0

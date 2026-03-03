@@ -227,9 +227,9 @@ fn draw_block_with_lighting(
             wz + dz,
           )
           if check_block == @types.block_torch {
-            let torch_dist = @types.absf(Float::from_int(dx)) +
-              @types.absf(Float::from_int(dy)) +
-              @types.absf(Float::from_int(dz))
+            let torch_dist = Float::from_int(dx).abs() +
+              Float::from_int(dy).abs() +
+              Float::from_int(dz).abs()
             if torch_dist < 5.0 {
               near_torch = true
             }

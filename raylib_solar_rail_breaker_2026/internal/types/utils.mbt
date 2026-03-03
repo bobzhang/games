@@ -43,12 +43,6 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-pub fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Linearly interpolates between two floats using `t` in `[0, 1]`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t
@@ -101,7 +95,7 @@ pub fn shortest_angle(from : Float, to : Float) -> Float {
 ///|
 /// Returns the smallest angular difference in degrees.
 pub fn angle_dist(a : Float, b : Float) -> Float {
-  absf(shortest_angle(a, b))
+  shortest_angle(a, b).abs()
 }
 
 ///|

@@ -152,7 +152,7 @@ fn draw_far_clouds(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 /// Draws horizontal wind-streak lines whose count and length vary with current wind intensity.
 fn draw_wind_lanes(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let intensity = @types.clampf(
-    @types.absf(game.wind_x) /
+    game.wind_x.abs() /
     (@types.wind_base + Float::from_int(game.stage) * @types.wind_stage_bonus),
     0.0,
     1.0,
@@ -161,9 +161,7 @@ fn draw_wind_lanes(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
   for i in 0..<count {
     let fi = Float::from_int(i)
-    let x = (
-        fi * 76.0 + game.time_s * (140.0 + @types.absf(game.wind_x) * 0.46)
-      ) %
+    let x = (fi * 76.0 + game.time_s * (140.0 + game.wind_x.abs() * 0.46)) %
       (Float::from_int(@types.screen_w) + 180.0) -
       90.0
     let y = @types.play_top +
@@ -254,7 +252,7 @@ fn draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     let life = @types.clampf(trail.life / 0.36, 0.0, 1.0)
     let col = @raylib.Color::new(122, 224, 255, (life * 132.0).to_int())
     let stretch : Float = Float::from_int(1) +
-      @types.absf(@types.sinf(trail.rot * 0.05)) * 0.28
+      @types.sinf(trail.rot * 0.05).abs() * 0.28
 
     @raylib.draw_rectangle(
       (trail.x - trail.w * 0.5 * stretch + cam_x * 0.2).to_int(),

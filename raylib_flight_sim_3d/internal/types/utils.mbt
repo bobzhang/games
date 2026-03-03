@@ -1,14 +1,4 @@
 ///|
-/// Returns the absolute value of `v`.
-pub fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
-}
-
-///|
 /// Returns `v` clamped between `low` and `high`.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
@@ -80,7 +70,7 @@ pub fn smooth_damp(
 ) -> Float {
   let diff = target - current
   let step = diff * speed * dt
-  if absf(step) > absf(diff) {
+  if step.abs() > diff.abs() {
     target
   } else {
     current + step
@@ -432,7 +422,7 @@ pub fn point_in_aabb(
   hh : Float,
   hd : Float,
 ) -> Bool {
-  absf(px - bx) < hw && absf(py - by) < hh && absf(pz - bz) < hd
+  (px - bx).abs() < hw && (py - by).abs() < hh && (pz - bz).abs() < hd
 }
 
 // Distance and bearing to waypoint
@@ -461,7 +451,7 @@ pub fn landing_alignment(
 ) -> Float {
   let bearing = bearing_to(player_x, player_z, runway_x, runway_z)
   let diff = angle_diff(player_yaw, bearing)
-  absf(diff)
+  diff.abs()
 }
 
 // Glide slope check for landing

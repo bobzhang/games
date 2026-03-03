@@ -64,7 +64,7 @@ fn update_input(game : @types.Game, _dt : Float) -> Unit {
   game.move_x = axis(left, right)
   game.move_y = axis(up, down)
 
-  if @types.absf(game.move_x) + @types.absf(game.move_y) > 0.01 {
+  if game.move_x.abs() + game.move_y.abs() > 0.01 {
     let facing = @types.normalize(game.move_x, game.move_y)
     game.facing_x = facing.0
     game.facing_y = facing.1

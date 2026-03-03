@@ -144,11 +144,6 @@ fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 fn sinf(v : Float) -> Float {
   @math.sinf(v)
 }
@@ -2173,19 +2168,19 @@ fn main {
 
       if craft.x < world_l + 16.0 {
         craft.x = world_l + 16.0
-        craft.vx = absf(craft.vx) * 0.32
+        craft.vx = craft.vx.abs() * 0.32
       }
       if craft.x > world_r - 16.0 {
         craft.x = world_r - 16.0
-        craft.vx = -absf(craft.vx) * 0.32
+        craft.vx = -craft.vx.abs() * 0.32
       }
       if craft.y < world_t + 16.0 {
         craft.y = world_t + 16.0
-        craft.vy = absf(craft.vy) * 0.32
+        craft.vy = craft.vy.abs() * 0.32
       }
       if craft.y > world_b - 16.0 {
         craft.y = world_b - 16.0
-        craft.vy = -absf(craft.vy) * 0.32
+        craft.vy = -craft.vy.abs() * 0.32
       }
 
       craft.battery = craft.battery -

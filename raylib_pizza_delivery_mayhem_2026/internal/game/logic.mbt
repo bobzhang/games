@@ -574,19 +574,19 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
       (pickup.vy + @types.cosf(pickup.phase * 2.1) * 22.0) * dt
     if pickup.x < @types.world_left() + 16.0 {
       pickup.x = @types.world_left() + 16.0
-      pickup.vx = @types.absf(pickup.vx) * 0.6
+      pickup.vx = pickup.vx.abs() * 0.6
     }
     if pickup.x > @types.world_right() - 16.0 {
       pickup.x = @types.world_right() - 16.0
-      pickup.vx = -@types.absf(pickup.vx) * 0.6
+      pickup.vx = -pickup.vx.abs() * 0.6
     }
     if pickup.y < @types.world_top() + 16.0 {
       pickup.y = @types.world_top() + 16.0
-      pickup.vy = @types.absf(pickup.vy) * 0.6
+      pickup.vy = pickup.vy.abs() * 0.6
     }
     if pickup.y > @types.world_bottom() - 16.0 {
       pickup.y = @types.world_bottom() - 16.0
-      pickup.vy = -@types.absf(pickup.vy) * 0.6
+      pickup.vy = -pickup.vy.abs() * 0.6
     }
     let rr : Float = @types.rider_r + pickup_distance(pickup.kind)
     if @types.dist2(game.rider_x, game.rider_y, pickup.x, pickup.y) <= rr * rr {

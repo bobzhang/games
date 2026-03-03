@@ -176,8 +176,7 @@ fn draw_mountains(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       let peak_y = horizon -
         120.0 -
         depth * 42.0 -
-        @types.absf(@types.sinf(Float::from_int(i) * 0.7 + game.time_s * 0.06)) *
-        30.0
+        @types.sinf(Float::from_int(i) * 0.7 + game.time_s * 0.06).abs() * 30.0
       let right_x = base_x + 180.0
 
       @raylib.draw_triangle(
@@ -395,7 +394,7 @@ fn draw_shadow_blobs(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     let col = @raylib.Color::new(30, 64, 104, a)
 
     let stretch : Float = Float::from_int(1) +
-      @types.absf(@types.sinf(shadow.rot * 0.05)) * 0.24
+      @types.sinf(shadow.rot * 0.05).abs() * 0.24
     let kind_boost = Float::from_int(shadow.kind) * 0.08
     @raylib.draw_rectangle(
       (shadow.x - shadow.w * (0.5 + kind_boost) + cam_x * 0.34).to_int(),
@@ -734,7 +733,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let bob = if h.grounded {
     @types.sinf(h.anim_t * 14.0) *
     2.5 *
-    (0.4 + @types.absf(h.vx) / @types.player_max_vx)
+    (0.4 + h.vx.abs() / @types.player_max_vx)
   } else {
     0.0
   }
@@ -762,7 +761,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
   let leg_swing = @types.sinf(h.anim_t * 12.0) *
     6.0 *
-    (@types.absf(h.vx) / @types.player_max_vx)
+    (h.vx.abs() / @types.player_max_vx)
   @raylib.draw_line_ex(
     @raylib.Vector2::new(x - 8.0 + lean, y - 4.0 + bob),
     @raylib.Vector2::new(x - 8.0 + lean - leg_swing, y + 24.0 + bob),

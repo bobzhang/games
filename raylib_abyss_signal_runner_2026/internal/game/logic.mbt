@@ -590,13 +590,13 @@ fn resolve_cave_hit(game : @types.Game) -> Unit {
 
   if game.hero.x - game.hero.r < left {
     game.hero.x = left + game.hero.r
-    game.hero.vx = @types.absf(game.hero.vx) * 0.2
+    game.hero.vx = game.hero.vx.abs() * 0.2
     hurt_hero(game, 12.0)
   }
 
   if game.hero.x + game.hero.r > right {
     game.hero.x = right - game.hero.r
-    game.hero.vx = -@types.absf(game.hero.vx) * 0.2
+    game.hero.vx = -game.hero.vx.abs() * 0.2
     hurt_hero(game, 12.0)
   }
 }
@@ -885,7 +885,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
     0.0,
     game.oxygen -
     @types.oxygen_drain * dt -
-    @types.absf(game.hero.vx) / @types.player_max_speed * 1.1 * dt,
+    game.hero.vx.abs() / @types.player_max_speed * 1.1 * dt,
   )
 
   if game.dash_t > 0.0 {

@@ -75,11 +75,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
   let dy = ay - by
@@ -613,7 +608,7 @@ fn main {
         }
 
         if rival.shoot_cd <= 0.0 && rally_wait <= 0.0 {
-          let ready = absf(rival.x - target_x) < 46.0 || match_time < 14.0
+          let ready = (rival.x - target_x).abs() < 46.0 || match_time < 14.0
           if ready {
             ai_shoot = true
           }
@@ -626,7 +621,7 @@ fn main {
           ai_right = true
         }
 
-        if absf(player.x - rival.x) > 240.0 && rival.energy > 38.0 {
+        if (player.x - rival.x).abs() > 240.0 && rival.energy > 38.0 {
           ai_dash = true
         }
       } else {
@@ -644,11 +639,11 @@ fn main {
           ai_right = true
         }
 
-        if ball.y < rival.y - 92.0 && absf(ball.x - rival.x) < 84.0 {
+        if ball.y < rival.y - 92.0 && (ball.x - rival.x).abs() < 84.0 {
           ai_jump = true
         }
 
-        if absf(rival.x - target_x) > 220.0 && rival.energy > 42.0 {
+        if (rival.x - target_x).abs() > 220.0 && rival.energy > 42.0 {
           ai_dash = true
         }
       }
@@ -708,22 +703,22 @@ fn main {
 
         if ball.x < ball.r {
           ball.x = ball.r
-          ball.vx = absf(ball.vx) * 0.82
+          ball.vx = ball.vx.abs() * 0.82
           ball.spin = -ball.spin * 0.70
           burst(particles, ball.x, ball.y, 8, 0.22, 0)
         }
 
         if ball.x > Float::from_int(sw) - ball.r {
           ball.x = Float::from_int(sw) - ball.r
-          ball.vx = -absf(ball.vx) * 0.82
+          ball.vx = -ball.vx.abs() * 0.82
           ball.spin = -ball.spin * 0.70
           burst(particles, ball.x, ball.y, 8, 0.22, 0)
         }
 
         if ball.y + ball.r >= ground_y {
           ball.y = ground_y - ball.r
-          if absf(ball.vy) > 90.0 {
-            ball.vy = -absf(ball.vy) * 0.72
+          if ball.vy.abs() > 90.0 {
+            ball.vy = -ball.vy.abs() * 0.72
           } else {
             ball.vy = 0.0
           }
@@ -738,7 +733,7 @@ fn main {
           ball.y - ball.r < 562.0 {
           if ball.vx < 0.0 {
             ball.x = 148.0 + ball.r
-            ball.vx = absf(ball.vx) * 0.74
+            ball.vx = ball.vx.abs() * 0.74
             ball.spin = -ball.spin * 0.72
             burst(particles, ball.x, ball.y, 9, 0.24, 2)
           }
@@ -750,7 +745,7 @@ fn main {
           ball.y - ball.r < 562.0 {
           if ball.vx > 0.0 {
             ball.x = 1132.0 - ball.r
-            ball.vx = -absf(ball.vx) * 0.74
+            ball.vx = -ball.vx.abs() * 0.74
             ball.spin = -ball.spin * 0.72
             burst(particles, ball.x, ball.y, 9, 0.24, 2)
           }
@@ -763,9 +758,9 @@ fn main {
 
         if ball.last_y < rim_y - 4.0 &&
           ball.y >= rim_y &&
-          absf(ball.x - right_hoop_x) <= 12.0 &&
+          (ball.x - right_hoop_x).abs() <= 12.0 &&
           ball.vy > 0.0 {
-          let mut points = if absf(ball.shot_from_x - right_hoop_x) > 430.0 {
+          let mut points = if (ball.shot_from_x - right_hoop_x).abs() > 430.0 {
             3
           } else {
             2
@@ -787,9 +782,9 @@ fn main {
         if not(scored) &&
           ball.last_y < rim_y - 4.0 &&
           ball.y >= rim_y &&
-          absf(ball.x - left_hoop_x) <= 12.0 &&
+          (ball.x - left_hoop_x).abs() <= 12.0 &&
           ball.vy > 0.0 {
-          let mut points = if absf(ball.shot_from_x - left_hoop_x) > 430.0 {
+          let mut points = if (ball.shot_from_x - left_hoop_x).abs() > 430.0 {
             3
           } else {
             2

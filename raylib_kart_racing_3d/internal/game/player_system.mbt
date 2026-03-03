@@ -50,9 +50,7 @@ pub fn update_player_kart(game : @types.Game, dt : Float) -> Unit {
   let drift_key = @raylib.is_key_down(@raylib.KeyLeftShift) ||
     @raylib.is_key_down(@raylib.KeyZ) ||
     @raylib.is_key_down(@raylib.KeyX)
-  let drifting = drift_key &&
-    @types.absf(steer_input) > 0.01 &&
-    kart.speed > 5.0
+  let drifting = drift_key && steer_input.abs() > 0.01 && kart.speed > 5.0
   if drifting {
     if not(kart.drift_left) && not(kart.drift_right) {
       // Initiate drift
@@ -166,7 +164,7 @@ pub fn update_player_kart(game : @types.Game, dt : Float) -> Unit {
   } else {
     1.0
   }
-  if @types.absf(accel) < 0.01 {
+  if accel.abs() < 0.01 {
     let friction = @types.kart_friction * friction_mult
     if kart.speed > 0.0 {
       kart.speed = kart.speed - friction * dt

@@ -625,7 +625,7 @@ fn draw_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
     let life = @types.clampf(echo_item.life / 0.24, 0.0, 1.0)
     let stretch : Float = Float::from_int(1) +
-      @types.absf(@types.sinf(echo_item.rot * 0.06)) * 0.24
+      @types.sinf(echo_item.rot * 0.06).abs() * 0.24
 
     @raylib.draw_rectangle(
       (echo_item.x - echo_item.w * 0.5 * stretch + cam_x * 0.2).to_int(),

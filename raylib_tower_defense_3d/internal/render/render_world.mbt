@@ -703,7 +703,7 @@ fn draw_buff_tower(
     if t.active && t.kind == @types.tower_buff {
       let tx = @types.grid_to_world_x(t.gx)
       let tz = @types.grid_to_world_z(t.gy)
-      if @types.absf(tx - wx) < 0.1 && @types.absf(tz - wz) < 0.1 {
+      if (tx - wx).abs() < 0.1 && (tz - wz).abs() < 0.1 {
         let actual_range = @types.tower_effective_range(t)
         @raylib.draw_circle_3d(
           @raylib.Vector3::new(wx, 0.05, wz),

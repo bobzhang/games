@@ -1,14 +1,4 @@
 ///|
-/// Returns absolute value for float math utilities.
-pub fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
-}
-
-///|
 /// Clamps float value into inclusive range `[low, high]`.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
@@ -374,7 +364,7 @@ pub fn is_cave(wx : Int, wy : Int, wz : Int) -> Bool {
   let fz = Float::from_int(wz)
   let n = cave_noise_3d(fx, fy, fz)
   let threshold = cave_threshold
-  absf(n) > threshold
+  n.abs() > threshold
 }
 
 // Check if should generate ore at this position
@@ -539,7 +529,7 @@ pub fn generate_chunk_terrain(chunk : Chunk, game : Game) -> Unit {
             let neg_r = -radius
             for dz in neg_r..<=radius {
               for dx in neg_r..<=radius {
-                let dist = absf(Float::from_int(dx)) + absf(Float::from_int(dz))
+                let dist = Float::from_int(dx).abs() + Float::from_int(dz).abs()
                 if dist.to_int() <= radius + 1 {
                   let tx = lx + dx
                   let tz = lz + dz

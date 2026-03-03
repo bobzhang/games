@@ -31,12 +31,6 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Return the absolute value of a float.
-pub fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Return the square of a float.
 pub fn sq(v : Float) -> Float {
   v * v

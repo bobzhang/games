@@ -528,18 +528,18 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
 
   if game.player_x < left {
     game.player_x = left
-    game.player_vx = @types.absf(game.player_vx) * 0.22
+    game.player_vx = game.player_vx.abs() * 0.22
   } else if game.player_x > right {
     game.player_x = right
-    game.player_vx = -@types.absf(game.player_vx) * 0.22
+    game.player_vx = -game.player_vx.abs() * 0.22
   }
 
   if game.player_y < top {
     game.player_y = top
-    game.player_vy = @types.absf(game.player_vy) * 0.22
+    game.player_vy = game.player_vy.abs() * 0.22
   } else if game.player_y > bottom {
     game.player_y = bottom
-    game.player_vy = -@types.absf(game.player_vy) * 0.22
+    game.player_vy = -game.player_vy.abs() * 0.22
   }
 
   if game.overdrive_t > 0.0 {
@@ -777,11 +777,11 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
 
     if pickup.x < @types.world_left() + 16.0 {
       pickup.x = @types.world_left() + 16.0
-      pickup.vx = @types.absf(pickup.vx) * 0.6
+      pickup.vx = pickup.vx.abs() * 0.6
     }
     if pickup.x > @types.world_right() - 16.0 {
       pickup.x = @types.world_right() - 16.0
-      pickup.vx = -@types.absf(pickup.vx) * 0.6
+      pickup.vx = -pickup.vx.abs() * 0.6
     }
 
     if pickup.y > @types.world_bottom() + 70.0 {

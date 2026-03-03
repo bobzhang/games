@@ -110,12 +110,6 @@ struct Particle {
 }
 
 ///|
-/// Returns the absolute value of a float.
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns true if point `(px, py)` lies within the rectangle at `(rx, ry)` with size `rw x rh`.
 fn inside_rect(
   px : Float,
@@ -815,7 +809,7 @@ fn main {
           continue
         }
 
-        let dx = absf(obstacle.x - player_x)
+        let dx = (obstacle.x - player_x).abs()
         let oz = obstacle_z(obstacle)
 
         if obstacle.kind == 0 {
@@ -842,14 +836,14 @@ fn main {
           }
         } else if player.slash_t > 0.0 &&
           dx < 72.0 &&
-          absf(player.z - oz) < 38.0 {
+          (player.z - oz).abs() < 38.0 {
           obstacle.hp = obstacle.hp - (34.0 + Float::from_int(level) * 1.6)
           burst(particles, obstacle.x, lane_y(obstacle.lane) - oz, 8, 0.20, 2)
           if obstacle.hp <= 0.0 {
             on_kill(obstacle.x, obstacle.lane, 18)
             obstacle.active = false
           }
-        } else if dx < 28.0 && absf(player.z - oz) < 24.0 {
+        } else if dx < 28.0 && (player.z - oz).abs() < 24.0 {
           on_hit(16.0, "Drone crash")
           obstacle.active = false
         }
@@ -885,7 +879,7 @@ fn main {
             }
 
             let oz = obstacle_z(obstacle)
-            if absf(shot.x - obstacle.x) < 26.0 && absf(shot.z - oz) < 36.0 {
+            if (shot.x - obstacle.x).abs() < 26.0 && (shot.z - oz).abs() < 36.0 {
               obstacle.hp = obstacle.hp - shot.dmg
               shot.active = false
               burst(
@@ -904,8 +898,8 @@ fn main {
             }
           }
         } else if shot.lane == player.lane &&
-          absf(shot.x - player_x) < 20.0 &&
-          absf(shot.z - player.z) < 24.0 {
+          (shot.x - player_x).abs() < 20.0 &&
+          (shot.z - player.z).abs() < 24.0 {
           shot.active = false
           on_hit(shot.dmg, "Shot hit")
         }
@@ -925,7 +919,7 @@ fn main {
         }
 
         if pickup.lane == player.lane &&
-          absf(pickup.x - player_x) < 24.0 &&
+          (pickup.x - player_x).abs() < 24.0 &&
           player.z < 26.0 {
           if pickup.kind == 0 {
             player.coins = player.coins + 1

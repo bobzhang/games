@@ -102,12 +102,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns the squared Euclidean distance between two points.
 fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
@@ -785,8 +779,8 @@ fn main {
           }
           let tx = trucks[t].x
           let ty = lane_y(trucks[t].lane)
-          if absf(meteors[i].x - tx) <= 30.0 + meteors[i].r &&
-            absf(meteors[i].y - ty) <= 18.0 + meteors[i].r {
+          if (meteors[i].x - tx).abs() <= 30.0 + meteors[i].r &&
+            (meteors[i].y - ty).abs() <= 18.0 + meteors[i].r {
             trucks[t].hp = trucks[t].hp - 1
             trucks[t].cargo = if trucks[t].cargo > 1 {
               trucks[t].cargo - 1
@@ -857,7 +851,7 @@ fn main {
 
           let tx = truck.x
           let ty = lane_y(truck.lane)
-          if absf(ore.x - tx) < 28.0 && absf(ore.y - ty) < 18.0 {
+          if (ore.x - tx).abs() < 28.0 && (ore.y - ty).abs() < 18.0 {
             truck.cargo = truck.cargo + ore.amount
             score = score + ore.amount * 8
             ore.active = false

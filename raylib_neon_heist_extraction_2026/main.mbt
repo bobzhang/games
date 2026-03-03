@@ -216,12 +216,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns the squared Euclidean distance between two 2D points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx : Float = x1 - x0
@@ -315,7 +309,7 @@ fn bounce_from_walls(
     }
 
     if circle_rect_hit(nx, ny, r, wall.x, wall.y, wall.w, wall.h) {
-      if absf(vx) > absf(vy) {
+      if vx.abs() > vy.abs() {
         nx = nx - vx * 0.05
         nvx = -vx * 0.26
       } else {

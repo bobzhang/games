@@ -296,9 +296,9 @@ pub fn check_entity_player_collision(
   ent : @types.Entity,
 ) -> Bool {
   let player = game.player
-  let dx = @types.absf(ent.x - player.x)
-  let dz = @types.absf(ent.z - player.z)
-  let dy = @types.absf(ent.y - player.y)
+  let dx = (ent.x - player.x).abs()
+  let dz = (ent.z - player.z).abs()
+  let dy = (ent.y - player.y).abs()
   let collision_radius : Float = 0.8
   let collision_height : Float = 1.8
   dx < collision_radius && dz < collision_radius && dy < collision_height
@@ -553,8 +553,8 @@ pub fn update_herd_behavior(game : @types.Game, ent : @types.Entity) -> Unit {
       continue
     }
     // Check if it's the same entity by position
-    let same_x = @types.absf(other.x - ent.x) < 0.01
-    let same_z = @types.absf(other.z - ent.z) < 0.01
+    let same_x = (other.x - ent.x).abs() < 0.01
+    let same_z = (other.z - ent.z).abs() < 0.01
     if same_x && same_z {
       continue
     }

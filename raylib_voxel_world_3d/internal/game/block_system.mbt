@@ -165,9 +165,9 @@ pub fn handle_block_interaction(game : @types.Game, dt : Float) -> Unit {
         let fpx = Float::from_int(place_x) + 0.5
         let fpy = Float::from_int(place_y) + 0.5
         let fpz = Float::from_int(place_z) + 0.5
-        let ddx = @types.absf(game.player.x - fpx)
-        let ddy = @types.absf(game.player.y + @types.player_height * 0.5 - fpy)
-        let ddz = @types.absf(game.player.z - fpz)
+        let ddx = (game.player.x - fpx).abs()
+        let ddy = (game.player.y + @types.player_height * 0.5 - fpy).abs()
+        let ddz = (game.player.z - fpz).abs()
         let collides = ddx < pr + 0.5 &&
           ddy < @types.player_height * 0.5 + 0.5 &&
           ddz < pr + 0.5

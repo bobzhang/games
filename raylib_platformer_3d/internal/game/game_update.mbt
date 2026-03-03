@@ -461,7 +461,7 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
 fn update_enemy_patrol(e : @types.Enemy, dt : Float) -> Unit {
   e.x += e.patrol_dir * @types.enemy_patrol_speed * dt
   let dist_from_base = e.x - e.base_x
-  if @types.absf(dist_from_base) > e.patrol_range {
+  if dist_from_base.abs() > e.patrol_range {
     e.patrol_dir = -e.patrol_dir
     e.x = e.base_x + e.patrol_dir * e.patrol_range
   }
@@ -470,7 +470,7 @@ fn update_enemy_patrol(e : @types.Enemy, dt : Float) -> Unit {
 ///|
 fn update_enemy_bounce(e : @types.Enemy, dt : Float) -> Unit {
   e.timer += dt * @types.enemy_bounce_speed
-  let bounce_h = @types.absf(@math.sinf(e.timer)) * @types.enemy_bounce_height
+  let bounce_h = @math.sinf(e.timer).abs() * @types.enemy_bounce_height
   e.y = e.base_y + bounce_h
   // Small horizontal wobble
   let wobble = @math.sinf(e.timer * 0.7) * 0.5

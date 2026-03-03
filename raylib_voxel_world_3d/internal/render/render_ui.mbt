@@ -1165,7 +1165,7 @@ fn draw_compass(game : @types.Game) -> Unit {
   let n_offset = @math.sinf(yaw) * 40.0
   let n_x = cx + n_offset.to_int()
   // Draw N marker
-  let n_alpha : Int = if @types.absf(n_offset) < 30.0 { 255 } else { 100 }
+  let n_alpha : Int = if n_offset.abs() < 30.0 { 255 } else { 100 }
   @raylib.draw_text(
     "N",
     n_x - 4,
@@ -1176,7 +1176,7 @@ fn draw_compass(game : @types.Game) -> Unit {
   // South indicator
   let s_offset = @math.sinf(yaw + @types.pi) * 40.0
   let s_x = cx + s_offset.to_int()
-  let s_alpha : Int = if @types.absf(s_offset) < 30.0 { 255 } else { 100 }
+  let s_alpha : Int = if s_offset.abs() < 30.0 { 255 } else { 100 }
   @raylib.draw_text(
     "S",
     s_x - 4,
@@ -1187,7 +1187,7 @@ fn draw_compass(game : @types.Game) -> Unit {
   // East indicator
   let e_offset = @math.sinf(yaw + @types.pi * 0.5) * 40.0
   let e_x = cx + e_offset.to_int()
-  let e_alpha : Int = if @types.absf(e_offset) < 30.0 { 200 } else { 80 }
+  let e_alpha : Int = if e_offset.abs() < 30.0 { 200 } else { 80 }
   @raylib.draw_text(
     "E",
     e_x - 4,
@@ -1198,7 +1198,7 @@ fn draw_compass(game : @types.Game) -> Unit {
   // West indicator
   let w_offset = @math.sinf(yaw - @types.pi * 0.5) * 40.0
   let w_x = cx + w_offset.to_int()
-  let w_alpha : Int = if @types.absf(w_offset) < 30.0 { 200 } else { 80 }
+  let w_alpha : Int = if w_offset.abs() < 30.0 { 200 } else { 80 }
   @raylib.draw_text(
     "W",
     w_x - 4,

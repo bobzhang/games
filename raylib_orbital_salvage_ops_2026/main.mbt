@@ -186,12 +186,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns the squared Euclidean distance between two points.
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx = x1 - x0
@@ -1554,19 +1548,19 @@ fn main {
 
         if mine.x < mine.radius {
           mine.x = mine.radius
-          mine.vx = absf(mine.vx)
+          mine.vx = mine.vx.abs()
         }
         if mine.x > world_w - mine.radius {
           mine.x = world_w - mine.radius
-          mine.vx = -absf(mine.vx)
+          mine.vx = -mine.vx.abs()
         }
         if mine.y < mine.radius {
           mine.y = mine.radius
-          mine.vy = absf(mine.vy)
+          mine.vy = mine.vy.abs()
         }
         if mine.y > world_h - mine.radius {
           mine.y = world_h - mine.radius
-          mine.vy = -absf(mine.vy)
+          mine.vy = -mine.vy.abs()
         }
 
         if mine.life <= 0.0 {
@@ -1997,19 +1991,19 @@ fn main {
 
         if scrap.x < 20.0 {
           scrap.x = 20.0
-          scrap.vx = absf(scrap.vx)
+          scrap.vx = scrap.vx.abs()
         }
         if scrap.x > world_w - 20.0 {
           scrap.x = world_w - 20.0
-          scrap.vx = -absf(scrap.vx)
+          scrap.vx = -scrap.vx.abs()
         }
         if scrap.y < 20.0 {
           scrap.y = 20.0
-          scrap.vy = absf(scrap.vy)
+          scrap.vy = scrap.vy.abs()
         }
         if scrap.y > world_h - 20.0 {
           scrap.y = world_h - 20.0
-          scrap.vy = -absf(scrap.vy)
+          scrap.vy = -scrap.vy.abs()
         }
 
         if dist2(player.x, player.y, scrap.x, scrap.y) <=

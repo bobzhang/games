@@ -823,13 +823,13 @@ fn constrain_to_track(game : @types.Game) -> Unit {
 
   if game.hero.x - rr < left {
     game.hero.x = left + rr
-    game.hero.vx = @types.absf(game.hero.vx) * 0.2
+    game.hero.vx = game.hero.vx.abs() * 0.2
     hurt_player(game, 10.0)
   }
 
   if game.hero.x + rr > right {
     game.hero.x = right - rr
-    game.hero.vx = -@types.absf(game.hero.vx) * 0.2
+    game.hero.vx = -game.hero.vx.abs() * 0.2
     hurt_player(game, 10.0)
   }
 }
@@ -1213,7 +1213,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
     0.0,
     game.heat -
     @types.heat_drain_base * dt -
-    @types.absf(game.hero.vx) / @types.max_speed_x * 1.2 * dt,
+    game.hero.vx.abs() / @types.max_speed_x * 1.2 * dt,
   )
 
   if game.dash_t > 0.0 {

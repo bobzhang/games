@@ -527,18 +527,18 @@ fn update_heli(game : @types.Game, dt : Float) -> Unit {
 
   if game.heli_x < left {
     game.heli_x = left
-    game.heli_vx = @types.absf(game.heli_vx) * 0.24
+    game.heli_vx = game.heli_vx.abs() * 0.24
   } else if game.heli_x > right {
     game.heli_x = right
-    game.heli_vx = -@types.absf(game.heli_vx) * 0.24
+    game.heli_vx = -game.heli_vx.abs() * 0.24
   }
 
   if game.heli_y < top {
     game.heli_y = top
-    game.heli_vy = @types.absf(game.heli_vy) * 0.24
+    game.heli_vy = game.heli_vy.abs() * 0.24
   } else if game.heli_y > bottom {
     game.heli_y = bottom
-    game.heli_vy = -@types.absf(game.heli_vy) * 0.24
+    game.heli_vy = -game.heli_vy.abs() * 0.24
   }
 
   if game.boost_on || game.turbo_t > 0.0 {
@@ -615,7 +615,7 @@ fn update_hook(game : @types.Game, dt : Float) -> Float {
     }
   }
 
-  @types.absf(game.hook_len - old_len) / @types.maxf(0.0001, dt)
+  (game.hook_len - old_len).abs() / @types.maxf(0.0001, dt)
 }
 
 ///|
@@ -698,7 +698,7 @@ fn update_hazards(game : @types.Game, dt : Float, hook_speed : Float) -> Unit {
       let dx : Float = tx - hazard.x
       let dy : Float = ty - hazard.y
 
-      let w : Float = @types.absf(dx) + @types.absf(dy)
+      let w : Float = dx.abs() + dy.abs()
       let nx : Float = if w <= 0.001 { 0.0 } else { dx / w }
       let ny : Float = if w <= 0.001 { 0.0 } else { dy / w }
 
@@ -783,11 +783,11 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
 
     if pickup.x < @types.world_left() + 16.0 {
       pickup.x = @types.world_left() + 16.0
-      pickup.vx = @types.absf(pickup.vx) * 0.6
+      pickup.vx = pickup.vx.abs() * 0.6
     }
     if pickup.x > @types.world_right() - 16.0 {
       pickup.x = @types.world_right() - 16.0
-      pickup.vx = -@types.absf(pickup.vx) * 0.6
+      pickup.vx = -pickup.vx.abs() * 0.6
     }
 
     if pickup.y > @types.world_bottom() + 80.0 {

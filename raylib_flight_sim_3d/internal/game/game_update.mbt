@@ -411,7 +411,7 @@ fn update_turrets(game : @types.Game, dt : Float) -> Unit {
     let target_rot = @types.bearing_to(t.x, t.z, player.x, player.z)
     let rot_diff = @types.angle_diff(t.rotation, target_rot)
     let rot_step = @types.turret_rotation_speed * dt
-    if @types.absf(rot_diff) < rot_step {
+    if rot_diff.abs() < rot_step {
       t.rotation = target_rot
     } else if rot_diff > 0.0 {
       t.rotation += rot_step
@@ -424,7 +424,7 @@ fn update_turrets(game : @types.Game, dt : Float) -> Unit {
     t.elevation = @math.atan2f(dy, dh)
     // Fire at player
     t.fire_timer -= dt
-    if t.fire_timer <= 0.0 && @types.absf(rot_diff) < 0.3 {
+    if t.fire_timer <= 0.0 && rot_diff.abs() < 0.3 {
       turret_fire(game, t, player)
       t.fire_timer = @types.turret_fire_rate
     }

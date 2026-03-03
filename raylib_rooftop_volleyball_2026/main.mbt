@@ -78,11 +78,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
   let dy = ay - by
@@ -660,7 +655,7 @@ fn main {
       if ball.active {
         if ball.x >= Float::from_int(net_x - 32) || ball.vx > 0.0 {
           let fall_t = clampf(
-            (ground_y - ball.y) / clampf(absf(ball.vy) + 220.0, 220.0, 1400.0),
+            (ground_y - ball.y) / clampf(ball.vy.abs() + 220.0, 220.0, 1400.0),
             0.0,
             1.7,
           )
@@ -682,12 +677,12 @@ fn main {
       let mut b_hit = false
 
       if ball.active {
-        let near_ball = absf(ball.x - bot.x) < 120.0
+        let near_ball = (ball.x - bot.x).abs() < 120.0
         if near_ball && ball.y < bot.y - 28.0 && ball.vy > -260.0 {
           b_jump = true
         }
 
-        if absf(bot.x - bot_target) > 180.0 &&
+        if (bot.x - bot_target).abs() > 180.0 &&
           bot.dash_t <= 0.0 &&
           bot.energy >= 34.0 {
           b_dash = true
@@ -757,21 +752,21 @@ fn main {
 
         if ball.x < ball.r {
           ball.x = ball.r
-          ball.vx = absf(ball.vx) * 0.85
+          ball.vx = ball.vx.abs() * 0.85
           ball.spin = -ball.spin * 0.65
           burst(particles, ball.x, ball.y, 8, 0.25, 0)
         }
 
         if ball.x > Float::from_int(sw) - ball.r {
           ball.x = Float::from_int(sw) - ball.r
-          ball.vx = -absf(ball.vx) * 0.85
+          ball.vx = -ball.vx.abs() * 0.85
           ball.spin = -ball.spin * 0.65
           burst(particles, ball.x, ball.y, 8, 0.25, 0)
         }
 
         if ball.y < 42.0 {
           ball.y = 42.0
-          ball.vy = absf(ball.vy) * 0.78
+          ball.vy = ball.vy.abs() * 0.78
           burst(particles, ball.x, ball.y, 8, 0.20, 3)
         }
 
@@ -785,13 +780,13 @@ fn main {
           ball.y - ball.r <= ground_y {
           if ball.y < net_top + 16.0 {
             ball.y = net_top - ball.r
-            ball.vy = -absf(ball.vy) * 0.76
+            ball.vy = -ball.vy.abs() * 0.76
           } else if ball.x < Float::from_int(net_x) {
             ball.x = net_left - ball.r
-            ball.vx = -absf(ball.vx) * 0.74
+            ball.vx = -ball.vx.abs() * 0.74
           } else {
             ball.x = net_right + ball.r
-            ball.vx = absf(ball.vx) * 0.74
+            ball.vx = ball.vx.abs() * 0.74
           }
           ball.spin = -ball.spin * 0.45
           burst(particles, ball.x, ball.y, 14, 0.30, 2)

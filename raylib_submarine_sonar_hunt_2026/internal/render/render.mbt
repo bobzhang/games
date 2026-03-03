@@ -106,7 +106,7 @@ fn draw_targets(game : @types.Game) -> Unit {
         game.targets[i].x,
         game.targets[i].y,
       ).sqrt()
-      if @types.absf(d - game.sonar_wave_r) < 12.0 {
+      if (d - game.sonar_wave_r).abs() < 12.0 {
         @raylib.draw_circle(tx, ty, 5.0, @raylib.Color::new(148, 250, 204, 128))
       }
     }

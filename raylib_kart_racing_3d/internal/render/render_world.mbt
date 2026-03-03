@@ -482,7 +482,7 @@ fn draw_themed_decorations(game : @types.Game) -> Unit {
       }
       // Only place decorations at matching segment progress
       let seg_match_f : Float = Float::from_int(si) / Float::from_int(wc)
-      let diff = @types.absf(seg_match_f - z_progress)
+      let diff = (seg_match_f - z_progress).abs()
       if diff > 0.15 && diff < 0.85 {
         continue
       }

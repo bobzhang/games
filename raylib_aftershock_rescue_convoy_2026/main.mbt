@@ -150,12 +150,6 @@ fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-/// Returns the absolute value of a Float.
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns a random Float value uniformly distributed between lo and hi.
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
@@ -729,18 +723,18 @@ fn update_cracks(
 
     if crack.x < world_l - 160.0 {
       crack.x = world_l - 160.0
-      crack.vx = absf(crack.vx)
+      crack.vx = crack.vx.abs()
     } else if crack.x > world_r + 160.0 {
       crack.x = world_r + 160.0
-      crack.vx = -absf(crack.vx)
+      crack.vx = -crack.vx.abs()
     }
 
     if crack.y < world_t - 160.0 {
       crack.y = world_t - 160.0
-      crack.vy = absf(crack.vy)
+      crack.vy = crack.vy.abs()
     } else if crack.y > world_b + 160.0 {
       crack.y = world_b + 160.0
-      crack.vy = -absf(crack.vy)
+      crack.vy = -crack.vy.abs()
     }
 
     crack.intensity = clampf(crack.intensity + dt * 0.06, 0.2, 2.2)
@@ -806,18 +800,18 @@ fn update_obstacles(
 
     if obstacle.x < world_l + obstacle.size {
       obstacle.x = world_l + obstacle.size
-      obstacle.vx = absf(obstacle.vx) * randf(0.66, 1.1)
+      obstacle.vx = obstacle.vx.abs() * randf(0.66, 1.1)
     } else if obstacle.x > world_r - obstacle.size {
       obstacle.x = world_r - obstacle.size
-      obstacle.vx = -absf(obstacle.vx) * randf(0.66, 1.1)
+      obstacle.vx = -obstacle.vx.abs() * randf(0.66, 1.1)
     }
 
     if obstacle.y < world_t + obstacle.size {
       obstacle.y = world_t + obstacle.size
-      obstacle.vy = absf(obstacle.vy) * randf(0.66, 1.1)
+      obstacle.vy = obstacle.vy.abs() * randf(0.66, 1.1)
     } else if obstacle.y > world_b - obstacle.size {
       obstacle.y = world_b - obstacle.size
-      obstacle.vy = -absf(obstacle.vy) * randf(0.66, 1.1)
+      obstacle.vy = -obstacle.vy.abs() * randf(0.66, 1.1)
     }
 
     obstacle.hard = maxf(8.0, obstacle.hard - dt * 0.02)

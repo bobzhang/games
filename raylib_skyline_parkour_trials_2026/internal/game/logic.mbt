@@ -444,7 +444,7 @@ fn update_hero_movement(game : @types.Game, dt : Float) -> Unit {
   }
   hero.vx = hero.vx + game.input_x * accel * dt
 
-  if @types.absf(game.input_x) < 0.01 {
+  if game.input_x.abs() < 0.01 {
     let drag = if hero.on_ground {
       @types.run_drag_ground
     } else {

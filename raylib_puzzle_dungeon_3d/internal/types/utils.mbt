@@ -1,16 +1,6 @@
 // Math helpers
 
 ///|
-/// Returns absolute value for `Float` math used by animation and camera helpers.
-pub fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
-}
-
-///|
 /// Clamps a float value into an inclusive `[low, high]` range.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {

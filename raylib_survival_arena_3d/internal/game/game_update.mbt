@@ -240,9 +240,9 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
     // Floor collision
     if p.y < 0.0 {
       p.y = 0.0
-      p.vy = @types.absf(p.vy) * 0.3
+      p.vy = p.vy.abs() * 0.3
       if p.kind == @types.particle_shell {
-        p.vy = @types.absf(p.vy) * 0.1
+        p.vy = p.vy.abs() * 0.1
         p.vx *= 0.5
         p.vz *= 0.5
       }

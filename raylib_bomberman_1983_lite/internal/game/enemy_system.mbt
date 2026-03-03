@@ -88,7 +88,7 @@ fn enemy_desired_dir(game : @types.Game, enemy : @types.Tank) -> Int {
   let vert = if dy < 0.0 { @types.dir_up } else { @types.dir_down }
 
   let r = @types.rand_range(game, 0, 99)
-  if @types.absf(dx) > @types.absf(dy) {
+  if dx.abs() > dy.abs() {
     if r < 72 {
       horiz
     } else if r < 92 {

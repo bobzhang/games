@@ -339,7 +339,7 @@ fn update_animations(game : @types.Game, dt : Float) -> Bool {
     } else {
       @types.fall_speed
     }
-    if @types.absf(dx) > 0.5 || @types.absf(dy) > 0.5 {
+    if dx.abs() > 0.5 || dy.abs() > 0.5 {
       g.anim_x = @types.lerpf(
         g.anim_x,
         g.target_x,

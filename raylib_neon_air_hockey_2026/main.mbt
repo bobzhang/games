@@ -50,12 +50,6 @@ struct Spark {
 }
 
 ///|
-/// Returns the absolute value of a float.
-fn absf(x : Float) -> Float {
-  x.abs()
-}
-
-///|
 /// Clamps a float value to the inclusive `[lo, hi]` range.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -541,21 +535,21 @@ fn main {
         puck_vx = puck_vx * (Float::from_int(1) - dt * 0.30)
         puck_vy = puck_vy * (Float::from_int(1) - dt * 0.30)
 
-        if absf(puck_vx) < 6.0 {
+        if puck_vx.abs() < 6.0 {
           puck_vx = 0.0
         }
-        if absf(puck_vy) < 6.0 {
+        if puck_vy.abs() < 6.0 {
           puck_vy = 0.0
         }
 
         if puck_y <= table_top() + puck_r {
           puck_y = table_top() + puck_r
-          puck_vy = absf(puck_vy) * 0.94
+          puck_vy = puck_vy.abs() * 0.94
           spawn_burst(sparks, puck_x, puck_y, 4, 0.6, 0)
         }
         if puck_y >= table_bottom() - puck_r {
           puck_y = table_bottom() - puck_r
-          puck_vy = -absf(puck_vy) * 0.94
+          puck_vy = -puck_vy.abs() * 0.94
           spawn_burst(sparks, puck_x, puck_y, 4, 0.6, 0)
         }
 
@@ -580,7 +574,7 @@ fn main {
             msg = "Enemy scored."
           } else {
             puck_x = table_left() + puck_r
-            puck_vx = absf(puck_vx) * 0.96
+            puck_vx = puck_vx.abs() * 0.96
             spawn_burst(sparks, puck_x, puck_y, 4, 0.7, 0)
           }
         }
@@ -606,7 +600,7 @@ fn main {
             msg = "Goal!"
           } else {
             puck_x = table_right() - puck_r
-            puck_vx = -absf(puck_vx) * 0.96
+            puck_vx = -puck_vx.abs() * 0.96
             spawn_burst(sparks, puck_x, puck_y, 4, 0.7, 0)
           }
         }
@@ -769,7 +763,7 @@ fn main {
       @raylib.Color::new(98, 232, 170, 255),
     )
 
-    let pulse = Float::from_int(1) - absf(zone_phase - 0.5) * 2.0
+    let pulse = Float::from_int(1) - (zone_phase - 0.5).abs() * 2.0
     let glow = (Float::from_int(40) + pulse * 90.0).to_int()
 
     if zone_left {

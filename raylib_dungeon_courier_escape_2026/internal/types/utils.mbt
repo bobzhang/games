@@ -37,12 +37,6 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-pub fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns the sine of an angle in radians.
 pub fn sinf(v : Float) -> Float {
   @math.sinf(v)
@@ -85,7 +79,7 @@ pub fn normalize_deg(a : Float) -> Float {
 ///|
 /// Returns the smallest angular difference in degrees.
 pub fn angle_delta_deg(a : Float, b : Float) -> Float {
-  absf(normalize_deg(a - b))
+  normalize_deg(a - b).abs()
 }
 
 ///|

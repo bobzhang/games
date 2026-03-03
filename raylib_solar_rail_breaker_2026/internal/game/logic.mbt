@@ -847,7 +847,7 @@ fn update_bullets(game : @types.Game, dt : Float) -> Unit {
         continue
       }
 
-      let ring_d = @types.absf(Float::from_int(game.enemies[j].ring) - b.ring_f)
+      let ring_d = (Float::from_int(game.enemies[j].ring) - b.ring_f).abs()
       if ring_d > 0.34 {
         continue
       }
@@ -897,7 +897,7 @@ fn update_enemy_bullets(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    if @types.absf(b.x) > 520.0 || @types.absf(b.y) > 520.0 {
+    if b.x.abs() > 520.0 || b.y.abs() > 520.0 {
       b.active = false
     }
   }

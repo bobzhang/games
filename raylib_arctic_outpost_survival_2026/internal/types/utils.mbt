@@ -49,12 +49,6 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-pub fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Computes sine using the core math backend.
 pub fn sinf(v : Float) -> Float {
   @math.sinf(v)
@@ -108,7 +102,7 @@ pub fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 ///|
 /// Returns an L1-normalized direction vector from `(dx, dy)`.
 pub fn normalize(dx : Float, dy : Float) -> (Float, Float) {
-  let d1 : Float = absf(dx) + absf(dy)
+  let d1 : Float = dx.abs() + dy.abs()
   if d1 <= 0.00001 {
     (0.0, -1.0)
   } else {

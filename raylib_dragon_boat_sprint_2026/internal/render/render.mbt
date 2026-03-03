@@ -115,7 +115,7 @@ fn draw_checkpoint_lines(game : @types.Game) -> Unit {
 
     let y : Int = world_y(game, dist).to_int()
     let alpha : Int = @types.clampi(
-      (Float::from_int(220) - @types.absf(rel) * 0.08).to_int(),
+      (Float::from_int(220) - rel.abs() * 0.08).to_int(),
       50,
       220,
     )

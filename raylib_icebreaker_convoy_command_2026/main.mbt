@@ -119,12 +119,6 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns a random float uniformly sampled from `[lo, hi]`.
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
@@ -551,18 +545,18 @@ fn update_ice(
 
     if ice[i].x < world_l + ice[i].radius {
       ice[i].x = world_l + ice[i].radius
-      ice[i].vx = absf(ice[i].vx) * randf(0.6, 1.2)
+      ice[i].vx = ice[i].vx.abs() * randf(0.6, 1.2)
     } else if ice[i].x > world_r - ice[i].radius {
       ice[i].x = world_r - ice[i].radius
-      ice[i].vx = -absf(ice[i].vx) * randf(0.6, 1.2)
+      ice[i].vx = -ice[i].vx.abs() * randf(0.6, 1.2)
     }
 
     if ice[i].y < world_t + ice[i].radius {
       ice[i].y = world_t + ice[i].radius
-      ice[i].vy = absf(ice[i].vy) * randf(0.6, 1.2)
+      ice[i].vy = ice[i].vy.abs() * randf(0.6, 1.2)
     } else if ice[i].y > world_b - ice[i].radius {
       ice[i].y = world_b - ice[i].radius
-      ice[i].vy = -absf(ice[i].vy) * randf(0.6, 1.2)
+      ice[i].vy = -ice[i].vy.abs() * randf(0.6, 1.2)
     }
 
     ice[i].hard = clampf(ice[i].hard - dt * 0.05, 0.0, 120.0)
@@ -613,18 +607,18 @@ fn update_storms(
 
     if storm.x < world_l - 120.0 {
       storm.x = world_l - 120.0
-      storm.vx = absf(storm.vx)
+      storm.vx = storm.vx.abs()
     } else if storm.x > world_r + 120.0 {
       storm.x = world_r + 120.0
-      storm.vx = -absf(storm.vx)
+      storm.vx = -storm.vx.abs()
     }
 
     if storm.y < world_t - 120.0 {
       storm.y = world_t - 120.0
-      storm.vy = absf(storm.vy)
+      storm.vy = storm.vy.abs()
     } else if storm.y > world_b + 120.0 {
       storm.y = world_b + 120.0
-      storm.vy = -absf(storm.vy)
+      storm.vy = -storm.vy.abs()
     }
   }
 }

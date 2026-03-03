@@ -512,7 +512,7 @@ fn draw_side_panel(game : @types.Game) -> Unit {
   let pwv : Int = (game.power * 100.0).to_int()
 
   @raylib.draw_text(
-    "Aim \{ap / 10}.\{@types.absf(Float::from_int(ap % 10)).to_int()} deg",
+    "Aim \{ap / 10}.\{(Float::from_int(ap % 10)).abs().to_int()} deg",
     px + 20,
     py + 410,
     28,

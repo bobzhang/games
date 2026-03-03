@@ -1,14 +1,4 @@
 ///|
-/// Returns absolute value for float arithmetic.
-pub fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
-}
-
-///|
 /// Clamps a float value to inclusive range `[low, high]`.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
@@ -140,7 +130,7 @@ pub fn angle_within(angle1 : Float, angle2 : Float, threshold : Float) -> Bool {
   if diff < -pi {
     diff = diff + 2.0 * pi
   }
-  absf(diff) < threshold
+  diff.abs() < threshold
 }
 
 // RNG
@@ -474,11 +464,11 @@ pub fn push_from_box(
     let nz = dz / dist
     (x + nx * push, z + nz * push, true)
   } else if dist < 0.001 &&
-    absf(x - bx) < half_w + radius &&
-    absf(z - bz) < half_d + radius {
+    (x - bx).abs() < half_w + radius &&
+    (z - bz).abs() < half_d + radius {
     // Inside the box, push out on nearest edge
-    let dx_edge = half_w + radius - absf(x - bx)
-    let dz_edge = half_d + radius - absf(z - bz)
+    let dx_edge = half_w + radius - (x - bx).abs()
+    let dz_edge = half_d + radius - (z - bz).abs()
     if dx_edge < dz_edge {
       let push_dir = sign(x - bx)
       (x + push_dir * dx_edge, z, true)

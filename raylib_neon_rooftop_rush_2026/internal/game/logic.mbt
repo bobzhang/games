@@ -382,7 +382,7 @@ fn spawn_chip_arc(
   x1 : Float,
   roof_y : Float,
 ) -> Unit {
-  let steps = @types.clampi((@types.absf(x1 - x0) / 62.0).to_int(), 3, 9)
+  let steps = @types.clampi(((x1 - x0).abs() / 62.0).to_int(), 3, 9)
   if steps <= 0 {
     return
   }

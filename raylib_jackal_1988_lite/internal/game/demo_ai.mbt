@@ -149,7 +149,7 @@ fn demo_choose_move_dir(
   let horiz = if dx < 0.0 { @types.dir_left } else { @types.dir_right }
   let vert = if dy < 0.0 { @types.dir_up } else { @types.dir_down }
 
-  let mut move_dir = if @types.absf(dx) > @types.absf(dy) {
+  let mut move_dir = if dx.abs() > dy.abs() {
     demo_priority_dir(
       game,
       index,
@@ -191,9 +191,9 @@ fn demo_line_shot_dir(
   let epsilon = Float::from_int(@types.tile_size) * 0.42
   let dx = target_x - player_x
   let dy = target_y - player_y
-  if @types.absf(dx) <= epsilon {
+  if dx.abs() <= epsilon {
     (if dy < 0.0 { @types.dir_up } else { @types.dir_down }, true)
-  } else if @types.absf(dy) <= epsilon {
+  } else if dy.abs() <= epsilon {
     (if dx < 0.0 { @types.dir_left } else { @types.dir_right }, true)
   } else {
     (@types.dir_up, false)

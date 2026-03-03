@@ -113,11 +113,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx : Float = ax - bx
   let dy : Float = ay - by
@@ -697,11 +692,11 @@ fn main {
       ship_x = ship_x + ship_vx * dt
       if ship_x < 220.0 {
         ship_x = 220.0
-        ship_vx = absf(ship_vx)
+        ship_vx = ship_vx.abs()
       }
       if ship_x > 1060.0 {
         ship_x = 1060.0
-        ship_vx = -absf(ship_vx)
+        ship_vx = -ship_vx.abs()
       }
 
       level = ufo.rescued / 4 + 1
@@ -759,7 +754,7 @@ fn main {
           cow.x = cow.x + dx * dt * 4.0
           cow.y = cow.y + dy * dt * 4.0
 
-          if absf(dx) < 10.0 && absf(dy) < 10.0 {
+          if dx.abs() < 10.0 && dy.abs() < 10.0 {
             cow.state = 2
           }
 
@@ -775,7 +770,7 @@ fn main {
             cow.state = 0
             cow.y = ground_y
             cow.vx = randf(-20.0, 20.0)
-          } else if absf(ufo.x - ship_x) < 96.0 && ufo.y < 116.0 {
+          } else if (ufo.x - ship_x).abs() < 96.0 && ufo.y < 116.0 {
             cow.active = false
             ufo.rescued = ufo.rescued + 1
             ufo.combo = ufo.combo + 1
@@ -807,7 +802,7 @@ fn main {
         let mut found_cow = false
         for cow in cows {
           if cow.active && cow.state == 0 {
-            if absf(cow.x - farmer.x) < 180.0 {
+            if (cow.x - farmer.x).abs() < 180.0 {
               tx = cow.x
               found_cow = true
             }
@@ -838,7 +833,7 @@ fn main {
         for c in 0..<cows.length() {
           if cows[c].active &&
             cows[c].state == 0 &&
-            absf(cows[c].x - farmer.x) < 18.0 {
+            (cows[c].x - farmer.x).abs() < 18.0 {
             cows[c].active = false
             missed = missed + 1
             ufo.combo = 0
@@ -850,7 +845,7 @@ fn main {
         }
 
         if farmer.fire_cd <= 0.0 &&
-          absf(farmer.x - ufo.x) < 260.0 &&
+          (farmer.x - ufo.x).abs() < 260.0 &&
           ufo.y < 340.0 {
           farmer.fire_cd = randf(0.86, 1.5)
           ignore(

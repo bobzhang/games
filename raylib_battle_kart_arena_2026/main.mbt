@@ -118,12 +118,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns true if the point (px, py) lies within the specified rectangle.
 fn inside_rect(
   px : Float,
@@ -417,10 +411,10 @@ fn resolve_track_collision(kart : Kart) -> Unit {
     kart.x < inner_r + 12.0 &&
     kart.y > inner_t - 12.0 &&
     kart.y < inner_b + 12.0 {
-    let dl = absf(kart.x - inner_l)
-    let dr = absf(inner_r - kart.x)
-    let dt = absf(kart.y - inner_t)
-    let db = absf(inner_b - kart.y)
+    let dl = (kart.x - inner_l).abs()
+    let dr = (inner_r - kart.x).abs()
+    let dt = (kart.y - inner_t).abs()
+    let db = (inner_b - kart.y).abs()
 
     if dl <= dr && dl <= dt && dl <= db {
       kart.x = inner_l - 12.0
@@ -624,7 +618,7 @@ fn main {
       }
 
       let turn_strength : Float = Float::from_int(120) +
-        absf(karts[0].speed) * 0.22
+        karts[0].speed.abs() * 0.22
       karts[0].angle = karts[0].angle + turn * turn_strength * dt
       karts[0].speed = karts[0].speed + acc * dt
       karts[0].speed = karts[0].speed * (Float::from_int(1) - dt * 0.90)

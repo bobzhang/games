@@ -159,9 +159,9 @@ fn draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_text("Wind", 650, 5, 16, @raylib.Color::new(150, 180, 220, 255))
   // Wind direction as arrow character hint
   let wind_rel = @types.angle_diff(ship.heading, game.wind_angle)
-  let wind_str = if @types.absf(wind_rel) < 0.5 {
+  let wind_str = if wind_rel.abs() < 0.5 {
     "Tailwind"
-  } else if @types.absf(wind_rel) > 2.6 {
+  } else if wind_rel.abs() > 2.6 {
     "Headwind"
   } else {
     "Crosswind"

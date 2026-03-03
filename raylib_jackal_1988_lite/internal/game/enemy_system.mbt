@@ -88,7 +88,7 @@ fn enemy_desired_dir(game : @types.Game, enemy : @types.Tank) -> Int {
   let vert = if dy < 0.0 { @types.dir_up } else { @types.dir_down }
 
   let r = @types.rand_range(game, 0, 99)
-  if @types.absf(dx) > @types.absf(dy) {
+  if dx.abs() > dy.abs() {
     if r < 72 {
       horiz
     } else if r < 92 {
@@ -143,8 +143,8 @@ fn enemy_shoot_if_ready(game : @types.Game, enemy_index : Int) -> Unit {
   let target_player = choose_enemy_target_player(game, enemy)
   if target_player >= 0 {
     let player = game.players[target_player]
-    if @types.absf(player.x - enemy.x) < Float::from_int(@types.tile_size) * 0.5 ||
-      @types.absf(player.y - enemy.y) < Float::from_int(@types.tile_size) * 0.5 {
+    if (player.x - enemy.x).abs() < Float::from_int(@types.tile_size) * 0.5 ||
+      (player.y - enemy.y).abs() < Float::from_int(@types.tile_size) * 0.5 {
       if not(sight_blocked(game, enemy.x, enemy.y, player.x, player.y)) {
         should_fire = true
       }
@@ -154,8 +154,8 @@ fn enemy_shoot_if_ready(game : @types.Game, enemy_index : Int) -> Unit {
   if not(should_fire) {
     let base_x = @types.tile_center_x(@types.base_tile_x)
     let base_y = @types.tile_center_y(@types.base_tile_y)
-    if @types.absf(base_x - enemy.x) < Float::from_int(@types.tile_size) * 0.5 ||
-      @types.absf(base_y - enemy.y) < Float::from_int(@types.tile_size) * 0.5 {
+    if (base_x - enemy.x).abs() < Float::from_int(@types.tile_size) * 0.5 ||
+      (base_y - enemy.y).abs() < Float::from_int(@types.tile_size) * 0.5 {
       if not(sight_blocked(game, enemy.x, enemy.y, base_x, base_y)) {
         should_fire = true
       }

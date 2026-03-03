@@ -981,7 +981,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   emit_snow(game, dt)
   update_sparks(game, dt)
 
-  if @types.absf(game.wind_x) > 220.0 {
+  if game.wind_x.abs() > 220.0 {
     game.calm = @types.maxf(0.0, game.calm - dt * 1.2)
   }
 

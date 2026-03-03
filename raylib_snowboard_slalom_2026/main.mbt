@@ -92,11 +92,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
   let dy = ay - by
@@ -562,7 +557,7 @@ fn main {
         gates[i].pulse_t = gates[i].pulse_t + dt
 
         if gates[i].state == 0 && rider.y >= gates[i].y {
-          let dx = absf(rider.x - gates[i].x)
+          let dx = (rider.x - gates[i].x).abs()
           if dx <= gates[i].w * 0.5 {
             gates[i].state = 1
             gates_clean = gates_clean + 1
@@ -602,8 +597,8 @@ fn main {
           continue
         }
 
-        if absf(obstacles[i].y - rider.y) <= obstacles[i].size + 22.0 &&
-          absf(obstacles[i].x - rider.x) <= obstacles[i].size + 16.0 {
+        if (obstacles[i].y - rider.y).abs() <= obstacles[i].size + 22.0 &&
+          (obstacles[i].x - rider.x).abs() <= obstacles[i].size + 16.0 {
           let hit_dmg : Float = if obstacles[i].kind == 1 { 22.0 } else { 14.0 }
           rider.hp = rider.hp - hit_dmg
           rider.flash_t = 0.2

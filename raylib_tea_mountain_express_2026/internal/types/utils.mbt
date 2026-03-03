@@ -37,12 +37,6 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-pub fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Clamps a float into `[0, 1]`.
 pub fn clamp01(v : Float) -> Float {
   clampf(v, 0.0, 1.0)

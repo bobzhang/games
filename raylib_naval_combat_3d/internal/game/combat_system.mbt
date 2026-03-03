@@ -96,7 +96,7 @@ fn check_cannonball_vs_enemies(game : @types.Game, cb_idx : Int) -> Unit {
       }
       // Rudder damage (occasional)
       let to_cb = @math.atan2f(cb.x - enemy.x, cb.z - enemy.z)
-      let rel_angle = @types.absf(@types.angle_diff(enemy.heading, to_cb))
+      let rel_angle = @types.angle_diff(enemy.heading, to_cb).abs()
       if rel_angle < @types.pi * 0.25 || rel_angle > @types.pi * 0.75 {
         let rudder_dmg = base_dmg * 0.3
         enemy.rudder_hp -= rudder_dmg
@@ -171,7 +171,7 @@ fn check_cannonball_vs_player(game : @types.Game, cb_idx : Int) -> Unit {
     let base_dmg = cb.damage
     // Determine which zone was hit based on cannonball position relative to ship
     let to_cb = @math.atan2f(cb.x - ship.x, cb.z - ship.z)
-    let rel_angle = @types.absf(@types.angle_diff(ship.heading, to_cb))
+    let rel_angle = @types.angle_diff(ship.heading, to_cb).abs()
     if rel_angle < @types.pi * 0.25 {
       // Hit from front - bow damage
       ship.bow_hp -= base_dmg

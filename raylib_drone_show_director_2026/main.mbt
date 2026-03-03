@@ -143,12 +143,6 @@ fn maxi(a : Int, b : Int) -> Int {
 }
 
 ///|
-/// Returns the absolute value of a Float.
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns the sine of v (in radians) as a Float.
 fn sinf(v : Float) -> Float {
   @math.sinf(v)
@@ -2171,19 +2165,19 @@ fn main {
 
         if drones[i].x < world_l + 12.0 {
           drones[i].x = world_l + 12.0
-          drones[i].vx = absf(drones[i].vx) * 0.32
+          drones[i].vx = drones[i].vx.abs() * 0.32
         }
         if drones[i].x > world_r - 12.0 {
           drones[i].x = world_r - 12.0
-          drones[i].vx = -absf(drones[i].vx) * 0.32
+          drones[i].vx = -drones[i].vx.abs() * 0.32
         }
         if drones[i].y < world_t + 12.0 {
           drones[i].y = world_t + 12.0
-          drones[i].vy = absf(drones[i].vy) * 0.32
+          drones[i].vy = drones[i].vy.abs() * 0.32
         }
         if drones[i].y > world_b - 12.0 {
           drones[i].y = world_b - 12.0
-          drones[i].vy = -absf(drones[i].vy) * 0.32
+          drones[i].vy = -drones[i].vy.abs() * 0.32
         }
 
         let speed : Float = (drones[i].vx * drones[i].vx +

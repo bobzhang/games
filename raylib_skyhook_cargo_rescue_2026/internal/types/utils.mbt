@@ -49,12 +49,6 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-pub fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Computes sine using the core math backend.
 pub fn sinf(v : Float) -> Float {
   @math.sinf(v)

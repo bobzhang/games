@@ -106,8 +106,8 @@ fn score_cell_for(
   score = score + score_dir(game, x, y, p, 1, -1)
 
   let cx : Int = @types.board_n / 2
-  let dist : Int = @types.absf(Float::from_int(x - cx)).to_int() +
-    @types.absf(Float::from_int(y - cx)).to_int()
+  let dist : Int = Float::from_int(x - cx).abs().to_int() +
+    Float::from_int(y - cx).abs().to_int()
   score = score + @types.maxi(0, 50 - dist * 3)
 
   score

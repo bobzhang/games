@@ -13,8 +13,8 @@ fn fighter_can_attempt_throw(fighter : @types.Fighter) -> Bool {
 
 ///|
 fn throw_in_range(attacker : @types.Fighter, defender : @types.Fighter) -> Bool {
-  @types.absf(attacker.x - defender.x) <= @types.throw_distance &&
-  @types.absf(attacker.y - defender.y) <= @types.throw_vertical_tolerance
+  (attacker.x - defender.x).abs() <= @types.throw_distance &&
+  (attacker.y - defender.y).abs() <= @types.throw_vertical_tolerance
 }
 
 ///|

@@ -1,14 +1,4 @@
 ///|
-/// Returns the absolute value of `v`.
-pub fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
-}
-
-///|
 /// Returns `v` clamped between `low` and `high`.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
@@ -643,7 +633,7 @@ pub fn is_wrong_way(game : Game, kart : Kart) -> Bool {
   let cur = get_waypoint(game, kart.waypoint_idx)
   let nxt = get_waypoint(game, (kart.waypoint_idx + 1) % wc)
   let track_angle = @math.atan2f(nxt.x - cur.x, nxt.z - cur.z)
-  let diff = absf(angle_diff(kart.angle, track_angle))
+  let diff = angle_diff(kart.angle, track_angle).abs()
   diff > wrong_way_angle_threshold
 }
 
@@ -901,7 +891,7 @@ pub fn should_spin_from_bump(
   weight_a : Float,
   weight_b : Float,
 ) -> (Bool, Bool) {
-  let diff = absf(weight_a - weight_b)
+  let diff = (weight_a - weight_b).abs()
   if diff >= weight_spin_diff {
     if weight_a < weight_b {
       (true, false) // a spins, b doesn't

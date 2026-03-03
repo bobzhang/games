@@ -64,7 +64,7 @@ pub fn update_ai_karts(game : @types.Game, dt : Float) -> Unit {
     let reaction = @types.clampf(1.0 - diff_stats.3 * 0.3, 0.2, 1.0)
     kart.steer = @types.lerpf(kart.steer, target_steer, reaction)
     // AI drift logic - better AI drifts on sharp turns
-    let should_drift = @types.absf(angle_delta) > 0.8 &&
+    let should_drift = angle_delta.abs() > 0.8 &&
       kart.speed > 12.0 &&
       diff_stats.2 > 0.7
     if should_drift {
@@ -106,9 +106,7 @@ pub fn update_ai_karts(game : @types.Game, dt : Float) -> Unit {
       next_wp.x - @types.get_waypoint(game, kart.waypoint_idx).x,
       next_wp.z - @types.get_waypoint(game, kart.waypoint_idx).z,
     )
-    let upcoming_turn = @types.absf(
-      @types.angle_diff(cur_track_angle, next_angle),
-    )
+    let upcoming_turn = @types.angle_diff(cur_track_angle, next_angle).abs()
     // Rubber-banding: AI adjusts speed based on relative position to player
     let ai_progress = kart.total_progress
     let speed_mult = @types.calc_rubber_band_mult(
@@ -205,7 +203,7 @@ fn ai_use_item(game : @types.Game, kart_idx : Int, dt : Float) -> Unit {
     let next_wp = @types.get_waypoint(game, (kart.waypoint_idx + 1) % wc)
     let dx = next_wp.x - kart.x
     let dz = next_wp.z - kart.z
-    let turn = @types.absf(@types.angle_diff(kart.angle, @math.atan2f(dx, dz)))
+    let turn = @types.angle_diff(kart.angle, @math.atan2f(dx, dz)).abs()
     turn < 0.5
   } else if item == @types.powerup_shield {
     // Use shield when in danger (near opponents)

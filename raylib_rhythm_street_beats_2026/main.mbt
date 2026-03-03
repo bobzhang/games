@@ -68,11 +68,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 fn minf(a : Float, b : Float) -> Float {
   if a < b {
     a
@@ -550,7 +545,7 @@ fn main {
               continue
             }
 
-            let dist : Float = absf(song_t - notes[i].time)
+            let dist : Float = (song_t - notes[i].time).abs()
             if dist < best_dist {
               best_dist = dist
               best = i

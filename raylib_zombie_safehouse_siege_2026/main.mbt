@@ -121,11 +121,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx : Float = ax - bx
   let dy : Float = ay - by
@@ -790,7 +785,7 @@ fn main {
           let my = mouse.y - player.y
           let mut dx = player.aim_x
           let mut dy = player.aim_y
-          if absf(mx) > 2.0 || absf(my) > 2.0 {
+          if mx.abs() > 2.0 || my.abs() > 2.0 {
             let n2 = mx * mx + my * my
             let n = safe_len2(n2)
             dx = mx / n

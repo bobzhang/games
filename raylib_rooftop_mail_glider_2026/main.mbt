@@ -131,11 +131,6 @@ fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 fn sinf(v : Float) -> Float {
   @math.sinf(v)
 }
@@ -1979,19 +1974,19 @@ fn main {
 
       if glider.x < world_l + 16.0 {
         glider.x = world_l + 16.0
-        glider.vx = absf(glider.vx) * 0.32
+        glider.vx = glider.vx.abs() * 0.32
       }
       if glider.x > world_r - 16.0 {
         glider.x = world_r - 16.0
-        glider.vx = -absf(glider.vx) * 0.32
+        glider.vx = -glider.vx.abs() * 0.32
       }
       if glider.y < world_t + 16.0 {
         glider.y = world_t + 16.0
-        glider.vy = absf(glider.vy) * 0.32
+        glider.vy = glider.vy.abs() * 0.32
       }
       if glider.y > world_b - 16.0 {
         glider.y = world_b - 16.0
-        glider.vy = -absf(glider.vy) * 0.32
+        glider.vy = -glider.vy.abs() * 0.32
       }
 
       glider.fuel = glider.fuel - dt * (fuel_drain + speed * 0.003 + wind_drain)

@@ -37,12 +37,6 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-pub fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns the square of a float value.
 pub fn squaref(v : Float) -> Float {
   v * v

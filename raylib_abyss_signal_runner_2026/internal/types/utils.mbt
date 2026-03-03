@@ -37,12 +37,6 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-pub fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Computes `sin(v)` and returns the result as `Float`.
 pub fn sinf(v : Float) -> Float {
   @math.sinf(v)

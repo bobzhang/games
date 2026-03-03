@@ -102,8 +102,8 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
         // Check if player is within firing arc (broadside)
         let to_player = @math.atan2f(px - enemy.x, pz - enemy.z)
         let rel = @types.angle_diff(enemy.heading, to_player)
-        let in_broadside_arc = @types.absf(rel) > @types.pi * 0.2 &&
-          @types.absf(rel) < @types.pi * 0.8
+        let in_broadside_arc = rel.abs() > @types.pi * 0.2 &&
+          rel.abs() < @types.pi * 0.8
         if in_broadside_arc && dist_to_player < enemy.attack_range * 1.2 {
           fire_enemy_broadside(game, i)
           enemy.fire_timer = enemy.fire_rate
@@ -354,7 +354,7 @@ fn update_retreat(
   let away_from_player = @math.atan2f(enemy.x - px, enemy.z - pz)
   // Try to use wind advantage
   let wind_bonus = @types.angle_diff(away_from_player, game.wind_angle)
-  let retreat_angle : Float = if @types.absf(wind_bonus) < @types.pi * 0.3 {
+  let retreat_angle : Float = if wind_bonus.abs() < @types.pi * 0.3 {
     away_from_player
   } else {
     // Adjust to get better wind

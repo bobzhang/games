@@ -138,11 +138,6 @@ fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
@@ -693,18 +688,18 @@ fn update_fires(
 
     if fire.x < world_l - 160.0 {
       fire.x = world_l - 160.0
-      fire.vx = absf(fire.vx)
+      fire.vx = fire.vx.abs()
     } else if fire.x > world_r + 160.0 {
       fire.x = world_r + 160.0
-      fire.vx = -absf(fire.vx)
+      fire.vx = -fire.vx.abs()
     }
 
     if fire.y < world_t - 160.0 {
       fire.y = world_t - 160.0
-      fire.vy = absf(fire.vy)
+      fire.vy = fire.vy.abs()
     } else if fire.y > world_b + 160.0 {
       fire.y = world_b + 160.0
-      fire.vy = -absf(fire.vy)
+      fire.vy = -fire.vy.abs()
     }
 
     // natural growth
@@ -769,18 +764,18 @@ fn update_debris(
 
     if debris.x < world_l + debris.size {
       debris.x = world_l + debris.size
-      debris.vx = absf(debris.vx) * randf(0.66, 1.1)
+      debris.vx = debris.vx.abs() * randf(0.66, 1.1)
     } else if debris.x > world_r - debris.size {
       debris.x = world_r - debris.size
-      debris.vx = -absf(debris.vx) * randf(0.66, 1.1)
+      debris.vx = -debris.vx.abs() * randf(0.66, 1.1)
     }
 
     if debris.y < world_t + debris.size {
       debris.y = world_t + debris.size
-      debris.vy = absf(debris.vy) * randf(0.66, 1.1)
+      debris.vy = debris.vy.abs() * randf(0.66, 1.1)
     } else if debris.y > world_b - debris.size {
       debris.y = world_b - debris.size
-      debris.vy = -absf(debris.vy) * randf(0.66, 1.1)
+      debris.vy = -debris.vy.abs() * randf(0.66, 1.1)
     }
 
     debris.hard = maxf(8.0, debris.hard - dt * 0.02)

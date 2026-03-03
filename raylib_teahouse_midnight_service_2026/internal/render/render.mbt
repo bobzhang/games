@@ -658,7 +658,7 @@ fn draw_sparks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
     let life = @types.clampf(shadow.life / 0.24, 0.0, 1.0)
     let stretch : Float = Float::from_int(1) +
-      @types.absf(@types.sinf(shadow.rot * 0.06)) * 0.24
+      @types.sinf(shadow.rot * 0.06).abs() * 0.24
 
     @raylib.draw_rectangle(
       (shadow.x - shadow.w * 0.5 * stretch + cam_x * 0.2).to_int(),

@@ -252,7 +252,7 @@ fn update_player(game : @types.Game, input : @types.Input, dt : Float) -> Unit {
     player.facing = move_axis
   } else if player.on_ground {
     let drag = @types.run_friction * dt
-    if @types.absf(player.vx) <= drag {
+    if player.vx.abs() <= drag {
       player.vx = 0.0
     } else {
       player.vx = player.vx - Float::from_int(@types.signf(player.vx)) * drag

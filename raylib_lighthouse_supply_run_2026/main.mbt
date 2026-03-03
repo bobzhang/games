@@ -118,12 +118,6 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of `v`.
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns the smaller of two integers.
 fn mini(a : Int, b : Int) -> Int {
   a.min(b)
@@ -599,18 +593,18 @@ fn update_storms(
 
     if storm.x < world_l - 130.0 {
       storm.x = world_l - 130.0
-      storm.vx = absf(storm.vx)
+      storm.vx = storm.vx.abs()
     } else if storm.x > world_r + 130.0 {
       storm.x = world_r + 130.0
-      storm.vx = -absf(storm.vx)
+      storm.vx = -storm.vx.abs()
     }
 
     if storm.y < world_t - 130.0 {
       storm.y = world_t - 130.0
-      storm.vy = absf(storm.vy)
+      storm.vy = storm.vy.abs()
     } else if storm.y > world_b + 130.0 {
       storm.y = world_b + 130.0
-      storm.vy = -absf(storm.vy)
+      storm.vy = -storm.vy.abs()
     }
   }
 }

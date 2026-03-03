@@ -17,12 +17,6 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-pub fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns the larger of two float values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {

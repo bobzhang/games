@@ -38,11 +38,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 fn inside_rect(
   px : Float,
   py : Float,
@@ -441,7 +436,7 @@ fn main {
 
       let gy = ground_y(hx)
       if hy + 14.0 >= gy {
-        if absf(hvy) > 110.0 || absf(hvx) > 130.0 {
+        if hvy.abs() > 110.0 || hvx.abs() > 130.0 {
           hull = hull - 1
           flash_t = 0.30
           shake_t = 0.22
@@ -477,7 +472,7 @@ fn main {
       }
 
       if carrying && carry_idx >= 0 {
-        let near_base = absf(hx - base_x) <= 74.0 &&
+        let near_base = (hx - base_x).abs() <= 74.0 &&
           hy >= base_y - 104.0 &&
           hy <= base_y - 18.0
         if action && near_base {

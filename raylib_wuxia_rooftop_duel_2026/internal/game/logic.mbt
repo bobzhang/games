@@ -465,7 +465,7 @@ fn trigger_parry_dash(game : @types.Game) -> Bool {
     return false
   }
 
-  let dash_dir = if @types.absf(game.move_x) + @types.absf(game.move_y) > 0.01 {
+  let dash_dir = if game.move_x.abs() + game.move_y.abs() > 0.01 {
     @types.normalize(game.move_x, game.move_y)
   } else {
     @types.normalize(game.facing_x, game.facing_y)
@@ -681,18 +681,18 @@ fn keep_enemy_inside_rooftop(game : @types.Game, idx : Int) -> Unit {
 
   if game.enemies[idx].x < left {
     game.enemies[idx].x = left
-    game.enemies[idx].vx = @types.absf(game.enemies[idx].vx) * 0.4
+    game.enemies[idx].vx = game.enemies[idx].vx.abs() * 0.4
   } else if game.enemies[idx].x > right {
     game.enemies[idx].x = right
-    game.enemies[idx].vx = -@types.absf(game.enemies[idx].vx) * 0.4
+    game.enemies[idx].vx = -game.enemies[idx].vx.abs() * 0.4
   }
 
   if game.enemies[idx].y < top {
     game.enemies[idx].y = top
-    game.enemies[idx].vy = @types.absf(game.enemies[idx].vy) * 0.4
+    game.enemies[idx].vy = game.enemies[idx].vy.abs() * 0.4
   } else if game.enemies[idx].y > bottom {
     game.enemies[idx].y = bottom
-    game.enemies[idx].vy = -@types.absf(game.enemies[idx].vy) * 0.4
+    game.enemies[idx].vy = -game.enemies[idx].vy.abs() * 0.4
   }
 }
 

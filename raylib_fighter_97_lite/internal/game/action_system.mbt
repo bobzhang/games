@@ -473,7 +473,7 @@ fn resolve_push_collision(game : @types.Game) -> Unit {
   let p2 = game.fighters[1]
 
   let dx = p2.x - p1.x
-  let dist = @types.absf(dx)
+  let dist = dx.abs()
   let min_dist = @types.fighter_push_radius * 2.0
   if dist < min_dist {
     let overlap = (min_dist - dist) * 0.5

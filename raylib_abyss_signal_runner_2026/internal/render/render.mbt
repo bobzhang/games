@@ -550,7 +550,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   )
 
   let fin : Float = Float::from_int(1) +
-    @types.absf(game.hero.vx) / @types.player_max_speed
+    game.hero.vx.abs() / @types.player_max_speed
   @raylib.draw_triangle(
     @raylib.Vector2::new(px - body_r * 1.1, py),
     @raylib.Vector2::new(px - body_r * 1.9 * fin, py - body_r * 0.6),

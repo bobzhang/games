@@ -306,8 +306,8 @@ fn draw_player(game : @types.Game, cam_x : Float) -> Unit {
     @raylib.Color::new(20, 20, 26, 240),
   )
 
-  if @types.absf(hero.vx) > 190.0 {
-    let trail_w = @types.clampi((@types.absf(hero.vx) * 0.045).to_int(), 8, 24)
+  if hero.vx.abs() > 190.0 {
+    let trail_w = @types.clampi((hero.vx.abs() * 0.045).to_int(), 8, 24)
     let tx = if hero.facing > 0 {
       sx - Float::from_int(trail_w) - 3.0
     } else {

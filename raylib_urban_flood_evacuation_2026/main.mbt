@@ -115,11 +115,6 @@ fn mini(a : Int, b : Int) -> Int {
 }
 
 ///|
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
@@ -609,18 +604,18 @@ fn update_floods(
 
     if flood.x < world_l - 160.0 {
       flood.x = world_l - 160.0
-      flood.vx = absf(flood.vx)
+      flood.vx = flood.vx.abs()
     } else if flood.x > world_r + 160.0 {
       flood.x = world_r + 160.0
-      flood.vx = -absf(flood.vx)
+      flood.vx = -flood.vx.abs()
     }
 
     if flood.y < world_t - 160.0 {
       flood.y = world_t - 160.0
-      flood.vy = absf(flood.vy)
+      flood.vy = flood.vy.abs()
     } else if flood.y > world_b + 160.0 {
       flood.y = world_b + 160.0
-      flood.vy = -absf(flood.vy)
+      flood.vy = -flood.vy.abs()
     }
   }
 }
@@ -647,18 +642,18 @@ fn update_barriers(
 
     if barrier.x < world_l + barrier.size {
       barrier.x = world_l + barrier.size
-      barrier.vx = absf(barrier.vx) * randf(0.66, 1.1)
+      barrier.vx = barrier.vx.abs() * randf(0.66, 1.1)
     } else if barrier.x > world_r - barrier.size {
       barrier.x = world_r - barrier.size
-      barrier.vx = -absf(barrier.vx) * randf(0.66, 1.1)
+      barrier.vx = -barrier.vx.abs() * randf(0.66, 1.1)
     }
 
     if barrier.y < world_t + barrier.size {
       barrier.y = world_t + barrier.size
-      barrier.vy = absf(barrier.vy) * randf(0.66, 1.1)
+      barrier.vy = barrier.vy.abs() * randf(0.66, 1.1)
     } else if barrier.y > world_b - barrier.size {
       barrier.y = world_b - barrier.size
-      barrier.vy = -absf(barrier.vy) * randf(0.66, 1.1)
+      barrier.vy = -barrier.vy.abs() * randf(0.66, 1.1)
     }
 
     barrier.hard = maxf(8.0, barrier.hard - dt * 0.02)

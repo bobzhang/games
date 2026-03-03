@@ -46,12 +46,6 @@ struct Log {
 }
 
 ///|
-/// Returns the absolute value of a float.
-fn absf(x : Float) -> Float {
-  x.abs()
-}
-
-///|
 /// Returns the value v clamped to the inclusive range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -406,7 +400,7 @@ fn main {
       if not(dead) && row == 0 {
         let mut dock = -1
         for i in 0..<homes.length() {
-          if absf(px - slot_center_x(i)) <= Float::from_int(cell) * 0.38 {
+          if (px - slot_center_x(i)).abs() <= Float::from_int(cell) * 0.38 {
             dock = i
             break
           }

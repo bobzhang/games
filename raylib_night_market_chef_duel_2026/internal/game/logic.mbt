@@ -457,16 +457,8 @@ fn move_cursor(game : @types.Game, dir_x : Int, dir_y : Int) -> Unit {
       }
 
       if accepted {
-        let forward : Float = if dir_x != 0 {
-          @types.absf(vx)
-        } else {
-          @types.absf(vy)
-        }
-        let side : Float = if dir_x != 0 {
-          @types.absf(vy)
-        } else {
-          @types.absf(vx)
-        }
+        let forward : Float = if dir_x != 0 { vx.abs() } else { vy.abs() }
+        let side : Float = if dir_x != 0 { vy.abs() } else { vx.abs() }
         let score : Float = forward + side * 1.9
         if score < best_score {
           best_score = score

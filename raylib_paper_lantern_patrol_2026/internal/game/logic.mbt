@@ -891,19 +891,19 @@ fn update_lanterns(game : @types.Game, dt : Float) -> Unit {
 
     if game.lanterns[i].x < @types.play_left {
       game.lanterns[i].x = @types.play_left
-      game.lanterns[i].vx = @types.absf(game.lanterns[i].vx) * 0.4
+      game.lanterns[i].vx = game.lanterns[i].vx.abs() * 0.4
     }
     if game.lanterns[i].x > @types.play_right {
       game.lanterns[i].x = @types.play_right
-      game.lanterns[i].vx = -@types.absf(game.lanterns[i].vx) * 0.4
+      game.lanterns[i].vx = -game.lanterns[i].vx.abs() * 0.4
     }
     if game.lanterns[i].y < @types.play_top {
       game.lanterns[i].y = @types.play_top
-      game.lanterns[i].vy = @types.absf(game.lanterns[i].vy) * 0.4
+      game.lanterns[i].vy = game.lanterns[i].vy.abs() * 0.4
     }
     if game.lanterns[i].y > @types.play_bottom {
       game.lanterns[i].y = @types.play_bottom
-      game.lanterns[i].vy = -@types.absf(game.lanterns[i].vy) * 0.4
+      game.lanterns[i].vy = -game.lanterns[i].vy.abs() * 0.4
     }
 
     game.lanterns[i].flame = game.lanterns[i].flame - drain

@@ -1,14 +1,4 @@
 ///|
-/// Returns the absolute value of a float.
-pub fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
-}
-
-///|
 /// Clamps a float into the inclusive range `[low, high]`.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
@@ -181,7 +171,7 @@ pub fn ease_out_elastic(t : Float) -> Float {
   let power : Float = neg10 * t
   let ln2 : Float = 0.6931472
   let x : Float = power * ln2
-  let ax : Float = absf(x)
+  let ax : Float = x.abs()
   let exp_val : Float = if ax > 10.0 {
     0.0
   } else {
@@ -214,7 +204,7 @@ pub fn ease_out_elastic(t : Float) -> Float {
 /// Moves `current` toward `target` by at most `max_delta`.
 pub fn move_toward(current : Float, target : Float, max_delta : Float) -> Float {
   let diff = target - current
-  if absf(diff) <= max_delta {
+  if diff.abs() <= max_delta {
     target
   } else {
     current + signf(diff) * max_delta
@@ -703,7 +693,7 @@ pub fn approach(
   dt : Float,
 ) -> Float {
   let diff = target - current
-  if absf(diff) < speed * dt {
+  if diff.abs() < speed * dt {
     target
   } else {
     current + signf(diff) * speed * dt

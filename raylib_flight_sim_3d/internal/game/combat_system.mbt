@@ -33,7 +33,7 @@ pub fn ai_patrol_advanced(
     let target_heading = @math.atan2f(dx, dz)
     let heading_diff = @types.angle_diff(e.heading, target_heading)
     let turn_rate : Float = 1.5 * dt
-    if @types.absf(heading_diff) < turn_rate {
+    if heading_diff.abs() < turn_rate {
       e.heading = target_heading
     } else if heading_diff > 0.0 {
       e.heading = e.heading + turn_rate
@@ -86,7 +86,7 @@ pub fn ai_engage_advanced(
     let target_heading = @math.atan2f(ldx, ldz)
     let heading_diff = @types.angle_diff(e.heading, target_heading)
     let turn_rate : Float = 2.5 * e.aggression * dt
-    if @types.absf(heading_diff) < turn_rate {
+    if heading_diff.abs() < turn_rate {
       e.heading = target_heading
     } else if heading_diff > 0.0 {
       e.heading = e.heading + turn_rate
@@ -136,7 +136,7 @@ pub fn ai_evasive_maneuver(
       let turn_heading = away_heading + perp_offset
       let heading_diff = @types.angle_diff(e.heading, turn_heading)
       let turn_rate : Float = 4.0 * dt
-      if @types.absf(heading_diff) < turn_rate {
+      if heading_diff.abs() < turn_rate {
         e.heading = turn_heading
       } else if heading_diff > 0.0 {
         e.heading = e.heading + turn_rate
@@ -216,7 +216,7 @@ pub fn ai_formation_fly(
     let target_heading = @math.atan2f(dx, dz)
     let heading_diff = @types.angle_diff(e.heading, target_heading)
     let turn_rate : Float = 2.0 * dt
-    if @types.absf(heading_diff) < turn_rate {
+    if heading_diff.abs() < turn_rate {
       e.heading = target_heading
     } else if heading_diff > 0.0 {
       e.heading = e.heading + turn_rate
@@ -269,7 +269,7 @@ pub fn turret_track_player(
   // Smooth rotation towards target
   let rot_diff = @types.angle_diff(t.rotation, target_rot)
   let rot_speed = @types.turret_rotation_speed * dt
-  if @types.absf(rot_diff) < rot_speed {
+  if rot_diff.abs() < rot_speed {
     t.rotation = target_rot
   } else if rot_diff > 0.0 {
     t.rotation = t.rotation + rot_speed
@@ -279,7 +279,7 @@ pub fn turret_track_player(
   // Smooth elevation
   let elev_diff = target_elev - t.elevation
   let elev_speed = @types.turret_rotation_speed * 0.8 * dt
-  if @types.absf(elev_diff) < elev_speed {
+  if elev_diff.abs() < elev_speed {
     t.elevation = target_elev
   } else if elev_diff > 0.0 {
     t.elevation = t.elevation + elev_speed

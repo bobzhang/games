@@ -101,12 +101,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns the squared Euclidean distance between two points.
 fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
@@ -364,7 +358,7 @@ fn player_support_wagon(player : Rider, wagons : Array[Wagon]) -> Int {
     let right = wagons[i].x + wagons[i].len - 10.0
     if player.x >= left &&
       player.x <= right &&
-      absf(player.y - wagons[i].roof_y) <= 6.0 {
+      (player.y - wagons[i].roof_y).abs() <= 6.0 {
       idx = i
     }
   }
@@ -660,7 +654,7 @@ fn main {
       }
 
       let support_idx = player_support_wagon(player, wagons)
-      if support_idx >= 0 && absf(player.vy) < 80.0 {
+      if support_idx >= 0 && player.vy.abs() < 80.0 {
         player.x = player.x + train_speed * dt
       }
 
@@ -686,7 +680,7 @@ fn main {
       player.vx = clampf(player.vx, -max_speed, max_speed)
 
       if jump {
-        if support_idx >= 0 || absf(player.y - ground_y) <= 4.0 {
+        if support_idx >= 0 || (player.y - ground_y).abs() <= 4.0 {
           player.vy = -596.0
         }
       }

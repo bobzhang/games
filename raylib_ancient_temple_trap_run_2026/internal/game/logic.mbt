@@ -347,12 +347,12 @@ fn move_player(game : @types.Game, dt : Float) -> Unit {
   let mut axis_x = @types.clampf(game.input_x, -1.0, 1.0)
   let mut axis_y = @types.clampf(game.input_y, -1.0, 1.0)
 
-  if @types.absf(axis_x) > 0.0 && @types.absf(axis_y) > 0.0 {
+  if axis_x.abs() > 0.0 && axis_y.abs() > 0.0 {
     axis_x = axis_x * 0.707
     axis_y = axis_y * 0.707
   }
 
-  let moving : Bool = @types.absf(axis_x) + @types.absf(axis_y) > 0.01
+  let moving : Bool = axis_x.abs() + axis_y.abs() > 0.01
 
   let mut dash_now : Bool = false
   if game.input_dash_hold &&

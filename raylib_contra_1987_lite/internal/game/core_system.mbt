@@ -64,8 +64,8 @@ fn try_spawn_core_at_tile(
   if not(@types.in_tile_bounds(tx, ty)) {
     return false
   }
-  if @types.absf(Float::from_int(tx - @types.base_tile_x)) <= 2.0 &&
-    @types.absf(Float::from_int(ty - @types.base_tile_y)) <= 2.0 {
+  if Float::from_int(tx - @types.base_tile_x).abs() <= 2.0 &&
+    Float::from_int(ty - @types.base_tile_y).abs() <= 2.0 {
     return false
   }
 

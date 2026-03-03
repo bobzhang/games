@@ -176,7 +176,7 @@ fn setup_stage(game : @types.Game, stage : Int) -> Unit {
 
     let mut vx = @types.randf(-120.0, 120.0)
     let mut vy = @types.randf(-120.0, 120.0)
-    if @types.absf(vx) + @types.absf(vy) < 50.0 {
+    if vx.abs() + vy.abs() < 50.0 {
       vx = 54.0 + Float::from_int(i) * 18.0
       vy = -62.0 + Float::from_int(i) * 12.0
     }
@@ -309,18 +309,18 @@ fn update_storms(game : @types.Game, dt : Float) -> Unit {
 
     if storm.x - storm.r < left {
       storm.x = left + storm.r
-      storm.vx = @types.absf(storm.vx)
+      storm.vx = storm.vx.abs()
     } else if storm.x + storm.r > right {
       storm.x = right - storm.r
-      storm.vx = -@types.absf(storm.vx)
+      storm.vx = -storm.vx.abs()
     }
 
     if storm.y - storm.r < top {
       storm.y = top + storm.r
-      storm.vy = @types.absf(storm.vy)
+      storm.vy = storm.vy.abs()
     } else if storm.y + storm.r > bottom {
       storm.y = bottom - storm.r
-      storm.vy = -@types.absf(storm.vy)
+      storm.vy = -storm.vy.abs()
     }
   }
 }
@@ -377,7 +377,7 @@ fn update_rover(
   let mut dir_x = game.input_x
   let mut dir_y = game.input_y
 
-  let norm = @types.absf(dir_x) + @types.absf(dir_y)
+  let norm = dir_x.abs() + dir_y.abs()
   if norm > 0.0001 {
     dir_x = dir_x / norm
     dir_y = dir_y / norm
@@ -403,7 +403,7 @@ fn update_rover(
     130.0,
     @types.rover_max_speed * (1.0 - 0.24 * @types.clampf(intensity, 0.0, 1.0)),
   )
-  let speed_sum = @types.absf(game.rover_vx) + @types.absf(game.rover_vy)
+  let speed_sum = game.rover_vx.abs() + game.rover_vy.abs()
   if speed_sum > max_speed {
     let s = max_speed / speed_sum
     game.rover_vx = game.rover_vx * s
@@ -438,7 +438,7 @@ fn update_rover(
 ///|
 /// Drains rover energy and heat based on movement speed and storm intensity, and recharges both while the rover is in the depot.
 fn update_resources(game : @types.Game, dt : Float, intensity : Float) -> Unit {
-  let speed = @types.absf(game.rover_vx) + @types.absf(game.rover_vy)
+  let speed = game.rover_vx.abs() + game.rover_vy.abs()
   let energy_drain = @types.energy_idle_drain +
     speed * @types.energy_move_drain +
     intensity * @types.energy_storm_drain

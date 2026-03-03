@@ -37,12 +37,6 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-pub fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Moves `v` toward `target` by at most `step`.
 pub fn approachf(v : Float, target : Float, step : Float) -> Float {
   if v < target {

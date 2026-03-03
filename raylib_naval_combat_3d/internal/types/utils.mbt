@@ -1,14 +1,4 @@
 ///|
-/// Returns the absolute value of a float.
-pub fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
-}
-
-///|
 /// Clamps a float to the inclusive range `[low, high]`.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
@@ -129,7 +119,7 @@ pub fn bearing(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
 ///|
 /// Returns whether angle `b` is within `range` radians of angle `a`.
 pub fn angle_within(a : Float, b : Float, range : Float) -> Bool {
-  absf(angle_diff(a, b)) < range
+  angle_diff(a, b).abs() < range
 }
 
 // Sailing speed calculator - wind-based
@@ -146,7 +136,7 @@ pub fn calc_sailing_speed(
   base_speed : Float,
 ) -> Float {
   // Calculate relative wind angle (0 = headwind, pi = tailwind)
-  let rel_wind = absf(angle_diff(heading, wind_dir))
+  let rel_wind = angle_diff(heading, wind_dir).abs()
   // Point of sail coefficient
   let point_of_sail : Float = if rel_wind < in_irons_angle {
     sail_in_irons

@@ -439,21 +439,21 @@ fn update_raft(game : @types.Game, dt : Float) -> Unit {
 
   if game.raft_x < left {
     game.raft_x = left
-    game.raft_vx = @types.absf(game.raft_vx) * 0.30
+    game.raft_vx = game.raft_vx.abs() * 0.30
     wall_hit = true
   } else if game.raft_x > right {
     game.raft_x = right
-    game.raft_vx = -@types.absf(game.raft_vx) * 0.30
+    game.raft_vx = -game.raft_vx.abs() * 0.30
     wall_hit = true
   }
 
   if game.raft_y < top {
     game.raft_y = top
-    game.raft_vy = @types.absf(game.raft_vy) * 0.35
+    game.raft_vy = game.raft_vy.abs() * 0.35
     wall_hit = true
   } else if game.raft_y > bottom {
     game.raft_y = bottom
-    game.raft_vy = -@types.absf(game.raft_vy) * 0.20
+    game.raft_vy = -game.raft_vy.abs() * 0.20
     wall_hit = true
   }
 
@@ -490,11 +490,11 @@ fn update_obstacles(game : @types.Game, dt : Float) -> Unit {
 
     if obstacle.x < @types.world_left() + 4.0 {
       obstacle.x = @types.world_left() + 4.0
-      obstacle.vx = @types.absf(obstacle.vx) * 0.7
+      obstacle.vx = obstacle.vx.abs() * 0.7
     }
     if obstacle.x + obstacle.w > @types.world_right() - 4.0 {
       obstacle.x = @types.world_right() - obstacle.w - 4.0
-      obstacle.vx = -@types.absf(obstacle.vx) * 0.7
+      obstacle.vx = -obstacle.vx.abs() * 0.7
     }
 
     if obstacle.y > @types.world_bottom() + 120.0 {
@@ -607,12 +607,12 @@ fn use_hint(game : @types.Game) -> Bool {
         continue
       }
 
-      if @types.absf(obstacle.y - best_y) > 260.0 {
+      if (obstacle.y - best_y).abs() > 260.0 {
         continue
       }
 
       let ox : Float = obstacle.x + obstacle.w * 0.5
-      let dx : Float = @types.absf(ox - lane_x)
+      let dx : Float = (ox - lane_x).abs()
       cost = cost + @types.maxf(0.0, 220.0 - dx)
 
       if obstacle.kind == @types.obstacle_mine {

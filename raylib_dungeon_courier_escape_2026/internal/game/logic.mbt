@@ -756,7 +756,7 @@ fn update_guards(game : @types.Game, dt : Float) -> Float {
       @types.world_bottom - @types.guard_spawn_margin * 0.4,
     )
 
-    if @types.absf(guard_val.vx) + @types.absf(guard_val.vy) > 0.1 {
+    if guard_val.vx.abs() + guard_val.vy.abs() > 0.1 {
       guard_val.dir_deg = @types.heading_deg(guard_val.vx, guard_val.vy)
     }
 

@@ -107,12 +107,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of a float.
-fn absf(v : Float) -> Float {
-  v.abs()
-}
-
-///|
 /// Returns the squared Euclidean distance between two points.
 fn sqdist(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
@@ -681,7 +675,7 @@ fn main {
       }
 
       let ground = lane_y(runner.lane)
-      let grounded = runner.y >= ground - 0.4 && absf(runner.vy) < 16.0
+      let grounded = runner.y >= ground - 0.4 && runner.vy.abs() < 16.0
 
       if jump && grounded {
         runner.vy = -470.0
@@ -767,8 +761,8 @@ fn main {
         let ox = obstacle.x
         let oy = obstacle_hit_center_y(obstacle)
 
-        let hit_x = absf(run_x - ox) <= obstacle.w * 0.5 + 20.0
-        let hit_y = absf(run_y - oy) <= obstacle.h * 0.5 + 24.0
+        let hit_x = (run_x - ox).abs() <= obstacle.w * 0.5 + 20.0
+        let hit_y = (run_y - oy).abs() <= obstacle.h * 0.5 + 24.0
 
         if hit_x && hit_y {
           if runner.dash_t > 0.0 {
@@ -891,7 +885,7 @@ fn main {
           }
 
           if runner.lane == train.lane {
-            let train_hit_x = absf(runner.x - train.x) <= 210.0
+            let train_hit_x = (runner.x - train.x).abs() <= 210.0
             let train_hit_y = runner.y >= lane_y(train.lane) - 50.0
             if train_hit_x && train_hit_y && runner.invuln_t <= 0.0 {
               runner.hp = runner.hp - 2
