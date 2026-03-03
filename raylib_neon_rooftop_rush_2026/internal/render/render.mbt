@@ -75,8 +75,8 @@ fn draw_skyline(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     let sy = (i * 41 + 73) % (@types.screen_h / 2)
     let phase = game.time_s * 0.7 + Float::from_int(i) * 0.4
     let pulse : Float = 0.5 +
-      0.32 * @types.sinf(phase) +
-      0.18 * @types.cosf(phase * 1.7)
+      0.32 * @math.sinf(phase) +
+      0.18 * @math.cosf(phase * 1.7)
     let c = @raylib.Color::new(
       110 + (pulse * 70.0).to_int(),
       130 + (pulse * 70.0).to_int(),
@@ -198,7 +198,7 @@ fn draw_anchor(a : @types.Anchor, cam_x : Float, cam_y : Float) -> Unit {
     return
   }
 
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(a.glow_t)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(a.glow_t)
   let core = @types.color_mix(@types.neon_blue(), @types.neon_pink(), pulse)
   let halo_r : Float = 10.0 + pulse * 8.0
 
@@ -284,7 +284,7 @@ fn draw_obstacle(ob : @types.Obstacle, cam_x : Float, cam_y : Float) -> Unit {
       @types.neon_pink(),
     )
   } else if ob.kind == @types.obstacle_drone {
-    let pulse : Float = 0.5 + 0.5 * @types.sinf(ob.phase * 2.2)
+    let pulse : Float = 0.5 + 0.5 * @math.sinf(ob.phase * 2.2)
     let glow = @types.color_mix(@types.neon_blue(), @types.neon_pink(), pulse)
     @raylib.draw_ellipse(
       (x + ob.w * 0.5).to_int(),
@@ -313,7 +313,7 @@ fn draw_obstacle(ob : @types.Obstacle, cam_x : Float, cam_y : Float) -> Unit {
       @raylib.Color::new(70, 78, 100, 240),
     )
   } else {
-    let pulse : Float = 0.5 + 0.5 * @types.sinf(ob.phase)
+    let pulse : Float = 0.5 + 0.5 * @math.sinf(ob.phase)
     let c = @types.color_mix(@types.neon_pink(), @types.neon_orange(), pulse)
     @raylib.draw_rectangle(
       x.to_int(),
@@ -348,12 +348,12 @@ fn draw_chips(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     }
 
     let x = chip.x + cam_x
-    let y = chip.y + @types.sinf(chip.bob_t) * 9.0 + cam_y
+    let y = chip.y + @math.sinf(chip.bob_t) * 9.0 + cam_y
     if x < -40.0 || x > Float::from_int(@types.screen_w) + 40.0 {
       continue
     }
 
-    let spin : Float = 0.5 + 0.5 * @types.sinf(chip.spin_t)
+    let spin : Float = 0.5 + 0.5 * @math.sinf(chip.spin_t)
     let glow = @types.color_mix(@types.neon_lime(), @types.neon_blue(), spin)
 
     @raylib.draw_circle(
@@ -427,7 +427,7 @@ fn draw_hero(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
   let hx = hero.x + cam_x
   let hy = hero.y + cam_y
-  let run_pulse : Float = 0.5 + 0.5 * @types.sinf(hero.anim_t * 14.0)
+  let run_pulse : Float = 0.5 + 0.5 * @math.sinf(hero.anim_t * 14.0)
 
   if hero.grapple_t > 0.0 {
     let anchor_y = hero.grapple_target_y

@@ -509,10 +509,9 @@ fn update_hook(game : @types.Game, dt : Float) -> Unit {
     1.0
   }
 
-  let sway_x : Float = @types.sinf(game.ui_t * 1.2 + game.hook_y * 0.008) *
+  let sway_x : Float = @math.sinf(game.ui_t * 1.2 + game.hook_y * 0.008) *
     (22.0 + Float::from_int(game.wave) * 2.4)
-  let sway_y : Float = @types.cosf(game.ui_t * 0.86 + game.hook_x * 0.006) *
-    16.0
+  let sway_y : Float = @math.cosf(game.ui_t * 0.86 + game.hook_x * 0.006) * 16.0
 
   game.hook_vx = game.hook_vx + (game.move_x * 640.0 * boost_mul + sway_x) * dt
   game.hook_vy = game.hook_vy + (game.move_y * 620.0 * boost_mul + sway_y) * dt
@@ -593,10 +592,10 @@ fn update_fish(game : @types.Game, dt : Float) -> Unit {
     game.fish[i].phase = game.fish[i].phase +
       dt * (1.6 + Float::from_int(game.fish[i].kind) * 0.7)
 
-    let sw_x : Float = @types.sinf(game.fish[i].phase * 1.8) *
+    let sw_x : Float = @math.sinf(game.fish[i].phase * 1.8) *
       40.0 *
       fish_speed_mul(game.fish[i].kind)
-    let sw_y : Float = @types.cosf(game.fish[i].phase * 1.4) *
+    let sw_y : Float = @math.cosf(game.fish[i].phase * 1.4) *
       22.0 *
       fish_speed_mul(game.fish[i].kind)
 
@@ -659,8 +658,8 @@ fn update_hazards(game : @types.Game, dt : Float) -> Unit {
       dt * (1.1 + Float::from_int(hazard.kind) * 0.9)
 
     if hazard.kind == @types.hazard_jelly {
-      hazard.vx = hazard.vx + @types.sinf(hazard.phase * 1.7) * dt * 72.0
-      hazard.vy = hazard.vy + @types.cosf(hazard.phase * 1.3) * dt * 24.0
+      hazard.vx = hazard.vx + @math.sinf(hazard.phase * 1.7) * dt * 72.0
+      hazard.vy = hazard.vy + @math.cosf(hazard.phase * 1.3) * dt * 24.0
     } else if hazard.kind == @types.hazard_eel {
       let dx : Float = game.hook_x - hazard.x
       let dy : Float = game.hook_y - hazard.y
@@ -671,7 +670,7 @@ fn update_hazards(game : @types.Game, dt : Float) -> Unit {
       hazard.vx = hazard.vx * (1.0 - dt * 2.2) + nx * dt * 300.0
       hazard.vy = hazard.vy * (1.0 - dt * 2.2) + ny * dt * 300.0
     } else {
-      hazard.vx = hazard.vx + @types.sinf(hazard.phase * 2.5) * dt * 66.0
+      hazard.vx = hazard.vx + @math.sinf(hazard.phase * 2.5) * dt * 66.0
       hazard.vy = hazard.vy + dt * 44.0
     }
 
@@ -744,9 +743,9 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
     pickup.phase = pickup.phase + dt * 2.3
 
     pickup.x = pickup.x +
-      (pickup.vx + @types.sinf(pickup.phase * 2.0) * 20.0) * dt
+      (pickup.vx + @math.sinf(pickup.phase * 2.0) * 20.0) * dt
     pickup.y = pickup.y +
-      (pickup.vy + @types.cosf(pickup.phase * 1.3) * 18.0) * dt
+      (pickup.vy + @math.cosf(pickup.phase * 1.3) * 18.0) * dt
 
     if pickup.x < @types.world_left() + 16.0 {
       pickup.x = @types.world_left() + 16.0

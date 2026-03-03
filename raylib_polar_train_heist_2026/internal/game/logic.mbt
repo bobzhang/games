@@ -949,15 +949,15 @@ fn update_ents(game : @types.Game, dt : Float) -> Unit {
 
     if game.ents[i].kind == @types.ent_guard {
       game.ents[i].x = game.ents[i].x +
-        @types.sinf(game.ents[i].spin * 2.4) * 22.0 * dt
+        @math.sinf(game.ents[i].spin * 2.4) * 22.0 * dt
     } else if game.ents[i].kind == @types.ent_drone {
       game.ents[i].y = @types.lane_y(game.ents[i].lane) +
-        @types.sinf(game.ents[i].spin * 3.0) * 22.0
+        @math.sinf(game.ents[i].spin * 3.0) * 22.0
     } else if game.ents[i].kind == @types.ent_turret {
       game.ents[i].y = @types.lane_y(game.ents[i].lane) - 6.0
     } else if game.ents[i].kind == @types.ent_crate {
-      game.ents[i].w = 52.0 + @types.sinf(game.ents[i].spin * 2.0) * 4.0
-      game.ents[i].h = 52.0 + @types.sinf(game.ents[i].spin * 2.6) * 4.0
+      game.ents[i].w = 52.0 + @math.sinf(game.ents[i].spin * 2.0) * 4.0
+      game.ents[i].h = 52.0 + @math.sinf(game.ents[i].spin * 2.6) * 4.0
     }
 
     if game.ents[i].x < -220.0 {

@@ -1,6 +1,6 @@
 ///|
 fn ui_wave(game : @types.Game, k : Float) -> Float {
-  @types.sinf(game.ui_t * k)
+  @math.sinf(game.ui_t * k)
 }
 
 ///|
@@ -213,10 +213,10 @@ fn draw_obstacle(ob : @types.Obstacle, ox : Int, oy : Int) -> Unit {
 
     for i in 0..<8 {
       let a : Float = ob.phase + Float::from_int(i) * 0.785
-      let px0 : Int = (Float::from_int(cx) + @types.cosf(a) * (r - 2.0)).to_int()
-      let py0 : Int = (Float::from_int(cy) + @types.sinf(a) * (r - 2.0)).to_int()
-      let px1 : Int = (Float::from_int(cx) + @types.cosf(a) * (r + 10.0)).to_int()
-      let py1 : Int = (Float::from_int(cy) + @types.sinf(a) * (r + 10.0)).to_int()
+      let px0 : Int = (Float::from_int(cx) + @math.cosf(a) * (r - 2.0)).to_int()
+      let py0 : Int = (Float::from_int(cy) + @math.sinf(a) * (r - 2.0)).to_int()
+      let px1 : Int = (Float::from_int(cx) + @math.cosf(a) * (r + 10.0)).to_int()
+      let py1 : Int = (Float::from_int(cy) + @math.sinf(a) * (r + 10.0)).to_int()
       @raylib.draw_line(
         px0,
         py0,
@@ -258,7 +258,7 @@ fn draw_pickup(pk : @types.Pickup, ox : Int, oy : Int) -> Unit {
     return
   }
 
-  let pulse : Float = @types.sinf(pk.phase * 2.1)
+  let pulse : Float = @math.sinf(pk.phase * 2.1)
   let rr : Float = pickup_radius(pk.kind) + pulse * 1.8
   let c : @raylib.Color = pickup_color(pk.kind)
 
@@ -380,7 +380,7 @@ fn draw_raft(game : @types.Game, ox : Int, oy : Int) -> Unit {
   }
 
   if game.shield_t > 0.0 {
-    let pulse : Float = @types.sinf(game.ui_t * 8.0)
+    let pulse : Float = @math.sinf(game.ui_t * 8.0)
     @raylib.draw_circle_lines(
       cx,
       cy,
@@ -396,7 +396,7 @@ fn draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
     return
   }
 
-  let pulse : Float = @types.sinf(game.ui_t * 10.0)
+  let pulse : Float = @math.sinf(game.ui_t * 10.0)
   let alpha : Int = if game.hint_t > 1.2 {
     238
   } else {

@@ -15,7 +15,7 @@ fn draw_ocean_background(game : @types.Game) -> Unit {
   for i in 0..<18 {
     let y = 34 + i * 26
     let phase = game.time_s * 1.5 + Float::from_int(i) * 0.7
-    let xoff = (@types.sinf(phase) * 18.0).to_int()
+    let xoff = (@math.sinf(phase) * 18.0).to_int()
     @raylib.draw_line(
       18 + xoff,
       y,
@@ -53,7 +53,7 @@ fn draw_arena() -> Unit {
     let px = @types.arena_x0 + i * 50
     let y = @types.arena_y0 +
       20 +
-      (@types.sinf(Float::from_int(i) * 0.8) * 7.0).to_int()
+      (@math.sinf(Float::from_int(i) * 0.8) * 7.0).to_int()
     @raylib.draw_line(px, y, px + 34, y, @raylib.Color::new(182, 228, 252, 98))
   }
 }
@@ -153,7 +153,7 @@ fn draw_mines(game : @types.Game) -> Unit {
 
 ///|
 fn draw_submarine(game : @types.Game) -> Unit {
-  let shake_x = @types.sinf(game.time_s * 96.0) * game.shake_t * 7.0
+  let shake_x = @math.sinf(game.time_s * 96.0) * game.shake_t * 7.0
   let sx = game.sub_x + shake_x
   let sy = game.sub_y
   @raylib.draw_circle(
@@ -190,7 +190,7 @@ fn draw_submarine(game : @types.Game) -> Unit {
     (sy - 14.0).to_int(),
     fin_col,
   )
-  let prop_phase = @types.sinf(game.time_s * 24.0)
+  let prop_phase = @math.sinf(game.time_s * 24.0)
   @raylib.draw_line(
     (sx - @types.sub_r - 18.0).to_int(),
     (sy - 8.0 + prop_phase * 4.0).to_int(),
@@ -833,8 +833,7 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 fn draw_title_preview(game : @types.Game) -> Unit {
   let cx = Float::from_int(@types.screen_w / 2)
   let cy = Float::from_int(@types.screen_h / 2 - 26)
-  let wave : Float = Float::from_int(120) +
-    @types.sinf(game.time_s * 1.3) * 42.0
+  let wave : Float = Float::from_int(120) + @math.sinf(game.time_s * 1.3) * 42.0
   @raylib.draw_circle(
     cx.to_int(),
     cy.to_int(),

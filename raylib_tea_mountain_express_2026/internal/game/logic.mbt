@@ -300,7 +300,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
     game.tilt = game.tilt *
       (1.0 - @types.clampf(@types.stabilize_wobble_damp * dt, 0.0, 0.9))
   } else {
-    let wobble = @types.sinf(
+    let wobble = @math.sinf(
         game.world_t * 6.4 + Float::from_int(game.checkpoint_index) * 0.67,
       ) *
       @types.route_wobble_strength

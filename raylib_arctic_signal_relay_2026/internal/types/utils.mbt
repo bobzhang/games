@@ -27,18 +27,6 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the sine of `v` (in radians) as a Float.
-pub fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
-/// Returns the cosine of `v` (in radians) as a Float.
-pub fn cosf(v : Float) -> Float {
-  @math.cosf(v)
-}
-
-///|
 /// Returns a pseudo-random float sampled uniformly from `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let n = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0

@@ -102,7 +102,7 @@ fn draw_backdrop(game : @types.Game) -> Unit {
   @raylib.clear_background(@types.col(14, 15, 24, 255))
 
   for i in 0..<13 {
-    let wave = @types.sinf(game.crowd_wave_t * 0.38 + Float::from_int(i) * 0.37)
+    let wave = @math.sinf(game.crowd_wave_t * 0.38 + Float::from_int(i) * 0.37)
     let y = i * 78 + (wave * 12.0).to_int()
     let c = 20 + i * 7 % 24
     @raylib.draw_rectangle(
@@ -178,7 +178,7 @@ fn draw_stage_actors(game : @types.Game) -> Unit {
     (game.crowd_wave_t * 1.2).to_int() % @types.stance_count
   }
 
-  let rival_pulse : Float = 0.5 + 0.5 * @types.sinf(game.crowd_wave_t * 2.1)
+  let rival_pulse : Float = 0.5 + 0.5 * @math.sinf(game.crowd_wave_t * 2.1)
   let rival_glow : Float = 110.0 + rival_pulse * 110.0
   let rival_glow_a = @types.clampi(rival_glow.to_int(), 90, 220)
 
@@ -222,7 +222,7 @@ fn draw_stage_actors(game : @types.Game) -> Unit {
 fn draw_focus_cursor(game : @types.Game) -> Unit {
   let x = @types.lane_to_x(game.lane_x)
   let y = @types.lane_to_y(game.lane_y)
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(game.crowd_wave_t * 4.4)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(game.crowd_wave_t * 4.4)
   let radius : Float = 56.0 + pulse * 7.0
 
   @raylib.draw_circle_lines(x, y, radius, @types.col(255, 243, 210, 245))

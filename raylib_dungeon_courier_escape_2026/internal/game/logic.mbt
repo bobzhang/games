@@ -501,13 +501,13 @@ fn try_interact(game : @types.Game) -> Unit {
     if pidx >= 0 {
       let drop_x = @types.clampf(
         game.player.x +
-        @types.cosf(game.player.facing_deg * @types.deg_to_rad) * 24.0,
+        @math.cosf(game.player.facing_deg * @types.deg_to_rad) * 24.0,
         @types.world_left + 60.0,
         @types.world_right - 60.0,
       )
       let drop_y = @types.clampf(
         game.player.y +
-        @types.sinf(game.player.facing_deg * @types.deg_to_rad) * 24.0,
+        @math.sinf(game.player.facing_deg * @types.deg_to_rad) * 24.0,
         @types.world_top + 60.0,
         @types.world_bottom - 60.0,
       )
@@ -581,9 +581,9 @@ fn update_player_motion(game : @types.Game, dt : Float) -> Float {
     let pidx = game.player.carrying_parcel
     if pidx >= 0 && game.parcels[pidx].active {
       let follow_x = game.player.x -
-        @types.cosf(game.player.facing_deg * @types.deg_to_rad) * 8.0
+        @math.cosf(game.player.facing_deg * @types.deg_to_rad) * 8.0
       let follow_y = game.player.y -
-        @types.sinf(game.player.facing_deg * @types.deg_to_rad) * 8.0
+        @math.sinf(game.player.facing_deg * @types.deg_to_rad) * 8.0
       game.parcels[pidx].x = follow_x
       game.parcels[pidx].y = follow_y
     }

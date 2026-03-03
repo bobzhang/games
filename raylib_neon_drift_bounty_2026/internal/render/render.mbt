@@ -101,9 +101,9 @@ fn draw_sky_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   )
 
   let glow0x = Float::from_int(@types.screen_w) * 0.18 +
-    @types.sinf(game.time_s * 0.3) * 140.0
+    @math.sinf(game.time_s * 0.3) * 140.0
   let glow0y = Float::from_int(@types.screen_h) * 0.2 +
-    @types.cosf(game.time_s * 0.22) * 70.0
+    @math.cosf(game.time_s * 0.22) * 70.0
   @raylib.draw_circle(
     (glow0x + cam_x).to_int(),
     (glow0y + cam_y).to_int(),
@@ -112,9 +112,9 @@ fn draw_sky_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   )
 
   let glow1x = Float::from_int(@types.screen_w) * 0.82 +
-    @types.sinf(game.time_s * 0.24 + 0.9) * 130.0
+    @math.sinf(game.time_s * 0.24 + 0.9) * 130.0
   let glow1y = Float::from_int(@types.screen_h) * 0.76 +
-    @types.cosf(game.time_s * 0.16 + 1.1) * 80.0
+    @math.cosf(game.time_s * 0.16 + 1.1) * 80.0
   @raylib.draw_circle(
     (glow1x + cam_x).to_int(),
     (glow1y + cam_y).to_int(),
@@ -124,13 +124,13 @@ fn draw_sky_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
   for i in 0..<140 {
     let p = Float::from_int(i)
-    let x = (p * 77.0 + @types.sinf(game.time_s * 0.15 + p * 0.37) * 80.0) %
+    let x = (p * 77.0 + @math.sinf(game.time_s * 0.15 + p * 0.37) * 80.0) %
       Float::from_int(@types.screen_w)
     let mut y = (p * 43.0 + game.distance * 0.11 + p * 0.8) %
       Float::from_int(@types.screen_h)
     y = Float::from_int(@types.screen_h) - y
 
-    let pulse : Float = 0.5 + 0.5 * @types.sinf(game.time_s * 0.9 + p * 0.17)
+    let pulse : Float = 0.5 + 0.5 * @math.sinf(game.time_s * 0.9 + p * 0.17)
     @raylib.draw_circle(
       (x + cam_x).to_int(),
       (y + cam_y).to_int(),
@@ -158,7 +158,7 @@ fn draw_city_horizon(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       60
     let y = (base_y - Float::from_int(h) + cam_y * 0.3).to_int()
 
-    let pulse : Float = 0.5 + 0.5 * @types.sinf(game.time_s * 0.8 + p * 0.44)
+    let pulse : Float = 0.5 + 0.5 * @math.sinf(game.time_s * 0.8 + p * 0.44)
     @raylib.draw_rectangle(
       (Float::from_int(x) + cam_x * 0.28).to_int(),
       y,
@@ -216,7 +216,7 @@ fn draw_road_surface(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     )
 
     let line_pulse : Float = 0.5 +
-      0.5 * @types.sinf(d0 * 0.02 + game.time_s * 3.8)
+      0.5 * @math.sinf(d0 * 0.02 + game.time_s * 3.8)
     let road_col = if yi % 24 == 0 {
       @types.road_mid()
     } else {
@@ -339,7 +339,7 @@ fn draw_entity_drone(
   let x = e.x + cam_x
   let y = e.y + cam_y
   let r = e.w * 0.42
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(e.spin * 4.0)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(e.spin * 4.0)
 
   @raylib.draw_circle(x.to_int(), y.to_int(), r, alpha_color(col, 200))
   @raylib.draw_circle_lines(
@@ -401,7 +401,7 @@ fn draw_entity_laser(
 ) -> Unit {
   let x = e.x + cam_x
   let y = e.y + cam_y
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(e.spin * 4.6)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(e.spin * 4.6)
 
   @raylib.draw_rectangle(
     (x - e.w * 0.5).to_int(),
@@ -430,7 +430,7 @@ fn draw_entity_pickup(
   let x = e.x + cam_x
   let y = e.y + cam_y
   let r = e.w * 0.46
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(e.spin * 3.2)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(e.spin * 3.2)
 
   @raylib.draw_circle(
     x.to_int(),
@@ -655,7 +655,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
   let lean = @types.clampf(game.hero.vx / @types.player_max_speed_x, -1.0, 1.0)
   let rot = lean * 18.0
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(game.hero.engine_t * 8.2)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(game.hero.engine_t * 8.2)
 
   let body_col = if game.hero.hurt_t > 0.0 {
     @raylib.Color::new(255, 188, 204, 255)
@@ -728,7 +728,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
   if game.hero.invuln > 0.0 {
     let flicker = Float::from_int(80) +
-      @types.sinf(game.time_s * 14.0) * 70.0 +
+      @math.sinf(game.time_s * 14.0) * 70.0 +
       70.0
     let aa = @types.clampi(flicker.to_int(), 30, 220)
     @raylib.draw_circle(

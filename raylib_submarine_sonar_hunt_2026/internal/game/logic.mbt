@@ -121,12 +121,12 @@ fn spawn_mines(game : @types.Game) -> Unit {
         let a = @types.randf(0.0, 6.28318)
         let rr = @types.randf(30.0, @types.hot_zone_r - 10.0)
         cand_x = @types.clampf(
-          @types.hot_zone_x + @types.cosf(a) * rr,
+          @types.hot_zone_x + @math.cosf(a) * rr,
           @types.arena_left() + 24.0,
           @types.arena_right() - 24.0,
         )
         cand_y = @types.clampf(
-          @types.hot_zone_y + @types.sinf(a) * rr,
+          @types.hot_zone_y + @math.sinf(a) * rr,
           @types.arena_top() + 24.0,
           @types.arena_bottom() - 24.0,
         )

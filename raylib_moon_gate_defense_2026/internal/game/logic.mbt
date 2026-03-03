@@ -674,10 +674,10 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     }
 
     let tx = gx +
-      @types.sinf(game.enemies[i].phase * 1.6 + Float::from_int(i) * 0.13) *
+      @math.sinf(game.enemies[i].phase * 1.6 + Float::from_int(i) * 0.13) *
       wobble
     let ty = gy +
-      @types.cosf(game.enemies[i].phase * 1.3 + Float::from_int(i) * 0.11) *
+      @math.cosf(game.enemies[i].phase * 1.3 + Float::from_int(i) * 0.11) *
       wobble
 
     let dx = tx - game.enemies[i].x

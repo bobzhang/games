@@ -49,18 +49,6 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 }
 
 ///|
-/// Returns the sine of an angle in radians.
-pub fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
-/// Returns the cosine of an angle in radians.
-pub fn cosf(v : Float) -> Float {
-  @math.cosf(v)
-}
-
-///|
 /// Returns squared distance between two 2D points.
 pub fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx = x1 - x0

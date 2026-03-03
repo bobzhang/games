@@ -222,7 +222,7 @@ fn update_wave_lane(game : @types.Game, dt : Float) -> Unit {
   game.wave_t = game.wave_t + dt
 
   let wave_force : Float = 0.5 +
-    0.5 * @types.sinf(game.wave_t * 1.82 + game.distance * 0.004)
+    0.5 * @math.sinf(game.wave_t * 1.82 + game.distance * 0.004)
 
   game.lane = game.lane + game.input.steer * dt * 2.4
 
@@ -235,7 +235,7 @@ fn update_wave_lane(game : @types.Game, dt : Float) -> Unit {
     )
   }
 
-  let drift : Float = @types.sinf(
+  let drift : Float = @math.sinf(
       game.wave_t * 2.63 + game.distance * 0.002 + game.lane * 1.8,
     ) *
     dt *
@@ -361,7 +361,7 @@ fn update_rivals(game : @types.Game, dt : Float) -> Unit {
     }
 
     let tempo : Float = 0.5 +
-      0.5 * @types.sinf(rival.stroke_t + Float::from_int(rival.id) * 0.35)
+      0.5 * @math.sinf(rival.stroke_t + Float::from_int(rival.id) * 0.35)
 
     let mut rival_speed : Float = @types.base_speed +
       8.0 +
@@ -378,7 +378,7 @@ fn update_rivals(game : @types.Game, dt : Float) -> Unit {
       Float::from_int(rival.id) * 0.9
 
     rival.lane = @types.clampf(
-      rival.lane + @types.sinf(path_t) * dt * 0.3,
+      rival.lane + @math.sinf(path_t) * dt * 0.3,
       -1.02,
       1.02,
     )

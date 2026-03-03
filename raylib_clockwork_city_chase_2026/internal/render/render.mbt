@@ -90,9 +90,9 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   )
 
   let g0x = Float::from_int(@types.screen_w) * 0.2 +
-    @types.sinf(game.time_s * 0.28) * 140.0
+    @math.sinf(game.time_s * 0.28) * 140.0
   let g0y = Float::from_int(@types.screen_h) * 0.22 +
-    @types.cosf(game.time_s * 0.24) * 70.0
+    @math.cosf(game.time_s * 0.24) * 70.0
   @raylib.draw_circle(
     (g0x + cam_x).to_int(),
     (g0y + cam_y).to_int(),
@@ -101,9 +101,9 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   )
 
   let g1x = Float::from_int(@types.screen_w) * 0.8 +
-    @types.sinf(game.time_s * 0.22 + 0.9) * 130.0
+    @math.sinf(game.time_s * 0.22 + 0.9) * 130.0
   let g1y = Float::from_int(@types.screen_h) * 0.74 +
-    @types.cosf(game.time_s * 0.16 + 1.1) * 80.0
+    @math.cosf(game.time_s * 0.16 + 1.1) * 80.0
   @raylib.draw_circle(
     (g1x + cam_x).to_int(),
     (g1y + cam_y).to_int(),
@@ -113,13 +113,13 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
   for i in 0..<140 {
     let p = Float::from_int(i)
-    let x = (p * 79.0 + @types.sinf(game.time_s * 0.16 + p * 0.38) * 76.0) %
+    let x = (p * 79.0 + @math.sinf(game.time_s * 0.16 + p * 0.38) * 76.0) %
       Float::from_int(@types.screen_w)
     let mut y = (p * 44.0 + game.distance * 0.12 + p * 0.8) %
       Float::from_int(@types.screen_h)
     y = Float::from_int(@types.screen_h) - y
 
-    let pulse : Float = 0.5 + 0.5 * @types.sinf(game.time_s * 0.94 + p * 0.17)
+    let pulse : Float = 0.5 + 0.5 * @math.sinf(game.time_s * 0.94 + p * 0.17)
     @raylib.draw_circle(
       (x + cam_x).to_int(),
       (y + cam_y).to_int(),
@@ -147,7 +147,7 @@ fn draw_horizon(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       60
     let y = (base_y - Float::from_int(h) + cam_y * 0.3).to_int()
 
-    let pulse : Float = 0.5 + 0.5 * @types.sinf(game.time_s * 0.8 + p * 0.44)
+    let pulse : Float = 0.5 + 0.5 * @math.sinf(game.time_s * 0.8 + p * 0.44)
     @raylib.draw_rectangle(
       (Float::from_int(x) + cam_x * 0.28).to_int(),
       y,
@@ -204,7 +204,7 @@ fn draw_track(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       @types.screen_w + 180,
     )
 
-    let pulse : Float = 0.5 + 0.5 * @types.sinf(d0 * 0.02 + game.time_s * 3.8)
+    let pulse : Float = 0.5 + 0.5 * @math.sinf(d0 * 0.02 + game.time_s * 3.8)
     let road = if yi % 24 == 0 {
       @types.track_mid()
     } else {
@@ -325,7 +325,7 @@ fn draw_spinner(
   let x = o.x + cam_x
   let y = o.y + cam_y
   let r = o.w * 0.42
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(o.spin * 4.0)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(o.spin * 4.0)
 
   @raylib.draw_circle(x.to_int(), y.to_int(), r, @types.alpha_color(col, 200))
   @raylib.draw_circle_lines(
@@ -387,7 +387,7 @@ fn draw_gear_wall(
 ) -> Unit {
   let x = o.x + cam_x
   let y = o.y + cam_y
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(o.spin * 4.6)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(o.spin * 4.6)
 
   @raylib.draw_rectangle(
     (x - o.w * 0.5).to_int(),
@@ -416,7 +416,7 @@ fn draw_pickup(
   let x = o.x + cam_x
   let y = o.y + cam_y
   let r = o.w * 0.46
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(o.spin * 3.2)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(o.spin * 3.2)
 
   @raylib.draw_circle(
     x.to_int(),
@@ -637,7 +637,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
   let lean = @types.clampf(game.hero.vx / @types.max_speed_x, -1.0, 1.0)
   let rot = lean * 18.0
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(game.hero.engine_t * 8.2)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(game.hero.engine_t * 8.2)
 
   let body = if game.hero.hurt_t > 0.0 {
     @raylib.Color::new(255, 188, 204, 255)
@@ -710,7 +710,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
   if game.hero.invuln > 0.0 {
     let flicker = Float::from_int(80) +
-      @types.sinf(game.time_s * 14.0) * 70.0 +
+      @math.sinf(game.time_s * 14.0) * 70.0 +
       70.0
     let aa = @types.clampi(flicker.to_int(), 30, 220)
     @raylib.draw_circle(

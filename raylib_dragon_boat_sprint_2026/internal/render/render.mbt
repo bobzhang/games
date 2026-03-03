@@ -17,8 +17,8 @@ fn world_y(game : @types.Game, dist : Float) -> Float {
 fn draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 20, 34, 255))
 
-  let glow0 : Float = 0.5 + 0.5 * @types.sinf(game.ui_t * 0.62)
-  let glow1 : Float = 0.5 + 0.5 * @types.cosf(game.ui_t * 0.48)
+  let glow0 : Float = 0.5 + 0.5 * @math.sinf(game.ui_t * 0.62)
+  let glow1 : Float = 0.5 + 0.5 * @math.cosf(game.ui_t * 0.48)
 
   @raylib.draw_circle(
     230,
@@ -91,13 +91,13 @@ fn draw_river_surface(game : @types.Game) -> Unit {
     let y_wave : Int = @types.river_y +
       14 +
       i * 40 +
-      (@types.sinf(game.ui_t * 1.3 + Float::from_int(i) * 0.45) * 12.0).to_int()
+      (@math.sinf(game.ui_t * 1.3 + Float::from_int(i) * 0.45) * 12.0).to_int()
     @raylib.draw_line(
       @types.river_x + 8,
       y_wave,
       @types.river_x + @types.river_w - 10,
       y_wave +
-      (@types.sinf(game.ui_t * 0.8 + Float::from_int(i) * 0.32) * 8.0).to_int(),
+      (@math.sinf(game.ui_t * 0.8 + Float::from_int(i) * 0.32) * 8.0).to_int(),
       @raylib.Color::new(154, 220, 244, 46),
     )
   }
@@ -153,7 +153,7 @@ fn draw_hazards(game : @types.Game) -> Unit {
     }
 
     let x : Int = lane_to_x(
-      hazard.lane + @types.sinf(game.ui_t * 0.9 + hazard.phase) * 0.03,
+      hazard.lane + @math.sinf(game.ui_t * 0.9 + hazard.phase) * 0.03,
     ).to_int()
 
     let y : Int = world_y(game, hazard.dist).to_int()

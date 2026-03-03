@@ -43,18 +43,6 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 }
 
 ///|
-/// Returns the sine of an angle in radians.
-pub fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
-/// Returns the cosine of an angle in radians.
-pub fn cosf(v : Float) -> Float {
-  @math.cosf(v)
-}
-
-///|
 /// Returns a pseudo-random float sampled from `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let n = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
@@ -93,15 +81,15 @@ pub fn ease_out_cubic(t : Float) -> Float {
 /// Returns world-space coordinates for track center.
 pub fn track_center(depth : Float, time_s : Float) -> Float {
   let c = Float::from_int(screen_w / 2)
-  let sway0 = sinf(depth * 0.0025 + time_s * 0.68) * 150.0
-  let sway1 = sinf(depth * 0.004 + time_s * 1.18 + 1.2) * 86.0
+  let sway0 = @math.sinf(depth * 0.0025 + time_s * 0.68) * 150.0
+  let sway1 = @math.sinf(depth * 0.004 + time_s * 1.18 + 1.2) * 86.0
   c + sway0 + sway1
 }
 
 ///|
 /// Returns geometry information for track half width.
 pub fn track_half_width(stage : Int, depth : Float, time_s : Float) -> Float {
-  let wobble = sinf(depth * 0.0035 + time_s * 0.92 + 0.8) * 58.0
+  let wobble = @math.sinf(depth * 0.0035 + time_s * 0.92 + 0.8) * 58.0
   let shrink = Float::from_int(stage - 1) * 10.0
   clampf(
     Float::from_int(305) + wobble - shrink,

@@ -694,8 +694,8 @@ fn apply_dash(game : @types.Game) -> Unit {
   let mut dy = game.input_y
 
   if dx.abs() < 0.01 && dy.abs() < 0.01 {
-    dx = @types.sinf(game.hero.angle * 0.017)
-    dy = -@types.cosf(game.hero.angle * 0.017)
+    dx = @math.sinf(game.hero.angle * 0.017)
+    dy = -@math.cosf(game.hero.angle * 0.017)
   }
 
   let n2 = @types.maxf(0.01, dx * dx + dy * dy)
@@ -850,14 +850,14 @@ fn update_foes(game : @types.Game, dt : Float) -> Unit {
 
     if game.foes[i].kind == @types.foe_wisp {
       game.foes[i].vx = game.foes[i].vx +
-        @types.sinf(game.foes[i].phase * 11.0) * 30.0 * dt
+        @math.sinf(game.foes[i].phase * 11.0) * 30.0 * dt
       game.foes[i].vy = game.foes[i].vy +
-        @types.cosf(game.foes[i].phase * 9.0) * 26.0 * dt
+        @math.cosf(game.foes[i].phase * 9.0) * 26.0 * dt
     } else if game.foes[i].kind == @types.foe_shaman {
       game.foes[i].vx = game.foes[i].vx +
-        @types.cosf(game.foes[i].phase * 4.2) * 40.0 * dt
+        @math.cosf(game.foes[i].phase * 4.2) * 40.0 * dt
       game.foes[i].vy = game.foes[i].vy +
-        @types.sinf(game.foes[i].phase * 4.8) * 40.0 * dt
+        @math.sinf(game.foes[i].phase * 4.8) * 40.0 * dt
       game.foes[i].shot_cd = game.foes[i].shot_cd - dt
       if game.foes[i].shot_cd <= 0.0 {
         fire_shaman_bolt(game, game.foes[i])
@@ -865,9 +865,9 @@ fn update_foes(game : @types.Game, dt : Float) -> Unit {
       }
     } else if game.foes[i].kind == @types.foe_relic {
       game.foes[i].vx = game.foes[i].vx +
-        @types.sinf(game.foes[i].phase * 6.0) * 34.0 * dt
+        @math.sinf(game.foes[i].phase * 6.0) * 34.0 * dt
       game.foes[i].vy = game.foes[i].vy +
-        @types.cosf(game.foes[i].phase * 7.0) * 34.0 * dt
+        @math.cosf(game.foes[i].phase * 7.0) * 34.0 * dt
     }
 
     let speed_cap : Float = if game.foes[i].kind == @types.foe_wisp {

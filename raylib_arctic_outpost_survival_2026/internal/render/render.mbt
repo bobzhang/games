@@ -1,7 +1,7 @@
 ///|
 /// Returns the sine of `game.ui_t * k`, used to animate background elements.
 fn bg_noise(game : @types.Game, k : Float) -> Float {
-  @types.sinf(game.ui_t * k)
+  @math.sinf(game.ui_t * k)
 }
 
 ///|
@@ -135,10 +135,10 @@ fn draw_storm(game : @types.Game, ox : Int, oy : Int) -> Unit {
     let t : Float = Float::from_int(i)
     let sx : Float = @types.world_left() +
       Float::from_int(i * 73 % @types.world_w) +
-      @types.sinf(game.storm_t * (0.9 + t * 0.01) + t * 0.7) * 30.0
+      @math.sinf(game.storm_t * (0.9 + t * 0.01) + t * 0.7) * 30.0
     let sy : Float = @types.world_top() +
       Float::from_int(i * 41 % @types.world_h) +
-      @types.cosf(game.storm_t * (1.1 + t * 0.006) + t * 0.3) * 24.0
+      @math.cosf(game.storm_t * (1.1 + t * 0.006) + t * 0.3) * 24.0
 
     let ex : Float = sx - 30.0 * swirl
     let ey : Float = sy + 18.0 * swirl
@@ -157,7 +157,7 @@ fn draw_storm(game : @types.Game, ox : Int, oy : Int) -> Unit {
 /// Draws the central generator: a dark outer ring, a heat-ratio-colored pulsing body circle, a dark inner circle, six orbiting satellite dots, and a "CORE" label.
 fn draw_core(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let heat_ratio : Float = @types.clampf(game.core_heat / 100.0, 0.0, 1.0)
-  let pulse : Float = @types.sinf(game.ui_t * 6.0)
+  let pulse : Float = @math.sinf(game.ui_t * 6.0)
 
   let cx : Int = @types.core_x().to_int() + ox
   let cy : Int = @types.core_y().to_int() + oy
@@ -190,9 +190,9 @@ fn draw_core(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
   for i in 0..<6 {
     let a : Float = game.ui_t * 0.8 + Float::from_int(i) * 1.047
-    let px : Int = (@types.core_x() + @types.cosf(a) * (@types.core_r + 20.0)).to_int() +
+    let px : Int = (@types.core_x() + @math.cosf(a) * (@types.core_r + 20.0)).to_int() +
       ox
-    let py : Int = (@types.core_y() + @types.sinf(a) * (@types.core_r + 20.0)).to_int() +
+    let py : Int = (@types.core_y() + @math.sinf(a) * (@types.core_r + 20.0)).to_int() +
       oy
     @raylib.draw_circle(px, py, 6.0, @raylib.Color::new(212, 236, 255, 186))
   }
@@ -268,12 +268,12 @@ fn draw_enemy(enemy : @types.Enemy, ox : Int, oy : Int) -> Unit {
       @raylib.draw_triangle(
         @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
         @raylib.Vector2::new(
-          (enemy.x + @types.cosf(a1) * (r + 8.0)).to_int() |> Float::from_int,
-          (enemy.y + @types.sinf(a1) * (r + 8.0)).to_int() |> Float::from_int,
+          (enemy.x + @math.cosf(a1) * (r + 8.0)).to_int() |> Float::from_int,
+          (enemy.y + @math.sinf(a1) * (r + 8.0)).to_int() |> Float::from_int,
         ),
         @raylib.Vector2::new(
-          (enemy.x + @types.cosf(a2) * (r + 8.0)).to_int() |> Float::from_int,
-          (enemy.y + @types.sinf(a2) * (r + 8.0)).to_int() |> Float::from_int,
+          (enemy.x + @math.cosf(a2) * (r + 8.0)).to_int() |> Float::from_int,
+          (enemy.y + @math.sinf(a2) * (r + 8.0)).to_int() |> Float::from_int,
         ),
         c0,
       )
@@ -306,7 +306,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
 
   let x : Int = p.x.to_int() + ox
   let y : Int = p.y.to_int() + oy
-  let pulse : Float = @types.sinf(p.phase * 2.4)
+  let pulse : Float = @math.sinf(p.phase * 2.4)
   let rr : Float = @types.pickup_radius(p.kind) + pulse * 1.8
 
   let c : @raylib.Color = pickup_color(p.kind)
@@ -458,7 +458,7 @@ fn draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
   )
 
   if game.overdrive_t > 0.0 {
-    let pulse : Float = @types.sinf(game.ui_t * 9.0)
+    let pulse : Float = @math.sinf(game.ui_t * 9.0)
     @raylib.draw_circle_lines(
       x,
       y,
@@ -475,7 +475,7 @@ fn draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
     return
   }
 
-  let pulse : Float = @types.sinf(game.ui_t * 11.0)
+  let pulse : Float = @math.sinf(game.ui_t * 11.0)
   let alpha : Int = if game.hint_t > 1.2 {
     238
   } else {

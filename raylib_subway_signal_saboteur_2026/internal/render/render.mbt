@@ -18,7 +18,7 @@ fn shake_dy(game : @types.Game) -> Int {
 
 ///|
 fn pulse(game : @types.Game, f : Float) -> Float {
-  0.5 + 0.5 * @types.sinf(game.time_s * f)
+  0.5 + 0.5 * @math.sinf(game.time_s * f)
 }
 
 ///|

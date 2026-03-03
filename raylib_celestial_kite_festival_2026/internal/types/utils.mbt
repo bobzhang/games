@@ -37,18 +37,6 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the sine of an angle in radians.
-pub fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
-/// Returns the cosine of an angle in radians.
-pub fn cosf(v : Float) -> Float {
-  @math.cosf(v)
-}
-
-///|
 /// Linearly interpolates between two floats using `t` in `[0, 1]`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t
@@ -293,7 +281,7 @@ pub fn kite_hit_r(k : Kite) -> Float {
 ///|
 /// Returns world-space coordinates for kite anchor x.
 pub fn kite_anchor_x(game : Game) -> Float {
-  Float::from_int(screen_w) * 0.5 + sinf(game.time_s * 0.42) * 120.0
+  Float::from_int(screen_w) * 0.5 + @math.sinf(game.time_s * 0.42) * 120.0
 }
 
 ///|

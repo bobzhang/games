@@ -243,9 +243,8 @@ fn undo_last_pose(game : @types.Game) -> Unit {
 
 ///|
 fn update_title_state(game : @types.Game) -> Unit {
-  game.excitement = 18.0 + (0.5 + 0.5 * @types.sinf(game.scene_t * 0.8)) * 14.0
-  game.spotlight = @types.spotlight_start +
-    @types.sinf(game.scene_t * 0.6) * 8.0
+  game.excitement = 18.0 + (0.5 + 0.5 * @math.sinf(game.scene_t * 0.8)) * 14.0
+  game.spotlight = @types.spotlight_start + @math.sinf(game.scene_t * 0.6) * 8.0
 
   if game.input.start_pressed {
     start_show(game)

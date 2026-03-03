@@ -48,12 +48,6 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the sine of an angle in radians.
-pub fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
 /// Normalizes a 2D vector and returns `(x, y)` components.
 pub fn normalize2(x : Float, y : Float) -> (Float, Float) {
   let len2 = x * x + y * y

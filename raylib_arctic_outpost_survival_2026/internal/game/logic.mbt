@@ -691,17 +691,17 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     let speed : Float = enemy_speed(game, enemy.kind)
 
     let swirl_x : Float = if enemy.kind == @types.enemy_shard {
-      @types.sinf(enemy.phase * 5.0) * 120.0
+      @math.sinf(enemy.phase * 5.0) * 120.0
     } else if enemy.kind == @types.enemy_wolf {
-      @types.sinf(enemy.phase * 3.0) * 64.0
+      @math.sinf(enemy.phase * 3.0) * 64.0
     } else {
-      @types.sinf(enemy.phase * 1.3) * 24.0
+      @math.sinf(enemy.phase * 1.3) * 24.0
     }
 
     let swirl_y : Float = if enemy.kind == @types.enemy_shard {
-      @types.cosf(enemy.phase * 4.0) * 96.0
+      @math.cosf(enemy.phase * 4.0) * 96.0
     } else {
-      @types.cosf(enemy.phase * 1.8) * 22.0
+      @math.cosf(enemy.phase * 1.8) * 22.0
     }
 
     enemy.vx = enemy.vx * (1.0 - dt * 2.2) +
@@ -772,7 +772,7 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
 
     pickup.phase = pickup.phase + dt * 2.2
     pickup.x = pickup.x +
-      (pickup.vx + @types.sinf(pickup.phase * 2.0) * 24.0) * dt
+      (pickup.vx + @math.sinf(pickup.phase * 2.0) * 24.0) * dt
     pickup.y = pickup.y + (pickup.vy + Float::from_int(game.wave) * 3.0) * dt
 
     if pickup.x < @types.world_left() + 16.0 {
@@ -891,8 +891,8 @@ fn use_hint(game : @types.Game) -> Bool {
 /// Drains core heat each frame by a base rate plus wave-scaled enemy pressure and a sinusoidal storm intensity.
 fn passive_heat_decay(game : @types.Game, dt : Float) -> Unit {
   let storm : Float = 0.5 +
-    @types.sinf(game.storm_t * 1.2) * 0.3 +
-    @types.cosf(game.storm_t * 0.7) * 0.2
+    @math.sinf(game.storm_t * 1.2) * 0.3 +
+    @math.cosf(game.storm_t * 0.7) * 0.2
 
   let enemy_pressure : Float = Float::from_int(game.wave) * 0.16
   let decay : Float = (1.35 + enemy_pressure + storm) * dt

@@ -32,7 +32,7 @@ fn world_to_screen(
 ///|
 fn ring_color(game : @types.Game, ring : Int) -> @raylib.Color {
   let phase = game.time_s * 1.2 + Float::from_int(ring) * 0.9
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(phase)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(phase)
   if game.phase_beta {
     @raylib.Color::new(
       180 + (pulse * 60.0).to_int(),
@@ -66,8 +66,8 @@ fn draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     let py = (i * 43 + 91) % @types.screen_h
     let phase = game.time_s * 0.4 + Float::from_int(i) * 0.21
     let v : Float = 0.5 +
-      0.3 * @types.sinf(phase) +
-      0.2 * @types.cosf(phase * 1.6)
+      0.3 * @math.sinf(phase) +
+      0.2 * @math.cosf(phase * 1.6)
     let star_r : Float = 0.8 + v * 1.8
     @raylib.draw_circle(
       px,
@@ -235,7 +235,7 @@ fn draw_enemy(
       @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 160),
     )
   } else if e.kind == 2 {
-    let pulse : Float = 0.5 + 0.5 * @types.sinf(e.spin * 2.9)
+    let pulse : Float = 0.5 + 0.5 * @math.sinf(e.spin * 2.9)
     let mine_r : Float = e.size + pulse * 4.0
     @raylib.draw_circle(
       s.0.to_int(),
@@ -396,12 +396,12 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let a = game.player.angle
   let tangent = a + @types.pi * 0.5
 
-  let nose_x = s.0 + @types.cosf(tangent) * 24.0
-  let nose_y = s.1 + @types.sinf(tangent) * 24.0
-  let left_x = s.0 + @types.cosf(tangent + 2.5) * 16.0
-  let left_y = s.1 + @types.sinf(tangent + 2.5) * 16.0
-  let right_x = s.0 + @types.cosf(tangent - 2.5) * 16.0
-  let right_y = s.1 + @types.sinf(tangent - 2.5) * 16.0
+  let nose_x = s.0 + @math.cosf(tangent) * 24.0
+  let nose_y = s.1 + @math.sinf(tangent) * 24.0
+  let left_x = s.0 + @math.cosf(tangent + 2.5) * 16.0
+  let left_y = s.1 + @math.sinf(tangent + 2.5) * 16.0
+  let right_x = s.0 + @math.cosf(tangent - 2.5) * 16.0
+  let right_y = s.1 + @math.sinf(tangent - 2.5) * 16.0
 
   let core_col = if game.phase_beta {
     @types.ring_beta()

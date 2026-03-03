@@ -390,7 +390,7 @@ fn spawn_chip_arc(
   for i in 0..<steps {
     let t = Float::from_int(i) / Float::from_int(steps - 1)
     let px = @types.lerpf(x0, x1, t)
-    let py = roof_y - 54.0 - @types.sinf(t * 3.14159) * 80.0
+    let py = roof_y - 54.0 - @math.sinf(t * 3.14159) * 80.0
     spawn_chip(game, px, py)
   }
 }
@@ -582,7 +582,7 @@ fn shift_world(game : @types.Game, dx : Float) -> Unit {
     obstacle.phase = obstacle.phase + 1.7 * dx * 0.01
     if obstacle.kind == @types.obstacle_drone {
       obstacle.x = obstacle.x + obstacle.vx * 0.04
-      obstacle.y = obstacle.y + @types.sinf(obstacle.phase) * 0.9
+      obstacle.y = obstacle.y + @math.sinf(obstacle.phase) * 0.9
     }
 
     if obstacle.hit_lock > 0.0 {
@@ -916,7 +916,7 @@ fn update_obstacles(game : @types.Game, dt : Float) -> Unit {
 
     if obstacle.kind == @types.obstacle_drone {
       obstacle.phase = obstacle.phase + dt * 3.8
-      obstacle.y = obstacle.y + @types.sinf(obstacle.phase) * 26.0 * dt
+      obstacle.y = obstacle.y + @math.sinf(obstacle.phase) * 26.0 * dt
     }
 
     if obstacle.kind == @types.obstacle_laser {
@@ -956,7 +956,7 @@ fn update_obstacles(game : @types.Game, dt : Float) -> Unit {
     }
 
     if obstacle.kind == @types.obstacle_laser {
-      let pulse : Float = 0.5 + 0.5 * @types.sinf(obstacle.phase)
+      let pulse : Float = 0.5 + 0.5 * @math.sinf(obstacle.phase)
       if pulse < 0.35 {
         ignored_hit = true
       }
@@ -1005,7 +1005,7 @@ fn update_chips(game : @types.Game, _dt : Float) -> Unit {
       continue
     }
 
-    let bob_y = chip.y + @types.sinf(chip.bob_t) * 9.0
+    let bob_y = chip.y + @math.sinf(chip.bob_t) * 9.0
     let d2 = @types.dist_sq(cx, cy, chip.x, bob_y)
     if d2 <= 34.0 * 34.0 {
       chip.active = false
@@ -1160,7 +1160,7 @@ fn init_title_scene(game : @types.Game) -> Unit {
 /// Advances the title screen demo: scrolls the world at a sinusoidally varying speed, pins the hero to the floor, spawns ambient particles, and starts a run if any start input is detected.
 fn update_title_scene(game : @types.Game, dt : Float) -> Unit {
   game.title_t = game.title_t + dt
-  let demo_speed : Float = 160.0 + @types.sinf(game.title_t * 0.6) * 30.0
+  let demo_speed : Float = 160.0 + @math.sinf(game.title_t * 0.6) * 30.0
   shift_world(game, demo_speed * dt)
   ensure_world(game)
 

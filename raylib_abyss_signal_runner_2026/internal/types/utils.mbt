@@ -37,18 +37,6 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Computes `sin(v)` and returns the result as `Float`.
-pub fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
-/// Computes `cos(v)` and returns the result as `Float`.
-pub fn cosf(v : Float) -> Float {
-  @math.cosf(v)
-}
-
-///|
 /// Returns a pseudo-random float sampled from `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let r = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
@@ -86,15 +74,15 @@ pub fn ease_out_quad(t : Float) -> Float {
 /// Computes cave center X at depth `y` and time `t`.
 pub fn cave_center(y : Float, t : Float) -> Float {
   let base = Float::from_int(screen_w / 2)
-  let s0 = sinf(y * 0.004 + t * 0.6) * 170.0
-  let s1 = sinf(y * 0.0022 + t * 1.1 + 1.4) * 80.0
+  let s0 = @math.sinf(y * 0.004 + t * 0.6) * 170.0
+  let s1 = @math.sinf(y * 0.0022 + t * 1.1 + 1.4) * 80.0
   base + s0 + s1
 }
 
 ///|
 /// Computes cave half-width at depth/time with stage-based narrowing.
 pub fn cave_half_width(y : Float, t : Float, stage : Int) -> Float {
-  let wobble = sinf(y * 0.0033 + t * 0.7 + 0.9) * 62.0
+  let wobble = @math.sinf(y * 0.0033 + t * 0.7 + 0.9) * 62.0
   let shrink = Float::from_int(stage - 1) * 8.0
   clampf(cave_max_half + wobble - shrink, cave_min_half, cave_max_half)
 }

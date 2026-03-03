@@ -43,18 +43,6 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 }
 
 ///|
-/// Computes the sine of `v` in radians.
-pub fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
-/// Computes the cosine of `v` in radians.
-pub fn cosf(v : Float) -> Float {
-  @math.cosf(v)
-}
-
-///|
 /// Applies an ease-out cubic curve to a normalized value.
 pub fn ease_out_cubic(t : Float) -> Float {
   let x = clampf(t, 0.0, 1.0)

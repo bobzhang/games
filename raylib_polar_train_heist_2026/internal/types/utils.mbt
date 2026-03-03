@@ -43,18 +43,6 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 }
 
 ///|
-/// Computes the sine of `v` in radians.
-pub fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
-/// Computes the cosine of `v` in radians.
-pub fn cosf(v : Float) -> Float {
-  @math.cosf(v)
-}
-
-///|
 /// Returns a random float in `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let n = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0

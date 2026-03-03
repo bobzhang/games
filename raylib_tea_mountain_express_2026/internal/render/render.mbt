@@ -53,7 +53,7 @@ fn draw_background(game : @types.Game) -> Unit {
 
   for i in 0..<9 {
     let fi = Float::from_int(i)
-    let drift = @types.sinf(game.world_t * 0.18 + fi * 0.73) * 70.0
+    let drift = @math.sinf(game.world_t * 0.18 + fi * 0.73) * 70.0
     let ridge_y = 170 + i * 62
     let ridge_h = 240 - i * 18
 
@@ -73,11 +73,11 @@ fn draw_background(game : @types.Game) -> Unit {
 
   for i in 0..<26 {
     let fi = Float::from_int(i)
-    let x = (fi * 78.0 + game.world_t * 16.0 + @types.sinf(fi * 1.3) * 40.0) %
+    let x = (fi * 78.0 + game.world_t * 16.0 + @math.sinf(fi * 1.3) * 40.0) %
       Float::from_int(@types.screen_w)
     let y : Float = 86.0 +
       fi * 8.4 +
-      @types.cosf(game.world_t * 0.55 + fi) * 18.0
+      @math.cosf(game.world_t * 0.55 + fi) * 18.0
     @raylib.draw_circle(
       x.to_int(),
       y.to_int(),

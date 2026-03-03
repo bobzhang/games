@@ -536,7 +536,7 @@ fn update_enemy_seek(game : @types.Game, idx : Int, dt : Float) -> Unit {
 
   let side_x : Float = -dir.1
   let side_y : Float = dir.0
-  let sidestep : Float = @types.sinf(
+  let sidestep : Float = @math.sinf(
       game.enemies[idx].visual_phase * 3.0 + game.ui_t * 1.6,
     ) *
     48.0

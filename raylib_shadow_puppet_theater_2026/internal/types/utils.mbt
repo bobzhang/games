@@ -37,12 +37,6 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns sine of `v` where `v` is in radians.
-pub fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
 /// Returns true when two poses match on both axes.
 pub fn same_pose(a : Pose, b : Pose) -> Bool {
   a.ax == b.ax && a.ay == b.ay

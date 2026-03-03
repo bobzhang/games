@@ -83,10 +83,10 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   )
 
   let moon_x = Float::from_int(@types.screen_w) * 0.78 +
-    @types.sinf(game.time_s * 0.12) * 34.0
+    @math.sinf(game.time_s * 0.12) * 34.0
   let moon_y = Float::from_int(@types.hud_h) +
     86.0 +
-    @types.cosf(game.time_s * 0.18) * 18.0
+    @math.cosf(game.time_s * 0.18) * 18.0
   @raylib.draw_circle(
     (moon_x + cam_x * 0.24).to_int(),
     (moon_y + cam_y * 0.24).to_int(),
@@ -108,7 +108,7 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       Float::from_int(@types.screen_h - @types.hud_h)
     y = y + Float::from_int(@types.hud_h)
 
-    let tw : Float = 0.45 + 0.55 * @types.sinf(fi * 0.73 + game.time_s * 1.4)
+    let tw : Float = 0.45 + 0.55 * @math.sinf(fi * 0.73 + game.time_s * 1.4)
     let alpha = 60 + (tw * 110.0).to_int()
     @raylib.draw_circle(
       (x + cam_x * 0.12).to_int(),
@@ -123,13 +123,13 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     let base_y = Float::from_int(@types.hud_h) + 56.0 + fb * 42.0
     for x = -120; x < @types.screen_w + 180; x = x + 26 {
       let fx = Float::from_int(x)
-      let wave = @types.sinf(fx * 0.012 + game.time_s * (0.8 + fb * 0.2) + fb)
-      let wave2 = @types.cosf(
+      let wave = @math.sinf(fx * 0.012 + game.time_s * (0.8 + fb * 0.2) + fb)
+      let wave2 = @math.cosf(
         fx * 0.018 + game.time_s * (0.46 + fb * 0.16) + fb * 1.2,
       )
       let y = base_y + wave * (26.0 + fb * 5.0) + wave2 * (16.0 + fb * 3.0)
       let glow : Float = 0.45 +
-        0.55 * @types.sinf(fx * 0.01 + game.time_s * 1.2 + fb * 0.8)
+        0.55 * @math.sinf(fx * 0.01 + game.time_s * 1.2 + fb * 0.8)
       let col = if band % 2 == 0 {
         @raylib.Color::new(84, 224 + (glow * 20.0).to_int(), 186, 42)
       } else {
@@ -172,11 +172,11 @@ fn draw_mountains(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       let base_x = Float::from_int(i * 180) - shift
       let peak_x = base_x +
         90.0 +
-        @types.sinf(Float::from_int(i) * 0.6 + depth) * 32.0
+        @math.sinf(Float::from_int(i) * 0.6 + depth) * 32.0
       let peak_y = horizon -
         120.0 -
         depth * 42.0 -
-        @types.sinf(Float::from_int(i) * 0.7 + game.time_s * 0.06).abs() * 30.0
+        @math.sinf(Float::from_int(i) * 0.7 + game.time_s * 0.06).abs() * 30.0
       let right_x = base_x + 180.0
 
       @raylib.draw_triangle(
@@ -394,7 +394,7 @@ fn draw_shadow_blobs(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     let col = @raylib.Color::new(30, 64, 104, a)
 
     let stretch : Float = Float::from_int(1) +
-      @types.sinf(shadow.rot * 0.05).abs() * 0.24
+      @math.sinf(shadow.rot * 0.05).abs() * 0.24
     let kind_boost = Float::from_int(shadow.kind) * 0.08
     @raylib.draw_rectangle(
       (shadow.x - shadow.w * (0.5 + kind_boost) + cam_x * 0.34).to_int(),
@@ -462,7 +462,7 @@ fn draw_drone(
 ) -> Unit {
   let x = e.x + cam_x
   let y = e.y + cam_y
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(e.spin * 4.0)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(e.spin * 4.0)
 
   @raylib.draw_circle(x.to_int(), y.to_int(), e.w * 0.36, col)
   @raylib.draw_circle(
@@ -486,8 +486,8 @@ fn draw_drone(
   )
 
   @raylib.draw_circle(
-    (x + @types.cosf(e.spin * 3.2) * 16.0).to_int(),
-    (y + @types.sinf(e.spin * 2.9) * 16.0).to_int(),
+    (x + @math.cosf(e.spin * 3.2) * 16.0).to_int(),
+    (y + @math.sinf(e.spin * 2.9) * 16.0).to_int(),
     4.0 + pulse * 2.0,
     @raylib.Color::new(220, 255, 255, 200),
   )
@@ -628,7 +628,7 @@ fn draw_pickup(
       @raylib.Color::new(12, 42, 34, 220),
     )
   } else {
-    let pulse : Float = 0.5 + 0.5 * @types.sinf(e.spin * 3.5)
+    let pulse : Float = 0.5 + 0.5 * @math.sinf(e.spin * 3.5)
     @raylib.draw_circle(x.to_int(), y.to_int(), 16.0 + pulse * 4.0, col)
     @raylib.draw_circle(
       x.to_int(),
@@ -731,7 +731,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
   let lean = h.heading * 0.24
   let bob = if h.grounded {
-    @types.sinf(h.anim_t * 14.0) *
+    @math.sinf(h.anim_t * 14.0) *
     2.5 *
     (0.4 + h.vx.abs() / @types.player_max_vx)
   } else {
@@ -759,7 +759,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     coat_col,
   )
 
-  let leg_swing = @types.sinf(h.anim_t * 12.0) *
+  let leg_swing = @math.sinf(h.anim_t * 12.0) *
     6.0 *
     (h.vx.abs() / @types.player_max_vx)
   @raylib.draw_line_ex(

@@ -37,12 +37,6 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Sine helper wrapping the math double API.
-pub fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
 /// Compute week duration after progression scaling.
 pub fn week_duration_for(week : Int) -> Float {
   let raw = week_duration_base - Float::from_int(week - 1) * week_duration_drop

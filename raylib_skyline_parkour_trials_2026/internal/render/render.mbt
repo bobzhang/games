@@ -74,9 +74,9 @@ fn draw_background(game : @types.Game, cam_x : Float) -> Unit {
 
   let glow_x = Float::from_int(@types.screen_w) * 0.72 -
     cam_x * 0.06 +
-    @types.sinf(game.run_time_s * 0.3) * 56.0
+    @math.sinf(game.run_time_s * 0.3) * 56.0
   let glow_y = Float::from_int(@types.screen_h) * 0.24 +
-    @types.cosf(game.run_time_s * 0.24) * 34.0
+    @math.cosf(game.run_time_s * 0.24) * 34.0
   @raylib.draw_circle(
     glow_x.to_int(),
     glow_y.to_int(),
@@ -94,13 +94,13 @@ fn draw_background(game : @types.Game, cam_x : Float) -> Unit {
       let x : Float = (
           idx * Float::from_int(bw) * 1.45 -
           cam_x * parallax +
-          @types.sinf(idx * 0.51 + Float::from_int(layer)) * 20.0
+          @math.sinf(idx * 0.51 + Float::from_int(layer)) * 20.0
         ) %
         track -
         Float::from_int(bw)
       let h = 140 +
         (i * 31 + layer * 67) % 190 +
-        (@types.sinf(game.run_time_s * 0.35 + idx * 0.4) * 12.0).to_int()
+        (@math.sinf(game.run_time_s * 0.35 + idx * 0.4) * 12.0).to_int()
       let y = @types.screen_h - h - 70 + layer * 26
       let col = if layer == 0 {
         @raylib.Color::new(22, 30, 52, 240)
@@ -159,7 +159,7 @@ fn draw_world_tiles(game : @types.Game, cam_x : Float) -> Unit {
       }
       Hazard => {
         let pulse : Float = 0.5 +
-          0.5 * @types.sinf(game.run_time_s * 7.2 + t.x * 0.02)
+          0.5 * @math.sinf(game.run_time_s * 7.2 + t.x * 0.02)
         let glow = 120 + (pulse * 96.0).to_int()
         @raylib.draw_rectangle(
           sx.to_int(),
@@ -208,7 +208,7 @@ fn draw_checkpoints(game : @types.Game, cam_x : Float) -> Unit {
     }
 
     let pulse : Float = 0.5 +
-      0.5 * @types.sinf(game.run_time_s * 5.0 + Float::from_int(i))
+      0.5 * @math.sinf(game.run_time_s * 5.0 + Float::from_int(i))
     @raylib.draw_rectangle(
       sx.to_int(),
       cp.y.to_int(),
@@ -236,7 +236,7 @@ fn draw_checkpoints(game : @types.Game, cam_x : Float) -> Unit {
 ///|
 fn draw_goal(game : @types.Game, cam_x : Float) -> Unit {
   let sx = game.goal_x - cam_x
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(game.run_time_s * 4.0)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(game.run_time_s * 4.0)
 
   @raylib.draw_rectangle(
     sx.to_int(),

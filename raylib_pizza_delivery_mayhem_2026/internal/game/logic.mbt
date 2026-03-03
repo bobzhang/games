@@ -474,11 +474,11 @@ fn update_rider(game : @types.Game, dt : Float) -> Unit {
   } else {
     1.0
   }
-  let traffic_drift_x : Float = @types.sinf(
+  let traffic_drift_x : Float = @math.sinf(
       game.ui_t * 0.92 + game.rider_y * 0.006,
     ) *
     (14.0 + Float::from_int(game.wave) * 2.2)
-  let traffic_drift_y : Float = @types.cosf(
+  let traffic_drift_y : Float = @math.cosf(
       game.ui_t * 0.81 + game.rider_x * 0.007,
     ) *
     12.0
@@ -523,8 +523,8 @@ fn update_traffic(game : @types.Game, dt : Float) -> Unit {
     }
     traffic_elem.phase = traffic_elem.phase +
       dt * (1.4 + Float::from_int(traffic_elem.kind) * 0.6)
-    let sway_x : Float = @types.sinf(traffic_elem.phase * 2.0) * 10.0
-    let sway_y : Float = @types.cosf(traffic_elem.phase * 1.7) * 10.0
+    let sway_x : Float = @math.sinf(traffic_elem.phase * 2.0) * 10.0
+    let sway_y : Float = @math.cosf(traffic_elem.phase * 1.7) * 10.0
     traffic_elem.x = traffic_elem.x + (traffic_elem.vx + sway_x) * dt
     traffic_elem.y = traffic_elem.y + (traffic_elem.vy + sway_y) * dt
     if traffic_elem.x < @types.world_left() - 130.0 ||
@@ -569,9 +569,9 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
     }
     pickup.phase = pickup.phase + dt * 2.4
     pickup.x = pickup.x +
-      (pickup.vx + @types.sinf(pickup.phase * 2.0) * 22.0) * dt
+      (pickup.vx + @math.sinf(pickup.phase * 2.0) * 22.0) * dt
     pickup.y = pickup.y +
-      (pickup.vy + @types.cosf(pickup.phase * 2.1) * 22.0) * dt
+      (pickup.vy + @math.cosf(pickup.phase * 2.1) * 22.0) * dt
     if pickup.x < @types.world_left() + 16.0 {
       pickup.x = @types.world_left() + 16.0
       pickup.vx = pickup.vx.abs() * 0.6

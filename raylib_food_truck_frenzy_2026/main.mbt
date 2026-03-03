@@ -103,12 +103,6 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the sine of v (in radians) as a Float.
-fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
 /// Returns a random Float uniformly distributed in [lo, hi].
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
@@ -673,7 +667,9 @@ fn draw_floor_grid(x : Int, y : Int, w : Int, h : Int, scene_t : Float) -> Unit 
     for c in 0..<cols {
       let px : Int = x + c * cell
       let py : Int = y + r * cell
-      let wave : Float = sinf(scene_t * 1.8 + Float::from_int(r + c) * 0.45) *
+      let wave : Float = @math.sinf(
+          scene_t * 1.8 + Float::from_int(r + c) * 0.45,
+        ) *
         0.5 +
         0.5
       let alpha : Int = 16 + (wave * 20.0).to_int()
@@ -725,7 +721,8 @@ fn draw_station(s : Station, active : Bool, scene_t : Float) -> Unit {
     @raylib.Color::new(230, 240, 252, 210),
   )
 
-  let pulse : Float = sinf(scene_t * 6.0 + s.x * 0.01 + s.y * 0.01) * 0.5 + 0.5
+  let pulse : Float = @math.sinf(scene_t * 6.0 + s.x * 0.01 + s.y * 0.01) * 0.5 +
+    0.5
   @raylib.draw_circle_v(
     @raylib.Vector2::new(s.x + s.w * 0.5, s.y + s.h * 0.5),
     5.0 + pulse * 4.0,
@@ -756,7 +753,7 @@ fn draw_station(s : Station, active : Bool, scene_t : Float) -> Unit {
 ///|
 /// Draws the chef character with bobbing animation and a boost aura when the boost is active.
 fn draw_chef(chef : Chef, scene_t : Float) -> Unit {
-  let bob : Float = sinf(scene_t * 10.0 + chef.step_t * 0.08) * 1.2
+  let bob : Float = @math.sinf(scene_t * 10.0 + chef.step_t * 0.08) * 1.2
   @raylib.draw_circle_v(
     @raylib.Vector2::new(chef.x, chef.y + bob),
     18.0,
@@ -813,7 +810,7 @@ fn draw_orders_panel(
     } else {
       clampf(1.0 - order.deadline / order.max_deadline, 0.0, 1.0)
     }
-    let blink : Float = sinf(scene_t * 8.0 + order.pulse) * 0.5 + 0.5
+    let blink : Float = @math.sinf(scene_t * 8.0 + order.pulse) * 0.5 + 0.5
     let card_h : Int = 86
 
     @raylib.draw_rectangle(
@@ -1005,7 +1002,7 @@ fn draw_stoves(
       )
 
       stoves[i].pulse = stoves[i].pulse + dt * 9.2
-      let wave : Float = sinf(stoves[i].pulse) * 0.5 + 0.5
+      let wave : Float = @math.sinf(stoves[i].pulse) * 0.5 + 0.5
       spawn_particle(
         parts,
         x + 35.0 + randf(-5.0, 5.0),
@@ -1027,7 +1024,7 @@ fn draw_supply_boxes(boxes : Array[SupplyBox], scene_t : Float) -> Unit {
     if not(box.active) {
       continue
     }
-    let pulse : Float = sinf(scene_t * 5.8 + box.pulse) * 0.5 + 0.5
+    let pulse : Float = @math.sinf(scene_t * 5.8 + box.pulse) * 0.5 + 0.5
     @raylib.draw_rectangle(
       (box.x - 14.0).to_int(),
       (box.y - 14.0).to_int(),
@@ -1410,7 +1407,7 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
 
   for i in 0..<24 {
     let yy : Float = Float::from_int(i) / 24.0
-    let wave : Float = sinf(scene_t * 1.2 + yy * 6.4) * 0.5 + 0.5
+    let wave : Float = @math.sinf(scene_t * 1.2 + yy * 6.4) * 0.5 + 0.5
     let alpha : Int = 22 + (wave * 46.0).to_int()
     @raylib.draw_rectangle(
       0,
@@ -1452,7 +1449,7 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
     @raylib.Color::new(170, 204, 226, 226),
   )
 
-  let pulse : Float = sinf(scene_t * 3.6) * 0.5 + 0.5
+  let pulse : Float = @math.sinf(scene_t * 3.6) * 0.5 + 0.5
   let bw : Int = 470
   let bh : Int = 96
   let bx : Int = sw / 2 - bw / 2

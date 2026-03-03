@@ -1,7 +1,7 @@
 ///|
 /// Returns a sinusoidal background wave amplitude value for frequency `k`.
 fn bg_wave(game : @types.Game, k : Float) -> Float {
-  @types.sinf(game.ui_t * k)
+  @math.sinf(game.ui_t * k)
 }
 
 ///|
@@ -329,7 +329,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
 
   let x : Int = p.x.to_int() + ox
   let y : Int = p.y.to_int() + oy
-  let pulse : Float = @types.sinf(p.phase * 2.6)
+  let pulse : Float = @math.sinf(p.phase * 2.6)
   let rr : Float = 15.0 + pulse * 1.6
 
   let c0 : @raylib.Color = pickup_color(p.kind)
@@ -463,7 +463,7 @@ fn draw_hook(game : @types.Game, ox : Int, oy : Int) -> Unit {
     @raylib.draw_circle(
       hx,
       hy,
-      @types.hook_r + 8.0 + @types.sinf(game.ui_t * 9.0) * 2.0,
+      @types.hook_r + 8.0 + @math.sinf(game.ui_t * 9.0) * 2.0,
       @raylib.Color::new(126, 234, 255, 98),
     )
   }
@@ -476,7 +476,7 @@ fn draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
     return
   }
 
-  let pulse : Float = @types.sinf(game.ui_t * 10.0)
+  let pulse : Float = @math.sinf(game.ui_t * 10.0)
   let alpha : Int = if game.hint_t > 1.2 {
     238
   } else {

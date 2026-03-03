@@ -79,7 +79,7 @@ fn draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(16, 20, 30, 255))
 
   for i in 0..<14 {
-    let wave = (@types.sinf(game.scene_t * 0.6 + Float::from_int(i) * 0.38) *
+    let wave = (@math.sinf(game.scene_t * 0.6 + Float::from_int(i) * 0.38) *
     18.0).to_int()
     let y = i * 72 + wave
     let tone = 28 + i * 2
@@ -474,7 +474,7 @@ fn draw_week_banner(game : @types.Game) -> Unit {
   if game.week_banner_t <= 0.0 || game.state != Playing {
     return
   }
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(game.scene_t * 6.2)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(game.scene_t * 6.2)
   let alpha = @types.clampi(
     (game.week_banner_t / 2.6 * (150.0 + pulse * 80.0)).to_int(),
     0,

@@ -318,7 +318,7 @@ fn try_activate_burst(game : @types.Game) -> Unit {
 ///|
 /// Animates the title screen health and harmony meters with a sine wave and transitions to a new duel when the player confirms.
 fn update_title_state(game : @types.Game) -> Unit {
-  let wave : Float = 0.5 + 0.5 * @types.sinf(game.crowd_wave_t * 0.9)
+  let wave : Float = 0.5 + 0.5 * @math.sinf(game.crowd_wave_t * 0.9)
   game.health = 80.0 + wave * 14.0
   game.harmony = 76.0 + (1.0 - wave) * 18.0
 

@@ -36,10 +36,10 @@ fn lane_y(game : @types.Game, index : Int) -> Float {
   let i = @types.clampi(index, 0, @types.lane_count - 1)
   let fi = Float::from_int(i)
   let base = @types.lane_base_y(i)
-  let wave = @types.sinf(
+  let wave = @math.sinf(
     game.time_s * (0.92 + fi * 0.12) + fi * 1.3 + game.distance * 0.008,
   )
-  let sway = @types.cosf(
+  let sway = @math.cosf(
     game.time_s * (0.46 + fi * 0.06) + fi * 0.8 + game.distance * 0.003,
   )
   base + wave * 26.0 + sway * 12.0
@@ -78,8 +78,8 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   )
 
   let sun_x = Float::from_int(@types.screen_w) * 0.76 +
-    @types.sinf(game.time_s * 0.22) * 26.0
-  let sun_y : Float = 128.0 + @types.cosf(game.time_s * 0.32) * 10.0
+    @math.sinf(game.time_s * 0.22) * 26.0
+  let sun_y : Float = 128.0 + @math.cosf(game.time_s * 0.32) * 10.0
   @raylib.draw_circle(
     (sun_x + cam_x * 0.15).to_int(),
     (sun_y + cam_y * 0.15).to_int(),
@@ -98,7 +98,7 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     let x = (fi * 91.0 + fi * fi * 0.17 + game.time_s * 5.0) %
       Float::from_int(@types.screen_w)
     let y = (fi * 58.0 + fi * 11.0) % 230.0
-    let tw : Float = 0.42 + 0.58 * @types.sinf(fi * 0.53 + game.time_s * 1.4)
+    let tw : Float = 0.42 + 0.58 * @math.sinf(fi * 0.53 + game.time_s * 1.4)
     @raylib.draw_circle(
       (x + cam_x * 0.08).to_int(),
       (y + cam_y * 0.08).to_int(),
@@ -126,11 +126,11 @@ fn draw_dunes(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     for x = -24; x < @types.screen_w + 24; x = x + 24 {
       let fx = Float::from_int(x)
       let y = height +
-        @types.sinf(
+        @math.sinf(
           fx * 0.015 + game.distance * 0.002 + game.time_s * speed + lf * 0.8,
         ) *
         amp +
-        @types.cosf(fx * 0.009 + game.time_s * (0.34 + lf * 0.1)) * (amp * 0.4)
+        @math.cosf(fx * 0.009 + game.time_s * (0.34 + lf * 0.1)) * (amp * 0.4)
       @raylib.draw_rectangle(
         (fx + cam_x * (0.1 + lf * 0.07)).to_int(),
         (y + cam_y * 0.12).to_int(),
@@ -165,7 +165,7 @@ fn draw_lanes(game : @types.Game, _cam_x : Float, cam_y : Float) -> Unit {
     let shift = ((game.distance * (0.7 + li * 0.1)).to_int() + i * 33) % step
     for x = -step; x < @types.screen_w + step; x = x + step {
       let mut alpha = 68 +
-        (@types.sinf(Float::from_int(x) * 0.02 + game.time_s * 1.2 + li) * 24.0).to_int()
+        (@math.sinf(Float::from_int(x) * 0.02 + game.time_s * 1.2 + li) * 24.0).to_int()
       alpha = @types.clampi(alpha, 24, 116)
       @raylib.draw_rectangle(
         x - shift,
@@ -183,16 +183,16 @@ fn draw_perimeter(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let mut t : Float = 0.0
   while t < @types.tau {
     let x0 = @types.caravan_center_x +
-      @types.cosf(t) * @types.perimeter_outer_rx +
+      @math.cosf(t) * @types.perimeter_outer_rx +
       cam_x * 0.4
     let y0 = @types.caravan_center_y +
-      @types.sinf(t) * @types.perimeter_outer_ry +
+      @math.sinf(t) * @types.perimeter_outer_ry +
       cam_y * 0.4
     let x1 = @types.caravan_center_x +
-      @types.cosf(t) * @types.perimeter_inner_rx +
+      @math.cosf(t) * @types.perimeter_inner_rx +
       cam_x * 0.4
     let y1 = @types.caravan_center_y +
-      @types.sinf(t) * @types.perimeter_inner_ry +
+      @math.sinf(t) * @types.perimeter_inner_ry +
       cam_y * 0.4
 
     @raylib.draw_circle(
@@ -215,12 +215,12 @@ fn draw_perimeter(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     let prog = checkpoint_progress(game)
     let ring_r = @types.perimeter_outer_rx +
       10.0 +
-      @types.sinf(game.time_s * 4.5) * 2.0
+      @math.sinf(game.time_s * 4.5) * 2.0
     let mut s : Float = 0.0
     while s < @types.tau * prog {
-      let x = @types.caravan_center_x + @types.cosf(s) * ring_r + cam_x * 0.2
+      let x = @types.caravan_center_x + @math.cosf(s) * ring_r + cam_x * 0.2
       let y = @types.caravan_center_y +
-        @types.sinf(s) * (@types.perimeter_outer_ry + 8.0) +
+        @math.sinf(s) * (@types.perimeter_outer_ry + 8.0) +
         cam_y * 0.2
       @raylib.draw_circle(
         x.to_int(),
@@ -299,7 +299,7 @@ fn draw_wagons(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       @raylib.draw_circle_lines(
         x,
         y,
-        30.0 + @types.sinf(game.time_s * 12.0 + Float::from_int(i)) * 2.0,
+        30.0 + @math.sinf(game.time_s * 12.0 + Float::from_int(i)) * 2.0,
         @raylib.Color::new(112, 236, 202, 188),
       )
     }
@@ -497,7 +497,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   )
 
   if game.hero.roll_t > 0.0 {
-    let pulse : Float = 24.0 + @types.sinf(game.time_s * 32.0) * 2.0
+    let pulse : Float = 24.0 + @math.sinf(game.time_s * 32.0) * 2.0
     @raylib.draw_circle_lines(
       px.to_int(),
       py.to_int(),

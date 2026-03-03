@@ -585,13 +585,13 @@ fn update_wind(game : @types.Game, dt : Float) -> Unit {
     game.wind_power = @types.wind_base +
       Float::from_int(game.stage - 1) * @types.wind_stage_bonus +
       @types.randf(-20.0, 26.0)
-    game.wind_x = @types.cosf(angle) * game.wind_power
-    game.wind_y = @types.sinf(angle) * game.wind_power * 0.56 - 6.0
+    game.wind_x = @math.cosf(angle) * game.wind_power
+    game.wind_y = @math.sinf(angle) * game.wind_power * 0.56 - 6.0
   }
 
-  let wave = @types.sinf(game.gust_phase * 3.2)
+  let wave = @math.sinf(game.gust_phase * 3.2)
   game.wind_x = game.wind_x + wave * 8.0 * dt
-  game.wind_y = game.wind_y + @types.cosf(game.gust_phase * 2.6) * 6.0 * dt
+  game.wind_y = game.wind_y + @math.cosf(game.gust_phase * 2.6) * 6.0 * dt
 }
 
 ///|
@@ -784,7 +784,7 @@ fn update_objs(game : @types.Game, dt : Float) -> Unit {
       Lantern => {
         obj.x = obj.x + (obj.vx + game.wind_x * 0.4) * dt
         obj.y = obj.y + (obj.vy + game.wind_y * 0.5) * dt
-        obj.y = obj.y + @types.sinf(obj.phase * 4.2) * 10.0 * dt
+        obj.y = obj.y + @math.sinf(obj.phase * 4.2) * 10.0 * dt
       }
       Bird => {
         let tx = game.kite.x - obj.x
@@ -803,11 +803,11 @@ fn update_objs(game : @types.Game, dt : Float) -> Unit {
         obj.y = obj.y + (obj.vy + game.wind_y * 0.4) * dt
         obj.w = @types.maxf(
           52.0,
-          obj.w + @types.sinf(obj.phase * 3.0) * 12.0 * dt,
+          obj.w + @math.sinf(obj.phase * 3.0) * 12.0 * dt,
         )
         obj.h = @types.maxf(
           36.0,
-          obj.h + @types.cosf(obj.phase * 2.4) * 9.0 * dt,
+          obj.h + @math.cosf(obj.phase * 2.4) * 9.0 * dt,
         )
         if @types.chance(14) {
           emit_spark(
@@ -825,12 +825,12 @@ fn update_objs(game : @types.Game, dt : Float) -> Unit {
       Orb => {
         obj.x = obj.x + (obj.vx + game.wind_x * 0.48) * dt
         obj.y = obj.y + (obj.vy + game.wind_y * 0.48) * dt
-        obj.x = obj.x + @types.sinf(obj.phase * 6.0) * 26.0 * dt
+        obj.x = obj.x + @math.sinf(obj.phase * 6.0) * 26.0 * dt
       }
       Koi => {
         obj.x = obj.x + (obj.vx + game.wind_x * 0.3) * dt
         obj.y = obj.y + (obj.vy + game.wind_y * 0.2) * dt
-        obj.y = obj.y + @types.sinf(obj.phase * 8.0) * 18.0 * dt
+        obj.y = obj.y + @math.sinf(obj.phase * 8.0) * 18.0 * dt
       }
     }
 

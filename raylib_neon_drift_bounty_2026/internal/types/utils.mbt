@@ -43,18 +43,6 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 }
 
 ///|
-/// Returns the sine of an angle in radians.
-pub fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
-/// Returns the cosine of an angle in radians.
-pub fn cosf(v : Float) -> Float {
-  @math.cosf(v)
-}
-
-///|
 /// Returns a pseudo-random float sampled from `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let n = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
@@ -93,15 +81,15 @@ pub fn ease_out_cubic(t : Float) -> Float {
 /// Returns geometry information for road center at.
 pub fn road_center_at(depth : Float, time_s : Float) -> Float {
   let cx = Float::from_int(screen_w / 2)
-  let sway0 = sinf(depth * 0.0024 + time_s * 0.72) * 146.0
-  let sway1 = sinf(depth * 0.0041 + time_s * 1.2 + 1.4) * 84.0
+  let sway0 = @math.sinf(depth * 0.0024 + time_s * 0.72) * 146.0
+  let sway1 = @math.sinf(depth * 0.0041 + time_s * 1.2 + 1.4) * 84.0
   cx + sway0 + sway1
 }
 
 ///|
 /// Returns geometry information for road half width.
 pub fn road_half_width(stage : Int, depth : Float, time_s : Float) -> Float {
-  let pulse = sinf(depth * 0.0037 + time_s * 0.95 + 0.7) * 62.0
+  let pulse = @math.sinf(depth * 0.0037 + time_s * 0.95 + 0.7) * 62.0
   let shrink = Float::from_int(stage - 1) * 10.0
   clampf(
     Float::from_int(310) + pulse - shrink,

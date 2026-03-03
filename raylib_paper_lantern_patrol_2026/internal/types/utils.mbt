@@ -64,18 +64,6 @@ pub fn randi(lo : Int, hi : Int) -> Int {
 }
 
 ///|
-/// Returns the sine of an angle in radians.
-pub fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
-/// Returns the cosine of an angle in radians.
-pub fn cosf(v : Float) -> Float {
-  @math.cosf(v)
-}
-
-///|
 /// Returns the configured UI or gameplay color for a col.
 pub fn a_col(c : @raylib.Color, a : Int) -> @raylib.Color {
   @raylib.Color::new(

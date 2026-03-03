@@ -958,22 +958,22 @@ fn update_entities(game : @types.Game, dt : Float) -> Unit {
     match game.entities[i].kind {
       FoeBike =>
         game.entities[i].x = game.entities[i].x +
-          @types.sinf(game.entities[i].spin * 2.2) * 34.0 * dt
+          @math.sinf(game.entities[i].spin * 2.2) * 34.0 * dt
       FoeDrone =>
         game.entities[i].y = game.entities[i].y +
-          @types.cosf(game.entities[i].spin * 2.8) * 26.0 * dt
+          @math.cosf(game.entities[i].spin * 2.8) * 26.0 * dt
       FoeTruck =>
         game.entities[i].x = game.entities[i].x +
-          @types.sinf(game.entities[i].spin * 1.4) * 18.0 * dt
+          @math.sinf(game.entities[i].spin * 1.4) * 18.0 * dt
       FoeLaser => {
         game.entities[i].w = 118.0 +
-          @types.sinf(game.entities[i].spin * 3.4) * 26.0
+          @math.sinf(game.entities[i].spin * 3.4) * 26.0
         game.entities[i].h = 18.0 +
-          @types.sinf(game.entities[i].spin * 4.2) * 4.0
+          @math.sinf(game.entities[i].spin * 4.2) * 4.0
       }
       _ =>
         game.entities[i].x = game.entities[i].x +
-          @types.sinf(game.entities[i].spin * 2.6) * 16.0 * dt
+          @math.sinf(game.entities[i].spin * 2.6) * 16.0 * dt
     }
 
     let out = game.entities[i].y > Float::from_int(@types.screen_h) + 220.0 ||

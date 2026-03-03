@@ -301,8 +301,8 @@ fn update_storms(game : @types.Game, dt : Float) -> Unit {
 
     storm.phase = storm.phase + dt * (0.8 + storm.strength * 0.8)
 
-    let drift_x = @types.cosf(storm.phase * 0.7) * 18.0
-    let drift_y = @types.sinf(storm.phase * 0.6) * 14.0
+    let drift_x = @math.cosf(storm.phase * 0.7) * 18.0
+    let drift_y = @math.sinf(storm.phase * 0.6) * 14.0
 
     storm.x = storm.x + (storm.vx + drift_x) * dt
     storm.y = storm.y + (storm.vy + drift_y) * dt
@@ -356,10 +356,10 @@ fn storm_effect_at(
     let swirl : Float = 8.0 + center_gain * 22.0
     wind_x = wind_x +
       game.storms[i].vx * 0.008 * amp +
-      @types.cosf(game.storms[i].phase + Float::from_int(i) * 0.7) * swirl
+      @math.cosf(game.storms[i].phase + Float::from_int(i) * 0.7) * swirl
     wind_y = wind_y +
       game.storms[i].vy * 0.008 * amp +
-      @types.sinf(game.storms[i].phase + Float::from_int(i) * 0.7) * swirl
+      @math.sinf(game.storms[i].phase + Float::from_int(i) * 0.7) * swirl
   }
 
   (@types.clampf(intensity, 0.0, 1.8), wind_x, wind_y)

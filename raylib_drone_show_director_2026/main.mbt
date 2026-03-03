@@ -131,18 +131,6 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the sine of v (in radians) as a Float.
-fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
-/// Returns the cosine of v (in radians) as a Float.
-fn cosf(v : Float) -> Float {
-  @math.cosf(v)
-}
-
-///|
 /// Returns a random Float uniformly distributed in [lo, hi].
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
@@ -296,30 +284,31 @@ fn pattern_target(
 
   match pattern {
     0 => {
-      let r : Float = 142.0 + sinf(phase * 0.9 + t * 10.0) * 16.0
-      { x: cx + cosf(a) * r, y: cy + sinf(a) * r }
+      let r : Float = 142.0 + @math.sinf(phase * 0.9 + t * 10.0) * 16.0
+      { x: cx + @math.cosf(a) * r, y: cy + @math.sinf(a) * r }
     }
     1 => {
       let layer : Float = 48.0 + t * 210.0
       let aa : Float = a * 1.5 + t * 4.0
-      { x: cx + cosf(aa) * layer, y: cy + sinf(aa) * layer * 0.72 }
+      { x: cx + @math.cosf(aa) * layer, y: cy + @math.sinf(aa) * layer * 0.72 }
     }
     2 => {
       let px : Float = cx - 250.0 + t * 500.0
-      let py : Float = cy + sinf(t * 18.0 + phase * 3.2) * 112.0
+      let py : Float = cy + @math.sinf(t * 18.0 + phase * 3.2) * 112.0
       { x: px, y: py }
     }
     3 => {
-      let rr : Float = 60.0 + (sinf(t * 12.0 + phase * 2.4) * 0.5 + 0.5) * 168.0
+      let rr : Float = 60.0 +
+        (@math.sinf(t * 12.0 + phase * 2.4) * 0.5 + 0.5) * 168.0
       let aa : Float = a * 2.2
-      { x: cx + cosf(aa) * rr * 0.62, y: cy + sinf(aa) * rr }
+      { x: cx + @math.cosf(aa) * rr * 0.62, y: cy + @math.sinf(aa) * rr }
     }
     _ => {
       let wing : Float = if t < 0.5 { -1.0 } else { 1.0 }
       let p : Float = if t < 0.5 { t * 2.0 } else { (t - 0.5) * 2.0 }
       {
         x: cx + wing * (70.0 + p * 210.0),
-        y: cy + sinf(p * 10.0 + phase * 4.0) * 84.0 - p * 64.0,
+        y: cy + @math.sinf(p * 10.0 + phase * 4.0) * 84.0 - p * 64.0,
       }
     }
   }
@@ -658,7 +647,8 @@ fn draw_background(
   for i in 0..<22 {
     let y0 : Float = Float::from_int(world_y) +
       Float::from_int(i) * Float::from_int(world_h) / 22.0
-    let wave : Float = sinf(scene_t * 1.4 + Float::from_int(i) * 0.7) * 0.5 +
+    let wave : Float = @math.sinf(scene_t * 1.4 + Float::from_int(i) * 0.7) *
+      0.5 +
       0.5
     let alpha : Int = 8 + (wave * 26.0).to_int()
     @raylib.draw_rectangle(
@@ -687,7 +677,8 @@ fn draw_stage(cx : Float, cy : Float, radius : Float, scene_t : Float) -> Unit {
   )
 
   for i in 0..<6 {
-    let p : Float = sinf(scene_t * 2.0 + Float::from_int(i) * 0.82) * 0.5 + 0.5
+    let p : Float = @math.sinf(scene_t * 2.0 + Float::from_int(i) * 0.82) * 0.5 +
+      0.5
     let rr : Float = radius * (0.38 + Float::from_int(i) * 0.12)
     @raylib.draw_circle_lines(
       cx.to_int(),
@@ -711,7 +702,8 @@ fn draw_targets(
   let col = pattern_color(pattern)
   for i in 0..<drones.length() {
     let t : Vec2f = pattern_target(pattern, i, drones.length(), cx, cy, phase)
-    let pulse : Float = sinf(scene_t * 6.0 + Float::from_int(i) * 0.18) * 0.5 +
+    let pulse : Float = @math.sinf(scene_t * 6.0 + Float::from_int(i) * 0.18) *
+      0.5 +
       0.5
     @raylib.draw_circle_v(
       @raylib.Vector2::new(t.x, t.y),
@@ -774,7 +766,8 @@ fn draw_stations(
       @raylib.Color::new(18, 24, 34, 242),
     )
 
-    let pulse : Float = sinf(scene_t * 4.6 + Float::from_int(i) * 1.7) * 0.5 +
+    let pulse : Float = @math.sinf(scene_t * 4.6 + Float::from_int(i) * 1.7) *
+      0.5 +
       0.5
     @raylib.draw_circle_v(
       @raylib.Vector2::new(s.x + s.w * 0.5, s.y + s.h * 0.5),
@@ -791,7 +784,7 @@ fn draw_gusts(gusts : Array[Gust], scene_t : Float) -> Unit {
     if not(gust.active) {
       continue
     }
-    let pulse : Float = sinf(scene_t * 5.0 + gust.pulse) * 0.5 + 0.5
+    let pulse : Float = @math.sinf(scene_t * 5.0 + gust.pulse) * 0.5 + 0.5
     let rr : Float = gust.radius * (0.86 + pulse * 0.18)
     @raylib.draw_circle_lines(
       gust.x.to_int(),
@@ -846,7 +839,7 @@ fn draw_drones(drones : Array[Drone], scene_t : Float) -> Unit {
       @raylib.Color::new(250, 252, 255, 240),
     )
 
-    let flash : Float = sinf(scene_t * 9.0 + d.flash_t) * 0.5 + 0.5
+    let flash : Float = @math.sinf(scene_t * 9.0 + d.flash_t) * 0.5 + 0.5
     @raylib.draw_circle_v(
       @raylib.Vector2::new(d.x, d.y),
       10.0 + flash * 4.0,
@@ -904,7 +897,7 @@ fn draw_particles(parts : Array[Particle]) -> Unit {
 ///|
 /// Draws the director character with a bobbing animation and sync pulse ring when active.
 fn draw_director(director : Director, scene_t : Float) -> Unit {
-  let bob : Float = sinf(scene_t * 11.0 + director.step_t * 0.07) * 1.2
+  let bob : Float = @math.sinf(scene_t * 11.0 + director.step_t * 0.07) * 1.2
   @raylib.draw_circle_v(
     @raylib.Vector2::new(director.x, director.y + bob),
     16.0,
@@ -917,7 +910,7 @@ fn draw_director(director : Director, scene_t : Float) -> Unit {
   )
 
   if director.sync_t > 0.0 {
-    let pulse : Float = sinf(director.sync_t * 8.0) * 0.5 + 0.5
+    let pulse : Float = @math.sinf(director.sync_t * 8.0) * 0.5 + 0.5
     @raylib.draw_circle_lines(
       director.x.to_int(),
       director.y.to_int(),
@@ -958,7 +951,7 @@ fn draw_requests_panel(
       clampf(1.0 - request.deadline / request.max_deadline, 0.0, 1.0)
     }
 
-    let blink : Float = sinf(scene_t * 7.0 + request.pulse) * 0.5 + 0.5
+    let blink : Float = @math.sinf(scene_t * 7.0 + request.pulse) * 0.5 + 0.5
     let matching : Bool = current_pattern == request.pattern
     let row_h : Int = 84
 
@@ -1403,7 +1396,7 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
 
   for i in 0..<24 {
     let yy : Float = Float::from_int(i) / 24.0
-    let wave : Float = sinf(scene_t * 1.2 + yy * 6.0) * 0.5 + 0.5
+    let wave : Float = @math.sinf(scene_t * 1.2 + yy * 6.0) * 0.5 + 0.5
     let alpha : Int = 18 + (wave * 44.0).to_int()
     @raylib.draw_rectangle(
       0,
@@ -1434,7 +1427,7 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
     @raylib.Color::new(186, 212, 236, 236),
   )
 
-  let pulse : Float = sinf(scene_t * 3.8) * 0.5 + 0.5
+  let pulse : Float = @math.sinf(scene_t * 3.8) * 0.5 + 0.5
   let bw : Int = 476
   let bh : Int = 94
   let bx : Int = sw / 2 - bw / 2

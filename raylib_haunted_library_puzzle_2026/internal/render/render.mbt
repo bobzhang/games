@@ -21,7 +21,7 @@ fn shake_dy(game : @types.Game) -> Int {
 ///|
 /// Returns a value oscillating between 0 and 1 using a sine wave at frequency `f` driven by `game.time_s`.
 fn pulse(game : @types.Game, f : Float) -> Float {
-  0.5 + 0.5 * @types.sinf(game.time_s * f)
+  0.5 + 0.5 * @math.sinf(game.time_s * f)
 }
 
 ///|

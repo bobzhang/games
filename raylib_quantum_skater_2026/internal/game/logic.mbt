@@ -219,7 +219,7 @@ fn spawn_orb_strip(
       @types.obj_orb,
       lane,
       z0 + Float::from_int(i) * 72.0,
-      48.0 + @types.sinf(Float::from_int(i) * 0.8) * 16.0,
+      48.0 + @math.sinf(Float::from_int(i) * 0.8) * 16.0,
       56.0,
       56.0,
       0,
@@ -355,7 +355,7 @@ fn spawn_wave(game : @types.Game, z_base : Float) -> Unit {
       }
       let y_off : Float = if kind == @types.obj_orb {
         Float::from_int(46) +
-        @types.sinf(Float::from_int(i)) * Float::from_int(22)
+        @math.sinf(Float::from_int(i)) * Float::from_int(22)
       } else {
         0.0
       }

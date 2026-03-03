@@ -23,12 +23,6 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 }
 
 ///|
-/// Computes sine using the core math backend.
-pub fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
 /// Returns a random float sampled uniformly from `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0

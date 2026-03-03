@@ -37,12 +37,6 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Sine helper that wraps the math double API.
-pub fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
 /// Convert a stance id to its HUD display name.
 pub fn stance_name(stance : Int) -> String {
   if stance == stance_spear {

@@ -47,10 +47,10 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   )
 
   let moon_x : Float = Float::from_int(@types.screen_w) * 0.78 +
-    @types.sinf(game.time_s * 0.2) * 44.0
+    @math.sinf(game.time_s * 0.2) * 44.0
   let moon_y : Float = Float::from_int(@types.hud_h) +
     86.0 +
-    @types.cosf(game.time_s * 0.24) * 14.0
+    @math.cosf(game.time_s * 0.24) * 14.0
 
   @raylib.draw_circle(
     (moon_x + cam_x * 0.2).to_int(),
@@ -73,7 +73,7 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       (fi * 38.0 + fi * fi * 0.27) %
       Float::from_int(@types.screen_h - @types.hud_h)
 
-    let tw : Float = 0.5 + 0.5 * @types.sinf(fi * 0.66 + game.time_s * 1.4)
+    let tw : Float = 0.5 + 0.5 * @math.sinf(fi * 0.66 + game.time_s * 1.4)
     let alpha = 70 + (tw * 120.0).to_int()
 
     @raylib.draw_circle(
@@ -90,13 +90,13 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
     for x = -120; x < @types.screen_w + 180; x = x + 30 {
       let fx = Float::from_int(x)
-      let wave = @types.sinf(fx * 0.011 + game.time_s * (0.74 + fb * 0.14) + fb)
-      let wave2 = @types.cosf(
+      let wave = @math.sinf(fx * 0.011 + game.time_s * (0.74 + fb * 0.14) + fb)
+      let wave2 = @math.cosf(
         fx * 0.018 + game.time_s * (0.54 + fb * 0.13) + fb * 1.2,
       )
       let y = base_y + wave * (22.0 + fb * 6.0) + wave2 * (12.0 + fb * 3.0)
       let glow : Float = 0.45 +
-        0.55 * @types.sinf(fx * 0.009 + game.time_s * 1.1 + fb)
+        0.55 * @math.sinf(fx * 0.009 + game.time_s * 1.1 + fb)
 
       let col = if band % 2 == 0 {
         @raylib.Color::new(96, 222 + (glow * 24.0).to_int(), 188, 42)
@@ -252,7 +252,7 @@ fn draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     let life = @types.clampf(trail.life / 0.36, 0.0, 1.0)
     let col = @raylib.Color::new(122, 224, 255, (life * 132.0).to_int())
     let stretch : Float = Float::from_int(1) +
-      @types.sinf(trail.rot * 0.05).abs() * 0.28
+      @math.sinf(trail.rot * 0.05).abs() * 0.28
 
     @raylib.draw_rectangle(
       (trail.x - trail.w * 0.5 * stretch + cam_x * 0.2).to_int(),
@@ -281,7 +281,7 @@ fn obj_col(kind : @types.ObjKind) -> @raylib.Color {
 fn draw_lantern(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
   let x = o.x + cam_x
   let y = o.y + cam_y
-  let glow : Float = 0.5 + 0.5 * @types.sinf(o.phase * 4.0)
+  let glow : Float = 0.5 + 0.5 * @math.sinf(o.phase * 4.0)
 
   @raylib.draw_circle(
     x.to_int(),
@@ -317,7 +317,7 @@ fn draw_lantern(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
 fn draw_bird(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
   let x = o.x + cam_x
   let y = o.y + cam_y
-  let wing : Float = @types.sinf(o.phase * 16.0) * 16.0
+  let wing : Float = @math.sinf(o.phase * 16.0) * 16.0
 
   @raylib.draw_triangle(
     @raylib.Vector2::new(x, y - o.h * 0.46),
@@ -352,7 +352,7 @@ fn draw_bird(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
 fn draw_storm(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
   let x = o.x + cam_x
   let y = o.y + cam_y
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(o.phase * 3.2)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(o.phase * 3.2)
 
   @raylib.draw_circle(
     (x - o.w * 0.24).to_int(),
@@ -386,7 +386,7 @@ fn draw_storm(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
 fn draw_orb(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
   let x = o.x + cam_x
   let y = o.y + cam_y
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(o.phase * 5.8)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(o.phase * 5.8)
 
   @raylib.draw_circle(
     x.to_int(),
@@ -408,7 +408,7 @@ fn draw_orb(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
 fn draw_koi(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
   let x = o.x + cam_x
   let y = o.y + cam_y
-  let sway : Float = @types.sinf(o.phase * 9.0) * 9.0
+  let sway : Float = @math.sinf(o.phase * 9.0) * 9.0
 
   @raylib.draw_triangle(
     @raylib.Vector2::new(x + o.w * 0.5, y),
@@ -519,7 +519,7 @@ fn draw_kite(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   )
 
   let tilt = game.kite.angle
-  let kx0 = x + @types.sinf(tilt * 0.017) * 6.0
+  let kx0 = x + @math.sinf(tilt * 0.017) * 6.0
 
   @raylib.draw_triangle(
     @raylib.Vector2::new(kx0, y - game.kite.h * 0.52),
@@ -550,8 +550,8 @@ fn draw_kite(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
   for i in 0..<8 {
     let fi = Float::from_int(i)
-    let sway = @types.sinf(game.kite.anim_t * 8.0 + fi * 0.6) * 8.0
-    let tx = x + @types.sinf(game.kite.angle * 0.02) * fi * 1.8 + sway * 0.16
+    let sway = @math.sinf(game.kite.anim_t * 8.0 + fi * 0.6) * 8.0
+    let tx = x + @math.sinf(game.kite.angle * 0.02) * fi * 1.8 + sway * 0.16
     let ty = y + fi * 14.0 + sway
 
     @raylib.draw_circle(

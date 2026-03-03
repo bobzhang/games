@@ -49,8 +49,8 @@ fn draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     let y = (i * 37 + 61) % (@types.screen_h / 2)
     let phase : Float = game.title_t * 0.7 + Float::from_int(i) * 0.33
     let pulse : Float = Float::from_int(1) * 0.5 +
-      0.3 * @types.sinf(phase) +
-      0.2 * @types.cosf(phase * 1.9)
+      0.3 * @math.sinf(phase) +
+      0.2 * @math.cosf(phase * 1.9)
     let star_r : Float = Float::from_int(1) + pulse * 1.8
     @raylib.draw_circle(
       x,
@@ -118,7 +118,7 @@ fn draw_track_grid(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       cam_y,
     )
 
-    let pulse : Float = 0.5 + 0.5 * @types.sinf(game.title_t * 1.5 + z * 0.004)
+    let pulse : Float = 0.5 + 0.5 * @math.sinf(game.title_t * 1.5 + z * 0.004)
     let line_w : Float = Float::from_int(1) + pulse * 2.0
     @raylib.draw_line_ex(
       @raylib.Vector2::new(left.0, left.1),
@@ -182,7 +182,7 @@ fn draw_obj(
   let col = obj_color(game, o)
 
   if o.kind == @types.obj_orb {
-    let pulse : Float = 0.5 + 0.5 * @types.sinf(o.spin * 2.6)
+    let pulse : Float = 0.5 + 0.5 * @math.sinf(o.spin * 2.6)
     let orb_r : Float = w * 0.36 + pulse * 3.0
     @raylib.draw_circle(
       s.0.to_int(),
@@ -208,7 +208,7 @@ fn draw_obj(
   }
 
   if o.kind == @types.obj_boost {
-    let pulse : Float = 0.5 + 0.5 * @types.sinf(o.spin * 2.8)
+    let pulse : Float = 0.5 + 0.5 * @math.sinf(o.spin * 2.8)
     let boost_r : Float = Float::from_int(4) + pulse * Float::from_int(4)
     @raylib.draw_rectangle(
       (s.0 - w * 0.55).to_int(),
@@ -268,7 +268,7 @@ fn draw_obj(
 
   if o.kind == @types.obj_gate_alpha || o.kind == @types.obj_gate_beta {
     let alpha = 110 +
-      (Float::from_int(1) * 0.5 + 0.5 * @types.sinf(o.spin * 2.0) * 100.0).to_int()
+      (Float::from_int(1) * 0.5 + 0.5 * @math.sinf(o.spin * 2.0) * 100.0).to_int()
     @raylib.draw_rectangle(
       (s.0 - w * 0.34).to_int(),
       (s.1 - h).to_int(),
@@ -344,7 +344,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     @types.color_lane_alpha()
   }
 
-  let suit_p : Float = 0.5 + 0.5 * @types.sinf(hero.anim_t * 10.0) * 18.0
+  let suit_p : Float = 0.5 + 0.5 * @math.sinf(hero.anim_t * 10.0) * 18.0
   let suit = @raylib.Color::new(
     30 + suit_p.to_int(),
     52 + suit_p.to_int(),

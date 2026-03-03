@@ -133,15 +133,3 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 pub fn randi(lo : Int, hi : Int) -> Int {
   @raylib.get_random_value(lo, hi)
 }
-
-///|
-/// Sine helper wrapping the math double API.
-pub fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
-/// Cosine helper wrapping the math double API.
-pub fn cosf(v : Float) -> Float {
-  @math.cosf(v)
-}

@@ -83,9 +83,9 @@ fn draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   )
 
   let glow_x = Float::from_int(@types.screen_w) * 0.28 +
-    @types.sinf(game.time_s * 0.35) * 120.0
+    @math.sinf(game.time_s * 0.35) * 120.0
   let glow_y = Float::from_int(@types.screen_h) * 0.24 +
-    @types.cosf(game.time_s * 0.24) * 60.0
+    @math.cosf(game.time_s * 0.24) * 60.0
 
   @raylib.draw_circle(
     (glow_x + cam_x).to_int(),
@@ -102,13 +102,13 @@ fn draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
   for i in 0..<120 {
     let p = Float::from_int(i)
-    let x = (p * 73.0 + @types.sinf(game.time_s * 0.14 + p * 0.2) * 90.0) %
+    let x = (p * 73.0 + @math.sinf(game.time_s * 0.14 + p * 0.2) * 90.0) %
       Float::from_int(@types.screen_w)
     let mut y = (p * 41.0 + game.distance * 0.17 + p * 1.1) %
       Float::from_int(@types.screen_h)
     y = Float::from_int(@types.screen_h) - y
 
-    let pulse : Float = 0.5 + 0.5 * @types.sinf(game.time_s * 0.7 + p * 0.31)
+    let pulse : Float = 0.5 + 0.5 * @math.sinf(game.time_s * 0.7 + p * 0.31)
     let r : Float = 0.8 + pulse * 1.7
 
     @raylib.draw_circle(
@@ -183,7 +183,7 @@ fn draw_cave(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       )
     }
 
-    let pulse : Float = 0.5 + 0.5 * @types.sinf(game.time_s * 1.5 + y0f * 0.03)
+    let pulse : Float = 0.5 + 0.5 * @math.sinf(game.time_s * 1.5 + y0f * 0.03)
     let glow = @types.cave_glow()
     let edge_col = @raylib.Color::new(
       glow.r.to_int(),
@@ -230,7 +230,7 @@ fn draw_obj_current(
 ) -> Unit {
   let x = o.x + cam_x
   let y = o.y + cam_y
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(o.spin * 2.2)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(o.spin * 2.2)
   let ring_r : Float = o.r + pulse * 8.0
 
   @raylib.draw_circle_lines(
@@ -281,7 +281,7 @@ fn draw_obj_mine(
 ) -> Unit {
   let x = o.x + cam_x
   let y = o.y + cam_y
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(o.spin * 3.4)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(o.spin * 3.4)
   let rr : Float = o.r + pulse * 3.0
 
   @raylib.draw_circle(
@@ -293,8 +293,8 @@ fn draw_obj_mine(
 
   for k in 0..<8 {
     let a = Float::from_int(k) * 0.785 + o.spin
-    let nx = @types.cosf(a)
-    let ny = @types.sinf(a)
+    let nx = @math.cosf(a)
+    let ny = @math.sinf(a)
     let p0 = @raylib.Vector2::new(x + nx * rr * 0.6, y + ny * rr * 0.6)
     let p1 = @raylib.Vector2::new(x + nx * rr * 1.45, y + ny * rr * 1.45)
     @raylib.draw_line_ex(p0, p1, 2.6, @raylib.Color::new(255, 214, 224, 230))
@@ -311,7 +311,7 @@ fn draw_obj_data(
 ) -> Unit {
   let x = o.x + cam_x
   let y = o.y + cam_y
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(o.spin * 4.3)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(o.spin * 4.3)
   let r : Float = o.r + pulse * 2.6
 
   let top = @raylib.Vector2::new(x, y - r)
@@ -342,7 +342,7 @@ fn draw_obj_oxygen(
 ) -> Unit {
   let x = o.x + cam_x
   let y = o.y + cam_y
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(o.spin * 3.0)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(o.spin * 3.0)
   let r : Float = o.r + pulse * 2.1
 
   @raylib.draw_circle(
@@ -525,7 +525,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let px = game.hero.x + cam_x
   let py = game.hero.y + cam_y
 
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(game.hero.anim_t * 7.2)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(game.hero.anim_t * 7.2)
   let body_r : Float = game.hero.r + pulse * 1.6
 
   let body_col = if game.hero.hurt_t > 0.0 {
@@ -568,7 +568,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   }
 
   if game.hero.invuln > 0.0 {
-    let alpha = 80 + (@types.sinf(game.time_s * 14.0) * 80.0 + 80.0).to_int()
+    let alpha = 80 + (@math.sinf(game.time_s * 14.0) * 80.0 + 80.0).to_int()
     @raylib.draw_circle(
       px.to_int(),
       py.to_int(),

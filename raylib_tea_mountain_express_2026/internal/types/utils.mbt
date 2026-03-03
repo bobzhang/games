@@ -43,18 +43,6 @@ pub fn clamp01(v : Float) -> Float {
 }
 
 ///|
-/// Computes `sin(v)` and returns a `Float`.
-pub fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
-/// Computes `cos(v)` and returns a `Float`.
-pub fn cosf(v : Float) -> Float {
-  @math.cosf(v)
-}
-
-///|
 /// Returns a pseudo-random float sampled from `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let r = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
@@ -88,8 +76,8 @@ pub fn road_half_width(y : Float) -> Float {
 pub fn road_center_x(world_t : Float, y : Float) -> Float {
   let t = road_depth(y)
   let base = Float::from_int(screen_w) * 0.5
-  let curve0 = sinf(world_t * 0.56 + t * 2.7) * 88.0
-  let curve1 = cosf(world_t * 0.28 + t * 5.8) * 36.0
+  let curve0 = @math.sinf(world_t * 0.56 + t * 2.7) * 88.0
+  let curve1 = @math.cosf(world_t * 0.28 + t * 5.8) * 36.0
   base + curve0 + curve1
 }
 

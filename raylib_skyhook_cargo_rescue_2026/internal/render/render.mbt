@@ -1,6 +1,6 @@
 ///|
 fn bg_wave(game : @types.Game, k : Float) -> Float {
-  @types.sinf(game.ui_t * k)
+  @math.sinf(game.ui_t * k)
 }
 
 ///|
@@ -122,7 +122,7 @@ fn draw_world_back(_game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 fn draw_safe_zone(game : @types.Game, ox : Int, oy : Int) -> Unit {
-  let pulse : Float = @types.sinf(game.ui_t * 7.0)
+  let pulse : Float = @math.sinf(game.ui_t * 7.0)
 
   @raylib.draw_rectangle(
     @types.safe_zone_x() + ox,
@@ -164,10 +164,10 @@ fn draw_storm(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
     let sx : Float = @types.world_left() +
       Float::from_int(i * 71 % @types.world_w) +
-      @types.sinf(game.storm_t * (0.9 + t * 0.01) + t * 0.6) * 30.0
+      @math.sinf(game.storm_t * (0.9 + t * 0.01) + t * 0.6) * 30.0
     let sy : Float = @types.world_top() +
       Float::from_int(i * 37 % @types.world_h) +
-      @types.cosf(game.storm_t * (1.1 + t * 0.007) + t * 0.4) * 24.0
+      @math.cosf(game.storm_t * (1.1 + t * 0.007) + t * 0.4) * 24.0
 
     let ex : Float = sx - 28.0
     let ey : Float = sy + 18.0
@@ -208,8 +208,8 @@ fn draw_survivor(s : @types.Survivor, ox : Int, oy : Int) -> Unit {
   @raylib.draw_circle(x, y - 6, 6.0, @raylib.Color::new(30, 42, 56, 220))
 
   let a : Float = s.phase
-  let px : Int = (s.x + @types.cosf(a) * 16.0).to_int() + ox
-  let py : Int = (s.y + @types.sinf(a) * 16.0).to_int() + oy
+  let px : Int = (s.x + @math.cosf(a) * 16.0).to_int() + ox
+  let py : Int = (s.y + @math.sinf(a) * 16.0).to_int() + oy
   @raylib.draw_circle(px, py, 2.0, @raylib.Color::new(246, 252, 255, 200))
 
   if s.carried {
@@ -248,7 +248,7 @@ fn draw_hazard(h : @types.Hazard, ox : Int, oy : Int) -> Unit {
     @raylib.draw_circle(x + 12, y + 2, h.r * 0.56, c0)
     @raylib.draw_circle(x, y - 8, h.r * 0.68, c0)
 
-    let bolt_x : Int = (h.x + @types.sinf(h.phase * 3.0) * 12.0).to_int() + ox
+    let bolt_x : Int = (h.x + @math.sinf(h.phase * 3.0) * 12.0).to_int() + ox
     @raylib.draw_line(
       bolt_x,
       y,
@@ -334,7 +334,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
   let x : Int = p.x.to_int() + ox
   let y : Int = p.y.to_int() + oy
 
-  let pulse : Float = @types.sinf(p.phase * 2.5)
+  let pulse : Float = @math.sinf(p.phase * 2.5)
   let rr : Float = 16.0 + pulse * 1.6
 
   let c0 : @raylib.Color = pickup_color(p.kind)
@@ -466,7 +466,7 @@ fn draw_heli(game : @types.Game, ox : Int, oy : Int) -> Unit {
     @raylib.draw_circle(
       x,
       y + 18,
-      8.0 + @types.sinf(game.ui_t * 9.0) * 2.0,
+      8.0 + @math.sinf(game.ui_t * 9.0) * 2.0,
       @raylib.Color::new(118, 236, 255, 178),
     )
   }
@@ -490,7 +490,7 @@ fn draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
     return
   }
 
-  let pulse : Float = @types.sinf(game.ui_t * 10.0)
+  let pulse : Float = @math.sinf(game.ui_t * 10.0)
   let alpha : Int = if game.hint_t > 1.2 {
     238
   } else {

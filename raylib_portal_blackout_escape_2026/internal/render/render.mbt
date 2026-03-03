@@ -21,7 +21,7 @@ fn shake_dy(game : @types.Game) -> Int {
 ///|
 /// Returns a value in [0, 1] oscillating at frequency `f` Hz using the elapsed game time.
 fn pulse(game : @types.Game, f : Float) -> Float {
-  0.5 + 0.5 * @types.sinf(game.time_s * f)
+  0.5 + 0.5 * @math.sinf(game.time_s * f)
 }
 
 ///|

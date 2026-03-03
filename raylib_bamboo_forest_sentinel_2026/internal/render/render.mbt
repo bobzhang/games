@@ -46,7 +46,7 @@ fn draw_forest_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(9, 24, 14, 255))
 
   for i in 0..<34 {
-    let sway = @types.sinf(game.elapsed * 1.7 + Float::from_int(i) * 0.62) * 8.0
+    let sway = @math.sinf(game.elapsed * 1.7 + Float::from_int(i) * 0.62) * 8.0
     let x = @types.world_x - 70 + i * 34 + sway.to_int()
     let w = 16 + i * 5 % 11
     @raylib.draw_rectangle(

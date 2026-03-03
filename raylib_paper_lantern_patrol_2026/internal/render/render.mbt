@@ -79,7 +79,7 @@ fn draw_background(game : @types.Game) -> Unit {
 
     let half = Float::from_int(1) / Float::from_int(2)
     let twinkle : Float = half +
-      half * @types.sinf(fi * 0.9 + game.run_time * 1.6)
+      half * @math.sinf(fi * 0.9 + game.run_time * 1.6)
     @raylib.draw_circle(
       x.to_int(),
       y.to_int(),
@@ -95,9 +95,9 @@ fn draw_background(game : @types.Game) -> Unit {
   }
 
   let moon_x = Float::from_int(@types.screen_w) * 0.82 +
-    @types.sinf(game.run_time * 0.18) * 28.0
+    @math.sinf(game.run_time * 0.18) * 28.0
   let moon_y = Float::from_int(@types.play_y) * 0.78 +
-    @types.cosf(game.run_time * 0.22) * 10.0
+    @math.cosf(game.run_time * 0.22) * 10.0
 
   @raylib.draw_circle(
     moon_x.to_int(),
@@ -185,7 +185,7 @@ fn draw_shrines(game : @types.Game) -> Unit {
     let queue = shrine_queue_count(game, i)
     let half = Float::from_int(1) / Float::from_int(2)
     let pulse : Float = half +
-      half * @types.sinf(game.run_time * 2.4 + Float::from_int(i) * 1.5)
+      half * @math.sinf(game.run_time * 2.4 + Float::from_int(i) * 1.5)
 
     @raylib.draw_circle(
       p.0.to_int(),
@@ -377,7 +377,7 @@ fn draw_lanterns(game : @types.Game) -> Unit {
 
     @raylib.draw_circle(
       game.lanterns[i].x.to_int(),
-      (game.lanterns[i].y - 12.0 + @types.sinf(game.lanterns[i].wobble) * 1.2).to_int(),
+      (game.lanterns[i].y - 12.0 + @math.sinf(game.lanterns[i].wobble) * 1.2).to_int(),
       5.0,
       @types.lantern_flame_col(game.lanterns[i].flame),
     )
@@ -421,7 +421,7 @@ fn draw_patrol(game : @types.Game) -> Unit {
     @raylib.draw_circle_lines(
       game.patrol.x.to_int(),
       game.patrol.y.to_int(),
-      @types.calm_radius * (0.92 + 0.08 * @types.sinf(game.run_time * 7.0)),
+      @types.calm_radius * (0.92 + 0.08 * @math.sinf(game.run_time * 7.0)),
       @types.a_col(@types.calm_col(), (ratio * 220.0).to_int()),
     )
   }

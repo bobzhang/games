@@ -655,7 +655,7 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     game.enemies[i].vy = ny * speed
     game.enemies[i].anim_t = game.enemies[i].anim_t + dt
 
-    let sway = @types.sinf(
+    let sway = @math.sinf(
         game.enemies[i].anim_t * 7.5 + Float::from_int(i) * 0.4,
       ) *
       14.0

@@ -56,7 +56,7 @@ fn draw_background(game : @types.Game) -> Unit {
       Float::from_int(@types.screen_w)
     let y = (fi * 43.0 + fi * 13.0 + game.ui_t * 4.0) %
       Float::from_int(@types.screen_h)
-    let tw : Float = 0.45 + 0.55 * @types.sinf(fi * 0.71 + game.ui_t * 1.6)
+    let tw : Float = 0.45 + 0.55 * @math.sinf(fi * 0.71 + game.ui_t * 1.6)
 
     @raylib.draw_circle(
       x.to_int(),
@@ -113,7 +113,7 @@ fn draw_world_back(game : @types.Game) -> Unit {
     @raylib.Color::new(176, 208, 228, 220),
   )
 
-  let depot_glow : Float = 0.55 + 0.45 * @types.sinf(game.ui_t * 2.0)
+  let depot_glow : Float = 0.55 + 0.45 * @math.sinf(game.ui_t * 2.0)
   @raylib.draw_circle(
     @types.depot_x().to_int(),
     @types.depot_y().to_int(),
@@ -171,7 +171,7 @@ fn draw_towers(game : @types.Game) -> Unit {
     let x = game.towers[i].x.to_int()
     let y = game.towers[i].y.to_int()
 
-    let pulse : Float = 0.8 + 0.2 * @types.sinf(game.towers[i].pulse_t * 2.2)
+    let pulse : Float = 0.8 + 0.2 * @math.sinf(game.towers[i].pulse_t * 2.2)
 
     @raylib.draw_circle(
       x,
@@ -199,8 +199,8 @@ fn draw_towers(game : @types.Game) -> Unit {
     let slots = @types.clampi(game.towers[i].need, 1, 6)
     for k in 0..<slots {
       let a = Float::from_int(k) / Float::from_int(slots) * 6.283
-      let px = game.towers[i].x + @types.cosf(a) * (@types.tower_hit_r() + 17.0)
-      let py = game.towers[i].y + @types.sinf(a) * (@types.tower_hit_r() + 17.0)
+      let px = game.towers[i].x + @math.cosf(a) * (@types.tower_hit_r() + 17.0)
+      let py = game.towers[i].y + @math.sinf(a) * (@types.tower_hit_r() + 17.0)
       let col = if k < game.towers[i].delivered {
         @raylib.Color::new(232, 255, 208, 236)
       } else {
@@ -292,10 +292,10 @@ fn draw_storms(game : @types.Game) -> Unit {
 
     for k in 0..<12 {
       let a = storm.phase + Float::from_int(k) * 0.52
-      let sx = storm.x + @types.cosf(a) * (storm.r - 12.0)
-      let sy = storm.y + @types.sinf(a) * (storm.r - 12.0)
-      let ex = sx + storm.vx * 0.06 + @types.cosf(a * 2.0) * 8.0
-      let ey = sy + storm.vy * 0.06 + @types.sinf(a * 2.0) * 8.0
+      let sx = storm.x + @math.cosf(a) * (storm.r - 12.0)
+      let sy = storm.y + @math.sinf(a) * (storm.r - 12.0)
+      let ex = sx + storm.vx * 0.06 + @math.cosf(a * 2.0) * 8.0
+      let ey = sy + storm.vy * 0.06 + @math.sinf(a * 2.0) * 8.0
 
       @raylib.draw_line(
         sx.to_int(),

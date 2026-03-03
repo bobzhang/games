@@ -949,20 +949,20 @@ fn update_objs(game : @types.Game, dt : Float) -> Unit {
     match game.objs[i].kind {
       Scout =>
         game.objs[i].x = game.objs[i].x +
-          @types.sinf(game.objs[i].spin * 2.2) * 34.0 * dt
+          @math.sinf(game.objs[i].spin * 2.2) * 34.0 * dt
       Spinner =>
         game.objs[i].y = game.objs[i].y +
-          @types.cosf(game.objs[i].spin * 2.8) * 26.0 * dt
+          @math.cosf(game.objs[i].spin * 2.8) * 26.0 * dt
       Tank =>
         game.objs[i].x = game.objs[i].x +
-          @types.sinf(game.objs[i].spin * 1.4) * 18.0 * dt
+          @math.sinf(game.objs[i].spin * 1.4) * 18.0 * dt
       GearWall => {
-        game.objs[i].w = 118.0 + @types.sinf(game.objs[i].spin * 3.4) * 26.0
-        game.objs[i].h = 18.0 + @types.sinf(game.objs[i].spin * 4.2) * 4.0
+        game.objs[i].w = 118.0 + @math.sinf(game.objs[i].spin * 3.4) * 26.0
+        game.objs[i].h = 18.0 + @math.sinf(game.objs[i].spin * 4.2) * 4.0
       }
       _ =>
         game.objs[i].x = game.objs[i].x +
-          @types.sinf(game.objs[i].spin * 2.6) * 16.0 * dt
+          @math.sinf(game.objs[i].spin * 2.6) * 16.0 * dt
     }
 
     let out = game.objs[i].y > Float::from_int(@types.screen_h) + 220.0 ||

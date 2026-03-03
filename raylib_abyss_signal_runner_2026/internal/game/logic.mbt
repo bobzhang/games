@@ -421,8 +421,8 @@ fn spawn_wave(game : @types.Game, y : Float) -> Unit {
         object_spawn_x(game, y, r),
         y + @types.randf(-28.0, 28.0),
         r,
-        @types.cosf(a) * p,
-        @types.sinf(a) * p,
+        @math.cosf(a) * p,
+        @math.sinf(a) * p,
         false,
         @types.randf(4.6, 9.4),
       )
@@ -637,17 +637,17 @@ fn update_objects(game : @types.Game, dt : Float) -> Unit {
     match game.objs[i].kind {
       Mine =>
         game.objs[i].x = game.objs[i].x +
-          @types.sinf(game.objs[i].spin * 2.3) * 18.0 * dt
+          @math.sinf(game.objs[i].spin * 2.3) * 18.0 * dt
       Data => {
         game.objs[i].x = game.objs[i].x +
-          @types.sinf(game.objs[i].spin * 3.2) * 12.0 * dt
+          @math.sinf(game.objs[i].spin * 3.2) * 12.0 * dt
         game.objs[i].y = game.objs[i].y +
-          @types.cosf(game.objs[i].spin * 2.4) * 9.0 * dt
+          @math.cosf(game.objs[i].spin * 2.4) * 9.0 * dt
       }
       Current => {
         game.objs[i].spin = game.objs[i].spin + dt * 1.3
         game.objs[i].r = game.objs[i].r +
-          @types.sinf(game.objs[i].spin * 1.8) * 9.0 * dt
+          @math.sinf(game.objs[i].spin * 1.8) * 9.0 * dt
         game.objs[i].r = @types.clampf(game.objs[i].r, 40.0, 72.0)
       }
       Rock | Oxygen | Scrap => ()

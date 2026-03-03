@@ -61,12 +61,6 @@ fn cosf_deg(angle : Float) -> Float {
 }
 
 ///|
-/// Returns the sine of `x` in radians.
-fn sinf(x : Float) -> Float {
-  @math.sinf(x)
-}
-
-///|
 /// Active meteor falling from above that destroys the lander on contact.
 struct Meteor {
   mut x : Float
@@ -314,7 +308,7 @@ fn main {
 
     if not(over) {
       wind_t = wind_t + dt
-      wind = wind_base + sinf(wind_t * 1.25) * 24.0
+      wind = wind_base + @math.sinf(wind_t * 1.25) * 24.0
 
       if respawn_t > 0.0 {
         respawn_t = respawn_t - dt

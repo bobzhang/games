@@ -16,7 +16,7 @@ fn draw_backdrop(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(8, 8, 14, 255))
 
   for i in 0..<13 {
-    let wave : Float = @types.sinf(
+    let wave : Float = @math.sinf(
         game.scene_t * 0.42 + Float::from_int(i) * 0.57,
       ) *
       10.0
@@ -30,7 +30,7 @@ fn draw_backdrop(game : @types.Game) -> Unit {
     )
   }
 
-  let curtain_wave_f : Float = @types.sinf(game.scene_t * 1.05) * 10.0
+  let curtain_wave_f : Float = @math.sinf(game.scene_t * 1.05) * 10.0
   let curtain_wave = curtain_wave_f.to_int()
 
   @raylib.draw_rectangle(
@@ -69,7 +69,7 @@ fn draw_spotlight(game : @types.Game) -> Unit {
   let cx = @types.stage_screen_x + @types.stage_screen_w / 2
   let cy = @types.stage_screen_y + @types.stage_screen_h / 2 - 26
 
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(game.beat_t * 2.15)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(game.beat_t * 2.15)
   let radius : Float = 272.0 + game.spotlight * 2.32 + pulse * 28.0
   let glow_f : Float = 48.0 + game.spotlight * 1.65
   let glow_alpha = @types.clampi(glow_f.to_int(), 54, 230)
@@ -254,7 +254,7 @@ fn draw_active_stage_pose(game : @types.Game) -> Unit {
   }
   let ring_alpha_f : Float = 45.0 + cue_ratio * 180.0
   let ring_alpha = @types.clampi(ring_alpha_f.to_int(), 30, 225)
-  let ring_radius : Float = 228.0 + @types.sinf(game.beat_t * 1.6) * 8.0
+  let ring_radius : Float = 228.0 + @math.sinf(game.beat_t * 1.6) * 8.0
   @raylib.draw_circle_lines(
     cx,
     cy,
@@ -270,7 +270,7 @@ fn draw_audience(game : @types.Game) -> Unit {
 
   for i in 0..<22 {
     let x = 42 + i * 74
-    let bounce_f : Float = @types.sinf(
+    let bounce_f : Float = @math.sinf(
         game.scene_t * 2.6 + Float::from_int(i) * 0.44,
       ) *
       cheer_amp
@@ -692,7 +692,7 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(10, 8, 12, 176),
   )
 
-  let rise_f : Float = @types.sinf(game.result_t * 2.6) * 8.0
+  let rise_f : Float = @math.sinf(game.result_t * 2.6) * 8.0
   let rise = rise_f.to_int()
   @raylib.draw_text(
     "CURTAIN FALL",

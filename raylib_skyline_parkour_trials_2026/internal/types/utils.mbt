@@ -47,18 +47,6 @@ pub fn approachf(v : Float, target : Float, step : Float) -> Float {
 }
 
 ///|
-/// Computes `sin(v)` and returns a `Float`.
-pub fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
-/// Computes `cos(v)` and returns a `Float`.
-pub fn cosf(v : Float) -> Float {
-  @math.cosf(v)
-}
-
-///|
 /// Returns whether point `(x, y)` lies inside a rectangle.
 pub fn point_in_rect(
   x : Float,

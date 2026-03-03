@@ -20,7 +20,7 @@ fn shake_y(game : @types.Game) -> Int {
 fn draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 14, 26, 255))
 
-  let moon_pulse : Float = @types.sinf(game.ui_t * 0.9)
+  let moon_pulse : Float = @math.sinf(game.ui_t * 0.9)
 
   @raylib.draw_circle(
     1240,
@@ -293,7 +293,7 @@ fn draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
   }
 
   if game.parry_t > 0.0 {
-    let pulse : Float = 30.0 + @types.sinf(game.ui_t * 20.0) * 4.0
+    let pulse : Float = 30.0 + @math.sinf(game.ui_t * 20.0) * 4.0
     @raylib.draw_circle_lines(
       px,
       py,

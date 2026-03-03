@@ -75,18 +75,6 @@ fn inside_rect(
 }
 
 ///|
-/// Computes sin(x) and returns it as Float.
-fn sinf(x : Float) -> Float {
-  @math.sinf(x)
-}
-
-///|
-/// Computes cos(x) and returns it as Float.
-fn cosf(x : Float) -> Float {
-  @math.cosf(x)
-}
-
-///|
 /// Writes a new ball entry at index `i` with the given position, active flag, and id; velocities and portal cooldown reset to zero.
 fn set_ball(
   balls : Array[Ball],
@@ -269,16 +257,22 @@ fn portal_pos(t : Float, idx : Int) -> (Float, Float) {
   let cx = Float::from_int(table_x + table_w / 2)
 
   if idx == 0 {
-    (left + 250.0 + sinf(t * 0.9) * 120.0, top + 130.0 + cosf(t * 1.2) * 44.0)
+    (
+      left + 250.0 + @math.sinf(t * 0.9) * 120.0,
+      top + 130.0 + @math.cosf(t * 1.2) * 44.0,
+    )
   } else if idx == 1 {
     (
-      right - 250.0 + cosf(t * 0.8) * 120.0,
-      bottom - 130.0 + sinf(t * 1.1) * 44.0,
+      right - 250.0 + @math.cosf(t * 0.8) * 120.0,
+      bottom - 130.0 + @math.sinf(t * 1.1) * 44.0,
     )
   } else if idx == 2 {
-    (cx + sinf(t * 1.1) * 190.0, top + 180.0 + cosf(t * 0.7) * 32.0)
+    (cx + @math.sinf(t * 1.1) * 190.0, top + 180.0 + @math.cosf(t * 0.7) * 32.0)
   } else {
-    (cx + cosf(t * 1.0) * 190.0, bottom - 180.0 + sinf(t * 0.75) * 32.0)
+    (
+      cx + @math.cosf(t * 1.0) * 190.0,
+      bottom - 180.0 + @math.sinf(t * 0.75) * 32.0,
+    )
   }
 }
 

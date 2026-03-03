@@ -75,7 +75,7 @@ fn draw_background(game : @types.Game) -> Unit {
     let fi = Float::from_int(i)
     let y : Float = 70.0 +
       fi * 62.0 +
-      @types.sinf(game.city_time * 0.9 + fi) * 24.0
+      @math.sinf(game.city_time * 0.9 + fi) * 24.0
     let shift = ((game.city_time * (34.0 + fi * 2.0)).to_int() + i * 19) % 220
     @raylib.draw_line(
       -220 + shift,
@@ -180,7 +180,7 @@ fn draw_clues(game : @types.Game) -> Unit {
 
     let base = suspect_col(game.clues[i].suspect)
     let pulse : Float = 0.45 +
-      0.55 * @types.sinf(game.city_time * 4.0 + Float::from_int(i) * 0.5)
+      0.55 * @math.sinf(game.city_time * 4.0 + Float::from_int(i) * 0.5)
     let radius : Float = 6.0 + pulse * 4.0
 
     @raylib.draw_circle(
@@ -237,7 +237,7 @@ fn draw_suspects(game : @types.Game) -> Unit {
     )
 
     if game.marked_suspect == i {
-      let pulse : Float = 0.5 + 0.5 * @types.sinf(game.city_time * 7.0)
+      let pulse : Float = 0.5 + 0.5 * @math.sinf(game.city_time * 7.0)
       @raylib.draw_circle_lines(
         x.to_int(),
         y.to_int(),
@@ -279,7 +279,7 @@ fn draw_incidents(game : @types.Game) -> Unit {
     let sevf = Float::from_int(incident.severity)
 
     let pulse : Float = 0.45 +
-      0.55 * @types.sinf(game.city_time * 8.0 + incident.pulse_t * 2.0)
+      0.55 * @math.sinf(game.city_time * 8.0 + incident.pulse_t * 2.0)
 
     let core_col = if incident.severity == 1 {
       @raylib.Color::new(244, 188, 122, 230)
@@ -320,7 +320,7 @@ fn draw_cursor(game : @types.Game) -> Unit {
   let lx = @types.cell_left_i(game.cursor_x)
   let ty = @types.cell_top_i(game.cursor_y)
 
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(game.city_time * 10.0)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(game.city_time * 10.0)
   let glow = 150 + (pulse * 90.0).to_int()
 
   @raylib.draw_rectangle_lines(

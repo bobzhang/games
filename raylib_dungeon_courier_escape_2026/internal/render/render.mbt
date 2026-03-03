@@ -129,7 +129,7 @@ fn draw_exits(game : @types.Game) -> Unit {
     }
 
     let pulse : Float = (0.5 : Float) +
-      (0.5 : Float) * @types.sinf(game.wave_clock * 2.3 + Float::from_int(i))
+      (0.5 : Float) * @math.sinf(game.wave_clock * 2.3 + Float::from_int(i))
     let r : Float = game.exits[i].radius + pulse * (6.0 : Float)
 
     @raylib.draw_circle(
@@ -170,7 +170,7 @@ fn draw_traps(game : @types.Game) -> Unit {
     }
 
     let blink : Float = (0.5 : Float) +
-      (0.5 : Float) * @types.sinf(trap.blink_t * 5.2)
+      (0.5 : Float) * @math.sinf(trap.blink_t * 5.2)
     let alpha = 70 + (blink * 120.0).to_int()
 
     @raylib.draw_circle(
@@ -204,8 +204,7 @@ fn draw_parcels(game : @types.Game) -> Unit {
       continue
     }
 
-    let pulse : Float = (0.5 : Float) +
-      (0.5 : Float) * @types.sinf(parcel.pulse)
+    let pulse : Float = (0.5 : Float) + (0.5 : Float) * @math.sinf(parcel.pulse)
 
     @raylib.draw_circle(
       parcel.x.to_int(),
@@ -293,8 +292,8 @@ fn draw_guard(g : @types.Guard) -> Unit {
     @raylib.Color::new(46, 22, 32, 220),
   )
 
-  let dir_x = g.x + @types.cosf(g.dir_deg * @types.deg_to_rad) * 22.0
-  let dir_y = g.y + @types.sinf(g.dir_deg * @types.deg_to_rad) * 22.0
+  let dir_x = g.x + @math.cosf(g.dir_deg * @types.deg_to_rad) * 22.0
+  let dir_y = g.y + @math.sinf(g.dir_deg * @types.deg_to_rad) * 22.0
 
   @raylib.draw_line_ex(
     @raylib.Vector2::new(g.x, g.y),
@@ -346,9 +345,9 @@ fn draw_player(game : @types.Game) -> Unit {
   )
 
   let fx = game.player.x +
-    @types.cosf(game.player.facing_deg * @types.deg_to_rad) * 20.0
+    @math.cosf(game.player.facing_deg * @types.deg_to_rad) * 20.0
   let fy = game.player.y +
-    @types.sinf(game.player.facing_deg * @types.deg_to_rad) * 20.0
+    @math.sinf(game.player.facing_deg * @types.deg_to_rad) * 20.0
 
   @raylib.draw_line_ex(
     @raylib.Vector2::new(game.player.x, game.player.y),

@@ -182,12 +182,6 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Wraps the standard library sine function for float arguments.
-fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
 /// Returns a pseudo-random float in the inclusive range [lo, hi].
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
@@ -485,7 +479,7 @@ fn find_flow(
 
   for cell in cells {
     if inside_rectf(x, y, cell.x, cell.y, cell.w, cell.h) {
-      let wave : Float = sinf(cell.pulse + x * 0.0017 + y * 0.0023)
+      let wave : Float = @math.sinf(cell.pulse + x * 0.0017 + y * 0.0023)
       out_vx = cell.vx + wave * (6.0 + storm * 7.0)
       out_vy = cell.vy + wave * (4.0 + storm * 5.0)
       out_t = wave.abs() * (0.2 + storm * 0.5)
@@ -786,7 +780,7 @@ fn draw_river(
   let seg_h : Float = Float::from_int(h) / Float::from_int(stripe_count)
   for i in 0..<stripe_count {
     let py : Float = Float::from_int(y) + Float::from_int(i) * seg_h
-    let wave : Float = sinf(scene_t * 2.4 + Float::from_int(i) * 0.42)
+    let wave : Float = @math.sinf(scene_t * 2.4 + Float::from_int(i) * 0.42)
     let shift : Int = (wave * 18.0).to_int()
     let alpha : Int = 18 +
       ((wave + 1.0) * 10.0).to_int() +
@@ -805,7 +799,7 @@ fn draw_river(
 /// Draws the river current grid overlay showing cell outlines and flow direction arrows.
 fn draw_current_grid(cells : Array[CurrentCell], storm : Float) -> Unit {
   for cell in cells {
-    let wave : Float = sinf(cell.pulse)
+    let wave : Float = @math.sinf(cell.pulse)
     let tone : Int = 34 +
       ((wave + 1.0) * 28.0).to_int() +
       (storm * 34.0).to_int()
@@ -842,7 +836,8 @@ fn draw_spans(spans : Array[BridgeSpan], scene_t : Float) -> Unit {
     let p : Float = clampf(spans[i].integrity / 100.0, 0.0, 1.0)
     let red : Int = 210 - (p * 100.0).to_int()
     let green : Int = 34 + (p * 180.0).to_int()
-    let pulse : Float = sinf(scene_t * 4.6 + Float::from_int(i) * 0.7) * 0.5 +
+    let pulse : Float = @math.sinf(scene_t * 4.6 + Float::from_int(i) * 0.7) *
+      0.5 +
       0.5
 
     @raylib.draw_rectangle(
@@ -906,7 +901,7 @@ fn draw_rafts(rafts : Array[RaftGroup], scene_t : Float) -> Unit {
       @raylib.Color::new(208, panic_col, 98, 238),
     )
 
-    let blink : Float = sinf(scene_t * 7.0 + raft.flare_t) * 0.5 + 0.5
+    let blink : Float = @math.sinf(scene_t * 7.0 + raft.flare_t) * 0.5 + 0.5
     @raylib.draw_circle_v(
       @raylib.Vector2::new(raft.x, raft.y - 22.0),
       5.0 + blink * 3.0,
@@ -957,7 +952,7 @@ fn draw_strikes(strikes : Array[LightningStrike], scene_t : Float) -> Unit {
     }
 
     if strike.telegraph > 0.0 {
-      let blink : Float = sinf(scene_t * 8.0 + strike.pulse) * 0.5 + 0.5
+      let blink : Float = @math.sinf(scene_t * 8.0 + strike.pulse) * 0.5 + 0.5
       @raylib.draw_circle_lines(
         strike.x.to_int(),
         strike.y.to_int(),
@@ -1000,7 +995,7 @@ fn draw_supplies(supplies : Array[SupplyCrate], scene_t : Float) -> Unit {
     if not(supply.active) {
       continue
     }
-    let blink : Float = sinf(scene_t * 6.2 + supply.blink) * 0.5 + 0.5
+    let blink : Float = @math.sinf(scene_t * 6.2 + supply.blink) * 0.5 + 0.5
     let col = if supply.kind == 0 {
       @raylib.Color::new(104, 222, 132, 212)
     } else {
@@ -1083,7 +1078,7 @@ fn draw_wakes(wakes : Array[WakeParticle]) -> Unit {
 ///|
 /// Draws the rescue boat as a triangle with a bobbing animation, interior highlight, and boost heat glow.
 fn draw_boat(boat : RescueBoat, scene_t : Float) -> Unit {
-  let bob : Float = sinf(scene_t * 7.2) * 1.4
+  let bob : Float = @math.sinf(scene_t * 7.2) * 1.4
   let x : Float = boat.x
   let y : Float = boat.y + bob
   @raylib.draw_triangle(
@@ -1165,7 +1160,7 @@ fn draw_world_panels(
     @raylib.Color::new(250, 250, 208, 240),
   )
 
-  let pulse : Float = sinf(scene_t * 3.6) * 0.5 + 0.5
+  let pulse : Float = @math.sinf(scene_t * 3.6) * 0.5 + 0.5
   @raylib.draw_circle_v(
     @raylib.Vector2::new(
       dock.x + Float::from_int(dock.w) * 0.5,
@@ -1533,7 +1528,7 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
   @raylib.clear_background(@raylib.Color::new(9, 16, 26, 255))
   for i in 0..<26 {
     let yy : Float = Float::from_int(i) / 26.0
-    let wave : Float = sinf(scene_t * 1.2 + yy * 6.0) * 0.5 + 0.5
+    let wave : Float = @math.sinf(scene_t * 1.2 + yy * 6.0) * 0.5 + 0.5
     let alpha : Int = 20 + (wave * 54.0).to_int()
     @raylib.draw_rectangle(
       0,
@@ -1577,7 +1572,7 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
     @raylib.Color::new(168, 208, 188, 230),
   )
 
-  let pulse : Float = sinf(scene_t * 3.7) * 0.5 + 0.5
+  let pulse : Float = @math.sinf(scene_t * 3.7) * 0.5 + 0.5
   let bw : Int = 460
   let bh : Int = 92
   let bx : Int = sw / 2 - bw / 2
@@ -1960,7 +1955,7 @@ fn main {
       }
 
       let storm : Float = clampf(1.0 - timer / 460.0, 0.0, 1.0)
-      let storm_surge : Float = sinf(scene_t * 1.3) * 0.5 + 0.5
+      let storm_surge : Float = @math.sinf(scene_t * 1.3) * 0.5 + 0.5
       let storm_level : Float = clampf(
         storm * 0.8 + storm_surge * 0.38,
         0.0,
@@ -2555,7 +2550,7 @@ fn main {
       draw_rain(rain, wind_x)
 
       if boat.siren_t > 0.0 {
-        let p : Float = sinf(boat.siren_t * 8.0) * 0.5 + 0.5
+        let p : Float = @math.sinf(boat.siren_t * 8.0) * 0.5 + 0.5
         @raylib.draw_circle_lines(
           boat.x.to_int(),
           boat.y.to_int(),

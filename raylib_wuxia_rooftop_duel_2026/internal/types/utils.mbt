@@ -31,12 +31,6 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Computes `sin(v)` and returns a `Float`.
-pub fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
 /// Returns a pseudo-random float sampled from `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0

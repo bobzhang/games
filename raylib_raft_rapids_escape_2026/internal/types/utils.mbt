@@ -37,18 +37,6 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Sine helper wrapping the math double API.
-pub fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
-/// Cosine helper wrapping the math double API.
-pub fn cosf(v : Float) -> Float {
-  @math.cosf(v)
-}
-
-///|
 /// Uniform random float in `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
@@ -90,16 +78,16 @@ pub fn point_dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 ///|
 /// Horizontal water current applied at a given y.
 pub fn water_current_x(game : Game, y : Float) -> Float {
-  let n0 : Float = sinf(game.ui_t * 0.80 + y * 0.011)
-  let n1 : Float = cosf(game.ui_t * 1.53 + y * 0.006)
+  let n0 : Float = @math.sinf(game.ui_t * 0.80 + y * 0.011)
+  let n1 : Float = @math.cosf(game.ui_t * 1.53 + y * 0.006)
   (n0 * 92.0 + n1 * 68.0) * (0.6 + Float::from_int(game.level) * 0.08)
 }
 
 ///|
 /// Vertical water current applied at a given x.
 pub fn water_current_y(game : Game, x : Float) -> Float {
-  let n0 : Float = sinf(game.ui_t * 0.66 + x * 0.008)
-  let n1 : Float = cosf(game.ui_t * 1.18 + x * 0.014)
+  let n0 : Float = @math.sinf(game.ui_t * 0.66 + x * 0.008)
+  let n1 : Float = @math.cosf(game.ui_t * 1.18 + x * 0.014)
   180.0 + Float::from_int(game.level) * 18.0 + n0 * 26.0 + n1 * 14.0
 }
 

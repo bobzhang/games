@@ -53,18 +53,6 @@ pub fn approachf(v : Float, target : Float, step : Float) -> Float {
 }
 
 ///|
-/// Computes `sin(v)` and returns a `Float`.
-pub fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
-/// Computes `cos(v)` and returns a `Float`.
-pub fn cosf(v : Float) -> Float {
-  @math.cosf(v)
-}
-
-///|
 /// Quadratic ease-out curve over input range `[0, 1]`.
 pub fn ease_out_quad(t : Float) -> Float {
   let x = clampf(t, 0.0, 1.0)

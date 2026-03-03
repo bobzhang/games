@@ -475,11 +475,11 @@ fn update_obstacles(game : @types.Game, dt : Float) -> Unit {
       dt * (1.3 + Float::from_int(obstacle.kind))
 
     let sway : Float = if obstacle.kind == @types.obstacle_log {
-      @types.sinf(obstacle.phase * 1.9) * 32.0
+      @math.sinf(obstacle.phase * 1.9) * 32.0
     } else if obstacle.kind == @types.obstacle_mine {
-      @types.sinf(obstacle.phase * 2.6) * 19.0
+      @math.sinf(obstacle.phase * 2.6) * 19.0
     } else {
-      @types.sinf(obstacle.phase * 1.3) * 24.0
+      @math.sinf(obstacle.phase * 1.3) * 24.0
     }
 
     obstacle.x = obstacle.x +
@@ -539,7 +539,7 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
 
     pickup.x = pickup.x +
       (
-        @types.sinf(pickup.phase * 2.3) * 22.0 +
+        @math.sinf(pickup.phase * 2.3) * 22.0 +
         @types.water_current_x(game, pickup.y) * 0.10
       ) *
       dt

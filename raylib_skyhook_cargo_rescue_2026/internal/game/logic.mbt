@@ -500,9 +500,9 @@ fn collect_pickup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit 
 
 ///|
 fn update_heli(game : @types.Game, dt : Float) -> Unit {
-  let wind_x : Float = @types.sinf(game.storm_t * 0.82 + game.heli_y * 0.010) *
+  let wind_x : Float = @math.sinf(game.storm_t * 0.82 + game.heli_y * 0.010) *
     (52.0 + Float::from_int(game.wave) * 6.0)
-  let wind_y : Float = @types.cosf(game.storm_t * 0.64 + game.heli_x * 0.008) *
+  let wind_y : Float = @math.cosf(game.storm_t * 0.64 + game.heli_x * 0.008) *
     26.0
 
   let boost_mul : Float = if game.boost_on || game.turbo_t > 0.0 {
@@ -632,9 +632,9 @@ fn update_survivors(game : @types.Game, dt : Float) -> Unit {
     survivor.phase = survivor.phase + dt * 1.7
     survivor.panic = @types.minf(4.0, survivor.panic + dt * 0.18)
 
-    let drift_x : Float = @types.sinf(survivor.phase * 2.2) *
+    let drift_x : Float = @math.sinf(survivor.phase * 2.2) *
       (10.0 + survivor.panic * 3.0)
-    let drift_y : Float = @types.cosf(survivor.phase * 1.9) *
+    let drift_y : Float = @math.cosf(survivor.phase * 1.9) *
       (6.0 + survivor.panic * 2.0)
 
     survivor.vx = survivor.vx * (1.0 - dt * 2.0) + drift_x * dt
@@ -689,7 +689,7 @@ fn update_hazards(game : @types.Game, dt : Float, hook_speed : Float) -> Unit {
       dt * (1.0 + Float::from_int(hazard.kind) * 0.8)
 
     if hazard.kind == @types.hazard_cloud {
-      hazard.vx = hazard.vx + @types.sinf(hazard.phase * 1.4) * dt * 80.0
+      hazard.vx = hazard.vx + @math.sinf(hazard.phase * 1.4) * dt * 80.0
       hazard.vy = hazard.vy + dt * 24.0
     } else if hazard.kind == @types.hazard_drone {
       let tx : Float = if game.carrying_idx >= 0 { tip_x } else { game.heli_x }
@@ -705,7 +705,7 @@ fn update_hazards(game : @types.Game, dt : Float, hook_speed : Float) -> Unit {
       hazard.vx = hazard.vx * (1.0 - dt * 2.4) + nx * dt * 420.0
       hazard.vy = hazard.vy * (1.0 - dt * 2.4) + ny * dt * 420.0
     } else {
-      hazard.vx = hazard.vx + @types.sinf(hazard.phase * 3.0) * dt * 96.0
+      hazard.vx = hazard.vx + @math.sinf(hazard.phase * 3.0) * dt * 96.0
       hazard.vy = hazard.vy + dt * 54.0
     }
 
@@ -778,7 +778,7 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
     pickup.phase = pickup.phase + dt * 2.2
 
     pickup.x = pickup.x +
-      (pickup.vx + @types.sinf(pickup.phase * 2.3) * 20.0) * dt
+      (pickup.vx + @math.sinf(pickup.phase * 2.3) * 20.0) * dt
     pickup.y = pickup.y + (pickup.vy + Float::from_int(game.wave) * 4.0) * dt
 
     if pickup.x < @types.world_left() + 16.0 {

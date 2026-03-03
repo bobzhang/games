@@ -52,8 +52,8 @@ fn draw_background(game : @types.Game) -> Unit {
   )
 
   let moon_x = Float::from_int(@types.screen_w) * 0.82 +
-    @types.sinf(game.time_s * 0.24) * 24.0
-  let moon_y : Float = 106.0 + @types.cosf(game.time_s * 0.18) * 14.0
+    @math.sinf(game.time_s * 0.24) * 24.0
+  let moon_y : Float = 106.0 + @math.cosf(game.time_s * 0.18) * 14.0
   @raylib.draw_circle(
     moon_x.to_int(),
     moon_y.to_int(),
@@ -71,10 +71,10 @@ fn draw_background(game : @types.Game) -> Unit {
     let fi = Float::from_int(i)
     let base_x = (i * 119 + i * i * 71) % @types.screen_w
     let base_y = (i * 73 + i * 29) % @types.screen_h
-    let x = Float::from_int(base_x) + @types.sinf(game.time_s * 0.3 + fi) * 2.0
+    let x = Float::from_int(base_x) + @math.sinf(game.time_s * 0.3 + fi) * 2.0
     let y = Float::from_int(base_y) +
-      @types.cosf(game.time_s * 0.2 + fi * 1.1) * 2.0
-    let tw : Float = 0.5 + 0.5 * @types.sinf(game.time_s * 1.4 + fi * 0.9)
+      @math.cosf(game.time_s * 0.2 + fi * 1.1) * 2.0
+    let tw : Float = 0.5 + 0.5 * @math.sinf(game.time_s * 1.4 + fi * 0.9)
     let alpha = 45 + (tw * 120.0).to_int()
 
     @raylib.draw_circle(
@@ -150,7 +150,7 @@ fn draw_gate(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     255,
   )
 
-  let pulse : Float = 3.0 * @types.sinf(game.time_s * 4.0)
+  let pulse : Float = 3.0 * @math.sinf(game.time_s * 4.0)
   @raylib.draw_circle(
     gx.to_int(),
     gy.to_int(),
@@ -258,7 +258,7 @@ fn draw_enemies(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     if enemy.kind == @types.enemy_kind_wraith {
       let aura = enemy.radius +
         4.0 +
-        @types.sinf(game.time_s * 8.0 + enemy.phase) * 2.0
+        @math.sinf(game.time_s * 8.0 + enemy.phase) * 2.0
       @raylib.draw_circle_lines(
         x.to_int(),
         y.to_int(),
@@ -603,7 +603,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(190, 218, 246, 230),
   )
 
-  let pulse = 170 + (@types.sinf(game.time_s * 5.0) * 70.0).to_int()
+  let pulse = 170 + (@math.sinf(game.time_s * 5.0) * 70.0).to_int()
   draw_center_text(
     "Press J to Start",
     560,

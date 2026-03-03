@@ -126,11 +126,6 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-fn sinf(v : Float) -> Float {
-  @math.sinf(v)
-}
-
-///|
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
@@ -653,7 +648,8 @@ fn draw_sky_background(
   for i in 0..<26 {
     let y0 : Float = Float::from_int(world_y) +
       Float::from_int(i) * Float::from_int(world_h) / 26.0
-    let wave : Float = sinf(scene_t * 1.6 + Float::from_int(i) * 0.4) * 0.5 +
+    let wave : Float = @math.sinf(scene_t * 1.6 + Float::from_int(i) * 0.4) *
+      0.5 +
       0.5
     let alpha : Int = 10 + (wave * 24.0).to_int()
     @raylib.draw_rectangle(
@@ -688,7 +684,7 @@ fn draw_city_blocks(
       let wx : Int = x + 6 + j * 14
       let mut wy : Int = y + 8
       while wy < y + h - 8 {
-        let blink : Float = sinf(
+        let blink : Float = @math.sinf(
             scene_t * 3.0 +
             Float::from_int(i * 5 + j) * 0.6 +
             Float::from_int(wy) * 0.03,
@@ -737,7 +733,7 @@ fn draw_depot(depot : Depot, scene_t : Float) -> Unit {
     @raylib.Color::new(232, 252, 240, 236),
   )
 
-  let pulse : Float = sinf(scene_t * 3.4) * 0.5 + 0.5
+  let pulse : Float = @math.sinf(scene_t * 3.4) * 0.5 + 0.5
   @raylib.draw_circle_v(
     @raylib.Vector2::new(depot.x + depot.w * 0.5, depot.y + depot.h * 0.5),
     20.0 + pulse * 8.0,
@@ -786,7 +782,8 @@ fn draw_pads(
     )
 
     if has_request {
-      let pulse : Float = sinf(scene_t * 8.0 + Float::from_int(i) * 0.7) * 0.5 +
+      let pulse : Float = @math.sinf(scene_t * 8.0 + Float::from_int(i) * 0.7) *
+        0.5 +
         0.5
       @raylib.draw_circle_v(
         @raylib.Vector2::new(pads[i].x + pads[i].w * 0.5, pads[i].y - 8.0),
@@ -804,7 +801,7 @@ fn draw_wind_tunnels(winds : Array[WindTunnel], scene_t : Float) -> Unit {
       continue
     }
 
-    let pulse : Float = sinf(scene_t * 6.0 + wind.pulse) * 0.5 + 0.5
+    let pulse : Float = @math.sinf(scene_t * 6.0 + wind.pulse) * 0.5 + 0.5
 
     @raylib.draw_rectangle(
       wind.x.to_int(),
@@ -846,7 +843,7 @@ fn draw_birds(birds : Array[Bird], scene_t : Float) -> Unit {
       continue
     }
 
-    let wing : Float = sinf(scene_t * 16.0 + bird.wing_t) * 0.5 + 0.5
+    let wing : Float = @math.sinf(scene_t * 16.0 + bird.wing_t) * 0.5 + 0.5
     let spread : Float = 6.0 + wing * 7.0
 
     @raylib.draw_triangle(
@@ -871,7 +868,7 @@ fn draw_crates(crates : Array[Crate], scene_t : Float) -> Unit {
       continue
     }
 
-    let pulse : Float = sinf(scene_t * 5.4 + crate.pulse) * 0.5 + 0.5
+    let pulse : Float = @math.sinf(scene_t * 5.4 + crate.pulse) * 0.5 + 0.5
     let col = if crate.kind == 0 {
       @raylib.Color::new(106, 204, 252, 220)
     } else if crate.kind == 1 {
@@ -931,7 +928,7 @@ fn draw_particles(parts : Array[Particle]) -> Unit {
 
 ///|
 fn draw_glider(glider : Glider, scene_t : Float) -> Unit {
-  let bob : Float = sinf(scene_t * 12.0 + glider.step_t * 0.08) * 1.1
+  let bob : Float = @math.sinf(scene_t * 12.0 + glider.step_t * 0.08) * 1.1
 
   @raylib.draw_triangle(
     @raylib.Vector2::new(glider.x + 22.0, glider.y + bob),
@@ -960,7 +957,7 @@ fn draw_glider(glider : Glider, scene_t : Float) -> Unit {
   }
 
   if glider.flare_t > 0.0 {
-    let pulse : Float = sinf(glider.flare_t * 9.0) * 0.5 + 0.5
+    let pulse : Float = @math.sinf(glider.flare_t * 9.0) * 0.5 + 0.5
     @raylib.draw_circle_lines(
       glider.x.to_int(),
       glider.y.to_int(),
@@ -998,7 +995,7 @@ fn draw_deliveries_panel(
       clampf(1.0 - delivery.deadline / delivery.max_deadline, 0.0, 1.0)
     }
 
-    let blink : Float = sinf(scene_t * 8.0 + delivery.pulse) * 0.5 + 0.5
+    let blink : Float = @math.sinf(scene_t * 8.0 + delivery.pulse) * 0.5 + 0.5
     let row_h : Int = 72
 
     @raylib.draw_rectangle(
@@ -1414,7 +1411,7 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
 
   for i in 0..<24 {
     let yy : Float = Float::from_int(i) / 24.0
-    let wave : Float = sinf(scene_t * 1.2 + yy * 6.0) * 0.5 + 0.5
+    let wave : Float = @math.sinf(scene_t * 1.2 + yy * 6.0) * 0.5 + 0.5
     let alpha : Int = 18 + (wave * 44.0).to_int()
     @raylib.draw_rectangle(
       0,
@@ -1445,7 +1442,7 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
     @raylib.Color::new(186, 212, 236, 236),
   )
 
-  let pulse : Float = sinf(scene_t * 3.8) * 0.5 + 0.5
+  let pulse : Float = @math.sinf(scene_t * 3.8) * 0.5 + 0.5
   let bw : Int = 476
   let bh : Int = 94
   let bx : Int = sw / 2 - bw / 2
@@ -1938,7 +1935,8 @@ fn main {
         wind.pulse = wind.pulse + dt * 2.8
 
         if inside_rectf(glider.x, glider.y, wind.x, wind.y, wind.w, wind.h) {
-          let wave_mul : Float = 0.72 + (sinf(wind.pulse) * 0.5 + 0.5) * 0.62
+          let wave_mul : Float = 0.72 +
+            (@math.sinf(wind.pulse) * 0.5 + 0.5) * 0.62
           glider.vx = glider.vx + wind.vx * dt * wave_mul
           glider.vy = glider.vy + wind.vy * dt * wave_mul
           wind_drain = wind_drain + wind.turbulence * (0.7 + wave_mul * 0.5)

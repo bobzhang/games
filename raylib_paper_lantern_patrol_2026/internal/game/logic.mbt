@@ -821,7 +821,7 @@ fn update_lanterns(game : @types.Game, dt : Float) -> Unit {
       let follow_x = game.patrol.x + game.patrol.vx * 0.05
       let follow_y = game.patrol.y -
         26.0 +
-        @types.sinf(game.run_time * 7.0 + game.lanterns[i].wobble) * 5.0
+        @math.sinf(game.run_time * 7.0 + game.lanterns[i].wobble) * 5.0
 
       game.lanterns[i].vx = game.lanterns[i].vx +
         (follow_x - game.lanterns[i].x) * @types.escort_pull * dt

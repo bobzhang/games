@@ -67,8 +67,8 @@ fn draw_background(game : @types.Game) -> Unit {
     let fi = Float::from_int(i)
     let x : Float = 90.0 +
       fi * 88.0 +
-      @types.sinf(game.elapsed_t * 0.6 + fi * 0.9) * 18.0
-    let y : Float = 62.0 + @types.cosf(game.elapsed_t * 0.9 + fi * 0.6) * 6.0
+      @math.sinf(game.elapsed_t * 0.6 + fi * 0.9) * 18.0
+    let y : Float = 62.0 + @math.cosf(game.elapsed_t * 0.9 + fi * 0.6) * 6.0
 
     @raylib.draw_circle(
       x.to_int(),
@@ -332,7 +332,7 @@ fn draw_grill_station(game : @types.Game) -> Unit {
 
   for i in 0..<5 {
     let fi = Float::from_int(i)
-    let pulse : Float = 0.5 + 0.5 * @types.sinf(game.elapsed_t * 6.0 + fi)
+    let pulse : Float = 0.5 + 0.5 * @math.sinf(game.elapsed_t * 6.0 + fi)
     let flame_h : Float = 14.0 + pulse * 8.0
     @raylib.draw_rectangle(
       (@types.grill_x - 78.0 + fi * 34.0).to_int(),
@@ -483,7 +483,7 @@ fn draw_pass_station(game : @types.Game) -> Unit {
 /// Draws an animated pulsing ring around the current navigation cursor position.
 fn draw_cursor(game : @types.Game) -> Unit {
   let p = @types.node_pos(game.cursor)
-  let r : Float = 28.0 + 6.0 * (0.5 + 0.5 * @types.sinf(game.elapsed_t * 8.0))
+  let r : Float = 28.0 + 6.0 * (0.5 + 0.5 * @math.sinf(game.elapsed_t * 8.0))
 
   @raylib.draw_circle_lines(
     p.0.to_int(),

@@ -342,7 +342,7 @@ fn update_district_pulses(game : @types.Game, dt : Float) -> Unit {
     let y = i / @types.city_cols
 
     let mut heat : Float = 0.24 +
-      0.18 * @types.sinf(game.city_time * 0.9 + game.pulses[i].drift)
+      0.18 * @math.sinf(game.city_time * 0.9 + game.pulses[i].drift)
 
     if x == game.cursor_x && y == game.cursor_y {
       heat = heat + 0.15

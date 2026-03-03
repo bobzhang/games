@@ -512,8 +512,8 @@ fn apply_dash(game : @types.Game) -> Unit {
   let mut dy = game.input_y
 
   if dx.abs() < 0.01 && dy.abs() < 0.01 {
-    dx = @types.sinf(game.player.angle * 0.017)
-    dy = -@types.cosf(game.player.angle * 0.017)
+    dx = @math.sinf(game.player.angle * 0.017)
+    dy = -@math.cosf(game.player.angle * 0.017)
   }
 
   let n2 = @types.maxf(0.01, dx * dx + dy * dy)

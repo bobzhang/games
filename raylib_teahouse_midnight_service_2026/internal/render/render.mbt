@@ -43,10 +43,10 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   )
 
   let moon_x : Float = Float::from_int(@types.screen_w) * 0.82 +
-    @types.sinf(game.time_s * 0.18) * 36.0
+    @math.sinf(game.time_s * 0.18) * 36.0
   let moon_y : Float = Float::from_int(@types.hud_h) +
     74.0 +
-    @types.cosf(game.time_s * 0.22) * 12.0
+    @math.cosf(game.time_s * 0.22) * 12.0
 
   @raylib.draw_circle(
     (moon_x + cam_x * 0.2).to_int(),
@@ -68,7 +68,7 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     let y = Float::from_int(@types.hud_h) +
       (fi * 41.0 + fi * 18.0) % Float::from_int(@types.screen_h - @types.hud_h)
 
-    let tw : Float = 0.5 + 0.5 * @types.sinf(fi * 0.72 + game.time_s * 1.34)
+    let tw : Float = 0.5 + 0.5 * @math.sinf(fi * 0.72 + game.time_s * 1.34)
     @raylib.draw_circle(
       (x + cam_x * 0.12).to_int(),
       (y + cam_y * 0.12).to_int(),
@@ -547,13 +547,13 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
   @raylib.draw_line_ex(
     @raylib.Vector2::new(x - 8.0, y + 2.0),
-    @raylib.Vector2::new(x - 10.0 - @types.sinf(p.anim_t * 8.0) * 5.0, y + 24.0),
+    @raylib.Vector2::new(x - 10.0 - @math.sinf(p.anim_t * 8.0) * 5.0, y + 24.0),
     5.0,
     @raylib.Color::new(176, 206, 236, 232),
   )
   @raylib.draw_line_ex(
     @raylib.Vector2::new(x + 8.0, y + 2.0),
-    @raylib.Vector2::new(x + 10.0 + @types.sinf(p.anim_t * 8.0) * 5.0, y + 24.0),
+    @raylib.Vector2::new(x + 10.0 + @math.sinf(p.anim_t * 8.0) * 5.0, y + 24.0),
     5.0,
     @raylib.Color::new(176, 206, 236, 232),
   )
@@ -658,7 +658,7 @@ fn draw_sparks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
     let life = @types.clampf(shadow.life / 0.24, 0.0, 1.0)
     let stretch : Float = Float::from_int(1) +
-      @types.sinf(shadow.rot * 0.06).abs() * 0.24
+      @math.sinf(shadow.rot * 0.06).abs() * 0.24
 
     @raylib.draw_rectangle(
       (shadow.x - shadow.w * 0.5 * stretch + cam_x * 0.2).to_int(),

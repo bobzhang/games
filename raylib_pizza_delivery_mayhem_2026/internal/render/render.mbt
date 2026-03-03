@@ -1,7 +1,7 @@
 ///|
 /// Returns a sine wave value oscillating at frequency k based on the game's UI timer.
 fn bg_wave(game : @types.Game, k : Float) -> Float {
-  @types.sinf(game.ui_t * k)
+  @math.sinf(game.ui_t * k)
 }
 
 ///|
@@ -269,7 +269,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
   }
   let x : Int = p.x.to_int() + ox
   let y : Int = p.y.to_int() + oy
-  let pulse : Float = @types.sinf(p.phase * 2.4)
+  let pulse : Float = @math.sinf(p.phase * 2.4)
   let rr : Float = 15.0 + pulse * 1.6
   let c0 : @raylib.Color = pickup_color(p.kind)
   @raylib.draw_circle(x, y, rr, c0)
@@ -377,7 +377,7 @@ fn draw_rider(game : @types.Game, ox : Int, oy : Int) -> Unit {
     @raylib.draw_circle(
       x,
       y + 14,
-      8.0 + @types.sinf(game.ui_t * 9.0) * 2.0,
+      8.0 + @math.sinf(game.ui_t * 9.0) * 2.0,
       @raylib.Color::new(118, 236, 255, 178),
     )
   }
@@ -398,7 +398,7 @@ fn draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
   if game.hint_t <= 0.0 {
     return
   }
-  let pulse : Float = @types.sinf(game.ui_t * 10.0)
+  let pulse : Float = @math.sinf(game.ui_t * 10.0)
   let alpha : Int = if game.hint_t > 1.2 {
     238
   } else {

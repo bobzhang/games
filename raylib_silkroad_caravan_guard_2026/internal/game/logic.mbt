@@ -200,10 +200,10 @@ fn lane_y(game : @types.Game, index : Int) -> Float {
   let i = @types.clampi(index, 0, @types.lane_count - 1)
   let fi = Float::from_int(i)
   let base = @types.lane_base_y(i)
-  let wave = @types.sinf(
+  let wave = @math.sinf(
     game.time_s * (0.92 + fi * 0.12) + fi * 1.3 + game.distance * 0.008,
   )
-  let sway = @types.cosf(
+  let sway = @math.cosf(
     game.time_s * (0.46 + fi * 0.06) + fi * 0.8 + game.distance * 0.003,
   )
   base + wave * 26.0 + sway * 12.0
@@ -284,9 +284,9 @@ fn update_wagons(game : @types.Game, dt : Float) -> Unit {
 
     let fi = Float::from_int(i)
     game.wagons[i].x = @types.wagon_slot_x(i) +
-      @types.sinf(game.time_s * 1.1 + fi * 0.9 + game.distance * 0.005) * 8.0
+      @math.sinf(game.time_s * 1.1 + fi * 0.9 + game.distance * 0.005) * 8.0
     game.wagons[i].y = @types.wagon_slot_y(i) +
-      @types.cosf(game.time_s * 1.4 + fi * 0.6) * 6.0
+      @math.cosf(game.time_s * 1.4 + fi * 0.6) * 6.0
   }
 }
 

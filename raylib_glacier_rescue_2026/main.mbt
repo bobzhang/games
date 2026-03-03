@@ -163,18 +163,6 @@ fn randf(lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the sine of x in radians.
-fn sinf(x : Float) -> Float {
-  @math.sinf(x)
-}
-
-///|
-/// Returns the cosine of x in radians.
-fn cosf(x : Float) -> Float {
-  @math.cosf(x)
-}
-
-///|
 /// Returns the squared Euclidean distance between two 2D points.
 fn dist2(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
   let dx = ax - bx
@@ -236,8 +224,8 @@ fn burst_particles(
       particles,
       x,
       y,
-      cosf(ang) * spd,
-      sinf(ang) * spd,
+      @math.cosf(ang) * spd,
+      @math.sinf(ang) * spd,
       randf(2.0, 6.0),
       randf(0.25, 0.95),
       kind,
@@ -296,8 +284,8 @@ fn spawn_hazards(hazards : FixedArray[Hazard], level : Int) -> Unit {
         kind,
         x: randf(420.0, world_w - 120.0),
         y: randf(120.0, world_h - 120.0),
-        vx: cosf(ang) * speed,
-        vy: sinf(ang) * speed,
+        vx: @math.cosf(ang) * speed,
+        vy: @math.sinf(ang) * speed,
         r,
         spin: randf(-2.5, 2.5),
         life: randf(8.0, 18.0),
@@ -899,8 +887,8 @@ fn main {
           } else {
             randf(42.0, 92.0)
           }
-          hazard.vx = cosf(a) * spd
-          hazard.vy = sinf(a) * spd
+          hazard.vx = @math.cosf(a) * spd
+          hazard.vy = @math.sinf(a) * spd
         }
 
         hazard.x = hazard.x + (hazard.vx + storm.wind_x * 0.16) * dt
@@ -1074,8 +1062,8 @@ fn main {
           particles,
           heli.x + randf(-380.0, 380.0),
           heli.y + randf(-260.0, 260.0),
-          storm.wind_x * 0.6 + cosf(ang) * randf(6.0, 28.0),
-          storm.wind_y * 0.6 + sinf(ang) * randf(6.0, 22.0),
+          storm.wind_x * 0.6 + @math.cosf(ang) * randf(6.0, 28.0),
+          storm.wind_y * 0.6 + @math.sinf(ang) * randf(6.0, 22.0),
           randf(1.0, 3.8),
           randf(0.4, 1.2),
           0,
@@ -1334,7 +1322,7 @@ fn main {
         @raylib.draw_circle_lines(
           sx.to_int(),
           sy.to_int(),
-          18.0 + sinf(survivor.panic_t * 4.0).abs() * 6.0,
+          18.0 + @math.sinf(survivor.panic_t * 4.0).abs() * 6.0,
           @raylib.Color::new(152, 206, 252, 126),
         )
       }
@@ -1377,7 +1365,7 @@ fn main {
       @raylib.Color::new(236, 240, 246, 240),
     )
 
-    let blade : Float = sinf(heli.rotor * 0.03) * 52.0
+    let blade : Float = @math.sinf(heli.rotor * 0.03) * 52.0
     @raylib.draw_line(
       (hx - blade).to_int(),
       (hy - 24.0).to_int(),

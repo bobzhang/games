@@ -47,10 +47,10 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   )
 
   let moon_x : Float = Float::from_int(@types.screen_w) * 0.8 +
-    @types.sinf(game.time_s * 0.16) * 34.0
+    @math.sinf(game.time_s * 0.16) * 34.0
   let moon_y : Float = Float::from_int(@types.hud_h) +
     74.0 +
-    @types.cosf(game.time_s * 0.22) * 14.0
+    @math.cosf(game.time_s * 0.22) * 14.0
 
   @raylib.draw_circle(
     (moon_x + cam_x * 0.2).to_int(),
@@ -72,7 +72,7 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     let y = Float::from_int(@types.hud_h) +
       (fi * 42.0 + fi * 15.0) % Float::from_int(@types.screen_h - @types.hud_h)
 
-    let tw : Float = 0.5 + 0.5 * @types.sinf(fi * 0.7 + game.time_s * 1.4)
+    let tw : Float = 0.5 + 0.5 * @math.sinf(fi * 0.7 + game.time_s * 1.4)
     let alpha = 64 + (tw * 112.0).to_int()
 
     @raylib.draw_circle(
@@ -89,13 +89,13 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
     for x = -120; x < @types.screen_w + 180; x = x + 30 {
       let fx = Float::from_int(x)
-      let wave = @types.sinf(fx * 0.012 + game.time_s * (0.8 + fl * 0.18) + fl)
-      let wave2 = @types.cosf(
+      let wave = @math.sinf(fx * 0.012 + game.time_s * (0.8 + fl * 0.18) + fl)
+      let wave2 = @math.cosf(
         fx * 0.016 + game.time_s * (0.54 + fl * 0.12) + fl * 1.2,
       )
       let y = yy + wave * (22.0 + fl * 5.0) + wave2 * (14.0 + fl * 2.0)
       let glow : Float = 0.45 +
-        0.55 * @types.sinf(fx * 0.01 + game.time_s * 1.2 + fl)
+        0.55 * @math.sinf(fx * 0.01 + game.time_s * 1.2 + fl)
 
       let col = if layer % 2 == 0 {
         @raylib.Color::new(84, 222 + (glow * 24.0).to_int(), 184, 40)
@@ -218,7 +218,7 @@ fn draw_bell(b : @types.Bell, i : Int, cam_x : Float, cam_y : Float) -> Unit {
   let x = b.x + cam_x
   let y = b.y + cam_y
   let pulse : Float = 0.5 +
-    0.5 * @types.sinf(Float::from_int(i) * 0.7 + b.glow * 8.0)
+    0.5 * @math.sinf(Float::from_int(i) * 0.7 + b.glow * 8.0)
 
   @raylib.draw_circle(
     x.to_int(),
@@ -401,7 +401,7 @@ fn draw_foe(f : @types.Foe, cam_x : Float, cam_y : Float) -> Unit {
     return
   }
 
-  let pulse : Float = 0.5 + 0.5 * @types.sinf(f.phase * 5.0)
+  let pulse : Float = 0.5 + 0.5 * @math.sinf(f.phase * 5.0)
 
   if f.kind == @types.foe_wisp {
     draw_wisp(f, cam_x, cam_y, pulse)
@@ -498,8 +498,8 @@ fn draw_hero(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     @raylib.Color::new(34, 52, 90, 226),
   )
 
-  let tail_a = @types.sinf(h.anim_t * 10.0) * 6.0
-  let tail_b = @types.cosf(h.anim_t * 8.0) * 6.0
+  let tail_a = @math.sinf(h.anim_t * 10.0) * 6.0
+  let tail_b = @math.cosf(h.anim_t * 8.0) * 6.0
   @raylib.draw_circle(
     (x + tail_a).to_int(),
     (y + h.h * 0.72).to_int(),
@@ -625,7 +625,7 @@ fn draw_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
     let life = @types.clampf(echo_item.life / 0.24, 0.0, 1.0)
     let stretch : Float = Float::from_int(1) +
-      @types.sinf(echo_item.rot * 0.06).abs() * 0.24
+      @math.sinf(echo_item.rot * 0.06).abs() * 0.24
 
     @raylib.draw_rectangle(
       (echo_item.x - echo_item.w * 0.5 * stretch + cam_x * 0.2).to_int(),
