@@ -49,10 +49,8 @@ fn split_rock(
   for i in 0..<2 {
     let angle : Float = @types.random_range((0.0 : Float), @types.pi * 2.0)
     let speed : Float = @types.random_range(60.0, 160.0)
-    let vx : Float = Float::from_double(@math.cos(angle.to_double())) * speed +
-      rock.vx * 0.2
-    let vy : Float = Float::from_double(@math.sin(angle.to_double())) * speed +
-      rock.vy * 0.2
+    let vx : Float = @math.cosf(angle) * speed + rock.vx * 0.2
+    let vy : Float = @math.sinf(angle) * speed + rock.vy * 0.2
     @types.spawn_rock(game, next_size, hit_x, hit_y, vx, vy)
   }
 }

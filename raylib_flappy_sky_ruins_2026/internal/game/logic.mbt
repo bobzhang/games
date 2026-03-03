@@ -448,8 +448,7 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
     pickup.x = pickup.x - speed * dt
     pickup.phase = pickup.phase + dt * 3.8
 
-    pickup.y = pickup.y +
-      Float::from_double(@math.sin(pickup.phase.to_double())) * dt * 40.0
+    pickup.y = pickup.y + @math.sinf(pickup.phase) * dt * 40.0
 
     if pickup.x < @types.world_left() - 70.0 {
       pickup.active = false

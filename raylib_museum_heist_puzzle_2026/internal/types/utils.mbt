@@ -1,11 +1,7 @@
 ///|
 /// Returns absolute value of an integer.
 pub fn absi(v : Int) -> Int {
-  if v < 0 {
-    -v
-  } else {
-    v
-  }
+  v.abs()
 }
 
 ///|

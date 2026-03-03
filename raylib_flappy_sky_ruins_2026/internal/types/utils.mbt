@@ -98,7 +98,7 @@ pub fn pointer_on_rect(
 /// Returns the effective gap center for an obstacle, including spinner motion.
 pub fn obstacle_gap_mid(ob : Obstacle) -> Float {
   if ob.kind == obstacle_kind_spinner {
-    ob.gap_y + Float::from_double(@math.sin(ob.phase.to_double())) * 120.0
+    ob.gap_y + @math.sinf(ob.phase) * 120.0
   } else {
     ob.gap_y
   }

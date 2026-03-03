@@ -146,8 +146,8 @@ fn draw_aim_guide(game : @types.Game, sx : Int, sy : Int) -> Unit {
   }
 
   let angle : Float = @types.deg_to_rad(game.aim)
-  let ux : Float = Float::from_double(@math.sin(angle.to_double()))
-  let uy : Float = -Float::from_double(@math.cos(angle.to_double()))
+  let ux : Float = @math.sinf(angle)
+  let uy : Float = -@math.cosf(angle)
 
   let x0 : Int = game.ball_x.to_int() + sx
   let y0 : Int = game.ball_y.to_int() + sy

@@ -277,9 +277,8 @@ fn throw_ball(game : @types.Game) -> Bool {
   let power_speed : Float = 520.0 + game.power * 780.0
   let angle : Float = @types.deg_to_rad(game.aim)
 
-  game.ball_vx = Float::from_double(@math.sin(angle.to_double())) * power_speed +
-    game.spin * 96.0
-  game.ball_vy = -Float::from_double(@math.cos(angle.to_double())) * power_speed
+  game.ball_vx = @math.sinf(angle) * power_speed + game.spin * 96.0
+  game.ball_vy = -@math.cosf(angle) * power_speed
   game.ball_spin = game.spin
   game.ball_live = true
   game.can_throw = false

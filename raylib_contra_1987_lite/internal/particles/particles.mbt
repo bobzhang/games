@@ -47,8 +47,8 @@ pub fn spawn_spark_burst(
   for _i in 0..<count {
     let angle = @types.rand_rangef(game, 0.0, 6.28318)
     let speed = @types.rand_rangef(game, 65.0, 210.0)
-    let vx = Float::from_double(@math.cos(angle.to_double())) * speed
-    let vy = Float::from_double(@math.sin(angle.to_double())) * speed
+    let vx = @math.cosf(angle) * speed
+    let vy = @math.sinf(angle) * speed
     let life = @types.rand_rangef(game, 0.18, 0.55)
     spawn_particle(
       game,
@@ -75,8 +75,8 @@ pub fn spawn_explosion(
   for i in 0..<sparks {
     let angle = @types.rand_rangef(game, 0.0, 6.28318)
     let speed = @types.rand_rangef(game, 40.0, 160.0) * strength
-    let vx = Float::from_double(@math.cos(angle.to_double())) * speed
-    let vy = Float::from_double(@math.sin(angle.to_double())) * speed
+    let vx = @math.cosf(angle) * speed
+    let vy = @math.sinf(angle) * speed
     let life = @types.rand_rangef(game, 0.25, 0.95)
     let size = @types.rand_rangef(game, 1.4, 4.0)
     let color = if i % 5 == 0 {
@@ -93,8 +93,8 @@ pub fn spawn_explosion(
   for _i in 0..<@types.clampi((strength * 10.0).to_int(), 4, 20) {
     let angle = @types.rand_rangef(game, 0.0, 6.28318)
     let speed = @types.rand_rangef(game, 12.0, 58.0)
-    let vx = Float::from_double(@math.cos(angle.to_double())) * speed
-    let vy = Float::from_double(@math.sin(angle.to_double())) * speed
+    let vx = @math.cosf(angle) * speed
+    let vy = @math.sinf(angle) * speed
     let life = @types.rand_rangef(game, 0.65, 1.8)
     spawn_particle(
       game,
@@ -117,8 +117,8 @@ pub fn spawn_respawn_burst(game : @types.Game, x : Float, y : Float) -> Unit {
   for i in 0..<24 {
     let angle = Float::from_int(i) / Float::from_int(24) * 6.28318
     let speed = Float::from_int(35 + i % 3 * 15)
-    let vx = Float::from_double(@math.cos(angle.to_double())) * speed
-    let vy = Float::from_double(@math.sin(angle.to_double())) * speed
+    let vx = @math.cosf(angle) * speed
+    let vy = @math.sinf(angle) * speed
     spawn_particle(
       game,
       x,

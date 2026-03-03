@@ -77,13 +77,13 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 ///|
 /// Returns the x coordinate of the far end of a flipper segment.
 fn seg_end_x(f : Flipper) -> Float {
-  f.pivot_x + Float::from_double(@math.cos(f.angle.to_double())) * flipper_len
+  f.pivot_x + @math.cosf(f.angle) * flipper_len
 }
 
 ///|
 /// Returns the y coordinate of the far end of a flipper segment.
 fn seg_end_y(f : Flipper) -> Float {
-  f.pivot_y + Float::from_double(@math.sin(f.angle.to_double())) * flipper_len
+  f.pivot_y + @math.sinf(f.angle) * flipper_len
 }
 
 ///|

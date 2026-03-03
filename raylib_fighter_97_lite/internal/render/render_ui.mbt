@@ -382,8 +382,7 @@ fn draw_announcer(game : @types.Game) -> Unit {
 
 ///|
 fn draw_title_screen(game : @types.Game) -> Unit {
-  let glow = Float::from_double(@math.sin(game.title_blink.to_double())) * 0.5 +
-    0.5
+  let glow = @math.sinf(game.title_blink) * 0.5 + 0.5
   let title_color = @raylib.color_lerp(
     @raylib.Color::new(248, 196, 98, 255),
     @raylib.Color::new(255, 240, 204, 255),
@@ -676,9 +675,7 @@ fn draw_select_screen(game : @types.Game) -> Unit {
   )
 
   if ready {
-    let pulse = Float::from_double(@math.sin(game.select_blink.to_double())) *
-      0.5 +
-      0.5
+    let pulse = @math.sinf(game.select_blink) * 0.5 + 0.5
     @raylib.draw_rectangle(
       @types.screen_width / 2 - 300,
       650,
@@ -831,8 +828,7 @@ fn draw_match_over_overlay(game : @types.Game) -> Unit {
 
 ///|
 fn draw_pause_overlay(game : @types.Game) -> Unit {
-  let pulse = Float::from_double(@math.sin(game.pause_blink.to_double())) * 0.5 +
-    0.5
+  let pulse = @math.sinf(game.pause_blink) * 0.5 + 0.5
   @raylib.draw_rectangle(
     0,
     0,

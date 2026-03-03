@@ -299,7 +299,7 @@ fn draw_menu_overlay(game : @types.Game) -> Unit {
   for i in 0..<options.length() {
     let selected = i == game.menu_cursor
     let phase = game.menu_blink + Float::from_int(i)
-    let pulse = Float::from_double(@math.sin(phase.to_double())) * 0.5 + 0.5
+    let pulse = @math.sinf(phase) * 0.5 + 0.5
     let color = if selected {
       @raylib.color_lerp(@raylib.yellow, @raylib.white, pulse)
     } else {

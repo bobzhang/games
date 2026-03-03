@@ -198,7 +198,7 @@ fn rand_rangef_by_seedless(fighter : @types.Fighter) -> Float {
   // Uses deterministic state derived from slot and frame counters in caller.
   let t = fighter.ai_timer * 37.0 +
     Float::from_int(fighter.action_frame * 11 + fighter.slot * 17)
-  let s = Float::from_double(@math.sin(t.to_double()))
+  let s = @math.sinf(t)
   s * 0.5 + 0.5
 }
 

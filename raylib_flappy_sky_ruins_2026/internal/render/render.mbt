@@ -136,10 +136,8 @@ fn draw_obstacle(ob : @types.Obstacle) -> Unit {
     let arm : Int = (gh * 0.40).to_int()
 
     let ang : Float = ob.phase
-    let ax : Int = (Float::from_int(cx) +
-    Float::from_double(@math.cos(ang.to_double())) * Float::from_int(arm)).to_int()
-    let ay : Int = (Float::from_int(cy) +
-    Float::from_double(@math.sin(ang.to_double())) * Float::from_int(arm)).to_int()
+    let ax : Int = (Float::from_int(cx) + @math.cosf(ang) * Float::from_int(arm)).to_int()
+    let ay : Int = (Float::from_int(cy) + @math.sinf(ang) * Float::from_int(arm)).to_int()
 
     @raylib.draw_line(cx, cy, ax, ay, @raylib.Color::new(238, 212, 146, 236))
     @raylib.draw_circle(cx, cy, 7.0, @raylib.Color::new(255, 226, 164, 236))
@@ -168,7 +166,7 @@ fn draw_pickup(pk : @types.Pickup) -> Unit {
     return
   }
 
-  let pulse : Float = Float::from_double(@math.sin(pk.phase.to_double()))
+  let pulse : Float = @math.sinf(pk.phase)
   let base_r : Float = if pk.kind == @types.pickup_score { 14.0 } else { 18.0 }
   let r : Float = base_r + pulse * 2.0
 

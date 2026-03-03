@@ -47,11 +47,7 @@ fn idx(x : Int, y : Int) -> Int {
 ///|
 /// Returns the absolute value of an integer.
 fn absi(x : Int) -> Int {
-  if x < 0 {
-    -x
-  } else {
-    x
-  }
+  x.abs()
 }
 
 ///|

@@ -279,7 +279,7 @@ pub fn shake_offsets(game : Game) -> (Float, Float) {
     (0.0, 0.0)
   } else {
     game.camera_shake_phase += 0.12
-    let sx = Float::from_double(@math.cos(game.camera_shake_phase.to_double()))
+    let sx = @math.cosf(game.camera_shake_phase)
     let sy = Float::from_double(
       @math.sin((game.camera_shake_phase * 1.8).to_double()),
     )
@@ -312,7 +312,7 @@ pub fn push_camera_shake(game : Game, amount : Float) -> Unit {
 ///|
 /// Returns a color that pulses between `base` and white based on `phase`.
 pub fn pulse_color(base : @raylib.Color, phase : Float) -> @raylib.Color {
-  let p = Float::from_double(@math.sin(phase.to_double())) * 0.5 + 0.5
+  let p = @math.sinf(phase) * 0.5 + 0.5
   @raylib.color_lerp(base, @raylib.white, p * 0.4)
 }
 

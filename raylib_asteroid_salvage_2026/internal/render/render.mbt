@@ -19,8 +19,8 @@ fn draw_ship(game : @types.Game) -> Unit {
     }
   }
 
-  let dir_x = Float::from_double(@math.cos(game.ship_angle.to_double()))
-  let dir_y = Float::from_double(@math.sin(game.ship_angle.to_double()))
+  let dir_x = @math.cosf(game.ship_angle)
+  let dir_y = @math.sinf(game.ship_angle)
   let side_x = Float::from_double(
     @math.cos((game.ship_angle + @types.pi * 0.75).to_double()),
   )

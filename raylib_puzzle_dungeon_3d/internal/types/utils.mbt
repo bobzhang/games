@@ -13,11 +13,7 @@ pub fn absf(v : Float) -> Float {
 ///|
 /// Returns absolute value for integer grid calculations.
 pub fn absi(v : Int) -> Int {
-  if v < 0 {
-    -v
-  } else {
-    v
-  }
+  v.abs()
 }
 
 ///|

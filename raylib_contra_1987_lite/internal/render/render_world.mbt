@@ -11,8 +11,7 @@ fn draw_starfield(game : @types.Game) -> Unit {
   )
 
   for star in game.stars {
-    let phase = Float::from_double(@math.sin(star.twinkle.to_double())) * 0.5 +
-      0.5
+    let phase = @math.sinf(star.twinkle) * 0.5 + 0.5
     let alpha = Float::from_double(0.25 + phase.to_double() * 0.75)
     let color = @raylib.color_alpha(@raylib.raywhite, alpha)
     @raylib.draw_circle(star.x.to_int(), star.y.to_int(), 1.0 + phase, color)
@@ -287,8 +286,7 @@ fn draw_cores(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
     }
     let sx = @types.world_to_screen_x(core.x, shake_x)
     let sy = @types.world_to_screen_y(core.y, shake_y)
-    let pulse = Float::from_double(@math.sin(core.pulse.to_double())) * 0.5 +
-      0.5
+    let pulse = @math.sinf(core.pulse) * 0.5 + 0.5
     let radius = @types.core_radius - 2.0 + pulse * 2.2
 
     let base = if core.flash > 0.0 {
@@ -508,7 +506,7 @@ fn draw_powerups(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
     let sx = @types.world_to_screen_x(p.x, shake_x)
     let sy = @types.world_to_screen_y(p.y, shake_y)
     let color = powerup_color(p.kind)
-    let pulse = Float::from_double(@math.sin(p.pulse.to_double())) * 0.5 + 0.5
+    let pulse = @math.sinf(p.pulse) * 0.5 + 0.5
     let radius = powerup_radius(p.kind) - 1.0 + pulse * 2.0
 
     @raylib.draw_circle(sx, sy, radius, @raylib.color_alpha(color, 0.25))

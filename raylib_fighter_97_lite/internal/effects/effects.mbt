@@ -84,8 +84,8 @@ pub fn spawn_hit_spark(
         @types.f(360.0)
       },
     )
-    let vx = Float::from_double(@math.cos(angle.to_double())) * speed
-    let vy = Float::from_double(@math.sin(angle.to_double())) * speed -
+    let vx = @math.cosf(angle) * speed
+    let vy = @math.sinf(angle) * speed -
       @types.rand_rangef(game, @types.f(30.0), @types.f(90.0))
 
     let p = game.hit_sparks[idx]
@@ -230,7 +230,7 @@ pub fn update_camera(game : @types.Game, dt : Float) -> Unit {
 
   if game.camera_shake > @types.f(0.0) {
     game.camera_phase += dt * @types.f(44.0)
-    let sx = Float::from_double(@math.sin(game.camera_phase.to_double()))
+    let sx = @math.sinf(game.camera_phase)
     let sy = Float::from_double(
       @math.cos((game.camera_phase * @types.f(1.33)).to_double()),
     )

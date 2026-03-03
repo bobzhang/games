@@ -124,8 +124,8 @@ pub fn spawn_wave(game : Game) -> Unit {
       30.0,
       95.0 + Float::from_int(game.wave * 8),
     )
-    let vx : Float = Float::from_double(@math.cos(angle.to_double())) * speed
-    let vy : Float = Float::from_double(@math.sin(angle.to_double())) * speed
+    let vx : Float = @math.cosf(angle) * speed
+    let vy : Float = @math.sinf(angle) * speed
     spawn_rock(game, 2, x, y, vx, vy)
   }
 }
