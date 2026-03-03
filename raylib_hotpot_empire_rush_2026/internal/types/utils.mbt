@@ -159,13 +159,7 @@ pub fn spice_name(level : Int) -> String {
 ///|
 /// Clamps an integer to the inclusive `[lo, hi]` range.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  if v < lo {
-    lo
-  } else if v > hi {
-    hi
-  } else {
-    v
-  }
+  v.clamp(min=lo, max=hi)
 }
 
 ///|

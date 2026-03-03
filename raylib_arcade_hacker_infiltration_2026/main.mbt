@@ -138,13 +138,7 @@ fn in_bounds(gx : Int, gy : Int) -> Bool {
 ///|
 /// Returns the integer value clamped between lo and hi.
 fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  if v < lo {
-    lo
-  } else if v > hi {
-    hi
-  } else {
-    v
-  }
+  v.clamp(min=lo, max=hi)
 }
 
 ///|

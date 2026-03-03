@@ -11,13 +11,7 @@ pub fn mini(a : Int, b : Int) -> Int {
 ///|
 /// Clamps an integer into the inclusive range [`lo`, `hi`].
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  if v < lo {
-    lo
-  } else if v > hi {
-    hi
-  } else {
-    v
-  }
+  v.clamp(min=lo, max=hi)
 }
 
 ///|

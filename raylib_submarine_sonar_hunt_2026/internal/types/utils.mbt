@@ -1,13 +1,7 @@
 ///|
 /// Clamps an integer value to the inclusive range `[lo, hi]`.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  if v < lo {
-    lo
-  } else if v > hi {
-    hi
-  } else {
-    v
-  }
+  v.clamp(min=lo, max=hi)
 }
 
 ///|
@@ -25,11 +19,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 ///|
 /// Returns the absolute value of a float.
 pub fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
+  v.abs()
 }
 
 ///|
@@ -61,13 +51,13 @@ pub fn sqrtf(v : Float) -> Float {
 ///|
 /// Returns the sine of an angle in radians.
 pub fn sinf(v : Float) -> Float {
-  Float::from_double(@math.sin(v.to_double()))
+  @math.sinf(v)
 }
 
 ///|
 /// Returns the cosine of an angle in radians.
 pub fn cosf(v : Float) -> Float {
-  Float::from_double(@math.cos(v.to_double()))
+  @math.cosf(v)
 }
 
 ///|

@@ -17,11 +17,7 @@ let max_meteors : Int = 24
 ///|
 /// Returns the absolute value of `x`.
 fn absf(x : Float) -> Float {
-  if x < 0.0 {
-    -x
-  } else {
-    x
-  }
+  x.abs()
 }
 
 ///|
@@ -73,7 +69,7 @@ fn cosf_deg(angle : Float) -> Float {
 ///|
 /// Returns the sine of `x` in radians.
 fn sinf(x : Float) -> Float {
-  Float::from_double(@math.sin(x.to_double()))
+  @math.sinf(x)
 }
 
 ///|

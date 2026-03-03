@@ -136,16 +136,12 @@ fn mini(a : Int, b : Int) -> Int {
 
 ///|
 fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
+  v.abs()
 }
 
 ///|
 fn sinf(v : Float) -> Float {
-  Float::from_double(@math.sin(v.to_double()))
+  @math.sinf(v)
 }
 
 ///|

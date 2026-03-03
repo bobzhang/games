@@ -21,13 +21,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 ///|
 /// Clamps an integer value to the inclusive range `[lo, hi]`.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  if v < lo {
-    lo
-  } else if v > hi {
-    hi
-  } else {
-    v
-  }
+  v.clamp(min=lo, max=hi)
 }
 
 ///|
@@ -71,11 +65,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 ///|
 /// Returns the absolute value of a float.
 pub fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
+  v.abs()
 }
 
 ///|
@@ -87,23 +77,19 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 ///|
 /// Returns the sine of an angle in radians.
 pub fn sinf(v : Float) -> Float {
-  Float::from_double(@math.sin(v.to_double()))
+  @math.sinf(v)
 }
 
 ///|
 /// Returns the cosine of an angle in radians.
 pub fn cosf(v : Float) -> Float {
-  Float::from_double(@math.cos(v.to_double()))
+  @math.cosf(v)
 }
 
 ///|
 /// Returns the square root of a non-negative float.
 pub fn sqrtf(v : Float) -> Float {
-  if v <= 0.0 {
-    0.0
-  } else {
-    v.sqrt()
-  }
+  v.sqrt()
 }
 
 ///|

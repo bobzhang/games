@@ -13,11 +13,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 ///|
 /// Returns the absolute value of a float.
 pub fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
+  v.abs()
 }
 
 ///|
@@ -54,15 +50,7 @@ pub fn deg_to_rad(d : Float) -> Float {
 ///|
 /// Approximates square root using Newton iterations.
 pub fn sqrtf(v : Float) -> Float {
-  if v <= 0.0 {
-    return 0.0
-  }
-
-  let mut x : Float = if v < 1.0 { 1.0 } else { v }
-  for _i in 0..<6 {
-    x = (x + v / x) * 0.5
-  }
-  x
+  v.sqrt()
 }
 
 ///|

@@ -101,13 +101,7 @@ pub fn wave_duration(wave : Int) -> Float {
 ///|
 /// Clamps an integer value to the inclusive range `[lo, hi]`.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  if v < lo {
-    lo
-  } else if v > hi {
-    hi
-  } else {
-    v
-  }
+  v.clamp(min=lo, max=hi)
 }
 
 ///|
@@ -145,11 +139,7 @@ pub fn maxf(a : Float, b : Float) -> Float {
 ///|
 /// Returns the absolute value of a float.
 pub fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
+  v.abs()
 }
 
 ///|
@@ -169,11 +159,7 @@ pub fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
 ///|
 /// Returns the square root of a non-negative float.
 pub fn sqrtf(v : Float) -> Float {
-  if v <= 0.0 {
-    0.0
-  } else {
-    v.sqrt()
-  }
+  v.sqrt()
 }
 
 ///|

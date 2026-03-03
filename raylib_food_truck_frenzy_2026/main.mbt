@@ -125,7 +125,7 @@ fn maxi(a : Int, b : Int) -> Int {
 ///|
 /// Returns the sine of v (in radians) as a Float.
 fn sinf(v : Float) -> Float {
-  Float::from_double(@math.sin(v.to_double()))
+  @math.sinf(v)
 }
 
 ///|

@@ -21,13 +21,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 ///|
 /// Clamps an integer to the inclusive `[lo, hi]` range.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  if v < lo {
-    lo
-  } else if v > hi {
-    hi
-  } else {
-    v
-  }
+  v.clamp(min=lo, max=hi)
 }
 
 ///|
@@ -61,7 +55,7 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 ///|
 /// Computes `sin(v)` and returns it as `Float`.
 pub fn sinf(v : Float) -> Float {
-  Float::from_double(@math.sin(v.to_double()))
+  @math.sinf(v)
 }
 
 ///|

@@ -1,13 +1,7 @@
 ///|
 /// Clamps an integer value to the inclusive range `[lo, hi]`.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  if v < lo {
-    lo
-  } else if v > hi {
-    hi
-  } else {
-    v
-  }
+  v.clamp(min=lo, max=hi)
 }
 
 ///|
@@ -66,7 +60,7 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 ///|
 /// Returns the sine of an angle in radians.
 pub fn sinf(v : Float) -> Float {
-  Float::from_double(@math.sin(v.to_double()))
+  @math.sinf(v)
 }
 
 ///|

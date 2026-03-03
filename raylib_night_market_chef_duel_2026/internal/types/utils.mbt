@@ -96,13 +96,7 @@ pub fn dish_cook_need(dish : Dish) -> Float {
 ///|
 /// Clamp an integer to the inclusive range `[lo, hi]`.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  if v < lo {
-    lo
-  } else if v > hi {
-    hi
-  } else {
-    v
-  }
+  v.clamp(min=lo, max=hi)
 }
 
 ///|
@@ -140,11 +134,7 @@ pub fn maxi(a : Int, b : Int) -> Int {
 ///|
 /// Return the absolute value of a float.
 pub fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
+  v.abs()
 }
 
 ///|
@@ -163,11 +153,11 @@ pub fn randi(lo : Int, hi : Int) -> Int {
 ///|
 /// Sine helper wrapping the math double API.
 pub fn sinf(v : Float) -> Float {
-  Float::from_double(@math.sin(v.to_double()))
+  @math.sinf(v)
 }
 
 ///|
 /// Cosine helper wrapping the math double API.
 pub fn cosf(v : Float) -> Float {
-  Float::from_double(@math.cos(v.to_double()))
+  @math.cosf(v)
 }

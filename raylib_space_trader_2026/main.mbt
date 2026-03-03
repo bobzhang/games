@@ -58,13 +58,7 @@ fn roll_prices(prices : Array[Int], day : Int) -> Unit {
 
 ///|
 fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  if v < lo {
-    lo
-  } else if v > hi {
-    hi
-  } else {
-    v
-  }
+  v.clamp(min=lo, max=hi)
 }
 
 ///|

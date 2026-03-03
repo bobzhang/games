@@ -91,13 +91,7 @@ fn adjacent_roads(zone : Array[Int], x : Int, y : Int) -> Int {
 ///|
 /// Returns the integer value v clamped to the inclusive range [lo, hi].
 fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  if v < lo {
-    lo
-  } else if v > hi {
-    hi
-  } else {
-    v
-  }
+  v.clamp(min=lo, max=hi)
 }
 
 ///|

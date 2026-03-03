@@ -48,11 +48,7 @@ struct Log {
 ///|
 /// Returns the absolute value of a float.
 fn absf(x : Float) -> Float {
-  if x < 0.0 {
-    -x
-  } else {
-    x
-  }
+  x.abs()
 }
 
 ///|

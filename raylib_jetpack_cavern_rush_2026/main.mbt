@@ -132,13 +132,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 ///|
 /// Clamps integer `v` to the inclusive `[lo, hi]` range.
 fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  if v < lo {
-    lo
-  } else if v > hi {
-    hi
-  } else {
-    v
-  }
+  v.clamp(min=lo, max=hi)
 }
 
 ///|

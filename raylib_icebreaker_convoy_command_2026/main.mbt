@@ -121,11 +121,7 @@ fn maxf(a : Float, b : Float) -> Float {
 ///|
 /// Returns the absolute value of a float.
 fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
+  v.abs()
 }
 
 ///|

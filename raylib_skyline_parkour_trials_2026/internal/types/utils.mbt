@@ -1,13 +1,7 @@
 ///|
 /// Clamps an integer to the inclusive `[lo, hi]` range.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  if v < lo {
-    lo
-  } else if v > hi {
-    hi
-  } else {
-    v
-  }
+  v.clamp(min=lo, max=hi)
 }
 
 ///|
@@ -45,11 +39,7 @@ pub fn minf(a : Float, b : Float) -> Float {
 ///|
 /// Returns the absolute value of a float.
 pub fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
+  v.abs()
 }
 
 ///|
@@ -65,13 +55,13 @@ pub fn approachf(v : Float, target : Float, step : Float) -> Float {
 ///|
 /// Computes `sin(v)` and returns a `Float`.
 pub fn sinf(v : Float) -> Float {
-  Float::from_double(@math.sin(v.to_double()))
+  @math.sinf(v)
 }
 
 ///|
 /// Computes `cos(v)` and returns a `Float`.
 pub fn cosf(v : Float) -> Float {
-  Float::from_double(@math.cos(v.to_double()))
+  @math.cosf(v)
 }
 
 ///|

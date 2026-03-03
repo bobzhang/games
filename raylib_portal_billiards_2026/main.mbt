@@ -49,11 +49,7 @@ struct Ball {
 ///|
 /// Returns the absolute value of a float.
 fn absf(x : Float) -> Float {
-  if x < 0.0 {
-    -x
-  } else {
-    x
-  }
+  x.abs()
 }
 
 ///|
@@ -87,13 +83,13 @@ fn inside_rect(
 ///|
 /// Computes sin(x) and returns it as Float.
 fn sinf(x : Float) -> Float {
-  Float::from_double(@math.sin(x.to_double()))
+  @math.sinf(x)
 }
 
 ///|
 /// Computes cos(x) and returns it as Float.
 fn cosf(x : Float) -> Float {
-  Float::from_double(@math.cos(x.to_double()))
+  @math.cosf(x)
 }
 
 ///|

@@ -33,11 +33,7 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 ///|
 /// Return the absolute value of a float.
 pub fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
+  v.abs()
 }
 
 ///|

@@ -156,11 +156,7 @@ fn mini(a : Int, b : Int) -> Int {
 ///|
 /// Returns the absolute value of a Float.
 fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
+  v.abs()
 }
 
 ///|

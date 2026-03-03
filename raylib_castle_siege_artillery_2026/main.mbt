@@ -45,11 +45,7 @@ let mountain_h : Int = 220
 ///|
 /// Returns the absolute value of a floating-point number.
 fn absf(x : Float) -> Float {
-  if x < 0.0 {
-    -x
-  } else {
-    x
-  }
+  x.abs()
 }
 
 ///|

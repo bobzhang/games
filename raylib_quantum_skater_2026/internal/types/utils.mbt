@@ -1,13 +1,7 @@
 ///|
 /// Clamp an integer to the inclusive range `[lo, hi]`.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  if v < lo {
-    lo
-  } else if v > hi {
-    hi
-  } else {
-    v
-  }
+  v.clamp(min=lo, max=hi)
 }
 
 ///|
@@ -61,13 +55,13 @@ pub fn approachf(v : Float, target : Float, step : Float) -> Float {
 ///|
 /// Sine helper wrapping the math double API.
 pub fn sinf(v : Float) -> Float {
-  Float::from_double(@math.sin(v.to_double()))
+  @math.sinf(v)
 }
 
 ///|
 /// Cosine helper wrapping the math double API.
 pub fn cosf(v : Float) -> Float {
-  Float::from_double(@math.cos(v.to_double()))
+  @math.cosf(v)
 }
 
 ///|

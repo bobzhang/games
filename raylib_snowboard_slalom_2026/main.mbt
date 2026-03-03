@@ -93,11 +93,7 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 
 ///|
 fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
+  v.abs()
 }
 
 ///|

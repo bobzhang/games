@@ -204,17 +204,13 @@ fn maxi(a : Int, b : Int) -> Int {
 ///|
 /// Returns the absolute value of a float.
 fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
+  v.abs()
 }
 
 ///|
 /// Wraps the standard library sine function for float arguments.
 fn sinf(v : Float) -> Float {
-  Float::from_double(@math.sin(v.to_double()))
+  @math.sinf(v)
 }
 
 ///|

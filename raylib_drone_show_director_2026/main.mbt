@@ -153,23 +153,19 @@ fn maxi(a : Int, b : Int) -> Int {
 ///|
 /// Returns the absolute value of a Float.
 fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
+  v.abs()
 }
 
 ///|
 /// Returns the sine of v (in radians) as a Float.
 fn sinf(v : Float) -> Float {
-  Float::from_double(@math.sin(v.to_double()))
+  @math.sinf(v)
 }
 
 ///|
 /// Returns the cosine of v (in radians) as a Float.
 fn cosf(v : Float) -> Float {
-  Float::from_double(@math.cos(v.to_double()))
+  @math.cosf(v)
 }
 
 ///|
