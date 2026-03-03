@@ -1,6 +1,6 @@
 ///|
 fn powf(base : Float, exp : Float) -> Float {
-  Float::from_double(@math.pow(base.to_double(), exp.to_double()))
+  @math.powf(base, exp)
 }
 
 // Audio exponentiation value (FixedArray to allow mutation from callback)

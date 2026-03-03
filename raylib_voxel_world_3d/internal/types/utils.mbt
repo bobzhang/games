@@ -79,12 +79,7 @@ pub fn lerpi(a : Int, b : Int, t : Float) -> Int {
 ///|
 /// Floors a float to integer, handling negatives consistently.
 pub fn floorf(v : Float) -> Int {
-  let i = v.to_int()
-  if Float::from_int(i) > v {
-    i - 1
-  } else {
-    i
-  }
+  v.floor().to_int()
 }
 
 ///|
@@ -102,7 +97,7 @@ pub fn signf(v : Float) -> Float {
 ///|
 /// Float modulo helper.
 pub fn fmodf(a : Float, b : Float) -> Float {
-  a - Float::from_int((a / b).to_int()) * b
+  a % b
 }
 
 // Smoothstep interpolation
