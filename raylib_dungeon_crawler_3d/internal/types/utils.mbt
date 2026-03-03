@@ -23,22 +23,6 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the larger of two float values.
-pub fn maxf(a : Float, b : Float) -> Float {
-  if a > b {
-    a
-  } else {
-    b
-  }
-}
-
-///|
-/// Linearly interpolates from `a` to `b` by parameter `t`.
-pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
-  a + (b - a) * t
-}
-
-///|
 /// Returns `-1.0`, `0.0`, or `1.0` based on the sign of `v`.
 pub fn signf(v : Float) -> Float {
   if v > 0.0 {
@@ -157,50 +141,6 @@ pub fn is_blocked(game : Game, wx : Float, wz : Float, radius : Float) -> Bool {
 }
 
 // Check if blocked including locked doors
-
-///|
-/// Checks collision like `is_blocked` and also treats locked/boss doors as blocking.
-pub fn is_blocked_strict(
-  game : Game,
-  wx : Float,
-  wz : Float,
-  radius : Float,
-) -> Bool {
-  let gx0 = world_to_grid_x(wx - radius)
-  let gz0 = world_to_grid_z(wz - radius)
-  let gx1 = world_to_grid_x(wx + radius)
-  let gz1 = world_to_grid_z(wz + radius)
-  let t0 = get_tile(game, gx0, gz0)
-  let t1 = get_tile(game, gx1, gz0)
-  let t2 = get_tile(game, gx0, gz1)
-  let t3 = get_tile(game, gx1, gz1)
-  if not(is_walkable(t0)) && not(is_door_tile(t0)) {
-    return true
-  }
-  if not(is_walkable(t1)) && not(is_door_tile(t1)) {
-    return true
-  }
-  if not(is_walkable(t2)) && not(is_door_tile(t2)) {
-    return true
-  }
-  if not(is_walkable(t3)) && not(is_door_tile(t3)) {
-    return true
-  }
-  // Check locked doors
-  if t0 == tile_locked_door || t0 == tile_boss_door {
-    return true
-  }
-  if t1 == tile_locked_door || t1 == tile_boss_door {
-    return true
-  }
-  if t2 == tile_locked_door || t2 == tile_boss_door {
-    return true
-  }
-  if t3 == tile_locked_door || t3 == tile_boss_door {
-    return true
-  }
-  false
-}
 
 // Distance between two points in 2D (xz plane)
 
@@ -455,19 +395,6 @@ pub fn count_active_enemies(game : Game) -> Int {
 
 // Normalize angle to -pi..pi range
 
-///|
-/// Normalizes an angle in radians to the `[-pi, pi]` range.
-pub fn normalize_angle(angle : Float) -> Float {
-  let mut a = angle
-  while a > pi {
-    a = a - 2.0 * pi
-  }
-  while a < -pi {
-    a = a + 2.0 * pi
-  }
-  a
-}
-
 // Add message to log
 
 ///|
@@ -498,29 +425,6 @@ pub fn add_message(
 }
 
 // Inventory helpers
-
-///|
-/// Returns the first free inventory slot index, or `-1` if full.
-pub fn alloc_inventory(game : Game) -> Int {
-  for i in 0..<game.inventory.length() {
-    if not(game.inventory[i].active) {
-      return i
-    }
-  }
-  -1
-}
-
-///|
-/// Counts active inventory entries.
-pub fn count_inventory_items(game : Game) -> Int {
-  let mut count = 0
-  for inventory_elem in game.inventory {
-    if inventory_elem.active {
-      count += 1
-    }
-  }
-  count
-}
 
 // Get weapon stats
 
@@ -617,24 +521,6 @@ pub fn get_armor_defense(armor_type : Int) -> Int {
     plate_defense
   } else {
     0
-  }
-}
-
-///|
-/// Returns display name for an armor type id.
-pub fn get_armor_name(armor_type : Int) -> String {
-  if armor_type == armor_none {
-    "None"
-  } else if armor_type == armor_robes {
-    "Robes"
-  } else if armor_type == armor_leather {
-    "Leather"
-  } else if armor_type == armor_chain {
-    "Chain"
-  } else if armor_type == armor_plate {
-    "Plate"
-  } else {
-    "Unknown"
   }
 }
 
@@ -743,110 +629,11 @@ pub fn get_enemy_name(kind : Int) -> String {
 
 // Get XP value for enemy type
 
-///|
-/// Returns XP reward for an enemy kind id.
-pub fn get_enemy_xp(kind : Int) -> Int {
-  if kind == enemy_skeleton {
-    xp_per_skeleton
-  } else if kind == enemy_archer {
-    xp_per_archer
-  } else if kind == enemy_golem {
-    xp_per_golem
-  } else if kind == enemy_wraith {
-    xp_per_wraith
-  } else if kind == enemy_dragon_boss {
-    xp_per_dragon
-  } else if kind == enemy_slime {
-    xp_per_slime
-  } else if kind == enemy_bat {
-    xp_per_bat
-  } else if kind == enemy_spider {
-    xp_per_spider
-  } else if kind == enemy_minotaur {
-    xp_per_minotaur
-  } else if kind == enemy_lich {
-    xp_per_lich
-  } else if kind == enemy_mimic {
-    xp_per_mimic
-  } else {
-    10
-  }
-}
-
 // Get rarity name
-
-///|
-/// Returns display name for an item rarity id.
-pub fn get_rarity_name(rarity : Int) -> String {
-  if rarity == rarity_common {
-    "Common"
-  } else if rarity == rarity_uncommon {
-    "Uncommon"
-  } else if rarity == rarity_rare {
-    "Rare"
-  } else if rarity == rarity_epic {
-    "Epic"
-  } else if rarity == rarity_legendary {
-    "Legendary"
-  } else {
-    "Unknown"
-  }
-}
 
 // Get class name
 
-///|
-/// Returns display name for a player class id.
-pub fn get_class_name(class_type : Int) -> String {
-  if class_type == class_warrior {
-    "Warrior"
-  } else if class_type == class_rogue {
-    "Rogue"
-  } else if class_type == class_mage {
-    "Mage"
-  } else {
-    "Unknown"
-  }
-}
-
 // Check line of sight between two grid cells
-
-///|
-/// Tests line of sight between two grid cells using a Bresenham-style walk.
-pub fn has_line_of_sight(
-  game : Game,
-  x1 : Int,
-  y1 : Int,
-  x2 : Int,
-  y2 : Int,
-) -> Bool {
-  let dx = (x2 - x1).abs()
-  let dy = (y2 - y1).abs()
-  let sx = if x1 < x2 { 1 } else { -1 }
-  let sy = if y1 < y2 { 1 } else { -1 }
-  let mut err = dx - dy
-  let mut cx = x1
-  let mut cy = y1
-  for _step in 0..<100 {
-    if cx == x2 && cy == y2 {
-      return true
-    }
-    let tile = get_tile(game, cx, cy)
-    if tile == tile_wall && not(cx == x1 && cy == y1) {
-      return false
-    }
-    let e2 = 2 * err
-    if e2 > -dy {
-      err -= dy
-      cx += sx
-    }
-    if e2 < dx {
-      err += dx
-      cy += sy
-    }
-  }
-  false
-}
 
 // Simple pathfinding step: returns direction to move toward target
 // Returns (dx, dz) normalized direction
@@ -890,19 +677,6 @@ pub fn pathfind_step(
 }
 
 // Find a random walkable position in a room
-
-///|
-/// Chooses a random walkable grid coordinate inside a room.
-pub fn find_walkable_in_room(game : Game, room : Room) -> (Int, Int) {
-  for _attempt in 0..<20 {
-    let gx = rand_range(game, room.x + 1, room.x + room.w - 2)
-    let gy = rand_range(game, room.y + 1, room.y + room.h - 2)
-    if is_walkable(get_tile(game, gx, gy)) {
-      return (gx, gy)
-    }
-  }
-  (room.center_x(), room.center_y())
-}
 
 // Check if player has an active buff of given kind
 
@@ -974,26 +748,6 @@ pub fn update_messages(game : Game, dt : Float) -> Unit {
 
 // Get trap name
 
-///|
-/// Returns display name for a trap kind id.
-pub fn get_trap_name(kind : Int) -> String {
-  if kind == trap_spike {
-    "Spike Trap"
-  } else if kind == trap_arrow {
-    "Arrow Trap"
-  } else if kind == trap_flame {
-    "Flame Trap"
-  } else if kind == trap_poison {
-    "Poison Gas"
-  } else if kind == trap_pitfall {
-    "Pitfall"
-  } else if kind == trap_teleporter {
-    "Teleporter"
-  } else {
-    "Unknown Trap"
-  }
-}
-
 // Get loot name
 
 ///|
@@ -1023,31 +777,3 @@ pub fn get_loot_name(kind : Int) -> String {
 }
 
 // Get theme name
-
-///|
-/// Returns display name for a dungeon theme id.
-pub fn get_theme_name(theme : Int) -> String {
-  if theme == theme_crypt {
-    "Crypt"
-  } else if theme == theme_sewer {
-    "Sewer"
-  } else if theme == theme_cavern {
-    "Cavern"
-  } else if theme == theme_library {
-    "Library"
-  } else if theme == theme_prison {
-    "Prison"
-  } else if theme == theme_throne_room {
-    "Throne Room"
-  } else if theme == theme_mine {
-    "Mine"
-  } else if theme == theme_temple {
-    "Temple"
-  } else if theme == theme_abyss {
-    "Abyss"
-  } else if theme == theme_final_chamber {
-    "Final Chamber"
-  } else {
-    "Unknown"
-  }
-}

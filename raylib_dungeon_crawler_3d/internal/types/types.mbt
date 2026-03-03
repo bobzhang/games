@@ -376,10 +376,6 @@ pub let buff_strength : Int = 1
 pub let buff_shield : Int = 2
 
 ///|
-/// Buff kind id for poison damage-over-time effects.
-pub let buff_poison : Int = 3
-
-///|
 /// Maximum number of simultaneously tracked buffs.
 pub let max_buffs : Int = 4
 

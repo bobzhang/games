@@ -33,10 +33,6 @@ pub let wall_height : Float = 3.0
 // Tile types
 
 ///|
-/// Numeric id for tile empty.
-pub let tile_empty : Int = 0
-
-///|
 /// Numeric id for tile wall.
 pub let tile_wall : Int = 1
 
@@ -137,24 +133,8 @@ pub let enemy_mimic : Int = 11
 pub let ai_idle : Int = 0
 
 ///|
-/// Numeric id for patrol.
-pub let ai_patrol : Int = 1
-
-///|
 /// Numeric id for chase.
 pub let ai_chase : Int = 2
-
-///|
-/// Numeric id for attack.
-pub let ai_attack : Int = 3
-
-///|
-/// Numeric id for flee.
-pub let ai_flee : Int = 4
-
-///|
-/// Numeric id for dead.
-pub let ai_dead : Int = 5
 
 ///|
 /// Numeric id for special.
@@ -397,24 +377,12 @@ pub let state_level_up : Int = 4
 pub let state_floor_complete : Int = 5
 
 ///|
-/// Numeric id for inventory.
-pub let state_inventory : Int = 6
-
-///|
 /// Numeric id for shop.
 pub let state_shop : Int = 7
 
 ///|
 /// Numeric id for shrine.
 pub let state_shrine : Int = 8
-
-///|
-/// Numeric id for boss intro.
-pub let state_boss_intro : Int = 9
-
-///|
-/// Numeric id for spellbook.
-pub let state_spellbook : Int = 10
 
 ///|
 /// Numeric id for class select.
@@ -886,47 +854,7 @@ pub let plate_defense : Int = 12
 
 // Shop prices
 
-///|
-/// Hit-point value for price health potion.
-pub let price_health_potion : Int = 25
-
-///|
-/// Mana-related value for price mana potion.
-pub let price_mana_potion : Int = 30
-
-///|
-/// Shop prices setting for price weapon upgrade.
-pub let price_weapon_upgrade : Int = 80
-
-///|
-/// Shop prices setting for price armor upgrade.
-pub let price_armor_upgrade : Int = 100
-
-///|
-/// Shop prices setting for price spell scroll.
-pub let price_spell_scroll : Int = 60
-
-///|
-/// Shop prices setting for price key.
-pub let price_key : Int = 40
-
 // Shrine buffs
-
-///|
-/// Scoring or progression value for shrine hp bonus.
-pub let shrine_hp_bonus : Int = 20
-
-///|
-/// Scoring or progression value for shrine mana bonus.
-pub let shrine_mana_bonus : Int = 15
-
-///|
-/// Scoring or progression value for shrine atk bonus.
-pub let shrine_atk_bonus : Int = 5
-
-///|
-/// Scoring or progression value for shrine def bonus.
-pub let shrine_def_bonus : Int = 3
 
 ///|
 /// Shrine buffs setting for shrine options.
@@ -982,28 +910,4 @@ pub let mana_regen_rate : Float = 1.5
 
 // Boss intro duration
 
-///|
-/// Time value for boss intro duration in seconds.
-pub let boss_intro_duration : Float = 3.0
-
 // Inventory UI
-
-///|
-/// UI sizing value for inv slot size in pixels.
-pub let inv_slot_size : Int = 50
-
-///|
-/// UI sizing value for inv cols in pixels.
-pub let inv_cols : Int = 5
-
-///|
-/// UI sizing value for inv rows in pixels.
-pub let inv_rows : Int = 4
-
-///|
-/// UI sizing value for inv start x in pixels.
-pub let inv_start_x : Int = 212
-
-///|
-/// UI sizing value for inv start y in pixels.
-pub let inv_start_y : Int = 184

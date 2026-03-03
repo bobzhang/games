@@ -126,97 +126,9 @@ pub fn get_enemy_def_scale(floor : Int) -> Int {
 
 // Theme wall colors (r, g, b)
 
-///|
-/// Returns wall RGB color values for a dungeon theme.
-pub fn get_theme_wall_color(theme : Int) -> (Int, Int, Int) {
-  if theme == 0 {
-    // crypt
-    (40, 35, 50)
-  } else if theme == 1 {
-    // sewer
-    (30, 45, 35)
-  } else if theme == 2 {
-    // cavern
-    (55, 45, 35)
-  } else if theme == 3 {
-    // library
-    (50, 35, 25)
-  } else if theme == 4 {
-    // prison
-    (45, 45, 50)
-  } else if theme == 5 {
-    // throne room
-    (55, 30, 30)
-  } else if theme == 6 {
-    // mine
-    (50, 40, 30)
-  } else if theme == 7 {
-    // temple
-    (45, 45, 55)
-  } else if theme == 8 {
-    // abyss
-    (20, 15, 30)
-  } else {
-    // final chamber
-    (60, 25, 25)
-  }
-}
-
 // Theme floor colors (r, g, b)
 
-///|
-/// Returns floor RGB color values for a dungeon theme.
-pub fn get_theme_floor_color(theme : Int) -> (Int, Int, Int) {
-  if theme == 0 {
-    (55, 50, 65)
-  } else if theme == 1 {
-    (40, 55, 50)
-  } else if theme == 2 {
-    (65, 55, 45)
-  } else if theme == 3 {
-    (60, 45, 35)
-  } else if theme == 4 {
-    (55, 55, 60)
-  } else if theme == 5 {
-    (70, 40, 40)
-  } else if theme == 6 {
-    (60, 50, 40)
-  } else if theme == 7 {
-    (60, 60, 70)
-  } else if theme == 8 {
-    (30, 25, 40)
-  } else {
-    (75, 35, 35)
-  }
-}
-
 // Theme ceiling colors (r, g, b)
-
-///|
-/// Returns ceiling RGB color values for a dungeon theme.
-pub fn get_theme_ceiling_color(theme : Int) -> (Int, Int, Int) {
-  if theme == 0 {
-    (30, 28, 38)
-  } else if theme == 1 {
-    (25, 35, 30)
-  } else if theme == 2 {
-    (40, 35, 28)
-  } else if theme == 3 {
-    (35, 28, 20)
-  } else if theme == 4 {
-    (35, 35, 40)
-  } else if theme == 5 {
-    (45, 25, 25)
-  } else if theme == 6 {
-    (38, 32, 25)
-  } else if theme == 7 {
-    (38, 38, 48)
-  } else if theme == 8 {
-    (15, 10, 22)
-  } else {
-    (50, 20, 20)
-  }
-}
 
 // Trap count per floor
 
@@ -353,18 +265,6 @@ pub fn get_rarity_weight_legendary(floor : Int) -> Int {
 // Boss definitions
 
 ///|
-/// Returns the boss display name for a floor.
-pub fn get_boss_name(floor : Int) -> String {
-  if floor == 4 {
-    "Warden of Iron"
-  } else if floor == 9 {
-    "Azhrakul the Undying"
-  } else {
-    "Unknown Boss"
-  }
-}
-
-///|
 /// Returns the boss HP value for a floor.
 pub fn get_boss_hp(floor : Int) -> Int {
   if floor == 4 {
@@ -440,39 +340,7 @@ pub fn get_shop_item_price(slot : Int) -> Int {
   }
 }
 
-///|
-/// Returns the display name for the shop item in a slot.
-pub fn get_shop_item_name(slot : Int) -> String {
-  if slot == 0 {
-    "Health Potion"
-  } else if slot == 1 {
-    "Mana Potion"
-  } else if slot == 2 {
-    "ATK Scroll"
-  } else if slot == 3 {
-    "DEF Scroll"
-  } else if slot == 4 {
-    "Key"
-  } else {
-    "Speed Potion"
-  }
-}
-
 // Shrine buff options
-
-///|
-/// Returns the shrine buff option name for a given index.
-pub fn get_shrine_buff_name(option : Int) -> String {
-  if option == 0 {
-    "Vitality (+20 Max HP)"
-  } else if option == 1 {
-    "Wisdom (+15 Max Mana)"
-  } else if option == 2 {
-    "Power (+5 ATK)"
-  } else {
-    "Unknown"
-  }
-}
 
 // XP required for each level
 
