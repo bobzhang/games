@@ -1,9 +1,4 @@
 ///|
-fn powf(base : Float, exp : Float) -> Float {
-  @math.powf(base, exp)
-}
-
-///|
 let pi : Float = 3.14159265358979323846
 
 ///|
@@ -18,7 +13,9 @@ fn ease_elastic_out(t : Float, b : Float, c : Float, d : Float) -> Float {
   let p = d * 0.3
   let a = c
   let s = p / 4.0
-  a * powf(2.0, -10.0 * t) * @math.sinf((t * d - s) * (2.0 * pi) / p) + c + b
+  a * @math.powf(2.0, -10.0 * t) * @math.sinf((t * d - s) * (2.0 * pi) / p) +
+  c +
+  b
 }
 
 ///|

@@ -1,9 +1,4 @@
 ///|
-fn powf(base : Float, exp : Float) -> Float {
-  @math.powf(base, exp)
-}
-
-///|
 let pi : Float = 3.14159265358979323846
 
 ///|
@@ -120,7 +115,7 @@ fn ease_expo_in(t : Float, b : Float, c : Float, d : Float) -> Float {
   if t == 0.0 {
     b
   } else {
-    c * powf(2.0, 10.0 * (t / d - 1.0)) + b
+    c * @math.powf(2.0, 10.0 * (t / d - 1.0)) + b
   }
 }
 
@@ -129,7 +124,7 @@ fn ease_expo_out(t : Float, b : Float, c : Float, d : Float) -> Float {
   if t == d {
     b + c
   } else {
-    c * (-powf(2.0, -10.0 * t / d) + 1.0) + b
+    c * (-@math.powf(2.0, -10.0 * t / d) + 1.0) + b
   }
 }
 
@@ -143,10 +138,10 @@ fn ease_expo_in_out(t : Float, b : Float, c : Float, d : Float) -> Float {
   }
   let t = t / (d / 2.0)
   if t < 1.0 {
-    c / 2.0 * powf(2.0, 10.0 * (t - 1.0)) + b
+    c / 2.0 * @math.powf(2.0, 10.0 * (t - 1.0)) + b
   } else {
     let t = t - 1.0
-    c / 2.0 * (-powf(2.0, -10.0 * t) + 2.0) + b
+    c / 2.0 * (-@math.powf(2.0, -10.0 * t) + 2.0) + b
   }
 }
 
@@ -219,7 +214,8 @@ fn ease_elastic_in(t : Float, b : Float, c : Float, d : Float) -> Float {
   let p = d * 0.3
   let s = p / 4.0
   let t = t - 1.0
-  -(c * powf(2.0, 10.0 * t) * @math.sinf((t * d - s) * (2.0 * pi) / p)) + b
+  -(c * @math.powf(2.0, 10.0 * t) * @math.sinf((t * d - s) * (2.0 * pi) / p)) +
+  b
 }
 
 ///|
@@ -233,7 +229,9 @@ fn ease_elastic_out(t : Float, b : Float, c : Float, d : Float) -> Float {
   }
   let p = d * 0.3
   let s = p / 4.0
-  c * powf(2.0, -10.0 * t) * @math.sinf((t * d - s) * (2.0 * pi) / p) + c + b
+  c * @math.powf(2.0, -10.0 * t) * @math.sinf((t * d - s) * (2.0 * pi) / p) +
+  c +
+  b
 }
 
 ///|
@@ -249,11 +247,15 @@ fn ease_elastic_in_out(t : Float, b : Float, c : Float, d : Float) -> Float {
   let s = p / 4.0
   if t < 1.0 {
     let t = t - 1.0
-    -0.5 * (c * powf(2.0, 10.0 * t) * @math.sinf((t * d - s) * (2.0 * pi) / p)) +
+    -0.5 *
+    (c * @math.powf(2.0, 10.0 * t) * @math.sinf((t * d - s) * (2.0 * pi) / p)) +
     b
   } else {
     let t = t - 1.0
-    c * powf(2.0, -10.0 * t) * @math.sinf((t * d - s) * (2.0 * pi) / p) * 0.5 +
+    c *
+    @math.powf(2.0, -10.0 * t) *
+    @math.sinf((t * d - s) * (2.0 * pi) / p) *
+    0.5 +
     c +
     b
   }

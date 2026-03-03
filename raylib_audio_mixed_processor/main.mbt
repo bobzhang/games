@@ -1,8 +1,3 @@
-///|
-fn powf(base : Float, exp : Float) -> Float {
-  @math.powf(base, exp)
-}
-
 // Audio exponentiation value (FixedArray to allow mutation from callback)
 
 ///|
@@ -22,9 +17,9 @@ fn process_audio_impl(buffer : @raylib.AudioBuffer, frames : UInt) -> Unit {
     let i_right = frame * 2U + 1U
     let left = @raylib.audio_buffer_get_sample(buffer, i_left)
     let right = @raylib.audio_buffer_get_sample(buffer, i_right)
-    let new_left = powf(left.abs(), exponent[0]) *
+    let new_left = @math.powf(left.abs(), exponent[0]) *
       (if left < 0.0 { -1.0 } else { 1.0 })
-    let new_right = powf(right.abs(), exponent[0]) *
+    let new_right = @math.powf(right.abs(), exponent[0]) *
       (if right < 0.0 { -1.0 } else { 1.0 })
     @raylib.audio_buffer_set_sample(buffer, i_left, new_left)
     @raylib.audio_buffer_set_sample(buffer, i_right, new_right)
