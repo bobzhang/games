@@ -430,40 +430,6 @@ pub fn shop_item_count() -> Int {
 // Shop item definition: (name, cost)
 
 ///|
-/// Returns display name for a shop item index.
-pub fn shop_item_name(idx : Int) -> String {
-  if idx == 0 {
-    "Heal +40 HP"
-  } else if idx == 1 {
-    "Armor +30"
-  } else if idx == 2 {
-    "Shotgun Ammo +12"
-  } else if idx == 3 {
-    "Rifle Ammo +30"
-  } else if idx == 4 {
-    "Sniper Ammo +5"
-  } else if idx == 5 {
-    "Rocket Ammo +3"
-  } else if idx == 6 {
-    "Minigun Ammo +100"
-  } else if idx == 7 {
-    "Damage +15%"
-  } else if idx == 8 {
-    "Speed +10%"
-  } else if idx == 9 {
-    "Buy Sniper Rifle"
-  } else if idx == 10 {
-    "Buy Rocket Launcher"
-  } else if idx == 11 {
-    "Buy Minigun"
-  } else if idx == 12 {
-    "Place Barricade"
-  } else {
-    "Place Spike Trap"
-  }
-}
-
-///|
 /// Returns purchase cost for a shop item index.
 pub fn shop_item_cost(idx : Int) -> Int {
   if idx == 0 {
@@ -498,20 +464,6 @@ pub fn shop_item_cost(idx : Int) -> Int {
 }
 
 // Boss configurations
-
-///|
-/// Returns normalized boss HP threshold where a phase transition occurs.
-pub fn boss_phase_hp_threshold(phase : Int) -> Float {
-  if phase == 0 {
-    0.75
-  } else if phase == 1 {
-    0.50
-  } else if phase == 2 {
-    0.25
-  } else {
-    0.0
-  }
-}
 
 ///|
 /// Returns boss active ability cooldown for a phase.

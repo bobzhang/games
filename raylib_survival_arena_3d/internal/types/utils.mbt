@@ -83,26 +83,7 @@ pub fn normalize3d(x : Float, y : Float, z : Float) -> (Float, Float, Float) {
 
 // Dot product of two 3d vectors
 
-///|
-/// Computes 3D dot product.
-pub fn dot3d(
-  ax : Float,
-  ay : Float,
-  az : Float,
-  bx : Float,
-  by : Float,
-  bz : Float,
-) -> Float {
-  ax * bx + ay * by + az * bz
-}
-
 // Angle between two 2d vectors (returns radians)
-
-///|
-/// Returns angle (radians) from point `(x1, z1)` toward `(x2, z2)`.
-pub fn angle_between(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
-  @math.atan2f(z2 - z1, x2 - x1)
-}
 
 // Check if angle difference is within threshold (for shield check)
 
@@ -491,26 +472,6 @@ pub fn weapon_name(kind : Int) -> String {
 
 // Weapon short name for UI slots
 
-///|
-/// Returns compact short label for weapon-slot UI.
-pub fn weapon_short_name(kind : Int) -> String {
-  if kind == weapon_pistol {
-    "P"
-  } else if kind == weapon_shotgun {
-    "SG"
-  } else if kind == weapon_rifle {
-    "AR"
-  } else if kind == weapon_sniper {
-    "SN"
-  } else if kind == weapon_rocket {
-    "RL"
-  } else if kind == weapon_minigun {
-    "MG"
-  } else {
-    "?"
-  }
-}
-
 // Weapon fire rate (base)
 
 ///|
@@ -661,51 +622,7 @@ pub fn effective_mag_size(player : Player, kind : Int) -> Int {
 
 // Enemy name
 
-///|
-/// Returns enemy archetype display name for HUD and kill feed.
-pub fn enemy_name(kind : Int) -> String {
-  if kind == enemy_zombie {
-    "Zombie"
-  } else if kind == enemy_runner {
-    "Runner"
-  } else if kind == enemy_brute {
-    "Brute"
-  } else if kind == enemy_spitter {
-    "Spitter"
-  } else if kind == enemy_exploder {
-    "Exploder"
-  } else if kind == enemy_necromancer {
-    "Necromancer"
-  } else if kind == enemy_shielded {
-    "Shielded"
-  } else if kind == enemy_boss {
-    "Boss"
-  } else {
-    "Unknown"
-  }
-}
-
 // Pickup name
-
-///|
-/// Returns pickup display name for notifications/UI.
-pub fn pickup_name(kind : Int) -> String {
-  if kind == pickup_health {
-    "Health Pack"
-  } else if kind == pickup_ammo {
-    "Ammo Crate"
-  } else if kind == pickup_speed_boost {
-    "Speed Boost"
-  } else if kind == pickup_damage_boost {
-    "Damage Boost"
-  } else if kind == pickup_shield {
-    "Shield"
-  } else if kind == pickup_nuke {
-    "NUKE"
-  } else {
-    "Unknown"
-  }
-}
 
 // Count active enemies
 
@@ -828,22 +745,6 @@ pub fn is_headshot_hit(
 }
 
 // Get combo multiplier text
-
-///|
-/// Returns stylized combo text for UI based on current combo count.
-pub fn combo_text(combo : Int) -> String {
-  if combo >= 10 {
-    "UNSTOPPABLE x\{combo}"
-  } else if combo >= 7 {
-    "RAMPAGE x\{combo}"
-  } else if combo >= 5 {
-    "KILLING SPREE x\{combo}"
-  } else if combo >= 3 {
-    "COMBO x\{combo}"
-  } else {
-    ""
-  }
-}
 
 // Collision push against barricades
 

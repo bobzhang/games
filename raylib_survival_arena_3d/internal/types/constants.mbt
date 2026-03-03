@@ -43,18 +43,10 @@ pub let pillar_height : Float = 5.0
 // Crate
 
 ///|
-/// Number of supply crates placed in the arena.
-pub let crate_count : Int = 6
-
-///|
 /// Uniform side length of crate meshes.
 pub let crate_size : Float = 1.5
 
 // Ramp dimensions
-
-///|
-/// Number of ramps in the arena layout.
-pub let ramp_count : Int = 4
 
 ///|
 /// Ramp width used for collision/rendering.
@@ -69,10 +61,6 @@ pub let ramp_length : Float = 6.0
 pub let ramp_height : Float = 2.5
 
 // Low wall (half-cover)
-
-///|
-/// Number of low walls used as half-cover.
-pub let low_wall_count : Int = 6
 
 ///|
 /// Horizontal width of each low wall.
@@ -196,26 +184,6 @@ pub let ammo_minigun : Int = 200
 
 // Weapon max reserve ammo
 
-///|
-/// Maximum reserve shotgun ammo capacity.
-pub let max_ammo_shotgun : Int = 60
-
-///|
-/// Maximum reserve rifle ammo capacity.
-pub let max_ammo_rifle : Int = 240
-
-///|
-/// Maximum reserve sniper ammo capacity.
-pub let max_ammo_sniper : Int = 30
-
-///|
-/// Maximum reserve rocket ammo capacity.
-pub let max_ammo_rocket : Int = 15
-
-///|
-/// Maximum reserve minigun ammo capacity.
-pub let max_ammo_minigun : Int = 600
-
 // Weapon projectile speed
 
 ///|
@@ -332,15 +300,7 @@ pub let mag_minigun : Int = 100
 
 // Weapon upgrade cost multiplier per level
 
-///|
-/// Cost multiplier applied per purchased weapon-upgrade level.
-pub let upgrade_cost_mult : Int = 75
-
 // Max upgrade level per stat
-
-///|
-/// Maximum upgrade level per upgradeable weapon stat.
-pub let max_upgrade_level : Int = 3
 
 // Enemy types
 
@@ -536,14 +496,6 @@ pub let cost_barricade : Int = 60
 /// Shop price to place one spike trap.
 pub let cost_trap_spike : Int = 80
 
-///|
-/// Shop price to place one flame trap.
-pub let cost_trap_flame : Int = 120
-
-///|
-/// Shop price to place one electric trap.
-pub let cost_trap_electric : Int = 150
-
 // Pickup types
 
 ///|
@@ -609,20 +561,8 @@ pub let trap_spike_damage : Float = 30.0
 pub let trap_spike_cooldown : Float = 3.0
 
 ///|
-/// Damage per hit from flame trap.
-pub let trap_flame_damage : Float = 15.0
-
-///|
-/// Cooldown between flame trap bursts.
-pub let trap_flame_cooldown : Float = 0.5
-
-///|
 /// Active flame duration once triggered.
 pub let trap_flame_duration : Float = 2.0
-
-///|
-/// Damage per electric trap pulse.
-pub let trap_electric_damage : Float = 10.0
 
 ///|
 /// Cooldown between electric trap pulses.
@@ -760,28 +700,4 @@ pub let pi : Float = 3.14159265
 
 // Minimap
 
-///|
-/// Minimap square size in pixels.
-pub let minimap_size : Int = 140
-
-///|
-/// Minimap top-left X coordinate in screen space.
-pub let minimap_x : Int = 1120
-
-///|
-/// Minimap top-left Y coordinate in screen space.
-pub let minimap_y : Int = 60
-
 // Difficulty scaling per wave
-
-///|
-/// Additional enemy HP scaling per wave.
-pub let difficulty_hp_scale : Float = 0.06
-
-///|
-/// Additional enemy speed scaling per wave.
-pub let difficulty_speed_scale : Float = 0.02
-
-///|
-/// Additional enemy damage scaling per wave.
-pub let difficulty_damage_scale : Float = 0.04
