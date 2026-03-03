@@ -59,34 +59,6 @@ pub let max_hit_sparks : Int = 360
 pub let direction_buffer_size : Int = 42
 
 ///|
-/// Title screen state id.
-pub let state_title : Int = 0
-
-///|
-/// Character select state id.
-pub let state_select : Int = 1
-
-///|
-/// Round intro state id.
-pub let state_intro : Int = 2
-
-///|
-/// Active fight state id.
-pub let state_fight : Int = 3
-
-///|
-/// Round-over state id.
-pub let state_round_over : Int = 4
-
-///|
-/// Match-over state id.
-pub let state_match_over : Int = 5
-
-///|
-/// Pause state id.
-pub let state_pause : Int = 6
-
-///|
 /// Sentinel winner value for no winner yet.
 pub let winner_none : Int = -1
 
@@ -95,136 +67,12 @@ pub let winner_none : Int = -1
 pub let winner_draw : Int = -2
 
 ///|
-/// Action id for idle.
-pub let action_idle : Int = 0
-
-///|
-/// Action id for walking forward.
-pub let action_walk_forward : Int = 1
-
-///|
-/// Action id for walking backward.
-pub let action_walk_back : Int = 2
-
-///|
-/// Action id for crouch.
-pub let action_crouch : Int = 3
-
-///|
-/// Action id for jump.
-pub let action_jump : Int = 4
-
-///|
-/// Action id for forward dash.
-pub let action_dash_forward : Int = 5
-
-///|
-/// Action id for backward dash.
-pub let action_dash_back : Int = 6
-
-///|
-/// Action id for attack animation.
-pub let action_attack : Int = 7
-
-///|
-/// Action id for hitstun.
-pub let action_hitstun : Int = 8
-
-///|
-/// Action id for blockstun.
-pub let action_blockstun : Int = 9
-
-///|
-/// Action id for knockdown.
-pub let action_knockdown : Int = 10
-
-///|
-/// Action id for wakeup.
-pub let action_wakeup : Int = 11
-
-///|
-/// Action id for victory pose.
-pub let action_victory : Int = 12
-
-///|
-/// Action id for intro animation.
-pub let action_intro : Int = 13
-
-///|
-/// Action id for throw state.
-pub let action_throw : Int = 14
-
-///|
-/// Attack id for no active attack.
-pub let attack_none : Int = 0
-
-///|
-/// Attack id for light punch.
-pub let attack_lp : Int = 1
-
-///|
-/// Attack id for heavy punch.
-pub let attack_hp : Int = 2
-
-///|
-/// Attack id for light kick.
-pub let attack_lk : Int = 3
-
-///|
-/// Attack id for heavy kick.
-pub let attack_hk : Int = 4
-
-///|
-/// Attack id for quarter-circle-forward special.
-pub let attack_special_qcf : Int = 5
-
-///|
-/// Attack id for dragon-punch special.
-pub let attack_special_dp : Int = 6
-
-///|
-/// Attack id for super move.
-pub let attack_super : Int = 7
-
-///|
-/// Move category id for normal attacks.
-pub let move_kind_normal : Int = 0
-
-///|
-/// Move category id for special attacks.
-pub let move_kind_special : Int = 1
-
-///|
-/// Move category id for super attacks.
-pub let move_kind_super : Int = 2
-
-///|
-/// CPU mode id for idle behavior.
-pub let ai_mode_idle : Int = 0
-
-///|
-/// CPU mode id for rushdown behavior.
-pub let ai_mode_rush : Int = 1
-
-///|
-/// CPU mode id for zoning behavior.
-pub let ai_mode_zone : Int = 2
-
-///|
-/// CPU mode id for evasive behavior.
-pub let ai_mode_evade : Int = 3
-
-///|
 /// Facing value for left.
 pub let facing_left : Int = -1
 
 ///|
 /// Facing value for right.
 pub let facing_right : Int = 1
-
-///|
-/// Motion id for no parsed command.
-pub let motion_none : Int = 0
 
 ///|
 /// Motion id for quarter-circle-forward command.
@@ -503,41 +351,5 @@ pub let font_title : Int = 62
 pub let font_subtitle : Int = 28
 
 ///|
-/// Direction id for neutral.
-pub let dir_neutral : Int = 0
-
-///|
-/// Direction id for up.
-pub let dir_up : Int = 1
-
-///|
 /// Direction id for down.
 pub let dir_down : Int = 2
-
-///|
-/// Direction id for back.
-pub let dir_back : Int = 3
-
-///|
-/// Direction id for forward.
-pub let dir_forward : Int = 4
-
-///|
-/// Direction id for down-back.
-pub let dir_down_back : Int = 5
-
-///|
-/// Direction id for down-forward.
-pub let dir_down_forward : Int = 6
-
-///|
-/// Spark kind id for normal hits.
-pub let spark_kind_hit : Int = 0
-
-///|
-/// Spark kind id for blocked hits.
-pub let spark_kind_block : Int = 1
-
-///|
-/// Spark kind id for super impacts.
-pub let spark_kind_super : Int = 2
