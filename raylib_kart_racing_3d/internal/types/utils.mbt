@@ -46,9 +46,7 @@ pub fn smooth_step(edge0 : Float, edge1 : Float, x : Float) -> Float {
 ///|
 /// Returns the 2D Euclidean distance between two points on the XZ plane.
 pub fn distance2d(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
-  let dx = x1 - x2
-  let dz = z1 - z2
-  (dx * dx + dz * dz).sqrt()
+  @math.hypotf(x1 - x2, z1 - z2)
 }
 
 ///|

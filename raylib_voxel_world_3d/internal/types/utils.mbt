@@ -1038,9 +1038,7 @@ pub fn distance3d(
 ///|
 /// Computes horizontal (`x/z`) distance.
 pub fn distance_xz(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
-  let dx = x2 - x1
-  let dz = z2 - z1
-  (dx * dx + dz * dz).sqrt()
+  @math.hypotf(x2 - x1, z2 - z1)
 }
 
 // Direction facing text

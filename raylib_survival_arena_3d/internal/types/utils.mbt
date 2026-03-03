@@ -51,9 +51,7 @@ pub fn sign(v : Float) -> Float {
 ///|
 /// Computes planar distance on the arena floor (`x/z` axes).
 pub fn distance2d(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
-  let dx = x1 - x2
-  let dz = z1 - z2
-  (dx * dx + dz * dz).sqrt()
+  @math.hypotf(x1 - x2, z1 - z2)
 }
 
 ///|

@@ -207,9 +207,7 @@ pub fn is_blocked_strict(
 ///|
 /// Computes Euclidean distance in the XZ plane.
 pub fn dist2d(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
-  let dx = x2 - x1
-  let dz = z2 - z1
-  (dx * dx + dz * dz).sqrt()
+  @math.hypotf(x2 - x1, z2 - z1)
 }
 
 // Squared distance (avoids sqrt for comparisons)
