@@ -87,11 +87,7 @@ pub fn load_map(game : @types.Game, map_idx : Int) -> Unit {
   }
   // Trace path from start using BFS-like walk
   trace_path(game, data, start_gx, start_gy, path_points)
-  game.path_count = @types.clampi(
-    path_points.length(),
-    0,
-    @types.max_path_nodes,
-  )
+  game.path_count = path_points.length().clamp(min=0, max=@types.max_path_nodes)
   for i in 0..<game.path_count {
     game.path_nodes[i] = path_points[i]
   }

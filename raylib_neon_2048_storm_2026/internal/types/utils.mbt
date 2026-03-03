@@ -1,10 +1,4 @@
 ///|
-/// Clamps an integer into the inclusive range [`lo`, `hi`].
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Clamps a float into the inclusive range [`lo`, `hi`].
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -57,7 +51,7 @@ pub fn board_metrics(game : Game) -> (Int, Int, Int) {
   let tile_y : Int = area_h / board_n
 
   let mut tile : Int = tile_x.min(tile_y)
-  tile = clampi(tile, 120, 170)
+  tile = tile.clamp(min=120, max=170)
 
   let mut bx : Int = area_x + (area_w - board_n * tile) / 2
   let mut by : Int = area_y + (area_h - board_n * tile) / 2

@@ -50,7 +50,7 @@ fn board_layout(game : @types.Game) -> (Int, Int, Int) {
   let tile_x : Int = (area_w - 24) / safe_w
   let tile_y : Int = (area_h - 24) / safe_h
   let mut tile : Int = tile_x.min(tile_y)
-  tile = @types.clampi(tile, 28, 66)
+  tile = tile.clamp(min=28, max=66)
 
   let mut left : Int = area_x + (area_w - safe_w * tile) / 2
   let mut top : Int = area_y + (area_h - safe_h * tile) / 2

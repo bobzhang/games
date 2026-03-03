@@ -244,15 +244,13 @@ fn detect_board_tap(game : @types.Game) -> (Bool, Int, Int) {
       return (false, 0, 0)
     }
 
-    let cx : Int = @types.clampi(
-      (px.to_int() - board_x) / tile + 1,
-      1,
-      game.board_w,
+    let cx : Int = ((px.to_int() - board_x) / tile + 1).clamp(
+      min=1,
+      max=game.board_w,
     )
-    let cy : Int = @types.clampi(
-      (py.to_int() - board_y) / tile + 1,
-      1,
-      game.board_h,
+    let cy : Int = ((py.to_int() - board_y) / tile + 1).clamp(
+      min=1,
+      max=game.board_h,
     )
     (true, cx, cy)
   }

@@ -17,7 +17,7 @@ fn col_a(c : @raylib.Color, a : Int) -> @raylib.Color {
     c.r.to_int(),
     c.g.to_int(),
     c.b.to_int(),
-    @types.clampi(a, 0, 255),
+    a.clamp(min=0, max=255),
   )
 }
 
@@ -196,7 +196,7 @@ fn draw_towers(game : @types.Game) -> Unit {
       )
     }
 
-    let slots = @types.clampi(game.towers[i].need, 1, 6)
+    let slots = game.towers[i].need.clamp(min=1, max=6)
     for k in 0..<slots {
       let a = Float::from_int(k) / Float::from_int(slots) * 6.283
       let px = game.towers[i].x + @math.cosf(a) * (@types.tower_hit_r() + 17.0)
@@ -402,26 +402,18 @@ fn draw_whiteout(game : @types.Game) -> Unit {
   }
 
   let vis_r : Float = 270.0 - fog * 120.0
-  let vx0 = @types.clampi(
-    (game.rover_x - vis_r).to_int(),
-    @types.world_x0,
-    @types.world_x0 + @types.world_w,
-  )
-  let vy0 = @types.clampi(
-    (game.rover_y - vis_r).to_int(),
-    @types.world_y0,
-    @types.world_y0 + @types.world_h,
-  )
-  let vx1 = @types.clampi(
-    (game.rover_x + vis_r).to_int(),
-    @types.world_x0,
-    @types.world_x0 + @types.world_w,
-  )
-  let vy1 = @types.clampi(
-    (game.rover_y + vis_r).to_int(),
-    @types.world_y0,
-    @types.world_y0 + @types.world_h,
-  )
+  let vx0 = (game.rover_x - vis_r)
+    .to_int()
+    .clamp(min=@types.world_x0, max=@types.world_x0 + @types.world_w)
+  let vy0 = (game.rover_y - vis_r)
+    .to_int()
+    .clamp(min=@types.world_y0, max=@types.world_y0 + @types.world_h)
+  let vx1 = (game.rover_x + vis_r)
+    .to_int()
+    .clamp(min=@types.world_x0, max=@types.world_x0 + @types.world_w)
+  let vy1 = (game.rover_y + vis_r)
+    .to_int()
+    .clamp(min=@types.world_y0, max=@types.world_y0 + @types.world_h)
 
   let shadow = @raylib.Color::new(10, 18, 28, 42 + (fog * 58.0).to_int())
   let wx1 = @types.world_x0 + @types.world_w

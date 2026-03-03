@@ -723,8 +723,8 @@ fn select_or_swap(game : @types.Game, x : Int, y : Int) -> Unit {
 ///|
 /// Moves the keyboard cursor by `(dx, dy)`, clamped to valid board bounds.
 fn move_cursor(game : @types.Game, dx : Int, dy : Int) -> Unit {
-  game.cursor_x = @types.clampi(game.cursor_x + dx, 0, @types.board_cols - 1)
-  game.cursor_y = @types.clampi(game.cursor_y + dy, 0, @types.board_rows - 1)
+  game.cursor_x = (game.cursor_x + dx).clamp(min=0, max=@types.board_cols - 1)
+  game.cursor_y = (game.cursor_y + dy).clamp(min=0, max=@types.board_rows - 1)
 }
 
 ///|
@@ -742,7 +742,7 @@ fn use_hint(game : @types.Game) -> Unit {
 /// Shuffles the board on player request, deducting one move; triggers game over if no valid arrangement is found.
 fn try_manual_shuffle(game : @types.Game) -> Unit {
   if shuffle_board(game) {
-    game.moves_left = @types.clampi(game.moves_left - 1, 0, 9999)
+    game.moves_left = (game.moves_left - 1).clamp(min=0, max=9999)
     set_message(game, "Board shuffled (-1 move).")
     if game.moves_left <= 0 {
       begin_game_over(game)

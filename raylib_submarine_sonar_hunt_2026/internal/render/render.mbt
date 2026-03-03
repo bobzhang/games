@@ -1,9 +1,9 @@
 ///|
 fn draw_ocean_background(game : @types.Game) -> Unit {
   for y = 0; y < @types.screen_h; y = y + 4 {
-    let r = @types.clampi(7 + y * 20 / @types.screen_h, 0, 255)
-    let g = @types.clampi(20 + y * 42 / @types.screen_h, 0, 255)
-    let b = @types.clampi(34 + y * 58 / @types.screen_h, 0, 255)
+    let r = (7 + y * 20 / @types.screen_h).clamp(min=0, max=255)
+    let g = (20 + y * 42 / @types.screen_h).clamp(min=0, max=255)
+    let b = (34 + y * 58 / @types.screen_h).clamp(min=0, max=255)
     @raylib.draw_rectangle(
       0,
       y,
@@ -87,11 +87,9 @@ fn draw_targets(game : @types.Game) -> Unit {
       @raylib.draw_circle(tx, ty, 8.5, @raylib.Color::new(116, 252, 172, 220))
       @raylib.draw_circle(tx, ty, 4.0, @raylib.Color::new(216, 255, 232, 240))
       if game.targets[i].pulse_t > 0.0 {
-        let alpha = @types.clampi(
-          (game.targets[i].pulse_t * 180.0).to_int(),
-          0,
-          190,
-        )
+        let alpha = (game.targets[i].pulse_t * 180.0)
+          .to_int()
+          .clamp(min=0, max=190)
         @raylib.draw_circle_lines(
           tx,
           ty,
@@ -124,11 +122,9 @@ fn draw_mines(game : @types.Game) -> Unit {
     let visible = not(game.mines[i].armed) || game.mines[i].reveal_t > 0.0
     if visible {
       let alpha = if game.mines[i].armed {
-        @types.clampi(
-          (Float::from_int(90) + game.mines[i].reveal_t * Float::from_int(70)).to_int(),
-          90,
-          220,
-        )
+        (Float::from_int(90) + game.mines[i].reveal_t * Float::from_int(70))
+        .to_int()
+        .clamp(min=90, max=220)
       } else {
         130
       }
@@ -205,11 +201,9 @@ fn draw_sonar_wave(game : @types.Game) -> Unit {
   if game.sonar_wave_t <= 0.0 {
     return
   }
-  let alpha = @types.clampi(
-    (game.sonar_wave_t / @types.sonar_pulse_time * 230.0).to_int(),
-    0,
-    230,
-  )
+  let alpha = (game.sonar_wave_t / @types.sonar_pulse_time * 230.0)
+    .to_int()
+    .clamp(min=0, max=230)
   @raylib.draw_circle_lines(
     game.sub_x.to_int(),
     game.sub_y.to_int(),
@@ -409,7 +403,7 @@ fn draw_touch_button(
       accent.0,
       accent.1,
       accent.2,
-      @types.clampi(alpha + 60, 0, 255),
+      (alpha + 60).clamp(min=0, max=255),
     ),
   )
   let tw = @raylib.measure_text(label, 22)
@@ -418,7 +412,7 @@ fn draw_touch_button(
     rect.0 + (rect.2 - tw) / 2,
     rect.1 + rect.3 / 2 - 11,
     22,
-    @raylib.Color::new(236, 246, 255, @types.clampi(alpha + 68, 0, 255)),
+    @raylib.Color::new(236, 246, 255, (alpha + 68).clamp(min=0, max=255)),
   )
 }
 

@@ -158,7 +158,7 @@ fn draw_board(game : @types.Game) -> Unit {
     @raylib.Color::new(110, 150, 182, 182),
   )
 
-  let text_size : Int = @types.clampi(tile / 2, 16, 30)
+  let text_size : Int = (tile / 2).clamp(min=16, max=30)
 
   for y in 1..<=game.board_h {
     for x in 1..<=game.board_w {

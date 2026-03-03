@@ -11,18 +11,6 @@ pub fn clampf(v : Float, low : Float, high : Float) -> Float {
 }
 
 ///|
-/// Returns `v` clamped between `low` and `high` for integers.
-pub fn clampi(v : Int, low : Int, high : Int) -> Int {
-  if v < low {
-    low
-  } else if v > high {
-    high
-  } else {
-    v
-  }
-}
-
-///|
 /// Returns the smaller of `a` and `b`.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
@@ -290,7 +278,7 @@ pub fn get_drift_spark_color(level : Int) -> (Int, Int, Int) {
 ///|
 /// Returns the effective maximum speed for `kart` considering type, surface, and active effects.
 pub fn get_kart_max_speed(kart : Kart) -> Float {
-  let stats = kart_stats[clampi(kart.kart_type, 0, kart_type_count - 1)]
+  let stats = kart_stats[kart.kart_type.clamp(min=0, max=kart_type_count - 1)]
   let base_speed = stats.0
   let surface_mult = get_surface_speed_mult(kart.on_surface_type)
   let mut result : Float = base_speed * surface_mult
@@ -311,7 +299,7 @@ pub fn get_kart_max_speed(kart : Kart) -> Float {
 ///|
 /// Returns the acceleration stat for `kart` based on its type.
 pub fn get_kart_accel(kart : Kart) -> Float {
-  let stats = kart_stats[clampi(kart.kart_type, 0, kart_type_count - 1)]
+  let stats = kart_stats[kart.kart_type.clamp(min=0, max=kart_type_count - 1)]
   stats.1
 }
 
@@ -320,7 +308,7 @@ pub fn get_kart_accel(kart : Kart) -> Float {
 ///|
 /// Returns the effective handling for `kart` adjusted by surface grip.
 pub fn get_kart_handling(kart : Kart) -> Float {
-  let stats = kart_stats[clampi(kart.kart_type, 0, kart_type_count - 1)]
+  let stats = kart_stats[kart.kart_type.clamp(min=0, max=kart_type_count - 1)]
   let grip = get_surface_grip(kart.on_surface_type)
   stats.2 * grip
 }
@@ -330,7 +318,7 @@ pub fn get_kart_handling(kart : Kart) -> Float {
 ///|
 /// Returns the weight stat for `kart` based on its type.
 pub fn get_kart_weight(kart : Kart) -> Float {
-  let stats = kart_stats[clampi(kart.kart_type, 0, kart_type_count - 1)]
+  let stats = kart_stats[kart.kart_type.clamp(min=0, max=kart_type_count - 1)]
   stats.3
 }
 
@@ -339,7 +327,7 @@ pub fn get_kart_weight(kart : Kart) -> Float {
 ///|
 /// Returns the drift boost multiplier for `kart` based on its type.
 pub fn get_kart_drift_boost_mult(kart : Kart) -> Float {
-  let stats = kart_stats[clampi(kart.kart_type, 0, kart_type_count - 1)]
+  let stats = kart_stats[kart.kart_type.clamp(min=0, max=kart_type_count - 1)]
   stats.4
 }
 
@@ -753,7 +741,7 @@ pub fn calc_rubber_band_mult(
   player_progress : Float,
   difficulty : Int,
 ) -> Float {
-  let stats = ai_difficulty_stats[clampi(difficulty, 0, 3)]
+  let stats = ai_difficulty_stats[difficulty.clamp(min=0, max=3)]
   let base_mult = stats.0
   let progress_diff = ai_progress - player_progress
   let mut mult = base_mult

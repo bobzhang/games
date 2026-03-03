@@ -1,10 +1,4 @@
 ///|
-/// Clamps `v` to the inclusive `[lo, hi]` integer range and returns the result.
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Clamps `v` to the inclusive `[lo, hi]` float range and returns the result.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {

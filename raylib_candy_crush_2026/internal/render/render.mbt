@@ -252,7 +252,7 @@ fn draw_selection(game : @types.Game) -> Unit {
 
   if game.hint_active {
     let pulse : Float = 0.52 + 0.48 * @math.sinf(game.hint_t * 8.0)
-    let alpha = @types.clampi((pulse * 240.0).to_int(), 84, 240)
+    let alpha = (pulse * 240.0).to_int().clamp(min=84, max=240)
 
     let x0 = bx + game.hint_x0 * @types.cell_px
     let y0 = by + game.hint_y0 * @types.cell_px

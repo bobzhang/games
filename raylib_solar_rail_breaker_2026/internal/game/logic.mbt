@@ -442,7 +442,7 @@ fn init_title_scene(game : @types.Game) -> Unit {
 
 ///|
 fn add_combo_score(game : @types.Game, base : Int) -> Unit {
-  game.combo = @types.clampi(game.combo + 1, 0, 999)
+  game.combo = (game.combo + 1).clamp(min=0, max=999)
   game.combo_t = 3.8
   let mul = @types.f(1) + Float::from_int(game.combo) * 0.08
   game.score = game.score + (Float::from_int(base) * mul).to_int()
@@ -590,10 +590,9 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   player.angle = @types.wrap_angle(player.angle + player.ang_v * dt)
 
   if game.input_ring_move != 0 && player.switch_cd <= 0.0 {
-    player.ring = @types.clampi(
-      player.ring + game.input_ring_move,
-      0,
-      @types.ring_count - 1,
+    player.ring = (player.ring + game.input_ring_move).clamp(
+      min=0,
+      max=@types.ring_count - 1,
     )
     player.switch_cd = @types.player_switch_cd
   }
@@ -680,10 +679,9 @@ fn spawn_enemy_wave(game : @types.Game) -> Unit {
   } else if wave_kind < 78 {
     let center = @types.randf(-@types.pi, @types.pi)
     for i in -2..<=2 {
-      let ring = @types.clampi(
-        1 + i % @types.ring_count,
-        0,
-        @types.ring_count - 1,
+      let ring = (1 + i % @types.ring_count).clamp(
+        min=0,
+        max=@types.ring_count - 1,
       )
       spawn_enemy(
         game,

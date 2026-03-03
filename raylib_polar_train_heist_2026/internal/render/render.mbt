@@ -30,7 +30,7 @@ fn a_col(c : @raylib.Color, a : Int) -> @raylib.Color {
     c.r.to_int(),
     c.g.to_int(),
     c.b.to_int(),
-    @types.clampi(a, 0, 255),
+    a.clamp(min=0, max=255),
   )
 }
 

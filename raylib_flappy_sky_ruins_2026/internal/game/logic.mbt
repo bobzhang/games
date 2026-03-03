@@ -521,7 +521,7 @@ fn update_spawns(game : @types.Game, dt : Float) -> Unit {
 ///|
 /// Recalculates the current level from the score, updates `game.level`, and shows a level-up message when the level changes.
 fn check_level_up(game : @types.Game) -> Unit {
-  let lv : Int = @types.clampi(1 + game.score / 520, 1, 10)
+  let lv : Int = (1 + game.score / 520).clamp(min=1, max=10)
   if lv != game.level {
     game.level = lv
     @types.set_msg(game, "Level \{game.level}", 0.8)

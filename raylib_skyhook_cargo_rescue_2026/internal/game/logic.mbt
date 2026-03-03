@@ -916,7 +916,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
     return
   }
 
-  game.wave = @types.clampi(1 + (game.game_t / 24.0).to_int(), 1, 10)
+  game.wave = (1 + (game.game_t / 24.0).to_int()).clamp(min=1, max=10)
 
   game.survivor_spawn_t = game.survivor_spawn_t + step
   let spawn_survivor_every : Float = @types.maxf(

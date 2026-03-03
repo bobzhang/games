@@ -125,8 +125,8 @@ fn apply_level_rows(
 
   if game.goals_total <= 0 {
     // Fallback for malformed levels.
-    let gx : Int = @types.clampi(game.grid_w / 2, 0, @types.board_cols - 1)
-    let gy : Int = @types.clampi(game.grid_h / 2, 0, @types.board_rows - 1)
+    let gx : Int = (game.grid_w / 2).clamp(min=0, max=@types.board_cols - 1)
+    let gy : Int = (game.grid_h / 2).clamp(min=0, max=@types.board_rows - 1)
     @types.set_tile(game, gx, gy, Goal)
     game.goals_total = 1
   }

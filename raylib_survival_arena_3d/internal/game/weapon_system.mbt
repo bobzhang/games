@@ -19,7 +19,7 @@ fn update_weapon_cooldowns(game : @types.Game, dt : Float) -> Unit {
           // Pistol has infinite ammo
           game.player.magazine[i] = mag_max
         } else {
-          let available = @types.clampi(game.player.ammo[i], 0, needed)
+          let available = game.player.ammo[i].clamp(min=0, max=needed)
           game.player.magazine[i] += available
           game.player.ammo[i] -= available
         }

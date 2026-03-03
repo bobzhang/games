@@ -114,11 +114,9 @@ fn draw_checkpoint_lines(game : @types.Game) -> Unit {
     }
 
     let y : Int = world_y(game, dist).to_int()
-    let alpha : Int = @types.clampi(
-      (Float::from_int(220) - rel.abs() * 0.08).to_int(),
-      50,
-      220,
-    )
+    let alpha : Int = (Float::from_int(220) - rel.abs() * 0.08)
+      .to_int()
+      .clamp(min=50, max=220)
 
     @raylib.draw_line(
       @types.river_x + 14,
@@ -681,11 +679,9 @@ fn draw_message_banner(game : @types.Game) -> Unit {
     return
   }
 
-  let alpha : Int = @types.clampi(
-    (Float::from_int(90) + game.msg_t * 120.0).to_int(),
-    0,
-    230,
-  )
+  let alpha : Int = (Float::from_int(90) + game.msg_t * 120.0)
+    .to_int()
+    .clamp(min=0, max=230)
   let box_w : Int = 680
   let box_h : Int = 56
   let x : Int = @types.river_x + @types.river_w / 2 - box_w / 2

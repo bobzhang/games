@@ -1,10 +1,4 @@
 ///|
-/// Clamps an integer to the inclusive `[lo, hi]` range.
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Clamps a float to the inclusive `[lo, hi]` range.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -117,7 +111,7 @@ pub fn mouse_click_on_rect(
 ///|
 /// Formats timer seconds with one decimal place.
 pub fn timer_string(v : Float) -> String {
-  let ds = clampi((maxf(0.0, v) * 10.0).to_int(), 0, 9999)
+  let ds = (maxf(0.0, v) * 10.0).to_int().clamp(min=0, max=9999)
   let sec = ds / 10
   let dec = ds % 10
   "\{sec}.\{dec}"
@@ -126,7 +120,7 @@ pub fn timer_string(v : Float) -> String {
 ///|
 /// Formats run time seconds with one decimal place.
 pub fn run_string(v : Float) -> String {
-  let ds = clampi((maxf(0.0, v) * 10.0).to_int(), 0, 99999)
+  let ds = (maxf(0.0, v) * 10.0).to_int().clamp(min=0, max=99999)
   let sec = ds / 10
   let dec = ds % 10
   "\{sec}.\{dec}"

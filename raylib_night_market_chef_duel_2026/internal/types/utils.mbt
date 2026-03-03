@@ -1,7 +1,8 @@
 ///|
 /// Convert an order slot index to its node y position.
 pub fn order_node_y(slot : Int) -> Float {
-  orders_y0 + Float::from_int(clampi(slot, 0, max_orders - 1)) * orders_gap
+  orders_y0 +
+  Float::from_int(slot.clamp(min=0, max=max_orders - 1)) * orders_gap
 }
 
 ///|
@@ -91,12 +92,6 @@ pub fn dish_cook_need(dish : Dish) -> Float {
     FriedRice => 3.7
     DishNone => 3.0
   }
-}
-
-///|
-/// Clamp an integer to the inclusive range `[lo, hi]`.
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
 }
 
 ///|

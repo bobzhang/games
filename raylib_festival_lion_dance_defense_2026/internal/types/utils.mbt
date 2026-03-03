@@ -20,13 +20,7 @@ pub fn lane_y(lane : Int) -> Float {
 /// Converts world Y position into nearest lane index.
 pub fn lane_from_y(y : Float) -> Int {
   let raw = ((y - Float::from_int(lane_top)) / Float::from_int(lane_gap)).to_int()
-  clampi(raw, 0, lane_count - 1)
-}
-
-///|
-/// Clamps an integer to the inclusive `[lo, hi]` range.
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
+  raw.clamp(min=0, max=lane_count - 1)
 }
 
 ///|

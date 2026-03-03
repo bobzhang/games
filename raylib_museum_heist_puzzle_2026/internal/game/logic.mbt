@@ -152,7 +152,7 @@ fn setup_level_3(game : @types.Game) -> Unit {
 ///|
 /// Clears entities, fills the board as floor, adds border walls, and calls the level-specific setup function.
 fn load_level(game : @types.Game, level_idx : Int) -> Unit {
-  let safe_idx = @types.clampi(level_idx, 0, game.level_count - 1)
+  let safe_idx = level_idx.clamp(min=0, max=game.level_count - 1)
   game.level_index = safe_idx
 
   @types.clear_entities(game)

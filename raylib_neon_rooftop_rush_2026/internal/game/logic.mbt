@@ -382,7 +382,7 @@ fn spawn_chip_arc(
   x1 : Float,
   roof_y : Float,
 ) -> Unit {
-  let steps = @types.clampi(((x1 - x0).abs() / 62.0).to_int(), 3, 9)
+  let steps = ((x1 - x0).abs() / 62.0).to_int().clamp(min=3, max=9)
   if steps <= 0 {
     return
   }
@@ -901,7 +901,7 @@ fn score_multiplier(game : @types.Game) -> Float {
 ///|
 /// Increments the combo counter by `amount` (clamped to 999) and resets the combo expiry timer to 4 seconds.
 fn gain_combo(game : @types.Game, amount : Int) -> Unit {
-  game.combo = @types.clampi(game.combo + amount, 0, 999)
+  game.combo = (game.combo + amount).clamp(min=0, max=999)
   game.combo_t = 4.0
 }
 

@@ -358,7 +358,7 @@ fn add_score(game : @types.Game, base : Int) -> Unit {
 ///|
 /// Increments the combo counter by one (capped at 24) and resets the combo display timer.
 fn push_combo(game : @types.Game) -> Unit {
-  game.combo = @types.clampi(game.combo + 1, 0, 24)
+  game.combo = (game.combo + 1).clamp(min=0, max=24)
   game.combo_t = 3.6
 }
 
@@ -1128,7 +1128,7 @@ fn update_fx(game : @types.Game, dt : Float) -> Unit {
 ///|
 /// Randomly emits roadside ambient sparks near the track edges each frame to convey the scrolling city environment.
 fn emit_ambient(game : @types.Game, dt : Float) -> Unit {
-  let tries = @types.clampi((dt * 230.0).to_int(), 1, 10)
+  let tries = (dt * 230.0).to_int().clamp(min=1, max=10)
   let mut i = 0
   while i < tries {
     if @types.chance(32) {

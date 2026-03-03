@@ -30,7 +30,7 @@ fn a_col(c : @raylib.Color, alpha : Int) -> @raylib.Color {
     c.r.to_int(),
     c.g.to_int(),
     c.b.to_int(),
-    @types.clampi(alpha, 0, 255),
+    alpha.clamp(min=0, max=255),
   )
 }
 
@@ -116,9 +116,9 @@ fn draw_districts(game : @types.Game) -> Unit {
         @types.cell_w_i - 2,
         @types.cell_h_i - 2,
         @raylib.Color::new(
-          @types.clampi(r, 0, 255),
-          @types.clampi(g, 0, 255),
-          @types.clampi(b, 0, 255),
+          r.clamp(min=0, max=255),
+          g.clamp(min=0, max=255),
+          b.clamp(min=0, max=255),
           220,
         ),
       )
@@ -214,7 +214,7 @@ fn draw_clues(game : @types.Game) -> Unit {
         246,
         252,
         255,
-        @types.clampi((glow * 180.0).to_int(), 0, 255),
+        (glow * 180.0).to_int().clamp(min=0, max=255),
       ),
     )
   }
@@ -328,7 +328,7 @@ fn draw_cursor(game : @types.Game) -> Unit {
     ty - 1,
     @types.cell_w_i,
     @types.cell_h_i,
-    @raylib.Color::new(242, 246, 255, @types.clampi(glow, 0, 255)),
+    @raylib.Color::new(242, 246, 255, glow.clamp(min=0, max=255)),
   )
 
   @raylib.draw_rectangle_lines(

@@ -517,7 +517,7 @@ fn draw_status_strip(game : @types.Game) -> Unit {
   let alpha = (@types.clampf(game.status_t / @types.status_default_t, 0.0, 1.0) *
   200.0 +
   40.0).to_int()
-  let text_alpha = @types.clampi(alpha + 20, 0, 255)
+  let text_alpha = (alpha + 20).clamp(min=0, max=255)
   @raylib.draw_rectangle(
     @types.world_x + 20,
     @types.world_y + 14,

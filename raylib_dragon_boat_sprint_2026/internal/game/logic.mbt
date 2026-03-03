@@ -170,7 +170,7 @@ fn apply_paddle(game : @types.Game) -> Unit {
   )
 
   if miss <= @types.beat_perfect_window {
-    game.streak = @types.clampi(game.streak + 1, 0, 30)
+    game.streak = (game.streak + 1).clamp(min=0, max=30)
     game.rhythm_meter = @types.minf(
       100.0,
       game.rhythm_meter + 18.0 + Float::from_int(game.streak) * 0.35,
@@ -180,7 +180,7 @@ fn apply_paddle(game : @types.Game) -> Unit {
     add_score(game, 15 + game.streak * 3)
     set_message(game, "Perfect stroke!", 0.5)
   } else if miss <= @types.beat_good_window {
-    game.streak = @types.clampi(game.streak + 1, 0, 30)
+    game.streak = (game.streak + 1).clamp(min=0, max=30)
     game.rhythm_meter = @types.minf(100.0, game.rhythm_meter + 12.0)
     game.speed = game.speed + 33.0 + Float::from_int(game.streak)
     game.wobble = @types.maxf(0.0, game.wobble - 0.04)

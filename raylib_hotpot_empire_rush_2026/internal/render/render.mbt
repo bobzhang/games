@@ -137,7 +137,7 @@ fn draw_background(game : @types.Game) -> Unit {
   )
 
   if game.flash_t > 0.0 {
-    let alpha = @types.clampi((game.flash_t * 140.0).to_int(), 0, 140)
+    let alpha = (game.flash_t * 140.0).to_int().clamp(min=0, max=140)
     @raylib.draw_rectangle(
       0,
       0,
@@ -398,7 +398,7 @@ fn draw_kitchen(game : @types.Game) -> Unit {
 
       if x == game.cursor_x && y == game.cursor_y {
         let pulse : Float = 0.54 + 0.46 * @math.sinf(game.elapsed * 8.0)
-        let alpha = @types.clampi((pulse * 230.0).to_int(), 80, 240)
+        let alpha = (pulse * 230.0).to_int().clamp(min=80, max=240)
 
         @raylib.draw_rectangle_lines_ex(
           @raylib.Rectangle::new(

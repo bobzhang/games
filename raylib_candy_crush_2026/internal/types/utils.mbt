@@ -41,12 +41,6 @@ pub fn score_for_removed(cleared : Int, chain : Int) -> Int {
 }
 
 ///|
-/// Clamps an integer into the inclusive range [`lo`, `hi`].
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Clamps a float into the inclusive range [`lo`, `hi`].
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -189,9 +183,9 @@ pub fn candy_color(kind : Int) -> @raylib.Color {
 ///|
 /// Applies a brightness delta to a color while preserving alpha.
 pub fn tint(c : @raylib.Color, delta : Int) -> @raylib.Color {
-  let r = clampi(c.r.to_int() + delta, 0, 255)
-  let g = clampi(c.g.to_int() + delta, 0, 255)
-  let b = clampi(c.b.to_int() + delta, 0, 255)
+  let r = (c.r.to_int() + delta).clamp(min=0, max=255)
+  let g = (c.g.to_int() + delta).clamp(min=0, max=255)
+  let b = (c.b.to_int() + delta).clamp(min=0, max=255)
   @raylib.Color::new(r, g, b, c.a.to_int())
 }
 
@@ -213,8 +207,8 @@ pub fn pointer_to_cell(
       return (false, 0, 0)
     }
 
-    let cx = clampi((px.to_int() - bx) / cell_px, 0, board_cols - 1)
-    let cy = clampi((py.to_int() - by) / cell_px, 0, board_rows - 1)
+    let cx = ((px.to_int() - bx) / cell_px).clamp(min=0, max=board_cols - 1)
+    let cy = ((py.to_int() - by) / cell_px).clamp(min=0, max=board_rows - 1)
     (true, cx, cy)
   }
 

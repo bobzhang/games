@@ -89,17 +89,15 @@ fn finish_duel(game : @types.Game, reason : String) -> Unit {
 /// Updates the player's lane focus position and derives the active stance from the directional axis input.
 fn apply_axis_focus_and_stance(game : @types.Game) -> Unit {
   if game.input.axis_x != 0 {
-    game.lane_x = @types.clampi(
-      game.lane_x + game.input.axis_x,
-      @types.lane_axis_min,
-      @types.lane_axis_max,
+    game.lane_x = (game.lane_x + game.input.axis_x).clamp(
+      min=@types.lane_axis_min,
+      max=@types.lane_axis_max,
     )
   }
   if game.input.axis_y != 0 {
-    game.lane_y = @types.clampi(
-      game.lane_y + game.input.axis_y,
-      @types.lane_axis_min,
-      @types.lane_axis_max,
+    game.lane_y = (game.lane_y + game.input.axis_y).clamp(
+      min=@types.lane_axis_min,
+      max=@types.lane_axis_max,
     )
   }
 

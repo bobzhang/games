@@ -1,10 +1,4 @@
 ///|
-/// Clamps an integer into `[lo, hi]`.
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Returns the larger of two floats.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
@@ -108,7 +102,7 @@ pub fn board_metrics(game : Game) -> (Int, Int, Int) {
   let tile_y : Int = (area_h - 24) / board_n
 
   let mut tile : Int = tile_x.min(tile_y)
-  tile = clampi(tile, 42, 72)
+  tile = tile.clamp(min=42, max=72)
 
   let mut board_x : Int = area_x + (area_w - board_n * tile) / 2
   let mut board_y : Int = area_y + (area_h - board_n * tile) / 2

@@ -17,7 +17,7 @@ fn alpha_col(c : @raylib.Color, alpha : Int) -> @raylib.Color {
     c.r.to_int(),
     c.g.to_int(),
     c.b.to_int(),
-    @types.clampi(alpha, 0, 255),
+    alpha.clamp(min=0, max=255),
   )
 }
 
@@ -608,7 +608,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
     "Press J to Start",
     560,
     44,
-    @raylib.Color::new(252, 220, 128, @types.clampi(pulse, 80, 255)),
+    @raylib.Color::new(252, 220, 128, pulse.clamp(min=80, max=255)),
   )
   draw_center_text(
     "R also restarts instantly",

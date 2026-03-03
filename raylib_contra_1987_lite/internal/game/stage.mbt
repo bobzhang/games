@@ -26,7 +26,7 @@ fn clear_entities_for_stage(game : @types.Game) -> Unit {
 ///|
 fn stage_enemy_total(stage : Int) -> Int {
   let wave = stage + 1
-  @types.clampi(16 + wave * 2, 18, 44)
+  (16 + wave * 2).clamp(min=18, max=44)
 }
 
 ///|
@@ -241,10 +241,9 @@ pub fn load_stage(game : @types.Game, stage : Int) -> Unit {
   seed_stage_cores(game, stage)
   prepare_players_for_stage(game)
   let base_total = stage_enemy_total(stage)
-  game.enemies_to_spawn = @types.clampi(
-    base_total + game.profile.enemy_bonus,
-    18,
-    60,
+  game.enemies_to_spawn = (base_total + game.profile.enemy_bonus).clamp(
+    min=18,
+    max=60,
   )
   game.stage_intro_timer = if game.demo_mode {
     0.45

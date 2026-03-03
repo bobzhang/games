@@ -505,7 +505,7 @@ fn try_move(game : @types.Game, dir : @types.Direction) -> Bool {
 
   game.max_tile = max_seen
 
-  game.zap_charge = @types.clampi(game.zap_charge + charge_add + 4, 0, 100)
+  game.zap_charge = (game.zap_charge + charge_add + 4).clamp(min=0, max=100)
   if game.zap_charge >= 100 {
     game.zap_ready = true
     game.zap_charge = 100

@@ -73,7 +73,7 @@ pub fn spawn_explosion(
   y : Float,
   strength : Float,
 ) -> Unit {
-  let sparks = @types.clampi((strength * 20.0).to_int(), 10, 70)
+  let sparks = (strength * 20.0).to_int().clamp(min=10, max=70)
   for i in 0..<sparks {
     let angle = @types.rand_rangef(game, 0.0, 6.28318)
     let speed = @types.rand_rangef(game, 40.0, 160.0) * strength
@@ -92,7 +92,7 @@ pub fn spawn_explosion(
   }
 
   // Smoke puffs.
-  for _i in 0..<@types.clampi((strength * 10.0).to_int(), 4, 20) {
+  for _i in 0..<(strength * 10.0).to_int().clamp(min=4, max=20) {
     let angle = @types.rand_rangef(game, 0.0, 6.28318)
     let speed = @types.rand_rangef(game, 12.0, 58.0)
     let vx = @math.cosf(angle) * speed

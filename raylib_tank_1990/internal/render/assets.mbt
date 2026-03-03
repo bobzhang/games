@@ -375,7 +375,7 @@ fn pick_turret(
   if len == 0 {
     return None
   }
-  let idx = @types.clampi(level, 0, len - 1)
+  let idx = level.clamp(min=0, max=len - 1)
   Some(textures[idx])
 }
 

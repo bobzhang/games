@@ -151,12 +151,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Clamps `v` to the inclusive integer range [`lo`, `hi`].
-fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Returns the larger of two float values.
 fn maxf(a : Float, b : Float) -> Float {
   if a > b {
@@ -450,7 +444,7 @@ fn route_len(route : Array[Int]) -> Int {
 ///|
 /// Returns the station index at position `pos` in the route, clamped to valid bounds.
 fn route_station(route : Array[Int], pos : Int) -> Int {
-  route[clampi(pos, 0, route.length() - 1)]
+  route[pos.clamp(min=0, max=route.length() - 1)]
 }
 
 ///|
@@ -498,7 +492,7 @@ fn train_segment_points(
   route1 : Array[Int],
 ) -> (Float, Float, Float, Float, Int, Int) {
   let route : Array[Int] = if train.route_id == 0 { route0 } else { route1 }
-  let cur_pos : Int = clampi(train.route_pos, 0, route.length() - 1)
+  let cur_pos : Int = train.route_pos.clamp(min=0, max=route.length() - 1)
   let cur_sid : Int = route_station(route, cur_pos)
 
   let (next_pos, _ndir) = next_route_pos(route, cur_pos, train.dir)
@@ -598,7 +592,7 @@ fn update_stations(stations : Array[Station], dt : Float, tier : Int) -> Float {
     if station.spawn_cd <= 0.0 {
       let add_n : Int = @raylib.get_random_value(0, 2 + tier / 2)
       station.crowd = station.crowd + add_n
-      station.crowd = clampi(station.crowd, 0, 180)
+      station.crowd = station.crowd.clamp(min=0, max=180)
 
       let mut next_cd : Float = randf(1.0, 2.4) - Float::from_int(tier) * 0.03
       if next_cd < 0.42 {
@@ -717,7 +711,7 @@ fn update_trains(
     }
 
     let route : Array[Int] = if train.route_id == 0 { route0 } else { route1 }
-    let cur_pos : Int = clampi(train.route_pos, 0, route_len(route) - 1)
+    let cur_pos : Int = train.route_pos.clamp(min=0, max=route_len(route) - 1)
     let cur_sid : Int = route_station(route, cur_pos)
 
     let (next_pos, ndir) = next_route_pos(route, cur_pos, train.dir)
@@ -1115,7 +1109,7 @@ fn draw_trains(
     )
 
     if train.blink_t > 0.0 {
-      let a : Int = clampi((train.blink_t * 400.0).to_int(), 0, 255)
+      let a : Int = (train.blink_t * 400.0).to_int().clamp(min=0, max=255)
       @raylib.draw_circle(
         x.to_int(),
         y.to_int(),
@@ -1827,7 +1821,7 @@ fn main {
           stations[segments[drone.target_seg].b].y
         ) *
         0.5
-      let alpha : Int = clampi((drone.scan_t * 130.0).to_int(), 0, 220)
+      let alpha : Int = (drone.scan_t * 130.0).to_int().clamp(min=0, max=220)
       @raylib.draw_line_ex(
         @raylib.Vector2::new(drone.x, drone.y),
         @raylib.Vector2::new(tx, ty),

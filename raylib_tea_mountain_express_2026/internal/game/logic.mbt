@@ -98,7 +98,7 @@ fn spawn_hazard(game : @types.Game) -> Unit {
   let mut lane = @types.randi(0, @types.lane_count - 1)
   if @types.randi(0, 99) < 34 {
     let lane_offset = @types.randi(0, 2) - 1
-    lane = @types.clampi(game.lane + lane_offset, 0, @types.lane_count - 1)
+    lane = (game.lane + lane_offset).clamp(min=0, max=@types.lane_count - 1)
   }
 
   let difficulty = Float::from_int(game.checkpoint_index - 1)
@@ -150,7 +150,7 @@ fn handle_hazard_collision(game : @types.Game, i : Int) -> Unit {
   game.reputation = game.reputation - (1.4 + durability_loss * 0.16)
 
   let penalty = (durability_loss * 4.0 + cargo_loss * 3.0).to_int()
-  game.score = @types.clampi(game.score - penalty, 0, 2000000000)
+  game.score = (game.score - penalty).clamp(min=0, max=2000000000)
   game.near_miss_combo = 0
 
   game.hazards[i].active = false
@@ -203,10 +203,9 @@ fn resolve_checkpoint(game : @types.Game) -> Unit {
 
   if on_time && quality_ready && durability_ready {
     game.successful_deliveries = game.successful_deliveries + 1
-    game.multiplier = @types.clampi(
-      game.multiplier + 1,
-      1,
-      @types.delivery_multiplier_max,
+    game.multiplier = (game.multiplier + 1).clamp(
+      min=1,
+      max=@types.delivery_multiplier_max,
     )
 
     let schedule_bonus = @types.clamp01(
@@ -247,7 +246,7 @@ fn resolve_checkpoint(game : @types.Game) -> Unit {
     }
 
     game.reputation = game.reputation - rep_loss
-    game.score = @types.clampi(game.score - 120, 0, 2000000000)
+    game.score = (game.score - 120).clamp(min=0, max=2000000000)
     game.near_miss_combo = 0
 
     let mut reason = "Contract penalty:"
@@ -276,10 +275,9 @@ fn resolve_checkpoint(game : @types.Game) -> Unit {
 ///|
 fn update_playing(game : @types.Game, dt : Float) -> Unit {
   if game.input_steer != 0 {
-    game.lane = @types.clampi(
-      game.lane + game.input_steer,
-      0,
-      @types.lane_count - 1,
+    game.lane = (game.lane + game.input_steer).clamp(
+      min=0,
+      max=@types.lane_count - 1,
     )
   }
 

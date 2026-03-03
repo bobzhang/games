@@ -89,17 +89,17 @@ fn draw_platforms(game : @types.Game) -> Unit {
       let in_cycle : Float = plat.phase_timer - floored * total_cycle
       if in_cycle > @types.phase_on_time - 0.5 {
         let fade : Float = (@types.phase_on_time - in_cycle) / 0.5
-        @types.clampi((fade * 255.0).to_int(), 80, 255)
+        (fade * 255.0).to_int().clamp(min=80, max=255)
       } else if in_cycle < 0.3 {
         let fade : Float = in_cycle / 0.3
-        @types.clampi((fade * 255.0).to_int(), 80, 255)
+        (fade * 255.0).to_int().clamp(min=80, max=255)
       } else {
         255
       }
     } else {
       255
     }
-    let a = @types.clampi(alpha, 50, 255)
+    let a = alpha.clamp(min=50, max=255)
     // Main platform body
     @raylib.draw_cube(
       @raylib.Vector3::new(plat.x, plat.y, plat.z),
@@ -115,9 +115,9 @@ fn draw_platforms(game : @types.Game) -> Unit {
       plat.h,
       plat.d,
       @raylib.Color::new(
-        @types.clampi(plat.r - 30, 0, 255),
-        @types.clampi(plat.g - 30, 0, 255),
-        @types.clampi(plat.b - 30, 0, 255),
+        (plat.r - 30).clamp(min=0, max=255),
+        (plat.g - 30).clamp(min=0, max=255),
+        (plat.b - 30).clamp(min=0, max=255),
         a,
       ),
     )
@@ -129,9 +129,9 @@ fn draw_platforms(game : @types.Game) -> Unit {
       0.02,
       plat.d * 0.95,
       @raylib.Color::new(
-        @types.clampi(plat.r + 30, 0, 255),
-        @types.clampi(plat.g + 30, 0, 255),
-        @types.clampi(plat.b + 30, 0, 255),
+        (plat.r + 30).clamp(min=0, max=255),
+        (plat.g + 30).clamp(min=0, max=255),
+        (plat.b + 30).clamp(min=0, max=255),
         a,
       ),
     )
@@ -195,7 +195,7 @@ fn draw_platform_special(game : @types.Game, plat : @types.Platform) -> Unit {
       plat.w * 0.9,
       0.01,
       plat.d * 0.9,
-      @raylib.Color::new(200, 230, 255, @types.clampi(sheen_a, 0, 255)),
+      @raylib.Color::new(200, 230, 255, sheen_a.clamp(min=0, max=255)),
     )
   }
   // Moving platform rails
@@ -336,7 +336,7 @@ fn draw_gem(x : Float, y : Float, z : Float, spin : Float, frame : Int) -> Unit 
     size * 1.3,
     size * 1.3,
     size * 1.3,
-    @raylib.Color::new(100, 255, 180, @types.clampi(glow_a, 0, 255)),
+    @raylib.Color::new(100, 255, 180, glow_a.clamp(min=0, max=255)),
   )
   @raylib.draw_cube_wires(
     @raylib.Vector3::new(x, y, z),
@@ -373,7 +373,7 @@ fn draw_star_collectible(x : Float, y : Float, z : Float, spin : Float) -> Unit 
   @raylib.draw_sphere(
     @raylib.Vector3::new(x, y, z),
     0.3,
-    @raylib.Color::new(255, 255, 100, @types.clampi(glow_a, 0, 255)),
+    @raylib.Color::new(255, 255, 100, glow_a.clamp(min=0, max=255)),
   )
 }
 
@@ -430,9 +430,9 @@ fn draw_coin(
     0.05,
     8,
     @raylib.Color::new(
-      @types.clampi(r + 50, 0, 255),
-      @types.clampi(g + 50, 0, 255),
-      @types.clampi(b + 50, 0, 255),
+      (r + 50).clamp(min=0, max=255),
+      (g + 50).clamp(min=0, max=255),
+      (b + 50).clamp(min=0, max=255),
       200,
     ),
   )
@@ -522,7 +522,7 @@ fn draw_powerups_3d(game : @types.Game) -> Unit {
     @raylib.draw_sphere(
       @raylib.Vector3::new(pu.x, y, pu.z),
       0.5,
-      @raylib.Color::new(pr, pg, pb, @types.clampi(glow_a, 0, 255)),
+      @raylib.Color::new(pr, pg, pb, glow_a.clamp(min=0, max=255)),
     )
     // Icon indicator
     if pu.kind == @types.powerup_double_jump {
@@ -1526,7 +1526,7 @@ fn draw_particles_3d(game : @types.Game) -> Unit {
     }
     let life_ratio : Float = p.life / p.max_life
     let alpha = (life_ratio * 255.0).to_int()
-    let a = @types.clampi(alpha, 0, 255)
+    let a = alpha.clamp(min=0, max=255)
     let size = p.size * (0.5 + life_ratio * 0.5)
     @raylib.draw_cube(
       @raylib.Vector3::new(p.x, p.y, p.z),

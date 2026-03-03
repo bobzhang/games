@@ -243,7 +243,7 @@ pub fn gate_position() -> (Float, Float) {
 ///|
 /// Returns world-space coordinates for shrine position.
 pub fn shrine_position(index : Int) -> (Float, Float) {
-  match clampi(index, 0, shrine_count - 1) {
+  match index.clamp(min=0, max=shrine_count - 1) {
     0 => (Float::from_int(play_x + play_w - 140), Float::from_int(play_y + 126))
     1 =>
       (

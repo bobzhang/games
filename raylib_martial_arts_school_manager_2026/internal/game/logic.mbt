@@ -172,23 +172,21 @@ fn start_new_run(game : @types.Game) -> Unit {
 ///|
 /// Moves the assignment grid cursor by (dx, dy), clamping to valid row and column ranges.
 fn move_cursor(game : @types.Game, dx : Int, dy : Int) -> Unit {
-  game.cursor_col = @types.clampi(
-    game.cursor_col + dx,
-    0,
-    @types.room_count - 1,
+  game.cursor_col = (game.cursor_col + dx).clamp(
+    min=0,
+    max=@types.room_count - 1,
   )
-  game.cursor_row = @types.clampi(
-    game.cursor_row + dy,
-    0,
-    @types.student_count - 1,
+  game.cursor_row = (game.cursor_row + dy).clamp(
+    min=0,
+    max=@types.student_count - 1,
   )
 }
 
 ///|
 /// Assigns the student at the current cursor row to the room at the current cursor column.
 fn assign_selected_room(game : @types.Game) -> Unit {
-  let row = @types.clampi(game.cursor_row, 0, @types.student_count - 1)
-  let room = @types.clampi(game.cursor_col, 0, @types.room_count - 1)
+  let row = game.cursor_row.clamp(min=0, max=@types.student_count - 1)
+  let room = game.cursor_col.clamp(min=0, max=@types.room_count - 1)
 
   game.students[row].room = room
   set_message(
@@ -201,7 +199,7 @@ fn assign_selected_room(game : @types.Game) -> Unit {
 ///|
 /// Moves the selected student to the rest room and immediately reduces their fatigue by a fixed amount.
 fn rest_selected_student(game : @types.Game) -> Unit {
-  let row = @types.clampi(game.cursor_row, 0, @types.student_count - 1)
+  let row = game.cursor_row.clamp(min=0, max=@types.student_count - 1)
   game.students[row].room = @types.room_rest
   game.students[row].fatigue = @types.maxf(
     0.0,

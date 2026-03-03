@@ -643,13 +643,13 @@ fn move_cursor_once(game : @types.Game, dir : Int) -> Unit {
   }
 
   if dir == @types.dir_left {
-    game.cursor_x = @types.clampi(game.cursor_x - 1, 0, game.grid_w - 1)
+    game.cursor_x = (game.cursor_x - 1).clamp(min=0, max=game.grid_w - 1)
   } else if dir == @types.dir_right {
-    game.cursor_x = @types.clampi(game.cursor_x + 1, 0, game.grid_w - 1)
+    game.cursor_x = (game.cursor_x + 1).clamp(min=0, max=game.grid_w - 1)
   } else if dir == @types.dir_up {
-    game.cursor_y = @types.clampi(game.cursor_y - 1, 0, game.grid_h - 1)
+    game.cursor_y = (game.cursor_y - 1).clamp(min=0, max=game.grid_h - 1)
   } else if dir == @types.dir_down {
-    game.cursor_y = @types.clampi(game.cursor_y + 1, 0, game.grid_h - 1)
+    game.cursor_y = (game.cursor_y + 1).clamp(min=0, max=game.grid_h - 1)
   }
 }
 

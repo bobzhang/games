@@ -119,10 +119,9 @@ fn draw_kart_select_ui(game : @types.Game) -> Unit {
         @raylib.Color::new(255, 255, 100, 255),
       )
     }
-    let kart_name = @types.kart_type_names[@types.clampi(
-        t,
-        0,
-        @types.kart_type_count - 1,
+    let kart_name = @types.kart_type_names[t.clamp(
+        min=0,
+        max=@types.kart_type_count - 1,
       )]
     @raylib.draw_text(
       kart_name,
@@ -132,32 +131,28 @@ fn draw_kart_select_ui(game : @types.Game) -> Unit {
       @raylib.Color::new(220, 220, 240, 255),
     )
     // Stats display
-    let stats = @types.kart_stats[@types.clampi(
-        t,
-        0,
-        @types.kart_type_count - 1,
-      )]
+    let stats = @types.kart_stats[t.clamp(min=0, max=@types.kart_type_count - 1)]
     let spd_bar = (stats.0 / 35.0 * 80.0).to_int()
     let acc_bar = (stats.1 / 25.0 * 80.0).to_int()
     let hdl_bar = (stats.2 / 4.0 * 80.0).to_int()
     @raylib.draw_rectangle(
       tx + 5,
       type_y + 25,
-      @types.clampi(spd_bar, 0, 80),
+      spd_bar.clamp(min=0, max=80),
       6,
       @raylib.Color::new(255, 100, 100, 200),
     )
     @raylib.draw_rectangle(
       tx + 5,
       type_y + 35,
-      @types.clampi(acc_bar, 0, 80),
+      acc_bar.clamp(min=0, max=80),
       6,
       @raylib.Color::new(100, 255, 100, 200),
     )
     @raylib.draw_rectangle(
       tx + 5,
       type_y + 45,
-      @types.clampi(hdl_bar, 0, 80),
+      hdl_bar.clamp(min=0, max=80),
       6,
       @raylib.Color::new(100, 100, 255, 200),
     )
@@ -196,7 +191,7 @@ fn draw_kart_select_ui(game : @types.Game) -> Unit {
   for c in 0..<@types.max_karts {
     let cy = char_y + 30 + c * 40
     let is_sel_c = c == sel_char
-    let ci = @types.clampi(c, 0, @types.kart_colors.length() - 1)
+    let ci = c.clamp(min=0, max=@types.kart_colors.length() - 1)
     let kc = @types.kart_colors[ci]
     let bg = if is_sel_c {
       @raylib.Color::new(50, 70, 120, 255)
@@ -221,10 +216,9 @@ fn draw_kart_select_ui(game : @types.Game) -> Unit {
       16,
       @raylib.Color::new(kc.0, kc.1, kc.2, 255),
     )
-    let char_name = @types.character_names[@types.clampi(
-        c,
-        0,
-        @types.character_names.length() - 1,
+    let char_name = @types.character_names[c.clamp(
+        min=0,
+        max=@types.character_names.length() - 1,
       )]
     @raylib.draw_text(
       char_name,
@@ -285,15 +279,13 @@ fn draw_kart_select_ui(game : @types.Game) -> Unit {
     350,
     @raylib.Color::new(80, 80, 120, 200),
   )
-  let kart_name_sel = @types.kart_type_names[@types.clampi(
-      sel_type,
-      0,
-      @types.kart_type_count - 1,
+  let kart_name_sel = @types.kart_type_names[sel_type.clamp(
+      min=0,
+      max=@types.kart_type_count - 1,
     )]
-  let char_name_sel = @types.character_names[@types.clampi(
-      sel_char,
-      0,
-      @types.character_names.length() - 1,
+  let char_name_sel = @types.character_names[sel_char.clamp(
+      min=0,
+      max=@types.character_names.length() - 1,
     )]
   @raylib.draw_text(
     char_name_sel,
@@ -311,10 +303,9 @@ fn draw_kart_select_ui(game : @types.Game) -> Unit {
     @raylib.Color::new(200, 200, 220, 255),
   )
   // Detailed stats bars
-  let stats_sel = @types.kart_stats[@types.clampi(
-      sel_type,
-      0,
-      @types.kart_type_count - 1,
+  let stats_sel = @types.kart_stats[sel_type.clamp(
+      min=0,
+      max=@types.kart_type_count - 1,
     )]
   let bar_x = preview_x + 20
   let bar_y = preview_y + 90
@@ -346,7 +337,7 @@ fn draw_kart_select_ui(game : @types.Game) -> Unit {
       @raylib.Color::new(180, 180, 200, 255),
     )
     let fill_w_f : Float = vals[bi] * Float::from_int(bar_w)
-    let fill_w = @types.clampi(fill_w_f.to_int(), 0, bar_w)
+    let fill_w = fill_w_f.to_int().clamp(min=0, max=bar_w)
     let bc = bar_colors[bi]
     @raylib.draw_rectangle(
       bar_x,
@@ -472,7 +463,7 @@ fn draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 255, 100, 255),
   )
   // Lap
-  let lap_num = @types.clampi(kart.lap + 1, 1, @types.total_laps)
+  let lap_num = (kart.lap + 1).clamp(min=1, max=@types.total_laps)
   let lap_text = "Lap \{lap_num}/\{@types.total_laps}"
   @raylib.draw_text(
     lap_text,
@@ -671,7 +662,7 @@ fn draw_minimap(game : @types.Game) -> Unit {
     }
     let kx = map_x + 10 + ((kart.x - min_x + 5.0) * scale).to_int()
     let ky = map_y + 10 + ((kart.z - min_z + 5.0) * scale).to_int()
-    let ci = @types.clampi(i, 0, @types.kart_colors.length() - 1)
+    let ci = i.clamp(min=0, max=@types.kart_colors.length() - 1)
     let kc = @types.kart_colors[ci]
     let dot_size = if i == @types.player_kart { 4 } else { 3 }
     @raylib.draw_rectangle(
@@ -783,7 +774,7 @@ fn draw_race_results(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(200, 200, 200, 255)
     }
-    let ci = @types.clampi(i, 0, @types.kart_colors.length() - 1)
+    let ci = i.clamp(min=0, max=@types.kart_colors.length() - 1)
     let kc = @types.kart_colors[ci]
     // Color dot
     @raylib.draw_rectangle(
@@ -881,7 +872,7 @@ fn draw_cup_results(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(200, 200, 200, 255)
     }
-    let ci = @types.clampi(ki, 0, @types.kart_colors.length() - 1)
+    let ci = ki.clamp(min=0, max=@types.kart_colors.length() - 1)
     let kc = @types.kart_colors[ci]
     @raylib.draw_rectangle(
       240,
@@ -1310,15 +1301,13 @@ pub fn draw_track_preview_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(200, 200, 255, 255),
   )
   // Selected kart info
-  let kart_name = @types.kart_type_names[@types.clampi(
-      game.selected_kart_type,
-      0,
-      @types.kart_type_count - 1,
+  let kart_name = @types.kart_type_names[game.selected_kart_type.clamp(
+      min=0,
+      max=@types.kart_type_count - 1,
     )]
-  let char_name = @types.character_names[@types.clampi(
-      game.selected_character,
-      0,
-      @types.max_karts - 1,
+  let char_name = @types.character_names[game.selected_character.clamp(
+      min=0,
+      max=@types.max_karts - 1,
     )]
   let kart_info = "Racer: \{char_name} - \{kart_name} Kart"
   @raylib.draw_text(
@@ -1333,7 +1322,7 @@ pub fn draw_track_preview_panel(game : @types.Game) -> Unit {
   let hiw = @raylib.measure_text(hint, 20)
   let blink = @math.sinf(game.preview_timer * 4.0)
   let hint_alpha_f : Float = 180.0 + blink * 60.0
-  let hint_alpha = @types.clampi(hint_alpha_f.to_int(), 120, 240)
+  let hint_alpha = hint_alpha_f.to_int().clamp(min=120, max=240)
   @raylib.draw_text(
     hint,
     (@types.screen_width - hiw) / 2,
@@ -1381,7 +1370,7 @@ pub fn draw_standings_sidebar(game : @types.Game) -> Unit {
       }
       let y = side_y + 20 + (p - 1) * entry_h
       let is_player = i == @types.player_kart
-      let ci = @types.clampi(i, 0, @types.kart_colors.length() - 1)
+      let ci = i.clamp(min=0, max=@types.kart_colors.length() - 1)
       let kc = @types.kart_colors[ci]
       // Color dot
       @raylib.draw_rectangle(

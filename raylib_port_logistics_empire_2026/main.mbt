@@ -96,12 +96,6 @@ struct Spark {
 }
 
 ///|
-/// Clamps an integer value to the inclusive range [lo, hi].
-fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Clamps a float value to the inclusive range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -624,7 +618,7 @@ fn load_from_node_to_target(
       amount = nodes[from_idx].raw
     }
     if amount > 0 {
-      let take : Int = clampi(amount, 0, capacity)
+      let take : Int = amount.clamp(min=0, max=capacity)
       truck.cargo_kind = 1
       truck.cargo = take
       nodes[from_idx].raw = nodes[from_idx].raw - take
@@ -638,7 +632,7 @@ fn load_from_node_to_target(
       amount = nodes[from_idx].goods
     }
     if amount > 0 {
-      let take : Int = clampi(amount, 0, capacity)
+      let take : Int = amount.clamp(min=0, max=capacity)
       truck.cargo_kind = 2
       truck.cargo = take
       nodes[from_idx].goods = nodes[from_idx].goods - take
@@ -648,7 +642,7 @@ fn load_from_node_to_target(
 
   if target_kind == 3 {
     if source_kind == 0 && nodes[from_idx].raw > 0 {
-      let take : Int = clampi(nodes[from_idx].raw, 0, capacity)
+      let take : Int = nodes[from_idx].raw.clamp(min=0, max=capacity)
       truck.cargo_kind = 1
       truck.cargo = take
       nodes[from_idx].raw = nodes[from_idx].raw - take
@@ -656,7 +650,7 @@ fn load_from_node_to_target(
     }
 
     if source_kind == 1 && nodes[from_idx].goods > 0 {
-      let take : Int = clampi(nodes[from_idx].goods, 0, capacity)
+      let take : Int = nodes[from_idx].goods.clamp(min=0, max=capacity)
       truck.cargo_kind = 2
       truck.cargo = take
       nodes[from_idx].goods = nodes[from_idx].goods - take
@@ -666,7 +660,7 @@ fn load_from_node_to_target(
 
   if target_kind == 0 {
     if source_kind == 1 && nodes[from_idx].raw > 0 {
-      let take : Int = clampi(nodes[from_idx].raw, 0, capacity)
+      let take : Int = nodes[from_idx].raw.clamp(min=0, max=capacity)
       truck.cargo_kind = 1
       truck.cargo = take
       nodes[from_idx].raw = nodes[from_idx].raw - take
@@ -704,7 +698,7 @@ fn update_nodes(nodes : Array[Node], dt : Float, cycle : Int) -> (Int, Int) {
     if node.kind == 0 {
       if node.prod_cd <= 0.0 {
         node.raw = node.raw + 2 + cycle / 3
-        node.raw = clampi(node.raw, 0, 120)
+        node.raw = node.raw.clamp(min=0, max=120)
         node.prod_cd = 0.66
       }
     } else if node.kind == 1 {
@@ -712,7 +706,7 @@ fn update_nodes(nodes : Array[Node], dt : Float, cycle : Int) -> (Int, Int) {
         if node.raw >= 2 {
           node.raw = node.raw - 2
           node.goods = node.goods + 1 + cycle / 6
-          node.goods = clampi(node.goods, 0, 120)
+          node.goods = node.goods.clamp(min=0, max=120)
         }
         let cd : Float = 1.04 - Float::from_int(cycle) * 0.02
         node.prod_cd = maxf(0.55, cd)
@@ -844,11 +838,11 @@ fn update_trucks(
 
       if truck.cargo_kind == 1 && truck.cargo > 0 {
         nodes[arrive].raw = nodes[arrive].raw + truck.cargo
-        nodes[arrive].raw = clampi(nodes[arrive].raw, 0, 120)
+        nodes[arrive].raw = nodes[arrive].raw.clamp(min=0, max=120)
         burst_sparks(sparks, nodes[arrive].x, nodes[arrive].y, 4, 1)
       } else if truck.cargo_kind == 2 && truck.cargo > 0 {
         nodes[arrive].goods = nodes[arrive].goods + truck.cargo
-        nodes[arrive].goods = clampi(nodes[arrive].goods, 0, 120)
+        nodes[arrive].goods = nodes[arrive].goods.clamp(min=0, max=120)
         burst_sparks(sparks, nodes[arrive].x, nodes[arrive].y, 4, 0)
       }
 
@@ -1036,7 +1030,7 @@ fn draw_routes(
         @raylib.Vector2::new(nodes[a].x, nodes[a].y),
         @raylib.Vector2::new(nodes[b].x, nodes[b].y),
         thick + 5.0,
-        @raylib.Color::new(255, 248, 188, clampi(alpha, 0, 255)),
+        @raylib.Color::new(255, 248, 188, alpha.clamp(min=0, max=255)),
       )
     }
 
@@ -1886,9 +1880,9 @@ fn main {
                 continue
               }
               if node.kind == 0 {
-                node.raw = clampi(node.raw + 8, 0, 120)
+                node.raw = (node.raw + 8).clamp(min=0, max=120)
               } else if node.kind == 1 {
-                node.goods = clampi(node.goods + 4, 0, 120)
+                node.goods = (node.goods + 4).clamp(min=0, max=120)
               } else if node.kind == 2 {
                 let nd : Int = node.demand - 3
                 node.demand = if nd < 0 { 0 } else { nd }

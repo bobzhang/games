@@ -933,7 +933,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
     return
   }
 
-  game.wave = @types.clampi(1 + (game.game_t / 22.0).to_int(), 1, 12)
+  game.wave = (1 + (game.game_t / 22.0).to_int()).clamp(min=1, max=12)
 
   passive_heat_decay(game, step)
 

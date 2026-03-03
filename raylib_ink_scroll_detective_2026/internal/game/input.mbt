@@ -33,8 +33,8 @@ fn update_input(game : @types.Game) -> Unit {
     game.input_dy = game.input_dy + 1
   }
 
-  game.input_dx = @types.clampi(game.input_dx, -1, 1)
-  game.input_dy = @types.clampi(game.input_dy, -1, 1)
+  game.input_dx = game.input_dx.clamp(min=-1, max=1)
+  game.input_dy = game.input_dy.clamp(min=-1, max=1)
 
   game.input_inspect_press = @raylib.is_key_pressed(@raylib.KeyJ) ||
     @raylib.is_key_pressed(@raylib.KeyEnter)

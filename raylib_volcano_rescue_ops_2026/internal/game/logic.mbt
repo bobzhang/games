@@ -283,7 +283,7 @@ fn finalize_level_setup(game : @types.Game) -> Unit {
   game.truck_y = game.start_y
 
   game.total_civilians = @types.total_waiting(game)
-  game.goal_rescue = @types.clampi(game.goal_rescue, 1, game.total_civilians)
+  game.goal_rescue = game.goal_rescue.clamp(min=1, max=game.total_civilians)
 
   game.carrying = 0
   game.rescued = 0
@@ -311,7 +311,7 @@ fn finalize_level_setup(game : @types.Game) -> Unit {
 fn load_level(game : @types.Game, index : Int) -> Unit {
   clear_world(game)
 
-  game.level_index = @types.clampi(index, 0, @types.level_count - 1)
+  game.level_index = index.clamp(min=0, max=@types.level_count - 1)
 
   if game.level_index == 0 {
     setup_level_0(game)
@@ -741,7 +741,7 @@ fn spread_chance(game : @types.Game, nx : Int, ny : Int, base : Int) -> Int {
     chance = chance + 10
   }
 
-  @types.clampi(chance, 6, 95)
+  chance.clamp(min=6, max=95)
 }
 
 ///|

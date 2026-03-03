@@ -34,10 +34,9 @@ pub fn update_ai_karts(game : @types.Game, dt : Float) -> Unit {
     if wc < 2 {
       continue
     }
-    let diff_stats = @types.ai_difficulty_stats[@types.clampi(
-        kart.ai_difficulty,
-        0,
-        3,
+    let diff_stats = @types.ai_difficulty_stats[kart.ai_difficulty.clamp(
+        min=0,
+        max=3,
       )]
     let look_ahead : Int = 2 + (diff_stats.2 * 2.0).to_int()
     let target_wp_idx = (kart.waypoint_idx + look_ahead) % wc
@@ -190,10 +189,9 @@ fn ai_use_item(game : @types.Game, kart_idx : Int, dt : Float) -> Unit {
   if kart.ai_use_item_timer > 0.0 {
     return
   }
-  let diff_stats = @types.ai_difficulty_stats[@types.clampi(
-      kart.ai_difficulty,
-      0,
-      3,
+  let diff_stats = @types.ai_difficulty_stats[kart.ai_difficulty.clamp(
+      min=0,
+      max=3,
     )]
   let item = kart.held_powerup
   let should_use : Bool = if item == @types.powerup_boost ||

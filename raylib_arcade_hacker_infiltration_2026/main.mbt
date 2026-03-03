@@ -136,12 +136,6 @@ fn in_bounds(gx : Int, gy : Int) -> Bool {
 }
 
 ///|
-/// Returns the integer value clamped between lo and hi.
-fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Returns the Float value clamped between lo and hi.
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -736,7 +730,7 @@ fn main {
       let g1 = @raylib.get_random_value(1, map_h - 2)
       let mut g2 = @raylib.get_random_value(1, map_h - 2)
       if g2 == g1 {
-        g2 = clampi(g2 + 2, 1, map_h - 2)
+        g2 = (g2 + 2).clamp(min=1, max=map_h - 2)
       }
       let g3 = map_h / 2
       for y in 1..<(map_h - 1) {
@@ -754,10 +748,10 @@ fn main {
       let mut g2 = @raylib.get_random_value(1, map_w - 2)
       let mut g3 = @raylib.get_random_value(1, map_w - 2)
       if g2 == g1 {
-        g2 = clampi(g2 + 2, 1, map_w - 2)
+        g2 = (g2 + 2).clamp(min=1, max=map_w - 2)
       }
       if g3 == g1 || g3 == g2 {
-        g3 = clampi(g3 + 3, 1, map_w - 2)
+        g3 = (g3 + 3).clamp(min=1, max=map_w - 2)
       }
 
       for x in 1..<(map_w - 1) {
@@ -777,7 +771,7 @@ fn main {
     tiles[idx(exit_x - 1, exit_y)] = 0
     tiles[idx(exit_x, exit_y + 1)] = 0
 
-    terminal_total = clampi(3 + stage_i, 3, 8)
+    terminal_total = (3 + stage_i).clamp(min=3, max=8)
     terminal_done = 0
 
     for i in 0..<terminal_total {
@@ -804,7 +798,7 @@ fn main {
       }
     }
 
-    let camera_count = clampi(3 + stage_i * 2, 3, 16)
+    let camera_count = (3 + stage_i * 2).clamp(min=3, max=16)
     for i in 0..<camera_count {
       ignore(i)
       for _a in 0..<240 {
@@ -831,7 +825,7 @@ fn main {
       }
     }
 
-    let guard_count = clampi(5 + stage_i * 3, 5, 30)
+    let guard_count = (5 + stage_i * 3).clamp(min=5, max=30)
     for i in 0..<guard_count {
       ignore(i)
       for _a in 0..<260 {
@@ -845,7 +839,7 @@ fn main {
       }
     }
 
-    let pickup_count = clampi(4 + stage_i, 4, 10)
+    let pickup_count = (4 + stage_i).clamp(min=4, max=10)
     for i in 0..<pickup_count {
       ignore(i)
       for _a in 0..<200 {

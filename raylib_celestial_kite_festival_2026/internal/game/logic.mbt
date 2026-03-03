@@ -295,7 +295,7 @@ fn add_score(game : @types.Game, base : Int) -> Unit {
 ///|
 /// Increments the combo counter by one (capped at 30) and resets the combo display timer.
 fn push_combo(game : @types.Game) -> Unit {
-  game.combo = @types.clampi(game.combo + 1, 0, 30)
+  game.combo = (game.combo + 1).clamp(min=0, max=30)
   game.combo_t = 4.0
 }
 
@@ -921,7 +921,7 @@ fn update_sparks(game : @types.Game, dt : Float) -> Unit {
 ///|
 /// Probabilistically emits wind-drifting snow-particle sparks from above the play area each frame.
 fn emit_snow(game : @types.Game, dt : Float) -> Unit {
-  let tries = @types.clampi((dt * 260.0).to_int(), 1, 16)
+  let tries = (dt * 260.0).to_int().clamp(min=1, max=16)
   for _i in 0..<tries {
     if @types.chance(34) {
       emit_spark(

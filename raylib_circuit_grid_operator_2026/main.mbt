@@ -78,12 +78,6 @@ struct Pulse {
 }
 
 ///|
-/// Clamps an integer value to the inclusive range [lo, hi].
-fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Clamps a float value to the inclusive range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -677,7 +671,7 @@ fn run_network_step(
       continue
     }
 
-    let need : Int = clampi(cell.demand + tier / 2, 1, 30)
+    let need : Int = (cell.demand + tier / 2).clamp(min=1, max=30)
 
     if cell.fault_t > 0.0 {
       miss = miss + need
@@ -686,11 +680,9 @@ fn run_network_step(
 
     if cell.charge > 0.25 {
       powered_sinks = powered_sinks + 1
-      let delivered : Int = clampi(
-        (cell.charge * Float::from_int(need)).to_int(),
-        1,
-        need + 3,
-      )
+      let delivered : Int = (cell.charge * Float::from_int(need))
+        .to_int()
+        .clamp(min=1, max=need + 3)
       cell.stored = cell.stored + delivered
       gain = gain + delivered
 
@@ -823,11 +815,13 @@ fn draw_board(
       }
 
       if cells[i].charge > 0.05 {
-        let glow : Int = clampi((cells[i].charge * 120.0).to_int(), 0, 130)
+        let glow : Int = (cells[i].charge * 120.0)
+          .to_int()
+          .clamp(min=0, max=130)
         base = @raylib.Color::new(
-          clampi(48 + glow / 4, 0, 255),
-          clampi(58 + glow / 3, 0, 255),
-          clampi(84 + glow / 2, 0, 255),
+          (48 + glow / 4).clamp(min=0, max=255),
+          (58 + glow / 3).clamp(min=0, max=255),
+          (84 + glow / 2).clamp(min=0, max=255),
           240,
         )
       }

@@ -331,7 +331,7 @@ fn spawn_ent(
   let i = alloc_ent(game)
   game.ents[i].active = true
   game.ents[i].kind = kind
-  game.ents[i].lane = @types.clampi(lane, 0, @types.lane_count - 1)
+  game.ents[i].lane = lane.clamp(min=0, max=@types.lane_count - 1)
   game.ents[i].x = x
   game.ents[i].y = @types.lane_y(game.ents[i].lane)
   game.ents[i].vx = vx
@@ -365,7 +365,7 @@ fn add_score(game : @types.Game, base : Int) -> Unit {
 ///|
 /// Increments the combo counter and resets the combo timer.
 fn push_combo(game : @types.Game) -> Unit {
-  game.combo = @types.clampi(game.combo + 1, 0, 24)
+  game.combo = (game.combo + 1).clamp(min=0, max=24)
   game.combo_t = 3.5
 }
 
@@ -1129,7 +1129,7 @@ fn update_fx(game : @types.Game, dt : Float) -> Unit {
 ///|
 /// Randomly emits snow particle effects drifting in from the right edge of the screen.
 fn emit_snow(game : @types.Game, dt : Float) -> Unit {
-  let tries = @types.clampi((dt * 230.0).to_int(), 1, 10)
+  let tries = (dt * 230.0).to_int().clamp(min=1, max=10)
   let mut i = 0
   while i < tries {
     if @types.chance(38) {

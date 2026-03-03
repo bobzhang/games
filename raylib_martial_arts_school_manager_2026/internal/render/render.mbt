@@ -5,7 +5,7 @@ fn with_alpha(color : @raylib.Color, alpha : Int) -> @raylib.Color {
     color.r.to_int(),
     color.g.to_int(),
     color.b.to_int(),
-    @types.clampi(alpha, 0, 255),
+    alpha.clamp(min=0, max=255),
   )
 }
 
@@ -102,7 +102,7 @@ fn draw_background(game : @types.Game) -> Unit {
   )
 
   if game.incident_flash_t > 0.0 {
-    let alpha = @types.clampi((game.incident_flash_t * 130.0).to_int(), 0, 130)
+    let alpha = (game.incident_flash_t * 130.0).to_int().clamp(min=0, max=130)
     @raylib.draw_rectangle(
       0,
       0,
@@ -439,11 +439,9 @@ fn draw_message(game : @types.Game) -> Unit {
   if game.message_t <= 0.0 {
     return
   }
-  let alpha = @types.clampi(
-    (@types.clampf(game.message_t / 3.0, 0.0, 1.0) * 226.0).to_int(),
-    90,
-    226,
-  )
+  let alpha = (@types.clampf(game.message_t / 3.0, 0.0, 1.0) * 226.0)
+    .to_int()
+    .clamp(min=90, max=226)
   @raylib.draw_rectangle(
     320,
     812,
@@ -475,11 +473,9 @@ fn draw_week_banner(game : @types.Game) -> Unit {
     return
   }
   let pulse : Float = 0.5 + 0.5 * @math.sinf(game.scene_t * 6.2)
-  let alpha = @types.clampi(
-    (game.week_banner_t / 2.6 * (150.0 + pulse * 80.0)).to_int(),
-    0,
-    230,
-  )
+  let alpha = (game.week_banner_t / 2.6 * (150.0 + pulse * 80.0))
+    .to_int()
+    .clamp(min=0, max=230)
   let text = "WEEK " + game.week.to_string()
   let tw = @raylib.measure_text(text, 56)
   @raylib.draw_text(

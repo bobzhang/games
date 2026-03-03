@@ -27,19 +27,17 @@ fn clear_world(game : @types.Game) -> Unit {
 
 ///|
 fn target_goal_for_mission(mission : Int) -> Int {
-  @types.clampi(
-    @types.base_target_goal + mission - 1,
-    @types.base_target_goal,
-    @types.target_goal_cap,
+  (@types.base_target_goal + mission - 1).clamp(
+    min=@types.base_target_goal,
+    max=@types.target_goal_cap,
   )
 }
 
 ///|
 fn mine_count_for_mission(mission : Int) -> Int {
-  @types.clampi(
-    @types.base_mine_count + (mission - 1) * 4,
-    @types.base_mine_count,
-    @types.max_mines,
+  (@types.base_mine_count + (mission - 1) * 4).clamp(
+    min=@types.base_mine_count,
+    max=@types.max_mines,
   )
 }
 
@@ -189,8 +187,9 @@ fn init_title_scene(game : @types.Game) -> Unit {
 
 ///|
 fn start_mission(game : @types.Game, mission : Int) -> Unit {
-  let clamped_mission = @types.clampi(
-    mission, @types.mission_min, @types.mission_max,
+  let clamped_mission = mission.clamp(
+    min=@types.mission_min,
+    max=@types.mission_max,
   )
   clear_world(game)
   game.state = Play
@@ -223,10 +222,9 @@ fn restart_mission(game : @types.Game) -> Unit {
 
 ///|
 fn next_mission(game : @types.Game) -> Unit {
-  let next_id = @types.clampi(
-    game.mission + 1,
-    @types.mission_min,
-    @types.mission_max,
+  let next_id = (game.mission + 1).clamp(
+    min=@types.mission_min,
+    max=@types.mission_max,
   )
   start_mission(game, next_id)
 }
@@ -425,10 +423,9 @@ fn resolve_round_state(game : @types.Game) -> Unit {
   if game.targets_found >= game.target_goal {
     game.state = Win
     game.lose_reason = None
-    let unlock = @types.clampi(
-      game.mission + 1,
-      @types.mission_min,
-      @types.mission_max,
+    let unlock = (game.mission + 1).clamp(
+      min=@types.mission_min,
+      max=@types.mission_max,
     )
     if unlock > game.best_mission {
       game.best_mission = unlock

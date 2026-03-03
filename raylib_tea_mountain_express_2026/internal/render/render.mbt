@@ -20,7 +20,7 @@ fn draw_meter(
   label : String,
 ) -> Unit {
   let pct = @types.clamp01(value_100 / 100.0)
-  let fill_w = @types.clampi((Float::from_int(w) * pct).to_int(), 0, w)
+  let fill_w = (Float::from_int(w) * pct).to_int().clamp(min=0, max=w)
 
   @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(18, 22, 30, 230))
   @raylib.draw_rectangle(x, y, fill_w, h, fill)

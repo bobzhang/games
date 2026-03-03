@@ -264,7 +264,7 @@ fn spawn_wave(game : @types.Game, z_base : Float) -> Unit {
       )
       if @types.chance(70) {
         let step_dir = if @types.chance(50) { 1 } else { -1 }
-        lane = @types.clampi(lane + step_dir, 0, @types.lane_count - 1)
+        lane = (lane + step_dir).clamp(min=0, max=@types.lane_count - 1)
       }
     }
   } else if p < 54 {
@@ -328,10 +328,9 @@ fn spawn_wave(game : @types.Game, z_base : Float) -> Unit {
       )
       if i % 2 == 0 {
         let side_step = if @types.chance(50) { 1 } else { -1 }
-        let side_lane = @types.clampi(
-          lane + side_step,
-          0,
-          @types.lane_count - 1,
+        let side_lane = (lane + side_step).clamp(
+          min=0,
+          max=@types.lane_count - 1,
         )
         spawn_obj(
           game,
@@ -485,10 +484,9 @@ fn handle_lane_input(game : @types.Game) -> Unit {
     return
   }
 
-  game.hero.lane = @types.clampi(
-    game.hero.lane + game.input_move,
-    0,
-    @types.lane_count - 1,
+  game.hero.lane = (game.hero.lane + game.input_move).clamp(
+    min=0,
+    max=@types.lane_count - 1,
   )
 }
 
@@ -646,7 +644,7 @@ fn update_objects(game : @types.Game, dt : Float) -> Unit {
       if d2 < 78.0 * 78.0 {
         o.active = false
         game.orbs = game.orbs + 1
-        game.combo = @types.clampi(game.combo + 1, 0, 999)
+        game.combo = (game.combo + 1).clamp(min=0, max=999)
         game.combo_t = @types.combo_decay_time
         game.score = game.score +
           (Float::from_int(96 + game.combo * 6) * combo_mul(game)).to_int()

@@ -251,7 +251,7 @@ fn add_score(game : @types.Game, base : Int) -> Unit {
 ///|
 /// Increments the combo counter by one (capped at 18) and resets the combo decay timer.
 fn push_combo(game : @types.Game) -> Unit {
-  game.combo = @types.clampi(game.combo + 1, 0, 18)
+  game.combo = (game.combo + 1).clamp(min=0, max=18)
   game.combo_t = 3.4
 }
 
@@ -831,7 +831,7 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
 /// Randomly emits small ambient particles from near the cave walls each frame to create the impression of water flow and bioluminescent debris.
 fn emit_ambience(game : @types.Game, dt : Float) -> Unit {
   let mut n = 0
-  let tries = @types.clampi((dt * 210.0).to_int(), 1, 8)
+  let tries = (dt * 210.0).to_int().clamp(min=1, max=8)
   while n < tries {
     if @types.chance(36) {
       let y = @types.randf(-24.0, Float::from_int(@types.screen_h) + 10.0)

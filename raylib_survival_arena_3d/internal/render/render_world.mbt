@@ -535,7 +535,7 @@ fn draw_pickups_3d(game : @types.Game) -> Unit {
       0.3 +
       0.7
     let glow_alpha = (glow_pulse * 200.0).to_int()
-    let ga = @types.clampi(glow_alpha, 100, 200)
+    let ga = glow_alpha.clamp(min=100, max=200)
     if pickup.kind == @types.pickup_health {
       // Health pack: green cube with cross
       @raylib.draw_cube(
@@ -1383,7 +1383,7 @@ fn draw_particles_3d(game : @types.Game) -> Unit {
       continue
     }
     let alpha = (p.life / p.max_life * 255.0).to_int()
-    let a = @types.clampi(alpha, 0, 255)
+    let a = alpha.clamp(min=0, max=255)
     if p.kind == @types.particle_shell {
       // Shell casings: elongated
       @raylib.draw_cube(

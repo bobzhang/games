@@ -73,7 +73,7 @@ fn alpha_color(c : @raylib.Color, a : Int) -> @raylib.Color {
     c.r.to_int(),
     c.g.to_int(),
     c.b.to_int(),
-    @types.clampi(a, 0, 255),
+    a.clamp(min=0, max=255),
   )
 }
 
@@ -204,16 +204,12 @@ fn draw_road_surface(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     let left1 = (e1.0 + cam_x).to_int()
     let right1 = (e1.1 + cam_x).to_int()
 
-    let left = @types.clampi(
-      @types.minf(Float::from_int(left0), Float::from_int(left1)).to_int(),
-      -180,
-      @types.screen_w + 180,
-    )
-    let right = @types.clampi(
-      @types.maxf(Float::from_int(right0), Float::from_int(right1)).to_int(),
-      -180,
-      @types.screen_w + 180,
-    )
+    let left = @types.minf(Float::from_int(left0), Float::from_int(left1))
+      .to_int()
+      .clamp(min=-180, max=@types.screen_w + 180)
+    let right = @types.maxf(Float::from_int(right0), Float::from_int(right1))
+      .to_int()
+      .clamp(min=-180, max=@types.screen_w + 180)
 
     let line_pulse : Float = 0.5 +
       0.5 * @math.sinf(d0 * 0.02 + game.time_s * 3.8)
@@ -579,7 +575,7 @@ fn draw_sparks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       continue
     }
 
-    let a = @types.clampi((s.life * 255.0).to_int(), 0, 255)
+    let a = (s.life * 255.0).to_int().clamp(min=0, max=255)
     let col = if s.kind == 1 {
       @raylib.Color::new(255, 134, 178, a)
     } else if s.kind == 2 {
@@ -605,7 +601,7 @@ fn draw_rings(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       continue
     }
 
-    let a = @types.clampi((r.life * 255.0).to_int(), 0, 255)
+    let a = (r.life * 255.0).to_int().clamp(min=0, max=255)
     let c = if r.kind == 2 {
       @raylib.Color::new(186, 146, 255, a)
     } else if r.kind == 1 {
@@ -631,7 +627,7 @@ fn draw_afterimages(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       continue
     }
 
-    let a = @types.clampi((it.life * 210.0).to_int(), 0, 210)
+    let a = (it.life * 210.0).to_int().clamp(min=0, max=210)
     let col = if it.kind == 1 {
       @raylib.Color::new(122, 242, 255, a)
     } else {
@@ -702,7 +698,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   )
 
   if game.hero.muzzle_t > 0.0 {
-    let a = @types.clampi((game.hero.muzzle_t * 255.0).to_int(), 0, 255)
+    let a = (game.hero.muzzle_t * 255.0).to_int().clamp(min=0, max=255)
     @raylib.draw_circle(
       (x - 10.0).to_int(),
       (y - game.hero.h * 0.53).to_int(),
@@ -730,7 +726,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     let flicker = Float::from_int(80) +
       @math.sinf(game.time_s * 14.0) * 70.0 +
       70.0
-    let aa = @types.clampi(flicker.to_int(), 30, 220)
+    let aa = flicker.to_int().clamp(min=30, max=220)
     @raylib.draw_circle(
       x.to_int(),
       y.to_int(),
@@ -749,7 +745,7 @@ fn draw_hack_pulse(game : @types.Game) -> Unit {
 
   let t = Float::from_int(1) - game.hack_t / @types.hack_time
   let rr = @types.hack_radius * t
-  let aa = @types.clampi(((Float::from_int(1) - t) * 200.0).to_int(), 0, 200)
+  let aa = ((Float::from_int(1) - t) * 200.0).to_int().clamp(min=0, max=200)
 
   @raylib.draw_circle_lines(
     game.hero.x.to_int(),
@@ -938,7 +934,7 @@ fn draw_hud(game : @types.Game) -> Unit {
   )
 
   if game.combo >= 2 && game.combo_t > 0.0 {
-    let aa = @types.clampi((game.combo_t * 130.0 + 60.0).to_int(), 0, 255)
+    let aa = (game.combo_t * 130.0 + 60.0).to_int().clamp(min=0, max=255)
     draw_center_text(
       "COMBO x" + game.combo.to_string(),
       12,
@@ -984,7 +980,7 @@ fn draw_button(
     (rect.0 + rect.2 * 0.5 - Float::from_int(tw) * 0.5).to_int(),
     (rect.1 + rect.3 * 0.5 - 12.0).to_int(),
     24,
-    @raylib.Color::new(230, 246, 255, @types.clampi(aa + 46, 0, 255)),
+    @raylib.Color::new(230, 246, 255, (aa + 46).clamp(min=0, max=255)),
   )
 }
 
@@ -1017,7 +1013,7 @@ fn draw_play_hint(game : @types.Game) -> Unit {
 
   let fade : Float = Float::from_int(1) -
     @types.clampf((game.hint_t - 7.0) / 9.0, 0.0, 1.0)
-  let aa = @types.clampi((fade * 190.0).to_int(), 0, 190)
+  let aa = (fade * 190.0).to_int().clamp(min=0, max=190)
 
   @raylib.draw_rectangle(
     @types.screen_w / 2 - 360,
@@ -1308,7 +1304,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   draw_hack_pulse(game)
 
   if game.flash_t > 0.0 {
-    let aa = @types.clampi((game.flash_t * 220.0).to_int(), 0, 220)
+    let aa = (game.flash_t * 220.0).to_int().clamp(min=0, max=220)
     @raylib.draw_rectangle(
       0,
       0,

@@ -130,12 +130,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Clamps integer `v` to the inclusive `[lo, hi]` range.
-fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Returns a random float in `[lo, hi]` using raylib's RNG.
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
@@ -171,7 +165,7 @@ fn inside_rect(
 /// Returns the linearly interpolated value from a cave boundary array at world x-coordinate `x`.
 fn sample_line(line : FixedArray[Float], x : Float) -> Float {
   let fx : Float = x / seg_w
-  let i0 : Int = clampi(fx.to_int(), 0, seg_count - 1)
+  let i0 : Int = fx.to_int().clamp(min=0, max=seg_count - 1)
   let i1 : Int = i0 + 1
   let t : Float = fx - Float::from_int(i0)
   line[i0] + (line[i1] - line[i0]) * t
@@ -1264,11 +1258,13 @@ fn main {
 
     @raylib.clear_background(@raylib.Color::new(10, 16, 28, 255))
 
-    let start_seg : Int = clampi((cam_x / seg_w).to_int() - 2, 0, seg_count - 1)
-    let end_seg : Int = clampi(
-      start_seg + sw / seg_w.to_int() + 6,
-      0,
-      seg_count - 1,
+    let start_seg : Int = ((cam_x / seg_w).to_int() - 2).clamp(
+      min=0,
+      max=seg_count - 1,
+    )
+    let end_seg : Int = (start_seg + sw / seg_w.to_int() + 6).clamp(
+      min=0,
+      max=seg_count - 1,
     )
 
     for i in start_seg..<=end_seg {

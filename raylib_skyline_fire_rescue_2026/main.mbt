@@ -119,11 +119,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx : Float = x1 - x0
   let dy : Float = y1 - y0
@@ -570,7 +565,7 @@ fn update_fire_system(
       let hazard : Float = buildings[i].fire - 54.0
       if hazard > 0.0 {
         let lose_prob : Int = (hazard * dt * 9.0).to_int() + 1
-        if @raylib.get_random_value(0, 99) < clampi(lose_prob, 0, 70) {
+        if @raylib.get_random_value(0, 99) < lose_prob.clamp(min=0, max=70) {
           buildings[i].people = buildings[i].people - 1
           buildings[i].casualties = buildings[i].casualties + 1
           new_casualties = new_casualties + 1
@@ -622,7 +617,7 @@ fn update_fire_system(
     buildings[i].emergency_cd = buildings[i].emergency_cd - dt
     if buildings[i].emergency_cd <= 0.0 {
       buildings[i].emergency_cd = randf(7.0, 15.0)
-      if @raylib.get_random_value(0, 99) < clampi(26 + tier * 3, 0, 78) {
+      if @raylib.get_random_value(0, 99) < (26 + tier * 3).clamp(min=0, max=78) {
         buildings[i].people = buildings[i].people + 1
       }
     }
@@ -864,7 +859,7 @@ fn draw_buildings(buildings : Array[Building], t : Float) -> Unit {
     }
 
     if not(buildings[i].collapsed) {
-      let fire_n : Int = clampi((buildings[i].fire / 18.0).to_int(), 0, 7)
+      let fire_n : Int = (buildings[i].fire / 18.0).to_int().clamp(min=0, max=7)
       for f in 0..<fire_n {
         let fx : Float = buildings[i].x + randf(10.0, buildings[i].w - 10.0)
         let fy : Float = buildings[i].y + randf(8.0, buildings[i].h - 8.0)

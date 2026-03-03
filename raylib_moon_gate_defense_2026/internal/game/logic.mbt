@@ -199,18 +199,18 @@ fn find_node_at(game : @types.Game, gx : Int, gy : Int) -> Int {
 /// Moves the placement cursor one cell in the input direction and updates the last-moved direction.
 fn move_cursor(game : @types.Game) -> Unit {
   if game.input_move_x < 0 {
-    game.cursor_x = @types.clampi(game.cursor_x - 1, 0, @types.grid_cols - 1)
+    game.cursor_x = (game.cursor_x - 1).clamp(min=0, max=@types.grid_cols - 1)
     game.cursor_dir = @types.dir_left
   } else if game.input_move_x > 0 {
-    game.cursor_x = @types.clampi(game.cursor_x + 1, 0, @types.grid_cols - 1)
+    game.cursor_x = (game.cursor_x + 1).clamp(min=0, max=@types.grid_cols - 1)
     game.cursor_dir = @types.dir_right
   }
 
   if game.input_move_y < 0 {
-    game.cursor_y = @types.clampi(game.cursor_y - 1, 0, @types.grid_rows - 1)
+    game.cursor_y = (game.cursor_y - 1).clamp(min=0, max=@types.grid_rows - 1)
     game.cursor_dir = @types.dir_up
   } else if game.input_move_y > 0 {
-    game.cursor_y = @types.clampi(game.cursor_y + 1, 0, @types.grid_rows - 1)
+    game.cursor_y = (game.cursor_y + 1).clamp(min=0, max=@types.grid_rows - 1)
     game.cursor_dir = @types.dir_down
   }
 }

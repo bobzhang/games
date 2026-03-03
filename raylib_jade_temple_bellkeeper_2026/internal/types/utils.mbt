@@ -1,10 +1,4 @@
 ///|
-/// Clamps an integer to the inclusive `[lo, hi]` range.
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Clamps a float to the inclusive `[lo, hi]` range.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -147,7 +141,7 @@ pub fn a_col(c : @raylib.Color, a : Int) -> @raylib.Color {
     c.r.to_int(),
     c.g.to_int(),
     c.b.to_int(),
-    clampi(a, 0, 255),
+    a.clamp(min=0, max=255),
   )
 }
 

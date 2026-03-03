@@ -270,9 +270,9 @@ fn draw_block_with_lighting(
     g = @types.lerpi(g, fg, fog_t)
     b = @types.lerpi(b, fb, fog_t)
   }
-  r = @types.clampi(r, 0, 255)
-  g = @types.clampi(g, 0, 255)
-  b = @types.clampi(b, 0, 255)
+  r = r.clamp(min=0, max=255)
+  g = g.clamp(min=0, max=255)
+  b = b.clamp(min=0, max=255)
   let color = @raylib.Color::new(r, g, b, a)
   @raylib.draw_cube(@raylib.Vector3::new(fx, fy, fz), 1.0, 1.0, 1.0, color)
   // Draw slightly darker wireframe for block edges
@@ -457,7 +457,7 @@ fn draw_mining_progress(game : @types.Game) -> Unit {
     crack_size,
     crack_size,
     crack_size,
-    @raylib.Color::new(0, 0, 0, @types.clampi(crack_alpha, 0, 180)),
+    @raylib.Color::new(0, 0, 0, crack_alpha.clamp(min=0, max=180)),
   )
   // Draw wireframe showing progress
   let wire_r : Int = @types.lerpi(255, 255, progress)
@@ -1396,7 +1396,7 @@ fn draw_particles(game : @types.Game) -> Unit {
     if p.active {
       let life_pct = p.lifetime / p.max_lifetime
       let alpha = (life_pct * 255.0).to_int()
-      let clamped_alpha = @types.clampi(alpha, 0, 255)
+      let clamped_alpha = alpha.clamp(min=0, max=255)
       @raylib.draw_cube(
         @raylib.Vector3::new(p.x, p.y, p.z),
         p.size,

@@ -386,7 +386,7 @@ fn draw_message(game : @types.Game) -> Unit {
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 120,
     32,
-    @raylib.Color::new(255, 255, 200, @types.clampi(a, 0, 255)),
+    @raylib.Color::new(255, 255, 200, a.clamp(min=0, max=255)),
   )
 }
 

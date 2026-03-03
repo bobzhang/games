@@ -50,7 +50,7 @@ fn reset_keeper(game : @types.Game) -> Unit {
 ///|
 /// Increases the severity of the specified room's breach by `amount` (clamped to the max), and primes the raider and ember cooldowns if they are nearly expired.
 fn raise_breach(game : @types.Game, room : Int, amount : Float) -> Unit {
-  let idx = @types.clampi(room, 0, @types.chamber_count - 1)
+  let idx = room.clamp(min=0, max=@types.chamber_count - 1)
   game.breaches[idx].severity = @types.clampf(
     game.breaches[idx].severity + amount,
     0.0,
@@ -155,7 +155,7 @@ fn spawn_raider_from_room(game : @types.Game, room : Int) -> Bool {
     return false
   }
 
-  let clamped_room = @types.clampi(room, 0, @types.chamber_count - 1)
+  let clamped_room = room.clamp(min=0, max=@types.chamber_count - 1)
   let start_x = @types.clampf(
     @types.breach_anchor_x(clamped_room) + @types.randf(-18.0, 18.0),
     @types.chamber_left + 20.0,
@@ -198,7 +198,7 @@ fn spawn_flame(
     return false
   }
 
-  let clamped_room = @types.clampi(room, 0, @types.chamber_count - 1)
+  let clamped_room = room.clamp(min=0, max=@types.chamber_count - 1)
 
   game.flames[slot] = {
     active: true,
@@ -667,10 +667,9 @@ fn update_wave_progress(game : @types.Game, dt : Float) -> Unit {
   game.wave = game.wave + 1
   game.wave_t = 0.0
   game.wave_goal_t = @types.wave_duration(game.wave)
-  game.seal_charges = @types.clampi(
-    game.seal_charges + @types.seal_charges_wave_gain,
-    0,
-    @types.seal_charges_max,
+  game.seal_charges = (game.seal_charges + @types.seal_charges_wave_gain).clamp(
+    min=0,
+    max=@types.seal_charges_max,
   )
   game.keeper.ink_shields = @types.minf(
     @types.ink_shield_stock_max,

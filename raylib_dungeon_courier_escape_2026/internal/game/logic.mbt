@@ -179,7 +179,7 @@ fn setup_guards(game : @types.Game, wave : Int, count : Int) -> Unit {
   clear_guards(game)
 
   let wavef = Float::from_int(wave - 1)
-  let cone_add = Float::from_int(@types.clampi(wave - 1, 0, 8)) * 1.6
+  let cone_add = Float::from_int((wave - 1).clamp(min=0, max=8)) * 1.6
 
   for i in 0..<count {
     let p0 = random_world_point(@types.guard_spawn_margin)
@@ -285,24 +285,21 @@ fn setup_wave(game : @types.Game, wave : Int) -> Unit {
   game.player.stealth = @types.player_stealth_max
   game.player.carrying_parcel = -1
 
-  game.target_deliveries = @types.clampi(
-    @types.wave_target_base + (wave - 1) / 2,
-    @types.wave_target_base,
-    @types.max_delivery_target,
+  game.target_deliveries = (@types.wave_target_base + (wave - 1) / 2).clamp(
+    min=@types.wave_target_base,
+    max=@types.max_delivery_target,
   )
 
-  let parcel_count = @types.clampi(
-    game.target_deliveries + 2,
-    game.target_deliveries,
-    @types.max_parcels,
+  let parcel_count = (game.target_deliveries + 2).clamp(
+    min=game.target_deliveries,
+    max=@types.max_parcels,
   )
-  let guard_count = @types.clampi(2 + wave, 2, @types.max_guards)
-  let trap_count = @types.clampi(4 + wave * 2, 4, @types.max_traps)
+  let guard_count = (2 + wave).clamp(min=2, max=@types.max_guards)
+  let trap_count = (4 + wave * 2).clamp(min=4, max=@types.max_traps)
 
-  game.smoke_stock = @types.clampi(
-    @types.smoke_stock_base + (wave - 1) / 2,
-    @types.smoke_stock_base,
-    @types.max_smokes,
+  game.smoke_stock = (@types.smoke_stock_base + (wave - 1) / 2).clamp(
+    min=@types.smoke_stock_base,
+    max=@types.max_smokes,
   )
 
   game.time_left = @types.maxf(

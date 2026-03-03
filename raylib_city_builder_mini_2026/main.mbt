@@ -89,12 +89,6 @@ fn adjacent_roads(zone : Array[Int], x : Int, y : Int) -> Int {
 }
 
 ///|
-/// Returns the integer value v clamped to the inclusive range [lo, hi].
-fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Regenerates the terrain and clears all zones to start a new city layout.
 fn regen_world(terrain : Array[Int], zone : Array[Int]) -> Unit {
   for y in 0..<gh {
@@ -218,14 +212,14 @@ fn main {
 
         let jobs = comm * 12 + ind * 16
         let target_pop = if res_cap < jobs + 20 { res_cap } else { jobs + 20 }
-        let delta_pop = clampi(target_pop - population, -8, 12)
+        let delta_pop = (target_pop - population).clamp(min=-8, max=12)
         population = population + delta_pop
         if population < 0 {
           population = 0
         }
 
         happiness = 50 + serviced * 2 - ind * 2
-        happiness = clampi(happiness, 5, 95)
+        happiness = happiness.clamp(min=5, max=95)
 
         let income = population / 4 + comm * 5 + ind * 6 + happiness / 8
         let upkeep = roads + comm * 2 + ind * 2

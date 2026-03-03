@@ -1,10 +1,4 @@
 ///|
-/// Clamps an integer value to the inclusive range `[lo, hi]`.
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Clamps a float value to the inclusive range `[lo, hi]`.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -107,7 +101,7 @@ pub fn lane_to_offset(lane : Int) -> Float {
 ///|
 /// Returns world-space coordinates for lane x.
 pub fn lane_x(lane : Int, center : Float) -> Float {
-  center + lane_to_offset(clampi(lane, 0, lanes_count - 1))
+  center + lane_to_offset(lane.clamp(min=0, max=lanes_count - 1))
 }
 
 ///|

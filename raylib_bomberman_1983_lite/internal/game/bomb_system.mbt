@@ -19,7 +19,7 @@ fn can_player_place_bomb(game : @types.Game, player_index : Int) -> Bool {
   }
 
   let team = @types.team_of_player(player_index)
-  let bomb_cap = @types.clampi(1 + player.weapon_level / 2, 1, 4)
+  let bomb_cap = (1 + player.weapon_level / 2).clamp(min=1, max=4)
   if @types.count_team_bombs(game, team) >= bomb_cap {
     return false
   }
@@ -64,10 +64,9 @@ fn place_player_bomb(game : @types.Game, player_index : Int) -> Unit {
   bomb.fuse = @types.bomb_fuse_time
   bomb.blast_timer = 0.0
   bomb.exploding = false
-  bomb.blast_range = @types.clampi(
-    @types.bomb_range_base + player.weapon_level / 2,
-    2,
-    5,
+  bomb.blast_range = (@types.bomb_range_base + player.weapon_level / 2).clamp(
+    min=2,
+    max=5,
   )
 
   player.reload_timer = 0.18

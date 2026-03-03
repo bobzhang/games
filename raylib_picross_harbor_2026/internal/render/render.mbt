@@ -41,7 +41,7 @@ fn draw_bg(game : @types.Game) -> Unit {
 ///|
 /// Returns the clamped font size for clue numbers based on the current tile size.
 fn board_font_size(tile : Int) -> Int {
-  @types.clampi(tile / 2, 14, 24)
+  (tile / 2).clamp(min=14, max=24)
 }
 
 ///|

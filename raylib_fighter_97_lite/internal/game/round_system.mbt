@@ -39,15 +39,13 @@ fn reset_round_fighters(game : @types.Game) -> Unit {
 
 ///|
 fn assign_selected_characters(game : @types.Game) -> Unit {
-  game.fighters[0].archetype_index = @types.clampi(
-    game.select_cursor_p1,
-    0,
-    @types.roster_count - 1,
+  game.fighters[0].archetype_index = game.select_cursor_p1.clamp(
+    min=0,
+    max=@types.roster_count - 1,
   )
-  game.fighters[1].archetype_index = @types.clampi(
-    game.select_cursor_p2,
-    0,
-    @types.roster_count - 1,
+  game.fighters[1].archetype_index = game.select_cursor_p2.clamp(
+    min=0,
+    max=@types.roster_count - 1,
   )
 
   game.fighters[0].round_wins = 0
@@ -93,14 +91,14 @@ fn start_next_round(game : @types.Game) -> Unit {
   let p2 = game.fighters[1]
 
   if game.winner_slot == 0 {
-    p1.super_meter = @types.clampi(p1.super_meter + 12, 0, @types.super_max)
-    p2.super_meter = @types.clampi(p2.super_meter + 24, 0, @types.super_max)
+    p1.super_meter = (p1.super_meter + 12).clamp(min=0, max=@types.super_max)
+    p2.super_meter = (p2.super_meter + 24).clamp(min=0, max=@types.super_max)
   } else if game.winner_slot == 1 {
-    p1.super_meter = @types.clampi(p1.super_meter + 24, 0, @types.super_max)
-    p2.super_meter = @types.clampi(p2.super_meter + 12, 0, @types.super_max)
+    p1.super_meter = (p1.super_meter + 24).clamp(min=0, max=@types.super_max)
+    p2.super_meter = (p2.super_meter + 12).clamp(min=0, max=@types.super_max)
   } else {
-    p1.super_meter = @types.clampi(p1.super_meter + 18, 0, @types.super_max)
-    p2.super_meter = @types.clampi(p2.super_meter + 18, 0, @types.super_max)
+    p1.super_meter = (p1.super_meter + 18).clamp(min=0, max=@types.super_max)
+    p2.super_meter = (p2.super_meter + 18).clamp(min=0, max=@types.super_max)
   }
 
   start_round_intro(game)
@@ -342,10 +340,10 @@ fn update_training_resources(game : @types.Game, dt : Float) -> Unit {
     if fighter.health <= 0 {
       fighter.health = 1
     } else if fighter.health < @types.health_max {
-      fighter.health = @types.clampi(
-        fighter.health + (@types.training_health_regen_per_sec * dt).to_int(),
-        1,
-        @types.health_max,
+      fighter.health = (fighter.health +
+      (@types.training_health_regen_per_sec * dt).to_int()).clamp(
+        min=1,
+        max=@types.health_max,
       )
     }
 

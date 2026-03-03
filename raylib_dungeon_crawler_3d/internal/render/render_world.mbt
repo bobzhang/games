@@ -589,7 +589,7 @@ fn draw_particles_3d(game : @types.Game) -> Unit {
     }
     let alpha_f = p.life / p.max_life
     let alpha = (alpha_f * 255.0).to_int()
-    let a = @types.clampi(alpha, 0, 255)
+    let a = alpha.clamp(min=0, max=255)
     @raylib.draw_cube(
       @raylib.Vector3::new(p.x, p.y, p.z),
       p.size,
@@ -614,7 +614,7 @@ fn draw_sword_swing(game : @types.Game) -> Unit {
   let sz = game.player_z + @math.cosf(swing_angle) * dist
   let fade : Float = 1.0 - t
   let alpha = (fade * 255.0).to_int()
-  let a = @types.clampi(alpha, 0, 255)
+  let a = alpha.clamp(min=0, max=255)
   // Blade
   @raylib.draw_cube(
     @raylib.Vector3::new(sx, 1.2, sz),

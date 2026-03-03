@@ -41,7 +41,7 @@ fn draw_meter(
     @raylib.Color::new(232, 240, 250, 180),
   )
 
-  let pct = @types.clampi((t * 100.0).to_int(), 0, 100)
+  let pct = (t * 100.0).to_int().clamp(min=0, max=100)
   @raylib.draw_text(
     "\{label} \{pct}%",
     x + 8,
@@ -97,7 +97,7 @@ fn draw_background(game : @types.Game, ox : Int, oy : Int) -> Unit {
   )
 
   if game.flash_t > 0.0 {
-    let alpha = @types.clampi((game.flash_t * 160.0).to_int(), 0, 180)
+    let alpha = (game.flash_t * 160.0).to_int().clamp(min=0, max=180)
     @raylib.draw_rectangle(
       0,
       0,
@@ -336,11 +336,9 @@ fn draw_action_fx(game : @types.Game, ox : Int, oy : Int) -> Unit {
     let t : Float = 1.0 -
       game.strike_t / @types.maxf(@types.strike_fx_time, 0.01)
     let radius : Float = @types.strike_radius * (0.78 + t * 0.28)
-    let alpha = @types.clampi(
-      (Float::from_int(220) * (Float::from_int(1) - t)).to_int(),
-      0,
-      220,
-    )
+    let alpha = (Float::from_int(220) * (Float::from_int(1) - t))
+      .to_int()
+      .clamp(min=0, max=220)
 
     @raylib.draw_circle_lines(
       cx,
@@ -354,11 +352,9 @@ fn draw_action_fx(game : @types.Game, ox : Int, oy : Int) -> Unit {
     let t : Float = 1.0 -
       game.burst_t / @types.maxf(@types.burst_duration, 0.01)
     let radius : Float = @types.burst_radius * (0.80 + t * 0.30)
-    let alpha = @types.clampi(
-      (Float::from_int(206) * (Float::from_int(1) - t * 0.6)).to_int(),
-      0,
-      230,
-    )
+    let alpha = (Float::from_int(206) * (Float::from_int(1) - t * 0.6))
+      .to_int()
+      .clamp(min=0, max=230)
 
     @raylib.draw_circle_lines(
       cx,
@@ -552,7 +548,7 @@ fn draw_message(game : @types.Game) -> Unit {
     return
   }
 
-  let alpha = @types.clampi((game.msg_t * 190.0).to_int(), 0, 220)
+  let alpha = (game.msg_t * 190.0).to_int().clamp(min=0, max=220)
   @raylib.draw_rectangle(
     380,
     @types.screen_h - 130,
@@ -573,7 +569,7 @@ fn draw_message(game : @types.Game) -> Unit {
     402,
     @types.screen_h - 120,
     24,
-    @raylib.Color::new(252, 244, 232, @types.clampi(alpha + 40, 0, 255)),
+    @raylib.Color::new(252, 244, 232, (alpha + 40).clamp(min=0, max=255)),
   )
 }
 

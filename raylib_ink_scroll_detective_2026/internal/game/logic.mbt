@@ -390,15 +390,13 @@ fn move_cursor(game : @types.Game) -> Unit {
     return
   }
 
-  game.cursor_x = @types.clampi(
-    game.cursor_x + game.input_dx,
-    0,
-    @types.city_cols - 1,
+  game.cursor_x = (game.cursor_x + game.input_dx).clamp(
+    min=0,
+    max=@types.city_cols - 1,
   )
-  game.cursor_y = @types.clampi(
-    game.cursor_y + game.input_dy,
-    0,
-    @types.city_rows - 1,
+  game.cursor_y = (game.cursor_y + game.input_dy).clamp(
+    min=0,
+    max=@types.city_rows - 1,
   )
 }
 

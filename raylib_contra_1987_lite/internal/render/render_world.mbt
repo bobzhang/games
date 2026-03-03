@@ -304,14 +304,12 @@ fn draw_cores(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
       @raylib.Color::new(255, 236, 198, 255),
     )
 
-    let hp_ratio = Float::from_int(@types.clampi(core.hp, 0, core.max_hp)) /
+    let hp_ratio = Float::from_int(core.hp.clamp(min=0, max=core.max_hp)) /
       Float::from_int(core.max_hp)
     let hp_w = 22
-    let fill = @types.clampi(
-      (Float::from_int(hp_w) * hp_ratio).to_int(),
-      0,
-      hp_w,
-    )
+    let fill = (Float::from_int(hp_w) * hp_ratio)
+      .to_int()
+      .clamp(min=0, max=hp_w)
     @raylib.draw_rectangle(sx - hp_w / 2, sy - 21, hp_w, 4, @raylib.black)
     @raylib.draw_rectangle(
       sx - hp_w / 2,

@@ -286,7 +286,7 @@ fn draw_combo_bar(game : @types.Game) -> Unit {
   // Fill
   let fill_ratio : Float = game.combo_timer / @types.combo_decay_time
   let fill_w = (Float::from_int(bar_w) * fill_ratio).to_int()
-  let combo_r : Int = @types.clampi((game.combo_mult * 50.0).to_int(), 0, 255)
+  let combo_r : Int = (game.combo_mult * 50.0).to_int().clamp(min=0, max=255)
   @raylib.draw_rectangle(
     bar_x,
     bar_y,
@@ -713,7 +713,7 @@ fn draw_death_overlay(game : @types.Game) -> Unit {
     0,
     @types.screen_width,
     @types.screen_height,
-    @raylib.Color::new(255, 0, 0, @types.clampi(alpha, 0, 100)),
+    @raylib.Color::new(255, 0, 0, alpha.clamp(min=0, max=100)),
   )
 }
 
@@ -970,7 +970,7 @@ fn draw_world_intro(game : @types.Game) -> Unit {
     (@types.screen_width - ww) / 2,
     @types.screen_height / 2 - 60,
     56,
-    @raylib.Color::new(255, 255, 255, @types.clampi(fade_alpha, 0, 255)),
+    @raylib.Color::new(255, 255, 255, fade_alpha.clamp(min=0, max=255)),
   )
   // Level name
   let lname = @levels.get_level_name(game.current_world, game.current_level)
@@ -980,7 +980,7 @@ fn draw_world_intro(game : @types.Game) -> Unit {
     (@types.screen_width - lw) / 2,
     @types.screen_height / 2 + 10,
     24,
-    @raylib.Color::new(220, 220, 240, @types.clampi(fade_alpha, 0, 255)),
+    @raylib.Color::new(220, 220, 240, fade_alpha.clamp(min=0, max=255)),
   )
   // World number
   let world_num = "World \{game.current_world + 1}"
@@ -990,7 +990,7 @@ fn draw_world_intro(game : @types.Game) -> Unit {
     (@types.screen_width - wnw) / 2,
     @types.screen_height / 2 - 90,
     18,
-    @raylib.Color::new(180, 180, 200, @types.clampi(fade_alpha, 0, 255)),
+    @raylib.Color::new(180, 180, 200, fade_alpha.clamp(min=0, max=255)),
   )
   // Press to continue
   if progress > 0.5 {
@@ -1010,7 +1010,7 @@ fn draw_world_intro(game : @types.Game) -> Unit {
     @types.screen_height / 2 - 2,
     200,
     2,
-    @raylib.Color::new(200, 200, 220, @types.clampi(fade_alpha / 2, 0, 255)),
+    @raylib.Color::new(200, 200, 220, (fade_alpha / 2).clamp(min=0, max=255)),
   )
 }
 
@@ -1109,7 +1109,7 @@ fn draw_score_flies(game : @types.Game) -> Unit {
     let progress : Float = sf.timer / sf.max_time
     let alpha_f : Float = (1.0 - progress) * 255.0
     let alpha = alpha_f.to_int()
-    let a = @types.clampi(alpha, 0, 255)
+    let a = alpha.clamp(min=0, max=255)
     let text = "+\{sf.value}"
     @raylib.draw_text(
       text,

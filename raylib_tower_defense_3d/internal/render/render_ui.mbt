@@ -1011,7 +1011,7 @@ fn draw_wave_message(game : @types.Game) -> Unit {
     return
   }
   let alpha_f : Float = @types.minf(game.wave_message_timer / 0.5, 1.0) * 255.0
-  let alpha = @types.clampi(alpha_f.to_int(), 0, 255)
+  let alpha = alpha_f.to_int().clamp(min=0, max=255)
   let msg = game.wave_message
   let mw = @raylib.measure_text(msg, 32)
   let msg_y = @types.screen_height / 3
@@ -1042,7 +1042,7 @@ fn draw_notification(game : @types.Game) -> Unit {
     return
   }
   let alpha_f : Float = @types.minf(game.notification_timer / 0.3, 1.0) * 255.0
-  let alpha = @types.clampi(alpha_f.to_int(), 0, 255)
+  let alpha = alpha_f.to_int().clamp(min=0, max=255)
   let msg = game.notification_text
   let mw = @raylib.measure_text(msg, 16)
   let ny = @types.screen_height - 60

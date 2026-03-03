@@ -369,7 +369,7 @@ fn add_score(game : @types.Game, base : Int) -> Unit {
 ///|
 /// Increments the combo counter (capped at 28) and resets the combo decay timer.
 fn push_combo(game : @types.Game) -> Unit {
-  game.combo = @types.clampi(game.combo + 1, 0, 28)
+  game.combo = (game.combo + 1).clamp(min=0, max=28)
   game.combo_t = 3.6
 }
 
@@ -1090,7 +1090,7 @@ fn update_bells(game : @types.Game, dt : Float) -> Unit {
 ///|
 /// Randomly emits upward-drifting ambient spark particles along the top of the play area.
 fn emit_ambient(game : @types.Game, dt : Float) -> Unit {
-  let tries = @types.clampi((dt * 200.0).to_int(), 1, 12)
+  let tries = (dt * 200.0).to_int().clamp(min=1, max=12)
 
   for _i in 0..<tries {
     if @types.chance(28) {

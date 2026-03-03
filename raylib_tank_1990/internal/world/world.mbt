@@ -94,7 +94,7 @@ pub fn sight_blocked(
     return false
   }
   let step = Float::from_int(@types.tile_size / 2)
-  let n = @types.clampi((distance / step).to_int(), 1, 80)
+  let n = (distance / step).to_int().clamp(min=1, max=80)
   for i in 1..<n {
     let t = Float::from_int(i) / Float::from_int(n)
     let px = ax + dx * t

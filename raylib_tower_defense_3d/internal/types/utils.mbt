@@ -11,18 +11,6 @@ pub fn clampf(v : Float, low : Float, high : Float) -> Float {
 }
 
 ///|
-/// Returns `v` clamped between `low` and `high` as an integer.
-pub fn clampi(v : Int, low : Int, high : Int) -> Int {
-  if v < low {
-    low
-  } else if v > high {
-    high
-  } else {
-    v
-  }
-}
-
-///|
 /// Returns the smaller of `a` and `b`.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {

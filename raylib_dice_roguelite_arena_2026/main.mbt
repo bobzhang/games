@@ -88,12 +88,6 @@ struct Spark {
 }
 
 ///|
-/// Returns v clamped to the inclusive integer range [lo, hi].
-fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Returns v clamped to the inclusive float range [lo, hi].
 fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -504,7 +498,7 @@ fn apply_face(
   } else if face == 2 {
     let gain : Int = 1 + value / 2 + art.focus_bonus
     player.energy = player.energy + gain
-    player.energy = clampi(player.energy, 0, 9)
+    player.energy = player.energy.clamp(min=0, max=9)
     burst_sparks(crit_flash, 330.0, 470.0, 6, 3)
     ("Energy +\{gain}", 0)
   } else if face == 3 {
@@ -930,7 +924,7 @@ fn main {
     roll_dice(dice, art, true)
     rerolls_left = 2 + art.reroll_bonus
     player.energy = 3 + art.focus_bonus
-    player.energy = clampi(player.energy, 1, 9)
+    player.energy = player.energy.clamp(min=1, max=9)
     player.shield = player.shield + art.start_shield / 2
 
     for dice_elem in dice {
@@ -1210,7 +1204,7 @@ fn main {
       }
 
       if picked >= 0 {
-        let idx : Int = clampi(picked, 0, 2)
+        let idx : Int = picked.clamp(min=0, max=2)
         let t = apply_reward(rewards[idx], player, art)
         msg = t
         msg_t = 1.8
@@ -1437,9 +1431,9 @@ fn main {
         if dice_elem.pulse_t > 0.0 {
           let glow : Int = (dice_elem.pulse_t * 420.0).to_int()
           bg = @raylib.Color::new(
-            clampi(94 + glow / 9, 0, 255),
-            clampi(112 + glow / 8, 0, 255),
-            clampi(170 + glow / 7, 0, 255),
+            (94 + glow / 9).clamp(min=0, max=255),
+            (112 + glow / 8).clamp(min=0, max=255),
+            (170 + glow / 7).clamp(min=0, max=255),
             240,
           )
         }

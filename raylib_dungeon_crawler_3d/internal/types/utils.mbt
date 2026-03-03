@@ -13,18 +13,6 @@ pub fn clampf(v : Float, low : Float, high : Float) -> Float {
 }
 
 ///|
-/// Clamps an integer to the inclusive range `[low, high]`.
-pub fn clampi(v : Int, low : Int, high : Int) -> Int {
-  if v < low {
-    low
-  } else if v > high {
-    high
-  } else {
-    v
-  }
-}
-
-///|
 /// Returns the smaller of two float values.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {

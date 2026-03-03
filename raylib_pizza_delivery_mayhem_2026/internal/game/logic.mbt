@@ -778,7 +778,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
     finish_run(game, game.score >= @types.score_goal * 8 / 10)
     return
   }
-  game.wave = @types.clampi(1 + (game.game_t / 22.0).to_int(), 1, 12)
+  game.wave = (1 + (game.game_t / 22.0).to_int()).clamp(min=1, max=12)
   game.order_spawn_t = game.order_spawn_t + step
   let order_interval : Float = @types.maxf(
     1.0,

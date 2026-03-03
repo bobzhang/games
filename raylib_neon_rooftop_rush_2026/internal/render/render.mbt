@@ -381,7 +381,7 @@ fn draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       continue
     }
 
-    let alpha = @types.clampi((p.life * 255.0).to_int(), 0, 255)
+    let alpha = (p.life * 255.0).to_int().clamp(min=0, max=255)
     let col = if p.kind == 0 {
       @raylib.Color::new(130, 250, 216, alpha)
     } else if p.kind == 1 {
@@ -403,7 +403,7 @@ fn draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       continue
     }
 
-    let a = @types.clampi((g.life * 160.0).to_int(), 0, 160)
+    let a = (g.life * 160.0).to_int().clamp(min=0, max=160)
     let tint = if g.hue < 0.5 {
       @raylib.Color::new(96, 178, 255, a)
     } else {
@@ -814,11 +814,9 @@ fn draw_hud(game : @types.Game) -> Unit {
   )
 
   if game.stage_intro_t > 0.0 {
-    let alpha = @types.clampi(
-      (game.stage_intro_t / @types.stage_intro_time * 255.0).to_int(),
-      0,
-      255,
-    )
+    let alpha = (game.stage_intro_t / @types.stage_intro_time * 255.0)
+      .to_int()
+      .clamp(min=0, max=255)
     draw_center_text(
       "Stage \{game.stage}",
       154,
@@ -828,7 +826,7 @@ fn draw_hud(game : @types.Game) -> Unit {
   }
 
   if game.hint_t > 0.0 {
-    let a = @types.clampi((game.hint_t / 8.0 * 255.0).to_int(), 0, 255)
+    let a = (game.hint_t / 8.0 * 255.0).to_int().clamp(min=0, max=255)
     @raylib.draw_text(
       "Hint: chain chips + hook takedowns to keep combo alive",
       28,
@@ -902,11 +900,9 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 /// Draws the stage-clear overlay: a darkening vignette, the "STAGE CLEAR" banner, the bonus points earned, and a transition message.
 fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
   let p = @types.ease_in_out(1.0 - game.stage_intro_t / 1.5)
-  let alpha = @types.clampi(
-    (Float::from_int(90) + p * Float::from_int(80)).to_int(),
-    0,
-    180,
-  )
+  let alpha = (Float::from_int(90) + p * Float::from_int(80))
+    .to_int()
+    .clamp(min=0, max=180)
   @raylib.draw_rectangle(
     0,
     0,
@@ -1026,7 +1022,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   }
 
   if game.flash_t > 0.0 {
-    let a = @types.clampi((game.flash_t * 150.0).to_int(), 0, 150)
+    let a = (game.flash_t * 150.0).to_int().clamp(min=0, max=150)
     @raylib.draw_rectangle(
       0,
       0,

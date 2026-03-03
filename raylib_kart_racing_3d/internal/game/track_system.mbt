@@ -4,7 +4,7 @@
 /// Loads a track by cup and race index, resetting all entity pools and spawning karts and powerups.
 pub fn load_track(game : @types.Game, cup : Int, race : Int) -> Unit {
   let wp_data = @levels.get_track_waypoints(cup, race)
-  game.waypoint_count = @types.clampi(wp_data.length(), 0, @types.max_waypoints)
+  game.waypoint_count = wp_data.length().clamp(min=0, max=@types.max_waypoints)
   for i in 0..<game.waypoint_count {
     let d = wp_data[i]
     game.waypoints[i] = { x: d.0, y: d.1, z: d.2 }

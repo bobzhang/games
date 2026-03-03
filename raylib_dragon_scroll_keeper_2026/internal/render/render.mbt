@@ -17,7 +17,7 @@ fn alpha_col(c : @raylib.Color, alpha : Int) -> @raylib.Color {
     c.r.to_int(),
     c.g.to_int(),
     c.b.to_int(),
-    @types.clampi(alpha, 0, 255),
+    alpha.clamp(min=0, max=255),
   )
 }
 
@@ -607,11 +607,9 @@ fn draw_message(game : @types.Game) -> Unit {
     return
   }
 
-  let alpha = @types.clampi(
-    (Float::from_int(80) + game.message_t * 180.0).to_int(),
-    70,
-    230,
-  )
+  let alpha = (Float::from_int(80) + game.message_t * 180.0)
+    .to_int()
+    .clamp(min=70, max=230)
   let y = @types.screen_h - 206
 
   @raylib.draw_rectangle(

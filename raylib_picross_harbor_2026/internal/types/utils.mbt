@@ -1,10 +1,4 @@
 ///|
-/// Clamp an integer to the inclusive range `[lo, hi]`.
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Return the larger of two float values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
@@ -279,7 +273,7 @@ pub fn board_metrics(game : Game) -> (Int, Int, Int, Int, Int, Int, Int) {
   let tile_y : Int = (area_h - 30) / den_h
 
   let mut tile : Int = tile_x.min(tile_y)
-  tile = clampi(tile, 24, 68)
+  tile = tile.clamp(min=24, max=68)
 
   let total_w : Int = den_w * tile
   let total_h : Int = den_h * tile

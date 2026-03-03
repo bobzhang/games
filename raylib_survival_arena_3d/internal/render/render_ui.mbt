@@ -360,7 +360,7 @@ fn draw_weapon_display(game : @types.Game) -> Unit {
   // Muzzle flash
   if player.flash_timer > 0.0 {
     let flash_alpha = (player.flash_timer / 0.08 * 200.0).to_int()
-    let fa = @types.clampi(flash_alpha, 0, 200)
+    let fa = flash_alpha.clamp(min=0, max=200)
     @raylib.draw_rectangle(
       gun_x - 5,
       gun_y - 30,
@@ -538,7 +538,7 @@ fn draw_weapon_display(game : @types.Game) -> Unit {
 fn draw_damage_flash(game : @types.Game) -> Unit {
   if game.player.flash_timer > 0.0 && game.player.damage_timer > 0.0 {
     let alpha = (game.player.flash_timer / 0.2 * 100.0).to_int()
-    let a = @types.clampi(alpha, 0, 100)
+    let a = alpha.clamp(min=0, max=100)
     @raylib.draw_rectangle(
       0,
       0,
@@ -554,7 +554,7 @@ fn draw_message(game : @types.Game) -> Unit {
   if game.message_timer > 0.0 {
     let alpha_f = @types.minf(game.message_timer * 2.0, 1.0) * 255.0
     let alpha = alpha_f.to_int()
-    let a = @types.clampi(alpha, 0, 255)
+    let a = alpha.clamp(min=0, max=255)
     let text = game.message_text
     let tw = @raylib.measure_text(text, 22)
     let cx = (@types.screen_width - tw) / 2

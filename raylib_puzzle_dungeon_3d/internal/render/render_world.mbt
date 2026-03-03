@@ -106,9 +106,9 @@ fn draw_wall(
     1.0,
     @raylib.Color::new(wc.0, wc.1, wc.2, 255),
   )
-  let edge_r = @types.clampi(wc.0 - 15, 0, 255)
-  let edge_g = @types.clampi(wc.1 - 15, 0, 255)
-  let edge_b = @types.clampi(wc.2 - 15, 0, 255)
+  let edge_r = (wc.0 - 15).clamp(min=0, max=255)
+  let edge_g = (wc.1 - 15).clamp(min=0, max=255)
+  let edge_b = (wc.2 - 15).clamp(min=0, max=255)
   @raylib.draw_cube_wires(
     pos,
     1.0,
@@ -169,9 +169,9 @@ fn draw_floor(wx : Float, wz : Float, world : @types.World) -> Unit {
     0.95,
     @raylib.Color::new(fc.0, fc.1, fc.2, 255),
   )
-  let line_r = @types.clampi(fc.0 - 10, 0, 255)
-  let line_g = @types.clampi(fc.1 - 10, 0, 255)
-  let line_b = @types.clampi(fc.2 - 10, 0, 255)
+  let line_r = (fc.0 - 10).clamp(min=0, max=255)
+  let line_g = (fc.1 - 10).clamp(min=0, max=255)
+  let line_b = (fc.2 - 10).clamp(min=0, max=255)
   @raylib.draw_cube(
     @raylib.Vector3::new(wx, 0.001, wz),
     0.98,
@@ -452,9 +452,9 @@ fn draw_teleport(
 ///|
 fn draw_cracked(wx : Float, wz : Float, world : @types.World) -> Unit {
   let fc = @types.get_world_floor_color(world)
-  let cr = @types.clampi(fc.0 + 20, 0, 255)
-  let cg = @types.clampi(fc.1 + 10, 0, 255)
-  let cb = @types.clampi(fc.2 - 10, 0, 255)
+  let cr = (fc.0 + 20).clamp(min=0, max=255)
+  let cg = (fc.1 + 10).clamp(min=0, max=255)
+  let cb = (fc.2 - 10).clamp(min=0, max=255)
   @raylib.draw_cube(
     @raylib.Vector3::new(wx, -0.05, wz),
     0.95,
@@ -878,7 +878,7 @@ fn draw_laser_beams(game : @types.Game) -> Unit {
   let fc = Float::from_int(game.frame_counter)
   let pulse = @math.sinf(fc * 0.15) * 0.3 + 0.7
   let pulse_alpha = (pulse * 200.0).to_int()
-  let a = @types.clampi(pulse_alpha, 80, 255)
+  let a = pulse_alpha.clamp(min=80, max=255)
   for i in 0..<game.laser_segment_count {
     let seg = game.laser_segments[i]
     if not(seg.active) {
@@ -970,9 +970,9 @@ fn draw_block(
 ) -> Unit {
   ignore(game)
   let ac = @types.get_world_accent_color(world)
-  let block_r = @types.clampi((@types.color_block_r + ac.0) / 2, 0, 255)
-  let block_g = @types.clampi((@types.color_block_g + ac.1) / 2, 0, 255)
-  let block_b = @types.clampi((@types.color_block_b + ac.2) / 2, 0, 255)
+  let block_r = ((@types.color_block_r + ac.0) / 2).clamp(min=0, max=255)
+  let block_g = ((@types.color_block_g + ac.1) / 2).clamp(min=0, max=255)
+  let block_b = ((@types.color_block_b + ac.2) / 2).clamp(min=0, max=255)
   let pos = @raylib.Vector3::new(wx, 0.35 + fall_offset, wz)
   @raylib.draw_cube(
     pos,
@@ -987,9 +987,9 @@ fn draw_block(
     0.7,
     0.8,
     @raylib.Color::new(
-      @types.clampi(block_r - 40, 0, 255),
-      @types.clampi(block_g - 30, 0, 255),
-      @types.clampi(block_b - 20, 0, 255),
+      (block_r - 40).clamp(min=0, max=255),
+      (block_g - 30).clamp(min=0, max=255),
+      (block_b - 20).clamp(min=0, max=255),
       255,
     ),
   )
@@ -999,9 +999,9 @@ fn draw_block(
     0.02,
     0.06,
     @raylib.Color::new(
-      @types.clampi(block_r + 20, 0, 255),
-      @types.clampi(block_g + 20, 0, 255),
-      @types.clampi(block_b + 20, 0, 255),
+      (block_r + 20).clamp(min=0, max=255),
+      (block_g + 20).clamp(min=0, max=255),
+      (block_b + 20).clamp(min=0, max=255),
       255,
     ),
   )
@@ -1011,9 +1011,9 @@ fn draw_block(
     0.02,
     0.5,
     @raylib.Color::new(
-      @types.clampi(block_r + 20, 0, 255),
-      @types.clampi(block_g + 20, 0, 255),
-      @types.clampi(block_b + 20, 0, 255),
+      (block_r + 20).clamp(min=0, max=255),
+      (block_g + 20).clamp(min=0, max=255),
+      (block_b + 20).clamp(min=0, max=255),
       255,
     ),
   )
@@ -1353,7 +1353,7 @@ fn draw_particles_3d(game : @types.Game) -> Unit {
     }
     let alpha_f = p.life / p.max_life
     let alpha = (alpha_f * 255.0).to_int()
-    let a = @types.clampi(alpha, 0, 255)
+    let a = alpha.clamp(min=0, max=255)
     @raylib.draw_cube(
       @raylib.Vector3::new(p.x, p.y, p.z),
       p.size,

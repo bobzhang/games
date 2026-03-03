@@ -228,7 +228,7 @@ fn add_score(game : @types.Game, base : Int) -> Unit {
 
 ///|
 fn push_combo(game : @types.Game) -> Unit {
-  game.combo = @types.clampi(game.combo + 1, 0, 30)
+  game.combo = (game.combo + 1).clamp(min=0, max=30)
   game.combo_t = 3.8
 }
 
@@ -729,7 +729,7 @@ fn update_effects(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 fn emit_ambient(game : @types.Game, dt : Float) -> Unit {
-  let tries = @types.clampi((dt * 220.0).to_int(), 1, 10)
+  let tries = (dt * 220.0).to_int().clamp(min=1, max=10)
 
   for _i in 0..<tries {
     if @types.chance(24) {

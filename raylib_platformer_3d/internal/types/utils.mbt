@@ -11,18 +11,6 @@ pub fn clampf(v : Float, low : Float, high : Float) -> Float {
 }
 
 ///|
-/// Clamps an integer into the inclusive range `[low, high]`.
-pub fn clampi(v : Int, low : Int, high : Int) -> Int {
-  if v < low {
-    low
-  } else if v > high {
-    high
-  } else {
-    v
-  }
-}
-
-///|
 /// Returns the smaller of two float values.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
@@ -386,7 +374,7 @@ pub fn shadow_alpha(py : Float, shadow_y : Float) -> Int {
   let min_f : Float = Float::from_int(shadow_min_alpha)
   let range_f : Float = Float::from_int(shadow_max_alpha - shadow_min_alpha)
   let alpha_f : Float = min_f + t * range_f
-  clampi(alpha_f.to_int(), shadow_min_alpha, shadow_max_alpha)
+  alpha_f.to_int().clamp(min=shadow_min_alpha, max=shadow_max_alpha)
 }
 
 // Calculate shadow size based on height
@@ -696,7 +684,7 @@ pub fn lerp_color(a : Int, b : Int, t : Float) -> Int {
   let tc = clampf(t, 0.0, 1.0)
   let result = Float::from_int(a) +
     (Float::from_int(b) - Float::from_int(a)) * tc
-  clampi(result.to_int(), 0, 255)
+  result.to_int().clamp(min=0, max=255)
 }
 
 // Pulse helper: returns 0..1 with sine wave

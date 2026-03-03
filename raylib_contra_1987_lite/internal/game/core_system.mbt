@@ -33,7 +33,7 @@ fn spawn_core_entity(
   core.active = true
   core.x = x
   core.y = y
-  core.hp = @types.clampi(hp, 4, 999)
+  core.hp = hp.clamp(min=4, max=999)
   core.max_hp = core.hp
   core.pulse = @types.rand_rangef(game, 0.0, 6.2)
   core.flash = 0.0
@@ -43,7 +43,7 @@ fn spawn_core_entity(
 ///|
 fn core_goal_for_stage(stage : Int) -> Int {
   let wave = stage + 1
-  @types.clampi(3 + wave / 4, 3, 8)
+  (3 + wave / 4).clamp(min=3, max=8)
 }
 
 ///|
@@ -149,7 +149,7 @@ fn damage_core(
     return false
   }
 
-  core.hp -= @types.clampi(power, 1, 8)
+  core.hp -= power.clamp(min=1, max=8)
   core.flash = 0.14
   @particles.spawn_spark_burst(game, core.x, core.y, 8)
 
@@ -158,7 +158,7 @@ fn damage_core(
     game.cores_destroyed += 1
 
     let bonus = @types.core_score_base +
-      @types.clampi(game.stage_index * 18, 0, 480)
+      (game.stage_index * 18).clamp(min=0, max=480)
     @score.grant_score(game, team, bonus)
     @particles.spawn_explosion(game, core.x, core.y, 1.8)
     @types.push_camera_shake(game, 2.2)

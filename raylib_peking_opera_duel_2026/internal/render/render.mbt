@@ -86,7 +86,7 @@ fn draw_duelist(
   }
 
   if guard_flash_t > 0.0 {
-    let glow_a = @types.clampi((guard_flash_t * 360.0).to_int(), 60, 210)
+    let glow_a = (guard_flash_t * 360.0).to_int().clamp(min=60, max=210)
     @raylib.draw_circle_lines(
       head_x,
       y - 28 + lift,
@@ -180,7 +180,7 @@ fn draw_stage_actors(game : @types.Game) -> Unit {
 
   let rival_pulse : Float = 0.5 + 0.5 * @math.sinf(game.crowd_wave_t * 2.1)
   let rival_glow : Float = 110.0 + rival_pulse * 110.0
-  let rival_glow_a = @types.clampi(rival_glow.to_int(), 90, 220)
+  let rival_glow_a = rival_glow.to_int().clamp(min=90, max=220)
 
   @raylib.draw_circle(1170, 370, 132.0, @types.col(160, 84, 98, rival_glow_a))
   @raylib.draw_circle(420, 370, 118.0, @types.col(74, 122, 160, 130))
@@ -269,7 +269,7 @@ fn draw_active_prompt(game : @types.Game) -> Unit {
   let urgency : Float = 1.0 -
     @types.clampf(game.prompt.time_left.abs() / @types.timing_miss, 0.0, 1.0)
   let glow_f : Float = 96.0 + urgency * 150.0
-  let glow = @types.clampi(glow_f.to_int(), 86, 246)
+  let glow = glow_f.to_int().clamp(min=86, max=246)
 
   let cue_color = @types.stance_color(game.prompt.stance, glow)
   @raylib.draw_circle_lines(px, py, radius, cue_color)

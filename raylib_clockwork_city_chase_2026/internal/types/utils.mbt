@@ -1,10 +1,4 @@
 ///|
-/// Clamps an integer value to the inclusive range `[lo, hi]`.
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Clamps a float value to the inclusive range `[lo, hi]`.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -107,7 +101,7 @@ pub fn lane_offset(lane : Int) -> Float {
 ///|
 /// Returns derived layout data for lane pos.
 pub fn lane_pos(lane : Int, center : Float) -> Float {
-  center + lane_offset(clampi(lane, 0, lane_count - 1))
+  center + lane_offset(lane.clamp(min=0, max=lane_count - 1))
 }
 
 ///|
@@ -370,6 +364,6 @@ pub fn alpha_color(c : @raylib.Color, a : Int) -> @raylib.Color {
     c.r.to_int(),
     c.g.to_int(),
     c.b.to_int(),
-    clampi(a, 0, 255),
+    a.clamp(min=0, max=255),
   )
 }

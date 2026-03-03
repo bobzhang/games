@@ -51,13 +51,12 @@ fn draw_menu(game : @types.Game) -> Unit {
   )
   // Mission list (scrollable, show 8 at a time)
   let visible = 8
-  let start = @types.clampi(
-    game.menu_cursor - visible / 2,
-    0,
-    @types.total_missions - visible,
+  let start = (game.menu_cursor - visible / 2).clamp(
+    min=0,
+    max=@types.total_missions - visible,
   )
-  let start_safe = @types.clampi(start, 0, @types.total_missions - 1)
-  let end_val = @types.clampi(start_safe + visible, 0, @types.total_missions)
+  let start_safe = start.clamp(min=0, max=@types.total_missions - 1)
+  let end_val = (start_safe + visible).clamp(min=0, max=@types.total_missions)
   for i in start_safe..<end_val {
     let row = i - start_safe
     let y = 170 + row * 55
@@ -346,7 +345,7 @@ fn draw_hud(game : @types.Game) -> Unit {
   // Damage flash
   if player.damage_flash > 0.0 {
     let flash_alpha = (player.damage_flash * 200.0).to_int()
-    let fa = @types.clampi(flash_alpha, 0, 150)
+    let fa = flash_alpha.clamp(min=0, max=150)
     @raylib.draw_rectangle(
       0,
       0,
@@ -746,7 +745,7 @@ fn draw_aircraft_select(game : @types.Game) -> Unit {
     if is_sel {
       let blink = @math.sinf(game.menu_blink * 2.0)
       let border_alpha = 180 + (blink * 75.0).to_int()
-      let ba = @types.clampi(border_alpha, 100, 255)
+      let ba = border_alpha.clamp(min=100, max=255)
       @raylib.draw_rectangle_lines(
         cx - 2,
         card_y - 2,
@@ -1040,8 +1039,8 @@ fn draw_radar(game : @types.Game) -> Unit {
     let blip_x = radar_cx + (rx / radar_scale).to_int()
     let blip_y = radar_cy + (rz / radar_scale).to_int()
     // Clamp to radar area
-    let bx = @types.clampi(blip_x, radar_x + 2, radar_x + @types.radar_size - 2)
-    let by = @types.clampi(blip_y, radar_y + 2, radar_y + @types.radar_size - 2)
+    let bx = blip_x.clamp(min=radar_x + 2, max=radar_x + @types.radar_size - 2)
+    let by = blip_y.clamp(min=radar_y + 2, max=radar_y + @types.radar_size - 2)
     let blip_color = if e.kind == @types.enemy_type_air {
       @raylib.Color::new(255, 50, 50, 255)
     } else {
@@ -1066,8 +1065,8 @@ fn draw_radar(game : @types.Game) -> Unit {
     let rz = dx * sin_yaw + dz * cos_yaw
     let blip_x = radar_cx + (rx / radar_scale).to_int()
     let blip_y = radar_cy + (rz / radar_scale).to_int()
-    let bx = @types.clampi(blip_x, radar_x + 2, radar_x + @types.radar_size - 2)
-    let by = @types.clampi(blip_y, radar_y + 2, radar_y + @types.radar_size - 2)
+    let bx = blip_x.clamp(min=radar_x + 2, max=radar_x + @types.radar_size - 2)
+    let by = blip_y.clamp(min=radar_y + 2, max=radar_y + @types.radar_size - 2)
     @raylib.draw_rectangle(
       bx - 1,
       by - 1,

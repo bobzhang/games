@@ -89,7 +89,7 @@ fn apply_powerup(
       @particles.spawn_respawn_burst(game, player.x, player.y)
     }
     Star => {
-      player.weapon_level = @types.clampi(player.weapon_level + 1, 0, 3)
+      player.weapon_level = (player.weapon_level + 1).clamp(min=0, max=3)
       player.reload_delay = @types.player_reload_base *
         (1.0 - Float::from_int(player.weapon_level) * 0.08)
       if player.reload_delay < 0.12 {

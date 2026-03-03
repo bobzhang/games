@@ -33,7 +33,7 @@ fn cam_shake(game : @types.Game) -> (Float, Float) {
 
 ///|
 fn lane_y(game : @types.Game, index : Int) -> Float {
-  let i = @types.clampi(index, 0, @types.lane_count - 1)
+  let i = index.clamp(min=0, max=@types.lane_count - 1)
   let fi = Float::from_int(i)
   let base = @types.lane_base_y(i)
   let wave = @math.sinf(
@@ -166,7 +166,7 @@ fn draw_lanes(game : @types.Game, _cam_x : Float, cam_y : Float) -> Unit {
     for x = -step; x < @types.screen_w + step; x = x + step {
       let mut alpha = 68 +
         (@math.sinf(Float::from_int(x) * 0.02 + game.time_s * 1.2 + li) * 24.0).to_int()
-      alpha = @types.clampi(alpha, 24, 116)
+      alpha = alpha.clamp(min=24, max=116)
       @raylib.draw_rectangle(
         x - shift,
         (y - 2.0).to_int(),
@@ -430,7 +430,7 @@ fn draw_bullets(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       continue
     }
 
-    let alpha = @types.clampi((bullet.life * 380.0).to_int(), 0, 255)
+    let alpha = (bullet.life * 380.0).to_int().clamp(min=0, max=255)
     @raylib.draw_circle(
       (bullet.x + cam_x).to_int(),
       (bullet.y + cam_y).to_int(),
@@ -447,13 +447,13 @@ fn draw_dust(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       continue
     }
 
-    let mut alpha = @types.clampi((dust.life * 280.0).to_int(), 0, 255)
+    let mut alpha = (dust.life * 280.0).to_int().clamp(min=0, max=255)
     let col = if dust.kind == 1 {
       @raylib.Color::new(238, 118, 86, alpha)
     } else if dust.kind == 2 {
       @raylib.Color::new(255, 246, 182, alpha)
     } else if dust.kind == 3 {
-      alpha = @types.clampi(alpha + 30, 0, 255)
+      alpha = (alpha + 30).clamp(min=0, max=255)
       @raylib.Color::new(120, 244, 204, alpha)
     } else {
       @raylib.Color::new(232, 196, 148, alpha)
@@ -698,7 +698,7 @@ fn draw_hud(game : @types.Game) -> Unit {
   )
 
   if game.message.length() > 0 && game.message_t > 0.0 {
-    let alpha = @types.clampi((game.message_t * 260.0).to_int(), 0, 255)
+    let alpha = (game.message_t * 260.0).to_int().clamp(min=0, max=255)
     draw_center_text(
       game.message,
       132,
@@ -941,7 +941,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
         246,
         236,
         216,
-        @types.clampi((game.flash_t * 168.0).to_int(), 0, 255),
+        (game.flash_t * 168.0).to_int().clamp(min=0, max=255),
       ),
     )
   }

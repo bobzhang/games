@@ -29,8 +29,8 @@ fn update_input(game : @types.Game) -> Unit {
     game.input.move_y = game.input.move_y + 1
   }
 
-  game.input.move_x = @types.clampi(game.input.move_x, -1, 1)
-  game.input.move_y = @types.clampi(game.input.move_y, -1, 1)
+  game.input.move_x = game.input.move_x.clamp(min=-1, max=1)
+  game.input.move_y = game.input.move_y.clamp(min=-1, max=1)
 
   game.input.press_interact = @raylib.is_key_pressed(@raylib.KeyJ)
   game.input.press_cancel = @raylib.is_key_pressed(@raylib.KeyK)

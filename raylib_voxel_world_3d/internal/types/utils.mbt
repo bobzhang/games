@@ -11,18 +11,6 @@ pub fn clampf(v : Float, low : Float, high : Float) -> Float {
 }
 
 ///|
-/// Clamps integer value into inclusive range `[low, high]`.
-pub fn clampi(v : Int, low : Int, high : Int) -> Int {
-  if v < low {
-    low
-  } else if v > high {
-    high
-  } else {
-    v
-  }
-}
-
-///|
 /// Returns minimum of two floats.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
@@ -297,7 +285,7 @@ pub fn get_biome_terrain_height(wx : Int, wz : Int, biome : Int) -> Int {
     amplitude = 3.0
   }
   let h = height_base + n * amplitude
-  clampi(h.to_int(), 1, chunk_y - 10)
+  h.to_int().clamp(min=1, max=chunk_y - 10)
 }
 
 // ========== Terrain generation ==========
@@ -312,7 +300,7 @@ pub fn get_terrain_height(wx : Int, wz : Int) -> Int {
   let n = terrain_noise(fx, fz)
   let h = Float::from_int(base_height) + n * terrain_amplitude
   let result = h.to_int()
-  clampi(result, 1, chunk_y - 10)
+  result.clamp(min=1, max=chunk_y - 10)
 }
 
 // Determine if a tree should be placed at world position

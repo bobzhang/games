@@ -35,10 +35,9 @@ fn start_attack(
   fighter.move_cancel_enabled = false
 
   if mv.move_kind == MoveKindSuper {
-    fighter.super_meter = @types.clampi(
-      fighter.super_meter - @types.super_cost,
-      0,
-      @types.super_max,
+    fighter.super_meter = (fighter.super_meter - @types.super_cost).clamp(
+      min=0,
+      max=@types.super_max,
     )
   }
 

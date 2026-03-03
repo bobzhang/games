@@ -132,8 +132,8 @@ pub fn update_play_input(game : @types.Game) -> Unit {
     dy = dy + 1
   }
 
-  dx = @types.clampi(dx, -1, 1)
-  dy = @types.clampi(dy, -1, 1)
+  dx = dx.clamp(min=-1, max=1)
+  dy = dy.clamp(min=-1, max=1)
 
   if dx != 0 && dy != 0 {
     if @raylib.is_key_down(@raylib.KeyA) ||

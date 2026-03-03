@@ -10,7 +10,7 @@ fn draw_health_gauge(
   @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(24, 26, 34, 220))
   @raylib.draw_rectangle_lines(x, y, w, h, @raylib.Color::new(80, 84, 96, 255))
 
-  let fill = @types.clampi((ratio * Float::from_int(w - 4)).to_int(), 0, w - 4)
+  let fill = (ratio * Float::from_int(w - 4)).to_int().clamp(min=0, max=w - 4)
   @raylib.draw_rectangle(x + 2, y + 2, fill, h - 4, base_color)
 }
 
@@ -26,7 +26,7 @@ fn draw_meter_gauge(
   @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(20, 20, 26, 210))
   @raylib.draw_rectangle_lines(x, y, w, h, @raylib.Color::new(72, 80, 100, 255))
 
-  let fill = @types.clampi((ratio * Float::from_int(w - 2)).to_int(), 0, w - 2)
+  let fill = (ratio * Float::from_int(w - 2)).to_int().clamp(min=0, max=w - 2)
   @raylib.draw_rectangle(x + 1, y + 1, fill, h - 2, base_color)
 
   let step_w = (w - 2) / 5

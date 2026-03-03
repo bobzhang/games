@@ -84,17 +84,15 @@ fn start_show(game : @types.Game) -> Unit {
 ///|
 fn apply_pose_axis_input(game : @types.Game) -> Unit {
   if game.input.axis_dx != 0 {
-    game.current_pose.ax = @types.clampi(
-      game.current_pose.ax + game.input.axis_dx,
-      @types.pose_axis_min,
-      @types.pose_axis_max,
+    game.current_pose.ax = (game.current_pose.ax + game.input.axis_dx).clamp(
+      min=@types.pose_axis_min,
+      max=@types.pose_axis_max,
     )
   }
   if game.input.axis_dy != 0 {
-    game.current_pose.ay = @types.clampi(
-      game.current_pose.ay + game.input.axis_dy,
-      @types.pose_axis_min,
-      @types.pose_axis_max,
+    game.current_pose.ay = (game.current_pose.ay + game.input.axis_dy).clamp(
+      min=@types.pose_axis_min,
+      max=@types.pose_axis_max,
     )
   }
 }
@@ -183,7 +181,7 @@ fn lock_current_pose(game : @types.Game) -> Unit {
     game.target_idx = game.target_idx + 1
     game.hit_count = game.hit_count + 1
 
-    game.combo = @types.clampi(game.combo + 1, 0, 99)
+    game.combo = (game.combo + 1).clamp(min=0, max=99)
     game.combo_t = @types.combo_hold_time
     if game.combo > game.best_combo {
       game.best_combo = game.combo

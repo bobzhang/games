@@ -36,20 +36,20 @@ fn stage_timer_limit(stage : Int) -> Float {
 ///|
 /// Returns the number of relay towers to spawn for the given stage, clamped to `[3, max_towers]`.
 fn stage_tower_count(stage : Int) -> Int {
-  @types.clampi(2 + stage, 3, @types.max_towers)
+  (2 + stage).clamp(min=3, max=@types.max_towers)
 }
 
 ///|
 /// Returns the number of storm cells to spawn for the given stage, clamped to `[1, max_storms]`.
 fn stage_storm_count(stage : Int) -> Int {
-  @types.clampi(1 + stage / 2, 1, @types.max_storms)
+  (1 + stage / 2).clamp(min=1, max=@types.max_storms)
 }
 
 ///|
 /// Returns the number of power cells a tower at `idx` requires for the given stage.
 fn stage_tower_need(stage : Int, idx : Int) -> Int {
   let base = 1 + (stage - 1) / 2
-  @types.clampi(base + idx % 2, 1, 4)
+  (base + idx % 2).clamp(min=1, max=4)
 }
 
 ///|

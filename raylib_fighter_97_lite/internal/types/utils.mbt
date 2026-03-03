@@ -11,18 +11,6 @@ pub fn clampf(v : Float, low : Float, high : Float) -> Float {
 }
 
 ///|
-/// Clamps an integer to the inclusive `[low, high]` range.
-pub fn clampi(v : Int, low : Int, high : Int) -> Int {
-  if v < low {
-    low
-  } else if v > high {
-    high
-  } else {
-    v
-  }
-}
-
-///|
 /// Converts a double literal to `Float`.
 pub fn f(v : Double) -> Float {
   Float::from_double(v)
@@ -104,7 +92,7 @@ pub fn rand_chance(game : Game, p : Float) -> Bool {
 ///|
 /// Returns archetype data for a fighter's selected character.
 pub fn fighter_archetype(game : Game, fighter : Fighter) -> CharacterArchetype {
-  game.roster[clampi(fighter.archetype_index, 0, game.roster.length() - 1)]
+  game.roster[fighter.archetype_index.clamp(min=0, max=game.roster.length() - 1)]
 }
 
 ///|
@@ -262,7 +250,7 @@ pub fn add_meter(
 ) -> Unit {
   let scaled = Float::from_int(value) * archetype.meter_mul
   let next = fighter.super_meter + scaled.to_int()
-  fighter.super_meter = clampi(next, 0, super_max)
+  fighter.super_meter = next.clamp(min=0, max=super_max)
 }
 
 ///|
@@ -273,7 +261,10 @@ pub fn add_guard(
   archetype : CharacterArchetype,
 ) -> Unit {
   let target = fighter_total_guard(archetype)
-  fighter.guard_meter = clampi(fighter.guard_meter + value.to_int(), 0, target)
+  fighter.guard_meter = (fighter.guard_meter + value.to_int()).clamp(
+    min=0,
+    max=target,
+  )
 }
 
 ///|
@@ -307,14 +298,14 @@ pub fn reset_fighter_round_state(fighter : Fighter) -> Unit {
 ///|
 /// Returns normalized health ratio in `[0,1]`.
 pub fn health_ratio(fighter : Fighter) -> Float {
-  Float::from_int(clampi(fighter.health, 0, health_max)) /
+  Float::from_int(fighter.health.clamp(min=0, max=health_max)) /
   Float::from_int(health_max)
 }
 
 ///|
 /// Returns normalized super meter ratio in `[0,1]`.
 pub fn meter_ratio(fighter : Fighter) -> Float {
-  Float::from_int(clampi(fighter.super_meter, 0, super_max)) /
+  Float::from_int(fighter.super_meter.clamp(min=0, max=super_max)) /
   Float::from_int(super_max)
 }
 
@@ -325,7 +316,7 @@ pub fn guard_ratio(fighter : Fighter, archetype : CharacterArchetype) -> Float {
   if total <= 0 {
     0.0
   } else {
-    Float::from_int(clampi(fighter.guard_meter, 0, total)) /
+    Float::from_int(fighter.guard_meter.clamp(min=0, max=total)) /
     Float::from_int(total)
   }
 }

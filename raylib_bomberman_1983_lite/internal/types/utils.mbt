@@ -11,18 +11,6 @@ pub fn clampf(v : Float, low : Float, high : Float) -> Float {
 }
 
 ///|
-/// Clamps an integer to the inclusive `[low, high]` range.
-pub fn clampi(v : Int, low : Int, high : Int) -> Int {
-  if v < low {
-    low
-  } else if v > high {
-    high
-  } else {
-    v
-  }
-}
-
-///|
 /// Advances and returns the PRNG state.
 pub fn rand_next(game : Game) -> Int {
   let mut x = game.rng_state
@@ -94,13 +82,13 @@ pub fn set_tile(
 ///|
 /// Converts world x-coordinate to tile x index.
 pub fn world_x_to_tile(x : Float) -> Int {
-  clampi((x / Float::from_int(tile_size)).to_int(), 0, map_tiles_w - 1)
+  (x / Float::from_int(tile_size)).to_int().clamp(min=0, max=map_tiles_w - 1)
 }
 
 ///|
 /// Converts world y-coordinate to tile y index.
 pub fn world_y_to_tile(y : Float) -> Int {
-  clampi((y / Float::from_int(tile_size)).to_int(), 0, map_tiles_h - 1)
+  (y / Float::from_int(tile_size)).to_int().clamp(min=0, max=map_tiles_h - 1)
 }
 
 ///|

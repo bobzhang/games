@@ -1,10 +1,4 @@
 ///|
-/// Clamps an integer to the inclusive `[lo, hi]` range.
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Clamps a float to the inclusive `[lo, hi]` range.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -85,7 +79,7 @@ pub fn road_center_x(world_t : Float, y : Float) -> Float {
 /// Returns lane center X for lane index at screen Y.
 pub fn lane_center_x(world_t : Float, lane : Int, y : Float) -> Float {
   let span = Float::from_int(lane_count - 1)
-  let t = Float::from_int(clampi(lane, 0, lane_count - 1)) / span
+  let t = Float::from_int(lane.clamp(min=0, max=lane_count - 1)) / span
   let offset = (t - 0.5) * 2.0
   let road_center = road_center_x(world_t, y)
   let lane_extent = road_half_width(y) * 0.55

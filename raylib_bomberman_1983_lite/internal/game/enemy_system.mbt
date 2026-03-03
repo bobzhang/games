@@ -237,7 +237,7 @@ fn destroy_enemy(
   // Chance to drop a powerup.
   let drop_roll = @types.rand_range(game, 0, 99)
   let base_bias = if enemy.enemy_kind == Heavy { 22 } else { 14 }
-  let drop_bias = @types.clampi(base_bias + game.profile.drop_bonus, 4, 55)
+  let drop_bias = (base_bias + game.profile.drop_bonus).clamp(min=4, max=55)
   if drop_roll < drop_bias {
     spawn_random_powerup(game, enemy.x, enemy.y)
   }

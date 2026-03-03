@@ -1,16 +1,4 @@
 ///|
-/// Clamps an integer to the inclusive `[lo, hi]` range.
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  if v < lo {
-    lo
-  } else if v > hi {
-    hi
-  } else {
-    v
-  }
-}
-
-///|
 /// Clamps a float to the inclusive `[lo, hi]` range.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -70,7 +58,7 @@ pub fn world_to_tile_x(x : Float) -> Int {
   if x <= 0.0 {
     0
   } else {
-    clampi((x / tile_size_f).to_int(), 0, world_tiles_w - 1)
+    (x / tile_size_f).to_int().clamp(min=0, max=world_tiles_w - 1)
   }
 }
 
@@ -80,7 +68,7 @@ pub fn world_to_tile_y(y : Float) -> Int {
   if y <= 0.0 {
     0
   } else {
-    clampi((y / tile_size_f).to_int(), 0, world_tiles_h - 1)
+    (y / tile_size_f).to_int().clamp(min=0, max=world_tiles_h - 1)
   }
 }
 

@@ -702,7 +702,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
     return
   }
 
-  game.level = @types.clampi(1 + (game.game_t / 24.0).to_int(), 1, 10)
+  game.level = (1 + (game.game_t / 24.0).to_int()).clamp(min=1, max=10)
 
   let old_band : Int = game.distance / 120
   let speed_base : Float = 170.0 + Float::from_int(game.level) * 18.0

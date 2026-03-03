@@ -215,16 +215,14 @@ fn draw_tile(
 
 ///|
 fn draw_tiles(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
-  let start_tx = @types.clampi(
-    @types.world_to_tile_x(cam_x) - 1,
-    0,
-    @types.world_tiles_w - 1,
+  let start_tx = (@types.world_to_tile_x(cam_x) - 1).clamp(
+    min=0,
+    max=@types.world_tiles_w - 1,
   )
-  let end_tx = @types.clampi(
-    @types.world_to_tile_x(cam_x + Float::from_int(@types.screen_width)) + 2,
-    0,
-    @types.world_tiles_w - 1,
-  )
+  let end_tx = (@types.world_to_tile_x(
+    cam_x + Float::from_int(@types.screen_width),
+  ) +
+  2).clamp(min=0, max=@types.world_tiles_w - 1)
 
   for ty in 0..<@types.world_tiles_h {
     for tx in start_tx..<=end_tx {

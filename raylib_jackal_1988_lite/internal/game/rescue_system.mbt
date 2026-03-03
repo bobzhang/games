@@ -20,7 +20,10 @@ fn alloc_hostage_slot(game : @types.Game) -> Int {
 ///|
 fn hostage_goal_for_stage(stage : Int) -> Int {
   let wave = stage + 1
-  @types.clampi(@types.rescue_goal_base + wave / 3, @types.rescue_goal_base, 12)
+  (@types.rescue_goal_base + wave / 3).clamp(
+    min=@types.rescue_goal_base,
+    max=12,
+  )
 }
 
 ///|

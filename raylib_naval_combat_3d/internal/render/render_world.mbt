@@ -50,7 +50,7 @@ fn draw_ocean(game : @types.Game) -> Unit {
     let wave_h = @math.sinf(time + Float::from_int(i) * 0.7) * 0.15
     let alpha : Int = 40 +
       (@math.sinf(time + Float::from_int(i) * 0.5) * 20.0).to_int()
-    let a = @types.clampi(alpha, 20, 80)
+    let a = alpha.clamp(min=20, max=80)
     @raylib.draw_cube(
       @raylib.Vector3::new(0.0, wave_h, offset),
       size,
@@ -176,7 +176,7 @@ fn draw_player_ship(game : @types.Game) -> Unit {
   // Sails (if sail_hp > 0)
   if ship.sail_hp > 0.0 {
     let sail_alpha : Int = (ship.sail_hp / ship.max_hp * 200.0).to_int() + 55
-    let sa = @types.clampi(sail_alpha, 55, 255)
+    let sa = sail_alpha.clamp(min=55, max=255)
     // Main sail
     @raylib.draw_cube(
       @raylib.Vector3::new(ship.x, 3.0, ship.z),
@@ -369,7 +369,7 @@ fn draw_particles_3d(game : @types.Game) -> Unit {
       continue
     }
     let alpha = (p.life / p.max_life * 255.0).to_int()
-    let a = @types.clampi(alpha, 0, 255)
+    let a = alpha.clamp(min=0, max=255)
     @raylib.draw_cube(
       @raylib.Vector3::new(p.x, p.y, p.z),
       p.size,

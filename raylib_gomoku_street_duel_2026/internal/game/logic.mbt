@@ -276,13 +276,13 @@ fn move_cursor_once(game : @types.Game, dir : @types.Dir) -> Unit {
 
   match dir {
     Left =>
-      game.cursor_x = @types.clampi(game.cursor_x - 1, 0, @types.board_n - 1)
+      game.cursor_x = (game.cursor_x - 1).clamp(min=0, max=@types.board_n - 1)
     Right =>
-      game.cursor_x = @types.clampi(game.cursor_x + 1, 0, @types.board_n - 1)
+      game.cursor_x = (game.cursor_x + 1).clamp(min=0, max=@types.board_n - 1)
     Up =>
-      game.cursor_y = @types.clampi(game.cursor_y - 1, 0, @types.board_n - 1)
+      game.cursor_y = (game.cursor_y - 1).clamp(min=0, max=@types.board_n - 1)
     Down =>
-      game.cursor_y = @types.clampi(game.cursor_y + 1, 0, @types.board_n - 1)
+      game.cursor_y = (game.cursor_y + 1).clamp(min=0, max=@types.board_n - 1)
     DirNone => ()
   }
 }

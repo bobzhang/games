@@ -89,8 +89,8 @@ fn do_action_on_cell(game : @types.Game, x : Int, y : Int) -> Bool {
 ///|
 /// Moves the keyboard cursor by (`dx`, `dy`) clamped to the board bounds.
 fn move_cursor(game : @types.Game, dx : Int, dy : Int) -> Unit {
-  game.cursor_x = @types.clampi(game.cursor_x + dx, 0, @types.board_w - 1)
-  game.cursor_y = @types.clampi(game.cursor_y + dy, 0, @types.board_h - 1)
+  game.cursor_x = (game.cursor_x + dx).clamp(min=0, max=@types.board_w - 1)
+  game.cursor_y = (game.cursor_y + dy).clamp(min=0, max=@types.board_h - 1)
 }
 
 ///|

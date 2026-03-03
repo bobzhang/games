@@ -56,9 +56,9 @@ fn draw_track(game : @types.Game) -> Unit {
   let rc = @levels.get_track_road_color(game.current_cup, game.current_race)
   let road_color = @raylib.Color::new(rc.0, rc.1, rc.2, 255)
   let edge_color = @raylib.Color::new(
-    @types.clampi(rc.0 + 40, 0, 255),
-    @types.clampi(rc.1 + 40, 0, 255),
-    @types.clampi(rc.2 + 40, 0, 255),
+    (rc.0 + 40).clamp(min=0, max=255),
+    (rc.1 + 40).clamp(min=0, max=255),
+    (rc.2 + 40).clamp(min=0, max=255),
     255,
   )
   let stripe_color = @raylib.Color::new(200, 200, 200, 200)
@@ -239,7 +239,7 @@ fn draw_karts(game : @types.Game) -> Unit {
       continue
     }
     let colors = @types.kart_colors
-    let ci = @types.clampi(i, 0, colors.length() - 1)
+    let ci = i.clamp(min=0, max=colors.length() - 1)
     let kc = colors[ci]
     let body_color = @raylib.Color::new(kc.0, kc.1, kc.2, 255)
     // Kart body (main cube)
@@ -442,7 +442,7 @@ fn draw_particles_3d(game : @types.Game) -> Unit {
       continue
     }
     let alpha = (p.life / p.max_life * 255.0).to_int()
-    let a = @types.clampi(alpha, 0, 255)
+    let a = alpha.clamp(min=0, max=255)
     @raylib.draw_cube(
       @raylib.Vector3::new(p.x, p.y, p.z),
       p.size,
@@ -900,7 +900,7 @@ fn draw_surface_indicators(game : @types.Game) -> Unit {
       // Boost pad arrows
       let pulse = @math.sinf(Float::from_int(game.frame_counter) * 0.15)
       let alpha_f : Float = 150.0 + pulse * 50.0
-      let alpha = @types.clampi(alpha_f.to_int(), 100, 200)
+      let alpha = alpha_f.to_int().clamp(min=100, max=200)
       @raylib.draw_cube(
         @raylib.Vector3::new(mx, my + 0.08, mz),
         @types.road_width * seg.width_mult * 0.8,
@@ -945,7 +945,7 @@ fn draw_surface_indicators(game : @types.Game) -> Unit {
         Float::from_int(game.frame_counter) * 0.1 + Float::from_int(i),
       )
       let ice_alpha_f : Float = 50.0 + shimmer * 20.0
-      let ice_alpha = @types.clampi(ice_alpha_f.to_int(), 30, 80)
+      let ice_alpha = ice_alpha_f.to_int().clamp(min=30, max=80)
       @raylib.draw_cube(
         @raylib.Vector3::new(mx, my + 0.05, mz),
         @types.road_width * seg.width_mult,
@@ -998,7 +998,7 @@ fn draw_skybox_elements(game : @types.Game) -> Unit {
         Float::from_int(game.frame_counter) * 0.1 + Float::from_int(s),
       )
       let star_alpha_f : Float = 150.0 + twinkle * 80.0
-      let star_alpha = @types.clampi(star_alpha_f.to_int(), 80, 230)
+      let star_alpha = star_alpha_f.to_int().clamp(min=80, max=230)
       @raylib.draw_sphere(
         @raylib.Vector3::new(star_x, star_y, star_z),
         0.15,
@@ -1032,7 +1032,7 @@ fn draw_kart_details(game : @types.Game) -> Unit {
     if not(kart.active) {
       continue
     }
-    let ci = @types.clampi(i, 0, @types.kart_accent_colors.length() - 1)
+    let ci = i.clamp(min=0, max=@types.kart_accent_colors.length() - 1)
     let ac = @types.kart_accent_colors[ci]
     let sin_a = @math.sinf(kart.angle)
     let cos_a = @math.cosf(kart.angle)

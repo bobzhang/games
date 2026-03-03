@@ -1,10 +1,4 @@
 ///|
-/// Clamps an integer value to the inclusive range `[lo, hi]`.
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Clamps a float value to the inclusive range `[lo, hi]`.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -107,7 +101,7 @@ pub fn wagon_slot_y(index : Int) -> Float {
 /// Returns world-space coordinates for lane base y.
 pub fn lane_base_y(index : Int) -> Float {
   desert_lane_top +
-  Float::from_int(clampi(index, 0, lane_count - 1)) * desert_lane_gap
+  Float::from_int(index.clamp(min=0, max=lane_count - 1)) * desert_lane_gap
 }
 
 ///|

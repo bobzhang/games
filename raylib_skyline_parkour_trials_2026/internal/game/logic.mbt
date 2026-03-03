@@ -201,7 +201,7 @@ fn setup_stage_3(game : @types.Game) -> Unit {
 ///|
 fn load_stage(game : @types.Game, stage : Int) -> Unit {
   clear_stage_data(game)
-  game.stage = @types.clampi(stage, 1, @types.stage_count)
+  game.stage = stage.clamp(min=1, max=@types.stage_count)
   game.pending_next_stage = 0
   game.stage_time_s = 0.0
   game.bonus_popup_t = 0.0

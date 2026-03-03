@@ -168,9 +168,9 @@ fn draw_boost_exhaust_flames(game : @types.Game) -> Unit {
         @raylib.Vector3::new(ex_x, ex_y + 0.15, ex_z),
         rainbow_size,
         @raylib.Color::new(
-          @types.clampi(rr, 0, 255),
-          @types.clampi(rg, 0, 255),
-          @types.clampi(rb, 0, 255),
+          rr.clamp(min=0, max=255),
+          rg.clamp(min=0, max=255),
+          rb.clamp(min=0, max=255),
           180,
         ),
       )
@@ -236,7 +236,7 @@ fn draw_dropped_items_3d(game : @types.Game) -> Unit {
       @raylib.draw_sphere(
         @raylib.Vector3::new(item.x, item.y + 0.3, item.z),
         0.4,
-        @raylib.Color::new(255, 50, 50, @types.clampi(warn_alpha, 0, 255)),
+        @raylib.Color::new(255, 50, 50, warn_alpha.clamp(min=0, max=255)),
       )
     }
   }
@@ -275,7 +275,7 @@ fn draw_dust_trails(game : @types.Game) -> Unit {
     @raylib.draw_sphere(
       @raylib.Vector3::new(dust_x, dust_y, dust_z),
       dust_size,
-      @raylib.Color::new(dc.0, dc.1, dc.2, @types.clampi(dust_alpha, 0, 255)),
+      @raylib.Color::new(dc.0, dc.1, dc.2, dust_alpha.clamp(min=0, max=255)),
     )
     let offset_x : Float = dust_x - sin_a * 0.3 + cos_a * 0.15
     let offset_z : Float = dust_z - cos_a * 0.3 - sin_a * 0.15
@@ -287,7 +287,7 @@ fn draw_dust_trails(game : @types.Game) -> Unit {
         dc.0,
         dc.1,
         dc.2,
-        @types.clampi(dust_alpha - 30, 0, 255),
+        (dust_alpha - 30).clamp(min=0, max=255),
       ),
     )
   }
@@ -312,16 +312,16 @@ fn draw_speed_lines(game : @types.Game) -> Unit {
     let y_base = (seed * 7 + 31) % @types.screen_height
     let line_len = 40 + seed * 3 % 60
     let alpha_f : Float = base_alpha - Float::from_int(li * 15)
-    let alpha = @types.clampi(alpha_f.to_int(), 30, 200)
+    let alpha = alpha_f.to_int().clamp(min=30, max=200)
     let color = if kart.star_timer > 0.0 {
       let phase : Float = game.star_rainbow_timer + Float::from_int(li) * 0.8
       let r_f : Float = 127.0 + @math.sinf(phase) * 128.0
       let g_f : Float = 127.0 + @math.sinf(phase + 2.0) * 128.0
       let b_f : Float = 127.0 + @math.sinf(phase + 4.0) * 128.0
       @raylib.Color::new(
-        @types.clampi(r_f.to_int(), 0, 255),
-        @types.clampi(g_f.to_int(), 0, 255),
-        @types.clampi(b_f.to_int(), 0, 255),
+        r_f.to_int().clamp(min=0, max=255),
+        g_f.to_int().clamp(min=0, max=255),
+        b_f.to_int().clamp(min=0, max=255),
         alpha,
       )
     } else {
@@ -357,9 +357,9 @@ fn draw_start_confetti(game : @types.Game) -> Unit {
       size,
       size,
       @raylib.Color::new(
-        @types.clampi(r, 0, 255),
-        @types.clampi(g, 0, 255),
-        @types.clampi(b, 0, 255),
+        r.clamp(min=0, max=255),
+        g.clamp(min=0, max=255),
+        b.clamp(min=0, max=255),
         200,
       ),
     )
@@ -381,7 +381,7 @@ fn draw_wrong_way_indicator(game : @types.Game) -> Unit {
     Float::from_int(game.frame_counter) * @types.wrong_way_flash_speed * 0.05,
   )
   let alpha_f : Float = 80.0 + flash * 40.0
-  let alpha = @types.clampi(alpha_f.to_int(), 30, 150)
+  let alpha = alpha_f.to_int().clamp(min=30, max=150)
   @raylib.draw_rectangle(
     0,
     0,
@@ -420,7 +420,7 @@ fn draw_lightning_flash(game : @types.Game) -> Unit {
   if remaining > @types.lightning_duration - 0.3 {
     let flash_t : Float = (@types.lightning_duration - remaining) / 0.3
     let alpha_f : Float = (1.0 - flash_t) * 200.0
-    let alpha = @types.clampi(alpha_f.to_int(), 0, 200)
+    let alpha = alpha_f.to_int().clamp(min=0, max=200)
     @raylib.draw_rectangle(
       0,
       0,
@@ -453,9 +453,9 @@ fn draw_star_glow(game : @types.Game) -> Unit {
     let r_f : Float = 127.0 + @math.sinf(phase) * 128.0
     let g_f : Float = 127.0 + @math.sinf(phase + 2.094) * 128.0
     let b_f : Float = 127.0 + @math.sinf(phase + 4.189) * 128.0
-    let r = @types.clampi(r_f.to_int(), 0, 255)
-    let g = @types.clampi(g_f.to_int(), 0, 255)
-    let b = @types.clampi(b_f.to_int(), 0, 255)
+    let r = r_f.to_int().clamp(min=0, max=255)
+    let g = g_f.to_int().clamp(min=0, max=255)
+    let b = b_f.to_int().clamp(min=0, max=255)
     let pulse = @math.sinf(Float::from_int(game.frame_counter) * 0.3)
     let glow_size : Float = 1.5 + pulse * 0.2
     let kart_mid_y : Float = kart.y + @types.kart_height * 0.5
@@ -492,7 +492,7 @@ fn draw_shield_bubbles(game : @types.Game) -> Unit {
     } else {
       60.0
     }
-    let alpha = @types.clampi(base_alpha.to_int(), 20, 80)
+    let alpha = base_alpha.to_int().clamp(min=20, max=80)
     let shield_y : Float = kart.y + @types.kart_height * 0.4
     @raylib.draw_sphere(
       @raylib.Vector3::new(kart.x, shield_y, kart.z),
@@ -506,7 +506,7 @@ fn draw_shield_bubbles(game : @types.Game) -> Unit {
       wire_w,
       wire_h,
       wire_w,
-      @raylib.Color::new(120, 200, 255, @types.clampi(alpha + 20, 0, 100)),
+      @raylib.Color::new(120, 200, 255, (alpha + 20).clamp(min=0, max=100)),
     )
   }
 }

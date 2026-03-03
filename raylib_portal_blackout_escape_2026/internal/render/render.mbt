@@ -249,7 +249,7 @@ fn draw_flares(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
     let cx : Int = @types.board_px(flare.x) + @types.cell / 2 + ox
     let cy : Int = @types.board_py(flare.y) + @types.cell / 2 + oy
-    let a : Int = @types.clampi((flare.t * 46.0).to_int(), 50, 188)
+    let a : Int = (flare.t * 46.0).to_int().clamp(min=50, max=188)
 
     @raylib.draw_circle(cx, cy, 38.0, @raylib.Color::new(192, 174, 244, a / 2))
     @raylib.draw_circle(cx, cy, 20.0, @raylib.Color::new(242, 236, 186, a))

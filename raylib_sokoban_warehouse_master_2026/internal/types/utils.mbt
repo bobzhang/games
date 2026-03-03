@@ -1,10 +1,4 @@
 ///|
-/// Clamps an integer into `[lo, hi]`.
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Returns the larger of two floats.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {

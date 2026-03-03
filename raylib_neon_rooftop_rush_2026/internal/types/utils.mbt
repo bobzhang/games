@@ -1,10 +1,4 @@
 ///|
-/// Clamps an integer value to the inclusive `[lo, hi]` range.
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Clamps a float value to the inclusive `[lo, hi]` range.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -142,10 +136,10 @@ pub fn color_mix(
   let aa = (Float::from_int(a.a.to_int()) +
   Float::from_int(b.a.to_int() - a.a.to_int()) * x).to_int()
   @raylib.Color::new(
-    clampi(r, 0, 255),
-    clampi(g, 0, 255),
-    clampi(bb, 0, 255),
-    clampi(aa, 0, 255),
+    r.clamp(min=0, max=255),
+    g.clamp(min=0, max=255),
+    bb.clamp(min=0, max=255),
+    aa.clamp(min=0, max=255),
   )
 }
 

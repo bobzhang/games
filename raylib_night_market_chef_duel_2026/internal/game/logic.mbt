@@ -361,7 +361,7 @@ fn try_serve_ready_dish(game : @types.Game) -> Unit {
   game.best_score = game.best_score.max(game.score)
 
   game.served_orders = game.served_orders + 1
-  game.combo = @types.clampi(game.combo + 1, 0, 99)
+  game.combo = (game.combo + 1).clamp(min=0, max=99)
   game.combo_timer = @types.combo_window
 
   clear_order(game.orders[matched_order])

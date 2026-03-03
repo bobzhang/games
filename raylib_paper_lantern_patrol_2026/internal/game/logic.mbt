@@ -369,7 +369,7 @@ fn deliver_lantern(game : @types.Game, idx : Int) -> Unit {
   }
 
   game.deliveries = game.deliveries + 1
-  game.combo = @types.clampi(game.combo + 1, 0, 99)
+  game.combo = (game.combo + 1).clamp(min=0, max=99)
   game.combo_t = @types.combo_window
 
   game.lanterns[idx].active = false

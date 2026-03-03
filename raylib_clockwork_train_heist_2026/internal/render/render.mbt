@@ -290,7 +290,7 @@ fn draw_smokes(game : @types.Game, ox : Int, oy : Int) -> Unit {
     let cx : Int = @types.board_px(game.smokes[i].x) + @types.cell / 2 + ox
     let cy : Int = @types.board_py(game.smokes[i].y) + @types.cell / 2 + oy
 
-    let alpha : Int = @types.clampi((game.smokes[i].t * 52.0).to_int(), 56, 188)
+    let alpha : Int = (game.smokes[i].t * 52.0).to_int().clamp(min=56, max=188)
 
     @raylib.draw_circle(
       cx,

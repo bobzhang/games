@@ -57,11 +57,6 @@ fn roll_prices(prices : Array[Int], day : Int) -> Unit {
 }
 
 ///|
-fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 fn main {
   @raylib.init_window(sw, sh, "Space Trader 2026")
   @raylib.set_target_fps(60)
@@ -104,16 +99,16 @@ fn main {
 
     if not(won) && not(lost) {
       if @raylib.is_key_pressed(@raylib.KeyUp) {
-        selected_good = clampi(selected_good - 1, 0, goods_count - 1)
+        selected_good = (selected_good - 1).clamp(min=0, max=goods_count - 1)
       }
       if @raylib.is_key_pressed(@raylib.KeyDown) {
-        selected_good = clampi(selected_good + 1, 0, goods_count - 1)
+        selected_good = (selected_good + 1).clamp(min=0, max=goods_count - 1)
       }
       if @raylib.is_key_pressed(@raylib.KeyLeft) {
-        target = clampi(target - 1, 0, planet_count - 1)
+        target = (target - 1).clamp(min=0, max=planet_count - 1)
       }
       if @raylib.is_key_pressed(@raylib.KeyRight) {
-        target = clampi(target + 1, 0, planet_count - 1)
+        target = (target + 1).clamp(min=0, max=planet_count - 1)
       }
 
       let price = prices[at * goods_count + selected_good]

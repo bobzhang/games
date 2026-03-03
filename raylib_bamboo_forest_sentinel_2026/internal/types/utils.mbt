@@ -1,10 +1,4 @@
 ///|
-/// Clamps an integer value to the inclusive range `[lo, hi]`.
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Clamps a float value to the inclusive range `[lo, hi]`.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -62,7 +56,7 @@ pub fn normalize2(x : Float, y : Float) -> (Float, Float) {
 ///|
 /// Returns world-space coordinates for lane y.
 pub fn lane_y(lane : Int) -> Float {
-  match clampi(lane, 0, corridor_lanes - 1) {
+  match lane.clamp(min=0, max=corridor_lanes - 1) {
     0 => Float::from_int(lane_top_y)
     1 => Float::from_int(lane_mid_y)
     _ => Float::from_int(lane_bottom_y)
@@ -72,7 +66,7 @@ pub fn lane_y(lane : Int) -> Float {
 ///|
 /// Returns world-space coordinates for beacon position.
 pub fn beacon_position(index : Int) -> (Float, Float) {
-  match clampi(index, 0, beacon_count - 1) {
+  match index.clamp(min=0, max=beacon_count - 1) {
     0 => (Float::from_int(world_x + 760), lane_y(0))
     1 => (Float::from_int(world_x + 900), lane_y(1))
     _ => (Float::from_int(world_x + 760), lane_y(2))
@@ -82,7 +76,7 @@ pub fn beacon_position(index : Int) -> (Float, Float) {
 ///|
 /// Returns world-space coordinates for trap slot position.
 pub fn trap_slot_position(index : Int) -> (Float, Float) {
-  let normalized = clampi(index, 0, trap_slot_count - 1)
+  let normalized = index.clamp(min=0, max=trap_slot_count - 1)
   let row = normalized / trap_slot_cols
   let col = normalized % trap_slot_cols
   let x = Float::from_int(world_x + 170 + col * 140)
@@ -134,7 +128,7 @@ pub fn spawn_route_target(route : Int) -> Int {
 ///|
 /// Returns derived layout data for spawn interval for night.
 pub fn spawn_interval_for_night(night : Int) -> Float {
-  let level = Float::from_int(clampi(night - 1, 0, 999))
+  let level = Float::from_int((night - 1).clamp(min=0, max=999))
   clampf(
     spawn_interval_start - spawn_interval_decay * level,
     spawn_interval_floor,

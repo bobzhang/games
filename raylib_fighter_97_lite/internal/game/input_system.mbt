@@ -356,8 +356,8 @@ fn push_cpu_direction(
 ) -> Unit {
   let input = fighter.input
   input.prev_x = input.x
-  input.x = @types.clampi(desired_x, -1, 1)
-  input.y = @types.clampi(desired_y, -1, 1)
+  input.x = desired_x.clamp(min=-1, max=1)
+  input.y = desired_y.clamp(min=-1, max=1)
 
   let prev_rel_x = if fighter.facing == @types.facing_right {
     input.prev_x

@@ -33,7 +33,7 @@ pub fn draw_ui(game : @types.Game) -> Unit {
   // Damage flash
   if game.damage_flash > 0.0 {
     let alpha = (game.damage_flash / 0.2 * 100.0).to_int()
-    let a = @types.clampi(alpha, 0, 150)
+    let a = alpha.clamp(min=0, max=150)
     @raylib.draw_rectangle(
       0,
       0,
@@ -58,7 +58,7 @@ pub fn draw_ui(game : @types.Game) -> Unit {
   // Level up glow
   if game.level_up_timer > 0.0 {
     let alpha = (game.level_up_timer / 3.0 * 60.0).to_int()
-    let a = @types.clampi(alpha, 0, 60)
+    let a = alpha.clamp(min=0, max=60)
     @raylib.draw_rectangle(
       0,
       0,

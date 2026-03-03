@@ -96,7 +96,7 @@ fn draw_checkpoints(game : @types.Game) -> Unit {
         0.6,
         0.6,
         0.6,
-        @raylib.Color::new(50, @types.clampi(green_val, 0, 255), 50, 200),
+        @raylib.Color::new(50, green_val.clamp(min=0, max=255), 50, 200),
       )
     }
     // Also draw ring in XZ plane
@@ -253,7 +253,7 @@ fn draw_particles_3d(game : @types.Game) -> Unit {
       continue
     }
     let alpha = (p.life / p.max_life * 255.0).to_int()
-    let a = @types.clampi(alpha, 0, 255)
+    let a = alpha.clamp(min=0, max=255)
     @raylib.draw_cube(
       @raylib.Vector3::new(p.x, p.y, p.z),
       p.size,
@@ -562,7 +562,7 @@ fn draw_buildings(game : @types.Game) -> Unit {
       let hp_rat = b.hp / b.max_hp
       let dmg_frac : Float = 1.0 - hp_rat
       let dmg_alpha = (dmg_frac * 150.0).to_int()
-      let da = @types.clampi(dmg_alpha, 20, 150)
+      let da = dmg_alpha.clamp(min=20, max=150)
       @raylib.draw_cube(
         @raylib.Vector3::new(b.x, b.y + b.height * 0.5, b.z),
         b.width * 0.7,
@@ -776,7 +776,7 @@ fn draw_landing_zone(game : @types.Game) -> Unit {
   // Edge lights (pulsing)
   let pulse = @math.sinf(Float::from_int(game.frame_counter) * 0.15)
   let alpha = 180 + (pulse * 75.0).to_int()
-  let a = @types.clampi(alpha, 0, 255)
+  let a = alpha.clamp(min=0, max=255)
   for i in -4..<=4 {
     let offset_z = Float::from_int(i) * 4.0
     @raylib.draw_cube(

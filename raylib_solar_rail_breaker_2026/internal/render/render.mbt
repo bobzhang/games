@@ -162,11 +162,9 @@ fn draw_flares(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
         cam_y,
       )
 
-      let alpha = @types.clampi(
-        (Float::from_int(80) + f0.danger * 160.0).to_int(),
-        40,
-        240,
-      )
+      let alpha = (Float::from_int(80) + f0.danger * 160.0)
+        .to_int()
+        .clamp(min=40, max=240)
       let c = @raylib.Color::new(255, 190, 94, alpha)
       @raylib.draw_line_ex(
         @raylib.Vector2::new(p0.0, p0.1),
@@ -282,7 +280,7 @@ fn draw_bullets(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     }
 
     let r = @types.ring_radius(
-      @types.clampi((b.ring_f + 0.5).to_int(), 0, @types.ring_count - 1),
+      (b.ring_f + 0.5).to_int().clamp(min=0, max=@types.ring_count - 1),
     )
     let p = world_to_screen(
       @types.world_x(r, b.angle),
@@ -328,7 +326,7 @@ fn draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     }
 
     let s = world_to_screen(p.x, p.y, cam_x, cam_y)
-    let alpha = @types.clampi((p.life * 255.0).to_int(), 0, 255)
+    let alpha = (p.life * 255.0).to_int().clamp(min=0, max=255)
 
     let c = if p.kind == 0 {
       @raylib.Color::new(136, 242, 255, alpha)
@@ -371,7 +369,7 @@ fn draw_shocks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
         cam_y,
       )
 
-      let alpha = @types.clampi((s.life / 0.34 * 220.0).to_int(), 0, 220)
+      let alpha = (s.life / 0.34 * 220.0).to_int().clamp(min=0, max=220)
       let col = if s.beta {
         @raylib.Color::new(255, 156, 232, alpha)
       } else {
@@ -570,7 +568,7 @@ fn draw_hud(game : @types.Game) -> Unit {
   )
 
   if game.hint_t > 0.0 {
-    let alpha = @types.clampi((game.hint_t / 7.0 * 255.0).to_int(), 0, 255)
+    let alpha = (game.hint_t / 7.0 * 255.0).to_int().clamp(min=0, max=255)
     @raylib.draw_text(
       "Hint: phase shift to hit hidden enemies and avoid wrong gates",
       30,
@@ -844,7 +842,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 ///|
 fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
   let p = @types.ease_in_out(1.0 - game.result_t / @types.stage_clear_delay)
-  let alpha = @types.clampi((Float::from_int(90) + p * 90.0).to_int(), 0, 190)
+  let alpha = (Float::from_int(90) + p * 90.0).to_int().clamp(min=0, max=190)
   @raylib.draw_rectangle(
     0,
     0,
@@ -972,7 +970,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   }
 
   if game.flash_t > 0.0 {
-    let a = @types.clampi((game.flash_t * 155.0).to_int(), 0, 155)
+    let a = (game.flash_t * 155.0).to_int().clamp(min=0, max=155)
     @raylib.draw_rectangle(
       0,
       0,

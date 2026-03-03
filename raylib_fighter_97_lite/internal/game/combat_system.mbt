@@ -51,7 +51,7 @@ fn attacker_remaining_recovery(
   attacker : @types.Fighter,
   mv : @types.MoveSpec,
 ) -> Int {
-  @types.clampi(mv.total_frames - attacker.action_frame, 0, 999)
+  (mv.total_frames - attacker.action_frame).clamp(min=0, max=999)
 }
 
 ///|
@@ -79,7 +79,7 @@ fn compute_damage(
     damage = damage * @types.counter_hit_bonus
   }
 
-  let d = @types.clampi(damage.to_int(), 1, 999)
+  let d = damage.to_int().clamp(min=1, max=999)
   (d, counter_hit)
 }
 
@@ -100,10 +100,9 @@ fn apply_successful_hit(
     attacker, defender, attacker_archetype, defender_archetype, mv,
   )
 
-  defender.health = @types.clampi(
-    defender.health - damage,
-    0,
-    @types.health_max,
+  defender.health = (defender.health - damage).clamp(
+    min=0,
+    max=@types.health_max,
   )
 
   if mv.knockdown {
@@ -216,14 +215,13 @@ fn apply_blocked_hit(
   }
 
   if chip > 0 && defender.health > 1 {
-    defender.health = @types.clampi(
-      defender.health - chip,
-      1,
-      @types.health_max,
+    defender.health = (defender.health - chip).clamp(
+      min=1,
+      max=@types.health_max,
     )
   }
 
-  let guard_damage = @types.clampi(mv.damage / 12 + 2, 2, 16)
+  let guard_damage = (mv.damage / 12 + 2).clamp(min=2, max=16)
   defender.guard_meter -= guard_damage
 
   if defender.guard_meter <= 0 {

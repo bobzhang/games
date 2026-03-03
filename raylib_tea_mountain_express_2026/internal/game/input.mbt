@@ -32,8 +32,8 @@ fn update_input(game : @types.Game) -> Unit {
     game.input_tilt = game.input_tilt + 1
   }
 
-  game.input_steer = @types.clampi(game.input_steer, -1, 1)
-  game.input_tilt = @types.clampi(game.input_tilt, -1, 1)
+  game.input_steer = game.input_steer.clamp(min=-1, max=1)
+  game.input_tilt = game.input_tilt.clamp(min=-1, max=1)
 
   let j_press = @raylib.is_key_pressed(@raylib.KeyJ)
 

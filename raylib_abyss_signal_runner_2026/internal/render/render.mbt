@@ -35,11 +35,9 @@ fn draw_value_bar(
   label : String,
 ) -> Unit {
   let clamped = @types.clampf(value, 0.0, 100.0)
-  let fill_w = @types.clampi(
-    (Float::from_int(w) * clamped / 100.0).to_int(),
-    0,
-    w,
-  )
+  let fill_w = (Float::from_int(w) * clamped / 100.0)
+    .to_int()
+    .clamp(min=0, max=w)
 
   @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(6, 20, 34, 210))
   @raylib.draw_rectangle(x, y, fill_w, h, col)
@@ -137,26 +135,18 @@ fn draw_cave(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     let e0 = @types.cave_edges(game, y0f)
     let e1 = @types.cave_edges(game, y1f)
 
-    let left0 = @types.clampi(
-      (e0.0 + cam_x).to_int(),
-      -200,
-      @types.screen_w + 200,
-    )
-    let right0 = @types.clampi(
-      (e0.1 + cam_x).to_int(),
-      -200,
-      @types.screen_w + 200,
-    )
-    let left1 = @types.clampi(
-      (e1.0 + cam_x).to_int(),
-      -200,
-      @types.screen_w + 200,
-    )
-    let right1 = @types.clampi(
-      (e1.1 + cam_x).to_int(),
-      -200,
-      @types.screen_w + 200,
-    )
+    let left0 = (e0.0 + cam_x)
+      .to_int()
+      .clamp(min=-200, max=@types.screen_w + 200)
+    let right0 = (e0.1 + cam_x)
+      .to_int()
+      .clamp(min=-200, max=@types.screen_w + 200)
+    let left1 = (e1.0 + cam_x)
+      .to_int()
+      .clamp(min=-200, max=@types.screen_w + 200)
+    let right1 = (e1.1 + cam_x)
+      .to_int()
+      .clamp(min=-200, max=@types.screen_w + 200)
 
     let left = @types.minf(Float::from_int(left0), Float::from_int(left1)).to_int()
     let right = @types.maxf(Float::from_int(right0), Float::from_int(right1)).to_int()
@@ -452,7 +442,7 @@ fn draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       continue
     }
 
-    let a = @types.clampi((t.life * 255.0).to_int(), 0, 255)
+    let a = (t.life * 255.0).to_int().clamp(min=0, max=255)
     let col = if t.kind == 1 {
       @raylib.Color::new(120, 240, 255, a)
     } else {
@@ -477,7 +467,7 @@ fn draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       continue
     }
 
-    let a = @types.clampi((p.life * 255.0).to_int(), 0, 255)
+    let a = (p.life * 255.0).to_int().clamp(min=0, max=255)
     let c = if p.kind == 1 {
       @raylib.Color::new(255, 124, 168, a)
     } else if p.kind == 2 {
@@ -503,7 +493,7 @@ fn draw_ripples(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       continue
     }
 
-    let a = @types.clampi((r.life * 255.0).to_int(), 0, 255)
+    let a = (r.life * 255.0).to_int().clamp(min=0, max=255)
     let c = if r.kind == 1 {
       @raylib.Color::new(184, 146, 255, a)
     } else {
@@ -573,7 +563,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
       px.to_int(),
       py.to_int(),
       body_r + 5.0,
-      @raylib.Color::new(250, 254, 255, @types.clampi(alpha, 30, 220)),
+      @raylib.Color::new(250, 254, 255, alpha.clamp(min=30, max=220)),
     )
   }
 
@@ -729,7 +719,7 @@ fn draw_hud(game : @types.Game) -> Unit {
   )
 
   if game.combo >= 2 && game.combo_t > 0.0 {
-    let alpha = @types.clampi((game.combo_t * 130.0 + 60.0).to_int(), 0, 255)
+    let alpha = (game.combo_t * 130.0 + 60.0).to_int().clamp(min=0, max=255)
     draw_center_text(
       "COMBO x" + game.combo.to_string(),
       22,
@@ -775,7 +765,7 @@ fn draw_button_hint(
     (rect.0 + rect.2 * 0.5 - Float::from_int(tw) * 0.5).to_int(),
     (rect.1 + rect.3 * 0.5 - 12.0).to_int(),
     24,
-    @raylib.Color::new(226, 244, 255, @types.clampi(alpha + 40, 0, 255)),
+    @raylib.Color::new(226, 244, 255, (alpha + 40).clamp(min=0, max=255)),
   )
 }
 
@@ -1049,7 +1039,7 @@ fn draw_signal_pulse(game : @types.Game) -> Unit {
 
   let t : Float = Float::from_int(1) - game.sonar_t / @types.sonar_time
   let rr = @types.sonar_reveal_r * t
-  let a = @types.clampi(((Float::from_int(1) - t) * 190.0).to_int(), 0, 190)
+  let a = ((Float::from_int(1) - t) * 190.0).to_int().clamp(min=0, max=190)
 
   @raylib.draw_circle_lines(
     game.hero.x.to_int(),
@@ -1068,7 +1058,7 @@ fn draw_play_hint(game : @types.Game) -> Unit {
 
   let fade : Float = Float::from_int(1) -
     @types.clampf((game.hint_t - 7.0) / 8.0, 0.0, 1.0)
-  let alpha = @types.clampi((fade * 180.0).to_int(), 0, 180)
+  let alpha = (fade * 180.0).to_int().clamp(min=0, max=180)
 
   @raylib.draw_rectangle(
     @types.screen_w / 2 - 310,
@@ -1110,7 +1100,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   draw_signal_pulse(game)
 
   if game.flash_t > 0.0 {
-    let a = @types.clampi((game.flash_t * 220.0).to_int(), 0, 220)
+    let a = (game.flash_t * 220.0).to_int().clamp(min=0, max=220)
     @raylib.draw_rectangle(
       0,
       0,

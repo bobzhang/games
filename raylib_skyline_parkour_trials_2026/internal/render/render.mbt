@@ -18,9 +18,9 @@ fn draw_button(
 ) -> Unit {
   let fill = if active {
     @raylib.Color::new(
-      @types.clampi(base.r.to_int() + 36, 0, 255),
-      @types.clampi(base.g.to_int() + 36, 0, 255),
-      @types.clampi(base.b.to_int() + 36, 0, 255),
+      (base.r.to_int() + 36).clamp(min=0, max=255),
+      (base.g.to_int() + 36).clamp(min=0, max=255),
+      (base.b.to_int() + 36).clamp(min=0, max=255),
       240,
     )
   } else {
@@ -172,8 +172,8 @@ fn draw_world_tiles(game : @types.Game, cam_x : Float) -> Unit {
           sx.to_int(),
           (t.y + 2.0).to_int(),
           t.w.to_int(),
-          @types.clampi((t.h - 4.0).to_int(), 1, 2000),
-          @raylib.Color::new(255, 120, 70, @types.clampi(glow, 40, 250)),
+          (t.h - 4.0).to_int().clamp(min=1, max=2000),
+          @raylib.Color::new(255, 120, 70, glow.clamp(min=40, max=250)),
         )
         @raylib.draw_rectangle_lines(
           sx.to_int(),
@@ -307,7 +307,7 @@ fn draw_player(game : @types.Game, cam_x : Float) -> Unit {
   )
 
   if hero.vx.abs() > 190.0 {
-    let trail_w = @types.clampi((hero.vx.abs() * 0.045).to_int(), 8, 24)
+    let trail_w = (hero.vx.abs() * 0.045).to_int().clamp(min=8, max=24)
     let tx = if hero.facing > 0 {
       sx - Float::from_int(trail_w) - 3.0
     } else {
@@ -396,7 +396,7 @@ fn draw_hud(game : @types.Game) -> Unit {
   }
 
   if game.bonus_popup_t > 0.0 {
-    let alpha = @types.clampi((game.bonus_popup_t * 255.0).to_int(), 0, 255)
+    let alpha = (game.bonus_popup_t * 255.0).to_int().clamp(min=0, max=255)
     @raylib.draw_text(
       "+\{game.bonus_popup_value}s",
       28,

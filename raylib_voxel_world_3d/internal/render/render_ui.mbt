@@ -40,7 +40,7 @@ pub fn draw_ui(game : @types.Game) -> Unit {
   // Damage flash overlay
   if game.player.damage_flash > 0.0 {
     let alpha = (game.player.damage_flash * 120.0).to_int()
-    let clamped = @types.clampi(alpha, 0, 120)
+    let clamped = alpha.clamp(min=0, max=120)
     @raylib.draw_rectangle(
       0,
       0,
@@ -241,14 +241,14 @@ fn draw_hud(game : @types.Game) -> Unit {
       @types.screen_height / 2 + 52,
       msg_w + 16,
       28,
-      @raylib.Color::new(0, 0, 0, @types.clampi(msg_alpha / 2, 0, 140)),
+      @raylib.Color::new(0, 0, 0, (msg_alpha / 2).clamp(min=0, max=140)),
     )
     @raylib.draw_text(
       game.message_text,
       (@types.screen_width - msg_w) / 2,
       @types.screen_height / 2 + 56,
       20,
-      @raylib.Color::new(255, 255, 200, @types.clampi(msg_alpha, 0, 255)),
+      @raylib.Color::new(255, 255, 200, msg_alpha.clamp(min=0, max=255)),
     )
   }
 }
@@ -1027,7 +1027,7 @@ fn draw_game_over_screen(game : @types.Game) -> Unit {
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 100,
     64,
-    @raylib.Color::new(255, 50, 50, @types.clampi(alpha, 0, 255)),
+    @raylib.Color::new(255, 50, 50, alpha.clamp(min=0, max=255)),
   )
   // Stats
   if game.death_timer > 0.5 {

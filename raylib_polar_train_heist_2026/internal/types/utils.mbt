@@ -1,10 +1,4 @@
 ///|
-/// Clamps an integer to the inclusive `[lo, hi]` range.
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Clamps a float to the inclusive `[lo, hi]` range.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {
@@ -80,7 +74,7 @@ pub fn ease_out_cubic(t : Float) -> Float {
 ///|
 /// Returns the world y-coordinate of a lane center.
 pub fn lane_y(lane : Int) -> Float {
-  lane_top + Float::from_int(clampi(lane, 0, lane_count - 1)) * lane_gap
+  lane_top + Float::from_int(lane.clamp(min=0, max=lane_count - 1)) * lane_gap
 }
 
 ///|

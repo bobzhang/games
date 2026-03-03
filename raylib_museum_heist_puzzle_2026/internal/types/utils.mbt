@@ -1,10 +1,4 @@
 ///|
-/// Clamps an integer to the inclusive `[lo, hi]` range.
-pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Converts `(x, y)` to a linear board index.
 pub fn cell_index(x : Int, y : Int) -> Int {
   y * board_cols + x

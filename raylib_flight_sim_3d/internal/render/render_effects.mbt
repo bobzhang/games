@@ -42,14 +42,14 @@ pub fn draw_clouds(game : @types.Game) -> Unit {
       base_gray
     }
     let b_tint : Int = if tod < 0.2 { 50 } else { base_gray }
-    let cloud_r = @types.clampi(r_tint, 0, 255)
-    let cloud_g = @types.clampi(g_tint, 0, 255)
-    let cloud_b = @types.clampi(b_tint, 0, 255)
+    let cloud_r = r_tint.clamp(min=0, max=255)
+    let cloud_g = g_tint.clamp(min=0, max=255)
+    let cloud_b = b_tint.clamp(min=0, max=255)
     // Fade alpha with distance
     let fade_raw = dist / (game.draw_distance * 0.8)
     let fade_ratio : Float = 1.0 - fade_raw
     let alpha_f = Float::from_int(c.alpha) * fade_ratio
-    let alpha = @types.clampi(alpha_f.to_int(), 10, 200)
+    let alpha = alpha_f.to_int().clamp(min=10, max=200)
     // Draw cloud as cluster of overlapping cubes for volume
     let num_puffs = 5
     for p in 0..<num_puffs {
@@ -101,7 +101,7 @@ pub fn draw_rain_effect(game : @types.Game) -> Unit {
     let wind_offset_z = ws.wind_dir_z * ws.wind_speed * 0.1
     // Rain line: from (rx,ry,rz) downward with wind
     let rain_alpha : Int = (ws.rain_intensity * 150.0).to_int()
-    let ra = @types.clampi(rain_alpha, 30, 180)
+    let ra = rain_alpha.clamp(min=30, max=180)
     @raylib.draw_line_3d(
       @raylib.Vector3::new(rx, ry, rz),
       @raylib.Vector3::new(
@@ -172,7 +172,7 @@ pub fn draw_engine_trail(game : @types.Game) -> Unit {
     let i_ratio = Float::from_int(i) / Float::from_int(trail_segments)
     let alpha_ratio : Float = 1.0 - i_ratio
     let alpha = (alpha_ratio * intensity * 120.0).to_int()
-    let a = @types.clampi(alpha, 0, 200)
+    let a = alpha.clamp(min=0, max=200)
     let seg_size : Float = 0.15 + Float::from_int(i) * 0.05 * intensity
     // Color transitions from yellow to gray
     let r_val = 255 - (Float::from_int(i) * 25.0).to_int()
@@ -184,9 +184,9 @@ pub fn draw_engine_trail(game : @types.Game) -> Unit {
       seg_size,
       seg_size,
       @raylib.Color::new(
-        @types.clampi(r_val, 100, 255),
-        @types.clampi(g_val, 80, 255),
-        @types.clampi(b_val, 50, 200),
+        r_val.clamp(min=100, max=255),
+        g_val.clamp(min=80, max=255),
+        b_val.clamp(min=50, max=200),
         a,
       ),
     )
@@ -228,11 +228,11 @@ pub fn draw_damage_smoke(game : @types.Game) -> Unit {
     let i_rat = Float::from_int(i) / Float::from_int(trail_segments)
     let alpha_ratio : Float = 1.0 - i_rat
     let alpha = (alpha_ratio * smoke_intensity * 150.0).to_int()
-    let a = @types.clampi(alpha, 0, 200)
+    let a = alpha.clamp(min=0, max=200)
     let seg_size : Float = 0.2 + Float::from_int(i) * 0.15
     // Dark smoke color, getting lighter with distance
     let gray = 40 + (Float::from_int(i) * 10.0).to_int()
-    let gray_c = @types.clampi(gray, 30, 120)
+    let gray_c = gray.clamp(min=30, max=120)
     @raylib.draw_cube(
       @raylib.Vector3::new(trail_x, trail_y, trail_z),
       seg_size,
@@ -244,7 +244,7 @@ pub fn draw_damage_smoke(game : @types.Game) -> Unit {
     if hp_ratio < 0.25 && i < 3 {
       let fire_size = seg_size * 0.6
       let fire_alpha = (alpha_ratio * 200.0).to_int()
-      let fa = @types.clampi(fire_alpha, 0, 200)
+      let fa = fire_alpha.clamp(min=0, max=200)
       @raylib.draw_cube(
         @raylib.Vector3::new(trail_x, trail_y - 0.1, trail_z),
         fire_size,
@@ -398,7 +398,7 @@ pub fn draw_enemy_damage_trails(game : @types.Game) -> Unit {
       let smoke_y = e.y + Float::from_int(s) * 0.2
       let smoke_z = e.z - dir_z * t_val
       let seg_alpha = 120 - s * 25
-      let sa = @types.clampi(seg_alpha, 10, 200)
+      let sa = seg_alpha.clamp(min=10, max=200)
       let seg_size : Float = 0.3 + Float::from_int(s) * 0.1
       @raylib.draw_cube(
         @raylib.Vector3::new(smoke_x, smoke_y, smoke_z),

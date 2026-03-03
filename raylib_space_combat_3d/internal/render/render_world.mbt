@@ -116,10 +116,10 @@ fn draw_stars(game : @types.Game) -> Unit {
       35.0,
       35.0,
       @raylib.Color::new(
-        @types.clampi(r_val, 0, 255),
-        @types.clampi(g_val, 0, 255),
-        @types.clampi(b_val, 0, 255),
-        @types.clampi(alpha, 0, 100),
+        r_val.clamp(min=0, max=255),
+        g_val.clamp(min=0, max=255),
+        b_val.clamp(min=0, max=255),
+        alpha.clamp(min=0, max=100),
       ),
     )
     ignore(i)
@@ -266,9 +266,9 @@ fn draw_player_ship(game : @types.Game) -> Unit {
     wing_thick,
     wing_depth * scale,
     @raylib.Color::new(
-      @types.clampi(fr - 20, 0, 255),
-      @types.clampi(fg - 30, 0, 255),
-      @types.clampi(fb - 40, 0, 255),
+      (fr - 20).clamp(min=0, max=255),
+      (fg - 30).clamp(min=0, max=255),
+      (fb - 40).clamp(min=0, max=255),
       255,
     ),
   )
@@ -283,9 +283,9 @@ fn draw_player_ship(game : @types.Game) -> Unit {
     wing_thick,
     wing_depth * scale,
     @raylib.Color::new(
-      @types.clampi(fr - 20, 0, 255),
-      @types.clampi(fg - 30, 0, 255),
-      @types.clampi(fb - 40, 0, 255),
+      (fr - 20).clamp(min=0, max=255),
+      (fg - 30).clamp(min=0, max=255),
+      (fb - 40).clamp(min=0, max=255),
       255,
     ),
   )
@@ -329,8 +329,8 @@ fn draw_player_ship(game : @types.Game) -> Unit {
     0.6 * scale,
     0.5 * scale,
     @raylib.Color::new(
-      @types.clampi(fr - 10, 0, 255),
-      @types.clampi(fg - 20, 0, 255),
+      (fr - 10).clamp(min=0, max=255),
+      (fg - 20).clamp(min=0, max=255),
       fb,
       255,
     ),
@@ -375,7 +375,7 @@ fn draw_player_ship(game : @types.Game) -> Unit {
         shield_r,
         shield_g,
         255,
-        @types.clampi(shield_alpha, 8, 50),
+        shield_alpha.clamp(min=8, max=50),
       ),
     )
   }
@@ -475,8 +475,8 @@ fn draw_fighter_ship(
   game : @types.Game,
 ) -> Unit {
   ignore(game)
-  let br : Int = @types.clampi(220 + flash_add, 0, 255)
-  let bg : Int = @types.clampi(60, 0, 255)
+  let br : Int = (220 + flash_add).clamp(min=0, max=255)
+  let bg : Int = (60).clamp(min=0, max=255)
   // Body
   @raylib.draw_cube(
     @raylib.Vector3::new(e.x, e.y, e.z),
@@ -491,7 +491,7 @@ fn draw_fighter_ship(
     2.2,
     0.1,
     0.8,
-    @raylib.Color::new(@types.clampi(180 + flash_add, 0, 255), 40, 40, 255),
+    @raylib.Color::new((180 + flash_add).clamp(min=0, max=255), 40, 40, 255),
   )
   // Engine glow
   let fwd = @types.forward_dir(e.yaw, e.pitch)
@@ -514,7 +514,7 @@ fn draw_interceptor_ship(
 ) -> Unit {
   ignore(game)
   // Interceptor: sleek, narrow, fast-looking
-  let br : Int = @types.clampi(200 + flash_add, 0, 255)
+  let br : Int = (200 + flash_add).clamp(min=0, max=255)
   // Narrow body
   @raylib.draw_cube(
     @raylib.Vector3::new(e.x, e.y, e.z),
@@ -529,7 +529,7 @@ fn draw_interceptor_ship(
     2.5,
     0.06,
     0.5,
-    @raylib.Color::new(@types.clampi(160 + flash_add, 0, 255), 80, 160, 255),
+    @raylib.Color::new((160 + flash_add).clamp(min=0, max=255), 80, 160, 255),
   )
   // Engine trail
   let fwd = @types.forward_dir(e.yaw, e.pitch)
@@ -552,7 +552,7 @@ fn draw_bomber_ship(
 ) -> Unit {
   ignore(game)
   // Bomber: bulky, heavy-looking
-  let br : Int = @types.clampi(180 + flash_add, 0, 255)
+  let br : Int = (180 + flash_add).clamp(min=0, max=255)
   // Wide body
   @raylib.draw_cube(
     @raylib.Vector3::new(e.x, e.y, e.z),
@@ -567,7 +567,7 @@ fn draw_bomber_ship(
     1.2,
     0.3,
     1.8,
-    @raylib.Color::new(@types.clampi(120 + flash_add, 0, 255), 80, 30, 255),
+    @raylib.Color::new((120 + flash_add).clamp(min=0, max=255), 80, 30, 255),
   )
   // Small wings
   @raylib.draw_cube(
@@ -575,7 +575,7 @@ fn draw_bomber_ship(
     3.0,
     0.1,
     1.0,
-    @raylib.Color::new(@types.clampi(150 + flash_add, 0, 255), 100, 40, 255),
+    @raylib.Color::new((150 + flash_add).clamp(min=0, max=255), 100, 40, 255),
   )
   // Twin engines
   let fwd = @types.forward_dir(e.yaw, e.pitch)
@@ -607,7 +607,7 @@ fn draw_cruiser_ship(
 ) -> Unit {
   ignore(game)
   // Cruiser: large blocky ship
-  let br : Int = @types.clampi(150 + flash_add, 0, 255)
+  let br : Int = (150 + flash_add).clamp(min=0, max=255)
   @raylib.draw_cube(
     @raylib.Vector3::new(e.x, e.y, e.z),
     2.0,
@@ -621,7 +621,7 @@ fn draw_cruiser_ship(
     1.0,
     0.8,
     1.5,
-    @raylib.Color::new(@types.clampi(180 + flash_add, 0, 255), 100, 100, 255),
+    @raylib.Color::new((180 + flash_add).clamp(min=0, max=255), 100, 100, 255),
   )
   // Hull armor plates
   @raylib.draw_cube(
@@ -629,7 +629,7 @@ fn draw_cruiser_ship(
     2.2,
     0.3,
     2.0,
-    @raylib.Color::new(@types.clampi(130 + flash_add, 0, 255), 70, 70, 255),
+    @raylib.Color::new((130 + flash_add).clamp(min=0, max=255), 70, 70, 255),
   )
   // Engines
   @raylib.draw_sphere(
@@ -651,7 +651,7 @@ fn draw_capital_ship(
   game : @types.Game,
 ) -> Unit {
   // Capital ship: massive, multi-section
-  let br : Int = @types.clampi(120 + flash_add, 0, 255)
+  let br : Int = (120 + flash_add).clamp(min=0, max=255)
   // Main hull
   @raylib.draw_cube(
     @raylib.Vector3::new(e.x, e.y, e.z),
@@ -666,7 +666,7 @@ fn draw_capital_ship(
     2.0,
     1.5,
     3.0,
-    @raylib.Color::new(@types.clampi(140 + flash_add, 0, 255), 80, 80, 255),
+    @raylib.Color::new((140 + flash_add).clamp(min=0, max=255), 80, 80, 255),
   )
   // Bow
   @raylib.draw_cube(
@@ -674,7 +674,7 @@ fn draw_capital_ship(
     2.5,
     1.5,
     2.0,
-    @raylib.Color::new(@types.clampi(100 + flash_add, 0, 255), 50, 60, 255),
+    @raylib.Color::new((100 + flash_add).clamp(min=0, max=255), 50, 60, 255),
   )
   // Engine block
   @raylib.draw_cube(
@@ -682,7 +682,7 @@ fn draw_capital_ship(
     3.5,
     2.0,
     1.5,
-    @raylib.Color::new(@types.clampi(90 + flash_add, 0, 255), 45, 50, 255),
+    @raylib.Color::new((90 + flash_add).clamp(min=0, max=255), 45, 50, 255),
   )
   // Turret mounts (visual indicators)
   let frame_f = Float::from_int(game.frame_counter)
@@ -719,7 +719,7 @@ fn draw_capital_ship(
     @raylib.draw_sphere(
       @raylib.Vector3::new(e.x, e.y, e.z),
       e.size * 1.2,
-      @raylib.Color::new(255, 50, 50, @types.clampi(sa, 5, 30)),
+      @raylib.Color::new(255, 50, 50, sa.clamp(min=5, max=30)),
     )
   }
 }
@@ -774,9 +774,9 @@ fn draw_asteroids(game : @types.Game) -> Unit {
       a.size * 0.7,
       a.size * 0.95,
       @raylib.Color::new(
-        @types.clampi(base_r - 20, 0, 255),
-        @types.clampi(base_g - 20, 0, 255),
-        @types.clampi(base_b - 15, 0, 255),
+        (base_r - 20).clamp(min=0, max=255),
+        (base_g - 20).clamp(min=0, max=255),
+        (base_b - 15).clamp(min=0, max=255),
         255,
       ),
     )
@@ -792,9 +792,9 @@ fn draw_asteroids(game : @types.Game) -> Unit {
         a.size * 0.5,
         a.size * 0.3,
         @raylib.Color::new(
-          @types.clampi(base_r - 10, 0, 255),
-          @types.clampi(base_g - 10, 0, 255),
-          @types.clampi(base_b - 8, 0, 255),
+          (base_r - 10).clamp(min=0, max=255),
+          (base_g - 10).clamp(min=0, max=255),
+          (base_b - 8).clamp(min=0, max=255),
           255,
         ),
       )
@@ -846,9 +846,9 @@ fn draw_stations(game : @types.Game) -> Unit {
         0.5,
         1.0,
         @raylib.Color::new(
-          @types.clampi(hub_r + 20, 0, 255),
-          @types.clampi(hub_g + 20, 0, 255),
-          @types.clampi(hub_b + 20, 0, 255),
+          (hub_r + 20).clamp(min=0, max=255),
+          (hub_g + 20).clamp(min=0, max=255),
+          (hub_b + 20).clamp(min=0, max=255),
           255,
         ),
       )
@@ -866,9 +866,9 @@ fn draw_stations(game : @types.Game) -> Unit {
         0.5,
         3.0,
         @raylib.Color::new(
-          @types.clampi(hub_r - 20, 0, 255),
-          @types.clampi(hub_g - 20, 0, 255),
-          @types.clampi(hub_b - 20, 0, 255),
+          (hub_r - 20).clamp(min=0, max=255),
+          (hub_g - 20).clamp(min=0, max=255),
+          (hub_b - 20).clamp(min=0, max=255),
           255,
         ),
       )
@@ -1120,7 +1120,7 @@ fn draw_particles_3d(game : @types.Game) -> Unit {
       continue
     }
     let alpha_f : Float = p.life / p.max_life * 255.0
-    let a = @types.clampi(alpha_f.to_int(), 0, 255)
+    let a = alpha_f.to_int().clamp(min=0, max=255)
 
     if p.kind == 1 {
       // Explosion particles: sphere
@@ -1156,7 +1156,7 @@ fn draw_debris_3d(game : @types.Game) -> Unit {
       continue
     }
     let alpha_f : Float = @types.minf(d.life / 2.0, 1.0) * 255.0
-    let a = @types.clampi(alpha_f.to_int(), 0, 255)
+    let a = alpha_f.to_int().clamp(min=0, max=255)
     @raylib.draw_cube(
       @raylib.Vector3::new(d.x, d.y, d.z),
       d.size,

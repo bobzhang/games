@@ -81,17 +81,17 @@ test "clampf: at boundaries" {
 
 ///|
 test "clampi: within range" {
-  assert_eq(clampi(5, 0, 10), 5)
+  assert_eq((5).clamp(min=0, max=10), 5)
 }
 
 ///|
 test "clampi: below min" {
-  assert_eq(clampi(-3, 0, 10), 0)
+  assert_eq((-3).clamp(min=0, max=10), 0)
 }
 
 ///|
 test "clampi: above max" {
-  assert_eq(clampi(15, 0, 10), 10)
+  assert_eq((15).clamp(min=0, max=10), 10)
 }
 
 ///|

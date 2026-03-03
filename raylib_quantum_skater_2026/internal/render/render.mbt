@@ -278,7 +278,7 @@ fn draw_obj(
         col.r.to_int(),
         col.g.to_int(),
         col.b.to_int(),
-        @types.clampi(alpha, 50, 220),
+        alpha.clamp(min=50, max=220),
       ),
     )
   }
@@ -292,7 +292,7 @@ fn draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     }
 
     let s = world_to_screen(t.x, t.y, 0.0, cam_x, cam_y)
-    let alpha = @types.clampi((t.life * 255.0).to_int(), 0, 255)
+    let alpha = (t.life * 255.0).to_int().clamp(min=0, max=255)
     let col = if t.beta {
       @raylib.Color::new(255, 140, 234, alpha)
     } else {
@@ -317,7 +317,7 @@ fn draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     }
 
     let s = world_to_screen(p.x, p.y, 0.0, cam_x, cam_y)
-    let alpha = @types.clampi((p.life * 255.0).to_int(), 0, 255)
+    let alpha = (p.life * 255.0).to_int().clamp(min=0, max=255)
     let col = if p.kind == 0 {
       @raylib.Color::new(130, 248, 214, alpha)
     } else if p.kind == 1 {
@@ -682,7 +682,7 @@ fn draw_hud(game : @types.Game) -> Unit {
   )
 
   if game.hint_t > 0.0 {
-    let a = @types.clampi((game.hint_t / 9.0 * 255.0).to_int(), 0, 255)
+    let a = (game.hint_t / 9.0 * 255.0).to_int().clamp(min=0, max=255)
     @raylib.draw_text(
       "Hint: Shift phase to pass matching gates",
       30,
@@ -897,7 +897,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   }
 
   if game.flash_t > 0.0 {
-    let a = @types.clampi((game.flash_t * 160.0).to_int(), 0, 160)
+    let a = (game.flash_t * 160.0).to_int().clamp(min=0, max=160)
     @raylib.draw_rectangle(
       0,
       0,

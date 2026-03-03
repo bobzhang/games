@@ -72,7 +72,7 @@ fn draw_spotlight(game : @types.Game) -> Unit {
   let pulse : Float = 0.5 + 0.5 * @math.sinf(game.beat_t * 2.15)
   let radius : Float = 272.0 + game.spotlight * 2.32 + pulse * 28.0
   let glow_f : Float = 48.0 + game.spotlight * 1.65
-  let glow_alpha = @types.clampi(glow_f.to_int(), 54, 230)
+  let glow_alpha = glow_f.to_int().clamp(min=54, max=230)
   let inner_radius : Float = radius * 0.62
 
   @raylib.draw_circle(
@@ -93,8 +93,8 @@ fn draw_spotlight(game : @types.Game) -> Unit {
 fn draw_stage_screen(game : @types.Game) -> Unit {
   let warmth_f : Float = 170.0 + game.excitement * 0.72
   let alpha_f : Float = 126.0 + game.spotlight * 1.1
-  let warmth = @types.clampi(warmth_f.to_int(), 162, 246)
-  let alpha = @types.clampi(alpha_f.to_int(), 120, 236)
+  let warmth = warmth_f.to_int().clamp(min=162, max=246)
+  let alpha = alpha_f.to_int().clamp(min=120, max=236)
 
   @raylib.draw_rectangle(
     @types.stage_screen_x,
@@ -253,7 +253,7 @@ fn draw_active_stage_pose(game : @types.Game) -> Unit {
     @types.clampf(game.cue_time_left / game.cue_time_limit, 0.0, 1.0)
   }
   let ring_alpha_f : Float = 45.0 + cue_ratio * 180.0
-  let ring_alpha = @types.clampi(ring_alpha_f.to_int(), 30, 225)
+  let ring_alpha = ring_alpha_f.to_int().clamp(min=30, max=225)
   let ring_radius : Float = 228.0 + @math.sinf(game.beat_t * 1.6) * 8.0
   @raylib.draw_circle_lines(
     cx,
@@ -584,7 +584,7 @@ fn draw_message_banner(game : @types.Game) -> Unit {
   }
 
   let alpha_f : Float = game.message_t * 220.0
-  let alpha = @types.clampi(alpha_f.to_int(), 0, 230)
+  let alpha = alpha_f.to_int().clamp(min=0, max=230)
   let w = 840
   let h = 46
   let x = @types.screen_w / 2 - w / 2

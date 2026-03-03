@@ -107,7 +107,7 @@ fn draw_background(game : @types.Game) -> Unit {
   )
 
   if game.flash_t > 0.0 {
-    let alpha = @types.clampi((game.flash_t * 180.0).to_int(), 0, 180)
+    let alpha = (game.flash_t * 180.0).to_int().clamp(min=0, max=180)
     @raylib.draw_rectangle(
       0,
       0,

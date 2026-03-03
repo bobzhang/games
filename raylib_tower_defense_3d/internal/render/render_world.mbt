@@ -318,9 +318,9 @@ fn draw_arrow_tower(
     0.3,
     0.3,
     @raylib.Color::new(
-      @types.clampi(color.r.to_int() + 30, 0, 255),
-      @types.clampi(color.g.to_int() + 30, 0, 255),
-      @types.clampi(color.b.to_int() + 30, 0, 255),
+      (color.r.to_int() + 30).clamp(min=0, max=255),
+      (color.g.to_int() + 30).clamp(min=0, max=255),
+      (color.b.to_int() + 30).clamp(min=0, max=255),
       255,
     ),
   )
@@ -641,9 +641,9 @@ fn draw_splash_tower(
     0.1,
     0.9,
     @raylib.Color::new(
-      @types.clampi(color.r.to_int() - 20, 0, 255),
-      @types.clampi(color.g.to_int() - 20, 0, 255),
-      @types.clampi(color.b.to_int() - 20, 0, 255),
+      (color.r.to_int() - 20).clamp(min=0, max=255),
+      (color.g.to_int() - 20).clamp(min=0, max=255),
+      (color.b.to_int() - 20).clamp(min=0, max=255),
       255,
     ),
   )
@@ -901,9 +901,9 @@ fn draw_basic_enemy(enemy : @types.Enemy, color : @raylib.Color) -> Unit {
     size + 0.02,
     size + 0.02,
     @raylib.Color::new(
-      @types.clampi(color.r.to_int() - 40, 0, 255),
-      @types.clampi(color.g.to_int() - 40, 0, 255),
-      @types.clampi(color.b.to_int() - 40, 0, 255),
+      (color.r.to_int() - 40).clamp(min=0, max=255),
+      (color.g.to_int() - 40).clamp(min=0, max=255),
+      (color.b.to_int() - 40).clamp(min=0, max=255),
       255,
     ),
   )
@@ -1506,7 +1506,7 @@ fn draw_chain_lightning_lines(game : @types.Game) -> Unit {
       continue
     }
     let alpha = (cl.life / 0.3 * 255.0).to_int()
-    let a = @types.clampi(alpha, 0, 255)
+    let a = alpha.clamp(min=0, max=255)
     // Draw lightning line as series of small cubes
     let steps = 5
     for s in 0..<steps {
@@ -1534,7 +1534,7 @@ fn draw_particles_3d(game : @types.Game) -> Unit {
       continue
     }
     let alpha = (p.life / p.max_life * 255.0).to_int()
-    let a = @types.clampi(alpha, 0, 255)
+    let a = alpha.clamp(min=0, max=255)
     @raylib.draw_cube(
       @raylib.Vector3::new(p.x, p.y, p.z),
       p.size,

@@ -197,7 +197,7 @@ fn burst_dust(
 
 ///|
 fn lane_y(game : @types.Game, index : Int) -> Float {
-  let i = @types.clampi(index, 0, @types.lane_count - 1)
+  let i = index.clamp(min=0, max=@types.lane_count - 1)
   let fi = Float::from_int(i)
   let base = @types.lane_base_y(i)
   let wave = @math.sinf(
@@ -352,11 +352,11 @@ fn kill_raider(game : @types.Game, index : Int, score_gain : Int) -> Unit {
   )
 
   if @types.chance(22) {
-    game.ammo = @types.clampi(game.ammo + 1, 0, @types.ammo_max)
+    game.ammo = (game.ammo + 1).clamp(min=0, max=@types.ammo_max)
   }
 
   if @types.chance(9) {
-    game.repair_kits = @types.clampi(game.repair_kits + 1, 0, @types.kit_max)
+    game.repair_kits = (game.repair_kits + 1).clamp(min=0, max=@types.kit_max)
     set_message(game, "Raider dropped a repair kit", 0.9)
   }
 }
@@ -419,7 +419,7 @@ fn spawn_raider(game : @types.Game, lane : Int, kind : Int) -> Unit {
   game.raiders[i].vx = @types.randf(-30.0, 20.0)
   game.raiders[i].vy = @types.randf(-20.0, 20.0)
   game.raiders[i].target_wagon = choose_target_wagon(game, x, y)
-  game.raiders[i].lane = @types.clampi(lane, 0, @types.lane_count - 1)
+  game.raiders[i].lane = lane.clamp(min=0, max=@types.lane_count - 1)
   game.raiders[i].attack_cd = @types.randf(0.24, 0.68)
   game.raiders[i].flash_t = 0.0
 
@@ -956,8 +956,8 @@ fn award_checkpoint(game : @types.Game) -> Unit {
     @types.checkpoint_span(game.checkpoint)
 
   game.morale = @types.clampf(game.morale + 18.0, 0.0, @types.morale_max)
-  game.ammo = @types.clampi(game.ammo + 10, 0, @types.ammo_max)
-  game.repair_kits = @types.clampi(game.repair_kits + 1, 0, @types.kit_max)
+  game.ammo = (game.ammo + 10).clamp(min=0, max=@types.ammo_max)
+  game.repair_kits = (game.repair_kits + 1).clamp(min=0, max=@types.kit_max)
 
   for i in 0..<game.wagons.length() {
     heal_wagon(game, i, 20.0)

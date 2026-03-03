@@ -122,11 +122,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
@@ -497,7 +492,7 @@ fn main {
     tiles[idx(player.gx, player.gy)] = 0
     tiles[idx(exit_x, exit_y)] = 0
 
-    plate_goal = clampi(2 + stage_i, 2, 6)
+    plate_goal = (2 + stage_i).clamp(min=2, max=6)
 
     for i in 0..<plate_goal {
       ignore(i)
@@ -523,7 +518,7 @@ fn main {
       }
     }
 
-    let crate_count : Int = clampi(plate_goal + 1, 3, 8)
+    let crate_count : Int = (plate_goal + 1).clamp(min=3, max=8)
     for i in 0..<crate_count {
       ignore(i)
       for _a in 0..<220 {
@@ -547,7 +542,7 @@ fn main {
       }
     }
 
-    relic_left = clampi(4 + stage_i * 2, 4, 14)
+    relic_left = (4 + stage_i * 2).clamp(min=4, max=14)
     for i in 0..<relic_left {
       ignore(i)
       for _a in 0..<220 {
@@ -572,7 +567,7 @@ fn main {
       }
     }
 
-    let enemy_count : Int = clampi(4 + stage_i * 3, 4, 28)
+    let enemy_count : Int = (4 + stage_i * 3).clamp(min=4, max=28)
     for i in 0..<enemy_count {
       ignore(i)
       for _a in 0..<220 {
@@ -605,7 +600,7 @@ fn main {
       }
     }
 
-    let spike_count : Int = clampi(3 + stage_i * 2, 3, 18)
+    let spike_count : Int = (3 + stage_i * 2).clamp(min=3, max=18)
     for i in 0..<spike_count {
       ignore(i)
       for _a in 0..<220 {

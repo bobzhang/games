@@ -498,7 +498,7 @@ fn draw_status_strip(game : @types.Game) -> Unit {
     game.status_text,
     @types.play_y + 60,
     23,
-    @raylib.Color::new(232, 240, 252, @types.clampi(alpha + 36, 0, 255)),
+    @raylib.Color::new(232, 240, 252, (alpha + 36).clamp(min=0, max=255)),
   )
 }
 

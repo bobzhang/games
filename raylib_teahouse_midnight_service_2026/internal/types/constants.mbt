@@ -231,13 +231,13 @@ pub fn leaf_x() -> Float {
 ///|
 /// Returns the y-coordinate of a tea leaf slot for a tea id.
 pub fn leaf_y(tea : Int) -> Float {
-  182.0 + Float::from_int(clampi(tea, 0, tea_count - 1)) * 86.0
+  182.0 + Float::from_int(tea.clamp(min=0, max=tea_count - 1)) * 86.0
 }
 
 ///|
 /// Returns world coordinates for a customer slot index.
 pub fn customer_slot_pos(slot : Int) -> (Float, Float) {
-  let s = clampi(slot, 0, customer_slots - 1)
+  let s = slot.clamp(min=0, max=customer_slots - 1)
   let row = s / 3
   let col = s % 3
   let x : Float = 822.0 + Float::from_int(col) * 140.0

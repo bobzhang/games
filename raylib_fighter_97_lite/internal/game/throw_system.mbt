@@ -109,10 +109,9 @@ fn apply_throw_hit(
   attacker.move_cancel_enabled = false
   attacker.throw_tech_timer = 0
 
-  defender.health = @types.clampi(
-    defender.health - @types.throw_damage,
-    0,
-    @types.health_max,
+  defender.health = (defender.health - @types.throw_damage).clamp(
+    min=0,
+    max=@types.health_max,
   )
   defender.action = ActionKnockdown
   defender.hitstun = 0

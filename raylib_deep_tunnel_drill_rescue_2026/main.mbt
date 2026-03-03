@@ -144,12 +144,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns v clamped to the inclusive integer range [lo, hi].
-fn clampi(v : Int, lo : Int, hi : Int) -> Int {
-  v.clamp(min=lo, max=hi)
-}
-
-///|
 /// Returns the larger of two float values.
 fn maxf(a : Float, b : Float) -> Float {
   if a > b {
@@ -1671,7 +1665,7 @@ fn main {
     draw_player(player, scene_t)
 
     if player.sonar_t > 0.0 {
-      let alpha : Int = clampi((player.sonar_t * 130.0).to_int(), 0, 220)
+      let alpha : Int = (player.sonar_t * 130.0).to_int().clamp(min=0, max=220)
       @raylib.draw_line_ex(
         @raylib.Vector2::new(player.x, player.y),
         @raylib.Vector2::new(player.sonar_tx, player.sonar_ty),

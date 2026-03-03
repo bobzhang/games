@@ -189,8 +189,8 @@ fn spawn_order(game : @types.Game) -> Bool {
 ///|
 /// Moves the cursor by `(dx, dy)` within grid bounds and updates the HUD message.
 fn move_cursor(game : @types.Game, dx : Int, dy : Int) -> Unit {
-  game.cursor_x = @types.clampi(game.cursor_x + dx, 0, @types.station_cols - 1)
-  game.cursor_y = @types.clampi(game.cursor_y + dy, 0, @types.station_rows - 1)
+  game.cursor_x = (game.cursor_x + dx).clamp(min=0, max=@types.station_cols - 1)
+  game.cursor_y = (game.cursor_y + dy).clamp(min=0, max=@types.station_rows - 1)
   @types.set_message(
     game,
     @types.station_name(@types.station_at(game.cursor_x, game.cursor_y)),
@@ -281,11 +281,11 @@ fn interact_spice(game : @types.Game) -> Unit {
 /// Handles J interaction at the prep board: starts prep, reports progress, or collects output.
 fn interact_prep(game : @types.Game) -> Unit {
   if game.prep.active {
-    let percent = @types.clampi(
-      (game.prep.progress / @types.maxf(game.prep.target, 0.01) * 100.0).to_int(),
-      0,
-      100,
-    )
+    let percent = (game.prep.progress /
+      @types.maxf(game.prep.target, 0.01) *
+      100.0)
+      .to_int()
+      .clamp(min=0, max=100)
     @types.set_message(game, "Prep in progress \{percent}%")
     return
   }

@@ -692,7 +692,10 @@ fn update_trains(game : @types.Game, dt : Float) -> Unit {
 
       if train.prev_x < jx && train.x >= jx {
         let dir : Int = game.switch_state[j]
-        train.lane = @types.clampi(train.lane + dir, 0, @types.train_lane_n - 1)
+        train.lane = (train.lane + dir).clamp(
+          min=0,
+          max=@types.train_lane_n - 1,
+        )
         train.passed_junction = j
       } else {
         break
