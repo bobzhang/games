@@ -86,10 +86,6 @@ pub let tower_splash : Int = 6
 /// Tower type identifier for the support tower that boosts nearby towers.
 pub let tower_buff : Int = 7
 
-///|
-/// Total number of distinct tower types available.
-pub let tower_type_count : Int = 8
-
 // Tower costs (base cost for level 1)
 
 ///|
@@ -280,34 +276,6 @@ pub let target_mode_count : Int = 4
 
 // Projectile types
 
-///|
-/// Projectile type for arrow tower bullets.
-pub let proj_bullet : Int = 0
-
-///|
-/// Projectile type for cannon tower shells.
-pub let proj_cannonball : Int = 1
-
-///|
-/// Projectile type for frost tower ice shards.
-pub let proj_ice_shard : Int = 2
-
-///|
-/// Projectile type for lightning tower bolts.
-pub let proj_lightning_bolt : Int = 3
-
-///|
-/// Projectile type for flame tower fireballs.
-pub let proj_fireball : Int = 4
-
-///|
-/// Projectile type for sniper tower rounds.
-pub let proj_sniper_round : Int = 5
-
-///|
-/// Projectile type for splash tower bombs.
-pub let proj_splash_bomb : Int = 6
-
 // Projectile speeds
 
 ///|
@@ -358,26 +326,6 @@ pub let splash_radius_flame : Float = 1.5
 /// Status effect type for no active effect.
 pub let effect_none : Int = 0
 
-///|
-/// Status effect type for movement speed reduction.
-pub let effect_slow : Int = 1
-
-///|
-/// Status effect type for damage-over-time burn.
-pub let effect_burn : Int = 2
-
-///|
-/// Status effect type for complete movement stun.
-pub let effect_stun : Int = 3
-
-///|
-/// Status effect type for lightning chain damage propagation.
-pub let effect_chain : Int = 4
-
-///|
-/// Status effect type for temporary armor reduction.
-pub let effect_armor_break : Int = 5
-
 // Status effect durations
 
 ///|
@@ -392,10 +340,6 @@ pub let burn_duration : Float = 3.0
 /// Duration in seconds of the stun immobilization effect.
 pub let stun_duration : Float = 1.0
 
-///|
-/// Duration in seconds of the armor break debuff.
-pub let armor_break_duration : Float = 4.0
-
 // Status effect strengths
 
 ///|
@@ -405,10 +349,6 @@ pub let slow_strength : Float = 0.4
 ///|
 /// Damage per second dealt by the burn status effect.
 pub let burn_dps : Float = 5.0
-
-///|
-/// Armor effectiveness multiplier during armor break (0.5 = halved armor).
-pub let armor_break_amount : Float = 0.5
 
 // Lightning chain parameters
 
@@ -489,10 +429,6 @@ pub let enemy_camo : Int = 8
 ///|
 /// Enemy type identifier for splitters that spawn children on death.
 pub let enemy_splitter : Int = 9
-
-///|
-/// Total number of distinct enemy types.
-pub let enemy_type_count : Int = 10
 
 // Enemy armor values (damage reduction flat amount)
 
@@ -642,10 +578,6 @@ pub let max_path_nodes : Int = 64
 /// Total number of enemy waves per game session.
 pub let max_waves : Int = 30
 
-///|
-/// Maximum number of concurrent status effects on a single enemy.
-pub let max_status_effects : Int = 4
-
 // Camera
 
 ///|
@@ -669,10 +601,6 @@ pub let starting_gold : Int = 250
 ///|
 /// Number of lives the player starts with.
 pub let starting_lives : Int = 25
-
-///|
-/// Base gold reward for killing a standard enemy.
-pub let kill_gold_base : Int = 10
 
 ///|
 /// Fraction of current gold awarded as interest each interval.
@@ -753,20 +681,8 @@ pub let map_count : Int = 5
 // Special ability cooldowns
 
 ///|
-/// Cooldown in seconds for the lightning chain special ability.
-pub let ability_lightning_chain_cd : Float = 5.0
-
-///|
-/// Cooldown in seconds for the sniper critical shot ability.
-pub let ability_sniper_crit_cd : Float = 0.0
-
-///|
 /// Cooldown in seconds for the flame aura special ability.
 pub let ability_flame_aura_cd : Float = 3.0
-
-///|
-/// Cooldown in seconds for the frost freeze special ability.
-pub let ability_frost_freeze_cd : Float = 8.0
 
 ///|
 /// Cooldown in seconds for the buff pulse special ability.
@@ -785,14 +701,6 @@ pub let health_bar_width : Float = 1.2
 ///|
 /// Height of the enemy health bar in world units.
 pub let health_bar_height : Float = 0.08
-
-///|
-/// Height of the tower base platform in world units.
-pub let tower_base_height : Float = 0.6
-
-///|
-/// Height of the tower body in world units.
-pub let tower_body_height : Float = 1.4
 
 ///|
 /// Side length of the minimap overlay in pixels.

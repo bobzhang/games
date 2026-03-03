@@ -59,14 +59,6 @@ pub fn distance3d(
 }
 
 ///|
-/// Returns the squared distance between two points on the XZ plane.
-pub fn distance2d_sq(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
-  let dx = x1 - x2
-  let dz = z1 - z2
-  dx * dx + dz * dz
-}
-
-///|
 /// Returns whether grid coordinates (`gx`, `gy`) are within the map bounds.
 pub fn in_bounds(gx : Int, gy : Int) -> Bool {
   gx >= 0 && gy >= 0 && gx < map_w && gy < map_h
@@ -391,30 +383,6 @@ pub fn tower_name(kind : Int) -> String {
 }
 
 ///|
-/// Returns a short combat description for a tower of the given `kind`.
-pub fn tower_description(kind : Int) -> String {
-  if kind == tower_arrow {
-    "Fast single-target"
-  } else if kind == tower_cannon {
-    "Slow splash damage"
-  } else if kind == tower_frost {
-    "Slows enemies"
-  } else if kind == tower_lightning {
-    "Chain lightning"
-  } else if kind == tower_flame {
-    "Rapid fire burn"
-  } else if kind == tower_sniper {
-    "High damage crit"
-  } else if kind == tower_splash {
-    "Wide area damage"
-  } else if kind == tower_buff {
-    "Boosts nearby towers"
-  } else {
-    ""
-  }
-}
-
-///|
 /// Returns the display name for an enemy of the given `kind`.
 pub fn enemy_name(kind : Int) -> String {
   if kind == enemy_basic {
@@ -567,34 +535,6 @@ pub fn calc_damage(
 }
 
 // Path interpolation: get world position at a given path progress
-
-///|
-/// Returns the interpolated world X position along the path at `path_idx` and `progress`.
-pub fn path_position_x(game : Game, path_idx : Int, progress : Float) -> Float {
-  if path_idx >= game.path_count - 1 {
-    if game.path_count > 0 {
-      return game.path_nodes[game.path_count - 1].x
-    }
-    return 0.0
-  }
-  let p0 = game.path_nodes[path_idx]
-  let p1 = game.path_nodes[path_idx + 1]
-  lerpf(p0.x, p1.x, progress)
-}
-
-///|
-/// Returns the interpolated world Z position along the path at `path_idx` and `progress`.
-pub fn path_position_z(game : Game, path_idx : Int, progress : Float) -> Float {
-  if path_idx >= game.path_count - 1 {
-    if game.path_count > 0 {
-      return game.path_nodes[game.path_count - 1].z
-    }
-    return 0.0
-  }
-  let p0 = game.path_nodes[path_idx]
-  let p1 = game.path_nodes[path_idx + 1]
-  lerpf(p0.z, p1.z, progress)
-}
 
 // Get total path progress for an enemy (for targeting comparison)
 

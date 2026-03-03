@@ -533,12 +533,6 @@ pub fn enemy_spawns_children(kind : Int) -> Bool {
 
 // Check if enemy type heals others
 
-///|
-/// Returns whether the enemy `kind` heals nearby allies.
-pub fn enemy_is_healer(kind : Int) -> Bool {
-  kind == 5
-}
-
 // Check if enemy type has shield
 
 ///|
