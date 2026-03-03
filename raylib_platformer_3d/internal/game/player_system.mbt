@@ -24,7 +24,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   let rx = input_x * cos_a - input_z * sin_a
   let rz = input_x * sin_a + input_z * cos_a
   // Normalize input
-  let input_len = (rx * rx + rz * rz).sqrt()
+  let input_len = @math.hypotf(rx, rz)
   let mut nx = rx
   let mut nz = rz
   if input_len > 0.01 {

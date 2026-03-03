@@ -608,7 +608,7 @@ fn main {
         if paddle_hit(px, py, paddle_r, puck_x, puck_y) {
           let dx = puck_x - px
           let dy = puck_y - py
-          let d = (dx * dx + dy * dy).sqrt()
+          let d = @math.hypotf(dx, dy)
           if d > 0.01 {
             let nx = dx / d
             let ny = dy / d
@@ -632,7 +632,7 @@ fn main {
         if paddle_hit(aix, aiy, paddle_r, puck_x, puck_y) {
           let dx = puck_x - aix
           let dy = puck_y - aiy
-          let d = (dx * dx + dy * dy).sqrt()
+          let d = @math.hypotf(dx, dy)
           if d > 0.01 {
             let nx = dx / d
             let ny = dy / d

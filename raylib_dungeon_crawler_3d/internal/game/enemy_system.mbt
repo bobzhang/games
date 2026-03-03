@@ -101,7 +101,7 @@ fn update_patrol(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit {
   // Move toward patrol point slowly
   let ddx = e.patrol_x - e.x
   let ddz = e.patrol_z - e.z
-  let dd = (ddx * ddx + ddz * ddz).sqrt()
+  let dd = @math.hypotf(ddx, ddz)
   if dd > 0.5 {
     let nx = ddx / dd
     let nz = ddz / dd
@@ -194,7 +194,7 @@ fn update_archer_enemy(
     // Back away
     let dx = e.x - game.player_x
     let dz = e.z - game.player_z
-    let d = (dx * dx + dz * dz).sqrt()
+    let d = @math.hypotf(dx, dz)
     if d > 0.1 {
       let nx = dx / d
       let nz = dz / d
@@ -298,7 +298,7 @@ fn update_bat_enemy(
   if dist > melee_range {
     let dx = game.player_x + erratic_x - e.x
     let dz = game.player_z + erratic_z - e.z
-    let d = (dx * dx + dz * dz).sqrt()
+    let d = @math.hypotf(dx, dz)
     if d > 0.1 {
       let nx = dx / d
       let nz = dz / d
@@ -480,7 +480,7 @@ fn update_lich_enemy(
     // Back away
     let dx = e.x - game.player_x
     let dz = e.z - game.player_z
-    let d = (dx * dx + dz * dz).sqrt()
+    let d = @math.hypotf(dx, dz)
     if d > 0.1 {
       let nx = dx / d
       let nz = dz / d
@@ -599,7 +599,7 @@ fn shoot_projectile(game : @types.Game, e : @types.Enemy) -> Unit {
   // Direction toward player
   let dx = game.player_x - e.x
   let dz = game.player_z - e.z
-  let d = (dx * dx + dz * dz).sqrt()
+  let d = @math.hypotf(dx, dz)
   if d > 0.1 {
     p.vx = dx / d * @types.projectile_speed
     p.vz = dz / d * @types.projectile_speed
@@ -627,7 +627,7 @@ fn shoot_web(game : @types.Game, e : @types.Enemy) -> Unit {
   p.z = e.z
   let dx = game.player_x - e.x
   let dz = game.player_z - e.z
-  let d = (dx * dx + dz * dz).sqrt()
+  let d = @math.hypotf(dx, dz)
   if d > 0.1 {
     p.vx = dx / d * 5.0
     p.vz = dz / d * 5.0
@@ -655,7 +655,7 @@ fn shoot_lich_bolt(game : @types.Game, e : @types.Enemy) -> Unit {
   p.z = e.z
   let dx = game.player_x - e.x
   let dz = game.player_z - e.z
-  let d = (dx * dx + dz * dz).sqrt()
+  let d = @math.hypotf(dx, dz)
   if d > 0.1 {
     p.vx = dx / d * 7.0
     p.vz = dz / d * 7.0

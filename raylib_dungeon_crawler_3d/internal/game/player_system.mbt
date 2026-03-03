@@ -37,7 +37,7 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   // Sprint
   game.sprinting = @raylib.is_key_down(@raylib.KeyLeftShift)
   // Normalize movement
-  let move_len = (move_x * move_x + move_z * move_z).sqrt()
+  let move_len = @math.hypotf(move_x, move_z)
   if move_len > 0.01 {
     move_x = move_x / move_len
     move_z = move_z / move_len

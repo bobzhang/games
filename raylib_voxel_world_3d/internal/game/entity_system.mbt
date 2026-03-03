@@ -32,7 +32,7 @@ pub fn calculate_flee_target(game : @types.Game, ent : @types.Entity) -> Unit {
   let player = game.player
   let dx = ent.x - player.x
   let dz = ent.z - player.z
-  let dist = (dx * dx + dz * dz).sqrt()
+  let dist = @math.hypotf(dx, dz)
   if dist > 0.1 {
     let flee_dist : Float = 15.0
     ent.target_x = ent.x + dx / dist * flee_dist
@@ -67,7 +67,7 @@ pub fn pathfind_toward_target(
 ) -> Unit {
   let dx = target_x - ent.x
   let dz = target_z - ent.z
-  let dist = (dx * dx + dz * dz).sqrt()
+  let dist = @math.hypotf(dx, dz)
   if dist < 0.5 {
     ent.vx = 0.0
     ent.vz = 0.0
@@ -315,7 +315,7 @@ pub fn resolve_entity_player_collision(
   let player = game.player
   let dx = ent.x - player.x
   let dz = ent.z - player.z
-  let dist = (dx * dx + dz * dz).sqrt()
+  let dist = @math.hypotf(dx, dz)
   if dist > 0.01 {
     let push_force : Float = 3.0
     ent.vx += dx / dist * push_force
@@ -447,7 +447,7 @@ pub fn resolve_entity_entity_collisions(game : @types.Game) -> Unit {
       }
       let dx = ent_b.x - ent_a.x
       let dz = ent_b.z - ent_a.z
-      let dist = (dx * dx + dz * dz).sqrt()
+      let dist = @math.hypotf(dx, dz)
       let min_dist : Float = 0.7
       if dist < min_dist && dist > 0.01 {
         let push = (min_dist - dist) * 2.0
@@ -631,7 +631,7 @@ pub fn update_skeleton_behavior(
     // Back away
     let dx = ent.x - player.x
     let dz = ent.z - player.z
-    let d = (dx * dx + dz * dz).sqrt()
+    let d = @math.hypotf(dx, dz)
     if d > 0.01 {
       ent.target_x = ent.x + dx / d * 4.0
       ent.target_z = ent.z + dz / d * 4.0

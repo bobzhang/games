@@ -536,7 +536,7 @@ fn apply_explosion(
       // Knockback
       let dx = enemy.x - x
       let dz = enemy.z - z
-      let knockback_dist = (dx * dx + dz * dz).sqrt()
+      let knockback_dist = @math.hypotf(dx, dz)
       if knockback_dist > 0.01 {
         let knockback_strength : Float = 5.0 * dmg_factor
         enemy.x += dx / knockback_dist * knockback_strength

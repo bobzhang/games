@@ -830,7 +830,7 @@ fn check_enemy_collision(game : @types.Game) -> Unit {
           // Knock back
           let knock_dir_x = game.px - e.x
           let knock_dir_z = game.pz - e.z
-          let knock_len = (knock_dir_x * knock_dir_x + knock_dir_z * knock_dir_z).sqrt()
+          let knock_len = @math.hypotf(knock_dir_x, knock_dir_z)
           if knock_len > 0.01 {
             game.vx = knock_dir_x / knock_len * 5.0
             game.vz = knock_dir_z / knock_len * 5.0

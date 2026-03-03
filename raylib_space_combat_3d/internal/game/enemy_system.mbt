@@ -392,7 +392,7 @@ fn update_bomber_ai(
 
   // Face player
   e.yaw = @math.atan2f(dx, dz)
-  e.pitch = @math.atan2f(dy, (dx * dx + dz * dz).sqrt())
+  e.pitch = @math.atan2f(dy, @math.hypotf(dx, dz))
   ignore(game)
   ignore(dist)
 }
@@ -442,7 +442,7 @@ fn update_cruiser_ai(
 
   // Face player
   e.yaw = @math.atan2f(dx, dz)
-  e.pitch = @math.atan2f(dy, (dx * dx + dz * dz).sqrt())
+  e.pitch = @math.atan2f(dy, @math.hypotf(dx, dz))
   ignore(game)
   ignore(dist)
 }
@@ -479,7 +479,7 @@ fn update_capital_ai(
   e.yaw = @types.lerpf(e.yaw, target_yaw, 0.5 * dt)
   e.pitch = @types.lerpf(
     e.pitch,
-    @math.atan2f(dy, (dx * dx + dz * dz).sqrt()),
+    @math.atan2f(dy, @math.hypotf(dx, dz)),
     0.3 * dt,
   )
   ignore(game)

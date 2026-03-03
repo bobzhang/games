@@ -411,7 +411,7 @@ pub fn push_from_pillar(
 ) -> (Float, Float, Bool) {
   let dx = x - px
   let dz = z - pz
-  let dist = (dx * dx + dz * dz).sqrt()
+  let dist = @math.hypotf(dx, dz)
   let min_dist = radius + pradius
   if dist < min_dist && dist > 0.001 {
     let push = min_dist - dist
@@ -443,7 +443,7 @@ pub fn push_from_box(
   let closest_z = clampf(z, bz - half_d, bz + half_d)
   let dx = x - closest_x
   let dz = z - closest_z
-  let dist = (dx * dx + dz * dz).sqrt()
+  let dist = @math.hypotf(dx, dz)
   if dist < radius && dist > 0.001 {
     let push = radius - dist
     let nx = dx / dist

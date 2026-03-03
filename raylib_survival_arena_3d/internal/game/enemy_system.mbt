@@ -83,7 +83,7 @@ fn update_enemies_ai(game : @types.Game, dt : Float) -> Unit {
         // Push enemy away
         let bdx = enemy.x - barr.x
         let bdz = enemy.z - barr.z
-        let blen = (bdx * bdx + bdz * bdz).sqrt()
+        let blen = @math.hypotf(bdx, bdz)
         if blen > 0.01 {
           let push_dist = @types.barricade_size * 0.5 + enemy.size * 0.5 - bdist
           enemy.x += bdx / blen * push_dist
@@ -109,7 +109,7 @@ fn update_enemies_ai(game : @types.Game, dt : Float) -> Unit {
       }
       let edx = other.x - enemy.x
       let edz = other.z - enemy.z
-      let edist = (edx * edx + edz * edz).sqrt()
+      let edist = @math.hypotf(edx, edz)
       let min_dist = (enemy.size + other.size) * 0.5
       if edist < min_dist && edist > 0.01 {
         let push = (min_dist - edist) * 0.5

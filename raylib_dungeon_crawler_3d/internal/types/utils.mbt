@@ -862,7 +862,7 @@ pub fn pathfind_step(
 ) -> (Float, Float) {
   let dx = to_x - from_x
   let dz = to_z - from_z
-  let d = (dx * dx + dz * dz).sqrt()
+  let d = @math.hypotf(dx, dz)
   if d < 0.1 {
     return (0.0, 0.0)
   }

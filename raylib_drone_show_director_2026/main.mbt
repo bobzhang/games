@@ -1894,7 +1894,7 @@ fn main {
       if move_d {
         input_y = input_y + 1.0
       }
-      let norm : Float = (input_x * input_x + input_y * input_y).sqrt()
+      let norm : Float = @math.hypotf(input_x, input_y)
       if norm > 0.001 {
         input_x = input_x / norm
         input_y = input_y / norm

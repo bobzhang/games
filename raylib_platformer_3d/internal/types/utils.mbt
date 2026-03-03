@@ -208,7 +208,7 @@ pub fn wrap_angle(angle : Float) -> Float {
 ///|
 /// Normalizes an XZ vector and returns `(nx, nz, length)`.
 pub fn normalize2d(x : Float, z : Float) -> (Float, Float, Float) {
-  let len = (x * x + z * z).sqrt()
+  let len = @math.hypotf(x, z)
   if len > 0.001 {
     (x / len, z / len, len)
   } else {

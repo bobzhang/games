@@ -750,7 +750,7 @@ fn update_thieves(game : @types.Game, dt : Float) -> Unit {
       let dx = gate.0 - thief.x
       let dy = gate.1 - thief.y
       let inv = Float::from_int(1) /
-        @types.maxf((dx * dx + dy * dy).sqrt(), 0.001)
+        @types.maxf(@math.hypotf(dx, dy), 0.001)
       vx = dx * inv * (thief.speed * 0.36)
       vy = dy * inv * (thief.speed * 0.36)
     }

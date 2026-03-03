@@ -144,7 +144,7 @@ fn main {
         let m = @raylib.get_mouse_position()
         let mut dx = m.x - bx
         let mut dy = m.y - by
-        let d = (dx * dx + dy * dy).sqrt()
+        let d = @math.hypotf(dx, dy)
         if d > 0.001 {
           dx = dx / d
           dy = dy / d
@@ -205,7 +205,7 @@ fn main {
             bvy = -bvy * 0.72
           }
 
-          let spd = (bvx * bvx + bvy * bvy).sqrt()
+          let spd = @math.hypotf(bvx, bvy)
           if shot_time > 0.9 && spd < 36.0 {
             moving = false
             bvx = 0.0

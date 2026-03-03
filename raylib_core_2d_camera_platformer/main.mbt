@@ -161,7 +161,7 @@ fn update_camera_center_smooth_follow(
   let h = Float::from_int(height)
   let diff_x = player_x - camera.target.x
   let diff_y = player_y - camera.target.y
-  let length = (diff_x * diff_x + diff_y * diff_y).sqrt()
+  let length = @math.hypotf(diff_x, diff_y)
   let mut target_x = camera.target.x
   let mut target_y = camera.target.y
   if length > min_effect_length {

@@ -1343,7 +1343,7 @@ fn main {
           aim_y = dy * inv
         }
       } else if inp_x * inp_x + inp_y * inp_y > 0.01 {
-        let inv : Float = 1.0 / (inp_x * inp_x + inp_y * inp_y).sqrt()
+        let inv : Float = 1.0 / @math.hypotf(inp_x, inp_y)
         aim_x = inp_x * inv
         aim_y = inp_y * inv
       }

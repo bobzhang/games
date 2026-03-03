@@ -218,7 +218,7 @@ fn ai_patrol(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit {
   let dx = target_x - e.x
   let dz = target_z - e.z
   let dy = e.target_y - e.y
-  let dist_h = (dx * dx + dz * dz).sqrt()
+  let dist_h = @math.hypotf(dx, dz)
   if dist_h > 1.0 {
     e.vx = dx / dist_h * e.speed
     e.vz = dz / dist_h * e.speed
@@ -239,7 +239,7 @@ fn ai_engage(
   let dx = player.x - e.x
   let dy = player.y - e.y
   let dz = player.z - e.z
-  let dist_h = (dx * dx + dz * dz).sqrt()
+  let dist_h = @math.hypotf(dx, dz)
   let engage_speed = e.speed * (1.0 + e.aggression * 0.5)
   if dist_h > 1.0 {
     // Pursuit with lead
@@ -248,7 +248,7 @@ fn ai_engage(
     let pred_z = player.z + player.speed * @math.cosf(player.yaw) * lead_factor
     let ldx = pred_x - e.x
     let ldz = pred_z - e.z
-    let ldist = (ldx * ldx + ldz * ldz).sqrt()
+    let ldist = @math.hypotf(ldx, ldz)
     if ldist > 1.0 {
       e.vx = @types.lerpf(e.vx, ldx / ldist * engage_speed, 2.0 * dt)
       e.vz = @types.lerpf(e.vz, ldz / ldist * engage_speed, 2.0 * dt)
@@ -272,7 +272,7 @@ fn ai_evade(
   // Break turn - turn perpendicular to player direction and climb
   let dx = player.x - e.x
   let dz = player.z - e.z
-  let dist_h = (dx * dx + dz * dz).sqrt()
+  let dist_h = @math.hypotf(dx, dz)
   if dist_h > 1.0 {
     // Turn perpendicular (cross product with up)
     let perp_x = -dz / dist_h
@@ -300,7 +300,7 @@ fn ai_flee(
   // Fly directly away from player
   let dx = e.x - player.x
   let dz = e.z - player.z
-  let dist_h = (dx * dx + dz * dz).sqrt()
+  let dist_h = @math.hypotf(dx, dz)
   if dist_h > 1.0 {
     e.vx = @types.lerpf(e.vx, dx / dist_h * e.speed * 1.3, 2.0 * dt)
     e.vz = @types.lerpf(e.vz, dz / dist_h * e.speed * 1.3, 2.0 * dt)

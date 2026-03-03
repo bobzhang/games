@@ -109,5 +109,5 @@ pub fn lane_base_y(index : Int) -> Float {
 pub fn ellipse_norm(dx : Float, dy : Float, rx : Float, ry : Float) -> Float {
   let nx = dx / maxf(rx, 0.001)
   let ny = dy / maxf(ry, 0.001)
-  (nx * nx + ny * ny).sqrt()
+  @math.hypotf(nx, ny)
 }

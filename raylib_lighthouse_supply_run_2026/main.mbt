@@ -670,7 +670,7 @@ fn update_pirates(
 
     let dx : Float = tx - pirates[i].x
     let dy : Float = ty - pirates[i].y
-    let d : Float = maxf(0.001, (dx * dx + dy * dy).sqrt())
+    let d : Float = maxf(0.001, @math.hypotf(dx, dy))
 
     let chase_scale : Float = if player.cargo > 0 { 1.1 } else { 0.92 }
 

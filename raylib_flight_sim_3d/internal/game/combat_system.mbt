@@ -23,7 +23,7 @@ pub fn ai_patrol_advanced(
   let dx = wp_x - e.x
   let dy = wp_y - e.y
   let dz = wp_z - e.z
-  let dist_h = (dx * dx + dz * dz).sqrt()
+  let dist_h = @math.hypotf(dx, dz)
   // If close to waypoint, advance to next
   if dist_h < 8.0 {
     e.patrol_index = (e.patrol_index + 1) % num_waypoints
@@ -81,7 +81,7 @@ pub fn ai_engage_advanced(
   let ldx = lead_x - e.x
   let ldy = lead_y - e.y
   let ldz = lead_z - e.z
-  let ldist_h = (ldx * ldx + ldz * ldz).sqrt()
+  let ldist_h = @math.hypotf(ldx, ldz)
   if ldist_h > 1.0 {
     let target_heading = @math.atan2f(ldx, ldz)
     let heading_diff = @types.angle_diff(e.heading, target_heading)
@@ -128,7 +128,7 @@ pub fn ai_evasive_maneuver(
     // Break turn: sharp turn away from player
     let dx = e.x - player.x
     let dz = e.z - player.z
-    let dist_h = (dx * dx + dz * dz).sqrt()
+    let dist_h = @math.hypotf(dx, dz)
     if dist_h > 1.0 {
       let away_heading = @math.atan2f(dx, dz)
       // Add perpendicular offset for corkscrew evasion
@@ -211,7 +211,7 @@ pub fn ai_formation_fly(
   let dx = target_x - e.x
   let dy = target_y - e.y
   let dz = target_z - e.z
-  let dist_h = (dx * dx + dz * dz).sqrt()
+  let dist_h = @math.hypotf(dx, dz)
   if dist_h > 2.0 {
     let target_heading = @math.atan2f(dx, dz)
     let heading_diff = @types.angle_diff(e.heading, target_heading)
@@ -246,7 +246,7 @@ pub fn turret_track_player(
   let dx = player.x - t.x
   let dy = player.y - (t.y + 1.5)
   let dz = player.z - t.z
-  let dist_h = (dx * dx + dz * dz).sqrt()
+  let dist_h = @math.hypotf(dx, dz)
   // Calculate predicted position based on player velocity
   let (pfx, pfy, pfz) = @types.get_forward(player.pitch, player.yaw)
   let pvx = pfx * player.speed
@@ -264,7 +264,7 @@ pub fn turret_track_player(
   let pred_dy = pred_y - (t.y + 1.5)
   let pred_dz = pred_z - t.z
   let target_rot = @math.atan2f(pred_dx, pred_dz)
-  let pred_dist_h = (pred_dx * pred_dx + pred_dz * pred_dz).sqrt()
+  let pred_dist_h = @math.hypotf(pred_dx, pred_dz)
   let target_elev = @math.atan2f(pred_dy, pred_dist_h)
   // Smooth rotation towards target
   let rot_diff = @types.angle_diff(t.rotation, target_rot)
@@ -595,7 +595,7 @@ pub fn calculate_lead_angle(
 ) -> Float {
   let dx = target_x - shooter_x
   let dz = target_z - shooter_z
-  let dist = (dx * dx + dz * dz).sqrt()
+  let dist = @math.hypotf(dx, dz)
   let time_to_target : Float = if dist > 1.0 {
     dist / bullet_speed
   } else {

@@ -2083,7 +2083,7 @@ fn main {
         move_y = move_y + 1.0
       }
 
-      let norm : Float = (move_x * move_x + move_y * move_y).sqrt()
+      let norm : Float = @math.hypotf(move_x, move_y)
       if norm > 0.001 {
         move_x = move_x / norm
         move_y = move_y / norm

@@ -2104,7 +2104,7 @@ fn main {
         input_y = input_y + 1.0
       }
 
-      let norm : Float = (input_x * input_x + input_y * input_y).sqrt()
+      let norm : Float = @math.hypotf(input_x, input_y)
       if norm > 0.001 {
         input_x = input_x / norm
         input_y = input_y / norm
@@ -2276,7 +2276,7 @@ fn main {
           let push : Float = storm.intensity * 90.0
           let dx : Float = craft.x - storm.x
           let dy : Float = craft.y - storm.y
-          let dd : Float = maxf((dx * dx + dy * dy).sqrt(), 0.001)
+          let dd : Float = maxf(@math.hypotf(dx, dy), 0.001)
           craft.vx = craft.vx + dx / dd * push * dt
           craft.vy = craft.vy + dy / dd * push * dt
           craft.hull = craft.hull - dt * storm.intensity * 2.3

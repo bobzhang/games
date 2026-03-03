@@ -143,7 +143,7 @@ fn ball_vs_bumper(ball : Ball, bx : Float, by : Float, r : Float) -> Bool {
   if dx * dx + dy * dy > rr * rr {
     return false
   }
-  let d = (dx * dx + dy * dy).sqrt()
+  let d = @math.hypotf(dx, dy)
   let nx : Float = if d < (0.0001 : Float) { (1.0 : Float) } else { dx / d }
   let ny : Float = if d < (0.0001 : Float) { (0.0 : Float) } else { dy / d }
   ball.x = bx + nx * (rr + (0.2 : Float))

@@ -768,7 +768,7 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
         let ep = @types.enemy_world_xy(e)
         let dx = player_xy.0 - ep.0
         let dy = player_xy.1 - ep.1
-        let d = @types.maxf(0.01, (dx * dx + dy * dy).sqrt())
+        let d = @types.maxf(0.01, @math.hypotf(dx, dy))
 
         let sp : Float = if e.kind == 1 {
           160.0

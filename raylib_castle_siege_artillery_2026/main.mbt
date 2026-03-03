@@ -115,7 +115,7 @@ fn launch(
 fn blast_damage(ex : Float, ey : Float, cx : Float, cy : Float) -> Int {
   let dx = ex - cx
   let dy = ey - cy
-  let d = (dx * dx + dy * dy).sqrt()
+  let d = @math.hypotf(dx, dy)
   if d > 134.0 {
     0
   } else {

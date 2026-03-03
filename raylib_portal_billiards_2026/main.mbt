@@ -406,7 +406,7 @@ fn main {
       if fire && not(moving) && shots_left > 0 && balls[0].active {
         let dx = aim_x - balls[0].x
         let dy = aim_y - balls[0].y
-        let d = (dx * dx + dy * dy).sqrt()
+        let d = @math.hypotf(dx, dy)
         if d > 0.001 {
           balls[0].vx = dx / d * power
           balls[0].vy = dy / d * power
@@ -685,7 +685,7 @@ fn main {
     if balls[0].active && not(moving_any(balls)) && not(over) {
       let dx = aim_x - balls[0].x
       let dy = aim_y - balls[0].y
-      let d = (dx * dx + dy * dy).sqrt()
+      let d = @math.hypotf(dx, dy)
       if d > 0.001 {
         let nx = dx / d
         let ny = dy / d

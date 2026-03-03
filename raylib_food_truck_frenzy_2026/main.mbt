@@ -1861,7 +1861,7 @@ fn main {
         my = my + 1.0
       }
 
-      let norm : Float = (mx * mx + my * my).sqrt()
+      let norm : Float = @math.hypotf(mx, my)
       if norm > 0.001 {
         mx = mx / norm
         my = my / norm

@@ -381,7 +381,7 @@ fn draw_raiders(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
     let mut nx = raider.vx
     let mut ny = raider.vy
-    let n_len = (nx * nx + ny * ny).sqrt()
+    let n_len = @math.hypotf(nx, ny)
     if n_len > 0.01 {
       nx = nx / n_len
       ny = ny / n_len

@@ -476,7 +476,7 @@ pub fn damage_player(game : @types.Game, amount : Int) -> Unit {
 fn update_distance_tracking(game : @types.Game) -> Unit {
   let dx = game.player.x - game.prev_pos_x
   let dz = game.player.z - game.prev_pos_z
-  let dist = (dx * dx + dz * dz).sqrt()
+  let dist = @math.hypotf(dx, dz)
   if dist > 0.01 && dist < 10.0 {
     game.distance_walked += dist
   }
@@ -581,7 +581,7 @@ fn update_combat(game : @types.Game, dt : Float) -> Unit {
           // Knockback
           let dx = player.x - ent.x
           let dz = player.z - ent.z
-          let dl = (dx * dx + dz * dz).sqrt()
+          let dl = @math.hypotf(dx, dz)
           if dl > 0.01 {
             player.vx += dx / dl * 5.0
             player.vz += dz / dl * 5.0
@@ -637,7 +637,7 @@ fn update_combat(game : @types.Game, dt : Float) -> Unit {
       // Knockback on entity
       let dx = ent.x - player.x
       let dz = ent.z - player.z
-      let dl = (dx * dx + dz * dz).sqrt()
+      let dl = @math.hypotf(dx, dz)
       if dl > 0.01 {
         ent.vx += dx / dl * 6.0
         ent.vy += 3.0

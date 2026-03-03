@@ -209,7 +209,7 @@ fn main {
           let mpos = @raylib.get_mouse_position()
           let mut dx = mpos.x - px
           let mut dy = mpos.y - py
-          let d = (dx * dx + dy * dy).sqrt()
+          let d = @math.hypotf(dx, dy)
           if d > 0.001 {
             dx = dx / d
             dy = dy / d
@@ -246,7 +246,7 @@ fn main {
           bot.fire_cd = Float::from_int(@raylib.get_random_value(1, 3))
           let mut dx = px - bot.x
           let mut dy = py - bot.y
-          let d = (dx * dx + dy * dy).sqrt()
+          let d = @math.hypotf(dx, dy)
           if d > 0.001 {
             dx = dx / d
             dy = dy / d

@@ -299,7 +299,7 @@ fn spawn_enemy(enemies : Array[Enemy], sector : Int) -> Unit {
   let ty = cy + Float::from_int(@raylib.get_random_value(-120, 120))
   let dx = tx - ex
   let dy = ty - ey
-  let d = (dx * dx + dy * dy).sqrt()
+  let d = @math.hypotf(dx, dy)
   if d <= 0.001 {
     return
   }
@@ -539,7 +539,7 @@ fn main {
 
         let rx = enemies[i].x - cx
         let ry = enemies[i].y - cy
-        let dist = (rx * rx + ry * ry).sqrt()
+        let dist = @math.hypotf(rx, ry)
         let er = enemy_radius(enemies[i].kind)
 
         if dist <= planet_r + er * 0.75 {

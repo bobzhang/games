@@ -70,7 +70,7 @@ fn sight_blocked(
 ) -> Bool {
   let dx = bx - ax
   let dy = by - ay
-  let distance = (dx * dx + dy * dy).sqrt()
+  let distance = @math.hypotf(dx, dy)
   if distance <= 1.0 {
     return false
   }

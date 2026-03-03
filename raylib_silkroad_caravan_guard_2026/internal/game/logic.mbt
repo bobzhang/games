@@ -526,7 +526,7 @@ fn try_shoot(game : @types.Game) -> Unit {
     dy = game.raiders[target].y - game.hero.y
   }
 
-  let len = (dx * dx + dy * dy).sqrt()
+  let len = @math.hypotf(dx, dy)
   if len < 0.001 {
     dx = 1.0
     dy = 0.0
@@ -655,7 +655,7 @@ fn update_hero(game : @types.Game, dt : Float) -> Unit {
       dy = game.hero.facing_y
     }
 
-    let len = (dx * dx + dy * dy).sqrt()
+    let len = @math.hypotf(dx, dy)
     if len < 0.001 {
       dx = 1.0
       dy = 0.0
@@ -797,7 +797,7 @@ fn update_raiders(game : @types.Game, dt : Float) -> Unit {
 
     let dx = tx - game.raiders[i].x
     let dy = ty - game.raiders[i].y
-    let len = (dx * dx + dy * dy).sqrt()
+    let len = @math.hypotf(dx, dy)
 
     if len > 0.01 {
       let ax = dx / len
@@ -886,7 +886,7 @@ fn update_raiders(game : @types.Game, dt : Float) -> Unit {
 
       let push_dx = game.raiders[i].x - game.hero.x
       let push_dy = game.raiders[i].y - game.hero.y
-      let push_len = (push_dx * push_dx + push_dy * push_dy).sqrt()
+      let push_len = @math.hypotf(push_dx, push_dy)
       if push_len > 0.001 {
         game.raiders[i].vx = game.raiders[i].vx + push_dx / push_len * 120.0
         game.raiders[i].vy = game.raiders[i].vy + push_dy / push_len * 120.0

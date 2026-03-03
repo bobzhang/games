@@ -247,7 +247,7 @@ fn update_entity_ai(
   } else if ent.ai_state == @types.ai_wander {
     let dx = ent.target_x - ent.x
     let dz = ent.target_z - ent.z
-    let dist_to_target = (dx * dx + dz * dz).sqrt()
+    let dist_to_target = @math.hypotf(dx, dz)
     if dist_to_target < 1.0 || ent.ai_timer <= 0.0 {
       ent.ai_state = @types.ai_idle
       ent.ai_timer = 1.0 + @types.rand_float(game) * 4.0
@@ -261,7 +261,7 @@ fn update_entity_ai(
     ent.ai_state == @types.ai_attack {
     let dx = ent.target_x - ent.x
     let dz = ent.target_z - ent.z
-    let dist = (dx * dx + dz * dz).sqrt()
+    let dist = @math.hypotf(dx, dz)
     if dist > 0.5 {
       let speed : Float = if is_hostile_mob &&
         (ent.ai_state == @types.ai_chase || ent.ai_state == @types.ai_attack) {

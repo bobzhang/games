@@ -910,7 +910,7 @@ fn update_convoys(
 
       let dx : Float = tx - convoy.x
       let dy : Float = ty - convoy.y
-      let d : Float = maxf(0.0001, (dx * dx + dy * dy).sqrt())
+      let d : Float = maxf(0.0001, @math.hypotf(dx, dy))
 
       let slow : Float = clampf(1.0 - storm_slow, 0.28, 1.0)
       let speed : Float = convoy.speed * slow

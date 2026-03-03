@@ -1027,7 +1027,7 @@ fn draw_radar(game : @types.Game) -> Unit {
     }
     let dx = e.x - player.x
     let dz = e.z - player.z
-    let dist = (dx * dx + dz * dz).sqrt()
+    let dist = @math.hypotf(dx, dz)
     if dist > @types.radar_range {
       continue
     }
@@ -1055,7 +1055,7 @@ fn draw_radar(game : @types.Game) -> Unit {
     }
     let dx = t.x - player.x
     let dz = t.z - player.z
-    let dist = (dx * dx + dz * dz).sqrt()
+    let dist = @math.hypotf(dx, dz)
     if dist > @types.radar_range {
       continue
     }
