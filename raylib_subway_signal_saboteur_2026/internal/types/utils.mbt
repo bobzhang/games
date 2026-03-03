@@ -29,12 +29,6 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of an integer.
-pub fn absi(v : Int) -> Int {
-  v.abs()
-}
-
-///|
 /// Returns the absolute value of a float.
 pub fn absf(v : Float) -> Float {
   v.abs()
@@ -62,7 +56,7 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 ///|
 /// Computes Manhattan distance between two grid cells.
 pub fn manhattan(x0 : Int, y0 : Int, x1 : Int, y1 : Int) -> Int {
-  absi(x1 - x0) + absi(y1 - y0)
+  (x1 - x0).abs() + (y1 - y0).abs()
 }
 
 ///|

@@ -29,12 +29,6 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of an integer.
-pub fn absi(v : Int) -> Int {
-  v.abs()
-}
-
-///|
 /// Linearly interpolates between `a` and `b` by ratio `t`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t
@@ -56,7 +50,7 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 ///|
 /// Returns Manhattan distance between two grid cells.
 pub fn manhattan(x0 : Int, y0 : Int, x1 : Int, y1 : Int) -> Int {
-  absi(x1 - x0) + absi(y1 - y0)
+  (x1 - x0).abs() + (y1 - y0).abs()
 }
 
 ///|

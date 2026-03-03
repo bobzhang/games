@@ -154,12 +154,6 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of an integer.
-fn absi(v : Int) -> Int {
-  v.abs()
-}
-
-///|
 /// Returns a random Float value uniformly distributed between lo and hi.
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
@@ -372,10 +366,10 @@ fn visible_line(
   max_dist : Int,
 ) -> Bool {
   if x0 == x1 {
-    let dist = absi(y1 - y0)
+    let dist = (y1 - y0).abs()
     dist <= max_dist && line_clear(tiles, x0, y0, x1, y1)
   } else if y0 == y1 {
-    let dist = absi(x1 - x0)
+    let dist = (x1 - x0).abs()
     dist <= max_dist && line_clear(tiles, x0, y0, x1, y1)
   } else {
     false
@@ -678,7 +672,7 @@ fn main {
   let cell_free_for_spawn = fn(gx : Int, gy : Int, min_dist : Int) {
     if not(can_walk(tiles, gx, gy)) {
       false
-    } else if absi(gx - player.gx) + absi(gy - player.gy) < min_dist {
+    } else if (gx - player.gx).abs() + (gy - player.gy).abs() < min_dist {
       false
     } else if gx == exit_x && gy == exit_y {
       false
@@ -1107,8 +1101,8 @@ fn main {
         let mut target : Int = -1
         for i in 0..<terminals.length() {
           if terminals[i].active && not(terminals[i].hacked) {
-            let d = absi(terminals[i].gx - player.gx) +
-              absi(terminals[i].gy - player.gy)
+            let d = (terminals[i].gx - player.gx).abs() +
+              (terminals[i].gy - player.gy).abs()
             if d <= 1 {
               target = i
               break
@@ -1159,7 +1153,8 @@ fn main {
           let mut shocked = 0
           for camera in cameras {
             if camera.active {
-              let d = absi(camera.gx - player.gx) + absi(camera.gy - player.gy)
+              let d = (camera.gx - player.gx).abs() +
+                (camera.gy - player.gy).abs()
               if d <= 6 {
                 camera.disable_t = 4.2
                 disabled = disabled + 1
@@ -1169,8 +1164,8 @@ fn main {
 
           for i in 0..<guards.length() {
             if guards[i].active {
-              let d = absi(guards[i].gx - player.gx) +
-                absi(guards[i].gy - player.gy)
+              let d = (guards[i].gx - player.gx).abs() +
+                (guards[i].gy - player.gy).abs()
               if d <= 5 {
                 guards[i].stun_t = 2.6
                 guards[i].hp = guards[i].hp - 10.0
@@ -1284,9 +1279,9 @@ fn main {
           alarm = alarm + dt * (16.0 + Float::from_int(guard_val.kind) * 6.0)
 
           let dist = if guard_val.gx == player.gx {
-            absi(guard_val.gy - player.gy)
+            (guard_val.gy - player.gy).abs()
           } else if guard_val.gy == player.gy {
-            absi(guard_val.gx - player.gx)
+            (guard_val.gx - player.gx).abs()
           } else {
             99
           }
@@ -1303,8 +1298,8 @@ fn main {
           }
         }
 
-        let adj = absi(guard_val.gx - player.gx) +
-          absi(guard_val.gy - player.gy)
+        let adj = (guard_val.gx - player.gx).abs() +
+          (guard_val.gy - player.gy).abs()
         if adj <= 1 && guard_val.atk_cd <= 0.0 {
           guard_val.atk_cd = 0.78
           damage_player(
@@ -1326,7 +1321,7 @@ fn main {
             let tx = player.gx - guard_val.gx
             let ty = player.gy - guard_val.gy
 
-            if absi(tx) > absi(ty) {
+            if tx.abs() > ty.abs() {
               dx = if tx < 0 { -1 } else if tx > 0 { 1 } else { 0 }
             } else {
               dy = if ty < 0 { -1 } else if ty > 0 { 1 } else { 0 }
@@ -1394,7 +1389,7 @@ fn main {
             let gy = @raylib.get_random_value(1, map_h - 2)
             if can_walk(tiles, gx, gy) &&
               guard_at(guards, gx, gy) < 0 &&
-              absi(gx - player.gx) + absi(gy - player.gy) >= 6 {
+              (gx - player.gx).abs() + (gy - player.gy).abs() >= 6 {
               ignore(
                 spawn_guard(
                   guards,
@@ -1419,7 +1414,7 @@ fn main {
           let gy = @raylib.get_random_value(1, map_h - 2)
           if can_walk(tiles, gx, gy) &&
             guard_at(guards, gx, gy) < 0 &&
-            absi(gx - player.gx) + absi(gy - player.gy) >= 7 {
+            (gx - player.gx).abs() + (gy - player.gy).abs() >= 7 {
             ignore(
               spawn_guard(guards, gx, gy, @raylib.get_random_value(0, 2), stage),
             )

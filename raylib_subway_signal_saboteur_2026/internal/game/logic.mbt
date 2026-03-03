@@ -356,7 +356,7 @@ fn try_toggle_switch(game : @types.Game) -> Bool {
   let mut best_d : Int = 999
 
   for i in 0..<@types.junction_n {
-    let d : Int = @types.absi(px - @types.junction_x(i))
+    let d : Int = (px - @types.junction_x(i)).abs()
     if d <= 1 && d < best_d {
       best_i = i
       best_d = d

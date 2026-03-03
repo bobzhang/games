@@ -11,12 +11,6 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of an integer.
-pub fn absi(v : Int) -> Int {
-  v.abs()
-}
-
-///|
 /// Clamps a float to the inclusive range `[low, high]`.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
@@ -862,8 +856,8 @@ pub fn has_line_of_sight(
   x2 : Int,
   y2 : Int,
 ) -> Bool {
-  let dx = absi(x2 - x1)
-  let dy = absi(y2 - y1)
+  let dx = (x2 - x1).abs()
+  let dy = (y2 - y1).abs()
   let sx = if x1 < x2 { 1 } else { -1 }
   let sy = if y1 < y2 { 1 } else { -1 }
   let mut err = dx - dy

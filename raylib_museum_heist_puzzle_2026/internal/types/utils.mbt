@@ -1,10 +1,4 @@
 ///|
-/// Returns absolute value of an integer.
-pub fn absi(v : Int) -> Int {
-  v.abs()
-}
-
-///|
 /// Returns the larger of two integers.
 pub fn maxi(a : Int, b : Int) -> Int {
   a.max(b)
@@ -207,9 +201,9 @@ pub fn has_line_of_sight(
 ) -> Bool {
   let mut x = from_x
   let mut y = from_y
-  let dx = absi(to_x - from_x)
+  let dx = (to_x - from_x).abs()
   let sx = if from_x < to_x { 1 } else if from_x > to_x { -1 } else { 0 }
-  let dy = -absi(to_y - from_y)
+  let dy = -(to_y - from_y).abs()
   let sy = if from_y < to_y { 1 } else if from_y > to_y { -1 } else { 0 }
   let mut err = dx + dy
 
@@ -242,8 +236,8 @@ pub fn has_line_of_sight(
 ///|
 /// Returns whether a target delta lies inside the guard forward cone.
 pub fn in_guard_front(g : Guard, dx : Int, dy : Int) -> Bool {
-  let adx = absi(dx)
-  let ady = absi(dy)
+  let adx = dx.abs()
+  let ady = dy.abs()
 
   if g.dir_x > 0 {
     dx >= 0 && ady <= dx
@@ -273,7 +267,7 @@ pub fn guard_sees_cell(game : Game, g : Guard, cx : Int, cy : Int) -> Bool {
 
   let dx = cx - g.x
   let dy = cy - g.y
-  let dist = maxi(absi(dx), absi(dy))
+  let dist = maxi(dx.abs(), dy.abs())
   if dist > g.view_range {
     return false
   }

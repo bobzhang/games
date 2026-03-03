@@ -127,11 +127,6 @@ fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
-fn absi(v : Int) -> Int {
-  v.abs()
-}
-
-///|
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
@@ -418,7 +413,7 @@ fn main {
   let cell_free_for_spawn = fn(gx : Int, gy : Int, min_dist : Int) -> Bool {
     if not(can_walk(gx, gy)) {
       false
-    } else if absi(gx - player.gx) + absi(gy - player.gy) < min_dist {
+    } else if (gx - player.gx).abs() + (gy - player.gy).abs() < min_dist {
       false
     } else if gx == exit_x && gy == exit_y {
       false
@@ -485,8 +480,8 @@ fn main {
         let gx = @raylib.get_random_value(2, map_w - 3)
         let gy = @raylib.get_random_value(2, map_h - 3)
 
-        if absi(gx - player.gx) + absi(gy - player.gy) > 3 &&
-          absi(gx - exit_x) + absi(gy - exit_y) > 3 {
+        if (gx - player.gx).abs() + (gy - player.gy).abs() > 3 &&
+          (gx - exit_x).abs() + (gy - exit_y).abs() > 3 {
           if tiles[idx(gx, gy)] == 0 {
             tiles[idx(gx, gy)] = 1
             placed = true
@@ -620,8 +615,8 @@ fn main {
           crate_at(crates, gx, gy) < 0 &&
           enemy_at(enemies, gx, gy) < 0 &&
           relic_at(relics, gx, gy) < 0 {
-          if absi(gx - player.gx) + absi(gy - player.gy) >= 5 &&
-            absi(gx - exit_x) + absi(gy - exit_y) >= 5 {
+          if (gx - player.gx).abs() + (gy - player.gy).abs() >= 5 &&
+            (gx - exit_x).abs() + (gy - exit_y).abs() >= 5 {
             let mut exists = false
             for spike in spikes {
               if spike.active && spike.gx == gx && spike.gy == gy {
@@ -1029,8 +1024,8 @@ fn main {
         let mut bomb_hits : Int = 0
         for i in 0..<enemies.length() {
           if enemies[i].active {
-            let dxi = absi(enemies[i].gx - player.gx)
-            let dyi = absi(enemies[i].gy - player.gy)
+            let dxi = (enemies[i].gx - player.gx).abs()
+            let dyi = (enemies[i].gy - player.gy).abs()
             if dxi <= 2 && dyi <= 2 {
               enemies[i].hp = enemies[i].hp - 42.0
               enemies[i].stun_t = 0.8
@@ -1105,8 +1100,8 @@ fn main {
           continue
         }
 
-        let dist = absi(enemies[i].gx - player.gx) +
-          absi(enemies[i].gy - player.gy)
+        let dist = (enemies[i].gx - player.gx).abs() +
+          (enemies[i].gy - player.gy).abs()
         if dist == 1 && enemies[i].atk_cd <= 0.0 {
           enemies[i].atk_cd = 0.9 - Float::from_int(enemies[i].kind) * 0.12
           if enemies[i].atk_cd < 0.38 {
@@ -1127,7 +1122,7 @@ fn main {
           let dxp = player.gx - enemies[i].gx
           let dyp = player.gy - enemies[i].gy
 
-          if absi(dxp) > absi(dyp) {
+          if dxp.abs() > dyp.abs() {
             dxm = if dxp < 0 { -1 } else if dxp > 0 { 1 } else { 0 }
           } else {
             dym = if dyp < 0 { -1 } else if dyp > 0 { 1 } else { 0 }

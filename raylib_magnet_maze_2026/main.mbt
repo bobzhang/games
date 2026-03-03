@@ -45,12 +45,6 @@ fn idx(x : Int, y : Int) -> Int {
 }
 
 ///|
-/// Returns the absolute value of an integer.
-fn absi(x : Int) -> Int {
-  x.abs()
-}
-
-///|
 /// Returns the sign of an integer as -1, 0, or 1.
 fn signi(x : Int) -> Int {
   if x < 0 {
@@ -331,8 +325,8 @@ fn apply_pulse(
       continue
     }
 
-    let adx = absi(dx)
-    let ady = absi(dy)
+    let adx = dx.abs()
+    let ady = dy.abs()
 
     let mut sx = 0
     let mut sy = 0

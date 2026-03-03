@@ -11,12 +11,6 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
-/// Returns absolute value for integer grid calculations.
-pub fn absi(v : Int) -> Int {
-  v.abs()
-}
-
-///|
 /// Clamps a float value into an inclusive `[low, high]` range.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {

@@ -59,12 +59,6 @@ pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Returns the absolute value of an integer.
-pub fn absi(v : Int) -> Int {
-  v.abs()
-}
-
-///|
 /// Returns the larger of two floating-point values.
 pub fn maxf(a : Float, b : Float) -> Float {
   if a > b {
@@ -97,8 +91,8 @@ pub fn in_board(x : Int, y : Int) -> Bool {
 ///|
 /// Returns true when two cells share an edge.
 pub fn is_adjacent(x0 : Int, y0 : Int, x1 : Int, y1 : Int) -> Bool {
-  let dx = absi(x0 - x1)
-  let dy = absi(y0 - y1)
+  let dx = (x0 - x1).abs()
+  let dy = (y0 - y1).abs()
   dx + dy == 1
 }
 
