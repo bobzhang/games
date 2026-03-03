@@ -354,7 +354,7 @@ fn update_entity_physics(
   } else {
     if ent.vy < 0.0 {
       ent.on_ground = true
-      let foot_y = @types.floorf(ent.y - 0.01)
+      let foot_y = (ent.y - 0.01).floor().to_int()
       ent.y = Float::from_int(foot_y + 1) + 0.001
     }
     ent.vy = 0.0

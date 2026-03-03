@@ -23,16 +23,16 @@ pub fn update_block_target(game : @types.Game) -> Unit {
   let mut rz = game.cam_pos_z
   let step = @types.ray_step
   let max_steps = (@types.reach_distance / step).to_int()
-  let mut prev_bx = @types.floorf(rx)
-  let mut prev_by = @types.floorf(ry)
-  let mut prev_bz = @types.floorf(rz)
+  let mut prev_bx = rx.floor().to_int()
+  let mut prev_by = ry.floor().to_int()
+  let mut prev_bz = rz.floor().to_int()
   for i in 0..<max_steps {
     rx += dx * step
     ry += dy * step
     rz += dz * step
-    let bx = @types.floorf(rx)
-    let by = @types.floorf(ry)
-    let bz = @types.floorf(rz)
+    let bx = rx.floor().to_int()
+    let by = ry.floor().to_int()
+    let bz = rz.floor().to_int()
     let block = @types.get_world_block(game, bx, by, bz)
     if @types.is_solid(block) {
       target.hit = true

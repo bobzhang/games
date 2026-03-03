@@ -113,7 +113,7 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
     if player.vy < 0.0 {
       player.on_ground = true
       // Snap to ground level
-      let foot_y = @types.floorf(player.y - 0.01)
+      let foot_y = (player.y - 0.01).floor().to_int()
       player.y = Float::from_int(foot_y + 1) + 0.001
     }
     player.vy = 0.0
@@ -167,12 +167,12 @@ fn check_player_collision(
   let r = @types.player_radius
   let h = @types.player_height
   // Check all blocks the player AABB overlaps
-  let min_x = @types.floorf(px - r)
-  let max_x = @types.floorf(px + r)
-  let min_y = @types.floorf(py)
-  let max_y = @types.floorf(py + h)
-  let min_z = @types.floorf(pz - r)
-  let max_z = @types.floorf(pz + r)
+  let min_x = (px - r).floor().to_int()
+  let max_x = (px + r).floor().to_int()
+  let min_y = py.floor().to_int()
+  let max_y = (py + h).floor().to_int()
+  let min_z = (pz - r).floor().to_int()
+  let max_z = (pz + r).floor().to_int()
   for by in min_y..<=max_y {
     for bz in min_z..<=max_z {
       for bx in min_x..<=max_x {

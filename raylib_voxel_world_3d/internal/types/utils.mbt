@@ -43,12 +43,6 @@ pub fn lerpi(a : Int, b : Int, t : Float) -> Int {
 }
 
 ///|
-/// Floors a float to integer, handling negatives consistently.
-pub fn floorf(v : Float) -> Int {
-  v.floor().to_int()
-}
-
-///|
 /// Returns sign of float as `-1.0`, `0.0`, or `1.0`.
 pub fn signf(v : Float) -> Float {
   if v > 0.0 {
@@ -58,12 +52,6 @@ pub fn signf(v : Float) -> Float {
   } else {
     0.0
   }
-}
-
-///|
-/// Float modulo helper.
-pub fn fmodf(a : Float, b : Float) -> Float {
-  a % b
 }
 
 // Smoothstep interpolation
@@ -118,8 +106,8 @@ pub fn noise2d(x : Float, z : Float) -> Float {
 ///|
 /// Bilinearly blended value noise sample for terrain generation.
 pub fn value_noise_2d(x : Float, z : Float) -> Float {
-  let ix = floorf(x)
-  let iz = floorf(z)
+  let ix = x.floor().to_int()
+  let iz = z.floor().to_int()
   let fx = x - Float::from_int(ix)
   let fz = z - Float::from_int(iz)
   // Smoothstep interpolation factors
@@ -1060,7 +1048,7 @@ pub fn distance_xz(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
 ///|
 /// Returns cardinal-facing label based on yaw angle.
 pub fn facing_direction(yaw : Float) -> String {
-  let normalized = fmodf(yaw + two_pi, two_pi)
+  let normalized = (yaw + two_pi) % two_pi
   if normalized < 0.393 || normalized > 5.89 {
     "North"
   } else if normalized < 1.178 {
