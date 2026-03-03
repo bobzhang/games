@@ -131,18 +131,6 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the smaller of two Int values.
-fn mini(a : Int, b : Int) -> Int {
-  a.min(b)
-}
-
-///|
-/// Returns the larger of two Int values.
-fn maxi(a : Int, b : Int) -> Int {
-  a.max(b)
-}
-
-///|
 /// Returns the sine of v (in radians) as a Float.
 fn sinf(v : Float) -> Float {
   @math.sinf(v)
@@ -1970,7 +1958,7 @@ fn main {
               drone.temp = 28.0
               drone.state = 1
               revived = true
-              drone_losses = maxi(0, drone_losses - 1)
+              drone_losses = (0).max(drone_losses - 1)
             }
             if drone.active {
               drone.battery = minf(100.0, drone.battery + 22.0)
@@ -2243,7 +2231,7 @@ fn main {
           let gain : Int = requests[i].reward + urgency_bonus + combo * 12
           score = score + gain
           served = served + 1
-          combo = mini(30, combo + 1)
+          combo = (30).min(combo + 1)
           rep = minf(100.0, rep + 2.6 + Float::from_int(combo) * 0.08)
           requests[i].active = false
           msg = "Served \{pattern_short(current_pattern)} request +\{gain}"

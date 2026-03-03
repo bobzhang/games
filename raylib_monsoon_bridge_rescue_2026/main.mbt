@@ -182,18 +182,6 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the smaller of two integer values.
-fn mini(a : Int, b : Int) -> Int {
-  a.min(b)
-}
-
-///|
-/// Returns the larger of two integer values.
-fn maxi(a : Int, b : Int) -> Int {
-  a.max(b)
-}
-
-///|
 /// Wraps the standard library sine function for float arguments.
 fn sinf(v : Float) -> Float {
   @math.sinf(v)
@@ -807,7 +795,7 @@ fn draw_river(
       x + shift,
       py.to_int(),
       w - 8,
-      maxi(1, (seg_h + 1.0).to_int()),
+      (1).max((seg_h + 1.0).to_int()),
       @raylib.Color::new(108, 164, 214, alpha),
     )
   }
@@ -2395,7 +2383,7 @@ fn main {
 
         if dist2(boat.x, boat.y, supply.x, supply.y) <= 29.0 * 29.0 {
           if supply.kind == 0 {
-            boat.kits = mini(boat.kit_max, boat.kits + supply.amount)
+            boat.kits = boat.kit_max.min(boat.kits + supply.amount)
             msg = "Collected repair kits +\{supply.amount}"
           } else {
             boat.fuel = minf(
@@ -2468,10 +2456,7 @@ fn main {
         if nearest_raft >= 0 {
           let can_take : Int = boat.capacity - boat.passengers
           if can_take > 0 {
-            let taken : Int = mini(
-              can_take,
-              mini(rafts[nearest_raft].survivors, 5),
-            )
+            let taken : Int = can_take.min(rafts[nearest_raft].survivors.min(5))
             boat.passengers = boat.passengers + taken
             rafts[nearest_raft].survivors = rafts[nearest_raft].survivors -
               taken

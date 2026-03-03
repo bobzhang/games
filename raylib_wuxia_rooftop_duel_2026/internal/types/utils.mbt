@@ -1,10 +1,4 @@
 ///|
-/// Returns the smaller of two integers.
-pub fn mini(a : Int, b : Int) -> Int {
-  a.min(b)
-}
-
-///|
 /// Clamps a float to the inclusive `[lo, hi]` range.
 pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
   if v < lo {

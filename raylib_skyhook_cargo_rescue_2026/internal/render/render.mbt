@@ -875,14 +875,14 @@ fn draw_msg(game : @types.Game) -> Unit {
     y,
     w,
     46,
-    @raylib.Color::new(198, 228, 246, @types.mini(250, a + 12)),
+    @raylib.Color::new(198, 228, 246, (250).min(a + 12)),
   )
   @raylib.draw_text(
     game.msg,
     x + 18,
     y + 10,
     28,
-    @raylib.Color::new(236, 246, 252, @types.mini(255, a + 20)),
+    @raylib.Color::new(236, 246, 252, (255).min(a + 20)),
   )
 }
 

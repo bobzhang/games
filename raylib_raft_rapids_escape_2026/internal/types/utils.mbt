@@ -1,16 +1,4 @@
 ///|
-/// Return the smaller of two integers.
-pub fn mini(a : Int, b : Int) -> Int {
-  a.min(b)
-}
-
-///|
-/// Return the larger of two integers.
-pub fn maxi(a : Int, b : Int) -> Int {
-  a.max(b)
-}
-
-///|
 /// Clamp an integer to the inclusive range `[lo, hi]`.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   v.clamp(min=lo, max=hi)

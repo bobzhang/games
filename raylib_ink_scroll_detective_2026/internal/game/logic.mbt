@@ -308,7 +308,7 @@ fn update_incidents(game : @types.Game, dt : Float) -> Unit {
     if incident.timer <= 0.0 {
       incident.active = false
       game.failed_incidents = game.failed_incidents + 1
-      game.score = @types.maxi(0, game.score - 24 - incident.severity * 10)
+      game.score = (0).max(game.score - 24 - incident.severity * 10)
       game.trust = @types.maxf(
         0.0,
         game.trust -
@@ -496,16 +496,12 @@ fn attempt_incident_resolution(
         0.0,
         game.trust - @types.trust_penalty_wrong_accuse * 0.4,
       )
-      game.score = @types.maxi(
-        0,
-        game.score - @types.score_wrong_accuse_penalty / 2,
-      )
+      game.score = (0).max(game.score - @types.score_wrong_accuse_penalty / 2)
       set_message(game, "Evidence chain incomplete. Accusation blocked.", 1.7)
     }
   } else {
     game.wrong_accusations = game.wrong_accusations + 1
-    game.score = @types.maxi(
-      0,
+    game.score = (0).max(
       game.score - @types.score_wrong_accuse_penalty - severity * 35,
     )
     game.trust = @types.maxf(

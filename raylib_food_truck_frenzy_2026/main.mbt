@@ -103,18 +103,6 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the smaller of two Int values.
-fn mini(a : Int, b : Int) -> Int {
-  a.min(b)
-}
-
-///|
-/// Returns the larger of two Int values.
-fn maxi(a : Int, b : Int) -> Int {
-  a.max(b)
-}
-
-///|
 /// Returns the sine of v (in radians) as a Float.
 fn sinf(v : Float) -> Float {
   @math.sinf(v)
@@ -353,7 +341,7 @@ fn recipe_can_make(kind : Int, ingredients : Array[Int]) -> Bool {
 fn recipe_consume(kind : Int, ingredients : Array[Int]) -> Unit {
   for i in 0..<ingredients.length() {
     let need : Int = recipe_need(kind, i)
-    ingredients[i] = maxi(0, ingredients[i] - need)
+    ingredients[i] = (0).max(ingredients[i] - need)
   }
 }
 
@@ -2017,7 +2005,7 @@ fn main {
           box.active = false
         }
         if dist2(chef.x, chef.y, box.x, box.y) <= 34.0 * 34.0 {
-          ingredients[box.kind] = mini(24, ingredients[box.kind] + box.amount)
+          ingredients[box.kind] = (24).min(ingredients[box.kind] + box.amount)
           box.active = false
           msg = "Supply drop: +\{box.amount} \{ingredient_name(box.kind)}"
           msg_t = 1.2
@@ -2044,7 +2032,7 @@ fn main {
             ) &&
             bin_cd[k] <= 0.0 {
             let amount : Int = randi(2, 4)
-            ingredients[k] = mini(24, ingredients[k] + amount)
+            ingredients[k] = (24).min(ingredients[k] + amount)
             bin_cd[k] = 0.42
             did_action = true
             msg = "+\{amount} \{ingredient_name(k)}"
@@ -2109,7 +2097,7 @@ fn main {
             let gain : Int = orders[oi].reward + combo * 12 + bonus
             score = score + gain
             served = served + 1
-            combo = mini(30, combo + 1)
+            combo = (30).min(combo + 1)
             rep = minf(100.0, rep + 3.0 + Float::from_int(combo) * 0.06)
             orders[oi].active = false
             did_action = true

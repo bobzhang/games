@@ -400,8 +400,8 @@ fn draw_minimap(game : @types.Game) -> Unit {
     }
     let px = (p.x * scale + offset_x).to_int()
     let pz = (p.z * scale + offset_z).to_int()
-    let pw = @types.maxi((p.w * scale * 0.5).to_int(), 2)
-    let pd = @types.maxi((p.d * scale * 0.5).to_int(), 2)
+    let pw = (p.w * scale * 0.5).to_int().max(2)
+    let pd = (p.d * scale * 0.5).to_int().max(2)
     @raylib.draw_rectangle(
       px - pw / 2,
       pz - pd / 2,

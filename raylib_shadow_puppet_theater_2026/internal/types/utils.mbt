@@ -1,10 +1,4 @@
 ///|
-/// Returns the larger of two integers.
-pub fn maxi(a : Int, b : Int) -> Int {
-  a.max(b)
-}
-
-///|
 /// Clamps an integer into the inclusive range [`lo`, `hi`].
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   v.clamp(min=lo, max=hi)
@@ -64,7 +58,7 @@ pub fn set_message(game : Game, text : String, ttl : Float) -> Unit {
 ///|
 /// Adds score delta while keeping score non-negative and updating best score.
 pub fn add_score(game : Game, delta : Int) -> Unit {
-  game.score = maxi(0, game.score + delta)
+  game.score = (0).max(game.score + delta)
   if game.score > game.best_score {
     game.best_score = game.score
   }

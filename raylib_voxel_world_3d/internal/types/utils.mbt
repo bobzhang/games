@@ -43,18 +43,6 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns minimum of two integers.
-pub fn mini(a : Int, b : Int) -> Int {
-  a.min(b)
-}
-
-///|
-/// Returns maximum of two integers.
-pub fn maxi(a : Int, b : Int) -> Int {
-  a.max(b)
-}
-
-///|
 /// Linearly interpolates from `a` to `b` by factor `t`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t

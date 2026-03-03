@@ -118,12 +118,6 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the smaller of two integers.
-fn mini(a : Int, b : Int) -> Int {
-  a.min(b)
-}
-
-///|
 /// Returns a random float in `[lo, hi]` using raylib's RNG.
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
@@ -780,7 +774,7 @@ fn deliver_to_lights(
       }
 
       let need_i : Int = light.demand.to_int() + 1
-      let give : Int = mini(player.cargo, mini(need_i, 18))
+      let give : Int = player.cargo.min(need_i.min(18))
       if give <= 0 {
         continue
       }
@@ -1152,7 +1146,7 @@ fn draw_player(player : Player, t : Float) -> Unit {
   )
 
   // cargo markers on deck
-  let shown : Int = mini(player.cargo, 6)
+  let shown : Int = player.cargo.min(6)
   for i in 0..<shown {
     let cx : Int = (x - 10.0 + Float::from_int(i % 3) * 8.0).to_int()
     let cy : Int = (y + 3.0 + Float::from_int(i / 3) * 5.0).to_int()
@@ -1779,7 +1773,7 @@ fn main {
         if near_harbor {
           // quick load action at harbor
           let can_load : Int = player.cargo_cap - player.cargo
-          let load_n : Int = mini(can_load, mini(18, harbor_stock.to_int()))
+          let load_n : Int = can_load.min((18).min(harbor_stock.to_int()))
           if load_n > 0 {
             player.cargo = player.cargo + load_n
             harbor_stock = harbor_stock - Float::from_int(load_n)

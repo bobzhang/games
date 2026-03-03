@@ -236,7 +236,7 @@ fn hurt_player(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit {
   }
 
   game.lives = game.lives - obstacle_hit_cost(kind)
-  game.lives = @types.maxi(0, game.lives)
+  game.lives = (0).max(game.lives)
 
   game.fuel = game.fuel - obstacle_hit_fuel(kind)
   game.fuel = @types.maxf(0.0, game.fuel)
@@ -271,7 +271,7 @@ fn pickup_radius(kind : Int) -> Float {
 ///|
 fn collect_pickup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit {
   if kind == @types.pickup_coin {
-    game.combo = @types.mini(15, game.combo + 1)
+    game.combo = (15).min(game.combo + 1)
     game.combo_t = 2.2
 
     game.score = game.score + 16 + game.combo * 4
@@ -304,7 +304,7 @@ fn collect_pickup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit 
     splash(game, x, y, 26, 2)
   }
 
-  game.score = @types.maxi(0, game.score)
+  game.score = (0).max(game.score)
   if game.score > game.best_score {
     game.best_score = game.score
   }
@@ -661,7 +661,7 @@ fn use_hint(game : @types.Game) -> Bool {
   game.hint_y = best_y
   game.hint_t = 2.7
   game.hint_left = game.hint_left - 1
-  game.score = @types.maxi(0, game.score - 6)
+  game.score = (0).max(game.score - 6)
 
   if pickup_found {
     @types.set_msg(game, "Hint: rush the supply pickup.", 1.4)

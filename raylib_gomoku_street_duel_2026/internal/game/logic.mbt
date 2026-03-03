@@ -206,7 +206,7 @@ fn undo_round_step(game : @types.Game) -> Bool {
 
   if @types.in_board(x, y) && @types.cell_at(game, x, y) != Empty {
     @types.set_cell(game, x, y, Empty)
-    game.move_count = @types.maxi(0, game.move_count - 1)
+    game.move_count = (0).max(game.move_count - 1)
     @types.burst_move(game, x, y, 8, SparkUndo)
   }
 

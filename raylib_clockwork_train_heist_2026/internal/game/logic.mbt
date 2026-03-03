@@ -616,8 +616,8 @@ fn line_of_sight(
   y1 : Int,
 ) -> Bool {
   if x0 == x1 {
-    let y_min : Int = @types.mini(y0, y1)
-    let y_max : Int = @types.maxi(y0, y1)
+    let y_min : Int = y0.min(y1)
+    let y_max : Int = y0.max(y1)
 
     for y in (y_min + 1)..<y_max {
       let t = tile_at(game, x0, y)
@@ -630,8 +630,8 @@ fn line_of_sight(
   }
 
   if y0 == y1 {
-    let x_min : Int = @types.mini(x0, x1)
-    let x_max : Int = @types.maxi(x0, x1)
+    let x_min : Int = x0.min(x1)
+    let x_max : Int = x0.max(x1)
 
     for x in (x_min + 1)..<x_max {
       let t = tile_at(game, x, y0)

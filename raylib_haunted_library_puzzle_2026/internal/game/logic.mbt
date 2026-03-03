@@ -306,7 +306,7 @@ fn load_layout(game : @types.Game) -> Unit {
     (16, 6),
   ]
 
-  game.shelf_n = @types.mini(shelf_list.length(), @types.max_shelves)
+  game.shelf_n = shelf_list.length().min(@types.max_shelves)
   for i in 0..<game.shelf_n {
     game.shelf_x[i] = shelf_list[i].0
     game.shelf_y[i] = shelf_list[i].1
@@ -585,8 +585,8 @@ fn line_of_sight(
   y1 : Int,
 ) -> Bool {
   if x0 == x1 {
-    let y_min : Int = @types.mini(y0, y1)
-    let y_max : Int = @types.maxi(y0, y1)
+    let y_min : Int = y0.min(y1)
+    let y_max : Int = y0.max(y1)
     for y in (y_min + 1)..<y_max {
       if tile_at(game, x0, y) == Wall || shelf_index_at(game, x0, y) >= 0 {
         return false
@@ -596,8 +596,8 @@ fn line_of_sight(
   }
 
   if y0 == y1 {
-    let x_min : Int = @types.mini(x0, x1)
-    let x_max : Int = @types.maxi(x0, x1)
+    let x_min : Int = x0.min(x1)
+    let x_max : Int = x0.max(x1)
     for x in (x_min + 1)..<x_max {
       if tile_at(game, x, y0) == Wall || shelf_index_at(game, x, y0) >= 0 {
         return false

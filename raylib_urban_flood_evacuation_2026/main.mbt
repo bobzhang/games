@@ -110,11 +110,6 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-fn mini(a : Int, b : Int) -> Int {
-  a.min(b)
-}
-
-///|
 fn randf(lo : Float, hi : Float) -> Float {
   let r : Float = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0
   lo + (hi - lo) * r
@@ -757,7 +752,7 @@ fn rescue_groups(
         break
       }
 
-      let take : Int = mini(group.count, mini(cap_left, 8))
+      let take : Int = group.count.min(cap_left.min(8))
       if take <= 0 {
         continue
       }
@@ -1121,7 +1116,7 @@ fn draw_player(player : Player, t : Float) -> Unit {
     @raylib.Color::new(176, 214, 246, 86),
   )
 
-  let shown : Int = mini(player.onboard, 6)
+  let shown : Int = player.onboard.min(6)
   for i in 0..<shown {
     let px : Int = (x - 10.0 + Float::from_int(i % 3) * 8.0).to_int()
     let py : Int = (y + 3.0 + Float::from_int(i / 3) * 5.0).to_int()
@@ -1758,7 +1753,7 @@ fn main {
         player.hull = minf(player.hull_max, player.hull + dt * 5.4)
 
         if player.onboard > 0 && unload_cd <= 0.0 {
-          let unload_n : Int = mini(player.onboard, 3)
+          let unload_n : Int = player.onboard.min(3)
           player.onboard = player.onboard - unload_n
           rescued_total = rescued_total + unload_n
           score = score + unload_n * 10

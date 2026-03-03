@@ -139,7 +139,7 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   let mana_regen : Float = @types.mana_regen_rate * dt
   let new_mana_f : Float = Float::from_int(game.player_mana) + mana_regen
   let new_mana = new_mana_f.to_int()
-  game.player_mana = @types.mini(new_mana, game.player_max_mana)
+  game.player_mana = new_mana.min(game.player_max_mana)
   // Pickup loot
   check_loot_pickup(game)
   // Check stairs
@@ -232,7 +232,7 @@ fn perform_melee_attack(game : @types.Game) -> Unit {
     }
     // Hit!
     let raw_atk = @types.calc_player_attack(game)
-    let damage = @types.maxi(1, raw_atk - e.def)
+    let damage = (1).max(raw_atk - e.def)
     // Critical hit chance based on dex
     let crit_chance = game.player_dex / 2
     let is_crit = @types.rand_range(game, 0, 99) < crit_chance
@@ -422,7 +422,7 @@ fn cast_ice_bolt(game : @types.Game) -> Unit {
 fn cast_heal(game : @types.Game) -> Unit {
   let int_bonus = game.player_int_stat / 2
   let heal = @types.heal_amount + int_bonus
-  game.player_hp = @types.mini(game.player_hp + heal, game.player_max_hp)
+  game.player_hp = (game.player_hp + heal).min(game.player_max_hp)
   @types.spawn_particles(
     game,
     game.player_x,
@@ -486,7 +486,7 @@ fn cast_lightning(game : @types.Game) -> Unit {
   }
   if hit_idx >= 0 {
     let e = game.enemies[hit_idx]
-    let dmg = @types.maxi(1, damage - e.def)
+    let dmg = (1).max(damage - e.def)
     e.hp -= dmg
     e.hit_flash = 0.3
     e.alerted = true
@@ -515,7 +515,7 @@ fn cast_lightning(game : @types.Game) -> Unit {
       }
       let chain_dist = @types.dist2d(chain_x, chain_z, e2.x, e2.z)
       if chain_dist < @types.lightning_chain_range {
-        let chain_dmg = @types.maxi(1, damage / 2 - e2.def)
+        let chain_dmg = (1).max(damage / 2 - e2.def)
         e2.hp -= chain_dmg
         e2.hit_flash = 0.3
         e2.alerted = true
@@ -579,8 +579,7 @@ fn cast_teleport(game : @types.Game) -> Unit {
   } else {
     @types.add_message(game, "Cannot teleport there!", 200, 100, 100)
     // Refund mana
-    game.player_mana = @types.mini(
-      game.player_mana + @types.teleport_mana_cost,
+    game.player_mana = (game.player_mana + @types.teleport_mana_cost).min(
       game.player_max_mana,
     )
   }
@@ -675,8 +674,7 @@ fn check_loot_pickup(game : @types.Game) -> Unit {
     if dist < 1.2 {
       // Pick up
       if l.kind == @types.loot_health_potion {
-        game.player_hp = @types.mini(
-          game.player_hp + @types.health_potion_heal,
+        game.player_hp = (game.player_hp + @types.health_potion_heal).min(
           game.player_max_hp,
         )
         @types.add_message(
@@ -688,8 +686,7 @@ fn check_loot_pickup(game : @types.Game) -> Unit {
         )
         @types.spawn_particles(game, l.x, 0.5, l.z, 8, 50, 255, 50)
       } else if l.kind == @types.loot_mana_potion {
-        game.player_mana = @types.mini(
-          game.player_mana + @types.mana_potion_restore,
+        game.player_mana = (game.player_mana + @types.mana_potion_restore).min(
           game.player_max_mana,
         )
         @types.add_message(
@@ -819,7 +816,7 @@ fn check_chest_open(game : @types.Game) -> Unit {
     let roll = @types.rand_range(game, 0, 4)
     if roll == 0 {
       let heal = @types.health_potion_heal + 20
-      game.player_hp = @types.mini(game.player_hp + heal, game.player_max_hp)
+      game.player_hp = (game.player_hp + heal).min(game.player_max_hp)
       game.message_text = "Chest: +\{heal} HP!"
       @types.add_message(game, "Chest: +\{heal} HP!", 50, 255, 50)
     } else if roll == 1 {
@@ -1068,7 +1065,7 @@ fn level_up(game : @types.Game) -> Unit {
 /// Applies incoming damage after defense, updates hit feedback, and clamps HP at zero.
 pub fn damage_player(game : @types.Game, raw_damage : Int) -> Unit {
   let total_def = @types.calc_player_defense(game)
-  let damage = @types.maxi(1, raw_damage - total_def)
+  let damage = (1).max(raw_damage - total_def)
   game.player_hp -= damage
   game.player_hit_flash = 0.3
   game.damage_flash = 0.2

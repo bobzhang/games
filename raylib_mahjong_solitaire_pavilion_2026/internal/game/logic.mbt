@@ -11,9 +11,9 @@ fn set_pattern_active(game : @types.Game, pattern : Int) -> Unit {
       let xf : Float = Float::from_int(x)
       let yf : Float = Float::from_int(y)
       let nx : Float = (xf - cx) /
-        (Float::from_int(@types.maxi(1, game.board_w)) * 0.5)
+        (Float::from_int((1).max(game.board_w)) * 0.5)
       let ny : Float = (yf - cy) /
-        (Float::from_int(@types.maxi(1, game.board_h)) * 0.5)
+        (Float::from_int((1).max(game.board_h)) * 0.5)
 
       let mut on : Bool = true
 
@@ -44,10 +44,9 @@ fn set_pattern_active(game : @types.Game, pattern : Int) -> Unit {
           0.36
         on = (ny - band).abs() <= 0.44 || nx.abs() <= 0.18
       } else if pattern == 7 {
-        let stair_a : Bool = y <=
-          x * game.board_h / @types.maxi(1, game.board_w) + 2
+        let stair_a : Bool = y <= x * game.board_h / (1).max(game.board_w) + 2
         let stair_b : Bool = y >=
-          game.board_h - x * game.board_h / @types.maxi(1, game.board_w) - 1
+          game.board_h - x * game.board_h / (1).max(game.board_w) - 1
         on = stair_a && stair_b
       } else if pattern == 8 {
         let r2 : Float = nx * nx + ny * ny
@@ -108,7 +107,7 @@ fn fill_board_with_pairs(game : @types.Game) -> Unit {
 
   let vals : Array[Int] = []
   for i in 0..<pair_n {
-    let kind : Int = i % @types.maxi(2, game.kind_count) + 1
+    let kind : Int = i % (2).max(game.kind_count) + 1
     vals.push(kind)
     vals.push(kind)
   }
@@ -639,9 +638,9 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
   game.level_index = id
   game.level_name = name
 
-  game.board_w = @types.mini(w, @types.max_cols)
-  game.board_h = @types.mini(h, @types.max_rows)
-  game.kind_count = @types.maxi(2, kinds)
+  game.board_w = w.min(@types.max_cols)
+  game.board_h = h.min(@types.max_rows)
+  game.kind_count = (2).max(kinds)
 
   game.time_limit = limit
   game.timer = limit

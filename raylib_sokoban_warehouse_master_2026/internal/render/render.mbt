@@ -44,12 +44,12 @@ fn board_layout(game : @types.Game) -> (Int, Int, Int) {
   let area_w : Int = @types.screen_w - 396
   let area_h : Int = @types.screen_h - 56
 
-  let safe_w : Int = @types.maxi(1, game.grid_w)
-  let safe_h : Int = @types.maxi(1, game.grid_h)
+  let safe_w : Int = (1).max(game.grid_w)
+  let safe_h : Int = (1).max(game.grid_h)
 
   let tile_x : Int = (area_w - 24) / safe_w
   let tile_y : Int = (area_h - 24) / safe_h
-  let mut tile : Int = @types.mini(tile_x, tile_y)
+  let mut tile : Int = tile_x.min(tile_y)
   tile = @types.clampi(tile, 28, 66)
 
   let mut left : Int = area_x + (area_w - safe_w * tile) / 2

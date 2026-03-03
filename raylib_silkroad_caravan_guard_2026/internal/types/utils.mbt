@@ -1,16 +1,4 @@
 ///|
-/// Returns the smaller of two integer values.
-pub fn mini(a : Int, b : Int) -> Int {
-  a.min(b)
-}
-
-///|
-/// Returns the larger of two integer values.
-pub fn maxi(a : Int, b : Int) -> Int {
-  a.max(b)
-}
-
-///|
 /// Clamps an integer value to the inclusive range `[lo, hi]`.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   v.clamp(min=lo, max=hi)
@@ -102,13 +90,13 @@ pub fn chance(pct : Int) -> Bool {
 ///|
 /// Returns derived layout data for checkpoint span.
 pub fn checkpoint_span(idx : Int) -> Float {
-  checkpoint_base_span + Float::from_int(maxi(idx, 0)) * checkpoint_span_step
+  checkpoint_base_span + Float::from_int(idx.max(0)) * checkpoint_span_step
 }
 
 ///|
 /// Returns a derived gameplay metric for caravan speed.
 pub fn caravan_speed(checkpoint : Int) -> Float {
-  caravan_speed_base + Float::from_int(maxi(checkpoint, 0)) * caravan_speed_step
+  caravan_speed_base + Float::from_int(checkpoint.max(0)) * caravan_speed_step
 }
 
 ///|

@@ -574,7 +574,7 @@ fn use_zap(game : @types.Game, x : Int, y : Int) -> Bool {
   if v == @types.blocker_value {
     @types.set_msg(game, "Debris vaporized", 0.9)
   } else {
-    game.score = game.score + @types.maxi(16, v / 2)
+    game.score = game.score + (16).max(v / 2)
     @types.set_msg(game, "Tile zapped", 0.8)
   }
 

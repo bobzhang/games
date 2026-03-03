@@ -1,10 +1,4 @@
 ///|
-/// Returns the larger of two integers.
-pub fn maxi(a : Int, b : Int) -> Int {
-  a.max(b)
-}
-
-///|
 /// Clamps an integer to the inclusive `[lo, hi]` range.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   v.clamp(min=lo, max=hi)
@@ -267,7 +261,7 @@ pub fn guard_sees_cell(game : Game, g : Guard, cx : Int, cy : Int) -> Bool {
 
   let dx = cx - g.x
   let dy = cy - g.y
-  let dist = maxi(dx.abs(), dy.abs())
+  let dist = dx.abs().max(dy.abs())
   if dist > g.view_range {
     return false
   }

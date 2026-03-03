@@ -8,7 +8,7 @@ fn set_message(game : @types.Game, msg : String, ttl : Float) -> Unit {
 ///|
 /// Adds `delta` to the score, clamping the result to a minimum of zero.
 fn add_score(game : @types.Game, delta : Int) -> Unit {
-  game.score = @types.maxi(0, game.score + delta)
+  game.score = (0).max(game.score + delta)
 }
 
 ///|
@@ -248,7 +248,7 @@ fn update_wave_lane(game : @types.Game, dt : Float) -> Unit {
 ///|
 /// Calculates target speed from streak, rhythm, burst, and wobble modifiers, then advances distance and awards pace score.
 fn update_speed_distance(game : @types.Game, dt : Float) -> Unit {
-  let streak_bonus : Float = Float::from_int(@types.mini(game.streak, 20)) * 2.4
+  let streak_bonus : Float = Float::from_int(game.streak.min(20)) * 2.4
   let rhythm_bonus : Float = game.rhythm_meter * 0.22
   let burst_bonus : Float = if game.burst_t > 0.0 { 108.0 } else { 0.0 }
   let stabilize_drag : Float = if game.input.stabilize_down { 8.0 } else { 0.0 }
@@ -455,12 +455,11 @@ fn finish_run(game : @types.Game) -> Unit {
   }
 
   let streak_bonus : Int = game.best_streak * 22
-  let clean_bonus : Int = @types.maxi(0, 280 - game.hit_count * 70)
+  let clean_bonus : Int = (0).max(280 - game.hit_count * 70)
   let checkpoint_bonus : Int = game.checkpoint_idx * 110
-  let time_bonus : Int = @types.maxi(0, 420 - game.finish_time.to_int() * 8)
+  let time_bonus : Int = (0).max(420 - game.finish_time.to_int() * 8)
 
-  game.score = @types.maxi(
-    0,
+  game.score = (0).max(
     game.score +
     place_bonus +
     streak_bonus +

@@ -239,19 +239,14 @@ fn update_battle_complete(game : @types.Game) -> Unit {
       game.player.max_hp,
     )
     // Replenish some ammo
-    game.player.ammo_round = @types.mini(
-      game.player.ammo_round + 15,
+    game.player.ammo_round = (game.player.ammo_round + 15).min(
       @types.player_start_ammo,
     )
-    game.player.ammo_chain = @types.mini(game.player.ammo_chain + 8, 20)
-    game.player.ammo_grape = @types.mini(game.player.ammo_grape + 5, 15)
+    game.player.ammo_chain = (game.player.ammo_chain + 8).min(20)
+    game.player.ammo_grape = (game.player.ammo_grape + 5).min(15)
     // Recover some crew
-    let crew_recover = @types.maxi(
-      (game.player.max_crew - game.player.crew) / 4,
-      2,
-    )
-    game.player.crew = @types.mini(
-      game.player.crew + crew_recover,
+    let crew_recover = ((game.player.max_crew - game.player.crew) / 4).max(2)
+    game.player.crew = (game.player.crew + crew_recover).min(
       game.player.max_crew,
     )
     game.current_battle += 1
@@ -612,7 +607,7 @@ fn fire_fleet_broadside(
   } else {
     fs.heading - @types.pi / 2.0
   }
-  let shots : Int = @types.mini(fs.cannon_count / 2, 3)
+  let shots : Int = (fs.cannon_count / 2).min(3)
   for i in 0..<shots {
     let idx = @types.alloc_cannonball(game)
     if idx < 0 {
@@ -726,7 +721,7 @@ fn update_fortress_combat(game : @types.Game, dt : Float) -> Unit {
       island.fortress_fire_timer = @types.fortress_fire_rate
       // Fire from fortress
       let cannon_count = island.fortress_cannons_active
-      let shots : Int = @types.mini(cannon_count, 3)
+      let shots : Int = cannon_count.min(3)
       for j in 0..<shots {
         let idx = @types.alloc_cannonball(game)
         if idx < 0 {

@@ -172,7 +172,7 @@ fn update_melee_enemy(
     )
     @types.add_message(
       game,
-      "\{@types.get_enemy_name(e.kind)} attacks for \{@types.maxi(1, e.atk - @types.calc_player_defense(game))} damage!",
+      "\{@types.get_enemy_name(e.kind)} attacks for \{(1).max(e.atk - @types.calc_player_defense(game))} damage!",
       255,
       100,
       80,
@@ -764,7 +764,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
         let edist = @types.dist2d(p.x, p.z, enemy.x, enemy.z)
         if edist < 0.8 {
           let raw_atk = @types.calc_player_attack(game)
-          let damage = @types.maxi(1, raw_atk - enemy.def)
+          let damage = (1).max(raw_atk - enemy.def)
           enemy.hp -= damage
           enemy.hit_flash = 0.2
           enemy.alerted = true

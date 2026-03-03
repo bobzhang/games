@@ -126,11 +126,6 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-fn mini(a : Int, b : Int) -> Int {
-  a.min(b)
-}
-
-///|
 fn sinf(v : Float) -> Float {
   @math.sinf(v)
 }
@@ -2146,7 +2141,7 @@ fn main {
             )
             msg = "Collected repair pack +\{crate.amount}"
           } else {
-            glider.bags = mini(glider.bag_cap, glider.bags + crate.amount)
+            glider.bags = glider.bag_cap.min(glider.bags + crate.amount)
             msg = "Collected extra bags +\{crate.amount}"
           }
           msg_t = 1.2
@@ -2194,7 +2189,7 @@ fn main {
                   let gain : Int = delivery.reward + combo * 10 + bonus
                   score = score + gain
                   completed = completed + 1
-                  combo = mini(30, combo + 1)
+                  combo = (30).min(combo + 1)
                   rep = minf(100.0, rep + 2.2 + Float::from_int(combo) * 0.06)
                   glider.bags = glider.bags - 1
                   delivery.active = false

@@ -651,7 +651,7 @@ fn update_orders(game : @types.Game, dt : Float) -> Unit {
         game.cargo_idx = -1
       }
       game.missed = game.missed + 1
-      game.score = @types.maxi(0, game.score - 22)
+      game.score = (0).max(game.score - 22)
       game.combo = 0
       game.combo_t = 0.0
       if game.missed % 2 == 0 {
@@ -672,7 +672,7 @@ fn update_orders(game : @types.Game, dt : Float) -> Unit {
       game.orders[i].active = false
       game.cargo_idx = -1
       game.delivered = game.delivered + 1
-      game.combo = @types.mini(18, game.combo + 1)
+      game.combo = (18).min(game.combo + 1)
       game.combo_t = 2.2
       game.score = game.score + gain
       if game.score > game.best_score {
@@ -745,7 +745,7 @@ fn use_hint(game : @types.Game) -> Bool {
   game.hint_y = hy
   game.hint_t = 2.8
   game.hint_left = game.hint_left - 1
-  game.score = @types.maxi(0, game.score - 5)
+  game.score = (0).max(game.score - 5)
   set_msg(game, text, 1.3)
   true
 }

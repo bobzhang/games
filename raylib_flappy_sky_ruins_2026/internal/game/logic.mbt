@@ -369,7 +369,7 @@ fn collect_pickup(game : @types.Game, i : Int) -> Unit {
     game.shield_t = 6.0
     @types.set_msg(game, "Shield online", 0.8)
   } else {
-    game.lives = @types.mini(5, game.lives + 1)
+    game.lives = (5).min(game.lives + 1)
     @types.set_msg(game, "+1 life", 0.8)
   }
 

@@ -113,15 +113,15 @@ fn add_rock_line(
   y1 : Int,
 ) -> Unit {
   if x0 == x1 {
-    let mut a : Int = @types.mini(y0, y1)
-    let b : Int = @types.maxi(y0, y1)
+    let mut a : Int = y0.min(y1)
+    let b : Int = y0.max(y1)
     while a <= b {
       set_tile(game, x0, a, @types.tile_rock)
       a = a + 1
     }
   } else if y0 == y1 {
-    let mut a : Int = @types.mini(x0, x1)
-    let b : Int = @types.maxi(x0, x1)
+    let mut a : Int = x0.min(x1)
+    let b : Int = x0.max(x1)
     while a <= b {
       set_tile(game, a, y0, @types.tile_rock)
       a = a + 1
@@ -547,7 +547,7 @@ fn pickup_civilians(game : @types.Game) -> Unit {
       return
     }
 
-    let take : Int = @types.mini(room, game.sites[i].waiting)
+    let take : Int = room.min(game.sites[i].waiting)
     if take <= 0 {
       continue
     }

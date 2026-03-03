@@ -201,7 +201,7 @@ fn apply_miss(
     0.0,
     game.harmony - @types.miss_harmony_penalty - extra_harmony_penalty,
   )
-  game.acclaim = @types.maxi(0, game.acclaim - 24)
+  game.acclaim = (0).max(game.acclaim - 24)
 
   @types.set_message(game, reason, 0.95)
 
@@ -215,7 +215,7 @@ fn apply_miss(
 fn apply_offbeat_penalty(game : @types.Game) -> Unit {
   game.combo = 0
   game.harmony = @types.maxf(0.0, game.harmony - @types.offbeat_harmony_penalty)
-  game.acclaim = @types.maxi(0, game.acclaim - 8)
+  game.acclaim = (0).max(game.acclaim - 8)
   @types.set_message(game, "Off-beat strike.", 0.45)
 
   if game.harmony <= 0.0 {
@@ -264,7 +264,7 @@ fn try_deflect(game : @types.Game) -> Unit {
     let timing = game.prompt.time_left.abs()
     if timing <= @types.timing_deflect {
       game.prompt_active = false
-      game.combo = @types.maxi(0, game.combo - 1)
+      game.combo = (0).max(game.combo - 1)
       game.harmony = @types.maxf(
         0.0,
         game.harmony - @types.deflect_harmony_penalty,

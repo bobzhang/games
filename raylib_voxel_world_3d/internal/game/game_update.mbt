@@ -498,18 +498,16 @@ fn update_block_physics(game : @types.Game, dt : Float) -> Unit {
   let pcz = game.player.z.to_int()
   let pcy = game.player.y.to_int()
   let check_radius = 16
-  let min_x = @types.maxi(0, pcx - check_radius)
-  let max_x = @types.mini(
-    @types.world_chunks_x * @types.chunk_x - 1,
+  let min_x = (0).max(pcx - check_radius)
+  let max_x = (@types.world_chunks_x * @types.chunk_x - 1).min(
     pcx + check_radius,
   )
-  let min_z = @types.maxi(0, pcz - check_radius)
-  let max_z = @types.mini(
-    @types.world_chunks_z * @types.chunk_z - 1,
+  let min_z = (0).max(pcz - check_radius)
+  let max_z = (@types.world_chunks_z * @types.chunk_z - 1).min(
     pcz + check_radius,
   )
-  let min_y = @types.maxi(1, pcy - 10)
-  let max_y = @types.mini(@types.chunk_y - 1, pcy + 10)
+  let min_y = (1).max(pcy - 10)
+  let max_y = (@types.chunk_y - 1).min(pcy + 10)
   for wy in min_y..<=max_y {
     for wz in min_z..<=max_z {
       for wx in min_x..<=max_x {

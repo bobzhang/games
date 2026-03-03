@@ -167,7 +167,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
     0.3
   }
   let active_cannons_f : Float = Float::from_int(ship.cannon_count) * cannon_eff
-  let active_cannons = @types.maxi(active_cannons_f.to_int(), 1)
+  let active_cannons = active_cannons_f.to_int().max(1)
   // Q fires port (left) broadside, E fires starboard (right) broadside
   if @raylib.is_key_pressed(@raylib.KeyQ) || @raylib.is_mouse_button_pressed(0) {
     if ship.reload_left <= 0.0 && has_ammo(ship) {
@@ -429,7 +429,7 @@ fn fire_player_broadside(
     ship.heading + @types.pi / 2.0
   }
   // Number of balls based on active cannons
-  let shots : Int = @types.mini(active_cannons / 2, 4)
+  let shots : Int = (active_cannons / 2).min(4)
   let cannon_spd = @types.get_cannon_speed(ship.cannon_type)
   let cannon_arc = @types.get_cannon_arc(ship.cannon_type)
   for i in 0..<shots {

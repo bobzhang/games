@@ -523,7 +523,7 @@ fn fire_enemy_broadside(game : @types.Game, enemy_idx : Int) -> Unit {
     enemy.heading - @types.pi / 2.0
   }
   // Number of cannonballs based on cannon count
-  let shots : Int = @types.mini(enemy.cannon_count / 2, 4)
+  let shots : Int = (enemy.cannon_count / 2).min(4)
   for i in 0..<shots {
     let idx = @types.alloc_cannonball(game)
     if idx < 0 {

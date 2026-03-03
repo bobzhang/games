@@ -30,7 +30,7 @@ fn active_enemy_count(game : @types.Game) -> Int {
 
 ///|
 fn wave_enemy_total(wave : Int) -> Int {
-  @types.mini(30, 4 + wave * 2)
+  (30).min(4 + wave * 2)
 }
 
 ///|
@@ -115,12 +115,12 @@ fn finish_game_over(game : @types.Game) -> Unit {
 
 ///|
 fn add_score_event(game : @types.Game, base : Int, stage_points : Int) -> Unit {
-  let combo_bonus_percent : Int = @types.mini(240, game.combo * 13)
+  let combo_bonus_percent : Int = (240).min(game.combo * 13)
   let gained : Int = base * (100 + combo_bonus_percent) / 100
 
   game.score = game.score + gained
   game.stage_score = game.stage_score + stage_points + game.combo / 2
-  game.combo = @types.mini(999, game.combo + 1)
+  game.combo = (999).min(game.combo + 1)
   game.combo_t = @types.combo_timeout
 
   if game.score > game.best_score {
@@ -761,7 +761,7 @@ fn update_wave_flow(game : @types.Game, dt : Float) -> Unit {
   let bonus : Int = 100 +
     cleared_wave * 44 +
     game.stage_score / 2 +
-    @types.mini(500, game.combo * 6)
+    (500).min(game.combo * 6)
 
   game.last_stage_bonus = bonus
   game.score = game.score + bonus

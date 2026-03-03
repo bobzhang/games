@@ -49,12 +49,6 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the larger of two integers.
-pub fn maxi(a : Int, b : Int) -> Int {
-  a.max(b)
-}
-
-///|
 /// Clamps a float into the `[0.0, 1.0]` range.
 pub fn clamp01(v : Float) -> Float {
   clampf(v, 0.0, 1.0)

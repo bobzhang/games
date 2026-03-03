@@ -972,7 +972,7 @@ pub fn draw_lap_times(game : @types.Game) -> Unit {
       14,
       @raylib.Color::new(150, 150, 170, 200),
     )
-    let display_count = @types.mini(kart.lap_times.length(), 5)
+    let display_count = kart.lap_times.length().min(5)
     for li in 0..<display_count {
       let lap_time = kart.lap_times[li]
       let li_display = li + 1

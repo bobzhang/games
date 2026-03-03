@@ -25,18 +25,6 @@ pub fn clampi(v : Int, low : Int, high : Int) -> Int {
 }
 
 ///|
-/// Returns the smaller of two integers.
-pub fn mini(a : Int, b : Int) -> Int {
-  a.min(b)
-}
-
-///|
-/// Returns the larger of two integers.
-pub fn maxi(a : Int, b : Int) -> Int {
-  a.max(b)
-}
-
-///|
 /// Returns the smaller of two float values.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {

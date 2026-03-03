@@ -422,10 +422,7 @@ fn draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(196, 212, 226, 230),
   )
 
-  let remain : Int = @types.maxi(
-    0,
-    (game.mission_limit - game.mission_time).to_int(),
-  )
+  let remain : Int = (0).max((game.mission_limit - game.mission_time).to_int())
   @raylib.draw_text(
     "Time " + remain.to_string() + "s",
     @types.panel_x + 18,

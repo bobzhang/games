@@ -194,7 +194,7 @@ fn register_failure(game : @types.Game) -> Unit {
 
   if game.failed_orders >= @types.fail_limit {
     game.state = GameOver
-    game.best_score = @types.maxi(game.best_score, game.score)
+    game.best_score = game.best_score.max(game.score)
   }
 }
 
@@ -356,12 +356,9 @@ fn try_serve_ready_dish(game : @types.Game) -> Unit {
   let quality_bonus = (Float::from_int(base) * (game.ready_quality - 0.5) * 0.34).to_int()
   let combo_bonus = game.combo * 18
 
-  let gained = @types.maxi(
-    18,
-    base + patience_bonus + quality_bonus + combo_bonus,
-  )
+  let gained = (18).max(base + patience_bonus + quality_bonus + combo_bonus)
   game.score = game.score + gained
-  game.best_score = @types.maxi(game.best_score, game.score)
+  game.best_score = game.best_score.max(game.score)
 
   game.served_orders = game.served_orders + 1
   game.combo = @types.clampi(game.combo + 1, 0, 99)

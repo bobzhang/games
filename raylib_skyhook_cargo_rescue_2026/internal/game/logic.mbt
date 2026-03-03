@@ -436,7 +436,7 @@ fn drop_carried_survivor(game : @types.Game) -> Unit {
     game.survivors[idx].active = false
     game.survivors[idx].carried = false
     game.lost = game.lost + 1
-    game.score = @types.maxi(0, game.score - 18)
+    game.score = (0).max(game.score - 18)
     set_msg(game, "Passenger lost in storm.", 1.3)
     burst(game, game.survivors[idx].x, game.survivors[idx].y, 22, 1)
   }
@@ -459,7 +459,7 @@ fn rescue_carried_survivor(game : @types.Game) -> Unit {
     game.survivors[idx].carried = false
 
     game.rescued = game.rescued + 1
-    game.combo = @types.mini(15, game.combo + 1)
+    game.combo = (15).min(game.combo + 1)
     game.combo_t = 2.3
 
     let bonus : Int = 24 + game.wave + game.combo * 2
@@ -872,7 +872,7 @@ fn use_hint(game : @types.Game) -> Bool {
   game.hint_y = hy
   game.hint_t = 2.8
   game.hint_left = game.hint_left - 1
-  game.score = @types.maxi(0, game.score - 5)
+  game.score = (0).max(game.score - 5)
 
   set_msg(game, msg, 1.3)
 

@@ -492,7 +492,7 @@ fn spawn_enemy(game : @types.Game) -> Bool {
     kind = 2
   }
 
-  let night_scale = Float::from_int(@types.maxi(game.night - 1, 0))
+  let night_scale = Float::from_int((game.night - 1).max(0))
   let mut hp = @types.enemy_hp_base +
     night_scale * @types.enemy_hp_step +
     @types.randf(-4.0, 10.0)
@@ -556,7 +556,7 @@ fn update_spawning(game : @types.Game, dt : Float) -> Unit {
 /// Ticks trap cooldown and flash timers, and for each armed active trap, hits the nearest enemy within trigger radius with night-scaled damage and a slow, then starts the rearm timer.
 fn update_traps(game : @types.Game, dt : Float) -> Unit {
   let power = @types.trap_damage +
-    Float::from_int(@types.maxi(game.night - 1, 0)) * 1.8
+    Float::from_int((game.night - 1).max(0)) * 1.8
 
   for trap in game.traps {
     if trap.trigger_cd > 0.0 {

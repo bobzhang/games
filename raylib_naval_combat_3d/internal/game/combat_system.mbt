@@ -106,7 +106,7 @@ fn check_cannonball_vs_enemies(game : @types.Game, cb_idx : Int) -> Unit {
       }
       // Crew casualties
       let crew_dmg = (base_dmg * crew_mult * 0.5).to_int()
-      enemy.crew -= @types.maxi(crew_dmg, 0)
+      enemy.crew -= crew_dmg.max(0)
       if enemy.crew < 0 {
         enemy.crew = 0
       }
@@ -217,7 +217,7 @@ fn check_cannonball_vs_player(game : @types.Game, cb_idx : Int) -> Unit {
     }
     // Crew casualties
     let crew_loss = (base_dmg * 0.15).to_int()
-    ship.crew -= @types.maxi(crew_loss, 0)
+    ship.crew -= crew_loss.max(0)
     if ship.crew < 0 {
       ship.crew = 0
     }
@@ -347,7 +347,7 @@ fn check_cannonball_vs_fortress(game : @types.Game, cb_idx : Int) -> Unit {
         let hp_ratio = island.fortress_hp / island.fortress_max_hp
         let active_f : Float = Float::from_int(@types.fortress_cannon_count) *
           hp_ratio
-        island.fortress_cannons_active = @types.maxi(active_f.to_int(), 1)
+        island.fortress_cannons_active = active_f.to_int().max(1)
       }
       return
     }

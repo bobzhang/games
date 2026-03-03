@@ -1,16 +1,4 @@
 ///|
-/// Return the smaller of two integers.
-pub fn mini(a : Int, b : Int) -> Int {
-  a.min(b)
-}
-
-///|
-/// Return the larger of two integers.
-pub fn maxi(a : Int, b : Int) -> Int {
-  a.max(b)
-}
-
-///|
 /// Clamp an integer to the inclusive range `[lo, hi]`.
 pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
   v.clamp(min=lo, max=hi)
@@ -108,7 +96,7 @@ pub fn board_metrics(shake_t : Float) -> (Int, Int, Int) {
   let tile_x : Int = board_area_w / grid_w
   let tile_y : Int = board_area_h / grid_h
 
-  let mut tile : Int = mini(tile_x, tile_y)
+  let mut tile : Int = tile_x.min(tile_y)
   tile = clampi(tile, 30, 45)
 
   let mut bx : Int = board_area_x + (board_area_w - grid_w * tile) / 2

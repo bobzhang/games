@@ -230,9 +230,9 @@ fn draw_boat(
     deck_w,
     deck_h,
     @raylib.Color::new(
-      @types.mini(255, hull.r.to_int() + 18),
-      @types.mini(255, hull.g.to_int() + 18),
-      @types.mini(255, hull.b.to_int() + 18),
+      (255).min(hull.r.to_int() + 18),
+      (255).min(hull.g.to_int() + 18),
+      (255).min(hull.b.to_int() + 18),
       230,
     ),
   )

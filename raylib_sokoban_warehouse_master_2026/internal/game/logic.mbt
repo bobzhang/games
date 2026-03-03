@@ -53,7 +53,7 @@ fn apply_level_rows(
   game.touch_action_cd = 0.0
 
   let mut found_player : Bool = false
-  game.grid_h = @types.mini(rows.length(), @types.board_rows)
+  game.grid_h = rows.length().min(@types.board_rows)
   game.grid_w = 0
 
   for y in 0..<game.grid_h {
@@ -62,7 +62,7 @@ fn apply_level_rows(
       game.grid_w = row.length()
     }
   }
-  game.grid_w = @types.mini(game.grid_w, @types.board_cols)
+  game.grid_w = game.grid_w.min(@types.board_cols)
 
   for y in 0..<game.grid_h {
     let row = rows[y]

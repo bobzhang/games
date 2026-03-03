@@ -441,7 +441,7 @@ fn toggle_flag(game : @types.Game, x : Int, y : Int) -> Bool {
 
   if game.cells[i].flagged {
     game.cells[i].flagged = false
-    game.flagged_count = @types.maxi(0, game.flagged_count - 1)
+    game.flagged_count = (0).max(game.flagged_count - 1)
     @types.set_msg(game, "Flag removed", 0.6)
     return true
   }
@@ -517,7 +517,7 @@ fn use_hint(game : @types.Game) -> Bool {
   }
 
   game.hints = game.hints - 1
-  game.score = @types.maxi(0, game.score - 60)
+  game.score = (0).max(game.score - 60)
 
   let x : Int = pick.1
   let y : Int = pick.2
@@ -570,7 +570,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.combo_t <= 0.0 {
-    game.combo = @types.maxi(0, game.combo - 1)
+    game.combo = (0).max(game.combo - 1)
     game.combo_t = if game.combo > 0 { 0.55 } else { 0.0 }
   }
 

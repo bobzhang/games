@@ -139,11 +139,6 @@ fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-fn mini(a : Int, b : Int) -> Int {
-  a.min(b)
-}
-
-///|
 fn sinf(v : Float) -> Float {
   @math.sinf(v)
 }
@@ -2318,10 +2313,10 @@ fn main {
 
         if dist2(craft.x, craft.y, drop.x, drop.y) <= 30.0 * 30.0 {
           if drop.kind == 0 {
-            craft.wire = mini(craft.wire_cap, craft.wire + drop.amount)
+            craft.wire = craft.wire_cap.min(craft.wire + drop.amount)
             msg = "Wire bundle +\{drop.amount}"
           } else if drop.kind == 1 {
-            craft.fuse = mini(craft.fuse_cap, craft.fuse + drop.amount)
+            craft.fuse = craft.fuse_cap.min(craft.fuse + drop.amount)
             msg = "Fuse pack +\{drop.amount}"
           } else {
             craft.battery = minf(
@@ -2447,7 +2442,7 @@ fn main {
               let gain : Int = faults[fi].reward + combo * 10 + bonus
               score = score + gain
               fixed_count = fixed_count + 1
-              combo = mini(30, combo + 1)
+              combo = (30).min(combo + 1)
               grid_health = minf(
                 100.0,
                 grid_health + 2.8 + Float::from_int(faults[fi].severity) * 1.6,

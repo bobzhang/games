@@ -322,7 +322,7 @@ fn damage_wagon(game : @types.Game, index : Int, value : Float) -> Unit {
   game.shake_t = @types.maxf(game.shake_t, 0.14)
 
   if game.wagons[index].hp <= 0.0 {
-    game.score = @types.maxi(0, game.score - 40)
+    game.score = (0).max(game.score - 40)
     game.morale = @types.clampf(game.morale - 10.0, 0.0, @types.morale_max)
     set_message(game, "A wagon is broken!", 1.1)
   }
@@ -896,7 +896,7 @@ fn update_raiders(game : @types.Game, dt : Float) -> Unit {
     if game.raiders[i].x < -140.0 {
       game.raiders[i].active = false
       game.morale = @types.clampf(game.morale - 3.8, 0.0, @types.morale_max)
-      game.score = @types.maxi(0, game.score - 12)
+      game.score = (0).max(game.score - 12)
       continue
     }
 

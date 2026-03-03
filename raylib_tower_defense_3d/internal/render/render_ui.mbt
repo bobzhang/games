@@ -580,13 +580,7 @@ fn draw_minimap(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(255, 80, 80, 255)
     }
-    @raylib.draw_rectangle(
-      cx,
-      cy,
-      @types.maxi(cw, 2),
-      @types.maxi(ch, 2),
-      enemy_mm_color,
-    )
+    @raylib.draw_rectangle(cx, cy, cw.max(2), ch.max(2), enemy_mm_color)
   }
   // Border
   @raylib.draw_rectangle_lines(

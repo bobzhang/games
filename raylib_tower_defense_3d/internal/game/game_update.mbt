@@ -464,7 +464,7 @@ fn update_interest(game : @types.Game, dt : Float) -> Unit {
     game.interest_timer = 0.0
     let interest_amount : Float = Float::from_int(game.gold) *
       @types.interest_rate
-    let capped = @types.mini(interest_amount.to_int(), @types.interest_cap)
+    let capped = interest_amount.to_int().min(@types.interest_cap)
     if capped > 0 {
       game.gold += capped
       game.total_gold_earned += capped

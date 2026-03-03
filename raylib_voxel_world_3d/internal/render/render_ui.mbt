@@ -771,9 +771,9 @@ fn draw_inventory_screen(game : @types.Game) -> Unit {
           slot_size - 20,
           3,
           @raylib.Color::new(
-            @types.mini(r + 30, 255),
-            @types.mini(g + 30, 255),
-            @types.mini(b + 30, 255),
+            (r + 30).min(255),
+            (g + 30).min(255),
+            (b + 30).min(255),
             200,
           ),
         )
@@ -1021,7 +1021,7 @@ fn draw_game_over_screen(game : @types.Game) -> Unit {
   let title = "YOU DIED"
   let tw = @raylib.measure_text(title, 64)
   // Fade in
-  let alpha : Int = @types.mini((game.death_timer * 200.0).to_int(), 255)
+  let alpha : Int = (game.death_timer * 200.0).to_int().min(255)
   @raylib.draw_text(
     title,
     (@types.screen_width - tw) / 2,

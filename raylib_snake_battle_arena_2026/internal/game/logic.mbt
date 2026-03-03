@@ -85,7 +85,7 @@ fn player_segment_at(
 ) -> Bool {
   let mut end : Int = game.p_len
   if ignore_tail && game.p_grow <= 0 {
-    end = @types.maxi(0, end - 1)
+    end = (0).max(end - 1)
   }
 
   for i in 0..<end {
@@ -113,7 +113,7 @@ fn rival_segment_at(
     if ignore_rid >= 0 && rid == ignore_rid {
       if ignore_tail {
         let end : Int = if game.rivals[rid].grow <= 0 {
-          @types.maxi(0, game.rivals[rid].len - 1)
+          (0).max(game.rivals[rid].len - 1)
         } else {
           game.rivals[rid].len
         }
@@ -401,7 +401,7 @@ fn grow_player_after_food(game : @types.Game) -> Unit {
 
 ///|
 fn shift_player_forward(game : @types.Game, nx : Int, ny : Int) -> Unit {
-  let cap : Int = @types.mini(game.p_len, @types.max_segments - 1)
+  let cap : Int = game.p_len.min(@types.max_segments - 1)
 
   for i = cap; i > 0; i = i - 1 {
     game.p_seg_x[i] = game.p_seg_x[i - 1]
@@ -413,7 +413,7 @@ fn shift_player_forward(game : @types.Game, nx : Int, ny : Int) -> Unit {
 
   if game.p_grow > 0 {
     game.p_grow = game.p_grow - 1
-    game.p_len = @types.mini(@types.max_segments, game.p_len + 1)
+    game.p_len = @types.max_segments.min(game.p_len + 1)
   }
 }
 
@@ -466,7 +466,7 @@ fn shift_rival_forward(
   ny : Int,
 ) -> Unit {
   let rival = game.rivals[rid]
-  let cap : Int = @types.mini(rival.len, @types.max_segments - 1)
+  let cap : Int = rival.len.min(@types.max_segments - 1)
 
   for i = cap; i > 0; i = i - 1 {
     rival.seg_x[i] = rival.seg_x[i - 1]
@@ -478,7 +478,7 @@ fn shift_rival_forward(
 
   if rival.grow > 0 {
     rival.grow = rival.grow - 1
-    rival.len = @types.mini(@types.max_segments, rival.len + 1)
+    rival.len = @types.max_segments.min(rival.len + 1)
   }
 }
 

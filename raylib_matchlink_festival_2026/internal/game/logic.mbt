@@ -741,7 +741,7 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
   game.level_name = name
   game.board_w = w
   game.board_h = h
-  game.kind_count = @types.mini(kinds, @types.maxi(2, w * h / 2))
+  game.kind_count = kinds.min((2).max(w * h / 2))
 
   game.time_limit = limit
   game.timer = limit
@@ -749,8 +749,8 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
   game.shuffles_left = shuffles
 
   game.combo = 0
-  game.cursor_x = @types.maxi(1, w / 2)
-  game.cursor_y = @types.maxi(1, h / 2)
+  game.cursor_x = (1).max(w / 2)
+  game.cursor_y = (1).max(h / 2)
   @types.clear_selection(game)
   @types.clear_path_flash(game)
   @types.clear_hint_flash(game)

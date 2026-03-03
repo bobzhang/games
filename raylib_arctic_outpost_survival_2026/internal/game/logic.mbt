@@ -367,7 +367,7 @@ fn try_fire(game : @types.Game, tx : Float, ty : Float) -> Bool {
     return false
   }
 
-  game.ammo = @types.maxi(0, game.ammo - 1)
+  game.ammo = (0).max(game.ammo - 1)
   game.fire_cd = if overdrive { 0.055 } else { 0.11 }
 
   let dir = @types.normalize(tx - game.player_x, ty - game.player_y)
@@ -412,7 +412,7 @@ fn try_repair(game : @types.Game) -> Bool {
   game.fuel = @types.maxf(0.0, game.fuel - 7.0)
   game.core_heat = @types.minf(100.0, game.core_heat + 20.0)
   game.suit_hp = @types.minf(100.0, game.suit_hp + 16.0)
-  game.ammo = @types.mini(400, game.ammo + 10)
+  game.ammo = (400).min(game.ammo + 10)
   game.score = game.score + 24
   game.repair_cd = 1.10
 
@@ -492,7 +492,7 @@ fn collect_pickup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit 
     @types.set_msg(game, "Medkit applied.", 1.2)
     burst(game, x, y, 18, 2)
   } else if kind == @types.pickup_ammo {
-    game.ammo = @types.mini(460, game.ammo + 48)
+    game.ammo = (460).min(game.ammo + 48)
     game.score = game.score + 14
     @types.set_msg(game, "Ammo crate recovered.", 1.2)
     burst(game, x, y, 18, 0)
@@ -503,7 +503,7 @@ fn collect_pickup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit 
     burst(game, x, y, 24, 2)
   }
 
-  game.combo = @types.mini(12, game.combo + 1)
+  game.combo = (12).min(game.combo + 1)
   game.combo_t = 2.1
 }
 
@@ -584,7 +584,7 @@ fn bullet_hit_enemy(game : @types.Game, bi : Int, ei : Int) -> Unit {
       12
     }
 
-    game.combo = @types.mini(18, game.combo + 1)
+    game.combo = (18).min(game.combo + 1)
     game.combo_t = 2.4
 
     game.score = game.score + base_score + game.combo * 2
@@ -876,7 +876,7 @@ fn use_hint(game : @types.Game) -> Bool {
   game.hint_y = best_y
   game.hint_t = 2.8
   game.hint_left = game.hint_left - 1
-  game.score = @types.maxi(0, game.score - 6)
+  game.score = (0).max(game.score - 6)
 
   if found_pickup {
     @types.set_msg(game, "Hint: supply route marked.", 1.3)

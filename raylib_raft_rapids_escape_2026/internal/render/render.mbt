@@ -163,7 +163,7 @@ fn draw_obstacle(ob : @types.Obstacle, ox : Int, oy : Int) -> Unit {
     @raylib.draw_circle(
       x + w / 2,
       y + h / 2,
-      Float::from_int(@types.mini(w, h)) * 0.42,
+      Float::from_int(w.min(h)) * 0.42,
       @raylib.Color::new(160, 184, 196, 180),
     )
     @raylib.draw_rectangle_lines(
@@ -199,7 +199,7 @@ fn draw_obstacle(ob : @types.Obstacle, ox : Int, oy : Int) -> Unit {
       )
     }
   } else {
-    let r : Float = Float::from_int(@types.mini(w, h)) * 0.42
+    let r : Float = Float::from_int(w.min(h)) * 0.42
     let cx : Int = x + w / 2
     let cy : Int = y + h / 2
 
@@ -639,9 +639,9 @@ fn draw_touch_button(
 
   let fill : @raylib.Color = if on {
     @raylib.Color::new(
-      @types.mini(255, base.r.to_int() + 38),
-      @types.mini(255, base.g.to_int() + 38),
-      @types.mini(255, base.b.to_int() + 38),
+      (255).min(base.r.to_int() + 38),
+      (255).min(base.g.to_int() + 38),
+      (255).min(base.b.to_int() + 38),
       228,
     )
   } else {
@@ -956,14 +956,14 @@ fn draw_msg(game : @types.Game) -> Unit {
     y,
     w,
     46,
-    @raylib.Color::new(198, 228, 246, @types.mini(240, a + 10)),
+    @raylib.Color::new(198, 228, 246, (240).min(a + 10)),
   )
   @raylib.draw_text(
     game.msg,
     x + 18,
     y + 10,
     28,
-    @raylib.Color::new(236, 246, 255, @types.mini(255, a + 20)),
+    @raylib.Color::new(236, 246, 255, (255).min(a + 20)),
   )
 }
 

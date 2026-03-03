@@ -122,12 +122,6 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Return the larger of two integer values.
-pub fn maxi(a : Int, b : Int) -> Int {
-  a.max(b)
-}
-
-///|
 /// Uniform random float in `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let r = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0

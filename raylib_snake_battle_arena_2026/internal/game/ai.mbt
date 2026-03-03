@@ -1,7 +1,7 @@
 ///|
 fn wrap_dist(a : Int, b : Int, size : Int) -> Int {
   let d0 : Int = if a > b { a - b } else { b - a }
-  @types.mini(d0, size - d0)
+  d0.min(size - d0)
 }
 
 ///|

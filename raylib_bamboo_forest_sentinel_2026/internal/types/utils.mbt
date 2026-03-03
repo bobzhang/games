@@ -27,12 +27,6 @@ pub fn maxf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the larger of two integer values.
-pub fn maxi(a : Int, b : Int) -> Int {
-  a.max(b)
-}
-
-///|
 /// Returns the square of a float value.
 pub fn squaref(v : Float) -> Float {
   v * v

@@ -41,10 +41,10 @@ fn draw_dungeon(game : @types.Game) -> Unit {
   let pgx = @types.world_to_grid_x(game.player_x)
   let pgz = @types.world_to_grid_z(game.player_z)
   let draw_radius = 16
-  let min_gx = @types.maxi(0, pgx - draw_radius)
-  let max_gx = @types.mini(@types.grid_w - 1, pgx + draw_radius)
-  let min_gz = @types.maxi(0, pgz - draw_radius)
-  let max_gz = @types.mini(@types.grid_h - 1, pgz + draw_radius)
+  let min_gx = (0).max(pgx - draw_radius)
+  let max_gx = (@types.grid_w - 1).min(pgx + draw_radius)
+  let min_gz = (0).max(pgz - draw_radius)
+  let max_gz = (@types.grid_h - 1).min(pgz + draw_radius)
   for gz in min_gz..<=max_gz {
     for gx in min_gx..<=max_gx {
       let tile = @types.get_tile(game, gx, gz)

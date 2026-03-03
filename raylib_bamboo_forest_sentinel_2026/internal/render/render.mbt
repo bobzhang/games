@@ -456,7 +456,7 @@ fn draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(238, 230, 206, 238),
   )
   @raylib.draw_text(
-    "Remaining this night: \{@types.maxi(game.spawn_pool, 0)}",
+    "Remaining this night: \{game.spawn_pool.max(0)}",
     @types.hud_x + 18,
     @types.hud_y + 458,
     22,

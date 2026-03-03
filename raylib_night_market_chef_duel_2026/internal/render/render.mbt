@@ -47,7 +47,7 @@ fn progress_bar(
 ) -> Unit {
   @raylib.draw_rectangle(x, y, w, h, base)
   let rw = (Float::from_int(w) * @types.clampf(ratio, 0.0, 1.0)).to_int()
-  @raylib.draw_rectangle(x + 2, y + 2, @types.maxi(0, rw - 4), h - 4, fill)
+  @raylib.draw_rectangle(x + 2, y + 2, (0).max(rw - 4), h - 4, fill)
   @raylib.draw_rectangle_lines(x, y, w, h, @raylib.Color::new(26, 28, 32, 240))
 }
 

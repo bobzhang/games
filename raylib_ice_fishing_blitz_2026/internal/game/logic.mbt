@@ -418,7 +418,7 @@ fn drop_carrying_fish(game : @types.Game) -> Unit {
     game.fish[idx].vy = @types.randf(30.0, 120.0)
 
     game.escaped = game.escaped + 1
-    game.score = @types.maxi(0, game.score - 14)
+    game.score = (0).max(game.score - 14)
     @types.set_msg(game, "Fish slipped from hook.", 1.0)
   }
 
@@ -443,7 +443,7 @@ fn land_carrying_fish(game : @types.Game) -> Unit {
   game.fish[idx].hooked = false
 
   game.caught = game.caught + 1
-  game.combo = @types.mini(20, game.combo + 1)
+  game.combo = (20).min(game.combo + 1)
   game.combo_t = 2.2
 
   let bonus : Int = game.fish[idx].value + game.combo * 2 + game.wave
@@ -844,7 +844,7 @@ fn use_hint(game : @types.Game) -> Bool {
   game.hint_y = hy
   game.hint_t = 2.8
   game.hint_left = game.hint_left - 1
-  game.score = @types.maxi(0, game.score - 5)
+  game.score = (0).max(game.score - 5)
 
   @types.set_msg(game, text, 1.3)
 

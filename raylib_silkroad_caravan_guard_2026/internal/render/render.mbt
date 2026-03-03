@@ -540,7 +540,7 @@ fn draw_bar(
   @raylib.draw_rectangle(
     x + 2,
     y + 2,
-    @types.maxi(0, (Float::from_int(w - 4) * r).to_int()),
+    (0).max((Float::from_int(w - 4) * r).to_int()),
     h - 4,
     fill,
   )
@@ -640,7 +640,7 @@ fn draw_hud(game : @types.Game) -> Unit {
   )
 
   @raylib.draw_text(
-    "Checkpoint \{@types.mini(game.checkpoint, @types.checkpoint_total)}/\{@types.checkpoint_total}",
+    "Checkpoint \{game.checkpoint.min(@types.checkpoint_total)}/\{@types.checkpoint_total}",
     634,
     16,
     28,
@@ -875,7 +875,7 @@ fn draw_end_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(212, 230, 242, 238),
   )
   draw_center_text(
-    "Checkpoints: \{@types.mini(game.checkpoint, @types.checkpoint_total)}/\{@types.checkpoint_total}",
+    "Checkpoints: \{game.checkpoint.min(@types.checkpoint_total)}/\{@types.checkpoint_total}",
     406,
     30,
     @raylib.Color::new(236, 218, 188, 236),

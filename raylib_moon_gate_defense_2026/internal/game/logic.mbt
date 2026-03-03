@@ -362,8 +362,8 @@ fn spawn_enemy(game : @types.Game) -> Bool {
 
   let mut kind = @types.enemy_kind_skitter
   let roll = @types.randi(0, 99)
-  let heavy_cut = 12 + @types.mini(26, game.wave * 3)
-  let wraith_cut = 72 - @types.mini(22, game.wave * 2)
+  let heavy_cut = 12 + (26).min(game.wave * 3)
+  let wraith_cut = 72 - (22).min(game.wave * 2)
 
   if roll < heavy_cut {
     kind = @types.enemy_kind_carapace
@@ -518,10 +518,7 @@ fn kill_enemy(game : @types.Game, enemy_index : Int, by_barrier : Bool) -> Unit 
     game.energy + Float::from_int(reward) * 0.85,
   )
 
-  let combo_for_charge = @types.mini(
-    game.combo,
-    @types.barrier_charge_combo_cap,
-  )
+  let combo_for_charge = game.combo.min(@types.barrier_charge_combo_cap)
   game.barrier_charge = @types.minf(
     @types.barrier_charge_goal,
     game.barrier_charge +

@@ -176,14 +176,14 @@ fn apply_level_rows(
   game.level_par_time = par_time
   game.level_mistake_limit = mistake_limit
 
-  game.grid_h = @types.mini(rows.length(), @types.max_board)
+  game.grid_h = rows.length().min(@types.max_board)
   game.grid_w = 0
   for y in 0..<game.grid_h {
     if rows[y].length() > game.grid_w {
       game.grid_w = rows[y].length()
     }
   }
-  game.grid_w = @types.mini(game.grid_w, @types.max_board)
+  game.grid_w = game.grid_w.min(@types.max_board)
 
   game.solution_total = 0
   for y in 0..<game.grid_h {
@@ -465,7 +465,7 @@ fn apply_cell_state(
   }
 
   if consume_hint {
-    game.hints_left = @types.maxi(0, game.hints_left - 1)
+    game.hints_left = (0).max(game.hints_left - 1)
     game.hints_used = game.hints_used + 1
     game.message = "Hint used"
     game.message_t = 0.9
