@@ -93,10 +93,6 @@ pub let enemy_fighter : Int = 0
 pub let enemy_cruiser : Int = 1
 
 ///|
-/// Enemy type identifier for destructible asteroids.
-pub let enemy_asteroid : Int = 2
-
-///|
 /// Enemy type identifier for fast interceptor craft.
 pub let enemy_interceptor : Int = 3
 
@@ -356,10 +352,6 @@ pub let shield_regen_delay : Float = 2.5
 pub let player_speed : Float = 40.0
 
 ///|
-/// Default player afterburner boost speed.
-pub let player_boost_speed : Float = 70.0
-
-///|
 /// Default player yaw and pitch turn speed in radians per second.
 pub let player_turn_speed : Float = 2.5
 
@@ -411,10 +403,6 @@ pub let plasma_range : Float = 150.0
 ///|
 /// Weapon energy consumed per plasma shot.
 pub let plasma_energy_cost : Float = 15.0
-
-///|
-/// Splash damage radius around plasma impact point.
-pub let plasma_aoe_radius : Float = 5.0
 
 // Missile: slow fire, high damage, limited ammo, homing
 
@@ -619,16 +607,8 @@ pub let capital_damage : Float = 25.0
 pub let capital_score : Int = 2000
 
 ///|
-/// Number of turret hardpoints on a capital ship.
-pub let capital_turret_count : Int = 4
-
-///|
 /// Hit points of each capital ship weak point.
 pub let capital_weak_point_hp : Float = 80.0
-
-///|
-/// Default asteroid hull hit points.
-pub let asteroid_hp : Float = 50.0
 
 ///|
 /// Score awarded for destroying an asteroid.
@@ -676,10 +656,6 @@ pub let station_friendly : Int = 0
 /// Station allegiance identifier for hostile stations.
 pub let station_enemy : Int = 1
 
-///|
-/// Distance within which the player can dock at a station.
-pub let station_dock_range : Float = 15.0
-
 // Power-up parameters
 
 ///|
@@ -715,30 +691,6 @@ pub let powerup_spin_speed : Float = 2.0
 pub let powerup_collect_radius : Float = 3.0
 
 // Particle effect parameters
-
-///|
-/// Lifetime in seconds for engine thruster particles.
-pub let particle_thruster_life : Float = 0.5
-
-///|
-/// Lifetime in seconds for explosion particles.
-pub let particle_explosion_life : Float = 1.2
-
-///|
-/// Lifetime in seconds for shield impact particles.
-pub let particle_shield_hit_life : Float = 0.4
-
-///|
-/// Lifetime in seconds for weapon trail particles.
-pub let particle_weapon_trail_life : Float = 0.3
-
-///|
-/// Lifetime in seconds for debris particles.
-pub let particle_debris_life : Float = 2.0
-
-///|
-/// Lifetime in seconds for impact spark particles.
-pub let particle_spark_life : Float = 0.25
 
 // Camera
 
@@ -816,14 +768,6 @@ pub let damage_flash_duration : Float = 0.3
 
 // Radar/minimap
 
-///|
-/// Radar minimap display radius in pixels.
-pub let radar_radius : Int = 60
-
-///|
-/// Maximum detection range shown on the radar minimap.
-pub let radar_range : Float = 200.0
-
 // Difficulty scaling per mission
 
 ///|
@@ -836,23 +780,6 @@ pub fn mission_difficulty_hp_mult(mission : Int) -> Float {
 /// Returns the enemy speed scaling multiplier for the given `mission` number.
 pub fn mission_difficulty_speed_mult(mission : Int) -> Float {
   1.0 + Float::from_int(mission) * 0.05
-}
-
-///|
-/// Returns the enemy fire rate scaling multiplier for the given `mission` number.
-pub fn mission_difficulty_fire_rate_mult(mission : Int) -> Float {
-  let base : Float = 1.0 - Float::from_int(mission) * 0.03
-  if base < 0.5 {
-    0.5
-  } else {
-    base
-  }
-}
-
-///|
-/// Returns the enemy damage scaling multiplier for the given `mission` number.
-pub fn mission_difficulty_damage_mult(mission : Int) -> Float {
-  1.0 + Float::from_int(mission) * 0.1
 }
 
 // Ship class hull by type
@@ -954,24 +881,6 @@ pub fn ship_class_name(ship_class : Int) -> String {
 }
 
 // Enemy type score
-
-///|
-/// Returns the base score value for destroying an enemy of the given `kind`.
-pub fn enemy_score_value(kind : Int) -> Int {
-  if kind == enemy_fighter {
-    fighter_score
-  } else if kind == enemy_cruiser {
-    cruiser_score
-  } else if kind == enemy_interceptor {
-    interceptor_score
-  } else if kind == enemy_bomber {
-    bomber_score
-  } else if kind == enemy_capital {
-    capital_score
-  } else {
-    asteroid_score
-  }
-}
 
 // Mission objective types
 

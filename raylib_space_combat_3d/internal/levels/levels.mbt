@@ -230,18 +230,6 @@ pub fn mission_formation(mission : Int) -> Int {
 
 // Asteroid field density multiplier per mission
 
-///|
-/// Returns the asteroid field density multiplier for the given `mission`.
-pub fn mission_asteroid_density(mission : Int) -> Float {
-  if mission == 1 {
-    1.5
-  } else if mission == 8 {
-    2.0
-  } else {
-    1.0
-  }
-}
-
 // Station positions for missions that have them
 // Returns (station_x, station_y, station_z)
 
@@ -386,17 +374,3 @@ pub fn mission_difficulty_text(mission : Int) -> String {
 }
 
 // Recommended ship class for each mission
-
-///|
-/// Returns the recommended ship class for the given `mission` number.
-pub fn mission_recommended_ship(mission : Int) -> String {
-  if mission < 3 {
-    "Fighter"
-  } else if mission < 5 {
-    "Fighter / Interceptor"
-  } else if mission < 8 {
-    "Bomber / Cruiser"
-  } else {
-    "Any"
-  }
-}

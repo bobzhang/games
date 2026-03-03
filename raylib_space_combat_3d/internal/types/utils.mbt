@@ -37,18 +37,6 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 }
 
 ///|
-/// Returns the sign of `v` as -1.0, 0.0, or 1.0.
-pub fn sign_f(v : Float) -> Float {
-  if v > 0.0 {
-    1.0
-  } else if v < 0.0 {
-    -1.0
-  } else {
-    0.0
-  }
-}
-
-///|
 /// Returns the Euclidean distance between two 3D points.
 pub fn distance3d(
   x1 : Float,
@@ -78,12 +66,6 @@ pub fn distance_squared_3d(
   let dy = y1 - y2
   let dz = z1 - z2
   dx * dx + dy * dy + dz * dz
-}
-
-///|
-/// Returns the Euclidean distance between two points on the XZ plane.
-pub fn distance2d(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
-  @math.hypotf(x1 - x2, z1 - z2)
 }
 
 ///|
@@ -132,27 +114,6 @@ pub fn cross3d(
 }
 
 // Rotate a vector around an axis by angle (Rodrigues rotation formula)
-
-///|
-/// Returns a vector rotated around an axis by `angle` using Rodrigues formula.
-pub fn rotate_vector_around_axis(
-  vx : Float,
-  vy : Float,
-  vz : Float,
-  ax : Float,
-  ay : Float,
-  az : Float,
-  angle : Float,
-) -> (Float, Float, Float) {
-  let cos_a = @math.cosf(angle)
-  let sin_a = @math.sinf(angle)
-  let dot_val = dot3d(vx, vy, vz, ax, ay, az)
-  let cross = cross3d(ax, ay, az, vx, vy, vz)
-  let rx = vx * cos_a + cross.0 * sin_a + ax * dot_val * (1.0 - cos_a)
-  let ry = vy * cos_a + cross.1 * sin_a + ay * dot_val * (1.0 - cos_a)
-  let rz = vz * cos_a + cross.2 * sin_a + az * dot_val * (1.0 - cos_a)
-  (rx, ry, rz)
-}
 
 // Forward direction from yaw and pitch
 
@@ -225,89 +186,13 @@ pub fn lead_target(
 
 // Sphere-sphere collision test
 
-///|
-/// Returns whether two spheres at the given positions and radii are overlapping.
-pub fn sphere_collision(
-  x1 : Float,
-  y1 : Float,
-  z1 : Float,
-  r1 : Float,
-  x2 : Float,
-  y2 : Float,
-  z2 : Float,
-  r2 : Float,
-) -> Bool {
-  let dist_sq = distance_squared_3d(x1, y1, z1, x2, y2, z2)
-  let combined_r = r1 + r2
-  dist_sq < combined_r * combined_r
-}
-
 // Distance culling: check if object is within render distance
-
-///|
-/// Returns whether an object is within the maximum render distance from the camera.
-pub fn within_render_distance(
-  cam_x : Float,
-  cam_y : Float,
-  cam_z : Float,
-  obj_x : Float,
-  obj_y : Float,
-  obj_z : Float,
-  max_dist : Float,
-) -> Bool {
-  let dist_sq = distance_squared_3d(cam_x, cam_y, cam_z, obj_x, obj_y, obj_z)
-  dist_sq < max_dist * max_dist
-}
 
 // Damage calculation with shield absorption
 
-///|
-/// Returns the hull damage and remaining shield after applying damage with shield absorption.
-pub fn calc_damage(
-  damage : Float,
-  shield : Float,
-  armor_factor : Float,
-) -> (Float, Float) {
-  // Returns (hull_damage, shield_remaining)
-  let effective_damage = damage * (1.0 - armor_factor * 0.5)
-  if shield > 0.0 {
-    let absorbed = minf(shield, effective_damage)
-    let remaining_shield = shield - absorbed
-    let remaining_damage = effective_damage - absorbed
-    (remaining_damage, remaining_shield)
-  } else {
-    (effective_damage, 0.0)
-  }
-}
-
 // Angle difference (handles wrapping)
 
-///|
-/// Returns the shortest signed angular difference from `a` to `b` with wrapping.
-pub fn angle_diff(a : Float, b : Float) -> Float {
-  let mut d = b - a
-  if d > pi {
-    d = d - two_pi
-  }
-  if d < -pi {
-    d = d + two_pi
-  }
-  d
-}
-
 // Smooth damp (spring-like interpolation)
-
-///|
-/// Returns a spring-damped interpolation from `current` toward `target`.
-pub fn smooth_damp(
-  current : Float,
-  target : Float,
-  speed : Float,
-  dt : Float,
-) -> Float {
-  let diff = target - current
-  current + diff * clampf(speed * dt, 0.0, 1.0)
-}
 
 // RNG
 
@@ -844,59 +729,6 @@ pub fn check_objective_progress(
 
 // Check if all objectives are complete
 
-///|
-/// Returns whether all active mission objectives have been completed.
-pub fn all_objectives_complete(game : Game) -> Bool {
-  if game.objectives_count == 0 {
-    return false
-  }
-  for i in 0..<game.objectives_count {
-    if not(game.objectives[i].complete) {
-      return false
-    }
-  }
-  true
-}
-
 // Accuracy percentage
 
-///|
-/// Returns the hit accuracy as an integer percentage from 0 to 100.
-pub fn calc_accuracy(shots_fired : Int, shots_hit : Int) -> Int {
-  if shots_fired <= 0 {
-    0
-  } else {
-    let pct = Float::from_int(shots_hit) / Float::from_int(shots_fired) * 100.0
-    pct.to_int()
-  }
-}
-
 // Mission rank based on score, time, accuracy
-
-///|
-/// Returns the mission performance rank from S to D based on score, time, and accuracy.
-pub fn calc_rank(score : Int, time : Float, accuracy : Int) -> String {
-  let score_pts : Int = score / 100
-  let time_bonus : Int = if time < 60.0 {
-    50
-  } else if time < 120.0 {
-    30
-  } else if time < 180.0 {
-    15
-  } else {
-    0
-  }
-  let acc_bonus : Int = accuracy / 2
-  let total = score_pts + time_bonus + acc_bonus
-  if total >= 80 {
-    "S"
-  } else if total >= 60 {
-    "A"
-  } else if total >= 40 {
-    "B"
-  } else if total >= 20 {
-    "C"
-  } else {
-    "D"
-  }
-}
