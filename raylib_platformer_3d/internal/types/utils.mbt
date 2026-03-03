@@ -81,140 +81,19 @@ pub fn smoothstep(edge0 : Float, edge1 : Float, x : Float) -> Float {
 
 // Ease-in quadratic
 
-///|
-/// Quadratic ease-in curve.
-pub fn ease_in_quad(t : Float) -> Float {
-  t * t
-}
-
 // Ease-out quadratic
-
-///|
-/// Quadratic ease-out curve.
-pub fn ease_out_quad(t : Float) -> Float {
-  t * (2.0 - t)
-}
 
 // Ease-in-out quadratic
 
-///|
-/// Quadratic ease-in-out curve.
-pub fn ease_in_out_quad(t : Float) -> Float {
-  if t < 0.5 {
-    2.0 * t * t
-  } else {
-    -1.0 + (4.0 - 2.0 * t) * t
-  }
-}
-
 // Ease-out bounce
-
-///|
-/// Bounce-like ease-out curve for impact-style animation.
-pub fn ease_out_bounce(t_in : Float) -> Float {
-  let n1 : Float = 7.5625
-  let d1 : Float = 2.75
-  let mut t = t_in
-  if t < 1.0 / d1 {
-    n1 * t * t
-  } else if t < 2.0 / d1 {
-    t = t - 1.5 / d1
-    n1 * t * t + 0.75
-  } else if t < 2.5 / d1 {
-    t = t - 2.25 / d1
-    n1 * t * t + 0.9375
-  } else {
-    t = t - 2.625 / d1
-    n1 * t * t + 0.984375
-  }
-}
 
 // Ease-out elastic (simplified)
 
-///|
-/// Elastic ease-out curve with overshoot and damping.
-pub fn ease_out_elastic(t : Float) -> Float {
-  if t <= 0.0 {
-    return 0.0
-  }
-  if t >= 1.0 {
-    return 1.0
-  }
-  let c4 : Float = two_pi / 3.0
-  let neg10 : Float = -10.0
-  let power : Float = neg10 * t
-  let ln2 : Float = 0.6931472
-  let x : Float = power * ln2
-  let ax : Float = x.abs()
-  let exp_val : Float = if ax > 10.0 {
-    0.0
-  } else {
-    let mut result : Float = 1.0
-    let mut term : Float = x
-    result = result + term
-    term = term * x / 2.0
-    result = result + term
-    term = term * x / 3.0
-    result = result + term
-    term = term * x / 4.0
-    result = result + term
-    term = term * x / 5.0
-    result = result + term
-    term = term * x / 6.0
-    result = result + term
-    if result < 0.0 {
-      0.0
-    } else {
-      result
-    }
-  }
-  let sin_arg : Float = (t * 10.0 - 0.75) * c4
-  exp_val * @math.sinf(sin_arg) + 1.0
-}
-
 // Move toward value
-
-///|
-/// Moves `current` toward `target` by at most `max_delta`.
-pub fn move_toward(current : Float, target : Float, max_delta : Float) -> Float {
-  let diff = target - current
-  if diff.abs() <= max_delta {
-    target
-  } else {
-    current + signf(diff) * max_delta
-  }
-}
 
 // Wrap angle to 0..360
 
-///|
-/// Wraps an angle in degrees to the range `[0, 360)`.
-pub fn wrap_angle(angle : Float) -> Float {
-  let mut a = angle
-  for {
-    if a >= 360.0 {
-      a = a - 360.0
-    } else if a < 0.0 {
-      a = a + 360.0
-    } else {
-      break
-    }
-  }
-  a
-}
-
 // Normalize a 2D vector, returning (nx, nz, length)
-
-///|
-/// Normalizes an XZ vector and returns `(nx, nz, length)`.
-pub fn normalize2d(x : Float, z : Float) -> (Float, Float, Float) {
-  let len = @math.hypotf(x, z)
-  if len > 0.001 {
-    (x / len, z / len, len)
-  } else {
-    (0.0, 0.0, 0.0)
-  }
-}
 
 // Dot product 2d
 
@@ -226,71 +105,9 @@ pub fn dot2d(ax : Float, az : Float, bx : Float, bz : Float) -> Float {
 
 // Dot product 3d
 
-///|
-/// Computes the 3D dot product.
-pub fn dot3d(
-  ax : Float,
-  ay : Float,
-  az : Float,
-  bx : Float,
-  by : Float,
-  bz : Float,
-) -> Float {
-  ax * bx + ay * by + az * bz
-}
-
 // Reflect 2d vector off normal
 
-///|
-/// Reflects a 2D velocity vector across a normalized surface normal.
-pub fn reflect2d(
-  vx : Float,
-  vz : Float,
-  nx : Float,
-  nz : Float,
-) -> (Float, Float) {
-  let dp : Float = dot2d(vx, vz, nx, nz)
-  let d : Float = 2.0 * dp
-  (vx - d * nx, vz - d * nz)
-}
-
 // AABB overlap check
-
-///|
-/// Tests overlap between two axis-aligned 3D boxes.
-pub fn aabb_overlap(
-  ax : Float,
-  ay : Float,
-  az : Float,
-  aw : Float,
-  ah : Float,
-  ad : Float,
-  bx : Float,
-  by : Float,
-  bz : Float,
-  bw : Float,
-  bh : Float,
-  bd : Float,
-) -> Bool {
-  let a_min_x = ax - aw / 2.0
-  let a_max_x = ax + aw / 2.0
-  let a_min_y = ay - ah / 2.0
-  let a_max_y = ay + ah / 2.0
-  let a_min_z = az - ad / 2.0
-  let a_max_z = az + ad / 2.0
-  let b_min_x = bx - bw / 2.0
-  let b_max_x = bx + bw / 2.0
-  let b_min_y = by - bh / 2.0
-  let b_max_y = by + bh / 2.0
-  let b_min_z = bz - bd / 2.0
-  let b_max_z = bz + bd / 2.0
-  a_min_x < b_max_x &&
-  a_max_x > b_min_x &&
-  a_min_y < b_max_y &&
-  a_max_y > b_min_y &&
-  a_min_z < b_max_z &&
-  a_max_z > b_min_z
-}
 
 // Sphere-AABB overlap
 
@@ -520,17 +337,6 @@ pub fn spawn_particle_ring(
 
 // Allocate enemy slot
 
-///|
-/// Returns the first inactive enemy slot index, or `-1` if full.
-pub fn alloc_enemy(game : Game) -> Int {
-  for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
-      return i
-    }
-  }
-  -1
-}
-
 // Allocate projectile slot
 
 ///|
@@ -558,27 +364,6 @@ pub fn alloc_score_fly(game : Game) -> Int {
 }
 
 // Spawn a score fly text
-
-///|
-/// Spawns a floating score popup at screen coordinates.
-pub fn spawn_score_fly(
-  game : Game,
-  screen_x : Float,
-  screen_y : Float,
-  value : Int,
-) -> Unit {
-  let idx = alloc_score_fly(game)
-  if idx < 0 {
-    return
-  }
-  let sf = game.score_flies[idx]
-  sf.active = true
-  sf.x = screen_x
-  sf.y = screen_y
-  sf.value = value
-  sf.timer = 0.0
-  sf.max_time = 1.2
-}
 
 // Add score with combo
 
@@ -643,47 +428,9 @@ pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
 
 // Map a value from one range to another
 
-///|
-/// Maps a value from one numeric range into another with clamping.
-pub fn map_range(
-  value : Float,
-  in_low : Float,
-  in_high : Float,
-  out_low : Float,
-  out_high : Float,
-) -> Float {
-  let t = clampf((value - in_low) / (in_high - in_low), 0.0, 1.0)
-  out_low + (out_high - out_low) * t
-}
-
 // Approach float value at a given speed
 
-///|
-/// Moves `current` toward `target` at `speed` units per second.
-pub fn approach(
-  current : Float,
-  target : Float,
-  speed : Float,
-  dt : Float,
-) -> Float {
-  let diff = target - current
-  if diff.abs() < speed * dt {
-    target
-  } else {
-    current + signf(diff) * speed * dt
-  }
-}
-
 // Color lerp helper (returns int 0-255)
-
-///|
-/// Linearly interpolates two color channels and clamps to `0..255`.
-pub fn lerp_color(a : Int, b : Int, t : Float) -> Int {
-  let tc = clampf(t, 0.0, 1.0)
-  let result = Float::from_int(a) +
-    (Float::from_int(b) - Float::from_int(a)) * tc
-  result.to_int().clamp(min=0, max=255)
-}
 
 // Pulse helper: returns 0..1 with sine wave
 
@@ -694,15 +441,6 @@ pub fn pulse(timer : Float, speed : Float) -> Float {
 }
 
 // Flash helper: returns true for on_time, false for off_time
-
-///|
-/// Returns whether the current flash half-period is in the "on" phase.
-pub fn flash_on(timer : Float, period : Float) -> Bool {
-  let ratio : Float = timer / period
-  let floored : Float = Float::from_int(ratio.to_int())
-  let phase : Float = timer - floored * period
-  phase < period * 0.5
-}
 
 // Calculate star rating for level completion
 

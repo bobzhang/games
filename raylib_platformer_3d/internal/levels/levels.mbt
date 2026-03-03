@@ -758,24 +758,4 @@ pub fn get_level_difficulty(world : Int, level : Int) -> Int {
 
 // Check if a level should have a key requirement
 
-///|
-/// Returns whether the level requires key collection before completion.
-pub fn level_has_key(world : Int, level : Int) -> Bool {
-  level == 4 && world >= 1
-}
-
 // Get recommended star count to unlock a world
-
-///|
-/// Returns the minimum campaign stars required to unlock a world.
-pub fn world_unlock_stars(world : Int) -> Int {
-  if world == 0 {
-    0
-  } else if world == 1 {
-    5
-  } else if world == 2 {
-    12
-  } else {
-    20
-  }
-}

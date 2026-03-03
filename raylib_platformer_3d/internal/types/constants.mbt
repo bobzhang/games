@@ -293,10 +293,6 @@ pub let collect_star : Int = 1
 pub let collect_life : Int = 2
 
 ///|
-/// Numeric id for spring.
-pub let collect_spring : Int = 3
-
-///|
 /// Numeric id for coin bronze.
 pub let collect_coin_bronze : Int = 4
 
@@ -325,10 +321,6 @@ pub let hazard_lava : Int = 1
 ///|
 /// Numeric id for saw.
 pub let hazard_saw : Int = 2
-
-///|
-/// Numeric id for laser.
-pub let hazard_laser : Int = 3
 
 ///|
 /// Numeric id for fire jet.
@@ -418,19 +410,11 @@ pub let world_crystal : Int = 1
 /// Numeric id for lava.
 pub let world_lava : Int = 2
 
-///|
-/// Numeric id for sky.
-pub let world_sky : Int = 3
-
 // ========== Bouncy ==========
 
 ///|
 /// Force value for bounce force in world units per second.
 pub let bounce_force : Float = 15.0
-
-///|
-/// Force value for super bounce force in world units per second.
-pub let super_bounce_force : Float = 20.0
 
 // ========== Falling platform ==========
 
@@ -535,10 +519,6 @@ pub let enemy_bounce_speed : Float = 4.0
 pub let enemy_bounce_height : Float = 3.0
 
 ///|
-/// Size or distance value for enemy fly radius in world units.
-pub let enemy_fly_radius : Float = 3.0
-
-///|
 /// Speed value for enemy fly speed in world units per second.
 pub let enemy_fly_speed : Float = 1.5
 
@@ -559,24 +539,12 @@ pub let enemy_turret_range : Float = 12.0
 pub let enemy_turret_fire_rate : Float = 2.0
 
 ///|
-/// Speed value for enemy ghost speed in world units per second.
-pub let enemy_ghost_speed : Float = 2.0
-
-///|
-/// Size or distance value for enemy ghost fade dist in world units.
-pub let enemy_ghost_fade_dist : Float = 6.0
-
-///|
 /// Enemy parameters setting for enemy stomp bounce.
 pub let enemy_stomp_bounce : Float = 8.0
 
 ///|
 /// Size or distance value for enemy size in world units.
 pub let enemy_size : Float = 0.6
-
-///|
-/// Size or distance value for enemy kill radius in world units.
-pub let enemy_kill_radius : Float = 0.7
 
 // ========== Power-up parameters ==========
 
@@ -621,10 +589,6 @@ pub let particle_death_count : Int = 16
 ///|
 /// Count limit or quantity for particle stomp count.
 pub let particle_stomp_count : Int = 10
-
-///|
-/// Count limit or quantity for particle trail count.
-pub let particle_trail_count : Int = 2
 
 ///|
 /// Count limit or quantity for particle powerup count.
@@ -695,10 +659,6 @@ pub let deco_lamp : Int = 9
 pub let proj_enemy_shot : Int = 0
 
 ///|
-/// Numeric id for fire ball.
-pub let proj_fire_ball : Int = 1
-
-///|
 /// Speed value for proj speed in world units per second.
 pub let proj_speed : Float = 8.0
 
@@ -717,14 +677,6 @@ pub let proj_radius : Float = 0.2
 pub let star_time_threshold_1 : Float = 60.0
 
 ///|
-/// Time value for star time threshold 2 in seconds.
-pub let star_time_threshold_2 : Float = 45.0
-
-///|
-/// Time value for star time threshold 3 in seconds.
-pub let star_time_threshold_3 : Float = 30.0
-
-///|
 /// Scoring or progression value for star no death bonus.
 pub let star_no_death_bonus : Int = 100
 
@@ -735,20 +687,8 @@ pub let star_all_gems_bonus : Int = 200
 // ========== UI animation ==========
 
 ///|
-/// UI sizing value for ui fade speed in pixels.
-pub let ui_fade_speed : Float = 3.0
-
-///|
-/// UI sizing value for ui slide speed in pixels.
-pub let ui_slide_speed : Float = 5.0
-
-///|
 /// UI sizing value for ui blink speed in pixels.
 pub let ui_blink_speed : Float = 3.5
-
-///|
-/// UI sizing value for ui score fly speed in pixels.
-pub let ui_score_fly_speed : Float = 2.0
 
 ///|
 /// UI sizing value for hud height in pixels.
@@ -775,10 +715,6 @@ pub let minimap_margin : Int = 10
 ///|
 /// Time value for world intro duration in seconds.
 pub let world_intro_duration : Float = 2.5
-
-///|
-/// World intro setting for world intro fade.
-pub let world_intro_fade : Float = 0.8
 
 // ========== Death animation ==========
 
@@ -850,59 +786,7 @@ pub let two_pi : Float = 6.28318530
 /// Multiplier to convert degrees to radians.
 pub let deg2rad : Float = 0.01745329
 
-///|
-/// Multiplier to convert radians to degrees.
-pub let rad2deg : Float = 57.2957795
-
 // ========== Forest world colors ==========
-
-///|
-/// Red channel (0-255) for forest plat color.
-pub let forest_plat_r : Int = 80
-
-///|
-/// Green channel (0-255) for forest plat color.
-pub let forest_plat_g : Int = 160
-
-///|
-/// Blue channel (0-255) for forest plat color.
-pub let forest_plat_b : Int = 60
-
-///|
-/// Red channel (0-255) for forest bg color.
-pub let forest_bg_r : Int = 100
-
-///|
-/// Green channel (0-255) for forest bg color.
-pub let forest_bg_g : Int = 180
-
-///|
-/// Blue channel (0-255) for forest bg color.
-pub let forest_bg_b : Int = 255
-
-///|
-/// Red channel (0-255) for forest fog color.
-pub let forest_fog_r : Int = 140
-
-///|
-/// Green channel (0-255) for forest fog color.
-pub let forest_fog_g : Int = 200
-
-///|
-/// Blue channel (0-255) for forest fog color.
-pub let forest_fog_b : Int = 255
-
-///|
-/// Red channel (0-255) for forest tree color.
-pub let forest_tree_r : Int = 60
-
-///|
-/// Green channel (0-255) for forest tree color.
-pub let forest_tree_g : Int = 130
-
-///|
-/// Blue channel (0-255) for forest tree color.
-pub let forest_tree_b : Int = 40
 
 ///|
 /// Red channel (0-255) for forest trunk color.
@@ -919,42 +803,6 @@ pub let forest_trunk_b : Int = 40
 // ========== Crystal world colors ==========
 
 ///|
-/// Red channel (0-255) for crystal plat color.
-pub let crystal_plat_r : Int = 80
-
-///|
-/// Green channel (0-255) for crystal plat color.
-pub let crystal_plat_g : Int = 120
-
-///|
-/// Blue channel (0-255) for crystal plat color.
-pub let crystal_plat_b : Int = 180
-
-///|
-/// Red channel (0-255) for crystal bg color.
-pub let crystal_bg_r : Int = 20
-
-///|
-/// Green channel (0-255) for crystal bg color.
-pub let crystal_bg_g : Int = 30
-
-///|
-/// Blue channel (0-255) for crystal bg color.
-pub let crystal_bg_b : Int = 60
-
-///|
-/// Red channel (0-255) for crystal glow color.
-pub let crystal_glow_r : Int = 100
-
-///|
-/// Green channel (0-255) for crystal glow color.
-pub let crystal_glow_g : Int = 150
-
-///|
-/// Blue channel (0-255) for crystal glow color.
-pub let crystal_glow_b : Int = 255
-
-///|
 /// Red channel (0-255) for crystal ice color.
 pub let crystal_ice_r : Int = 150
 
@@ -969,30 +817,6 @@ pub let crystal_ice_b : Int = 240
 // ========== Lava world colors ==========
 
 ///|
-/// Red channel (0-255) for lava plat color.
-pub let lava_plat_r : Int = 160
-
-///|
-/// Green channel (0-255) for lava plat color.
-pub let lava_plat_g : Int = 80
-
-///|
-/// Blue channel (0-255) for lava plat color.
-pub let lava_plat_b : Int = 40
-
-///|
-/// Red channel (0-255) for lava bg color.
-pub let lava_bg_r : Int = 60
-
-///|
-/// Green channel (0-255) for lava bg color.
-pub let lava_bg_g : Int = 20
-
-///|
-/// Blue channel (0-255) for lava bg color.
-pub let lava_bg_b : Int = 10
-
-///|
 /// Red channel (0-255) for lava glow color.
 pub let lava_glow_r : Int = 255
 
@@ -1004,67 +828,7 @@ pub let lava_glow_g : Int = 100
 /// Blue channel (0-255) for lava glow color.
 pub let lava_glow_b : Int = 20
 
-///|
-/// Red channel (0-255) for lava rock color.
-pub let lava_rock_r : Int = 80
-
-///|
-/// Green channel (0-255) for lava rock color.
-pub let lava_rock_g : Int = 50
-
-///|
-/// Blue channel (0-255) for lava rock color.
-pub let lava_rock_b : Int = 30
-
 // ========== Sky world colors ==========
-
-///|
-/// Red channel (0-255) for sky plat color.
-pub let sky_plat_r : Int = 140
-
-///|
-/// Green channel (0-255) for sky plat color.
-pub let sky_plat_g : Int = 140
-
-///|
-/// Blue channel (0-255) for sky plat color.
-pub let sky_plat_b : Int = 160
-
-///|
-/// Red channel (0-255) for sky bg color.
-pub let sky_bg_r : Int = 180
-
-///|
-/// Green channel (0-255) for sky bg color.
-pub let sky_bg_g : Int = 200
-
-///|
-/// Blue channel (0-255) for sky bg color.
-pub let sky_bg_b : Int = 240
-
-///|
-/// Red channel (0-255) for sky cloud color.
-pub let sky_cloud_r : Int = 240
-
-///|
-/// Green channel (0-255) for sky cloud color.
-pub let sky_cloud_g : Int = 245
-
-///|
-/// Blue channel (0-255) for sky cloud color.
-pub let sky_cloud_b : Int = 255
-
-///|
-/// Red channel (0-255) for sky pillar color.
-pub let sky_pillar_r : Int = 200
-
-///|
-/// Green channel (0-255) for sky pillar color.
-pub let sky_pillar_g : Int = 195
-
-///|
-/// Blue channel (0-255) for sky pillar color.
-pub let sky_pillar_b : Int = 210
 
 // ========== Player colors ==========
 
@@ -1343,18 +1107,6 @@ pub let saw_g : Int = 180
 ///|
 /// Blue channel (0-255) for saw color.
 pub let saw_b : Int = 180
-
-///|
-/// Red channel (0-255) for laser color.
-pub let laser_r : Int = 255
-
-///|
-/// Green channel (0-255) for laser color.
-pub let laser_g : Int = 50
-
-///|
-/// Blue channel (0-255) for laser color.
-pub let laser_b : Int = 50
 
 ///|
 /// Red channel (0-255) for fire jet color.
