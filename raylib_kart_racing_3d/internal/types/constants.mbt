@@ -37,34 +37,6 @@ pub let kart_length : Float = 1.2
 pub let kart_type_balanced : Int = 0
 
 ///|
-/// Kart type index for high top speed.
-pub let kart_type_speed : Int = 1
-
-///|
-/// Kart type index for fast acceleration.
-pub let kart_type_accel : Int = 2
-
-///|
-/// Kart type index for tight handling.
-pub let kart_type_handling : Int = 3
-
-///|
-/// Kart type index for heavy weight class.
-pub let kart_type_heavy : Int = 4
-
-///|
-/// Kart type index for drift boost specialization.
-pub let kart_type_drift : Int = 5
-
-///|
-/// Kart type index for turbo speed and acceleration.
-pub let kart_type_turbo : Int = 6
-
-///|
-/// Kart type index for lightweight nimble kart.
-pub let kart_type_feather : Int = 7
-
-///|
 /// Total number of available kart types.
 pub let kart_type_count : Int = 8
 
@@ -118,10 +90,6 @@ pub let kart_max_speed : Float = 28.0
 pub let kart_friction : Float = 8.0
 
 ///|
-/// Default steering turn rate in radians per second.
-pub let kart_steer_speed : Float = 2.8
-
-///|
 /// Steering sensitivity multiplier while drifting.
 pub let drift_steer_mult : Float = 1.6
 
@@ -130,20 +98,8 @@ pub let drift_steer_mult : Float = 1.6
 pub let drift_friction_mult : Float = 0.6
 
 ///|
-/// Duration of a standard drift boost in seconds.
-pub let drift_boost_time : Float = 0.8
-
-///|
-/// Speed bonus added during a standard drift boost.
-pub let drift_boost_speed : Float = 8.0
-
-///|
 /// Gravitational acceleration in units per second squared.
 pub let gravity : Float = 20.0
-
-///|
-/// Bounce restitution factor on landing.
-pub let kart_bounce : Float = 0.3
 
 ///|
 /// Upward velocity applied when launching off a jump ramp.
@@ -264,34 +220,6 @@ pub let max_dropped_items : Int = 24
 ///|
 /// Segment type ID for a straight section.
 pub let seg_straight : Int = 0
-
-///|
-/// Segment type ID for a gentle curve.
-pub let seg_curve_gentle : Int = 1
-
-///|
-/// Segment type ID for a sharp curve.
-pub let seg_curve_sharp : Int = 2
-
-///|
-/// Segment type ID for an S-curve section.
-pub let seg_s_curve : Int = 3
-
-///|
-/// Segment type ID for a chicane section.
-pub let seg_chicane : Int = 4
-
-///|
-/// Segment type ID for a jump ramp section.
-pub let seg_jump_ramp : Int = 5
-
-///|
-/// Segment type ID for a tunnel section.
-pub let seg_tunnel : Int = 6
-
-///|
-/// Segment type ID for a bridge section.
-pub let seg_bridge : Int = 7
 
 // Track surface types
 
@@ -494,10 +422,6 @@ pub let camera_boost_fov_add : Float = 8.0
 // AI rubber-banding
 
 ///|
-/// Base speed multiplier for AI-controlled karts.
-pub let ai_base_speed_mult : Float = 0.92
-
-///|
 /// Speed boost added to AI karts trailing the player.
 pub let ai_rubberband_behind : Float = 0.12
 
@@ -506,20 +430,8 @@ pub let ai_rubberband_behind : Float = 0.12
 pub let ai_rubberband_ahead : Float = 0.08
 
 ///|
-/// AI difficulty level ID for easy mode.
-pub let ai_difficulty_easy : Int = 0
-
-///|
 /// AI difficulty level ID for medium mode.
 pub let ai_difficulty_medium : Int = 1
-
-///|
-/// AI difficulty level ID for hard mode.
-pub let ai_difficulty_hard : Int = 2
-
-///|
-/// AI difficulty level ID for expert mode.
-pub let ai_difficulty_expert : Int = 3
 
 // AI difficulty modifiers: (speed_mult, item_luck, line_accuracy, reaction_time)
 
@@ -644,18 +556,10 @@ pub let bump_spin_threshold : Float = 0.8
 // Weight-based collision
 
 ///|
-/// Force multiplier for weight-based kart bump collisions.
-pub let weight_bump_force : Float = 3.0
-
-///|
 /// Minimum weight difference required to trigger a bump spin.
 pub let weight_spin_diff : Float = 0.5
 
 // Decoration density
-
-///|
-/// Distance between trackside tree decorations in world units.
-pub let tree_spacing : Float = 8.0
 
 ///|
 /// Height of trackside barrier objects in world units.
@@ -675,51 +579,7 @@ pub let pi : Float = 3.14159265
 /// Approximation of two pi (full circle in radians).
 pub let two_pi : Float = 6.28318530
 
-///|
-/// Approximation of half pi (quarter turn in radians).
-pub let half_pi : Float = 1.57079632
-
-// Item detailed stats: (duration, speed_multiplier, damage_power, cooldown)
-
-///|
-/// Boost item stats: duration, speed multiplier, damage, and cooldown.
-pub let item_stats_boost : (Float, Float, Float, Float) = (2.0, 1.4, 0.0, 0.5)
-
-///|
-/// Shield item stats: duration, speed multiplier, damage, and cooldown.
-pub let item_stats_shield : (Float, Float, Float, Float) = (5.0, 1.0, 0.0, 1.0)
-
-///|
-/// Missile item stats: lifetime, speed multiplier, damage, and cooldown.
-pub let item_stats_missile : (Float, Float, Float, Float) = (6.0, 1.0, 1.5, 2.0)
-
-///|
-/// Oil slick item stats: lifetime, speed penalty, damage, and cooldown.
-pub let item_stats_oil : (Float, Float, Float, Float) = (15.0, 0.5, 0.8, 1.5)
-
-///|
-/// Lightning item stats: duration, speed penalty, damage, and cooldown.
-pub let item_stats_lightning : (Float, Float, Float, Float) = (
-  4.0, 0.5, 1.0, 3.0,
-)
-
-///|
-/// Star item stats: duration, speed multiplier, damage, and cooldown.
-pub let item_stats_star : (Float, Float, Float, Float) = (6.0, 1.3, 2.0, 5.0)
-
-///|
-/// Banana item stats: lifetime, speed penalty, damage, and cooldown.
-pub let item_stats_banana : (Float, Float, Float, Float) = (20.0, 0.0, 1.0, 0.5)
-
-///|
-/// Triple mushroom item stats: duration, speed multiplier, damage, and cooldown.
-pub let item_stats_triple : (Float, Float, Float, Float) = (1.2, 1.4, 0.0, 0.3)
-
 // Track decoration types
-
-///|
-/// Decoration type ID for no decoration.
-pub let deco_none : Int = 0
 
 ///|
 /// Decoration type ID for green deciduous tree.
@@ -781,113 +641,11 @@ pub let deco_lamp_post : Int = 14
 /// Decoration type ID for sign board.
 pub let deco_sign_board : Int = 15
 
-///|
-/// Total number of distinct decoration types.
-pub let deco_type_count : Int = 16
-
-// Decoration colors by type (r, g, b)
-
-///|
-/// RGB colors for each decoration type, indexed by decoration type ID.
-pub let deco_colors : Array[(Int, Int, Int)] = [
-  (100, 100, 100), // none
-  (40, 120, 30), // tree_green
-  (30, 80, 40), // tree_pine
-  (50, 140, 40), // tree_palm
-  (110, 105, 95), // rock_small
-  (90, 85, 75), // rock_large
-  (160, 160, 170), // barrier_metal
-  (30, 30, 30), // barrier_tire
-  (180, 170, 150), // grandstand
-  (160, 150, 140), // building_small
-  (140, 140, 150), // building_tall
-  (60, 120, 40), // cactus
-  (230, 235, 240), // snow_mound
-  (100, 40, 20), // lava_rock
-  (120, 120, 130), // lamp_post
-  (180, 180, 40), // sign_board
-]
-
 // Particle configuration constants
-
-///|
-/// Downward acceleration applied to particles.
-pub let particle_gravity : Float = 8.0
-
-///|
-/// Per-frame velocity drag multiplier for particles.
-pub let particle_drag : Float = 0.97
-
-///|
-/// Number of drift spark particles emitted per frame.
-pub let drift_spark_emit_rate : Int = 3
-
-///|
-/// Number of boost flame particles emitted per frame.
-pub let boost_flame_emit_rate : Int = 3
-
-///|
-/// Number of dust particles emitted per frame on off-road surfaces.
-pub let dust_emit_rate : Int = 6
-
-///|
-/// Number of particles spawned in an explosion burst.
-pub let explosion_particle_count : Int = 15
-
-///|
-/// Number of star sparkle particles emitted per frame during star power.
-pub let star_sparkle_rate : Int = 4
 
 ///|
 /// Number of confetti particles spawned at race start.
 pub let confetti_count : Int = 20
-
-// Particle size ranges
-
-///|
-/// Radius for tiny particles.
-pub let particle_size_tiny : Float = 0.03
-
-///|
-/// Radius for small particles.
-pub let particle_size_small : Float = 0.05
-
-///|
-/// Radius for medium particles.
-pub let particle_size_medium : Float = 0.08
-
-///|
-/// Radius for large particles.
-pub let particle_size_large : Float = 0.12
-
-// Particle life ranges
-
-///|
-/// Lifespan for short-lived particles in seconds.
-pub let particle_life_short : Float = 0.2
-
-///|
-/// Lifespan for medium-lived particles in seconds.
-pub let particle_life_medium : Float = 0.5
-
-///|
-/// Lifespan for long-lived particles in seconds.
-pub let particle_life_long : Float = 0.8
-
-// Extended kart color palette with secondary colors
-
-///|
-/// Secondary highlight RGB colors for each kart, indexed by kart slot.
-pub let kart_secondary_colors : Array[(Int, Int, Int)] = [
-  (255, 100, 100), // Player - Light Red
-  (100, 150, 255), // Light Blue
-  (100, 230, 100), // Light Green
-  (255, 240, 100), // Light Yellow
-  (240, 120, 240), // Light Purple
-  (100, 240, 240), // Light Cyan
-  (255, 180, 100), // Light Orange
-  (240, 240, 240), // Bright White
-]
 
 // Kart accent colors (for trim/details)
 
@@ -965,17 +723,3 @@ pub let track_difficulty_ratings : Array[Int] = [
    5, // Grand Prix
 ]
 
-// Theme-specific decoration mapping: which deco types to use per theme
-
-///|
-/// Decoration type IDs to use for each track theme, indexed by theme.
-pub let theme_decorations : Array[Array[Int]] = [
-  [1, 4, 6, 8, 15], // Circuit: green trees, rocks, metal barriers, grandstands, signs
-  [3, 4, 7, 15, 0], // Beach: palm trees, rocks, tire barriers, signs
-  [2, 5, 6, 4, 0], // Mountain: pine trees, large rocks, metal barriers, small rocks
-  [6, 9, 10, 15, 4], // Castle: metal barriers, buildings, tall buildings, signs, rocks
-  [11, 5, 15, 4, 0], // Desert: cactus, large rocks, signs, small rocks
-  [12, 2, 6, 4, 0], // Ice: snow mounds, pine trees, metal barriers, rocks
-  [14, 9, 10, 7, 15], // Night: lamp posts, buildings, tall buildings, tire barriers, signs
-  [13, 5, 6, 4, 0], // Volcano: lava rocks, large rocks, metal barriers, small rocks
-]

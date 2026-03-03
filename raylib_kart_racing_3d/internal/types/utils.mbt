@@ -21,56 +21,15 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
-/// Returns the larger of `a` and `b`.
-pub fn maxf(a : Float, b : Float) -> Float {
-  if a > b {
-    a
-  } else {
-    b
-  }
-}
-
-///|
 /// Returns the linear interpolation from `a` to `b` by factor `t`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t
 }
 
 ///|
-/// Returns a smooth Hermite interpolation between `edge0` and `edge1` at `x`.
-pub fn smooth_step(edge0 : Float, edge1 : Float, x : Float) -> Float {
-  let t = clampf((x - edge0) / (edge1 - edge0), 0.0, 1.0)
-  t * t * (3.0 - 2.0 * t)
-}
-
-///|
 /// Returns the 2D Euclidean distance between two points on the XZ plane.
 pub fn distance2d(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
   @math.hypotf(x1 - x2, z1 - z2)
-}
-
-///|
-/// Returns the 3D Euclidean distance between two points.
-pub fn distance3d(
-  x1 : Float,
-  y1 : Float,
-  z1 : Float,
-  x2 : Float,
-  y2 : Float,
-  z2 : Float,
-) -> Float {
-  let dx = x1 - x2
-  let dy = y1 - y2
-  let dz = z1 - z2
-  (dx * dx + dy * dy + dz * dz).sqrt()
-}
-
-///|
-/// Returns the squared 2D distance between two points on the XZ plane.
-pub fn distance2d_sq(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
-  let dx = x1 - x2
-  let dz = z1 - z2
-  dx * dx + dz * dz
 }
 
 // Normalize angle to [-PI, PI]
@@ -101,27 +60,9 @@ pub fn angle_diff(from : Float, to : Float) -> Float {
 
 // Get angle from point a to point b
 
-///|
-/// Returns the angle in radians from one XZ point to another.
-pub fn angle_to(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
-  @math.atan2f(x2 - x1, z2 - z1)
-}
-
 // Dot product of 2D vectors
 
-///|
-/// Returns the 2D dot product of two vectors on the XZ plane.
-pub fn dot2d(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
-  x1 * x2 + z1 * z2
-}
-
 // Cross product magnitude of 2D vectors (useful for determining side)
-
-///|
-/// Returns the 2D cross product magnitude, useful for determining which side a point is on.
-pub fn cross2d(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
-  x1 * z2 - z1 * x2
-}
 
 // Project point onto line segment, return parameter t [0,1]
 
@@ -146,22 +87,6 @@ pub fn project_point_on_segment(
 }
 
 // Get distance from point to line segment
-
-///|
-/// Returns the shortest distance from a point to a line segment on the XZ plane.
-pub fn point_to_segment_dist(
-  px : Float,
-  pz : Float,
-  ax : Float,
-  az : Float,
-  bx : Float,
-  bz : Float,
-) -> Float {
-  let t = project_point_on_segment(px, pz, ax, az, bx, bz)
-  let proj_x = ax + (bx - ax) * t
-  let proj_z = az + (bz - az) * t
-  distance2d(px, pz, proj_x, proj_z)
-}
 
 // Get the surface grip multiplier
 
@@ -362,24 +287,7 @@ pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
   low + (high - low) * n
 }
 
-///|
-/// Returns whether a random roll succeeds with the given `chance` probability.
-pub fn rand_bool(game : Game, chance : Float) -> Bool {
-  rand_rangef(game, 0.0, 1.0) < chance
-}
-
 // Allocators
-
-///|
-/// Returns the index of the first inactive powerup slot, or -1 if full.
-pub fn alloc_powerup(game : Game) -> Int {
-  for i in 0..<game.powerups.length() {
-    if not(game.powerups[i].active) {
-      return i
-    }
-  }
-  -1
-}
 
 ///|
 /// Returns the index of the first inactive projectile slot, or -1 if full.
@@ -658,32 +566,6 @@ pub fn find_target_ahead(game : Game, kart_idx : Int) -> Int {
 
 // Find nearest opponent behind the given kart
 
-///|
-/// Returns the index of the nearest opponent behind `kart_idx`, or -1 if none found.
-pub fn find_target_behind(game : Game, kart_idx : Int) -> Int {
-  let kart = game.karts[kart_idx]
-  let mut best_idx = -1
-  let mut best_dist : Float = 99999.0
-  for i in 0..<max_karts {
-    if i == kart_idx {
-      continue
-    }
-    let other = game.karts[i]
-    if not(other.active) || other.finished {
-      continue
-    }
-    if other.total_progress >= kart.total_progress {
-      continue
-    }
-    let d = distance2d(kart.x, kart.z, other.x, other.z)
-    if d < best_dist {
-      best_dist = d
-      best_idx = i
-    }
-  }
-  best_idx
-}
-
 // Get item probability weights based on race position (better items when further behind)
 
 ///|
@@ -706,29 +588,6 @@ pub fn get_item_weights(place : Int) -> Array[Int] {
 }
 
 // Pick a random powerup based on position weights
-
-///|
-/// Returns a randomly selected powerup type weighted by the kart's race `place`.
-pub fn pick_random_powerup(game : Game, place : Int) -> Int {
-  let weights = get_item_weights(place)
-  let mut total = 0
-  for weight in weights {
-    total = total + weight
-  }
-  if total == 0 {
-    return powerup_boost
-  }
-  let roll = rand_range(game, 0, total - 1)
-  let mut accum = 0
-  for i in 0..<weights.length() {
-    accum = accum + weights[i]
-    if roll < accum {
-      // Map index to powerup type (1-indexed)
-      return i + 1
-    }
-  }
-  powerup_boost
-}
 
 // Calculate rubber-band speed multiplier for AI
 
@@ -793,25 +652,6 @@ pub fn ordinal_suffix(n : Int) -> String {
 }
 
 // Track spline interpolation: get position at progress along segment
-
-///|
-/// Returns the interpolated 3D position at parameter `t` along track segment `seg_idx`.
-pub fn interpolate_track_position(
-  game : Game,
-  seg_idx : Int,
-  t : Float,
-) -> (Float, Float, Float) {
-  let wc = game.waypoint_count
-  if wc < 2 {
-    return (0.0, 0.0, 0.0)
-  }
-  let wp0 = get_waypoint(game, seg_idx)
-  let wp1 = get_waypoint(game, (seg_idx + 1) % wc)
-  let x = lerpf(wp0.x, wp1.x, t)
-  let y = lerpf(wp0.y, wp1.y, t)
-  let z = lerpf(wp0.z, wp1.z, t)
-  (x, y, z)
-}
 
 // Get track direction vector at a segment
 
