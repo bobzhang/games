@@ -34,10 +34,6 @@ pub let state_game_over : Int = 4
 /// Numeric id for battle select.
 pub let state_battle_select : Int = 5
 
-///|
-/// Numeric id for victory.
-pub let state_victory : Int = 6
-
 // Ship classes
 
 ///|
@@ -280,10 +276,6 @@ pub let cannon_chain_shot : Int = 4
 pub let light_cannon_damage : Float = 8.0
 
 ///|
-/// Size or distance value for light cannon range in world units.
-pub let light_cannon_range : Float = 35.0
-
-///|
 /// Cannon stats: damage, range, reload_time, speed, arc setting for light cannon reload.
 pub let light_cannon_reload : Float = 1.5
 
@@ -298,10 +290,6 @@ pub let light_cannon_arc : Float = 4.0
 ///|
 /// Damage value for medium cannon damage.
 pub let medium_cannon_damage : Float = 14.0
-
-///|
-/// Size or distance value for medium cannon range in world units.
-pub let medium_cannon_range : Float = 40.0
 
 ///|
 /// Cannon stats: damage, range, reload_time, speed, arc setting for medium cannon reload.
@@ -320,10 +308,6 @@ pub let medium_cannon_arc : Float = 5.0
 pub let heavy_cannon_damage : Float = 22.0
 
 ///|
-/// Size or distance value for heavy cannon range in world units.
-pub let heavy_cannon_range : Float = 45.0
-
-///|
 /// Cannon stats: damage, range, reload_time, speed, arc setting for heavy cannon reload.
 pub let heavy_cannon_reload : Float = 3.5
 
@@ -340,10 +324,6 @@ pub let heavy_cannon_arc : Float = 6.0
 pub let mortar_damage : Float = 30.0
 
 ///|
-/// Size or distance value for mortar range in world units.
-pub let mortar_range : Float = 55.0
-
-///|
 /// Cannon stats: damage, range, reload_time, speed, arc setting for mortar reload.
 pub let mortar_reload : Float = 5.0
 
@@ -358,10 +338,6 @@ pub let mortar_arc : Float = 12.0
 ///|
 /// Damage value for chain shot damage.
 pub let chain_shot_damage : Float = 5.0
-
-///|
-/// Size or distance value for chain shot range in world units.
-pub let chain_shot_range : Float = 25.0
 
 ///|
 /// Cannon stats: damage, range, reload_time, speed, arc setting for chain shot reload.
@@ -434,32 +410,8 @@ pub let grapeshot_crew_mult : Float = 2.0
 pub let wind_dir_n : Int = 0
 
 ///|
-/// Wind system setting for wind dir ne.
-pub let wind_dir_ne : Int = 1
-
-///|
-/// Wind system setting for wind dir e.
-pub let wind_dir_e : Int = 2
-
-///|
-/// Wind system setting for wind dir se.
-pub let wind_dir_se : Int = 3
-
-///|
 /// Wind system setting for wind dir s.
 pub let wind_dir_s : Int = 4
-
-///|
-/// Wind system setting for wind dir sw.
-pub let wind_dir_sw : Int = 5
-
-///|
-/// Wind system setting for wind dir width.
-pub let wind_dir_w : Int = 6
-
-///|
-/// Wind system setting for wind dir nw.
-pub let wind_dir_nw : Int = 7
 
 ///|
 /// Speed value for wind speed calm in world units per second.
@@ -571,22 +523,6 @@ pub let sail_full_mult : Float = 1.0
 
 // Ship damage zones
 
-///|
-/// Ship damage zones setting for zone hull.
-pub let zone_hull : Int = 0
-
-///|
-/// Ship damage zones setting for zone mast.
-pub let zone_mast : Int = 1
-
-///|
-/// Ship damage zones setting for zone rudder.
-pub let zone_rudder : Int = 2
-
-///|
-/// Ship damage zones setting for zone cannon deck.
-pub let zone_cannon_deck : Int = 3
-
 // Repair speeds per damage type (HP per second per crew member assigned)
 
 ///|
@@ -601,15 +537,7 @@ pub let repair_mast_speed : Float = 0.5
 /// Speed value for repair rudder speed in world units per second.
 pub let repair_rudder_speed : Float = 0.6
 
-///|
-/// Speed value for repair cannon speed in world units per second.
-pub let repair_cannon_speed : Float = 0.4
-
 // Crew action modes
-
-///|
-/// Numeric id for sailing.
-pub let crew_action_sailing : Int = 0
 
 ///|
 /// Numeric id for cannons.
@@ -626,10 +554,6 @@ pub let crew_action_repair_mast : Int = 3
 ///|
 /// Numeric id for repair rudder.
 pub let crew_action_repair_rudder : Int = 4
-
-///|
-/// Numeric id for boarding.
-pub let crew_action_boarding : Int = 5
 
 // AI captain personality types
 
@@ -686,24 +610,12 @@ pub let ai_broadside_run : Int = 5
 pub let objective_destroy_all : Int = 0
 
 ///|
-/// Numeric id for capture flagship.
-pub let objective_capture_flagship : Int = 1
-
-///|
-/// Numeric id for defend port.
-pub let objective_defend_port : Int = 2
-
-///|
 /// Numeric id for escort convoy.
 pub let objective_escort_convoy : Int = 3
 
 ///|
 /// Numeric id for blockade run.
 pub let objective_blockade_run : Int = 4
-
-///|
-/// Numeric id for survive time.
-pub let objective_survive_time : Int = 5
 
 // Island types
 
@@ -790,10 +702,6 @@ pub let cannonball_speed : Float = 30.0
 pub let cannonball_life : Float = 4.0
 
 ///|
-/// Damping factor for water drag.
-pub let water_drag : Float = 0.98
-
-///|
 /// Physics setting for drift factor.
 pub let drift_factor : Float = 0.3
 
@@ -802,10 +710,6 @@ pub let drift_factor : Float = 0.3
 ///|
 /// Hit-point value for player max hp.
 pub let player_max_hp : Float = 120.0
-
-///|
-/// Speed value for player turn speed in world units per second.
-pub let player_turn_speed : Float = 1.2
 
 ///|
 /// Player ship defaults (frigate class) setting for player max sail.
@@ -901,22 +805,6 @@ pub let two_pi : Float = 6.28318
 
 // Minimap
 
-///|
-/// UI sizing value for minimap x in pixels.
-pub let minimap_x : Int = 860
-
-///|
-/// UI sizing value for minimap y in pixels.
-pub let minimap_y : Int = 80
-
-///|
-/// UI sizing value for minimap size in pixels.
-pub let minimap_size : Int = 150
-
-///|
-/// UI sizing value for minimap scale in pixels.
-pub let minimap_scale : Float = 0.7
-
 // Score multipliers
 
 ///|
@@ -946,10 +834,6 @@ pub let score_fortress_kill : Int = 500
 // Reputation thresholds
 
 ///|
-/// Reputation thresholds setting for rep privateer.
-pub let rep_privateer : Int = 0
-
-///|
 /// Reputation thresholds setting for rep captain.
 pub let rep_captain : Int = 500
 
@@ -972,10 +856,6 @@ pub let rep_legend : Int = 5000
 pub let wake_lifetime : Float = 2.5
 
 ///|
-/// Size or distance value for wake max width in world units.
-pub let wake_max_width : Float = 2.0
-
-///|
 /// Speed value for wake min speed in world units per second.
 pub let wake_min_speed : Float = 1.0
 
@@ -994,10 +874,6 @@ pub let debris_sink_speed : Float = 0.3
 ///|
 /// Time value for message display time in seconds.
 pub let message_display_time : Float = 3.0
-
-///|
-/// Time value for message fade time in seconds.
-pub let message_fade_time : Float = 1.0
 
 // Battle timer (for survive objectives)
 
@@ -1020,7 +896,3 @@ pub let convoy_spacing : Float = 8.0
 ///|
 /// Size or distance value for fleet follow dist in world units.
 pub let fleet_follow_dist : Float = 15.0
-
-///|
-/// Size or distance value for fleet attack dist in world units.
-pub let fleet_attack_dist : Float = 30.0

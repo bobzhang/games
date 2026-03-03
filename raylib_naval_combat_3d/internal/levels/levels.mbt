@@ -79,36 +79,6 @@ pub fn get_battle_name(battle : Int) -> String {
 
 // Get battle description
 
-///|
-/// Returns a short objective flavor description for the battle scenario.
-pub fn get_battle_description(battle : Int) -> String {
-  if battle == 0 {
-    "Scout the area. Destroy 2 enemy sloops."
-  } else if battle == 1 {
-    "Clear the coast of 3 pirate raiders."
-  } else if battle == 2 {
-    "Engage a mixed squadron in open waters."
-  } else if battle == 3 {
-    "Flush out enemies hiding behind islands."
-  } else if battle == 4 {
-    "Navigate a narrow channel under fire."
-  } else if battle == 5 {
-    "Destroy the fortress and its escort."
-  } else if battle == 6 {
-    "Engage a full enemy fleet of brigantines."
-  } else if battle == 7 {
-    "Protect the convoy from raiders."
-  } else if battle == 8 {
-    "Strike hard against heavy warships."
-  } else if battle == 9 {
-    "Break through the enemy blockade."
-  } else if battle == 10 {
-    "Command the grand fleet battle."
-  } else {
-    "Defeat the enemy armada. Last stand!"
-  }
-}
-
 // Get battle difficulty (1-5 stars)
 
 ///|
@@ -290,12 +260,6 @@ pub fn get_enemy_personalities(battle : Int) -> Array[Int] {
 
 // Which battle index has a fortress island
 
-///|
-/// Returns whether the battle includes a fortress island objective.
-pub fn battle_has_fortress(battle : Int) -> Bool {
-  battle == 5 || battle == 9 || battle == 11
-}
-
 // Get fortress island index for a battle (-1 if none)
 
 ///|
@@ -313,20 +277,6 @@ pub fn get_fortress_island(battle : Int) -> Int {
 }
 
 // Get fleet ship count for battle (allied ships)
-
-///|
-/// Returns the number of allied fleet ships available in this battle.
-pub fn get_fleet_count(battle : Int) -> Int {
-  if battle <= 4 {
-    0
-  } else if battle <= 7 {
-    1
-  } else if battle <= 9 {
-    2
-  } else {
-    3
-  }
-}
 
 // Get fleet ship classes
 

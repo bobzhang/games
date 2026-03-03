@@ -90,12 +90,6 @@ pub fn bearing(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
 
 // Check if angle b is within +/- range of angle a
 
-///|
-/// Returns whether angle `b` is within `range` radians of angle `a`.
-pub fn angle_within(a : Float, b : Float, range : Float) -> Bool {
-  angle_diff(a, b).abs() < range
-}
-
 // Sailing speed calculator - wind-based
 // Takes ship heading, wind direction, wind speed, sail amount, sail state, mast hp ratio
 
@@ -205,27 +199,6 @@ pub fn calc_wind_drift(
 
 // Cannon ballistic trajectory - calculate launch velocity for given range
 
-///|
-/// Returns cannonball launch velocity components for a shot profile.
-pub fn calc_cannon_launch(
-  fire_angle : Float,
-  cannon_speed : Float,
-  cannon_arc : Float,
-  target_dist : Float,
-) -> (Float, Float, Float) {
-  // Horizontal velocity
-  let hvel = cannon_speed
-  let vx = @math.sinf(fire_angle) * hvel
-  let vz = @math.cosf(fire_angle) * hvel
-  // Vertical velocity for arc (higher arc = more lob)
-  let arc_mult : Float = if target_dist > 20.0 {
-    cannon_arc * 1.2
-  } else {
-    cannon_arc * 0.8
-  }
-  (vx, arc_mult, vz)
-}
-
 // Get cannon damage for a specific cannon type
 
 ///|
@@ -247,24 +220,6 @@ pub fn get_cannon_damage(cannon_type : Int) -> Float {
 }
 
 // Get cannon reload time
-
-///|
-/// Returns reload time in seconds for a cannon type.
-pub fn get_cannon_reload(cannon_type : Int) -> Float {
-  if cannon_type == cannon_light {
-    light_cannon_reload
-  } else if cannon_type == cannon_medium {
-    medium_cannon_reload
-  } else if cannon_type == cannon_heavy {
-    heavy_cannon_reload
-  } else if cannon_type == cannon_mortar {
-    mortar_reload
-  } else if cannon_type == cannon_chain_shot {
-    chain_shot_reload
-  } else {
-    medium_cannon_reload
-  }
-}
 
 // Get cannon speed
 
@@ -515,24 +470,6 @@ pub fn get_class_width(ship_class : Int) -> Float {
 }
 
 ///|
-/// Returns score reward for sinking a ship class.
-pub fn get_class_score(ship_class : Int) -> Int {
-  if ship_class == class_sloop {
-    score_sloop_kill
-  } else if ship_class == class_brigantine {
-    score_brigantine_kill
-  } else if ship_class == class_frigate {
-    score_frigate_kill
-  } else if ship_class == class_galleon {
-    score_galleon_kill
-  } else if ship_class == class_man_of_war {
-    score_mow_kill
-  } else {
-    score_frigate_kill
-  }
-}
-
-///|
 /// Returns display name for a ship class id.
 pub fn get_class_name(ship_class : Int) -> String {
   if ship_class == class_sloop {
@@ -547,22 +484,6 @@ pub fn get_class_name(ship_class : Int) -> String {
     "Man-of-War"
   } else {
     "Ship"
-  }
-}
-
-///|
-/// Returns reputation title string for a reputation score.
-pub fn get_reputation_title(rep : Int) -> String {
-  if rep >= rep_legend {
-    "Legend"
-  } else if rep >= rep_admiral {
-    "Admiral"
-  } else if rep >= rep_commodore {
-    "Commodore"
-  } else if rep >= rep_captain {
-    "Captain"
-  } else {
-    "Privateer"
   }
 }
 
@@ -947,49 +868,9 @@ pub fn check_island_collision(
 
 // Check ship-to-ship collision
 
-///|
-/// Checks overlap between two circular ship footprints.
-pub fn check_ship_collision(
-  x1 : Float,
-  z1 : Float,
-  r1 : Float,
-  x2 : Float,
-  z2 : Float,
-  r2 : Float,
-) -> Bool {
-  let dist = distance2d(x1, z1, x2, z2)
-  dist < r1 + r2
-}
-
 // Get total HP ratio for player ship
 
-///|
-/// Returns normalized player survivability ratio from major HP pools.
-pub fn player_hp_ratio(game : Game) -> Float {
-  let total = game.player.hull_hp + game.player.sail_hp + game.player.rudder_hp
-  let max_total = game.player.max_hp * 3.0
-  if max_total > 0.0 {
-    total / max_total
-  } else {
-    0.0
-  }
-}
-
 // Check if player can board an enemy
-
-///|
-/// Returns whether the player is close enough to initiate boarding against an enemy.
-pub fn check_boarding_range(game : Game, enemy_idx : Int) -> Bool {
-  if enemy_idx < 0 || enemy_idx >= game.enemies.length() {
-    return false
-  }
-  let enemy = game.enemies[enemy_idx]
-  if not(enemy.active) {
-    return false
-  }
-  let dist = distance2d(game.player.x, game.player.z, enemy.x, enemy.z)
-  dist < boarding_range
-}
 
 // Resolve boarding combat
 
@@ -1008,18 +889,6 @@ pub fn resolve_boarding(
 }
 
 // Count active fleet ships
-
-///|
-/// Counts active allied fleet ships.
-pub fn count_fleet_alive(game : Game) -> Int {
-  let mut count = 0
-  for fleet_ship in game.fleet_ships {
-    if fleet_ship.active {
-      count += 1
-    }
-  }
-  count
-}
 
 // Count active convoy ships
 

@@ -284,14 +284,6 @@ pub let particle_fire : Int = 2
 pub let particle_splash : Int = 3
 
 ///|
-/// Particle type id for debris dust particles.
-pub let particle_debris : Int = 4
-
-///|
-/// Particle type id for spark particles.
-pub let particle_spark : Int = 5
-
-///|
 /// Creates an inactive particle slot with neutral defaults.
 pub fn Particle::inactive() -> Particle {
   {
@@ -420,10 +412,6 @@ pub let debris_barrel : Int = 1
 ///|
 /// Debris type id for torn sail cloth.
 pub let debris_sail_scrap : Int = 2
-
-///|
-/// Debris type id for broken mast pieces.
-pub let debris_mast_piece : Int = 3
 
 ///|
 /// Creates an inactive debris slot.
