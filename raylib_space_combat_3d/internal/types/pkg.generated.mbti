@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_space_combat_3d/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub fn add_kill_feed(Game, String, Int, Int, Int) -> Unit
 
 pub let ai_attack : Int
@@ -125,8 +123,6 @@ pub let capital_weak_point_hp : Float
 pub fn check_objective_progress(Game, Int, Int) -> Unit
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub let combo_mult_2 : Float
 
@@ -296,11 +292,7 @@ pub let max_weapon_energy : Float
 
 pub fn maxf(Float, Float) -> Float
 
-pub fn maxi(Int, Int) -> Int
-
 pub fn minf(Float, Float) -> Float
-
-pub fn mini(Int, Int) -> Int
 
 pub let missile_cooldown : Float
 

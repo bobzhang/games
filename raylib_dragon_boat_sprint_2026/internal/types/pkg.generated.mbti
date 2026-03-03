@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_dragon_boat_sprint_2026/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub let base_speed : Float
 
 pub let beat_good_window : Float
@@ -21,10 +19,6 @@ pub fn checkpoint_distance(Int) -> Float
 pub let checkpoint_gap : Float
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
-
-pub fn cosf(Float) -> Float
 
 pub let distance_to_px : Float
 
@@ -46,11 +40,7 @@ pub let max_rivals : Int
 
 pub fn maxf(Float, Float) -> Float
 
-pub fn maxi(Int, Int) -> Int
-
 pub fn minf(Float, Float) -> Float
-
-pub fn mini(Int, Int) -> Int
 
 pub fn randf(Float, Float) -> Float
 
@@ -65,8 +55,6 @@ pub let river_y : Int
 pub let screen_h : Int
 
 pub let screen_w : Int
-
-pub fn sinf(Float) -> Float
 
 pub let target_fps : Int
 

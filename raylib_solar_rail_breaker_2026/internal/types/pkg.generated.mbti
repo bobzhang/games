@@ -6,8 +6,6 @@ import {
 }
 
 // Values
-pub fn absf(Float) -> Float
-
 pub fn angle_dist(Float, Float) -> Float
 
 pub let base_radius : Float
@@ -33,10 +31,6 @@ pub fn center_x() -> Float
 pub fn center_y() -> Float
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
-
-pub fn cosf(Float) -> Float
 
 pub fn dist2(Float, Float, Float, Float) -> Float
 
@@ -121,10 +115,6 @@ pub let screen_h : Int
 pub let screen_w : Int
 
 pub fn shortest_angle(Float, Float) -> Float
-
-pub fn sinf(Float) -> Float
-
-pub fn sqrtf(Float) -> Float
 
 pub let stage_clear_delay : Float
 

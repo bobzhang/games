@@ -6,8 +6,6 @@ import {
 }
 
 // Values
-pub fn absf(Float) -> Float
-
 pub let beat_accel_per_sec : Float
 
 pub let beat_min_interval : Float
@@ -21,8 +19,6 @@ pub let burst_duration : Float
 pub let burst_slow_factor : Float
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub fn col(Int, Int, Int, Int) -> @raylib.Color
 
@@ -66,8 +62,6 @@ pub fn lane_to_y(Int) -> Int
 
 pub fn maxf(Float, Float) -> Float
 
-pub fn maxi(Int, Int) -> Int
-
 pub fn minf(Float, Float) -> Float
 
 pub let mismatch_harmony_extra : Float
@@ -87,8 +81,6 @@ pub let screen_h : Int
 pub let screen_w : Int
 
 pub fn set_message(Game, String, Float) -> Unit
-
-pub fn sinf(Float) -> Float
 
 pub let stage_h : Int
 

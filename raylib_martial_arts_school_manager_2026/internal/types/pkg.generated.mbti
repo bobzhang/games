@@ -12,8 +12,6 @@ pub let burst_time_multiplier : Float
 
 pub fn clampf(Float, Float, Float) -> Float
 
-pub fn clampi(Int, Int, Int) -> Int
-
 pub let defense_fatigue_gain_per_sec : Float
 
 pub let defense_stipend_per_sec : Float
@@ -69,8 +67,6 @@ pub let room_train : Int
 pub let screen_h : Int
 
 pub let screen_w : Int
-
-pub fn sinf(Float) -> Float
 
 pub let spar_fatigue_gain_per_sec : Float
 

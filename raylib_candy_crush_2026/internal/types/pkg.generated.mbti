@@ -6,8 +6,6 @@ import {
 }
 
 // Values
-pub fn absi(Int) -> Int
-
 pub let base_jelly : Int
 
 pub let board_cells : Int
@@ -33,8 +31,6 @@ pub let candy_kinds : Int
 pub let cell_px : Int
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub fn hint_button_rect() -> (Int, Int, Int, Int)
 

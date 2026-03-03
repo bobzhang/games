@@ -28,8 +28,6 @@ pub fn beacon_total_integrity(Game) -> Float
 
 pub fn clampf(Float, Float, Float) -> Float
 
-pub fn clampi(Int, Int, Int) -> Int
-
 pub let corridor_lanes : Int
 
 pub let dash_cooldown : Float
@@ -84,8 +82,6 @@ pub let max_enemies : Int
 
 pub fn maxf(Float, Float) -> Float
 
-pub fn maxi(Int, Int) -> Int
-
 pub let night_banner_time : Float
 
 pub let night_clear_charge_bonus : Float
@@ -113,8 +109,6 @@ pub let screen_h : Int
 pub let screen_w : Int
 
 pub let shake_hit_time : Float
-
-pub fn sinf(Float) -> Float
 
 pub let spawn_interval_decay : Float
 

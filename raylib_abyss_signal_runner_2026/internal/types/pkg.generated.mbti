@@ -6,8 +6,6 @@ import {
 }
 
 // Values
-pub fn absf(Float) -> Float
-
 pub fn alloc_trail(Game) -> Int
 
 pub let base_scroll : Float
@@ -47,10 +45,6 @@ pub let cave_x_margin : Float
 pub fn chance(Int) -> Bool
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
-
-pub fn cosf(Float) -> Float
 
 pub let dash_cd_time : Float
 
@@ -118,8 +112,6 @@ pub let screen_h : Int
 
 pub let screen_w : Int
 
-pub fn sinf(Float) -> Float
-
 pub let sonar_cd_time : Float
 
 pub let sonar_destroy_r : Float
@@ -133,8 +125,6 @@ pub let spawn_spacing_max : Float
 pub let spawn_spacing_min : Float
 
 pub let spawn_start_y : Float
-
-pub fn sqrtf(Float) -> Float
 
 pub let stage_base_goal : Float
 

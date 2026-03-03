@@ -12,8 +12,6 @@ pub fn btn_restart_rect() -> (Int, Int, Int, Int)
 
 pub fn clampf(Float, Float, Float) -> Float
 
-pub fn clampi(Int, Int, Int) -> Int
-
 pub let flap_impulse : Float
 
 pub let gravity : Float
@@ -25,8 +23,6 @@ pub let max_particles : Int
 pub let max_pickups : Int
 
 pub fn maxf(Float, Float) -> Float
-
-pub fn mini(Int, Int) -> Int
 
 pub fn obstacle_gap_mid(Obstacle) -> Float
 

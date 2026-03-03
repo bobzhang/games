@@ -6,8 +6,6 @@ import {
 }
 
 // Values
-pub fn absf(Float) -> Float
-
 pub let anim_pop_scale : Float
 
 pub let anim_pop_speed : Float
@@ -87,6 +85,8 @@ pub(all) struct Game {
   mut msg : String
   mut msg_t : Float
   mut keep_playing : Bool
+
+  fn new() -> Game
 }
 pub fn Game::new() -> Self
 
@@ -107,8 +107,10 @@ pub(all) struct Tile {
   mut scale : Float
   mut is_new : Bool
   mut is_merged : Bool
+
+  fn new() -> Tile
 }
-pub fn Tile::empty() -> Self
+pub fn Tile::new() -> Self
 
 // Type aliases
 

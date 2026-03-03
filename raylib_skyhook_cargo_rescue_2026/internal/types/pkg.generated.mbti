@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_skyhook_cargo_rescue_2026/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub fn btn_boost() -> (Int, Int, Int, Int)
 
 pub fn btn_down() -> (Int, Int, Int, Int)
@@ -23,10 +21,6 @@ pub fn btn_right() -> (Int, Int, Int, Int)
 pub fn btn_up() -> (Int, Int, Int, Int)
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
-
-pub fn cosf(Float) -> Float
 
 pub fn dist2(Float, Float, Float, Float) -> Float
 
@@ -54,11 +48,7 @@ pub let max_survivors : Int
 
 pub fn maxf(Float, Float) -> Float
 
-pub fn maxi(Int, Int) -> Int
-
 pub fn minf(Float, Float) -> Float
-
-pub fn mini(Int, Int) -> Int
 
 pub let panel_w : Int
 
@@ -99,8 +89,6 @@ pub fn safe_zone_y() -> Int
 pub let screen_h : Int
 
 pub let screen_w : Int
-
-pub fn sinf(Float) -> Float
 
 pub fn start_button_rect() -> (Int, Int, Int, Int)
 

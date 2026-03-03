@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_voxel_world_3d/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub let ai_attack : Int
 
 pub let ai_chase : Int
@@ -107,8 +105,6 @@ pub let chunk_y : Int
 pub let chunk_z : Int
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub let cow_health : Int
 
@@ -232,8 +228,6 @@ pub let max_light_level : Int
 
 pub fn maxf(Float, Float) -> Float
 
-pub fn maxi(Int, Int) -> Int
-
 pub let min_ambient_light : Float
 
 pub let mine_speed_bedrock : Float
@@ -263,8 +257,6 @@ pub let mine_speed_stone : Float
 pub let mine_speed_wood : Float
 
 pub fn minf(Float, Float) -> Float
-
-pub fn mini(Int, Int) -> Int
 
 pub fn moisture_noise(Float, Float) -> Float
 

@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_wuxia_rooftop_duel_2026/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub fn arena_bottom() -> Float
 
 pub fn arena_center_x() -> Float
@@ -94,8 +92,6 @@ pub fn maxf(Float, Float) -> Float
 
 pub fn minf(Float, Float) -> Float
 
-pub fn mini(Int, Int) -> Int
-
 pub fn normalize(Float, Float) -> (Float, Float)
 
 pub let parry_active_t : Float
@@ -125,8 +121,6 @@ pub let screen_h : Int
 pub let screen_w : Int
 
 pub fn set_message(Game, String, Float) -> Unit
-
-pub fn sinf(Float) -> Float
 
 pub let spawn_interval_base : Float
 

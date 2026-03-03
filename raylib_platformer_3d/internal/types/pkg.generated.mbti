@@ -4,8 +4,6 @@ package "tonyfettes/raylib-examples/raylib_platformer_3d/internal/types"
 // Values
 pub fn aabb_overlap(Float, Float, Float, Float, Float, Float, Float, Float, Float, Float, Float, Float) -> Bool
 
-pub fn absf(Float) -> Float
-
 pub fn add_score(Game, Int) -> Unit
 
 pub let air_control : Float
@@ -49,8 +47,6 @@ pub let checkpoint_activate_range : Float
 pub let checkpoint_flag_height : Float
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub let coin_bronze_b : Int
 
@@ -436,11 +432,7 @@ pub let max_projectiles : Int
 
 pub fn maxf(Float, Float) -> Float
 
-pub fn maxi(Int, Int) -> Int
-
 pub fn minf(Float, Float) -> Float
-
-pub fn mini(Int, Int) -> Int
 
 pub let minimap_margin : Int
 

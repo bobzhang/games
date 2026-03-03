@@ -6,8 +6,6 @@ import {
 }
 
 // Values
-pub fn absf(Float) -> Float
-
 pub let base_ring_count : Int
 
 pub let base_ring_x : Array[Int]
@@ -35,8 +33,6 @@ pub let camera_shake_power : Float
 pub let campaign_clear_delay : Float
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub fn count_team_bombs(Game, Team) -> Int
 

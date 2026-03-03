@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_shadow_puppet_theater_2026/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub fn active_slow_factor(Game) -> Float
 
 pub fn add_score(Game, Int) -> Unit
@@ -15,8 +13,6 @@ pub let burst_duration : Float
 pub let burst_slow_factor : Float
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub let combo_hold_time : Float
 
@@ -40,8 +36,6 @@ pub let max_sequence_len : Int
 
 pub fn maxf(Float, Float) -> Float
 
-pub fn maxi(Int, Int) -> Int
-
 pub fn minf(Float, Float) -> Float
 
 pub let mistake_excitement_loss : Float
@@ -63,8 +57,6 @@ pub let screen_w : Int
 pub fn sequence_len_for_stage(Int) -> Int
 
 pub fn set_message(Game, String, Float) -> Unit
-
-pub fn sinf(Float) -> Float
 
 pub let spotlight_drain : Float
 

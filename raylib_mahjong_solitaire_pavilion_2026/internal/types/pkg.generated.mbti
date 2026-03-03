@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_mahjong_solitaire_pavilion_2026/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub fn active_at(Game, Int, Int) -> Bool
 
 pub fn active_count(Game) -> Int
@@ -13,8 +11,6 @@ pub fn board_metrics(Game) -> (Int, Int, Int)
 pub fn burst_tile(Game, Int, Int, Int, Int) -> Unit
 
 pub fn cell_at(Game, Int, Int) -> Int
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub fn clear_board(Game) -> Unit
 
@@ -55,10 +51,6 @@ pub let max_rows : Int
 pub let max_undos : Int
 
 pub fn maxf(Float, Float) -> Float
-
-pub fn maxi(Int, Int) -> Int
-
-pub fn mini(Int, Int) -> Int
 
 pub fn next_button_rect() -> (Int, Int, Int, Int)
 

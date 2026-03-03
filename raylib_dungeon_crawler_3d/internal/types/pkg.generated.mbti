@@ -2,10 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_dungeon_crawler_3d/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
-pub fn absi(Int) -> Int
-
 pub fn add_buff(Game, Int, Float, Int) -> Unit
 
 pub fn add_message(Game, String, Int, Int, Int) -> Unit
@@ -93,8 +89,6 @@ pub let cell_size : Float
 pub let chain_defense : Int
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub let class_mage : Int
 
@@ -322,15 +316,11 @@ pub let max_traps : Int
 
 pub fn maxf(Float, Float) -> Float
 
-pub fn maxi(Int, Int) -> Int
-
 pub let menu_blink_speed : Float
 
 pub let min_room_size : Int
 
 pub fn minf(Float, Float) -> Float
-
-pub fn mini(Int, Int) -> Int
 
 pub let minimap_cell : Int
 

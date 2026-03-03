@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_kart_racing_3d/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub let ai_base_speed_mult : Float
 
 pub let ai_difficulty_easy : Int
@@ -73,8 +71,6 @@ pub let character_names : Array[String]
 pub let character_stats : Array[(Float, Float, Float, Float)]
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub let confetti_count : Int
 
@@ -316,11 +312,7 @@ pub let max_waypoints : Int
 
 pub fn maxf(Float, Float) -> Float
 
-pub fn maxi(Int, Int) -> Int
-
 pub fn minf(Float, Float) -> Float
-
-pub fn mini(Int, Int) -> Int
 
 pub let missile_speed : Float
 

@@ -6,13 +6,9 @@ import {
 }
 
 // Values
-pub fn absf(Float) -> Float
-
 pub fn approachf(Float, Float, Float) -> Float
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub fn col_bg_bottom() -> @raylib.Color
 
@@ -35,8 +31,6 @@ pub fn col_sky_glow() -> @raylib.Color
 pub fn col_text_dim() -> @raylib.Color
 
 pub fn col_text_main() -> @raylib.Color
-
-pub fn cosf(Float) -> Float
 
 pub let coyote_time : Float
 
@@ -89,8 +83,6 @@ pub fn run_string(Float) -> String
 pub let screen_h : Int
 
 pub let screen_w : Int
-
-pub fn sinf(Float) -> Float
 
 pub fn stage_clear_bonus(Int) -> Int
 

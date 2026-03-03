@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_arctic_outpost_survival_2026/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub fn btn_down() -> (Int, Int, Int, Int)
 
 pub fn btn_fire() -> (Int, Int, Int, Int)
@@ -26,15 +24,11 @@ pub let bullet_pierce : Int
 
 pub fn clampf(Float, Float, Float) -> Float
 
-pub fn clampi(Int, Int, Int) -> Int
-
 pub let core_r : Float
 
 pub fn core_x() -> Float
 
 pub fn core_y() -> Float
-
-pub fn cosf(Float) -> Float
 
 pub fn dist2(Float, Float, Float, Float) -> Float
 
@@ -54,11 +48,7 @@ pub let max_pickups : Int
 
 pub fn maxf(Float, Float) -> Float
 
-pub fn maxi(Int, Int) -> Int
-
 pub fn minf(Float, Float) -> Float
-
-pub fn mini(Int, Int) -> Int
 
 pub fn normalize(Float, Float) -> (Float, Float)
 
@@ -91,8 +81,6 @@ pub let screen_h : Int
 pub let screen_w : Int
 
 pub fn set_msg(Game, String, Float) -> Unit
-
-pub fn sinf(Float) -> Float
 
 pub fn start_button_rect() -> (Int, Int, Int, Int)
 

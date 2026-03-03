@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_silkroad_caravan_guard_2026/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub let ammo_max : Int
 
 pub let ammo_regen_base : Float
@@ -38,10 +36,6 @@ pub fn clamp01(Float) -> Float
 
 pub fn clampf(Float, Float, Float) -> Float
 
-pub fn clampi(Int, Int, Int) -> Int
-
-pub fn cosf(Float) -> Float
-
 pub let desert_lane_gap : Float
 
 pub let desert_lane_top : Float
@@ -66,11 +60,7 @@ pub let max_raiders : Int
 
 pub fn maxf(Float, Float) -> Float
 
-pub fn maxi(Int, Int) -> Int
-
 pub fn minf(Float, Float) -> Float
-
-pub fn mini(Int, Int) -> Int
 
 pub let morale_decay : Float
 
@@ -122,13 +112,9 @@ pub let screen_w : Int
 
 pub let shoot_cd : Float
 
-pub fn sinf(Float) -> Float
-
 pub let spawn_interval_base : Float
 
 pub let spawn_interval_min : Float
-
-pub fn sqrtf(Float) -> Float
 
 pub let state_game_over : Int
 

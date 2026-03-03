@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_clockwork_train_heist_2026/internal/types"
 
 // Values
-pub fn absi(Int) -> Int
-
 pub let board_h : Int
 
 pub fn board_px(Int) -> Int
@@ -40,8 +38,6 @@ pub fn cell_center_y(Float) -> Int
 
 pub fn clampf(Float, Float, Float) -> Float
 
-pub fn clampi(Int, Int, Int) -> Int
-
 pub let exit_x : Int
 
 pub let exit_y : Int
@@ -67,10 +63,6 @@ pub let max_loot : Int
 pub let max_particles : Int
 
 pub let max_smokes : Int
-
-pub fn maxi(Int, Int) -> Int
-
-pub fn mini(Int, Int) -> Int
 
 pub let panel_w : Int
 
@@ -101,8 +93,6 @@ pub let score_keycard : Int
 pub let screen_h : Int
 
 pub let screen_w : Int
-
-pub fn sinf(Float) -> Float
 
 pub let smoke_cost : Float
 

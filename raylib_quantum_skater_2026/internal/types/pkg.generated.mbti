@@ -22,8 +22,6 @@ pub fn chance(Int) -> Bool
 
 pub fn clampf(Float, Float, Float) -> Float
 
-pub fn clampi(Int, Int, Int) -> Int
-
 pub fn color_bg_bottom() -> @raylib.Color
 
 pub fn color_bg_top() -> @raylib.Color
@@ -37,8 +35,6 @@ pub fn color_lane_beta() -> @raylib.Color
 pub fn color_phase_bar() -> @raylib.Color
 
 pub let combo_decay_time : Float
-
-pub fn cosf(Float) -> Float
 
 pub fn dist2(Float, Float, Float, Float) -> Float
 
@@ -93,8 +89,6 @@ pub fn randi(Int, Int) -> Int
 pub let screen_h : Int
 
 pub let screen_w : Int
-
-pub fn sinf(Float) -> Float
 
 pub let speed_stage_gain : Float
 

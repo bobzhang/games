@@ -6,13 +6,9 @@ import {
 }
 
 // Values
-pub fn absf(Float) -> Float
-
 pub fn angle_delta_deg(Float, Float) -> Float
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub fn col_bg_bottom() -> @raylib.Color
 
@@ -37,8 +33,6 @@ pub fn col_stealth() -> @raylib.Color
 pub fn col_trap() -> @raylib.Color
 
 pub fn col_wall() -> @raylib.Color
-
-pub fn cosf(Float) -> Float
 
 pub fn default_exit_pos(Int) -> (Float, Float)
 
@@ -124,8 +118,6 @@ pub let screen_h : Int
 
 pub let screen_w : Int
 
-pub fn sinf(Float) -> Float
-
 pub let smoke_cover_factor : Float
 
 pub let smoke_life_secs : Float
@@ -137,8 +129,6 @@ pub let smoke_stock_base : Int
 pub let sprint_noise_pressure : Float
 
 pub let sprint_stealth_burn : Float
-
-pub fn sqrtf(Float) -> Float
 
 pub let stealth_break_damage_per_sec : Float
 

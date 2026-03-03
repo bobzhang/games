@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_museum_heist_puzzle_2026/internal/types"
 
 // Values
-pub fn absi(Int) -> Int
-
 pub fn add_border_walls(Game) -> Unit
 
 pub fn add_wall_rect(Game, Int, Int, Int, Int) -> Unit
@@ -38,8 +36,6 @@ pub fn cell_x(Int) -> Int
 
 pub fn cell_y(Int) -> Int
 
-pub fn clampi(Int, Int, Int) -> Int
-
 pub fn clear_entities(Game) -> Unit
 
 pub fn dir_delta(Direction) -> (Int, Int)
@@ -73,8 +69,6 @@ pub fn in_bounds(Int, Int) -> Bool
 pub fn in_guard_front(Guard, Int, Int) -> Bool
 
 pub fn inside_rect(Float, Float, Int, Int, Int, Int) -> Bool
-
-pub fn maxi(Int, Int) -> Int
 
 pub let menu_action_delay : Float
 

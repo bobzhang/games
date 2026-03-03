@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_bowling_alley_2026/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub let aim_max : Float
 
 pub let aim_min : Float
@@ -73,8 +71,6 @@ pub let screen_w : Int
 pub let spin_max : Float
 
 pub let spin_min : Float
-
-pub fn sqrtf(Float) -> Float
 
 pub let target_fps : Int
 

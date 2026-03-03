@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_portal_blackout_escape_2026/internal/types"
 
 // Values
-pub fn absi(Int) -> Int
-
 pub let board_h : Int
 
 pub fn board_px(Int) -> Int
@@ -39,8 +37,6 @@ pub fn cell_center_x(Float) -> Int
 pub fn cell_center_y(Float) -> Int
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub let core_need : Int
 
@@ -82,10 +78,6 @@ pub let max_lives : Int
 
 pub let max_particles : Int
 
-pub fn maxi(Int, Int) -> Int
-
-pub fn mini(Int, Int) -> Int
-
 pub let panel_w : Int
 
 pub let panel_x0 : Int
@@ -121,8 +113,6 @@ pub let score_win : Int
 pub let screen_h : Int
 
 pub let screen_w : Int
-
-pub fn sinf(Float) -> Float
 
 pub fn start_button_rect() -> (Int, Int, Int, Int)
 

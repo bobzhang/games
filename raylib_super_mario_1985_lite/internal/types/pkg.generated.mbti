@@ -6,8 +6,6 @@ import {
 }
 
 // Values
-pub fn absf(Float) -> Float
-
 pub fn active_enemy_count(Game) -> Int
 
 pub let block_hit_score : Int
@@ -19,8 +17,6 @@ pub let camera_lerp : Float
 pub let castle_walk_speed : Float
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub fn clear_tiles(Game) -> Unit
 

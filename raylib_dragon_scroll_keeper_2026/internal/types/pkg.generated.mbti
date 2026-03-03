@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_dragon_scroll_keeper_2026/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub let attack_damage : Float
 
 pub let attack_damage_wave_bonus : Float
@@ -49,8 +47,6 @@ pub let chamber_w : Float
 pub fn clamp01(Float) -> Float
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub fn dist2(Float, Float, Float, Float) -> Float
 
@@ -155,8 +151,6 @@ pub let seal_charges_max : Int
 pub let seal_charges_start : Int
 
 pub let seal_charges_wave_gain : Int
-
-pub fn sqrtf(Float) -> Float
 
 pub let stamina_attack_cost : Float
 

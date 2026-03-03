@@ -12,8 +12,6 @@ pub let ability_lightning_chain_cd : Float
 
 pub let ability_sniper_crit_cd : Float
 
-pub fn absf(Float) -> Float
-
 pub fn add_chain_line(Game, Float, Float, Float, Float, Float, Float) -> Unit
 
 pub fn alloc_enemy(Game) -> Int
@@ -77,8 +75,6 @@ pub let chain_damage_decay : Float
 pub let chain_range : Float
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub let cost_arrow : Int
 
@@ -240,11 +236,7 @@ pub let max_waves : Int
 
 pub fn maxf(Float, Float) -> Float
 
-pub fn maxi(Int, Int) -> Int
-
 pub fn minf(Float, Float) -> Float
-
-pub fn mini(Int, Int) -> Int
 
 pub let minimap_size : Int
 

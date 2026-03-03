@@ -8,8 +8,6 @@ import {
 // Values
 pub fn a_col(@raylib.Color, Int) -> @raylib.Color
 
-pub fn absf(Float) -> Float
-
 pub fn active_gust_count(Game) -> Int
 
 pub fn active_lantern_count(Game) -> Int
@@ -26,13 +24,9 @@ pub let calm_radius : Float
 
 pub fn clampf(Float, Float, Float) -> Float
 
-pub fn clampi(Int, Int, Int) -> Int
-
 pub let combo_bonus_step : Int
 
 pub let combo_window : Float
-
-pub fn cosf(Float) -> Float
 
 pub fn danger_col() -> @raylib.Color
 
@@ -143,8 +137,6 @@ pub fn shrine_col() -> @raylib.Color
 pub let shrine_count : Int
 
 pub fn shrine_position(Int) -> (Float, Float)
-
-pub fn sinf(Float) -> Float
 
 pub let spark_drain_power : Float
 

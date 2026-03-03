@@ -18,8 +18,6 @@ pub let cell_fill : Int
 
 pub let cell_unknown : Int
 
-pub fn clampi(Int, Int, Int) -> Int
-
 pub fn col_solved(Game, Int) -> Bool
 
 pub fn cross_button_rect() -> (Int, Int, Int, Int)
@@ -57,10 +55,6 @@ pub fn max_col_clues(Game) -> Int
 pub fn max_row_clues(Game) -> Int
 
 pub fn maxf(Float, Float) -> Float
-
-pub fn maxi(Int, Int) -> Int
-
-pub fn mini(Int, Int) -> Int
 
 pub fn next_button_rect() -> (Int, Int, Int, Int)
 

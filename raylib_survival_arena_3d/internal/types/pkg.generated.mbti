@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_survival_arena_3d/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub fn add_damage_indicator(Game, Float, Float) -> Unit
 
 pub fn add_kill_feed(Game, String, Int, Int, Int) -> Unit
@@ -61,8 +59,6 @@ pub let camera_fovy : Float
 pub fn clamp_to_arena(Float, Float) -> (Float, Float)
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub let combo_base_mult : Float
 

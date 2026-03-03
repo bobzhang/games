@@ -38,8 +38,6 @@ pub fn charge_for_merge(Int) -> Int
 
 pub fn clampf(Float, Float, Float) -> Float
 
-pub fn clampi(Int, Int, Int) -> Int
-
 pub fn final_grade(Game) -> String
 
 pub fn idx(Int, Int) -> Int
@@ -49,10 +47,6 @@ pub fn in_board(Int, Int) -> Bool
 pub let max_cells : Int
 
 pub fn maxf(Float, Float) -> Float
-
-pub fn maxi(Int, Int) -> Int
-
-pub fn mini(Int, Int) -> Int
 
 pub let panel_w : Int
 

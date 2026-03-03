@@ -2,10 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_subway_signal_saboteur_2026/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
-pub fn absi(Int) -> Int
-
 pub fn actor_place(Actor, Int, Int) -> Unit
 
 pub fn actor_start_move(Actor, Int, Int) -> Unit
@@ -48,8 +44,6 @@ pub fn cell_center_y(Float) -> Int
 
 pub fn clampf(Float, Float, Float) -> Float
 
-pub fn clampi(Int, Int, Int) -> Int
-
 pub let emp_cost : Float
 
 pub let goal_routed : Int
@@ -83,10 +77,6 @@ pub let max_lives : Int
 pub let max_particles : Int
 
 pub let max_trains : Int
-
-pub fn maxi(Int, Int) -> Int
-
-pub fn mini(Int, Int) -> Int
 
 pub let panel_w : Int
 
@@ -125,8 +115,6 @@ pub fn set_tile(Game, Int, Int, Tile) -> Unit
 pub fn signal_panel_bottom_y() -> Int
 
 pub fn signal_panel_top_y() -> Int
-
-pub fn sinf(Float) -> Float
 
 pub fn start_button_rect() -> (Int, Int, Int, Int)
 

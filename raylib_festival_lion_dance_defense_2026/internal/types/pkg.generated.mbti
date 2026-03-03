@@ -20,8 +20,6 @@ pub let burst_radius : Float
 
 pub fn clampf(Float, Float, Float) -> Float
 
-pub fn clampi(Int, Int, Int) -> Int
-
 pub let collision_morale_loss_firecracker : Float
 
 pub let collision_morale_loss_incident : Float

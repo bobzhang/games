@@ -6,8 +6,6 @@ import {
 }
 
 // Values
-pub fn absf(Float) -> Float
-
 pub let base_scroll_speed : Float
 
 pub fn bg_bottom() -> @raylib.Color
@@ -43,10 +41,6 @@ pub let bullet_speed : Float
 pub fn chance(Int) -> Bool
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
-
-pub fn cosf(Float) -> Float
 
 pub fn dist2(Float, Float, Float, Float) -> Float
 
@@ -156,15 +150,11 @@ pub fn shield_col() -> @raylib.Color
 
 pub let shield_damage_decay : Float
 
-pub fn sinf(Float) -> Float
-
 pub let spawn_spacing_max : Float
 
 pub let spawn_spacing_min : Float
 
 pub let spawn_start_y : Float
-
-pub fn sqrtf(Float) -> Float
 
 pub let stage_clear_delay : Float
 

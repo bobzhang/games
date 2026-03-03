@@ -10,8 +10,6 @@ pub fn cell_at(Game, Int, Int) -> Int
 
 pub fn cell_index(Int, Int) -> Int
 
-pub fn clampi(Int, Int, Int) -> Int
-
 pub fn clear_board(Game) -> Unit
 
 pub fn clear_button_rect() -> (Int, Int, Int, Int)
@@ -45,10 +43,6 @@ pub let max_cols : Int
 pub let max_rows : Int
 
 pub fn maxf(Float, Float) -> Float
-
-pub fn maxi(Int, Int) -> Int
-
-pub fn mini(Int, Int) -> Int
 
 pub fn next_button_rect() -> (Int, Int, Int, Int)
 

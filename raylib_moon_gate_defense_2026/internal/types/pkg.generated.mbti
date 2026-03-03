@@ -50,8 +50,6 @@ pub let cell_size : Int
 
 pub fn clampf(Float, Float, Float) -> Float
 
-pub fn clampi(Int, Int, Int) -> Int
-
 pub fn col_barrier() -> @raylib.Color
 
 pub fn col_bg_bottom() -> @raylib.Color
@@ -71,8 +69,6 @@ pub fn col_node(Int) -> @raylib.Color
 pub let combo_score_step : Int
 
 pub let combo_window : Float
-
-pub fn cosf(Float) -> Float
 
 pub let dir_down : Int
 
@@ -144,8 +140,6 @@ pub fn maxf(Float, Float) -> Float
 
 pub fn minf(Float, Float) -> Float
 
-pub fn mini(Int, Int) -> Int
-
 pub let node_build_cost : Float
 
 pub let node_cone_dot_sq : Float
@@ -200,13 +194,9 @@ pub let screen_w : Int
 
 pub let shake_time_hit : Float
 
-pub fn sinf(Float) -> Float
-
 pub let spawn_cd_base : Float
 
 pub let spawn_cd_min : Float
-
-pub fn sqrtf(Float) -> Float
 
 pub let state_game_over : Int
 

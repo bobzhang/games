@@ -8,8 +8,6 @@ import {
 // Values
 pub fn a_col(@raylib.Color, Int) -> @raylib.Color
 
-pub fn absf(Float) -> Float
-
 pub fn amber() -> @raylib.Color
 
 pub let bell_cd_time : Float
@@ -53,10 +51,6 @@ pub fn btn_up_rect() -> (Float, Float, Float, Float)
 pub fn chance(Int) -> Bool
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
-
-pub fn cosf(Float) -> Float
 
 pub fn cyan() -> @raylib.Color
 
@@ -162,8 +156,6 @@ pub fn shrine_x() -> Float
 
 pub fn shrine_y() -> Float
 
-pub fn sinf(Float) -> Float
-
 pub fn spark_col(Int) -> @raylib.Color
 
 pub let spawn_cd_max : Float
@@ -177,8 +169,6 @@ pub let spirit_dash_cost : Float
 pub let spirit_max : Float
 
 pub let spirit_regen : Float
-
-pub fn sqrtf(Float) -> Float
 
 pub let stage_clear_wait : Float
 

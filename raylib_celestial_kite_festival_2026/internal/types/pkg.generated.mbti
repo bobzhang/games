@@ -8,8 +8,6 @@ import {
 // Values
 pub fn a_col(@raylib.Color, Int) -> @raylib.Color
 
-pub fn absf(Float) -> Float
-
 pub fn amber() -> @raylib.Color
 
 pub fn btn_burst_rect() -> (Float, Float, Float, Float)
@@ -39,10 +37,6 @@ pub let calm_max : Float
 pub fn chance(Int) -> Bool
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
-
-pub fn cosf(Float) -> Float
 
 pub fn cyan() -> @raylib.Color
 
@@ -132,13 +126,9 @@ pub let screen_h : Int
 
 pub let screen_w : Int
 
-pub fn sinf(Float) -> Float
-
 pub fn sky_bottom() -> @raylib.Color
 
 pub fn sky_top() -> @raylib.Color
-
-pub fn sqrtf(Float) -> Float
 
 pub let stage_clear_wait : Float
 

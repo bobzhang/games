@@ -2,10 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_puzzle_dungeon_3d/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
-pub fn absi(Int) -> Int
-
 pub let achievement_all_stars : Int
 
 pub let achievement_first_clear : Int
@@ -41,8 +37,6 @@ pub let camera_height : Float
 pub let cell_size : Float
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub let collect_particle_count : Int
 
@@ -336,13 +330,9 @@ pub let max_undo : Int
 
 pub fn maxf(Float, Float) -> Float
 
-pub fn maxi(Int, Int) -> Int
-
 pub let menu_blink_speed : Float
 
 pub fn minf(Float, Float) -> Float
-
-pub fn mini(Int, Int) -> Int
 
 pub fn mirror_reflect(Tile, Dir) -> Dir
 

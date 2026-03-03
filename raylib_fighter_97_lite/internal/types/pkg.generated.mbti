@@ -6,8 +6,6 @@ import {
 }
 
 // Values
-pub fn absf(Float) -> Float
-
 pub let action_attack : Int
 
 pub let action_blockstun : Int
@@ -93,8 +91,6 @@ pub let camera_zoom_far : Float
 pub let center_line_x : Float
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub let combo_decay_step : Float
 

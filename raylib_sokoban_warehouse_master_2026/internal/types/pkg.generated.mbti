@@ -20,8 +20,6 @@ pub let board_rows : Int
 
 pub fn box_at(Game, Int, Int) -> Bool
 
-pub fn clampi(Int, Int, Int) -> Int
-
 pub fn dpad_center_x() -> Int
 
 pub fn dpad_center_y() -> Int
@@ -33,10 +31,6 @@ pub fn goal_filled_count(Game) -> Int
 pub fn inside_rect(Float, Float, Int, Int, Int, Int) -> Bool
 
 pub fn maxf(Float, Float) -> Float
-
-pub fn maxi(Int, Int) -> Int
-
-pub fn mini(Int, Int) -> Int
 
 pub fn next_button_rect() -> (Int, Int, Int, Int)
 

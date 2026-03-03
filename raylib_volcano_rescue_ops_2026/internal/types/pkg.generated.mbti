@@ -6,8 +6,6 @@ pub fn cell_index(Int, Int) -> Int
 
 pub fn clampf(Float, Float, Float) -> Float
 
-pub fn clampi(Int, Int, Int) -> Int
-
 pub fn clear_route_button_rect() -> (Int, Int, Int, Int)
 
 pub fn coolant_button_rect() -> (Int, Int, Int, Int)
@@ -73,10 +71,6 @@ pub let max_heat : Float
 pub let max_route_steps : Int
 
 pub let max_sites : Int
-
-pub fn maxi(Int, Int) -> Int
-
-pub fn mini(Int, Int) -> Int
 
 pub fn mission_result_label(Game) -> String
 

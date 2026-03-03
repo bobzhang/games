@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_naval_combat_3d/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub fn add_battle_log(Game, String) -> Unit
 
 pub fn add_battle_message(Game, String, Int, Int, Int) -> Unit
@@ -137,8 +135,6 @@ pub fn check_island_collision(Game, Float, Float, Float) -> Bool
 pub fn check_ship_collision(Float, Float, Float, Float, Float, Float) -> Bool
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub let class_brigantine : Int
 
@@ -346,8 +342,6 @@ pub let max_wakes : Int
 
 pub fn maxf(Float, Float) -> Float
 
-pub fn maxi(Int, Int) -> Int
-
 pub let medium_cannon_arc : Float
 
 pub let medium_cannon_damage : Float
@@ -363,8 +357,6 @@ pub let message_display_time : Float
 pub let message_fade_time : Float
 
 pub fn minf(Float, Float) -> Float
-
-pub fn mini(Int, Int) -> Int
 
 pub let minimap_scale : Float
 

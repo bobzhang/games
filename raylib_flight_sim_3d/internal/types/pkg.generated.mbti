@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_flight_sim_3d/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub let ai_disengage_range : Float
 
 pub let ai_engage : Int
@@ -183,8 +181,6 @@ pub fn chase_camera_pos(Float, Float, Float, Float, Float, Float, Float, Float) 
 pub let checkpoint_radius : Float
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub let cloud_base_height : Float
 

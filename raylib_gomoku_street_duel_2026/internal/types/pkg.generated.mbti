@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_gomoku_street_duel_2026/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub fn board_index(Int, Int) -> Int
 
 pub fn board_metrics(Game) -> (Int, Int, Int)
@@ -13,8 +11,6 @@ pub let board_n : Int
 pub fn burst_move(Game, Int, Int, Int, SparkKind) -> Unit
 
 pub fn cell_at(Game, Int, Int) -> Player
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub fn clear_button_rect() -> (Int, Int, Int, Int)
 
@@ -35,10 +31,6 @@ pub fn inside_rect(Float, Float, Int, Int, Int, Int) -> Bool
 pub let max_cells : Int
 
 pub fn maxf(Float, Float) -> Float
-
-pub fn maxi(Int, Int) -> Int
-
-pub fn mini(Int, Int) -> Int
 
 pub fn next_button_rect() -> (Int, Int, Int, Int)
 

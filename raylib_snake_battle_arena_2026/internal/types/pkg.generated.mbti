@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_snake_battle_arena_2026/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub let board_area_h : Int
 
 pub let board_area_w : Int
@@ -31,8 +29,6 @@ pub fn btn_up() -> (Int, Int, Int, Int)
 pub fn cell_world_center(Game, Int, Int) -> (Float, Float)
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub let dir_down : Int
 
@@ -65,10 +61,6 @@ pub let max_rivals : Int
 pub let max_segments : Int
 
 pub fn maxf(Float, Float) -> Float
-
-pub fn maxi(Int, Int) -> Int
-
-pub fn mini(Int, Int) -> Int
 
 pub fn opposite_dir(Int, Int) -> Bool
 

@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_pizza_delivery_mayhem_2026/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub fn btn_action() -> (Int, Int, Int, Int)
 
 pub fn btn_boost() -> (Int, Int, Int, Int)
@@ -23,10 +21,6 @@ pub fn btn_up() -> (Int, Int, Int, Int)
 pub fn circle_rect_hit(Float, Float, Float, Float, Float, Float, Float) -> Bool
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
-
-pub fn cosf(Float) -> Float
 
 pub fn depot_h() -> Int
 
@@ -48,11 +42,7 @@ pub let max_traffic : Int
 
 pub fn maxf(Float, Float) -> Float
 
-pub fn maxi(Int, Int) -> Int
-
 pub fn minf(Float, Float) -> Float
-
-pub fn mini(Int, Int) -> Int
 
 pub let panel_w : Int
 
@@ -89,8 +79,6 @@ pub let score_goal : Int
 pub let screen_h : Int
 
 pub let screen_w : Int
-
-pub fn sinf(Float) -> Float
 
 pub fn start_button_rect() -> (Int, Int, Int, Int)
 

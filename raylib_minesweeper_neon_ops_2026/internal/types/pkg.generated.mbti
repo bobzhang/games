@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_minesweeper_neon_ops_2026/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub fn board_area_h() -> Int
 
 pub fn board_area_w() -> Int
@@ -19,8 +17,6 @@ pub fn board_metrics(Game) -> (Int, Int, Int)
 pub let board_w : Int
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
 
 pub fn clear_ratio_pct(Game) -> Int
 
@@ -44,11 +40,7 @@ pub let max_cells : Int
 
 pub fn maxf(Float, Float) -> Float
 
-pub fn maxi(Int, Int) -> Int
-
 pub let mine_count_default : Int
-
-pub fn mini(Int, Int) -> Int
 
 pub fn panel_x() -> Int
 

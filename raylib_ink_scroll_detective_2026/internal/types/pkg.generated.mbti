@@ -36,8 +36,6 @@ pub fn clamp01(Float) -> Float
 
 pub fn clampf(Float, Float, Float) -> Float
 
-pub fn clampi(Int, Int, Int) -> Int
-
 pub let clue_count : Int
 
 pub let clue_steps_per_chain : Int
@@ -70,8 +68,6 @@ pub let max_incidents : Int
 
 pub fn maxf(Float, Float) -> Float
 
-pub fn maxi(Int, Int) -> Int
-
 pub fn minf(Float, Float) -> Float
 
 pub fn randf(Float, Float) -> Float
@@ -91,8 +87,6 @@ pub let score_wrong_accuse_penalty : Int
 pub let screen_h : Int
 
 pub let screen_w : Int
-
-pub fn sinf(Float) -> Float
 
 pub let suspect_count : Int
 

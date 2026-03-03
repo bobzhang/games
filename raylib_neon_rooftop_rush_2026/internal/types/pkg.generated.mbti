@@ -6,8 +6,6 @@ import {
 }
 
 // Values
-pub fn absf(Float) -> Float
-
 pub fn approachf(Float, Float, Float) -> Float
 
 pub let base_scroll_speed : Float
@@ -26,11 +24,7 @@ pub fn chance(Int) -> Bool
 
 pub fn clampf(Float, Float, Float) -> Float
 
-pub fn clampi(Int, Int, Int) -> Int
-
 pub fn color_mix(@raylib.Color, @raylib.Color, Float) -> @raylib.Color
-
-pub fn cosf(Float) -> Float
 
 pub let coyote_time : Float
 
@@ -105,8 +99,6 @@ pub fn rect_overlap(Float, Float, Float, Float, Float, Float, Float, Float) -> B
 pub let screen_h : Int
 
 pub let screen_w : Int
-
-pub fn sinf(Float) -> Float
 
 pub let skyline_layers : Int
 

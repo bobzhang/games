@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_night_market_chef_duel_2026/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub let boost_cooldown : Float
 
 pub let boost_heat_rate : Float
@@ -14,11 +12,7 @@ pub let boost_time : Float
 
 pub fn clampf(Float, Float, Float) -> Float
 
-pub fn clampi(Int, Int, Int) -> Int
-
 pub let combo_window : Float
-
-pub fn cosf(Float) -> Float
 
 pub fn dish_base_reward(Dish) -> Int
 
@@ -43,8 +37,6 @@ pub let hud_h : Int
 pub let max_orders : Int
 
 pub fn maxf(Float, Float) -> Float
-
-pub fn maxi(Int, Int) -> Int
 
 pub let node_count : Int
 
@@ -89,8 +81,6 @@ pub fn randi(Int, Int) -> Int
 pub let screen_h : Int
 
 pub let screen_w : Int
-
-pub fn sinf(Float) -> Float
 
 pub let spawn_interval_min : Float
 

@@ -2,8 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_submarine_sonar_hunt_2026/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub fn arena_bottom() -> Float
 
 pub let arena_h : Int
@@ -29,10 +27,6 @@ pub let base_mine_count : Int
 pub let base_target_goal : Int
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
-
-pub fn cosf(Float) -> Float
 
 pub let detect_fuel_reward : Float
 
@@ -122,8 +116,6 @@ pub let screen_h : Int
 
 pub let screen_w : Int
 
-pub fn sinf(Float) -> Float
-
 pub let sonar_base_range : Float
 
 pub let sonar_cd_time : Float
@@ -135,8 +127,6 @@ pub let sonar_hot_bonus : Float
 pub let sonar_oxygen_cost : Float
 
 pub let sonar_pulse_time : Float
-
-pub fn sqrtf(Float) -> Float
 
 pub let sub_accel : Float
 

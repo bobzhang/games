@@ -6,8 +6,6 @@ import {
 }
 
 // Values
-pub fn absf(Float) -> Float
-
 pub fn amber() -> @raylib.Color
 
 pub fn armor_col() -> @raylib.Color
@@ -39,10 +37,6 @@ pub fn btn_size() -> Float
 pub fn chance(Int) -> Bool
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
-
-pub fn cosf(Float) -> Float
 
 pub fn cyan() -> @raylib.Color
 
@@ -164,8 +158,6 @@ pub let shot_life : Float
 
 pub let shot_speed : Float
 
-pub fn sinf(Float) -> Float
-
 pub fn snow_col() -> @raylib.Color
 
 pub let spawn_gap_max : Float
@@ -173,8 +165,6 @@ pub let spawn_gap_max : Float
 pub let spawn_gap_min : Float
 
 pub let spawn_start_x : Float
-
-pub fn sqrtf(Float) -> Float
 
 pub let stage_clear_wait : Float
 

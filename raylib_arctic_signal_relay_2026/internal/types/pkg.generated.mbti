@@ -2,15 +2,9 @@
 package "tonyfettes/raylib-examples/raylib_arctic_signal_relay_2026/internal/types"
 
 // Values
-pub fn absf(Float) -> Float
-
 pub let cargo_capacity : Int
 
 pub fn clampf(Float, Float, Float) -> Float
-
-pub fn clampi(Int, Int, Int) -> Int
-
-pub fn cosf(Float) -> Float
 
 pub fn depot_r() -> Float
 
@@ -71,8 +65,6 @@ pub let rover_wind_force : Float
 pub let screen_h : Int
 
 pub let screen_w : Int
-
-pub fn sinf(Float) -> Float
 
 pub let storm_control_penalty : Float
 
