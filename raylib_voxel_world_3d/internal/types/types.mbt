@@ -139,34 +139,7 @@ pub fn Inventory::add_item(self : Inventory, item_id : Int, count : Int) -> Int 
 
 // Remove one item from the selected hotbar slot
 
-///|
-/// Consumes one item from selected slot and returns consumed item id (or `0` if empty).
-pub fn Inventory::use_selected(self : Inventory) -> Int {
-  let slot = self.slots[self.selected]
-  if slot.count > 0 {
-    let id = slot.item_id
-    slot.count -= 1
-    if slot.count <= 0 {
-      slot.item_id = 0
-    }
-    id
-  } else {
-    0
-  }
-}
-
 // Get the item id in the selected slot
-
-///|
-/// Returns item id currently selected in hotbar (or `0` when empty).
-pub fn Inventory::selected_item(self : Inventory) -> Int {
-  let slot = self.slots[self.selected]
-  if slot.count > 0 {
-    slot.item_id
-  } else {
-    0
-  }
-}
 
 // Player entity
 

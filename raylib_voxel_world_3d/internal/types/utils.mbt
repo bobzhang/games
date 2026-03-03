@@ -11,26 +11,6 @@ pub fn clampf(v : Float, low : Float, high : Float) -> Float {
 }
 
 ///|
-/// Returns minimum of two floats.
-pub fn minf(a : Float, b : Float) -> Float {
-  if a < b {
-    a
-  } else {
-    b
-  }
-}
-
-///|
-/// Returns maximum of two floats.
-pub fn maxf(a : Float, b : Float) -> Float {
-  if a > b {
-    a
-  } else {
-    b
-  }
-}
-
-///|
 /// Linearly interpolates from `a` to `b` by factor `t`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t
@@ -42,26 +22,7 @@ pub fn lerpi(a : Int, b : Int, t : Float) -> Int {
   (Float::from_int(a) + Float::from_int(b - a) * t).to_int()
 }
 
-///|
-/// Returns sign of float as `-1.0`, `0.0`, or `1.0`.
-pub fn signf(v : Float) -> Float {
-  if v > 0.0 {
-    1.0
-  } else if v < 0.0 {
-    -1.0
-  } else {
-    0.0
-  }
-}
-
 // Smoothstep interpolation
-
-///|
-/// Smoothstep interpolation between `edge0` and `edge1`.
-pub fn smoothstep(edge0 : Float, edge1 : Float, x : Float) -> Float {
-  let t = clampf((x - edge0) / (edge1 - edge0), 0.0, 1.0)
-  t * t * (3.0 - 2.0 * t)
-}
 
 // ========== Noise Functions ==========
 
@@ -91,15 +52,6 @@ fn hash_2d(x : Int, z : Int) -> Int {
 }
 
 // Simple noise function for terrain generation using sin/cos
-
-///|
-/// Deterministic hash-like 2D noise sample in range `[-1, 1]`.
-pub fn noise2d(x : Float, z : Float) -> Float {
-  let v1 = @math.sinf(x * 0.1 + z * 0.3) * 0.5
-  let v2 = @math.cosf(x * 0.2 - z * 0.1) * 0.3
-  let v3 = @math.sinf((x + z) * 0.15) * 0.2
-  v1 + v2 + v3
-}
 
 // Value noise with smooth interpolation
 
@@ -145,16 +97,6 @@ pub fn fractal_noise_2d(x : Float, z : Float, octaves : Int) -> Float {
 
 // 3D noise for cave generation
 
-///|
-/// Deterministic 3D noise sample in range `[-1, 1]`.
-pub fn noise3d(x : Float, y : Float, z : Float) -> Float {
-  let v1 = @math.sinf(x * 0.1 + y * 0.2 + z * 0.3) * 0.3
-  let v2 = @math.cosf(x * 0.15 - z * 0.1 + y * 0.25) * 0.25
-  let v3 = @math.sinf((x + y + z) * 0.12) * 0.2
-  let v4 = @math.cosf(x * 0.08 + y * 0.15 - z * 0.12) * 0.25
-  v1 + v2 + v3 + v4
-}
-
 // Cave noise using 3D value noise approximation
 
 ///|
@@ -188,16 +130,6 @@ pub fn terrain_noise(wx : Float, wz : Float) -> Float {
 }
 
 // Biome noise - determines which biome at a given position
-
-///|
-/// Low-frequency biome classifier noise at world `(wx, wz)`.
-pub fn biome_noise(wx : Float, wz : Float) -> Float {
-  let freq : Float = 0.008
-  let n1 = @math.sinf(wx * freq + 5.3) * @math.cosf(wz * freq * 0.8 + 2.1) * 0.5 +
-    0.5
-  let n2 = @math.cosf(wx * freq * 0.6 + wz * freq * 0.5 + 1.7) * 0.3 + 0.5
-  (n1 + n2) * 0.5
-}
 
 // Temperature noise - for biome blending
 
@@ -279,17 +211,6 @@ pub fn get_biome_terrain_height(wx : Int, wz : Int, biome : Int) -> Int {
 // ========== Terrain generation ==========
 
 // Get height at a world position
-
-///|
-/// Returns final terrain surface height at world coordinates `(wx, wz)`.
-pub fn get_terrain_height(wx : Int, wz : Int) -> Int {
-  let fx = Float::from_int(wx)
-  let fz = Float::from_int(wz)
-  let n = terrain_noise(fx, fz)
-  let h = Float::from_int(base_height) + n * terrain_amplitude
-  let result = h.to_int()
-  result.clamp(min=1, max=chunk_y - 10)
-}
 
 // Determine if a tree should be placed at world position
 
@@ -551,16 +472,6 @@ pub fn generate_chunk_terrain(chunk : Chunk, game : Game) -> Unit {
 // ========== World access helpers ==========
 
 // Get chunk from world
-
-///|
-/// Returns chunk option at chunk coordinates `(cx, cz)`.
-pub fn get_chunk(game : Game, cx : Int, cz : Int) -> Chunk? {
-  if cx < 0 || cx >= world_chunks_x || cz < 0 || cz >= world_chunks_z {
-    None
-  } else {
-    Some(game.chunks[cz * world_chunks_x + cx])
-  }
-}
 
 // Get block at world coordinates
 
@@ -921,16 +832,6 @@ pub fn rand_float(game : Game) -> Float {
 }
 
 // Random int in range [low, high)
-
-///|
-/// Returns random integer in inclusive range `[low, high]`.
-pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
-  if high <= low {
-    return low
-  }
-  let r = rand_next(game)
-  low + r % (high - low)
-}
 
 // Show temporary message
 

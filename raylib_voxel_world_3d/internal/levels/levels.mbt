@@ -165,49 +165,7 @@ pub fn block_color_b(kind : Int) -> Int {
 
 // Darker shade for block sides
 
-///|
-/// Returns red channel for side-face shading of a block id.
-pub fn block_side_color_r(kind : Int) -> Int {
-  let r = block_color_r(kind)
-  r * 4 / 5
-}
-
-///|
-/// Returns green channel for side-face shading of a block id.
-pub fn block_side_color_g(kind : Int) -> Int {
-  let g = block_color_g(kind)
-  g * 4 / 5
-}
-
-///|
-/// Returns blue channel for side-face shading of a block id.
-pub fn block_side_color_b(kind : Int) -> Int {
-  let b = block_color_b(kind)
-  b * 4 / 5
-}
-
 // Even darker shade for block bottom
-
-///|
-/// Returns red channel for bottom-face shading of a block id.
-pub fn block_bottom_color_r(kind : Int) -> Int {
-  let r = block_color_r(kind)
-  r * 3 / 5
-}
-
-///|
-/// Returns green channel for bottom-face shading of a block id.
-pub fn block_bottom_color_g(kind : Int) -> Int {
-  let g = block_color_g(kind)
-  g * 3 / 5
-}
-
-///|
-/// Returns blue channel for bottom-face shading of a block id.
-pub fn block_bottom_color_b(kind : Int) -> Int {
-  let b = block_color_b(kind)
-  b * 3 / 5
-}
 
 // Block alpha (water and glass are semi-transparent)
 
@@ -226,46 +184,6 @@ pub fn block_alpha(kind : Int) -> Int {
 }
 
 // ========== Biome Definitions ==========
-
-///|
-/// Returns biome-specific tree density scalar used by world generation.
-pub fn biome_tree_density(biome : Int) -> Float {
-  if biome == @types.biome_plains {
-    0.02
-  } else if biome == @types.biome_forest {
-    0.12
-  } else if biome == @types.biome_desert {
-    0.0
-  } else if biome == @types.biome_mountains {
-    0.01
-  } else if biome == @types.biome_tundra {
-    0.03
-  } else if biome == @types.biome_swamp {
-    0.06
-  } else {
-    0.03
-  }
-}
-
-///|
-/// Returns biome-specific grass/foliage density scalar.
-pub fn biome_grass_density(biome : Int) -> Float {
-  if biome == @types.biome_plains {
-    0.15
-  } else if biome == @types.biome_forest {
-    0.08
-  } else if biome == @types.biome_desert {
-    0.0
-  } else if biome == @types.biome_mountains {
-    0.02
-  } else if biome == @types.biome_tundra {
-    0.01
-  } else if biome == @types.biome_swamp {
-    0.1
-  } else {
-    0.05
-  }
-}
 
 // ========== Fog colors per time of day ==========
 
@@ -487,20 +405,6 @@ pub fn get_spawn_type_for_biome(
 
 // ========== Ore distribution ==========
 
-///|
-/// Returns typical ore vein size for a given ore block id.
-pub fn ore_vein_size(ore : Int) -> Int {
-  if ore == @types.block_ore_iron {
-    4
-  } else if ore == @types.block_ore_gold {
-    3
-  } else if ore == @types.block_ore_diamond {
-    2
-  } else {
-    1
-  }
-}
-
 // ========== Structure templates ==========
 
 // Simple house dimensions
@@ -525,281 +429,22 @@ pub fn structure_house_height() -> Int {
 
 // Get block for a house at relative position
 
-///|
-/// Returns block id at local coordinates for procedural house blueprint.
-pub fn structure_house_block(rx : Int, ry : Int, rz : Int) -> Int {
-  let w = structure_house_width() - 1
-  let d = structure_house_depth() - 1
-  let h = structure_house_height() - 1
-  // Floor
-  if ry == 0 {
-    return @types.block_planks
-  }
-  // Roof
-  if ry == h {
-    return @types.block_planks
-  }
-  // Walls
-  let is_wall = rx == 0 || rx == w || rz == 0 || rz == d
-  if is_wall && ry > 0 && ry < h {
-    // Door opening
-    if rx == w / 2 && rz == 0 && ry < 3 {
-      return @types.block_air
-    }
-    // Window openings
-    if ry == 2 {
-      if (rx == 0 || rx == w) && rz == d / 2 {
-        return @types.block_glass
-      }
-      if (rz == 0 || rz == d) && rx == w / 2 {
-        return @types.block_glass
-      }
-    }
-    return @types.block_cobblestone
-  }
-  // Interior
-  if ry > 0 && ry < h {
-    // Torch in corner
-    if rx == 1 && rz == 1 && ry == 1 {
-      return @types.block_torch
-    }
-    return @types.block_air
-  }
-  @types.block_air
-}
-
 // ========== Biome parameters definitions ==========
-
-///|
-/// Returns full biome parameter record for terrain and decoration generation.
-pub fn get_biome_params(biome : Int) -> @types.BiomeParams {
-  if biome == @types.biome_plains {
-    {
-      id: @types.biome_plains,
-      name: "Plains",
-      height_base: 22.0,
-      height_amplitude: 6.0,
-      tree_density: 0.02,
-      surface_block: @types.block_grass,
-      sub_surface_block: @types.block_dirt,
-      has_snow: false,
-      has_cactus: false,
-      water_color_r: 64,
-      water_color_g: 164,
-      water_color_b: 223,
-    }
-  } else if biome == @types.biome_forest {
-    {
-      id: @types.biome_forest,
-      name: "Forest",
-      height_base: 23.0,
-      height_amplitude: 10.0,
-      tree_density: 0.12,
-      surface_block: @types.block_grass,
-      sub_surface_block: @types.block_dirt,
-      has_snow: false,
-      has_cactus: false,
-      water_color_r: 40,
-      water_color_g: 140,
-      water_color_b: 200,
-    }
-  } else if biome == @types.biome_desert {
-    {
-      id: @types.biome_desert,
-      name: "Desert",
-      height_base: 19.0,
-      height_amplitude: 5.0,
-      tree_density: 0.0,
-      surface_block: @types.block_sand,
-      sub_surface_block: @types.block_sand,
-      has_snow: false,
-      has_cactus: true,
-      water_color_r: 80,
-      water_color_g: 180,
-      water_color_b: 200,
-    }
-  } else if biome == @types.biome_mountains {
-    {
-      id: @types.biome_mountains,
-      name: "Mountains",
-      height_base: 30.0,
-      height_amplitude: 22.0,
-      tree_density: 0.01,
-      surface_block: @types.block_stone,
-      sub_surface_block: @types.block_stone,
-      has_snow: true,
-      has_cactus: false,
-      water_color_r: 50,
-      water_color_g: 130,
-      water_color_b: 210,
-    }
-  } else if biome == @types.biome_tundra {
-    {
-      id: @types.biome_tundra,
-      name: "Tundra",
-      height_base: 21.0,
-      height_amplitude: 8.0,
-      tree_density: 0.03,
-      surface_block: @types.block_snow,
-      sub_surface_block: @types.block_gravel,
-      has_snow: true,
-      has_cactus: false,
-      water_color_r: 80,
-      water_color_g: 140,
-      water_color_b: 180,
-    }
-  } else {
-    // Swamp
-    {
-      id: @types.biome_swamp,
-      name: "Swamp",
-      height_base: 18.0,
-      height_amplitude: 3.0,
-      tree_density: 0.06,
-      surface_block: @types.block_grass,
-      sub_surface_block: @types.block_clay,
-      has_snow: false,
-      has_cactus: false,
-      water_color_r: 50,
-      water_color_g: 100,
-      water_color_b: 80,
-    }
-  }
-}
 
 // ========== Ore distribution tables per depth ==========
 
 // Get ore spawn chance at a given depth for each ore type
 
-///|
-/// Returns ore spawn chance modifier by ore type and depth.
-pub fn ore_chance_at_depth(ore : Int, depth : Int) -> Float {
-  if ore == @types.block_ore_iron {
-    if depth < 5 {
-      0.01
-    } else if depth < 15 {
-      0.025
-    } else if depth < 30 {
-      0.035
-    } else if depth < 45 {
-      0.03
-    } else {
-      0.01
-    }
-  } else if ore == @types.block_ore_gold {
-    if depth < 5 {
-      0.005
-    } else if depth < 12 {
-      0.015
-    } else if depth < 20 {
-      0.02
-    } else if depth < 28 {
-      0.015
-    } else {
-      0.0
-    }
-  } else if ore == @types.block_ore_diamond {
-    if depth < 5 {
-      0.002
-    } else if depth < 8 {
-      0.005
-    } else if depth < 14 {
-      0.008
-    } else if depth < 16 {
-      0.006
-    } else {
-      0.0
-    }
-  } else {
-    0.0
-  }
-}
-
 // Get ore vein maximum size at given depth
-
-///|
-/// Returns max ore vein size by ore type and depth.
-pub fn ore_vein_max_at_depth(ore : Int, depth : Int) -> Int {
-  if ore == @types.block_ore_iron {
-    if depth < 10 {
-      3
-    } else if depth < 25 {
-      5
-    } else {
-      4
-    }
-  } else if ore == @types.block_ore_gold {
-    if depth < 10 {
-      2
-    } else if depth < 20 {
-      4
-    } else {
-      3
-    }
-  } else if ore == @types.block_ore_diamond {
-    if depth < 8 {
-      1
-    } else if depth < 14 {
-      3
-    } else {
-      2
-    }
-  } else {
-    1
-  }
-}
 
 // ========== Structure templates ==========
 
 // Large tree template: oak tree with wider canopy
 
 ///|
-/// Returns procedural large-tree trunk height.
-pub fn structure_large_tree_height() -> Int {
-  7
-}
-
-///|
 /// Returns canopy radius for large-tree structure generation.
 pub fn structure_large_tree_canopy_radius() -> Int {
   3
-}
-
-///|
-/// Returns block id at local coordinates for large-tree blueprint.
-pub fn structure_large_tree_block(rx : Int, ry : Int, rz : Int) -> Int {
-  let trunk_h = 5
-  let canopy_start = 3
-  let canopy_end = 7
-  let r = structure_large_tree_canopy_radius()
-  // Trunk
-  if rx == 0 && rz == 0 && ry < trunk_h {
-    return @types.block_wood
-  }
-  // Canopy (sphere-ish leaves)
-  if ry >= canopy_start && ry < canopy_end {
-    let dist_sq = rx * rx + rz * rz
-    let layer = ry - canopy_start
-    let max_r : Int = if layer == 0 {
-      r
-    } else if layer == 1 {
-      r
-    } else if layer == 2 {
-      r - 1
-    } else {
-      r - 2
-    }
-    if max_r < 0 {
-      return @types.block_air
-    }
-    if dist_sq <= max_r * max_r {
-      if rx == 0 && rz == 0 && ry < trunk_h {
-        return @types.block_wood
-      }
-      return @types.block_leaves
-    }
-  }
-  @types.block_air
 }
 
 // Ruin structure template: small ruined stone walls
@@ -822,27 +467,6 @@ pub fn structure_ruin_height() -> Int {
   3
 }
 
-///|
-/// Returns block id at local coordinates for ruin blueprint.
-pub fn structure_ruin_block(rx : Int, ry : Int, rz : Int) -> Int {
-  let w = structure_ruin_width() - 1
-  let d = structure_ruin_depth() - 1
-  // Floor is cobblestone
-  if ry == 0 {
-    return @types.block_cobblestone
-  }
-  // Partial walls (some gaps for ruin effect)
-  let is_wall = rx == 0 || rx == w || rz == 0 || rz == d
-  if is_wall && ry > 0 && ry < structure_ruin_height() {
-    // Leave gaps at certain positions to look ruined
-    if (rx + rz + ry) % 3 == 0 {
-      return @types.block_air
-    }
-    return @types.block_cobblestone
-  }
-  @types.block_air
-}
-
 // Watchtower template
 
 ///|
@@ -857,129 +481,13 @@ pub fn structure_tower_height() -> Int {
   8
 }
 
-///|
-/// Returns block id at local coordinates for tower blueprint.
-pub fn structure_tower_block(rx : Int, ry : Int, rz : Int) -> Int {
-  let w = structure_tower_width() - 1
-  // Base and top platform
-  if ry == 0 || ry == structure_tower_height() - 1 {
-    return @types.block_cobblestone
-  }
-  // Walls (hollow inside)
-  let is_wall = rx == 0 || rx == w || rz == 0 || rz == w
-  if is_wall && ry > 0 && ry < structure_tower_height() - 1 {
-    // Door at ground level
-    if rx == w / 2 && rz == 0 && ry < 3 {
-      return @types.block_air
-    }
-    // Windows at mid height
-    if ry == 4 && (rx == 0 || rx == w || rz == 0 || rz == w) {
-      if rx == w / 2 || rz == w / 2 {
-        return @types.block_glass
-      }
-    }
-    return @types.block_cobblestone
-  }
-  // Interior torch
-  if rx == 1 && rz == 1 && ry == 1 {
-    return @types.block_torch
-  }
-  @types.block_air
-}
-
 // ========== Mob spawn tables per biome and time of day ==========
 
 // Get the spawn rate modifier for a biome
 
-///|
-/// Returns baseline spawn-rate multiplier for biome wildlife/mobs.
-pub fn biome_spawn_rate(biome : Int) -> Float {
-  if biome == @types.biome_plains {
-    1.0
-  } else if biome == @types.biome_forest {
-    1.2
-  } else if biome == @types.biome_desert {
-    0.4
-  } else if biome == @types.biome_mountains {
-    0.5
-  } else if biome == @types.biome_tundra {
-    0.6
-  } else if biome == @types.biome_swamp {
-    1.1
-  } else {
-    0.8
-  }
-}
-
 // Night-specific spawn multiplier
 
-///|
-/// Returns global hostile-spawn multiplier applied at night.
-pub fn night_spawn_multiplier() -> Float {
-  1.8
-}
-
 // Get the hostile mob pool for a biome at night
-
-///|
-/// Picks hostile mob type for nighttime biome pool from RNG value.
-pub fn get_night_hostile_pool(biome : Int, rng_val : Int) -> Int {
-  let r = rng_val % 100
-  if biome == @types.biome_swamp {
-    // Swamps have more spiders at night
-    if r < 30 {
-      @types.entity_zombie
-    } else if r < 50 {
-      @types.entity_spider
-    } else if r < 70 {
-      @types.entity_skeleton
-    } else {
-      0
-    }
-  } else if biome == @types.biome_desert {
-    // Deserts have more skeletons
-    if r < 25 {
-      @types.entity_zombie
-    } else if r < 60 {
-      @types.entity_skeleton
-    } else if r < 75 {
-      @types.entity_spider
-    } else {
-      0
-    }
-  } else if biome == @types.biome_tundra {
-    // Tundra has more skeletons
-    if r < 20 {
-      @types.entity_zombie
-    } else if r < 55 {
-      @types.entity_skeleton
-    } else if r < 70 {
-      @types.entity_spider
-    } else {
-      0
-    }
-  } else if biome == @types.biome_forest {
-    // Forests have more spiders
-    if r < 35 {
-      @types.entity_zombie
-    } else if r < 55 {
-      @types.entity_spider
-    } else if r < 75 {
-      @types.entity_skeleton
-    } else {
-      0
-    }
-    // Default (plains, mountains)
-  } else if r < 40 {
-    @types.entity_zombie
-  } else if r < 65 {
-    @types.entity_skeleton
-  } else if r < 80 {
-    @types.entity_spider
-  } else {
-    0
-  }
-}
 
 // ========== Damage amounts for weapons ==========
 
@@ -1005,44 +513,4 @@ pub fn get_weapon_damage(tool : Int) -> Int {
 
 // ========== Light emitting blocks ==========
 
-///|
-/// Returns emitted light level for luminous blocks (e.g. torches).
-pub fn block_light_level(kind : Int) -> Int {
-  if kind == @types.block_torch {
-    @types.torch_light_level
-  } else {
-    0
-  }
-}
-
 // ========== Block hardness (for explosion/damage resistance) ==========
-
-///|
-/// Returns relative block hardness tier for mining progression logic.
-pub fn block_hardness(kind : Int) -> Int {
-  if kind == @types.block_bedrock {
-    999
-  } else if kind == @types.block_stone || kind == @types.block_cobblestone {
-    5
-  } else if kind == @types.block_brick {
-    6
-  } else if kind == @types.block_ore_iron || kind == @types.block_ore_gold {
-    5
-  } else if kind == @types.block_ore_diamond {
-    6
-  } else if kind == @types.block_wood || kind == @types.block_planks {
-    3
-  } else if kind == @types.block_dirt || kind == @types.block_grass {
-    1
-  } else if kind == @types.block_sand || kind == @types.block_gravel {
-    1
-  } else if kind == @types.block_glass {
-    0
-  } else if kind == @types.block_leaves {
-    0
-  } else if kind == @types.block_snow || kind == @types.block_clay {
-    1
-  } else {
-    2
-  }
-}

@@ -132,10 +132,6 @@ pub let block_cactus : Int = 22
 /// Block id for clay resource block.
 pub let block_clay : Int = 23
 
-///|
-/// Total number of block ids.
-pub let block_count : Int = 24
-
 // Biome types
 
 ///|
@@ -161,10 +157,6 @@ pub let biome_tundra : Int = 4
 ///|
 /// Biome id for swamp.
 pub let biome_swamp : Int = 5
-
-///|
-/// Total number of biome ids.
-pub let biome_count : Int = 6
 
 // Tool types
 
@@ -329,10 +321,6 @@ pub let ray_step : Float = 0.02
 pub let day_length : Float = 120.0
 
 ///|
-/// Start normalized time for dawn segment.
-pub let dawn_start : Float = 0.0
-
-///|
 /// End normalized time for dawn segment.
 pub let dawn_end : Float = 0.1
 
@@ -375,10 +363,6 @@ pub let terrain_amplitude : Float = 12.0
 ///|
 /// Frequency for terrain height noise.
 pub let terrain_frequency : Float = 0.04
-
-///|
-/// Frequency controlling tree-placement noise.
-pub let tree_frequency : Float = 0.03
 
 // Caves
 
@@ -461,20 +445,8 @@ pub let stack_max : Int = 64
 // Lighting
 
 ///|
-/// Maximum light level value.
-pub let max_light_level : Int = 15
-
-///|
 /// Emitted light level from torch blocks.
 pub let torch_light_level : Int = 14
-
-///|
-/// Sky/sun light level at daytime.
-pub let sun_light_level : Int = 15
-
-///|
-/// Minimum ambient brightness multiplier at darkest time.
-pub let min_ambient_light : Float = 0.15
 
 // Entities
 
@@ -595,16 +567,8 @@ pub let entity_attack_range : Float = 1.8
 pub let particle_max : Int = 64
 
 ///|
-/// Default particle lifetime in seconds.
-pub let particle_lifetime : Float = 1.0
-
-///|
 /// Gravity acceleration applied to particles.
 pub let particle_gravity : Float = 12.0
-
-///|
-/// Default particle ejection speed scale.
-pub let particle_speed : Float = 4.0
 
 // Mining speeds (seconds to break with hand)
 
@@ -617,28 +581,12 @@ pub let mine_speed_dirt : Float = 0.5
 pub let mine_speed_grass : Float = 0.6
 
 ///|
-/// Base mining time for sand blocks.
-pub let mine_speed_sand : Float = 0.5
-
-///|
-/// Base mining time for gravel blocks.
-pub let mine_speed_gravel : Float = 0.6
-
-///|
 /// Base mining time for stone blocks.
 pub let mine_speed_stone : Float = 2.0
 
 ///|
-/// Base mining time for cobblestone blocks.
-pub let mine_speed_cobblestone : Float = 2.0
-
-///|
 /// Base mining time for log blocks.
 pub let mine_speed_wood : Float = 1.5
-
-///|
-/// Base mining time for plank blocks.
-pub let mine_speed_planks : Float = 1.0
 
 ///|
 /// Base mining time for leaf blocks.
@@ -662,62 +610,6 @@ pub let mine_speed_bedrock : Float = 999.0
 
 // Crafting recipe IDs
 
-///|
-/// Recipe id for crafting planks.
-pub let recipe_planks : Int = 0
-
-///|
-/// Recipe id for crafting sticks.
-pub let recipe_sticks : Int = 1
-
-///|
-/// Recipe id for crafting table.
-pub let recipe_crafting_table : Int = 2
-
-///|
-/// Recipe id for wooden pickaxe.
-pub let recipe_wooden_pickaxe : Int = 3
-
-///|
-/// Recipe id for stone pickaxe.
-pub let recipe_stone_pickaxe : Int = 4
-
-///|
-/// Recipe id for iron pickaxe.
-pub let recipe_iron_pickaxe : Int = 5
-
-///|
-/// Recipe id for wooden axe.
-pub let recipe_wooden_axe : Int = 6
-
-///|
-/// Recipe id for wooden shovel.
-pub let recipe_wooden_shovel : Int = 7
-
-///|
-/// Recipe id for wooden sword.
-pub let recipe_wooden_sword : Int = 8
-
-///|
-/// Recipe id for furnace.
-pub let recipe_furnace : Int = 9
-
-///|
-/// Recipe id for torch.
-pub let recipe_torch : Int = 10
-
-///|
-/// Recipe id for brick.
-pub let recipe_brick : Int = 11
-
-///|
-/// Recipe id for glass.
-pub let recipe_glass : Int = 12
-
-///|
-/// Total number of recipe ids.
-pub let recipe_count : Int = 13
-
 // Fog
 
 ///|
@@ -728,15 +620,7 @@ pub let fog_start_distance : Float = 32.0
 /// Distance where fog reaches full strength.
 pub let fog_end_distance : Float = 52.0
 
-///|
-/// Fog density parameter for distance haze.
-pub let fog_density : Float = 0.02
-
 // Water
-
-///|
-/// Update interval for water spread simulation.
-pub let water_spread_interval : Float = 0.5
 
 ///|
 /// Default sea/water level Y coordinate.

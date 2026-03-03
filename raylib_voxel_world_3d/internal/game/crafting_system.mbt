@@ -5,31 +5,6 @@
 
 // Maximum durability for each tool tier
 
-///|
-/// Returns max durability for a tool id.
-pub fn get_tool_max_durability(tool : Int) -> Int {
-  if tool == @types.tool_hand {
-    999999
-  } else if tool == @types.tool_wooden_pickaxe ||
-    tool == @types.tool_wooden_axe ||
-    tool == @types.tool_wooden_shovel ||
-    tool == @types.tool_wooden_sword {
-    60
-  } else if tool == @types.tool_stone_pickaxe ||
-    tool == @types.tool_stone_axe ||
-    tool == @types.tool_stone_shovel ||
-    tool == @types.tool_stone_sword {
-    132
-  } else if tool == @types.tool_iron_pickaxe ||
-    tool == @types.tool_iron_axe ||
-    tool == @types.tool_iron_shovel ||
-    tool == @types.tool_iron_sword {
-    250
-  } else {
-    100
-  }
-}
-
 // Get the tier level of a tool (0=hand, 1=wood, 2=stone, 3=iron)
 
 ///|
@@ -147,35 +122,6 @@ pub fn is_correct_tool_for_block(tool : Int, block : Int) -> Bool {
 
 // Get the effective mining speed multiplier when using the correct tool
 
-///|
-/// Returns mining speed multiplier for tool/block combination.
-pub fn get_tool_effectiveness(tool : Int, block : Int) -> Float {
-  let correct = is_correct_tool_for_block(tool, block)
-  let tier = get_tool_tier(tool)
-  if tool == @types.tool_hand {
-    1.0
-  } else if correct {
-    if tier == 1 {
-      0.5
-    } else if tier == 2 {
-      0.3
-    } else if tier == 3 {
-      0.15
-    } else {
-      1.0
-    }
-    // Wrong tool type, still slightly faster than hand
-  } else if tier == 1 {
-    0.8
-  } else if tier == 2 {
-    0.65
-  } else if tier == 3 {
-    0.5
-  } else {
-    1.0
-  }
-}
-
 // ========== Crafting recipe matching ==========
 
 // Check if inventory has enough of a specific item
@@ -248,48 +194,6 @@ pub fn remove_item_from_inventory(
 
 // Execute a crafting recipe: consume inputs and produce outputs
 
-///|
-/// Consumes recipe inputs and awards outputs, returning whether craft succeeded.
-pub fn execute_craft(
-  game : @types.Game,
-  recipe : @types.CraftingRecipe,
-) -> Bool {
-  if not(can_craft_recipe(game, recipe)) {
-    return false
-  }
-  // Consume input 1
-  if recipe.input1_id > 0 && recipe.input1_count > 0 {
-    let removed1 = remove_item_from_inventory(
-      game,
-      recipe.input1_id,
-      recipe.input1_count,
-    )
-    if not(removed1) {
-      return false
-    }
-  }
-  // Consume input 2
-  if recipe.input2_id > 0 && recipe.input2_count > 0 {
-    let removed2 = remove_item_from_inventory(
-      game,
-      recipe.input2_id,
-      recipe.input2_count,
-    )
-    if not(removed2) {
-      return false
-    }
-  }
-  // Produce output
-  let leftover = game.player.inventory.add_item(
-    recipe.output_id,
-    recipe.output_count,
-  )
-  if leftover > 0 {
-    @types.show_message(game, "Inventory full! Lost some items.", 2.0)
-  }
-  true
-}
-
 // ========== Tool equip cycling ==========
 
 // Cycle through tools the player owns (simplified: just cycle equipped_tool)
@@ -320,17 +224,6 @@ pub fn cycle_tool_backward(game : @types.Game) -> Unit {
 
 // Handle tool equip keys (T to cycle, number + T for specific)
 
-///|
-/// Processes tool-cycling input bindings for the current frame.
-pub fn handle_tool_input(game : @types.Game) -> Unit {
-  if @raylib.is_key_pressed(@raylib.KeyT) {
-    cycle_tool_forward(game)
-  }
-  if @raylib.is_key_pressed(@raylib.KeyR) {
-    cycle_tool_backward(game)
-  }
-}
-
 // ========== Furnace smelting logic ==========
 
 // Smelting converts raw ores to ingots (simplified as block items)
@@ -358,161 +251,26 @@ pub fn get_smelting_result(input : Int) -> Int {
 
 // Get smelting time in seconds for a given input
 
-///|
-/// Returns smelting time in seconds for a given smeltable input id.
-pub fn get_smelting_time(input : Int) -> Float {
-  if input == @types.block_sand {
-    8.0
-  } else if input == @types.block_cobblestone {
-    6.0
-  } else if input == @types.block_clay {
-    10.0
-  } else if input == @types.block_wood {
-    4.0
-  } else {
-    10.0
-  }
-}
-
 // Check if a block is smeltable
-
-///|
-/// Returns whether a block/item id can be smelted.
-pub fn is_smeltable(block : Int) -> Bool {
-  get_smelting_result(block) != 0
-}
 
 // ========== Quick-craft helpers ==========
 
 // Find the first available recipe the player can craft
 
-///|
-/// Returns index of first craftable recipe, or `-1` if none are craftable.
-pub fn find_first_craftable(game : @types.Game) -> Int {
-  let recipes = @levels.get_crafting_recipes()
-  for i in 0..<recipes.length() {
-    if can_craft_recipe(game, recipes[i]) {
-      return i
-    }
-  }
-  -1
-}
-
 // Count how many recipes the player can currently craft
-
-///|
-/// Counts number of recipes currently craftable from inventory state.
-pub fn count_craftable_recipes(game : @types.Game) -> Int {
-  let recipes = @levels.get_crafting_recipes()
-  let mut count = 0
-  for recipe in recipes {
-    if can_craft_recipe(game, recipe) {
-      count += 1
-    }
-  }
-  count
-}
 
 // ========== Tool crafting requirement check ==========
 
 // Check if the player has the required tool tier to mine certain ores
 
-///|
-/// Returns whether a tool can mine a block without tier mismatch penalties.
-pub fn can_mine_with_tool(block : Int, tool : Int) -> Bool {
-  let tier = get_tool_tier(tool)
-  if block == @types.block_ore_diamond {
-    // Need at least iron pickaxe
-    tier >= 3 && is_pickaxe(tool)
-  } else if block == @types.block_ore_gold {
-    // Need at least iron pickaxe
-    tier >= 3 && is_pickaxe(tool)
-  } else if block == @types.block_ore_iron {
-    // Need at least stone pickaxe
-    tier >= 2 && is_pickaxe(tool)
-  } else if block == @types.block_stone || block == @types.block_cobblestone {
-    // Any pickaxe works, hand is very slow
-    true
-  } else {
-    true
-  }
-}
-
 // Get bonus drops when using correct tool
-
-///|
-/// Returns extra-drop chance bonus for tool/block pair.
-pub fn get_bonus_drop_chance(tool : Int, block : Int) -> Float {
-  let tier = get_tool_tier(tool)
-  let correct = is_correct_tool_for_block(tool, block)
-  if correct && tier >= 2 {
-    // Stone or iron tool with correct type: chance of extra drop
-    if tier == 2 {
-      0.15
-    } else if tier == 3 {
-      0.3
-    } else {
-      0.0
-    }
-  } else {
-    0.0
-  }
-}
 
 // ========== Workbench interaction ==========
 
 // When player interacts with a workbench block, open crafting UI
 
-///|
-/// Returns whether player is interacting with a nearby workbench block.
-pub fn check_workbench_interaction(game : @types.Game) -> Bool {
-  let target = game.target
-  if target.hit {
-    let block = @types.get_world_block(game, target.bx, target.by, target.bz)
-    if block == @types.block_planks {
-      // Planks act as workbench
-      return true
-    }
-  }
-  false
-}
-
 // ========== Crafting category helpers ==========
 
 // Get the category of a recipe for UI grouping
 
-///|
-/// Returns recipe category id used by crafting UI tabs/grouping.
-pub fn get_recipe_category(recipe : @types.CraftingRecipe) -> Int {
-  // 0=blocks, 1=tools, 2=materials, 3=decorations
-  let out = recipe.output_id
-  if out == @types.block_planks ||
-    out == @types.block_cobblestone ||
-    out == @types.block_stone ||
-    out == @types.block_brick ||
-    out == @types.block_glass {
-    0
-  } else if out == @types.block_torch || out == @types.block_gravel {
-    3
-  } else {
-    2
-  }
-}
-
 // Get category name
-
-///|
-/// Returns display name for recipe category id.
-pub fn recipe_category_name(cat : Int) -> String {
-  if cat == 0 {
-    "Blocks"
-  } else if cat == 1 {
-    "Tools"
-  } else if cat == 2 {
-    "Materials"
-  } else if cat == 3 {
-    "Decorations"
-  } else {
-    "Other"
-  }
-}
