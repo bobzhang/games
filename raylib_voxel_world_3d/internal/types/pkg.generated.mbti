@@ -154,10 +154,6 @@ pub let fall_damage_multiplier : Float
 
 pub let fall_damage_threshold : Float
 
-pub fn floorf(Float) -> Int
-
-pub fn fmodf(Float, Float) -> Float
-
 pub let fog_density : Float
 
 pub let fog_end_distance : Float
