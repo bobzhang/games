@@ -2,11 +2,7 @@
 package "tonyfettes/raylib-examples/raylib_naval_combat_3d/internal/levels"
 
 // Values
-pub fn battle_has_fortress(Int) -> Bool
-
 pub fn get_battle_def(Int) -> (Int, Float, Float, Float, Float, Float, Int)
-
-pub fn get_battle_description(Int) -> String
 
 pub fn get_battle_difficulty(Int) -> Int
 
@@ -31,8 +27,6 @@ pub fn get_enemy_spawn_angle(Int, Int) -> (Float, Float)
 pub fn get_flagship_index(Int) -> Int
 
 pub fn get_fleet_classes(Int) -> Array[Int]
-
-pub fn get_fleet_count(Int) -> Int
 
 pub fn get_fortress_island(Int) -> Int
 

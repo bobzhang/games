@@ -22,8 +22,6 @@ pub fn get_powerup_data(Int, Int) -> Array[(Int, Float, Float, Float)]
 
 pub fn get_world_name(Int) -> String
 
-pub fn level_has_key(Int, Int) -> Bool
-
 pub fn world_bg_color(Int) -> (Int, Int, Int)
 
 pub fn world_deco_color_1(Int) -> (Int, Int, Int)
@@ -31,8 +29,6 @@ pub fn world_deco_color_1(Int) -> (Int, Int, Int)
 pub fn world_deco_color_2(Int) -> (Int, Int, Int)
 
 pub fn world_platform_color(Int) -> (Int, Int, Int)
-
-pub fn world_unlock_stars(Int) -> Int
 
 // Errors
 

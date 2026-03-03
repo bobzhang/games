@@ -6,12 +6,6 @@ pub let ability_buff_pulse_cd : Float
 
 pub let ability_flame_aura_cd : Float
 
-pub let ability_frost_freeze_cd : Float
-
-pub let ability_lightning_chain_cd : Float
-
-pub let ability_sniper_crit_cd : Float
-
 pub fn add_chain_line(Game, Float, Float, Float, Float, Float, Float) -> Unit
 
 pub fn alloc_enemy(Game) -> Int
@@ -25,10 +19,6 @@ pub fn alloc_tower(Game) -> Int
 pub let armor_basic : Float
 
 pub let armor_boss : Float
-
-pub let armor_break_amount : Float
-
-pub let armor_break_duration : Float
 
 pub let armor_camo : Float
 
@@ -116,8 +106,6 @@ pub fn difficulty_speed_mult(Int) -> Float
 
 pub fn distance2d(Float, Float, Float, Float) -> Float
 
-pub fn distance2d_sq(Float, Float, Float, Float) -> Float
-
 pub fn distance3d(Float, Float, Float, Float, Float, Float) -> Float
 
 pub let dmg_arrow : Float
@@ -136,17 +124,7 @@ pub let dmg_sniper : Float
 
 pub let dmg_splash : Float
 
-pub let effect_armor_break : Int
-
-pub let effect_burn : Int
-
-pub let effect_chain : Int
-
 pub let effect_none : Int
-
-pub let effect_slow : Int
-
-pub let effect_stun : Int
 
 pub fn enemy_armor_value(Int) -> Float
 
@@ -175,8 +153,6 @@ pub let enemy_swarm : Int
 pub let enemy_tank : Int
 
 pub fn enemy_total_progress(Enemy) -> Float
-
-pub let enemy_type_count : Int
 
 pub let fast_spawn_interval : Float
 
@@ -208,8 +184,6 @@ pub let interest_interval : Float
 
 pub let interest_rate : Float
 
-pub let kill_gold_base : Int
-
 pub fn lerpf(Float, Float, Float) -> Float
 
 pub let map_count : Int
@@ -227,8 +201,6 @@ pub let max_particles : Int
 pub let max_path_nodes : Int
 
 pub let max_projectiles : Int
-
-pub let max_status_effects : Int
 
 pub let max_towers : Int
 
@@ -258,23 +230,7 @@ pub let particle_lightning : Int
 
 pub let particle_normal : Int
 
-pub fn path_position_x(Game, Int, Float) -> Float
-
-pub fn path_position_z(Game, Int, Float) -> Float
-
 pub let pi : Float
-
-pub let proj_bullet : Int
-
-pub let proj_cannonball : Int
-
-pub let proj_fireball : Int
-
-pub let proj_ice_shard : Int
-
-pub let proj_lightning_bolt : Int
-
-pub let proj_sniper_round : Int
 
 pub let proj_speed_bullet : Float
 
@@ -289,8 +245,6 @@ pub let proj_speed_lightning : Float
 pub let proj_speed_sniper : Float
 
 pub let proj_speed_splash : Float
-
-pub let proj_splash_bomb : Int
 
 pub fn projectile_speed_for(Int) -> Float
 
@@ -452,10 +406,6 @@ pub let tower_arrow : Int
 
 pub fn tower_at(Game, Int, Int) -> Int
 
-pub let tower_base_height : Float
-
-pub let tower_body_height : Float
-
 pub let tower_buff : Int
 
 pub fn tower_can_detect_camo(Int) -> Bool
@@ -467,8 +417,6 @@ pub fn tower_cost(Int) -> Int
 pub fn tower_cost_for(Int) -> Int
 
 pub fn tower_damage(Int) -> Float
-
-pub fn tower_description(Int) -> String
 
 pub fn tower_effective_damage(Tower) -> Float
 
@@ -495,8 +443,6 @@ pub let tower_sniper : Int
 pub let tower_splash : Int
 
 pub fn tower_total_investment(Int, Int) -> Int
-
-pub let tower_type_count : Int
 
 pub fn tower_upgrade_cost(Int, Int) -> Int
 

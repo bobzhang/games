@@ -2,23 +2,17 @@
 package "tonyfettes/raylib-examples/raylib_platformer_3d/internal/types"
 
 // Values
-pub fn aabb_overlap(Float, Float, Float, Float, Float, Float, Float, Float, Float, Float, Float, Float) -> Bool
-
 pub fn add_score(Game, Int) -> Unit
 
 pub let air_control : Float
 
 pub let air_friction : Float
 
-pub fn alloc_enemy(Game) -> Int
-
 pub fn alloc_particle(Game) -> Int
 
 pub fn alloc_projectile(Game) -> Int
 
 pub fn alloc_score_fly(Game) -> Int
-
-pub fn approach(Float, Float, Float, Float) -> Float
 
 pub let bounce_force : Float
 
@@ -84,8 +78,6 @@ pub let collect_key : Int
 
 pub let collect_life : Int
 
-pub let collect_spring : Int
-
 pub let collect_star : Int
 
 pub let combo_base_mult : Float
@@ -102,29 +94,11 @@ pub let coyote_time : Float
 
 pub let crumble_time : Float
 
-pub let crystal_bg_b : Int
-
-pub let crystal_bg_g : Int
-
-pub let crystal_bg_r : Int
-
-pub let crystal_glow_b : Int
-
-pub let crystal_glow_g : Int
-
-pub let crystal_glow_r : Int
-
 pub let crystal_ice_b : Int
 
 pub let crystal_ice_g : Int
 
 pub let crystal_ice_r : Int
-
-pub let crystal_plat_b : Int
-
-pub let crystal_plat_g : Int
-
-pub let crystal_plat_r : Int
 
 pub let dash_cooldown : Float
 
@@ -166,19 +140,7 @@ pub fn dist3d(Float, Float, Float, Float, Float, Float) -> Float
 
 pub fn dot2d(Float, Float, Float, Float) -> Float
 
-pub fn dot3d(Float, Float, Float, Float, Float, Float) -> Float
-
 pub let double_jump_force : Float
-
-pub fn ease_in_out_quad(Float) -> Float
-
-pub fn ease_in_quad(Float) -> Float
-
-pub fn ease_out_bounce(Float) -> Float
-
-pub fn ease_out_elastic(Float) -> Float
-
-pub fn ease_out_quad(Float) -> Float
 
 pub let enemy_bounce : Int
 
@@ -212,23 +174,15 @@ pub let enemy_fly_g : Int
 
 pub let enemy_fly_r : Int
 
-pub let enemy_fly_radius : Float
-
 pub let enemy_fly_speed : Float
 
 pub let enemy_ghost : Int
 
 pub let enemy_ghost_b : Int
 
-pub let enemy_ghost_fade_dist : Float
-
 pub let enemy_ghost_g : Int
 
 pub let enemy_ghost_r : Int
-
-pub let enemy_ghost_speed : Float
-
-pub let enemy_kill_radius : Float
 
 pub let enemy_kill_score : Int
 
@@ -272,32 +226,6 @@ pub let fire_jet_g : Int
 
 pub let fire_jet_r : Int
 
-pub fn flash_on(Float, Float) -> Bool
-
-pub let forest_bg_b : Int
-
-pub let forest_bg_g : Int
-
-pub let forest_bg_r : Int
-
-pub let forest_fog_b : Int
-
-pub let forest_fog_g : Int
-
-pub let forest_fog_r : Int
-
-pub let forest_plat_b : Int
-
-pub let forest_plat_g : Int
-
-pub let forest_plat_r : Int
-
-pub let forest_tree_b : Int
-
-pub let forest_tree_g : Int
-
-pub let forest_tree_r : Int
-
 pub let forest_trunk_b : Int
 
 pub let forest_trunk_g : Int
@@ -332,8 +260,6 @@ pub let hazard_crusher : Int
 
 pub let hazard_fire_jet : Int
 
-pub let hazard_laser : Int
-
 pub let hazard_lava : Int
 
 pub let hazard_pendulum : Int
@@ -364,37 +290,11 @@ pub let key_r : Int
 
 pub let key_score : Int
 
-pub let laser_b : Int
-
-pub let laser_g : Int
-
-pub let laser_r : Int
-
-pub let lava_bg_b : Int
-
-pub let lava_bg_g : Int
-
-pub let lava_bg_r : Int
-
 pub let lava_glow_b : Int
 
 pub let lava_glow_g : Int
 
 pub let lava_glow_r : Int
-
-pub let lava_plat_b : Int
-
-pub let lava_plat_g : Int
-
-pub let lava_plat_r : Int
-
-pub let lava_rock_b : Int
-
-pub let lava_rock_g : Int
-
-pub let lava_rock_r : Int
-
-pub fn lerp_color(Int, Int, Float) -> Int
 
 pub fn lerpf(Float, Float, Float) -> Float
 
@@ -407,8 +307,6 @@ pub let level_card_w : Int
 pub let level_grid_cols : Int
 
 pub let levels_per_world : Int
-
-pub fn map_range(Float, Float, Float, Float, Float) -> Float
 
 pub let max_checkpoints : Int
 
@@ -440,10 +338,6 @@ pub let minimap_size : Int
 
 pub let move_speed : Float
 
-pub fn move_toward(Float, Float, Float) -> Float
-
-pub fn normalize2d(Float, Float) -> (Float, Float, Float)
-
 pub let num_worlds : Int
 
 pub let particle_checkpoint_count : Int
@@ -461,8 +355,6 @@ pub let particle_landing_count : Int
 pub let particle_powerup_count : Int
 
 pub let particle_stomp_count : Int
-
-pub let particle_trail_count : Int
 
 pub let particle_wall_slide_count : Int
 
@@ -570,8 +462,6 @@ pub let powerup_spin_speed : Float
 
 pub let proj_enemy_shot : Int
 
-pub let proj_fire_ball : Int
-
 pub let proj_lifetime : Float
 
 pub let proj_radius : Float
@@ -610,15 +500,11 @@ pub let pu_speed_r : Int
 
 pub fn pulse(Float, Float) -> Float
 
-pub let rad2deg : Float
-
 pub fn rand_next(Game) -> Int
 
 pub fn rand_range(Game, Int, Int) -> Int
 
 pub fn rand_rangef(Game, Float, Float) -> Float
-
-pub fn reflect2d(Float, Float, Float, Float) -> (Float, Float)
 
 pub let respawn_height : Float
 
@@ -648,30 +534,6 @@ pub let shadow_size_base : Float
 
 pub fn signf(Float) -> Float
 
-pub let sky_bg_b : Int
-
-pub let sky_bg_g : Int
-
-pub let sky_bg_r : Int
-
-pub let sky_cloud_b : Int
-
-pub let sky_cloud_g : Int
-
-pub let sky_cloud_r : Int
-
-pub let sky_pillar_b : Int
-
-pub let sky_pillar_g : Int
-
-pub let sky_pillar_r : Int
-
-pub let sky_plat_b : Int
-
-pub let sky_plat_g : Int
-
-pub let sky_plat_r : Int
-
 pub fn smoothstep(Float, Float, Float) -> Float
 
 pub fn spawn_particle_ring(Game, Float, Float, Float, Int, Float, Float, Int, Int, Int) -> Unit
@@ -679,8 +541,6 @@ pub fn spawn_particle_ring(Game, Float, Float, Float, Int, Float, Float, Int, In
 pub fn spawn_particles(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
 
 pub fn spawn_particles_dir(Game, Float, Float, Float, Int, Float, Float, Float, Float, Int, Int, Int) -> Unit
-
-pub fn spawn_score_fly(Game, Float, Float, Int) -> Unit
 
 pub fn sphere_aabb(Float, Float, Float, Float, Float, Float, Float, Float, Float, Float) -> Bool
 
@@ -704,10 +564,6 @@ pub let star_score : Int
 
 pub let star_time_threshold_1 : Float
 
-pub let star_time_threshold_2 : Float
-
-pub let star_time_threshold_3 : Float
-
 pub let state_campaign_complete : Int
 
 pub let state_death_anim : Int
@@ -728,8 +584,6 @@ pub let state_world_intro : Int
 
 pub let state_world_select : Int
 
-pub let super_bounce_force : Float
-
 pub let total_levels : Int
 
 pub fn trigger_cam_shake(Game, Float, Float) -> Unit
@@ -737,12 +591,6 @@ pub fn trigger_cam_shake(Game, Float, Float) -> Unit
 pub let two_pi : Float
 
 pub let ui_blink_speed : Float
-
-pub let ui_fade_speed : Float
-
-pub let ui_score_fly_speed : Float
-
-pub let ui_slide_speed : Float
 
 pub let wall_jump_h_force : Float
 
@@ -756,13 +604,7 @@ pub let world_forest : Int
 
 pub let world_intro_duration : Float
 
-pub let world_intro_fade : Float
-
 pub let world_lava : Int
-
-pub let world_sky : Int
-
-pub fn wrap_angle(Float) -> Float
 
 // Errors
 

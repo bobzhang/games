@@ -14,8 +14,6 @@ pub fn get_boss_def(Int) -> Int
 
 pub fn get_boss_hp(Int) -> Int
 
-pub fn get_boss_name(Int) -> String
-
 pub fn get_enemy_atk_scale(Int) -> Int
 
 pub fn get_enemy_def_scale(Int) -> Int
@@ -44,19 +42,9 @@ pub fn get_rarity_weight_rare(Int) -> Int
 
 pub fn get_rarity_weight_uncommon(Int) -> Int
 
-pub fn get_shop_item_name(Int) -> String
-
 pub fn get_shop_item_price(Int) -> Int
 
 pub fn get_shop_item_type(Int) -> Int
-
-pub fn get_shrine_buff_name(Int) -> String
-
-pub fn get_theme_ceiling_color(Int) -> (Int, Int, Int)
-
-pub fn get_theme_floor_color(Int) -> (Int, Int, Int)
-
-pub fn get_theme_wall_color(Int) -> (Int, Int, Int)
 
 pub fn get_torches_per_room(Int) -> Int
 

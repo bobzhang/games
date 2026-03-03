@@ -6,23 +6,13 @@ pub fn add_buff(Game, Int, Float, Int) -> Unit
 
 pub fn add_message(Game, String, Int, Int, Int) -> Unit
 
-pub let ai_attack : Int
-
 pub let ai_chase : Int
 
-pub let ai_dead : Int
-
-pub let ai_flee : Int
-
 pub let ai_idle : Int
-
-pub let ai_patrol : Int
 
 pub let ai_special : Int
 
 pub fn alloc_enemy(Game) -> Int
-
-pub fn alloc_inventory(Game) -> Int
 
 pub fn alloc_loot(Game) -> Int
 
@@ -62,15 +52,11 @@ pub let axe_range : Float
 
 pub let bat_move_speed : Float
 
-pub let boss_intro_duration : Float
-
 pub let bow_cooldown : Float
 
 pub let bow_damage_mult : Float
 
 pub let bow_range : Float
-
-pub let buff_poison : Int
 
 pub let buff_shield : Int
 
@@ -99,8 +85,6 @@ pub let class_warrior : Int
 pub let corridor_width : Int
 
 pub fn count_active_enemies(Game) -> Int
-
-pub fn count_inventory_items(Game) -> Int
 
 pub let dagger_cooldown : Float
 
@@ -148,8 +132,6 @@ pub let enemy_spider : Int
 
 pub let enemy_wraith : Int
 
-pub fn find_walkable_in_room(Game, Room) -> (Int, Int)
-
 pub let fireball_damage : Int
 
 pub let fireball_mana_cost : Int
@@ -160,27 +142,15 @@ pub let flame_damage : Int
 
 pub fn get_armor_defense(Int) -> Int
 
-pub fn get_armor_name(Int) -> String
-
-pub fn get_class_name(Int) -> String
-
 pub fn get_enemy_name(Int) -> String
 
-pub fn get_enemy_xp(Int) -> Int
-
 pub fn get_loot_name(Int) -> String
-
-pub fn get_rarity_name(Int) -> String
 
 pub fn get_spell_mana_cost(Int) -> Int
 
 pub fn get_spell_name(Int) -> String
 
-pub fn get_theme_name(Int) -> String
-
 pub fn get_tile(Game, Int, Int) -> Int
-
-pub fn get_trap_name(Int) -> String
 
 pub fn get_weapon_cooldown(Int) -> Float
 
@@ -208,8 +178,6 @@ pub let grid_w : Int
 
 pub fn has_buff(Game, Int) -> Bool
 
-pub fn has_line_of_sight(Game, Int, Int, Int, Int) -> Bool
-
 pub let heal_amount : Int
 
 pub let heal_mana_cost : Int
@@ -226,27 +194,13 @@ pub let ice_bolt_slow_duration : Float
 
 pub fn in_bounds(Int, Int) -> Bool
 
-pub let inv_cols : Int
-
-pub let inv_rows : Int
-
-pub let inv_slot_size : Int
-
-pub let inv_start_x : Int
-
-pub let inv_start_y : Int
-
 pub fn is_blocked(Game, Float, Float, Float) -> Bool
-
-pub fn is_blocked_strict(Game, Float, Float, Float) -> Bool
 
 pub fn is_door_tile(Int) -> Bool
 
 pub fn is_walkable(Int) -> Bool
 
 pub let leather_defense : Int
-
-pub fn lerpf(Float, Float, Float) -> Float
 
 pub let lightning_chain_range : Float
 
@@ -314,8 +268,6 @@ pub let max_torches : Int
 
 pub let max_traps : Int
 
-pub fn maxf(Float, Float) -> Float
-
 pub let menu_blink_speed : Float
 
 pub let min_room_size : Int
@@ -331,8 +283,6 @@ pub let minimap_x : Int
 pub let minimap_y : Int
 
 pub let minotaur_charge_speed : Float
-
-pub fn normalize_angle(Float) -> Float
 
 pub fn pathfind_step(Game, Float, Float, Float, Float) -> (Float, Float)
 
@@ -365,18 +315,6 @@ pub let player_start_str : Int
 pub let poison_damage_per_sec : Int
 
 pub let poison_duration : Float
-
-pub let price_armor_upgrade : Int
-
-pub let price_health_potion : Int
-
-pub let price_key : Int
-
-pub let price_mana_potion : Int
-
-pub let price_spell_scroll : Int
-
-pub let price_weapon_upgrade : Int
 
 pub let projectile_lifetime : Float
 
@@ -424,14 +362,6 @@ pub let shield_duration : Float
 
 pub let shield_mana_cost : Int
 
-pub let shrine_atk_bonus : Int
-
-pub let shrine_def_bonus : Int
-
-pub let shrine_hp_bonus : Int
-
-pub let shrine_mana_bonus : Int
-
 pub let shrine_options : Int
 
 pub fn signf(Float) -> Float
@@ -468,15 +398,11 @@ pub let staff_damage_mult : Float
 
 pub let staff_range : Float
 
-pub let state_boss_intro : Int
-
 pub let state_class_select : Int
 
 pub let state_floor_complete : Int
 
 pub let state_game_over : Int
-
-pub let state_inventory : Int
 
 pub let state_level_up : Int
 
@@ -489,8 +415,6 @@ pub let state_playing : Int
 pub let state_shop : Int
 
 pub let state_shrine : Int
-
-pub let state_spellbook : Int
 
 pub let strength_potion_bonus : Int
 
@@ -531,8 +455,6 @@ pub let tile_boss_door : Int
 pub let tile_chest : Int
 
 pub let tile_door : Int
-
-pub let tile_empty : Int
 
 pub let tile_floor : Int
 

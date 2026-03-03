@@ -2,14 +2,6 @@
 package "tonyfettes/raylib-examples/raylib_kart_racing_3d/internal/types"
 
 // Values
-pub let ai_base_speed_mult : Float
-
-pub let ai_difficulty_easy : Int
-
-pub let ai_difficulty_expert : Int
-
-pub let ai_difficulty_hard : Int
-
 pub let ai_difficulty_medium : Int
 
 pub let ai_difficulty_stats : Array[(Float, Float, Float, Float)]
@@ -24,13 +16,9 @@ pub fn alloc_dropped_item(Game) -> Int
 
 pub fn alloc_particle(Game) -> Int
 
-pub fn alloc_powerup(Game) -> Int
-
 pub fn alloc_projectile(Game) -> Int
 
 pub fn angle_diff(Float, Float) -> Float
-
-pub fn angle_to(Float, Float, Float, Float) -> Float
 
 pub let banana_lifetime : Float
 
@@ -39,8 +27,6 @@ pub let barrier_height : Float
 pub let barrier_width : Float
 
 pub let boost_duration : Float
-
-pub let boost_flame_emit_rate : Int
 
 pub let boost_speed_add : Float
 
@@ -76,8 +62,6 @@ pub let confetti_count : Int
 
 pub let countdown_total : Float
 
-pub fn cross2d(Float, Float, Float, Float) -> Float
-
 pub let cup_points_table : Array[Int]
 
 pub let cups_count : Int
@@ -92,15 +76,11 @@ pub let deco_building_tall : Int
 
 pub let deco_cactus : Int
 
-pub let deco_colors : Array[(Int, Int, Int)]
-
 pub let deco_grandstand : Int
 
 pub let deco_lamp_post : Int
 
 pub let deco_lava_rock : Int
-
-pub let deco_none : Int
 
 pub let deco_rock_large : Int
 
@@ -116,21 +96,9 @@ pub let deco_tree_palm : Int
 
 pub let deco_tree_pine : Int
 
-pub let deco_type_count : Int
-
 pub fn detect_surface_type(Game, Float, Float) -> Int
 
 pub fn distance2d(Float, Float, Float, Float) -> Float
-
-pub fn distance2d_sq(Float, Float, Float, Float) -> Float
-
-pub fn distance3d(Float, Float, Float, Float, Float, Float) -> Float
-
-pub fn dot2d(Float, Float, Float, Float) -> Float
-
-pub let drift_boost_speed : Float
-
-pub let drift_boost_time : Float
 
 pub let drift_friction_mult : Float
 
@@ -148,8 +116,6 @@ pub let drift_mini_duration : Float
 
 pub let drift_mini_threshold : Float
 
-pub let drift_spark_emit_rate : Int
-
 pub let drift_steer_mult : Float
 
 pub let drift_super_boost : Float
@@ -164,13 +130,7 @@ pub let drift_ultra_duration : Float
 
 pub let drift_ultra_threshold : Float
 
-pub let dust_emit_rate : Int
-
-pub let explosion_particle_count : Int
-
 pub fn find_target_ahead(Game, Int) -> Int
-
-pub fn find_target_behind(Game, Int) -> Int
 
 pub fn format_time(Float) -> String
 
@@ -218,37 +178,15 @@ pub let grip_oil : Float
 
 pub let grip_road : Float
 
-pub let half_pi : Float
-
-pub fn interpolate_track_position(Game, Int, Float) -> (Float, Float, Float)
-
 pub fn is_on_ramp(Game, Kart) -> Bool
 
 pub fn is_wrong_way(Game, Kart) -> Bool
-
-pub let item_stats_banana : (Float, Float, Float, Float)
-
-pub let item_stats_boost : (Float, Float, Float, Float)
-
-pub let item_stats_lightning : (Float, Float, Float, Float)
-
-pub let item_stats_missile : (Float, Float, Float, Float)
-
-pub let item_stats_oil : (Float, Float, Float, Float)
-
-pub let item_stats_shield : (Float, Float, Float, Float)
-
-pub let item_stats_star : (Float, Float, Float, Float)
-
-pub let item_stats_triple : (Float, Float, Float, Float)
 
 pub let jump_ramp_force : Float
 
 pub let kart_accel : Float
 
 pub let kart_accent_colors : Array[(Int, Int, Int)]
-
-pub let kart_bounce : Float
 
 pub let kart_brake : Float
 
@@ -262,31 +200,13 @@ pub let kart_length : Float
 
 pub let kart_max_speed : Float
 
-pub let kart_secondary_colors : Array[(Int, Int, Int)]
-
 pub let kart_stats : Array[(Float, Float, Float, Float, Float)]
-
-pub let kart_steer_speed : Float
-
-pub let kart_type_accel : Int
 
 pub let kart_type_balanced : Int
 
 pub let kart_type_count : Int
 
-pub let kart_type_drift : Int
-
-pub let kart_type_feather : Int
-
-pub let kart_type_handling : Int
-
-pub let kart_type_heavy : Int
-
 pub let kart_type_names : Array[String]
-
-pub let kart_type_speed : Int
-
-pub let kart_type_turbo : Int
 
 pub let kart_width : Float
 
@@ -310,8 +230,6 @@ pub let max_projectiles : Int
 
 pub let max_waypoints : Int
 
-pub fn maxf(Float, Float) -> Float
-
 pub fn minf(Float, Float) -> Float
 
 pub let missile_speed : Float
@@ -324,31 +242,13 @@ pub fn ordinal_suffix(Int) -> String
 
 pub let particle_boost_flame : Int
 
-pub let particle_drag : Float
-
 pub let particle_drift_spark : Int
 
 pub let particle_dust : Int
 
 pub let particle_explosion : Int
 
-pub let particle_gravity : Float
-
-pub let particle_life_long : Float
-
-pub let particle_life_medium : Float
-
-pub let particle_life_short : Float
-
 pub let particle_lightning : Int
-
-pub let particle_size_large : Float
-
-pub let particle_size_medium : Float
-
-pub let particle_size_small : Float
-
-pub let particle_size_tiny : Float
 
 pub let particle_splash : Int
 
@@ -356,11 +256,7 @@ pub let particle_star_sparkle : Int
 
 pub let pi : Float
 
-pub fn pick_random_powerup(Game, Int) -> Int
-
 pub let player_kart : Int
-
-pub fn point_to_segment_dist(Float, Float, Float, Float, Float, Float) -> Float
 
 pub fn position_points(Int) -> Int
 
@@ -388,8 +284,6 @@ pub fn project_point_on_segment(Float, Float, Float, Float, Float, Float) -> Flo
 
 pub let races_per_cup : Int
 
-pub fn rand_bool(Game, Float) -> Bool
-
 pub fn rand_next(Game) -> Int
 
 pub fn rand_range(Game, Int, Int) -> Int
@@ -404,27 +298,11 @@ pub let screen_height : Int
 
 pub let screen_width : Int
 
-pub let seg_bridge : Int
-
-pub let seg_chicane : Int
-
-pub let seg_curve_gentle : Int
-
-pub let seg_curve_sharp : Int
-
-pub let seg_jump_ramp : Int
-
-pub let seg_s_curve : Int
-
 pub let seg_straight : Int
-
-pub let seg_tunnel : Int
 
 pub let shield_duration : Float
 
 pub fn should_spin_from_bump(Float, Float) -> (Bool, Bool)
-
-pub fn smooth_step(Float, Float, Float) -> Float
 
 pub fn spawn_particles(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
 
@@ -446,8 +324,6 @@ pub let spin_duration : Float
 
 pub let star_duration : Float
 
-pub let star_sparkle_rate : Int
-
 pub let star_speed_add : Float
 
 pub let surface_boost_pad : Int
@@ -467,8 +343,6 @@ pub let theme_beach : Int
 pub let theme_castle : Int
 
 pub let theme_circuit : Int
-
-pub let theme_decorations : Array[Array[Int]]
 
 pub let theme_desert : Int
 
@@ -490,13 +364,9 @@ pub let track_difficulty_ratings : Array[Int]
 
 pub let track_record_times : Array[Float]
 
-pub let tree_spacing : Float
-
 pub let triple_mushroom_boost : Float
 
 pub let two_pi : Float
-
-pub let weight_bump_force : Float
 
 pub let weight_spin_diff : Float
 

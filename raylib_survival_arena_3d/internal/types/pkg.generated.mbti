@@ -30,8 +30,6 @@ pub let ammo_shotgun : Int
 
 pub let ammo_sniper : Int
 
-pub fn angle_between(Float, Float, Float, Float) -> Float
-
 pub fn angle_within(Float, Float, Float) -> Bool
 
 pub let arena_depth : Float
@@ -66,8 +64,6 @@ pub let combo_increment : Float
 
 pub let combo_max_mult : Float
 
-pub fn combo_text(Int) -> String
-
 pub let combo_timeout : Float
 
 pub let cost_armor : Int
@@ -96,23 +92,11 @@ pub let cost_sniper_ammo : Int
 
 pub let cost_speed_up : Int
 
-pub let cost_trap_electric : Int
-
-pub let cost_trap_flame : Int
-
 pub let cost_trap_spike : Int
 
 pub fn count_active_enemies(Game) -> Int
 
-pub let crate_count : Int
-
 pub let crate_size : Float
-
-pub let difficulty_damage_scale : Float
-
-pub let difficulty_hp_scale : Float
-
-pub let difficulty_speed_scale : Float
 
 pub fn distance2d(Float, Float, Float, Float) -> Float
 
@@ -130,8 +114,6 @@ pub let dmg_shotgun : Float
 
 pub let dmg_sniper : Float
 
-pub fn dot3d(Float, Float, Float, Float, Float, Float) -> Float
-
 pub fn effective_damage(Player, Int) -> Float
 
 pub fn effective_fire_rate(Player, Int) -> Float
@@ -143,8 +125,6 @@ pub let enemy_boss : Int
 pub let enemy_brute : Int
 
 pub let enemy_exploder : Int
-
-pub fn enemy_name(Int) -> String
 
 pub let enemy_necromancer : Int
 
@@ -174,8 +154,6 @@ pub let kill_feed_duration : Float
 
 pub fn lerpf(Float, Float, Float) -> Float
 
-pub let low_wall_count : Int
-
 pub let low_wall_depth : Float
 
 pub let low_wall_height : Float
@@ -194,16 +172,6 @@ pub let mag_shotgun : Int
 
 pub let mag_sniper : Int
 
-pub let max_ammo_minigun : Int
-
-pub let max_ammo_rifle : Int
-
-pub let max_ammo_rocket : Int
-
-pub let max_ammo_shotgun : Int
-
-pub let max_ammo_sniper : Int
-
 pub let max_barricades : Int
 
 pub let max_enemies : Int
@@ -218,8 +186,6 @@ pub let max_projectiles : Int
 
 pub let max_traps : Int
 
-pub let max_upgrade_level : Int
-
 pub let max_waves : Int
 
 pub fn maxf(Float, Float) -> Float
@@ -231,12 +197,6 @@ pub let minigun_max_spread : Float
 pub let minigun_min_spread : Float
 
 pub let minigun_spinup_time : Float
-
-pub let minimap_size : Int
-
-pub let minimap_x : Int
-
-pub let minimap_y : Int
 
 pub let necro_revive_cooldown : Float
 
@@ -265,8 +225,6 @@ pub let pickup_damage_boost : Int
 pub let pickup_damage_duration : Float
 
 pub let pickup_health : Int
-
-pub fn pickup_name(Int) -> String
 
 pub let pickup_nuke : Int
 
@@ -311,8 +269,6 @@ pub fn push_from_box(Float, Float, Float, Float, Float, Float, Float) -> (Float,
 pub fn push_from_low_walls(Game, Float, Float, Float) -> (Float, Float)
 
 pub fn push_from_pillar(Float, Float, Float, Float, Float, Float) -> (Float, Float, Bool)
-
-pub let ramp_count : Int
 
 pub let ramp_height : Float
 
@@ -400,15 +356,9 @@ pub let trap_electric : Int
 
 pub let trap_electric_cooldown : Float
 
-pub let trap_electric_damage : Float
-
 pub let trap_electric_stun : Float
 
 pub let trap_flame : Int
-
-pub let trap_flame_cooldown : Float
-
-pub let trap_flame_damage : Float
 
 pub let trap_flame_duration : Float
 
@@ -421,8 +371,6 @@ pub let trap_spike_damage : Float
 pub fn update_damage_indicators(Game, Float) -> Unit
 
 pub fn update_kill_feed(Game, Float) -> Unit
-
-pub let upgrade_cost_mult : Int
 
 pub let wave_shop_time : Float
 
@@ -447,8 +395,6 @@ pub fn weapon_reload_time(Int) -> Float
 pub let weapon_rifle : Int
 
 pub let weapon_rocket : Int
-
-pub fn weapon_short_name(Int) -> String
 
 pub let weapon_shotgun : Int
 

@@ -2,29 +2,13 @@
 package "tonyfettes/raylib-examples/raylib_puzzle_dungeon_3d/internal/types"
 
 // Values
-pub let achievement_all_stars : Int
-
 pub let achievement_first_clear : Int
 
 pub let achievement_no_undo : Int
 
-pub let achievement_speed_run : Int
-
 pub let achievement_world_1 : Int
 
-pub let achievement_world_2 : Int
-
-pub let achievement_world_3 : Int
-
-pub let achievement_world_4 : Int
-
-pub let achievement_world_5 : Int
-
-pub fn alloc_entity(Game) -> Int
-
 pub fn alloc_particle(Game) -> Int
-
-pub let bridge_anim_duration : Float
 
 pub fn calculate_laser_paths(Game) -> Unit
 
@@ -33,8 +17,6 @@ pub let camera_dist : Float
 pub let camera_fovy : Float
 
 pub let camera_height : Float
-
-pub let cell_size : Float
 
 pub fn clampf(Float, Float, Float) -> Float
 
@@ -69,12 +51,6 @@ pub let color_exit_b : Int
 pub let color_exit_g : Int
 
 pub let color_exit_r : Int
-
-pub let color_floor_b : Int
-
-pub let color_floor_g : Int
-
-pub let color_floor_r : Int
 
 pub let color_gate_b : Int
 
@@ -124,15 +100,7 @@ pub let color_target_g : Int
 
 pub let color_target_r : Int
 
-pub let color_wall_b : Int
-
-pub let color_wall_g : Int
-
-pub let color_wall_r : Int
-
 pub let complete_particle_count : Int
-
-pub let conveyor_anim_speed : Float
 
 pub fn conveyor_direction(Tile) -> Dir
 
@@ -174,12 +142,6 @@ pub let dungeon_wall_g : Int
 
 pub let dungeon_wall_r : Int
 
-pub fn ease_in_out_quad(Float) -> Float
-
-pub fn ease_out_bounce(Float) -> Float
-
-pub fn ease_out_cubic(Float) -> Float
-
 pub fn entity_at(Game, Int, Int) -> Int
 
 pub let fall_anim_duration : Float
@@ -210,8 +172,6 @@ pub let garden_wall_g : Int
 
 pub let garden_wall_r : Int
 
-pub let gate_anim_duration : Float
-
 pub let gate_particle_count : Int
 
 pub fn get_tile(Game, Int, Int) -> Tile
@@ -219,8 +179,6 @@ pub fn get_tile(Game, Int, Int) -> Tile
 pub fn get_tutorial_for_floor(Int) -> String
 
 pub fn get_world_accent_color(World) -> (Int, Int, Int)
-
-pub fn get_world_bg_color(World) -> (Int, Int, Int)
 
 pub fn get_world_floor_color(World) -> (Int, Int, Int)
 
@@ -280,10 +238,6 @@ pub fn is_walkable(Tile) -> Bool
 
 pub fn is_world_unlocked(Game, Int) -> Bool
 
-pub let laser_particle_count : Int
-
-pub let laser_pulse_speed : Float
-
 pub fn laser_source_direction(Tile) -> Dir
 
 pub let lava_accent_b : Int
@@ -340,8 +294,6 @@ pub let move_anim_duration : Float
 
 pub let num_worlds : Int
 
-pub fn opposite_dir(Dir) -> Dir
-
 pub let particle_drag : Float
 
 pub let particle_gravity : Float
@@ -356,10 +308,6 @@ pub fn rand_rangef(Game, Float, Float) -> Float
 
 pub fn resolve_conveyors(Game) -> Unit
 
-pub let rotate_anim_duration : Float
-
-pub fn rotate_dir_cw(Dir) -> Dir
-
 pub let screen_height : Int
 
 pub let screen_width : Int
@@ -367,8 +315,6 @@ pub let screen_width : Int
 pub fn set_tile(Game, Int, Int, Tile) -> Unit
 
 pub fn setup_decorations(Game) -> Unit
-
-pub let slide_anim_duration : Float
 
 pub fn smooth_step(Float) -> Float
 
@@ -378,15 +324,7 @@ pub fn spawn_particles(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
 
 pub let spike_cycle_time : Float
 
-pub let star_anim_delay : Float
-
 pub let star_threshold_2 : Int
-
-pub let star_threshold_3 : Int
-
-pub fn stars_to_unlock_world(Int) -> Int
-
-pub let teleport_anim_duration : Float
 
 pub let teleport_particle_count : Int
 
@@ -396,23 +334,11 @@ pub fn toggle_bridges(Game) -> Unit
 
 pub let transition_time : Float
 
-pub let tutorial_fade_speed : Float
-
-pub let tutorial_msg_bridge : String
-
-pub let tutorial_msg_complete : String
-
-pub let tutorial_msg_conveyor : String
-
 pub let tutorial_msg_cracked : String
 
 pub let tutorial_msg_diamond : String
 
-pub let tutorial_msg_gate : String
-
 pub let tutorial_msg_ice : String
-
-pub let tutorial_msg_mirror : String
 
 pub let tutorial_msg_move : String
 

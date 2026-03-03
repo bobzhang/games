@@ -52,8 +52,6 @@ pub let aircraft_speed_min : Float
 
 pub let aircraft_speed_start : Float
 
-pub let aircraft_throttle_accel : Float
-
 pub let aircraft_trainer : Int
 
 pub let aircraft_yaw_rate : Float
@@ -70,15 +68,11 @@ pub fn alloc_particle(Game) -> Int
 
 pub fn alloc_projectile(Game) -> Int
 
-pub fn alloc_terrain(Game) -> Int
-
 pub fn alloc_turret(Game) -> Int
 
 pub fn altitude_above_terrain(Float, Float, Float) -> Float
 
 pub let altitude_control_min : Float
-
-pub let altitude_engine_min : Float
 
 pub fn altitude_factor(Float) -> Float
 
@@ -90,19 +84,9 @@ pub fn angle_diff(Float, Float) -> Float
 
 pub fn angle_wrap(Float) -> Float
 
-pub fn apply_wind(Float, Float, Float, Float, Float, Float) -> (Float, Float)
-
 pub fn bearing_to(Float, Float, Float, Float) -> Float
 
-pub let bomb_blast_radius : Float
-
-pub let bomb_damage : Float
-
-pub let bomb_fire_rate : Float
-
 pub let bomb_gravity : Float
-
-pub fn bomb_impact_point(Float, Float, Float, Float, Float, Float) -> (Float, Float, Float)
 
 pub let bomber_ammo_bombs : Int
 
@@ -111,10 +95,6 @@ pub let bomber_ammo_mg : Int
 pub let bomber_ammo_rockets : Int
 
 pub let bomber_climb_rate : Float
-
-pub let bomber_damage_mult : Float
-
-pub let bomber_firerate_mult : Float
 
 pub let bomber_fuel_capacity : Float
 
@@ -128,21 +108,11 @@ pub let bomber_speed_min : Float
 
 pub let bomber_turn_rate : Float
 
-pub let building_barracks : Int
-
-pub let building_bunker : Int
-
-pub let building_command : Int
-
 pub let building_factory : Int
-
-pub let building_fuel_depot : Int
 
 pub let building_hangar : Int
 
 pub let building_house : Int
-
-pub let building_radar : Int
 
 pub let building_runway : Int
 
@@ -150,17 +120,7 @@ pub let building_tower : Int
 
 pub fn calculate_accuracy(Int, Int) -> Float
 
-pub fn calculate_drag(Float, Float) -> Float
-
-pub fn calculate_gforce(Float, Float, Float) -> Float
-
-pub fn calculate_lift(Float, Float) -> Float
-
 pub fn calculate_rating(Int) -> String
-
-pub fn calculate_thrust(Float, Float, Float) -> Float
-
-pub let camera_cockpit_fov : Float
 
 pub let camera_distance : Float
 
@@ -184,35 +144,13 @@ pub fn clampf(Float, Float, Float) -> Float
 
 pub let cloud_base_height : Float
 
-pub let cloud_count_clear : Int
-
-pub let cloud_count_cloudy : Int
-
-pub let cloud_count_default : Int
-
-pub let cloud_count_storm : Int
-
-pub let cloud_layer_thickness : Float
-
 pub fn count_active_buildings(Game) -> Int
-
-pub fn count_active_enemies(Game) -> Int
-
-pub fn count_active_turrets(Game) -> Int
-
-pub fn count_remaining_checkpoints(Game) -> Int
-
-pub fn cross3d(Float, Float, Float, Float, Float, Float) -> (Float, Float, Float)
-
-pub let deg_to_rad : Float
 
 pub fn difficulty_str(Int) -> String
 
 pub fn distance2d(Float, Float, Float, Float) -> Float
 
 pub fn distance3d(Float, Float, Float, Float, Float, Float) -> Float
-
-pub fn dot3d(Float, Float, Float, Float, Float, Float) -> Float
 
 pub let enemy_air_size : Float
 
@@ -240,10 +178,6 @@ pub let fighter_ammo_rockets : Int
 
 pub let fighter_climb_rate : Float
 
-pub let fighter_damage_mult : Float
-
-pub let fighter_firerate_mult : Float
-
 pub let fighter_fuel_capacity : Float
 
 pub let fighter_hp : Float
@@ -256,8 +190,6 @@ pub let fighter_speed_min : Float
 
 pub let fighter_turn_rate : Float
 
-pub fn find_nearest_enemy(Game, Float, Float, Float) -> Int
-
 pub let fire_cooldown : Float
 
 pub let fog_clear_dist : Float
@@ -266,8 +198,6 @@ pub let fog_cloudy_dist : Float
 
 pub let fog_fog_dist : Float
 
-pub let fog_ground_alpha : Int
-
 pub let fog_night_dist : Float
 
 pub let fog_rain_dist : Float
@@ -275,10 +205,6 @@ pub let fog_rain_dist : Float
 pub let fog_storm_dist : Float
 
 pub let fuel_afterburner_rate : Float
-
-pub fn fuel_consumption(Float) -> Float
-
-pub let fuel_critical_threshold : Float
 
 pub let fuel_cruise_rate : Float
 
@@ -294,35 +220,11 @@ pub fn get_forward(Float, Float) -> (Float, Float, Float)
 
 pub fn get_right(Float, Float) -> (Float, Float, Float)
 
-pub let gforce_blackout : Float
-
-pub let gforce_damage_threshold : Float
-
 pub let gforce_max : Float
 
 pub let gforce_normal : Float
 
-pub fn glide_slope_deviation(Float, Float, Float, Float, Float) -> Float
-
 pub let half_pi : Float
-
-pub let hp_barracks : Float
-
-pub let hp_bunker : Float
-
-pub let hp_command : Float
-
-pub let hp_factory : Float
-
-pub let hp_fuel_depot : Float
-
-pub let hp_hangar : Float
-
-pub let hp_house : Float
-
-pub let hp_radar : Float
-
-pub let hp_tower : Float
 
 pub let interceptor_ammo_bombs : Int
 
@@ -331,10 +233,6 @@ pub let interceptor_ammo_mg : Int
 pub let interceptor_ammo_rockets : Int
 
 pub let interceptor_climb_rate : Float
-
-pub let interceptor_damage_mult : Float
-
-pub let interceptor_firerate_mult : Float
 
 pub let interceptor_fuel_capacity : Float
 
@@ -348,33 +246,7 @@ pub let interceptor_speed_min : Float
 
 pub let interceptor_turn_rate : Float
 
-pub fn is_stalling(Float, Float) -> Bool
-
-pub let kill_value_boss : Int
-
-pub let kill_value_building : Int
-
-pub let kill_value_fighter : Int
-
-pub let kill_value_ground : Int
-
-pub let kill_value_turret : Int
-
-pub fn landing_alignment(Float, Float, Float, Float, Float) -> Float
-
 pub let landing_glide_slope : Float
-
-pub let landing_hold_time : Float
-
-pub let landing_max_pitch : Float
-
-pub let landing_max_roll : Float
-
-pub let landing_max_speed : Float
-
-pub let landing_zone_radius : Float
-
-pub fn lead_target(Float, Float, Float, Float, Float, Float, Float, Float, Float, Float) -> (Float, Float, Float)
 
 pub fn lerpf(Float, Float, Float) -> Float
 
@@ -395,18 +267,6 @@ pub let max_terrain_chunks : Int
 pub let max_turrets : Int
 
 pub fn maxf(Float, Float) -> Float
-
-pub let mg_damage : Float
-
-pub let mg_fire_rate : Float
-
-pub let mg_range : Float
-
-pub let mg_speed : Float
-
-pub let mg_spread : Float
-
-pub fn minf(Float, Float) -> Float
 
 pub let mission_attack_base : Int
 
@@ -440,35 +300,7 @@ pub let mission_survive : Int
 
 pub fn normalize3d(Float, Float, Float) -> (Float, Float, Float)
 
-pub let par_time_air_sup : Float
-
-pub let par_time_base_raid : Float
-
-pub let par_time_canyon : Float
-
-pub let par_time_defense : Float
-
-pub let par_time_dogfight : Float
-
-pub let par_time_final : Float
-
-pub let par_time_fog_nav : Float
-
-pub let par_time_ground_strike : Float
-
-pub let par_time_landing : Float
-
-pub let par_time_night : Float
-
 pub let par_time_storm : Float
-
-pub let par_time_storm_surv : Float
-
-pub let par_time_survival : Float
-
-pub let par_time_training : Float
-
-pub let par_time_valley : Float
 
 pub let particle_debris : Int
 
@@ -482,15 +314,9 @@ pub let particle_rain : Int
 
 pub let particle_smoke : Int
 
-pub let particle_spark : Int
-
-pub let particle_tracer : Int
-
 pub let pi : Float
 
 pub fn point_in_aabb(Float, Float, Float, Float, Float, Float, Float, Float, Float) -> Bool
-
-pub fn point_in_sphere(Float, Float, Float, Float, Float, Float, Float) -> Bool
 
 pub let proj_aa_shell : Int
 
@@ -508,17 +334,9 @@ pub let projectile_speed : Float
 
 pub fn push_message(Game, String, Float, Int) -> Unit
 
-pub let radar_blip_size : Int
-
 pub let radar_range : Float
 
 pub let radar_size : Int
-
-pub let radar_sweep_speed : Float
-
-pub let rain_line_length : Float
-
-pub let rain_particle_count : Int
 
 pub fn rand_next(Game) -> Int
 
@@ -534,30 +352,6 @@ pub let rating_c_threshold : Int
 
 pub let rating_s_threshold : Int
 
-pub let rock_max_size : Float
-
-pub let rock_min_size : Float
-
-pub let rock_spawn_chance : Float
-
-pub let rocket_damage : Float
-
-pub let rocket_fire_rate : Float
-
-pub let rocket_gravity : Float
-
-pub let rocket_range : Float
-
-pub let rocket_speed : Float
-
-pub let rocket_thrust : Float
-
-pub let score_accuracy_bonus_50 : Int
-
-pub let score_accuracy_bonus_70 : Int
-
-pub let score_accuracy_bonus_90 : Int
-
 pub let score_air_kill : Int
 
 pub let score_building_destroy : Int
@@ -566,23 +360,7 @@ pub let score_checkpoint : Int
 
 pub let score_ground_kill : Int
 
-pub let score_kill_streak_10 : Int
-
-pub let score_kill_streak_3 : Int
-
-pub let score_kill_streak_5 : Int
-
-pub let score_landing_bonus : Int
-
 pub let score_mission_complete : Int
-
-pub let score_no_damage_bonus : Int
-
-pub let score_time_bonus_fast : Int
-
-pub let score_time_bonus_good : Int
-
-pub let score_time_bonus_ok : Int
 
 pub let score_turret_kill : Int
 
@@ -593,8 +371,6 @@ pub let screen_width : Int
 pub fn show_message(Game, String, Float) -> Unit
 
 pub fn sign(Float) -> Float
-
-pub fn smooth_damp(Float, Float, Float, Float) -> Float
 
 pub fn spawn_debris(Game, Float, Float, Float, Int) -> Unit
 
@@ -609,12 +385,6 @@ pub fn spawn_particles(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
 pub fn spawn_rocket_trail(Game, Float, Float, Float) -> Unit
 
 pub fn spawn_smoke(Game, Float, Float, Float, Int) -> Unit
-
-pub let stall_control_reduction : Float
-
-pub let stall_nose_drop_rate : Float
-
-pub let stall_recovery_pitch : Float
 
 pub let stall_speed_threshold : Float
 
@@ -634,23 +404,13 @@ pub let state_paused : Int
 
 pub let state_playing : Int
 
-pub let storm_flash_duration : Float
-
-pub let storm_flash_interval : Float
-
 pub let terrain_chunk_scale : Float
 
 pub let terrain_forest_level : Float
 
-pub let terrain_grid_size : Int
-
 pub fn terrain_height_at(Float, Float) -> Float
 
-pub fn terrain_height_smooth(Float, Float) -> Float
-
 pub let terrain_max_height : Float
-
-pub fn terrain_normal(Float, Float) -> (Float, Float, Float)
 
 pub let terrain_snow_level : Float
 
@@ -668,10 +428,6 @@ pub let trainer_ammo_rockets : Int
 
 pub let trainer_climb_rate : Float
 
-pub let trainer_damage_mult : Float
-
-pub let trainer_firerate_mult : Float
-
 pub let trainer_fuel_capacity : Float
 
 pub let trainer_hp : Float
@@ -684,12 +440,6 @@ pub let trainer_speed_min : Float
 
 pub let trainer_turn_rate : Float
 
-pub let tree_max_height : Float
-
-pub let tree_min_height : Float
-
-pub let tree_spawn_chance : Float
-
 pub let turb_clear : Float
 
 pub let turb_cloudy : Float
@@ -701,8 +451,6 @@ pub let turb_night : Float
 pub let turb_rain : Float
 
 pub let turb_storm : Float
-
-pub fn turbulence_jitter(Game, Float, Float) -> (Float, Float)
 
 pub let turret_fire_rate : Float
 
@@ -721,8 +469,6 @@ pub let warning_altitude_rate : Float
 pub let warning_flash_rate : Float
 
 pub let warning_fuel_rate : Float
-
-pub let warning_stall_rate : Float
 
 pub let weapon_bombs : Int
 

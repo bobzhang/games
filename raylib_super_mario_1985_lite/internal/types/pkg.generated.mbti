@@ -208,7 +208,6 @@ pub(all) struct Input {
   accept : Bool
   restart : Bool
 }
-pub fn Input::none() -> Self
 
 pub(all) struct Particle {
   mut active : Bool

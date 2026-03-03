@@ -48,8 +48,6 @@ pub let ammo_round_shot : Int
 
 pub fn angle_diff(Float, Float) -> Float
 
-pub fn angle_within(Float, Float, Float) -> Bool
-
 pub let beam_reach_angle : Float
 
 pub fn bearing(Float, Float, Float, Float) -> Float
@@ -79,8 +77,6 @@ pub let brigantine_turn_rate : Float
 pub let brigantine_width : Float
 
 pub let broad_reach_angle : Float
-
-pub fn calc_cannon_launch(Float, Float, Float, Float) -> (Float, Float, Float)
 
 pub fn calc_sailing_speed(Float, Float, Float, Float, Float, Float) -> Float
 
@@ -122,17 +118,11 @@ pub let chain_shot_hull_mult : Float
 
 pub let chain_shot_mast_mult : Float
 
-pub let chain_shot_range : Float
-
 pub let chain_shot_reload : Float
 
 pub let chain_shot_speed : Float
 
-pub fn check_boarding_range(Game, Int) -> Bool
-
 pub fn check_island_collision(Game, Float, Float, Float) -> Bool
-
-pub fn check_ship_collision(Float, Float, Float, Float, Float, Float) -> Bool
 
 pub fn clampf(Float, Float, Float) -> Float
 
@@ -154,10 +144,6 @@ pub let convoy_speed : Float
 
 pub fn count_convoy_alive(Game) -> Int
 
-pub fn count_fleet_alive(Game) -> Int
-
-pub let crew_action_boarding : Int
-
 pub let crew_action_cannons : Int
 
 pub let crew_action_repair_hull : Int
@@ -166,13 +152,9 @@ pub let crew_action_repair_mast : Int
 
 pub let crew_action_repair_rudder : Int
 
-pub let crew_action_sailing : Int
-
 pub let debris_barrel : Int
 
 pub let debris_lifetime : Float
-
-pub let debris_mast_piece : Int
 
 pub let debris_plank : Int
 
@@ -185,8 +167,6 @@ pub fn distance2d(Float, Float, Float, Float) -> Float
 pub fn distance3d(Float, Float, Float, Float, Float, Float) -> Float
 
 pub let drift_factor : Float
-
-pub let fleet_attack_dist : Float
 
 pub let fleet_follow_dist : Float
 
@@ -254,8 +234,6 @@ pub fn get_cannon_arc(Int) -> Float
 
 pub fn get_cannon_damage(Int) -> Float
 
-pub fn get_cannon_reload(Int) -> Float
-
 pub fn get_cannon_speed(Int) -> Float
 
 pub fn get_class_base_speed(Int) -> Float
@@ -274,13 +252,9 @@ pub fn get_class_max_rudder(Int) -> Float
 
 pub fn get_class_name(Int) -> String
 
-pub fn get_class_score(Int) -> Int
-
 pub fn get_class_turn_rate(Int) -> Float
 
 pub fn get_class_width(Int) -> Float
-
-pub fn get_reputation_title(Int) -> String
 
 pub let grapeshot_crew_mult : Float
 
@@ -293,8 +267,6 @@ pub let gravity : Float
 pub let heavy_cannon_arc : Float
 
 pub let heavy_cannon_damage : Float
-
-pub let heavy_cannon_range : Float
 
 pub let heavy_cannon_reload : Float
 
@@ -315,8 +287,6 @@ pub fn lerpf(Float, Float, Float) -> Float
 pub let light_cannon_arc : Float
 
 pub let light_cannon_damage : Float
-
-pub let light_cannon_range : Float
 
 pub let light_cannon_reload : Float
 
@@ -346,31 +316,17 @@ pub let medium_cannon_arc : Float
 
 pub let medium_cannon_damage : Float
 
-pub let medium_cannon_range : Float
-
 pub let medium_cannon_reload : Float
 
 pub let medium_cannon_speed : Float
 
 pub let message_display_time : Float
 
-pub let message_fade_time : Float
-
 pub fn minf(Float, Float) -> Float
-
-pub let minimap_scale : Float
-
-pub let minimap_size : Int
-
-pub let minimap_x : Int
-
-pub let minimap_y : Int
 
 pub let mortar_arc : Float
 
 pub let mortar_damage : Float
-
-pub let mortar_range : Float
 
 pub let mortar_reload : Float
 
@@ -398,27 +354,17 @@ pub fn normalize_angle(Float) -> Float
 
 pub let objective_blockade_run : Int
 
-pub let objective_capture_flagship : Int
-
-pub let objective_defend_port : Int
-
 pub let objective_destroy_all : Int
 
 pub let objective_escort_convoy : Int
 
-pub let objective_survive_time : Int
-
 pub let ocean_size : Float
-
-pub let particle_debris : Int
 
 pub let particle_fire : Int
 
 pub let particle_generic : Int
 
 pub let particle_smoke : Int
-
-pub let particle_spark : Int
 
 pub let particle_splash : Int
 
@@ -428,8 +374,6 @@ pub let player_cannon_damage : Float
 
 pub let player_cannon_reload : Float
 
-pub fn player_hp_ratio(Game) -> Float
-
 pub let player_max_hp : Float
 
 pub let player_max_sail : Float
@@ -437,8 +381,6 @@ pub let player_max_sail : Float
 pub let player_start_ammo : Int
 
 pub let player_start_crew : Int
-
-pub let player_turn_speed : Float
 
 pub fn rand_next(Game) -> Int
 
@@ -453,10 +395,6 @@ pub let rep_captain : Int
 pub let rep_commodore : Int
 
 pub let rep_legend : Int
-
-pub let rep_privateer : Int
-
-pub let repair_cannon_speed : Float
 
 pub let repair_hull_speed : Float
 
@@ -552,8 +490,6 @@ pub let state_paused : Int
 
 pub let state_playing : Int
 
-pub let state_victory : Int
-
 pub let survive_time_default : Float
 
 pub fn sync_wind(Game) -> Unit
@@ -562,11 +498,7 @@ pub let two_pi : Float
 
 pub let wake_lifetime : Float
 
-pub let wake_max_width : Float
-
 pub let wake_min_speed : Float
-
-pub let water_drag : Float
 
 pub fn water_height(Float, Float, Float) -> Float
 
@@ -576,21 +508,9 @@ pub let wave_frequency : Float
 
 pub let wave_speed : Float
 
-pub let wind_dir_e : Int
-
 pub let wind_dir_n : Int
 
-pub let wind_dir_ne : Int
-
-pub let wind_dir_nw : Int
-
 pub let wind_dir_s : Int
-
-pub let wind_dir_se : Int
-
-pub let wind_dir_sw : Int
-
-pub let wind_dir_w : Int
 
 pub let wind_gust_duration : Float
 
@@ -611,14 +531,6 @@ pub let wind_speed_moderate : Float
 pub let wind_speed_strong : Float
 
 pub let wind_strength : Float
-
-pub let zone_cannon_deck : Int
-
-pub let zone_hull : Int
-
-pub let zone_mast : Int
-
-pub let zone_rudder : Int
 
 // Errors
 

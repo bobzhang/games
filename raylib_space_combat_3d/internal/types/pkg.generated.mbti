@@ -18,8 +18,6 @@ pub let ai_idle : Int
 
 pub let ai_patrol : Int
 
-pub fn all_objectives_complete(Game) -> Bool
-
 pub fn alloc_asteroid(Game) -> Int
 
 pub fn alloc_debris(Game) -> Int
@@ -34,11 +32,7 @@ pub fn alloc_projectile(Game) -> Int
 
 pub fn alloc_station(Game) -> Int
 
-pub fn angle_diff(Float, Float) -> Float
-
 pub let asteroid_break_count : Int
-
-pub let asteroid_hp : Float
 
 pub let asteroid_large : Int
 
@@ -84,12 +78,6 @@ pub let boost_fuel_drain : Float
 
 pub let boost_fuel_regen : Float
 
-pub fn calc_accuracy(Int, Int) -> Int
-
-pub fn calc_damage(Float, Float, Float) -> (Float, Float)
-
-pub fn calc_rank(Int, Float, Int) -> String
-
 pub let camera_distance : Float
 
 pub let camera_fovy : Float
@@ -115,8 +103,6 @@ pub let capital_hp : Float
 pub let capital_score : Int
 
 pub let capital_speed : Float
-
-pub let capital_turret_count : Int
 
 pub let capital_weak_point_hp : Float
 
@@ -162,15 +148,11 @@ pub let cruiser_speed : Float
 
 pub let damage_flash_duration : Float
 
-pub fn distance2d(Float, Float, Float, Float) -> Float
-
 pub fn distance3d(Float, Float, Float, Float, Float, Float) -> Float
 
 pub fn distance_squared_3d(Float, Float, Float, Float, Float, Float) -> Float
 
 pub fn dot3d(Float, Float, Float, Float, Float, Float) -> Float
-
-pub let enemy_asteroid : Int
 
 pub let enemy_bomber : Int
 
@@ -181,8 +163,6 @@ pub let enemy_cruiser : Int
 pub let enemy_fighter : Int
 
 pub let enemy_interceptor : Int
-
-pub fn enemy_score_value(Int) -> Int
 
 pub fn enemy_type_name(Int) -> String
 
@@ -310,10 +290,6 @@ pub let missile_speed : Float
 
 pub let missile_turn_rate : Float
 
-pub fn mission_difficulty_damage_mult(Int) -> Float
-
-pub fn mission_difficulty_fire_rate_mult(Int) -> Float
-
 pub fn mission_difficulty_hp_mult(Int) -> Float
 
 pub fn mission_difficulty_speed_mult(Int) -> Float
@@ -338,21 +314,7 @@ pub let objective_survive : Int
 
 pub fn objective_type_name(Int) -> String
 
-pub let particle_debris_life : Float
-
-pub let particle_explosion_life : Float
-
-pub let particle_shield_hit_life : Float
-
-pub let particle_spark_life : Float
-
-pub let particle_thruster_life : Float
-
-pub let particle_weapon_trail_life : Float
-
 pub let pi : Float
-
-pub let plasma_aoe_radius : Float
 
 pub let plasma_cooldown : Float
 
@@ -363,8 +325,6 @@ pub let plasma_energy_cost : Float
 pub let plasma_range : Float
 
 pub let plasma_speed : Float
-
-pub let player_boost_speed : Float
 
 pub let player_max_hull : Float
 
@@ -400,10 +360,6 @@ pub let powerup_weapon_boost : Int
 
 pub let powerup_weapon_duration : Float
 
-pub let radar_radius : Int
-
-pub let radar_range : Float
-
 pub let railgun_cooldown : Float
 
 pub let railgun_damage : Float
@@ -425,8 +381,6 @@ pub fn rand_rangef(Game, Float, Float) -> Float
 pub fn register_kill_combo(Game) -> Unit
 
 pub fn right_dir(Float) -> (Float, Float, Float)
-
-pub fn rotate_vector_around_axis(Float, Float, Float, Float, Float, Float, Float) -> (Float, Float, Float)
 
 pub let screen_height : Int
 
@@ -458,10 +412,6 @@ pub let ship_fighter : Int
 
 pub let ship_interceptor : Int
 
-pub fn sign_f(Float) -> Float
-
-pub fn smooth_damp(Float, Float, Float, Float) -> Float
-
 pub fn spawn_debris(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
 
 pub fn spawn_explosion(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
@@ -469,8 +419,6 @@ pub fn spawn_explosion(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
 pub fn spawn_particles(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
 
 pub fn spawn_shield_hit(Game, Float, Float, Float, Int) -> Unit
-
-pub fn sphere_collision(Float, Float, Float, Float, Float, Float, Float, Float) -> Bool
 
 pub let state_game_over : Int
 
@@ -487,8 +435,6 @@ pub let state_mission_select : Int
 pub let state_paused : Int
 
 pub let state_playing : Int
-
-pub let station_dock_range : Float
 
 pub let station_enemy : Int
 
@@ -521,8 +467,6 @@ pub let weapon_plasma : Int
 pub fn weapon_proj_speed(Int) -> Float
 
 pub let weapon_railgun : Int
-
-pub fn within_render_distance(Float, Float, Float, Float, Float, Float, Float) -> Bool
 
 pub let world_size : Float
 

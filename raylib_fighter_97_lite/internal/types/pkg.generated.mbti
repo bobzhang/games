@@ -6,69 +6,15 @@ import {
 }
 
 // Values
-pub let action_attack : Int
-
-pub let action_blockstun : Int
-
-pub let action_crouch : Int
-
-pub let action_dash_back : Int
-
-pub let action_dash_forward : Int
-
-pub let action_hitstun : Int
-
-pub let action_idle : Int
-
-pub let action_intro : Int
-
-pub let action_jump : Int
-
-pub let action_knockdown : Int
-
 pub fn action_name(Action) -> String
-
-pub let action_throw : Int
-
-pub let action_victory : Int
-
-pub let action_wakeup : Int
-
-pub let action_walk_back : Int
-
-pub let action_walk_forward : Int
 
 pub fn add_guard(Fighter, Float, CharacterArchetype) -> Unit
 
 pub fn add_meter(Fighter, Int, CharacterArchetype) -> Unit
 
-pub let ai_mode_evade : Int
-
-pub let ai_mode_idle : Int
-
-pub let ai_mode_rush : Int
-
-pub let ai_mode_zone : Int
-
 pub fn approachf(Float, Float, Float) -> Float
 
 pub fn attack_hitbox_for(Fighter, MoveSpec) -> @raylib.Rectangle
-
-pub let attack_hk : Int
-
-pub let attack_hp : Int
-
-pub let attack_lk : Int
-
-pub let attack_lp : Int
-
-pub let attack_none : Int
-
-pub let attack_special_dp : Int
-
-pub let attack_special_qcf : Int
-
-pub let attack_super : Int
 
 pub fn build_roster() -> Array[CharacterArchetype]
 
@@ -120,19 +66,7 @@ pub let dash_duration_frames : Int
 
 pub let dash_forward_speed : Float
 
-pub let dir_back : Int
-
 pub let dir_down : Int
-
-pub let dir_down_back : Int
-
-pub let dir_down_forward : Int
-
-pub let dir_forward : Int
-
-pub let dir_neutral : Int
-
-pub let dir_up : Int
 
 pub let direction_buffer_size : Int
 
@@ -232,15 +166,7 @@ pub fn minf(Float, Float) -> Float
 
 pub let motion_dp : Int
 
-pub let motion_none : Int
-
 pub let motion_qcf : Int
-
-pub let move_kind_normal : Int
-
-pub let move_kind_special : Int
-
-pub let move_kind_super : Int
 
 pub let move_speed_back : Float
 
@@ -302,31 +228,11 @@ pub fn set_training_note(Game, String) -> Unit
 
 pub fn signed_frames_text(Int) -> String
 
-pub let spark_kind_block : Int
-
-pub let spark_kind_hit : Int
-
-pub let spark_kind_super : Int
-
 pub fn stage_clamp_x(Float) -> Float
 
 pub let stage_left_x : Float
 
 pub let stage_right_x : Float
-
-pub let state_fight : Int
-
-pub let state_intro : Int
-
-pub let state_match_over : Int
-
-pub let state_pause : Int
-
-pub let state_round_over : Int
-
-pub let state_select : Int
-
-pub let state_title : Int
 
 pub let super_cost : Int
 

@@ -6,8 +6,6 @@ pub fn get_mission_def(Int) -> (Int, Int, Int, Float, Float)
 
 pub fn get_mission_extended(Int) -> (Int, Int, Int, Int, Int, Int, Int)
 
-pub fn mission_asteroid_density(Int) -> Float
-
 pub fn mission_boss_config(Int) -> (Float, Float, Float, Float)
 
 pub fn mission_briefing(Int) -> String
@@ -21,8 +19,6 @@ pub fn mission_name(Int) -> String
 pub fn mission_objective_target(Int) -> Int
 
 pub fn mission_objective_type(Int) -> Int
-
-pub fn mission_recommended_ship(Int) -> String
 
 pub fn mission_reward(Int) -> Int
 
