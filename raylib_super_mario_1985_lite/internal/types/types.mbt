@@ -10,19 +10,6 @@ pub(all) struct Input {
 }
 
 ///|
-/// Returns a neutral input state with all controls released.
-pub fn Input::none() -> Input {
-  {
-    move_left: false,
-    move_right: false,
-    jump_pressed: false,
-    jump_held: false,
-    accept: false,
-    restart: false,
-  }
-}
-
-///|
 /// Mutable player runtime state.
 pub(all) struct Player {
   mut x : Float
