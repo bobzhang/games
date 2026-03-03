@@ -1,11 +1,7 @@
 ///|
 /// Returns the smaller of two integers.
 pub fn mini(a : Int, b : Int) -> Int {
-  if a < b {
-    a
-  } else {
-    b
-  }
+  a.min(b)
 }
 
 ///|

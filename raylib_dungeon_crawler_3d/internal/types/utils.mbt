@@ -47,21 +47,13 @@ pub fn clampi(v : Int, low : Int, high : Int) -> Int {
 ///|
 /// Returns the smaller of two integers.
 pub fn mini(a : Int, b : Int) -> Int {
-  if a < b {
-    a
-  } else {
-    b
-  }
+  a.min(b)
 }
 
 ///|
 /// Returns the larger of two integers.
 pub fn maxi(a : Int, b : Int) -> Int {
-  if a > b {
-    a
-  } else {
-    b
-  }
+  a.max(b)
 }
 
 ///|

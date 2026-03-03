@@ -105,21 +105,13 @@ pub let exit_y : Int = grid_h - 2
 ///|
 /// Returns the smaller of two integers.
 pub fn mini(a : Int, b : Int) -> Int {
-  if a < b {
-    a
-  } else {
-    b
-  }
+  a.min(b)
 }
 
 ///|
 /// Returns the larger of two integers.
 pub fn maxi(a : Int, b : Int) -> Int {
-  if a > b {
-    a
-  } else {
-    b
-  }
+  a.max(b)
 }
 
 ///|

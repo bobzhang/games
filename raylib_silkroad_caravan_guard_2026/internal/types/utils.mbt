@@ -1,21 +1,13 @@
 ///|
 /// Returns the smaller of two integer values.
 pub fn mini(a : Int, b : Int) -> Int {
-  if a < b {
-    a
-  } else {
-    b
-  }
+  a.min(b)
 }
 
 ///|
 /// Returns the larger of two integer values.
 pub fn maxi(a : Int, b : Int) -> Int {
-  if a > b {
-    a
-  } else {
-    b
-  }
+  a.max(b)
 }
 
 ///|

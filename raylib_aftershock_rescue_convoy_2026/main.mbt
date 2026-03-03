@@ -146,11 +146,7 @@ fn maxf(a : Float, b : Float) -> Float {
 ///|
 /// Returns the smaller of two Int values.
 fn mini(a : Int, b : Int) -> Int {
-  if a < b {
-    a
-  } else {
-    b
-  }
+  a.min(b)
 }
 
 ///|

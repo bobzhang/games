@@ -126,11 +126,7 @@ fn absf(v : Float) -> Float {
 ///|
 /// Returns the smaller of two integers.
 fn mini(a : Int, b : Int) -> Int {
-  if a < b {
-    a
-  } else {
-    b
-  }
+  a.min(b)
 }
 
 ///|

@@ -55,21 +55,13 @@ pub fn maxf(a : Float, b : Float) -> Float {
 ///|
 /// Returns the smaller of `a` and `b` as integers.
 pub fn mini(a : Int, b : Int) -> Int {
-  if a < b {
-    a
-  } else {
-    b
-  }
+  a.min(b)
 }
 
 ///|
 /// Returns the larger of `a` and `b` as integers.
 pub fn maxi(a : Int, b : Int) -> Int {
-  if a > b {
-    a
-  } else {
-    b
-  }
+  a.max(b)
 }
 
 ///|

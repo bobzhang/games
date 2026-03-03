@@ -134,11 +134,7 @@ fn maxf(a : Float, b : Float) -> Float {
 
 ///|
 fn mini(a : Int, b : Int) -> Int {
-  if a < b {
-    a
-  } else {
-    b
-  }
+  a.min(b)
 }
 
 ///|
