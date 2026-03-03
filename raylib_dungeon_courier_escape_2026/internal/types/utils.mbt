@@ -43,12 +43,6 @@ pub fn absf(v : Float) -> Float {
 }
 
 ///|
-/// Returns the square root of a non-negative float.
-pub fn sqrtf(v : Float) -> Float {
-  v.sqrt()
-}
-
-///|
 /// Returns the sine of an angle in radians.
 pub fn sinf(v : Float) -> Float {
   @math.sinf(v)

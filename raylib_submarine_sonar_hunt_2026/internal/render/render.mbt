@@ -100,14 +100,12 @@ fn draw_targets(game : @types.Game) -> Unit {
         )
       }
     } else if game.sonar_wave_t > 0.0 {
-      let d = @types.sqrtf(
-        @types.dist2(
-          game.sub_x,
-          game.sub_y,
-          game.targets[i].x,
-          game.targets[i].y,
-        ),
-      )
+      let d = @types.dist2(
+        game.sub_x,
+        game.sub_y,
+        game.targets[i].x,
+        game.targets[i].y,
+      ).sqrt()
       if @types.absf(d - game.sonar_wave_r) < 12.0 {
         @raylib.draw_circle(tx, ty, 5.0, @raylib.Color::new(148, 250, 204, 128))
       }
@@ -237,7 +235,7 @@ fn draw_bearing_indicator(game : @types.Game) -> Unit {
   }
   let dx = target.0 - game.sub_x
   let dy = target.1 - game.sub_y
-  let len = @types.sqrtf(@types.maxf(dx * dx + dy * dy, 0.001))
+  let len = @types.maxf(dx * dx + dy * dy, 0.001).sqrt()
   let bx = @types.screen_w / 2
   let by = 52
   @raylib.draw_circle_lines(

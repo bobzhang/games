@@ -860,7 +860,7 @@ fn draw_shots(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     let vx = shot.vx
     let vy = shot.vy
     let v2 = @types.maxf(1.0, vx * vx + vy * vy)
-    let inv = Float::from_int(1) / @types.sqrtf(v2)
+    let inv = Float::from_int(1) / v2.sqrt()
 
     let x0 = shot.x + cam_x
     let y0 = shot.y + cam_y

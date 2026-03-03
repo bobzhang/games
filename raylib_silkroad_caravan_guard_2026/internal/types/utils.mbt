@@ -79,12 +79,6 @@ pub fn cosf(v : Float) -> Float {
 }
 
 ///|
-/// Returns the square root of a non-negative float.
-pub fn sqrtf(v : Float) -> Float {
-  v.sqrt()
-}
-
-///|
 /// Returns squared distance between two 2D points.
 pub fn dist2(x0 : Float, y0 : Float, x1 : Float, y1 : Float) -> Float {
   let dx = x1 - x0
@@ -151,5 +145,5 @@ pub fn lane_base_y(index : Int) -> Float {
 pub fn ellipse_norm(dx : Float, dy : Float, rx : Float, ry : Float) -> Float {
   let nx = dx / maxf(rx, 0.001)
   let ny = dy / maxf(ry, 0.001)
-  sqrtf(nx * nx + ny * ny)
+  (nx * nx + ny * ny).sqrt()
 }

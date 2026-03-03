@@ -308,7 +308,7 @@ fn update_submarine_motion(game : @types.Game, dt : Float) -> Unit {
   let mut iy = game.move_y
   let mag2 = ix * ix + iy * iy
   if mag2 > 1.0 {
-    let inv : Float = 1.0 / @types.sqrtf(mag2)
+    let inv : Float = 1.0 / mag2.sqrt()
     ix = ix * inv
     iy = iy * inv
   }
@@ -326,7 +326,7 @@ fn update_submarine_motion(game : @types.Game, dt : Float) -> Unit {
     @types.sub_max_speed
   }
   if speed2 > max_speed * max_speed {
-    let scale = max_speed / @types.sqrtf(speed2)
+    let scale = max_speed / speed2.sqrt()
     game.sub_vx = game.sub_vx * scale
     game.sub_vy = game.sub_vy * scale
   }
@@ -355,7 +355,7 @@ fn update_submarine_motion(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn update_resources(game : @types.Game, dt : Float) -> Unit {
   let input_mag = @types.clampf(
-    @types.sqrtf(game.move_x * game.move_x + game.move_y * game.move_y),
+    (game.move_x * game.move_x + game.move_y * game.move_y).sqrt(),
     0.0,
     1.0,
   )
@@ -413,7 +413,7 @@ fn update_contacts(game : @types.Game, dt : Float) -> Unit {
       game.shake_t = 0.36
       let dx = game.sub_x - game.mines[i].x
       let dy = game.sub_y - game.mines[i].y
-      let n = @types.sqrtf(@types.maxf(dx * dx + dy * dy, 0.001))
+      let n = @types.maxf(dx * dx + dy * dy, 0.001).sqrt()
       game.sub_vx = game.sub_vx + dx / n * 180.0
       game.sub_vy = game.sub_vy + dy / n * 180.0
     }

@@ -48,12 +48,6 @@ pub fn deg_to_rad(d : Float) -> Float {
 }
 
 ///|
-/// Approximates square root using Newton iterations.
-pub fn sqrtf(v : Float) -> Float {
-  v.sqrt()
-}
-
-///|
 /// Checks whether an active pointer is currently inside a rectangle.
 pub fn pointer_on_rect(
   x : Float,

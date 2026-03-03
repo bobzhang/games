@@ -821,7 +821,7 @@ fn update_raiders(game : @types.Game, dt : Float) -> Float {
     let d2 = dx * dx + dy * dy
 
     if d2 > 0.01 {
-      let inv : Float = Float::from_int(1) / @types.sqrtf(d2)
+      let inv : Float = Float::from_int(1) / d2.sqrt()
       raider.x = raider.x + dx * inv * move_speed * dt
       raider.y = raider.y + dy * inv * move_speed * dt
     }

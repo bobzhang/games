@@ -55,12 +55,6 @@ pub fn cosf(v : Float) -> Float {
 }
 
 ///|
-/// Returns the square root of a non-negative float.
-pub fn sqrtf(v : Float) -> Float {
-  v.sqrt()
-}
-
-///|
 /// Linearly interpolates between two floats using `t` in `[0, 1]`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t

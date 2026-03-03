@@ -250,7 +250,7 @@ fn draw_obj_current(
   let mut py = o.vy
   let p2 = px * px + py * py
   if p2 > 0.001 {
-    let inv : Float = Float::from_int(1) / @types.sqrtf(p2)
+    let inv : Float = Float::from_int(1) / p2.sqrt()
     px = px * inv
     py = py * inv
 

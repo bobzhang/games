@@ -863,7 +863,7 @@ fn enemy_fire(game : @types.Game, e : @types.Ent) -> Unit {
     let dx = game.hero.x - e.x
     let dy = game.hero.y - e.y
     let n2 = @types.maxf(dx * dx + dy * dy, 1.0)
-    let inv : Float = Float::from_int(1) / @types.sqrtf(n2)
+    let inv : Float = Float::from_int(1) / n2.sqrt()
     spawn_shot(
       game,
       false,

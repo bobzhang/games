@@ -55,12 +55,6 @@ pub fn cosf(v : Float) -> Float {
 }
 
 ///|
-/// Computes the square root of `v`.
-pub fn sqrtf(v : Float) -> Float {
-  v.sqrt()
-}
-
-///|
 /// Returns a random float in `[lo, hi]`.
 pub fn randf(lo : Float, hi : Float) -> Float {
   let r = Float::from_int(@raylib.get_random_value(0, 10000)) / 10000.0

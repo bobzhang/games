@@ -1,12 +1,7 @@
 ///|
-fn sqrtf(x : Float) -> Float {
-  x.sqrt()
-}
-
-///|
 fn ease_circ_out(t : Float, b : Float, c : Float, d : Float) -> Float {
   let t = t / d - 1.0
-  c * sqrtf(1.0 - t * t) + b
+  c * ((1.0 : Float) - t * t).sqrt() + b
 }
 
 ///|

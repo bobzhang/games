@@ -4,11 +4,6 @@ fn powf(base : Float, exp : Float) -> Float {
 }
 
 ///|
-fn sqrtf(x : Float) -> Float {
-  x.sqrt()
-}
-
-///|
 let pi : Float = 3.14159265358979323846
 
 ///|
@@ -54,23 +49,23 @@ fn ease_sine_in_out(t : Float, b : Float, c : Float, d : Float) -> Float {
 ///|
 fn ease_circ_in(t : Float, b : Float, c : Float, d : Float) -> Float {
   let t = t / d
-  -c * (sqrtf(1.0 - t * t) - 1.0) + b
+  -c * (((1.0 : Float) - t * t).sqrt() - 1.0) + b
 }
 
 ///|
 fn ease_circ_out(t : Float, b : Float, c : Float, d : Float) -> Float {
   let t = t / d - 1.0
-  c * sqrtf(1.0 - t * t) + b
+  c * ((1.0 : Float) - t * t).sqrt() + b
 }
 
 ///|
 fn ease_circ_in_out(t : Float, b : Float, c : Float, d : Float) -> Float {
   let t = t / (d / 2.0)
   if t < 1.0 {
-    -c / 2.0 * (sqrtf(1.0 - t * t) - 1.0) + b
+    -c / 2.0 * (((1.0 : Float) - t * t).sqrt() - 1.0) + b
   } else {
     let t = t - 2.0
-    c / 2.0 * (sqrtf(1.0 - t * t) + 1.0) + b
+    c / 2.0 * (((1.0 : Float) - t * t).sqrt() + 1.0) + b
   }
 }
 

@@ -744,7 +744,7 @@ fn apply_player_input(game : @types.Game, dt : Float) -> Unit {
       dx = 0.0
       dy = -1.0
     } else {
-      let inv : Float = Float::from_int(1) / @types.sqrtf(n2)
+      let inv : Float = Float::from_int(1) / n2.sqrt()
       dx = dx * inv
       dy = dy * inv
     }
@@ -855,7 +855,7 @@ fn entity_fire(game : @types.Game, e : @types.Entity) -> Unit {
       let dx = game.hero.x - e.x
       let dy = game.hero.y - e.y
       let n2 = @types.maxf(dx * dx + dy * dy, 1.0)
-      let inv = Float::from_int(1) / @types.sqrtf(n2)
+      let inv = Float::from_int(1) / n2.sqrt()
       spawn_bullet(
         game,
         false,

@@ -515,7 +515,7 @@ fn dash_dir(game : @types.Game) -> (Float, Float) {
     dx = 0.0
     dy = -1.0
   } else {
-    let inv : Float = Float::from_int(1) / @types.sqrtf(len2)
+    let inv : Float = Float::from_int(1) / len2.sqrt()
     dx = dx * inv
     dy = dy * inv
   }
@@ -551,7 +551,7 @@ fn apply_player_input(game : @types.Game, dt : Float) -> Unit {
 
     let speed2 = game.hero.vx * game.hero.vx + game.hero.vy * game.hero.vy
     if speed2 > @types.player_max_speed * @types.player_max_speed {
-      let inv = @types.player_max_speed / @types.sqrtf(speed2)
+      let inv = @types.player_max_speed / speed2.sqrt()
       game.hero.vx = game.hero.vx * inv
       game.hero.vy = game.hero.vy * inv
     }
@@ -684,7 +684,7 @@ fn update_objects(game : @types.Game, dt : Float) -> Unit {
         let mut py = game.objs[i].vy
         let p2 = px * px + py * py
         if p2 > 0.001 {
-          let inv : Float = Float::from_int(1) / @types.sqrtf(p2)
+          let inv : Float = Float::from_int(1) / p2.sqrt()
           px = px * inv
           py = py * inv
           game.hero.vx = game.hero.vx + px * (220.0 + 120.0 * push_scale) * dt
@@ -719,7 +719,7 @@ fn update_objects(game : @types.Game, dt : Float) -> Unit {
           let dx = game.hero.x - game.objs[i].x
           let dy = game.hero.y - game.objs[i].y
           let n2 = @types.maxf(dx * dx + dy * dy, 1.0)
-          let inv : Float = Float::from_int(1) / @types.sqrtf(n2)
+          let inv : Float = Float::from_int(1) / n2.sqrt()
           game.hero.vx = dx * inv * 120.0
           game.hero.vy = dy * inv * 120.0
         }

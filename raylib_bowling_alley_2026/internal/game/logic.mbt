@@ -471,13 +471,13 @@ fn collide_ball_pins(game : @types.Game) -> Unit {
 
     let dx : Float = game.pins[i].x - game.ball_x
     let dy : Float = game.pins[i].y - game.ball_y
-    let d : Float = @types.sqrtf(d2) + 0.0001
+    let d : Float = d2.sqrt() + 0.0001
 
     let nx : Float = dx / d
     let ny : Float = dy / d
     let impulse : Float = @types.maxf(
       150.0,
-      @types.sqrtf(game.ball_vx * game.ball_vx + game.ball_vy * game.ball_vy),
+      (game.ball_vx * game.ball_vx + game.ball_vy * game.ball_vy).sqrt(),
     )
 
     knock_pin(

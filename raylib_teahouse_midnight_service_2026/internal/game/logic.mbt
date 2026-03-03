@@ -517,7 +517,7 @@ fn apply_dash(game : @types.Game) -> Unit {
   }
 
   let n2 = @types.maxf(0.01, dx * dx + dy * dy)
-  let inv = Float::from_int(1) / @types.sqrtf(n2)
+  let inv = Float::from_int(1) / n2.sqrt()
 
   game.player.vx = dx * inv * @types.dash_speed
   game.player.vy = dy * inv * @types.dash_speed

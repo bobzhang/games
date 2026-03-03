@@ -537,7 +537,7 @@ fn draw_bolts(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     let vx = bolt.vx
     let vy = bolt.vy
     let n2 = @types.maxf(1.0, vx * vx + vy * vy)
-    let inv = Float::from_int(1) / @types.sqrtf(n2)
+    let inv = Float::from_int(1) / n2.sqrt()
     let len : Float = 16.0
     let col = if bolt.kind == 1 {
       @raylib.Color::new(128, 236, 255, 230)

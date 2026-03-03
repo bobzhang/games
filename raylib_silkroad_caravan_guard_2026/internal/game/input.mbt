@@ -15,7 +15,7 @@ fn clear_input(game : @types.Game) -> Unit {
 fn normalize_move(game : @types.Game) -> Unit {
   let len2 = game.input_x * game.input_x + game.input_y * game.input_y
   if len2 > 1.0 {
-    let inv : Float = 1.0 / @types.sqrtf(len2)
+    let inv : Float = 1.0 / len2.sqrt()
     game.input_x = game.input_x * inv
     game.input_y = game.input_y * inv
   }

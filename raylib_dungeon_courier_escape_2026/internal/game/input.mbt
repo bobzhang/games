@@ -33,7 +33,7 @@ fn update_input(game : @types.Game) -> Unit {
 
   let len2 = ix * ix + iy * iy
   if len2 > 1.0 {
-    let inv : Float = (1.0 : Float) / @types.sqrtf(len2)
+    let inv : Float = (1.0 : Float) / len2.sqrt()
     ix = ix * inv
     iy = iy * inv
   }

@@ -526,7 +526,7 @@ fn try_shoot(game : @types.Game) -> Unit {
     dy = game.raiders[target].y - game.hero.y
   }
 
-  let len = @types.sqrtf(dx * dx + dy * dy)
+  let len = (dx * dx + dy * dy).sqrt()
   if len < 0.001 {
     dx = 1.0
     dy = 0.0
@@ -655,7 +655,7 @@ fn update_hero(game : @types.Game, dt : Float) -> Unit {
       dy = game.hero.facing_y
     }
 
-    let len = @types.sqrtf(dx * dx + dy * dy)
+    let len = (dx * dx + dy * dy).sqrt()
     if len < 0.001 {
       dx = 1.0
       dy = 0.0
@@ -693,9 +693,7 @@ fn update_hero(game : @types.Game, dt : Float) -> Unit {
   game.hero.x = game.hero.x + game.hero.vx * dt
   game.hero.y = game.hero.y + game.hero.vy * dt
 
-  let vel_len = @types.sqrtf(
-    game.hero.vx * game.hero.vx + game.hero.vy * game.hero.vy,
-  )
+  let vel_len = (game.hero.vx * game.hero.vx + game.hero.vy * game.hero.vy).sqrt()
   if vel_len > 8.0 {
     game.hero.facing_x = game.hero.vx / vel_len
     game.hero.facing_y = game.hero.vy / vel_len
@@ -799,7 +797,7 @@ fn update_raiders(game : @types.Game, dt : Float) -> Unit {
 
     let dx = tx - game.raiders[i].x
     let dy = ty - game.raiders[i].y
-    let len = @types.sqrtf(dx * dx + dy * dy)
+    let len = (dx * dx + dy * dy).sqrt()
 
     if len > 0.01 {
       let ax = dx / len
@@ -888,7 +886,7 @@ fn update_raiders(game : @types.Game, dt : Float) -> Unit {
 
       let push_dx = game.raiders[i].x - game.hero.x
       let push_dy = game.raiders[i].y - game.hero.y
-      let push_len = @types.sqrtf(push_dx * push_dx + push_dy * push_dy)
+      let push_len = (push_dx * push_dx + push_dy * push_dy).sqrt()
       if push_len > 0.001 {
         game.raiders[i].vx = game.raiders[i].vx + push_dx / push_len * 120.0
         game.raiders[i].vy = game.raiders[i].vy + push_dy / push_len * 120.0

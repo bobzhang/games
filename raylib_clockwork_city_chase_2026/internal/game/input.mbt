@@ -144,7 +144,7 @@ fn update_play_input(game : @types.Game) -> Unit {
 
   let len2 = ix * ix + iy * iy
   if len2 > 1.0 {
-    let inv : Float = Float::from_int(1) / @types.sqrtf(len2)
+    let inv : Float = Float::from_int(1) / len2.sqrt()
     ix = ix * inv
     iy = iy * inv
   }

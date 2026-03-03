@@ -476,7 +476,7 @@ fn spawn_bolt(
     return
   }
 
-  let inv = Float::from_int(1) / @types.sqrtf(d2)
+  let inv = Float::from_int(1) / d2.sqrt()
   game.bolts[slot] = {
     active: true,
     x,
@@ -688,7 +688,7 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     let d2 = dx * dx + dy * dy
 
     if d2 > 1.0 {
-      let inv = Float::from_int(1) / @types.sqrtf(d2)
+      let inv = Float::from_int(1) / d2.sqrt()
       game.enemies[i].vx = dx * inv * game.enemies[i].speed
       game.enemies[i].vy = dy * inv * game.enemies[i].speed
     }
@@ -754,7 +754,7 @@ fn trigger_barrier(game : @types.Game) -> Unit {
     }
 
     if d2 > 1.0 {
-      let inv = Float::from_int(1) / @types.sqrtf(d2)
+      let inv = Float::from_int(1) / d2.sqrt()
       game.enemies[i].x = game.enemies[i].x + dx * inv * @types.barrier_push
       game.enemies[i].y = game.enemies[i].y + dy * inv * @types.barrier_push
       game.enemies[i].vx = game.enemies[i].vx + dx * inv * 80.0

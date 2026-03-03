@@ -61,12 +61,6 @@ pub fn cosf(v : Float) -> Float {
 }
 
 ///|
-/// Computes the square root of `v`.
-pub fn sqrtf(v : Float) -> Float {
-  v.sqrt()
-}
-
-///|
 /// Applies an ease-out cubic curve to a normalized value.
 pub fn ease_out_cubic(t : Float) -> Float {
   let x = clampf(t, 0.0, 1.0)

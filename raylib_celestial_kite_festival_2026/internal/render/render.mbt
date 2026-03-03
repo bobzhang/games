@@ -217,7 +217,7 @@ fn draw_anchor_and_rope(
   let ey = ky + cam_y
 
   let stretch = @types.clampf(
-    @types.sqrtf(@types.dist2(ax, ay, kx, ky)) / @types.maxf(game.rope_len, 1.0),
+    @types.dist2(ax, ay, kx, ky).sqrt() / @types.maxf(game.rope_len, 1.0),
     0.0,
     1.4,
   )
@@ -800,9 +800,7 @@ fn draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(170, 214, 236, 228),
   )
 
-  let wind_mag = @types.sqrtf(
-    game.wind_x * game.wind_x + game.wind_y * game.wind_y,
-  )
+  let wind_mag = (game.wind_x * game.wind_x + game.wind_y * game.wind_y).sqrt()
   draw_right_text(
     "WIND " + wind_mag.to_int().to_string(),
     @types.screen_w - 20,

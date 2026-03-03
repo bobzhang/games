@@ -465,7 +465,7 @@ fn ring_bell(game : @types.Game, bell_i : Int) -> Unit {
     let dx = foe.x - game.bells[bell_i].x
     let dy = foe.y - game.bells[bell_i].y
     let n2 = @types.maxf(1.0, dx * dx + dy * dy)
-    let inv = Float::from_int(1) / @types.sqrtf(n2)
+    let inv = Float::from_int(1) / n2.sqrt()
     foe.vx = foe.vx + dx * inv * 220.0
     foe.vy = foe.vy + dy * inv * 220.0
 
@@ -699,7 +699,7 @@ fn apply_dash(game : @types.Game) -> Unit {
   }
 
   let n2 = @types.maxf(0.01, dx * dx + dy * dy)
-  let inv = Float::from_int(1) / @types.sqrtf(n2)
+  let inv = Float::from_int(1) / n2.sqrt()
   game.hero.vx = dx * inv * @types.dash_speed
   game.hero.vy = dy * inv * @types.dash_speed
 
@@ -738,7 +738,7 @@ fn update_hero(game : @types.Game, dt : Float) -> Unit {
 
   let speed2 = game.hero.vx * game.hero.vx + game.hero.vy * game.hero.vy
   if speed2 > @types.hero_max_speed * @types.hero_max_speed {
-    let inv = Float::from_int(1) / @types.sqrtf(speed2)
+    let inv = Float::from_int(1) / speed2.sqrt()
     game.hero.vx = game.hero.vx * inv * @types.hero_max_speed
     game.hero.vy = game.hero.vy * inv * @types.hero_max_speed
   }
@@ -774,7 +774,7 @@ fn fire_shaman_bolt(game : @types.Game, f : @types.Foe) -> Unit {
   let dx = game.hero.x - f.x
   let dy = game.hero.y - f.y
   let n2 = @types.maxf(1.0, dx * dx + dy * dy)
-  let inv = Float::from_int(1) / @types.sqrtf(n2)
+  let inv = Float::from_int(1) / n2.sqrt()
 
   spawn_bolt(
     game,
@@ -825,7 +825,7 @@ fn update_foes(game : @types.Game, dt : Float) -> Unit {
       let away_x = game.foes[i].x - @types.shrine_x()
       let away_y = game.foes[i].y - @types.shrine_y()
       let n2 = @types.maxf(1.0, away_x * away_x + away_y * away_y)
-      let inv = Float::from_int(1) / @types.sqrtf(n2)
+      let inv = Float::from_int(1) / n2.sqrt()
       tx = @types.shrine_x() + away_x * inv * 180.0
       ty = @types.shrine_y() + away_y * inv * 180.0
     }
@@ -833,7 +833,7 @@ fn update_foes(game : @types.Game, dt : Float) -> Unit {
     let dx = tx - game.foes[i].x
     let dy = ty - game.foes[i].y
     let n2 = @types.maxf(1.0, dx * dx + dy * dy)
-    let inv = Float::from_int(1) / @types.sqrtf(n2)
+    let inv = Float::from_int(1) / n2.sqrt()
 
     let accel : Float = if game.foes[i].kind == @types.foe_wisp {
       180.0
@@ -883,7 +883,7 @@ fn update_foes(game : @types.Game, dt : Float) -> Unit {
     let v2 = game.foes[i].vx * game.foes[i].vx +
       game.foes[i].vy * game.foes[i].vy
     if v2 > speed_cap * speed_cap {
-      let invv = Float::from_int(1) / @types.sqrtf(v2)
+      let invv = Float::from_int(1) / v2.sqrt()
       game.foes[i].vx = game.foes[i].vx * invv * speed_cap
       game.foes[i].vy = game.foes[i].vy * invv * speed_cap
     }

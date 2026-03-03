@@ -734,7 +734,7 @@ fn update_guards(game : @types.Game, dt : Float) -> Float {
     let len2 = dx * dx + dy * dy
 
     if len2 > 1.0 {
-      let inv : Float = (1.0 : Float) / @types.sqrtf(len2)
+      let inv : Float = (1.0 : Float) / len2.sqrt()
       guard_val.vx = dx * inv * move_speed
       guard_val.vy = dy * inv * move_speed
     } else {
@@ -765,7 +765,7 @@ fn update_guards(game : @types.Game, dt : Float) -> Float {
     let p_d2 = pdx * pdx + pdy * pdy
 
     if p_d2 <= guard_val.cone_range * guard_val.cone_range {
-      let p_dist = @types.sqrtf(@types.maxf(p_d2, 0.0001))
+      let p_dist = @types.maxf(p_d2, 0.0001).sqrt()
       let ang_to_player = @types.heading_deg(pdx, pdy)
       let delta = @types.angle_delta_deg(ang_to_player, guard_val.dir_deg)
 

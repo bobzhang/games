@@ -697,7 +697,7 @@ fn update_kite(game : @types.Game, dt : Float) -> Unit {
   let dx = game.kite.x - anchor_x
   let dy = game.kite.y - anchor_y
   let d2 = @types.maxf(1.0, dx * dx + dy * dy)
-  let d = @types.sqrtf(d2)
+  let d = d2.sqrt()
 
   if d > game.rope_len {
     let nx = dx / d
@@ -790,7 +790,7 @@ fn update_objs(game : @types.Game, dt : Float) -> Unit {
         let tx = game.kite.x - obj.x
         let ty = game.kite.y - obj.y
         let d2 = @types.maxf(20.0, tx * tx + ty * ty)
-        let inv = Float::from_int(1) / @types.sqrtf(d2)
+        let inv = Float::from_int(1) / d2.sqrt()
         obj.vx = obj.vx + tx * inv * 90.0 * dt
         obj.vy = obj.vy + ty * inv * 90.0 * dt
         obj.vx = @types.clampf(obj.vx, -320.0, 320.0)

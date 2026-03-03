@@ -55,12 +55,6 @@ pub fn cosf(v : Float) -> Float {
 }
 
 ///|
-/// Computes the square root of `v`.
-pub fn sqrtf(v : Float) -> Float {
-  v.sqrt()
-}
-
-///|
 /// Linearly interpolates from `a` to `b` by `t`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t

@@ -743,7 +743,7 @@ fn apply_player_input(game : @types.Game, dt : Float) -> Unit {
       dx = 0.0
       dy = -1.0
     } else {
-      let inv : Float = Float::from_int(1) / @types.sqrtf(n2)
+      let inv : Float = Float::from_int(1) / n2.sqrt()
       dx = dx * inv
       dy = dy * inv
     }
@@ -854,7 +854,7 @@ fn enemy_fire(game : @types.Game, o : @types.Obj) -> Unit {
       let dx = game.hero.x - o.x
       let dy = game.hero.y - o.y
       let n2 = @types.maxf(dx * dx + dy * dy, 1.0)
-      let inv : Float = Float::from_int(1) / @types.sqrtf(n2)
+      let inv : Float = Float::from_int(1) / n2.sqrt()
       spawn_shot(
         game,
         false,
