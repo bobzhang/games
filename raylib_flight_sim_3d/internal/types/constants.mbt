@@ -52,10 +52,6 @@ pub let two_pi : Float = 6.2831853
 /// Half of pi representing a 90-degree angle in radians.
 pub let half_pi : Float = 1.57079632
 
-///|
-/// Conversion factor from degrees to radians.
-pub let deg_to_rad : Float = 0.01745329
-
 // Aircraft types
 
 ///|
@@ -257,10 +253,6 @@ pub let aircraft_speed_max : Float = 80.0
 pub let aircraft_speed_start : Float = 40.0
 
 ///|
-/// Throttle acceleration rate per second.
-pub let aircraft_throttle_accel : Float = 20.0
-
-///|
 /// Pitch rotation rate in radians per second.
 pub let aircraft_pitch_rate : Float = 1.8
 
@@ -307,18 +299,6 @@ pub let aircraft_min_altitude : Float = 0.5
 pub let stall_speed_threshold : Float = 0.7
 
 ///|
-/// Pitch correction rate during stall recovery.
-pub let stall_recovery_pitch : Float = 0.3
-
-///|
-/// Rate at which the nose drops during a stall.
-pub let stall_nose_drop_rate : Float = 1.5
-
-///|
-/// Control effectiveness reduction factor during a stall.
-pub let stall_control_reduction : Float = 0.3
-
-///|
 /// Speed ratio at which the stall warning activates.
 pub let stall_warning_speed_ratio : Float = 0.8
 
@@ -335,10 +315,6 @@ pub let altitude_thin_air_max : Float = 120.0
 ///|
 /// Minimum control effectiveness at extreme altitude.
 pub let altitude_control_min : Float = 0.4
-
-///|
-/// Minimum engine efficiency at extreme altitude.
-pub let altitude_engine_min : Float = 0.5
 
 // Fuel consumption rates
 
@@ -357,10 +333,6 @@ pub let fuel_afterburner_rate : Float = 3.0
 ///|
 /// Fuel ratio below which the low-fuel warning activates.
 pub let fuel_warning_threshold : Float = 0.2
-
-///|
-/// Fuel ratio below which the critical-fuel warning activates.
-pub let fuel_critical_threshold : Float = 0.1
 
 // Camera
 
@@ -392,15 +364,7 @@ pub let camera_mode_cockpit : Int = 1
 /// Camera mode identifier for free orbiting view.
 pub let camera_mode_free : Int = 2
 
-///|
-/// Field of view in degrees for cockpit camera mode.
-pub let camera_cockpit_fov : Float = 80.0
-
 // Terrain
-
-///|
-/// Number of cells per terrain grid side.
-pub let terrain_grid_size : Int = 16
 
 ///|
 /// World-space size of each terrain chunk.
@@ -446,65 +410,9 @@ pub let weapon_bombs : Int = 2
 
 // Machine gun parameters
 
-///|
-/// Machine gun fire interval in seconds.
-pub let mg_fire_rate : Float = 0.08
-
-///|
-/// Machine gun damage per bullet.
-pub let mg_damage : Float = 12.0
-
-///|
-/// Machine gun bullet speed.
-pub let mg_speed : Float = 150.0
-
-///|
-/// Machine gun effective range.
-pub let mg_range : Float = 80.0
-
-///|
-/// Machine gun bullet spread in radians.
-pub let mg_spread : Float = 0.02
-
 // Rocket parameters
 
-///|
-/// Rocket fire interval in seconds.
-pub let rocket_fire_rate : Float = 0.5
-
-///|
-/// Rocket damage per hit.
-pub let rocket_damage : Float = 60.0
-
-///|
-/// Rocket projectile speed.
-pub let rocket_speed : Float = 100.0
-
-///|
-/// Rocket maximum effective range.
-pub let rocket_range : Float = 120.0
-
-///|
-/// Rocket engine thrust acceleration.
-pub let rocket_thrust : Float = 40.0
-
-///|
-/// Gravity effect on rocket trajectory.
-pub let rocket_gravity : Float = 2.0
-
 // Bomb parameters
-
-///|
-/// Bomb release interval in seconds.
-pub let bomb_fire_rate : Float = 0.8
-
-///|
-/// Bomb damage at the center of the blast.
-pub let bomb_damage : Float = 120.0
-
-///|
-/// Bomb explosion area-of-effect radius.
-pub let bomb_blast_radius : Float = 8.0
 
 ///|
 /// Gravitational acceleration applied to falling bombs.
@@ -688,10 +596,6 @@ pub let building_house : Int = 3
 /// Building type identifier for factories.
 pub let building_factory : Int = 4
 
-///|
-/// Building type identifier for bunkers.
-pub let building_bunker : Int = 5
-
 // Particles
 
 ///|
@@ -711,10 +615,6 @@ pub let particle_smoke : Int = 1
 pub let particle_fire : Int = 2
 
 ///|
-/// Particle type identifier for bullet tracers.
-pub let particle_tracer : Int = 3
-
-///|
 /// Particle type identifier for explosion fragments.
 pub let particle_explosion : Int = 4
 
@@ -725,10 +625,6 @@ pub let particle_debris : Int = 5
 ///|
 /// Particle type identifier for rain droplets.
 pub let particle_rain : Int = 6
-
-///|
-/// Particle type identifier for spark effects.
-pub let particle_spark : Int = 7
 
 // Checkpoints
 
@@ -917,10 +813,6 @@ pub let wind_night : Float = 1.5
 pub let cloud_base_height : Float = 50.0
 
 ///|
-/// Vertical thickness of the cloud layer.
-pub let cloud_layer_thickness : Float = 10.0
-
-///|
 /// Maximum number of active clouds in the pool.
 pub let max_clouds : Int = 40
 
@@ -929,26 +821,6 @@ pub let max_clouds : Int = 40
 ///|
 /// Ideal glide slope angle for landing approach.
 pub let landing_glide_slope : Float = 0.05
-
-///|
-/// Maximum airspeed allowed for a safe landing.
-pub let landing_max_speed : Float = 25.0
-
-///|
-/// Maximum pitch angle allowed during landing.
-pub let landing_max_pitch : Float = 0.2
-
-///|
-/// Maximum roll angle allowed during landing.
-pub let landing_max_roll : Float = 0.3
-
-///|
-/// Horizontal radius of the landing zone.
-pub let landing_zone_radius : Float = 15.0
-
-///|
-/// Time the aircraft must hold landing conditions to succeed in seconds.
-pub let landing_hold_time : Float = 1.5
 
 // G-force parameters
 
@@ -959,14 +831,6 @@ pub let gforce_normal : Float = 1.0
 ///|
 /// Maximum tolerable G-force before effects worsen.
 pub let gforce_max : Float = 6.0
-
-///|
-/// G-force threshold that triggers pilot blackout.
-pub let gforce_blackout : Float = 7.0
-
-///|
-/// G-force threshold above which the aircraft takes structural damage.
-pub let gforce_damage_threshold : Float = 8.0
 
 // Scoring
 
@@ -994,10 +858,6 @@ pub let score_building_destroy : Int = 100
 /// Score awarded for completing a mission.
 pub let score_mission_complete : Int = 500
 
-///|
-/// Bonus score awarded for a successful landing.
-pub let score_landing_bonus : Int = 200
-
 // Mission rating thresholds
 
 ///|
@@ -1018,225 +878,21 @@ pub let rating_c_threshold : Int = 500
 
 // Building types (extended)
 
-///|
-/// Building type identifier for barracks.
-pub let building_barracks : Int = 6
-
-///|
-/// Building type identifier for fuel depots.
-pub let building_fuel_depot : Int = 7
-
-///|
-/// Building type identifier for radar installations.
-pub let building_radar : Int = 8
-
-///|
-/// Building type identifier for command centers.
-pub let building_command : Int = 9
-
 // Building HP values
-
-///|
-/// Hit points for hangar buildings.
-pub let hp_hangar : Float = 200.0
-
-///|
-/// Hit points for control tower buildings.
-pub let hp_tower : Float = 80.0
-
-///|
-/// Hit points for house buildings.
-pub let hp_house : Float = 60.0
-
-///|
-/// Hit points for factory buildings.
-pub let hp_factory : Float = 250.0
-
-///|
-/// Hit points for bunker buildings.
-pub let hp_bunker : Float = 300.0
-
-///|
-/// Hit points for barracks buildings.
-pub let hp_barracks : Float = 120.0
-
-///|
-/// Hit points for fuel depot buildings.
-pub let hp_fuel_depot : Float = 90.0
-
-///|
-/// Hit points for radar installation buildings.
-pub let hp_radar : Float = 70.0
-
-///|
-/// Hit points for command center buildings.
-pub let hp_command : Float = 180.0
 
 // Weapon damage multipliers by aircraft type
 
-///|
-/// Trainer weapon damage multiplier.
-pub let trainer_damage_mult : Float = 0.8
-
-///|
-/// Fighter weapon damage multiplier.
-pub let fighter_damage_mult : Float = 1.0
-
-///|
-/// Bomber weapon damage multiplier.
-pub let bomber_damage_mult : Float = 1.3
-
-///|
-/// Interceptor weapon damage multiplier.
-pub let interceptor_damage_mult : Float = 1.1
-
 // Weapon fire rate multipliers by aircraft type
-
-///|
-/// Trainer fire rate multiplier.
-pub let trainer_firerate_mult : Float = 1.2
-
-///|
-/// Fighter fire rate multiplier.
-pub let fighter_firerate_mult : Float = 1.0
-
-///|
-/// Bomber fire rate multiplier.
-pub let bomber_firerate_mult : Float = 0.7
-
-///|
-/// Interceptor fire rate multiplier.
-pub let interceptor_firerate_mult : Float = 0.9
 
 // Scoring constants (extended)
 
-///|
-/// Bonus score for 90% or higher accuracy.
-pub let score_accuracy_bonus_90 : Int = 500
-
-///|
-/// Bonus score for 70% or higher accuracy.
-pub let score_accuracy_bonus_70 : Int = 300
-
-///|
-/// Bonus score for 50% or higher accuracy.
-pub let score_accuracy_bonus_50 : Int = 150
-
-///|
-/// Bonus score for completing a mission without taking damage.
-pub let score_no_damage_bonus : Int = 400
-
-///|
-/// Bonus score for completing a mission well under par time.
-pub let score_time_bonus_fast : Int = 500
-
-///|
-/// Bonus score for completing a mission under par time.
-pub let score_time_bonus_good : Int = 300
-
-///|
-/// Bonus score for completing a mission near par time.
-pub let score_time_bonus_ok : Int = 150
-
-///|
-/// Bonus score for a 3-kill streak.
-pub let score_kill_streak_3 : Int = 100
-
-///|
-/// Bonus score for a 5-kill streak.
-pub let score_kill_streak_5 : Int = 250
-
-///|
-/// Bonus score for a 10-kill streak.
-pub let score_kill_streak_10 : Int = 500
-
 // Kill values per enemy type
-
-///|
-/// Point value for destroying an enemy fighter.
-pub let kill_value_fighter : Int = 150
-
-///|
-/// Point value for destroying a ground enemy.
-pub let kill_value_ground : Int = 75
-
-///|
-/// Point value for destroying a turret.
-pub let kill_value_turret : Int = 50
-
-///|
-/// Point value for destroying a building.
-pub let kill_value_building : Int = 100
-
-///|
-/// Point value for destroying a boss enemy.
-pub let kill_value_boss : Int = 500
 
 // Weather effect parameters (extended)
 
-///|
-/// Number of rain particles spawned per frame.
-pub let rain_particle_count : Int = 30
-
-///|
-/// Visual length of each rain streak.
-pub let rain_line_length : Float = 1.5
-
-///|
-/// Alpha transparency of ground-level fog overlays.
-pub let fog_ground_alpha : Int = 60
-
-///|
-/// Interval between lightning flashes during storms in seconds.
-pub let storm_flash_interval : Float = 5.0
-
-///|
-/// Duration of a lightning flash in seconds.
-pub let storm_flash_duration : Float = 0.15
-
 // Cloud count by weather
 
-///|
-/// Target cloud count in clear weather.
-pub let cloud_count_clear : Int = 8
-
-///|
-/// Target cloud count in cloudy weather.
-pub let cloud_count_cloudy : Int = 25
-
-///|
-/// Target cloud count in storm weather.
-pub let cloud_count_storm : Int = 30
-
-///|
-/// Default target cloud count for other weather types.
-pub let cloud_count_default : Int = 12
-
 // Terrain detail constants
-
-///|
-/// Probability of spawning a tree on a forest terrain chunk.
-pub let tree_spawn_chance : Float = 0.3
-
-///|
-/// Probability of spawning a rock on a high terrain chunk.
-pub let rock_spawn_chance : Float = 0.2
-
-///|
-/// Minimum height of procedurally placed trees.
-pub let tree_min_height : Float = 3.0
-
-///|
-/// Maximum height of procedurally placed trees.
-pub let tree_max_height : Float = 8.0
-
-///|
-/// Minimum size of procedurally placed rocks.
-pub let rock_min_size : Float = 0.5
-
-///|
-/// Maximum size of procedurally placed rocks.
-pub let rock_max_size : Float = 2.0
 
 // Radar constants
 
@@ -1247,14 +903,6 @@ pub let radar_range : Float = 120.0
 ///|
 /// Radar display size in pixels.
 pub let radar_size : Int = 100
-
-///|
-/// Size of enemy blips on the radar in pixels.
-pub let radar_blip_size : Int = 3
-
-///|
-/// Radar sweep line rotation speed.
-pub let radar_sweep_speed : Float = 2.0
 
 // Warning flash rates
 
@@ -1267,71 +915,11 @@ pub let warning_flash_rate : Float = 4.0
 pub let warning_fuel_rate : Float = 3.0
 
 ///|
-/// Stall warning flash rate in Hz.
-pub let warning_stall_rate : Float = 6.0
-
-///|
 /// Low-altitude warning flash rate in Hz.
 pub let warning_altitude_rate : Float = 5.0
 
 // Mission par times (for time bonus calculation)
 
 ///|
-/// Par time in seconds for the training mission.
-pub let par_time_training : Float = 60.0
-
-///|
-/// Par time in seconds for the ground strike mission.
-pub let par_time_ground_strike : Float = 90.0
-
-///|
-/// Par time in seconds for the dogfight mission.
-pub let par_time_dogfight : Float = 120.0
-
-///|
-/// Par time in seconds for the fog navigation mission.
-pub let par_time_fog_nav : Float = 90.0
-
-///|
-/// Par time in seconds for the landing mission.
-pub let par_time_landing : Float = 60.0
-
-///|
-/// Par time in seconds for the valley assault mission.
-pub let par_time_valley : Float = 150.0
-
-///|
 /// Par time in seconds for the storm runner mission.
 pub let par_time_storm : Float = 120.0
-
-///|
-/// Par time in seconds for the air superiority mission.
-pub let par_time_air_sup : Float = 120.0
-
-///|
-/// Par time in seconds for the base raid mission.
-pub let par_time_base_raid : Float = 180.0
-
-///|
-/// Par time in seconds for the survival mission.
-pub let par_time_survival : Float = 60.0
-
-///|
-/// Par time in seconds for the night recon mission.
-pub let par_time_night : Float = 120.0
-
-///|
-/// Par time in seconds for the canyon run mission.
-pub let par_time_canyon : Float = 90.0
-
-///|
-/// Par time in seconds for the base defense mission.
-pub let par_time_defense : Float = 90.0
-
-///|
-/// Par time in seconds for the storm survival mission.
-pub let par_time_storm_surv : Float = 90.0
-
-///|
-/// Par time in seconds for the final sortie mission.
-pub let par_time_final : Float = 240.0
