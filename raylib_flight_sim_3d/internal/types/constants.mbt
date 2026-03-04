@@ -296,18 +296,6 @@ pub let stall_warning_speed_ratio : Float = 0.8
 
 // Altitude effects
 
-///|
-/// Altitude at which thin air effects begin reducing performance.
-pub let altitude_thin_air_start : Float = 60.0
-
-///|
-/// Altitude at which thin air effects reach maximum severity.
-pub let altitude_thin_air_max : Float = 120.0
-
-///|
-/// Minimum control effectiveness at extreme altitude.
-pub let altitude_control_min : Float = 0.4
-
 // Fuel consumption rates
 
 ///|
@@ -497,10 +485,6 @@ pub let ai_evade : Int = 2
 ///|
 /// AI state identifier for fleeing when critically damaged.
 pub let ai_flee : Int = 3
-
-///|
-/// AI state identifier for formation flying.
-pub let ai_formation : Int = 4
 
 // Enemy AI parameters
 

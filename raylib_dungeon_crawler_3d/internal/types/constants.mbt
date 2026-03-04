@@ -72,10 +72,6 @@ pub let tile_locked_door : Int = 9
 /// Numeric id for tile boss door.
 pub let tile_boss_door : Int = 10
 
-///|
-/// Numeric id for tile secret door.
-pub let tile_secret_door : Int = 11
-
 // Enemy types
 
 ///|

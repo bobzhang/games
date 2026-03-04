@@ -49,33 +49,6 @@ pub fn is_sword(tool : Int) -> Bool {
 
 // Get the best tool type for breaking a given block
 
-///|
-/// Returns preferred tool class for efficiently mining a block id.
-pub fn get_best_tool_class_for_block(block : Int) -> Int {
-  // Returns: 0=any, 1=pickaxe, 2=axe, 3=shovel, 4=sword
-  if block == @types.block_stone ||
-    block == @types.block_cobblestone ||
-    block == @types.block_ore_iron ||
-    block == @types.block_ore_gold ||
-    block == @types.block_ore_diamond ||
-    block == @types.block_brick {
-    1
-  } else if block == @types.block_wood ||
-    block == @types.block_planks ||
-    block == @types.block_leaves {
-    2
-  } else if block == @types.block_dirt ||
-    block == @types.block_grass ||
-    block == @types.block_sand ||
-    block == @types.block_gravel ||
-    block == @types.block_clay ||
-    block == @types.block_snow {
-    3
-  } else {
-    0
-  }
-}
-
 // Check if the equipped tool matches the best tool class for a block
 
 // Get the effective mining speed multiplier when using the correct tool
@@ -83,19 +56,6 @@ pub fn get_best_tool_class_for_block(block : Int) -> Int {
 // ========== Crafting recipe matching ==========
 
 // Check if inventory has enough of a specific item
-
-///|
-/// Counts total quantity of `item_id` across player inventory slots.
-pub fn count_item_in_inventory(game : @types.Game, item_id : Int) -> Int {
-  let inv = game.player.inventory
-  let mut total = 0
-  for i in 0..<@types.inventory_slots {
-    if inv.slots[i].item_id == item_id && inv.slots[i].count > 0 {
-      total += inv.slots[i].count
-    }
-  }
-  total
-}
 
 // Check if a recipe can be crafted with current inventory
 

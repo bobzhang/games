@@ -212,10 +212,6 @@ pub let tool_stone_sword : Int = 11
 /// Tool id for iron sword.
 pub let tool_iron_sword : Int = 12
 
-///|
-/// Total number of tool ids.
-pub let tool_count : Int = 13
-
 // Chunk dimensions
 
 ///|
