@@ -66,26 +66,6 @@ pub fn angle_diff(from : Float, to : Float) -> Float {
 
 // Project point onto line segment, return parameter t [0,1]
 
-///|
-/// Returns the projection parameter `t` in the range 0 to 1 of a point onto a line segment.
-pub fn project_point_on_segment(
-  px : Float,
-  pz : Float,
-  ax : Float,
-  az : Float,
-  bx : Float,
-  bz : Float,
-) -> Float {
-  let dx = bx - ax
-  let dz = bz - az
-  let len_sq = dx * dx + dz * dz
-  if len_sq < 0.0001 {
-    return 0.0
-  }
-  let t = ((px - ax) * dx + (pz - az) * dz) / len_sq
-  clampf(t, 0.0, 1.0)
-}
-
 // Get distance from point to line segment
 
 // Get the surface grip multiplier
@@ -567,25 +547,6 @@ pub fn find_target_ahead(game : Game, kart_idx : Int) -> Int {
 // Find nearest opponent behind the given kart
 
 // Get item probability weights based on race position (better items when further behind)
-
-///|
-/// Returns item probability weights based on the kart's race `place` position.
-pub fn get_item_weights(place : Int) -> Array[Int] {
-  // Returns weights for: boost, shield, missile, oil, lightning, star, banana, triple_mushroom
-  if place <= 1 {
-    // First place: defensive items
-    [10, 15, 0, 20, 0, 0, 30, 5]
-  } else if place <= 3 {
-    // Top 3: mixed items
-    [20, 15, 10, 15, 0, 0, 15, 10]
-  } else if place <= 5 {
-    // Middle: offensive items
-    [15, 10, 20, 10, 5, 5, 5, 15]
-  } else {
-    // Back of pack: powerful items
-    [10, 5, 15, 5, 15, 15, 0, 20]
-  }
-}
 
 // Pick a random powerup based on position weights
 

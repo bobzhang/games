@@ -78,15 +78,6 @@ pub fn is_walkable(tile : Int) -> Bool {
   tile == tile_shop
 }
 
-///|
-/// Returns whether a tile id represents any door variant.
-pub fn is_door_tile(tile : Int) -> Bool {
-  tile == tile_door ||
-  tile == tile_locked_door ||
-  tile == tile_boss_door ||
-  tile == tile_secret_door
-}
-
 // Convert world position to grid position
 
 ///|

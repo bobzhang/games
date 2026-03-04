@@ -1,16 +1,4 @@
 ///|
-/// Returns `v` clamped between `low` and `high`.
-pub fn clampf(v : Float, low : Float, high : Float) -> Float {
-  if v < low {
-    low
-  } else if v > high {
-    high
-  } else {
-    v
-  }
-}
-
-///|
 /// Returns the smaller of `a` and `b`.
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b {
@@ -53,22 +41,6 @@ pub fn distance3d(
 }
 
 ///|
-/// Returns the squared Euclidean distance between two 3D points.
-pub fn distance_squared_3d(
-  x1 : Float,
-  y1 : Float,
-  z1 : Float,
-  x2 : Float,
-  y2 : Float,
-  z2 : Float,
-) -> Float {
-  let dx = x1 - x2
-  let dy = y1 - y2
-  let dz = z1 - z2
-  dx * dx + dy * dy + dz * dz
-}
-
-///|
 /// Returns the unit vector of the given 3D vector, or forward if near zero.
 pub fn normalize3d(x : Float, y : Float, z : Float) -> (Float, Float, Float) {
   let len = (x * x + y * y + z * z).sqrt()
@@ -83,19 +55,6 @@ pub fn normalize3d(x : Float, y : Float, z : Float) -> (Float, Float, Float) {
 /// Returns the magnitude of a 3D vector.
 pub fn length3d(x : Float, y : Float, z : Float) -> Float {
   (x * x + y * y + z * z).sqrt()
-}
-
-///|
-/// Returns the dot product of two 3D vectors.
-pub fn dot3d(
-  x1 : Float,
-  y1 : Float,
-  z1 : Float,
-  x2 : Float,
-  y2 : Float,
-  z2 : Float,
-) -> Float {
-  x1 * x2 + y1 * y2 + z1 * z2
 }
 
 // Cross product

@@ -48,10 +48,6 @@ pub let pi : Float = 3.14159265
 /// Two times pi for full-circle angle wrapping.
 pub let two_pi : Float = 6.2831853
 
-///|
-/// Half of pi representing a 90-degree angle in radians.
-pub let half_pi : Float = 1.57079632
-
 // Aircraft types
 
 ///|
@@ -295,10 +291,6 @@ pub let aircraft_min_altitude : Float = 0.5
 // Stall parameters
 
 ///|
-/// Speed ratio below minimum that triggers a stall.
-pub let stall_speed_threshold : Float = 0.7
-
-///|
 /// Speed ratio at which the stall warning activates.
 pub let stall_warning_speed_ratio : Float = 0.8
 
@@ -317,18 +309,6 @@ pub let altitude_thin_air_max : Float = 120.0
 pub let altitude_control_min : Float = 0.4
 
 // Fuel consumption rates
-
-///|
-/// Fuel consumption rate at idle throttle.
-pub let fuel_idle_rate : Float = 0.3
-
-///|
-/// Fuel consumption rate at cruise throttle.
-pub let fuel_cruise_rate : Float = 1.0
-
-///|
-/// Fuel consumption rate at full afterburner throttle.
-pub let fuel_afterburner_rate : Float = 3.0
 
 ///|
 /// Fuel ratio below which the low-fuel warning activates.
@@ -539,10 +519,6 @@ pub let ai_flee_hp_ratio : Float = 0.2
 ///|
 /// Duration of evasive maneuvers in seconds.
 pub let ai_evade_duration : Float = 3.0
-
-///|
-/// Distance between aircraft in formation flying.
-pub let ai_formation_spacing : Float = 8.0
 
 // Turrets
 
@@ -818,19 +794,7 @@ pub let max_clouds : Int = 40
 
 // Landing parameters
 
-///|
-/// Ideal glide slope angle for landing approach.
-pub let landing_glide_slope : Float = 0.05
-
 // G-force parameters
-
-///|
-/// Normal gravitational force at 1G level flight.
-pub let gforce_normal : Float = 1.0
-
-///|
-/// Maximum tolerable G-force before effects worsen.
-pub let gforce_max : Float = 6.0
 
 // Scoring
 
@@ -919,7 +883,3 @@ pub let warning_fuel_rate : Float = 3.0
 pub let warning_altitude_rate : Float = 5.0
 
 // Mission par times (for time bonus calculation)
-
-///|
-/// Par time in seconds for the storm runner mission.
-pub let par_time_storm : Float = 120.0

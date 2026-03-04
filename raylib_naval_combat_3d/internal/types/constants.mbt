@@ -276,10 +276,6 @@ pub let cannon_chain_shot : Int = 4
 pub let light_cannon_damage : Float = 8.0
 
 ///|
-/// Cannon stats: damage, range, reload_time, speed, arc setting for light cannon reload.
-pub let light_cannon_reload : Float = 1.5
-
-///|
 /// Speed value for light cannon speed in world units per second.
 pub let light_cannon_speed : Float = 32.0
 
@@ -290,10 +286,6 @@ pub let light_cannon_arc : Float = 4.0
 ///|
 /// Damage value for medium cannon damage.
 pub let medium_cannon_damage : Float = 14.0
-
-///|
-/// Cannon stats: damage, range, reload_time, speed, arc setting for medium cannon reload.
-pub let medium_cannon_reload : Float = 2.2
 
 ///|
 /// Speed value for medium cannon speed in world units per second.
@@ -308,10 +300,6 @@ pub let medium_cannon_arc : Float = 5.0
 pub let heavy_cannon_damage : Float = 22.0
 
 ///|
-/// Cannon stats: damage, range, reload_time, speed, arc setting for heavy cannon reload.
-pub let heavy_cannon_reload : Float = 3.5
-
-///|
 /// Speed value for heavy cannon speed in world units per second.
 pub let heavy_cannon_speed : Float = 28.0
 
@@ -324,10 +312,6 @@ pub let heavy_cannon_arc : Float = 6.0
 pub let mortar_damage : Float = 30.0
 
 ///|
-/// Cannon stats: damage, range, reload_time, speed, arc setting for mortar reload.
-pub let mortar_reload : Float = 5.0
-
-///|
 /// Speed value for mortar speed in world units per second.
 pub let mortar_speed : Float = 20.0
 
@@ -338,10 +322,6 @@ pub let mortar_arc : Float = 12.0
 ///|
 /// Damage value for chain shot damage.
 pub let chain_shot_damage : Float = 5.0
-
-///|
-/// Cannon stats: damage, range, reload_time, speed, arc setting for chain shot reload.
-pub let chain_shot_reload : Float = 2.0
 
 ///|
 /// Speed value for chain shot speed in world units per second.
@@ -404,14 +384,6 @@ pub let grapeshot_mast_mult : Float = 0.1
 pub let grapeshot_crew_mult : Float = 2.0
 
 // Wind system
-
-///|
-/// Wind system setting for wind dir n.
-pub let wind_dir_n : Int = 0
-
-///|
-/// Wind system setting for wind dir s.
-pub let wind_dir_s : Int = 4
 
 ///|
 /// Speed value for wind speed calm in world units per second.
@@ -808,46 +780,10 @@ pub let two_pi : Float = 6.28318
 // Score multipliers
 
 ///|
-/// Scoring or progression value for score sloop kill.
-pub let score_sloop_kill : Int = 80
-
-///|
-/// Scoring or progression value for score brigantine kill.
-pub let score_brigantine_kill : Int = 150
-
-///|
-/// Scoring or progression value for score frigate kill.
-pub let score_frigate_kill : Int = 250
-
-///|
-/// Scoring or progression value for score galleon kill.
-pub let score_galleon_kill : Int = 400
-
-///|
-/// Scoring or progression value for score mow kill.
-pub let score_mow_kill : Int = 600
-
-///|
 /// Scoring or progression value for score fortress kill.
 pub let score_fortress_kill : Int = 500
 
 // Reputation thresholds
-
-///|
-/// Reputation thresholds setting for rep captain.
-pub let rep_captain : Int = 500
-
-///|
-/// Reputation thresholds setting for rep commodore.
-pub let rep_commodore : Int = 1500
-
-///|
-/// Reputation thresholds setting for rep admiral.
-pub let rep_admiral : Int = 3000
-
-///|
-/// Reputation thresholds setting for rep legend.
-pub let rep_legend : Int = 5000
 
 // Water wake parameters
 

@@ -37,18 +37,6 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 }
 
 ///|
-/// Returns `-1.0`, `0.0`, or `1.0` based on the sign of `v`.
-pub fn signf(v : Float) -> Float {
-  if v > 0.0 {
-    1.0
-  } else if v < 0.0 {
-    -1.0
-  } else {
-    0.0
-  }
-}
-
-///|
 /// Computes Euclidean distance in the XZ plane.
 pub fn dist2d(x1 : Float, z1 : Float, x2 : Float, z2 : Float) -> Float {
   @math.hypotf(x1 - x2, z1 - z2)
@@ -96,12 +84,6 @@ pub fn smoothstep(edge0 : Float, edge1 : Float, x : Float) -> Float {
 // Normalize a 2D vector, returning (nx, nz, length)
 
 // Dot product 2d
-
-///|
-/// Computes the 2D dot product in XZ space.
-pub fn dot2d(ax : Float, az : Float, bx : Float, bz : Float) -> Float {
-  ax * bx + az * bz
-}
 
 // Dot product 3d
 
@@ -351,17 +333,6 @@ pub fn alloc_projectile(game : Game) -> Int {
 }
 
 // Allocate score fly slot
-
-///|
-/// Returns the first inactive score-fly slot index, or `-1` if full.
-pub fn alloc_score_fly(game : Game) -> Int {
-  for i in 0..<game.score_flies.length() {
-    if not(game.score_flies[i].active) {
-      return i
-    }
-  }
-  -1
-}
 
 // Spawn a score fly text
 

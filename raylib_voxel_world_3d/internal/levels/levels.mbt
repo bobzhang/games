@@ -409,24 +409,6 @@ pub fn get_spawn_type_for_biome(
 
 // Simple house dimensions
 
-///|
-/// Returns generated house structure width in blocks.
-pub fn structure_house_width() -> Int {
-  7
-}
-
-///|
-/// Returns generated house structure depth in blocks.
-pub fn structure_house_depth() -> Int {
-  7
-}
-
-///|
-/// Returns generated house structure height in blocks.
-pub fn structure_house_height() -> Int {
-  5
-}
-
 // Get block for a house at relative position
 
 // ========== Biome parameters definitions ==========
@@ -441,45 +423,9 @@ pub fn structure_house_height() -> Int {
 
 // Large tree template: oak tree with wider canopy
 
-///|
-/// Returns canopy radius for large-tree structure generation.
-pub fn structure_large_tree_canopy_radius() -> Int {
-  3
-}
-
 // Ruin structure template: small ruined stone walls
 
-///|
-/// Returns generated ruin structure width in blocks.
-pub fn structure_ruin_width() -> Int {
-  5
-}
-
-///|
-/// Returns generated ruin structure depth in blocks.
-pub fn structure_ruin_depth() -> Int {
-  5
-}
-
-///|
-/// Returns generated ruin structure height in blocks.
-pub fn structure_ruin_height() -> Int {
-  3
-}
-
 // Watchtower template
-
-///|
-/// Returns generated tower structure width in blocks.
-pub fn structure_tower_width() -> Int {
-  3
-}
-
-///|
-/// Returns generated tower structure height in blocks.
-pub fn structure_tower_height() -> Int {
-  8
-}
 
 // ========== Mob spawn tables per biome and time of day ==========
 

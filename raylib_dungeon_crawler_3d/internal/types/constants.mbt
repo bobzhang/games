@@ -282,10 +282,6 @@ pub let trap_poison : Int = 3
 /// Numeric id for pitfall.
 pub let trap_pitfall : Int = 4
 
-///|
-/// Numeric id for teleporter.
-pub let trap_teleporter : Int = 5
-
 // Item rarity
 
 ///|
@@ -296,59 +292,11 @@ pub let rarity_common : Int = 0
 /// Numeric id for uncommon.
 pub let rarity_uncommon : Int = 1
 
-///|
-/// Numeric id for rare.
-pub let rarity_rare : Int = 2
-
-///|
-/// Numeric id for epic.
-pub let rarity_epic : Int = 3
-
-///|
-/// Numeric id for legendary.
-pub let rarity_legendary : Int = 4
-
 // Floor themes
 
 ///|
 /// Numeric id for crypt.
 pub let theme_crypt : Int = 0
-
-///|
-/// Numeric id for sewer.
-pub let theme_sewer : Int = 1
-
-///|
-/// Numeric id for cavern.
-pub let theme_cavern : Int = 2
-
-///|
-/// Numeric id for library.
-pub let theme_library : Int = 3
-
-///|
-/// Numeric id for prison.
-pub let theme_prison : Int = 4
-
-///|
-/// Numeric id for throne room.
-pub let theme_throne_room : Int = 5
-
-///|
-/// Numeric id for mine.
-pub let theme_mine : Int = 6
-
-///|
-/// Numeric id for temple.
-pub let theme_temple : Int = 7
-
-///|
-/// Numeric id for abyss.
-pub let theme_abyss : Int = 8
-
-///|
-/// Numeric id for final chamber.
-pub let theme_final_chamber : Int = 9
 
 // Game states
 

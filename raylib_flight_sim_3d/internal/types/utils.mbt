@@ -133,20 +133,6 @@ pub fn altitude_above_terrain(x : Float, y : Float, z : Float) -> Float {
 
 // Altitude effect on engine and control (thinner air at high altitude)
 
-///|
-/// Returns the thin-air performance factor for the given `altitude`.
-pub fn altitude_factor(altitude : Float) -> Float {
-  if altitude < altitude_thin_air_start {
-    1.0
-  } else if altitude > altitude_thin_air_max {
-    altitude_control_min
-  } else {
-    let t = (altitude - altitude_thin_air_start) /
-      (altitude_thin_air_max - altitude_thin_air_start)
-    lerpf(1.0, altitude_control_min, t)
-  }
-}
-
 // Calculate lift based on speed and aircraft min speed
 
 // Calculate drag based on speed

@@ -444,10 +444,6 @@ pub let stack_max : Int = 64
 
 // Lighting
 
-///|
-/// Emitted light level from torch blocks.
-pub let torch_light_level : Int = 14
-
 // Entities
 
 ///|

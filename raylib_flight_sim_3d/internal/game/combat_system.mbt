@@ -30,21 +30,6 @@
 
 // Calculate no-damage bonus
 
-///|
-/// Returns the bonus score based on how much hull integrity the player retained.
-pub fn no_damage_bonus(current_hp : Float, max_hp : Float) -> Int {
-  let ratio = current_hp / max_hp
-  if ratio >= 1.0 {
-    400
-  } else if ratio > 0.9 {
-    200
-  } else if ratio > 0.75 {
-    100
-  } else {
-    0
-  }
-}
-
 // Determine if enemy should attempt evasion based on incoming projectiles
 
 // Calculate lead angle for AI firing

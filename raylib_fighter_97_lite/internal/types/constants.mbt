@@ -349,7 +349,3 @@ pub let font_title : Int = 62
 ///|
 /// Font size for subtitles.
 pub let font_subtitle : Int = 28
-
-///|
-/// Direction id for down.
-pub let dir_down : Int = 2

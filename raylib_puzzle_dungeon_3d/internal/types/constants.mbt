@@ -49,10 +49,6 @@ pub let spike_cycle_time : Float = 2.0
 // Scoring
 
 ///|
-/// Maximum stars that can be earned on a single floor.
-pub let max_stars : Int = 3
-
-///|
 /// Move-count threshold for earning exactly two stars.
 pub let star_threshold_2 : Int = 15
 
@@ -176,18 +172,6 @@ pub let dungeon_accent_g : Int = 130
 /// Blue channel for dungeon accent light color.
 pub let dungeon_accent_b : Int = 80
 
-///|
-/// Red channel for dungeon background/fog tint.
-pub let dungeon_bg_r : Int = 15
-
-///|
-/// Green channel for dungeon background/fog tint.
-pub let dungeon_bg_g : Int = 20
-
-///|
-/// Blue channel for dungeon background/fog tint.
-pub let dungeon_bg_b : Int = 35
-
 // World theme: Ice colors
 
 ///|
@@ -225,18 +209,6 @@ pub let ice_accent_g : Int = 200
 ///|
 /// Blue channel for ice world accent lighting.
 pub let ice_accent_b : Int = 255
-
-///|
-/// Red channel for ice world background/fog tint.
-pub let ice_bg_r : Int = 20
-
-///|
-/// Green channel for ice world background/fog tint.
-pub let ice_bg_g : Int = 30
-
-///|
-/// Blue channel for ice world background/fog tint.
-pub let ice_bg_b : Int = 50
 
 // World theme: Lava colors
 
@@ -276,18 +248,6 @@ pub let lava_accent_g : Int = 120
 /// Blue channel for lava world accent lighting.
 pub let lava_accent_b : Int = 30
 
-///|
-/// Red channel for lava world background/fog tint.
-pub let lava_bg_r : Int = 30
-
-///|
-/// Green channel for lava world background/fog tint.
-pub let lava_bg_g : Int = 10
-
-///|
-/// Blue channel for lava world background/fog tint.
-pub let lava_bg_b : Int = 5
-
 // World theme: Garden colors
 
 ///|
@@ -326,18 +286,6 @@ pub let garden_accent_g : Int = 230
 /// Blue channel for garden accent lighting.
 pub let garden_accent_b : Int = 100
 
-///|
-/// Red channel for garden background/fog tint.
-pub let garden_bg_r : Int = 10
-
-///|
-/// Green channel for garden background/fog tint.
-pub let garden_bg_g : Int = 25
-
-///|
-/// Blue channel for garden background/fog tint.
-pub let garden_bg_b : Int = 15
-
 // World theme: Void colors
 
 ///|
@@ -375,18 +323,6 @@ pub let void_accent_g : Int = 100
 ///|
 /// Blue channel for void accent lighting.
 pub let void_accent_b : Int = 255
-
-///|
-/// Red channel for void background/fog tint.
-pub let void_bg_r : Int = 8
-
-///|
-/// Green channel for void background/fog tint.
-pub let void_bg_g : Int = 5
-
-///|
-/// Blue channel for void background/fog tint.
-pub let void_bg_b : Int = 20
 
 // Common colors
 

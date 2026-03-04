@@ -16,53 +16,7 @@
 
 // Get item drops when a mob dies
 
-///|
-/// Returns inventory drop item id for a mob kind.
-pub fn get_mob_drop_id(kind : Int) -> Int {
-  if kind == @types.entity_pig {
-    // Pigs drop food (represented as special healing)
-    @types.block_brick // cooked porkchop placeholder
-  } else if kind == @types.entity_cow {
-    // Cows drop leather (represented as block)
-    @types.block_dirt // leather placeholder
-  } else if kind == @types.entity_chicken {
-    // Chickens drop feathers
-    @types.block_snow // feather placeholder
-  } else if kind == @types.entity_zombie {
-    // Zombies drop rotten flesh (not useful, but collectible)
-    @types.block_clay
-  } else if kind == @types.entity_skeleton {
-    // Skeletons drop bones
-    @types.block_gravel
-  } else if kind == @types.entity_spider {
-    // Spiders drop string
-    @types.block_cobblestone
-  } else {
-    0
-  }
-}
-
 // Get number of items dropped
-
-///|
-/// Returns random drop count for a mob kind.
-pub fn get_mob_drop_count(kind : Int) -> Int {
-  if kind == @types.entity_pig {
-    2
-  } else if kind == @types.entity_cow {
-    2
-  } else if kind == @types.entity_chicken {
-    1
-  } else if kind == @types.entity_zombie {
-    1
-  } else if kind == @types.entity_skeleton {
-    1
-  } else if kind == @types.entity_spider {
-    1
-  } else {
-    0
-  }
-}
 
 // Process mob death: spawn particles, drop items, restore hunger
 
