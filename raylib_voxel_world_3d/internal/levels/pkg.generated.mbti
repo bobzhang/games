@@ -26,24 +26,6 @@ pub fn get_spawn_type_for_biome(Int, Bool, Int) -> Int
 
 pub fn get_weapon_damage(Int) -> Int
 
-pub fn structure_house_depth() -> Int
-
-pub fn structure_house_height() -> Int
-
-pub fn structure_house_width() -> Int
-
-pub fn structure_large_tree_canopy_radius() -> Int
-
-pub fn structure_ruin_depth() -> Int
-
-pub fn structure_ruin_height() -> Int
-
-pub fn structure_ruin_width() -> Int
-
-pub fn structure_tower_height() -> Int
-
-pub fn structure_tower_width() -> Int
-
 // Errors
 
 // Types and methods

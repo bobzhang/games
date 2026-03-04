@@ -12,8 +12,6 @@ pub fn alloc_particle(Game) -> Int
 
 pub fn alloc_projectile(Game) -> Int
 
-pub fn alloc_score_fly(Game) -> Int
-
 pub let bounce_force : Float
 
 pub fn calc_stars(Float, Int, Int, Int) -> Int
@@ -137,8 +135,6 @@ pub let deg2rad : Float
 pub fn dist2d(Float, Float, Float, Float) -> Float
 
 pub fn dist3d(Float, Float, Float, Float, Float, Float) -> Float
-
-pub fn dot2d(Float, Float, Float, Float) -> Float
 
 pub let double_jump_force : Float
 
@@ -531,8 +527,6 @@ pub let shadow_min_alpha : Int
 pub fn shadow_scale(Float, Float) -> Float
 
 pub let shadow_size_base : Float
-
-pub fn signf(Float) -> Float
 
 pub fn smoothstep(Float, Float, Float) -> Float
 

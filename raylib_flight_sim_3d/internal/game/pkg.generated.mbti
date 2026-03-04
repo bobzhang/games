@@ -8,8 +8,6 @@ import {
 // Values
 pub fn damage_player(@types.Game, Float) -> Unit
 
-pub fn no_damage_bonus(Float, Float) -> Int
-
 pub fn start_mission(@types.Game, Int) -> Unit
 
 pub fn update_enemies(@types.Game, Float) -> Unit

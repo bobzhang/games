@@ -3,24 +3,19 @@ package "tonyfettes/raylib-examples/raylib_tank_1990/internal/render"
 
 import {
   "tonyfettes/raylib-examples/raylib_tank_1990/internal/types",
+  "tonyfettes/raylib/internal/raylib",
 }
 
 // Values
-pub fn draw_text_shadow(String, Int, Int, Int, @tonyfettes/raylib.Color) -> Unit
-
-pub fn draw_texture_centered(@tonyfettes/raylib/internal/raylib.Texture, Float, Float, Float, Float, Float, @tonyfettes/raylib.Color) -> Unit
-
-pub fn draw_texture_centered_opt(@tonyfettes/raylib/internal/raylib.Texture?, Float, Float, Float, Float, Float, @tonyfettes/raylib.Color) -> Bool
-
 pub fn draw_ui(@types.Game) -> Unit
 
 pub fn draw_world(@types.Game) -> Unit
 
-pub fn explosion_frame(Int) -> @tonyfettes/raylib/internal/raylib.Texture?
+pub fn explosion_frame(Int) -> @raylib.Texture?
 
-pub fn smoke_frame(Int) -> @tonyfettes/raylib/internal/raylib.Texture?
+pub fn smoke_frame(Int) -> @raylib.Texture?
 
-pub fn ui_font() -> @tonyfettes/raylib/internal/raylib.Font?
+pub fn ui_font() -> @raylib.Font?
 
 // Errors
 

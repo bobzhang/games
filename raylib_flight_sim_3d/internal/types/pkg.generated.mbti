@@ -16,10 +16,6 @@ pub let ai_flee : Int
 
 pub let ai_flee_hp_ratio : Float
 
-pub let ai_formation : Int
-
-pub let ai_formation_spacing : Float
-
 pub let ai_patrol : Int
 
 pub let aircraft_bomber : Int
@@ -71,14 +67,6 @@ pub fn alloc_projectile(Game) -> Int
 pub fn alloc_turret(Game) -> Int
 
 pub fn altitude_above_terrain(Float, Float, Float) -> Float
-
-pub let altitude_control_min : Float
-
-pub fn altitude_factor(Float) -> Float
-
-pub let altitude_thin_air_max : Float
-
-pub let altitude_thin_air_start : Float
 
 pub fn angle_diff(Float, Float) -> Float
 
@@ -204,12 +192,6 @@ pub let fog_rain_dist : Float
 
 pub let fog_storm_dist : Float
 
-pub let fuel_afterburner_rate : Float
-
-pub let fuel_cruise_rate : Float
-
-pub let fuel_idle_rate : Float
-
 pub let fuel_warning_threshold : Float
 
 pub fn get_aircraft_stats(Int) -> AircraftStats
@@ -219,12 +201,6 @@ pub fn get_ammo(Player) -> Int
 pub fn get_forward(Float, Float) -> (Float, Float, Float)
 
 pub fn get_right(Float, Float) -> (Float, Float, Float)
-
-pub let gforce_max : Float
-
-pub let gforce_normal : Float
-
-pub let half_pi : Float
 
 pub let interceptor_ammo_bombs : Int
 
@@ -245,8 +221,6 @@ pub let interceptor_speed_max : Float
 pub let interceptor_speed_min : Float
 
 pub let interceptor_turn_rate : Float
-
-pub let landing_glide_slope : Float
 
 pub fn lerpf(Float, Float, Float) -> Float
 
@@ -299,8 +273,6 @@ pub let mission_recon : Int
 pub let mission_survive : Int
 
 pub fn normalize3d(Float, Float, Float) -> (Float, Float, Float)
-
-pub let par_time_storm : Float
 
 pub let particle_debris : Int
 
@@ -385,8 +357,6 @@ pub fn spawn_particles(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
 pub fn spawn_rocket_trail(Game, Float, Float, Float) -> Unit
 
 pub fn spawn_smoke(Game, Float, Float, Float, Int) -> Unit
-
-pub let stall_speed_threshold : Float
 
 pub let stall_warning_speed_ratio : Float
 

@@ -108,8 +108,6 @@ pub let capital_weak_point_hp : Float
 
 pub fn check_objective_progress(Game, Int, Int) -> Unit
 
-pub fn clampf(Float, Float, Float) -> Float
-
 pub let combo_mult_2 : Float
 
 pub let combo_mult_3 : Float
@@ -149,10 +147,6 @@ pub let cruiser_speed : Float
 pub let damage_flash_duration : Float
 
 pub fn distance3d(Float, Float, Float, Float, Float, Float) -> Float
-
-pub fn distance_squared_3d(Float, Float, Float, Float, Float, Float) -> Float
-
-pub fn dot3d(Float, Float, Float, Float, Float, Float) -> Float
 
 pub let enemy_bomber : Int
 

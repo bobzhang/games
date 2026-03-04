@@ -124,12 +124,6 @@ pub let dungeon_accent_g : Int
 
 pub let dungeon_accent_r : Int
 
-pub let dungeon_bg_b : Int
-
-pub let dungeon_bg_g : Int
-
-pub let dungeon_bg_r : Int
-
 pub let dungeon_floor_b : Int
 
 pub let dungeon_floor_g : Int
@@ -153,12 +147,6 @@ pub let garden_accent_b : Int
 pub let garden_accent_g : Int
 
 pub let garden_accent_r : Int
-
-pub let garden_bg_b : Int
-
-pub let garden_bg_g : Int
-
-pub let garden_bg_r : Int
 
 pub let garden_floor_b : Int
 
@@ -200,12 +188,6 @@ pub let ice_accent_g : Int
 
 pub let ice_accent_r : Int
 
-pub let ice_bg_b : Int
-
-pub let ice_bg_g : Int
-
-pub let ice_bg_r : Int
-
 pub let ice_floor_b : Int
 
 pub let ice_floor_g : Int
@@ -246,12 +228,6 @@ pub let lava_accent_g : Int
 
 pub let lava_accent_r : Int
 
-pub let lava_bg_b : Int
-
-pub let lava_bg_g : Int
-
-pub let lava_bg_r : Int
-
 pub let lava_floor_b : Int
 
 pub let lava_floor_g : Int
@@ -277,8 +253,6 @@ pub let max_floors : Int
 pub let max_laser_segments : Int
 
 pub let max_particles : Int
-
-pub let max_stars : Int
 
 pub let max_undo : Int
 
@@ -359,12 +333,6 @@ pub let void_accent_b : Int
 pub let void_accent_g : Int
 
 pub let void_accent_r : Int
-
-pub let void_bg_b : Int
-
-pub let void_bg_g : Int
-
-pub let void_bg_r : Int
 
 pub let void_floor_b : Int
 

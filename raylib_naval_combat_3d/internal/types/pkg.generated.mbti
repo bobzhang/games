@@ -118,8 +118,6 @@ pub let chain_shot_hull_mult : Float
 
 pub let chain_shot_mast_mult : Float
 
-pub let chain_shot_reload : Float
-
 pub let chain_shot_speed : Float
 
 pub fn check_island_collision(Game, Float, Float, Float) -> Bool
@@ -268,8 +266,6 @@ pub let heavy_cannon_arc : Float
 
 pub let heavy_cannon_damage : Float
 
-pub let heavy_cannon_reload : Float
-
 pub let heavy_cannon_speed : Float
 
 pub let in_irons_angle : Float
@@ -287,8 +283,6 @@ pub fn lerpf(Float, Float, Float) -> Float
 pub let light_cannon_arc : Float
 
 pub let light_cannon_damage : Float
-
-pub let light_cannon_reload : Float
 
 pub let light_cannon_speed : Float
 
@@ -316,8 +310,6 @@ pub let medium_cannon_arc : Float
 
 pub let medium_cannon_damage : Float
 
-pub let medium_cannon_reload : Float
-
 pub let medium_cannon_speed : Float
 
 pub let message_display_time : Float
@@ -327,8 +319,6 @@ pub fn minf(Float, Float) -> Float
 pub let mortar_arc : Float
 
 pub let mortar_damage : Float
-
-pub let mortar_reload : Float
 
 pub let mortar_speed : Float
 
@@ -388,14 +378,6 @@ pub fn rand_range(Game, Int, Int) -> Int
 
 pub fn rand_rangef(Game, Float, Float) -> Float
 
-pub let rep_admiral : Int
-
-pub let rep_captain : Int
-
-pub let rep_commodore : Int
-
-pub let rep_legend : Int
-
 pub let repair_hull_speed : Float
 
 pub let repair_mast_speed : Float
@@ -432,17 +414,7 @@ pub let sail_in_irons : Float
 
 pub let sail_running : Float
 
-pub let score_brigantine_kill : Int
-
 pub let score_fortress_kill : Int
-
-pub let score_frigate_kill : Int
-
-pub let score_galleon_kill : Int
-
-pub let score_mow_kill : Int
-
-pub let score_sloop_kill : Int
 
 pub let screen_height : Int
 
@@ -507,10 +479,6 @@ pub let wave_amplitude : Float
 pub let wave_frequency : Float
 
 pub let wave_speed : Float
-
-pub let wind_dir_n : Int
-
-pub let wind_dir_s : Int
 
 pub let wind_gust_duration : Float
 

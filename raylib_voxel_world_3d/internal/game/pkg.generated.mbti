@@ -6,25 +6,7 @@ import {
 }
 
 // Values
-pub fn can_craft_recipe(@types.Game, @types.CraftingRecipe) -> Bool
-
-pub fn count_item_in_inventory(@types.Game, Int) -> Int
-
-pub fn cycle_tool_backward(@types.Game) -> Unit
-
-pub fn cycle_tool_forward(@types.Game) -> Unit
-
 pub fn damage_player(@types.Game, Int) -> Unit
-
-pub fn get_best_tool_class_for_block(Int) -> Int
-
-pub fn get_mob_drop_count(Int) -> Int
-
-pub fn get_mob_drop_id(Int) -> Int
-
-pub fn get_smelting_result(Int) -> Int
-
-pub fn get_tool_tier(Int) -> Int
 
 pub fn handle_block_interaction(@types.Game, Float) -> Unit
 
@@ -32,15 +14,11 @@ pub fn handle_block_selection(@types.Game) -> Unit
 
 pub fn is_axe(Int) -> Bool
 
-pub fn is_correct_tool_for_block(Int, Int) -> Bool
-
 pub fn is_pickaxe(Int) -> Bool
 
 pub fn is_shovel(Int) -> Bool
 
 pub fn is_sword(Int) -> Bool
-
-pub fn remove_item_from_inventory(@types.Game, Int, Int) -> Bool
 
 pub fn update_block_target(@types.Game) -> Unit
 

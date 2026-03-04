@@ -196,8 +196,6 @@ pub fn in_bounds(Int, Int) -> Bool
 
 pub fn is_blocked(Game, Float, Float, Float) -> Bool
 
-pub fn is_door_tile(Int) -> Bool
-
 pub fn is_walkable(Int) -> Bool
 
 pub let leather_defense : Int
@@ -330,12 +328,6 @@ pub fn rand_weighted(Game, Array[Int]) -> Int
 
 pub let rarity_common : Int
 
-pub let rarity_epic : Int
-
-pub let rarity_legendary : Int
-
-pub let rarity_rare : Int
-
 pub let rarity_uncommon : Int
 
 pub let robes_defense : Int
@@ -430,25 +422,7 @@ pub let sword_range : Float
 
 pub let teleport_mana_cost : Int
 
-pub let theme_abyss : Int
-
-pub let theme_cavern : Int
-
 pub let theme_crypt : Int
-
-pub let theme_final_chamber : Int
-
-pub let theme_library : Int
-
-pub let theme_mine : Int
-
-pub let theme_prison : Int
-
-pub let theme_sewer : Int
-
-pub let theme_temple : Int
-
-pub let theme_throne_room : Int
 
 pub let tile_boss_door : Int
 
@@ -461,8 +435,6 @@ pub let tile_floor : Int
 pub fn tile_index(Int, Int) -> Int
 
 pub let tile_locked_door : Int
-
-pub let tile_secret_door : Int
 
 pub let tile_shop : Int
 
@@ -485,8 +457,6 @@ pub let trap_pitfall : Int
 pub let trap_poison : Int
 
 pub let trap_spike : Int
-
-pub let trap_teleporter : Int
 
 pub fn update_buffs(Game, Float) -> Unit
 

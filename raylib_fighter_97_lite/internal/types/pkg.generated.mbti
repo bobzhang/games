@@ -66,8 +66,6 @@ pub let dash_duration_frames : Int
 
 pub let dash_forward_speed : Float
 
-pub let dir_down : Int
-
 pub let direction_buffer_size : Int
 
 pub fn draw_center_shadow_text(String, Int, Int, Int, @raylib.Color) -> Unit

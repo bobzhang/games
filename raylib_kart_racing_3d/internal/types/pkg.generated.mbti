@@ -140,8 +140,6 @@ pub fn get_drift_boost_power(Int) -> Float
 
 pub fn get_drift_spark_color(Int) -> (Int, Int, Int)
 
-pub fn get_item_weights(Int) -> Array[Int]
-
 pub fn get_kart_accel(Kart) -> Float
 
 pub fn get_kart_drift_boost_mult(Kart) -> Float
@@ -279,8 +277,6 @@ pub let powerup_star : Int
 pub let powerup_triple_mushroom : Int
 
 pub let powerup_type_count : Int
-
-pub fn project_point_on_segment(Float, Float, Float, Float, Float, Float) -> Float
 
 pub let races_per_cup : Int
 

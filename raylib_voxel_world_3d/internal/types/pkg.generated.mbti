@@ -336,8 +336,6 @@ pub let terrain_frequency : Float
 
 pub fn terrain_noise(Float, Float) -> Float
 
-pub let tool_count : Int
-
 pub let tool_hand : Int
 
 pub let tool_iron_axe : Int
@@ -365,8 +363,6 @@ pub let tool_wooden_pickaxe : Int
 pub let tool_wooden_shovel : Int
 
 pub let tool_wooden_sword : Int
-
-pub let torch_light_level : Int
 
 pub let two_pi : Float
 
