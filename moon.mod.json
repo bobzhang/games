@@ -5,6 +5,5 @@
     "tonyfettes/raylib": "0.2.2",
     "moonbitlang/async": "0.16.6"
   },
-  "license": "MIT",
   "preferred-target": "native"
 }
