@@ -13,7 +13,7 @@ pub(all) struct Student {
   name : String
   mut skill : Float
   mut fatigue : Float
-  mut room : Int
+  mut room : Room
 }
 
 ///|
@@ -96,7 +96,7 @@ pub fn starting_skill(slot : Int) -> Float {
 ///|
 /// Create a student starting in rest with low fatigue.
 pub fn Student::new(name : String, skill : Float) -> Student {
-  { name, skill, fatigue: 12.0, room: room_rest }
+  { name, skill, fatigue: 12.0, room: Rest }
 }
 
 ///|
@@ -133,7 +133,7 @@ pub fn Game::new() -> Game {
     week_duration: week_duration_for(1),
     week_time_left: week_duration_for(1),
     cursor_row: 0,
-    cursor_col: room_rest,
+    cursor_col: Rest.to_int(),
     speed_burst_t: 0.0,
     speed_burst_cd: 0.0,
     incident_timer: 0.0,

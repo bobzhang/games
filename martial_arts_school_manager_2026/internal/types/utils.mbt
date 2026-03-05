@@ -57,15 +57,34 @@ pub fn incident_severity_for(week : Int) -> Float {
 }
 
 ///|
-/// Convert room id to UI label text.
-pub fn room_name(room : Int) -> String {
-  if room == room_rest {
-    "Rest"
-  } else if room == room_train {
-    "Train"
-  } else if room == room_sparring {
-    "Spar"
-  } else {
-    "Defense"
+/// Convert a Room enum to its integer index.
+pub fn Room::to_int(self : Room) -> Int {
+  match self {
+    Rest => 0
+    Train => 1
+    Sparring => 2
+    Defense => 3
+  }
+}
+
+///|
+/// Convert an integer index to a Room enum value.
+pub fn Room::from_int(v : Int) -> Room {
+  match v {
+    1 => Train
+    2 => Sparring
+    3 => Defense
+    _ => Rest
+  }
+}
+
+///|
+/// Convert room to UI label text.
+pub fn room_name(room : Room) -> String {
+  match room {
+    Rest => "Rest"
+    Train => "Train"
+    Sparring => "Spar"
+    Defense => "Defense"
   }
 }

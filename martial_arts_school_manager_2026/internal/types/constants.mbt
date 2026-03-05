@@ -11,23 +11,7 @@ pub let screen_h : Int = 960
 pub let target_fps : Int = 120
 
 ///|
-/// Room id for rest assignment.
-pub let room_rest : Int = 0
-
-///|
-/// Room id for skill training assignment.
-pub let room_train : Int = 1
-
-///|
-/// Room id for sparring assignment.
-pub let room_sparring : Int = 2
-
-///|
-/// Room id for defense duty assignment.
-pub let room_defense : Int = 3
-
-///|
-/// Total number of assignable room ids.
+/// Total number of assignable rooms.
 pub let room_count : Int = 4
 
 ///|
@@ -173,3 +157,13 @@ pub let burst_cooldown : Float = 9.0
 ///|
 /// Simulation speed multiplier during burst mode.
 pub let burst_time_multiplier : Float = 3.5
+
+
+///|
+/// Assignable room types for student placement.
+pub(all) enum Room {
+  Rest
+  Train
+  Sparring
+  Defense
+} derive(Eq)

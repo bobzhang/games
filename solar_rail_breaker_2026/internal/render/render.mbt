@@ -978,13 +978,15 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   let shake = game.shake_offset()
   game.draw_world(shake.0, shake.1)
 
-  if game.state != @types.state_title {
-    game.draw_hud()
+  match game.state {
+    Title => ()
+    _ => game.draw_hud()
   }
 
   if game.touch_mode || game.touch_count > 0 {
-    if game.state == @types.state_play {
-      game.draw_touch_controls()
+    match game.state {
+      Play => game.draw_touch_controls()
+      _ => ()
     }
 
     if game.touch_count > 0 {
@@ -997,12 +999,11 @@ pub fn draw_frame(game : @types.Game) -> Unit {
     }
   }
 
-  if game.state == @types.state_title {
-    game.draw_title_overlay()
-  } else if game.state == @types.state_stage_clear {
-    game.draw_stage_clear_overlay()
-  } else if game.state == @types.state_game_over {
-    game.draw_game_over_overlay()
+  match game.state {
+    Title => game.draw_title_overlay()
+    StageClear => game.draw_stage_clear_overlay()
+    GameOver => game.draw_game_over_overlay()
+    _ => ()
   }
 
   if game.flash_t > 0.0 {

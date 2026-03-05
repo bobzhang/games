@@ -2,6 +2,8 @@
 package "tonyfettes/raylib-examples/night_market_chef_duel_2026/internal/types"
 
 // Values
+pub fn all_nav_nodes() -> Array[NavNode]
+
 pub let boost_cooldown : Float
 
 pub let boost_heat_rate : Float
@@ -38,19 +40,9 @@ pub let max_orders : Int
 
 pub fn maxf(Float, Float) -> Float
 
-pub let node_count : Int
+pub fn node_name(NavNode) -> String
 
-pub let node_grill : Int
-
-pub fn node_name(Int) -> String
-
-pub let node_pass : Int
-
-pub fn node_pos(Int) -> (Float, Float)
-
-pub let node_prep : Int
-
-pub let node_wok : Int
+pub fn node_pos(NavNode) -> (Float, Float)
 
 pub fn order_node_y(Int) -> Float
 
@@ -125,7 +117,7 @@ pub(all) struct Game {
   input : InputState
   cooking : CookingState
   mut state : GameState
-  mut cursor : Int
+  mut cursor : NavNode
   mut selected_order : Int
   mut ready_dish : Dish
   mut ready_quality : Float
@@ -170,6 +162,15 @@ pub(all) enum Lane {
   Wok
 }
 pub impl Eq for Lane
+
+pub(all) enum NavNode {
+  OrderSlot(Int)
+  PrepStation
+  GrillStation
+  WokStation
+  PassStation
+}
+pub impl Eq for NavNode
 
 pub(all) struct Order {
   mut active : Bool

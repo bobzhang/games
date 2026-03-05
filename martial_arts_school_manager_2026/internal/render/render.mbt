@@ -10,16 +10,13 @@ fn with_alpha(color : @raylib.Color, alpha : Int) -> @raylib.Color {
 }
 
 ///|
-/// Returns the theme colour associated with a room id.
-fn room_color(room : Int) -> @raylib.Color {
-  if room == @types.room_rest {
-    @raylib.Color::new(96, 182, 128, 255)
-  } else if room == @types.room_train {
-    @raylib.Color::new(222, 166, 74, 255)
-  } else if room == @types.room_sparring {
-    @raylib.Color::new(224, 96, 94, 255)
-  } else {
-    @raylib.Color::new(92, 148, 236, 255)
+/// Returns the theme colour associated with a room.
+fn room_color(room : @types.Room) -> @raylib.Color {
+  match room {
+    Rest => @raylib.Color::new(96, 182, 128, 255)
+    Train => @raylib.Color::new(222, 166, 74, 255)
+    Sparring => @raylib.Color::new(224, 96, 94, 255)
+    Defense => @raylib.Color::new(92, 148, 236, 255)
   }
 }
 
@@ -275,21 +272,22 @@ fn @types.Game::draw_student_table(game : @types.Game) -> Unit {
 
   for col in 0..<@types.room_count {
     let x = grid_x + col * (cell_w + cell_gap)
-    let title = @types.room_name(col)
+    let room = @types.Room::from_int(col)
+    let title = @types.room_name(room)
     let tw = @raylib.measure_text(title, 24)
     @raylib.draw_rectangle(
       x,
       panel_y + 20,
       cell_w,
       52,
-      with_alpha(room_color(col), 88),
+      with_alpha(room_color(room), 88),
     )
     @raylib.draw_rectangle_lines(
       x,
       panel_y + 20,
       cell_w,
       52,
-      with_alpha(room_color(col), 200),
+      with_alpha(room_color(room), 200),
     )
     @raylib.draw_text(
       title,
@@ -353,7 +351,8 @@ fn @types.Game::draw_student_table(game : @types.Game) -> Unit {
 
     for col in 0..<@types.room_count {
       let x = grid_x + col * (cell_w + cell_gap)
-      let assigned = game.students[i].room == col
+      let room = @types.Room::from_int(col)
+      let assigned = game.students[i].room == room
       let selected = (game.state == Playing || game.state == Paused) &&
         game.cursor_row == i &&
         game.cursor_col == col
@@ -363,9 +362,9 @@ fn @types.Game::draw_student_table(game : @types.Game) -> Unit {
         cell_w,
         row_h - 24,
         if assigned {
-          with_alpha(room_color(col), 176)
+          with_alpha(room_color(room), 176)
         } else {
-          with_alpha(room_color(col), 54)
+          with_alpha(room_color(room), 54)
         },
       )
       @raylib.draw_rectangle_lines(
@@ -376,7 +375,7 @@ fn @types.Game::draw_student_table(game : @types.Game) -> Unit {
         if selected {
           @raylib.Color::new(252, 246, 214, 242)
         } else if assigned {
-          with_alpha(room_color(col), 226)
+          with_alpha(room_color(room), 226)
         } else {
           @raylib.Color::new(84, 106, 136, 170)
         },

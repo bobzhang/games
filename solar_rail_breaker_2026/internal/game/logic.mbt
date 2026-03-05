@@ -388,7 +388,7 @@ fn @types.Game::start_run(game : @types.Game) -> Unit {
   game.clear_shocks()
   reset_player(game.player)
 
-  game.state = @types.state_play
+  game.state = Play
   game.score = 0
   game.combo = 0
   game.combo_t = 0.0
@@ -419,7 +419,7 @@ fn @types.Game::init_title_scene(game : @types.Game) -> Unit {
   game.clear_shocks()
   reset_player(game.player)
 
-  game.state = @types.state_title
+  game.state = Title
   game.stage = 1
   game.stage_time_left = @types.stage_time
   game.stage_goal = 20
@@ -474,7 +474,7 @@ fn @types.Game::apply_damage(game : @types.Game, dmg : Float) -> Unit {
   game.burst(p.0, p.1, 20, 2)
 
   if game.hp <= 0.0 {
-    game.state = @types.state_game_over
+    game.state = GameOver
     game.result_t = 0.0
     if game.score > game.best_score {
       game.best_score = game.score
@@ -1013,7 +1013,7 @@ fn @types.Game::update_stage_flow(game : @types.Game, dt : Float) -> Unit {
   let win_by_time = game.stage_time_left <= 0.0
 
   if win_by_kills || win_by_time {
-    game.state = @types.state_stage_clear
+    game.state = StageClear
     game.result_t = @types.stage_clear_delay
     game.stage_bonus = 520 + game.stage_kills * 12 + (game.hp * 5.0).to_int()
     game.score = game.score + game.stage_bonus
@@ -1062,7 +1062,7 @@ fn @types.Game::update_stage_clear(game : @types.Game, dt : Float) -> Unit {
   game.result_t = game.result_t - dt
   if game.result_t <= 0.0 {
     game.begin_stage(game.stage + 1)
-    game.state = @types.state_play
+    game.state = Play
 
     game.clear_enemies()
     game.clear_enemy_bullets()
@@ -1134,30 +1134,16 @@ pub fn init_game(game : @types.Game) -> Unit {
 ///|
 /// Advances the game simulation by one frame using the current input state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
-  if game.state == @types.state_title {
-    game.update_title_input()
-  } else if game.state == @types.state_play {
-    game.update_play_input()
-  } else if game.state == @types.state_stage_clear {
-    game.update_stage_clear_input()
-  } else {
-    game.update_result_input()
+  match game.state {
+    Title => game.update_title_input()
+    Play => game.update_play_input()
+    StageClear => game.update_stage_clear_input()
+    GameOver => game.update_result_input()
   }
-
-  if game.state == @types.state_title {
-    game.update_title(dt)
-    return
+  match game.state {
+    Title => game.update_title(dt)
+    Play => game.update_play(dt)
+    StageClear => game.update_stage_clear(dt)
+    GameOver => game.update_game_over(dt)
   }
-
-  if game.state == @types.state_play {
-    game.update_play(dt)
-    return
-  }
-
-  if game.state == @types.state_stage_clear {
-    game.update_stage_clear(dt)
-    return
-  }
-
-  game.update_game_over(dt)
 }

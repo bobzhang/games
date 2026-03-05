@@ -73,7 +73,7 @@ pub(all) struct Game {
   input : InputState
   cooking : CookingState
   mut state : GameState
-  mut cursor : Int
+  mut cursor : NavNode
   mut selected_order : Int
   mut ready_dish : Dish
   mut ready_quality : Float
@@ -141,7 +141,7 @@ pub fn Game::new() -> Game {
     input: InputState::new(),
     cooking: CookingState::new(),
     state: Title,
-    cursor: node_prep,
+    cursor: PrepStation,
     selected_order: -1,
     ready_dish: DishNone,
     ready_quality: 0.0,

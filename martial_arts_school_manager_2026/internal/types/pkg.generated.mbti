@@ -54,15 +54,7 @@ pub let rest_fatigue_recover_per_sec : Float
 
 pub let room_count : Int
 
-pub let room_defense : Int
-
-pub fn room_name(Int) -> String
-
-pub let room_rest : Int
-
-pub let room_sparring : Int
-
-pub let room_train : Int
+pub fn room_name(Room) -> String
 
 pub let screen_h : Int
 
@@ -160,11 +152,21 @@ pub(all) struct Input {
 }
 pub fn Input::new() -> Self
 
+pub(all) enum Room {
+  Rest
+  Train
+  Sparring
+  Defense
+}
+pub fn Room::from_int(Int) -> Self
+pub fn Room::to_int(Self) -> Int
+pub impl Eq for Room
+
 pub(all) struct Student {
   name : String
   mut skill : Float
   mut fatigue : Float
-  mut room : Int
+  mut room : Room
 }
 pub fn Student::new(String, Float) -> Self
 

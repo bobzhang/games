@@ -100,7 +100,7 @@ pub(all) struct Game {
   particles : Array[Particle]
   shocks : Array[Shock]
   player : Player
-  mut state : Int
+  mut state : GameState
   mut stage : Int
   mut stage_time_left : Float
   mut stage_goal : Int
@@ -249,7 +249,7 @@ pub fn Game::new() -> Game {
     particles: Array::makei(max_particles, fn(_i) { Particle::new() }),
     shocks: Array::makei(max_shocks, fn(_i) { Shock::new() }),
     player: Player::new(),
-    state: state_title,
+    state: Title,
     stage: 1,
     stage_time_left: stage_time,
     stage_goal: 24,

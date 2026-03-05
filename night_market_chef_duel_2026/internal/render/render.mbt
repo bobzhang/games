@@ -128,7 +128,7 @@ fn @types.Game::draw_order_slot(game : @types.Game, slot : Int) -> Unit {
 
   let active = game.orders[slot].active
   let selected = active && game.selected_order == slot
-  let cursor_on = game.cursor == slot
+  let cursor_on = game.cursor == OrderSlot(slot)
 
   let bg = if selected {
     @raylib.Color::new(74, 70, 106, 240)
@@ -239,7 +239,7 @@ fn draw_station_base(
 ///|
 /// Draws the prep station with active dish name and prep progress bar when cooking is in progress.
 fn @types.Game::draw_prep_station(game : @types.Game) -> Unit {
-  let hot = game.cursor == @types.node_prep
+  let hot = game.cursor == PrepStation
   let working = game.cooking.active && game.cooking.stage == Prep
 
   draw_station_base(
@@ -307,7 +307,7 @@ fn @types.Game::draw_prep_station(game : @types.Game) -> Unit {
 ///|
 /// Draws the grill station with animated flame effects and a cook progress bar for grill-lane dishes.
 fn @types.Game::draw_grill_station(game : @types.Game) -> Unit {
-  let hot = game.cursor == @types.node_grill
+  let hot = game.cursor == GrillStation
   let working = game.cooking.active &&
     game.cooking.stage == Heat &&
     game.cooking.lane == Grill
@@ -365,7 +365,7 @@ fn @types.Game::draw_grill_station(game : @types.Game) -> Unit {
 ///|
 /// Draws the wok station with a circular wok graphic and a cook progress bar for wok-lane dishes.
 fn @types.Game::draw_wok_station(game : @types.Game) -> Unit {
-  let hot = game.cursor == @types.node_wok
+  let hot = game.cursor == WokStation
   let working = game.cooking.active &&
     game.cooking.stage == Heat &&
     game.cooking.lane == Wok
@@ -423,7 +423,7 @@ fn @types.Game::draw_wok_station(game : @types.Game) -> Unit {
 ///|
 /// Draws the serve-pass station showing the ready dish and its quality bar, or an idle prompt.
 fn @types.Game::draw_pass_station(game : @types.Game) -> Unit {
-  let hot = game.cursor == @types.node_pass
+  let hot = game.cursor == PassStation
 
   draw_station_base(
     "Serve Pass",

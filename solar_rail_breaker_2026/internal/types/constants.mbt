@@ -11,22 +11,6 @@ pub let screen_h : Int = 720
 pub let target_fps : Int = 120
 
 ///|
-/// Gameplay tuning constant for state title.
-pub let state_title : Int = 0
-
-///|
-/// Gameplay tuning constant for state play.
-pub let state_play : Int = 1
-
-///|
-/// Gameplay tuning constant for state stage clear.
-pub let state_stage_clear : Int = 2
-
-///|
-/// Gameplay tuning constant for state game over.
-pub let state_game_over : Int = 3
-
-///|
 /// Gameplay tuning constant for ring count.
 pub let ring_count : Int = 4
 
@@ -125,3 +109,13 @@ pub let pi : Float = 3.14159265
 ///|
 /// Gameplay tuning constant for tau.
 pub let tau : Float = 6.28318530
+
+
+///|
+/// Represents the current phase of the game lifecycle.
+pub(all) enum GameState {
+  Title
+  Play
+  StageClear
+  GameOver
+} derive(Eq)

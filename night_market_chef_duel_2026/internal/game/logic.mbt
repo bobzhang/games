@@ -30,7 +30,7 @@ fn @types.Game::clear_round_entities(game : @types.Game) -> Unit {
   game.ready_dish = DishNone
   game.ready_quality = 0.0
   game.selected_order = -1
-  game.cursor = @types.node_prep
+  game.cursor = PrepStation
 }
 
 ///|
@@ -383,48 +383,37 @@ fn @types.Game::try_serve_ready_dish(game : @types.Game) -> Unit {
 ///|
 /// Dispatches J press to the appropriate handler based on the current cursor position.
 fn @types.Game::apply_press_j(game : @types.Game) -> Unit {
-  if game.cursor < @types.max_orders {
-    if game.orders[game.cursor].active {
-      game.selected_order = game.cursor
+  match game.cursor {
+    OrderSlot(i) => {
+      if game.orders[i].active {
+        game.selected_order = i
+      }
     }
-    return
-  }
-
-  if game.cursor == @types.node_prep {
-    game.apply_press_j_at_prep()
-  } else if game.cursor == @types.node_grill {
-    game.apply_press_j_at_heat(Grill)
-  } else if game.cursor == @types.node_wok {
-    game.apply_press_j_at_heat(Wok)
+    PrepStation => game.apply_press_j_at_prep()
+    GrillStation => game.apply_press_j_at_heat(Grill)
+    WokStation => game.apply_press_j_at_heat(Wok)
+    PassStation => ()
   }
 }
 
 ///|
 /// Handles K press: serves a ready dish at the pass, deselects an order, or cancels active cooking.
 fn @types.Game::apply_press_k(game : @types.Game) -> Unit {
-  if game.cursor == @types.node_pass {
-    game.try_serve_ready_dish()
-    return
-  }
-
-  if game.cursor < @types.max_orders {
-    if game.selected_order == game.cursor {
-      game.selected_order = -1
-      game.flash_t = @types.maxf(game.flash_t, 0.08)
+  match game.cursor {
+    PassStation => game.try_serve_ready_dish()
+    OrderSlot(i) => {
+      if game.selected_order == i {
+        game.selected_order = -1
+        game.flash_t = @types.maxf(game.flash_t, 0.08)
+      }
     }
-    return
-  }
-
-  if (
-      game.cursor == @types.node_prep ||
-      game.cursor == @types.node_grill ||
-      game.cursor == @types.node_wok
-    ) &&
-    game.cooking.active {
-    game.clear_cooking()
-    game.combo = 0
-    game.combo_timer = 0.0
-    game.flash_t = @types.maxf(game.flash_t, 0.16)
+    PrepStation | GrillStation | WokStation =>
+      if game.cooking.active {
+        game.clear_cooking()
+        game.combo = 0
+        game.combo_timer = 0.0
+        game.flash_t = @types.maxf(game.flash_t, 0.16)
+      }
   }
 }
 
@@ -443,9 +432,10 @@ fn @types.Game::move_cursor(
   let mut best = game.cursor
   let mut best_score : Float = 1000000.0
 
-  for i in 0..<@types.node_count {
-    if i != game.cursor {
-      let p = @types.node_pos(i)
+  let nodes = @types.all_nav_nodes()
+  for node in nodes {
+    if node != game.cursor {
+      let p = @types.node_pos(node)
       let vx = p.0 - cur.0
       let vy = p.1 - cur.1
 
@@ -469,7 +459,7 @@ fn @types.Game::move_cursor(
         let score : Float = forward + side * 1.9
         if score < best_score {
           best_score = score
-          best = i
+          best = node
         }
       }
     }
@@ -512,10 +502,10 @@ fn @types.Game::update_cooking_passive(game : @types.Game, dt : Float) -> Unit {
         game.cooking.stage = Heat
       }
     } else if game.cooking.stage == Heat {
-      let on_lane = (
-          game.cursor == @types.node_grill && game.cooking.lane == Grill
-        ) ||
-        (game.cursor == @types.node_wok && game.cooking.lane == Wok)
+      let on_lane = match (game.cursor, game.cooking.lane) {
+        (GrillStation, Grill) | (WokStation, Wok) => true
+        _ => false
+      }
       if on_lane {
         game.cooking.cook_progress = game.cooking.cook_progress +
           dt * @types.boost_heat_rate

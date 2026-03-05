@@ -111,21 +111,11 @@ pub let pass_x : Float = 1030.0
 pub let pass_y : Float = 312.0
 
 ///|
-/// Navigation node id for prep station.
-pub let node_prep : Int = max_orders
-
-///|
-/// Navigation node id for grill station.
-pub let node_grill : Int = max_orders + 1
-
-///|
-/// Navigation node id for wok station.
-pub let node_wok : Int = max_orders + 2
-
-///|
-/// Navigation node id for serving pass.
-pub let node_pass : Int = max_orders + 3
-
-///|
-/// Total navigation node count.
-pub let node_count : Int = max_orders + 4
+/// Navigation node identifiers for cursor placement.
+pub(all) enum NavNode {
+  OrderSlot(Int)
+  PrepStation
+  GrillStation
+  WokStation
+  PassStation
+} derive(Eq)

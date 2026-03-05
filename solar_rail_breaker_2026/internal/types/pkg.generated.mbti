@@ -120,14 +120,6 @@ pub let stage_clear_delay : Float
 
 pub let stage_time : Float
 
-pub let state_game_over : Int
-
-pub let state_play : Int
-
-pub let state_stage_clear : Int
-
-pub let state_title : Int
-
 pub let target_fps : Int
 
 pub let tau : Float
@@ -198,7 +190,7 @@ pub(all) struct Game {
   particles : Array[Particle]
   shocks : Array[Shock]
   player : Player
-  mut state : Int
+  mut state : GameState
   mut stage : Int
   mut stage_time_left : Float
   mut stage_goal : Int
@@ -237,6 +229,14 @@ pub(all) struct Game {
   mut mouse_hold : Bool
 }
 pub fn Game::new() -> Self
+
+pub(all) enum GameState {
+  Title
+  Play
+  StageClear
+  GameOver
+}
+pub impl Eq for GameState
 
 pub(all) struct Particle {
   mut active : Bool

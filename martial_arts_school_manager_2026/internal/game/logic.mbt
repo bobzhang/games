@@ -53,7 +53,7 @@ fn @types.Game::defense_power(game : @types.Game) -> Float {
   let mut power : Float = 0.0
 
   for i in 0..<@types.student_count {
-    if game.students[i].room != @types.room_defense {
+    if game.students[i].room != Defense {
       continue
     }
 
@@ -70,7 +70,7 @@ fn @types.Game::reset_students(game : @types.Game) -> Unit {
   for i in 0..<@types.student_count {
     game.students[i].skill = @types.starting_skill(i)
     game.students[i].fatigue = Float::from_int(@raylib.get_random_value(8, 20))
-    game.students[i].room = @types.room_rest
+    game.students[i].room = Rest
   }
 }
 
@@ -126,7 +126,7 @@ fn @types.Game::init_title_scene(game : @types.Game) -> Unit {
   game.week_duration = @types.week_duration_for(1)
   game.week_time_left = game.week_duration
   game.cursor_row = 0
-  game.cursor_col = @types.room_rest
+  game.cursor_col = @types.Room::Rest.to_int()
   game.speed_burst_t = 0.0
   game.speed_burst_cd = 0.0
   game.incident_timer = 0.0
@@ -155,7 +155,7 @@ fn @types.Game::start_new_run(game : @types.Game) -> Unit {
   game.week_duration = @types.week_duration_for(1)
   game.week_time_left = game.week_duration
   game.cursor_row = 0
-  game.cursor_col = @types.room_train
+  game.cursor_col = @types.Room::Train.to_int()
   game.speed_burst_t = 0.0
   game.speed_burst_cd = 0.0
   game.incident_timer = random_incident_delay(1)
@@ -190,9 +190,10 @@ fn @types.Game::assign_selected_room(game : @types.Game) -> Unit {
   let row = game.cursor_row.clamp(min=0, max=@types.student_count - 1)
   let room = game.cursor_col.clamp(min=0, max=@types.room_count - 1)
 
-  game.students[row].room = room
+  let room_enum = @types.Room::from_int(room)
+  game.students[row].room = room_enum
   game.set_message(
-    game.students[row].name + " assigned to " + @types.room_name(room) + ".",
+    game.students[row].name + " assigned to " + @types.room_name(room_enum) + ".",
     1.1,
   )
 }
@@ -201,7 +202,7 @@ fn @types.Game::assign_selected_room(game : @types.Game) -> Unit {
 /// Moves the selected student to the rest room and immediately reduces their fatigue by a fixed amount.
 fn @types.Game::rest_selected_student(game : @types.Game) -> Unit {
   let row = game.cursor_row.clamp(min=0, max=@types.student_count - 1)
-  game.students[row].room = @types.room_rest
+  game.students[row].room = Rest
   game.students[row].fatigue = @types.maxf(
     0.0,
     game.students[row].fatigue - 4.5,
@@ -257,45 +258,46 @@ fn @types.Game::apply_room_simulation(
     sim_dt
 
   for i in 0..<@types.student_count {
-    if game.students[i].room == @types.room_rest {
-      game.students[i].fatigue = @types.maxf(
-        0.0,
-        game.students[i].fatigue - @types.rest_fatigue_recover_per_sec * sim_dt,
-      )
-    } else if game.students[i].room == @types.room_train {
-      game.funds = game.funds - @types.train_cost_per_sec * sim_dt
-
-      let focus = @types.maxf(0.25, 1.0 - game.students[i].fatigue / 120.0)
-      game.students[i].skill = @types.minf(
-        130.0,
-        game.students[i].skill +
-        @types.train_skill_gain_per_sec * focus * sim_dt,
-      )
-      game.students[i].fatigue = @types.minf(
-        @types.fatigue_max,
-        game.students[i].fatigue + @types.train_fatigue_gain_per_sec * sim_dt,
-      )
-    } else if game.students[i].room == @types.room_sparring {
-      let form = @types.maxf(0.2, 1.0 - game.students[i].fatigue / 140.0)
-      let skill_scale : Float = 0.6 + game.students[i].skill / 120.0
-
-      game.funds = game.funds +
-        @types.spar_income_per_sec * form * skill_scale * sim_dt
-      game.reputation = game.reputation +
-        @types.spar_rep_gain_per_sec * form * skill_scale * sim_dt
-      game.students[i].fatigue = @types.minf(
-        @types.fatigue_max,
-        game.students[i].fatigue + @types.spar_fatigue_gain_per_sec * sim_dt,
-      )
-    } else {
-      let stipend = @types.defense_stipend_per_sec +
-        Float::from_int(game.week - 1) * @types.defense_stipend_week_scale
-
-      game.funds = game.funds + stipend * sim_dt
-      game.students[i].fatigue = @types.minf(
-        @types.fatigue_max,
-        game.students[i].fatigue + @types.defense_fatigue_gain_per_sec * sim_dt,
-      )
+    match game.students[i].room {
+      Rest =>
+        game.students[i].fatigue = @types.maxf(
+          0.0,
+          game.students[i].fatigue - @types.rest_fatigue_recover_per_sec * sim_dt,
+        )
+      Train => {
+        game.funds = game.funds - @types.train_cost_per_sec * sim_dt
+        let focus = @types.maxf(0.25, 1.0 - game.students[i].fatigue / 120.0)
+        game.students[i].skill = @types.minf(
+          130.0,
+          game.students[i].skill +
+          @types.train_skill_gain_per_sec * focus * sim_dt,
+        )
+        game.students[i].fatigue = @types.minf(
+          @types.fatigue_max,
+          game.students[i].fatigue + @types.train_fatigue_gain_per_sec * sim_dt,
+        )
+      }
+      Sparring => {
+        let form = @types.maxf(0.2, 1.0 - game.students[i].fatigue / 140.0)
+        let skill_scale : Float = 0.6 + game.students[i].skill / 120.0
+        game.funds = game.funds +
+          @types.spar_income_per_sec * form * skill_scale * sim_dt
+        game.reputation = game.reputation +
+          @types.spar_rep_gain_per_sec * form * skill_scale * sim_dt
+        game.students[i].fatigue = @types.minf(
+          @types.fatigue_max,
+          game.students[i].fatigue + @types.spar_fatigue_gain_per_sec * sim_dt,
+        )
+      }
+      Defense => {
+        let stipend = @types.defense_stipend_per_sec +
+          Float::from_int(game.week - 1) * @types.defense_stipend_week_scale
+        game.funds = game.funds + stipend * sim_dt
+        game.students[i].fatigue = @types.minf(
+          @types.fatigue_max,
+          game.students[i].fatigue + @types.defense_fatigue_gain_per_sec * sim_dt,
+        )
+      }
     }
 
     if game.students[i].fatigue > 92.0 {
@@ -359,17 +361,14 @@ fn @types.Game::trigger_incident(game : @types.Game) -> Unit {
   game.reputation = game.reputation - reputation_loss
 
   for i in 0..<@types.student_count {
-    if game.students[i].room == @types.room_rest {
-      game.students[i].fatigue = @types.minf(
-        @types.fatigue_max,
-        game.students[i].fatigue + fatigue_bump * 0.35,
-      )
-    } else {
-      game.students[i].fatigue = @types.minf(
-        @types.fatigue_max,
-        game.students[i].fatigue + fatigue_bump,
-      )
+    let bump = match game.students[i].room {
+      Rest => fatigue_bump * 0.35
+      _ => fatigue_bump
     }
+    game.students[i].fatigue = @types.minf(
+      @types.fatigue_max,
+      game.students[i].fatigue + bump,
+    )
   }
 
   game.incident_count_week = game.incident_count_week + 1
@@ -398,10 +397,10 @@ fn @types.Game::advance_week(game : @types.Game) -> Unit {
   let mut defense_count = 0
 
   for i in 0..<@types.student_count {
-    if game.students[i].room == @types.room_sparring {
+    if game.students[i].room == Sparring {
       spar_count = spar_count + 1
     }
-    if game.students[i].room == @types.room_defense {
+    if game.students[i].room == Defense {
       defense_count = defense_count + 1
     }
   }
@@ -419,7 +418,7 @@ fn @types.Game::advance_week(game : @types.Game) -> Unit {
   game.reputation = @types.clampf(game.reputation + eval_score, 0.0, 100.0)
 
   for i in 0..<@types.student_count {
-    let recover = if game.students[i].room == @types.room_rest {
+    let recover = if game.students[i].room == Rest {
       @types.weekly_recovery_bonus + 4.0
     } else {
       @types.weekly_recovery_bonus

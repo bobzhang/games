@@ -6,35 +6,41 @@ pub fn order_node_y(slot : Int) -> Float {
 }
 
 ///|
-/// Return `(x, y)` position for a navigation node id.
-pub fn node_pos(node : Int) -> (Float, Float) {
-  if node < max_orders {
-    (orders_x, order_node_y(node))
-  } else if node == node_prep {
-    (prep_x, prep_y)
-  } else if node == node_grill {
-    (grill_x, grill_y)
-  } else if node == node_wok {
-    (wok_x, wok_y)
-  } else {
-    (pass_x, pass_y)
+/// Return `(x, y)` position for a navigation node.
+pub fn node_pos(node : NavNode) -> (Float, Float) {
+  match node {
+    OrderSlot(i) => (orders_x, order_node_y(i))
+    PrepStation => (prep_x, prep_y)
+    GrillStation => (grill_x, grill_y)
+    WokStation => (wok_x, wok_y)
+    PassStation => (pass_x, pass_y)
   }
 }
 
 ///|
-/// Human-readable label for a navigation node id.
-pub fn node_name(node : Int) -> String {
-  if node < max_orders {
-    "Order #" + (node + 1).to_string()
-  } else if node == node_prep {
-    "Prep"
-  } else if node == node_grill {
-    "Grill"
-  } else if node == node_wok {
-    "Wok"
-  } else {
-    "Serve Pass"
+/// Human-readable label for a navigation node.
+pub fn node_name(node : NavNode) -> String {
+  match node {
+    OrderSlot(i) => "Order #" + (i + 1).to_string()
+    PrepStation => "Prep"
+    GrillStation => "Grill"
+    WokStation => "Wok"
+    PassStation => "Serve Pass"
   }
+}
+
+///|
+/// Return all navigation nodes for cursor traversal.
+pub fn all_nav_nodes() -> Array[NavNode] {
+  let nodes : Array[NavNode] = []
+  for i in 0..<max_orders {
+    nodes.push(OrderSlot(i))
+  }
+  nodes.push(PrepStation)
+  nodes.push(GrillStation)
+  nodes.push(WokStation)
+  nodes.push(PassStation)
+  nodes
 }
 
 ///|
