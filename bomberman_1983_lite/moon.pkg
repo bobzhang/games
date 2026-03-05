@@ -1,8 +1,8 @@
 import {
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/bomberman_1983_lite/internal/game",
-  "tonyfettes/raylib-examples/bomberman_1983_lite/internal/render",
-  "tonyfettes/raylib-examples/bomberman_1983_lite/internal/types",
+  "bobzhang/games/bomberman_1983_lite/internal/game",
+  "bobzhang/games/bomberman_1983_lite/internal/render",
+  "bobzhang/games/bomberman_1983_lite/internal/types",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

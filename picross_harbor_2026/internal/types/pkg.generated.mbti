@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/picross_harbor_2026/internal/types"
+package "bobzhang/games/picross_harbor_2026/internal/types"
 
 // Values
 pub fn action_h() -> Int

@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/sokoban_warehouse_master_2026/internal/game"
+package "bobzhang/games/sokoban_warehouse_master_2026/internal/game"
 
 import {
-  "tonyfettes/raylib-examples/sokoban_warehouse_master_2026/internal/types",
+  "bobzhang/games/sokoban_warehouse_master_2026/internal/types",
 }
 
 // Values

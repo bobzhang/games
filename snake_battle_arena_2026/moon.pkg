@@ -1,8 +1,8 @@
 import {
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/snake_battle_arena_2026/internal/game",
-  "tonyfettes/raylib-examples/snake_battle_arena_2026/internal/render",
-  "tonyfettes/raylib-examples/snake_battle_arena_2026/internal/types",
+  "bobzhang/games/snake_battle_arena_2026/internal/game",
+  "bobzhang/games/snake_battle_arena_2026/internal/render",
+  "bobzhang/games/snake_battle_arena_2026/internal/types",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

@@ -1,6 +1,6 @@
 import {
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/museum_heist_puzzle_2026/internal/types",
+  "bobzhang/games/museum_heist_puzzle_2026/internal/types",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

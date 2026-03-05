@@ -1,7 +1,7 @@
 import {
   "moonbitlang/core/math",
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/dragon_boat_sprint_2026/internal/types",
+  "bobzhang/games/dragon_boat_sprint_2026/internal/types",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

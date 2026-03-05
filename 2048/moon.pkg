@@ -1,8 +1,8 @@
 import {
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/2048/internal/types",
-  "tonyfettes/raylib-examples/2048/internal/game",
-  "tonyfettes/raylib-examples/2048/internal/render",
+  "bobzhang/games/2048/internal/types",
+  "bobzhang/games/2048/internal/game",
+  "bobzhang/games/2048/internal/render",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/tank_1990/internal/particles"
+package "bobzhang/games/tank_1990/internal/particles"
 
 import {
+  "bobzhang/games/tank_1990/internal/types",
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/tank_1990/internal/types",
 }
 
 // Values

@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/asteroid_salvage_2026/internal/render"
+package "bobzhang/games/asteroid_salvage_2026/internal/render"
 
 import {
-  "tonyfettes/raylib-examples/asteroid_salvage_2026/internal/types",
+  "bobzhang/games/asteroid_salvage_2026/internal/types",
 }
 
 // Values

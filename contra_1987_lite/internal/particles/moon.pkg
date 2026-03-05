@@ -1,7 +1,7 @@
 import {
   "moonbitlang/core/math",
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/contra_1987_lite/internal/types",
+  "bobzhang/games/contra_1987_lite/internal/types",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

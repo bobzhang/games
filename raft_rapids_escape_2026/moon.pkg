@@ -1,8 +1,8 @@
 import {
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/raft_rapids_escape_2026/internal/game",
-  "tonyfettes/raylib-examples/raft_rapids_escape_2026/internal/render",
-  "tonyfettes/raylib-examples/raft_rapids_escape_2026/internal/types",
+  "bobzhang/games/raft_rapids_escape_2026/internal/game",
+  "bobzhang/games/raft_rapids_escape_2026/internal/render",
+  "bobzhang/games/raft_rapids_escape_2026/internal/types",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

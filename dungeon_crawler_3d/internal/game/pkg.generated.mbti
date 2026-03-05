@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/dungeon_crawler_3d/internal/game"
+package "bobzhang/games/dungeon_crawler_3d/internal/game"
 
 import {
-  "tonyfettes/raylib-examples/dungeon_crawler_3d/internal/types",
+  "bobzhang/games/dungeon_crawler_3d/internal/types",
 }
 
 // Values

@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/puzzle_dungeon_3d/internal/types"
+package "bobzhang/games/puzzle_dungeon_3d/internal/types"
 
 // Values
 pub let achievement_first_clear : Int

@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/tea_mountain_express_2026/internal/game"
+package "bobzhang/games/tea_mountain_express_2026/internal/game"
 
 import {
-  "tonyfettes/raylib-examples/tea_mountain_express_2026/internal/types",
+  "bobzhang/games/tea_mountain_express_2026/internal/types",
 }
 
 // Values

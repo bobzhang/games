@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/tank_1990/internal/world"
+package "bobzhang/games/tank_1990/internal/world"
 
 import {
-  "tonyfettes/raylib-examples/tank_1990/internal/types",
+  "bobzhang/games/tank_1990/internal/types",
 }
 
 // Values

@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/mahjong_solitaire_pavilion_2026/internal/types"
+package "bobzhang/games/mahjong_solitaire_pavilion_2026/internal/types"
 
 // Values
 pub fn active_at(Game, Int, Int) -> Bool

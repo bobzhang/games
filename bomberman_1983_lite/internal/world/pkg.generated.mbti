@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/bomberman_1983_lite/internal/world"
+package "bobzhang/games/bomberman_1983_lite/internal/world"
 
 import {
-  "tonyfettes/raylib-examples/bomberman_1983_lite/internal/types",
+  "bobzhang/games/bomberman_1983_lite/internal/types",
 }
 
 // Values

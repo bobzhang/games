@@ -1,5 +1,5 @@
 import {
-  "tonyfettes/raylib-examples/kart_racing_3d/internal/types",
+  "bobzhang/games/kart_racing_3d/internal/types",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

@@ -1,7 +1,7 @@
 import {
   "moonbitlang/core/math",
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/submarine_sonar_hunt_2026/internal/types",
+  "bobzhang/games/submarine_sonar_hunt_2026/internal/types",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

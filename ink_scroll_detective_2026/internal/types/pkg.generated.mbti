@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/ink_scroll_detective_2026/internal/types"
+package "bobzhang/games/ink_scroll_detective_2026/internal/types"
 
 // Values
 pub fn cell_center_x(Int) -> Float

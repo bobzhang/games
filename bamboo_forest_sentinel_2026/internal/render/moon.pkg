@@ -1,7 +1,7 @@
 import {
   "moonbitlang/core/math",
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/bamboo_forest_sentinel_2026/internal/types",
+  "bobzhang/games/bamboo_forest_sentinel_2026/internal/types",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

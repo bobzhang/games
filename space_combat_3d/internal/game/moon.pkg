@@ -1,8 +1,8 @@
 import {
   "moonbitlang/core/math",
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/space_combat_3d/internal/levels",
-  "tonyfettes/raylib-examples/space_combat_3d/internal/types",
+  "bobzhang/games/space_combat_3d/internal/levels",
+  "bobzhang/games/space_combat_3d/internal/types",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

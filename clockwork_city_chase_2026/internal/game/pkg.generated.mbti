@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/clockwork_city_chase_2026/internal/game"
+package "bobzhang/games/clockwork_city_chase_2026/internal/game"
 
 import {
-  "tonyfettes/raylib-examples/clockwork_city_chase_2026/internal/types",
+  "bobzhang/games/clockwork_city_chase_2026/internal/types",
 }
 
 // Values

@@ -1,8 +1,8 @@
 import {
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/night_market_chef_duel_2026/internal/types",
-  "tonyfettes/raylib-examples/night_market_chef_duel_2026/internal/game",
-  "tonyfettes/raylib-examples/night_market_chef_duel_2026/internal/render",
+  "bobzhang/games/night_market_chef_duel_2026/internal/types",
+  "bobzhang/games/night_market_chef_duel_2026/internal/game",
+  "bobzhang/games/night_market_chef_duel_2026/internal/render",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

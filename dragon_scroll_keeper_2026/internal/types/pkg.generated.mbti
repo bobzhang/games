@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/dragon_scroll_keeper_2026/internal/types"
+package "bobzhang/games/dragon_scroll_keeper_2026/internal/types"
 
 // Values
 pub let attack_damage : Float

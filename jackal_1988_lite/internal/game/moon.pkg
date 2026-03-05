@@ -2,11 +2,11 @@ import {
   "moonbitlang/core/encoding/utf8",
   "moonbitlang/core/math",
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/jackal_1988_lite/internal/levels",
-  "tonyfettes/raylib-examples/jackal_1988_lite/internal/particles",
-  "tonyfettes/raylib-examples/jackal_1988_lite/internal/score",
-  "tonyfettes/raylib-examples/jackal_1988_lite/internal/types",
-  "tonyfettes/raylib-examples/jackal_1988_lite/internal/world",
+  "bobzhang/games/jackal_1988_lite/internal/levels",
+  "bobzhang/games/jackal_1988_lite/internal/particles",
+  "bobzhang/games/jackal_1988_lite/internal/score",
+  "bobzhang/games/jackal_1988_lite/internal/types",
+  "bobzhang/games/jackal_1988_lite/internal/world",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

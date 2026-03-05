@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/flight_sim_3d/internal/levels"
+package "bobzhang/games/flight_sim_3d/internal/levels"
 
 // Values
 pub fn get_air_enemy_pos(Int, Int) -> (Float, Float, Float)

@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/jackal_1988_lite/internal/particles"
+package "bobzhang/games/jackal_1988_lite/internal/particles"
 
 import {
+  "bobzhang/games/jackal_1988_lite/internal/types",
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/jackal_1988_lite/internal/types",
 }
 
 // Values

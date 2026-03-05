@@ -1,8 +1,8 @@
 import {
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/neon_drift_bounty_2026/internal/types",
-  "tonyfettes/raylib-examples/neon_drift_bounty_2026/internal/game",
-  "tonyfettes/raylib-examples/neon_drift_bounty_2026/internal/render",
+  "bobzhang/games/neon_drift_bounty_2026/internal/types",
+  "bobzhang/games/neon_drift_bounty_2026/internal/game",
+  "bobzhang/games/neon_drift_bounty_2026/internal/render",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

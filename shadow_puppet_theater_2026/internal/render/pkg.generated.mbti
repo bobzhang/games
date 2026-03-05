@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/shadow_puppet_theater_2026/internal/render"
+package "bobzhang/games/shadow_puppet_theater_2026/internal/render"
 
 import {
-  "tonyfettes/raylib-examples/shadow_puppet_theater_2026/internal/types",
+  "bobzhang/games/shadow_puppet_theater_2026/internal/types",
 }
 
 // Values

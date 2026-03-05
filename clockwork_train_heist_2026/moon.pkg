@@ -1,8 +1,8 @@
 import {
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/clockwork_train_heist_2026/internal/types",
-  "tonyfettes/raylib-examples/clockwork_train_heist_2026/internal/game",
-  "tonyfettes/raylib-examples/clockwork_train_heist_2026/internal/render",
+  "bobzhang/games/clockwork_train_heist_2026/internal/types",
+  "bobzhang/games/clockwork_train_heist_2026/internal/game",
+  "bobzhang/games/clockwork_train_heist_2026/internal/render",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

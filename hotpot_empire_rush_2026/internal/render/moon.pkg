@@ -1,7 +1,7 @@
 import {
   "moonbitlang/core/math",
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/hotpot_empire_rush_2026/internal/types",
+  "bobzhang/games/hotpot_empire_rush_2026/internal/types",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

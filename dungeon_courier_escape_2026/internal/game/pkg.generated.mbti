@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/dungeon_courier_escape_2026/internal/game"
+package "bobzhang/games/dungeon_courier_escape_2026/internal/game"
 
 import {
-  "tonyfettes/raylib-examples/dungeon_courier_escape_2026/internal/types",
+  "bobzhang/games/dungeon_courier_escape_2026/internal/types",
 }
 
 // Values

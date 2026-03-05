@@ -1,8 +1,8 @@
 import {
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/xiaoxiaole/internal/types",
-  "tonyfettes/raylib-examples/xiaoxiaole/internal/game",
-  "tonyfettes/raylib-examples/xiaoxiaole/internal/render",
+  "bobzhang/games/xiaoxiaole/internal/types",
+  "bobzhang/games/xiaoxiaole/internal/game",
+  "bobzhang/games/xiaoxiaole/internal/render",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

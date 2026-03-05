@@ -2,11 +2,11 @@ import {
   "moonbitlang/core/math",
   "moonbitlang/core/encoding/utf8",
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/bomberman_1983_lite/internal/levels",
-  "tonyfettes/raylib-examples/bomberman_1983_lite/internal/particles",
-  "tonyfettes/raylib-examples/bomberman_1983_lite/internal/score",
-  "tonyfettes/raylib-examples/bomberman_1983_lite/internal/types",
-  "tonyfettes/raylib-examples/bomberman_1983_lite/internal/world",
+  "bobzhang/games/bomberman_1983_lite/internal/levels",
+  "bobzhang/games/bomberman_1983_lite/internal/particles",
+  "bobzhang/games/bomberman_1983_lite/internal/score",
+  "bobzhang/games/bomberman_1983_lite/internal/types",
+  "bobzhang/games/bomberman_1983_lite/internal/world",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

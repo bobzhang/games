@@ -1,8 +1,8 @@
 import {
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/silkroad_caravan_guard_2026/internal/game",
-  "tonyfettes/raylib-examples/silkroad_caravan_guard_2026/internal/render",
-  "tonyfettes/raylib-examples/silkroad_caravan_guard_2026/internal/types",
+  "bobzhang/games/silkroad_caravan_guard_2026/internal/game",
+  "bobzhang/games/silkroad_caravan_guard_2026/internal/render",
+  "bobzhang/games/silkroad_caravan_guard_2026/internal/types",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

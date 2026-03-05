@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/2048/internal/render"
+package "bobzhang/games/2048/internal/render"
 
 import {
-  "tonyfettes/raylib-examples/2048/internal/types",
+  "bobzhang/games/2048/internal/types",
 }
 
 // Values

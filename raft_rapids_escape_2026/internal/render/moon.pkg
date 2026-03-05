@@ -1,7 +1,7 @@
 import {
   "moonbitlang/core/math",
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/raft_rapids_escape_2026/internal/types",
+  "bobzhang/games/raft_rapids_escape_2026/internal/types",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

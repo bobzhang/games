@@ -1,6 +1,6 @@
 import {
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/pac_dash_2026/internal/types",
+  "bobzhang/games/pac_dash_2026/internal/types",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

@@ -1,7 +1,7 @@
 import {
   "moonbitlang/core/math",
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/clockwork_city_chase_2026/internal/types",
+  "bobzhang/games/clockwork_city_chase_2026/internal/types",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"
