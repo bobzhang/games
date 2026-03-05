@@ -102,11 +102,11 @@ fn reset_player(hero : @types.Player) -> Unit {
 ///|
 /// Returns the index of a free entity slot, evicting the leftmost active entity if the pool is full.
 fn @types.Game::alloc_ent(game : @types.Game) -> Int {
-  for i in 0..<game.ents.length() {
-    if not(game.ents[i].active) {
-      return i
+  for i, slot in game.ents {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_x = game.ents[0].x
@@ -117,16 +117,17 @@ fn @types.Game::alloc_ent(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 /// Returns the index of a free shot slot, evicting the shortest-lived active shot if the pool is full.
 fn @types.Game::alloc_shot(game : @types.Game) -> Int {
-  for i in 0..<game.shots.length() {
-    if not(game.shots[i].active) {
-      return i
+  for i, slot in game.shots {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.shots[0].life
@@ -137,16 +138,17 @@ fn @types.Game::alloc_shot(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 /// Returns the index of a free particle slot, evicting the shortest-lived active particle if the pool is full.
 fn @types.Game::alloc_fx(game : @types.Game) -> Int {
-  for i in 0..<game.fxs.length() {
-    if not(game.fxs[i].active) {
-      return i
+  for i, slot in game.fxs {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.fxs[0].life
@@ -157,16 +159,17 @@ fn @types.Game::alloc_fx(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 /// Returns the index of a free ring slot, evicting the shortest-lived active ring if the pool is full.
 fn @types.Game::alloc_ring(game : @types.Game) -> Int {
-  for i in 0..<game.rings.length() {
-    if not(game.rings[i].active) {
-      return i
+  for i, slot in game.rings {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.rings[0].life
@@ -177,16 +180,17 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 /// Returns the index of a free shadow slot, evicting the shortest-lived active shadow if the pool is full.
 fn @types.Game::alloc_shadow(game : @types.Game) -> Int {
-  for i in 0..<game.shadows.length() {
-    if not(game.shadows[i].active) {
-      return i
+  for i, slot in game.shadows {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.shadows[0].life
@@ -197,6 +201,7 @@ fn @types.Game::alloc_shadow(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
