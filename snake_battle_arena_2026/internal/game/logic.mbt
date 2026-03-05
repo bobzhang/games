@@ -8,7 +8,7 @@ fn @types.Game::clear_effects(game : @types.Game) -> Unit {
     spark.vy = 0.0
     spark.life = 0.0
     spark.size = 0.0
-    spark.kind = 0
+    spark.kind = Splash
   }
 }
 
@@ -21,7 +21,7 @@ fn @types.Game::spawn_spark(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : @types.SparkKind,
 ) -> Unit {
   for spark in game.sparks {
     if spark.active {
@@ -46,7 +46,7 @@ fn @types.Game::burst(
   x : Float,
   y : Float,
   n : Int,
-  kind : Int,
+  kind : @types.SparkKind,
 ) -> Unit {
   for _i in 0..<n {
     game.spawn_spark(
@@ -210,9 +210,9 @@ fn @types.Game::spawn_food(game : @types.Game) -> Bool {
   game.food_x = cell.1
   game.food_y = cell.2
   game.food_kind = if @raylib.get_random_value(0, 99) < 22 {
-    @types.food_gold
+    Gold
   } else {
-    @types.food_normal
+    Normal
   }
 
   true
@@ -236,7 +236,7 @@ fn @types.Game::spawn_trap(game : @types.Game) -> Bool {
   game.trap_flash = 0.0
 
   let (wx, wy) = @types.cell_world_center(game, game.trap_x, game.trap_y)
-  game.burst(wx, wy, 12, 2)
+  game.burst(wx, wy, 12, Death)
   true
 }
 
@@ -347,7 +347,7 @@ fn @types.Game::damage_player(game : @types.Game, msg : String) -> Unit {
     game.p_seg_x[0],
     game.p_seg_y[0],
   )
-  game.burst(wx, wy, 22, 2)
+  game.burst(wx, wy, 22, Death)
 
   if game.lives <= 0 {
     game.state = Result
@@ -379,7 +379,7 @@ fn @types.Game::rival_respawn(game : @types.Game, rid : Int) -> Unit {
 
 ///|
 fn @types.Game::grow_player_after_food(game : @types.Game) -> Unit {
-  if game.food_kind == @types.food_gold {
+  if game.food_kind == Gold {
     game.p_grow = game.p_grow + 3
     game.score = game.score + 210
     game.combo = game.combo + 2
@@ -458,12 +458,12 @@ fn @types.Game::player_step(game : @types.Game) -> Unit {
     game.burst(
       wx,
       wy,
-      if game.food_kind == @types.food_gold {
+      if game.food_kind == Gold {
         16
       } else {
         10
       },
-      1,
+      Eat,
     )
     game.grow_player_after_food()
   }
@@ -544,7 +544,7 @@ fn @types.Game::rival_step(game : @types.Game, rid : Int) -> Unit {
         game.best_score = game.score
       }
       let (wx, wy) = @types.cell_world_center(game, nx, ny)
-      game.burst(wx, wy, 14, 0)
+      game.burst(wx, wy, 14, Splash)
       @types.set_msg(game, "Rival crashed", 0.7)
     }
 
@@ -560,13 +560,13 @@ fn @types.Game::rival_step(game : @types.Game, rid : Int) -> Unit {
   game.shift_rival_forward(rid, nx, ny)
 
   if nx == game.food_x && ny == game.food_y {
-    let grow_gain : Int = if game.food_kind == @types.food_gold { 2 } else { 1 }
-    let score_gain : Int = if game.food_kind == @types.food_gold {
+    let grow_gain : Int = if game.food_kind == Gold { 2 } else { 1 }
+    let score_gain : Int = if game.food_kind == Gold {
       140
     } else {
       64
     }
-    let burst_count : Int = if game.food_kind == @types.food_gold {
+    let burst_count : Int = if game.food_kind == Gold {
       14
     } else {
       8
@@ -576,7 +576,7 @@ fn @types.Game::rival_step(game : @types.Game, rid : Int) -> Unit {
     rival.score = rival.score + score_gain
 
     let (wx, wy) = @types.cell_world_center(game, nx, ny)
-    game.burst(wx, wy, burst_count, 1)
+    game.burst(wx, wy, burst_count, Eat)
     ignore(game.spawn_food())
 
     if @raylib.get_random_value(0, 99) < 14 {

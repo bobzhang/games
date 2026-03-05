@@ -119,3 +119,43 @@ pub(all) enum GameState {
   StageClear
   GameOver
 } derive(Eq)
+
+///|
+/// Classifies enemy behavior and visual style.
+pub(all) enum EnemyKind {
+  /// Basic enemy: square shape, standard chase, moderate fire rate.
+  Basic
+  /// Heavy enemy: large circle, faster chase, higher damage bullets.
+  Heavy
+  /// Orbiter enemy: pulsing mine, offset orbit, contact damage.
+  Orbiter
+} derive(Eq)
+
+///|
+/// Classifies player bullet visual and behavior style.
+pub(all) enum BulletKind {
+  /// Standard player bullet with cyan trail.
+  Standard
+} derive(Eq)
+
+///|
+/// Classifies enemy bullet visual style based on firing enemy type.
+pub(all) enum EnemyBulletKind {
+  /// Pink bullet fired by basic enemies.
+  BasicShot
+  /// Orange bullet fired by heavy enemies.
+  HeavyShot
+  /// Green bullet fired by orbiter enemies.
+  OrbiterShot
+} derive(Eq)
+
+///|
+/// Classifies particle visual style by color.
+pub(all) enum ParticleKind {
+  /// Cyan spark from player fire.
+  Spark
+  /// Orange flash from kills and beam.
+  Flash
+  /// Pink burst from damage.
+  Damage
+} derive(Eq)

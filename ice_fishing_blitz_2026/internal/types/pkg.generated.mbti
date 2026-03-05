@@ -214,9 +214,16 @@ pub(all) struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : ParticleKind
 }
 pub fn Particle::new() -> Self
+
+pub(all) enum ParticleKind {
+  Splash
+  Spark
+  Shimmer
+}
+pub impl Eq for ParticleKind
 
 pub(all) struct Pickup {
   mut active : Bool

@@ -157,8 +157,16 @@ pub(all) struct Spark {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : SparkKind
 }
+
+pub(all) enum SparkKind {
+  Hint
+  Fill
+  Error
+  Mark
+}
+pub impl Eq for SparkKind
 
 pub(all) enum ToolKind {
   ToolFill

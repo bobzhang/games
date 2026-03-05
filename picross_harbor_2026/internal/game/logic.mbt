@@ -44,7 +44,7 @@ fn @types.Game::clear_sparks(game : @types.Game) -> Unit {
     spark.vy = 0.0
     spark.life = 0.0
     spark.size = 0.0
-    spark.kind = 0
+    spark.kind = Hint
   }
 }
 
@@ -230,7 +230,7 @@ fn @types.Game::spawn_spark(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : @types.SparkKind,
 ) -> Unit {
   for spark in game.sparks {
     if spark.active {
@@ -256,7 +256,7 @@ fn @types.Game::burst_cell(
   x : Int,
   y : Int,
   amount : Int,
-  kind : Int,
+  kind : @types.SparkKind,
 ) -> Unit {
   let (cx, cy, tile_f) = @types.world_for_cell(game, x, y)
 
@@ -361,7 +361,7 @@ fn @types.Game::complete_level(game : @types.Game) -> Unit {
   for y in 0..<game.grid_h {
     for x in 0..<game.grid_w {
       if @types.solution_at(game, x, y) {
-        game.burst_cell(x, y, 12, 0)
+        game.burst_cell(x, y, 12, Hint)
       }
     }
   }
@@ -389,7 +389,7 @@ fn @types.Game::fail_level(game : @types.Game) -> Unit {
     for x in 0..<game.grid_w {
       if @types.cell_at(game, x, y) == Fill &&
         not(@types.solution_at(game, x, y)) {
-        game.burst_cell(x, y, 10, 2)
+        game.burst_cell(x, y, 10, Error)
       }
     }
   }
@@ -404,7 +404,7 @@ fn @types.Game::apply_cell_state(
   new_state : @types.Cell,
   count_mistake : Bool,
   consume_hint : Bool,
-  spark_kind : Int,
+  spark_kind : @types.SparkKind,
 ) -> Bool {
   if game.state != Play {
     return false
@@ -507,7 +507,7 @@ fn @types.Game::apply_tool_on_cell(
     Cross
   }
 
-  let spark_kind : Int = if tool == ToolFill { 1 } else { 3 }
+  let spark_kind : @types.SparkKind = if tool == ToolFill { Fill } else { Mark }
   let ok : Bool = game.apply_cell_state(
     x, y, next_state, true, false, spark_kind,
   )
@@ -542,7 +542,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
         @types.cell_at(game, x, y) != Fill {
         game.cursor_x = x
         game.cursor_y = y
-        return game.apply_cell_state(x, y, Fill, false, true, 0)
+        return game.apply_cell_state(x, y, Fill, false, true, Hint)
       }
     }
   }
@@ -553,7 +553,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
         @types.cell_at(game, x, y) == Fill {
         game.cursor_x = x
         game.cursor_y = y
-        return game.apply_cell_state(x, y, Cross, false, true, 0)
+        return game.apply_cell_state(x, y, Cross, false, true, Hint)
       }
     }
   }
@@ -564,7 +564,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
         @types.cell_at(game, x, y) == Unknown {
         game.cursor_x = x
         game.cursor_y = y
-        return game.apply_cell_state(x, y, Cross, false, true, 0)
+        return game.apply_cell_state(x, y, Cross, false, true, Hint)
       }
     }
   }
@@ -601,7 +601,7 @@ fn @types.Game::undo_action(game : @types.Game) -> Bool {
   game.message = "Undo"
   game.message_t = 0.45
   game.shake_t = 0.08
-  game.burst_cell(step.x, step.y, 8, 2)
+  game.burst_cell(step.x, step.y, 8, Error)
 
   true
 }

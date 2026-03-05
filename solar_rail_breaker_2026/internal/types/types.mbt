@@ -2,7 +2,7 @@
 /// Stores runtime data for Enemy.
 pub(all) struct Enemy {
   mut active : Bool
-  mut kind : Int
+  mut kind : EnemyKind
   mut ring : Int
   mut angle : Float
   mut ang_v : Float
@@ -23,7 +23,7 @@ pub(all) struct Bullet {
   mut va : Float
   mut life : Float
   mut dmg : Float
-  mut kind : Int
+  mut kind : BulletKind
 }
 
 ///|
@@ -36,7 +36,7 @@ pub(all) struct EnemyBullet {
   mut vy : Float
   mut life : Float
   mut dmg : Float
-  mut kind : Int
+  mut kind : EnemyBulletKind
 }
 
 ///|
@@ -61,7 +61,7 @@ pub(all) struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : ParticleKind
 }
 
 ///|
@@ -144,7 +144,7 @@ pub(all) struct Game {
 pub fn Enemy::new() -> Enemy {
   {
     active: false,
-    kind: 0,
+    kind: Basic,
     ring: 0,
     angle: 0.0,
     ang_v: 0.0,
@@ -167,7 +167,7 @@ pub fn Bullet::new() -> Bullet {
     va: 0.0,
     life: 0.0,
     dmg: 0.0,
-    kind: 0,
+    kind: Standard,
   }
 }
 
@@ -182,7 +182,7 @@ pub fn EnemyBullet::new() -> EnemyBullet {
     vy: 0.0,
     life: 0.0,
     dmg: 0.0,
-    kind: 0,
+    kind: BasicShot,
   }
 }
 
@@ -211,7 +211,7 @@ pub fn Particle::new() -> Particle {
     vy: 0.0,
     life: 0.0,
     size: 0.0,
-    kind: 0,
+    kind: Spark,
   }
 }
 

@@ -9,7 +9,7 @@ fn @types.Game::clear_particles(game : @types.Game) -> Unit {
     particle.vy = 0.0
     particle.life = 0.0
     particle.size = 0.0
-    particle.kind = 0
+    particle.kind = Splash
   }
 }
 
@@ -62,7 +62,7 @@ fn @types.Game::emit_particle(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : @types.ParticleKind,
 ) -> Unit {
   for particle in game.particles {
     if particle.active {
@@ -88,7 +88,7 @@ fn @types.Game::burst(
   x : Float,
   y : Float,
   n : Int,
-  kind : Int,
+  kind : @types.ParticleKind,
 ) -> Unit {
   for _i in 0..<n {
     game.emit_particle(
@@ -120,10 +120,10 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
     particle.x = particle.x + particle.vx * dt
     particle.y = particle.y + particle.vy * dt
 
-    let drag : Float = if particle.kind == 2 { 2.6 } else { 1.9 }
+    let drag : Float = if particle.kind == Shimmer { 2.6 } else { 1.9 }
     particle.vx = particle.vx * (1.0 - dt * drag)
     particle.vy = particle.vy * (1.0 - dt * (drag - 0.4)) +
-      dt * (if particle.kind == 1 { 160.0 } else { 90.0 })
+      dt * (if particle.kind == Spark { 160.0 } else { 90.0 })
   }
 }
 
@@ -207,10 +207,10 @@ fn @types.Game::finish_run(game : @types.Game, win : Bool) -> Unit {
 
   if win {
     @types.set_msg(game, "Festival haul complete!", 3.0)
-    game.burst(@types.hole_xf(), @types.topf() + 18.0, 64, 2)
+    game.burst(@types.hole_xf(), @types.topf() + 18.0, 64, Shimmer)
   } else {
     @types.set_msg(game, "Ice line snapped. Mission over.", 3.0)
-    game.burst(game.hook_x, game.hook_y, 50, 1)
+    game.burst(game.hook_x, game.hook_y, 50, Spark)
   }
 }
 
@@ -411,7 +411,7 @@ fn @types.Game::try_repair(game : @types.Game) -> Bool {
 
   game.score = game.score + 12
   @types.set_msg(game, "Line repaired.", 1.0)
-  game.burst(game.hook_x, game.hook_y, 20, 2)
+  game.burst(game.hook_x, game.hook_y, 20, Shimmer)
 
   true
 }
@@ -466,7 +466,7 @@ fn @types.Game::land_carrying_fish(game : @types.Game) -> Unit {
   }
 
   @types.set_msg(game, "Fish landed +" + bonus.to_string(), 1.1)
-  game.burst(@types.hole_xf(), @types.hole_yf() + 20.0, 26, 2)
+  game.burst(@types.hole_xf(), @types.hole_yf() + 20.0, 26, Shimmer)
 
   game.carrying_idx = -1
 }
@@ -484,19 +484,19 @@ fn @types.Game::collect_pickup(
       game.bait = @types.minf(100.0, game.bait + 34.0)
       game.score = game.score + 10
       @types.set_msg(game, "Bait crate collected.", 1.0)
-      game.burst(x, y, 16, 0)
+      game.burst(x, y, 16, Splash)
     }
     Repair => {
       game.line_hp = @types.minf(100.0, game.line_hp + 26.0)
       game.score = game.score + 10
       @types.set_msg(game, "Line reinforced.", 1.0)
-      game.burst(x, y, 16, 2)
+      game.burst(x, y, 16, Shimmer)
     }
     Thermos => {
       game.turbo_t = @types.maxf(game.turbo_t, 7.0)
       game.score = game.score + 16
       @types.set_msg(game, "Thermos boost activated.", 1.0)
-      game.burst(x, y, 20, 2)
+      game.burst(x, y, 20, Shimmer)
     }
   }
 }
@@ -567,7 +567,7 @@ fn @types.Game::update_hook(game : @types.Game, dt : Float) -> Unit {
       @types.randf(30.0, 100.0),
       @types.randf(0.18, 0.44),
       @types.randf(1.1, 3.0),
-      0,
+      Splash,
     )
   }
 }
@@ -647,7 +647,7 @@ fn @types.Game::update_fish(game : @types.Game, dt : Float) -> Unit {
       game.carrying_idx = i
       game.grab_on = false
       @types.set_msg(game, "Fish hooked. Reel it up!", 1.1)
-      game.burst(game.hook_x, game.hook_y, 14, 2)
+      game.burst(game.hook_x, game.hook_y, 14, Shimmer)
       continue
     }
 
@@ -722,7 +722,7 @@ fn @types.Game::update_hazards(game : @types.Game, dt : Float) -> Unit {
       game.line_hp = @types.maxf(0.0, game.line_hp - hazard.dmg)
       game.shake_t = @types.maxf(game.shake_t, 0.22)
 
-      game.burst(game.hook_x, game.hook_y, 12, 1)
+      game.burst(game.hook_x, game.hook_y, 12, Spark)
 
       if hazard.kind == Ice {
         hazard.active = false
@@ -951,7 +951,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
     game.reset_rig()
 
     @types.set_msg(game, "Line snapped. Life lost.", 1.4)
-    game.burst(@types.hole_xf(), @types.topf() + 30.0, 30, 1)
+    game.burst(@types.hole_xf(), @types.topf() + 30.0, 30, Spark)
 
     if game.lives <= 0 {
       game.finish_run(false)

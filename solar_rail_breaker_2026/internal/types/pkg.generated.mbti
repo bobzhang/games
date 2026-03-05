@@ -141,13 +141,18 @@ pub(all) struct Bullet {
   mut va : Float
   mut life : Float
   mut dmg : Float
-  mut kind : Int
+  mut kind : BulletKind
 }
 pub fn Bullet::new() -> Self
 
+pub(all) enum BulletKind {
+  Standard
+}
+pub impl Eq for BulletKind
+
 pub(all) struct Enemy {
   mut active : Bool
-  mut kind : Int
+  mut kind : EnemyKind
   mut ring : Int
   mut angle : Float
   mut ang_v : Float
@@ -167,9 +172,23 @@ pub(all) struct EnemyBullet {
   mut vy : Float
   mut life : Float
   mut dmg : Float
-  mut kind : Int
+  mut kind : EnemyBulletKind
 }
 pub fn EnemyBullet::new() -> Self
+
+pub(all) enum EnemyBulletKind {
+  BasicShot
+  HeavyShot
+  OrbiterShot
+}
+pub impl Eq for EnemyBulletKind
+
+pub(all) enum EnemyKind {
+  Basic
+  Heavy
+  Orbiter
+}
+pub impl Eq for EnemyKind
 
 pub(all) struct Flare {
   mut active : Bool
@@ -246,9 +265,16 @@ pub(all) struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : ParticleKind
 }
 pub fn Particle::new() -> Self
+
+pub(all) enum ParticleKind {
+  Spark
+  Flash
+  Damage
+}
+pub impl Eq for ParticleKind
 
 pub(all) struct Player {
   mut ring : Int

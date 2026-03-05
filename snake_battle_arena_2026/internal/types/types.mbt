@@ -8,7 +8,7 @@ pub(all) struct Spark {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : SparkKind
 }
 
 ///|
@@ -40,7 +40,7 @@ pub(all) struct Game {
   rivals : Array[Rival]
   mut food_x : Int
   mut food_y : Int
-  mut food_kind : Int
+  mut food_kind : FoodKind
   mut trap_x : Int
   mut trap_y : Int
   mut trap_active : Bool
@@ -84,7 +84,7 @@ pub fn Spark::new() -> Spark {
     vy: 0.0,
     life: 0.0,
     size: 0.0,
-    kind: 0,
+    kind: Splash,
   }
 }
 
@@ -128,7 +128,7 @@ pub fn Game::new() -> Game {
     rivals: Array::makei(max_rivals, fn(i) { Rival::new(i) }),
     food_x: 0,
     food_y: 0,
-    food_kind: food_normal,
+    food_kind: Normal,
     trap_x: 0,
     trap_y: 0,
     trap_active: false,

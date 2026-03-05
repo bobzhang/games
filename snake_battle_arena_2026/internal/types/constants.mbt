@@ -31,12 +31,11 @@ pub let max_segments : Int = max_cells
 pub let max_rivals : Int = 2
 
 ///|
-/// Food kind id for regular food.
-pub let food_normal : Int = 0
-
-///|
-/// Food kind id for bonus gold food.
-pub let food_gold : Int = 1
+/// Food type for pickups in the arena.
+pub(all) enum FoodKind {
+  Normal
+  Gold
+} derive(Eq)
 
 ///|
 /// Starting life count per run.
@@ -123,6 +122,14 @@ pub fn btn_restart() -> (Int, Int, Int, Int) {
 pub fn btn_hint() -> (Int, Int, Int, Int) {
   (1530, 590, 154, 82)
 }
+
+///|
+/// Visual spark particle category.
+pub(all) enum SparkKind {
+  Splash
+  Eat
+  Death
+} derive(Eq)
 
 ///|
 /// Cardinal movement direction for snakes.

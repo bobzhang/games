@@ -36,7 +36,7 @@ pub(all) struct Core {
   mut active : Bool
   mut x : Int
   mut y : Int
-  mut kind : Int
+  mut kind : CoreKind
 }
 
 ///|
@@ -58,7 +58,7 @@ pub(all) struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : ParticleKind
 }
 
 ///|
@@ -139,7 +139,7 @@ pub fn Drone::new() -> Drone {
 ///|
 /// Creates an inactive core entry for the core pool.
 pub fn Core::new() -> Core {
-  { active: false, x: 0, y: 0, kind: 0 }
+  { active: false, x: 0, y: 0, kind: Orange }
 }
 
 ///|
@@ -159,7 +159,7 @@ pub fn Particle::new() -> Particle {
     vy: 0.0,
     life: 0.0,
     size: 0.0,
-    kind: 0,
+    kind: BluePulse,
   }
 }
 

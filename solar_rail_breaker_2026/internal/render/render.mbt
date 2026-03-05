@@ -190,18 +190,17 @@ fn @types.Game::draw_flares(
 
 ///|
 fn enemy_color(_game : @types.Game, e : @types.Enemy) -> @raylib.Color {
-  if e.kind == 0 {
-    if e.phase_mask == 1 {
-      @raylib.Color::new(94, 222, 255, 255)
-    } else if e.phase_mask == 2 {
-      @raylib.Color::new(255, 136, 224, 255)
-    } else {
-      @raylib.Color::new(222, 228, 248, 255)
-    }
-  } else if e.kind == 1 {
-    @raylib.Color::new(255, 172, 102, 255)
-  } else {
-    @raylib.Color::new(174, 240, 164, 255)
+  match e.kind {
+    Basic =>
+      if e.phase_mask == 1 {
+        @raylib.Color::new(94, 222, 255, 255)
+      } else if e.phase_mask == 2 {
+        @raylib.Color::new(255, 136, 224, 255)
+      } else {
+        @raylib.Color::new(222, 228, 248, 255)
+      }
+    Heavy => @raylib.Color::new(255, 172, 102, 255)
+    Orbiter => @raylib.Color::new(174, 240, 164, 255)
   }
 }
 
@@ -236,44 +235,48 @@ fn @types.Game::draw_enemy(
     return
   }
 
-  if e.kind == 1 {
-    @raylib.draw_circle(s.0.to_int(), s.1.to_int(), e.size + 6.0, col)
-    @raylib.draw_circle_lines(
-      s.0.to_int(),
-      s.1.to_int(),
-      e.size + 14.0,
-      @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 160),
-    )
-  } else if e.kind == 2 {
-    let pulse : Float = 0.5 + 0.5 * @math.sinf(e.spin * 2.9)
-    let mine_r : Float = e.size + pulse * 4.0
-    @raylib.draw_circle(
-      s.0.to_int(),
-      s.1.to_int(),
-      mine_r,
-      @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 220),
-    )
-    @raylib.draw_circle_lines(
-      s.0.to_int(),
-      s.1.to_int(),
-      e.size + 8.0,
-      @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 180),
-    )
-  } else {
-    @raylib.draw_rectangle(
-      (s.0 - e.size).to_int(),
-      (s.1 - e.size).to_int(),
-      (e.size * 2.0).to_int(),
-      (e.size * 2.0).to_int(),
-      col,
-    )
-    @raylib.draw_rectangle_lines(
-      (s.0 - e.size).to_int(),
-      (s.1 - e.size).to_int(),
-      (e.size * 2.0).to_int(),
-      (e.size * 2.0).to_int(),
-      @raylib.Color::new(20, 24, 32, 220),
-    )
+  match e.kind {
+    Heavy => {
+      @raylib.draw_circle(s.0.to_int(), s.1.to_int(), e.size + 6.0, col)
+      @raylib.draw_circle_lines(
+        s.0.to_int(),
+        s.1.to_int(),
+        e.size + 14.0,
+        @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 160),
+      )
+    }
+    Orbiter => {
+      let pulse : Float = 0.5 + 0.5 * @math.sinf(e.spin * 2.9)
+      let mine_r : Float = e.size + pulse * 4.0
+      @raylib.draw_circle(
+        s.0.to_int(),
+        s.1.to_int(),
+        mine_r,
+        @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 220),
+      )
+      @raylib.draw_circle_lines(
+        s.0.to_int(),
+        s.1.to_int(),
+        e.size + 8.0,
+        @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 180),
+      )
+    }
+    Basic => {
+      @raylib.draw_rectangle(
+        (s.0 - e.size).to_int(),
+        (s.1 - e.size).to_int(),
+        (e.size * 2.0).to_int(),
+        (e.size * 2.0).to_int(),
+        col,
+      )
+      @raylib.draw_rectangle_lines(
+        (s.0 - e.size).to_int(),
+        (s.1 - e.size).to_int(),
+        (e.size * 2.0).to_int(),
+        (e.size * 2.0).to_int(),
+        @raylib.Color::new(20, 24, 32, 220),
+      )
+    }
   }
 }
 
@@ -312,10 +315,8 @@ fn @types.Game::draw_bullets(
       p.0.to_int(),
       p.1.to_int(),
       4.2,
-      if b.kind == 0 {
-        @raylib.Color::new(134, 236, 255, 255)
-      } else {
-        @raylib.Color::new(255, 176, 120, 255)
+      match b.kind {
+        Standard => @raylib.Color::new(134, 236, 255, 255)
       },
     )
   }
@@ -326,12 +327,10 @@ fn @types.Game::draw_bullets(
     }
 
     let p = world_to_screen(b.x, b.y, cam_x, cam_y)
-    let col = if b.kind == 1 {
-      @raylib.Color::new(255, 176, 106, 255)
-    } else if b.kind == 2 {
-      @raylib.Color::new(168, 248, 162, 255)
-    } else {
-      @raylib.Color::new(252, 146, 190, 255)
+    let col = match b.kind {
+      HeavyShot => @raylib.Color::new(255, 176, 106, 255)
+      OrbiterShot => @raylib.Color::new(168, 248, 162, 255)
+      BasicShot => @raylib.Color::new(252, 146, 190, 255)
     }
 
     @raylib.draw_circle(p.0.to_int(), p.1.to_int(), 4.6, col)
@@ -352,12 +351,10 @@ fn @types.Game::draw_particles(
     let s = world_to_screen(p.x, p.y, cam_x, cam_y)
     let alpha = (p.life * 255.0).to_int().clamp(min=0, max=255)
 
-    let c = if p.kind == 0 {
-      @raylib.Color::new(136, 242, 255, alpha)
-    } else if p.kind == 1 {
-      @raylib.Color::new(255, 184, 112, alpha)
-    } else {
-      @raylib.Color::new(255, 130, 170, alpha)
+    let c = match p.kind {
+      Spark => @raylib.Color::new(136, 242, 255, alpha)
+      Flash => @raylib.Color::new(255, 184, 112, alpha)
+      Damage => @raylib.Color::new(255, 130, 170, alpha)
     }
 
     @raylib.draw_circle(s.0.to_int(), s.1.to_int(), p.size, c)

@@ -2,7 +2,7 @@
 fn @types.Game::clear_enemies(game : @types.Game) -> Unit {
   for enemy in game.enemies {
     enemy.active = false
-    enemy.kind = 0
+    enemy.kind = Basic
     enemy.ring = 0
     enemy.angle = 0.0
     enemy.ang_v = 0.0
@@ -24,7 +24,7 @@ fn @types.Game::clear_bullets(game : @types.Game) -> Unit {
     bullet.va = 0.0
     bullet.life = 0.0
     bullet.dmg = 0.0
-    bullet.kind = 0
+    bullet.kind = Standard
   }
 }
 
@@ -38,7 +38,7 @@ fn @types.Game::clear_enemy_bullets(game : @types.Game) -> Unit {
     enemy_bullet.vy = 0.0
     enemy_bullet.life = 0.0
     enemy_bullet.dmg = 0.0
-    enemy_bullet.kind = 0
+    enemy_bullet.kind = BasicShot
   }
 }
 
@@ -65,7 +65,7 @@ fn @types.Game::clear_particles(game : @types.Game) -> Unit {
     particle.vy = 0.0
     particle.life = 0.0
     particle.size = 0.0
-    particle.kind = 0
+    particle.kind = Spark
   }
 }
 
@@ -206,7 +206,7 @@ fn @types.Game::alloc_shock(game : @types.Game) -> Int {
 ///|
 fn @types.Game::spawn_enemy(
   game : @types.Game,
-  kind : Int,
+  kind : @types.EnemyKind,
   ring : Int,
   angle : Float,
   ang_v : Float,
@@ -222,12 +222,10 @@ fn @types.Game::spawn_enemy(
   game.enemies[i].hp = hp
   game.enemies[i].fire_cd = @types.randf(0.2, @types.enemy_fire_base)
   game.enemies[i].phase_mask = phase_mask
-  game.enemies[i].size = if kind == 0 {
-    16.0
-  } else if kind == 1 {
-    22.0
-  } else {
-    14.0
+  game.enemies[i].size = match kind {
+    Basic => 16.0
+    Heavy => 22.0
+    Orbiter => 14.0
   }
   game.enemies[i].spin = @types.randf(0.0, @types.tau)
 }
@@ -260,7 +258,7 @@ fn @types.Game::spawn_bullet(
   va : Float,
   life : Float,
   dmg : Float,
-  kind : Int,
+  kind : @types.BulletKind,
 ) -> Unit {
   let i = game.alloc_bullet()
   game.bullets[i].active = true
@@ -282,7 +280,7 @@ fn @types.Game::spawn_enemy_bullet(
   vy : Float,
   life : Float,
   dmg : Float,
-  kind : Int,
+  kind : @types.EnemyBulletKind,
 ) -> Unit {
   let i = game.alloc_enemy_bullet()
   game.enemy_bullets[i].active = true
@@ -304,7 +302,7 @@ fn @types.Game::emit_particle(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : @types.ParticleKind,
 ) -> Unit {
   let i = game.alloc_particle()
   game.particles[i].active = true
@@ -323,7 +321,7 @@ fn @types.Game::burst(
   x : Float,
   y : Float,
   n : Int,
-  kind : Int,
+  kind : @types.ParticleKind,
 ) -> Unit {
   for _i in 0..<n {
     game.emit_particle(
@@ -357,13 +355,14 @@ fn @types.Game::spawn_shock(
 }
 
 ///|
-fn @types.Game::stage_enemy_hp(game : @types.Game, kind : Int) -> Float {
-  if kind == 0 {
-    18.0 + Float::from_int(game.stage - 1) * 2.4
-  } else if kind == 1 {
-    36.0 + Float::from_int(game.stage - 1) * 4.8
-  } else {
-    12.0 + Float::from_int(game.stage - 1) * 1.8
+fn @types.Game::stage_enemy_hp(
+  game : @types.Game,
+  kind : @types.EnemyKind,
+) -> Float {
+  match kind {
+    Basic => 18.0 + Float::from_int(game.stage - 1) * 2.4
+    Heavy => 36.0 + Float::from_int(game.stage - 1) * 4.8
+    Orbiter => 12.0 + Float::from_int(game.stage - 1) * 1.8
   }
 }
 
@@ -471,7 +470,7 @@ fn @types.Game::apply_damage(game : @types.Game, dmg : Float) -> Unit {
   game.shake_t = 0.22
 
   let p = @types.player_world_xy(game.player)
-  game.burst(p.0, p.1, 20, 2)
+  game.burst(p.0, p.1, 20, Damage)
 
   if game.hp <= 0.0 {
     game.state = GameOver
@@ -493,10 +492,14 @@ fn @types.Game::kill_enemy(game : @types.Game, i : Int) -> Unit {
   game.enemies[i].active = false
   game.stage_kills = game.stage_kills + 1
 
-  let base_score = if kind == 0 { 160 } else if kind == 1 { 330 } else { 110 }
+  let base_score = match kind {
+    Basic => 160
+    Heavy => 330
+    Orbiter => 110
+  }
   game.add_combo_score(base_score)
 
-  game.burst(p.0, p.1, if kind == 1 { 26 } else { 14 }, 1)
+  game.burst(p.0, p.1, if kind == Heavy { 26 } else { 14 }, Flash)
 }
 
 ///|
@@ -514,13 +517,13 @@ fn @types.Game::try_fire(game : @types.Game) -> Unit {
     game.player.ang_v * 0.18,
     0.92,
     16.0,
-    0,
+    Standard,
   )
 
   game.player.shot_cd = @types.player_shot_cd
 
   let p = @types.player_world_xy(game.player)
-  game.burst(p.0, p.1, 5, 0)
+  game.burst(p.0, p.1, 5, Spark)
 }
 
 ///|
@@ -565,7 +568,7 @@ fn @types.Game::try_beam(game : @types.Game) -> Unit {
   }
 
   let p = @types.player_world_xy(game.player)
-  game.burst(p.0, p.1, 18, 1)
+  game.burst(p.0, p.1, 18, Flash)
 }
 
 ///|
@@ -648,11 +651,11 @@ fn @types.Game::spawn_enemy_wave(game : @types.Game) -> Unit {
     for i in 0..<5 {
       let a = @types.randf(-@types.pi, @types.pi)
       game.spawn_enemy(
-        0,
+        Basic,
         ring,
         a,
         @types.randf(-2.2, 2.2),
-        game.stage_enemy_hp(0),
+        game.stage_enemy_hp(Basic),
         enemy_phase_mask_random(),
       )
       ignore(i)
@@ -660,21 +663,21 @@ fn @types.Game::spawn_enemy_wave(game : @types.Game) -> Unit {
   } else if wave_kind < 56 {
     for ring in 0..<@types.ring_count {
       game.spawn_enemy(
-        0,
+        Basic,
         ring,
         @types.randf(-@types.pi, @types.pi),
         @types.randf(-1.9, 1.9),
-        game.stage_enemy_hp(0),
+        game.stage_enemy_hp(Basic),
         enemy_phase_mask_random(),
       )
     }
     let ring_big = @types.randi(0, @types.ring_count - 1)
     game.spawn_enemy(
-      1,
+      Heavy,
       ring_big,
       @types.randf(-@types.pi, @types.pi),
       @types.randf(-1.2, 1.2),
-      game.stage_enemy_hp(1),
+      game.stage_enemy_hp(Heavy),
       enemy_phase_mask_random(),
     )
   } else if wave_kind < 78 {
@@ -685,11 +688,11 @@ fn @types.Game::spawn_enemy_wave(game : @types.Game) -> Unit {
         max=@types.ring_count - 1,
       )
       game.spawn_enemy(
-        2,
+        Orbiter,
         ring,
         @types.wrap_angle(center + Float::from_int(i) * 0.34),
         @types.randf(-2.8, 2.8),
-        game.stage_enemy_hp(2),
+        game.stage_enemy_hp(Orbiter),
         enemy_phase_mask_random(),
       )
     }
@@ -697,7 +700,13 @@ fn @types.Game::spawn_enemy_wave(game : @types.Game) -> Unit {
     for _i in 0..<8 {
       let ring = @types.randi(0, @types.ring_count - 1)
       let kind_pick = @types.randi(0, 99)
-      let kind = if kind_pick < 65 { 0 } else if kind_pick < 86 { 2 } else { 1 }
+      let kind : @types.EnemyKind = if kind_pick < 65 {
+        Basic
+      } else if kind_pick < 86 {
+        Orbiter
+      } else {
+        Heavy
+      }
       game.spawn_enemy(
         kind,
         ring,
@@ -742,22 +751,24 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
     let e = game.enemies[i]
     let speed_mul : Float = @types.enemy_base_speed +
       Float::from_int(game.stage - 1) * @types.enemy_speed_stage
-    let chase : Float = if e.kind == 1 {
-      0.18
-    } else if e.kind == 2 {
-      0.07
-    } else {
-      0.12
+    let chase : Float = match e.kind {
+      Heavy => 0.18
+      Orbiter => 0.07
+      Basic => 0.12
     }
 
-    let target_offset : Float = if e.kind == 2 { @types.pi * 0.5 } else { 0.0 }
+    let target_offset : Float = if e.kind == Orbiter {
+      @types.pi * 0.5
+    } else {
+      0.0
+    }
     let target_a : Float = game.player.angle + target_offset
     let turn = @types.shortest_angle(e.angle, target_a)
 
     e.ang_v = e.ang_v + turn * chase * dt
     e.ang_v = @types.clampf(e.ang_v, -2.8, 2.8)
     e.angle = @types.wrap_angle(e.angle + e.ang_v * dt * speed_mul)
-    e.spin = e.spin + dt * (if e.kind == 2 { 3.8 } else { 2.2 })
+    e.spin = e.spin + dt * (if e.kind == Orbiter { 3.8 } else { 2.2 })
 
     e.fire_cd = e.fire_cd - dt
 
@@ -768,12 +779,15 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
         let dy = player_xy.1 - ep.1
         let d = @types.maxf(0.01, @math.hypotf(dx, dy))
 
-        let sp : Float = if e.kind == 1 {
-          160.0
-        } else if e.kind == 2 {
-          220.0
-        } else {
-          185.0
+        let sp : Float = match e.kind {
+          Heavy => 160.0
+          Orbiter => 220.0
+          Basic => 185.0
+        }
+        let eb_kind : @types.EnemyBulletKind = match e.kind {
+          Basic => BasicShot
+          Heavy => HeavyShot
+          Orbiter => OrbiterShot
         }
         game.spawn_enemy_bullet(
           ep.0,
@@ -781,12 +795,12 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
           dx / d * sp,
           dy / d * sp,
           2.8,
-          if e.kind == 1 {
+          if e.kind == Heavy {
             16.0
           } else {
             11.0
           },
-          e.kind,
+          eb_kind,
         )
       }
 
@@ -796,7 +810,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
       e.fire_cd = @types.maxf(0.26, e.fire_cd)
     }
 
-    if e.kind == 2 {
+    if e.kind == Orbiter {
       let p = @types.enemy_world_xy(e)
       if @types.dist2(p.0, p.1, player_xy.0, player_xy.1) <= 34.0 * 34.0 {
         game.apply_damage(16.0)
@@ -856,7 +870,7 @@ fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
       b.active = false
 
       let p = @types.enemy_world_xy(game.enemies[j])
-      game.burst(p.0, p.1, 8, 0)
+      game.burst(p.0, p.1, 8, Spark)
 
       if game.enemies[j].hp <= 0.0 {
         game.kill_enemy(j)
@@ -1023,7 +1037,7 @@ fn @types.Game::update_stage_flow(game : @types.Game, dt : Float) -> Unit {
     game.flash_t = 0.4
 
     let p = @types.player_world_xy(game.player)
-    game.burst(p.0, p.1, 28, 1)
+    game.burst(p.0, p.1, 28, Flash)
   }
 }
 

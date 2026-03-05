@@ -137,9 +137,17 @@ pub(all) struct Core {
   mut active : Bool
   mut x : Int
   mut y : Int
-  mut kind : Int
+  mut kind : CoreKind
 }
 pub fn Core::new() -> Self
+
+pub(all) enum CoreKind {
+  Orange
+  Blue
+  Green
+}
+pub fn CoreKind::from_int(Int) -> Self
+pub impl Eq for CoreKind
 
 pub(all) struct Drone {
   mut active : Bool
@@ -225,9 +233,16 @@ pub(all) struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : ParticleKind
 }
 pub fn Particle::new() -> Self
+
+pub(all) enum ParticleKind {
+  BluePulse
+  YellowFlash
+  PurpleSmoke
+}
+pub impl Eq for ParticleKind
 
 pub(all) enum Tile {
   Wall

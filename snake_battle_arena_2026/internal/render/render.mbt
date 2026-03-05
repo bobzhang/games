@@ -105,7 +105,7 @@ fn @types.Game::draw_food(
   let cy : Int = by + game.food_y * tile + tile / 2
   let r : Float = Float::from_int(tile) * 0.33
 
-  if game.food_kind == @types.food_gold {
+  if game.food_kind == Gold {
     @raylib.draw_circle(cx, cy, r, @raylib.Color::new(255, 218, 122, 252))
     @raylib.draw_circle_lines(cx, cy, r, @raylib.Color::new(255, 242, 196, 238))
     @raylib.draw_circle(
@@ -309,9 +309,9 @@ fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
       128
     }
 
-    let c : @raylib.Color = if spark.kind == 2 {
+    let c : @raylib.Color = if spark.kind == Death {
       @raylib.Color::new(255, 164, 122, a)
-    } else if spark.kind == 1 {
+    } else if spark.kind == Eat {
       @raylib.Color::new(255, 228, 140, a)
     } else {
       @raylib.Color::new(140, 220, 174, a)
@@ -586,7 +586,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(184, 214, 236, 230),
   )
 
-  let food_name : String = if game.food_kind == @types.food_gold {
+  let food_name : String = if game.food_kind == Gold {
     "Gold"
   } else {
     "Normal"

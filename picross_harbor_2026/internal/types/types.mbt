@@ -22,7 +22,7 @@ pub(all) struct Spark {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : SparkKind
 }
 
 ///|
@@ -101,7 +101,7 @@ pub fn Game::new() -> Game {
       vy: 0.0,
       life: 0.0,
       size: 0.0,
-      kind: 0,
+      kind: Hint,
     }
   })
 

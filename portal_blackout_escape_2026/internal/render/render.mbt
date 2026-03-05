@@ -25,14 +25,12 @@ fn @types.Game::pulse(game : @types.Game, f : Float) -> Float {
 }
 
 ///|
-/// Returns the display color for a core based on its kind (0=orange, 1=blue, 2=green).
-fn core_color(kind : Int) -> @raylib.Color {
-  if kind == 1 {
-    @raylib.Color::new(130, 214, 252, 242)
-  } else if kind == 2 {
-    @raylib.Color::new(176, 236, 166, 242)
-  } else {
-    @raylib.Color::new(244, 182, 120, 242)
+/// Returns the display color for a core based on its kind.
+fn core_color(kind : @types.CoreKind) -> @raylib.Color {
+  match kind {
+    Blue => @raylib.Color::new(130, 214, 252, 242)
+    Green => @raylib.Color::new(176, 236, 166, 242)
+    Orange => @raylib.Color::new(244, 182, 120, 242)
   }
 }
 
@@ -325,16 +323,16 @@ fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-/// Draws all active particles as colored circles colored by kind (0=blue, 1=yellow, 2=purple).
+/// Draws all active particles as colored circles colored by kind.
 fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
       continue
     }
 
-    let col = if particle.kind == 2 {
+    let col = if particle.kind == PurpleSmoke {
       @raylib.Color::new(194, 170, 246, 188)
-    } else if particle.kind == 1 {
+    } else if particle.kind == YellowFlash {
       @raylib.Color::new(250, 224, 154, 194)
     } else {
       @raylib.Color::new(170, 220, 252, 170)

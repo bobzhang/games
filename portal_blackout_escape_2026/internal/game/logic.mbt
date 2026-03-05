@@ -101,7 +101,7 @@ fn @types.Game::clear_particles(game : @types.Game) -> Unit {
     particle.vy = 0.0
     particle.life = 0.0
     particle.size = 0.0
-    particle.kind = 0
+    particle.kind = BluePulse
   }
 }
 
@@ -115,7 +115,7 @@ fn @types.Game::emit_particle(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : @types.ParticleKind,
 ) -> Unit {
   for particle in game.particles {
     if particle.active {
@@ -141,7 +141,7 @@ fn @types.Game::burst(
   x : Float,
   y : Float,
   n : Int,
-  kind : Int,
+  kind : @types.ParticleKind,
 ) -> Unit {
   for _i in 0..<n {
     game.emit_particle(
@@ -173,10 +173,10 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
     particle.x = particle.x + particle.vx * dt
     particle.y = particle.y + particle.vy * dt
 
-    let drag : Float = if particle.kind == 2 { 2.8 } else { 2.1 }
+    let drag : Float = if particle.kind == PurpleSmoke { 2.8 } else { 2.1 }
     particle.vx = particle.vx * (1.0 - drag * dt)
     particle.vy = particle.vy * (1.0 - (drag - 0.4) * dt) +
-      dt * (if particle.kind == 1 { 84.0 } else { 118.0 })
+      dt * (if particle.kind == YellowFlash { 84.0 } else { 118.0 })
   }
 }
 
@@ -307,11 +307,11 @@ fn @types.Game::init_cores(game : @types.Game) -> Unit {
     if game.cores[i].active {
       game.cores[i].x = plan[i].0
       game.cores[i].y = plan[i].1
-      game.cores[i].kind = plan[i].2
+      game.cores[i].kind = @types.CoreKind::from_int(plan[i].2)
     } else {
       game.cores[i].x = 0
       game.cores[i].y = 0
-      game.cores[i].kind = 0
+      game.cores[i].kind = Orange
     }
   }
 }
@@ -445,7 +445,7 @@ fn @types.Game::finish_run(
       Float::from_int(@types.cell_center_x(Float::from_int(@types.exit_x))),
       Float::from_int(@types.cell_center_y(Float::from_int(@types.exit_y))),
       72,
-      1,
+      YellowFlash,
     )
   } else {
     game.set_msg("Escape failed.", 2.6)
@@ -540,7 +540,7 @@ fn @types.Game::collect_core(game : @types.Game) -> Unit {
     Float::from_int(@types.cell_center_x(game.player.fx)),
     Float::from_int(@types.cell_center_y(game.player.fy)),
     22,
-    1,
+    YellowFlash,
   )
 
   if game.cores_taken >= @types.core_need && not(game.portal_on) {
@@ -554,13 +554,13 @@ fn @types.Game::collect_core(game : @types.Game) -> Unit {
       Float::from_int(@types.cell_center_x(Float::from_int(@types.portal_ax))),
       Float::from_int(@types.cell_center_y(Float::from_int(@types.portal_ay))),
       30,
-      2,
+      PurpleSmoke,
     )
     game.burst(
       Float::from_int(@types.cell_center_x(Float::from_int(@types.portal_bx))),
       Float::from_int(@types.cell_center_y(Float::from_int(@types.portal_by))),
       30,
-      2,
+      PurpleSmoke,
     )
   }
 }
@@ -800,7 +800,7 @@ fn @types.Game::update_flares(game : @types.Game, dt : Float) -> Unit {
         @types.randf(-28.0, -8.0),
         @types.randf(0.3, 0.9),
         @types.randf(4.0, 9.0),
-        2,
+        PurpleSmoke,
       )
     }
   }
@@ -869,7 +869,7 @@ fn @types.Game::deploy_flare(game : @types.Game) -> Bool {
     Float::from_int(@types.cell_center_x(game.player.fx)),
     Float::from_int(@types.cell_center_y(game.player.fy)),
     34,
-    2,
+    PurpleSmoke,
   )
 
   true
@@ -901,7 +901,7 @@ fn @types.Game::try_portal(game : @types.Game) -> Bool {
     Float::from_int(@types.cell_center_x(game.player.fx)),
     Float::from_int(@types.cell_center_y(game.player.fy)),
     30,
-    1,
+    YellowFlash,
   )
 
   true
@@ -928,7 +928,7 @@ fn @types.Game::handle_player_hit(game : @types.Game) -> Unit {
         Float::from_int(@types.cell_center_x(game.player.fx)),
         Float::from_int(@types.cell_center_y(game.player.fy)),
         34,
-        2,
+        PurpleSmoke,
       )
 
       if game.lives <= 0 {

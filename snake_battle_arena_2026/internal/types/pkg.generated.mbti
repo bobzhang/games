@@ -34,10 +34,6 @@ pub fn dir_dx(Dir) -> Int
 
 pub fn dir_dy(Dir) -> Int
 
-pub let food_gold : Int
-
-pub let food_normal : Int
-
 pub let grid_h : Int
 
 pub let grid_w : Int
@@ -92,6 +88,12 @@ pub(all) enum Dir {
 pub fn Dir::from_int(Int) -> Self
 pub impl Eq for Dir
 
+pub(all) enum FoodKind {
+  Normal
+  Gold
+}
+pub impl Eq for FoodKind
+
 pub(all) struct Game {
   p_seg_x : Array[Int]
   p_seg_y : Array[Int]
@@ -104,7 +106,7 @@ pub(all) struct Game {
   rivals : Array[Rival]
   mut food_x : Int
   mut food_y : Int
-  mut food_kind : Int
+  mut food_kind : FoodKind
   mut trap_x : Int
   mut trap_y : Int
   mut trap_active : Bool
@@ -167,9 +169,16 @@ pub(all) struct Spark {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : SparkKind
 }
 pub fn Spark::new() -> Self
+
+pub(all) enum SparkKind {
+  Splash
+  Eat
+  Death
+}
+pub impl Eq for SparkKind
 
 // Type aliases
 

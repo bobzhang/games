@@ -393,9 +393,9 @@ fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
       108
     }
 
-    let c0 : @raylib.Color = if particle.kind == 2 {
+    let c0 : @raylib.Color = if particle.kind == Shimmer {
       @raylib.Color::new(206, 174, 255, a)
-    } else if particle.kind == 1 {
+    } else if particle.kind == Spark {
       @raylib.Color::new(255, 162, 162, a)
     } else {
       @raylib.Color::new(174, 234, 255, a)

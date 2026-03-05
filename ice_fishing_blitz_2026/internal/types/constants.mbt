@@ -191,3 +191,11 @@ pub(all) enum HazardKind {
   Eel
   Ice
 } derive(Eq)
+
+///|
+/// Particle kind enum: splash (blue), spark (red), shimmer (purple).
+pub(all) enum ParticleKind {
+  Splash
+  Spark
+  Shimmer
+} derive(Eq)

@@ -35,6 +35,15 @@ pub(all) enum Cell {
 } derive(Eq)
 
 ///|
+/// Visual spark particle category.
+pub(all) enum SparkKind {
+  Hint
+  Fill
+  Error
+  Mark
+} derive(Eq)
+
+///|
 /// Direction for cursor movement.
 pub(all) enum Dir {
   None

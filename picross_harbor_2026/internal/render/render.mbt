@@ -52,11 +52,11 @@ fn @types.Game::draw_spark_layer(game : @types.Game) -> Unit {
       continue
     }
 
-    let c : @raylib.Color = if spark.kind == 0 {
+    let c : @raylib.Color = if spark.kind == Hint {
       @raylib.Color::new(255, 218, 116, 236)
-    } else if spark.kind == 1 {
+    } else if spark.kind == Fill {
       @raylib.Color::new(122, 214, 255, 236)
-    } else if spark.kind == 2 {
+    } else if spark.kind == Error {
       @raylib.Color::new(246, 106, 94, 228)
     } else {
       @raylib.Color::new(206, 228, 255, 226)

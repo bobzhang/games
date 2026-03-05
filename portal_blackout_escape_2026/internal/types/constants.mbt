@@ -166,3 +166,31 @@ pub(all) enum Tile {
   Floor
   Exit
 } derive(Eq)
+
+///|
+/// Core kind enum: orange, blue, or green energy core.
+pub(all) enum CoreKind {
+  Orange
+  Blue
+  Green
+} derive(Eq)
+
+///|
+/// Converts an integer (from level data) to a CoreKind.
+pub fn CoreKind::from_int(v : Int) -> CoreKind {
+  if v == 1 {
+    Blue
+  } else if v == 2 {
+    Green
+  } else {
+    Orange
+  }
+}
+
+///|
+/// Particle kind enum: blue, yellow, or purple effect.
+pub(all) enum ParticleKind {
+  BluePulse
+  YellowFlash
+  PurpleSmoke
+} derive(Eq)
