@@ -82,11 +82,11 @@ fn @types.Game::reset_kite(game : @types.Game) -> Unit {
 ///|
 /// Returns the index of a free obj slot, evicting the slot with the lowest remaining life if all are active.
 fn @types.Game::alloc_obj(game : @types.Game) -> Int {
-  for i in 0..<game.objs.length() {
-    if not(game.objs[i].active) {
-      return i
+  for i, slot in game.objs {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.objs[0].life
@@ -97,16 +97,17 @@ fn @types.Game::alloc_obj(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 /// Returns the index of a free spark slot, evicting the slot with the lowest remaining life if all are active.
 fn @types.Game::alloc_spark(game : @types.Game) -> Int {
-  for i in 0..<game.sparks.length() {
-    if not(game.sparks[i].active) {
-      return i
+  for i, slot in game.sparks {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.sparks[0].life
@@ -117,16 +118,17 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 /// Returns the index of a free halo slot, evicting the slot with the lowest remaining life if all are active.
 fn @types.Game::alloc_halo(game : @types.Game) -> Int {
-  for i in 0..<game.halos.length() {
-    if not(game.halos[i].active) {
-      return i
+  for i, slot in game.halos {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.halos[0].life
@@ -137,16 +139,17 @@ fn @types.Game::alloc_halo(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 /// Returns the index of a free trail slot, evicting the slot with the lowest remaining life if all are active.
 fn @types.Game::alloc_trail(game : @types.Game) -> Int {
-  for i in 0..<game.trails.length() {
-    if not(game.trails[i].active) {
-      return i
+  for i, slot in game.trails {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.trails[0].life
@@ -157,6 +160,7 @@ fn @types.Game::alloc_trail(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
