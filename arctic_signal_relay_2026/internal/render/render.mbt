@@ -161,17 +161,17 @@ fn tower_col(active : Bool) -> @raylib.Color {
 ///|
 /// Draws all active relay towers with pulsing glow, delivery-slot indicators, interaction range ring, and a cell count label.
 fn @types.Game::draw_towers(game : @types.Game) -> Unit {
-  for i in 0..<game.towers.length() {
-    if not(game.towers[i].active) {
+  for i, tower in game.towers {
+    if !tower.active {
       continue
     }
 
-    let done = game.towers[i].delivered >= game.towers[i].need
+    let done = tower.delivered >= tower.need
     let base_col = tower_col(done)
-    let x = game.towers[i].x.to_int()
-    let y = game.towers[i].y.to_int()
+    let x = tower.x.to_int()
+    let y = tower.y.to_int()
 
-    let pulse : Float = 0.8 + 0.2 * @math.sinf(game.towers[i].pulse_t * 2.2)
+    let pulse : Float = 0.8 + 0.2 * @math.sinf(tower.pulse_t * 2.2)
 
     @raylib.draw_circle(
       x,
@@ -196,12 +196,12 @@ fn @types.Game::draw_towers(game : @types.Game) -> Unit {
       )
     }
 
-    let slots = game.towers[i].need.clamp(min=1, max=6)
+    let slots = tower.need.clamp(min=1, max=6)
     for k in 0..<slots {
       let a = Float::from_int(k) / Float::from_int(slots) * 6.283
-      let px = game.towers[i].x + @math.cosf(a) * (@types.tower_hit_r() + 17.0)
-      let py = game.towers[i].y + @math.sinf(a) * (@types.tower_hit_r() + 17.0)
-      let col = if k < game.towers[i].delivered {
+      let px = tower.x + @math.cosf(a) * (@types.tower_hit_r() + 17.0)
+      let py = tower.y + @math.sinf(a) * (@types.tower_hit_r() + 17.0)
+      let col = if k < tower.delivered {
         @raylib.Color::new(232, 255, 208, 236)
       } else {
         @raylib.Color::new(58, 92, 114, 190)

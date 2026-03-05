@@ -344,30 +344,30 @@ fn @types.Game::storm_effect_at(
   let mut wind_x : Float = 0.0
   let mut wind_y : Float = 0.0
 
-  for i in 0..<game.storms.length() {
-    if not(game.storms[i].active) {
+  for i, storm in game.storms {
+    if !storm.active {
       continue
     }
 
-    let rr = game.storms[i].r
+    let rr = storm.r
     let rr2 = rr * rr
-    let d2 = @types.dist2(x, y, game.storms[i].x, game.storms[i].y)
+    let d2 = @types.dist2(x, y, storm.x, storm.y)
 
     if d2 > rr2 {
       continue
     }
 
     let center_gain : Float = 1.0 - d2 / rr2
-    let amp : Float = game.storms[i].strength * (0.35 + center_gain * 0.95)
+    let amp : Float = storm.strength * (0.35 + center_gain * 0.95)
     intensity = intensity + amp
 
     let swirl : Float = 8.0 + center_gain * 22.0
     wind_x = wind_x +
-      game.storms[i].vx * 0.008 * amp +
-      @math.cosf(game.storms[i].phase + Float::from_int(i) * 0.7) * swirl
+      storm.vx * 0.008 * amp +
+      @math.cosf(storm.phase + Float::from_int(i) * 0.7) * swirl
     wind_y = wind_y +
-      game.storms[i].vy * 0.008 * amp +
-      @math.sinf(game.storms[i].phase + Float::from_int(i) * 0.7) * swirl
+      storm.vy * 0.008 * amp +
+      @math.sinf(storm.phase + Float::from_int(i) * 0.7) * swirl
   }
 
   (@types.clampf(intensity, 0.0, 1.8), wind_x, wind_y)
