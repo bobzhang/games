@@ -198,7 +198,7 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   }
   // Check death
   if game.player_hp <= 0 {
-    game.state = @types.state_game_over
+    game.state = StateGameOver
     @raylib.enable_cursor()
   }
   // Check level up
@@ -766,10 +766,10 @@ fn @types.Game::check_stairs(game : @types.Game) -> Unit {
       game.floor_info[game.current_floor].cleared = true
       game.floors_cleared += 1
       if game.current_floor < @types.max_floors - 1 {
-        game.state = @types.state_floor_complete
+        game.state = StateFloorComplete
         @raylib.enable_cursor()
       } else {
-        game.state = @types.state_floor_complete
+        game.state = StateFloorComplete
         @raylib.enable_cursor()
       }
     } else {
@@ -908,7 +908,7 @@ fn @types.Game::check_shop_interact(game : @types.Game) -> Unit {
   let gz = @types.world_to_grid_z(check_z)
   if @types.get_tile(game, gx, gz) == @types.tile_shop {
     game.prev_state = game.state
-    game.state = @types.state_shop
+    game.state = StateShop
     game.shop_cursor = 0
     @raylib.enable_cursor()
   }
@@ -925,7 +925,7 @@ fn @types.Game::check_shrine_interact(game : @types.Game) -> Unit {
       @types.add_message(game, "Shrine already used.", 150, 150, 150)
     } else {
       game.prev_state = game.state
-      game.state = @types.state_shrine
+      game.state = StateShrine
       game.shrine_cursor = 0
       @raylib.enable_cursor()
     }

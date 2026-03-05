@@ -397,7 +397,7 @@ pub fn damage_player(game : @types.Game, damage : Float) -> Unit {
   game.camera_shake = @types.maxf(game.camera_shake, 0.5)
   if p.hull <= 0.0 {
     p.hull = 0.0
-    game.state = @types.state_game_over
+    game.state = StateGameOver
     @types.spawn_explosion(game, p.x, p.y, p.z, 40, 255, 150, 50)
     @types.spawn_debris(game, p.x, p.y, p.z, 10, 100, 150, 220)
     game.camera_shake = 2.0

@@ -38,21 +38,21 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     }
   }
 
-  if game.state == @types.state_menu {
+  if game.state == StateMenu {
     game.update_menu(dt)
-  } else if game.state == @types.state_playing {
+  } else if game.state == StatePlaying {
     game.update_playing(dt)
-  } else if game.state == @types.state_paused {
+  } else if game.state == StatePaused {
     game.update_paused()
-  } else if game.state == @types.state_mission_complete {
+  } else if game.state == StateMissionComplete {
     game.update_mission_complete()
-  } else if game.state == @types.state_game_over {
+  } else if game.state == StateGameOver {
     game.update_game_over()
-  } else if game.state == @types.state_mission_briefing {
+  } else if game.state == StateMissionBriefing {
     game.update_mission_briefing()
-  } else if game.state == @types.state_mission_select {
+  } else if game.state == StateMissionSelect {
     game.update_mission_select()
-  } else if game.state == @types.state_loadout {
+  } else if game.state == StateLoadout {
     game.update_loadout()
   }
 }
@@ -79,15 +79,15 @@ fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
       game.current_mission = 0
       game.score = 0
       game.total_kills = 0
-      game.state = @types.state_loadout
+      game.state = StateLoadout
       game.loadout_cursor = 0
     } else if game.menu_cursor == 1 {
       // Mission select
-      game.state = @types.state_mission_select
+      game.state = StateMissionSelect
       game.select_cursor = game.current_mission
     } else if game.menu_cursor == 2 {
       // Continue from current mission
-      game.state = @types.state_mission_briefing
+      game.state = StateMissionBriefing
       game.briefing_scroll = 0
     } else {
       // Quick start
@@ -100,7 +100,7 @@ fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
-    game.state = @types.state_paused
+    game.state = StatePaused
     game.pause_cursor = 0
     return
   }
@@ -219,7 +219,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
     // Check if all enemies eliminated while station survives
     let station_alive = game.check_station_alive(@types.station_friendly)
     if not(station_alive) {
-      game.state = @types.state_game_over
+      game.state = StateGameOver
       game.message_text = "STATION DESTROYED"
       game.message_timer = 3.0
     } else if @types.count_active_enemies(game) == 0 &&
@@ -235,7 +235,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 fn @types.Game::complete_mission(game : @types.Game) -> Unit {
-  game.state = @types.state_mission_complete
+  game.state = StateMissionComplete
   game.message_text = "MISSION COMPLETE"
   game.message_timer = 3.0
   // Award mission reward
@@ -269,18 +269,18 @@ fn @types.Game::update_paused(game : @types.Game) -> Unit {
   }
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
-    game.state = @types.state_playing
+    game.state = StatePlaying
   }
   if @raylib.is_key_pressed(@raylib.KeyEnter) {
     if game.pause_cursor == 0 {
       // Resume
-      game.state = @types.state_playing
+      game.state = StatePlaying
     } else if game.pause_cursor == 1 {
       // Restart mission
       game.start_mission(game.current_mission)
     } else {
       // Quit to menu
-      game.state = @types.state_menu
+      game.state = StateMenu
       game.menu_cursor = 0
     }
   }
@@ -293,10 +293,10 @@ fn @types.Game::update_mission_complete(game : @types.Game) -> Unit {
     let next = game.current_mission + 1
     if next >= @types.total_missions {
       // Completed all missions
-      game.state = @types.state_menu
+      game.state = StateMenu
     } else {
       game.current_mission = next
-      game.state = @types.state_mission_briefing
+      game.state = StateMissionBriefing
       game.briefing_scroll = 0
     }
   }
@@ -310,7 +310,7 @@ fn @types.Game::update_game_over(game : @types.Game) -> Unit {
       // Hold shift+enter to restart the same mission
       game.start_mission(game.current_mission)
     } else {
-      game.state = @types.state_menu
+      game.state = StateMenu
     }
   }
   // R to restart
@@ -326,7 +326,7 @@ fn @types.Game::update_mission_briefing(game : @types.Game) -> Unit {
     game.start_mission(game.current_mission)
   }
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.state_menu
+    game.state = StateMenu
     game.menu_cursor = 0
   }
 }
@@ -348,11 +348,11 @@ fn @types.Game::update_mission_select(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     game.current_mission = game.select_cursor
-    game.state = @types.state_loadout
+    game.state = StateLoadout
     game.loadout_cursor = 0
   }
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.state_menu
+    game.state = StateMenu
     game.menu_cursor = 0
   }
 }
@@ -381,11 +381,11 @@ fn @types.Game::update_loadout(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     game.selected_ship_class = @types.ship_kind_from_int(game.loadout_cursor)
-    game.state = @types.state_mission_briefing
+    game.state = StateMissionBriefing
     game.briefing_scroll = 0
   }
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.state_menu
+    game.state = StateMenu
     game.menu_cursor = 0
   }
 }
@@ -393,7 +393,7 @@ fn @types.Game::update_loadout(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::start_mission(game : @types.Game, mission : Int) -> Unit {
   game.current_mission = mission
-  game.state = @types.state_playing
+  game.state = StatePlaying
   game.mission_timer = 0.0
   game.mission_time = 0.0
   game.mission_kills = 0

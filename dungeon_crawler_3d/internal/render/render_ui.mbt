@@ -3,30 +3,30 @@
 ///|
 /// Draws the 2D HUD and state overlays, including transient damage and message effects.
 pub fn draw_ui(game : @types.Game) -> Unit {
-  if game.state == @types.state_menu {
+  if game.state == StateMenu {
     game.draw_menu()
-  } else if game.state == @types.state_playing {
+  } else if game.state == StatePlaying {
     game.draw_hud()
     game.draw_minimap()
     draw_crosshair()
-  } else if game.state == @types.state_paused {
+  } else if game.state == StatePaused {
     game.draw_hud()
     game.draw_minimap()
     game.draw_pause_overlay()
-  } else if game.state == @types.state_game_over {
+  } else if game.state == StateGameOver {
     game.draw_game_over()
-  } else if game.state == @types.state_level_up {
+  } else if game.state == StateLevelUp {
     game.draw_hud()
     game.draw_level_up_overlay()
-  } else if game.state == @types.state_floor_complete {
+  } else if game.state == StateFloorComplete {
     game.draw_hud()
     game.draw_floor_complete_overlay()
-  } else if game.state == @types.state_class_select {
+  } else if game.state == StateClassSelect {
     game.draw_class_select()
-  } else if game.state == @types.state_shop {
+  } else if game.state == StateShop {
     game.draw_hud()
     game.draw_shop()
-  } else if game.state == @types.state_shrine {
+  } else if game.state == StateShrine {
     game.draw_hud()
     game.draw_shrine()
   }

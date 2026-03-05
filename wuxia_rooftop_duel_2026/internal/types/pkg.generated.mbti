@@ -22,12 +22,6 @@ pub let arena_x : Int
 
 pub let arena_y : Int
 
-pub let attack_heavy : Int
-
-pub let attack_light : Int
-
-pub let attack_none : Int
-
 pub fn clampf(Float, Float, Float) -> Float
 
 pub let combo_timeout : Float
@@ -43,16 +37,6 @@ pub let enemy_contact_damage : Float
 pub let enemy_parry_window : Float
 
 pub let enemy_recover_t : Float
-
-pub let enemy_state_recover : Int
-
-pub let enemy_state_seek : Int
-
-pub let enemy_state_strike : Int
-
-pub let enemy_state_stunned : Int
-
-pub let enemy_state_telegraph : Int
 
 pub let enemy_strike_t : Float
 
@@ -130,14 +114,6 @@ pub let stamina_regen_fast : Float
 
 pub let stamina_regen_slow : Float
 
-pub let state_game_over : Int
-
-pub let state_paused : Int
-
-pub let state_playing : Int
-
-pub let state_title : Int
-
 pub let target_fps : Int
 
 pub let wave_gap_duration : Float
@@ -145,6 +121,13 @@ pub let wave_gap_duration : Float
 // Errors
 
 // Types and methods
+pub(all) enum Attack {
+  None
+  Light
+  Heavy
+}
+pub impl Eq for Attack
+
 pub(all) struct Enemy {
   mut active : Bool
   mut x : Float
@@ -155,16 +138,25 @@ pub(all) struct Enemy {
   mut max_hp : Float
   mut radius : Float
   mut speed : Float
-  mut state : Int
+  mut state : EnemyState
   mut state_t : Float
   mut telegraph_total_t : Float
   mut visual_phase : Float
 }
 pub fn Enemy::new() -> Self
 
+pub(all) enum EnemyState {
+  Seek
+  Telegraph
+  Strike
+  Recover
+  Stunned
+}
+pub impl Eq for EnemyState
+
 pub(all) struct Game {
   enemies : Array[Enemy]
-  mut state : Int
+  mut state : GameState
   mut player_x : Float
   mut player_y : Float
   mut player_vx : Float
@@ -182,7 +174,7 @@ pub(all) struct Game {
   mut dash_dir_y : Float
   mut attack_cd : Float
   mut attack_anim_t : Float
-  mut attack_kind : Int
+  mut attack_kind : Attack
   mut wave : Int
   mut wave_enemies_total : Int
   mut wave_spawned : Int
@@ -202,6 +194,14 @@ pub(all) struct Game {
   mut message_t : Float
 }
 pub fn Game::new() -> Self
+
+pub(all) enum GameState {
+  Title
+  Playing
+  Paused
+  GameOver
+}
+pub impl Eq for GameState
 
 // Type aliases
 

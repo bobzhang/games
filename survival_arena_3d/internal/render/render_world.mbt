@@ -303,11 +303,11 @@ fn @types.Game::draw_crates(game : @types.Game) -> Unit {
     }
     let cs = @types.crate_size
     // Crate body
-    let crate_color = if crate.kind == @types.Shotgun.to_int() {
+    let crate_color = if crate.kind == Shotgun {
       @raylib.Color::new(180, 120, 50, 255)
-    } else if crate.kind == @types.Rifle.to_int() {
+    } else if crate.kind == Rifle {
       @raylib.Color::new(50, 150, 50, 255)
-    } else if crate.kind == @types.Minigun.to_int() {
+    } else if crate.kind == Minigun {
       @raylib.Color::new(80, 80, 180, 255)
     } else {
       @raylib.Color::new(180, 50, 50, 255)
@@ -991,7 +991,7 @@ fn draw_necromancer(
   size : Float,
   frame : Int,
 ) -> Unit {
-  // @types.Necromancer: robed figure with staff
+  // Necromancer: robed figure with staff
   // Robe body (wider at bottom)
   @raylib.draw_cube(
     @raylib.Vector3::new(enemy.x, size * 0.5, enemy.z),
@@ -1062,7 +1062,7 @@ fn draw_shielded(
   color : @raylib.Color,
   size : Float,
 ) -> Unit {
-  // @types.Shielded: body with front shield panel
+  // Shielded: body with front shield panel
   // Body
   @raylib.draw_cube(
     @raylib.Vector3::new(enemy.x, size * 0.6, enemy.z),
@@ -1385,7 +1385,7 @@ fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
     let alpha = (p.life / p.max_life * 255.0).to_int()
     let a = alpha.clamp(min=0, max=255)
     if p.kind == Shell {
-      // @types.Shell casings: elongated
+      // Shell casings: elongated
       @raylib.draw_cube(
         @raylib.Vector3::new(p.x, p.y, p.z),
         0.02,

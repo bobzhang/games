@@ -382,9 +382,9 @@ pub(all) struct Crate {
   mut x : Float
   mut z : Float
   mut respawn_timer : Float
-  mut kind : Int
+  mut kind : WeaponKind
 }
-pub fn Crate::new(Float, Float, Int) -> Self
+pub fn Crate::new(Float, Float, WeaponKind) -> Self
 
 pub(all) struct DamageIndicator {
   mut active : Bool
@@ -453,7 +453,7 @@ pub(all) struct Game {
   mut spawn_timer : Float
   mut enemies_to_spawn : Int
   mut enemies_spawned : Int
-  mut wave_enemy_kinds : Array[Int]
+  mut wave_enemy_kinds : Array[EnemyKind]
   mut wave_enemy_counts : Array[Int]
   mut wave_spawn_idx : Int
   mut wave_hp_mult : Float
@@ -582,7 +582,7 @@ pub(all) struct Player {
   mut pitch : Float
   mut hp : Float
   mut armor : Float
-  mut current_weapon : Int
+  mut current_weapon : WeaponKind
   ammo : Array[Int]
   magazine : Array[Int]
   mag_size : Array[Int]

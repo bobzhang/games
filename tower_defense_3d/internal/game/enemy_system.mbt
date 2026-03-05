@@ -3,7 +3,7 @@
 ///|
 fn @types.Game::start_wave(game : @types.Game, wave : Int) -> Unit {
   let def = @levels.get_wave_def(wave)
-  game.wave_enemy_kind = @types.enemy_kind_from_int(def.0)
+  game.wave_enemy_kind = def.0
   game.enemies_to_spawn = def.1
   game.wave_hp_mult = def.2
   game.wave_speed_mult = def.3

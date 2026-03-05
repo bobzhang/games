@@ -11,36 +11,46 @@ pub let screen_height : Int = 720
 // Game states
 
 ///|
-/// Game state identifier for the main menu screen.
-pub let state_menu : Int = 0
+pub(all) enum GameState {
+  StateMenu
+  StatePlaying
+  StatePaused
+  StateMissionComplete
+  StateGameOver
+  StateMissionBriefing
+  StateMissionSelect
+  StateLoadout
+} derive(Eq)
 
 ///|
-/// Game state identifier for active gameplay.
-pub let state_playing : Int = 1
+/// Converts a GameState to its integer value.
+pub fn GameState::to_int(self : GameState) -> Int {
+  match self {
+    StateMenu => 0
+    StatePlaying => 1
+    StatePaused => 2
+    StateMissionComplete => 3
+    StateGameOver => 4
+    StateMissionBriefing => 5
+    StateMissionSelect => 6
+    StateLoadout => 7
+  }
+}
 
 ///|
-/// Game state identifier for the pause screen.
-pub let state_paused : Int = 2
-
-///|
-/// Game state identifier for the mission complete summary.
-pub let state_mission_complete : Int = 3
-
-///|
-/// Game state identifier for the game over screen.
-pub let state_game_over : Int = 4
-
-///|
-/// Game state identifier for the pre-mission briefing screen.
-pub let state_mission_briefing : Int = 5
-
-///|
-/// Game state identifier for the mission selection screen.
-pub let state_mission_select : Int = 6
-
-///|
-/// Game state identifier for the ship loadout selection screen.
-pub let state_loadout : Int = 7
+/// Converts an integer to a GameState.
+pub fn GameState::from_int(v : Int) -> GameState {
+  match v {
+    0 => StateMenu
+    1 => StatePlaying
+    2 => StatePaused
+    3 => StateMissionComplete
+    4 => StateGameOver
+    5 => StateMissionBriefing
+    6 => StateMissionSelect
+    _ => StateLoadout
+  }
+}
 
 // Ship classes
 

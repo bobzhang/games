@@ -366,22 +366,6 @@ pub fn spawn_particles(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
 
 pub fn spawn_shield_hit(Game, Float, Float, Float, Int) -> Unit
 
-pub let state_game_over : Int
-
-pub let state_loadout : Int
-
-pub let state_menu : Int
-
-pub let state_mission_briefing : Int
-
-pub let state_mission_complete : Int
-
-pub let state_mission_select : Int
-
-pub let state_paused : Int
-
-pub let state_playing : Int
-
 pub let station_enemy : Int
 
 pub let station_friendly : Int
@@ -506,7 +490,7 @@ pub(all) enum Formation {
 pub impl Eq for Formation
 
 pub(all) struct Game {
-  mut state : Int
+  mut state : GameState
   player : Player
   mut target_idx : Int
   mut target_lock_timer : Float
@@ -552,6 +536,20 @@ pub(all) struct Game {
   mut frame_counter : Int
 }
 pub fn Game::new() -> Self
+
+pub(all) enum GameState {
+  StateMenu
+  StatePlaying
+  StatePaused
+  StateMissionComplete
+  StateGameOver
+  StateMissionBriefing
+  StateMissionSelect
+  StateLoadout
+}
+pub fn GameState::from_int(Int) -> Self
+pub fn GameState::to_int(Self) -> Int
+pub impl Eq for GameState
 
 pub(all) struct KillFeedEntry {
   mut active : Bool

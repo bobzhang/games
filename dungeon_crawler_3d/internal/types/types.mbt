@@ -385,8 +385,8 @@ pub let max_buffs : Int = 4
 /// Aggregated mutable game state for player stats, dungeon data, and UI flow.
 pub(all) struct Game {
   // State
-  mut state : Int
-  mut prev_state : Int
+  mut state : GameState
+  mut prev_state : GameState
 
   // Player
   mut player_x : Float
@@ -557,8 +557,8 @@ pub fn Game::new() -> Game {
   }
   let shrine_options : Array[Int] = [0, 1, 2]
   {
-    state: state_class_select,
-    prev_state: state_menu,
+    state: StateClassSelect,
+    prev_state: StateMenu,
     player_x: 5.0,
     player_z: 5.0,
     player_yaw: 0.0,

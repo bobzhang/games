@@ -10,7 +10,7 @@ pub fn bump_combo(@types.Game) -> Unit
 
 pub fn combo_multiplier(@types.Game) -> Int
 
-pub fn grant_score(@types.Game, Int, Int) -> Unit
+pub fn grant_score(@types.Game, @types.Team, Int) -> Unit
 
 pub fn update_combo(@types.Game, Float) -> Unit
 

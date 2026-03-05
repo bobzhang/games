@@ -22,7 +22,7 @@ pub(all) struct Player {
   mut pitch : Float
   mut hp : Float
   mut armor : Float
-  mut current_weapon : Int
+  mut current_weapon : WeaponKind
   ammo : Array[Int]
   magazine : Array[Int]
   mag_size : Array[Int]
@@ -84,7 +84,7 @@ pub fn Player::new() -> Player {
     pitch: 0.0,
     hp: player_max_hp,
     armor: 0.0,
-    current_weapon: Pistol.to_int(),
+    current_weapon: Pistol,
     ammo,
     magazine,
     mag_size,
@@ -312,12 +312,12 @@ pub(all) struct Crate {
   mut x : Float
   mut z : Float
   mut respawn_timer : Float
-  mut kind : Int
+  mut kind : WeaponKind
 }
 
 ///|
-/// Creates an active crate instance at world position `(x, z)` with a crate kind id.
-pub fn Crate::new(x : Float, z : Float, kind : Int) -> Crate {
+/// Creates an active crate instance at world position `(x, z)` with a weapon kind.
+pub fn Crate::new(x : Float, z : Float, kind : WeaponKind) -> Crate {
   { active: true, x, z, respawn_timer: 0.0, kind }
 }
 
@@ -506,7 +506,7 @@ pub(all) struct Game {
   mut spawn_timer : Float
   mut enemies_to_spawn : Int
   mut enemies_spawned : Int
-  mut wave_enemy_kinds : Array[Int]
+  mut wave_enemy_kinds : Array[EnemyKind]
   mut wave_enemy_counts : Array[Int]
   mut wave_spawn_idx : Int
   mut wave_hp_mult : Float
@@ -590,12 +590,12 @@ pub fn Game::new() -> Game {
   }
   // Create ammo crates at various positions
   let crates : Array[Crate] = []
-  crates.push(Crate::new(12.0, 12.0, Shotgun.to_int()))
-  crates.push(Crate::new(-12.0, 12.0, Rifle.to_int()))
-  crates.push(Crate::new(12.0, -12.0, Rocket.to_int()))
-  crates.push(Crate::new(-12.0, -12.0, Shotgun.to_int()))
-  crates.push(Crate::new(0.0, 15.0, Rifle.to_int()))
-  crates.push(Crate::new(0.0, -15.0, Minigun.to_int()))
+  crates.push(Crate::new(12.0, 12.0, Shotgun))
+  crates.push(Crate::new(-12.0, 12.0, Rifle))
+  crates.push(Crate::new(12.0, -12.0, Rocket))
+  crates.push(Crate::new(-12.0, -12.0, Shotgun))
+  crates.push(Crate::new(0.0, 15.0, Rifle))
+  crates.push(Crate::new(0.0, -15.0, Minigun))
   // Create low walls for cover
   let low_walls : Array[LowWall] = []
   low_walls.push({

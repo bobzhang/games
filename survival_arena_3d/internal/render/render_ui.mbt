@@ -205,7 +205,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     50,
     @raylib.Color::new(0, 0, 0, 160),
   )
-  let weapon = player.current_weapon
+  let weapon = player.current_weapon.to_int()
   let weapon_text = @types.weapon_name(weapon)
   @raylib.draw_text(
     weapon_text,
@@ -215,12 +215,12 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 220, 100, 255),
   )
   let ammo_count = player.ammo[weapon]
-  let ammo_text = if weapon == @types.Pistol.to_int() {
+  let ammo_text = if player.current_weapon == Pistol {
     "Ammo: INF"
   } else {
     "Ammo: \{ammo_count}"
   }
-  let ammo_color = if ammo_count > 0 || weapon == @types.Pistol.to_int() {
+  let ammo_color = if ammo_count > 0 || player.current_weapon == Pistol {
     @raylib.Color::new(200, 200, 200, 255)
   } else {
     @raylib.Color::new(255, 80, 80, 255)
@@ -230,7 +230,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   let slot_y = sh - 95
   for i in 0..<@types.weapon_count {
     let slot_x = ammo_x + i * 50
-    let is_selected = i == player.current_weapon
+    let is_selected = i == weapon
     let bg_color = if is_selected {
       @raylib.Color::new(80, 80, 120, 200)
     } else {
@@ -355,9 +355,10 @@ fn @types.Game::draw_weapon_display(game : @types.Game) -> Unit {
   let player = game.player
   // Weapon view model (simplified gun shape in 2D)
   let weapon = player.current_weapon
+  let weapon_i = weapon.to_int()
   let gun_x = sw / 2 + 80
   let gun_y = sh - 140
-  // @types.Muzzle flash
+  // Muzzle flash
   if player.flash_timer > 0.0 {
     let flash_alpha = (player.flash_timer / 0.08 * 200.0).to_int()
     let fa = flash_alpha.clamp(min=0, max=200)
@@ -376,7 +377,7 @@ fn @types.Game::draw_weapon_display(game : @types.Game) -> Unit {
       @raylib.Color::new(255, 200, 50, fa),
     )
   }
-  if weapon == @types.Pistol.to_int() {
+  if weapon == Pistol {
     // Pistol shape
     @raylib.draw_rectangle(
       gun_x - 6,
@@ -392,7 +393,7 @@ fn @types.Game::draw_weapon_display(game : @types.Game) -> Unit {
       18,
       @raylib.Color::new(100, 100, 110, 255),
     )
-  } else if weapon == @types.Shotgun.to_int() {
+  } else if weapon == Shotgun {
     // Shotgun shape - wider
     @raylib.draw_rectangle(
       gun_x - 8,
@@ -415,7 +416,7 @@ fn @types.Game::draw_weapon_display(game : @types.Game) -> Unit {
       6,
       @raylib.Color::new(70, 70, 80, 255),
     )
-  } else if weapon == @types.Rifle.to_int() {
+  } else if weapon == Rifle {
     // Rifle shape - long
     @raylib.draw_rectangle(
       gun_x - 6,
@@ -438,7 +439,7 @@ fn @types.Game::draw_weapon_display(game : @types.Game) -> Unit {
       8,
       @raylib.Color::new(60, 70, 60, 255),
     )
-  } else if weapon == @types.Sniper.to_int() {
+  } else if weapon == Sniper {
     // Sniper shape - very long barrel with scope
     @raylib.draw_rectangle(
       gun_x - 5,
@@ -469,7 +470,7 @@ fn @types.Game::draw_weapon_display(game : @types.Game) -> Unit {
       8,
       @raylib.Color::new(70, 70, 80, 255),
     )
-  } else if weapon == @types.Minigun.to_int() {
+  } else if weapon == Minigun {
     // Minigun shape - wide with multiple barrels
     @raylib.draw_rectangle(
       gun_x - 10,

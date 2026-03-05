@@ -448,7 +448,7 @@ pub(all) struct Star {
 ///|
 /// Main game state holding all entity pools, player data, mission progress, and UI state.
 pub(all) struct Game {
-  mut state : Int
+  mut state : GameState
 
   // Player
   player : Player
@@ -618,7 +618,7 @@ pub fn Game::new() -> Game {
   }
 
   {
-    state: state_menu,
+    state: StateMenu,
     player: Player::new(),
     target_idx: -1,
     target_lock_timer: 0.0,

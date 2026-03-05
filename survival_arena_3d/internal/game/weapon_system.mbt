@@ -48,7 +48,7 @@ fn @types.Game::try_reload(game : @types.Game, weapon : Int) -> Unit {
 
 ///|
 fn @types.Game::handle_shooting(game : @types.Game) -> Unit {
-  let weapon = game.player.current_weapon
+  let weapon = game.player.current_weapon.to_int()
   let ws = game.weapons[weapon]
   // Don't shoot while reloading
   if ws.reloading {
@@ -152,7 +152,7 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
       game.fire_projectile(norm.0, norm.1, norm.2, weapon)
       ignore(i)
     }
-    // @types.Muzzle flash particles
+    // Muzzle flash particles
     @types.spawn_particles_dir(
       game,
       player.x + look_x * 0.5,
@@ -166,7 +166,7 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
       200,
       50,
     )
-    // @types.Shell casing
+    // Shell casing
     @types.spawn_shell_casing(
       game,
       player.x,
@@ -250,7 +250,7 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
       dz = norm.2
     }
     game.fire_projectile(dx, dy, dz, weapon)
-    // @types.Muzzle flash particles
+    // Muzzle flash particles
     @types.spawn_particles_dir(
       game,
       player.x + look_x * 0.5,
@@ -264,7 +264,7 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
       220,
       80,
     )
-    // @types.Shell casing
+    // Shell casing
     @types.spawn_shell_casing(
       game,
       player.x,
@@ -572,7 +572,7 @@ fn @types.Game::apply_explosion(
       }
     }
   }
-  // @types.Explosion particles
+  // Explosion particles
   @types.spawn_particles_typed(
     game, x, y, z, 20, 255, 150, 30, Explosion,
   )

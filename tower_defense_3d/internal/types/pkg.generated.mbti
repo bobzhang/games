@@ -664,7 +664,7 @@ pub(all) struct UpgradeInfo {
 }
 
 pub(all) struct WaveDef {
-  enemy_kind : Int
+  enemy_kind : EnemyKind
   count : Int
   hp_mult : Float
   speed_mult : Float
@@ -678,7 +678,7 @@ pub(all) struct WaveInfo {
 }
 
 pub(all) struct WaveSpawnEntry {
-  enemy_kind : Int
+  enemy_kind : EnemyKind
   count : Int
   hp_mult : Float
   speed_mult : Float

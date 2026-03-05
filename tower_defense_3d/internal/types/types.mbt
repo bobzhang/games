@@ -307,7 +307,7 @@ pub(all) struct PathNode {
 ///|
 /// Single enemy group within a wave with type, count, and spawn timing.
 pub(all) struct WaveSpawnEntry {
-  enemy_kind : Int
+  enemy_kind : EnemyKind
   count : Int
   hp_mult : Float
   speed_mult : Float
@@ -319,7 +319,7 @@ pub(all) struct WaveSpawnEntry {
 ///|
 /// Simple wave definition with enemy type, count, and scaling multipliers.
 pub(all) struct WaveDef {
-  enemy_kind : Int
+  enemy_kind : EnemyKind
   count : Int
   hp_mult : Float
   speed_mult : Float

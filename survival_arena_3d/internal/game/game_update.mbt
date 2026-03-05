@@ -86,12 +86,13 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 fn @types.Game::switch_weapon(game : @types.Game, weapon : Int) -> Unit {
-  if game.player.current_weapon != weapon {
-    game.player.current_weapon = weapon
+  let wk = @types.WeaponKind::from_int(weapon)
+  if game.player.current_weapon != wk {
+    game.player.current_weapon = wk
     // Cancel reload
     game.weapons[weapon].reloading = false
     // Reset minigun spin
-    if weapon != @types.Minigun.to_int() {
+    if wk != Minigun {
       game.player.minigun_spinning = false
     }
   }
@@ -99,7 +100,7 @@ fn @types.Game::switch_weapon(game : @types.Game, weapon : Int) -> Unit {
 
 ///|
 fn @types.Game::cycle_weapon(game : @types.Game, direction : Int) -> Unit {
-  let mut next = game.player.current_weapon + direction
+  let mut next = game.player.current_weapon.to_int() + direction
   // Wrap around and find next owned weapon
   for _attempts in 0..<@types.weapon_count {
     if next >= @types.weapon_count {
@@ -308,8 +309,8 @@ fn @types.Game::apply_pickup(game : @types.Game, kind : Int) -> Unit {
     @types.add_kill_feed(game, "+30 Health", 50, 255, 50)
   } else if kind == @types.pickup_ammo {
     // Give ammo to current weapon
-    let weapon = game.player.current_weapon
-    if weapon != @types.Pistol.to_int() {
+    let weapon = game.player.current_weapon.to_int()
+    if game.player.current_weapon != Pistol {
       let add = @types.weapon_mag_size(weapon) * 2
       game.player.ammo[weapon] += add
       @types.show_message(
@@ -408,7 +409,7 @@ fn @types.Game::start_new_game(game : @types.Game) -> Unit {
   game.player.pitch = 0.0
   game.player.hp = @types.player_max_hp
   game.player.armor = 0.0
-  game.player.current_weapon = @types.Pistol.to_int()
+  game.player.current_weapon = Pistol
   game.player.ammo[0] = @types.ammo_pistol
   game.player.ammo[1] = @types.ammo_shotgun
   game.player.ammo[2] = @types.ammo_rifle
@@ -530,7 +531,7 @@ fn @types.Game::buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
     return
   }
   if item_idx == 0 {
-    // @types.Heal
+    // Heal
     if game.player.hp < @types.player_max_hp {
       game.player.money -= cost
       game.player.hp = @types.minf(game.player.hp + 40.0, @types.player_max_hp)
@@ -686,19 +687,20 @@ fn @types.Game::update_crates(game : @types.Game, dt : Float) -> Unit {
     if dist < 2.0 {
       // Give ammo
       let weapon = crate.kind
-      let add_ammo = if weapon == @types.Shotgun.to_int() {
+      let wi = weapon.to_int()
+      let add_ammo = if weapon == Shotgun {
         6
-      } else if weapon == @types.Rifle.to_int() {
+      } else if weapon == Rifle {
         15
-      } else if weapon == @types.Minigun.to_int() {
+      } else if weapon == Minigun {
         50
       } else {
         2
       }
-      game.player.ammo[weapon] += add_ammo
+      game.player.ammo[wi] += add_ammo
       @types.show_message(
         game,
-        "+\{add_ammo} \{@types.weapon_name(weapon)} ammo",
+        "+\{add_ammo} \{@types.weapon_name(wi)} ammo",
         1.0,
       )
       @types.spawn_particles(game, crate.x, 1.0, crate.z, 8, 255, 255, 100)

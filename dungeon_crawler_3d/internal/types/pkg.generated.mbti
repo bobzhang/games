@@ -352,24 +352,6 @@ pub let staff_damage_mult : Float
 
 pub let staff_range : Float
 
-pub let state_class_select : Int
-
-pub let state_floor_complete : Int
-
-pub let state_game_over : Int
-
-pub let state_level_up : Int
-
-pub let state_menu : Int
-
-pub let state_paused : Int
-
-pub let state_playing : Int
-
-pub let state_shop : Int
-
-pub let state_shrine : Int
-
 pub let strength_potion_bonus : Int
 
 pub let strength_potion_duration : Float
@@ -510,8 +492,8 @@ pub(all) struct FloorInfo {
 pub fn FloorInfo::new() -> Self
 
 pub(all) struct Game {
-  mut state : Int
-  mut prev_state : Int
+  mut state : GameState
+  mut prev_state : GameState
   mut player_x : Float
   mut player_z : Float
   mut player_yaw : Float
@@ -586,6 +568,21 @@ pub(all) struct Game {
   mut frame_counter : Int
 }
 pub fn Game::new() -> Self
+
+pub(all) enum GameState {
+  StateMenu
+  StatePlaying
+  StatePaused
+  StateGameOver
+  StateLevelUp
+  StateFloorComplete
+  StateShop
+  StateShrine
+  StateClassSelect
+}
+pub fn GameState::from_int(Int) -> Self
+pub fn GameState::to_int(Self) -> Int
+pub impl Eq for GameState
 
 pub(all) struct InvItem {
   mut kind : Int

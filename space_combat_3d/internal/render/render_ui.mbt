@@ -3,27 +3,27 @@
 ///|
 /// Draws the 2D UI overlay for the current game state.
 pub fn draw_ui(game : @types.Game) -> Unit {
-  if game.state == @types.state_menu {
+  if game.state == StateMenu {
     game.draw_menu()
-  } else if game.state == @types.state_playing {
+  } else if game.state == StatePlaying {
     game.draw_hud()
     game.draw_crosshair()
     if game.message_timer > 0.0 {
       game.draw_message()
     }
-  } else if game.state == @types.state_paused {
+  } else if game.state == StatePaused {
     game.draw_hud()
     game.draw_pause_overlay()
-  } else if game.state == @types.state_mission_complete {
+  } else if game.state == StateMissionComplete {
     game.draw_hud()
     game.draw_mission_complete()
-  } else if game.state == @types.state_game_over {
+  } else if game.state == StateGameOver {
     game.draw_game_over()
-  } else if game.state == @types.state_mission_briefing {
+  } else if game.state == StateMissionBriefing {
     game.draw_mission_briefing()
-  } else if game.state == @types.state_mission_select {
+  } else if game.state == StateMissionSelect {
     game.draw_mission_select()
-  } else if game.state == @types.state_loadout {
+  } else if game.state == StateLoadout {
     game.draw_loadout()
   }
 }

@@ -101,68 +101,68 @@ pub fn get_map_info(map_idx : Int) -> @types.MapInfo {
 
 ///|
 /// Returns the enemy kind, count, HP multiplier, and speed multiplier for `wave`.
-pub fn get_wave_def(wave : Int) -> (Int, Int, Float, Float) {
+pub fn get_wave_def(wave : Int) -> (@types.EnemyKind, Int, Float, Float) {
   // Returns (enemy_kind, count, hp_mult, speed_mult)
   if wave == 0 {
-    (0, 8, 1.0, 1.0)
+    (Basic, 8, 1.0, 1.0)
   } else if wave == 1 {
-    (0, 12, 1.0, 1.0)
+    (Basic, 12, 1.0, 1.0)
   } else if wave == 2 {
-    (1, 8, 1.0, 1.0)
+    (Fast, 8, 1.0, 1.0)
   } else if wave == 3 {
-    (0, 15, 1.3, 1.0)
+    (Basic, 15, 1.3, 1.0)
   } else if wave == 4 {
-    (2, 5, 1.0, 1.0)
+    (Tank, 5, 1.0, 1.0)
   } else if wave == 5 {
-    (6, 20, 0.8, 1.2)
+    (Swarm, 20, 0.8, 1.2)
   } else if wave == 6 {
-    (1, 15, 1.0, 1.2)
+    (Fast, 15, 1.0, 1.2)
   } else if wave == 7 {
-    (3, 6, 1.0, 1.0)
+    (Flying, 6, 1.0, 1.0)
   } else if wave == 8 {
-    (5, 4, 1.0, 0.9)
+    (Healer, 4, 1.0, 0.9)
   } else if wave == 9 {
-    (4, 1, 1.0, 0.7)
+    (Boss, 1, 1.0, 0.7)
   } else if wave == 10 {
-    (0, 25, 2.0, 1.1)
+    (Basic, 25, 2.0, 1.1)
   } else if wave == 11 {
-    (7, 6, 1.5, 0.9)
+    (Shield, 6, 1.5, 0.9)
   } else if wave == 12 {
-    (8, 8, 1.2, 1.3)
+    (Camo, 8, 1.2, 1.3)
   } else if wave == 13 {
-    (9, 5, 1.5, 1.0)
+    (Splitter, 5, 1.5, 1.0)
   } else if wave == 14 {
-    (4, 2, 1.5, 0.8)
+    (Boss, 2, 1.5, 0.8)
   } else if wave == 15 {
-    (6, 35, 1.0, 1.3)
+    (Swarm, 35, 1.0, 1.3)
   } else if wave == 16 {
-    (2, 12, 2.5, 1.0)
+    (Tank, 12, 2.5, 1.0)
   } else if wave == 17 {
-    (3, 15, 2.0, 1.2)
+    (Flying, 15, 2.0, 1.2)
   } else if wave == 18 {
-    (5, 8, 2.0, 1.0)
+    (Healer, 8, 2.0, 1.0)
   } else if wave == 19 {
-    (4, 3, 2.0, 0.8)
+    (Boss, 3, 2.0, 0.8)
   } else if wave == 20 {
-    (1, 30, 2.5, 1.5)
+    (Fast, 30, 2.5, 1.5)
   } else if wave == 21 {
-    (7, 10, 2.5, 1.0)
+    (Shield, 10, 2.5, 1.0)
   } else if wave == 22 {
-    (9, 8, 2.5, 1.1)
+    (Splitter, 8, 2.5, 1.1)
   } else if wave == 23 {
-    (8, 12, 2.0, 1.5)
+    (Camo, 12, 2.0, 1.5)
   } else if wave == 24 {
-    (4, 4, 2.5, 0.9)
+    (Boss, 4, 2.5, 0.9)
   } else if wave == 25 {
-    (6, 50, 1.5, 1.5)
+    (Swarm, 50, 1.5, 1.5)
   } else if wave == 26 {
-    (2, 20, 3.5, 1.0)
+    (Tank, 20, 3.5, 1.0)
   } else if wave == 27 {
-    (3, 20, 3.0, 1.3)
+    (Flying, 20, 3.0, 1.3)
   } else if wave == 28 {
-    (5, 12, 3.0, 1.1)
+    (Healer, 12, 3.0, 1.1)
   } else {
-    (4, 5, 3.5, 0.9)
+    (Boss, 5, 3.5, 0.9)
   }
 }
 
@@ -175,7 +175,7 @@ pub fn get_wave_info(wave : Int) -> @types.WaveInfo {
     {
       entries: [
         {
-          enemy_kind: 0,
+          enemy_kind: Basic,
           count: 8,
           hp_mult: 1.0,
           speed_mult: 1.0,
@@ -190,7 +190,7 @@ pub fn get_wave_info(wave : Int) -> @types.WaveInfo {
     {
       entries: [
         {
-          enemy_kind: 2,
+          enemy_kind: Tank,
           count: 5,
           hp_mult: 1.0,
           speed_mult: 1.0,
@@ -205,7 +205,7 @@ pub fn get_wave_info(wave : Int) -> @types.WaveInfo {
     {
       entries: [
         {
-          enemy_kind: 6,
+          enemy_kind: Swarm,
           count: 20,
           hp_mult: 0.8,
           speed_mult: 1.2,
@@ -220,7 +220,7 @@ pub fn get_wave_info(wave : Int) -> @types.WaveInfo {
     {
       entries: [
         {
-          enemy_kind: 3,
+          enemy_kind: Flying,
           count: 6,
           hp_mult: 1.0,
           speed_mult: 1.0,
@@ -235,7 +235,7 @@ pub fn get_wave_info(wave : Int) -> @types.WaveInfo {
     {
       entries: [
         {
-          enemy_kind: 5,
+          enemy_kind: Healer,
           count: 4,
           hp_mult: 1.0,
           speed_mult: 0.9,
@@ -250,7 +250,7 @@ pub fn get_wave_info(wave : Int) -> @types.WaveInfo {
     {
       entries: [
         {
-          enemy_kind: 4,
+          enemy_kind: Boss,
           count: 1,
           hp_mult: 1.0,
           speed_mult: 0.7,
@@ -265,7 +265,7 @@ pub fn get_wave_info(wave : Int) -> @types.WaveInfo {
     {
       entries: [
         {
-          enemy_kind: 7,
+          enemy_kind: Shield,
           count: 6,
           hp_mult: 1.5,
           speed_mult: 0.9,
@@ -280,7 +280,7 @@ pub fn get_wave_info(wave : Int) -> @types.WaveInfo {
     {
       entries: [
         {
-          enemy_kind: 8,
+          enemy_kind: Camo,
           count: 8,
           hp_mult: 1.2,
           speed_mult: 1.3,
@@ -295,7 +295,7 @@ pub fn get_wave_info(wave : Int) -> @types.WaveInfo {
     {
       entries: [
         {
-          enemy_kind: 9,
+          enemy_kind: Splitter,
           count: 5,
           hp_mult: 1.5,
           speed_mult: 1.0,
@@ -310,7 +310,7 @@ pub fn get_wave_info(wave : Int) -> @types.WaveInfo {
     {
       entries: [
         {
-          enemy_kind: 4,
+          enemy_kind: Boss,
           count: 2,
           hp_mult: 1.5,
           speed_mult: 0.8,
@@ -325,7 +325,7 @@ pub fn get_wave_info(wave : Int) -> @types.WaveInfo {
     {
       entries: [
         {
-          enemy_kind: 4,
+          enemy_kind: Boss,
           count: 3,
           hp_mult: 2.0,
           speed_mult: 0.8,
@@ -340,7 +340,7 @@ pub fn get_wave_info(wave : Int) -> @types.WaveInfo {
     {
       entries: [
         {
-          enemy_kind: 4,
+          enemy_kind: Boss,
           count: 4,
           hp_mult: 2.5,
           speed_mult: 0.9,
@@ -355,7 +355,7 @@ pub fn get_wave_info(wave : Int) -> @types.WaveInfo {
     {
       entries: [
         {
-          enemy_kind: 4,
+          enemy_kind: Boss,
           count: 5,
           hp_mult: 3.5,
           speed_mult: 0.9,

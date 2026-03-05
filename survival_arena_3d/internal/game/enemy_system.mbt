@@ -543,7 +543,7 @@ fn @types.Game::update_shielded_ai(
   dt : Float,
 ) -> Unit {
   let enemy = game.enemies[idx]
-  // @types.Shielded enemies always face the player (shield in front)
+  // Shielded enemies always face the player (shield in front)
   // Move toward player
   if dist > 0.5 {
     let nx = dx / dist

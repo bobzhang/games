@@ -4,23 +4,23 @@
 /// Advances one frame of dungeon gameplay by dispatching updates for the active game state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
-  if game.state == @types.state_menu {
+  if game.state == StateMenu {
     game.update_menu(dt)
-  } else if game.state == @types.state_playing {
+  } else if game.state == StatePlaying {
     game.update_playing(dt)
-  } else if game.state == @types.state_paused {
+  } else if game.state == StatePaused {
     game.update_paused(dt)
-  } else if game.state == @types.state_game_over {
+  } else if game.state == StateGameOver {
     game.update_game_over(dt)
-  } else if game.state == @types.state_level_up {
+  } else if game.state == StateLevelUp {
     game.update_level_up(dt)
-  } else if game.state == @types.state_floor_complete {
+  } else if game.state == StateFloorComplete {
     game.update_floor_complete(dt)
-  } else if game.state == @types.state_class_select {
+  } else if game.state == StateClassSelect {
     game.update_class_select(dt)
-  } else if game.state == @types.state_shop {
+  } else if game.state == StateShop {
     game.update_shop(dt)
-  } else if game.state == @types.state_shrine {
+  } else if game.state == StateShrine {
     game.update_shrine(dt)
   }
   // Update message
@@ -87,7 +87,7 @@ fn @types.Game::start_new_game(game : @types.Game) -> Unit {
   }
   // Generate first dungeon
   generate_dungeon(game)
-  game.state = @types.state_playing
+  game.state = StatePlaying
   @raylib.disable_cursor()
 }
 
@@ -95,7 +95,7 @@ fn @types.Game::start_new_game(game : @types.Game) -> Unit {
 fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   // Pause
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.state_paused
+    game.state = StatePaused
     @raylib.enable_cursor()
     return
   }
@@ -111,11 +111,11 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::update_paused(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
-    game.state = @types.state_playing
+    game.state = StatePlaying
     @raylib.disable_cursor()
   }
   if @raylib.is_key_pressed(@raylib.KeyM) {
-    game.state = @types.state_menu
+    game.state = StateMenu
     @raylib.enable_cursor()
   }
 }
@@ -128,7 +128,7 @@ fn @types.Game::update_game_over(game : @types.Game, _dt : Float) -> Unit {
     game.start_new_game()
   }
   if @raylib.is_key_pressed(@raylib.KeyM) {
-    game.state = @types.state_menu
+    game.state = StateMenu
     @raylib.enable_cursor()
   }
 }
@@ -137,7 +137,7 @@ fn @types.Game::update_game_over(game : @types.Game, _dt : Float) -> Unit {
 fn @types.Game::update_level_up(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    game.state = @types.state_playing
+    game.state = StatePlaying
     @raylib.disable_cursor()
   }
 }
@@ -149,16 +149,16 @@ fn @types.Game::update_floor_complete(game : @types.Game, _dt : Float) -> Unit {
     if game.current_floor < @types.max_floors - 1 {
       game.current_floor += 1
       generate_dungeon(game)
-      game.state = @types.state_playing
+      game.state = StatePlaying
       @raylib.disable_cursor()
     } else {
       // Game won - return to menu
-      game.state = @types.state_menu
+      game.state = StateMenu
       @raylib.enable_cursor()
     }
   }
   if @raylib.is_key_pressed(@raylib.KeyM) {
-    game.state = @types.state_menu
+    game.state = StateMenu
     @raylib.enable_cursor()
   }
 }
@@ -188,7 +188,7 @@ fn @types.Game::update_class_select(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_shop(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.state_playing
+    game.state = StatePlaying
     @raylib.disable_cursor()
   }
 }
@@ -196,7 +196,7 @@ fn @types.Game::update_shop(game : @types.Game, _dt : Float) -> Unit {
 ///|
 fn @types.Game::update_shrine(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.state_playing
+    game.state = StatePlaying
     @raylib.disable_cursor()
   }
 }

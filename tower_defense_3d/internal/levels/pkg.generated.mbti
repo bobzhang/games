@@ -30,7 +30,7 @@ pub fn get_map_data(Int) -> Array[String]
 
 pub fn get_map_info(Int) -> @types.MapInfo
 
-pub fn get_wave_def(Int) -> (Int, Int, Float, Float)
+pub fn get_wave_def(Int) -> (@types.EnemyKind, Int, Float, Float)
 
 pub fn get_wave_info(Int) -> @types.WaveInfo
 

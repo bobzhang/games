@@ -631,7 +631,7 @@ fn @types.Game::draw_wave_prep_overlay(game : @types.Game) -> Unit {
       @raylib.Color::new(0, 0, 0, 150),
     )
     let entry = info.entries[0]
-    let enemy_name = @types.enemy_name(@types.enemy_kind_from_int(entry.enemy_kind))
+    let enemy_name = @types.enemy_name(entry.enemy_kind)
     @raylib.draw_text(
       "Next: \{entry.count}x \{enemy_name}",
       (@types.screen_width - 280) / 2,

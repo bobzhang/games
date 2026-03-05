@@ -177,40 +177,47 @@ pub let theme_crypt : Int = 0
 // Game states
 
 ///|
-/// Numeric id for menu.
-pub let state_menu : Int = 0
+pub(all) enum GameState {
+  StateMenu
+  StatePlaying
+  StatePaused
+  StateGameOver
+  StateLevelUp
+  StateFloorComplete
+  StateShop
+  StateShrine
+  StateClassSelect
+} derive(Eq)
 
 ///|
-/// Numeric id for playing.
-pub let state_playing : Int = 1
+pub fn GameState::to_int(self : GameState) -> Int {
+  match self {
+    StateMenu => 0
+    StatePlaying => 1
+    StatePaused => 2
+    StateGameOver => 3
+    StateLevelUp => 4
+    StateFloorComplete => 5
+    StateShop => 7
+    StateShrine => 8
+    StateClassSelect => 11
+  }
+}
 
 ///|
-/// Numeric id for paused.
-pub let state_paused : Int = 2
-
-///|
-/// Numeric id for game over.
-pub let state_game_over : Int = 3
-
-///|
-/// Numeric id for level up.
-pub let state_level_up : Int = 4
-
-///|
-/// Numeric id for floor complete.
-pub let state_floor_complete : Int = 5
-
-///|
-/// Numeric id for shop.
-pub let state_shop : Int = 7
-
-///|
-/// Numeric id for shrine.
-pub let state_shrine : Int = 8
-
-///|
-/// Numeric id for class select.
-pub let state_class_select : Int = 11
+pub fn GameState::from_int(v : Int) -> GameState {
+  match v {
+    0 => StateMenu
+    1 => StatePlaying
+    2 => StatePaused
+    3 => StateGameOver
+    4 => StateLevelUp
+    5 => StateFloorComplete
+    7 => StateShop
+    8 => StateShrine
+    _ => StateClassSelect
+  }
+}
 
 // Player classes
 
