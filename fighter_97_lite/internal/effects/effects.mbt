@@ -12,8 +12,8 @@ pub fn push_camera_shake(game : @types.Game, amount : Float) -> Unit {
 ///|
 /// Returns an available particle slot index, or `-1` if full.
 pub fn allocate_particle_slot(list : Array[@types.Particle]) -> Int {
-  for i in 0..<list.length() {
-    if not(list[i].active) {
+  for i, slot in list {
+    if !slot.active {
       return i
     }
   }
