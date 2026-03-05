@@ -136,23 +136,25 @@ fn @types.Game::enter_game_over(game : @types.Game, reason : String) -> Unit {
 ///|
 /// Returns the index of the first inactive raider slot, or -1 if all slots are occupied.
 fn @types.Game::alloc_raider(game : @types.Game) -> Int {
-  for i in 0..<game.raiders.length() {
-    if not(game.raiders[i].active) {
-      return i
+  for i, slot in game.raiders {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   -1
+  }
 }
 
 ///|
 /// Returns the index of the first inactive flame slot, or -1 if all slots are occupied.
 fn @types.Game::alloc_flame(game : @types.Game) -> Int {
-  for i in 0..<game.flames.length() {
-    if not(game.flames[i].active) {
-      return i
+  for i, slot in game.flames {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   -1
+  }
 }
 
 ///|
