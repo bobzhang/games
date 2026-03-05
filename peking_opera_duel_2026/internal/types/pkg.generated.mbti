@@ -90,19 +90,11 @@ pub let stage_top : Int
 
 pub let stage_w : Int
 
-pub fn stance_color(Int, Int) -> @raylib.Color
+pub fn stance_color(Stance, Int) -> @raylib.Color
 
 pub let stance_count : Int
 
-pub let stance_fan : Int
-
-pub let stance_guard : Int
-
-pub fn stance_name(Int) -> String
-
-pub let stance_sleeve : Int
-
-pub let stance_spear : Int
+pub fn stance_name(Stance) -> String
 
 pub let target_fps : Int
 
@@ -122,7 +114,7 @@ pub(all) struct Game {
   mut state : GameState
   mut lane_x : Int
   mut lane_y : Int
-  mut stance : Int
+  mut stance : Stance
   mut health : Float
   mut harmony : Float
   mut acclaim : Int
@@ -170,10 +162,19 @@ pub fn InputState::new() -> Self
 pub(all) struct Prompt {
   lane_x : Int
   lane_y : Int
-  stance : Int
+  stance : Stance
   mut time_left : Float
 }
-pub fn Prompt::new(Int, Int, Int, Float) -> Self
+pub fn Prompt::new(Int, Int, Stance, Float) -> Self
+
+pub(all) enum Stance {
+  Spear
+  Fan
+  Guard
+  Sleeve
+}
+pub fn Stance::from_int(Int) -> Self
+pub impl Eq for Stance
 
 // Type aliases
 

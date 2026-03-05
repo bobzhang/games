@@ -162,31 +162,17 @@ pub let stage_time_base : Float
 
 pub let stage_time_bonus : Float
 
-pub let state_game_over : Int
-
-pub let state_play : Int
-
-pub let state_stage_clear : Int
-
-pub let state_title : Int
-
 pub let target_fps : Int
 
-pub let tea_berry : Int
-
-pub fn tea_color(Int) -> @raylib.Color
+pub fn tea_color(Tea) -> @raylib.Color
 
 pub let tea_count : Int
 
-pub let tea_jasmine : Int
+pub fn tea_from_index(Int) -> Tea
 
-pub let tea_matcha : Int
+pub fn tea_index(Tea) -> Int
 
-pub fn tea_name(Int) -> String
-
-pub let tea_oolong : Int
-
-pub let tea_puer : Int
+pub fn tea_name(Tea) -> String
 
 pub fn title_start_rect() -> (Float, Float, Float, Float)
 
@@ -197,7 +183,7 @@ pub let wrong_serve_penalty : Float
 // Types and methods
 pub(all) struct Customer {
   mut active : Bool
-  mut tea_type : Int
+  mut tea_type : Tea
   mut slot : Int
   mut x : Float
   mut y : Float
@@ -217,7 +203,7 @@ pub(all) struct Game {
   rings : Array[Ring]
   shadows : Array[Shadow]
   player : Player
-  mut state : Int
+  mut state : GameState
   mut stage : Int
   mut stage_goal : Int
   mut score : Int
@@ -232,8 +218,8 @@ pub(all) struct Game {
   mut spawn_cd : Float
   mut brew_active : Bool
   mut brew_t : Float
-  mut brew_type : Int
-  mut ready_cup : Int
+  mut brew_type : Tea
+  mut ready_cup : Tea?
   mut focus_mode : Bool
   mut flash_t : Float
   mut shake_t : Float
@@ -257,6 +243,14 @@ pub(all) struct Game {
 }
 pub fn Game::new() -> Self
 
+pub(all) enum GameState {
+  Title
+  Play
+  StageClear
+  GameOver
+}
+pub impl Eq for GameState
+
 pub(all) struct Player {
   mut x : Float
   mut y : Float
@@ -270,7 +264,7 @@ pub(all) struct Player {
   mut interact_t : Float
   mut anim_t : Float
   mut carry_water : Bool
-  mut carry_leaf : Int
+  mut carry_leaf : Tea?
 }
 pub fn Player::new() -> Self
 
@@ -306,6 +300,15 @@ pub(all) struct Spark {
   mut kind : Int
 }
 pub fn Spark::new() -> Self
+
+pub(all) enum Tea {
+  Jasmine
+  Oolong
+  Puer
+  Matcha
+  Berry
+}
+pub impl Eq for Tea
 
 // Type aliases
 

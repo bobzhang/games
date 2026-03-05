@@ -59,7 +59,7 @@ pub fn Order::new(id : Int) -> Order {
 ///|
 /// Item currently carried by the player hand.
 pub(all) struct Item {
-  mut kind : Int
+  mut kind : Ingredient
   mut flavor : Int
   mut prepped : Bool
 }
@@ -67,19 +67,19 @@ pub(all) struct Item {
 ///|
 /// Returns an empty hand item placeholder.
 pub fn Item::empty() -> Item {
-  { kind: ingredient_none, flavor: 0, prepped: false }
+  { kind: None, flavor: 0, prepped: false }
 }
 
 ///|
 /// Prep-board workflow state and pending output.
 pub(all) struct PrepState {
   mut active : Bool
-  mut kind : Int
+  mut kind : Ingredient
   mut flavor : Int
   mut progress : Float
   mut target : Float
   mut output_ready : Bool
-  mut out_kind : Int
+  mut out_kind : Ingredient
   mut out_flavor : Int
 }
 
@@ -88,12 +88,12 @@ pub(all) struct PrepState {
 pub fn PrepState::new() -> PrepState {
   {
     active: false,
-    kind: ingredient_none,
+    kind: None,
     flavor: 0,
     progress: 0.0,
     target: prep_target_base,
     output_ready: false,
-    out_kind: ingredient_none,
+    out_kind: None,
     out_flavor: 0,
   }
 }
@@ -134,7 +134,7 @@ pub(all) struct Game {
   prep : PrepState
   pot : PotState
   hand : Item
-  mut state : Int
+  mut state : GameState
   mut cursor_x : Int
   mut cursor_y : Int
   mut score : Int
@@ -166,7 +166,7 @@ pub fn Game::new() -> Game {
     prep: PrepState::new(),
     pot: PotState::new(),
     hand: Item::empty(),
-    state: state_title,
+    state: Title,
     cursor_x: 1,
     cursor_y: 1,
     score: 0,

@@ -3,7 +3,7 @@
 fn draw_duelist(
   x : Int,
   y : Int,
-  stance : Int,
+  stance : @types.Stance,
   lane_x : Int,
   lane_y : Int,
   body : @raylib.Color,
@@ -27,23 +27,28 @@ fn draw_duelist(
   let mut right_hand_x = x + 98 + lean
   let mut right_hand_y = y - 22 + lift
 
-  if stance == @types.stance_spear {
-    left_hand_y = left_hand_y - 42
-    right_hand_y = right_hand_y - 64
-    right_hand_x = right_hand_x + 28
-  } else if stance == @types.stance_fan {
-    left_hand_y = left_hand_y - 20
-    right_hand_y = right_hand_y - 44
-    right_hand_x = right_hand_x + 18
-  } else if stance == @types.stance_guard {
-    left_hand_y = left_hand_y - 8
-    right_hand_y = right_hand_y - 8
-    left_hand_x = left_hand_x + 14
-    right_hand_x = right_hand_x - 14
-  } else {
-    left_hand_y = left_hand_y - 44
-    left_hand_x = left_hand_x - 22
-    right_hand_y = right_hand_y - 18
+  match stance {
+    Spear => {
+      left_hand_y = left_hand_y - 42
+      right_hand_y = right_hand_y - 64
+      right_hand_x = right_hand_x + 28
+    }
+    Fan => {
+      left_hand_y = left_hand_y - 20
+      right_hand_y = right_hand_y - 44
+      right_hand_x = right_hand_x + 18
+    }
+    Guard => {
+      left_hand_y = left_hand_y - 8
+      right_hand_y = right_hand_y - 8
+      left_hand_x = left_hand_x + 14
+      right_hand_x = right_hand_x - 14
+    }
+    Sleeve => {
+      left_hand_y = left_hand_y - 44
+      left_hand_x = left_hand_x - 22
+      right_hand_y = right_hand_y - 18
+    }
   }
 
   @raylib.draw_line(head_x - 30, shoulder_y, left_hand_x, left_hand_y, body)
@@ -55,34 +60,37 @@ fn draw_duelist(
   @raylib.draw_line(x - 18 + lean, hip_y, x - 52 + lean, y + 188 + lift, body)
   @raylib.draw_line(x + 18 + lean, hip_y, x + 52 + lean, y + 188 + lift, body)
 
-  if stance == @types.stance_spear {
-    @raylib.draw_line(
-      right_hand_x,
-      right_hand_y,
-      right_hand_x + 80,
-      right_hand_y - 44,
-      accent,
-    )
-    @raylib.draw_circle(right_hand_x + 84, right_hand_y - 46, 6.0, accent)
-  } else if stance == @types.stance_fan {
-    @raylib.draw_circle(right_hand_x + 22, right_hand_y - 2, 18.0, accent)
-  } else if stance == @types.stance_guard {
-    @raylib.draw_rectangle(x - 40 + lean, y - 52 + lift, 80, 72, accent)
-  } else {
-    @raylib.draw_line(
-      left_hand_x,
-      left_hand_y,
-      left_hand_x - 64,
-      left_hand_y + 34,
-      accent,
-    )
-    @raylib.draw_line(
-      left_hand_x,
-      left_hand_y,
-      left_hand_x - 68,
-      left_hand_y - 10,
-      accent,
-    )
+  match stance {
+    Spear => {
+      @raylib.draw_line(
+        right_hand_x,
+        right_hand_y,
+        right_hand_x + 80,
+        right_hand_y - 44,
+        accent,
+      )
+      @raylib.draw_circle(right_hand_x + 84, right_hand_y - 46, 6.0, accent)
+    }
+    Fan =>
+      @raylib.draw_circle(right_hand_x + 22, right_hand_y - 2, 18.0, accent)
+    Guard =>
+      @raylib.draw_rectangle(x - 40 + lean, y - 52 + lift, 80, 72, accent)
+    Sleeve => {
+      @raylib.draw_line(
+        left_hand_x,
+        left_hand_y,
+        left_hand_x - 64,
+        left_hand_y + 34,
+        accent,
+      )
+      @raylib.draw_line(
+        left_hand_x,
+        left_hand_y,
+        left_hand_x - 68,
+        left_hand_y - 10,
+        accent,
+      )
+    }
   }
 
   if guard_flash_t > 0.0 {
@@ -175,7 +183,7 @@ fn @types.Game::draw_stage_actors(game : @types.Game) -> Unit {
   let rival_stance = if game.prompt_active {
     game.prompt.stance
   } else {
-    (game.crowd_wave_t * 1.2).to_int() % @types.stance_count
+    @types.Stance::from_int((game.crowd_wave_t * 1.2).to_int())
   }
 
   let rival_pulse : Float = 0.5 + 0.5 * @math.sinf(game.crowd_wave_t * 2.1)

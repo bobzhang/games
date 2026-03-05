@@ -1,4 +1,23 @@
 ///|
+/// Identifies the current top-level scene or phase of the game loop.
+pub(all) enum GameState {
+  Title
+  Play
+  StageClear
+  GameOver
+} derive(Eq)
+
+///|
+/// Identifies a tea variety for orders, brewing, and serving.
+pub(all) enum Tea {
+  Jasmine
+  Oolong
+  Puer
+  Matcha
+  Berry
+} derive(Eq)
+
+///|
 /// Window width in pixels.
 pub let screen_w : Int = 1280
 
@@ -29,42 +48,6 @@ pub let play_top : Float = Float::from_int(hud_h) + 18.0
 ///|
 /// Bottom play-area boundary.
 pub let play_bottom : Float = Float::from_int(screen_h) - 26.0
-
-///|
-/// Title screen state id.
-pub let state_title : Int = 0
-
-///|
-/// Active stage state id.
-pub let state_play : Int = 1
-
-///|
-/// Stage-clear transition state id.
-pub let state_stage_clear : Int = 2
-
-///|
-/// Game-over state id.
-pub let state_game_over : Int = 3
-
-///|
-/// Tea id for jasmine orders.
-pub let tea_jasmine : Int = 0
-
-///|
-/// Tea id for oolong orders.
-pub let tea_oolong : Int = 1
-
-///|
-/// Tea id for pu-erh orders.
-pub let tea_puer : Int = 2
-
-///|
-/// Tea id for matcha orders.
-pub let tea_matcha : Int = 3
-
-///|
-/// Tea id for berry blend orders.
-pub let tea_berry : Int = 4
 
 ///|
 /// Number of distinct tea types.
@@ -229,9 +212,34 @@ pub fn leaf_x() -> Float {
 }
 
 ///|
-/// Returns the y-coordinate of a tea leaf slot for a tea id.
+/// Returns the y-coordinate of a tea leaf slot for a tea index.
 pub fn leaf_y(tea : Int) -> Float {
   182.0 + Float::from_int(tea.clamp(min=0, max=tea_count - 1)) * 86.0
+}
+
+///|
+/// Returns the integer index for a Tea enum value.
+pub fn tea_index(t : Tea) -> Int {
+  match t {
+    Jasmine => 0
+    Oolong => 1
+    Puer => 2
+    Matcha => 3
+    Berry => 4
+  }
+}
+
+///|
+/// Returns the Tea enum for an integer index, defaulting to Jasmine.
+pub fn tea_from_index(i : Int) -> Tea {
+  match i {
+    0 => Jasmine
+    1 => Oolong
+    2 => Puer
+    3 => Matcha
+    4 => Berry
+    _ => Jasmine
+  }
 }
 
 ///|
@@ -294,34 +302,26 @@ pub fn focus_col() -> @raylib.Color {
 }
 
 ///|
-/// Returns the display name for a tea id.
-pub fn tea_name(t : Int) -> String {
-  if t == tea_jasmine {
-    "JASMINE"
-  } else if t == tea_oolong {
-    "OOLONG"
-  } else if t == tea_puer {
-    "PU-ERH"
-  } else if t == tea_matcha {
-    "MATCHA"
-  } else {
-    "BERRY"
+/// Returns the display name for a tea type.
+pub fn tea_name(t : Tea) -> String {
+  match t {
+    Jasmine => "JASMINE"
+    Oolong => "OOLONG"
+    Puer => "PU-ERH"
+    Matcha => "MATCHA"
+    Berry => "BERRY"
   }
 }
 
 ///|
-/// Returns the cup color used for a tea id.
-pub fn tea_color(t : Int) -> @raylib.Color {
-  if t == tea_jasmine {
-    @raylib.Color::new(246, 238, 178, 255)
-  } else if t == tea_oolong {
-    @raylib.Color::new(220, 154, 110, 255)
-  } else if t == tea_puer {
-    @raylib.Color::new(164, 94, 74, 255)
-  } else if t == tea_matcha {
-    @raylib.Color::new(124, 208, 126, 255)
-  } else {
-    @raylib.Color::new(236, 112, 152, 255)
+/// Returns the cup color used for a tea type.
+pub fn tea_color(t : Tea) -> @raylib.Color {
+  match t {
+    Jasmine => @raylib.Color::new(246, 238, 178, 255)
+    Oolong => @raylib.Color::new(220, 154, 110, 255)
+    Puer => @raylib.Color::new(164, 94, 74, 255)
+    Matcha => @raylib.Color::new(124, 208, 126, 255)
+    Berry => @raylib.Color::new(236, 112, 152, 255)
   }
 }
 

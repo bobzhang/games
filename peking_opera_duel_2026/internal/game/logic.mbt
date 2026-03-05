@@ -25,7 +25,7 @@ fn @types.Game::init_title_state(game : @types.Game) -> Unit {
   game.state = Title
   game.lane_x = 0
   game.lane_y = 0
-  game.stance = @types.stance_spear
+  game.stance = Spear
   game.health = @types.health_max
   game.harmony = @types.harmony_max
   game.acclaim = 0
@@ -37,7 +37,7 @@ fn @types.Game::init_title_state(game : @types.Game) -> Unit {
   game.beat_interval = @types.beat_start_interval
   game.next_prompt_t = 0.7
   game.prompt_active = false
-  game.prompt = @types.Prompt::new(0, 0, @types.stance_spear, 0.0)
+  game.prompt = @types.Prompt::new(0, 0, Spear, 0.0)
   game.prompt_serial = 0
   game.burst_t = 0.0
   game.burst_cd = 0.0
@@ -52,7 +52,7 @@ fn @types.Game::start_duel(game : @types.Game) -> Unit {
   game.state = Playing
   game.lane_x = 0
   game.lane_y = 0
-  game.stance = @types.stance_spear
+  game.stance = Spear
   game.health = @types.health_max
   game.harmony = @types.harmony_max
   game.acclaim = 0
@@ -64,7 +64,7 @@ fn @types.Game::start_duel(game : @types.Game) -> Unit {
   game.beat_interval = @types.beat_start_interval
   game.next_prompt_t = 0.9
   game.prompt_active = false
-  game.prompt = @types.Prompt::new(0, 0, @types.stance_spear, 0.0)
+  game.prompt = @types.Prompt::new(0, 0, Spear, 0.0)
   game.prompt_serial = 0
   game.burst_t = 0.0
   game.burst_cd = 0.0
@@ -102,13 +102,13 @@ fn @types.Game::apply_axis_focus_and_stance(game : @types.Game) -> Unit {
   }
 
   if game.input.axis_y < 0 {
-    game.stance = @types.stance_spear
+    game.stance = Spear
   } else if game.input.axis_x > 0 {
-    game.stance = @types.stance_fan
+    game.stance = Fan
   } else if game.input.axis_y > 0 {
-    game.stance = @types.stance_guard
+    game.stance = Guard
   } else if game.input.axis_x < 0 {
-    game.stance = @types.stance_sleeve
+    game.stance = Sleeve
   }
 }
 
@@ -125,13 +125,15 @@ fn @types.Game::spawn_prompt(game : @types.Game) -> Unit {
   let lane_y = @raylib.get_random_value(
     @types.lane_axis_min, @types.lane_axis_max,
   )
-  let mut stance = @raylib.get_random_value(0, @types.stance_count - 1)
+  let mut stance_i = @raylib.get_random_value(0, @types.stance_count - 1)
+  let mut stance = @types.Stance::from_int(stance_i)
 
   if game.prompt_serial > 0 &&
     lane_x == prev_lane_x &&
     lane_y == prev_lane_y &&
     stance == prev_stance {
-    stance = (stance + 1) % @types.stance_count
+    stance_i = (stance_i + 1) % @types.stance_count
+    stance = @types.Stance::from_int(stance_i)
     if lane_x == 0 && lane_y == 0 {
       lane_x = 1
     }
@@ -281,7 +283,7 @@ fn @types.Game::try_deflect(game : @types.Game) -> Unit {
     }
   }
 
-  game.stance = @types.stance_guard
+  game.stance = Guard
   game.guard_flash_t = 0.22
   game.harmony = @types.maxf(0.0, game.harmony - 1.0)
   @types.set_message(game, "Guard transition.", 0.5)

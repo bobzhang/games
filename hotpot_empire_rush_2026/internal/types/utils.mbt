@@ -36,75 +36,40 @@ pub fn panel_w() -> Int {
 
 ///|
 /// Maps station grid coordinates to a station id.
-pub fn station_at(x : Int, y : Int) -> Int {
-  if y == 0 {
-    if x == 0 {
-      station_broth
-    } else if x == 1 {
-      station_protein
-    } else if x == 2 {
-      station_veg
-    } else if x == 3 {
-      station_spice
-    } else {
-      station_none
-    }
-  } else if y == 1 {
-    if x == 0 {
-      station_prep
-    } else if x == 1 {
-      station_pot
-    } else if x == 2 {
-      station_serve
-    } else if x == 3 {
-      station_rush
-    } else {
-      station_none
-    }
-  } else if y == 2 {
-    if x == 0 {
-      station_trash
-    } else if x == 1 {
-      station_queue
-    } else if x == 2 {
-      station_reputation
-    } else if x == 3 {
-      station_storage
-    } else {
-      station_none
-    }
-  } else {
-    station_none
+pub fn station_at(x : Int, y : Int) -> Station {
+  match (y, x) {
+    (0, 0) => Broth
+    (0, 1) => Protein
+    (0, 2) => Veg
+    (0, 3) => Spice
+    (1, 0) => Prep
+    (1, 1) => Pot
+    (1, 2) => Serve
+    (1, 3) => Rush
+    (2, 0) => Trash
+    (2, 1) => Queue
+    (2, 2) => Reputation
+    (2, 3) => Storage
+    _ => Storage
   }
 }
 
 ///|
 /// Returns human-readable label for a station id.
-pub fn station_name(station : Int) -> String {
-  if station == station_broth {
-    "Broth Kettle"
-  } else if station == station_protein {
-    "Protein Crate"
-  } else if station == station_veg {
-    "Veg Basket"
-  } else if station == station_spice {
-    "Chili Rack"
-  } else if station == station_prep {
-    "Prep Board"
-  } else if station == station_pot {
-    "Hotpot Base"
-  } else if station == station_serve {
-    "Serve Counter"
-  } else if station == station_rush {
-    "Rush Bell"
-  } else if station == station_trash {
-    "Waste Bin"
-  } else if station == station_queue {
-    "Queue Monitor"
-  } else if station == station_reputation {
-    "Street Cred"
-  } else {
-    "Dry Storage"
+pub fn station_name(station : Station) -> String {
+  match station {
+    Broth => "Broth Kettle"
+    Protein => "Protein Crate"
+    Veg => "Veg Basket"
+    Spice => "Chili Rack"
+    Prep => "Prep Board"
+    Pot => "Hotpot Base"
+    Serve => "Serve Counter"
+    Rush => "Rush Bell"
+    Trash => "Waste Bin"
+    Queue => "Queue Monitor"
+    Reputation => "Street Cred"
+    Storage => "Dry Storage"
   }
 }
 

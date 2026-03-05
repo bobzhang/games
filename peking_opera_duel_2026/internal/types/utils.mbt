@@ -32,15 +32,12 @@ pub fn maxf(a : Float, b : Float) -> Float {
 
 ///|
 /// Convert a stance id to its HUD display name.
-pub fn stance_name(stance : Int) -> String {
-  if stance == stance_spear {
-    "Spear Lift"
-  } else if stance == stance_fan {
-    "Fan Sweep"
-  } else if stance == stance_guard {
-    "Guard Frame"
-  } else {
-    "Sleeve Arc"
+pub fn stance_name(stance : Stance) -> String {
+  match stance {
+    Spear => "Spear Lift"
+    Fan => "Fan Sweep"
+    Guard => "Guard Frame"
+    Sleeve => "Sleeve Arc"
   }
 }
 
@@ -73,15 +70,12 @@ pub fn col(r : Int, g : Int, b : Int, a : Int) -> @raylib.Color {
 
 ///|
 /// Select the UI color for a stance with the given alpha.
-pub fn stance_color(stance : Int, alpha : Int) -> @raylib.Color {
-  if stance == stance_spear {
-    col(231, 103, 80, alpha)
-  } else if stance == stance_fan {
-    col(255, 195, 84, alpha)
-  } else if stance == stance_guard {
-    col(113, 200, 149, alpha)
-  } else {
-    col(134, 157, 245, alpha)
+pub fn stance_color(stance : Stance, alpha : Int) -> @raylib.Color {
+  match stance {
+    Spear => col(231, 103, 80, alpha)
+    Fan => col(255, 195, 84, alpha)
+    Guard => col(113, 200, 149, alpha)
+    Sleeve => col(134, 157, 245, alpha)
   }
 }
 

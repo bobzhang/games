@@ -25,7 +25,7 @@ pub(all) struct InputState {
 pub(all) struct Prompt {
   lane_x : Int
   lane_y : Int
-  stance : Int
+  stance : Stance
   mut time_left : Float
 }
 
@@ -36,7 +36,7 @@ pub(all) struct Game {
   mut state : GameState
   mut lane_x : Int
   mut lane_y : Int
-  mut stance : Int
+  mut stance : Stance
   mut health : Float
   mut harmony : Float
   mut acclaim : Int
@@ -80,7 +80,7 @@ pub fn InputState::new() -> InputState {
 pub fn Prompt::new(
   lane_x : Int,
   lane_y : Int,
-  stance : Int,
+  stance : Stance,
   time_left : Float,
 ) -> Prompt {
   { lane_x, lane_y, stance, time_left }
@@ -94,7 +94,7 @@ pub fn Game::new() -> Game {
     state: Title,
     lane_x: 0,
     lane_y: 0,
-    stance: stance_spear,
+    stance: Spear,
     health: health_max,
     harmony: harmony_max,
     acclaim: 0,
@@ -107,7 +107,7 @@ pub fn Game::new() -> Game {
     beat_interval: beat_start_interval,
     next_prompt_t: 0.7,
     prompt_active: false,
-    prompt: Prompt::new(0, 0, stance_spear, 0.0),
+    prompt: Prompt::new(0, 0, Spear, 0.0),
     prompt_serial: 0,
     burst_t: 0.0,
     burst_cd: 0.0,

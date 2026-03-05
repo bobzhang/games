@@ -2,7 +2,7 @@
 fn @types.Game::clear_customers(game : @types.Game) -> Unit {
   for customer in game.customers {
     customer.active = false
-    customer.tea_type = @types.tea_jasmine
+    customer.tea_type = Jasmine
     customer.slot = 0
     customer.x = 0.0
     customer.y = 0.0
@@ -69,7 +69,7 @@ fn @types.Game::reset_player(game : @types.Game) -> Unit {
   game.player.interact_t = 0.0
   game.player.anim_t = 0.0
   game.player.carry_water = false
-  game.player.carry_leaf = -1
+  game.player.carry_leaf = None
 }
 
 ///|
@@ -282,33 +282,33 @@ fn customer_base_patience(stage : Int) -> Float {
 }
 
 ///|
-fn pick_tea_type(stage : Int) -> Int {
+fn pick_tea_type(stage : Int) -> @types.Tea {
   let r = @types.randi(0, 99)
 
   if stage <= 1 {
     if r < 40 {
-      @types.tea_jasmine
+      Jasmine
     } else if r < 72 {
-      @types.tea_oolong
+      Oolong
     } else if r < 86 {
-      @types.tea_matcha
+      Matcha
     } else {
-      @types.tea_berry
+      Berry
     }
   } else if stage <= 3 {
     if r < 24 {
-      @types.tea_jasmine
+      Jasmine
     } else if r < 46 {
-      @types.tea_oolong
+      Oolong
     } else if r < 66 {
-      @types.tea_puer
+      Puer
     } else if r < 84 {
-      @types.tea_matcha
+      Matcha
     } else {
-      @types.tea_berry
+      Berry
     }
   } else {
-    @types.randi(0, @types.tea_count - 1)
+    @types.tea_from_index(@types.randi(0, @types.tea_count - 1))
   }
 }
 
@@ -334,7 +334,7 @@ fn @types.Game::spawn_customer(game : @types.Game) -> Unit {
   game.customers[i].patience_max = @types.maxf(6.0, patience_max)
   game.customers[i].patience = game.customers[i].patience_max
   game.customers[i].life = 0.0
-  game.customers[i].reward = 96 + tea * 24 + game.stage * 12
+  game.customers[i].reward = 96 + @types.tea_index(tea) * 24 + game.stage * 12
   game.customers[i].mood = 1.0
   game.customers[i].served_t = 0.0
   game.customers[i].angry = false
@@ -390,9 +390,12 @@ fn @types.Game::start_brew(game : @types.Game) -> Unit {
     @types.brew_time_min,
     @types.brew_time_base - Float::from_int(game.stage - 1) * 0.12,
   )
-  game.brew_type = game.player.carry_leaf
+  match game.player.carry_leaf {
+    Some(leaf) => game.brew_type = leaf
+    None => ()
+  }
   game.player.carry_water = false
-  game.player.carry_leaf = -1
+  game.player.carry_leaf = None
 
   game.spawn_ring(@types.brew_x, @types.brew_y, 12.0, 0.42, 0)
   game.burst_sparks(@types.brew_x, @types.brew_y, 12, 0)
@@ -401,7 +404,7 @@ fn @types.Game::start_brew(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::finish_brew(game : @types.Game) -> Unit {
   game.brew_active = false
-  game.ready_cup = game.brew_type
+  game.ready_cup = Some(game.brew_type)
 
   game.spawn_ring(@types.brew_x, @types.brew_y, 16.0, 0.7, 2)
   game.burst_sparks(@types.brew_x, @types.brew_y, 22, 2)
@@ -418,7 +421,7 @@ fn @types.Game::serve_customer(game : @types.Game, ci : Int) -> Unit {
     return
   }
 
-  if game.ready_cup == c.tea_type {
+  if game.ready_cup == Some(c.tea_type) {
     game.customers[ci].active = false
     game.served = game.served + 1
     game.add_score(game.customers[ci].reward)
@@ -444,7 +447,7 @@ fn @types.Game::serve_customer(game : @types.Game, ci : Int) -> Unit {
     game.burst_sparks(c.x, c.y, 16, 1)
   }
 
-  game.ready_cup = -1
+  game.ready_cup = None
   game.player.interact_t = 0.2
 }
 
@@ -465,7 +468,7 @@ fn @types.Game::apply_interact(game : @types.Game) -> Unit {
 
   let leaf = nearest_leaf_station(px, py, @types.interact_reach)
   if leaf >= 0 {
-    game.player.carry_leaf = leaf
+    game.player.carry_leaf = Some(@types.tea_from_index(leaf))
     game.player.interact_t = 0.22
     game.spawn_ring(@types.leaf_x(), @types.leaf_y(leaf), 8.0, 0.36, 0)
     game.burst_sparks(@types.leaf_x(), @types.leaf_y(leaf), 8, 0)
@@ -476,16 +479,16 @@ fn @types.Game::apply_interact(game : @types.Game) -> Unit {
       px, py, @types.brew_x, @types.brew_y, @types.interact_reach,
     ) {
     if not(game.brew_active) &&
-      game.ready_cup < 0 &&
+      game.ready_cup is None &&
       game.player.carry_water &&
-      game.player.carry_leaf >= 0 {
+      not(game.player.carry_leaf is None) {
       game.start_brew()
       game.player.interact_t = 0.26
     }
     return
   }
 
-  if game.ready_cup >= 0 &&
+  if not(game.ready_cup is None) &&
     @types.near_station(
       px,
       py,
@@ -793,7 +796,7 @@ fn @types.Game::start_stage(game : @types.Game, stage : Int) -> Unit {
   game.clear_shadows()
   game.reset_player()
 
-  game.state = @types.state_play
+  game.state = Play
   game.stage = stage
   game.stage_goal = @types.stage_goal_base +
     (stage - 1) * @types.stage_goal_bonus
@@ -806,8 +809,8 @@ fn @types.Game::start_stage(game : @types.Game, stage : Int) -> Unit {
   game.spawn_cd = 0.6
   game.brew_active = false
   game.brew_t = 0.0
-  game.brew_type = @types.tea_jasmine
-  game.ready_cup = -1
+  game.brew_type = Jasmine
+  game.ready_cup = None
   game.focus_mode = false
   game.clear_combo()
 
@@ -844,12 +847,12 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   game.update_effects(dt)
 
   if game.reputation <= 0.0 || game.time_left <= 0.0 {
-    game.state = @types.state_game_over
+    game.state = GameOver
     game.result_t = 0.0
   }
 
-  if game.state == @types.state_play && game.score >= game.stage_goal {
-    game.state = @types.state_stage_clear
+  if game.state == Play && game.score >= game.stage_goal {
+    game.state = StageClear
     game.result_t = 0.0
     game.add_score(@types.stage_clear_bonus + game.stage * 120)
     game.reputation = @types.minf(@types.reputation_max, game.reputation + 12.0)
@@ -917,24 +920,19 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     game.touch_count > 0
 
   // Dispatch input based on state
-  if game.state == @types.state_title {
-    game.update_title_input()
-  } else if game.state == @types.state_play {
-    game.update_play_input()
-  } else {
-    game.update_result_input()
+  match game.state {
+    Title => game.update_title_input()
+    Play => game.update_play_input()
+    _ => game.update_result_input()
   }
 
   game.update_timers(dt)
 
-  if game.state == @types.state_title {
-    game.update_title(dt)
-  } else if game.state == @types.state_play {
-    game.update_play(dt)
-  } else if game.state == @types.state_stage_clear {
-    game.update_stage_clear(dt)
-  } else {
-    game.update_game_over(dt)
+  match game.state {
+    Title => game.update_title(dt)
+    Play => game.update_play(dt)
+    StageClear => game.update_stage_clear(dt)
+    GameOver => game.update_game_over(dt)
   }
 
   if game.score > game.best_score {

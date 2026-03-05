@@ -22,12 +22,6 @@ pub let combo_keep_time : Float
 
 pub let cook_target_base : Float
 
-pub let ingredient_none : Int
-
-pub let ingredient_protein : Int
-
-pub let ingredient_veg : Int
-
 pub fn kitchen_h() -> Int
 
 pub let kitchen_left : Int
@@ -80,53 +74,19 @@ pub let spice_levels : Int
 
 pub fn spice_name(Int) -> String
 
-pub let state_game_over : Int
-
-pub let state_paused : Int
-
-pub let state_playing : Int
-
-pub let state_title : Int
-
-pub fn station_at(Int, Int) -> Int
-
-pub let station_broth : Int
+pub fn station_at(Int, Int) -> Station
 
 pub let station_cols : Int
 
 pub let station_gap : Int
 
-pub fn station_name(Int) -> String
-
-pub let station_none : Int
-
-pub let station_pot : Int
-
-pub let station_prep : Int
-
-pub let station_protein : Int
-
-pub let station_queue : Int
-
-pub let station_reputation : Int
+pub fn station_name(Station) -> String
 
 pub let station_rows : Int
-
-pub let station_rush : Int
-
-pub let station_serve : Int
-
-pub let station_spice : Int
-
-pub let station_storage : Int
 
 pub let station_tile_h : Int
 
 pub let station_tile_w : Int
-
-pub let station_trash : Int
-
-pub let station_veg : Int
 
 pub fn station_x(Int) -> Int
 
@@ -147,7 +107,7 @@ pub(all) struct Game {
   prep : PrepState
   pot : PotState
   hand : Item
-  mut state : Int
+  mut state : GameState
   mut cursor_x : Int
   mut cursor_y : Int
   mut score : Int
@@ -171,6 +131,21 @@ pub(all) struct Game {
 }
 pub fn Game::new() -> Self
 
+pub(all) enum GameState {
+  Title
+  Playing
+  Paused
+  GameOver
+}
+pub impl Eq for GameState
+
+pub(all) enum Ingredient {
+  None
+  Protein
+  Veg
+}
+pub impl Eq for Ingredient
+
 pub(all) struct InputState {
   mut move_x : Int
   mut move_y : Int
@@ -184,7 +159,7 @@ pub(all) struct InputState {
 pub fn InputState::new() -> Self
 
 pub(all) struct Item {
-  mut kind : Int
+  mut kind : Ingredient
   mut flavor : Int
   mut prepped : Bool
 }
@@ -217,15 +192,31 @@ pub fn PotState::new() -> Self
 
 pub(all) struct PrepState {
   mut active : Bool
-  mut kind : Int
+  mut kind : Ingredient
   mut flavor : Int
   mut progress : Float
   mut target : Float
   mut output_ready : Bool
-  mut out_kind : Int
+  mut out_kind : Ingredient
   mut out_flavor : Int
 }
 pub fn PrepState::new() -> Self
+
+pub(all) enum Station {
+  Broth
+  Protein
+  Veg
+  Spice
+  Prep
+  Pot
+  Serve
+  Rush
+  Trash
+  Queue
+  Reputation
+  Storage
+}
+pub impl Eq for Station
 
 // Type aliases
 

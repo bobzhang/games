@@ -1,30 +1,19 @@
 ///|
 /// Returns the background fill color for a given station id.
-fn station_color(station : Int) -> @raylib.Color {
-  if station == @types.station_broth {
-    @raylib.Color::new(120, 62, 48, 255)
-  } else if station == @types.station_protein {
-    @raylib.Color::new(108, 44, 52, 255)
-  } else if station == @types.station_veg {
-    @raylib.Color::new(44, 96, 60, 255)
-  } else if station == @types.station_spice {
-    @raylib.Color::new(136, 70, 26, 255)
-  } else if station == @types.station_prep {
-    @raylib.Color::new(72, 88, 102, 255)
-  } else if station == @types.station_pot {
-    @raylib.Color::new(84, 56, 106, 255)
-  } else if station == @types.station_serve {
-    @raylib.Color::new(34, 118, 126, 255)
-  } else if station == @types.station_rush {
-    @raylib.Color::new(122, 82, 36, 255)
-  } else if station == @types.station_trash {
-    @raylib.Color::new(62, 62, 62, 255)
-  } else if station == @types.station_queue {
-    @raylib.Color::new(56, 72, 116, 255)
-  } else if station == @types.station_reputation {
-    @raylib.Color::new(92, 54, 92, 255)
-  } else {
-    @raylib.Color::new(58, 70, 74, 255)
+fn station_color(station : @types.Station) -> @raylib.Color {
+  match station {
+    Broth => @raylib.Color::new(120, 62, 48, 255)
+    Protein => @raylib.Color::new(108, 44, 52, 255)
+    Veg => @raylib.Color::new(44, 96, 60, 255)
+    Spice => @raylib.Color::new(136, 70, 26, 255)
+    Prep => @raylib.Color::new(72, 88, 102, 255)
+    Pot => @raylib.Color::new(84, 56, 106, 255)
+    Serve => @raylib.Color::new(34, 118, 126, 255)
+    Rush => @raylib.Color::new(122, 82, 36, 255)
+    Trash => @raylib.Color::new(62, 62, 62, 255)
+    Queue => @raylib.Color::new(56, 72, 116, 255)
+    Reputation => @raylib.Color::new(92, 54, 92, 255)
+    Storage => @raylib.Color::new(58, 70, 74, 255)
   }
 }
 
@@ -84,18 +73,20 @@ fn veg_slot_text(v : Int) -> String {
 ///|
 /// Returns a display string for the item currently held in hand.
 fn @types.Game::hand_text(game : @types.Game) -> String {
-  if game.hand.kind == @types.ingredient_none {
-    "Empty"
-  } else if game.hand.kind == @types.ingredient_protein {
-    if game.hand.prepped {
-      "Sliced \{@types.protein_name(game.hand.flavor)}"
-    } else {
-      "Raw \{@types.protein_name(game.hand.flavor)}"
-    }
-  } else if game.hand.prepped {
-    "Clean \{@types.veg_name(game.hand.flavor)}"
-  } else {
-    "Raw \{@types.veg_name(game.hand.flavor)}"
+  match game.hand.kind {
+    None => "Empty"
+    Protein =>
+      if game.hand.prepped {
+        "Sliced \{@types.protein_name(game.hand.flavor)}"
+      } else {
+        "Raw \{@types.protein_name(game.hand.flavor)}"
+      }
+    Veg =>
+      if game.hand.prepped {
+        "Clean \{@types.veg_name(game.hand.flavor)}"
+      } else {
+        "Raw \{@types.veg_name(game.hand.flavor)}"
+      }
   }
 }
 
@@ -152,193 +143,219 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
 /// Draws contextual status text and controls inside a station tile.
 fn @types.Game::draw_station_info(
   game : @types.Game,
-  station : Int,
+  station : @types.Station,
   x : Int,
   y : Int,
 ) -> Unit {
   let text_color = @raylib.Color::new(238, 244, 252, 246)
 
-  if station == @types.station_broth {
-    @raylib.draw_text(
-      "Current: \{broth_slot_text(game.pot.broth)}",
-      x + 14,
-      y + 64,
-      24,
-      text_color,
-    )
-    @raylib.draw_text("J: cycle broth", x + 14, y + 96, 20, text_color)
-  } else if station == @types.station_protein {
-    @raylib.draw_text(
-      "Next raw: \{@types.protein_name(game.next_protein_pick)}",
-      x + 14,
-      y + 64,
-      24,
-      text_color,
-    )
-    @raylib.draw_text("J: pick protein", x + 14, y + 96, 20, text_color)
-  } else if station == @types.station_veg {
-    @raylib.draw_text(
-      "Next raw: \{@types.veg_name(game.next_veg_pick)}",
-      x + 14,
-      y + 64,
-      24,
-      text_color,
-    )
-    @raylib.draw_text("J: pick veg", x + 14, y + 96, 20, text_color)
-  } else if station == @types.station_spice {
-    @raylib.draw_text(
-      "Pot spice: \{@types.spice_name(game.pot.spice)}",
-      x + 14,
-      y + 64,
-      24,
-      text_color,
-    )
-    @raylib.draw_text("J: cycle spice", x + 14, y + 96, 20, text_color)
-  } else if station == @types.station_prep {
-    if game.prep.active {
-      let ratio = game.prep.progress / @types.maxf(game.prep.target, 0.01)
-      draw_meter(
-        x + 14,
-        y + 70,
-        @types.station_tile_w - 28,
-        22,
-        ratio,
-        @raylib.Color::new(28, 40, 54, 220),
-        @raylib.Color::new(120, 222, 208, 236),
-      )
-      @raylib.draw_text("J: check progress", x + 14, y + 104, 20, text_color)
-      @raylib.draw_text("K: cancel prep", x + 14, y + 130, 20, text_color)
-    } else if game.prep.output_ready {
-      let ready_label = if game.prep.out_kind == @types.ingredient_protein {
-        "Sliced \{@types.protein_name(game.prep.out_flavor)}"
-      } else {
-        "Clean \{@types.veg_name(game.prep.out_flavor)}"
-      }
-      @raylib.draw_text("Ready: \{ready_label}", x + 14, y + 64, 24, text_color)
-      @raylib.draw_text("J: collect item", x + 14, y + 96, 20, text_color)
-      @raylib.draw_text("K: clear station", x + 14, y + 122, 20, text_color)
-    } else {
+  match station {
+    Broth => {
       @raylib.draw_text(
-        "Bring raw protein or veg",
+        "Current: \{broth_slot_text(game.pot.broth)}",
         x + 14,
         y + 64,
         24,
         text_color,
       )
-      @raylib.draw_text("J: start prep", x + 14, y + 96, 20, text_color)
+      @raylib.draw_text("J: cycle broth", x + 14, y + 96, 20, text_color)
     }
-  } else if station == @types.station_pot {
-    @raylib.draw_text(
-      "Broth: \{broth_slot_text(game.pot.broth)}",
-      x + 14,
-      y + 54,
-      21,
-      text_color,
-    )
-    @raylib.draw_text(
-      "Protein: \{protein_slot_text(game.pot.protein)}",
-      x + 14,
-      y + 79,
-      21,
-      text_color,
-    )
-    @raylib.draw_text(
-      "Veg: \{veg_slot_text(game.pot.veg)}",
-      x + 14,
-      y + 104,
-      21,
-      text_color,
-    )
-    @raylib.draw_text(
-      "Spice: \{@types.spice_name(game.pot.spice)}",
-      x + 14,
-      y + 129,
-      21,
-      text_color,
-    )
-
-    if game.pot.cooking || game.pot.ready {
-      draw_meter(
-        x + 130,
-        y + 140,
-        @types.station_tile_w - 144,
-        18,
-        game.pot.progress / @types.maxf(game.pot.target, 0.01),
-        @raylib.Color::new(44, 30, 58, 220),
-        @raylib.Color::new(236, 146, 82, 236),
-      )
-    }
-
-    let action_label = if game.pot.ready {
-      "Ready: serve with K"
-    } else if game.pot.cooking {
-      "Simmering"
-    } else {
-      "J: add or start cook"
-    }
-    @raylib.draw_text(action_label, x + 14, y + 152, 19, text_color)
-  } else if station == @types.station_serve {
-    if game.orders[0].active {
+    Protein => {
       @raylib.draw_text(
-        "Head #\{game.orders[0].id}",
+        "Next raw: \{@types.protein_name(game.next_protein_pick)}",
         x + 14,
-        y + 54,
+        y + 64,
         24,
         text_color,
       )
-      @raylib.draw_text(
-        "\{@types.broth_name(game.orders[0].broth)} / \{@types.protein_name(game.orders[0].protein)}",
-        x + 14,
-        y + 84,
-        20,
-        text_color,
-      )
-      @raylib.draw_text(
-        "\{@types.veg_name(game.orders[0].veg)} / \{@types.spice_name(game.orders[0].spice)}",
-        x + 14,
-        y + 108,
-        20,
-        text_color,
-      )
-      draw_meter(
-        x + 14,
-        y + 136,
-        @types.station_tile_w - 28,
-        18,
-        game.orders[0].patience / @types.maxf(game.orders[0].max_patience, 0.01),
-        @raylib.Color::new(24, 52, 58, 220),
-        @raylib.Color::new(132, 234, 208, 236),
-      )
-      @raylib.draw_text("K: serve head order", x + 14, y + 156, 18, text_color)
-    } else {
-      @raylib.draw_text("No queue head", x + 14, y + 70, 26, text_color)
-      @raylib.draw_text("K: serve (penalty)", x + 14, y + 106, 20, text_color)
+      @raylib.draw_text("J: pick protein", x + 14, y + 96, 20, text_color)
     }
-  } else if station == @types.station_rush {
-    @raylib.draw_text("Boost meter +24", x + 14, y + 64, 24, text_color)
-    if game.rush_cd > 0.0 {
+    Veg => {
       @raylib.draw_text(
-        "Cooldown: \{game.rush_cd.to_int() + 1}s",
+        "Next raw: \{@types.veg_name(game.next_veg_pick)}",
         x + 14,
-        y + 96,
-        22,
+        y + 64,
+        24,
         text_color,
       )
-    } else {
-      @raylib.draw_text("J: ring bell", x + 14, y + 96, 22, text_color)
+      @raylib.draw_text("J: pick veg", x + 14, y + 96, 20, text_color)
     }
-  } else if station == @types.station_trash {
-    @raylib.draw_text("Dump held ingredient", x + 14, y + 66, 24, text_color)
-    @raylib.draw_text("J: throw away", x + 14, y + 98, 22, text_color)
-  } else if station == @types.station_queue {
-    @raylib.draw_text("Review queue head", x + 14, y + 66, 24, text_color)
-    @raylib.draw_text("J: repeat demand", x + 14, y + 98, 22, text_color)
-  } else if station == @types.station_reputation {
-    @raylib.draw_text("Reputation is your HP", x + 14, y + 66, 24, text_color)
-    @raylib.draw_text("Drops to 0 => game over", x + 14, y + 98, 22, text_color)
-  } else {
-    @raylib.draw_text("Shuffle next pickup", x + 14, y + 66, 24, text_color)
-    @raylib.draw_text("J: randomize crates", x + 14, y + 98, 22, text_color)
+    Spice => {
+      @raylib.draw_text(
+        "Pot spice: \{@types.spice_name(game.pot.spice)}",
+        x + 14,
+        y + 64,
+        24,
+        text_color,
+      )
+      @raylib.draw_text("J: cycle spice", x + 14, y + 96, 20, text_color)
+    }
+    Prep =>
+      if game.prep.active {
+        let ratio = game.prep.progress / @types.maxf(game.prep.target, 0.01)
+        draw_meter(
+          x + 14,
+          y + 70,
+          @types.station_tile_w - 28,
+          22,
+          ratio,
+          @raylib.Color::new(28, 40, 54, 220),
+          @raylib.Color::new(120, 222, 208, 236),
+        )
+        @raylib.draw_text("J: check progress", x + 14, y + 104, 20, text_color)
+        @raylib.draw_text("K: cancel prep", x + 14, y + 130, 20, text_color)
+      } else if game.prep.output_ready {
+        let ready_label = if game.prep.out_kind == Protein {
+          "Sliced \{@types.protein_name(game.prep.out_flavor)}"
+        } else {
+          "Clean \{@types.veg_name(game.prep.out_flavor)}"
+        }
+        @raylib.draw_text(
+          "Ready: \{ready_label}", x + 14, y + 64, 24, text_color,
+        )
+        @raylib.draw_text("J: collect item", x + 14, y + 96, 20, text_color)
+        @raylib.draw_text("K: clear station", x + 14, y + 122, 20, text_color)
+      } else {
+        @raylib.draw_text(
+          "Bring raw protein or veg",
+          x + 14,
+          y + 64,
+          24,
+          text_color,
+        )
+        @raylib.draw_text("J: start prep", x + 14, y + 96, 20, text_color)
+      }
+    Pot => {
+      @raylib.draw_text(
+        "Broth: \{broth_slot_text(game.pot.broth)}",
+        x + 14,
+        y + 54,
+        21,
+        text_color,
+      )
+      @raylib.draw_text(
+        "Protein: \{protein_slot_text(game.pot.protein)}",
+        x + 14,
+        y + 79,
+        21,
+        text_color,
+      )
+      @raylib.draw_text(
+        "Veg: \{veg_slot_text(game.pot.veg)}",
+        x + 14,
+        y + 104,
+        21,
+        text_color,
+      )
+      @raylib.draw_text(
+        "Spice: \{@types.spice_name(game.pot.spice)}",
+        x + 14,
+        y + 129,
+        21,
+        text_color,
+      )
+
+      if game.pot.cooking || game.pot.ready {
+        draw_meter(
+          x + 130,
+          y + 140,
+          @types.station_tile_w - 144,
+          18,
+          game.pot.progress / @types.maxf(game.pot.target, 0.01),
+          @raylib.Color::new(44, 30, 58, 220),
+          @raylib.Color::new(236, 146, 82, 236),
+        )
+      }
+
+      let action_label = if game.pot.ready {
+        "Ready: serve with K"
+      } else if game.pot.cooking {
+        "Simmering"
+      } else {
+        "J: add or start cook"
+      }
+      @raylib.draw_text(action_label, x + 14, y + 152, 19, text_color)
+    }
+    Serve =>
+      if game.orders[0].active {
+        @raylib.draw_text(
+          "Head #\{game.orders[0].id}",
+          x + 14,
+          y + 54,
+          24,
+          text_color,
+        )
+        @raylib.draw_text(
+          "\{@types.broth_name(game.orders[0].broth)} / \{@types.protein_name(game.orders[0].protein)}",
+          x + 14,
+          y + 84,
+          20,
+          text_color,
+        )
+        @raylib.draw_text(
+          "\{@types.veg_name(game.orders[0].veg)} / \{@types.spice_name(game.orders[0].spice)}",
+          x + 14,
+          y + 108,
+          20,
+          text_color,
+        )
+        draw_meter(
+          x + 14,
+          y + 136,
+          @types.station_tile_w - 28,
+          18,
+          game.orders[0].patience /
+          @types.maxf(game.orders[0].max_patience, 0.01),
+          @raylib.Color::new(24, 52, 58, 220),
+          @raylib.Color::new(132, 234, 208, 236),
+        )
+        @raylib.draw_text(
+          "K: serve head order", x + 14, y + 156, 18, text_color,
+        )
+      } else {
+        @raylib.draw_text("No queue head", x + 14, y + 70, 26, text_color)
+        @raylib.draw_text(
+          "K: serve (penalty)", x + 14, y + 106, 20, text_color,
+        )
+      }
+    Rush => {
+      @raylib.draw_text("Boost meter +24", x + 14, y + 64, 24, text_color)
+      if game.rush_cd > 0.0 {
+        @raylib.draw_text(
+          "Cooldown: \{game.rush_cd.to_int() + 1}s",
+          x + 14,
+          y + 96,
+          22,
+          text_color,
+        )
+      } else {
+        @raylib.draw_text("J: ring bell", x + 14, y + 96, 22, text_color)
+      }
+    }
+    Trash => {
+      @raylib.draw_text(
+        "Dump held ingredient", x + 14, y + 66, 24, text_color,
+      )
+      @raylib.draw_text("J: throw away", x + 14, y + 98, 22, text_color)
+    }
+    Queue => {
+      @raylib.draw_text("Review queue head", x + 14, y + 66, 24, text_color)
+      @raylib.draw_text("J: repeat demand", x + 14, y + 98, 22, text_color)
+    }
+    Reputation => {
+      @raylib.draw_text(
+        "Reputation is your HP", x + 14, y + 66, 24, text_color,
+      )
+      @raylib.draw_text(
+        "Drops to 0 => game over", x + 14, y + 98, 22, text_color,
+      )
+    }
+    Storage => {
+      @raylib.draw_text("Shuffle next pickup", x + 14, y + 66, 24, text_color)
+      @raylib.draw_text(
+        "J: randomize crates", x + 14, y + 98, 22, text_color,
+      )
+    }
   }
 }
 
@@ -864,11 +881,10 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_side_panel()
   game.draw_controls_bar()
 
-  if game.state == @types.state_title {
-    draw_title_overlay(game)
-  } else if game.state == @types.state_paused {
-    draw_pause_overlay()
-  } else if game.state == @types.state_game_over {
-    game.draw_game_over_overlay()
+  match game.state {
+    Title => draw_title_overlay(game)
+    Paused => draw_pause_overlay()
+    GameOver => game.draw_game_over_overlay()
+    Playing => ()
   }
 }

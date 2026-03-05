@@ -1,7 +1,7 @@
 ///|
 /// Clears the player hand to the empty ingredient state.
 fn @types.Game::clear_hand(game : @types.Game) -> Unit {
-  game.hand.kind = @types.ingredient_none
+  game.hand.kind = None
   game.hand.flavor = 0
   game.hand.prepped = false
 }
@@ -10,12 +10,12 @@ fn @types.Game::clear_hand(game : @types.Game) -> Unit {
 /// Resets the prep board to its idle state with default timing target.
 fn @types.Game::clear_prep(game : @types.Game) -> Unit {
   game.prep.active = false
-  game.prep.kind = @types.ingredient_none
+  game.prep.kind = None
   game.prep.flavor = 0
   game.prep.progress = 0.0
   game.prep.target = @types.prep_target_base
   game.prep.output_ready = false
-  game.prep.out_kind = @types.ingredient_none
+  game.prep.out_kind = None
   game.prep.out_flavor = 0
 }
 
@@ -51,7 +51,7 @@ fn @types.Game::clear_orders(game : @types.Game) -> Unit {
 ///|
 /// Initialises a fresh kitchen run: resets state, meters, timers, and spawns two orders.
 fn @types.Game::start_run(game : @types.Game) -> Unit {
-  game.state = @types.state_playing
+  game.state = Playing
   game.cursor_x = 1
   game.cursor_y = 1
 
@@ -233,12 +233,12 @@ fn @types.Game::interact_broth(game : @types.Game) -> Unit {
 ///|
 /// Handles J interaction at the protein station: picks a raw protein into hand.
 fn @types.Game::interact_protein(game : @types.Game) -> Unit {
-  if game.hand.kind != @types.ingredient_none {
+  if game.hand.kind != None {
     @types.set_message(game, "Hands full. Drop with K or trash station.")
     return
   }
 
-  game.hand.kind = @types.ingredient_protein
+  game.hand.kind = Protein
   game.hand.flavor = game.next_protein_pick
   game.hand.prepped = false
   game.next_protein_pick = (game.next_protein_pick + 1) % @types.protein_count
@@ -252,12 +252,12 @@ fn @types.Game::interact_protein(game : @types.Game) -> Unit {
 ///|
 /// Handles J interaction at the veg station: picks a raw vegetable into hand.
 fn @types.Game::interact_veg(game : @types.Game) -> Unit {
-  if game.hand.kind != @types.ingredient_none {
+  if game.hand.kind != None {
     @types.set_message(game, "Hands full. Drop with K or trash station.")
     return
   }
 
-  game.hand.kind = @types.ingredient_veg
+  game.hand.kind = Veg
   game.hand.flavor = game.next_veg_pick
   game.hand.prepped = false
   game.next_veg_pick = (game.next_veg_pick + 1) % @types.veg_count
@@ -291,7 +291,7 @@ fn @types.Game::interact_prep(game : @types.Game) -> Unit {
   }
 
   if game.prep.output_ready {
-    if game.hand.kind != @types.ingredient_none {
+    if game.hand.kind != None {
       @types.set_message(game, "Hands full. Cannot collect prepped ingredient.")
       return
     }
@@ -300,10 +300,10 @@ fn @types.Game::interact_prep(game : @types.Game) -> Unit {
     game.hand.flavor = game.prep.out_flavor
     game.hand.prepped = true
     game.prep.output_ready = false
-    game.prep.out_kind = @types.ingredient_none
+    game.prep.out_kind = None
     game.prep.out_flavor = 0
 
-    if game.hand.kind == @types.ingredient_protein {
+    if game.hand.kind == Protein {
       @types.set_message(
         game,
         "Collected sliced \{@types.protein_name(game.hand.flavor)}",
@@ -317,7 +317,7 @@ fn @types.Game::interact_prep(game : @types.Game) -> Unit {
     return
   }
 
-  if game.hand.kind == @types.ingredient_none {
+  if game.hand.kind == None {
     @types.set_message(game, "Bring raw protein/veg to prep.")
     return
   }
@@ -327,8 +327,8 @@ fn @types.Game::interact_prep(game : @types.Game) -> Unit {
     return
   }
 
-  if game.hand.kind != @types.ingredient_protein &&
-    game.hand.kind != @types.ingredient_veg {
+  if game.hand.kind != Protein &&
+    game.hand.kind != Veg {
     @types.set_message(game, "Only protein or veg can be prepped.")
     return
   }
@@ -352,7 +352,7 @@ fn @types.Game::interact_pot(game : @types.Game) -> Unit {
     return
   }
 
-  if game.hand.kind == @types.ingredient_protein && game.hand.prepped {
+  if game.hand.kind == Protein && game.hand.prepped {
     if game.pot.protein >= 0 {
       @types.set_message(game, "Protein already loaded in pot.")
       return
@@ -363,7 +363,7 @@ fn @types.Game::interact_pot(game : @types.Game) -> Unit {
     return
   }
 
-  if game.hand.kind == @types.ingredient_veg && game.hand.prepped {
+  if game.hand.kind == Veg && game.hand.prepped {
     if game.pot.veg >= 0 {
       @types.set_message(game, "Veg already loaded in pot.")
       return
@@ -374,7 +374,7 @@ fn @types.Game::interact_pot(game : @types.Game) -> Unit {
     return
   }
 
-  if game.hand.kind != @types.ingredient_none {
+  if game.hand.kind != None {
     @types.set_message(game, "Only prepped protein/veg can enter the pot.")
     return
   }
@@ -422,7 +422,7 @@ fn @types.Game::interact_rush(game : @types.Game) -> Unit {
 ///|
 /// Handles J interaction at the trash station: discards the held ingredient.
 fn @types.Game::interact_trash(game : @types.Game) -> Unit {
-  if game.hand.kind == @types.ingredient_none {
+  if game.hand.kind == None {
     @types.set_message(game, "Nothing in hand to trash.")
     return
   }
@@ -457,32 +457,23 @@ fn @types.Game::interact_storage(game : @types.Game) -> Unit {
 fn @types.Game::handle_interact(game : @types.Game) -> Unit {
   let station = @types.station_at(game.cursor_x, game.cursor_y)
 
-  if station == @types.station_broth {
-    game.interact_broth()
-  } else if station == @types.station_protein {
-    game.interact_protein()
-  } else if station == @types.station_veg {
-    game.interact_veg()
-  } else if station == @types.station_spice {
-    game.interact_spice()
-  } else if station == @types.station_prep {
-    game.interact_prep()
-  } else if station == @types.station_pot {
-    game.interact_pot()
-  } else if station == @types.station_rush {
-    game.interact_rush()
-  } else if station == @types.station_trash {
-    game.interact_trash()
-  } else if station == @types.station_queue {
-    game.interact_queue()
-  } else if station == @types.station_reputation {
-    @types.set_message(
-      game, "Reputation controls game over. Keep orders flowing.",
-    )
-  } else if station == @types.station_storage {
-    game.interact_storage()
-  } else {
-    @types.set_message(game, "No interaction at this station.")
+  match station {
+    Broth => game.interact_broth()
+    Protein => game.interact_protein()
+    Veg => game.interact_veg()
+    Spice => game.interact_spice()
+    Prep => game.interact_prep()
+    Pot => game.interact_pot()
+    Rush => game.interact_rush()
+    Trash => game.interact_trash()
+    Queue => game.interact_queue()
+    Reputation =>
+      @types.set_message(
+        game, "Reputation controls game over. Keep orders flowing.",
+      )
+    Storage => game.interact_storage()
+    Serve =>
+      @types.set_message(game, "Use K at this station to serve.")
   }
 }
 
@@ -573,38 +564,38 @@ fn @types.Game::serve_head_order(game : @types.Game) -> Unit {
 fn @types.Game::handle_serve_cancel(game : @types.Game) -> Unit {
   let station = @types.station_at(game.cursor_x, game.cursor_y)
 
-  if station == @types.station_serve {
-    game.serve_head_order()
-    return
-  }
-
-  if station == @types.station_pot {
-    if game.pot_has_anything() {
-      game.clear_pot()
-      game.combo = 0
-      game.combo_t = 0.0
-      game.reputation = @types.clampf(
-        game.reputation - @types.rep_loss_discard_pot,
-        0.0,
-        @types.reputation_max,
-      )
-      game.flash_t = 0.2
-      @types.set_message(game, "Pot discarded. Reputation down.")
-    } else {
-      @types.set_message(game, "Pot is already empty.")
-    }
-    return
-  }
-
-  if station == @types.station_prep {
-    if game.prep.active || game.prep.output_ready {
-      game.clear_prep()
-      @types.set_message(game, "Prep canceled.")
+  match station {
+    Serve => {
+      game.serve_head_order()
       return
     }
+    Pot => {
+      if game.pot_has_anything() {
+        game.clear_pot()
+        game.combo = 0
+        game.combo_t = 0.0
+        game.reputation = @types.clampf(
+          game.reputation - @types.rep_loss_discard_pot,
+          0.0,
+          @types.reputation_max,
+        )
+        game.flash_t = 0.2
+        @types.set_message(game, "Pot discarded. Reputation down.")
+      } else {
+        @types.set_message(game, "Pot is already empty.")
+      }
+      return
+    }
+    Prep =>
+      if game.prep.active || game.prep.output_ready {
+        game.clear_prep()
+        @types.set_message(game, "Prep canceled.")
+        return
+      }
+    _ => ()
   }
 
-  if game.hand.kind != @types.ingredient_none {
+  if game.hand.kind != None {
     game.clear_hand()
     @types.set_message(game, "Held item canceled.")
     return
@@ -785,7 +776,7 @@ fn @types.Game::update_paused(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.input.press_pause || game.input.press_start {
-    game.state = @types.state_playing
+    game.state = Playing
     @types.set_message(game, "Rush resumed.")
   }
 }
@@ -802,7 +793,7 @@ fn @types.Game::update_game_over(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.input.press_start {
-    game.state = @types.state_title
+    game.state = Title
     @types.set_message(game, "Press J to start another shift.")
   }
 }
@@ -811,7 +802,7 @@ fn @types.Game::update_game_over(game : @types.Game, dt : Float) -> Unit {
 /// Handles one full update tick during active gameplay including all input and timer systems.
 fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   if game.input.press_pause {
-    game.state = @types.state_paused
+    game.state = Paused
     @types.set_message(game, "Shift paused.")
     return
   }
@@ -838,7 +829,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   game.update_order_spawn(dt)
 
   if game.reputation <= 0.0 {
-    game.state = @types.state_game_over
+    game.state = GameOver
     game.reputation = 0.0
     if game.score > game.best_score {
       game.best_score = game.score
@@ -858,13 +849,10 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     return
   }
 
-  if game.state == @types.state_title {
-    game.update_title(dt)
-  } else if game.state == @types.state_playing {
-    game.update_playing(dt)
-  } else if game.state == @types.state_paused {
-    game.update_paused(dt)
-  } else {
-    game.update_game_over(dt)
+  match game.state {
+    Title => game.update_title(dt)
+    Playing => game.update_playing(dt)
+    Paused => game.update_paused(dt)
+    GameOver => game.update_game_over(dt)
   }
 }

@@ -11,22 +11,6 @@ pub let screen_h : Int = 960
 pub let target_fps : Int = 120
 
 ///|
-/// Integer id for the title screen state.
-pub let state_title : Int = 0
-
-///|
-/// Integer id for active kitchen gameplay.
-pub let state_playing : Int = 1
-
-///|
-/// Integer id for paused gameplay.
-pub let state_paused : Int = 2
-
-///|
-/// Integer id for the game-over state.
-pub let state_game_over : Int = 3
-
-///|
 /// Number of station columns in the kitchen grid.
 pub let station_cols : Int = 4
 
@@ -54,69 +38,6 @@ pub let kitchen_left : Int = 52
 /// Top edge of the kitchen grid in pixels.
 pub let kitchen_top : Int = 130
 
-///|
-/// Sentinel station id for an invalid or empty station.
-pub let station_none : Int = -1
-
-///|
-/// Station id for selecting broth.
-pub let station_broth : Int = 0
-
-///|
-/// Station id for selecting protein.
-pub let station_protein : Int = 1
-
-///|
-/// Station id for selecting vegetables.
-pub let station_veg : Int = 2
-
-///|
-/// Station id for selecting spice level.
-pub let station_spice : Int = 3
-
-///|
-/// Station id for prep board operations.
-pub let station_prep : Int = 4
-
-///|
-/// Station id for the cooking pot.
-pub let station_pot : Int = 5
-
-///|
-/// Station id for serving finished orders.
-pub let station_serve : Int = 6
-
-///|
-/// Station id for triggering rush boost.
-pub let station_rush : Int = 7
-
-///|
-/// Station id for discarding current pot/hand contents.
-pub let station_trash : Int = 8
-
-///|
-/// Station id for viewing order queue.
-pub let station_queue : Int = 9
-
-///|
-/// Station id for viewing reputation status.
-pub let station_reputation : Int = 10
-
-///|
-/// Station id for storage information.
-pub let station_storage : Int = 11
-
-///|
-/// Ingredient id representing empty hand or no ingredient.
-pub let ingredient_none : Int = 0
-
-///|
-/// Ingredient id representing protein.
-pub let ingredient_protein : Int = 1
-
-///|
-/// Ingredient id representing vegetables.
-pub let ingredient_veg : Int = 2
 
 ///|
 /// Number of broth variants available.
@@ -205,3 +126,38 @@ pub let rush_cooldown : Float = 7.0
 ///|
 /// Lifetime of transient UI messages in seconds.
 pub let msg_ttl : Float = 2.4
+
+
+///|
+/// Kind of ingredient the player can carry.
+pub(all) enum Ingredient {
+  None
+  Protein
+  Veg
+} derive(Eq)
+
+///|
+/// High-level game phase.
+pub(all) enum GameState {
+  Title
+  Playing
+  Paused
+  GameOver
+} derive(Eq)
+
+///|
+/// Kitchen grid station identity.
+pub(all) enum Station {
+  Broth
+  Protein
+  Veg
+  Spice
+  Prep
+  Pot
+  Serve
+  Rush
+  Trash
+  Queue
+  Reputation
+  Storage
+} derive(Eq)

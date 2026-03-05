@@ -227,7 +227,7 @@ fn @types.Game::draw_leaf_racks(
   cam_y : Float,
 ) -> Unit {
   for tea_i in 0..<@types.tea_count {
-    let tea = tea_i
+    let tea = @types.tea_from_index(tea_i)
     let x = @types.leaf_x() + cam_x
     let y = @types.leaf_y(tea_i) + cam_y
     let hot = @types.near_station(
@@ -261,7 +261,7 @@ fn @types.Game::draw_leaf_racks(
       @raylib.Color::new(26, 30, 34, 200),
     )
 
-    if game.player.carry_leaf == tea {
+    if game.player.carry_leaf == Some(tea) {
       @raylib.draw_circle_lines(
         x.to_int(),
         y.to_int(),
@@ -367,19 +367,22 @@ fn @types.Game::draw_brewer(
     )
   }
 
-  if game.ready_cup >= 0 {
-    @raylib.draw_circle(
-      (x + 52.0).to_int(),
-      (y - 22.0).to_int(),
-      16.0,
-      @types.tea_color(game.ready_cup),
-    )
-    @raylib.draw_circle(
-      (x + 52.0).to_int(),
-      (y - 22.0).to_int(),
-      6.0,
-      @raylib.Color::new(24, 28, 34, 210),
-    )
+  match game.ready_cup {
+    Some(cup) => {
+      @raylib.draw_circle(
+        (x + 52.0).to_int(),
+        (y - 22.0).to_int(),
+        16.0,
+        @types.tea_color(cup),
+      )
+      @raylib.draw_circle(
+        (x + 52.0).to_int(),
+        (y - 22.0).to_int(),
+        6.0,
+        @raylib.Color::new(24, 28, 34, 210),
+      )
+    }
+    None => ()
   }
 
   draw_station_tag("BREWER", x, y, hot)
@@ -424,13 +427,15 @@ fn @types.Game::draw_counter(
     @raylib.Color::new(122, 84, 60, 210),
   )
 
-  if game.ready_cup >= 0 {
-    @raylib.draw_circle(
-      (x - 44.0).to_int(),
-      (y + 12.0).to_int(),
-      14.0,
-      @types.tea_color(game.ready_cup),
-    )
+  match game.ready_cup {
+    Some(cup) =>
+      @raylib.draw_circle(
+        (x - 44.0).to_int(),
+        (y + 12.0).to_int(),
+        14.0,
+        @types.tea_color(cup),
+      )
+    None => ()
   }
 
   draw_station_tag("SERVE", x, y, hot)
@@ -595,13 +600,15 @@ fn @types.Game::draw_player(
     )
   }
 
-  if p.carry_leaf >= 0 {
-    @raylib.draw_circle(
-      (x - 22.0).to_int(),
-      (y - 14.0).to_int(),
-      8.0,
-      @types.tea_color(p.carry_leaf),
-    )
+  match p.carry_leaf {
+    Some(leaf) =>
+      @raylib.draw_circle(
+        (x - 22.0).to_int(),
+        (y - 14.0).to_int(),
+        8.0,
+        @types.tea_color(leaf),
+      )
+    None => ()
   }
 
   if p.interact_t > 0.0 {
@@ -872,7 +879,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     )
   }
 
-  if game.state == @types.state_play {
+  if game.state == Play {
     @raylib.draw_text(
       "WASD move  J/E/SPACE interact  K hold focus  L dash",
       20,
@@ -948,7 +955,7 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   let hold = game.mouse_hold
   let touch_count = game.touch_count
 
-  if game.state == @types.state_play {
+  if game.state == Play {
     draw_button_visual(
       "<",
       @types.btn_left_rect(),
@@ -1012,7 +1019,7 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
       hold,
       touch_count,
     )
-  } else if game.state == @types.state_title {
+  } else if game.state == Title {
     draw_button_visual(
       "START",
       @types.title_start_rect(),
@@ -1341,18 +1348,17 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_world(shake.0, shake.1)
   game.draw_hud()
 
-  if game.state == @types.state_title {
-    game.draw_title_overlay()
-  } else if game.state == @types.state_stage_clear {
-    game.draw_stage_clear_overlay()
-  } else if game.state == @types.state_game_over {
-    game.draw_game_over_overlay()
+  match game.state {
+    Title => game.draw_title_overlay()
+    StageClear => game.draw_stage_clear_overlay()
+    GameOver => game.draw_game_over_overlay()
+    _ => ()
   }
 
   game.draw_touch_controls()
   game.draw_flash()
 
-  if game.state == @types.state_play && game.touch_mode {
+  if game.state == Play && game.touch_mode {
     draw_center_text(
       "Mobile: move pad + ACT / FOCUS / DASH",
       @types.screen_h - 24,

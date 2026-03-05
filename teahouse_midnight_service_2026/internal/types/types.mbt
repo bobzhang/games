@@ -2,7 +2,7 @@
 /// Runtime record for an active or queued customer.
 pub(all) struct Customer {
   mut active : Bool
-  mut tea_type : Int
+  mut tea_type : Tea
   mut slot : Int
   mut x : Float
   mut y : Float
@@ -66,7 +66,7 @@ pub(all) struct Player {
   mut interact_t : Float
   mut anim_t : Float
   mut carry_water : Bool
-  mut carry_leaf : Int
+  mut carry_leaf : Tea?
 }
 
 ///|
@@ -77,7 +77,7 @@ pub(all) struct Game {
   rings : Array[Ring]
   shadows : Array[Shadow]
   player : Player
-  mut state : Int
+  mut state : GameState
   mut stage : Int
   mut stage_goal : Int
   mut score : Int
@@ -92,8 +92,8 @@ pub(all) struct Game {
   mut spawn_cd : Float
   mut brew_active : Bool
   mut brew_t : Float
-  mut brew_type : Int
-  mut ready_cup : Int
+  mut brew_type : Tea
+  mut ready_cup : Tea?
   mut focus_mode : Bool
   mut flash_t : Float
   mut shake_t : Float
@@ -121,7 +121,7 @@ pub(all) struct Game {
 pub fn Customer::new() -> Customer {
   {
     active: false,
-    tea_type: tea_jasmine,
+    tea_type: Jasmine,
     slot: 0,
     x: 0.0,
     y: 0.0,
@@ -178,7 +178,7 @@ pub fn Player::new() -> Player {
     interact_t: 0.0,
     anim_t: 0.0,
     carry_water: false,
-    carry_leaf: -1,
+    carry_leaf: None,
   }
 }
 
@@ -191,7 +191,7 @@ pub fn Game::new() -> Game {
     rings: Array::makei(max_rings, fn(_i) { Ring::new() }),
     shadows: Array::makei(max_shadows, fn(_i) { Shadow::new() }),
     player: Player::new(),
-    state: state_title,
+    state: Title,
     stage: 1,
     stage_goal: stage_goal_base,
     score: 0,
@@ -206,8 +206,8 @@ pub fn Game::new() -> Game {
     spawn_cd: 0.0,
     brew_active: false,
     brew_t: 0.0,
-    brew_type: tea_jasmine,
-    ready_cup: -1,
+    brew_type: Jasmine,
+    ready_cup: None,
     focus_mode: false,
     flash_t: 0.0,
     shake_t: 0.0,
@@ -240,7 +240,7 @@ pub fn init_title_scene(game : Game) -> Unit {
   clear_shadows(game)
   reset_player(game)
 
-  game.state = state_title
+  game.state = Title
   game.stage = 1
   game.stage_goal = stage_goal_base
   game.score = 0
@@ -256,8 +256,8 @@ pub fn init_title_scene(game : Game) -> Unit {
   game.spawn_cd = 0.8
   game.brew_active = false
   game.brew_t = 0.0
-  game.brew_type = tea_jasmine
-  game.ready_cup = -1
+  game.brew_type = Jasmine
+  game.ready_cup = None
   game.focus_mode = false
 
   game.flash_t = 0.0
@@ -271,7 +271,7 @@ pub fn init_title_scene(game : Game) -> Unit {
 fn clear_customers(game : Game) -> Unit {
   for customer in game.customers {
     customer.active = false
-    customer.tea_type = tea_jasmine
+    customer.tea_type = Jasmine
     customer.slot = 0
     customer.x = 0.0
     customer.y = 0.0
@@ -338,5 +338,5 @@ fn reset_player(game : Game) -> Unit {
   game.player.interact_t = 0.0
   game.player.anim_t = 0.0
   game.player.carry_water = false
-  game.player.carry_leaf = -1
+  game.player.carry_leaf = None
 }

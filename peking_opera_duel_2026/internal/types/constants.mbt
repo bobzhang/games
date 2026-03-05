@@ -11,22 +11,6 @@ pub let screen_h : Int = 960
 pub let target_fps : Int = 120
 
 ///|
-/// Prompt stance id for the spear action.
-pub let stance_spear : Int = 0
-
-///|
-/// Prompt stance id for the fan action.
-pub let stance_fan : Int = 1
-
-///|
-/// Prompt stance id for the guard/deflect action.
-pub let stance_guard : Int = 2
-
-///|
-/// Prompt stance id for the sleeve action.
-pub let stance_sleeve : Int = 3
-
-///|
 /// Number of supported stance ids.
 pub let stance_count : Int = 4
 
@@ -169,3 +153,24 @@ pub let lane_step_x : Int = 220
 ///|
 /// Vertical pixel step per lane index.
 pub let lane_step_y : Int = 120
+
+
+///|
+/// Available stance types for player and rival.
+pub(all) enum Stance {
+  Spear
+  Fan
+  Guard
+  Sleeve
+} derive(Eq)
+
+///|
+/// Convert an integer index (mod 4) to the corresponding stance.
+pub fn Stance::from_int(i : Int) -> Stance {
+  match i % stance_count {
+    0 => Spear
+    1 => Fan
+    2 => Guard
+    _ => Sleeve
+  }
+}
