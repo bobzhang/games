@@ -216,12 +216,11 @@ fn @types.Game::update_enemy_spawn(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
-  for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
+  for i, enemy in game.enemies {
+    if !enemy.active {
       continue
     }
 
-    let enemy = game.enemies[i]
     if enemy.reload_timer > 0.0 {
       enemy.reload_timer -= dt
       if enemy.reload_timer < 0.0 {
