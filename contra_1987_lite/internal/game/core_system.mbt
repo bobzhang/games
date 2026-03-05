@@ -9,12 +9,13 @@ fn @types.Game::clear_cores(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::alloc_core_slot(game : @types.Game) -> Int {
-  for i in 0..<game.cores.length() {
-    if not(game.cores[i].active) {
-      return i
+  for i, slot in game.cores {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   -1
+  }
 }
 
 ///|

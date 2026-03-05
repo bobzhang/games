@@ -11,12 +11,13 @@ fn enemy_spawn_x(slot : Int) -> Float {
 
 ///|
 fn @types.Game::alloc_enemy_slot(game : @types.Game) -> Int {
-  for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
-      return i
+  for i, slot in game.enemies {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   -1
+  }
 }
 
 ///|

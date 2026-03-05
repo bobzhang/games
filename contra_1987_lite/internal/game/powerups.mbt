@@ -1,11 +1,12 @@
 ///|
 fn @types.Game::alloc_powerup(game : @types.Game) -> Int {
-  for i in 0..<game.powerups.length() {
-    if not(game.powerups[i].active) {
-      return i
+  for i, slot in game.powerups {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   -1
+  }
 }
 
 ///|
