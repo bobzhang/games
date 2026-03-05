@@ -468,14 +468,14 @@ pub fn find_nearest_enemy(game : Game, x : Float, y : Float, z : Float) -> Int {
 
 ///|
 /// Returns the display name for the given `weapon` type.
-pub fn weapon_name(weapon : Int) -> String {
-  if weapon == weapon_laser {
+pub fn weapon_name(weapon : WeaponKind) -> String {
+  if weapon == Laser {
     "LASER"
-  } else if weapon == weapon_missile {
+  } else if weapon == Missile {
     "MISSILE"
-  } else if weapon == weapon_plasma {
+  } else if weapon == Plasma {
     "PLASMA"
-  } else if weapon == weapon_railgun {
+  } else if weapon == Railgun {
     "RAILGUN"
   } else {
     "UNKNOWN"
@@ -486,14 +486,14 @@ pub fn weapon_name(weapon : Int) -> String {
 
 ///|
 /// Returns the fire cooldown interval in seconds for the given `weapon` type.
-pub fn weapon_cooldown(weapon : Int) -> Float {
-  if weapon == weapon_laser {
+pub fn weapon_cooldown(weapon : WeaponKind) -> Float {
+  if weapon == Laser {
     laser_cooldown
-  } else if weapon == weapon_missile {
+  } else if weapon == Missile {
     missile_cooldown
-  } else if weapon == weapon_plasma {
+  } else if weapon == Plasma {
     plasma_cooldown
-  } else if weapon == weapon_railgun {
+  } else if weapon == Railgun {
     railgun_cooldown
   } else {
     1.0
@@ -504,14 +504,14 @@ pub fn weapon_cooldown(weapon : Int) -> Float {
 
 ///|
 /// Returns the energy cost per shot for the given `weapon` type.
-pub fn weapon_energy_cost(weapon : Int) -> Float {
-  if weapon == weapon_laser {
+pub fn weapon_energy_cost(weapon : WeaponKind) -> Float {
+  if weapon == Laser {
     laser_energy_cost
-  } else if weapon == weapon_missile {
+  } else if weapon == Missile {
     0.0
-  } else if weapon == weapon_plasma {
+  } else if weapon == Plasma {
     plasma_energy_cost
-  } else if weapon == weapon_railgun {
+  } else if weapon == Railgun {
     railgun_energy_cost
   } else {
     0.0
@@ -522,14 +522,14 @@ pub fn weapon_energy_cost(weapon : Int) -> Float {
 
 ///|
 /// Returns the projectile speed for the given `weapon` type.
-pub fn weapon_proj_speed(weapon : Int) -> Float {
-  if weapon == weapon_laser {
+pub fn weapon_proj_speed(weapon : WeaponKind) -> Float {
+  if weapon == Laser {
     laser_speed
-  } else if weapon == weapon_missile {
+  } else if weapon == Missile {
     missile_speed
-  } else if weapon == weapon_plasma {
+  } else if weapon == Plasma {
     plasma_speed
-  } else if weapon == weapon_railgun {
+  } else if weapon == Railgun {
     railgun_speed
   } else {
     100.0
@@ -638,21 +638,21 @@ pub fn register_kill_combo(game : Game) -> Unit {
 ///|
 /// Returns the 3D position offset for a unit at the given `index` in a formation `pattern`.
 pub fn formation_offset(
-  pattern : Int,
+  pattern : Formation,
   index : Int,
   spacing : Float,
 ) -> (Float, Float, Float) {
   let fi = Float::from_int(index)
-  if pattern == formation_v {
+  if pattern == V {
     // V formation: alternating left/right, pushed back
     let side : Float = if index % 2 == 0 { 1.0 } else { -1.0 }
     let rank = Float::from_int((index + 1) / 2)
     (side * rank * spacing, 0.0, -rank * spacing * 0.8)
-  } else if pattern == formation_line {
+  } else if pattern == Line {
     // Line abreast
     let half = fi - 3.0
     (half * spacing, 0.0, 0.0)
-  } else if pattern == formation_circle {
+  } else if pattern == Circle {
     // Circle formation
     let angle = fi * (two_pi / 8.0)
     let r = spacing * 2.0
@@ -671,7 +671,7 @@ pub fn formation_offset(
 /// Updates mission objectives of the given type by the specified increment.
 pub fn check_objective_progress(
   game : Game,
-  obj_type : Int,
+  obj_type : Objective,
   increment : Int,
 ) -> Unit {
   for i in 0..<game.objectives_count {

@@ -10,7 +10,7 @@ pub(all) struct Ship {
   mut drift_x : Float
   mut drift_z : Float
   mut sail_amount : Float
-  mut sail_state : Int
+  mut sail_state : Sail
   mut hull_hp : Float
   mut bow_hp : Float
   mut mid_hp : Float
@@ -24,9 +24,9 @@ pub(all) struct Ship {
   mut reload_right : Float
   mut cannon_damage : Float
   mut reload_time : Float
-  mut ship_class : Int
+  mut ship_class : ShipClass
   mut cannon_count : Int
-  mut cannon_type : Int
+  mut cannon_type : Cannon
   mut ammo_type : Int
   mut ammo_round : Int
   mut ammo_chain : Int
@@ -60,7 +60,7 @@ pub fn Ship::new_player() -> Ship {
     drift_x: 0.0,
     drift_z: 0.0,
     sail_amount: 0.5,
-    sail_state: sail_half,
+    sail_state: Half,
     hull_hp: player_max_hp,
     bow_hp: player_max_hp * 0.8,
     mid_hp: player_max_hp,
@@ -74,9 +74,9 @@ pub fn Ship::new_player() -> Ship {
     reload_right: 0.0,
     cannon_damage: player_cannon_damage,
     reload_time: player_cannon_reload,
-    ship_class: class_frigate,
+    ship_class: Frigate,
     cannon_count: frigate_cannon_count,
-    cannon_type: cannon_medium,
+    cannon_type: Medium,
     ammo_type: ammo_round_shot,
     ammo_round: player_start_ammo,
     ammo_chain: 20,
@@ -118,8 +118,8 @@ pub(all) struct EnemyShip {
   mut max_hp : Float
   mut max_mast_hp : Float
   mut max_rudder_hp : Float
-  mut ai_state : Int
-  mut ai_personality : Int
+  mut ai_state : AiState
+  mut ai_personality : AiPersonality
   mut patrol_angle : Float
   mut patrol_cx : Float
   mut patrol_cz : Float
@@ -127,12 +127,12 @@ pub(all) struct EnemyShip {
   mut fire_timer : Float
   mut fire_rate : Float
   mut cannon_damage : Float
-  mut cannon_type : Int
+  mut cannon_type : Cannon
   mut cannon_count : Int
   mut detect_range : Float
   mut attack_range : Float
   mut score_value : Int
-  mut ship_class : Int
+  mut ship_class : ShipClass
   mut crew : Int
   mut max_crew : Int
   mut sail_amount : Float
@@ -169,8 +169,8 @@ pub fn EnemyShip::inactive() -> EnemyShip {
     max_hp: 50.0,
     max_mast_hp: 50.0,
     max_rudder_hp: 40.0,
-    ai_state: ai_patrol,
-    ai_personality: ai_personality_aggressive,
+    ai_state: Patrol,
+    ai_personality: Aggressive,
     patrol_angle: 0.0,
     patrol_cx: 0.0,
     patrol_cz: 0.0,
@@ -178,12 +178,12 @@ pub fn EnemyShip::inactive() -> EnemyShip {
     fire_timer: 0.0,
     fire_rate: 2.0,
     cannon_damage: 8.0,
-    cannon_type: cannon_light,
+    cannon_type: Light,
     cannon_count: 4,
     detect_range: 40.0,
     attack_range: 25.0,
     score_value: 100,
-    ship_class: class_sloop,
+    ship_class: Sloop,
     crew: 20,
     max_crew: 20,
     sail_amount: 0.8,
@@ -220,7 +220,7 @@ pub(all) struct Cannonball {
   mut damage : Float
   mut from_player : Bool
   mut ammo_type : Int
-  mut cannon_type : Int
+  mut cannon_type : Cannon
   mut wind_drift : Float
   mut trail_timer : Float
 }
@@ -240,7 +240,7 @@ pub fn Cannonball::inactive() -> Cannonball {
     damage: 0.0,
     from_player: false,
     ammo_type: ammo_round_shot,
-    cannon_type: cannon_medium,
+    cannon_type: Medium,
     wind_drift: 0.0,
     trail_timer: 0.0,
   }
@@ -315,7 +315,7 @@ pub(all) struct Island {
   mut radius : Float
   mut height : Float
   mut blocks : Int
-  mut island_type : Int
+  mut island_type : IslandKind
   mut has_fortress : Bool
   mut fortress_hp : Float
   mut fortress_max_hp : Float
@@ -337,7 +337,7 @@ pub fn Island::inactive() -> Island {
     radius: 5.0,
     height: 3.0,
     blocks: 3,
-    island_type: island_small,
+    island_type: Small,
     has_fortress: false,
     fortress_hp: 0.0,
     fortress_max_hp: fortress_base_hp,
@@ -604,7 +604,7 @@ pub(all) struct FleetShip {
   mut max_hp : Float
   mut mast_hp : Float
   mut max_mast_hp : Float
-  mut ship_class : Int
+  mut ship_class : ShipClass
   mut cannon_count : Int
   mut fire_timer : Float
   mut fire_rate : Float
@@ -650,7 +650,7 @@ pub fn FleetShip::inactive() -> FleetShip {
     max_hp: 60.0,
     mast_hp: 50.0,
     max_mast_hp: 50.0,
-    ship_class: class_sloop,
+    ship_class: Sloop,
     cannon_count: 4,
     fire_timer: 0.0,
     fire_rate: 2.5,
@@ -681,7 +681,7 @@ pub let max_convoy_ships : Int = 4
 ///|
 /// Aggregated naval game state for battle flow, entities, UI, and progression.
 pub(all) struct Game {
-  mut state : Int
+  mut state : GameState
 
   // Player
   player : Ship
@@ -759,7 +759,7 @@ pub(all) struct Game {
 /// Constructs a fresh naval game state with initialized pools and menu defaults.
 pub fn Game::new() -> Game {
   {
-    state: state_menu,
+    state: Menu,
     player: Ship::new_player(),
     score: 0,
     reputation: 0,

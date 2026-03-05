@@ -5,17 +5,17 @@
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   game.update_particles(dt)
-  if game.state == @types.state_menu {
+  if game.state == Menu {
     game.update_menu(dt)
-  } else if game.state == @types.state_battle_select {
+  } else if game.state == BattleSelect {
     game.update_battle_select(dt)
-  } else if game.state == @types.state_playing {
+  } else if game.state == Playing {
     game.update_playing(dt)
-  } else if game.state == @types.state_paused {
+  } else if game.state == Paused {
     game.update_paused()
-  } else if game.state == @types.state_battle_complete {
+  } else if game.state == BattleComplete {
     game.update_battle_complete()
-  } else if game.state == @types.state_game_over {
+  } else if game.state == GameOver {
     game.update_game_over()
   }
 }
@@ -41,10 +41,10 @@ fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
     if game.menu_cursor == 0 {
       // Quick battle - start battle 0
       game.start_battle(0)
-      game.state = @types.state_playing
+      game.state = Playing
     } else {
       // Battle select
-      game.state = @types.state_battle_select
+      game.state = BattleSelect
       game.battle_select_cursor = 0
     }
   }
@@ -70,10 +70,10 @@ fn @types.Game::update_battle_select(game : @types.Game, dt : Float) -> Unit {
     @raylib.is_key_pressed(@raylib.KeySpace) {
     game.start_battle(game.battle_select_cursor)
     game.current_battle = game.battle_select_cursor
-    game.state = @types.state_playing
+    game.state = Playing
   }
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.state_menu
+    game.state = Menu
   }
 }
 
@@ -81,7 +81,7 @@ fn @types.Game::update_battle_select(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
-    game.state = @types.state_paused
+    game.state = Paused
     return
   }
   // Update timers
@@ -139,7 +139,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   // Check game over
   if game.player.hull_hp <= 0.0 {
     game.player.hull_hp = 0.0
-    game.state = @types.state_game_over
+    game.state = GameOver
   }
 }
 
@@ -202,7 +202,7 @@ fn @types.Game::update_wind(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::update_paused(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
-    game.state = @types.state_playing
+    game.state = Playing
   }
 }
 
@@ -213,7 +213,7 @@ fn @types.Game::update_battle_complete(game : @types.Game) -> Unit {
     if @raylib.is_key_pressed(@raylib.KeyEnter) ||
       @raylib.is_key_pressed(@raylib.KeySpace) {
       game.reset_game()
-      game.state = @types.state_menu
+      game.state = Menu
     }
   } else if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
@@ -251,7 +251,7 @@ fn @types.Game::update_battle_complete(game : @types.Game) -> Unit {
     )
     game.current_battle += 1
     game.start_battle(game.current_battle)
-    game.state = @types.state_playing
+    game.state = Playing
   }
 }
 
@@ -260,7 +260,7 @@ fn @types.Game::update_game_over(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     game.reset_game()
-    game.state = @types.state_menu
+    game.state = Menu
   }
 }
 
@@ -636,7 +636,7 @@ fn @types.Game::fire_fleet_broadside(
     cb.damage = fs.cannon_damage
     cb.from_player = true
     cb.ammo_type = @types.ammo_round_shot
-    cb.cannon_type = @types.cannon_medium
+    cb.cannon_type = Medium
   }
   let flash_x = fs.x + @math.sinf(side_angle) * 1.5
   let flash_z = fs.z + @math.cosf(side_angle) * 1.5
@@ -817,7 +817,7 @@ fn @types.Game::check_objectives(game : @types.Game) -> Unit {
     }
     if convoy_alive == 0 && game.convoy_arrived_count == 0 {
       obj.failed = true
-      game.state = @types.state_game_over
+      game.state = GameOver
       game.message_text = "All convoy ships destroyed!"
       game.message_timer = 5.0
     } else if all_arrived && convoy_alive > 0 {
@@ -837,7 +837,7 @@ fn @types.Game::check_objectives(game : @types.Game) -> Unit {
     obj.time_elapsed += @raylib.get_frame_time()
     if obj.time_limit > 0.0 && obj.time_elapsed > obj.time_limit {
       obj.failed = true
-      game.state = @types.state_game_over
+      game.state = GameOver
       game.message_text = "Time's up! Blockade held."
       game.message_timer = 5.0
     }
@@ -850,7 +850,7 @@ fn @types.Game::complete_battle(game : @types.Game) -> Unit {
   let bonus = @levels.get_battle_reward_mult(game.current_battle) * 100
   game.score += bonus
   game.reputation += bonus
-  game.state = @types.state_battle_complete
+  game.state = BattleComplete
   if game.current_battle >= game.total_battles - 1 {
     game.message_text = "ALL BATTLES WON!"
     game.message_timer = 999.0
@@ -978,10 +978,10 @@ fn @types.Game::start_battle(game : @types.Game, battle : Int) -> Unit {
     enemy.z = ez
     enemy.heading = angle + @types.pi
     // Set class-based stats
-    let eclass : Int = if i < classes.length() {
+    let eclass : @types.ShipClass = if i < classes.length() {
       classes[i]
     } else {
-      @types.class_sloop
+      Sloop
     }
     enemy.ship_class = eclass
     enemy.ship_length = @types.get_class_length(eclass)
@@ -1002,20 +1002,20 @@ fn @types.Game::start_battle(game : @types.Game, battle : Int) -> Unit {
     enemy.rudder_hp = @types.get_class_max_rudder(eclass) * hp_scale
     enemy.max_rudder_hp = enemy.rudder_hp
     enemy.speed = enemy_speed
-    enemy.ai_state = @types.ai_patrol
+    enemy.ai_state = Patrol
     // Set personality
-    let personality : Int = if i < personalities.length() {
+    let personality : @types.AiPersonality = if i < personalities.length() {
       personalities[i]
     } else {
-      @types.ai_personality_aggressive
+      Aggressive
     }
     enemy.ai_personality = personality
     // Set retreat threshold based on personality
-    if personality == @types.ai_personality_defensive {
+    if personality == Defensive {
       enemy.retreat_hp_pct = 0.4
-    } else if personality == @types.ai_personality_retreater {
+    } else if personality == Retreater {
       enemy.retreat_hp_pct = 0.5
-    } else if personality == @types.ai_personality_berserker {
+    } else if personality == Berserker {
       enemy.retreat_hp_pct = 0.05
     } else {
       enemy.retreat_hp_pct = 0.2
@@ -1061,14 +1061,14 @@ fn @types.Game::start_battle(game : @types.Game, battle : Int) -> Unit {
       island.fortress_max_hp = @types.fortress_base_hp
       island.fortress_cannons_active = @types.fortress_cannon_count
       island.fortress_fire_timer = @types.fortress_fire_rate
-      island.island_type = @types.island_fortress
+      island.island_type = Fortress
     }
     // Vegetation density based on size
-    if island.island_type == @types.island_small {
+    if island.island_type == Small {
       island.vegetation_density = 2
-    } else if island.island_type == @types.island_medium {
+    } else if island.island_type == Medium {
       island.vegetation_density = 4
-    } else if island.island_type == @types.island_large {
+    } else if island.island_type == Large {
       island.vegetation_density = 6
     } else {
       island.vegetation_density = 3
@@ -1093,7 +1093,7 @@ fn @types.Game::start_battle(game : @types.Game, battle : Int) -> Unit {
     fs.mast_hp = @types.get_class_max_mast(fc) * 0.9
     fs.max_mast_hp = @types.get_class_max_mast(fc) * 0.9
     fs.cannon_count = @types.get_class_cannon_count(fc)
-    fs.cannon_damage = @types.get_cannon_damage(@types.cannon_medium)
+    fs.cannon_damage = @types.get_cannon_damage(Medium)
     fs.fire_rate = 2.5
     fs.fire_timer = 0.0
     fs.crew = @types.get_class_max_crew(fc)

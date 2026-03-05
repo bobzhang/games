@@ -56,7 +56,7 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     e.fire_timer -= dt
     if e.fire_timer <= 0.0 && dist < 150.0 {
       // Only fire in attack or chase state
-      if e.ai_state == @types.ai_attack || e.ai_state == @types.ai_chase {
+      if e.ai_state == Attack || e.ai_state == Chase {
         game.enemy_fire(i, dx, dy, dz, dist)
         let rate : Float = if e.kind == @types.enemy_fighter {
           @types.fighter_fire_rate
@@ -108,69 +108,69 @@ fn @types.Game::update_ai_state(
   let hp_pct = e.hp / e.max_hp
 
   // State transitions
-  if e.ai_state == @types.ai_idle {
+  if e.ai_state == Idle {
     if dist < e.detect_range {
-      e.ai_state = @types.ai_chase
+      e.ai_state = Chase
       e.ai_timer = 1.0
     } else {
-      e.ai_state = @types.ai_patrol
+      e.ai_state = Patrol
       e.ai_timer = 2.0
     }
-  } else if e.ai_state == @types.ai_patrol {
+  } else if e.ai_state == Patrol {
     if dist < e.detect_range {
-      e.ai_state = @types.ai_chase
+      e.ai_state = Chase
       e.ai_timer = 0.5
     } else {
       e.ai_timer = @types.rand_rangef(game, 1.0, 3.0)
     }
-  } else if e.ai_state == @types.ai_chase {
+  } else if e.ai_state == Chase {
     if hp_pct < e.flee_threshold {
-      e.ai_state = @types.ai_flee
+      e.ai_state = Flee
       e.ai_timer = 2.0
     } else if dist < @types.fighter_attack_range {
-      e.ai_state = @types.ai_attack
+      e.ai_state = Attack
       e.ai_timer = @types.rand_rangef(game, 1.0, 3.0)
     } else if dist > e.detect_range * 1.5 {
-      e.ai_state = @types.ai_patrol
+      e.ai_state = Patrol
       e.ai_timer = 1.0
     } else {
       e.ai_timer = 0.5
     }
-  } else if e.ai_state == @types.ai_attack {
+  } else if e.ai_state == Attack {
     if hp_pct < e.flee_threshold {
-      e.ai_state = @types.ai_flee
+      e.ai_state = Flee
       e.ai_timer = 2.0
     } else if hp_pct < @types.fighter_evade_hp_pct &&
       @types.rand_bool(game, 0.4) {
-      e.ai_state = @types.ai_evade
+      e.ai_state = Evade
       e.ai_timer = @types.rand_rangef(game, 1.5, 3.0)
     } else if dist > @types.fighter_attack_range * 1.5 {
-      e.ai_state = @types.ai_chase
+      e.ai_state = Chase
       e.ai_timer = 0.5
     } else {
       e.ai_timer = @types.rand_rangef(game, 0.8, 2.0)
     }
-  } else if e.ai_state == @types.ai_evade {
+  } else if e.ai_state == Evade {
     if hp_pct < e.flee_threshold {
-      e.ai_state = @types.ai_flee
+      e.ai_state = Flee
       e.ai_timer = 2.0
     } else if dist > 60.0 {
-      e.ai_state = @types.ai_chase
+      e.ai_state = Chase
       e.ai_timer = 1.0
     } else {
       e.ai_timer = @types.rand_rangef(game, 1.0, 2.0)
     }
-  } else if e.ai_state == @types.ai_flee {
+  } else if e.ai_state == Flee {
     if dist > 200.0 {
       // Fled far enough, regroup
-      e.ai_state = @types.ai_patrol
+      e.ai_state = Patrol
       e.ai_timer = 3.0
     } else {
       e.ai_timer = 1.0
     }
-  } else if e.ai_state == @types.ai_formation {
+  } else if e.ai_state == Formation {
     if dist < e.detect_range * 0.8 {
-      e.ai_state = @types.ai_chase
+      e.ai_state = Chase
       e.ai_timer = 0.5
     } else {
       e.ai_timer = 1.0
@@ -191,7 +191,7 @@ fn @types.Game::update_fighter_ai(
   let e = game.enemies[idx]
   let spd = @types.fighter_speed
 
-  if e.ai_state == @types.ai_patrol {
+  if e.ai_state == Patrol {
     // Patrol: move toward patrol point
     let pdx = e.patrol_x - e.x
     let pdy = e.patrol_y - e.y
@@ -208,13 +208,13 @@ fn @types.Game::update_fighter_ai(
       e.vy = @types.lerpf(e.vy, 0.0, 1.0 * dt)
       e.vz = @types.lerpf(e.vz, 0.0, 1.0 * dt)
     }
-  } else if e.ai_state == @types.ai_chase {
+  } else if e.ai_state == Chase {
     // Chase: approach player
     let norm = @types.normalize3d(dx, dy, dz)
     e.vx = @types.lerpf(e.vx, norm.0 * spd, 2.0 * dt)
     e.vy = @types.lerpf(e.vy, norm.1 * spd, 2.0 * dt)
     e.vz = @types.lerpf(e.vz, norm.2 * spd, 2.0 * dt)
-  } else if e.ai_state == @types.ai_attack {
+  } else if e.ai_state == Attack {
     if dist > 60.0 {
       // Approach
       let norm = @types.normalize3d(dx, dy, dz)
@@ -240,7 +240,7 @@ fn @types.Game::update_fighter_ai(
       e.vy = @types.lerpf(e.vy, orbit.1 * spd, 2.0 * dt)
       e.vz = @types.lerpf(e.vz, orbit.2 * spd, 2.0 * dt)
     }
-  } else if e.ai_state == @types.ai_evade {
+  } else if e.ai_state == Evade {
     // Evade: jink perpendicular to player direction
     let norm = @types.normalize3d(dx, dy, dz)
     let cross = @types.cross3d(norm.0, norm.1, norm.2, 0.0, 1.0, 0.0)
@@ -252,7 +252,7 @@ fn @types.Game::update_fighter_ai(
     e.vx = @types.lerpf(e.vx, jnorm.0 * spd * 1.2, 3.0 * dt)
     e.vy = @types.lerpf(e.vy, jnorm.1 * spd * 1.2, 3.0 * dt)
     e.vz = @types.lerpf(e.vz, jnorm.2 * spd * 1.2, 3.0 * dt)
-  } else if e.ai_state == @types.ai_flee {
+  } else if e.ai_state == Flee {
     // Run away from player
     let norm = @types.normalize3d(-dx, -dy, -dz)
     e.vx = @types.lerpf(e.vx, norm.0 * spd * 1.5, 2.0 * dt)
@@ -289,7 +289,7 @@ fn @types.Game::update_interceptor_ai(
   let spd = @types.interceptor_speed
 
   // Interceptors are aggressive and fast - they do hit-and-run attacks
-  if e.ai_state == @types.ai_patrol || e.ai_state == @types.ai_idle {
+  if e.ai_state == Patrol || e.ai_state == Idle {
     let pdx = e.patrol_x - e.x
     let pdy = e.patrol_y - e.y
     let pdz = e.patrol_z - e.z
@@ -300,7 +300,7 @@ fn @types.Game::update_interceptor_ai(
       e.vy = @types.lerpf(e.vy, norm.1 * spd * 0.4, 2.0 * dt)
       e.vz = @types.lerpf(e.vz, norm.2 * spd * 0.4, 2.0 * dt)
     }
-  } else if e.ai_state == @types.ai_chase || e.ai_state == @types.ai_attack {
+  } else if e.ai_state == Chase || e.ai_state == Attack {
     // Full speed toward player
     let norm = @types.normalize3d(dx, dy, dz)
     e.vx = @types.lerpf(e.vx, norm.0 * spd, 3.0 * dt)
@@ -309,16 +309,16 @@ fn @types.Game::update_interceptor_ai(
 
     // If very close, zip past and evade
     if dist < 10.0 {
-      e.ai_state = @types.ai_evade
+      e.ai_state = Evade
       e.ai_timer = 2.0
     }
-  } else if e.ai_state == @types.ai_evade {
+  } else if e.ai_state == Evade {
     // Sharp turn away
     let norm = @types.normalize3d(-dx, -dy + 5.0, -dz)
     e.vx = @types.lerpf(e.vx, norm.0 * spd * 1.3, 4.0 * dt)
     e.vy = @types.lerpf(e.vy, norm.1 * spd * 1.3, 4.0 * dt)
     e.vz = @types.lerpf(e.vz, norm.2 * spd * 1.3, 4.0 * dt)
-  } else if e.ai_state == @types.ai_flee {
+  } else if e.ai_state == Flee {
     let norm = @types.normalize3d(-dx, -dy, -dz)
     e.vx = @types.lerpf(e.vx, norm.0 * spd * 1.5, 3.0 * dt)
     e.vy = @types.lerpf(e.vy, norm.1 * spd * 1.5, 3.0 * dt)
@@ -348,7 +348,7 @@ fn @types.Game::update_bomber_ai(
   let spd = @types.bomber_speed
 
   // Bombers are slow but try to get firing angles. They stay at medium range.
-  if e.ai_state == @types.ai_patrol || e.ai_state == @types.ai_idle {
+  if e.ai_state == Patrol || e.ai_state == Idle {
     let pdx = e.patrol_x - e.x
     let pdy = e.patrol_y - e.y
     let pdz = e.patrol_z - e.z
@@ -359,13 +359,13 @@ fn @types.Game::update_bomber_ai(
       e.vy = @types.lerpf(e.vy, norm.1 * spd * 0.3, 1.0 * dt)
       e.vz = @types.lerpf(e.vz, norm.2 * spd * 0.3, 1.0 * dt)
     }
-  } else if e.ai_state == @types.ai_chase {
+  } else if e.ai_state == Chase {
     // Slow approach
     let norm = @types.normalize3d(dx, dy, dz)
     e.vx = @types.lerpf(e.vx, norm.0 * spd, 1.5 * dt)
     e.vy = @types.lerpf(e.vy, norm.1 * spd, 1.5 * dt)
     e.vz = @types.lerpf(e.vz, norm.2 * spd, 1.5 * dt)
-  } else if e.ai_state == @types.ai_attack {
+  } else if e.ai_state == Attack {
     // Hold distance at ~60 units
     if dist > 80.0 {
       let norm = @types.normalize3d(dx, dy, dz)
@@ -383,7 +383,7 @@ fn @types.Game::update_bomber_ai(
       e.vy = @types.lerpf(e.vy, 0.0, 0.5 * dt)
       e.vz = @types.lerpf(e.vz, 0.0, 0.5 * dt)
     }
-  } else if e.ai_state == @types.ai_evade || e.ai_state == @types.ai_flee {
+  } else if e.ai_state == Evade || e.ai_state == Flee {
     let norm = @types.normalize3d(-dx, -dy, -dz)
     e.vx = @types.lerpf(e.vx, norm.0 * spd * 1.2, 1.5 * dt)
     e.vy = @types.lerpf(e.vy, norm.1 * spd * 1.2, 1.5 * dt)
@@ -411,12 +411,12 @@ fn @types.Game::update_cruiser_ai(
   let spd = @types.cruiser_speed
 
   // Cruisers slowly approach and hold distance
-  if e.ai_state == @types.ai_patrol || e.ai_state == @types.ai_idle {
+  if e.ai_state == Patrol || e.ai_state == Idle {
     // Drift slowly
     e.vx = @types.lerpf(e.vx, 0.0, 0.3 * dt)
     e.vy = @types.lerpf(e.vy, 0.0, 0.3 * dt)
     e.vz = @types.lerpf(e.vz, 0.0, 0.3 * dt)
-  } else if e.ai_state == @types.ai_chase || e.ai_state == @types.ai_attack {
+  } else if e.ai_state == Chase || e.ai_state == Attack {
     if dist > 60.0 {
       let norm = @types.normalize3d(dx, dy, dz)
       e.vx = @types.lerpf(e.vx, norm.0 * spd, 1.0 * dt)
@@ -433,7 +433,7 @@ fn @types.Game::update_cruiser_ai(
       e.vy = @types.lerpf(e.vy, 0.0, 0.5 * dt)
       e.vz = @types.lerpf(e.vz, 0.0, 0.5 * dt)
     }
-  } else if e.ai_state == @types.ai_evade || e.ai_state == @types.ai_flee {
+  } else if e.ai_state == Evade || e.ai_state == Flee {
     let norm = @types.normalize3d(-dx, -dy, -dz)
     e.vx = @types.lerpf(e.vx, norm.0 * spd, 1.0 * dt)
     e.vy = @types.lerpf(e.vy, norm.1 * spd, 1.0 * dt)
@@ -529,21 +529,21 @@ fn @types.Game::enemy_fire(
 
   if e.kind == @types.enemy_bomber {
     // Bombers fire plasma-like shots
-    proj.kind = @types.weapon_plasma
+    proj.kind = Plasma
     proj.damage = @types.bomber_damage
     proj.life = 4.0
     proj.target_idx = -1
     proj.size = 0.2
     proj.fuel = 0.0
   } else if e.kind == @types.enemy_capital {
-    proj.kind = @types.weapon_laser
+    proj.kind = Laser
     proj.damage = @types.capital_damage
     proj.life = 4.0
     proj.target_idx = -1
     proj.size = 0.12
     proj.fuel = 0.0
   } else {
-    proj.kind = @types.weapon_laser
+    proj.kind = Laser
     let dmg : Float = if e.kind == @types.enemy_fighter {
       @types.fighter_damage
     } else if e.kind == @types.enemy_interceptor {
@@ -588,7 +588,7 @@ fn @types.Game::capital_turret_fire(
 
   let spd : Float = 90.0
   proj.active = true
-  proj.kind = @types.weapon_laser
+  proj.kind = Laser
   proj.from_player = false
   proj.x = e.x + turret_off_x
   proj.y = e.y + turret_off_y
@@ -679,7 +679,7 @@ pub fn damage_enemy(game : @types.Game, idx : Int, damage : Float) -> Unit {
       if pu_idx >= 0 {
         let pu = game.powerups[pu_idx]
         pu.active = true
-        pu.kind = @types.rand_range(game, 0, 3)
+        pu.kind = @types.powerup_kind_from_int(@types.rand_range(game, 0, 3))
         pu.x = e.x
         pu.y = e.y
         pu.z = e.z
@@ -706,8 +706,8 @@ pub fn damage_enemy(game : @types.Game, idx : Int, damage : Float) -> Unit {
     }
 
     // Update objectives
-    @types.check_objective_progress(game, @types.objective_destroy_all, 1)
-    @types.check_objective_progress(game, @types.objective_destroy_count, 1)
+    @types.check_objective_progress(game, DestroyAll, 1)
+    @types.check_objective_progress(game, DestroyCount, 1)
   }
 }
 

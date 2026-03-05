@@ -15,11 +15,11 @@ fn main {
     @raylib.begin_drawing()
     let bg = @levels.world_bg_color(game.current_world)
     @raylib.clear_background(@raylib.Color::new(bg.0, bg.1, bg.2, 255))
-    if game.state == @types.state_playing ||
-      game.state == @types.state_paused ||
-      game.state == @types.state_level_complete ||
-      game.state == @types.state_game_over ||
-      game.state == @types.state_death_anim {
+    if game.state == Playing ||
+      game.state == Paused ||
+      game.state == LevelComplete ||
+      game.state == GameOver ||
+      game.state == DeathAnim {
       @render.draw_world(game)
     }
     @render.draw_ui(game)

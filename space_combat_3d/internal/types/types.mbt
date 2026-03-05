@@ -17,11 +17,11 @@ pub(all) struct Player {
   mut shield : Float
   mut max_shield : Float
   mut shield_timer : Float
-  mut weapon : Int
+  mut weapon : WeaponKind
   mut fire_timer : Float
   mut boosting : Bool
   mut speed : Float
-  mut ship_class : Int
+  mut ship_class : ShipKind
   mut turn_rate : Float
   mut weapon_level : Int
   mut missile_ammo : Int
@@ -55,11 +55,11 @@ pub fn Player::new() -> Player {
     shield: player_max_shield,
     max_shield: player_max_shield,
     shield_timer: 0.0,
-    weapon: weapon_laser,
+    weapon: Laser,
     fire_timer: 0.0,
     boosting: false,
     speed: player_speed,
-    ship_class: ship_fighter,
+    ship_class: Fighter,
     turn_rate: player_turn_speed,
     weapon_level: 1,
     missile_ammo: missile_max_ammo,
@@ -97,7 +97,7 @@ pub(all) struct Enemy {
   mut max_shield_hp : Float
   mut fire_timer : Float
   mut ai_timer : Float
-  mut ai_state : Int
+  mut ai_state : AiState
   mut score_value : Int
   mut size : Float
   mut squad_id : Int
@@ -134,7 +134,7 @@ pub fn Enemy::inactive() -> Enemy {
     max_shield_hp: 0.0,
     fire_timer: 0.0,
     ai_timer: 0.0,
-    ai_state: ai_idle,
+    ai_state: Idle,
     score_value: 100,
     size: 1.0,
     squad_id: -1,
@@ -158,7 +158,7 @@ pub fn Enemy::inactive() -> Enemy {
 /// Projectile entity with position, velocity, damage, and homing capability.
 pub(all) struct Projectile {
   mut active : Bool
-  mut kind : Int
+  mut kind : WeaponKind
   mut x : Float
   mut y : Float
   mut z : Float
@@ -179,7 +179,7 @@ pub(all) struct Projectile {
 pub fn Projectile::inactive() -> Projectile {
   {
     active: false,
-    kind: 0,
+    kind: Laser,
     x: 0.0,
     y: 0.0,
     z: 0.0,
@@ -288,7 +288,7 @@ pub fn Asteroid::inactive() -> Asteroid {
 /// Collectible power-up pickup with type, position, and animation state.
 pub(all) struct PowerUp {
   mut active : Bool
-  mut kind : Int
+  mut kind : PowerupKind
   mut x : Float
   mut y : Float
   mut z : Float
@@ -302,7 +302,7 @@ pub(all) struct PowerUp {
 pub fn PowerUp::inactive() -> PowerUp {
   {
     active: false,
-    kind: 0,
+    kind: Health,
     x: 0.0,
     y: 0.0,
     z: 0.0,
@@ -412,7 +412,7 @@ pub fn KillFeedEntry::inactive() -> KillFeedEntry {
 ///|
 /// Mission objective tracking type, target count, and completion status.
 pub(all) struct MissionObjective {
-  mut obj_type : Int
+  mut obj_type : Objective
   mut target_count : Int
   mut current_count : Int
   mut complete : Bool
@@ -422,7 +422,7 @@ pub(all) struct MissionObjective {
 ///|
 /// Creates a new mission objective with the given type, target count, and description.
 pub fn MissionObjective::new(
-  obj_type : Int,
+  obj_type : Objective,
   target_count : Int,
   description : String,
 ) -> MissionObjective {
@@ -504,7 +504,7 @@ pub(all) struct Game {
 
   // Loadout
   mut loadout_cursor : Int
-  mut selected_ship_class : Int
+  mut selected_ship_class : ShipKind
 
   // Wave spawning
   mut wave_timer : Float
@@ -607,7 +607,7 @@ pub fn Game::new() -> Game {
 
   let objectives_arr : Array[MissionObjective] = []
   for i in 0..<4 {
-    objectives_arr.push(MissionObjective::new(objective_destroy_all, 0, ""))
+    objectives_arr.push(MissionObjective::new(DestroyAll, 0, ""))
     ignore(i)
   }
 
@@ -699,7 +699,7 @@ pub fn Game::new() -> Game {
     pause_cursor: 0,
     select_cursor: 0,
     loadout_cursor: 0,
-    selected_ship_class: ship_fighter,
+    selected_ship_class: Fighter,
     wave_timer: 0.0,
     wave_number: 0,
     waves_total: 1,

@@ -13,17 +13,17 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
     // AI state transitions based on personality
     game.update_ai_state(i, dist_to_player)
     // Execute behavior
-    if enemy.ai_state == @types.ai_patrol {
+    if enemy.ai_state == Patrol {
       game.update_patrol(i, dt)
-    } else if enemy.ai_state == @types.ai_chase {
+    } else if enemy.ai_state == Chase {
       game.update_chase(i, dt, px, pz)
-    } else if enemy.ai_state == @types.ai_attack {
+    } else if enemy.ai_state == Attack {
       game.update_attack(i, dt, px, pz)
-    } else if enemy.ai_state == @types.ai_retreat {
+    } else if enemy.ai_state == Retreat {
       game.update_retreat(i, dt, px, pz)
-    } else if enemy.ai_state == @types.ai_flank {
+    } else if enemy.ai_state == Flank {
       game.update_flank(i, dt, px, pz)
-    } else if enemy.ai_state == @types.ai_broadside_run {
+    } else if enemy.ai_state == BroadsideRun {
       game.update_broadside_run(i, dt, px, pz)
     }
     // Calculate speed based on wind and mast damage
@@ -94,8 +94,8 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
     }
     if enemy.fire_timer <= 0.0 &&
       (
-        enemy.ai_state == @types.ai_attack ||
-        enemy.ai_state == @types.ai_broadside_run
+        enemy.ai_state == Attack ||
+        enemy.ai_state == BroadsideRun
       ) {
       let can_fire = enemy.crew > 0 && enemy.broadside_cooldown <= 0.0
       if can_fire {
@@ -125,7 +125,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
       }
     }
     // Target convoy ships if applicable
-    if enemy.ai_state == @types.ai_attack || enemy.ai_state == @types.ai_chase {
+    if enemy.ai_state == Attack || enemy.ai_state == Chase {
       game.maybe_target_convoy(i, dt)
     }
   }
@@ -145,58 +145,58 @@ fn @types.Game::update_ai_state(
   }
   // Retreat check based on personality
   if hp_ratio < enemy.retreat_hp_pct &&
-    enemy.ai_personality != @types.ai_personality_berserker {
-    enemy.ai_state = @types.ai_retreat
+    enemy.ai_personality != Berserker {
+    enemy.ai_state = Retreat
     return
   }
   // State machine
-  if enemy.ai_state == @types.ai_patrol {
+  if enemy.ai_state == Patrol {
     if dist_to_player < enemy.detect_range {
       // Transition based on personality
-      if enemy.ai_personality == @types.ai_personality_aggressive ||
-        enemy.ai_personality == @types.ai_personality_berserker {
-        enemy.ai_state = @types.ai_chase
-      } else if enemy.ai_personality == @types.ai_personality_flanker {
-        enemy.ai_state = @types.ai_flank
-      } else if enemy.ai_personality == @types.ai_personality_defensive {
-        enemy.ai_state = @types.ai_attack
-      } else if enemy.ai_personality == @types.ai_personality_retreater {
-        enemy.ai_state = @types.ai_chase
+      if enemy.ai_personality == Aggressive ||
+        enemy.ai_personality == Berserker {
+        enemy.ai_state = Chase
+      } else if enemy.ai_personality == Flanker {
+        enemy.ai_state = Flank
+      } else if enemy.ai_personality == Defensive {
+        enemy.ai_state = Attack
+      } else if enemy.ai_personality == Retreater {
+        enemy.ai_state = Chase
       }
     }
-  } else if enemy.ai_state == @types.ai_chase {
+  } else if enemy.ai_state == Chase {
     if dist_to_player < enemy.attack_range {
-      if enemy.ai_personality == @types.ai_personality_flanker {
-        enemy.ai_state = @types.ai_broadside_run
+      if enemy.ai_personality == Flanker {
+        enemy.ai_state = BroadsideRun
       } else {
-        enemy.ai_state = @types.ai_attack
+        enemy.ai_state = Attack
       }
     } else if dist_to_player > enemy.detect_range * 1.5 {
-      enemy.ai_state = @types.ai_patrol
+      enemy.ai_state = Patrol
     }
-  } else if enemy.ai_state == @types.ai_attack {
+  } else if enemy.ai_state == Attack {
     if dist_to_player > enemy.attack_range * 1.3 {
-      enemy.ai_state = @types.ai_chase
+      enemy.ai_state = Chase
     }
     // Berserkers try to close distance for boarding
-    if enemy.ai_personality == @types.ai_personality_berserker &&
+    if enemy.ai_personality == Berserker &&
       dist_to_player < @types.boarding_range * 2.0 {
       // Stay attacking, try to board
       ignore(game)
     }
-  } else if enemy.ai_state == @types.ai_retreat {
+  } else if enemy.ai_state == Retreat {
     if hp_ratio > enemy.retreat_hp_pct + 0.1 {
-      enemy.ai_state = @types.ai_patrol
+      enemy.ai_state = Patrol
     }
-  } else if enemy.ai_state == @types.ai_flank {
+  } else if enemy.ai_state == Flank {
     if dist_to_player < enemy.attack_range * 0.7 {
-      enemy.ai_state = @types.ai_broadside_run
+      enemy.ai_state = BroadsideRun
     } else if dist_to_player > enemy.detect_range * 1.5 {
-      enemy.ai_state = @types.ai_patrol
+      enemy.ai_state = Patrol
     }
-  } else if enemy.ai_state == @types.ai_broadside_run {
+  } else if enemy.ai_state == BroadsideRun {
     if dist_to_player > enemy.attack_range * 1.2 {
-      enemy.ai_state = @types.ai_chase
+      enemy.ai_state = Chase
     }
   }
 }
@@ -252,9 +252,9 @@ fn @types.Game::update_chase(
   let to_player = @math.atan2f(px - enemy.x, pz - enemy.z)
   // Approach at an angle to get broadside position
   let approach_offset : Float = if enemy.ai_personality ==
-    @types.ai_personality_aggressive {
+    Aggressive {
     @types.pi * 0.2
-  } else if enemy.ai_personality == @types.ai_personality_berserker {
+  } else if enemy.ai_personality == Berserker {
     0.0
   } else {
     @types.pi * 0.3
@@ -301,7 +301,7 @@ fn @types.Game::update_attack(
   let orbit_angle : Float = if dist < enemy.attack_range * 0.6 {
     // Too close, angle away
     let away_mult : Float = if enemy.ai_personality ==
-      @types.ai_personality_defensive {
+      Defensive {
       0.8
     } else {
       0.7
@@ -310,7 +310,7 @@ fn @types.Game::update_attack(
   } else if dist > enemy.attack_range {
     // Too far, angle towards
     let toward_mult : Float = if enemy.ai_personality ==
-      @types.ai_personality_aggressive {
+      Aggressive {
       0.15
     } else {
       0.2
@@ -553,11 +553,11 @@ fn @types.Game::fire_enemy_broadside(
     let aim_dz = pz - cb.z
     let aim_dist = @types.distance2d(cb.x, cb.z, px, pz)
     let cannon_spd = @types.get_cannon_speed(enemy.cannon_type)
-    let inaccuracy : Float = if enemy.ship_class == @types.class_man_of_war {
+    let inaccuracy : Float = if enemy.ship_class == ManOfWar {
       1.5
-    } else if enemy.ship_class == @types.class_galleon {
+    } else if enemy.ship_class == Galleon {
       2.0
-    } else if enemy.ship_class == @types.class_frigate {
+    } else if enemy.ship_class == Frigate {
       2.5
     } else {
       3.0

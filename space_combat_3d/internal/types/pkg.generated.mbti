@@ -4,20 +4,6 @@ package "tonyfettes/raylib-examples/space_combat_3d/internal/types"
 // Values
 pub fn add_kill_feed(Game, String, Int, Int, Int) -> Unit
 
-pub let ai_attack : Int
-
-pub let ai_chase : Int
-
-pub let ai_evade : Int
-
-pub let ai_flee : Int
-
-pub let ai_formation : Int
-
-pub let ai_idle : Int
-
-pub let ai_patrol : Int
-
 pub fn alloc_asteroid(Game) -> Int
 
 pub fn alloc_debris(Game) -> Int
@@ -106,7 +92,7 @@ pub let capital_speed : Float
 
 pub let capital_weak_point_hp : Float
 
-pub fn check_objective_progress(Game, Int, Int) -> Unit
+pub fn check_objective_progress(Game, Objective, Int) -> Unit
 
 pub let combo_mult_2 : Float
 
@@ -190,15 +176,9 @@ pub let fighter_speed : Float
 
 pub fn find_nearest_enemy(Game, Float, Float, Float) -> Int
 
-pub let formation_circle : Int
+pub fn formation_from_int(Int) -> Formation
 
-pub let formation_line : Int
-
-pub fn formation_offset(Int, Int, Float) -> (Float, Float, Float)
-
-pub let formation_v : Int
-
-pub let formation_wedge : Int
+pub fn formation_offset(Formation, Int, Float) -> (Float, Float, Float)
 
 pub fn forward_dir(Float, Float) -> (Float, Float, Float)
 
@@ -290,23 +270,9 @@ pub fn mission_difficulty_speed_mult(Int) -> Float
 
 pub fn normalize3d(Float, Float, Float) -> (Float, Float, Float)
 
-pub let objective_ambush : Int
+pub fn objective_from_int(Int) -> Objective
 
-pub let objective_boss_fight : Int
-
-pub let objective_defend_station : Int
-
-pub let objective_destroy_all : Int
-
-pub let objective_destroy_count : Int
-
-pub let objective_escort : Int
-
-pub let objective_patrol : Int
-
-pub let objective_survive : Int
-
-pub fn objective_type_name(Int) -> String
+pub fn objective_type_name(Objective) -> String
 
 pub let pi : Float
 
@@ -336,21 +302,15 @@ pub let powerup_collect_radius : Float
 
 pub let powerup_float_speed : Float
 
-pub let powerup_health : Int
-
 pub let powerup_health_amount : Float
 
-pub let powerup_shield : Int
+pub fn powerup_kind_from_int(Int) -> PowerupKind
 
 pub let powerup_shield_amount : Float
-
-pub let powerup_speed_boost : Int
 
 pub let powerup_speed_duration : Float
 
 pub let powerup_spin_speed : Float
-
-pub let powerup_weapon_boost : Int
 
 pub let powerup_weapon_duration : Float
 
@@ -384,27 +344,19 @@ pub let shield_regen_delay : Float
 
 pub let shield_regen_rate : Float
 
-pub let ship_bomber : Int
+pub fn ship_class_boost(ShipKind) -> Float
 
-pub let ship_capital_ship : Int
+pub fn ship_class_hull(ShipKind) -> Float
 
-pub fn ship_class_boost(Int) -> Float
+pub fn ship_class_name(ShipKind) -> String
 
-pub fn ship_class_hull(Int) -> Float
+pub fn ship_class_shield(ShipKind) -> Float
 
-pub fn ship_class_name(Int) -> String
+pub fn ship_class_speed(ShipKind) -> Float
 
-pub fn ship_class_shield(Int) -> Float
+pub fn ship_class_turn(ShipKind) -> Float
 
-pub fn ship_class_speed(Int) -> Float
-
-pub fn ship_class_turn(Int) -> Float
-
-pub let ship_cruiser : Int
-
-pub let ship_fighter : Int
-
-pub let ship_interceptor : Int
+pub fn ship_kind_from_int(Int) -> ShipKind
 
 pub fn spawn_debris(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
 
@@ -444,23 +396,15 @@ pub fn up_dir(Float, Float) -> (Float, Float, Float)
 
 pub fn update_combo(Game, Float) -> Unit
 
-pub fn weapon_cooldown(Int) -> Float
+pub fn weapon_cooldown(WeaponKind) -> Float
 
-pub fn weapon_energy_cost(Int) -> Float
+pub fn weapon_energy_cost(WeaponKind) -> Float
 
 pub let weapon_energy_regen : Float
 
-pub let weapon_laser : Int
+pub fn weapon_name(WeaponKind) -> String
 
-pub let weapon_missile : Int
-
-pub fn weapon_name(Int) -> String
-
-pub let weapon_plasma : Int
-
-pub fn weapon_proj_speed(Int) -> Float
-
-pub let weapon_railgun : Int
+pub fn weapon_proj_speed(WeaponKind) -> Float
 
 pub let world_size : Float
 
@@ -469,6 +413,17 @@ pub fn wrap_coord(Float) -> Float
 // Errors
 
 // Types and methods
+pub(all) enum AiState {
+  Idle
+  Patrol
+  Chase
+  Attack
+  Evade
+  Flee
+  Formation
+}
+pub impl Eq for AiState
+
 pub(all) struct Asteroid {
   mut active : Bool
   mut x : Float
@@ -524,7 +479,7 @@ pub(all) struct Enemy {
   mut max_shield_hp : Float
   mut fire_timer : Float
   mut ai_timer : Float
-  mut ai_state : Int
+  mut ai_state : AiState
   mut score_value : Int
   mut size : Float
   mut squad_id : Int
@@ -541,6 +496,14 @@ pub(all) struct Enemy {
   mut weak_point_hp : Float
 }
 pub fn Enemy::inactive() -> Self
+
+pub(all) enum Formation {
+  V
+  Line
+  Circle
+  Wedge
+}
+pub impl Eq for Formation
 
 pub(all) struct Game {
   mut state : Int
@@ -575,7 +538,7 @@ pub(all) struct Game {
   mut pause_cursor : Int
   mut select_cursor : Int
   mut loadout_cursor : Int
-  mut selected_ship_class : Int
+  mut selected_ship_class : ShipKind
   mut wave_timer : Float
   mut wave_number : Int
   mut waves_total : Int
@@ -601,13 +564,25 @@ pub(all) struct KillFeedEntry {
 pub fn KillFeedEntry::inactive() -> Self
 
 pub(all) struct MissionObjective {
-  mut obj_type : Int
+  mut obj_type : Objective
   mut target_count : Int
   mut current_count : Int
   mut complete : Bool
   mut description : String
 }
-pub fn MissionObjective::new(Int, Int, String) -> Self
+pub fn MissionObjective::new(Objective, Int, String) -> Self
+
+pub(all) enum Objective {
+  DestroyAll
+  Escort
+  DefendStation
+  BossFight
+  Ambush
+  PatrolMission
+  Survive
+  DestroyCount
+}
+pub impl Eq for Objective
 
 pub(all) struct Particle {
   mut active : Bool
@@ -642,11 +617,11 @@ pub(all) struct Player {
   mut shield : Float
   mut max_shield : Float
   mut shield_timer : Float
-  mut weapon : Int
+  mut weapon : WeaponKind
   mut fire_timer : Float
   mut boosting : Bool
   mut speed : Float
-  mut ship_class : Int
+  mut ship_class : ShipKind
   mut turn_rate : Float
   mut weapon_level : Int
   mut missile_ammo : Int
@@ -665,7 +640,7 @@ pub fn Player::new() -> Self
 
 pub(all) struct PowerUp {
   mut active : Bool
-  mut kind : Int
+  mut kind : PowerupKind
   mut x : Float
   mut y : Float
   mut z : Float
@@ -675,9 +650,17 @@ pub(all) struct PowerUp {
 }
 pub fn PowerUp::inactive() -> Self
 
+pub(all) enum PowerupKind {
+  Health
+  Shield
+  WeaponBoost
+  SpeedBoost
+}
+pub impl Eq for PowerupKind
+
 pub(all) struct Projectile {
   mut active : Bool
-  mut kind : Int
+  mut kind : WeaponKind
   mut x : Float
   mut y : Float
   mut z : Float
@@ -693,6 +676,15 @@ pub(all) struct Projectile {
   mut piercing : Bool
 }
 pub fn Projectile::inactive() -> Self
+
+pub(all) enum ShipKind {
+  Fighter
+  Interceptor
+  Bomber
+  Cruiser
+  CapitalShip
+}
+pub impl Eq for ShipKind
 
 pub(all) struct SpaceStation {
   mut active : Bool
@@ -716,6 +708,14 @@ pub(all) struct Star {
   g : Int
   b : Int
 }
+
+pub(all) enum WeaponKind {
+  Laser
+  Missile
+  Plasma
+  Railgun
+}
+pub impl Eq for WeaponKind
 
 // Type aliases
 

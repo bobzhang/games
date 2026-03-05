@@ -199,23 +199,23 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
 
   // Check mission complete conditions
   let obj_type = @levels.mission_objective_type(game.current_mission)
-  if obj_type == @types.objective_destroy_all {
+  if obj_type == DestroyAll {
     if @types.count_active_enemies(game) == 0 &&
       game.wave_number >= game.waves_total {
       game.complete_mission()
     }
-  } else if obj_type == @types.objective_destroy_count {
+  } else if obj_type == DestroyCount {
     let target_count = @levels.mission_objective_target(game.current_mission)
     if game.mission_kills >= target_count {
       game.complete_mission()
     }
-  } else if obj_type == @types.objective_boss_fight {
+  } else if obj_type == BossFight {
     // Check if all capital ships are destroyed
     if @types.count_enemies_of_type(game, @types.enemy_capital) == 0 &&
       game.wave_number >= game.waves_total {
       game.complete_mission()
     }
-  } else if obj_type == @types.objective_defend_station {
+  } else if obj_type == DefendStation {
     // Check if all enemies eliminated while station survives
     let station_alive = game.check_station_alive(@types.station_friendly)
     if not(station_alive) {
@@ -375,12 +375,12 @@ fn @types.Game::update_loadout(game : @types.Game) -> Unit {
     @raylib.is_key_pressed(@raylib.KeyRight) {
     // Cycle selected ship class
     if game.loadout_cursor < 5 {
-      game.selected_ship_class = game.loadout_cursor
+      game.selected_ship_class = @types.ship_kind_from_int(game.loadout_cursor)
     }
   }
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    game.selected_ship_class = game.loadout_cursor
+    game.selected_ship_class = @types.ship_kind_from_int(game.loadout_cursor)
     game.state = @types.state_mission_briefing
     game.briefing_scroll = 0
   }
@@ -421,7 +421,7 @@ fn @types.Game::start_mission(game : @types.Game, mission : Int) -> Unit {
   p.max_shield = @types.ship_class_shield(sc)
   p.shield = p.max_shield
   p.shield_timer = 0.0
-  p.weapon = @types.weapon_laser
+  p.weapon = Laser
   p.fire_timer = 0.0
   p.boosting = false
   p.speed = @types.ship_class_speed(sc)
@@ -590,17 +590,17 @@ fn @types.Game::start_mission(game : @types.Game, mission : Int) -> Unit {
   game.objectives[0].obj_type = obj_type
   game.objectives[0].current_count = 0
   game.objectives[0].complete = false
-  if obj_type == @types.objective_destroy_all {
+  if obj_type == DestroyAll {
     game.objectives[0].target_count = total_enemies
     game.objectives[0].description = "Destroy all enemies"
-  } else if obj_type == @types.objective_destroy_count {
+  } else if obj_type == DestroyCount {
     let target = @levels.mission_objective_target(mission)
     game.objectives[0].target_count = target
     game.objectives[0].description = "Destroy \{target} enemies"
-  } else if obj_type == @types.objective_boss_fight {
+  } else if obj_type == BossFight {
     game.objectives[0].target_count = 1
     game.objectives[0].description = "Destroy the capital ship"
-  } else if obj_type == @types.objective_defend_station {
+  } else if obj_type == DefendStation {
     game.objectives[0].target_count = total_enemies
     game.objectives[0].description = "Defend the station"
   } else {
@@ -698,7 +698,7 @@ fn @types.Game::spawn_wave(
       e.pitch = 0.0
       e.fire_timer = 2.0
       e.ai_timer = 0.0
-      e.ai_state = @types.ai_idle
+      e.ai_state = Idle
       e.score_value = @types.capital_score
       e.size = 8.0
       e.squad_id = -1
@@ -721,7 +721,7 @@ fn @types.Game::spawn_enemy_of_type(
   kind : Int,
   hp_mult : Float,
   spd_mult : Float,
-  formation : Int,
+  formation : @types.Formation,
   form_index : Int,
   wave : Int,
 ) -> Unit {
@@ -732,7 +732,7 @@ fn @types.Game::spawn_enemy_of_type(
   let e = game.enemies[idx]
   e.active = true
   e.kind = kind
-  e.ai_state = @types.ai_patrol
+  e.ai_state = Patrol
   e.squad_id = wave
   e.formation_index = form_index
   e.damage_flash = 0.0
@@ -849,7 +849,7 @@ fn @types.Game::collect_powerup(game : @types.Game, idx : Int) -> Unit {
   let p = game.player
   pu.active = false
 
-  if pu.kind == @types.powerup_health {
+  if pu.kind == Health {
     p.hull += @types.powerup_health_amount
     if p.hull > p.max_hull {
       p.hull = p.max_hull
@@ -857,7 +857,7 @@ fn @types.Game::collect_powerup(game : @types.Game, idx : Int) -> Unit {
     game.message_text = "HULL REPAIRED"
     game.message_timer = 1.5
     @types.add_kill_feed(game, "+HULL", 0, 255, 0)
-  } else if pu.kind == @types.powerup_shield {
+  } else if pu.kind == Shield {
     p.shield += @types.powerup_shield_amount
     if p.shield > p.max_shield {
       p.shield = p.max_shield
@@ -865,12 +865,12 @@ fn @types.Game::collect_powerup(game : @types.Game, idx : Int) -> Unit {
     game.message_text = "SHIELD BOOST"
     game.message_timer = 1.5
     @types.add_kill_feed(game, "+SHIELD", 80, 160, 255)
-  } else if pu.kind == @types.powerup_weapon_boost {
+  } else if pu.kind == WeaponBoost {
     p.weapon_boost_timer = @types.powerup_weapon_duration
     game.message_text = "WEAPON POWER UP"
     game.message_timer = 1.5
     @types.add_kill_feed(game, "+WEAPON", 255, 200, 50)
-  } else if pu.kind == @types.powerup_speed_boost {
+  } else if pu.kind == SpeedBoost {
     p.speed_boost_timer = @types.powerup_speed_duration
     game.message_text = "SPEED BOOST"
     game.message_timer = 1.5

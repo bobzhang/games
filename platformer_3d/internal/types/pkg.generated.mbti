@@ -110,25 +110,7 @@ pub let death_bounce_height : Float
 
 pub let death_fall_y : Float
 
-pub let deco_bush : Int
-
-pub let deco_cloud : Int
-
-pub let deco_crystal : Int
-
-pub let deco_lamp : Int
-
-pub let deco_lava_rock : Int
-
-pub let deco_mushroom : Int
-
-pub let deco_pillar : Int
-
-pub let deco_rock : Int
-
-pub let deco_stalagmite : Int
-
-pub let deco_tree : Int
+pub fn deco_from_int(Int) -> Deco
 
 pub let deg2rad : Float
 
@@ -558,26 +540,6 @@ pub let star_score : Int
 
 pub let star_time_threshold_1 : Float
 
-pub let state_campaign_complete : Int
-
-pub let state_death_anim : Int
-
-pub let state_game_over : Int
-
-pub let state_level_complete : Int
-
-pub let state_level_select : Int
-
-pub let state_menu : Int
-
-pub let state_paused : Int
-
-pub let state_playing : Int
-
-pub let state_world_intro : Int
-
-pub let state_world_select : Int
-
 pub let total_levels : Int
 
 pub fn trigger_cam_shake(Game, Float, Float) -> Unit
@@ -626,9 +588,23 @@ pub(all) struct Collectible {
 }
 pub fn Collectible::inactive() -> Self
 
+pub(all) enum Deco {
+  Tree
+  Rock
+  Crystal
+  Mushroom
+  Pillar
+  Stalagmite
+  LavaRock
+  Cloud
+  Bush
+  Lamp
+}
+pub impl Eq for Deco
+
 pub(all) struct Decoration {
   mut active : Bool
-  mut kind : Int
+  mut kind : Deco
   mut x : Float
   mut y : Float
   mut z : Float
@@ -667,7 +643,7 @@ pub(all) struct Enemy {
 pub fn Enemy::inactive() -> Self
 
 pub(all) struct Game {
-  mut state : Int
+  mut state : GameState
   mut px : Float
   mut py : Float
   mut pz : Float
@@ -751,6 +727,20 @@ pub(all) struct Game {
   mut frame_counter : Int
 }
 pub fn Game::new() -> Self
+
+pub(all) enum GameState {
+  Menu
+  Playing
+  Paused
+  LevelComplete
+  GameOver
+  WorldSelect
+  CampaignComplete
+  LevelSelect
+  DeathAnim
+  WorldIntro
+}
+pub impl Eq for GameState
 
 pub(all) struct Hazard {
   mut active : Bool

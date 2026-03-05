@@ -4,25 +4,25 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   game.update_particles(dt)
   game.update_score_flies(dt)
-  if game.state == @types.state_menu {
+  if game.state == Menu {
     game.update_menu(dt)
-  } else if game.state == @types.state_playing {
+  } else if game.state == Playing {
     game.update_playing(dt)
-  } else if game.state == @types.state_paused {
+  } else if game.state == Paused {
     game.update_paused(dt)
-  } else if game.state == @types.state_level_complete {
+  } else if game.state == LevelComplete {
     game.update_level_complete(dt)
-  } else if game.state == @types.state_game_over {
+  } else if game.state == GameOver {
     game.update_game_over(dt)
-  } else if game.state == @types.state_world_select {
+  } else if game.state == WorldSelect {
     game.update_world_select(dt)
-  } else if game.state == @types.state_campaign_complete {
+  } else if game.state == CampaignComplete {
     game.update_campaign_complete(dt)
-  } else if game.state == @types.state_level_select {
+  } else if game.state == LevelSelect {
     game.update_level_select(dt)
-  } else if game.state == @types.state_death_anim {
+  } else if game.state == DeathAnim {
     game.update_death_anim(dt)
-  } else if game.state == @types.state_world_intro {
+  } else if game.state == WorldIntro {
     game.update_world_intro(dt)
   }
 }
@@ -52,12 +52,12 @@ fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
       game.current_world = 0
       game.current_level = 0
       load_level(game, 0, 0)
-      game.state = @types.state_world_intro
+      game.state = WorldIntro
     } else if game.menu_cursor == 1 {
-      game.state = @types.state_world_select
+      game.state = WorldSelect
     } else {
       // Level select
-      game.state = @types.state_level_select
+      game.state = LevelSelect
     }
   }
 }
@@ -66,7 +66,7 @@ fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
-    game.state = @types.state_paused
+    game.state = Paused
     game.pause_cursor = 0
     return
   }
@@ -159,7 +159,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
       215,
       0,
     )
-    game.state = @types.state_level_complete
+    game.state = LevelComplete
   }
 }
 
@@ -167,7 +167,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::update_paused(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
-    game.state = @types.state_playing
+    game.state = Playing
     return
   }
   if @raylib.is_key_pressed(@raylib.KeyUp) {
@@ -186,14 +186,14 @@ fn @types.Game::update_paused(game : @types.Game, _dt : Float) -> Unit {
     @raylib.is_key_pressed(@raylib.KeySpace) {
     if game.pause_cursor == 0 {
       // Resume
-      game.state = @types.state_playing
+      game.state = Playing
     } else if game.pause_cursor == 1 {
       // Restart
       load_level(game, game.current_world, game.current_level)
-      game.state = @types.state_playing
+      game.state = Playing
     } else {
       // Quit to menu
-      game.state = @types.state_menu
+      game.state = Menu
     }
   }
 }
@@ -207,21 +207,21 @@ fn @types.Game::update_level_complete(game : @types.Game, dt : Float) -> Unit {
     if next_level >= @types.levels_per_world {
       let next_world = game.current_world + 1
       if next_world >= @types.num_worlds {
-        game.state = @types.state_campaign_complete
+        game.state = CampaignComplete
       } else {
         game.current_world = next_world
         game.current_level = 0
         game.world_intro_timer = @types.world_intro_duration
         load_level(game, next_world, 0)
-        game.state = @types.state_world_intro
+        game.state = WorldIntro
       }
     } else {
       load_level(game, game.current_world, next_level)
-      game.state = @types.state_playing
+      game.state = Playing
     }
   }
   if @raylib.is_key_pressed(@raylib.KeyM) {
-    game.state = @types.state_menu
+    game.state = Menu
   }
 }
 
@@ -232,19 +232,19 @@ fn @types.Game::update_game_over(game : @types.Game, _dt : Float) -> Unit {
     game.lives = @types.player_max_lives
     game.score = 0
     load_level(game, game.current_world, game.current_level)
-    game.state = @types.state_playing
+    game.state = Playing
   }
   if @raylib.is_key_pressed(@raylib.KeyM) {
     game.lives = @types.player_max_lives
     game.score = 0
-    game.state = @types.state_menu
+    game.state = Menu
   }
 }
 
 ///|
 fn @types.Game::update_world_select(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.state_menu
+    game.state = Menu
     return
   }
   if @raylib.is_key_pressed(@raylib.KeyLeft) {
@@ -265,7 +265,7 @@ fn @types.Game::update_world_select(game : @types.Game, _dt : Float) -> Unit {
     game.current_level = 0
     game.world_intro_timer = @types.world_intro_duration
     load_level(game, game.world_select_cursor, 0)
-    game.state = @types.state_world_intro
+    game.state = WorldIntro
   }
 }
 
@@ -276,14 +276,14 @@ fn @types.Game::update_campaign_complete(
 ) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    game.state = @types.state_menu
+    game.state = Menu
   }
 }
 
 ///|
 fn @types.Game::update_level_select(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.state_menu
+    game.state = Menu
     return
   }
   let total = @types.total_levels
@@ -316,7 +316,7 @@ fn @types.Game::update_level_select(game : @types.Game, _dt : Float) -> Unit {
     let w = game.level_select_cursor / @types.levels_per_world
     let l = game.level_select_cursor % @types.levels_per_world
     load_level(game, w, l)
-    game.state = @types.state_playing
+    game.state = Playing
   }
 }
 
@@ -332,7 +332,7 @@ fn @types.Game::update_death_anim(game : @types.Game, dt : Float) -> Unit {
   if game.death_timer >= @types.death_anim_time {
     game.death_timer = 0.0
     if game.lives <= 0 {
-      game.state = @types.state_game_over
+      game.state = GameOver
     } else {
       // Respawn at checkpoint
       game.px = game.checkpoint_x
@@ -343,7 +343,7 @@ fn @types.Game::update_death_anim(game : @types.Game, dt : Float) -> Unit {
       game.vz = 0.0
       game.grounded = false
       game.invincible_timer = @types.invincible_time
-      game.state = @types.state_playing
+      game.state = Playing
     }
   }
 }
@@ -354,7 +354,7 @@ fn @types.Game::update_world_intro(game : @types.Game, dt : Float) -> Unit {
   if game.world_intro_timer <= 0.0 ||
     @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    game.state = @types.state_playing
+    game.state = Playing
   }
 }
 
@@ -901,5 +901,5 @@ fn @types.Game::player_die(game : @types.Game) -> Unit {
   )
   @types.trigger_cam_shake(game, 0.3, 0.4)
   game.death_timer = 0.0
-  game.state = @types.state_death_anim
+  game.state = DeathAnim
 }

@@ -18,24 +18,24 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   }
   // Sail state management (1/2/3 keys for quick setting)
   if @raylib.is_key_pressed(@raylib.KeyOne) {
-    ship.sail_state = @types.sail_furled
+    ship.sail_state = Furled
     ship.sail_amount = @types.sail_furled_mult
   }
   if @raylib.is_key_pressed(@raylib.KeyTwo) {
-    ship.sail_state = @types.sail_half
+    ship.sail_state = Half
     ship.sail_amount = @types.sail_half_mult
   }
   if @raylib.is_key_pressed(@raylib.KeyThree) {
-    ship.sail_state = @types.sail_full
+    ship.sail_state = Full
     ship.sail_amount = @types.sail_full_mult
   }
   // Update sail state based on amount
   if ship.sail_amount < 0.15 {
-    ship.sail_state = @types.sail_furled
+    ship.sail_state = Furled
   } else if ship.sail_amount < 0.7 {
-    ship.sail_state = @types.sail_half
+    ship.sail_state = Half
   } else {
-    ship.sail_state = @types.sail_full
+    ship.sail_state = Full
   }
   // Wind-based speed calculation using sailing physics
   let mast_ratio : Float = if @types.get_class_max_mast(ship.ship_class) > 0.0 {

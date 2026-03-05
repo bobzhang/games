@@ -10,51 +10,7 @@ pub let screen_height : Int = 768
 
 // Game states
 
-///|
-/// Numeric id for menu.
-pub let state_menu : Int = 0
-
-///|
-/// Numeric id for playing.
-pub let state_playing : Int = 1
-
-///|
-/// Numeric id for paused.
-pub let state_paused : Int = 2
-
-///|
-/// Numeric id for battle complete.
-pub let state_battle_complete : Int = 3
-
-///|
-/// Numeric id for game over.
-pub let state_game_over : Int = 4
-
-///|
-/// Numeric id for battle select.
-pub let state_battle_select : Int = 5
-
 // Ship classes
-
-///|
-/// Numeric id for sloop.
-pub let class_sloop : Int = 0
-
-///|
-/// Numeric id for brigantine.
-pub let class_brigantine : Int = 1
-
-///|
-/// Numeric id for frigate.
-pub let class_frigate : Int = 2
-
-///|
-/// Numeric id for galleon.
-pub let class_galleon : Int = 3
-
-///|
-/// Numeric id for man of war.
-pub let class_man_of_war : Int = 4
 
 // Ship class stats: (max_hull, max_mast_hp, max_rudder_hp, max_crew, cannon_count, base_speed, turn_rate, ship_length, ship_width)
 // Sloop: fast, light, small crew
@@ -248,26 +204,6 @@ pub let mow_length : Float = 8.0
 pub let mow_width : Float = 3.0
 
 // Cannon types
-
-///|
-/// Numeric id for light.
-pub let cannon_light : Int = 0
-
-///|
-/// Numeric id for medium.
-pub let cannon_medium : Int = 1
-
-///|
-/// Numeric id for heavy.
-pub let cannon_heavy : Int = 2
-
-///|
-/// Numeric id for mortar.
-pub let cannon_mortar : Int = 3
-
-///|
-/// Numeric id for chain shot.
-pub let cannon_chain_shot : Int = 4
 
 // Cannon stats: damage, range, reload_time, speed, arc
 
@@ -467,18 +403,6 @@ pub let broad_reach_angle : Float = 2.5
 
 // Sail states
 
-///|
-/// Numeric id for furled.
-pub let sail_furled : Int = 0
-
-///|
-/// Numeric id for half.
-pub let sail_half : Int = 1
-
-///|
-/// Numeric id for full.
-pub let sail_full : Int = 2
-
 // Sail state speed multipliers
 
 ///|
@@ -529,51 +453,7 @@ pub let crew_action_repair_rudder : Int = 4
 
 // AI captain personality types
 
-///|
-/// Numeric id for personality aggressive.
-pub let ai_personality_aggressive : Int = 0
-
-///|
-/// Numeric id for personality defensive.
-pub let ai_personality_defensive : Int = 1
-
-///|
-/// Numeric id for personality flanker.
-pub let ai_personality_flanker : Int = 2
-
-///|
-/// Numeric id for personality retreater.
-pub let ai_personality_retreater : Int = 3
-
-///|
-/// Numeric id for personality berserker.
-pub let ai_personality_berserker : Int = 4
-
 // Enemy AI states
-
-///|
-/// Numeric id for patrol.
-pub let ai_patrol : Int = 0
-
-///|
-/// Numeric id for chase.
-pub let ai_chase : Int = 1
-
-///|
-/// Numeric id for attack.
-pub let ai_attack : Int = 2
-
-///|
-/// Numeric id for retreat.
-pub let ai_retreat : Int = 3
-
-///|
-/// Numeric id for flank.
-pub let ai_flank : Int = 4
-
-///|
-/// Numeric id for broadside run.
-pub let ai_broadside_run : Int = 5
 
 // Battle objective types
 
@@ -590,22 +470,6 @@ pub let objective_escort_convoy : Int = 3
 pub let objective_blockade_run : Int = 4
 
 // Island types
-
-///|
-/// Numeric id for small.
-pub let island_small : Int = 0
-
-///|
-/// Numeric id for medium.
-pub let island_medium : Int = 1
-
-///|
-/// Numeric id for large.
-pub let island_large : Int = 2
-
-///|
-/// Numeric id for fortress.
-pub let island_fortress : Int = 3
 
 // Pool sizes
 
@@ -832,3 +696,66 @@ pub let convoy_spacing : Float = 8.0
 ///|
 /// Size or distance value for fleet follow dist in world units.
 pub let fleet_follow_dist : Float = 15.0
+
+
+///|
+pub(all) enum AiState {
+  Patrol
+  Chase
+  Attack
+  Retreat
+  Flank
+  BroadsideRun
+} derive(Eq)
+
+///|
+pub(all) enum AiPersonality {
+  Aggressive
+  Defensive
+  Flanker
+  Retreater
+  Berserker
+} derive(Eq)
+
+///|
+pub(all) enum Cannon {
+  Light
+  Medium
+  Heavy
+  Mortar
+  ChainShot
+} derive(Eq)
+
+///|
+pub(all) enum ShipClass {
+  Sloop
+  Brigantine
+  Frigate
+  Galleon
+  ManOfWar
+} derive(Eq)
+
+///|
+pub(all) enum IslandKind {
+  Small
+  Medium
+  Large
+  Fortress
+} derive(Eq)
+
+///|
+pub(all) enum Sail {
+  Furled
+  Half
+  Full
+} derive(Eq)
+
+///|
+pub(all) enum GameState {
+  Menu
+  Playing
+  Paused
+  BattleComplete
+  GameOver
+  BattleSelect
+} derive(Eq)

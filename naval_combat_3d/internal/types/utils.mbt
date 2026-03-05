@@ -203,19 +203,13 @@ pub fn calc_wind_drift(
 
 ///|
 /// Returns base damage for a cannon type.
-pub fn get_cannon_damage(cannon_type : Int) -> Float {
-  if cannon_type == cannon_light {
-    light_cannon_damage
-  } else if cannon_type == cannon_medium {
-    medium_cannon_damage
-  } else if cannon_type == cannon_heavy {
-    heavy_cannon_damage
-  } else if cannon_type == cannon_mortar {
-    mortar_damage
-  } else if cannon_type == cannon_chain_shot {
-    chain_shot_damage
-  } else {
-    medium_cannon_damage
+pub fn get_cannon_damage(cannon_type : Cannon) -> Float {
+  match cannon_type {
+    Light => light_cannon_damage
+    Medium => medium_cannon_damage
+    Heavy => heavy_cannon_damage
+    Mortar => mortar_damage
+    ChainShot => chain_shot_damage
   }
 }
 
@@ -225,19 +219,13 @@ pub fn get_cannon_damage(cannon_type : Int) -> Float {
 
 ///|
 /// Returns muzzle speed for a cannon type.
-pub fn get_cannon_speed(cannon_type : Int) -> Float {
-  if cannon_type == cannon_light {
-    light_cannon_speed
-  } else if cannon_type == cannon_medium {
-    medium_cannon_speed
-  } else if cannon_type == cannon_heavy {
-    heavy_cannon_speed
-  } else if cannon_type == cannon_mortar {
-    mortar_speed
-  } else if cannon_type == cannon_chain_shot {
-    chain_shot_speed
-  } else {
-    medium_cannon_speed
+pub fn get_cannon_speed(cannon_type : Cannon) -> Float {
+  match cannon_type {
+    Light => light_cannon_speed
+    Medium => medium_cannon_speed
+    Heavy => heavy_cannon_speed
+    Mortar => mortar_speed
+    ChainShot => chain_shot_speed
   }
 }
 
@@ -245,19 +233,13 @@ pub fn get_cannon_speed(cannon_type : Int) -> Float {
 
 ///|
 /// Returns vertical launch arc factor for a cannon type.
-pub fn get_cannon_arc(cannon_type : Int) -> Float {
-  if cannon_type == cannon_light {
-    light_cannon_arc
-  } else if cannon_type == cannon_medium {
-    medium_cannon_arc
-  } else if cannon_type == cannon_heavy {
-    heavy_cannon_arc
-  } else if cannon_type == cannon_mortar {
-    mortar_arc
-  } else if cannon_type == cannon_chain_shot {
-    chain_shot_arc
-  } else {
-    medium_cannon_arc
+pub fn get_cannon_arc(cannon_type : Cannon) -> Float {
+  match cannon_type {
+    Light => light_cannon_arc
+    Medium => medium_cannon_arc
+    Heavy => heavy_cannon_arc
+    Mortar => mortar_arc
+    ChainShot => chain_shot_arc
   }
 }
 
@@ -309,181 +291,121 @@ pub fn get_ammo_crew_mult(ammo_type : Int) -> Float {
 
 ///|
 /// Returns maximum hull HP for a ship class.
-pub fn get_class_max_hull(ship_class : Int) -> Float {
-  if ship_class == class_sloop {
-    sloop_max_hull
-  } else if ship_class == class_brigantine {
-    brigantine_max_hull
-  } else if ship_class == class_frigate {
-    frigate_max_hull
-  } else if ship_class == class_galleon {
-    galleon_max_hull
-  } else if ship_class == class_man_of_war {
-    mow_max_hull
-  } else {
-    frigate_max_hull
+pub fn get_class_max_hull(ship_class : ShipClass) -> Float {
+  match ship_class {
+    Sloop => sloop_max_hull
+    Brigantine => brigantine_max_hull
+    Frigate => frigate_max_hull
+    Galleon => galleon_max_hull
+    ManOfWar => mow_max_hull
   }
 }
 
 ///|
 /// Returns maximum mast HP for a ship class.
-pub fn get_class_max_mast(ship_class : Int) -> Float {
-  if ship_class == class_sloop {
-    sloop_max_mast
-  } else if ship_class == class_brigantine {
-    brigantine_max_mast
-  } else if ship_class == class_frigate {
-    frigate_max_mast
-  } else if ship_class == class_galleon {
-    galleon_max_mast
-  } else if ship_class == class_man_of_war {
-    mow_max_mast
-  } else {
-    frigate_max_mast
+pub fn get_class_max_mast(ship_class : ShipClass) -> Float {
+  match ship_class {
+    Sloop => sloop_max_mast
+    Brigantine => brigantine_max_mast
+    Frigate => frigate_max_mast
+    Galleon => galleon_max_mast
+    ManOfWar => mow_max_mast
   }
 }
 
 ///|
 /// Returns maximum rudder HP for a ship class.
-pub fn get_class_max_rudder(ship_class : Int) -> Float {
-  if ship_class == class_sloop {
-    sloop_max_rudder
-  } else if ship_class == class_brigantine {
-    brigantine_max_rudder
-  } else if ship_class == class_frigate {
-    frigate_max_rudder
-  } else if ship_class == class_galleon {
-    galleon_max_rudder
-  } else if ship_class == class_man_of_war {
-    mow_max_rudder
-  } else {
-    frigate_max_rudder
+pub fn get_class_max_rudder(ship_class : ShipClass) -> Float {
+  match ship_class {
+    Sloop => sloop_max_rudder
+    Brigantine => brigantine_max_rudder
+    Frigate => frigate_max_rudder
+    Galleon => galleon_max_rudder
+    ManOfWar => mow_max_rudder
   }
 }
 
 ///|
 /// Returns base sailing speed for a ship class.
-pub fn get_class_base_speed(ship_class : Int) -> Float {
-  if ship_class == class_sloop {
-    sloop_base_speed
-  } else if ship_class == class_brigantine {
-    brigantine_base_speed
-  } else if ship_class == class_frigate {
-    frigate_base_speed
-  } else if ship_class == class_galleon {
-    galleon_base_speed
-  } else if ship_class == class_man_of_war {
-    mow_base_speed
-  } else {
-    frigate_base_speed
+pub fn get_class_base_speed(ship_class : ShipClass) -> Float {
+  match ship_class {
+    Sloop => sloop_base_speed
+    Brigantine => brigantine_base_speed
+    Frigate => frigate_base_speed
+    Galleon => galleon_base_speed
+    ManOfWar => mow_base_speed
   }
 }
 
 ///|
 /// Returns base turning rate for a ship class.
-pub fn get_class_turn_rate(ship_class : Int) -> Float {
-  if ship_class == class_sloop {
-    sloop_turn_rate
-  } else if ship_class == class_brigantine {
-    brigantine_turn_rate
-  } else if ship_class == class_frigate {
-    frigate_turn_rate
-  } else if ship_class == class_galleon {
-    galleon_turn_rate
-  } else if ship_class == class_man_of_war {
-    mow_turn_rate
-  } else {
-    frigate_turn_rate
+pub fn get_class_turn_rate(ship_class : ShipClass) -> Float {
+  match ship_class {
+    Sloop => sloop_turn_rate
+    Brigantine => brigantine_turn_rate
+    Frigate => frigate_turn_rate
+    Galleon => galleon_turn_rate
+    ManOfWar => mow_turn_rate
   }
 }
 
 ///|
 /// Returns broadside cannon count for a ship class.
-pub fn get_class_cannon_count(ship_class : Int) -> Int {
-  if ship_class == class_sloop {
-    sloop_cannon_count
-  } else if ship_class == class_brigantine {
-    brigantine_cannon_count
-  } else if ship_class == class_frigate {
-    frigate_cannon_count
-  } else if ship_class == class_galleon {
-    galleon_cannon_count
-  } else if ship_class == class_man_of_war {
-    mow_cannon_count
-  } else {
-    frigate_cannon_count
+pub fn get_class_cannon_count(ship_class : ShipClass) -> Int {
+  match ship_class {
+    Sloop => sloop_cannon_count
+    Brigantine => brigantine_cannon_count
+    Frigate => frigate_cannon_count
+    Galleon => galleon_cannon_count
+    ManOfWar => mow_cannon_count
   }
 }
 
 ///|
 /// Returns maximum crew capacity for a ship class.
-pub fn get_class_max_crew(ship_class : Int) -> Int {
-  if ship_class == class_sloop {
-    sloop_max_crew
-  } else if ship_class == class_brigantine {
-    brigantine_max_crew
-  } else if ship_class == class_frigate {
-    frigate_max_crew
-  } else if ship_class == class_galleon {
-    galleon_max_crew
-  } else if ship_class == class_man_of_war {
-    mow_max_crew
-  } else {
-    frigate_max_crew
+pub fn get_class_max_crew(ship_class : ShipClass) -> Int {
+  match ship_class {
+    Sloop => sloop_max_crew
+    Brigantine => brigantine_max_crew
+    Frigate => frigate_max_crew
+    Galleon => galleon_max_crew
+    ManOfWar => mow_max_crew
   }
 }
 
 ///|
 /// Returns hull length in world units for a ship class.
-pub fn get_class_length(ship_class : Int) -> Float {
-  if ship_class == class_sloop {
-    sloop_length
-  } else if ship_class == class_brigantine {
-    brigantine_length
-  } else if ship_class == class_frigate {
-    frigate_length
-  } else if ship_class == class_galleon {
-    galleon_length
-  } else if ship_class == class_man_of_war {
-    mow_length
-  } else {
-    frigate_length
+pub fn get_class_length(ship_class : ShipClass) -> Float {
+  match ship_class {
+    Sloop => sloop_length
+    Brigantine => brigantine_length
+    Frigate => frigate_length
+    Galleon => galleon_length
+    ManOfWar => mow_length
   }
 }
 
 ///|
 /// Returns hull width in world units for a ship class.
-pub fn get_class_width(ship_class : Int) -> Float {
-  if ship_class == class_sloop {
-    sloop_width
-  } else if ship_class == class_brigantine {
-    brigantine_width
-  } else if ship_class == class_frigate {
-    frigate_width
-  } else if ship_class == class_galleon {
-    galleon_width
-  } else if ship_class == class_man_of_war {
-    mow_width
-  } else {
-    frigate_width
+pub fn get_class_width(ship_class : ShipClass) -> Float {
+  match ship_class {
+    Sloop => sloop_width
+    Brigantine => brigantine_width
+    Frigate => frigate_width
+    Galleon => galleon_width
+    ManOfWar => mow_width
   }
 }
 
 ///|
 /// Returns display name for a ship class id.
-pub fn get_class_name(ship_class : Int) -> String {
-  if ship_class == class_sloop {
-    "Sloop"
-  } else if ship_class == class_brigantine {
-    "Brigantine"
-  } else if ship_class == class_frigate {
-    "Frigate"
-  } else if ship_class == class_galleon {
-    "Galleon"
-  } else if ship_class == class_man_of_war {
-    "Man-of-War"
-  } else {
-    "Ship"
+pub fn get_class_name(ship_class : ShipClass) -> String {
+  match ship_class {
+    Sloop => "Sloop"
+    Brigantine => "Brigantine"
+    Frigate => "Frigate"
+    Galleon => "Galleon"
+    ManOfWar => "Man-of-War"
   }
 }
 

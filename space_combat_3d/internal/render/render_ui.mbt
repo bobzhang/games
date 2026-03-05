@@ -247,9 +247,9 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(150, 150, 170, 255),
   )
   let wpn_name = @types.weapon_name(p.weapon)
-  let wpn_color = if p.weapon == @types.weapon_laser {
+  let wpn_color = if p.weapon == Laser {
     @raylib.Color::new(255, 255, 100, 255)
-  } else if p.weapon == @types.weapon_missile {
+  } else if p.weapon == Missile {
     @raylib.Color::new(255, 180, 80, 255)
   } else {
     @raylib.Color::new(100, 255, 150, 255)
@@ -257,17 +257,17 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_text(wpn_name, wpn_x + 5, wpn_y + 25, 20, wpn_color)
 
   // Weapon selection keys
-  let key1_color = if p.weapon == @types.weapon_laser {
+  let key1_color = if p.weapon == Laser {
     @raylib.Color::new(255, 255, 100, 255)
   } else {
     @raylib.Color::new(100, 100, 100, 255)
   }
-  let key2_color = if p.weapon == @types.weapon_missile {
+  let key2_color = if p.weapon == Missile {
     @raylib.Color::new(255, 180, 80, 255)
   } else {
     @raylib.Color::new(100, 100, 100, 255)
   }
-  let key3_color = if p.weapon == @types.weapon_plasma {
+  let key3_color = if p.weapon == Plasma {
     @raylib.Color::new(100, 255, 150, 255)
   } else {
     @raylib.Color::new(100, 100, 100, 255)
@@ -705,14 +705,15 @@ fn @types.Game::draw_loadout(game : @types.Game) -> Unit {
       @raylib.Color::new(150, 150, 170, 255)
     }
     let prefix = if is_sel { "> " } else { "  " }
-    let name_text = prefix + @types.ship_class_name(i)
+    let sk = @types.ship_kind_from_int(i)
+    let name_text = prefix + @types.ship_class_name(sk)
     @raylib.draw_text(name_text, 200, y, 26, color)
 
     // Stats
-    let hull_val = @types.ship_class_hull(i).to_int()
-    let shield_val = @types.ship_class_shield(i).to_int()
-    let speed_val = @types.ship_class_speed(i).to_int()
-    let turn_val = @types.ship_class_turn(i)
+    let hull_val = @types.ship_class_hull(sk).to_int()
+    let shield_val = @types.ship_class_shield(sk).to_int()
+    let speed_val = @types.ship_class_speed(sk).to_int()
+    let turn_val = @types.ship_class_turn(sk)
     let turn_text = turn_val.to_string()
     let stats_color = if is_sel {
       @raylib.Color::new(200, 200, 150, 255)

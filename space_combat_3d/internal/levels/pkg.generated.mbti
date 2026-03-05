@@ -1,6 +1,10 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "tonyfettes/raylib-examples/space_combat_3d/internal/levels"
 
+import {
+  "tonyfettes/raylib-examples/space_combat_3d/internal/types",
+}
+
 // Values
 pub fn get_mission_def(Int) -> (Int, Int, Int, Float, Float)
 
@@ -12,19 +16,19 @@ pub fn mission_briefing(Int) -> String
 
 pub fn mission_difficulty_text(Int) -> String
 
-pub fn mission_formation(Int) -> Int
+pub fn mission_formation(Int) -> @types.Formation
 
 pub fn mission_name(Int) -> String
 
 pub fn mission_objective_target(Int) -> Int
 
-pub fn mission_objective_type(Int) -> Int
+pub fn mission_objective_type(Int) -> @types.Objective
 
 pub fn mission_reward(Int) -> Int
 
 pub fn mission_station_pos(Int, Int) -> (Float, Float, Float)
 
-pub fn powerup_spawn_pos(Int, Int) -> (Float, Float, Float, Int)
+pub fn powerup_spawn_pos(Int, Int) -> (Float, Float, Float, @types.PowerupKind)
 
 pub fn wave_composition(Int, Int) -> (Int, Int, Int, Int)
 

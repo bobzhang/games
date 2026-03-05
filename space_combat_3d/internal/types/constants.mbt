@@ -45,42 +45,25 @@ pub let state_loadout : Int = 7
 // Ship classes
 
 ///|
-/// Ship class identifier for the balanced fighter.
-pub let ship_fighter : Int = 0
-
-///|
-/// Ship class identifier for the fast, fragile interceptor.
-pub let ship_interceptor : Int = 1
-
-///|
-/// Ship class identifier for the slow, heavy bomber.
-pub let ship_bomber : Int = 2
-
-///|
-/// Ship class identifier for the armored cruiser.
-pub let ship_cruiser : Int = 3
-
-///|
-/// Ship class identifier for the massive capital ship.
-pub let ship_capital_ship : Int = 4
+/// Player and enemy ship class identifiers.
+pub(all) enum ShipKind {
+  Fighter
+  Interceptor
+  Bomber
+  Cruiser
+  CapitalShip
+} derive(Eq)
 
 // Weapon types
 
 ///|
-/// Weapon type identifier for rapid-fire laser bolts.
-pub let weapon_laser : Int = 0
-
-///|
-/// Weapon type identifier for homing missiles.
-pub let weapon_missile : Int = 1
-
-///|
-/// Weapon type identifier for area-of-effect plasma shots.
-pub let weapon_plasma : Int = 2
-
-///|
-/// Weapon type identifier for high-velocity piercing railgun rounds.
-pub let weapon_railgun : Int = 3
+/// Weapon type identifiers for projectiles.
+pub(all) enum WeaponKind {
+  Laser
+  Missile
+  Plasma
+  Railgun
+} derive(Eq)
 
 // Enemy types
 
@@ -107,50 +90,27 @@ pub let enemy_capital : Int = 5
 // Enemy AI states
 
 ///|
-/// AI state for idle enemies awaiting activation.
-pub let ai_idle : Int = 0
-
-///|
-/// AI state for patrolling toward a waypoint.
-pub let ai_patrol : Int = 1
-
-///|
-/// AI state for pursuing the player.
-pub let ai_chase : Int = 2
-
-///|
-/// AI state for actively engaging and firing at the player.
-pub let ai_attack : Int = 3
-
-///|
-/// AI state for evasive jinking maneuvers when damaged.
-pub let ai_evade : Int = 4
-
-///|
-/// AI state for fleeing when health is critically low.
-pub let ai_flee : Int = 5
-
-///|
-/// AI state for holding squad formation position.
-pub let ai_formation : Int = 6
+/// Enemy AI behavior state identifiers.
+pub(all) enum AiState {
+  Idle
+  Patrol
+  Chase
+  Attack
+  Evade
+  Flee
+  Formation
+} derive(Eq)
 
 // Power-up types
 
 ///|
-/// Power-up type that restores hull integrity.
-pub let powerup_health : Int = 0
-
-///|
-/// Power-up type that recharges shield energy.
-pub let powerup_shield : Int = 1
-
-///|
-/// Power-up type that temporarily increases weapon damage.
-pub let powerup_weapon_boost : Int = 2
-
-///|
-/// Power-up type that temporarily increases ship speed.
-pub let powerup_speed_boost : Int = 3
+/// Power-up pickup type identifiers.
+pub(all) enum PowerupKind {
+  Health
+  Shield
+  WeaponBoost
+  SpeedBoost
+} derive(Eq)
 
 // Asteroid size tiers
 
@@ -169,20 +129,28 @@ pub let asteroid_small : Int = 2
 // Formation patterns
 
 ///|
-/// V-shaped formation pattern for enemy squads.
-pub let formation_v : Int = 0
+/// Enemy squad formation pattern identifiers.
+pub(all) enum Formation {
+  V
+  Line
+  Circle
+  Wedge
+} derive(Eq)
+
+// Mission objective types
 
 ///|
-/// Line-abreast formation pattern for enemy squads.
-pub let formation_line : Int = 1
-
-///|
-/// Circular formation pattern for enemy squads.
-pub let formation_circle : Int = 2
-
-///|
-/// Arrow-wedge formation pattern for enemy squads.
-pub let formation_wedge : Int = 3
+/// Mission objective type identifiers.
+pub(all) enum Objective {
+  DestroyAll
+  Escort
+  DefendStation
+  BossFight
+  Ambush
+  PatrolMission
+  Survive
+  DestroyCount
+} derive(Eq)
 
 // Pool sizes
 
@@ -786,14 +754,14 @@ pub fn mission_difficulty_speed_mult(mission : Int) -> Float {
 
 ///|
 /// Returns the maximum hull hit points for the given `ship_class`.
-pub fn ship_class_hull(ship_class : Int) -> Float {
-  if ship_class == ship_fighter {
+pub fn ship_class_hull(ship_class : ShipKind) -> Float {
+  if ship_class == Fighter {
     fighter_class_hull
-  } else if ship_class == ship_interceptor {
+  } else if ship_class == Interceptor {
     interceptor_class_hull
-  } else if ship_class == ship_bomber {
+  } else if ship_class == Bomber {
     bomber_class_hull
-  } else if ship_class == ship_cruiser {
+  } else if ship_class == Cruiser {
     cruiser_class_hull
   } else {
     capital_class_hull
@@ -802,14 +770,14 @@ pub fn ship_class_hull(ship_class : Int) -> Float {
 
 ///|
 /// Returns the maximum shield capacity for the given `ship_class`.
-pub fn ship_class_shield(ship_class : Int) -> Float {
-  if ship_class == ship_fighter {
+pub fn ship_class_shield(ship_class : ShipKind) -> Float {
+  if ship_class == Fighter {
     fighter_class_shield
-  } else if ship_class == ship_interceptor {
+  } else if ship_class == Interceptor {
     interceptor_class_shield
-  } else if ship_class == ship_bomber {
+  } else if ship_class == Bomber {
     bomber_class_shield
-  } else if ship_class == ship_cruiser {
+  } else if ship_class == Cruiser {
     cruiser_class_shield
   } else {
     capital_class_shield
@@ -818,14 +786,14 @@ pub fn ship_class_shield(ship_class : Int) -> Float {
 
 ///|
 /// Returns the base movement speed for the given `ship_class`.
-pub fn ship_class_speed(ship_class : Int) -> Float {
-  if ship_class == ship_fighter {
+pub fn ship_class_speed(ship_class : ShipKind) -> Float {
+  if ship_class == Fighter {
     fighter_class_speed
-  } else if ship_class == ship_interceptor {
+  } else if ship_class == Interceptor {
     interceptor_class_speed
-  } else if ship_class == ship_bomber {
+  } else if ship_class == Bomber {
     bomber_class_speed
-  } else if ship_class == ship_cruiser {
+  } else if ship_class == Cruiser {
     cruiser_class_speed
   } else {
     capital_class_speed
@@ -834,14 +802,14 @@ pub fn ship_class_speed(ship_class : Int) -> Float {
 
 ///|
 /// Returns the turn rate for the given `ship_class`.
-pub fn ship_class_turn(ship_class : Int) -> Float {
-  if ship_class == ship_fighter {
+pub fn ship_class_turn(ship_class : ShipKind) -> Float {
+  if ship_class == Fighter {
     fighter_class_turn
-  } else if ship_class == ship_interceptor {
+  } else if ship_class == Interceptor {
     interceptor_class_turn
-  } else if ship_class == ship_bomber {
+  } else if ship_class == Bomber {
     bomber_class_turn
-  } else if ship_class == ship_cruiser {
+  } else if ship_class == Cruiser {
     cruiser_class_turn
   } else {
     capital_class_turn
@@ -850,14 +818,14 @@ pub fn ship_class_turn(ship_class : Int) -> Float {
 
 ///|
 /// Returns the afterburner boost speed for the given `ship_class`.
-pub fn ship_class_boost(ship_class : Int) -> Float {
-  if ship_class == ship_fighter {
+pub fn ship_class_boost(ship_class : ShipKind) -> Float {
+  if ship_class == Fighter {
     fighter_class_boost
-  } else if ship_class == ship_interceptor {
+  } else if ship_class == Interceptor {
     interceptor_class_boost
-  } else if ship_class == ship_bomber {
+  } else if ship_class == Bomber {
     bomber_class_boost
-  } else if ship_class == ship_cruiser {
+  } else if ship_class == Cruiser {
     cruiser_class_boost
   } else {
     capital_class_boost
@@ -866,14 +834,14 @@ pub fn ship_class_boost(ship_class : Int) -> Float {
 
 ///|
 /// Returns the display name for the given `ship_class`.
-pub fn ship_class_name(ship_class : Int) -> String {
-  if ship_class == ship_fighter {
+pub fn ship_class_name(ship_class : ShipKind) -> String {
+  if ship_class == Fighter {
     "Fighter"
-  } else if ship_class == ship_interceptor {
+  } else if ship_class == Interceptor {
     "Interceptor"
-  } else if ship_class == ship_bomber {
+  } else if ship_class == Bomber {
     "Bomber"
-  } else if ship_class == ship_cruiser {
+  } else if ship_class == Cruiser {
     "Cruiser"
   } else {
     "Capital Ship"
@@ -882,60 +850,92 @@ pub fn ship_class_name(ship_class : Int) -> String {
 
 // Enemy type score
 
-// Mission objective types
-
-///|
-/// Mission objective requiring destruction of all enemies.
-pub let objective_destroy_all : Int = 0
-
-///|
-/// Mission objective requiring escort of an allied ship.
-pub let objective_escort : Int = 1
-
-///|
-/// Mission objective requiring defense of a friendly station.
-pub let objective_defend_station : Int = 2
-
-///|
-/// Mission objective requiring destruction of a capital ship boss.
-pub let objective_boss_fight : Int = 3
-
-///|
-/// Mission objective requiring survival of an ambush encounter.
-pub let objective_ambush : Int = 4
-
-///|
-/// Mission objective requiring clearance of patrol waypoints.
-pub let objective_patrol : Int = 5
-
-///|
-/// Mission objective requiring survival for a set duration.
-pub let objective_survive : Int = 6
-
-///|
-/// Mission objective requiring destruction of a specific number of enemies.
-pub let objective_destroy_count : Int = 7
-
 ///|
 /// Returns the human-readable description for the given `obj_type`.
-pub fn objective_type_name(obj_type : Int) -> String {
-  if obj_type == objective_destroy_all {
+pub fn objective_type_name(obj_type : Objective) -> String {
+  if obj_type == DestroyAll {
     "Destroy all enemies"
-  } else if obj_type == objective_escort {
+  } else if obj_type == Escort {
     "Escort ally ship"
-  } else if obj_type == objective_defend_station {
+  } else if obj_type == DefendStation {
     "Defend the station"
-  } else if obj_type == objective_boss_fight {
+  } else if obj_type == BossFight {
     "Destroy the capital ship"
-  } else if obj_type == objective_ambush {
+  } else if obj_type == Ambush {
     "Survive the ambush"
-  } else if obj_type == objective_patrol {
+  } else if obj_type == PatrolMission {
     "Clear patrol waypoints"
-  } else if obj_type == objective_survive {
+  } else if obj_type == Survive {
     "Survive for the duration"
-  } else if obj_type == objective_destroy_count {
+  } else if obj_type == DestroyCount {
     "Destroy target count"
   } else {
     "Unknown objective"
+  }
+}
+
+///|
+/// Converts an integer to a ShipKind enum value.
+pub fn ship_kind_from_int(v : Int) -> ShipKind {
+  if v == 0 {
+    Fighter
+  } else if v == 1 {
+    Interceptor
+  } else if v == 2 {
+    Bomber
+  } else if v == 3 {
+    Cruiser
+  } else {
+    CapitalShip
+  }
+}
+
+///|
+/// Converts an integer to a PowerupKind enum value.
+pub fn powerup_kind_from_int(v : Int) -> PowerupKind {
+  if v == 0 {
+    Health
+  } else if v == 1 {
+    Shield
+  } else if v == 2 {
+    WeaponBoost
+  } else {
+    SpeedBoost
+  }
+}
+
+///|
+/// Converts an integer to a Formation enum value.
+pub fn formation_from_int(v : Int) -> Formation {
+  if v == 0 {
+    V
+  } else if v == 1 {
+    Line
+  } else if v == 2 {
+    Circle
+  } else {
+    Wedge
+  }
+}
+
+///|
+/// Converts an integer to an Objective enum value.
+pub fn objective_from_int(v : Int) -> Objective {
+  if v == 0 {
+    DestroyAll
+  } else if v == 1 {
+    Escort
+  } else if v == 2 {
+    DefendStation
+  } else if v == 3 {
+    BossFight
+  } else if v == 4 {
+    Ambush
+  } else if v == 5 {
+    PatrolMission
+  } else if v == 6 {
+    Survive
+  } else {
+    DestroyCount
   }
 }

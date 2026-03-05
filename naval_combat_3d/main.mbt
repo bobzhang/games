@@ -14,10 +14,10 @@ fn main {
     @game.update_game(game, dt)
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(100, 180, 230, 255))
-    if game.state == @types.state_playing ||
-      game.state == @types.state_paused ||
-      game.state == @types.state_battle_complete ||
-      game.state == @types.state_game_over {
+    if game.state == Playing ||
+      game.state == Paused ||
+      game.state == BattleComplete ||
+      game.state == GameOver {
       @render.draw_world(game)
     }
     @render.draw_ui(game)

@@ -184,46 +184,6 @@ pub let max_projectiles : Int = 32
 
 // ========== Game states ==========
 
-///|
-/// Numeric id for menu.
-pub let state_menu : Int = 0
-
-///|
-/// Numeric id for playing.
-pub let state_playing : Int = 1
-
-///|
-/// Numeric id for paused.
-pub let state_paused : Int = 2
-
-///|
-/// Numeric id for level complete.
-pub let state_level_complete : Int = 3
-
-///|
-/// Numeric id for game over.
-pub let state_game_over : Int = 4
-
-///|
-/// Numeric id for world select.
-pub let state_world_select : Int = 5
-
-///|
-/// Numeric id for campaign complete.
-pub let state_campaign_complete : Int = 6
-
-///|
-/// Numeric id for level select.
-pub let state_level_select : Int = 7
-
-///|
-/// Numeric id for death anim.
-pub let state_death_anim : Int = 8
-
-///|
-/// Numeric id for world intro.
-pub let state_world_intro : Int = 9
-
 // ========== Platform types ==========
 
 ///|
@@ -611,46 +571,6 @@ pub let particle_wall_slide_count : Int = 1
 pub let particle_dash_count : Int = 6
 
 // ========== Decoration parameters ==========
-
-///|
-/// Numeric id for tree.
-pub let deco_tree : Int = 0
-
-///|
-/// Numeric id for rock.
-pub let deco_rock : Int = 1
-
-///|
-/// Numeric id for crystal.
-pub let deco_crystal : Int = 2
-
-///|
-/// Numeric id for mushroom.
-pub let deco_mushroom : Int = 3
-
-///|
-/// Numeric id for pillar.
-pub let deco_pillar : Int = 4
-
-///|
-/// Numeric id for stalagmite.
-pub let deco_stalagmite : Int = 5
-
-///|
-/// Numeric id for lava rock.
-pub let deco_lava_rock : Int = 6
-
-///|
-/// Numeric id for cloud.
-pub let deco_cloud : Int = 7
-
-///|
-/// Numeric id for bush.
-pub let deco_bush : Int = 8
-
-///|
-/// Numeric id for lamp.
-pub let deco_lamp : Int = 9
 
 // ========== Projectile types ==========
 
@@ -1181,3 +1101,32 @@ pub let pu_slow_fall_g : Int = 255
 ///|
 /// Blue channel (0-255) for pu slow fall color.
 pub let pu_slow_fall_b : Int = 200
+
+
+///|
+pub(all) enum Deco {
+  Tree
+  Rock
+  Crystal
+  Mushroom
+  Pillar
+  Stalagmite
+  LavaRock
+  Cloud
+  Bush
+  Lamp
+} derive(Eq)
+
+///|
+pub(all) enum GameState {
+  Menu
+  Playing
+  Paused
+  LevelComplete
+  GameOver
+  WorldSelect
+  CampaignComplete
+  LevelSelect
+  DeathAnim
+  WorldIntro
+} derive(Eq)

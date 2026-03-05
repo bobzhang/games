@@ -1,1 +1,5 @@
+import {
+  "tonyfettes/raylib-examples/space_combat_3d/internal/types",
+}
+
 warnings = "+missing_doc+unnecessary_annotation"

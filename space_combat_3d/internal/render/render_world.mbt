@@ -133,35 +133,35 @@ fn @types.Game::draw_player_ship(game : @types.Game) -> Unit {
   let rgt = @types.right_dir(p.yaw)
 
   // Ship color based on class
-  let body_r : Int = if p.ship_class == @types.ship_fighter {
+  let body_r : Int = if p.ship_class == Fighter {
     100
-  } else if p.ship_class == @types.ship_interceptor {
+  } else if p.ship_class == Interceptor {
     70
-  } else if p.ship_class == @types.ship_bomber {
+  } else if p.ship_class == Bomber {
     140
-  } else if p.ship_class == @types.ship_cruiser {
+  } else if p.ship_class == Cruiser {
     120
   } else {
     150
   }
-  let body_g : Int = if p.ship_class == @types.ship_fighter {
+  let body_g : Int = if p.ship_class == Fighter {
     150
-  } else if p.ship_class == @types.ship_interceptor {
+  } else if p.ship_class == Interceptor {
     200
-  } else if p.ship_class == @types.ship_bomber {
+  } else if p.ship_class == Bomber {
     100
-  } else if p.ship_class == @types.ship_cruiser {
+  } else if p.ship_class == Cruiser {
     130
   } else {
     150
   }
-  let body_b : Int = if p.ship_class == @types.ship_fighter {
+  let body_b : Int = if p.ship_class == Fighter {
     220
-  } else if p.ship_class == @types.ship_interceptor {
+  } else if p.ship_class == Interceptor {
     255
-  } else if p.ship_class == @types.ship_bomber {
+  } else if p.ship_class == Bomber {
     80
-  } else if p.ship_class == @types.ship_cruiser {
+  } else if p.ship_class == Cruiser {
     160
   } else {
     180
@@ -204,13 +204,13 @@ fn @types.Game::draw_player_ship(game : @types.Game) -> Unit {
   }
 
   // Ship scale based on class
-  let scale : Float = if p.ship_class == @types.ship_interceptor {
+  let scale : Float = if p.ship_class == Interceptor {
     0.8
-  } else if p.ship_class == @types.ship_bomber {
+  } else if p.ship_class == Bomber {
     1.3
-  } else if p.ship_class == @types.ship_cruiser {
+  } else if p.ship_class == Cruiser {
     1.6
-  } else if p.ship_class == @types.ship_capital_ship {
+  } else if p.ship_class == CapitalShip {
     2.2
   } else {
     1.0
@@ -239,17 +239,17 @@ fn @types.Game::draw_player_ship(game : @types.Game) -> Unit {
   )
 
   // Wings (different shape per class)
-  let wing_span : Float = if p.ship_class == @types.ship_interceptor {
+  let wing_span : Float = if p.ship_class == Interceptor {
     1.8
-  } else if p.ship_class == @types.ship_bomber {
+  } else if p.ship_class == Bomber {
     1.0
-  } else if p.ship_class == @types.ship_cruiser {
+  } else if p.ship_class == Cruiser {
     1.5
   } else {
     1.5
   }
   let wing_thick : Float = 0.1 * scale
-  let wing_depth : Float = if p.ship_class == @types.ship_bomber {
+  let wing_depth : Float = if p.ship_class == Bomber {
     1.8
   } else {
     1.2
@@ -291,8 +291,8 @@ fn @types.Game::draw_player_ship(game : @types.Game) -> Unit {
   )
 
   // Weapon pods (on wing tips for fighter/interceptor)
-  if p.ship_class == @types.ship_fighter ||
-    p.ship_class == @types.ship_interceptor {
+  if p.ship_class == Fighter ||
+    p.ship_class == Interceptor {
     let pod_off = wing_span * scale * 1.2
     @raylib.draw_cube(
       @raylib.Vector3::new(
@@ -945,7 +945,7 @@ fn @types.Game::draw_powerups(game : @types.Game) -> Unit {
     let spin_off = @math.sinf(pu.spin_angle) * 0.5
 
     // Color and shape by type
-    if pu.kind == @types.powerup_health {
+    if pu.kind == Health {
       // Green cross
       @raylib.draw_cube(
         @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
@@ -966,7 +966,7 @@ fn @types.Game::draw_powerups(game : @types.Game) -> Unit {
         0.8,
         @raylib.Color::new(50, 255, 50, 40),
       )
-    } else if pu.kind == @types.powerup_shield {
+    } else if pu.kind == Shield {
       // Blue sphere
       @raylib.draw_sphere(
         @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
@@ -978,7 +978,7 @@ fn @types.Game::draw_powerups(game : @types.Game) -> Unit {
         0.8,
         @raylib.Color::new(80, 150, 255, 40),
       )
-    } else if pu.kind == @types.powerup_weapon_boost {
+    } else if pu.kind == WeaponBoost {
       // Orange cube
       @raylib.draw_cube(
         @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
@@ -1027,7 +1027,7 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
     }
 
     if proj.from_player {
-      if proj.kind == @types.weapon_laser {
+      if proj.kind == Laser {
         // Laser: bright line-like cube
         @raylib.draw_cube(
           @raylib.Vector3::new(proj.x, proj.y, proj.z),
@@ -1044,7 +1044,7 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
           0.6,
           @raylib.Color::new(255, 255, 255, 255),
         )
-      } else if proj.kind == @types.weapon_missile {
+      } else if proj.kind == Missile {
         // Missile: small solid with glow
         @raylib.draw_cube(
           @raylib.Vector3::new(proj.x, proj.y, proj.z),
@@ -1058,7 +1058,7 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
           0.25,
           @raylib.Color::new(255, 150, 50, 150),
         )
-      } else if proj.kind == @types.weapon_plasma {
+      } else if proj.kind == Plasma {
         // Plasma: glowing sphere
         @raylib.draw_sphere(
           @raylib.Vector3::new(proj.x, proj.y, proj.z),
@@ -1070,7 +1070,7 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
           0.5,
           @raylib.Color::new(50, 200, 100, 80),
         )
-      } else if proj.kind == @types.weapon_railgun {
+      } else if proj.kind == Railgun {
         // Railgun: thin bright beam-like
         @raylib.draw_cube(
           @raylib.Vector3::new(proj.x, proj.y, proj.z),
@@ -1088,7 +1088,7 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
         )
       }
       // Enemy projectiles
-    } else if proj.kind == @types.weapon_plasma {
+    } else if proj.kind == Plasma {
       // Enemy plasma (from bombers)
       @raylib.draw_sphere(
         @raylib.Vector3::new(proj.x, proj.y, proj.z),

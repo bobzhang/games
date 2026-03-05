@@ -145,32 +145,32 @@ pub fn mission_briefing(mission : Int) -> String {
 // Mission objective type for each mission
 
 ///|
-/// Returns the objective type identifier for the given `mission` number.
-pub fn mission_objective_type(mission : Int) -> Int {
+/// Returns the objective type for the given `mission` number.
+pub fn mission_objective_type(mission : Int) -> @types.Objective {
   if mission == 0 {
-    0 // destroy_all
+    DestroyAll
   } else if mission == 1 {
-    0 // destroy_all
+    DestroyAll
   } else if mission == 2 {
-    0 // destroy_all
+    DestroyAll
   } else if mission == 3 {
-    2 // defend_station
+    DefendStation
   } else if mission == 4 {
-    0 // destroy_all
+    DestroyAll
   } else if mission == 5 {
-    7 // destroy_count
+    DestroyCount
   } else if mission == 6 {
-    0 // destroy_all
+    DestroyAll
   } else if mission == 7 {
-    3 // boss_fight
+    BossFight
   } else if mission == 8 {
-    0 // destroy_all
+    DestroyAll
   } else if mission == 9 {
-    7 // destroy_count
+    DestroyCount
   } else if mission == 10 {
-    3 // boss_fight
+    BossFight
   } else {
-    3 // boss_fight
+    BossFight
   }
 }
 
@@ -199,32 +199,32 @@ pub fn mission_reward(mission : Int) -> Int {
 // Enemy formation pattern for each mission
 
 ///|
-/// Returns the enemy formation pattern identifier for the given `mission`.
-pub fn mission_formation(mission : Int) -> Int {
+/// Returns the enemy formation pattern for the given `mission`.
+pub fn mission_formation(mission : Int) -> @types.Formation {
   if mission == 0 {
-    0 // formation_v
+    V
   } else if mission == 1 {
-    1 // formation_line
+    Line
   } else if mission == 2 {
-    0 // formation_v
+    V
   } else if mission == 3 {
-    2 // formation_circle
+    Circle
   } else if mission == 4 {
-    3 // formation_wedge
+    Wedge
   } else if mission == 5 {
-    0 // formation_v
+    V
   } else if mission == 6 {
-    3 // formation_wedge
+    Wedge
   } else if mission == 7 {
-    2 // formation_circle
+    Circle
   } else if mission == 8 {
-    1 // formation_line
+    Line
   } else if mission == 9 {
-    0 // formation_v
+    V
   } else if mission == 10 {
-    3 // formation_wedge
+    Wedge
   } else {
-    2 // formation_circle
+    Circle
   }
 }
 
@@ -337,21 +337,21 @@ pub fn wave_composition(mission : Int, wave : Int) -> (Int, Int, Int, Int) {
 pub fn powerup_spawn_pos(
   mission : Int,
   index : Int,
-) -> (Float, Float, Float, Int) {
+) -> (Float, Float, Float, @types.PowerupKind) {
   // Returns (x, y, z, type)
   ignore(mission)
   if index == 0 {
-    (30.0, 5.0, 50.0, 0)
+    (30.0, 5.0, 50.0, Health)
   } else if index == 1 {
-    (-40.0, -3.0, 80.0, 1)
+    (-40.0, -3.0, 80.0, Shield)
   } else if index == 2 {
-    (60.0, 10.0, 120.0, 2)
+    (60.0, 10.0, 120.0, WeaponBoost)
   } else if index == 3 {
-    (-20.0, 0.0, 60.0, 3)
+    (-20.0, 0.0, 60.0, SpeedBoost)
   } else if index == 4 {
-    (80.0, -5.0, 160.0, 0)
+    (80.0, -5.0, 160.0, Health)
   } else {
-    (0.0, 8.0, 100.0, 1)
+    (0.0, 8.0, 100.0, Shield)
   }
 }
 

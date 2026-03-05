@@ -435,3 +435,21 @@ pub fn calc_stars(
   }
   stars
 }
+
+///|
+/// Converts an integer decoration kind to the corresponding Deco enum value.
+pub fn deco_from_int(v : Int) -> Deco {
+  match v {
+    0 => Tree
+    1 => Rock
+    2 => Crystal
+    3 => Mushroom
+    4 => Pillar
+    5 => Stalagmite
+    6 => LavaRock
+    7 => Cloud
+    8 => Bush
+    9 => Lamp
+    _ => Tree
+  }
+}

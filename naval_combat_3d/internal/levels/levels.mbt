@@ -136,57 +136,57 @@ pub fn get_battle_objective_desc(battle : Int) -> String {
 
 ///|
 /// Returns enemy ship class ids to spawn for the battle.
-pub fn get_enemy_classes(battle : Int) -> Array[Int] {
+pub fn get_enemy_classes(battle : Int) -> Array[@types.ShipClass] {
   if battle == 0 {
-    [@types.class_sloop, @types.class_sloop]
+    [Sloop, Sloop]
   } else if battle == 1 {
-    [@types.class_sloop, @types.class_sloop, @types.class_sloop]
+    [Sloop, Sloop, Sloop]
   } else if battle == 2 {
     [
-      @types.class_sloop, @types.class_sloop, @types.class_brigantine, @types.class_brigantine,
+      Sloop, Sloop, Brigantine, Brigantine,
     ]
   } else if battle == 3 {
     [
-      @types.class_brigantine, @types.class_brigantine, @types.class_sloop, @types.class_sloop,
+      Brigantine, Brigantine, Sloop, Sloop,
     ]
   } else if battle == 4 {
     [
-      @types.class_brigantine, @types.class_brigantine, @types.class_brigantine,
-      @types.class_sloop, @types.class_sloop,
+      Brigantine, Brigantine, Brigantine,
+      Sloop, Sloop,
     ]
   } else if battle == 5 {
     [
-      @types.class_brigantine, @types.class_brigantine, @types.class_frigate, @types.class_sloop,
+      Brigantine, Brigantine, Frigate, Sloop,
     ]
   } else if battle == 6 {
     [
-      @types.class_brigantine, @types.class_brigantine, @types.class_brigantine,
-      @types.class_brigantine, @types.class_brigantine, @types.class_brigantine,
+      Brigantine, Brigantine, Brigantine,
+      Brigantine, Brigantine, Brigantine,
     ]
   } else if battle == 7 {
     [
-      @types.class_sloop, @types.class_sloop, @types.class_brigantine, @types.class_brigantine,
-      @types.class_frigate,
+      Sloop, Sloop, Brigantine, Brigantine,
+      Frigate,
     ]
   } else if battle == 8 {
     [
-      @types.class_frigate, @types.class_frigate, @types.class_galleon, @types.class_brigantine,
-      @types.class_brigantine,
+      Frigate, Frigate, Galleon, Brigantine,
+      Brigantine,
     ]
   } else if battle == 9 {
     [
-      @types.class_brigantine, @types.class_brigantine, @types.class_frigate, @types.class_frigate,
-      @types.class_frigate, @types.class_galleon, @types.class_galleon,
+      Brigantine, Brigantine, Frigate, Frigate,
+      Frigate, Galleon, Galleon,
     ]
   } else if battle == 10 {
     [
-      @types.class_frigate, @types.class_frigate, @types.class_frigate, @types.class_galleon,
-      @types.class_galleon, @types.class_brigantine, @types.class_brigantine, @types.class_man_of_war,
+      Frigate, Frigate, Frigate, Galleon,
+      Galleon, Brigantine, Brigantine, ManOfWar,
     ]
   } else {
     [
-      @types.class_galleon, @types.class_galleon, @types.class_galleon, @types.class_frigate,
-      @types.class_frigate, @types.class_man_of_war, @types.class_man_of_war, @types.class_man_of_war,
+      Galleon, Galleon, Galleon, Frigate,
+      Frigate, ManOfWar, ManOfWar, ManOfWar,
     ]
   }
 }
@@ -195,65 +195,65 @@ pub fn get_enemy_classes(battle : Int) -> Array[Int] {
 
 ///|
 /// Returns AI personality ids for each spawned enemy ship.
-pub fn get_enemy_personalities(battle : Int) -> Array[Int] {
+pub fn get_enemy_personalities(battle : Int) -> Array[@types.AiPersonality] {
   if battle == 0 {
-    [@types.ai_personality_defensive, @types.ai_personality_defensive]
+    [Defensive, Defensive]
   } else if battle == 1 {
     [
-      @types.ai_personality_aggressive, @types.ai_personality_defensive, @types.ai_personality_flanker,
+      Aggressive, Defensive, Flanker,
     ]
   } else if battle == 2 {
     [
-      @types.ai_personality_aggressive, @types.ai_personality_flanker, @types.ai_personality_defensive,
-      @types.ai_personality_aggressive,
+      Aggressive, Flanker, Defensive,
+      Aggressive,
     ]
   } else if battle == 3 {
     [
-      @types.ai_personality_flanker, @types.ai_personality_flanker, @types.ai_personality_aggressive,
-      @types.ai_personality_retreater,
+      Flanker, Flanker, Aggressive,
+      Retreater,
     ]
   } else if battle == 4 {
     [
-      @types.ai_personality_aggressive, @types.ai_personality_aggressive, @types.ai_personality_defensive,
-      @types.ai_personality_flanker, @types.ai_personality_flanker,
+      Aggressive, Aggressive, Defensive,
+      Flanker, Flanker,
     ]
   } else if battle == 5 {
     [
-      @types.ai_personality_defensive, @types.ai_personality_defensive, @types.ai_personality_aggressive,
-      @types.ai_personality_flanker,
+      Defensive, Defensive, Aggressive,
+      Flanker,
     ]
   } else if battle == 6 {
     [
-      @types.ai_personality_aggressive, @types.ai_personality_aggressive, @types.ai_personality_flanker,
-      @types.ai_personality_flanker, @types.ai_personality_defensive, @types.ai_personality_berserker,
+      Aggressive, Aggressive, Flanker,
+      Flanker, Defensive, Berserker,
     ]
   } else if battle == 7 {
     [
-      @types.ai_personality_berserker, @types.ai_personality_berserker, @types.ai_personality_aggressive,
-      @types.ai_personality_aggressive, @types.ai_personality_flanker,
+      Berserker, Berserker, Aggressive,
+      Aggressive, Flanker,
     ]
   } else if battle == 8 {
     [
-      @types.ai_personality_aggressive, @types.ai_personality_aggressive, @types.ai_personality_berserker,
-      @types.ai_personality_flanker, @types.ai_personality_defensive,
+      Aggressive, Aggressive, Berserker,
+      Flanker, Defensive,
     ]
   } else if battle == 9 {
     [
-      @types.ai_personality_defensive, @types.ai_personality_defensive, @types.ai_personality_aggressive,
-      @types.ai_personality_aggressive, @types.ai_personality_flanker, @types.ai_personality_flanker,
-      @types.ai_personality_defensive,
+      Defensive, Defensive, Aggressive,
+      Aggressive, Flanker, Flanker,
+      Defensive,
     ]
   } else if battle == 10 {
     [
-      @types.ai_personality_aggressive, @types.ai_personality_berserker, @types.ai_personality_flanker,
-      @types.ai_personality_defensive, @types.ai_personality_aggressive, @types.ai_personality_flanker,
-      @types.ai_personality_aggressive, @types.ai_personality_berserker,
+      Aggressive, Berserker, Flanker,
+      Defensive, Aggressive, Flanker,
+      Aggressive, Berserker,
     ]
   } else {
     [
-      @types.ai_personality_berserker, @types.ai_personality_berserker, @types.ai_personality_aggressive,
-      @types.ai_personality_aggressive, @types.ai_personality_flanker, @types.ai_personality_berserker,
-      @types.ai_personality_berserker, @types.ai_personality_aggressive,
+      Berserker, Berserker, Aggressive,
+      Aggressive, Flanker, Berserker,
+      Berserker, Aggressive,
     ]
   }
 }
@@ -282,23 +282,23 @@ pub fn get_fortress_island(battle : Int) -> Int {
 
 ///|
 /// Returns allied fleet ship class ids for this battle.
-pub fn get_fleet_classes(battle : Int) -> Array[Int] {
+pub fn get_fleet_classes(battle : Int) -> Array[@types.ShipClass] {
   if battle <= 4 {
     []
   } else if battle == 5 {
-    [@types.class_sloop]
+    [Sloop]
   } else if battle == 6 {
-    [@types.class_brigantine]
+    [Brigantine]
   } else if battle == 7 {
-    [@types.class_brigantine]
+    [Brigantine]
   } else if battle == 8 {
-    [@types.class_sloop, @types.class_sloop]
+    [Sloop, Sloop]
   } else if battle == 9 {
-    [@types.class_brigantine, @types.class_sloop]
+    [Brigantine, Sloop]
   } else if battle == 10 {
-    [@types.class_frigate, @types.class_brigantine, @types.class_sloop]
+    [Frigate, Brigantine, Sloop]
   } else {
-    [@types.class_frigate, @types.class_brigantine, @types.class_brigantine]
+    [Frigate, Brigantine, Brigantine]
   }
 }
 
@@ -466,59 +466,59 @@ pub fn get_island_layout(
 
 ///|
 /// Returns island type ids aligned with `get_island_layout` ordering.
-pub fn get_island_types(battle : Int) -> Array[Int] {
+pub fn get_island_types(battle : Int) -> Array[@types.IslandKind] {
   if battle == 0 {
-    [@types.island_medium, @types.island_small]
+    [Medium, Small]
   } else if battle == 1 {
-    [@types.island_medium, @types.island_small, @types.island_small]
+    [Medium, Small, Small]
   } else if battle == 2 {
     [
-      @types.island_medium, @types.island_small, @types.island_large, @types.island_small,
+      Medium, Small, Large, Small,
     ]
   } else if battle == 3 {
     [
-      @types.island_medium, @types.island_medium, @types.island_small, @types.island_medium,
-      @types.island_small,
+      Medium, Medium, Small, Medium,
+      Small,
     ]
   } else if battle == 4 {
     [
-      @types.island_large, @types.island_medium, @types.island_medium, @types.island_small,
-      @types.island_medium, @types.island_small,
+      Large, Medium, Medium, Small,
+      Medium, Small,
     ]
   } else if battle == 5 {
     [
-      @types.island_fortress, @types.island_medium, @types.island_small, @types.island_small,
-      @types.island_small,
+      Fortress, Medium, Small, Small,
+      Small,
     ]
   } else if battle == 6 {
     [
-      @types.island_large, @types.island_medium, @types.island_medium, @types.island_large,
-      @types.island_small, @types.island_small,
+      Large, Medium, Medium, Large,
+      Small, Small,
     ]
   } else if battle == 7 {
     [
-      @types.island_medium, @types.island_small, @types.island_medium, @types.island_medium,
-      @types.island_small,
+      Medium, Small, Medium, Medium,
+      Small,
     ]
   } else if battle == 8 {
     [
-      @types.island_medium, @types.island_medium, @types.island_small, @types.island_small,
-      @types.island_medium, @types.island_medium, @types.island_small,
+      Medium, Medium, Small, Small,
+      Medium, Medium, Small,
     ]
   } else if battle == 9 {
     [
-      @types.island_large, @types.island_medium, @types.island_fortress, @types.island_medium,
-      @types.island_small, @types.island_small, @types.island_small,
+      Large, Medium, Fortress, Medium,
+      Small, Small, Small,
     ]
   } else if battle == 10 {
     [
-      @types.island_medium, @types.island_medium, @types.island_medium, @types.island_medium,
-      @types.island_small, @types.island_small, @types.island_small, @types.island_small,
+      Medium, Medium, Medium, Medium,
+      Small, Small, Small, Small,
     ]
   } else {
     [
-      @types.island_fortress, @types.island_medium, @types.island_medium, @types.island_medium,
-      @types.island_medium, @types.island_small, @types.island_small, @types.island_large,
+      Fortress, Medium, Medium, Medium,
+      Medium, Small, Small, Large,
     ]
   }
 }
@@ -567,26 +567,12 @@ pub fn get_battle_reward_mult(battle : Int) -> Int {
 
 ///|
 /// Returns cannon type id equipped by an enemy ship class for the battle context.
-pub fn get_enemy_cannon_type(ship_class : Int, battle : Int) -> Int {
-  if ship_class == @types.class_sloop {
-    @types.cannon_light
-  } else if ship_class == @types.class_brigantine {
-    if battle >= 6 {
-      @types.cannon_medium
-    } else {
-      @types.cannon_light
-    }
-  } else if ship_class == @types.class_frigate {
-    @types.cannon_medium
-  } else if ship_class == @types.class_galleon {
-    if battle >= 10 {
-      @types.cannon_heavy
-    } else {
-      @types.cannon_medium
-    }
-  } else if ship_class == @types.class_man_of_war {
-    @types.cannon_heavy
-  } else {
-    @types.cannon_medium
+pub fn get_enemy_cannon_type(ship_class : @types.ShipClass, battle : Int) -> @types.Cannon {
+  match ship_class {
+    Sloop => Light
+    Brigantine => if battle >= 6 { Medium } else { Light }
+    Frigate => Medium
+    Galleon => if battle >= 10 { Heavy } else { Medium }
+    ManOfWar => Heavy
   }
 }

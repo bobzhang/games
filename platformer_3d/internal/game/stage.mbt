@@ -341,7 +341,7 @@ fn @types.Game::load_decorations(
     let dd = deco_data[i]
     let d = game.decorations[i]
     d.active = true
-    d.kind = dd.0
+    d.kind = @types.deco_from_int(dd.0)
     d.x = dd.1
     d.y = dd.2
     d.z = dd.3

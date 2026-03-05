@@ -3,22 +3,22 @@
 ///|
 /// Draws the active 2D naval HUD/menu overlays for the current game state.
 pub fn draw_ui(game : @types.Game) -> Unit {
-  if game.state == @types.state_menu {
+  if game.state == Menu {
     game.draw_menu()
-  } else if game.state == @types.state_playing {
+  } else if game.state == Playing {
     game.draw_hud()
     if game.message_timer > 0.0 {
       game.draw_message()
     }
-  } else if game.state == @types.state_paused {
+  } else if game.state == Paused {
     game.draw_hud()
     draw_pause_overlay()
-  } else if game.state == @types.state_battle_complete {
+  } else if game.state == BattleComplete {
     game.draw_hud()
     game.draw_battle_complete()
-  } else if game.state == @types.state_battle_select {
+  } else if game.state == BattleSelect {
     game.draw_battle_select()
-  } else if game.state == @types.state_game_over {
+  } else if game.state == GameOver {
     game.draw_game_over()
   }
 }

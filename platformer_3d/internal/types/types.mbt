@@ -283,7 +283,7 @@ pub fn Particle::inactive() -> Particle {
 /// Runtime decorative prop entity with transform, scale, and tint values.
 pub(all) struct Decoration {
   mut active : Bool
-  mut kind : Int
+  mut kind : Deco
   mut x : Float
   mut y : Float
   mut z : Float
@@ -299,7 +299,7 @@ pub(all) struct Decoration {
 pub fn Decoration::inactive() -> Decoration {
   {
     active: false,
-    kind: deco_tree,
+    kind: Tree,
     x: 0.0,
     y: 0.0,
     z: 0.0,
@@ -367,7 +367,7 @@ pub fn ScoreFly::inactive() -> ScoreFly {
 ///|
 /// Aggregated mutable game state for player, world entities, UI, and progression systems.
 pub(all) struct Game {
-  mut state : Int
+  mut state : GameState
 
   // Player
   mut px : Float
@@ -487,7 +487,7 @@ pub(all) struct Game {
 /// Constructs a fresh game state with initialized pools and menu-start defaults.
 pub fn Game::new() -> Game {
   {
-    state: state_menu,
+    state: Menu,
     px: 0.0,
     py: 2.0,
     pz: 0.0,

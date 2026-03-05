@@ -17,7 +17,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
     }
 
     // Missile homing logic
-    if proj.kind == @types.weapon_missile &&
+    if proj.kind == Missile &&
       proj.from_player &&
       proj.target_idx >= 0 {
       if proj.fuel > 0.0 {
@@ -62,13 +62,13 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
     proj.z += proj.vz * dt
 
     // Trail particles
-    if proj.kind == @types.weapon_missile && game.frame_counter % 2 == 0 {
+    if proj.kind == Missile && game.frame_counter % 2 == 0 {
       @types.spawn_particles(game, proj.x, proj.y, proj.z, 1, 255, 200, 100)
     }
-    if proj.kind == @types.weapon_plasma && game.frame_counter % 2 == 0 {
+    if proj.kind == Plasma && game.frame_counter % 2 == 0 {
       @types.spawn_particles(game, proj.x, proj.y, proj.z, 1, 100, 255, 100)
     }
-    if proj.kind == @types.weapon_railgun && game.frame_counter % 1 == 0 {
+    if proj.kind == Railgun && game.frame_counter % 1 == 0 {
       // Railgun leaves a fading trail
       let idx2 = @types.alloc_particle(game)
       if idx2 >= 0 {
@@ -108,29 +108,29 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
           game.player.shots_hit += 1
 
           // Hit sparks by weapon type
-          let spark_r : Int = if proj.kind == @types.weapon_laser {
+          let spark_r : Int = if proj.kind == Laser {
             255
-          } else if proj.kind == @types.weapon_missile {
+          } else if proj.kind == Missile {
             255
-          } else if proj.kind == @types.weapon_plasma {
+          } else if proj.kind == Plasma {
             100
           } else {
             150
           }
-          let spark_g : Int = if proj.kind == @types.weapon_laser {
+          let spark_g : Int = if proj.kind == Laser {
             50
-          } else if proj.kind == @types.weapon_missile {
+          } else if proj.kind == Missile {
             180
-          } else if proj.kind == @types.weapon_plasma {
+          } else if proj.kind == Plasma {
             255
           } else {
             200
           }
-          let spark_b : Int = if proj.kind == @types.weapon_laser {
+          let spark_b : Int = if proj.kind == Laser {
             50
-          } else if proj.kind == @types.weapon_missile {
+          } else if proj.kind == Missile {
             50
-          } else if proj.kind == @types.weapon_plasma {
+          } else if proj.kind == Plasma {
             100
           } else {
             255

@@ -1,6 +1,10 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "tonyfettes/raylib-examples/naval_combat_3d/internal/levels"
 
+import {
+  "tonyfettes/raylib-examples/naval_combat_3d/internal/types",
+}
+
 // Values
 pub fn get_battle_def(Int) -> (Int, Float, Float, Float, Float, Float, Int)
 
@@ -16,23 +20,23 @@ pub fn get_battle_reward_mult(Int) -> Int
 
 pub fn get_convoy_count(Int) -> Int
 
-pub fn get_enemy_cannon_type(Int, Int) -> Int
+pub fn get_enemy_cannon_type(@types.ShipClass, Int) -> @types.Cannon
 
-pub fn get_enemy_classes(Int) -> Array[Int]
+pub fn get_enemy_classes(Int) -> Array[@types.ShipClass]
 
-pub fn get_enemy_personalities(Int) -> Array[Int]
+pub fn get_enemy_personalities(Int) -> Array[@types.AiPersonality]
 
 pub fn get_enemy_spawn_angle(Int, Int) -> (Float, Float)
 
 pub fn get_flagship_index(Int) -> Int
 
-pub fn get_fleet_classes(Int) -> Array[Int]
+pub fn get_fleet_classes(Int) -> Array[@types.ShipClass]
 
 pub fn get_fortress_island(Int) -> Int
 
 pub fn get_island_layout(Int) -> Array[(Float, Float, Float, Float, Int)]
 
-pub fn get_island_types(Int) -> Array[Int]
+pub fn get_island_types(Int) -> Array[@types.IslandKind]
 
 pub fn get_wind_conditions(Int) -> (Float, Float, Float)
 

@@ -124,22 +124,22 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
 
   // Weapon selection (1-4)
   if @raylib.is_key_pressed(@raylib.KeyOne) {
-    p.weapon = @types.weapon_laser
+    p.weapon = Laser
   }
   if @raylib.is_key_pressed(@raylib.KeyTwo) {
-    p.weapon = @types.weapon_missile
+    p.weapon = Missile
   }
   if @raylib.is_key_pressed(@raylib.KeyThree) {
-    p.weapon = @types.weapon_plasma
+    p.weapon = Plasma
   }
   if @raylib.is_key_pressed(@raylib.KeyFour) {
-    p.weapon = @types.weapon_railgun
+    p.weapon = Railgun
   }
 
   // Fire weapon (Space or left mouse)
   let can_fire = p.fire_timer <= 0.0
   let has_energy = p.weapon_energy >= @types.weapon_energy_cost(p.weapon)
-  let has_ammo = p.weapon != @types.weapon_missile || p.missile_ammo > 0
+  let has_ammo = p.weapon != Missile || p.missile_ammo > 0
   if (
       @raylib.is_key_down(@raylib.KeySpace) ||
       @raylib.is_mouse_button_down(@raylib.MouseButtonLeft)
@@ -152,7 +152,7 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
     // Deduct energy
     let cost = @types.weapon_energy_cost(p.weapon)
     p.weapon_energy -= cost
-    if p.weapon == @types.weapon_missile {
+    if p.weapon == Missile {
       p.missile_ammo -= 1
     }
     p.shots_fired += 1
@@ -202,13 +202,13 @@ fn @types.Game::fire_weapon(game : @types.Game) -> Unit {
 
   let damage_mult : Float = if p.weapon_boost_timer > 0.0 { 1.5 } else { 1.0 }
 
-  if p.weapon == @types.weapon_laser {
+  if p.weapon == Laser {
     game.fire_laser(fwd, rgt, damage_mult)
-  } else if p.weapon == @types.weapon_missile {
+  } else if p.weapon == Missile {
     game.fire_missile(fwd, damage_mult)
-  } else if p.weapon == @types.weapon_plasma {
+  } else if p.weapon == Plasma {
     game.fire_plasma(fwd, damage_mult)
-  } else if p.weapon == @types.weapon_railgun {
+  } else if p.weapon == Railgun {
     game.fire_railgun(fwd, damage_mult)
   }
   game.camera_shake = @types.maxf(game.camera_shake, 0.3)
@@ -231,7 +231,7 @@ fn @types.Game::fire_laser(
     }
     let proj = game.projectiles[idx]
     proj.active = true
-    proj.kind = @types.weapon_laser
+    proj.kind = Laser
     proj.from_player = true
     proj.x = p.x + fwd.0 * 2.0 + rgt.0 * off
     proj.y = p.y + fwd.1 * 2.0 + rgt.1 * off
@@ -261,7 +261,7 @@ fn @types.Game::fire_missile(
   }
   let proj = game.projectiles[idx]
   proj.active = true
-  proj.kind = @types.weapon_missile
+  proj.kind = Missile
   proj.from_player = true
   proj.x = p.x + fwd.0 * 2.0
   proj.y = p.y + fwd.1 * 2.0
@@ -290,7 +290,7 @@ fn @types.Game::fire_plasma(
   }
   let proj = game.projectiles[idx]
   proj.active = true
-  proj.kind = @types.weapon_plasma
+  proj.kind = Plasma
   proj.from_player = true
   proj.x = p.x + fwd.0 * 2.0
   proj.y = p.y + fwd.1 * 2.0
@@ -319,7 +319,7 @@ fn @types.Game::fire_railgun(
   }
   let proj = game.projectiles[idx]
   proj.active = true
-  proj.kind = @types.weapon_railgun
+  proj.kind = Railgun
   proj.from_player = true
   proj.x = p.x + fwd.0 * 2.5
   proj.y = p.y + fwd.1 * 2.5
