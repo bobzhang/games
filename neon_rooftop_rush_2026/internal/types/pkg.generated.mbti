@@ -70,20 +70,6 @@ pub fn neon_orange() -> @raylib.Color
 
 pub fn neon_pink() -> @raylib.Color
 
-pub let obstacle_drone : Int
-
-pub let obstacle_laser : Int
-
-pub let obstacle_sign : Int
-
-pub let obstacle_vent : Int
-
-pub let particle_glow : Int
-
-pub let particle_hurt : Int
-
-pub let particle_spark : Int
-
 pub let player_spawn_x : Float
 
 pub let player_spawn_y : Float
@@ -113,14 +99,6 @@ pub let stage_base_goal : Float
 pub let stage_goal_growth : Float
 
 pub let stage_intro_time : Float
-
-pub let state_game_over : Int
-
-pub let state_play : Int
-
-pub let state_stage_clear : Int
-
-pub let state_title : Int
 
 pub let target_fps : Int
 
@@ -162,7 +140,7 @@ pub(all) struct Game {
   particles : Array[Particle]
   ghosts : Array[Ghost]
   hero : Player
-  mut state : Int
+  mut state : GameState
   mut title_t : Float
   mut stage_intro_t : Float
   mut time_s : Float
@@ -203,6 +181,14 @@ pub(all) struct Game {
 }
 pub fn Game::new() -> Self
 
+pub(all) enum GameState {
+  Title
+  Play
+  StageClear
+  GameOver
+}
+pub impl Eq for GameState
+
 pub(all) struct Ghost {
   mut active : Bool
   mut x : Float
@@ -216,7 +202,7 @@ pub fn Ghost::new() -> Self
 
 pub(all) struct Obstacle {
   mut active : Bool
-  mut kind : Int
+  mut kind : ObstacleKind
   mut x : Float
   mut y : Float
   mut w : Float
@@ -227,6 +213,14 @@ pub(all) struct Obstacle {
 }
 pub fn Obstacle::new() -> Self
 
+pub(all) enum ObstacleKind {
+  Vent
+  Sign
+  Drone
+  Laser
+}
+pub impl Eq for ObstacleKind
+
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -235,9 +229,16 @@ pub(all) struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : ParticleKind
 }
 pub fn Particle::new() -> Self
+
+pub(all) enum ParticleKind {
+  Spark
+  Glow
+  Hurt
+}
+pub impl Eq for ParticleKind
 
 pub(all) struct Player {
   mut x : Float

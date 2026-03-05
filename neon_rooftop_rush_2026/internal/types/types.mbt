@@ -15,7 +15,7 @@ pub(all) struct Segment {
 /// Hazard entity that can collide with the runner.
 pub(all) struct Obstacle {
   mut active : Bool
-  mut kind : Int
+  mut kind : ObstacleKind
   mut x : Float
   mut y : Float
   mut w : Float
@@ -54,7 +54,7 @@ pub(all) struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : ParticleKind
 }
 
 ///|
@@ -100,7 +100,7 @@ pub(all) struct Game {
   particles : Array[Particle]
   ghosts : Array[Ghost]
   hero : Player
-  mut state : Int
+  mut state : GameState
   mut title_t : Float
   mut stage_intro_t : Float
   mut time_s : Float
@@ -160,7 +160,7 @@ pub fn Segment::new() -> Segment {
 pub fn Obstacle::new() -> Obstacle {
   {
     active: false,
-    kind: obstacle_vent,
+    kind: Vent,
     x: 0.0,
     y: 0.0,
     w: 0.0,
@@ -194,7 +194,7 @@ pub fn Particle::new() -> Particle {
     vy: 0.0,
     life: 0.0,
     size: 0.0,
-    kind: 0,
+    kind: Spark,
   }
 }
 
@@ -238,7 +238,7 @@ pub fn Game::new() -> Game {
     particles: Array::makei(max_particles, fn(_i) { Particle::new() }),
     ghosts: Array::makei(96, fn(_i) { Ghost::new() }),
     hero: Player::new(),
-    state: state_title,
+    state: Title,
     title_t: 0.0,
     stage_intro_t: stage_intro_time,
     time_s: 0.0,

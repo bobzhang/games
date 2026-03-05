@@ -47,42 +47,6 @@ pub let panel_x0 : Int = board_x0 + board_w + 24
 pub let panel_w : Int = screen_w - panel_x0 - 24
 
 ///|
-/// Integer id for the title screen state.
-pub let state_title : Int = 0
-
-///|
-/// Integer id for active gameplay.
-pub let state_play : Int = 1
-
-///|
-/// Integer id for the result screen state.
-pub let state_result : Int = 2
-
-///|
-/// Tile id for an impassable wall cell.
-pub let tile_wall : Int = 0
-
-///|
-/// Tile id for normal walkable floor.
-pub let tile_floor : Int = 1
-
-///|
-/// Tile id for the extraction exit cell.
-pub let tile_exit : Int = 2
-
-///|
-/// Drone mode id for patrol behavior.
-pub let drone_patrol : Int = 0
-
-///|
-/// Drone mode id for chase behavior.
-pub let drone_hunt : Int = 1
-
-///|
-/// Drone mode id for temporary stun behavior.
-pub let drone_stunned : Int = 2
-
-///|
 /// Maximum drones allocated in the drone pool.
 pub let max_drones : Int = 5
 
@@ -177,3 +141,28 @@ pub let score_stun : Int = 60
 ///|
 /// Bonus score granted on successful escape.
 pub let score_win : Int = 1100
+
+
+///|
+/// Behavior mode of a patrol drone: patrol, hunt, or stunned.
+pub(all) enum DroneMode {
+  Patrol
+  Hunt
+  Stunned
+} derive(Eq)
+
+///|
+/// Top-level game state: title screen, active play, or result screen.
+pub(all) enum GameState {
+  Title
+  Play
+  Result
+} derive(Eq)
+
+///|
+/// Grid tile type: impassable wall, walkable floor, or extraction exit.
+pub(all) enum Tile {
+  Wall
+  Floor
+  Exit
+} derive(Eq)

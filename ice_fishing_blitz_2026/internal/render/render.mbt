@@ -172,13 +172,11 @@ fn @types.Game::draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit 
 
 ///|
 /// Returns the fill color for a fish kind.
-fn fish_color(kind : Int) -> @raylib.Color {
-  if kind == @types.fish_trout {
-    @raylib.Color::new(154, 224, 252, 244)
-  } else if kind == @types.fish_salmon {
-    @raylib.Color::new(255, 178, 144, 244)
-  } else {
-    @raylib.Color::new(244, 216, 120, 246)
+fn fish_color(kind : @types.FishKind) -> @raylib.Color {
+  match kind {
+    Trout => @raylib.Color::new(154, 224, 252, 244)
+    Salmon => @raylib.Color::new(255, 178, 144, 244)
+    Gold => @raylib.Color::new(244, 216, 120, 246)
   }
 }
 
@@ -238,13 +236,11 @@ fn draw_fish(f : @types.Fish, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Returns the fill color for a hazard kind.
-fn hazard_color(kind : Int) -> @raylib.Color {
-  if kind == @types.hazard_jelly {
-    @raylib.Color::new(186, 168, 224, 234)
-  } else if kind == @types.hazard_eel {
-    @raylib.Color::new(132, 210, 196, 242)
-  } else {
-    @raylib.Color::new(206, 236, 255, 246)
+fn hazard_color(kind : @types.HazardKind) -> @raylib.Color {
+  match kind {
+    Jelly => @raylib.Color::new(186, 168, 224, 234)
+    Eel => @raylib.Color::new(132, 210, 196, 242)
+    Ice => @raylib.Color::new(206, 236, 255, 246)
   }
 }
 
@@ -259,54 +255,58 @@ fn draw_hazard(h : @types.Hazard, ox : Int, oy : Int) -> Unit {
   let y : Int = h.y.to_int() + oy
   let c0 : @raylib.Color = hazard_color(h.kind)
 
-  if h.kind == @types.hazard_jelly {
-    @raylib.draw_circle(x, y, h.r, c0)
+  match h.kind {
+    Jelly => {
+      @raylib.draw_circle(x, y, h.r, c0)
 
-    for k in 0..<5 {
-      let px : Int = x - h.r.to_int() + 8 + k * 8
-      @raylib.draw_line(
-        px,
-        y + h.r.to_int() - 2,
-        px + @raylib.get_random_value(-6, 6),
-        y + h.r.to_int() + 18,
-        @raylib.Color::new(216, 204, 238, 188),
+      for k in 0..<5 {
+        let px : Int = x - h.r.to_int() + 8 + k * 8
+        @raylib.draw_line(
+          px,
+          y + h.r.to_int() - 2,
+          px + @raylib.get_random_value(-6, 6),
+          y + h.r.to_int() + 18,
+          @raylib.Color::new(216, 204, 238, 188),
+        )
+      }
+    }
+    Eel => {
+      @raylib.draw_ellipse(x, y, h.r + 10.0, h.r * 0.54, c0)
+      @raylib.draw_circle(x + 8, y - 2, 3.0, @raylib.Color::new(18, 32, 44, 220))
+      @raylib.draw_circle(x - 10, y, 2.0, @raylib.Color::new(216, 246, 255, 200))
+    }
+    Ice => {
+      @raylib.draw_triangle(
+        @raylib.Vector2::new(
+          Float::from_int(x),
+          Float::from_int(y - h.r.to_int() - 6),
+        ),
+        @raylib.Vector2::new(
+          Float::from_int(x - h.r.to_int() - 5),
+          Float::from_int(y + h.r.to_int() + 5),
+        ),
+        @raylib.Vector2::new(
+          Float::from_int(x + h.r.to_int() + 5),
+          Float::from_int(y + h.r.to_int() + 5),
+        ),
+        c0,
+      )
+      @raylib.draw_triangle_lines(
+        @raylib.Vector2::new(
+          Float::from_int(x),
+          Float::from_int(y - h.r.to_int() - 6),
+        ),
+        @raylib.Vector2::new(
+          Float::from_int(x - h.r.to_int() - 5),
+          Float::from_int(y + h.r.to_int() + 5),
+        ),
+        @raylib.Vector2::new(
+          Float::from_int(x + h.r.to_int() + 5),
+          Float::from_int(y + h.r.to_int() + 5),
+        ),
+        @raylib.Color::new(232, 246, 255, 196),
       )
     }
-  } else if h.kind == @types.hazard_eel {
-    @raylib.draw_ellipse(x, y, h.r + 10.0, h.r * 0.54, c0)
-    @raylib.draw_circle(x + 8, y - 2, 3.0, @raylib.Color::new(18, 32, 44, 220))
-    @raylib.draw_circle(x - 10, y, 2.0, @raylib.Color::new(216, 246, 255, 200))
-  } else {
-    @raylib.draw_triangle(
-      @raylib.Vector2::new(
-        Float::from_int(x),
-        Float::from_int(y - h.r.to_int() - 6),
-      ),
-      @raylib.Vector2::new(
-        Float::from_int(x - h.r.to_int() - 5),
-        Float::from_int(y + h.r.to_int() + 5),
-      ),
-      @raylib.Vector2::new(
-        Float::from_int(x + h.r.to_int() + 5),
-        Float::from_int(y + h.r.to_int() + 5),
-      ),
-      c0,
-    )
-    @raylib.draw_triangle_lines(
-      @raylib.Vector2::new(
-        Float::from_int(x),
-        Float::from_int(y - h.r.to_int() - 6),
-      ),
-      @raylib.Vector2::new(
-        Float::from_int(x - h.r.to_int() - 5),
-        Float::from_int(y + h.r.to_int() + 5),
-      ),
-      @raylib.Vector2::new(
-        Float::from_int(x + h.r.to_int() + 5),
-        Float::from_int(y + h.r.to_int() + 5),
-      ),
-      @raylib.Color::new(232, 246, 255, 196),
-    )
   }
 }
 

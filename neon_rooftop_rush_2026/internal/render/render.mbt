@@ -238,112 +238,117 @@ fn draw_obstacle(ob : @types.Obstacle, cam_x : Float, cam_y : Float) -> Unit {
     return
   }
 
-  if ob.kind == @types.obstacle_vent {
-    @raylib.draw_rectangle(
-      x.to_int(),
-      y.to_int(),
-      ob.w.to_int(),
-      ob.h.to_int(),
-      @raylib.Color::new(98, 110, 132, 255),
-    )
-    @raylib.draw_rectangle_lines(
-      x.to_int(),
-      y.to_int(),
-      ob.w.to_int(),
-      ob.h.to_int(),
-      @raylib.Color::new(20, 26, 34, 220),
-    )
-    for i in 0..<4 {
-      @raylib.draw_line(
-        x.to_int() + 8,
-        y.to_int() + 5 + i * 5,
-        x.to_int() + ob.w.to_int() - 8,
-        y.to_int() + 5 + i * 5,
-        @raylib.Color::new(66, 74, 92, 240),
+  match ob.kind {
+    Vent => {
+      @raylib.draw_rectangle(
+        x.to_int(),
+        y.to_int(),
+        ob.w.to_int(),
+        ob.h.to_int(),
+        @raylib.Color::new(98, 110, 132, 255),
+      )
+      @raylib.draw_rectangle_lines(
+        x.to_int(),
+        y.to_int(),
+        ob.w.to_int(),
+        ob.h.to_int(),
+        @raylib.Color::new(20, 26, 34, 220),
+      )
+      for i in 0..<4 {
+        @raylib.draw_line(
+          x.to_int() + 8,
+          y.to_int() + 5 + i * 5,
+          x.to_int() + ob.w.to_int() - 8,
+          y.to_int() + 5 + i * 5,
+          @raylib.Color::new(66, 74, 92, 240),
+        )
+      }
+    }
+    Sign => {
+      @raylib.draw_rectangle(
+        x.to_int() + 6,
+        y.to_int() + ob.h.to_int(),
+        6,
+        26,
+        @raylib.Color::new(80, 90, 114, 255),
+      )
+      @raylib.draw_rectangle(
+        x.to_int(),
+        y.to_int(),
+        ob.w.to_int(),
+        ob.h.to_int(),
+        @raylib.Color::new(38, 20, 40, 255),
+      )
+      @raylib.draw_rectangle_lines(
+        x.to_int(),
+        y.to_int(),
+        ob.w.to_int(),
+        ob.h.to_int(),
+        @types.neon_pink(),
+      )
+      @raylib.draw_text(
+        "N",
+        x.to_int() + ob.w.to_int() / 2 - 8,
+        y.to_int() + 2,
+        22,
+        @types.neon_pink(),
       )
     }
-  } else if ob.kind == @types.obstacle_sign {
-    @raylib.draw_rectangle(
-      x.to_int() + 6,
-      y.to_int() + ob.h.to_int(),
-      6,
-      26,
-      @raylib.Color::new(80, 90, 114, 255),
-    )
-    @raylib.draw_rectangle(
-      x.to_int(),
-      y.to_int(),
-      ob.w.to_int(),
-      ob.h.to_int(),
-      @raylib.Color::new(38, 20, 40, 255),
-    )
-    @raylib.draw_rectangle_lines(
-      x.to_int(),
-      y.to_int(),
-      ob.w.to_int(),
-      ob.h.to_int(),
-      @types.neon_pink(),
-    )
-    @raylib.draw_text(
-      "N",
-      x.to_int() + ob.w.to_int() / 2 - 8,
-      y.to_int() + 2,
-      22,
-      @types.neon_pink(),
-    )
-  } else if ob.kind == @types.obstacle_drone {
-    let pulse : Float = 0.5 + 0.5 * @math.sinf(ob.phase * 2.2)
-    let glow = @types.color_mix(@types.neon_blue(), @types.neon_pink(), pulse)
-    @raylib.draw_ellipse(
-      (x + ob.w * 0.5).to_int(),
-      (y + ob.h * 0.5).to_int(),
-      ob.w * 0.5,
-      ob.h * 0.5,
-      @raylib.Color::new(70, 76, 98, 255),
-    )
-    @raylib.draw_circle(
-      (x + ob.w * 0.5).to_int(),
-      (y + ob.h * 0.5).to_int(),
-      8.0,
-      glow,
-    )
-    @raylib.draw_circle_lines(
-      (x + ob.w * 0.5).to_int(),
-      (y + ob.h * 0.5).to_int(),
-      Float::from_int(14) + pulse * Float::from_int(6),
-      @raylib.Color::new(glow.r.to_int(), glow.g.to_int(), glow.b.to_int(), 160),
-    )
-    @raylib.draw_line(
-      x.to_int() - 6,
-      (y + ob.h * 0.5).to_int(),
-      x.to_int() + ob.w.to_int() + 6,
-      (y + ob.h * 0.5).to_int(),
-      @raylib.Color::new(70, 78, 100, 240),
-    )
-  } else {
-    let pulse : Float = 0.5 + 0.5 * @math.sinf(ob.phase)
-    let c = @types.color_mix(@types.neon_pink(), @types.neon_orange(), pulse)
-    @raylib.draw_rectangle(
-      x.to_int(),
-      y.to_int(),
-      ob.w.to_int(),
-      ob.h.to_int(),
-      @raylib.Color::new(36, 22, 28, 255),
-    )
-    @raylib.draw_rectangle(
-      x.to_int() + 5,
-      y.to_int(),
-      4,
-      ob.h.to_int(),
-      @raylib.Color::new(c.r.to_int(), c.g.to_int(), c.b.to_int(), 220),
-    )
-    @raylib.draw_rectangle(
-      x.to_int() + ob.w.to_int() - 9,
-      y.to_int(),
-      4,
-      ob.h.to_int(),
-      @raylib.Color::new(c.r.to_int(), c.g.to_int(), c.b.to_int(), 220),
-    )
+    Drone => {
+      let pulse : Float = 0.5 + 0.5 * @math.sinf(ob.phase * 2.2)
+      let glow = @types.color_mix(@types.neon_blue(), @types.neon_pink(), pulse)
+      @raylib.draw_ellipse(
+        (x + ob.w * 0.5).to_int(),
+        (y + ob.h * 0.5).to_int(),
+        ob.w * 0.5,
+        ob.h * 0.5,
+        @raylib.Color::new(70, 76, 98, 255),
+      )
+      @raylib.draw_circle(
+        (x + ob.w * 0.5).to_int(),
+        (y + ob.h * 0.5).to_int(),
+        8.0,
+        glow,
+      )
+      @raylib.draw_circle_lines(
+        (x + ob.w * 0.5).to_int(),
+        (y + ob.h * 0.5).to_int(),
+        Float::from_int(14) + pulse * Float::from_int(6),
+        @raylib.Color::new(glow.r.to_int(), glow.g.to_int(), glow.b.to_int(), 160),
+      )
+      @raylib.draw_line(
+        x.to_int() - 6,
+        (y + ob.h * 0.5).to_int(),
+        x.to_int() + ob.w.to_int() + 6,
+        (y + ob.h * 0.5).to_int(),
+        @raylib.Color::new(70, 78, 100, 240),
+      )
+    }
+    Laser => {
+      let pulse : Float = 0.5 + 0.5 * @math.sinf(ob.phase)
+      let c = @types.color_mix(@types.neon_pink(), @types.neon_orange(), pulse)
+      @raylib.draw_rectangle(
+        x.to_int(),
+        y.to_int(),
+        ob.w.to_int(),
+        ob.h.to_int(),
+        @raylib.Color::new(36, 22, 28, 255),
+      )
+      @raylib.draw_rectangle(
+        x.to_int() + 5,
+        y.to_int(),
+        4,
+        ob.h.to_int(),
+        @raylib.Color::new(c.r.to_int(), c.g.to_int(), c.b.to_int(), 220),
+      )
+      @raylib.draw_rectangle(
+        x.to_int() + ob.w.to_int() - 9,
+        y.to_int(),
+        4,
+        ob.h.to_int(),
+        @raylib.Color::new(c.r.to_int(), c.g.to_int(), c.b.to_int(), 220),
+      )
+    }
   }
 }
 
@@ -398,12 +403,10 @@ fn @types.Game::draw_particles(
     }
 
     let alpha = (p.life * 255.0).to_int().clamp(min=0, max=255)
-    let col = if p.kind == 0 {
-      @raylib.Color::new(130, 250, 216, alpha)
-    } else if p.kind == 1 {
-      @raylib.Color::new(98, 178, 255, alpha)
-    } else {
-      @raylib.Color::new(255, 108, 156, alpha)
+    let col = match p.kind {
+      Spark => @raylib.Color::new(130, 250, 216, alpha)
+      Glow => @raylib.Color::new(98, 178, 255, alpha)
+      Hurt => @raylib.Color::new(255, 108, 156, alpha)
     }
 
     @raylib.draw_circle(
@@ -1019,12 +1022,12 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   let shake = game.shake_offset()
   game.draw_game_world(shake.0, shake.1)
 
-  if game.state != @types.state_title {
+  if game.state != Title {
     game.draw_hud()
   }
 
   if game.touch_mode || game.touch_count > 0 {
-    if game.state == @types.state_play {
+    if game.state == Play {
       game.draw_touch_controls()
     }
     if game.touch_count > 0 {
@@ -1037,12 +1040,11 @@ pub fn draw_frame(game : @types.Game) -> Unit {
     }
   }
 
-  if game.state == @types.state_title {
-    game.draw_title_overlay()
-  } else if game.state == @types.state_stage_clear {
-    game.draw_stage_clear_overlay()
-  } else if game.state == @types.state_game_over {
-    game.draw_game_over_overlay()
+  match game.state {
+    Title => game.draw_title_overlay()
+    StageClear => game.draw_stage_clear_overlay()
+    GameOver => game.draw_game_over_overlay()
+    Play => ()
   }
 
   if game.flash_t > 0.0 {

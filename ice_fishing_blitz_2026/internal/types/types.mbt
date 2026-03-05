@@ -8,7 +8,7 @@ pub(all) struct Fish {
   mut vy : Float
   mut r : Float
   mut value : Int
-  mut kind : Int
+  mut kind : FishKind
   mut phase : Float
   mut hooked : Bool
 }
@@ -23,7 +23,7 @@ pub(all) struct Hazard {
   mut vy : Float
   mut r : Float
   mut dmg : Float
-  mut kind : Int
+  mut kind : HazardKind
   mut phase : Float
 }
 
@@ -129,7 +129,7 @@ pub fn Fish::new() -> Fish {
     vy: 0.0,
     r: 0.0,
     value: 0,
-    kind: fish_trout,
+    kind: Trout,
     phase: 0.0,
     hooked: false,
   }
@@ -146,7 +146,7 @@ pub fn Hazard::new() -> Hazard {
     vy: 0.0,
     r: 0.0,
     dmg: 0.0,
-    kind: hazard_jelly,
+    kind: Jelly,
     phase: 0.0,
   }
 }

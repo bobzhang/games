@@ -40,13 +40,7 @@ pub fn clampf(Float, Float, Float) -> Float
 
 pub let core_need : Int
 
-pub let drone_hunt : Int
-
 pub let drone_move_t : Float
-
-pub let drone_patrol : Int
-
-pub let drone_stunned : Int
 
 pub let exit_x : Int
 
@@ -120,19 +114,7 @@ pub let start_x : Int
 
 pub let start_y : Int
 
-pub let state_play : Int
-
-pub let state_result : Int
-
-pub let state_title : Int
-
 pub let target_fps : Int
-
-pub let tile_exit : Int
-
-pub let tile_floor : Int
-
-pub let tile_wall : Int
 
 // Errors
 
@@ -162,7 +144,7 @@ pub fn Core::new() -> Self
 pub(all) struct Drone {
   mut active : Bool
   body : Actor
-  mut mode : Int
+  mut mode : DroneMode
   mut move_cd : Float
   mut stun_t : Float
   mut dir_x : Int
@@ -175,6 +157,13 @@ pub(all) struct Drone {
 }
 pub fn Drone::new() -> Self
 
+pub(all) enum DroneMode {
+  Patrol
+  Hunt
+  Stunned
+}
+pub impl Eq for DroneMode
+
 pub(all) struct Flare {
   mut active : Bool
   mut x : Int
@@ -184,12 +173,12 @@ pub(all) struct Flare {
 pub fn Flare::new() -> Self
 
 pub(all) struct Game {
-  map : Array[Int]
+  map : Array[Tile]
   drones : Array[Drone]
   cores : Array[Core]
   flares : Array[Flare]
   particles : Array[Particle]
-  mut state : Int
+  mut state : GameState
   player : Actor
   mut lives : Int
   mut score : Int
@@ -221,6 +210,13 @@ pub(all) struct Game {
 }
 pub fn Game::new() -> Self
 
+pub(all) enum GameState {
+  Title
+  Play
+  Result
+}
+pub impl Eq for GameState
+
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -232,6 +228,13 @@ pub(all) struct Particle {
   mut kind : Int
 }
 pub fn Particle::new() -> Self
+
+pub(all) enum Tile {
+  Wall
+  Floor
+  Exit
+}
+pub impl Eq for Tile
 
 // Type aliases
 

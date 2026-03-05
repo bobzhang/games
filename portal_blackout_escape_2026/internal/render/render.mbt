@@ -89,9 +89,9 @@ fn @types.Game::draw_tiles(game : @types.Game, ox : Int, oy : Int) -> Unit {
     for x in 0..<@types.grid_w {
       let rx : Int = @types.board_px(x) + ox
       let ry : Int = @types.board_py(y) + oy
-      let t : Int = game.map[y * @types.grid_w + x]
+      let t = game.map[y * @types.grid_w + x]
 
-      if t == @types.tile_wall {
+      if t == Wall {
         let tone : Int = if (x + y) % 2 == 0 { 56 } else { 64 }
         @raylib.draw_rectangle(
           rx,
@@ -107,7 +107,7 @@ fn @types.Game::draw_tiles(game : @types.Game, ox : Int, oy : Int) -> Unit {
           @types.cell - 14,
           @raylib.Color::new(82, 66, 64, 226),
         )
-      } else if t == @types.tile_exit {
+      } else if t == Exit {
         @raylib.draw_rectangle(
           rx,
           ry,
@@ -267,9 +267,9 @@ fn @types.Game::draw_drones(game : @types.Game, ox : Int, oy : Int) -> Unit {
     let cx : Int = @types.cell_center_x(drone.body.fx) + ox
     let cy : Int = @types.cell_center_y(drone.body.fy) + oy
 
-    let col = if drone.mode == @types.drone_stunned {
+    let col = if drone.mode == Stunned {
       @raylib.Color::new(170, 150, 246, 230)
-    } else if drone.mode == @types.drone_hunt {
+    } else if drone.mode == Hunt {
       @raylib.Color::new(252, 140, 164, 236)
     } else {
       drone_color(drone.color_id)
@@ -471,7 +471,7 @@ fn @types.Game::draw_touch_button(
 ///|
 /// Draws the on-screen D-pad, action button, and hint/restart/menu shortcut buttons during gameplay.
 fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
 
@@ -927,9 +927,9 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_panel()
   game.draw_touch_controls()
 
-  if game.state == @types.state_title {
+  if game.state == Title {
     game.draw_title_overlay()
-  } else if game.state == @types.state_result {
+  } else if game.state == Result {
     game.draw_result_overlay()
   }
 }

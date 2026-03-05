@@ -24,7 +24,7 @@ fn @types.Game::clear_world(game : @types.Game) -> Unit {
     fish_elem.vy = 0.0
     fish_elem.r = 0.0
     fish_elem.value = 0
-    fish_elem.kind = @types.fish_trout
+    fish_elem.kind = Trout
     fish_elem.phase = 0.0
     fish_elem.hooked = false
   }
@@ -37,7 +37,7 @@ fn @types.Game::clear_world(game : @types.Game) -> Unit {
     hazard.vy = 0.0
     hazard.r = 0.0
     hazard.dmg = 0.0
-    hazard.kind = @types.hazard_jelly
+    hazard.kind = Jelly
     hazard.phase = 0.0
   }
 
@@ -223,12 +223,12 @@ fn @types.Game::spawn_fish(game : @types.Game) -> Bool {
     }
 
     let roll : Int = @raylib.get_random_value(0, 99)
-    let kind : Int = if roll < 58 {
-      @types.fish_trout
+    let kind : @types.FishKind = if roll < 58 {
+      Trout
     } else if roll < 90 {
-      @types.fish_salmon
+      Salmon
     } else {
-      @types.fish_gold
+      Gold
     }
 
     let side : Int = @raylib.get_random_value(0, 1)
@@ -248,15 +248,19 @@ fn @types.Game::spawn_fish(game : @types.Game) -> Bool {
     fish_elem.hooked = false
     fish_elem.phase = @types.randf(0.0, 6.28)
 
-    if kind == @types.fish_trout {
-      fish_elem.r = @types.randf(16.0, 22.0)
-      fish_elem.value = @raylib.get_random_value(22, 35)
-    } else if kind == @types.fish_salmon {
-      fish_elem.r = @types.randf(22.0, 28.0)
-      fish_elem.value = @raylib.get_random_value(38, 56)
-    } else {
-      fish_elem.r = @types.randf(14.0, 20.0)
-      fish_elem.value = @raylib.get_random_value(70, 110)
+    match kind {
+      Trout => {
+        fish_elem.r = @types.randf(16.0, 22.0)
+        fish_elem.value = @raylib.get_random_value(22, 35)
+      }
+      Salmon => {
+        fish_elem.r = @types.randf(22.0, 28.0)
+        fish_elem.value = @raylib.get_random_value(38, 56)
+      }
+      Gold => {
+        fish_elem.r = @types.randf(14.0, 20.0)
+        fish_elem.value = @raylib.get_random_value(70, 110)
+      }
     }
 
     return true
@@ -274,48 +278,52 @@ fn @types.Game::spawn_hazard(game : @types.Game) -> Bool {
     }
 
     let roll : Int = @raylib.get_random_value(0, 99)
-    let kind : Int = if roll < 46 {
-      @types.hazard_jelly
+    let kind : @types.HazardKind = if roll < 46 {
+      Jelly
     } else if roll < 78 {
-      @types.hazard_eel
+      Eel
     } else {
-      @types.hazard_ice
+      Ice
     }
 
     hazard.active = true
     hazard.kind = kind
     hazard.phase = @types.randf(0.0, 6.28)
 
-    if kind == @types.hazard_jelly {
-      hazard.x = @types.randf(
-        @types.world_left() + 24.0,
-        @types.world_right() - 24.0,
-      )
-      hazard.y = @types.topf() + @types.randf(80.0, 180.0)
-      hazard.vx = @types.randf(-44.0, 44.0)
-      hazard.vy = @types.randf(22.0, 80.0)
-      hazard.r = @types.randf(26.0, 36.0)
-      hazard.dmg = @types.randf(7.0, 12.0)
-    } else if kind == @types.hazard_eel {
-      hazard.x = @types.randf(
-        @types.world_left() + 30.0,
-        @types.world_right() - 30.0,
-      )
-      hazard.y = @types.bottomf() - @types.randf(50.0, 180.0)
-      hazard.vx = @types.randf(-26.0, 26.0)
-      hazard.vy = @types.randf(-22.0, 22.0)
-      hazard.r = @types.randf(18.0, 24.0)
-      hazard.dmg = @types.randf(10.0, 16.0)
-    } else {
-      hazard.x = @types.randf(
-        @types.world_left() + 20.0,
-        @types.world_right() - 20.0,
-      )
-      hazard.y = @types.topf() + 10.0
-      hazard.vx = @types.randf(-18.0, 18.0)
-      hazard.vy = @types.randf(180.0, 280.0) + Float::from_int(game.wave) * 12.0
-      hazard.r = @types.randf(12.0, 18.0)
-      hazard.dmg = @types.randf(14.0, 24.0)
+    match kind {
+      Jelly => {
+        hazard.x = @types.randf(
+          @types.world_left() + 24.0,
+          @types.world_right() - 24.0,
+        )
+        hazard.y = @types.topf() + @types.randf(80.0, 180.0)
+        hazard.vx = @types.randf(-44.0, 44.0)
+        hazard.vy = @types.randf(22.0, 80.0)
+        hazard.r = @types.randf(26.0, 36.0)
+        hazard.dmg = @types.randf(7.0, 12.0)
+      }
+      Eel => {
+        hazard.x = @types.randf(
+          @types.world_left() + 30.0,
+          @types.world_right() - 30.0,
+        )
+        hazard.y = @types.bottomf() - @types.randf(50.0, 180.0)
+        hazard.vx = @types.randf(-26.0, 26.0)
+        hazard.vy = @types.randf(-22.0, 22.0)
+        hazard.r = @types.randf(18.0, 24.0)
+        hazard.dmg = @types.randf(10.0, 16.0)
+      }
+      Ice => {
+        hazard.x = @types.randf(
+          @types.world_left() + 20.0,
+          @types.world_right() - 20.0,
+        )
+        hazard.y = @types.topf() + 10.0
+        hazard.vx = @types.randf(-18.0, 18.0)
+        hazard.vy = @types.randf(180.0, 280.0) + Float::from_int(game.wave) * 12.0
+        hazard.r = @types.randf(12.0, 18.0)
+        hazard.dmg = @types.randf(14.0, 24.0)
+      }
     }
 
     return true
@@ -495,13 +503,11 @@ fn @types.Game::collect_pickup(
 
 ///|
 /// Returns the movement speed multiplier for a fish kind.
-fn fish_speed_mul(kind : Int) -> Float {
-  if kind == @types.fish_trout {
-    1.0
-  } else if kind == @types.fish_salmon {
-    0.84
-  } else {
-    1.16
+fn fish_speed_mul(kind : @types.FishKind) -> Float {
+  match kind {
+    Trout => 1.0
+    Salmon => 0.84
+    Gold => 1.16
   }
 }
 
@@ -593,8 +599,13 @@ fn @types.Game::update_fish(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
+    let kind_idx : Float = match game.fish[i].kind {
+      Trout => 0.0
+      Salmon => 1.0
+      Gold => 2.0
+    }
     game.fish[i].phase = game.fish[i].phase +
-      dt * (1.6 + Float::from_int(game.fish[i].kind) * 0.7)
+      dt * (1.6 + kind_idx * 0.7)
 
     let sw_x : Float = @math.sinf(game.fish[i].phase * 1.8) *
       40.0 *
@@ -640,7 +651,7 @@ fn @types.Game::update_fish(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    if game.fish[i].kind == @types.fish_gold &&
+    if game.fish[i].kind == Gold &&
       @raylib.get_random_value(0, 999) < 2 {
       game.fish[i].active = false
       game.escaped = game.escaped + 1
@@ -658,24 +669,33 @@ fn @types.Game::update_hazards(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
+    let hkind_idx : Float = match hazard.kind {
+      Jelly => 0.0
+      Eel => 1.0
+      Ice => 2.0
+    }
     hazard.phase = hazard.phase +
-      dt * (1.1 + Float::from_int(hazard.kind) * 0.9)
+      dt * (1.1 + hkind_idx * 0.9)
 
-    if hazard.kind == @types.hazard_jelly {
-      hazard.vx = hazard.vx + @math.sinf(hazard.phase * 1.7) * dt * 72.0
-      hazard.vy = hazard.vy + @math.cosf(hazard.phase * 1.3) * dt * 24.0
-    } else if hazard.kind == @types.hazard_eel {
-      let dx : Float = game.hook_x - hazard.x
-      let dy : Float = game.hook_y - hazard.y
-      let d : Float = dx.abs() + dy.abs()
-      let nx : Float = if d <= 0.001 { 0.0 } else { dx / d }
-      let ny : Float = if d <= 0.001 { 0.0 } else { dy / d }
+    match hazard.kind {
+      Jelly => {
+        hazard.vx = hazard.vx + @math.sinf(hazard.phase * 1.7) * dt * 72.0
+        hazard.vy = hazard.vy + @math.cosf(hazard.phase * 1.3) * dt * 24.0
+      }
+      Eel => {
+        let dx : Float = game.hook_x - hazard.x
+        let dy : Float = game.hook_y - hazard.y
+        let d : Float = dx.abs() + dy.abs()
+        let nx : Float = if d <= 0.001 { 0.0 } else { dx / d }
+        let ny : Float = if d <= 0.001 { 0.0 } else { dy / d }
 
-      hazard.vx = hazard.vx * (1.0 - dt * 2.2) + nx * dt * 300.0
-      hazard.vy = hazard.vy * (1.0 - dt * 2.2) + ny * dt * 300.0
-    } else {
-      hazard.vx = hazard.vx + @math.sinf(hazard.phase * 2.5) * dt * 66.0
-      hazard.vy = hazard.vy + dt * 44.0
+        hazard.vx = hazard.vx * (1.0 - dt * 2.2) + nx * dt * 300.0
+        hazard.vy = hazard.vy * (1.0 - dt * 2.2) + ny * dt * 300.0
+      }
+      Ice => {
+        hazard.vx = hazard.vx + @math.sinf(hazard.phase * 2.5) * dt * 66.0
+        hazard.vy = hazard.vy + dt * 44.0
+      }
     }
 
     hazard.vx = @types.clampf(hazard.vx, -220.0, 220.0)
@@ -684,7 +704,7 @@ fn @types.Game::update_hazards(game : @types.Game, dt : Float) -> Unit {
     hazard.x = hazard.x + hazard.vx * dt
     hazard.y = hazard.y + hazard.vy * dt
 
-    if hazard.kind == @types.hazard_ice && hazard.y > @types.bottomf() + 30.0 {
+    if hazard.kind == Ice && hazard.y > @types.bottomf() + 30.0 {
       hazard.active = false
       continue
     }
@@ -704,7 +724,7 @@ fn @types.Game::update_hazards(game : @types.Game, dt : Float) -> Unit {
 
       game.burst(game.hook_x, game.hook_y, 12, 1)
 
-      if hazard.kind == @types.hazard_ice {
+      if hazard.kind == Ice {
         hazard.active = false
       } else {
         hazard.vx = -hazard.vx * 0.6
@@ -720,7 +740,7 @@ fn @types.Game::update_hazards(game : @types.Game, dt : Float) -> Unit {
       }
     }
 
-    if hazard.kind == @types.hazard_eel &&
+    if hazard.kind == Eel &&
       game.carrying_idx >= 0 &&
       game.carrying_idx < game.fish.length() {
       let idx : Int = game.carrying_idx

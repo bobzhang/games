@@ -34,18 +34,6 @@ pub fn clampf(Float, Float, Float) -> Float
 
 pub fn dist2(Float, Float, Float, Float) -> Float
 
-pub let fish_gold : Int
-
-pub let fish_salmon : Int
-
-pub let fish_trout : Int
-
-pub let hazard_eel : Int
-
-pub let hazard_ice : Int
-
-pub let hazard_jelly : Int
-
 pub let hole_x : Int
 
 pub fn hole_xf() -> Float
@@ -129,11 +117,18 @@ pub(all) struct Fish {
   mut vy : Float
   mut r : Float
   mut value : Int
-  mut kind : Int
+  mut kind : FishKind
   mut phase : Float
   mut hooked : Bool
 }
 pub fn Fish::new() -> Self
+
+pub(all) enum FishKind {
+  Trout
+  Salmon
+  Gold
+}
+pub impl Eq for FishKind
 
 pub(all) struct Game {
   fish : Array[Fish]
@@ -199,10 +194,17 @@ pub(all) struct Hazard {
   mut vy : Float
   mut r : Float
   mut dmg : Float
-  mut kind : Int
+  mut kind : HazardKind
   mut phase : Float
 }
 pub fn Hazard::new() -> Self
+
+pub(all) enum HazardKind {
+  Jelly
+  Eel
+  Ice
+}
+pub impl Eq for HazardKind
 
 pub(all) struct Particle {
   mut active : Bool

@@ -12,9 +12,9 @@ fn in_bounds(x : Int, y : Int) -> Bool {
 
 ///|
 /// Returns the tile type at `(x, y)`, returning `tile_wall` for out-of-bounds coordinates.
-fn @types.Game::tile_at(game : @types.Game, x : Int, y : Int) -> Int {
+fn @types.Game::tile_at(game : @types.Game, x : Int, y : Int) -> @types.Tile {
   if not(in_bounds(x, y)) {
-    @types.tile_wall
+    Wall
   } else {
     game.map[idx(x, y)]
   }
@@ -22,7 +22,7 @@ fn @types.Game::tile_at(game : @types.Game, x : Int, y : Int) -> Int {
 
 ///|
 /// Writes tile type `t` into the map at `(x, y)`, ignoring out-of-bounds coordinates.
-fn @types.Game::set_tile(game : @types.Game, x : Int, y : Int, t : Int) -> Unit {
+fn @types.Game::set_tile(game : @types.Game, x : Int, y : Int, t : @types.Tile) -> Unit {
   if not(in_bounds(x, y)) {
     return
   }
@@ -240,9 +240,9 @@ fn @types.Game::build_map(game : @types.Game) -> Unit {
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
       if x == 0 || y == 0 || x == @types.grid_w - 1 || y == @types.grid_h - 1 {
-        game.set_tile(x, y, @types.tile_wall)
+        game.set_tile(x, y, Wall)
       } else {
-        game.set_tile(x, y, @types.tile_floor)
+        game.set_tile(x, y, Floor)
       }
     }
   }
@@ -251,7 +251,7 @@ fn @types.Game::build_map(game : @types.Game) -> Unit {
     for y in 1..<(@types.grid_h - 1) {
       let keep_gap : Bool = y == 2 || y == 6 || y == 10
       if not(keep_gap) {
-        game.set_tile(x, y, @types.tile_wall)
+        game.set_tile(x, y, Wall)
       }
     }
   }
@@ -260,7 +260,7 @@ fn @types.Game::build_map(game : @types.Game) -> Unit {
     for x in 2..<(@types.grid_w - 2) {
       let keep_gap : Bool = x == 5 || x == 9 || x == 13 || x == 17
       if not(keep_gap) {
-        game.set_tile(x, y, @types.tile_wall)
+        game.set_tile(x, y, Wall)
       }
     }
   }
@@ -281,11 +281,11 @@ fn @types.Game::build_map(game : @types.Game) -> Unit {
   ]
 
   for extra_wall in extra_walls {
-    game.set_tile(extra_wall.0, extra_wall.1, @types.tile_wall)
+    game.set_tile(extra_wall.0, extra_wall.1, Wall)
   }
 
-  game.set_tile(@types.exit_x, @types.exit_y, @types.tile_exit)
-  game.set_tile(@types.start_x, @types.start_y, @types.tile_floor)
+  game.set_tile(@types.exit_x, @types.exit_y, Exit)
+  game.set_tile(@types.start_x, @types.start_y, Floor)
 }
 
 ///|
@@ -329,7 +329,7 @@ fn @types.Game::init_drones(game : @types.Game) -> Unit {
 
   for i in 0..<game.drones.length() {
     game.drones[i].active = i < plan.length()
-    game.drones[i].mode = @types.drone_patrol
+    game.drones[i].mode = Patrol
     game.drones[i].move_cd = @types.randf(0.04, 0.30)
     game.drones[i].stun_t = 0.0
     game.drones[i].seed = 151 + i * 241
@@ -375,7 +375,7 @@ fn @types.Game::start_run(game : @types.Game) -> Unit {
 
   actor_place(game.player, @types.start_x, @types.start_y)
 
-  game.state = @types.state_play
+  game.state = Play
   game.win = false
   game.loss_reason = ""
 
@@ -410,7 +410,7 @@ fn @types.Game::start_run(game : @types.Game) -> Unit {
 ///|
 /// Transitions to the title screen and clears transient input and effect state.
 fn @types.Game::go_title(game : @types.Game) -> Unit {
-  game.state = @types.state_title
+  game.state = Title
   game.req_dx = 0
   game.req_dy = 0
   game.action_down = false
@@ -427,11 +427,11 @@ fn @types.Game::finish_run(
   win : Bool,
   reason : String,
 ) -> Unit {
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
 
-  game.state = @types.state_result
+  game.state = Result
   game.win = win
   game.loss_reason = reason
   game.req_dx = 0
@@ -470,12 +470,12 @@ fn @types.Game::blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
     return true
   }
 
-  let t : Int = game.tile_at(x, y)
-  if t == @types.tile_wall {
+  let t = game.tile_at(x, y)
+  if t == Wall {
     return true
   }
 
-  t == @types.tile_exit && not(game.portal_on)
+  t == Exit && not(game.portal_on)
 }
 
 ///|
@@ -579,7 +579,7 @@ fn @types.Game::line_of_sight(
     let y_max : Int = y0.max(y1)
 
     for y in (y_min + 1)..<y_max {
-      if game.tile_at(x0, y) == @types.tile_wall {
+      if game.tile_at(x0, y) == Wall {
         return false
       }
     }
@@ -592,7 +592,7 @@ fn @types.Game::line_of_sight(
     let x_max : Int = x0.max(x1)
 
     for x in (x_min + 1)..<x_max {
-      if game.tile_at(x, y0) == @types.tile_wall {
+      if game.tile_at(x, y0) == Wall {
         return false
       }
     }
@@ -644,18 +644,18 @@ fn @types.Game::choose_drone_step(game : @types.Game, i : Int) -> (Int, Int) {
   let flare_cover : Bool = game.flare_cover_at(px, py)
 
   if dist <= 3 || (sees && dist <= 7 && not(flare_cover)) {
-    d.mode = @types.drone_hunt
+    d.mode = Hunt
     d.alert_t = 1.2
   } else {
     d.alert_t = d.alert_t - 0.16
     if d.alert_t <= 0.0 {
-      d.mode = @types.drone_patrol
+      d.mode = Patrol
     }
   }
 
   let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
-  if d.mode == @types.drone_hunt {
+  if d.mode == Hunt {
     let mut best_k : Int = -1
     let mut best_d : Int = 999999
 
@@ -737,10 +737,10 @@ fn @types.Game::update_drones(game : @types.Game, dt : Float) -> Unit {
 
     actor_tick(game.drones[i].body, dt, @types.drone_move_t)
 
-    if game.drones[i].mode == @types.drone_stunned {
+    if game.drones[i].mode == Stunned {
       game.drones[i].stun_t = game.drones[i].stun_t - dt
       if game.drones[i].stun_t <= 0.0 {
-        game.drones[i].mode = @types.drone_patrol
+        game.drones[i].mode = Patrol
         game.drones[i].stun_t = 0.0
       }
     }
@@ -758,7 +758,7 @@ fn @types.Game::update_drones(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    if game.drones[i].mode == @types.drone_stunned {
+    if game.drones[i].mode == Stunned {
       game.drones[i].move_cd = 0.14
       continue
     }
@@ -839,7 +839,7 @@ fn @types.Game::deploy_flare(game : @types.Game) -> Bool {
 
   let mut stunned : Int = 0
   for drone in game.drones {
-    if not(drone.active) || drone.mode == @types.drone_stunned {
+    if not(drone.active) || drone.mode == Stunned {
       continue
     }
 
@@ -851,7 +851,7 @@ fn @types.Game::deploy_flare(game : @types.Game) -> Bool {
     )
 
     if d <= 2 {
-      drone.mode = @types.drone_stunned
+      drone.mode = Stunned
       drone.stun_t = @types.flare_stun_t
       drone.move_cd = 0.14
       stunned = stunned + 1
@@ -915,7 +915,7 @@ fn @types.Game::handle_player_hit(game : @types.Game) -> Unit {
   }
 
   for drone in game.drones {
-    if not(drone.active) || drone.mode == @types.drone_stunned {
+    if not(drone.active) || drone.mode == Stunned {
       continue
     }
 
@@ -1020,7 +1020,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   game.handle_player_hit()
   game.update_particles(dt)
 
-  if game.state == @types.state_play &&
+  if game.state == Play &&
     not(game.player.moving) &&
     game.portal_on &&
     game.player.x == @types.exit_x &&
@@ -1028,7 +1028,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
     game.finish_run(true, "")
   }
 
-  if game.state == @types.state_play && game.time_left <= 0.0 {
+  if game.state == Play && game.time_left <= 0.0 {
     game.finish_run(false, "Blackout stabilized before escape")
   }
 }
@@ -1037,17 +1037,17 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
 /// Advances one frame of blackout gameplay, input, and state transitions.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   // Process input at the start of each frame
-  if game.state == @types.state_title {
+  if game.state == Title {
     game.update_title_input()
-  } else if game.state == @types.state_play {
+  } else if game.state == Play {
     game.update_play_input()
   } else {
     game.update_result_input()
   }
 
-  if game.state == @types.state_title {
+  if game.state == Title {
     game.update_title(dt)
-  } else if game.state == @types.state_play {
+  } else if game.state == Play {
     game.update_play(dt)
   } else {
     game.update_result(dt)

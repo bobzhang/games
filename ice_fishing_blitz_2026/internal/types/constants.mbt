@@ -11,30 +11,6 @@ pub let screen_h : Int = 980
 pub let target_fps : Int = 120
 
 ///|
-/// Fish kind id for trout.
-pub let fish_trout : Int = 0
-
-///|
-/// Fish kind id for salmon.
-pub let fish_salmon : Int = 1
-
-///|
-/// Fish kind id for rare gold fish.
-pub let fish_gold : Int = 2
-
-///|
-/// Hazard kind id for jellyfish.
-pub let hazard_jelly : Int = 0
-
-///|
-/// Hazard kind id for electric eel.
-pub let hazard_eel : Int = 1
-
-///|
-/// Hazard kind id for floating ice chunk.
-pub let hazard_ice : Int = 2
-
-///|
 /// Maximum fish entities allocated in the fish pool.
 pub let max_fish : Int = 180
 
@@ -199,3 +175,19 @@ pub fn btn_restart() -> (Int, Int, Int, Int) {
 pub fn btn_repair() -> (Int, Int, Int, Int) {
   (1462, 704, 110, 124)
 }
+
+///|
+/// Fish kind enum.
+pub(all) enum FishKind {
+  Trout
+  Salmon
+  Gold
+} derive(Eq)
+
+///|
+/// Hazard kind enum.
+pub(all) enum HazardKind {
+  Jelly
+  Eel
+  Ice
+} derive(Eq)

@@ -11,38 +11,6 @@ pub let screen_h : Int = 720
 pub let target_fps : Int = 120
 
 ///|
-/// Integer id representing the title screen state.
-pub let state_title : Int = 0
-
-///|
-/// Integer id representing active gameplay.
-pub let state_play : Int = 1
-
-///|
-/// Integer id representing the stage clear intermission.
-pub let state_stage_clear : Int = 2
-
-///|
-/// Integer id representing the game over state.
-pub let state_game_over : Int = 3
-
-///|
-/// Obstacle type id for rooftop vents.
-pub let obstacle_vent : Int = 0
-
-///|
-/// Obstacle type id for neon sign hazards.
-pub let obstacle_sign : Int = 1
-
-///|
-/// Obstacle type id for patrolling drones.
-pub let obstacle_drone : Int = 2
-
-///|
-/// Obstacle type id for laser gates.
-pub let obstacle_laser : Int = 3
-
-///|
 /// Maximum rooftop segments allocated in the segment pool.
 pub let max_segments : Int = 96
 
@@ -139,17 +107,32 @@ pub let ui_button_size : Float = 104.0
 pub let ui_button_gap : Float = 14.0
 
 ///|
-/// Particle kind id for short spark bursts.
-pub let particle_spark : Int = 0
-
-///|
-/// Particle kind id for neon glow motes.
-pub let particle_glow : Int = 1
-
-///|
-/// Particle kind id for damage burst effects.
-pub let particle_hurt : Int = 2
-
-///|
 /// Number of skyline parallax layers to draw.
 pub let skyline_layers : Int = 3
+
+
+///|
+/// Identifies the type of obstacle hazard on a rooftop.
+pub(all) enum ObstacleKind {
+  Vent
+  Sign
+  Drone
+  Laser
+} derive(Eq)
+
+///|
+/// Identifies the visual kind of a particle effect.
+pub(all) enum ParticleKind {
+  Spark
+  Glow
+  Hurt
+} derive(Eq)
+
+///|
+/// Represents the current high-level game state.
+pub(all) enum GameState {
+  Title
+  Play
+  StageClear
+  GameOver
+} derive(Eq)

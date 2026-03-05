@@ -18,7 +18,7 @@ fn @types.Game::clear_segments(game : @types.Game) -> Unit {
 fn @types.Game::clear_obstacles(game : @types.Game) -> Unit {
   for obstacle in game.obstacles {
     obstacle.active = false
-    obstacle.kind = @types.obstacle_vent
+    obstacle.kind = Vent
     obstacle.x = -2000.0
     obstacle.y = 0.0
     obstacle.w = 0.0
@@ -63,7 +63,7 @@ fn @types.Game::clear_particles(game : @types.Game) -> Unit {
     particle.vy = 0.0
     particle.life = 0.0
     particle.size = 0.0
-    particle.kind = @types.particle_spark
+    particle.kind = Spark
   }
 }
 
@@ -255,7 +255,7 @@ fn @types.Game::spawn_segment(
 /// Activates an obstacle slot with the given kind, position, size, horizontal velocity, and phase offset.
 fn @types.Game::spawn_obstacle(
   game : @types.Game,
-  kind : Int,
+  kind : @types.ObstacleKind,
   x : Float,
   y : Float,
   w : Float,
@@ -305,7 +305,7 @@ fn @types.Game::spawn_particle(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : @types.ParticleKind,
 ) -> Unit {
   let i = game.alloc_particle_slot()
   game.particles[i].active = true
@@ -325,7 +325,7 @@ fn @types.Game::burst_particles(
   x : Float,
   y : Float,
   amount : Int,
-  kind : Int,
+  kind : @types.ParticleKind,
 ) -> Unit {
   for _i in 0..<amount {
     game.spawn_particle(
@@ -434,10 +434,10 @@ fn @types.Game::spawn_stage_chunk(game : @types.Game) -> Unit {
       let px = @types.randf(x + 40.0, x + w - 60.0)
       let choice = @types.randi(0, 99)
       if choice < 36 {
-        game.spawn_obstacle(@types.obstacle_vent, px, y - 26.0, 46.0, 26.0, 0.0)
+        game.spawn_obstacle(Vent, px, y - 26.0, 46.0, 26.0, 0.0)
       } else if choice < 62 {
         game.spawn_obstacle(
-          @types.obstacle_sign,
+          Sign,
           px,
           y - 112.0,
           62.0,
@@ -446,7 +446,7 @@ fn @types.Game::spawn_stage_chunk(game : @types.Game) -> Unit {
         )
       } else if choice < 86 {
         game.spawn_obstacle(
-          @types.obstacle_drone,
+          Drone,
           px,
           y - 84.0,
           56.0,
@@ -455,7 +455,7 @@ fn @types.Game::spawn_stage_chunk(game : @types.Game) -> Unit {
         )
       } else {
         game.spawn_obstacle(
-          @types.obstacle_laser,
+          Laser,
           px,
           y - 140.0,
           24.0,
@@ -568,7 +568,7 @@ fn @types.Game::shift_world(game : @types.Game, dx : Float) -> Unit {
     }
 
     obstacle.phase = obstacle.phase + 1.7 * dx * 0.01
-    if obstacle.kind == @types.obstacle_drone {
+    if obstacle.kind == Drone {
       obstacle.x = obstacle.x + obstacle.vx * 0.04
       obstacle.y = obstacle.y + @math.sinf(obstacle.phase) * 0.9
     }
@@ -654,11 +654,11 @@ fn @types.Game::apply_damage(game : @types.Game, amount : Float) -> Unit {
     game.hero.x + game.hero.w * 0.5,
     game.hero.y + game.hero.h * 0.45,
     18,
-    @types.particle_hurt,
+    Hurt,
   )
 
   if game.health <= 0.0 {
-    game.state = @types.state_game_over
+    game.state = GameOver
     game.result_t = 0.0
     if game.score > game.best_score {
       game.best_score = game.score
@@ -715,7 +715,7 @@ fn @types.Game::try_grapple(game : @types.Game) -> Bool {
   game.stamina = @types.maxf(0.0, game.stamina - 26.0)
   game.flash_t = @types.maxf(game.flash_t, 0.1)
 
-  game.burst_particles(hero_cx, hero_cy, 10, @types.particle_glow)
+  game.burst_particles(hero_cx, hero_cy, 10, Glow)
   true
 }
 
@@ -790,7 +790,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
         hero.x + hero.w * 0.38,
         hero.y + hero.h,
         8,
-        @types.particle_spark,
+        Spark,
       )
     } else if hero.air_jumps > 0 {
       hero.air_jumps = hero.air_jumps - 1
@@ -800,7 +800,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
         hero.x + hero.w * 0.45,
         hero.y + hero.h * 0.55,
         10,
-        @types.particle_glow,
+        Glow,
       )
     }
   }
@@ -902,12 +902,12 @@ fn @types.Game::update_obstacles(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    if obstacle.kind == @types.obstacle_drone {
+    if obstacle.kind == Drone {
       obstacle.phase = obstacle.phase + dt * 3.8
       obstacle.y = obstacle.y + @math.sinf(obstacle.phase) * 26.0 * dt
     }
 
-    if obstacle.kind == @types.obstacle_laser {
+    if obstacle.kind == Laser {
       obstacle.phase = obstacle.phase + dt * 5.4
     }
 
@@ -931,26 +931,26 @@ fn @types.Game::update_obstacles(game : @types.Game, dt : Float) -> Unit {
     }
 
     let mut ignored_hit = false
-    if obstacle.kind == @types.obstacle_sign {
+    if obstacle.kind == Sign {
       if game.hero.slide_t > 0.0 {
         ignored_hit = true
       }
     }
 
-    if obstacle.kind == @types.obstacle_vent {
+    if obstacle.kind == Vent {
       if game.hero.vy < -10.0 {
         ignored_hit = true
       }
     }
 
-    if obstacle.kind == @types.obstacle_laser {
+    if obstacle.kind == Laser {
       let pulse : Float = 0.5 + 0.5 * @math.sinf(obstacle.phase)
       if pulse < 0.35 {
         ignored_hit = true
       }
     }
 
-    if game.hero.grapple_t > 0.0 && obstacle.kind == @types.obstacle_drone {
+    if game.hero.grapple_t > 0.0 && obstacle.kind == Drone {
       ignored_hit = true
       obstacle.active = false
       game.score = game.score +
@@ -960,7 +960,7 @@ fn @types.Game::update_obstacles(game : @types.Game, dt : Float) -> Unit {
         obstacle.x + obstacle.w * 0.5,
         obstacle.y + obstacle.h * 0.5,
         20,
-        @types.particle_glow,
+        Glow,
       )
     }
 
@@ -969,10 +969,9 @@ fn @types.Game::update_obstacles(game : @types.Game, dt : Float) -> Unit {
     }
 
     if obstacle.hit_lock <= 0.0 {
-      let dmg : Float = if obstacle.kind == @types.obstacle_laser {
-        18.0
-      } else {
-        13.0
+      let dmg : Float = match obstacle.kind {
+        Laser => 18.0
+        _ => 13.0
       }
       game.apply_damage(dmg)
       obstacle.hit_lock = 0.2
@@ -1001,7 +1000,7 @@ fn @types.Game::update_chips(game : @types.Game, _dt : Float) -> Unit {
       let base = 100 + game.combo * 5
       game.score = game.score +
         (Float::from_int(base) * game.score_multiplier()).to_int()
-      game.burst_particles(chip.x, bob_y, 8, @types.particle_spark)
+      game.burst_particles(chip.x, bob_y, 8, Spark)
     }
   }
 }
@@ -1024,7 +1023,7 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
     particle.y = particle.y + particle.vy * dt
     particle.vx = particle.vx * (1.0 - dt * 2.8)
     particle.vy = particle.vy * (1.0 - dt * 2.0) +
-      dt * (if particle.kind == @types.particle_glow { 130.0 } else { 220.0 })
+      dt * (if particle.kind == Glow { 130.0 } else { 220.0 })
   }
 
   for ghost in game.ghosts {
@@ -1088,7 +1087,7 @@ fn @types.Game::start_run(game : @types.Game) -> Unit {
   game.clear_ghosts()
   reset_player(game.hero)
 
-  game.state = @types.state_play
+  game.state = Play
   game.title_t = 0.0
   game.time_s = 0.0
   game.distance = 0.0
@@ -1123,7 +1122,7 @@ fn @types.Game::init_title_scene(game : @types.Game) -> Unit {
   game.clear_ghosts()
   reset_player(game.hero)
 
-  game.state = @types.state_title
+  game.state = Title
   game.title_t = 0.0
   game.time_s = 0.0
   game.speed = 160.0
@@ -1169,9 +1168,9 @@ fn @types.Game::update_title_scene(game : @types.Game, dt : Float) -> Unit {
       @types.randf(0.5, 1.1),
       @types.randf(1.0, 2.4),
       if @types.chance(50) {
-        @types.particle_spark
+        Spark
       } else {
-        @types.particle_glow
+        Glow
       },
     )
   }
@@ -1201,14 +1200,14 @@ fn @types.Game::update_stage_clear(game : @types.Game, dt : Float) -> Unit {
       @types.randf(-220.0, -40.0),
       @types.randf(0.5, 1.2),
       @types.randf(2.0, 4.6),
-      @types.particle_glow,
+      Glow,
     )
   }
 
   game.stage_intro_t = @types.maxf(0.0, game.stage_intro_t - dt)
   if game.stage_intro_t <= 0.0 {
     game.start_stage(game.stage + 1)
-    game.state = @types.state_play
+    game.state = Play
   }
 }
 
@@ -1242,7 +1241,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   game.update_combo_and_score(dt, dx)
 
   if game.stage_progress >= game.stage_goal {
-    game.state = @types.state_stage_clear
+    game.state = StageClear
     game.stage_intro_t = 1.5
     let bonus = 380 + game.combo * 14 + (game.health * 4.0).to_int()
     game.stage_clear_bonus = bonus
@@ -1255,7 +1254,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
       game.hero.x + game.hero.w * 0.5,
       game.hero.y + 20.0,
       24,
-      @types.particle_glow,
+      Glow,
     )
   }
 
@@ -1298,14 +1297,11 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 
   // Dispatch input based on current state (input may change state)
   let prev_state = game.state
-  if game.state == @types.state_title {
-    game.update_title_input()
-  } else if game.state == @types.state_play {
-    game.update_play_input()
-  } else if game.state == @types.state_stage_clear {
-    game.update_stage_clear_input()
-  } else if game.state == @types.state_game_over {
-    game.update_result_input()
+  match game.state {
+    Title => game.update_title_input()
+    Play => game.update_play_input()
+    StageClear => game.update_stage_clear_input()
+    GameOver => game.update_result_input()
   }
 
   // If state changed during input, clear stale input flags
@@ -1317,18 +1313,17 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   }
 
   // Dispatch update based on (potentially changed) state
-  if game.state == @types.state_title {
-    game.update_title_scene(dt)
-  } else if game.state == @types.state_play {
-    game.update_play(dt)
-  } else if game.state == @types.state_stage_clear {
-    game.update_stage_clear(dt)
-    game.update_particles(dt)
-    if game.input_restart_press {
-      game.start_run()
+  match game.state {
+    Title => game.update_title_scene(dt)
+    Play => game.update_play(dt)
+    StageClear => {
+      game.update_stage_clear(dt)
+      game.update_particles(dt)
+      if game.input_restart_press {
+        game.start_run()
+      }
     }
-  } else if game.state == @types.state_game_over {
-    game.update_game_over(dt)
+    GameOver => game.update_game_over(dt)
   }
 }
 

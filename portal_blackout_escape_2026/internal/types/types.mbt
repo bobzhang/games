@@ -18,7 +18,7 @@ pub(all) struct Actor {
 pub(all) struct Drone {
   mut active : Bool
   body : Actor
-  mut mode : Int
+  mut mode : DroneMode
   mut move_cd : Float
   mut stun_t : Float
   mut dir_x : Int
@@ -64,12 +64,12 @@ pub(all) struct Particle {
 ///|
 /// Complete mutable game state for a blackout escape run.
 pub(all) struct Game {
-  map : Array[Int]
+  map : Array[Tile]
   drones : Array[Drone]
   cores : Array[Core]
   flares : Array[Flare]
   particles : Array[Particle]
-  mut state : Int
+  mut state : GameState
   player : Actor
   mut lives : Int
   mut score : Int
@@ -123,7 +123,7 @@ pub fn Drone::new() -> Drone {
   {
     active: false,
     body: Actor::new(),
-    mode: drone_patrol,
+    mode: Patrol,
     move_cd: 0.0,
     stun_t: 0.0,
     dir_x: 1,
@@ -167,12 +167,12 @@ pub fn Particle::new() -> Particle {
 /// Creates a new game state with initialized pools and counters.
 pub fn Game::new() -> Game {
   {
-    map: Array::make(grid_w * grid_h, tile_wall),
+    map: Array::make(grid_w * grid_h, Wall),
     drones: Array::makei(max_drones, fn(_i) { Drone::new() }),
     cores: Array::makei(max_cores, fn(_i) { Core::new() }),
     flares: Array::makei(max_flares, fn(_i) { Flare::new() }),
     particles: Array::makei(max_particles, fn(_i) { Particle::new() }),
-    state: state_title,
+    state: Title,
     player: Actor::new(),
     lives: max_lives,
     score: 0,
