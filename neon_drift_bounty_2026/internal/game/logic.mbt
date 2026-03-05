@@ -96,11 +96,11 @@ fn reset_player(hero : @types.Player) -> Unit {
 ///|
 /// Returns the index of a free entity slot, or evicts the lowest-priority active entity if the pool is full.
 fn @types.Game::alloc_entity(game : @types.Game) -> Int {
-  for i in 0..<game.entities.length() {
-    if not(game.entities[i].active) {
-      return i
+  for i, slot in game.entities {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_y = game.entities[0].y
@@ -111,16 +111,17 @@ fn @types.Game::alloc_entity(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 /// Returns the index of a free bullet slot, or evicts the shortest-lived active bullet if the pool is full.
 fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
-  for i in 0..<game.bullets.length() {
-    if not(game.bullets[i].active) {
-      return i
+  for i, slot in game.bullets {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.bullets[0].life
@@ -131,16 +132,17 @@ fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 /// Returns the index of a free spark slot, or evicts the shortest-lived active spark if the pool is full.
 fn @types.Game::alloc_spark(game : @types.Game) -> Int {
-  for i in 0..<game.sparks.length() {
-    if not(game.sparks[i].active) {
-      return i
+  for i, slot in game.sparks {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.sparks[0].life
@@ -151,16 +153,17 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 /// Returns the index of a free glow ring slot, or evicts the shortest-lived active ring if the pool is full.
 fn @types.Game::alloc_ring(game : @types.Game) -> Int {
-  for i in 0..<game.rings.length() {
-    if not(game.rings[i].active) {
-      return i
+  for i, slot in game.rings {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.rings[0].life
@@ -171,16 +174,17 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 /// Returns the index of a free afterimage slot, or evicts the shortest-lived active afterimage if the pool is full.
 fn @types.Game::alloc_image(game : @types.Game) -> Int {
-  for i in 0..<game.images.length() {
-    if not(game.images[i].active) {
-      return i
+  for i, slot in game.images {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.images[0].life
@@ -191,6 +195,7 @@ fn @types.Game::alloc_image(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
