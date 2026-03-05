@@ -109,11 +109,11 @@ fn @types.Game::start_run(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::alloc_raider(game : @types.Game) -> Int {
-  for i in 0..<game.raiders.length() {
-    if not(game.raiders[i].active) {
-      return i
+  for i, slot in game.raiders {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut oldest = 0
   let mut best_x = game.raiders[0].x
@@ -124,15 +124,16 @@ fn @types.Game::alloc_raider(game : @types.Game) -> Int {
     }
   }
   oldest
+  }
 }
 
 ///|
 fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
-  for i in 0..<game.bullets.length() {
-    if not(game.bullets[i].active) {
-      return i
+  for i, slot in game.bullets {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut oldest = 0
   let mut best_life = game.bullets[0].life
@@ -143,16 +144,18 @@ fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
     }
   }
   oldest
+  }
 }
 
 ///|
 fn @types.Game::alloc_dust(game : @types.Game) -> Int {
-  for i in 0..<game.dusts.length() {
-    if not(game.dusts[i].active) {
-      return i
+  for i, slot in game.dusts {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   @types.randi(0, game.dusts.length() - 1)
+  }
 }
 
 ///|
