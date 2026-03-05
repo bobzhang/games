@@ -11,44 +11,14 @@ pub let screen_h : Int = 768
 pub let target_fps : Int = 120
 
 ///|
-/// Title screen state id.
-pub let state_title : Int = 0
-
-///|
-/// Active gameplay state id.
-pub let state_play : Int = 1
-
-///|
-/// Stage-clear transition state id.
-pub let state_stage_clear : Int = 2
-
-///|
-/// Failure/result state id.
-pub let state_game_over : Int = 3
-
-///|
-/// Track obstacle type for solid walls.
-pub let obj_wall : Int = 0
-
-///|
-/// Track collectible type for score orbs.
-pub let obj_orb : Int = 1
-
-///|
-/// One-way gate that permits only alpha phase.
-pub let obj_gate_alpha : Int = 2
-
-///|
-/// One-way gate that permits only beta phase.
-pub let obj_gate_beta : Int = 3
-
-///|
-/// Temporary speed pickup type.
-pub let obj_boost : Int = 4
-
-///|
-/// Jump assist bar obstacle type.
-pub let obj_jump_bar : Int = 5
+pub(all) enum ObjKind {
+  Wall
+  Orb
+  GateAlpha
+  GateBeta
+  Boost
+  JumpBar
+} derive(Eq)
 
 ///|
 /// Number of lateral lanes on the track.
@@ -109,3 +79,12 @@ pub let invuln_time : Float = 0.65
 ///|
 /// Time before combo count starts decaying.
 pub let combo_decay_time : Float = 3.8
+
+
+///|
+pub(all) enum GameState {
+  Title
+  Play
+  StageClear
+  GameOver
+} derive(Eq)

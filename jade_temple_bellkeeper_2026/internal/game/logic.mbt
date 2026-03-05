@@ -3,7 +3,7 @@
 fn @types.Game::clear_foes(game : @types.Game) -> Unit {
   for foe in game.foes {
     foe.active = false
-    foe.kind = @types.foe_wisp
+    foe.kind = Wisp
     foe.x = 0.0
     foe.y = 0.0
     foe.vx = 0.0
@@ -319,7 +319,7 @@ fn @types.Game::spawn_bolt(
 /// Allocates a foe and initializes all its fields including position, velocity, size, HP, lifetime, shot cooldown, and score reward.
 fn @types.Game::spawn_foe(
   game : @types.Game,
-  kind : Int,
+  kind : @types.FoeKind,
   x : Float,
   y : Float,
   vx : Float,
@@ -452,10 +452,9 @@ fn @types.Game::ring_bell(game : @types.Game, bell_i : Int) -> Unit {
       continue
     }
 
-    let dmg = if foe.kind == @types.foe_brute {
-      @types.bell_shock_damage * 0.7
-    } else {
-      @types.bell_shock_damage
+    let dmg = match foe.kind {
+      Brute => @types.bell_shock_damage * 0.7
+      _ => @types.bell_shock_damage
     }
 
     foe.hp = foe.hp - dmg
@@ -563,7 +562,7 @@ fn @types.Game::spawn_wisp(game : @types.Game) -> Unit {
   let p = edge_spawn()
 
   game.spawn_foe(
-    @types.foe_wisp,
+    Wisp,
     p.0,
     p.1,
     @types.randf(-20.0, 20.0),
@@ -583,7 +582,7 @@ fn @types.Game::spawn_brute(game : @types.Game) -> Unit {
   let p = edge_spawn()
 
   game.spawn_foe(
-    @types.foe_brute,
+    Brute,
     p.0,
     p.1,
     @types.randf(-12.0, 12.0),
@@ -603,7 +602,7 @@ fn @types.Game::spawn_shaman(game : @types.Game) -> Unit {
   let p = edge_spawn()
 
   game.spawn_foe(
-    @types.foe_shaman,
+    Shaman,
     p.0,
     p.1,
     @types.randf(-16.0, 16.0),
@@ -623,7 +622,7 @@ fn @types.Game::spawn_relic(game : @types.Game) -> Unit {
   let p = edge_spawn()
 
   game.spawn_foe(
-    @types.foe_relic,
+    Relic,
     p.0,
     p.1,
     @types.randf(-18.0, 18.0),
@@ -815,16 +814,20 @@ fn @types.Game::update_foes(game : @types.Game, dt : Float) -> Unit {
     let mut tx = @types.shrine_x()
     let mut ty = @types.shrine_y()
 
-    if game.foes[i].kind == @types.foe_wisp {
-      tx = game.hero.x
-      ty = game.hero.y
-    } else if game.foes[i].kind == @types.foe_shaman {
-      let away_x = game.foes[i].x - @types.shrine_x()
-      let away_y = game.foes[i].y - @types.shrine_y()
-      let n2 = @types.maxf(1.0, away_x * away_x + away_y * away_y)
-      let inv = Float::from_int(1) / n2.sqrt()
-      tx = @types.shrine_x() + away_x * inv * 180.0
-      ty = @types.shrine_y() + away_y * inv * 180.0
+    match game.foes[i].kind {
+      Wisp => {
+        tx = game.hero.x
+        ty = game.hero.y
+      }
+      Shaman => {
+        let away_x = game.foes[i].x - @types.shrine_x()
+        let away_y = game.foes[i].y - @types.shrine_y()
+        let n2 = @types.maxf(1.0, away_x * away_x + away_y * away_y)
+        let inv = Float::from_int(1) / n2.sqrt()
+        tx = @types.shrine_x() + away_x * inv * 180.0
+        ty = @types.shrine_y() + away_y * inv * 180.0
+      }
+      Brute | Relic => ()
     }
 
     let dx = tx - game.foes[i].x
@@ -832,49 +835,48 @@ fn @types.Game::update_foes(game : @types.Game, dt : Float) -> Unit {
     let n2 = @types.maxf(1.0, dx * dx + dy * dy)
     let inv = Float::from_int(1) / n2.sqrt()
 
-    let accel : Float = if game.foes[i].kind == @types.foe_wisp {
-      180.0
-    } else if game.foes[i].kind == @types.foe_brute {
-      100.0
-    } else if game.foes[i].kind == @types.foe_shaman {
-      120.0
-    } else {
-      74.0
+    let accel : Float = match game.foes[i].kind {
+      Wisp => 180.0
+      Brute => 100.0
+      Shaman => 120.0
+      Relic => 74.0
     }
 
     game.foes[i].vx = game.foes[i].vx + dx * inv * accel * dt
     game.foes[i].vy = game.foes[i].vy + dy * inv * accel * dt
 
-    if game.foes[i].kind == @types.foe_wisp {
-      game.foes[i].vx = game.foes[i].vx +
-        @math.sinf(game.foes[i].phase * 11.0) * 30.0 * dt
-      game.foes[i].vy = game.foes[i].vy +
-        @math.cosf(game.foes[i].phase * 9.0) * 26.0 * dt
-    } else if game.foes[i].kind == @types.foe_shaman {
-      game.foes[i].vx = game.foes[i].vx +
-        @math.cosf(game.foes[i].phase * 4.2) * 40.0 * dt
-      game.foes[i].vy = game.foes[i].vy +
-        @math.sinf(game.foes[i].phase * 4.8) * 40.0 * dt
-      game.foes[i].shot_cd = game.foes[i].shot_cd - dt
-      if game.foes[i].shot_cd <= 0.0 {
-        game.fire_shaman_bolt(game.foes[i])
-        game.foes[i].shot_cd = @types.randf(0.9, 1.7)
+    match game.foes[i].kind {
+      Wisp => {
+        game.foes[i].vx = game.foes[i].vx +
+          @math.sinf(game.foes[i].phase * 11.0) * 30.0 * dt
+        game.foes[i].vy = game.foes[i].vy +
+          @math.cosf(game.foes[i].phase * 9.0) * 26.0 * dt
       }
-    } else if game.foes[i].kind == @types.foe_relic {
-      game.foes[i].vx = game.foes[i].vx +
-        @math.sinf(game.foes[i].phase * 6.0) * 34.0 * dt
-      game.foes[i].vy = game.foes[i].vy +
-        @math.cosf(game.foes[i].phase * 7.0) * 34.0 * dt
+      Shaman => {
+        game.foes[i].vx = game.foes[i].vx +
+          @math.cosf(game.foes[i].phase * 4.2) * 40.0 * dt
+        game.foes[i].vy = game.foes[i].vy +
+          @math.sinf(game.foes[i].phase * 4.8) * 40.0 * dt
+        game.foes[i].shot_cd = game.foes[i].shot_cd - dt
+        if game.foes[i].shot_cd <= 0.0 {
+          game.fire_shaman_bolt(game.foes[i])
+          game.foes[i].shot_cd = @types.randf(0.9, 1.7)
+        }
+      }
+      Relic => {
+        game.foes[i].vx = game.foes[i].vx +
+          @math.sinf(game.foes[i].phase * 6.0) * 34.0 * dt
+        game.foes[i].vy = game.foes[i].vy +
+          @math.cosf(game.foes[i].phase * 7.0) * 34.0 * dt
+      }
+      Brute => ()
     }
 
-    let speed_cap : Float = if game.foes[i].kind == @types.foe_wisp {
-      260.0
-    } else if game.foes[i].kind == @types.foe_brute {
-      180.0
-    } else if game.foes[i].kind == @types.foe_shaman {
-      220.0
-    } else {
-      170.0
+    let speed_cap : Float = match game.foes[i].kind {
+      Wisp => 260.0
+      Brute => 180.0
+      Shaman => 220.0
+      Relic => 170.0
     }
 
     let v2 = game.foes[i].vx * game.foes[i].vx +
@@ -930,12 +932,11 @@ fn @types.Game::update_foes(game : @types.Game, dt : Float) -> Unit {
     )
     let shrine_rr = @types.shrine_radius + @types.foe_hit_r(game.foes[i])
     if d2_shrine <= shrine_rr * shrine_rr {
-      let dmg = if game.foes[i].kind == @types.foe_wisp {
-        @types.shrine_drain_wisp
-      } else if game.foes[i].kind == @types.foe_brute {
-        @types.shrine_drain_brute
-      } else {
-        @types.shrine_drain_shaman
+      let dmg = match game.foes[i].kind {
+        Wisp => @types.shrine_drain_wisp
+        Brute => @types.shrine_drain_brute
+        Shaman => @types.shrine_drain_shaman
+        Relic => @types.shrine_drain_shaman
       }
       game.shrine_hp = @types.maxf(0.0, game.shrine_hp - dmg)
       game.foes[i].active = false
@@ -962,10 +963,9 @@ fn @types.Game::update_foes(game : @types.Game, dt : Float) -> Unit {
       if dash_hit {
         game.kill_foe(i, game.foes[i].reward, 0)
       } else {
-        let dmg : Float = if game.foes[i].kind == @types.foe_brute {
-          14.0
-        } else {
-          10.0
+        let dmg : Float = match game.foes[i].kind {
+          Brute => 14.0
+          _ => 10.0
         }
         game.hurt_hero(dmg)
         game.foes[i].hp = game.foes[i].hp - 10.0

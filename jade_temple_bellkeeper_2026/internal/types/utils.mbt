@@ -112,14 +112,20 @@ pub fn pointer_on_rect(
 
 ///|
 /// Returns whether an entity kind should attack the shrine.
-pub fn is_hostile(kind : Int) -> Bool {
-  kind == foe_wisp || kind == foe_brute || kind == foe_shaman
+pub fn is_hostile(kind : FoeKind) -> Bool {
+  match kind {
+    Wisp | Brute | Shaman => true
+    Relic => false
+  }
 }
 
 ///|
 /// Returns whether an entity kind is a relic pickup.
-pub fn is_relic(kind : Int) -> Bool {
-  kind == foe_relic
+pub fn is_relic(kind : FoeKind) -> Bool {
+  match kind {
+    Relic => true
+    _ => false
+  }
 }
 
 ///|
@@ -147,15 +153,12 @@ pub fn a_col(c : @raylib.Color, a : Int) -> @raylib.Color {
 
 ///|
 /// Returns the display color for a foe kind.
-pub fn foe_col(kind : Int) -> @raylib.Color {
-  if kind == foe_wisp {
-    pink()
-  } else if kind == foe_brute {
-    @raylib.Color::new(255, 170, 118, 255)
-  } else if kind == foe_shaman {
-    @raylib.Color::new(126, 210, 255, 255)
-  } else {
-    jade()
+pub fn foe_col(kind : FoeKind) -> @raylib.Color {
+  match kind {
+    Wisp => pink()
+    Brute => @raylib.Color::new(255, 170, 118, 255)
+    Shaman => @raylib.Color::new(126, 210, 255, 255)
+    Relic => jade()
   }
 }
 

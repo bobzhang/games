@@ -68,20 +68,13 @@ pub fn bell_pos(i : Int) -> (Float, Float) {
 }
 
 ///|
-/// Enemy kind id for wisps.
-pub let foe_wisp : Int = 0
-
-///|
-/// Enemy kind id for brutes.
-pub let foe_brute : Int = 1
-
-///|
-/// Enemy kind id for shamans.
-pub let foe_shaman : Int = 2
-
-///|
-/// Entity kind id for relic pickups.
-pub let foe_relic : Int = 3
+/// Categorizes foe entities into hostile spirit types and rescuable relics.
+pub(all) enum FoeKind {
+  Wisp
+  Brute
+  Shaman
+  Relic
+} derive(Eq)
 
 ///|
 /// Maximum foe records in the pool.

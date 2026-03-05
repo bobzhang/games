@@ -58,18 +58,6 @@ pub fn maxf(Float, Float) -> Float
 
 pub fn minf(Float, Float) -> Float
 
-pub let obj_boost : Int
-
-pub let obj_gate_alpha : Int
-
-pub let obj_gate_beta : Int
-
-pub let obj_jump_bar : Int
-
-pub let obj_orb : Int
-
-pub let obj_wall : Int
-
 pub let phase_drain_per_sec : Float
 
 pub let phase_recover_per_sec : Float
@@ -96,14 +84,6 @@ pub let stage_base_distance : Float
 
 pub let stage_distance_growth : Float
 
-pub let state_game_over : Int
-
-pub let state_play : Int
-
-pub let state_stage_clear : Int
-
-pub let state_title : Int
-
 pub let target_fps : Int
 
 pub fn track_y(Float) -> Float
@@ -116,7 +96,7 @@ pub(all) struct Game {
   particles : Array[Particle]
   trails : Array[Trail]
   hero : Player
-  mut state : Int
+  mut state : GameState
   mut stage : Int
   mut stage_goal : Float
   mut stage_progress : Float
@@ -160,6 +140,24 @@ pub(all) struct Game {
 }
 pub fn Game::new() -> Self
 
+pub(all) enum GameState {
+  Title
+  Play
+  StageClear
+  GameOver
+}
+pub impl Eq for GameState
+
+pub(all) enum ObjKind {
+  Wall
+  Orb
+  GateAlpha
+  GateBeta
+  Boost
+  JumpBar
+}
+pub impl Eq for ObjKind
+
 pub(all) struct Particle {
   mut active : Bool
   mut x : Float
@@ -187,7 +185,7 @@ pub fn Player::new() -> Self
 
 pub(all) struct TrackObj {
   mut active : Bool
-  mut kind : Int
+  mut kind : ObjKind
   mut lane : Int
   mut z : Float
   mut y_off : Float

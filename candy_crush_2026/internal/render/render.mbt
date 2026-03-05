@@ -113,35 +113,34 @@ fn draw_board_frame() -> Unit {
 
 ///|
 /// Draws the visual indicator for a special candy (row stripe, column stripe, or bomb ring) at the given center pixel.
-fn draw_special_overlay(cx : Int, cy : Int, sp : Int) -> Unit {
-  if sp == @types.special_none {
-    return
-  }
-
-  if sp == @types.special_row {
-    @raylib.draw_rectangle(
-      cx - 24,
-      cy - 6,
-      48,
-      12,
-      @raylib.Color::new(248, 248, 255, 228),
-    )
-  } else if sp == @types.special_col {
-    @raylib.draw_rectangle(
-      cx - 6,
-      cy - 24,
-      12,
-      48,
-      @raylib.Color::new(248, 248, 255, 228),
-    )
-  } else {
-    @raylib.draw_circle_lines(
-      cx,
-      cy,
-      25.0,
-      @raylib.Color::new(250, 245, 255, 236),
-    )
-    @raylib.draw_circle(cx, cy, 8.0, @raylib.Color::new(255, 255, 255, 240))
+fn draw_special_overlay(cx : Int, cy : Int, sp : @types.Special) -> Unit {
+  match sp {
+    None => return
+    Row =>
+      @raylib.draw_rectangle(
+        cx - 24,
+        cy - 6,
+        48,
+        12,
+        @raylib.Color::new(248, 248, 255, 228),
+      )
+    Col =>
+      @raylib.draw_rectangle(
+        cx - 6,
+        cy - 24,
+        12,
+        48,
+        @raylib.Color::new(248, 248, 255, 228),
+      )
+    Bomb => {
+      @raylib.draw_circle_lines(
+        cx,
+        cy,
+        25.0,
+        @raylib.Color::new(250, 245, 255, 236),
+      )
+      @raylib.draw_circle(cx, cy, 8.0, @raylib.Color::new(255, 255, 255, 240))
+    }
   }
 }
 

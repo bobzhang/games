@@ -64,17 +64,9 @@ pub fn dist2(Float, Float, Float, Float) -> Float
 
 pub fn ease_out_cubic(Float) -> Float
 
-pub let foe_brute : Int
-
-pub fn foe_col(Int) -> @raylib.Color
+pub fn foe_col(FoeKind) -> @raylib.Color
 
 pub fn foe_hit_r(Foe) -> Float
-
-pub let foe_relic : Int
-
-pub let foe_shaman : Int
-
-pub let foe_wisp : Int
 
 pub let hero_accel : Float
 
@@ -94,9 +86,9 @@ pub let hero_w : Float
 
 pub let hud_h : Int
 
-pub fn is_hostile(Int) -> Bool
+pub fn is_hostile(FoeKind) -> Bool
 
-pub fn is_relic(Int) -> Bool
+pub fn is_relic(FoeKind) -> Bool
 
 pub fn jade() -> @raylib.Color
 
@@ -220,7 +212,7 @@ pub fn Echo::new() -> Self
 
 pub(all) struct Foe {
   mut active : Bool
-  mut kind : Int
+  mut kind : FoeKind
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -235,6 +227,14 @@ pub(all) struct Foe {
   mut marked : Bool
 }
 pub fn Foe::new() -> Self
+
+pub(all) enum FoeKind {
+  Wisp
+  Brute
+  Shaman
+  Relic
+}
+pub impl Eq for FoeKind
 
 pub(all) struct Game {
   bells : Array[Bell]

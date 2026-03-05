@@ -147,26 +147,23 @@ fn @types.Game::obj_color(
   game : @types.Game,
   o : @types.TrackObj,
 ) -> @raylib.Color {
-  if o.kind == @types.obj_orb {
-    @raylib.Color::new(140, 248, 212, 255)
-  } else if o.kind == @types.obj_boost {
-    @raylib.Color::new(255, 210, 110, 255)
-  } else if o.kind == @types.obj_jump_bar {
-    @raylib.Color::new(255, 168, 96, 255)
-  } else if o.kind == @types.obj_gate_alpha {
-    if game.phase_beta {
-      @raylib.Color::new(120, 140, 170, 170)
-    } else {
-      @types.color_lane_alpha()
-    }
-  } else if o.kind == @types.obj_gate_beta {
-    if game.phase_beta {
-      @types.color_lane_beta()
-    } else {
-      @raylib.Color::new(120, 140, 170, 170)
-    }
-  } else {
-    @raylib.Color::new(242, 112, 160, 255)
+  match o.kind {
+    Orb => @raylib.Color::new(140, 248, 212, 255)
+    Boost => @raylib.Color::new(255, 210, 110, 255)
+    JumpBar => @raylib.Color::new(255, 168, 96, 255)
+    GateAlpha =>
+      if game.phase_beta {
+        @raylib.Color::new(120, 140, 170, 170)
+      } else {
+        @types.color_lane_alpha()
+      }
+    GateBeta =>
+      if game.phase_beta {
+        @types.color_lane_beta()
+      } else {
+        @raylib.Color::new(120, 140, 170, 170)
+      }
+    Wall => @raylib.Color::new(242, 112, 160, 255)
   }
 }
 
@@ -192,7 +189,7 @@ fn @types.Game::draw_obj(
   let h = @types.maxf(8.0, o.h * s.2)
   let col = game.obj_color(o)
 
-  if o.kind == @types.obj_orb {
+  if o.kind == Orb {
     let pulse : Float = 0.5 + 0.5 * @math.sinf(o.spin * 2.6)
     let orb_r : Float = w * 0.36 + pulse * 3.0
     @raylib.draw_circle(
@@ -218,7 +215,7 @@ fn @types.Game::draw_obj(
     return
   }
 
-  if o.kind == @types.obj_boost {
+  if o.kind == Boost {
     let pulse : Float = 0.5 + 0.5 * @math.sinf(o.spin * 2.8)
     let boost_r : Float = Float::from_int(4) + pulse * Float::from_int(4)
     @raylib.draw_rectangle(
@@ -244,7 +241,7 @@ fn @types.Game::draw_obj(
     return
   }
 
-  if o.kind == @types.obj_jump_bar {
+  if o.kind == JumpBar {
     @raylib.draw_rectangle(
       (s.0 - w * 0.5).to_int(),
       (s.1 - h * 0.2).to_int(),
@@ -277,7 +274,7 @@ fn @types.Game::draw_obj(
     @raylib.Color::new(12, 18, 28, 230),
   )
 
-  if o.kind == @types.obj_gate_alpha || o.kind == @types.obj_gate_beta {
+  if o.kind == GateAlpha || o.kind == GateBeta {
     let alpha = 110 +
       (Float::from_int(1) * 0.5 + 0.5 * @math.sinf(o.spin * 2.0) * 100.0).to_int()
     @raylib.draw_rectangle(
@@ -897,12 +894,12 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   let shake = game.shake_offset()
   game.draw_world(shake.0, shake.1)
 
-  if game.state != @types.state_title {
+  if game.state != Title {
     game.draw_hud()
   }
 
   if game.touch_mode || game.touch_count > 0 {
-    if game.state == @types.state_play {
+    if game.state == Play {
       game.draw_touch_controls()
     }
     if game.touch_count > 0 {
@@ -915,12 +912,11 @@ pub fn draw_frame(game : @types.Game) -> Unit {
     }
   }
 
-  if game.state == @types.state_title {
-    game.draw_title_overlay()
-  } else if game.state == @types.state_stage_clear {
-    game.draw_stage_clear_overlay()
-  } else if game.state == @types.state_game_over {
-    game.draw_game_over_overlay()
+  match game.state {
+    Title => game.draw_title_overlay()
+    StageClear => game.draw_stage_clear_overlay()
+    GameOver => game.draw_game_over_overlay()
+    Play => ()
   }
 
   if game.flash_t > 0.0 {

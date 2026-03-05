@@ -2,7 +2,7 @@
 fn @types.Game::clear_objs(game : @types.Game) -> Unit {
   for obj in game.objs {
     obj.active = false
-    obj.kind = @types.obj_wall
+    obj.kind = Wall
     obj.lane = 0
     obj.z = 0.0
     obj.y_off = 0.0
@@ -114,7 +114,7 @@ fn @types.Game::alloc_trail_slot(game : @types.Game) -> Int {
 ///|
 fn @types.Game::spawn_obj(
   game : @types.Game,
-  kind : Int,
+  kind : @types.ObjKind,
   lane : Int,
   z : Float,
   y_off : Float,
@@ -214,7 +214,7 @@ fn @types.Game::spawn_orb_strip(
 ) -> Unit {
   for i in 0..<len {
     game.spawn_obj(
-      @types.obj_orb,
+      Orb,
       lane,
       z0 + Float::from_int(i) * 72.0,
       48.0 + @math.sinf(Float::from_int(i) * 0.8) * 16.0,
@@ -236,7 +236,7 @@ fn @types.Game::spawn_wave(game : @types.Game, z_base : Float) -> Unit {
         game.spawn_orb_strip(z_base + 30.0, 4, lane)
       } else {
         game.spawn_obj(
-          @types.obj_wall,
+          Wall,
           lane,
           z_base + @types.randf(0.0, 56.0),
           0.0,
@@ -250,7 +250,7 @@ fn @types.Game::spawn_wave(game : @types.Game, z_base : Float) -> Unit {
     let mut lane = @types.randi(0, @types.lane_count - 1)
     for i in 0..<6 {
       game.spawn_obj(
-        @types.obj_wall,
+        Wall,
         lane,
         z_base + Float::from_int(i) * 170.0,
         0.0,
@@ -266,7 +266,7 @@ fn @types.Game::spawn_wave(game : @types.Game, z_base : Float) -> Unit {
   } else if p < 54 {
     for lane in 0..<@types.lane_count {
       game.spawn_obj(
-        @types.obj_gate_alpha,
+        GateAlpha,
         lane,
         z_base + Float::from_int(lane) * 36.0,
         0.0,
@@ -275,7 +275,7 @@ fn @types.Game::spawn_wave(game : @types.Game, z_base : Float) -> Unit {
         1,
       )
       game.spawn_obj(
-        @types.obj_gate_beta,
+        GateBeta,
         lane,
         z_base + 260.0 + Float::from_int(lane) * 36.0,
         0.0,
@@ -291,12 +291,12 @@ fn @types.Game::spawn_wave(game : @types.Game, z_base : Float) -> Unit {
     )
   } else if p < 72 {
     let lane = @types.randi(0, @types.lane_count - 1)
-    game.spawn_obj(@types.obj_boost, lane, z_base + 180.0, 0.0, 112.0, 48.0, 0)
+    game.spawn_obj(Boost, lane, z_base + 180.0, 0.0, 112.0, 48.0, 0)
     game.spawn_orb_strip(z_base + 20.0, 3, lane)
     for i in 0..<5 {
       let l = (lane + i + 1) % @types.lane_count
       game.spawn_obj(
-        @types.obj_wall,
+        Wall,
         l,
         z_base + 300.0 + Float::from_int(i) * 60.0,
         0.0,
@@ -309,7 +309,7 @@ fn @types.Game::spawn_wave(game : @types.Game, z_base : Float) -> Unit {
     let lane = @types.randi(0, @types.lane_count - 1)
     for i in 0..<7 {
       game.spawn_obj(
-        @types.obj_jump_bar,
+        JumpBar,
         lane,
         z_base + Float::from_int(i) * 130.0,
         0.0,
@@ -324,7 +324,7 @@ fn @types.Game::spawn_wave(game : @types.Game, z_base : Float) -> Unit {
           max=@types.lane_count - 1,
         )
         game.spawn_obj(
-          @types.obj_orb,
+          Orb,
           side_lane,
           z_base + Float::from_int(i) * 130.0 + 32.0,
           62.0,
@@ -337,19 +337,19 @@ fn @types.Game::spawn_wave(game : @types.Game, z_base : Float) -> Unit {
   } else {
     for i in 0..<10 {
       let lane = @types.randi(0, @types.lane_count - 1)
-      let kind = if @types.chance(70) {
-        @types.obj_orb
+      let kind : @types.ObjKind = if @types.chance(70) {
+        Orb
       } else {
-        @types.obj_wall
+        Wall
       }
-      let y_off : Float = if kind == @types.obj_orb {
+      let y_off : Float = if kind == Orb {
         Float::from_int(46) +
         @math.sinf(Float::from_int(i)) * Float::from_int(22)
       } else {
         0.0
       }
-      let w : Float = if kind == @types.obj_orb { 56.0 } else { 96.0 }
-      let h : Float = if kind == @types.obj_orb { 56.0 } else { 172.0 }
+      let w : Float = if kind == Orb { 56.0 } else { 96.0 }
+      let h : Float = if kind == Orb { 56.0 } else { 172.0 }
       game.spawn_obj(
         kind,
         lane,
@@ -391,7 +391,7 @@ fn @types.Game::apply_damage(game : @types.Game, amount : Float) -> Unit {
   game.burst(game.hero.lane_f, game.hero.y + 42.0, 24, 2)
 
   if game.health <= 0.0 {
-    game.state = @types.state_game_over
+    game.state = GameOver
     game.result_t = 0.0
     if game.score > game.best_score {
       game.best_score = game.score
@@ -406,7 +406,7 @@ fn @types.Game::start_run(game : @types.Game) -> Unit {
   game.clear_trails()
   reset_hero(game.hero)
 
-  game.state = @types.state_play
+  game.state = Play
   game.set_stage(1)
   game.speed_mul = 1.0
   game.boost_t = 0.0
@@ -441,7 +441,7 @@ fn @types.Game::init_title_scene(game : @types.Game) -> Unit {
   game.clear_trails()
   reset_hero(game.hero)
 
-  game.state = @types.state_title
+  game.state = Title
   game.stage = 1
   game.stage_goal = @types.stage_base_distance
   game.stage_progress = 0.0
@@ -626,7 +626,7 @@ fn @types.Game::update_objects(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    if o.kind == @types.obj_orb {
+    if o.kind == Orb {
       let d2 = @types.dist2(
         @types.lane_world_x(o.lane),
         o.y_off + 24.0,
@@ -645,7 +645,7 @@ fn @types.Game::update_objects(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    if o.kind == @types.obj_boost {
+    if o.kind == Boost {
       if game.hero.y <= 48.0 {
         o.active = false
         game.boost_t = 1.4
@@ -664,7 +664,7 @@ fn @types.Game::update_objects(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    if o.kind == @types.obj_jump_bar {
+    if o.kind == JumpBar {
       if game.hero.y > 84.0 {
         continue
       }
@@ -673,7 +673,7 @@ fn @types.Game::update_objects(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    if o.kind == @types.obj_gate_alpha || o.kind == @types.obj_gate_beta {
+    if o.kind == GateAlpha || o.kind == GateBeta {
       if game.hero.y > 106.0 {
         continue
       }
@@ -682,7 +682,7 @@ fn @types.Game::update_objects(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    if o.kind == @types.obj_wall {
+    if o.kind == Wall {
       if game.hero.y > 120.0 {
         continue
       }
@@ -775,7 +775,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.stage_progress >= game.stage_goal {
-    game.state = @types.state_stage_clear
+    game.state = StageClear
     game.result_t = 1.7
     game.stage_bonus = 520 + game.combo * 14 + (game.health * 5.0).to_int()
     game.score = game.score + game.stage_bonus
@@ -798,7 +798,7 @@ fn @types.Game::update_stage_clear(game : @types.Game, dt : Float) -> Unit {
   game.result_t = game.result_t - dt
   if game.result_t <= 0.0 {
     game.set_stage(game.stage + 1)
-    game.state = @types.state_play
+    game.state = Play
     game.result_t = 0.0
     game.stage_bonus = 0
     game.health = @types.minf(100.0, game.health + 15.0)
@@ -849,33 +849,20 @@ fn @types.Game::update_title_scene(game : @types.Game, dt : Float) -> Unit {
 /// Advance one simulation step based on current game state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   // Handle input first based on current state
-  if game.state == @types.state_title {
-    game.update_title_input()
-  } else if game.state == @types.state_play {
-    game.update_play_input()
-  } else if game.state == @types.state_stage_clear {
-    game.update_stage_clear_input()
-  } else {
-    game.update_result_input()
+  match game.state {
+    Title => game.update_title_input()
+    Play => game.update_play_input()
+    StageClear => game.update_stage_clear_input()
+    GameOver => game.update_result_input()
   }
 
   // Then update game logic
-  if game.state == @types.state_title {
-    game.update_title_scene(dt)
-    return
+  match game.state {
+    Title => game.update_title_scene(dt)
+    Play => game.update_play(dt)
+    StageClear => game.update_stage_clear(dt)
+    GameOver => game.update_game_over(dt)
   }
-
-  if game.state == @types.state_play {
-    game.update_play(dt)
-    return
-  }
-
-  if game.state == @types.state_stage_clear {
-    game.update_stage_clear(dt)
-    return
-  }
-
-  game.update_game_over(dt)
 }
 
 ///|

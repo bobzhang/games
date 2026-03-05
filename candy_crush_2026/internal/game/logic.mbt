@@ -22,7 +22,7 @@ fn @types.Game::set_message(game : @types.Game, text : String) -> Unit {
 fn @types.Game::clear_marks(game : @types.Game) -> Unit {
   for i in 0..<@types.board_cells {
     game.marks[i] = false
-    game.spawn_special[i] = @types.special_none
+    game.spawn_special[i] = None
   }
 }
 
@@ -36,17 +36,12 @@ fn @types.Game::clear_effects(game : @types.Game) -> Unit {
 
 ///|
 /// Merges two special-candy markers, preferring bomb when types differ.
-fn merge_special(a : Int, b : Int) -> Int {
-  if a == @types.special_bomb || b == @types.special_bomb {
-    @types.special_bomb
-  } else if a == @types.special_none {
-    b
-  } else if b == @types.special_none {
-    a
-  } else if a != b {
-    @types.special_bomb
-  } else {
-    a
+fn merge_special(a : @types.Special, b : @types.Special) -> @types.Special {
+  match (a, b) {
+    (Bomb, _) | (_, Bomb) => Bomb
+    (None, _) => b
+    (_, None) => a
+    _ => if a != b { Bomb } else { a }
   }
 }
 
@@ -66,11 +61,11 @@ fn @types.Game::mark_horizontal_run(
     let anchor = @types.idx(start_x + 1, y)
     game.spawn_special[anchor] = merge_special(
       game.spawn_special[anchor],
-      @types.special_row,
+      Row,
     )
   } else if len >= 5 {
     let anchor = @types.idx(start_x + len / 2, y)
-    game.spawn_special[anchor] = @types.special_bomb
+    game.spawn_special[anchor] = Bomb
   }
 }
 
@@ -90,11 +85,11 @@ fn @types.Game::mark_vertical_run(
     let anchor = @types.idx(x, start_y + 1)
     game.spawn_special[anchor] = merge_special(
       game.spawn_special[anchor],
-      @types.special_col,
+      Col,
     )
   } else if len >= 5 {
     let anchor = @types.idx(x, start_y + len / 2)
-    game.spawn_special[anchor] = @types.special_bomb
+    game.spawn_special[anchor] = Bomb
   }
 }
 
@@ -170,43 +165,45 @@ fn @types.Game::expand_special_marks(game : @types.Game) -> Unit {
       }
 
       let sp = game.specials[i]
-      if sp == @types.special_none {
+      if sp == None {
         continue
       }
 
       let cx = i % @types.board_cols
       let cy = i / @types.board_cols
 
-      if sp == @types.special_row {
-        for x in 0..<@types.board_cols {
-          let j = @types.idx(x, cy)
-          if not(game.marks[j]) {
-            game.marks[j] = true
-            changed = true
+      match sp {
+        None => ()
+        Row =>
+          for x in 0..<@types.board_cols {
+            let j = @types.idx(x, cy)
+            if not(game.marks[j]) {
+              game.marks[j] = true
+              changed = true
+            }
           }
-        }
-      } else if sp == @types.special_col {
-        for y in 0..<@types.board_rows {
-          let j = @types.idx(cx, y)
-          if not(game.marks[j]) {
-            game.marks[j] = true
-            changed = true
+        Col =>
+          for y in 0..<@types.board_rows {
+            let j = @types.idx(cx, y)
+            if not(game.marks[j]) {
+              game.marks[j] = true
+              changed = true
+            }
           }
-        }
-      } else if sp == @types.special_bomb {
-        for dy in -1..<=1 {
-          for dx in -1..<=1 {
-            let x = cx + dx
-            let y = cy + dy
-            if @types.in_board(x, y) {
-              let j = @types.idx(x, y)
-              if not(game.marks[j]) {
-                game.marks[j] = true
-                changed = true
+        Bomb =>
+          for dy in -1..<=1 {
+            for dx in -1..<=1 {
+              let x = cx + dx
+              let y = cy + dy
+              if @types.in_board(x, y) {
+                let j = @types.idx(x, y)
+                if not(game.marks[j]) {
+                  game.marks[j] = true
+                  changed = true
+                }
               }
             }
           }
-        }
       }
     }
   }
@@ -223,7 +220,7 @@ fn @types.Game::remove_marked_cells(game : @types.Game) -> Int {
     }
 
     let spawn = game.spawn_special[i]
-    if spawn != @types.special_none {
+    if spawn != None {
       if game.kinds[i] < 0 {
         game.kinds[i] = random_kind()
       }
@@ -232,7 +229,7 @@ fn @types.Game::remove_marked_cells(game : @types.Game) -> Int {
       continue
     }
 
-    if game.kinds[i] >= 0 || game.specials[i] != @types.special_none {
+    if game.kinds[i] >= 0 || game.specials[i] != None {
       removed = removed + 1
       if game.jelly[i] > 0 {
         game.jelly[i] = game.jelly[i] - 1
@@ -241,7 +238,7 @@ fn @types.Game::remove_marked_cells(game : @types.Game) -> Int {
         }
       }
       game.kinds[i] = -1
-      game.specials[i] = @types.special_none
+      game.specials[i] = None
       game.flash[i] = 1.0
     }
   }
@@ -253,14 +250,14 @@ fn @types.Game::remove_marked_cells(game : @types.Game) -> Int {
 /// Drops existing candies downward to fill gaps in each column and spawns new random candies at the top.
 fn @types.Game::collapse_and_refill(game : @types.Game) -> Unit {
   let col_kind : Array[Int] = Array::make(@types.board_rows, -1)
-  let col_special : Array[Int] = Array::make(
-    @types.board_rows, @types.special_none,
+  let col_special : Array[@types.Special] = Array::make(
+    @types.board_rows, None,
   )
 
   for x in 0..<@types.board_cols {
     for y in 0..<@types.board_rows {
       col_kind[y] = -1
-      col_special[y] = @types.special_none
+      col_special[y] = None
     }
 
     let mut write = @types.board_rows - 1
@@ -275,7 +272,7 @@ fn @types.Game::collapse_and_refill(game : @types.Game) -> Unit {
 
     while write >= 0 {
       col_kind[write] = random_kind()
-      col_special[write] = @types.special_none
+      col_special[write] = None
       write = write - 1
     }
 
@@ -386,7 +383,7 @@ fn @types.Game::shuffle_board(game : @types.Game) -> Bool {
 
     for i in 0..<@types.board_cells {
       game.kinds[i] = bucket[i]
-      game.specials[i] = @types.special_none
+      game.specials[i] = None
     }
 
     if not(has_any_match(game.kinds)) && has_possible_swap(game.kinds) {
@@ -459,7 +456,7 @@ fn @types.Game::fill_board_without_initial_matches(game : @types.Game) -> Unit {
 
       let i = @types.idx(x, y)
       game.kinds[i] = t
-      game.specials[i] = @types.special_none
+      game.specials[i] = None
     }
   }
 }
@@ -650,11 +647,11 @@ fn @types.Game::attempt_swap(
   let b = @types.idx(x1, y1)
 
   @types.swapi(game.kinds, a, b)
-  @types.swapi(game.specials, a, b)
+  @types.swap_special(game.specials, a, b)
 
   if not(has_any_match(game.kinds)) {
     @types.swapi(game.kinds, a, b)
-    @types.swapi(game.specials, a, b)
+    @types.swap_special(game.specials, a, b)
     game.set_message("Swap did not make a match.")
     return false
   }

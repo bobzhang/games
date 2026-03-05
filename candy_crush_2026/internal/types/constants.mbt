@@ -55,22 +55,6 @@ pub let base_jelly : Int = 16
 pub let jelly_level_bonus : Int = 3
 
 ///|
-/// Marker for cells without a special candy effect.
-pub let special_none : Int = 0
-
-///|
-/// Marker for row-clearing special candies.
-pub let special_row : Int = 1
-
-///|
-/// Marker for column-clearing special candies.
-pub let special_col : Int = 2
-
-///|
-/// Marker for bomb-style special candies.
-pub let special_bomb : Int = 3
-
-///|
 /// Maximum duration of a shown hint in seconds.
 pub let hint_ttl_max : Float = 2.2
 
@@ -81,3 +65,13 @@ pub let message_ttl_max : Float = 2.4
 ///|
 /// Minimum delay between touch actions in seconds.
 pub let touch_action_cooldown : Float = 0.1
+
+
+///|
+/// Kind of special candy effect applied to a board cell.
+pub(all) enum Special {
+  None
+  Row
+  Col
+  Bomb
+} derive(Eq)

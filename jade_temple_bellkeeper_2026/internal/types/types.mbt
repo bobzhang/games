@@ -12,7 +12,7 @@ pub(all) struct Bell {
 /// Runtime foe record for hostile spirits and relic carriers.
 pub(all) struct Foe {
   mut active : Bool
-  mut kind : Int
+  mut kind : FoeKind
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -152,7 +152,7 @@ pub(all) struct Game {
 pub fn Foe::new() -> Foe {
   {
     active: false,
-    kind: foe_wisp,
+    kind: Wisp,
     x: 0.0,
     y: 0.0,
     vx: 0.0,

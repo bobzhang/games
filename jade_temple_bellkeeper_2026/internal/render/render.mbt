@@ -415,14 +415,11 @@ fn draw_foe(f : @types.Foe, cam_x : Float, cam_y : Float) -> Unit {
 
   let pulse : Float = 0.5 + 0.5 * @math.sinf(f.phase * 5.0)
 
-  if f.kind == @types.foe_wisp {
-    draw_wisp(f, cam_x, cam_y, pulse)
-  } else if f.kind == @types.foe_brute {
-    draw_brute(f, cam_x, cam_y, pulse)
-  } else if f.kind == @types.foe_shaman {
-    draw_shaman(f, cam_x, cam_y, pulse)
-  } else {
-    draw_relic(f, cam_x, cam_y, pulse)
+  match f.kind {
+    Wisp => draw_wisp(f, cam_x, cam_y, pulse)
+    Brute => draw_brute(f, cam_x, cam_y, pulse)
+    Shaman => draw_shaman(f, cam_x, cam_y, pulse)
+    Relic => draw_relic(f, cam_x, cam_y, pulse)
   }
 
   if f.marked {
@@ -435,12 +432,10 @@ fn draw_foe(f : @types.Foe, cam_x : Float, cam_y : Float) -> Unit {
   }
 
   if @types.is_hostile(f.kind) {
-    let hp_max : Float = if f.kind == @types.foe_brute {
-      44.0
-    } else if f.kind == @types.foe_shaman {
-      28.0
-    } else {
-      22.0
+    let hp_max : Float = match f.kind {
+      Brute => 44.0
+      Shaman => 28.0
+      Wisp | Relic => 22.0
     }
 
     let hp_ratio = @types.clampf(f.hp / hp_max, 0.0, 1.0)

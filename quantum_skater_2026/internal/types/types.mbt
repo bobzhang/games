@@ -2,7 +2,7 @@
 /// Runtime track entity such as obstacle, orb, or gate.
 pub(all) struct TrackObj {
   mut active : Bool
-  mut kind : Int
+  mut kind : ObjKind
   mut lane : Int
   mut z : Float
   mut y_off : Float
@@ -18,7 +18,7 @@ pub(all) struct TrackObj {
 pub fn TrackObj::new() -> TrackObj {
   {
     active: false,
-    kind: obj_wall,
+    kind: Wall,
     lane: 0,
     z: 0.0,
     y_off: 0.0,
@@ -113,7 +113,7 @@ pub(all) struct Game {
   particles : Array[Particle]
   trails : Array[Trail]
   hero : Player
-  mut state : Int
+  mut state : GameState
   mut stage : Int
   mut stage_goal : Float
   mut stage_progress : Float
@@ -164,7 +164,7 @@ pub fn Game::new() -> Game {
     particles: Array::makei(max_particles, fn(_i) { Particle::new() }),
     trails: Array::makei(max_trails, fn(_i) { Trail::new() }),
     hero: Player::new(),
-    state: state_title,
+    state: Title,
     stage: 1,
     stage_goal: stage_base_distance,
     stage_progress: 0.0,

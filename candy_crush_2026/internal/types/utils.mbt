@@ -71,6 +71,14 @@ pub fn swapi(xs : Array[Int], i : Int, j : Int) -> Unit {
 }
 
 ///|
+/// Swaps two Special array elements in place.
+pub fn swap_special(xs : Array[Special], i : Int, j : Int) -> Unit {
+  let t = xs[i]
+  xs[i] = xs[j]
+  xs[j] = t
+}
+
+///|
 /// Converts board coordinates into a flat row-major index.
 pub fn idx(x : Int, y : Int) -> Int {
   y * board_cols + x

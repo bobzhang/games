@@ -11,11 +11,11 @@ pub(all) enum GameState {
 /// Full mutable game state for board simulation, UI, and input.
 pub(all) struct Game {
   kinds : Array[Int]
-  specials : Array[Int]
+  specials : Array[Special]
   jelly : Array[Int]
   flash : Array[Float]
   marks : Array[Bool]
-  spawn_special : Array[Int]
+  spawn_special : Array[Special]
   mut state : GameState
   mut level : Int
   mut score : Int
@@ -54,11 +54,11 @@ pub(all) struct Game {
 pub fn Game::new() -> Game {
   {
     kinds: Array::make(board_cells, 0),
-    specials: Array::make(board_cells, special_none),
+    specials: Array::make(board_cells, None),
     jelly: Array::make(board_cells, 0),
     flash: Array::make(board_cells, 0.0),
     marks: Array::make(board_cells, false),
-    spawn_special: Array::make(board_cells, special_none),
+    spawn_special: Array::make(board_cells, None),
     state: Title,
     level: 1,
     score: 0,

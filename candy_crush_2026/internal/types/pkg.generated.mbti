@@ -74,15 +74,9 @@ pub let screen_w : Int
 
 pub fn shuffle_button_rect() -> (Int, Int, Int, Int)
 
-pub let special_bomb : Int
-
-pub let special_col : Int
-
-pub let special_none : Int
-
-pub let special_row : Int
-
 pub fn start_button_rect() -> (Int, Int, Int, Int)
+
+pub fn swap_special(Array[Special], Int, Int) -> Unit
 
 pub fn swapi(Array[Int], Int, Int) -> Unit
 
@@ -99,11 +93,11 @@ pub let ui_panel_w : Int
 // Types and methods
 pub(all) struct Game {
   kinds : Array[Int]
-  specials : Array[Int]
+  specials : Array[Special]
   jelly : Array[Int]
   flash : Array[Float]
   marks : Array[Bool]
-  spawn_special : Array[Int]
+  spawn_special : Array[Special]
   mut state : GameState
   mut level : Int
   mut score : Int
@@ -145,6 +139,14 @@ pub(all) enum GameState {
   GameOver
 }
 pub impl Eq for GameState
+
+pub(all) enum Special {
+  None
+  Row
+  Col
+  Bomb
+}
+pub impl Eq for Special
 
 // Type aliases
 
