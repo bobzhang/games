@@ -70,11 +70,11 @@ fn @types.Game::enter_game_over(game : @types.Game, reason : String) -> Unit {
 
 ///|
 fn @types.Game::alloc_hazard_slot(game : @types.Game) -> Int {
-  for i in 0..<game.hazards.length() {
-    if not(game.hazards[i].active) {
-      return i
+  for i, slot in game.hazards {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut farthest_y = game.hazards[0].y
@@ -85,6 +85,7 @@ fn @types.Game::alloc_hazard_slot(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
