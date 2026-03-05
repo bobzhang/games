@@ -1,11 +1,12 @@
 ///|
 fn @types.Game::alloc_bomb(game : @types.Game) -> Int {
-  for i in 0..<game.bombs.length() {
-    if not(game.bombs[i].active) {
-      return i
+  for i, slot in game.bombs {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   -1
+  }
 }
 
 ///|
