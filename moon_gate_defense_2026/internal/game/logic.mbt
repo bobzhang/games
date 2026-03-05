@@ -740,30 +740,30 @@ fn @types.Game::trigger_barrier(game : @types.Game) -> Unit {
 
   game.emit_pulse(gx, gy, @types.gate_radius + 14.0, 0.58, 2)
 
-  for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
+  for i, enemy in game.enemies {
+    if !enemy.active {
       continue
     }
 
-    let dx = game.enemies[i].x - gx
-    let dy = game.enemies[i].y - gy
+    let dx = enemy.x - gx
+    let dy = enemy.y - gy
     let d2 = dx * dx + dy * dy
     if d2 > radius2 {
       continue
     }
 
-    game.enemies[i].hp = game.enemies[i].hp - @types.barrier_damage
-    if game.enemies[i].hp <= 0.0 {
+    enemy.hp = enemy.hp - @types.barrier_damage
+    if enemy.hp <= 0.0 {
       game.kill_enemy(i, true)
       continue
     }
 
     if d2 > 1.0 {
       let inv = Float::from_int(1) / d2.sqrt()
-      game.enemies[i].x = game.enemies[i].x + dx * inv * @types.barrier_push
-      game.enemies[i].y = game.enemies[i].y + dy * inv * @types.barrier_push
-      game.enemies[i].vx = game.enemies[i].vx + dx * inv * 80.0
-      game.enemies[i].vy = game.enemies[i].vy + dy * inv * 80.0
+      enemy.x = enemy.x + dx * inv * @types.barrier_push
+      enemy.y = enemy.y + dy * inv * @types.barrier_push
+      enemy.vx = enemy.vx + dx * inv * 80.0
+      enemy.vy = enemy.vy + dy * inv * 80.0
     }
   }
 
