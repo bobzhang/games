@@ -1,10 +1,10 @@
 ///|
 /// Adds points to totals and updates high score.
-pub fn grant_score(game : @types.Game, team : Int, points : Int) -> Unit {
+pub fn grant_score(game : @types.Game, team : @types.Team, points : Int) -> Unit {
   game.score_total += points
-  if team == @types.team_player1 {
+  if team == Player1 {
     game.players[0].score += points
-  } else if team == @types.team_player2 {
+  } else if team == Player2 {
     game.players[1].score += points
   }
   if game.score_total > game.high_score {

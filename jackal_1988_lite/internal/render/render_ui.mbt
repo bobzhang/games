@@ -559,17 +559,17 @@ fn @types.Game::draw_campaign_clear_overlay(game : @types.Game) -> Unit {
 pub fn draw_ui(game : @types.Game) -> Unit {
   game.draw_panel()
 
-  if game.state == @types.state_menu {
+  if game.state == Menu {
     game.draw_menu_overlay()
-  } else if game.state == @types.state_stage_intro {
+  } else if game.state == StageIntro {
     game.draw_stage_intro_overlay()
-  } else if game.state == @types.state_paused {
+  } else if game.state == Paused {
     game.draw_pause_overlay()
-  } else if game.state == @types.state_stage_clear {
+  } else if game.state == StageClear {
     game.draw_stage_clear_overlay()
-  } else if game.state == @types.state_game_over {
+  } else if game.state == GameOver {
     game.draw_game_over_overlay()
-  } else if game.state == @types.state_campaign_clear {
+  } else if game.state == CampaignClear {
     game.draw_campaign_clear_overlay()
   }
 }

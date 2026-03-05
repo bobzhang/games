@@ -262,7 +262,7 @@ fn draw_tank(
 
   let turret_len = 11
   let turret_w = 4
-  if tank.dir == @types.dir_up {
+  if tank.dir == Up {
     @raylib.draw_rectangle(
       sx - turret_w / 2,
       sy - turret_len,
@@ -270,7 +270,7 @@ fn draw_tank(
       turret_len,
       trim_color,
     )
-  } else if tank.dir == @types.dir_down {
+  } else if tank.dir == Down {
     @raylib.draw_rectangle(
       sx - turret_w / 2,
       sy,
@@ -278,7 +278,7 @@ fn draw_tank(
       turret_len,
       trim_color,
     )
-  } else if tank.dir == @types.dir_left {
+  } else if tank.dir == Left {
     @raylib.draw_rectangle(
       sx - turret_len,
       sy - turret_w / 2,
@@ -403,7 +403,7 @@ fn @types.Game::draw_enemies(
     let trim = @raylib.Color::new(70, 30, 30, 255)
     draw_tank(enemy, body, trim, shake_x, shake_y)
 
-    if enemy.enemy_kind == @types.enemy_heavy {
+    if enemy.enemy_kind == Heavy {
       for hp_i in 0..<enemy.hp {
         @raylib.draw_rectangle(
           @types.world_to_screen_x(enemy.x, shake_x) - 9 + hp_i * 4,
@@ -427,9 +427,9 @@ fn @types.Game::draw_bullets(
     if not(bullet.active) {
       continue
     }
-    let color = if bullet.owner_team == @types.team_enemy {
+    let color = if bullet.owner_team == Enemy {
       @raylib.Color::new(255, 94, 94, 255)
-    } else if bullet.owner_team == @types.team_player2 {
+    } else if bullet.owner_team == Player2 {
       @raylib.Color::new(255, 222, 120, 255)
     } else {
       @raylib.Color::new(122, 222, 255, 255)
@@ -465,59 +465,38 @@ fn @types.Game::draw_particles(
 }
 
 ///|
-fn powerup_color(kind : Int) -> @raylib.Color {
-  if kind == @types.powerup_shield {
-    @raylib.skyblue
-  } else if kind == @types.powerup_star {
-    @raylib.gold
-  } else if kind == @types.powerup_grenade {
-    @raylib.red
-  } else if kind == @types.powerup_clock {
-    @raylib.lime
-  } else if kind == @types.powerup_shovel {
-    @raylib.brown
-  } else if kind == @types.powerup_tank {
-    @raylib.orange
-  } else {
-    @raylib.white
+fn powerup_color(kind : @types.PowerupKind) -> @raylib.Color {
+  match kind {
+    Shield => @raylib.skyblue
+    Star => @raylib.gold
+    Grenade => @raylib.red
+    Clock => @raylib.lime
+    Shovel => @raylib.brown
+    Tank => @raylib.orange
   }
 }
 
 ///|
-fn powerup_text(kind : Int) -> String {
-  if kind == @types.powerup_shield {
-    "S"
-  } else if kind == @types.powerup_star {
-    "*"
-  } else if kind == @types.powerup_grenade {
-    "G"
-  } else if kind == @types.powerup_clock {
-    "C"
-  } else if kind == @types.powerup_shovel {
-    "H"
-  } else if kind == @types.powerup_tank {
-    "+"
-  } else {
-    "?"
+fn powerup_text(kind : @types.PowerupKind) -> String {
+  match kind {
+    Shield => "S"
+    Star => "*"
+    Grenade => "G"
+    Clock => "C"
+    Shovel => "H"
+    Tank => "+"
   }
 }
 
 ///|
-fn powerup_radius(kind : Int) -> Float {
-  if kind == @types.powerup_shield {
-    11.0
-  } else if kind == @types.powerup_star {
-    10.0
-  } else if kind == @types.powerup_grenade {
-    12.0
-  } else if kind == @types.powerup_clock {
-    11.0
-  } else if kind == @types.powerup_shovel {
-    11.0
-  } else if kind == @types.powerup_tank {
-    12.0
-  } else {
-    10.0
+fn powerup_radius(kind : @types.PowerupKind) -> Float {
+  match kind {
+    Shield => 11.0
+    Star => 10.0
+    Grenade => 12.0
+    Clock => 11.0
+    Shovel => 11.0
+    Tank => 12.0
   }
 }
 

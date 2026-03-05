@@ -9,7 +9,7 @@ fn @types.Game::clear_particles(game : @types.Game) -> Unit {
     particle.vy = 0.0
     particle.life = 0.0
     particle.size = 0.0
-    particle.kind = 0
+    particle.kind = Default
   }
 }
 
@@ -24,7 +24,7 @@ fn @types.Game::clear_world(game : @types.Game) -> Unit {
     enemy.vy = 0.0
     enemy.r = 0.0
     enemy.hp = 0.0
-    enemy.kind = @types.enemy_wolf
+    enemy.kind = Wolf
     enemy.phase = 0.0
   }
 
@@ -34,7 +34,7 @@ fn @types.Game::clear_world(game : @types.Game) -> Unit {
     pickup.y = 0.0
     pickup.vx = 0.0
     pickup.vy = 0.0
-    pickup.kind = @types.pickup_fuel
+    pickup.kind = Fuel
     pickup.phase = 0.0
   }
 
@@ -46,7 +46,7 @@ fn @types.Game::clear_world(game : @types.Game) -> Unit {
     bullet.vy = 0.0
     bullet.life = 0.0
     bullet.power = 0.0
-    bullet.kind = @types.bullet_normal
+    bullet.kind = Normal
   }
 }
 
@@ -60,7 +60,7 @@ fn @types.Game::emit_particle(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : @types.ParticleKind,
 ) -> Unit {
   for particle in game.particles {
     if particle.active {
@@ -86,7 +86,7 @@ fn @types.Game::burst(
   x : Float,
   y : Float,
   n : Int,
-  kind : Int,
+  kind : @types.ParticleKind,
 ) -> Unit {
   for _i in 0..<n {
     game.emit_particle(
@@ -118,10 +118,10 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
     particle.x = particle.x + particle.vx * dt
     particle.y = particle.y + particle.vy * dt
 
-    let damp : Float = if particle.kind == 2 { 2.7 } else { 1.9 }
+    let damp : Float = if particle.kind == OverdriveEffect { 2.7 } else { 1.9 }
     particle.vx = particle.vx * (1.0 - dt * damp)
     particle.vy = particle.vy * (1.0 - dt * (damp - 0.4)) +
-      dt * (if particle.kind == 1 { 180.0 } else { 120.0 })
+      dt * (if particle.kind == Damage { 180.0 } else { 120.0 })
   }
 }
 
@@ -201,10 +201,10 @@ fn @types.Game::finish_run(game : @types.Game, win : Bool) -> Unit {
 
   if win {
     @types.set_msg(game, "Outpost survived the polar night.", 3.0)
-    game.burst(@types.core_x(), @types.core_y(), 70, 2)
+    game.burst(@types.core_x(), @types.core_y(), 70, OverdriveEffect)
   } else {
     @types.set_msg(game, "Outpost collapsed in the storm.", 3.0)
-    game.burst(@types.core_x(), @types.core_y(), 56, 1)
+    game.burst(@types.core_x(), @types.core_y(), 56, Damage)
   }
 }
 
@@ -217,12 +217,12 @@ fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
     }
 
     let roll : Int = @raylib.get_random_value(0, 99)
-    let kind : Int = if roll < 56 {
-      @types.enemy_wolf
+    let kind : @types.EnemyKind = if roll < 56 {
+      Wolf
     } else if roll < 84 {
-      @types.enemy_brute
+      Brute
     } else {
-      @types.enemy_shard
+      Shard
     }
 
     let side : Int = @raylib.get_random_value(0, 3)
@@ -255,15 +255,19 @@ fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
     enemy.active = true
     enemy.kind = kind
 
-    if kind == @types.enemy_wolf {
-      enemy.r = @types.randf(17.0, 22.0)
-      enemy.hp = @types.randf(24.0, 36.0) + Float::from_int(game.wave) * 2.4
-    } else if kind == @types.enemy_brute {
-      enemy.r = @types.randf(26.0, 34.0)
-      enemy.hp = @types.randf(60.0, 82.0) + Float::from_int(game.wave) * 4.0
-    } else {
-      enemy.r = @types.randf(13.0, 18.0)
-      enemy.hp = @types.randf(16.0, 24.0) + Float::from_int(game.wave) * 1.8
+    match kind {
+      Wolf => {
+        enemy.r = @types.randf(17.0, 22.0)
+        enemy.hp = @types.randf(24.0, 36.0) + Float::from_int(game.wave) * 2.4
+      }
+      Brute => {
+        enemy.r = @types.randf(26.0, 34.0)
+        enemy.hp = @types.randf(60.0, 82.0) + Float::from_int(game.wave) * 4.0
+      }
+      Shard => {
+        enemy.r = @types.randf(13.0, 18.0)
+        enemy.hp = @types.randf(16.0, 24.0) + Float::from_int(game.wave) * 1.8
+      }
     }
 
     enemy.vx = 0.0
@@ -296,13 +300,13 @@ fn @types.Game::spawn_pickup(game : @types.Game) -> Bool {
 
     let roll : Int = @raylib.get_random_value(0, 99)
     pickup.kind = if roll < 38 {
-      @types.pickup_fuel
+      Fuel
     } else if roll < 62 {
-      @types.pickup_medkit
+      Medkit
     } else if roll < 86 {
-      @types.pickup_ammo
+      Ammo
     } else {
-      @types.pickup_overdrive
+      Overdrive
     }
 
     return true
@@ -320,7 +324,7 @@ fn @types.Game::spawn_bullet(
   tx : Float,
   ty : Float,
   power : Float,
-  kind : Int,
+  kind : @types.BulletKind,
 ) -> Bool {
   for bullet in game.bullets {
     if bullet.active {
@@ -328,14 +332,14 @@ fn @types.Game::spawn_bullet(
     }
 
     let dir = @types.normalize(tx - x, ty - y)
-    let speed : Float = if kind == @types.bullet_pierce { 920.0 } else { 760.0 }
+    let speed : Float = if kind == Pierce { 920.0 } else { 760.0 }
 
     bullet.active = true
     bullet.x = x
     bullet.y = y
     bullet.vx = dir.0 * speed
     bullet.vy = dir.1 * speed
-    bullet.life = if kind == @types.bullet_pierce { 1.8 } else { 1.4 }
+    bullet.life = if kind == Pierce { 1.8 } else { 1.4 }
     bullet.power = power
     bullet.kind = kind
 
@@ -361,10 +365,10 @@ fn @types.Game::try_fire(game : @types.Game, tx : Float, ty : Float) -> Bool {
   }
 
   let overdrive : Bool = game.overdrive_t > 0.0
-  let kind : Int = if overdrive {
-    @types.bullet_pierce
+  let kind : @types.BulletKind = if overdrive {
+    Pierce
   } else {
-    @types.bullet_normal
+    Normal
   }
   let power : Float = if overdrive { 38.0 } else { 24.0 }
 
@@ -379,7 +383,7 @@ fn @types.Game::try_fire(game : @types.Game, tx : Float, ty : Float) -> Bool {
   game.player_vx = game.player_vx - dir.0 * 28.0
   game.player_vy = game.player_vy - dir.1 * 28.0
 
-  game.burst(game.player_x, game.player_y, if overdrive { 8 } else { 5 }, 0)
+  game.burst(game.player_x, game.player_y, if overdrive { 8 } else { 5 }, Default)
 
   true
 }
@@ -422,32 +426,28 @@ fn @types.Game::try_repair(game : @types.Game) -> Bool {
   game.repair_cd = 1.10
 
   @types.set_msg(game, "Generator repaired: heat stabilized.", 1.4)
-  game.burst(@types.core_x(), @types.core_y(), 28, 2)
+  game.burst(@types.core_x(), @types.core_y(), 28, OverdriveEffect)
 
   true
 }
 
 ///|
 /// Returns the suit damage dealt when an enemy of the given kind collides with the player.
-fn enemy_touch_damage(kind : Int) -> Float {
-  if kind == @types.enemy_brute {
-    34.0
-  } else if kind == @types.enemy_wolf {
-    20.0
-  } else {
-    14.0
+fn enemy_touch_damage(kind : @types.EnemyKind) -> Float {
+  match kind {
+    Brute => 34.0
+    Wolf => 20.0
+    Shard => 14.0
   }
 }
 
 ///|
 /// Returns the core heat damage dealt when an enemy of the given kind reaches the generator.
-fn enemy_core_damage(kind : Int) -> Float {
-  if kind == @types.enemy_brute {
-    14.0
-  } else if kind == @types.enemy_wolf {
-    8.0
-  } else {
-    6.0
+fn enemy_core_damage(kind : @types.EnemyKind) -> Float {
+  match kind {
+    Brute => 14.0
+    Wolf => 8.0
+    Shard => 6.0
   }
 }
 
@@ -470,7 +470,7 @@ fn @types.Game::hurt_player(game : @types.Game, dmg : Float) -> Unit {
     game.fuel = @types.maxf(0.0, game.fuel - 18.0)
     game.reset_player()
     @types.set_msg(game, "Suit breached. Life lost.", 1.6)
-    game.burst(game.player_x, game.player_y, 34, 1)
+    game.burst(game.player_x, game.player_y, 34, Damage)
 
     if game.lives <= 0 {
       game.finish_run(false)
@@ -478,7 +478,7 @@ fn @types.Game::hurt_player(game : @types.Game, dmg : Float) -> Unit {
     }
   } else {
     @types.set_msg(game, "Hostile contact.", 0.9)
-    game.burst(game.player_x, game.player_y, 16, 1)
+    game.burst(game.player_x, game.player_y, 16, Damage)
   }
 }
 
@@ -486,31 +486,31 @@ fn @types.Game::hurt_player(game : @types.Game, dmg : Float) -> Unit {
 /// Applies the pickup effect by kind (fuel refills core heat, medkit heals suit, ammo crate restores ammo, overdrive activates pierce mode), adds score, increments combo, and shows a status message.
 fn @types.Game::collect_pickup(
   game : @types.Game,
-  kind : Int,
+  kind : @types.PickupKind,
   x : Float,
   y : Float,
 ) -> Unit {
-  if kind == @types.pickup_fuel {
+  if kind == Fuel {
     game.fuel = @types.minf(100.0, game.fuel + 26.0)
     game.core_heat = @types.minf(100.0, game.core_heat + 6.0)
     game.score = game.score + 16
     @types.set_msg(game, "Fuel cache secured.", 1.2)
-    game.burst(x, y, 20, 0)
-  } else if kind == @types.pickup_medkit {
+    game.burst(x, y, 20, Default)
+  } else if kind == Medkit {
     game.suit_hp = @types.minf(100.0, game.suit_hp + 34.0)
     game.score = game.score + 16
     @types.set_msg(game, "Medkit applied.", 1.2)
-    game.burst(x, y, 18, 2)
-  } else if kind == @types.pickup_ammo {
+    game.burst(x, y, 18, OverdriveEffect)
+  } else if kind == Ammo {
     game.ammo = (460).min(game.ammo + 48)
     game.score = game.score + 14
     @types.set_msg(game, "Ammo crate recovered.", 1.2)
-    game.burst(x, y, 18, 0)
+    game.burst(x, y, 18, Default)
   } else {
     game.overdrive_t = @types.maxf(game.overdrive_t, 7.0)
     game.score = game.score + 26
     @types.set_msg(game, "Overdrive engaged.", 1.2)
-    game.burst(x, y, 24, 2)
+    game.burst(x, y, 24, OverdriveEffect)
   }
 
   game.combo = (12).min(game.combo + 1)
@@ -560,7 +560,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
       @types.randf(-40.0, 40.0),
       @types.randf(0.2, 0.5),
       @types.randf(1.1, 2.8),
-      2,
+      OverdriveEffect,
     )
   }
 }
@@ -574,7 +574,7 @@ fn @types.Game::bullet_hit_enemy(
 ) -> Unit {
   game.enemies[ei].hp = game.enemies[ei].hp - game.bullets[bi].power
 
-  if game.bullets[bi].kind == @types.bullet_normal {
+  if game.bullets[bi].kind == Normal {
     game.bullets[bi].active = false
   } else {
     game.bullets[bi].power = game.bullets[bi].power * 0.72
@@ -583,18 +583,16 @@ fn @types.Game::bullet_hit_enemy(
     }
   }
 
-  game.burst(game.enemies[ei].x, game.enemies[ei].y, 9, 0)
+  game.burst(game.enemies[ei].x, game.enemies[ei].y, 9, Default)
 
   if game.enemies[ei].hp <= 0.0 {
-    let kind : Int = game.enemies[ei].kind
+    let kind : @types.EnemyKind = game.enemies[ei].kind
     game.enemies[ei].active = false
 
-    let base_score : Int = if kind == @types.enemy_brute {
-      26
-    } else if kind == @types.enemy_wolf {
-      15
-    } else {
-      12
+    let base_score : Int = match kind {
+      Brute => 26
+      Wolf => 15
+      Shard => 12
     }
 
     game.combo = (18).min(game.combo + 1)
@@ -606,7 +604,7 @@ fn @types.Game::bullet_hit_enemy(
       ignore(game.spawn_pickup())
     }
 
-    game.burst(game.enemies[ei].x, game.enemies[ei].y, 20, 1)
+    game.burst(game.enemies[ei].x, game.enemies[ei].y, 20, Damage)
   }
 }
 
@@ -637,7 +635,7 @@ fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
       }
 
       let rr : Float = game.enemies[ei].r +
-        (if game.bullets[bi].kind == @types.bullet_pierce { 4.0 } else { 2.0 })
+        (if game.bullets[bi].kind == Pierce { 4.0 } else { 2.0 })
 
       if @types.dist2(
           game.bullets[bi].x,
@@ -658,13 +656,11 @@ fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Returns the base movement speed for an enemy of the given kind, scaled up by the current wave number.
-fn @types.Game::enemy_speed(game : @types.Game, kind : Int) -> Float {
-  if kind == @types.enemy_wolf {
-    130.0 + Float::from_int(game.wave) * 10.0
-  } else if kind == @types.enemy_brute {
-    84.0 + Float::from_int(game.wave) * 6.0
-  } else {
-    162.0 + Float::from_int(game.wave) * 12.0
+fn @types.Game::enemy_speed(game : @types.Game, kind : @types.EnemyKind) -> Float {
+  match kind {
+    Wolf => 130.0 + Float::from_int(game.wave) * 10.0
+    Brute => 84.0 + Float::from_int(game.wave) * 6.0
+    Shard => 162.0 + Float::from_int(game.wave) * 12.0
   }
 }
 
@@ -676,9 +672,14 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    enemy.phase = enemy.phase + dt * (1.2 + Float::from_int(enemy.kind))
+    let kind_offset : Float = match enemy.kind {
+      Wolf => 0.0
+      Brute => 1.0
+      Shard => 2.0
+    }
+    enemy.phase = enemy.phase + dt * (1.2 + kind_offset)
 
-    let target_x : Float = if enemy.kind == @types.enemy_wolf {
+    let target_x : Float = if enemy.kind == Wolf {
       if @types.dist2(enemy.x, enemy.y, game.player_x, game.player_y) <
         280.0 * 280.0 {
         game.player_x
@@ -689,7 +690,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
       @types.core_x()
     }
 
-    let target_y : Float = if enemy.kind == @types.enemy_wolf {
+    let target_y : Float = if enemy.kind == Wolf {
       if @types.dist2(enemy.x, enemy.y, game.player_x, game.player_y) <
         280.0 * 280.0 {
         game.player_y
@@ -703,15 +704,15 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
     let dir = @types.normalize(target_x - enemy.x, target_y - enemy.y)
     let speed : Float = game.enemy_speed(enemy.kind)
 
-    let swirl_x : Float = if enemy.kind == @types.enemy_shard {
+    let swirl_x : Float = if enemy.kind == Shard {
       @math.sinf(enemy.phase * 5.0) * 120.0
-    } else if enemy.kind == @types.enemy_wolf {
+    } else if enemy.kind == Wolf {
       @math.sinf(enemy.phase * 3.0) * 64.0
     } else {
       @math.sinf(enemy.phase * 1.3) * 24.0
     }
 
-    let swirl_y : Float = if enemy.kind == @types.enemy_shard {
+    let swirl_y : Float = if enemy.kind == Shard {
       @math.cosf(enemy.phase * 4.0) * 96.0
     } else {
       @math.cosf(enemy.phase * 1.8) * 22.0
@@ -738,7 +739,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
       player_rr * player_rr {
       game.hurt_player(enemy_touch_damage(enemy.kind))
 
-      enemy.active = if enemy.kind == @types.enemy_brute { true } else { false }
+      enemy.active = if enemy.kind == Brute { true } else { false }
 
       enemy.vx = -enemy.vx * 0.5
       enemy.vy = -enemy.vy * 0.5
@@ -758,9 +759,9 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
       game.shake_t = @types.maxf(game.shake_t, 0.30)
 
       @types.set_msg(game, "Core under attack!", 0.8)
-      game.burst(@types.core_x(), @types.core_y(), 14, 1)
+      game.burst(@types.core_x(), @types.core_y(), 14, Damage)
 
-      if enemy.kind == @types.enemy_brute {
+      if enemy.kind == Brute {
         enemy.hp = enemy.hp - 34.0
         enemy.vx = -enemy.vx * 0.8
         enemy.vy = -enemy.vy * 0.8
@@ -804,7 +805,7 @@ fn @types.Game::update_pickups(game : @types.Game, dt : Float) -> Unit {
 
     let rr : Float = @types.player_r + @types.pickup_radius(pickup.kind)
     if @types.dist2(game.player_x, game.player_y, pickup.x, pickup.y) <= rr * rr {
-      let kind : Int = pickup.kind
+      let kind : @types.PickupKind = pickup.kind
       let px : Float = pickup.x
       let py : Float = pickup.y
       pickup.active = false
@@ -832,9 +833,9 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
       }
 
       let want : Bool = if game.fuel < 42.0 {
-        pickup.kind == @types.pickup_fuel
+        pickup.kind == Fuel
       } else {
-        pickup.kind == @types.pickup_ammo
+        pickup.kind == Ammo
       }
 
       if not(want) {
@@ -873,7 +874,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
         }
 
         let d2 : Float = @types.dist2(lx, ly, enemy.x, enemy.y)
-        let w : Float = if enemy.kind == @types.enemy_brute { 1.4 } else { 1.0 }
+        let w : Float = if enemy.kind == Brute { 1.4 } else { 1.0 }
         threat = threat + w * 42000.0 / @types.maxf(120.0, d2)
       }
 

@@ -11,42 +11,6 @@ pub let screen_h : Int = 980
 pub let target_fps : Int = 120
 
 ///|
-/// Enemy kind id for fast melee wolves.
-pub let enemy_wolf : Int = 0
-
-///|
-/// Enemy kind id for slow armored brutes.
-pub let enemy_brute : Int = 1
-
-///|
-/// Enemy kind id for agile shard creatures.
-pub let enemy_shard : Int = 2
-
-///|
-/// Pickup kind id for fuel canisters.
-pub let pickup_fuel : Int = 0
-
-///|
-/// Pickup kind id for medkits.
-pub let pickup_medkit : Int = 1
-
-///|
-/// Pickup kind id for ammunition crates.
-pub let pickup_ammo : Int = 2
-
-///|
-/// Pickup kind id for temporary overdrive boosts.
-pub let pickup_overdrive : Int = 3
-
-///|
-/// Bullet kind id for the default projectile.
-pub let bullet_normal : Int = 0
-
-///|
-/// Bullet kind id for piercing overdrive shots.
-pub let bullet_pierce : Int = 1
-
-///|
 /// Maximum number of enemies allocated in the object pool.
 pub let max_enemies : Int = 200
 
@@ -169,3 +133,35 @@ pub fn btn_hint() -> (Int, Int, Int, Int) {
 pub fn btn_restart() -> (Int, Int, Int, Int) {
   (1462, 606, 110, 92)
 }
+
+///|
+/// Classifies the three enemy archetypes in the arctic outpost.
+pub(all) enum EnemyKind {
+  Wolf
+  Brute
+  Shard
+} derive(Eq)
+
+///|
+/// Classifies the four supply pickup types that can spawn.
+pub(all) enum PickupKind {
+  Fuel
+  Medkit
+  Ammo
+  Overdrive
+} derive(Eq)
+
+///|
+/// Classifies the two projectile types the player can fire.
+pub(all) enum BulletKind {
+  Normal
+  Pierce
+} derive(Eq)
+
+///|
+/// Classifies the three visual particle effect categories.
+pub(all) enum ParticleKind {
+  Default
+  Damage
+  OverdriveEffect
+} derive(Eq)

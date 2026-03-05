@@ -8,7 +8,7 @@ pub(all) struct Enemy {
   mut vy : Float
   mut r : Float
   mut hp : Float
-  mut kind : Int
+  mut kind : EnemyKind
   mut phase : Float
 }
 
@@ -20,7 +20,7 @@ pub(all) struct Pickup {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut kind : Int
+  mut kind : PickupKind
   mut phase : Float
 }
 
@@ -34,7 +34,7 @@ pub(all) struct Bullet {
   mut vy : Float
   mut life : Float
   mut power : Float
-  mut kind : Int
+  mut kind : BulletKind
 }
 
 ///|
@@ -47,7 +47,7 @@ pub(all) struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : ParticleKind
 }
 
 ///|
@@ -118,7 +118,7 @@ pub fn Enemy::new() -> Enemy {
     vy: 0.0,
     r: 0.0,
     hp: 0.0,
-    kind: enemy_wolf,
+    kind: Wolf,
     phase: 0.0,
   }
 }
@@ -132,7 +132,7 @@ pub fn Pickup::new() -> Pickup {
     y: 0.0,
     vx: 0.0,
     vy: 0.0,
-    kind: pickup_fuel,
+    kind: Fuel,
     phase: 0.0,
   }
 }
@@ -148,7 +148,7 @@ pub fn Bullet::new() -> Bullet {
     vy: 0.0,
     life: 0.0,
     power: 0.0,
-    kind: bullet_normal,
+    kind: Normal,
   }
 }
 
@@ -163,7 +163,7 @@ pub fn Particle::new() -> Particle {
     vy: 0.0,
     life: 0.0,
     size: 0.0,
-    kind: 0,
+    kind: Default,
   }
 }
 

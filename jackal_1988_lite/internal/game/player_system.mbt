@@ -8,29 +8,29 @@ fn @types.Game::is_player_enabled(game : @types.Game, index : Int) -> Bool {
 }
 
 ///|
-fn read_player_move_dir(index : Int) -> Int {
+fn read_player_move_dir(index : Int) -> @types.Dir? {
   if index == 0 {
     if @raylib.is_key_down(@raylib.KeyUp) {
-      @types.dir_up
+      Some(Up)
     } else if @raylib.is_key_down(@raylib.KeyDown) {
-      @types.dir_down
+      Some(Down)
     } else if @raylib.is_key_down(@raylib.KeyLeft) {
-      @types.dir_left
+      Some(Left)
     } else if @raylib.is_key_down(@raylib.KeyRight) {
-      @types.dir_right
+      Some(Right)
     } else {
-      -1
+      None
     }
   } else if @raylib.is_key_down(@raylib.KeyW) {
-    @types.dir_up
+    Some(Up)
   } else if @raylib.is_key_down(@raylib.KeyS) {
-    @types.dir_down
+    Some(Down)
   } else if @raylib.is_key_down(@raylib.KeyA) {
-    @types.dir_left
+    Some(Left)
   } else if @raylib.is_key_down(@raylib.KeyD) {
-    @types.dir_right
+    Some(Right)
   } else {
-    -1
+    None
   }
 }
 
@@ -115,7 +115,7 @@ fn @types.Game::update_player_reload_timers(
 fn @types.Game::try_move_player(
   game : @types.Game,
   index : Int,
-  dir : Int,
+  dir : @types.Dir,
   dt : Float,
 ) -> Unit {
   let player = game.players[index]
@@ -160,14 +160,18 @@ fn @types.Game::update_player_input(game : @types.Game, dt : Float) -> Unit {
     } else {
       (read_player_move_dir(i), is_player_shoot_pressed(i))
     }
-    if move_dir >= 0 {
-      player.dir = move_dir
-      game.try_move_player(i, move_dir, dt)
-      if game.player_is_on_ice(player) {
-        player.skid_timer = 0.12
+    match move_dir {
+      Some(d) => {
+        player.dir = d
+        game.try_move_player(i, d, dt)
+        if game.player_is_on_ice(player) {
+          player.skid_timer = 0.12
+        }
       }
-    } else if player.skid_timer > 0.0 && game.player_is_on_ice(player) {
-      game.try_move_player(i, player.dir, dt * 0.55)
+      None =>
+        if player.skid_timer > 0.0 && game.player_is_on_ice(player) {
+          game.try_move_player(i, player.dir, dt * 0.55)
+        }
     }
 
     if shoot_pressed && game.can_player_fire(i) {

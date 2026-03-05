@@ -26,23 +26,9 @@ pub fn maxf(Float, Float) -> Float
 
 pub fn obstacle_gap_mid(Obstacle) -> Float
 
-pub let obstacle_kind_beam : Int
-
-pub let obstacle_kind_gate : Int
-
-pub let obstacle_kind_spinner : Int
-
 pub let panel_w : Int
 
 pub let panel_x0 : Int
-
-pub let pickup_boost : Int
-
-pub let pickup_heart : Int
-
-pub let pickup_score : Int
-
-pub let pickup_shield : Int
 
 pub let player_r : Float
 
@@ -133,11 +119,18 @@ pub(all) struct Obstacle {
   mut gap_h : Float
   mut w : Float
   mut speed : Float
-  mut kind : Int
+  mut kind : ObstacleKind
   mut phase : Float
   mut scored : Bool
 }
 pub fn Obstacle::new() -> Self
+
+pub(all) enum ObstacleKind {
+  Gate
+  Beam
+  Spinner
+}
+pub impl Eq for ObstacleKind
 
 pub(all) struct Particle {
   mut active : Bool
@@ -155,10 +148,18 @@ pub(all) struct Pickup {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut kind : Int
+  mut kind : PickupKind
   mut phase : Float
 }
 pub fn Pickup::new() -> Self
+
+pub(all) enum PickupKind {
+  Score
+  Boost
+  Shield
+  Heart
+}
+pub impl Eq for PickupKind
 
 // Type aliases
 

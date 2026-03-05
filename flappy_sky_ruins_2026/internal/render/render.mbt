@@ -104,12 +104,10 @@ fn draw_obstacle(ob : @types.Obstacle) -> Unit {
   let x : Int = ob.x.to_int()
   let w : Int = ob.w.to_int()
 
-  let c0 : @raylib.Color = if ob.kind == @types.obstacle_kind_beam {
-    @raylib.Color::new(170, 104, 96, 244)
-  } else if ob.kind == @types.obstacle_kind_spinner {
-    @raylib.Color::new(118, 100, 156, 244)
-  } else {
-    @raylib.Color::new(98, 136, 182, 244)
+  let c0 : @raylib.Color = match ob.kind {
+    Beam => @raylib.Color::new(170, 104, 96, 244)
+    Spinner => @raylib.Color::new(118, 100, 156, 244)
+    Gate => @raylib.Color::new(98, 136, 182, 244)
   }
 
   @raylib.draw_rectangle(x, @types.world_y0, w, top_h, c0)
@@ -130,32 +128,32 @@ fn draw_obstacle(ob : @types.Obstacle) -> Unit {
     @raylib.Color::new(208, 220, 238, 186),
   )
 
-  if ob.kind == @types.obstacle_kind_spinner {
-    let cx : Int = x + w / 2
-    let cy : Int = gy.to_int()
-    let arm : Int = (gh * 0.40).to_int()
+  match ob.kind {
+    Spinner => {
+      let cx : Int = x + w / 2
+      let cy : Int = gy.to_int()
+      let arm : Int = (gh * 0.40).to_int()
 
-    let ang : Float = ob.phase
-    let ax : Int = (Float::from_int(cx) + @math.cosf(ang) * Float::from_int(arm)).to_int()
-    let ay : Int = (Float::from_int(cy) + @math.sinf(ang) * Float::from_int(arm)).to_int()
+      let ang : Float = ob.phase
+      let ax : Int = (Float::from_int(cx) + @math.cosf(ang) * Float::from_int(arm)).to_int()
+      let ay : Int = (Float::from_int(cy) + @math.sinf(ang) * Float::from_int(arm)).to_int()
 
-    @raylib.draw_line(cx, cy, ax, ay, @raylib.Color::new(238, 212, 146, 236))
-    @raylib.draw_circle(cx, cy, 7.0, @raylib.Color::new(255, 226, 164, 236))
-    @raylib.draw_circle(ax, ay, 8.0, @raylib.Color::new(255, 174, 122, 236))
+      @raylib.draw_line(cx, cy, ax, ay, @raylib.Color::new(238, 212, 146, 236))
+      @raylib.draw_circle(cx, cy, 7.0, @raylib.Color::new(255, 226, 164, 236))
+      @raylib.draw_circle(ax, ay, 8.0, @raylib.Color::new(255, 174, 122, 236))
+    }
+    Gate | Beam => ()
   }
 }
 
 ///|
 /// Returns the display color for a pickup based on its kind (score/boost/shield/heart).
-fn pickup_color(kind : Int) -> @raylib.Color {
-  if kind == @types.pickup_score {
-    @raylib.Color::new(120, 218, 255, 250)
-  } else if kind == @types.pickup_boost {
-    @raylib.Color::new(255, 200, 122, 250)
-  } else if kind == @types.pickup_shield {
-    @raylib.Color::new(172, 206, 255, 250)
-  } else {
-    @raylib.Color::new(255, 130, 152, 250)
+fn pickup_color(kind : @types.PickupKind) -> @raylib.Color {
+  match kind {
+    Score => @raylib.Color::new(120, 218, 255, 250)
+    Boost => @raylib.Color::new(255, 200, 122, 250)
+    Shield => @raylib.Color::new(172, 206, 255, 250)
+    Heart => @raylib.Color::new(255, 130, 152, 250)
   }
 }
 
@@ -167,7 +165,10 @@ fn draw_pickup(pk : @types.Pickup) -> Unit {
   }
 
   let pulse : Float = @math.sinf(pk.phase)
-  let base_r : Float = if pk.kind == @types.pickup_score { 14.0 } else { 18.0 }
+  let base_r : Float = match pk.kind {
+    Score => 14.0
+    Boost | Shield | Heart => 18.0
+  }
   let r : Float = base_r + pulse * 2.0
 
   let c : @raylib.Color = pickup_color(pk.kind)

@@ -7,7 +7,7 @@ pub(all) struct Obstacle {
   mut gap_h : Float
   mut w : Float
   mut speed : Float
-  mut kind : Int
+  mut kind : ObstacleKind
   mut phase : Float
   mut scored : Bool
 }
@@ -18,7 +18,7 @@ pub(all) struct Pickup {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut kind : Int
+  mut kind : PickupKind
   mut phase : Float
 }
 
@@ -92,7 +92,7 @@ pub fn Obstacle::new() -> Obstacle {
     gap_h: 0.0,
     w: 0.0,
     speed: 0.0,
-    kind: obstacle_kind_gate,
+    kind: Gate,
     phase: 0.0,
     scored: false,
   }
@@ -101,7 +101,7 @@ pub fn Obstacle::new() -> Obstacle {
 ///|
 /// Creates an inactive pickup with score type defaults.
 pub fn Pickup::new() -> Pickup {
-  { active: false, x: 0.0, y: 0.0, kind: pickup_score, phase: 0.0 }
+  { active: false, x: 0.0, y: 0.0, kind: Score, phase: 0.0 }
 }
 
 ///|

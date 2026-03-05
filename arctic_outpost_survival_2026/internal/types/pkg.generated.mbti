@@ -18,10 +18,6 @@ pub fn btn_right() -> (Int, Int, Int, Int)
 
 pub fn btn_up() -> (Int, Int, Int, Int)
 
-pub let bullet_normal : Int
-
-pub let bullet_pierce : Int
-
 pub fn clampf(Float, Float, Float) -> Float
 
 pub let core_r : Float
@@ -31,12 +27,6 @@ pub fn core_x() -> Float
 pub fn core_y() -> Float
 
 pub fn dist2(Float, Float, Float, Float) -> Float
-
-pub let enemy_brute : Int
-
-pub let enemy_shard : Int
-
-pub let enemy_wolf : Int
 
 pub let max_bullets : Int
 
@@ -56,15 +46,7 @@ pub let panel_w : Int
 
 pub let panel_x0 : Int
 
-pub let pickup_ammo : Int
-
-pub let pickup_fuel : Int
-
-pub let pickup_medkit : Int
-
-pub let pickup_overdrive : Int
-
-pub fn pickup_radius(Int) -> Float
+pub fn pickup_radius(PickupKind) -> Float
 
 pub let player_r : Float
 
@@ -115,9 +97,15 @@ pub(all) struct Bullet {
   mut vy : Float
   mut life : Float
   mut power : Float
-  mut kind : Int
+  mut kind : BulletKind
 }
 pub fn Bullet::new() -> Self
+
+pub(all) enum BulletKind {
+  Normal
+  Pierce
+}
+pub impl Eq for BulletKind
 
 pub(all) struct Enemy {
   mut active : Bool
@@ -127,10 +115,17 @@ pub(all) struct Enemy {
   mut vy : Float
   mut r : Float
   mut hp : Float
-  mut kind : Int
+  mut kind : EnemyKind
   mut phase : Float
 }
 pub fn Enemy::new() -> Self
+
+pub(all) enum EnemyKind {
+  Wolf
+  Brute
+  Shard
+}
+pub impl Eq for EnemyKind
 
 pub(all) struct Game {
   enemies : Array[Enemy]
@@ -195,9 +190,16 @@ pub(all) struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : ParticleKind
 }
 pub fn Particle::new() -> Self
+
+pub(all) enum ParticleKind {
+  Default
+  Damage
+  OverdriveEffect
+}
+pub impl Eq for ParticleKind
 
 pub(all) struct Pickup {
   mut active : Bool
@@ -205,10 +207,18 @@ pub(all) struct Pickup {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut kind : Int
+  mut kind : PickupKind
   mut phase : Float
 }
 pub fn Pickup::new() -> Self
+
+pub(all) enum PickupKind {
+  Fuel
+  Medkit
+  Ammo
+  Overdrive
+}
+pub impl Eq for PickupKind
 
 // Type aliases
 

@@ -34,41 +34,41 @@ fn @types.Game::stage_enemy_kind(
   game : @types.Game,
   stage : Int,
   spawned_index : Int,
-) -> Int {
+) -> @types.EnemyKind {
   let wave = stage + 1
   let roll = @types.rand_range(game, 0, 99)
   if wave < 4 {
     if roll < 70 {
-      @types.enemy_basic
+      Basic
     } else if roll < 88 {
-      @types.enemy_fast
+      Fast
     } else if roll < 96 {
-      @types.enemy_sniper
+      Sniper
     } else {
-      @types.enemy_heavy
+      Heavy
     }
   } else if wave < 10 {
     if roll < 52 {
-      @types.enemy_basic
+      Basic
     } else if roll < 72 {
-      @types.enemy_fast
+      Fast
     } else if roll < 88 {
-      @types.enemy_sniper
+      Sniper
     } else {
-      @types.enemy_heavy
+      Heavy
     }
   } else {
     let bias = (spawned_index + wave) % 6
     if bias == 0 {
-      @types.enemy_heavy
+      Heavy
     } else if roll < 36 {
-      @types.enemy_basic
+      Basic
     } else if roll < 58 {
-      @types.enemy_fast
+      Fast
     } else if roll < 80 {
-      @types.enemy_sniper
+      Sniper
     } else {
-      @types.enemy_heavy
+      Heavy
     }
   }
 }
@@ -159,7 +159,7 @@ fn @types.Game::respawn_player_tank(game : @types.Game, index : Int) -> Unit {
   player.ai_move_timer = 0.0
   player.ai_fire_timer = 0.0
   player.ai_stuck_timer = 0.0
-  player.dir = @types.dir_up
+  player.dir = Up
   player.invuln_timer = @types.player_invuln_spawn
   player.shield_timer = 0.0
   player.respawn_timer = 0.0
@@ -263,7 +263,7 @@ pub fn load_stage(game : @types.Game, stage : Int) -> Unit {
   game.stage_clear_timer = 0.0
   game.game_over_timer = 0.0
   game.campaign_clear_timer = 0.0
-  game.state = @types.state_stage_intro
+  game.state = StageIntro
 }
 
 ///|

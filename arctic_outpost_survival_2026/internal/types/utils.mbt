@@ -133,12 +133,10 @@ pub fn set_msg(game : Game, msg : String, ttl : Float) -> Unit {
 
 ///|
 /// Returns collision radius used for a pickup kind.
-pub fn pickup_radius(kind : Int) -> Float {
-  if kind == pickup_overdrive {
-    21.0
-  } else if kind == pickup_fuel {
-    19.0
-  } else {
-    17.0
+pub fn pickup_radius(kind : PickupKind) -> Float {
+  match kind {
+    Overdrive => 21.0
+    Fuel => 19.0
+    _ => 17.0
   }
 }

@@ -207,38 +207,6 @@ pub let rescue_stage_bonus : Int = 300
 pub let rescue_goal_base : Int = 5
 
 ///|
-/// Team id for no owner.
-pub let team_none : Int = 0
-
-///|
-/// Team id for player 1.
-pub let team_player1 : Int = 1
-
-///|
-/// Team id for player 2.
-pub let team_player2 : Int = 2
-
-///|
-/// Team id for enemies.
-pub let team_enemy : Int = 3
-
-///|
-/// Direction id for up.
-pub let dir_up : Int = 0
-
-///|
-/// Direction id for right.
-pub let dir_right : Int = 1
-
-///|
-/// Direction id for down.
-pub let dir_down : Int = 2
-
-///|
-/// Direction id for left.
-pub let dir_left : Int = 3
-
-///|
 /// Tile id for empty space.
 pub let tile_empty : Int = 0
 
@@ -269,74 +237,6 @@ pub let tile_base : Int = 6
 ///|
 /// Tile id for hostage camp.
 pub let tile_camp : Int = 7
-
-///|
-/// Menu state id.
-pub let state_menu : Int = 0
-
-///|
-/// Stage intro state id.
-pub let state_stage_intro : Int = 1
-
-///|
-/// Active gameplay state id.
-pub let state_playing : Int = 2
-
-///|
-/// Paused state id.
-pub let state_paused : Int = 3
-
-///|
-/// Stage clear state id.
-pub let state_stage_clear : Int = 4
-
-///|
-/// Game over state id.
-pub let state_game_over : Int = 5
-
-///|
-/// Campaign clear state id.
-pub let state_campaign_clear : Int = 6
-
-///|
-/// Enemy kind id for basic unit.
-pub let enemy_basic : Int = 0
-
-///|
-/// Enemy kind id for fast unit.
-pub let enemy_fast : Int = 1
-
-///|
-/// Enemy kind id for heavy unit.
-pub let enemy_heavy : Int = 2
-
-///|
-/// Enemy kind id for sniper unit.
-pub let enemy_sniper : Int = 3
-
-///|
-/// Powerup id for shield.
-pub let powerup_shield : Int = 0
-
-///|
-/// Powerup id for star.
-pub let powerup_star : Int = 1
-
-///|
-/// Powerup id for grenade.
-pub let powerup_grenade : Int = 2
-
-///|
-/// Powerup id for clock.
-pub let powerup_clock : Int = 3
-
-///|
-/// Powerup id for shovel.
-pub let powerup_shovel : Int = 4
-
-///|
-/// Powerup id for extra tank life.
-pub let powerup_tank : Int = 5
 
 ///|
 /// Enemy spawn point x for left lane.
@@ -393,3 +293,64 @@ pub let base_ring_x : Array[Int] = [
 pub let base_ring_y : Array[Int] = [
   22, 22, 22, 22, 23, 23, 24, 24, 25, 25, 25, 25, 24, 24,
 ]
+
+///|
+/// Cardinal movement direction.
+pub(all) enum Dir {
+  Up
+  Right
+  Down
+  Left
+} derive(Eq)
+
+///|
+/// Converts an integer to a Dir value.
+pub fn Dir::from_int(v : Int) -> Dir {
+  match v {
+    0 => Up
+    1 => Right
+    2 => Down
+    _ => Left
+  }
+}
+
+///|
+/// Identifies the variant of enemy tank.
+pub(all) enum EnemyKind {
+  Basic
+  Fast
+  Heavy
+  Sniper
+} derive(Eq)
+
+///|
+/// Identifies the type of powerup pickup.
+pub(all) enum PowerupKind {
+  Shield
+  Star
+  Grenade
+  Clock
+  Shovel
+  Tank
+} derive(Eq)
+
+///|
+/// High-level game state for the campaign state machine.
+pub(all) enum GameState {
+  Menu
+  StageIntro
+  Playing
+  Paused
+  StageClear
+  GameOver
+  CampaignClear
+} derive(Eq)
+
+///|
+/// Identifies which team owns a bullet or scores points.
+pub(all) enum Team {
+  None
+  Player1
+  Player2
+  Enemy
+} derive(Eq)

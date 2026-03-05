@@ -11,10 +11,10 @@ fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
 ///|
 fn @types.Game::spawn_bullet(
   game : @types.Game,
-  owner_team : Int,
+  owner_team : @types.Team,
   x : Float,
   y : Float,
-  dir : Int,
+  dir : @types.Dir,
   speed : Float,
   power : Int,
 ) -> Unit {
@@ -55,10 +55,10 @@ fn @types.Game::bullet_hit_enemy(
       enemy.hp -= bullet.damage
       @particles.spawn_spark_burst(game, bullet.x, bullet.y, 6)
       if enemy.hp <= 0 {
-        let team = if bullet.owner_team == @types.team_player2 {
-          @types.team_player2
+        let team : @types.Team = if bullet.owner_team == Player2 {
+          Player2
         } else {
-          @types.team_player1
+          Player1
         }
         game.destroy_enemy(i, team)
       } else {
@@ -160,7 +160,7 @@ fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
         break
       }
 
-      if bullet.owner_team == @types.team_enemy {
+      if bullet.owner_team == Enemy {
         if game.bullet_hit_player(bullet) {
           bullet.active = false
           hit_something = true

@@ -2,10 +2,10 @@
 /// Shared tank record used for players and enemies.
 pub(all) struct Tank {
   mut active : Bool
-  enemy_kind : Int
+  enemy_kind : EnemyKind
   mut x : Float
   mut y : Float
-  mut dir : Int
+  mut dir : Dir
   mut move_speed : Float
   mut hp : Int
   mut reload_timer : Float
@@ -28,10 +28,10 @@ pub(all) struct Tank {
 pub fn Tank::inactive() -> Tank {
   {
     active: false,
-    enemy_kind: enemy_basic,
+    enemy_kind: Basic,
     x: 0.0,
     y: 0.0,
-    dir: dir_up,
+    dir: Up,
     move_speed: speed_enemy_basic,
     hp: 1,
     reload_timer: 0.0,
@@ -55,10 +55,10 @@ pub fn Tank::inactive() -> Tank {
 pub fn Tank::new_player(_index : Int, spawn_x : Float, spawn_y : Float) -> Tank {
   {
     active: true,
-    enemy_kind: enemy_basic,
+    enemy_kind: Basic,
     x: spawn_x,
     y: spawn_y,
-    dir: dir_up,
+    dir: Up,
     move_speed: speed_player,
     hp: 1,
     reload_timer: 0.0,
@@ -79,22 +79,19 @@ pub fn Tank::new_player(_index : Int, spawn_x : Float, spawn_y : Float) -> Tank 
 
 ///|
 /// Creates an enemy tank configured by `kind`.
-pub fn Tank::new_enemy(kind : Int, spawn_x : Float, spawn_y : Float) -> Tank {
-  let (speed, hp, reload) = if kind == enemy_fast {
-    (speed_enemy_fast, 1, enemy_reload_base * 0.85)
-  } else if kind == enemy_heavy {
-    (speed_enemy_heavy, 4, enemy_reload_base * 1.35)
-  } else if kind == enemy_sniper {
-    (speed_enemy_sniper, 2, enemy_reload_base * 0.72)
-  } else {
-    (speed_enemy_basic, 1, enemy_reload_base)
+pub fn Tank::new_enemy(kind : EnemyKind, spawn_x : Float, spawn_y : Float) -> Tank {
+  let (speed, hp, reload) = match kind {
+    Fast => (speed_enemy_fast, 1, enemy_reload_base * 0.85)
+    Heavy => (speed_enemy_heavy, 4, enemy_reload_base * 1.35)
+    Sniper => (speed_enemy_sniper, 2, enemy_reload_base * 0.72)
+    Basic => (speed_enemy_basic, 1, enemy_reload_base)
   }
   {
     active: true,
     enemy_kind: kind,
     x: spawn_x,
     y: spawn_y,
-    dir: dir_down,
+    dir: Down,
     move_speed: speed,
     hp,
     reload_timer: 0.0,
@@ -117,7 +114,7 @@ pub fn Tank::new_enemy(kind : Int, spawn_x : Float, spawn_y : Float) -> Tank {
 /// Projectile record for fired bullets.
 pub(all) struct Bullet {
   mut active : Bool
-  mut owner_team : Int
+  mut owner_team : Team
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -133,7 +130,7 @@ pub(all) struct Bullet {
 pub fn Bullet::inactive() -> Bullet {
   {
     active: false,
-    owner_team: team_none,
+    owner_team: None,
     x: 0.0,
     y: 0.0,
     vx: 0.0,
@@ -181,7 +178,7 @@ pub fn Particle::inactive() -> Particle {
 /// Powerup record for map pickups.
 pub(all) struct Powerup {
   mut active : Bool
-  mut kind : Int
+  mut kind : PowerupKind
   mut x : Float
   mut y : Float
   mut ttl : Float
@@ -194,7 +191,7 @@ pub(all) struct Powerup {
 pub fn Powerup::inactive() -> Powerup {
   {
     active: false,
-    kind: powerup_shield,
+    kind: Shield,
     x: 0.0,
     y: 0.0,
     ttl: 0.0,
@@ -237,7 +234,7 @@ pub fn Star::new(x : Float, y : Float, speed : Float, twinkle : Float) -> Star {
 ///|
 /// Global mutable game state for Jackal-lite campaign simulation.
 pub(all) struct Game {
-  mut state : Int
+  mut state : GameState
   mut coop_enabled : Bool
   mut demo_mode : Bool
   mut demo_runs : Int
@@ -295,7 +292,7 @@ pub fn Game::new() -> Game {
   }
 
   {
-    state: state_menu,
+    state: Menu,
     coop_enabled: false,
     demo_mode: false,
     demo_runs: 0,
@@ -346,11 +343,11 @@ pub fn Game::new() -> Game {
 
 ///|
 /// Returns the team id for a player index.
-pub fn team_of_player(index : Int) -> Int {
+pub fn team_of_player(index : Int) -> Team {
   if index == 0 {
-    team_player1
+    Player1
   } else {
-    team_player2
+    Player2
   }
 }
 

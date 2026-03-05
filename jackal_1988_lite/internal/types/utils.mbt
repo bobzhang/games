@@ -123,25 +123,21 @@ pub fn tile_to_screen_y(ty : Int, shake_y : Float) -> Int {
 
 ///|
 /// Returns unit x direction for a direction id.
-pub fn dir_vector_x(dir : Int) -> Float {
-  if dir == dir_left {
-    -1.0
-  } else if dir == dir_right {
-    1.0
-  } else {
-    0.0
+pub fn dir_vector_x(dir : Dir) -> Float {
+  match dir {
+    Left => -1.0
+    Right => 1.0
+    _ => 0.0
   }
 }
 
 ///|
 /// Returns unit y direction for a direction id.
-pub fn dir_vector_y(dir : Int) -> Float {
-  if dir == dir_up {
-    -1.0
-  } else if dir == dir_down {
-    1.0
-  } else {
-    0.0
+pub fn dir_vector_y(dir : Dir) -> Float {
+  match dir {
+    Up => -1.0
+    Down => 1.0
+    _ => 0.0
   }
 }
 
@@ -188,29 +184,23 @@ pub fn is_tile_solid_for_bullet(tile : Int) -> Bool {
 
 ///|
 /// Returns score awarded for defeating an enemy kind.
-pub fn enemy_score(kind : Int) -> Int {
-  if kind == enemy_fast {
-    200
-  } else if kind == enemy_heavy {
-    400
-  } else if kind == enemy_sniper {
-    300
-  } else {
-    100
+pub fn enemy_score(kind : EnemyKind) -> Int {
+  match kind {
+    Fast => 200
+    Heavy => 400
+    Sniper => 300
+    Basic => 100
   }
 }
 
 ///|
 /// Returns display color for an enemy kind.
-pub fn enemy_color(kind : Int) -> @raylib.Color {
-  if kind == enemy_fast {
-    @raylib.orange
-  } else if kind == enemy_heavy {
-    @raylib.red
-  } else if kind == enemy_sniper {
-    @raylib.purple
-  } else {
-    @raylib.yellow
+pub fn enemy_color(kind : EnemyKind) -> @raylib.Color {
+  match kind {
+    Fast => @raylib.orange
+    Heavy => @raylib.red
+    Sniper => @raylib.purple
+    Basic => @raylib.yellow
   }
 }
 

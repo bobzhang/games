@@ -208,13 +208,11 @@ fn @types.Game::draw_core(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Maps an enemy kind to its base display color (icy-blue for wolf, steel for brute, pale cyan for shard).
-fn enemy_color(kind : Int) -> @raylib.Color {
-  if kind == @types.enemy_wolf {
-    @raylib.Color::new(180, 212, 232, 242)
-  } else if kind == @types.enemy_brute {
-    @raylib.Color::new(146, 170, 194, 248)
-  } else {
-    @raylib.Color::new(196, 240, 255, 244)
+fn enemy_color(kind : @types.EnemyKind) -> @raylib.Color {
+  match kind {
+    Wolf => @raylib.Color::new(180, 212, 232, 242)
+    Brute => @raylib.Color::new(146, 170, 194, 248)
+    Shard => @raylib.Color::new(196, 240, 255, 244)
   }
 }
 
@@ -230,7 +228,7 @@ fn draw_enemy(enemy : @types.Enemy, ox : Int, oy : Int) -> Unit {
 
   let c0 : @raylib.Color = enemy_color(enemy.kind)
 
-  if enemy.kind == @types.enemy_wolf {
+  if enemy.kind == Wolf {
     @raylib.draw_circle(x, y, enemy.r, c0)
     @raylib.draw_triangle(
       @raylib.Vector2::new(Float::from_int(x - 10), Float::from_int(y - 8)),
@@ -244,7 +242,7 @@ fn draw_enemy(enemy : @types.Enemy, ox : Int, oy : Int) -> Unit {
       @raylib.Vector2::new(Float::from_int(x + 18), Float::from_int(y - 18)),
       @raylib.Color::new(206, 232, 248, 238),
     )
-  } else if enemy.kind == @types.enemy_brute {
+  } else if enemy.kind == Brute {
     @raylib.draw_circle(
       x,
       y,
@@ -285,15 +283,12 @@ fn draw_enemy(enemy : @types.Enemy, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Maps a pickup kind to its base display color (amber for fuel, pink for medkit, sky-blue for ammo, violet for overdrive).
-fn pickup_color(kind : Int) -> @raylib.Color {
-  if kind == @types.pickup_fuel {
-    @raylib.Color::new(255, 196, 112, 244)
-  } else if kind == @types.pickup_medkit {
-    @raylib.Color::new(255, 132, 156, 244)
-  } else if kind == @types.pickup_ammo {
-    @raylib.Color::new(138, 222, 255, 244)
-  } else {
-    @raylib.Color::new(194, 142, 255, 244)
+fn pickup_color(kind : @types.PickupKind) -> @raylib.Color {
+  match kind {
+    Fuel => @raylib.Color::new(255, 196, 112, 244)
+    Medkit => @raylib.Color::new(255, 132, 156, 244)
+    Ammo => @raylib.Color::new(138, 222, 255, 244)
+    Overdrive => @raylib.Color::new(194, 142, 255, 244)
   }
 }
 
@@ -319,7 +314,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
     @raylib.Color::new(244, 250, 255, 210),
   )
 
-  if p.kind == @types.pickup_fuel {
+  if p.kind == Fuel {
     @raylib.draw_rectangle(
       x - 5,
       y - 8,
@@ -327,7 +322,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
       16,
       @raylib.Color::new(58, 38, 24, 230),
     )
-  } else if p.kind == @types.pickup_medkit {
+  } else if p.kind == Medkit {
     @raylib.draw_line(
       x - 6,
       y,
@@ -342,7 +337,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
       y + 6,
       @raylib.Color::new(250, 248, 248, 240),
     )
-  } else if p.kind == @types.pickup_ammo {
+  } else if p.kind == Ammo {
     @raylib.draw_circle(x, y, 4.0, @raylib.Color::new(22, 36, 50, 234))
   } else {
     @raylib.draw_circle_lines(
@@ -361,7 +356,7 @@ fn draw_bullet(b : @types.Bullet, ox : Int, oy : Int) -> Unit {
     return
   }
 
-  let c : @raylib.Color = if b.kind == @types.bullet_pierce {
+  let c : @raylib.Color = if b.kind == Pierce {
     @raylib.Color::new(198, 150, 255, 242)
   } else {
     @raylib.Color::new(152, 236, 255, 242)
@@ -370,7 +365,7 @@ fn draw_bullet(b : @types.Bullet, ox : Int, oy : Int) -> Unit {
   @raylib.draw_circle(
     b.x.to_int() + ox,
     b.y.to_int() + oy,
-    if b.kind == @types.bullet_pierce {
+    if b.kind == Pierce {
       5.0
     } else {
       3.5
@@ -395,12 +390,10 @@ fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
       108
     }
 
-    let c : @raylib.Color = if particle.kind == 2 {
-      @raylib.Color::new(208, 180, 255, a)
-    } else if particle.kind == 1 {
-      @raylib.Color::new(255, 160, 172, a)
-    } else {
-      @raylib.Color::new(180, 236, 255, a)
+    let c : @raylib.Color = match particle.kind {
+      OverdriveEffect => @raylib.Color::new(208, 180, 255, a)
+      Damage => @raylib.Color::new(255, 160, 172, a)
+      Default => @raylib.Color::new(180, 236, 255, a)
     }
 
     @raylib.draw_circle(

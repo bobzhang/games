@@ -35,34 +35,6 @@ pub let max_pickups : Int = 64
 pub let max_particles : Int = 1300
 
 ///|
-/// Obstacle kind id for a static gate.
-pub let obstacle_kind_gate : Int = 0
-
-///|
-/// Obstacle kind id for a beam hazard.
-pub let obstacle_kind_beam : Int = 1
-
-///|
-/// Obstacle kind id for a moving spinner hazard.
-pub let obstacle_kind_spinner : Int = 2
-
-///|
-/// Pickup kind id for raw score bonus.
-pub let pickup_score : Int = 0
-
-///|
-/// Pickup kind id for boost refill.
-pub let pickup_boost : Int = 1
-
-///|
-/// Pickup kind id for temporary shield.
-pub let pickup_shield : Int = 2
-
-///|
-/// Pickup kind id for extra life.
-pub let pickup_heart : Int = 3
-
-///|
 /// Left x coordinate of the side panel.
 pub let panel_x0 : Int = 1180
 
@@ -121,3 +93,20 @@ pub fn btn_restart_rect() -> (Int, Int, Int, Int) {
 pub fn btn_hint_rect() -> (Int, Int, Int, Int) {
   (1250, 876, 188, 74)
 }
+
+///|
+/// Kind of obstacle in the scrolling world.
+pub(all) enum ObstacleKind {
+  Gate
+  Beam
+  Spinner
+} derive(Eq)
+
+///|
+/// Kind of collectible pickup item.
+pub(all) enum PickupKind {
+  Score
+  Boost
+  Shield
+  Heart
+} derive(Eq)

@@ -95,7 +95,7 @@ fn @types.Game::clear_world(game : @types.Game) -> Unit {
     obstacle.gap_h = 0.0
     obstacle.w = 0.0
     obstacle.speed = 0.0
-    obstacle.kind = @types.obstacle_kind_gate
+    obstacle.kind = Gate
     obstacle.phase = 0.0
     obstacle.scored = false
   }
@@ -104,7 +104,7 @@ fn @types.Game::clear_world(game : @types.Game) -> Unit {
     pickup.active = false
     pickup.x = 0.0
     pickup.y = 0.0
-    pickup.kind = @types.pickup_score
+    pickup.kind = Score
     pickup.phase = 0.0
   }
 }
@@ -194,11 +194,11 @@ fn @types.Game::spawn_obstacle(game : @types.Game) -> Bool {
 
     let roll : Int = @raylib.get_random_value(0, 99)
     obstacle.kind = if roll < 62 {
-      @types.obstacle_kind_gate
+      Gate
     } else if roll < 86 {
-      @types.obstacle_kind_beam
+      Beam
     } else {
-      @types.obstacle_kind_spinner
+      Spinner
     }
 
     obstacle.phase = @types.randf(0.0, 6.28)
@@ -227,13 +227,13 @@ fn @types.Game::spawn_pickup(game : @types.Game) -> Bool {
 
     let roll : Int = @raylib.get_random_value(0, 99)
     pickup.kind = if roll < 56 {
-      @types.pickup_score
+      Score
     } else if roll < 78 {
-      @types.pickup_boost
+      Boost
     } else if roll < 93 {
-      @types.pickup_shield
+      Shield
     } else {
-      @types.pickup_heart
+      Heart
     }
 
     pickup.phase = @types.randf(0.0, 6.28)
@@ -315,7 +315,10 @@ fn point_hits_pickup(
     return false
   }
 
-  let r : Float = if pk.kind == @types.pickup_score { 16.0 } else { 20.0 }
+  let r : Float = match pk.kind {
+    Score => 16.0
+    Boost | Shield | Heart => 20.0
+  }
   let dx : Float = px - pk.x
   let dy : Float = py - pk.y
   dx * dx + dy * dy <= (pr + r) * (pr + r)
@@ -359,23 +362,28 @@ fn @types.Game::collect_pickup(game : @types.Game, i : Int) -> Unit {
     return
   }
 
-  let kind : Int = game.pickups[i].kind
+  let kind : @types.PickupKind = game.pickups[i].kind
   game.pickups[i].active = false
 
   game.burst(game.px, game.py, 14, 1)
 
-  if kind == @types.pickup_score {
-    game.score = game.score + 90 + game.level * 4
-    @types.set_msg(game, "+Score", 0.6)
-  } else if kind == @types.pickup_boost {
-    game.boost_meter = @types.clampf(game.boost_meter + 0.44, 0.0, 1.0)
-    @types.set_msg(game, "Boost refilled", 0.7)
-  } else if kind == @types.pickup_shield {
-    game.shield_t = 6.0
-    @types.set_msg(game, "Shield online", 0.8)
-  } else {
-    game.lives = (5).min(game.lives + 1)
-    @types.set_msg(game, "+1 life", 0.8)
+  match kind {
+    Score => {
+      game.score = game.score + 90 + game.level * 4
+      @types.set_msg(game, "+Score", 0.6)
+    }
+    Boost => {
+      game.boost_meter = @types.clampf(game.boost_meter + 0.44, 0.0, 1.0)
+      @types.set_msg(game, "Boost refilled", 0.7)
+    }
+    Shield => {
+      game.shield_t = 6.0
+      @types.set_msg(game, "Shield online", 0.8)
+    }
+    Heart => {
+      game.lives = (5).min(game.lives + 1)
+      @types.set_msg(game, "+1 life", 0.8)
+    }
   }
 
   if game.score > game.best_score {
