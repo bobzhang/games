@@ -97,11 +97,11 @@ fn reset_player(player : @types.Player) -> Unit {
 
 ///|
 fn @types.Game::alloc_enemy(game : @types.Game) -> Int {
-  for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
-      return i
+  for i, slot in game.enemies {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   let mut best = 0
   let mut best_hp = game.enemies[0].hp
   for i in 1..<game.enemies.length() {
@@ -111,15 +111,16 @@ fn @types.Game::alloc_enemy(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
-  for i in 0..<game.bullets.length() {
-    if not(game.bullets[i].active) {
-      return i
+  for i, slot in game.bullets {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   let mut best = 0
   let mut best_life = game.bullets[0].life
   for i in 1..<game.bullets.length() {
@@ -129,15 +130,16 @@ fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 fn @types.Game::alloc_enemy_bullet(game : @types.Game) -> Int {
-  for i in 0..<game.enemy_bullets.length() {
-    if not(game.enemy_bullets[i].active) {
-      return i
+  for i, slot in game.enemy_bullets {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   let mut best = 0
   let mut best_life = game.enemy_bullets[0].life
   for i in 1..<game.enemy_bullets.length() {
@@ -147,15 +149,16 @@ fn @types.Game::alloc_enemy_bullet(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 fn @types.Game::alloc_flare(game : @types.Game) -> Int {
-  for i in 0..<game.flares.length() {
-    if not(game.flares[i].active) {
-      return i
+  for i, slot in game.flares {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   let mut best = 0
   let mut best_t = game.flares[0].t
   for i in 1..<game.flares.length() {
@@ -165,15 +168,16 @@ fn @types.Game::alloc_flare(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 fn @types.Game::alloc_particle(game : @types.Game) -> Int {
-  for i in 0..<game.particles.length() {
-    if not(game.particles[i].active) {
-      return i
+  for i, slot in game.particles {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   let mut best = 0
   let mut best_life = game.particles[0].life
   for i in 1..<game.particles.length() {
@@ -183,15 +187,16 @@ fn @types.Game::alloc_particle(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 fn @types.Game::alloc_shock(game : @types.Game) -> Int {
-  for i in 0..<game.shocks.length() {
-    if not(game.shocks[i].active) {
-      return i
+  for i, slot in game.shocks {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   let mut best = 0
   let mut best_life = game.shocks[0].life
   for i in 1..<game.shocks.length() {
@@ -201,6 +206,7 @@ fn @types.Game::alloc_shock(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
