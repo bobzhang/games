@@ -110,11 +110,11 @@ fn @types.Game::reset_hero(game : @types.Game) -> Unit {
 ///|
 /// Returns the index of a free foe slot, or the slot with the shortest remaining life if the pool is full.
 fn @types.Game::alloc_foe(game : @types.Game) -> Int {
-  for i in 0..<game.foes.length() {
-    if not(game.foes[i].active) {
-      return i
+  for i, slot in game.foes {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.foes[0].life
@@ -125,16 +125,17 @@ fn @types.Game::alloc_foe(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 /// Returns the index of a free bolt slot, or the slot with the shortest remaining life if the pool is full.
 fn @types.Game::alloc_bolt(game : @types.Game) -> Int {
-  for i in 0..<game.bolts.length() {
-    if not(game.bolts[i].active) {
-      return i
+  for i, slot in game.bolts {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.bolts[0].life
@@ -145,16 +146,17 @@ fn @types.Game::alloc_bolt(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 /// Returns the index of a free spark slot, or the slot with the shortest remaining life if the pool is full.
 fn @types.Game::alloc_spark(game : @types.Game) -> Int {
-  for i in 0..<game.sparks.length() {
-    if not(game.sparks[i].active) {
-      return i
+  for i, slot in game.sparks {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.sparks[0].life
@@ -165,16 +167,17 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 /// Returns the index of a free ring slot, or the slot with the shortest remaining life if the pool is full.
 fn @types.Game::alloc_ring(game : @types.Game) -> Int {
-  for i in 0..<game.rings.length() {
-    if not(game.rings[i].active) {
-      return i
+  for i, slot in game.rings {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.rings[0].life
@@ -185,16 +188,17 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 /// Returns the index of a free echo slot, or the slot with the shortest remaining life if the pool is full.
 fn @types.Game::alloc_echo(game : @types.Game) -> Int {
-  for i in 0..<game.echoes.length() {
-    if not(game.echoes[i].active) {
-      return i
+  for i, slot in game.echoes {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.echoes[0].life
@@ -205,6 +209,7 @@ fn @types.Game::alloc_echo(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
