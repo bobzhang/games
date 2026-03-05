@@ -31,34 +31,6 @@ pub let max_segments : Int = max_cells
 pub let max_rivals : Int = 2
 
 ///|
-/// Title-screen state id.
-pub let state_title : Int = 0
-
-///|
-/// Active match state id.
-pub let state_play : Int = 1
-
-///|
-/// Result-screen state id.
-pub let state_result : Int = 2
-
-///|
-/// Direction id for left movement.
-pub let dir_left : Int = 0
-
-///|
-/// Direction id for right movement.
-pub let dir_right : Int = 1
-
-///|
-/// Direction id for upward movement.
-pub let dir_up : Int = 2
-
-///|
-/// Direction id for downward movement.
-pub let dir_down : Int = 3
-
-///|
 /// Food kind id for regular food.
 pub let food_normal : Int = 0
 
@@ -151,3 +123,20 @@ pub fn btn_restart() -> (Int, Int, Int, Int) {
 pub fn btn_hint() -> (Int, Int, Int, Int) {
   (1530, 590, 154, 82)
 }
+
+///|
+/// Cardinal movement direction for snakes.
+pub(all) enum Dir {
+  Left
+  Right
+  Up
+  Down
+} derive(Eq)
+
+///|
+/// Top-level game screen state.
+pub(all) enum GameState {
+  Title
+  Play
+  Result
+} derive(Eq)

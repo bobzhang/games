@@ -4,7 +4,7 @@ pub(all) struct UndoStep {
   valid : Bool
   x : Int
   y : Int
-  prev_state : Int
+  prev_state : Cell
   prev_mistakes : Int
   prev_filled_correct : Int
   prev_filled_wrong : Int
@@ -29,14 +29,14 @@ pub(all) struct Spark {
 /// Full mutable campaign and level runtime state.
 pub(all) struct Game {
   solution : Array[Bool]
-  cells : Array[Int]
+  cells : Array[Cell]
   row_clues : Array[Int]
   row_clue_counts : Array[Int]
   col_clues : Array[Int]
   col_clue_counts : Array[Int]
   undo : Array[UndoStep]
   sparks : Array[Spark]
-  mut state : Int
+  mut state : GameState
   mut level_index : Int
   level_count : Int
   mut level_name : String
@@ -46,7 +46,7 @@ pub(all) struct Game {
   mut grid_h : Int
   mut cursor_x : Int
   mut cursor_y : Int
-  mut tool_mode : Int
+  mut tool_mode : ToolKind
   mut level_time : Float
   mut mistakes : Int
   mut hints_left : Int
@@ -65,7 +65,7 @@ pub(all) struct Game {
   mut message_t : Float
   mut shake_t : Float
   mut ui_t : Float
-  mut hold_dir : Int
+  mut hold_dir : Dir
   mut move_repeat_t : Float
   mut touch_action_cd : Float
   mut mouse_x : Float
@@ -83,7 +83,7 @@ pub fn Game::new() -> Game {
       valid: false,
       x: 0,
       y: 0,
-      prev_state: cell_unknown,
+      prev_state: Unknown,
       prev_mistakes: 0,
       prev_filled_correct: 0,
       prev_filled_wrong: 0,
@@ -107,14 +107,14 @@ pub fn Game::new() -> Game {
 
   {
     solution: Array::make(max_cells, false),
-    cells: Array::make(max_cells, cell_unknown),
+    cells: Array::make(max_cells, Unknown),
     row_clues: Array::make(max_cells, 0),
     row_clue_counts: Array::make(max_board, 0),
     col_clues: Array::make(max_cells, 0),
     col_clue_counts: Array::make(max_board, 0),
     undo: undo_arr,
     sparks: sparks_arr,
-    state: state_title,
+    state: Title,
     level_index: 0,
     level_count: 12,
     level_name: "",
@@ -124,7 +124,7 @@ pub fn Game::new() -> Game {
     grid_h: 0,
     cursor_x: 0,
     cursor_y: 0,
-    tool_mode: tool_fill,
+    tool_mode: ToolFill,
     level_time: 0.0,
     mistakes: 0,
     hints_left: 3,
@@ -143,7 +143,7 @@ pub fn Game::new() -> Game {
     message_t: 0.0,
     shake_t: 0.0,
     ui_t: 0.0,
-    hold_dir: dir_none,
+    hold_dir: None,
     move_repeat_t: 0.0,
     touch_action_cd: 0.0,
     mouse_x: 0.0,

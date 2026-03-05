@@ -358,7 +358,7 @@ fn draw_touch_button(
 
 ///|
 fn @types.Game::draw_controls(game : @types.Game) -> Unit {
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
 
@@ -816,7 +816,7 @@ fn @types.Game::rival_total_score(game : @types.Game) -> Int {
 pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_bg()
 
-  if game.state == @types.state_title {
+  if game.state == Title {
     game.draw_title()
     return
   }
@@ -838,7 +838,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_panel()
   game.draw_controls()
 
-  if game.state == @types.state_result {
+  if game.state == Result {
     game.draw_result_overlay()
   }
 }

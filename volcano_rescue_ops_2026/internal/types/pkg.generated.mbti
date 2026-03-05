@@ -12,16 +12,6 @@ pub fn coolant_button_rect() -> (Int, Int, Int, Int)
 
 pub fn current_goal_progress(Game) -> String
 
-pub let dir_down : Int
-
-pub let dir_left : Int
-
-pub let dir_none : Int
-
-pub let dir_right : Int
-
-pub let dir_up : Int
-
 pub fn dpad_center_x() -> Int
 
 pub fn dpad_center_y() -> Int
@@ -86,19 +76,13 @@ pub fn pointer_on_rect(Float, Float, Bool, Int, Int, Int, Int, Int) -> Bool
 
 pub fn restart_button_rect() -> (Int, Int, Int, Int)
 
-pub let result_lose : Int
-
 pub fn result_next_button_rect() -> (Int, Int, Int, Int)
-
-pub let result_none : Int
 
 pub fn result_restart_button_rect() -> (Int, Int, Int, Int)
 
-pub let result_win : Int
+pub fn route_dx(Dir) -> Int
 
-pub fn route_dx(Int) -> Int
-
-pub fn route_dy(Int) -> Int
+pub fn route_dy(Dir) -> Int
 
 pub fn sample_pointer(Float, Float, Bool, Int) -> (Bool, Float, Float)
 
@@ -106,25 +90,11 @@ pub let screen_h : Int
 
 pub let screen_w : Int
 
-pub let state_play : Int
-
-pub let state_result : Int
-
-pub let state_title : Int
-
 pub let step_interval : Float
 
 pub let target_fps : Int
 
-pub fn tile_at(Game, Int, Int) -> Int
-
-pub let tile_depot : Int
-
-pub let tile_ground : Int
-
-pub let tile_rock : Int
-
-pub let tile_shelter : Int
+pub fn tile_at(Game, Int, Int) -> Tile
 
 pub let tile_size : Int
 
@@ -145,11 +115,20 @@ pub(all) struct CivilianSite {
 }
 pub fn CivilianSite::new() -> Self
 
+pub(all) enum Dir {
+  None
+  Up
+  Down
+  Left
+  Right
+}
+pub impl Eq for Dir
+
 pub(all) struct Game {
-  terrain : Array[Int]
+  terrain : Array[Tile]
   lava : Array[Bool]
   lava_buf : Array[Bool]
-  route : Array[Int]
+  route : Array[Dir]
   sites : Array[CivilianSite]
   mut route_len : Int
   mut route_running : Bool
@@ -174,8 +153,8 @@ pub(all) struct Game {
   mut mission_time : Float
   mut mission_limit : Float
   mut level_index : Int
-  mut state : Int
-  mut result : Int
+  mut state : GameState
+  mut result : GameResult
   mut ui_t : Float
   mut msg : String
   mut msg_t : Float
@@ -190,6 +169,28 @@ pub(all) struct Game {
   mut touch_count : Int
 }
 pub fn Game::new() -> Self
+
+pub(all) enum GameResult {
+  None
+  Win
+  Lose
+}
+pub impl Eq for GameResult
+
+pub(all) enum GameState {
+  Title
+  Play
+  Result
+}
+pub impl Eq for GameState
+
+pub(all) enum Tile {
+  Ground
+  Rock
+  Depot
+  Shelter
+}
+pub impl Eq for Tile
 
 // Type aliases
 

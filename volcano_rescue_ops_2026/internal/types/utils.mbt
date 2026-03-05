@@ -24,11 +24,11 @@ pub fn in_bounds(x : Int, y : Int) -> Bool {
 
 ///|
 /// Returns terrain id at `(x, y)`, treating out-of-bounds as rock.
-pub fn tile_at(game : Game, x : Int, y : Int) -> Int {
+pub fn tile_at(game : Game, x : Int, y : Int) -> Tile {
   if in_bounds(x, y) {
     game.terrain[cell_index(x, y)]
   } else {
-    tile_rock
+    Rock
   }
 }
 
@@ -44,25 +44,21 @@ pub fn lava_at(game : Game, x : Int, y : Int) -> Bool {
 
 ///|
 /// Returns x-direction delta for a route direction id.
-pub fn route_dx(dir : Int) -> Int {
-  if dir == dir_left {
-    -1
-  } else if dir == dir_right {
-    1
-  } else {
-    0
+pub fn route_dx(dir : Dir) -> Int {
+  match dir {
+    Left => -1
+    Right => 1
+    _ => 0
   }
 }
 
 ///|
 /// Returns y-direction delta for a route direction id.
-pub fn route_dy(dir : Int) -> Int {
-  if dir == dir_up {
-    -1
-  } else if dir == dir_down {
-    1
-  } else {
-    0
+pub fn route_dy(dir : Dir) -> Int {
+  match dir {
+    Up => -1
+    Down => 1
+    _ => 0
   }
 }
 
@@ -93,7 +89,7 @@ pub fn level_title(index : Int) -> String {
 ///|
 /// Returns localized mission result text from game state.
 pub fn mission_result_label(game : Game) -> String {
-  if game.result == result_win {
+  if game.result == Win {
     "Mission Successful"
   } else {
     "Mission Failed"

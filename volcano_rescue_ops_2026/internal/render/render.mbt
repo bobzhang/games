@@ -76,16 +76,13 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
 fn @types.Game::draw_cell_base(game : @types.Game, x : Int, y : Int) -> Unit {
   let px : Int = cell_screen_x(x)
   let py : Int = cell_screen_y(y)
-  let t : Int = @types.tile_at(game, x, y)
+  let t : @types.Tile = @types.tile_at(game, x, y)
 
-  let base : @raylib.Color = if t == @types.tile_rock {
-    @raylib.Color::new(52, 52, 58, 255)
-  } else if t == @types.tile_depot {
-    @raylib.Color::new(48, 86, 118, 255)
-  } else if t == @types.tile_shelter {
-    @raylib.Color::new(56, 108, 80, 255)
-  } else {
-    @raylib.Color::new(98, 70, 54, 255)
+  let base : @raylib.Color = match t {
+    Rock => @raylib.Color::new(52, 52, 58, 255)
+    Depot => @raylib.Color::new(48, 86, 118, 255)
+    Shelter => @raylib.Color::new(56, 108, 80, 255)
+    _ => @raylib.Color::new(98, 70, 54, 255)
   }
 
   @raylib.draw_rectangle(px, py, @types.tile_size, @types.tile_size, base)
@@ -224,7 +221,7 @@ fn @types.Game::draw_route_preview(game : @types.Game) -> Unit {
   let mut py : Int = cell_center_y(y)
 
   for i in 0..<game.route_len {
-    let dir : Int = game.route[i]
+    let dir : @types.Dir = game.route[i]
     x = x + @types.route_dx(dir)
     y = y + @types.route_dy(dir)
 
@@ -775,7 +772,7 @@ fn @types.Game::draw_result_scene(game : @types.Game) -> Unit {
     174,
     panel_wide,
     512,
-    if game.result == @types.result_win {
+    if game.result == Win {
       @raylib.Color::new(156, 228, 168, 180)
     } else {
       @raylib.Color::new(240, 130, 102, 180)
@@ -786,7 +783,7 @@ fn @types.Game::draw_result_scene(game : @types.Game) -> Unit {
     @types.mission_result_label(game),
     232,
     66,
-    if game.result == @types.result_win {
+    if game.result == Win {
       @raylib.Color::new(192, 248, 204, 250)
     } else {
       @raylib.Color::new(255, 184, 164, 250)
@@ -849,7 +846,7 @@ fn @types.Game::draw_result_scene(game : @types.Game) -> Unit {
     @raylib.Color::new(176, 88, 78, 236),
   )
 
-  let can_next : Bool = game.result == @types.result_win
+  let can_next : Bool = game.result == Win
   draw_button(
     if @types.has_next_level(game) {
       "NEXT"
@@ -918,9 +915,9 @@ fn @types.Game::draw_message(game : @types.Game) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_bg()
 
-  if game.state == @types.state_title {
+  if game.state == Title {
     game.draw_title_scene()
-  } else if game.state == @types.state_play {
+  } else if game.state == Play {
     game.draw_play_scene()
   } else {
     game.draw_result_scene()

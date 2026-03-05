@@ -177,7 +177,7 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
       let py : Int = board_y + y * tile
 
       let sol : Bool = @types.solution_at(game, x, y)
-      let state : Int = @types.cell_at(game, x, y)
+      let state : @types.Cell = @types.cell_at(game, x, y)
 
       let mut bg : @raylib.Color = @raylib.Color::new(28, 34, 45, 255)
       if (x + y) % 2 == 0 {
@@ -186,7 +186,7 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
 
       @raylib.draw_rectangle(px, py, tile, tile, bg)
 
-      if state == @types.cell_fill {
+      if state == Fill {
         @raylib.draw_rectangle(
           px + 3,
           py + 3,
@@ -209,7 +209,7 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
             @raylib.Color::new(255, 190, 182, 240)
           },
         )
-      } else if state == @types.cell_cross {
+      } else if state == Cross {
         let cc : @raylib.Color = if sol {
           @raylib.Color::new(244, 122, 108, 242)
         } else {
@@ -248,7 +248,7 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
     }
   }
 
-  if game.state == @types.state_play {
+  if game.state == Play {
     let cx : Int = board_x + game.cursor_x * tile
     let cy : Int = board_y + game.cursor_y * tile
     @raylib.draw_rectangle_lines_ex(
@@ -502,7 +502,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     fy,
     fw,
     fh,
-    game.tool_mode == @types.tool_fill,
+    game.tool_mode == ToolFill,
     @raylib.Color::new(66, 154, 202, 236),
   )
   draw_button(
@@ -511,7 +511,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     cy,
     cw,
     ch,
-    game.tool_mode == @types.tool_cross,
+    game.tool_mode == ToolCross,
     @raylib.Color::new(158, 116, 76, 236),
   )
   draw_button(
@@ -1037,7 +1037,7 @@ fn @types.Game::draw_campaign_clear_overlay(game : @types.Game) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_bg()
 
-  if game.state == @types.state_title {
+  if game.state == Title {
     game.draw_title_screen()
     return
   }
@@ -1046,11 +1046,11 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_side_panel()
   game.draw_touch_controls()
 
-  if game.state == @types.state_level_clear {
+  if game.state == LevelClear {
     game.draw_level_clear_overlay()
-  } else if game.state == @types.state_campaign_clear {
+  } else if game.state == CampaignClear {
     game.draw_campaign_clear_overlay()
-  } else if game.state == @types.state_level_fail {
+  } else if game.state == LevelFail {
     game.draw_level_fail_overlay()
   }
 }

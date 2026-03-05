@@ -35,66 +35,6 @@ pub let max_route_steps : Int = 96
 pub let level_count : Int = 3
 
 ///|
-/// State id used for the title screen.
-pub let state_title : Int = 0
-
-///|
-/// State id used for active gameplay.
-pub let state_play : Int = 1
-
-///|
-/// State id used for the result screen.
-pub let state_result : Int = 2
-
-///|
-/// Result id used when mission outcome is undecided.
-pub let result_none : Int = 0
-
-///|
-/// Result id used when mission succeeds.
-pub let result_win : Int = 1
-
-///|
-/// Result id used when mission fails.
-pub let result_lose : Int = 2
-
-///|
-/// Terrain id for traversable ground.
-pub let tile_ground : Int = 0
-
-///|
-/// Terrain id for blocked rock tiles.
-pub let tile_rock : Int = 1
-
-///|
-/// Terrain id for the vehicle depot tile.
-pub let tile_depot : Int = 2
-
-///|
-/// Terrain id for the evacuation shelter tile.
-pub let tile_shelter : Int = 3
-
-///|
-/// Route direction id for no movement.
-pub let dir_none : Int = 0
-
-///|
-/// Route direction id for upward movement.
-pub let dir_up : Int = 1
-
-///|
-/// Route direction id for downward movement.
-pub let dir_down : Int = 2
-
-///|
-/// Route direction id for left movement.
-pub let dir_left : Int = 3
-
-///|
-/// Route direction id for right movement.
-pub let dir_right : Int = 4
-
-///|
 /// X-coordinate of the map origin in screen pixels.
 pub let map_x : Int = 44
 
@@ -141,3 +81,35 @@ pub let move_heat_gain : Float = 4.8
 ///|
 /// Time interval between route steps, in seconds.
 pub let step_interval : Float = 0.22
+
+
+///|
+pub(all) enum Dir {
+  None
+  Up
+  Down
+  Left
+  Right
+} derive(Eq)
+
+///|
+pub(all) enum GameResult {
+  None
+  Win
+  Lose
+} derive(Eq)
+
+///|
+pub(all) enum GameState {
+  Title
+  Play
+  Result
+} derive(Eq)
+
+///|
+pub(all) enum Tile {
+  Ground
+  Rock
+  Depot
+  Shelter
+} derive(Eq)

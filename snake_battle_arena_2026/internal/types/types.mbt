@@ -16,8 +16,8 @@ pub(all) struct Spark {
 pub(all) struct Rival {
   mut alive : Bool
   mut len : Int
-  mut dir : Int
-  mut next_dir : Int
+  mut dir : Dir
+  mut next_dir : Dir
   mut grow : Int
   mut score : Int
   mut deaths : Int
@@ -34,8 +34,8 @@ pub(all) struct Game {
   sparks : Array[Spark]
   mut p_alive : Bool
   mut p_len : Int
-  mut p_dir : Int
-  mut p_next_dir : Int
+  mut p_dir : Dir
+  mut p_next_dir : Dir
   mut p_grow : Int
   rivals : Array[Rival]
   mut food_x : Int
@@ -46,7 +46,7 @@ pub(all) struct Game {
   mut trap_active : Bool
   mut trap_ttl : Float
   mut trap_flash : Float
-  mut state : Int
+  mut state : GameState
   mut score : Int
   mut best_score : Int
   mut lives : Int
@@ -95,14 +95,14 @@ pub fn Rival::new(kind : Int) -> Rival {
     alive: true,
     len: 4,
     dir: if kind % 2 == 0 {
-      dir_left
+      Left
     } else {
-      dir_right
+      Right
     },
     next_dir: if kind % 2 == 0 {
-      dir_left
+      Left
     } else {
-      dir_right
+      Right
     },
     grow: 0,
     score: 0,
@@ -122,8 +122,8 @@ pub fn Game::new() -> Game {
     sparks: Array::makei(1300, fn(_i) { Spark::new() }),
     p_alive: true,
     p_len: 5,
-    p_dir: dir_right,
-    p_next_dir: dir_right,
+    p_dir: Right,
+    p_next_dir: Right,
     p_grow: 0,
     rivals: Array::makei(max_rivals, fn(i) { Rival::new(i) }),
     food_x: 0,
@@ -134,7 +134,7 @@ pub fn Game::new() -> Game {
     trap_active: false,
     trap_ttl: 0.0,
     trap_flash: 0.0,
-    state: state_title,
+    state: Title,
     score: 0,
     best_score: 0,
     lives: lives_default,

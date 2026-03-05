@@ -117,24 +117,24 @@ fn detect_dir_press(
   mouse_y : Float,
   mouse_press : Bool,
   touch_count : Int,
-) -> Int {
-  let mut dir : Int = @types.dir_none
+) -> @types.Dir {
+  let mut dir : @types.Dir = None
 
   if @raylib.is_key_pressed(@raylib.KeyUp) ||
     @raylib.is_key_pressed(@raylib.KeyW) {
-    dir = @types.dir_up
+    dir = Up
   }
   if @raylib.is_key_pressed(@raylib.KeyDown) ||
     @raylib.is_key_pressed(@raylib.KeyS) {
-    dir = @types.dir_down
+    dir = Down
   }
   if @raylib.is_key_pressed(@raylib.KeyLeft) ||
     @raylib.is_key_pressed(@raylib.KeyA) {
-    dir = @types.dir_left
+    dir = Left
   }
   if @raylib.is_key_pressed(@raylib.KeyRight) ||
     @raylib.is_key_pressed(@raylib.KeyD) {
-    dir = @types.dir_right
+    dir = Right
   }
 
   let up = @types.dpad_up_rect()
@@ -148,7 +148,7 @@ fn detect_dir_press(
       up.2,
       up.3,
     ) {
-    dir = @types.dir_up
+    dir = Up
   }
 
   let down = @types.dpad_down_rect()
@@ -162,7 +162,7 @@ fn detect_dir_press(
       down.2,
       down.3,
     ) {
-    dir = @types.dir_down
+    dir = Down
   }
 
   let left = @types.dpad_left_rect()
@@ -176,7 +176,7 @@ fn detect_dir_press(
       left.2,
       left.3,
     ) {
-    dir = @types.dir_left
+    dir = Left
   }
 
   let right = @types.dpad_right_rect()
@@ -190,7 +190,7 @@ fn detect_dir_press(
       right.2,
       right.3,
     ) {
-    dir = @types.dir_right
+    dir = Right
   }
 
   dir

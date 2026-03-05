@@ -3,7 +3,7 @@
 fn @types.Game::clear_solution_and_cells(game : @types.Game) -> Unit {
   for i in 0..<@types.max_cells {
     game.solution[i] = false
-    game.cells[i] = @types.cell_unknown
+    game.cells[i] = Unknown
     game.row_clues[i] = 0
     game.col_clues[i] = 0
   }
@@ -23,7 +23,7 @@ fn @types.Game::clear_undo(game : @types.Game) -> Unit {
       valid: false,
       x: 0,
       y: 0,
-      prev_state: @types.cell_unknown,
+      prev_state: Unknown,
       prev_mistakes: 0,
       prev_filled_correct: 0,
       prev_filled_wrong: 0,
@@ -50,8 +50,8 @@ fn @types.Game::clear_sparks(game : @types.Game) -> Unit {
 
 ///|
 /// Returns 1 if the cell is filled and the solution requires it to be filled, otherwise 0.
-fn contribution_correct(cell_state : Int, sol : Bool) -> Int {
-  if cell_state == @types.cell_fill {
+fn contribution_correct(cell_state : @types.Cell, sol : Bool) -> Int {
+  if cell_state == Fill {
     if sol {
       1
     } else {
@@ -64,8 +64,8 @@ fn contribution_correct(cell_state : Int, sol : Bool) -> Int {
 
 ///|
 /// Returns 1 if the cell is filled but the solution requires it to be empty, otherwise 0.
-fn contribution_wrong(cell_state : Int, sol : Bool) -> Int {
-  if cell_state == @types.cell_fill {
+fn contribution_wrong(cell_state : @types.Cell, sol : Bool) -> Int {
+  if cell_state == Fill {
     if not(sol) {
       1
     } else {
@@ -191,7 +191,7 @@ fn @types.Game::apply_level_rows(
     for x in 0..<game.grid_w {
       let filled : Bool = x < row.length() && row[x] != 0
       @types.set_solution(game, x, y, filled)
-      @types.set_cell(game, x, y, @types.cell_unknown)
+      @types.set_cell(game, x, y, Unknown)
       if filled {
         game.solution_total = game.solution_total + 1
       }
@@ -202,7 +202,7 @@ fn @types.Game::apply_level_rows(
 
   game.cursor_x = game.grid_w / 2
   game.cursor_y = game.grid_h / 2
-  game.tool_mode = @types.tool_fill
+  game.tool_mode = ToolFill
 
   game.level_time = 0.0
   game.mistakes = 0
@@ -215,7 +215,7 @@ fn @types.Game::apply_level_rows(
   game.message = ""
   game.message_t = 0.0
   game.shake_t = 0.0
-  game.hold_dir = @types.dir_none
+  game.hold_dir = None
   game.move_repeat_t = 0.0
   game.touch_action_cd = 0.0
 }
@@ -349,7 +349,7 @@ fn @types.Game::finalize_level_success(game : @types.Game) -> Unit {
 ///|
 /// Finalizes a solved puzzle: scores the run, triggers a spark burst on all filled cells, and transitions to the level-clear or campaign-clear state.
 fn @types.Game::complete_level(game : @types.Game) -> Unit {
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
 
@@ -367,27 +367,27 @@ fn @types.Game::complete_level(game : @types.Game) -> Unit {
   }
 
   if game.level_index + 1 >= game.level_count {
-    game.state = @types.state_campaign_clear
+    game.state = CampaignClear
   } else {
-    game.state = @types.state_level_clear
+    game.state = LevelClear
   }
 }
 
 ///|
 /// Triggers a level failure: sets the fail state, shows a shake effect, and bursts sparks on every incorrectly filled cell.
 fn @types.Game::fail_level(game : @types.Game) -> Unit {
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
 
   game.message = "Too many mistakes"
   game.message_t = 1.2
   game.shake_t = 0.3
-  game.state = @types.state_level_fail
+  game.state = LevelFail
 
   for y in 0..<game.grid_h {
     for x in 0..<game.grid_w {
-      if @types.cell_at(game, x, y) == @types.cell_fill &&
+      if @types.cell_at(game, x, y) == Fill &&
         not(@types.solution_at(game, x, y)) {
         game.burst_cell(x, y, 10, 2)
       }
@@ -401,12 +401,12 @@ fn @types.Game::apply_cell_state(
   game : @types.Game,
   x : Int,
   y : Int,
-  new_state : Int,
+  new_state : @types.Cell,
   count_mistake : Bool,
   consume_hint : Bool,
   spark_kind : Int,
 ) -> Bool {
-  if game.state != @types.state_play {
+  if game.state != Play {
     return false
   }
 
@@ -415,7 +415,7 @@ fn @types.Game::apply_cell_state(
   }
 
   let idx : Int = @types.board_index(x, y)
-  let prev_state : Int = game.cells[idx]
+  let prev_state : @types.Cell = game.cells[idx]
   if prev_state == new_state {
     return false
   }
@@ -446,16 +446,16 @@ fn @types.Game::apply_cell_state(
   game.filled_wrong = game.filled_wrong + contribution_wrong(new_state, sol)
 
   if count_mistake {
-    if new_state == @types.cell_fill &&
+    if new_state == Fill &&
       not(sol) &&
-      prev_state != @types.cell_fill {
+      prev_state != Fill {
       game.mistakes = game.mistakes + 1
       game.message = "Wrong fill"
       game.message_t = 0.8
       game.shake_t = 0.1
-    } else if new_state == @types.cell_cross &&
+    } else if new_state == Cross &&
       sol &&
-      prev_state != @types.cell_cross {
+      prev_state != Cross {
       game.mistakes = game.mistakes + 1
       game.message = "Marked a required cell"
       game.message_t = 0.9
@@ -487,27 +487,27 @@ fn @types.Game::apply_tool_on_cell(
   game : @types.Game,
   x : Int,
   y : Int,
-  tool : Int,
+  tool : @types.ToolKind,
 ) -> Bool {
-  if game.state != @types.state_play {
+  if game.state != Play {
     return false
   }
 
-  let prev : Int = @types.cell_at(game, x, y)
+  let prev : @types.Cell = @types.cell_at(game, x, y)
 
-  let next_state : Int = if tool == @types.tool_fill {
-    if prev == @types.cell_fill {
-      @types.cell_unknown
+  let next_state : @types.Cell = if tool == ToolFill {
+    if prev == Fill {
+      Unknown
     } else {
-      @types.cell_fill
+      Fill
     }
-  } else if prev == @types.cell_cross {
-    @types.cell_unknown
+  } else if prev == Cross {
+    Unknown
   } else {
-    @types.cell_cross
+    Cross
   }
 
-  let spark_kind : Int = if tool == @types.tool_fill { 1 } else { 3 }
+  let spark_kind : Int = if tool == ToolFill { 1 } else { 3 }
   let ok : Bool = game.apply_cell_state(
     x, y, next_state, true, false, spark_kind,
   )
@@ -522,14 +522,14 @@ fn @types.Game::apply_tool_on_cell(
 
 ///|
 /// Applies the given tool to the cell under the current cursor position.
-fn @types.Game::apply_tool_at_cursor(game : @types.Game, tool : Int) -> Bool {
+fn @types.Game::apply_tool_at_cursor(game : @types.Game, tool : @types.ToolKind) -> Bool {
   game.apply_tool_on_cell(game.cursor_x, game.cursor_y, tool)
 }
 
 ///|
 /// Consumes one hint: reveals the first unfilled required cell, then the first incorrect fill, then the first unmarked empty cell; returns false if no hints remain.
 fn @types.Game::use_hint(game : @types.Game) -> Bool {
-  if game.state != @types.state_play {
+  if game.state != Play {
     return false
   }
   if game.hints_left <= 0 {
@@ -539,10 +539,10 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
   for y in 0..<game.grid_h {
     for x in 0..<game.grid_w {
       if @types.solution_at(game, x, y) &&
-        @types.cell_at(game, x, y) != @types.cell_fill {
+        @types.cell_at(game, x, y) != Fill {
         game.cursor_x = x
         game.cursor_y = y
-        return game.apply_cell_state(x, y, @types.cell_fill, false, true, 0)
+        return game.apply_cell_state(x, y, Fill, false, true, 0)
       }
     }
   }
@@ -550,10 +550,10 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
   for y in 0..<game.grid_h {
     for x in 0..<game.grid_w {
       if not(@types.solution_at(game, x, y)) &&
-        @types.cell_at(game, x, y) == @types.cell_fill {
+        @types.cell_at(game, x, y) == Fill {
         game.cursor_x = x
         game.cursor_y = y
-        return game.apply_cell_state(x, y, @types.cell_cross, false, true, 0)
+        return game.apply_cell_state(x, y, Cross, false, true, 0)
       }
     }
   }
@@ -561,10 +561,10 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
   for y in 0..<game.grid_h {
     for x in 0..<game.grid_w {
       if not(@types.solution_at(game, x, y)) &&
-        @types.cell_at(game, x, y) == @types.cell_unknown {
+        @types.cell_at(game, x, y) == Unknown {
         game.cursor_x = x
         game.cursor_y = y
-        return game.apply_cell_state(x, y, @types.cell_cross, false, true, 0)
+        return game.apply_cell_state(x, y, Cross, false, true, 0)
       }
     }
   }
@@ -597,7 +597,7 @@ fn @types.Game::undo_action(game : @types.Game) -> Bool {
 
   game.cursor_x = step.x
   game.cursor_y = step.y
-  game.state = @types.state_play
+  game.state = Play
   game.message = "Undo"
   game.message_t = 0.45
   game.shake_t = 0.08
@@ -611,7 +611,7 @@ fn @types.Game::undo_action(game : @types.Game) -> Bool {
 fn @types.Game::update_frame_timers(game : @types.Game, dt : Float) -> Unit {
   game.ui_t = game.ui_t + dt
 
-  if game.state == @types.state_play {
+  if game.state == Play {
     game.level_time = game.level_time + dt
   }
 
@@ -641,18 +641,18 @@ fn @types.Game::update_frame_timers(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Moves the cursor one step in the given direction, clamping it within the current grid bounds.
-fn @types.Game::move_cursor_once(game : @types.Game, dir : Int) -> Unit {
-  if game.state != @types.state_play {
+fn @types.Game::move_cursor_once(game : @types.Game, dir : @types.Dir) -> Unit {
+  if game.state != Play {
     return
   }
 
-  if dir == @types.dir_left {
+  if dir == Left {
     game.cursor_x = (game.cursor_x - 1).clamp(min=0, max=game.grid_w - 1)
-  } else if dir == @types.dir_right {
+  } else if dir == Right {
     game.cursor_x = (game.cursor_x + 1).clamp(min=0, max=game.grid_w - 1)
-  } else if dir == @types.dir_up {
+  } else if dir == Up {
     game.cursor_y = (game.cursor_y - 1).clamp(min=0, max=game.grid_h - 1)
-  } else if dir == @types.dir_down {
+  } else if dir == Down {
     game.cursor_y = (game.cursor_y + 1).clamp(min=0, max=game.grid_h - 1)
   }
 }
@@ -662,16 +662,16 @@ fn @types.Game::move_cursor_once(game : @types.Game, dir : Int) -> Unit {
 fn @types.Game::update_cursor_hold(
   game : @types.Game,
   dt : Float,
-  held_dir : Int,
+  held_dir : @types.Dir,
 ) -> Unit {
-  if game.state != @types.state_play {
-    game.hold_dir = @types.dir_none
+  if game.state != Play {
+    game.hold_dir = None
     game.move_repeat_t = 0.0
     return
   }
 
-  if held_dir == @types.dir_none {
-    game.hold_dir = @types.dir_none
+  if held_dir == None {
+    game.hold_dir = None
     game.move_repeat_t = 0.0
     return
   }
@@ -692,11 +692,11 @@ fn @types.Game::update_cursor_hold(
 ///|
 /// Toggles the active tool between fill and mark and shows a brief status message.
 fn @types.Game::switch_tool(game : @types.Game) -> Unit {
-  if game.tool_mode == @types.tool_fill {
-    game.tool_mode = @types.tool_cross
+  if game.tool_mode == ToolFill {
+    game.tool_mode = ToolCross
     game.message = "Tool: Mark"
   } else {
-    game.tool_mode = @types.tool_fill
+    game.tool_mode = ToolFill
     game.message = "Tool: Fill"
   }
   game.message_t = 0.5
@@ -890,7 +890,7 @@ fn @types.Game::load_level(game : @types.Game, level_id : Int) -> Unit {
   }
 
   game.level_index = id
-  game.state = @types.state_play
+  game.state = Play
   game.message = "Level \{id + 1}: \{game.level_name}"
   game.message_t = 1.4
 }
@@ -916,7 +916,7 @@ fn @types.Game::restart_campaign(game : @types.Game) -> Unit {
 /// Loads the next level in the campaign, or transitions to the campaign-clear state if all levels have been completed.
 fn @types.Game::advance_level(game : @types.Game) -> Unit {
   if game.level_index + 1 >= game.level_count {
-    game.state = @types.state_campaign_clear
+    game.state = CampaignClear
     return
   }
   game.load_level(game.level_index + 1)
@@ -946,12 +946,12 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   let next_press : Bool = game.detect_next_press()
   let reset_press : Bool = game.detect_reset_press()
 
-  if game.state == @types.state_title {
+  if game.state == Title {
     if start_press {
       game.restart_campaign()
     }
-  } else if game.state == @types.state_play {
-    let held_dir : Int = game.detect_held_dir()
+  } else if game.state == Play {
+    let held_dir : @types.Dir = game.detect_held_dir()
     game.update_cursor_hold(dt, held_dir)
 
     if detect_toggle_tool() {
@@ -978,20 +978,20 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
       ignore(game.apply_tool_on_cell(board_tap.1, board_tap.2, game.tool_mode))
     } else if fill_press && game.touch_action_cd <= 0.0 {
       game.touch_action_cd = 0.1
-      ignore(game.apply_tool_at_cursor(@types.tool_fill))
+      ignore(game.apply_tool_at_cursor(ToolFill))
     } else if cross_press && game.touch_action_cd <= 0.0 {
       game.touch_action_cd = 0.1
-      ignore(game.apply_tool_at_cursor(@types.tool_cross))
+      ignore(game.apply_tool_at_cursor(ToolCross))
     }
-  } else if game.state == @types.state_level_clear {
+  } else if game.state == LevelClear {
     if next_press {
       game.advance_level()
     }
-  } else if game.state == @types.state_campaign_clear {
+  } else if game.state == CampaignClear {
     if next_press {
       game.restart_campaign()
     }
-  } else if game.state == @types.state_level_fail {
+  } else if game.state == LevelFail {
     if reset_press || next_press {
       game.reload_level()
     }

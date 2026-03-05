@@ -28,36 +28,45 @@ pub fn randf(lo : Float, hi : Float) -> Float {
 }
 
 ///|
-/// Return x-step delta for a direction id.
-pub fn dir_dx(dir : Int) -> Int {
-  if dir == dir_left {
-    -1
-  } else if dir == dir_right {
-    1
-  } else {
-    0
+/// Return x-step delta for a direction.
+pub fn dir_dx(dir : Dir) -> Int {
+  match dir {
+    Left => -1
+    Right => 1
+    Up => 0
+    Down => 0
   }
 }
 
 ///|
-/// Return y-step delta for a direction id.
-pub fn dir_dy(dir : Int) -> Int {
-  if dir == dir_up {
-    -1
-  } else if dir == dir_down {
-    1
-  } else {
-    0
+/// Return y-step delta for a direction.
+pub fn dir_dy(dir : Dir) -> Int {
+  match dir {
+    Up => -1
+    Down => 1
+    Left => 0
+    Right => 0
   }
 }
 
 ///|
 /// Return true when directions are exact opposites.
-pub fn opposite_dir(a : Int, b : Int) -> Bool {
-  (a == dir_left && b == dir_right) ||
-  (a == dir_right && b == dir_left) ||
-  (a == dir_up && b == dir_down) ||
-  (a == dir_down && b == dir_up)
+pub fn opposite_dir(a : Dir, b : Dir) -> Bool {
+  match (a, b) {
+    (Left, Right) | (Right, Left) | (Up, Down) | (Down, Up) => true
+    _ => false
+  }
+}
+
+///|
+/// Convert an integer (0..3) to a Dir value.
+pub fn Dir::from_int(v : Int) -> Dir {
+  match v {
+    0 => Left
+    1 => Right
+    2 => Up
+    _ => Down
+  }
 }
 
 ///|

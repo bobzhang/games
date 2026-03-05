@@ -10,7 +10,14 @@ fn food_distance(nx : Int, ny : Int, fx : Int, fy : Int) -> Int {
 }
 
 ///|
-fn @types.Game::direction_score_player(game : @types.Game, dir : Int) -> Int {
+/// All four directions for iteration.
+let all_dirs : Array[@types.Dir] = [Left, Right, Up, Down]
+
+///|
+fn @types.Game::direction_score_player(
+  game : @types.Game,
+  dir : @types.Dir,
+) -> Int {
   if @types.opposite_dir(game.p_dir, dir) {
     return -100000
   }
@@ -31,7 +38,7 @@ fn @types.Game::direction_score_player(game : @types.Game, dir : Int) -> Int {
   let mut score : Int = 3000 -
     food_distance(nx, ny, game.food_x, game.food_y) * 70
 
-  for d in 0..<4 {
+  for d in all_dirs {
     let tx : Int = @types.wrap_x(nx + @types.dir_dx(d))
     let ty : Int = @types.wrap_y(ny + @types.dir_dy(d))
 
@@ -46,15 +53,15 @@ fn @types.Game::direction_score_player(game : @types.Game, dir : Int) -> Int {
 }
 
 ///|
-fn @types.Game::suggest_player_dir(game : @types.Game) -> Int {
-  let mut best_dir : Int = -1
+fn @types.Game::suggest_player_dir(game : @types.Game) -> @types.Dir? {
+  let mut best_dir : @types.Dir? = None
   let mut best_score : Int = -999999
 
-  for d in 0..<4 {
+  for d in all_dirs {
     let s : Int = game.direction_score_player(d)
     if s > best_score {
       best_score = s
-      best_dir = d
+      best_dir = Some(d)
     }
   }
 
@@ -65,7 +72,7 @@ fn @types.Game::suggest_player_dir(game : @types.Game) -> Int {
 fn @types.Game::direction_score_rival(
   game : @types.Game,
   rid : Int,
-  dir : Int,
+  dir : @types.Dir,
 ) -> Int {
   let rival = game.rivals[rid]
 
@@ -88,7 +95,7 @@ fn @types.Game::direction_score_rival(
     score = score - 120
   }
 
-  for d in 0..<4 {
+  for d in all_dirs {
     let tx : Int = @types.wrap_x(nx + @types.dir_dx(d))
     let ty : Int = @types.wrap_y(ny + @types.dir_dy(d))
     if not(game.rival_would_collide(rid, tx, ty)) {
@@ -100,13 +107,13 @@ fn @types.Game::direction_score_rival(
 }
 
 ///|
-fn @types.Game::ai_choose_dir(game : @types.Game, rid : Int) -> Int {
+fn @types.Game::ai_choose_dir(game : @types.Game, rid : Int) -> @types.Dir {
   let rival = game.rivals[rid]
 
-  let mut best_dir : Int = rival.dir
+  let mut best_dir : @types.Dir = rival.dir
   let mut best_score : Int = -999999
 
-  for d in 0..<4 {
+  for d in all_dirs {
     let s : Int = game.direction_score_rival(rid, d)
     if s > best_score {
       best_score = s

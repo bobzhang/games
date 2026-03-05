@@ -244,8 +244,8 @@ fn @types.Game::spawn_trap(game : @types.Game) -> Bool {
 fn @types.Game::reset_player(game : @types.Game, cx : Int, cy : Int) -> Unit {
   game.p_alive = true
   game.p_len = 5
-  game.p_dir = @types.dir_right
-  game.p_next_dir = @types.dir_right
+  game.p_dir = Right
+  game.p_next_dir = Right
   game.p_grow = 0
 
   for i in 0..<game.p_seg_x.length() {
@@ -265,7 +265,7 @@ fn @types.Game::reset_rival(
   rid : Int,
   cx : Int,
   cy : Int,
-  dir : Int,
+  dir : @types.Dir,
 ) -> Unit {
   let rival = game.rivals[rid]
   rival.alive = true
@@ -280,7 +280,10 @@ fn @types.Game::reset_rival(
   }
 
   for i in 0..<rival.len {
-    let offset : Int = if dir == @types.dir_left { i } else { -i }
+    let offset : Int = match dir {
+      Left => i
+      _ => -i
+    }
     rival.seg_x[i] = @types.wrap_x(cx + offset)
     rival.seg_y[i] = cy
   }
@@ -290,7 +293,7 @@ fn @types.Game::reset_rival(
 fn @types.Game::start_match(game : @types.Game) -> Unit {
   game.clear_effects()
 
-  game.state = @types.state_play
+  game.state = Play
   game.score = 0
   game.lives = @types.lives_default
   game.total_kills = 0
@@ -317,9 +320,9 @@ fn @types.Game::start_match(game : @types.Game) -> Unit {
 
   game.reset_player(@types.grid_w / 2, @types.grid_h / 2)
 
-  game.reset_rival(0, 6, 4, @types.dir_right)
+  game.reset_rival(0, 6, 4, Right)
   if game.rivals.length() > 1 {
-    game.reset_rival(1, @types.grid_w - 7, @types.grid_h - 5, @types.dir_left)
+    game.reset_rival(1, @types.grid_w - 7, @types.grid_h - 5, Left)
   }
 
   ignore(game.spawn_food())
@@ -347,7 +350,7 @@ fn @types.Game::damage_player(game : @types.Game, msg : String) -> Unit {
   game.burst(wx, wy, 22, 2)
 
   if game.lives <= 0 {
-    game.state = @types.state_result
+    game.state = Result
     game.win = false
     if game.score > game.best_score {
       game.best_score = game.score
@@ -370,7 +373,7 @@ fn @types.Game::rival_respawn(game : @types.Game, rid : Int) -> Unit {
 
   let sx : Int = if rid % 2 == 0 { 3 } else { @types.grid_w - 4 }
   let sy : Int = if rid % 2 == 0 { 3 } else { @types.grid_h - 4 }
-  let dir : Int = if rid % 2 == 0 { @types.dir_right } else { @types.dir_left }
+  let dir : @types.Dir = if rid % 2 == 0 { Right } else { Left }
   game.reset_rival(rid, sx, sy, dir)
 }
 
@@ -603,7 +606,7 @@ fn @types.Game::update_hint(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::use_hint(game : @types.Game) -> Bool {
-  if game.state != @types.state_play {
+  if game.state != Play {
     return false
   }
   if game.hint_left <= 0 {
@@ -612,16 +615,20 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
   }
 
   let best = game.suggest_player_dir()
-  if best < 0 {
-    @types.set_msg(game, "No safe hint", 0.7)
-    return false
+  match best {
+    None => {
+      @types.set_msg(game, "No safe hint", 0.7)
+      return false
+    }
+    _ => ()
   }
+  let best_dir = best.unwrap()
 
   game.hint_left = game.hint_left - 1
-  game.p_next_dir = best
+  game.p_next_dir = best_dir
 
-  let nx : Int = @types.wrap_x(game.p_seg_x[0] + @types.dir_dx(best))
-  let ny : Int = @types.wrap_y(game.p_seg_y[0] + @types.dir_dy(best))
+  let nx : Int = @types.wrap_x(game.p_seg_x[0] + @types.dir_dx(best_dir))
+  let ny : Int = @types.wrap_y(game.p_seg_y[0] + @types.dir_dy(best_dir))
   game.hint_x = nx
   game.hint_y = ny
   game.hint_t = 1.4
@@ -636,7 +643,7 @@ fn @types.Game::check_timeout(game : @types.Game) -> Unit {
     return
   }
 
-  game.state = @types.state_result
+  game.state = Result
   game.win = game.score >= game.rival_total_score()
 
   if game.score > game.best_score {
@@ -652,18 +659,18 @@ fn @types.Game::check_timeout(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::step_once(game : @types.Game) -> Unit {
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
 
   game.player_step()
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
 
   for rid in 0..<game.rivals.length() {
     game.rival_step(rid)
-    if game.state != @types.state_play {
+    if game.state != Play {
       return
     }
   }
@@ -684,7 +691,7 @@ fn @types.Game::step_once(game : @types.Game) -> Unit {
 fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   game.ui_t = game.ui_t + dt
 
-  if game.state == @types.state_play {
+  if game.state == Play {
     game.game_t = game.game_t + dt
   }
 
@@ -713,7 +720,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
 
   game.update_sparks(dt)
 
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
 
@@ -734,7 +741,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
     game.step_acc = game.step_acc - base_step
     game.step_once()
 
-    if game.state != @types.state_play {
+    if game.state != Play {
       break
     }
   }
@@ -752,10 +759,10 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.mouse_hold = @raylib.is_mouse_button_down(@raylib.MouseButtonLeft) ||
     game.touch_count > 0
   let clamped_dt : Float = @types.clampf(dt, 0.0, 0.04)
-  if game.state == @types.state_title {
+  if game.state == Title {
     game.update_title_input()
     game.update_play(clamped_dt)
-  } else if game.state == @types.state_play {
+  } else if game.state == Play {
     game.update_play_input(clamped_dt)
     game.update_play(clamped_dt)
   } else {

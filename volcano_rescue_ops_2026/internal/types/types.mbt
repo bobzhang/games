@@ -10,10 +10,10 @@ pub(all) struct CivilianSite {
 ///|
 /// Complete runtime state for one volcano rescue mission.
 pub(all) struct Game {
-  terrain : Array[Int]
+  terrain : Array[Tile]
   lava : Array[Bool]
   lava_buf : Array[Bool]
-  route : Array[Int]
+  route : Array[Dir]
   sites : Array[CivilianSite]
   mut route_len : Int
   mut route_running : Bool
@@ -38,8 +38,8 @@ pub(all) struct Game {
   mut mission_time : Float
   mut mission_limit : Float
   mut level_index : Int
-  mut state : Int
-  mut result : Int
+  mut state : GameState
+  mut result : GameResult
   mut ui_t : Float
   mut msg : String
   mut msg_t : Float
@@ -64,10 +64,10 @@ pub fn CivilianSite::new() -> CivilianSite {
 /// Creates a new game state with preallocated arrays and default UI state.
 pub fn Game::new() -> Game {
   {
-    terrain: Array::make(max_cells, tile_ground),
+    terrain: Array::make(max_cells, Ground),
     lava: Array::make(max_cells, false),
     lava_buf: Array::make(max_cells, false),
-    route: Array::make(max_route_steps, dir_none),
+    route: Array::make(max_route_steps, None),
     sites: Array::makei(max_sites, fn(_i) { CivilianSite::new() }),
     route_len: 0,
     route_running: false,
@@ -92,8 +92,8 @@ pub fn Game::new() -> Game {
     mission_time: 0.0,
     mission_limit: 0.0,
     level_index: 0,
-    state: state_title,
-    result: result_none,
+    state: Title,
+    result: None,
     ui_t: 0.0,
     msg: "",
     msg_t: 0.0,

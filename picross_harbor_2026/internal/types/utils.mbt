@@ -39,9 +39,9 @@ pub fn solution_at(game : Game, x : Int, y : Int) -> Bool {
 
 ///|
 /// Read player cell state at `(x, y)` safely.
-pub fn cell_at(game : Game, x : Int, y : Int) -> Int {
+pub fn cell_at(game : Game, x : Int, y : Int) -> Cell {
   if not(in_grid(game, x, y)) {
-    cell_unknown
+    Unknown
   } else {
     game.cells[board_index(x, y)]
   }
@@ -57,7 +57,7 @@ pub fn set_solution(game : Game, x : Int, y : Int, v : Bool) -> Unit {
 
 ///|
 /// Write player cell state at `(x, y)` if valid.
-pub fn set_cell(game : Game, x : Int, y : Int, state : Int) -> Unit {
+pub fn set_cell(game : Game, x : Int, y : Int, state : Cell) -> Unit {
   if in_grid(game, x, y) {
     game.cells[board_index(x, y)] = state
   }
@@ -192,13 +192,13 @@ pub fn start_button_rect() -> (Int, Int, Int, Int) {
 pub fn row_solved(game : Game, y : Int) -> Bool {
   for x in 0..<game.grid_w {
     let sol : Bool = solution_at(game, x, y)
-    let state : Int = cell_at(game, x, y)
+    let state : Cell = cell_at(game, x, y)
 
-    if sol && state != cell_fill {
+    if sol && state != Fill {
       return false
     }
 
-    if not(sol) && state == cell_fill {
+    if not(sol) && state == Fill {
       return false
     }
   }
@@ -211,13 +211,13 @@ pub fn row_solved(game : Game, y : Int) -> Bool {
 pub fn col_solved(game : Game, x : Int) -> Bool {
   for y in 0..<game.grid_h {
     let sol : Bool = solution_at(game, x, y)
-    let state : Int = cell_at(game, x, y)
+    let state : Cell = cell_at(game, x, y)
 
-    if sol && state != cell_fill {
+    if sol && state != Fill {
       return false
     }
 
-    if not(sol) && state == cell_fill {
+    if not(sol) && state == Fill {
       return false
     }
   }

@@ -10,27 +10,11 @@ pub fn board_index(Int, Int) -> Int
 
 pub fn board_metrics(Game) -> (Int, Int, Int, Int, Int, Int, Int)
 
-pub fn cell_at(Game, Int, Int) -> Int
-
-pub let cell_cross : Int
-
-pub let cell_fill : Int
-
-pub let cell_unknown : Int
+pub fn cell_at(Game, Int, Int) -> Cell
 
 pub fn col_solved(Game, Int) -> Bool
 
 pub fn cross_button_rect() -> (Int, Int, Int, Int)
-
-pub let dir_down : Int
-
-pub let dir_left : Int
-
-pub let dir_none : Int
-
-pub let dir_right : Int
-
-pub let dir_up : Int
 
 pub fn dpad_center_x() -> Int
 
@@ -74,7 +58,7 @@ pub let screen_h : Int
 
 pub let screen_w : Int
 
-pub fn set_cell(Game, Int, Int, Int) -> Unit
+pub fn set_cell(Game, Int, Int, Cell) -> Unit
 
 pub fn set_solution(Game, Int, Int, Bool) -> Unit
 
@@ -82,21 +66,7 @@ pub fn solution_at(Game, Int, Int) -> Bool
 
 pub fn start_button_rect() -> (Int, Int, Int, Int)
 
-pub let state_campaign_clear : Int
-
-pub let state_level_clear : Int
-
-pub let state_level_fail : Int
-
-pub let state_play : Int
-
-pub let state_title : Int
-
 pub let target_fps : Int
-
-pub let tool_cross : Int
-
-pub let tool_fill : Int
 
 pub fn undo_button_rect() -> (Int, Int, Int, Int)
 
@@ -105,16 +75,32 @@ pub fn world_for_cell(Game, Int, Int) -> (Float, Float, Float)
 // Errors
 
 // Types and methods
+pub(all) enum Cell {
+  Unknown
+  Fill
+  Cross
+}
+pub impl Eq for Cell
+
+pub(all) enum Dir {
+  None
+  Left
+  Right
+  Up
+  Down
+}
+pub impl Eq for Dir
+
 pub(all) struct Game {
   solution : Array[Bool]
-  cells : Array[Int]
+  cells : Array[Cell]
   row_clues : Array[Int]
   row_clue_counts : Array[Int]
   col_clues : Array[Int]
   col_clue_counts : Array[Int]
   undo : Array[UndoStep]
   sparks : Array[Spark]
-  mut state : Int
+  mut state : GameState
   mut level_index : Int
   level_count : Int
   mut level_name : String
@@ -124,7 +110,7 @@ pub(all) struct Game {
   mut grid_h : Int
   mut cursor_x : Int
   mut cursor_y : Int
-  mut tool_mode : Int
+  mut tool_mode : ToolKind
   mut level_time : Float
   mut mistakes : Int
   mut hints_left : Int
@@ -143,7 +129,7 @@ pub(all) struct Game {
   mut message_t : Float
   mut shake_t : Float
   mut ui_t : Float
-  mut hold_dir : Int
+  mut hold_dir : Dir
   mut move_repeat_t : Float
   mut touch_action_cd : Float
   mut mouse_x : Float
@@ -153,6 +139,15 @@ pub(all) struct Game {
   mut touch_count : Int
 }
 pub fn Game::new() -> Self
+
+pub(all) enum GameState {
+  Title
+  Play
+  LevelClear
+  CampaignClear
+  LevelFail
+}
+pub impl Eq for GameState
 
 pub(all) struct Spark {
   mut active : Bool
@@ -165,11 +160,17 @@ pub(all) struct Spark {
   mut kind : Int
 }
 
+pub(all) enum ToolKind {
+  ToolFill
+  ToolCross
+}
+pub impl Eq for ToolKind
+
 pub(all) struct UndoStep {
   valid : Bool
   x : Int
   y : Int
-  prev_state : Int
+  prev_state : Cell
   prev_mistakes : Int
   prev_filled_correct : Int
   prev_filled_wrong : Int

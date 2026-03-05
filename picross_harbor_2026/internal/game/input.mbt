@@ -1,19 +1,19 @@
 ///|
 /// Returns the directional constant for the currently held keyboard key or on-screen D-pad button, or dir_none if none is active.
-fn @types.Game::detect_held_dir(game : @types.Game) -> Int {
-  let mut dir : Int = @types.dir_none
+fn @types.Game::detect_held_dir(game : @types.Game) -> @types.Dir {
+  let mut dir : @types.Dir = None
 
   if @raylib.is_key_down(@raylib.KeyLeft) || @raylib.is_key_down(@raylib.KeyA) {
-    dir = @types.dir_left
+    dir = Left
   }
   if @raylib.is_key_down(@raylib.KeyRight) || @raylib.is_key_down(@raylib.KeyD) {
-    dir = @types.dir_right
+    dir = Right
   }
   if @raylib.is_key_down(@raylib.KeyUp) || @raylib.is_key_down(@raylib.KeyW) {
-    dir = @types.dir_up
+    dir = Up
   }
   if @raylib.is_key_down(@raylib.KeyDown) || @raylib.is_key_down(@raylib.KeyS) {
-    dir = @types.dir_down
+    dir = Down
   }
 
   let cx : Int = @types.dpad_center_x()
@@ -30,7 +30,7 @@ fn @types.Game::detect_held_dir(game : @types.Game) -> Int {
       s,
       s,
     ) {
-    dir = @types.dir_left
+    dir = Left
   }
   if @types.pointer_on_rect(
       game.mouse_x,
@@ -42,7 +42,7 @@ fn @types.Game::detect_held_dir(game : @types.Game) -> Int {
       s,
       s,
     ) {
-    dir = @types.dir_right
+    dir = Right
   }
   if @types.pointer_on_rect(
       game.mouse_x,
@@ -54,7 +54,7 @@ fn @types.Game::detect_held_dir(game : @types.Game) -> Int {
       s,
       s,
     ) {
-    dir = @types.dir_up
+    dir = Up
   }
   if @types.pointer_on_rect(
       game.mouse_x,
@@ -66,7 +66,7 @@ fn @types.Game::detect_held_dir(game : @types.Game) -> Int {
       s,
       s,
     ) {
-    dir = @types.dir_down
+    dir = Down
   }
 
   dir

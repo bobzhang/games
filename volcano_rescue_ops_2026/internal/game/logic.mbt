@@ -1,5 +1,5 @@
 ///|
-fn @types.Game::set_tile(game : @types.Game, x : Int, y : Int, t : Int) -> Unit {
+fn @types.Game::set_tile(game : @types.Game, x : Int, y : Int, t : @types.Tile) -> Unit {
   if @types.in_bounds(x, y) {
     game.terrain[@types.cell_index(x, y)] = t
   }
@@ -33,12 +33,12 @@ fn @types.Game::clear_route(game : @types.Game) -> Unit {
   game.route_running = false
   game.step_timer = 0.0
   for i in 0..<game.route.length() {
-    game.route[i] = @types.dir_none
+    game.route[i] = None
   }
 }
 
 ///|
-fn @types.Game::push_route_step(game : @types.Game, dir : Int) -> Bool {
+fn @types.Game::push_route_step(game : @types.Game, dir : @types.Dir) -> Bool {
   if game.route_len >= @types.max_route_steps {
     return false
   }
@@ -49,24 +49,24 @@ fn @types.Game::push_route_step(game : @types.Game, dir : Int) -> Bool {
 }
 
 ///|
-fn @types.Game::pop_route_step(game : @types.Game) -> Int {
+fn @types.Game::pop_route_step(game : @types.Game) -> @types.Dir {
   if game.route_len <= 0 {
-    return @types.dir_none
+    return None
   }
 
-  let dir : Int = game.route[0]
+  let dir : @types.Dir = game.route[0]
   for i in 1..<game.route_len {
     game.route[i - 1] = game.route[i]
   }
   game.route_len = game.route_len - 1
-  game.route[game.route_len] = @types.dir_none
+  game.route[game.route_len] = None
   dir
 }
 
 ///|
 fn @types.Game::is_walkable(game : @types.Game, x : Int, y : Int) -> Bool {
   @types.in_bounds(x, y) &&
-  @types.tile_at(game, x, y) != @types.tile_rock &&
+  @types.tile_at(game, x, y) != Rock &&
   not(@types.lava_at(game, x, y))
 }
 
@@ -105,7 +105,7 @@ fn @types.Game::add_site(
 ///|
 fn @types.Game::clear_world(game : @types.Game) -> Unit {
   for i in 0..<@types.max_cells {
-    game.terrain[i] = @types.tile_ground
+    game.terrain[i] = Ground
     game.lava[i] = false
     game.lava_buf[i] = false
   }
@@ -130,14 +130,14 @@ fn @types.Game::add_rock_line(
     let mut a : Int = y0.min(y1)
     let b : Int = y0.max(y1)
     while a <= b {
-      game.set_tile(x0, a, @types.tile_rock)
+      game.set_tile(x0, a, Rock)
       a = a + 1
     }
   } else if y0 == y1 {
     let mut a : Int = x0.min(x1)
     let b : Int = x0.max(x1)
     while a <= b {
-      game.set_tile(a, y0, @types.tile_rock)
+      game.set_tile(a, y0, Rock)
       a = a + 1
     }
   }
@@ -153,7 +153,7 @@ fn @types.Game::add_rock_block(
 ) -> Unit {
   for yy in y..<(y + h) {
     for xx in x..<(x + w) {
-      game.set_tile(xx, yy, @types.tile_rock)
+      game.set_tile(xx, yy, Rock)
     }
   }
 }
@@ -161,13 +161,13 @@ fn @types.Game::add_rock_block(
 ///|
 fn @types.Game::add_depot(game : @types.Game, x : Int, y : Int) -> Unit {
   if @types.in_bounds(x, y) {
-    game.set_tile(x, y, @types.tile_depot)
+    game.set_tile(x, y, Depot)
   }
 }
 
 ///|
 fn @types.Game::add_lava_seed(game : @types.Game, x : Int, y : Int) -> Unit {
-  if @types.in_bounds(x, y) && @types.tile_at(game, x, y) != @types.tile_rock {
+  if @types.in_bounds(x, y) && @types.tile_at(game, x, y) != Rock {
     game.set_lava(x, y, true)
   }
 }
@@ -183,13 +183,13 @@ fn @types.Game::setup_level_0(game : @types.Game) -> Unit {
   game.lava_interval = 1.58
 
   game.add_rock_line(4, 0, 4, 8)
-  game.set_tile(4, 2, @types.tile_ground)
-  game.set_tile(4, 5, @types.tile_ground)
-  game.set_tile(4, 7, @types.tile_ground)
+  game.set_tile(4, 2, Ground)
+  game.set_tile(4, 5, Ground)
+  game.set_tile(4, 7, Ground)
 
   game.add_rock_line(7, 4, 14, 4)
-  game.set_tile(9, 4, @types.tile_ground)
-  game.set_tile(12, 4, @types.tile_ground)
+  game.set_tile(9, 4, Ground)
+  game.set_tile(12, 4, Ground)
 
   game.add_rock_block(8, 0, 2, 2)
   game.add_rock_block(10, 6, 2, 2)
@@ -219,16 +219,16 @@ fn @types.Game::setup_level_1(game : @types.Game) -> Unit {
   game.lava_interval = 1.42
 
   game.add_rock_line(2, 0, 2, 8)
-  game.set_tile(2, 2, @types.tile_ground)
-  game.set_tile(2, 6, @types.tile_ground)
+  game.set_tile(2, 2, Ground)
+  game.set_tile(2, 6, Ground)
 
   game.add_rock_line(6, 1, 6, 9)
-  game.set_tile(6, 3, @types.tile_ground)
-  game.set_tile(6, 7, @types.tile_ground)
+  game.set_tile(6, 3, Ground)
+  game.set_tile(6, 7, Ground)
 
   game.add_rock_line(9, 0, 13, 0)
   game.add_rock_line(9, 5, 14, 5)
-  game.set_tile(11, 5, @types.tile_ground)
+  game.set_tile(11, 5, Ground)
 
   game.add_rock_block(10, 2, 2, 2)
   game.add_rock_block(4, 7, 1, 3)
@@ -258,17 +258,17 @@ fn @types.Game::setup_level_2(game : @types.Game) -> Unit {
   game.lava_interval = 1.31
 
   game.add_rock_line(3, 2, 12, 2)
-  game.set_tile(5, 2, @types.tile_ground)
-  game.set_tile(8, 2, @types.tile_ground)
-  game.set_tile(10, 2, @types.tile_ground)
+  game.set_tile(5, 2, Ground)
+  game.set_tile(8, 2, Ground)
+  game.set_tile(10, 2, Ground)
 
   game.add_rock_line(4, 6, 11, 6)
-  game.set_tile(6, 6, @types.tile_ground)
-  game.set_tile(9, 6, @types.tile_ground)
+  game.set_tile(6, 6, Ground)
+  game.set_tile(9, 6, Ground)
 
   game.add_rock_line(12, 3, 12, 9)
-  game.set_tile(12, 5, @types.tile_ground)
-  game.set_tile(12, 8, @types.tile_ground)
+  game.set_tile(12, 5, Ground)
+  game.set_tile(12, 8, Ground)
 
   game.add_rock_block(0, 4, 2, 2)
   game.add_rock_block(7, 4, 2, 1)
@@ -290,8 +290,8 @@ fn @types.Game::setup_level_2(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::finalize_level_setup(game : @types.Game) -> Unit {
-  game.set_tile(game.shelter_x, game.shelter_y, @types.tile_shelter)
-  game.set_tile(game.start_x, game.start_y, @types.tile_ground)
+  game.set_tile(game.shelter_x, game.shelter_y, Shelter)
+  game.set_tile(game.start_x, game.start_y, Ground)
 
   game.truck_x = game.start_x
   game.truck_y = game.start_y
@@ -309,8 +309,8 @@ fn @types.Game::finalize_level_setup(game : @types.Game) -> Unit {
 
   game.mission_time = 0.0
   game.lava_timer = 0.0
-  game.result = @types.result_none
-  game.state = @types.state_play
+  game.result = None
+  game.state = Play
 
   game.clear_route()
 
@@ -352,8 +352,8 @@ fn @types.Game::next_level_or_title(game : @types.Game) -> Unit {
   if @types.has_next_level(game) {
     game.load_level(game.level_index + 1)
   } else {
-    game.state = @types.state_title
-    game.result = @types.result_none
+    game.state = Title
+    game.result = None
     game.msg = ""
     game.msg_t = 0.0
     game.route_len = 0
@@ -365,8 +365,8 @@ fn @types.Game::next_level_or_title(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::append_manual_step(game : @types.Game, dir : Int) -> Bool {
-  if dir == @types.dir_none {
+fn @types.Game::append_manual_step(game : @types.Game, dir : @types.Dir) -> Bool {
+  if dir == None {
     return false
   }
 
@@ -435,7 +435,7 @@ fn @types.Game::plan_route_to(game : @types.Game, tx : Int, ty : Int) -> Bool {
 
   let q : Array[Int] = Array::make(@types.max_cells, 0)
   let parent : Array[Int] = Array::make(@types.max_cells, -1)
-  let parent_dir : Array[Int] = Array::make(@types.max_cells, @types.dir_none)
+  let parent_dir : Array[@types.Dir] = Array::make(@types.max_cells, None)
   let visited : Array[Bool] = Array::make(@types.max_cells, false)
 
   let mut head : Int = 0
@@ -453,14 +453,14 @@ fn @types.Game::plan_route_to(game : @types.Game, tx : Int, ty : Int) -> Bool {
     let cy : Int = cur / @types.grid_w
 
     for k in 0..<4 {
-      let dir : Int = if k == 0 {
-        @types.dir_up
+      let dir : @types.Dir = if k == 0 {
+        Up
       } else if k == 1 {
-        @types.dir_down
+        Down
       } else if k == 2 {
-        @types.dir_left
+        Left
       } else {
-        @types.dir_right
+        Right
       }
 
       let nx : Int = cx + @types.route_dx(dir)
@@ -492,7 +492,7 @@ fn @types.Game::plan_route_to(game : @types.Game, tx : Int, ty : Int) -> Bool {
     return false
   }
 
-  let rev : Array[Int] = Array::make(@types.max_route_steps, @types.dir_none)
+  let rev : Array[@types.Dir] = Array::make(@types.max_route_steps, None)
   let mut rev_len : Int = 0
   let mut cur : Int = goal
 
@@ -503,8 +503,8 @@ fn @types.Game::plan_route_to(game : @types.Game, tx : Int, ty : Int) -> Bool {
       return false
     }
 
-    let d : Int = parent_dir[cur]
-    if d == @types.dir_none {
+    let d : @types.Dir = parent_dir[cur]
+    if d == None {
       game.last_plan_ok = false
       game.set_message("Planner failed", 0.95)
       return false
@@ -589,7 +589,7 @@ fn @types.Game::dropoff_civilians(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::tile_is_depot(game : @types.Game, x : Int, y : Int) -> Bool {
-  @types.tile_at(game, x, y) == @types.tile_depot
+  @types.tile_at(game, x, y) == Depot
 }
 
 ///|
@@ -599,8 +599,8 @@ fn @types.Game::process_arrival(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::move_step(game : @types.Game, dir : Int) -> Bool {
-  if dir == @types.dir_none {
+fn @types.Game::move_step(game : @types.Game, dir : @types.Dir) -> Bool {
+  if dir == None {
     return false
   }
 
@@ -652,8 +652,8 @@ fn @types.Game::update_route_run(game : @types.Game, dt : Float) -> Unit {
       break
     }
 
-    let dir : Int = game.pop_route_step()
-    if dir == @types.dir_none {
+    let dir : @types.Dir = game.pop_route_step()
+    if dir == None {
       game.route_running = false
       break
     }
@@ -750,7 +750,7 @@ fn @types.Game::spread_chance(
 ) -> Int {
   let mut chance : Int = base
 
-  if @types.tile_at(game, nx, ny) == @types.tile_depot {
+  if @types.tile_at(game, nx, ny) == Depot {
     chance = chance + 8
   }
 
@@ -775,7 +775,7 @@ fn @types.Game::try_spread_to(
   if not(@types.in_bounds(nx, ny)) {
     return
   }
-  if @types.tile_at(game, nx, ny) == @types.tile_rock {
+  if @types.tile_at(game, nx, ny) == Rock {
     return
   }
 
@@ -824,8 +824,8 @@ fn @types.Game::finish_mission(
   win : Bool,
   reason : String,
 ) -> Unit {
-  game.state = @types.state_result
-  game.result = if win { @types.result_win } else { @types.result_lose }
+  game.state = Result
+  game.result = if win { Win } else { Lose }
   game.clear_route()
   game.set_message(reason, 2.8)
 }
@@ -874,7 +874,7 @@ fn @types.Game::evaluate_mission_state(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
 
@@ -928,7 +928,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 
   game.update_timers(dt)
 
-  if game.state == @types.state_title {
+  if game.state == Title {
     if detect_start_press(
         game.mouse_x,
         game.mouse_y,
@@ -937,7 +937,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
       ) {
       game.start_campaign()
     }
-  } else if game.state == @types.state_play {
+  } else if game.state == Play {
     let restart_press : Bool = detect_restart_press(
       game.mouse_x,
       game.mouse_y,
@@ -949,13 +949,13 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
       game.touch_cd = 0.2
       game.restart_level()
     } else {
-      let dir : Int = detect_dir_press(
+      let dir : @types.Dir = detect_dir_press(
         game.mouse_x,
         game.mouse_y,
         game.mouse_press,
         game.touch_count,
       )
-      if dir != @types.dir_none && game.touch_cd <= 0.0 {
+      if dir != None && game.touch_cd <= 0.0 {
         game.touch_cd = 0.08
         ignore(game.append_manual_step(dir))
       }
@@ -1022,7 +1022,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
       game.touch_count,
     ) &&
     game.touch_cd <= 0.0 &&
-    game.result == @types.result_win {
+    game.result == Win {
     game.touch_cd = 0.2
     game.next_level_or_title()
   }

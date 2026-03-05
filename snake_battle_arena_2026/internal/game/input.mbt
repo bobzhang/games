@@ -47,7 +47,7 @@ fn @types.Game::direction_to_cell(
   game : @types.Game,
   tx : Int,
   ty : Int,
-) -> Int {
+) -> @types.Dir {
   let hx : Int = game.p_seg_x[0]
   let hy : Int = game.p_seg_y[0]
 
@@ -63,14 +63,14 @@ fn @types.Game::direction_to_cell(
 
   if Float::from_int(dx).abs() > Float::from_int(dy).abs() {
     if dx < 0 {
-      @types.dir_left
+      Left
     } else {
-      @types.dir_right
+      Right
     }
   } else if dy < 0 {
-    @types.dir_up
+    Up
   } else {
-    @types.dir_down
+    Down
   }
 }
 
@@ -125,7 +125,7 @@ fn @types.Game::handle_touch_buttons(game : @types.Game) -> Bool {
   let hint = @types.btn_hint()
 
   if @types.pointer_on_rect(mx, my, hold, tc, left.0, left.1, left.2, left.3) {
-    game.p_next_dir = @types.dir_left
+    game.p_next_dir = Left
     game.touch_cd = 0.12
     return true
   }
@@ -139,17 +139,17 @@ fn @types.Game::handle_touch_buttons(game : @types.Game) -> Bool {
       right.2,
       right.3,
     ) {
-    game.p_next_dir = @types.dir_right
+    game.p_next_dir = Right
     game.touch_cd = 0.12
     return true
   }
   if @types.pointer_on_rect(mx, my, hold, tc, up.0, up.1, up.2, up.3) {
-    game.p_next_dir = @types.dir_up
+    game.p_next_dir = Up
     game.touch_cd = 0.12
     return true
   }
   if @types.pointer_on_rect(mx, my, hold, tc, down.0, down.1, down.2, down.3) {
-    game.p_next_dir = @types.dir_down
+    game.p_next_dir = Down
     game.touch_cd = 0.12
     return true
   }
@@ -195,7 +195,7 @@ fn @types.Game::handle_touch_buttons(game : @types.Game) -> Bool {
 ///|
 fn @types.Game::update_play_input(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.state_title
+    game.state = Title
     return
   }
 
@@ -206,19 +206,19 @@ fn @types.Game::update_play_input(game : @types.Game, _dt : Float) -> Unit {
 
   if @raylib.is_key_pressed(@raylib.KeyLeft) ||
     @raylib.is_key_pressed(@raylib.KeyA) {
-    game.p_next_dir = @types.dir_left
+    game.p_next_dir = Left
   }
   if @raylib.is_key_pressed(@raylib.KeyRight) ||
     @raylib.is_key_pressed(@raylib.KeyD) {
-    game.p_next_dir = @types.dir_right
+    game.p_next_dir = Right
   }
   if @raylib.is_key_pressed(@raylib.KeyUp) ||
     @raylib.is_key_pressed(@raylib.KeyW) {
-    game.p_next_dir = @types.dir_up
+    game.p_next_dir = Up
   }
   if @raylib.is_key_pressed(@raylib.KeyDown) ||
     @raylib.is_key_pressed(@raylib.KeyS) {
-    game.p_next_dir = @types.dir_down
+    game.p_next_dir = Down
   }
 
   if @raylib.is_key_pressed(@raylib.KeyH) {
