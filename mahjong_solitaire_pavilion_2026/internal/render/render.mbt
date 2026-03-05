@@ -25,7 +25,7 @@ fn tile_label(kind : Int) -> String {
 
 ///|
 /// Clears the background and draws animated decorative circles and horizontal bands.
-fn draw_bg(game : @types.Game) -> Unit {
+fn @types.Game::draw_bg(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 14, 22, 255))
 
   let wave : Float = Float::from_double(
@@ -64,7 +64,7 @@ fn draw_bg(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all active spark particles with kind-dependent colours.
-fn draw_sparks(game : @types.Game) -> Unit {
+fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
       continue
@@ -91,7 +91,7 @@ fn draw_sparks(game : @types.Game) -> Unit {
 
 ///|
 /// Draws golden highlight rectangles around the two hinted tile positions when a hint is active.
-fn draw_hint(game : @types.Game) -> Unit {
+fn @types.Game::draw_hint(game : @types.Game) -> Unit {
   if not(game.hint_active) {
     return
   }
@@ -128,7 +128,7 @@ fn draw_hint(game : @types.Game) -> Unit {
 
 ///|
 /// Renders all board cells with tile colours, free/blocked overlays, cursor, selection highlight, and hint markers.
-fn draw_board(game : @types.Game) -> Unit {
+fn @types.Game::draw_board(game : @types.Game) -> Unit {
   let (board_x, board_y, tile) = @types.board_metrics(game)
 
   @raylib.draw_rectangle(
@@ -253,7 +253,7 @@ fn draw_board(game : @types.Game) -> Unit {
     )
   }
 
-  draw_hint(game)
+  game.draw_hint()
 }
 
 ///|
@@ -298,7 +298,7 @@ fn draw_button(
 
 ///|
 /// Draws the right-side panel with game stats, keyboard help text, action buttons, and the status message.
-fn draw_side_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
   let px : Int = @types.panel_x()
   let py : Int = 20
   let pw : Int = 396
@@ -561,7 +561,7 @@ fn draw_side_panel(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the on-screen D-pad directional buttons with active highlight when pressed.
-fn draw_touch_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
   let cx : Int = @types.dpad_center_x()
   let cy : Int = @types.dpad_center_y()
   let s : Int = @types.dpad_size()
@@ -693,7 +693,7 @@ fn draw_touch_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the title-screen layout with game name, instructions, and the start button.
-fn draw_title(game : @types.Game) -> Unit {
+fn @types.Game::draw_title(game : @types.Game) -> Unit {
   @raylib.draw_text(
     "Mahjong Solitaire Pavilion 2026",
     @types.screen_w / 2 -
@@ -747,7 +747,7 @@ fn draw_title(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the level-clear overlay showing score, remaining time, and the next-stage button.
-fn draw_level_clear_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_level_clear_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -816,7 +816,7 @@ fn draw_level_clear_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the stage-failed overlay with the player score and a retry button.
-fn draw_fail_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_fail_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -885,7 +885,7 @@ fn draw_fail_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the campaign-complete overlay showing final score, stages cleared, play time, and a restart button.
-fn draw_campaign_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_campaign_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -970,19 +970,19 @@ fn draw_campaign_overlay(game : @types.Game) -> Unit {
 ///|
 /// Renders the complete frame for the current campaign state.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_bg(game)
+  game.draw_bg()
 
   match game.state {
-    Title => draw_title(game)
+    Title => game.draw_title()
     _ => {
-      draw_board(game)
-      draw_side_panel(game)
-      draw_touch_overlay(game)
-      draw_sparks(game)
+      game.draw_board()
+      game.draw_side_panel()
+      game.draw_touch_overlay()
+      game.draw_sparks()
       match game.state {
-        LevelClear => draw_level_clear_overlay(game)
-        CampaignClear => draw_campaign_overlay(game)
-        Fail => draw_fail_overlay(game)
+        LevelClear => game.draw_level_clear_overlay()
+        CampaignClear => game.draw_campaign_overlay()
+        Fail => game.draw_fail_overlay()
         _ => ()
       }
     }

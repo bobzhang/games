@@ -5,22 +5,22 @@
 ///|
 /// Draws all visual effects including drift sparks, boost flames, hazards, speed lines, and shields.
 pub fn draw_effects(game : @types.Game) -> Unit {
-  draw_drift_spark_trails(game)
-  draw_boost_exhaust_flames(game)
-  draw_dropped_items_3d(game)
-  draw_dust_trails(game)
-  draw_speed_lines(game)
-  draw_start_confetti(game)
-  draw_wrong_way_indicator(game)
-  draw_lightning_flash(game)
-  draw_star_glow(game)
-  draw_shield_bubbles(game)
+  game.draw_drift_spark_trails()
+  game.draw_boost_exhaust_flames()
+  game.draw_dropped_items_3d()
+  game.draw_dust_trails()
+  game.draw_speed_lines()
+  game.draw_start_confetti()
+  game.draw_wrong_way_indicator()
+  game.draw_lightning_flash()
+  game.draw_star_glow()
+  game.draw_shield_bubbles()
 }
 
 // Draw colored drift spark trails behind drifting karts
 
 ///|
-fn draw_drift_spark_trails(game : @types.Game) -> Unit {
+fn @types.Game::draw_drift_spark_trails(game : @types.Game) -> Unit {
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
     if not(kart.active) {
@@ -101,7 +101,7 @@ fn draw_drift_spark_trails(game : @types.Game) -> Unit {
 // Draw boost exhaust flame effect from kart rear
 
 ///|
-fn draw_boost_exhaust_flames(game : @types.Game) -> Unit {
+fn @types.Game::draw_boost_exhaust_flames(game : @types.Game) -> Unit {
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
     if not(kart.active) {
@@ -181,7 +181,7 @@ fn draw_boost_exhaust_flames(game : @types.Game) -> Unit {
 // Draw dropped items on the track (bananas, oil slicks)
 
 ///|
-fn draw_dropped_items_3d(game : @types.Game) -> Unit {
+fn @types.Game::draw_dropped_items_3d(game : @types.Game) -> Unit {
   for i in 0..<game.dropped_items.length() {
     let item = game.dropped_items[i]
     if not(item.active) {
@@ -245,7 +245,7 @@ fn draw_dropped_items_3d(game : @types.Game) -> Unit {
 // Draw dust/dirt particles trailing behind off-road karts
 
 ///|
-fn draw_dust_trails(game : @types.Game) -> Unit {
+fn @types.Game::draw_dust_trails(game : @types.Game) -> Unit {
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
     if not(kart.active) || not(kart.on_ground) {
@@ -296,7 +296,7 @@ fn draw_dust_trails(game : @types.Game) -> Unit {
 // Draw speed lines effect when player is boosting
 
 ///|
-fn draw_speed_lines(game : @types.Game) -> Unit {
+fn @types.Game::draw_speed_lines(game : @types.Game) -> Unit {
   let kart = game.karts[@types.player_kart]
   if not(kart.active) {
     return
@@ -334,7 +334,7 @@ fn draw_speed_lines(game : @types.Game) -> Unit {
 // Draw confetti effect at race start during countdown
 
 ///|
-fn draw_start_confetti(game : @types.Game) -> Unit {
+fn @types.Game::draw_start_confetti(game : @types.Game) -> Unit {
   if game.state != Countdown {
     return
   }
@@ -369,7 +369,7 @@ fn draw_start_confetti(game : @types.Game) -> Unit {
 // Draw wrong way indicator overlay
 
 ///|
-fn draw_wrong_way_indicator(game : @types.Game) -> Unit {
+fn @types.Game::draw_wrong_way_indicator(game : @types.Game) -> Unit {
   let kart = game.karts[@types.player_kart]
   if not(kart.active) || not(kart.wrong_way) {
     return
@@ -412,7 +412,7 @@ fn draw_wrong_way_indicator(game : @types.Game) -> Unit {
 // Draw lightning flash overlay when lightning is active
 
 ///|
-fn draw_lightning_flash(game : @types.Game) -> Unit {
+fn @types.Game::draw_lightning_flash(game : @types.Game) -> Unit {
   if not(game.lightning_active) {
     return
   }
@@ -443,7 +443,7 @@ fn draw_lightning_flash(game : @types.Game) -> Unit {
 // Draw star power glow around star-powered karts
 
 ///|
-fn draw_star_glow(game : @types.Game) -> Unit {
+fn @types.Game::draw_star_glow(game : @types.Game) -> Unit {
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
     if not(kart.active) || kart.star_timer <= 0.0 {
@@ -476,7 +476,7 @@ fn draw_star_glow(game : @types.Game) -> Unit {
 // Draw shield bubble effect around shielded karts
 
 ///|
-fn draw_shield_bubbles(game : @types.Game) -> Unit {
+fn @types.Game::draw_shield_bubbles(game : @types.Game) -> Unit {
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
     if not(kart.active) || kart.shield_timer <= 0.0 {

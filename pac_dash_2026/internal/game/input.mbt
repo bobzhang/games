@@ -1,6 +1,6 @@
 ///|
 /// Reads keyboard input and updates the player's desired movement direction on the game state.
-fn try_set_player_wanted_dir(game : @types.Game) -> Unit {
+fn @types.Game::try_set_player_wanted_dir(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyUp) ||
     @raylib.is_key_pressed(@raylib.KeyW) {
     game.want_x = 0

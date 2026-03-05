@@ -1,6 +1,6 @@
 ///|
 /// Clears the screen to the dark harbor background color and renders animated glowing circles and horizontal stripe bands.
-fn draw_bg(game : @types.Game) -> Unit {
+fn @types.Game::draw_bg(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(9, 12, 18, 255))
 
   let wave : Float = Float::from_double(
@@ -46,7 +46,7 @@ fn board_font_size(tile : Int) -> Int {
 
 ///|
 /// Draws all active spark particles as colored circles at their current world positions.
-fn draw_spark_layer(game : @types.Game) -> Unit {
+fn @types.Game::draw_spark_layer(game : @types.Game) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
       continue
@@ -73,7 +73,7 @@ fn draw_spark_layer(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the full nonogram board: background panel, row and column clues in the gutter areas, filled/crossed/unknown cells, the cursor highlight, and the spark particle layer.
-fn draw_board(game : @types.Game) -> Unit {
+fn @types.Game::draw_board(game : @types.Game) -> Unit {
   let (board_x, board_y, tile, clue_l, clue_t, origin_x, origin_y) = @types.board_metrics(
     game,
   )
@@ -263,7 +263,7 @@ fn draw_board(game : @types.Game) -> Unit {
     )
   }
 
-  draw_spark_layer(game)
+  game.draw_spark_layer()
 }
 
 ///|
@@ -304,7 +304,7 @@ fn draw_button(
 
 ///|
 /// Draws the right-side HUD panel showing level info, stats, progress bar, keyboard reference, and action buttons.
-fn draw_side_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
   let px : Int = @types.right_panel_x()
   let py : Int = 20
   let pw : Int = 396
@@ -569,7 +569,7 @@ fn draw_side_panel(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the on-screen D-pad directional buttons, highlighting any that are currently pressed.
-fn draw_touch_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   let cx : Int = @types.dpad_center_x()
   let cy : Int = @types.dpad_center_y()
   let s : Int = @types.dpad_size()
@@ -701,7 +701,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the title screen with the game name, descriptive text, and the Start Campaign button.
-fn draw_title_screen(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_screen(game : @types.Game) -> Unit {
   @raylib.draw_text(
     "Picross Harbor 2026",
     @types.screen_w / 2 - @raylib.measure_text("Picross Harbor 2026", 92) / 2,
@@ -775,7 +775,7 @@ fn draw_title_screen(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the level-clear overlay showing completion time, mistake count, hints used, earned stars, and a Next Puzzle button.
-fn draw_level_clear_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_level_clear_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -867,7 +867,7 @@ fn draw_level_clear_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the level-fail overlay showing the mistake count and a Retry button.
-fn draw_level_fail_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_level_fail_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -936,7 +936,7 @@ fn draw_level_fail_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the campaign-clear overlay with cumulative stars, boards solved, total time, mistakes, hints, and a Restart Campaign button.
-fn draw_campaign_clear_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_campaign_clear_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -1035,22 +1035,22 @@ fn draw_campaign_clear_overlay(game : @types.Game) -> Unit {
 ///|
 /// Render board, side panel, controls, and active overlay state.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_bg(game)
+  game.draw_bg()
 
   if game.state == @types.state_title {
-    draw_title_screen(game)
+    game.draw_title_screen()
     return
   }
 
-  draw_board(game)
-  draw_side_panel(game)
-  draw_touch_controls(game)
+  game.draw_board()
+  game.draw_side_panel()
+  game.draw_touch_controls()
 
   if game.state == @types.state_level_clear {
-    draw_level_clear_overlay(game)
+    game.draw_level_clear_overlay()
   } else if game.state == @types.state_campaign_clear {
-    draw_campaign_clear_overlay(game)
+    game.draw_campaign_clear_overlay()
   } else if game.state == @types.state_level_fail {
-    draw_level_fail_overlay(game)
+    game.draw_level_fail_overlay()
   }
 }

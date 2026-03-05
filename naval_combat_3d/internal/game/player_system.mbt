@@ -1,7 +1,7 @@
 // Player ship movement and controls
 
 ///|
-fn update_player(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   let ship = game.player
   // Sail control: W/S to raise/lower sails
   if @raylib.is_key_down(@raylib.KeyW) {
@@ -171,7 +171,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   // Q fires port (left) broadside, E fires starboard (right) broadside
   if @raylib.is_key_pressed(@raylib.KeyQ) || @raylib.is_mouse_button_pressed(0) {
     if ship.reload_left <= 0.0 && has_ammo(ship) {
-      fire_player_broadside(game, true, active_cannons)
+      game.fire_player_broadside(true, active_cannons)
       ship.reload_left = effective_reload
       consume_ammo(ship)
       game.battle_stats.ammo_used += 1
@@ -180,7 +180,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   }
   if @raylib.is_key_pressed(@raylib.KeyE) || @raylib.is_mouse_button_pressed(1) {
     if ship.reload_right <= 0.0 && has_ammo(ship) {
-      fire_player_broadside(game, false, active_cannons)
+      game.fire_player_broadside(false, active_cannons)
       ship.reload_right = effective_reload
       consume_ammo(ship)
       game.battle_stats.ammo_used += 1
@@ -190,14 +190,14 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   // Space fires both broadsides
   if @raylib.is_key_pressed(@raylib.KeySpace) {
     if ship.reload_left <= 0.0 && has_ammo(ship) {
-      fire_player_broadside(game, true, active_cannons)
+      game.fire_player_broadside(true, active_cannons)
       ship.reload_left = effective_reload
       consume_ammo(ship)
       game.battle_stats.ammo_used += 1
       game.battle_stats.accuracy_shots += active_cannons / 2
     }
     if ship.reload_right <= 0.0 && has_ammo(ship) {
-      fire_player_broadside(game, false, active_cannons)
+      game.fire_player_broadside(false, active_cannons)
       ship.reload_right = effective_reload
       consume_ammo(ship)
       game.battle_stats.ammo_used += 1
@@ -307,19 +307,19 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   if game.fleet_command_mode {
     // 1-4 for fleet orders
     if @raylib.is_key_pressed(@raylib.KeyOne) {
-      set_fleet_order(game, @types.fleet_order_follow)
+      game.set_fleet_order(@types.fleet_order_follow)
       game.fleet_command_mode = false
     }
     if @raylib.is_key_pressed(@raylib.KeyTwo) {
-      set_fleet_order(game, @types.fleet_order_attack)
+      game.set_fleet_order(@types.fleet_order_attack)
       game.fleet_command_mode = false
     }
     if @raylib.is_key_pressed(@raylib.KeyThree) {
-      set_fleet_order(game, @types.fleet_order_defend)
+      game.set_fleet_order(@types.fleet_order_defend)
       game.fleet_command_mode = false
     }
     if @raylib.is_key_pressed(@raylib.KeyFour) {
-      set_fleet_order(game, @types.fleet_order_hold)
+      game.set_fleet_order(@types.fleet_order_hold)
       game.fleet_command_mode = false
     }
   }
@@ -392,7 +392,7 @@ fn get_ammo_name(ammo_type : Int) -> String {
 }
 
 ///|
-fn set_fleet_order(game : @types.Game, order : Int) -> Unit {
+fn @types.Game::set_fleet_order(game : @types.Game, order : Int) -> Unit {
   for fs in game.fleet_ships {
     if not(fs.active) {
       continue
@@ -416,7 +416,7 @@ fn set_fleet_order(game : @types.Game, order : Int) -> Unit {
 }
 
 ///|
-fn fire_player_broadside(
+fn @types.Game::fire_player_broadside(
   game : @types.Game,
   port : Bool,
   active_cannons : Int,

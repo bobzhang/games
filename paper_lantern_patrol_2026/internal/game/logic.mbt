@@ -1,6 +1,6 @@
 ///|
 /// Sets the HUD status text and its display duration in seconds.
-fn set_status(game : @types.Game, text : String, ttl : Float) -> Unit {
+fn @types.Game::set_status(game : @types.Game, text : String, ttl : Float) -> Unit {
   game.status_text = text
   game.status_t = ttl
 }
@@ -21,7 +21,7 @@ fn reset_patrol(patrol : @types.Patrol) -> Unit {
 
 ///|
 /// Deactivates all lanterns and clears their position, velocity, and flame state.
-fn reset_lanterns(game : @types.Game) -> Unit {
+fn @types.Game::reset_lanterns(game : @types.Game) -> Unit {
   for lantern in game.lanterns {
     lantern.active = false
     lantern.x = 0.0
@@ -37,7 +37,7 @@ fn reset_lanterns(game : @types.Game) -> Unit {
 
 ///|
 /// Deactivates all wind gusts and clears their position, velocity, and lifetime.
-fn reset_gusts(game : @types.Game) -> Unit {
+fn @types.Game::reset_gusts(game : @types.Game) -> Unit {
   for gust in game.gusts {
     gust.active = false
     gust.x = 0.0
@@ -52,7 +52,7 @@ fn reset_gusts(game : @types.Game) -> Unit {
 
 ///|
 /// Deactivates all ember sparks and clears their position, velocity, and lifetime.
-fn reset_sparks(game : @types.Game) -> Unit {
+fn @types.Game::reset_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
     spark.active = false
     spark.x = 0.0
@@ -67,7 +67,7 @@ fn reset_sparks(game : @types.Game) -> Unit {
 
 ///|
 /// Deactivates all thieves and clears their position, velocity, target, and lifetime.
-fn reset_thieves(game : @types.Game) -> Unit {
+fn @types.Game::reset_thieves(game : @types.Game) -> Unit {
   for thief in game.thieves {
     thief.active = false
     thief.x = 0.0
@@ -83,7 +83,7 @@ fn reset_thieves(game : @types.Game) -> Unit {
 
 ///|
 /// Resets all game counters and entities and transitions to the Playing state to begin a fresh run.
-fn start_new_run(game : @types.Game) -> Unit {
+fn @types.Game::start_new_run(game : @types.Game) -> Unit {
   game.state = Playing
   game.score = 0
   game.deliveries = 0
@@ -101,26 +101,26 @@ fn start_new_run(game : @types.Game) -> Unit {
   game.game_over_reason = ""
 
   reset_patrol(game.patrol)
-  reset_lanterns(game)
-  reset_gusts(game)
-  reset_sparks(game)
-  reset_thieves(game)
+  game.reset_lanterns()
+  game.reset_gusts()
+  game.reset_sparks()
+  game.reset_thieves()
 
-  ignore(spawn_lantern(game))
-  ignore(spawn_lantern(game))
+  ignore(game.spawn_lantern())
+  ignore(game.spawn_lantern())
 }
 
 ///|
 /// Transitions the game to GameOver state and records the reason the run ended.
-fn end_run_game_over(game : @types.Game, reason : String) -> Unit {
+fn @types.Game::end_run_game_over(game : @types.Game, reason : String) -> Unit {
   game.state = GameOver
   game.game_over_reason = reason
-  set_status(game, "Run ended. Press R to patrol again.", 2.0)
+  game.set_status("Run ended. Press R to patrol again.", 2.0)
 }
 
 ///|
 /// Returns the index of the first inactive lantern slot, or -1 if all slots are in use.
-fn free_lantern_slot(game : @types.Game) -> Int {
+fn @types.Game::free_lantern_slot(game : @types.Game) -> Int {
   for i in 0..<game.lanterns.length() {
     if not(game.lanterns[i].active) {
       return i
@@ -131,7 +131,7 @@ fn free_lantern_slot(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive gust slot, or -1 if all slots are in use.
-fn free_gust_slot(game : @types.Game) -> Int {
+fn @types.Game::free_gust_slot(game : @types.Game) -> Int {
   for i in 0..<game.gusts.length() {
     if not(game.gusts[i].active) {
       return i
@@ -142,7 +142,7 @@ fn free_gust_slot(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive spark slot, or -1 if all slots are in use.
-fn free_spark_slot(game : @types.Game) -> Int {
+fn @types.Game::free_spark_slot(game : @types.Game) -> Int {
   for i in 0..<game.sparks.length() {
     if not(game.sparks[i].active) {
       return i
@@ -153,7 +153,7 @@ fn free_spark_slot(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive thief slot, or -1 if all slots are in use.
-fn free_thief_slot(game : @types.Game) -> Int {
+fn @types.Game::free_thief_slot(game : @types.Game) -> Int {
   for i in 0..<game.thieves.length() {
     if not(game.thieves[i].active) {
       return i
@@ -164,8 +164,8 @@ fn free_thief_slot(game : @types.Game) -> Int {
 
 ///|
 /// Activates a lantern from the pool at the gate with randomised initial velocity and a random shrine target.
-fn spawn_lantern(game : @types.Game) -> Bool {
-  let slot = free_lantern_slot(game)
+fn @types.Game::spawn_lantern(game : @types.Game) -> Bool {
+  let slot = game.free_lantern_slot()
   if slot < 0 {
     return false
   }
@@ -187,8 +187,8 @@ fn spawn_lantern(game : @types.Game) -> Bool {
 
 ///|
 /// Spawns a wind gust from a random play-field edge with randomised velocity and radius.
-fn spawn_gust(game : @types.Game) -> Bool {
-  let slot = free_gust_slot(game)
+fn @types.Game::spawn_gust(game : @types.Game) -> Bool {
+  let slot = game.free_gust_slot()
   if slot < 0 {
     return false
   }
@@ -227,8 +227,8 @@ fn spawn_gust(game : @types.Game) -> Bool {
 
 ///|
 /// Activates an ember spark near a random shrine or gate anchor with randomised velocity and drain power.
-fn spawn_spark(game : @types.Game) -> Bool {
-  let slot = free_spark_slot(game)
+fn @types.Game::spawn_spark(game : @types.Game) -> Bool {
+  let slot = game.free_spark_slot()
   if slot < 0 {
     return false
   }
@@ -257,7 +257,7 @@ fn spawn_spark(game : @types.Game) -> Bool {
 
 ///|
 /// Returns the index of the nearest active lantern within `max_d2` squared distance of `(x, y)`, or -1.
-fn nearest_active_lantern(
+fn @types.Game::nearest_active_lantern(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -283,8 +283,8 @@ fn nearest_active_lantern(
 
 ///|
 /// Spawns a thief from a random off-screen edge with speed scaling to current delivery count.
-fn spawn_thief(game : @types.Game) -> Bool {
-  let slot = free_thief_slot(game)
+fn @types.Game::spawn_thief(game : @types.Game) -> Bool {
+  let slot = game.free_thief_slot()
   if slot < 0 {
     return false
   }
@@ -317,8 +317,7 @@ fn spawn_thief(game : @types.Game) -> Bool {
   game.thieves[slot].speed = @types.thief_speed +
     Float::from_int(game.deliveries) * 1.7 +
     @types.randf(-14.0, 22.0)
-  game.thieves[slot].target = nearest_active_lantern(
-    game,
+  game.thieves[slot].target = game.nearest_active_lantern(
     game.thieves[slot].x,
     game.thieves[slot].y,
     100000000.0,
@@ -331,7 +330,7 @@ fn spawn_thief(game : @types.Game) -> Bool {
 
 ///|
 /// Clears the patrol's escort link and marks the previously escorted lantern as unescorted.
-fn release_escort(game : @types.Game) -> Unit {
+fn @types.Game::release_escort(game : @types.Game) -> Unit {
   let idx = game.patrol.escort
   if idx >= 0 && idx < game.lanterns.length() {
     game.lanterns[idx].escorting = false
@@ -341,19 +340,19 @@ fn release_escort(game : @types.Game) -> Unit {
 
 ///|
 /// Links the patrol to lantern at `idx` as its current escort, releasing any previous link.
-fn set_escort(game : @types.Game, idx : Int) -> Unit {
+fn @types.Game::set_escort(game : @types.Game, idx : Int) -> Unit {
   if idx < 0 || idx >= game.lanterns.length() || not(game.lanterns[idx].active) {
     return
   }
 
-  release_escort(game)
+  game.release_escort()
   game.patrol.escort = idx
   game.lanterns[idx].escorting = true
 }
 
 ///|
 /// Awards score for delivering lantern `idx` to its shrine, updates combo, and deactivates the lantern.
-fn deliver_lantern(game : @types.Game, idx : Int) -> Unit {
+fn @types.Game::deliver_lantern(game : @types.Game, idx : Int) -> Unit {
   if idx < 0 || idx >= game.lanterns.length() || not(game.lanterns[idx].active) {
     return
   }
@@ -380,12 +379,12 @@ fn deliver_lantern(game : @types.Game, idx : Int) -> Unit {
   }
 
   game.screen_flash_t = @types.maxf(game.screen_flash_t, 0.12)
-  set_status(game, "Safe delivery +\{gain}! Combo x\{game.combo}.", 1.0)
+  game.set_status("Safe delivery +\{gain}! Combo x\{game.combo}.", 1.0)
 }
 
 ///|
 /// Deactivates lantern `idx` when its flame reaches zero, increments the extinguished count, and resets combo.
-fn extinguish_lantern(game : @types.Game, idx : Int) -> Unit {
+fn @types.Game::extinguish_lantern(game : @types.Game, idx : Int) -> Unit {
   if idx < 0 || idx >= game.lanterns.length() || not(game.lanterns[idx].active) {
     return
   }
@@ -402,20 +401,19 @@ fn extinguish_lantern(game : @types.Game, idx : Int) -> Unit {
   game.combo_t = 0.0
   game.screen_flash_t = @types.maxf(game.screen_flash_t, 0.28)
 
-  set_status(
-    game,
+  game.set_status(
     "Lantern extinguished (\{game.extinguished}/\{@types.extinguish_limit}).",
     1.2,
   )
 
   if game.extinguished >= @types.extinguish_limit {
-    end_run_game_over(game, "Too many lanterns were extinguished.")
+    game.end_run_game_over("Too many lanterns were extinguished.")
   }
 }
 
 ///|
 /// Handles J-button: delivers or stabilises escorted lantern, picks up a nearby lantern, or launches one from the gate.
-fn try_interact(game : @types.Game) -> Unit {
+fn @types.Game::try_interact(game : @types.Game) -> Unit {
   if game.patrol.escort >= 0 {
     let idx = game.patrol.escort
 
@@ -428,7 +426,7 @@ fn try_interact(game : @types.Game) -> Unit {
           shrine.1,
         ) <=
         @types.squaref(@types.delivery_radius + 6.0) {
-        deliver_lantern(game, idx)
+        game.deliver_lantern(idx)
         return
       }
 
@@ -436,90 +434,88 @@ fn try_interact(game : @types.Game) -> Unit {
         100.0,
         game.lanterns[idx].flame + @types.interact_stabilize_boost,
       )
-      set_status(game, "Escorted flame steadied.", 0.52)
+      game.set_status("Escorted flame steadied.", 0.52)
       return
     }
 
-    release_escort(game)
+    game.release_escort()
   }
 
-  let pickup = nearest_active_lantern(
-    game,
+  let pickup = game.nearest_active_lantern(
     game.patrol.x,
     game.patrol.y,
     @types.squaref(@types.escort_pickup_range),
   )
   if pickup >= 0 {
-    set_escort(game, pickup)
-    set_status(game, "Lantern linked to patrol.", 0.8)
+    game.set_escort(pickup)
+    game.set_status("Lantern linked to patrol.", 0.8)
     return
   }
 
   let gate = @types.gate_position()
   if @types.dist2(game.patrol.x, game.patrol.y, gate.0, gate.1) <=
     @types.squaref(@types.escort_pickup_range + 22.0) {
-    if spawn_lantern(game) {
-      let near_gate = nearest_active_lantern(
-        game,
+    if game.spawn_lantern() {
+      let near_gate = game.nearest_active_lantern(
         game.patrol.x,
         game.patrol.y,
         @types.squaref(@types.escort_pickup_range + 40.0),
       )
       if near_gate >= 0 {
-        set_escort(game, near_gate)
+        game.set_escort(near_gate)
       }
-      set_status(game, "Lantern launched from the gate.", 0.92)
+      game.set_status("Lantern launched from the gate.", 0.92)
     } else {
-      set_status(game, "No room to launch a new lantern.", 0.8)
+      game.set_status("No room to launch a new lantern.", 0.8)
     }
     return
   }
 
-  set_status(game, "Move closer to a lantern or gate.", 0.7)
+  game.set_status("Move closer to a lantern or gate.", 0.7)
 }
 
 ///|
 /// Handles K-button: releases the current escort or activates the guard stance to repel nearby thieves.
-fn try_cancel(game : @types.Game) -> Unit {
+fn @types.Game::try_cancel(game : @types.Game) -> Unit {
   if game.patrol.escort >= 0 {
-    release_escort(game)
-    set_status(game, "Escort released.", 0.7)
+    game.release_escort()
+    game.set_status("Escort released.", 0.7)
     return
   }
 
   game.patrol.guard_t = @types.guard_time
-  set_status(game, "Guard stance raised.", 0.8)
+  game.set_status("Guard stance raised.", 0.8)
 }
 
 ///|
 /// Handles Space-button: deploys the calm-wind field if the cooldown has expired, slowing gusts and sparks.
-fn try_calm(game : @types.Game) -> Unit {
+fn @types.Game::try_calm(game : @types.Game) -> Unit {
   if game.patrol.calm_cd <= 0.0 {
     game.patrol.calm_t = @types.calm_duration
     game.patrol.calm_cd = @types.calm_cooldown
-    set_status(game, "Calm-wind field deployed.", 1.0)
+    game.set_status("Calm-wind field deployed.", 1.0)
   } else {
-    set_status(game, "Calm field cooling down.", 0.7)
+    game.set_status("Calm field cooling down.", 0.7)
   }
 }
 
 ///|
 /// Dispatches pressed action buttons (interact, cancel, calm) to their respective handlers.
-fn handle_actions(game : @types.Game) -> Unit {
+fn @types.Game::handle_actions(game : @types.Game) -> Unit {
   if game.input.press_interact {
-    try_interact(game)
+    game.try_interact()
   }
   if game.input.press_cancel {
-    try_cancel(game)
+    game.try_cancel()
   }
   if game.input.press_calm {
-    try_calm(game)
+    game.try_calm()
   }
 }
 
 ///|
 /// Applies movement acceleration, drag, speed capping, boundary clamping, and ability timer ticks for the patrol.
-fn update_patrol(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_patrol(game : @types.Game, dt : Float) -> Unit {
   let mut dir_x = Float::from_int(game.input.move_x)
   let mut dir_y = Float::from_int(game.input.move_y)
 
@@ -572,7 +568,7 @@ fn update_patrol(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Ticks the combo window timer and resets the combo count when it expires.
-fn update_combo_timer(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_combo_timer(game : @types.Game, dt : Float) -> Unit {
   if game.combo_t <= 0.0 {
     return
   }
@@ -586,10 +582,10 @@ fn update_combo_timer(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Advances all entity spawn cooldown timers and triggers lantern, gust, spark, and thief spawns as intervals elapse.
-fn update_spawning(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_spawning(game : @types.Game, dt : Float) -> Unit {
   game.lantern_spawn_cd = game.lantern_spawn_cd - dt
   if game.lantern_spawn_cd <= 0.0 {
-    ignore(spawn_lantern(game))
+    ignore(game.spawn_lantern())
     let pressure = Float::from_int(game.deliveries) * 0.055
     let next = @types.maxf(
       @types.lantern_spawn_floor,
@@ -600,7 +596,7 @@ fn update_spawning(game : @types.Game, dt : Float) -> Unit {
 
   game.gust_spawn_cd = game.gust_spawn_cd - dt
   if game.gust_spawn_cd <= 0.0 {
-    ignore(spawn_gust(game))
+    ignore(game.spawn_gust())
     let wind_pressure = Float::from_int(game.deliveries) * 0.024 +
       game.run_time * 0.012
     let next = @types.maxf(
@@ -612,7 +608,7 @@ fn update_spawning(game : @types.Game, dt : Float) -> Unit {
 
   game.spark_spawn_cd = game.spark_spawn_cd - dt
   if game.spark_spawn_cd <= 0.0 {
-    ignore(spawn_spark(game))
+    ignore(game.spawn_spark())
     let lantern_pressure = Float::from_int(@types.active_lantern_count(game)) *
       0.005
     let next = @types.maxf(
@@ -625,7 +621,7 @@ fn update_spawning(game : @types.Game, dt : Float) -> Unit {
   if game.run_time > 8.0 {
     game.thief_spawn_cd = game.thief_spawn_cd - dt
     if game.thief_spawn_cd <= 0.0 {
-      ignore(spawn_thief(game))
+      ignore(game.spawn_thief())
       let thief_pressure = Float::from_int(game.deliveries) * 0.18
       let next = @types.maxf(
         @types.thief_spawn_floor,
@@ -638,7 +634,7 @@ fn update_spawning(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Moves all active gusts, applies calm-field dampening, and deactivates gusts that leave the play area or expire.
-fn update_gusts(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_gusts(game : @types.Game, dt : Float) -> Unit {
   for gust in game.gusts {
     if not(gust.active) {
       continue
@@ -668,7 +664,7 @@ fn update_gusts(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Moves all active ember sparks, applies calm-field drag, and deactivates sparks that expire or leave bounds.
-fn update_sparks(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_sparks(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
       continue
@@ -701,7 +697,7 @@ fn update_sparks(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Moves all active thieves toward the nearest lantern, applies guard-push repulsion, and drains lantern flame on contact.
-fn update_thieves(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_thieves(game : @types.Game, dt : Float) -> Unit {
   for thief in game.thieves {
     if not(thief.active) {
       continue
@@ -715,7 +711,7 @@ fn update_thieves(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    let target = nearest_active_lantern(game, thief.x, thief.y, 100000000.0)
+    let target = game.nearest_active_lantern(thief.x, thief.y, 100000000.0)
     thief.target = target
 
     let mut vx : Float = 0.0
@@ -783,7 +779,7 @@ fn update_thieves(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Updates all active lanterns: applies escort pull, gust influence, spark damage, boundary bounce, and flame drain or extinguish.
-fn update_lanterns(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_lanterns(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.lanterns.length() {
     if not(game.lanterns[i].active) {
       continue
@@ -908,7 +904,7 @@ fn update_lanterns(game : @types.Game, dt : Float) -> Unit {
     game.lanterns[i].flame = game.lanterns[i].flame - drain
 
     if game.lanterns[i].flame <= 0.0 {
-      extinguish_lantern(game, i)
+      game.extinguish_lantern(i)
       if game.state == GameOver {
         return
       }
@@ -918,7 +914,7 @@ fn update_lanterns(game : @types.Game, dt : Float) -> Unit {
     let shrine = @types.shrine_position(game.lanterns[i].target_shrine)
     if @types.dist2(game.lanterns[i].x, game.lanterns[i].y, shrine.0, shrine.1) <=
       @types.squaref(@types.delivery_radius) {
-      deliver_lantern(game, i)
+      game.deliver_lantern(i)
       continue
     }
 
@@ -929,59 +925,59 @@ fn update_lanterns(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Handles the Title screen state: animates preview meters and transitions to Playing on start input.
-fn update_title_state(game : @types.Game) -> Unit {
+fn @types.Game::update_title_state(game : @types.Game) -> Unit {
   if game.input.press_start || game.input.press_restart {
-    start_new_run(game)
+    game.start_new_run()
   }
 }
 
 ///|
 /// Handles the Paused state: resumes play on P press or restarts the run on R press.
-fn update_paused_state(game : @types.Game) -> Unit {
+fn @types.Game::update_paused_state(game : @types.Game) -> Unit {
   if game.input.press_restart {
-    start_new_run(game)
+    game.start_new_run()
     return
   }
 
   if game.input.press_pause {
     game.state = Playing
-    set_status(game, "Patrol resumed.", 0.7)
+    game.set_status("Patrol resumed.", 0.7)
   }
 }
 
 ///|
 /// Handles the GameOver state: starts a new run on R or start input.
-fn update_game_over_state(game : @types.Game) -> Unit {
+fn @types.Game::update_game_over_state(game : @types.Game) -> Unit {
   if game.input.press_restart || game.input.press_start {
-    start_new_run(game)
+    game.start_new_run()
   }
 }
 
 ///|
 /// Runs one frame of the Playing state: advances timers, patrol, actions, spawning, hazards, and lanterns.
-fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_playing_state(game : @types.Game, dt : Float) -> Unit {
   if game.input.press_pause {
     game.state = Paused
-    set_status(game, "Patrol paused.", 0.7)
+    game.set_status("Patrol paused.", 0.7)
     return
   }
 
   if game.input.press_restart {
-    start_new_run(game)
+    game.start_new_run()
     return
   }
 
   game.run_time = game.run_time + dt
 
-  update_patrol(game, dt)
-  handle_actions(game)
-  update_combo_timer(game, dt)
+  game.update_patrol(dt)
+  game.handle_actions()
+  game.update_combo_timer(dt)
 
-  update_spawning(game, dt)
-  update_gusts(game, dt)
-  update_sparks(game, dt)
-  update_thieves(game, dt)
-  update_lanterns(game, dt)
+  game.update_spawning(dt)
+  game.update_gusts(dt)
+  game.update_sparks(dt)
+  game.update_thieves(dt)
+  game.update_lanterns(dt)
 
   if game.score > game.best_score {
     game.best_score = game.score
@@ -991,7 +987,7 @@ fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
 ///|
 /// Advances the game simulation by one frame using the current input state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
-  update_input(game)
+  game.update_input()
 
   if game.status_t > 0.0 {
     game.status_t = @types.maxf(game.status_t - dt, 0.0)
@@ -1002,9 +998,9 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   }
 
   match game.state {
-    Title => update_title_state(game)
-    Playing => update_playing_state(game, dt)
-    Paused => update_paused_state(game)
-    GameOver => update_game_over_state(game)
+    Title => game.update_title_state()
+    Playing => game.update_playing_state(dt)
+    Paused => game.update_paused_state()
+    GameOver => game.update_game_over_state()
   }
 }

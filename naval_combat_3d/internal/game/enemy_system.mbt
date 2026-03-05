@@ -1,7 +1,7 @@
 // Enemy AI and movement
 
 ///|
-fn update_enemies(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
   let px = game.player.x
   let pz = game.player.z
   for i in 0..<game.enemies.length() {
@@ -11,20 +11,20 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     }
     let dist_to_player = @types.distance2d(enemy.x, enemy.z, px, pz)
     // AI state transitions based on personality
-    update_ai_state(game, i, dist_to_player)
+    game.update_ai_state(i, dist_to_player)
     // Execute behavior
     if enemy.ai_state == @types.ai_patrol {
-      update_patrol(game, i, dt)
+      game.update_patrol(i, dt)
     } else if enemy.ai_state == @types.ai_chase {
-      update_chase(game, i, dt, px, pz)
+      game.update_chase(i, dt, px, pz)
     } else if enemy.ai_state == @types.ai_attack {
-      update_attack(game, i, dt, px, pz)
+      game.update_attack(i, dt, px, pz)
     } else if enemy.ai_state == @types.ai_retreat {
-      update_retreat(game, i, dt, px, pz)
+      game.update_retreat(i, dt, px, pz)
     } else if enemy.ai_state == @types.ai_flank {
-      update_flank(game, i, dt, px, pz)
+      game.update_flank(i, dt, px, pz)
     } else if enemy.ai_state == @types.ai_broadside_run {
-      update_broadside_run(game, i, dt, px, pz)
+      game.update_broadside_run(i, dt, px, pz)
     }
     // Calculate speed based on wind and mast damage
     let mast_ratio : Float = if enemy.max_mast_hp > 0.0 {
@@ -105,7 +105,7 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
         let in_broadside_arc = rel.abs() > @types.pi * 0.2 &&
           rel.abs() < @types.pi * 0.8
         if in_broadside_arc && dist_to_player < enemy.attack_range * 1.2 {
-          fire_enemy_broadside(game, i)
+          game.fire_enemy_broadside(i)
           enemy.fire_timer = enemy.fire_rate
           enemy.broadside_cooldown = enemy.fire_rate * 0.5
         } else {
@@ -126,13 +126,13 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     }
     // Target convoy ships if applicable
     if enemy.ai_state == @types.ai_attack || enemy.ai_state == @types.ai_chase {
-      maybe_target_convoy(game, i, dt)
+      game.maybe_target_convoy(i, dt)
     }
   }
 }
 
 ///|
-fn update_ai_state(
+fn @types.Game::update_ai_state(
   game : @types.Game,
   idx : Int,
   dist_to_player : Float,
@@ -202,7 +202,7 @@ fn update_ai_state(
 }
 
 ///|
-fn update_patrol(game : @types.Game, idx : Int, dt : Float) -> Unit {
+fn @types.Game::update_patrol(game : @types.Game, idx : Int, dt : Float) -> Unit {
   let enemy = game.enemies[idx]
   // Circle around patrol center
   enemy.patrol_angle += dt * 0.3
@@ -236,7 +236,7 @@ fn update_patrol(game : @types.Game, idx : Int, dt : Float) -> Unit {
 }
 
 ///|
-fn update_chase(
+fn @types.Game::update_chase(
   game : @types.Game,
   idx : Int,
   dt : Float,
@@ -282,7 +282,7 @@ fn update_chase(
 }
 
 ///|
-fn update_attack(
+fn @types.Game::update_attack(
   game : @types.Game,
   idx : Int,
   dt : Float,
@@ -342,7 +342,7 @@ fn update_attack(
 }
 
 ///|
-fn update_retreat(
+fn @types.Game::update_retreat(
   game : @types.Game,
   idx : Int,
   dt : Float,
@@ -388,7 +388,7 @@ fn update_retreat(
 }
 
 ///|
-fn update_flank(
+fn @types.Game::update_flank(
   game : @types.Game,
   idx : Int,
   dt : Float,
@@ -433,7 +433,7 @@ fn update_flank(
 }
 
 ///|
-fn update_broadside_run(
+fn @types.Game::update_broadside_run(
   game : @types.Game,
   idx : Int,
   dt : Float,
@@ -481,7 +481,7 @@ fn update_broadside_run(
 }
 
 ///|
-fn maybe_target_convoy(game : @types.Game, enemy_idx : Int, dt : Float) -> Unit {
+fn @types.Game::maybe_target_convoy(game : @types.Game, enemy_idx : Int, dt : Float) -> Unit {
   ignore(dt)
   let enemy = game.enemies[enemy_idx]
   // Check if any convoy ships are closer than the player
@@ -510,7 +510,7 @@ fn maybe_target_convoy(game : @types.Game, enemy_idx : Int, dt : Float) -> Unit 
 }
 
 ///|
-fn fire_enemy_broadside(game : @types.Game, enemy_idx : Int) -> Unit {
+fn @types.Game::fire_enemy_broadside(game : @types.Game, enemy_idx : Int) -> Unit {
   let enemy = game.enemies[enemy_idx]
   let px = game.player.x
   let pz = game.player.z

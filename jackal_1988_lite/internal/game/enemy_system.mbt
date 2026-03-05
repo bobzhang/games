@@ -10,7 +10,7 @@ fn enemy_spawn_x(slot : Int) -> Float {
 }
 
 ///|
-fn alloc_enemy_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_enemy_slot(game : @types.Game) -> Int {
   for i in 0..<game.enemies.length() {
     if not(game.enemies[i].active) {
       return i
@@ -20,7 +20,7 @@ fn alloc_enemy_slot(game : @types.Game) -> Int {
 }
 
 ///|
-fn spawn_enemy(game : @types.Game) -> Bool {
+fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
   if game.enemies_spawned >= game.enemies_to_spawn {
     return false
   }
@@ -28,7 +28,7 @@ fn spawn_enemy(game : @types.Game) -> Bool {
     return false
   }
 
-  let slot = alloc_enemy_slot(game)
+  let slot = game.alloc_enemy_slot()
   if slot < 0 {
     return false
   }
@@ -43,7 +43,7 @@ fn spawn_enemy(game : @types.Game) -> Bool {
     return false
   }
 
-  let kind = stage_enemy_kind(game, game.stage_index, game.enemies_spawned)
+  let kind = game.stage_enemy_kind(game.stage_index, game.enemies_spawned)
   game.enemies[slot] = @types.Tank::new_enemy(kind, sx, sy)
   game.enemies_spawned += 1
   game.enemies_alive += 1
@@ -52,7 +52,7 @@ fn spawn_enemy(game : @types.Game) -> Bool {
 }
 
 ///|
-fn choose_enemy_target_player(game : @types.Game, enemy : @types.Tank) -> Int {
+fn @types.Game::choose_enemy_target_player(game : @types.Game, enemy : @types.Tank) -> Int {
   let mut best_idx = -1
   let mut best_dist : Float = Float::from_int(1000000000)
   for i in 0..<@types.max_players {
@@ -69,8 +69,8 @@ fn choose_enemy_target_player(game : @types.Game, enemy : @types.Tank) -> Int {
 }
 
 ///|
-fn enemy_desired_dir(game : @types.Game, enemy : @types.Tank) -> Int {
-  let target_player = choose_enemy_target_player(game, enemy)
+fn @types.Game::enemy_desired_dir(game : @types.Game, enemy : @types.Tank) -> Int {
+  let target_player = game.choose_enemy_target_player(enemy)
   let mut target_x = @types.tile_center_x(@types.base_tile_x)
   let mut target_y = @types.tile_center_y(@types.base_tile_y)
 
@@ -106,7 +106,7 @@ fn enemy_desired_dir(game : @types.Game, enemy : @types.Tank) -> Int {
 }
 
 ///|
-fn try_move_enemy(
+fn @types.Game::try_move_enemy(
   game : @types.Game,
   enemy_index : Int,
   dir : Int,
@@ -133,19 +133,19 @@ fn try_move_enemy(
 }
 
 ///|
-fn enemy_shoot_if_ready(game : @types.Game, enemy_index : Int) -> Unit {
+fn @types.Game::enemy_shoot_if_ready(game : @types.Game, enemy_index : Int) -> Unit {
   let enemy = game.enemies[enemy_index]
   if enemy.reload_timer > 0.0 || enemy.invuln_timer > 0.0 {
     return
   }
 
   let mut should_fire = false
-  let target_player = choose_enemy_target_player(game, enemy)
+  let target_player = game.choose_enemy_target_player(enemy)
   if target_player >= 0 {
     let player = game.players[target_player]
     if (player.x - enemy.x).abs() < Float::from_int(@types.tile_size) * 0.5 ||
       (player.y - enemy.y).abs() < Float::from_int(@types.tile_size) * 0.5 {
-      if not(sight_blocked(game, enemy.x, enemy.y, player.x, player.y)) {
+      if not(game.sight_blocked(enemy.x, enemy.y, player.x, player.y)) {
         should_fire = true
       }
     }
@@ -156,7 +156,7 @@ fn enemy_shoot_if_ready(game : @types.Game, enemy_index : Int) -> Unit {
     let base_y = @types.tile_center_y(@types.base_tile_y)
     if (base_x - enemy.x).abs() < Float::from_int(@types.tile_size) * 0.5 ||
       (base_y - enemy.y).abs() < Float::from_int(@types.tile_size) * 0.5 {
-      if not(sight_blocked(game, enemy.x, enemy.y, base_x, base_y)) {
+      if not(game.sight_blocked(enemy.x, enemy.y, base_x, base_y)) {
         should_fire = true
       }
     }
@@ -186,8 +186,7 @@ fn enemy_shoot_if_ready(game : @types.Game, enemy_index : Int) -> Unit {
       @types.bullet_speed_enemy
     }
     let power = if enemy.enemy_kind == @types.enemy_heavy { 2 } else { 1 }
-    spawn_bullet(
-      game,
+    game.spawn_bullet(
       @types.team_enemy,
       muzzle_x,
       muzzle_y,
@@ -201,13 +200,13 @@ fn enemy_shoot_if_ready(game : @types.Game, enemy_index : Int) -> Unit {
 }
 
 ///|
-fn update_enemy_spawn(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_enemy_spawn(game : @types.Game, dt : Float) -> Unit {
   if game.enemies_spawned >= game.enemies_to_spawn {
     return
   }
   game.spawn_timer -= dt
   if game.spawn_timer <= 0.0 {
-    if spawn_enemy(game) {
+    if game.spawn_enemy() {
       game.spawn_timer = @types.enemy_spawn_period * game.profile.spawn_scale
     } else {
       game.spawn_timer = 0.25 * game.profile.spawn_scale
@@ -216,7 +215,7 @@ fn update_enemy_spawn(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_enemies(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.enemies.length() {
     if not(game.enemies[i].active) {
       continue
@@ -245,11 +244,11 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
 
     if enemy.ai_move_timer <= 0.0 {
       enemy.ai_move_timer = @types.rand_rangef(game, 0.35, 1.25)
-      let new_dir = enemy_desired_dir(game, enemy)
+      let new_dir = game.enemy_desired_dir(enemy)
       enemy.dir = new_dir
     }
 
-    let moved = try_move_enemy(game, i, enemy.dir, dt)
+    let moved = game.try_move_enemy(i, enemy.dir, dt)
     if not(moved) {
       enemy.ai_stuck_timer += dt
       if enemy.ai_stuck_timer > 0.14 {
@@ -262,13 +261,13 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
 
     if enemy.ai_fire_timer <= 0.0 {
       enemy.ai_fire_timer = @types.rand_rangef(game, 0.18, 0.62)
-      enemy_shoot_if_ready(game, i)
+      game.enemy_shoot_if_ready(i)
     }
   }
 }
 
 ///|
-fn destroy_enemy(
+fn @types.Game::destroy_enemy(
   game : @types.Game,
   enemy_index : Int,
   killer_team : Int,
@@ -293,13 +292,13 @@ fn destroy_enemy(
   let base_bias = if enemy.enemy_kind == @types.enemy_heavy { 22 } else { 14 }
   let drop_bias = (base_bias + game.profile.drop_bonus).clamp(min=4, max=55)
   if drop_roll < drop_bias {
-    spawn_random_powerup(game, enemy.x, enemy.y)
+    game.spawn_random_powerup(enemy.x, enemy.y)
   }
 }
 
 ///|
-fn stage_is_clear(game : @types.Game) -> Bool {
+fn @types.Game::stage_is_clear(game : @types.Game) -> Bool {
   game.enemies_spawned >= game.enemies_to_spawn &&
   game.enemies_alive <= 0 &&
-  rescue_objective_done(game)
+  game.rescue_objective_done()
 }

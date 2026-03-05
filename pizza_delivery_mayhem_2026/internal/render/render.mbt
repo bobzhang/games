@@ -1,12 +1,12 @@
 ///|
 /// Returns a sine wave value oscillating at frequency k based on the game's UI timer.
-fn bg_wave(game : @types.Game, k : Float) -> Float {
+fn @types.Game::bg_wave(game : @types.Game, k : Float) -> Float {
   @math.sinf(game.ui_t * k)
 }
 
 ///|
 /// Returns a random horizontal screen-shake offset when the shake timer is active.
-fn shake_x(game : @types.Game) -> Int {
+fn @types.Game::shake_x(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -16,7 +16,7 @@ fn shake_x(game : @types.Game) -> Int {
 
 ///|
 /// Returns a random vertical screen-shake offset when the shake timer is active.
-fn shake_y(game : @types.Game) -> Int {
+fn @types.Game::shake_y(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -26,10 +26,10 @@ fn shake_y(game : @types.Game) -> Int {
 
 ///|
 /// Clears the screen and draws the animated dark-blue background with soft glowing circles.
-fn draw_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(14, 22, 34, 255))
-  let w0 : Float = bg_wave(game, 0.44)
-  let w1 : Float = bg_wave(game, 0.88)
+  let w0 : Float = game.bg_wave(0.44)
+  let w1 : Float = game.bg_wave(0.88)
   @raylib.draw_circle(
     200,
     130,
@@ -52,7 +52,7 @@ fn draw_background(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the city grid background including road lanes, dashes, restaurant buildings, and the depot.
-fn draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit {
   @raylib.draw_rectangle(
     @types.world_x0 + ox,
     @types.world_y0 + oy,
@@ -147,7 +147,7 @@ fn draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit {
     24,
     @raylib.Color::new(236, 248, 255, 240),
   )
-  let city_flash : Int = (bg_wave(game, 2.1) * 16.0).to_int()
+  let city_flash : Int = (game.bg_wave(2.1) * 16.0).to_int()
   @raylib.draw_circle(
     depx + 44,
     depy - 34,
@@ -314,7 +314,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws all active particles as circles with alpha that fades as their lifetime decreases.
-fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
       continue
@@ -344,7 +344,7 @@ fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the player's delivery rider as a circle with a tilt-offset head, a scooter base, and optional boost flame or cargo box.
-fn draw_rider(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_rider(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let x : Int = game.rider_x.to_int() + ox
   let y : Int = game.rider_y.to_int() + oy
   let tilt : Float = @types.clampf(game.rider_vx * 0.0014, -0.45, 0.45)
@@ -394,7 +394,7 @@ fn draw_rider(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the active hint as a pulsing ring and a line from the rider to the hint target.
-fn draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
   if game.hint_t <= 0.0 {
     return
   }
@@ -447,7 +447,7 @@ fn draw_bar(
 
 ///|
 /// Draws the side HUD panel showing score, best score, deliveries, lives, combo, status bars, and key bindings.
-fn draw_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.panel_x0,
     20,
@@ -623,7 +623,7 @@ fn draw_panel(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a labelled touch button that highlights when the pointer is over its rectangle.
-fn draw_touch_button(
+fn @types.Game::draw_touch_button(
   game : @types.Game,
   rect : (Int, Int, Int, Int),
   label : String,
@@ -671,40 +671,35 @@ fn draw_touch_button(
 
 ///|
 /// Draws all on-screen touch control buttons for directional movement, boost, action, hint, and restart.
-fn draw_touch_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   if game.state != @types.state_play {
     return
   }
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_left(),
     "L",
     @raylib.Color::new(44, 76, 102, 176),
     @raylib.Color::new(70, 118, 156, 212),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_right(),
     "R",
     @raylib.Color::new(44, 76, 102, 176),
     @raylib.Color::new(70, 118, 156, 212),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_up(),
     "U",
     @raylib.Color::new(44, 76, 102, 176),
     @raylib.Color::new(70, 118, 156, 212),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_down(),
     "D",
     @raylib.Color::new(44, 76, 102, 176),
     @raylib.Color::new(70, 118, 156, 212),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_boost(),
     "BST",
     if game.boost_on || game.turbo_t > 0.0 {
@@ -714,8 +709,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
     },
     @raylib.Color::new(120, 184, 240, 230),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_action(),
     "ACT",
     if game.action_on {
@@ -725,15 +719,13 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
     },
     @raylib.Color::new(190, 170, 120, 230),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_hint(),
     "HNT",
     @raylib.Color::new(90, 96, 134, 182),
     @raylib.Color::new(152, 170, 224, 220),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_restart(),
     "RST",
     @raylib.Color::new(102, 88, 124, 182),
@@ -743,7 +735,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the current HUD notification message as a fade-out banner near the top of the world area.
-fn draw_msg(game : @types.Game) -> Unit {
+fn @types.Game::draw_msg(game : @types.Game) -> Unit {
   if game.msg_t <= 0.0 || game.msg == "" {
     return
   }
@@ -774,7 +766,7 @@ fn draw_msg(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the title screen overlay with game title, instructions, and a hoverable start button.
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -847,7 +839,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the result screen overlay showing win or lose outcome, score summary, and a retry button.
-fn draw_result_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -963,10 +955,10 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 ///|
 /// Draws the complete frame for the current delivery game state.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_background(game)
-  let ox : Int = shake_x(game)
-  let oy : Int = shake_y(game)
-  draw_world_back(game, ox, oy)
+  game.draw_background()
+  let ox : Int = game.shake_x()
+  let oy : Int = game.shake_y()
+  game.draw_world_back(ox, oy)
   for i in 0..<game.orders.length() {
     let highlight : Bool = game.cargo_idx == i
     draw_order(game.orders[i], highlight, ox, oy)
@@ -977,15 +969,15 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   for pickup in game.pickups {
     draw_pickup(pickup, ox, oy)
   }
-  draw_hint(game, ox, oy)
-  draw_particles(game, ox, oy)
-  draw_rider(game, ox, oy)
-  draw_panel(game)
-  draw_touch_controls(game)
-  draw_msg(game)
+  game.draw_hint(ox, oy)
+  game.draw_particles(ox, oy)
+  game.draw_rider(ox, oy)
+  game.draw_panel()
+  game.draw_touch_controls()
+  game.draw_msg()
   if game.state == @types.state_title {
-    draw_title_overlay(game)
+    game.draw_title_overlay()
   } else if game.state == @types.state_result {
-    draw_result_overlay(game)
+    game.draw_result_overlay()
   }
 }

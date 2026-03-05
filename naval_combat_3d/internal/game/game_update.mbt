@@ -4,24 +4,24 @@
 /// Advances one frame of naval gameplay by dispatching state-specific update logic.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
-  update_particles(game, dt)
+  game.update_particles(dt)
   if game.state == @types.state_menu {
-    update_menu(game, dt)
+    game.update_menu(dt)
   } else if game.state == @types.state_battle_select {
-    update_battle_select(game, dt)
+    game.update_battle_select(dt)
   } else if game.state == @types.state_playing {
-    update_playing(game, dt)
+    game.update_playing(dt)
   } else if game.state == @types.state_paused {
-    update_paused(game)
+    game.update_paused()
   } else if game.state == @types.state_battle_complete {
-    update_battle_complete(game)
+    game.update_battle_complete()
   } else if game.state == @types.state_game_over {
-    update_game_over(game)
+    game.update_game_over()
   }
 }
 
 ///|
-fn update_menu(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
   game.menu_blink += dt * 3.5
   // Up/Down to navigate menu
   if @raylib.is_key_pressed(@raylib.KeyUp) {
@@ -40,7 +40,7 @@ fn update_menu(game : @types.Game, dt : Float) -> Unit {
     @raylib.is_key_pressed(@raylib.KeySpace) {
     if game.menu_cursor == 0 {
       // Quick battle - start battle 0
-      start_battle(game, 0)
+      game.start_battle(0)
       game.state = @types.state_playing
     } else {
       // Battle select
@@ -51,7 +51,7 @@ fn update_menu(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_battle_select(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_battle_select(game : @types.Game, dt : Float) -> Unit {
   game.menu_blink += dt * 3.5
   // Navigate battle list
   if @raylib.is_key_pressed(@raylib.KeyUp) {
@@ -68,7 +68,7 @@ fn update_battle_select(game : @types.Game, dt : Float) -> Unit {
   }
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    start_battle(game, game.battle_select_cursor)
+    game.start_battle(game.battle_select_cursor)
     game.current_battle = game.battle_select_cursor
     game.state = @types.state_playing
   }
@@ -78,7 +78,7 @@ fn update_battle_select(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_playing(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
     game.state = @types.state_paused
@@ -89,19 +89,19 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   game.wave_time += dt
   game.battle_stats.time_elapsed += dt
   // Update wind system
-  update_wind(game, dt)
+  game.update_wind(dt)
   // Update systems
-  update_player(game, dt)
-  update_enemies(game, dt)
-  update_cannonballs(game, dt)
-  update_fleet_ships(game, dt)
-  update_convoy(game, dt)
-  update_fortress_combat(game, dt)
-  update_wakes(game, dt)
-  update_debris(game, dt)
-  update_messages(game, dt)
-  update_message(game, dt)
-  update_ship_effects(game, dt)
+  game.update_player(dt)
+  game.update_enemies(dt)
+  game.update_cannonballs(dt)
+  game.update_fleet_ships(dt)
+  game.update_convoy(dt)
+  game.update_fortress_combat(dt)
+  game.update_wakes(dt)
+  game.update_debris(dt)
+  game.update_messages(dt)
+  game.update_message(dt)
+  game.update_ship_effects(dt)
   // Wake spawning
   game.wake_spawn_timer -= dt
   if game.wake_spawn_timer <= 0.0 {
@@ -135,7 +135,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
     }
   }
   // Check battle objectives
-  check_objectives(game)
+  game.check_objectives()
   // Check game over
   if game.player.hull_hp <= 0.0 {
     game.player.hull_hp = 0.0
@@ -144,7 +144,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_wind(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_wind(game : @types.Game, dt : Float) -> Unit {
   let wind = game.wind
   // Shift timer - periodically change wind direction
   wind.shift_timer -= dt
@@ -199,7 +199,7 @@ fn update_wind(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_paused(game : @types.Game) -> Unit {
+fn @types.Game::update_paused(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
     game.state = @types.state_playing
@@ -207,12 +207,12 @@ fn update_paused(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_battle_complete(game : @types.Game) -> Unit {
+fn @types.Game::update_battle_complete(game : @types.Game) -> Unit {
   if game.current_battle >= game.total_battles - 1 {
     // All battles done - victory
     if @raylib.is_key_pressed(@raylib.KeyEnter) ||
       @raylib.is_key_pressed(@raylib.KeySpace) {
-      reset_game(game)
+      game.reset_game()
       game.state = @types.state_menu
     }
   } else if @raylib.is_key_pressed(@raylib.KeyEnter) ||
@@ -250,22 +250,22 @@ fn update_battle_complete(game : @types.Game) -> Unit {
       game.player.max_crew,
     )
     game.current_battle += 1
-    start_battle(game, game.current_battle)
+    game.start_battle(game.current_battle)
     game.state = @types.state_playing
   }
 }
 
 ///|
-fn update_game_over(game : @types.Game) -> Unit {
+fn @types.Game::update_game_over(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    reset_game(game)
+    game.reset_game()
     game.state = @types.state_menu
   }
 }
 
 ///|
-fn update_particles(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -306,7 +306,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_wakes(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_wakes(game : @types.Game, dt : Float) -> Unit {
   for w in game.wakes {
     if not(w.active) {
       continue
@@ -323,7 +323,7 @@ fn update_wakes(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_debris(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_debris(game : @types.Game, dt : Float) -> Unit {
   for d in game.debris_pool {
     if not(d.active) {
       continue
@@ -352,7 +352,7 @@ fn update_debris(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_messages(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_messages(game : @types.Game, dt : Float) -> Unit {
   for msg in game.messages {
     if not(msg.active) {
       continue
@@ -365,14 +365,14 @@ fn update_messages(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_message(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_message(game : @types.Game, dt : Float) -> Unit {
   if game.message_timer > 0.0 {
     game.message_timer -= dt
   }
 }
 
 ///|
-fn update_ship_effects(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_ship_effects(game : @types.Game, dt : Float) -> Unit {
   // Player ship bobbing
   game.player.bob_phase += dt * 2.0
   // Player roll from turning
@@ -461,7 +461,7 @@ fn update_ship_effects(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_fleet_ships(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_fleet_ships(game : @types.Game, dt : Float) -> Unit {
   let px = game.player.x
   let pz = game.player.z
   for i in 0..<game.fleet_ships.length() {
@@ -526,7 +526,7 @@ fn update_fleet_ships(game : @types.Game, dt : Float) -> Unit {
         // Fire when in range
         fs.fire_timer -= dt
         if fs.fire_timer <= 0.0 && nearest_dist < 30.0 {
-          fire_fleet_broadside(game, i, nearest_idx)
+          game.fire_fleet_broadside(i, nearest_idx)
           fs.fire_timer = fs.fire_rate
         }
       } else {
@@ -568,7 +568,7 @@ fn update_fleet_ships(game : @types.Game, dt : Float) -> Unit {
           }
         }
         if near_enemy >= 0 {
-          fire_fleet_broadside(game, i, near_enemy)
+          game.fire_fleet_broadside(i, near_enemy)
           fs.fire_timer = fs.fire_rate
         }
       }
@@ -593,7 +593,7 @@ fn update_fleet_ships(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn fire_fleet_broadside(
+fn @types.Game::fire_fleet_broadside(
   game : @types.Game,
   fleet_idx : Int,
   enemy_idx : Int,
@@ -645,7 +645,7 @@ fn fire_fleet_broadside(
 }
 
 ///|
-fn update_convoy(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_convoy(game : @types.Game, dt : Float) -> Unit {
   for cs in game.convoy_ships {
     if not(cs.active) {
       continue
@@ -696,7 +696,7 @@ fn update_convoy(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_fortress_combat(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_fortress_combat(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.island_count {
     let island = game.islands[i]
     if not(island.active) {
@@ -780,7 +780,7 @@ fn update_fortress_combat(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn check_objectives(game : @types.Game) -> Unit {
+fn @types.Game::check_objectives(game : @types.Game) -> Unit {
   let obj = game.objective
   if obj.completed || obj.failed {
     return
@@ -804,7 +804,7 @@ fn check_objectives(game : @types.Game) -> Unit {
     }
     if alive == 0 && not(fortress_alive) {
       obj.completed = true
-      complete_battle(game)
+      game.complete_battle()
     }
   } else if obj.objective_type == @types.objective_escort_convoy {
     // Check if any convoy ships are still active and haven't arrived
@@ -822,7 +822,7 @@ fn check_objectives(game : @types.Game) -> Unit {
       game.message_timer = 5.0
     } else if all_arrived && convoy_alive > 0 {
       obj.completed = true
-      complete_battle(game)
+      game.complete_battle()
     } else if alive == 0 && convoy_alive > 0 {
       // All enemies dead but convoy still moving - wait for arrival
       ignore(all_arrived)
@@ -831,7 +831,7 @@ fn check_objectives(game : @types.Game) -> Unit {
     // Player must reach the far side
     if game.player.z > 80.0 {
       obj.completed = true
-      complete_battle(game)
+      game.complete_battle()
     }
     // Time limit
     obj.time_elapsed += @raylib.get_frame_time()
@@ -845,7 +845,7 @@ fn check_objectives(game : @types.Game) -> Unit {
 }
 
 ///|
-fn complete_battle(game : @types.Game) -> Unit {
+fn @types.Game::complete_battle(game : @types.Game) -> Unit {
   // Award score bonus
   let bonus = @levels.get_battle_reward_mult(game.current_battle) * 100
   game.score += bonus
@@ -865,7 +865,7 @@ fn complete_battle(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_battle(game : @types.Game, battle : Int) -> Unit {
+fn @types.Game::start_battle(game : @types.Game, battle : Int) -> Unit {
   // Clear pools
   for i in 0..<game.enemies.length() {
     game.enemies[i] = @types.EnemyShip::inactive()
@@ -1129,7 +1129,7 @@ fn start_battle(game : @types.Game, battle : Int) -> Unit {
 }
 
 ///|
-fn reset_game(game : @types.Game) -> Unit {
+fn @types.Game::reset_game(game : @types.Game) -> Unit {
   game.score = 0
   game.reputation = 0
   game.current_battle = 0

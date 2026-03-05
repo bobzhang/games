@@ -1,6 +1,6 @@
 ///|
 /// Resets all input fields in the game's input snapshot to neutral for the new frame.
-fn clear_frame_input(game : @types.Game) -> Unit {
+fn @types.Game::clear_frame_input(game : @types.Game) -> Unit {
   game.input.move_x = 0
   game.input.move_y = 0
   game.input.press_j = false
@@ -13,8 +13,8 @@ fn clear_frame_input(game : @types.Game) -> Unit {
 
 ///|
 /// Polls keyboard state and writes the current frame's directional and action inputs into `game.input`.
-fn capture_input(game : @types.Game) -> Unit {
-  clear_frame_input(game)
+fn @types.Game::capture_input(game : @types.Game) -> Unit {
+  game.clear_frame_input()
 
   let left = @raylib.is_key_pressed(@raylib.KeyLeft) ||
     @raylib.is_key_pressed(@raylib.KeyA)

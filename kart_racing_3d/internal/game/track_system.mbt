@@ -23,9 +23,9 @@ pub fn load_track(game : @types.Game, cup : Int, race : Int) -> Unit {
     game.particles[i] = @types.Particle::inactive()
   }
   // Spawn karts at start positions
-  spawn_karts(game)
+  game.spawn_karts()
   // Spawn powerup pickups along track
-  spawn_track_powerups(game)
+  game.spawn_track_powerups()
   // Reset race state
   game.race_time = 0.0
   game.countdown_timer = @types.countdown_total
@@ -35,7 +35,7 @@ pub fn load_track(game : @types.Game, cup : Int, race : Int) -> Unit {
 }
 
 ///|
-fn spawn_karts(game : @types.Game) -> Unit {
+fn @types.Game::spawn_karts(game : @types.Game) -> Unit {
   if game.waypoint_count < 2 {
     return
   }
@@ -89,7 +89,7 @@ fn spawn_karts(game : @types.Game) -> Unit {
 }
 
 ///|
-fn spawn_track_powerups(game : @types.Game) -> Unit {
+fn @types.Game::spawn_track_powerups(game : @types.Game) -> Unit {
   if game.waypoint_count < 3 {
     return
   }

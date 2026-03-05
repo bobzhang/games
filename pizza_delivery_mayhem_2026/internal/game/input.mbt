@@ -1,6 +1,6 @@
 ///|
 /// Returns true when the pointer is over the title screen start button.
-fn title_hover(game : @types.Game) -> Bool {
+fn @types.Game::title_hover(game : @types.Game) -> Bool {
   let b = @types.start_button_rect()
   @types.pointer_on_rect(
     game.mouse_x,
@@ -16,7 +16,7 @@ fn title_hover(game : @types.Game) -> Bool {
 
 ///|
 /// Returns true when the pointer is over the result screen retry button.
-fn result_hover(game : @types.Game) -> Bool {
+fn @types.Game::result_hover(game : @types.Game) -> Bool {
   let b = @types.retry_button_rect()
   @types.pointer_on_rect(
     game.mouse_x,
@@ -32,48 +32,48 @@ fn result_hover(game : @types.Game) -> Bool {
 
 ///|
 /// Reads keyboard, mouse, and touch input on the title screen and starts the run when triggered.
-fn update_title_input(game : @types.Game) -> Unit {
+fn @types.Game::update_title_input(game : @types.Game) -> Unit {
   let key_start : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
   let click_start : Bool = @raylib.is_mouse_button_pressed(
     @raylib.MouseButtonLeft,
   )
-  let tap_start : Bool = game.touch_cd <= 0.0 && title_hover(game)
+  let tap_start : Bool = game.touch_cd <= 0.0 && game.title_hover()
   if key_start || click_start || tap_start {
-    start_run(game)
+    game.start_run()
     game.touch_cd = 0.16
   }
 }
 
 ///|
 /// Reads keyboard, mouse, and touch input on the result screen and restarts the run when triggered.
-fn update_result_input(game : @types.Game) -> Unit {
+fn @types.Game::update_result_input(game : @types.Game) -> Unit {
   let key_retry : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyR)
   let click_retry : Bool = @raylib.is_mouse_button_pressed(
     @raylib.MouseButtonLeft,
   )
-  let tap_retry : Bool = game.touch_cd <= 0.0 && result_hover(game)
+  let tap_retry : Bool = game.touch_cd <= 0.0 && game.result_hover()
   if key_retry || click_retry || tap_retry {
-    start_run(game)
+    game.start_run()
     game.touch_cd = 0.16
   }
 }
 
 ///|
 /// Reads keyboard and touch input during gameplay and updates movement, boost, action, hint, and restart state.
-fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_play_input(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
     game.state = @types.state_title
     return
   }
   if @raylib.is_key_pressed(@raylib.KeyR) {
-    start_run(game)
+    game.start_run()
     return
   }
   if @raylib.is_key_pressed(@raylib.KeyH) {
-    ignore(use_hint(game))
+    ignore(game.use_hint())
   }
   let mut move_x : Float = 0.0
   let mut move_y : Float = 0.0
@@ -152,7 +152,7 @@ fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
   )
   game.action_on = action_key || action_touch
   if @raylib.is_key_pressed(@raylib.KeyQ) {
-    ignore(try_repair(game))
+    ignore(game.try_repair())
   }
   if game.touch_cd <= 0.0 &&
     @types.pointer_on_rect(
@@ -165,12 +165,12 @@ fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
       action.2,
       action.3,
     ) {
-    ignore(try_repair(game))
+    ignore(game.try_repair())
     game.touch_cd = 0.14
   }
   if game.touch_cd <= 0.0 &&
     @types.pointer_on_rect(mx, my, hold, tc, hint.0, hint.1, hint.2, hint.3) {
-    ignore(use_hint(game))
+    ignore(game.use_hint())
     game.touch_cd = 0.16
   }
   if game.touch_cd <= 0.0 &&
@@ -184,7 +184,7 @@ fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
       restart.2,
       restart.3,
     ) {
-    start_run(game)
+    game.start_run()
     game.touch_cd = 0.16
   }
 }

@@ -1,6 +1,6 @@
 ///|
 /// Resets all input fields on the game to their zero/false defaults for the current frame.
-fn clear_input(game : @types.Game) -> Unit {
+fn @types.Game::clear_input(game : @types.Game) -> Unit {
   game.input_dx = 0
   game.input_dy = 0
   game.input_inspect_press = false
@@ -12,8 +12,8 @@ fn clear_input(game : @types.Game) -> Unit {
 
 ///|
 /// Reads keyboard state and populates the per-frame input fields on the game.
-fn update_input(game : @types.Game) -> Unit {
-  clear_input(game)
+fn @types.Game::update_input(game : @types.Game) -> Unit {
+  game.clear_input()
 
   if @raylib.is_key_pressed(@raylib.KeyA) ||
     @raylib.is_key_pressed(@raylib.KeyLeft) {

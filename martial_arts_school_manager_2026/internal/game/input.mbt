@@ -1,6 +1,6 @@
 ///|
 /// Resets all input fields on the game's input struct to their zero/false defaults.
-fn clear_input(game : @types.Game) -> Unit {
+fn @types.Game::clear_input(game : @types.Game) -> Unit {
   game.input.move_x = 0
   game.input.move_y = 0
   game.input.confirm_pressed = false
@@ -13,8 +13,8 @@ fn clear_input(game : @types.Game) -> Unit {
 
 ///|
 /// Clears input then polls keyboard for movement, confirm, cancel, burst, pause, restart, and start actions.
-fn sample_input(game : @types.Game) -> Unit {
-  clear_input(game)
+fn @types.Game::sample_input(game : @types.Game) -> Unit {
+  game.clear_input()
 
   if @raylib.is_key_pressed(@raylib.KeyLeft) ||
     @raylib.is_key_pressed(@raylib.KeyA) {

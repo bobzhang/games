@@ -47,7 +47,7 @@ fn draw_meter(
 
 ///|
 /// Returns the number of active lanterns currently assigned to the given shrine index.
-fn shrine_queue_count(game : @types.Game, shrine : Int) -> Int {
+fn @types.Game::shrine_queue_count(game : @types.Game, shrine : Int) -> Int {
   let mut total = 0
   for lantern in game.lanterns {
     if lantern.active && lantern.target_shrine == shrine {
@@ -59,7 +59,7 @@ fn shrine_queue_count(game : @types.Game, shrine : Int) -> Int {
 
 ///|
 /// Draws the night sky gradient, twinkling stars, and a drifting moon.
-fn draw_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_background(game : @types.Game) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -115,7 +115,7 @@ fn draw_background(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the street play-field rectangle with lane strips, grid lines, border, and title text.
-fn draw_playfield(game : @types.Game) -> Unit {
+fn @types.Game::draw_playfield(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.play_x,
     @types.play_y,
@@ -179,10 +179,10 @@ fn draw_playfield(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all shrine positions with pulsing glow rings, labels, and pending lantern queue counts.
-fn draw_shrines(game : @types.Game) -> Unit {
+fn @types.Game::draw_shrines(game : @types.Game) -> Unit {
   for i in 0..<@types.shrine_count {
     let p = @types.shrine_position(i)
-    let queue = shrine_queue_count(game, i)
+    let queue = game.shrine_queue_count(i)
     let half = Float::from_int(1) / Float::from_int(2)
     let pulse : Float = half +
       half * @math.sinf(game.run_time * 2.4 + Float::from_int(i) * 1.5)
@@ -256,7 +256,7 @@ fn draw_gate() -> Unit {
 
 ///|
 /// Draws all active wind gusts as circle outlines with a velocity direction line.
-fn draw_gusts(game : @types.Game) -> Unit {
+fn @types.Game::draw_gusts(game : @types.Game) -> Unit {
   for gust in game.gusts {
     if not(gust.active) {
       continue
@@ -285,7 +285,7 @@ fn draw_gusts(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all active ember sparks as orange-to-white filled circles fading with lifetime.
-fn draw_sparks(game : @types.Game) -> Unit {
+fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
       continue
@@ -308,7 +308,7 @@ fn draw_sparks(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all active thieves as red circles with an outline and a targeting line to their current lantern.
-fn draw_thieves(game : @types.Game) -> Unit {
+fn @types.Game::draw_thieves(game : @types.Game) -> Unit {
   for thief in game.thieves {
     if not(thief.active) {
       continue
@@ -343,7 +343,7 @@ fn draw_thieves(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all active lanterns with their frame, inner glow, flame dot, flame bar, shrine guide line, and escort ring.
-fn draw_lanterns(game : @types.Game) -> Unit {
+fn @types.Game::draw_lanterns(game : @types.Game) -> Unit {
   for i in 0..<game.lanterns.length() {
     if not(game.lanterns[i].active) {
       continue
@@ -411,7 +411,7 @@ fn draw_lanterns(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the patrol character with calm-field ring, guard-stance ring, escort link line, body, and direction dot.
-fn draw_patrol(game : @types.Game) -> Unit {
+fn @types.Game::draw_patrol(game : @types.Game) -> Unit {
   if game.patrol.calm_t > 0.0 {
     let ratio = @types.clampf(
       game.patrol.calm_t / @types.calm_duration,
@@ -471,7 +471,7 @@ fn draw_patrol(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the transient status text banner overlaid on the play-field while `status_t` is positive.
-fn draw_status_strip(game : @types.Game) -> Unit {
+fn @types.Game::draw_status_strip(game : @types.Game) -> Unit {
   if game.status_t <= 0.0 {
     return
   }
@@ -504,7 +504,7 @@ fn draw_status_strip(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the side HUD panel with score, delivery stats, meters, active counts, and control reference.
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.hud_x,
     @types.hud_y,
@@ -747,7 +747,7 @@ fn draw_paused_overlay() -> Unit {
 
 ///|
 /// Draws the game-over overlay showing the run end reason, delivery count, score, and best score.
-fn draw_game_over_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -784,7 +784,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a full-screen flash overlay tinted orange-red when `screen_flash_t` is positive.
-fn draw_flash(game : @types.Game) -> Unit {
+fn @types.Game::draw_flash(game : @types.Game) -> Unit {
   if game.screen_flash_t <= 0.0 {
     return
   }
@@ -804,24 +804,24 @@ fn draw_flash(game : @types.Game) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@types.night_top())
 
-  draw_background(game)
-  draw_playfield(game)
-  draw_shrines(game)
+  game.draw_background()
+  game.draw_playfield()
+  game.draw_shrines()
   draw_gate()
-  draw_gusts(game)
-  draw_sparks(game)
-  draw_thieves(game)
-  draw_lanterns(game)
-  draw_patrol(game)
-  draw_status_strip(game)
-  draw_hud(game)
+  game.draw_gusts()
+  game.draw_sparks()
+  game.draw_thieves()
+  game.draw_lanterns()
+  game.draw_patrol()
+  game.draw_status_strip()
+  game.draw_hud()
 
   match game.state {
     Title => draw_title_overlay()
     Paused => draw_paused_overlay()
-    GameOver => draw_game_over_overlay(game)
+    GameOver => game.draw_game_over_overlay()
     Playing => ()
   }
 
-  draw_flash(game)
+  game.draw_flash()
 }

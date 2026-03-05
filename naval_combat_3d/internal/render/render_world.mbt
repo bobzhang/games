@@ -3,20 +3,20 @@
 ///|
 /// Draws the 3D naval battlefield, including ocean, islands, ships, shots, and effects.
 pub fn draw_world(game : @types.Game) -> Unit {
-  let camera = build_camera(game)
+  let camera = game.build_camera()
   @raylib.begin_mode_3d(camera)
-  draw_ocean(game)
-  draw_islands(game)
-  draw_player_ship(game)
-  draw_enemy_ships(game)
-  draw_cannonballs(game)
-  draw_particles_3d(game)
-  draw_wind_indicator(game)
+  game.draw_ocean()
+  game.draw_islands()
+  game.draw_player_ship()
+  game.draw_enemy_ships()
+  game.draw_cannonballs()
+  game.draw_particles_3d()
+  game.draw_wind_indicator()
   @raylib.end_mode_3d()
 }
 
 ///|
-fn build_camera(game : @types.Game) -> @raylib.Camera3D {
+fn @types.Game::build_camera(game : @types.Game) -> @raylib.Camera3D {
   let ship = game.player
   // Camera behind and above the player ship
   let cam_angle = ship.heading + @types.pi + game.camera_offset_angle
@@ -35,7 +35,7 @@ fn build_camera(game : @types.Game) -> @raylib.Camera3D {
 }
 
 ///|
-fn draw_ocean(game : @types.Game) -> Unit {
+fn @types.Game::draw_ocean(game : @types.Game) -> Unit {
   // Main ocean plane
   let size = @types.ocean_size
   @raylib.draw_plane(
@@ -74,7 +74,7 @@ fn draw_ocean(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_islands(game : @types.Game) -> Unit {
+fn @types.Game::draw_islands(game : @types.Game) -> Unit {
   for i in 0..<game.island_count {
     let island = game.islands[i]
     if not(island.active) {
@@ -128,7 +128,7 @@ fn draw_islands(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_player_ship(game : @types.Game) -> Unit {
+fn @types.Game::draw_player_ship(game : @types.Game) -> Unit {
   let ship = game.player
   let sin_h = @math.sinf(ship.heading)
   let cos_h = @math.cosf(ship.heading)
@@ -246,7 +246,7 @@ fn draw_player_ship(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_enemy_ships(game : @types.Game) -> Unit {
+fn @types.Game::draw_enemy_ships(game : @types.Game) -> Unit {
   for enemy in game.enemies {
     if not(enemy.active) {
       continue
@@ -338,7 +338,7 @@ fn draw_enemy_ships(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_cannonballs(game : @types.Game) -> Unit {
+fn @types.Game::draw_cannonballs(game : @types.Game) -> Unit {
   for cb in game.cannonballs {
     if not(cb.active) {
       continue
@@ -363,7 +363,7 @@ fn draw_cannonballs(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_particles_3d(game : @types.Game) -> Unit {
+fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -381,7 +381,7 @@ fn draw_particles_3d(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_wind_indicator(game : @types.Game) -> Unit {
+fn @types.Game::draw_wind_indicator(game : @types.Game) -> Unit {
   // Draw a wind direction arrow near the player
   let ship = game.player
   let arrow_base_x = ship.x + 5.0

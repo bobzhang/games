@@ -1,5 +1,5 @@
 ///|
-fn clear_hostages(game : @types.Game) -> Unit {
+fn @types.Game::clear_hostages(game : @types.Game) -> Unit {
   for i in 0..<game.hostages.length() {
     game.hostages[i] = @types.Hostage::inactive()
   }
@@ -8,7 +8,7 @@ fn clear_hostages(game : @types.Game) -> Unit {
 }
 
 ///|
-fn alloc_hostage_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_hostage_slot(game : @types.Game) -> Int {
   for i in 0..<game.hostages.length() {
     if not(game.hostages[i].active) {
       return i
@@ -34,7 +34,7 @@ fn tile_is_hostage_spawnable(tile : Int) -> Bool {
 }
 
 ///|
-fn try_spawn_hostage_at_tile(game : @types.Game, tx : Int, ty : Int) -> Bool {
+fn @types.Game::try_spawn_hostage_at_tile(game : @types.Game, tx : Int, ty : Int) -> Bool {
   if not(@types.in_tile_bounds(tx, ty)) {
     return false
   }
@@ -47,7 +47,7 @@ fn try_spawn_hostage_at_tile(game : @types.Game, tx : Int, ty : Int) -> Bool {
     return false
   }
 
-  let slot = alloc_hostage_slot(game)
+  let slot = game.alloc_hostage_slot()
   if slot < 0 {
     return false
   }
@@ -66,8 +66,8 @@ fn try_spawn_hostage_at_tile(game : @types.Game, tx : Int, ty : Int) -> Bool {
 }
 
 ///|
-fn seed_stage_hostages(game : @types.Game, stage : Int) -> Unit {
-  clear_hostages(game)
+fn @types.Game::seed_stage_hostages(game : @types.Game, stage : Int) -> Unit {
+  game.clear_hostages()
   game.hostages_goal = hostage_goal_for_stage(stage)
 
   let mut placed = 0
@@ -76,7 +76,7 @@ fn seed_stage_hostages(game : @types.Game, stage : Int) -> Unit {
     attempts += 1
     let tx = @types.rand_range(game, 1, @types.map_tiles_w - 2)
     let ty = @types.rand_range(game, 2, @types.map_tiles_h - 4)
-    if try_spawn_hostage_at_tile(game, tx, ty) {
+    if game.try_spawn_hostage_at_tile(tx, ty) {
       placed += 1
     }
   }
@@ -88,7 +88,7 @@ fn seed_stage_hostages(game : @types.Game, stage : Int) -> Unit {
       for tx = 2
           tx < @types.map_tiles_w - 2 && placed < game.hostages_goal
           tx = tx + 1 {
-        if try_spawn_hostage_at_tile(game, tx, ty) {
+        if game.try_spawn_hostage_at_tile(tx, ty) {
           placed += 1
         }
       }
@@ -99,7 +99,7 @@ fn seed_stage_hostages(game : @types.Game, stage : Int) -> Unit {
 }
 
 ///|
-fn rescue_objective_done(game : @types.Game) -> Bool {
+fn @types.Game::rescue_objective_done(game : @types.Game) -> Bool {
   if game.hostages_goal <= 0 {
     true
   } else {
@@ -108,7 +108,7 @@ fn rescue_objective_done(game : @types.Game) -> Bool {
 }
 
 ///|
-fn update_hostages(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_hostages(game : @types.Game, dt : Float) -> Unit {
   let pickup_r2 = @types.rescue_pickup_radius * @types.rescue_pickup_radius
 
   for hostage in game.hostages {
@@ -135,7 +135,7 @@ fn update_hostages(game : @types.Game, dt : Float) -> Unit {
         @particles.spawn_spark_burst(game, hostage.x, hostage.y - 8.0, 12)
         @particles.spawn_respawn_burst(game, hostage.x, hostage.y)
 
-        if rescue_objective_done(game) && not(game.rescue_stage_bonus_awarded) {
+        if game.rescue_objective_done() && not(game.rescue_stage_bonus_awarded) {
           game.rescue_stage_bonus_awarded = true
           @score.grant_score(game, team, @types.rescue_stage_bonus)
           @particles.spawn_spark_burst(

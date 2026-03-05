@@ -63,7 +63,7 @@ fn draw_meter(
 
 ///|
 /// Returns the average fatigue across all students for HUD display.
-fn mean_fatigue(game : @types.Game) -> Float {
+fn @types.Game::mean_fatigue(game : @types.Game) -> Float {
   let mut sum : Float = 0.0
 
   for i in 0..<@types.student_count {
@@ -75,7 +75,7 @@ fn mean_fatigue(game : @types.Game) -> Float {
 
 ///|
 /// Clears and draws the animated background with waving stripe bands, decorative circles, and incident flash overlay.
-fn draw_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(16, 20, 30, 255))
 
   for i in 0..<14 {
@@ -115,7 +115,7 @@ fn draw_background(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the top HUD bar showing title, week number, funds, reputation, average fatigue, and week-progress meter.
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     28,
     22,
@@ -169,7 +169,7 @@ fn draw_hud(game : @types.Game) -> Unit {
     },
   )
 
-  let avg_fatigue = mean_fatigue(game)
+  let avg_fatigue = game.mean_fatigue()
   let fatigue_text = "Avg Fatigue " + avg_fatigue.to_int().to_string()
   @raylib.draw_text(fatigue_text, 790, 84, 30, fatigue_color(avg_fatigue))
 
@@ -231,7 +231,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the student assignment grid with room column headers, per-student skill/fatigue meters, and cursor/assignment highlights.
-fn draw_student_table(game : @types.Game) -> Unit {
+fn @types.Game::draw_student_table(game : @types.Game) -> Unit {
   let panel_x = 40
   let panel_y = 164
   let panel_w = @types.screen_w - 80
@@ -435,7 +435,7 @@ fn draw_footer_help() -> Unit {
 
 ///|
 /// Draws the floating status message box with fade-in/out alpha when a message is active.
-fn draw_message(game : @types.Game) -> Unit {
+fn @types.Game::draw_message(game : @types.Game) -> Unit {
   if game.message_t <= 0.0 {
     return
   }
@@ -468,7 +468,7 @@ fn draw_message(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the animated week-number banner that pulses briefly when a new week begins.
-fn draw_week_banner(game : @types.Game) -> Unit {
+fn @types.Game::draw_week_banner(game : @types.Game) -> Unit {
   if game.week_banner_t <= 0.0 || game.state != Playing {
     return
   }
@@ -521,7 +521,7 @@ fn draw_overlay_card(
 
 ///|
 /// Draws the title-screen overlay with game instructions and the best-week record.
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -577,7 +577,7 @@ fn draw_paused_overlay() -> Unit {
 
 ///|
 /// Draws the game-over overlay card showing the defeat reason, final stats, and a restart prompt.
-fn draw_game_over_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -604,17 +604,17 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 ///|
 /// Render world panels, HUD, and state overlays for the frame.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_background(game)
-  draw_hud(game)
-  draw_student_table(game)
+  game.draw_background()
+  game.draw_hud()
+  game.draw_student_table()
   draw_footer_help()
-  draw_week_banner(game)
-  draw_message(game)
+  game.draw_week_banner()
+  game.draw_message()
 
   match game.state {
-    Title => draw_title_overlay(game)
+    Title => game.draw_title_overlay()
     Paused => draw_paused_overlay()
-    GameOver => draw_game_over_overlay(game)
+    GameOver => game.draw_game_over_overlay()
     Playing => ()
   }
 }

@@ -1,6 +1,6 @@
 ///|
 /// Resets all per-frame input flags on the game state to their default off values.
-fn clear_frame_input(game : @types.Game) -> Unit {
+fn @types.Game::clear_frame_input(game : @types.Game) -> Unit {
   game.input_x = 0.0
   game.input_y = 0.0
   game.input_fire_hold = false
@@ -11,8 +11,8 @@ fn clear_frame_input(game : @types.Game) -> Unit {
 
 ///|
 /// Reads keyboard, mouse, and touch input for the title screen and sets `input_restart_press` when the player activates the start button.
-fn update_title_input(game : @types.Game) -> Unit {
-  clear_frame_input(game)
+fn @types.Game::update_title_input(game : @types.Game) -> Unit {
+  game.clear_frame_input()
 
   game.touch_mode = game.touch_count > 0
 
@@ -39,8 +39,8 @@ fn update_title_input(game : @types.Game) -> Unit {
 
 ///|
 /// Reads keyboard, mouse, and touch input during gameplay and populates all directional, fire, boost, and hack input fields.
-fn update_play_input(game : @types.Game) -> Unit {
-  clear_frame_input(game)
+fn @types.Game::update_play_input(game : @types.Game) -> Unit {
+  game.clear_frame_input()
 
   game.touch_mode = game.touch_count > 0
 
@@ -181,8 +181,8 @@ fn update_play_input(game : @types.Game) -> Unit {
 
 ///|
 /// Reads keyboard, mouse, and touch input on the result screen and sets `input_restart_press` when the player activates the retry button.
-fn update_result_input(game : @types.Game) -> Unit {
-  clear_frame_input(game)
+fn @types.Game::update_result_input(game : @types.Game) -> Unit {
+  game.clear_frame_input()
 
   game.touch_mode = game.touch_count > 0
 

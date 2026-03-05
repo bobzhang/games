@@ -4,27 +4,27 @@
 /// Draws the active 2D naval HUD/menu overlays for the current game state.
 pub fn draw_ui(game : @types.Game) -> Unit {
   if game.state == @types.state_menu {
-    draw_menu(game)
+    game.draw_menu()
   } else if game.state == @types.state_playing {
-    draw_hud(game)
+    game.draw_hud()
     if game.message_timer > 0.0 {
-      draw_message(game)
+      game.draw_message()
     }
   } else if game.state == @types.state_paused {
-    draw_hud(game)
+    game.draw_hud()
     draw_pause_overlay()
   } else if game.state == @types.state_battle_complete {
-    draw_hud(game)
-    draw_battle_complete(game)
+    game.draw_hud()
+    game.draw_battle_complete()
   } else if game.state == @types.state_battle_select {
-    draw_battle_select(game)
+    game.draw_battle_select()
   } else if game.state == @types.state_game_over {
-    draw_game_over(game)
+    game.draw_game_over()
   }
 }
 
 ///|
-fn draw_menu(game : @types.Game) -> Unit {
+fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -121,7 +121,7 @@ fn draw_menu(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   let ship = game.player
   // Top bar background
   @raylib.draw_rectangle(
@@ -362,7 +362,7 @@ fn draw_hp_bar(
 }
 
 ///|
-fn draw_message(game : @types.Game) -> Unit {
+fn @types.Game::draw_message(game : @types.Game) -> Unit {
   let text = game.message_text
   let tw = @raylib.measure_text(text, 28)
   let y = 60
@@ -412,7 +412,7 @@ fn draw_pause_overlay() -> Unit {
 }
 
 ///|
-fn draw_battle_complete(game : @types.Game) -> Unit {
+fn @types.Game::draw_battle_complete(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -490,7 +490,7 @@ fn draw_battle_complete(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_battle_select(game : @types.Game) -> Unit {
+fn @types.Game::draw_battle_select(game : @types.Game) -> Unit {
   // Dark background
   @raylib.draw_rectangle(
     0,
@@ -559,7 +559,7 @@ fn draw_battle_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_game_over(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,

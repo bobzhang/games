@@ -39,7 +39,7 @@ fn pointer_on_rect(
 
 ///|
 /// Resets all per-frame input flags on the game state to their default off values.
-fn clear_frame_input(game : @types.Game) -> Unit {
+fn @types.Game::clear_frame_input(game : @types.Game) -> Unit {
   game.input_jump_press = false
   game.input_jump_hold = false
   game.input_slide_hold = false
@@ -50,7 +50,7 @@ fn clear_frame_input(game : @types.Game) -> Unit {
 
 ///|
 /// Updates the game pointer coordinates from the mouse position or the first active touch point.
-fn update_pointer(game : @types.Game) -> Unit {
+fn @types.Game::update_pointer(game : @types.Game) -> Unit {
   game.pointer_x = game.mouse_x
   game.pointer_y = game.mouse_y
 
@@ -64,9 +64,9 @@ fn update_pointer(game : @types.Game) -> Unit {
 
 ///|
 /// Reads title screen input and immediately starts a run when any start key, mouse button, or touch event is detected.
-fn update_title_input(game : @types.Game) -> Unit {
-  clear_frame_input(game)
-  update_pointer(game)
+fn @types.Game::update_title_input(game : @types.Game) -> Unit {
+  game.clear_frame_input()
+  game.update_pointer()
 
   let touch_count = @raylib.get_touch_point_count()
   game.touch_mode = touch_count > 0
@@ -83,15 +83,15 @@ fn update_title_input(game : @types.Game) -> Unit {
   game.touch_restart_prev = touch_active
 
   if key_start || mouse_start || touch_start {
-    start_run(game)
+    game.start_run()
   }
 }
 
 ///|
 /// Reads gameplay input for jump, slide, grapple, and restart actions from keyboard, mouse, and touch sources.
-fn update_play_input(game : @types.Game) -> Unit {
-  clear_frame_input(game)
-  update_pointer(game)
+fn @types.Game::update_play_input(game : @types.Game) -> Unit {
+  game.clear_frame_input()
+  game.update_pointer()
 
   let mx = game.mouse_x
   let my = game.mouse_y
@@ -183,15 +183,15 @@ fn update_play_input(game : @types.Game) -> Unit {
   game.touch_restart_prev = touch_restart
 
   if game.input_pause_press {
-    init_title_scene(game)
+    game.init_title_scene()
   }
 }
 
 ///|
 /// Reads stage-clear screen input and sets restart or jump-press flags to advance to the next stage.
-fn update_stage_clear_input(game : @types.Game) -> Unit {
-  clear_frame_input(game)
-  update_pointer(game)
+fn @types.Game::update_stage_clear_input(game : @types.Game) -> Unit {
+  game.clear_frame_input()
+  game.update_pointer()
 
   let touch_count = @raylib.get_touch_point_count()
 
@@ -209,9 +209,9 @@ fn update_stage_clear_input(game : @types.Game) -> Unit {
 
 ///|
 /// Reads game-over screen input and sets the restart flag when a retry key, click, or touch event is detected.
-fn update_result_input(game : @types.Game) -> Unit {
-  clear_frame_input(game)
-  update_pointer(game)
+fn @types.Game::update_result_input(game : @types.Game) -> Unit {
+  game.clear_frame_input()
+  game.update_pointer()
 
   let touch_count = @raylib.get_touch_point_count()
 

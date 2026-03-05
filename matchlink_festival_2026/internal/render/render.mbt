@@ -9,7 +9,7 @@ fn color_for_kind(kind : Int) -> @raylib.Color {
 
 ///|
 /// Draws the background: a dark fill, two pulsing ambient circles, and subtle horizontal stripe bands.
-fn draw_bg(game : @types.Game) -> Unit {
+fn @types.Game::draw_bg(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 14, 22, 255))
 
   let wave : Float = Float::from_double(
@@ -48,7 +48,7 @@ fn draw_bg(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all active spark particles as coloured circles, using kind-specific colours for match, link, fail, and hint effects.
-fn draw_sparks(game : @types.Game) -> Unit {
+fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
       continue
@@ -75,7 +75,7 @@ fn draw_sparks(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the active link path flash as a sequence of thick yellow line segments with dot markers at each waypoint.
-fn draw_link_path(game : @types.Game) -> Unit {
+fn @types.Game::draw_link_path(game : @types.Game) -> Unit {
   if not(game.path_active) || game.path_points < 2 {
     return
   }
@@ -103,7 +103,7 @@ fn draw_link_path(game : @types.Game) -> Unit {
 
 ///|
 /// Draws yellow highlight rectangles around the two tiles indicated by the active hint.
-fn draw_hint_pair(game : @types.Game) -> Unit {
+fn @types.Game::draw_hint_pair(game : @types.Game) -> Unit {
   if not(game.hint_active) {
     return
   }
@@ -140,7 +140,7 @@ fn draw_hint_pair(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the tile grid with alternating cell shading, coloured tiles with kind labels, selection highlight, cursor ring, hint pair, and link path.
-fn draw_board(game : @types.Game) -> Unit {
+fn @types.Game::draw_board(game : @types.Game) -> Unit {
   let (board_x, board_y, tile) = @types.board_metrics(game)
 
   @raylib.draw_rectangle(
@@ -242,8 +242,8 @@ fn draw_board(game : @types.Game) -> Unit {
     )
   }
 
-  draw_hint_pair(game)
-  draw_link_path(game)
+  game.draw_hint_pair()
+  game.draw_link_path()
 }
 
 ///|
@@ -288,7 +288,7 @@ fn draw_button(
 
 ///|
 /// Draws the right-side panel showing level info, score, combo, timer, remaining tiles, time bar, hint/shuffle counts, keyboard help, action buttons, and the current message.
-fn draw_side_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
   let px : Int = @types.panel_x()
   let py : Int = 20
   let pw : Int = 396
@@ -534,7 +534,7 @@ fn draw_side_panel(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the on-screen D-pad directional buttons with active-state highlighting for touch and mouse input.
-fn draw_touch_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
   let cx : Int = @types.dpad_center_x()
   let cy : Int = @types.dpad_center_y()
   let s : Int = @types.dpad_size()
@@ -666,7 +666,7 @@ fn draw_touch_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the title screen with game name, subtitle, instruction lines, and the Start Festival button.
-fn draw_title(game : @types.Game) -> Unit {
+fn @types.Game::draw_title(game : @types.Game) -> Unit {
   @raylib.draw_text(
     "MatchLink Festival 2026",
     @types.screen_w / 2 -
@@ -722,7 +722,7 @@ fn draw_title(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the level-clear modal overlay showing score, time left, hints left, and a Next Stage button.
-fn draw_level_clear_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_level_clear_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -798,7 +798,7 @@ fn draw_level_clear_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the game-over failure overlay showing the final score and a Retry button.
-fn draw_fail_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_fail_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -867,7 +867,7 @@ fn draw_fail_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the campaign-complete overlay showing final score, stages cleared, total play time, and a Restart Festival button.
-fn draw_campaign_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_campaign_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -952,25 +952,25 @@ fn draw_campaign_overlay(game : @types.Game) -> Unit {
 ///|
 /// Renders the complete frame for the current campaign state.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_bg(game)
+  game.draw_bg()
 
   match game.state {
     Title => {
-      draw_title(game)
+      game.draw_title()
       return
     }
     _ => ()
   }
 
-  draw_board(game)
-  draw_side_panel(game)
-  draw_touch_overlay(game)
-  draw_sparks(game)
+  game.draw_board()
+  game.draw_side_panel()
+  game.draw_touch_overlay()
+  game.draw_sparks()
 
   match game.state {
-    LevelClear => draw_level_clear_overlay(game)
-    CampaignClear => draw_campaign_overlay(game)
-    Fail => draw_fail_overlay(game)
+    LevelClear => game.draw_level_clear_overlay()
+    CampaignClear => game.draw_campaign_overlay()
+    Fail => game.draw_fail_overlay()
     _ => ()
   }
 }

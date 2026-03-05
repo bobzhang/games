@@ -1,6 +1,6 @@
 ///|
 /// Activates board slots using a geometric pattern, ensuring the count is even.
-fn set_pattern_active(game : @types.Game, pattern : Int) -> Unit {
+fn @types.Game::set_pattern_active(game : @types.Game, pattern : Int) -> Unit {
   @types.clear_board(game)
 
   let cx : Float = (Float::from_int(game.board_w) + 1.0) * 0.5
@@ -101,7 +101,7 @@ fn set_pattern_active(game : @types.Game, pattern : Int) -> Unit {
 
 ///|
 /// Fills all active board slots with shuffled matching pairs of tile kinds.
-fn fill_board_with_pairs(game : @types.Game) -> Unit {
+fn @types.Game::fill_board_with_pairs(game : @types.Game) -> Unit {
   let active_n : Int = @types.active_count(game)
   let pair_n : Int = active_n / 2
 
@@ -129,7 +129,7 @@ fn fill_board_with_pairs(game : @types.Game) -> Unit {
 
 ///|
 /// Scans the board for any valid free-tile pair match, returning found status and the two tile coordinates.
-fn find_any_move(game : @types.Game) -> (Bool, Int, Int, Int, Int) {
+fn @types.Game::find_any_move(game : @types.Game) -> (Bool, Int, Int, Int, Int) {
   for y1 in 1..<=game.board_h {
     for x1 in 1..<=game.board_w {
       let k1 : Int = @types.cell_at(game, x1, y1)
@@ -157,7 +157,7 @@ fn find_any_move(game : @types.Game) -> (Bool, Int, Int, Int, Int) {
 
 ///|
 /// Shuffles all remaining tile kinds on the board up to 32 times until a valid move exists, optionally spending a shuffle ticket.
-fn reshuffle(game : @types.Game, consume_ticket : Bool) -> Bool {
+fn @types.Game::reshuffle(game : @types.Game, consume_ticket : Bool) -> Bool {
   if game.state != Play {
     return false
   }
@@ -196,7 +196,7 @@ fn reshuffle(game : @types.Game, consume_ticket : Bool) -> Bool {
       }
     }
 
-    if find_any_move(game).0 {
+    if game.find_any_move().0 {
       good = true
       break
     }
@@ -224,22 +224,22 @@ fn reshuffle(game : @types.Game, consume_ticket : Bool) -> Bool {
 
 ///|
 /// Checks whether any move remains and auto-shuffles or transitions to Fail state when none are available.
-fn ensure_moves(game : @types.Game) -> Unit {
+fn @types.Game::ensure_moves(game : @types.Game) -> Unit {
   if game.state != Play || game.remaining <= 0 {
     return
   }
 
-  if find_any_move(game).0 {
+  if game.find_any_move().0 {
     return
   }
 
-  if reshuffle(game, true) {
+  if game.reshuffle(true) {
     game.message = "No moves, auto shuffle"
     game.message_t = 1.0
     return
   }
 
-  if reshuffle(game, false) {
+  if game.reshuffle(false) {
     game.message = "No moves, forced shuffle"
     game.message_t = 1.0
     return
@@ -252,7 +252,7 @@ fn ensure_moves(game : @types.Game) -> Unit {
 
 ///|
 /// Appends an undo snapshot to the ring buffer, evicting the oldest entry when full.
-fn push_undo_pair(game : @types.Game, step : @types.UndoPair) -> Unit {
+fn @types.Game::push_undo_pair(game : @types.Game, step : @types.UndoPair) -> Unit {
   if game.undo_len >= game.undo.length() {
     for i in 1..<game.undo.length() {
       game.undo[i - 1] = game.undo[i]
@@ -266,7 +266,7 @@ fn push_undo_pair(game : @types.Game, step : @types.UndoPair) -> Unit {
 
 ///|
 /// Calculates and adds the score for a successful tile match, returning the points earned.
-fn award_match(game : @types.Game, kind : Int) -> Int {
+fn @types.Game::award_match(game : @types.Game, kind : Int) -> Int {
   let gain : Int = 90 + game.combo * 25 + kind % 8 * 6
   game.score = game.score + gain
   gain
@@ -274,7 +274,7 @@ fn award_match(game : @types.Game, kind : Int) -> Int {
 
 ///|
 /// Handles a successful pair match: saves undo state, removes tiles, updates score and combo, spawns particles, and checks for level/campaign completion.
-fn on_match(
+fn @types.Game::on_match(
   game : @types.Game,
   x1 : Int,
   y1 : Int,
@@ -295,7 +295,7 @@ fn on_match(
     prev_timer: game.timer,
     prev_remaining: game.remaining,
   }
-  push_undo_pair(game, step)
+  game.push_undo_pair(step)
 
   @types.set_cell(game, x1, y1, 0)
   @types.set_cell(game, x2, y2, 0)
@@ -303,7 +303,7 @@ fn on_match(
   game.remaining = game.remaining - 2
   game.combo = game.combo + 1
 
-  let gain : Int = award_match(game, kind)
+  let gain : Int = game.award_match(kind)
   game.timer = game.timer + 2.1 + Float::from_int(game.combo) * 0.18
   if game.timer > game.time_limit {
     game.timer = game.time_limit
@@ -334,12 +334,12 @@ fn on_match(
     return
   }
 
-  ensure_moves(game)
+  game.ensure_moves()
 }
 
 ///|
 /// Handles an invalid tile pick attempt: resets combo, shows a message, shakes the board, and emits particles.
-fn on_bad_pick(game : @types.Game, x : Int, y : Int) -> Unit {
+fn @types.Game::on_bad_pick(game : @types.Game, x : Int, y : Int) -> Unit {
   game.combo = 0
   game.message = "Tile blocked"
   game.message_t = 0.6
@@ -349,7 +349,7 @@ fn on_bad_pick(game : @types.Game, x : Int, y : Int) -> Unit {
 
 ///|
 /// Handles a player tile selection at (x, y), either setting the first tile or attempting a match with the previously selected tile.
-fn pick_tile(game : @types.Game, x : Int, y : Int) -> Unit {
+fn @types.Game::pick_tile(game : @types.Game, x : Int, y : Int) -> Unit {
   if game.state != Play {
     return
   }
@@ -360,7 +360,7 @@ fn pick_tile(game : @types.Game, x : Int, y : Int) -> Unit {
   }
 
   if not(@types.free_tile(game, x, y)) {
-    on_bad_pick(game, x, y)
+    game.on_bad_pick(x, y)
     return
   }
 
@@ -396,7 +396,7 @@ fn pick_tile(game : @types.Game, x : Int, y : Int) -> Unit {
   }
 
   if sk == kind {
-    on_match(game, sx, sy, x, y, kind)
+    game.on_match(sx, sy, x, y, kind)
   } else {
     game.select_x = x
     game.select_y = y
@@ -408,13 +408,13 @@ fn pick_tile(game : @types.Game, x : Int, y : Int) -> Unit {
 
 ///|
 /// Picks the tile at the current cursor position.
-fn pick_cursor(game : @types.Game) -> Unit {
-  pick_tile(game, game.cursor_x, game.cursor_y)
+fn @types.Game::pick_cursor(game : @types.Game) -> Unit {
+  game.pick_tile(game.cursor_x, game.cursor_y)
 }
 
 ///|
 /// Spends a hint ticket to highlight a valid free-tile pair on the board, returning false if none are available.
-fn use_hint(game : @types.Game) -> Bool {
+fn @types.Game::use_hint(game : @types.Game) -> Bool {
   if game.state != Play {
     return false
   }
@@ -425,7 +425,7 @@ fn use_hint(game : @types.Game) -> Bool {
     return false
   }
 
-  let m = find_any_move(game)
+  let m = game.find_any_move()
   if not(m.0) {
     game.message = "No pair available"
     game.message_t = 0.9
@@ -453,7 +453,7 @@ fn use_hint(game : @types.Game) -> Bool {
 
 ///|
 /// Reverts the most recent pair removal using a stored undo snapshot, consuming one undo credit.
-fn undo_last(game : @types.Game) -> Bool {
+fn @types.Game::undo_last(game : @types.Game) -> Bool {
   if game.undo_len <= 0 {
     game.message = "Nothing to undo"
     game.message_t = 0.8
@@ -505,7 +505,7 @@ fn undo_last(game : @types.Game) -> Bool {
 
 ///|
 /// Moves the cursor one cell in the specified direction, clamping to board bounds.
-fn move_cursor_once(game : @types.Game, dir : @types.Dir) -> Unit {
+fn @types.Game::move_cursor_once(game : @types.Game, dir : @types.Dir) -> Unit {
   if game.state != Play {
     return
   }
@@ -521,7 +521,7 @@ fn move_cursor_once(game : @types.Game, dir : @types.Dir) -> Unit {
 
 ///|
 /// Applies held-direction key repeat logic, firing an initial move and then repeating at a fixed interval.
-fn update_cursor_hold(
+fn @types.Game::update_cursor_hold(
   game : @types.Game,
   dt : Float,
   held_dir : @types.Dir,
@@ -541,19 +541,19 @@ fn update_cursor_hold(
   if game.hold_dir != held_dir {
     game.hold_dir = held_dir
     game.repeat_t = 0.2
-    move_cursor_once(game, held_dir)
+    game.move_cursor_once(held_dir)
   } else {
     game.repeat_t = game.repeat_t - dt
     if game.repeat_t <= 0.0 {
       game.repeat_t = 0.095
-      move_cursor_once(game, held_dir)
+      game.move_cursor_once(held_dir)
     }
   }
 }
 
 ///|
 /// Advances all frame timers including UI, message, shake, touch cooldown, hint TTL, countdown, and spark simulation.
-fn update_timers(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_timers(game : @types.Game, dt : Float) -> Unit {
   game.ui_t = game.ui_t + dt
 
   if game.message_t > 0.0 {
@@ -603,7 +603,7 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Moves the cursor to the first occupied board cell found in reading order.
-fn place_cursor_on_first_tile(game : @types.Game) -> Unit {
+fn @types.Game::place_cursor_on_first_tile(game : @types.Game) -> Unit {
   let mut found : Bool = false
   for y in 1..<=game.board_h {
     for x in 1..<=game.board_w {
@@ -622,7 +622,7 @@ fn place_cursor_on_first_tile(game : @types.Game) -> Unit {
 
 ///|
 /// Loads a campaign level by id, configuring board dimensions, tile kinds, time limit, power-ups, and generating a solvable board.
-fn load_level(game : @types.Game, level_id : Int) -> Unit {
+fn @types.Game::load_level(game : @types.Game, level_id : Int) -> Unit {
   let mut id : Int = level_id
   if id < 0 {
     id = 0
@@ -659,17 +659,17 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
   @types.clear_undo(game)
   @types.clear_sparks(game)
 
-  set_pattern_active(game, pattern)
-  fill_board_with_pairs(game)
+  game.set_pattern_active(pattern)
+  game.fill_board_with_pairs()
 
   for _t in 0..<24 {
-    if find_any_move(game).0 {
+    if game.find_any_move().0 {
       break
     }
-    ignore(reshuffle(game, false))
+    ignore(game.reshuffle(false))
   }
 
-  place_cursor_on_first_tile(game)
+  game.place_cursor_on_first_tile()
 
   game.state = Play
   game.message = "Level \{id + 1}: \{name}"
@@ -678,28 +678,28 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
 
 ///|
 /// Restarts the current level by reloading it from scratch.
-fn reload_level(game : @types.Game) -> Unit {
-  load_level(game, game.level_index)
+fn @types.Game::reload_level(game : @types.Game) -> Unit {
+  game.load_level(game.level_index)
 }
 
 ///|
 /// Resets campaign score and totals, then loads level 0 to start a fresh run.
-fn restart_campaign(game : @types.Game) -> Unit {
+fn @types.Game::restart_campaign(game : @types.Game) -> Unit {
   game.score = 0
   game.total_levels = 0
   game.total_time = 0.0
-  load_level(game, 0)
+  game.load_level(0)
 }
 
 ///|
 /// Advances to the next campaign level, or transitions to CampaignClear if all levels are complete.
-fn next_level(game : @types.Game) -> Unit {
+fn @types.Game::next_level(game : @types.Game) -> Unit {
   if game.level_index + 1 >= game.level_count {
     game.state = CampaignClear
     return
   }
 
-  load_level(game, game.level_index + 1)
+  game.load_level(game.level_index + 1)
 }
 
 ///|
@@ -721,28 +721,28 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     @raylib.toggle_borderless_windowed()
   }
 
-  update_timers(game, dt)
+  game.update_timers(dt)
 
-  let start_press : Bool = detect_start_press(game)
-  let next_press : Bool = detect_next_press(game)
-  let reset_press : Bool = detect_reset_press(game)
+  let start_press : Bool = game.detect_start_press()
+  let next_press : Bool = game.detect_next_press()
+  let reset_press : Bool = game.detect_reset_press()
 
   match game.state {
-    Title => if start_press { restart_campaign(game) }
+    Title => if start_press { game.restart_campaign() }
     Play => {
-      let held_dir : @types.Dir = detect_held_dir(game)
-      update_cursor_hold(game, dt, held_dir)
+      let held_dir : @types.Dir = game.detect_held_dir()
+      game.update_cursor_hold(dt, held_dir)
 
-      let select_press : Bool = detect_select_press(game)
-      let hint_press : Bool = detect_hint_press(game)
-      let shuffle_press : Bool = detect_shuffle_press(game)
-      let undo_press : Bool = detect_undo_press(game)
-      let clear_press : Bool = detect_clear_press(game)
-      let board_tap = detect_board_tap(game)
+      let select_press : Bool = game.detect_select_press()
+      let hint_press : Bool = game.detect_hint_press()
+      let shuffle_press : Bool = game.detect_shuffle_press()
+      let undo_press : Bool = game.detect_undo_press()
+      let clear_press : Bool = game.detect_clear_press()
+      let board_tap = game.detect_board_tap()
 
       if reset_press && game.touch_action_cd <= 0.0 {
         game.touch_action_cd = 0.2
-        reload_level(game)
+        game.reload_level()
       } else if clear_press && game.touch_action_cd <= 0.0 {
         game.touch_action_cd = 0.12
         @types.clear_selection(game)
@@ -751,23 +751,23 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
         game.message_t = 0.45
       } else if hint_press && game.touch_action_cd <= 0.0 {
         game.touch_action_cd = 0.2
-        ignore(use_hint(game))
+        ignore(game.use_hint())
       } else if shuffle_press && game.touch_action_cd <= 0.0 {
         game.touch_action_cd = 0.2
-        ignore(reshuffle(game, true))
+        ignore(game.reshuffle(true))
       } else if undo_press && game.touch_action_cd <= 0.0 {
         game.touch_action_cd = 0.18
-        ignore(undo_last(game))
+        ignore(game.undo_last())
       } else if board_tap.0 && game.touch_action_cd <= 0.0 {
         game.touch_action_cd = 0.1
-        pick_tile(game, board_tap.1, board_tap.2)
+        game.pick_tile(board_tap.1, board_tap.2)
       } else if select_press && game.touch_action_cd <= 0.0 {
         game.touch_action_cd = 0.1
-        pick_cursor(game)
+        game.pick_cursor()
       }
     }
-    LevelClear => if next_press { next_level(game) }
-    CampaignClear => if next_press { restart_campaign(game) }
-    Fail => if reset_press || next_press { reload_level(game) }
+    LevelClear => if next_press { game.next_level() }
+    CampaignClear => if next_press { game.restart_campaign() }
+    Fail => if reset_press || next_press { game.reload_level() }
   }
 }

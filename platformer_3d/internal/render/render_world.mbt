@@ -10,25 +10,25 @@ pub fn draw_world(game : @types.Game) -> Unit {
   )
   @raylib.begin_mode_3d(camera)
   // Skybox floor
-  draw_world_floor(game)
+  game.draw_world_floor()
   // World decorations (behind platforms)
-  draw_decorations(game)
-  draw_platforms(game)
-  draw_collectibles(game)
-  draw_powerups_3d(game)
-  draw_hazards(game)
-  draw_enemies_3d(game)
-  draw_projectiles_3d(game)
-  draw_checkpoints(game)
-  draw_goal(game)
-  draw_player(game)
-  draw_player_shadow(game)
-  draw_particles_3d(game)
+  game.draw_decorations()
+  game.draw_platforms()
+  game.draw_collectibles()
+  game.draw_powerups_3d()
+  game.draw_hazards()
+  game.draw_enemies_3d()
+  game.draw_projectiles_3d()
+  game.draw_checkpoints()
+  game.draw_goal()
+  game.draw_player()
+  game.draw_player_shadow()
+  game.draw_particles_3d()
   @raylib.end_mode_3d()
 }
 
 ///|
-fn draw_world_floor(game : @types.Game) -> Unit {
+fn @types.Game::draw_world_floor(game : @types.Game) -> Unit {
   let world = game.current_world
   if world == @types.world_forest {
     // Green meadow
@@ -69,7 +69,7 @@ fn draw_world_floor(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_platforms(game : @types.Game) -> Unit {
+fn @types.Game::draw_platforms(game : @types.Game) -> Unit {
   for plat in game.platforms {
     if not(plat.active) {
       continue
@@ -136,12 +136,12 @@ fn draw_platforms(game : @types.Game) -> Unit {
       ),
     )
     // Special indicators per platform type
-    draw_platform_special(game, plat)
+    game.draw_platform_special(plat)
   }
 }
 
 ///|
-fn draw_platform_special(game : @types.Game, plat : @types.Platform) -> Unit {
+fn @types.Game::draw_platform_special(game : @types.Game, plat : @types.Platform) -> Unit {
   if plat.kind == @types.plat_bouncy {
     // Spring coil on top
     @raylib.draw_cylinder(
@@ -268,7 +268,7 @@ fn draw_platform_rails(plat : @types.Platform) -> Unit {
 }
 
 ///|
-fn draw_collectibles(game : @types.Game) -> Unit {
+fn @types.Game::draw_collectibles(game : @types.Game) -> Unit {
   for c in game.collectibles {
     if not(c.active) || c.collected {
       continue
@@ -469,7 +469,7 @@ fn draw_key(x : Float, y : Float, z : Float, spin : Float) -> Unit {
 }
 
 ///|
-fn draw_powerups_3d(game : @types.Game) -> Unit {
+fn @types.Game::draw_powerups_3d(game : @types.Game) -> Unit {
   for pu in game.powerups {
     if not(pu.active) || pu.collected {
       continue
@@ -557,7 +557,7 @@ fn draw_powerups_3d(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_hazards(game : @types.Game) -> Unit {
+fn @types.Game::draw_hazards(game : @types.Game) -> Unit {
   for h in game.hazards {
     if not(h.active) {
       continue
@@ -565,11 +565,11 @@ fn draw_hazards(game : @types.Game) -> Unit {
     if h.kind == @types.hazard_spike {
       draw_spike(h)
     } else if h.kind == @types.hazard_lava {
-      draw_lava_pool(game, h)
+      game.draw_lava_pool(h)
     } else if h.kind == @types.hazard_saw {
-      draw_saw_blade(game, h)
+      game.draw_saw_blade(h)
     } else if h.kind == @types.hazard_fire_jet {
-      draw_fire_jet(game, h)
+      game.draw_fire_jet(h)
     } else if h.kind == @types.hazard_pendulum {
       draw_pendulum(h)
     } else if h.kind == @types.hazard_crusher {
@@ -606,7 +606,7 @@ fn draw_spike(h : @types.Hazard) -> Unit {
 }
 
 ///|
-fn draw_lava_pool(game : @types.Game, h : @types.Hazard) -> Unit {
+fn @types.Game::draw_lava_pool(game : @types.Game, h : @types.Hazard) -> Unit {
   let pulse = @math.sinf(Float::from_int(game.frame_counter) * 0.05) * 0.02
   @raylib.draw_cube(
     @raylib.Vector3::new(h.x, h.y + pulse, h.z),
@@ -632,7 +632,7 @@ fn draw_lava_pool(game : @types.Game, h : @types.Hazard) -> Unit {
 }
 
 ///|
-fn draw_saw_blade(game : @types.Game, h : @types.Hazard) -> Unit {
+fn @types.Game::draw_saw_blade(game : @types.Game, h : @types.Hazard) -> Unit {
   // Rotating disk
   @raylib.draw_cylinder(
     @raylib.Vector3::new(h.x, h.y, h.z),
@@ -658,7 +658,7 @@ fn draw_saw_blade(game : @types.Game, h : @types.Hazard) -> Unit {
 }
 
 ///|
-fn draw_fire_jet(game : @types.Game, h : @types.Hazard) -> Unit {
+fn @types.Game::draw_fire_jet(game : @types.Game, h : @types.Hazard) -> Unit {
   // Base nozzle
   @raylib.draw_cylinder(
     @raylib.Vector3::new(h.x, h.y - 0.3, h.z),
@@ -771,7 +771,7 @@ fn draw_crusher(h : @types.Hazard) -> Unit {
 }
 
 ///|
-fn draw_enemies_3d(game : @types.Game) -> Unit {
+fn @types.Game::draw_enemies_3d(game : @types.Game) -> Unit {
   for e in game.enemies {
     if not(e.active) {
       continue
@@ -983,7 +983,7 @@ fn draw_enemy_turret(e : @types.Enemy) -> Unit {
 }
 
 ///|
-fn draw_projectiles_3d(game : @types.Game) -> Unit {
+fn @types.Game::draw_projectiles_3d(game : @types.Game) -> Unit {
   for proj in game.projectiles {
     if not(proj.active) {
       continue
@@ -1003,7 +1003,7 @@ fn draw_projectiles_3d(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_checkpoints(game : @types.Game) -> Unit {
+fn @types.Game::draw_checkpoints(game : @types.Game) -> Unit {
   for cp in game.checkpoints {
     if not(cp.active) {
       continue
@@ -1051,7 +1051,7 @@ fn draw_checkpoints(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_goal(game : @types.Game) -> Unit {
+fn @types.Game::draw_goal(game : @types.Game) -> Unit {
   let bob = @math.sinf(Float::from_int(game.frame_counter) * 0.04) * 0.3
   let y = game.goal_y + bob
   // Inner gem
@@ -1097,7 +1097,7 @@ fn draw_goal(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_player(game : @types.Game) -> Unit {
+fn @types.Game::draw_player(game : @types.Game) -> Unit {
   // Invincibility flash
   if game.invincible_timer > 0.0 && game.frame_counter % 4 < 2 {
     return
@@ -1254,7 +1254,7 @@ fn draw_player(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_player_shadow(game : @types.Game) -> Unit {
+fn @types.Game::draw_player_shadow(game : @types.Game) -> Unit {
   let shadow_y = @types.find_shadow_y(game, game.px, game.py, game.pz)
   let alpha = @types.shadow_alpha(game.py, shadow_y)
   let scale = @types.shadow_scale(game.py, shadow_y)
@@ -1270,7 +1270,7 @@ fn draw_player_shadow(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_decorations(game : @types.Game) -> Unit {
+fn @types.Game::draw_decorations(game : @types.Game) -> Unit {
   for d in game.decorations {
     if not(d.active) {
       continue
@@ -1519,7 +1519,7 @@ fn draw_lamp(d : @types.Decoration) -> Unit {
 }
 
 ///|
-fn draw_particles_3d(game : @types.Game) -> Unit {
+fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue

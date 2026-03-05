@@ -1,12 +1,12 @@
 ///|
 /// Returns a sinusoidal background wave amplitude value for frequency `k`.
-fn bg_wave(game : @types.Game, k : Float) -> Float {
+fn @types.Game::bg_wave(game : @types.Game, k : Float) -> Float {
   @math.sinf(game.ui_t * k)
 }
 
 ///|
 /// Returns a random horizontal shake offset when shake is active, else 0.
-fn shake_x(game : @types.Game) -> Int {
+fn @types.Game::shake_x(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -16,7 +16,7 @@ fn shake_x(game : @types.Game) -> Int {
 
 ///|
 /// Returns a random vertical shake offset when shake is active, else 0.
-fn shake_y(game : @types.Game) -> Int {
+fn @types.Game::shake_y(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -26,11 +26,11 @@ fn shake_y(game : @types.Game) -> Int {
 
 ///|
 /// Draws the dark ocean background with animated gradient circles.
-fn draw_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(9, 18, 30, 255))
 
-  let w0 : Float = bg_wave(game, 0.42)
-  let w1 : Float = bg_wave(game, 0.84)
+  let w0 : Float = game.bg_wave(0.42)
+  let w1 : Float = game.bg_wave(0.84)
 
   @raylib.draw_circle(
     200,
@@ -70,7 +70,7 @@ fn draw_background(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the ice sheet, water area, grid lines, hole, and catch zone with shake offset.
-fn draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit {
   @raylib.draw_rectangle(
     @types.world_x0 + ox,
     @types.water_top + oy,
@@ -97,7 +97,7 @@ fn draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
   for i in 0..<18 {
     let y : Int = @types.water_top + oy + i * 42
-    let shift : Int = (bg_wave(game, 1.1 + Float::from_int(i) * 0.07) * 20.0).to_int()
+    let shift : Int = (game.bg_wave(1.1 + Float::from_int(i) * 0.07) * 20.0).to_int()
 
     @raylib.draw_line(
       @types.world_x0 + ox + 12,
@@ -119,7 +119,7 @@ fn draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit {
     )
   }
 
-  let crack_wobble : Int = (bg_wave(game, 1.9) * 8.0).to_int()
+  let crack_wobble : Int = (game.bg_wave(1.9) * 8.0).to_int()
 
   for i in 0..<9 {
     let sx : Int = @types.world_x0 + 120 + i * 108 + crack_wobble
@@ -379,7 +379,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws all active particles with opacity based on remaining lifetime.
-fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
       continue
@@ -412,7 +412,7 @@ fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the fishing line, hook circle, barb lines, and boost glow.
-fn draw_hook(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_hook(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let hx : Int = game.hook_x.to_int() + ox
   let hy : Int = game.hook_y.to_int() + oy
 
@@ -471,7 +471,7 @@ fn draw_hook(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the hint marker circle and guide line to the hook if hint timer is active.
-fn draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
   if game.hint_t <= 0.0 {
     return
   }
@@ -528,7 +528,7 @@ fn draw_bar(
 
 ///|
 /// Draws the right-side panel: title, scores, stats, resource bars, and controls text.
-fn draw_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.panel_x0,
     20,
@@ -714,7 +714,7 @@ fn draw_panel(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a single touch button with active/idle fill color and centered label.
-fn draw_touch_button(
+fn @types.Game::draw_touch_button(
   game : @types.Game,
   rect : (Int, Int, Int, Int),
   label : String,
@@ -764,42 +764,37 @@ fn draw_touch_button(
 
 ///|
 /// Draws the D-pad and action button overlay for touch/mobile controls.
-fn draw_touch_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   if game.state != Play {
     return
   }
 
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_left(),
     "L",
     @raylib.Color::new(44, 76, 102, 176),
     @raylib.Color::new(70, 118, 156, 212),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_right(),
     "R",
     @raylib.Color::new(44, 76, 102, 176),
     @raylib.Color::new(70, 118, 156, 212),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_up(),
     "U",
     @raylib.Color::new(44, 76, 102, 176),
     @raylib.Color::new(70, 118, 156, 212),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_down(),
     "D",
     @raylib.Color::new(44, 76, 102, 176),
     @raylib.Color::new(70, 118, 156, 212),
   )
 
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_hook(),
     "HOOK",
     if game.grab_on {
@@ -809,8 +804,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
     },
     @raylib.Color::new(166, 154, 112, 230),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_boost(),
     "BST",
     if game.boost_on || game.turbo_t > 0.0 {
@@ -820,22 +814,19 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
     },
     @raylib.Color::new(120, 184, 240, 230),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_hint(),
     "HNT",
     @raylib.Color::new(90, 96, 134, 182),
     @raylib.Color::new(152, 170, 224, 220),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_restart(),
     "RST",
     @raylib.Color::new(102, 88, 124, 182),
     @raylib.Color::new(170, 136, 194, 220),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_repair(),
     "RPR",
     @raylib.Color::new(88, 102, 128, 182),
@@ -845,7 +836,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the HUD message toast if message timer is active.
-fn draw_msg(game : @types.Game) -> Unit {
+fn @types.Game::draw_msg(game : @types.Game) -> Unit {
   if game.msg_t <= 0.0 || game.msg == "" {
     return
   }
@@ -879,7 +870,7 @@ fn draw_msg(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the title overlay with game title, instructions, and start button.
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -957,7 +948,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the result overlay with win/loss header, score summary, and retry button.
-fn draw_result_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -1080,12 +1071,12 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 ///|
 /// Draws one full frame of lake world, UI controls, and overlays.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_background(game)
+  game.draw_background()
 
-  let ox : Int = shake_x(game)
-  let oy : Int = shake_y(game)
+  let ox : Int = game.shake_x()
+  let oy : Int = game.shake_y()
 
-  draw_world_back(game, ox, oy)
+  game.draw_world_back(ox, oy)
 
   for fish_elem in game.fish {
     draw_fish(fish_elem, ox, oy)
@@ -1099,17 +1090,17 @@ pub fn draw_frame(game : @types.Game) -> Unit {
     draw_pickup(pickup, ox, oy)
   }
 
-  draw_hint(game, ox, oy)
-  draw_particles(game, ox, oy)
-  draw_hook(game, ox, oy)
+  game.draw_hint(ox, oy)
+  game.draw_particles(ox, oy)
+  game.draw_hook(ox, oy)
 
-  draw_panel(game)
-  draw_touch_controls(game)
-  draw_msg(game)
+  game.draw_panel()
+  game.draw_touch_controls()
+  game.draw_msg()
 
   match game.state {
-    Title => draw_title_overlay(game)
+    Title => game.draw_title_overlay()
     Play => ()
-    Result => draw_result_overlay(game)
+    Result => game.draw_result_overlay()
   }
 }

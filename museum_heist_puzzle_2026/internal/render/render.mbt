@@ -13,7 +13,7 @@ fn draw_centered_text(
 
 ///|
 /// Draws the dark stealth-themed background with animated gradient bands and ambient circles.
-fn draw_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_background(game : @types.Game) -> Unit {
   let pulse = Float::from_double(@math.sin((game.pulse_t * 1.2).to_double()))
 
   @raylib.clear_background(@raylib.Color::new(10, 12, 18, 255))
@@ -51,7 +51,7 @@ fn draw_background(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all board tiles (wall and floor) with the outer panel border.
-fn draw_board_tiles(game : @types.Game) -> Unit {
+fn @types.Game::draw_board_tiles(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.board_origin_x - 12,
     @types.board_origin_y - 12,
@@ -110,7 +110,7 @@ fn draw_board_tiles(game : @types.Game) -> Unit {
 
 ///|
 /// Draws translucent red overlays on every floor cell within any guard's view cone.
-fn draw_guard_fov(game : @types.Game) -> Unit {
+fn @types.Game::draw_guard_fov(game : @types.Game) -> Unit {
   for g in game.guards {
     for y in 0..<@types.board_rows {
       for x in 0..<@types.board_cols {
@@ -133,7 +133,7 @@ fn draw_guard_fov(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the exit tile: locked when artifacts remain, glowing green once all are collected.
-fn draw_exit(game : @types.Game) -> Unit {
+fn @types.Game::draw_exit(game : @types.Game) -> Unit {
   let ex = @types.cell_px(game.exit_x)
   let ey = @types.cell_py(game.exit_y)
 
@@ -171,7 +171,7 @@ fn draw_exit(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all uncollected artifacts as pulsing gold circles with a cross marker.
-fn draw_artifacts(game : @types.Game) -> Unit {
+fn @types.Game::draw_artifacts(game : @types.Game) -> Unit {
   for i in 0..<game.artifacts.length() {
     if game.artifacts[i].taken {
       continue
@@ -216,7 +216,7 @@ fn draw_artifacts(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all guards as red circles with a facing direction indicator.
-fn draw_guards(game : @types.Game) -> Unit {
+fn @types.Game::draw_guards(game : @types.Game) -> Unit {
   for guard_val in game.guards {
     let cx = @types.cell_px(guard_val.x) + @types.tile_size / 2
     let cy = @types.cell_py(guard_val.y) + @types.tile_size / 2
@@ -244,7 +244,7 @@ fn draw_guards(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the player as a pulsing cyan circle at their current grid cell.
-fn draw_player(game : @types.Game) -> Unit {
+fn @types.Game::draw_player(game : @types.Game) -> Unit {
   let cx = @types.cell_px(game.player_x) + @types.tile_size / 2
   let cy = @types.cell_py(game.player_y) + @types.tile_size / 2
   let pulse = Float::from_double(@math.sin((game.pulse_t * 8.0).to_double())) *
@@ -262,7 +262,7 @@ fn draw_player(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the right-side information panel with level stats, relic count, and controls legend.
-fn draw_side_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.panel_x,
     @types.panel_y,
@@ -480,7 +480,7 @@ fn draw_dpad_button(
 
 ///|
 /// Draws the on-screen D-pad and restart button during the play state.
-fn draw_play_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_play_controls(game : @types.Game) -> Unit {
   let (lx, ly, lw, lh) = @types.dpad_left_rect()
   let (rx, ry, rw, rh) = @types.dpad_right_rect()
   let (ux, uy, uw, uh) = @types.dpad_up_rect()
@@ -555,7 +555,7 @@ fn draw_play_controls(game : @types.Game) -> Unit {
 
 ///|
 /// Overlays a red screen flash proportional to the remaining alarm timer.
-fn draw_alarm_flash(game : @types.Game) -> Unit {
+fn @types.Game::draw_alarm_flash(game : @types.Game) -> Unit {
   if game.alarm_t <= 0.0 {
     return
   }
@@ -624,7 +624,7 @@ fn draw_overlay_card(title : String, line1 : String, line2 : String) -> Unit {
 
 ///|
 /// Draws the title overlay with game description, level preview name, and start/cycle buttons.
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   draw_overlay_card(
     "Museum Heist",
     "Collect all relics, avoid patrol vision, then escape.",
@@ -660,7 +660,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the floor-cleared win overlay with retry and next-floor buttons.
-fn draw_win_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_win_overlay(game : @types.Game) -> Unit {
   draw_overlay_card(
     "Floor Cleared", "You secured the relics and escaped undetected.", "Continue to the next wing or replay this floor.",
   )
@@ -703,7 +703,7 @@ fn draw_win_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the alarm-triggered loss overlay with a retry button.
-fn draw_lose_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_lose_overlay(game : @types.Game) -> Unit {
   draw_overlay_card(
     "Alarm Triggered", "A guard spotted you in their cone of vision.", "Retry the same floor and adjust your route.",
   )
@@ -724,7 +724,7 @@ fn draw_lose_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the campaign-complete overlay with a back-to-title button.
-fn draw_campaign_clear_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_campaign_clear_overlay(game : @types.Game) -> Unit {
   draw_overlay_card(
     "Grand Collection Secured", "All museum wings cleared without raising a full lockdown.",
     "Return to title to launch another campaign.",
@@ -747,14 +747,14 @@ fn draw_campaign_clear_overlay(game : @types.Game) -> Unit {
 ///|
 /// Draws the complete frame for the current museum heist state.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_background(game)
-  draw_board_tiles(game)
-  draw_guard_fov(game)
-  draw_exit(game)
-  draw_artifacts(game)
-  draw_guards(game)
-  draw_player(game)
-  draw_side_panel(game)
+  game.draw_background()
+  game.draw_board_tiles()
+  game.draw_guard_fov()
+  game.draw_exit()
+  game.draw_artifacts()
+  game.draw_guards()
+  game.draw_player()
+  game.draw_side_panel()
 
   @raylib.draw_rectangle_lines(
     @types.board_origin_x,
@@ -765,17 +765,17 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   )
 
   match game.state {
-    Play => draw_play_controls(game)
+    Play => game.draw_play_controls()
     _ => ()
   }
 
-  draw_alarm_flash(game)
+  game.draw_alarm_flash()
 
   match game.state {
-    Title => draw_title_overlay(game)
-    Win => draw_win_overlay(game)
-    Lose => draw_lose_overlay(game)
-    CampaignClear => draw_campaign_clear_overlay(game)
+    Title => game.draw_title_overlay()
+    Win => game.draw_win_overlay()
+    Lose => game.draw_lose_overlay()
+    CampaignClear => game.draw_campaign_clear_overlay()
     Play => ()
   }
 }

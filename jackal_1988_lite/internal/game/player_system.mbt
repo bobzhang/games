@@ -1,5 +1,5 @@
 ///|
-fn is_player_enabled(game : @types.Game, index : Int) -> Bool {
+fn @types.Game::is_player_enabled(game : @types.Game, index : Int) -> Bool {
   if index == 0 {
     true
   } else {
@@ -45,14 +45,14 @@ fn is_player_shoot_pressed(index : Int) -> Bool {
 }
 
 ///|
-fn player_is_on_ice(game : @types.Game, player : @types.Tank) -> Bool {
+fn @types.Game::player_is_on_ice(game : @types.Game, player : @types.Tank) -> Bool {
   let tx = @types.world_x_to_tile(player.x)
   let ty = @types.world_y_to_tile(player.y)
   @types.get_tile(game, tx, ty) == @types.tile_ice
 }
 
 ///|
-fn can_player_fire(game : @types.Game, index : Int) -> Bool {
+fn @types.Game::can_player_fire(game : @types.Game, index : Int) -> Bool {
   let player = game.players[index]
   if not(player.active) {
     return false
@@ -74,7 +74,7 @@ fn can_player_fire(game : @types.Game, index : Int) -> Bool {
 }
 
 ///|
-fn update_player_reload_timers(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_player_reload_timers(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<@types.max_players {
     let player = game.players[i]
     if player.reload_timer > 0.0 {
@@ -106,7 +106,7 @@ fn update_player_reload_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn try_move_player(
+fn @types.Game::try_move_player(
   game : @types.Game,
   index : Int,
   dir : Int,
@@ -138,9 +138,9 @@ fn try_move_player(
 }
 
 ///|
-fn update_player_input(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_player_input(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<@types.max_players {
-    if not(is_player_enabled(game, i)) {
+    if not(game.is_player_enabled(i)) {
       continue
     }
 
@@ -150,21 +150,21 @@ fn update_player_input(game : @types.Game, dt : Float) -> Unit {
     }
 
     let (move_dir, shoot_pressed) = if game.demo_mode {
-      demo_player_command(game, i, dt)
+      game.demo_player_command(i, dt)
     } else {
       (read_player_move_dir(i), is_player_shoot_pressed(i))
     }
     if move_dir >= 0 {
       player.dir = move_dir
-      try_move_player(game, i, move_dir, dt)
-      if player_is_on_ice(game, player) {
+      game.try_move_player(i, move_dir, dt)
+      if game.player_is_on_ice(player) {
         player.skid_timer = 0.12
       }
-    } else if player.skid_timer > 0.0 && player_is_on_ice(game, player) {
-      try_move_player(game, i, player.dir, dt * 0.55)
+    } else if player.skid_timer > 0.0 && game.player_is_on_ice(player) {
+      game.try_move_player(i, player.dir, dt * 0.55)
     }
 
-    if shoot_pressed && can_player_fire(game, i) {
+    if shoot_pressed && game.can_player_fire(i) {
       let muzzle_x = player.x +
         @types.dir_vector_x(player.dir) * (@types.tank_half + 3.0)
       let muzzle_y = player.y +
@@ -178,8 +178,7 @@ fn update_player_input(game : @types.Game, dt : Float) -> Unit {
       } else {
         1
       }
-      spawn_bullet(
-        game,
+      game.spawn_bullet(
         @types.team_of_player(i),
         muzzle_x,
         muzzle_y,
@@ -194,7 +193,7 @@ fn update_player_input(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn on_player_destroyed(game : @types.Game, index : Int) -> Unit {
+fn @types.Game::on_player_destroyed(game : @types.Game, index : Int) -> Unit {
   let player = game.players[index]
   if not(player.active) {
     return
@@ -219,9 +218,9 @@ fn on_player_destroyed(game : @types.Game, index : Int) -> Unit {
 }
 
 ///|
-fn update_player_respawns(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_player_respawns(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<@types.max_players {
-    if not(is_player_enabled(game, i)) {
+    if not(game.is_player_enabled(i)) {
       continue
     }
     let player = game.players[i]
@@ -233,17 +232,17 @@ fn update_player_respawns(game : @types.Game, dt : Float) -> Unit {
     }
     player.respawn_timer -= dt
     if player.respawn_timer <= 0.0 {
-      respawn_player_tank(game, i)
+      game.respawn_player_tank(i)
       @particles.spawn_respawn_burst(game, player.x, player.y)
     }
   }
 }
 
 ///|
-fn all_players_out(game : @types.Game) -> Bool {
+fn @types.Game::all_players_out(game : @types.Game) -> Bool {
   let mut living = 0
   for i in 0..<@types.max_players {
-    if not(is_player_enabled(game, i)) {
+    if not(game.is_player_enabled(i)) {
       continue
     }
     let player = game.players[i]

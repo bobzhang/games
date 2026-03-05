@@ -1,13 +1,13 @@
 ///|
 /// Sets the HUD message text and resets its display timer to `ttl` seconds.
-fn set_message(game : @types.Game, text : String, ttl : Float) -> Unit {
+fn @types.Game::set_message(game : @types.Game, text : String, ttl : Float) -> Unit {
   game.message = text
   game.message_t = ttl
 }
 
 ///|
 /// Deactivates all incident slots and zeroes their fields.
-fn clear_incidents(game : @types.Game) -> Unit {
+fn @types.Game::clear_incidents(game : @types.Game) -> Unit {
   for incident in game.incidents {
     incident.active = false
     incident.x = 0
@@ -21,7 +21,7 @@ fn clear_incidents(game : @types.Game) -> Unit {
 
 ///|
 /// Resets the full case state: clues, suspects, chain progress, incidents, timers, and message.
-fn reset_case(game : @types.Game) -> Unit {
+fn @types.Game::reset_case(game : @types.Game) -> Unit {
   for clue in game.clues {
     clue.discovered = false
     clue.glow_t = 0.0
@@ -39,7 +39,7 @@ fn reset_case(game : @types.Game) -> Unit {
     game.evidence_score[i] = 0
   }
 
-  clear_incidents(game)
+  game.clear_incidents()
 
   game.state = Playing
   game.cursor_x = @types.city_cols / 2
@@ -57,12 +57,12 @@ fn reset_case(game : @types.Game) -> Unit {
   game.wrong_accusations = 0
   game.clue_found = 0
 
-  set_message(game, "Case opened. Gather clues and stop incidents.", 2.2)
+  game.set_message("Case opened. Gather clues and stop incidents.", 2.2)
 }
 
 ///|
 /// Returns the index of the suspect whose home district is at `(cell_x, cell_y)`, or -1.
-fn suspect_index_at_cell(game : @types.Game, cell_x : Int, cell_y : Int) -> Int {
+fn @types.Game::suspect_index_at_cell(game : @types.Game, cell_x : Int, cell_y : Int) -> Int {
   for i in 0..<game.suspects.length() {
     if game.suspects[i].home_x == cell_x && game.suspects[i].home_y == cell_y {
       return i
@@ -73,7 +73,7 @@ fn suspect_index_at_cell(game : @types.Game, cell_x : Int, cell_y : Int) -> Int 
 
 ///|
 /// Returns the index of a clue at the given cell; optionally filters to undiscovered only.
-fn clue_index_at_cell(
+fn @types.Game::clue_index_at_cell(
   game : @types.Game,
   cell_x : Int,
   cell_y : Int,
@@ -93,7 +93,7 @@ fn clue_index_at_cell(
 
 ///|
 /// Returns the index of an active incident at the given cell, or -1 if none.
-fn incident_index_at_cell(
+fn @types.Game::incident_index_at_cell(
   game : @types.Game,
   cell_x : Int,
   cell_y : Int,
@@ -110,7 +110,7 @@ fn incident_index_at_cell(
 
 ///|
 /// Returns the number of fully completed evidence chains for `suspect`.
-fn completed_chains(game : @types.Game, suspect : Int) -> Int {
+fn @types.Game::completed_chains(game : @types.Game, suspect : Int) -> Int {
   if suspect < 0 || suspect >= @types.suspect_count {
     return 0
   }
@@ -127,13 +127,13 @@ fn completed_chains(game : @types.Game, suspect : Int) -> Int {
 
 ///|
 /// Returns the total confidence score for `suspect` based on evidence, chains, and deduction.
-fn suspect_confidence(game : @types.Game, suspect : Int) -> Int {
+fn @types.Game::suspect_confidence(game : @types.Game, suspect : Int) -> Int {
   if suspect < 0 || suspect >= @types.suspect_count {
     return 0
   }
 
   let mut value = game.evidence_score[suspect] +
-    completed_chains(game, suspect) * 8
+    game.completed_chains(suspect) * 8
   if game.suspects[suspect].deduction_unlocked {
     value = value + 8
   }
@@ -142,16 +142,16 @@ fn suspect_confidence(game : @types.Game, suspect : Int) -> Int {
 
 ///|
 /// Recalculates each suspect's suspicion float from their current confidence score.
-fn update_suspect_suspicion(game : @types.Game) -> Unit {
+fn @types.Game::update_suspect_suspicion(game : @types.Game) -> Unit {
   for i in 0..<game.suspects.length() {
-    let conf = Float::from_int(suspect_confidence(game, i))
+    let conf = Float::from_int(game.suspect_confidence(i))
     game.suspects[i].suspicion = @types.clamp01(conf / 42.0)
   }
 }
 
 ///|
 /// Unlocks the deduction for `suspect` if enough chains are complete; awards score and trust.
-fn unlock_deduction_if_ready(game : @types.Game, suspect : Int) -> Unit {
+fn @types.Game::unlock_deduction_if_ready(game : @types.Game, suspect : Int) -> Unit {
   if suspect < 0 || suspect >= @types.suspect_count {
     return
   }
@@ -159,15 +159,14 @@ fn unlock_deduction_if_ready(game : @types.Game, suspect : Int) -> Unit {
     return
   }
 
-  if completed_chains(game, suspect) >= @types.deduction_chains_to_unlock {
+  if game.completed_chains(suspect) >= @types.deduction_chains_to_unlock {
     game.suspects[suspect].deduction_unlocked = true
     game.score = game.score + @types.score_deduction_unlock
     game.trust = @types.minf(
       @types.trust_max,
       game.trust + @types.trust_gain_deduction,
     )
-    set_message(
-      game,
+    game.set_message(
       "Deduction unlocked: " + game.suspects[suspect].name + ".",
       1.8,
     )
@@ -176,7 +175,7 @@ fn unlock_deduction_if_ready(game : @types.Game, suspect : Int) -> Unit {
 
 ///|
 /// Discovers a clue at `clue_index`: awards evidence, advances chain progress, and triggers deduction check.
-fn discover_clue(game : @types.Game, clue_index : Int) -> Unit {
+fn @types.Game::discover_clue(game : @types.Game, clue_index : Int) -> Unit {
   if clue_index < 0 || clue_index >= game.clues.length() {
     return
   }
@@ -214,25 +213,23 @@ fn discover_clue(game : @types.Game, clue_index : Int) -> Unit {
       @types.trust_max,
       game.trust + @types.trust_gain_chain,
     )
-    set_message(
-      game,
+    game.set_message(
       "Chain sealed for " + game.suspects[suspect].name + ".",
       1.6,
     )
   } else {
-    set_message(
-      game,
+    game.set_message(
       "Clue archived on " + game.suspects[suspect].name + ".",
       1.3,
     )
   }
 
-  unlock_deduction_if_ready(game, suspect)
+  game.unlock_deduction_if_ready(suspect)
 }
 
 ///|
 /// Returns the index of a free incident slot, or the slot with the highest remaining timer.
-fn alloc_incident_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_incident_slot(game : @types.Game) -> Int {
   for i in 0..<game.incidents.length() {
     if not(game.incidents[i].active) {
       return i
@@ -252,8 +249,8 @@ fn alloc_incident_slot(game : @types.Game) -> Int {
 
 ///|
 /// Spawns a new incident at a random unoccupied cell with severity-scaled timer.
-fn spawn_incident(game : @types.Game) -> Unit {
-  let slot = alloc_incident_slot(game)
+fn @types.Game::spawn_incident(game : @types.Game) -> Unit {
+  let slot = game.alloc_incident_slot()
   let roll = @types.randi(0, 99)
   let severity = if roll < 48 { 1 } else if roll < 82 { 2 } else { 3 }
 
@@ -263,8 +260,8 @@ fn spawn_incident(game : @types.Game) -> Unit {
   let mut cell_y = @types.randi(0, @types.city_rows - 1)
   let mut tries = 0
   while tries < @types.district_count {
-    if incident_index_at_cell(game, cell_x, cell_y) < 0 &&
-      suspect_index_at_cell(game, cell_x, cell_y) < 0 {
+    if game.incident_index_at_cell(cell_x, cell_y) < 0 &&
+      game.suspect_index_at_cell(cell_x, cell_y) < 0 {
       break
     }
     cell_x = (cell_x + 2 + tries) % @types.city_cols
@@ -284,8 +281,7 @@ fn spawn_incident(game : @types.Game) -> Unit {
   game.incidents[slot].pulse_t = 0.0
 
   let district_id = @types.cell_index(cell_x, cell_y)
-  set_message(
-    game,
+  game.set_message(
     "Incident at district #" + district_id.to_string() + ".",
     1.3,
   )
@@ -293,7 +289,7 @@ fn spawn_incident(game : @types.Game) -> Unit {
 
 ///|
 /// Ticks all active incident timers; deactivates and penalises on timeout.
-fn update_incidents(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_incidents(game : @types.Game, dt : Float) -> Unit {
   let slowdown : Float = if game.focus_t > 0.0 { 0.72 } else { 1.0 }
 
   for incident in game.incidents {
@@ -315,14 +311,14 @@ fn update_incidents(game : @types.Game, dt : Float) -> Unit {
         @types.trust_penalty_missed_incident -
         Float::from_int(incident.severity) * 2.1,
       )
-      set_message(game, "Incident unresolved. City trust slips.", 1.6)
+      game.set_message("Incident unresolved. City trust slips.", 1.6)
     }
   }
 }
 
 ///|
 /// Returns the cumulative trust drain pressure from all currently active incidents.
-fn incident_pressure(game : @types.Game) -> Float {
+fn @types.Game::incident_pressure(game : @types.Game) -> Float {
   let mut pressure : Float = 0.0
   for incident in game.incidents {
     if incident.active {
@@ -334,7 +330,7 @@ fn incident_pressure(game : @types.Game) -> Float {
 
 ///|
 /// Updates each district's heat value based on cursor, incidents, undiscovered clues, and focus.
-fn update_district_pulses(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_district_pulses(game : @types.Game, dt : Float) -> Unit {
   game.city_time = game.city_time + dt
 
   for i in 0..<game.pulses.length() {
@@ -365,7 +361,7 @@ fn update_district_pulses(game : @types.Game, dt : Float) -> Unit {
       }
     }
 
-    if clue_index_at_cell(game, x, y, true) >= 0 {
+    if game.clue_index_at_cell(x, y, true) >= 0 {
       heat = heat + 0.1
     }
 
@@ -385,7 +381,7 @@ fn update_district_pulses(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Moves the cursor by the current frame input delta, clamping within grid bounds.
-fn move_cursor(game : @types.Game) -> Unit {
+fn @types.Game::move_cursor(game : @types.Game) -> Unit {
   if game.input_dx == 0 && game.input_dy == 0 {
     return
   }
@@ -402,7 +398,7 @@ fn move_cursor(game : @types.Game) -> Unit {
 
 ///|
 /// Activates focus or shows cooldown message when the focus key is pressed.
-fn handle_focus_input(game : @types.Game) -> Unit {
+fn @types.Game::handle_focus_input(game : @types.Game) -> Unit {
   if not(game.input_focus_press) {
     return
   }
@@ -410,10 +406,9 @@ fn handle_focus_input(game : @types.Game) -> Unit {
   if game.focus_cd <= 0.0 {
     game.focus_t = @types.focus_duration
     game.focus_cd = @types.focus_cooldown
-    set_message(game, "Focus engaged.", 0.9)
+    game.set_message("Focus engaged.", 0.9)
   } else {
-    set_message(
-      game,
+    game.set_message(
       "Focus cooling: " + game.focus_cd.to_int().to_string() + "s",
       0.8,
     )
@@ -422,30 +417,29 @@ fn handle_focus_input(game : @types.Game) -> Unit {
 
 ///|
 /// Marks or clears the marked suspect when K is pressed at a suspect or empty cell.
-fn handle_cancel_or_mark(game : @types.Game) -> Unit {
+fn @types.Game::handle_cancel_or_mark(game : @types.Game) -> Unit {
   if not(game.input_cancel_press) {
     return
   }
 
-  let suspect = suspect_index_at_cell(game, game.cursor_x, game.cursor_y)
+  let suspect = game.suspect_index_at_cell(game.cursor_x, game.cursor_y)
   if suspect >= 0 {
     game.marked_suspect = suspect
-    set_message(
-      game,
+    game.set_message(
       "Marked suspect: " + game.suspects[suspect].name + ".",
       1.5,
     )
   } else if game.marked_suspect >= 0 {
     game.marked_suspect = -1
-    set_message(game, "Marked suspect cleared.", 1.1)
+    game.set_message("Marked suspect cleared.", 1.1)
   } else {
-    set_message(game, "No suspect at cursor.", 1.0)
+    game.set_message("No suspect at cursor.", 1.0)
   }
 }
 
 ///|
 /// Attempts to resolve an incident using the marked suspect; handles correct, blocked, and wrong cases.
-fn attempt_incident_resolution(
+fn @types.Game::attempt_incident_resolution(
   game : @types.Game,
   incident_index : Int,
 ) -> Unit {
@@ -455,7 +449,7 @@ fn attempt_incident_resolution(
 
   if game.marked_suspect < 0 {
     game.trust = @types.maxf(0.0, game.trust - 1.8)
-    set_message(game, "Mark a suspect with K before accusing.", 1.4)
+    game.set_message("Mark a suspect with K before accusing.", 1.4)
     return
   }
 
@@ -464,7 +458,7 @@ fn attempt_incident_resolution(
   let severity = game.incidents[incident_index].severity
 
   if accused == culprit {
-    let mut effective_confidence = suspect_confidence(game, accused)
+    let mut effective_confidence = game.suspect_confidence(accused)
     if game.suspects[accused].deduction_unlocked {
       effective_confidence = effective_confidence + 4
     }
@@ -483,8 +477,7 @@ fn attempt_incident_resolution(
         @types.trust_max,
         game.trust + @types.trust_gain_resolve + Float::from_int(severity),
       )
-      set_message(
-        game,
+      game.set_message(
         "Incident resolved. Culprit: " + game.suspects[accused].name + ".",
         1.8,
       )
@@ -495,7 +488,7 @@ fn attempt_incident_resolution(
         game.trust - @types.trust_penalty_wrong_accuse * 0.4,
       )
       game.score = (0).max(game.score - @types.score_wrong_accuse_penalty / 2)
-      set_message(game, "Evidence chain incomplete. Accusation blocked.", 1.7)
+      game.set_message("Evidence chain incomplete. Accusation blocked.", 1.7)
     }
   } else {
     game.wrong_accusations = game.wrong_accusations + 1
@@ -512,27 +505,26 @@ fn attempt_incident_resolution(
       1.0,
       game.incidents[incident_index].timer - 4.0,
     )
-    set_message(game, "Wrong accusation. Trust drops hard.", 1.8)
+    game.set_message("Wrong accusation. Trust drops hard.", 1.8)
   }
 }
 
 ///|
 /// Prints a confidence/chains/deduction summary for `suspect` as a HUD message.
-fn inspect_suspect(game : @types.Game, suspect : Int) -> Unit {
+fn @types.Game::inspect_suspect(game : @types.Game, suspect : Int) -> Unit {
   if suspect < 0 || suspect >= @types.suspect_count {
     return
   }
 
-  let chains = completed_chains(game, suspect)
-  let conf = suspect_confidence(game, suspect)
+  let chains = game.completed_chains(suspect)
+  let conf = game.suspect_confidence(suspect)
   let unlock_word = if game.suspects[suspect].deduction_unlocked {
     "deduction ready"
   } else {
     "deduction locked"
   }
 
-  set_message(
-    game,
+  game.set_message(
     game.suspects[suspect].name +
     ": confidence " +
     conf.to_string() +
@@ -547,35 +539,35 @@ fn inspect_suspect(game : @types.Game, suspect : Int) -> Unit {
 
 ///|
 /// Dispatches J input: resolve incident, discover clue, inspect suspect, or show no-lead message.
-fn handle_inspect(game : @types.Game) -> Unit {
+fn @types.Game::handle_inspect(game : @types.Game) -> Unit {
   if not(game.input_inspect_press) {
     return
   }
 
-  let incident = incident_index_at_cell(game, game.cursor_x, game.cursor_y)
+  let incident = game.incident_index_at_cell(game.cursor_x, game.cursor_y)
   if incident >= 0 {
-    attempt_incident_resolution(game, incident)
+    game.attempt_incident_resolution(incident)
     return
   }
 
-  let clue = clue_index_at_cell(game, game.cursor_x, game.cursor_y, true)
+  let clue = game.clue_index_at_cell(game.cursor_x, game.cursor_y, true)
   if clue >= 0 {
-    discover_clue(game, clue)
+    game.discover_clue(clue)
     return
   }
 
-  let suspect = suspect_index_at_cell(game, game.cursor_x, game.cursor_y)
+  let suspect = game.suspect_index_at_cell(game.cursor_x, game.cursor_y)
   if suspect >= 0 {
-    inspect_suspect(game, suspect)
+    game.inspect_suspect(suspect)
     return
   }
 
-  set_message(game, "No lead in this district.", 1.0)
+  game.set_message("No lead in this district.", 1.0)
 }
 
 ///|
 /// Decrements the glow timer for all discovered clues with active glow.
-fn update_clue_glow(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_clue_glow(game : @types.Game, dt : Float) -> Unit {
   for clue in game.clues {
     if clue.glow_t > 0.0 {
       clue.glow_t = @types.maxf(0.0, clue.glow_t - dt)
@@ -585,13 +577,13 @@ fn update_clue_glow(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Counts down the spawn timer and spawns a new incident when it reaches zero.
-fn update_spawn_timer(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_spawn_timer(game : @types.Game, dt : Float) -> Unit {
   game.spawn_t = game.spawn_t - dt
   if game.spawn_t > 0.0 {
     return
   }
 
-  spawn_incident(game)
+  game.spawn_incident()
 
   let solved_scale = Float::from_int(game.solved_incidents) * 0.08
   let mut next_spawn = @types.incident_spawn_base -
@@ -608,7 +600,7 @@ fn update_spawn_timer(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Ticks focus timer, focus cooldown, case timer, and trust decay per frame.
-fn update_runtime_meters(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_runtime_meters(game : @types.Game, dt : Float) -> Unit {
   if game.focus_t > 0.0 {
     game.focus_t = @types.maxf(0.0, game.focus_t - dt)
   }
@@ -622,91 +614,91 @@ fn update_runtime_meters(game : @types.Game, dt : Float) -> Unit {
   game.trust = @types.maxf(
     0.0,
     game.trust -
-    dt * (@types.trust_decay_base + incident_pressure(game)) * focus_factor,
+    dt * (@types.trust_decay_base + game.incident_pressure()) * focus_factor,
   )
 }
 
 ///|
 /// Saves best score and transitions to game-over state with a reason message.
-fn transition_to_game_over(game : @types.Game, reason : String) -> Unit {
+fn @types.Game::transition_to_game_over(game : @types.Game, reason : String) -> Unit {
   if game.score > game.best_score {
     game.best_score = game.score
   }
   game.state = GameOver
-  set_message(game, reason + " Press J or R to restart.", 99.0)
+  game.set_message(reason + " Press J or R to restart.", 99.0)
 }
 
 ///|
 /// Handles one tick in Title state: animates district pulses and starts case on J.
-fn update_title_state(game : @types.Game, dt : Float) -> Unit {
-  update_district_pulses(game, dt)
+fn @types.Game::update_title_state(game : @types.Game, dt : Float) -> Unit {
+  game.update_district_pulses(dt)
 
   if game.input_inspect_press {
-    reset_case(game)
+    game.reset_case()
   }
 }
 
 ///|
 /// Handles one tick in Playing state: processes all input, timers, and checks win/loss conditions.
-fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_playing_state(game : @types.Game, dt : Float) -> Unit {
   if game.input_pause_press {
     game.state = Paused
-    set_message(game, "Investigation paused.", 99.0)
+    game.set_message("Investigation paused.", 99.0)
     return
   }
 
-  move_cursor(game)
-  handle_cancel_or_mark(game)
-  handle_focus_input(game)
-  handle_inspect(game)
+  game.move_cursor()
+  game.handle_cancel_or_mark()
+  game.handle_focus_input()
+  game.handle_inspect()
 
-  update_runtime_meters(game, dt)
-  update_spawn_timer(game, dt)
-  update_incidents(game, dt)
-  update_clue_glow(game, dt)
-  update_district_pulses(game, dt)
-  update_suspect_suspicion(game)
+  game.update_runtime_meters(dt)
+  game.update_spawn_timer(dt)
+  game.update_incidents(dt)
+  game.update_clue_glow(dt)
+  game.update_district_pulses(dt)
+  game.update_suspect_suspicion()
 
   if game.trust <= 0.0 {
-    transition_to_game_over(game, "City trust collapsed.")
+    game.transition_to_game_over("City trust collapsed.")
   } else if game.case_time <= 0.0 {
-    transition_to_game_over(game, "Case file expired.")
+    game.transition_to_game_over("Case file expired.")
   }
 }
 
 ///|
 /// Handles one tick in Paused state: animates district pulses and resumes on P or K.
-fn update_paused_state(game : @types.Game, dt : Float) -> Unit {
-  update_district_pulses(game, dt)
+fn @types.Game::update_paused_state(game : @types.Game, dt : Float) -> Unit {
+  game.update_district_pulses(dt)
 
   if game.input_pause_press || game.input_cancel_press {
     game.state = Playing
-    set_message(game, "Investigation resumed.", 1.1)
+    game.set_message("Investigation resumed.", 1.1)
   }
 }
 
 ///|
 /// Handles one tick in GameOver state: animates district pulses and handles restart or title.
-fn update_game_over_state(game : @types.Game, dt : Float) -> Unit {
-  update_district_pulses(game, dt)
+fn @types.Game::update_game_over_state(game : @types.Game, dt : Float) -> Unit {
+  game.update_district_pulses(dt)
 
   if game.input_inspect_press {
-    reset_case(game)
+    game.reset_case()
   } else if game.input_cancel_press {
     game.state = Title
-    set_message(game, "Press J to reopen the case.", 99.0)
+    game.set_message("Press J to reopen the case.", 99.0)
   }
 }
 
 ///|
 /// Advances one frame of detective gameplay and state transitions.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
-  update_input(game)
+  game.update_input()
 
   let step = @types.clampf(dt, 0.0, 0.05)
 
   if game.input_restart_press {
-    reset_case(game)
+    game.reset_case()
   }
 
   if game.message_t > 0.0 {
@@ -714,9 +706,9 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   }
 
   match game.state {
-    Title => update_title_state(game, step)
-    Playing => update_playing_state(game, step)
-    Paused => update_paused_state(game, step)
-    GameOver => update_game_over_state(game, step)
+    Title => game.update_title_state(step)
+    Playing => game.update_playing_state(step)
+    Paused => game.update_paused_state(step)
+    GameOver => game.update_game_over_state(step)
   }
 }

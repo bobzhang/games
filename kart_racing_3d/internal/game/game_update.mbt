@@ -6,19 +6,19 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   update_particles(game, dt)
   match game.state {
-    Menu => update_menu(game, dt)
-    KartSelect => update_kart_select(game, dt)
-    TrackPreview => update_track_preview(game, dt)
-    Countdown => update_countdown(game, dt)
-    Racing => update_racing(game, dt)
-    Paused => update_paused(game, dt)
-    RaceComplete => update_race_complete(game, dt)
-    CupComplete => update_cup_complete(game, dt)
+    Menu => game.update_menu(dt)
+    KartSelect => game.update_kart_select(dt)
+    TrackPreview => game.update_track_preview(dt)
+    Countdown => game.update_countdown(dt)
+    Racing => game.update_racing(dt)
+    Paused => game.update_paused(dt)
+    RaceComplete => game.update_race_complete(dt)
+    CupComplete => game.update_cup_complete(dt)
   }
 }
 
 ///|
-fn update_menu(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
   game.menu_blink += dt * 3.5
   if @raylib.is_key_pressed(@raylib.KeyUp) {
     game.menu_cursor -= 1
@@ -44,7 +44,7 @@ fn update_menu(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_kart_select(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_kart_select(game : @types.Game, dt : Float) -> Unit {
   game.menu_blink += dt * 3.5
   // Navigate kart types
   if @raylib.is_key_pressed(@raylib.KeyLeft) {
@@ -85,14 +85,14 @@ fn update_kart_select(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_track_preview(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_track_preview(game : @types.Game, dt : Float) -> Unit {
   game.preview_timer += dt
   game.preview_rotation += dt * 0.5
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     game.preview_timer > 5.0 {
     reset_cup_points(game)
-    start_race(game)
+    game.start_race()
   }
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
     game.state = KartSelect
@@ -100,16 +100,16 @@ fn update_track_preview(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn start_race(game : @types.Game) -> Unit {
+fn @types.Game::start_race(game : @types.Game) -> Unit {
   load_track(game, game.current_cup, game.current_race)
   game.state = Countdown
   game.countdown_timer = @types.countdown_total
 }
 
 ///|
-fn update_countdown(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_countdown(game : @types.Game, dt : Float) -> Unit {
   game.countdown_timer -= dt
-  update_camera_chase(game, dt)
+  game.update_camera_chase(dt)
   if game.countdown_timer <= 0.0 {
     game.state = Racing
     game.race_time = 0.0
@@ -118,7 +118,7 @@ fn update_countdown(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_racing(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_racing(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
     game.state = Paused
@@ -127,16 +127,16 @@ fn update_racing(game : @types.Game, dt : Float) -> Unit {
   game.race_time += dt
   game.current_lap_time = game.race_time - game.lap_start_time
   // Update global effects
-  update_lightning_effect(game, dt)
-  update_star_effects(game, dt)
+  game.update_lightning_effect(dt)
+  game.update_star_effects(dt)
   // Update all systems
   update_player_kart(game, dt)
   update_ai_karts(game, dt)
   // Waypoint tracking and surface detection for all karts
   for i in 0..<@types.max_karts {
     update_kart_waypoint(game, i)
-    update_kart_surface(game, i)
-    update_kart_wrong_way(game, i, dt)
+    game.update_kart_surface(i)
+    game.update_kart_wrong_way(i, dt)
   }
   check_kart_collisions(game)
   update_positions(game)
@@ -147,9 +147,9 @@ fn update_racing(game : @types.Game, dt : Float) -> Unit {
   check_dropped_item_collisions(game)
   update_projectile_homing(game, dt)
   update_item_box_respawns(game, dt)
-  update_camera_chase(game, dt)
+  game.update_camera_chase(dt)
   // Emit track-based particles (boost pads, etc.)
-  emit_surface_particles(game)
+  game.emit_surface_particles()
   // Check race end
   if player_finished(game) || all_karts_finished(game) {
     // Auto-finish any remaining karts
@@ -168,7 +168,7 @@ fn update_racing(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_paused(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_paused(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
     game.state = Racing
@@ -179,9 +179,9 @@ fn update_paused(game : @types.Game, _dt : Float) -> Unit {
 }
 
 ///|
-fn update_race_complete(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_race_complete(game : @types.Game, dt : Float) -> Unit {
   game.results_scroll += dt
-  update_camera_chase(game, dt)
+  game.update_camera_chase(dt)
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     game.current_race += 1
@@ -189,13 +189,13 @@ fn update_race_complete(game : @types.Game, dt : Float) -> Unit {
       game.state = CupComplete
       game.results_scroll = 0.0
     } else {
-      start_race(game)
+      game.start_race()
     }
   }
 }
 
 ///|
-fn update_cup_complete(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_cup_complete(game : @types.Game, dt : Float) -> Unit {
   game.results_scroll += dt
   ignore(dt)
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
@@ -205,7 +205,7 @@ fn update_cup_complete(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_camera_chase(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_camera_chase(game : @types.Game, dt : Float) -> Unit {
   let kart = game.karts[@types.player_kart]
   if not(kart.active) {
     return
@@ -271,7 +271,7 @@ fn update_camera_chase(game : @types.Game, dt : Float) -> Unit {
 // Update kart surface detection
 
 ///|
-fn update_kart_surface(game : @types.Game, kart_idx : Int) -> Unit {
+fn @types.Game::update_kart_surface(game : @types.Game, kart_idx : Int) -> Unit {
   let kart = game.karts[kart_idx]
   if not(kart.active) {
     return
@@ -289,7 +289,7 @@ fn update_kart_surface(game : @types.Game, kart_idx : Int) -> Unit {
 // Update wrong way detection
 
 ///|
-fn update_kart_wrong_way(
+fn @types.Game::update_kart_wrong_way(
   game : @types.Game,
   kart_idx : Int,
   dt : Float,
@@ -309,7 +309,7 @@ fn update_kart_wrong_way(
 // Update global lightning effect
 
 ///|
-fn update_lightning_effect(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_lightning_effect(game : @types.Game, dt : Float) -> Unit {
   if game.lightning_active {
     game.lightning_timer -= dt
     if game.lightning_timer <= 0.0 {
@@ -325,7 +325,7 @@ fn update_lightning_effect(game : @types.Game, dt : Float) -> Unit {
 // Update star effects
 
 ///|
-fn update_star_effects(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_star_effects(game : @types.Game, dt : Float) -> Unit {
   game.star_rainbow_timer += dt * 5.0
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
@@ -361,7 +361,7 @@ fn update_star_effects(game : @types.Game, dt : Float) -> Unit {
 // Emit surface-based particles (dust on dirt, sparks on boost pads)
 
 ///|
-fn emit_surface_particles(game : @types.Game) -> Unit {
+fn @types.Game::emit_surface_particles(game : @types.Game) -> Unit {
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
     if not(kart.active) || not(kart.on_ground) {

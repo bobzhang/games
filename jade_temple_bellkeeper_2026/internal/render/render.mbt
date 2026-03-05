@@ -25,7 +25,7 @@ fn draw_right_text(
 
 ///|
 /// Returns a random camera offset based on the current shake timer amplitude.
-fn cam_shake(game : @types.Game) -> (Float, Float) {
+fn @types.Game::cam_shake(game : @types.Game) -> (Float, Float) {
   if game.shake_t <= 0.0 {
     (0.0, 0.0)
   } else {
@@ -36,7 +36,7 @@ fn cam_shake(game : @types.Game) -> (Float, Float) {
 
 ///|
 /// Draws the background gradient, animated moon, twinkling stars, and layered wave clouds.
-fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -115,7 +115,7 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws the play area floor with an animated scrolling grid overlay.
-fn draw_floor_grid(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_floor_grid(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   @raylib.draw_rectangle(
     @types.play_left.to_int(),
     @types.play_top.to_int(),
@@ -162,7 +162,7 @@ fn draw_floor_grid(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws the central shrine with aura glow, HP-scaled inner gem, and connector lines to each bell.
-fn draw_shrine(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_shrine(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let x = @types.shrine_x() + cam_x
   let y = @types.shrine_y() + cam_y
 
@@ -455,7 +455,7 @@ fn draw_foe(f : @types.Foe, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws the hero sprite with aura, body triangles, animated tail orbs, invulnerability tint, and hurt flash.
-fn draw_hero(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_hero(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let h = game.hero
   let x = h.x + cam_x
   let y = h.y + cam_y
@@ -526,7 +526,7 @@ fn draw_hero(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws all active bolts as directional line segments with a bright tip circle.
-fn draw_bolts(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_bolts(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for bolt in game.bolts {
     if not(bolt.active) {
       continue
@@ -562,7 +562,7 @@ fn draw_bolts(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws all active spark, ring, and echo visual effects with alpha fading based on remaining life.
-fn draw_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
       continue
@@ -682,7 +682,7 @@ fn draw_bar(
 
 ///|
 /// Draws the HUD strip with shrine HP, spirit, score/goal, timer, stage info, bell charge bars, combo counter, and key hints.
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -893,7 +893,7 @@ fn draw_button_visual(
 
 ///|
 /// Renders all on-screen touch buttons appropriate for the current game state, only when touch mode is active.
-fn draw_touch_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   if not(game.touch_mode) {
     return
   }
@@ -977,7 +977,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the title screen overlay with game name, how-to-play panel, and start button.
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -1097,7 +1097,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the stage-clear overlay with an ease-in animated title, bonus score, and next-stage message.
-fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_stage_clear_overlay(game : @types.Game) -> Unit {
   let t = @types.clampf(game.result_t / @types.stage_clear_wait, 0.0, 1.0)
   let y = @types.lerpf(232.0, 166.0, @types.ease_out_cubic(t)).to_int()
 
@@ -1126,7 +1126,7 @@ fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the game-over overlay with final stats panel, "SHRINE FALLEN" heading, and retry button.
-fn draw_game_over_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -1232,7 +1232,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a full-screen red-pink flash overlay that fades out with the flash timer.
-fn draw_flash(game : @types.Game) -> Unit {
+fn @types.Game::draw_flash(game : @types.Game) -> Unit {
   if game.flash_t <= 0.0 {
     return
   }
@@ -1249,10 +1249,10 @@ fn draw_flash(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all world layers in order: sky, floor grid, shrine, bells, relics, hostile foes, hero, bolts, and effects.
-fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
-  draw_sky(game, cam_x, cam_y)
-  draw_floor_grid(game, cam_x, cam_y)
-  draw_shrine(game, cam_x, cam_y)
+fn @types.Game::draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+  game.draw_sky(cam_x, cam_y)
+  game.draw_floor_grid(cam_x, cam_y)
+  game.draw_shrine(cam_x, cam_y)
 
   for i in 0..<@types.bell_count {
     draw_bell(game.bells[i], i, cam_x, cam_y)
@@ -1270,9 +1270,9 @@ fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     }
   }
 
-  draw_hero(game, cam_x, cam_y)
-  draw_bolts(game, cam_x, cam_y)
-  draw_fx(game, cam_x, cam_y)
+  game.draw_hero(cam_x, cam_y)
+  game.draw_bolts(cam_x, cam_y)
+  game.draw_fx(cam_x, cam_y)
 }
 
 ///|
@@ -1280,19 +1280,19 @@ fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(6, 12, 24, 255))
 
-  let shake = cam_shake(game)
-  draw_world(game, shake.0, shake.1)
-  draw_hud(game)
+  let shake = game.cam_shake()
+  game.draw_world(shake.0, shake.1)
+  game.draw_hud()
 
   match game.state {
-    Title => draw_title_overlay(game)
-    StageClear => draw_stage_clear_overlay(game)
-    GameOver => draw_game_over_overlay(game)
+    Title => game.draw_title_overlay()
+    StageClear => game.draw_stage_clear_overlay()
+    GameOver => game.draw_game_over_overlay()
     Play => ()
   }
 
-  draw_touch_controls(game)
-  draw_flash(game)
+  game.draw_touch_controls()
+  game.draw_flash()
 
   match game.state {
     Play =>

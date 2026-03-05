@@ -1,6 +1,6 @@
 ///|
 /// Returns a random horizontal screen shake offset when the shake timer is active, or 0 when idle.
-fn shake_dx(game : @types.Game) -> Int {
+fn @types.Game::shake_dx(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -10,7 +10,7 @@ fn shake_dx(game : @types.Game) -> Int {
 
 ///|
 /// Returns a random vertical screen shake offset when the shake timer is active, or 0 when idle.
-fn shake_dy(game : @types.Game) -> Int {
+fn @types.Game::shake_dy(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -20,7 +20,7 @@ fn shake_dy(game : @types.Game) -> Int {
 
 ///|
 /// Returns a value in [0, 1] oscillating at frequency `f` Hz using the elapsed game time.
-fn pulse(game : @types.Game, f : Float) -> Float {
+fn @types.Game::pulse(game : @types.Game, f : Float) -> Float {
   0.5 + 0.5 * @math.sinf(game.time_s * f)
 }
 
@@ -50,7 +50,7 @@ fn drone_color(id : Int) -> @raylib.Color {
 
 ///|
 /// Draws the dark gradient background and ambient glow circles behind the board.
-fn draw_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(8, 10, 18, 255))
 
   @raylib.draw_rectangle_gradient_v(
@@ -62,8 +62,8 @@ fn draw_background(game : @types.Game) -> Unit {
     @raylib.Color::new(8, 10, 18, 255),
   )
 
-  let g0 : Int = 24 + (pulse(game, 0.36) * 20.0).to_int()
-  let g1 : Int = 34 + (pulse(game, 0.60) * 24.0).to_int()
+  let g0 : Int = 24 + (game.pulse(0.36) * 20.0).to_int()
+  let g1 : Int = 34 + (game.pulse(0.60) * 24.0).to_int()
 
   @raylib.draw_circle(154, 108, 220.0, @raylib.Color::new(110, 136, 206, g0))
   @raylib.draw_circle(
@@ -84,7 +84,7 @@ fn draw_background(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all grid tiles (walls, floor, exit) with checkerboard shading and grid lines, offset by `(ox, oy)`.
-fn draw_tiles(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_tiles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
       let rx : Int = @types.board_px(x) + ox
@@ -152,13 +152,13 @@ fn draw_tiles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws both portal pads with pulsing glow rings; glows are dim when the portal is offline and bright when online.
-fn draw_portals(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_portals(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let a_cx : Int = @types.board_px(@types.portal_ax) + @types.cell / 2 + ox
   let a_cy : Int = @types.board_py(@types.portal_ay) + @types.cell / 2 + oy
   let b_cx : Int = @types.board_px(@types.portal_bx) + @types.cell / 2 + ox
   let b_cy : Int = @types.board_py(@types.portal_by) + @types.cell / 2 + oy
 
-  let p : Float = pulse(game, 2.8)
+  let p : Float = game.pulse(2.8)
 
   let glow_a : Int = if game.portal_on { 120 + (p * 70.0).to_int() } else { 52 }
 
@@ -212,7 +212,7 @@ fn draw_portals(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws all active energy cores as colored circles with a soft glow halo.
-fn draw_cores(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_cores(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for core in game.cores {
     if not(core.active) {
       continue
@@ -241,7 +241,7 @@ fn draw_cores(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws all active flare beacons as fading light pools with alpha proportional to remaining lifetime.
-fn draw_flares(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_flares(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for flare in game.flares {
     if not(flare.active) {
       continue
@@ -258,7 +258,7 @@ fn draw_flares(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws all active drones with mode-dependent color (stunned=purple, hunting=red, patrol=color_id).
-fn draw_drones(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_drones(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for drone in game.drones {
     if not(drone.active) {
       continue
@@ -301,7 +301,7 @@ fn draw_drones(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the player sprite at its interpolated position, blinking when the damage flash timer is active.
-fn draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let blink : Bool = game.flash_t > 0.0 &&
     (game.flash_t * 14.0).to_int() % 2 == 0
   if blink {
@@ -326,7 +326,7 @@ fn draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws all active particles as colored circles colored by kind (0=blue, 1=yellow, 2=purple).
-fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
       continue
@@ -351,7 +351,7 @@ fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Computes the blackout overlay alpha for tile `(x, y)` based on Manhattan distance to the player and any active flares.
-fn light_alpha(game : @types.Game, x : Int, y : Int) -> Int {
+fn @types.Game::light_alpha(game : @types.Game, x : Int, y : Int) -> Int {
   let mut best : Int = @types.manhattan(x, y, game.player.x, game.player.y)
 
   for flare in game.flares {
@@ -380,10 +380,10 @@ fn light_alpha(game : @types.Game, x : Int, y : Int) -> Int {
 
 ///|
 /// Overlays dark rectangles on each interior tile to simulate blackout visibility, with alpha from `light_alpha`.
-fn draw_blackout(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_blackout(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for y in 1..<(@types.grid_h - 1) {
     for x in 1..<(@types.grid_w - 1) {
-      let a : Int = light_alpha(game, x, y)
+      let a : Int = game.light_alpha(x, y)
       @raylib.draw_rectangle(
         @types.board_px(x) + ox,
         @types.board_py(y) + oy,
@@ -397,15 +397,15 @@ fn draw_blackout(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the complete board layer: tiles, portals, cores, flares, drones, player, particles, blackout, and border.
-fn draw_board(game : @types.Game, ox : Int, oy : Int) -> Unit {
-  draw_tiles(game, ox, oy)
-  draw_portals(game, ox, oy)
-  draw_cores(game, ox, oy)
-  draw_flares(game, ox, oy)
-  draw_drones(game, ox, oy)
-  draw_player(game, ox, oy)
-  draw_particles(game, ox, oy)
-  draw_blackout(game, ox, oy)
+fn @types.Game::draw_board(game : @types.Game, ox : Int, oy : Int) -> Unit {
+  game.draw_tiles(ox, oy)
+  game.draw_portals(ox, oy)
+  game.draw_cores(ox, oy)
+  game.draw_flares(ox, oy)
+  game.draw_drones(ox, oy)
+  game.draw_player(ox, oy)
+  game.draw_particles(ox, oy)
+  game.draw_blackout(ox, oy)
 
   @raylib.draw_rectangle_lines(
     @types.board_x0 - 2 + ox,
@@ -418,7 +418,7 @@ fn draw_board(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws a labeled touch button that highlights with `c_on` when pressed and `c_idle` otherwise.
-fn draw_touch_button(
+fn @types.Game::draw_touch_button(
   game : @types.Game,
   rect : (Int, Int, Int, Int),
   label : String,
@@ -470,66 +470,58 @@ fn draw_touch_button(
 
 ///|
 /// Draws the on-screen D-pad, action button, and hint/restart/menu shortcut buttons during gameplay.
-fn draw_touch_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   if game.state != @types.state_play {
     return
   }
 
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_left(),
     "<",
     @raylib.Color::new(42, 64, 96, 116),
     @raylib.Color::new(74, 114, 168, 186),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_right(),
     ">",
     @raylib.Color::new(42, 64, 96, 116),
     @raylib.Color::new(74, 114, 168, 186),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_up(),
     "^",
     @raylib.Color::new(42, 64, 96, 116),
     @raylib.Color::new(74, 114, 168, 186),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_down(),
     "v",
     @raylib.Color::new(42, 64, 96, 116),
     @raylib.Color::new(74, 114, 168, 186),
   )
 
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_action(),
     "A",
     @raylib.Color::new(98, 62, 118, 134),
     @raylib.Color::new(168, 94, 212, 192),
   )
 
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_hint(),
     "Hint",
     @raylib.Color::new(44, 78, 110, 136),
     @raylib.Color::new(84, 144, 196, 198),
   )
 
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_restart(),
     "Retry",
     @raylib.Color::new(86, 62, 44, 136),
     @raylib.Color::new(170, 120, 78, 198),
   )
 
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_menu(),
     "Menu",
     @raylib.Color::new(70, 58, 90, 136),
@@ -539,7 +531,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the side panel with core count, portal status, lives, score, timer, flare energy bar, and control hints.
-fn draw_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.panel_x0,
     @types.board_y0,
@@ -734,7 +726,7 @@ fn draw_panel(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the title screen overlay with game name, tagline, and the start button.
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   let b = @types.start_button_rect()
   let hot : Bool = @types.pointer_on_rect(
     game.mouse_x,
@@ -825,7 +817,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the result screen overlay with win/fail title, outcome reason, score summary, and the retry button.
-fn draw_result_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   let b = @types.retry_button_rect()
   let hot : Bool = @types.pointer_on_rect(
     game.mouse_x,
@@ -926,18 +918,18 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 ///|
 /// Draws one full frame including board, UI panel, and overlays.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_background(game)
+  game.draw_background()
 
-  let ox : Int = shake_dx(game)
-  let oy : Int = shake_dy(game)
+  let ox : Int = game.shake_dx()
+  let oy : Int = game.shake_dy()
 
-  draw_board(game, ox, oy)
-  draw_panel(game)
-  draw_touch_controls(game)
+  game.draw_board(ox, oy)
+  game.draw_panel()
+  game.draw_touch_controls()
 
   if game.state == @types.state_title {
-    draw_title_overlay(game)
+    game.draw_title_overlay()
   } else if game.state == @types.state_result {
-    draw_result_overlay(game)
+    game.draw_result_overlay()
   }
 }

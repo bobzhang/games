@@ -1,6 +1,6 @@
 ///|
 /// Resets all normalized input fields in the game struct to their default off state.
-fn clear_input(game : @types.Game) -> Unit {
+fn @types.Game::clear_input(game : @types.Game) -> Unit {
   game.input_x = 0.0
   game.input_jump_press = false
   game.input_fire_hold = false
@@ -11,8 +11,8 @@ fn clear_input(game : @types.Game) -> Unit {
 
 ///|
 /// Reads keyboard and pointer input for the title screen and sets the restart press flag.
-fn update_title_input(game : @types.Game) -> Unit {
-  clear_input(game)
+fn @types.Game::update_title_input(game : @types.Game) -> Unit {
+  game.clear_input()
   game.touch_mode = game.touch_count > 0
 
   let start_btn = @types.title_start_rect()
@@ -38,8 +38,8 @@ fn update_title_input(game : @types.Game) -> Unit {
 
 ///|
 /// Reads keyboard and on-screen touch input during gameplay and populates normalized input fields.
-fn update_play_input(game : @types.Game) -> Unit {
-  clear_input(game)
+fn @types.Game::update_play_input(game : @types.Game) -> Unit {
+  game.clear_input()
   game.touch_mode = game.touch_count > 0
 
   let left = @types.btn_left_rect()
@@ -153,8 +153,8 @@ fn update_play_input(game : @types.Game) -> Unit {
 
 ///|
 /// Reads keyboard and pointer input on the result screen and sets the restart press flag.
-fn update_result_input(game : @types.Game) -> Unit {
-  clear_input(game)
+fn @types.Game::update_result_input(game : @types.Game) -> Unit {
+  game.clear_input()
   game.touch_mode = game.touch_count > 0
 
   let retry = @types.retry_rect()

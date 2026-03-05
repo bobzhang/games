@@ -3,26 +3,26 @@
 ///|
 /// Draws the complete 3D world including track, karts, items, particles, and visual effects.
 pub fn draw_world(game : @types.Game) -> Unit {
-  let camera = build_camera(game)
+  let camera = game.build_camera()
   @raylib.begin_mode_3d(camera)
-  draw_skybox_elements(game)
-  draw_ground(game)
-  draw_track(game)
-  draw_surface_indicators(game)
-  draw_powerups(game)
-  draw_karts(game)
-  draw_kart_details(game)
-  draw_projectiles(game)
-  draw_particles_3d(game)
-  draw_start_finish_line(game)
-  draw_trackside_objects(game)
-  draw_themed_decorations(game)
+  game.draw_skybox_elements()
+  game.draw_ground()
+  game.draw_track()
+  game.draw_surface_indicators()
+  game.draw_powerups()
+  game.draw_karts()
+  game.draw_kart_details()
+  game.draw_projectiles()
+  game.draw_particles_3d()
+  game.draw_start_finish_line()
+  game.draw_trackside_objects()
+  game.draw_themed_decorations()
   @raylib.end_mode_3d()
   draw_effects(game)
 }
 
 ///|
-fn build_camera(game : @types.Game) -> @raylib.Camera3D {
+fn @types.Game::build_camera(game : @types.Game) -> @raylib.Camera3D {
   @raylib.Camera3D::new(
     @raylib.Vector3::new(game.camera_x, game.camera_y, game.camera_z),
     @raylib.Vector3::new(
@@ -37,7 +37,7 @@ fn build_camera(game : @types.Game) -> @raylib.Camera3D {
 }
 
 ///|
-fn draw_ground(game : @types.Game) -> Unit {
+fn @types.Game::draw_ground(game : @types.Game) -> Unit {
   let gc = @levels.get_track_ground_color(game.current_cup, game.current_race)
   // Draw a large ground plane
   @raylib.draw_plane(
@@ -48,7 +48,7 @@ fn draw_ground(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_track(game : @types.Game) -> Unit {
+fn @types.Game::draw_track(game : @types.Game) -> Unit {
   let wc = game.waypoint_count
   if wc < 2 {
     return
@@ -120,7 +120,7 @@ fn draw_track(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_start_finish_line(game : @types.Game) -> Unit {
+fn @types.Game::draw_start_finish_line(game : @types.Game) -> Unit {
   let wc = game.waypoint_count
   if wc < 2 {
     return
@@ -180,7 +180,7 @@ fn draw_start_finish_line(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_trackside_objects(game : @types.Game) -> Unit {
+fn @types.Game::draw_trackside_objects(game : @types.Game) -> Unit {
   let wc = game.waypoint_count
   if wc < 3 {
     return
@@ -232,7 +232,7 @@ fn draw_trackside_objects(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_karts(game : @types.Game) -> Unit {
+fn @types.Game::draw_karts(game : @types.Game) -> Unit {
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
     if not(kart.active) {
@@ -366,7 +366,7 @@ fn draw_karts(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_powerups(game : @types.Game) -> Unit {
+fn @types.Game::draw_powerups(game : @types.Game) -> Unit {
   for i in 0..<game.powerups.length() {
     let pu = game.powerups[i]
     if not(pu.active) || pu.collected {
@@ -414,7 +414,7 @@ fn draw_powerups(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_projectiles(game : @types.Game) -> Unit {
+fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
   for proj in game.projectiles {
     if not(proj.active) {
       continue
@@ -436,7 +436,7 @@ fn draw_projectiles(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_particles_3d(game : @types.Game) -> Unit {
+fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -456,7 +456,7 @@ fn draw_particles_3d(game : @types.Game) -> Unit {
 // Draw theme-specific track decorations using decoration data from levels
 
 ///|
-fn draw_themed_decorations(game : @types.Game) -> Unit {
+fn @types.Game::draw_themed_decorations(game : @types.Game) -> Unit {
   let wc = game.waypoint_count
   if wc < 3 {
     return
@@ -884,7 +884,7 @@ fn draw_decoration_object(
 // Draw track surface visual differences (boost pads, dirt patches, ice patches)
 
 ///|
-fn draw_surface_indicators(game : @types.Game) -> Unit {
+fn @types.Game::draw_surface_indicators(game : @types.Game) -> Unit {
   let wc = game.waypoint_count
   if wc < 2 {
     return
@@ -960,7 +960,7 @@ fn draw_surface_indicators(game : @types.Game) -> Unit {
 // Draw skybox elements based on theme
 
 ///|
-fn draw_skybox_elements(game : @types.Game) -> Unit {
+fn @types.Game::draw_skybox_elements(game : @types.Game) -> Unit {
   let theme = @levels.get_track_theme(game.current_cup, game.current_race)
   let sky_c = @levels.get_track_sky_color(game.current_cup, game.current_race)
   let grad_c = @levels.get_sky_gradient_color(
@@ -1026,7 +1026,7 @@ fn draw_skybox_elements(game : @types.Game) -> Unit {
 // Draw kart detail: exhaust pipes, spoiler, engine details
 
 ///|
-fn draw_kart_details(game : @types.Game) -> Unit {
+fn @types.Game::draw_kart_details(game : @types.Game) -> Unit {
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
     if not(kart.active) {

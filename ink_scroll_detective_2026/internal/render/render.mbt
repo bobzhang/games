@@ -61,7 +61,7 @@ fn state_label(state : @types.GameState) -> String {
 
 ///|
 /// Draws the dark gradient background, animated scan lines, and city panel underlay.
-fn draw_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_background(game : @types.Game) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -97,7 +97,7 @@ fn draw_background(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all district cells with heat-based color, focus highlight, and grid lines.
-fn draw_districts(game : @types.Game) -> Unit {
+fn @types.Game::draw_districts(game : @types.Game) -> Unit {
   for y in 0..<@types.city_rows {
     for x in 0..<@types.city_cols {
       let idx = @types.cell_index(x, y)
@@ -169,7 +169,7 @@ fn draw_district_ids() -> Unit {
 
 ///|
 /// Draws undiscovered clue dots with pulsing radius and color, plus glow rings on newly found clues.
-fn draw_clues(game : @types.Game) -> Unit {
+fn @types.Game::draw_clues(game : @types.Game) -> Unit {
   for i in 0..<game.clues.length() {
     if game.clues[i].discovered {
       continue
@@ -222,7 +222,7 @@ fn draw_clues(game : @types.Game) -> Unit {
 
 ///|
 /// Draws suspect circles with name label, deduction badge, and marked-suspect pulsing ring.
-fn draw_suspects(game : @types.Game) -> Unit {
+fn @types.Game::draw_suspects(game : @types.Game) -> Unit {
   for i in 0..<game.suspects.length() {
     let x = @types.cell_center_x(game.suspects[i].home_x)
     let y = @types.cell_center_y(game.suspects[i].home_y)
@@ -268,7 +268,7 @@ fn draw_suspects(game : @types.Game) -> Unit {
 
 ///|
 /// Draws active incidents with severity-scaled pulsing circles and countdown timer.
-fn draw_incidents(game : @types.Game) -> Unit {
+fn @types.Game::draw_incidents(game : @types.Game) -> Unit {
   for incident in game.incidents {
     if not(incident.active) {
       continue
@@ -316,7 +316,7 @@ fn draw_incidents(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the cursor highlight rectangle with pulsing glow and focus overlay.
-fn draw_cursor(game : @types.Game) -> Unit {
+fn @types.Game::draw_cursor(game : @types.Game) -> Unit {
   let lx = @types.cell_left_i(game.cursor_x)
   let ty = @types.cell_top_i(game.cursor_y)
 
@@ -387,7 +387,7 @@ fn draw_meter(
 
 ///|
 /// Returns the count of currently active incidents.
-fn active_incident_count(game : @types.Game) -> Int {
+fn @types.Game::active_incident_count(game : @types.Game) -> Int {
   let mut count = 0
   for incident in game.incidents {
     if incident.active {
@@ -399,7 +399,7 @@ fn active_incident_count(game : @types.Game) -> Int {
 
 ///|
 /// Returns the number of fully completed evidence chains for `suspect`.
-fn completed_chains(game : @types.Game, suspect : Int) -> Int {
+fn @types.Game::completed_chains(game : @types.Game, suspect : Int) -> Int {
   if suspect < 0 || suspect >= @types.suspect_count {
     return 0
   }
@@ -416,13 +416,13 @@ fn completed_chains(game : @types.Game, suspect : Int) -> Int {
 
 ///|
 /// Returns the total confidence score for `suspect`.
-fn suspect_confidence(game : @types.Game, suspect : Int) -> Int {
+fn @types.Game::suspect_confidence(game : @types.Game, suspect : Int) -> Int {
   if suspect < 0 || suspect >= @types.suspect_count {
     return 0
   }
 
   let mut value = game.evidence_score[suspect] +
-    completed_chains(game, suspect) * 8
+    game.completed_chains(suspect) * 8
   if game.suspects[suspect].deduction_unlocked {
     value = value + 8
   }
@@ -431,7 +431,7 @@ fn suspect_confidence(game : @types.Game, suspect : Int) -> Int {
 
 ///|
 /// Draws the top HUD strip: title, state label, trust/time meters, score, focus status, and message bar.
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -509,7 +509,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 
   @raylib.draw_text(
     "Incidents " +
-    active_incident_count(game).to_string() +
+    game.active_incident_count().to_string() +
     "  Solved " +
     game.solved_incidents.to_string() +
     "  Failed " +
@@ -556,7 +556,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the right-side evidence board panel with per-suspect confidence bars, chains, and deduction status.
-fn draw_suspect_board(game : @types.Game) -> Unit {
+fn @types.Game::draw_suspect_board(game : @types.Game) -> Unit {
   let panel_x = @types.city_origin_x_i + @types.city_w_i() + 18
   let panel_w = @types.screen_w - panel_x - 18
 
@@ -595,7 +595,7 @@ fn draw_suspect_board(game : @types.Game) -> Unit {
       @raylib.Color::new(224, 236, 252, 230),
     )
 
-    let conf = suspect_confidence(game, i)
+    let conf = game.suspect_confidence(i)
     let conf_ratio = game.suspects[i].suspicion
 
     @raylib.draw_rectangle(
@@ -628,7 +628,7 @@ fn draw_suspect_board(game : @types.Game) -> Unit {
       @raylib.Color::new(196, 214, 238, 220),
     )
 
-    let chains = completed_chains(game, i)
+    let chains = game.completed_chains(i)
     @raylib.draw_text(
       "Chains " +
       chains.to_string() +
@@ -716,7 +716,7 @@ fn draw_paused_overlay() -> Unit {
 
 ///|
 /// Draws the game-over overlay with score summary, incident stats, and clue collection count.
-fn draw_game_over_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -772,20 +772,20 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 ///|
 /// Draws the full frame for the current detective case state.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_background(game)
-  draw_districts(game)
+  game.draw_background()
+  game.draw_districts()
   draw_district_ids()
-  draw_clues(game)
-  draw_suspects(game)
-  draw_incidents(game)
-  draw_cursor(game)
-  draw_hud(game)
-  draw_suspect_board(game)
+  game.draw_clues()
+  game.draw_suspects()
+  game.draw_incidents()
+  game.draw_cursor()
+  game.draw_hud()
+  game.draw_suspect_board()
 
   match game.state {
     Title => draw_title_overlay()
     Paused => draw_paused_overlay()
-    GameOver => draw_game_over_overlay(game)
+    GameOver => game.draw_game_over_overlay()
     Playing => ()
   }
 }

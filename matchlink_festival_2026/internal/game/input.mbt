@@ -1,6 +1,6 @@
 ///|
 /// Returns the currently held directional input from keyboard (WASD/arrows) or on-screen D-pad buttons.
-fn detect_held_dir(game : @types.Game) -> @types.Direction {
+fn @types.Game::detect_held_dir(game : @types.Game) -> @types.Direction {
   let mut dir : @types.Direction = DirNone
 
   if @raylib.is_key_down(@raylib.KeyLeft) || @raylib.is_key_down(@raylib.KeyA) {
@@ -74,7 +74,7 @@ fn detect_held_dir(game : @types.Game) -> @types.Direction {
 
 ///|
 /// Returns true if the select action was triggered this frame via Enter, Space, or the SELECT button.
-fn detect_select_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_select_press(game : @types.Game) -> Bool {
   let mut press : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
 
@@ -97,7 +97,7 @@ fn detect_select_press(game : @types.Game) -> Bool {
 
 ///|
 /// Returns true if the hint action was triggered this frame via the H key or the HINT button.
-fn detect_hint_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_hint_press(game : @types.Game) -> Bool {
   let mut press : Bool = @raylib.is_key_pressed(@raylib.KeyH)
 
   let (x, y, w, h) = @types.hint_button_rect()
@@ -119,7 +119,7 @@ fn detect_hint_press(game : @types.Game) -> Bool {
 
 ///|
 /// Returns true if the shuffle action was triggered this frame via the J key or the SHUFFLE button.
-fn detect_shuffle_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_shuffle_press(game : @types.Game) -> Bool {
   let mut press : Bool = @raylib.is_key_pressed(@raylib.KeyJ)
 
   let (x, y, w, h) = @types.shuffle_button_rect()
@@ -141,7 +141,7 @@ fn detect_shuffle_press(game : @types.Game) -> Bool {
 
 ///|
 /// Returns true if the clear-selection action was triggered this frame via C, Backspace, or the CLEAR button.
-fn detect_clear_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_clear_press(game : @types.Game) -> Bool {
   let mut press : Bool = @raylib.is_key_pressed(@raylib.KeyC) ||
     @raylib.is_key_pressed(@raylib.KeyBackspace)
 
@@ -164,7 +164,7 @@ fn detect_clear_press(game : @types.Game) -> Bool {
 
 ///|
 /// Returns true if the reset action was triggered this frame via the R key or the RESET button.
-fn detect_reset_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_reset_press(game : @types.Game) -> Bool {
   let mut press : Bool = @raylib.is_key_pressed(@raylib.KeyR)
 
   let (x, y, w, h) = @types.reset_button_rect()
@@ -186,7 +186,7 @@ fn detect_reset_press(game : @types.Game) -> Bool {
 
 ///|
 /// Returns true if the start action was triggered this frame via Enter, Space, or the start button on the title screen.
-fn detect_start_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_start_press(game : @types.Game) -> Bool {
   let mut press : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
 
@@ -209,7 +209,7 @@ fn detect_start_press(game : @types.Game) -> Bool {
 
 ///|
 /// Returns true if the next-stage action was triggered this frame via Enter, Space, N, or the NEXT button.
-fn detect_next_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_next_press(game : @types.Game) -> Bool {
   let mut press : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyN)
@@ -233,7 +233,7 @@ fn detect_next_press(game : @types.Game) -> Bool {
 
 ///|
 /// Detects a mouse click or touch point that lands inside the board area and returns found status with the mapped tile column and row.
-fn detect_board_tap(game : @types.Game) -> (Bool, Int, Int) {
+fn @types.Game::detect_board_tap(game : @types.Game) -> (Bool, Int, Int) {
   let (board_x, board_y, tile) = @types.board_metrics(game)
 
   let bw : Int = game.board_w * tile

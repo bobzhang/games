@@ -1,5 +1,5 @@
 ///|
-fn clear_entities_for_stage(game : @types.Game) -> Unit {
+fn @types.Game::clear_entities_for_stage(game : @types.Game) -> Unit {
   for i in 0..<game.enemies.length() {
     game.enemies[i] = @types.Tank::inactive()
   }
@@ -12,7 +12,7 @@ fn clear_entities_for_stage(game : @types.Game) -> Unit {
   for i in 0..<game.powerups.length() {
     game.powerups[i] = @types.Powerup::inactive()
   }
-  clear_hostages(game)
+  game.clear_hostages()
   game.enemies_alive = 0
   game.enemies_spawned = 0
   game.spawn_timer = @types.enemy_spawn_period * game.profile.spawn_scale
@@ -30,7 +30,7 @@ fn stage_enemy_total(stage : Int) -> Int {
 }
 
 ///|
-fn stage_enemy_kind(
+fn @types.Game::stage_enemy_kind(
   game : @types.Game,
   stage : Int,
   spawned_index : Int,
@@ -95,7 +95,7 @@ fn parse_level_char(ch : Byte) -> (Int, Int) {
 }
 
 ///|
-fn cache_base_ring(game : @types.Game) -> Unit {
+fn @types.Game::cache_base_ring(game : @types.Game) -> Unit {
   for i in 0..<@types.base_ring_count {
     let tx = @types.base_ring_x[i]
     let ty = @types.base_ring_y[i]
@@ -104,7 +104,7 @@ fn cache_base_ring(game : @types.Game) -> Unit {
 }
 
 ///|
-fn apply_shovel_fortress(game : @types.Game) -> Unit {
+fn @types.Game::apply_shovel_fortress(game : @types.Game) -> Unit {
   for i in 0..<@types.base_ring_count {
     let tx = @types.base_ring_x[i]
     let ty = @types.base_ring_y[i]
@@ -116,7 +116,7 @@ fn apply_shovel_fortress(game : @types.Game) -> Unit {
 }
 
 ///|
-fn restore_base_ring(game : @types.Game) -> Unit {
+fn @types.Game::restore_base_ring(game : @types.Game) -> Unit {
   for i in 0..<@types.base_ring_count {
     let tx = @types.base_ring_x[i]
     let ty = @types.base_ring_y[i]
@@ -136,7 +136,7 @@ fn restore_base_ring(game : @types.Game) -> Unit {
 }
 
 ///|
-fn respawn_player_tank(game : @types.Game, index : Int) -> Unit {
+fn @types.Game::respawn_player_tank(game : @types.Game, index : Int) -> Unit {
   let spawn_x = if index == 0 {
     @types.player1_spawn_x
   } else {
@@ -168,7 +168,7 @@ fn respawn_player_tank(game : @types.Game, index : Int) -> Unit {
 }
 
 ///|
-fn prepare_players_for_stage(game : @types.Game) -> Unit {
+fn @types.Game::prepare_players_for_stage(game : @types.Game) -> Unit {
   for i in 0..<@types.max_players {
     if i == 1 && not(game.coop_enabled) {
       game.players[i].active = false
@@ -183,13 +183,13 @@ fn prepare_players_for_stage(game : @types.Game) -> Unit {
       game.players[i].active = false
       game.players[i].respawn_timer = 0.0
     } else {
-      respawn_player_tank(game, i)
+      game.respawn_player_tank(i)
     }
   }
 }
 
 ///|
-fn load_stage_map(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::load_stage_map(game : @types.Game, stage : Int) -> Unit {
   let rows = @levels.level_pattern(stage)
   for y in 0..<@types.map_tiles_h {
     let row = rows[y]
@@ -222,11 +222,11 @@ fn load_stage_map(game : @types.Game, stage : Int) -> Unit {
   )
 
   game.base_alive = true
-  cache_base_ring(game)
+  game.cache_base_ring()
 }
 
 ///|
-fn reset_campaign(game : @types.Game) -> Unit {
+fn @types.Game::reset_campaign(game : @types.Game) -> Unit {
   game.score_total = 0
   game.stage_index = 0
   for i in 0..<@types.max_players {
@@ -246,10 +246,10 @@ fn reset_campaign(game : @types.Game) -> Unit {
 /// Loads stage content and resets runtime state for that stage.
 pub fn load_stage(game : @types.Game, stage : Int) -> Unit {
   game.profile = @levels.get_stage_profile(stage)
-  clear_entities_for_stage(game)
-  load_stage_map(game, stage)
-  seed_stage_hostages(game, stage)
-  prepare_players_for_stage(game)
+  game.clear_entities_for_stage()
+  game.load_stage_map(stage)
+  game.seed_stage_hostages(stage)
+  game.prepare_players_for_stage()
   let base_total = stage_enemy_total(stage)
   game.enemies_to_spawn = (base_total + game.profile.enemy_bonus).clamp(
     min=18,
@@ -269,6 +269,6 @@ pub fn load_stage(game : @types.Game, stage : Int) -> Unit {
 ///|
 /// Resets campaign progression and starts from stage 0.
 pub fn start_new_campaign(game : @types.Game) -> Unit {
-  reset_campaign(game)
+  game.reset_campaign()
   load_stage(game, 0)
 }

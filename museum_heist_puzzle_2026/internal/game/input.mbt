@@ -1,6 +1,6 @@
 ///|
 /// Returns the movement direction derived from keyboard keys or on-screen D-pad buttons.
-fn detect_move_dir(game : @types.Game) -> @types.Direction {
+fn @types.Game::detect_move_dir(game : @types.Game) -> @types.Direction {
   let mut dir : @types.Direction = DirNone
 
   if @raylib.is_key_down(@raylib.KeyLeft) || @raylib.is_key_down(@raylib.KeyA) {
@@ -75,7 +75,7 @@ fn detect_move_dir(game : @types.Game) -> @types.Direction {
 
 ///|
 /// Returns true when the start button is pressed via keyboard or touch.
-fn detect_start_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_start_press(game : @types.Game) -> Bool {
   let mut pressed = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
 
@@ -98,7 +98,7 @@ fn detect_start_press(game : @types.Game) -> Bool {
 
 ///|
 /// Returns true when the next/advance button is pressed via keyboard or touch.
-fn detect_next_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_next_press(game : @types.Game) -> Bool {
   let mut pressed = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyN)
@@ -122,7 +122,7 @@ fn detect_next_press(game : @types.Game) -> Bool {
 
 ///|
 /// Returns true when the retry button is pressed via keyboard or touch.
-fn detect_retry_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_retry_press(game : @types.Game) -> Bool {
   let mut pressed = @raylib.is_key_pressed(@raylib.KeyR) ||
     @raylib.is_key_pressed(@raylib.KeyBackspace)
 
@@ -145,7 +145,7 @@ fn detect_retry_press(game : @types.Game) -> Bool {
 
 ///|
 /// Returns true when the in-play restart button is pressed via keyboard or touch.
-fn detect_restart_play_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_restart_play_press(game : @types.Game) -> Bool {
   let mut pressed = @raylib.is_key_pressed(@raylib.KeyR)
   let (x, y, w, h) = @types.restart_button_rect()
   if @types.pointer_on_rect(
@@ -165,17 +165,17 @@ fn detect_restart_play_press(game : @types.Game) -> Bool {
 
 ///|
 /// Collects all input for the current frame into a `FrameInput` snapshot.
-fn gather_input(game : @types.Game) -> @types.FrameInput {
+fn @types.Game::gather_input(game : @types.Game) -> @types.FrameInput {
   let move_dir = match game.state {
-    Play => detect_move_dir(game)
+    Play => game.detect_move_dir()
     _ => DirNone
   }
 
   {
     move_dir,
-    start_pressed: detect_start_press(game),
-    next_pressed: detect_next_press(game),
-    retry_pressed: detect_retry_press(game),
-    restart_pressed: detect_restart_play_press(game),
+    start_pressed: game.detect_start_press(),
+    next_pressed: game.detect_next_press(),
+    retry_pressed: game.detect_retry_press(),
+    restart_pressed: game.detect_restart_play_press(),
   }
 }

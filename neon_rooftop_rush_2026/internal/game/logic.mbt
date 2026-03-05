@@ -1,6 +1,6 @@
 ///|
 /// Resets all rooftop segment slots in the pool to their inactive off-screen default state.
-fn clear_segments(game : @types.Game) -> Unit {
+fn @types.Game::clear_segments(game : @types.Game) -> Unit {
   for segment in game.segments {
     segment.active = false
     segment.x = -2000.0
@@ -15,7 +15,7 @@ fn clear_segments(game : @types.Game) -> Unit {
 
 ///|
 /// Resets all obstacle slots in the pool to their inactive default state.
-fn clear_obstacles(game : @types.Game) -> Unit {
+fn @types.Game::clear_obstacles(game : @types.Game) -> Unit {
   for obstacle in game.obstacles {
     obstacle.active = false
     obstacle.kind = @types.obstacle_vent
@@ -31,7 +31,7 @@ fn clear_obstacles(game : @types.Game) -> Unit {
 
 ///|
 /// Resets all collectible chip slots in the pool to their inactive off-screen default state.
-fn clear_chips(game : @types.Game) -> Unit {
+fn @types.Game::clear_chips(game : @types.Game) -> Unit {
   for chip in game.chips {
     chip.active = false
     chip.x = -2000.0
@@ -43,7 +43,7 @@ fn clear_chips(game : @types.Game) -> Unit {
 
 ///|
 /// Resets all grapple anchor slots in the pool to their inactive off-screen default state.
-fn clear_anchors(game : @types.Game) -> Unit {
+fn @types.Game::clear_anchors(game : @types.Game) -> Unit {
   for anchor in game.anchors {
     anchor.active = false
     anchor.x = -2000.0
@@ -54,7 +54,7 @@ fn clear_anchors(game : @types.Game) -> Unit {
 
 ///|
 /// Resets all particle slots in the pool to their inactive default state.
-fn clear_particles(game : @types.Game) -> Unit {
+fn @types.Game::clear_particles(game : @types.Game) -> Unit {
   for particle in game.particles {
     particle.active = false
     particle.x = 0.0
@@ -69,7 +69,7 @@ fn clear_particles(game : @types.Game) -> Unit {
 
 ///|
 /// Resets all ghost trail slots in the pool to their inactive default state.
-fn clear_ghosts(game : @types.Game) -> Unit {
+fn @types.Game::clear_ghosts(game : @types.Game) -> Unit {
   for ghost in game.ghosts {
     ghost.active = false
     ghost.x = 0.0
@@ -104,7 +104,7 @@ fn reset_player(hero : @types.Player) -> Unit {
 
 ///|
 /// Returns the index of the first inactive segment slot, or the rightmost active segment if all slots are occupied.
-fn alloc_segment_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_segment_slot(game : @types.Game) -> Int {
   for i in 0..<game.segments.length() {
     if not(game.segments[i].active) {
       return i
@@ -125,7 +125,7 @@ fn alloc_segment_slot(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive obstacle slot, or evicts the farthest right active obstacle if all slots are occupied.
-fn alloc_obstacle_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_obstacle_slot(game : @types.Game) -> Int {
   for i in 0..<game.obstacles.length() {
     if not(game.obstacles[i].active) {
       return i
@@ -146,7 +146,7 @@ fn alloc_obstacle_slot(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive chip slot, or evicts the farthest right active chip if all slots are occupied.
-fn alloc_chip_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_chip_slot(game : @types.Game) -> Int {
   for i in 0..<game.chips.length() {
     if not(game.chips[i].active) {
       return i
@@ -167,7 +167,7 @@ fn alloc_chip_slot(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive anchor slot, or evicts the farthest right active anchor if all slots are occupied.
-fn alloc_anchor_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_anchor_slot(game : @types.Game) -> Int {
   for i in 0..<game.anchors.length() {
     if not(game.anchors[i].active) {
       return i
@@ -188,7 +188,7 @@ fn alloc_anchor_slot(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive particle slot, or evicts the shortest-lived active particle if all slots are occupied.
-fn alloc_particle_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_particle_slot(game : @types.Game) -> Int {
   for i in 0..<game.particles.length() {
     if not(game.particles[i].active) {
       return i
@@ -209,7 +209,7 @@ fn alloc_particle_slot(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive ghost slot, or evicts the shortest-lived active ghost if all slots are occupied.
-fn alloc_ghost_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_ghost_slot(game : @types.Game) -> Int {
   for i in 0..<game.ghosts.length() {
     if not(game.ghosts[i].active) {
       return i
@@ -230,7 +230,7 @@ fn alloc_ghost_slot(game : @types.Game) -> Int {
 
 ///|
 /// Activates a segment slot at the given position with the specified width, height, skin, neon color, and window seed.
-fn spawn_segment(
+fn @types.Game::spawn_segment(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -240,7 +240,7 @@ fn spawn_segment(
   neon : Int,
   window_seed : Int,
 ) -> Unit {
-  let i = alloc_segment_slot(game)
+  let i = game.alloc_segment_slot()
   game.segments[i].active = true
   game.segments[i].x = x
   game.segments[i].y = y
@@ -253,7 +253,7 @@ fn spawn_segment(
 
 ///|
 /// Activates an obstacle slot with the given kind, position, size, horizontal velocity, and phase offset.
-fn spawn_obstacle(
+fn @types.Game::spawn_obstacle(
   game : @types.Game,
   kind : Int,
   x : Float,
@@ -262,7 +262,7 @@ fn spawn_obstacle(
   h : Float,
   vx : Float,
 ) -> Unit {
-  let i = alloc_obstacle_slot(game)
+  let i = game.alloc_obstacle_slot()
   game.obstacles[i].active = true
   game.obstacles[i].kind = kind
   game.obstacles[i].x = x
@@ -276,8 +276,8 @@ fn spawn_obstacle(
 
 ///|
 /// Activates a chip slot at position `(x, y)` with a randomized bob animation timer.
-fn spawn_chip(game : @types.Game, x : Float, y : Float) -> Unit {
-  let i = alloc_chip_slot(game)
+fn @types.Game::spawn_chip(game : @types.Game, x : Float, y : Float) -> Unit {
+  let i = game.alloc_chip_slot()
   game.chips[i].active = true
   game.chips[i].x = x
   game.chips[i].y = y
@@ -287,8 +287,8 @@ fn spawn_chip(game : @types.Game, x : Float, y : Float) -> Unit {
 
 ///|
 /// Activates a grapple anchor slot at position `(x, y)` with a randomized glow timer.
-fn spawn_anchor(game : @types.Game, x : Float, y : Float) -> Unit {
-  let i = alloc_anchor_slot(game)
+fn @types.Game::spawn_anchor(game : @types.Game, x : Float, y : Float) -> Unit {
+  let i = game.alloc_anchor_slot()
   game.anchors[i].active = true
   game.anchors[i].x = x
   game.anchors[i].y = y
@@ -297,7 +297,7 @@ fn spawn_anchor(game : @types.Game, x : Float, y : Float) -> Unit {
 
 ///|
 /// Activates a particle slot with the given kind, position, velocity, size, and lifetime.
-fn spawn_particle(
+fn @types.Game::spawn_particle(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -307,7 +307,7 @@ fn spawn_particle(
   size : Float,
   kind : Int,
 ) -> Unit {
-  let i = alloc_particle_slot(game)
+  let i = game.alloc_particle_slot()
   game.particles[i].active = true
   game.particles[i].x = x
   game.particles[i].y = y
@@ -320,7 +320,7 @@ fn spawn_particle(
 
 ///|
 /// Spawns `count` particles at `(x, y)` with randomized directions, speeds, and sizes for the given visual kind.
-fn burst_particles(
+fn @types.Game::burst_particles(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -328,8 +328,7 @@ fn burst_particles(
   kind : Int,
 ) -> Unit {
   for _i in 0..<amount {
-    spawn_particle(
-      game,
+    game.spawn_particle(
       x + @types.randf(-18.0, 18.0),
       y + @types.randf(-18.0, 18.0),
       @types.randf(-280.0, 280.0),
@@ -343,8 +342,8 @@ fn burst_particles(
 
 ///|
 /// Spawns a ghost trail image at the hero's current position with a slight jitter and a specified hue, used for speed-trail visuals.
-fn spawn_ghost(game : @types.Game, hero : @types.Player, hue : Float) -> Unit {
-  let i = alloc_ghost_slot(game)
+fn @types.Game::spawn_ghost(game : @types.Game, hero : @types.Player, hue : Float) -> Unit {
+  let i = game.alloc_ghost_slot()
   game.ghosts[i].active = true
   game.ghosts[i].x = hero.x + @types.randf(-2.0, 2.0)
   game.ghosts[i].y = hero.y + @types.randf(-2.0, 2.0)
@@ -356,7 +355,7 @@ fn spawn_ghost(game : @types.Game, hero : @types.Player, hue : Float) -> Unit {
 
 ///|
 /// Returns the x and y coordinates of the rightmost active segment edge, used to anchor new chunk generation.
-fn best_right_edge(game : @types.Game) -> (Float, Float) {
+fn @types.Game::best_right_edge(game : @types.Game) -> (Float, Float) {
   let mut right_x : Float = -10000.0
   let mut right_y : Float = 460.0
   for segment in game.segments {
@@ -376,7 +375,7 @@ fn best_right_edge(game : @types.Game) -> (Float, Float) {
 
 ///|
 /// Spawns evenly spaced chips along a sine-arced path between `x0` and `x1` above `roof_y`, creating a collectible arc for the player.
-fn spawn_chip_arc(
+fn @types.Game::spawn_chip_arc(
   game : @types.Game,
   x0 : Float,
   x1 : Float,
@@ -391,14 +390,14 @@ fn spawn_chip_arc(
     let t = Float::from_int(i) / Float::from_int(steps - 1)
     let px = @types.lerpf(x0, x1, t)
     let py = roof_y - 54.0 - @math.sinf(t * 3.14159) * 80.0
-    spawn_chip(game, px, py)
+    game.spawn_chip(px, py)
   }
 }
 
 ///|
 /// Generates a new procedural rooftop segment beyond the current right edge, placing randomized obstacles, a chip arc, and optionally a grapple anchor.
-fn spawn_stage_chunk(game : @types.Game) -> Unit {
-  let right = best_right_edge(game)
+fn @types.Game::spawn_stage_chunk(game : @types.Game) -> Unit {
+  let right = game.best_right_edge()
   let prev_end = @types.maxf(right.0, game.last_segment_end)
   let prev_y = right.1
 
@@ -411,8 +410,7 @@ fn spawn_stage_chunk(game : @types.Game) -> Unit {
   let skin = @types.randi(0, 3)
   let neon = @types.randi(0, 3)
   let seed = @types.randi(0, 9999)
-  spawn_segment(
-    game,
+  game.spawn_segment(
     x,
     y,
     w,
@@ -432,8 +430,7 @@ fn spawn_stage_chunk(game : @types.Game) -> Unit {
       let px = @types.randf(x + 40.0, x + w - 60.0)
       let choice = @types.randi(0, 99)
       if choice < 36 {
-        spawn_obstacle(
-          game,
+        game.spawn_obstacle(
           @types.obstacle_vent,
           px,
           y - 26.0,
@@ -442,8 +439,7 @@ fn spawn_stage_chunk(game : @types.Game) -> Unit {
           0.0,
         )
       } else if choice < 62 {
-        spawn_obstacle(
-          game,
+        game.spawn_obstacle(
           @types.obstacle_sign,
           px,
           y - 112.0,
@@ -452,8 +448,7 @@ fn spawn_stage_chunk(game : @types.Game) -> Unit {
           0.0,
         )
       } else if choice < 86 {
-        spawn_obstacle(
-          game,
+        game.spawn_obstacle(
           @types.obstacle_drone,
           px,
           y - 84.0,
@@ -462,8 +457,7 @@ fn spawn_stage_chunk(game : @types.Game) -> Unit {
           @types.randf(-22.0, 28.0),
         )
       } else {
-        spawn_obstacle(
-          game,
+        game.spawn_obstacle(
           @types.obstacle_laser,
           px,
           y - 140.0,
@@ -481,15 +475,15 @@ fn spawn_stage_chunk(game : @types.Game) -> Unit {
       x + w - 28.0,
       arc_from + @types.randf(120.0, w * 0.72),
     )
-    spawn_chip_arc(game, arc_from, arc_to, y)
+    game.spawn_chip_arc(arc_from, arc_to, y)
   }
 
   if gap > 150.0 || @types.chance(26) {
     let anchor_y = @types.minf(prev_y, y) - @types.randf(126.0, 182.0)
     let anchor_x = prev_end + gap * 0.52
-    spawn_anchor(game, anchor_x, anchor_y)
+    game.spawn_anchor(anchor_x, anchor_y)
     if @types.chance(58) {
-      spawn_chip_arc(game, prev_end + 36.0, x - 20.0, @types.minf(prev_y, y))
+      game.spawn_chip_arc(prev_end + 36.0, x - 20.0, @types.minf(prev_y, y))
     }
   }
 
@@ -498,7 +492,7 @@ fn spawn_stage_chunk(game : @types.Game) -> Unit {
 
 ///|
 /// Seeds the initial rooftop layout if no segments exist, then spawns additional chunks until the world extends at least 1200 pixels past the screen edge.
-fn ensure_world(game : @types.Game) -> Unit {
+fn @types.Game::ensure_world(game : @types.Game) -> Unit {
   let mut right : Float = -10000.0
   for segment in game.segments {
     if not(segment.active) {
@@ -510,8 +504,7 @@ fn ensure_world(game : @types.Game) -> Unit {
 
   if right < -9000.0 {
     let y0 : Float = 460.0
-    spawn_segment(
-      game,
+    game.spawn_segment(
       -120.0,
       y0,
       430.0,
@@ -520,8 +513,7 @@ fn ensure_world(game : @types.Game) -> Unit {
       0,
       @types.randi(0, 9999),
     )
-    spawn_segment(
-      game,
+    game.spawn_segment(
       420.0,
       y0 - 24.0,
       390.0,
@@ -530,8 +522,7 @@ fn ensure_world(game : @types.Game) -> Unit {
       1,
       @types.randi(0, 9999),
     )
-    spawn_segment(
-      game,
+    game.spawn_segment(
       900.0,
       y0 + 20.0,
       420.0,
@@ -540,17 +531,17 @@ fn ensure_world(game : @types.Game) -> Unit {
       2,
       @types.randi(0, 9999),
     )
-    spawn_chip_arc(game, 120.0, 270.0, y0)
-    spawn_chip_arc(game, 500.0, 740.0, y0 - 24.0)
-    spawn_anchor(game, 350.0, y0 - 164.0)
-    spawn_anchor(game, 840.0, y0 - 170.0)
+    game.spawn_chip_arc(120.0, 270.0, y0)
+    game.spawn_chip_arc(500.0, 740.0, y0 - 24.0)
+    game.spawn_anchor(350.0, y0 - 164.0)
+    game.spawn_anchor(840.0, y0 - 170.0)
     right = Float::from_int(1320)
     game.last_segment_end = right
   }
 
   while right < Float::from_int(@types.screen_w) + 1200.0 {
-    spawn_stage_chunk(game)
-    let r = best_right_edge(game)
+    game.spawn_stage_chunk()
+    let r = game.best_right_edge()
     right = r.0
     game.last_segment_end = right
   }
@@ -558,7 +549,7 @@ fn ensure_world(game : @types.Game) -> Unit {
 
 ///|
 /// Scrolls all active world objects (segments, obstacles, chips, anchors) leftward by `dx`, advancing bobbing and phase animations, and despawns anything that moves off the left edge.
-fn shift_world(game : @types.Game, dx : Float) -> Unit {
+fn @types.Game::shift_world(game : @types.Game, dx : Float) -> Unit {
   for segment in game.segments {
     if segment.active {
       segment.x = segment.x - dx
@@ -618,7 +609,7 @@ fn shift_world(game : @types.Game, dx : Float) -> Unit {
 
 ///|
 /// Finds the topmost active segment surface directly beneath `center_x`, returning whether a floor was found and its y coordinate.
-fn find_floor(game : @types.Game, center_x : Float) -> (Bool, Float) {
+fn @types.Game::find_floor(game : @types.Game, center_x : Float) -> (Bool, Float) {
   let mut found = false
   let mut best_y = Float::from_int(@types.screen_h) + 400.0
 
@@ -642,7 +633,7 @@ fn find_floor(game : @types.Game, center_x : Float) -> (Bool, Float) {
 
 ///|
 /// Deals `amount` damage to the player, resets the combo, triggers hurt flash and screen shake, spawns hurt particles, and transitions to GameOver if health reaches zero.
-fn apply_damage(game : @types.Game, amount : Float) -> Unit {
+fn @types.Game::apply_damage(game : @types.Game, amount : Float) -> Unit {
   if game.hero.invuln_t > 0.0 {
     return
   }
@@ -659,8 +650,7 @@ fn apply_damage(game : @types.Game, amount : Float) -> Unit {
   game.shake_t = 0.34
   game.flash_t = 0.22
 
-  burst_particles(
-    game,
+  game.burst_particles(
     game.hero.x + game.hero.w * 0.5,
     game.hero.y + game.hero.h * 0.45,
     18,
@@ -678,7 +668,7 @@ fn apply_damage(game : @types.Game, amount : Float) -> Unit {
 
 ///|
 /// Attempts to latch the hero onto the nearest valid grapple anchor within range, consuming stamina and triggering an upward velocity boost; returns true if a grapple was started.
-fn try_grapple(game : @types.Game) -> Bool {
+fn @types.Game::try_grapple(game : @types.Game) -> Bool {
   if game.stamina < 26.0 || game.hero.grapple_t > 0.0 {
     return false
   }
@@ -725,13 +715,13 @@ fn try_grapple(game : @types.Game) -> Bool {
   game.stamina = @types.maxf(0.0, game.stamina - 26.0)
   game.flash_t = @types.maxf(game.flash_t, 0.1)
 
-  burst_particles(game, hero_cx, hero_cy, 10, @types.particle_glow)
+  game.burst_particles(hero_cx, hero_cy, 10, @types.particle_glow)
   true
 }
 
 ///|
 /// Advances the hero's physics and state for one frame: processes jump buffering, sliding, grapple pulling, gravity, floor collision, coyote time, air jumps, fall damage, stamina recovery, and ghost trail spawning.
-fn update_player(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   let hero = game.hero
 
   hero.anim_t = hero.anim_t + dt
@@ -767,7 +757,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.input_grapple_press {
-    ignore(try_grapple(game))
+    ignore(game.try_grapple())
   }
 
   if hero.grapple_t > 0.0 {
@@ -796,8 +786,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
       hero.grounded = false
       hero.coyote_t = 0.0
       hero.air_jumps = 1
-      burst_particles(
-        game,
+      game.burst_particles(
         hero.x + hero.w * 0.38,
         hero.y + hero.h,
         8,
@@ -807,8 +796,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
       hero.air_jumps = hero.air_jumps - 1
       hero.vy = @types.double_jump_speed
       hero.jump_buf_t = 0.0
-      burst_particles(
-        game,
+      game.burst_particles(
         hero.x + hero.w * 0.45,
         hero.y + hero.h * 0.55,
         10,
@@ -820,7 +808,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   let prev_y = hero.y
   hero.y = hero.y + hero.vy * dt
 
-  let floor = find_floor(game, hero.x + hero.w * 0.52)
+  let floor = game.find_floor(hero.x + hero.w * 0.52)
   if floor.0 {
     hero.floor_y = floor.1
   } else {
@@ -854,7 +842,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   }
 
   if hero.y > Float::from_int(@types.screen_h) + 200.0 {
-    apply_damage(game, 28.0)
+    game.apply_damage(28.0)
     hero.y = @types.player_spawn_y
     hero.vy = -220.0
     hero.grounded = false
@@ -873,7 +861,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
     let tick_now = (hero.anim_t / gate).to_int()
     let tick_prev = ((hero.anim_t - dt) / gate).to_int()
     if tick_now != tick_prev {
-      spawn_ghost(game, hero, if hero.slide_t > 0.0 { 1.0 } else { 0.0 })
+      game.spawn_ghost(hero, if hero.slide_t > 0.0 { 1.0 } else { 0.0 })
     }
   }
 }
@@ -894,20 +882,20 @@ fn hero_hitbox(hero : @types.Player) -> (Float, Float, Float, Float) {
 
 ///|
 /// Returns the score multiplier for the current combo count, starting at 1.0 and increasing by 0.06 per combo point.
-fn score_multiplier(game : @types.Game) -> Float {
+fn @types.Game::score_multiplier(game : @types.Game) -> Float {
   1.0 + Float::from_int(game.combo) * 0.06
 }
 
 ///|
 /// Increments the combo counter by `amount` (clamped to 999) and resets the combo expiry timer to 4 seconds.
-fn gain_combo(game : @types.Game, amount : Int) -> Unit {
+fn @types.Game::gain_combo(game : @types.Game, amount : Int) -> Unit {
   game.combo = (game.combo + amount).clamp(min=0, max=999)
   game.combo_t = 4.0
 }
 
 ///|
 /// Ticks obstacle animations (drone bobbing, laser pulsing), tests hero hitbox overlap for each active obstacle, applies damage with hit-lock cooldown, and destroys drones hit by a grapple swing.
-fn update_obstacles(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_obstacles(game : @types.Game, dt : Float) -> Unit {
   let hb = hero_hitbox(game.hero)
   for obstacle in game.obstacles {
     if not(obstacle.active) {
@@ -966,10 +954,9 @@ fn update_obstacles(game : @types.Game, dt : Float) -> Unit {
       ignored_hit = true
       obstacle.active = false
       game.score = game.score +
-        (Float::from_int(260) * score_multiplier(game)).to_int()
-      gain_combo(game, 2)
-      burst_particles(
-        game,
+        (Float::from_int(260) * game.score_multiplier()).to_int()
+      game.gain_combo(2)
+      game.burst_particles(
         obstacle.x + obstacle.w * 0.5,
         obstacle.y + obstacle.h * 0.5,
         20,
@@ -987,7 +974,7 @@ fn update_obstacles(game : @types.Game, dt : Float) -> Unit {
       } else {
         13.0
       }
-      apply_damage(game, dmg)
+      game.apply_damage(dmg)
       obstacle.hit_lock = 0.2
     }
   }
@@ -995,7 +982,7 @@ fn update_obstacles(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Checks each active chip's bobbing position against the hero's center and collects any within pickup range, awarding score and combo points and spawning spark particles.
-fn update_chips(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_chips(game : @types.Game, _dt : Float) -> Unit {
   let hero = game.hero
   let cx = hero.x + hero.w * 0.5
   let cy = hero.y + hero.h * 0.45
@@ -1010,18 +997,18 @@ fn update_chips(game : @types.Game, _dt : Float) -> Unit {
     if d2 <= 34.0 * 34.0 {
       chip.active = false
       game.chips_collected = game.chips_collected + 1
-      gain_combo(game, 1)
+      game.gain_combo(1)
       let base = 100 + game.combo * 5
       game.score = game.score +
-        (Float::from_int(base) * score_multiplier(game)).to_int()
-      burst_particles(game, chip.x, bob_y, 8, @types.particle_spark)
+        (Float::from_int(base) * game.score_multiplier()).to_int()
+      game.burst_particles(chip.x, bob_y, 8, @types.particle_spark)
     }
   }
 }
 
 ///|
 /// Advances all active particles (position, velocity drag, gravity, lifetime) and ghost trail images (lifetime countdown), deactivating expired entries.
-fn update_particles(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
       continue
@@ -1054,7 +1041,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Counts down the combo timer (resetting the combo on expiry), accumulates distance and stage progress from the scroll delta, and awards distance-based score scaled by the combo multiplier.
-fn update_combo_and_score(game : @types.Game, dt : Float, dx : Float) -> Unit {
+fn @types.Game::update_combo_and_score(game : @types.Game, dt : Float, dx : Float) -> Unit {
   if game.combo_t > 0.0 {
     game.combo_t = @types.maxf(0.0, game.combo_t - dt)
     if game.combo_t <= 0.0 {
@@ -1065,7 +1052,7 @@ fn update_combo_and_score(game : @types.Game, dt : Float, dx : Float) -> Unit {
   game.distance = game.distance + dx
   game.stage_progress = game.stage_progress + dx
 
-  let run_points = (dx * 0.16 * score_multiplier(game)).to_int()
+  let run_points = (dx * 0.16 * game.score_multiplier()).to_int()
   game.score = game.score + run_points
 
   if game.score > game.best_score {
@@ -1075,7 +1062,7 @@ fn update_combo_and_score(game : @types.Game, dt : Float, dx : Float) -> Unit {
 
 ///|
 /// Begins the given stage number by setting the scroll speed, stage goal distance, progress counter, and intro timer, and partially restoring the player's health.
-fn start_stage(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::start_stage(game : @types.Game, stage : Int) -> Unit {
   game.stage = stage
   game.stage_goal = @types.stage_base_goal +
     Float::from_int(stage - 1) * @types.stage_goal_growth
@@ -1088,13 +1075,13 @@ fn start_stage(game : @types.Game, stage : Int) -> Unit {
 
 ///|
 /// Resets all world objects and player state, zeroes all run statistics, and begins stage 1 with a freshly generated world layout.
-fn start_run(game : @types.Game) -> Unit {
-  clear_segments(game)
-  clear_obstacles(game)
-  clear_chips(game)
-  clear_anchors(game)
-  clear_particles(game)
-  clear_ghosts(game)
+fn @types.Game::start_run(game : @types.Game) -> Unit {
+  game.clear_segments()
+  game.clear_obstacles()
+  game.clear_chips()
+  game.clear_anchors()
+  game.clear_particles()
+  game.clear_ghosts()
   reset_player(game.hero)
 
   game.state = @types.state_play
@@ -1117,19 +1104,19 @@ fn start_run(game : @types.Game) -> Unit {
   game.touch_grapple_prev = false
   game.touch_restart_prev = false
 
-  start_stage(game, 1)
-  ensure_world(game)
+  game.start_stage(1)
+  game.ensure_world()
 }
 
 ///|
 /// Resets all world objects and player state, then initializes the title screen: sets state to title, resets timers and stats, and generates the initial rooftop world for the background demo.
-fn init_title_scene(game : @types.Game) -> Unit {
-  clear_segments(game)
-  clear_obstacles(game)
-  clear_chips(game)
-  clear_anchors(game)
-  clear_particles(game)
-  clear_ghosts(game)
+fn @types.Game::init_title_scene(game : @types.Game) -> Unit {
+  game.clear_segments()
+  game.clear_obstacles()
+  game.clear_chips()
+  game.clear_anchors()
+  game.clear_particles()
+  game.clear_ghosts()
   reset_player(game.hero)
 
   game.state = @types.state_title
@@ -1153,25 +1140,24 @@ fn init_title_scene(game : @types.Game) -> Unit {
   game.touch_grapple_prev = false
   game.touch_restart_prev = false
 
-  ensure_world(game)
+  game.ensure_world()
 }
 
 ///|
 /// Advances the title screen demo: scrolls the world at a sinusoidally varying speed, pins the hero to the floor, spawns ambient particles, and starts a run if any start input is detected.
-fn update_title_scene(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_title_scene(game : @types.Game, dt : Float) -> Unit {
   game.title_t = game.title_t + dt
   let demo_speed : Float = 160.0 + @math.sinf(game.title_t * 0.6) * 30.0
-  shift_world(game, demo_speed * dt)
-  ensure_world(game)
+  game.shift_world(demo_speed * dt)
+  game.ensure_world()
 
-  let floor = find_floor(game, game.hero.x + game.hero.w * 0.5)
+  let floor = game.find_floor(game.hero.x + game.hero.w * 0.5)
   if floor.0 {
     game.hero.y = floor.1 - game.hero.h
   }
 
   if @types.chance(4) {
-    spawn_particle(
-      game,
+    game.spawn_particle(
       @types.randf(80.0, Float::from_int(@types.screen_w) - 120.0),
       @types.randf(120.0, Float::from_int(@types.screen_h) - 200.0),
       @types.randf(-22.0, 22.0),
@@ -1186,26 +1172,25 @@ fn update_title_scene(game : @types.Game, dt : Float) -> Unit {
     )
   }
 
-  update_particles(game, dt)
+  game.update_particles(dt)
 
   if game.input_jump_press ||
     game.input_grapple_press ||
     game.input_restart_press {
-    start_run(game)
+    game.start_run()
   }
 }
 
 ///|
 /// Runs the stage-clear celebration: decelerates the hero, periodically spawns glow particles, counts down the intro timer, and then advances to the next stage.
-fn update_stage_clear(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_stage_clear(game : @types.Game, dt : Float) -> Unit {
   game.result_t = game.result_t + dt
   game.hero.vy = @types.approachf(game.hero.vy, 0.0, 1600.0 * dt)
   game.hero.y = game.hero.y + game.hero.vy * dt
 
   if game.result_t > 0.08 {
     game.result_t = 0.0
-    spawn_particle(
-      game,
+    game.spawn_particle(
       game.hero.x + @types.randf(0.0, game.hero.w),
       game.hero.y + @types.randf(0.0, game.hero.h),
       @types.randf(-120.0, 120.0),
@@ -1218,14 +1203,14 @@ fn update_stage_clear(game : @types.Game, dt : Float) -> Unit {
 
   game.stage_intro_t = @types.maxf(0.0, game.stage_intro_t - dt)
   if game.stage_intro_t <= 0.0 {
-    start_stage(game, game.stage + 1)
+    game.start_stage(game.stage + 1)
     game.state = @types.state_play
   }
 }
 
 ///|
 /// Runs one gameplay frame: ramps scroll speed, shifts and ensures the world, updates the player, obstacles, chips, particles, combo, and score, detects stage-clear threshold, and handles restart input.
-fn update_play(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt
   if game.hint_t > 0.0 {
     game.hint_t = @types.maxf(0.0, game.hint_t - dt)
@@ -1243,14 +1228,14 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   let speed_mul : Float = if game.stage_intro_t > 0.0 { 0.64 } else { 1.0 }
   let dx = game.speed * speed_mul * dt
 
-  shift_world(game, dx)
-  ensure_world(game)
+  game.shift_world(dx)
+  game.ensure_world()
 
-  update_player(game, dt)
-  update_obstacles(game, dt)
-  update_chips(game, dt)
-  update_particles(game, dt)
-  update_combo_and_score(game, dt, dx)
+  game.update_player(dt)
+  game.update_obstacles(dt)
+  game.update_chips(dt)
+  game.update_particles(dt)
+  game.update_combo_and_score(dt, dx)
 
   if game.stage_progress >= game.stage_goal {
     game.state = @types.state_stage_clear
@@ -1262,8 +1247,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
       game.best_score = game.score
     }
     game.flash_t = 0.4
-    burst_particles(
-      game,
+    game.burst_particles(
       game.hero.x + game.hero.w * 0.5,
       game.hero.y + 20.0,
       24,
@@ -1280,15 +1264,15 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.input_restart_press {
-    start_run(game)
+    game.start_run()
   }
 }
 
 ///|
 /// Advances the game-over screen: ticks time and particles, counts up the result display timer, and restarts the run when a retry input is detected.
-fn update_game_over(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_game_over(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt
-  update_particles(game, dt)
+  game.update_particles(dt)
 
   game.result_t = game.result_t + dt
   if game.flash_t > 0.0 {
@@ -1296,7 +1280,7 @@ fn update_game_over(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.input_restart_press || (game.result_t > 0.45 && game.input_jump_press) {
-    start_run(game)
+    game.start_run()
   }
 }
 
@@ -1311,13 +1295,13 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   // Dispatch input based on current state (input may change state)
   let prev_state = game.state
   if game.state == @types.state_title {
-    update_title_input(game)
+    game.update_title_input()
   } else if game.state == @types.state_play {
-    update_play_input(game)
+    game.update_play_input()
   } else if game.state == @types.state_stage_clear {
-    update_stage_clear_input(game)
+    game.update_stage_clear_input()
   } else if game.state == @types.state_game_over {
-    update_result_input(game)
+    game.update_result_input()
   }
 
   // If state changed during input, clear stale input flags
@@ -1330,22 +1314,22 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 
   // Dispatch update based on (potentially changed) state
   if game.state == @types.state_title {
-    update_title_scene(game, dt)
+    game.update_title_scene(dt)
   } else if game.state == @types.state_play {
-    update_play(game, dt)
+    game.update_play(dt)
   } else if game.state == @types.state_stage_clear {
-    update_stage_clear(game, dt)
-    update_particles(game, dt)
+    game.update_stage_clear(dt)
+    game.update_particles(dt)
     if game.input_restart_press {
-      start_run(game)
+      game.start_run()
     }
   } else if game.state == @types.state_game_over {
-    update_game_over(game, dt)
+    game.update_game_over(dt)
   }
 }
 
 ///|
 /// Initializes the game into the title scene state.
 pub fn init_title(game : @types.Game) -> Unit {
-  init_title_scene(game)
+  game.init_title_scene()
 }

@@ -1,6 +1,6 @@
 ///|
 /// Deactivates all particles and zeroes their fields.
-fn clear_particles(game : @types.Game) -> Unit {
+fn @types.Game::clear_particles(game : @types.Game) -> Unit {
   for particle in game.particles {
     particle.active = false
     particle.x = 0.0
@@ -15,7 +15,7 @@ fn clear_particles(game : @types.Game) -> Unit {
 
 ///|
 /// Deactivates all fish, hazards, and pickups and zeroes their fields.
-fn clear_world(game : @types.Game) -> Unit {
+fn @types.Game::clear_world(game : @types.Game) -> Unit {
   for fish_elem in game.fish {
     fish_elem.active = false
     fish_elem.x = 0.0
@@ -54,7 +54,7 @@ fn clear_world(game : @types.Game) -> Unit {
 
 ///|
 /// Emits one particle from the pool with the given position, velocity, lifetime, size, and kind.
-fn emit_particle(
+fn @types.Game::emit_particle(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -83,10 +83,9 @@ fn emit_particle(
 
 ///|
 /// Emits `n` particles from the pool scattered around `(x, y)` with the given kind.
-fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
+fn @types.Game::burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
   for _i in 0..<n {
-    emit_particle(
-      game,
+    game.emit_particle(
       x + @types.randf(-14.0, 14.0),
       y + @types.randf(-14.0, 14.0),
       @types.randf(-220.0, 220.0),
@@ -100,7 +99,7 @@ fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit 
 
 ///|
 /// Advances all active particles: move, apply drag and gravity, deactivate on expiry.
-fn update_particles(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
       continue
@@ -124,7 +123,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Resets the hook to the ice hole position with zeroed velocity and no carried fish.
-fn reset_rig(game : @types.Game) -> Unit {
+fn @types.Game::reset_rig(game : @types.Game) -> Unit {
   game.hook_x = @types.hole_xf()
   game.hook_y = @types.topf() + 70.0
   game.hook_vx = 0.0
@@ -138,13 +137,13 @@ fn reset_rig(game : @types.Game) -> Unit {
 
 ///|
 /// Resets the full game state and starts a new fishing run in the Play state.
-fn start_run(game : @types.Game) -> Unit {
-  clear_world(game)
-  clear_particles(game)
+fn @types.Game::start_run(game : @types.Game) -> Unit {
+  game.clear_world()
+  game.clear_particles()
 
   game.state = Play
 
-  reset_rig(game)
+  game.reset_rig()
 
   game.boost_on = false
   game.lives = 3
@@ -183,7 +182,7 @@ fn start_run(game : @types.Game) -> Unit {
 
 ///|
 /// Transitions the game to the Result state, recording win/loss and triggering burst effect.
-fn finish_run(game : @types.Game, win : Bool) -> Unit {
+fn @types.Game::finish_run(game : @types.Game, win : Bool) -> Unit {
   if game.state != Play {
     return
   }
@@ -202,16 +201,16 @@ fn finish_run(game : @types.Game, win : Bool) -> Unit {
 
   if win {
     @types.set_msg(game, "Festival haul complete!", 3.0)
-    burst(game, @types.hole_xf(), @types.topf() + 18.0, 64, 2)
+    game.burst(@types.hole_xf(), @types.topf() + 18.0, 64, 2)
   } else {
     @types.set_msg(game, "Ice line snapped. Mission over.", 3.0)
-    burst(game, game.hook_x, game.hook_y, 50, 1)
+    game.burst(game.hook_x, game.hook_y, 50, 1)
   }
 }
 
 ///|
 /// Spawns a fish of random kind and velocity from either side of the world; returns false if full.
-fn spawn_fish(game : @types.Game) -> Bool {
+fn @types.Game::spawn_fish(game : @types.Game) -> Bool {
   for fish_elem in game.fish {
     if fish_elem.active {
       continue
@@ -262,7 +261,7 @@ fn spawn_fish(game : @types.Game) -> Bool {
 
 ///|
 /// Spawns a hazard of random kind with appropriate starting position; returns false if full.
-fn spawn_hazard(game : @types.Game) -> Bool {
+fn @types.Game::spawn_hazard(game : @types.Game) -> Bool {
   for hazard in game.hazards {
     if hazard.active {
       continue
@@ -321,7 +320,7 @@ fn spawn_hazard(game : @types.Game) -> Bool {
 
 ///|
 /// Spawns a pickup of random kind at a random underwater position; returns false if full.
-fn spawn_pickup(game : @types.Game) -> Bool {
+fn @types.Game::spawn_pickup(game : @types.Game) -> Bool {
   for pickup in game.pickups {
     if pickup.active {
       continue
@@ -354,7 +353,7 @@ fn spawn_pickup(game : @types.Game) -> Bool {
 
 ///|
 /// Toggles grab-on state; only active during play; shows HUD message.
-fn try_toggle_grab(game : @types.Game) -> Bool {
+fn @types.Game::try_toggle_grab(game : @types.Game) -> Bool {
   if game.state != Play {
     return false
   }
@@ -372,7 +371,7 @@ fn try_toggle_grab(game : @types.Game) -> Bool {
 
 ///|
 /// Attempts a line repair: requires hook near hole and sufficient bait; applies cost and heal.
-fn try_repair(game : @types.Game) -> Bool {
+fn @types.Game::try_repair(game : @types.Game) -> Bool {
   if game.state != Play {
     return false
   }
@@ -398,14 +397,14 @@ fn try_repair(game : @types.Game) -> Bool {
 
   game.score = game.score + 12
   @types.set_msg(game, "Line repaired.", 1.0)
-  burst(game, game.hook_x, game.hook_y, 20, 2)
+  game.burst(game.hook_x, game.hook_y, 20, 2)
 
   true
 }
 
 ///|
 /// Drops the currently carried fish without scoring: marks it escaped, penalises score.
-fn drop_carrying_fish(game : @types.Game) -> Unit {
+fn @types.Game::drop_carrying_fish(game : @types.Game) -> Unit {
   if game.carrying_idx < 0 || game.carrying_idx >= game.fish.length() {
     game.carrying_idx = -1
     return
@@ -427,7 +426,7 @@ fn drop_carrying_fish(game : @types.Game) -> Unit {
 
 ///|
 /// Lands the hooked fish into the catch zone: increments caught, combo, and score.
-fn land_carrying_fish(game : @types.Game) -> Unit {
+fn @types.Game::land_carrying_fish(game : @types.Game) -> Unit {
   if game.carrying_idx < 0 || game.carrying_idx >= game.fish.length() {
     game.carrying_idx = -1
     return
@@ -453,14 +452,14 @@ fn land_carrying_fish(game : @types.Game) -> Unit {
   }
 
   @types.set_msg(game, "Fish landed +" + bonus.to_string(), 1.1)
-  burst(game, @types.hole_xf(), @types.hole_yf() + 20.0, 26, 2)
+  game.burst(@types.hole_xf(), @types.hole_yf() + 20.0, 26, 2)
 
   game.carrying_idx = -1
 }
 
 ///|
 /// Applies the effect of collecting a pickup item: bait, repair, or thermos bonus.
-fn collect_pickup(
+fn @types.Game::collect_pickup(
   game : @types.Game,
   kind : @types.PickupKind,
   x : Float,
@@ -471,19 +470,19 @@ fn collect_pickup(
       game.bait = @types.minf(100.0, game.bait + 34.0)
       game.score = game.score + 10
       @types.set_msg(game, "Bait crate collected.", 1.0)
-      burst(game, x, y, 16, 0)
+      game.burst(x, y, 16, 0)
     }
     Repair => {
       game.line_hp = @types.minf(100.0, game.line_hp + 26.0)
       game.score = game.score + 10
       @types.set_msg(game, "Line reinforced.", 1.0)
-      burst(game, x, y, 16, 2)
+      game.burst(x, y, 16, 2)
     }
     Thermos => {
       game.turbo_t = @types.maxf(game.turbo_t, 7.0)
       game.score = game.score + 16
       @types.set_msg(game, "Thermos boost activated.", 1.0)
-      burst(game, x, y, 20, 2)
+      game.burst(x, y, 20, 2)
     }
   }
 }
@@ -502,7 +501,7 @@ fn fish_speed_mul(kind : Int) -> Float {
 
 ///|
 /// Applies player input and ocean sway to the hook; enforces line length limit and emits wake particles.
-fn update_hook(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_hook(game : @types.Game, dt : Float) -> Unit {
   let boost_mul : Float = if game.boost_on || game.turbo_t > 0.0 {
     1.55
   } else {
@@ -549,8 +548,7 @@ fn update_hook(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.boost_on || game.turbo_t > 0.0 {
-    emit_particle(
-      game,
+    game.emit_particle(
       game.hook_x + @types.randf(-6.0, 6.0),
       game.hook_y + @types.randf(-6.0, 6.0),
       @types.randf(-40.0, 40.0),
@@ -564,7 +562,7 @@ fn update_hook(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Advances all active fish: follows hook if hooked, swims with sway, bounces off walls, detects hook collision.
-fn update_fish(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_fish(game : @types.Game, dt : Float) -> Unit {
   let mut active_count : Int = 0
 
   for i in 0..<game.fish.length() {
@@ -583,7 +581,7 @@ fn update_fish(game : @types.Game, dt : Float) -> Unit {
 
       if @types.in_catch_zone(game.fish[i].x, game.fish[i].y) &&
         game.hook_y <= @types.topf() + 72.0 {
-        land_carrying_fish(game)
+        game.land_carrying_fish()
       }
 
       continue
@@ -632,7 +630,7 @@ fn update_fish(game : @types.Game, dt : Float) -> Unit {
       game.carrying_idx = i
       game.grab_on = false
       @types.set_msg(game, "Fish hooked. Reel it up!", 1.1)
-      burst(game, game.hook_x, game.hook_y, 14, 2)
+      game.burst(game.hook_x, game.hook_y, 14, 2)
       continue
     }
 
@@ -648,7 +646,7 @@ fn update_fish(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Advances all active hazards: applies kind-specific movement, bounces or despawns, applies line damage on hit.
-fn update_hazards(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_hazards(game : @types.Game, dt : Float) -> Unit {
   for hazard in game.hazards {
     if not(hazard.active) {
       continue
@@ -698,7 +696,7 @@ fn update_hazards(game : @types.Game, dt : Float) -> Unit {
       game.line_hp = @types.maxf(0.0, game.line_hp - hazard.dmg)
       game.shake_t = @types.maxf(game.shake_t, 0.22)
 
-      burst(game, game.hook_x, game.hook_y, 12, 1)
+      game.burst(game.hook_x, game.hook_y, 12, 1)
 
       if hazard.kind == @types.hazard_ice {
         hazard.active = false
@@ -708,7 +706,7 @@ fn update_hazards(game : @types.Game, dt : Float) -> Unit {
       }
 
       if game.carrying_idx >= 0 && @raylib.get_random_value(0, 99) < 34 {
-        drop_carrying_fish(game)
+        game.drop_carrying_fish()
       }
 
       if game.line_hp <= 0.0 {
@@ -725,7 +723,7 @@ fn update_hazards(game : @types.Game, dt : Float) -> Unit {
         if @types.dist2(hazard.x, hazard.y, game.fish[idx].x, game.fish[idx].y) <=
           r2 * r2 {
           hazard.active = false
-          drop_carrying_fish(game)
+          game.drop_carrying_fish()
         }
       }
     }
@@ -734,7 +732,7 @@ fn update_hazards(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Advances all active pickups: applies drift and wave motion, bounces off walls, detects hook collection.
-fn update_pickups(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_pickups(game : @types.Game, dt : Float) -> Unit {
   for pickup in game.pickups {
     if not(pickup.active) {
       continue
@@ -771,14 +769,14 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
       let px : Float = pickup.x
       let py : Float = pickup.y
       pickup.active = false
-      collect_pickup(game, kind, px, py)
+      game.collect_pickup(kind, px, py)
     }
   }
 }
 
 ///|
 /// Uses a hint charge to mark the nearest relevant target; costs one hint and deducts 5 score.
-fn use_hint(game : @types.Game) -> Bool {
+fn @types.Game::use_hint(game : @types.Game) -> Bool {
   if game.state != Play || game.hint_left <= 0 {
     return false
   }
@@ -852,7 +850,7 @@ fn use_hint(game : @types.Game) -> Bool {
 
 ///|
 /// Runs one frame of play simulation: timers, spawning, hook/fish/hazard/pickup updates, win/loss checks.
-fn update_play(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   let step : Float = @types.clampf(dt, 0.0, 0.04)
 
   game.ui_t = game.ui_t + step
@@ -869,7 +867,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   game.turbo_t = @types.maxf(0.0, game.turbo_t - step)
   game.repair_cd = @types.maxf(0.0, game.repair_cd - step)
 
-  update_particles(game, step)
+  game.update_particles(step)
 
   if game.state != Play {
     return
@@ -878,12 +876,12 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   game.game_t = game.game_t + step
 
   if game.score >= @types.score_goal {
-    finish_run(game, true)
+    game.finish_run(true)
     return
   }
 
   if game.game_t >= @types.run_time_goal {
-    finish_run(game, game.score >= @types.score_goal * 8 / 10)
+    game.finish_run(game.score >= @types.score_goal * 8 / 10)
     return
   }
 
@@ -896,7 +894,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   )
   while game.fish_spawn_t >= fish_interval {
     game.fish_spawn_t = game.fish_spawn_t - fish_interval
-    ignore(spawn_fish(game))
+    ignore(game.spawn_fish())
   }
 
   game.hazard_spawn_t = game.hazard_spawn_t + step
@@ -906,36 +904,36 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   )
   while game.hazard_spawn_t >= hazard_interval {
     game.hazard_spawn_t = game.hazard_spawn_t - hazard_interval
-    ignore(spawn_hazard(game))
+    ignore(game.spawn_hazard())
   }
 
   game.pickup_spawn_t = game.pickup_spawn_t + step
   if game.pickup_spawn_t >= 3.1 {
     game.pickup_spawn_t = 0.0
-    ignore(spawn_pickup(game))
+    ignore(game.spawn_pickup())
   }
 
-  update_hook(game, step)
-  update_fish(game, step)
-  update_hazards(game, step)
+  game.update_hook(step)
+  game.update_fish(step)
+  game.update_hazards(step)
   if game.line_hp <= 0.0 {
     game.lives = game.lives - 1
     game.line_hp = 100.0
     game.bait = @types.maxf(0.0, game.bait - 14.0)
 
-    drop_carrying_fish(game)
-    reset_rig(game)
+    game.drop_carrying_fish()
+    game.reset_rig()
 
     @types.set_msg(game, "Line snapped. Life lost.", 1.4)
-    burst(game, @types.hole_xf(), @types.topf() + 30.0, 30, 1)
+    game.burst(@types.hole_xf(), @types.topf() + 30.0, 30, 1)
 
     if game.lives <= 0 {
-      finish_run(game, false)
+      game.finish_run(false)
       return
     }
   }
 
-  update_pickups(game, step)
+  game.update_pickups(step)
 
   let drain : Float = if game.boost_on || game.turbo_t > 0.0 {
     2.5 + Float::from_int(game.wave) * 0.10
@@ -965,16 +963,16 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 
   match game.state {
     Title => {
-      update_title_input(game)
-      update_play(game, dt)
+      game.update_title_input()
+      game.update_play(dt)
     }
     Play => {
-      update_play_input(game, dt)
-      update_play(game, dt)
+      game.update_play_input(dt)
+      game.update_play(dt)
     }
     Result => {
-      update_result_input(game)
-      update_play(game, dt)
+      game.update_result_input()
+      game.update_play(dt)
     }
   }
 }

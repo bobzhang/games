@@ -1,16 +1,16 @@
 ///|
 /// Returns a sine wave value driven by the game UI timer at frequency `k`.
-fn bg_wave(game : @types.Game, k : Float) -> Float {
+fn @types.Game::bg_wave(game : @types.Game, k : Float) -> Float {
   Float::from_double(@math.sin((game.ui_t * k).to_double()))
 }
 
 ///|
 /// Draws the dark neon background with animated ambient circles and horizontal scan-line stripes.
-fn draw_bg(game : @types.Game) -> Unit {
+fn @types.Game::draw_bg(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(8, 10, 18, 255))
 
-  let w0 : Float = bg_wave(game, 0.68)
-  let w1 : Float = bg_wave(game, 0.96)
+  let w0 : Float = game.bg_wave(0.68)
+  let w1 : Float = game.bg_wave(0.96)
 
   @raylib.draw_circle(
     220,
@@ -86,7 +86,7 @@ fn tile_text_color(v : Int) -> @raylib.Color {
 
 ///|
 /// Draws the board background panel and, when shaking, an orange border highlight.
-fn draw_board_panel(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
+fn @types.Game::draw_board_panel(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
   let bw : Int = @types.board_n * tile
   let bh : Int = @types.board_n * tile
 
@@ -120,7 +120,7 @@ fn draw_board_panel(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit 
 
 ///|
 /// Draws one board cell: a blocker with debris appearance or a numbered tile with gloss highlight.
-fn draw_cell(
+fn @types.Game::draw_cell(
   game : @types.Game,
   x : Int,
   y : Int,
@@ -208,10 +208,10 @@ fn draw_cell(
 
 ///|
 /// Draws all board cells and the grid line overlay.
-fn draw_grid(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
+fn @types.Game::draw_grid(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
   for y in 0..<@types.board_n {
     for x in 0..<@types.board_n {
-      draw_cell(game, x, y, tile, bx, by)
+      game.draw_cell(x, y, tile, bx, by)
     }
   }
 
@@ -241,7 +241,7 @@ fn draw_grid(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
 
 ///|
 /// Draws the cursor selection rectangle, tinted gold when zap is ready.
-fn draw_cursor(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
+fn @types.Game::draw_cursor(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
   if game.state != Play {
     return
   }
@@ -267,7 +267,7 @@ fn draw_cursor(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
 
 ///|
 /// Draws all currently active spark particles with colour determined by their kind.
-fn draw_sparks(game : @types.Game) -> Unit {
+fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
       continue
@@ -334,7 +334,7 @@ fn draw_touch_button(
 
 ///|
 /// Draws the full set of on-screen directional and action touch buttons during play.
-fn draw_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_controls(game : @types.Game) -> Unit {
   if game.state != Play {
     return
   }
@@ -466,7 +466,7 @@ fn draw_controls(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the right-side HUD panel with score, stats, zap charge bar, controls legend, and transient messages.
-fn draw_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   let px : Int = @types.panel_x0
   let py : Int = 24
   let pw : Int = @types.panel_w
@@ -665,7 +665,7 @@ fn draw_panel(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the title screen with game name, description, start button, and tip text.
-fn draw_title(game : @types.Game) -> Unit {
+fn @types.Game::draw_title(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -725,7 +725,7 @@ fn draw_title(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the win/loss result overlay with score, grade, rank, stats, and a play-again button.
-fn draw_result_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -818,23 +818,23 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 ///|
 /// Renders the complete frame for the current game state.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_bg(game)
+  game.draw_bg()
 
   if game.state == Title {
-    draw_title(game)
+    game.draw_title()
     return
   }
 
   let (bx, by, tile) = @types.board_metrics(game)
-  draw_board_panel(game, bx, by, tile)
-  draw_grid(game, bx, by, tile)
-  draw_cursor(game, bx, by, tile)
+  game.draw_board_panel(bx, by, tile)
+  game.draw_grid(bx, by, tile)
+  game.draw_cursor(bx, by, tile)
 
-  draw_sparks(game)
-  draw_panel(game)
-  draw_controls(game)
+  game.draw_sparks()
+  game.draw_panel()
+  game.draw_controls()
 
   if game.state == Result {
-    draw_result_overlay(game)
+    game.draw_result_overlay()
   }
 }

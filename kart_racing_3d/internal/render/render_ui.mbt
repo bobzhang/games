@@ -52,36 +52,36 @@ fn get_item_display_color(item_type : Int) -> (Int, Int, Int) {
 /// Draws all UI elements appropriate for the current game state.
 pub fn draw_ui(game : @types.Game) -> Unit {
   match game.state {
-    Menu => draw_menu(game)
-    KartSelect => draw_kart_select_ui(game)
+    Menu => game.draw_menu()
+    KartSelect => game.draw_kart_select_ui()
     TrackPreview => draw_track_preview_panel(game)
     Countdown => {
-      draw_hud(game)
-      draw_countdown(game)
+      game.draw_hud()
+      game.draw_countdown()
     }
     Racing => {
-      draw_hud(game)
+      game.draw_hud()
       draw_lap_times(game)
       draw_item_indicator(game)
       draw_standings_sidebar(game)
     }
     Paused => {
-      draw_hud(game)
+      game.draw_hud()
       draw_pause_overlay()
     }
     RaceComplete => {
-      draw_hud(game)
-      draw_race_results(game)
+      game.draw_hud()
+      game.draw_race_results()
       draw_detailed_race_results(game)
     }
-    CupComplete => draw_cup_results(game)
+    CupComplete => game.draw_cup_results()
   }
 }
 
 // Draw kart selection screen
 
 ///|
-fn draw_kart_select_ui(game : @types.Game) -> Unit {
+fn @types.Game::draw_kart_select_ui(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -367,7 +367,7 @@ fn draw_kart_select_ui(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_menu(game : @types.Game) -> Unit {
+fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -434,7 +434,7 @@ fn draw_menu(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   let kart = game.karts[@types.player_kart]
   // Top bar
   @raylib.draw_rectangle(
@@ -587,11 +587,11 @@ fn draw_hud(game : @types.Game) -> Unit {
     )
   }
   // Minimap (top-right corner)
-  draw_minimap(game)
+  game.draw_minimap()
 }
 
 ///|
-fn draw_minimap(game : @types.Game) -> Unit {
+fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
   let map_x = @types.screen_width - 160
   let map_y = 50
   let map_size = 140
@@ -676,7 +676,7 @@ fn draw_minimap(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_countdown(game : @types.Game) -> Unit {
+fn @types.Game::draw_countdown(game : @types.Game) -> Unit {
   let count = game.countdown_timer.to_int() + 1
   let text = if count > 3 {
     "READY"
@@ -735,7 +735,7 @@ fn draw_pause_overlay() -> Unit {
 }
 
 ///|
-fn draw_race_results(game : @types.Game) -> Unit {
+fn @types.Game::draw_race_results(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -821,7 +821,7 @@ fn draw_race_results(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_cup_results(game : @types.Game) -> Unit {
+fn @types.Game::draw_cup_results(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,

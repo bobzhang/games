@@ -1,6 +1,6 @@
 ///|
 /// Draws the maze background, wall tiles, normal pellets, and power pellets.
-fn draw_maze(game : @types.Game) -> Unit {
+fn @types.Game::draw_maze(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.maze_x - 4,
     @types.maze_y - 4,
@@ -54,7 +54,7 @@ fn draw_maze(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the player character as a yellow circle at its current tile position.
-fn draw_player(game : @types.Game) -> Unit {
+fn @types.Game::draw_player(game : @types.Game) -> Unit {
   let cx = @types.tile_center_x(game.player_x)
   let cy = @types.tile_center_y(game.player_y)
   @raylib.draw_circle(cx, cy, 9.0, @raylib.yellow)
@@ -63,7 +63,7 @@ fn draw_player(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all ghosts in their team color, or blue when frightened mode is active.
-fn draw_ghosts(game : @types.Game) -> Unit {
+fn @types.Game::draw_ghosts(game : @types.Game) -> Unit {
   for ghost in game.ghosts {
     let cx = @types.tile_center_x(ghost.x)
     let cy = @types.tile_center_y(ghost.y)
@@ -81,7 +81,7 @@ fn draw_ghosts(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the HUD panel showing score, lives, pellet count, ghost mode, and controls.
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_text("PAC DASH 2026", @types.hud_x, 30, 30, @raylib.raywhite)
   @raylib.draw_text("Score", @types.hud_x, 90, 24, @raylib.lightgray)
   @raylib.draw_text("\{game.score}", @types.hud_x, 118, 32, @raylib.yellow)
@@ -122,9 +122,9 @@ fn draw_hud(game : @types.Game) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.begin_drawing()
   @raylib.clear_background(@raylib.Color::new(5, 5, 10, 255))
-  draw_maze(game)
-  draw_player(game)
-  draw_ghosts(game)
-  draw_hud(game)
+  game.draw_maze()
+  game.draw_player()
+  game.draw_ghosts()
+  game.draw_hud()
   @raylib.end_drawing()
 }

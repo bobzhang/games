@@ -12,7 +12,7 @@ fn draw_center_text(
 
 ///|
 /// Returns a random camera offset scaled by the current shake intensity, or `(0, 0)` when no shake is active.
-fn shake_offset(game : @types.Game) -> (Float, Float) {
+fn @types.Game::shake_offset(game : @types.Game) -> (Float, Float) {
   if game.shake_t <= 0.0 {
     (0.0, 0.0)
   } else {
@@ -23,7 +23,7 @@ fn shake_offset(game : @types.Game) -> (Float, Float) {
 
 ///|
 /// Draws the background sky gradient, parallax city building layers, glowing windows, and twinkling stars.
-fn draw_skyline(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_skyline(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let top_a = @types.bg_night()
   let top_b = @raylib.Color::new(24, 24, 52, 255)
   @raylib.draw_rectangle_gradient_v(
@@ -118,7 +118,7 @@ fn segment_color_glow(seg : @types.Segment) -> @raylib.Color {
 
 ///|
 /// Draws all active rooftop segments as neon-lit buildings with a colored top edge and procedural window grid.
-fn draw_segments(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_segments(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for segment in game.segments {
     if not(segment.active) {
       continue
@@ -341,7 +341,7 @@ fn draw_obstacle(ob : @types.Obstacle, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws all active collectible chips as spinning neon squares with a bobbing glow halo, blending lime and blue.
-fn draw_chips(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_chips(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for chip in game.chips {
     if not(chip.active) {
       continue
@@ -375,7 +375,7 @@ fn draw_chips(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws all active particles as colored circles fading with their remaining life, followed by ghost trail rectangles that fade by their remaining life time.
-fn draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -422,7 +422,7 @@ fn draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws the player character with a grapple line when latched, an animated running/sliding body, leg animation, hurt flash tint, and an invulnerability blink outline.
-fn draw_hero(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_hero(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let hero = game.hero
 
   let hx = hero.x + cam_x
@@ -549,7 +549,7 @@ fn pointer_on_rect(
 
 ///|
 /// Draws the three on-screen touch buttons (Jump, Slide, Hook) with highlighted borders when each button is actively pressed.
-fn draw_touch_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -685,7 +685,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the gameplay HUD: score panel, health bar, stamina bar, stage progress meter, restart button, stage intro banner, and the combo hint overlay.
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(16, 14, 450, 108, @types.ui_dark())
   @raylib.draw_rectangle_lines(
     16,
@@ -839,7 +839,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the title screen overlay with the game title, tagline, controls reference panel, and a blinking start prompt.
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -898,7 +898,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the stage-clear overlay: a darkening vignette, the "STAGE CLEAR" banner, the bonus points earned, and a transition message.
-fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_stage_clear_overlay(game : @types.Game) -> Unit {
   let p = @types.ease_in_out(1.0 - game.stage_intro_t / 1.5)
   let alpha = (Float::from_int(90) + p * Float::from_int(80))
     .to_int()
@@ -922,7 +922,7 @@ fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the game-over overlay with a "RUN FAILED" header, the run score, the all-time best score, and a retry prompt panel.
-fn draw_game_over_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -969,22 +969,22 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the full game world layer stack: skyline backdrop, grapple anchors, rooftop segments, obstacles, chips, particles, ghost trails, and the hero.
-fn draw_game_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
-  draw_skyline(game, cam_x, cam_y)
+fn @types.Game::draw_game_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+  game.draw_skyline(cam_x, cam_y)
 
   for anchor in game.anchors {
     draw_anchor(anchor, cam_x, cam_y)
   }
 
-  draw_segments(game, cam_x, cam_y)
+  game.draw_segments(cam_x, cam_y)
 
   for obstacle in game.obstacles {
     draw_obstacle(obstacle, cam_x, cam_y)
   }
 
-  draw_chips(game, cam_x, cam_y)
-  draw_particles(game, cam_x, cam_y)
-  draw_hero(game, cam_x, cam_y)
+  game.draw_chips(cam_x, cam_y)
+  game.draw_particles(cam_x, cam_y)
+  game.draw_hero(cam_x, cam_y)
 }
 
 ///|
@@ -992,16 +992,16 @@ fn draw_game_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@types.bg_haze())
 
-  let shake = shake_offset(game)
-  draw_game_world(game, shake.0, shake.1)
+  let shake = game.shake_offset()
+  game.draw_game_world(shake.0, shake.1)
 
   if game.state != @types.state_title {
-    draw_hud(game)
+    game.draw_hud()
   }
 
   if game.touch_mode || game.touch_count > 0 {
     if game.state == @types.state_play {
-      draw_touch_controls(game)
+      game.draw_touch_controls()
     }
     if game.touch_count > 0 {
       @raylib.draw_circle(
@@ -1014,11 +1014,11 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   }
 
   if game.state == @types.state_title {
-    draw_title_overlay(game)
+    game.draw_title_overlay()
   } else if game.state == @types.state_stage_clear {
-    draw_stage_clear_overlay(game)
+    game.draw_stage_clear_overlay()
   } else if game.state == @types.state_game_over {
-    draw_game_over_overlay(game)
+    game.draw_game_over_overlay()
   }
 
   if game.flash_t > 0.0 {

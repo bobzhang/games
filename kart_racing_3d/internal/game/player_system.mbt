@@ -289,11 +289,11 @@ pub fn apply_kart_physics(
     }
   }
   // Keep karts from going too far off track
-  clamp_kart_to_track_bounds(game, kart_idx)
+  game.clamp_kart_to_track_bounds(kart_idx)
 }
 
 ///|
-fn clamp_kart_to_track_bounds(game : @types.Game, kart_idx : Int) -> Unit {
+fn @types.Game::clamp_kart_to_track_bounds(game : @types.Game, kart_idx : Int) -> Unit {
   let kart = game.karts[kart_idx]
   let wc = game.waypoint_count
   if wc < 2 {
@@ -349,11 +349,11 @@ pub fn use_powerup(game : @types.Game, kart_idx : Int) -> Unit {
     kart.shield_timer = @types.shield_duration
     @types.spawn_particles(game, kart.x, kart.y + 0.5, kart.z, 8, 100, 200, 255)
   } else if item == @types.powerup_missile {
-    fire_missile(game, kart_idx)
+    game.fire_missile(kart_idx)
   } else if item == @types.powerup_oil_slick {
-    drop_item(game, kart_idx, @types.powerup_oil_slick)
+    game.drop_item(kart_idx, @types.powerup_oil_slick)
   } else if item == @types.powerup_lightning {
-    activate_lightning(game, kart_idx)
+    game.activate_lightning(kart_idx)
   } else if item == @types.powerup_star {
     kart.star_timer = @types.star_duration
     kart.invincible_timer = @types.star_duration
@@ -368,7 +368,7 @@ pub fn use_powerup(game : @types.Game, kart_idx : Int) -> Unit {
       100,
     )
   } else if item == @types.powerup_banana {
-    drop_item(game, kart_idx, @types.powerup_banana)
+    game.drop_item(kart_idx, @types.powerup_banana)
   } else if item == @types.powerup_triple_mushroom {
     kart.boost_timer = @types.triple_mushroom_boost
     kart.boost_power = @types.boost_speed_add
@@ -400,7 +400,7 @@ pub fn use_powerup(game : @types.Game, kart_idx : Int) -> Unit {
 }
 
 ///|
-fn fire_missile(game : @types.Game, kart_idx : Int) -> Unit {
+fn @types.Game::fire_missile(game : @types.Game, kart_idx : Int) -> Unit {
   let kart = game.karts[kart_idx]
   let idx = @types.alloc_projectile(game)
   if idx < 0 {
@@ -422,7 +422,7 @@ fn fire_missile(game : @types.Game, kart_idx : Int) -> Unit {
 }
 
 ///|
-fn drop_item(game : @types.Game, kart_idx : Int, item_type : Int) -> Unit {
+fn @types.Game::drop_item(game : @types.Game, kart_idx : Int, item_type : Int) -> Unit {
   let kart = game.karts[kart_idx]
   let idx = @types.alloc_dropped_item(game)
   if idx < 0 {
@@ -446,7 +446,7 @@ fn drop_item(game : @types.Game, kart_idx : Int, item_type : Int) -> Unit {
 }
 
 ///|
-fn activate_lightning(game : @types.Game, source_kart : Int) -> Unit {
+fn @types.Game::activate_lightning(game : @types.Game, source_kart : Int) -> Unit {
   game.lightning_active = true
   game.lightning_timer = @types.lightning_duration
   game.lightning_source = source_kart

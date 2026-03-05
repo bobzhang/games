@@ -1,13 +1,13 @@
 ///|
 /// Sets the HUD message string and its display duration in seconds.
-fn set_msg(game : @types.Game, msg : String, ttl : Float) -> Unit {
+fn @types.Game::set_msg(game : @types.Game, msg : String, ttl : Float) -> Unit {
   game.msg = msg
   game.msg_t = ttl
 }
 
 ///|
 /// Deactivates all particles and resets their fields to defaults.
-fn clear_particles(game : @types.Game) -> Unit {
+fn @types.Game::clear_particles(game : @types.Game) -> Unit {
   for particle in game.particles {
     particle.active = false
     particle.x = 0.0
@@ -22,7 +22,7 @@ fn clear_particles(game : @types.Game) -> Unit {
 
 ///|
 /// Deactivates all traffic vehicles, orders, and pickups and resets their fields.
-fn clear_world(game : @types.Game) -> Unit {
+fn @types.Game::clear_world(game : @types.Game) -> Unit {
   for traffic_elem in game.traffic {
     traffic_elem.active = false
     traffic_elem.x = 0.0
@@ -57,7 +57,7 @@ fn clear_world(game : @types.Game) -> Unit {
 
 ///|
 /// Allocates the first inactive particle slot and initialises it with the given position, velocity, lifetime, size, and kind.
-fn emit_particle(
+fn @types.Game::emit_particle(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -85,10 +85,9 @@ fn emit_particle(
 
 ///|
 /// Emits n particles of the given kind in a random burst around position (x, y).
-fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
+fn @types.Game::burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
   for _i in 0..<n {
-    emit_particle(
-      game,
+    game.emit_particle(
       x + @types.randf(-12.0, 12.0),
       y + @types.randf(-12.0, 12.0),
       @types.randf(-240.0, 240.0),
@@ -102,7 +101,7 @@ fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit 
 
 ///|
 /// Advances all active particles by dt, applying drag and gravity, and deactivates expired ones.
-fn update_particles(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
       continue
@@ -123,7 +122,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Repositions the rider to the world centre and zeroes all movement and cargo state.
-fn reset_rider(game : @types.Game) -> Unit {
+fn @types.Game::reset_rider(game : @types.Game) -> Unit {
   game.rider_x = Float::from_int(@types.world_x0 + @types.world_w / 2)
   game.rider_y = Float::from_int(@types.world_y0 + @types.world_h / 2)
   game.rider_vx = 0.0
@@ -137,11 +136,11 @@ fn reset_rider(game : @types.Game) -> Unit {
 
 ///|
 /// Resets all game state and starts a fresh delivery run from wave 1.
-fn start_run(game : @types.Game) -> Unit {
-  clear_world(game)
-  clear_particles(game)
+fn @types.Game::start_run(game : @types.Game) -> Unit {
+  game.clear_world()
+  game.clear_particles()
   game.state = @types.state_play
-  reset_rider(game)
+  game.reset_rider()
   game.lives = 3
   game.scooter_hp = 100.0
   game.fuel = 100.0
@@ -167,12 +166,12 @@ fn start_run(game : @types.Game) -> Unit {
   game.msg_t = 0.0
   game.shake_t = 0.0
   game.win = false
-  set_msg(game, "Pick up pizza, deliver fast, avoid traffic.", 2.6)
+  game.set_msg("Pick up pizza, deliver fast, avoid traffic.", 2.6)
 }
 
 ///|
 /// Ends the current run, sets the win or lose outcome, updates best score, and triggers the result burst effect.
-fn finish_run(game : @types.Game, win : Bool) -> Unit {
+fn @types.Game::finish_run(game : @types.Game, win : Bool) -> Unit {
   if game.state != @types.state_play {
     return
   }
@@ -186,17 +185,17 @@ fn finish_run(game : @types.Game, win : Bool) -> Unit {
     game.best_score = game.score
   }
   if win {
-    set_msg(game, "City fed. Delivery legend.", 3.0)
-    burst(game, @types.depot_x(), @types.depot_y(), 66, 2)
+    game.set_msg("City fed. Delivery legend.", 3.0)
+    game.burst(@types.depot_x(), @types.depot_y(), 66, 2)
   } else {
-    set_msg(game, "Rush ended. Try another shift.", 3.0)
-    burst(game, game.rider_x, game.rider_y, 52, 1)
+    game.set_msg("Rush ended. Try another shift.", 3.0)
+    game.burst(game.rider_x, game.rider_y, 52, 1)
   }
 }
 
 ///|
 /// Returns the number of currently active delivery orders.
-fn active_orders(game : @types.Game) -> Int {
+fn @types.Game::active_orders(game : @types.Game) -> Int {
   let mut n : Int = 0
   for order in game.orders {
     if order.active {
@@ -208,7 +207,7 @@ fn active_orders(game : @types.Game) -> Int {
 
 ///|
 /// Activates the first free order slot with a random restaurant source, road-snapped destination, and scaled timer.
-fn spawn_order(game : @types.Game) -> Bool {
+fn @types.Game::spawn_order(game : @types.Game) -> Bool {
   for order in game.orders {
     if order.active {
       continue
@@ -250,7 +249,7 @@ fn spawn_order(game : @types.Game) -> Bool {
 
 ///|
 /// Activates the first free traffic slot with a random kind, lane, direction, size, and entry position.
-fn spawn_traffic(game : @types.Game) -> Bool {
+fn @types.Game::spawn_traffic(game : @types.Game) -> Bool {
   for traffic_elem in game.traffic {
     if traffic_elem.active {
       continue
@@ -335,7 +334,7 @@ fn spawn_traffic(game : @types.Game) -> Bool {
 
 ///|
 /// Activates the first free pickup slot with a random position, velocity, phase, and weighted kind.
-fn spawn_pickup(game : @types.Game) -> Bool {
+fn @types.Game::spawn_pickup(game : @types.Game) -> Bool {
   for pickup in game.pickups {
     if pickup.active {
       continue
@@ -367,7 +366,7 @@ fn spawn_pickup(game : @types.Game) -> Bool {
 
 ///|
 /// Attempts a scooter repair at the depot, consuming fuel and restoring HP if conditions are met.
-fn try_repair(game : @types.Game) -> Bool {
+fn @types.Game::try_repair(game : @types.Game) -> Bool {
   if game.state != @types.state_play {
     return false
   }
@@ -383,12 +382,12 @@ fn try_repair(game : @types.Game) -> Bool {
     Float::from_int(@types.depot_h() + 40),
   )
   if not(near_depot) {
-    set_msg(game, "Return to depot for repairs.", 1.0)
+    game.set_msg("Return to depot for repairs.", 1.0)
     game.action_cd = 0.22
     return false
   }
   if game.fuel < 8.0 {
-    set_msg(game, "Not enough fuel to repair.", 1.0)
+    game.set_msg("Not enough fuel to repair.", 1.0)
     game.action_cd = 0.22
     return false
   }
@@ -396,8 +395,8 @@ fn try_repair(game : @types.Game) -> Bool {
   game.scooter_hp = @types.minf(100.0, game.scooter_hp + 30.0)
   game.action_cd = 1.2
   game.score = game.score + 12
-  set_msg(game, "Scooter serviced.", 1.0)
-  burst(game, @types.depot_x(), @types.depot_y(), 22, 2)
+  game.set_msg("Scooter serviced.", 1.0)
+  game.burst(@types.depot_x(), @types.depot_y(), 22, 2)
   true
 }
 
@@ -413,28 +412,28 @@ fn pickup_distance(kind : Int) -> Float {
 
 ///|
 /// Applies a collected pickup's effect (fuel, HP, or turbo boost) and spawns a burst particle effect.
-fn collect_pickup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit {
+fn @types.Game::collect_pickup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit {
   if kind == @types.pickup_fuel {
     game.fuel = @types.minf(100.0, game.fuel + 30.0)
     game.score = game.score + 10
-    set_msg(game, "Fuel canister collected.", 1.0)
-    burst(game, x, y, 16, 0)
+    game.set_msg("Fuel canister collected.", 1.0)
+    game.burst(x, y, 16, 0)
   } else if kind == @types.pickup_repair {
     game.scooter_hp = @types.minf(100.0, game.scooter_hp + 24.0)
     game.score = game.score + 10
-    set_msg(game, "Quick repair kit used.", 1.0)
-    burst(game, x, y, 16, 2)
+    game.set_msg("Quick repair kit used.", 1.0)
+    game.burst(x, y, 16, 2)
   } else {
     game.turbo_t = @types.maxf(game.turbo_t, 7.0)
     game.score = game.score + 16
-    set_msg(game, "Nitro drink activated.", 1.0)
-    burst(game, x, y, 20, 2)
+    game.set_msg("Nitro drink activated.", 1.0)
+    game.burst(x, y, 20, 2)
   }
 }
 
 ///|
 /// Applies damage to the rider's scooter HP, resets combo, triggers screen shake, and handles life loss or game over.
-fn hurt_rider(game : @types.Game, dmg : Float) -> Unit {
+fn @types.Game::hurt_rider(game : @types.Game, dmg : Float) -> Unit {
   game.scooter_hp = game.scooter_hp - dmg
   game.combo = 0
   game.combo_t = 0.0
@@ -447,8 +446,8 @@ fn hurt_rider(game : @types.Game, dmg : Float) -> Unit {
     game.rider_y = Float::from_int(@types.world_y0 + @types.world_h / 2)
     game.rider_vx = 0.0
     game.rider_vy = 0.0
-    set_msg(game, "Scooter wrecked. Life lost.", 1.4)
-    burst(game, game.rider_x, game.rider_y, 30, 1)
+    game.set_msg("Scooter wrecked. Life lost.", 1.4)
+    game.burst(game.rider_x, game.rider_y, 30, 1)
     if game.cargo_idx >= 0 {
       let idx : Int = game.cargo_idx
       if idx < game.orders.length() && game.orders[idx].active {
@@ -459,16 +458,16 @@ fn hurt_rider(game : @types.Game, dmg : Float) -> Unit {
       game.cargo_idx = -1
     }
     if game.lives <= 0 {
-      finish_run(game, false)
+      game.finish_run(false)
     }
   } else {
-    burst(game, game.rider_x, game.rider_y, 12, 1)
+    game.burst(game.rider_x, game.rider_y, 12, 1)
   }
 }
 
 ///|
 /// Advances the rider's velocity and position by dt, applying boost, drift, drag, and world boundary clamping.
-fn update_rider(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_rider(game : @types.Game, dt : Float) -> Unit {
   let boost_mul : Float = if game.boost_on || game.turbo_t > 0.0 {
     1.55
   } else {
@@ -501,8 +500,7 @@ fn update_rider(game : @types.Game, dt : Float) -> Unit {
     @types.world_bottom() - @types.rider_r - 8.0,
   )
   if game.boost_on || game.turbo_t > 0.0 {
-    emit_particle(
-      game,
+    game.emit_particle(
       game.rider_x + @types.randf(-6.0, 6.0),
       game.rider_y + @types.randf(-6.0, 6.0),
       @types.randf(-40.0, 40.0),
@@ -516,7 +514,7 @@ fn update_rider(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Advances all active traffic vehicles by dt with sway motion, removes out-of-bounds vehicles, and applies collision damage to the rider.
-fn update_traffic(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_traffic(game : @types.Game, dt : Float) -> Unit {
   for traffic_elem in game.traffic {
     if not(traffic_elem.active) {
       continue
@@ -551,7 +549,7 @@ fn update_traffic(game : @types.Game, dt : Float) -> Unit {
       } else {
         16.0
       }
-      hurt_rider(game, dmg)
+      game.hurt_rider(dmg)
       traffic_elem.active = false
       if game.state != @types.state_play {
         return
@@ -562,7 +560,7 @@ fn update_traffic(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Advances all active pickups by dt with sinusoidal drift, bounces them off world edges, and collects any within range of the rider.
-fn update_pickups(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_pickups(game : @types.Game, dt : Float) -> Unit {
   for pickup in game.pickups {
     if not(pickup.active) {
       continue
@@ -594,14 +592,14 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
       let px : Float = pickup.x
       let py : Float = pickup.y
       pickup.active = false
-      collect_pickup(game, kind, px, py)
+      game.collect_pickup(kind, px, py)
     }
   }
 }
 
 ///|
 /// Returns true when the rider is within pickup range of order i's source restaurant.
-fn near_order_pick(game : @types.Game, i : Int) -> Bool {
+fn @types.Game::near_order_pick(game : @types.Game, i : Int) -> Bool {
   @types.dist2(
     game.rider_x,
     game.rider_y,
@@ -613,7 +611,7 @@ fn near_order_pick(game : @types.Game, i : Int) -> Bool {
 
 ///|
 /// Returns true when the rider is within drop-off range of order i's delivery destination.
-fn near_order_drop(game : @types.Game, i : Int) -> Bool {
+fn @types.Game::near_order_drop(game : @types.Game, i : Int) -> Bool {
   @types.dist2(
     game.rider_x,
     game.rider_y,
@@ -639,7 +637,7 @@ fn order_time_bonus(timer_left : Float) -> Int {
 
 ///|
 /// Ticks order timers, expires late orders, handles pickup and drop-off interactions, and updates score and combo.
-fn update_orders(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_orders(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.orders.length() {
     if not(game.orders[i].active) {
       continue
@@ -655,18 +653,18 @@ fn update_orders(game : @types.Game, dt : Float) -> Unit {
       game.combo = 0
       game.combo_t = 0.0
       if game.missed % 2 == 0 {
-        set_msg(game, "Late order lost.", 1.0)
+        game.set_msg("Late order lost.", 1.0)
       }
       continue
     }
     if not(game.orders[i].picked) {
-      if game.cargo_idx < 0 && game.action_on && near_order_pick(game, i) {
+      if game.cargo_idx < 0 && game.action_on && game.near_order_pick(i) {
         game.orders[i].picked = true
         game.cargo_idx = i
-        set_msg(game, "Order picked. Deliver now.", 1.0)
-        burst(game, game.orders[i].x_from, game.orders[i].y_from, 14, 0)
+        game.set_msg("Order picked. Deliver now.", 1.0)
+        game.burst(game.orders[i].x_from, game.orders[i].y_from, 14, 0)
       }
-    } else if game.cargo_idx == i && game.action_on && near_order_drop(game, i) {
+    } else if game.cargo_idx == i && game.action_on && game.near_order_drop(i) {
       let bonus : Int = order_time_bonus(game.orders[i].timer)
       let gain : Int = game.orders[i].value + bonus + game.combo * 3
       game.orders[i].active = false
@@ -678,15 +676,15 @@ fn update_orders(game : @types.Game, dt : Float) -> Unit {
       if game.score > game.best_score {
         game.best_score = game.score
       }
-      set_msg(game, "Delivery +" + gain.to_string(), 1.0)
-      burst(game, game.orders[i].x_to, game.orders[i].y_to, 20, 2)
+      game.set_msg("Delivery +" + gain.to_string(), 1.0)
+      game.burst(game.orders[i].x_to, game.orders[i].y_to, 20, 2)
     }
   }
 }
 
 ///|
 /// Spends a hint to mark the nearest relevant target (drop-off, fuel pickup, or restaurant) and displays a guidance message.
-fn use_hint(game : @types.Game) -> Bool {
+fn @types.Game::use_hint(game : @types.Game) -> Bool {
   if game.state != @types.state_play || game.hint_left <= 0 {
     return false
   }
@@ -746,13 +744,13 @@ fn use_hint(game : @types.Game) -> Bool {
   game.hint_t = 2.8
   game.hint_left = game.hint_left - 1
   game.score = (0).max(game.score - 5)
-  set_msg(game, text, 1.3)
+  game.set_msg(text, 1.3)
   true
 }
 
 ///|
 /// Advances timers, spawns orders, traffic, and pickups, updates all entities, drains fuel, and checks win or lose conditions.
-fn update_play(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   let step : Float = @types.clampf(dt, 0.0, 0.04)
   game.ui_t = game.ui_t + step
   game.touch_cd = @types.maxf(0.0, game.touch_cd - step)
@@ -765,17 +763,17 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   }
   game.turbo_t = @types.maxf(0.0, game.turbo_t - step)
   game.action_cd = @types.maxf(0.0, game.action_cd - step)
-  update_particles(game, step)
+  game.update_particles(step)
   if game.state != @types.state_play {
     return
   }
   game.game_t = game.game_t + step
   if game.score >= @types.score_goal {
-    finish_run(game, true)
+    game.finish_run(true)
     return
   }
   if game.game_t >= @types.run_time_goal {
-    finish_run(game, game.score >= @types.score_goal * 8 / 10)
+    game.finish_run(game.score >= @types.score_goal * 8 / 10)
     return
   }
   game.wave = (1 + (game.game_t / 22.0).to_int()).clamp(min=1, max=12)
@@ -786,8 +784,8 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   )
   if game.order_spawn_t >= order_interval {
     game.order_spawn_t = game.order_spawn_t - order_interval
-    if active_orders(game) < 4 {
-      ignore(spawn_order(game))
+    if game.active_orders() < 4 {
+      ignore(game.spawn_order())
     }
   }
   game.traffic_spawn_t = game.traffic_spawn_t + step
@@ -797,20 +795,20 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   )
   while game.traffic_spawn_t >= traffic_interval {
     game.traffic_spawn_t = game.traffic_spawn_t - traffic_interval
-    ignore(spawn_traffic(game))
+    ignore(game.spawn_traffic())
   }
   game.pickup_spawn_t = game.pickup_spawn_t + step
   if game.pickup_spawn_t >= 3.3 {
     game.pickup_spawn_t = 0.0
-    ignore(spawn_pickup(game))
+    ignore(game.spawn_pickup())
   }
-  update_rider(game, step)
-  update_orders(game, step)
-  update_traffic(game, step)
+  game.update_rider(step)
+  game.update_orders(step)
+  game.update_traffic(step)
   if game.state != @types.state_play {
     return
   }
-  update_pickups(game, step)
+  game.update_pickups(step)
   let drain : Float = if game.boost_on || game.turbo_t > 0.0 {
     2.5 + Float::from_int(game.wave) * 0.10
   } else {
@@ -821,13 +819,13 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
     game.scooter_hp = @types.maxf(0.0, game.scooter_hp - step * 6.0)
   }
   if game.scooter_hp <= 0.0 {
-    hurt_rider(game, 100.0)
+    game.hurt_rider(100.0)
     if game.state != @types.state_play {
       return
     }
   }
   if game.lives <= 0 {
-    finish_run(game, false)
+    game.finish_run(false)
     return
   }
   if game.score > game.best_score {
@@ -839,13 +837,13 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
 /// Advances one frame of delivery logic, input handling, and game-state flow.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   if game.state == @types.state_title {
-    update_title_input(game)
-    update_play(game, dt)
+    game.update_title_input()
+    game.update_play(dt)
   } else if game.state == @types.state_play {
-    update_play_input(game, dt)
-    update_play(game, dt)
+    game.update_play_input(dt)
+    game.update_play(dt)
   } else {
-    update_result_input(game)
-    update_play(game, dt)
+    game.update_result_input()
+    game.update_play(dt)
   }
 }

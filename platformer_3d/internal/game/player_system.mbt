@@ -1,7 +1,7 @@
 // Player movement, physics, and platform interaction
 
 ///|
-fn update_player(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   // Input
   let mut input_x : Float = 0.0
   let mut input_z : Float = 0.0
@@ -77,7 +77,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
       game.pz += game.vz * dt
       game.grounded = false
       game.on_ice = false
-      resolve_platform_collisions(game)
+      game.resolve_platform_collisions()
       // Dash trail particles
       if game.frame_counter % 2 == 0 {
         @types.spawn_particles_dir(
@@ -122,7 +122,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   game.vz = game.vz * friction + nz * accel * dt * @types.player_accel_mult
 
   // Conveyor belt force
-  apply_conveyor_force(game, dt)
+  game.apply_conveyor_force(dt)
 
   // Clamp horizontal speed
   let hspeed = (game.vx * game.vx + game.vz * game.vz).sqrt()
@@ -157,7 +157,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   game.wall_slide = false
   game.can_wall_jump = false
   if not(game.grounded) && game.vy < 0.0 {
-    check_wall_slide(game)
+    game.check_wall_slide()
   }
 
   // Jump
@@ -277,7 +277,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   let was_grounded = game.grounded
   game.grounded = false
   game.on_ice = false
-  resolve_platform_collisions(game)
+  game.resolve_platform_collisions()
 
   // Landing squash animation
   if game.grounded && not(was_grounded) && game.vy <= 0.0 {
@@ -312,12 +312,12 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
 
   // Magnet effect - pull collectibles toward player
   if game.powerup_type == @types.powerup_magnet {
-    pull_collectibles_magnet(game, dt)
+    game.pull_collectibles_magnet(dt)
   }
 }
 
 ///|
-fn check_wall_slide(game : @types.Game) -> Unit {
+fn @types.Game::check_wall_slide(game : @types.Game) -> Unit {
   let pr = @types.player_radius
   let ph = @types.player_height
   let check_dist : Float = 0.15
@@ -363,7 +363,7 @@ fn check_wall_slide(game : @types.Game) -> Unit {
 }
 
 ///|
-fn apply_conveyor_force(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::apply_conveyor_force(game : @types.Game, dt : Float) -> Unit {
   if not(game.grounded) {
     return
   }
@@ -393,7 +393,7 @@ fn apply_conveyor_force(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn pull_collectibles_magnet(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::pull_collectibles_magnet(game : @types.Game, dt : Float) -> Unit {
   let mag_range = @types.powerup_magnet_range
   for c in game.collectibles {
     if not(c.active) || c.collected {
@@ -412,7 +412,7 @@ fn pull_collectibles_magnet(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn resolve_platform_collisions(game : @types.Game) -> Unit {
+fn @types.Game::resolve_platform_collisions(game : @types.Game) -> Unit {
   let pr = @types.player_radius
   let ph = @types.player_height
   for plat in game.platforms {
@@ -494,7 +494,7 @@ fn resolve_platform_collisions(game : @types.Game) -> Unit {
           // Moving platform carry
           if plat.kind >= @types.plat_moving_x &&
             plat.kind <= @types.plat_moving_z {
-            carry_player_on_platform(game, plat)
+            game.carry_player_on_platform(plat)
           }
         } else {
           // Player hitting bottom
@@ -525,7 +525,7 @@ fn resolve_platform_collisions(game : @types.Game) -> Unit {
 }
 
 ///|
-fn carry_player_on_platform(game : @types.Game, plat : @types.Platform) -> Unit {
+fn @types.Game::carry_player_on_platform(game : @types.Game, plat : @types.Platform) -> Unit {
   // Calculate platform velocity from its movement
   let speed = plat.move_speed
   let range = plat.move_range
@@ -543,7 +543,7 @@ fn carry_player_on_platform(game : @types.Game, plat : @types.Platform) -> Unit 
 }
 
 ///|
-fn update_platforms(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_platforms(game : @types.Game, dt : Float) -> Unit {
   for plat in game.platforms {
     if not(plat.active) {
       continue
@@ -624,7 +624,7 @@ fn update_platforms(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_collectibles(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_collectibles(game : @types.Game, dt : Float) -> Unit {
   for c in game.collectibles {
     if not(c.active) || c.collected {
       continue

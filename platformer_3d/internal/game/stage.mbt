@@ -30,26 +30,26 @@ pub fn load_level(game : @types.Game, world : Int, level : Int) -> Unit {
   game.can_wall_jump = false
   game.checkpoint_active = false
   // Clear all pools
-  clear_pools(game)
+  game.clear_pools()
   // Load platforms
-  load_platforms(game, world, level)
+  game.load_platforms(world, level)
   // Load collectibles
-  load_collectibles(game, world, level)
+  game.load_collectibles(world, level)
   // Load hazards
-  load_hazards(game, world, level)
+  game.load_hazards(world, level)
   // Load enemies
-  load_enemies(game, world, level)
+  game.load_enemies(world, level)
   // Load power-ups
-  load_powerups(game, world, level)
+  game.load_powerups(world, level)
   // Load decorations
-  load_decorations(game, world, level)
+  game.load_decorations(world, level)
   // Set goal
   let goal = @levels.get_goal_position(world, level)
   game.goal_x = goal.0
   game.goal_y = goal.1
   game.goal_z = goal.2
   // Set checkpoints
-  load_checkpoints(game, world, level)
+  game.load_checkpoints(world, level)
   // Player start
   game.px = 0.0
   game.py = @types.respawn_height
@@ -79,7 +79,7 @@ pub fn load_level(game : @types.Game, world : Int, level : Int) -> Unit {
 }
 
 ///|
-fn clear_pools(game : @types.Game) -> Unit {
+fn @types.Game::clear_pools(game : @types.Game) -> Unit {
   for i in 0..<game.platforms.length() {
     game.platforms[i] = @types.Platform::inactive()
   }
@@ -113,7 +113,7 @@ fn clear_pools(game : @types.Game) -> Unit {
 }
 
 ///|
-fn load_platforms(game : @types.Game, world : Int, level : Int) -> Unit {
+fn @types.Game::load_platforms(game : @types.Game, world : Int, level : Int) -> Unit {
   let plat_data = @levels.get_platform_data(world, level)
   let wc = @levels.world_platform_color(world)
   for i = 0; i < plat_data.length() && i < @types.max_platforms; i = i + 1 {
@@ -178,7 +178,7 @@ fn load_platforms(game : @types.Game, world : Int, level : Int) -> Unit {
 }
 
 ///|
-fn load_collectibles(game : @types.Game, world : Int, level : Int) -> Unit {
+fn @types.Game::load_collectibles(game : @types.Game, world : Int, level : Int) -> Unit {
   let coll_data = @levels.get_collectible_data(world, level)
   for i = 0; i < coll_data.length() && i < @types.max_collectibles; i = i + 1 {
     let cd = coll_data[i]
@@ -207,7 +207,7 @@ fn load_collectibles(game : @types.Game, world : Int, level : Int) -> Unit {
 }
 
 ///|
-fn load_hazards(game : @types.Game, world : Int, level : Int) -> Unit {
+fn @types.Game::load_hazards(game : @types.Game, world : Int, level : Int) -> Unit {
   let hazard_data = @levels.get_hazard_data(world, level)
   for i = 0; i < hazard_data.length() && i < @types.max_hazards; i = i + 1 {
     let hd = hazard_data[i]
@@ -240,7 +240,7 @@ fn load_hazards(game : @types.Game, world : Int, level : Int) -> Unit {
 }
 
 ///|
-fn load_enemies(game : @types.Game, world : Int, level : Int) -> Unit {
+fn @types.Game::load_enemies(game : @types.Game, world : Int, level : Int) -> Unit {
   let enemy_data = @levels.get_enemy_data(world, level)
   for i = 0; i < enemy_data.length() && i < @types.max_enemies; i = i + 1 {
     let ed = enemy_data[i]
@@ -294,7 +294,7 @@ fn load_enemies(game : @types.Game, world : Int, level : Int) -> Unit {
 }
 
 ///|
-fn load_powerups(game : @types.Game, world : Int, level : Int) -> Unit {
+fn @types.Game::load_powerups(game : @types.Game, world : Int, level : Int) -> Unit {
   let pu_data = @levels.get_powerup_data(world, level)
   for i = 0; i < pu_data.length() && i < @types.max_powerups; i = i + 1 {
     let pd = pu_data[i]
@@ -311,7 +311,7 @@ fn load_powerups(game : @types.Game, world : Int, level : Int) -> Unit {
 }
 
 ///|
-fn load_decorations(game : @types.Game, world : Int, level : Int) -> Unit {
+fn @types.Game::load_decorations(game : @types.Game, world : Int, level : Int) -> Unit {
   let deco_data = @levels.get_decoration_data(world, level)
   for i = 0; i < deco_data.length() && i < @types.max_decorations; i = i + 1 {
     let dd = deco_data[i]
@@ -339,7 +339,7 @@ fn load_decorations(game : @types.Game, world : Int, level : Int) -> Unit {
 }
 
 ///|
-fn load_checkpoints(game : @types.Game, world : Int, level : Int) -> Unit {
+fn @types.Game::load_checkpoints(game : @types.Game, world : Int, level : Int) -> Unit {
   let plat_data = @levels.get_platform_data(world, level)
   let mut cp_count = 0
   for i = 0

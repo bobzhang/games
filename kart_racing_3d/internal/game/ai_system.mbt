@@ -138,7 +138,7 @@ pub fn update_ai_karts(game : @types.Game, dt : Float) -> Unit {
       kart.shield_timer -= dt
     }
     // AI item usage strategy
-    ai_use_item(game, i, dt)
+    game.ai_use_item(i, dt)
     // Slight random variation for natural movement
     if game.frame_counter % 60 == i {
       kart.steer = kart.steer + @types.rand_rangef(game, -0.15, 0.15)
@@ -180,7 +180,7 @@ fn update_ai_timers(kart : @types.Kart, dt : Float) -> Unit {
 // AI item usage strategy
 
 ///|
-fn ai_use_item(game : @types.Game, kart_idx : Int, dt : Float) -> Unit {
+fn @types.Game::ai_use_item(game : @types.Game, kart_idx : Int, dt : Float) -> Unit {
   let kart = game.karts[kart_idx]
   if kart.held_powerup == @types.powerup_none {
     return
@@ -205,7 +205,7 @@ fn ai_use_item(game : @types.Game, kart_idx : Int, dt : Float) -> Unit {
     turn < 0.5
   } else if item == @types.powerup_shield {
     // Use shield when in danger (near opponents)
-    has_nearby_opponent(game, kart_idx, 15.0)
+    game.has_nearby_opponent(kart_idx, 15.0)
   } else if item == @types.powerup_missile {
     // Fire when someone is ahead and fairly close
     let target = @types.find_target_ahead(game, kart_idx)
@@ -222,13 +222,13 @@ fn ai_use_item(game : @types.Game, kart_idx : Int, dt : Float) -> Unit {
     }
   } else if item == @types.powerup_oil_slick || item == @types.powerup_banana {
     // Drop behind when someone is close behind
-    has_nearby_opponent_behind(game, kart_idx, 10.0)
+    game.has_nearby_opponent_behind(kart_idx, 10.0)
   } else if item == @types.powerup_lightning {
     // Use when in lower positions
     kart.place >= 4
   } else if item == @types.powerup_star {
     // Use when near opponents to ram them
-    has_nearby_opponent(game, kart_idx, 12.0) || kart.place >= 3
+    game.has_nearby_opponent(kart_idx, 12.0) || kart.place >= 3
   } else {
     true
   }
@@ -248,7 +248,7 @@ fn ai_use_item(game : @types.Game, kart_idx : Int, dt : Float) -> Unit {
 // Check if any opponent is nearby
 
 ///|
-fn has_nearby_opponent(
+fn @types.Game::has_nearby_opponent(
   game : @types.Game,
   kart_idx : Int,
   range : Float,
@@ -272,7 +272,7 @@ fn has_nearby_opponent(
 // Check if any opponent is nearby behind
 
 ///|
-fn has_nearby_opponent_behind(
+fn @types.Game::has_nearby_opponent_behind(
   game : @types.Game,
   kart_idx : Int,
   range : Float,

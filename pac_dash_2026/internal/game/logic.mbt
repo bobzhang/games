@@ -1,6 +1,6 @@
 ///|
 /// Procedurally generates the maze wall layout using a fixed pattern into `game.walls`.
-fn build_walls(game : @types.Game) -> Unit {
+fn @types.Game::build_walls(game : @types.Game) -> Unit {
   for y in 0..<@types.maze_rows {
     for x in 0..<@types.maze_cols {
       let mut wall = false
@@ -41,7 +41,7 @@ fn build_walls(game : @types.Game) -> Unit {
 
 ///|
 /// Fills all open maze tiles with pellets, clears spawn zones, and places power pellets at corners.
-fn reset_pellets(game : @types.Game) -> Unit {
+fn @types.Game::reset_pellets(game : @types.Game) -> Unit {
   game.pellets_left = 0
   for y in 0..<@types.maze_rows {
     for x in 0..<@types.maze_cols {
@@ -91,7 +91,7 @@ fn reset_pellets(game : @types.Game) -> Unit {
 
 ///|
 /// Resets the player and all ghosts to their starting positions and clears movement state.
-fn reset_positions(game : @types.Game) -> Unit {
+fn @types.Game::reset_positions(game : @types.Game) -> Unit {
   game.player_x = @types.maze_cols / 2
   game.player_y = @types.maze_rows - 4
   game.dir_x = 0
@@ -158,9 +158,9 @@ pub fn init_game(game : @types.Game) -> Unit {
   game.game_over = false
   game.win = false
 
-  build_walls(game)
-  reset_pellets(game)
-  reset_positions(game)
+  game.build_walls()
+  game.reset_pellets()
+  game.reset_positions()
 }
 
 ///|
@@ -171,7 +171,7 @@ fn is_reverse(dx : Int, dy : Int, ox : Int, oy : Int) -> Bool {
 
 ///|
 /// Consumes any pellet at the player's current tile, updating score and triggering frightened mode if it was a power pellet.
-fn maybe_consume_pellet(game : @types.Game) -> Unit {
+fn @types.Game::maybe_consume_pellet(game : @types.Game) -> Unit {
   let idx = @types.map_index(game.player_x, game.player_y)
   match game.pellets[idx] {
     1 => {
@@ -200,8 +200,8 @@ fn maybe_consume_pellet(game : @types.Game) -> Unit {
 
 ///|
 /// Advances the player one tile step, applying buffered direction input and consuming any pellet.
-fn step_player(game : @types.Game) -> Unit {
-  try_set_player_wanted_dir(game)
+fn @types.Game::step_player(game : @types.Game) -> Unit {
+  game.try_set_player_wanted_dir()
 
   let wx = game.player_x + game.want_x
   let wy = game.player_y + game.want_y
@@ -217,12 +217,12 @@ fn step_player(game : @types.Game) -> Unit {
     game.player_y = ny
   }
 
-  maybe_consume_pellet(game)
+  game.maybe_consume_pellet()
 }
 
 ///|
 /// Returns the target tile for a ghost based on current mode (chase, scatter, or frightened random).
-fn choose_ghost_target(game : @types.Game, ghost : @types.Ghost) -> (Int, Int) {
+fn @types.Game::choose_ghost_target(game : @types.Game, ghost : @types.Ghost) -> (Int, Int) {
   if game.frightened_timer > 0.0 {
     let tx = @raylib.get_random_value(1, @types.maze_cols - 2)
     let ty = @raylib.get_random_value(1, @types.maze_rows - 2)
@@ -236,8 +236,8 @@ fn choose_ghost_target(game : @types.Game, ghost : @types.Ghost) -> (Int, Int) {
 
 ///|
 /// Moves a ghost one tile toward its target using Manhattan-distance minimisation, without reversing direction.
-fn step_ghost(game : @types.Game, ghost : @types.Ghost) -> Unit {
-  let (target_x, target_y) = choose_ghost_target(game, ghost)
+fn @types.Game::step_ghost(game : @types.Game, ghost : @types.Ghost) -> Unit {
+  let (target_x, target_y) = game.choose_ghost_target(ghost)
   let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
   let mut best_dx = ghost.dir_x
@@ -283,7 +283,7 @@ fn step_ghost(game : @types.Game, ghost : @types.Ghost) -> Unit {
 
 ///|
 /// Checks for player-ghost collisions; eats frightened ghosts for score or costs a life otherwise.
-fn resolve_collisions(game : @types.Game) -> Unit {
+fn @types.Game::resolve_collisions(game : @types.Game) -> Unit {
   for ghost in game.ghosts {
     if ghost.x == game.player_x && ghost.y == game.player_y {
       if game.frightened_timer > 0.0 {
@@ -299,7 +299,7 @@ fn resolve_collisions(game : @types.Game) -> Unit {
           game.win = false
           return
         }
-        reset_positions(game)
+        game.reset_positions()
         return
       }
     }
@@ -308,7 +308,7 @@ fn resolve_collisions(game : @types.Game) -> Unit {
 
 ///|
 /// Ticks the frightened or chase/scatter phase timer and switches modes when the timer expires.
-fn update_phase(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_phase(game : @types.Game, dt : Float) -> Unit {
   if game.frightened_timer > 0.0 {
     game.frightened_timer = game.frightened_timer - dt
     if game.frightened_timer < 0.0 {
@@ -338,14 +338,14 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     return
   }
 
-  update_phase(game, dt)
+  game.update_phase(dt)
   game.step_timer_player = game.step_timer_player + dt
   game.step_timer_ghost = game.step_timer_ghost + dt
 
   if game.step_timer_player >= 0.11 {
     game.step_timer_player = game.step_timer_player - 0.11
-    step_player(game)
-    resolve_collisions(game)
+    game.step_player()
+    game.resolve_collisions()
   }
 
   let ghost_step : Float = if game.frightened_timer > 0.0 {
@@ -356,8 +356,8 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   if game.step_timer_ghost >= ghost_step {
     game.step_timer_ghost = game.step_timer_ghost - ghost_step
     for ghost in game.ghosts {
-      step_ghost(game, ghost)
+      game.step_ghost(ghost)
     }
-    resolve_collisions(game)
+    game.resolve_collisions()
   }
 }

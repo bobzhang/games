@@ -2,35 +2,35 @@
 /// Draws the active 2D UI layer for the current game state and overlays score popups.
 pub fn draw_ui(game : @types.Game) -> Unit {
   if game.state == @types.state_menu {
-    draw_menu(game)
+    game.draw_menu()
   } else if game.state == @types.state_playing {
-    draw_hud(game)
+    game.draw_hud()
   } else if game.state == @types.state_paused {
-    draw_hud(game)
-    draw_pause_overlay(game)
+    game.draw_hud()
+    game.draw_pause_overlay()
   } else if game.state == @types.state_level_complete {
-    draw_hud(game)
-    draw_level_complete(game)
+    game.draw_hud()
+    game.draw_level_complete()
   } else if game.state == @types.state_game_over {
-    draw_game_over(game)
+    game.draw_game_over()
   } else if game.state == @types.state_world_select {
-    draw_world_select(game)
+    game.draw_world_select()
   } else if game.state == @types.state_campaign_complete {
-    draw_campaign_complete(game)
+    game.draw_campaign_complete()
   } else if game.state == @types.state_level_select {
-    draw_level_select(game)
+    game.draw_level_select()
   } else if game.state == @types.state_death_anim {
-    draw_hud(game)
-    draw_death_overlay(game)
+    game.draw_hud()
+    game.draw_death_overlay()
   } else if game.state == @types.state_world_intro {
-    draw_world_intro(game)
+    game.draw_world_intro()
   }
   // Score flies (drawn over everything)
-  draw_score_flies(game)
+  game.draw_score_flies()
 }
 
 ///|
-fn draw_menu(game : @types.Game) -> Unit {
+fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   let bg = @levels.world_bg_color(0)
   @raylib.draw_rectangle(
     0,
@@ -140,7 +140,7 @@ fn draw_menu(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   // Top bar background
   @raylib.draw_rectangle(
     0,
@@ -188,7 +188,7 @@ fn draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(@types.star_r, @types.star_g, @types.star_b, 255),
   )
   // Lives
-  draw_lives(game)
+  game.draw_lives()
   // Score
   @raylib.draw_text(
     "Score: \{game.score}",
@@ -199,11 +199,11 @@ fn draw_hud(game : @types.Game) -> Unit {
   )
   // Combo bar
   if game.combo_count > 0 {
-    draw_combo_bar(game)
+    game.draw_combo_bar()
   }
   // Power-up indicator
   if game.powerup_type >= 0 {
-    draw_powerup_indicator(game)
+    game.draw_powerup_indicator()
   }
   // Level time
   let time_secs = game.level_time.to_int()
@@ -220,7 +220,7 @@ fn draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(180, 180, 200, 200),
   )
   // Minimap
-  draw_minimap(game)
+  game.draw_minimap()
   // Bottom controls
   @raylib.draw_rectangle(
     0,
@@ -239,7 +239,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_lives(game : @types.Game) -> Unit {
+fn @types.Game::draw_lives(game : @types.Game) -> Unit {
   let start_x = 680
   let y = 6
   @raylib.draw_text(
@@ -270,7 +270,7 @@ fn draw_lives(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_combo_bar(game : @types.Game) -> Unit {
+fn @types.Game::draw_combo_bar(game : @types.Game) -> Unit {
   let bar_x = 10
   let bar_y = @types.hud_height + 5
   let bar_w = @types.hud_combo_bar_width
@@ -314,7 +314,7 @@ fn draw_combo_bar(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_powerup_indicator(game : @types.Game) -> Unit {
+fn @types.Game::draw_powerup_indicator(game : @types.Game) -> Unit {
   let x = 10
   let y = @types.hud_height + 22
   let name : String = if game.powerup_type == @types.powerup_double_jump {
@@ -345,7 +345,7 @@ fn draw_powerup_indicator(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_minimap(game : @types.Game) -> Unit {
+fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
   let mm_size = @types.minimap_size
   let mm_margin = @types.minimap_margin
   let mm_x = @types.screen_width - mm_size - mm_margin
@@ -448,7 +448,7 @@ fn draw_minimap(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_pause_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_pause_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -509,7 +509,7 @@ fn draw_pause_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_level_complete(game : @types.Game) -> Unit {
+fn @types.Game::draw_level_complete(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -631,7 +631,7 @@ fn draw_star_rating(x : Int, y : Int, filled : Int, total : Int) -> Unit {
 }
 
 ///|
-fn draw_game_over(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
   ignore(game)
   @raylib.draw_rectangle(
     0,
@@ -705,7 +705,7 @@ fn draw_game_over(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_death_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_death_overlay(game : @types.Game) -> Unit {
   let progress : Float = game.death_timer / @types.death_anim_time
   let alpha = (progress * 100.0).to_int()
   @raylib.draw_rectangle(
@@ -718,7 +718,7 @@ fn draw_death_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_world_select(game : @types.Game) -> Unit {
+fn @types.Game::draw_world_select(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -841,7 +841,7 @@ fn draw_world_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_level_select(game : @types.Game) -> Unit {
+fn @types.Game::draw_level_select(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -944,7 +944,7 @@ fn draw_level_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_world_intro(game : @types.Game) -> Unit {
+fn @types.Game::draw_world_intro(game : @types.Game) -> Unit {
   let progress : Float = 1.0 -
     game.world_intro_timer / @types.world_intro_duration
   // Background
@@ -1015,7 +1015,7 @@ fn draw_world_intro(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_campaign_complete(game : @types.Game) -> Unit {
+fn @types.Game::draw_campaign_complete(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -1101,7 +1101,7 @@ fn draw_campaign_complete(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_score_flies(game : @types.Game) -> Unit {
+fn @types.Game::draw_score_flies(game : @types.Game) -> Unit {
   for sf in game.score_flies {
     if not(sf.active) {
       continue

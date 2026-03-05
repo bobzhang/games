@@ -1,6 +1,6 @@
 ///|
 /// Configures the first campaign level: East Wing Silent Sweep, with walls, artifacts, and guard patrols.
-fn setup_level_1(game : @types.Game) -> Unit {
+fn @types.Game::setup_level_1(game : @types.Game) -> Unit {
   game.level_name = "East Wing Silent Sweep"
   game.player_x = 2
   game.player_y = 11
@@ -38,7 +38,7 @@ fn setup_level_1(game : @types.Game) -> Unit {
 
 ///|
 /// Configures the second campaign level: Laser Hall Maze, with a corridor maze and three guards.
-fn setup_level_2(game : @types.Game) -> Unit {
+fn @types.Game::setup_level_2(game : @types.Game) -> Unit {
   game.level_name = "Laser Hall Maze"
   game.player_x = 2
   game.player_y = 2
@@ -90,7 +90,7 @@ fn setup_level_2(game : @types.Game) -> Unit {
 
 ///|
 /// Configures the third campaign level: Grand Vault Orbit, with complex partitions and four guards.
-fn setup_level_3(game : @types.Game) -> Unit {
+fn @types.Game::setup_level_3(game : @types.Game) -> Unit {
   game.level_name = "Grand Vault Orbit"
   game.player_x = 1
   game.player_y = 12
@@ -151,7 +151,7 @@ fn setup_level_3(game : @types.Game) -> Unit {
 
 ///|
 /// Clears entities, fills the board as floor, adds border walls, and calls the level-specific setup function.
-fn load_level(game : @types.Game, level_idx : Int) -> Unit {
+fn @types.Game::load_level(game : @types.Game, level_idx : Int) -> Unit {
   let safe_idx = level_idx.clamp(min=0, max=game.level_count - 1)
   game.level_index = safe_idx
 
@@ -160,11 +160,11 @@ fn load_level(game : @types.Game, level_idx : Int) -> Unit {
   @types.add_border_walls(game)
 
   if safe_idx == 0 {
-    setup_level_1(game)
+    game.setup_level_1()
   } else if safe_idx == 1 {
-    setup_level_2(game)
+    game.setup_level_2()
   } else {
-    setup_level_3(game)
+    game.setup_level_3()
   }
 
   game.player_step_t = 0.0
@@ -175,33 +175,33 @@ fn load_level(game : @types.Game, level_idx : Int) -> Unit {
 ///|
 /// Loads the first level and returns the game to title state.
 pub fn reset_to_title(game : @types.Game) -> Unit {
-  load_level(game, 0)
+  game.load_level(0)
   game.state = Title
   game.state_t = 0.0
 }
 
 ///|
 /// Loads level 0 and transitions the game to the play state.
-fn start_campaign(game : @types.Game) -> Unit {
-  load_level(game, 0)
+fn @types.Game::start_campaign(game : @types.Game) -> Unit {
+  game.load_level(0)
   game.state = Play
   game.state_t = 0.0
 }
 
 ///|
 /// Reloads the current level index and restarts play.
-fn retry_level(game : @types.Game) -> Unit {
-  load_level(game, game.level_index)
+fn @types.Game::retry_level(game : @types.Game) -> Unit {
+  game.load_level(game.level_index)
   game.state = Play
   game.state_t = 0.0
 }
 
 ///|
 /// Advances to the next level or transitions to campaign-clear if all levels are done.
-fn go_to_next_level(game : @types.Game) -> Unit {
+fn @types.Game::go_to_next_level(game : @types.Game) -> Unit {
   let next_level = game.level_index + 1
   if next_level < game.level_count {
-    load_level(game, next_level)
+    game.load_level(next_level)
     game.state = Play
     game.state_t = 0.0
   } else {
@@ -212,15 +212,15 @@ fn go_to_next_level(game : @types.Game) -> Unit {
 
 ///|
 /// Loads the next level in a cycle while keeping the title state, to preview the board.
-fn preview_next_title_level(game : @types.Game) -> Unit {
+fn @types.Game::preview_next_title_level(game : @types.Game) -> Unit {
   let next_level = (game.level_index + 1) % game.level_count
-  load_level(game, next_level)
+  game.load_level(next_level)
   game.state = Title
 }
 
 ///|
 /// Moves the player one step in the given direction if the target cell is walkable and the step timer is ready.
-fn try_move_player(game : @types.Game, dir : @types.Direction) -> Unit {
+fn @types.Game::try_move_player(game : @types.Game, dir : @types.Direction) -> Unit {
   match dir {
     DirNone => return
     _ => ()
@@ -241,7 +241,7 @@ fn try_move_player(game : @types.Game, dir : @types.Direction) -> Unit {
 
 ///|
 /// Marks any artifact at the player's current position as taken and increments the collection counter.
-fn collect_artifacts(game : @types.Game) -> Unit {
+fn @types.Game::collect_artifacts(game : @types.Game) -> Unit {
   for artifact in game.artifacts {
     if artifact.taken {
       continue
@@ -255,7 +255,7 @@ fn collect_artifacts(game : @types.Game) -> Unit {
 
 ///|
 /// Steps a guard one tile toward its next patrol waypoint.
-fn advance_guard_once(game : @types.Game, guard_idx : Int) -> Unit {
+fn @types.Game::advance_guard_once(game : @types.Game, guard_idx : Int) -> Unit {
   let path_len = game.guards[guard_idx].path.length()
   if path_len == 0 {
     return
@@ -310,27 +310,27 @@ fn advance_guard_once(game : @types.Game, guard_idx : Int) -> Unit {
 
 ///|
 /// Advances all guard step timers and calls `advance_guard_once` whenever the interval elapses.
-fn update_guards(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_guards(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.guards.length() {
     game.guards[i].step_timer = game.guards[i].step_timer - dt
     while game.guards[i].step_timer <= 0.0 {
       game.guards[i].step_timer = game.guards[i].step_timer +
         @types.guard_step_interval
-      advance_guard_once(game, i)
+      game.advance_guard_once(i)
     }
   }
 }
 
 ///|
 /// Returns true when the current level is the last one in the campaign.
-fn current_level_is_last(game : @types.Game) -> Bool {
+fn @types.Game::current_level_is_last(game : @types.Game) -> Bool {
   game.level_index + 1 >= game.level_count
 }
 
 ///|
 /// Transitions to the campaign-clear or win state depending on whether this is the final level.
-fn complete_level(game : @types.Game) -> Unit {
-  if current_level_is_last(game) {
+fn @types.Game::complete_level(game : @types.Game) -> Unit {
+  if game.current_level_is_last() {
     game.state = CampaignClear
   } else {
     game.state = Win
@@ -340,7 +340,7 @@ fn complete_level(game : @types.Game) -> Unit {
 
 ///|
 /// Transitions to the lose state and starts the alarm flash timer.
-fn trigger_loss(game : @types.Game) -> Unit {
+fn @types.Game::trigger_loss(game : @types.Game) -> Unit {
   game.state = Lose
   game.state_t = 0.0
   game.alarm_t = @types.alarm_flash_time
@@ -348,13 +348,13 @@ fn trigger_loss(game : @types.Game) -> Unit {
 
 ///|
 /// Runs one frame of active play: handles restart input, advances guards, moves the player, checks collection and exit, and tests for detection.
-fn update_play(
+fn @types.Game::update_play(
   game : @types.Game,
   dt : Float,
   input : @types.FrameInput,
 ) -> Unit {
   if input.restart_pressed {
-    retry_level(game)
+    game.retry_level()
     return
   }
 
@@ -365,72 +365,72 @@ fn update_play(
     }
   }
 
-  update_guards(game, dt)
-  try_move_player(game, input.move_dir)
-  collect_artifacts(game)
+  game.update_guards(dt)
+  game.try_move_player(input.move_dir)
+  game.collect_artifacts()
 
   if @types.exit_unlocked(game) &&
     game.player_x == game.exit_x &&
     game.player_y == game.exit_y {
-    complete_level(game)
+    game.complete_level()
     return
   }
 
   if @types.player_spotted(game) {
-    trigger_loss(game)
+    game.trigger_loss()
   }
 }
 
 ///|
 /// Returns true when enough time has elapsed since the last state change to allow menu actions.
-fn actions_ready(game : @types.Game) -> Bool {
+fn @types.Game::actions_ready(game : @types.Game) -> Bool {
   game.state_t >= @types.menu_action_delay
 }
 
 ///|
 /// Handles title-screen input to start the campaign or preview the next level.
-fn update_title(game : @types.Game, input : @types.FrameInput) -> Unit {
-  if not(actions_ready(game)) {
+fn @types.Game::update_title(game : @types.Game, input : @types.FrameInput) -> Unit {
+  if not(game.actions_ready()) {
     return
   }
 
   if input.start_pressed {
-    start_campaign(game)
+    game.start_campaign()
   } else if input.next_pressed {
-    preview_next_title_level(game)
+    game.preview_next_title_level()
   }
 }
 
 ///|
 /// Handles win-screen input to advance to the next level or retry.
-fn update_win(game : @types.Game, input : @types.FrameInput) -> Unit {
-  if not(actions_ready(game)) {
+fn @types.Game::update_win(game : @types.Game, input : @types.FrameInput) -> Unit {
+  if not(game.actions_ready()) {
     return
   }
 
   if input.next_pressed {
-    go_to_next_level(game)
+    game.go_to_next_level()
   } else if input.retry_pressed || input.restart_pressed {
-    retry_level(game)
+    game.retry_level()
   }
 }
 
 ///|
 /// Handles lose-screen input to retry the current level.
-fn update_lose(game : @types.Game, input : @types.FrameInput) -> Unit {
-  if not(actions_ready(game)) {
+fn @types.Game::update_lose(game : @types.Game, input : @types.FrameInput) -> Unit {
+  if not(game.actions_ready()) {
     return
   }
 
   if input.retry_pressed || input.next_pressed || input.start_pressed {
-    retry_level(game)
+    game.retry_level()
   }
 }
 
 ///|
 /// Handles campaign-clear input to return to the title screen.
-fn update_campaign_clear(game : @types.Game, input : @types.FrameInput) -> Unit {
-  if not(actions_ready(game)) {
+fn @types.Game::update_campaign_clear(game : @types.Game, input : @types.FrameInput) -> Unit {
+  if not(game.actions_ready()) {
     return
   }
 
@@ -442,7 +442,7 @@ fn update_campaign_clear(game : @types.Game, input : @types.FrameInput) -> Unit 
 ///|
 /// Advances one frame of museum gameplay and campaign menu state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
-  let input = gather_input(game)
+  let input = game.gather_input()
 
   let mut capped_dt = dt
   if capped_dt < 0.0 {
@@ -463,10 +463,10 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   }
 
   match game.state {
-    Title => update_title(game, input)
-    Play => update_play(game, capped_dt, input)
-    Win => update_win(game, input)
-    Lose => update_lose(game, input)
-    CampaignClear => update_campaign_clear(game, input)
+    Title => game.update_title(input)
+    Play => game.update_play(capped_dt, input)
+    Win => game.update_win(input)
+    Lose => game.update_lose(input)
+    CampaignClear => game.update_campaign_clear(input)
   }
 }

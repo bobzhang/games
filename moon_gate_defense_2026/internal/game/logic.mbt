@@ -1,13 +1,13 @@
 ///|
 /// Sets the HUD status text and its display lifetime in seconds.
-fn set_status(game : @types.Game, text : String, ttl : Float) -> Unit {
+fn @types.Game::set_status(game : @types.Game, text : String, ttl : Float) -> Unit {
   game.status_text = text
   game.status_t = ttl
 }
 
 ///|
 /// Deactivates all node slots, resetting them to default values.
-fn clear_nodes(game : @types.Game) -> Unit {
+fn @types.Game::clear_nodes(game : @types.Game) -> Unit {
   for i in 0..<game.nodes.length() {
     game.nodes[i] = @types.Node::new()
   }
@@ -15,7 +15,7 @@ fn clear_nodes(game : @types.Game) -> Unit {
 
 ///|
 /// Deactivates all enemy slots, resetting them to default values.
-fn clear_enemies(game : @types.Game) -> Unit {
+fn @types.Game::clear_enemies(game : @types.Game) -> Unit {
   for i in 0..<game.enemies.length() {
     game.enemies[i] = @types.Enemy::new()
   }
@@ -23,7 +23,7 @@ fn clear_enemies(game : @types.Game) -> Unit {
 
 ///|
 /// Deactivates all bolt projectile slots, resetting them to default values.
-fn clear_bolts(game : @types.Game) -> Unit {
+fn @types.Game::clear_bolts(game : @types.Game) -> Unit {
   for i in 0..<game.bolts.length() {
     game.bolts[i] = @types.Bolt::new()
   }
@@ -31,7 +31,7 @@ fn clear_bolts(game : @types.Game) -> Unit {
 
 ///|
 /// Deactivates all pulse effect slots, resetting them to default values.
-fn clear_pulses(game : @types.Game) -> Unit {
+fn @types.Game::clear_pulses(game : @types.Game) -> Unit {
   for i in 0..<game.pulses.length() {
     game.pulses[i] = @types.PulseFx::new()
   }
@@ -39,7 +39,7 @@ fn clear_pulses(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the index of the first inactive node slot, or -1 if the pool is full.
-fn alloc_node(game : @types.Game) -> Int {
+fn @types.Game::alloc_node(game : @types.Game) -> Int {
   for i in 0..<game.nodes.length() {
     if not(game.nodes[i].active) {
       return i
@@ -50,7 +50,7 @@ fn alloc_node(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive enemy slot, or -1 if the pool is full.
-fn alloc_enemy(game : @types.Game) -> Int {
+fn @types.Game::alloc_enemy(game : @types.Game) -> Int {
   for i in 0..<game.enemies.length() {
     if not(game.enemies[i].active) {
       return i
@@ -61,7 +61,7 @@ fn alloc_enemy(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive bolt slot, or -1 if the pool is full.
-fn alloc_bolt(game : @types.Game) -> Int {
+fn @types.Game::alloc_bolt(game : @types.Game) -> Int {
   for i in 0..<game.bolts.length() {
     if not(game.bolts[i].active) {
       return i
@@ -72,7 +72,7 @@ fn alloc_bolt(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive pulse slot, or -1 if the pool is full.
-fn alloc_pulse(game : @types.Game) -> Int {
+fn @types.Game::alloc_pulse(game : @types.Game) -> Int {
   for i in 0..<game.pulses.length() {
     if not(game.pulses[i].active) {
       return i
@@ -83,7 +83,7 @@ fn alloc_pulse(game : @types.Game) -> Int {
 
 ///|
 /// Spawns a ring pulse effect at the given world position with the specified radius, lifetime, and kind.
-fn emit_pulse(
+fn @types.Game::emit_pulse(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -91,7 +91,7 @@ fn emit_pulse(
   life : Float,
   kind : Int,
 ) -> Unit {
-  let i = alloc_pulse(game)
+  let i = game.alloc_pulse()
   if i < 0 {
     return
   }
@@ -109,7 +109,7 @@ fn emit_pulse(
 
 ///|
 /// Returns the number of currently active enemies.
-fn active_enemy_count(game : @types.Game) -> Int {
+fn @types.Game::active_enemy_count(game : @types.Game) -> Int {
   let mut count = 0
   for enemy in game.enemies {
     if enemy.active {
@@ -121,7 +121,7 @@ fn active_enemy_count(game : @types.Game) -> Int {
 
 ///|
 /// Increments the wave counter, queues enemy spawns, awards wave energy, and sets status text.
-fn begin_next_wave(game : @types.Game) -> Unit {
+fn @types.Game::begin_next_wave(game : @types.Game) -> Unit {
   game.wave = game.wave + 1
   game.pending_spawns = @types.wave_spawn_count(game.wave)
   game.spawn_cd = 0.35
@@ -130,16 +130,16 @@ fn begin_next_wave(game : @types.Game) -> Unit {
     @types.energy_max,
     game.energy + @types.wave_energy_bonus + Float::from_int(game.wave) * 1.5,
   )
-  set_status(game, "Wave " + game.wave.to_string() + " incoming", 1.5)
+  game.set_status("Wave " + game.wave.to_string() + " incoming", 1.5)
 }
 
 ///|
 /// Resets all pools and counters, then begins wave 1 of a new defense run.
-fn start_new_run(game : @types.Game) -> Unit {
-  clear_nodes(game)
-  clear_enemies(game)
-  clear_bolts(game)
-  clear_pulses(game)
+fn @types.Game::start_new_run(game : @types.Game) -> Unit {
+  game.clear_nodes()
+  game.clear_enemies()
+  game.clear_bolts()
+  game.clear_pulses()
 
   game.state = @types.state_playing
   game.score = 0
@@ -159,13 +159,13 @@ fn start_new_run(game : @types.Game) -> Unit {
   game.cursor_y = @types.gate_gy
   game.cursor_dir = @types.dir_left
 
-  set_status(game, "Deploy guardians and hold the moon gate", 1.7)
-  begin_next_wave(game)
+  game.set_status("Deploy guardians and hold the moon gate", 1.7)
+  game.begin_next_wave()
 }
 
 ///|
 /// Transitions to the game-over state, finalises the best score, and sets status text.
-fn enter_game_over(game : @types.Game) -> Unit {
+fn @types.Game::enter_game_over(game : @types.Game) -> Unit {
   if game.state == @types.state_game_over {
     return
   }
@@ -181,12 +181,12 @@ fn enter_game_over(game : @types.Game) -> Unit {
     game.best_score = game.score
   }
 
-  set_status(game, "The moon gate has fallen", 2.0)
+  game.set_status("The moon gate has fallen", 2.0)
 }
 
 ///|
 /// Returns the index of the node at grid cell `(gx, gy)`, or -1 if none exists.
-fn find_node_at(game : @types.Game, gx : Int, gy : Int) -> Int {
+fn @types.Game::find_node_at(game : @types.Game, gx : Int, gy : Int) -> Int {
   for i in 0..<game.nodes.length() {
     if game.nodes[i].active && game.nodes[i].gx == gx && game.nodes[i].gy == gy {
       return i
@@ -197,7 +197,7 @@ fn find_node_at(game : @types.Game, gx : Int, gy : Int) -> Int {
 
 ///|
 /// Moves the placement cursor one cell in the input direction and updates the last-moved direction.
-fn move_cursor(game : @types.Game) -> Unit {
+fn @types.Game::move_cursor(game : @types.Game) -> Unit {
   if game.input_move_x < 0 {
     game.cursor_x = (game.cursor_x - 1).clamp(min=0, max=@types.grid_cols - 1)
     game.cursor_dir = @types.dir_left
@@ -217,23 +217,23 @@ fn move_cursor(game : @types.Game) -> Unit {
 
 ///|
 /// Builds a new guardian node, rotates or upgrades an existing one at the cursor cell, spending energy as needed.
-fn try_build_or_upgrade(game : @types.Game) -> Unit {
+fn @types.Game::try_build_or_upgrade(game : @types.Game) -> Unit {
   let gx = game.cursor_x
   let gy = game.cursor_y
 
   if @types.is_gate_cell(gx, gy) {
-    set_status(game, "Gate tile reserved", 0.5)
+    game.set_status("Gate tile reserved", 0.5)
     return
   }
 
-  let node_index = find_node_at(game, gx, gy)
+  let node_index = game.find_node_at(gx, gy)
   if node_index < 0 {
     if game.energy < @types.node_build_cost {
-      set_status(game, "Not enough energy", 0.6)
+      game.set_status("Not enough energy", 0.6)
       return
     }
 
-    let slot = alloc_node(game)
+    let slot = game.alloc_node()
     if slot < 0 {
       return
     }
@@ -249,23 +249,21 @@ fn try_build_or_upgrade(game : @types.Game) -> Unit {
     }
 
     game.energy = game.energy - @types.node_build_cost
-    emit_pulse(
-      game,
+    game.emit_pulse(
       @types.cell_center_x(gx),
       @types.cell_center_y(gy),
       14.0,
       0.38,
       0,
     )
-    set_status(game, "Guardian deployed", 0.5)
+    game.set_status("Guardian deployed", 0.5)
     return
   }
 
   if game.nodes[node_index].facing != game.cursor_dir {
     game.nodes[node_index].facing = game.cursor_dir
     game.nodes[node_index].pulse = 0.6
-    emit_pulse(
-      game,
+    game.emit_pulse(
       @types.cell_center_x(gx),
       @types.cell_center_y(gy),
       12.0,
@@ -280,8 +278,7 @@ fn try_build_or_upgrade(game : @types.Game) -> Unit {
     let upgrade_cost = @types.node_upgrade_cost(next_level)
 
     if game.energy < upgrade_cost {
-      set_status(
-        game,
+      game.set_status(
         "Need " + upgrade_cost.to_int().to_string() + " energy",
         0.6,
       )
@@ -295,15 +292,14 @@ fn try_build_or_upgrade(game : @types.Game) -> Unit {
       game.nodes[node_index].cooldown,
       0.1,
     )
-    emit_pulse(
-      game,
+    game.emit_pulse(
       @types.cell_center_x(gx),
       @types.cell_center_y(gy),
       16.0,
       0.42,
       1,
     )
-    set_status(game, "Node upgraded to L" + next_level.to_string(), 0.7)
+    game.set_status("Node upgraded to L" + next_level.to_string(), 0.7)
     return
   }
 
@@ -313,10 +309,10 @@ fn try_build_or_upgrade(game : @types.Game) -> Unit {
 
 ///|
 /// Removes the node at the cursor cell and refunds its energy value.
-fn try_sell_node(game : @types.Game) -> Unit {
-  let node_index = find_node_at(game, game.cursor_x, game.cursor_y)
+fn @types.Game::try_sell_node(game : @types.Game) -> Unit {
+  let node_index = game.find_node_at(game.cursor_x, game.cursor_y)
   if node_index < 0 {
-    set_status(game, "No node on this tile", 0.5)
+    game.set_status("No node on this tile", 0.5)
     return
   }
 
@@ -324,21 +320,20 @@ fn try_sell_node(game : @types.Game) -> Unit {
   game.energy = @types.minf(@types.energy_max, game.energy + refund)
   game.nodes[node_index] = @types.Node::new()
 
-  emit_pulse(
-    game,
+  game.emit_pulse(
     @types.cell_center_x(game.cursor_x),
     @types.cell_center_y(game.cursor_y),
     20.0,
     0.45,
     2,
   )
-  set_status(game, "Salvaged +" + refund.to_int().to_string(), 0.55)
+  game.set_status("Salvaged +" + refund.to_int().to_string(), 0.55)
 }
 
 ///|
 /// Allocates a new enemy at a random screen edge with stats scaled to the current wave.
-fn spawn_enemy(game : @types.Game) -> Bool {
-  let slot = alloc_enemy(game)
+fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
+  let slot = game.alloc_enemy()
   if slot < 0 {
     return false
   }
@@ -429,7 +424,7 @@ fn spawn_enemy(game : @types.Game) -> Bool {
 
 ///|
 /// Manages the wave intro delay, per-spawn cooldown, and triggers the next wave when all enemies are defeated.
-fn update_wave_spawner(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_wave_spawner(game : @types.Game, dt : Float) -> Unit {
   if game.wave_delay > 0.0 {
     game.wave_delay = @types.maxf(0.0, game.wave_delay - dt)
   }
@@ -441,7 +436,7 @@ fn update_wave_spawner(game : @types.Game, dt : Float) -> Unit {
 
     game.spawn_cd = game.spawn_cd - dt
     if game.spawn_cd <= 0.0 {
-      if spawn_enemy(game) {
+      if game.spawn_enemy() {
         game.pending_spawns = game.pending_spawns - 1
       }
       game.spawn_cd = @types.wave_spawn_cd(game.wave)
@@ -449,14 +444,14 @@ fn update_wave_spawner(game : @types.Game, dt : Float) -> Unit {
     return
   }
 
-  if active_enemy_count(game) == 0 {
-    begin_next_wave(game)
+  if game.active_enemy_count() == 0 {
+    game.begin_next_wave()
   }
 }
 
 ///|
 /// Fires a new bolt projectile from position `(x, y)` towards target `(tx, ty)` with the given damage.
-fn spawn_bolt(
+fn @types.Game::spawn_bolt(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -464,7 +459,7 @@ fn spawn_bolt(
   ty : Float,
   dmg : Float,
 ) -> Unit {
-  let slot = alloc_bolt(game)
+  let slot = game.alloc_bolt()
   if slot < 0 {
     return
   }
@@ -490,7 +485,7 @@ fn spawn_bolt(
 
 ///|
 /// Deactivates an enemy, awards score with combo multiplier, restores energy, and contributes to barrier charge.
-fn kill_enemy(game : @types.Game, enemy_index : Int, by_barrier : Bool) -> Unit {
+fn @types.Game::kill_enemy(game : @types.Game, enemy_index : Int, by_barrier : Bool) -> Unit {
   if enemy_index < 0 || not(game.enemies[enemy_index].active) {
     return
   }
@@ -526,19 +521,19 @@ fn kill_enemy(game : @types.Game, enemy_index : Int, by_barrier : Bool) -> Unit 
     Float::from_int(combo_for_charge) * @types.barrier_charge_combo,
   )
 
-  emit_pulse(game, hit_x, hit_y, hit_r + 4.0, 0.42, 1)
+  game.emit_pulse(hit_x, hit_y, hit_r + 4.0, 0.42, 1)
   if by_barrier {
-    emit_pulse(game, hit_x, hit_y, hit_r + 12.0, 0.48, 2)
+    game.emit_pulse(hit_x, hit_y, hit_r + 12.0, 0.48, 2)
   }
 
   if game.combo > 0 && game.combo % 6 == 0 {
-    set_status(game, "Combo x" + game.combo.to_string(), 0.5)
+    game.set_status("Combo x" + game.combo.to_string(), 0.5)
   }
 }
 
 ///|
 /// Ticks guardian cooldowns and fires bolts at the nearest in-cone enemy within range.
-fn update_nodes(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_nodes(game : @types.Game, dt : Float) -> Unit {
   for node in game.nodes {
     if not(node.active) {
       continue
@@ -590,8 +585,7 @@ fn update_nodes(game : @types.Game, dt : Float) -> Unit {
     }
 
     if best >= 0 {
-      spawn_bolt(
-        game,
+      game.spawn_bolt(
         x,
         y,
         game.enemies[best].x,
@@ -606,7 +600,7 @@ fn update_nodes(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Advances all bolts, deactivates out-of-bounds ones, and applies damage and pulses on enemy hit.
-fn update_bolts(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_bolts(game : @types.Game, dt : Float) -> Unit {
   for bolt in game.bolts {
     if not(bolt.active) {
       continue
@@ -640,10 +634,10 @@ fn update_bolts(game : @types.Game, dt : Float) -> Unit {
         hit_r2 {
         game.enemies[j].hp = game.enemies[j].hp - bolt.dmg
         bolt.active = false
-        emit_pulse(game, bolt.x, bolt.y, 7.0, 0.22, 0)
+        game.emit_pulse(bolt.x, bolt.y, 7.0, 0.22, 0)
 
         if game.enemies[j].hp <= 0.0 {
-          kill_enemy(game, j, false)
+          game.kill_enemy(j, false)
         }
         break
       }
@@ -653,7 +647,7 @@ fn update_bolts(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Moves all enemies toward the gate with wobble and handles contact damage and gate breach.
-fn update_enemies(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
   let gx = @types.gate_x()
   let gy = @types.gate_y()
 
@@ -704,10 +698,10 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
       game.combo = 0
       game.combo_timer = 0.0
       game.shake_t = @types.maxf(game.shake_t, @types.shake_time_hit)
-      emit_pulse(game, gx, gy, @types.gate_radius + 18.0, 0.48, 2)
+      game.emit_pulse(gx, gy, @types.gate_radius + 18.0, 0.48, 2)
 
       if game.gate_hp <= 0.0 {
-        enter_game_over(game)
+        game.enter_game_over()
         return
       }
     }
@@ -716,9 +710,9 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Consumes a full barrier charge to deal damage and push all enemies within barrier radius.
-fn trigger_barrier(game : @types.Game) -> Unit {
+fn @types.Game::trigger_barrier(game : @types.Game) -> Unit {
   if game.barrier_charge < @types.barrier_charge_goal {
-    set_status(game, "Barrier not charged", 0.5)
+    game.set_status("Barrier not charged", 0.5)
     return
   }
 
@@ -730,7 +724,7 @@ fn trigger_barrier(game : @types.Game) -> Unit {
   let gy = @types.gate_y()
   let radius2 = @types.barrier_radius * @types.barrier_radius
 
-  emit_pulse(game, gx, gy, @types.gate_radius + 14.0, 0.58, 2)
+  game.emit_pulse(gx, gy, @types.gate_radius + 14.0, 0.58, 2)
 
   for i in 0..<game.enemies.length() {
     if not(game.enemies[i].active) {
@@ -746,7 +740,7 @@ fn trigger_barrier(game : @types.Game) -> Unit {
 
     game.enemies[i].hp = game.enemies[i].hp - @types.barrier_damage
     if game.enemies[i].hp <= 0.0 {
-      kill_enemy(game, i, true)
+      game.kill_enemy(i, true)
       continue
     }
 
@@ -759,12 +753,12 @@ fn trigger_barrier(game : @types.Game) -> Unit {
     }
   }
 
-  set_status(game, "Barrier burst released", 0.7)
+  game.set_status("Barrier burst released", 0.7)
 }
 
 ///|
 /// Expands and expires all active ring pulse effects each frame.
-fn update_pulses(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_pulses(game : @types.Game, dt : Float) -> Unit {
   for pulse in game.pulses {
     if not(pulse.active) {
       continue
@@ -789,7 +783,7 @@ fn update_pulses(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Decrements the status, shake, and barrier flash timers by `dt`.
-fn decay_overlay_timers(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::decay_overlay_timers(game : @types.Game, dt : Float) -> Unit {
   if game.status_t > 0.0 {
     game.status_t = @types.maxf(0.0, game.status_t - dt)
   }
@@ -803,33 +797,33 @@ fn decay_overlay_timers(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Handles input on the title screen to start a new run.
-fn update_title_state(game : @types.Game) -> Unit {
+fn @types.Game::update_title_state(game : @types.Game) -> Unit {
   if game.input_place_press ||
     game.input_barrier_press ||
     game.input_restart_press {
-    start_new_run(game)
+    game.start_new_run()
   }
 }
 
 ///|
 /// Runs one frame of active gameplay: cursor movement, building, barrier, energy regen, and combat updates.
-fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_playing_state(game : @types.Game, dt : Float) -> Unit {
   if game.input_pause_press {
     game.state = @types.state_paused
-    set_status(game, "Paused", 0.4)
+    game.set_status("Paused", 0.4)
     return
   }
 
-  move_cursor(game)
+  game.move_cursor()
 
   if game.input_place_press {
-    try_build_or_upgrade(game)
+    game.try_build_or_upgrade()
   }
   if game.input_cancel_press {
-    try_sell_node(game)
+    game.try_sell_node()
   }
   if game.input_barrier_press {
-    trigger_barrier(game)
+    game.trigger_barrier()
   }
 
   game.energy = @types.minf(
@@ -845,65 +839,65 @@ fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
     }
   }
 
-  update_wave_spawner(game, dt)
-  update_nodes(game, dt)
-  update_bolts(game, dt)
-  update_enemies(game, dt)
-  update_pulses(game, dt)
+  game.update_wave_spawner(dt)
+  game.update_nodes(dt)
+  game.update_bolts(dt)
+  game.update_enemies(dt)
+  game.update_pulses(dt)
 }
 
 ///|
 /// Handles input while paused to resume play.
-fn update_paused_state(game : @types.Game) -> Unit {
+fn @types.Game::update_paused_state(game : @types.Game) -> Unit {
   if game.input_pause_press || game.input_cancel_press {
     game.state = @types.state_playing
-    set_status(game, "Defense resumed", 0.5)
+    game.set_status("Defense resumed", 0.5)
   }
 }
 
 ///|
 /// Handles input on the game-over screen to restart or return to title.
-fn update_game_over_state(game : @types.Game) -> Unit {
+fn @types.Game::update_game_over_state(game : @types.Game) -> Unit {
   if game.input_place_press || game.input_restart_press {
-    start_new_run(game)
+    game.start_new_run()
     return
   }
 
   if game.input_cancel_press {
-    clear_enemies(game)
-    clear_bolts(game)
-    clear_pulses(game)
+    game.clear_enemies()
+    game.clear_bolts()
+    game.clear_pulses()
     game.state = @types.state_title
     game.gate_hp = @types.gate_hp_max
     game.energy = @types.energy_start
     game.barrier_charge = 0.0
-    set_status(game, "Press J to begin defense", 0.0)
+    game.set_status("Press J to begin defense", 0.0)
   }
 }
 
 ///|
 /// Advances one simulation step, including input, state transitions, and combat updates.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
-  update_input(game)
+  game.update_input()
   game.time_s = game.time_s + dt
 
   if game.input_restart_press {
-    start_new_run(game)
+    game.start_new_run()
     return
   }
 
   if game.state == @types.state_title {
-    decay_overlay_timers(game, dt)
-    update_pulses(game, dt)
-    update_title_state(game)
+    game.decay_overlay_timers(dt)
+    game.update_pulses(dt)
+    game.update_title_state()
   } else if game.state == @types.state_playing {
-    decay_overlay_timers(game, dt)
-    update_playing_state(game, dt)
+    game.decay_overlay_timers(dt)
+    game.update_playing_state(dt)
   } else if game.state == @types.state_paused {
-    update_paused_state(game)
+    game.update_paused_state()
   } else {
-    decay_overlay_timers(game, dt)
-    update_pulses(game, dt)
-    update_game_over_state(game)
+    game.decay_overlay_timers(dt)
+    game.update_pulses(dt)
+    game.update_game_over_state()
   }
 }

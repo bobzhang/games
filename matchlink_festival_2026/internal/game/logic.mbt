@@ -1,6 +1,6 @@
 ///|
 /// Fills the board with shuffled paired tile kinds and sets the remaining count to the total cell count.
-fn build_level_board(game : @types.Game) -> Unit {
+fn @types.Game::build_level_board(game : @types.Game) -> Unit {
   let total : Int = game.board_w * game.board_h
   let pair_count : Int = total / 2
 
@@ -87,7 +87,7 @@ fn make_path(xs : Array[Int], ys : Array[Int]) -> @types.LinkPath {
 
 ///|
 /// Returns true when the axis-aligned segment from (x1, y1) to (x2, y2) contains no non-empty cells between the endpoints.
-fn line_clear(
+fn @types.Game::line_clear(
   game : @types.Game,
   x1 : Int,
   y1 : Int,
@@ -128,7 +128,7 @@ fn line_clear(
 
 ///|
 /// Returns true when cell (x, y) is the target tile or is empty, used to validate corner waypoints.
-fn empty_or_target(
+fn @types.Game::empty_or_target(
   game : @types.Game,
   x : Int,
   y : Int,
@@ -140,14 +140,14 @@ fn empty_or_target(
 
 ///|
 /// Tries to connect anchor (ax, ay) to (bx, by) via a straight line or a single L-shaped turn, returning the path if found.
-fn direct_or_one_turn_from_anchor(
+fn @types.Game::direct_or_one_turn_from_anchor(
   game : @types.Game,
   ax : Int,
   ay : Int,
   bx : Int,
   by : Int,
 ) -> @types.LinkPath {
-  if line_clear(game, ax, ay, bx, by) {
+  if game.line_clear(ax, ay, bx, by) {
     let xs : Array[Int] = []
     let ys : Array[Int] = []
     push_point(xs, ys, ax, ay)
@@ -157,9 +157,9 @@ fn direct_or_one_turn_from_anchor(
 
   let c1x : Int = ax
   let c1y : Int = by
-  if empty_or_target(game, c1x, c1y, bx, by) &&
-    line_clear(game, ax, ay, c1x, c1y) &&
-    line_clear(game, c1x, c1y, bx, by) {
+  if game.empty_or_target(c1x, c1y, bx, by) &&
+    game.line_clear(ax, ay, c1x, c1y) &&
+    game.line_clear(c1x, c1y, bx, by) {
     let xs : Array[Int] = []
     let ys : Array[Int] = []
     push_point(xs, ys, ax, ay)
@@ -170,9 +170,9 @@ fn direct_or_one_turn_from_anchor(
 
   let c2x : Int = bx
   let c2y : Int = ay
-  if empty_or_target(game, c2x, c2y, bx, by) &&
-    line_clear(game, ax, ay, c2x, c2y) &&
-    line_clear(game, c2x, c2y, bx, by) {
+  if game.empty_or_target(c2x, c2y, bx, by) &&
+    game.line_clear(ax, ay, c2x, c2y) &&
+    game.line_clear(c2x, c2y, bx, by) {
     let xs : Array[Int] = []
     let ys : Array[Int] = []
     push_point(xs, ys, ax, ay)
@@ -209,7 +209,7 @@ fn compose_with_start(
 
 ///|
 /// Searches for a valid link path between (ax, ay) and (bx, by) using direct, one-turn, and two-turn routes, returning the path if found.
-fn find_link_path(
+fn @types.Game::find_link_path(
   game : @types.Game,
   ax : Int,
   ay : Int,
@@ -226,8 +226,8 @@ fn find_link_path(
     return @types.empty_path()
   }
 
-  let direct_or_corner : @types.LinkPath = direct_or_one_turn_from_anchor(
-    game, ax, ay, bx, by,
+  let direct_or_corner : @types.LinkPath = game.direct_or_one_turn_from_anchor(
+    ax, ay, bx, by,
   )
   if direct_or_corner.found {
     return direct_or_corner
@@ -238,16 +238,16 @@ fn find_link_path(
       continue
     }
 
-    if x != ax && not(empty_or_target(game, x, ay, bx, by)) {
+    if x != ax && not(game.empty_or_target(x, ay, bx, by)) {
       continue
     }
 
-    if not(line_clear(game, ax, ay, x, ay)) {
+    if not(game.line_clear(ax, ay, x, ay)) {
       continue
     }
 
-    let tail : @types.LinkPath = direct_or_one_turn_from_anchor(
-      game, x, ay, bx, by,
+    let tail : @types.LinkPath = game.direct_or_one_turn_from_anchor(
+      x, ay, bx, by,
     )
     if tail.found {
       return compose_with_start(ax, ay, tail)
@@ -259,16 +259,16 @@ fn find_link_path(
       continue
     }
 
-    if y != ay && not(empty_or_target(game, ax, y, bx, by)) {
+    if y != ay && not(game.empty_or_target(ax, y, bx, by)) {
       continue
     }
 
-    if not(line_clear(game, ax, ay, ax, y)) {
+    if not(game.line_clear(ax, ay, ax, y)) {
       continue
     }
 
-    let tail : @types.LinkPath = direct_or_one_turn_from_anchor(
-      game, ax, y, bx, by,
+    let tail : @types.LinkPath = game.direct_or_one_turn_from_anchor(
+      ax, y, bx, by,
     )
     if tail.found {
       return compose_with_start(ax, ay, tail)
@@ -280,7 +280,7 @@ fn find_link_path(
 
 ///|
 /// Stores a link path into the game state for a brief flash animation, or clears it if the path was not found.
-fn set_path_flash(game : @types.Game, path : @types.LinkPath) -> Unit {
+fn @types.Game::set_path_flash(game : @types.Game, path : @types.LinkPath) -> Unit {
   if not(path.found) {
     @types.clear_path_flash(game)
     return
@@ -301,7 +301,7 @@ fn set_path_flash(game : @types.Game, path : @types.LinkPath) -> Unit {
 
 ///|
 /// Activates a hint highlight for the tile pair at (x0, y0) and (x1, y1) with a fixed display TTL.
-fn set_hint_pair(
+fn @types.Game::set_hint_pair(
   game : @types.Game,
   x0 : Int,
   y0 : Int,
@@ -318,7 +318,7 @@ fn set_hint_pair(
 
 ///|
 /// Scans the entire board for any linkable matching tile pair, returning found status, the two coordinates, and the path.
-fn find_any_move(
+fn @types.Game::find_any_move(
   game : @types.Game,
 ) -> (Bool, Int, Int, Int, Int, @types.LinkPath) {
   for y1 in 1..<=game.board_h {
@@ -334,7 +334,7 @@ fn find_any_move(
         let mut x2 : Int = start_x
         while x2 <= game.board_w {
           if @types.cell_at(game, x2, y2) == k1 {
-            let p : @types.LinkPath = find_link_path(game, x1, y1, x2, y2)
+            let p : @types.LinkPath = game.find_link_path(x1, y1, x2, y2)
             if p.found {
               return (true, x1, y1, x2, y2, p)
             }
@@ -351,7 +351,7 @@ fn find_any_move(
 
 ///|
 /// Repeatedly reshuffles remaining tile values until a valid move exists, optionally spending a shuffle ticket.
-fn reshuffle_board(game : @types.Game, consume_ticket : Bool) -> Bool {
+fn @types.Game::reshuffle_board(game : @types.Game, consume_ticket : Bool) -> Bool {
   if game.state != Play {
     return false
   }
@@ -390,7 +390,7 @@ fn reshuffle_board(game : @types.Game, consume_ticket : Bool) -> Bool {
       }
     }
 
-    let probe = find_any_move(game)
+    let probe = game.find_any_move()
     if probe.0 {
       made = true
       break
@@ -420,19 +420,19 @@ fn reshuffle_board(game : @types.Game, consume_ticket : Bool) -> Bool {
 
 ///|
 /// Records level completion by incrementing the cleared level counter and accumulating elapsed time.
-fn finalize_level_clear(game : @types.Game) -> Unit {
+fn @types.Game::finalize_level_clear(game : @types.Game) -> Unit {
   game.total_levels = game.total_levels + 1
   game.total_time = game.total_time + (game.time_limit - game.timer)
 }
 
 ///|
 /// Finalises a cleared level and transitions to LevelClear or CampaignClear state depending on progress.
-fn complete_level(game : @types.Game) -> Unit {
+fn @types.Game::complete_level(game : @types.Game) -> Unit {
   if game.state != Play {
     return
   }
 
-  finalize_level_clear(game)
+  game.finalize_level_clear()
   game.state = if game.level_index + 1 >= game.level_count {
     CampaignClear
   } else {
@@ -446,7 +446,7 @@ fn complete_level(game : @types.Game) -> Unit {
 
 ///|
 /// Transitions to Fail state when time runs out, resetting combo and triggering a shake effect.
-fn fail_level(game : @types.Game) -> Unit {
+fn @types.Game::fail_level(game : @types.Game) -> Unit {
   if game.state != Play {
     return
   }
@@ -460,34 +460,34 @@ fn fail_level(game : @types.Game) -> Unit {
 
 ///|
 /// Checks whether any valid move exists, and if not auto-shuffles or forces a shuffle; fails the level if no valid arrangement can be found.
-fn ensure_move_exists(game : @types.Game) -> Unit {
+fn @types.Game::ensure_move_exists(game : @types.Game) -> Unit {
   if game.state != Play || game.remaining <= 0 {
     return
   }
 
-  let probe = find_any_move(game)
+  let probe = game.find_any_move()
   if probe.0 {
     return
   }
 
-  if reshuffle_board(game, true) {
+  if game.reshuffle_board(true) {
     game.message = "No moves, auto-shuffled"
     game.message_t = 1.0
     return
   }
 
-  if reshuffle_board(game, false) {
+  if game.reshuffle_board(false) {
     game.message = "No moves, forced shuffle"
     game.message_t = 1.0
     return
   }
 
-  fail_level(game)
+  game.fail_level()
 }
 
 ///|
 /// Removes the matched pair from the board, updates score and combo, grants bonus time, triggers sparks and path flash, and checks for level completion or a follow-up ensure_move_exists.
-fn on_pair_matched(
+fn @types.Game::on_pair_matched(
   game : @types.Game,
   x0 : Int,
   y0 : Int,
@@ -510,7 +510,7 @@ fn on_pair_matched(
     game.timer = game.time_limit
   }
 
-  set_path_flash(game, path)
+  game.set_path_flash(path)
   @types.clear_hint_flash(game)
   @types.clear_selection(game)
 
@@ -521,16 +521,16 @@ fn on_pair_matched(
   @types.burst_cell(game, x1, y1, 14, 1)
 
   if game.remaining <= 0 {
-    complete_level(game)
+    game.complete_level()
     return
   }
 
-  ensure_move_exists(game)
+  game.ensure_move_exists()
 }
 
 ///|
 /// Resets the combo, shows a "Path blocked" message, and emits a shake and spark effect at the attempted cell.
-fn on_pair_failed(game : @types.Game, x : Int, y : Int) -> Unit {
+fn @types.Game::on_pair_failed(game : @types.Game, x : Int, y : Int) -> Unit {
   game.combo = 0
   game.message = "Path blocked"
   game.message_t = 0.62
@@ -540,7 +540,7 @@ fn on_pair_failed(game : @types.Game, x : Int, y : Int) -> Unit {
 
 ///|
 /// Handles a tile pick at (x, y): selects the first tile, deselects on re-tap, switches selection to a different kind, or attempts to match the pair if kinds match.
-fn pick_cell(game : @types.Game, x : Int, y : Int) -> Unit {
+fn @types.Game::pick_cell(game : @types.Game, x : Int, y : Int) -> Unit {
   if game.state != Play {
     return
   }
@@ -581,32 +581,32 @@ fn pick_cell(game : @types.Game, x : Int, y : Int) -> Unit {
     return
   }
 
-  let path : @types.LinkPath = find_link_path(game, sx, sy, x, y)
+  let path : @types.LinkPath = game.find_link_path(sx, sy, x, y)
   if path.found {
-    on_pair_matched(game, sx, sy, x, y, k, path)
+    game.on_pair_matched(sx, sy, x, y, k, path)
   } else {
     game.select_x = x
     game.select_y = y
-    on_pair_failed(game, x, y)
+    game.on_pair_failed(x, y)
   }
 }
 
 ///|
 /// Picks the tile at the current cursor position.
-fn pick_cursor_cell(game : @types.Game) -> Unit {
-  pick_cell(game, game.cursor_x, game.cursor_y)
+fn @types.Game::pick_cursor_cell(game : @types.Game) -> Unit {
+  game.pick_cell(game.cursor_x, game.cursor_y)
 }
 
 ///|
 /// Consumes one hint ticket to highlight the first available matching pair and moves the cursor to it; returns false if no hints remain or no pair is available.
-fn use_hint(game : @types.Game) -> Bool {
+fn @types.Game::use_hint(game : @types.Game) -> Bool {
   if game.state != Play || game.hints_left <= 0 {
     game.message = "No hints left"
     game.message_t = 0.8
     return false
   }
 
-  let m = find_any_move(game)
+  let m = game.find_any_move()
   if not(m.0) {
     game.message = "No pair available"
     game.message_t = 0.9
@@ -614,7 +614,7 @@ fn use_hint(game : @types.Game) -> Bool {
   }
 
   game.hints_left = game.hints_left - 1
-  set_hint_pair(game, m.1, m.2, m.3, m.4)
+  game.set_hint_pair(m.1, m.2, m.3, m.4)
   game.cursor_x = m.1
   game.cursor_y = m.2
   game.message = "Hint highlighted"
@@ -627,7 +627,7 @@ fn use_hint(game : @types.Game) -> Bool {
 
 ///|
 /// Moves the cursor one step in the given direction, clamping to the board boundaries.
-fn move_cursor_once(game : @types.Game, dir : @types.Direction) -> Unit {
+fn @types.Game::move_cursor_once(game : @types.Game, dir : @types.Direction) -> Unit {
   if game.state != Play {
     return
   }
@@ -643,7 +643,7 @@ fn move_cursor_once(game : @types.Game, dir : @types.Direction) -> Unit {
 
 ///|
 /// Handles directional key/button hold with initial delay and repeat rate to move the cursor smoothly while a direction is held.
-fn update_cursor_hold(
+fn @types.Game::update_cursor_hold(
   game : @types.Game,
   dt : Float,
   held_dir : @types.Direction,
@@ -663,19 +663,19 @@ fn update_cursor_hold(
   if game.hold_dir != held_dir {
     game.hold_dir = held_dir
     game.repeat_t = 0.2
-    move_cursor_once(game, held_dir)
+    game.move_cursor_once(held_dir)
   } else {
     game.repeat_t = game.repeat_t - dt
     if game.repeat_t <= 0.0 {
       game.repeat_t = 0.095
-      move_cursor_once(game, held_dir)
+      game.move_cursor_once(held_dir)
     }
   }
 }
 
 ///|
 /// Advances all time-based game fields each frame: ui_t, message fade, shake, path flash, hint flash, touch cooldown, level countdown timer, and spark particles.
-fn update_timers(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_timers(game : @types.Game, dt : Float) -> Unit {
   game.ui_t = game.ui_t + dt
 
   if game.message_t > 0.0 {
@@ -717,7 +717,7 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
     game.timer = game.timer - dt
     if game.timer <= 0.0 {
       game.timer = 0.0
-      fail_level(game)
+      game.fail_level()
     }
   }
 
@@ -726,7 +726,7 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Configures and initialises a campaign level by id: sets board dimensions, time limit, hint and shuffle counts, builds the board, and ensures at least one valid move exists before entering Play state.
-fn load_level(game : @types.Game, level_id : Int) -> Unit {
+fn @types.Game::load_level(game : @types.Game, level_id : Int) -> Unit {
   let mut id : Int = level_id
   if id < 0 {
     id = 0
@@ -756,16 +756,16 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
   @types.clear_hint_flash(game)
   @types.clear_sparks(game)
 
-  build_level_board(game)
+  game.build_level_board()
 
   let mut ok : Bool = false
   for _k in 0..<28 {
-    let m = find_any_move(game)
+    let m = game.find_any_move()
     if m.0 {
       ok = true
       break
     }
-    ignore(reshuffle_board(game, false))
+    ignore(game.reshuffle_board(false))
   }
 
   if not(ok) {
@@ -780,27 +780,27 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
 
 ///|
 /// Reloads the current level by index, resetting the board and all level state.
-fn reload_level(game : @types.Game) -> Unit {
-  load_level(game, game.level_index)
+fn @types.Game::reload_level(game : @types.Game) -> Unit {
+  game.load_level(game.level_index)
 }
 
 ///|
 /// Resets cumulative score and statistics then loads level 0 to start a fresh campaign run.
-fn restart_campaign(game : @types.Game) -> Unit {
+fn @types.Game::restart_campaign(game : @types.Game) -> Unit {
   game.score = 0
   game.total_levels = 0
   game.total_time = 0.0
-  load_level(game, 0)
+  game.load_level(0)
 }
 
 ///|
 /// Advances to the next campaign level, or transitions to CampaignClear if the last level has already been completed.
-fn next_level(game : @types.Game) -> Unit {
+fn @types.Game::next_level(game : @types.Game) -> Unit {
   if game.level_index + 1 >= game.level_count {
     game.state = CampaignClear
     return
   }
-  load_level(game, game.level_index + 1)
+  game.load_level(game.level_index + 1)
 }
 
 ///|
@@ -818,27 +818,27 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   }
   game.touch_count = tc
 
-  update_timers(game, dt)
+  game.update_timers(dt)
 
-  let start_press : Bool = detect_start_press(game)
-  let next_press : Bool = detect_next_press(game)
-  let reset_press : Bool = detect_reset_press(game)
+  let start_press : Bool = game.detect_start_press()
+  let next_press : Bool = game.detect_next_press()
+  let reset_press : Bool = game.detect_reset_press()
 
   match game.state {
-    Title => if start_press { restart_campaign(game) }
+    Title => if start_press { game.restart_campaign() }
     Play => {
-      let held_dir : @types.Direction = detect_held_dir(game)
-      update_cursor_hold(game, dt, held_dir)
+      let held_dir : @types.Direction = game.detect_held_dir()
+      game.update_cursor_hold(dt, held_dir)
 
-      let select_press : Bool = detect_select_press(game)
-      let hint_press : Bool = detect_hint_press(game)
-      let shuffle_press : Bool = detect_shuffle_press(game)
-      let clear_press : Bool = detect_clear_press(game)
-      let board_tap = detect_board_tap(game)
+      let select_press : Bool = game.detect_select_press()
+      let hint_press : Bool = game.detect_hint_press()
+      let shuffle_press : Bool = game.detect_shuffle_press()
+      let clear_press : Bool = game.detect_clear_press()
+      let board_tap = game.detect_board_tap()
 
       if reset_press && game.touch_action_cd <= 0.0 {
         game.touch_action_cd = 0.2
-        reload_level(game)
+        game.reload_level()
       } else if clear_press && game.touch_action_cd <= 0.0 {
         game.touch_action_cd = 0.12
         @types.clear_selection(game)
@@ -846,20 +846,20 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
         game.message_t = 0.5
       } else if hint_press && game.touch_action_cd <= 0.0 {
         game.touch_action_cd = 0.18
-        ignore(use_hint(game))
+        ignore(game.use_hint())
       } else if shuffle_press && game.touch_action_cd <= 0.0 {
         game.touch_action_cd = 0.2
-        ignore(reshuffle_board(game, true))
+        ignore(game.reshuffle_board(true))
       } else if board_tap.0 && game.touch_action_cd <= 0.0 {
         game.touch_action_cd = 0.1
-        pick_cell(game, board_tap.1, board_tap.2)
+        game.pick_cell(board_tap.1, board_tap.2)
       } else if select_press && game.touch_action_cd <= 0.0 {
         game.touch_action_cd = 0.1
-        pick_cursor_cell(game)
+        game.pick_cursor_cell()
       }
     }
-    LevelClear => if next_press { next_level(game) }
-    CampaignClear => if next_press { restart_campaign(game) }
-    Fail => if reset_press || next_press { reload_level(game) }
+    LevelClear => if next_press { game.next_level() }
+    CampaignClear => if next_press { game.restart_campaign() }
+    Fail => if reset_press || next_press { game.reload_level() }
   }
 }

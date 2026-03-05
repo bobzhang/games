@@ -2,33 +2,33 @@
 /// Updates timers, effects, and state-specific logic for one frame of the platformer.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
-  update_particles(game, dt)
-  update_score_flies(game, dt)
+  game.update_particles(dt)
+  game.update_score_flies(dt)
   if game.state == @types.state_menu {
-    update_menu(game, dt)
+    game.update_menu(dt)
   } else if game.state == @types.state_playing {
-    update_playing(game, dt)
+    game.update_playing(dt)
   } else if game.state == @types.state_paused {
-    update_paused(game, dt)
+    game.update_paused(dt)
   } else if game.state == @types.state_level_complete {
-    update_level_complete(game, dt)
+    game.update_level_complete(dt)
   } else if game.state == @types.state_game_over {
-    update_game_over(game, dt)
+    game.update_game_over(dt)
   } else if game.state == @types.state_world_select {
-    update_world_select(game, dt)
+    game.update_world_select(dt)
   } else if game.state == @types.state_campaign_complete {
-    update_campaign_complete(game, dt)
+    game.update_campaign_complete(dt)
   } else if game.state == @types.state_level_select {
-    update_level_select(game, dt)
+    game.update_level_select(dt)
   } else if game.state == @types.state_death_anim {
-    update_death_anim(game, dt)
+    game.update_death_anim(dt)
   } else if game.state == @types.state_world_intro {
-    update_world_intro(game, dt)
+    game.update_world_intro(dt)
   }
 }
 
 ///|
-fn update_menu(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
   game.menu_blink += dt * @types.ui_blink_speed
   if @raylib.is_key_pressed(@raylib.KeyUp) {
     game.menu_cursor -= 1
@@ -63,7 +63,7 @@ fn update_menu(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_playing(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
     game.state = @types.state_paused
@@ -84,7 +84,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   if game.powerup_type >= 0 {
     game.powerup_timer -= dt
     if game.powerup_timer <= 0.0 {
-      expire_powerup(game)
+      game.expire_powerup()
     }
   }
   // Invincibility timer
@@ -95,17 +95,17 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   if game.dash_cooldown_timer > 0.0 {
     game.dash_cooldown_timer -= dt
   }
-  update_player(game, dt)
-  update_platforms(game, dt)
-  update_collectibles(game, dt)
-  update_enemies(game, dt)
-  update_powerups(game, dt)
-  update_projectiles(game, dt)
-  update_hazards(game, dt)
-  check_hazard_collision(game)
-  check_enemy_collision(game)
-  check_checkpoint_collision(game)
-  update_camera(game, dt)
+  game.update_player(dt)
+  game.update_platforms(dt)
+  game.update_collectibles(dt)
+  game.update_enemies(dt)
+  game.update_powerups(dt)
+  game.update_projectiles(dt)
+  game.update_hazards(dt)
+  game.check_hazard_collision()
+  game.check_enemy_collision()
+  game.check_checkpoint_collision()
+  game.update_camera(dt)
   // Camera shake
   if game.cam_shake_timer > 0.0 {
     game.cam_shake_timer -= dt
@@ -115,7 +115,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   }
   // Check death by falling
   if game.py < @types.death_fall_y {
-    player_die(game)
+    game.player_die()
   }
   // Check goal
   let goal_dist = @types.dist3d(
@@ -164,7 +164,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_paused(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_paused(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
     game.state = @types.state_playing
@@ -199,7 +199,7 @@ fn update_paused(game : @types.Game, _dt : Float) -> Unit {
 }
 
 ///|
-fn update_level_complete(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_level_complete(game : @types.Game, dt : Float) -> Unit {
   game.complete_timer += dt
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
@@ -226,7 +226,7 @@ fn update_level_complete(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_game_over(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_game_over(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     game.lives = @types.player_max_lives
@@ -242,7 +242,7 @@ fn update_game_over(game : @types.Game, _dt : Float) -> Unit {
 }
 
 ///|
-fn update_world_select(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_world_select(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
     game.state = @types.state_menu
     return
@@ -270,7 +270,7 @@ fn update_world_select(game : @types.Game, _dt : Float) -> Unit {
 }
 
 ///|
-fn update_campaign_complete(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_campaign_complete(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     game.state = @types.state_menu
@@ -278,7 +278,7 @@ fn update_campaign_complete(game : @types.Game, _dt : Float) -> Unit {
 }
 
 ///|
-fn update_level_select(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_level_select(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
     game.state = @types.state_menu
     return
@@ -318,7 +318,7 @@ fn update_level_select(game : @types.Game, _dt : Float) -> Unit {
 }
 
 ///|
-fn update_death_anim(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_death_anim(game : @types.Game, dt : Float) -> Unit {
   game.death_timer += dt
   // Player pops up then falls
   if game.death_timer < 0.3 {
@@ -346,7 +346,7 @@ fn update_death_anim(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_world_intro(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_world_intro(game : @types.Game, dt : Float) -> Unit {
   game.world_intro_timer -= dt
   if game.world_intro_timer <= 0.0 ||
     @raylib.is_key_pressed(@raylib.KeyEnter) ||
@@ -356,7 +356,7 @@ fn update_world_intro(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_particles(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -377,7 +377,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_score_flies(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_score_flies(game : @types.Game, dt : Float) -> Unit {
   for sf in game.score_flies {
     if not(sf.active) {
       continue
@@ -391,7 +391,7 @@ fn update_score_flies(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_camera(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_camera(game : @types.Game, dt : Float) -> Unit {
   // Rotate camera with Q/E
   if @raylib.is_key_down(@raylib.KeyQ) {
     game.cam_angle += @types.camera_rotate_speed * dt
@@ -429,7 +429,7 @@ fn update_camera(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_enemies(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
   for e in game.enemies {
     if not(e.active) {
       continue
@@ -450,9 +450,9 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     } else if e.kind == @types.enemy_fly_circle {
       update_enemy_fly(e, dt)
     } else if e.kind == @types.enemy_chase {
-      update_enemy_chase(game, e, dt)
+      game.update_enemy_chase(e, dt)
     } else if e.kind == @types.enemy_turret {
-      update_enemy_turret(game, e, dt)
+      game.update_enemy_turret(e, dt)
     }
   }
 }
@@ -488,7 +488,7 @@ fn update_enemy_fly(e : @types.Enemy, dt : Float) -> Unit {
 }
 
 ///|
-fn update_enemy_chase(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit {
+fn @types.Game::update_enemy_chase(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit {
   let dist = @types.dist2d(e.x, e.z, game.px, game.pz)
   if dist < @types.enemy_chase_range && dist > 0.5 {
     let dx = game.px - e.x
@@ -510,7 +510,7 @@ fn update_enemy_chase(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit 
 }
 
 ///|
-fn update_enemy_turret(
+fn @types.Game::update_enemy_turret(
   game : @types.Game,
   e : @types.Enemy,
   dt : Float,
@@ -548,7 +548,7 @@ fn update_enemy_turret(
 }
 
 ///|
-fn update_powerups(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_powerups(game : @types.Game, dt : Float) -> Unit {
   for pu in game.powerups {
     if not(pu.active) || pu.collected {
       continue
@@ -560,7 +560,7 @@ fn update_powerups(game : @types.Game, dt : Float) -> Unit {
     if dist < 1.2 {
       pu.collected = true
       pu.active = false
-      activate_powerup(game, pu.kind)
+      game.activate_powerup(pu.kind)
       // Particles
       let pr : Int = if pu.kind == @types.powerup_double_jump {
         @types.pu_double_jump_r
@@ -612,7 +612,7 @@ fn update_powerups(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn activate_powerup(game : @types.Game, kind : Int) -> Unit {
+fn @types.Game::activate_powerup(game : @types.Game, kind : Int) -> Unit {
   game.powerup_type = kind
   game.powerup_timer = @types.powerup_duration
   if kind == @types.powerup_double_jump {
@@ -623,7 +623,7 @@ fn activate_powerup(game : @types.Game, kind : Int) -> Unit {
 }
 
 ///|
-fn expire_powerup(game : @types.Game) -> Unit {
+fn @types.Game::expire_powerup(game : @types.Game) -> Unit {
   if game.powerup_type == @types.powerup_double_jump {
     game.has_double_jump = false
   } else if game.powerup_type == @types.powerup_shield {
@@ -634,7 +634,7 @@ fn expire_powerup(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_projectiles(game : @types.Game, dt : Float) -> Unit {
   for proj in game.projectiles {
     if not(proj.active) {
       continue
@@ -667,7 +667,7 @@ fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
             @types.player_shield_b,
           )
         } else {
-          player_die(game)
+          game.player_die()
           return
         }
       }
@@ -676,7 +676,7 @@ fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_hazards(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_hazards(game : @types.Game, dt : Float) -> Unit {
   for h in game.hazards {
     if not(h.active) {
       continue
@@ -725,7 +725,7 @@ fn update_hazards(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn check_hazard_collision(game : @types.Game) -> Unit {
+fn @types.Game::check_hazard_collision(game : @types.Game) -> Unit {
   if game.invincible_timer > 0.0 {
     return
   }
@@ -765,7 +765,7 @@ fn check_hazard_collision(game : @types.Game) -> Unit {
           @types.player_shield_b,
         )
       } else {
-        player_die(game)
+        game.player_die()
       }
       return
     }
@@ -773,7 +773,7 @@ fn check_hazard_collision(game : @types.Game) -> Unit {
 }
 
 ///|
-fn check_enemy_collision(game : @types.Game) -> Unit {
+fn @types.Game::check_enemy_collision(game : @types.Game) -> Unit {
   if game.invincible_timer > 0.0 {
     return
   }
@@ -837,7 +837,7 @@ fn check_enemy_collision(game : @types.Game) -> Unit {
           }
           game.vy = 4.0
         } else {
-          player_die(game)
+          game.player_die()
         }
         return
       }
@@ -846,7 +846,7 @@ fn check_enemy_collision(game : @types.Game) -> Unit {
 }
 
 ///|
-fn check_checkpoint_collision(game : @types.Game) -> Unit {
+fn @types.Game::check_checkpoint_collision(game : @types.Game) -> Unit {
   for cp in game.checkpoints {
     if not(cp.active) || cp.activated {
       continue
@@ -876,7 +876,7 @@ fn check_checkpoint_collision(game : @types.Game) -> Unit {
 }
 
 ///|
-fn player_die(game : @types.Game) -> Unit {
+fn @types.Game::player_die(game : @types.Game) -> Unit {
   game.lives -= 1
   game.level_deaths += 1
   game.combo_count = 0
