@@ -384,27 +384,31 @@ fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
   let mut gate_damage = @types.enemy_contact_damage_base +
     wavef * @types.enemy_contact_damage_wave
 
-  if kind == Carapace {
-    hp = base_hp * 1.85
-    speed = base_speed * 0.78
-    radius = 17.0
-    reward = 14 + game.wave
-    gate_damage = @types.enemy_contact_damage_base * 1.45 +
-      wavef * @types.enemy_contact_damage_wave
-  } else if kind == Wraith {
-    hp = base_hp * 1.15
-    speed = base_speed * 1.08
-    radius = 13.0
-    reward = 11 + game.wave
-    gate_damage = @types.enemy_contact_damage_base * 1.05 +
-      wavef * @types.enemy_contact_damage_wave * 0.9
-  } else {
-    hp = base_hp * 0.84
-    speed = base_speed * 1.28
-    radius = 10.0
-    reward = 8 + game.wave / 2
-    gate_damage = @types.enemy_contact_damage_base * 0.75 +
-      wavef * @types.enemy_contact_damage_wave * 0.7
+  match kind {
+    Carapace => {
+      hp = base_hp * 1.85
+      speed = base_speed * 0.78
+      radius = 17.0
+      reward = 14 + game.wave
+      gate_damage = @types.enemy_contact_damage_base * 1.45 +
+        wavef * @types.enemy_contact_damage_wave
+    }
+    Wraith => {
+      hp = base_hp * 1.15
+      speed = base_speed * 1.08
+      radius = 13.0
+      reward = 11 + game.wave
+      gate_damage = @types.enemy_contact_damage_base * 1.05 +
+        wavef * @types.enemy_contact_damage_wave * 0.9
+    }
+    _ => {
+      hp = base_hp * 0.84
+      speed = base_speed * 1.28
+      radius = 10.0
+      reward = 8 + game.wave / 2
+      gate_damage = @types.enemy_contact_damage_base * 0.75 +
+        wavef * @types.enemy_contact_damage_wave * 0.7
+    }
   }
 
   game.enemies[slot] = {
@@ -667,12 +671,10 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
     game.enemies[i].phase = game.enemies[i].phase +
       dt * (1.2 + Float::from_int(game.enemies[i].kind.to_int()) * 0.35)
 
-    let wobble : Float = if game.enemies[i].kind == Wraith {
-      28.0
-    } else if game.enemies[i].kind == Carapace {
-      10.0
-    } else {
-      16.0
+    let wobble : Float = match game.enemies[i].kind {
+      Wraith => 28.0
+      Carapace => 10.0
+      _ => 16.0
     }
 
     let tx = gx +
@@ -894,18 +896,21 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     return
   }
 
-  if game.state == Title {
-    game.decay_overlay_timers(dt)
-    game.update_pulses(dt)
-    game.update_title_state()
-  } else if game.state == Playing {
-    game.decay_overlay_timers(dt)
-    game.update_playing_state(dt)
-  } else if game.state == Paused {
-    game.update_paused_state()
-  } else {
-    game.decay_overlay_timers(dt)
-    game.update_pulses(dt)
-    game.update_game_over_state()
+  match game.state {
+    Title => {
+      game.decay_overlay_timers(dt)
+      game.update_pulses(dt)
+      game.update_title_state()
+    }
+    Playing => {
+      game.decay_overlay_timers(dt)
+      game.update_playing_state(dt)
+    }
+    Paused => game.update_paused_state()
+    _ => {
+      game.decay_overlay_timers(dt)
+      game.update_pulses(dt)
+      game.update_game_over_state()
+    }
   }
 }

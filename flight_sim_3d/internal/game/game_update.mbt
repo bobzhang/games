@@ -6,20 +6,14 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   game.update_particles(dt)
   game.update_messages(dt)
-  if game.state == Menu {
-    game.update_menu(dt)
-  } else if game.state == AircraftSelect {
-    game.update_aircraft_select(dt)
-  } else if game.state == MissionBriefing {
-    game.update_briefing()
-  } else if game.state == Playing {
-    game.update_playing(dt)
-  } else if game.state == Paused {
-    game.update_paused()
-  } else if game.state == MissionComplete {
-    game.update_mission_complete()
-  } else if game.state == GameOver {
-    game.update_game_over()
+  match game.state {
+    Menu => game.update_menu(dt)
+    AircraftSelect => game.update_aircraft_select(dt)
+    MissionBriefing => game.update_briefing()
+    Playing => game.update_playing(dt)
+    Paused => game.update_paused()
+    MissionComplete => game.update_mission_complete()
+    GameOver => game.update_game_over()
   }
 }
 
@@ -192,45 +186,49 @@ fn @types.Game::update_messages(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::update_camera(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
   let (fx, fy, fz) = @types.get_forward(player.pitch, player.yaw)
-  if game.camera_mode == Chase {
-    // Chase camera: behind and above the aircraft
-    let (tcx, tcy, tcz) = @types.chase_camera_pos(
-      player.x,
-      player.y,
-      player.z,
-      fx,
-      fy,
-      fz,
-      @types.camera_distance,
-      @types.camera_height,
-    )
-    let sm = @types.camera_smooth * dt
-    let sm_clamped : Float = if sm > 1.0 { 1.0 } else { sm }
-    game.cam_x = @types.lerpf(game.cam_x, tcx, sm_clamped)
-    game.cam_y = @types.lerpf(game.cam_y, tcy, sm_clamped)
-    game.cam_z = @types.lerpf(game.cam_z, tcz, sm_clamped)
-    // Look at point slightly ahead of aircraft
-    game.cam_target_x = player.x + fx * 5.0
-    game.cam_target_y = player.y + fy * 5.0
-    game.cam_target_z = player.z + fz * 5.0
-  } else if game.camera_mode == Cockpit {
-    // Cockpit camera: at aircraft position, looking forward
-    game.cam_x = player.x + fx * 0.5
-    game.cam_y = player.y + 0.3
-    game.cam_z = player.z + fz * 0.5
-    game.cam_target_x = player.x + fx * 20.0
-    game.cam_target_y = player.y + fy * 20.0
-    game.cam_target_z = player.z + fz * 20.0
-  } else {
-    // Free camera: orbiting around aircraft
-    let angle = Float::from_int(game.frame_counter) * 0.005
-    let free_dist : Float = 18.0
-    game.cam_x = player.x + @math.cosf(angle) * free_dist
-    game.cam_y = player.y + 6.0
-    game.cam_z = player.z + @math.sinf(angle) * free_dist
-    game.cam_target_x = player.x
-    game.cam_target_y = player.y
-    game.cam_target_z = player.z
+  match game.camera_mode {
+    Chase => {
+      // Chase camera: behind and above the aircraft
+      let (tcx, tcy, tcz) = @types.chase_camera_pos(
+        player.x,
+        player.y,
+        player.z,
+        fx,
+        fy,
+        fz,
+        @types.camera_distance,
+        @types.camera_height,
+      )
+      let sm = @types.camera_smooth * dt
+      let sm_clamped : Float = if sm > 1.0 { 1.0 } else { sm }
+      game.cam_x = @types.lerpf(game.cam_x, tcx, sm_clamped)
+      game.cam_y = @types.lerpf(game.cam_y, tcy, sm_clamped)
+      game.cam_z = @types.lerpf(game.cam_z, tcz, sm_clamped)
+      // Look at point slightly ahead of aircraft
+      game.cam_target_x = player.x + fx * 5.0
+      game.cam_target_y = player.y + fy * 5.0
+      game.cam_target_z = player.z + fz * 5.0
+    }
+    Cockpit => {
+      // Cockpit camera: at aircraft position, looking forward
+      game.cam_x = player.x + fx * 0.5
+      game.cam_y = player.y + 0.3
+      game.cam_z = player.z + fz * 0.5
+      game.cam_target_x = player.x + fx * 20.0
+      game.cam_target_y = player.y + fy * 20.0
+      game.cam_target_z = player.z + fz * 20.0
+    }
+    Free => {
+      // Free camera: orbiting around aircraft
+      let angle = Float::from_int(game.frame_counter) * 0.005
+      let free_dist : Float = 18.0
+      game.cam_x = player.x + @math.cosf(angle) * free_dist
+      game.cam_y = player.y + 6.0
+      game.cam_z = player.z + @math.sinf(angle) * free_dist
+      game.cam_target_x = player.x
+      game.cam_target_y = player.y
+      game.cam_target_z = player.z
+    }
   }
   // Keep camera above terrain
   let cam_terrain = @types.terrain_height_at(game.cam_x, game.cam_z) + 2.0
@@ -329,15 +327,11 @@ fn @types.Game::update_clouds(game : @types.Game) -> Unit {
     }
   }
   // Spawn new clouds if below target count
-  let target_clouds : Int = if game.weather_state.kind == Clear {
-    8
-  } else if game.weather_state.kind == Cloudy ||
-    game.weather_state.kind == Rain {
-    25
-  } else if game.weather_state.kind == Storm {
-    30
-  } else {
-    12
+  let target_clouds : Int = match game.weather_state.kind {
+    Clear => 8
+    Cloudy | Rain => 25
+    Storm => 30
+    _ => 12
   }
   if active_count < target_clouds {
     let count_to_spawn = target_clouds - active_count

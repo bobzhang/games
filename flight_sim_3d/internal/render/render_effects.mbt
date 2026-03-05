@@ -17,14 +17,11 @@ pub fn draw_clouds(game : @types.Game) -> Unit {
     }
     // Determine cloud color based on weather and time of day
     let tod = game.weather_state.time_of_day
-    let base_gray : Int = if game.weather_state.kind == Storm {
-      80
-    } else if game.weather_state.kind == Rain {
-      120
-    } else if game.weather_state.kind == Night {
-      40
-    } else {
-      220
+    let base_gray : Int = match game.weather_state.kind {
+      Storm => 80
+      Rain => 120
+      Night => 40
+      _ => 220
     }
     // Time of day tint
     let r_tint : Int = if tod < 0.2 {

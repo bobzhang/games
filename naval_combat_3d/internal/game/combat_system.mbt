@@ -29,12 +29,10 @@ fn @types.Game::update_cannonballs(game : @types.Game, dt : Float) -> Unit {
     // Check if hit water (y <= 0)
     if cb.y <= 0.0 {
       // Water splash - bigger for heavier shots
-      let splash_count : Int = if cb.cannon_type == Heavy {
-        10
-      } else if cb.cannon_type == Mortar {
-        12
-      } else {
-        6
+      let splash_count : Int = match cb.cannon_type {
+        Heavy => 10
+        Mortar => 12
+        _ => 6
       }
       @types.spawn_water_splash(game, cb.x, cb.z, splash_count)
       cb.active = false

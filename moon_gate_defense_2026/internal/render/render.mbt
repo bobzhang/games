@@ -716,12 +716,11 @@ fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
 ///|
 /// Dispatches to the correct overlay (title, paused, or game-over) based on the current state.
 fn @types.Game::draw_state_overlay(game : @types.Game) -> Unit {
-  if game.state == Title {
-    game.draw_title_overlay()
-  } else if game.state == Paused {
-    draw_paused_overlay()
-  } else if game.state == GameOver {
-    game.draw_game_over_overlay()
+  match game.state {
+    Title => game.draw_title_overlay()
+    Paused => draw_paused_overlay()
+    GameOver => game.draw_game_over_overlay()
+    _ => ()
   }
 }
 

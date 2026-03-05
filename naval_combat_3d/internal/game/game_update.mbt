@@ -5,18 +5,13 @@
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   game.update_particles(dt)
-  if game.state == Menu {
-    game.update_menu(dt)
-  } else if game.state == BattleSelect {
-    game.update_battle_select(dt)
-  } else if game.state == Playing {
-    game.update_playing(dt)
-  } else if game.state == Paused {
-    game.update_paused()
-  } else if game.state == BattleComplete {
-    game.update_battle_complete()
-  } else if game.state == GameOver {
-    game.update_game_over()
+  match game.state {
+    Menu => game.update_menu(dt)
+    BattleSelect => game.update_battle_select(dt)
+    Playing => game.update_playing(dt)
+    Paused => game.update_paused()
+    BattleComplete => game.update_battle_complete()
+    GameOver => game.update_game_over()
   }
 }
 
@@ -1011,14 +1006,11 @@ fn @types.Game::start_battle(game : @types.Game, battle : Int) -> Unit {
     }
     enemy.ai_personality = personality
     // Set retreat threshold based on personality
-    if personality == Defensive {
-      enemy.retreat_hp_pct = 0.4
-    } else if personality == Retreater {
-      enemy.retreat_hp_pct = 0.5
-    } else if personality == Berserker {
-      enemy.retreat_hp_pct = 0.05
-    } else {
-      enemy.retreat_hp_pct = 0.2
+    match personality {
+      Defensive => enemy.retreat_hp_pct = 0.4
+      Retreater => enemy.retreat_hp_pct = 0.5
+      Berserker => enemy.retreat_hp_pct = 0.05
+      _ => enemy.retreat_hp_pct = 0.2
     }
     enemy.patrol_angle = angle
     enemy.patrol_cx = ex
@@ -1064,14 +1056,11 @@ fn @types.Game::start_battle(game : @types.Game, battle : Int) -> Unit {
       island.island_type = Fortress
     }
     // Vegetation density based on size
-    if island.island_type == Small {
-      island.vegetation_density = 2
-    } else if island.island_type == Medium {
-      island.vegetation_density = 4
-    } else if island.island_type == Large {
-      island.vegetation_density = 6
-    } else {
-      island.vegetation_density = 3
+    match island.island_type {
+      Small => island.vegetation_density = 2
+      Medium => island.vegetation_density = 4
+      Large => island.vegetation_density = 6
+      _ => island.vegetation_density = 3
     }
     game.island_count += 1
   }

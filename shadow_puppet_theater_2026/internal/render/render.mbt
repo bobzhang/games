@@ -313,18 +313,20 @@ fn @types.Game::draw_sequence_strip(game : @types.Game) -> Unit {
 
     let frame = if i < game.target_idx {
       @raylib.Color::new(122, 234, 156, 240)
-    } else if i == game.target_idx && game.state == Play {
-      @raylib.Color::new(246, 222, 142, 244)
     } else {
-      @raylib.Color::new(162, 150, 136, 220)
+      match (i == game.target_idx, game.state) {
+        (true, Play) => @raylib.Color::new(246, 222, 142, 244)
+        _ => @raylib.Color::new(162, 150, 136, 220)
+      }
     }
 
     let fill = if i < game.target_idx {
       @raylib.Color::new(24, 56, 38, 210)
-    } else if i == game.target_idx && game.state == Play {
-      @raylib.Color::new(64, 46, 24, 210)
     } else {
-      @raylib.Color::new(42, 34, 32, 186)
+      match (i == game.target_idx, game.state) {
+        (true, Play) => @raylib.Color::new(64, 46, 24, 210)
+        _ => @raylib.Color::new(42, 34, 32, 186)
+      }
     }
 
     @raylib.draw_rectangle(x, y, card_w, card_h, fill)

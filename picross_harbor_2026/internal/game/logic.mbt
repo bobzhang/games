@@ -646,14 +646,12 @@ fn @types.Game::move_cursor_once(game : @types.Game, dir : @types.Dir) -> Unit {
     return
   }
 
-  if dir == Left {
-    game.cursor_x = (game.cursor_x - 1).clamp(min=0, max=game.grid_w - 1)
-  } else if dir == Right {
-    game.cursor_x = (game.cursor_x + 1).clamp(min=0, max=game.grid_w - 1)
-  } else if dir == Up {
-    game.cursor_y = (game.cursor_y - 1).clamp(min=0, max=game.grid_h - 1)
-  } else if dir == Down {
-    game.cursor_y = (game.cursor_y + 1).clamp(min=0, max=game.grid_h - 1)
+  match dir {
+    Left => game.cursor_x = (game.cursor_x - 1).clamp(min=0, max=game.grid_w - 1)
+    Right => game.cursor_x = (game.cursor_x + 1).clamp(min=0, max=game.grid_w - 1)
+    Up => game.cursor_y = (game.cursor_y - 1).clamp(min=0, max=game.grid_h - 1)
+    Down => game.cursor_y = (game.cursor_y + 1).clamp(min=0, max=game.grid_h - 1)
+    _ => ()
   }
 }
 
@@ -946,54 +944,57 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   let next_press : Bool = game.detect_next_press()
   let reset_press : Bool = game.detect_reset_press()
 
-  if game.state == Title {
-    if start_press {
-      game.restart_campaign()
-    }
-  } else if game.state == Play {
-    let held_dir : @types.Dir = game.detect_held_dir()
-    game.update_cursor_hold(dt, held_dir)
+  match game.state {
+    Title =>
+      if start_press {
+        game.restart_campaign()
+      }
+    Play => {
+      let held_dir : @types.Dir = game.detect_held_dir()
+      game.update_cursor_hold(dt, held_dir)
 
-    if detect_toggle_tool() {
-      game.switch_tool()
-    }
+      if detect_toggle_tool() {
+        game.switch_tool()
+      }
 
-    let undo_press : Bool = game.detect_undo_press()
-    let hint_press : Bool = game.detect_hint_press()
-    let fill_press : Bool = game.detect_fill_press()
-    let cross_press : Bool = game.detect_cross_press()
-    let board_tap = game.detect_board_tap()
+      let undo_press : Bool = game.detect_undo_press()
+      let hint_press : Bool = game.detect_hint_press()
+      let fill_press : Bool = game.detect_fill_press()
+      let cross_press : Bool = game.detect_cross_press()
+      let board_tap = game.detect_board_tap()
 
-    if reset_press && game.touch_action_cd <= 0.0 {
-      game.touch_action_cd = 0.2
-      game.reload_level()
-    } else if undo_press && game.touch_action_cd <= 0.0 {
-      game.touch_action_cd = 0.16
-      ignore(game.undo_action())
-    } else if hint_press && game.touch_action_cd <= 0.0 {
-      game.touch_action_cd = 0.2
-      ignore(game.use_hint())
-    } else if board_tap.0 && game.touch_action_cd <= 0.0 {
-      game.touch_action_cd = 0.12
-      ignore(game.apply_tool_on_cell(board_tap.1, board_tap.2, game.tool_mode))
-    } else if fill_press && game.touch_action_cd <= 0.0 {
-      game.touch_action_cd = 0.1
-      ignore(game.apply_tool_at_cursor(ToolFill))
-    } else if cross_press && game.touch_action_cd <= 0.0 {
-      game.touch_action_cd = 0.1
-      ignore(game.apply_tool_at_cursor(ToolCross))
+      if reset_press && game.touch_action_cd <= 0.0 {
+        game.touch_action_cd = 0.2
+        game.reload_level()
+      } else if undo_press && game.touch_action_cd <= 0.0 {
+        game.touch_action_cd = 0.16
+        ignore(game.undo_action())
+      } else if hint_press && game.touch_action_cd <= 0.0 {
+        game.touch_action_cd = 0.2
+        ignore(game.use_hint())
+      } else if board_tap.0 && game.touch_action_cd <= 0.0 {
+        game.touch_action_cd = 0.12
+        ignore(game.apply_tool_on_cell(board_tap.1, board_tap.2, game.tool_mode))
+      } else if fill_press && game.touch_action_cd <= 0.0 {
+        game.touch_action_cd = 0.1
+        ignore(game.apply_tool_at_cursor(ToolFill))
+      } else if cross_press && game.touch_action_cd <= 0.0 {
+        game.touch_action_cd = 0.1
+        ignore(game.apply_tool_at_cursor(ToolCross))
+      }
     }
-  } else if game.state == LevelClear {
-    if next_press {
-      game.advance_level()
-    }
-  } else if game.state == CampaignClear {
-    if next_press {
-      game.restart_campaign()
-    }
-  } else if game.state == LevelFail {
-    if reset_press || next_press {
-      game.reload_level()
-    }
+    LevelClear =>
+      if next_press {
+        game.advance_level()
+      }
+    CampaignClear =>
+      if next_press {
+        game.restart_campaign()
+      }
+    LevelFail =>
+      if reset_press || next_press {
+        game.reload_level()
+      }
+    _ => ()
   }
 }

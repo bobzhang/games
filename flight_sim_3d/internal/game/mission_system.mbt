@@ -174,16 +174,12 @@ fn @types.Game::update_air_enemy_ai(
     e.ai_state = Patrol
   }
   // Execute AI behavior
-  if e.ai_state == Patrol {
-    game.ai_patrol(e, dt)
-  } else if e.ai_state == Engage {
-    game.ai_engage(e, player, dt)
-  } else if e.ai_state == Evade {
-    game.ai_evade(e, player, dt)
-  } else if e.ai_state == Flee {
-    game.ai_flee(e, player, dt)
-  } else {
-    game.ai_patrol(e, dt)
+  match e.ai_state {
+    Patrol => game.ai_patrol(e, dt)
+    Engage => game.ai_engage(e, player, dt)
+    Evade => game.ai_evade(e, player, dt)
+    Flee => game.ai_flee(e, player, dt)
+    _ => game.ai_patrol(e, dt)
   }
   // Apply velocity
   e.x += e.vx * dt

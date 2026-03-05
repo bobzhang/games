@@ -4,26 +4,17 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   game.update_particles(dt)
   game.update_score_flies(dt)
-  if game.state == Menu {
-    game.update_menu(dt)
-  } else if game.state == Playing {
-    game.update_playing(dt)
-  } else if game.state == Paused {
-    game.update_paused(dt)
-  } else if game.state == LevelComplete {
-    game.update_level_complete(dt)
-  } else if game.state == GameOver {
-    game.update_game_over(dt)
-  } else if game.state == WorldSelect {
-    game.update_world_select(dt)
-  } else if game.state == CampaignComplete {
-    game.update_campaign_complete(dt)
-  } else if game.state == LevelSelect {
-    game.update_level_select(dt)
-  } else if game.state == DeathAnim {
-    game.update_death_anim(dt)
-  } else if game.state == WorldIntro {
-    game.update_world_intro(dt)
+  match game.state {
+    Menu => game.update_menu(dt)
+    Playing => game.update_playing(dt)
+    Paused => game.update_paused(dt)
+    LevelComplete => game.update_level_complete(dt)
+    GameOver => game.update_game_over(dt)
+    WorldSelect => game.update_world_select(dt)
+    CampaignComplete => game.update_campaign_complete(dt)
+    LevelSelect => game.update_level_select(dt)
+    DeathAnim => game.update_death_anim(dt)
+    WorldIntro => game.update_world_intro(dt)
   }
 }
 

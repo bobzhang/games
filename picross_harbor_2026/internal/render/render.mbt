@@ -52,14 +52,11 @@ fn @types.Game::draw_spark_layer(game : @types.Game) -> Unit {
       continue
     }
 
-    let c : @raylib.Color = if spark.kind == Hint {
-      @raylib.Color::new(255, 218, 116, 236)
-    } else if spark.kind == Fill {
-      @raylib.Color::new(122, 214, 255, 236)
-    } else if spark.kind == Error {
-      @raylib.Color::new(246, 106, 94, 228)
-    } else {
-      @raylib.Color::new(206, 228, 255, 226)
+    let c : @raylib.Color = match spark.kind {
+      Hint => @raylib.Color::new(255, 218, 116, 236)
+      Fill => @raylib.Color::new(122, 214, 255, 236)
+      Error => @raylib.Color::new(246, 106, 94, 228)
+      _ => @raylib.Color::new(206, 228, 255, 226)
     }
 
     @raylib.draw_circle(
@@ -1046,11 +1043,10 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_side_panel()
   game.draw_touch_controls()
 
-  if game.state == LevelClear {
-    game.draw_level_clear_overlay()
-  } else if game.state == CampaignClear {
-    game.draw_campaign_clear_overlay()
-  } else if game.state == LevelFail {
-    game.draw_level_fail_overlay()
+  match game.state {
+    LevelClear => game.draw_level_clear_overlay()
+    CampaignClear => game.draw_campaign_clear_overlay()
+    LevelFail => game.draw_level_fail_overlay()
+    _ => ()
   }
 }

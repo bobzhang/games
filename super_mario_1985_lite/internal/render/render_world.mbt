@@ -56,160 +56,168 @@ fn @types.Game::draw_tile(
   let sx = @types.world_to_screen_x(@types.tile_left(tx), cam_x).to_int()
   let sy = world_to_screen_y(@types.tile_top(ty), shake_y).to_int()
 
-  if tile == Ground {
-    @raylib.draw_rectangle(
-      sx,
-      sy,
-      @types.tile_size,
-      @types.tile_size,
-      @raylib.Color::new(147, 86, 34, 255),
-    )
-    @raylib.draw_rectangle(
-      sx + 3,
-      sy + 4,
-      @types.tile_size - 6,
-      @types.tile_size - 7,
-      @raylib.Color::new(168, 103, 48, 255),
-    )
-    if @types.get_tile(game, tx, ty - 1) == Empty {
+  match tile {
+    Ground => {
       @raylib.draw_rectangle(
         sx,
         sy,
         @types.tile_size,
-        6,
-        @raylib.Color::new(101, 176, 68, 255),
+        @types.tile_size,
+        @raylib.Color::new(147, 86, 34, 255),
       )
-    }
-  } else if tile == Brick {
-    @raylib.draw_rectangle(
-      sx,
-      sy,
-      @types.tile_size,
-      @types.tile_size,
-      @raylib.Color::new(181, 92, 36, 255),
-    )
-    @raylib.draw_line(
-      sx,
-      sy + @types.tile_size / 2,
-      sx + @types.tile_size,
-      sy + @types.tile_size / 2,
-      @raylib.Color::new(145, 65, 22, 255),
-    )
-    @raylib.draw_line(
-      sx + @types.tile_size / 2,
-      sy,
-      sx + @types.tile_size / 2,
-      sy + @types.tile_size / 2,
-      @raylib.Color::new(145, 65, 22, 255),
-    )
-    @raylib.draw_line(
-      sx + @types.tile_size / 4,
-      sy + @types.tile_size / 2,
-      sx + @types.tile_size / 4,
-      sy + @types.tile_size,
-      @raylib.Color::new(145, 65, 22, 255),
-    )
-    @raylib.draw_line(
-      sx + @types.tile_size * 3 / 4,
-      sy + @types.tile_size / 2,
-      sx + @types.tile_size * 3 / 4,
-      sy + @types.tile_size,
-      @raylib.Color::new(145, 65, 22, 255),
-    )
-  } else if tile == Question {
-    let wave : Float = @math.sinf(
-      game.elapsed * (5.0 : Float) + Float::from_int(tx + ty),
-    )
-    let pulse : Float = (0.45 : Float) +
-      (0.55 : Float) * (wave * (0.5 : Float) + (0.5 : Float))
-    let c0 = @raylib.Color::new(219, 163, 38, 255)
-    let c1 = @raylib.Color::new(255, 220, 112, 255)
-    let cc = @raylib.color_lerp(c0, c1, pulse)
-    @raylib.draw_rectangle(sx, sy, @types.tile_size, @types.tile_size, cc)
-    @raylib.draw_rectangle_lines(
-      sx,
-      sy,
-      @types.tile_size,
-      @types.tile_size,
-      @raylib.Color::new(162, 108, 25, 255),
-    )
-    @raylib.draw_text(
-      "?",
-      sx + 9,
-      sy + 4,
-      22,
-      @raylib.Color::new(130, 84, 20, 255),
-    )
-  } else if tile == Used {
-    @raylib.draw_rectangle(
-      sx,
-      sy,
-      @types.tile_size,
-      @types.tile_size,
-      @raylib.Color::new(124, 108, 84, 255),
-    )
-    @raylib.draw_rectangle_lines(
-      sx,
-      sy,
-      @types.tile_size,
-      @types.tile_size,
-      @raylib.Color::new(98, 86, 69, 255),
-    )
-  } else if tile == Pipe {
-    @raylib.draw_rectangle(
-      sx,
-      sy,
-      @types.tile_size,
-      @types.tile_size,
-      @raylib.Color::new(28, 151, 58, 255),
-    )
-    let is_pipe_top = @types.get_tile(game, tx, ty - 1) != Pipe
-    if is_pipe_top {
       @raylib.draw_rectangle(
-        sx - 3,
-        sy - 6,
-        @types.tile_size + 6,
-        8,
-        @raylib.Color::new(50, 189, 88, 255),
+        sx + 3,
+        sy + 4,
+        @types.tile_size - 6,
+        @types.tile_size - 7,
+        @raylib.Color::new(168, 103, 48, 255),
+      )
+      if @types.get_tile(game, tx, ty - 1) == Empty {
+        @raylib.draw_rectangle(
+          sx,
+          sy,
+          @types.tile_size,
+          6,
+          @raylib.Color::new(101, 176, 68, 255),
+        )
+      }
+    }
+    Brick => {
+      @raylib.draw_rectangle(
+        sx,
+        sy,
+        @types.tile_size,
+        @types.tile_size,
+        @raylib.Color::new(181, 92, 36, 255),
+      )
+      @raylib.draw_line(
+        sx,
+        sy + @types.tile_size / 2,
+        sx + @types.tile_size,
+        sy + @types.tile_size / 2,
+        @raylib.Color::new(145, 65, 22, 255),
+      )
+      @raylib.draw_line(
+        sx + @types.tile_size / 2,
+        sy,
+        sx + @types.tile_size / 2,
+        sy + @types.tile_size / 2,
+        @raylib.Color::new(145, 65, 22, 255),
+      )
+      @raylib.draw_line(
+        sx + @types.tile_size / 4,
+        sy + @types.tile_size / 2,
+        sx + @types.tile_size / 4,
+        sy + @types.tile_size,
+        @raylib.Color::new(145, 65, 22, 255),
+      )
+      @raylib.draw_line(
+        sx + @types.tile_size * 3 / 4,
+        sy + @types.tile_size / 2,
+        sx + @types.tile_size * 3 / 4,
+        sy + @types.tile_size,
+        @raylib.Color::new(145, 65, 22, 255),
       )
     }
-    @raylib.draw_rectangle_lines(
-      sx,
-      sy,
-      @types.tile_size,
-      @types.tile_size,
-      @raylib.Color::new(18, 104, 40, 255),
-    )
-  } else if tile == FlagPole {
-    @raylib.draw_rectangle(
-      sx + @types.tile_size / 2 - 2,
-      sy,
-      4,
-      @types.tile_size,
-      @raylib.lightgray,
-    )
-  } else if tile == Castle {
-    @raylib.draw_rectangle(
-      sx,
-      sy,
-      @types.tile_size,
-      @types.tile_size,
-      @raylib.Color::new(118, 118, 128, 255),
-    )
-    @raylib.draw_rectangle(
-      sx + 6,
-      sy + 5,
-      8,
-      8,
-      @raylib.Color::new(92, 92, 99, 255),
-    )
-    @raylib.draw_rectangle(
-      sx + 18,
-      sy + 17,
-      8,
-      8,
-      @raylib.Color::new(92, 92, 99, 255),
-    )
+    Question => {
+      let wave : Float = @math.sinf(
+        game.elapsed * (5.0 : Float) + Float::from_int(tx + ty),
+      )
+      let pulse : Float = (0.45 : Float) +
+        (0.55 : Float) * (wave * (0.5 : Float) + (0.5 : Float))
+      let c0 = @raylib.Color::new(219, 163, 38, 255)
+      let c1 = @raylib.Color::new(255, 220, 112, 255)
+      let cc = @raylib.color_lerp(c0, c1, pulse)
+      @raylib.draw_rectangle(sx, sy, @types.tile_size, @types.tile_size, cc)
+      @raylib.draw_rectangle_lines(
+        sx,
+        sy,
+        @types.tile_size,
+        @types.tile_size,
+        @raylib.Color::new(162, 108, 25, 255),
+      )
+      @raylib.draw_text(
+        "?",
+        sx + 9,
+        sy + 4,
+        22,
+        @raylib.Color::new(130, 84, 20, 255),
+      )
+    }
+    Used => {
+      @raylib.draw_rectangle(
+        sx,
+        sy,
+        @types.tile_size,
+        @types.tile_size,
+        @raylib.Color::new(124, 108, 84, 255),
+      )
+      @raylib.draw_rectangle_lines(
+        sx,
+        sy,
+        @types.tile_size,
+        @types.tile_size,
+        @raylib.Color::new(98, 86, 69, 255),
+      )
+    }
+    Pipe => {
+      @raylib.draw_rectangle(
+        sx,
+        sy,
+        @types.tile_size,
+        @types.tile_size,
+        @raylib.Color::new(28, 151, 58, 255),
+      )
+      let is_pipe_top = @types.get_tile(game, tx, ty - 1) != Pipe
+      if is_pipe_top {
+        @raylib.draw_rectangle(
+          sx - 3,
+          sy - 6,
+          @types.tile_size + 6,
+          8,
+          @raylib.Color::new(50, 189, 88, 255),
+        )
+      }
+      @raylib.draw_rectangle_lines(
+        sx,
+        sy,
+        @types.tile_size,
+        @types.tile_size,
+        @raylib.Color::new(18, 104, 40, 255),
+      )
+    }
+    FlagPole =>
+      @raylib.draw_rectangle(
+        sx + @types.tile_size / 2 - 2,
+        sy,
+        4,
+        @types.tile_size,
+        @raylib.lightgray,
+      )
+    Castle => {
+      @raylib.draw_rectangle(
+        sx,
+        sy,
+        @types.tile_size,
+        @types.tile_size,
+        @raylib.Color::new(118, 118, 128, 255),
+      )
+      @raylib.draw_rectangle(
+        sx + 6,
+        sy + 5,
+        8,
+        8,
+        @raylib.Color::new(92, 92, 99, 255),
+      )
+      @raylib.draw_rectangle(
+        sx + 18,
+        sy + 17,
+        8,
+        8,
+        @raylib.Color::new(92, 92, 99, 255),
+      )
+    }
+    _ => ()
   }
 }
 

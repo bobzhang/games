@@ -262,38 +262,39 @@ fn draw_tank(
 
   let turret_len = 11
   let turret_w = 4
-  if tank.dir == Up {
-    @raylib.draw_rectangle(
-      sx - turret_w / 2,
-      sy - turret_len,
-      turret_w,
-      turret_len,
-      trim_color,
-    )
-  } else if tank.dir == Down {
-    @raylib.draw_rectangle(
-      sx - turret_w / 2,
-      sy,
-      turret_w,
-      turret_len,
-      trim_color,
-    )
-  } else if tank.dir == Left {
-    @raylib.draw_rectangle(
-      sx - turret_len,
-      sy - turret_w / 2,
-      turret_len,
-      turret_w,
-      trim_color,
-    )
-  } else {
-    @raylib.draw_rectangle(
-      sx,
-      sy - turret_w / 2,
-      turret_len,
-      turret_w,
-      trim_color,
-    )
+  match tank.dir {
+    Up =>
+      @raylib.draw_rectangle(
+        sx - turret_w / 2,
+        sy - turret_len,
+        turret_w,
+        turret_len,
+        trim_color,
+      )
+    Down =>
+      @raylib.draw_rectangle(
+        sx - turret_w / 2,
+        sy,
+        turret_w,
+        turret_len,
+        trim_color,
+      )
+    Left =>
+      @raylib.draw_rectangle(
+        sx - turret_len,
+        sy - turret_w / 2,
+        turret_len,
+        turret_w,
+        trim_color,
+      )
+    _ =>
+      @raylib.draw_rectangle(
+        sx,
+        sy - turret_w / 2,
+        turret_len,
+        turret_w,
+        trim_color,
+      )
   }
 
   @raylib.draw_circle(sx, sy, 5.0, trim_color)

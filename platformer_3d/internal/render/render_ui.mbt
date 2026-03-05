@@ -1,29 +1,26 @@
 ///|
 /// Draws the active 2D UI layer for the current game state and overlays score popups.
 pub fn draw_ui(game : @types.Game) -> Unit {
-  if game.state == Menu {
-    game.draw_menu()
-  } else if game.state == Playing {
-    game.draw_hud()
-  } else if game.state == Paused {
-    game.draw_hud()
-    game.draw_pause_overlay()
-  } else if game.state == LevelComplete {
-    game.draw_hud()
-    game.draw_level_complete()
-  } else if game.state == GameOver {
-    game.draw_game_over()
-  } else if game.state == WorldSelect {
-    game.draw_world_select()
-  } else if game.state == CampaignComplete {
-    game.draw_campaign_complete()
-  } else if game.state == LevelSelect {
-    game.draw_level_select()
-  } else if game.state == DeathAnim {
-    game.draw_hud()
-    game.draw_death_overlay()
-  } else if game.state == WorldIntro {
-    game.draw_world_intro()
+  match game.state {
+    Menu => game.draw_menu()
+    Playing => game.draw_hud()
+    Paused => {
+      game.draw_hud()
+      game.draw_pause_overlay()
+    }
+    LevelComplete => {
+      game.draw_hud()
+      game.draw_level_complete()
+    }
+    GameOver => game.draw_game_over()
+    WorldSelect => game.draw_world_select()
+    CampaignComplete => game.draw_campaign_complete()
+    LevelSelect => game.draw_level_select()
+    DeathAnim => {
+      game.draw_hud()
+      game.draw_death_overlay()
+    }
+    WorldIntro => game.draw_world_intro()
   }
   // Score flies (drawn over everything)
   game.draw_score_flies()

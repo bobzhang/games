@@ -13,18 +13,13 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
     // AI state transitions based on personality
     game.update_ai_state(i, dist_to_player)
     // Execute behavior
-    if enemy.ai_state == Patrol {
-      game.update_patrol(i, dt)
-    } else if enemy.ai_state == Chase {
-      game.update_chase(i, dt, px, pz)
-    } else if enemy.ai_state == Attack {
-      game.update_attack(i, dt, px, pz)
-    } else if enemy.ai_state == Retreat {
-      game.update_retreat(i, dt, px, pz)
-    } else if enemy.ai_state == Flank {
-      game.update_flank(i, dt, px, pz)
-    } else if enemy.ai_state == BroadsideRun {
-      game.update_broadside_run(i, dt, px, pz)
+    match enemy.ai_state {
+      Patrol => game.update_patrol(i, dt)
+      Chase => game.update_chase(i, dt, px, pz)
+      Attack => game.update_attack(i, dt, px, pz)
+      Retreat => game.update_retreat(i, dt, px, pz)
+      Flank => game.update_flank(i, dt, px, pz)
+      BroadsideRun => game.update_broadside_run(i, dt, px, pz)
     }
     // Calculate speed based on wind and mast damage
     let mast_ratio : Float = if enemy.max_mast_hp > 0.0 {
@@ -153,15 +148,11 @@ fn @types.Game::update_ai_state(
   if enemy.ai_state == Patrol {
     if dist_to_player < enemy.detect_range {
       // Transition based on personality
-      if enemy.ai_personality == Aggressive ||
-        enemy.ai_personality == Berserker {
-        enemy.ai_state = Chase
-      } else if enemy.ai_personality == Flanker {
-        enemy.ai_state = Flank
-      } else if enemy.ai_personality == Defensive {
-        enemy.ai_state = Attack
-      } else if enemy.ai_personality == Retreater {
-        enemy.ai_state = Chase
+      match enemy.ai_personality {
+        Aggressive | Berserker => enemy.ai_state = Chase
+        Flanker => enemy.ai_state = Flank
+        Defensive => enemy.ai_state = Attack
+        Retreater => enemy.ai_state = Chase
       }
     }
   } else if enemy.ai_state == Chase {

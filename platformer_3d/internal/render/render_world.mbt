@@ -1278,26 +1278,17 @@ fn @types.Game::draw_decorations(game : @types.Game) -> Unit {
     if not(d.active) {
       continue
     }
-    if d.kind == Tree {
-      draw_tree(d)
-    } else if d.kind == Rock {
-      draw_rock(d)
-    } else if d.kind == Crystal {
-      draw_crystal(d)
-    } else if d.kind == Mushroom {
-      draw_mushroom(d)
-    } else if d.kind == Pillar {
-      draw_pillar(d)
-    } else if d.kind == Stalagmite {
-      draw_stalagmite(d)
-    } else if d.kind == LavaRock {
-      draw_lava_rock(d)
-    } else if d.kind == Cloud {
-      draw_cloud_deco(d)
-    } else if d.kind == Bush {
-      draw_bush(d)
-    } else if d.kind == Lamp {
-      draw_lamp(d)
+    match d.kind {
+      Tree => draw_tree(d)
+      Rock => draw_rock(d)
+      Crystal => draw_crystal(d)
+      Mushroom => draw_mushroom(d)
+      Pillar => draw_pillar(d)
+      Stalagmite => draw_stalagmite(d)
+      LavaRock => draw_lava_rock(d)
+      Cloud => draw_cloud_deco(d)
+      Bush => draw_bush(d)
+      Lamp => draw_lamp(d)
     }
   }
 }

@@ -287,19 +287,13 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     game.demo_elapsed += dt
   }
 
-  if game.state == Menu {
-    game.update_menu(dt)
-  } else if game.state == StageIntro {
-    game.update_stage_intro(dt)
-  } else if game.state == Playing {
-    game.update_playing(dt)
-  } else if game.state == Paused {
-    game.update_paused(dt)
-  } else if game.state == StageClear {
-    game.update_stage_clear(dt)
-  } else if game.state == GameOver {
-    game.update_game_over(dt)
-  } else if game.state == CampaignClear {
-    game.update_campaign_clear(dt)
+  match game.state {
+    Menu => game.update_menu(dt)
+    StageIntro => game.update_stage_intro(dt)
+    Playing => game.update_playing(dt)
+    Paused => game.update_paused(dt)
+    StageClear => game.update_stage_clear(dt)
+    GameOver => game.update_game_over(dt)
+    CampaignClear => game.update_campaign_clear(dt)
   }
 }

@@ -1,24 +1,24 @@
 ///|
 /// Draws the full 2D user interface overlay for the current game state.
 pub fn draw_ui(game : @types.Game) -> Unit {
-  if game.state == Menu {
-    game.draw_menu()
-  } else if game.state == AircraftSelect {
-    game.draw_aircraft_select()
-  } else if game.state == MissionBriefing {
-    game.draw_mission_briefing()
-  } else if game.state == Playing {
-    game.draw_hud()
-    game.draw_radar()
-    game.draw_warning_indicators()
-  } else if game.state == Paused {
-    game.draw_hud()
-    draw_pause_overlay()
-  } else if game.state == MissionComplete {
-    game.draw_hud()
-    game.draw_mission_complete_detailed()
-  } else if game.state == GameOver {
-    game.draw_game_over_detailed()
+  match game.state {
+    Menu => game.draw_menu()
+    AircraftSelect => game.draw_aircraft_select()
+    MissionBriefing => game.draw_mission_briefing()
+    Playing => {
+      game.draw_hud()
+      game.draw_radar()
+      game.draw_warning_indicators()
+    }
+    Paused => {
+      game.draw_hud()
+      draw_pause_overlay()
+    }
+    MissionComplete => {
+      game.draw_hud()
+      game.draw_mission_complete_detailed()
+    }
+    GameOver => game.draw_game_over_detailed()
   }
 }
 
@@ -1223,12 +1223,10 @@ fn @types.Game::draw_warning_indicators(game : @types.Game) -> Unit {
   }
   @raylib.draw_text(ammo_text, weapon_x + 8, weapon_y + 28, 16, ammo_color)
   // Camera mode
-  let cam_text = if game.camera_mode == Chase {
-    "CAM: Chase"
-  } else if game.camera_mode == Cockpit {
-    "CAM: Cockpit"
-  } else {
-    "CAM: Free"
+  let cam_text = match game.camera_mode {
+    Chase => "CAM: Chase"
+    Cockpit => "CAM: Cockpit"
+    Free => "CAM: Free"
   }
   @raylib.draw_text(
     cam_text,

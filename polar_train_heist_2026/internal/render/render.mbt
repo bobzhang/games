@@ -677,16 +677,12 @@ fn draw_ent(e : @types.Ent, cam_x : Float, cam_y : Float) -> Unit {
     col = a_col(col, 84)
   }
 
-  if e.kind == Guard {
-    draw_guard(e, col, cam_x, cam_y)
-  } else if e.kind == Drone {
-    draw_drone(e, col, cam_x, cam_y)
-  } else if e.kind == Turret {
-    draw_turret(e, col, cam_x, cam_y)
-  } else if e.kind == Crate {
-    draw_crate(e, col, cam_x, cam_y)
-  } else {
-    draw_pickup(e, col, cam_x, cam_y)
+  match e.kind {
+    Guard => draw_guard(e, col, cam_x, cam_y)
+    Drone => draw_drone(e, col, cam_x, cam_y)
+    Turret => draw_turret(e, col, cam_x, cam_y)
+    Crate => draw_crate(e, col, cam_x, cam_y)
+    _ => draw_pickup(e, col, cam_x, cam_y)
   }
 
   if @types.is_hostile(e.kind) {
@@ -1574,12 +1570,11 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_world(shake.0, shake.1)
   game.draw_hud()
 
-  if game.state == Title {
-    game.draw_title_overlay()
-  } else if game.state == StageClear {
-    game.draw_stage_clear_overlay()
-  } else if game.state == GameOver {
-    game.draw_game_over_overlay()
+  match game.state {
+    Title => game.draw_title_overlay()
+    StageClear => game.draw_stage_clear_overlay()
+    GameOver => game.draw_game_over_overlay()
+    _ => ()
   }
 
   game.draw_touch_controls()

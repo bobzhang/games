@@ -142,16 +142,12 @@ fn @types.Game::level_completed(game : @types.Game) -> Bool {
 
 ///|
 fn direction_delta(dir : @types.Direction) -> (Int, Int) {
-  if dir == Left {
-    (-1, 0)
-  } else if dir == Right {
-    (1, 0)
-  } else if dir == Up {
-    (0, -1)
-  } else if dir == Down {
-    (0, 1)
-  } else {
-    (0, 0)
+  match dir {
+    Left => (-1, 0)
+    Right => (1, 0)
+    Up => (0, -1)
+    Down => (0, 1)
+    _ => (0, 0)
   }
 }
 
@@ -700,26 +696,31 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   let start_press : Bool = game.detect_start_press()
   let next_press : Bool = game.detect_next_press()
 
-  if game.state == Title {
-    game.update_active_game(dt, None, false, false)
-    if start_press {
-      game.restart_campaign()
+  match game.state {
+    Title => {
+      game.update_active_game(dt, None, false, false)
+      if start_press {
+        game.restart_campaign()
+      }
     }
-  } else if game.state == Play {
-    let held_dir = game.detect_hold_direction()
-    let undo_press : Bool = game.detect_undo_press()
-    let reset_press : Bool = game.detect_reset_press()
+    Play => {
+      let held_dir = game.detect_hold_direction()
+      let undo_press : Bool = game.detect_undo_press()
+      let reset_press : Bool = game.detect_reset_press()
 
-    game.update_active_game(dt, held_dir, undo_press, reset_press)
-  } else if game.state == LevelClear {
-    game.update_active_game(dt, None, false, false)
-    if next_press {
-      game.advance_to_next_level()
+      game.update_active_game(dt, held_dir, undo_press, reset_press)
     }
-  } else {
-    game.update_active_game(dt, None, false, false)
-    if next_press {
-      game.state = Title
+    LevelClear => {
+      game.update_active_game(dt, None, false, false)
+      if next_press {
+        game.advance_to_next_level()
+      }
+    }
+    _ => {
+      game.update_active_game(dt, None, false, false)
+      if next_press {
+        game.state = Title
+      }
     }
   }
 }

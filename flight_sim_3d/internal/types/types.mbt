@@ -542,42 +542,49 @@ pub fn WeatherState::new() -> WeatherState {
 /// Sets all weather parameters based on the given weather type `kind`.
 pub fn WeatherState::set_weather(self : WeatherState, kind : Weather) -> Unit {
   self.kind = kind
-  if kind == Clear {
-    self.visibility = fog_clear_dist
-    self.turbulence = turb_clear
-    self.wind_speed = wind_clear
-    self.rain_intensity = 0.0
-    self.time_of_day = 0.5
-  } else if kind == Cloudy {
-    self.visibility = fog_cloudy_dist
-    self.turbulence = turb_cloudy
-    self.wind_speed = wind_cloudy
-    self.rain_intensity = 0.0
-    self.time_of_day = 0.5
-  } else if kind == Fog {
-    self.visibility = fog_fog_dist
-    self.turbulence = turb_fog
-    self.wind_speed = wind_fog
-    self.rain_intensity = 0.0
-    self.time_of_day = 0.4
-  } else if kind == Rain {
-    self.visibility = fog_rain_dist
-    self.turbulence = turb_rain
-    self.wind_speed = wind_rain
-    self.rain_intensity = 0.7
-    self.time_of_day = 0.35
-  } else if kind == Storm {
-    self.visibility = fog_storm_dist
-    self.turbulence = turb_storm
-    self.wind_speed = wind_storm
-    self.rain_intensity = 1.0
-    self.time_of_day = 0.25
-  } else if kind == Night {
-    self.visibility = fog_night_dist
-    self.turbulence = turb_night
-    self.wind_speed = wind_night
-    self.rain_intensity = 0.0
-    self.time_of_day = 0.05
+  match kind {
+    Clear => {
+      self.visibility = fog_clear_dist
+      self.turbulence = turb_clear
+      self.wind_speed = wind_clear
+      self.rain_intensity = 0.0
+      self.time_of_day = 0.5
+    }
+    Cloudy => {
+      self.visibility = fog_cloudy_dist
+      self.turbulence = turb_cloudy
+      self.wind_speed = wind_cloudy
+      self.rain_intensity = 0.0
+      self.time_of_day = 0.5
+    }
+    Fog => {
+      self.visibility = fog_fog_dist
+      self.turbulence = turb_fog
+      self.wind_speed = wind_fog
+      self.rain_intensity = 0.0
+      self.time_of_day = 0.4
+    }
+    Rain => {
+      self.visibility = fog_rain_dist
+      self.turbulence = turb_rain
+      self.wind_speed = wind_rain
+      self.rain_intensity = 0.7
+      self.time_of_day = 0.35
+    }
+    Storm => {
+      self.visibility = fog_storm_dist
+      self.turbulence = turb_storm
+      self.wind_speed = wind_storm
+      self.rain_intensity = 1.0
+      self.time_of_day = 0.25
+    }
+    Night => {
+      self.visibility = fog_night_dist
+      self.turbulence = turb_night
+      self.wind_speed = wind_night
+      self.rain_intensity = 0.0
+      self.time_of_day = 0.05
+    }
   }
 }
 

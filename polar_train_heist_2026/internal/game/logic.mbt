@@ -834,53 +834,57 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
 ///|
 /// Fires one or two enemy projectiles from the given entity based on its kind.
 fn @types.Game::enemy_fire(game : @types.Game, e : @types.Ent) -> Unit {
-  if e.kind == Guard {
-    game.spawn_shot(
-      false,
-      e.x - e.w * 0.4,
-      e.y - e.h * 0.16,
-      -@types.enemy_shot_speed,
-      @types.randf(-80.0, 80.0),
-      2.2,
-      9.0,
-      0,
-    )
-  } else if e.kind == Drone {
-    let dx = game.hero.x - e.x
-    let dy = game.hero.y - e.y
-    let n2 = @types.maxf(dx * dx + dy * dy, 1.0)
-    let inv : Float = Float::from_int(1) / n2.sqrt()
-    game.spawn_shot(
-      false,
-      e.x,
-      e.y,
-      dx * inv * @types.enemy_shot_speed,
-      dy * inv * @types.enemy_shot_speed,
-      2.4,
-      11.0,
-      1,
-    )
-  } else if e.kind == Turret {
-    game.spawn_shot(
-      false,
-      e.x - 10.0,
-      e.y - e.h * 0.32,
-      -@types.enemy_shot_speed * 0.9,
-      -40.0,
-      2.4,
-      12.0,
-      2,
-    )
-    game.spawn_shot(
-      false,
-      e.x - 10.0,
-      e.y - e.h * 0.12,
-      -@types.enemy_shot_speed * 0.9,
-      40.0,
-      2.4,
-      12.0,
-      2,
-    )
+  match e.kind {
+    Guard =>
+      game.spawn_shot(
+        false,
+        e.x - e.w * 0.4,
+        e.y - e.h * 0.16,
+        -@types.enemy_shot_speed,
+        @types.randf(-80.0, 80.0),
+        2.2,
+        9.0,
+        0,
+      )
+    Drone => {
+      let dx = game.hero.x - e.x
+      let dy = game.hero.y - e.y
+      let n2 = @types.maxf(dx * dx + dy * dy, 1.0)
+      let inv : Float = Float::from_int(1) / n2.sqrt()
+      game.spawn_shot(
+        false,
+        e.x,
+        e.y,
+        dx * inv * @types.enemy_shot_speed,
+        dy * inv * @types.enemy_shot_speed,
+        2.4,
+        11.0,
+        1,
+      )
+    }
+    Turret => {
+      game.spawn_shot(
+        false,
+        e.x - 10.0,
+        e.y - e.h * 0.32,
+        -@types.enemy_shot_speed * 0.9,
+        -40.0,
+        2.4,
+        12.0,
+        2,
+      )
+      game.spawn_shot(
+        false,
+        e.x - 10.0,
+        e.y - e.h * 0.12,
+        -@types.enemy_shot_speed * 0.9,
+        40.0,
+        2.4,
+        12.0,
+        2,
+      )
+    }
+    _ => ()
   }
 }
 
@@ -935,17 +939,19 @@ fn @types.Game::update_ents(game : @types.Game, dt : Float) -> Unit {
     game.ents[i].spin = game.ents[i].spin + dt * 1.9
     game.ents[i].shot_cd = game.ents[i].shot_cd - dt
 
-    if game.ents[i].kind == Guard {
-      game.ents[i].x = game.ents[i].x +
-        @math.sinf(game.ents[i].spin * 2.4) * 22.0 * dt
-    } else if game.ents[i].kind == Drone {
-      game.ents[i].y = @types.lane_y(game.ents[i].lane) +
-        @math.sinf(game.ents[i].spin * 3.0) * 22.0
-    } else if game.ents[i].kind == Turret {
-      game.ents[i].y = @types.lane_y(game.ents[i].lane) - 6.0
-    } else if game.ents[i].kind == Crate {
-      game.ents[i].w = 52.0 + @math.sinf(game.ents[i].spin * 2.0) * 4.0
-      game.ents[i].h = 52.0 + @math.sinf(game.ents[i].spin * 2.6) * 4.0
+    match game.ents[i].kind {
+      Guard =>
+        game.ents[i].x = game.ents[i].x +
+          @math.sinf(game.ents[i].spin * 2.4) * 22.0 * dt
+      Drone =>
+        game.ents[i].y = @types.lane_y(game.ents[i].lane) +
+          @math.sinf(game.ents[i].spin * 3.0) * 22.0
+      Turret => game.ents[i].y = @types.lane_y(game.ents[i].lane) - 6.0
+      Crate => {
+        game.ents[i].w = 52.0 + @math.sinf(game.ents[i].spin * 2.0) * 4.0
+        game.ents[i].h = 52.0 + @math.sinf(game.ents[i].spin * 2.6) * 4.0
+      }
+      _ => ()
     }
 
     if game.ents[i].x < -220.0 {
@@ -957,14 +963,11 @@ fn @types.Game::update_ents(game : @types.Game, dt : Float) -> Unit {
       game.ents[i].shot_cd <= 0.0 &&
       game.ents[i].x < Float::from_int(@types.screen_w) - 20.0 {
       game.enemy_fire(game.ents[i])
-      game.ents[i].shot_cd = if game.ents[i].kind == Guard {
-        @types.randf(0.74, 1.42)
-      } else if game.ents[i].kind == Drone {
-        @types.randf(0.44, 1.02)
-      } else if game.ents[i].kind == Turret {
-        @types.randf(0.92, 1.72)
-      } else {
-        @types.randf(1.1, 1.8)
+      game.ents[i].shot_cd = match game.ents[i].kind {
+        Guard => @types.randf(0.74, 1.42)
+        Drone => @types.randf(0.44, 1.02)
+        Turret => @types.randf(0.92, 1.72)
+        _ => @types.randf(1.1, 1.8)
       }
     }
 
@@ -1278,14 +1281,11 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 
   game.update_timers(dt)
 
-  if game.state == Title {
-    game.update_title(dt)
-  } else if game.state == Play {
-    game.update_play(dt)
-  } else if game.state == StageClear {
-    game.update_stage_clear(dt)
-  } else {
-    game.update_game_over(dt)
+  match game.state {
+    Title => game.update_title(dt)
+    Play => game.update_play(dt)
+    StageClear => game.update_stage_clear(dt)
+    _ => game.update_game_over(dt)
   }
 
   if game.score > game.best_score {

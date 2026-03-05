@@ -241,14 +241,11 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
     let sy : Int = top + (spark.y * Float::from_int(tile)).to_int()
     let sr : Float = @types.maxf(1.0, Float::from_int(tile) * spark.size)
 
-    let c = if spark.kind == Gold {
-      @raylib.Color::new(255, 218, 102, 235)
-    } else if spark.kind == Orange {
-      @raylib.Color::new(248, 164, 78, 225)
-    } else if spark.kind == Red {
-      @raylib.Color::new(236, 100, 86, 214)
-    } else {
-      @raylib.Color::new(118, 222, 254, 228)
+    let c = match spark.kind {
+      Gold => @raylib.Color::new(255, 218, 102, 235)
+      Orange => @raylib.Color::new(248, 164, 78, 225)
+      Red => @raylib.Color::new(236, 100, 86, 214)
+      _ => @raylib.Color::new(118, 222, 254, 228)
     }
 
     @raylib.draw_circle(sx, sy, sr, c)
