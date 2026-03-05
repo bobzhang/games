@@ -75,7 +75,7 @@ fn @types.Game::choose_enemy_target_player(
 fn @types.Game::enemy_desired_dir(
   game : @types.Game,
   enemy : @types.Tank,
-) -> Int {
+) -> @types.Dir {
   let target_player = game.choose_enemy_target_player(enemy)
   let mut target_x = @types.tile_center_x(@types.base_tile_x)
   let mut target_y = @types.tile_center_y(@types.base_tile_y)
@@ -90,8 +90,8 @@ fn @types.Game::enemy_desired_dir(
 
   let dx = target_x - enemy.x
   let dy = target_y - enemy.y
-  let horiz = if dx < 0.0 { @types.dir_left } else { @types.dir_right }
-  let vert = if dy < 0.0 { @types.dir_up } else { @types.dir_down }
+  let horiz : @types.Dir = if dx < 0.0 { Left } else { Right }
+  let vert : @types.Dir = if dy < 0.0 { Up } else { Down }
 
   let r = @types.rand_range(game, 0, 99)
   if dx.abs() > dy.abs() {
@@ -100,14 +100,14 @@ fn @types.Game::enemy_desired_dir(
     } else if r < 92 {
       vert
     } else {
-      @types.rand_range(game, 0, 3)
+      @types.Dir::from_int(@types.rand_range(game, 0, 3))
     }
   } else if r < 72 {
     vert
   } else if r < 92 {
     horiz
   } else {
-    @types.rand_range(game, 0, 3)
+    @types.Dir::from_int(@types.rand_range(game, 0, 3))
   }
 }
 
@@ -115,7 +115,7 @@ fn @types.Game::enemy_desired_dir(
 fn @types.Game::try_move_enemy(
   game : @types.Game,
   enemy_index : Int,
-  dir : Int,
+  dir : @types.Dir,
   dt : Float,
 ) -> Bool {
   let enemy = game.enemies[enemy_index]
@@ -194,7 +194,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
       enemy.ai_stuck_timer += dt
       if enemy.ai_stuck_timer > 0.14 {
         enemy.ai_stuck_timer = 0.0
-        enemy.dir = @types.rand_range(game, 0, 3)
+        enemy.dir = @types.Dir::from_int(@types.rand_range(game, 0, 3))
       }
     } else {
       enemy.ai_stuck_timer = 0.0

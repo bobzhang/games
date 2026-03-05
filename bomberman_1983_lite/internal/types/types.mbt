@@ -58,7 +58,7 @@ pub(all) struct Tank {
   enemy_kind : EnemyKind
   mut x : Float
   mut y : Float
-  mut dir : Int
+  mut dir : Dir
   mut move_speed : Float
   mut hp : Int
   mut reload_timer : Float
@@ -84,7 +84,7 @@ pub fn Tank::inactive() -> Tank {
     enemy_kind: Basic,
     x: 0.0,
     y: 0.0,
-    dir: dir_up,
+    dir: Up,
     move_speed: speed_enemy_basic,
     hp: 1,
     reload_timer: 0.0,
@@ -111,7 +111,7 @@ pub fn Tank::new_player(_index : Int, spawn_x : Float, spawn_y : Float) -> Tank 
     enemy_kind: Basic,
     x: spawn_x,
     y: spawn_y,
-    dir: dir_up,
+    dir: Up,
     move_speed: speed_player,
     hp: 1,
     reload_timer: 0.0,
@@ -148,7 +148,7 @@ pub fn Tank::new_enemy(
     enemy_kind: kind,
     x: spawn_x,
     y: spawn_y,
-    dir: dir_down,
+    dir: Down,
     move_speed: speed,
     hp,
     reload_timer: 0.0,

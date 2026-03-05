@@ -156,7 +156,7 @@ fn @types.Game::respawn_player_tank(game : @types.Game, index : Int) -> Unit {
   player.ai_move_timer = 0.0
   player.ai_fire_timer = 0.0
   player.ai_stuck_timer = 0.0
-  player.dir = @types.dir_up
+  player.dir = Up
   player.invuln_timer = @types.player_invuln_spawn
   player.shield_timer = 0.0
   player.respawn_timer = 0.0

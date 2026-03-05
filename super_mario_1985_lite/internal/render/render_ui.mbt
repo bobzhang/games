@@ -98,11 +98,11 @@ fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
 pub fn draw_ui(game : @types.Game) -> Unit {
   game.draw_hud()
 
-  if game.state == @types.state_title {
+  if game.state == Title {
     game.draw_title_overlay()
-  } else if game.state == @types.state_win {
+  } else if game.state == Win {
     game.draw_win_overlay()
-  } else if game.state == @types.state_game_over {
+  } else if game.state == GameOver {
     game.draw_game_over_overlay()
   }
 }

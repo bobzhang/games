@@ -45,18 +45,18 @@ fn @types.Game::draw_tile(
   game : @types.Game,
   tx : Int,
   ty : Int,
-  tile : Int,
+  tile : @types.Tile,
   cam_x : Float,
   shake_y : Float,
 ) -> Unit {
-  if tile == @types.tile_empty {
+  if tile == Empty {
     return
   }
 
   let sx = @types.world_to_screen_x(@types.tile_left(tx), cam_x).to_int()
   let sy = world_to_screen_y(@types.tile_top(ty), shake_y).to_int()
 
-  if tile == @types.tile_ground {
+  if tile == Ground {
     @raylib.draw_rectangle(
       sx,
       sy,
@@ -71,7 +71,7 @@ fn @types.Game::draw_tile(
       @types.tile_size - 7,
       @raylib.Color::new(168, 103, 48, 255),
     )
-    if @types.get_tile(game, tx, ty - 1) == @types.tile_empty {
+    if @types.get_tile(game, tx, ty - 1) == Empty {
       @raylib.draw_rectangle(
         sx,
         sy,
@@ -80,7 +80,7 @@ fn @types.Game::draw_tile(
         @raylib.Color::new(101, 176, 68, 255),
       )
     }
-  } else if tile == @types.tile_brick {
+  } else if tile == Brick {
     @raylib.draw_rectangle(
       sx,
       sy,
@@ -116,7 +116,7 @@ fn @types.Game::draw_tile(
       sy + @types.tile_size,
       @raylib.Color::new(145, 65, 22, 255),
     )
-  } else if tile == @types.tile_question {
+  } else if tile == Question {
     let wave : Float = @math.sinf(
       game.elapsed * (5.0 : Float) + Float::from_int(tx + ty),
     )
@@ -140,7 +140,7 @@ fn @types.Game::draw_tile(
       22,
       @raylib.Color::new(130, 84, 20, 255),
     )
-  } else if tile == @types.tile_used {
+  } else if tile == Used {
     @raylib.draw_rectangle(
       sx,
       sy,
@@ -155,7 +155,7 @@ fn @types.Game::draw_tile(
       @types.tile_size,
       @raylib.Color::new(98, 86, 69, 255),
     )
-  } else if tile == @types.tile_pipe {
+  } else if tile == Pipe {
     @raylib.draw_rectangle(
       sx,
       sy,
@@ -163,7 +163,7 @@ fn @types.Game::draw_tile(
       @types.tile_size,
       @raylib.Color::new(28, 151, 58, 255),
     )
-    let is_pipe_top = @types.get_tile(game, tx, ty - 1) != @types.tile_pipe
+    let is_pipe_top = @types.get_tile(game, tx, ty - 1) != Pipe
     if is_pipe_top {
       @raylib.draw_rectangle(
         sx - 3,
@@ -180,7 +180,7 @@ fn @types.Game::draw_tile(
       @types.tile_size,
       @raylib.Color::new(18, 104, 40, 255),
     )
-  } else if tile == @types.tile_flag_pole {
+  } else if tile == FlagPole {
     @raylib.draw_rectangle(
       sx + @types.tile_size / 2 - 2,
       sy,
@@ -188,7 +188,7 @@ fn @types.Game::draw_tile(
       @types.tile_size,
       @raylib.lightgray,
     )
-  } else if tile == @types.tile_castle {
+  } else if tile == Castle {
     @raylib.draw_rectangle(
       sx,
       sy,

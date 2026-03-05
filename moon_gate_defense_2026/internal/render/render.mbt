@@ -267,7 +267,7 @@ fn @types.Game::draw_enemies(
       alpha_col(col, 220),
     )
 
-    if enemy.kind == @types.enemy_kind_wraith {
+    if enemy.kind == Wraith {
       let aura = enemy.radius +
         4.0 +
         @math.sinf(game.time_s * 8.0 + enemy.phase) * 2.0
@@ -716,11 +716,11 @@ fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
 ///|
 /// Dispatches to the correct overlay (title, paused, or game-over) based on the current state.
 fn @types.Game::draw_state_overlay(game : @types.Game) -> Unit {
-  if game.state == @types.state_title {
+  if game.state == Title {
     game.draw_title_overlay()
-  } else if game.state == @types.state_paused {
+  } else if game.state == Paused {
     draw_paused_overlay()
-  } else if game.state == @types.state_game_over {
+  } else if game.state == GameOver {
     game.draw_game_over_overlay()
   }
 }

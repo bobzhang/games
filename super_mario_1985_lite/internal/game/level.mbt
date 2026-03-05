@@ -59,7 +59,7 @@ fn @types.Game::add_coin_spawn(game : @types.Game, tx : Int, ty : Int) -> Unit {
 fn @types.Game::carve_gap(game : @types.Game, tx0 : Int, tx1 : Int) -> Unit {
   for x in tx0..<=tx1 {
     for y in @types.ground_row..<@types.world_tiles_h {
-      @types.set_tile(game, x, y, @types.tile_empty)
+      @types.set_tile(game, x, y, Empty)
     }
   }
 }
@@ -67,7 +67,7 @@ fn @types.Game::carve_gap(game : @types.Game, tx0 : Int, tx1 : Int) -> Unit {
 ///|
 fn @types.Game::add_pipe(game : @types.Game, tx : Int, height : Int) -> Unit {
   let top = @types.ground_row - height
-  @types.fill_rect_tile(game, tx, top, 2, height, @types.tile_pipe)
+  @types.fill_rect_tile(game, tx, top, 2, height, Pipe)
 }
 
 ///|
@@ -78,13 +78,13 @@ fn @types.Game::add_brick_row(
   len : Int,
 ) -> Unit {
   for x in tx..<(tx + len) {
-    @types.set_tile(game, x, ty, @types.tile_brick)
+    @types.set_tile(game, x, ty, Brick)
   }
 }
 
 ///|
 fn @types.Game::add_question(game : @types.Game, tx : Int, ty : Int) -> Unit {
-  @types.set_tile(game, tx, ty, @types.tile_question)
+  @types.set_tile(game, tx, ty, Question)
 }
 
 ///|
@@ -95,7 +95,7 @@ fn @types.Game::fill_ground(game : @types.Game) -> Unit {
     @types.ground_row,
     @types.world_tiles_w,
     @types.world_tiles_h - @types.ground_row,
-    @types.tile_ground,
+    Ground,
   )
 }
 
@@ -146,7 +146,7 @@ fn @types.Game::build_level_geometry(game : @types.Game) -> Unit {
     @types.ground_row - 1,
     1,
     1,
-    @types.tile_ground,
+    Ground,
   )
   @types.fill_rect_tile(
     game,
@@ -154,7 +154,7 @@ fn @types.Game::build_level_geometry(game : @types.Game) -> Unit {
     @types.ground_row - 2,
     1,
     2,
-    @types.tile_ground,
+    Ground,
   )
   @types.fill_rect_tile(
     game,
@@ -162,7 +162,7 @@ fn @types.Game::build_level_geometry(game : @types.Game) -> Unit {
     @types.ground_row - 3,
     1,
     3,
-    @types.tile_ground,
+    Ground,
   )
   @types.fill_rect_tile(
     game,
@@ -170,7 +170,7 @@ fn @types.Game::build_level_geometry(game : @types.Game) -> Unit {
     @types.ground_row - 4,
     1,
     4,
-    @types.tile_ground,
+    Ground,
   )
   @types.fill_rect_tile(
     game,
@@ -178,7 +178,7 @@ fn @types.Game::build_level_geometry(game : @types.Game) -> Unit {
     @types.ground_row - 5,
     1,
     5,
-    @types.tile_ground,
+    Ground,
   )
   @types.fill_rect_tile(
     game,
@@ -186,13 +186,13 @@ fn @types.Game::build_level_geometry(game : @types.Game) -> Unit {
     @types.ground_row - 6,
     1,
     6,
-    @types.tile_ground,
+    Ground,
   )
 
   // Flag pole and castle.
   let flag_tx = 214
   for ty in 8..<@types.ground_row {
-    @types.set_tile(game, flag_tx, ty, @types.tile_flag_pole)
+    @types.set_tile(game, flag_tx, ty, FlagPole)
   }
 
   @types.fill_rect_tile(
@@ -201,7 +201,7 @@ fn @types.Game::build_level_geometry(game : @types.Game) -> Unit {
     @types.ground_row - 5,
     6,
     5,
-    @types.tile_castle,
+    Castle,
   )
   @types.fill_rect_tile(
     game,
@@ -209,7 +209,7 @@ fn @types.Game::build_level_geometry(game : @types.Game) -> Unit {
     @types.ground_row - 7,
     2,
     2,
-    @types.tile_castle,
+    Castle,
   )
 
   game.flag_x = @types.tile_center_x(flag_tx)
@@ -299,5 +299,5 @@ fn @types.Game::reset_full_run(game : @types.Game) -> Unit {
   game.time_left = @types.start_time_seconds
   game.time_accum = 0.0
   game.elapsed = 0.0
-  game.state = @types.state_playing
+  game.state = Playing
 }

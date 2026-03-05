@@ -128,26 +128,22 @@ pub fn tile_to_screen_y(ty : Int, shake_y : Float) -> Int {
 }
 
 ///|
-/// Returns unit x direction for a direction id.
-pub fn dir_vector_x(dir : Int) -> Float {
-  if dir == dir_left {
-    -1.0
-  } else if dir == dir_right {
-    1.0
-  } else {
-    0.0
+/// Returns unit x direction for a direction.
+pub fn dir_vector_x(dir : Dir) -> Float {
+  match dir {
+    Left => -1.0
+    Right => 1.0
+    Up | Down => 0.0
   }
 }
 
 ///|
-/// Returns unit y direction for a direction id.
-pub fn dir_vector_y(dir : Int) -> Float {
-  if dir == dir_up {
-    -1.0
-  } else if dir == dir_down {
-    1.0
-  } else {
-    0.0
+/// Returns unit y direction for a direction.
+pub fn dir_vector_y(dir : Dir) -> Float {
+  match dir {
+    Up => -1.0
+    Down => 1.0
+    Left | Right => 0.0
   }
 }
 

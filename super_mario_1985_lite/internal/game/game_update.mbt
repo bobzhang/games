@@ -17,7 +17,7 @@ fn @types.Game::update_camera(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 fn @types.Game::tick_level_timer(game : @types.Game, dt : Float) -> Unit {
-  if game.player.reached_flag || game.state != @types.state_playing {
+  if game.player.reached_flag || game.state != Playing {
     return
   }
 
@@ -27,7 +27,7 @@ fn @types.Game::tick_level_timer(game : @types.Game, dt : Float) -> Unit {
     game.time_left -= 1
     if game.time_left <= 0 {
       game.time_left = 0
-      game.state = @types.state_game_over
+      game.state = GameOver
       game.player.lives = 0
       return
     }
@@ -41,7 +41,7 @@ fn @types.Game::update_playing(
   dt : Float,
 ) -> Unit {
   game.tick_level_timer(dt)
-  if game.state != @types.state_playing {
+  if game.state != Playing {
     return
   }
 
@@ -64,7 +64,7 @@ fn @types.Game::update_playing(
 /// Builds and initializes the level, then enters title state.
 pub fn init_game(game : @types.Game) -> Unit {
   game.build_level()
-  game.state = @types.state_title
+  game.state = Title
   game.time_left = @types.start_time_seconds
   game.time_accum = 0.0
 }
@@ -78,7 +78,7 @@ pub fn update_game(
 ) -> Unit {
   game.elapsed += dt
 
-  if game.state == @types.state_title {
+  if game.state == Title {
     @particles.update_particles(game, dt)
     if input.accept {
       game.reset_full_run()
@@ -86,7 +86,7 @@ pub fn update_game(
     return
   }
 
-  if game.state == @types.state_playing {
+  if game.state == Playing {
     game.update_playing(input, dt)
     return
   }

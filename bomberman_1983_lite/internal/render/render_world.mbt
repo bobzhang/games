@@ -247,7 +247,7 @@ fn draw_tank(
 
   let turret_len = 11
   let turret_w = 4
-  if tank.dir == @types.dir_up {
+  if tank.dir == Up {
     @raylib.draw_rectangle(
       sx - turret_w / 2,
       sy - turret_len,
@@ -255,7 +255,7 @@ fn draw_tank(
       turret_len,
       trim_color,
     )
-  } else if tank.dir == @types.dir_down {
+  } else if tank.dir == Down {
     @raylib.draw_rectangle(
       sx - turret_w / 2,
       sy,
@@ -263,7 +263,7 @@ fn draw_tank(
       turret_len,
       trim_color,
     )
-  } else if tank.dir == @types.dir_left {
+  } else if tank.dir == Left {
     @raylib.draw_rectangle(
       sx - turret_len,
       sy - turret_w / 2,

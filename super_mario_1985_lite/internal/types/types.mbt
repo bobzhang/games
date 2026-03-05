@@ -147,7 +147,7 @@ pub fn Particle::inactive() -> Particle {
 ///|
 /// Global mutable game state for the Mario-lite loop.
 pub(all) struct Game {
-  mut state : Int
+  mut state : GameState
   mut elapsed : Float
   mut time_accum : Float
   mut time_left : Int
@@ -158,7 +158,7 @@ pub(all) struct Game {
   mut castle_x : Float
   mut start_y : Float
   mut shake_t : Float
-  tiles : Array[Int]
+  tiles : Array[Tile]
   player : Player
   enemies : Array[Enemy]
   coins : Array[Coin]
@@ -169,7 +169,7 @@ pub(all) struct Game {
 /// Creates a fresh game state with allocated tile/entity pools.
 pub fn Game::new() -> Game {
   {
-    state: state_title,
+    state: Title,
     elapsed: 0.0,
     time_accum: 0.0,
     time_left: start_time_seconds,
@@ -180,7 +180,7 @@ pub fn Game::new() -> Game {
     castle_x: 0.0,
     start_y: 0.0,
     shake_t: 0.0,
-    tiles: Array::make(world_tiles_w * world_tiles_h, tile_empty),
+    tiles: Array::make(world_tiles_w * world_tiles_h, Empty),
     player: Player::new(),
     enemies: Array::makei(max_enemies, fn(_i) { Enemy::inactive() }),
     coins: Array::makei(max_coins, fn(_i) { Coin::inactive() }),

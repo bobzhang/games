@@ -11,18 +11,18 @@ fn @types.Game::on_player_hit_block(
   game : @types.Game,
   tx : Int,
   ty : Int,
-  tile : Int,
+  tile : @types.Tile,
 ) -> Unit {
   let player = game.player
   let cx = @types.tile_center_x(tx)
   let cy = @types.tile_center_y(ty)
 
-  if tile == @types.tile_brick {
-    @types.set_tile(game, tx, ty, @types.tile_empty)
+  if tile == Brick {
+    @types.set_tile(game, tx, ty, Empty)
     player.score += @types.block_hit_score
     @particles.spawn_block_burst(game, cx, cy, @raylib.maroon)
-  } else if tile == @types.tile_question {
-    @types.set_tile(game, tx, ty, @types.tile_used)
+  } else if tile == Question {
+    @types.set_tile(game, tx, ty, Used)
     game.collect_coin(cx, cy - 12.0)
     player.score += @types.block_hit_score
     @particles.spawn_block_burst(game, cx, cy, @raylib.yellow)
@@ -152,7 +152,7 @@ fn @types.Game::update_flag_sequence(game : @types.Game, dt : Float) -> Unit {
     player.x += @types.castle_walk_speed * dt
     if player.x >= game.castle_x {
       player.flag_phase = 3
-      game.state = @types.state_win
+      game.state = Win
     }
   }
 }
@@ -185,7 +185,7 @@ fn @types.Game::on_player_hurt(game : @types.Game) -> Unit {
   game.shake_t = 0.24
 
   if player.lives <= 0 {
-    game.state = @types.state_game_over
+    game.state = GameOver
     return
   }
 

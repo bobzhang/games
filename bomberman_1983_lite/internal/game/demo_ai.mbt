@@ -1,13 +1,10 @@
 ///|
-fn opposite_dir(dir : Int) -> Int {
-  if dir == @types.dir_up {
-    @types.dir_down
-  } else if dir == @types.dir_down {
-    @types.dir_up
-  } else if dir == @types.dir_left {
-    @types.dir_right
-  } else {
-    @types.dir_left
+fn opposite_dir(dir : @types.Dir) -> @types.Dir {
+  match dir {
+    Up => Down
+    Down => Up
+    Left => Right
+    Right => Left
   }
 }
 
@@ -57,7 +54,7 @@ fn @types.Game::demo_nearest_powerup(
 fn @types.Game::demo_can_step(
   game : @types.Game,
   index : Int,
-  dir : Int,
+  dir : @types.Dir,
   dt : Float,
 ) -> Bool {
   let player = game.players[index]
@@ -86,21 +83,21 @@ fn @types.Game::demo_priority_dir(
   game : @types.Game,
   index : Int,
   dt : Float,
-  a : Int,
-  b : Int,
-  c : Int,
-  d : Int,
-) -> Int {
+  a : @types.Dir,
+  b : @types.Dir,
+  c : @types.Dir,
+  d : @types.Dir,
+) -> @types.Dir? {
   if game.demo_can_step(index, a, dt) {
-    a
+    Some(a)
   } else if game.demo_can_step(index, b, dt) {
-    b
+    Some(b)
   } else if game.demo_can_step(index, c, dt) {
-    c
+    Some(c)
   } else if game.demo_can_step(index, d, dt) {
-    d
+    Some(d)
   } else {
-    -1
+    None
   }
 }
 
@@ -111,15 +108,15 @@ fn @types.Game::demo_choose_move_dir(
   dt : Float,
   target_x : Float,
   target_y : Float,
-) -> Int {
+) -> @types.Dir? {
   let player = game.players[index]
   let dx = target_x - player.x
   let dy = target_y - player.y
 
-  let horiz = if dx < 0.0 { @types.dir_left } else { @types.dir_right }
-  let vert = if dy < 0.0 { @types.dir_up } else { @types.dir_down }
+  let horiz : @types.Dir = if dx < 0.0 { Left } else { Right }
+  let vert : @types.Dir = if dy < 0.0 { Up } else { Down }
 
-  let mut move_dir = if dx.abs() > dy.abs() {
+  let mut move_dir : @types.Dir? = if dx.abs() > dy.abs() {
     game.demo_priority_dir(
       index,
       dt,
@@ -139,10 +136,10 @@ fn @types.Game::demo_choose_move_dir(
     )
   }
 
-  if move_dir < 0 {
-    let random_dir = @types.rand_range(game, 0, 3)
+  if move_dir is None {
+    let random_dir = @types.Dir::from_int(@types.rand_range(game, 0, 3))
     if game.demo_can_step(index, random_dir, dt) {
-      move_dir = random_dir
+      move_dir = Some(random_dir)
     }
   }
 
@@ -155,16 +152,16 @@ fn demo_line_shot_dir(
   player_y : Float,
   target_x : Float,
   target_y : Float,
-) -> (Int, Bool) {
+) -> (@types.Dir, Bool) {
   let epsilon = Float::from_int(@types.tile_size) * 0.42
   let dx = target_x - player_x
   let dy = target_y - player_y
   if dx.abs() <= epsilon {
-    (if dy < 0.0 { @types.dir_up } else { @types.dir_down }, true)
+    (if dy < 0.0 { Up } else { Down }, true)
   } else if dy.abs() <= epsilon {
-    (if dx < 0.0 { @types.dir_left } else { @types.dir_right }, true)
+    (if dx < 0.0 { Left } else { Right }, true)
   } else {
-    (@types.dir_up, false)
+    (Up, false)
   }
 }
 
@@ -199,10 +196,10 @@ fn @types.Game::demo_player_command(
   game : @types.Game,
   index : Int,
   dt : Float,
-) -> (Int, Bool) {
+) -> (@types.Dir?, Bool) {
   let player = game.players[index]
   if not(player.active) {
-    return (-1, false)
+    return (None, false)
   }
 
   let (nearest_enemy, enemy_dist) = game.demo_nearest_enemy(player.x, player.y)
@@ -226,7 +223,7 @@ fn @types.Game::demo_player_command(
       enemy.y,
     )
     if aligned && not(game.sight_blocked(player.x, player.y, enemy.x, enemy.y)) {
-      move_dir = line_dir
+      move_dir = Some(line_dir)
       shoot = true
     }
   }
@@ -241,7 +238,7 @@ fn @types.Game::demo_player_command(
       base_y,
     )
     if aligned && @types.rand_range(game, 0, 99) < 8 {
-      move_dir = line_dir
+      move_dir = Some(line_dir)
       shoot = true
     }
   }

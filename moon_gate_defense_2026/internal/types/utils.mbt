@@ -190,25 +190,21 @@ pub fn wave_spawn_cd(wave : Int) -> Float {
 
 ///|
 /// Returns the x component for a direction id.
-pub fn dir_vec_x(dir : Int) -> Float {
-  if dir == dir_right {
-    1.0
-  } else if dir == dir_left {
-    -1.0
-  } else {
-    0.0
+pub fn dir_vec_x(dir : Dir) -> Float {
+  match dir {
+    Right => 1.0
+    Left => -1.0
+    _ => 0.0
   }
 }
 
 ///|
 /// Returns the y component for a direction id.
-pub fn dir_vec_y(dir : Int) -> Float {
-  if dir == dir_down {
-    1.0
-  } else if dir == dir_up {
-    -1.0
-  } else {
-    0.0
+pub fn dir_vec_y(dir : Dir) -> Float {
+  match dir {
+    Down => 1.0
+    Up => -1.0
+    _ => 0.0
   }
 }
 
@@ -250,13 +246,11 @@ pub fn col_barrier() -> @raylib.Color {
 
 ///|
 /// Returns the tint color for an enemy kind.
-pub fn col_enemy(kind : Int) -> @raylib.Color {
-  if kind == enemy_kind_carapace {
-    @raylib.Color::new(248, 134, 104, 255)
-  } else if kind == enemy_kind_wraith {
-    @raylib.Color::new(166, 122, 252, 255)
-  } else {
-    @raylib.Color::new(250, 206, 116, 255)
+pub fn col_enemy(kind : EnemyKind) -> @raylib.Color {
+  match kind {
+    Carapace => @raylib.Color::new(248, 134, 104, 255)
+    Wraith => @raylib.Color::new(166, 122, 252, 255)
+    Skitter => @raylib.Color::new(250, 206, 116, 255)
   }
 }
 

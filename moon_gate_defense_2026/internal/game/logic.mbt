@@ -145,7 +145,7 @@ fn @types.Game::start_new_run(game : @types.Game) -> Unit {
   game.clear_bolts()
   game.clear_pulses()
 
-  game.state = @types.state_playing
+  game.state = Playing
   game.score = 0
   game.kills = 0
   game.wave = 0
@@ -161,7 +161,7 @@ fn @types.Game::start_new_run(game : @types.Game) -> Unit {
   game.shake_t = 0.0
   game.cursor_x = @types.gate_gx + 1
   game.cursor_y = @types.gate_gy
-  game.cursor_dir = @types.dir_left
+  game.cursor_dir = Left
 
   game.set_status("Deploy guardians and hold the moon gate", 1.7)
   game.begin_next_wave()
@@ -170,11 +170,11 @@ fn @types.Game::start_new_run(game : @types.Game) -> Unit {
 ///|
 /// Transitions to the game-over state, finalises the best score, and sets status text.
 fn @types.Game::enter_game_over(game : @types.Game) -> Unit {
-  if game.state == @types.state_game_over {
+  if game.state == GameOver {
     return
   }
 
-  game.state = @types.state_game_over
+  game.state = GameOver
   game.pending_spawns = 0
   game.spawn_cd = 0.0
   game.wave_delay = 0.0
@@ -204,18 +204,18 @@ fn @types.Game::find_node_at(game : @types.Game, gx : Int, gy : Int) -> Int {
 fn @types.Game::move_cursor(game : @types.Game) -> Unit {
   if game.input_move_x < 0 {
     game.cursor_x = (game.cursor_x - 1).clamp(min=0, max=@types.grid_cols - 1)
-    game.cursor_dir = @types.dir_left
+    game.cursor_dir = Left
   } else if game.input_move_x > 0 {
     game.cursor_x = (game.cursor_x + 1).clamp(min=0, max=@types.grid_cols - 1)
-    game.cursor_dir = @types.dir_right
+    game.cursor_dir = Right
   }
 
   if game.input_move_y < 0 {
     game.cursor_y = (game.cursor_y - 1).clamp(min=0, max=@types.grid_rows - 1)
-    game.cursor_dir = @types.dir_up
+    game.cursor_dir = Up
   } else if game.input_move_y > 0 {
     game.cursor_y = (game.cursor_y + 1).clamp(min=0, max=@types.grid_rows - 1)
-    game.cursor_dir = @types.dir_down
+    game.cursor_dir = Down
   }
 }
 
@@ -307,7 +307,7 @@ fn @types.Game::try_build_or_upgrade(game : @types.Game) -> Unit {
     return
   }
 
-  game.nodes[node_index].facing = (game.nodes[node_index].facing + 1) % 4
+  game.nodes[node_index].facing = game.nodes[node_index].facing.rotate_cw()
   game.nodes[node_index].pulse = 0.45
 }
 
@@ -359,15 +359,15 @@ fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
     y = @types.randf(@types.board_top() + 10.0, @types.board_bottom() - 10.0)
   }
 
-  let mut kind = @types.enemy_kind_skitter
+  let mut kind : @types.EnemyKind = Skitter
   let roll = @types.randi(0, 99)
   let heavy_cut = 12 + (26).min(game.wave * 3)
   let wraith_cut = 72 - (22).min(game.wave * 2)
 
   if roll < heavy_cut {
-    kind = @types.enemy_kind_carapace
+    kind = Carapace
   } else if roll >= wraith_cut {
-    kind = @types.enemy_kind_wraith
+    kind = Wraith
   }
 
   let wavef = Float::from_int(game.wave - 1)
@@ -384,14 +384,14 @@ fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
   let mut gate_damage = @types.enemy_contact_damage_base +
     wavef * @types.enemy_contact_damage_wave
 
-  if kind == @types.enemy_kind_carapace {
+  if kind == Carapace {
     hp = base_hp * 1.85
     speed = base_speed * 0.78
     radius = 17.0
     reward = 14 + game.wave
     gate_damage = @types.enemy_contact_damage_base * 1.45 +
       wavef * @types.enemy_contact_damage_wave
-  } else if kind == @types.enemy_kind_wraith {
+  } else if kind == Wraith {
     hp = base_hp * 1.15
     speed = base_speed * 1.08
     radius = 13.0
@@ -665,11 +665,11 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
     }
 
     game.enemies[i].phase = game.enemies[i].phase +
-      dt * (1.2 + Float::from_int(game.enemies[i].kind) * 0.35)
+      dt * (1.2 + Float::from_int(game.enemies[i].kind.to_int()) * 0.35)
 
-    let wobble : Float = if game.enemies[i].kind == @types.enemy_kind_wraith {
+    let wobble : Float = if game.enemies[i].kind == Wraith {
       28.0
-    } else if game.enemies[i].kind == @types.enemy_kind_carapace {
+    } else if game.enemies[i].kind == Carapace {
       10.0
     } else {
       16.0
@@ -817,7 +817,7 @@ fn @types.Game::update_title_state(game : @types.Game) -> Unit {
 /// Runs one frame of active gameplay: cursor movement, building, barrier, energy regen, and combat updates.
 fn @types.Game::update_playing_state(game : @types.Game, dt : Float) -> Unit {
   if game.input_pause_press {
-    game.state = @types.state_paused
+    game.state = Paused
     game.set_status("Paused", 0.4)
     return
   }
@@ -858,7 +858,7 @@ fn @types.Game::update_playing_state(game : @types.Game, dt : Float) -> Unit {
 /// Handles input while paused to resume play.
 fn @types.Game::update_paused_state(game : @types.Game) -> Unit {
   if game.input_pause_press || game.input_cancel_press {
-    game.state = @types.state_playing
+    game.state = Playing
     game.set_status("Defense resumed", 0.5)
   }
 }
@@ -875,7 +875,7 @@ fn @types.Game::update_game_over_state(game : @types.Game) -> Unit {
     game.clear_enemies()
     game.clear_bolts()
     game.clear_pulses()
-    game.state = @types.state_title
+    game.state = Title
     game.gate_hp = @types.gate_hp_max
     game.energy = @types.energy_start
     game.barrier_charge = 0.0
@@ -894,14 +894,14 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     return
   }
 
-  if game.state == @types.state_title {
+  if game.state == Title {
     game.decay_overlay_timers(dt)
     game.update_pulses(dt)
     game.update_title_state()
-  } else if game.state == @types.state_playing {
+  } else if game.state == Playing {
     game.decay_overlay_timers(dt)
     game.update_playing_state(dt)
-  } else if game.state == @types.state_paused {
+  } else if game.state == Paused {
     game.update_paused_state()
   } else {
     game.decay_overlay_timers(dt)

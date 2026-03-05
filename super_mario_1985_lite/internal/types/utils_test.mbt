@@ -1,41 +1,41 @@
 ///|
 test "tile_is_solid: ground is solid" {
-  assert_true(tile_is_solid(tile_ground))
+  assert_true(tile_is_solid(Ground))
 }
 
 ///|
 test "tile_is_solid: brick is solid" {
-  assert_true(tile_is_solid(tile_brick))
+  assert_true(tile_is_solid(Brick))
 }
 
 ///|
 test "tile_is_solid: question is solid" {
-  assert_true(tile_is_solid(tile_question))
+  assert_true(tile_is_solid(Question))
 }
 
 ///|
 test "tile_is_solid: used is solid" {
-  assert_true(tile_is_solid(tile_used))
+  assert_true(tile_is_solid(Used))
 }
 
 ///|
 test "tile_is_solid: pipe is solid" {
-  assert_true(tile_is_solid(tile_pipe))
+  assert_true(tile_is_solid(Pipe))
 }
 
 ///|
 test "tile_is_solid: castle is solid" {
-  assert_true(tile_is_solid(tile_castle))
+  assert_true(tile_is_solid(Castle))
 }
 
 ///|
 test "tile_is_solid: empty is not solid" {
-  assert_false(tile_is_solid(tile_empty))
+  assert_false(tile_is_solid(Empty))
 }
 
 ///|
 test "tile_is_solid: flag_pole is not solid" {
-  assert_false(tile_is_solid(tile_flag_pole))
+  assert_false(tile_is_solid(FlagPole))
 }
 
 ///|

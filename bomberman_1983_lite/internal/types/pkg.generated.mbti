@@ -38,17 +38,9 @@ pub fn count_team_bombs(Game, Team) -> Int
 
 pub fn default_stage_profile() -> StageProfile
 
-pub let dir_down : Int
+pub fn dir_vector_x(Dir) -> Float
 
-pub let dir_left : Int
-
-pub let dir_right : Int
-
-pub let dir_up : Int
-
-pub fn dir_vector_x(Int) -> Float
-
-pub fn dir_vector_y(Int) -> Float
+pub fn dir_vector_y(Dir) -> Float
 
 pub fn distance_sq(Float, Float, Float, Float) -> Float
 
@@ -241,6 +233,15 @@ pub(all) struct Bullet {
 }
 pub fn Bullet::inactive() -> Self
 
+pub(all) enum Dir {
+  Up
+  Right
+  Down
+  Left
+}
+pub fn Dir::from_int(Int) -> Self
+pub impl Eq for Dir
+
 pub(all) enum EnemyKind {
   Basic
   Fast
@@ -365,7 +366,7 @@ pub(all) struct Tank {
   enemy_kind : EnemyKind
   mut x : Float
   mut y : Float
-  mut dir : Int
+  mut dir : Dir
   mut move_speed : Float
   mut hp : Int
   mut reload_timer : Float

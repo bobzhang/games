@@ -56,7 +56,7 @@ pub fn col_bg_bottom() -> @raylib.Color
 
 pub fn col_bg_top() -> @raylib.Color
 
-pub fn col_enemy(Int) -> @raylib.Color
+pub fn col_enemy(EnemyKind) -> @raylib.Color
 
 pub fn col_energy() -> @raylib.Color
 
@@ -70,17 +70,9 @@ pub let combo_score_step : Int
 
 pub let combo_window : Float
 
-pub let dir_down : Int
+pub fn dir_vec_x(Dir) -> Float
 
-pub let dir_left : Int
-
-pub let dir_right : Int
-
-pub let dir_up : Int
-
-pub fn dir_vec_x(Int) -> Float
-
-pub fn dir_vec_y(Int) -> Float
+pub fn dir_vec_y(Dir) -> Float
 
 pub fn dist2(Float, Float, Float, Float) -> Float
 
@@ -93,12 +85,6 @@ pub let enemy_contact_damage_base : Float
 pub let enemy_contact_damage_wave : Float
 
 pub let enemy_hp_per_wave : Float
-
-pub let enemy_kind_carapace : Int
-
-pub let enemy_kind_skitter : Int
-
-pub let enemy_kind_wraith : Int
 
 pub let enemy_speed_per_wave : Float
 
@@ -198,14 +184,6 @@ pub let spawn_cd_base : Float
 
 pub let spawn_cd_min : Float
 
-pub let state_game_over : Int
-
-pub let state_paused : Int
-
-pub let state_playing : Int
-
-pub let state_title : Int
-
 pub let target_fps : Int
 
 pub let wave_energy_bonus : Float
@@ -234,9 +212,18 @@ pub(all) struct Bolt {
 }
 pub fn Bolt::new() -> Self
 
+pub(all) enum Dir {
+  Up
+  Right
+  Down
+  Left
+}
+pub fn Dir::rotate_cw(Self) -> Self
+pub impl Eq for Dir
+
 pub(all) struct Enemy {
   mut active : Bool
-  kind : Int
+  kind : EnemyKind
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -251,12 +238,20 @@ pub(all) struct Enemy {
 }
 pub fn Enemy::new() -> Self
 
+pub(all) enum EnemyKind {
+  Skitter
+  Carapace
+  Wraith
+}
+pub fn EnemyKind::to_int(Self) -> Int
+pub impl Eq for EnemyKind
+
 pub(all) struct Game {
   nodes : Array[Node]
   enemies : Array[Enemy]
   bolts : Array[Bolt]
   pulses : Array[PulseFx]
-  mut state : Int
+  mut state : GameState
   mut score : Int
   mut best_score : Int
   mut kills : Int
@@ -274,7 +269,7 @@ pub(all) struct Game {
   mut shake_t : Float
   mut cursor_x : Int
   mut cursor_y : Int
-  mut cursor_dir : Int
+  mut cursor_dir : Dir
   mut status_text : String
   mut status_t : Float
   mut input_move_x : Int
@@ -287,12 +282,20 @@ pub(all) struct Game {
 }
 pub fn Game::new() -> Self
 
+pub(all) enum GameState {
+  Title
+  Playing
+  Paused
+  GameOver
+}
+pub impl Eq for GameState
+
 pub(all) struct Node {
   active : Bool
   gx : Int
   gy : Int
   mut level : Int
-  mut facing : Int
+  mut facing : Dir
   mut cooldown : Float
   mut pulse : Float
 }

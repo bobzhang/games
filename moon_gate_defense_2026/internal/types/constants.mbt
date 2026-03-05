@@ -11,38 +11,6 @@ pub let screen_h : Int = 900
 pub let target_fps : Int = 120
 
 ///|
-/// Title screen state id.
-pub let state_title : Int = 0
-
-///|
-/// Active gameplay state id.
-pub let state_playing : Int = 1
-
-///|
-/// Paused gameplay state id.
-pub let state_paused : Int = 2
-
-///|
-/// Defeat screen state id.
-pub let state_game_over : Int = 3
-
-///|
-/// Up direction id for grid-facing logic.
-pub let dir_up : Int = 0
-
-///|
-/// Right direction id for grid-facing logic.
-pub let dir_right : Int = 1
-
-///|
-/// Down direction id for grid-facing logic.
-pub let dir_down : Int = 2
-
-///|
-/// Left direction id for grid-facing logic.
-pub let dir_left : Int = 3
-
-///|
 /// Number of horizontal cells on the defense board.
 pub let grid_cols : Int = 11
 
@@ -215,18 +183,6 @@ pub let spawn_cd_base : Float = 0.95
 pub let spawn_cd_min : Float = 0.20
 
 ///|
-/// Enemy type id for skitter units.
-pub let enemy_kind_skitter : Int = 0
-
-///|
-/// Enemy type id for carapace units.
-pub let enemy_kind_carapace : Int = 1
-
-///|
-/// Enemy type id for wraith units.
-pub let enemy_kind_wraith : Int = 2
-
-///|
 /// Base health for newly spawned enemies.
 pub let enemy_base_hp : Float = 28.0
 
@@ -293,3 +249,51 @@ pub let barrier_flash_time : Float = 0.56
 ///|
 /// Camera shake duration after a gate hit.
 pub let shake_time_hit : Float = 0.22
+
+
+///|
+/// Cardinal direction used for node facing and cursor movement.
+pub(all) enum Dir {
+  Up
+  Right
+  Down
+  Left
+} derive(Eq)
+
+///|
+/// Rotates a direction clockwise by one step.
+pub fn Dir::rotate_cw(self : Dir) -> Dir {
+  match self {
+    Up => Right
+    Right => Down
+    Down => Left
+    Left => Up
+  }
+}
+
+///|
+/// Enemy type that determines stats and visual appearance.
+pub(all) enum EnemyKind {
+  Skitter
+  Carapace
+  Wraith
+} derive(Eq)
+
+///|
+/// Returns the integer ordinal of an enemy kind.
+pub fn EnemyKind::to_int(self : EnemyKind) -> Int {
+  match self {
+    Skitter => 0
+    Carapace => 1
+    Wraith => 2
+  }
+}
+
+///|
+/// Top-level game state controlling which screen is active.
+pub(all) enum GameState {
+  Title
+  Playing
+  Paused
+  GameOver
+} derive(Eq)

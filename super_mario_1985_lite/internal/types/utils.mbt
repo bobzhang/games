@@ -74,7 +74,7 @@ pub fn world_to_tile_y(y : Float) -> Int {
 
 ///|
 /// Writes a tile value if coordinates are inside bounds.
-pub fn set_tile(game : Game, tx : Int, ty : Int, tile : Int) -> Unit {
+pub fn set_tile(game : Game, tx : Int, ty : Int, tile : Tile) -> Unit {
   if tx < 0 || tx >= world_tiles_w || ty < 0 || ty >= world_tiles_h {
     return
   }
@@ -83,15 +83,15 @@ pub fn set_tile(game : Game, tx : Int, ty : Int, tile : Int) -> Unit {
 
 ///|
 /// Reads a tile value with out-of-bounds defaults.
-pub fn get_tile(game : Game, tx : Int, ty : Int) -> Int {
+pub fn get_tile(game : Game, tx : Int, ty : Int) -> Tile {
   if tx < 0 || tx >= world_tiles_w {
-    return tile_ground
+    return Ground
   }
   if ty < 0 {
-    return tile_empty
+    return Empty
   }
   if ty >= world_tiles_h {
-    return tile_ground
+    return Ground
   }
   game.tiles[tile_index(tx, ty)]
 }
@@ -104,7 +104,7 @@ pub fn fill_rect_tile(
   ty0 : Int,
   tw : Int,
   th : Int,
-  tile : Int,
+  tile : Tile,
 ) -> Unit {
   for y in ty0..<(ty0 + th) {
     for x in tx0..<(tx0 + tw) {
@@ -117,19 +117,19 @@ pub fn fill_rect_tile(
 /// Resets all tiles in the level to empty.
 pub fn clear_tiles(game : Game) -> Unit {
   for i in 0..<game.tiles.length() {
-    game.tiles[i] = tile_empty
+    game.tiles[i] = Empty
   }
 }
 
 ///|
 /// Returns whether a tile id should block movement.
-pub fn tile_is_solid(tile : Int) -> Bool {
-  tile == tile_ground ||
-  tile == tile_brick ||
-  tile == tile_question ||
-  tile == tile_used ||
-  tile == tile_pipe ||
-  tile == tile_castle
+pub fn tile_is_solid(tile : Tile) -> Bool {
+  tile == Ground ||
+  tile == Brick ||
+  tile == Question ||
+  tile == Used ||
+  tile == Pipe ||
+  tile == Castle
 }
 
 ///|

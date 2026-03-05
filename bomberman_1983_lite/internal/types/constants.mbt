@@ -199,22 +199,6 @@ pub let level_count : Int = 96
 pub let map_pattern_count : Int = 48
 
 ///|
-/// Direction id for up.
-pub let dir_up : Int = 0
-
-///|
-/// Direction id for right.
-pub let dir_right : Int = 1
-
-///|
-/// Direction id for down.
-pub let dir_down : Int = 2
-
-///|
-/// Direction id for left.
-pub let dir_left : Int = 3
-
-///|
 /// Enemy spawn point x for left lane.
 pub let enemy_spawn_x0 : Float = 2.0 * Float::from_int(tile_size) + tank_half
 
@@ -269,3 +253,23 @@ pub let base_ring_x : Array[Int] = [
 pub let base_ring_y : Array[Int] = [
   22, 22, 22, 22, 23, 23, 24, 24, 25, 25, 25, 25, 24, 24,
 ]
+
+///|
+/// Cardinal direction for tank movement and turret facing.
+pub(all) enum Dir {
+  Up
+  Right
+  Down
+  Left
+} derive(Eq)
+
+///|
+/// Converts an integer to a direction (for random direction selection).
+pub fn Dir::from_int(v : Int) -> Dir {
+  match v % 4 {
+    0 => Up
+    1 => Right
+    2 => Down
+    _ => Left
+  }
+}

@@ -5,7 +5,7 @@ pub(all) struct Node {
   gx : Int
   gy : Int
   mut level : Int
-  mut facing : Int
+  mut facing : Dir
   mut cooldown : Float
   mut pulse : Float
 }
@@ -14,7 +14,7 @@ pub(all) struct Node {
 /// Active enemy marching toward the moon gate.
 pub(all) struct Enemy {
   mut active : Bool
-  kind : Int
+  kind : EnemyKind
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -59,7 +59,7 @@ pub(all) struct Game {
   enemies : Array[Enemy]
   bolts : Array[Bolt]
   pulses : Array[PulseFx]
-  mut state : Int
+  mut state : GameState
   mut score : Int
   mut best_score : Int
   mut kills : Int
@@ -77,7 +77,7 @@ pub(all) struct Game {
   mut shake_t : Float
   mut cursor_x : Int
   mut cursor_y : Int
-  mut cursor_dir : Int
+  mut cursor_dir : Dir
   mut status_text : String
   mut status_t : Float
   mut input_move_x : Int
@@ -97,7 +97,7 @@ pub fn Node::new() -> Node {
     gx: 0,
     gy: 0,
     level: 1,
-    facing: dir_up,
+    facing: Up,
     cooldown: 0.0,
     pulse: 0.0,
   }
@@ -108,7 +108,7 @@ pub fn Node::new() -> Node {
 pub fn Enemy::new() -> Enemy {
   {
     active: false,
-    kind: enemy_kind_skitter,
+    kind: Skitter,
     x: 0.0,
     y: 0.0,
     vx: 0.0,
@@ -156,7 +156,7 @@ pub fn Game::new() -> Game {
     enemies,
     bolts,
     pulses,
-    state: state_title,
+    state: Title,
     score: 0,
     best_score: 0,
     kills: 0,
@@ -174,7 +174,7 @@ pub fn Game::new() -> Game {
     shake_t: 0.0,
     cursor_x: gate_gx + 1,
     cursor_y: gate_gy,
-    cursor_dir: dir_left,
+    cursor_dir: Left,
     status_text: "Press J to begin defense",
     status_t: 0.0,
     input_move_x: 0,

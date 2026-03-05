@@ -39,54 +39,6 @@ pub let world_height_px : Float = Float::from_int(world_tiles_h * tile_size)
 pub let ground_row : Int = 17
 
 ///|
-/// Title scene state id.
-pub let state_title : Int = 0
-
-///|
-/// Active gameplay state id.
-pub let state_playing : Int = 1
-
-///|
-/// Stage-clear state id.
-pub let state_win : Int = 2
-
-///|
-/// Game-over state id.
-pub let state_game_over : Int = 3
-
-///|
-/// Tile id for empty space.
-pub let tile_empty : Int = 0
-
-///|
-/// Tile id for ground blocks.
-pub let tile_ground : Int = 1
-
-///|
-/// Tile id for breakable bricks.
-pub let tile_brick : Int = 2
-
-///|
-/// Tile id for question blocks.
-pub let tile_question : Int = 3
-
-///|
-/// Tile id for already-used question blocks.
-pub let tile_used : Int = 4
-
-///|
-/// Tile id for pipes.
-pub let tile_pipe : Int = 5
-
-///|
-/// Tile id for the flagpole.
-pub let tile_flag_pole : Int = 6
-
-///|
-/// Tile id for castle blocks.
-pub let tile_castle : Int = 7
-
-///|
 /// Player collision width.
 pub let player_w : Float = 24.0
 
@@ -201,3 +153,24 @@ pub let stomp_score : Int = 400
 ///|
 /// Score gained when hitting a block.
 pub let block_hit_score : Int = 50
+
+
+///| Game state machine phases.
+pub(all) enum GameState {
+  Title
+  Playing
+  Win
+  GameOver
+} derive(Eq, Show)
+
+///| Tile types used in the level grid.
+pub(all) enum Tile {
+  Empty
+  Ground
+  Brick
+  Question
+  Used
+  Pipe
+  FlagPole
+  Castle
+} derive(Eq)

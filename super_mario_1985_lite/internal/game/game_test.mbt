@@ -7,7 +7,7 @@ fn setup_game() -> @types.Game {
     @types.ground_row,
     @types.world_tiles_w,
     @types.world_tiles_h - @types.ground_row,
-    @types.tile_ground,
+    Ground,
   )
   let ground_y = @types.tile_top(@types.ground_row) -
     @types.player_half_h() -
@@ -18,7 +18,7 @@ fn setup_game() -> @types.Game {
   game.player.lives = 3
   game.player.coins = 0
   game.player.score = 0
-  game.state = @types.state_playing
+  game.state = Playing
   game.start_y = ground_y
   game.flag_x = @types.tile_center_x(214)
   game.flag_top_y = @types.tile_top(8)
@@ -191,10 +191,10 @@ test "timer expiry: time runs out triggers game over" {
   game.time_left = 1
   game.time_accum = 0.0
   for i in 0..<120 {
-    if game.state != @types.state_playing {
+    if game.state != Playing {
       break
     }
     update_game(game, no_input, dt)
   }
-  assert_eq(game.state, @types.state_game_over)
+  assert_eq(game.state, GameOver)
 }
