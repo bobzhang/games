@@ -1,0 +1,12 @@
+import {
+  "tonyfettes/raylib",
+  "tonyfettes/raylib-examples/dragon_boat_sprint_2026/internal/types",
+  "tonyfettes/raylib-examples/dragon_boat_sprint_2026/internal/game",
+  "tonyfettes/raylib-examples/dragon_boat_sprint_2026/internal/render",
+}
+
+warnings = "+missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

@@ -1,0 +1,12 @@
+import {
+  "tonyfettes/raylib",
+  "tonyfettes/raylib-examples/hotpot_empire_rush_2026/internal/game",
+  "tonyfettes/raylib-examples/hotpot_empire_rush_2026/internal/render",
+  "tonyfettes/raylib-examples/hotpot_empire_rush_2026/internal/types",
+}
+
+warnings = "+missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

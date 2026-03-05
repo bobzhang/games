@@ -1,0 +1,12 @@
+import {
+  "tonyfettes/raylib",
+  "tonyfettes/raylib-examples/xiaoxiaole/internal/types",
+  "tonyfettes/raylib-examples/xiaoxiaole/internal/game",
+  "tonyfettes/raylib-examples/xiaoxiaole/internal/render",
+}
+
+warnings = "+missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

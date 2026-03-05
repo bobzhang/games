@@ -21,9 +21,8 @@ declare -a GAME_URLS=()
 while IFS= read -r bundle_dir; do
   bundle="$(basename "$bundle_dir")"
 
-  # Publish only canonical game bundles. Debug/prototype folders can remain in
-  # _build/web for local experiments but should not appear in public index/site.
-  if [[ "$bundle" != raylib_* ]]; then
+  # Skip non-game artifact directories (e.g. BUILD_FAILURES.md parent).
+  if [[ ! -d "$bundle_dir" ]]; then
     continue
   fi
 

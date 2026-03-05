@@ -1,0 +1,6 @@
+import {
+  "tonyfettes/raylib",
+  "tonyfettes/raylib-examples/tank_1990/internal/types",
+}
+
+warnings = "+missing_doc+unnecessary_annotation"

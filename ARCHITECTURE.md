@@ -5,7 +5,7 @@
 This module is a collection of independent game/example packages under one MoonBit module root.
 
 - Shared dependency layer: `tonyfettes/raylib` plus MoonBit core packages.
-- Package isolation: each `raylib_*` folder owns its own package graph and runtime loop.
+- Package isolation: each game/example folder owns its own package graph and runtime loop.
 - Tooling layer: shell/python helpers in `tools/` for build and publishing workflows.
 
 ## Typical In-Game Architecture

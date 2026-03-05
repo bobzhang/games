@@ -1,0 +1,12 @@
+import {
+  "tonyfettes/raylib",
+  "tonyfettes/raylib-examples/fighter_97_lite/internal/types",
+  "tonyfettes/raylib-examples/fighter_97_lite/internal/game",
+  "tonyfettes/raylib-examples/fighter_97_lite/internal/render",
+}
+
+warnings = "+missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

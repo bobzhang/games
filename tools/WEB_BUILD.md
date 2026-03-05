@@ -33,7 +33,7 @@ tools/build_web_games.sh --jobs 8 --strict
 
 ## Selecting Games
 
-Build all discovered `raylib_*` games:
+Build all discovered games:
 
 ```bash
 tools/build_web_games.sh --jobs 8
@@ -48,7 +48,7 @@ tools/build_web_games.sh --filter 'tank|fighter'
 Build explicit list:
 
 ```bash
-tools/build_web_games.sh --games raylib_tank_1990,raylib_bomber_grid_2026
+tools/build_web_games.sh --games tank_1990,bomber_grid_2026
 ```
 
 List selected games without building:

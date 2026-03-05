@@ -40,7 +40,7 @@ Behavior:
 Examples:
   tools/build_web_games.sh --jobs 8
   tools/build_web_games.sh --filter 'tank|fighter'
-  tools/build_web_games.sh --games raylib_tank_1990,raylib_fighter_97_lite -j 2`;
+  tools/build_web_games.sh --games tank_1990,fighter_97_lite -j 2`;
   console.log(text);
 }
 
@@ -145,7 +145,7 @@ function discoverGames() {
   const games = [];
   for (const entry of entries) {
     if (!entry.isDirectory()) continue;
-    if (!entry.name.startsWith("raylib_")) continue;
+    if (entry.name.startsWith(".") || entry.name === "tools" || entry.name === "memory") continue;
     const gameDir = path.join(ROOT_DIR, entry.name);
     if (fs.existsSync(path.join(gameDir, "moon.pkg")) && fs.existsSync(path.join(gameDir, "main.mbt"))) {
       games.push(entry.name);
@@ -364,7 +364,7 @@ async function main() {
 
   const discovered = discoverGames();
   if (discovered.length === 0) {
-    fail("no buildable raylib game packages found in repo root");
+    fail("no buildable game packages found in repo root");
   }
 
   const discoveredSet = new Set(discovered);

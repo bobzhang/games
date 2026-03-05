@@ -1,0 +1,5 @@
+import {
+  "tonyfettes/raylib-examples/voxel_world_3d/internal/types",
+}
+
+warnings = "+missing_doc+unnecessary_annotation"

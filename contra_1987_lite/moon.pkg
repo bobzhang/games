@@ -1,0 +1,12 @@
+import {
+  "tonyfettes/raylib",
+  "tonyfettes/raylib-examples/contra_1987_lite/internal/game",
+  "tonyfettes/raylib-examples/contra_1987_lite/internal/render",
+  "tonyfettes/raylib-examples/contra_1987_lite/internal/types",
+}
+
+warnings = "+missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

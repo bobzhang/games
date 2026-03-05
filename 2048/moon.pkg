@@ -1,0 +1,12 @@
+import {
+  "tonyfettes/raylib",
+  "tonyfettes/raylib-examples/2048/internal/types",
+  "tonyfettes/raylib-examples/2048/internal/game",
+  "tonyfettes/raylib-examples/2048/internal/render",
+}
+
+warnings = "+missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

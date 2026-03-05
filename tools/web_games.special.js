@@ -14,14 +14,14 @@ module.exports = {
   games: {
     // FIXME(web): Re-enable once async TLS symbols are supported in web linking.
     // Current failure: undefined moonbitlang_async_tls_ssl_* symbols during wasm link.
-    raylib_network_curl: {
+    network_curl: {
       skip: true,
       reason: "web link missing async TLS symbols (moonbitlang_async_tls_ssl_*)",
     },
 
     // Example:
-    // raylib_example: {
-    //   outDirName: "raylib_example_mobile",
+    // some_game: {
+    //   outDirName: "some_game_mobile",
     //   extraArgs: ["--some-flag"],
     // },
   },
@@ -35,7 +35,7 @@ module.exports = {
    */
   resolveGame(game, plan) {
     // Example:
-    // if (game === "raylib_example") {
+    // if (game === "some_game") {
     //   return { ...plan, skip: true };
     // }
     return plan;

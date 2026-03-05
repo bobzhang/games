@@ -6,16 +6,16 @@ This repository has no single monolithic API. It exposes many small package APIs
 
 For most game directories, the public surface is split into three internal layers plus the executable root:
 
-1. `raylib_<game>`
+1. `<game>`
 - Primary executable entrypoint (`main`).
 
-2. `raylib_<game>/internal/types`
+2. `<game>/internal/types`
 - Public constants, enums/structs, and math/layout helpers shared by other internal packages.
 
-3. `raylib_<game>/internal/game`
+3. `<game>/internal/game`
 - Public simulation update entrypoints (for example `update_game`).
 
-4. `raylib_<game>/internal/render`
+4. `<game>/internal/render`
 - Public frame rendering entrypoints (for example `draw_frame`).
 
 ## Authoritative API Source

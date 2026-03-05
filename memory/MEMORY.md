@@ -3,7 +3,7 @@
 ## Project Overview
 - MoonBit + Raylib game examples repo at `/Users/hongbozhang/git/games`
 - Module: `tonyfettes/raylib-examples`
-- Build: `moon build --target native raylib_<game>/`
+- Build: `moon build --target native <game>/`
 - Check: `moon check`, Test: `moon test`
 
 ## Quality Improvement Campaign
@@ -38,7 +38,7 @@ fn function_name(...) -> ... {
 2. `## Architecture` — package structure diagram + data flow + design patterns
 3. `## Improvement & Refinement Plan` — 5–7 numbered improvements
 
-Good README example: `raylib_hotpot_empire_rush_2026/README.mbt.md`
+Good README example: `hotpot_empire_rush_2026/README.mbt.md`
 
 ## Workflow
 - After each commit: run `codex review --commit <SHA>`
@@ -48,7 +48,7 @@ Good README example: `raylib_hotpot_empire_rush_2026/README.mbt.md`
 ## Architecture Patterns
 - Multi-file game structure:
   ```
-  raylib_<game>_2026/
+  <game>_2026/
   ├── main.mbt          — Entry, game loop
   ├── moon.pkg
   └── internal/

@@ -1,0 +1,12 @@
+import {
+  "tonyfettes/raylib",
+  "tonyfettes/raylib-examples/flight_sim_3d/internal/game",
+  "tonyfettes/raylib-examples/flight_sim_3d/internal/render",
+  "tonyfettes/raylib-examples/flight_sim_3d/internal/types",
+}
+
+warnings = "+missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

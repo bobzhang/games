@@ -5,7 +5,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-PKG_PATH="${1:-raylib_tank_1990}"
+PKG_PATH="${1:-tank_1990}"
 PKG_PATH="${PKG_PATH%/}"
 PKG_NAME="$(basename "$PKG_PATH")"
 OUT_DIR="${2:-_build/web/${PKG_NAME}}"

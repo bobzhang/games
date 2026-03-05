@@ -1,0 +1,7 @@
+import {
+  "moonbitlang/core/math",
+  "tonyfettes/raylib",
+  "tonyfettes/raylib-examples/fighter_97_lite/internal/types",
+}
+
+warnings = "+missing_doc+unnecessary_annotation"

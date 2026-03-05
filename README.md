@@ -2,7 +2,7 @@
 
 A large MoonBit module containing hundreds of small game and graphics examples built with `tonyfettes/raylib`.
 
-Each `raylib_*` directory is an independent package set that can be built and run on its own.
+Each game/example directory is an independent package set that can be built and run on its own.
 
 ## Goals
 
@@ -14,16 +14,16 @@ Each `raylib_*` directory is an independent package set that can be built and ru
 
 ```bash
 moon check
-moon build --target native raylib_2048/
-moon run --target native raylib_2048/
+moon build --target native 2048/
+moon run --target native 2048/
 ```
 
-To run another game, replace `raylib_2048/` with a different package directory.
+To run another game, replace `2048/` with a different package directory.
 
 ## Repository Layout
 
 - `moon.mod.json`: module metadata and dependencies.
-- `raylib_*`: example/game packages.
+- `<game_name>/`: example/game packages.
 - `raygui_demo`: raygui-focused demo package.
 - `tools/`: build/publish helper scripts.
 
@@ -56,7 +56,7 @@ moon test
 For targeted validation:
 
 ```bash
-moon check --package-path raylib_2048
+moon check --package-path 2048
 ```
 
 ## Notes
