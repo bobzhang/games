@@ -371,11 +371,9 @@ fn @types.Game::emit_surface_particles(game : @types.Game) -> Unit {
       continue
     }
     // Dust on dirt/grass
-    if kart.on_surface_type == Dirt ||
-      kart.on_surface_type == Grass {
+    if kart.on_surface_type == Dirt || kart.on_surface_type == Grass {
       if game.frame_counter % 6 == i % 6 {
-        let dc : (Int, Int, Int) = if kart.on_surface_type ==
-          Dirt {
+        let dc : (Int, Int, Int) = if kart.on_surface_type == Dirt {
           (160, 130, 80)
         } else {
           (80, 140, 60)

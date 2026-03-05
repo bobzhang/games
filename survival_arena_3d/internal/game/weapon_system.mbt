@@ -573,10 +573,6 @@ fn @types.Game::apply_explosion(
     }
   }
   // Explosion particles
-  @types.spawn_particles_typed(
-    game, x, y, z, 20, 255, 150, 30, Explosion,
-  )
-  @types.spawn_particles_typed(
-    game, x, y, z, 10, 255, 80, 20, Explosion,
-  )
+  @types.spawn_particles_typed(game, x, y, z, 20, 255, 150, 30, Explosion)
+  @types.spawn_particles_typed(game, x, y, z, 10, 255, 80, 20, Explosion)
 }

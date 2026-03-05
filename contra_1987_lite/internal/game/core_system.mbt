@@ -14,7 +14,7 @@ fn @types.Game::alloc_core_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-  -1
+    -1
   }
 }
 

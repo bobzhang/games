@@ -1,5 +1,10 @@
 ///|
-fn @types.Game::set_tile(game : @types.Game, x : Int, y : Int, t : @types.Tile) -> Unit {
+fn @types.Game::set_tile(
+  game : @types.Game,
+  x : Int,
+  y : Int,
+  t : @types.Tile,
+) -> Unit {
   if @types.in_bounds(x, y) {
     game.terrain[@types.cell_index(x, y)] = t
   }
@@ -365,7 +370,10 @@ fn @types.Game::next_level_or_title(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::append_manual_step(game : @types.Game, dir : @types.Dir) -> Bool {
+fn @types.Game::append_manual_step(
+  game : @types.Game,
+  dir : @types.Dir,
+) -> Bool {
   if dir == None {
     return false
   }

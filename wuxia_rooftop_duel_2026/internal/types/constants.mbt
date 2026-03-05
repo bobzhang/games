@@ -214,7 +214,6 @@ pub let spawn_interval_base : Float = 0.96
 /// Minimum enemy spawn interval cap.
 pub let spawn_interval_min : Float = 0.30
 
-
 ///|
 /// Player attack type.
 pub(all) enum Attack {

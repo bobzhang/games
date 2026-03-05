@@ -66,7 +66,6 @@ pub let message_ttl_max : Float = 2.4
 /// Minimum delay between touch actions in seconds.
 pub let touch_action_cooldown : Float = 0.1
 
-
 ///|
 /// Kind of special candy effect applied to a board cell.
 pub(all) enum Special {

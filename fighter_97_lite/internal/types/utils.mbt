@@ -207,21 +207,21 @@ pub fn fighter_total_guard(archetype : CharacterArchetype) -> Int {
 /// Returns a short debug label for an action enum.
 pub fn action_name(action : Action) -> String {
   match action {
-    ActionIdle => { "idle" }
-    ActionWalkForward => { "walk_fwd" }
-    ActionWalkBack => { "walk_back" }
-    ActionCrouch => { "crouch" }
-    ActionJump => { "jump" }
-    ActionDashForward => { "dash_fwd" }
-    ActionDashBack => { "dash_back" }
-    ActionAttack => { "attack" }
-    ActionThrow => { "throw" }
-    ActionHitstun => { "hit" }
-    ActionBlockstun => { "block" }
-    ActionKnockdown => { "down" }
-    ActionWakeup => { "wake" }
-    ActionVictory => { "victory" }
-    ActionIntro => { "intro" }
+    ActionIdle => "idle"
+    ActionWalkForward => "walk_fwd"
+    ActionWalkBack => "walk_back"
+    ActionCrouch => "crouch"
+    ActionJump => "jump"
+    ActionDashForward => "dash_fwd"
+    ActionDashBack => "dash_back"
+    ActionAttack => "attack"
+    ActionThrow => "throw"
+    ActionHitstun => "hit"
+    ActionBlockstun => "block"
+    ActionKnockdown => "down"
+    ActionWakeup => "wake"
+    ActionVictory => "victory"
+    ActionIntro => "intro"
   }
 }
 

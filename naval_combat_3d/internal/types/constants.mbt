@@ -697,7 +697,6 @@ pub let convoy_spacing : Float = 8.0
 /// Size or distance value for fleet follow dist in world units.
 pub let fleet_follow_dist : Float = 15.0
 
-
 ///|
 /// AI behavior state.
 pub(all) enum AiState {

@@ -14,7 +14,7 @@ fn @types.Game::alloc_hostage_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-  -1
+    -1
   }
 }
 

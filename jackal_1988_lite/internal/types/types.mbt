@@ -79,7 +79,11 @@ pub fn Tank::new_player(_index : Int, spawn_x : Float, spawn_y : Float) -> Tank 
 
 ///|
 /// Creates an enemy tank configured by `kind`.
-pub fn Tank::new_enemy(kind : EnemyKind, spawn_x : Float, spawn_y : Float) -> Tank {
+pub fn Tank::new_enemy(
+  kind : EnemyKind,
+  spawn_x : Float,
+  spawn_y : Float,
+) -> Tank {
   let (speed, hp, reload) = match kind {
     Fast => (speed_enemy_fast, 1, enemy_reload_base * 0.85)
     Heavy => (speed_enemy_heavy, 4, enemy_reload_base * 1.35)

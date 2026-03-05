@@ -346,7 +346,10 @@ fn @types.Game::apply_attack_hit(
 }
 
 ///|
-fn @types.Game::try_player_attack(game : @types.Game, attack : @types.Attack) -> Bool {
+fn @types.Game::try_player_attack(
+  game : @types.Game,
+  attack : @types.Attack,
+) -> Bool {
   if game.state != Playing {
     return false
   }

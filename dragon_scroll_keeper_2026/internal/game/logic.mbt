@@ -141,7 +141,7 @@ fn @types.Game::alloc_raider(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-  -1
+    -1
   }
 }
 
@@ -153,7 +153,7 @@ fn @types.Game::alloc_flame(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-  -1
+    -1
   }
 }
 

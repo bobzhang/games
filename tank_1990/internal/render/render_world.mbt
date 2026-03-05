@@ -54,53 +54,83 @@ fn @types.Game::draw_single_tile(
   match tile {
     Brick => {
       @raylib.draw_rectangle(
-        sx, sy, @types.tile_size, @types.tile_size,
+        sx,
+        sy,
+        @types.tile_size,
+        @types.tile_size,
         @raylib.Color::new(140, 72, 51, 255),
       )
       @raylib.draw_rectangle_lines(
-        sx, sy, @types.tile_size, @types.tile_size,
+        sx,
+        sy,
+        @types.tile_size,
+        @types.tile_size,
         @raylib.Color::new(88, 43, 30, 255),
       )
       @raylib.draw_line(
-        sx, sy + @types.tile_size / 2, sx + @types.tile_size,
-        sy + @types.tile_size / 2, @raylib.Color::new(110, 55, 37, 255),
+        sx,
+        sy + @types.tile_size / 2,
+        sx + @types.tile_size,
+        sy + @types.tile_size / 2,
+        @raylib.Color::new(110, 55, 37, 255),
       )
     }
     Steel => {
       @raylib.draw_rectangle(
-        sx, sy, @types.tile_size, @types.tile_size,
+        sx,
+        sy,
+        @types.tile_size,
+        @types.tile_size,
         @raylib.Color::new(110, 124, 143, 255),
       )
       @raylib.draw_rectangle_lines(
-        sx, sy, @types.tile_size, @types.tile_size,
+        sx,
+        sy,
+        @types.tile_size,
+        @types.tile_size,
         @raylib.Color::new(180, 190, 204, 255),
       )
       @raylib.draw_line(
-        sx, sy, sx + @types.tile_size, sy + @types.tile_size,
+        sx,
+        sy,
+        sx + @types.tile_size,
+        sy + @types.tile_size,
         @raylib.Color::new(84, 94, 108, 255),
       )
     }
     Water => {
       @raylib.draw_rectangle(
-        sx, sy, @types.tile_size, @types.tile_size,
+        sx,
+        sy,
+        @types.tile_size,
+        @types.tile_size,
         @raylib.Color::new(35, 70, 140, 255),
       )
       let wave = (Float::from_int(game.frame_counter) * 0.18 +
         Float::from_int(tx + ty)).to_int() %
         4
       @raylib.draw_line(
-        sx, sy + 5 + wave, sx + @types.tile_size, sy + 3 + wave,
+        sx,
+        sy + 5 + wave,
+        sx + @types.tile_size,
+        sy + 3 + wave,
         @raylib.Color::new(70, 130, 220, 255),
       )
     }
     Ice => {
       @raylib.draw_rectangle(
-        sx, sy, @types.tile_size, @types.tile_size,
+        sx,
+        sy,
+        @types.tile_size,
+        @types.tile_size,
         @raylib.Color::new(156, 222, 232, 255),
       )
       @raylib.draw_line(
-        sx + 4, sy + 5, sx + @types.tile_size - 4,
-        sy + @types.tile_size - 5, @raylib.Color::new(210, 248, 255, 255),
+        sx + 4,
+        sy + 5,
+        sx + @types.tile_size - 4,
+        sy + @types.tile_size - 5,
+        @raylib.Color::new(210, 248, 255, 255),
       )
     }
     Base => {
@@ -227,19 +257,35 @@ fn draw_tank(
   match tank.dir {
     Up =>
       @raylib.draw_rectangle(
-        sx - turret_w / 2, sy - turret_len, turret_w, turret_len, trim_color,
+        sx - turret_w / 2,
+        sy - turret_len,
+        turret_w,
+        turret_len,
+        trim_color,
       )
     Down =>
       @raylib.draw_rectangle(
-        sx - turret_w / 2, sy, turret_w, turret_len, trim_color,
+        sx - turret_w / 2,
+        sy,
+        turret_w,
+        turret_len,
+        trim_color,
       )
     Left =>
       @raylib.draw_rectangle(
-        sx - turret_len, sy - turret_w / 2, turret_len, turret_w, trim_color,
+        sx - turret_len,
+        sy - turret_w / 2,
+        turret_len,
+        turret_w,
+        trim_color,
       )
     Right =>
       @raylib.draw_rectangle(
-        sx, sy - turret_w / 2, turret_len, turret_w, trim_color,
+        sx,
+        sy - turret_w / 2,
+        turret_len,
+        turret_w,
+        trim_color,
       )
   }
 

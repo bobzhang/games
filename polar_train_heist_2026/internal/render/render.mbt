@@ -690,8 +690,7 @@ fn draw_ent(e : @types.Ent, cam_x : Float, cam_y : Float) -> Unit {
     let hpx = e.x - hpw * 0.5 + cam_x
     let hpy = e.y - e.h * 0.72 + cam_y
     let pct = @types.clampf(
-      e.hp /
-      @types.maxf(1.0, if e.kind == Crate { 35.0 } else { 24.0 }),
+      e.hp / @types.maxf(1.0, if e.kind == Crate { 35.0 } else { 24.0 }),
       0.0,
       1.0,
     )

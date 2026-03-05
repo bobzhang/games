@@ -81,7 +81,6 @@ pub let invuln_time : Float = 0.65
 /// Time before combo count starts decaying.
 pub let combo_decay_time : Float = 3.8
 
-
 ///|
 /// Current game state.
 pub(all) enum GameState {

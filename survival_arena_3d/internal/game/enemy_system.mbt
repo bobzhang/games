@@ -821,8 +821,7 @@ fn @types.Game::kill_enemy(game : @types.Game, idx : Int) -> Unit {
   // Save death position for necromancer
   enemy.death_x = enemy.x
   enemy.death_z = enemy.z
-  enemy.can_revive = enemy.kind != Boss &&
-    enemy.kind != Exploder
+  enemy.can_revive = enemy.kind != Boss && enemy.kind != Exploder
   game.player.money += enemy.gold_value
   let combo_mult_score : Float = game.player.combo_mult
   let score_add_f : Float = Float::from_int(enemy.score_value) *

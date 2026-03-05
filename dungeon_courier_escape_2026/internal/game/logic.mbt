@@ -386,17 +386,16 @@ fn @types.Game::alloc_smoke_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-
-  let mut oldest = 0
-  let mut life = game.smokes[0].life
-  for i in 1..<game.smokes.length() {
-    if game.smokes[i].life < life {
-      life = game.smokes[i].life
-      oldest = i
+    let mut oldest = 0
+    let mut life = game.smokes[0].life
+    for i in 1..<game.smokes.length() {
+      if game.smokes[i].life < life {
+        life = game.smokes[i].life
+        oldest = i
+      }
     }
-  }
 
-  oldest
+    oldest
   }
 }
 

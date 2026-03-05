@@ -1102,7 +1102,6 @@ pub let pu_slow_fall_g : Int = 255
 /// Blue channel (0-255) for pu slow fall color.
 pub let pu_slow_fall_b : Int = 200
 
-
 ///|
 /// Decoration type.
 pub(all) enum Deco {

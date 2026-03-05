@@ -15,7 +15,7 @@ fn @types.Game::alloc_enemy(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-  -1
+    -1
   }
 }
 
@@ -26,7 +26,7 @@ fn @types.Game::alloc_coin(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-  -1
+    -1
   }
 }
 
@@ -142,54 +142,12 @@ fn @types.Game::build_level_geometry(game : @types.Game) -> Unit {
   game.add_question(184, 11)
 
   // Stair near the end.
-  @types.fill_rect_tile(
-    game,
-    200,
-    @types.ground_row - 1,
-    1,
-    1,
-    Ground,
-  )
-  @types.fill_rect_tile(
-    game,
-    201,
-    @types.ground_row - 2,
-    1,
-    2,
-    Ground,
-  )
-  @types.fill_rect_tile(
-    game,
-    202,
-    @types.ground_row - 3,
-    1,
-    3,
-    Ground,
-  )
-  @types.fill_rect_tile(
-    game,
-    203,
-    @types.ground_row - 4,
-    1,
-    4,
-    Ground,
-  )
-  @types.fill_rect_tile(
-    game,
-    204,
-    @types.ground_row - 5,
-    1,
-    5,
-    Ground,
-  )
-  @types.fill_rect_tile(
-    game,
-    205,
-    @types.ground_row - 6,
-    1,
-    6,
-    Ground,
-  )
+  @types.fill_rect_tile(game, 200, @types.ground_row - 1, 1, 1, Ground)
+  @types.fill_rect_tile(game, 201, @types.ground_row - 2, 1, 2, Ground)
+  @types.fill_rect_tile(game, 202, @types.ground_row - 3, 1, 3, Ground)
+  @types.fill_rect_tile(game, 203, @types.ground_row - 4, 1, 4, Ground)
+  @types.fill_rect_tile(game, 204, @types.ground_row - 5, 1, 5, Ground)
+  @types.fill_rect_tile(game, 205, @types.ground_row - 6, 1, 6, Ground)
 
   // Flag pole and castle.
   let flag_tx = 214
@@ -197,22 +155,8 @@ fn @types.Game::build_level_geometry(game : @types.Game) -> Unit {
     @types.set_tile(game, flag_tx, ty, FlagPole)
   }
 
-  @types.fill_rect_tile(
-    game,
-    222,
-    @types.ground_row - 5,
-    6,
-    5,
-    Castle,
-  )
-  @types.fill_rect_tile(
-    game,
-    224,
-    @types.ground_row - 7,
-    2,
-    2,
-    Castle,
-  )
+  @types.fill_rect_tile(game, 222, @types.ground_row - 5, 6, 5, Castle)
+  @types.fill_rect_tile(game, 224, @types.ground_row - 7, 2, 2, Castle)
 
   game.flag_x = @types.tile_center_x(flag_tx)
   game.flag_top_y = @types.tile_top(8)

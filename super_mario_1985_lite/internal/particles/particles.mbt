@@ -13,7 +13,7 @@ fn @types.Game::alloc_particle(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-  -1
+    -1
   }
 }
 

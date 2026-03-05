@@ -767,11 +767,11 @@ pub fn mission_difficulty_speed_mult(mission : Int) -> Float {
 /// Returns the maximum hull hit points for the given `ship_class`.
 pub fn ship_class_hull(ship_class : ShipKind) -> Float {
   match ship_class {
-    Fighter => (fighter_class_hull)
-    Interceptor => (interceptor_class_hull)
-    Bomber => (bomber_class_hull)
-    Cruiser => (cruiser_class_hull)
-    _ => (capital_class_hull)
+    Fighter => fighter_class_hull
+    Interceptor => interceptor_class_hull
+    Bomber => bomber_class_hull
+    Cruiser => cruiser_class_hull
+    _ => capital_class_hull
   }
 }
 
@@ -779,11 +779,11 @@ pub fn ship_class_hull(ship_class : ShipKind) -> Float {
 /// Returns the maximum shield capacity for the given `ship_class`.
 pub fn ship_class_shield(ship_class : ShipKind) -> Float {
   match ship_class {
-    Fighter => (fighter_class_shield)
-    Interceptor => (interceptor_class_shield)
-    Bomber => (bomber_class_shield)
-    Cruiser => (cruiser_class_shield)
-    _ => (capital_class_shield)
+    Fighter => fighter_class_shield
+    Interceptor => interceptor_class_shield
+    Bomber => bomber_class_shield
+    Cruiser => cruiser_class_shield
+    _ => capital_class_shield
   }
 }
 
@@ -791,11 +791,11 @@ pub fn ship_class_shield(ship_class : ShipKind) -> Float {
 /// Returns the base movement speed for the given `ship_class`.
 pub fn ship_class_speed(ship_class : ShipKind) -> Float {
   match ship_class {
-    Fighter => (fighter_class_speed)
-    Interceptor => (interceptor_class_speed)
-    Bomber => (bomber_class_speed)
-    Cruiser => (cruiser_class_speed)
-    _ => (capital_class_speed)
+    Fighter => fighter_class_speed
+    Interceptor => interceptor_class_speed
+    Bomber => bomber_class_speed
+    Cruiser => cruiser_class_speed
+    _ => capital_class_speed
   }
 }
 
@@ -803,11 +803,11 @@ pub fn ship_class_speed(ship_class : ShipKind) -> Float {
 /// Returns the turn rate for the given `ship_class`.
 pub fn ship_class_turn(ship_class : ShipKind) -> Float {
   match ship_class {
-    Fighter => (fighter_class_turn)
-    Interceptor => (interceptor_class_turn)
-    Bomber => (bomber_class_turn)
-    Cruiser => (cruiser_class_turn)
-    _ => (capital_class_turn)
+    Fighter => fighter_class_turn
+    Interceptor => interceptor_class_turn
+    Bomber => bomber_class_turn
+    Cruiser => cruiser_class_turn
+    _ => capital_class_turn
   }
 }
 
@@ -815,11 +815,11 @@ pub fn ship_class_turn(ship_class : ShipKind) -> Float {
 /// Returns the afterburner boost speed for the given `ship_class`.
 pub fn ship_class_boost(ship_class : ShipKind) -> Float {
   match ship_class {
-    Fighter => (fighter_class_boost)
-    Interceptor => (interceptor_class_boost)
-    Bomber => (bomber_class_boost)
-    Cruiser => (cruiser_class_boost)
-    _ => (capital_class_boost)
+    Fighter => fighter_class_boost
+    Interceptor => interceptor_class_boost
+    Bomber => bomber_class_boost
+    Cruiser => cruiser_class_boost
+    _ => capital_class_boost
   }
 }
 
@@ -827,11 +827,11 @@ pub fn ship_class_boost(ship_class : ShipKind) -> Float {
 /// Returns the display name for the given `ship_class`.
 pub fn ship_class_name(ship_class : ShipKind) -> String {
   match ship_class {
-    Fighter => { "Fighter" }
-    Interceptor => { "Interceptor" }
-    Bomber => { "Bomber" }
-    Cruiser => { "Cruiser" }
-    _ => { "Capital Ship" }
+    Fighter => "Fighter"
+    Interceptor => "Interceptor"
+    Bomber => "Bomber"
+    Cruiser => "Cruiser"
+    _ => "Capital Ship"
   }
 }
 
@@ -841,14 +841,14 @@ pub fn ship_class_name(ship_class : ShipKind) -> String {
 /// Returns the human-readable description for the given `obj_type`.
 pub fn objective_type_name(obj_type : Objective) -> String {
   match obj_type {
-    DestroyAll => { "Destroy all enemies" }
-    Escort => { "Escort ally ship" }
-    DefendStation => { "Defend the station" }
-    BossFight => { "Destroy the capital ship" }
-    Ambush => { "Survive the ambush" }
-    PatrolMission => { "Clear patrol waypoints" }
-    Survive => { "Survive for the duration" }
-    DestroyCount => { "Destroy target count" }
+    DestroyAll => "Destroy all enemies"
+    Escort => "Escort ally ship"
+    DefendStation => "Defend the station"
+    BossFight => "Destroy the capital ship"
+    Ambush => "Survive the ambush"
+    PatrolMission => "Clear patrol waypoints"
+    Survive => "Survive for the duration"
+    DestroyCount => "Destroy target count"
   }
 }
 

@@ -384,11 +384,7 @@ fn @types.Game::try_serve_ready_dish(game : @types.Game) -> Unit {
 /// Dispatches J press to the appropriate handler based on the current cursor position.
 fn @types.Game::apply_press_j(game : @types.Game) -> Unit {
   match game.cursor {
-    OrderSlot(i) => {
-      if game.orders[i].active {
-        game.selected_order = i
-      }
-    }
+    OrderSlot(i) => if game.orders[i].active { game.selected_order = i }
     PrepStation => game.apply_press_j_at_prep()
     GrillStation => game.apply_press_j_at_heat(Grill)
     WokStation => game.apply_press_j_at_heat(Wok)
@@ -401,12 +397,11 @@ fn @types.Game::apply_press_j(game : @types.Game) -> Unit {
 fn @types.Game::apply_press_k(game : @types.Game) -> Unit {
   match game.cursor {
     PassStation => game.try_serve_ready_dish()
-    OrderSlot(i) => {
+    OrderSlot(i) =>
       if game.selected_order == i {
         game.selected_order = -1
         game.flash_t = @types.maxf(game.flash_t, 0.08)
       }
-    }
     PrepStation | GrillStation | WokStation =>
       if game.cooking.active {
         game.clear_cooking()

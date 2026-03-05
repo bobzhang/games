@@ -378,12 +378,7 @@ pub fn get_spawn_type_for_biome(
         } else {
           0
         }
-      Mountains =>
-        if r < 25 {
-          @types.entity_cow
-        } else {
-          0
-        }
+      Mountains => if r < 25 { @types.entity_cow } else { 0 }
       Tundra =>
         if r < 20 {
           @types.entity_cow

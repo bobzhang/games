@@ -142,7 +142,6 @@ pub let score_stun : Int = 60
 /// Bonus score granted on successful escape.
 pub let score_win : Int = 1100
 
-
 ///|
 /// Behavior mode of a patrol drone: patrol, hunt, or stunned.
 pub(all) enum DroneMode {

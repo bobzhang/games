@@ -774,7 +774,6 @@ pub let warning_fuel_rate : Float = 3.0
 /// Low-altitude warning flash rate in Hz.
 pub let warning_altitude_rate : Float = 5.0
 
-
 ///|
 /// AI behavior state.
 pub(all) enum AiState {

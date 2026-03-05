@@ -1,6 +1,10 @@
 ///|
 /// Grants `points` to the specified `team` and updates the total and high scores.
-pub fn grant_score(game : @types.Game, team : @types.Team, points : Int) -> Unit {
+pub fn grant_score(
+  game : @types.Game,
+  team : @types.Team,
+  points : Int,
+) -> Unit {
   game.score_total += points
   match team {
     Player1 => game.players[0].score += points

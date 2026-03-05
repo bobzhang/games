@@ -347,8 +347,7 @@ fn @types.Game::update_clouds(game : @types.Game) -> Unit {
         c.size_x = @types.rand_rangef(game, 6.0, 15.0)
         c.size_y = @types.rand_rangef(game, 2.0, 5.0)
         c.size_z = @types.rand_rangef(game, 5.0, 12.0)
-        let base_alpha : Int = if game.weather_state.kind ==
-          Storm {
+        let base_alpha : Int = if game.weather_state.kind == Storm {
           160
         } else {
           100

@@ -39,14 +39,14 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   }
 
   match game.state {
-    StateMenu => { game.update_menu(dt) }
-    StatePlaying => { game.update_playing(dt) }
-    StatePaused => { game.update_paused() }
-    StateMissionComplete => { game.update_mission_complete() }
-    StateGameOver => { game.update_game_over() }
-    StateMissionBriefing => { game.update_mission_briefing() }
-    StateMissionSelect => { game.update_mission_select() }
-    StateLoadout => { game.update_loadout() }
+    StateMenu => game.update_menu(dt)
+    StatePlaying => game.update_playing(dt)
+    StatePaused => game.update_paused()
+    StateMissionComplete => game.update_mission_complete()
+    StateGameOver => game.update_game_over()
+    StateMissionBriefing => game.update_mission_briefing()
+    StateMissionSelect => game.update_mission_select()
+    StateLoadout => game.update_loadout()
   }
 }
 
@@ -852,7 +852,7 @@ fn @types.Game::collect_powerup(game : @types.Game, idx : Int) -> Unit {
     Health => {
       p.hull += @types.powerup_health_amount
       if p.hull > p.max_hull {
-      p.hull = p.max_hull
+        p.hull = p.max_hull
       }
       game.message_text = "HULL REPAIRED"
       game.message_timer = 1.5
@@ -861,7 +861,7 @@ fn @types.Game::collect_powerup(game : @types.Game, idx : Int) -> Unit {
     Shield => {
       p.shield += @types.powerup_shield_amount
       if p.shield > p.max_shield {
-      p.shield = p.max_shield
+        p.shield = p.max_shield
       }
       game.message_text = "SHIELD BOOST"
       game.message_timer = 1.5

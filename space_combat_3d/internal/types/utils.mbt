@@ -470,10 +470,10 @@ pub fn find_nearest_enemy(game : Game, x : Float, y : Float, z : Float) -> Int {
 /// Returns the display name for the given `weapon` type.
 pub fn weapon_name(weapon : WeaponKind) -> String {
   match weapon {
-    Laser => { "LASER" }
-    Missile => { "MISSILE" }
-    Plasma => { "PLASMA" }
-    Railgun => { "RAILGUN" }
+    Laser => "LASER"
+    Missile => "MISSILE"
+    Plasma => "PLASMA"
+    Railgun => "RAILGUN"
   }
 }
 
@@ -483,10 +483,10 @@ pub fn weapon_name(weapon : WeaponKind) -> String {
 /// Returns the fire cooldown interval in seconds for the given `weapon` type.
 pub fn weapon_cooldown(weapon : WeaponKind) -> Float {
   match weapon {
-    Laser => (laser_cooldown)
-    Missile => (missile_cooldown)
-    Plasma => (plasma_cooldown)
-    Railgun => (railgun_cooldown)
+    Laser => laser_cooldown
+    Missile => missile_cooldown
+    Plasma => plasma_cooldown
+    Railgun => railgun_cooldown
   }
 }
 
@@ -496,10 +496,10 @@ pub fn weapon_cooldown(weapon : WeaponKind) -> Float {
 /// Returns the energy cost per shot for the given `weapon` type.
 pub fn weapon_energy_cost(weapon : WeaponKind) -> Float {
   match weapon {
-    Laser => (laser_energy_cost)
-    Missile => { 0.0 }
-    Plasma => (plasma_energy_cost)
-    Railgun => (railgun_energy_cost)
+    Laser => laser_energy_cost
+    Missile => 0.0
+    Plasma => plasma_energy_cost
+    Railgun => railgun_energy_cost
   }
 }
 
@@ -509,10 +509,10 @@ pub fn weapon_energy_cost(weapon : WeaponKind) -> Float {
 /// Returns the projectile speed for the given `weapon` type.
 pub fn weapon_proj_speed(weapon : WeaponKind) -> Float {
   match weapon {
-    Laser => (laser_speed)
-    Missile => (missile_speed)
-    Plasma => (plasma_speed)
-    Railgun => (railgun_speed)
+    Laser => laser_speed
+    Missile => missile_speed
+    Plasma => plasma_speed
+    Railgun => railgun_speed
   }
 }
 

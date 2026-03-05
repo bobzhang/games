@@ -556,9 +556,7 @@ fn @types.Game::update_combat(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
   for i in 0..<@types.entity_max {
     let ent = game.entities[i]
-    if ent.active &&
-      @types.is_hostile(ent.kind) &&
-      ent.ai_state == Attack {
+    if ent.active && @types.is_hostile(ent.kind) && ent.ai_state == Attack {
       if ent.attack_cooldown <= 0.0 {
         let dist = @types.distance3d(
           ent.x,

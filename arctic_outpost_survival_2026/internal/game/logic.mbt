@@ -365,11 +365,7 @@ fn @types.Game::try_fire(game : @types.Game, tx : Float, ty : Float) -> Bool {
   }
 
   let overdrive : Bool = game.overdrive_t > 0.0
-  let kind : @types.BulletKind = if overdrive {
-    Pierce
-  } else {
-    Normal
-  }
+  let kind : @types.BulletKind = if overdrive { Pierce } else { Normal }
   let power : Float = if overdrive { 38.0 } else { 24.0 }
 
   if not(game.spawn_bullet(game.player_x, game.player_y, tx, ty, power, kind)) {
@@ -383,7 +379,16 @@ fn @types.Game::try_fire(game : @types.Game, tx : Float, ty : Float) -> Bool {
   game.player_vx = game.player_vx - dir.0 * 28.0
   game.player_vy = game.player_vy - dir.1 * 28.0
 
-  game.burst(game.player_x, game.player_y, if overdrive { 8 } else { 5 }, Default)
+  game.burst(
+    game.player_x,
+    game.player_y,
+    if overdrive {
+      8
+    } else {
+      5
+    },
+    Default,
+  )
 
   true
 }
@@ -661,7 +666,10 @@ fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Returns the base movement speed for an enemy of the given kind, scaled up by the current wave number.
-fn @types.Game::enemy_speed(game : @types.Game, kind : @types.EnemyKind) -> Float {
+fn @types.Game::enemy_speed(
+  game : @types.Game,
+  kind : @types.EnemyKind,
+) -> Float {
   match kind {
     Wolf => 130.0 + Float::from_int(game.wave) * 10.0
     Brute => 84.0 + Float::from_int(game.wave) * 6.0

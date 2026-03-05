@@ -327,8 +327,7 @@ fn @types.Game::interact_prep(game : @types.Game) -> Unit {
     return
   }
 
-  if game.hand.kind != Protein &&
-    game.hand.kind != Veg {
+  if game.hand.kind != Protein && game.hand.kind != Veg {
     @types.set_message(game, "Only protein or veg can be prepped.")
     return
   }
@@ -472,8 +471,7 @@ fn @types.Game::handle_interact(game : @types.Game) -> Unit {
         game, "Reputation controls game over. Keep orders flowing.",
       )
     Storage => game.interact_storage()
-    Serve =>
-      @types.set_message(game, "Use K at this station to serve.")
+    Serve => @types.set_message(game, "Use K at this station to serve.")
   }
 }
 

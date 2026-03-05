@@ -66,7 +66,8 @@ pub fn update_player_kart(game : @types.Game, dt : Float) -> Unit {
     kart.drift_timer += dt
     // Update drift level based on accumulated time
     let new_level = @types.calc_drift_level(kart.drift_timer)
-    if @types.drift_level_to_int(new_level) > @types.drift_level_to_int(kart.drift_level) {
+    if @types.drift_level_to_int(new_level) >
+      @types.drift_level_to_int(kart.drift_level) {
       kart.drift_level = new_level
       // Emit level-up particles
       let dc = @types.get_drift_spark_color(new_level)
@@ -348,15 +349,33 @@ pub fn use_powerup(game : @types.Game, kart_idx : Int) -> Unit {
     Boost => {
       kart.boost_timer = @types.boost_duration
       kart.boost_power = @types.boost_speed_add
-      @types.spawn_particles(game, kart.x, kart.y + 0.3, kart.z, 10, 255, 200, 0)
+      @types.spawn_particles(
+        game,
+        kart.x,
+        kart.y + 0.3,
+        kart.z,
+        10,
+        255,
+        200,
+        0,
+      )
     }
     Shield => {
       kart.shield_timer = @types.shield_duration
-      @types.spawn_particles(game, kart.x, kart.y + 0.5, kart.z, 8, 100, 200, 255)
+      @types.spawn_particles(
+        game,
+        kart.x,
+        kart.y + 0.5,
+        kart.z,
+        8,
+        100,
+        200,
+        255,
+      )
     }
-    Missile => { game.fire_missile(kart_idx) }
-    OilSlick => { game.drop_item(kart_idx, OilSlick) }
-    Lightning => { game.activate_lightning(kart_idx) }
+    Missile => game.fire_missile(kart_idx)
+    OilSlick => game.drop_item(kart_idx, OilSlick)
+    Lightning => game.activate_lightning(kart_idx)
     Star => {
       kart.star_timer = @types.star_duration
       kart.invincible_timer = @types.star_duration
@@ -371,7 +390,7 @@ pub fn use_powerup(game : @types.Game, kart_idx : Int) -> Unit {
         100,
       )
     }
-    Banana => { game.drop_item(kart_idx, Banana) }
+    Banana => game.drop_item(kart_idx, Banana)
     TripleMushroom => {
       kart.boost_timer = @types.triple_mushroom_boost
       kart.boost_power = @types.boost_speed_add

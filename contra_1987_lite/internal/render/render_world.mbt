@@ -249,7 +249,7 @@ fn draw_tank(
   let turret_len = 11
   let turret_w = 4
   match tank.dir {
-    Up => {
+    Up =>
       @raylib.draw_rectangle(
         sx - turret_w / 2,
         sy - turret_len,
@@ -257,8 +257,7 @@ fn draw_tank(
         turret_len,
         trim_color,
       )
-    }
-    Down => {
+    Down =>
       @raylib.draw_rectangle(
         sx - turret_w / 2,
         sy,
@@ -266,8 +265,7 @@ fn draw_tank(
         turret_len,
         trim_color,
       )
-    }
-    Left => {
+    Left =>
       @raylib.draw_rectangle(
         sx - turret_len,
         sy - turret_w / 2,
@@ -275,8 +273,7 @@ fn draw_tank(
         turret_w,
         trim_color,
       )
-    }
-    _ => {
+    _ =>
       @raylib.draw_rectangle(
         sx,
         sy - turret_w / 2,
@@ -284,7 +281,6 @@ fn draw_tank(
         turret_w,
         trim_color,
       )
-    }
   }
 
   @raylib.draw_circle(sx, sy, 5.0, trim_color)
@@ -429,9 +425,9 @@ fn @types.Game::draw_bullets(
       continue
     }
     let color = match bullet.owner_team {
-      Enemy => { @raylib.Color::new(255, 94, 94, 255) }
-      Player2 => { @raylib.Color::new(255, 222, 120, 255) }
-      _ => { @raylib.Color::new(122, 222, 255, 255) }
+      Enemy => @raylib.Color::new(255, 94, 94, 255)
+      Player2 => @raylib.Color::new(255, 222, 120, 255)
+      _ => @raylib.Color::new(122, 222, 255, 255)
     }
     @raylib.draw_circle(
       @types.world_to_screen_x(bullet.x, shake_x),
@@ -466,36 +462,36 @@ fn @types.Game::draw_particles(
 ///|
 fn powerup_color(kind : @types.PowerupKind) -> @raylib.Color {
   match kind {
-    Shield => { @raylib.skyblue }
-    Star => { @raylib.gold }
-    Grenade => { @raylib.red }
-    Clock => { @raylib.lime }
-    Shovel => { @raylib.brown }
-    ExtraLife => { @raylib.orange }
+    Shield => @raylib.skyblue
+    Star => @raylib.gold
+    Grenade => @raylib.red
+    Clock => @raylib.lime
+    Shovel => @raylib.brown
+    ExtraLife => @raylib.orange
   }
 }
 
 ///|
 fn powerup_text(kind : @types.PowerupKind) -> String {
   match kind {
-    Shield => { "S" }
-    Star => { "*" }
-    Grenade => { "G" }
-    Clock => { "C" }
-    Shovel => { "H" }
-    ExtraLife => { "+" }
+    Shield => "S"
+    Star => "*"
+    Grenade => "G"
+    Clock => "C"
+    Shovel => "H"
+    ExtraLife => "+"
   }
 }
 
 ///|
 fn powerup_radius(kind : @types.PowerupKind) -> Float {
   match kind {
-    Shield => { 11.0 }
-    Star => { 10.0 }
-    Grenade => { 12.0 }
-    Clock => { 11.0 }
-    Shovel => { 11.0 }
-    ExtraLife => { 12.0 }
+    Shield => 11.0
+    Star => 10.0
+    Grenade => 12.0
+    Clock => 11.0
+    Shovel => 11.0
+    ExtraLife => 12.0
   }
 }
 

@@ -25,7 +25,6 @@ pub(all) enum ToolKind {
   ToolCross
 } derive(Eq)
 
-
 ///|
 /// Cell state in the puzzle grid.
 pub(all) enum Cell {

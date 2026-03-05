@@ -16,7 +16,7 @@ fn @types.Game::alloc_enemy_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-  -1
+    -1
   }
 }
 
@@ -193,14 +193,7 @@ fn @types.Game::enemy_shoot_if_ready(
       @types.bullet_speed_enemy
     }
     let power = if enemy.enemy_kind == Heavy { 2 } else { 1 }
-    game.spawn_bullet(
-      Enemy,
-      muzzle_x,
-      muzzle_y,
-      enemy.dir,
-      speed,
-      power,
-    )
+    game.spawn_bullet(Enemy, muzzle_x, muzzle_y, enemy.dir, speed, power)
     enemy.reload_timer = enemy.reload_delay
     @particles.spawn_spark_burst(game, muzzle_x, muzzle_y, 4)
   }

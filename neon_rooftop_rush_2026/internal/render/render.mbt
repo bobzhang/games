@@ -314,7 +314,12 @@ fn draw_obstacle(ob : @types.Obstacle, cam_x : Float, cam_y : Float) -> Unit {
         (x + ob.w * 0.5).to_int(),
         (y + ob.h * 0.5).to_int(),
         Float::from_int(14) + pulse * Float::from_int(6),
-        @raylib.Color::new(glow.r.to_int(), glow.g.to_int(), glow.b.to_int(), 160),
+        @raylib.Color::new(
+          glow.r.to_int(),
+          glow.g.to_int(),
+          glow.b.to_int(),
+          160,
+        ),
       )
       @raylib.draw_line(
         x.to_int() - 6,

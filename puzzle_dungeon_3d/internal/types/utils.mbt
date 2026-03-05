@@ -44,9 +44,9 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 /// Returns the grid-x step (`-1`, `0`, `1`) represented by a direction.
 pub fn dir_dx(dir : Dir) -> Int {
   match dir {
-    DirRight => { 1 }
-    DirLeft => { -1 }
-    _ => { 0 }
+    DirRight => 1
+    DirLeft => -1
+    _ => 0
   }
 }
 
@@ -54,9 +54,9 @@ pub fn dir_dx(dir : Dir) -> Int {
 /// Returns the grid-y step (`-1`, `0`, `1`) represented by a direction.
 pub fn dir_dy(dir : Dir) -> Int {
   match dir {
-    DirDown => { 1 }
-    DirUp => { -1 }
-    _ => { 0 }
+    DirDown => 1
+    DirUp => -1
+    _ => 0
   }
 }
 
@@ -161,11 +161,11 @@ pub fn is_conveyor(tile : Tile) -> Bool {
 /// Returns conveyor travel direction encoded by a conveyor tile.
 pub fn conveyor_direction(tile : Tile) -> Dir {
   match tile {
-    TileConveyorUp => { DirUp }
-    TileConveyorRight => { DirRight }
-    TileConveyorDown => { DirDown }
-    TileConveyorLeft => { DirLeft }
-    _ => { DirNone }
+    TileConveyorUp => DirUp
+    TileConveyorRight => DirRight
+    TileConveyorDown => DirDown
+    TileConveyorLeft => DirLeft
+    _ => DirNone
   }
 }
 
@@ -191,11 +191,11 @@ pub fn is_laser_source(tile : Tile) -> Bool {
 /// Returns initial beam direction for a laser source tile.
 pub fn laser_source_direction(tile : Tile) -> Dir {
   match tile {
-    TileLaserSourceRight => { DirRight }
-    TileLaserSourceDown => { DirDown }
-    TileLaserSourceLeft => { DirLeft }
-    TileLaserSourceUp => { DirUp }
-    _ => { DirNone }
+    TileLaserSourceRight => DirRight
+    TileLaserSourceDown => DirDown
+    TileLaserSourceLeft => DirLeft
+    TileLaserSourceUp => DirUp
+    _ => DirNone
   }
 }
 
@@ -206,46 +206,42 @@ pub fn laser_source_direction(tile : Tile) -> Dir {
 pub fn mirror_reflect(tile : Tile, incoming_dir : Dir) -> Dir {
   // NE mirror: / shape - reflects up<->right, down<->left
   match tile {
-    TileMirrorNe => {
+    TileMirrorNe =>
       match incoming_dir {
-        DirLeft => { DirUp }
-        DirDown => { DirRight }
-        DirRight => { DirDown }
-        DirUp => { DirLeft }
-        _ => { DirNone }
+        DirLeft => DirUp
+        DirDown => DirRight
+        DirRight => DirDown
+        DirUp => DirLeft
+        _ => DirNone
       }
-    }
-    TileMirrorNw => {
+    TileMirrorNw =>
       // NW mirror: \ shape - reflects up<->left, down<->right
       match incoming_dir {
-        DirRight => { DirUp }
-        DirDown => { DirLeft }
-        DirLeft => { DirDown }
-        DirUp => { DirRight }
-        _ => { DirNone }
+        DirRight => DirUp
+        DirDown => DirLeft
+        DirLeft => DirDown
+        DirUp => DirRight
+        _ => DirNone
       }
-    }
-    TileMirrorSe => {
+    TileMirrorSe =>
       // SE mirror: \ shape going other way
       match incoming_dir {
-        DirLeft => { DirDown }
-        DirUp => { DirRight }
-        DirRight => { DirUp }
-        DirDown => { DirLeft }
-        _ => { DirNone }
+        DirLeft => DirDown
+        DirUp => DirRight
+        DirRight => DirUp
+        DirDown => DirLeft
+        _ => DirNone
       }
-    }
-    TileMirrorSw => {
+    TileMirrorSw =>
       // SW mirror: / shape going other way
       match incoming_dir {
-        DirRight => { DirDown }
-        DirUp => { DirLeft }
-        DirLeft => { DirUp }
-        DirDown => { DirRight }
-        _ => { DirNone }
+        DirRight => DirDown
+        DirUp => DirLeft
+        DirLeft => DirUp
+        DirDown => DirRight
+        _ => DirNone
       }
-    }
-    _ => { DirNone }
+    _ => DirNone
   }
 }
 
@@ -478,11 +474,11 @@ pub fn get_world_for_floor(floor : Int) -> World {
 /// Returns the `(r, g, b)` floor color tuple for a world theme.
 pub fn get_world_floor_color(world : World) -> (Int, Int, Int) {
   match world {
-    WorldIce => { (ice_floor_r, ice_floor_g, ice_floor_b) }
-    WorldLava => { (lava_floor_r, lava_floor_g, lava_floor_b) }
-    WorldGarden => { (garden_floor_r, garden_floor_g, garden_floor_b) }
-    WorldVoid => { (void_floor_r, void_floor_g, void_floor_b) }
-    _ => { (dungeon_floor_r, dungeon_floor_g, dungeon_floor_b) }
+    WorldIce => (ice_floor_r, ice_floor_g, ice_floor_b)
+    WorldLava => (lava_floor_r, lava_floor_g, lava_floor_b)
+    WorldGarden => (garden_floor_r, garden_floor_g, garden_floor_b)
+    WorldVoid => (void_floor_r, void_floor_g, void_floor_b)
+    _ => (dungeon_floor_r, dungeon_floor_g, dungeon_floor_b)
   }
 }
 
@@ -490,11 +486,11 @@ pub fn get_world_floor_color(world : World) -> (Int, Int, Int) {
 /// Returns the `(r, g, b)` wall color tuple for a world theme.
 pub fn get_world_wall_color(world : World) -> (Int, Int, Int) {
   match world {
-    WorldIce => { (ice_wall_r, ice_wall_g, ice_wall_b) }
-    WorldLava => { (lava_wall_r, lava_wall_g, lava_wall_b) }
-    WorldGarden => { (garden_wall_r, garden_wall_g, garden_wall_b) }
-    WorldVoid => { (void_wall_r, void_wall_g, void_wall_b) }
-    _ => { (dungeon_wall_r, dungeon_wall_g, dungeon_wall_b) }
+    WorldIce => (ice_wall_r, ice_wall_g, ice_wall_b)
+    WorldLava => (lava_wall_r, lava_wall_g, lava_wall_b)
+    WorldGarden => (garden_wall_r, garden_wall_g, garden_wall_b)
+    WorldVoid => (void_wall_r, void_wall_g, void_wall_b)
+    _ => (dungeon_wall_r, dungeon_wall_g, dungeon_wall_b)
   }
 }
 
@@ -502,11 +498,11 @@ pub fn get_world_wall_color(world : World) -> (Int, Int, Int) {
 /// Returns the `(r, g, b)` accent color tuple for a world theme.
 pub fn get_world_accent_color(world : World) -> (Int, Int, Int) {
   match world {
-    WorldIce => { (ice_accent_r, ice_accent_g, ice_accent_b) }
-    WorldLava => { (lava_accent_r, lava_accent_g, lava_accent_b) }
-    WorldGarden => { (garden_accent_r, garden_accent_g, garden_accent_b) }
-    WorldVoid => { (void_accent_r, void_accent_g, void_accent_b) }
-    _ => { (dungeon_accent_r, dungeon_accent_g, dungeon_accent_b) }
+    WorldIce => (ice_accent_r, ice_accent_g, ice_accent_b)
+    WorldLava => (lava_accent_r, lava_accent_g, lava_accent_b)
+    WorldGarden => (garden_accent_r, garden_accent_g, garden_accent_b)
+    WorldVoid => (void_accent_r, void_accent_g, void_accent_b)
+    _ => (dungeon_accent_r, dungeon_accent_g, dungeon_accent_b)
   }
 }
 
@@ -514,11 +510,11 @@ pub fn get_world_accent_color(world : World) -> (Int, Int, Int) {
 /// Returns localized world name text for menu and HUD displays.
 pub fn get_world_name(world : World) -> String {
   match world {
-    WorldDungeon => (world_name_0)
-    WorldIce => (world_name_1)
-    WorldLava => (world_name_2)
-    WorldGarden => (world_name_3)
-    WorldVoid => (world_name_4)
+    WorldDungeon => world_name_0
+    WorldIce => world_name_1
+    WorldLava => world_name_2
+    WorldGarden => world_name_3
+    WorldVoid => world_name_4
   }
 }
 
@@ -777,12 +773,12 @@ pub fn toggle_bridges(game : Game) -> Unit {
     for gx in 0..<grid_w {
       let tile = get_tile(game, gx, gy)
       match tile {
-        TileBridgeOff => { set_tile(game, gx, gy, TileBridgeOn) }
+        TileBridgeOff => set_tile(game, gx, gy, TileBridgeOn)
         TileBridgeOn => {
           // Only retract if no entity on it
           let eidx = entity_at(game, gx, gy)
           if eidx < 0 {
-          set_tile(game, gx, gy, TileBridgeOff)
+            set_tile(game, gx, gy, TileBridgeOff)
           }
         }
         _ => ()
@@ -847,11 +843,11 @@ pub fn setup_decorations(game : Game) -> Unit {
             d.scale = rand_rangef(game, 0.5, 1.2)
             d.phase = rand_rangef(game, 0.0, 6.28)
             match world {
-              WorldDungeon => { d.kind = DecoTorch }
-              WorldIce => { d.kind = DecoCrystal }
-              WorldLava => { d.kind = DecoMagmaPool }
-              WorldGarden => { d.kind = DecoFlower }
-              _ => { d.kind = DecoFloatingRock }
+              WorldDungeon => d.kind = DecoTorch
+              WorldIce => d.kind = DecoCrystal
+              WorldLava => d.kind = DecoMagmaPool
+              WorldGarden => d.kind = DecoFlower
+              _ => d.kind = DecoFloatingRock
             }
             game.decoration_count += 1
           }

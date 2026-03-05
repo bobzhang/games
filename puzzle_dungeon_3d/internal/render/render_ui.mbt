@@ -5,8 +5,8 @@
 /// puzzle state, including transient message text and completion banners.
 pub fn draw_ui(game : @types.Game) -> Unit {
   match game.state {
-    StateMenu => { game.draw_menu() }
-    StatePlaying => { game.draw_hud() }
+    StateMenu => game.draw_menu()
+    StatePlaying => game.draw_hud()
     StatePaused => {
       game.draw_hud()
       game.draw_pause_overlay()
@@ -15,10 +15,10 @@ pub fn draw_ui(game : @types.Game) -> Unit {
       game.draw_hud()
       game.draw_level_complete()
     }
-    StateGameOver => { game.draw_game_over() }
-    StateWorldSelect => { game.draw_world_select() }
-    StateFloorSelect => { game.draw_floor_select() }
-    StateCampaignComplete => { game.draw_campaign_complete() }
+    StateGameOver => game.draw_game_over()
+    StateWorldSelect => game.draw_world_select()
+    StateFloorSelect => game.draw_floor_select()
+    StateCampaignComplete => game.draw_campaign_complete()
     _ => ()
   }
   // Message overlay

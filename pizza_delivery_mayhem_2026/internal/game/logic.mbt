@@ -290,9 +290,18 @@ fn @types.Game::spawn_traffic(game : @types.Game) -> Bool {
       }
       traffic_elem.vy = @types.randf(-16.0, 16.0)
       match kind {
-        Sedan => { traffic_elem.w = 48.0; traffic_elem.h = 30.0 }
-        Van => { traffic_elem.w = 60.0; traffic_elem.h = 34.0 }
-        Bus => { traffic_elem.w = 88.0; traffic_elem.h = 40.0 }
+        Sedan => {
+          traffic_elem.w = 48.0
+          traffic_elem.h = 30.0
+        }
+        Van => {
+          traffic_elem.w = 60.0
+          traffic_elem.h = 34.0
+        }
+        Bus => {
+          traffic_elem.w = 88.0
+          traffic_elem.h = 40.0
+        }
       }
     } else {
       let x_lane : Float = @types.world_left() +
@@ -315,9 +324,18 @@ fn @types.Game::spawn_traffic(game : @types.Game) -> Bool {
         @types.randf(-280.0, -180.0)
       }
       match kind {
-        Sedan => { traffic_elem.w = 30.0; traffic_elem.h = 48.0 }
-        Van => { traffic_elem.w = 34.0; traffic_elem.h = 60.0 }
-        Bus => { traffic_elem.w = 40.0; traffic_elem.h = 88.0 }
+        Sedan => {
+          traffic_elem.w = 30.0
+          traffic_elem.h = 48.0
+        }
+        Van => {
+          traffic_elem.w = 34.0
+          traffic_elem.h = 60.0
+        }
+        Bus => {
+          traffic_elem.w = 40.0
+          traffic_elem.h = 88.0
+        }
       }
     }
     traffic_elem.active = true
@@ -707,8 +725,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
     let mut best_d2 : Float = 1000000000.0
     if game.fuel < 40.0 {
       for i in 0..<game.pickups.length() {
-        if not(game.pickups[i].active) ||
-          game.pickups[i].kind != Fuel {
+        if not(game.pickups[i].active) || game.pickups[i].kind != Fuel {
           continue
         }
         let d2 : Float = @types.dist2(

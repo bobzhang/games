@@ -298,7 +298,8 @@ fn @types.Game::spawn_hazard(game : @types.Game) -> Bool {
         hazard.r = @types.randf(16.0, 22.0)
         hazard.hp = @types.randf(12.0, 18.0)
         hazard.vx = @types.randf(-34.0, 34.0)
-        hazard.vy = @types.randf(160.0, 240.0) + Float::from_int(game.wave) * 14.0
+        hazard.vy = @types.randf(160.0, 240.0) +
+          Float::from_int(game.wave) * 14.0
       }
     }
 
@@ -717,8 +718,16 @@ fn @types.Game::update_hazards(
         hazard.vy = hazard.vy + dt * 24.0
       }
       Drone => {
-        let tx : Float = if game.carrying_idx >= 0 { tip_x } else { game.heli_x }
-        let ty : Float = if game.carrying_idx >= 0 { tip_y } else { game.heli_y }
+        let tx : Float = if game.carrying_idx >= 0 {
+          tip_x
+        } else {
+          game.heli_x
+        }
+        let ty : Float = if game.carrying_idx >= 0 {
+          tip_y
+        } else {
+          game.heli_y
+        }
 
         let dx : Float = tx - hazard.x
         let dy : Float = ty - hazard.y

@@ -594,7 +594,6 @@ pub let respawn_invulnerability : Float = 3.0
 /// Update interval for gravity-affected block simulation.
 pub let gravity_block_interval : Float = 0.15
 
-
 ///|
 /// AI behavior state.
 pub(all) enum AiState {

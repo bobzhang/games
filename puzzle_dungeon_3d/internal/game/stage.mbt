@@ -65,10 +65,12 @@ pub fn load_floor(game : @types.Game, floor : Int) -> Unit {
       if result.1 != EntityNone && entity_count < @types.max_entities {
         // Spawn entity
         match result.1 {
-          EntityBlock => { game.entities[entity_count] = @types.Entity::new_block(gx, gy) }
-          EntityDiamond => { game.entities[entity_count] = @types.Entity::new_diamond(gx, gy) }
-          EntityKey => { game.entities[entity_count] = @types.Entity::new_key(gx, gy) }
-        
+          EntityBlock =>
+            game.entities[entity_count] = @types.Entity::new_block(gx, gy)
+          EntityDiamond =>
+            game.entities[entity_count] = @types.Entity::new_diamond(gx, gy)
+          EntityKey =>
+            game.entities[entity_count] = @types.Entity::new_key(gx, gy)
           _ => ()
         }
         entity_count += 1

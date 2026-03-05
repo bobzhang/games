@@ -88,10 +88,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
       enemy.broadside_cooldown = 0.0
     }
     if enemy.fire_timer <= 0.0 &&
-      (
-        enemy.ai_state == Attack ||
-        enemy.ai_state == BroadsideRun
-      ) {
+      (enemy.ai_state == Attack || enemy.ai_state == BroadsideRun) {
       let can_fire = enemy.crew > 0 && enemy.broadside_cooldown <= 0.0
       if can_fire {
         // Check if player is within firing arc (broadside)
@@ -139,8 +136,7 @@ fn @types.Game::update_ai_state(
     1.0
   }
   // Retreat check based on personality
-  if hp_ratio < enemy.retreat_hp_pct &&
-    enemy.ai_personality != Berserker {
+  if hp_ratio < enemy.retreat_hp_pct && enemy.ai_personality != Berserker {
     enemy.ai_state = Retreat
     return
   }
@@ -244,8 +240,7 @@ fn @types.Game::update_chase(
   // Head towards player but try to approach broadside
   let to_player = @math.atan2f(px - enemy.x, pz - enemy.z)
   // Approach at an angle to get broadside position
-  let approach_offset : Float = if enemy.ai_personality ==
-    Aggressive {
+  let approach_offset : Float = if enemy.ai_personality == Aggressive {
     @types.pi * 0.2
   } else if enemy.ai_personality == Berserker {
     0.0
@@ -293,8 +288,7 @@ fn @types.Game::update_attack(
   // Orbit angle depends on personality
   let orbit_angle : Float = if dist < enemy.attack_range * 0.6 {
     // Too close, angle away
-    let away_mult : Float = if enemy.ai_personality ==
-      Defensive {
+    let away_mult : Float = if enemy.ai_personality == Defensive {
       0.8
     } else {
       0.7
@@ -302,8 +296,7 @@ fn @types.Game::update_attack(
     to_player + @types.pi * away_mult
   } else if dist > enemy.attack_range {
     // Too far, angle towards
-    let toward_mult : Float = if enemy.ai_personality ==
-      Aggressive {
+    let toward_mult : Float = if enemy.ai_personality == Aggressive {
       0.15
     } else {
       0.2

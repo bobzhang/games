@@ -28,16 +28,16 @@ pub fn enemy_kind_from_int(n : Int) -> EnemyKind {
 /// Converts an EnemyKind enum value to an integer.
 pub fn enemy_kind_to_int(kind : EnemyKind) -> Int {
   match kind {
-    Basic => { 0 }
-    Fast => { 1 }
-    Tank => { 2 }
-    Flying => { 3 }
-    Boss => { 4 }
-    Healer => { 5 }
-    Swarm => { 6 }
-    Shield => { 7 }
-    Camo => { 8 }
-    _ => { 9 }
+    Basic => 0
+    Fast => 1
+    Tank => 2
+    Flying => 3
+    Boss => 4
+    Healer => 5
+    Swarm => 6
+    Shield => 7
+    Camo => 8
+    _ => 9
   }
 }
 
@@ -59,10 +59,10 @@ pub fn target_priority_from_int(n : Int) -> TargetPriority {
 /// Converts a TargetPriority enum value to an integer.
 pub fn target_priority_to_int(mode : TargetPriority) -> Int {
   match mode {
-    First => { 0 }
-    Last => { 1 }
-    Strongest => { 2 }
-    _ => { 3 }
+    First => 0
+    Last => 1
+    Strongest => 2
+    _ => 3
   }
 }
 
@@ -243,14 +243,14 @@ pub fn alloc_particle(game : Game) -> Int {
 /// Returns the base gold cost for building a tower of the given `kind`.
 pub fn tower_cost_for(kind : TowerKind) -> Int {
   match kind {
-    Arrow => (cost_arrow)
-    Cannon => (cost_cannon)
-    Frost => (cost_frost)
-    Lightning => (cost_lightning)
-    Flame => (cost_flame)
-    Sniper => (cost_sniper)
-    Splash => (cost_splash)
-    Buff => (cost_buff)
+    Arrow => cost_arrow
+    Cannon => cost_cannon
+    Frost => cost_frost
+    Lightning => cost_lightning
+    Flame => cost_flame
+    Sniper => cost_sniper
+    Splash => cost_splash
+    Buff => cost_buff
   }
 }
 
@@ -312,14 +312,14 @@ pub fn tower_sell_value(kind : TowerKind, level : Int) -> Int {
 /// Returns the base attack range for a tower of the given `kind`.
 pub fn tower_range(kind : TowerKind) -> Float {
   match kind {
-    Arrow => (range_arrow)
-    Cannon => (range_cannon)
-    Frost => (range_frost)
-    Lightning => (range_lightning)
-    Flame => (range_flame)
-    Sniper => (range_sniper)
-    Splash => (range_splash)
-    Buff => (range_buff)
+    Arrow => range_arrow
+    Cannon => range_cannon
+    Frost => range_frost
+    Lightning => range_lightning
+    Flame => range_flame
+    Sniper => range_sniper
+    Splash => range_splash
+    Buff => range_buff
   }
 }
 
@@ -339,14 +339,14 @@ pub fn tower_effective_range(tower : Tower) -> Float {
 /// Returns the base damage per shot for a tower of the given `kind`.
 pub fn tower_damage(kind : TowerKind) -> Float {
   match kind {
-    Arrow => (dmg_arrow)
-    Cannon => (dmg_cannon)
-    Frost => (dmg_frost)
-    Lightning => (dmg_lightning)
-    Flame => (dmg_flame)
-    Sniper => (dmg_sniper)
-    Splash => (dmg_splash)
-    Buff => (dmg_buff)
+    Arrow => dmg_arrow
+    Cannon => dmg_cannon
+    Frost => dmg_frost
+    Lightning => dmg_lightning
+    Flame => dmg_flame
+    Sniper => dmg_sniper
+    Splash => dmg_splash
+    Buff => dmg_buff
   }
 }
 
@@ -366,14 +366,14 @@ pub fn tower_effective_damage(tower : Tower) -> Float {
 /// Returns the base fire rate in seconds between shots for a tower of `kind`.
 pub fn tower_fire_rate(kind : TowerKind) -> Float {
   match kind {
-    Arrow => (rate_arrow)
-    Cannon => (rate_cannon)
-    Frost => (rate_frost)
-    Lightning => (rate_lightning)
-    Flame => (rate_flame)
-    Sniper => (rate_sniper)
-    Splash => (rate_splash)
-    Buff => (rate_buff)
+    Arrow => rate_arrow
+    Cannon => rate_cannon
+    Frost => rate_frost
+    Lightning => rate_lightning
+    Flame => rate_flame
+    Sniper => rate_sniper
+    Splash => rate_splash
+    Buff => rate_buff
   }
 }
 
@@ -394,14 +394,14 @@ pub fn tower_effective_rate(tower : Tower) -> Float {
 /// Returns the display name for a tower of the given `kind`.
 pub fn tower_name(kind : TowerKind) -> String {
   match kind {
-    Arrow => { "Arrow" }
-    Cannon => { "Cannon" }
-    Frost => { "Frost" }
-    Lightning => { "Lightning" }
-    Flame => { "Flame" }
-    Sniper => { "Sniper" }
-    Splash => { "Splash" }
-    Buff => { "Buff" }
+    Arrow => "Arrow"
+    Cannon => "Cannon"
+    Frost => "Frost"
+    Lightning => "Lightning"
+    Flame => "Flame"
+    Sniper => "Sniper"
+    Splash => "Splash"
+    Buff => "Buff"
   }
 }
 
@@ -409,16 +409,16 @@ pub fn tower_name(kind : TowerKind) -> String {
 /// Returns the display name for an enemy of the given `kind`.
 pub fn enemy_name(kind : EnemyKind) -> String {
   match kind {
-    Basic => { "Soldier" }
-    Fast => { "Scout" }
-    Tank => { "Heavy" }
-    Flying => { "Flyer" }
-    Boss => { "Boss" }
-    Healer => { "Medic" }
-    Swarm => { "Swarm" }
-    Shield => { "Shield" }
-    Camo => { "Stealth" }
-    Splitter => { "Splitter" }
+    Basic => "Soldier"
+    Fast => "Scout"
+    Tank => "Heavy"
+    Flying => "Flyer"
+    Boss => "Boss"
+    Healer => "Medic"
+    Swarm => "Swarm"
+    Shield => "Shield"
+    Camo => "Stealth"
+    Splitter => "Splitter"
   }
 }
 
@@ -426,10 +426,10 @@ pub fn enemy_name(kind : EnemyKind) -> String {
 /// Returns the display name for the given targeting `mode`.
 pub fn targeting_mode_name(mode : TargetPriority) -> String {
   match mode {
-    First => { "First" }
-    Last => { "Last" }
-    Strongest => { "Strong" }
-    Closest => { "Close" }
+    First => "First"
+    Last => "Last"
+    Strongest => "Strong"
+    Closest => "Close"
   }
 }
 
@@ -438,7 +438,10 @@ pub fn targeting_mode_name(mode : TargetPriority) -> String {
 
 ///|
 /// Returns the damage resistance multiplier for `enemy_kind` against `tower_kind`.
-pub fn enemy_resistance(enemy_kind : EnemyKind, tower_kind : TowerKind) -> Float {
+pub fn enemy_resistance(
+  enemy_kind : EnemyKind,
+  tower_kind : TowerKind,
+) -> Float {
   // Flying enemies are weak to arrow, resistant to flame
   if enemy_kind == Flying {
     if tower_kind == Arrow {
@@ -502,16 +505,16 @@ pub fn enemy_resistance(enemy_kind : EnemyKind, tower_kind : TowerKind) -> Float
 /// Returns the flat damage reduction armor value for an enemy of `kind`.
 pub fn enemy_armor_value(kind : EnemyKind) -> Float {
   match kind {
-    Basic => (armor_basic)
-    Fast => (armor_fast)
-    Tank => (armor_tank)
-    Flying => (armor_flying)
-    Boss => (armor_boss)
-    Healer => (armor_healer)
-    Swarm => (armor_swarm)
-    Shield => (armor_shield)
-    Camo => (armor_camo)
-    Splitter => (armor_splitter)
+    Basic => armor_basic
+    Fast => armor_fast
+    Tank => armor_tank
+    Flying => armor_flying
+    Boss => armor_boss
+    Healer => armor_healer
+    Swarm => armor_swarm
+    Shield => armor_shield
+    Camo => armor_camo
+    Splitter => armor_splitter
   }
 }
 
@@ -566,22 +569,18 @@ pub fn find_target(
     let dist = distance2d(wx, wz, enemy.x, enemy.z)
     if dist <= range {
       let score : Float = match mode {
-        First => {
+        First =>
           // Highest path progress = first (furthest along)
           enemy_total_progress(enemy)
-        }
-        Last => {
+        Last =>
           // Lowest path progress = last
           -enemy_total_progress(enemy)
-        }
-        Strongest => {
+        Strongest =>
           // Highest current HP
           enemy.hp
-        }
-        _ => {
+        _ =>
           // Closest: negate distance so closer = higher score
           -dist
-        }
       }
       if score > best_score {
         best_score = score
@@ -634,14 +633,14 @@ pub fn tower_can_detect_camo(kind : TowerKind) -> Bool {
 /// Returns the projectile travel speed for a tower of the given `kind`.
 pub fn projectile_speed_for(kind : TowerKind) -> Float {
   match kind {
-    Arrow => (proj_speed_bullet)
-    Cannon => (proj_speed_cannonball)
-    Frost => (proj_speed_ice_shard)
-    Lightning => (proj_speed_lightning)
-    Flame => (proj_speed_fireball)
-    Sniper => (proj_speed_sniper)
-    Splash => (proj_speed_splash)
-    _ => { 12.0 }
+    Arrow => proj_speed_bullet
+    Cannon => proj_speed_cannonball
+    Frost => proj_speed_ice_shard
+    Lightning => proj_speed_lightning
+    Flame => proj_speed_fireball
+    Sniper => proj_speed_sniper
+    Splash => proj_speed_splash
+    _ => 12.0
   }
 }
 
@@ -651,10 +650,10 @@ pub fn projectile_speed_for(kind : TowerKind) -> Float {
 /// Returns the area-of-effect splash radius for a tower of the given `kind`.
 pub fn splash_radius_for(kind : TowerKind) -> Float {
   match kind {
-    Cannon => (splash_radius_cannon)
-    Splash => (splash_radius_splash)
-    Flame => (splash_radius_flame)
-    _ => { 0.0 }
+    Cannon => splash_radius_cannon
+    Splash => splash_radius_splash
+    Flame => splash_radius_flame
+    _ => 0.0
   }
 }
 
@@ -947,14 +946,14 @@ pub fn get_upgrade_info(kind : TowerKind, level : Int) -> UpgradeInfo {
 /// Returns the special ability description for level 3 of a tower of `kind`.
 fn get_level3_special_desc(kind : TowerKind) -> String {
   match kind {
-    Arrow => { "Double shot" }
-    Cannon => { "Bigger explosion" }
-    Frost => { "Freeze chance" }
-    Lightning => { "More chains" }
-    Flame => { "Fire aura" }
-    Sniper => { "Armor break" }
-    Splash => { "Stun chance" }
-    Buff => { "Buff pulse" }
+    Arrow => "Double shot"
+    Cannon => "Bigger explosion"
+    Frost => "Freeze chance"
+    Lightning => "More chains"
+    Flame => "Fire aura"
+    Sniper => "Armor break"
+    Splash => "Stun chance"
+    Buff => "Buff pulse"
   }
 }
 

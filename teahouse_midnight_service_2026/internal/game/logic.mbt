@@ -79,16 +79,15 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-
-  let mut best = 0
-  let mut best_life = game.sparks[0].life
-  for i in 1..<game.sparks.length() {
-    if game.sparks[i].life < best_life {
-      best_life = game.sparks[i].life
-      best = i
+    let mut best = 0
+    let mut best_life = game.sparks[0].life
+    for i in 1..<game.sparks.length() {
+      if game.sparks[i].life < best_life {
+        best_life = game.sparks[i].life
+        best = i
+      }
     }
-  }
-  best
+    best
   }
 }
 
@@ -99,16 +98,15 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-
-  let mut best = 0
-  let mut best_life = game.rings[0].life
-  for i in 1..<game.rings.length() {
-    if game.rings[i].life < best_life {
-      best_life = game.rings[i].life
-      best = i
+    let mut best = 0
+    let mut best_life = game.rings[0].life
+    for i in 1..<game.rings.length() {
+      if game.rings[i].life < best_life {
+        best_life = game.rings[i].life
+        best = i
+      }
     }
-  }
-  best
+    best
   }
 }
 
@@ -119,16 +117,15 @@ fn @types.Game::alloc_shadow(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-
-  let mut best = 0
-  let mut best_life = game.shadows[0].life
-  for i in 1..<game.shadows.length() {
-    if game.shadows[i].life < best_life {
-      best_life = game.shadows[i].life
-      best = i
+    let mut best = 0
+    let mut best_life = game.shadows[0].life
+    for i in 1..<game.shadows.length() {
+      if game.shadows[i].life < best_life {
+        best_life = game.shadows[i].life
+        best = i
+      }
     }
-  }
-  best
+    best
   }
 }
 
@@ -267,16 +264,15 @@ fn @types.Game::alloc_customer(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-
-  let mut best = 0
-  let mut best_patience = game.customers[0].patience
-  for i in 1..<game.customers.length() {
-    if game.customers[i].patience < best_patience {
-      best_patience = game.customers[i].patience
-      best = i
+    let mut best = 0
+    let mut best_patience = game.customers[0].patience
+    for i in 1..<game.customers.length() {
+      if game.customers[i].patience < best_patience {
+        best_patience = game.customers[i].patience
+        best = i
+      }
     }
-  }
-  best
+    best
   }
 }
 

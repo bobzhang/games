@@ -16,7 +16,7 @@ fn @types.Game::alloc_enemy_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-  -1
+    -1
   }
 }
 
@@ -174,10 +174,10 @@ fn @types.Game::enemy_shoot_if_ready(
 
   if not(should_fire) {
     let chance = match enemy.enemy_kind {
-      Fast => { 16 }
-      Heavy => { 11 }
-      Sniper => { 26 }
-      _ => { 13 }
+      Fast => 16
+      Heavy => 11
+      Sniper => 26
+      _ => 13
     }
     should_fire = @types.rand_range(game, 0, 99) < chance
   }

@@ -899,17 +899,17 @@ pub fn draw_game(game : @types.Game) -> Unit {
   game.draw_stage()
 
   match game.state {
-    StateTitle => { game.draw_title_screen() }
-    StateSelect => { game.draw_select_screen() }
+    StateTitle => game.draw_title_screen()
+    StateSelect => game.draw_select_screen()
     _ => {
       game.draw_fighters()
       game.draw_fight_hud()
 
       match game.state {
-        StateIntro => { game.draw_intro_overlay() }
-        StateRoundOver => { game.draw_round_over_overlay() }
-        StateMatchOver => { game.draw_match_over_overlay() }
-        _ => { game.draw_announcer() }
+        StateIntro => game.draw_intro_overlay()
+        StateRoundOver => game.draw_round_over_overlay()
+        StateMatchOver => game.draw_match_over_overlay()
+        _ => game.draw_announcer()
       }
 
       if game.state == StatePause {

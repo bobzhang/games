@@ -371,11 +371,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   )
   // Weather indicator
   if game.weather != Clear {
-    let weather_text = if game.weather == Fog {
-      "FOG"
-    } else {
-      "STORM"
-    }
+    let weather_text = if game.weather == Fog { "FOG" } else { "STORM" }
     let weather_color = if game.weather == Fog {
       @raylib.Color::new(200, 200, 150, 255)
     } else {

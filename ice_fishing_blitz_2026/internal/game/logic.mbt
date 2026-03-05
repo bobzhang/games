@@ -320,7 +320,8 @@ fn @types.Game::spawn_hazard(game : @types.Game) -> Bool {
         )
         hazard.y = @types.topf() + 10.0
         hazard.vx = @types.randf(-18.0, 18.0)
-        hazard.vy = @types.randf(180.0, 280.0) + Float::from_int(game.wave) * 12.0
+        hazard.vy = @types.randf(180.0, 280.0) +
+          Float::from_int(game.wave) * 12.0
         hazard.r = @types.randf(12.0, 18.0)
         hazard.dmg = @types.randf(14.0, 24.0)
       }
@@ -604,8 +605,7 @@ fn @types.Game::update_fish(game : @types.Game, dt : Float) -> Unit {
       Salmon => 1.0
       Gold => 2.0
     }
-    game.fish[i].phase = game.fish[i].phase +
-      dt * (1.6 + kind_idx * 0.7)
+    game.fish[i].phase = game.fish[i].phase + dt * (1.6 + kind_idx * 0.7)
 
     let sw_x : Float = @math.sinf(game.fish[i].phase * 1.8) *
       40.0 *
@@ -651,8 +651,7 @@ fn @types.Game::update_fish(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    if game.fish[i].kind == Gold &&
-      @raylib.get_random_value(0, 999) < 2 {
+    if game.fish[i].kind == Gold && @raylib.get_random_value(0, 999) < 2 {
       game.fish[i].active = false
       game.escaped = game.escaped + 1
     }
@@ -674,8 +673,7 @@ fn @types.Game::update_hazards(game : @types.Game, dt : Float) -> Unit {
       Eel => 1.0
       Ice => 2.0
     }
-    hazard.phase = hazard.phase +
-      dt * (1.1 + hkind_idx * 0.9)
+    hazard.phase = hazard.phase + dt * (1.1 + hkind_idx * 0.9)
 
     match hazard.kind {
       Jelly => {

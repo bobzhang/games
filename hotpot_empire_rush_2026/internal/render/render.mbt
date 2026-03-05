@@ -211,7 +211,11 @@ fn @types.Game::draw_station_info(
           "Clean \{@types.veg_name(game.prep.out_flavor)}"
         }
         @raylib.draw_text(
-          "Ready: \{ready_label}", x + 14, y + 64, 24, text_color,
+          "Ready: \{ready_label}",
+          x + 14,
+          y + 64,
+          24,
+          text_color,
         )
         @raylib.draw_text("J: collect item", x + 14, y + 96, 20, text_color)
         @raylib.draw_text("K: clear station", x + 14, y + 122, 20, text_color)
@@ -310,13 +314,15 @@ fn @types.Game::draw_station_info(
           @raylib.Color::new(132, 234, 208, 236),
         )
         @raylib.draw_text(
-          "K: serve head order", x + 14, y + 156, 18, text_color,
+          "K: serve head order",
+          x + 14,
+          y + 156,
+          18,
+          text_color,
         )
       } else {
         @raylib.draw_text("No queue head", x + 14, y + 70, 26, text_color)
-        @raylib.draw_text(
-          "K: serve (penalty)", x + 14, y + 106, 20, text_color,
-        )
+        @raylib.draw_text("K: serve (penalty)", x + 14, y + 106, 20, text_color)
       }
     Rush => {
       @raylib.draw_text("Boost meter +24", x + 14, y + 64, 24, text_color)
@@ -333,9 +339,7 @@ fn @types.Game::draw_station_info(
       }
     }
     Trash => {
-      @raylib.draw_text(
-        "Dump held ingredient", x + 14, y + 66, 24, text_color,
-      )
+      @raylib.draw_text("Dump held ingredient", x + 14, y + 66, 24, text_color)
       @raylib.draw_text("J: throw away", x + 14, y + 98, 22, text_color)
     }
     Queue => {
@@ -343,18 +347,18 @@ fn @types.Game::draw_station_info(
       @raylib.draw_text("J: repeat demand", x + 14, y + 98, 22, text_color)
     }
     Reputation => {
+      @raylib.draw_text("Reputation is your HP", x + 14, y + 66, 24, text_color)
       @raylib.draw_text(
-        "Reputation is your HP", x + 14, y + 66, 24, text_color,
-      )
-      @raylib.draw_text(
-        "Drops to 0 => game over", x + 14, y + 98, 22, text_color,
+        "Drops to 0 => game over",
+        x + 14,
+        y + 98,
+        22,
+        text_color,
       )
     }
     Storage => {
       @raylib.draw_text("Shuffle next pickup", x + 14, y + 66, 24, text_color)
-      @raylib.draw_text(
-        "J: randomize crates", x + 14, y + 98, 22, text_color,
-      )
+      @raylib.draw_text("J: randomize crates", x + 14, y + 98, 22, text_color)
     }
   }
 }

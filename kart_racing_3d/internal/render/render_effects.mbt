@@ -52,9 +52,9 @@ fn @types.Game::draw_drift_spark_trails(game : @types.Game) -> Unit {
       sin_a * spark_side * @types.kart_width * 0.2
     // Spark intensity based on drift level
     let intensity : Float = match kart.drift_level {
-      Mini => { 0.6 }
-      Super => { 0.8 }
-      _ => { 1.0 }
+      Mini => 0.6
+      Super => 0.8
+      _ => 1.0
     }
     let spark_size : Float = 0.12 * intensity
     let pulse = @math.sinf(
@@ -256,8 +256,7 @@ fn @types.Game::draw_dust_trails(game : @types.Game) -> Unit {
     if kart.speed < 5.0 {
       continue
     }
-    if kart.on_surface_type != Dirt &&
-      kart.on_surface_type != Grass {
+    if kart.on_surface_type != Dirt && kart.on_surface_type != Grass {
       continue
     }
     let sin_a = @math.sinf(kart.angle)

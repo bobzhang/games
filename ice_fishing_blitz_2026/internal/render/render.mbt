@@ -272,8 +272,18 @@ fn draw_hazard(h : @types.Hazard, ox : Int, oy : Int) -> Unit {
     }
     Eel => {
       @raylib.draw_ellipse(x, y, h.r + 10.0, h.r * 0.54, c0)
-      @raylib.draw_circle(x + 8, y - 2, 3.0, @raylib.Color::new(18, 32, 44, 220))
-      @raylib.draw_circle(x - 10, y, 2.0, @raylib.Color::new(216, 246, 255, 200))
+      @raylib.draw_circle(
+        x + 8,
+        y - 2,
+        3.0,
+        @raylib.Color::new(18, 32, 44, 220),
+      )
+      @raylib.draw_circle(
+        x - 10,
+        y,
+        2.0,
+        @raylib.Color::new(216, 246, 255, 200),
+      )
     }
     Ice => {
       @raylib.draw_triangle(

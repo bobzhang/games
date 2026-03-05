@@ -117,51 +117,46 @@ fn @types.Game::draw_wall(
     @raylib.Color::new(edge_r, edge_g, edge_b, 255),
   )
   match world {
-    WorldDungeon => {
+    WorldDungeon =>
       @raylib.draw_cube(
-      @raylib.Vector3::new(wx, 1.02, wz),
-      0.9,
-      0.04,
-      0.9,
-      @raylib.Color::new(55, 60, 75, 255),
+        @raylib.Vector3::new(wx, 1.02, wz),
+        0.9,
+        0.04,
+        0.9,
+        @raylib.Color::new(55, 60, 75, 255),
       )
-    }
-    WorldIce => {
+    WorldIce =>
       @raylib.draw_cube(
-      @raylib.Vector3::new(wx, 1.02, wz),
-      0.85,
-      0.03,
-      0.85,
-      @raylib.Color::new(200, 230, 255, 150),
+        @raylib.Vector3::new(wx, 1.02, wz),
+        0.85,
+        0.03,
+        0.85,
+        @raylib.Color::new(200, 230, 255, 150),
       )
-    }
-    WorldLava => {
+    WorldLava =>
       @raylib.draw_cube(
-      @raylib.Vector3::new(wx, 1.0, wz),
-      1.02,
-      0.02,
-      1.02,
-      @raylib.Color::new(255, 100, 20, 100),
+        @raylib.Vector3::new(wx, 1.0, wz),
+        1.02,
+        0.02,
+        1.02,
+        @raylib.Color::new(255, 100, 20, 100),
       )
-    }
-    WorldGarden => {
+    WorldGarden =>
       @raylib.draw_cube(
-      @raylib.Vector3::new(wx, 1.02, wz),
-      0.9,
-      0.04,
-      0.9,
-      @raylib.Color::new(40, 100, 35, 200),
+        @raylib.Vector3::new(wx, 1.02, wz),
+        0.9,
+        0.04,
+        0.9,
+        @raylib.Color::new(40, 100, 35, 200),
       )
-    }
-    WorldVoid => {
+    WorldVoid =>
       @raylib.draw_cube(
-      @raylib.Vector3::new(wx, 1.0, wz),
-      1.02,
-      0.02,
-      1.02,
-      @raylib.Color::new(120, 60, 200, 100),
+        @raylib.Vector3::new(wx, 1.0, wz),
+        1.02,
+        0.02,
+        1.02,
+        @raylib.Color::new(120, 60, 200, 100),
       )
-    }
   }
 }
 
@@ -957,9 +952,9 @@ fn @types.Game::draw_entities(game : @types.Game) -> Unit {
       0.0
     }
     match e.kind {
-      EntityBlock => { game.draw_block(wx, wz, fall_offset, world) }
-      EntityDiamond => { game.draw_diamond(wx, wz) }
-      EntityKey => { game.draw_key(wx, wz) }
+      EntityBlock => game.draw_block(wx, wz, fall_offset, world)
+      EntityDiamond => game.draw_diamond(wx, wz)
+      EntityKey => game.draw_key(wx, wz)
       _ => ()
     }
   }
@@ -1124,11 +1119,11 @@ fn @types.Game::draw_player(game : @types.Game) -> Unit {
   let lean_dx = Float::from_int(@types.dir_dx(game.player_dir)) * push_lean
   let lean_dz = Float::from_int(@types.dir_dy(game.player_dir)) * push_lean
   let body_color = match world {
-    WorldIce => { @raylib.Color::new(80, 160, 240, 255) }
-    WorldLava => { @raylib.Color::new(200, 120, 60, 255) }
-    WorldGarden => { @raylib.Color::new(60, 180, 80, 255) }
-    WorldVoid => { @raylib.Color::new(140, 80, 200, 255) }
-    _ => { @raylib.Color::new(60, 140, 220, 255) }
+    WorldIce => @raylib.Color::new(80, 160, 240, 255)
+    WorldLava => @raylib.Color::new(200, 120, 60, 255)
+    WorldGarden => @raylib.Color::new(60, 180, 80, 255)
+    WorldVoid => @raylib.Color::new(140, 80, 200, 255)
+    _ => @raylib.Color::new(60, 140, 220, 255)
   }
   @raylib.draw_cube(
     @raylib.Vector3::new(wx, 0.005, wz),
@@ -1152,8 +1147,8 @@ fn @types.Game::draw_player(game : @types.Game) -> Unit {
     @raylib.Color::new(40, 100, 180, 255),
   )
   let head_color = match world {
-    WorldVoid => { @raylib.Color::new(170, 120, 230, 255) }
-    _ => { @raylib.Color::new(80, 170, 250, 255) }
+    WorldVoid => @raylib.Color::new(170, 120, 230, 255)
+    _ => @raylib.Color::new(80, 170, 250, 255)
   }
   @raylib.draw_sphere(
     @raylib.Vector3::new(wx + lean_dx, 0.85 + walk_bob, wz + lean_dz),
@@ -1246,93 +1241,93 @@ fn @types.Game::draw_decorations(game : @types.Game) -> Unit {
     match d.kind {
       DecoTorch => {
         @raylib.draw_cube(
-        @raylib.Vector3::new(d.x, 0.3, d.z),
-        0.08,
-        0.3,
-        0.08,
-        @raylib.Color::new(100, 80, 50, 255),
+          @raylib.Vector3::new(d.x, 0.3, d.z),
+          0.08,
+          0.3,
+          0.08,
+          @raylib.Color::new(100, 80, 50, 255),
         )
         let flicker = @math.sinf(fc * 0.15 + d.phase) * 0.03
         @raylib.draw_sphere(
-        @raylib.Vector3::new(d.x, 0.5 + flicker, d.z),
-        0.06 + flicker,
-        @raylib.Color::new(255, 180, 50, 220),
+          @raylib.Vector3::new(d.x, 0.5 + flicker, d.z),
+          0.06 + flicker,
+          @raylib.Color::new(255, 180, 50, 220),
         )
         @raylib.draw_sphere(
-        @raylib.Vector3::new(d.x, 0.55 + flicker, d.z),
-        0.04,
-        @raylib.Color::new(255, 220, 100, 150),
+          @raylib.Vector3::new(d.x, 0.55 + flicker, d.z),
+          0.04,
+          @raylib.Color::new(255, 220, 100, 150),
         )
       }
       DecoCrystal => {
         let sparkle = @math.sinf(fc * 0.08 + d.phase) * 0.02
         @raylib.draw_cube(
-        @raylib.Vector3::new(d.x, 0.15 + sparkle, d.z),
-        0.08 * d.scale,
-        0.3 * d.scale,
-        0.08 * d.scale,
-        @raylib.Color::new(150, 210, 255, 200),
+          @raylib.Vector3::new(d.x, 0.15 + sparkle, d.z),
+          0.08 * d.scale,
+          0.3 * d.scale,
+          0.08 * d.scale,
+          @raylib.Color::new(150, 210, 255, 200),
         )
         @raylib.draw_cube(
-        @raylib.Vector3::new(d.x + 0.05, 0.1, d.z - 0.03),
-        0.05 * d.scale,
-        0.2 * d.scale,
-        0.05 * d.scale,
-        @raylib.Color::new(120, 190, 240, 180),
+          @raylib.Vector3::new(d.x + 0.05, 0.1, d.z - 0.03),
+          0.05 * d.scale,
+          0.2 * d.scale,
+          0.05 * d.scale,
+          @raylib.Color::new(120, 190, 240, 180),
         )
       }
       DecoMagmaPool => {
         let glow = @math.sinf(fc * 0.04 + d.phase) * 0.02
         @raylib.draw_cube(
-        @raylib.Vector3::new(d.x, 0.01 + glow, d.z),
-        0.25 * d.scale,
-        0.02,
-        0.25 * d.scale,
-        @raylib.Color::new(255, 100, 20, 180),
+          @raylib.Vector3::new(d.x, 0.01 + glow, d.z),
+          0.25 * d.scale,
+          0.02,
+          0.25 * d.scale,
+          @raylib.Color::new(255, 100, 20, 180),
         )
         @raylib.draw_cube(
-        @raylib.Vector3::new(d.x, 0.02 + glow, d.z),
-        0.15 * d.scale,
-        0.02,
-        0.15 * d.scale,
-        @raylib.Color::new(255, 180, 50, 120),
+          @raylib.Vector3::new(d.x, 0.02 + glow, d.z),
+          0.15 * d.scale,
+          0.02,
+          0.15 * d.scale,
+          @raylib.Color::new(255, 180, 50, 120),
         )
       }
       DecoFlower => {
         let sway = @math.sinf(fc * 0.03 + d.phase) * 0.02
         @raylib.draw_cube(
-        @raylib.Vector3::new(d.x + sway, 0.1, d.z),
-        0.03,
-        0.2 * d.scale,
-        0.03,
-        @raylib.Color::new(50, 130, 40, 255),
+          @raylib.Vector3::new(d.x + sway, 0.1, d.z),
+          0.03,
+          0.2 * d.scale,
+          0.03,
+          @raylib.Color::new(50, 130, 40, 255),
         )
         @raylib.draw_sphere(
-        @raylib.Vector3::new(d.x + sway, 0.22 * d.scale, d.z),
-        0.06 * d.scale,
-        @raylib.Color::new(255, 120, 180, 255),
+          @raylib.Vector3::new(d.x + sway, 0.22 * d.scale, d.z),
+          0.06 * d.scale,
+          @raylib.Color::new(255, 120, 180, 255),
         )
         @raylib.draw_sphere(
-        @raylib.Vector3::new(d.x + sway, 0.22 * d.scale + 0.02, d.z),
-        0.03 * d.scale,
-        @raylib.Color::new(255, 220, 100, 255),
+          @raylib.Vector3::new(d.x + sway, 0.22 * d.scale + 0.02, d.z),
+          0.03 * d.scale,
+          @raylib.Color::new(255, 220, 100, 255),
         )
       }
       DecoFloatingRock => {
         let float_y = @math.sinf(fc * 0.02 + d.phase) * 0.1 + 0.3
         @raylib.draw_cube(
-        @raylib.Vector3::new(d.x, float_y, d.z),
-        0.12 * d.scale,
-        0.08 * d.scale,
-        0.12 * d.scale,
-        @raylib.Color::new(60, 50, 90, 200),
+          @raylib.Vector3::new(d.x, float_y, d.z),
+          0.12 * d.scale,
+          0.08 * d.scale,
+          0.12 * d.scale,
+          @raylib.Color::new(60, 50, 90, 200),
         )
         @raylib.draw_cube(
-        @raylib.Vector3::new(d.x, float_y - 0.05, d.z),
-        0.08 * d.scale,
-        0.02,
-        0.08 * d.scale,
-        @raylib.Color::new(150, 80, 255, 80),
+          @raylib.Vector3::new(d.x, float_y - 0.05, d.z),
+          0.08 * d.scale,
+          0.02,
+          0.08 * d.scale,
+          @raylib.Color::new(150, 80, 255, 80),
         )
       }
       _ => ()

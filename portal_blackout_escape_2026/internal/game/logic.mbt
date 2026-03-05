@@ -22,7 +22,12 @@ fn @types.Game::tile_at(game : @types.Game, x : Int, y : Int) -> @types.Tile {
 
 ///|
 /// Writes tile type `t` into the map at `(x, y)`, ignoring out-of-bounds coordinates.
-fn @types.Game::set_tile(game : @types.Game, x : Int, y : Int, t : @types.Tile) -> Unit {
+fn @types.Game::set_tile(
+  game : @types.Game,
+  x : Int,
+  y : Int,
+  t : @types.Tile,
+) -> Unit {
   if not(in_bounds(x, y)) {
     return
   }

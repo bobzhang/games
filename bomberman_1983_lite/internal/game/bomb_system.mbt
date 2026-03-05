@@ -5,7 +5,7 @@ fn @types.Game::alloc_bomb(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-  -1
+    -1
   }
 }
 

@@ -606,7 +606,6 @@ pub let kill_feed_duration : Float = 3.0
 /// Shared PI constant used by radial arena math.
 pub let pi : Float = 3.14159265
 
-
 ///|
 /// Enemy variant.
 pub(all) enum EnemyKind {

@@ -1021,7 +1021,7 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
         touch_count,
       )
     }
-    Title => {
+    Title =>
       draw_button_visual(
         "START",
         @types.title_start_rect(),
@@ -1031,8 +1031,7 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
         hold,
         touch_count,
       )
-    }
-    _ => {
+    _ =>
       draw_button_visual(
         "RETRY",
         @types.retry_rect(),
@@ -1042,7 +1041,6 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
         hold,
         touch_count,
       )
-    }
   }
 }
 

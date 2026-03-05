@@ -14,8 +14,7 @@ fn main {
     @game.update_game(game, dt)
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(5, 5, 10, 255))
-    if game.state != StateMenu &&
-      game.state != StateClassSelect {
+    if game.state != StateMenu && game.state != StateClassSelect {
       @render.draw_world(game)
     }
     @render.draw_ui(game)

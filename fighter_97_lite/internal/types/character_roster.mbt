@@ -43,14 +43,14 @@ pub fn make_move(
   mv.hitbox_w = hitbox_w
   mv.hitbox_h = hitbox_h
   mv.meter_gain_on_use = match move_kind {
-    MoveKindNormal => { 4 }
-    MoveKindSpecial => { 3 }
-    _ => { 0 }
+    MoveKindNormal => 4
+    MoveKindSpecial => 3
+    _ => 0
   }
   mv.meter_gain_on_hit = match move_kind {
-    MoveKindNormal => { 8 }
-    MoveKindSpecial => { 12 }
-    _ => { 0 }
+    MoveKindNormal => 8
+    MoveKindSpecial => 12
+    _ => 0
   }
   mv.hitstop_frames = match move_kind {
     MoveKindSuper => hitstop_super

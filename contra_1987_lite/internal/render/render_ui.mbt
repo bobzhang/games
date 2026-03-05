@@ -559,12 +559,12 @@ pub fn draw_ui(game : @types.Game) -> Unit {
   game.draw_panel()
 
   match game.state {
-    Menu => { game.draw_menu_overlay() }
-    StageIntro => { game.draw_stage_intro_overlay() }
-    Paused => { game.draw_pause_overlay() }
-    StageClear => { game.draw_stage_clear_overlay() }
-    GameOver => { game.draw_game_over_overlay() }
-    CampaignClear => { game.draw_campaign_clear_overlay() }
+    Menu => game.draw_menu_overlay()
+    StageIntro => game.draw_stage_intro_overlay()
+    Paused => game.draw_pause_overlay()
+    StageClear => game.draw_stage_clear_overlay()
+    GameOver => game.draw_game_over_overlay()
+    CampaignClear => game.draw_campaign_clear_overlay()
     _ => ()
   }
 }

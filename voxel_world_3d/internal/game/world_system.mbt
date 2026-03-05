@@ -289,11 +289,7 @@ fn @types.Game::update_entity_ai(
   }
 
   // Jump over obstacles
-  if (
-      ent.ai_state == Wander ||
-      ent.ai_state == Chase ||
-      ent.ai_state == Flee
-    ) &&
+  if (ent.ai_state == Wander || ent.ai_state == Chase || ent.ai_state == Flee) &&
     ent.on_ground {
     // Check if blocked ahead
     let ahead_x = ent.x + @math.sinf(ent.yaw) * 0.8

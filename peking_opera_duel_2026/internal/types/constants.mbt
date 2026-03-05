@@ -154,7 +154,6 @@ pub let lane_step_x : Int = 220
 /// Vertical pixel step per lane index.
 pub let lane_step_y : Int = 120
 
-
 ///|
 /// Available stance types for player and rival.
 pub(all) enum Stance {

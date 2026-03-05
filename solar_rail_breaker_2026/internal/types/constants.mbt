@@ -110,7 +110,6 @@ pub let pi : Float = 3.14159265
 /// Gameplay tuning constant for tau.
 pub let tau : Float = 6.28318530
 
-
 ///|
 /// Represents the current phase of the game lifecycle.
 pub(all) enum GameState {

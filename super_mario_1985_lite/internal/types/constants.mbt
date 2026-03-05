@@ -154,8 +154,8 @@ pub let stomp_score : Int = 400
 /// Score gained when hitting a block.
 pub let block_hit_score : Int = 50
 
-
-///| Game state machine phases.
+///|
+/// Game state machine phases.
 pub(all) enum GameState {
   Title
   Playing
@@ -163,7 +163,8 @@ pub(all) enum GameState {
   GameOver
 } derive(Eq, Show)
 
-///| Tile types used in the level grid.
+///|
+/// Tile types used in the level grid.
 pub(all) enum Tile {
   Empty
   Ground

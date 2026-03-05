@@ -1372,7 +1372,7 @@ fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
     let alpha = (p.life / p.max_life * 255.0).to_int()
     let a = alpha.clamp(min=0, max=255)
     match p.kind {
-      Shell => {
+      Shell =>
         // Shell casings: elongated
         @raylib.draw_cube(
           @raylib.Vector3::new(p.x, p.y, p.z),
@@ -1381,16 +1381,14 @@ fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
           0.02,
           @raylib.Color::new(p.r, p.g, p.b, a),
         )
-      }
-      Spark => {
+      Spark =>
         // Sparks: bright, small
         @raylib.draw_sphere(
           @raylib.Vector3::new(p.x, p.y, p.z),
           p.size * 0.5,
           @raylib.Color::new(p.r, p.g, p.b, a),
         )
-      }
-      _ => {
+      _ =>
         @raylib.draw_cube(
           @raylib.Vector3::new(p.x, p.y, p.z),
           p.size,
@@ -1398,7 +1396,6 @@ fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
           p.size,
           @raylib.Color::new(p.r, p.g, p.b, a),
         )
-      }
     }
   }
 }

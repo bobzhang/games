@@ -278,7 +278,12 @@ fn draw_hazard(h : @types.Hazard, ox : Int, oy : Int) -> Unit {
         y,
         @raylib.Color::new(210, 224, 238, 206),
       )
-      @raylib.draw_circle(x + 5, y - 5, 3.0, @raylib.Color::new(28, 40, 58, 220))
+      @raylib.draw_circle(
+        x + 5,
+        y - 5,
+        3.0,
+        @raylib.Color::new(28, 40, 58, 220),
+      )
     }
     Ice => {
       let r : Float = h.r

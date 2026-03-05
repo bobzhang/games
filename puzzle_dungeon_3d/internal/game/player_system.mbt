@@ -50,43 +50,43 @@ fn @types.Game::try_move_player(game : @types.Game, dir : @types.Dir) -> Unit {
         let bx = nx + dx
         let by = ny + dy
         if not(@types.in_bounds(bx, by)) {
-        return
+          return
         }
         let behind_tile = @types.get_tile(game, bx, by)
         let behind_entity = @types.entity_at(game, bx, by)
         if behind_entity >= 0 {
-        // Check push chain: can we push the second block too?
-        let chain_entity = game.entities[behind_entity]
-        if chain_entity.kind == EntityBlock {
-        let cx = bx + dx
-        let cy = by + dy
-        if @types.in_bounds(cx, cy) {
-        let chain_tile = @types.get_tile(game, cx, cy)
-        let chain_behind = @types.entity_at(game, cx, cy)
-        if @types.is_pushable_onto(chain_tile) && chain_behind < 0 {
-        // Push chain: push second block, then first
-        game.save_undo()
-        // Move second block
-        chain_entity.gx = cx
-        chain_entity.gy = cy
-        chain_entity.anim_timer = @types.push_anim_duration
-        game.handle_block_land(chain_entity, chain_tile, cx, cy)
-        // Move first block
-        entity.gx = bx
-        entity.gy = by
-        entity.anim_timer = @types.push_anim_duration
-        game.handle_block_land(entity, behind_tile, bx, by)
-        // Move player
-        game.move_player_to(nx, ny, dir)
-        game.after_move()
-        return
-        }
-        }
-        }
-        return // Can't push into another entity (non-chainable)
+          // Check push chain: can we push the second block too?
+          let chain_entity = game.entities[behind_entity]
+          if chain_entity.kind == EntityBlock {
+            let cx = bx + dx
+            let cy = by + dy
+            if @types.in_bounds(cx, cy) {
+              let chain_tile = @types.get_tile(game, cx, cy)
+              let chain_behind = @types.entity_at(game, cx, cy)
+              if @types.is_pushable_onto(chain_tile) && chain_behind < 0 {
+                // Push chain: push second block, then first
+                game.save_undo()
+                // Move second block
+                chain_entity.gx = cx
+                chain_entity.gy = cy
+                chain_entity.anim_timer = @types.push_anim_duration
+                game.handle_block_land(chain_entity, chain_tile, cx, cy)
+                // Move first block
+                entity.gx = bx
+                entity.gy = by
+                entity.anim_timer = @types.push_anim_duration
+                game.handle_block_land(entity, behind_tile, bx, by)
+                // Move player
+                game.move_player_to(nx, ny, dir)
+                game.after_move()
+                return
+              }
+            }
+          }
+          return // Can't push into another entity (non-chainable)
         }
         if not(@types.is_pushable_onto(behind_tile)) {
-        return
+          return
         }
         // Save undo before move
         game.save_undo()
@@ -97,7 +97,7 @@ fn @types.Game::try_move_player(game : @types.Game, dir : @types.Dir) -> Unit {
         game.handle_block_land(entity, behind_tile, bx, by)
         // If block lands on ice, slide it
         if behind_tile == TileIce {
-        @types.ice_slide_entity(game, eidx, dir)
+          @types.ice_slide_entity(game, eidx, dir)
         }
         // Move player
         game.move_player_to(nx, ny, dir)
@@ -112,14 +112,14 @@ fn @types.Game::try_move_player(game : @types.Game, dir : @types.Dir) -> Unit {
         game.move_player_to(nx, ny, dir)
         // Particles
         @types.spawn_particles(
-        game,
-        Float::from_int(nx),
-        0.5,
-        Float::from_int(ny),
-        @types.collect_particle_count,
-        @types.color_diamond_r,
-        @types.color_diamond_g,
-        @types.color_diamond_b,
+          game,
+          Float::from_int(nx),
+          0.5,
+          Float::from_int(ny),
+          @types.collect_particle_count,
+          @types.color_diamond_r,
+          @types.color_diamond_g,
+          @types.color_diamond_b,
         )
         game.after_move()
       }
@@ -130,18 +130,18 @@ fn @types.Game::try_move_player(game : @types.Game, dir : @types.Dir) -> Unit {
         game.keys_held += 1
         game.move_player_to(nx, ny, dir)
         @types.spawn_particles(
-        game,
-        Float::from_int(nx),
-        0.5,
-        Float::from_int(ny),
-        @types.collect_particle_count,
-        @types.color_key_r,
-        @types.color_key_g,
-        @types.color_key_b,
+          game,
+          Float::from_int(nx),
+          0.5,
+          Float::from_int(ny),
+          @types.collect_particle_count,
+          @types.color_key_r,
+          @types.color_key_g,
+          @types.color_key_b,
         )
         game.after_move()
       }
-      _ => { return }
+      _ => return
     }
   } else {
     // Empty tile - just move
@@ -430,11 +430,11 @@ fn @types.Game::rotate_adjacent_mirrors(
 ///|
 fn rotate_mirror(tile : @types.Tile) -> @types.Tile {
   match tile {
-    TileMirrorNe => { TileMirrorNw }
-    TileMirrorNw => { TileMirrorSw }
-    TileMirrorSw => { TileMirrorSe }
-    TileMirrorSe => { TileMirrorNe }
-    _ => (tile)
+    TileMirrorNe => TileMirrorNw
+    TileMirrorNw => TileMirrorSw
+    TileMirrorSw => TileMirrorSe
+    TileMirrorSe => TileMirrorNe
+    _ => tile
   }
 }
 
@@ -700,9 +700,8 @@ fn @types.Game::toggle_spikes(game : @types.Game) -> Unit {
     for gx in 0..<@types.grid_w {
       let tile = @types.get_tile(game, gx, gy)
       match tile {
-        TileSpikesOff => { @types.set_tile(game, gx, gy, TileSpikesOn) }
-        TileSpikesOn => { @types.set_tile(game, gx, gy, TileSpikesOff) }
-      
+        TileSpikesOff => @types.set_tile(game, gx, gy, TileSpikesOn)
+        TileSpikesOn => @types.set_tile(game, gx, gy, TileSpikesOff)
         _ => ()
       }
     }

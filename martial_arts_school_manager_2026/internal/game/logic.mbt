@@ -193,7 +193,10 @@ fn @types.Game::assign_selected_room(game : @types.Game) -> Unit {
   let room_enum = @types.Room::from_int(room)
   game.students[row].room = room_enum
   game.set_message(
-    game.students[row].name + " assigned to " + @types.room_name(room_enum) + ".",
+    game.students[row].name +
+    " assigned to " +
+    @types.room_name(room_enum) +
+    ".",
     1.1,
   )
 }
@@ -262,7 +265,8 @@ fn @types.Game::apply_room_simulation(
       Rest =>
         game.students[i].fatigue = @types.maxf(
           0.0,
-          game.students[i].fatigue - @types.rest_fatigue_recover_per_sec * sim_dt,
+          game.students[i].fatigue -
+          @types.rest_fatigue_recover_per_sec * sim_dt,
         )
       Train => {
         game.funds = game.funds - @types.train_cost_per_sec * sim_dt
@@ -295,7 +299,8 @@ fn @types.Game::apply_room_simulation(
         game.funds = game.funds + stipend * sim_dt
         game.students[i].fatigue = @types.minf(
           @types.fatigue_max,
-          game.students[i].fatigue + @types.defense_fatigue_gain_per_sec * sim_dt,
+          game.students[i].fatigue +
+          @types.defense_fatigue_gain_per_sec * sim_dt,
         )
       }
     }

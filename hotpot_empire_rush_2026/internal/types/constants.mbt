@@ -38,7 +38,6 @@ pub let kitchen_left : Int = 52
 /// Top edge of the kitchen grid in pixels.
 pub let kitchen_top : Int = 130
 
-
 ///|
 /// Number of broth variants available.
 pub let broth_count : Int = 3
@@ -126,7 +125,6 @@ pub let rush_cooldown : Float = 7.0
 ///|
 /// Lifetime of transient UI messages in seconds.
 pub let msg_ttl : Float = 2.4
-
 
 ///|
 /// Kind of ingredient the player can carry.

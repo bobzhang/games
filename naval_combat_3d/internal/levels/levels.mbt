@@ -142,52 +142,34 @@ pub fn get_enemy_classes(battle : Int) -> Array[@types.ShipClass] {
   } else if battle == 1 {
     [Sloop, Sloop, Sloop]
   } else if battle == 2 {
-    [
-      Sloop, Sloop, Brigantine, Brigantine,
-    ]
+    [Sloop, Sloop, Brigantine, Brigantine]
   } else if battle == 3 {
-    [
-      Brigantine, Brigantine, Sloop, Sloop,
-    ]
+    [Brigantine, Brigantine, Sloop, Sloop]
   } else if battle == 4 {
-    [
-      Brigantine, Brigantine, Brigantine,
-      Sloop, Sloop,
-    ]
+    [Brigantine, Brigantine, Brigantine, Sloop, Sloop]
   } else if battle == 5 {
-    [
-      Brigantine, Brigantine, Frigate, Sloop,
-    ]
+    [Brigantine, Brigantine, Frigate, Sloop]
   } else if battle == 6 {
-    [
-      Brigantine, Brigantine, Brigantine,
-      Brigantine, Brigantine, Brigantine,
-    ]
+    [Brigantine, Brigantine, Brigantine, Brigantine, Brigantine, Brigantine]
   } else if battle == 7 {
-    [
-      Sloop, Sloop, Brigantine, Brigantine,
-      Frigate,
-    ]
+    [Sloop, Sloop, Brigantine, Brigantine, Frigate]
   } else if battle == 8 {
-    [
-      Frigate, Frigate, Galleon, Brigantine,
-      Brigantine,
-    ]
+    [Frigate, Frigate, Galleon, Brigantine, Brigantine]
   } else if battle == 9 {
-    [
-      Brigantine, Brigantine, Frigate, Frigate,
-      Frigate, Galleon, Galleon,
-    ]
+    [Brigantine, Brigantine, Frigate, Frigate, Frigate, Galleon, Galleon]
   } else if battle == 10 {
     [
-      Frigate, Frigate, Frigate, Galleon,
-      Galleon, Brigantine, Brigantine, ManOfWar,
+      Frigate,
+      Frigate,
+      Frigate,
+      Galleon,
+      Galleon,
+      Brigantine,
+      Brigantine,
+      ManOfWar,
     ]
   } else {
-    [
-      Galleon, Galleon, Galleon, Frigate,
-      Frigate, ManOfWar, ManOfWar, ManOfWar,
-    ]
+    [Galleon, Galleon, Galleon, Frigate, Frigate, ManOfWar, ManOfWar, ManOfWar]
   }
 }
 
@@ -199,61 +181,44 @@ pub fn get_enemy_personalities(battle : Int) -> Array[@types.AiPersonality] {
   if battle == 0 {
     [Defensive, Defensive]
   } else if battle == 1 {
-    [
-      Aggressive, Defensive, Flanker,
-    ]
+    [Aggressive, Defensive, Flanker]
   } else if battle == 2 {
-    [
-      Aggressive, Flanker, Defensive,
-      Aggressive,
-    ]
+    [Aggressive, Flanker, Defensive, Aggressive]
   } else if battle == 3 {
-    [
-      Flanker, Flanker, Aggressive,
-      Retreater,
-    ]
+    [Flanker, Flanker, Aggressive, Retreater]
   } else if battle == 4 {
-    [
-      Aggressive, Aggressive, Defensive,
-      Flanker, Flanker,
-    ]
+    [Aggressive, Aggressive, Defensive, Flanker, Flanker]
   } else if battle == 5 {
-    [
-      Defensive, Defensive, Aggressive,
-      Flanker,
-    ]
+    [Defensive, Defensive, Aggressive, Flanker]
   } else if battle == 6 {
-    [
-      Aggressive, Aggressive, Flanker,
-      Flanker, Defensive, Berserker,
-    ]
+    [Aggressive, Aggressive, Flanker, Flanker, Defensive, Berserker]
   } else if battle == 7 {
-    [
-      Berserker, Berserker, Aggressive,
-      Aggressive, Flanker,
-    ]
+    [Berserker, Berserker, Aggressive, Aggressive, Flanker]
   } else if battle == 8 {
-    [
-      Aggressive, Aggressive, Berserker,
-      Flanker, Defensive,
-    ]
+    [Aggressive, Aggressive, Berserker, Flanker, Defensive]
   } else if battle == 9 {
-    [
-      Defensive, Defensive, Aggressive,
-      Aggressive, Flanker, Flanker,
-      Defensive,
-    ]
+    [Defensive, Defensive, Aggressive, Aggressive, Flanker, Flanker, Defensive]
   } else if battle == 10 {
     [
-      Aggressive, Berserker, Flanker,
-      Defensive, Aggressive, Flanker,
-      Aggressive, Berserker,
+      Aggressive,
+      Berserker,
+      Flanker,
+      Defensive,
+      Aggressive,
+      Flanker,
+      Aggressive,
+      Berserker,
     ]
   } else {
     [
-      Berserker, Berserker, Aggressive,
-      Aggressive, Flanker, Berserker,
-      Berserker, Aggressive,
+      Berserker,
+      Berserker,
+      Aggressive,
+      Aggressive,
+      Flanker,
+      Berserker,
+      Berserker,
+      Aggressive,
     ]
   }
 }
@@ -472,54 +437,25 @@ pub fn get_island_types(battle : Int) -> Array[@types.IslandKind] {
   } else if battle == 1 {
     [Medium, Small, Small]
   } else if battle == 2 {
-    [
-      Medium, Small, Large, Small,
-    ]
+    [Medium, Small, Large, Small]
   } else if battle == 3 {
-    [
-      Medium, Medium, Small, Medium,
-      Small,
-    ]
+    [Medium, Medium, Small, Medium, Small]
   } else if battle == 4 {
-    [
-      Large, Medium, Medium, Small,
-      Medium, Small,
-    ]
+    [Large, Medium, Medium, Small, Medium, Small]
   } else if battle == 5 {
-    [
-      Fortress, Medium, Small, Small,
-      Small,
-    ]
+    [Fortress, Medium, Small, Small, Small]
   } else if battle == 6 {
-    [
-      Large, Medium, Medium, Large,
-      Small, Small,
-    ]
+    [Large, Medium, Medium, Large, Small, Small]
   } else if battle == 7 {
-    [
-      Medium, Small, Medium, Medium,
-      Small,
-    ]
+    [Medium, Small, Medium, Medium, Small]
   } else if battle == 8 {
-    [
-      Medium, Medium, Small, Small,
-      Medium, Medium, Small,
-    ]
+    [Medium, Medium, Small, Small, Medium, Medium, Small]
   } else if battle == 9 {
-    [
-      Large, Medium, Fortress, Medium,
-      Small, Small, Small,
-    ]
+    [Large, Medium, Fortress, Medium, Small, Small, Small]
   } else if battle == 10 {
-    [
-      Medium, Medium, Medium, Medium,
-      Small, Small, Small, Small,
-    ]
+    [Medium, Medium, Medium, Medium, Small, Small, Small, Small]
   } else {
-    [
-      Fortress, Medium, Medium, Medium,
-      Medium, Small, Small, Large,
-    ]
+    [Fortress, Medium, Medium, Medium, Medium, Small, Small, Large]
   }
 }
 
@@ -567,7 +503,10 @@ pub fn get_battle_reward_mult(battle : Int) -> Int {
 
 ///|
 /// Returns cannon type id equipped by an enemy ship class for the battle context.
-pub fn get_enemy_cannon_type(ship_class : @types.ShipClass, battle : Int) -> @types.Cannon {
+pub fn get_enemy_cannon_type(
+  ship_class : @types.ShipClass,
+  battle : Int,
+) -> @types.Cannon {
   match ship_class {
     Sloop => Light
     Brigantine => if battle >= 6 { Medium } else { Light }

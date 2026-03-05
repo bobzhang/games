@@ -158,7 +158,6 @@ pub let burst_cooldown : Float = 9.0
 /// Simulation speed multiplier during burst mode.
 pub let burst_time_multiplier : Float = 3.5
 
-
 ///|
 /// Assignable room types for student placement.
 pub(all) enum Room {

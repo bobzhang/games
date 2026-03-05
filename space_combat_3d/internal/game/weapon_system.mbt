@@ -17,9 +17,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
     }
 
     // Missile homing logic
-    if proj.kind == Missile &&
-      proj.from_player &&
-      proj.target_idx >= 0 {
+    if proj.kind == Missile && proj.from_player && proj.target_idx >= 0 {
       if proj.fuel > 0.0 {
         proj.fuel -= dt
         if proj.target_idx < game.enemies.length() &&
@@ -109,22 +107,22 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
 
           // Hit sparks by weapon type
           let spark_r : Int = match proj.kind {
-            Laser => { 255 }
-            Missile => { 255 }
-            Plasma => { 100 }
-            _ => { 150 }
+            Laser => 255
+            Missile => 255
+            Plasma => 100
+            _ => 150
           }
           let spark_g : Int = match proj.kind {
-            Laser => { 50 }
-            Missile => { 180 }
-            Plasma => { 255 }
-            _ => { 200 }
+            Laser => 50
+            Missile => 180
+            Plasma => 255
+            _ => 200
           }
           let spark_b : Int = match proj.kind {
-            Laser => { 50 }
-            Missile => { 50 }
-            Plasma => { 100 }
-            _ => { 255 }
+            Laser => 50
+            Missile => 50
+            Plasma => 100
+            _ => 255
           }
           @types.spawn_particles(
             game,

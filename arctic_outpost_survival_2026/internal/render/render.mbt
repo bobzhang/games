@@ -343,8 +343,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
         @raylib.Color::new(250, 248, 248, 240),
       )
     }
-    Ammo =>
-      @raylib.draw_circle(x, y, 4.0, @raylib.Color::new(22, 36, 50, 234))
+    Ammo => @raylib.draw_circle(x, y, 4.0, @raylib.Color::new(22, 36, 50, 234))
     _ =>
       @raylib.draw_circle_lines(
         x,

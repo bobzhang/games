@@ -109,80 +109,73 @@ fn @types.Game::update_ai_state(
 
   // State transitions
   match e.ai_state {
-    Idle => {
+    Idle =>
       if dist < e.detect_range {
-      e.ai_state = Chase
-      e.ai_timer = 1.0
+        e.ai_state = Chase
+        e.ai_timer = 1.0
       } else {
-      e.ai_state = Patrol
-      e.ai_timer = 2.0
+        e.ai_state = Patrol
+        e.ai_timer = 2.0
       }
-    }
-    Patrol => {
+    Patrol =>
       if dist < e.detect_range {
-      e.ai_state = Chase
-      e.ai_timer = 0.5
+        e.ai_state = Chase
+        e.ai_timer = 0.5
       } else {
-      e.ai_timer = @types.rand_rangef(game, 1.0, 3.0)
+        e.ai_timer = @types.rand_rangef(game, 1.0, 3.0)
       }
-    }
-    Chase => {
+    Chase =>
       if hp_pct < e.flee_threshold {
-      e.ai_state = Flee
-      e.ai_timer = 2.0
+        e.ai_state = Flee
+        e.ai_timer = 2.0
       } else if dist < @types.fighter_attack_range {
-      e.ai_state = Attack
-      e.ai_timer = @types.rand_rangef(game, 1.0, 3.0)
+        e.ai_state = Attack
+        e.ai_timer = @types.rand_rangef(game, 1.0, 3.0)
       } else if dist > e.detect_range * 1.5 {
-      e.ai_state = Patrol
-      e.ai_timer = 1.0
+        e.ai_state = Patrol
+        e.ai_timer = 1.0
       } else {
-      e.ai_timer = 0.5
+        e.ai_timer = 0.5
       }
-    }
-    Attack => {
+    Attack =>
       if hp_pct < e.flee_threshold {
-      e.ai_state = Flee
-      e.ai_timer = 2.0
+        e.ai_state = Flee
+        e.ai_timer = 2.0
       } else if hp_pct < @types.fighter_evade_hp_pct &&
-      @types.rand_bool(game, 0.4) {
-      e.ai_state = Evade
-      e.ai_timer = @types.rand_rangef(game, 1.5, 3.0)
+        @types.rand_bool(game, 0.4) {
+        e.ai_state = Evade
+        e.ai_timer = @types.rand_rangef(game, 1.5, 3.0)
       } else if dist > @types.fighter_attack_range * 1.5 {
-      e.ai_state = Chase
-      e.ai_timer = 0.5
+        e.ai_state = Chase
+        e.ai_timer = 0.5
       } else {
-      e.ai_timer = @types.rand_rangef(game, 0.8, 2.0)
+        e.ai_timer = @types.rand_rangef(game, 0.8, 2.0)
       }
-    }
-    Evade => {
+    Evade =>
       if hp_pct < e.flee_threshold {
-      e.ai_state = Flee
-      e.ai_timer = 2.0
+        e.ai_state = Flee
+        e.ai_timer = 2.0
       } else if dist > 60.0 {
-      e.ai_state = Chase
-      e.ai_timer = 1.0
+        e.ai_state = Chase
+        e.ai_timer = 1.0
       } else {
-      e.ai_timer = @types.rand_rangef(game, 1.0, 2.0)
+        e.ai_timer = @types.rand_rangef(game, 1.0, 2.0)
       }
-    }
-    Flee => {
+    Flee =>
       if dist > 200.0 {
-      // Fled far enough, regroup
-      e.ai_state = Patrol
-      e.ai_timer = 3.0
+        // Fled far enough, regroup
+        e.ai_state = Patrol
+        e.ai_timer = 3.0
       } else {
-      e.ai_timer = 1.0
+        e.ai_timer = 1.0
       }
-    }
-    Formation => {
+    Formation =>
       if dist < e.detect_range * 0.8 {
-      e.ai_state = Chase
-      e.ai_timer = 0.5
+        e.ai_state = Chase
+        e.ai_timer = 0.5
       } else {
-      e.ai_timer = 1.0
+        e.ai_timer = 1.0
       }
-    }
   }
 }
 
@@ -207,15 +200,15 @@ fn @types.Game::update_fighter_ai(
       let pdz = e.patrol_z - e.z
       let pdist = @types.length3d(pdx, pdy, pdz)
       if pdist > 5.0 {
-      let norm = @types.normalize3d(pdx, pdy, pdz)
-      e.vx = @types.lerpf(e.vx, norm.0 * spd * 0.5, 1.5 * dt)
-      e.vy = @types.lerpf(e.vy, norm.1 * spd * 0.5, 1.5 * dt)
-      e.vz = @types.lerpf(e.vz, norm.2 * spd * 0.5, 1.5 * dt)
+        let norm = @types.normalize3d(pdx, pdy, pdz)
+        e.vx = @types.lerpf(e.vx, norm.0 * spd * 0.5, 1.5 * dt)
+        e.vy = @types.lerpf(e.vy, norm.1 * spd * 0.5, 1.5 * dt)
+        e.vz = @types.lerpf(e.vz, norm.2 * spd * 0.5, 1.5 * dt)
       } else {
-      // Drift near patrol point
-      e.vx = @types.lerpf(e.vx, 0.0, 1.0 * dt)
-      e.vy = @types.lerpf(e.vy, 0.0, 1.0 * dt)
-      e.vz = @types.lerpf(e.vz, 0.0, 1.0 * dt)
+        // Drift near patrol point
+        e.vx = @types.lerpf(e.vx, 0.0, 1.0 * dt)
+        e.vy = @types.lerpf(e.vy, 0.0, 1.0 * dt)
+        e.vz = @types.lerpf(e.vz, 0.0, 1.0 * dt)
       }
     }
     Chase => {
@@ -225,33 +218,32 @@ fn @types.Game::update_fighter_ai(
       e.vy = @types.lerpf(e.vy, norm.1 * spd, 2.0 * dt)
       e.vz = @types.lerpf(e.vz, norm.2 * spd, 2.0 * dt)
     }
-    Attack => {
+    Attack =>
       if dist > 60.0 {
-      // Approach
-      let norm = @types.normalize3d(dx, dy, dz)
-      e.vx = @types.lerpf(e.vx, norm.0 * spd, 2.0 * dt)
-      e.vy = @types.lerpf(e.vy, norm.1 * spd, 2.0 * dt)
-      e.vz = @types.lerpf(e.vz, norm.2 * spd, 2.0 * dt)
+        // Approach
+        let norm = @types.normalize3d(dx, dy, dz)
+        e.vx = @types.lerpf(e.vx, norm.0 * spd, 2.0 * dt)
+        e.vy = @types.lerpf(e.vy, norm.1 * spd, 2.0 * dt)
+        e.vz = @types.lerpf(e.vz, norm.2 * spd, 2.0 * dt)
       } else if dist < 15.0 {
-      // Too close, pull away
-      let norm = @types.normalize3d(-dx, -dy, -dz)
-      e.vx = @types.lerpf(e.vx, norm.0 * spd * 1.3, 3.0 * dt)
-      e.vy = @types.lerpf(e.vy, norm.1 * spd * 1.3, 3.0 * dt)
-      e.vz = @types.lerpf(e.vz, norm.2 * spd * 1.3, 3.0 * dt)
+        // Too close, pull away
+        let norm = @types.normalize3d(-dx, -dy, -dz)
+        e.vx = @types.lerpf(e.vx, norm.0 * spd * 1.3, 3.0 * dt)
+        e.vy = @types.lerpf(e.vy, norm.1 * spd * 1.3, 3.0 * dt)
+        e.vz = @types.lerpf(e.vz, norm.2 * spd * 1.3, 3.0 * dt)
       } else {
-      // Strafe around player
-      let norm = @types.normalize3d(dx, dy, dz)
-      let cross = @types.cross3d(norm.0, norm.1, norm.2, 0.0, 1.0, 0.0)
-      let orbit = @types.normalize3d(
-      cross.0 + norm.0 * 0.3,
-      cross.1 + norm.1 * 0.3,
-      cross.2 + norm.2 * 0.3,
-      )
-      e.vx = @types.lerpf(e.vx, orbit.0 * spd, 2.0 * dt)
-      e.vy = @types.lerpf(e.vy, orbit.1 * spd, 2.0 * dt)
-      e.vz = @types.lerpf(e.vz, orbit.2 * spd, 2.0 * dt)
+        // Strafe around player
+        let norm = @types.normalize3d(dx, dy, dz)
+        let cross = @types.cross3d(norm.0, norm.1, norm.2, 0.0, 1.0, 0.0)
+        let orbit = @types.normalize3d(
+          cross.0 + norm.0 * 0.3,
+          cross.1 + norm.1 * 0.3,
+          cross.2 + norm.2 * 0.3,
+        )
+        e.vx = @types.lerpf(e.vx, orbit.0 * spd, 2.0 * dt)
+        e.vy = @types.lerpf(e.vy, orbit.1 * spd, 2.0 * dt)
+        e.vz = @types.lerpf(e.vz, orbit.2 * spd, 2.0 * dt)
       }
-    }
     Evade => {
       // Evade: jink perpendicular to player direction
       let norm = @types.normalize3d(dx, dy, dz)

@@ -182,7 +182,6 @@ pub let caravan_center_x : Float = Float::from_int(screen_w) * 0.48
 /// World layout coordinate for caravan center y.
 pub let caravan_center_y : Float = Float::from_int(screen_h) * 0.57
 
-
 ///|
 /// Distinguishes raider archetypes with different stats.
 pub(all) enum RaiderKind {

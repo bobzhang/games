@@ -28,8 +28,8 @@ fn @types.Game::update_spawning(game : @types.Game, dt : Float) -> Unit {
     game.spawn_enemy()
     // Swarm enemies spawn faster
     let interval : Float = match game.wave_enemy_kind {
-      Swarm => { @types.fast_spawn_interval }
-      _ => { @types.spawn_interval }
+      Swarm => @types.fast_spawn_interval
+      _ => @types.spawn_interval
     }
     game.spawn_timer = interval
   }
@@ -73,7 +73,10 @@ fn @types.Game::spawn_enemy(game : @types.Game) -> Unit {
   enemy.heal_timer = 0.0
   // Shield setup
   if @levels.enemy_has_shield(kind_int) {
-    let shield_hp = @levels.enemy_shield_hp(kind_int, game.wave_hp_mult * diff_hp)
+    let shield_hp = @levels.enemy_shield_hp(
+      kind_int,
+      game.wave_hp_mult * diff_hp,
+    )
     enemy.shield_hp = shield_hp
     enemy.shield_max = shield_hp
     enemy.shield_regen_timer = 0.0
@@ -515,9 +518,7 @@ fn @types.Game::apply_chain_lightning(
   // Hit initial target
   if current_target >= 0 && game.enemies[current_target].active {
     let enemy = game.enemies[current_target]
-    let actual_damage = @types.calc_damage(
-      current_damage, Lightning, enemy,
-    )
+    let actual_damage = @types.calc_damage(current_damage, Lightning, enemy)
     game.damage_enemy(current_target, actual_damage, proj.tower_idx)
     @types.spawn_lightning_particles(game, enemy.x, enemy.y, enemy.z)
     // Add chain line visual
@@ -569,9 +570,7 @@ fn @types.Game::apply_chain_lightning(
     }
     visited[best] = true
     let enemy = game.enemies[best]
-    let actual_damage = @types.calc_damage(
-      current_damage, Lightning, enemy,
-    )
+    let actual_damage = @types.calc_damage(current_damage, Lightning, enemy)
     game.damage_enemy(best, actual_damage, proj.tower_idx)
     @types.spawn_lightning_particles(game, enemy.x, enemy.y, enemy.z)
     @types.add_chain_line(

@@ -49,7 +49,7 @@ fn @types.Game::alloc_node(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-  -1
+    -1
   }
 }
 
@@ -61,7 +61,7 @@ fn @types.Game::alloc_enemy(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-  -1
+    -1
   }
 }
 
@@ -73,7 +73,7 @@ fn @types.Game::alloc_bolt(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-  -1
+    -1
   }
 }
 
@@ -85,7 +85,7 @@ fn @types.Game::alloc_pulse(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-  -1
+    -1
   }
 }
 

@@ -250,7 +250,6 @@ pub let barrier_flash_time : Float = 0.56
 /// Camera shake duration after a gate hit.
 pub let shake_time_hit : Float = 0.22
 
-
 ///|
 /// Cardinal direction used for node facing and cursor movement.
 pub(all) enum Dir {

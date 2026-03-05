@@ -166,11 +166,9 @@ fn @types.Game::update_air_enemy_ai(
     e.maneuver_timer = 0.0
   } else if e.evade_timer > 0.0 && e.ai_state != Flee {
     e.ai_state = Evade
-  } else if dist_to_player < @types.ai_engage_range &&
-    e.ai_state == Patrol {
+  } else if dist_to_player < @types.ai_engage_range && e.ai_state == Patrol {
     e.ai_state = Engage
-  } else if dist_to_player > @types.ai_disengage_range &&
-    e.ai_state == Engage {
+  } else if dist_to_player > @types.ai_disengage_range && e.ai_state == Engage {
     e.ai_state = Patrol
   }
   // Execute AI behavior

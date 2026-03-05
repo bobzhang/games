@@ -14,13 +14,7 @@ pub(all) struct Chunk {
 /// Creates a new empty chunk initialized with `block_air`.
 pub fn Chunk::new(cx : Int, cz : Int) -> Chunk {
   let size = chunk_x * chunk_y * chunk_z
-  {
-    blocks: Array::make(size, block_air),
-    cx,
-    cz,
-    dirty: true,
-    biome: Plains,
-  }
+  { blocks: Array::make(size, block_air), cx, cz, dirty: true, biome: Plains }
 }
 
 ///|

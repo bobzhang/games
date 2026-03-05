@@ -495,26 +495,26 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   // Powerup indicator (bottom right)
   if kart.held_powerup != NoPowerup {
     let pu_name = match kart.held_powerup {
-      Boost => { "BOOST" }
-      Shield => { "SHIELD" }
-      Missile => { "MISSILE" }
-      OilSlick => { "OIL" }
-      Lightning => { "BOLT" }
-      Star => { "STAR" }
-      Banana => { "BANANA" }
-      TripleMushroom => { "x3 BOOST" }
-      _ => { "ITEM" }
+      Boost => "BOOST"
+      Shield => "SHIELD"
+      Missile => "MISSILE"
+      OilSlick => "OIL"
+      Lightning => "BOLT"
+      Star => "STAR"
+      Banana => "BANANA"
+      TripleMushroom => "x3 BOOST"
+      _ => "ITEM"
     }
     let pu_color = match kart.held_powerup {
-      Boost => { @raylib.Color::new(255, 200, 0, 255) }
-      Shield => { @raylib.Color::new(80, 180, 255, 255) }
-      Missile => { @raylib.Color::new(255, 80, 60, 255) }
-      OilSlick => { @raylib.Color::new(100, 100, 110, 255) }
-      Lightning => { @raylib.Color::new(255, 255, 100, 255) }
-      Star => { @raylib.Color::new(255, 255, 50, 255) }
-      Banana => { @raylib.Color::new(255, 230, 50, 255) }
-      TripleMushroom => { @raylib.Color::new(255, 150, 200, 255) }
-      _ => { @raylib.Color::new(200, 200, 200, 255) }
+      Boost => @raylib.Color::new(255, 200, 0, 255)
+      Shield => @raylib.Color::new(80, 180, 255, 255)
+      Missile => @raylib.Color::new(255, 80, 60, 255)
+      OilSlick => @raylib.Color::new(100, 100, 110, 255)
+      Lightning => @raylib.Color::new(255, 255, 100, 255)
+      Star => @raylib.Color::new(255, 255, 50, 255)
+      Banana => @raylib.Color::new(255, 230, 50, 255)
+      TripleMushroom => @raylib.Color::new(255, 150, 200, 255)
+      _ => @raylib.Color::new(200, 200, 200, 255)
     }
     @raylib.draw_rectangle(
       @types.screen_width - 120,

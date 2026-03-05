@@ -134,25 +134,25 @@ fn @types.Game::draw_player_ship(game : @types.Game) -> Unit {
 
   // Ship color based on class
   let body_r : Int = match p.ship_class {
-    Fighter => { 100 }
-    Interceptor => { 70 }
-    Bomber => { 140 }
-    Cruiser => { 120 }
-    _ => { 150 }
+    Fighter => 100
+    Interceptor => 70
+    Bomber => 140
+    Cruiser => 120
+    _ => 150
   }
   let body_g : Int = match p.ship_class {
-    Fighter => { 150 }
-    Interceptor => { 200 }
-    Bomber => { 100 }
-    Cruiser => { 130 }
-    _ => { 150 }
+    Fighter => 150
+    Interceptor => 200
+    Bomber => 100
+    Cruiser => 130
+    _ => 150
   }
   let body_b : Int = match p.ship_class {
-    Fighter => { 220 }
-    Interceptor => { 255 }
-    Bomber => { 80 }
-    Cruiser => { 160 }
-    _ => { 180 }
+    Fighter => 220
+    Interceptor => 255
+    Bomber => 80
+    Cruiser => 160
+    _ => 180
   }
 
   // Damage flash tint
@@ -193,11 +193,11 @@ fn @types.Game::draw_player_ship(game : @types.Game) -> Unit {
 
   // Ship scale based on class
   let scale : Float = match p.ship_class {
-    Interceptor => { 0.8 }
-    Bomber => { 1.3 }
-    Cruiser => { 1.6 }
-    CapitalShip => { 2.2 }
-    _ => { 1.0 }
+    Interceptor => 0.8
+    Bomber => 1.3
+    Cruiser => 1.6
+    CapitalShip => 2.2
+    _ => 1.0
   }
 
   // Main fuselage
@@ -224,15 +224,15 @@ fn @types.Game::draw_player_ship(game : @types.Game) -> Unit {
 
   // Wings (different shape per class)
   let wing_span : Float = match p.ship_class {
-    Interceptor => { 1.8 }
-    Bomber => { 1.0 }
-    Cruiser => { 1.5 }
-    _ => { 1.5 }
+    Interceptor => 1.8
+    Bomber => 1.0
+    Cruiser => 1.5
+    _ => 1.5
   }
   let wing_thick : Float = 0.1 * scale
   let wing_depth : Float = match p.ship_class {
-    Bomber => { 1.8 }
-    _ => { 1.2 }
+    Bomber => 1.8
+    _ => 1.2
   }
 
   // Right wing
@@ -271,8 +271,7 @@ fn @types.Game::draw_player_ship(game : @types.Game) -> Unit {
   )
 
   // Weapon pods (on wing tips for fighter/interceptor)
-  if p.ship_class == Fighter ||
-    p.ship_class == Interceptor {
+  if p.ship_class == Fighter || p.ship_class == Interceptor {
     let pod_off = wing_span * scale * 1.2
     @raylib.draw_cube(
       @raylib.Vector3::new(
@@ -929,75 +928,75 @@ fn @types.Game::draw_powerups(game : @types.Game) -> Unit {
       Health => {
         // Green cross
         @raylib.draw_cube(
-        @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
-        0.8,
-        0.3,
-        0.3,
-        @raylib.Color::new(50, 255, 50, 220),
+          @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
+          0.8,
+          0.3,
+          0.3,
+          @raylib.Color::new(50, 255, 50, 220),
         )
         @raylib.draw_cube(
-        @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
-        0.3,
-        0.8,
-        0.3,
-        @raylib.Color::new(50, 255, 50, 220),
+          @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
+          0.3,
+          0.8,
+          0.3,
+          @raylib.Color::new(50, 255, 50, 220),
         )
         @raylib.draw_sphere(
-        @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
-        0.8,
-        @raylib.Color::new(50, 255, 50, 40),
+          @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
+          0.8,
+          @raylib.Color::new(50, 255, 50, 40),
         )
       }
       Shield => {
         // Blue sphere
         @raylib.draw_sphere(
-        @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
-        0.5,
-        @raylib.Color::new(80, 150, 255, 220),
+          @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
+          0.5,
+          @raylib.Color::new(80, 150, 255, 220),
         )
         @raylib.draw_sphere(
-        @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
-        0.8,
-        @raylib.Color::new(80, 150, 255, 40),
+          @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
+          0.8,
+          @raylib.Color::new(80, 150, 255, 40),
         )
       }
       WeaponBoost => {
         // Orange cube
         @raylib.draw_cube(
-        @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
-        0.6,
-        0.6,
-        0.6,
-        @raylib.Color::new(255, 180, 50, 220),
+          @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
+          0.6,
+          0.6,
+          0.6,
+          @raylib.Color::new(255, 180, 50, 220),
         )
         @raylib.draw_cube_wires(
-        @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
-        0.7,
-        0.7,
-        0.7,
-        @raylib.Color::new(255, 200, 100, 180),
+          @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
+          0.7,
+          0.7,
+          0.7,
+          @raylib.Color::new(255, 200, 100, 180),
         )
       }
       _ => {
         // Yellow speed bolt
         @raylib.draw_cube(
-        @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
-        0.2,
-        0.8,
-        0.2,
-        @raylib.Color::new(255, 255, 100, 220),
+          @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
+          0.2,
+          0.8,
+          0.2,
+          @raylib.Color::new(255, 255, 100, 220),
         )
         @raylib.draw_cube(
-        @raylib.Vector3::new(pu.x + spin_off + 0.2, draw_y - 0.2, pu.z),
-        0.2,
-        0.5,
-        0.2,
-        @raylib.Color::new(255, 255, 100, 220),
+          @raylib.Vector3::new(pu.x + spin_off + 0.2, draw_y - 0.2, pu.z),
+          0.2,
+          0.5,
+          0.2,
+          @raylib.Color::new(255, 255, 100, 220),
         )
         @raylib.draw_sphere(
-        @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
-        0.7,
-        @raylib.Color::new(255, 255, 100, 30),
+          @raylib.Vector3::new(pu.x + spin_off, draw_y, pu.z),
+          0.7,
+          @raylib.Color::new(255, 255, 100, 30),
         )
       }
     }
@@ -1016,64 +1015,64 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
         Laser => {
           // Laser: bright line-like cube
           @raylib.draw_cube(
-          @raylib.Vector3::new(proj.x, proj.y, proj.z),
-          0.06,
-          0.06,
-          0.8,
-          @raylib.Color::new(255, 255, 100, 255),
+            @raylib.Vector3::new(proj.x, proj.y, proj.z),
+            0.06,
+            0.06,
+            0.8,
+            @raylib.Color::new(255, 255, 100, 255),
           )
           // Inner glow
           @raylib.draw_cube(
-          @raylib.Vector3::new(proj.x, proj.y, proj.z),
-          0.03,
-          0.03,
-          0.6,
-          @raylib.Color::new(255, 255, 255, 255),
+            @raylib.Vector3::new(proj.x, proj.y, proj.z),
+            0.03,
+            0.03,
+            0.6,
+            @raylib.Color::new(255, 255, 255, 255),
           )
         }
         Missile => {
           // Missile: small solid with glow
           @raylib.draw_cube(
-          @raylib.Vector3::new(proj.x, proj.y, proj.z),
-          0.15,
-          0.15,
-          0.5,
-          @raylib.Color::new(255, 200, 100, 255),
+            @raylib.Vector3::new(proj.x, proj.y, proj.z),
+            0.15,
+            0.15,
+            0.5,
+            @raylib.Color::new(255, 200, 100, 255),
           )
           @raylib.draw_sphere(
-          @raylib.Vector3::new(proj.x, proj.y, proj.z),
-          0.25,
-          @raylib.Color::new(255, 150, 50, 150),
+            @raylib.Vector3::new(proj.x, proj.y, proj.z),
+            0.25,
+            @raylib.Color::new(255, 150, 50, 150),
           )
         }
         Plasma => {
           // Plasma: glowing sphere
           @raylib.draw_sphere(
-          @raylib.Vector3::new(proj.x, proj.y, proj.z),
-          0.3,
-          @raylib.Color::new(100, 255, 150, 220),
+            @raylib.Vector3::new(proj.x, proj.y, proj.z),
+            0.3,
+            @raylib.Color::new(100, 255, 150, 220),
           )
           @raylib.draw_sphere(
-          @raylib.Vector3::new(proj.x, proj.y, proj.z),
-          0.5,
-          @raylib.Color::new(50, 200, 100, 80),
+            @raylib.Vector3::new(proj.x, proj.y, proj.z),
+            0.5,
+            @raylib.Color::new(50, 200, 100, 80),
           )
         }
         Railgun => {
           // Railgun: thin bright beam-like
           @raylib.draw_cube(
-          @raylib.Vector3::new(proj.x, proj.y, proj.z),
-          0.03,
-          0.03,
-          1.5,
-          @raylib.Color::new(150, 200, 255, 255),
+            @raylib.Vector3::new(proj.x, proj.y, proj.z),
+            0.03,
+            0.03,
+            1.5,
+            @raylib.Color::new(150, 200, 255, 255),
           )
           @raylib.draw_cube(
-          @raylib.Vector3::new(proj.x, proj.y, proj.z),
-          0.08,
-          0.08,
-          1.0,
-          @raylib.Color::new(100, 150, 255, 120),
+            @raylib.Vector3::new(proj.x, proj.y, proj.z),
+            0.08,
+            0.08,
+            1.0,
+            @raylib.Color::new(100, 150, 255, 120),
           )
         }
       }

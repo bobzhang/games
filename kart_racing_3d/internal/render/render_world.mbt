@@ -380,9 +380,9 @@ fn @types.Game::draw_powerups(game : @types.Game) -> Unit {
     let spin = Float::from_int(game.frame_counter) * 0.05
     let size : Float = 0.5
     let color = match pu.kind {
-      Boost => { @raylib.Color::new(255, 200, 0, 220) }
-      Shield => { @raylib.Color::new(80, 180, 255, 220) }
-      _ => { @raylib.Color::new(255, 80, 60, 220) }
+      Boost => @raylib.Color::new(255, 200, 0, 220)
+      Shield => @raylib.Color::new(80, 180, 255, 220)
+      _ => @raylib.Color::new(255, 80, 60, 220)
     }
     // Rotating cube for powerup
     @raylib.draw_cube(
@@ -989,7 +989,7 @@ fn @types.Game::draw_skybox_elements(game : @types.Game) -> Unit {
   }
   // Theme-specific sky objects
   match theme {
-    Night => {
+    Night =>
       // Stars in the sky
       for s in 0..<12 {
         let sa = Float::from_int(s) * @types.two_pi / 12.0 +
@@ -1009,8 +1009,7 @@ fn @types.Game::draw_skybox_elements(game : @types.Game) -> Unit {
           @raylib.Color::new(255, 255, 230, star_alpha),
         )
       }
-    }
-    Volcano => {
+    Volcano =>
       // Smoke/ash in the air
       for s in 0..<6 {
         let sa = Float::from_int(s) * @types.two_pi / 6.0
@@ -1024,7 +1023,6 @@ fn @types.Game::draw_skybox_elements(game : @types.Game) -> Unit {
           @raylib.Color::new(80, 60, 50, 40),
         )
       }
-    }
     _ => ()
   }
   ignore(sky_c)

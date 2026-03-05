@@ -32,7 +32,7 @@ fn @types.Game::damage_tile_at_point(
         @particles.spawn_spark_burst(game, world_x, world_y, 6)
       }
     }
-    Steel => {
+    Steel =>
       if power >= 3 {
         @types.set_tile(game, tx, ty, Empty, 0)
         @particles.spawn_explosion(
@@ -44,7 +44,6 @@ fn @types.Game::damage_tile_at_point(
       } else {
         @particles.spawn_spark_burst(game, world_x, world_y, 9)
       }
-    }
     Base => {
       game.base_alive = false
       game.base_flash = 1.0
@@ -293,12 +292,12 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   }
 
   match game.state {
-    Menu => { game.update_menu(dt) }
-    StageIntro => { game.update_stage_intro(dt) }
-    Playing => { game.update_playing(dt) }
-    Paused => { game.update_paused(dt) }
-    StageClear => { game.update_stage_clear(dt) }
-    GameOver => { game.update_game_over(dt) }
-    CampaignClear => { game.update_campaign_clear(dt) }
+    Menu => game.update_menu(dt)
+    StageIntro => game.update_stage_intro(dt)
+    Playing => game.update_playing(dt)
+    Paused => game.update_paused(dt)
+    StageClear => game.update_stage_clear(dt)
+    GameOver => game.update_game_over(dt)
+    CampaignClear => game.update_campaign_clear(dt)
   }
 }

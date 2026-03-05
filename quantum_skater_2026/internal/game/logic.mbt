@@ -61,16 +61,15 @@ fn @types.Game::alloc_obj_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-
-  let mut best_i = 0
-  let mut best_z = game.objs[0].z
-  for i in 1..<game.objs.length() {
-    if game.objs[i].z < best_z {
-      best_z = game.objs[i].z
-      best_i = i
+    let mut best_i = 0
+    let mut best_z = game.objs[0].z
+    for i in 1..<game.objs.length() {
+      if game.objs[i].z < best_z {
+        best_z = game.objs[i].z
+        best_i = i
+      }
     }
-  }
-  best_i
+    best_i
   }
 }
 
@@ -81,16 +80,15 @@ fn @types.Game::alloc_particle_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-
-  let mut best_i = 0
-  let mut best_life = game.particles[0].life
-  for i in 1..<game.particles.length() {
-    if game.particles[i].life < best_life {
-      best_life = game.particles[i].life
-      best_i = i
+    let mut best_i = 0
+    let mut best_life = game.particles[0].life
+    for i in 1..<game.particles.length() {
+      if game.particles[i].life < best_life {
+        best_life = game.particles[i].life
+        best_i = i
+      }
     }
-  }
-  best_i
+    best_i
   }
 }
 
@@ -101,16 +99,15 @@ fn @types.Game::alloc_trail_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-
-  let mut best_i = 0
-  let mut best_life = game.trails[0].life
-  for i in 1..<game.trails.length() {
-    if game.trails[i].life < best_life {
-      best_life = game.trails[i].life
-      best_i = i
+    let mut best_i = 0
+    let mut best_life = game.trails[0].life
+    for i in 1..<game.trails.length() {
+      if game.trails[i].life < best_life {
+        best_life = game.trails[i].life
+        best_i = i
+      }
     }
-  }
-  best_i
+    best_i
   }
 }
 
@@ -340,11 +337,7 @@ fn @types.Game::spawn_wave(game : @types.Game, z_base : Float) -> Unit {
   } else {
     for i in 0..<10 {
       let lane = @types.randi(0, @types.lane_count - 1)
-      let kind : @types.ObjKind = if @types.chance(70) {
-        Orb
-      } else {
-        Wall
-      }
+      let kind : @types.ObjKind = if @types.chance(70) { Orb } else { Wall }
       let y_off : Float = if kind == Orb {
         Float::from_int(46) +
         @math.sinf(Float::from_int(i)) * Float::from_int(22)

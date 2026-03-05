@@ -7,15 +7,14 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   game.update_particles(dt)
   match game.state {
-    StateMenu => { game.update_menu(dt) }
-    StatePlaying => { game.update_playing(dt) }
-    StatePaused => { game.update_paused(dt) }
-    StateLevelComplete => { game.update_level_complete(dt) }
-    StateGameOver => { game.update_game_over(dt) }
-    StateFloorSelect => { game.update_floor_select(dt) }
-    StateCampaignComplete => { game.update_campaign_complete(dt) }
-    StateWorldSelect => { game.update_world_select(dt) }
-  
+    StateMenu => game.update_menu(dt)
+    StatePlaying => game.update_playing(dt)
+    StatePaused => game.update_paused(dt)
+    StateLevelComplete => game.update_level_complete(dt)
+    StateGameOver => game.update_game_over(dt)
+    StateFloorSelect => game.update_floor_select(dt)
+    StateCampaignComplete => game.update_campaign_complete(dt)
+    StateWorldSelect => game.update_world_select(dt)
     _ => ()
   }
   // Update transition
@@ -175,63 +174,58 @@ fn @types.Game::update_decoration_particles(
         continue
       }
       match d.kind {
-        DecoTorch => {
+        DecoTorch =>
           @types.spawn_ambient_particles(
-          game,
-          d.x,
-          0.6,
-          d.z,
-          1,
-          255,
-          160,
-          50,
-          0.1,
-          0.8,
+            game,
+            d.x,
+            0.6,
+            d.z,
+            1,
+            255,
+            160,
+            50,
+            0.1,
+            0.8,
           )
-        }
-        DecoCrystal => {
+        DecoCrystal =>
           @types.spawn_ambient_particles(
-          game,
-          d.x,
-          0.4,
-          d.z,
-          1,
-          100,
-          200,
-          255,
-          0.1,
-          0.4,
+            game,
+            d.x,
+            0.4,
+            d.z,
+            1,
+            100,
+            200,
+            255,
+            0.1,
+            0.4,
           )
-        }
-        DecoMagmaPool => {
+        DecoMagmaPool =>
           @types.spawn_ambient_particles(
-          game,
-          d.x,
-          0.1,
-          d.z,
-          1,
-          255,
-          100,
-          20,
-          0.15,
-          0.3,
+            game,
+            d.x,
+            0.1,
+            d.z,
+            1,
+            255,
+            100,
+            20,
+            0.15,
+            0.3,
           )
-        }
-        DecoFloatingRock => {
+        DecoFloatingRock =>
           @types.spawn_ambient_particles(
-          game,
-          d.x,
-          0.5,
-          d.z,
-          1,
-          150,
-          100,
-          200,
-          0.1,
-          0.3,
+            game,
+            d.x,
+            0.5,
+            d.z,
+            1,
+            150,
+            100,
+            200,
+            0.1,
+            0.3,
           )
-        }
-      
         _ => ()
       }
     }

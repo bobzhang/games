@@ -75,19 +75,19 @@ fn @types.Game::stage_enemy_kind(
 ///|
 fn parse_level_char(ch : Byte) -> (@types.Tile, Int) {
   if ch == b'#' {
-    ((Brick), 1)
+    (Brick, 1)
   } else if ch == b'@' {
-    ((Steel), 999)
+    (Steel, 999)
   } else if ch == b'~' {
-    ((Water), 1)
+    (Water, 1)
   } else if ch == b'^' {
-    ((Bush), 1)
+    (Bush, 1)
   } else if ch == b'=' {
-    ((Ice), 1)
+    (Ice, 1)
   } else if ch == b'B' {
-    ((Base), 1)
+    (Base, 1)
   } else {
-    ((Empty), 0)
+    (Empty, 0)
   }
 }
 

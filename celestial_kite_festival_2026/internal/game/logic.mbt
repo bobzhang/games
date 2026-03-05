@@ -87,16 +87,15 @@ fn @types.Game::alloc_obj(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-
-  let mut best = 0
-  let mut best_life = game.objs[0].life
-  for i in 1..<game.objs.length() {
-    if game.objs[i].life < best_life {
-      best_life = game.objs[i].life
-      best = i
+    let mut best = 0
+    let mut best_life = game.objs[0].life
+    for i in 1..<game.objs.length() {
+      if game.objs[i].life < best_life {
+        best_life = game.objs[i].life
+        best = i
+      }
     }
-  }
-  best
+    best
   }
 }
 
@@ -108,16 +107,15 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-
-  let mut best = 0
-  let mut best_life = game.sparks[0].life
-  for i in 1..<game.sparks.length() {
-    if game.sparks[i].life < best_life {
-      best_life = game.sparks[i].life
-      best = i
+    let mut best = 0
+    let mut best_life = game.sparks[0].life
+    for i in 1..<game.sparks.length() {
+      if game.sparks[i].life < best_life {
+        best_life = game.sparks[i].life
+        best = i
+      }
     }
-  }
-  best
+    best
   }
 }
 
@@ -129,16 +127,15 @@ fn @types.Game::alloc_halo(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-
-  let mut best = 0
-  let mut best_life = game.halos[0].life
-  for i in 1..<game.halos.length() {
-    if game.halos[i].life < best_life {
-      best_life = game.halos[i].life
-      best = i
+    let mut best = 0
+    let mut best_life = game.halos[0].life
+    for i in 1..<game.halos.length() {
+      if game.halos[i].life < best_life {
+        best_life = game.halos[i].life
+        best = i
+      }
     }
-  }
-  best
+    best
   }
 }
 
@@ -150,16 +147,15 @@ fn @types.Game::alloc_trail(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-
-  let mut best = 0
-  let mut best_life = game.trails[0].life
-  for i in 1..<game.trails.length() {
-    if game.trails[i].life < best_life {
-      best_life = game.trails[i].life
-      best = i
+    let mut best = 0
+    let mut best_life = game.trails[0].life
+    for i in 1..<game.trails.length() {
+      if game.trails[i].life < best_life {
+        best_life = game.trails[i].life
+        best = i
+      }
     }
-  }
-  best
+    best
   }
 }
 

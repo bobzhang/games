@@ -145,8 +145,8 @@ fn @types.Game::apply_successful_hit(
   @types.add_meter(defender, @types.meter_gain_hit_taken, defender_archetype)
 
   let spark_kind = match mv.move_kind {
-    MoveKindSuper => { @types.SparkKindSuper }
-    _ => { SparkKindHit }
+    MoveKindSuper => @types.SparkKindSuper
+    _ => SparkKindHit
   }
 
   @effects.spawn_hit_spark(

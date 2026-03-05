@@ -566,7 +566,6 @@ pub let minimap_x : Int = 10
 /// Vertical screen position of the minimap in pixels.
 pub let minimap_y : Int = 60
 
-
 ///|
 /// Enemy variant.
 pub(all) enum EnemyKind {

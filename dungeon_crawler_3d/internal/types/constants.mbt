@@ -730,7 +730,6 @@ pub let pi : Float = 3.14159265
 /// Mana-related value for mana regen rate.
 pub let mana_regen_rate : Float = 1.5
 
-
 ///|
 /// Player class.
 pub(all) enum ShipClass {

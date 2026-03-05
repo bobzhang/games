@@ -82,7 +82,6 @@ pub let move_heat_gain : Float = 4.8
 /// Time interval between route steps, in seconds.
 pub let step_interval : Float = 0.22
 
-
 ///|
 /// Movement direction.
 pub(all) enum Dir {

@@ -203,10 +203,10 @@ fn @types.Game::fire_weapon(game : @types.Game) -> Unit {
   let damage_mult : Float = if p.weapon_boost_timer > 0.0 { 1.5 } else { 1.0 }
 
   match p.weapon {
-    Laser => { game.fire_laser(fwd, rgt, damage_mult) }
-    Missile => { game.fire_missile(fwd, damage_mult) }
-    Plasma => { game.fire_plasma(fwd, damage_mult) }
-    Railgun => { game.fire_railgun(fwd, damage_mult) }
+    Laser => game.fire_laser(fwd, rgt, damage_mult)
+    Missile => game.fire_missile(fwd, damage_mult)
+    Plasma => game.fire_plasma(fwd, damage_mult)
+    Railgun => game.fire_railgun(fwd, damage_mult)
   }
   game.camera_shake = @types.maxf(game.camera_shake, 0.3)
 }

@@ -7,8 +7,8 @@ pub fn grant_score(
 ) -> Unit {
   game.score_total += points
   match team {
-    Player1 => { game.players[0].score += points }
-    Player2 => { game.players[1].score += points }
+    Player1 => game.players[0].score += points
+    Player2 => game.players[1].score += points
     _ => ()
   }
   if game.score_total > game.high_score {

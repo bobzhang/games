@@ -136,15 +136,7 @@ pub fn Hazard::new() -> Hazard {
 ///|
 /// Creates an inactive pickup with default values.
 pub fn Pickup::new() -> Pickup {
-  {
-    active: false,
-    x: 0.0,
-    y: 0.0,
-    vx: 0.0,
-    vy: 0.0,
-    kind: Fuel,
-    phase: 0.0,
-  }
+  { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, kind: Fuel, phase: 0.0 }
 }
 
 ///|

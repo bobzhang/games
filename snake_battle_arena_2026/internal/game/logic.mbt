@@ -455,16 +455,7 @@ fn @types.Game::player_step(game : @types.Game) -> Unit {
 
   if nx == game.food_x && ny == game.food_y {
     let (wx, wy) = @types.cell_world_center(game, nx, ny)
-    game.burst(
-      wx,
-      wy,
-      if game.food_kind == Gold {
-        16
-      } else {
-        10
-      },
-      Eat,
-    )
+    game.burst(wx, wy, if game.food_kind == Gold { 16 } else { 10 }, Eat)
     game.grow_player_after_food()
   }
 }
@@ -561,16 +552,8 @@ fn @types.Game::rival_step(game : @types.Game, rid : Int) -> Unit {
 
   if nx == game.food_x && ny == game.food_y {
     let grow_gain : Int = if game.food_kind == Gold { 2 } else { 1 }
-    let score_gain : Int = if game.food_kind == Gold {
-      140
-    } else {
-      64
-    }
-    let burst_count : Int = if game.food_kind == Gold {
-      14
-    } else {
-      8
-    }
+    let score_gain : Int = if game.food_kind == Gold { 140 } else { 64 }
+    let burst_count : Int = if game.food_kind == Gold { 14 } else { 8 }
 
     rival.grow = rival.grow + grow_gain
     rival.score = rival.score + score_gain

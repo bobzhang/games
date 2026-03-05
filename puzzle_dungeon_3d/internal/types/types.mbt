@@ -102,11 +102,11 @@ pub fn int_to_world(i : Int) -> World {
 /// Converts a `World` enum to its stable integer index for save/UI usage.
 pub fn world_to_int(w : World) -> Int {
   match w {
-    WorldDungeon => { 0 }
-    WorldIce => { 1 }
-    WorldLava => { 2 }
-    WorldGarden => { 3 }
-    _ => { 4 }
+    WorldDungeon => 0
+    WorldIce => 1
+    WorldLava => 2
+    WorldGarden => 3
+    _ => 4
   }
 }
 

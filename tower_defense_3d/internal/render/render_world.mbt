@@ -71,9 +71,7 @@ fn @types.Game::draw_map(game : @types.Game) -> Unit {
             255,
           ),
         )
-      } else if tile == Path ||
-        tile == Start ||
-        tile == End {
+      } else if tile == Path || tile == Start || tile == End {
         // Path tiles - darker worn earth color
         @raylib.draw_cube(
           @raylib.Vector3::new(wx, -0.1, wz),
@@ -249,14 +247,14 @@ fn @types.Game::draw_towers(game : @types.Game) -> Unit {
     let color = tower_color(tower.kind)
     // Draw tower based on type
     match tower.kind {
-      Arrow => { draw_arrow_tower(wx, wz, tower.level, color, game) }
-      Cannon => { draw_cannon_tower(wx, wz, tower.level, tower.angle, color, game) }
-      Frost => { draw_frost_tower(wx, wz, tower.level, color, game) }
-      Lightning => { draw_lightning_tower(wx, wz, tower.level, color, game) }
-      Flame => { draw_flame_tower(wx, wz, tower.level, color, game) }
-      Sniper => { draw_sniper_tower(wx, wz, tower.level, tower.angle, color, game) }
-      Splash => { draw_splash_tower(wx, wz, tower.level, color, game) }
-      Buff => { draw_buff_tower(wx, wz, tower.level, color, game) }
+      Arrow => draw_arrow_tower(wx, wz, tower.level, color, game)
+      Cannon => draw_cannon_tower(wx, wz, tower.level, tower.angle, color, game)
+      Frost => draw_frost_tower(wx, wz, tower.level, color, game)
+      Lightning => draw_lightning_tower(wx, wz, tower.level, color, game)
+      Flame => draw_flame_tower(wx, wz, tower.level, color, game)
+      Sniper => draw_sniper_tower(wx, wz, tower.level, tower.angle, color, game)
+      Splash => draw_splash_tower(wx, wz, tower.level, color, game)
+      Buff => draw_buff_tower(wx, wz, tower.level, color, game)
     }
     // Draw level indicators (rings around base)
     draw_level_indicators(wx, wz, tower.level, color)
@@ -818,14 +816,14 @@ fn @types.Game::draw_selected_tower_highlight(game : @types.Game) -> Unit {
 /// Returns the display color for the given tower type `kind`.
 fn tower_color(kind : @types.TowerKind) -> @raylib.Color {
   match kind {
-    Arrow => { @raylib.Color::new(150, 100, 50, 255) }
-    Cannon => { @raylib.Color::new(100, 100, 100, 255) }
-    Frost => { @raylib.Color::new(100, 180, 240, 255) }
-    Lightning => { @raylib.Color::new(200, 200, 50, 255) }
-    Flame => { @raylib.Color::new(220, 100, 30, 255) }
-    Sniper => { @raylib.Color::new(150, 50, 50, 255) }
-    Splash => { @raylib.Color::new(100, 150, 100, 255) }
-    Buff => { @raylib.Color::new(160, 100, 200, 255) }
+    Arrow => @raylib.Color::new(150, 100, 50, 255)
+    Cannon => @raylib.Color::new(100, 100, 100, 255)
+    Frost => @raylib.Color::new(100, 180, 240, 255)
+    Lightning => @raylib.Color::new(200, 200, 50, 255)
+    Flame => @raylib.Color::new(220, 100, 30, 255)
+    Sniper => @raylib.Color::new(150, 50, 50, 255)
+    Splash => @raylib.Color::new(100, 150, 100, 255)
+    Buff => @raylib.Color::new(160, 100, 200, 255)
   }
 }
 
@@ -839,16 +837,16 @@ fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
     let color = enemy_color(enemy.kind)
     // Draw enemy based on type
     match enemy.kind {
-      Basic => { draw_basic_enemy(enemy, color) }
-      Fast => { draw_fast_enemy(enemy, color) }
-      Tank => { draw_tank_enemy(enemy, color) }
-      Flying => { draw_flying_enemy(enemy, color, game) }
-      Boss => { draw_boss_enemy(enemy, color, game) }
-      Healer => { draw_healer_enemy(enemy, color, game) }
-      Swarm => { draw_swarm_enemy(enemy, color) }
-      Shield => { draw_shield_enemy(enemy, color) }
-      Camo => { draw_camo_enemy(enemy, color) }
-      Splitter => { draw_splitter_enemy(enemy, color) }
+      Basic => draw_basic_enemy(enemy, color)
+      Fast => draw_fast_enemy(enemy, color)
+      Tank => draw_tank_enemy(enemy, color)
+      Flying => draw_flying_enemy(enemy, color, game)
+      Boss => draw_boss_enemy(enemy, color, game)
+      Healer => draw_healer_enemy(enemy, color, game)
+      Swarm => draw_swarm_enemy(enemy, color)
+      Shield => draw_shield_enemy(enemy, color)
+      Camo => draw_camo_enemy(enemy, color)
+      Splitter => draw_splitter_enemy(enemy, color)
     }
     // Health bar
     draw_enemy_health_bar(enemy)
@@ -1354,16 +1352,16 @@ fn @types.Game::draw_enemy_status_visuals(game : @types.Game) -> Unit {
 /// Returns the display color for the given enemy type `kind`.
 fn enemy_color(kind : @types.EnemyKind) -> @raylib.Color {
   match kind {
-    Basic => { @raylib.Color::new(180, 60, 60, 255) }
-    Fast => { @raylib.Color::new(60, 180, 60, 255) }
-    Tank => { @raylib.Color::new(100, 80, 150, 255) }
-    Flying => { @raylib.Color::new(180, 180, 60, 255) }
-    Boss => { @raylib.Color::new(200, 50, 200, 255) }
-    Healer => { @raylib.Color::new(50, 180, 50, 255) }
-    Swarm => { @raylib.Color::new(180, 140, 60, 255) }
-    Shield => { @raylib.Color::new(60, 100, 200, 255) }
-    Camo => { @raylib.Color::new(140, 140, 140, 255) }
-    Splitter => { @raylib.Color::new(160, 80, 120, 255) }
+    Basic => @raylib.Color::new(180, 60, 60, 255)
+    Fast => @raylib.Color::new(60, 180, 60, 255)
+    Tank => @raylib.Color::new(100, 80, 150, 255)
+    Flying => @raylib.Color::new(180, 180, 60, 255)
+    Boss => @raylib.Color::new(200, 50, 200, 255)
+    Healer => @raylib.Color::new(50, 180, 50, 255)
+    Swarm => @raylib.Color::new(180, 140, 60, 255)
+    Shield => @raylib.Color::new(60, 100, 200, 255)
+    Camo => @raylib.Color::new(140, 140, 140, 255)
+    Splitter => @raylib.Color::new(160, 80, 120, 255)
   }
 }
 
@@ -1375,96 +1373,92 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
       continue
     }
     match proj.kind {
-      Arrow => {
+      Arrow =>
         // Small fast bullet
         @raylib.draw_cube(
-        @raylib.Vector3::new(proj.x, proj.y, proj.z),
-        0.08,
-        0.08,
-        0.2,
-        @raylib.Color::new(200, 180, 100, 255),
+          @raylib.Vector3::new(proj.x, proj.y, proj.z),
+          0.08,
+          0.08,
+          0.2,
+          @raylib.Color::new(200, 180, 100, 255),
         )
-      }
-      Cannon => {
+      Cannon =>
         // Cannonball
         @raylib.draw_sphere(
-        @raylib.Vector3::new(proj.x, proj.y, proj.z),
-        0.18,
-        @raylib.Color::new(50, 50, 50, 255),
+          @raylib.Vector3::new(proj.x, proj.y, proj.z),
+          0.18,
+          @raylib.Color::new(50, 50, 50, 255),
         )
-      }
-      Frost => {
+      Frost =>
         // Ice shard
         @raylib.draw_cube(
-        @raylib.Vector3::new(proj.x, proj.y, proj.z),
-        0.12,
-        0.2,
-        0.12,
-        @raylib.Color::new(150, 220, 255, 230),
+          @raylib.Vector3::new(proj.x, proj.y, proj.z),
+          0.12,
+          0.2,
+          0.12,
+          @raylib.Color::new(150, 220, 255, 230),
         )
-      }
       Lightning => {
         // Lightning bolt (bright yellow)
         @raylib.draw_cube(
-        @raylib.Vector3::new(proj.x, proj.y, proj.z),
-        0.06,
-        0.3,
-        0.06,
-        @raylib.Color::new(255, 255, 100, 250),
+          @raylib.Vector3::new(proj.x, proj.y, proj.z),
+          0.06,
+          0.3,
+          0.06,
+          @raylib.Color::new(255, 255, 100, 250),
         )
         // Glow
         @raylib.draw_cube(
-        @raylib.Vector3::new(proj.x, proj.y, proj.z),
-        0.15,
-        0.15,
-        0.15,
-        @raylib.Color::new(255, 255, 50, 80),
+          @raylib.Vector3::new(proj.x, proj.y, proj.z),
+          0.15,
+          0.15,
+          0.15,
+          @raylib.Color::new(255, 255, 50, 80),
         )
       }
       Flame => {
         // Fireball
         @raylib.draw_sphere(
-        @raylib.Vector3::new(proj.x, proj.y, proj.z),
-        0.12,
-        @raylib.Color::new(255, 150, 30, 240),
+          @raylib.Vector3::new(proj.x, proj.y, proj.z),
+          0.12,
+          @raylib.Color::new(255, 150, 30, 240),
         )
         // Fire trail
         @raylib.draw_sphere(
-        @raylib.Vector3::new(proj.x, proj.y + 0.05, proj.z),
-        0.08,
-        @raylib.Color::new(255, 80, 10, 180),
+          @raylib.Vector3::new(proj.x, proj.y + 0.05, proj.z),
+          0.08,
+          @raylib.Color::new(255, 80, 10, 180),
         )
       }
       Sniper => {
         // Sniper round (thin and fast)
         let color = if proj.is_crit {
-        @raylib.Color::new(255, 50, 50, 255)
+          @raylib.Color::new(255, 50, 50, 255)
         } else {
-        @raylib.Color::new(200, 200, 50, 255)
+          @raylib.Color::new(200, 200, 50, 255)
         }
         @raylib.draw_cube(
-        @raylib.Vector3::new(proj.x, proj.y, proj.z),
-        0.05,
-        0.05,
-        0.25,
-        color,
+          @raylib.Vector3::new(proj.x, proj.y, proj.z),
+          0.05,
+          0.05,
+          0.25,
+          color,
         )
       }
-      Splash => {
+      Splash =>
         // Splash bomb
         @raylib.draw_sphere(
-        @raylib.Vector3::new(proj.x, proj.y, proj.z),
-        0.15,
-        @raylib.Color::new(100, 180, 100, 255),
+          @raylib.Vector3::new(proj.x, proj.y, proj.z),
+          0.15,
+          @raylib.Color::new(100, 180, 100, 255),
         )
-      }
       _ => {
         // Default
         let color = tower_color(proj.kind)
         @raylib.draw_sphere(
-        @raylib.Vector3::new(proj.x, proj.y, proj.z),
-        0.15,
-        color,
+          @raylib.Vector3::new(proj.x, proj.y, proj.z),
+          0.15,
+          color,
         )
       }
     }

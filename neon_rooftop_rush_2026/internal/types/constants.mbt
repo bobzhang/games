@@ -110,7 +110,6 @@ pub let ui_button_gap : Float = 14.0
 /// Number of skyline parallax layers to draw.
 pub let skyline_layers : Int = 3
 
-
 ///|
 /// Identifies the type of obstacle hazard on a rooftop.
 pub(all) enum ObstacleKind {

@@ -509,51 +509,46 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
       let cx = mx + gx * cw
       let cy = my + gy * ch
       match tile {
-        Path => {
+        Path =>
           @raylib.draw_rectangle(
-          cx,
-          cy,
-          cw,
-          ch,
-          @raylib.Color::new(160, 140, 100, 200),
+            cx,
+            cy,
+            cw,
+            ch,
+            @raylib.Color::new(160, 140, 100, 200),
           )
-        }
-        Start => {
+        Start =>
           @raylib.draw_rectangle(
-          cx,
-          cy,
-          cw,
-          ch,
-          @raylib.Color::new(50, 200, 50, 255),
+            cx,
+            cy,
+            cw,
+            ch,
+            @raylib.Color::new(50, 200, 50, 255),
           )
-        }
-        End => {
+        End =>
           @raylib.draw_rectangle(
-          cx,
-          cy,
-          cw,
-          ch,
-          @raylib.Color::new(200, 50, 50, 255),
+            cx,
+            cy,
+            cw,
+            ch,
+            @raylib.Color::new(200, 50, 50, 255),
           )
-        }
-        Water => {
+        Water =>
           @raylib.draw_rectangle(
-          cx,
-          cy,
-          cw,
-          ch,
-          @raylib.Color::new(40, 80, 180, 200),
+            cx,
+            cy,
+            cw,
+            ch,
+            @raylib.Color::new(40, 80, 180, 200),
           )
-        }
-        Rock => {
+        Rock =>
           @raylib.draw_rectangle(
-          cx,
-          cy,
-          cw,
-          ch,
-          @raylib.Color::new(80, 75, 70, 200),
+            cx,
+            cy,
+            cw,
+            ch,
+            @raylib.Color::new(80, 75, 70, 200),
           )
-        }
         _ => ()
       }
     }

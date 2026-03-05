@@ -556,12 +556,12 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.update_announcer(dt)
 
   match game.state {
-    StateTitle => { game.update_title(dt) }
-    StateSelect => { game.update_select(dt) }
-    StateIntro => { game.update_intro(dt) }
-    StateFight => { game.update_fight(dt) }
-    StateRoundOver => { game.update_round_over(dt) }
-    StateMatchOver => { game.update_match_over(dt) }
-    StatePause => { game.update_pause(dt) }
+    StateTitle => game.update_title(dt)
+    StateSelect => game.update_select(dt)
+    StateIntro => game.update_intro(dt)
+    StateFight => game.update_fight(dt)
+    StateRoundOver => game.update_round_over(dt)
+    StateMatchOver => game.update_match_over(dt)
+    StatePause => game.update_pause(dt)
   }
 }

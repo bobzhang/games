@@ -110,17 +110,16 @@ fn @types.Game::alloc_segment_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-
-  let mut best_i = 0
-  let mut best_x = game.segments[0].x
-  for i in 1..<game.segments.length() {
-    if game.segments[i].x < best_x {
-      best_x = game.segments[i].x
-      best_i = i
+    let mut best_i = 0
+    let mut best_x = game.segments[0].x
+    for i in 1..<game.segments.length() {
+      if game.segments[i].x < best_x {
+        best_x = game.segments[i].x
+        best_i = i
+      }
     }
-  }
 
-  best_i
+    best_i
   }
 }
 
@@ -132,17 +131,16 @@ fn @types.Game::alloc_obstacle_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-
-  let mut best_i = 0
-  let mut best_x = game.obstacles[0].x
-  for i in 1..<game.obstacles.length() {
-    if game.obstacles[i].x < best_x {
-      best_x = game.obstacles[i].x
-      best_i = i
+    let mut best_i = 0
+    let mut best_x = game.obstacles[0].x
+    for i in 1..<game.obstacles.length() {
+      if game.obstacles[i].x < best_x {
+        best_x = game.obstacles[i].x
+        best_i = i
+      }
     }
-  }
 
-  best_i
+    best_i
   }
 }
 
@@ -154,17 +152,16 @@ fn @types.Game::alloc_chip_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-
-  let mut best_i = 0
-  let mut best_x = game.chips[0].x
-  for i in 1..<game.chips.length() {
-    if game.chips[i].x < best_x {
-      best_x = game.chips[i].x
-      best_i = i
+    let mut best_i = 0
+    let mut best_x = game.chips[0].x
+    for i in 1..<game.chips.length() {
+      if game.chips[i].x < best_x {
+        best_x = game.chips[i].x
+        best_i = i
+      }
     }
-  }
 
-  best_i
+    best_i
   }
 }
 
@@ -176,17 +173,16 @@ fn @types.Game::alloc_anchor_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-
-  let mut best_i = 0
-  let mut best_x = game.anchors[0].x
-  for i in 1..<game.anchors.length() {
-    if game.anchors[i].x < best_x {
-      best_x = game.anchors[i].x
-      best_i = i
+    let mut best_i = 0
+    let mut best_x = game.anchors[0].x
+    for i in 1..<game.anchors.length() {
+      if game.anchors[i].x < best_x {
+        best_x = game.anchors[i].x
+        best_i = i
+      }
     }
-  }
 
-  best_i
+    best_i
   }
 }
 
@@ -198,17 +194,16 @@ fn @types.Game::alloc_particle_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-
-  let mut best_i = 0
-  let mut best_life = game.particles[0].life
-  for i in 1..<game.particles.length() {
-    if game.particles[i].life < best_life {
-      best_life = game.particles[i].life
-      best_i = i
+    let mut best_i = 0
+    let mut best_life = game.particles[0].life
+    for i in 1..<game.particles.length() {
+      if game.particles[i].life < best_life {
+        best_life = game.particles[i].life
+        best_i = i
+      }
     }
-  }
 
-  best_i
+    best_i
   }
 }
 
@@ -220,17 +215,16 @@ fn @types.Game::alloc_ghost_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-
-  let mut best_i = 0
-  let mut best_life = game.ghosts[0].life
-  for i in 1..<game.ghosts.length() {
-    if game.ghosts[i].life < best_life {
-      best_life = game.ghosts[i].life
-      best_i = i
+    let mut best_i = 0
+    let mut best_life = game.ghosts[0].life
+    for i in 1..<game.ghosts.length() {
+      if game.ghosts[i].life < best_life {
+        best_life = game.ghosts[i].life
+        best_i = i
+      }
     }
-  }
 
-  best_i
+    best_i
   }
 }
 
@@ -442,14 +436,7 @@ fn @types.Game::spawn_stage_chunk(game : @types.Game) -> Unit {
       if choice < 36 {
         game.spawn_obstacle(Vent, px, y - 26.0, 46.0, 26.0, 0.0)
       } else if choice < 62 {
-        game.spawn_obstacle(
-          Sign,
-          px,
-          y - 112.0,
-          62.0,
-          28.0,
-          0.0,
-        )
+        game.spawn_obstacle(Sign, px, y - 112.0, 62.0, 28.0, 0.0)
       } else if choice < 86 {
         game.spawn_obstacle(
           Drone,
@@ -460,14 +447,7 @@ fn @types.Game::spawn_stage_chunk(game : @types.Game) -> Unit {
           @types.randf(-22.0, 28.0),
         )
       } else {
-        game.spawn_obstacle(
-          Laser,
-          px,
-          y - 140.0,
-          24.0,
-          140.0,
-          0.0,
-        )
+        game.spawn_obstacle(Laser, px, y - 140.0, 24.0, 140.0, 0.0)
       }
     }
   }
@@ -792,12 +772,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
       hero.grounded = false
       hero.coyote_t = 0.0
       hero.air_jumps = 1
-      game.burst_particles(
-        hero.x + hero.w * 0.38,
-        hero.y + hero.h,
-        8,
-        Spark,
-      )
+      game.burst_particles(hero.x + hero.w * 0.38, hero.y + hero.h, 8, Spark)
     } else if hero.air_jumps > 0 {
       hero.air_jumps = hero.air_jumps - 1
       hero.vy = @types.double_jump_speed

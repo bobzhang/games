@@ -198,8 +198,7 @@ fn @types.Game::ai_use_item(
       max=3,
     )]
   let item = kart.held_powerup
-  let should_use : Bool = if item == Boost ||
-    item == TripleMushroom {
+  let should_use : Bool = if item == Boost || item == TripleMushroom {
     // Use boost anytime (not in sharp turn)
     let wc = game.waypoint_count
     let next_wp = @types.get_waypoint(game, (kart.waypoint_idx + 1) % wc)

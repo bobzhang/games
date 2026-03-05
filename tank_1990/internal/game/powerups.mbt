@@ -5,7 +5,7 @@ fn @types.Game::alloc_powerup(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-  -1
+    -1
   }
 }
 

@@ -59,10 +59,7 @@ fn @types.Game::mark_horizontal_run(
 
   if len == 4 {
     let anchor = @types.idx(start_x + 1, y)
-    game.spawn_special[anchor] = merge_special(
-      game.spawn_special[anchor],
-      Row,
-    )
+    game.spawn_special[anchor] = merge_special(game.spawn_special[anchor], Row)
   } else if len >= 5 {
     let anchor = @types.idx(start_x + len / 2, y)
     game.spawn_special[anchor] = Bomb
@@ -83,10 +80,7 @@ fn @types.Game::mark_vertical_run(
 
   if len == 4 {
     let anchor = @types.idx(x, start_y + 1)
-    game.spawn_special[anchor] = merge_special(
-      game.spawn_special[anchor],
-      Col,
-    )
+    game.spawn_special[anchor] = merge_special(game.spawn_special[anchor], Col)
   } else if len >= 5 {
     let anchor = @types.idx(x, start_y + len / 2)
     game.spawn_special[anchor] = Bomb
@@ -250,9 +244,7 @@ fn @types.Game::remove_marked_cells(game : @types.Game) -> Int {
 /// Drops existing candies downward to fill gaps in each column and spawns new random candies at the top.
 fn @types.Game::collapse_and_refill(game : @types.Game) -> Unit {
   let col_kind : Array[Int] = Array::make(@types.board_rows, -1)
-  let col_special : Array[@types.Special] = Array::make(
-    @types.board_rows, None,
-  )
+  let col_special : Array[@types.Special] = Array::make(@types.board_rows, None)
 
   for x in 0..<@types.board_cols {
     for y in 0..<@types.board_rows {

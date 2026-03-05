@@ -161,7 +161,7 @@ fn demo_line_shot_dir(
   } else if dy.abs() <= epsilon {
     (if dx < 0.0 { Left } else { Right }, true)
   } else {
-    ((Up), false)
+    (Up, false)
   }
 }
 

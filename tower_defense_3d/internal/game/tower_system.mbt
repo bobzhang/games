@@ -225,11 +225,7 @@ fn @types.Game::fire_tower(game : @types.Game, tower_idx : Int) -> Unit {
     proj.stun_duration = 0.0
   }
   // Flame tower: burn effect
-  proj.burn_damage = if tower.kind == Flame {
-    @types.burn_dps
-  } else {
-    0.0
-  }
+  proj.burn_damage = if tower.kind == Flame { @types.burn_dps } else { 0.0 }
   proj.burn_duration = if tower.kind == Flame {
     @types.burn_duration
   } else {
@@ -239,9 +235,9 @@ fn @types.Game::fire_tower(game : @types.Game, tower_idx : Int) -> Unit {
   match tower.kind {
     Lightning => {
       let chains : Int = if tower.level >= 3 {
-      @types.chain_count + 2
+        @types.chain_count + 2
       } else {
-      @types.chain_count
+        @types.chain_count
       }
       proj.chain_count = chains
       proj.chain_range = @types.chain_range
@@ -400,7 +396,10 @@ fn @types.Game::cycle_targeting_mode(game : @types.Game) -> Unit {
   if not(tower.active) {
     return
   }
-  tower.targeting_mode = @types.target_priority_from_int((@types.target_priority_to_int(tower.targeting_mode) + 1) % @types.target_mode_count)
+  tower.targeting_mode = @types.target_priority_from_int(
+    (@types.target_priority_to_int(tower.targeting_mode) + 1) %
+    @types.target_mode_count,
+  )
   @types.set_notification(
     game,
     "Target: " + @types.targeting_mode_name(tower.targeting_mode),
