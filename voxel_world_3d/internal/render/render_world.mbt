@@ -1227,7 +1227,7 @@ fn @types.Game::draw_water_surface_effects(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::draw_tool_in_hand(game : @types.Game) -> Unit {
-  if game.state != @types.state_playing {
+  if game.state != Playing {
     return
   }
   let player = game.player

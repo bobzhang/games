@@ -50,22 +50,22 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   game.update_message(dt)
   // Weapon selection with number keys
   if @raylib.is_key_pressed(@raylib.KeyOne) && game.player.owns_weapon[0] {
-    game.switch_weapon(@types.weapon_pistol)
+    game.switch_weapon(@types.Pistol.to_int())
   }
   if @raylib.is_key_pressed(@raylib.KeyTwo) && game.player.owns_weapon[1] {
-    game.switch_weapon(@types.weapon_shotgun)
+    game.switch_weapon(@types.Shotgun.to_int())
   }
   if @raylib.is_key_pressed(@raylib.KeyThree) && game.player.owns_weapon[2] {
-    game.switch_weapon(@types.weapon_rifle)
+    game.switch_weapon(@types.Rifle.to_int())
   }
   if @raylib.is_key_pressed(@raylib.KeyFour) && game.player.owns_weapon[3] {
-    game.switch_weapon(@types.weapon_sniper)
+    game.switch_weapon(@types.Sniper.to_int())
   }
   if @raylib.is_key_pressed(@raylib.KeyFive) && game.player.owns_weapon[4] {
-    game.switch_weapon(@types.weapon_rocket)
+    game.switch_weapon(@types.Rocket.to_int())
   }
   if @raylib.is_key_pressed(@raylib.KeySix) && game.player.owns_weapon[5] {
-    game.switch_weapon(@types.weapon_minigun)
+    game.switch_weapon(@types.Minigun.to_int())
   }
   // Mouse wheel weapon cycling
   let wheel = @raylib.get_mouse_wheel_move()
@@ -91,7 +91,7 @@ fn @types.Game::switch_weapon(game : @types.Game, weapon : Int) -> Unit {
     // Cancel reload
     game.weapons[weapon].reloading = false
     // Reset minigun spin
-    if weapon != @types.weapon_minigun {
+    if weapon != @types.Minigun.to_int() {
       game.player.minigun_spinning = false
     }
   }
@@ -157,22 +157,22 @@ fn @types.Game::update_wave_complete(game : @types.Game, dt : Float) -> Unit {
   }
   // Weapon selection still works
   if @raylib.is_key_pressed(@raylib.KeyOne) && game.player.owns_weapon[0] {
-    game.switch_weapon(@types.weapon_pistol)
+    game.switch_weapon(@types.Pistol.to_int())
   }
   if @raylib.is_key_pressed(@raylib.KeyTwo) && game.player.owns_weapon[1] {
-    game.switch_weapon(@types.weapon_shotgun)
+    game.switch_weapon(@types.Shotgun.to_int())
   }
   if @raylib.is_key_pressed(@raylib.KeyThree) && game.player.owns_weapon[2] {
-    game.switch_weapon(@types.weapon_rifle)
+    game.switch_weapon(@types.Rifle.to_int())
   }
   if @raylib.is_key_pressed(@raylib.KeyFour) && game.player.owns_weapon[3] {
-    game.switch_weapon(@types.weapon_sniper)
+    game.switch_weapon(@types.Sniper.to_int())
   }
   if @raylib.is_key_pressed(@raylib.KeyFive) && game.player.owns_weapon[4] {
-    game.switch_weapon(@types.weapon_rocket)
+    game.switch_weapon(@types.Rocket.to_int())
   }
   if @raylib.is_key_pressed(@raylib.KeySix) && game.player.owns_weapon[5] {
-    game.switch_weapon(@types.weapon_minigun)
+    game.switch_weapon(@types.Minigun.to_int())
   }
   // Timer counts down or skip with space
   game.wave_timer -= dt
@@ -224,11 +224,11 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
     p.y += p.vy * dt
     p.z += p.vz * dt
     // Different physics per particle type
-    if p.kind == @types.particle_shell {
+    if p.kind == Shell {
       p.vy -= 12.0 * dt
       p.vx *= 0.98
       p.vz *= 0.98
-    } else if p.kind == @types.particle_spark {
+    } else if p.kind == Spark {
       p.vy -= 5.0 * dt
       p.vx *= 0.92
       p.vz *= 0.92
@@ -241,7 +241,7 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
     if p.y < 0.0 {
       p.y = 0.0
       p.vy = p.vy.abs() * 0.3
-      if p.kind == @types.particle_shell {
+      if p.kind == Shell {
         p.vy = p.vy.abs() * 0.1
         p.vx *= 0.5
         p.vz *= 0.5
@@ -309,7 +309,7 @@ fn @types.Game::apply_pickup(game : @types.Game, kind : Int) -> Unit {
   } else if kind == @types.pickup_ammo {
     // Give ammo to current weapon
     let weapon = game.player.current_weapon
-    if weapon != @types.weapon_pistol {
+    if weapon != @types.Pistol.to_int() {
       let add = @types.weapon_mag_size(weapon) * 2
       game.player.ammo[weapon] += add
       @types.show_message(
@@ -408,7 +408,7 @@ fn @types.Game::start_new_game(game : @types.Game) -> Unit {
   game.player.pitch = 0.0
   game.player.hp = @types.player_max_hp
   game.player.armor = 0.0
-  game.player.current_weapon = @types.weapon_pistol
+  game.player.current_weapon = @types.Pistol.to_int()
   game.player.ammo[0] = @types.ammo_pistol
   game.player.ammo[1] = @types.ammo_shotgun
   game.player.ammo[2] = @types.ammo_rifle
@@ -530,7 +530,7 @@ fn @types.Game::buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
     return
   }
   if item_idx == 0 {
-    // Heal
+    // @types.Heal
     if game.player.hp < @types.player_max_hp {
       game.player.money -= cost
       game.player.hp = @types.minf(game.player.hp + 40.0, @types.player_max_hp)
@@ -553,46 +553,46 @@ fn @types.Game::buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
   } else if item_idx == 2 {
     // Shotgun ammo
     game.player.money -= cost
-    game.player.ammo[@types.weapon_shotgun] += 12
+    game.player.ammo[@types.Shotgun.to_int()] += 12
     @types.show_message(
       game,
-      "Shotgun ammo +12! Total: \{game.player.ammo[@types.weapon_shotgun]}",
+      "Shotgun ammo +12! Total: \{game.player.ammo[@types.Shotgun.to_int()]}",
       1.5,
     )
   } else if item_idx == 3 {
     // Rifle ammo
     game.player.money -= cost
-    game.player.ammo[@types.weapon_rifle] += 30
+    game.player.ammo[@types.Rifle.to_int()] += 30
     @types.show_message(
       game,
-      "Rifle ammo +30! Total: \{game.player.ammo[@types.weapon_rifle]}",
+      "Rifle ammo +30! Total: \{game.player.ammo[@types.Rifle.to_int()]}",
       1.5,
     )
   } else if item_idx == 4 {
     // Sniper ammo
     game.player.money -= cost
-    game.player.ammo[@types.weapon_sniper] += 5
+    game.player.ammo[@types.Sniper.to_int()] += 5
     @types.show_message(
       game,
-      "Sniper ammo +5! Total: \{game.player.ammo[@types.weapon_sniper]}",
+      "Sniper ammo +5! Total: \{game.player.ammo[@types.Sniper.to_int()]}",
       1.5,
     )
   } else if item_idx == 5 {
     // Rocket ammo
     game.player.money -= cost
-    game.player.ammo[@types.weapon_rocket] += 3
+    game.player.ammo[@types.Rocket.to_int()] += 3
     @types.show_message(
       game,
-      "Rocket ammo +3! Total: \{game.player.ammo[@types.weapon_rocket]}",
+      "Rocket ammo +3! Total: \{game.player.ammo[@types.Rocket.to_int()]}",
       1.5,
     )
   } else if item_idx == 6 {
     // Minigun ammo
     game.player.money -= cost
-    game.player.ammo[@types.weapon_minigun] += 100
+    game.player.ammo[@types.Minigun.to_int()] += 100
     @types.show_message(
       game,
-      "Minigun ammo +100! Total: \{game.player.ammo[@types.weapon_minigun]}",
+      "Minigun ammo +100! Total: \{game.player.ammo[@types.Minigun.to_int()]}",
       1.5,
     )
   } else if item_idx == 7 {
@@ -608,30 +608,30 @@ fn @types.Game::buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
     let pct = (game.player.speed_mult * 100.0).to_int()
     @types.show_message(game, "Speed up! Now \{pct}%", 1.5)
   } else if item_idx == 9 {
-    // Buy Sniper
-    if not(game.player.owns_weapon[@types.weapon_sniper]) {
+    // Buy @types.Sniper
+    if not(game.player.owns_weapon[@types.Sniper.to_int()]) {
       game.player.money -= cost
-      game.player.owns_weapon[@types.weapon_sniper] = true
-      game.player.ammo[@types.weapon_sniper] = @types.ammo_sniper
-      game.player.magazine[@types.weapon_sniper] = @types.mag_sniper
+      game.player.owns_weapon[@types.Sniper.to_int()] = true
+      game.player.ammo[@types.Sniper.to_int()] = @types.ammo_sniper
+      game.player.magazine[@types.Sniper.to_int()] = @types.mag_sniper
       @types.show_message(game, "Sniper Rifle acquired!", 2.0)
     }
   } else if item_idx == 10 {
-    // Buy Rocket Launcher
-    if not(game.player.owns_weapon[@types.weapon_rocket]) {
+    // Buy @types.Rocket Launcher
+    if not(game.player.owns_weapon[@types.Rocket.to_int()]) {
       game.player.money -= cost
-      game.player.owns_weapon[@types.weapon_rocket] = true
-      game.player.ammo[@types.weapon_rocket] = @types.ammo_rocket
-      game.player.magazine[@types.weapon_rocket] = @types.mag_rocket
+      game.player.owns_weapon[@types.Rocket.to_int()] = true
+      game.player.ammo[@types.Rocket.to_int()] = @types.ammo_rocket
+      game.player.magazine[@types.Rocket.to_int()] = @types.mag_rocket
       @types.show_message(game, "Rocket Launcher acquired!", 2.0)
     }
   } else if item_idx == 11 {
-    // Buy Minigun
-    if not(game.player.owns_weapon[@types.weapon_minigun]) {
+    // Buy @types.Minigun
+    if not(game.player.owns_weapon[@types.Minigun.to_int()]) {
       game.player.money -= cost
-      game.player.owns_weapon[@types.weapon_minigun] = true
-      game.player.ammo[@types.weapon_minigun] = @types.ammo_minigun
-      game.player.magazine[@types.weapon_minigun] = @types.mag_minigun
+      game.player.owns_weapon[@types.Minigun.to_int()] = true
+      game.player.ammo[@types.Minigun.to_int()] = @types.ammo_minigun
+      game.player.magazine[@types.Minigun.to_int()] = @types.mag_minigun
       @types.show_message(game, "Minigun acquired!", 2.0)
     }
   } else if item_idx == 12 {
@@ -657,7 +657,7 @@ fn @types.Game::buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
       game.player.money -= cost
       let trap = game.traps[ti]
       trap.active = true
-      trap.kind = @types.trap_spike
+      trap.kind = Spike
       // Place in front of player
       let cos_yaw = @math.cosf(game.player.yaw)
       let sin_yaw = @math.sinf(game.player.yaw)
@@ -686,11 +686,11 @@ fn @types.Game::update_crates(game : @types.Game, dt : Float) -> Unit {
     if dist < 2.0 {
       // Give ammo
       let weapon = crate.kind
-      let add_ammo = if weapon == @types.weapon_shotgun {
+      let add_ammo = if weapon == @types.Shotgun.to_int() {
         6
-      } else if weapon == @types.weapon_rifle {
+      } else if weapon == @types.Rifle.to_int() {
         15
-      } else if weapon == @types.weapon_minigun {
+      } else if weapon == @types.Minigun.to_int() {
         50
       } else {
         2

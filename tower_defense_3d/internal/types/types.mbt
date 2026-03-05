@@ -31,14 +31,14 @@ pub fn StatusEffect::new(
 /// Tower entity with targeting, upgrade level, and attack state.
 pub(all) struct Tower {
   mut active : Bool
-  mut kind : Int
+  mut kind : TowerKind
   mut gx : Int
   mut gy : Int
   mut level : Int
   mut reload_timer : Float
   mut target_idx : Int
   mut angle : Float
-  mut targeting_mode : Int
+  mut targeting_mode : TargetPriority
   mut kills : Int
   mut total_damage : Float
   mut special_timer : Float
@@ -54,14 +54,14 @@ pub(all) struct Tower {
 pub fn Tower::inactive() -> Tower {
   {
     active: false,
-    kind: 0,
+    kind: Arrow,
     gx: 0,
     gy: 0,
     level: 1,
     reload_timer: 0.0,
     target_idx: -1,
     angle: 0.0,
-    targeting_mode: target_first,
+    targeting_mode: First,
     kills: 0,
     total_damage: 0.0,
     special_timer: 0.0,
@@ -75,7 +75,7 @@ pub fn Tower::inactive() -> Tower {
 
 ///|
 /// Creates a new active tower of the given `kind` at grid position (`gx`, `gy`).
-pub fn Tower::new(kind : Int, gx : Int, gy : Int) -> Tower {
+pub fn Tower::new(kind : TowerKind, gx : Int, gy : Int) -> Tower {
   {
     active: true,
     kind,
@@ -85,7 +85,7 @@ pub fn Tower::new(kind : Int, gx : Int, gy : Int) -> Tower {
     reload_timer: 0.0,
     target_idx: -1,
     angle: 0.0,
-    targeting_mode: target_first,
+    targeting_mode: First,
     kills: 0,
     total_damage: 0.0,
     special_timer: 0.0,
@@ -103,7 +103,7 @@ pub fn Tower::new(kind : Int, gx : Int, gy : Int) -> Tower {
 /// Enemy entity with HP, movement, status effects, and special traits.
 pub(all) struct Enemy {
   mut active : Bool
-  mut kind : Int
+  mut kind : EnemyKind
   mut x : Float
   mut y : Float
   mut z : Float
@@ -138,7 +138,7 @@ pub(all) struct Enemy {
 pub fn Enemy::inactive() -> Enemy {
   {
     active: false,
-    kind: 0,
+    kind: Basic,
     x: 0.0,
     y: 0.0,
     z: 0.0,
@@ -175,7 +175,7 @@ pub fn Enemy::inactive() -> Enemy {
 /// Projectile entity with position, damage, and on-hit effect properties.
 pub(all) struct Projectile {
   mut active : Bool
-  mut kind : Int
+  mut kind : TowerKind
   mut x : Float
   mut y : Float
   mut z : Float
@@ -200,7 +200,7 @@ pub(all) struct Projectile {
 pub fn Projectile::inactive() -> Projectile {
   {
     active: false,
-    kind: 0,
+    kind: Arrow,
     x: 0.0,
     y: 0.0,
     z: 0.0,
@@ -365,8 +365,8 @@ pub(all) struct UpgradeInfo {
 ///|
 /// Main game state holding all entity pools, economy, wave, camera, and UI data.
 pub(all) struct Game {
-  mut state : Int
-  mut prev_state : Int
+  mut state : GameState
+  mut prev_state : GameState
 
   // Economy
   mut gold : Int
@@ -382,7 +382,7 @@ pub(all) struct Game {
   mut spawn_timer : Float
   mut enemies_to_spawn : Int
   mut enemies_spawned : Int
-  mut wave_enemy_kind : Int
+  mut wave_enemy_kind : EnemyKind
   mut wave_hp_mult : Float
   mut wave_speed_mult : Float
   mut wave_spawn_group : Int
@@ -396,7 +396,7 @@ pub(all) struct Game {
   mut group_delay_timer : Float
 
   // Map
-  tiles : Array[Int]
+  tiles : Array[Tile]
   path_nodes : Array[PathNode]
   mut path_count : Int
 
@@ -407,7 +407,7 @@ pub(all) struct Game {
   particles : Array[Particle]
 
   // Building mode
-  mut selected_tower_type : Int
+  mut selected_tower_type : TowerKind
   mut hover_gx : Int
   mut hover_gy : Int
   mut hover_valid : Bool
@@ -494,8 +494,8 @@ pub fn ChainLine::inactive() -> ChainLine {
 /// Creates a new game instance with default settings and empty entity pools.
 pub fn Game::new() -> Game {
   {
-    state: state_menu,
-    prev_state: state_menu,
+    state: Menu,
+    prev_state: Menu,
     gold: starting_gold,
     lives: starting_lives,
     score: 0,
@@ -507,7 +507,7 @@ pub fn Game::new() -> Game {
     spawn_timer: 0.0,
     enemies_to_spawn: 0,
     enemies_spawned: 0,
-    wave_enemy_kind: 0,
+    wave_enemy_kind: Basic,
     wave_hp_mult: 1.0,
     wave_speed_mult: 1.0,
     wave_spawn_group: 0,
@@ -517,7 +517,7 @@ pub fn Game::new() -> Game {
     current_group: 0,
     group_spawned: 0,
     group_delay_timer: 0.0,
-    tiles: Array::make(map_total, tile_grass),
+    tiles: Array::make(map_total, Grass),
     path_nodes: {
       let arr : Array[PathNode] = []
       for i in 0..<max_path_nodes {
@@ -531,7 +531,7 @@ pub fn Game::new() -> Game {
     enemies: Array::make(max_enemies, Enemy::inactive()),
     projectiles: Array::make(max_projectiles, Projectile::inactive()),
     particles: Array::make(max_particles, Particle::inactive()),
-    selected_tower_type: tower_arrow,
+    selected_tower_type: Arrow,
     hover_gx: 0,
     hover_gy: 0,
     hover_valid: false,

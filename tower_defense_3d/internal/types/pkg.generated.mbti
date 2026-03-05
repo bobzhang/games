@@ -46,7 +46,7 @@ pub let burn_dps : Float
 
 pub let burn_duration : Float
 
-pub fn calc_damage(Float, Int, Enemy) -> Float
+pub fn calc_damage(Float, TowerKind, Enemy) -> Float
 
 pub let camera_fovy : Float
 
@@ -126,41 +126,25 @@ pub let dmg_splash : Float
 
 pub let effect_none : Int
 
-pub fn enemy_armor_value(Int) -> Float
+pub fn enemy_armor_value(EnemyKind) -> Float
 
-pub let enemy_basic : Int
+pub fn enemy_kind_from_int(Int) -> EnemyKind
 
-pub let enemy_boss : Int
+pub fn enemy_kind_to_int(EnemyKind) -> Int
 
-pub let enemy_camo : Int
+pub fn enemy_name(EnemyKind) -> String
 
-pub let enemy_fast : Int
-
-pub let enemy_flying : Int
-
-pub let enemy_healer : Int
-
-pub fn enemy_name(Int) -> String
-
-pub fn enemy_resistance(Int, Int) -> Float
-
-pub let enemy_shield : Int
-
-pub let enemy_splitter : Int
-
-pub let enemy_swarm : Int
-
-pub let enemy_tank : Int
+pub fn enemy_resistance(EnemyKind, TowerKind) -> Float
 
 pub fn enemy_total_progress(Enemy) -> Float
 
 pub let fast_spawn_interval : Float
 
-pub fn find_target(Game, Float, Float, Float, Int, Bool) -> Int
+pub fn find_target(Game, Float, Float, Float, TargetPriority, Bool) -> Int
 
-pub fn get_tile(Game, Int, Int) -> Int
+pub fn get_tile(Game, Int, Int) -> Tile
 
-pub fn get_upgrade_info(Int, Int) -> UpgradeInfo
+pub fn get_upgrade_info(TowerKind, Int) -> UpgradeInfo
 
 pub fn grid_to_world_x(Int) -> Float
 
@@ -246,7 +230,7 @@ pub let proj_speed_sniper : Float
 
 pub let proj_speed_splash : Float
 
-pub fn projectile_speed_for(Int) -> Float
+pub fn projectile_speed_for(TowerKind) -> Float
 
 pub fn rand_bool(Game, Float) -> Bool
 
@@ -296,7 +280,7 @@ pub let sell_value_pct : Float
 
 pub fn set_notification(Game, String, Float) -> Unit
 
-pub fn set_tile(Game, Int, Int, Int) -> Unit
+pub fn set_tile(Game, Int, Int, Tile) -> Unit
 
 pub let shield_max_pct : Float
 
@@ -344,7 +328,7 @@ pub let splash_radius_cannon : Float
 
 pub let splash_radius_flame : Float
 
-pub fn splash_radius_for(Int) -> Float
+pub fn splash_radius_for(TowerKind) -> Float
 
 pub let splash_radius_splash : Float
 
@@ -356,67 +340,27 @@ pub let starting_gold : Int
 
 pub let starting_lives : Int
 
-pub let state_building : Int
-
-pub let state_game_over : Int
-
-pub let state_map_select : Int
-
-pub let state_menu : Int
-
-pub let state_paused : Int
-
-pub let state_playing : Int
-
-pub let state_tower_info : Int
-
-pub let state_victory : Int
-
-pub let state_wave_prep : Int
-
 pub let stun_duration : Float
-
-pub let target_closest : Int
-
-pub let target_first : Int
-
-pub let target_last : Int
 
 pub let target_mode_count : Int
 
-pub let target_strongest : Int
+pub fn target_priority_from_int(Int) -> TargetPriority
 
-pub fn targeting_mode_name(Int) -> String
+pub fn target_priority_to_int(TargetPriority) -> Int
 
-pub let tile_end : Int
-
-pub let tile_grass : Int
+pub fn targeting_mode_name(TargetPriority) -> String
 
 pub fn tile_index(Int, Int) -> Int
 
-pub let tile_path : Int
-
-pub let tile_rock : Int
-
-pub let tile_start : Int
-
-pub let tile_water : Int
-
-pub let tower_arrow : Int
-
 pub fn tower_at(Game, Int, Int) -> Int
 
-pub let tower_buff : Int
+pub fn tower_can_detect_camo(TowerKind) -> Bool
 
-pub fn tower_can_detect_camo(Int) -> Bool
+pub fn tower_cost(TowerKind) -> Int
 
-pub let tower_cannon : Int
+pub fn tower_cost_for(TowerKind) -> Int
 
-pub fn tower_cost(Int) -> Int
-
-pub fn tower_cost_for(Int) -> Int
-
-pub fn tower_damage(Int) -> Float
+pub fn tower_damage(TowerKind) -> Float
 
 pub fn tower_effective_damage(Tower) -> Float
 
@@ -424,27 +368,17 @@ pub fn tower_effective_range(Tower) -> Float
 
 pub fn tower_effective_rate(Tower) -> Float
 
-pub fn tower_fire_rate(Int) -> Float
+pub fn tower_fire_rate(TowerKind) -> Float
 
-pub let tower_flame : Int
+pub fn tower_name(TowerKind) -> String
 
-pub let tower_frost : Int
+pub fn tower_range(TowerKind) -> Float
 
-pub let tower_lightning : Int
+pub fn tower_sell_value(TowerKind, Int) -> Int
 
-pub fn tower_name(Int) -> String
+pub fn tower_total_investment(TowerKind, Int) -> Int
 
-pub fn tower_range(Int) -> Float
-
-pub fn tower_sell_value(Int, Int) -> Int
-
-pub let tower_sniper : Int
-
-pub let tower_splash : Int
-
-pub fn tower_total_investment(Int, Int) -> Int
-
-pub fn tower_upgrade_cost(Int, Int) -> Int
+pub fn tower_upgrade_cost(TowerKind, Int) -> Int
 
 pub let upgrade_cost_mult_2 : Float
 
@@ -481,7 +415,7 @@ pub fn ChainLine::inactive() -> Self
 
 pub(all) struct Enemy {
   mut active : Bool
-  mut kind : Int
+  mut kind : EnemyKind
   mut x : Float
   mut y : Float
   mut z : Float
@@ -512,9 +446,23 @@ pub(all) struct Enemy {
 }
 pub fn Enemy::inactive() -> Self
 
+pub(all) enum EnemyKind {
+  Basic
+  Fast
+  Tank
+  Flying
+  Boss
+  Healer
+  Swarm
+  Shield
+  Camo
+  Splitter
+}
+pub impl Eq for EnemyKind
+
 pub(all) struct Game {
-  mut state : Int
-  mut prev_state : Int
+  mut state : GameState
+  mut prev_state : GameState
   mut gold : Int
   mut lives : Int
   mut score : Int
@@ -526,7 +474,7 @@ pub(all) struct Game {
   mut spawn_timer : Float
   mut enemies_to_spawn : Int
   mut enemies_spawned : Int
-  mut wave_enemy_kind : Int
+  mut wave_enemy_kind : EnemyKind
   mut wave_hp_mult : Float
   mut wave_speed_mult : Float
   mut wave_spawn_group : Int
@@ -536,14 +484,14 @@ pub(all) struct Game {
   mut current_group : Int
   mut group_spawned : Int
   mut group_delay_timer : Float
-  tiles : Array[Int]
+  tiles : Array[Tile]
   path_nodes : Array[PathNode]
   mut path_count : Int
   towers : Array[Tower]
   enemies : Array[Enemy]
   projectiles : Array[Projectile]
   particles : Array[Particle]
-  mut selected_tower_type : Int
+  mut selected_tower_type : TowerKind
   mut hover_gx : Int
   mut hover_gy : Int
   mut hover_valid : Bool
@@ -579,6 +527,19 @@ pub(all) struct Game {
 }
 pub fn Game::new() -> Self
 
+pub(all) enum GameState {
+  Menu
+  Playing
+  Paused
+  WavePrep
+  GameOver
+  Victory
+  Building
+  MapSelect
+  TowerInfo
+}
+pub impl Eq for GameState
+
 pub(all) struct MapInfo {
   name : String
   difficulty : Int
@@ -612,7 +573,7 @@ pub(all) struct PathNode {
 
 pub(all) struct Projectile {
   mut active : Bool
-  mut kind : Int
+  mut kind : TowerKind
   mut x : Float
   mut y : Float
   mut z : Float
@@ -642,16 +603,34 @@ pub(all) struct StatusEffect {
 pub fn StatusEffect::new(Int, Float, Float) -> Self
 pub fn StatusEffect::none() -> Self
 
+pub(all) enum TargetPriority {
+  First
+  Last
+  Strongest
+  Closest
+}
+pub impl Eq for TargetPriority
+
+pub(all) enum Tile {
+  Grass
+  Path
+  Start
+  End
+  Water
+  Rock
+}
+pub impl Eq for Tile
+
 pub(all) struct Tower {
   mut active : Bool
-  mut kind : Int
+  mut kind : TowerKind
   mut gx : Int
   mut gy : Int
   mut level : Int
   mut reload_timer : Float
   mut target_idx : Int
   mut angle : Float
-  mut targeting_mode : Int
+  mut targeting_mode : TargetPriority
   mut kills : Int
   mut total_damage : Float
   mut special_timer : Float
@@ -662,7 +641,19 @@ pub(all) struct Tower {
   mut sell_value : Int
 }
 pub fn Tower::inactive() -> Self
-pub fn Tower::new(Int, Int, Int) -> Self
+pub fn Tower::new(TowerKind, Int, Int) -> Self
+
+pub(all) enum TowerKind {
+  Arrow
+  Cannon
+  Frost
+  Lightning
+  Flame
+  Sniper
+  Splash
+  Buff
+}
+pub impl Eq for TowerKind
 
 pub(all) struct UpgradeInfo {
   cost : Int

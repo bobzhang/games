@@ -10,30 +10,6 @@ pub let screen_height : Int = 720
 
 // Game states
 
-///|
-/// Game state id for main menu.
-pub let state_menu : Int = 0
-
-///|
-/// Game state id for active gameplay.
-pub let state_playing : Int = 1
-
-///|
-/// Game state id for pause overlay.
-pub let state_paused : Int = 2
-
-///|
-/// Game state id for inventory screen.
-pub let state_inventory : Int = 3
-
-///|
-/// Game state id for crafting screen.
-pub let state_crafting : Int = 4
-
-///|
-/// Game state id for player death/game-over screen.
-pub let state_game_over : Int = 5
-
 // Block types
 
 ///|
@@ -133,30 +109,6 @@ pub let block_cactus : Int = 22
 pub let block_clay : Int = 23
 
 // Biome types
-
-///|
-/// Biome id for plains.
-pub let biome_plains : Int = 0
-
-///|
-/// Biome id for forest.
-pub let biome_forest : Int = 1
-
-///|
-/// Biome id for desert.
-pub let biome_desert : Int = 2
-
-///|
-/// Biome id for mountains.
-pub let biome_mountains : Int = 3
-
-///|
-/// Biome id for tundra.
-pub let biome_tundra : Int = 4
-
-///|
-/// Biome id for swamp.
-pub let biome_swamp : Int = 5
 
 // Tool types
 
@@ -472,26 +424,6 @@ pub let entity_spider : Int = 6
 
 // Entity AI states
 
-///|
-/// AI state id for idle behavior.
-pub let ai_idle : Int = 0
-
-///|
-/// AI state id for roaming/wandering.
-pub let ai_wander : Int = 1
-
-///|
-/// AI state id for fleeing behavior.
-pub let ai_flee : Int = 2
-
-///|
-/// AI state id for chase behavior.
-pub let ai_chase : Int = 3
-
-///|
-/// AI state id for attack behavior.
-pub let ai_attack : Int = 4
-
 // Entity stats
 
 ///|
@@ -661,3 +593,33 @@ pub let respawn_invulnerability : Float = 3.0
 ///|
 /// Update interval for gravity-affected block simulation.
 pub let gravity_block_interval : Float = 0.15
+
+
+///|
+pub(all) enum AiState {
+  Idle
+  Wander
+  Flee
+  Chase
+  Attack
+} derive(Eq)
+
+///|
+pub(all) enum Biome {
+  Plains
+  Forest
+  Desert
+  Mountains
+  Tundra
+  Swamp
+} derive(Eq)
+
+///|
+pub(all) enum GameState {
+  Menu
+  Playing
+  Paused
+  Inventory
+  Crafting
+  GameOver
+} derive(Eq)

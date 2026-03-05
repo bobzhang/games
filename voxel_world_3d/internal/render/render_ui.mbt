@@ -4,9 +4,9 @@
 /// Draws screen-space UI for all game states, including HUD, menus, inventory,
 /// crafting panels, and contextual overlays.
 pub fn draw_ui(game : @types.Game) -> Unit {
-  if game.state == @types.state_menu {
+  if game.state == Menu {
     game.draw_menu()
-  } else if game.state == @types.state_playing {
+  } else if game.state == Playing {
     game.draw_hud()
     draw_crosshair()
     game.draw_health_hunger_bars()
@@ -14,24 +14,24 @@ pub fn draw_ui(game : @types.Game) -> Unit {
     if game.show_debug {
       game.draw_debug_info()
     }
-  } else if game.state == @types.state_paused {
+  } else if game.state == Paused {
     game.draw_hud()
     draw_crosshair()
     game.draw_health_hunger_bars()
     game.draw_pause_overlay()
-  } else if game.state == @types.state_inventory {
+  } else if game.state == Inventory {
     game.draw_hud()
     game.draw_health_hunger_bars()
     game.draw_inventory_screen()
-  } else if game.state == @types.state_crafting {
+  } else if game.state == Crafting {
     game.draw_hud()
     game.draw_health_hunger_bars()
     game.draw_crafting_screen()
-  } else if game.state == @types.state_game_over {
+  } else if game.state == GameOver {
     game.draw_game_over_screen()
   }
   // Biome name display
-  if game.state == @types.state_playing {
+  if game.state == Playing {
     game.draw_biome_indicator()
     game.draw_compass()
     game.draw_tool_durability()
@@ -1086,47 +1086,47 @@ fn @types.Game::draw_biome_indicator(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, 120),
   )
   // Biome color indicator dot
-  let dot_r : Int = if biome == @types.biome_plains {
+  let dot_r : Int = if biome == Plains {
     100
-  } else if biome == @types.biome_forest {
+  } else if biome == Forest {
     30
-  } else if biome == @types.biome_desert {
+  } else if biome == Desert {
     210
-  } else if biome == @types.biome_mountains {
+  } else if biome == Mountains {
     140
-  } else if biome == @types.biome_tundra {
+  } else if biome == Tundra {
     200
-  } else if biome == @types.biome_swamp {
+  } else if biome == Swamp {
     60
   } else {
     150
   }
-  let dot_g : Int = if biome == @types.biome_plains {
+  let dot_g : Int = if biome == Plains {
     180
-  } else if biome == @types.biome_forest {
+  } else if biome == Forest {
     120
-  } else if biome == @types.biome_desert {
+  } else if biome == Desert {
     180
-  } else if biome == @types.biome_mountains {
+  } else if biome == Mountains {
     140
-  } else if biome == @types.biome_tundra {
+  } else if biome == Tundra {
     220
-  } else if biome == @types.biome_swamp {
+  } else if biome == Swamp {
     100
   } else {
     150
   }
-  let dot_b : Int = if biome == @types.biome_plains {
+  let dot_b : Int = if biome == Plains {
     80
-  } else if biome == @types.biome_forest {
+  } else if biome == Forest {
     50
-  } else if biome == @types.biome_desert {
+  } else if biome == Desert {
     100
-  } else if biome == @types.biome_mountains {
+  } else if biome == Mountains {
     160
-  } else if biome == @types.biome_tundra {
+  } else if biome == Tundra {
     240
-  } else if biome == @types.biome_swamp {
+  } else if biome == Swamp {
     70
   } else {
     150

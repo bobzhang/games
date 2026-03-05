@@ -5,17 +5,17 @@
 /// and ticking all active simulation systems while in play mode.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
-  if game.state == @types.state_menu {
+  if game.state == Menu {
     game.update_menu(dt)
-  } else if game.state == @types.state_playing {
+  } else if game.state == Playing {
     game.update_playing(dt)
-  } else if game.state == @types.state_paused {
+  } else if game.state == Paused {
     game.update_paused(dt)
-  } else if game.state == @types.state_inventory {
+  } else if game.state == Inventory {
     game.update_inventory(dt)
-  } else if game.state == @types.state_crafting {
+  } else if game.state == Crafting {
     game.update_crafting(dt)
-  } else if game.state == @types.state_game_over {
+  } else if game.state == GameOver {
     game.update_game_over(dt)
   }
 }
@@ -26,7 +26,7 @@ fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     game.start_new_game()
-    game.state = @types.state_playing
+    game.state = Playing
     @raylib.disable_cursor()
     @types.show_message(
       game, "WASD: Move | Space: Jump | LMB: Break | RMB: Place | E: Inventory | C: Craft",
@@ -38,17 +38,17 @@ fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.state_paused
+    game.state = Paused
     @raylib.enable_cursor()
     return
   }
   if @raylib.is_key_pressed(@raylib.KeyE) {
-    game.state = @types.state_inventory
+    game.state = Inventory
     @raylib.enable_cursor()
     return
   }
   if @raylib.is_key_pressed(@raylib.KeyC) {
-    game.state = @types.state_crafting
+    game.state = Crafting
     game.crafting_selection = 0
     @raylib.enable_cursor()
     return
@@ -79,11 +79,11 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::update_paused(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
-    game.state = @types.state_playing
+    game.state = Playing
     @raylib.disable_cursor()
   }
   if @raylib.is_key_pressed(@raylib.KeyQ) {
-    game.state = @types.state_menu
+    game.state = Menu
     @raylib.enable_cursor()
   }
 }
@@ -92,7 +92,7 @@ fn @types.Game::update_paused(game : @types.Game, _dt : Float) -> Unit {
 fn @types.Game::update_inventory(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyE) {
-    game.state = @types.state_playing
+    game.state = Playing
     @raylib.disable_cursor()
     return
   }
@@ -135,7 +135,7 @@ fn @types.Game::update_inventory(game : @types.Game, _dt : Float) -> Unit {
 fn @types.Game::update_crafting(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyC) {
-    game.state = @types.state_playing
+    game.state = Playing
     @raylib.disable_cursor()
     return
   }
@@ -233,11 +233,11 @@ fn @types.Game::update_game_over(game : @types.Game, dt : Float) -> Unit {
     @raylib.is_key_pressed(@raylib.KeySpace) {
     // Respawn
     game.respawn_player()
-    game.state = @types.state_playing
+    game.state = Playing
     @raylib.disable_cursor()
   }
   if @raylib.is_key_pressed(@raylib.KeyQ) {
-    game.state = @types.state_menu
+    game.state = Menu
     @raylib.enable_cursor()
   }
 }
@@ -471,7 +471,7 @@ pub fn damage_player(game : @types.Game, amount : Int) -> Unit {
   player.invulnerable_timer = 0.5
   if player.health <= 0 {
     player.health = 0
-    game.state = @types.state_game_over
+    game.state = GameOver
     game.death_timer = 0.0
     @raylib.enable_cursor()
   }
@@ -563,7 +563,7 @@ fn @types.Game::update_combat(game : @types.Game, dt : Float) -> Unit {
     let ent = game.entities[i]
     if ent.active &&
       @types.is_hostile(ent.kind) &&
-      ent.ai_state == @types.ai_attack {
+      ent.ai_state == Attack {
       if ent.attack_cooldown <= 0.0 {
         let dist = @types.distance3d(
           ent.x,
@@ -652,12 +652,12 @@ fn @types.Game::update_combat(game : @types.Game, dt : Float) -> Unit {
       }
       // Hostile entities become aggressive
       if @types.is_hostile(ent.kind) {
-        ent.ai_state = @types.ai_chase
+        ent.ai_state = Chase
         ent.target_x = player.x
         ent.target_z = player.z
       } else {
         // Passive entities flee
-        ent.ai_state = @types.ai_flee
+        ent.ai_state = Flee
         ent.ai_timer = 5.0
         ent.target_x = ent.x + (ent.x - player.x) * 2.0
         ent.target_z = ent.z + (ent.z - player.z) * 2.0

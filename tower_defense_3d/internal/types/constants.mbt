@@ -28,63 +28,7 @@ pub let map_total : Int = 300 // map_w * map_h
 
 // Tile types
 
-///|
-/// Tile type for buildable grass terrain.
-pub let tile_grass : Int = 0
-
-///|
-/// Tile type for the enemy movement path.
-pub let tile_path : Int = 1
-
-///|
-/// Tile type for the enemy spawn point.
-pub let tile_start : Int = 2
-
-///|
-/// Tile type for the player base that enemies target.
-pub let tile_end : Int = 3
-
-///|
-/// Tile type for impassable water terrain.
-pub let tile_water : Int = 4
-
-///|
-/// Tile type for impassable rock terrain.
-pub let tile_rock : Int = 5
-
 // Tower types (8 tower types)
-
-///|
-/// Tower type identifier for the fast single-target arrow tower.
-pub let tower_arrow : Int = 0
-
-///|
-/// Tower type identifier for the slow splash-damage cannon tower.
-pub let tower_cannon : Int = 1
-
-///|
-/// Tower type identifier for the enemy-slowing frost tower.
-pub let tower_frost : Int = 2
-
-///|
-/// Tower type identifier for the chain-lightning tower.
-pub let tower_lightning : Int = 3
-
-///|
-/// Tower type identifier for the rapid-fire burn-damage flame tower.
-pub let tower_flame : Int = 4
-
-///|
-/// Tower type identifier for the long-range critical-hit sniper tower.
-pub let tower_sniper : Int = 5
-
-///|
-/// Tower type identifier for the wide area-of-effect splash tower.
-pub let tower_splash : Int = 6
-
-///|
-/// Tower type identifier for the support tower that boosts nearby towers.
-pub let tower_buff : Int = 7
 
 // Tower costs (base cost for level 1)
 
@@ -255,22 +199,6 @@ pub let sell_value_pct : Float = 0.6
 // Targeting modes
 
 ///|
-/// Targeting mode that prioritizes the enemy furthest along the path.
-pub let target_first : Int = 0
-
-///|
-/// Targeting mode that prioritizes the enemy least far along the path.
-pub let target_last : Int = 1
-
-///|
-/// Targeting mode that prioritizes the enemy with the most HP.
-pub let target_strongest : Int = 2
-
-///|
-/// Targeting mode that prioritizes the nearest enemy to the tower.
-pub let target_closest : Int = 3
-
-///|
 /// Total number of available targeting modes.
 pub let target_mode_count : Int = 4
 
@@ -390,46 +318,6 @@ pub let buff_rate_bonus : Float = 0.10
 
 // Enemy types (10+ enemy types)
 
-///|
-/// Enemy type identifier for standard soldiers.
-pub let enemy_basic : Int = 0
-
-///|
-/// Enemy type identifier for fast-moving scouts.
-pub let enemy_fast : Int = 1
-
-///|
-/// Enemy type identifier for heavily armored tanks.
-pub let enemy_tank : Int = 2
-
-///|
-/// Enemy type identifier for airborne flyers that bypass ground obstacles.
-pub let enemy_flying : Int = 3
-
-///|
-/// Enemy type identifier for powerful boss enemies.
-pub let enemy_boss : Int = 4
-
-///|
-/// Enemy type identifier for medics that heal nearby allies.
-pub let enemy_healer : Int = 5
-
-///|
-/// Enemy type identifier for weak but numerous swarm units.
-pub let enemy_swarm : Int = 6
-
-///|
-/// Enemy type identifier for shield-bearing units with regenerating barriers.
-pub let enemy_shield : Int = 7
-
-///|
-/// Enemy type identifier for camouflaged stealth units.
-pub let enemy_camo : Int = 8
-
-///|
-/// Enemy type identifier for splitters that spawn children on death.
-pub let enemy_splitter : Int = 9
-
 // Enemy armor values (damage reduction flat amount)
 
 ///|
@@ -515,42 +403,6 @@ pub let shield_regen_rate : Float = 5.0
 pub let shield_max_pct : Float = 0.4
 
 // Game states
-
-///|
-/// Game state for the main menu screen.
-pub let state_menu : Int = 0
-
-///|
-/// Game state for active gameplay with enemies spawning and moving.
-pub let state_playing : Int = 1
-
-///|
-/// Game state for paused gameplay.
-pub let state_paused : Int = 2
-
-///|
-/// Game state for the countdown before a new wave starts.
-pub let state_wave_prep : Int = 3
-
-///|
-/// Game state for the defeat screen when all lives are lost.
-pub let state_game_over : Int = 4
-
-///|
-/// Game state for the victory screen after surviving all waves.
-pub let state_victory : Int = 5
-
-///|
-/// Game state for tower placement building mode.
-pub let state_building : Int = 6
-
-///|
-/// Game state for the map selection screen.
-pub let state_map_select : Int = 7
-
-///|
-/// Game state for the tower inspection and upgrade panel.
-pub let state_tower_info : Int = 8
 
 // Pools
 
@@ -713,3 +565,61 @@ pub let minimap_x : Int = 10
 ///|
 /// Vertical screen position of the minimap in pixels.
 pub let minimap_y : Int = 60
+
+
+///|
+pub(all) enum EnemyKind {
+  Basic
+  Fast
+  Tank
+  Flying
+  Boss
+  Healer
+  Swarm
+  Shield
+  Camo
+  Splitter
+} derive(Eq)
+
+///|
+pub(all) enum GameState {
+  Menu
+  Playing
+  Paused
+  WavePrep
+  GameOver
+  Victory
+  Building
+  MapSelect
+  TowerInfo
+} derive(Eq)
+
+///|
+pub(all) enum TargetPriority {
+  First
+  Last
+  Strongest
+  Closest
+} derive(Eq)
+
+///|
+pub(all) enum Tile {
+  Grass
+  Path
+  Start
+  End
+  Water
+  Rock
+} derive(Eq)
+
+///|
+pub(all) enum TowerKind {
+  Arrow
+  Cannon
+  Frost
+  Lightning
+  Flame
+  Sniper
+  Splash
+  Buff
+} derive(Eq)

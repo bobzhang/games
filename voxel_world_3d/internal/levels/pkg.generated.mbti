@@ -22,7 +22,7 @@ pub fn fog_color_r(Bool) -> Int
 
 pub fn get_crafting_recipes() -> Array[@types.CraftingRecipe]
 
-pub fn get_spawn_type_for_biome(Int, Bool, Int) -> Int
+pub fn get_spawn_type_for_biome(@types.Biome, Bool, Int) -> Int
 
 pub fn get_weapon_damage(Int) -> Int
 

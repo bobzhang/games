@@ -2,31 +2,9 @@
 package "tonyfettes/raylib-examples/voxel_world_3d/internal/types"
 
 // Values
-pub let ai_attack : Int
-
-pub let ai_chase : Int
-
-pub let ai_flee : Int
-
-pub let ai_idle : Int
-
-pub let ai_wander : Int
-
 pub let base_height : Int
 
-pub let biome_desert : Int
-
-pub let biome_forest : Int
-
-pub let biome_mountains : Int
-
-pub fn biome_name(Int) -> String
-
-pub let biome_plains : Int
-
-pub let biome_swamp : Int
-
-pub let biome_tundra : Int
+pub fn biome_name(Biome) -> String
 
 pub let block_air : Int
 
@@ -154,9 +132,9 @@ pub fn fractal_noise_2d(Float, Float, Int) -> Float
 
 pub fn generate_chunk_terrain(Chunk, Game) -> Unit
 
-pub fn get_biome_at(Int, Int) -> Int
+pub fn get_biome_at(Int, Int) -> Biome
 
-pub fn get_biome_terrain_height(Int, Int, Int) -> Int
+pub fn get_biome_terrain_height(Int, Int, Biome) -> Int
 
 pub fn get_block_drop(Int) -> Int
 
@@ -294,7 +272,7 @@ pub fn set_world_block(Game, Int, Int, Int, Int) -> Unit
 
 pub fn should_place_ore(Int, Int, Int, Int, Int) -> Bool
 
-pub fn should_place_tree(Int, Int, Int) -> Bool
+pub fn should_place_tree(Int, Int, Biome) -> Bool
 
 pub fn show_message(Game, String, Float) -> Unit
 
@@ -313,18 +291,6 @@ pub let spider_health : Int
 pub let stack_max : Int
 
 pub let starve_damage_interval : Float
-
-pub let state_crafting : Int
-
-pub let state_game_over : Int
-
-pub let state_inventory : Int
-
-pub let state_menu : Int
-
-pub let state_paused : Int
-
-pub let state_playing : Int
 
 pub fn temperature_noise(Float, Float) -> Float
 
@@ -381,6 +347,25 @@ pub let zombie_health : Int
 // Errors
 
 // Types and methods
+pub(all) enum AiState {
+  Idle
+  Wander
+  Flee
+  Chase
+  Attack
+}
+pub impl Eq for AiState
+
+pub(all) enum Biome {
+  Plains
+  Forest
+  Desert
+  Mountains
+  Tundra
+  Swamp
+}
+pub impl Eq for Biome
+
 pub(all) struct BiomeParams {
   id : Int
   name : String
@@ -413,7 +398,7 @@ pub(all) struct Chunk {
   cx : Int
   cz : Int
   mut dirty : Bool
-  mut biome : Int
+  mut biome : Biome
 }
 pub fn Chunk::get_block(Self, Int, Int, Int) -> Int
 pub fn Chunk::new(Int, Int) -> Self
@@ -441,7 +426,7 @@ pub(all) struct Entity {
   mut vz : Float
   mut health : Int
   mut max_health : Int
-  mut ai_state : Int
+  mut ai_state : AiState
   mut ai_timer : Float
   mut target_x : Float
   mut target_z : Float
@@ -454,7 +439,7 @@ pub(all) struct Entity {
 pub fn Entity::inactive() -> Self
 
 pub(all) struct Game {
-  mut state : Int
+  mut state : GameState
   player : Player
   chunks : Array[Chunk]
   mut cam_pos_x : Float
@@ -494,6 +479,16 @@ pub(all) struct Game {
   mut respawn_count : Int
 }
 pub fn Game::new() -> Self
+
+pub(all) enum GameState {
+  Menu
+  Playing
+  Paused
+  Inventory
+  Crafting
+  GameOver
+}
+pub impl Eq for GameState
 
 pub(all) struct Inventory {
   slots : Array[ItemSlot]

@@ -120,22 +120,6 @@ pub fn effective_fire_rate(Player, Int) -> Float
 
 pub fn effective_mag_size(Player, Int) -> Int
 
-pub let enemy_boss : Int
-
-pub let enemy_brute : Int
-
-pub let enemy_exploder : Int
-
-pub let enemy_necromancer : Int
-
-pub let enemy_runner : Int
-
-pub let enemy_shielded : Int
-
-pub let enemy_spitter : Int
-
-pub let enemy_zombie : Int
-
 pub let exploder_damage : Float
 
 pub let exploder_radius : Float
@@ -203,18 +187,6 @@ pub let necro_revive_cooldown : Float
 pub let necro_revive_range : Float
 
 pub fn normalize3d(Float, Float, Float) -> (Float, Float, Float)
-
-pub let particle_blood : Int
-
-pub let particle_explosion : Int
-
-pub let particle_heal : Int
-
-pub let particle_muzzle : Int
-
-pub let particle_shell : Int
-
-pub let particle_spark : Int
 
 pub let pi : Float
 
@@ -336,7 +308,7 @@ pub fn spawn_particles(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
 
 pub fn spawn_particles_dir(Game, Float, Float, Float, Float, Float, Float, Int, Int, Int, Int) -> Unit
 
-pub fn spawn_particles_typed(Game, Float, Float, Float, Int, Int, Int, Int, Int) -> Unit
+pub fn spawn_particles_typed(Game, Float, Float, Float, Int, Int, Int, Int, ParticleKind) -> Unit
 
 pub fn spawn_shell_casing(Game, Float, Float, Float, Float, Float) -> Unit
 
@@ -352,17 +324,11 @@ pub let speed_shotgun : Float
 
 pub let speed_sniper : Float
 
-pub let trap_electric : Int
-
 pub let trap_electric_cooldown : Float
 
 pub let trap_electric_stun : Float
 
-pub let trap_flame : Int
-
 pub let trap_flame_duration : Float
-
-pub let trap_spike : Int
 
 pub let trap_spike_cooldown : Float
 
@@ -382,30 +348,18 @@ pub fn weapon_fire_rate(Int) -> Float
 
 pub fn weapon_mag_size(Int) -> Int
 
-pub let weapon_minigun : Int
-
 pub fn weapon_name(Int) -> String
-
-pub let weapon_pistol : Int
 
 pub fn weapon_proj_speed(Int) -> Float
 
 pub fn weapon_reload_time(Int) -> Float
-
-pub let weapon_rifle : Int
-
-pub let weapon_rocket : Int
-
-pub let weapon_shotgun : Int
-
-pub let weapon_sniper : Int
 
 // Errors
 
 // Types and methods
 pub(all) struct ArenaTrap {
   mut active : Bool
-  mut kind : Int
+  mut kind : Trap
   mut x : Float
   mut z : Float
   mut cooldown_timer : Float
@@ -441,7 +395,7 @@ pub fn DamageIndicator::inactive() -> Self
 
 pub(all) struct Enemy {
   mut active : Bool
-  mut kind : Int
+  mut kind : EnemyKind
   mut x : Float
   mut y : Float
   mut z : Float
@@ -475,6 +429,20 @@ pub(all) struct Enemy {
   mut drops_pickup : Bool
 }
 pub fn Enemy::inactive() -> Self
+
+pub(all) enum EnemyKind {
+  Zombie
+  Runner
+  Brute
+  Spitter
+  Exploder
+  Necromancer
+  Shielded
+  Boss
+}
+pub fn EnemyKind::from_int(Int) -> Self
+pub fn EnemyKind::to_int(Self) -> Int
+pub impl Eq for EnemyKind
 
 pub(all) struct Game {
   mut state : GameState
@@ -572,9 +540,21 @@ pub(all) struct Particle {
   mut g : Int
   mut b : Int
   mut size : Float
-  mut kind : Int
+  mut kind : ParticleKind
 }
 pub fn Particle::inactive() -> Self
+
+pub(all) enum ParticleKind {
+  Blood
+  Muzzle
+  Explosion
+  Shell
+  Spark
+  Heal
+}
+pub fn ParticleKind::from_int(Int) -> Self
+pub fn ParticleKind::to_int(Self) -> Int
+pub impl Eq for ParticleKind
 
 pub(all) struct Pickup {
   mut active : Bool
@@ -670,6 +650,27 @@ pub(all) struct ShopItem {
   cost : Int
   kind : Int
 }
+
+pub(all) enum Trap {
+  Spike
+  Flame
+  Electric
+}
+pub fn Trap::from_int(Int) -> Self
+pub fn Trap::to_int(Self) -> Int
+pub impl Eq for Trap
+
+pub(all) enum WeaponKind {
+  Pistol
+  Shotgun
+  Rifle
+  Sniper
+  Rocket
+  Minigun
+}
+pub fn WeaponKind::from_int(Int) -> Self
+pub fn WeaponKind::to_int(Self) -> Int
+pub impl Eq for WeaponKind
 
 pub(all) struct WeaponState {
   mut reload_timer : Float

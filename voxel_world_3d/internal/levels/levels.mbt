@@ -332,7 +332,7 @@ pub fn get_crafting_recipes() -> Array[@types.CraftingRecipe] {
 ///|
 /// Chooses spawn mob type for biome/night context from RNG roll.
 pub fn get_spawn_type_for_biome(
-  biome : Int,
+  biome : @types.Biome,
   is_night : Bool,
   rng_val : Int,
 ) -> Int {
@@ -349,7 +349,7 @@ pub fn get_spawn_type_for_biome(
       0
     }
     // Passive mobs during day, biome-dependent
-  } else if biome == @types.biome_plains {
+  } else if biome == Plains {
     if r < 35 {
       @types.entity_cow
     } else if r < 65 {
@@ -359,7 +359,7 @@ pub fn get_spawn_type_for_biome(
     } else {
       0
     }
-  } else if biome == @types.biome_forest {
+  } else if biome == Forest {
     if r < 30 {
       @types.entity_pig
     } else if r < 55 {
@@ -369,20 +369,20 @@ pub fn get_spawn_type_for_biome(
     } else {
       0
     }
-  } else if biome == @types.biome_desert {
+  } else if biome == Desert {
     // Very few spawns in desert
     if r < 10 {
       @types.entity_chicken
     } else {
       0
     }
-  } else if biome == @types.biome_mountains {
+  } else if biome == Mountains {
     if r < 25 {
       @types.entity_cow
     } else {
       0
     }
-  } else if biome == @types.biome_tundra {
+  } else if biome == Tundra {
     if r < 20 {
       @types.entity_cow
     } else if r < 35 {
@@ -390,7 +390,7 @@ pub fn get_spawn_type_for_biome(
     } else {
       0
     }
-  } else if biome == @types.biome_swamp {
+  } else if biome == Swamp {
     if r < 20 {
       @types.entity_pig
     } else if r < 40 {

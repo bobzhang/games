@@ -152,7 +152,7 @@ fn @types.Game::spawn_entity_at(
       ent.vz = 0.0
       ent.max_health = @types.get_entity_max_health(kind)
       ent.health = ent.max_health
-      ent.ai_state = @types.ai_idle
+      ent.ai_state = Idle
       ent.ai_timer = 2.0 + @types.rand_float(game) * 3.0
       ent.target_x = x
       ent.target_z = z
@@ -221,56 +221,56 @@ fn @types.Game::update_entity_ai(
     // Hostile AI
     if dist_to_player < 20.0 {
       // Chase player
-      ent.ai_state = @types.ai_chase
+      ent.ai_state = Chase
       ent.target_x = player.x
       ent.target_z = player.z
       if dist_to_player < @types.entity_attack_range {
-        ent.ai_state = @types.ai_attack
+        ent.ai_state = Attack
       }
       // Wander
     } else if ent.ai_timer <= 0.0 {
-      ent.ai_state = @types.ai_wander
+      ent.ai_state = Wander
       ent.ai_timer = 3.0 + @types.rand_float(game) * 4.0
       ent.target_x = ent.x + (@types.rand_float(game) - 0.5) * 16.0
       ent.target_z = ent.z + (@types.rand_float(game) - 0.5) * 16.0
     }
     // Passive AI
-  } else if ent.ai_state == @types.ai_flee {
+  } else if ent.ai_state == Flee {
     // Continue fleeing
     if ent.ai_timer <= 0.0 {
-      ent.ai_state = @types.ai_idle
+      ent.ai_state = Idle
       ent.ai_timer = 2.0 + @types.rand_float(game) * 3.0
     }
-  } else if ent.ai_state == @types.ai_idle {
+  } else if ent.ai_state == Idle {
     if ent.ai_timer <= 0.0 {
-      ent.ai_state = @types.ai_wander
+      ent.ai_state = Wander
       ent.ai_timer = 3.0 + @types.rand_float(game) * 5.0
       ent.target_x = ent.x + (@types.rand_float(game) - 0.5) * 10.0
       ent.target_z = ent.z + (@types.rand_float(game) - 0.5) * 10.0
     }
-  } else if ent.ai_state == @types.ai_wander {
+  } else if ent.ai_state == Wander {
     let dx = ent.target_x - ent.x
     let dz = ent.target_z - ent.z
     let dist_to_target = @math.hypotf(dx, dz)
     if dist_to_target < 1.0 || ent.ai_timer <= 0.0 {
-      ent.ai_state = @types.ai_idle
+      ent.ai_state = Idle
       ent.ai_timer = 1.0 + @types.rand_float(game) * 4.0
     }
   }
 
   // Move toward target
-  if ent.ai_state == @types.ai_wander ||
-    ent.ai_state == @types.ai_chase ||
-    ent.ai_state == @types.ai_flee ||
-    ent.ai_state == @types.ai_attack {
+  if ent.ai_state == Wander ||
+    ent.ai_state == Chase ||
+    ent.ai_state == Flee ||
+    ent.ai_state == Attack {
     let dx = ent.target_x - ent.x
     let dz = ent.target_z - ent.z
     let dist = @math.hypotf(dx, dz)
     if dist > 0.5 {
       let speed : Float = if is_hostile_mob &&
-        (ent.ai_state == @types.ai_chase || ent.ai_state == @types.ai_attack) {
+        (ent.ai_state == Chase || ent.ai_state == Attack) {
         @types.entity_speed_hostile
-      } else if ent.ai_state == @types.ai_flee {
+      } else if ent.ai_state == Flee {
         @types.entity_speed_hostile
       } else {
         @types.entity_speed_passive
@@ -290,9 +290,9 @@ fn @types.Game::update_entity_ai(
 
   // Jump over obstacles
   if (
-      ent.ai_state == @types.ai_wander ||
-      ent.ai_state == @types.ai_chase ||
-      ent.ai_state == @types.ai_flee
+      ent.ai_state == Wander ||
+      ent.ai_state == Chase ||
+      ent.ai_state == Flee
     ) &&
     ent.on_ground {
     // Check if blocked ahead

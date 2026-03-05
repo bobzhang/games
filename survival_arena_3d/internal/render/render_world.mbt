@@ -303,11 +303,11 @@ fn @types.Game::draw_crates(game : @types.Game) -> Unit {
     }
     let cs = @types.crate_size
     // Crate body
-    let crate_color = if crate.kind == @types.weapon_shotgun {
+    let crate_color = if crate.kind == @types.Shotgun.to_int() {
       @raylib.Color::new(180, 120, 50, 255)
-    } else if crate.kind == @types.weapon_rifle {
+    } else if crate.kind == @types.Rifle.to_int() {
       @raylib.Color::new(50, 150, 50, 255)
-    } else if crate.kind == @types.weapon_minigun {
+    } else if crate.kind == @types.Minigun.to_int() {
       @raylib.Color::new(80, 80, 180, 255)
     } else {
       @raylib.Color::new(180, 50, 50, 255)
@@ -427,7 +427,7 @@ fn @types.Game::draw_traps(game : @types.Game) -> Unit {
       continue
     }
     let trap_active = trap.active_timer > 0.0
-    if trap.kind == @types.trap_spike {
+    if trap.kind == Spike {
       // Spike trap - base plate with spikes
       let plate_color = @raylib.Color::new(90, 80, 70, 255)
       @raylib.draw_cube(
@@ -457,7 +457,7 @@ fn @types.Game::draw_traps(game : @types.Game) -> Unit {
           )
         }
       }
-    } else if trap.kind == @types.trap_flame {
+    } else if trap.kind == Flame {
       // Flame trap - vent with fire
       @raylib.draw_cube(
         @raylib.Vector3::new(trap.x, 0.05, trap.z),
@@ -629,19 +629,19 @@ fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
     }
     let color = enemy_color(enemy.kind, enemy.flash_timer > 0.0)
     let size = enemy.size
-    if enemy.kind == @types.enemy_zombie {
+    if enemy.kind == Zombie {
       draw_zombie(enemy, color, size)
-    } else if enemy.kind == @types.enemy_runner {
+    } else if enemy.kind == Runner {
       draw_runner(enemy, color, size)
-    } else if enemy.kind == @types.enemy_brute {
+    } else if enemy.kind == Brute {
       draw_brute(enemy, color, size)
-    } else if enemy.kind == @types.enemy_spitter {
+    } else if enemy.kind == Spitter {
       draw_spitter(enemy, color, size)
-    } else if enemy.kind == @types.enemy_exploder {
+    } else if enemy.kind == Exploder {
       draw_exploder(enemy, color, size, game.frame_counter)
-    } else if enemy.kind == @types.enemy_necromancer {
+    } else if enemy.kind == Necromancer {
       draw_necromancer(enemy, color, size, game.frame_counter)
-    } else if enemy.kind == @types.enemy_shielded {
+    } else if enemy.kind == Shielded {
       draw_shielded(enemy, color, size)
     } else {
       draw_boss(enemy, color, size, game.frame_counter)
@@ -991,7 +991,7 @@ fn draw_necromancer(
   size : Float,
   frame : Int,
 ) -> Unit {
-  // Necromancer: robed figure with staff
+  // @types.Necromancer: robed figure with staff
   // Robe body (wider at bottom)
   @raylib.draw_cube(
     @raylib.Vector3::new(enemy.x, size * 0.5, enemy.z),
@@ -1062,7 +1062,7 @@ fn draw_shielded(
   color : @raylib.Color,
   size : Float,
 ) -> Unit {
-  // Shielded: body with front shield panel
+  // @types.Shielded: body with front shield panel
   // Body
   @raylib.draw_cube(
     @raylib.Vector3::new(enemy.x, size * 0.6, enemy.z),
@@ -1247,23 +1247,23 @@ fn draw_boss(
 }
 
 ///|
-fn enemy_color(kind : Int, is_flashing : Bool) -> @raylib.Color {
+fn enemy_color(kind : @types.EnemyKind, is_flashing : Bool) -> @raylib.Color {
   if is_flashing {
     return @raylib.Color::new(255, 255, 255, 255)
   }
-  if kind == @types.enemy_zombie {
+  if kind == Zombie {
     @raylib.Color::new(80, 140, 60, 255)
-  } else if kind == @types.enemy_runner {
+  } else if kind == Runner {
     @raylib.Color::new(60, 180, 80, 255)
-  } else if kind == @types.enemy_brute {
+  } else if kind == Brute {
     @raylib.Color::new(120, 80, 160, 255)
-  } else if kind == @types.enemy_spitter {
+  } else if kind == Spitter {
     @raylib.Color::new(60, 160, 100, 255)
-  } else if kind == @types.enemy_exploder {
+  } else if kind == Exploder {
     @raylib.Color::new(200, 140, 50, 255)
-  } else if kind == @types.enemy_necromancer {
+  } else if kind == Necromancer {
     @raylib.Color::new(100, 50, 150, 255)
-  } else if kind == @types.enemy_shielded {
+  } else if kind == Shielded {
     @raylib.Color::new(80, 100, 160, 255)
   } else {
     // Boss
@@ -1278,7 +1278,7 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
       continue
     }
     if proj.is_enemy {
-      if proj.kind == @types.enemy_boss {
+      if proj.kind == @types.Boss.to_int() {
         // Boss projectile: purple sphere
         @raylib.draw_sphere(
           @raylib.Vector3::new(proj.x, proj.y, proj.z),
@@ -1303,7 +1303,7 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
           @raylib.Color::new(80, 220, 50, 255),
         )
       }
-    } else if proj.kind == @types.weapon_rocket {
+    } else if proj.kind == @types.Rocket.to_int() {
       // Rocket: larger, with trail
       @raylib.draw_sphere(
         @raylib.Vector3::new(proj.x, proj.y, proj.z),
@@ -1329,14 +1329,14 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
         0.1,
         @raylib.Color::new(200, 100, 30, 120),
       )
-    } else if proj.kind == @types.weapon_shotgun {
+    } else if proj.kind == @types.Shotgun.to_int() {
       // Shotgun pellet: small
       @raylib.draw_sphere(
         @raylib.Vector3::new(proj.x, proj.y, proj.z),
         0.06,
         @raylib.Color::new(255, 220, 100, 255),
       )
-    } else if proj.kind == @types.weapon_sniper {
+    } else if proj.kind == @types.Sniper.to_int() {
       // Sniper: bright tracer line
       @raylib.draw_sphere(
         @raylib.Vector3::new(proj.x, proj.y, proj.z),
@@ -1353,7 +1353,7 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
         ),
         @raylib.Color::new(255, 255, 150, 200),
       )
-    } else if proj.kind == @types.weapon_minigun {
+    } else if proj.kind == @types.Minigun.to_int() {
       // Minigun bullet: tiny fast
       @raylib.draw_sphere(
         @raylib.Vector3::new(proj.x, proj.y, proj.z),
@@ -1361,8 +1361,8 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
         @raylib.Color::new(255, 200, 50, 255),
       )
     } else {
-      // Pistol/Rifle bullet
-      let color = if proj.kind == @types.weapon_pistol {
+      // Pistol/@types.Rifle bullet
+      let color = if proj.kind == @types.Pistol.to_int() {
         @raylib.Color::new(255, 230, 150, 255)
       } else {
         @raylib.Color::new(255, 200, 50, 255)
@@ -1384,8 +1384,8 @@ fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
     }
     let alpha = (p.life / p.max_life * 255.0).to_int()
     let a = alpha.clamp(min=0, max=255)
-    if p.kind == @types.particle_shell {
-      // Shell casings: elongated
+    if p.kind == Shell {
+      // @types.Shell casings: elongated
       @raylib.draw_cube(
         @raylib.Vector3::new(p.x, p.y, p.z),
         0.02,
@@ -1393,7 +1393,7 @@ fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
         0.02,
         @raylib.Color::new(p.r, p.g, p.b, a),
       )
-    } else if p.kind == @types.particle_spark {
+    } else if p.kind == Spark {
       // Sparks: bright, small
       @raylib.draw_sphere(
         @raylib.Vector3::new(p.x, p.y, p.z),

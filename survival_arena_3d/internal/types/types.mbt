@@ -84,7 +84,7 @@ pub fn Player::new() -> Player {
     pitch: 0.0,
     hp: player_max_hp,
     armor: 0.0,
-    current_weapon: weapon_pistol,
+    current_weapon: Pistol.to_int(),
     ammo,
     magazine,
     mag_size,
@@ -125,7 +125,7 @@ pub fn Player::new() -> Player {
 /// Enemy runtime state covering locomotion, attacks, special abilities, and state-machine timers.
 pub(all) struct Enemy {
   mut active : Bool
-  mut kind : Int
+  mut kind : EnemyKind
   mut x : Float
   mut y : Float
   mut z : Float
@@ -171,7 +171,7 @@ pub(all) struct Enemy {
 pub fn Enemy::inactive() -> Enemy {
   {
     active: false,
-    kind: 0,
+    kind: Zombie,
     x: 0.0,
     y: 0.0,
     z: 0.0,
@@ -268,7 +268,7 @@ pub(all) struct Particle {
   mut g : Int
   mut b : Int
   mut size : Float
-  mut kind : Int
+  mut kind : ParticleKind
 }
 
 ///|
@@ -288,7 +288,7 @@ pub fn Particle::inactive() -> Particle {
     g: 255,
     b: 255,
     size: 0.05,
-    kind: 0,
+    kind: Blood,
   }
 }
 
@@ -381,7 +381,7 @@ pub fn Pickup::inactive() -> Pickup {
 /// Trap state for placeable arena hazards with cooldown/active windows.
 pub(all) struct ArenaTrap {
   mut active : Bool
-  mut kind : Int
+  mut kind : Trap
   mut x : Float
   mut z : Float
   mut cooldown_timer : Float
@@ -394,7 +394,7 @@ pub(all) struct ArenaTrap {
 pub fn ArenaTrap::inactive() -> ArenaTrap {
   {
     active: false,
-    kind: 0,
+    kind: Spike,
     x: 0.0,
     z: 0.0,
     cooldown_timer: 0.0,
@@ -590,12 +590,12 @@ pub fn Game::new() -> Game {
   }
   // Create ammo crates at various positions
   let crates : Array[Crate] = []
-  crates.push(Crate::new(12.0, 12.0, weapon_shotgun))
-  crates.push(Crate::new(-12.0, 12.0, weapon_rifle))
-  crates.push(Crate::new(12.0, -12.0, weapon_rocket))
-  crates.push(Crate::new(-12.0, -12.0, weapon_shotgun))
-  crates.push(Crate::new(0.0, 15.0, weapon_rifle))
-  crates.push(Crate::new(0.0, -15.0, weapon_minigun))
+  crates.push(Crate::new(12.0, 12.0, Shotgun.to_int()))
+  crates.push(Crate::new(-12.0, 12.0, Rifle.to_int()))
+  crates.push(Crate::new(12.0, -12.0, Rocket.to_int()))
+  crates.push(Crate::new(-12.0, -12.0, Shotgun.to_int()))
+  crates.push(Crate::new(0.0, 15.0, Rifle.to_int()))
+  crates.push(Crate::new(0.0, -15.0, Minigun.to_int()))
   // Create low walls for cover
   let low_walls : Array[LowWall] = []
   low_walls.push({

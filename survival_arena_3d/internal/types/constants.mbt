@@ -77,30 +77,6 @@ pub let low_wall_depth : Float = 0.6
 // Weapon types
 
 ///|
-/// Weapon id for the pistol.
-pub let weapon_pistol : Int = 0
-
-///|
-/// Weapon id for the shotgun.
-pub let weapon_shotgun : Int = 1
-
-///|
-/// Weapon id for the rifle.
-pub let weapon_rifle : Int = 2
-
-///|
-/// Weapon id for the sniper rifle.
-pub let weapon_sniper : Int = 3
-
-///|
-/// Weapon id for the rocket launcher.
-pub let weapon_rocket : Int = 4
-
-///|
-/// Weapon id for the minigun.
-pub let weapon_minigun : Int = 5
-
-///|
 /// Total number of weapon ids.
 pub let weapon_count : Int = 6
 
@@ -304,38 +280,6 @@ pub let mag_minigun : Int = 100
 
 // Enemy types
 
-///|
-/// Enemy id for baseline zombie melee unit.
-pub let enemy_zombie : Int = 0
-
-///|
-/// Enemy id for fast runner melee unit.
-pub let enemy_runner : Int = 1
-
-///|
-/// Enemy id for high-HP brute unit.
-pub let enemy_brute : Int = 2
-
-///|
-/// Enemy id for ranged spitter unit.
-pub let enemy_spitter : Int = 3
-
-///|
-/// Enemy id for suicide exploder unit.
-pub let enemy_exploder : Int = 4
-
-///|
-/// Enemy id for necromancer support unit.
-pub let enemy_necromancer : Int = 5
-
-///|
-/// Enemy id for frontal shield-bearing unit.
-pub let enemy_shielded : Int = 6
-
-///|
-/// Enemy id for boss unit.
-pub let enemy_boss : Int = 7
-
 // Player
 
 ///|
@@ -538,18 +482,6 @@ pub let pickup_shield_duration : Float = 8.0
 
 // Arena trap types
 
-///|
-/// Trap id for spike trap.
-pub let trap_spike : Int = 0
-
-///|
-/// Trap id for flame trap.
-pub let trap_flame : Int = 1
-
-///|
-/// Trap id for electric trap.
-pub let trap_electric : Int = 2
-
 // Trap stats
 
 ///|
@@ -668,35 +600,51 @@ pub let kill_feed_duration : Float = 3.0
 
 // Particle types (used as kind tag)
 
-///|
-/// Particle kind tag for blood splatter.
-pub let particle_blood : Int = 0
-
-///|
-/// Particle kind tag for muzzle flash streaks.
-pub let particle_muzzle : Int = 1
-
-///|
-/// Particle kind tag for explosions.
-pub let particle_explosion : Int = 2
-
-///|
-/// Particle kind tag for shell casings.
-pub let particle_shell : Int = 3
-
-///|
-/// Particle kind tag for impact sparks.
-pub let particle_spark : Int = 4
-
-///|
-/// Particle kind tag for healing visual effects.
-pub let particle_heal : Int = 5
-
 // PI constant
 
 ///|
 /// Shared PI constant used by radial arena math.
 pub let pi : Float = 3.14159265
+
+
+///|
+pub(all) enum EnemyKind {
+  Zombie
+  Runner
+  Brute
+  Spitter
+  Exploder
+  Necromancer
+  Shielded
+  Boss
+} derive(Eq)
+
+///|
+pub(all) enum ParticleKind {
+  Blood
+  Muzzle
+  Explosion
+  Shell
+  Spark
+  Heal
+} derive(Eq)
+
+///|
+pub(all) enum Trap {
+  Spike
+  Flame
+  Electric
+} derive(Eq)
+
+///|
+pub(all) enum WeaponKind {
+  Pistol
+  Shotgun
+  Rifle
+  Sniper
+  Rocket
+  Minigun
+} derive(Eq)
 
 // Minimap
 

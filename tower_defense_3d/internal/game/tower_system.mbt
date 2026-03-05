@@ -17,7 +17,7 @@ fn @types.Game::update_towers(game : @types.Game, dt : Float) -> Unit {
     if not(tower.active) {
       continue
     }
-    if tower.kind == @types.tower_buff {
+    if tower.kind == Buff {
       game.apply_buff_tower(i)
     }
   }
@@ -41,7 +41,7 @@ fn @types.Game::update_towers(game : @types.Game, dt : Float) -> Unit {
       }
     }
     // Buff towers don't attack
-    if tower.kind == @types.tower_buff {
+    if tower.kind == Buff {
       // Level 3 buff towers have a pulse ability
       if tower.level >= 3 {
         game.update_buff_pulse(i, dt)
@@ -75,13 +75,13 @@ fn @types.Game::update_towers(game : @types.Game, dt : Float) -> Unit {
       let fire_rate = @types.tower_effective_rate(tower)
       tower.reload_timer = fire_rate
       // Level 3 arrow tower: double shot
-      if tower.kind == @types.tower_arrow && tower.level >= 3 {
+      if tower.kind == Arrow && tower.level >= 3 {
         // Fire a second projectile after a small delay (simulated by immediate fire)
         game.fire_tower_secondary(i)
       }
     }
     // Level 3 flame tower: fire aura (damages nearby enemies passively)
-    if tower.kind == @types.tower_flame && tower.level >= 3 {
+    if tower.kind == Flame && tower.level >= 3 {
       game.update_flame_aura(i, dt)
     }
   }
@@ -107,7 +107,7 @@ fn @types.Game::apply_buff_tower(game : @types.Game, buff_idx : Int) -> Unit {
     if not(other.active) {
       continue
     }
-    if other.kind == @types.tower_buff {
+    if other.kind == Buff {
       continue
     }
     let ox = @types.grid_to_world_x(other.gx)
@@ -202,22 +202,22 @@ fn @types.Game::fire_tower(game : @types.Game, tower_idx : Int) -> Unit {
   proj.speed = @types.projectile_speed_for(tower.kind)
   proj.splash_radius = @types.splash_radius_for(tower.kind)
   // Level 3 cannon: bigger splash
-  if tower.kind == @types.tower_cannon && tower.level >= 3 {
+  if tower.kind == Cannon && tower.level >= 3 {
     proj.splash_radius = @types.splash_radius_cannon * 1.5
   }
   // Frost tower: slow effect
-  proj.slow_amount = if tower.kind == @types.tower_frost {
+  proj.slow_amount = if tower.kind == Frost {
     @types.slow_strength
   } else {
     0.0
   }
-  proj.slow_duration = if tower.kind == @types.tower_frost {
+  proj.slow_duration = if tower.kind == Frost {
     @types.slow_duration
   } else {
     0.0
   }
   // Level 3 frost: stun chance
-  if tower.kind == @types.tower_frost && tower.level >= 3 {
+  if tower.kind == Frost && tower.level >= 3 {
     proj.stun_chance = 0.2
     proj.stun_duration = @types.stun_duration
   } else {
@@ -225,18 +225,18 @@ fn @types.Game::fire_tower(game : @types.Game, tower_idx : Int) -> Unit {
     proj.stun_duration = 0.0
   }
   // Flame tower: burn effect
-  proj.burn_damage = if tower.kind == @types.tower_flame {
+  proj.burn_damage = if tower.kind == Flame {
     @types.burn_dps
   } else {
     0.0
   }
-  proj.burn_duration = if tower.kind == @types.tower_flame {
+  proj.burn_duration = if tower.kind == Flame {
     @types.burn_duration
   } else {
     0.0
   }
   // Lightning tower: chain
-  if tower.kind == @types.tower_lightning {
+  if tower.kind == Lightning {
     let chains : Int = if tower.level >= 3 {
       @types.chain_count + 2
     } else {
@@ -249,7 +249,7 @@ fn @types.Game::fire_tower(game : @types.Game, tower_idx : Int) -> Unit {
     proj.chain_range = 0.0
   }
   // Sniper tower: crit
-  proj.is_crit = if tower.kind == @types.tower_sniper {
+  proj.is_crit = if tower.kind == Sniper {
     @types.rand_bool(game, @types.sniper_crit_chance)
   } else {
     false
@@ -257,7 +257,7 @@ fn @types.Game::fire_tower(game : @types.Game, tower_idx : Int) -> Unit {
   // Level 3 sniper: armor break on hit
   // (Applied in apply_projectile_effects via a check)
   // Splash tower: stun chance at level 3
-  if tower.kind == @types.tower_splash && tower.level >= 3 {
+  if tower.kind == Splash && tower.level >= 3 {
     proj.stun_chance = 0.15
     proj.stun_duration = @types.stun_duration * 0.5
   }
@@ -397,7 +397,7 @@ fn @types.Game::cycle_targeting_mode(game : @types.Game) -> Unit {
   if not(tower.active) {
     return
   }
-  tower.targeting_mode = (tower.targeting_mode + 1) % @types.target_mode_count
+  tower.targeting_mode = @types.target_priority_from_int((@types.target_priority_to_int(tower.targeting_mode) + 1) % @types.target_mode_count)
   @types.set_notification(
     game,
     "Target: " + @types.targeting_mode_name(tower.targeting_mode),

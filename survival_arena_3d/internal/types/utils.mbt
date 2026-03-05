@@ -1,4 +1,106 @@
 ///|
+/// Converts EnemyKind to integer.
+pub fn EnemyKind::to_int(self : EnemyKind) -> Int {
+  match self {
+    Zombie => 0
+    Runner => 1
+    Brute => 2
+    Spitter => 3
+    Exploder => 4
+    Necromancer => 5
+    Shielded => 6
+    Boss => 7
+  }
+}
+
+///|
+/// Converts integer to EnemyKind.
+pub fn EnemyKind::from_int(v : Int) -> EnemyKind {
+  match v {
+    0 => Zombie
+    1 => Runner
+    2 => Brute
+    3 => Spitter
+    4 => Exploder
+    5 => Necromancer
+    6 => Shielded
+    _ => Boss
+  }
+}
+
+///|
+/// Converts WeaponKind to integer.
+pub fn WeaponKind::to_int(self : WeaponKind) -> Int {
+  match self {
+    Pistol => 0
+    Shotgun => 1
+    Rifle => 2
+    Sniper => 3
+    Rocket => 4
+    Minigun => 5
+  }
+}
+
+///|
+/// Converts integer to WeaponKind.
+pub fn WeaponKind::from_int(v : Int) -> WeaponKind {
+  match v {
+    0 => Pistol
+    1 => Shotgun
+    2 => Rifle
+    3 => Sniper
+    4 => Rocket
+    _ => Minigun
+  }
+}
+
+///|
+/// Converts ParticleKind to integer.
+pub fn ParticleKind::to_int(self : ParticleKind) -> Int {
+  match self {
+    Blood => 0
+    Muzzle => 1
+    Explosion => 2
+    Shell => 3
+    Spark => 4
+    Heal => 5
+  }
+}
+
+///|
+/// Converts integer to ParticleKind.
+pub fn ParticleKind::from_int(v : Int) -> ParticleKind {
+  match v {
+    0 => Blood
+    1 => Muzzle
+    2 => Explosion
+    3 => Shell
+    4 => Spark
+    _ => Heal
+  }
+}
+
+///|
+/// Converts Trap to integer.
+pub fn Trap::to_int(self : Trap) -> Int {
+  match self {
+    Spike => 0
+    Flame => 1
+    Electric => 2
+  }
+}
+
+///|
+/// Converts integer to Trap.
+pub fn Trap::from_int(v : Int) -> Trap {
+  match v {
+    0 => Spike
+    1 => Flame
+    _ => Electric
+  }
+}
+
+///|
 /// Clamps a float value to inclusive range `[low, high]`.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
@@ -240,7 +342,7 @@ pub fn spawn_particles(
     p.g = g
     p.b = b
     p.size = rand_rangef(game, 0.04, 0.12)
-    p.kind = particle_blood
+    p.kind = Blood
     ignore(i)
   }
 }
@@ -258,7 +360,7 @@ pub fn spawn_particles_typed(
   r : Int,
   g : Int,
   b : Int,
-  kind : Int,
+  kind : ParticleKind,
 ) -> Unit {
   for i in 0..<count {
     let idx = alloc_particle(game)
@@ -320,7 +422,7 @@ pub fn spawn_particles_dir(
     p.g = g
     p.b = b
     p.size = rand_rangef(game, 0.03, 0.08)
-    p.kind = particle_muzzle
+    p.kind = Muzzle
     ignore(i)
   }
 }
@@ -355,7 +457,7 @@ pub fn spawn_shell_casing(
   p.g = 180
   p.b = 50
   p.size = 0.04
-  p.kind = particle_shell
+  p.kind = Shell
 }
 
 // Check if point is inside arena bounds
@@ -453,20 +555,13 @@ pub fn push_from_box(
 ///|
 /// Returns full display name for weapon type id.
 pub fn weapon_name(kind : Int) -> String {
-  if kind == weapon_pistol {
-    "Pistol"
-  } else if kind == weapon_shotgun {
-    "Shotgun"
-  } else if kind == weapon_rifle {
-    "Rifle"
-  } else if kind == weapon_sniper {
-    "Sniper"
-  } else if kind == weapon_rocket {
-    "Rocket"
-  } else if kind == weapon_minigun {
-    "Minigun"
-  } else {
-    "Unknown"
+  match WeaponKind::from_int(kind) {
+    Pistol => "Pistol"
+    Shotgun => "Shotgun"
+    Rifle => "Rifle"
+    Sniper => "Sniper"
+    Rocket => "Rocket"
+    Minigun => "Minigun"
   }
 }
 
@@ -477,20 +572,13 @@ pub fn weapon_name(kind : Int) -> String {
 ///|
 /// Returns base fire interval (seconds between shots) for a weapon type.
 pub fn weapon_fire_rate(kind : Int) -> Float {
-  if kind == weapon_pistol {
-    rate_pistol
-  } else if kind == weapon_shotgun {
-    rate_shotgun
-  } else if kind == weapon_rifle {
-    rate_rifle
-  } else if kind == weapon_sniper {
-    rate_sniper
-  } else if kind == weapon_rocket {
-    rate_rocket
-  } else if kind == weapon_minigun {
-    rate_minigun
-  } else {
-    1.0
+  match WeaponKind::from_int(kind) {
+    Pistol => rate_pistol
+    Shotgun => rate_shotgun
+    Rifle => rate_rifle
+    Sniper => rate_sniper
+    Rocket => rate_rocket
+    Minigun => rate_minigun
   }
 }
 
@@ -499,20 +587,13 @@ pub fn weapon_fire_rate(kind : Int) -> Float {
 ///|
 /// Returns base damage for a weapon type.
 pub fn weapon_damage(kind : Int) -> Float {
-  if kind == weapon_pistol {
-    dmg_pistol
-  } else if kind == weapon_shotgun {
-    dmg_shotgun
-  } else if kind == weapon_rifle {
-    dmg_rifle
-  } else if kind == weapon_sniper {
-    dmg_sniper
-  } else if kind == weapon_rocket {
-    dmg_rocket
-  } else if kind == weapon_minigun {
-    dmg_minigun
-  } else {
-    0.0
+  match WeaponKind::from_int(kind) {
+    Pistol => dmg_pistol
+    Shotgun => dmg_shotgun
+    Rifle => dmg_rifle
+    Sniper => dmg_sniper
+    Rocket => dmg_rocket
+    Minigun => dmg_minigun
   }
 }
 
@@ -521,20 +602,13 @@ pub fn weapon_damage(kind : Int) -> Float {
 ///|
 /// Returns base projectile speed for a weapon type.
 pub fn weapon_proj_speed(kind : Int) -> Float {
-  if kind == weapon_pistol {
-    speed_pistol
-  } else if kind == weapon_shotgun {
-    speed_shotgun
-  } else if kind == weapon_rifle {
-    speed_rifle
-  } else if kind == weapon_sniper {
-    speed_sniper
-  } else if kind == weapon_rocket {
-    speed_rocket
-  } else if kind == weapon_minigun {
-    speed_minigun
-  } else {
-    30.0
+  match WeaponKind::from_int(kind) {
+    Pistol => speed_pistol
+    Shotgun => speed_shotgun
+    Rifle => speed_rifle
+    Sniper => speed_sniper
+    Rocket => speed_rocket
+    Minigun => speed_minigun
   }
 }
 
@@ -543,20 +617,13 @@ pub fn weapon_proj_speed(kind : Int) -> Float {
 ///|
 /// Returns base reload time for a weapon type.
 pub fn weapon_reload_time(kind : Int) -> Float {
-  if kind == weapon_pistol {
-    reload_pistol
-  } else if kind == weapon_shotgun {
-    reload_shotgun
-  } else if kind == weapon_rifle {
-    reload_rifle
-  } else if kind == weapon_sniper {
-    reload_sniper
-  } else if kind == weapon_rocket {
-    reload_rocket
-  } else if kind == weapon_minigun {
-    reload_minigun
-  } else {
-    1.0
+  match WeaponKind::from_int(kind) {
+    Pistol => reload_pistol
+    Shotgun => reload_shotgun
+    Rifle => reload_rifle
+    Sniper => reload_sniper
+    Rocket => reload_rocket
+    Minigun => reload_minigun
   }
 }
 
@@ -565,20 +632,13 @@ pub fn weapon_reload_time(kind : Int) -> Float {
 ///|
 /// Returns base magazine size for a weapon type.
 pub fn weapon_mag_size(kind : Int) -> Int {
-  if kind == weapon_pistol {
-    mag_pistol
-  } else if kind == weapon_shotgun {
-    mag_shotgun
-  } else if kind == weapon_rifle {
-    mag_rifle
-  } else if kind == weapon_sniper {
-    mag_sniper
-  } else if kind == weapon_rocket {
-    mag_rocket
-  } else if kind == weapon_minigun {
-    mag_minigun
-  } else {
-    10
+  match WeaponKind::from_int(kind) {
+    Pistol => mag_pistol
+    Shotgun => mag_shotgun
+    Rifle => mag_rifle
+    Sniper => mag_sniper
+    Rocket => mag_rocket
+    Minigun => mag_minigun
   }
 }
 

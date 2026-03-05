@@ -1,4 +1,84 @@
 ///|
+/// Converts an integer to an EnemyKind enum value.
+pub fn enemy_kind_from_int(n : Int) -> EnemyKind {
+  if n == 0 {
+    Basic
+  } else if n == 1 {
+    Fast
+  } else if n == 2 {
+    Tank
+  } else if n == 3 {
+    Flying
+  } else if n == 4 {
+    Boss
+  } else if n == 5 {
+    Healer
+  } else if n == 6 {
+    Swarm
+  } else if n == 7 {
+    Shield
+  } else if n == 8 {
+    Camo
+  } else {
+    Splitter
+  }
+}
+
+///|
+/// Converts an EnemyKind enum value to an integer.
+pub fn enemy_kind_to_int(kind : EnemyKind) -> Int {
+  if kind == Basic {
+    0
+  } else if kind == Fast {
+    1
+  } else if kind == Tank {
+    2
+  } else if kind == Flying {
+    3
+  } else if kind == Boss {
+    4
+  } else if kind == Healer {
+    5
+  } else if kind == Swarm {
+    6
+  } else if kind == Shield {
+    7
+  } else if kind == Camo {
+    8
+  } else {
+    9
+  }
+}
+
+///|
+/// Converts an integer to a TargetPriority enum value.
+pub fn target_priority_from_int(n : Int) -> TargetPriority {
+  if n == 0 {
+    First
+  } else if n == 1 {
+    Last
+  } else if n == 2 {
+    Strongest
+  } else {
+    Closest
+  }
+}
+
+///|
+/// Converts a TargetPriority enum value to an integer.
+pub fn target_priority_to_int(mode : TargetPriority) -> Int {
+  if mode == First {
+    0
+  } else if mode == Last {
+    1
+  } else if mode == Strongest {
+    2
+  } else {
+    3
+  }
+}
+
+///|
 /// Returns `v` clamped between `low` and `high`.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
@@ -72,17 +152,17 @@ pub fn tile_index(gx : Int, gy : Int) -> Int {
 
 ///|
 /// Returns the tile type at grid position (`gx`, `gy`), or rock if out of bounds.
-pub fn get_tile(game : Game, gx : Int, gy : Int) -> Int {
+pub fn get_tile(game : Game, gx : Int, gy : Int) -> Tile {
   if in_bounds(gx, gy) {
     game.tiles[tile_index(gx, gy)]
   } else {
-    tile_rock
+    Rock
   }
 }
 
 ///|
 /// Sets the tile type at grid position (`gx`, `gy`) to `tile`.
-pub fn set_tile(game : Game, gx : Int, gy : Int, tile : Int) -> Unit {
+pub fn set_tile(game : Game, gx : Int, gy : Int, tile : Tile) -> Unit {
   if in_bounds(gx, gy) {
     game.tiles[tile_index(gx, gy)] = tile
   }
@@ -173,22 +253,22 @@ pub fn alloc_particle(game : Game) -> Int {
 
 ///|
 /// Returns the base gold cost for building a tower of the given `kind`.
-pub fn tower_cost_for(kind : Int) -> Int {
-  if kind == tower_arrow {
+pub fn tower_cost_for(kind : TowerKind) -> Int {
+  if kind == Arrow {
     cost_arrow
-  } else if kind == tower_cannon {
+  } else if kind == Cannon {
     cost_cannon
-  } else if kind == tower_frost {
+  } else if kind == Frost {
     cost_frost
-  } else if kind == tower_lightning {
+  } else if kind == Lightning {
     cost_lightning
-  } else if kind == tower_flame {
+  } else if kind == Flame {
     cost_flame
-  } else if kind == tower_sniper {
+  } else if kind == Sniper {
     cost_sniper
-  } else if kind == tower_splash {
+  } else if kind == Splash {
     cost_splash
-  } else if kind == tower_buff {
+  } else if kind == Buff {
     cost_buff
   } else {
     999
@@ -199,7 +279,7 @@ pub fn tower_cost_for(kind : Int) -> Int {
 
 ///|
 /// Returns the base gold cost for a tower type (backward-compatible alias).
-pub fn tower_cost(kind : Int) -> Int {
+pub fn tower_cost(kind : TowerKind) -> Int {
   tower_cost_for(kind)
 }
 
@@ -207,7 +287,7 @@ pub fn tower_cost(kind : Int) -> Int {
 
 ///|
 /// Returns the gold cost to upgrade a tower of `kind` from `current_level`.
-pub fn tower_upgrade_cost(kind : Int, current_level : Int) -> Int {
+pub fn tower_upgrade_cost(kind : TowerKind, current_level : Int) -> Int {
   let base = tower_cost_for(kind)
   if current_level == 1 {
     let cost : Float = Float::from_int(base) * upgrade_cost_mult_2
@@ -224,7 +304,7 @@ pub fn tower_upgrade_cost(kind : Int, current_level : Int) -> Int {
 
 ///|
 /// Returns the total gold invested in a tower of `kind` at the given `level`.
-pub fn tower_total_investment(kind : Int, level : Int) -> Int {
+pub fn tower_total_investment(kind : TowerKind, level : Int) -> Int {
   let mut total = tower_cost_for(kind)
   if level >= 2 {
     let cost2 : Float = Float::from_int(tower_cost_for(kind)) *
@@ -243,7 +323,7 @@ pub fn tower_total_investment(kind : Int, level : Int) -> Int {
 
 ///|
 /// Returns the gold refund for selling a tower of `kind` at the given `level`.
-pub fn tower_sell_value(kind : Int, level : Int) -> Int {
+pub fn tower_sell_value(kind : TowerKind, level : Int) -> Int {
   let invested = tower_total_investment(kind, level)
   let value : Float = Float::from_int(invested) * sell_value_pct
   value.to_int()
@@ -251,22 +331,22 @@ pub fn tower_sell_value(kind : Int, level : Int) -> Int {
 
 ///|
 /// Returns the base attack range for a tower of the given `kind`.
-pub fn tower_range(kind : Int) -> Float {
-  if kind == tower_arrow {
+pub fn tower_range(kind : TowerKind) -> Float {
+  if kind == Arrow {
     range_arrow
-  } else if kind == tower_cannon {
+  } else if kind == Cannon {
     range_cannon
-  } else if kind == tower_frost {
+  } else if kind == Frost {
     range_frost
-  } else if kind == tower_lightning {
+  } else if kind == Lightning {
     range_lightning
-  } else if kind == tower_flame {
+  } else if kind == Flame {
     range_flame
-  } else if kind == tower_sniper {
+  } else if kind == Sniper {
     range_sniper
-  } else if kind == tower_splash {
+  } else if kind == Splash {
     range_splash
-  } else if kind == tower_buff {
+  } else if kind == Buff {
     range_buff
   } else {
     0.0
@@ -278,7 +358,7 @@ pub fn tower_range(kind : Int) -> Float {
 ///|
 /// Returns the actual range of `tower` including level scaling and buff bonuses.
 pub fn tower_effective_range(tower : Tower) -> Float {
-  let base = tower_range(tower.kind)
+  let base : Float = tower_range(tower.kind)
   let level_mult : Float = 1.0 +
     Float::from_int(tower.level - 1) * upgrade_range_mult
   let buff_mult : Float = 1.0 + tower.buff_range
@@ -287,22 +367,22 @@ pub fn tower_effective_range(tower : Tower) -> Float {
 
 ///|
 /// Returns the base damage per shot for a tower of the given `kind`.
-pub fn tower_damage(kind : Int) -> Float {
-  if kind == tower_arrow {
+pub fn tower_damage(kind : TowerKind) -> Float {
+  if kind == Arrow {
     dmg_arrow
-  } else if kind == tower_cannon {
+  } else if kind == Cannon {
     dmg_cannon
-  } else if kind == tower_frost {
+  } else if kind == Frost {
     dmg_frost
-  } else if kind == tower_lightning {
+  } else if kind == Lightning {
     dmg_lightning
-  } else if kind == tower_flame {
+  } else if kind == Flame {
     dmg_flame
-  } else if kind == tower_sniper {
+  } else if kind == Sniper {
     dmg_sniper
-  } else if kind == tower_splash {
+  } else if kind == Splash {
     dmg_splash
-  } else if kind == tower_buff {
+  } else if kind == Buff {
     dmg_buff
   } else {
     0.0
@@ -323,22 +403,22 @@ pub fn tower_effective_damage(tower : Tower) -> Float {
 
 ///|
 /// Returns the base fire rate in seconds between shots for a tower of `kind`.
-pub fn tower_fire_rate(kind : Int) -> Float {
-  if kind == tower_arrow {
+pub fn tower_fire_rate(kind : TowerKind) -> Float {
+  if kind == Arrow {
     rate_arrow
-  } else if kind == tower_cannon {
+  } else if kind == Cannon {
     rate_cannon
-  } else if kind == tower_frost {
+  } else if kind == Frost {
     rate_frost
-  } else if kind == tower_lightning {
+  } else if kind == Lightning {
     rate_lightning
-  } else if kind == tower_flame {
+  } else if kind == Flame {
     rate_flame
-  } else if kind == tower_sniper {
+  } else if kind == Sniper {
     rate_sniper
-  } else if kind == tower_splash {
+  } else if kind == Splash {
     rate_splash
-  } else if kind == tower_buff {
+  } else if kind == Buff {
     rate_buff
   } else {
     1.0
@@ -360,22 +440,22 @@ pub fn tower_effective_rate(tower : Tower) -> Float {
 
 ///|
 /// Returns the display name for a tower of the given `kind`.
-pub fn tower_name(kind : Int) -> String {
-  if kind == tower_arrow {
+pub fn tower_name(kind : TowerKind) -> String {
+  if kind == Arrow {
     "Arrow"
-  } else if kind == tower_cannon {
+  } else if kind == Cannon {
     "Cannon"
-  } else if kind == tower_frost {
+  } else if kind == Frost {
     "Frost"
-  } else if kind == tower_lightning {
+  } else if kind == Lightning {
     "Lightning"
-  } else if kind == tower_flame {
+  } else if kind == Flame {
     "Flame"
-  } else if kind == tower_sniper {
+  } else if kind == Sniper {
     "Sniper"
-  } else if kind == tower_splash {
+  } else if kind == Splash {
     "Splash"
-  } else if kind == tower_buff {
+  } else if kind == Buff {
     "Buff"
   } else {
     "Unknown"
@@ -384,26 +464,26 @@ pub fn tower_name(kind : Int) -> String {
 
 ///|
 /// Returns the display name for an enemy of the given `kind`.
-pub fn enemy_name(kind : Int) -> String {
-  if kind == enemy_basic {
+pub fn enemy_name(kind : EnemyKind) -> String {
+  if kind == Basic {
     "Soldier"
-  } else if kind == enemy_fast {
+  } else if kind == Fast {
     "Scout"
-  } else if kind == enemy_tank {
+  } else if kind == Tank {
     "Heavy"
-  } else if kind == enemy_flying {
+  } else if kind == Flying {
     "Flyer"
-  } else if kind == enemy_boss {
+  } else if kind == Boss {
     "Boss"
-  } else if kind == enemy_healer {
+  } else if kind == Healer {
     "Medic"
-  } else if kind == enemy_swarm {
+  } else if kind == Swarm {
     "Swarm"
-  } else if kind == enemy_shield {
+  } else if kind == Shield {
     "Shield"
-  } else if kind == enemy_camo {
+  } else if kind == Camo {
     "Stealth"
-  } else if kind == enemy_splitter {
+  } else if kind == Splitter {
     "Splitter"
   } else {
     "Unknown"
@@ -412,14 +492,14 @@ pub fn enemy_name(kind : Int) -> String {
 
 ///|
 /// Returns the display name for the given targeting `mode`.
-pub fn targeting_mode_name(mode : Int) -> String {
-  if mode == target_first {
+pub fn targeting_mode_name(mode : TargetPriority) -> String {
+  if mode == First {
     "First"
-  } else if mode == target_last {
+  } else if mode == Last {
     "Last"
-  } else if mode == target_strongest {
+  } else if mode == Strongest {
     "Strong"
-  } else if mode == target_closest {
+  } else if mode == Closest {
     "Close"
   } else {
     "First"
@@ -431,57 +511,57 @@ pub fn targeting_mode_name(mode : Int) -> String {
 
 ///|
 /// Returns the damage resistance multiplier for `enemy_kind` against `tower_kind`.
-pub fn enemy_resistance(enemy_kind : Int, tower_kind : Int) -> Float {
+pub fn enemy_resistance(enemy_kind : EnemyKind, tower_kind : TowerKind) -> Float {
   // Flying enemies are weak to arrow, resistant to flame
-  if enemy_kind == enemy_flying {
-    if tower_kind == tower_arrow {
+  if enemy_kind == Flying {
+    if tower_kind == Arrow {
       return 1.5
     }
-    if tower_kind == tower_flame {
+    if tower_kind == Flame {
       return 0.5
     }
     return 1.0
   }
   // Tank enemies are resistant to arrow, weak to cannon
-  if enemy_kind == enemy_tank {
-    if tower_kind == tower_arrow {
+  if enemy_kind == Tank {
+    if tower_kind == Arrow {
       return 0.6
     }
-    if tower_kind == tower_cannon {
+    if tower_kind == Cannon {
       return 1.5
     }
     return 1.0
   }
   // Shield enemies are resistant to splash, weak to sniper
-  if enemy_kind == enemy_shield {
-    if tower_kind == tower_splash {
+  if enemy_kind == Shield {
+    if tower_kind == Splash {
       return 0.6
     }
-    if tower_kind == tower_sniper {
+    if tower_kind == Sniper {
       return 1.5
     }
     return 1.0
   }
   // Boss enemies are resistant to frost slow
-  if enemy_kind == enemy_boss {
-    if tower_kind == tower_frost {
+  if enemy_kind == Boss {
+    if tower_kind == Frost {
       return 0.5
     }
     return 1.0
   }
   // Swarm enemies are weak to splash and flame
-  if enemy_kind == enemy_swarm {
-    if tower_kind == tower_splash {
+  if enemy_kind == Swarm {
+    if tower_kind == Splash {
       return 1.5
     }
-    if tower_kind == tower_flame {
+    if tower_kind == Flame {
       return 1.5
     }
     return 1.0
   }
   // Armored (healer) enemies are weak to lightning
-  if enemy_kind == enemy_healer {
-    if tower_kind == tower_lightning {
+  if enemy_kind == Healer {
+    if tower_kind == Lightning {
       return 1.3
     }
     return 1.0
@@ -493,26 +573,26 @@ pub fn enemy_resistance(enemy_kind : Int, tower_kind : Int) -> Float {
 
 ///|
 /// Returns the flat damage reduction armor value for an enemy of `kind`.
-pub fn enemy_armor_value(kind : Int) -> Float {
-  if kind == enemy_basic {
+pub fn enemy_armor_value(kind : EnemyKind) -> Float {
+  if kind == Basic {
     armor_basic
-  } else if kind == enemy_fast {
+  } else if kind == Fast {
     armor_fast
-  } else if kind == enemy_tank {
+  } else if kind == Tank {
     armor_tank
-  } else if kind == enemy_flying {
+  } else if kind == Flying {
     armor_flying
-  } else if kind == enemy_boss {
+  } else if kind == Boss {
     armor_boss
-  } else if kind == enemy_healer {
+  } else if kind == Healer {
     armor_healer
-  } else if kind == enemy_swarm {
+  } else if kind == Swarm {
     armor_swarm
-  } else if kind == enemy_shield {
+  } else if kind == Shield {
     armor_shield
-  } else if kind == enemy_camo {
+  } else if kind == Camo {
     armor_camo
-  } else if kind == enemy_splitter {
+  } else if kind == Splitter {
     armor_splitter
   } else {
     0.0
@@ -525,7 +605,7 @@ pub fn enemy_armor_value(kind : Int) -> Float {
 /// Returns the final damage after applying armor and resistance modifiers.
 pub fn calc_damage(
   base_damage : Float,
-  tower_kind : Int,
+  tower_kind : TowerKind,
   enemy : Enemy,
 ) -> Float {
   let resistance = enemy_resistance(enemy.kind, tower_kind)
@@ -553,7 +633,7 @@ pub fn find_target(
   wx : Float,
   wz : Float,
   range : Float,
-  mode : Int,
+  mode : TargetPriority,
   can_see_camo : Bool,
 ) -> Int {
   let mut best_idx = -1
@@ -569,13 +649,13 @@ pub fn find_target(
     }
     let dist = distance2d(wx, wz, enemy.x, enemy.z)
     if dist <= range {
-      let score : Float = if mode == target_first {
+      let score : Float = if mode == First {
         // Highest path progress = first (furthest along)
         enemy_total_progress(enemy)
-      } else if mode == target_last {
+      } else if mode == Last {
         // Lowest path progress = last
         -enemy_total_progress(enemy)
-      } else if mode == target_strongest {
+      } else if mode == Strongest {
         // Highest current HP
         enemy.hp
       } else {
@@ -623,28 +703,28 @@ pub fn count_active_towers(game : Game) -> Int {
 
 ///|
 /// Returns whether a tower of `kind` can detect camouflaged enemies.
-pub fn tower_can_detect_camo(kind : Int) -> Bool {
-  kind == tower_sniper || kind == tower_lightning
+pub fn tower_can_detect_camo(kind : TowerKind) -> Bool {
+  kind == Sniper || kind == Lightning
 }
 
 // Get projectile speed for tower type
 
 ///|
 /// Returns the projectile travel speed for a tower of the given `kind`.
-pub fn projectile_speed_for(kind : Int) -> Float {
-  if kind == tower_arrow {
+pub fn projectile_speed_for(kind : TowerKind) -> Float {
+  if kind == Arrow {
     proj_speed_bullet
-  } else if kind == tower_cannon {
+  } else if kind == Cannon {
     proj_speed_cannonball
-  } else if kind == tower_frost {
+  } else if kind == Frost {
     proj_speed_ice_shard
-  } else if kind == tower_lightning {
+  } else if kind == Lightning {
     proj_speed_lightning
-  } else if kind == tower_flame {
+  } else if kind == Flame {
     proj_speed_fireball
-  } else if kind == tower_sniper {
+  } else if kind == Sniper {
     proj_speed_sniper
-  } else if kind == tower_splash {
+  } else if kind == Splash {
     proj_speed_splash
   } else {
     12.0
@@ -655,12 +735,12 @@ pub fn projectile_speed_for(kind : Int) -> Float {
 
 ///|
 /// Returns the area-of-effect splash radius for a tower of the given `kind`.
-pub fn splash_radius_for(kind : Int) -> Float {
-  if kind == tower_cannon {
+pub fn splash_radius_for(kind : TowerKind) -> Float {
+  if kind == Cannon {
     splash_radius_cannon
-  } else if kind == tower_splash {
+  } else if kind == Splash {
     splash_radius_splash
-  } else if kind == tower_flame {
+  } else if kind == Flame {
     splash_radius_flame
   } else {
     0.0
@@ -867,7 +947,7 @@ pub fn can_place_tower(game : Game, gx : Int, gy : Int) -> Bool {
     return false
   }
   let tile = get_tile(game, gx, gy)
-  if tile != tile_grass {
+  if tile != Grass {
     return false
   }
   if tower_at(game, gx, gy) >= 0 {
@@ -929,7 +1009,7 @@ pub fn difficulty_name(difficulty : Int) -> String {
 
 ///|
 /// Returns the upgrade cost and stat preview for a tower of `kind` at `level`.
-pub fn get_upgrade_info(kind : Int, level : Int) -> UpgradeInfo {
+pub fn get_upgrade_info(kind : TowerKind, level : Int) -> UpgradeInfo {
   let cost = tower_upgrade_cost(kind, level)
   let dmg_mult : Float = 1.0 + Float::from_int(level) * upgrade_damage_mult
   let rng_mult : Float = 1.0 + Float::from_int(level) * upgrade_range_mult
@@ -954,22 +1034,22 @@ pub fn get_upgrade_info(kind : Int, level : Int) -> UpgradeInfo {
 
 ///|
 /// Returns the special ability description for level 3 of a tower of `kind`.
-fn get_level3_special_desc(kind : Int) -> String {
-  if kind == tower_arrow {
+fn get_level3_special_desc(kind : TowerKind) -> String {
+  if kind == Arrow {
     "Double shot"
-  } else if kind == tower_cannon {
+  } else if kind == Cannon {
     "Bigger explosion"
-  } else if kind == tower_frost {
+  } else if kind == Frost {
     "Freeze chance"
-  } else if kind == tower_lightning {
+  } else if kind == Lightning {
     "More chains"
-  } else if kind == tower_flame {
+  } else if kind == Flame {
     "Fire aura"
-  } else if kind == tower_sniper {
+  } else if kind == Sniper {
     "Armor break"
-  } else if kind == tower_splash {
+  } else if kind == Splash {
     "Stun chance"
-  } else if kind == tower_buff {
+  } else if kind == Buff {
     "Buff pulse"
   } else {
     "Special"

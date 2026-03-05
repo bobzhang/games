@@ -16,7 +16,7 @@ pub fn draw_world(game : @types.Game) -> Unit {
   game.draw_chain_lightning_lines()
   game.draw_particles_3d()
   // Draw hover indicator in building mode
-  if game.state == @types.state_building {
+  if game.state == Building {
     game.draw_build_cursor()
   }
   // Draw selected tower highlight
@@ -56,7 +56,7 @@ fn @types.Game::draw_map(game : @types.Game) -> Unit {
       let wx = @types.grid_to_world_x(gx)
       let wz = @types.grid_to_world_z(gy)
       let cs = @types.cell_size
-      if tile == @types.tile_grass {
+      if tile == Grass {
         // Grass with subtle variation
         let shade_offset = (gx + gy) % 3 * 5
         @raylib.draw_cube(
@@ -71,9 +71,9 @@ fn @types.Game::draw_map(game : @types.Game) -> Unit {
             255,
           ),
         )
-      } else if tile == @types.tile_path ||
-        tile == @types.tile_start ||
-        tile == @types.tile_end {
+      } else if tile == Path ||
+        tile == Start ||
+        tile == End {
         // Path tiles - darker worn earth color
         @raylib.draw_cube(
           @raylib.Vector3::new(wx, -0.1, wz),
@@ -90,7 +90,7 @@ fn @types.Game::draw_map(game : @types.Game) -> Unit {
           cs,
           @raylib.Color::new(130, 110, 80, 100),
         )
-        if tile == @types.tile_start {
+        if tile == Start {
           // Start marker - green glowing cube
           let pulse = @math.sinf(Float::from_int(game.frame_counter) * 0.08) *
             0.1 +
@@ -110,7 +110,7 @@ fn @types.Game::draw_map(game : @types.Game) -> Unit {
             @raylib.Color::new(100, 255, 100, 150),
           )
         }
-        if tile == @types.tile_end {
+        if tile == End {
           // End marker - red glowing cube
           let pulse = @math.sinf(Float::from_int(game.frame_counter) * 0.08) *
             0.1 +
@@ -130,7 +130,7 @@ fn @types.Game::draw_map(game : @types.Game) -> Unit {
             @raylib.Color::new(255, 100, 100, 150),
           )
         }
-      } else if tile == @types.tile_water {
+      } else if tile == Water {
         let water_pulse = @math.sinf(
             Float::from_int(game.frame_counter) * 0.05 + wx + wz,
           ) *
@@ -156,7 +156,7 @@ fn @types.Game::draw_map(game : @types.Game) -> Unit {
           cs * 0.8,
           @raylib.Color::new(100, 180, 255, shimmer_alpha),
         )
-      } else if tile == @types.tile_rock {
+      } else if tile == Rock {
         @raylib.draw_cube(
           @raylib.Vector3::new(wx, 0.3, wz),
           cs * 0.9,
@@ -181,13 +181,13 @@ fn @types.Game::draw_map(game : @types.Game) -> Unit {
 /// Draws a subtle grid overlay on buildable grass tiles when in building mode.
 fn @types.Game::draw_grid_overlay(game : @types.Game) -> Unit {
   // Draw subtle grid lines when in building mode
-  if game.state != @types.state_building {
+  if game.state != Building {
     return
   }
   for gy in 0..<@types.map_h {
     for gx in 0..<@types.map_w {
       let tile = @types.get_tile(game, gx, gy)
-      if tile == @types.tile_grass {
+      if tile == Grass {
         let wx = @types.grid_to_world_x(gx)
         let wz = @types.grid_to_world_z(gy)
         @raylib.draw_cube_wires(
@@ -248,21 +248,21 @@ fn @types.Game::draw_towers(game : @types.Game) -> Unit {
     let wz = @types.grid_to_world_z(tower.gy)
     let color = tower_color(tower.kind)
     // Draw tower based on type
-    if tower.kind == @types.tower_arrow {
+    if tower.kind == Arrow {
       draw_arrow_tower(wx, wz, tower.level, color, game)
-    } else if tower.kind == @types.tower_cannon {
+    } else if tower.kind == Cannon {
       draw_cannon_tower(wx, wz, tower.level, tower.angle, color, game)
-    } else if tower.kind == @types.tower_frost {
+    } else if tower.kind == Frost {
       draw_frost_tower(wx, wz, tower.level, color, game)
-    } else if tower.kind == @types.tower_lightning {
+    } else if tower.kind == Lightning {
       draw_lightning_tower(wx, wz, tower.level, color, game)
-    } else if tower.kind == @types.tower_flame {
+    } else if tower.kind == Flame {
       draw_flame_tower(wx, wz, tower.level, color, game)
-    } else if tower.kind == @types.tower_sniper {
+    } else if tower.kind == Sniper {
       draw_sniper_tower(wx, wz, tower.level, tower.angle, color, game)
-    } else if tower.kind == @types.tower_splash {
+    } else if tower.kind == Splash {
       draw_splash_tower(wx, wz, tower.level, color, game)
-    } else if tower.kind == @types.tower_buff {
+    } else if tower.kind == Buff {
       draw_buff_tower(wx, wz, tower.level, color, game)
     }
     // Draw level indicators (rings around base)
@@ -700,7 +700,7 @@ fn draw_buff_tower(
   let range = @types.tower_effective_range(game.towers[0])
   // Find this tower to get actual range
   for t in game.towers {
-    if t.active && t.kind == @types.tower_buff {
+    if t.active && t.kind == Buff {
       let tx = @types.grid_to_world_x(t.gx)
       let tz = @types.grid_to_world_z(t.gy)
       if (tx - wx).abs() < 0.1 && (tz - wz).abs() < 0.1 {
@@ -823,22 +823,22 @@ fn @types.Game::draw_selected_tower_highlight(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the display color for the given tower type `kind`.
-fn tower_color(kind : Int) -> @raylib.Color {
-  if kind == @types.tower_arrow {
+fn tower_color(kind : @types.TowerKind) -> @raylib.Color {
+  if kind == Arrow {
     @raylib.Color::new(150, 100, 50, 255)
-  } else if kind == @types.tower_cannon {
+  } else if kind == Cannon {
     @raylib.Color::new(100, 100, 100, 255)
-  } else if kind == @types.tower_frost {
+  } else if kind == Frost {
     @raylib.Color::new(100, 180, 240, 255)
-  } else if kind == @types.tower_lightning {
+  } else if kind == Lightning {
     @raylib.Color::new(200, 200, 50, 255)
-  } else if kind == @types.tower_flame {
+  } else if kind == Flame {
     @raylib.Color::new(220, 100, 30, 255)
-  } else if kind == @types.tower_sniper {
+  } else if kind == Sniper {
     @raylib.Color::new(150, 50, 50, 255)
-  } else if kind == @types.tower_splash {
+  } else if kind == Splash {
     @raylib.Color::new(100, 150, 100, 255)
-  } else if kind == @types.tower_buff {
+  } else if kind == Buff {
     @raylib.Color::new(160, 100, 200, 255)
   } else {
     @raylib.Color::new(150, 150, 150, 255)
@@ -854,25 +854,25 @@ fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
     }
     let color = enemy_color(enemy.kind)
     // Draw enemy based on type
-    if enemy.kind == @types.enemy_basic {
+    if enemy.kind == Basic {
       draw_basic_enemy(enemy, color)
-    } else if enemy.kind == @types.enemy_fast {
+    } else if enemy.kind == Fast {
       draw_fast_enemy(enemy, color)
-    } else if enemy.kind == @types.enemy_tank {
+    } else if enemy.kind == Tank {
       draw_tank_enemy(enemy, color)
-    } else if enemy.kind == @types.enemy_flying {
+    } else if enemy.kind == Flying {
       draw_flying_enemy(enemy, color, game)
-    } else if enemy.kind == @types.enemy_boss {
+    } else if enemy.kind == Boss {
       draw_boss_enemy(enemy, color, game)
-    } else if enemy.kind == @types.enemy_healer {
+    } else if enemy.kind == Healer {
       draw_healer_enemy(enemy, color, game)
-    } else if enemy.kind == @types.enemy_swarm {
+    } else if enemy.kind == Swarm {
       draw_swarm_enemy(enemy, color)
-    } else if enemy.kind == @types.enemy_shield {
+    } else if enemy.kind == Shield {
       draw_shield_enemy(enemy, color)
-    } else if enemy.kind == @types.enemy_camo {
+    } else if enemy.kind == Camo {
       draw_camo_enemy(enemy, color)
-    } else if enemy.kind == @types.enemy_splitter {
+    } else if enemy.kind == Splitter {
       draw_splitter_enemy(enemy, color)
     }
     // Health bar
@@ -1228,9 +1228,9 @@ fn draw_splitter_enemy(enemy : @types.Enemy, color : @raylib.Color) -> Unit {
 fn draw_enemy_health_bar(enemy : @types.Enemy) -> Unit {
   let size : Float = if enemy.is_boss {
     1.2
-  } else if enemy.kind == @types.enemy_tank {
+  } else if enemy.kind == Tank {
     0.9
-  } else if enemy.kind == @types.enemy_swarm {
+  } else if enemy.kind == Swarm {
     0.3
   } else {
     0.6
@@ -1303,7 +1303,7 @@ fn @types.Game::draw_enemy_status_visuals(game : @types.Game) -> Unit {
     }
     let size : Float = if enemy.is_boss {
       1.2
-    } else if enemy.kind == @types.enemy_tank {
+    } else if enemy.kind == Tank {
       0.9
     } else {
       0.6
@@ -1377,26 +1377,26 @@ fn @types.Game::draw_enemy_status_visuals(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the display color for the given enemy type `kind`.
-fn enemy_color(kind : Int) -> @raylib.Color {
-  if kind == @types.enemy_basic {
+fn enemy_color(kind : @types.EnemyKind) -> @raylib.Color {
+  if kind == Basic {
     @raylib.Color::new(180, 60, 60, 255)
-  } else if kind == @types.enemy_fast {
+  } else if kind == Fast {
     @raylib.Color::new(60, 180, 60, 255)
-  } else if kind == @types.enemy_tank {
+  } else if kind == Tank {
     @raylib.Color::new(100, 80, 150, 255)
-  } else if kind == @types.enemy_flying {
+  } else if kind == Flying {
     @raylib.Color::new(180, 180, 60, 255)
-  } else if kind == @types.enemy_boss {
+  } else if kind == Boss {
     @raylib.Color::new(200, 50, 200, 255)
-  } else if kind == @types.enemy_healer {
+  } else if kind == Healer {
     @raylib.Color::new(50, 180, 50, 255)
-  } else if kind == @types.enemy_swarm {
+  } else if kind == Swarm {
     @raylib.Color::new(180, 140, 60, 255)
-  } else if kind == @types.enemy_shield {
+  } else if kind == Shield {
     @raylib.Color::new(60, 100, 200, 255)
-  } else if kind == @types.enemy_camo {
+  } else if kind == Camo {
     @raylib.Color::new(140, 140, 140, 255)
-  } else if kind == @types.enemy_splitter {
+  } else if kind == Splitter {
     @raylib.Color::new(160, 80, 120, 255)
   } else {
     @raylib.Color::new(180, 60, 60, 255)
@@ -1410,7 +1410,7 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
     if not(proj.active) {
       continue
     }
-    if proj.kind == @types.tower_arrow {
+    if proj.kind == Arrow {
       // Small fast bullet
       @raylib.draw_cube(
         @raylib.Vector3::new(proj.x, proj.y, proj.z),
@@ -1419,14 +1419,14 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
         0.2,
         @raylib.Color::new(200, 180, 100, 255),
       )
-    } else if proj.kind == @types.tower_cannon {
+    } else if proj.kind == Cannon {
       // Cannonball
       @raylib.draw_sphere(
         @raylib.Vector3::new(proj.x, proj.y, proj.z),
         0.18,
         @raylib.Color::new(50, 50, 50, 255),
       )
-    } else if proj.kind == @types.tower_frost {
+    } else if proj.kind == Frost {
       // Ice shard
       @raylib.draw_cube(
         @raylib.Vector3::new(proj.x, proj.y, proj.z),
@@ -1435,7 +1435,7 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
         0.12,
         @raylib.Color::new(150, 220, 255, 230),
       )
-    } else if proj.kind == @types.tower_lightning {
+    } else if proj.kind == Lightning {
       // Lightning bolt (bright yellow)
       @raylib.draw_cube(
         @raylib.Vector3::new(proj.x, proj.y, proj.z),
@@ -1452,7 +1452,7 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
         0.15,
         @raylib.Color::new(255, 255, 50, 80),
       )
-    } else if proj.kind == @types.tower_flame {
+    } else if proj.kind == Flame {
       // Fireball
       @raylib.draw_sphere(
         @raylib.Vector3::new(proj.x, proj.y, proj.z),
@@ -1465,7 +1465,7 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
         0.08,
         @raylib.Color::new(255, 80, 10, 180),
       )
-    } else if proj.kind == @types.tower_sniper {
+    } else if proj.kind == Sniper {
       // Sniper round (thin and fast)
       let color = if proj.is_crit {
         @raylib.Color::new(255, 50, 50, 255)
@@ -1479,7 +1479,7 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
         0.25,
         color,
       )
-    } else if proj.kind == @types.tower_splash {
+    } else if proj.kind == Splash {
       // Splash bomb
       @raylib.draw_sphere(
         @raylib.Vector3::new(proj.x, proj.y, proj.z),

@@ -3,37 +3,37 @@
 ///|
 /// Draws all 2D UI overlays based on the current game state.
 pub fn draw_ui(game : @types.Game) -> Unit {
-  if game.state == @types.state_menu {
+  if game.state == Menu {
     game.draw_menu()
-  } else if game.state == @types.state_map_select {
+  } else if game.state == MapSelect {
     game.draw_map_select()
-  } else if game.state == @types.state_playing ||
-    game.state == @types.state_wave_prep ||
-    game.state == @types.state_building ||
-    game.state == @types.state_tower_info {
+  } else if game.state == Playing ||
+    game.state == WavePrep ||
+    game.state == Building ||
+    game.state == TowerInfo {
     game.draw_hud()
     game.draw_economy_panel()
     if game.show_minimap {
       game.draw_minimap()
     }
-    if game.state == @types.state_wave_prep {
+    if game.state == WavePrep {
       game.draw_wave_prep_overlay()
     }
-    if game.state == @types.state_building {
+    if game.state == Building {
       game.draw_build_ui()
     }
-    if game.state == @types.state_tower_info {
+    if game.state == TowerInfo {
       game.draw_tower_info_panel()
     }
     game.draw_wave_message()
     game.draw_notification()
     game.draw_speed_indicator()
-  } else if game.state == @types.state_paused {
+  } else if game.state == Paused {
     game.draw_hud()
     game.draw_pause_overlay()
-  } else if game.state == @types.state_game_over {
+  } else if game.state == GameOver {
     game.draw_game_over()
-  } else if game.state == @types.state_victory {
+  } else if game.state == Victory {
     game.draw_victory()
   }
 }
@@ -508,7 +508,7 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
       let tile = @types.get_tile(game, gx, gy)
       let cx = mx + gx * cw
       let cy = my + gy * ch
-      if tile == @types.tile_path {
+      if tile == Path {
         @raylib.draw_rectangle(
           cx,
           cy,
@@ -516,7 +516,7 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
           ch,
           @raylib.Color::new(160, 140, 100, 200),
         )
-      } else if tile == @types.tile_start {
+      } else if tile == Start {
         @raylib.draw_rectangle(
           cx,
           cy,
@@ -524,7 +524,7 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
           ch,
           @raylib.Color::new(50, 200, 50, 255),
         )
-      } else if tile == @types.tile_end {
+      } else if tile == End {
         @raylib.draw_rectangle(
           cx,
           cy,
@@ -532,7 +532,7 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
           ch,
           @raylib.Color::new(200, 50, 50, 255),
         )
-      } else if tile == @types.tile_water {
+      } else if tile == Water {
         @raylib.draw_rectangle(
           cx,
           cy,
@@ -540,7 +540,7 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
           ch,
           @raylib.Color::new(40, 80, 180, 200),
         )
-      } else if tile == @types.tile_rock {
+      } else if tile == Rock {
         @raylib.draw_rectangle(
           cx,
           cy,
@@ -631,7 +631,7 @@ fn @types.Game::draw_wave_prep_overlay(game : @types.Game) -> Unit {
       @raylib.Color::new(0, 0, 0, 150),
     )
     let entry = info.entries[0]
-    let enemy_name = @types.enemy_name(entry.enemy_kind)
+    let enemy_name = @types.enemy_name(@types.enemy_kind_from_int(entry.enemy_kind))
     @raylib.draw_text(
       "Next: \{entry.count}x \{enemy_name}",
       (@types.screen_width - 280) / 2,
@@ -705,15 +705,15 @@ fn @types.Game::draw_build_ui(game : @types.Game) -> Unit {
     1,
     @raylib.Color::new(60, 80, 110, 255),
   )
-  let tower_types : Array[(Int, String, Int, String)] = [
-    (@types.tower_arrow, "1: Arrow", @types.cost_arrow, "Fast single"),
-    (@types.tower_cannon, "2: Cannon", @types.cost_cannon, "Splash dmg"),
-    (@types.tower_frost, "3: Frost", @types.cost_frost, "Slows"),
-    (@types.tower_lightning, "4: Lightning", @types.cost_lightning, "Chain"),
-    (@types.tower_flame, "5: Flame", @types.cost_flame, "Burns"),
-    (@types.tower_sniper, "6: Sniper", @types.cost_sniper, "Crit shots"),
-    (@types.tower_splash, "7: Splash", @types.cost_splash, "Area dmg"),
-    (@types.tower_buff, "8: Buff", @types.cost_buff, "Boosts"),
+  let tower_types : Array[(@types.TowerKind, String, Int, String)] = [
+    (Arrow, "1: Arrow", @types.cost_arrow, "Fast single"),
+    (Cannon, "2: Cannon", @types.cost_cannon, "Splash dmg"),
+    (Frost, "3: Frost", @types.cost_frost, "Slows"),
+    (Lightning, "4: Lightning", @types.cost_lightning, "Chain"),
+    (Flame, "5: Flame", @types.cost_flame, "Burns"),
+    (Sniper, "6: Sniper", @types.cost_sniper, "Crit shots"),
+    (Splash, "7: Splash", @types.cost_splash, "Area dmg"),
+    (Buff, "8: Buff", @types.cost_buff, "Boosts"),
   ]
   for i in 0..<tower_types.length() {
     let entry = tower_types[i]

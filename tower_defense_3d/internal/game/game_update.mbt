@@ -5,7 +5,7 @@
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   // Apply speed multiplier to dt for gameplay (not menu/UI)
-  let game_dt : Float = if game.state == @types.state_playing {
+  let game_dt : Float = if game.state == Playing {
     dt * game.speed_multiplier
   } else {
     dt
@@ -14,23 +14,23 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.update_chain_lines(dt)
   game.update_notifications(dt)
   game.update_wave_message(dt)
-  if game.state == @types.state_menu {
+  if game.state == Menu {
     game.update_menu(dt)
-  } else if game.state == @types.state_map_select {
+  } else if game.state == MapSelect {
     game.update_map_select(dt)
-  } else if game.state == @types.state_playing {
+  } else if game.state == Playing {
     game.update_playing(game_dt)
-  } else if game.state == @types.state_paused {
+  } else if game.state == Paused {
     game.update_paused(dt)
-  } else if game.state == @types.state_wave_prep {
+  } else if game.state == WavePrep {
     game.update_wave_prep(dt)
-  } else if game.state == @types.state_building {
+  } else if game.state == Building {
     game.update_building(dt)
-  } else if game.state == @types.state_tower_info {
+  } else if game.state == TowerInfo {
     game.update_tower_info(dt)
-  } else if game.state == @types.state_game_over {
+  } else if game.state == GameOver {
     game.update_game_over(dt)
-  } else if game.state == @types.state_victory {
+  } else if game.state == Victory {
     game.update_victory(dt)
   }
 }
@@ -68,7 +68,7 @@ fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
     @raylib.is_key_pressed(@raylib.KeySpace) {
     if game.menu_cursor == 0 {
       // Start game -> map select
-      game.state = @types.state_map_select
+      game.state = MapSelect
       game.menu_cursor = 0
     } else if game.menu_cursor == 1 {
       // Cycle difficulty
@@ -94,7 +94,7 @@ fn @types.Game::update_map_select(game : @types.Game, dt : Float) -> Unit {
     }
   }
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.state_menu
+    game.state = Menu
     game.menu_cursor = 0
     return
   }
@@ -102,7 +102,7 @@ fn @types.Game::update_map_select(game : @types.Game, dt : Float) -> Unit {
     @raylib.is_key_pressed(@raylib.KeySpace) {
     game.current_map = game.menu_cursor
     load_map(game, game.current_map)
-    game.state = @types.state_wave_prep
+    game.state = WavePrep
     game.wave_timer = @types.wave_prep_time
   }
   ignore(dt)
@@ -113,13 +113,13 @@ fn @types.Game::update_map_select(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
-    game.state = @types.state_paused
+    game.state = Paused
     return
   }
   // Toggle building mode
   if @raylib.is_key_pressed(@raylib.KeyB) {
-    game.prev_state = @types.state_playing
-    game.state = @types.state_building
+    game.prev_state = Playing
+    game.state = Building
     return
   }
   // Toggle range display
@@ -139,8 +139,8 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyT) {
     // Open tower info if tower is selected
     if game.selected_tower_idx >= 0 {
-      game.prev_state = @types.state_playing
-      game.state = @types.state_tower_info
+      game.prev_state = Playing
+      game.state = TowerInfo
       return
     }
   }
@@ -172,9 +172,9 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
       }
       game.current_wave += 1
       if game.current_wave >= @types.max_waves {
-        game.state = @types.state_victory
+        game.state = Victory
       } else {
-        game.state = @types.state_wave_prep
+        game.state = WavePrep
         game.wave_timer = @types.wave_prep_time
       }
     }
@@ -182,7 +182,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   // Check game over
   if game.lives <= 0 {
     game.lives = 0
-    game.state = @types.state_game_over
+    game.state = GameOver
   }
 }
 
@@ -191,12 +191,12 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::update_paused(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
-    game.state = @types.state_playing
+    game.state = Playing
   }
   // Allow quitting to menu
   if @raylib.is_key_pressed(@raylib.KeyQ) {
     game.reset_game()
-    game.state = @types.state_menu
+    game.state = Menu
   }
 }
 
@@ -206,8 +206,8 @@ fn @types.Game::update_wave_prep(game : @types.Game, dt : Float) -> Unit {
   game.update_camera(dt)
   // Allow building during prep
   if @raylib.is_key_pressed(@raylib.KeyB) {
-    game.prev_state = @types.state_wave_prep
-    game.state = @types.state_building
+    game.prev_state = WavePrep
+    game.state = Building
     return
   }
   // Tower selection with number keys
@@ -220,7 +220,7 @@ fn @types.Game::update_wave_prep(game : @types.Game, dt : Float) -> Unit {
   game.wave_timer -= dt
   if game.wave_timer <= 0.0 || @raylib.is_key_pressed(@raylib.KeySpace) {
     game.start_wave(game.current_wave)
-    game.state = @types.state_playing
+    game.state = Playing
   }
 }
 
@@ -231,10 +231,10 @@ fn @types.Game::update_building(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyB) {
     // Return to previous state
-    if game.prev_state == @types.state_playing {
-      game.state = @types.state_playing
+    if game.prev_state == Playing {
+      game.state = Playing
     } else {
-      game.state = @types.state_wave_prep
+      game.state = WavePrep
     }
     return
   }
@@ -327,7 +327,7 @@ fn @types.Game::update_game_over(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     game.reset_game()
-    game.state = @types.state_menu
+    game.state = Menu
   }
 }
 
@@ -337,7 +337,7 @@ fn @types.Game::update_victory(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     game.reset_game()
-    game.state = @types.state_menu
+    game.state = Menu
   }
 }
 
@@ -352,7 +352,7 @@ fn @types.Game::update_camera(game : @types.Game, dt : Float) -> Unit {
     game.camera_angle -= 60.0 * dt
   }
   // Camera pan with WASD (when not in build mode moving cursor)
-  if game.state != @types.state_building {
+  if game.state != Building {
     let pan_speed : Float = 15.0 * dt
     if @raylib.is_key_down(@raylib.KeyW) {
       game.camera_target_z -= pan_speed
@@ -477,21 +477,21 @@ fn @types.Game::update_interest(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::handle_tower_placement_keys(game : @types.Game) -> Unit {
   // Quick-place with number keys
   if @raylib.is_key_pressed(@raylib.KeyOne) {
-    game.selected_tower_type = @types.tower_arrow
+    game.selected_tower_type = Arrow
   } else if @raylib.is_key_pressed(@raylib.KeyTwo) {
-    game.selected_tower_type = @types.tower_cannon
+    game.selected_tower_type = Cannon
   } else if @raylib.is_key_pressed(@raylib.KeyThree) {
-    game.selected_tower_type = @types.tower_frost
+    game.selected_tower_type = Frost
   } else if @raylib.is_key_pressed(@raylib.KeyFour) {
-    game.selected_tower_type = @types.tower_lightning
+    game.selected_tower_type = Lightning
   } else if @raylib.is_key_pressed(@raylib.KeyFive) {
-    game.selected_tower_type = @types.tower_flame
+    game.selected_tower_type = Flame
   } else if @raylib.is_key_pressed(@raylib.KeySix) {
-    game.selected_tower_type = @types.tower_sniper
+    game.selected_tower_type = Sniper
   } else if @raylib.is_key_pressed(@raylib.KeySeven) {
-    game.selected_tower_type = @types.tower_splash
+    game.selected_tower_type = Splash
   } else if @raylib.is_key_pressed(@raylib.KeyEight) {
-    game.selected_tower_type = @types.tower_buff
+    game.selected_tower_type = Buff
   }
 }
 

@@ -155,23 +155,23 @@ pub fn moisture_noise(wx : Float, wz : Float) -> Float {
 
 ///|
 /// Returns biome id for world coordinates `(wx, wz)`.
-pub fn get_biome_at(wx : Int, wz : Int) -> Int {
+pub fn get_biome_at(wx : Int, wz : Int) -> Biome {
   let fx = Float::from_int(wx)
   let fz = Float::from_int(wz)
   let temp = temperature_noise(fx, fz)
   let moist = moisture_noise(fx, fz)
   if temp < 0.25 {
-    biome_tundra
+    Tundra
   } else if temp > 0.75 && moist < 0.3 {
-    biome_desert
+    Desert
   } else if temp > 0.5 && moist > 0.6 {
-    biome_swamp
+    Swamp
   } else if moist > 0.5 {
-    biome_forest
+    Forest
   } else if fractal_noise_2d(fx * 0.01, fz * 0.01, 2) > 0.3 {
-    biome_mountains
+    Mountains
   } else {
-    biome_plains
+    Plains
   }
 }
 
@@ -179,28 +179,28 @@ pub fn get_biome_at(wx : Int, wz : Int) -> Int {
 
 ///|
 /// Returns biome-specific terrain height at `(wx, wz)` for known biome id.
-pub fn get_biome_terrain_height(wx : Int, wz : Int, biome : Int) -> Int {
+pub fn get_biome_terrain_height(wx : Int, wz : Int, biome : Biome) -> Int {
   let fx = Float::from_int(wx)
   let fz = Float::from_int(wz)
   let n = terrain_noise(fx, fz)
   let mut height_base : Float = Float::from_int(base_height)
   let mut amplitude : Float = terrain_amplitude
-  if biome == biome_plains {
+  if biome == Plains {
     height_base = Float::from_int(base_height) + 2.0
     amplitude = 6.0
-  } else if biome == biome_forest {
+  } else if biome == Forest {
     height_base = Float::from_int(base_height) + 3.0
     amplitude = 10.0
-  } else if biome == biome_desert {
+  } else if biome == Desert {
     height_base = Float::from_int(base_height) - 1.0
     amplitude = 5.0
-  } else if biome == biome_mountains {
+  } else if biome == Mountains {
     height_base = Float::from_int(base_height) + 10.0
     amplitude = 22.0
-  } else if biome == biome_tundra {
+  } else if biome == Tundra {
     height_base = Float::from_int(base_height) + 1.0
     amplitude = 8.0
-  } else if biome == biome_swamp {
+  } else if biome == Swamp {
     height_base = Float::from_int(base_height) - 2.0
     amplitude = 3.0
   }
@@ -216,19 +216,19 @@ pub fn get_biome_terrain_height(wx : Int, wz : Int, biome : Int) -> Int {
 
 ///|
 /// Returns whether a tree should spawn at `(wx, wz)` for a biome.
-pub fn should_place_tree(wx : Int, wz : Int, biome : Int) -> Bool {
+pub fn should_place_tree(wx : Int, wz : Int, biome : Biome) -> Bool {
   let fx = Float::from_int(wx)
   let fz = Float::from_int(wz)
   let v = @math.sinf(fx * 0.73 + 5.1) * @math.cosf(fz * 0.91 + 3.7)
   let v2 = @math.sinf(fx * 1.37 + fz * 0.53) * 0.5
   let combined = (v + v2) * 0.5
-  let threshold : Float = if biome == biome_forest {
+  let threshold : Float = if biome == Forest {
     0.35
-  } else if biome == biome_plains {
+  } else if biome == Plains {
     0.7
-  } else if biome == biome_swamp {
+  } else if biome == Swamp {
     0.5
-  } else if biome == biome_tundra {
+  } else if biome == Tundra {
     0.8
   } else {
     999.0
@@ -348,20 +348,20 @@ pub fn generate_chunk_terrain(chunk : Chunk, game : Game) -> Unit {
           }
         } else if y < height - 1 {
           // Sub-surface layer depends on biome
-          if local_biome == biome_desert {
+          if local_biome == Desert {
             chunk.set_block(lx, y, lz, block_sand)
-          } else if local_biome == biome_tundra {
+          } else if local_biome == Tundra {
             chunk.set_block(lx, y, lz, block_gravel)
           } else {
             chunk.set_block(lx, y, lz, block_dirt)
           }
         } else if y == height - 1 {
           // Surface block varies by biome
-          if local_biome == biome_desert {
+          if local_biome == Desert {
             chunk.set_block(lx, y, lz, block_sand)
-          } else if local_biome == biome_tundra {
+          } else if local_biome == Tundra {
             chunk.set_block(lx, y, lz, block_snow)
-          } else if local_biome == biome_swamp {
+          } else if local_biome == Swamp {
             if height < base_height {
               chunk.set_block(lx, y, lz, block_clay)
             } else {
@@ -369,7 +369,7 @@ pub fn generate_chunk_terrain(chunk : Chunk, game : Game) -> Unit {
             }
           } else if height < base_height - 2 {
             chunk.set_block(lx, y, lz, block_sand)
-          } else if local_biome == biome_mountains && height > base_height + 18 {
+          } else if local_biome == Mountains && height > base_height + 18 {
             chunk.set_block(lx, y, lz, block_snow)
           } else {
             chunk.set_block(lx, y, lz, block_grass)
@@ -397,9 +397,9 @@ pub fn generate_chunk_terrain(chunk : Chunk, game : Game) -> Unit {
       if height >= base_height - 1 && should_place_tree(wx, wz, local_biome) {
         if surface_block == block_grass || surface_block == block_snow {
           // Place trunk (variable height)
-          let trunk_height : Int = if local_biome == biome_forest {
+          let trunk_height : Int = if local_biome == Forest {
             5
-          } else if local_biome == biome_tundra {
+          } else if local_biome == Tundra {
             3
           } else {
             4
@@ -436,7 +436,7 @@ pub fn generate_chunk_terrain(chunk : Chunk, game : Game) -> Unit {
       }
 
       // Cactus in desert
-      if local_biome == biome_desert && surface_block == block_sand {
+      if local_biome == Desert && surface_block == block_sand {
         let cactus_check = @math.sinf(Float::from_int(wx) * 1.3 + 2.5) *
           @math.cosf(Float::from_int(wz) * 0.9 + 1.7)
         if cactus_check > 0.75 {
@@ -451,7 +451,7 @@ pub fn generate_chunk_terrain(chunk : Chunk, game : Game) -> Unit {
       }
 
       // Flowers and tall grass in plains/forest
-      if (local_biome == biome_plains || local_biome == biome_forest) &&
+      if (local_biome == Plains || local_biome == Forest) &&
         surface_block == block_grass {
         let flower_check = @math.sinf(Float::from_int(wx) * 2.1 + 3.3) *
           @math.cosf(Float::from_int(wz) * 1.7 + 4.1)
@@ -682,18 +682,18 @@ pub fn entity_name(kind : Int) -> String {
 
 ///|
 /// Returns display name for a biome id.
-pub fn biome_name(kind : Int) -> String {
-  if kind == biome_plains {
+pub fn biome_name(kind : Biome) -> String {
+  if kind == Plains {
     "Plains"
-  } else if kind == biome_forest {
+  } else if kind == Forest {
     "Forest"
-  } else if kind == biome_desert {
+  } else if kind == Desert {
     "Desert"
-  } else if kind == biome_mountains {
+  } else if kind == Mountains {
     "Mountains"
-  } else if kind == biome_tundra {
+  } else if kind == Tundra {
     "Tundra"
-  } else if kind == biome_swamp {
+  } else if kind == Swamp {
     "Swamp"
   } else {
     "Unknown"

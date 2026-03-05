@@ -14,7 +14,7 @@ pub fn load_map(game : @types.Game, map_idx : Int) -> Unit {
   game.enemies_to_spawn = 0
   game.enemies_spawned = 0
   game.path_count = 0
-  game.selected_tower_type = @types.tower_arrow
+  game.selected_tower_type = Arrow
   game.hover_gx = @types.map_w / 2
   game.hover_gy = @types.map_h / 2
   game.hover_valid = false
@@ -36,7 +36,7 @@ pub fn load_map(game : @types.Game, map_idx : Int) -> Unit {
   game.show_ranges = false
   game.show_minimap = true
   game.upgrade_preview = false
-  game.prev_state = @types.state_wave_prep
+  game.prev_state = WavePrep
   // Clear pools
   for i in 0..<game.towers.length() {
     game.towers[i] = @types.Tower::inactive()
@@ -67,21 +67,21 @@ pub fn load_map(game : @types.Game, map_idx : Int) -> Unit {
     for gx in 0..<@types.map_w {
       let ch = if gx < row.length() { row[gx] } else { '.' }
       if ch == '#' || ch == 'S' || ch == 'E' {
-        @types.set_tile(game, gx, gy, @types.tile_path)
+        @types.set_tile(game, gx, gy, Path)
       } else if ch == '~' {
-        @types.set_tile(game, gx, gy, @types.tile_water)
+        @types.set_tile(game, gx, gy, Water)
       } else if ch == 'R' {
-        @types.set_tile(game, gx, gy, @types.tile_rock)
+        @types.set_tile(game, gx, gy, Rock)
       } else {
-        @types.set_tile(game, gx, gy, @types.tile_grass)
+        @types.set_tile(game, gx, gy, Grass)
       }
       if ch == 'S' {
-        @types.set_tile(game, gx, gy, @types.tile_start)
+        @types.set_tile(game, gx, gy, Start)
         start_gx = gx
         start_gy = gy
       }
       if ch == 'E' {
-        @types.set_tile(game, gx, gy, @types.tile_end)
+        @types.set_tile(game, gx, gy, End)
       }
     }
   }
@@ -123,7 +123,7 @@ fn @types.Game::trace_path(
     visited[@types.tile_index(cx, cy)] = true
     // Check if reached end
     let tile = @types.get_tile(game, cx, cy)
-    if tile == @types.tile_end {
+    if tile == End {
       return
     }
     // Find unvisited path neighbor
@@ -136,7 +136,7 @@ fn @types.Game::trace_path(
         let idx = @types.tile_index(nx, ny)
         if not(visited[idx]) {
           let ntile = @types.get_tile(game, nx, ny)
-          if ntile == @types.tile_path || ntile == @types.tile_end {
+          if ntile == Path || ntile == End {
             cx = nx
             cy = ny
             found = true
@@ -181,7 +181,7 @@ fn @types.Game::reset_game(game : @types.Game) -> Unit {
   game.wave_message_timer = 0.0
   game.show_ranges = false
   game.show_minimap = true
-  game.prev_state = @types.state_menu
+  game.prev_state = Menu
   for i in 0..<game.towers.length() {
     game.towers[i] = @types.Tower::inactive()
   }

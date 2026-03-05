@@ -3,7 +3,7 @@
 ///|
 fn @types.Game::start_wave(game : @types.Game, wave : Int) -> Unit {
   let def = @levels.get_wave_def(wave)
-  game.wave_enemy_kind = def.0
+  game.wave_enemy_kind = @types.enemy_kind_from_int(def.0)
   game.enemies_to_spawn = def.1
   game.wave_hp_mult = def.2
   game.wave_speed_mult = def.3
@@ -27,7 +27,7 @@ fn @types.Game::update_spawning(game : @types.Game, dt : Float) -> Unit {
   if game.spawn_timer <= 0.0 {
     game.spawn_enemy()
     // Swarm enemies spawn faster
-    let interval : Float = if game.wave_enemy_kind == @types.enemy_swarm {
+    let interval : Float = if game.wave_enemy_kind == Swarm {
       @types.fast_spawn_interval
     } else {
       @types.spawn_interval
@@ -43,8 +43,9 @@ fn @types.Game::spawn_enemy(game : @types.Game) -> Unit {
     return
   }
   let kind = game.wave_enemy_kind
-  let base_hp = @levels.enemy_base_hp(kind)
-  let base_speed = @levels.enemy_base_speed(kind)
+  let kind_int = @types.enemy_kind_to_int(kind)
+  let base_hp = @levels.enemy_base_hp(kind_int)
+  let base_speed = @levels.enemy_base_speed(kind_int)
   let diff_hp = @types.difficulty_hp_mult(game.difficulty)
   let diff_speed = @types.difficulty_speed_mult(game.difficulty)
   let enemy = game.enemies[idx]
@@ -64,16 +65,16 @@ fn @types.Game::spawn_enemy(game : @types.Game) -> Unit {
   enemy.stun_timer = 0.0
   enemy.armor_break_timer = 0.0
   enemy.armor_break_factor = 1.0
-  enemy.gold_value = @levels.enemy_gold_value(kind)
-  enemy.score_value = @levels.enemy_score_value(kind)
-  enemy.flying = @levels.enemy_is_flying(kind)
-  enemy.is_boss = @levels.enemy_is_boss(kind)
-  enemy.is_camo = @levels.enemy_is_camo(kind)
-  enemy.spawn_children = @levels.enemy_spawns_children(kind)
+  enemy.gold_value = @levels.enemy_gold_value(kind_int)
+  enemy.score_value = @levels.enemy_score_value(kind_int)
+  enemy.flying = @levels.enemy_is_flying(kind_int)
+  enemy.is_boss = @levels.enemy_is_boss(kind_int)
+  enemy.is_camo = @levels.enemy_is_camo(kind_int)
+  enemy.spawn_children = @levels.enemy_spawns_children(kind_int)
   enemy.heal_timer = 0.0
   // Shield setup
-  if @levels.enemy_has_shield(kind) {
-    let shield_hp = @levels.enemy_shield_hp(kind, game.wave_hp_mult * diff_hp)
+  if @levels.enemy_has_shield(kind_int) {
+    let shield_hp = @levels.enemy_shield_hp(kind_int, game.wave_hp_mult * diff_hp)
     enemy.shield_hp = shield_hp
     enemy.shield_max = shield_hp
     enemy.shield_regen_timer = 0.0
@@ -108,7 +109,7 @@ fn @types.Game::spawn_splitter_children(
     }
     let child = game.enemies[idx]
     child.active = true
-    child.kind = @types.enemy_swarm
+    child.kind = Swarm
     child.hp = parent.max_hp * @types.splitter_child_hp_pct
     child.max_hp = child.hp
     child.speed = parent.base_speed * 1.3
@@ -154,7 +155,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
     // Update status effects
     game.update_enemy_status_effects(enemy, dt)
     // Update healer ability
-    if enemy.kind == @types.enemy_healer {
+    if enemy.kind == Healer {
       game.update_healer(i, dt)
     }
     // Update shield regeneration
@@ -516,7 +517,7 @@ fn @types.Game::apply_chain_lightning(
   if current_target >= 0 && game.enemies[current_target].active {
     let enemy = game.enemies[current_target]
     let actual_damage = @types.calc_damage(
-      current_damage, @types.tower_lightning, enemy,
+      current_damage, Lightning, enemy,
     )
     game.damage_enemy(current_target, actual_damage, proj.tower_idx)
     @types.spawn_lightning_particles(game, enemy.x, enemy.y, enemy.z)
@@ -570,7 +571,7 @@ fn @types.Game::apply_chain_lightning(
     visited[best] = true
     let enemy = game.enemies[best]
     let actual_damage = @types.calc_damage(
-      current_damage, @types.tower_lightning, enemy,
+      current_damage, Lightning, enemy,
     )
     game.damage_enemy(best, actual_damage, proj.tower_idx)
     @types.spawn_lightning_particles(game, enemy.x, enemy.y, enemy.z)

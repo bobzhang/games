@@ -15,7 +15,7 @@ fn @types.Game::update_weapon_cooldowns(game : @types.Game, dt : Float) -> Unit 
         let mag_max = @types.effective_mag_size(game.player, i)
         let current_mag = game.player.magazine[i]
         let needed = mag_max - current_mag
-        if i == @types.weapon_pistol {
+        if i == @types.Pistol.to_int() {
           // Pistol has infinite ammo
           game.player.magazine[i] = mag_max
         } else {
@@ -39,7 +39,7 @@ fn @types.Game::try_reload(game : @types.Game, weapon : Int) -> Unit {
   if game.player.magazine[weapon] >= mag_max {
     return
   }
-  if weapon != @types.weapon_pistol && game.player.ammo[weapon] <= 0 {
+  if weapon != @types.Pistol.to_int() && game.player.ammo[weapon] <= 0 {
     return
   }
   ws.reloading = true
@@ -60,7 +60,7 @@ fn @types.Game::handle_shooting(game : @types.Game) -> Unit {
     return
   }
   // Minigun spin-up handling
-  if weapon == @types.weapon_minigun {
+  if weapon == @types.Minigun.to_int() {
     if @raylib.is_mouse_button_down(@raylib.MouseButtonLeft) {
       game.player.minigun_spinning = true
       game.player.minigun_spin = @types.minf(
@@ -72,9 +72,9 @@ fn @types.Game::handle_shooting(game : @types.Game) -> Unit {
     }
   }
   // Check fire button (left mouse)
-  let can_fire = if weapon == @types.weapon_rifle {
+  let can_fire = if weapon == @types.Rifle.to_int() {
     @raylib.is_mouse_button_down(@raylib.MouseButtonLeft)
-  } else if weapon == @types.weapon_minigun {
+  } else if weapon == @types.Minigun.to_int() {
     @raylib.is_mouse_button_down(@raylib.MouseButtonLeft) &&
     game.player.minigun_spin >= @types.minigun_spinup_time
   } else {
@@ -96,15 +96,15 @@ fn @types.Game::handle_shooting(game : @types.Game) -> Unit {
     game.total_shots_fired += 1
     game.player.flash_timer = 0.08
     // Recoil
-    let recoil_amount : Float = if weapon == @types.weapon_sniper {
+    let recoil_amount : Float = if weapon == @types.Sniper.to_int() {
       1.5
-    } else if weapon == @types.weapon_shotgun {
+    } else if weapon == @types.Shotgun.to_int() {
       1.0
-    } else if weapon == @types.weapon_rocket {
+    } else if weapon == @types.Rocket.to_int() {
       0.8
-    } else if weapon == @types.weapon_minigun {
+    } else if weapon == @types.Minigun.to_int() {
       0.15
-    } else if weapon == @types.weapon_rifle {
+    } else if weapon == @types.Rifle.to_int() {
       0.25
     } else {
       0.4
@@ -132,7 +132,7 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
   // Right vector for shell casing
   let right_x = cos_yaw
   let right_z = -sin_yaw
-  if weapon == @types.weapon_shotgun {
+  if weapon == @types.Shotgun.to_int() {
     // Fire multiple pellets with spread
     for i in 0..<@types.shotgun_pellets {
       let spread_h = @types.rand_rangef(
@@ -152,7 +152,7 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
       game.fire_projectile(norm.0, norm.1, norm.2, weapon)
       ignore(i)
     }
-    // Muzzle flash particles
+    // @types.Muzzle flash particles
     @types.spawn_particles_dir(
       game,
       player.x + look_x * 0.5,
@@ -166,7 +166,7 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
       200,
       50,
     )
-    // Shell casing
+    // @types.Shell casing
     @types.spawn_shell_casing(
       game,
       player.x,
@@ -175,7 +175,7 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
       right_x,
       right_z,
     )
-  } else if weapon == @types.weapon_sniper {
+  } else if weapon == @types.Sniper.to_int() {
     // Sniper: high accuracy, penetrating
     game.fire_projectile(look_x, look_y, look_z, weapon)
     // Big muzzle flash
@@ -200,7 +200,7 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
       right_x,
       right_z,
     )
-  } else if weapon == @types.weapon_minigun {
+  } else if weapon == @types.Minigun.to_int() {
     // Minigun: spread increases when sustained firing
     let spin_ratio = game.player.minigun_spin
     let spread = @types.lerpf(
@@ -240,7 +240,7 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
     let mut dx = look_x
     let mut dy = look_y
     let mut dz = look_z
-    if weapon == @types.weapon_rifle {
+    if weapon == @types.Rifle.to_int() {
       dx += @types.rand_rangef(game, -0.02, 0.02)
       dy += @types.rand_rangef(game, -0.02, 0.02)
       dz += @types.rand_rangef(game, -0.02, 0.02)
@@ -250,7 +250,7 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
       dz = norm.2
     }
     game.fire_projectile(dx, dy, dz, weapon)
-    // Muzzle flash particles
+    // @types.Muzzle flash particles
     @types.spawn_particles_dir(
       game,
       player.x + look_x * 0.5,
@@ -264,7 +264,7 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
       220,
       80,
     )
-    // Shell casing
+    // @types.Shell casing
     @types.spawn_shell_casing(
       game,
       player.x,
@@ -304,27 +304,27 @@ fn @types.Game::fire_projectile(
   proj.dz = dz
   proj.speed = @types.weapon_proj_speed(weapon)
   proj.damage = @types.effective_damage(player, weapon)
-  proj.life = if weapon == @types.weapon_rocket {
+  proj.life = if weapon == @types.Rocket.to_int() {
     4.0
-  } else if weapon == @types.weapon_sniper {
+  } else if weapon == @types.Sniper.to_int() {
     3.0
   } else {
     2.0
   }
   proj.is_enemy = false
-  proj.splash_radius = if weapon == @types.weapon_rocket {
+  proj.splash_radius = if weapon == @types.Rocket.to_int() {
     @types.rocket_splash_radius
   } else {
     0.0
   }
-  proj.penetration = if weapon == @types.weapon_sniper {
+  proj.penetration = if weapon == @types.Sniper.to_int() {
     @types.sniper_penetration
   } else {
     0
   }
-  proj.is_headshot_capable = weapon == @types.weapon_sniper ||
-    weapon == @types.weapon_pistol ||
-    weapon == @types.weapon_rifle
+  proj.is_headshot_capable = weapon == @types.Sniper.to_int() ||
+    weapon == @types.Pistol.to_int() ||
+    weapon == @types.Rifle.to_int()
 }
 
 ///|
@@ -338,7 +338,7 @@ fn @types.Game::update_projectiles(game : @types.Game, dt : Float) -> Unit {
     proj.y += proj.dy * proj.speed * dt
     proj.z += proj.dz * proj.speed * dt
     // Rocket has slight gravity
-    if proj.kind == @types.weapon_rocket && not(proj.is_enemy) {
+    if proj.kind == @types.Rocket.to_int() && not(proj.is_enemy) {
       proj.dy -= 1.5 * dt
     }
     // Lifetime
@@ -403,7 +403,7 @@ fn @types.Game::update_projectiles(game : @types.Game, dt : Float) -> Unit {
         200,
         200,
         200,
-        @types.particle_spark,
+        Spark,
       )
       proj.active = false
       continue
@@ -482,7 +482,7 @@ fn @types.Game::update_projectiles(game : @types.Game, dt : Float) -> Unit {
             let is_headshot = proj.is_headshot_capable &&
               @types.is_headshot_hit(proj.y, enemy.y, enemy.size)
             // Check if shielded
-            if enemy.kind == @types.enemy_shielded {
+            if enemy.kind == Shielded {
               game.damage_shielded_enemy(j, proj.damage, proj.dx, proj.dz)
             } else if is_headshot {
               game.damage_enemy_headshot(j, proj.damage)
@@ -539,7 +539,7 @@ fn @types.Game::apply_explosion(
         enemy.z += dz / knockback_dist * knockback_strength
       }
       // Stun brutes and below
-      if enemy.kind != @types.enemy_boss {
+      if enemy.kind != Boss {
         enemy.stun_timer = 0.3 * dmg_factor
       }
     }
@@ -572,11 +572,11 @@ fn @types.Game::apply_explosion(
       }
     }
   }
-  // Explosion particles
+  // @types.Explosion particles
   @types.spawn_particles_typed(
-    game, x, y, z, 20, 255, 150, 30, @types.particle_explosion,
+    game, x, y, z, 20, 255, 150, 30, Explosion,
   )
   @types.spawn_particles_typed(
-    game, x, y, z, 10, 255, 80, 20, @types.particle_explosion,
+    game, x, y, z, 10, 255, 80, 20, Explosion,
   )
 }

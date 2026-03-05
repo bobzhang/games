@@ -7,7 +7,7 @@ pub(all) struct Chunk {
   cx : Int
   cz : Int
   mut dirty : Bool
-  mut biome : Int
+  mut biome : Biome
 }
 
 ///|
@@ -19,7 +19,7 @@ pub fn Chunk::new(cx : Int, cz : Int) -> Chunk {
     cx,
     cz,
     dirty: true,
-    biome: biome_plains,
+    biome: Plains,
   }
 }
 
@@ -263,7 +263,7 @@ pub(all) struct Entity {
   mut vz : Float
   mut health : Int
   mut max_health : Int
-  mut ai_state : Int
+  mut ai_state : AiState
   mut ai_timer : Float
   mut target_x : Float
   mut target_z : Float
@@ -288,7 +288,7 @@ pub fn Entity::inactive() -> Entity {
     vz: 0.0,
     health: 0,
     max_health: 0,
-    ai_state: ai_idle,
+    ai_state: Idle,
     ai_timer: 0.0,
     target_x: 0.0,
     target_z: 0.0,
@@ -400,7 +400,7 @@ pub(all) struct BiomeParams {
 ///|
 /// Top-level mutable game state shared by update, simulation, and rendering.
 pub(all) struct Game {
-  mut state : Int
+  mut state : GameState
 
   // Player
   player : Player
@@ -492,7 +492,7 @@ pub fn Game::new() -> Game {
     ignore(i)
   }
   let game : Game = {
-    state: state_menu,
+    state: Menu,
     player: Player::new(),
     chunks,
     cam_pos_x: 0.0,
