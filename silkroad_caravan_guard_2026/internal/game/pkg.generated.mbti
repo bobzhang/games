@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_silkroad_caravan_guard_2026/internal/game"
+package "tonyfettes/raylib-examples/silkroad_caravan_guard_2026/internal/game"
 
 import {
-  "tonyfettes/raylib-examples/raylib_silkroad_caravan_guard_2026/internal/types",
+  "tonyfettes/raylib-examples/silkroad_caravan_guard_2026/internal/types",
 }
 
 // Values

@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_puzzle_dungeon_3d/internal/levels"
+package "tonyfettes/raylib-examples/puzzle_dungeon_3d/internal/levels"
 
 // Values
 pub fn get_floor_data(Int) -> Array[String]

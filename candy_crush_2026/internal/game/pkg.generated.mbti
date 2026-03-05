@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_candy_crush_2026/internal/game"
+package "tonyfettes/raylib-examples/candy_crush_2026/internal/game"
 
 import {
-  "tonyfettes/raylib-examples/raylib_candy_crush_2026/internal/types",
+  "tonyfettes/raylib-examples/candy_crush_2026/internal/types",
 }
 
 // Values

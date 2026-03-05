@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_voxel_world_3d/internal/game"
+package "tonyfettes/raylib-examples/voxel_world_3d/internal/game"
 
 import {
-  "tonyfettes/raylib-examples/raylib_voxel_world_3d/internal/types",
+  "tonyfettes/raylib-examples/voxel_world_3d/internal/types",
 }
 
 // Values

@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_subway_signal_saboteur_2026/internal/types"
+package "tonyfettes/raylib-examples/subway_signal_saboteur_2026/internal/types"
 
 // Values
 pub fn actor_place(Actor, Int, Int) -> Unit

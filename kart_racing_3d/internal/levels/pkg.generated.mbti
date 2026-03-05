@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_kart_racing_3d/internal/levels"
+package "tonyfettes/raylib-examples/kart_racing_3d/internal/levels"
 
 // Values
 pub fn get_cup_name(Int) -> String

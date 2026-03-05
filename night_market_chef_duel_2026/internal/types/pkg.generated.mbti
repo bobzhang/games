@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_night_market_chef_duel_2026/internal/types"
+package "tonyfettes/raylib-examples/night_market_chef_duel_2026/internal/types"
 
 // Values
 pub let boost_cooldown : Float

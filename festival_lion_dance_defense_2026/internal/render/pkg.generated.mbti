@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_festival_lion_dance_defense_2026/internal/render"
+package "tonyfettes/raylib-examples/festival_lion_dance_defense_2026/internal/render"
 
 import {
-  "tonyfettes/raylib-examples/raylib_festival_lion_dance_defense_2026/internal/types",
+  "tonyfettes/raylib-examples/festival_lion_dance_defense_2026/internal/types",
 }
 
 // Values

@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_kart_racing_3d/internal/types"
+package "tonyfettes/raylib-examples/kart_racing_3d/internal/types"
 
 // Values
 pub let ai_difficulty_medium : Int

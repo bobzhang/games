@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_ancient_temple_trap_run_2026/internal/render"
+package "tonyfettes/raylib-examples/ancient_temple_trap_run_2026/internal/render"
 
 import {
-  "tonyfettes/raylib-examples/raylib_ancient_temple_trap_run_2026/internal/types",
+  "tonyfettes/raylib-examples/ancient_temple_trap_run_2026/internal/types",
 }
 
 // Values

@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_tower_defense_3d/internal/game"
+package "tonyfettes/raylib-examples/tower_defense_3d/internal/game"
 
 import {
-  "tonyfettes/raylib-examples/raylib_tower_defense_3d/internal/types",
+  "tonyfettes/raylib-examples/tower_defense_3d/internal/types",
 }
 
 // Values

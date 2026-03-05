@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_gomoku_street_duel_2026/internal/types"
+package "tonyfettes/raylib-examples/gomoku_street_duel_2026/internal/types"
 
 // Values
 pub fn board_index(Int, Int) -> Int

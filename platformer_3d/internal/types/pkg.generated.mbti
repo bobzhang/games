@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_platformer_3d/internal/types"
+package "tonyfettes/raylib-examples/platformer_3d/internal/types"
 
 // Values
 pub fn add_score(Game, Int) -> Unit

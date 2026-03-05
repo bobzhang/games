@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_tea_mountain_express_2026/internal/types"
+package "tonyfettes/raylib-examples/tea_mountain_express_2026/internal/types"
 
 // Values
 pub let boost_accel : Float

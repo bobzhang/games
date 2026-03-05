@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_fighter_97_lite/internal/effects"
+package "tonyfettes/raylib-examples/fighter_97_lite/internal/effects"
 
 import {
   "tonyfettes/raylib",
-  "tonyfettes/raylib-examples/raylib_fighter_97_lite/internal/types",
+  "tonyfettes/raylib-examples/fighter_97_lite/internal/types",
 }
 
 // Values
