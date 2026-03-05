@@ -67,7 +67,11 @@ fn @types.Game::checkpoint_progress(game : @types.Game) -> Float {
 }
 
 ///|
-fn @types.Game::draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_sky(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -109,7 +113,11 @@ fn @types.Game::draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Un
 }
 
 ///|
-fn @types.Game::draw_dunes(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_dunes(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for layer in 0..<3 {
     let lf = Float::from_int(layer)
     let height : Float = 440.0 + lf * 86.0
@@ -143,7 +151,11 @@ fn @types.Game::draw_dunes(game : @types.Game, cam_x : Float, cam_y : Float) -> 
 }
 
 ///|
-fn @types.Game::draw_lanes(game : @types.Game, _cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_lanes(
+  game : @types.Game,
+  _cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for i in 0..<@types.lane_count {
     let y = game.lane_y(i) + cam_y * 0.2
     let li = Float::from_int(i)
@@ -179,7 +191,11 @@ fn @types.Game::draw_lanes(game : @types.Game, _cam_x : Float, cam_y : Float) ->
 }
 
 ///|
-fn @types.Game::draw_perimeter(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_perimeter(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let mut t : Float = 0.0
   while t < @types.tau {
     let x0 = @types.caravan_center_x +
@@ -234,7 +250,11 @@ fn @types.Game::draw_perimeter(game : @types.Game, cam_x : Float, cam_y : Float)
 }
 
 ///|
-fn @types.Game::draw_wagons(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_wagons(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for i in 0..<game.wagons.length() {
     let x = (game.wagons[i].x + cam_x).to_int()
     let y = (game.wagons[i].y + cam_y).to_int()
@@ -356,7 +376,11 @@ fn @types.Game::draw_wagons(game : @types.Game, cam_x : Float, cam_y : Float) ->
 }
 
 ///|
-fn @types.Game::draw_raiders(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_raiders(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for raider in game.raiders {
     if not(raider.active) {
       continue
@@ -424,7 +448,11 @@ fn @types.Game::draw_raiders(game : @types.Game, cam_x : Float, cam_y : Float) -
 }
 
 ///|
-fn @types.Game::draw_bullets(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_bullets(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for bullet in game.bullets {
     if not(bullet.active) {
       continue
@@ -441,7 +469,11 @@ fn @types.Game::draw_bullets(game : @types.Game, cam_x : Float, cam_y : Float) -
 }
 
 ///|
-fn @types.Game::draw_dust(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_dust(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for dust in game.dusts {
     if not(dust.active) {
       continue
@@ -469,7 +501,11 @@ fn @types.Game::draw_dust(game : @types.Game, cam_x : Float, cam_y : Float) -> U
 }
 
 ///|
-fn @types.Game::draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_player(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let px = game.hero.x + cam_x
   let py = game.hero.y + cam_y
 
@@ -896,7 +932,11 @@ fn @types.Game::draw_end_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_world(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   game.draw_sky(cam_x, cam_y)
   game.draw_dunes(cam_x, cam_y)
   game.draw_lanes(cam_x, cam_y)

@@ -68,7 +68,10 @@ fn @types.Game::update_cannonballs(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::check_cannonball_vs_enemies(game : @types.Game, cb_idx : Int) -> Unit {
+fn @types.Game::check_cannonball_vs_enemies(
+  game : @types.Game,
+  cb_idx : Int,
+) -> Unit {
   let cb = game.cannonballs[cb_idx]
   if not(cb.active) {
     return
@@ -159,7 +162,10 @@ fn @types.Game::check_cannonball_vs_enemies(game : @types.Game, cb_idx : Int) ->
 }
 
 ///|
-fn @types.Game::check_cannonball_vs_player(game : @types.Game, cb_idx : Int) -> Unit {
+fn @types.Game::check_cannonball_vs_player(
+  game : @types.Game,
+  cb_idx : Int,
+) -> Unit {
   let cb = game.cannonballs[cb_idx]
   if not(cb.active) {
     return
@@ -242,7 +248,10 @@ fn @types.Game::check_cannonball_vs_player(game : @types.Game, cb_idx : Int) -> 
 }
 
 ///|
-fn @types.Game::check_cannonball_vs_fleet(game : @types.Game, cb_idx : Int) -> Unit {
+fn @types.Game::check_cannonball_vs_fleet(
+  game : @types.Game,
+  cb_idx : Int,
+) -> Unit {
   let cb = game.cannonballs[cb_idx]
   if not(cb.active) {
     return
@@ -271,7 +280,10 @@ fn @types.Game::check_cannonball_vs_fleet(game : @types.Game, cb_idx : Int) -> U
 }
 
 ///|
-fn @types.Game::check_cannonball_vs_convoy(game : @types.Game, cb_idx : Int) -> Unit {
+fn @types.Game::check_cannonball_vs_convoy(
+  game : @types.Game,
+  cb_idx : Int,
+) -> Unit {
   let cb = game.cannonballs[cb_idx]
   if not(cb.active) {
     return
@@ -300,7 +312,10 @@ fn @types.Game::check_cannonball_vs_convoy(game : @types.Game, cb_idx : Int) -> 
 }
 
 ///|
-fn @types.Game::check_cannonball_vs_fortress(game : @types.Game, cb_idx : Int) -> Unit {
+fn @types.Game::check_cannonball_vs_fortress(
+  game : @types.Game,
+  cb_idx : Int,
+) -> Unit {
   let cb = game.cannonballs[cb_idx]
   if not(cb.active) {
     return

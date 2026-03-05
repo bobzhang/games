@@ -37,7 +37,11 @@ fn @types.Game::spawn_powerup(
 }
 
 ///|
-fn @types.Game::spawn_random_powerup(game : @types.Game, x : Float, y : Float) -> Unit {
+fn @types.Game::spawn_random_powerup(
+  game : @types.Game,
+  x : Float,
+  y : Float,
+) -> Unit {
   let roll = @types.rand_range(game, 0, 99)
   let kind : @types.PowerupKind = if roll < 18 {
     Shield
@@ -56,7 +60,10 @@ fn @types.Game::spawn_random_powerup(game : @types.Game, x : Float, y : Float) -
 }
 
 ///|
-fn @types.Game::clear_all_enemies_by_grenade(game : @types.Game, team : @types.Team) -> Unit {
+fn @types.Game::clear_all_enemies_by_grenade(
+  game : @types.Game,
+  team : @types.Team,
+) -> Unit {
   let mut killed = 0
   for enemy in game.enemies {
     if enemy.active {

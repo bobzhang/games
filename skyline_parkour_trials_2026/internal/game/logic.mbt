@@ -239,7 +239,10 @@ fn @types.Game::begin_new_run(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::fail_run(game : @types.Game, reason : @types.LoseReason) -> Unit {
+fn @types.Game::fail_run(
+  game : @types.Game,
+  reason : @types.LoseReason,
+) -> Unit {
   game.lose_reason = reason
   game.state = GameOver
   game.pending_next_stage = 0

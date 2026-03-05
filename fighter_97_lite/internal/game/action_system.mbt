@@ -489,7 +489,11 @@ fn @types.Game::resolve_push_collision(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::update_fighter_core(game : @types.Game, slot : Int, dt : Float) -> Unit {
+fn @types.Game::update_fighter_core(
+  game : @types.Game,
+  slot : Int,
+  dt : Float,
+) -> Unit {
   let fighter = game.fighters[slot]
   let archetype = @types.fighter_archetype(game, fighter)
 

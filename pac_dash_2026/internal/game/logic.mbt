@@ -222,7 +222,10 @@ fn @types.Game::step_player(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the target tile for a ghost based on current mode (chase, scatter, or frightened random).
-fn @types.Game::choose_ghost_target(game : @types.Game, ghost : @types.Ghost) -> (Int, Int) {
+fn @types.Game::choose_ghost_target(
+  game : @types.Game,
+  ghost : @types.Ghost,
+) -> (Int, Int) {
   if game.frightened_timer > 0.0 {
     let tx = @raylib.get_random_value(1, @types.maze_cols - 2)
     let ty = @raylib.get_random_value(1, @types.maze_rows - 2)

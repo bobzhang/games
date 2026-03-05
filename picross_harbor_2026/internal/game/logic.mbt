@@ -483,7 +483,12 @@ fn @types.Game::apply_cell_state(
 
 ///|
 /// Applies the fill or mark tool to the cell at (x, y): toggles the state between filled/unknown or crossed/unknown, moves the cursor, and returns whether the cell changed.
-fn @types.Game::apply_tool_on_cell(game : @types.Game, x : Int, y : Int, tool : Int) -> Bool {
+fn @types.Game::apply_tool_on_cell(
+  game : @types.Game,
+  x : Int,
+  y : Int,
+  tool : Int,
+) -> Bool {
   if game.state != @types.state_play {
     return false
   }
@@ -654,7 +659,11 @@ fn @types.Game::move_cursor_once(game : @types.Game, dir : Int) -> Unit {
 
 ///|
 /// Handles cursor auto-repeat movement: on first frame of a new held direction the cursor moves once, then repeats at a faster interval while the direction is held.
-fn @types.Game::update_cursor_hold(game : @types.Game, dt : Float, held_dir : Int) -> Unit {
+fn @types.Game::update_cursor_hold(
+  game : @types.Game,
+  dt : Float,
+  held_dir : Int,
+) -> Unit {
   if game.state != @types.state_play {
     game.hold_dir = @types.dir_none
     game.move_repeat_t = 0.0

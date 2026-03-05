@@ -202,7 +202,11 @@ fn @types.Game::update_ai_state(
 }
 
 ///|
-fn @types.Game::update_patrol(game : @types.Game, idx : Int, dt : Float) -> Unit {
+fn @types.Game::update_patrol(
+  game : @types.Game,
+  idx : Int,
+  dt : Float,
+) -> Unit {
   let enemy = game.enemies[idx]
   // Circle around patrol center
   enemy.patrol_angle += dt * 0.3
@@ -481,7 +485,11 @@ fn @types.Game::update_broadside_run(
 }
 
 ///|
-fn @types.Game::maybe_target_convoy(game : @types.Game, enemy_idx : Int, dt : Float) -> Unit {
+fn @types.Game::maybe_target_convoy(
+  game : @types.Game,
+  enemy_idx : Int,
+  dt : Float,
+) -> Unit {
   ignore(dt)
   let enemy = game.enemies[enemy_idx]
   // Check if any convoy ships are closer than the player
@@ -510,7 +518,10 @@ fn @types.Game::maybe_target_convoy(game : @types.Game, enemy_idx : Int, dt : Fl
 }
 
 ///|
-fn @types.Game::fire_enemy_broadside(game : @types.Game, enemy_idx : Int) -> Unit {
+fn @types.Game::fire_enemy_broadside(
+  game : @types.Game,
+  enemy_idx : Int,
+) -> Unit {
   let enemy = game.enemies[enemy_idx]
   let px = game.player.x
   let pz = game.player.z

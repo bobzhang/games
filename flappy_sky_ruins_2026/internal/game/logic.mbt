@@ -44,7 +44,13 @@ fn @types.Game::spawn_particle(
 
 ///|
 /// Emits `n` particles of the given `kind` scattered randomly around `(x, y)`.
-fn @types.Game::burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
+fn @types.Game::burst(
+  game : @types.Game,
+  x : Float,
+  y : Float,
+  n : Int,
+  kind : Int,
+) -> Unit {
   for _i in 0..<n {
     game.spawn_particle(
       x + @types.randf(-10.0, 10.0),

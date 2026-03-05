@@ -41,7 +41,13 @@ fn @types.Game::spawn_spark(
 }
 
 ///|
-fn @types.Game::burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
+fn @types.Game::burst(
+  game : @types.Game,
+  x : Float,
+  y : Float,
+  n : Int,
+  kind : Int,
+) -> Unit {
   for _i in 0..<n {
     game.spawn_spark(
       x + @types.randf(-8.0, 8.0),
@@ -399,7 +405,11 @@ fn @types.Game::grow_player_after_food(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::shift_player_forward(game : @types.Game, nx : Int, ny : Int) -> Unit {
+fn @types.Game::shift_player_forward(
+  game : @types.Game,
+  nx : Int,
+  ny : Int,
+) -> Unit {
   let cap : Int = game.p_len.min(@types.max_segments - 1)
 
   for i = cap; i > 0; i = i - 1 {

@@ -44,7 +44,13 @@ fn @types.Game::spawn_spark(
 
 ///|
 /// Spawns `n` sparks in a burst at (`x`, `y`) with random velocities and the given kind.
-fn @types.Game::burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
+fn @types.Game::burst(
+  game : @types.Game,
+  x : Float,
+  y : Float,
+  n : Int,
+  kind : Int,
+) -> Unit {
   for _i in 0..<n {
     game.spawn_spark(
       x + @types.randf(-8.0, 8.0),
@@ -139,7 +145,11 @@ fn is_safe_seed_cell(seed_x : Int, seed_y : Int, x : Int, y : Int) -> Bool {
 
 ///|
 /// Randomly places the required number of mines, guaranteeing the 3x3 area around (`safe_x`, `safe_y`) is mine-free.
-fn @types.Game::place_mines(game : @types.Game, safe_x : Int, safe_y : Int) -> Unit {
+fn @types.Game::place_mines(
+  game : @types.Game,
+  safe_x : Int,
+  safe_y : Int,
+) -> Unit {
   let mut placed : Int = 0
 
   while placed < game.mine_count {
@@ -236,7 +246,11 @@ fn @types.Game::reset_combo(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the pixel centre of cell (`x`, `y`) in world coordinates, using the current board metrics.
-fn @types.Game::cell_world_center(game : @types.Game, x : Int, y : Int) -> (Float, Float) {
+fn @types.Game::cell_world_center(
+  game : @types.Game,
+  x : Int,
+  y : Int,
+) -> (Float, Float) {
   let (bx, by, tile) = @types.board_metrics(game)
   (
     Float::from_int(bx + x * tile + tile / 2),

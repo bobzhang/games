@@ -155,7 +155,13 @@ fn @types.Game::emit_particle(
 
 ///|
 /// Emits `n` particles of the given kind in random directions from a jittered position around `(x, y)`.
-fn @types.Game::burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
+fn @types.Game::burst(
+  game : @types.Game,
+  x : Float,
+  y : Float,
+  n : Int,
+  kind : Int,
+) -> Unit {
   for _i in 0..<n {
     game.emit_particle(
       x + @types.randf(-14.0, 14.0),
@@ -216,7 +222,11 @@ fn @types.Game::spawn_obj(
 
 ///|
 /// Returns a random X coordinate inside the cave corridor at depth `y`, keeping the object radius `r` clear of the cave walls.
-fn @types.Game::object_spawn_x(game : @types.Game, y : Float, r : Float) -> Float {
+fn @types.Game::object_spawn_x(
+  game : @types.Game,
+  y : Float,
+  r : Float,
+) -> Float {
   let d = @types.depth_at_screen(game, y)
   let c = @types.cave_center(d, game.time_s)
   let hw = @types.cave_half_width(d, game.time_s, game.stage)

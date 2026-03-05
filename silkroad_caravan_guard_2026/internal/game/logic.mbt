@@ -1,5 +1,9 @@
 ///|
-fn @types.Game::set_message(game : @types.Game, msg : String, ttl : Float) -> Unit {
+fn @types.Game::set_message(
+  game : @types.Game,
+  msg : String,
+  ttl : Float,
+) -> Unit {
   game.message = msg
   game.message_t = ttl
 }
@@ -290,7 +294,11 @@ fn @types.Game::update_wagons(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::heal_wagon(game : @types.Game, index : Int, value : Float) -> Unit {
+fn @types.Game::heal_wagon(
+  game : @types.Game,
+  index : Int,
+  value : Float,
+) -> Unit {
   if index < 0 || index >= game.wagons.length() {
     return
   }
@@ -302,7 +310,11 @@ fn @types.Game::heal_wagon(game : @types.Game, index : Int, value : Float) -> Un
 }
 
 ///|
-fn @types.Game::damage_wagon(game : @types.Game, index : Int, value : Float) -> Unit {
+fn @types.Game::damage_wagon(
+  game : @types.Game,
+  index : Int,
+  value : Float,
+) -> Unit {
   if index < 0 || index >= game.wagons.length() {
     return
   }
@@ -328,7 +340,11 @@ fn @types.Game::damage_wagon(game : @types.Game, index : Int, value : Float) -> 
 }
 
 ///|
-fn @types.Game::kill_raider(game : @types.Game, index : Int, score_gain : Int) -> Unit {
+fn @types.Game::kill_raider(
+  game : @types.Game,
+  index : Int,
+  score_gain : Int,
+) -> Unit {
   if index < 0 || index >= game.raiders.length() {
     return
   }
@@ -396,7 +412,11 @@ fn @types.Game::choose_raider_kind(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::choose_target_wagon(game : @types.Game, x : Float, y : Float) -> Int {
+fn @types.Game::choose_target_wagon(
+  game : @types.Game,
+  x : Float,
+  y : Float,
+) -> Int {
   let target = game.nearest_wagon_index(x, y, true)
   if target >= 0 {
     target
@@ -406,7 +426,11 @@ fn @types.Game::choose_target_wagon(game : @types.Game, x : Float, y : Float) ->
 }
 
 ///|
-fn @types.Game::spawn_raider(game : @types.Game, lane : Int, kind : Int) -> Unit {
+fn @types.Game::spawn_raider(
+  game : @types.Game,
+  lane : Int,
+  kind : Int,
+) -> Unit {
   let i = game.alloc_raider()
   let x = Float::from_int(@types.screen_w) + @types.randf(60.0, 160.0)
   let y = game.lane_y(lane) + @types.randf(-20.0, 20.0)

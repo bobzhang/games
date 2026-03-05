@@ -393,7 +393,10 @@ fn @types.Game::apply_conveyor_force(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::pull_collectibles_magnet(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::pull_collectibles_magnet(
+  game : @types.Game,
+  dt : Float,
+) -> Unit {
   let mag_range = @types.powerup_magnet_range
   for c in game.collectibles {
     if not(c.active) || c.collected {
@@ -525,7 +528,10 @@ fn @types.Game::resolve_platform_collisions(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::carry_player_on_platform(game : @types.Game, plat : @types.Platform) -> Unit {
+fn @types.Game::carry_player_on_platform(
+  game : @types.Game,
+  plat : @types.Platform,
+) -> Unit {
   // Calculate platform velocity from its movement
   let speed = plat.move_speed
   let range = plat.move_range

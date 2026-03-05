@@ -270,7 +270,10 @@ fn @types.Game::update_world_select(game : @types.Game, _dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::update_campaign_complete(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_campaign_complete(
+  game : @types.Game,
+  _dt : Float,
+) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     game.state = @types.state_menu
@@ -488,7 +491,11 @@ fn update_enemy_fly(e : @types.Enemy, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::update_enemy_chase(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit {
+fn @types.Game::update_enemy_chase(
+  game : @types.Game,
+  e : @types.Enemy,
+  dt : Float,
+) -> Unit {
   let dist = @types.dist2d(e.x, e.z, game.px, game.pz)
   if dist < @types.enemy_chase_range && dist > 0.5 {
     let dx = game.px - e.x

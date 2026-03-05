@@ -203,7 +203,11 @@ fn rand_rangef_by_seedless(fighter : @types.Fighter) -> Float {
 }
 
 ///|
-fn @types.Game::update_cpu_input(game : @types.Game, slot : Int, dt : Float) -> Unit {
+fn @types.Game::update_cpu_input(
+  game : @types.Game,
+  slot : Int,
+  dt : Float,
+) -> Unit {
   let fighter = game.fighters[slot]
   let opponent = game.fighters[@types.other_slot(slot)]
 

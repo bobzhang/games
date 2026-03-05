@@ -1,13 +1,20 @@
 ///|
 /// Sets the HUD status text and starts its display timer.
-fn @types.Game::set_status(game : @types.Game, text : String, ttl : Float) -> Unit {
+fn @types.Game::set_status(
+  game : @types.Game,
+  text : String,
+  ttl : Float,
+) -> Unit {
   game.status_text = text
   game.status_t = ttl
 }
 
 ///|
 /// Returns `preferred` if that beacon is still alive, otherwise returns the index of the beacon with the highest remaining integrity, or -1 if all beacons are destroyed.
-fn @types.Game::preferred_alive_beacon(game : @types.Game, preferred : Int) -> Int {
+fn @types.Game::preferred_alive_beacon(
+  game : @types.Game,
+  preferred : Int,
+) -> Int {
   if preferred >= 0 &&
     preferred < game.beacons.length() &&
     game.beacons[preferred].integrity > 0.0 {

@@ -79,7 +79,11 @@ fn @types.Game::shake_offset(game : @types.Game) -> (Float, Float) {
 
 ///|
 /// Draws the dark gradient sky background, two large animated glow blobs, and 140 parallax-scrolling twinkling stars with camera offset applied.
-fn @types.Game::draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_sky(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -136,7 +140,11 @@ fn @types.Game::draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Un
 
 ///|
 /// Draws scrolling cityscape silhouette buildings along the horizon line above the track, with pulsing neon accent bands on every third building.
-fn @types.Game::draw_horizon(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_horizon(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let base_y = Float::from_int(@types.hud_h) + 20.0
 
   for i in 0..<44 {
@@ -175,7 +183,11 @@ fn @types.Game::draw_horizon(game : @types.Game, cam_x : Float, cam_y : Float) -
 
 ///|
 /// Renders the procedural road surface row-by-row, drawing off-road gutters in dark tones, the road fill with alternating mid stripes, cyan left and pink right border lines, and dashed lane dividers.
-fn @types.Game::draw_track(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_track(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let step = 12
 
   for yi = @types.hud_h; yi < @types.screen_h + step; yi = yi + step {
@@ -465,7 +477,11 @@ fn draw_pickup(
 
 ///|
 /// Iterates all active objects, applies cloaking transparency where applicable, dispatches to the per-kind draw function, and draws a small HP bar above hostile enemies.
-fn @types.Game::draw_objs(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_objs(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for o in game.objs {
     if not(o.active) {
       continue
@@ -512,7 +528,11 @@ fn @types.Game::draw_objs(game : @types.Game, cam_x : Float, cam_y : Float) -> U
 
 ///|
 /// Draws each active projectile as a coloured dot (teal for player, violet/amber/pink for enemy types) with a short velocity-aligned trail line.
-fn @types.Game::draw_shots(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_shots(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for s in game.shots {
     if not(s.active) {
       continue
@@ -551,7 +571,11 @@ fn @types.Game::draw_shots(game : @types.Game, cam_x : Float, cam_y : Float) -> 
 
 ///|
 /// Draws all active spark particles as coloured circles that fade out as their life decreases; three visual kinds use teal, pink, and violet tones.
-fn @types.Game::draw_spark_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_spark_fx(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for s in game.sparks {
     if not(s.active) {
       continue
@@ -577,7 +601,11 @@ fn @types.Game::draw_spark_fx(game : @types.Game, cam_x : Float, cam_y : Float) 
 
 ///|
 /// Draws all active shock-ring effects as expanding circle outlines that fade out as their life decreases; three kinds use cyan, pink, and violet colours.
-fn @types.Game::draw_ring_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_ring_fx(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for r in game.rings {
     if not(r.active) {
       continue
@@ -603,7 +631,11 @@ fn @types.Game::draw_ring_fx(game : @types.Game, cam_x : Float, cam_y : Float) -
 
 ///|
 /// Draws all active ghost after-images as fading rotated rectangles in cyan (dash) or pale-blue (default) tones.
-fn @types.Game::draw_ghost_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_ghost_fx(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for g in game.ghosts {
     if not(g.active) {
       continue
@@ -627,7 +659,11 @@ fn @types.Game::draw_ghost_fx(game : @types.Game, cam_x : Float, cam_y : Float) 
 
 ///|
 /// Draws the player car as a tilted rectangle body with a cockpit cutout, front headlight, twin engine flares, muzzle flashes, a dash aura ring, and an invulnerability flicker shield; body tints red while the hurt timer is active.
-fn @types.Game::draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_player(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let x = game.hero.x + cam_x
   let y = game.hero.y + cam_y
 
@@ -1244,7 +1280,11 @@ fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
 
 ///|
 /// Composites the play-world layer in depth order: ghost after-images, rings, objects, shots, spark particles, and then the player car.
-fn @types.Game::draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_world(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   game.draw_ghost_fx(cam_x, cam_y)
   game.draw_ring_fx(cam_x, cam_y)
   game.draw_objs(cam_x, cam_y)

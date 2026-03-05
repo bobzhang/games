@@ -123,7 +123,11 @@ fn @types.Game::apply_buff_tower(game : @types.Game, buff_idx : Int) -> Unit {
 }
 
 ///|
-fn @types.Game::update_buff_pulse(game : @types.Game, buff_idx : Int, dt : Float) -> Unit {
+fn @types.Game::update_buff_pulse(
+  game : @types.Game,
+  buff_idx : Int,
+  dt : Float,
+) -> Unit {
   let buff = game.towers[buff_idx]
   buff.special_timer -= dt
   if buff.special_timer <= 0.0 {
@@ -149,7 +153,11 @@ fn @types.Game::update_buff_pulse(game : @types.Game, buff_idx : Int, dt : Float
 }
 
 ///|
-fn @types.Game::update_flame_aura(game : @types.Game, tower_idx : Int, dt : Float) -> Unit {
+fn @types.Game::update_flame_aura(
+  game : @types.Game,
+  tower_idx : Int,
+  dt : Float,
+) -> Unit {
   let tower = game.towers[tower_idx]
   tower.special_timer -= dt
   if tower.special_timer <= 0.0 {
@@ -258,7 +266,10 @@ fn @types.Game::fire_tower(game : @types.Game, tower_idx : Int) -> Unit {
 // Secondary shot for level 3 arrow tower
 
 ///|
-fn @types.Game::fire_tower_secondary(game : @types.Game, tower_idx : Int) -> Unit {
+fn @types.Game::fire_tower_secondary(
+  game : @types.Game,
+  tower_idx : Int,
+) -> Unit {
   let tower = game.towers[tower_idx]
   let idx = @types.alloc_projectile(game)
   if idx < 0 {

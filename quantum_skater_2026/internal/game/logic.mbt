@@ -581,7 +581,10 @@ fn mark_hit_obj(o : @types.TrackObj) -> Unit {
 }
 
 ///|
-fn @types.Game::obj_affects_phase(game : @types.Game, o : @types.TrackObj) -> Bool {
+fn @types.Game::obj_affects_phase(
+  game : @types.Game,
+  o : @types.TrackObj,
+) -> Bool {
   if o.phase_only == 1 {
     return not(game.phase_beta)
   }

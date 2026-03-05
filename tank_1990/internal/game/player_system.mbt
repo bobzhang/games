@@ -45,7 +45,10 @@ fn is_player_shoot_pressed(index : Int) -> Bool {
 }
 
 ///|
-fn @types.Game::player_is_on_ice(game : @types.Game, player : @types.Tank) -> Bool {
+fn @types.Game::player_is_on_ice(
+  game : @types.Game,
+  player : @types.Tank,
+) -> Bool {
   let tx = @types.world_x_to_tile(player.x)
   let ty = @types.world_y_to_tile(player.y)
   @types.get_tile(game, tx, ty) == @types.tile_ice

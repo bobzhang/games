@@ -70,7 +70,11 @@ fn @types.Game::shake_offset(game : @types.Game) -> (Float, Float) {
 
 ///|
 /// Draws the deep-sea gradient background, two ambient glow circles, and 120 pseudo-random pulsing star particles.
-fn @types.Game::draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_backdrop(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -125,7 +129,11 @@ fn @types.Game::draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) 
 
 ///|
 /// Draws the procedural cave walls row-by-row using dark fill rectangles on each side and glowing edge lines with a pulsing bioluminescent color.
-fn @types.Game::draw_cave(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_cave(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let step = 14
 
   for yi = 0; yi < @types.screen_h; yi = yi + step {
@@ -386,7 +394,11 @@ fn draw_obj_scrap(
 
 ///|
 /// Iterates over all active objects and dispatches to the appropriate per-kind draw function, skipping cloaked objects while sonar is inactive.
-fn @types.Game::draw_objects(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_objects(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for o in game.objs {
     if not(o.active) {
       continue
@@ -436,7 +448,11 @@ fn @types.Game::draw_objects(game : @types.Game, cam_x : Float, cam_y : Float) -
 
 ///|
 /// Draws all active trail segments as small rectangles fading by their remaining life, using teal for dash trails and pale blue for wake trails.
-fn @types.Game::draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_trails(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for t in game.trails {
     if not(t.active) {
       continue
@@ -461,7 +477,11 @@ fn @types.Game::draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) ->
 
 ///|
 /// Draws all active particles as small circles fading by remaining life, colored by kind: red-pink for damage, sky-blue for sonar, and mint-green for collection effects.
-fn @types.Game::draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_particles(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -487,7 +507,11 @@ fn @types.Game::draw_particles(game : @types.Game, cam_x : Float, cam_y : Float)
 
 ///|
 /// Draws all active ripples as expanding circle outlines fading by remaining life, colored violet for sonar ripples and cyan for standard wake ripples.
-fn @types.Game::draw_ripples(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_ripples(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for r in game.ripples {
     if not(r.active) {
       continue
@@ -511,7 +535,11 @@ fn @types.Game::draw_ripples(game : @types.Game, cam_x : Float, cam_y : Float) -
 
 ///|
 /// Draws the player submarine with a pulsing body, highlight dot, velocity-scaled tail fin, active-dash ring, invulnerability shield flash, and a wake trail emitter.
-fn @types.Game::draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_player(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let px = game.hero.x + cam_x
   let py = game.hero.y + cam_y
 
@@ -1077,7 +1105,11 @@ fn @types.Game::draw_play_hint(game : @types.Game) -> Unit {
 
 ///|
 /// Composites the full world layer in depth order: trails, ripples, objects, particles, and the player.
-fn @types.Game::draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_world(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   game.draw_trails(cam_x, cam_y)
   game.draw_ripples(cam_x, cam_y)
   game.draw_objects(cam_x, cam_y)

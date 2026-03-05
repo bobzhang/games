@@ -141,7 +141,10 @@ fn @types.Game::draw_platforms(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::draw_platform_special(game : @types.Game, plat : @types.Platform) -> Unit {
+fn @types.Game::draw_platform_special(
+  game : @types.Game,
+  plat : @types.Platform,
+) -> Unit {
   if plat.kind == @types.plat_bouncy {
     // Spring coil on top
     @raylib.draw_cylinder(

@@ -203,7 +203,11 @@ fn @types.Game::on_player_hurt(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::update_player(game : @types.Game, input : @types.Input, dt : Float) -> Unit {
+fn @types.Game::update_player(
+  game : @types.Game,
+  input : @types.Input,
+  dt : Float,
+) -> Unit {
   let player = game.player
 
   if player.invuln_t > 0.0 {

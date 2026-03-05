@@ -899,7 +899,10 @@ fn @types.Game::kill_entity(
 
 ///|
 /// Applies the effect of collecting a pickup item: credits add score and combo, batteries restore energy, and hackcells reduce hack cooldown.
-fn @types.Game::collect_pickup(game : @types.Game, kind : @types.EntityKind) -> Unit {
+fn @types.Game::collect_pickup(
+  game : @types.Game,
+  kind : @types.EntityKind,
+) -> Unit {
   match kind {
     ItemCredit => {
       game.credits = game.credits + 1
@@ -1128,7 +1131,10 @@ fn @types.Game::update_effects(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Probabilistically emits small spark particles along the road edges each frame to simulate ambient neon traffic glow.
-fn @types.Game::emit_ambient_traffic_glow(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::emit_ambient_traffic_glow(
+  game : @types.Game,
+  dt : Float,
+) -> Unit {
   let tries = (dt * 230.0).to_int().clamp(min=1, max=10)
   let mut i = 0
   while i < tries {

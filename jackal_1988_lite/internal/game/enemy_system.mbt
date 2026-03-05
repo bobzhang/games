@@ -52,7 +52,10 @@ fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
 }
 
 ///|
-fn @types.Game::choose_enemy_target_player(game : @types.Game, enemy : @types.Tank) -> Int {
+fn @types.Game::choose_enemy_target_player(
+  game : @types.Game,
+  enemy : @types.Tank,
+) -> Int {
   let mut best_idx = -1
   let mut best_dist : Float = Float::from_int(1000000000)
   for i in 0..<@types.max_players {
@@ -69,7 +72,10 @@ fn @types.Game::choose_enemy_target_player(game : @types.Game, enemy : @types.Ta
 }
 
 ///|
-fn @types.Game::enemy_desired_dir(game : @types.Game, enemy : @types.Tank) -> Int {
+fn @types.Game::enemy_desired_dir(
+  game : @types.Game,
+  enemy : @types.Tank,
+) -> Int {
   let target_player = game.choose_enemy_target_player(enemy)
   let mut target_x = @types.tile_center_x(@types.base_tile_x)
   let mut target_y = @types.tile_center_y(@types.base_tile_y)
@@ -133,7 +139,10 @@ fn @types.Game::try_move_enemy(
 }
 
 ///|
-fn @types.Game::enemy_shoot_if_ready(game : @types.Game, enemy_index : Int) -> Unit {
+fn @types.Game::enemy_shoot_if_ready(
+  game : @types.Game,
+  enemy_index : Int,
+) -> Unit {
   let enemy = game.enemies[enemy_index]
   if enemy.reload_timer > 0.0 || enemy.invuln_timer > 0.0 {
     return

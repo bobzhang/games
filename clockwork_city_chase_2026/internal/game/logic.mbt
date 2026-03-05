@@ -880,7 +880,12 @@ fn @types.Game::enemy_fire(game : @types.Game, o : @types.Obj) -> Unit {
 
 ///|
 /// Deactivates an enemy object, awards score, increments kills, pushes the combo, and emits a burst and ring at the object's position.
-fn @types.Game::kill_obj(game : @types.Game, i : Int, base : Int, burst_kind : Int) -> Unit {
+fn @types.Game::kill_obj(
+  game : @types.Game,
+  i : Int,
+  base : Int,
+  burst_kind : Int,
+) -> Unit {
   let x = game.objs[i].x
   let y = game.objs[i].y
   game.objs[i].active = false

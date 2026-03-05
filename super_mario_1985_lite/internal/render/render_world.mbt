@@ -214,7 +214,11 @@ fn @types.Game::draw_tile(
 }
 
 ///|
-fn @types.Game::draw_tiles(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_tiles(
+  game : @types.Game,
+  cam_x : Float,
+  shake_y : Float,
+) -> Unit {
   let start_tx = (@types.world_to_tile_x(cam_x) - 1).clamp(
     min=0,
     max=@types.world_tiles_w - 1,
@@ -232,7 +236,11 @@ fn @types.Game::draw_tiles(game : @types.Game, cam_x : Float, shake_y : Float) -
 }
 
 ///|
-fn @types.Game::draw_flag(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_flag(
+  game : @types.Game,
+  cam_x : Float,
+  shake_y : Float,
+) -> Unit {
   let pole_x = @types.world_to_screen_x(game.flag_x, cam_x).to_int()
   let top_y = world_to_screen_y(game.flag_top_y, shake_y).to_int()
   let bottom_y = world_to_screen_y(
@@ -268,7 +276,11 @@ fn @types.Game::draw_flag(game : @types.Game, cam_x : Float, shake_y : Float) ->
 }
 
 ///|
-fn @types.Game::draw_coins(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_coins(
+  game : @types.Game,
+  cam_x : Float,
+  shake_y : Float,
+) -> Unit {
   for c in game.coins {
     if not(c.active) {
       continue
@@ -328,7 +340,11 @@ fn draw_enemy(enemy : @types.Enemy, cam_x : Float, shake_y : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::draw_enemies(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_enemies(
+  game : @types.Game,
+  cam_x : Float,
+  shake_y : Float,
+) -> Unit {
   for e in game.enemies {
     if e.active {
       draw_enemy(e, cam_x, shake_y)
@@ -337,7 +353,11 @@ fn @types.Game::draw_enemies(game : @types.Game, cam_x : Float, shake_y : Float)
 }
 
 ///|
-fn @types.Game::draw_player(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_player(
+  game : @types.Game,
+  cam_x : Float,
+  shake_y : Float,
+) -> Unit {
   let player = game.player
   if player.invuln_t > 0.0 && (@raylib.get_time() * 18.0).to_int() % 2 == 0 {
     return
@@ -417,7 +437,11 @@ fn @types.Game::draw_player(game : @types.Game, cam_x : Float, shake_y : Float) 
 }
 
 ///|
-fn @types.Game::draw_particles(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_particles(
+  game : @types.Game,
+  cam_x : Float,
+  shake_y : Float,
+) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue

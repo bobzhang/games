@@ -36,7 +36,11 @@ fn @types.Game::cam_shake(game : @types.Game) -> (Float, Float) {
 
 ///|
 /// Draws the background gradient, animated moon, twinkling stars, and layered wave clouds.
-fn @types.Game::draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_sky(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -115,7 +119,11 @@ fn @types.Game::draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Un
 
 ///|
 /// Draws the play area floor with an animated scrolling grid overlay.
-fn @types.Game::draw_floor_grid(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_floor_grid(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   @raylib.draw_rectangle(
     @types.play_left.to_int(),
     @types.play_top.to_int(),
@@ -162,7 +170,11 @@ fn @types.Game::draw_floor_grid(game : @types.Game, cam_x : Float, cam_y : Float
 
 ///|
 /// Draws the central shrine with aura glow, HP-scaled inner gem, and connector lines to each bell.
-fn @types.Game::draw_shrine(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_shrine(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let x = @types.shrine_x() + cam_x
   let y = @types.shrine_y() + cam_y
 
@@ -455,7 +467,11 @@ fn draw_foe(f : @types.Foe, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws the hero sprite with aura, body triangles, animated tail orbs, invulnerability tint, and hurt flash.
-fn @types.Game::draw_hero(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_hero(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let h = game.hero
   let x = h.x + cam_x
   let y = h.y + cam_y
@@ -526,7 +542,11 @@ fn @types.Game::draw_hero(game : @types.Game, cam_x : Float, cam_y : Float) -> U
 
 ///|
 /// Draws all active bolts as directional line segments with a bright tip circle.
-fn @types.Game::draw_bolts(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_bolts(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for bolt in game.bolts {
     if not(bolt.active) {
       continue
@@ -562,7 +582,11 @@ fn @types.Game::draw_bolts(game : @types.Game, cam_x : Float, cam_y : Float) -> 
 
 ///|
 /// Draws all active spark, ring, and echo visual effects with alpha fading based on remaining life.
-fn @types.Game::draw_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_fx(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
       continue
@@ -1249,7 +1273,11 @@ fn @types.Game::draw_flash(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all world layers in order: sky, floor grid, shrine, bells, relics, hostile foes, hero, bolts, and effects.
-fn @types.Game::draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_world(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   game.draw_sky(cam_x, cam_y)
   game.draw_floor_grid(cam_x, cam_y)
   game.draw_shrine(cam_x, cam_y)

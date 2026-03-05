@@ -318,7 +318,13 @@ fn @types.Game::emit_particle(
 }
 
 ///|
-fn @types.Game::burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
+fn @types.Game::burst(
+  game : @types.Game,
+  x : Float,
+  y : Float,
+  n : Int,
+  kind : Int,
+) -> Unit {
   for _i in 0..<n {
     game.emit_particle(
       x + @types.randf(-16.0, 16.0),

@@ -1,6 +1,10 @@
 ///|
 /// Sets the on-screen status message and starts its display timer.
-fn @types.Game::set_message(game : @types.Game, msg : String, ttl : Float) -> Unit {
+fn @types.Game::set_message(
+  game : @types.Game,
+  msg : String,
+  ttl : Float,
+) -> Unit {
   game.message = msg
   game.message_t = ttl
 }

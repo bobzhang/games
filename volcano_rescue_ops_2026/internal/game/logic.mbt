@@ -6,14 +6,23 @@ fn @types.Game::set_tile(game : @types.Game, x : Int, y : Int, t : Int) -> Unit 
 }
 
 ///|
-fn @types.Game::set_lava(game : @types.Game, x : Int, y : Int, v : Bool) -> Unit {
+fn @types.Game::set_lava(
+  game : @types.Game,
+  x : Int,
+  y : Int,
+  v : Bool,
+) -> Unit {
   if @types.in_bounds(x, y) {
     game.lava[@types.cell_index(x, y)] = v
   }
 }
 
 ///|
-fn @types.Game::set_message(game : @types.Game, msg : String, ttl : Float) -> Unit {
+fn @types.Game::set_message(
+  game : @types.Game,
+  msg : String,
+  ttl : Float,
+) -> Unit {
   game.msg = msg
   game.msg_t = ttl
 }
@@ -73,7 +82,12 @@ fn @types.Game::clear_sites(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::add_site(game : @types.Game, x : Int, y : Int, waiting : Int) -> Unit {
+fn @types.Game::add_site(
+  game : @types.Game,
+  x : Int,
+  y : Int,
+  waiting : Int,
+) -> Unit {
   if game.site_count >= @types.max_sites ||
     waiting <= 0 ||
     not(@types.in_bounds(x, y)) {
@@ -669,7 +683,10 @@ fn @types.Game::lava_pressure(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::update_passive_heat_and_supply(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_passive_heat_and_supply(
+  game : @types.Game,
+  dt : Float,
+) -> Unit {
   let pressure : Int = game.lava_pressure()
 
   let mut heat_gain : Float = 1.2 + Float::from_int(pressure) * 0.34
@@ -725,7 +742,12 @@ fn @types.Game::burn_sites_from_lava(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::spread_chance(game : @types.Game, nx : Int, ny : Int, base : Int) -> Int {
+fn @types.Game::spread_chance(
+  game : @types.Game,
+  nx : Int,
+  ny : Int,
+  base : Int,
+) -> Int {
   let mut chance : Int = base
 
   if @types.tile_at(game, nx, ny) == @types.tile_depot {
@@ -744,7 +766,12 @@ fn @types.Game::spread_chance(game : @types.Game, nx : Int, ny : Int, base : Int
 }
 
 ///|
-fn @types.Game::try_spread_to(game : @types.Game, nx : Int, ny : Int, base : Int) -> Unit {
+fn @types.Game::try_spread_to(
+  game : @types.Game,
+  nx : Int,
+  ny : Int,
+  base : Int,
+) -> Unit {
   if not(@types.in_bounds(nx, ny)) {
     return
   }
@@ -792,7 +819,11 @@ fn @types.Game::spread_lava_once(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::finish_mission(game : @types.Game, win : Bool, reason : String) -> Unit {
+fn @types.Game::finish_mission(
+  game : @types.Game,
+  win : Bool,
+  reason : String,
+) -> Unit {
   game.state = @types.state_result
   game.result = if win { @types.result_win } else { @types.result_lose }
   game.clear_route()

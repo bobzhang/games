@@ -34,7 +34,11 @@ fn world_to_screen(
 }
 
 ///|
-fn @types.Game::draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_backdrop(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -81,7 +85,11 @@ fn @types.Game::draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) 
 }
 
 ///|
-fn @types.Game::draw_track_grid(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_track_grid(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let lane_col = if game.phase_beta {
     @raylib.Color::new(255, 126, 234, 170)
   } else {
@@ -135,7 +143,10 @@ fn @types.Game::draw_track_grid(game : @types.Game, cam_x : Float, cam_y : Float
 }
 
 ///|
-fn @types.Game::obj_color(game : @types.Game, o : @types.TrackObj) -> @raylib.Color {
+fn @types.Game::obj_color(
+  game : @types.Game,
+  o : @types.TrackObj,
+) -> @raylib.Color {
   if o.kind == @types.obj_orb {
     @raylib.Color::new(140, 248, 212, 255)
   } else if o.kind == @types.obj_boost {
@@ -285,7 +296,11 @@ fn @types.Game::draw_obj(
 }
 
 ///|
-fn @types.Game::draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_trails(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for t in game.trails {
     if not(t.active) {
       continue
@@ -310,7 +325,11 @@ fn @types.Game::draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) ->
 }
 
 ///|
-fn @types.Game::draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_particles(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -331,7 +350,11 @@ fn @types.Game::draw_particles(game : @types.Game, cam_x : Float, cam_y : Float)
 }
 
 ///|
-fn @types.Game::draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_player(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let hero = game.hero
   let s = world_to_screen(hero.lane_f, hero.y, 0.0, cam_x, cam_y)
 
@@ -849,7 +872,11 @@ fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_world(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   game.draw_backdrop(cam_x, cam_y)
   game.draw_track_grid(cam_x, cam_y)
 

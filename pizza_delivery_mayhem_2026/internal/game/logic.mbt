@@ -85,7 +85,13 @@ fn @types.Game::emit_particle(
 
 ///|
 /// Emits n particles of the given kind in a random burst around position (x, y).
-fn @types.Game::burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
+fn @types.Game::burst(
+  game : @types.Game,
+  x : Float,
+  y : Float,
+  n : Int,
+  kind : Int,
+) -> Unit {
   for _i in 0..<n {
     game.emit_particle(
       x + @types.randf(-12.0, 12.0),
@@ -412,7 +418,12 @@ fn pickup_distance(kind : Int) -> Float {
 
 ///|
 /// Applies a collected pickup's effect (fuel, HP, or turbo boost) and spawns a burst particle effect.
-fn @types.Game::collect_pickup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit {
+fn @types.Game::collect_pickup(
+  game : @types.Game,
+  kind : Int,
+  x : Float,
+  y : Float,
+) -> Unit {
   if kind == @types.pickup_fuel {
     game.fuel = @types.minf(100.0, game.fuel + 30.0)
     game.score = game.score + 10

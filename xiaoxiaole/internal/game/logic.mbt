@@ -87,7 +87,13 @@ fn @types.Game::snap_positions(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::try_swap(game : @types.Game, r1 : Int, c1 : Int, r2 : Int, c2 : Int) -> Unit {
+fn @types.Game::try_swap(
+  game : @types.Game,
+  r1 : Int,
+  c1 : Int,
+  r2 : Int,
+  c2 : Int,
+) -> Unit {
   // Check adjacency
   let dr = if r2 > r1 { r2 - r1 } else { r1 - r2 }
   let dc = if c2 > c1 { c2 - c1 } else { c1 - c2 }

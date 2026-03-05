@@ -997,7 +997,10 @@ fn @types.Game::check_traps(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::add_spell_to_player(game : @types.Game, spell_type : Int) -> Bool {
+fn @types.Game::add_spell_to_player(
+  game : @types.Game,
+  spell_type : Int,
+) -> Bool {
   // Check if already have this spell
   for spell in game.spells {
     if spell.active && spell.spell_type == spell_type {

@@ -1020,7 +1020,11 @@ fn @types.Game::draw_block(
 }
 
 ///|
-fn @types.Game::draw_diamond(game : @types.Game, wx : Float, wz : Float) -> Unit {
+fn @types.Game::draw_diamond(
+  game : @types.Game,
+  wx : Float,
+  wz : Float,
+) -> Unit {
   let bob = @math.sinf(Float::from_int(game.frame_counter) * 0.06) * 0.08
   let pos = @raylib.Vector3::new(wx, 0.4 + bob, wz)
   @raylib.draw_cube(

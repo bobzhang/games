@@ -32,7 +32,11 @@ fn @types.Game::cam_shake(game : @types.Game) -> (Float, Float) {
 }
 
 ///|
-fn @types.Game::draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_sky(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -84,7 +88,11 @@ fn @types.Game::draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Un
 }
 
 ///|
-fn @types.Game::draw_room_base(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_room_base(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   @raylib.draw_rectangle(
     @types.play_left.to_int(),
     @types.play_top.to_int(),
@@ -165,7 +173,11 @@ fn draw_station_tag(label : String, x : Float, y : Float, hot : Bool) -> Unit {
 }
 
 ///|
-fn @types.Game::draw_kettle(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_kettle(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let x = @types.kettle_x + cam_x
   let y = @types.kettle_y + cam_y
   let hot = @types.near_station(
@@ -209,7 +221,11 @@ fn @types.Game::draw_kettle(game : @types.Game, cam_x : Float, cam_y : Float) ->
 }
 
 ///|
-fn @types.Game::draw_leaf_racks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_leaf_racks(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for tea_i in 0..<@types.tea_count {
     let tea = tea_i
     let x = @types.leaf_x() + cam_x
@@ -281,7 +297,11 @@ fn @types.Game::draw_leaf_racks(game : @types.Game, cam_x : Float, cam_y : Float
 }
 
 ///|
-fn @types.Game::draw_brewer(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_brewer(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let x = @types.brew_x + cam_x
   let y = @types.brew_y + cam_y
   let hot = @types.near_station(
@@ -366,7 +386,11 @@ fn @types.Game::draw_brewer(game : @types.Game, cam_x : Float, cam_y : Float) ->
 }
 
 ///|
-fn @types.Game::draw_counter(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_counter(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let x = @types.counter_x + cam_x
   let y = @types.counter_y + cam_y
   let hot = @types.near_station(
@@ -512,7 +536,11 @@ fn draw_customer(c : @types.Customer, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_player(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let p = game.player
   let x = p.x + cam_x
   let y = p.y + cam_y
@@ -588,7 +616,11 @@ fn @types.Game::draw_player(game : @types.Game, cam_x : Float, cam_y : Float) ->
 }
 
 ///|
-fn @types.Game::draw_sparks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_sparks(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
       continue
@@ -1277,7 +1309,11 @@ fn @types.Game::draw_flash(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_world(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   game.draw_sky(cam_x, cam_y)
   game.draw_room_base(cam_x, cam_y)
 

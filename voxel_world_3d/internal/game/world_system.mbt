@@ -125,7 +125,12 @@ pub fn update_entity_spawning(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::spawn_entity_at(game : @types.Game, x : Float, y : Float, z : Float) -> Unit {
+fn @types.Game::spawn_entity_at(
+  game : @types.Game,
+  x : Float,
+  y : Float,
+  z : Float,
+) -> Unit {
   // Determine biome at spawn location
   let biome = @types.get_biome_at(x.to_int(), z.to_int())
   let rng_val = @types.rand_next(game)

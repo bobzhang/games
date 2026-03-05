@@ -86,7 +86,12 @@ fn tile_text_color(v : Int) -> @raylib.Color {
 
 ///|
 /// Draws the board background panel and, when shaking, an orange border highlight.
-fn @types.Game::draw_board_panel(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
+fn @types.Game::draw_board_panel(
+  game : @types.Game,
+  bx : Int,
+  by : Int,
+  tile : Int,
+) -> Unit {
   let bw : Int = @types.board_n * tile
   let bh : Int = @types.board_n * tile
 
@@ -208,7 +213,12 @@ fn @types.Game::draw_cell(
 
 ///|
 /// Draws all board cells and the grid line overlay.
-fn @types.Game::draw_grid(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
+fn @types.Game::draw_grid(
+  game : @types.Game,
+  bx : Int,
+  by : Int,
+  tile : Int,
+) -> Unit {
   for y in 0..<@types.board_n {
     for x in 0..<@types.board_n {
       game.draw_cell(x, y, tile, bx, by)
@@ -241,7 +251,12 @@ fn @types.Game::draw_grid(game : @types.Game, bx : Int, by : Int, tile : Int) ->
 
 ///|
 /// Draws the cursor selection rectangle, tinted gold when zap is ready.
-fn @types.Game::draw_cursor(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
+fn @types.Game::draw_cursor(
+  game : @types.Game,
+  bx : Int,
+  by : Int,
+  tile : Int,
+) -> Unit {
   if game.state != Play {
     return
   }

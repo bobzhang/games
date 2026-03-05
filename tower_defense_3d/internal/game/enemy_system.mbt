@@ -96,7 +96,10 @@ fn @types.Game::spawn_enemy(game : @types.Game) -> Unit {
 // Spawn child enemies from splitters
 
 ///|
-fn @types.Game::spawn_splitter_children(game : @types.Game, parent : @types.Enemy) -> Unit {
+fn @types.Game::spawn_splitter_children(
+  game : @types.Game,
+  parent : @types.Enemy,
+) -> Unit {
   let child_count = @types.splitter_children
   for i in 0..<child_count {
     let idx = @types.alloc_enemy(game)
@@ -232,7 +235,11 @@ fn update_enemy_shield(enemy : @types.Enemy, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::update_healer(game : @types.Game, healer_idx : Int, dt : Float) -> Unit {
+fn @types.Game::update_healer(
+  game : @types.Game,
+  healer_idx : Int,
+  dt : Float,
+) -> Unit {
   let healer = game.enemies[healer_idx]
   healer.heal_timer += dt
   if healer.heal_timer < @types.healer_heal_interval {
@@ -289,7 +296,11 @@ fn @types.Game::kill_enemy(game : @types.Game, enemy : @types.Enemy) -> Unit {
 }
 
 ///|
-fn @types.Game::move_enemy_along_path(game : @types.Game, idx : Int, speed : Float) -> Unit {
+fn @types.Game::move_enemy_along_path(
+  game : @types.Game,
+  idx : Int,
+  speed : Float,
+) -> Unit {
   let enemy = game.enemies[idx]
   if enemy.path_index >= game.path_count - 1 {
     enemy.path_progress = 1.0
@@ -390,7 +401,10 @@ fn @types.Game::update_projectiles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::apply_projectile_hit(game : @types.Game, proj_idx : Int) -> Unit {
+fn @types.Game::apply_projectile_hit(
+  game : @types.Game,
+  proj_idx : Int,
+) -> Unit {
   let proj = game.projectiles[proj_idx]
   // Determine tower kind for resistance calculation
   let tower_kind = proj.kind
@@ -488,7 +502,10 @@ fn @types.Game::apply_projectile_effects(
 }
 
 ///|
-fn @types.Game::apply_chain_lightning(game : @types.Game, proj : @types.Projectile) -> Unit {
+fn @types.Game::apply_chain_lightning(
+  game : @types.Game,
+  proj : @types.Projectile,
+) -> Unit {
   let mut current_target = proj.target_idx
   let mut current_damage = proj.damage
   let chains = proj.chain_count

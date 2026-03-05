@@ -61,7 +61,9 @@ fn @types.Game::push_history(
 
 ///|
 /// Removes and returns the most recent history entry as `(true, x, y, player)`, or `(false, 0, 0, Empty)` if the stack is empty.
-fn @types.Game::pop_history(game : @types.Game) -> (Bool, Int, Int, @types.Player) {
+fn @types.Game::pop_history(
+  game : @types.Game,
+) -> (Bool, Int, Int, @types.Player) {
   if game.hist_len <= 0 {
     return (false, 0, 0, Empty)
   }
@@ -129,7 +131,12 @@ fn @types.Game::board_full(game : @types.Game) -> Bool {
 
 ///|
 /// Places player `p`'s stone at `(x, y)`, records history, emits sparks, checks for a win or draw, and advances the turn; returns false if placement is invalid.
-fn @types.Game::place_stone(game : @types.Game, x : Int, y : Int, p : @types.Player) -> Bool {
+fn @types.Game::place_stone(
+  game : @types.Game,
+  x : Int,
+  y : Int,
+  p : @types.Player,
+) -> Bool {
   if game.state != Play {
     return false
   }

@@ -167,7 +167,10 @@ fn @types.Game::update_timed_spikes(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::update_decoration_particles(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_decoration_particles(
+  game : @types.Game,
+  dt : Float,
+) -> Unit {
   ignore(dt)
   // Spawn particles near decorations periodically
   if game.frame_counter % 30 == 0 {
@@ -363,7 +366,10 @@ fn @types.Game::update_world_select(game : @types.Game, _dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::update_campaign_complete(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_campaign_complete(
+  game : @types.Game,
+  _dt : Float,
+) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyM) {

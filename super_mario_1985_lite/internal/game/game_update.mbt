@@ -35,7 +35,11 @@ fn @types.Game::tick_level_timer(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::update_playing(game : @types.Game, input : @types.Input, dt : Float) -> Unit {
+fn @types.Game::update_playing(
+  game : @types.Game,
+  input : @types.Input,
+  dt : Float,
+) -> Unit {
   game.tick_level_timer(dt)
   if game.state != @types.state_playing {
     return

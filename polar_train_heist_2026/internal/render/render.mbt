@@ -63,7 +63,11 @@ fn @types.Game::scene_tint(game : @types.Game) -> @raylib.Color {
 
 ///|
 /// Draws the background gradient, heat tint, animated moon, stars, and aurora light bands.
-fn @types.Game::draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_sky(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -159,7 +163,11 @@ fn mountain_col(depth : Int) -> @raylib.Color {
 
 ///|
 /// Draws three parallax mountain layers with snow-capped peaks scrolling at different speeds.
-fn @types.Game::draw_mountains(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_mountains(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let horizon = Float::from_int(@types.hud_h) + 156.0
 
   for layer in 0..<3 {
@@ -240,7 +248,11 @@ fn rail_col() -> @raylib.Color {
 
 ///|
 /// Draws the scrolling train car body with seam lines, rivet dots, lane rails, and edge stripes.
-fn @types.Game::draw_train_body(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_train_body(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let y = roof_y()
   let h = roof_h()
 
@@ -335,7 +347,11 @@ fn @types.Game::draw_train_body(game : @types.Game, cam_x : Float, cam_y : Float
 
 ///|
 /// Draws horizontal speed streak lines whose count and length scale with the current scroll speed.
-fn @types.Game::draw_speed_lines(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_speed_lines(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let intensity = @types.clampf(
     (game.scroll - @types.base_scroll) / 120.0,
     0.0,
@@ -383,7 +399,11 @@ fn ent_base_col(kind : Int) -> @raylib.Color {
 
 ///|
 /// Draws all active shadow afterimage blobs as fading translucent rectangles.
-fn @types.Game::draw_shadow_blobs(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_shadow_blobs(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for shadow in game.shadows {
     if not(shadow.active) {
       continue
@@ -704,7 +724,11 @@ fn draw_ent(e : @types.Ent, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws the player character with animated body, coat, legs, arm, muzzle flash, hook ring, and hurt overlay.
-fn @types.Game::draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_player(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let h = game.hero
   let x = h.x + cam_x
   let y = h.y + cam_y
@@ -848,7 +872,11 @@ fn shot_col(s : @types.Shot) -> @raylib.Color {
 
 ///|
 /// Draws all active projectiles as velocity-oriented line segments with a bright dot at the tip.
-fn @types.Game::draw_shots(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_shots(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for shot in game.shots {
     if not(shot.active) {
       continue
@@ -905,7 +933,11 @@ fn fx_col(kind : Int) -> @raylib.Color {
 
 ///|
 /// Draws all active particle sparks and expanding ring effects with alpha fading by lifetime.
-fn @types.Game::draw_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_fx(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for fx in game.fxs {
     if not(fx.active) {
       continue
@@ -1510,7 +1542,11 @@ fn @types.Game::draw_flash(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the complete game world: sky, mountains, speed lines, train body, shadows, entities, player, shots, and effects.
-fn @types.Game::draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_world(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   game.draw_sky(cam_x, cam_y)
   game.draw_mountains(cam_x, cam_y)
   game.draw_speed_lines(cam_x, cam_y)

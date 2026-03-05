@@ -43,7 +43,11 @@ fn @types.Game::board_cell_from_pointer(game : @types.Game) -> (Bool, Int, Int) 
 }
 
 ///|
-fn @types.Game::direction_to_cell(game : @types.Game, tx : Int, ty : Int) -> Int {
+fn @types.Game::direction_to_cell(
+  game : @types.Game,
+  tx : Int,
+  ty : Int,
+) -> Int {
   let hx : Int = game.p_seg_x[0]
   let hy : Int = game.p_seg_y[0]
 

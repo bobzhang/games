@@ -99,7 +99,10 @@ fn @types.Game::enemy_resolve_y(
 }
 
 ///|
-fn @types.Game::enemy_ground_ahead(game : @types.Game, enemy : @types.Enemy) -> Bool {
+fn @types.Game::enemy_ground_ahead(
+  game : @types.Game,
+  enemy : @types.Enemy,
+) -> Bool {
   let probe_x = enemy.x +
     Float::from_int(enemy.dir) * (@types.enemy_half_w() + 2.0)
   let probe_y = enemy.y + @types.enemy_half_h() + 6.0

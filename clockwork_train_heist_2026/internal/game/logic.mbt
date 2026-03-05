@@ -12,7 +12,11 @@ fn in_bounds(x : Int, y : Int) -> Bool {
 
 ///|
 /// Returns the tile kind at `(x, y)`, treating out-of-bounds positions as Wall.
-fn @types.Game::tile_at(game : @types.Game, x : Int, y : Int) -> @types.TileKind {
+fn @types.Game::tile_at(
+  game : @types.Game,
+  x : Int,
+  y : Int,
+) -> @types.TileKind {
   if not(in_bounds(x, y)) {
     Wall
   } else {
@@ -22,7 +26,12 @@ fn @types.Game::tile_at(game : @types.Game, x : Int, y : Int) -> @types.TileKind
 
 ///|
 /// Writes a tile kind into the map at `(x, y)`, ignoring out-of-bounds positions.
-fn @types.Game::set_tile(game : @types.Game, x : Int, y : Int, t : @types.TileKind) -> Unit {
+fn @types.Game::set_tile(
+  game : @types.Game,
+  x : Int,
+  y : Int,
+  t : @types.TileKind,
+) -> Unit {
   if not(in_bounds(x, y)) {
     return
   }
@@ -205,7 +214,12 @@ fn @types.Game::smoke_cover_at(game : @types.Game, x : Int, y : Int) -> Bool {
 
 ///|
 /// Returns the index of an active guard occupying `(x, y)`, skipping guard `skip`, or -1 if none found.
-fn @types.Game::guard_index_at(game : @types.Game, x : Int, y : Int, skip : Int) -> Int {
+fn @types.Game::guard_index_at(
+  game : @types.Game,
+  x : Int,
+  y : Int,
+  skip : Int,
+) -> Int {
   for i in 0..<game.guards.length() {
     if i == skip || not(game.guards[i].active) {
       continue
@@ -251,7 +265,12 @@ fn @types.Game::blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
 
 ///|
 /// Returns true if the cell `(x, y)` is impassable for guard `gid`, accounting for map tiles and other guards.
-fn @types.Game::blocked_for_guard(game : @types.Game, gid : Int, x : Int, y : Int) -> Bool {
+fn @types.Game::blocked_for_guard(
+  game : @types.Game,
+  gid : Int,
+  x : Int,
+  y : Int,
+) -> Bool {
   if game.blocked_by_map(x, y) {
     return true
   }
@@ -455,7 +474,11 @@ fn @types.Game::go_title(game : @types.Game) -> Unit {
 
 ///|
 /// Ends the current run, recording win/loss and reason, updating the best score, and emitting a particle burst.
-fn @types.Game::finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
+fn @types.Game::finish_run(
+  game : @types.Game,
+  win : Bool,
+  reason : String,
+) -> Unit {
   if game.state != Play {
     return
   }
@@ -653,7 +676,10 @@ fn guard_seed_next(seed : Int) -> Int {
 
 ///|
 /// Selects the best adjacent step toward the player for a guard in Hunt mode using Manhattan distance.
-fn @types.Game::guard_choose_chase_step(game : @types.Game, gid : Int) -> (Int, Int) {
+fn @types.Game::guard_choose_chase_step(
+  game : @types.Game,
+  gid : Int,
+) -> (Int, Int) {
   let gx : Int = game.guards[gid].body.x
   let gy : Int = game.guards[gid].body.y
 
@@ -689,7 +715,10 @@ fn @types.Game::guard_choose_chase_step(game : @types.Game, gid : Int) -> (Int, 
 
 ///|
 /// Selects the next patrol step for a guard, reversing direction at patrol boundaries or when blocked.
-fn @types.Game::guard_choose_patrol_step(game : @types.Game, gid : Int) -> (Int, Int) {
+fn @types.Game::guard_choose_patrol_step(
+  game : @types.Game,
+  gid : Int,
+) -> (Int, Int) {
   let g = game.guards[gid]
   let gx : Int = g.body.x
   let gy : Int = g.body.y

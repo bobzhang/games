@@ -22,7 +22,12 @@ fn @types.Game::tile_at(game : @types.Game, x : Int, y : Int) -> @types.Tile {
 
 ///|
 /// Sets the tile at `(x, y)` to `t`; silently ignores out-of-bounds coordinates.
-fn @types.Game::set_tile(game : @types.Game, x : Int, y : Int, t : @types.Tile) -> Unit {
+fn @types.Game::set_tile(
+  game : @types.Game,
+  x : Int,
+  y : Int,
+  t : @types.Tile,
+) -> Unit {
   if not(in_bounds(x, y)) {
     return
   }
@@ -209,7 +214,12 @@ fn @types.Game::page_index_at(game : @types.Game, x : Int, y : Int) -> Int {
 
 ///|
 /// Returns the index of an active ghost at `(x, y)` other than `skip`, or -1 if none exists.
-fn @types.Game::ghost_index_at(game : @types.Game, x : Int, y : Int, skip : Int) -> Int {
+fn @types.Game::ghost_index_at(
+  game : @types.Game,
+  x : Int,
+  y : Int,
+  skip : Int,
+) -> Int {
   for i in 0..<game.ghosts.length() {
     if i == skip || not(game.ghosts[i].active) {
       continue
@@ -240,7 +250,12 @@ fn @types.Game::blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
 
 ///|
 /// Returns true if `(x, y)` is blocked for ghost `gid` by the map, a shelf, or another ghost.
-fn @types.Game::blocked_for_actor(game : @types.Game, gid : Int, x : Int, y : Int) -> Bool {
+fn @types.Game::blocked_for_actor(
+  game : @types.Game,
+  gid : Int,
+  x : Int,
+  y : Int,
+) -> Bool {
   if game.blocked_by_map(x, y) {
     return true
   }
@@ -440,7 +455,11 @@ pub fn go_title(game : @types.Game) -> Unit {
 
 ///|
 /// Transitions to the Result state, records the win/loss reason, applies escape bonus on win, and emits particle burst.
-fn @types.Game::finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
+fn @types.Game::finish_run(
+  game : @types.Game,
+  win : Bool,
+  reason : String,
+) -> Unit {
   if game.state != Play {
     return
   }
@@ -481,7 +500,12 @@ pub fn cycle_hint(game : @types.Game) -> Unit {
 
 ///|
 /// Attempts to push shelf `sidx` one step in direction `(dx, dy)`; returns false if the destination is blocked.
-fn @types.Game::push_shelf(game : @types.Game, sidx : Int, dx : Int, dy : Int) -> Bool {
+fn @types.Game::push_shelf(
+  game : @types.Game,
+  sidx : Int,
+  dx : Int,
+  dy : Int,
+) -> Bool {
   let nx : Int = game.shelf_x[sidx] + dx
   let ny : Int = game.shelf_y[sidx] + dy
 

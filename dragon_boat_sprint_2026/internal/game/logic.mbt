@@ -1,6 +1,10 @@
 ///|
 /// Sets the HUD status message and starts its display timer.
-fn @types.Game::set_message(game : @types.Game, msg : String, ttl : Float) -> Unit {
+fn @types.Game::set_message(
+  game : @types.Game,
+  msg : String,
+  ttl : Float,
+) -> Unit {
   game.msg = msg
   game.msg_t = ttl
 }

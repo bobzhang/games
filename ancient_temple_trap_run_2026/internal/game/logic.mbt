@@ -328,7 +328,11 @@ fn @types.Game::refresh_doors(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Returns true if the player placed at `(x, y)` would overlap any currently-closed door rectangle.
-fn @types.Game::collides_closed_door(game : @types.Game, x : Float, y : Float) -> Bool {
+fn @types.Game::collides_closed_door(
+  game : @types.Game,
+  x : Float,
+  y : Float,
+) -> Bool {
   let (px, py, pw, ph) = @types.player_rect_at(game, x, y)
 
   for door in game.doors {
@@ -541,7 +545,10 @@ fn @types.Game::update_play_state(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Handles the StageClear state: retries the current stage on `input_restart_press` or advances to the next stage on `input_next_press`.
-fn @types.Game::update_stage_clear_state(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_stage_clear_state(
+  game : @types.Game,
+  _dt : Float,
+) -> Unit {
   if game.input_restart_press {
     game.retry_stage()
   } else if game.input_next_press {

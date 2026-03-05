@@ -782,7 +782,12 @@ fn @types.Game::fire_shaman_bolt(game : @types.Game, f : @types.Foe) -> Unit {
 
 ///|
 /// Deactivates foe at index `i`, awards score, pushes the combo, and spawns death ring and spark effects.
-fn @types.Game::kill_foe(game : @types.Game, i : Int, reward : Int, kind : Int) -> Unit {
+fn @types.Game::kill_foe(
+  game : @types.Game,
+  i : Int,
+  reward : Int,
+  kind : Int,
+) -> Unit {
   let x = game.foes[i].x
   let y = game.foes[i].y
   game.foes[i].active = false

@@ -886,7 +886,12 @@ fn @types.Game::enemy_fire(game : @types.Game, e : @types.Ent) -> Unit {
 
 ///|
 /// Deactivates an entity, awards score with combo scaling, increments kill count, and emits death effects.
-fn @types.Game::kill_ent(game : @types.Game, i : Int, base : Int, burst_kind : Int) -> Unit {
+fn @types.Game::kill_ent(
+  game : @types.Game,
+  i : Int,
+  base : Int,
+  burst_kind : Int,
+) -> Unit {
   let x = game.ents[i].x
   let y = game.ents[i].y
   game.ents[i].active = false

@@ -138,7 +138,11 @@ fn draw_grid_and_gate_cell(cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws the moon gate with a pulsing ring, health-tinted colour, and barrier flash ring.
-fn @types.Game::draw_gate(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_gate(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let gx = @types.gate_x() + cam_x
   let gy = @types.gate_y() + cam_y
   let gate_ratio = @types.clampf(game.gate_hp / @types.gate_hp_max, 0.0, 1.0)
@@ -183,7 +187,11 @@ fn @types.Game::draw_gate(game : @types.Game, cam_x : Float, cam_y : Float) -> U
 
 ///|
 /// Draws all active guardian nodes with level-scaled radius, facing arrow, and range arc.
-fn @types.Game::draw_nodes(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_nodes(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for node in game.nodes {
     if not(node.active) {
       continue
@@ -238,7 +246,11 @@ fn @types.Game::draw_nodes(game : @types.Game, cam_x : Float, cam_y : Float) -> 
 
 ///|
 /// Draws all active enemies with health bars and wraith aura effects.
-fn @types.Game::draw_enemies(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_enemies(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for enemy in game.enemies {
     if not(enemy.active) {
       continue
@@ -289,7 +301,11 @@ fn @types.Game::draw_enemies(game : @types.Game, cam_x : Float, cam_y : Float) -
 
 ///|
 /// Draws all active bolt projectiles as a short trailing line with a bright tip.
-fn @types.Game::draw_bolts(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_bolts(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for bolt in game.bolts {
     if not(bolt.active) {
       continue
@@ -330,7 +346,11 @@ fn pulse_col(kind : Int) -> @raylib.Color {
 
 ///|
 /// Draws all active ring pulse effects with alpha fading as they expire.
-fn @types.Game::draw_pulses(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_pulses(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for pulse in game.pulses {
     if not(pulse.active) {
       continue
@@ -352,7 +372,11 @@ fn @types.Game::draw_pulses(game : @types.Game, cam_x : Float, cam_y : Float) ->
 
 ///|
 /// Draws the tile cursor rectangle and a directional facing indicator.
-fn @types.Game::draw_cursor(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_cursor(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let x = @types.board_x + game.cursor_x * @types.cell_size
   let y = @types.board_y + game.cursor_y * @types.cell_size
 

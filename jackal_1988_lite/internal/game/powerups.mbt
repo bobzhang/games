@@ -9,7 +9,12 @@ fn @types.Game::alloc_powerup(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::spawn_powerup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit {
+fn @types.Game::spawn_powerup(
+  game : @types.Game,
+  kind : Int,
+  x : Float,
+  y : Float,
+) -> Unit {
   let idx = game.alloc_powerup()
   if idx < 0 {
     return
@@ -32,7 +37,11 @@ fn @types.Game::spawn_powerup(game : @types.Game, kind : Int, x : Float, y : Flo
 }
 
 ///|
-fn @types.Game::spawn_random_powerup(game : @types.Game, x : Float, y : Float) -> Unit {
+fn @types.Game::spawn_random_powerup(
+  game : @types.Game,
+  x : Float,
+  y : Float,
+) -> Unit {
   let roll = @types.rand_range(game, 0, 99)
   let kind = if roll < 18 {
     @types.powerup_shield
@@ -51,7 +60,10 @@ fn @types.Game::spawn_random_powerup(game : @types.Game, x : Float, y : Float) -
 }
 
 ///|
-fn @types.Game::clear_all_enemies_by_grenade(game : @types.Game, team : Int) -> Unit {
+fn @types.Game::clear_all_enemies_by_grenade(
+  game : @types.Game,
+  team : Int,
+) -> Unit {
   let mut killed = 0
   for enemy in game.enemies {
     if enemy.active {
@@ -70,7 +82,11 @@ fn @types.Game::clear_all_enemies_by_grenade(game : @types.Game, team : Int) -> 
 }
 
 ///|
-fn @types.Game::apply_powerup(game : @types.Game, player_index : Int, kind : Int) -> Unit {
+fn @types.Game::apply_powerup(
+  game : @types.Game,
+  player_index : Int,
+  kind : Int,
+) -> Unit {
   let player = game.players[player_index]
   let team = @types.team_of_player(player_index)
   if kind == @types.powerup_shield {

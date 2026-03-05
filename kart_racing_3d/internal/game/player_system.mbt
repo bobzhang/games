@@ -293,7 +293,10 @@ pub fn apply_kart_physics(
 }
 
 ///|
-fn @types.Game::clamp_kart_to_track_bounds(game : @types.Game, kart_idx : Int) -> Unit {
+fn @types.Game::clamp_kart_to_track_bounds(
+  game : @types.Game,
+  kart_idx : Int,
+) -> Unit {
   let kart = game.karts[kart_idx]
   let wc = game.waypoint_count
   if wc < 2 {
@@ -422,7 +425,11 @@ fn @types.Game::fire_missile(game : @types.Game, kart_idx : Int) -> Unit {
 }
 
 ///|
-fn @types.Game::drop_item(game : @types.Game, kart_idx : Int, item_type : Int) -> Unit {
+fn @types.Game::drop_item(
+  game : @types.Game,
+  kart_idx : Int,
+  item_type : Int,
+) -> Unit {
   let kart = game.karts[kart_idx]
   let idx = @types.alloc_dropped_item(game)
   if idx < 0 {
@@ -446,7 +453,10 @@ fn @types.Game::drop_item(game : @types.Game, kart_idx : Int, item_type : Int) -
 }
 
 ///|
-fn @types.Game::activate_lightning(game : @types.Game, source_kart : Int) -> Unit {
+fn @types.Game::activate_lightning(
+  game : @types.Game,
+  source_kart : Int,
+) -> Unit {
   game.lightning_active = true
   game.lightning_timer = @types.lightning_duration
   game.lightning_source = source_kart

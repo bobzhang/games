@@ -136,7 +136,13 @@ fn @types.Game::emit_particle(
 
 ///|
 /// Emits `n` particles of the given kind around pixel position `(x, y)` with random velocities.
-fn @types.Game::burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
+fn @types.Game::burst(
+  game : @types.Game,
+  x : Float,
+  y : Float,
+  n : Int,
+  kind : Int,
+) -> Unit {
   for _i in 0..<n {
     game.emit_particle(
       x + @types.randf(-10.0, 10.0),
@@ -209,7 +215,12 @@ fn @types.Game::core_index_at(game : @types.Game, x : Int, y : Int) -> Int {
 
 ///|
 /// Returns the index of an active drone occupying tile `(x, y)`, skipping drone index `skip`, or -1 if none.
-fn @types.Game::drone_index_at(game : @types.Game, x : Int, y : Int, skip : Int) -> Int {
+fn @types.Game::drone_index_at(
+  game : @types.Game,
+  x : Int,
+  y : Int,
+  skip : Int,
+) -> Int {
   for i in 0..<game.drones.length() {
     if i == skip || not(game.drones[i].active) {
       continue
@@ -411,7 +422,11 @@ fn @types.Game::go_title(game : @types.Game) -> Unit {
 
 ///|
 /// Ends the current run, records win/loss outcome, applies score bonuses, and transitions to the result screen.
-fn @types.Game::finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
+fn @types.Game::finish_run(
+  game : @types.Game,
+  win : Bool,
+  reason : String,
+) -> Unit {
   if game.state != @types.state_play {
     return
   }
@@ -601,7 +616,12 @@ fn drone_seed_next(seed : Int) -> Int {
 
 ///|
 /// Returns true if tile `(x, y)` is impassable for drone `gid` (wall, locked exit, or occupied by another drone).
-fn @types.Game::blocked_for_drone(game : @types.Game, gid : Int, x : Int, y : Int) -> Bool {
+fn @types.Game::blocked_for_drone(
+  game : @types.Game,
+  gid : Int,
+  x : Int,
+  y : Int,
+) -> Bool {
   if game.blocked_by_map(x, y) {
     return true
   }

@@ -1,5 +1,9 @@
 ///|
-fn @types.Game::draw_enemy_counter(game : @types.Game, x : Int, y : Int) -> Unit {
+fn @types.Game::draw_enemy_counter(
+  game : @types.Game,
+  x : Int,
+  y : Int,
+) -> Unit {
   let pending = game.enemies_to_spawn - game.enemies_spawned
   let remaining = game.enemies_alive + (if pending > 0 { pending } else { 0 })
   @types.draw_shadow_text("MONSTERS", x, y, 18, @raylib.raywhite)

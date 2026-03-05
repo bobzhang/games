@@ -41,7 +41,12 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::draw_board_back(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
+fn @types.Game::draw_board_back(
+  game : @types.Game,
+  bx : Int,
+  by : Int,
+  tile : Int,
+) -> Unit {
   let bw : Int = @types.grid_w * tile
   let bh : Int = @types.grid_h * tile
 
@@ -90,7 +95,12 @@ fn draw_grid_lines(bx : Int, by : Int, tile : Int) -> Unit {
 }
 
 ///|
-fn @types.Game::draw_food(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
+fn @types.Game::draw_food(
+  game : @types.Game,
+  bx : Int,
+  by : Int,
+  tile : Int,
+) -> Unit {
   let cx : Int = bx + game.food_x * tile + tile / 2
   let cy : Int = by + game.food_y * tile + tile / 2
   let r : Float = Float::from_int(tile) * 0.33
@@ -117,7 +127,12 @@ fn @types.Game::draw_food(game : @types.Game, bx : Int, by : Int, tile : Int) ->
 }
 
 ///|
-fn @types.Game::draw_trap(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
+fn @types.Game::draw_trap(
+  game : @types.Game,
+  bx : Int,
+  by : Int,
+  tile : Int,
+) -> Unit {
   if not(game.trap_active) {
     return
   }
@@ -179,7 +194,12 @@ fn rival_segment_color(kind : Int, head : Bool) -> @raylib.Color {
 }
 
 ///|
-fn @types.Game::draw_player(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
+fn @types.Game::draw_player(
+  game : @types.Game,
+  bx : Int,
+  by : Int,
+  tile : Int,
+) -> Unit {
   for i = game.p_len - 1; i >= 0; i = i - 1 {
     let x : Int = bx + game.p_seg_x[i] * tile
     let y : Int = by + game.p_seg_y[i] * tile
@@ -253,7 +273,12 @@ fn @types.Game::draw_rival(
 }
 
 ///|
-fn @types.Game::draw_hint(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
+fn @types.Game::draw_hint(
+  game : @types.Game,
+  bx : Int,
+  by : Int,
+  tile : Int,
+) -> Unit {
   if game.hint_t <= 0.0 {
     return
   }

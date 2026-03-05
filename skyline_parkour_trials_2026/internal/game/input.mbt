@@ -9,7 +9,10 @@ fn @types.Game::clear_frame_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::update_touch_mode(game : @types.Game, touch_count : Int) -> Unit {
+fn @types.Game::update_touch_mode(
+  game : @types.Game,
+  touch_count : Int,
+) -> Unit {
   if touch_count > 0 {
     game.touch_mode = true
   }

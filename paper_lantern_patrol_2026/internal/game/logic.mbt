@@ -1,6 +1,10 @@
 ///|
 /// Sets the HUD status text and its display duration in seconds.
-fn @types.Game::set_status(game : @types.Game, text : String, ttl : Float) -> Unit {
+fn @types.Game::set_status(
+  game : @types.Game,
+  text : String,
+  ttl : Float,
+) -> Unit {
   game.status_text = text
   game.status_t = ttl
 }

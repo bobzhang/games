@@ -207,7 +207,11 @@ fn @types.Game::update_air_enemy_ai(
 }
 
 ///|
-fn @types.Game::ai_patrol(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit {
+fn @types.Game::ai_patrol(
+  game : @types.Game,
+  e : @types.Enemy,
+  dt : Float,
+) -> Unit {
   // Orbit around patrol center
   e.orbit_angle += e.speed * 0.02 * dt
   if e.orbit_angle > @types.two_pi {

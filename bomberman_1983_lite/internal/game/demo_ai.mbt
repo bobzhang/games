@@ -12,7 +12,11 @@ fn opposite_dir(dir : Int) -> Int {
 }
 
 ///|
-fn @types.Game::demo_nearest_enemy(game : @types.Game, x : Float, y : Float) -> (Int, Float) {
+fn @types.Game::demo_nearest_enemy(
+  game : @types.Game,
+  x : Float,
+  y : Float,
+) -> (Int, Float) {
   let mut best_idx = -1
   let mut best_dist : Float = Float::from_int(1000000000)
   for i in 0..<game.enemies.length() {

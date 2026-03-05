@@ -36,7 +36,11 @@ fn @types.Game::cam_shake(game : @types.Game) -> (Float, Float) {
 
 ///|
 /// Draws the gradient night sky, animated moon, twinkling stars, and aurora ribbon bands with parallax camera offset.
-fn @types.Game::draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_sky(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -116,7 +120,11 @@ fn @types.Game::draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Un
 
 ///|
 /// Draws a layer of softly scrolling background clouds at slow parallax depth using triple overlapping circles.
-fn @types.Game::draw_far_clouds(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_far_clouds(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for i in 0..<24 {
     let fi = Float::from_int(i)
     let speed : Float = 14.0 + fi * 0.9
@@ -150,7 +158,11 @@ fn @types.Game::draw_far_clouds(game : @types.Game, cam_x : Float, cam_y : Float
 
 ///|
 /// Draws horizontal wind-streak lines whose count and length vary with current wind intensity.
-fn @types.Game::draw_wind_lanes(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_wind_lanes(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let intensity = @types.clampf(
     game.wind_x.abs() /
     (@types.wind_base + Float::from_int(game.stage) * @types.wind_stage_bonus),
@@ -243,7 +255,11 @@ fn @types.Game::draw_anchor_and_rope(
 
 ///|
 /// Draws all active kite trail rectangles fading out as their lifetime decreases.
-fn @types.Game::draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_trails(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for trail in game.trails {
     if not(trail.active) {
       continue
@@ -495,7 +511,11 @@ fn draw_obj(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws the player kite as a diamond with burst glow, tilt, a flowing tail of alternating coloured beads, reel ring, and hurt flash circle.
-fn @types.Game::draw_kite(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_kite(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let x = game.kite.x + cam_x
   let y = game.kite.y + cam_y
 
@@ -602,7 +622,11 @@ fn spark_col(kind : Int) -> @raylib.Color {
 
 ///|
 /// Draws all active sparks as fading circles and all active halos as expanding coloured ring outlines.
-fn @types.Game::draw_sparks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_sparks(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
       continue
@@ -1188,7 +1212,11 @@ fn @types.Game::draw_flash(game : @types.Game) -> Unit {
 
 ///|
 /// Composites the full play-world: sky, clouds, wind lanes, bounds, rope, trails, all objects (collectibles then hostiles), kite, and sparks.
-fn @types.Game::draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_world(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   game.draw_sky(cam_x, cam_y)
   game.draw_far_clouds(cam_x, cam_y)
   game.draw_wind_lanes(cam_x, cam_y)

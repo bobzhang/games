@@ -320,7 +320,10 @@ fn @types.Game::update_intro(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::recover_fighter_resources(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::recover_fighter_resources(
+  game : @types.Game,
+  dt : Float,
+) -> Unit {
   for i in 0..<@types.max_players {
     let fighter = game.fighters[i]
     let archetype = @types.fighter_archetype(game, fighter)
@@ -332,7 +335,10 @@ fn @types.Game::recover_fighter_resources(game : @types.Game, dt : Float) -> Uni
 }
 
 ///|
-fn @types.Game::update_training_resources(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_training_resources(
+  game : @types.Game,
+  dt : Float,
+) -> Unit {
   for i in 0..<@types.max_players {
     let fighter = game.fighters[i]
     let archetype = @types.fighter_archetype(game, fighter)

@@ -1,6 +1,11 @@
 ///|
 /// Returns true if any cell within Manhattan radius `r` of `(x, y)` is occupied.
-fn @types.Game::has_neighbor(game : @types.Game, x : Int, y : Int, r : Int) -> Bool {
+fn @types.Game::has_neighbor(
+  game : @types.Game,
+  x : Int,
+  y : Int,
+  r : Int,
+) -> Bool {
   for yy in (y - r)..<=(y + r) {
     for xx in (x - r)..<=(x + r) {
       if xx == x && yy == y {

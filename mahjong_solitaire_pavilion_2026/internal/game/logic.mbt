@@ -252,7 +252,10 @@ fn @types.Game::ensure_moves(game : @types.Game) -> Unit {
 
 ///|
 /// Appends an undo snapshot to the ring buffer, evicting the oldest entry when full.
-fn @types.Game::push_undo_pair(game : @types.Game, step : @types.UndoPair) -> Unit {
+fn @types.Game::push_undo_pair(
+  game : @types.Game,
+  step : @types.UndoPair,
+) -> Unit {
   if game.undo_len >= game.undo.length() {
     for i in 1..<game.undo.length() {
       game.undo[i - 1] = game.undo[i]

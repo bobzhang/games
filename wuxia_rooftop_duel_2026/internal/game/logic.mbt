@@ -114,7 +114,11 @@ fn @types.Game::finish_game_over(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::add_score_event(game : @types.Game, base : Int, stage_points : Int) -> Unit {
+fn @types.Game::add_score_event(
+  game : @types.Game,
+  base : Int,
+  stage_points : Int,
+) -> Unit {
   let combo_bonus_percent : Int = (240).min(game.combo * 13)
   let gained : Int = base * (100 + combo_bonus_percent) / 100
 
@@ -202,7 +206,11 @@ fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
 }
 
 ///|
-fn @types.Game::defeat_enemy(game : @types.Game, idx : Int, parry_kill : Bool) -> Unit {
+fn @types.Game::defeat_enemy(
+  game : @types.Game,
+  idx : Int,
+  parry_kill : Bool,
+) -> Unit {
   if not(game.enemies[idx].active) {
     return
   }
@@ -526,7 +534,11 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::update_enemy_seek(game : @types.Game, idx : Int, dt : Float) -> Unit {
+fn @types.Game::update_enemy_seek(
+  game : @types.Game,
+  idx : Int,
+  dt : Float,
+) -> Unit {
   let dir = @types.normalize(
     game.player_x - game.enemies[idx].x,
     game.player_y - game.enemies[idx].y,
@@ -568,7 +580,11 @@ fn @types.Game::update_enemy_seek(game : @types.Game, idx : Int, dt : Float) -> 
 }
 
 ///|
-fn @types.Game::update_enemy_telegraph(game : @types.Game, idx : Int, dt : Float) -> Unit {
+fn @types.Game::update_enemy_telegraph(
+  game : @types.Game,
+  idx : Int,
+  dt : Float,
+) -> Unit {
   game.enemies[idx].state_t = @types.maxf(0.0, game.enemies[idx].state_t - dt)
 
   let dir = @types.normalize(
@@ -600,7 +616,11 @@ fn @types.Game::update_enemy_telegraph(game : @types.Game, idx : Int, dt : Float
 }
 
 ///|
-fn @types.Game::update_enemy_strike(game : @types.Game, idx : Int, dt : Float) -> Unit {
+fn @types.Game::update_enemy_strike(
+  game : @types.Game,
+  idx : Int,
+  dt : Float,
+) -> Unit {
   game.enemies[idx].state_t = @types.maxf(0.0, game.enemies[idx].state_t - dt)
 
   game.enemies[idx].x = game.enemies[idx].x + game.enemies[idx].vx * dt
@@ -638,7 +658,11 @@ fn @types.Game::update_enemy_strike(game : @types.Game, idx : Int, dt : Float) -
 }
 
 ///|
-fn @types.Game::update_enemy_recover(game : @types.Game, idx : Int, dt : Float) -> Unit {
+fn @types.Game::update_enemy_recover(
+  game : @types.Game,
+  idx : Int,
+  dt : Float,
+) -> Unit {
   game.enemies[idx].state_t = @types.maxf(0.0, game.enemies[idx].state_t - dt)
 
   game.enemies[idx].x = game.enemies[idx].x + game.enemies[idx].vx * dt
@@ -654,7 +678,11 @@ fn @types.Game::update_enemy_recover(game : @types.Game, idx : Int, dt : Float) 
 }
 
 ///|
-fn @types.Game::update_enemy_stunned(game : @types.Game, idx : Int, dt : Float) -> Unit {
+fn @types.Game::update_enemy_stunned(
+  game : @types.Game,
+  idx : Int,
+  dt : Float,
+) -> Unit {
   game.enemies[idx].state_t = @types.maxf(0.0, game.enemies[idx].state_t - dt)
 
   game.enemies[idx].x = game.enemies[idx].x + game.enemies[idx].vx * dt
@@ -670,7 +698,10 @@ fn @types.Game::update_enemy_stunned(game : @types.Game, idx : Int, dt : Float) 
 }
 
 ///|
-fn @types.Game::keep_enemy_inside_rooftop(game : @types.Game, idx : Int) -> Unit {
+fn @types.Game::keep_enemy_inside_rooftop(
+  game : @types.Game,
+  idx : Int,
+) -> Unit {
   let left : Float = @types.arena_left() - 120.0
   let right : Float = @types.arena_right() + 120.0
   let top : Float = @types.arena_top() - 120.0

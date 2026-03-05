@@ -1,6 +1,10 @@
 ///|
 /// Sets the HUD message string and its display lifetime in seconds.
-fn @types.Game::set_message(game : @types.Game, text : String, ttl : Float) -> Unit {
+fn @types.Game::set_message(
+  game : @types.Game,
+  text : String,
+  ttl : Float,
+) -> Unit {
   game.message = text
   game.message_t = ttl
 }
@@ -49,7 +53,11 @@ fn @types.Game::reset_keeper(game : @types.Game) -> Unit {
 
 ///|
 /// Increases the severity of the specified room's breach by `amount` (clamped to the max), and primes the raider and ember cooldowns if they are nearly expired.
-fn @types.Game::raise_breach(game : @types.Game, room : Int, amount : Float) -> Unit {
+fn @types.Game::raise_breach(
+  game : @types.Game,
+  room : Int,
+  amount : Float,
+) -> Unit {
   let idx = room.clamp(min=0, max=@types.chamber_count - 1)
   game.breaches[idx].severity = @types.clampf(
     game.breaches[idx].severity + amount,
@@ -221,7 +229,11 @@ fn @types.Game::spawn_flame(
 
 ///|
 /// Deactivates a raider, increments the defeat counter, adds the score bonus, and partially replenishes the keeper's ink shield stock.
-fn @types.Game::defeat_raider(game : @types.Game, idx : Int, score_bonus : Int) -> Unit {
+fn @types.Game::defeat_raider(
+  game : @types.Game,
+  idx : Int,
+  score_bonus : Int,
+) -> Unit {
   if idx < 0 || idx >= game.raiders.length() || not(game.raiders[idx].active) {
     return
   }
@@ -373,7 +385,10 @@ fn @types.Game::update_keeper_motion(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Decrements the action, shield cooldown, and shield duration timers, and regenerates stamina at the rate appropriate for the keeper's current mode.
-fn @types.Game::update_keeper_timers_and_resources(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_keeper_timers_and_resources(
+  game : @types.Game,
+  dt : Float,
+) -> Unit {
   if game.keeper.action_cd > 0.0 {
     game.keeper.action_cd = @types.maxf(0.0, game.keeper.action_cd - dt)
   }

@@ -931,7 +931,11 @@ fn @types.Game::kill_enemy(game : @types.Game, idx : Int) -> Unit {
 }
 
 ///|
-fn @types.Game::damage_enemy(game : @types.Game, idx : Int, damage : Float) -> Unit {
+fn @types.Game::damage_enemy(
+  game : @types.Game,
+  idx : Int,
+  damage : Float,
+) -> Unit {
   let enemy = game.enemies[idx]
   enemy.hp -= damage
   enemy.flash_timer = 0.1
@@ -943,7 +947,11 @@ fn @types.Game::damage_enemy(game : @types.Game, idx : Int, damage : Float) -> U
 }
 
 ///|
-fn @types.Game::damage_enemy_headshot(game : @types.Game, idx : Int, damage : Float) -> Unit {
+fn @types.Game::damage_enemy_headshot(
+  game : @types.Game,
+  idx : Int,
+  damage : Float,
+) -> Unit {
   let final_damage = damage * @types.headshot_mult
   let enemy = game.enemies[idx]
   enemy.hp -= final_damage
@@ -1015,7 +1023,11 @@ fn @types.Game::damage_shielded_enemy(
 }
 
 ///|
-fn @types.Game::spawn_pickup_at(game : @types.Game, x : Float, z : Float) -> Unit {
+fn @types.Game::spawn_pickup_at(
+  game : @types.Game,
+  x : Float,
+  z : Float,
+) -> Unit {
   let idx = @types.alloc_pickup(game)
   if idx < 0 {
     return

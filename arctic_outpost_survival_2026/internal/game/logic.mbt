@@ -81,7 +81,13 @@ fn @types.Game::emit_particle(
 
 ///|
 /// Emits `n` particles of the given kind in random directions from a jittered position around `(x, y)`.
-fn @types.Game::burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
+fn @types.Game::burst(
+  game : @types.Game,
+  x : Float,
+  y : Float,
+  n : Int,
+  kind : Int,
+) -> Unit {
   for _i in 0..<n {
     game.emit_particle(
       x + @types.randf(-14.0, 14.0),
@@ -478,7 +484,12 @@ fn @types.Game::hurt_player(game : @types.Game, dmg : Float) -> Unit {
 
 ///|
 /// Applies the pickup effect by kind (fuel refills core heat, medkit heals suit, ammo crate restores ammo, overdrive activates pierce mode), adds score, increments combo, and shows a status message.
-fn @types.Game::collect_pickup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit {
+fn @types.Game::collect_pickup(
+  game : @types.Game,
+  kind : Int,
+  x : Float,
+  y : Float,
+) -> Unit {
   if kind == @types.pickup_fuel {
     game.fuel = @types.minf(100.0, game.fuel + 26.0)
     game.core_heat = @types.minf(100.0, game.core_heat + 6.0)
@@ -556,7 +567,11 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Applies bullet damage to the target enemy, deactivates normal bullets on hit or degrades pierce bullets until below the kill threshold, and on enemy death awards combo-scaled score and may spawn a pickup.
-fn @types.Game::bullet_hit_enemy(game : @types.Game, bi : Int, ei : Int) -> Unit {
+fn @types.Game::bullet_hit_enemy(
+  game : @types.Game,
+  bi : Int,
+  ei : Int,
+) -> Unit {
   game.enemies[ei].hp = game.enemies[ei].hp - game.bullets[bi].power
 
   if game.bullets[bi].kind == @types.bullet_normal {

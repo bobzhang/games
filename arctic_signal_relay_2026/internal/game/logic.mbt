@@ -54,7 +54,11 @@ fn stage_tower_need(stage : Int, idx : Int) -> Int {
 
 ///|
 /// Sets the in-game hint text and its display duration in seconds.
-fn @types.Game::set_hint(game : @types.Game, text : String, ttl : Float) -> Unit {
+fn @types.Game::set_hint(
+  game : @types.Game,
+  text : String,
+  ttl : Float,
+) -> Unit {
   game.hint_text = text
   game.hint_t = ttl
 }
@@ -251,7 +255,11 @@ pub fn init_title_scene(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the index of the nearest active, incomplete tower within interaction range of `(x, y)`, or -1 if none is found.
-fn @types.Game::closest_pending_tower(game : @types.Game, x : Float, y : Float) -> Int {
+fn @types.Game::closest_pending_tower(
+  game : @types.Game,
+  x : Float,
+  y : Float,
+) -> Int {
   let mut best_idx = -1
   let mut best_d2 = @types.tower_interact_r() * @types.tower_interact_r()
 
@@ -437,7 +445,11 @@ fn @types.Game::update_rover(
 
 ///|
 /// Drains rover energy and heat based on movement speed and storm intensity, and recharges both while the rover is in the depot.
-fn @types.Game::update_resources(game : @types.Game, dt : Float, intensity : Float) -> Unit {
+fn @types.Game::update_resources(
+  game : @types.Game,
+  dt : Float,
+  intensity : Float,
+) -> Unit {
   let speed = game.rover_vx.abs() + game.rover_vy.abs()
   let energy_drain = @types.energy_idle_drain +
     speed * @types.energy_move_drain +
@@ -504,7 +516,11 @@ fn @types.Game::apply_action(game : @types.Game) -> Unit {
 
 ///|
 /// Transitions the game to the Result state, records the win/loss outcome with a note, triggers a flash effect, and updates `best_stage` on a win.
-fn @types.Game::set_result(game : @types.Game, win : Bool, note : String) -> Unit {
+fn @types.Game::set_result(
+  game : @types.Game,
+  win : Bool,
+  note : String,
+) -> Unit {
   game.state = Result
   game.result_win = win
   game.result_note = note

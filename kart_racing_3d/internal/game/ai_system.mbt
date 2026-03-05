@@ -180,7 +180,11 @@ fn update_ai_timers(kart : @types.Kart, dt : Float) -> Unit {
 // AI item usage strategy
 
 ///|
-fn @types.Game::ai_use_item(game : @types.Game, kart_idx : Int, dt : Float) -> Unit {
+fn @types.Game::ai_use_item(
+  game : @types.Game,
+  kart_idx : Int,
+  dt : Float,
+) -> Unit {
   let kart = game.karts[kart_idx]
   if kart.held_powerup == @types.powerup_none {
     return

@@ -62,7 +62,11 @@ fn @types.Game::suggest_player_dir(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::direction_score_rival(game : @types.Game, rid : Int, dir : Int) -> Int {
+fn @types.Game::direction_score_rival(
+  game : @types.Game,
+  rid : Int,
+  dir : Int,
+) -> Int {
   let rival = game.rivals[rid]
 
   if @types.opposite_dir(rival.dir, dir) {

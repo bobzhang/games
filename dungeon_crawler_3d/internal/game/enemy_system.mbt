@@ -90,7 +90,11 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::update_patrol(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit {
+fn @types.Game::update_patrol(
+  game : @types.Game,
+  e : @types.Enemy,
+  dt : Float,
+) -> Unit {
   e.move_timer += dt
   if e.move_timer > 2.0 {
     e.move_timer = 0.0

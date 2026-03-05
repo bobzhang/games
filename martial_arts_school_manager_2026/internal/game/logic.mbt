@@ -1,6 +1,10 @@
 ///|
 /// Sets the HUD message text with a display duration in seconds.
-fn @types.Game::set_message(game : @types.Game, text : String, ttl : Float) -> Unit {
+fn @types.Game::set_message(
+  game : @types.Game,
+  text : String,
+  ttl : Float,
+) -> Unit {
   game.message = text
   game.message_t = ttl
 }
@@ -234,7 +238,10 @@ fn @types.Game::try_activate_burst(game : @types.Game) -> Unit {
 
 ///|
 /// Runs per-second simulation for all room assignments: deducts operating costs, applies training, sparring, defense, and rest effects to funds, reputation, skill, and fatigue.
-fn @types.Game::apply_room_simulation(game : @types.Game, sim_dt : Float) -> Unit {
+fn @types.Game::apply_room_simulation(
+  game : @types.Game,
+  sim_dt : Float,
+) -> Unit {
   let ops_cost = (
       @types.operation_cost_per_sec +
       Float::from_int(game.week - 1) * @types.operation_cost_week_scale
@@ -305,7 +312,10 @@ fn @types.Game::apply_room_simulation(game : @types.Game, sim_dt : Float) -> Uni
 
 ///|
 /// Applies reputation and funds penalties when average student fatigue exceeds the threshold, and triggers burnout game-over if critical.
-fn @types.Game::apply_fatigue_pressure(game : @types.Game, sim_dt : Float) -> Unit {
+fn @types.Game::apply_fatigue_pressure(
+  game : @types.Game,
+  sim_dt : Float,
+) -> Unit {
   let avg_fatigue = game.mean_fatigue()
 
   if avg_fatigue > @types.fatigue_penalty_start {

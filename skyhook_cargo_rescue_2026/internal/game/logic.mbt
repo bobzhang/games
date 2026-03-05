@@ -83,7 +83,13 @@ fn @types.Game::emit_particle(
 }
 
 ///|
-fn @types.Game::burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
+fn @types.Game::burst(
+  game : @types.Game,
+  x : Float,
+  y : Float,
+  n : Int,
+  kind : Int,
+) -> Unit {
   for _i in 0..<n {
     game.emit_particle(
       x + @types.randf(-14.0, 14.0),
@@ -478,7 +484,12 @@ fn @types.Game::rescue_carried_survivor(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::collect_pickup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit {
+fn @types.Game::collect_pickup(
+  game : @types.Game,
+  kind : Int,
+  x : Float,
+  y : Float,
+) -> Unit {
   if kind == @types.pickup_fuel {
     game.fuel = @types.minf(100.0, game.fuel + 30.0)
     game.score = game.score + 10
@@ -674,7 +685,11 @@ fn hazard_damage(kind : Int) -> Float {
 }
 
 ///|
-fn @types.Game::update_hazards(game : @types.Game, dt : Float, hook_speed : Float) -> Unit {
+fn @types.Game::update_hazards(
+  game : @types.Game,
+  dt : Float,
+  hook_speed : Float,
+) -> Unit {
   let tip_x : Float = @types.hook_tip_x(game)
   let tip_y : Float = @types.hook_tip_y(game)
 

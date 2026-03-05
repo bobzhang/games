@@ -219,7 +219,10 @@ fn @types.Game::update_orders(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Returns the order index matching the given dish with the least patience, preferring the selected order.
-fn @types.Game::find_matching_order(game : @types.Game, dish : @types.Dish) -> Int {
+fn @types.Game::find_matching_order(
+  game : @types.Game,
+  dish : @types.Dish,
+) -> Int {
   game.ensure_selected_order()
 
   if game.selected_order >= 0 {
@@ -307,7 +310,10 @@ fn @types.Game::apply_press_j_at_prep(game : @types.Game) -> Unit {
 
 ///|
 /// Handles J press at a heat station: advances cook progress if the active dish matches the station lane.
-fn @types.Game::apply_press_j_at_heat(game : @types.Game, lane : @types.Lane) -> Unit {
+fn @types.Game::apply_press_j_at_heat(
+  game : @types.Game,
+  lane : @types.Lane,
+) -> Unit {
   if not(game.cooking.active) || game.cooking.stage != Heat {
     return
   }
@@ -424,7 +430,11 @@ fn @types.Game::apply_press_k(game : @types.Game) -> Unit {
 
 ///|
 /// Moves the navigation cursor to the nearest node in the given direction using a distance-and-alignment heuristic.
-fn @types.Game::move_cursor(game : @types.Game, dir_x : Int, dir_y : Int) -> Unit {
+fn @types.Game::move_cursor(
+  game : @types.Game,
+  dir_x : Int,
+  dir_y : Int,
+) -> Unit {
   if dir_x == 0 && dir_y == 0 {
     return
   }

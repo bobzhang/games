@@ -218,7 +218,12 @@ fn obstacle_hit_fuel(kind : Int) -> Float {
 }
 
 ///|
-fn @types.Game::hurt_player(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit {
+fn @types.Game::hurt_player(
+  game : @types.Game,
+  kind : Int,
+  x : Float,
+  y : Float,
+) -> Unit {
   game.splash(x, y, if kind == @types.obstacle_mine { 40 } else { 26 }, 1)
   game.shake_t = @types.maxf(game.shake_t, 0.34)
 
@@ -268,7 +273,12 @@ fn pickup_radius(kind : Int) -> Float {
 }
 
 ///|
-fn @types.Game::collect_pickup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit {
+fn @types.Game::collect_pickup(
+  game : @types.Game,
+  kind : Int,
+  x : Float,
+  y : Float,
+) -> Unit {
   if kind == @types.pickup_coin {
     game.combo = (15).min(game.combo + 1)
     game.combo_t = 2.2

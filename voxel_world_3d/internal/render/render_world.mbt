@@ -127,7 +127,11 @@ fn @types.Game::draw_chunks(game : @types.Game) -> Unit {
 // Draw visible blocks in a single chunk
 
 ///|
-fn @types.Game::draw_chunk_blocks(game : @types.Game, cx : Int, cz : Int) -> Unit {
+fn @types.Game::draw_chunk_blocks(
+  game : @types.Game,
+  cx : Int,
+  cz : Int,
+) -> Unit {
   let chunk = game.chunks[cz * @types.world_chunks_x + cx]
   let base_wx = cx * @types.chunk_x
   let base_wz = cz * @types.chunk_z
@@ -309,7 +313,11 @@ fn @types.Game::draw_decorations(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::draw_chunk_decorations(game : @types.Game, cx : Int, cz : Int) -> Unit {
+fn @types.Game::draw_chunk_decorations(
+  game : @types.Game,
+  cx : Int,
+  cz : Int,
+) -> Unit {
   let chunk = game.chunks[cz * @types.world_chunks_x + cx]
   let base_wx = cx * @types.chunk_x
   let base_wz = cz * @types.chunk_z

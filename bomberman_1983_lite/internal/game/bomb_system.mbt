@@ -9,7 +9,10 @@ fn @types.Game::alloc_bomb(game : @types.Game) -> Int {
 }
 
 ///|
-fn @types.Game::can_player_place_bomb(game : @types.Game, player_index : Int) -> Bool {
+fn @types.Game::can_player_place_bomb(
+  game : @types.Game,
+  player_index : Int,
+) -> Bool {
   let player = game.players[player_index]
   if not(player.active) {
     return false
@@ -42,7 +45,10 @@ fn @types.Game::can_player_place_bomb(game : @types.Game, player_index : Int) ->
 }
 
 ///|
-fn @types.Game::place_player_bomb(game : @types.Game, player_index : Int) -> Unit {
+fn @types.Game::place_player_bomb(
+  game : @types.Game,
+  player_index : Int,
+) -> Unit {
   if not(game.can_player_place_bomb(player_index)) {
     return
   }
@@ -82,7 +88,11 @@ fn is_blast_blocking_tile(tile : @types.TileKind) -> Bool {
 }
 
 ///|
-fn @types.Game::mark_chain_bombs(game : @types.Game, tx : Int, ty : Int) -> Unit {
+fn @types.Game::mark_chain_bombs(
+  game : @types.Game,
+  tx : Int,
+  ty : Int,
+) -> Unit {
   for b in game.bombs {
     if not(b.active) || b.exploding {
       continue

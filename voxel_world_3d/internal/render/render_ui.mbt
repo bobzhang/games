@@ -978,7 +978,10 @@ fn @types.Game::draw_crafting_screen(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::check_can_craft(game : @types.Game, recipe : @types.CraftingRecipe) -> Bool {
+fn @types.Game::check_can_craft(
+  game : @types.Game,
+  recipe : @types.CraftingRecipe,
+) -> Bool {
   let inv = game.player.inventory
   let mut has1 = false
   let mut has2 = false

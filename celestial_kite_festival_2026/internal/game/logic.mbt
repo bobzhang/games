@@ -729,7 +729,11 @@ fn @types.Game::update_kite(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Applies the on-collect effect for the given object kind: scores points, restores time or energy, and increments the rescue counter.
-fn @types.Game::collect_obj(game : @types.Game, kind : @types.ObjKind, value : Int) -> Unit {
+fn @types.Game::collect_obj(
+  game : @types.Game,
+  kind : @types.ObjKind,
+  value : Int,
+) -> Unit {
   match kind {
     Lantern => {
       game.add_score(value)

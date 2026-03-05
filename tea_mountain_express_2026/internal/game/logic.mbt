@@ -1,5 +1,9 @@
 ///|
-fn @types.Game::set_message(game : @types.Game, text : String, ttl : Float) -> Unit {
+fn @types.Game::set_message(
+  game : @types.Game,
+  text : String,
+  ttl : Float,
+) -> Unit {
   game.message = text
   game.message_t = ttl
 }

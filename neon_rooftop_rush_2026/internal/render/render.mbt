@@ -23,7 +23,11 @@ fn @types.Game::shake_offset(game : @types.Game) -> (Float, Float) {
 
 ///|
 /// Draws the background sky gradient, parallax city building layers, glowing windows, and twinkling stars.
-fn @types.Game::draw_skyline(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_skyline(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let top_a = @types.bg_night()
   let top_b = @raylib.Color::new(24, 24, 52, 255)
   @raylib.draw_rectangle_gradient_v(
@@ -118,7 +122,11 @@ fn segment_color_glow(seg : @types.Segment) -> @raylib.Color {
 
 ///|
 /// Draws all active rooftop segments as neon-lit buildings with a colored top edge and procedural window grid.
-fn @types.Game::draw_segments(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_segments(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for segment in game.segments {
     if not(segment.active) {
       continue
@@ -341,7 +349,11 @@ fn draw_obstacle(ob : @types.Obstacle, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws all active collectible chips as spinning neon squares with a bobbing glow halo, blending lime and blue.
-fn @types.Game::draw_chips(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_chips(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for chip in game.chips {
     if not(chip.active) {
       continue
@@ -375,7 +387,11 @@ fn @types.Game::draw_chips(game : @types.Game, cam_x : Float, cam_y : Float) -> 
 
 ///|
 /// Draws all active particles as colored circles fading with their remaining life, followed by ghost trail rectangles that fade by their remaining life time.
-fn @types.Game::draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_particles(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -422,7 +438,11 @@ fn @types.Game::draw_particles(game : @types.Game, cam_x : Float, cam_y : Float)
 
 ///|
 /// Draws the player character with a grapple line when latched, an animated running/sliding body, leg animation, hurt flash tint, and an invulnerability blink outline.
-fn @types.Game::draw_hero(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_hero(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let hero = game.hero
 
   let hx = hero.x + cam_x
@@ -969,7 +989,11 @@ fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the full game world layer stack: skyline backdrop, grapple anchors, rooftop segments, obstacles, chips, particles, ghost trails, and the hero.
-fn @types.Game::draw_game_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_game_world(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   game.draw_skyline(cam_x, cam_y)
 
   for anchor in game.anchors {

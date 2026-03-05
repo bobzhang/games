@@ -45,7 +45,10 @@ fn is_player_shoot_pressed(index : Int) -> Bool {
 }
 
 ///|
-fn @types.Game::player_is_on_ice(game : @types.Game, player : @types.Tank) -> Bool {
+fn @types.Game::player_is_on_ice(
+  game : @types.Game,
+  player : @types.Tank,
+) -> Bool {
   let tx = @types.world_x_to_tile(player.x)
   let ty = @types.world_y_to_tile(player.y)
   @types.get_tile(game, tx, ty) == Ice
@@ -74,7 +77,10 @@ fn @types.Game::can_player_fire(game : @types.Game, index : Int) -> Bool {
 }
 
 ///|
-fn @types.Game::update_player_reload_timers(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_player_reload_timers(
+  game : @types.Game,
+  dt : Float,
+) -> Unit {
   for i in 0..<@types.max_players {
     let player = game.players[i]
     if player.reload_timer > 0.0 {

@@ -90,7 +90,11 @@ fn @types.Game::shake_offset(game : @types.Game) -> (Float, Float) {
 
 ///|
 /// Draws the gradient sky background, two large ambient glow circles, and a field of twinkling star particles.
-fn @types.Game::draw_sky_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_sky_backdrop(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -147,7 +151,11 @@ fn @types.Game::draw_sky_backdrop(game : @types.Game, cam_x : Float, cam_y : Flo
 
 ///|
 /// Draws a scrolling parallax city skyline of dark building silhouettes with neon accent lines at the top of the play area.
-fn @types.Game::draw_city_horizon(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_city_horizon(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let base_y = Float::from_int(@types.ui_panel_h) + 20.0
 
   for i in 0..<44 {
@@ -186,7 +194,11 @@ fn @types.Game::draw_city_horizon(game : @types.Game, cam_x : Float, cam_y : Flo
 
 ///|
 /// Draws the scrolling road surface strip by strip, including off-road fill, lane dividers, and neon edge lines.
-fn @types.Game::draw_road_surface(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_road_surface(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let step = 12
 
   for yi = @types.ui_panel_h; yi < @types.screen_h + step; yi = yi + step {
@@ -479,7 +491,11 @@ fn draw_entity_pickup(
 
 ///|
 /// Draws all active entities using their kind-appropriate draw function, applying cloak transparency and HP bars for hostiles.
-fn @types.Game::draw_entities(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_entities(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for e in game.entities {
     if not(e.active) {
       continue
@@ -530,7 +546,11 @@ fn @types.Game::draw_entities(game : @types.Game, cam_x : Float, cam_y : Float) 
 
 ///|
 /// Draws all active bullets as small colored circles with a trailing line segment indicating direction.
-fn @types.Game::draw_bullets(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_bullets(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for b in game.bullets {
     if not(b.active) {
       continue
@@ -569,7 +589,11 @@ fn @types.Game::draw_bullets(game : @types.Game, cam_x : Float, cam_y : Float) -
 
 ///|
 /// Draws all active sparks as small colored circles that fade out as their lifetime expires.
-fn @types.Game::draw_sparks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_sparks(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for s in game.sparks {
     if not(s.active) {
       continue
@@ -595,7 +619,11 @@ fn @types.Game::draw_sparks(game : @types.Game, cam_x : Float, cam_y : Float) ->
 
 ///|
 /// Draws all active glow rings as expanding colored circle outlines that fade as their lifetime expires.
-fn @types.Game::draw_rings(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_rings(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for r in game.rings {
     if not(r.active) {
       continue
@@ -621,7 +649,11 @@ fn @types.Game::draw_rings(game : @types.Game, cam_x : Float, cam_y : Float) -> 
 
 ///|
 /// Draws all active afterimage ghosts as fading rotated rectangles at their stored positions.
-fn @types.Game::draw_afterimages(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_afterimages(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for it in game.images {
     if not(it.active) {
       continue
@@ -645,7 +677,11 @@ fn @types.Game::draw_afterimages(game : @types.Game, cam_x : Float, cam_y : Floa
 
 ///|
 /// Draws the player vehicle with body lean, engine glow, muzzle flash, boost ring, and invulnerability flicker.
-fn @types.Game::draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_player(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let x = game.hero.x + cam_x
   let y = game.hero.y + cam_y
 
@@ -1279,7 +1315,11 @@ fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all world-space game objects in the correct painter's order: afterimages, rings, entities, bullets, sparks, and the player.
-fn @types.Game::draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_world(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   game.draw_afterimages(cam_x, cam_y)
   game.draw_rings(cam_x, cam_y)
   game.draw_entities(cam_x, cam_y)

@@ -1,6 +1,10 @@
 ///|
 /// Sets the on-screen hint text and its display duration.
-fn @types.Game::set_hint(game : @types.Game, text : String, ttl : Float) -> Unit {
+fn @types.Game::set_hint(
+  game : @types.Game,
+  text : String,
+  ttl : Float,
+) -> Unit {
   game.hint = text
   game.info_t = ttl
 }
@@ -175,7 +179,11 @@ fn @types.Game::setup_parcels(game : @types.Game, count : Int) -> Unit {
 
 ///|
 /// Clears existing guards and spawns `count` new patrol guards with speed, cone range, and cone angle scaled by `wave`.
-fn @types.Game::setup_guards(game : @types.Game, wave : Int, count : Int) -> Unit {
+fn @types.Game::setup_guards(
+  game : @types.Game,
+  wave : Int,
+  count : Int,
+) -> Unit {
   game.clear_guards()
 
   let wavef = Float::from_int(wave - 1)
@@ -228,7 +236,11 @@ fn @types.Game::setup_guards(game : @types.Game, wave : Int, count : Int) -> Uni
 
 ///|
 /// Clears existing traps and places `count` new traps at random world positions away from exits and spawn, with a fallback grid layout if placement fails.
-fn @types.Game::setup_traps(game : @types.Game, _wave : Int, count : Int) -> Unit {
+fn @types.Game::setup_traps(
+  game : @types.Game,
+  _wave : Int,
+  count : Int,
+) -> Unit {
   game.clear_traps()
 
   for i in 0..<count {
@@ -652,7 +664,10 @@ fn @types.Game::nearest_smoke_target(
 
 ///|
 /// Sets every active guard's alert timer to at least `alert_time` and directs them toward the player's current position.
-fn @types.Game::alert_all_guards(game : @types.Game, alert_time : Float) -> Unit {
+fn @types.Game::alert_all_guards(
+  game : @types.Game,
+  alert_time : Float,
+) -> Unit {
   for guard_val in game.guards {
     if guard_val.active {
       guard_val.alert_t = @types.maxf(guard_val.alert_t, alert_time)

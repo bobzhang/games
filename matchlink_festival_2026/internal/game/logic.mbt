@@ -280,7 +280,10 @@ fn @types.Game::find_link_path(
 
 ///|
 /// Stores a link path into the game state for a brief flash animation, or clears it if the path was not found.
-fn @types.Game::set_path_flash(game : @types.Game, path : @types.LinkPath) -> Unit {
+fn @types.Game::set_path_flash(
+  game : @types.Game,
+  path : @types.LinkPath,
+) -> Unit {
   if not(path.found) {
     @types.clear_path_flash(game)
     return
@@ -351,7 +354,10 @@ fn @types.Game::find_any_move(
 
 ///|
 /// Repeatedly reshuffles remaining tile values until a valid move exists, optionally spending a shuffle ticket.
-fn @types.Game::reshuffle_board(game : @types.Game, consume_ticket : Bool) -> Bool {
+fn @types.Game::reshuffle_board(
+  game : @types.Game,
+  consume_ticket : Bool,
+) -> Bool {
   if game.state != Play {
     return false
   }
@@ -627,7 +633,10 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
 
 ///|
 /// Moves the cursor one step in the given direction, clamping to the board boundaries.
-fn @types.Game::move_cursor_once(game : @types.Game, dir : @types.Direction) -> Unit {
+fn @types.Game::move_cursor_once(
+  game : @types.Game,
+  dir : @types.Direction,
+) -> Unit {
   if game.state != Play {
     return
   }

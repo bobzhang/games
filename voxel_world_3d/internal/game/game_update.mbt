@@ -166,7 +166,10 @@ fn @types.Game::update_crafting(game : @types.Game, _dt : Float) -> Unit {
 }
 
 ///|
-fn @types.Game::try_craft(game : @types.Game, recipe : @types.CraftingRecipe) -> Unit {
+fn @types.Game::try_craft(
+  game : @types.Game,
+  recipe : @types.CraftingRecipe,
+) -> Unit {
   let inv = game.player.inventory
   // Check if player has required materials
   let mut has_input1 = false
@@ -334,7 +337,11 @@ fn @types.Game::start_new_game(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::find_surface_height(game : @types.Game, wx : Int, wz : Int) -> Int {
+fn @types.Game::find_surface_height(
+  game : @types.Game,
+  wx : Int,
+  wz : Int,
+) -> Int {
   for y = @types.chunk_y - 1; y >= 0; y = y - 1 {
     let block = @types.get_world_block(game, wx, y, wz)
     if @types.is_solid(block) {

@@ -289,7 +289,12 @@ fn @types.Game::draw_sparks(game : @types.Game, sx : Int, sy : Int) -> Unit {
 
 ///|
 /// Draws the ten-frame scorecard grid with roll marks and running totals.
-fn @types.Game::draw_score_grid(game : @types.Game, px : Int, py : Int, pw : Int) -> Unit {
+fn @types.Game::draw_score_grid(
+  game : @types.Game,
+  px : Int,
+  py : Int,
+  pw : Int,
+) -> Unit {
   @raylib.draw_text(
     "Frames",
     px + 16,
@@ -383,7 +388,11 @@ fn @types.Game::draw_score_grid(game : @types.Game, px : Int, py : Int, pw : Int
 
 ///|
 /// Draws the keyboard/touch control reference and the current status message if active.
-fn @types.Game::draw_control_hint(game : @types.Game, px : Int, py : Int) -> Unit {
+fn @types.Game::draw_control_hint(
+  game : @types.Game,
+  px : Int,
+  py : Int,
+) -> Unit {
   @raylib.draw_text(
     "Controls",
     px,

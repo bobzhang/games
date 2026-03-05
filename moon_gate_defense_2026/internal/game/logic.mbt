@@ -1,6 +1,10 @@
 ///|
 /// Sets the HUD status text and its display lifetime in seconds.
-fn @types.Game::set_status(game : @types.Game, text : String, ttl : Float) -> Unit {
+fn @types.Game::set_status(
+  game : @types.Game,
+  text : String,
+  ttl : Float,
+) -> Unit {
   game.status_text = text
   game.status_t = ttl
 }
@@ -485,7 +489,11 @@ fn @types.Game::spawn_bolt(
 
 ///|
 /// Deactivates an enemy, awards score with combo multiplier, restores energy, and contributes to barrier charge.
-fn @types.Game::kill_enemy(game : @types.Game, enemy_index : Int, by_barrier : Bool) -> Unit {
+fn @types.Game::kill_enemy(
+  game : @types.Game,
+  enemy_index : Int,
+  by_barrier : Bool,
+) -> Unit {
   if enemy_index < 0 || not(game.enemies[enemy_index].active) {
     return
   }

@@ -342,7 +342,11 @@ fn @types.Game::burst_particles(
 
 ///|
 /// Spawns a ghost trail image at the hero's current position with a slight jitter and a specified hue, used for speed-trail visuals.
-fn @types.Game::spawn_ghost(game : @types.Game, hero : @types.Player, hue : Float) -> Unit {
+fn @types.Game::spawn_ghost(
+  game : @types.Game,
+  hero : @types.Player,
+  hue : Float,
+) -> Unit {
   let i = game.alloc_ghost_slot()
   game.ghosts[i].active = true
   game.ghosts[i].x = hero.x + @types.randf(-2.0, 2.0)
@@ -430,14 +434,7 @@ fn @types.Game::spawn_stage_chunk(game : @types.Game) -> Unit {
       let px = @types.randf(x + 40.0, x + w - 60.0)
       let choice = @types.randi(0, 99)
       if choice < 36 {
-        game.spawn_obstacle(
-          @types.obstacle_vent,
-          px,
-          y - 26.0,
-          46.0,
-          26.0,
-          0.0,
-        )
+        game.spawn_obstacle(@types.obstacle_vent, px, y - 26.0, 46.0, 26.0, 0.0)
       } else if choice < 62 {
         game.spawn_obstacle(
           @types.obstacle_sign,
@@ -609,7 +606,10 @@ fn @types.Game::shift_world(game : @types.Game, dx : Float) -> Unit {
 
 ///|
 /// Finds the topmost active segment surface directly beneath `center_x`, returning whether a floor was found and its y coordinate.
-fn @types.Game::find_floor(game : @types.Game, center_x : Float) -> (Bool, Float) {
+fn @types.Game::find_floor(
+  game : @types.Game,
+  center_x : Float,
+) -> (Bool, Float) {
   let mut found = false
   let mut best_y = Float::from_int(@types.screen_h) + 400.0
 
@@ -1041,7 +1041,11 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Counts down the combo timer (resetting the combo on expiry), accumulates distance and stage progress from the scroll delta, and awards distance-based score scaled by the combo multiplier.
-fn @types.Game::update_combo_and_score(game : @types.Game, dt : Float, dx : Float) -> Unit {
+fn @types.Game::update_combo_and_score(
+  game : @types.Game,
+  dt : Float,
+  dx : Float,
+) -> Unit {
   if game.combo_t > 0.0 {
     game.combo_t = @types.maxf(0.0, game.combo_t - dt)
     if game.combo_t <= 0.0 {

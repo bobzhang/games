@@ -34,7 +34,11 @@ fn tile_is_hostage_spawnable(tile : Int) -> Bool {
 }
 
 ///|
-fn @types.Game::try_spawn_hostage_at_tile(game : @types.Game, tx : Int, ty : Int) -> Bool {
+fn @types.Game::try_spawn_hostage_at_tile(
+  game : @types.Game,
+  tx : Int,
+  ty : Int,
+) -> Bool {
   if not(@types.in_tile_bounds(tx, ty)) {
     return false
   }

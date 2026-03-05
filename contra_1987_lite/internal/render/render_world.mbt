@@ -279,7 +279,11 @@ fn draw_tank(
 }
 
 ///|
-fn @types.Game::draw_cores(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_cores(
+  game : @types.Game,
+  shake_x : Float,
+  shake_y : Float,
+) -> Unit {
   for core in game.cores {
     if not(core.active) {
       continue
@@ -322,7 +326,11 @@ fn @types.Game::draw_cores(game : @types.Game, shake_x : Float, shake_y : Float)
 }
 
 ///|
-fn @types.Game::draw_players(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_players(
+  game : @types.Game,
+  shake_x : Float,
+  shake_y : Float,
+) -> Unit {
   for i in 0..<@types.max_players {
     if not(game.players[i].active) {
       continue
@@ -364,7 +372,11 @@ fn @types.Game::draw_players(game : @types.Game, shake_x : Float, shake_y : Floa
 }
 
 ///|
-fn @types.Game::draw_enemies(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_enemies(
+  game : @types.Game,
+  shake_x : Float,
+  shake_y : Float,
+) -> Unit {
   for enemy in game.enemies {
     if not(enemy.active) {
       continue
@@ -395,7 +407,11 @@ fn @types.Game::draw_enemies(game : @types.Game, shake_x : Float, shake_y : Floa
 }
 
 ///|
-fn @types.Game::draw_bullets(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_bullets(
+  game : @types.Game,
+  shake_x : Float,
+  shake_y : Float,
+) -> Unit {
   for bullet in game.bullets {
     if not(bullet.active) {
       continue
@@ -417,7 +433,11 @@ fn @types.Game::draw_bullets(game : @types.Game, shake_x : Float, shake_y : Floa
 }
 
 ///|
-fn @types.Game::draw_particles(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_particles(
+  game : @types.Game,
+  shake_x : Float,
+  shake_y : Float,
+) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -491,7 +511,11 @@ fn powerup_radius(kind : @types.PowerupKind) -> Float {
 }
 
 ///|
-fn @types.Game::draw_powerups(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_powerups(
+  game : @types.Game,
+  shake_x : Float,
+  shake_y : Float,
+) -> Unit {
   for p in game.powerups {
     if not(p.active) {
       continue

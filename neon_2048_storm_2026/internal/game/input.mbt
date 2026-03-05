@@ -65,7 +65,10 @@ fn @types.Game::update_result_input(game : @types.Game) -> Unit {
 
 ///|
 /// Returns true when the pointer is inside `rect` and the touch cooldown has fully expired.
-fn @types.Game::btn_pressed(game : @types.Game, rect : (Int, Int, Int, Int)) -> Bool {
+fn @types.Game::btn_pressed(
+  game : @types.Game,
+  rect : (Int, Int, Int, Int),
+) -> Bool {
   if game.touch_cd > 0.0 {
     return false
   }

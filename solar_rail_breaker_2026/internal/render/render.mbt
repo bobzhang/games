@@ -51,7 +51,11 @@ fn @types.Game::ring_color(game : @types.Game, ring : Int) -> @raylib.Color {
 }
 
 ///|
-fn @types.Game::draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_backdrop(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -103,7 +107,11 @@ fn @types.Game::draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) 
 }
 
 ///|
-fn @types.Game::draw_rings(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_rings(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for ring in 0..<@types.ring_count {
     let r = @types.ring_radius(ring)
     let col = game.ring_color(ring)
@@ -134,7 +142,11 @@ fn @types.Game::draw_rings(game : @types.Game, cam_x : Float, cam_y : Float) -> 
 }
 
 ///|
-fn @types.Game::draw_flares(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_flares(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for f0 in game.flares {
     if not(f0.active) {
       continue
@@ -266,14 +278,22 @@ fn @types.Game::draw_enemy(
 }
 
 ///|
-fn @types.Game::draw_enemies(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_enemies(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for enemy in game.enemies {
     game.draw_enemy(enemy, cam_x, cam_y)
   }
 }
 
 ///|
-fn @types.Game::draw_bullets(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_bullets(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for b in game.bullets {
     if not(b.active) {
       continue
@@ -319,7 +339,11 @@ fn @types.Game::draw_bullets(game : @types.Game, cam_x : Float, cam_y : Float) -
 }
 
 ///|
-fn @types.Game::draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_particles(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -341,7 +365,11 @@ fn @types.Game::draw_particles(game : @types.Game, cam_x : Float, cam_y : Float)
 }
 
 ///|
-fn @types.Game::draw_shocks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_shocks(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   for s in game.shocks {
     if not(s.active) {
       continue
@@ -387,7 +415,11 @@ fn @types.Game::draw_shocks(game : @types.Game, cam_x : Float, cam_y : Float) ->
 }
 
 ///|
-fn @types.Game::draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_player(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   let p = @types.player_world_xy(game.player)
   let s = world_to_screen(p.0, p.1, cam_x, cam_y)
 
@@ -923,7 +955,11 @@ fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_world(
+  game : @types.Game,
+  cam_x : Float,
+  cam_y : Float,
+) -> Unit {
   game.draw_backdrop(cam_x, cam_y)
   game.draw_rings(cam_x, cam_y)
   game.draw_flares(cam_x, cam_y)

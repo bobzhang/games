@@ -614,7 +614,11 @@ fn @types.Game::start_mission(game : @types.Game, mission : Int) -> Unit {
 }
 
 ///|
-fn @types.Game::spawn_wave(game : @types.Game, mission : Int, wave : Int) -> Unit {
+fn @types.Game::spawn_wave(
+  game : @types.Game,
+  mission : Int,
+  wave : Int,
+) -> Unit {
   let comp = @levels.wave_composition(mission, wave)
   let hp_mult = @types.mission_difficulty_hp_mult(mission)
   let spd_mult = @types.mission_difficulty_speed_mult(mission)

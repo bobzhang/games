@@ -219,7 +219,11 @@ fn @types.Game::register_clear(
 
 ///|
 /// Deactivates the threat at index `i` and calls `register_clear` to update score, hype, and combo.
-fn @types.Game::clear_threat_at(game : @types.Game, i : Int, action : @types.Action) -> Unit {
+fn @types.Game::clear_threat_at(
+  game : @types.Game,
+  i : Int,
+  action : @types.Action,
+) -> Unit {
   if i < 0 || i >= game.threats.length() {
     return
   }
@@ -270,8 +274,7 @@ fn @types.Game::breach_penalty(game : @types.Game, kind : Int) -> Unit {
     )
   } else {
     game.lose_order(
-      @types.breach_order_loss_incident, @types.breach_morale_loss_incident,
-      "Crowd incident reached the parade core!",
+      @types.breach_order_loss_incident, @types.breach_morale_loss_incident, "Crowd incident reached the parade core!",
     )
   }
 }

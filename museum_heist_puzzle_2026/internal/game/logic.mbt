@@ -220,7 +220,10 @@ fn @types.Game::preview_next_title_level(game : @types.Game) -> Unit {
 
 ///|
 /// Moves the player one step in the given direction if the target cell is walkable and the step timer is ready.
-fn @types.Game::try_move_player(game : @types.Game, dir : @types.Direction) -> Unit {
+fn @types.Game::try_move_player(
+  game : @types.Game,
+  dir : @types.Direction,
+) -> Unit {
   match dir {
     DirNone => return
     _ => ()
@@ -389,7 +392,10 @@ fn @types.Game::actions_ready(game : @types.Game) -> Bool {
 
 ///|
 /// Handles title-screen input to start the campaign or preview the next level.
-fn @types.Game::update_title(game : @types.Game, input : @types.FrameInput) -> Unit {
+fn @types.Game::update_title(
+  game : @types.Game,
+  input : @types.FrameInput,
+) -> Unit {
   if not(game.actions_ready()) {
     return
   }
@@ -403,7 +409,10 @@ fn @types.Game::update_title(game : @types.Game, input : @types.FrameInput) -> U
 
 ///|
 /// Handles win-screen input to advance to the next level or retry.
-fn @types.Game::update_win(game : @types.Game, input : @types.FrameInput) -> Unit {
+fn @types.Game::update_win(
+  game : @types.Game,
+  input : @types.FrameInput,
+) -> Unit {
   if not(game.actions_ready()) {
     return
   }
@@ -417,7 +426,10 @@ fn @types.Game::update_win(game : @types.Game, input : @types.FrameInput) -> Uni
 
 ///|
 /// Handles lose-screen input to retry the current level.
-fn @types.Game::update_lose(game : @types.Game, input : @types.FrameInput) -> Unit {
+fn @types.Game::update_lose(
+  game : @types.Game,
+  input : @types.FrameInput,
+) -> Unit {
   if not(game.actions_ready()) {
     return
   }
@@ -429,7 +441,10 @@ fn @types.Game::update_lose(game : @types.Game, input : @types.FrameInput) -> Un
 
 ///|
 /// Handles campaign-clear input to return to the title screen.
-fn @types.Game::update_campaign_clear(game : @types.Game, input : @types.FrameInput) -> Unit {
+fn @types.Game::update_campaign_clear(
+  game : @types.Game,
+  input : @types.FrameInput,
+) -> Unit {
   if not(game.actions_ready()) {
     return
   }

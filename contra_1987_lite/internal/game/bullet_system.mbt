@@ -36,7 +36,10 @@ fn @types.Game::spawn_bullet(
 }
 
 ///|
-fn @types.Game::bullet_hit_enemy(game : @types.Game, bullet : @types.Bullet) -> Bool {
+fn @types.Game::bullet_hit_enemy(
+  game : @types.Game,
+  bullet : @types.Bullet,
+) -> Bool {
   for i in 0..<game.enemies.length() {
     if not(game.enemies[i].active) {
       continue
@@ -68,7 +71,10 @@ fn @types.Game::bullet_hit_enemy(game : @types.Game, bullet : @types.Bullet) -> 
 }
 
 ///|
-fn @types.Game::bullet_hit_player(game : @types.Game, bullet : @types.Bullet) -> Bool {
+fn @types.Game::bullet_hit_player(
+  game : @types.Game,
+  bullet : @types.Bullet,
+) -> Bool {
   for i in 0..<@types.max_players {
     let player = game.players[i]
     if not(player.active) {
@@ -85,7 +91,10 @@ fn @types.Game::bullet_hit_player(game : @types.Game, bullet : @types.Bullet) ->
 }
 
 ///|
-fn @types.Game::bullet_hit_core(game : @types.Game, bullet : @types.Bullet) -> Bool {
+fn @types.Game::bullet_hit_core(
+  game : @types.Game,
+  bullet : @types.Bullet,
+) -> Bool {
   for i in 0..<game.cores.length() {
     if not(game.cores[i].active) {
       continue

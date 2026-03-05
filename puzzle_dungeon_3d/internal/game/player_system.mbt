@@ -399,7 +399,11 @@ fn @types.Game::handle_ice_sliding(
 }
 
 ///|
-fn @types.Game::rotate_adjacent_mirrors(game : @types.Game, gx : Int, gy : Int) -> Unit {
+fn @types.Game::rotate_adjacent_mirrors(
+  game : @types.Game,
+  gx : Int,
+  gy : Int,
+) -> Unit {
   // Check all 4 adjacent tiles for mirrors and rotate them
   let neighbors : Array[(Int, Int)] = [
     (gx - 1, gy),
@@ -497,7 +501,10 @@ fn @types.Game::update_player_animation(game : @types.Game, dt : Float) -> Unit 
 }
 
 ///|
-fn @types.Game::update_entity_animations(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_entity_animations(
+  game : @types.Game,
+  dt : Float,
+) -> Unit {
   for e in game.entities {
     if not(e.active) {
       continue
@@ -674,7 +681,10 @@ fn @types.Game::show_achievement(game : @types.Game, text : String) -> Unit {
 }
 
 ///|
-fn @types.Game::find_tile(game : @types.Game, tile_type : @types.Tile) -> (Int, Int) {
+fn @types.Game::find_tile(
+  game : @types.Game,
+  tile_type : @types.Tile,
+) -> (Int, Int) {
   for gy in 0..<@types.grid_h {
     for gx in 0..<@types.grid_w {
       if @types.get_tile(game, gx, gy) == tile_type {

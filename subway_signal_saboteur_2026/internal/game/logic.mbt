@@ -236,7 +236,11 @@ fn @types.Game::go_title(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
+fn @types.Game::finish_run(
+  game : @types.Game,
+  win : Bool,
+  reason : String,
+) -> Unit {
   if game.state != Play {
     return
   }
@@ -526,7 +530,11 @@ fn inspector_seed_next(seed : Int) -> Int {
 }
 
 ///|
-fn @types.Game::blocked_for_inspector(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::blocked_for_inspector(
+  game : @types.Game,
+  x : Int,
+  y : Int,
+) -> Bool {
   if game.blocked_for_actor(x, y) {
     return true
   }
@@ -545,7 +553,10 @@ fn @types.Game::blocked_for_inspector(game : @types.Game, x : Int, y : Int) -> B
 }
 
 ///|
-fn @types.Game::choose_inspector_step(game : @types.Game, i : Int) -> (Int, Int) {
+fn @types.Game::choose_inspector_step(
+  game : @types.Game,
+  i : Int,
+) -> (Int, Int) {
   let g = game.inspectors[i]
   let gx : Int = g.body.x
   let gy : Int = g.body.y

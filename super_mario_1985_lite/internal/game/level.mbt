@@ -71,7 +71,12 @@ fn @types.Game::add_pipe(game : @types.Game, tx : Int, height : Int) -> Unit {
 }
 
 ///|
-fn @types.Game::add_brick_row(game : @types.Game, tx : Int, ty : Int, len : Int) -> Unit {
+fn @types.Game::add_brick_row(
+  game : @types.Game,
+  tx : Int,
+  ty : Int,
+  len : Int,
+) -> Unit {
   for x in tx..<(tx + len) {
     @types.set_tile(game, x, ty, @types.tile_brick)
   }
@@ -254,7 +259,10 @@ fn @types.Game::populate_level_entities(game : @types.Game) -> Unit {
 }
 
 ///|
-fn @types.Game::reset_player_pose(game : @types.Game, give_invuln : Bool) -> Unit {
+fn @types.Game::reset_player_pose(
+  game : @types.Game,
+  give_invuln : Bool,
+) -> Unit {
   let player = game.player
   player.x = @types.player_start_x
   player.y = game.start_y

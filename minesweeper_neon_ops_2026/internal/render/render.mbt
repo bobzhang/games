@@ -215,7 +215,12 @@ fn draw_grid_lines(bx : Int, by : Int, tile : Int) -> Unit {
 
 ///|
 /// Iterates every board cell and draws it as either revealed or hidden, then draws the grid lines on top.
-fn @types.Game::draw_cells(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
+fn @types.Game::draw_cells(
+  game : @types.Game,
+  bx : Int,
+  by : Int,
+  tile : Int,
+) -> Unit {
   for y in 0..<@types.board_h {
     for x in 0..<@types.board_w {
       let i : Int = @types.idx(x, y)
@@ -242,7 +247,12 @@ fn @types.Game::draw_cells(game : @types.Game, bx : Int, by : Int, tile : Int) -
 
 ///|
 /// Draws a highlight rectangle around the most recently revealed cell.
-fn @types.Game::draw_last_reveal(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
+fn @types.Game::draw_last_reveal(
+  game : @types.Game,
+  bx : Int,
+  by : Int,
+  tile : Int,
+) -> Unit {
   if game.last_reveal_x < 0 || game.last_reveal_y < 0 {
     return
   }
@@ -264,7 +274,12 @@ fn @types.Game::draw_last_reveal(game : @types.Game, bx : Int, by : Int, tile : 
 
 ///|
 /// Draws the keyboard navigation cursor outline on the current cursor cell during Play state; colour reflects the active mode.
-fn @types.Game::draw_cursor(game : @types.Game, bx : Int, by : Int, tile : Int) -> Unit {
+fn @types.Game::draw_cursor(
+  game : @types.Game,
+  bx : Int,
+  by : Int,
+  tile : Int,
+) -> Unit {
   if game.state != Play {
     return
   }

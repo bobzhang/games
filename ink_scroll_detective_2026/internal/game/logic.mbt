@@ -1,6 +1,10 @@
 ///|
 /// Sets the HUD message text and resets its display timer to `ttl` seconds.
-fn @types.Game::set_message(game : @types.Game, text : String, ttl : Float) -> Unit {
+fn @types.Game::set_message(
+  game : @types.Game,
+  text : String,
+  ttl : Float,
+) -> Unit {
   game.message = text
   game.message_t = ttl
 }
@@ -62,7 +66,11 @@ fn @types.Game::reset_case(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the index of the suspect whose home district is at `(cell_x, cell_y)`, or -1.
-fn @types.Game::suspect_index_at_cell(game : @types.Game, cell_x : Int, cell_y : Int) -> Int {
+fn @types.Game::suspect_index_at_cell(
+  game : @types.Game,
+  cell_x : Int,
+  cell_y : Int,
+) -> Int {
   for i in 0..<game.suspects.length() {
     if game.suspects[i].home_x == cell_x && game.suspects[i].home_y == cell_y {
       return i
@@ -151,7 +159,10 @@ fn @types.Game::update_suspect_suspicion(game : @types.Game) -> Unit {
 
 ///|
 /// Unlocks the deduction for `suspect` if enough chains are complete; awards score and trust.
-fn @types.Game::unlock_deduction_if_ready(game : @types.Game, suspect : Int) -> Unit {
+fn @types.Game::unlock_deduction_if_ready(
+  game : @types.Game,
+  suspect : Int,
+) -> Unit {
   if suspect < 0 || suspect >= @types.suspect_count {
     return
   }
@@ -620,7 +631,10 @@ fn @types.Game::update_runtime_meters(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Saves best score and transitions to game-over state with a reason message.
-fn @types.Game::transition_to_game_over(game : @types.Game, reason : String) -> Unit {
+fn @types.Game::transition_to_game_over(
+  game : @types.Game,
+  reason : String,
+) -> Unit {
   if game.score > game.best_score {
     game.best_score = game.score
   }

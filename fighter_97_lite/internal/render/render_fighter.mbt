@@ -262,7 +262,10 @@ fn @types.Game::draw_fighter_nameplate(
 }
 
 ///|
-fn @types.Game::draw_single_fighter(game : @types.Game, fighter : @types.Fighter) -> Unit {
+fn @types.Game::draw_single_fighter(
+  game : @types.Game,
+  fighter : @types.Fighter,
+) -> Unit {
   let archetype = @types.fighter_archetype(game, fighter)
   let (sx, sy) = game.fighter_draw_pos(fighter)
   game.draw_fighter_shadow(fighter, sx)
