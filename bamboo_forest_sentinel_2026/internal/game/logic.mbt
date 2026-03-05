@@ -468,8 +468,8 @@ fn @types.Game::handle_player_actions(game : @types.Game) -> Unit {
 ///|
 /// Returns the index of the first inactive enemy slot, or -1 if all slots are occupied.
 fn @types.Game::free_enemy_slot(game : @types.Game) -> Int {
-  for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
+  for i, slot in game.enemies {
+    if !slot.active {
       return i
     }
   }
