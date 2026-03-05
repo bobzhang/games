@@ -9,12 +9,13 @@ fn @types.Game::clear_hostages(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::alloc_hostage_slot(game : @types.Game) -> Int {
-  for i in 0..<game.hostages.length() {
-    if not(game.hostages[i].active) {
-      return i
+  for i, slot in game.hostages {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   -1
+  }
 }
 
 ///|
