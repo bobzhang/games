@@ -749,12 +749,11 @@ fn @types.Game::spawn_flare_event(game : @types.Game) -> Unit {
 fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
   let player_xy = @types.player_world_xy(game.player)
 
-  for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
+  for i, e in game.enemies {
+    if !e.active {
       continue
     }
 
-    let e = game.enemies[i]
     let speed_mul : Float = @types.enemy_base_speed +
       Float::from_int(game.stage - 1) * @types.enemy_speed_stage
     let chase : Float = match e.kind {
