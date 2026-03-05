@@ -1,5 +1,5 @@
 ///|
-fn title_hover(game : @types.Game) -> Bool {
+fn @types.Game::title_hover(game : @types.Game) -> Bool {
   let b = @types.start_button_rect()
   @types.pointer_on_rect(
     game.mouse_x,
@@ -14,7 +14,7 @@ fn title_hover(game : @types.Game) -> Bool {
 }
 
 ///|
-fn result_hover(game : @types.Game) -> Bool {
+fn @types.Game::result_hover(game : @types.Game) -> Bool {
   let b = @types.retry_button_rect()
   @types.pointer_on_rect(
     game.mouse_x,
@@ -29,7 +29,7 @@ fn result_hover(game : @types.Game) -> Bool {
 }
 
 ///|
-fn board_cell_from_pointer(game : @types.Game) -> (Bool, Int, Int) {
+fn @types.Game::board_cell_from_pointer(game : @types.Game) -> (Bool, Int, Int) {
   let (bx, by, tile) = @types.board_metrics(game.shake_t)
 
   let x : Int = (game.mouse_x.to_int() - bx) / tile
@@ -43,7 +43,7 @@ fn board_cell_from_pointer(game : @types.Game) -> (Bool, Int, Int) {
 }
 
 ///|
-fn direction_to_cell(game : @types.Game, tx : Int, ty : Int) -> Int {
+fn @types.Game::direction_to_cell(game : @types.Game, tx : Int, ty : Int) -> Int {
   let hx : Int = game.p_seg_x[0]
   let hy : Int = game.p_seg_y[0]
 
@@ -71,38 +71,38 @@ fn direction_to_cell(game : @types.Game, tx : Int, ty : Int) -> Int {
 }
 
 ///|
-fn update_title_input(game : @types.Game) -> Unit {
+fn @types.Game::update_title_input(game : @types.Game) -> Unit {
   let key_start : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
   let click_start : Bool = @raylib.is_mouse_button_pressed(
     @raylib.MouseButtonLeft,
   )
-  let tap_start : Bool = game.touch_cd <= 0.0 && title_hover(game)
+  let tap_start : Bool = game.touch_cd <= 0.0 && game.title_hover()
 
   if key_start || click_start || tap_start {
-    start_match(game)
+    game.start_match()
     game.touch_cd = 0.16
   }
 }
 
 ///|
-fn update_result_input(game : @types.Game) -> Unit {
+fn @types.Game::update_result_input(game : @types.Game) -> Unit {
   let key_retry : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyR)
   let click_retry : Bool = @raylib.is_mouse_button_pressed(
     @raylib.MouseButtonLeft,
   )
-  let tap_retry : Bool = game.touch_cd <= 0.0 && result_hover(game)
+  let tap_retry : Bool = game.touch_cd <= 0.0 && game.result_hover()
 
   if key_retry || click_retry || tap_retry {
-    start_match(game)
+    game.start_match()
     game.touch_cd = 0.16
   }
 }
 
 ///|
-fn handle_touch_buttons(game : @types.Game) -> Bool {
+fn @types.Game::handle_touch_buttons(game : @types.Game) -> Bool {
   if game.touch_cd > 0.0 {
     return false
   }
@@ -160,13 +160,13 @@ fn handle_touch_buttons(game : @types.Game) -> Bool {
       restart.2,
       restart.3,
     ) {
-    start_match(game)
+    game.start_match()
     game.touch_cd = 0.16
     return true
   }
 
   if @types.pointer_on_rect(mx, my, hold, tc, hint.0, hint.1, hint.2, hint.3) {
-    ignore(use_hint(game))
+    ignore(game.use_hint())
     game.touch_cd = 0.16
     return true
   }
@@ -189,14 +189,14 @@ fn handle_touch_buttons(game : @types.Game) -> Bool {
 }
 
 ///|
-fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_play_input(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
     game.state = @types.state_title
     return
   }
 
   if @raylib.is_key_pressed(@raylib.KeyR) {
-    start_match(game)
+    game.start_match()
     return
   }
 
@@ -218,7 +218,7 @@ fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
   }
 
   if @raylib.is_key_pressed(@raylib.KeyH) {
-    ignore(use_hint(game))
+    ignore(game.use_hint())
   }
 
   let boost_key : Bool = @raylib.is_key_down(@raylib.KeyLeftShift) ||
@@ -227,12 +227,12 @@ fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
 
   game.boost_on = boost_key && game.boost_meter > 0.08
 
-  let cell = board_cell_from_pointer(game)
+  let cell = game.board_cell_from_pointer()
   if cell.0 {
     if @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
-      game.p_next_dir = direction_to_cell(game, cell.1, cell.2)
+      game.p_next_dir = game.direction_to_cell(cell.1, cell.2)
     }
   }
 
-  ignore(handle_touch_buttons(game))
+  ignore(game.handle_touch_buttons())
 }

@@ -5,13 +5,13 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   match game.state {
     Title => draw_title()
     _ => {
-      draw_panel(game)
-      draw_board(game)
+      game.draw_panel()
+      game.draw_board()
       if game.state == Over {
-        draw_overlay_over(game)
+        game.draw_overlay_over()
       }
       if game.state == Clear {
-        draw_overlay_clear(game)
+        game.draw_overlay_clear()
       }
     }
   }
@@ -53,7 +53,7 @@ fn draw_title() -> Unit {
 }
 
 ///|
-fn draw_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   // Level
   @raylib.draw_text("Level", 36, 20, 16, @types.panel_label_color)
   @raylib.draw_text(game.level.to_string(), 36, 38, 32, @types.panel_text_color)
@@ -120,7 +120,7 @@ fn draw_panel(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_board(game : @types.Game) -> Unit {
+fn @types.Game::draw_board(game : @types.Game) -> Unit {
   // Board background
   let bw = @types.grid_cols * (@types.cell_px + @types.cell_gap) -
     @types.cell_gap +
@@ -217,7 +217,7 @@ fn draw_board(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_overlay_over(game : @types.Game) -> Unit {
+fn @types.Game::draw_overlay_over(game : @types.Game) -> Unit {
   let bw = @types.grid_cols * (@types.cell_px + @types.cell_gap) -
     @types.cell_gap +
     16
@@ -260,7 +260,7 @@ fn draw_overlay_over(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_overlay_clear(game : @types.Game) -> Unit {
+fn @types.Game::draw_overlay_clear(game : @types.Game) -> Unit {
   let bw = @types.grid_cols * (@types.cell_px + @types.cell_gap) -
     @types.cell_gap +
     16

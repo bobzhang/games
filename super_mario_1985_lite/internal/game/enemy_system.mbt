@@ -1,5 +1,5 @@
 ///|
-fn enemy_resolve_x(
+fn @types.Game::enemy_resolve_x(
   game : @types.Game,
   enemy : @types.Enemy,
   dt : Float,
@@ -50,7 +50,7 @@ fn enemy_resolve_x(
 }
 
 ///|
-fn enemy_resolve_y(
+fn @types.Game::enemy_resolve_y(
   game : @types.Game,
   enemy : @types.Enemy,
   dt : Float,
@@ -99,7 +99,7 @@ fn enemy_resolve_y(
 }
 
 ///|
-fn enemy_ground_ahead(game : @types.Game, enemy : @types.Enemy) -> Bool {
+fn @types.Game::enemy_ground_ahead(game : @types.Game, enemy : @types.Enemy) -> Bool {
   let probe_x = enemy.x +
     Float::from_int(enemy.dir) * (@types.enemy_half_w() + 2.0)
   let probe_y = enemy.y + @types.enemy_half_h() + 6.0
@@ -109,7 +109,7 @@ fn enemy_ground_ahead(game : @types.Game, enemy : @types.Enemy) -> Bool {
 }
 
 ///|
-fn stomp_enemy(game : @types.Game, enemy : @types.Enemy) -> Unit {
+fn @types.Game::stomp_enemy(game : @types.Game, enemy : @types.Enemy) -> Unit {
   if enemy.squashed {
     return
   }
@@ -125,7 +125,7 @@ fn stomp_enemy(game : @types.Game, enemy : @types.Enemy) -> Unit {
 }
 
 ///|
-fn update_enemies(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
   for enemy in game.enemies {
     if not(enemy.active) {
       continue
@@ -144,10 +144,10 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
       enemy.vy = @types.max_fall_speed
     }
 
-    enemy_resolve_x(game, enemy, dt)
-    enemy_resolve_y(game, enemy, dt)
+    game.enemy_resolve_x(enemy, dt)
+    game.enemy_resolve_y(enemy, dt)
 
-    if not(enemy_ground_ahead(game, enemy)) {
+    if not(game.enemy_ground_ahead(enemy)) {
       enemy.vx = -enemy.vx
       enemy.dir = -enemy.dir
     }
@@ -174,9 +174,9 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
 
     if @types.rects_overlap(px0, py0, px1, py1, ex0, ey0, ex1, ey1) {
       if player.vy > 110.0 && player.y < enemy.y - 4.0 {
-        stomp_enemy(game, enemy)
+        game.stomp_enemy(enemy)
       } else {
-        on_player_hurt(game)
+        game.on_player_hurt()
       }
       break
     }

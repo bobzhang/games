@@ -5,24 +5,24 @@
 /// and dispatching behavior for menu, combat, shop-between-waves, pause, and game-over states.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
-  update_particles(game, dt)
+  game.update_particles(dt)
   @types.update_kill_feed(game, dt)
   @types.update_damage_indicators(game, dt)
   match game.state {
-    Menu => update_menu(game, dt)
-    Playing => update_playing(game, dt)
-    WaveComplete => update_wave_complete(game, dt)
-    Paused => update_paused(game, dt)
-    GameOver => update_game_over(game, dt)
+    Menu => game.update_menu(dt)
+    Playing => game.update_playing(dt)
+    WaveComplete => game.update_wave_complete(dt)
+    Paused => game.update_paused(dt)
+    GameOver => game.update_game_over(dt)
   }
 }
 
 ///|
-fn update_menu(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
   game.menu_blink += dt * 3.5
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    start_new_game(game)
+    game.start_new_game()
     game.state = WaveComplete
     game.wave_timer = @types.wave_shop_time
     @types.show_message(game, "Wave 1 starting soon! Press SPACE to skip.", 3.0)
@@ -31,51 +31,51 @@ fn update_menu(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_playing(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
     game.state = Paused
     @raylib.enable_cursor()
     return
   }
   // Update game systems
-  update_player(game, dt)
-  update_camera_fps(game)
-  update_weapon_cooldowns(game, dt)
-  handle_shooting(game)
-  update_enemies_ai(game, dt)
-  update_projectiles(game, dt)
-  update_crates(game, dt)
-  update_pickups(game, dt)
-  update_traps(game, dt)
-  update_message(game, dt)
+  game.update_player(dt)
+  game.update_camera_fps()
+  game.update_weapon_cooldowns(dt)
+  game.handle_shooting()
+  game.update_enemies_ai(dt)
+  game.update_projectiles(dt)
+  game.update_crates(dt)
+  game.update_pickups(dt)
+  game.update_traps(dt)
+  game.update_message(dt)
   // Weapon selection with number keys
   if @raylib.is_key_pressed(@raylib.KeyOne) && game.player.owns_weapon[0] {
-    switch_weapon(game, @types.weapon_pistol)
+    game.switch_weapon(@types.weapon_pistol)
   }
   if @raylib.is_key_pressed(@raylib.KeyTwo) && game.player.owns_weapon[1] {
-    switch_weapon(game, @types.weapon_shotgun)
+    game.switch_weapon(@types.weapon_shotgun)
   }
   if @raylib.is_key_pressed(@raylib.KeyThree) && game.player.owns_weapon[2] {
-    switch_weapon(game, @types.weapon_rifle)
+    game.switch_weapon(@types.weapon_rifle)
   }
   if @raylib.is_key_pressed(@raylib.KeyFour) && game.player.owns_weapon[3] {
-    switch_weapon(game, @types.weapon_sniper)
+    game.switch_weapon(@types.weapon_sniper)
   }
   if @raylib.is_key_pressed(@raylib.KeyFive) && game.player.owns_weapon[4] {
-    switch_weapon(game, @types.weapon_rocket)
+    game.switch_weapon(@types.weapon_rocket)
   }
   if @raylib.is_key_pressed(@raylib.KeySix) && game.player.owns_weapon[5] {
-    switch_weapon(game, @types.weapon_minigun)
+    game.switch_weapon(@types.weapon_minigun)
   }
   // Mouse wheel weapon cycling
   let wheel = @raylib.get_mouse_wheel_move()
   if wheel > 0.0 {
-    cycle_weapon(game, 1)
+    game.cycle_weapon(1)
   } else if wheel < 0.0 {
-    cycle_weapon(game, -1)
+    game.cycle_weapon(-1)
   }
   // Check wave completion
-  check_wave_status(game)
+  game.check_wave_status()
   // Check player death
   if game.player.hp <= 0.0 {
     game.player.hp = 0.0
@@ -85,7 +85,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn switch_weapon(game : @types.Game, weapon : Int) -> Unit {
+fn @types.Game::switch_weapon(game : @types.Game, weapon : Int) -> Unit {
   if game.player.current_weapon != weapon {
     game.player.current_weapon = weapon
     // Cancel reload
@@ -98,7 +98,7 @@ fn switch_weapon(game : @types.Game, weapon : Int) -> Unit {
 }
 
 ///|
-fn cycle_weapon(game : @types.Game, direction : Int) -> Unit {
+fn @types.Game::cycle_weapon(game : @types.Game, direction : Int) -> Unit {
   let mut next = game.player.current_weapon + direction
   // Wrap around and find next owned weapon
   for _attempts in 0..<@types.weapon_count {
@@ -109,7 +109,7 @@ fn cycle_weapon(game : @types.Game, direction : Int) -> Unit {
       next = @types.weapon_count - 1
     }
     if game.player.owns_weapon[next] {
-      switch_weapon(game, next)
+      game.switch_weapon(next)
       return
     }
     next += direction
@@ -117,18 +117,18 @@ fn cycle_weapon(game : @types.Game, direction : Int) -> Unit {
 }
 
 ///|
-fn update_wave_complete(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_wave_complete(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
     game.state = Paused
     @raylib.enable_cursor()
     return
   }
   // Player can still move during shop phase
-  update_player(game, dt)
-  update_camera_fps(game)
-  update_crates(game, dt)
-  update_pickups(game, dt)
-  update_message(game, dt)
+  game.update_player(dt)
+  game.update_camera_fps()
+  game.update_crates(dt)
+  game.update_pickups(dt)
+  game.update_message(dt)
   // Wave summary display
   if game.show_wave_summary {
     game.wave_summary_timer -= dt
@@ -153,38 +153,38 @@ fn update_wave_complete(game : @types.Game, dt : Float) -> Unit {
   // Buy item
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeyE) {
-    buy_shop_item(game, game.shop_cursor)
+    game.buy_shop_item(game.shop_cursor)
   }
   // Weapon selection still works
   if @raylib.is_key_pressed(@raylib.KeyOne) && game.player.owns_weapon[0] {
-    switch_weapon(game, @types.weapon_pistol)
+    game.switch_weapon(@types.weapon_pistol)
   }
   if @raylib.is_key_pressed(@raylib.KeyTwo) && game.player.owns_weapon[1] {
-    switch_weapon(game, @types.weapon_shotgun)
+    game.switch_weapon(@types.weapon_shotgun)
   }
   if @raylib.is_key_pressed(@raylib.KeyThree) && game.player.owns_weapon[2] {
-    switch_weapon(game, @types.weapon_rifle)
+    game.switch_weapon(@types.weapon_rifle)
   }
   if @raylib.is_key_pressed(@raylib.KeyFour) && game.player.owns_weapon[3] {
-    switch_weapon(game, @types.weapon_sniper)
+    game.switch_weapon(@types.weapon_sniper)
   }
   if @raylib.is_key_pressed(@raylib.KeyFive) && game.player.owns_weapon[4] {
-    switch_weapon(game, @types.weapon_rocket)
+    game.switch_weapon(@types.weapon_rocket)
   }
   if @raylib.is_key_pressed(@raylib.KeySix) && game.player.owns_weapon[5] {
-    switch_weapon(game, @types.weapon_minigun)
+    game.switch_weapon(@types.weapon_minigun)
   }
   // Timer counts down or skip with space
   game.wave_timer -= dt
   if game.wave_timer <= 0.0 || @raylib.is_key_pressed(@raylib.KeySpace) {
-    start_wave(game, game.current_wave)
+    game.start_wave(game.current_wave)
     game.state = Playing
     @types.show_message(game, "Wave \{game.current_wave + 1} incoming!", 2.5)
   }
 }
 
 ///|
-fn update_paused(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_paused(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
     // Return to previous playing state
@@ -202,7 +202,7 @@ fn update_paused(game : @types.Game, _dt : Float) -> Unit {
 }
 
 ///|
-fn update_game_over(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_game_over(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     game.state = Menu
@@ -210,7 +210,7 @@ fn update_game_over(game : @types.Game, _dt : Float) -> Unit {
 }
 
 ///|
-fn update_particles(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -251,7 +251,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_message(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_message(game : @types.Game, dt : Float) -> Unit {
   if game.message_timer > 0.0 {
     game.message_timer -= dt
     if game.message_timer < 0.0 {
@@ -261,7 +261,7 @@ fn update_message(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_pickups(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_pickups(game : @types.Game, dt : Float) -> Unit {
   for pickup in game.pickups {
     if not(pickup.active) {
       continue
@@ -283,7 +283,7 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
       pickup.z,
     )
     if dist < 1.5 {
-      apply_pickup(game, pickup.kind)
+      game.apply_pickup(pickup.kind)
       pickup.active = false
       @types.spawn_particles(
         game,
@@ -300,7 +300,7 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn apply_pickup(game : @types.Game, kind : Int) -> Unit {
+fn @types.Game::apply_pickup(game : @types.Game, kind : Int) -> Unit {
   if kind == @types.pickup_health {
     let heal : Float = 30.0
     game.player.hp = @types.minf(game.player.hp + heal, @types.player_max_hp)
@@ -338,14 +338,14 @@ fn apply_pickup(game : @types.Game, kind : Int) -> Unit {
       let enemy = game.enemies[ei]
       if enemy.active {
         @types.spawn_particles(game, enemy.x, enemy.y, enemy.z, 8, 255, 200, 50)
-        kill_enemy(game, ei)
+        game.kill_enemy(ei)
       }
     }
   }
 }
 
 ///|
-fn update_traps(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_traps(game : @types.Game, dt : Float) -> Unit {
   for trap in game.traps {
     if not(trap.active) {
       continue
@@ -360,7 +360,7 @@ fn update_traps(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn check_wave_status(game : @types.Game) -> Unit {
+fn @types.Game::check_wave_status(game : @types.Game) -> Unit {
   if not(game.wave_active) {
     return
   }
@@ -399,7 +399,7 @@ fn check_wave_status(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_new_game(game : @types.Game) -> Unit {
+fn @types.Game::start_new_game(game : @types.Game) -> Unit {
   // Reset player
   game.player.x = 0.0
   game.player.y = @types.player_height
@@ -513,7 +513,7 @@ fn start_new_game(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_wave(game : @types.Game, wave : Int) -> Unit {
+fn @types.Game::start_wave(game : @types.Game, wave : Int) -> Unit {
   game.enemies_to_spawn = @levels.get_wave_total_enemies(wave)
   game.wave_hp_mult = @levels.get_wave_hp_mult(wave)
   game.wave_speed_mult = @levels.get_wave_speed_mult(wave)
@@ -524,7 +524,7 @@ fn start_wave(game : @types.Game, wave : Int) -> Unit {
 }
 
 ///|
-fn buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
+fn @types.Game::buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
   let cost = @levels.shop_item_cost(item_idx)
   if game.player.money < cost {
     return
@@ -672,7 +672,7 @@ fn buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
 }
 
 ///|
-fn update_crates(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_crates(game : @types.Game, dt : Float) -> Unit {
   for crate in game.crates {
     if not(crate.active) {
       crate.respawn_timer -= dt

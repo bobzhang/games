@@ -22,7 +22,7 @@ fn draw_right_text(
 }
 
 ///|
-fn cam_shake(game : @types.Game) -> (Float, Float) {
+fn @types.Game::cam_shake(game : @types.Game) -> (Float, Float) {
   if game.shake_t <= 0.0 {
     (0.0, 0.0)
   } else {
@@ -32,7 +32,7 @@ fn cam_shake(game : @types.Game) -> (Float, Float) {
 }
 
 ///|
-fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -84,7 +84,7 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_room_base(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_room_base(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   @raylib.draw_rectangle(
     @types.play_left.to_int(),
     @types.play_top.to_int(),
@@ -165,7 +165,7 @@ fn draw_station_tag(label : String, x : Float, y : Float, hot : Bool) -> Unit {
 }
 
 ///|
-fn draw_kettle(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_kettle(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let x = @types.kettle_x + cam_x
   let y = @types.kettle_y + cam_y
   let hot = @types.near_station(
@@ -209,7 +209,7 @@ fn draw_kettle(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_leaf_racks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_leaf_racks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for tea_i in 0..<@types.tea_count {
     let tea = tea_i
     let x = @types.leaf_x() + cam_x
@@ -281,7 +281,7 @@ fn draw_leaf_racks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_brewer(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_brewer(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let x = @types.brew_x + cam_x
   let y = @types.brew_y + cam_y
   let hot = @types.near_station(
@@ -366,7 +366,7 @@ fn draw_brewer(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_counter(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_counter(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let x = @types.counter_x + cam_x
   let y = @types.counter_y + cam_y
   let hot = @types.near_station(
@@ -512,7 +512,7 @@ fn draw_customer(c : @types.Customer, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let p = game.player
   let x = p.x + cam_x
   let y = p.y + cam_y
@@ -588,7 +588,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_sparks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_sparks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
       continue
@@ -713,7 +713,7 @@ fn draw_bar(
 }
 
 ///|
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -906,7 +906,7 @@ fn draw_button_visual(
 }
 
 ///|
-fn draw_touch_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   if not(game.touch_mode) {
     return
   }
@@ -1004,7 +1004,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -1118,7 +1118,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_stage_clear_overlay(game : @types.Game) -> Unit {
   let t = @types.clampf(game.result_t / @types.stage_clear_wait, 0.0, 1.0)
   let y = @types.lerpf(232.0, 166.0, @types.ease_out_cubic(t)).to_int()
 
@@ -1151,7 +1151,7 @@ fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_game_over_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -1261,7 +1261,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_flash(game : @types.Game) -> Unit {
+fn @types.Game::draw_flash(game : @types.Game) -> Unit {
   if game.flash_t <= 0.0 {
     return
   }
@@ -1277,14 +1277,14 @@ fn draw_flash(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
-  draw_sky(game, cam_x, cam_y)
-  draw_room_base(game, cam_x, cam_y)
+fn @types.Game::draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+  game.draw_sky(cam_x, cam_y)
+  game.draw_room_base(cam_x, cam_y)
 
-  draw_kettle(game, cam_x, cam_y)
-  draw_leaf_racks(game, cam_x, cam_y)
-  draw_brewer(game, cam_x, cam_y)
-  draw_counter(game, cam_x, cam_y)
+  game.draw_kettle(cam_x, cam_y)
+  game.draw_leaf_racks(cam_x, cam_y)
+  game.draw_brewer(cam_x, cam_y)
+  game.draw_counter(cam_x, cam_y)
 
   for customer in game.customers {
     if customer.active {
@@ -1292,8 +1292,8 @@ fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     }
   }
 
-  draw_player(game, cam_x, cam_y)
-  draw_sparks(game, cam_x, cam_y)
+  game.draw_player(cam_x, cam_y)
+  game.draw_sparks(cam_x, cam_y)
 }
 
 ///|
@@ -1301,20 +1301,20 @@ fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(6, 12, 24, 255))
 
-  let shake = cam_shake(game)
-  draw_world(game, shake.0, shake.1)
-  draw_hud(game)
+  let shake = game.cam_shake()
+  game.draw_world(shake.0, shake.1)
+  game.draw_hud()
 
   if game.state == @types.state_title {
-    draw_title_overlay(game)
+    game.draw_title_overlay()
   } else if game.state == @types.state_stage_clear {
-    draw_stage_clear_overlay(game)
+    game.draw_stage_clear_overlay()
   } else if game.state == @types.state_game_over {
-    draw_game_over_overlay(game)
+    game.draw_game_over_overlay()
   }
 
-  draw_touch_controls(game)
-  draw_flash(game)
+  game.draw_touch_controls()
+  game.draw_flash()
 
   if game.state == @types.state_play && game.touch_mode {
     draw_center_text(

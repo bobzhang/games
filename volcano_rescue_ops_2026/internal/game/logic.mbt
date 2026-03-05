@@ -1,25 +1,25 @@
 ///|
-fn set_tile(game : @types.Game, x : Int, y : Int, t : Int) -> Unit {
+fn @types.Game::set_tile(game : @types.Game, x : Int, y : Int, t : Int) -> Unit {
   if @types.in_bounds(x, y) {
     game.terrain[@types.cell_index(x, y)] = t
   }
 }
 
 ///|
-fn set_lava(game : @types.Game, x : Int, y : Int, v : Bool) -> Unit {
+fn @types.Game::set_lava(game : @types.Game, x : Int, y : Int, v : Bool) -> Unit {
   if @types.in_bounds(x, y) {
     game.lava[@types.cell_index(x, y)] = v
   }
 }
 
 ///|
-fn set_message(game : @types.Game, msg : String, ttl : Float) -> Unit {
+fn @types.Game::set_message(game : @types.Game, msg : String, ttl : Float) -> Unit {
   game.msg = msg
   game.msg_t = ttl
 }
 
 ///|
-fn clear_route(game : @types.Game) -> Unit {
+fn @types.Game::clear_route(game : @types.Game) -> Unit {
   game.route_len = 0
   game.route_running = false
   game.step_timer = 0.0
@@ -29,7 +29,7 @@ fn clear_route(game : @types.Game) -> Unit {
 }
 
 ///|
-fn push_route_step(game : @types.Game, dir : Int) -> Bool {
+fn @types.Game::push_route_step(game : @types.Game, dir : Int) -> Bool {
   if game.route_len >= @types.max_route_steps {
     return false
   }
@@ -40,7 +40,7 @@ fn push_route_step(game : @types.Game, dir : Int) -> Bool {
 }
 
 ///|
-fn pop_route_step(game : @types.Game) -> Int {
+fn @types.Game::pop_route_step(game : @types.Game) -> Int {
   if game.route_len <= 0 {
     return @types.dir_none
   }
@@ -55,14 +55,14 @@ fn pop_route_step(game : @types.Game) -> Int {
 }
 
 ///|
-fn is_walkable(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::is_walkable(game : @types.Game, x : Int, y : Int) -> Bool {
   @types.in_bounds(x, y) &&
   @types.tile_at(game, x, y) != @types.tile_rock &&
   not(@types.lava_at(game, x, y))
 }
 
 ///|
-fn clear_sites(game : @types.Game) -> Unit {
+fn @types.Game::clear_sites(game : @types.Game) -> Unit {
   game.site_count = 0
   for site in game.sites {
     site.active = false
@@ -73,7 +73,7 @@ fn clear_sites(game : @types.Game) -> Unit {
 }
 
 ///|
-fn add_site(game : @types.Game, x : Int, y : Int, waiting : Int) -> Unit {
+fn @types.Game::add_site(game : @types.Game, x : Int, y : Int, waiting : Int) -> Unit {
   if game.site_count >= @types.max_sites ||
     waiting <= 0 ||
     not(@types.in_bounds(x, y)) {
@@ -89,15 +89,15 @@ fn add_site(game : @types.Game, x : Int, y : Int, waiting : Int) -> Unit {
 }
 
 ///|
-fn clear_world(game : @types.Game) -> Unit {
+fn @types.Game::clear_world(game : @types.Game) -> Unit {
   for i in 0..<@types.max_cells {
     game.terrain[i] = @types.tile_ground
     game.lava[i] = false
     game.lava_buf[i] = false
   }
 
-  clear_sites(game)
-  clear_route(game)
+  game.clear_sites()
+  game.clear_route()
 
   game.selected_tx = -1
   game.selected_ty = -1
@@ -105,7 +105,7 @@ fn clear_world(game : @types.Game) -> Unit {
 }
 
 ///|
-fn add_rock_line(
+fn @types.Game::add_rock_line(
   game : @types.Game,
   x0 : Int,
   y0 : Int,
@@ -116,21 +116,21 @@ fn add_rock_line(
     let mut a : Int = y0.min(y1)
     let b : Int = y0.max(y1)
     while a <= b {
-      set_tile(game, x0, a, @types.tile_rock)
+      game.set_tile(x0, a, @types.tile_rock)
       a = a + 1
     }
   } else if y0 == y1 {
     let mut a : Int = x0.min(x1)
     let b : Int = x0.max(x1)
     while a <= b {
-      set_tile(game, a, y0, @types.tile_rock)
+      game.set_tile(a, y0, @types.tile_rock)
       a = a + 1
     }
   }
 }
 
 ///|
-fn add_rock_block(
+fn @types.Game::add_rock_block(
   game : @types.Game,
   x : Int,
   y : Int,
@@ -139,27 +139,27 @@ fn add_rock_block(
 ) -> Unit {
   for yy in y..<(y + h) {
     for xx in x..<(x + w) {
-      set_tile(game, xx, yy, @types.tile_rock)
+      game.set_tile(xx, yy, @types.tile_rock)
     }
   }
 }
 
 ///|
-fn add_depot(game : @types.Game, x : Int, y : Int) -> Unit {
+fn @types.Game::add_depot(game : @types.Game, x : Int, y : Int) -> Unit {
   if @types.in_bounds(x, y) {
-    set_tile(game, x, y, @types.tile_depot)
+    game.set_tile(x, y, @types.tile_depot)
   }
 }
 
 ///|
-fn add_lava_seed(game : @types.Game, x : Int, y : Int) -> Unit {
+fn @types.Game::add_lava_seed(game : @types.Game, x : Int, y : Int) -> Unit {
   if @types.in_bounds(x, y) && @types.tile_at(game, x, y) != @types.tile_rock {
-    set_lava(game, x, y, true)
+    game.set_lava(x, y, true)
   }
 }
 
 ///|
-fn setup_level_0(game : @types.Game) -> Unit {
+fn @types.Game::setup_level_0(game : @types.Game) -> Unit {
   game.start_x = 1
   game.start_y = 8
   game.shelter_x = 13
@@ -168,34 +168,34 @@ fn setup_level_0(game : @types.Game) -> Unit {
   game.mission_limit = 205.0
   game.lava_interval = 1.58
 
-  add_rock_line(game, 4, 0, 4, 8)
-  set_tile(game, 4, 2, @types.tile_ground)
-  set_tile(game, 4, 5, @types.tile_ground)
-  set_tile(game, 4, 7, @types.tile_ground)
+  game.add_rock_line(4, 0, 4, 8)
+  game.set_tile(4, 2, @types.tile_ground)
+  game.set_tile(4, 5, @types.tile_ground)
+  game.set_tile(4, 7, @types.tile_ground)
 
-  add_rock_line(game, 7, 4, 14, 4)
-  set_tile(game, 9, 4, @types.tile_ground)
-  set_tile(game, 12, 4, @types.tile_ground)
+  game.add_rock_line(7, 4, 14, 4)
+  game.set_tile(9, 4, @types.tile_ground)
+  game.set_tile(12, 4, @types.tile_ground)
 
-  add_rock_block(game, 8, 0, 2, 2)
-  add_rock_block(game, 10, 6, 2, 2)
-  add_rock_block(game, 1, 4, 2, 1)
+  game.add_rock_block(8, 0, 2, 2)
+  game.add_rock_block(10, 6, 2, 2)
+  game.add_rock_block(1, 4, 2, 1)
 
-  add_depot(game, 2, 3)
-  add_depot(game, 11, 8)
+  game.add_depot(2, 3)
+  game.add_depot(11, 8)
 
-  add_lava_seed(game, 0, 0)
-  add_lava_seed(game, 7, 0)
-  add_lava_seed(game, 14, 9)
+  game.add_lava_seed(0, 0)
+  game.add_lava_seed(7, 0)
+  game.add_lava_seed(14, 9)
 
-  add_site(game, 3, 7, 4)
-  add_site(game, 8, 8, 3)
-  add_site(game, 12, 6, 5)
-  add_site(game, 6, 2, 3)
+  game.add_site(3, 7, 4)
+  game.add_site(8, 8, 3)
+  game.add_site(12, 6, 5)
+  game.add_site(6, 2, 3)
 }
 
 ///|
-fn setup_level_1(game : @types.Game) -> Unit {
+fn @types.Game::setup_level_1(game : @types.Game) -> Unit {
   game.start_x = 0
   game.start_y = 5
   game.shelter_x = 14
@@ -204,37 +204,37 @@ fn setup_level_1(game : @types.Game) -> Unit {
   game.mission_limit = 225.0
   game.lava_interval = 1.42
 
-  add_rock_line(game, 2, 0, 2, 8)
-  set_tile(game, 2, 2, @types.tile_ground)
-  set_tile(game, 2, 6, @types.tile_ground)
+  game.add_rock_line(2, 0, 2, 8)
+  game.set_tile(2, 2, @types.tile_ground)
+  game.set_tile(2, 6, @types.tile_ground)
 
-  add_rock_line(game, 6, 1, 6, 9)
-  set_tile(game, 6, 3, @types.tile_ground)
-  set_tile(game, 6, 7, @types.tile_ground)
+  game.add_rock_line(6, 1, 6, 9)
+  game.set_tile(6, 3, @types.tile_ground)
+  game.set_tile(6, 7, @types.tile_ground)
 
-  add_rock_line(game, 9, 0, 13, 0)
-  add_rock_line(game, 9, 5, 14, 5)
-  set_tile(game, 11, 5, @types.tile_ground)
+  game.add_rock_line(9, 0, 13, 0)
+  game.add_rock_line(9, 5, 14, 5)
+  game.set_tile(11, 5, @types.tile_ground)
 
-  add_rock_block(game, 10, 2, 2, 2)
-  add_rock_block(game, 4, 7, 1, 3)
+  game.add_rock_block(10, 2, 2, 2)
+  game.add_rock_block(4, 7, 1, 3)
 
-  add_depot(game, 5, 1)
-  add_depot(game, 10, 6)
+  game.add_depot(5, 1)
+  game.add_depot(10, 6)
 
-  add_lava_seed(game, 14, 0)
-  add_lava_seed(game, 13, 1)
-  add_lava_seed(game, 7, 9)
+  game.add_lava_seed(14, 0)
+  game.add_lava_seed(13, 1)
+  game.add_lava_seed(7, 9)
 
-  add_site(game, 1, 1, 4)
-  add_site(game, 4, 8, 3)
-  add_site(game, 8, 4, 3)
-  add_site(game, 11, 2, 4)
-  add_site(game, 13, 6, 3)
+  game.add_site(1, 1, 4)
+  game.add_site(4, 8, 3)
+  game.add_site(8, 4, 3)
+  game.add_site(11, 2, 4)
+  game.add_site(13, 6, 3)
 }
 
 ///|
-fn setup_level_2(game : @types.Game) -> Unit {
+fn @types.Game::setup_level_2(game : @types.Game) -> Unit {
   game.start_x = 7
   game.start_y = 9
   game.shelter_x = 1
@@ -243,41 +243,41 @@ fn setup_level_2(game : @types.Game) -> Unit {
   game.mission_limit = 245.0
   game.lava_interval = 1.31
 
-  add_rock_line(game, 3, 2, 12, 2)
-  set_tile(game, 5, 2, @types.tile_ground)
-  set_tile(game, 8, 2, @types.tile_ground)
-  set_tile(game, 10, 2, @types.tile_ground)
+  game.add_rock_line(3, 2, 12, 2)
+  game.set_tile(5, 2, @types.tile_ground)
+  game.set_tile(8, 2, @types.tile_ground)
+  game.set_tile(10, 2, @types.tile_ground)
 
-  add_rock_line(game, 4, 6, 11, 6)
-  set_tile(game, 6, 6, @types.tile_ground)
-  set_tile(game, 9, 6, @types.tile_ground)
+  game.add_rock_line(4, 6, 11, 6)
+  game.set_tile(6, 6, @types.tile_ground)
+  game.set_tile(9, 6, @types.tile_ground)
 
-  add_rock_line(game, 12, 3, 12, 9)
-  set_tile(game, 12, 5, @types.tile_ground)
-  set_tile(game, 12, 8, @types.tile_ground)
+  game.add_rock_line(12, 3, 12, 9)
+  game.set_tile(12, 5, @types.tile_ground)
+  game.set_tile(12, 8, @types.tile_ground)
 
-  add_rock_block(game, 0, 4, 2, 2)
-  add_rock_block(game, 7, 4, 2, 1)
+  game.add_rock_block(0, 4, 2, 2)
+  game.add_rock_block(7, 4, 2, 1)
 
-  add_depot(game, 6, 5)
-  add_depot(game, 13, 2)
+  game.add_depot(6, 5)
+  game.add_depot(13, 2)
 
-  add_lava_seed(game, 14, 4)
-  add_lava_seed(game, 14, 5)
-  add_lava_seed(game, 13, 4)
-  add_lava_seed(game, 0, 9)
+  game.add_lava_seed(14, 4)
+  game.add_lava_seed(14, 5)
+  game.add_lava_seed(13, 4)
+  game.add_lava_seed(0, 9)
 
-  add_site(game, 2, 8, 4)
-  add_site(game, 5, 4, 5)
-  add_site(game, 8, 8, 4)
-  add_site(game, 10, 1, 4)
-  add_site(game, 13, 7, 3)
+  game.add_site(2, 8, 4)
+  game.add_site(5, 4, 5)
+  game.add_site(8, 8, 4)
+  game.add_site(10, 1, 4)
+  game.add_site(13, 7, 3)
 }
 
 ///|
-fn finalize_level_setup(game : @types.Game) -> Unit {
-  set_tile(game, game.shelter_x, game.shelter_y, @types.tile_shelter)
-  set_tile(game, game.start_x, game.start_y, @types.tile_ground)
+fn @types.Game::finalize_level_setup(game : @types.Game) -> Unit {
+  game.set_tile(game.shelter_x, game.shelter_y, @types.tile_shelter)
+  game.set_tile(game.start_x, game.start_y, @types.tile_ground)
 
   game.truck_x = game.start_x
   game.truck_y = game.start_y
@@ -298,46 +298,45 @@ fn finalize_level_setup(game : @types.Game) -> Unit {
   game.result = @types.result_none
   game.state = @types.state_play
 
-  clear_route(game)
+  game.clear_route()
 
-  set_message(
-    game,
+  game.set_message(
     "Mission " + (game.level_index + 1).to_string() + " underway",
     1.4,
   )
 }
 
 ///|
-fn load_level(game : @types.Game, index : Int) -> Unit {
-  clear_world(game)
+fn @types.Game::load_level(game : @types.Game, index : Int) -> Unit {
+  game.clear_world()
 
   game.level_index = index.clamp(min=0, max=@types.level_count - 1)
 
   if game.level_index == 0 {
-    setup_level_0(game)
+    game.setup_level_0()
   } else if game.level_index == 1 {
-    setup_level_1(game)
+    game.setup_level_1()
   } else {
-    setup_level_2(game)
+    game.setup_level_2()
   }
 
-  finalize_level_setup(game)
+  game.finalize_level_setup()
 }
 
 ///|
-fn restart_level(game : @types.Game) -> Unit {
-  load_level(game, game.level_index)
+fn @types.Game::restart_level(game : @types.Game) -> Unit {
+  game.load_level(game.level_index)
 }
 
 ///|
-fn start_campaign(game : @types.Game) -> Unit {
-  load_level(game, 0)
+fn @types.Game::start_campaign(game : @types.Game) -> Unit {
+  game.load_level(0)
 }
 
 ///|
-fn next_level_or_title(game : @types.Game) -> Unit {
+fn @types.Game::next_level_or_title(game : @types.Game) -> Unit {
   if @types.has_next_level(game) {
-    load_level(game, game.level_index + 1)
+    game.load_level(game.level_index + 1)
   } else {
     game.state = @types.state_title
     game.result = @types.result_none
@@ -352,57 +351,57 @@ fn next_level_or_title(game : @types.Game) -> Unit {
 }
 
 ///|
-fn append_manual_step(game : @types.Game, dir : Int) -> Bool {
+fn @types.Game::append_manual_step(game : @types.Game, dir : Int) -> Bool {
   if dir == @types.dir_none {
     return false
   }
 
-  let ok : Bool = push_route_step(game, dir)
+  let ok : Bool = game.push_route_step(dir)
   game.last_plan_ok = ok
   game.selected_tx = -1
   game.selected_ty = -1
 
   if not(ok) {
-    set_message(game, "Route queue full", 0.8)
+    game.set_message("Route queue full", 0.8)
   }
 
   ok
 }
 
 ///|
-fn begin_route(game : @types.Game) -> Unit {
+fn @types.Game::begin_route(game : @types.Game) -> Unit {
   if game.route_len <= 0 {
-    set_message(game, "Route queue is empty", 0.8)
+    game.set_message("Route queue is empty", 0.8)
     return
   }
 
   game.route_running = true
   game.step_timer = 0.0
-  set_message(game, "Convoy moving", 0.55)
+  game.set_message("Convoy moving", 0.55)
 }
 
 ///|
-fn clear_planned_route(game : @types.Game) -> Unit {
+fn @types.Game::clear_planned_route(game : @types.Game) -> Unit {
   if game.route_len > 0 {
-    clear_route(game)
-    set_message(game, "Route queue cleared", 0.55)
+    game.clear_route()
+    game.set_message("Route queue cleared", 0.55)
   }
 }
 
 ///|
-fn use_coolant(game : @types.Game) -> Unit {
+fn @types.Game::use_coolant(game : @types.Game) -> Unit {
   if game.coolant < 18.0 {
-    set_message(game, "Coolant too low", 0.7)
+    game.set_message("Coolant too low", 0.7)
     return
   }
 
   game.coolant = @types.clampf(game.coolant - 18.0, 0.0, @types.max_coolant)
   game.heat = @types.clampf(game.heat - 28.0, 0.0, @types.max_heat)
-  set_message(game, "Emergency spray deployed", 0.75)
+  game.set_message("Emergency spray deployed", 0.75)
 }
 
 ///|
-fn plan_route_to(game : @types.Game, tx : Int, ty : Int) -> Bool {
+fn @types.Game::plan_route_to(game : @types.Game, tx : Int, ty : Int) -> Bool {
   game.selected_tx = tx
   game.selected_ty = ty
 
@@ -411,9 +410,9 @@ fn plan_route_to(game : @types.Game, tx : Int, ty : Int) -> Bool {
     return false
   }
 
-  if not(is_walkable(game, tx, ty)) {
+  if not(game.is_walkable(tx, ty)) {
     game.last_plan_ok = false
-    set_message(game, "Target cell is blocked", 0.85)
+    game.set_message("Target cell is blocked", 0.85)
     return false
   }
 
@@ -456,7 +455,7 @@ fn plan_route_to(game : @types.Game, tx : Int, ty : Int) -> Bool {
       if not(@types.in_bounds(nx, ny)) {
         continue
       }
-      if not(is_walkable(game, nx, ny)) {
+      if not(game.is_walkable(nx, ny)) {
         continue
       }
 
@@ -475,7 +474,7 @@ fn plan_route_to(game : @types.Game, tx : Int, ty : Int) -> Bool {
 
   if not(visited[goal]) {
     game.last_plan_ok = false
-    set_message(game, "No safe path available", 0.95)
+    game.set_message("No safe path available", 0.95)
     return false
   }
 
@@ -486,14 +485,14 @@ fn plan_route_to(game : @types.Game, tx : Int, ty : Int) -> Bool {
   while cur != start {
     if rev_len >= @types.max_route_steps {
       game.last_plan_ok = false
-      set_message(game, "Path exceeds queue limit", 0.95)
+      game.set_message("Path exceeds queue limit", 0.95)
       return false
     }
 
     let d : Int = parent_dir[cur]
     if d == @types.dir_none {
       game.last_plan_ok = false
-      set_message(game, "Planner failed", 0.95)
+      game.set_message("Planner failed", 0.95)
       return false
     }
 
@@ -503,32 +502,32 @@ fn plan_route_to(game : @types.Game, tx : Int, ty : Int) -> Bool {
 
     if cur < 0 {
       game.last_plan_ok = false
-      set_message(game, "Planner failed", 0.95)
+      game.set_message("Planner failed", 0.95)
       return false
     }
   }
 
-  clear_route(game)
+  game.clear_route()
 
   let mut i : Int = rev_len - 1
   while i >= 0 {
-    ignore(push_route_step(game, rev[i]))
+    ignore(game.push_route_step(rev[i]))
     i = i - 1
   }
 
   game.last_plan_ok = true
 
   if rev_len > 0 {
-    set_message(game, "Route planned: " + rev_len.to_string() + " steps", 0.9)
+    game.set_message("Route planned: " + rev_len.to_string() + " steps", 0.9)
   } else {
-    set_message(game, "Already at target", 0.7)
+    game.set_message("Already at target", 0.7)
   }
 
   true
 }
 
 ///|
-fn pickup_civilians(game : @types.Game) -> Unit {
+fn @types.Game::pickup_civilians(game : @types.Game) -> Unit {
   if game.carrying >= @types.vehicle_capacity {
     return
   }
@@ -555,12 +554,12 @@ fn pickup_civilians(game : @types.Game) -> Unit {
     game.sites[i].waiting = game.sites[i].waiting - take
     game.carrying = game.carrying + take
 
-    set_message(game, "Picked up " + take.to_string() + " civilians", 0.85)
+    game.set_message("Picked up " + take.to_string() + " civilians", 0.85)
   }
 }
 
 ///|
-fn dropoff_civilians(game : @types.Game) -> Unit {
+fn @types.Game::dropoff_civilians(game : @types.Game) -> Unit {
   if game.carrying <= 0 {
     return
   }
@@ -570,39 +569,39 @@ fn dropoff_civilians(game : @types.Game) -> Unit {
     game.rescued = game.rescued + delivered
     game.carrying = 0
 
-    set_message(game, "Delivered " + delivered.to_string() + " civilians", 0.9)
+    game.set_message("Delivered " + delivered.to_string() + " civilians", 0.9)
   }
 }
 
 ///|
-fn tile_is_depot(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::tile_is_depot(game : @types.Game, x : Int, y : Int) -> Bool {
   @types.tile_at(game, x, y) == @types.tile_depot
 }
 
 ///|
-fn process_arrival(game : @types.Game) -> Unit {
-  pickup_civilians(game)
-  dropoff_civilians(game)
+fn @types.Game::process_arrival(game : @types.Game) -> Unit {
+  game.pickup_civilians()
+  game.dropoff_civilians()
 }
 
 ///|
-fn move_step(game : @types.Game, dir : Int) -> Bool {
+fn @types.Game::move_step(game : @types.Game, dir : Int) -> Bool {
   if dir == @types.dir_none {
     return false
   }
 
   if game.fuel < @types.move_fuel_cost {
     game.route_running = false
-    set_message(game, "Insufficient fuel", 0.75)
+    game.set_message("Insufficient fuel", 0.75)
     return false
   }
 
   let nx : Int = game.truck_x + @types.route_dx(dir)
   let ny : Int = game.truck_y + @types.route_dy(dir)
 
-  if not(is_walkable(game, nx, ny)) {
+  if not(game.is_walkable(nx, ny)) {
     game.route_running = false
-    set_message(game, "Route blocked by lava or debris", 0.9)
+    game.set_message("Route blocked by lava or debris", 0.9)
     return false
   }
 
@@ -619,12 +618,12 @@ fn move_step(game : @types.Game, dir : Int) -> Bool {
     @types.max_heat,
   )
 
-  process_arrival(game)
+  game.process_arrival()
   true
 }
 
 ///|
-fn update_route_run(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_route_run(game : @types.Game, dt : Float) -> Unit {
   if not(game.route_running) {
     return
   }
@@ -639,20 +638,20 @@ fn update_route_run(game : @types.Game, dt : Float) -> Unit {
       break
     }
 
-    let dir : Int = pop_route_step(game)
+    let dir : Int = game.pop_route_step()
     if dir == @types.dir_none {
       game.route_running = false
       break
     }
 
-    if not(move_step(game, dir)) {
+    if not(game.move_step(dir)) {
       break
     }
   }
 }
 
 ///|
-fn lava_pressure(game : @types.Game) -> Int {
+fn @types.Game::lava_pressure(game : @types.Game) -> Int {
   let mut pressure : Int = 0
 
   for oy in -1..<=1 {
@@ -670,8 +669,8 @@ fn lava_pressure(game : @types.Game) -> Int {
 }
 
 ///|
-fn update_passive_heat_and_supply(game : @types.Game, dt : Float) -> Unit {
-  let pressure : Int = lava_pressure(game)
+fn @types.Game::update_passive_heat_and_supply(game : @types.Game, dt : Float) -> Unit {
+  let pressure : Int = game.lava_pressure()
 
   let mut heat_gain : Float = 1.2 + Float::from_int(pressure) * 0.34
   heat_gain = heat_gain + Float::from_int(game.carrying) * 0.24
@@ -681,7 +680,7 @@ fn update_passive_heat_and_supply(game : @types.Game, dt : Float) -> Unit {
 
   let mut cooling : Float = 0.95
 
-  if tile_is_depot(game, game.truck_x, game.truck_y) {
+  if game.tile_is_depot(game.truck_x, game.truck_y) {
     cooling = cooling + 5.6
     game.fuel = @types.clampf(game.fuel + dt * 23.0, 0.0, @types.max_fuel)
     game.coolant = @types.clampf(
@@ -705,7 +704,7 @@ fn update_passive_heat_and_supply(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn burn_sites_from_lava(game : @types.Game) -> Unit {
+fn @types.Game::burn_sites_from_lava(game : @types.Game) -> Unit {
   let mut losses : Int = 0
 
   for i in 0..<game.site_count {
@@ -721,12 +720,12 @@ fn burn_sites_from_lava(game : @types.Game) -> Unit {
   }
 
   if losses > 0 {
-    set_message(game, losses.to_string() + " civilians lost to lava", 1.0)
+    game.set_message(losses.to_string() + " civilians lost to lava", 1.0)
   }
 }
 
 ///|
-fn spread_chance(game : @types.Game, nx : Int, ny : Int, base : Int) -> Int {
+fn @types.Game::spread_chance(game : @types.Game, nx : Int, ny : Int, base : Int) -> Int {
   let mut chance : Int = base
 
   if @types.tile_at(game, nx, ny) == @types.tile_depot {
@@ -745,7 +744,7 @@ fn spread_chance(game : @types.Game, nx : Int, ny : Int, base : Int) -> Int {
 }
 
 ///|
-fn try_spread_to(game : @types.Game, nx : Int, ny : Int, base : Int) -> Unit {
+fn @types.Game::try_spread_to(game : @types.Game, nx : Int, ny : Int, base : Int) -> Unit {
   if not(@types.in_bounds(nx, ny)) {
     return
   }
@@ -758,14 +757,14 @@ fn try_spread_to(game : @types.Game, nx : Int, ny : Int, base : Int) -> Unit {
     return
   }
 
-  let chance : Int = spread_chance(game, nx, ny, base)
+  let chance : Int = game.spread_chance(nx, ny, base)
   if @raylib.get_random_value(0, 99) < chance {
     game.lava_buf[idx] = true
   }
 }
 
 ///|
-fn spread_lava_once(game : @types.Game) -> Unit {
+fn @types.Game::spread_lava_once(game : @types.Game) -> Unit {
   for i in 0..<@types.max_cells {
     game.lava_buf[i] = game.lava[i]
   }
@@ -778,10 +777,10 @@ fn spread_lava_once(game : @types.Game) -> Unit {
         continue
       }
 
-      try_spread_to(game, x + 1, y, base)
-      try_spread_to(game, x - 1, y, base)
-      try_spread_to(game, x, y + 1, base)
-      try_spread_to(game, x, y - 1, base)
+      game.try_spread_to(x + 1, y, base)
+      game.try_spread_to(x - 1, y, base)
+      game.try_spread_to(x, y + 1, base)
+      game.try_spread_to(x, y - 1, base)
     }
   }
 
@@ -789,41 +788,41 @@ fn spread_lava_once(game : @types.Game) -> Unit {
     game.lava[i] = game.lava_buf[i]
   }
 
-  burn_sites_from_lava(game)
+  game.burn_sites_from_lava()
 }
 
 ///|
-fn finish_mission(game : @types.Game, win : Bool, reason : String) -> Unit {
+fn @types.Game::finish_mission(game : @types.Game, win : Bool, reason : String) -> Unit {
   game.state = @types.state_result
   game.result = if win { @types.result_win } else { @types.result_lose }
-  clear_route(game)
-  set_message(game, reason, 2.8)
+  game.clear_route()
+  game.set_message(reason, 2.8)
 }
 
 ///|
-fn evaluate_mission_state(game : @types.Game) -> Unit {
+fn @types.Game::evaluate_mission_state(game : @types.Game) -> Unit {
   if game.rescued >= game.goal_rescue {
-    finish_mission(game, true, "Rescue quota achieved")
+    game.finish_mission(true, "Rescue quota achieved")
     return
   }
 
   if game.heat >= @types.max_heat {
-    finish_mission(game, false, "Vehicle overheated")
+    game.finish_mission(false, "Vehicle overheated")
     return
   }
 
   if game.mission_time >= game.mission_limit {
-    finish_mission(game, false, "Mission timer expired")
+    game.finish_mission(false, "Mission timer expired")
     return
   }
 
   if @types.lava_at(game, game.truck_x, game.truck_y) {
-    finish_mission(game, false, "Convoy consumed by lava")
+    game.finish_mission(false, "Convoy consumed by lava")
     return
   }
 
   if @types.lava_at(game, game.shelter_x, game.shelter_y) {
-    finish_mission(game, false, "Shelter overrun")
+    game.finish_mission(false, "Shelter overrun")
     return
   }
 
@@ -831,40 +830,40 @@ fn evaluate_mission_state(game : @types.Game) -> Unit {
     game.carrying +
     @types.total_waiting(game)
   if remaining_possible < game.goal_rescue {
-    finish_mission(game, false, "Rescue quota no longer possible")
+    game.finish_mission(false, "Rescue quota no longer possible")
     return
   }
 
-  if game.fuel <= 0.0 && not(tile_is_depot(game, game.truck_x, game.truck_y)) {
+  if game.fuel <= 0.0 && not(game.tile_is_depot(game.truck_x, game.truck_y)) {
     if game.route_len <= 0 && not(game.route_running) {
-      finish_mission(game, false, "Fuel exhausted")
+      game.finish_mission(false, "Fuel exhausted")
     }
   }
 }
 
 ///|
-fn update_play(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   if game.state != @types.state_play {
     return
   }
 
   game.mission_time = game.mission_time + dt
 
-  update_route_run(game, dt)
-  update_passive_heat_and_supply(game, dt)
+  game.update_route_run(dt)
+  game.update_passive_heat_and_supply(dt)
 
   game.lava_timer = game.lava_timer + dt
   while game.lava_timer >= game.lava_interval {
     game.lava_timer = game.lava_timer - game.lava_interval
-    spread_lava_once(game)
+    game.spread_lava_once()
   }
 
-  process_arrival(game)
-  evaluate_mission_state(game)
+  game.process_arrival()
+  game.evaluate_mission_state()
 }
 
 ///|
-fn update_timers(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_timers(game : @types.Game, dt : Float) -> Unit {
   game.ui_t = game.ui_t + dt
 
   if game.msg_t > 0.0 {
@@ -896,7 +895,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   }
   game.touch_count = tc
 
-  update_timers(game, dt)
+  game.update_timers(dt)
 
   if game.state == @types.state_title {
     if detect_start_press(
@@ -905,7 +904,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
         game.mouse_press,
         game.touch_count,
       ) {
-      start_campaign(game)
+      game.start_campaign()
     }
   } else if game.state == @types.state_play {
     let restart_press : Bool = detect_restart_press(
@@ -917,7 +916,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 
     if restart_press && game.touch_cd <= 0.0 {
       game.touch_cd = 0.2
-      restart_level(game)
+      game.restart_level()
     } else {
       let dir : Int = detect_dir_press(
         game.mouse_x,
@@ -927,7 +926,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
       )
       if dir != @types.dir_none && game.touch_cd <= 0.0 {
         game.touch_cd = 0.08
-        ignore(append_manual_step(game, dir))
+        ignore(game.append_manual_step(dir))
       }
 
       let tap = detect_map_target(
@@ -938,7 +937,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
       )
       if tap.0 && game.touch_cd <= 0.0 {
         game.touch_cd = 0.12
-        ignore(plan_route_to(game, tap.1, tap.2))
+        ignore(game.plan_route_to(tap.1, tap.2))
       }
 
       if detect_execute_press(
@@ -949,7 +948,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
         ) &&
         game.touch_cd <= 0.0 {
         game.touch_cd = 0.14
-        begin_route(game)
+        game.begin_route()
       }
 
       if detect_clear_route_press(
@@ -960,7 +959,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
         ) &&
         game.touch_cd <= 0.0 {
         game.touch_cd = 0.14
-        clear_planned_route(game)
+        game.clear_planned_route()
       }
 
       if detect_coolant_press(
@@ -971,11 +970,11 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
         ) &&
         game.touch_cd <= 0.0 {
         game.touch_cd = 0.18
-        use_coolant(game)
+        game.use_coolant()
       }
     }
 
-    update_play(game, dt)
+    game.update_play(dt)
   } else if detect_restart_press(
       game.mouse_x,
       game.mouse_y,
@@ -984,7 +983,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     ) &&
     game.touch_cd <= 0.0 {
     game.touch_cd = 0.2
-    restart_level(game)
+    game.restart_level()
   } else if detect_next_press(
       game.mouse_x,
       game.mouse_y,
@@ -994,6 +993,6 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     game.touch_cd <= 0.0 &&
     game.result == @types.result_win {
     game.touch_cd = 0.2
-    next_level_or_title(game)
+    game.next_level_or_title()
   }
 }

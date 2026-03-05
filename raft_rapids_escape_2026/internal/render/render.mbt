@@ -1,10 +1,10 @@
 ///|
-fn ui_wave(game : @types.Game, k : Float) -> Float {
+fn @types.Game::ui_wave(game : @types.Game, k : Float) -> Float {
   @math.sinf(game.ui_t * k)
 }
 
 ///|
-fn shake_offset_x(game : @types.Game) -> Int {
+fn @types.Game::shake_offset_x(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -13,7 +13,7 @@ fn shake_offset_x(game : @types.Game) -> Int {
 }
 
 ///|
-fn shake_offset_y(game : @types.Game) -> Int {
+fn @types.Game::shake_offset_y(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -22,11 +22,11 @@ fn shake_offset_y(game : @types.Game) -> Int {
 }
 
 ///|
-fn draw_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(7, 16, 26, 255))
 
-  let w0 : Float = ui_wave(game, 0.58)
-  let w1 : Float = ui_wave(game, 0.92)
+  let w0 : Float = game.ui_wave(0.58)
+  let w1 : Float = game.ui_wave(0.92)
 
   @raylib.draw_circle(
     210,
@@ -65,7 +65,7 @@ fn draw_background(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit {
   @raylib.draw_rectangle(
     @types.world_x0 + ox,
     @types.world_y0 + oy,
@@ -84,7 +84,7 @@ fn draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
   for i in 0..<23 {
     let y : Int = @types.world_y0 + oy + i * 42
-    let shift : Int = (ui_wave(game, 1.0 + Float::from_int(i) * 0.07) * 18.0).to_int()
+    let shift : Int = (game.ui_wave(1.0 + Float::from_int(i) * 0.07) * 18.0).to_int()
 
     @raylib.draw_line(
       @types.world_x0 + 14 + ox,
@@ -95,7 +95,7 @@ fn draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit {
     )
   }
 
-  let bank_wave : Int = (ui_wave(game, 1.32) * 8.0).to_int()
+  let bank_wave : Int = (game.ui_wave(1.32) * 8.0).to_int()
 
   @raylib.draw_rectangle(
     @types.world_x0 - 10 + ox + bank_wave,
@@ -114,7 +114,7 @@ fn draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn draw_currents(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_currents(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for r in 0..<12 {
     let row_y : Float = @types.world_top() + 38.0 + Float::from_int(r) * 76.0
 
@@ -307,7 +307,7 @@ fn draw_pickup(pk : @types.Pickup, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
       continue
@@ -339,7 +339,7 @@ fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn draw_raft(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_raft(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let cx : Int = game.raft_x.to_int() + ox
   let cy : Int = game.raft_y.to_int() + oy
 
@@ -375,7 +375,7 @@ fn draw_raft(game : @types.Game, ox : Int, oy : Int) -> Unit {
   @raylib.draw_circle(cx + 6, cy - 6, 4.0, @raylib.Color::new(24, 36, 28, 220))
 
   if game.boost_on && game.fuel > 0.6 {
-    let f : Float = 8.0 + ui_wave(game, 11.0) * 3.0
+    let f : Float = 8.0 + game.ui_wave(11.0) * 3.0
     @raylib.draw_circle(cx, cy + 18, f, @raylib.Color::new(86, 234, 255, 168))
   }
 
@@ -391,7 +391,7 @@ fn draw_raft(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
   if game.hint_t <= 0.0 {
     return
   }
@@ -448,7 +448,7 @@ fn draw_progress_bar(
 }
 
 ///|
-fn draw_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.panel_x0,
     20,
@@ -620,7 +620,7 @@ fn draw_panel(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_touch_button(
+fn @types.Game::draw_touch_button(
   game : @types.Game,
   rect : (Int, Int, Int, Int),
   label : String,
@@ -669,38 +669,33 @@ fn draw_touch_button(
 }
 
 ///|
-fn draw_touch_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   if game.state != @types.state_play {
     return
   }
 
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_left(),
     "L",
     @raylib.Color::new(40, 78, 104, 168),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_right(),
     "R",
     @raylib.Color::new(40, 78, 104, 168),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_up(),
     "U",
     @raylib.Color::new(40, 78, 104, 168),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_down(),
     "D",
     @raylib.Color::new(40, 78, 104, 168),
   )
 
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_boost(),
     "BOOST",
     if game.boost_on {
@@ -710,14 +705,12 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
     },
   )
 
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_hint(),
     "HINT",
     @raylib.Color::new(70, 94, 136, 176),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_restart(),
     "RST",
     @raylib.Color::new(94, 78, 116, 176),
@@ -725,7 +718,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -816,7 +809,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_result_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -935,7 +928,7 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_msg(game : @types.Game) -> Unit {
+fn @types.Game::draw_msg(game : @types.Game) -> Unit {
   if game.msg_t <= 0.0 || game.msg == "" {
     return
   }
@@ -970,13 +963,13 @@ fn draw_msg(game : @types.Game) -> Unit {
 ///|
 /// Render world layers, objects, HUD panel, and overlays.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_background(game)
+  game.draw_background()
 
-  let ox : Int = shake_offset_x(game)
-  let oy : Int = shake_offset_y(game)
+  let ox : Int = game.shake_offset_x()
+  let oy : Int = game.shake_offset_y()
 
-  draw_world_back(game, ox, oy)
-  draw_currents(game, ox, oy)
+  game.draw_world_back(ox, oy)
+  game.draw_currents(ox, oy)
 
   for obstacle in game.obstacles {
     draw_obstacle(obstacle, ox, oy)
@@ -986,17 +979,17 @@ pub fn draw_frame(game : @types.Game) -> Unit {
     draw_pickup(pickup, ox, oy)
   }
 
-  draw_hint(game, ox, oy)
-  draw_particles(game, ox, oy)
-  draw_raft(game, ox, oy)
+  game.draw_hint(ox, oy)
+  game.draw_particles(ox, oy)
+  game.draw_raft(ox, oy)
 
-  draw_panel(game)
-  draw_touch_controls(game)
-  draw_msg(game)
+  game.draw_panel()
+  game.draw_touch_controls()
+  game.draw_msg()
 
   if game.state == @types.state_title {
-    draw_title_overlay(game)
+    game.draw_title_overlay()
   } else if game.state == @types.state_result {
-    draw_result_overlay(game)
+    game.draw_result_overlay()
   }
 }

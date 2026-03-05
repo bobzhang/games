@@ -1,5 +1,5 @@
 ///|
-fn refill_bag(game : @types.Game) -> Unit {
+fn @types.Game::refill_bag(game : @types.Game) -> Unit {
   for i in 0..<@types.bag_size {
     game.bag[i] = i
   }
@@ -15,9 +15,9 @@ fn refill_bag(game : @types.Game) -> Unit {
 }
 
 ///|
-fn take_bag_piece(game : @types.Game) -> Int {
+fn @types.Game::take_bag_piece(game : @types.Game) -> Int {
   if game.bag_pos >= @types.bag_size {
-    refill_bag(game)
+    game.refill_bag()
   }
   let kind = game.bag[game.bag_pos]
   game.bag_pos = game.bag_pos + 1
@@ -25,7 +25,7 @@ fn take_bag_piece(game : @types.Game) -> Int {
 }
 
 ///|
-fn lock_piece(game : @types.Game) -> Unit {
+fn @types.Game::lock_piece(game : @types.Game) -> Unit {
   for i in 0..<4 {
     let c = @types.piece_cell(game.piece_kind, game.piece_rot, i)
     let x = game.piece_x + c.x
@@ -41,7 +41,7 @@ fn lock_piece(game : @types.Game) -> Unit {
 }
 
 ///|
-fn clear_lines(game : @types.Game) -> Int {
+fn @types.Game::clear_lines(game : @types.Game) -> Int {
   let mut cleared = 0
   let mut y = @types.board_rows - 1
   while y >= 0 {
@@ -75,20 +75,20 @@ fn clear_lines(game : @types.Game) -> Int {
 }
 
 ///|
-fn recalc_speed(game : @types.Game) -> Unit {
+fn @types.Game::recalc_speed(game : @types.Game) -> Unit {
   let raw : Float = (0.70 : Float) -
     Float::from_int(game.level - 1) * (0.05 : Float)
   game.drop_interval = if raw < (0.09 : Float) { (0.09 : Float) } else { raw }
 }
 
 ///|
-fn apply_line_score(game : @types.Game, cleared : Int) -> Unit {
+fn @types.Game::apply_line_score(game : @types.Game, cleared : Int) -> Unit {
   if cleared <= 0 {
     return
   }
   game.lines = game.lines + cleared
   game.level = 1 + game.lines / 10
-  recalc_speed(game)
+  game.recalc_speed()
   let base = match cleared {
     1 => @types.score_single
     2 => @types.score_double
@@ -99,9 +99,9 @@ fn apply_line_score(game : @types.Game, cleared : Int) -> Unit {
 }
 
 ///|
-fn spawn_piece(game : @types.Game) -> Unit {
+fn @types.Game::spawn_piece(game : @types.Game) -> Unit {
   game.piece_kind = game.next_kind
-  game.next_kind = take_bag_piece(game)
+  game.next_kind = game.take_bag_piece()
   game.piece_rot = 0
   game.piece_x = @types.board_cols / 2
   game.piece_y = 0
@@ -118,7 +118,7 @@ fn spawn_piece(game : @types.Game) -> Unit {
 }
 
 ///|
-fn hard_drop(game : @types.Game) -> Unit {
+fn @types.Game::hard_drop(game : @types.Game) -> Unit {
   let mut traveled = 0
   while not(
           @types.collides(
@@ -133,16 +133,16 @@ fn hard_drop(game : @types.Game) -> Unit {
     traveled = traveled + 1
   }
   game.score = game.score + traveled * 2
-  lock_piece(game)
-  let cleared = clear_lines(game)
-  apply_line_score(game, cleared)
+  game.lock_piece()
+  let cleared = game.clear_lines()
+  game.apply_line_score(cleared)
   if not(game.over) {
-    spawn_piece(game)
+    game.spawn_piece()
   }
 }
 
 ///|
-fn try_move(game : @types.Game, dx : Int, dy : Int) -> Bool {
+fn @types.Game::try_move(game : @types.Game, dx : Int, dy : Int) -> Bool {
   let nx = game.piece_x + dx
   let ny = game.piece_y + dy
   if @types.collides(game, game.piece_kind, game.piece_rot, nx, ny) {
@@ -154,7 +154,7 @@ fn try_move(game : @types.Game, dx : Int, dy : Int) -> Bool {
 }
 
 ///|
-fn try_rotate(game : @types.Game, dir : Int) -> Unit {
+fn @types.Game::try_rotate(game : @types.Game, dir : Int) -> Unit {
   let new_rot = @types.normalize_rot(game.piece_rot + dir)
   let kicks : Array[Int] = [0, -1, 1, -2, 2]
   for kick in kicks {
@@ -168,7 +168,7 @@ fn try_rotate(game : @types.Game, dir : Int) -> Unit {
 }
 
 ///|
-fn use_hold(game : @types.Game) -> Unit {
+fn @types.Game::use_hold(game : @types.Game) -> Unit {
   if game.hold_used {
     return
   }
@@ -176,7 +176,7 @@ fn use_hold(game : @types.Game) -> Unit {
   if game.hold_kind < 0 {
     game.hold_kind = current
     game.piece_kind = game.next_kind
-    game.next_kind = take_bag_piece(game)
+    game.next_kind = game.take_bag_piece()
   } else {
     game.piece_kind = game.hold_kind
     game.hold_kind = current
@@ -211,12 +211,12 @@ pub fn reset_game(game : @types.Game) -> Unit {
   game.hold_kind = -1
   game.hold_used = false
   game.bag_pos = @types.bag_size
-  game.next_kind = take_bag_piece(game)
-  game.piece_kind = take_bag_piece(game)
+  game.next_kind = game.take_bag_piece()
+  game.piece_kind = game.take_bag_piece()
   game.piece_rot = 0
   game.piece_x = @types.board_cols / 2
   game.piece_y = 0
-  recalc_speed(game)
+  game.recalc_speed()
 }
 
 ///|
@@ -230,29 +230,29 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   }
 
   if @raylib.is_key_pressed(@raylib.KeyLeft) {
-    ignore(try_move(game, -1, 0))
+    ignore(game.try_move(-1, 0))
   }
   if @raylib.is_key_pressed(@raylib.KeyRight) {
-    ignore(try_move(game, 1, 0))
+    ignore(game.try_move(1, 0))
   }
   if @raylib.is_key_pressed(@raylib.KeyUp) ||
     @raylib.is_key_pressed(@raylib.KeyX) {
-    try_rotate(game, 1)
+    game.try_rotate(1)
   }
   if @raylib.is_key_pressed(@raylib.KeyZ) {
-    try_rotate(game, -1)
+    game.try_rotate(-1)
   }
   if @raylib.is_key_pressed(@raylib.KeyC) {
-    use_hold(game)
+    game.use_hold()
   }
   if @raylib.is_key_pressed(@raylib.KeySpace) {
-    hard_drop(game)
+    game.hard_drop()
     game.drop_timer = 0.0
     return
   }
 
   if @raylib.is_key_pressed(@raylib.KeyDown) {
-    if try_move(game, 0, 1) {
+    if game.try_move(0, 1) {
       game.score = game.score + 1
     }
   }
@@ -266,12 +266,12 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   let interval = game.drop_interval * speed_scale
   if game.drop_timer >= interval {
     game.drop_timer = 0.0
-    if not(try_move(game, 0, 1)) {
-      lock_piece(game)
-      let cleared = clear_lines(game)
-      apply_line_score(game, cleared)
+    if not(game.try_move(0, 1)) {
+      game.lock_piece()
+      let cleared = game.clear_lines()
+      game.apply_line_score(cleared)
       if not(game.over) {
-        spawn_piece(game)
+        game.spawn_piece()
       }
     }
   }

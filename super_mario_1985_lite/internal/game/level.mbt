@@ -1,5 +1,5 @@
 ///|
-fn clear_dynamic_world(game : @types.Game) -> Unit {
+fn @types.Game::clear_dynamic_world(game : @types.Game) -> Unit {
   for i in 0..<game.enemies.length() {
     game.enemies[i] = @types.Enemy::inactive()
   }
@@ -9,7 +9,7 @@ fn clear_dynamic_world(game : @types.Game) -> Unit {
 }
 
 ///|
-fn alloc_enemy(game : @types.Game) -> Int {
+fn @types.Game::alloc_enemy(game : @types.Game) -> Int {
   for i in 0..<game.enemies.length() {
     if not(game.enemies[i].active) {
       return i
@@ -19,7 +19,7 @@ fn alloc_enemy(game : @types.Game) -> Int {
 }
 
 ///|
-fn alloc_coin(game : @types.Game) -> Int {
+fn @types.Game::alloc_coin(game : @types.Game) -> Int {
   for i in 0..<game.coins.length() {
     if not(game.coins[i].active) {
       return i
@@ -29,13 +29,13 @@ fn alloc_coin(game : @types.Game) -> Int {
 }
 
 ///|
-fn add_enemy_spawn(
+fn @types.Game::add_enemy_spawn(
   game : @types.Game,
   tx : Int,
   stand_tile_y : Int,
   dir : Int,
 ) -> Unit {
-  let idx = alloc_enemy(game)
+  let idx = game.alloc_enemy()
   if idx < 0 {
     return
   }
@@ -45,8 +45,8 @@ fn add_enemy_spawn(
 }
 
 ///|
-fn add_coin_spawn(game : @types.Game, tx : Int, ty : Int) -> Unit {
-  let idx = alloc_coin(game)
+fn @types.Game::add_coin_spawn(game : @types.Game, tx : Int, ty : Int) -> Unit {
+  let idx = game.alloc_coin()
   if idx < 0 {
     return
   }
@@ -56,7 +56,7 @@ fn add_coin_spawn(game : @types.Game, tx : Int, ty : Int) -> Unit {
 }
 
 ///|
-fn carve_gap(game : @types.Game, tx0 : Int, tx1 : Int) -> Unit {
+fn @types.Game::carve_gap(game : @types.Game, tx0 : Int, tx1 : Int) -> Unit {
   for x in tx0..<=tx1 {
     for y in @types.ground_row..<@types.world_tiles_h {
       @types.set_tile(game, x, y, @types.tile_empty)
@@ -65,25 +65,25 @@ fn carve_gap(game : @types.Game, tx0 : Int, tx1 : Int) -> Unit {
 }
 
 ///|
-fn add_pipe(game : @types.Game, tx : Int, height : Int) -> Unit {
+fn @types.Game::add_pipe(game : @types.Game, tx : Int, height : Int) -> Unit {
   let top = @types.ground_row - height
   @types.fill_rect_tile(game, tx, top, 2, height, @types.tile_pipe)
 }
 
 ///|
-fn add_brick_row(game : @types.Game, tx : Int, ty : Int, len : Int) -> Unit {
+fn @types.Game::add_brick_row(game : @types.Game, tx : Int, ty : Int, len : Int) -> Unit {
   for x in tx..<(tx + len) {
     @types.set_tile(game, x, ty, @types.tile_brick)
   }
 }
 
 ///|
-fn add_question(game : @types.Game, tx : Int, ty : Int) -> Unit {
+fn @types.Game::add_question(game : @types.Game, tx : Int, ty : Int) -> Unit {
   @types.set_tile(game, tx, ty, @types.tile_question)
 }
 
 ///|
-fn fill_ground(game : @types.Game) -> Unit {
+fn @types.Game::fill_ground(game : @types.Game) -> Unit {
   @types.fill_rect_tile(
     game,
     0,
@@ -95,44 +95,44 @@ fn fill_ground(game : @types.Game) -> Unit {
 }
 
 ///|
-fn build_level_geometry(game : @types.Game) -> Unit {
+fn @types.Game::build_level_geometry(game : @types.Game) -> Unit {
   @types.clear_tiles(game)
-  fill_ground(game)
+  game.fill_ground()
 
-  carve_gap(game, 48, 51)
-  carve_gap(game, 92, 95)
-  carve_gap(game, 138, 142)
-  carve_gap(game, 174, 176)
-  carve_gap(game, 209, 212)
+  game.carve_gap(48, 51)
+  game.carve_gap(92, 95)
+  game.carve_gap(138, 142)
+  game.carve_gap(174, 176)
+  game.carve_gap(209, 212)
 
-  add_pipe(game, 28, 3)
-  add_pipe(game, 40, 4)
-  add_pipe(game, 70, 3)
-  add_pipe(game, 106, 5)
-  add_pipe(game, 146, 4)
-  add_pipe(game, 164, 6)
-  add_pipe(game, 192, 4)
+  game.add_pipe(28, 3)
+  game.add_pipe(40, 4)
+  game.add_pipe(70, 3)
+  game.add_pipe(106, 5)
+  game.add_pipe(146, 4)
+  game.add_pipe(164, 6)
+  game.add_pipe(192, 4)
 
-  add_brick_row(game, 22, 12, 5)
-  add_question(game, 23, 12)
-  add_question(game, 25, 12)
+  game.add_brick_row(22, 12, 5)
+  game.add_question(23, 12)
+  game.add_question(25, 12)
 
-  add_brick_row(game, 58, 11, 6)
-  add_question(game, 61, 11)
+  game.add_brick_row(58, 11, 6)
+  game.add_question(61, 11)
 
-  add_brick_row(game, 82, 12, 5)
-  add_question(game, 84, 12)
+  game.add_brick_row(82, 12, 5)
+  game.add_question(84, 12)
 
-  add_brick_row(game, 118, 10, 4)
-  add_question(game, 119, 10)
-  add_question(game, 121, 10)
+  game.add_brick_row(118, 10, 4)
+  game.add_question(119, 10)
+  game.add_question(121, 10)
 
-  add_brick_row(game, 152, 12, 8)
-  add_question(game, 155, 12)
-  add_question(game, 157, 12)
+  game.add_brick_row(152, 12, 8)
+  game.add_question(155, 12)
+  game.add_question(157, 12)
 
-  add_brick_row(game, 181, 11, 7)
-  add_question(game, 184, 11)
+  game.add_brick_row(181, 11, 7)
+  game.add_question(184, 11)
 
   // Stair near the end.
   @types.fill_rect_tile(
@@ -219,42 +219,42 @@ fn build_level_geometry(game : @types.Game) -> Unit {
 }
 
 ///|
-fn populate_level_entities(game : @types.Game) -> Unit {
-  clear_dynamic_world(game)
+fn @types.Game::populate_level_entities(game : @types.Game) -> Unit {
+  game.clear_dynamic_world()
 
-  add_enemy_spawn(game, 18, @types.ground_row, -1)
-  add_enemy_spawn(game, 33, @types.ground_row, -1)
-  add_enemy_spawn(game, 45, @types.ground_row, -1)
-  add_enemy_spawn(game, 64, @types.ground_row, -1)
-  add_enemy_spawn(game, 76, @types.ground_row, -1)
-  add_enemy_spawn(game, 88, @types.ground_row, -1)
-  add_enemy_spawn(game, 103, @types.ground_row, -1)
-  add_enemy_spawn(game, 115, @types.ground_row, -1)
-  add_enemy_spawn(game, 132, @types.ground_row, -1)
-  add_enemy_spawn(game, 150, @types.ground_row, -1)
-  add_enemy_spawn(game, 170, @types.ground_row, -1)
-  add_enemy_spawn(game, 188, @types.ground_row, -1)
-  add_enemy_spawn(game, 198, @types.ground_row - 6, -1)
+  game.add_enemy_spawn(18, @types.ground_row, -1)
+  game.add_enemy_spawn(33, @types.ground_row, -1)
+  game.add_enemy_spawn(45, @types.ground_row, -1)
+  game.add_enemy_spawn(64, @types.ground_row, -1)
+  game.add_enemy_spawn(76, @types.ground_row, -1)
+  game.add_enemy_spawn(88, @types.ground_row, -1)
+  game.add_enemy_spawn(103, @types.ground_row, -1)
+  game.add_enemy_spawn(115, @types.ground_row, -1)
+  game.add_enemy_spawn(132, @types.ground_row, -1)
+  game.add_enemy_spawn(150, @types.ground_row, -1)
+  game.add_enemy_spawn(170, @types.ground_row, -1)
+  game.add_enemy_spawn(188, @types.ground_row, -1)
+  game.add_enemy_spawn(198, @types.ground_row - 6, -1)
 
   for x = 8; x < 36; x = x + 3 {
-    add_coin_spawn(game, x, 13)
+    game.add_coin_spawn(x, 13)
   }
   for x = 54; x < 88; x = x + 4 {
-    add_coin_spawn(game, x, 10)
+    game.add_coin_spawn(x, 10)
   }
   for x = 100; x < 133; x = x + 3 {
-    add_coin_spawn(game, x, 9)
+    game.add_coin_spawn(x, 9)
   }
   for x = 146; x < 180; x = x + 3 {
-    add_coin_spawn(game, x, 11)
+    game.add_coin_spawn(x, 11)
   }
   for x = 184; x < 212; x = x + 2 {
-    add_coin_spawn(game, x, 8)
+    game.add_coin_spawn(x, 8)
   }
 }
 
 ///|
-fn reset_player_pose(game : @types.Game, give_invuln : Bool) -> Unit {
+fn @types.Game::reset_player_pose(game : @types.Game, give_invuln : Bool) -> Unit {
   let player = game.player
   player.x = @types.player_start_x
   player.y = game.start_y
@@ -270,17 +270,17 @@ fn reset_player_pose(game : @types.Game, give_invuln : Bool) -> Unit {
 }
 
 ///|
-fn build_level(game : @types.Game) -> Unit {
-  build_level_geometry(game)
-  populate_level_entities(game)
-  reset_player_pose(game, false)
+fn @types.Game::build_level(game : @types.Game) -> Unit {
+  game.build_level_geometry()
+  game.populate_level_entities()
+  game.reset_player_pose(false)
   game.camera_x = 0.0
   game.shake_t = 0.0
 }
 
 ///|
-fn reset_full_run(game : @types.Game) -> Unit {
-  build_level(game)
+fn @types.Game::reset_full_run(game : @types.Game) -> Unit {
+  game.build_level()
   @particles.clear_particles(game)
 
   let player = game.player

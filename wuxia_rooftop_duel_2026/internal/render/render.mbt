@@ -1,5 +1,5 @@
 ///|
-fn shake_x(game : @types.Game) -> Int {
+fn @types.Game::shake_x(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -8,7 +8,7 @@ fn shake_x(game : @types.Game) -> Int {
 }
 
 ///|
-fn shake_y(game : @types.Game) -> Int {
+fn @types.Game::shake_y(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -17,7 +17,7 @@ fn shake_y(game : @types.Game) -> Int {
 }
 
 ///|
-fn draw_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 14, 26, 255))
 
   let moon_pulse : Float = @math.sinf(game.ui_t * 0.9)
@@ -225,7 +225,7 @@ fn draw_enemy(
 }
 
 ///|
-fn draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let px : Int = game.player_x.to_int() + ox
   let py : Int = game.player_y.to_int() + oy
 
@@ -331,7 +331,7 @@ fn draw_bar(
 }
 
 ///|
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -458,7 +458,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_message(game : @types.Game) -> Unit {
+fn @types.Game::draw_message(game : @types.Game) -> Unit {
   if game.message == "" || game.message_t <= 0.0 {
     return
   }
@@ -587,7 +587,7 @@ fn draw_paused_overlay() -> Unit {
 }
 
 ///|
-fn draw_game_over_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -652,10 +652,10 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 ///|
 /// Draws one full frame including arena combatants, HUD, and overlays.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_background(game)
+  game.draw_background()
 
-  let ox : Int = shake_x(game)
-  let oy : Int = shake_y(game)
+  let ox : Int = game.shake_x()
+  let oy : Int = game.shake_y()
 
   draw_rooftop(ox, oy)
 
@@ -663,15 +663,15 @@ pub fn draw_frame(game : @types.Game) -> Unit {
     draw_enemy(enemy, game, ox, oy)
   }
 
-  draw_player(game, ox, oy)
-  draw_hud(game)
-  draw_message(game)
+  game.draw_player(ox, oy)
+  game.draw_hud()
+  game.draw_message()
 
   if game.state == @types.state_title {
     draw_title_overlay()
   } else if game.state == @types.state_paused {
     draw_paused_overlay()
   } else if game.state == @types.state_game_over {
-    draw_game_over_overlay(game)
+    game.draw_game_over_overlay()
   }
 }

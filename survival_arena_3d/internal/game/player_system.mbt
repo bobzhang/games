@@ -1,7 +1,7 @@
 // Player movement and camera
 
 ///|
-fn update_player(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
   // Mouse look
   let mouse_delta = @raylib.get_mouse_delta()
@@ -184,7 +184,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_camera_fps(game : @types.Game) -> Unit {
+fn @types.Game::update_camera_fps(game : @types.Game) -> Unit {
   let player = game.player
   let cos_yaw = @math.cosf(player.yaw)
   let sin_yaw = @math.sinf(player.yaw)
@@ -206,7 +206,7 @@ fn update_camera_fps(game : @types.Game) -> Unit {
 }
 
 ///|
-fn damage_player(game : @types.Game, damage : Float) -> Unit {
+fn @types.Game::damage_player(game : @types.Game, damage : Float) -> Unit {
   let player = game.player
   if player.damage_timer > 0.0 {
     return
@@ -235,12 +235,12 @@ fn damage_player(game : @types.Game, damage : Float) -> Unit {
 }
 
 ///|
-fn damage_player_from(
+fn @types.Game::damage_player_from(
   game : @types.Game,
   damage : Float,
   from_x : Float,
   from_z : Float,
 ) -> Unit {
-  damage_player(game, damage)
+  game.damage_player(damage)
   @types.add_damage_indicator(game, from_x, from_z)
 }

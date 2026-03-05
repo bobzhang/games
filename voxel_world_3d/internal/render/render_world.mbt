@@ -4,24 +4,24 @@
 /// Renders the 3D voxel scene for the current frame, including sky objects,
 /// visible chunks, selection overlays, entities, particles, and held tool.
 pub fn draw_world(game : @types.Game) -> Unit {
-  let camera = build_camera(game)
+  let camera = game.build_camera()
   @raylib.begin_mode_3d(camera)
-  draw_sky_objects(game)
-  draw_chunks(game)
-  draw_block_highlight(game)
-  draw_face_highlight(game)
-  draw_mining_progress(game)
-  draw_entities(game)
-  draw_particles(game)
-  draw_decorations(game)
-  draw_torch_glow_effects(game)
-  draw_water_surface_effects(game)
-  draw_tool_in_hand(game)
+  game.draw_sky_objects()
+  game.draw_chunks()
+  game.draw_block_highlight()
+  game.draw_face_highlight()
+  game.draw_mining_progress()
+  game.draw_entities()
+  game.draw_particles()
+  game.draw_decorations()
+  game.draw_torch_glow_effects()
+  game.draw_water_surface_effects()
+  game.draw_tool_in_hand()
   @raylib.end_mode_3d()
 }
 
 ///|
-fn build_camera(game : @types.Game) -> @raylib.Camera3D {
+fn @types.Game::build_camera(game : @types.Game) -> @raylib.Camera3D {
   @raylib.Camera3D::new(
     @raylib.Vector3::new(game.cam_pos_x, game.cam_pos_y, game.cam_pos_z),
     @raylib.Vector3::new(
@@ -38,7 +38,7 @@ fn build_camera(game : @types.Game) -> @raylib.Camera3D {
 // ========== Sky objects (sun, moon, stars) ==========
 
 ///|
-fn draw_sky_objects(game : @types.Game) -> Unit {
+fn @types.Game::draw_sky_objects(game : @types.Game) -> Unit {
   let t = game.day_timer / @types.day_length
   // Sun
   let sun_y = @math.cosf(game.sun_angle) * 80.0
@@ -75,12 +75,12 @@ fn draw_sky_objects(game : @types.Game) -> Unit {
   }
   // Stars at night
   if game.is_night {
-    draw_stars(game)
+    game.draw_stars()
   }
 }
 
 ///|
-fn draw_stars(game : @types.Game) -> Unit {
+fn @types.Game::draw_stars(game : @types.Game) -> Unit {
   // Draw some fixed "stars" as small bright spheres
   let star_count = 20
   for i in 0..<star_count {
@@ -107,7 +107,7 @@ fn draw_stars(game : @types.Game) -> Unit {
 // Draw all visible blocks in chunks near the player
 
 ///|
-fn draw_chunks(game : @types.Game) -> Unit {
+fn @types.Game::draw_chunks(game : @types.Game) -> Unit {
   let player = game.player
   // Determine which chunk the player is in
   let pcx = player.x.to_int() / @types.chunk_x
@@ -119,7 +119,7 @@ fn draw_chunks(game : @types.Game) -> Unit {
   let max_cz = (@types.world_chunks_z - 1).min(pcz + rd)
   for cz in min_cz..<=max_cz {
     for cx in min_cx..<=max_cx {
-      draw_chunk_blocks(game, cx, cz)
+      game.draw_chunk_blocks(cx, cz)
     }
   }
 }
@@ -127,7 +127,7 @@ fn draw_chunks(game : @types.Game) -> Unit {
 // Draw visible blocks in a single chunk
 
 ///|
-fn draw_chunk_blocks(game : @types.Game, cx : Int, cz : Int) -> Unit {
+fn @types.Game::draw_chunk_blocks(game : @types.Game, cx : Int, cz : Int) -> Unit {
   let chunk = game.chunks[cz * @types.world_chunks_x + cx]
   let base_wx = cx * @types.chunk_x
   let base_wz = cz * @types.chunk_z
@@ -178,7 +178,7 @@ fn draw_chunk_blocks(game : @types.Game, cx : Int, cz : Int) -> Unit {
           Float::from_int(wx) + 0.5,
           Float::from_int(wz) + 0.5,
         )
-        draw_block_with_lighting(game, block, wx, ly, wz, block_dist)
+        game.draw_block_with_lighting(block, wx, ly, wz, block_dist)
       }
     }
   }
@@ -187,7 +187,7 @@ fn draw_chunk_blocks(game : @types.Game, cx : Int, cz : Int) -> Unit {
 // Draw a single block with lighting and fog
 
 ///|
-fn draw_block_with_lighting(
+fn @types.Game::draw_block_with_lighting(
   game : @types.Game,
   block : Int,
   wx : Int,
@@ -292,7 +292,7 @@ fn draw_block_with_lighting(
 // ========== Decoration rendering (flowers, grass, torches) ==========
 
 ///|
-fn draw_decorations(game : @types.Game) -> Unit {
+fn @types.Game::draw_decorations(game : @types.Game) -> Unit {
   let player = game.player
   let pcx = player.x.to_int() / @types.chunk_x
   let pcz = player.z.to_int() / @types.chunk_z
@@ -303,13 +303,13 @@ fn draw_decorations(game : @types.Game) -> Unit {
   let max_cz = (@types.world_chunks_z - 1).min(pcz + rd)
   for cz in min_cz..<=max_cz {
     for cx in min_cx..<=max_cx {
-      draw_chunk_decorations(game, cx, cz)
+      game.draw_chunk_decorations(cx, cz)
     }
   }
 }
 
 ///|
-fn draw_chunk_decorations(game : @types.Game, cx : Int, cz : Int) -> Unit {
+fn @types.Game::draw_chunk_decorations(game : @types.Game, cx : Int, cz : Int) -> Unit {
   let chunk = game.chunks[cz * @types.world_chunks_x + cx]
   let base_wx = cx * @types.chunk_x
   let base_wz = cz * @types.chunk_z
@@ -413,7 +413,7 @@ fn draw_chunk_decorations(game : @types.Game, cx : Int, cz : Int) -> Unit {
 // Draw highlight around targeted block
 
 ///|
-fn draw_block_highlight(game : @types.Game) -> Unit {
+fn @types.Game::draw_block_highlight(game : @types.Game) -> Unit {
   let target = game.target
   if not(target.hit) {
     return
@@ -440,7 +440,7 @@ fn draw_block_highlight(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_mining_progress(game : @types.Game) -> Unit {
+fn @types.Game::draw_mining_progress(game : @types.Game) -> Unit {
   let player = game.player
   if not(player.mining_active) {
     return
@@ -475,7 +475,7 @@ fn draw_mining_progress(game : @types.Game) -> Unit {
 // ========== Entity rendering ==========
 
 ///|
-fn draw_entities(game : @types.Game) -> Unit {
+fn @types.Game::draw_entities(game : @types.Game) -> Unit {
   for i in 0..<@types.entity_max {
     let ent = game.entities[i]
     if not(ent.active) {
@@ -486,12 +486,12 @@ fn draw_entities(game : @types.Game) -> Unit {
     if dist > @types.fog_end_distance {
       continue
     }
-    draw_entity(game, ent)
+    game.draw_entity(ent)
   }
 }
 
 ///|
-fn draw_entity(game : @types.Game, ent : @types.Entity) -> Unit {
+fn @types.Game::draw_entity(game : @types.Game, ent : @types.Entity) -> Unit {
   let x = ent.x
   let y = ent.y
   let z = ent.z
@@ -1040,7 +1040,7 @@ fn draw_entity_leg(
 // ========== Face-specific block highlight ==========
 
 ///|
-fn draw_face_highlight(game : @types.Game) -> Unit {
+fn @types.Game::draw_face_highlight(game : @types.Game) -> Unit {
   let target = game.target
   if not(target.hit) {
     return
@@ -1112,7 +1112,7 @@ fn draw_face_highlight(game : @types.Game) -> Unit {
 // ========== Torch glow effects ==========
 
 ///|
-fn draw_torch_glow_effects(game : @types.Game) -> Unit {
+fn @types.Game::draw_torch_glow_effects(game : @types.Game) -> Unit {
   let player = game.player
   let pcx = player.x.to_int() / @types.chunk_x
   let pcz = player.z.to_int() / @types.chunk_z
@@ -1169,7 +1169,7 @@ fn draw_torch_glow_effects(game : @types.Game) -> Unit {
 // ========== Water surface transparency effect ==========
 
 ///|
-fn draw_water_surface_effects(game : @types.Game) -> Unit {
+fn @types.Game::draw_water_surface_effects(game : @types.Game) -> Unit {
   let player = game.player
   let pcx = player.x.to_int() / @types.chunk_x
   let pcz = player.z.to_int() / @types.chunk_z
@@ -1218,7 +1218,7 @@ fn draw_water_surface_effects(game : @types.Game) -> Unit {
 // ========== Tool in hand rendering (first-person) ==========
 
 ///|
-fn draw_tool_in_hand(game : @types.Game) -> Unit {
+fn @types.Game::draw_tool_in_hand(game : @types.Game) -> Unit {
   if game.state != @types.state_playing {
     return
   }
@@ -1390,7 +1390,7 @@ fn get_tool_head_color(tool : Int) -> @raylib.Color {
 // ========== Particle rendering ==========
 
 ///|
-fn draw_particles(game : @types.Game) -> Unit {
+fn @types.Game::draw_particles(game : @types.Game) -> Unit {
   for i in 0..<@types.particle_max {
     let p = game.particles[i]
     if p.active {

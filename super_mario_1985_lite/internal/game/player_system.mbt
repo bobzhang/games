@@ -1,5 +1,5 @@
 ///|
-fn collect_coin(game : @types.Game, x : Float, y : Float) -> Unit {
+fn @types.Game::collect_coin(game : @types.Game, x : Float, y : Float) -> Unit {
   let player = game.player
   player.coins += 1
   player.score += @types.coin_collect_score
@@ -7,7 +7,7 @@ fn collect_coin(game : @types.Game, x : Float, y : Float) -> Unit {
 }
 
 ///|
-fn on_player_hit_block(
+fn @types.Game::on_player_hit_block(
   game : @types.Game,
   tx : Int,
   ty : Int,
@@ -23,14 +23,14 @@ fn on_player_hit_block(
     @particles.spawn_block_burst(game, cx, cy, @raylib.maroon)
   } else if tile == @types.tile_question {
     @types.set_tile(game, tx, ty, @types.tile_used)
-    collect_coin(game, cx, cy - 12.0)
+    game.collect_coin(cx, cy - 12.0)
     player.score += @types.block_hit_score
     @particles.spawn_block_burst(game, cx, cy, @raylib.yellow)
   }
 }
 
 ///|
-fn resolve_player_x(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::resolve_player_x(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
   let nx = player.x + player.vx * dt
   let half_w = @types.player_half_w()
@@ -76,7 +76,7 @@ fn resolve_player_x(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn resolve_player_y(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::resolve_player_y(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
   let ny = player.y + player.vy * dt
   let half_w = @types.player_half_w()
@@ -113,7 +113,7 @@ fn resolve_player_y(game : @types.Game, dt : Float) -> Unit {
       let tile = @types.get_tile(game, tx, ty)
       if @types.tile_is_solid(tile) {
         blocked = true
-        on_player_hit_block(game, tx, ty, tile)
+        game.on_player_hit_block(tx, ty, tile)
       }
     }
     if blocked {
@@ -126,7 +126,7 @@ fn resolve_player_y(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_flag_sequence(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_flag_sequence(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
   if not(player.reached_flag) {
     return
@@ -158,7 +158,7 @@ fn update_flag_sequence(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn try_trigger_flag(game : @types.Game) -> Unit {
+fn @types.Game::try_trigger_flag(game : @types.Game) -> Unit {
   let player = game.player
   if player.reached_flag {
     return
@@ -174,7 +174,7 @@ fn try_trigger_flag(game : @types.Game) -> Unit {
 }
 
 ///|
-fn on_player_hurt(game : @types.Game) -> Unit {
+fn @types.Game::on_player_hurt(game : @types.Game) -> Unit {
   let player = game.player
   if player.invuln_t > 0.0 || player.reached_flag {
     return
@@ -194,7 +194,7 @@ fn on_player_hurt(game : @types.Game) -> Unit {
   } else {
     player.coins = 0
   }
-  reset_player_pose(game, true)
+  game.reset_player_pose(true)
   game.camera_x = @types.clampf(
     player.x - 180.0,
     0.0,
@@ -203,7 +203,7 @@ fn on_player_hurt(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_player(game : @types.Game, input : @types.Input, dt : Float) -> Unit {
+fn @types.Game::update_player(game : @types.Game, input : @types.Input, dt : Float) -> Unit {
   let player = game.player
 
   if player.invuln_t > 0.0 {
@@ -214,7 +214,7 @@ fn update_player(game : @types.Game, input : @types.Input, dt : Float) -> Unit {
   }
 
   if player.reached_flag {
-    update_flag_sequence(game, dt)
+    game.update_flag_sequence(dt)
     return
   }
 
@@ -275,8 +275,8 @@ fn update_player(game : @types.Game, input : @types.Input, dt : Float) -> Unit {
     player.vy = @types.max_fall_speed
   }
 
-  resolve_player_x(game, dt)
-  resolve_player_y(game, dt)
+  game.resolve_player_x(dt)
+  game.resolve_player_y(dt)
 
   if player.on_ground {
     player.coyote_t = @types.coyote_time
@@ -294,12 +294,12 @@ fn update_player(game : @types.Game, input : @types.Input, dt : Float) -> Unit {
 
   if player.y > @types.world_height_px + 80.0 {
     if player.invuln_t > 0.0 {
-      reset_player_pose(game, true)
+      game.reset_player_pose(true)
     } else {
-      on_player_hurt(game)
+      game.on_player_hurt()
     }
     return
   }
 
-  try_trigger_flag(game)
+  game.try_trigger_flag()
 }

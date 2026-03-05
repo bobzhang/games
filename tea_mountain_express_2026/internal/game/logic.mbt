@@ -1,11 +1,11 @@
 ///|
-fn set_message(game : @types.Game, text : String, ttl : Float) -> Unit {
+fn @types.Game::set_message(game : @types.Game, text : String, ttl : Float) -> Unit {
   game.message = text
   game.message_t = ttl
 }
 
 ///|
-fn clear_hazards(game : @types.Game) -> Unit {
+fn @types.Game::clear_hazards(game : @types.Game) -> Unit {
   for hazard in game.hazards {
     hazard.active = false
     hazard.lane = 0
@@ -18,8 +18,8 @@ fn clear_hazards(game : @types.Game) -> Unit {
 }
 
 ///|
-fn reset_run(game : @types.Game) -> Unit {
-  clear_hazards(game)
+fn @types.Game::reset_run(game : @types.Game) -> Unit {
+  game.clear_hazards()
 
   game.state = Playing
   game.lane = @types.lane_count / 2
@@ -45,13 +45,13 @@ fn reset_run(game : @types.Game) -> Unit {
 
   game.lane_x = @types.lane_center_x(game.world_t, game.lane, @types.cart_y)
 
-  set_message(
-    game, "Caravan dispatched. Keep cargo steady across the pass.", 2.2,
+  game.set_message(
+    "Caravan dispatched. Keep cargo steady across the pass.", 2.2,
   )
 }
 
 ///|
-fn enter_game_over(game : @types.Game, reason : String) -> Unit {
+fn @types.Game::enter_game_over(game : @types.Game, reason : String) -> Unit {
   if game.state == GameOver {
     return
   }
@@ -61,11 +61,11 @@ fn enter_game_over(game : @types.Game, reason : String) -> Unit {
     game.best_score = game.score
   }
 
-  set_message(game, reason, 4.5)
+  game.set_message(reason, 4.5)
 }
 
 ///|
-fn alloc_hazard_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_hazard_slot(game : @types.Game) -> Int {
   for i in 0..<game.hazards.length() {
     if not(game.hazards[i].active) {
       return i
@@ -84,8 +84,8 @@ fn alloc_hazard_slot(game : @types.Game) -> Int {
 }
 
 ///|
-fn spawn_hazard(game : @types.Game) -> Unit {
-  let slot = alloc_hazard_slot(game)
+fn @types.Game::spawn_hazard(game : @types.Game) -> Unit {
+  let slot = game.alloc_hazard_slot()
   let roll = @types.randi(0, 99)
   let kind : @types.HazardKind = if roll < 45 {
     Rock
@@ -117,7 +117,7 @@ fn spawn_hazard(game : @types.Game) -> Unit {
 }
 
 ///|
-fn handle_hazard_collision(game : @types.Game, i : Int) -> Unit {
+fn @types.Game::handle_hazard_collision(game : @types.Game, i : Int) -> Unit {
   let kind = game.hazards[i].kind
   let tilt_gap = (game.tilt - @types.hazard_tilt_bias(kind)).abs()
 
@@ -155,8 +155,7 @@ fn handle_hazard_collision(game : @types.Game, i : Int) -> Unit {
 
   game.hazards[i].active = false
 
-  set_message(
-    game,
+  game.set_message(
     "Impact from " +
     @types.hazard_name(kind) +
     ". Use K and tilt to absorb shock.",
@@ -165,7 +164,7 @@ fn handle_hazard_collision(game : @types.Game, i : Int) -> Unit {
 }
 
 ///|
-fn update_hazards(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_hazards(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.hazards.length() {
     if not(game.hazards[i].active) {
       continue
@@ -190,13 +189,13 @@ fn update_hazards(game : @types.Game, dt : Float) -> Unit {
     if game.hazards[i].lane == game.lane &&
       (game.hazards[i].y - @types.cart_y).abs() <=
       @types.hazard_collision_window {
-      handle_hazard_collision(game, i)
+      game.handle_hazard_collision(i)
     }
   }
 }
 
 ///|
-fn resolve_checkpoint(game : @types.Game) -> Unit {
+fn @types.Game::resolve_checkpoint(game : @types.Game) -> Unit {
   let on_time = game.schedule_s > 0.0
   let quality_ready = game.cargo_quality >= @types.delivery_quality_floor
   let durability_ready = game.durability >= @types.delivery_durability_floor
@@ -225,8 +224,7 @@ fn resolve_checkpoint(game : @types.Game) -> Unit {
       game.reputation + @types.delivery_reputation_gain + schedule_bonus * 2.8,
     )
 
-    set_message(
-      game,
+    game.set_message(
       "Delivery secured. Multiplier x" + game.multiplier.to_string() + ".",
       2.0,
     )
@@ -260,7 +258,7 @@ fn resolve_checkpoint(game : @types.Game) -> Unit {
       reason = reason + " damaged cart"
     }
 
-    set_message(game, reason, 2.3)
+    game.set_message(reason, 2.3)
   }
 
   game.checkpoint_index = game.checkpoint_index + 1
@@ -273,7 +271,7 @@ fn resolve_checkpoint(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_playing(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   if game.input_steer != 0 {
     game.lane = (game.lane + game.input_steer).clamp(
       min=0,
@@ -316,9 +314,9 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
     if game.boost_cd <= 0.0 && game.boost_heat < @types.boost_heat_start_limit {
       game.boost_timer = @types.boost_duration
       game.boost_cd = @types.boost_cooldown
-      set_message(game, "Booster fired.", 0.8)
+      game.set_message("Booster fired.", 0.8)
     } else if game.boost_heat >= @types.boost_heat_start_limit {
-      set_message(game, "Boost locked: boiler overheated.", 0.9)
+      game.set_message("Boost locked: boiler overheated.", 0.9)
     }
   }
 
@@ -371,7 +369,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
 
   if prev_heat <= @types.boost_heat_critical &&
     game.boost_heat > @types.boost_heat_critical {
-    set_message(game, "Boiler overheat! brake or stabilize now.", 1.2)
+    game.set_message("Boiler overheat! brake or stabilize now.", 1.2)
   }
 
   let speed_factor = game.speed / @types.speed_max
@@ -396,7 +394,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
 
   game.hazard_spawn_t = game.hazard_spawn_t - dt
   if game.hazard_spawn_t <= 0.0 {
-    spawn_hazard(game)
+    game.spawn_hazard()
     let difficulty = Float::from_int(game.checkpoint_index - 1)
     game.hazard_spawn_t = @types.maxf(
         @types.hazard_spawn_floor,
@@ -406,10 +404,10 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
       @types.randf(-0.08, 0.22)
   }
 
-  update_hazards(game, dt)
+  game.update_hazards(dt)
 
   while game.distance >= game.next_checkpoint_distance {
-    resolve_checkpoint(game)
+    game.resolve_checkpoint()
   }
 
   game.cargo_quality = @types.clampf(game.cargo_quality, 0.0, 100.0)
@@ -418,24 +416,24 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   game.boost_heat = @types.clampf(game.boost_heat, 0.0, 140.0)
 
   if game.durability <= 0.0 {
-    enter_game_over(game, "The caravan broke apart on the descent.")
+    game.enter_game_over("The caravan broke apart on the descent.")
     return
   }
 
   if game.cargo_quality <= 0.0 {
-    enter_game_over(game, "Tea quality collapsed before delivery.")
+    game.enter_game_over("Tea quality collapsed before delivery.")
     return
   }
 
   if game.reputation <= 0.0 {
-    enter_game_over(game, "Contract reputation is exhausted.")
+    game.enter_game_over("Contract reputation is exhausted.")
   }
 }
 
 ///|
 /// Advances one frame of route simulation and delivery state logic.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
-  update_input(game)
+  game.update_input()
 
   let frame_dt = @types.clampf(dt, 0.0, 0.05)
 
@@ -447,33 +445,33 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   match game.state {
     Title =>
       if game.input_confirm_press || game.input_restart_press {
-        reset_run(game)
+        game.reset_run()
       }
     Playing => {
       if game.input_restart_press {
-        reset_run(game)
+        game.reset_run()
         return
       }
       if game.input_pause_press {
         game.state = Paused
-        set_message(game, "Paused", 99.0)
+        game.set_message("Paused", 99.0)
         return
       }
-      update_playing(game, frame_dt)
+      game.update_playing(frame_dt)
     }
     Paused => {
       if game.input_restart_press {
-        reset_run(game)
+        game.reset_run()
         return
       }
       if game.input_pause_press || game.input_confirm_press {
         game.state = Playing
-        set_message(game, "Caravan rolling.", 1.0)
+        game.set_message("Caravan rolling.", 1.0)
       }
     }
     GameOver =>
       if game.input_restart_press || game.input_confirm_press {
-        reset_run(game)
+        game.reset_run()
       }
   }
 }

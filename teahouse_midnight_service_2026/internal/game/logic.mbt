@@ -1,5 +1,5 @@
 ///|
-fn clear_customers(game : @types.Game) -> Unit {
+fn @types.Game::clear_customers(game : @types.Game) -> Unit {
   for customer in game.customers {
     customer.active = false
     customer.tea_type = @types.tea_jasmine
@@ -17,7 +17,7 @@ fn clear_customers(game : @types.Game) -> Unit {
 }
 
 ///|
-fn clear_sparks(game : @types.Game) -> Unit {
+fn @types.Game::clear_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
     spark.active = false
     spark.x = 0.0
@@ -31,7 +31,7 @@ fn clear_sparks(game : @types.Game) -> Unit {
 }
 
 ///|
-fn clear_rings(game : @types.Game) -> Unit {
+fn @types.Game::clear_rings(game : @types.Game) -> Unit {
   for ring in game.rings {
     ring.active = false
     ring.x = 0.0
@@ -43,7 +43,7 @@ fn clear_rings(game : @types.Game) -> Unit {
 }
 
 ///|
-fn clear_shadows(game : @types.Game) -> Unit {
+fn @types.Game::clear_shadows(game : @types.Game) -> Unit {
   for shadow in game.shadows {
     shadow.active = false
     shadow.x = 0.0
@@ -56,7 +56,7 @@ fn clear_shadows(game : @types.Game) -> Unit {
 }
 
 ///|
-fn reset_player(game : @types.Game) -> Unit {
+fn @types.Game::reset_player(game : @types.Game) -> Unit {
   game.player.x = 628.0
   game.player.y = 468.0
   game.player.vx = 0.0
@@ -73,7 +73,7 @@ fn reset_player(game : @types.Game) -> Unit {
 }
 
 ///|
-fn alloc_spark(game : @types.Game) -> Int {
+fn @types.Game::alloc_spark(game : @types.Game) -> Int {
   for i in 0..<game.sparks.length() {
     if not(game.sparks[i].active) {
       return i
@@ -92,7 +92,7 @@ fn alloc_spark(game : @types.Game) -> Int {
 }
 
 ///|
-fn alloc_ring(game : @types.Game) -> Int {
+fn @types.Game::alloc_ring(game : @types.Game) -> Int {
   for i in 0..<game.rings.length() {
     if not(game.rings[i].active) {
       return i
@@ -111,7 +111,7 @@ fn alloc_ring(game : @types.Game) -> Int {
 }
 
 ///|
-fn alloc_shadow(game : @types.Game) -> Int {
+fn @types.Game::alloc_shadow(game : @types.Game) -> Int {
   for i in 0..<game.shadows.length() {
     if not(game.shadows[i].active) {
       return i
@@ -130,7 +130,7 @@ fn alloc_shadow(game : @types.Game) -> Int {
 }
 
 ///|
-fn emit_spark(
+fn @types.Game::emit_spark(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -140,7 +140,7 @@ fn emit_spark(
   size : Float,
   kind : Int,
 ) -> Unit {
-  let i = alloc_spark(game)
+  let i = game.alloc_spark()
   game.sparks[i].active = true
   game.sparks[i].x = x
   game.sparks[i].y = y
@@ -152,7 +152,7 @@ fn emit_spark(
 }
 
 ///|
-fn burst_sparks(
+fn @types.Game::burst_sparks(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -160,8 +160,7 @@ fn burst_sparks(
   kind : Int,
 ) -> Unit {
   for _i in 0..<n {
-    emit_spark(
-      game,
+    game.emit_spark(
       x + @types.randf(-14.0, 14.0),
       y + @types.randf(-14.0, 14.0),
       @types.randf(-230.0, 230.0),
@@ -174,7 +173,7 @@ fn burst_sparks(
 }
 
 ///|
-fn spawn_ring(
+fn @types.Game::spawn_ring(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -182,7 +181,7 @@ fn spawn_ring(
   life : Float,
   kind : Int,
 ) -> Unit {
-  let i = alloc_ring(game)
+  let i = game.alloc_ring()
   game.rings[i].active = true
   game.rings[i].x = x
   game.rings[i].y = y
@@ -192,7 +191,7 @@ fn spawn_ring(
 }
 
 ///|
-fn spawn_shadow(
+fn @types.Game::spawn_shadow(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -201,7 +200,7 @@ fn spawn_shadow(
   life : Float,
   rot : Float,
 ) -> Unit {
-  let i = alloc_shadow(game)
+  let i = game.alloc_shadow()
   game.shadows[i].active = true
   game.shadows[i].x = x
   game.shadows[i].y = y
@@ -212,14 +211,14 @@ fn spawn_shadow(
 }
 
 ///|
-fn score_gain(game : @types.Game, base : Int) -> Int {
+fn @types.Game::score_gain(game : @types.Game, base : Int) -> Int {
   let bonus = base * game.combo / 5
   base + bonus
 }
 
 ///|
-fn add_score(game : @types.Game, base : Int) -> Unit {
-  let g = score_gain(game, base)
+fn @types.Game::add_score(game : @types.Game, base : Int) -> Unit {
+  let g = game.score_gain(base)
   game.score = game.score + g
   if game.score > game.best_score {
     game.best_score = game.score
@@ -227,19 +226,19 @@ fn add_score(game : @types.Game, base : Int) -> Unit {
 }
 
 ///|
-fn push_combo(game : @types.Game) -> Unit {
+fn @types.Game::push_combo(game : @types.Game) -> Unit {
   game.combo = (game.combo + 1).clamp(min=0, max=30)
   game.combo_t = 3.8
 }
 
 ///|
-fn clear_combo(game : @types.Game) -> Unit {
+fn @types.Game::clear_combo(game : @types.Game) -> Unit {
   game.combo = 0
   game.combo_t = 0.0
 }
 
 ///|
-fn slot_used(game : @types.Game, slot : Int) -> Bool {
+fn @types.Game::slot_used(game : @types.Game, slot : Int) -> Bool {
   for customer in game.customers {
     if customer.active && customer.slot == slot {
       return true
@@ -249,9 +248,9 @@ fn slot_used(game : @types.Game, slot : Int) -> Bool {
 }
 
 ///|
-fn find_open_slot(game : @types.Game) -> Int {
+fn @types.Game::find_open_slot(game : @types.Game) -> Int {
   for s in 0..<@types.customer_slots {
-    if not(slot_used(game, s)) {
+    if not(game.slot_used(s)) {
       return s
     }
   }
@@ -259,7 +258,7 @@ fn find_open_slot(game : @types.Game) -> Int {
 }
 
 ///|
-fn alloc_customer(game : @types.Game) -> Int {
+fn @types.Game::alloc_customer(game : @types.Game) -> Int {
   for i in 0..<game.customers.length() {
     if not(game.customers[i].active) {
       return i
@@ -314,13 +313,13 @@ fn pick_tea_type(stage : Int) -> Int {
 }
 
 ///|
-fn spawn_customer(game : @types.Game) -> Unit {
-  let slot = find_open_slot(game)
+fn @types.Game::spawn_customer(game : @types.Game) -> Unit {
+  let slot = game.find_open_slot()
   if slot < 0 {
     return
   }
 
-  let i = alloc_customer(game)
+  let i = game.alloc_customer()
   let tea = pick_tea_type(game.stage)
   let p = @types.customer_slot_pos(slot)
 
@@ -340,7 +339,7 @@ fn spawn_customer(game : @types.Game) -> Unit {
   game.customers[i].served_t = 0.0
   game.customers[i].angry = false
 
-  burst_sparks(game, game.customers[i].x, game.customers[i].y, 10, 0)
+  game.burst_sparks(game.customers[i].x, game.customers[i].y, 10, 0)
 }
 
 ///|
@@ -360,7 +359,7 @@ fn nearest_leaf_station(px : Float, py : Float, reach : Float) -> Int {
 }
 
 ///|
-fn nearest_customer(
+fn @types.Game::nearest_customer(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -385,7 +384,7 @@ fn nearest_customer(
 }
 
 ///|
-fn start_brew(game : @types.Game) -> Unit {
+fn @types.Game::start_brew(game : @types.Game) -> Unit {
   game.brew_active = true
   game.brew_t = @types.maxf(
     @types.brew_time_min,
@@ -395,21 +394,21 @@ fn start_brew(game : @types.Game) -> Unit {
   game.player.carry_water = false
   game.player.carry_leaf = -1
 
-  spawn_ring(game, @types.brew_x, @types.brew_y, 12.0, 0.42, 0)
-  burst_sparks(game, @types.brew_x, @types.brew_y, 12, 0)
+  game.spawn_ring(@types.brew_x, @types.brew_y, 12.0, 0.42, 0)
+  game.burst_sparks(@types.brew_x, @types.brew_y, 12, 0)
 }
 
 ///|
-fn finish_brew(game : @types.Game) -> Unit {
+fn @types.Game::finish_brew(game : @types.Game) -> Unit {
   game.brew_active = false
   game.ready_cup = game.brew_type
 
-  spawn_ring(game, @types.brew_x, @types.brew_y, 16.0, 0.7, 2)
-  burst_sparks(game, @types.brew_x, @types.brew_y, 22, 2)
+  game.spawn_ring(@types.brew_x, @types.brew_y, 16.0, 0.7, 2)
+  game.burst_sparks(@types.brew_x, @types.brew_y, 22, 2)
 }
 
 ///|
-fn serve_customer(game : @types.Game, ci : Int) -> Unit {
+fn @types.Game::serve_customer(game : @types.Game, ci : Int) -> Unit {
   if ci < 0 || ci >= game.customers.length() {
     return
   }
@@ -422,13 +421,13 @@ fn serve_customer(game : @types.Game, ci : Int) -> Unit {
   if game.ready_cup == c.tea_type {
     game.customers[ci].active = false
     game.served = game.served + 1
-    add_score(game, game.customers[ci].reward)
+    game.add_score(game.customers[ci].reward)
     game.reputation = @types.minf(@types.reputation_max, game.reputation + 6.0)
     game.focus = @types.minf(@types.focus_max, game.focus + 10.0)
-    push_combo(game)
+    game.push_combo()
 
-    spawn_ring(game, c.x, c.y, 10.0, 0.5, 2)
-    burst_sparks(game, c.x, c.y, 18, 2)
+    game.spawn_ring(c.x, c.y, 10.0, 0.5, 2)
+    game.burst_sparks(c.x, c.y, 18, 2)
   } else {
     game.customers[ci].angry = true
     game.customers[ci].mood = @types.maxf(0.0, game.customers[ci].mood - 0.4)
@@ -437,12 +436,12 @@ fn serve_customer(game : @types.Game, ci : Int) -> Unit {
       game.reputation - @types.wrong_serve_penalty,
     )
     game.focus = @types.maxf(0.0, game.focus - 6.0)
-    clear_combo(game)
+    game.clear_combo()
 
     game.flash_t = @types.maxf(game.flash_t, 0.22)
     game.shake_t = @types.maxf(game.shake_t, 0.2)
 
-    burst_sparks(game, c.x, c.y, 16, 1)
+    game.burst_sparks(c.x, c.y, 16, 1)
   }
 
   game.ready_cup = -1
@@ -450,7 +449,7 @@ fn serve_customer(game : @types.Game, ci : Int) -> Unit {
 }
 
 ///|
-fn apply_interact(game : @types.Game) -> Unit {
+fn @types.Game::apply_interact(game : @types.Game) -> Unit {
   let px = game.player.x
   let py = game.player.y
 
@@ -459,8 +458,8 @@ fn apply_interact(game : @types.Game) -> Unit {
     ) {
     game.player.carry_water = true
     game.player.interact_t = 0.22
-    spawn_ring(game, @types.kettle_x, @types.kettle_y, 10.0, 0.4, 0)
-    burst_sparks(game, @types.kettle_x, @types.kettle_y, 10, 0)
+    game.spawn_ring(@types.kettle_x, @types.kettle_y, 10.0, 0.4, 0)
+    game.burst_sparks(@types.kettle_x, @types.kettle_y, 10, 0)
     return
   }
 
@@ -468,8 +467,8 @@ fn apply_interact(game : @types.Game) -> Unit {
   if leaf >= 0 {
     game.player.carry_leaf = leaf
     game.player.interact_t = 0.22
-    spawn_ring(game, @types.leaf_x(), @types.leaf_y(leaf), 8.0, 0.36, 0)
-    burst_sparks(game, @types.leaf_x(), @types.leaf_y(leaf), 8, 0)
+    game.spawn_ring(@types.leaf_x(), @types.leaf_y(leaf), 8.0, 0.36, 0)
+    game.burst_sparks(@types.leaf_x(), @types.leaf_y(leaf), 8, 0)
     return
   }
 
@@ -480,7 +479,7 @@ fn apply_interact(game : @types.Game) -> Unit {
       game.ready_cup < 0 &&
       game.player.carry_water &&
       game.player.carry_leaf >= 0 {
-      start_brew(game)
+      game.start_brew()
       game.player.interact_t = 0.26
     }
     return
@@ -494,16 +493,16 @@ fn apply_interact(game : @types.Game) -> Unit {
       @types.counter_y,
       @types.interact_reach + 10.0,
     ) {
-    let ci = nearest_customer(game, px, py, @types.serve_reach)
+    let ci = game.nearest_customer(px, py, @types.serve_reach)
     if ci >= 0 {
-      serve_customer(game, ci)
+      game.serve_customer(ci)
     }
     return
   }
 }
 
 ///|
-fn apply_dash(game : @types.Game) -> Unit {
+fn @types.Game::apply_dash(game : @types.Game) -> Unit {
   if game.player.dash_cd > 0.0 || game.focus < @types.dash_focus_cost {
     return
   }
@@ -526,18 +525,18 @@ fn apply_dash(game : @types.Game) -> Unit {
   game.player.dash_cd = @types.dash_cd_time
   game.focus = @types.maxf(0.0, game.focus - @types.dash_focus_cost)
 
-  spawn_ring(game, game.player.x, game.player.y, 14.0, 0.46, 2)
-  burst_sparks(game, game.player.x, game.player.y, 16, 2)
+  game.spawn_ring(game.player.x, game.player.y, 14.0, 0.46, 2)
+  game.burst_sparks(game.player.x, game.player.y, 16, 2)
 }
 
 ///|
-fn update_player(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   if game.input_dash_press {
-    apply_dash(game)
+    game.apply_dash()
   }
 
   if game.input_interact_press {
-    apply_interact(game)
+    game.apply_interact()
   }
 
   let speed_mul : Float = if game.focus_mode { 1.15 } else { 1.0 }
@@ -570,8 +569,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   )
 
   if game.player.dash_t > 0.0 {
-    spawn_shadow(
-      game,
+    game.spawn_shadow(
       game.player.x,
       game.player.y,
       game.player.w,
@@ -589,7 +587,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn customer_drain_rate(game : @types.Game) -> Float {
+fn @types.Game::customer_drain_rate(game : @types.Game) -> Float {
   let base : Float = 1.0 + Float::from_int(game.stage - 1) * 0.1
   if game.focus_mode {
     base * 0.58
@@ -599,8 +597,8 @@ fn customer_drain_rate(game : @types.Game) -> Float {
 }
 
 ///|
-fn update_customers(game : @types.Game, dt : Float) -> Unit {
-  let drain = customer_drain_rate(game)
+fn @types.Game::update_customers(game : @types.Game, dt : Float) -> Unit {
+  let drain = game.customer_drain_rate()
 
   for customer in game.customers {
     if not(customer.active) {
@@ -629,19 +627,19 @@ fn update_customers(game : @types.Game, dt : Float) -> Unit {
       game.missed = game.missed + 1
       game.reputation = @types.maxf(0.0, game.reputation - @types.miss_penalty)
       game.focus = @types.maxf(0.0, game.focus - 10.0)
-      clear_combo(game)
+      game.clear_combo()
 
       game.flash_t = @types.maxf(game.flash_t, 0.22)
       game.shake_t = @types.maxf(game.shake_t, 0.28)
 
-      burst_sparks(game, x, y, 18, 1)
-      spawn_ring(game, x, y, 10.0, 0.45, 1)
+      game.burst_sparks(x, y, 18, 1)
+      game.spawn_ring(x, y, 10.0, 0.45, 1)
     }
   }
 }
 
 ///|
-fn update_brew(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_brew(game : @types.Game, dt : Float) -> Unit {
   if not(game.brew_active) {
     return
   }
@@ -650,8 +648,7 @@ fn update_brew(game : @types.Game, dt : Float) -> Unit {
   game.brew_t = game.brew_t - dt * speed
 
   if @types.chance(16) {
-    emit_spark(
-      game,
+    game.emit_spark(
       @types.brew_x + @types.randf(-14.0, 14.0),
       @types.brew_y + @types.randf(-14.0, 14.0),
       @types.randf(-30.0, 30.0),
@@ -663,12 +660,12 @@ fn update_brew(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.brew_t <= 0.0 {
-    finish_brew(game)
+    game.finish_brew()
   }
 }
 
 ///|
-fn update_focus(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_focus(game : @types.Game, dt : Float) -> Unit {
   game.focus_mode = false
 
   if game.input_focus_hold && game.focus > 0.0 {
@@ -683,7 +680,7 @@ fn update_focus(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_effects(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_effects(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
       continue
@@ -728,13 +725,12 @@ fn update_effects(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn emit_ambient(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::emit_ambient(game : @types.Game, dt : Float) -> Unit {
   let tries = (dt * 220.0).to_int().clamp(min=1, max=10)
 
   for _i in 0..<tries {
     if @types.chance(24) {
-      emit_spark(
-        game,
+      game.emit_spark(
         @types.randf(@types.play_left, @types.play_right),
         @types.play_top - @types.randf(20.0, 110.0),
         @types.randf(-30.0, 30.0),
@@ -748,14 +744,14 @@ fn emit_ambient(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn spawn_step(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::spawn_step(game : @types.Game, dt : Float) -> Unit {
   game.spawn_cd = game.spawn_cd - dt
 
   if game.spawn_cd <= 0.0 {
-    spawn_customer(game)
+    game.spawn_customer()
 
     if game.stage >= 3 && @types.chance(32) {
-      spawn_customer(game)
+      game.spawn_customer()
     }
 
     let pressure = Float::from_int(game.stage - 1) * 0.08
@@ -769,7 +765,7 @@ fn spawn_step(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_timers(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_timers(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt
   game.hint_t = game.hint_t + dt
 
@@ -784,18 +780,18 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
   if game.combo_t > 0.0 {
     game.combo_t = game.combo_t - dt
     if game.combo_t <= 0.0 {
-      clear_combo(game)
+      game.clear_combo()
     }
   }
 }
 
 ///|
-fn start_stage(game : @types.Game, stage : Int) -> Unit {
-  clear_customers(game)
-  clear_sparks(game)
-  clear_rings(game)
-  clear_shadows(game)
-  reset_player(game)
+fn @types.Game::start_stage(game : @types.Game, stage : Int) -> Unit {
+  game.clear_customers()
+  game.clear_sparks()
+  game.clear_rings()
+  game.clear_shadows()
+  game.reset_player()
 
   game.state = @types.state_play
   game.stage = stage
@@ -813,39 +809,39 @@ fn start_stage(game : @types.Game, stage : Int) -> Unit {
   game.brew_type = @types.tea_jasmine
   game.ready_cup = -1
   game.focus_mode = false
-  clear_combo(game)
+  game.clear_combo()
 
   game.flash_t = 0.0
   game.shake_t = 0.0
   game.result_t = 0.0
   game.hint_t = 0.0
 
-  spawn_ring(game, @types.brew_x, @types.brew_y, 16.0, 0.68, 2)
-  burst_sparks(game, @types.brew_x, @types.brew_y, 22, 2)
+  game.spawn_ring(@types.brew_x, @types.brew_y, 16.0, 0.68, 2)
+  game.burst_sparks(@types.brew_x, @types.brew_y, 22, 2)
 }
 
 ///|
-fn start_run(game : @types.Game) -> Unit {
+fn @types.Game::start_run(game : @types.Game) -> Unit {
   game.score = 0
   game.served = 0
   game.missed = 0
   game.reputation = @types.reputation_max
   game.focus = @types.focus_max
-  start_stage(game, 1)
+  game.start_stage(1)
 }
 
 ///|
-fn update_play(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   game.time_left = @types.maxf(0.0, game.time_left - dt)
 
-  update_focus(game, dt)
-  update_player(game, dt)
-  update_brew(game, dt)
-  spawn_step(game, dt)
-  update_customers(game, dt)
+  game.update_focus(dt)
+  game.update_player(dt)
+  game.update_brew(dt)
+  game.spawn_step(dt)
+  game.update_customers(dt)
 
-  emit_ambient(game, dt)
-  update_effects(game, dt)
+  game.emit_ambient(dt)
+  game.update_effects(dt)
 
   if game.reputation <= 0.0 || game.time_left <= 0.0 {
     game.state = @types.state_game_over
@@ -855,35 +851,34 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   if game.state == @types.state_play && game.score >= game.stage_goal {
     game.state = @types.state_stage_clear
     game.result_t = 0.0
-    add_score(game, @types.stage_clear_bonus + game.stage * 120)
+    game.add_score(@types.stage_clear_bonus + game.stage * 120)
     game.reputation = @types.minf(@types.reputation_max, game.reputation + 12.0)
     game.focus = @types.minf(@types.focus_max, game.focus + 18.0)
 
-    spawn_ring(game, @types.counter_x, @types.counter_y, 20.0, 0.84, 2)
-    burst_sparks(game, @types.counter_x, @types.counter_y, 30, 2)
+    game.spawn_ring(@types.counter_x, @types.counter_y, 20.0, 0.84, 2)
+    game.burst_sparks(@types.counter_x, @types.counter_y, 30, 2)
   }
 }
 
 ///|
-fn update_title(game : @types.Game, dt : Float) -> Unit {
-  emit_ambient(game, dt)
-  update_effects(game, dt)
+fn @types.Game::update_title(game : @types.Game, dt : Float) -> Unit {
+  game.emit_ambient(dt)
+  game.update_effects(dt)
 
   if game.input_restart_press {
-    start_run(game)
+    game.start_run()
   }
 }
 
 ///|
-fn update_stage_clear(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_stage_clear(game : @types.Game, dt : Float) -> Unit {
   game.result_t = game.result_t + dt
 
-  emit_ambient(game, dt)
-  update_effects(game, dt)
+  game.emit_ambient(dt)
+  game.update_effects(dt)
 
   if @types.chance(28) {
-    emit_spark(
-      game,
+    game.emit_spark(
       @types.counter_x + @types.randf(-24.0, 24.0),
       @types.counter_y + @types.randf(-20.0, 20.0),
       @types.randf(-44.0, 44.0),
@@ -895,16 +890,16 @@ fn update_stage_clear(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.input_restart_press || game.result_t >= @types.stage_clear_wait {
-    start_stage(game, game.stage + 1)
+    game.start_stage(game.stage + 1)
   }
 }
 
 ///|
-fn update_game_over(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_game_over(game : @types.Game, dt : Float) -> Unit {
   game.result_t = game.result_t + dt
 
-  emit_ambient(game, dt)
-  update_effects(game, dt)
+  game.emit_ambient(dt)
+  game.update_effects(dt)
 
   if game.input_restart_press {
     @types.init_title_scene(game)
@@ -923,23 +918,23 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 
   // Dispatch input based on state
   if game.state == @types.state_title {
-    update_title_input(game)
+    game.update_title_input()
   } else if game.state == @types.state_play {
-    update_play_input(game)
+    game.update_play_input()
   } else {
-    update_result_input(game)
+    game.update_result_input()
   }
 
-  update_timers(game, dt)
+  game.update_timers(dt)
 
   if game.state == @types.state_title {
-    update_title(game, dt)
+    game.update_title(dt)
   } else if game.state == @types.state_play {
-    update_play(game, dt)
+    game.update_play(dt)
   } else if game.state == @types.state_stage_clear {
-    update_stage_clear(game, dt)
+    game.update_stage_clear(dt)
   } else {
-    update_game_over(game, dt)
+    game.update_game_over(dt)
   }
 
   if game.score > game.best_score {

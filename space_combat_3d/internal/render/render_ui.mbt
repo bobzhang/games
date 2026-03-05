@@ -4,32 +4,32 @@
 /// Draws the 2D UI overlay for the current game state.
 pub fn draw_ui(game : @types.Game) -> Unit {
   if game.state == @types.state_menu {
-    draw_menu(game)
+    game.draw_menu()
   } else if game.state == @types.state_playing {
-    draw_hud(game)
-    draw_crosshair(game)
+    game.draw_hud()
+    game.draw_crosshair()
     if game.message_timer > 0.0 {
-      draw_message(game)
+      game.draw_message()
     }
   } else if game.state == @types.state_paused {
-    draw_hud(game)
-    draw_pause_overlay(game)
+    game.draw_hud()
+    game.draw_pause_overlay()
   } else if game.state == @types.state_mission_complete {
-    draw_hud(game)
-    draw_mission_complete(game)
+    game.draw_hud()
+    game.draw_mission_complete()
   } else if game.state == @types.state_game_over {
-    draw_game_over(game)
+    game.draw_game_over()
   } else if game.state == @types.state_mission_briefing {
-    draw_mission_briefing(game)
+    game.draw_mission_briefing()
   } else if game.state == @types.state_mission_select {
-    draw_mission_select(game)
+    game.draw_mission_select()
   } else if game.state == @types.state_loadout {
-    draw_loadout(game)
+    game.draw_loadout()
   }
 }
 
 ///|
-fn draw_menu(game : @types.Game) -> Unit {
+fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -128,7 +128,7 @@ fn draw_menu(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   let p = game.player
 
   // Top bar
@@ -357,7 +357,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_crosshair(game : @types.Game) -> Unit {
+fn @types.Game::draw_crosshair(game : @types.Game) -> Unit {
   let cx = @types.screen_width / 2
   let cy = @types.screen_height / 2
   let s = 12
@@ -376,7 +376,7 @@ fn draw_crosshair(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_message(game : @types.Game) -> Unit {
+fn @types.Game::draw_message(game : @types.Game) -> Unit {
   let text = game.message_text
   let tw = @raylib.measure_text(text, 32)
   let alpha = @types.minf(game.message_timer * 2.0, 1.0)
@@ -391,7 +391,7 @@ fn draw_message(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_pause_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_pause_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -432,7 +432,7 @@ fn draw_pause_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_mission_complete(game : @types.Game) -> Unit {
+fn @types.Game::draw_mission_complete(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -474,7 +474,7 @@ fn draw_mission_complete(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_game_over(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -510,7 +510,7 @@ fn draw_game_over(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_mission_briefing(game : @types.Game) -> Unit {
+fn @types.Game::draw_mission_briefing(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -603,7 +603,7 @@ fn draw_mission_briefing(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_mission_select(game : @types.Game) -> Unit {
+fn @types.Game::draw_mission_select(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -666,7 +666,7 @@ fn draw_mission_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_loadout(game : @types.Game) -> Unit {
+fn @types.Game::draw_loadout(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,

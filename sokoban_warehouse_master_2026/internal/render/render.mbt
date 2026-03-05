@@ -1,5 +1,5 @@
 ///|
-fn draw_bg(game : @types.Game) -> Unit {
+fn @types.Game::draw_bg(game : @types.Game) -> Unit {
   let pulse : Float = Float::from_double(
     @math.sin((game.pulse_t * 0.8).to_double()),
   )
@@ -38,7 +38,7 @@ fn draw_bg(game : @types.Game) -> Unit {
 }
 
 ///|
-fn board_layout(game : @types.Game) -> (Int, Int, Int) {
+fn @types.Game::board_layout(game : @types.Game) -> (Int, Int, Int) {
   let area_x : Int = 28
   let area_y : Int = 28
   let area_w : Int = @types.screen_w - 396
@@ -181,8 +181,8 @@ fn draw_player(px : Int, py : Int, tile : Int, pulse_t : Float) -> Unit {
 }
 
 ///|
-fn draw_board(game : @types.Game) -> Unit {
-  let (left, top, tile) = board_layout(game)
+fn @types.Game::draw_board(game : @types.Game) -> Unit {
+  let (left, top, tile) = game.board_layout()
 
   @raylib.draw_rectangle(
     left - 10,
@@ -256,7 +256,7 @@ fn draw_board(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_side_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
   let panel_x : Int = @types.screen_w - 352
   let panel_y : Int = 20
   let panel_w : Int = 324
@@ -414,7 +414,7 @@ fn draw_side_panel(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_touch_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
   let cx : Int = @types.dpad_center_x()
   let cy : Int = @types.dpad_center_y()
   let s : Int = @types.dpad_size()
@@ -576,7 +576,7 @@ fn draw_touch_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_title(game : @types.Game) -> Unit {
+fn @types.Game::draw_title(game : @types.Game) -> Unit {
   @raylib.draw_text(
     "Warehouse Master 2026",
     @types.screen_w / 2 - @raylib.measure_text("Warehouse Master 2026", 76) / 2,
@@ -666,7 +666,7 @@ fn draw_title(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_level_clear_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_level_clear_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -773,7 +773,7 @@ fn draw_level_clear_panel(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_campaign_clear(game : @types.Game) -> Unit {
+fn @types.Game::draw_campaign_clear(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -882,20 +882,20 @@ fn draw_campaign_clear(game : @types.Game) -> Unit {
 ///|
 /// Renders world, UI panels, and overlays for the current frame.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_bg(game)
+  game.draw_bg()
 
   if game.state == Title {
-    draw_title(game)
+    game.draw_title()
     return
   }
 
-  draw_board(game)
-  draw_side_panel(game)
-  draw_touch_overlay(game)
+  game.draw_board()
+  game.draw_side_panel()
+  game.draw_touch_overlay()
 
   if game.state == LevelClear {
-    draw_level_clear_panel(game)
+    game.draw_level_clear_panel()
   } else if game.state == CampaignClear {
-    draw_campaign_clear(game)
+    game.draw_campaign_clear()
   }
 }

@@ -4,20 +4,20 @@
 /// Renders the full 3D puzzle scene for the active floor, including tiles,
 /// laser paths, entities, decorative props, particles, and projected shadows.
 pub fn draw_world(game : @types.Game) -> Unit {
-  let camera = build_camera(game)
+  let camera = game.build_camera()
   @raylib.begin_mode_3d(camera)
-  draw_floor_tiles(game)
-  draw_laser_beams(game)
-  draw_entities(game)
-  draw_player(game)
-  draw_decorations(game)
-  draw_particles_3d(game)
-  draw_shadows(game)
+  game.draw_floor_tiles()
+  game.draw_laser_beams()
+  game.draw_entities()
+  game.draw_player()
+  game.draw_decorations()
+  game.draw_particles_3d()
+  game.draw_shadows()
   @raylib.end_mode_3d()
 }
 
 ///|
-fn build_camera(game : @types.Game) -> @raylib.Camera3D {
+fn @types.Game::build_camera(game : @types.Game) -> @raylib.Camera3D {
   let angle_rad = game.camera_angle * 3.14159 / 180.0
   let cos_a = @math.cosf(angle_rad)
   let sin_a = @math.sinf(angle_rad)
@@ -33,7 +33,7 @@ fn build_camera(game : @types.Game) -> @raylib.Camera3D {
 }
 
 ///|
-fn draw_floor_tiles(game : @types.Game) -> Unit {
+fn @types.Game::draw_floor_tiles(game : @types.Game) -> Unit {
   let world = game.current_world
   for gy in 0..<@types.grid_h {
     for gx in 0..<@types.grid_w {
@@ -41,25 +41,25 @@ fn draw_floor_tiles(game : @types.Game) -> Unit {
       let wx = Float::from_int(gx)
       let wz = Float::from_int(gy)
       if tile == TileWall {
-        draw_wall(game, wx, wz, world)
+        game.draw_wall(wx, wz, world)
       } else if tile == TileFloor {
         draw_floor(wx, wz, world)
       } else if tile == TilePlate {
-        draw_plate(game, wx, wz, gx, gy, world)
+        game.draw_plate(wx, wz, gx, gy, world)
       } else if tile == TileSwitchOff {
         draw_switch(wx, wz, false, world)
       } else if tile == TileSwitchOn {
         draw_switch(wx, wz, true, world)
       } else if tile == TileExitClosed {
-        draw_exit(game, wx, wz, false, world)
+        game.draw_exit(wx, wz, false, world)
       } else if tile == TileExitOpen {
-        draw_exit(game, wx, wz, true, world)
+        game.draw_exit(wx, wz, true, world)
       } else if tile == TilePit {
         draw_pit(wx, wz, world)
       } else if tile == TileIce {
         draw_ice(wx, wz)
       } else if tile == TileTeleportA || tile == TileTeleportB {
-        draw_teleport(game, wx, wz, world)
+        game.draw_teleport(wx, wz, world)
       } else if tile == TileCracked {
         draw_cracked(wx, wz, world)
       } else if tile == TileSpikesOff {
@@ -67,7 +67,7 @@ fn draw_floor_tiles(game : @types.Game) -> Unit {
       } else if tile == TileSpikesOn {
         draw_spikes(wx, wz, true, world)
       } else if @types.is_conveyor(tile) {
-        draw_conveyor(game, wx, wz, tile, world)
+        game.draw_conveyor(wx, wz, tile, world)
       } else if tile == TileBridgeOff {
         draw_bridge(wx, wz, false)
       } else if tile == TileBridgeOn {
@@ -77,20 +77,20 @@ fn draw_floor_tiles(game : @types.Game) -> Unit {
       } else if tile == TileGateOpen {
         draw_gate(wx, wz, true, world)
       } else if @types.is_mirror(tile) {
-        draw_mirror(game, wx, wz, tile, world)
+        game.draw_mirror(wx, wz, tile, world)
       } else if @types.is_laser_source(tile) {
         draw_laser_source(wx, wz, tile, world)
       } else if tile == TileLaserTarget {
-        draw_laser_target(game, wx, wz, world)
+        game.draw_laser_target(wx, wz, world)
       } else if tile == TileRotatePlatform {
-        draw_rotate_platform(game, wx, wz, world)
+        game.draw_rotate_platform(wx, wz, world)
       }
     }
   }
 }
 
 ///|
-fn draw_wall(
+fn @types.Game::draw_wall(
   game : @types.Game,
   wx : Float,
   wz : Float,
@@ -189,7 +189,7 @@ fn draw_floor(wx : Float, wz : Float, world : @types.World) -> Unit {
 }
 
 ///|
-fn draw_plate(
+fn @types.Game::draw_plate(
   game : @types.Game,
   wx : Float,
   wz : Float,
@@ -284,7 +284,7 @@ fn draw_switch(wx : Float, wz : Float, on : Bool, world : @types.World) -> Unit 
 }
 
 ///|
-fn draw_exit(
+fn @types.Game::draw_exit(
   game : @types.Game,
   wx : Float,
   wz : Float,
@@ -409,7 +409,7 @@ fn draw_ice(wx : Float, wz : Float) -> Unit {
 }
 
 ///|
-fn draw_teleport(
+fn @types.Game::draw_teleport(
   game : @types.Game,
   wx : Float,
   wz : Float,
@@ -537,7 +537,7 @@ fn draw_spikes(
 }
 
 ///|
-fn draw_conveyor(
+fn @types.Game::draw_conveyor(
   game : @types.Game,
   wx : Float,
   wz : Float,
@@ -708,7 +708,7 @@ fn draw_gate(wx : Float, wz : Float, open : Bool, world : @types.World) -> Unit 
 }
 
 ///|
-fn draw_mirror(
+fn @types.Game::draw_mirror(
   game : @types.Game,
   wx : Float,
   wz : Float,
@@ -783,7 +783,7 @@ fn draw_laser_source(
 }
 
 ///|
-fn draw_laser_target(
+fn @types.Game::draw_laser_target(
   game : @types.Game,
   wx : Float,
   wz : Float,
@@ -838,7 +838,7 @@ fn draw_laser_target(
 }
 
 ///|
-fn draw_rotate_platform(
+fn @types.Game::draw_rotate_platform(
   game : @types.Game,
   wx : Float,
   wz : Float,
@@ -874,7 +874,7 @@ fn draw_rotate_platform(
 }
 
 ///|
-fn draw_laser_beams(game : @types.Game) -> Unit {
+fn @types.Game::draw_laser_beams(game : @types.Game) -> Unit {
   let fc = Float::from_int(game.frame_counter)
   let pulse = @math.sinf(fc * 0.15) * 0.3 + 0.7
   let pulse_alpha = (pulse * 200.0).to_int()
@@ -936,7 +936,7 @@ fn draw_laser_beams(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_entities(game : @types.Game) -> Unit {
+fn @types.Game::draw_entities(game : @types.Game) -> Unit {
   let world = game.current_world
   for e in game.entities {
     if not(e.active) {
@@ -951,17 +951,17 @@ fn draw_entities(game : @types.Game) -> Unit {
       0.0
     }
     if e.kind == EntityBlock {
-      draw_block(game, wx, wz, fall_offset, world)
+      game.draw_block(wx, wz, fall_offset, world)
     } else if e.kind == EntityDiamond {
-      draw_diamond(game, wx, wz)
+      game.draw_diamond(wx, wz)
     } else if e.kind == EntityKey {
-      draw_key(game, wx, wz)
+      game.draw_key(wx, wz)
     }
   }
 }
 
 ///|
-fn draw_block(
+fn @types.Game::draw_block(
   game : @types.Game,
   wx : Float,
   wz : Float,
@@ -1020,7 +1020,7 @@ fn draw_block(
 }
 
 ///|
-fn draw_diamond(game : @types.Game, wx : Float, wz : Float) -> Unit {
+fn @types.Game::draw_diamond(game : @types.Game, wx : Float, wz : Float) -> Unit {
   let bob = @math.sinf(Float::from_int(game.frame_counter) * 0.06) * 0.08
   let pos = @raylib.Vector3::new(wx, 0.4 + bob, wz)
   @raylib.draw_cube(
@@ -1058,7 +1058,7 @@ fn draw_diamond(game : @types.Game, wx : Float, wz : Float) -> Unit {
 }
 
 ///|
-fn draw_key(game : @types.Game, wx : Float, wz : Float) -> Unit {
+fn @types.Game::draw_key(game : @types.Game, wx : Float, wz : Float) -> Unit {
   let bob = @math.sinf(Float::from_int(game.frame_counter) * 0.05) * 0.06
   let pos = @raylib.Vector3::new(wx, 0.35 + bob, wz)
   @raylib.draw_cube(
@@ -1098,7 +1098,7 @@ fn draw_key(game : @types.Game, wx : Float, wz : Float) -> Unit {
 }
 
 ///|
-fn draw_player(game : @types.Game) -> Unit {
+fn @types.Game::draw_player(game : @types.Game) -> Unit {
   let wx = game.player_anim_x
   let wz = game.player_anim_z
   let world = game.current_world
@@ -1232,7 +1232,7 @@ fn draw_player(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_decorations(game : @types.Game) -> Unit {
+fn @types.Game::draw_decorations(game : @types.Game) -> Unit {
   let fc = Float::from_int(game.frame_counter)
   for i in 0..<game.decoration_count {
     let d = game.decorations[i]
@@ -1330,7 +1330,7 @@ fn draw_decorations(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_shadows(game : @types.Game) -> Unit {
+fn @types.Game::draw_shadows(game : @types.Game) -> Unit {
   for e in game.entities {
     if not(e.active) || e.falling {
       continue
@@ -1346,7 +1346,7 @@ fn draw_shadows(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_particles_3d(game : @types.Game) -> Unit {
+fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue

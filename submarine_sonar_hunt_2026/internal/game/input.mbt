@@ -1,5 +1,5 @@
 ///|
-fn update_title_input(game : @types.Game) -> Unit {
+fn @types.Game::update_title_input(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -28,19 +28,19 @@ fn update_title_input(game : @types.Game) -> Unit {
       start_btn.3,
     )
   if key_start || click_start || tap_start {
-    start_mission(game, game.best_mission)
+    game.start_mission(game.best_mission)
     game.touch_cd = 0.2
   }
 }
 
 ///|
-fn update_play_input(game : @types.Game) -> Unit {
+fn @types.Game::update_play_input(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
   let touch_count = game.touch_count
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    init_title_scene(game)
+    game.init_title_scene()
     return
   }
   let restart_btn = @types.mobile_restart_btn()
@@ -57,7 +57,7 @@ fn update_play_input(game : @types.Game) -> Unit {
       restart_btn.3,
     )
   if restart_key || restart_tap {
-    restart_mission(game)
+    game.restart_mission()
     game.touch_cd = 0.18
     return
   }
@@ -164,7 +164,7 @@ fn update_play_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_result_input(game : @types.Game) -> Unit {
+fn @types.Game::update_result_input(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -213,17 +213,17 @@ fn update_result_input(game : @types.Game) -> Unit {
       title_btn.3,
     )
   if key_next || tap_next {
-    next_mission(game)
+    game.next_mission()
     game.touch_cd = 0.2
     return
   }
   if key_restart || tap_restart {
-    restart_mission(game)
+    game.restart_mission()
     game.touch_cd = 0.2
     return
   }
   if key_title || tap_title {
-    init_title_scene(game)
+    game.init_title_scene()
     game.touch_cd = 0.2
   }
 }

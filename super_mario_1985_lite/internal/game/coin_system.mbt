@@ -1,5 +1,5 @@
 ///|
-fn update_coins(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_coins(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
   let px0 = player.x - @types.player_half_w()
   let py0 = player.y - @types.player_half_h()
@@ -22,7 +22,7 @@ fn update_coins(game : @types.Game, dt : Float) -> Unit {
 
     if @types.rects_overlap(px0, py0, px1, py1, cx0, cy0, cx1, cy1) {
       coin.active = false
-      collect_coin(game, coin.x, coin.y)
+      game.collect_coin(coin.x, coin.y)
     }
   }
 }

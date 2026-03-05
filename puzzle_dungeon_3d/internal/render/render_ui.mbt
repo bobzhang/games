@@ -5,23 +5,23 @@
 /// puzzle state, including transient message text and completion banners.
 pub fn draw_ui(game : @types.Game) -> Unit {
   if game.state == StateMenu {
-    draw_menu(game)
+    game.draw_menu()
   } else if game.state == StatePlaying {
-    draw_hud(game)
+    game.draw_hud()
   } else if game.state == StatePaused {
-    draw_hud(game)
-    draw_pause_overlay(game)
+    game.draw_hud()
+    game.draw_pause_overlay()
   } else if game.state == StateLevelComplete {
-    draw_hud(game)
-    draw_level_complete(game)
+    game.draw_hud()
+    game.draw_level_complete()
   } else if game.state == StateGameOver {
-    draw_game_over(game)
+    game.draw_game_over()
   } else if game.state == StateWorldSelect {
-    draw_world_select(game)
+    game.draw_world_select()
   } else if game.state == StateFloorSelect {
-    draw_floor_select(game)
+    game.draw_floor_select()
   } else if game.state == StateCampaignComplete {
-    draw_campaign_complete(game)
+    game.draw_campaign_complete()
   }
   // Message overlay
   if game.message_timer > 0.0 {
@@ -39,7 +39,7 @@ pub fn draw_ui(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_menu(game : @types.Game) -> Unit {
+fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -104,7 +104,7 @@ fn draw_menu(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   // Top bar background
   @raylib.draw_rectangle(
     0,
@@ -180,7 +180,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_pause_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_pause_overlay(game : @types.Game) -> Unit {
   ignore(game)
   @raylib.draw_rectangle(
     0,
@@ -210,7 +210,7 @@ fn draw_pause_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_level_complete(game : @types.Game) -> Unit {
+fn @types.Game::draw_level_complete(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -265,7 +265,7 @@ fn draw_level_complete(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_game_over(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
   ignore(game)
   @raylib.draw_rectangle(
     0,
@@ -295,7 +295,7 @@ fn draw_game_over(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_floor_select(game : @types.Game) -> Unit {
+fn @types.Game::draw_floor_select(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -396,7 +396,7 @@ fn draw_floor_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_world_select(game : @types.Game) -> Unit {
+fn @types.Game::draw_world_select(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -517,7 +517,7 @@ fn draw_world_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_campaign_complete(game : @types.Game) -> Unit {
+fn @types.Game::draw_campaign_complete(game : @types.Game) -> Unit {
   ignore(game)
   @raylib.draw_rectangle(
     0,

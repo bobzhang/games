@@ -18,22 +18,22 @@ fn should_start_duel() -> Bool {
 }
 
 ///|
-fn update_input(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_input(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyR) {
-    start_new_run(game)
+    game.start_new_run()
     return
   }
 
   if game.state == @types.state_title {
     if should_start_duel() {
-      start_new_run(game)
+      game.start_new_run()
     }
     return
   }
 
   if game.state == @types.state_game_over {
     if should_start_duel() {
-      start_new_run(game)
+      game.start_new_run()
     }
     return
   }
@@ -71,15 +71,15 @@ fn update_input(game : @types.Game, _dt : Float) -> Unit {
   }
 
   if @raylib.is_key_pressed(@raylib.KeyJ) {
-    ignore(try_player_attack(game, @types.attack_light))
+    ignore(game.try_player_attack(@types.attack_light))
   }
 
   if @raylib.is_key_pressed(@raylib.KeyK) {
-    ignore(try_player_attack(game, @types.attack_heavy))
+    ignore(game.try_player_attack(@types.attack_heavy))
   }
 
   if @raylib.is_key_pressed(@raylib.KeyL) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    ignore(trigger_parry_dash(game))
+    ignore(game.trigger_parry_dash())
   }
 }

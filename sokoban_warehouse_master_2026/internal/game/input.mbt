@@ -1,5 +1,5 @@
 ///|
-fn detect_hold_direction(game : @types.Game) -> @types.Direction {
+fn @types.Game::detect_hold_direction(game : @types.Game) -> @types.Direction {
   let mut dir : @types.Direction = None
 
   if @raylib.is_key_down(@raylib.KeyLeft) || @raylib.is_key_down(@raylib.KeyA) {
@@ -72,7 +72,7 @@ fn detect_hold_direction(game : @types.Game) -> @types.Direction {
 }
 
 ///|
-fn detect_undo_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_undo_press(game : @types.Game) -> Bool {
   let mut press : Bool = @raylib.is_key_pressed(@raylib.KeyZ) ||
     @raylib.is_key_pressed(@raylib.KeyBackspace)
 
@@ -98,7 +98,7 @@ fn detect_undo_press(game : @types.Game) -> Bool {
 }
 
 ///|
-fn detect_reset_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_reset_press(game : @types.Game) -> Bool {
   let mut press : Bool = @raylib.is_key_pressed(@raylib.KeyR)
 
   let x : Int = @types.action_panel_x()
@@ -123,7 +123,7 @@ fn detect_reset_press(game : @types.Game) -> Bool {
 }
 
 ///|
-fn detect_next_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_next_press(game : @types.Game) -> Bool {
   let mut press : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyN)
@@ -146,7 +146,7 @@ fn detect_next_press(game : @types.Game) -> Bool {
 }
 
 ///|
-fn detect_start_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_start_press(game : @types.Game) -> Bool {
   let mut press : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
 

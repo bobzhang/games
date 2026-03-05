@@ -1,5 +1,5 @@
 ///|
-fn clear_input(game : @types.Game) -> Unit {
+fn @types.Game::clear_input(game : @types.Game) -> Unit {
   game.input_x = 0.0
   game.input_y = 0.0
   game.input_shoot_hold = false
@@ -12,7 +12,7 @@ fn clear_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn normalize_move(game : @types.Game) -> Unit {
+fn @types.Game::normalize_move(game : @types.Game) -> Unit {
   let len2 = game.input_x * game.input_x + game.input_y * game.input_y
   if len2 > 1.0 {
     let inv : Float = 1.0 / len2.sqrt()
@@ -22,8 +22,8 @@ fn normalize_move(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_input(game : @types.Game) -> Unit {
-  clear_input(game)
+fn @types.Game::update_input(game : @types.Game) -> Unit {
+  game.clear_input()
 
   if @raylib.is_key_down(@raylib.KeyA) || @raylib.is_key_down(@raylib.KeyLeft) {
     game.input_x = game.input_x - 1.0
@@ -38,7 +38,7 @@ fn update_input(game : @types.Game) -> Unit {
     game.input_y = game.input_y + 1.0
   }
 
-  normalize_move(game)
+  game.normalize_move()
 
   game.input_shoot_hold = @raylib.is_key_down(@raylib.KeyJ)
   game.input_shoot_press = @raylib.is_key_pressed(@raylib.KeyJ)

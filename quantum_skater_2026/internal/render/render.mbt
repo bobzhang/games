@@ -10,7 +10,7 @@ fn draw_center_text(
 }
 
 ///|
-fn shake_offset(game : @types.Game) -> (Float, Float) {
+fn @types.Game::shake_offset(game : @types.Game) -> (Float, Float) {
   if game.shake_t <= 0.0 {
     (0.0, 0.0)
   } else {
@@ -34,7 +34,7 @@ fn world_to_screen(
 }
 
 ///|
-fn draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -81,7 +81,7 @@ fn draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_track_grid(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_track_grid(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let lane_col = if game.phase_beta {
     @raylib.Color::new(255, 126, 234, 170)
   } else {
@@ -135,7 +135,7 @@ fn draw_track_grid(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn obj_color(game : @types.Game, o : @types.TrackObj) -> @raylib.Color {
+fn @types.Game::obj_color(game : @types.Game, o : @types.TrackObj) -> @raylib.Color {
   if o.kind == @types.obj_orb {
     @raylib.Color::new(140, 248, 212, 255)
   } else if o.kind == @types.obj_boost {
@@ -160,7 +160,7 @@ fn obj_color(game : @types.Game, o : @types.TrackObj) -> @raylib.Color {
 }
 
 ///|
-fn draw_obj(
+fn @types.Game::draw_obj(
   game : @types.Game,
   o : @types.TrackObj,
   cam_x : Float,
@@ -179,7 +179,7 @@ fn draw_obj(
 
   let w = @types.maxf(8.0, o.w * s.2)
   let h = @types.maxf(8.0, o.h * s.2)
-  let col = obj_color(game, o)
+  let col = game.obj_color(o)
 
   if o.kind == @types.obj_orb {
     let pulse : Float = 0.5 + 0.5 * @math.sinf(o.spin * 2.6)
@@ -285,7 +285,7 @@ fn draw_obj(
 }
 
 ///|
-fn draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for t in game.trails {
     if not(t.active) {
       continue
@@ -310,7 +310,7 @@ fn draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -331,7 +331,7 @@ fn draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let hero = game.hero
   let s = world_to_screen(hero.lane_f, hero.y, 0.0, cam_x, cam_y)
 
@@ -390,7 +390,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_touch_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -557,7 +557,7 @@ fn ui_text(active : Bool) -> @raylib.Color {
 }
 
 ///|
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(16, 16, 550, 108, @raylib.Color::new(14, 18, 30, 196))
   @raylib.draw_rectangle_lines(
     16,
@@ -694,7 +694,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -769,7 +769,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_stage_clear_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -798,7 +798,7 @@ fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_game_over_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -849,17 +849,17 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
-  draw_backdrop(game, cam_x, cam_y)
-  draw_track_grid(game, cam_x, cam_y)
+fn @types.Game::draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+  game.draw_backdrop(cam_x, cam_y)
+  game.draw_track_grid(cam_x, cam_y)
 
   for obj in game.objs {
-    draw_obj(game, obj, cam_x, cam_y)
+    game.draw_obj(obj, cam_x, cam_y)
   }
 
-  draw_trails(game, cam_x, cam_y)
-  draw_particles(game, cam_x, cam_y)
-  draw_player(game, cam_x, cam_y)
+  game.draw_trails(cam_x, cam_y)
+  game.draw_particles(cam_x, cam_y)
+  game.draw_player(cam_x, cam_y)
 }
 
 ///|
@@ -867,16 +867,16 @@ fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.black)
 
-  let shake = shake_offset(game)
-  draw_world(game, shake.0, shake.1)
+  let shake = game.shake_offset()
+  game.draw_world(shake.0, shake.1)
 
   if game.state != @types.state_title {
-    draw_hud(game)
+    game.draw_hud()
   }
 
   if game.touch_mode || game.touch_count > 0 {
     if game.state == @types.state_play {
-      draw_touch_controls(game)
+      game.draw_touch_controls()
     }
     if game.touch_count > 0 {
       @raylib.draw_circle(
@@ -889,11 +889,11 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   }
 
   if game.state == @types.state_title {
-    draw_title_overlay(game)
+    game.draw_title_overlay()
   } else if game.state == @types.state_stage_clear {
-    draw_stage_clear_overlay(game)
+    game.draw_stage_clear_overlay()
   } else if game.state == @types.state_game_over {
-    draw_game_over_overlay(game)
+    game.draw_game_over_overlay()
   }
 
   if game.flash_t > 0.0 {

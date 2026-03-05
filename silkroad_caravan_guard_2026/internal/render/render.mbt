@@ -22,7 +22,7 @@ fn draw_right_text(
 }
 
 ///|
-fn cam_shake(game : @types.Game) -> (Float, Float) {
+fn @types.Game::cam_shake(game : @types.Game) -> (Float, Float) {
   if game.state != @types.state_play || game.shake_t <= 0.0 {
     (0.0, 0.0)
   } else {
@@ -32,7 +32,7 @@ fn cam_shake(game : @types.Game) -> (Float, Float) {
 }
 
 ///|
-fn lane_y(game : @types.Game, index : Int) -> Float {
+fn @types.Game::lane_y(game : @types.Game, index : Int) -> Float {
   let i = index.clamp(min=0, max=@types.lane_count - 1)
   let fi = Float::from_int(i)
   let base = @types.lane_base_y(i)
@@ -46,7 +46,7 @@ fn lane_y(game : @types.Game, index : Int) -> Float {
 }
 
 ///|
-fn active_raider_count(game : @types.Game) -> Int {
+fn @types.Game::active_raider_count(game : @types.Game) -> Int {
   let mut c = 0
   for raider in game.raiders {
     if raider.active {
@@ -57,7 +57,7 @@ fn active_raider_count(game : @types.Game) -> Int {
 }
 
 ///|
-fn checkpoint_progress(game : @types.Game) -> Float {
+fn @types.Game::checkpoint_progress(game : @types.Game) -> Float {
   if game.state == @types.state_victory {
     1.0
   } else {
@@ -67,7 +67,7 @@ fn checkpoint_progress(game : @types.Game) -> Float {
 }
 
 ///|
-fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -109,7 +109,7 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_dunes(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_dunes(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for layer in 0..<3 {
     let lf = Float::from_int(layer)
     let height : Float = 440.0 + lf * 86.0
@@ -143,9 +143,9 @@ fn draw_dunes(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_lanes(game : @types.Game, _cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_lanes(game : @types.Game, _cam_x : Float, cam_y : Float) -> Unit {
   for i in 0..<@types.lane_count {
-    let y = lane_y(game, i) + cam_y * 0.2
+    let y = game.lane_y(i) + cam_y * 0.2
     let li = Float::from_int(i)
     let lane_col = if i % 2 == 0 {
       @raylib.Color::new(196, 146, 86, 78)
@@ -179,7 +179,7 @@ fn draw_lanes(game : @types.Game, _cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_perimeter(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_perimeter(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let mut t : Float = 0.0
   while t < @types.tau {
     let x0 = @types.caravan_center_x +
@@ -212,7 +212,7 @@ fn draw_perimeter(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   }
 
   if game.state == @types.state_play {
-    let prog = checkpoint_progress(game)
+    let prog = game.checkpoint_progress()
     let ring_r = @types.perimeter_outer_rx +
       10.0 +
       @math.sinf(game.time_s * 4.5) * 2.0
@@ -234,7 +234,7 @@ fn draw_perimeter(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_wagons(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_wagons(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for i in 0..<game.wagons.length() {
     let x = (game.wagons[i].x + cam_x).to_int()
     let y = (game.wagons[i].y + cam_y).to_int()
@@ -356,7 +356,7 @@ fn draw_wagons(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_raiders(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_raiders(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for raider in game.raiders {
     if not(raider.active) {
       continue
@@ -424,7 +424,7 @@ fn draw_raiders(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_bullets(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_bullets(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for bullet in game.bullets {
     if not(bullet.active) {
       continue
@@ -441,7 +441,7 @@ fn draw_bullets(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_dust(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_dust(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for dust in game.dusts {
     if not(dust.active) {
       continue
@@ -469,7 +469,7 @@ fn draw_dust(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let px = game.hero.x + cam_x
   let py = game.hero.y + cam_y
 
@@ -568,7 +568,7 @@ fn draw_bar(
 }
 
 ///|
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -654,7 +654,7 @@ fn draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(210, 228, 238, 232),
   )
   @raylib.draw_text(
-    "Raiders \{active_raider_count(game)}",
+    "Raiders \{game.active_raider_count()}",
     634,
     80,
     24,
@@ -665,7 +665,7 @@ fn draw_hud(game : @types.Game) -> Unit {
   let py = 26
   let pw = 376
   let ph = 24
-  let prog = checkpoint_progress(game)
+  let prog = game.checkpoint_progress()
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(16, 20, 28, 220))
   @raylib.draw_rectangle(
     px + 2,
@@ -709,7 +709,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -824,7 +824,7 @@ fn draw_pause_overlay() -> Unit {
 }
 
 ///|
-fn draw_end_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_end_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -896,16 +896,16 @@ fn draw_end_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
-  draw_sky(game, cam_x, cam_y)
-  draw_dunes(game, cam_x, cam_y)
-  draw_lanes(game, cam_x, cam_y)
-  draw_perimeter(game, cam_x, cam_y)
-  draw_wagons(game, cam_x, cam_y)
-  draw_raiders(game, cam_x, cam_y)
-  draw_bullets(game, cam_x, cam_y)
-  draw_dust(game, cam_x, cam_y)
-  draw_player(game, cam_x, cam_y)
+fn @types.Game::draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+  game.draw_sky(cam_x, cam_y)
+  game.draw_dunes(cam_x, cam_y)
+  game.draw_lanes(cam_x, cam_y)
+  game.draw_perimeter(cam_x, cam_y)
+  game.draw_wagons(cam_x, cam_y)
+  game.draw_raiders(cam_x, cam_y)
+  game.draw_bullets(cam_x, cam_y)
+  game.draw_dust(cam_x, cam_y)
+  game.draw_player(cam_x, cam_y)
 }
 
 ///|
@@ -913,22 +913,22 @@ fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 12, 18, 255))
 
-  let (cam_x, cam_y) = cam_shake(game)
-  draw_world(game, cam_x, cam_y)
+  let (cam_x, cam_y) = game.cam_shake()
+  game.draw_world(cam_x, cam_y)
 
   if game.state == @types.state_title {
-    draw_title_overlay(game)
+    game.draw_title_overlay()
     return
   }
 
-  draw_hud(game)
+  game.draw_hud()
 
   if game.state == @types.state_pause {
     draw_pause_overlay()
   }
 
   if game.state == @types.state_game_over || game.state == @types.state_victory {
-    draw_end_overlay(game)
+    game.draw_end_overlay()
   }
 
   if game.flash_t > 0.0 {

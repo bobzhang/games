@@ -5,23 +5,23 @@
 /// then ticking shared timers (transitions, messages, and achievement popups).
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
-  update_particles(game, dt)
+  game.update_particles(dt)
   if game.state == StateMenu {
-    update_menu(game, dt)
+    game.update_menu(dt)
   } else if game.state == StatePlaying {
-    update_playing(game, dt)
+    game.update_playing(dt)
   } else if game.state == StatePaused {
-    update_paused(game, dt)
+    game.update_paused(dt)
   } else if game.state == StateLevelComplete {
-    update_level_complete(game, dt)
+    game.update_level_complete(dt)
   } else if game.state == StateGameOver {
-    update_game_over(game, dt)
+    game.update_game_over(dt)
   } else if game.state == StateFloorSelect {
-    update_floor_select(game, dt)
+    game.update_floor_select(dt)
   } else if game.state == StateCampaignComplete {
-    update_campaign_complete(game, dt)
+    game.update_campaign_complete(dt)
   } else if game.state == StateWorldSelect {
-    update_world_select(game, dt)
+    game.update_world_select(dt)
   }
   // Update transition
   if game.transition_timer > 0.0 {
@@ -47,7 +47,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_menu(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
   game.menu_blink += dt * @types.menu_blink_speed
   if @raylib.is_key_pressed(@raylib.KeyUp) {
     game.menu_cursor -= 1
@@ -65,7 +65,7 @@ fn update_menu(game : @types.Game, dt : Float) -> Unit {
     @raylib.is_key_pressed(@raylib.KeySpace) {
     if game.menu_cursor == 0 {
       // New game
-      reset_progress(game)
+      game.reset_progress()
       load_floor(game, 0)
       game.state = StatePlaying
     } else if game.menu_cursor == 1 {
@@ -79,7 +79,7 @@ fn update_menu(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_playing(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   // Update level timer
   game.level_timer += dt
   // Pause
@@ -91,7 +91,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   // Undo
   if @raylib.is_key_pressed(@raylib.KeyZ) ||
     @raylib.is_key_pressed(@raylib.KeyU) {
-    undo_move(game)
+    game.undo_move()
     return
   }
   // Restart level
@@ -100,14 +100,14 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
     return
   }
   // Update animations
-  update_player_animation(game, dt)
-  update_entity_animations(game, dt)
+  game.update_player_animation(dt)
+  game.update_entity_animations(dt)
   // Update spike timer (timed spikes in lava world)
   if game.current_world == WorldLava {
-    update_timed_spikes(game, dt)
+    game.update_timed_spikes(dt)
   }
   // Ambient particles for decorations
-  update_decoration_particles(game, dt)
+  game.update_decoration_particles(dt)
   // Camera rotation
   if @raylib.is_key_pressed(@raylib.KeyQ) {
     game.camera_angle += 90.0
@@ -143,7 +143,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
       dir = DirRight
     }
     if dir != DirNone {
-      try_move_player(game, dir)
+      game.try_move_player(dir)
     }
   }
   // Update camera target towards player
@@ -156,18 +156,18 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_timed_spikes(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_timed_spikes(game : @types.Game, dt : Float) -> Unit {
   game.spike_timer += dt
   if game.spike_timer >= @types.spike_cycle_time {
     game.spike_timer -= @types.spike_cycle_time
     game.spike_phase = not(game.spike_phase)
     // Toggle all spikes
-    toggle_spikes(game)
+    game.toggle_spikes()
   }
 }
 
 ///|
-fn update_decoration_particles(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_decoration_particles(game : @types.Game, dt : Float) -> Unit {
   ignore(dt)
   // Spawn particles near decorations periodically
   if game.frame_counter % 30 == 0 {
@@ -234,7 +234,7 @@ fn update_decoration_particles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_paused(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_paused(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
     game.state = StatePlaying
@@ -252,7 +252,7 @@ fn update_paused(game : @types.Game, _dt : Float) -> Unit {
 }
 
 ///|
-fn update_level_complete(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_level_complete(game : @types.Game, dt : Float) -> Unit {
   game.complete_timer += dt
   // Spawn celebration particles periodically
   if game.frame_counter % 10 == 0 && game.complete_timer < 3.0 {
@@ -284,7 +284,7 @@ fn update_level_complete(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_game_over(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_game_over(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     load_floor(game, game.current_floor)
@@ -296,7 +296,7 @@ fn update_game_over(game : @types.Game, _dt : Float) -> Unit {
 }
 
 ///|
-fn update_floor_select(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_floor_select(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
     game.state = StateMenu
     return
@@ -335,7 +335,7 @@ fn update_floor_select(game : @types.Game, _dt : Float) -> Unit {
 }
 
 ///|
-fn update_world_select(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_world_select(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
     game.state = StateMenu
     return
@@ -363,7 +363,7 @@ fn update_world_select(game : @types.Game, _dt : Float) -> Unit {
 }
 
 ///|
-fn update_campaign_complete(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_campaign_complete(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyM) {

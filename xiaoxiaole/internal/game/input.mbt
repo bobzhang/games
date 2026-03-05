@@ -1,33 +1,33 @@
 ///|
-fn handle_input(game : @types.Game) -> Unit {
+fn @types.Game::handle_input(game : @types.Game) -> Unit {
   match game.state {
-    Title => handle_title_input(game)
-    Play => handle_play_input(game)
-    Over | Clear => handle_end_input(game)
+    Title => game.handle_title_input()
+    Play => game.handle_play_input()
+    Over | Clear => game.handle_end_input()
     _ => ()
   }
 }
 
 ///|
-fn handle_title_input(game : @types.Game) -> Unit {
+fn @types.Game::handle_title_input(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
     game.level = 1
     game.best_score = 0
-    reset(game)
+    game.reset()
   }
 }
 
 ///|
-fn handle_play_input(game : @types.Game) -> Unit {
+fn @types.Game::handle_play_input(game : @types.Game) -> Unit {
   // Keyboard cursor
   if @raylib.is_key_pressed(@raylib.KeyH) {
-    find_hint(game)
+    game.find_hint()
     game.hint_t = 2.5 // show immediately (hint renders when hint_t > 2.0)
   }
   if @raylib.is_key_pressed(@raylib.KeyR) {
-    reset(game)
+    game.reset()
     return
   }
   // Mouse/touch click
@@ -66,7 +66,7 @@ fn handle_play_input(game : @types.Game) -> Unit {
             game.sel_c - col
           }
           if dr + dc == 1 {
-            try_swap(game, game.sel_r, game.sel_c, row, col)
+            game.try_swap(game.sel_r, game.sel_c, row, col)
           }
           game.sel_r = -1
           game.sel_c = -1
@@ -77,18 +77,18 @@ fn handle_play_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn handle_end_input(game : @types.Game) -> Unit {
+fn @types.Game::handle_end_input(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     if game.state == Clear {
       game.level = game.level + 1
     }
-    reset(game)
+    game.reset()
     return
   }
   if @raylib.is_key_pressed(@raylib.KeyR) {
     game.level = 1
-    reset(game)
+    game.reset()
     return
   }
   if @raylib.is_key_pressed(@raylib.KeyEscape) {

@@ -3,32 +3,32 @@
 ///|
 /// Draws the full 3D world including map, towers, enemies, and projectiles.
 pub fn draw_world(game : @types.Game) -> Unit {
-  let camera = build_camera(game)
+  let camera = game.build_camera()
   @raylib.begin_mode_3d(camera)
-  draw_map(game)
-  draw_grid_overlay(game)
-  draw_path_markers(game)
-  draw_towers(game)
-  draw_tower_range_indicators(game)
-  draw_enemies(game)
-  draw_enemy_status_visuals(game)
-  draw_projectiles(game)
-  draw_chain_lightning_lines(game)
-  draw_particles_3d(game)
+  game.draw_map()
+  game.draw_grid_overlay()
+  game.draw_path_markers()
+  game.draw_towers()
+  game.draw_tower_range_indicators()
+  game.draw_enemies()
+  game.draw_enemy_status_visuals()
+  game.draw_projectiles()
+  game.draw_chain_lightning_lines()
+  game.draw_particles_3d()
   // Draw hover indicator in building mode
   if game.state == @types.state_building {
-    draw_build_cursor(game)
+    game.draw_build_cursor()
   }
   // Draw selected tower highlight
   if game.selected_tower_idx >= 0 {
-    draw_selected_tower_highlight(game)
+    game.draw_selected_tower_highlight()
   }
   @raylib.end_mode_3d()
 }
 
 ///|
 /// Builds a 3D camera from the current camera angle, pitch, distance, and target position.
-fn build_camera(game : @types.Game) -> @raylib.Camera3D {
+fn @types.Game::build_camera(game : @types.Game) -> @raylib.Camera3D {
   let angle_rad = game.camera_angle * @types.pi / 180.0
   let pitch_rad = game.camera_pitch * @types.pi / 180.0
   let cos_a = @math.cosf(angle_rad)
@@ -49,7 +49,7 @@ fn build_camera(game : @types.Game) -> @raylib.Camera3D {
 
 ///|
 /// Draws all map tiles including grass, path, start, end, water, and rock terrain.
-fn draw_map(game : @types.Game) -> Unit {
+fn @types.Game::draw_map(game : @types.Game) -> Unit {
   for gy in 0..<@types.map_h {
     for gx in 0..<@types.map_w {
       let tile = @types.get_tile(game, gx, gy)
@@ -179,7 +179,7 @@ fn draw_map(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a subtle grid overlay on buildable grass tiles when in building mode.
-fn draw_grid_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_grid_overlay(game : @types.Game) -> Unit {
   // Draw subtle grid lines when in building mode
   if game.state != @types.state_building {
     return
@@ -204,7 +204,7 @@ fn draw_grid_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws directional arrow markers along the enemy path to indicate movement direction.
-fn draw_path_markers(game : @types.Game) -> Unit {
+fn @types.Game::draw_path_markers(game : @types.Game) -> Unit {
   // Draw subtle path direction indicators
   for i in 0..<(game.path_count - 1) {
     let p0 = game.path_nodes[i]
@@ -239,7 +239,7 @@ fn draw_path_markers(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all active towers with type-specific models, level indicators, and buff auras.
-fn draw_towers(game : @types.Game) -> Unit {
+fn @types.Game::draw_towers(game : @types.Game) -> Unit {
   for tower in game.towers {
     if not(tower.active) {
       continue
@@ -753,7 +753,7 @@ fn draw_level_indicators(
 
 ///|
 /// Draws range circles around all active towers when range display is enabled.
-fn draw_tower_range_indicators(game : @types.Game) -> Unit {
+fn @types.Game::draw_tower_range_indicators(game : @types.Game) -> Unit {
   if not(game.show_ranges) {
     return
   }
@@ -784,7 +784,7 @@ fn draw_tower_range_indicators(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a pulsing selection highlight and range circle around the currently selected tower.
-fn draw_selected_tower_highlight(game : @types.Game) -> Unit {
+fn @types.Game::draw_selected_tower_highlight(game : @types.Game) -> Unit {
   if game.selected_tower_idx < 0 {
     return
   }
@@ -847,7 +847,7 @@ fn tower_color(kind : Int) -> @raylib.Color {
 
 ///|
 /// Draws all active enemies with type-specific models, health bars, and shield bars.
-fn draw_enemies(game : @types.Game) -> Unit {
+fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
   for enemy in game.enemies {
     if not(enemy.active) {
       continue
@@ -1296,7 +1296,7 @@ fn draw_enemy_shield_bar(enemy : @types.Enemy) -> Unit {
 
 ///|
 /// Draws visual indicators for active status effects including slow, burn, stun, and armor break.
-fn draw_enemy_status_visuals(game : @types.Game) -> Unit {
+fn @types.Game::draw_enemy_status_visuals(game : @types.Game) -> Unit {
   for enemy in game.enemies {
     if not(enemy.active) {
       continue
@@ -1405,7 +1405,7 @@ fn enemy_color(kind : Int) -> @raylib.Color {
 
 ///|
 /// Draws all active projectiles with type-specific shapes and visual effects.
-fn draw_projectiles(game : @types.Game) -> Unit {
+fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
   for proj in game.projectiles {
     if not(proj.active) {
       continue
@@ -1500,7 +1500,7 @@ fn draw_projectiles(game : @types.Game) -> Unit {
 
 ///|
 /// Draws chain lightning visual lines as interpolated cube segments between source and target.
-fn draw_chain_lightning_lines(game : @types.Game) -> Unit {
+fn @types.Game::draw_chain_lightning_lines(game : @types.Game) -> Unit {
   for cl in game.chain_lines {
     if not(cl.active) {
       continue
@@ -1528,7 +1528,7 @@ fn draw_chain_lightning_lines(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all active 3D particles as small cubes with lifetime-based alpha fade.
-fn draw_particles_3d(game : @types.Game) -> Unit {
+fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -1547,7 +1547,7 @@ fn draw_particles_3d(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the pulsing build cursor at the hovered grid cell with validity color and range preview.
-fn draw_build_cursor(game : @types.Game) -> Unit {
+fn @types.Game::draw_build_cursor(game : @types.Game) -> Unit {
   let wx = @types.grid_to_world_x(game.hover_gx)
   let wz = @types.grid_to_world_z(game.hover_gy)
   let pulse = @math.sinf(Float::from_int(game.frame_counter) * 0.1) * 0.15 +

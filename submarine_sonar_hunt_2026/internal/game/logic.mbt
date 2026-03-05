@@ -1,5 +1,5 @@
 ///|
-fn reset_controls(game : @types.Game) -> Unit {
+fn @types.Game::reset_controls(game : @types.Game) -> Unit {
   game.move_x = 0.0
   game.move_y = 0.0
   game.boost_hold = false
@@ -7,7 +7,7 @@ fn reset_controls(game : @types.Game) -> Unit {
 }
 
 ///|
-fn clear_world(game : @types.Game) -> Unit {
+fn @types.Game::clear_world(game : @types.Game) -> Unit {
   for mine in game.mines {
     mine.active = false
     mine.x = 0.0
@@ -42,7 +42,7 @@ fn mine_count_for_mission(mission : Int) -> Int {
 }
 
 ///|
-fn sonar_range_at(game : @types.Game) -> Float {
+fn @types.Game::sonar_range_at(game : @types.Game) -> Float {
   if @types.in_hot_zone_xy(game.sub_x, game.sub_y) {
     @types.sonar_base_range + @types.sonar_hot_bonus
   } else {
@@ -64,7 +64,7 @@ fn random_arena_point(margin : Float) -> (Float, Float) {
 }
 
 ///|
-fn spawn_targets(game : @types.Game) -> Unit {
+fn @types.Game::spawn_targets(game : @types.Game) -> Unit {
   for i in 0..<game.target_goal {
     let mut px = @types.sub_start_x + 320.0
     let mut py = @types.sub_start_y
@@ -103,7 +103,7 @@ fn spawn_targets(game : @types.Game) -> Unit {
 }
 
 ///|
-fn spawn_mines(game : @types.Game) -> Unit {
+fn @types.Game::spawn_mines(game : @types.Game) -> Unit {
   for i in 0..<game.mine_count {
     let mut px = @types.sub_start_x + 200.0
     let mut py = @types.sub_start_y
@@ -175,23 +175,23 @@ fn spawn_mines(game : @types.Game) -> Unit {
 }
 
 ///|
-fn init_title_scene(game : @types.Game) -> Unit {
+fn @types.Game::init_title_scene(game : @types.Game) -> Unit {
   game.state = Title
   game.lose_reason = None
   game.sonar_wave_t = 0.0
   game.sonar_wave_r = 0.0
   game.sonar_cd = 0.0
   game.shake_t = 0.0
-  reset_controls(game)
+  game.reset_controls()
 }
 
 ///|
-fn start_mission(game : @types.Game, mission : Int) -> Unit {
+fn @types.Game::start_mission(game : @types.Game, mission : Int) -> Unit {
   let clamped_mission = mission.clamp(
     min=@types.mission_min,
     max=@types.mission_max,
   )
-  clear_world(game)
+  game.clear_world()
   game.state = Play
   game.mission = clamped_mission
   game.mine_count = mine_count_for_mission(clamped_mission)
@@ -210,27 +210,27 @@ fn start_mission(game : @types.Game, mission : Int) -> Unit {
   game.sonar_wave_r = 0.0
   game.last_pulse_range = @types.sonar_base_range
   game.shake_t = 0.0
-  reset_controls(game)
-  spawn_targets(game)
-  spawn_mines(game)
+  game.reset_controls()
+  game.spawn_targets()
+  game.spawn_mines()
 }
 
 ///|
-fn restart_mission(game : @types.Game) -> Unit {
-  start_mission(game, game.mission)
+fn @types.Game::restart_mission(game : @types.Game) -> Unit {
+  game.start_mission(game.mission)
 }
 
 ///|
-fn next_mission(game : @types.Game) -> Unit {
+fn @types.Game::next_mission(game : @types.Game) -> Unit {
   let next_id = (game.mission + 1).clamp(
     min=@types.mission_min,
     max=@types.mission_max,
   )
-  start_mission(game, next_id)
+  game.start_mission(next_id)
 }
 
 ///|
-fn fire_sonar(game : @types.Game) -> Unit {
+fn @types.Game::fire_sonar(game : @types.Game) -> Unit {
   if game.sonar_cd > 0.0 {
     return
   }
@@ -242,7 +242,7 @@ fn fire_sonar(game : @types.Game) -> Unit {
   game.oxygen = game.oxygen - @types.sonar_oxygen_cost
   game.sonar_cd = @types.sonar_cd_time
   game.sonar_wave_t = @types.sonar_pulse_time
-  let pulse_range = sonar_range_at(game)
+  let pulse_range = game.sonar_range_at()
   game.last_pulse_range = pulse_range
   let mut found_this_pulse = 0
   for i in 0..<game.target_goal {
@@ -286,7 +286,7 @@ fn fire_sonar(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_sonar_wave(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_sonar_wave(game : @types.Game, dt : Float) -> Unit {
   if game.sonar_cd > 0.0 {
     game.sonar_cd = @types.maxf(0.0, game.sonar_cd - dt)
   }
@@ -301,7 +301,7 @@ fn update_sonar_wave(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_submarine_motion(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_submarine_motion(game : @types.Game, dt : Float) -> Unit {
   let mut ix = game.move_x
   let mut iy = game.move_y
   let mag2 = ix * ix + iy * iy
@@ -351,7 +351,7 @@ fn update_submarine_motion(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_resources(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_resources(game : @types.Game, dt : Float) -> Unit {
   let input_mag = @types.clampf(
     (game.move_x * game.move_x + game.move_y * game.move_y).sqrt(),
     0.0,
@@ -381,7 +381,7 @@ fn update_resources(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_contacts(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_contacts(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.target_goal {
     if not(game.targets[i].active) {
       continue
@@ -419,7 +419,7 @@ fn update_contacts(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn resolve_round_state(game : @types.Game) -> Unit {
+fn @types.Game::resolve_round_state(game : @types.Game) -> Unit {
   if game.targets_found >= game.target_goal {
     game.state = Win
     game.lose_reason = None
@@ -430,38 +430,38 @@ fn resolve_round_state(game : @types.Game) -> Unit {
     if unlock > game.best_mission {
       game.best_mission = unlock
     }
-    reset_controls(game)
+    game.reset_controls()
     return
   }
   if game.hull <= 0.0 {
     game.state = Lose
     game.lose_reason = Hull
-    reset_controls(game)
+    game.reset_controls()
     return
   }
   if game.oxygen <= 0.0 {
     game.state = Lose
     game.lose_reason = Oxygen
-    reset_controls(game)
+    game.reset_controls()
     return
   }
   if game.fuel <= 0.0 {
     game.state = Lose
     game.lose_reason = Fuel
-    reset_controls(game)
+    game.reset_controls()
   }
 }
 
 ///|
-fn update_play_state(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_play_state(game : @types.Game, dt : Float) -> Unit {
   if game.sonar_trigger {
-    fire_sonar(game)
+    game.fire_sonar()
   }
   game.sonar_trigger = false
-  update_submarine_motion(game, dt)
-  update_resources(game, dt)
-  update_contacts(game, dt)
-  resolve_round_state(game)
+  game.update_submarine_motion(dt)
+  game.update_resources(dt)
+  game.update_contacts(dt)
+  game.resolve_round_state()
 }
 
 ///|
@@ -478,9 +478,9 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 
   // Process input based on current state
   match game.state {
-    Title => update_title_input(game)
-    Play => update_play_input(game)
-    Win | Lose => update_result_input(game)
+    Title => game.update_title_input()
+    Play => game.update_play_input()
+    Win | Lose => game.update_result_input()
   }
 
   game.time_s = game.time_s + d
@@ -490,8 +490,8 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   if game.shake_t > 0.0 {
     game.shake_t = @types.maxf(0.0, game.shake_t - d)
   }
-  update_sonar_wave(game, d)
+  game.update_sonar_wave(d)
   if game.state == Play {
-    update_play_state(game, d)
+    game.update_play_state(d)
   }
 }

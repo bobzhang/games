@@ -4,25 +4,25 @@
 /// Renders the full arena scene for the current frame, including static geometry,
 /// enemies, projectiles, pickups, traps, and particles.
 pub fn draw_world(game : @types.Game) -> Unit {
-  let camera = build_camera(game)
+  let camera = game.build_camera()
   @raylib.begin_mode_3d(camera)
   draw_arena_floor()
   draw_arena_walls()
-  draw_pillars(game)
-  draw_low_walls(game)
-  draw_ramps(game)
-  draw_crates(game)
-  draw_barricades(game)
-  draw_traps(game)
-  draw_pickups_3d(game)
-  draw_enemies(game)
-  draw_projectiles(game)
-  draw_particles_3d(game)
+  game.draw_pillars()
+  game.draw_low_walls()
+  game.draw_ramps()
+  game.draw_crates()
+  game.draw_barricades()
+  game.draw_traps()
+  game.draw_pickups_3d()
+  game.draw_enemies()
+  game.draw_projectiles()
+  game.draw_particles_3d()
   @raylib.end_mode_3d()
 }
 
 ///|
-fn build_camera(game : @types.Game) -> @raylib.Camera3D {
+fn @types.Game::build_camera(game : @types.Game) -> @raylib.Camera3D {
   @raylib.Camera3D::new(
     @raylib.Vector3::new(game.cam_pos_x, game.cam_pos_y, game.cam_pos_z),
     @raylib.Vector3::new(
@@ -188,7 +188,7 @@ fn draw_arena_walls() -> Unit {
 }
 
 ///|
-fn draw_pillars(game : @types.Game) -> Unit {
+fn @types.Game::draw_pillars(game : @types.Game) -> Unit {
   for pillar in game.pillars {
     let base_color = @raylib.Color::new(100, 95, 90, 255)
     let top_color = @raylib.Color::new(120, 115, 108, 255)
@@ -233,7 +233,7 @@ fn draw_pillars(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_low_walls(game : @types.Game) -> Unit {
+fn @types.Game::draw_low_walls(game : @types.Game) -> Unit {
   let wall_color = @raylib.Color::new(85, 80, 75, 255)
   let wall_top = @raylib.Color::new(100, 95, 88, 255)
   for w in game.low_walls {
@@ -265,7 +265,7 @@ fn draw_low_walls(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_ramps(game : @types.Game) -> Unit {
+fn @types.Game::draw_ramps(game : @types.Game) -> Unit {
   let ramp_color = @raylib.Color::new(75, 80, 70, 255)
   let ramp_top = @raylib.Color::new(90, 95, 85, 255)
   for r in game.ramps {
@@ -295,7 +295,7 @@ fn draw_ramps(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_crates(game : @types.Game) -> Unit {
+fn @types.Game::draw_crates(game : @types.Game) -> Unit {
   for i in 0..<game.crates.length() {
     let crate = game.crates[i]
     if not(crate.active) {
@@ -349,7 +349,7 @@ fn draw_crates(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_barricades(game : @types.Game) -> Unit {
+fn @types.Game::draw_barricades(game : @types.Game) -> Unit {
   for b in game.barricades {
     if not(b.active) {
       continue
@@ -421,7 +421,7 @@ fn draw_barricades(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_traps(game : @types.Game) -> Unit {
+fn @types.Game::draw_traps(game : @types.Game) -> Unit {
   for trap in game.traps {
     if not(trap.active) {
       continue
@@ -523,7 +523,7 @@ fn draw_traps(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_pickups_3d(game : @types.Game) -> Unit {
+fn @types.Game::draw_pickups_3d(game : @types.Game) -> Unit {
   for i in 0..<game.pickups.length() {
     let pickup = game.pickups[i]
     if not(pickup.active) {
@@ -622,7 +622,7 @@ fn draw_pickups_3d(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_enemies(game : @types.Game) -> Unit {
+fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
   for enemy in game.enemies {
     if not(enemy.active) {
       continue
@@ -1272,7 +1272,7 @@ fn enemy_color(kind : Int, is_flashing : Bool) -> @raylib.Color {
 }
 
 ///|
-fn draw_projectiles(game : @types.Game) -> Unit {
+fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
   for proj in game.projectiles {
     if not(proj.active) {
       continue
@@ -1377,7 +1377,7 @@ fn draw_projectiles(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_particles_3d(game : @types.Game) -> Unit {
+fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue

@@ -1,5 +1,5 @@
 ///|
-fn clear_frame_input(game : @types.Game) -> Unit {
+fn @types.Game::clear_frame_input(game : @types.Game) -> Unit {
   game.input_x = 0.0
   game.input_jump_press = false
   game.input_jump_hold = false
@@ -9,20 +9,20 @@ fn clear_frame_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_touch_mode(game : @types.Game, touch_count : Int) -> Unit {
+fn @types.Game::update_touch_mode(game : @types.Game, touch_count : Int) -> Unit {
   if touch_count > 0 {
     game.touch_mode = true
   }
 }
 
 ///|
-fn update_title_input(game : @types.Game) -> Unit {
+fn @types.Game::update_title_input(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
   let touch_count = game.touch_count
-  clear_frame_input(game)
-  update_touch_mode(game, touch_count)
+  game.clear_frame_input()
+  game.update_touch_mode(touch_count)
 
   let start = @types.title_start_rect()
   let start_touch = @types.pointer_on_rect(
@@ -53,13 +53,13 @@ fn update_title_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_play_input(game : @types.Game) -> Unit {
+fn @types.Game::update_play_input(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
   let touch_count = game.touch_count
-  clear_frame_input(game)
-  update_touch_mode(game, touch_count)
+  game.clear_frame_input()
+  game.update_touch_mode(touch_count)
 
   let left_rect = @types.touch_left_rect()
   let right_rect = @types.touch_right_rect()
@@ -156,13 +156,13 @@ fn update_play_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_stage_clear_input(game : @types.Game) -> Unit {
+fn @types.Game::update_stage_clear_input(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
   let touch_count = game.touch_count
-  clear_frame_input(game)
-  update_touch_mode(game, touch_count)
+  game.clear_frame_input()
+  game.update_touch_mode(touch_count)
 
   let next_rect = @types.panel_next_rect()
   let restart_rect = @types.panel_restart_rect()
@@ -221,13 +221,13 @@ fn update_stage_clear_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_game_over_input(game : @types.Game) -> Unit {
+fn @types.Game::update_game_over_input(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
   let touch_count = game.touch_count
-  clear_frame_input(game)
-  update_touch_mode(game, touch_count)
+  game.clear_frame_input()
+  game.update_touch_mode(touch_count)
 
   let retry_rect = @types.panel_next_rect()
   let reset_rect = @types.panel_restart_rect()
@@ -286,13 +286,13 @@ fn update_game_over_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_victory_input(game : @types.Game) -> Unit {
+fn @types.Game::update_victory_input(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
   let touch_count = game.touch_count
-  clear_frame_input(game)
-  update_touch_mode(game, touch_count)
+  game.clear_frame_input()
+  game.update_touch_mode(touch_count)
 
   let next_rect = @types.panel_next_rect()
   let restart_rect = @types.panel_restart_rect()

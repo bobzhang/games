@@ -1,10 +1,10 @@
 ///|
-fn bg_wave(game : @types.Game, k : Float) -> Float {
+fn @types.Game::bg_wave(game : @types.Game, k : Float) -> Float {
   @math.sinf(game.ui_t * k)
 }
 
 ///|
-fn shake_x(game : @types.Game) -> Int {
+fn @types.Game::shake_x(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -13,7 +13,7 @@ fn shake_x(game : @types.Game) -> Int {
 }
 
 ///|
-fn shake_y(game : @types.Game) -> Int {
+fn @types.Game::shake_y(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -22,11 +22,11 @@ fn shake_y(game : @types.Game) -> Int {
 }
 
 ///|
-fn draw_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 18, 30, 255))
 
-  let w0 : Float = bg_wave(game, 0.46)
-  let w1 : Float = bg_wave(game, 0.88)
+  let w0 : Float = game.bg_wave(0.46)
+  let w1 : Float = game.bg_wave(0.88)
 
   @raylib.draw_circle(
     190,
@@ -121,7 +121,7 @@ fn draw_world_back(_game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn draw_safe_zone(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_safe_zone(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let pulse : Float = @math.sinf(game.ui_t * 7.0)
 
   @raylib.draw_rectangle(
@@ -156,7 +156,7 @@ fn draw_safe_zone(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn draw_storm(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_storm(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let alpha : Int = 36 + game.wave * 7
 
   for i in 0..<84 {
@@ -381,7 +381,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
       continue
@@ -413,7 +413,7 @@ fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn draw_heli(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_heli(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let x : Int = game.heli_x.to_int() + ox
   let y : Int = game.heli_y.to_int() + oy
 
@@ -485,7 +485,7 @@ fn draw_heli(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
   if game.hint_t <= 0.0 {
     return
   }
@@ -540,7 +540,7 @@ fn draw_bar(
 }
 
 ///|
-fn draw_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.panel_x0,
     20,
@@ -729,7 +729,7 @@ fn draw_panel(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_touch_button(
+fn @types.Game::draw_touch_button(
   game : @types.Game,
   rect : (Int, Int, Int, Int),
   label : String,
@@ -778,49 +778,43 @@ fn draw_touch_button(
 }
 
 ///|
-fn draw_touch_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   if game.state != @types.state_play {
     return
   }
 
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_left(),
     "L",
     @raylib.Color::new(44, 76, 102, 176),
     @raylib.Color::new(70, 118, 156, 212),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_right(),
     "R",
     @raylib.Color::new(44, 76, 102, 176),
     @raylib.Color::new(70, 118, 156, 212),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_up(),
     "U",
     @raylib.Color::new(44, 76, 102, 176),
     @raylib.Color::new(70, 118, 156, 212),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_down(),
     "D",
     @raylib.Color::new(44, 76, 102, 176),
     @raylib.Color::new(70, 118, 156, 212),
   )
 
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_hook(),
     "HOOK",
     @raylib.Color::new(90, 104, 152, 182),
     @raylib.Color::new(142, 166, 236, 220),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_boost(),
     "BST",
     if game.boost_on || game.turbo_t > 0.0 {
@@ -830,22 +824,19 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
     },
     @raylib.Color::new(120, 184, 240, 230),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_hint(),
     "HNT",
     @raylib.Color::new(90, 96, 134, 182),
     @raylib.Color::new(152, 170, 224, 220),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_restart(),
     "RST",
     @raylib.Color::new(102, 88, 124, 182),
     @raylib.Color::new(170, 136, 194, 220),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_repair(),
     "RPR",
     @raylib.Color::new(88, 102, 128, 182),
@@ -854,7 +845,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_msg(game : @types.Game) -> Unit {
+fn @types.Game::draw_msg(game : @types.Game) -> Unit {
   if game.msg_t <= 0.0 || game.msg == "" {
     return
   }
@@ -887,7 +878,7 @@ fn draw_msg(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -964,7 +955,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_result_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -1087,14 +1078,14 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 ///|
 /// Draws the complete frame for the current skyhook rescue state.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_background(game)
+  game.draw_background()
 
-  let ox : Int = shake_x(game)
-  let oy : Int = shake_y(game)
+  let ox : Int = game.shake_x()
+  let oy : Int = game.shake_y()
 
   draw_world_back(game, ox, oy)
-  draw_storm(game, ox, oy)
-  draw_safe_zone(game, ox, oy)
+  game.draw_storm(ox, oy)
+  game.draw_safe_zone(ox, oy)
 
   for hazard in game.hazards {
     draw_hazard(hazard, ox, oy)
@@ -1108,17 +1099,17 @@ pub fn draw_frame(game : @types.Game) -> Unit {
     draw_survivor(survivor, ox, oy)
   }
 
-  draw_hint(game, ox, oy)
-  draw_particles(game, ox, oy)
-  draw_heli(game, ox, oy)
+  game.draw_hint(ox, oy)
+  game.draw_particles(ox, oy)
+  game.draw_heli(ox, oy)
 
-  draw_panel(game)
-  draw_touch_controls(game)
-  draw_msg(game)
+  game.draw_panel()
+  game.draw_touch_controls()
+  game.draw_msg()
 
   if game.state == @types.state_title {
-    draw_title_overlay(game)
+    game.draw_title_overlay()
   } else if game.state == @types.state_result {
-    draw_result_overlay(game)
+    game.draw_result_overlay()
   }
 }

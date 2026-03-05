@@ -7,7 +7,7 @@ pub fn clear_particles(game : @types.Game) -> Unit {
 }
 
 ///|
-fn alloc_particle(game : @types.Game) -> Int {
+fn @types.Game::alloc_particle(game : @types.Game) -> Int {
   for i in 0..<game.particles.length() {
     if not(game.particles[i].active) {
       return i
@@ -17,7 +17,7 @@ fn alloc_particle(game : @types.Game) -> Int {
 }
 
 ///|
-fn spawn_particle(
+fn @types.Game::spawn_particle(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -27,7 +27,7 @@ fn spawn_particle(
   size : Float,
   color : @raylib.Color,
 ) -> Unit {
-  let idx = alloc_particle(game)
+  let idx = game.alloc_particle()
   if idx < 0 {
     return
   }
@@ -49,8 +49,7 @@ pub fn spawn_coin_burst(game : @types.Game, x : Float, y : Float) -> Unit {
   for i in 0..<10 {
     let a = @types.randf(0.0, 6.28)
     let s = @types.randf(45.0, 160.0)
-    spawn_particle(
-      game,
+    game.spawn_particle(
       x,
       y,
       @math.cosf(a) * s,
@@ -73,8 +72,7 @@ pub fn spawn_block_burst(
   for i in 0..<12 {
     let a = @types.randf(0.0, 6.28)
     let s = @types.randf(60.0, 220.0)
-    spawn_particle(
-      game,
+    game.spawn_particle(
       x,
       y,
       @math.cosf(a) * s,
@@ -92,8 +90,7 @@ pub fn spawn_stomp_burst(game : @types.Game, x : Float, y : Float) -> Unit {
   for i in 0..<15 {
     let a = @types.randf(0.0, 6.28)
     let s = @types.randf(55.0, 200.0)
-    spawn_particle(
-      game,
+    game.spawn_particle(
       x,
       y,
       @math.cosf(a) * s,
@@ -111,8 +108,7 @@ pub fn spawn_hurt_burst(game : @types.Game, x : Float, y : Float) -> Unit {
   for i in 0..<18 {
     let a = @types.randf(0.0, 6.28)
     let s = @types.randf(80.0, 260.0)
-    spawn_particle(
-      game,
+    game.spawn_particle(
       x,
       y,
       @math.cosf(a) * s,

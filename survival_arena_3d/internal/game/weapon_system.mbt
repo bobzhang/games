@@ -1,7 +1,7 @@
 // Weapon firing, projectile updates, and collision
 
 ///|
-fn update_weapon_cooldowns(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_weapon_cooldowns(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.weapons.length() {
     if game.weapons[i].reload_timer > 0.0 {
       game.weapons[i].reload_timer -= dt
@@ -30,7 +30,7 @@ fn update_weapon_cooldowns(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn try_reload(game : @types.Game, weapon : Int) -> Unit {
+fn @types.Game::try_reload(game : @types.Game, weapon : Int) -> Unit {
   let ws = game.weapons[weapon]
   if ws.reloading {
     return
@@ -47,7 +47,7 @@ fn try_reload(game : @types.Game, weapon : Int) -> Unit {
 }
 
 ///|
-fn handle_shooting(game : @types.Game) -> Unit {
+fn @types.Game::handle_shooting(game : @types.Game) -> Unit {
   let weapon = game.player.current_weapon
   let ws = game.weapons[weapon]
   // Don't shoot while reloading
@@ -56,7 +56,7 @@ fn handle_shooting(game : @types.Game) -> Unit {
   }
   // Manual reload with R
   if @raylib.is_key_pressed(@raylib.KeyR) {
-    try_reload(game, weapon)
+    game.try_reload(weapon)
     return
   }
   // Minigun spin-up handling
@@ -84,13 +84,13 @@ fn handle_shooting(game : @types.Game) -> Unit {
   if game.player.magazine[weapon] <= 0 {
     if can_fire {
       // Auto-reload on empty
-      try_reload(game, weapon)
+      game.try_reload(weapon)
     }
     return
   }
   let eff_rate = @types.effective_fire_rate(game.player, weapon)
   if can_fire && ws.reload_timer <= 0.0 {
-    fire_weapon(game, weapon)
+    game.fire_weapon(weapon)
     ws.reload_timer = eff_rate
     game.player.magazine[weapon] -= 1
     game.total_shots_fired += 1
@@ -113,13 +113,13 @@ fn handle_shooting(game : @types.Game) -> Unit {
     game.player.recoil_offset = @types.minf(game.player.recoil_offset, 3.0)
     // Auto-reload when magazine empty
     if game.player.magazine[weapon] <= 0 {
-      try_reload(game, weapon)
+      game.try_reload(weapon)
     }
   }
 }
 
 ///|
-fn fire_weapon(game : @types.Game, weapon : Int) -> Unit {
+fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
   let player = game.player
   // Calculate look direction
   let cos_yaw = @math.cosf(player.yaw)
@@ -149,7 +149,7 @@ fn fire_weapon(game : @types.Game, weapon : Int) -> Unit {
       let dy = look_y + spread_v
       let dz = look_z + spread_h * 0.5
       let norm = @types.normalize3d(dx, dy, dz)
-      fire_projectile(game, norm.0, norm.1, norm.2, weapon)
+      game.fire_projectile(norm.0, norm.1, norm.2, weapon)
       ignore(i)
     }
     // Muzzle flash particles
@@ -177,7 +177,7 @@ fn fire_weapon(game : @types.Game, weapon : Int) -> Unit {
     )
   } else if weapon == @types.weapon_sniper {
     // Sniper: high accuracy, penetrating
-    fire_projectile(game, look_x, look_y, look_z, weapon)
+    game.fire_projectile(look_x, look_y, look_z, weapon)
     // Big muzzle flash
     @types.spawn_particles_dir(
       game,
@@ -210,7 +210,7 @@ fn fire_weapon(game : @types.Game, weapon : Int) -> Unit {
     let dy = look_y + @types.rand_rangef(game, -spread, spread)
     let dz = look_z + @types.rand_rangef(game, -spread, spread)
     let norm = @types.normalize3d(dx, dy, dz)
-    fire_projectile(game, norm.0, norm.1, norm.2, weapon)
+    game.fire_projectile(norm.0, norm.1, norm.2, weapon)
     // Small muzzle flash
     if game.frame_counter % 3 == 0 {
       @types.spawn_particles_dir(
@@ -249,7 +249,7 @@ fn fire_weapon(game : @types.Game, weapon : Int) -> Unit {
       dy = norm.1
       dz = norm.2
     }
-    fire_projectile(game, dx, dy, dz, weapon)
+    game.fire_projectile(dx, dy, dz, weapon)
     // Muzzle flash particles
     @types.spawn_particles_dir(
       game,
@@ -277,7 +277,7 @@ fn fire_weapon(game : @types.Game, weapon : Int) -> Unit {
 }
 
 ///|
-fn fire_projectile(
+fn @types.Game::fire_projectile(
   game : @types.Game,
   dx : Float,
   dy : Float,
@@ -328,7 +328,7 @@ fn fire_projectile(
 }
 
 ///|
-fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_projectiles(game : @types.Game, dt : Float) -> Unit {
   for proj in game.projectiles {
     if not(proj.active) {
       continue
@@ -350,8 +350,7 @@ fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
     // Floor/ceiling collision
     if proj.y < 0.0 || proj.y > 10.0 {
       if proj.splash_radius > 0.0 {
-        apply_explosion(
-          game,
+        game.apply_explosion(
           proj.x,
           proj.y,
           proj.z,
@@ -365,8 +364,7 @@ fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
     // Arena wall collision
     if not(@types.in_arena(proj.x, proj.z)) {
       if proj.splash_radius > 0.0 {
-        apply_explosion(
-          game,
+        game.apply_explosion(
           proj.x,
           proj.y,
           proj.z,
@@ -388,8 +386,7 @@ fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
     }
     if hit_pillar {
       if proj.splash_radius > 0.0 {
-        apply_explosion(
-          game,
+        game.apply_explosion(
           proj.x,
           proj.y,
           proj.z,
@@ -445,7 +442,7 @@ fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
         game.player.z,
       )
       if pdist < @types.player_radius + 0.3 {
-        damage_player_from(game, proj.damage, proj.x, proj.z)
+        game.damage_player_from(proj.damage, proj.x, proj.z)
         proj.active = false
         continue
       }
@@ -470,8 +467,7 @@ fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
           game.total_shots_hit += 1
           if proj.splash_radius > 0.0 {
             // Rocket: splash damage
-            apply_explosion(
-              game,
+            game.apply_explosion(
               proj.x,
               proj.y,
               proj.z,
@@ -487,11 +483,11 @@ fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
               @types.is_headshot_hit(proj.y, enemy.y, enemy.size)
             // Check if shielded
             if enemy.kind == @types.enemy_shielded {
-              damage_shielded_enemy(game, j, proj.damage, proj.dx, proj.dz)
+              game.damage_shielded_enemy(j, proj.damage, proj.dx, proj.dz)
             } else if is_headshot {
-              damage_enemy_headshot(game, j, proj.damage)
+              game.damage_enemy_headshot(j, proj.damage)
             } else {
-              damage_enemy(game, j, proj.damage)
+              game.damage_enemy(j, proj.damage)
             }
             // Penetration
             if proj.penetration > 0 {
@@ -514,7 +510,7 @@ fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn apply_explosion(
+fn @types.Game::apply_explosion(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -532,7 +528,7 @@ fn apply_explosion(
     if dist < radius {
       let dmg_factor : Float = 1.0 - dist / radius
       let dmg = damage * dmg_factor
-      damage_enemy(game, i, dmg)
+      game.damage_enemy(i, dmg)
       // Knockback
       let dx = enemy.x - x
       let dz = enemy.z - z
@@ -559,7 +555,7 @@ fn apply_explosion(
   )
   if player_dist < radius * 0.5 {
     let self_dmg = damage * 0.3 * (1.0 - player_dist / (radius * 0.5))
-    damage_player(game, self_dmg)
+    game.damage_player(self_dmg)
   }
   // Damage barricades
   for barr in game.barricades {

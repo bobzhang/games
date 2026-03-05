@@ -10,7 +10,7 @@ fn draw_center_text(
 }
 
 ///|
-fn shake_offset(game : @types.Game) -> (Float, Float) {
+fn @types.Game::shake_offset(game : @types.Game) -> (Float, Float) {
   if game.shake_t <= 0.0 {
     (0.0, 0.0)
   } else {
@@ -30,7 +30,7 @@ fn world_to_screen(
 }
 
 ///|
-fn ring_color(game : @types.Game, ring : Int) -> @raylib.Color {
+fn @types.Game::ring_color(game : @types.Game, ring : Int) -> @raylib.Color {
   let phase = game.time_s * 1.2 + Float::from_int(ring) * 0.9
   let pulse : Float = 0.5 + 0.5 * @math.sinf(phase)
   if game.phase_beta {
@@ -51,7 +51,7 @@ fn ring_color(game : @types.Game, ring : Int) -> @raylib.Color {
 }
 
 ///|
-fn draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -103,10 +103,10 @@ fn draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_rings(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_rings(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for ring in 0..<@types.ring_count {
     let r = @types.ring_radius(ring)
-    let col = ring_color(game, ring)
+    let col = game.ring_color(ring)
 
     @raylib.draw_circle_lines(
       (@types.center_x() + cam_x).to_int(),
@@ -134,7 +134,7 @@ fn draw_rings(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_flares(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_flares(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for f0 in game.flares {
     if not(f0.active) {
       continue
@@ -194,7 +194,7 @@ fn enemy_color(_game : @types.Game, e : @types.Enemy) -> @raylib.Color {
 }
 
 ///|
-fn draw_enemy(
+fn @types.Game::draw_enemy(
   game : @types.Game,
   e : @types.Enemy,
   cam_x : Float,
@@ -266,14 +266,14 @@ fn draw_enemy(
 }
 
 ///|
-fn draw_enemies(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_enemies(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for enemy in game.enemies {
-    draw_enemy(game, enemy, cam_x, cam_y)
+    game.draw_enemy(enemy, cam_x, cam_y)
   }
 }
 
 ///|
-fn draw_bullets(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_bullets(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for b in game.bullets {
     if not(b.active) {
       continue
@@ -319,7 +319,7 @@ fn draw_bullets(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -341,7 +341,7 @@ fn draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_shocks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_shocks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for s in game.shocks {
     if not(s.active) {
       continue
@@ -387,7 +387,7 @@ fn draw_shocks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let p = @types.player_world_xy(game.player)
   let s = world_to_screen(p.0, p.1, cam_x, cam_y)
 
@@ -446,7 +446,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 }
 
 ///|
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(14, 14, 530, 108, @raylib.Color::new(16, 20, 30, 202))
   @raylib.draw_rectangle_lines(
     14,
@@ -621,7 +621,7 @@ fn draw_button(
 }
 
 ///|
-fn draw_touch_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -765,7 +765,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -840,7 +840,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_stage_clear_overlay(game : @types.Game) -> Unit {
   let p = @types.ease_in_out(1.0 - game.result_t / @types.stage_clear_delay)
   let alpha = (Float::from_int(90) + p * 90.0).to_int().clamp(min=0, max=190)
   @raylib.draw_rectangle(
@@ -872,7 +872,7 @@ fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_game_over_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -923,15 +923,15 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
-  draw_backdrop(game, cam_x, cam_y)
-  draw_rings(game, cam_x, cam_y)
-  draw_flares(game, cam_x, cam_y)
-  draw_shocks(game, cam_x, cam_y)
-  draw_enemies(game, cam_x, cam_y)
-  draw_bullets(game, cam_x, cam_y)
-  draw_particles(game, cam_x, cam_y)
-  draw_player(game, cam_x, cam_y)
+fn @types.Game::draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+  game.draw_backdrop(cam_x, cam_y)
+  game.draw_rings(cam_x, cam_y)
+  game.draw_flares(cam_x, cam_y)
+  game.draw_shocks(cam_x, cam_y)
+  game.draw_enemies(cam_x, cam_y)
+  game.draw_bullets(cam_x, cam_y)
+  game.draw_particles(cam_x, cam_y)
+  game.draw_player(cam_x, cam_y)
 }
 
 ///|
@@ -939,16 +939,16 @@ fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.black)
 
-  let shake = shake_offset(game)
-  draw_world(game, shake.0, shake.1)
+  let shake = game.shake_offset()
+  game.draw_world(shake.0, shake.1)
 
   if game.state != @types.state_title {
-    draw_hud(game)
+    game.draw_hud()
   }
 
   if game.touch_mode || game.touch_count > 0 {
     if game.state == @types.state_play {
-      draw_touch_controls(game)
+      game.draw_touch_controls()
     }
 
     if game.touch_count > 0 {
@@ -962,11 +962,11 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   }
 
   if game.state == @types.state_title {
-    draw_title_overlay(game)
+    game.draw_title_overlay()
   } else if game.state == @types.state_stage_clear {
-    draw_stage_clear_overlay(game)
+    game.draw_stage_clear_overlay()
   } else if game.state == @types.state_game_over {
-    draw_game_over_overlay(game)
+    game.draw_game_over_overlay()
   }
 
   if game.flash_t > 0.0 {

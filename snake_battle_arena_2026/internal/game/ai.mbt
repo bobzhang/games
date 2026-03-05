@@ -10,7 +10,7 @@ fn food_distance(nx : Int, ny : Int, fx : Int, fy : Int) -> Int {
 }
 
 ///|
-fn direction_score_player(game : @types.Game, dir : Int) -> Int {
+fn @types.Game::direction_score_player(game : @types.Game, dir : Int) -> Int {
   if @types.opposite_dir(game.p_dir, dir) {
     return -100000
   }
@@ -18,13 +18,13 @@ fn direction_score_player(game : @types.Game, dir : Int) -> Int {
   let nx : Int = @types.wrap_x(game.p_seg_x[0] + @types.dir_dx(dir))
   let ny : Int = @types.wrap_y(game.p_seg_y[0] + @types.dir_dy(dir))
 
-  if player_segment_at(game, nx, ny, true) {
+  if game.player_segment_at(nx, ny, true) {
     return -90000
   }
-  if rival_segment_at(game, nx, ny, -1, false) {
+  if game.rival_segment_at(nx, ny, -1, false) {
     return -86000
   }
-  if trap_at(game, nx, ny) {
+  if game.trap_at(nx, ny) {
     return -83000
   }
 
@@ -35,9 +35,9 @@ fn direction_score_player(game : @types.Game, dir : Int) -> Int {
     let tx : Int = @types.wrap_x(nx + @types.dir_dx(d))
     let ty : Int = @types.wrap_y(ny + @types.dir_dy(d))
 
-    if not(player_segment_at(game, tx, ty, true)) &&
-      not(rival_segment_at(game, tx, ty, -1, false)) &&
-      not(trap_at(game, tx, ty)) {
+    if not(game.player_segment_at(tx, ty, true)) &&
+      not(game.rival_segment_at(tx, ty, -1, false)) &&
+      not(game.trap_at(tx, ty)) {
       score = score + 36
     }
   }
@@ -46,12 +46,12 @@ fn direction_score_player(game : @types.Game, dir : Int) -> Int {
 }
 
 ///|
-fn suggest_player_dir(game : @types.Game) -> Int {
+fn @types.Game::suggest_player_dir(game : @types.Game) -> Int {
   let mut best_dir : Int = -1
   let mut best_score : Int = -999999
 
   for d in 0..<4 {
-    let s : Int = direction_score_player(game, d)
+    let s : Int = game.direction_score_player(d)
     if s > best_score {
       best_score = s
       best_dir = d
@@ -62,7 +62,7 @@ fn suggest_player_dir(game : @types.Game) -> Int {
 }
 
 ///|
-fn direction_score_rival(game : @types.Game, rid : Int, dir : Int) -> Int {
+fn @types.Game::direction_score_rival(game : @types.Game, rid : Int, dir : Int) -> Int {
   let rival = game.rivals[rid]
 
   if @types.opposite_dir(rival.dir, dir) {
@@ -72,7 +72,7 @@ fn direction_score_rival(game : @types.Game, rid : Int, dir : Int) -> Int {
   let nx : Int = @types.wrap_x(rival.seg_x[0] + @types.dir_dx(dir))
   let ny : Int = @types.wrap_y(rival.seg_y[0] + @types.dir_dy(dir))
 
-  if rival_would_collide(game, rid, nx, ny) {
+  if game.rival_would_collide(rid, nx, ny) {
     return -90000
   }
 
@@ -87,7 +87,7 @@ fn direction_score_rival(game : @types.Game, rid : Int, dir : Int) -> Int {
   for d in 0..<4 {
     let tx : Int = @types.wrap_x(nx + @types.dir_dx(d))
     let ty : Int = @types.wrap_y(ny + @types.dir_dy(d))
-    if not(rival_would_collide(game, rid, tx, ty)) {
+    if not(game.rival_would_collide(rid, tx, ty)) {
       score = score + 26
     }
   }
@@ -96,14 +96,14 @@ fn direction_score_rival(game : @types.Game, rid : Int, dir : Int) -> Int {
 }
 
 ///|
-fn ai_choose_dir(game : @types.Game, rid : Int) -> Int {
+fn @types.Game::ai_choose_dir(game : @types.Game, rid : Int) -> Int {
   let rival = game.rivals[rid]
 
   let mut best_dir : Int = rival.dir
   let mut best_score : Int = -999999
 
   for d in 0..<4 {
-    let s : Int = direction_score_rival(game, rid, d)
+    let s : Int = game.direction_score_rival(rid, d)
     if s > best_score {
       best_score = s
       best_dir = d

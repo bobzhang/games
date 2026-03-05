@@ -5,37 +5,37 @@
 /// crafting panels, and contextual overlays.
 pub fn draw_ui(game : @types.Game) -> Unit {
   if game.state == @types.state_menu {
-    draw_menu(game)
+    game.draw_menu()
   } else if game.state == @types.state_playing {
-    draw_hud(game)
+    game.draw_hud()
     draw_crosshair()
-    draw_health_hunger_bars(game)
-    draw_air_bar(game)
+    game.draw_health_hunger_bars()
+    game.draw_air_bar()
     if game.show_debug {
-      draw_debug_info(game)
+      game.draw_debug_info()
     }
   } else if game.state == @types.state_paused {
-    draw_hud(game)
+    game.draw_hud()
     draw_crosshair()
-    draw_health_hunger_bars(game)
-    draw_pause_overlay(game)
+    game.draw_health_hunger_bars()
+    game.draw_pause_overlay()
   } else if game.state == @types.state_inventory {
-    draw_hud(game)
-    draw_health_hunger_bars(game)
-    draw_inventory_screen(game)
+    game.draw_hud()
+    game.draw_health_hunger_bars()
+    game.draw_inventory_screen()
   } else if game.state == @types.state_crafting {
-    draw_hud(game)
-    draw_health_hunger_bars(game)
-    draw_crafting_screen(game)
+    game.draw_hud()
+    game.draw_health_hunger_bars()
+    game.draw_crafting_screen()
   } else if game.state == @types.state_game_over {
-    draw_game_over_screen(game)
+    game.draw_game_over_screen()
   }
   // Biome name display
   if game.state == @types.state_playing {
-    draw_biome_indicator(game)
-    draw_compass(game)
-    draw_tool_durability(game)
-    draw_event_log(game)
+    game.draw_biome_indicator()
+    game.draw_compass()
+    game.draw_tool_durability()
+    game.draw_event_log()
   }
   // Damage flash overlay
   if game.player.damage_flash > 0.0 {
@@ -64,7 +64,7 @@ pub fn draw_ui(game : @types.Game) -> Unit {
 // ========== Main menu ==========
 
 ///|
-fn draw_menu(game : @types.Game) -> Unit {
+fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   // Background gradient
   @raylib.draw_rectangle(
     0,
@@ -178,7 +178,7 @@ fn draw_menu(game : @types.Game) -> Unit {
 // ========== HUD ==========
 
 ///|
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   // Top bar background
   @raylib.draw_rectangle(
     0,
@@ -226,7 +226,7 @@ fn draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(180, 180, 200, 255),
   )
   // Hotbar at bottom
-  draw_hotbar(game)
+  game.draw_hotbar()
   // Message
   if game.message_timer > 0.0 {
     let msg_alpha : Int = if game.message_timer < 1.0 {
@@ -256,7 +256,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 // ========== Hotbar ==========
 
 ///|
-fn draw_hotbar(game : @types.Game) -> Unit {
+fn @types.Game::draw_hotbar(game : @types.Game) -> Unit {
   let slot_size = 48
   let slot_gap = 4
   let total_slots = @types.hotbar_slots
@@ -382,7 +382,7 @@ fn draw_crosshair() -> Unit {
 // ========== Health & Hunger bars ==========
 
 ///|
-fn draw_health_hunger_bars(game : @types.Game) -> Unit {
+fn @types.Game::draw_health_hunger_bars(game : @types.Game) -> Unit {
   let player = game.player
   let bar_width = 200
   let bar_height = 14
@@ -503,7 +503,7 @@ fn draw_health_hunger_bars(game : @types.Game) -> Unit {
 // ========== Air bar (when underwater) ==========
 
 ///|
-fn draw_air_bar(game : @types.Game) -> Unit {
+fn @types.Game::draw_air_bar(game : @types.Game) -> Unit {
   if not(game.player.underwater) {
     return
   }
@@ -541,7 +541,7 @@ fn draw_air_bar(game : @types.Game) -> Unit {
 // ========== Debug info ==========
 
 ///|
-fn draw_debug_info(game : @types.Game) -> Unit {
+fn @types.Game::draw_debug_info(game : @types.Game) -> Unit {
   let player = game.player
   let x = 10
   let mut y = 40
@@ -627,7 +627,7 @@ fn draw_debug_info(game : @types.Game) -> Unit {
 // ========== Pause screen ==========
 
 ///|
-fn draw_pause_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_pause_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -675,7 +675,7 @@ fn draw_pause_overlay(game : @types.Game) -> Unit {
 // ========== Inventory screen ==========
 
 ///|
-fn draw_inventory_screen(game : @types.Game) -> Unit {
+fn @types.Game::draw_inventory_screen(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -846,7 +846,7 @@ fn draw_inventory_screen(game : @types.Game) -> Unit {
 // ========== Crafting screen ==========
 
 ///|
-fn draw_crafting_screen(game : @types.Game) -> Unit {
+fn @types.Game::draw_crafting_screen(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -904,7 +904,7 @@ fn draw_crafting_screen(game : @types.Game) -> Unit {
     }
     @raylib.draw_rectangle(panel_x, ry, panel_width, recipe_height - 4, bg)
     // Check if player can craft this
-    let can_craft = check_can_craft(game, recipe)
+    let can_craft = game.check_can_craft(recipe)
     let text_color = if can_craft {
       @raylib.Color::new(200, 255, 200, 255)
     } else {
@@ -978,7 +978,7 @@ fn draw_crafting_screen(game : @types.Game) -> Unit {
 }
 
 ///|
-fn check_can_craft(game : @types.Game, recipe : @types.CraftingRecipe) -> Bool {
+fn @types.Game::check_can_craft(game : @types.Game, recipe : @types.CraftingRecipe) -> Bool {
   let inv = game.player.inventory
   let mut has1 = false
   let mut has2 = false
@@ -1008,7 +1008,7 @@ fn check_can_craft(game : @types.Game, recipe : @types.CraftingRecipe) -> Bool {
 // ========== Game over screen ==========
 
 ///|
-fn draw_game_over_screen(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_screen(game : @types.Game) -> Unit {
   // Dark overlay
   @raylib.draw_rectangle(
     0,
@@ -1066,7 +1066,7 @@ fn draw_game_over_screen(game : @types.Game) -> Unit {
 // ========== Biome name display ==========
 
 ///|
-fn draw_biome_indicator(game : @types.Game) -> Unit {
+fn @types.Game::draw_biome_indicator(game : @types.Game) -> Unit {
   let player = game.player
   let biome = @types.get_biome_at(player.x.to_int(), player.z.to_int())
   let bname = @types.biome_name(biome)
@@ -1147,7 +1147,7 @@ fn draw_biome_indicator(game : @types.Game) -> Unit {
 // ========== Compass / direction indicator ==========
 
 ///|
-fn draw_compass(game : @types.Game) -> Unit {
+fn @types.Game::draw_compass(game : @types.Game) -> Unit {
   let player = game.player
   let cx = @types.screen_width / 2
   let cy = 24
@@ -1220,7 +1220,7 @@ fn draw_compass(game : @types.Game) -> Unit {
 // ========== Tool durability display ==========
 
 ///|
-fn draw_tool_durability(game : @types.Game) -> Unit {
+fn @types.Game::draw_tool_durability(game : @types.Game) -> Unit {
   let player = game.player
   let tool = player.equipped_tool
   if tool == @types.tool_hand {
@@ -1295,7 +1295,7 @@ fn draw_tool_durability(game : @types.Game) -> Unit {
 // ========== Event log area ==========
 
 ///|
-fn draw_event_log(game : @types.Game) -> Unit {
+fn @types.Game::draw_event_log(game : @types.Game) -> Unit {
   // Show recent stats in bottom-left corner
   let log_x = 10
   let log_y = @types.screen_height - 140

@@ -1,5 +1,5 @@
 ///|
-fn clear_board(game : @types.Game) -> Unit {
+fn @types.Game::clear_board(game : @types.Game) -> Unit {
   for i in 0..<game.tiles.length() {
     game.tiles[i] = Void
     game.boxes[i] = false
@@ -7,7 +7,7 @@ fn clear_board(game : @types.Game) -> Unit {
 }
 
 ///|
-fn clear_undo(game : @types.Game) -> Unit {
+fn @types.Game::clear_undo(game : @types.Game) -> Unit {
   game.undo_len = 0
   for undo_elem in game.undo {
     undo_elem.valid = false
@@ -15,7 +15,7 @@ fn clear_undo(game : @types.Game) -> Unit {
 }
 
 ///|
-fn clear_sparks(game : @types.Game) -> Unit {
+fn @types.Game::clear_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
     spark.active = false
     spark.x = 0.0
@@ -29,15 +29,15 @@ fn clear_sparks(game : @types.Game) -> Unit {
 }
 
 ///|
-fn apply_level_rows(
+fn @types.Game::apply_level_rows(
   game : @types.Game,
   rows : Array[Array[Int]],
   title : String,
   par : Int,
 ) -> Unit {
-  clear_board(game)
-  clear_undo(game)
-  clear_sparks(game)
+  game.clear_board()
+  game.clear_undo()
+  game.clear_sparks()
 
   game.level_name = title
   game.level_par = par
@@ -133,7 +133,7 @@ fn apply_level_rows(
 }
 
 ///|
-fn level_completed(game : @types.Game) -> Bool {
+fn @types.Game::level_completed(game : @types.Game) -> Bool {
   if game.goals_total <= 0 {
     return false
   }
@@ -156,7 +156,7 @@ fn direction_delta(dir : @types.Direction) -> (Int, Int) {
 }
 
 ///|
-fn spawn_spark(
+fn @types.Game::spawn_spark(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -184,7 +184,7 @@ fn spawn_spark(
 }
 
 ///|
-fn burst_cell(
+fn @types.Game::burst_cell(
   game : @types.Game,
   cell_x : Int,
   cell_y : Int,
@@ -195,8 +195,7 @@ fn burst_cell(
   let cy : Float = Float::from_int(cell_y) + 0.5
 
   for _i in 0..<amount {
-    spawn_spark(
-      game,
+    game.spawn_spark(
       cx + @types.randf(-0.18, 0.18),
       cy + @types.randf(-0.18, 0.18),
       @types.randf(-2.4, 2.4),
@@ -209,7 +208,7 @@ fn burst_cell(
 }
 
 ///|
-fn update_sparks(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_sparks(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
       continue
@@ -229,7 +228,7 @@ fn update_sparks(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn push_undo(game : @types.Game, step : @types.UndoStep) -> Unit {
+fn @types.Game::push_undo(game : @types.Game, step : @types.UndoStep) -> Unit {
   if game.undo_len >= game.undo.length() {
     for i in 1..<game.undo.length() {
       game.undo[i - 1] = game.undo[i]
@@ -242,15 +241,15 @@ fn push_undo(game : @types.Game, step : @types.UndoStep) -> Unit {
 }
 
 ///|
-fn blocked_feedback(game : @types.Game, x : Int, y : Int) -> Unit {
+fn @types.Game::blocked_feedback(game : @types.Game, x : Int, y : Int) -> Unit {
   game.shake_t = 0.17
   game.message = "Blocked"
   game.message_t = 0.32
-  burst_cell(game, x, y, 7, Red)
+  game.burst_cell(x, y, 7, Red)
 }
 
 ///|
-fn attempt_move(game : @types.Game, dx : Int, dy : Int) -> Bool {
+fn @types.Game::attempt_move(game : @types.Game, dx : Int, dy : Int) -> Bool {
   if dx == 0 && dy == 0 {
     return false
   }
@@ -259,13 +258,13 @@ fn attempt_move(game : @types.Game, dx : Int, dy : Int) -> Bool {
   let ny : Int = game.player_y + dy
 
   if nx < 0 || nx >= game.grid_w || ny < 0 || ny >= game.grid_h {
-    blocked_feedback(game, game.player_x, game.player_y)
+    game.blocked_feedback(game.player_x, game.player_y)
     return false
   }
 
   let target_tile = @types.tile_at(game, nx, ny)
   if not(@types.walkable_tile(target_tile)) {
-    blocked_feedback(game, nx, ny)
+    game.blocked_feedback(nx, ny)
     return false
   }
 
@@ -287,13 +286,13 @@ fn attempt_move(game : @types.Game, dx : Int, dy : Int) -> Bool {
     let by : Int = ny + dy
 
     if bx < 0 || bx >= game.grid_w || by < 0 || by >= game.grid_h {
-      blocked_feedback(game, nx, ny)
+      game.blocked_feedback(nx, ny)
       return false
     }
 
     let behind_tile = @types.tile_at(game, bx, by)
     if not(@types.walkable_tile(behind_tile)) || @types.box_at(game, bx, by) {
-      blocked_feedback(game, nx, ny)
+      game.blocked_feedback(nx, ny)
       return false
     }
 
@@ -307,9 +306,9 @@ fn attempt_move(game : @types.Game, dx : Int, dy : Int) -> Bool {
     @types.set_box(game, bx, by, true)
     game.pushes = game.pushes + 1
 
-    burst_cell(game, nx, ny, 10, Orange)
+    game.burst_cell(nx, ny, 10, Orange)
     if @types.tile_at(game, bx, by) == Goal {
-      burst_cell(game, bx, by, 16, Gold)
+      game.burst_cell(bx, by, 16, Gold)
       game.message = "Crate locked"
       game.message_t = 0.5
     }
@@ -320,14 +319,14 @@ fn attempt_move(game : @types.Game, dx : Int, dy : Int) -> Bool {
   game.moves = game.moves + 1
   game.pulse_t = game.pulse_t + 0.13
 
-  push_undo(game, step)
-  burst_cell(game, game.player_x, game.player_y, 6, Blue)
+  game.push_undo(step)
+  game.burst_cell(game.player_x, game.player_y, 6, Blue)
 
   true
 }
 
 ///|
-fn undo_move(game : @types.Game) -> Bool {
+fn @types.Game::undo_move(game : @types.Game) -> Bool {
   if game.undo_len <= 0 {
     return false
   }
@@ -347,7 +346,7 @@ fn undo_move(game : @types.Game) -> Bool {
   if step.pushed_box {
     @types.set_box(game, step.box_to_x, step.box_to_y, false)
     @types.set_box(game, step.box_from_x, step.box_from_y, true)
-    burst_cell(game, step.box_from_x, step.box_from_y, 12, Red)
+    game.burst_cell(step.box_from_x, step.box_from_y, 12, Red)
   }
 
   game.shake_t = 0.08
@@ -358,7 +357,7 @@ fn undo_move(game : @types.Game) -> Bool {
 }
 
 ///|
-fn score_stars(game : @types.Game) -> Int {
+fn @types.Game::score_stars(game : @types.Game) -> Int {
   let mut stars : Int = 1
 
   if game.moves <= game.level_par {
@@ -379,8 +378,8 @@ fn score_stars(game : @types.Game) -> Int {
 }
 
 ///|
-fn complete_level(game : @types.Game) -> Unit {
-  let stars : Int = score_stars(game)
+fn @types.Game::complete_level(game : @types.Game) -> Unit {
+  let stars : Int = game.score_stars()
   game.last_level_stars = stars
   game.campaign_stars = game.campaign_stars + stars
 
@@ -395,7 +394,7 @@ fn complete_level(game : @types.Game) -> Unit {
   for y in 0..<game.grid_h {
     for x in 0..<game.grid_w {
       if @types.tile_at(game, x, y) == Goal {
-        burst_cell(game, x, y, 18, Gold)
+        game.burst_cell(x, y, 18, Gold)
       }
     }
   }
@@ -408,17 +407,17 @@ fn complete_level(game : @types.Game) -> Unit {
 }
 
 ///|
-fn advance_to_next_level(game : @types.Game) -> Unit {
+fn @types.Game::advance_to_next_level(game : @types.Game) -> Unit {
   let next_id : Int = game.level_index + 1
   if next_id >= game.level_count {
     game.state = CampaignClear
     return
   }
-  load_level(game, next_id)
+  game.load_level(next_id)
 }
 
 ///|
-fn update_active_game(
+fn @types.Game::update_active_game(
   game : @types.Game,
   dt : Float,
   held_dir : @types.Direction,
@@ -440,7 +439,7 @@ fn update_active_game(
   }
 
   game.pulse_t = game.pulse_t + dt
-  update_sparks(game, dt)
+  game.update_sparks(dt)
 
   if game.state != Play {
     return
@@ -456,13 +455,13 @@ fn update_active_game(
 
   if press_reset && game.touch_action_cd <= 0.0 {
     game.touch_action_cd = 0.2
-    reload_level(game)
+    game.reload_level()
     return
   }
 
   if press_undo && game.touch_action_cd <= 0.0 {
     game.touch_action_cd = 0.2
-    ignore(undo_move(game))
+    ignore(game.undo_move())
     return
   }
 
@@ -476,23 +475,23 @@ fn update_active_game(
     game.hold_dir = held_dir
     game.repeat_t = 0.18
     let (dx, dy) = direction_delta(held_dir)
-    ignore(attempt_move(game, dx, dy))
+    ignore(game.attempt_move(dx, dy))
   } else {
     game.repeat_t = game.repeat_t - dt
     if game.repeat_t <= 0.0 {
       game.repeat_t = 0.09
       let (dx, dy) = direction_delta(held_dir)
-      ignore(attempt_move(game, dx, dy))
+      ignore(game.attempt_move(dx, dy))
     }
   }
 
-  if level_completed(game) {
-    complete_level(game)
+  if game.level_completed() {
+    game.complete_level()
   }
 }
 
 ///|
-fn load_level(game : @types.Game, level_id : Int) -> Unit {
+fn @types.Game::load_level(game : @types.Game, level_id : Int) -> Unit {
   let mut id : Int = level_id
   if id < 0 {
     id = 0
@@ -519,7 +518,7 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
       [v, w, w, f, f, f, w, w, v, v],
       [v, v, w, w, w, w, w, v, v, v],
     ]
-    apply_level_rows(game, rows, "Dock Warmup", 14)
+    game.apply_level_rows(rows, "Dock Warmup", 14)
   } else if id == 1 {
     let rows : Array[Array[Int]] = [
       [v, w, w, w, w, w, w, w, v],
@@ -530,7 +529,7 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
       [w, w, f, f, g, f, f, w, w],
       [v, w, w, w, w, w, w, w, v],
     ]
-    apply_level_rows(game, rows, "Twin Lift Hall", 22)
+    game.apply_level_rows(rows, "Twin Lift Hall", 22)
   } else if id == 2 {
     let rows : Array[Array[Int]] = [
       [v, v, w, w, w, w, w, w, v, v],
@@ -543,7 +542,7 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
       [v, w, w, f, f, f, f, w, w, v],
       [v, v, w, w, w, w, w, w, v, v],
     ]
-    apply_level_rows(game, rows, "Gear Junction", 28)
+    game.apply_level_rows(rows, "Gear Junction", 28)
   } else if id == 3 {
     let rows : Array[Array[Int]] = [
       [v, v, w, w, w, w, w, w, w, v, v],
@@ -556,7 +555,7 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
       [v, w, w, f, f, f, f, f, w, w, v],
       [v, v, w, w, w, w, w, w, w, v, v],
     ]
-    apply_level_rows(game, rows, "Steel Switchback", 34)
+    game.apply_level_rows(rows, "Steel Switchback", 34)
   } else if id == 4 {
     let rows : Array[Array[Int]] = [
       [v, w, w, w, w, w, w, w, w, w, v],
@@ -569,7 +568,7 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
       [w, w, f, f, f, g, f, f, f, w, w],
       [v, w, w, w, w, w, w, w, w, w, v],
     ]
-    apply_level_rows(game, rows, "Crane Cross", 42)
+    game.apply_level_rows(rows, "Crane Cross", 42)
   } else if id == 5 {
     let rows : Array[Array[Int]] = [
       [v, v, w, w, w, w, w, w, w, v, v],
@@ -582,7 +581,7 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
       [v, w, w, f, f, g, f, f, w, w, v],
       [v, v, w, w, w, w, w, w, w, v, v],
     ]
-    apply_level_rows(game, rows, "Midnight Depot", 44)
+    game.apply_level_rows(rows, "Midnight Depot", 44)
   } else if id == 6 {
     let rows : Array[Array[Int]] = [
       [v, w, w, w, w, w, w, w, w, w, w, v],
@@ -595,7 +594,7 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
       [w, w, f, f, f, f, g, f, f, f, w, w],
       [v, w, w, w, w, w, w, w, w, w, w, v],
     ]
-    apply_level_rows(game, rows, "Triple Cargo", 52)
+    game.apply_level_rows(rows, "Triple Cargo", 52)
   } else if id == 7 {
     let rows : Array[Array[Int]] = [
       [v, v, w, w, w, w, w, w, w, w, v, v],
@@ -608,7 +607,7 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
       [v, w, w, f, f, f, f, f, f, w, w, v],
       [v, v, w, w, w, w, w, w, w, w, v, v],
     ]
-    apply_level_rows(game, rows, "Rivet Split", 58)
+    game.apply_level_rows(rows, "Rivet Split", 58)
   } else if id == 8 {
     let rows : Array[Array[Int]] = [
       [v, w, w, w, w, w, w, w, w, w, w, v],
@@ -621,7 +620,7 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
       [w, w, f, f, f, f, g, f, f, f, w, w],
       [v, w, w, w, w, w, w, w, w, w, w, v],
     ]
-    apply_level_rows(game, rows, "Relay Loop", 62)
+    game.apply_level_rows(rows, "Relay Loop", 62)
   } else if id == 9 {
     let rows : Array[Array[Int]] = [
       [v, v, w, w, w, w, w, w, w, w, v, v],
@@ -634,7 +633,7 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
       [v, w, w, f, f, f, f, f, f, w, w, v],
       [v, v, w, w, w, w, w, w, w, w, v, v],
     ]
-    apply_level_rows(game, rows, "Night Shift Maze", 68)
+    game.apply_level_rows(rows, "Night Shift Maze", 68)
   } else if id == 10 {
     let rows : Array[Array[Int]] = [
       [v, w, w, w, w, w, w, w, w, w, w, w, v],
@@ -647,7 +646,7 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
       [w, w, f, f, f, g, f, g, f, f, f, w, w],
       [v, w, w, w, w, w, w, w, w, w, w, w, v],
     ]
-    apply_level_rows(game, rows, "Hydraulic Crown", 76)
+    game.apply_level_rows(rows, "Hydraulic Crown", 76)
   } else {
     let rows : Array[Array[Int]] = [
       [v, v, w, w, w, w, w, w, w, w, w, v, v],
@@ -660,7 +659,7 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
       [v, w, w, f, f, f, f, g, f, f, w, w, v],
       [v, v, w, w, w, w, w, w, w, w, w, v, v],
     ]
-    apply_level_rows(game, rows, "Master Freight Ring", 84)
+    game.apply_level_rows(rows, "Master Freight Ring", 84)
   }
 
   game.level_index = id
@@ -670,17 +669,17 @@ fn load_level(game : @types.Game, level_id : Int) -> Unit {
 }
 
 ///|
-fn reload_level(game : @types.Game) -> Unit {
-  load_level(game, game.level_index)
+fn @types.Game::reload_level(game : @types.Game) -> Unit {
+  game.load_level(game.level_index)
 }
 
 ///|
-fn restart_campaign(game : @types.Game) -> Unit {
+fn @types.Game::restart_campaign(game : @types.Game) -> Unit {
   game.total_moves = 0
   game.total_pushes = 0
   game.total_elapsed = 0.0
   game.campaign_stars = 0
-  load_level(game, 0)
+  game.load_level(0)
 }
 
 ///|
@@ -698,27 +697,27 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   }
   game.touch_count = tc
 
-  let start_press : Bool = detect_start_press(game)
-  let next_press : Bool = detect_next_press(game)
+  let start_press : Bool = game.detect_start_press()
+  let next_press : Bool = game.detect_next_press()
 
   if game.state == Title {
-    update_active_game(game, dt, None, false, false)
+    game.update_active_game(dt, None, false, false)
     if start_press {
-      restart_campaign(game)
+      game.restart_campaign()
     }
   } else if game.state == Play {
-    let held_dir = detect_hold_direction(game)
-    let undo_press : Bool = detect_undo_press(game)
-    let reset_press : Bool = detect_reset_press(game)
+    let held_dir = game.detect_hold_direction()
+    let undo_press : Bool = game.detect_undo_press()
+    let reset_press : Bool = game.detect_reset_press()
 
-    update_active_game(game, dt, held_dir, undo_press, reset_press)
+    game.update_active_game(dt, held_dir, undo_press, reset_press)
   } else if game.state == LevelClear {
-    update_active_game(game, dt, None, false, false)
+    game.update_active_game(dt, None, false, false)
     if next_press {
-      advance_to_next_level(game)
+      game.advance_to_next_level()
     }
   } else {
-    update_active_game(game, dt, None, false, false)
+    game.update_active_game(dt, None, false, false)
     if next_press {
       game.state = Title
     }

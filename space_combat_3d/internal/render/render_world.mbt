@@ -3,25 +3,25 @@
 ///|
 /// Draws the 3D game world including ships, asteroids, stations, projectiles, and effects.
 pub fn draw_world(game : @types.Game) -> Unit {
-  let camera = build_camera(game)
+  let camera = game.build_camera()
   @raylib.begin_mode_3d(camera)
-  draw_stars(game)
-  draw_asteroids(game)
-  draw_stations(game)
-  draw_powerups(game)
-  draw_enemies(game)
-  draw_player_ship(game)
-  draw_projectiles(game)
-  draw_particles_3d(game)
-  draw_debris_3d(game)
-  draw_target_indicator(game)
-  draw_lead_indicator(game)
-  draw_waypoint_markers(game)
+  game.draw_stars()
+  game.draw_asteroids()
+  game.draw_stations()
+  game.draw_powerups()
+  game.draw_enemies()
+  game.draw_player_ship()
+  game.draw_projectiles()
+  game.draw_particles_3d()
+  game.draw_debris_3d()
+  game.draw_target_indicator()
+  game.draw_lead_indicator()
+  game.draw_waypoint_markers()
   @raylib.end_mode_3d()
 }
 
 ///|
-fn build_camera(game : @types.Game) -> @raylib.Camera3D {
+fn @types.Game::build_camera(game : @types.Game) -> @raylib.Camera3D {
   let p = game.player
   let fwd = @types.forward_dir(p.yaw, p.pitch)
 
@@ -56,7 +56,7 @@ fn build_camera(game : @types.Game) -> @raylib.Camera3D {
 }
 
 ///|
-fn draw_stars(game : @types.Game) -> Unit {
+fn @types.Game::draw_stars(game : @types.Game) -> Unit {
   for s in game.stars {
     @raylib.draw_cube(
       @raylib.Vector3::new(s.x, s.y, s.z),
@@ -127,7 +127,7 @@ fn draw_stars(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_player_ship(game : @types.Game) -> Unit {
+fn @types.Game::draw_player_ship(game : @types.Game) -> Unit {
   let p = game.player
   let fwd = @types.forward_dir(p.yaw, p.pitch)
   let rgt = @types.right_dir(p.yaw)
@@ -392,7 +392,7 @@ fn draw_player_ship(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_enemies(game : @types.Game) -> Unit {
+fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
   for e in game.enemies {
     if not(e.active) {
       continue
@@ -725,7 +725,7 @@ fn draw_capital_ship(
 }
 
 ///|
-fn draw_asteroids(game : @types.Game) -> Unit {
+fn @types.Game::draw_asteroids(game : @types.Game) -> Unit {
   for a in game.asteroids {
     if not(a.active) {
       continue
@@ -811,7 +811,7 @@ fn draw_asteroids(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stations(game : @types.Game) -> Unit {
+fn @types.Game::draw_stations(game : @types.Game) -> Unit {
   for s in game.stations {
     if not(s.active) {
       continue
@@ -931,7 +931,7 @@ fn draw_stations(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_powerups(game : @types.Game) -> Unit {
+fn @types.Game::draw_powerups(game : @types.Game) -> Unit {
   for pu in game.powerups {
     if not(pu.active) {
       continue
@@ -1020,7 +1020,7 @@ fn draw_powerups(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_projectiles(game : @types.Game) -> Unit {
+fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
   for proj in game.projectiles {
     if not(proj.active) {
       continue
@@ -1114,7 +1114,7 @@ fn draw_projectiles(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_particles_3d(game : @types.Game) -> Unit {
+fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -1150,7 +1150,7 @@ fn draw_particles_3d(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_debris_3d(game : @types.Game) -> Unit {
+fn @types.Game::draw_debris_3d(game : @types.Game) -> Unit {
   for d in game.debris {
     if not(d.active) {
       continue
@@ -1168,7 +1168,7 @@ fn draw_debris_3d(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_target_indicator(game : @types.Game) -> Unit {
+fn @types.Game::draw_target_indicator(game : @types.Game) -> Unit {
   if game.target_idx < 0 {
     return
   }
@@ -1244,7 +1244,7 @@ fn draw_target_indicator(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_lead_indicator(game : @types.Game) -> Unit {
+fn @types.Game::draw_lead_indicator(game : @types.Game) -> Unit {
   if game.target_idx < 0 {
     return
   }
@@ -1295,7 +1295,7 @@ fn draw_lead_indicator(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_waypoint_markers(game : @types.Game) -> Unit {
+fn @types.Game::draw_waypoint_markers(game : @types.Game) -> Unit {
   // Draw markers for stations
   for s in game.stations {
     if not(s.active) {

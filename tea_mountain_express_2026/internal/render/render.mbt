@@ -41,7 +41,7 @@ fn draw_meter(
 }
 
 ///|
-fn draw_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_background(game : @types.Game) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -88,7 +88,7 @@ fn draw_background(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_road(game : @types.Game) -> Unit {
+fn @types.Game::draw_road(game : @types.Game) -> Unit {
   let row_h = 16
 
   for yi = @types.road_top_y_i; yi < @types.screen_h; yi = yi + row_h {
@@ -192,7 +192,7 @@ fn hazard_color(kind : @types.HazardKind) -> @raylib.Color {
 }
 
 ///|
-fn draw_hazards(game : @types.Game) -> Unit {
+fn @types.Game::draw_hazards(game : @types.Game) -> Unit {
   for hazard in game.hazards {
     if not(hazard.active) {
       continue
@@ -273,7 +273,7 @@ fn draw_hazards(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_cart(game : @types.Game) -> Unit {
+fn @types.Game::draw_cart(game : @types.Game) -> Unit {
   let x = game.lane_x
   let y = @types.cart_y
   let lean = game.tilt * 18.0
@@ -368,7 +368,7 @@ fn draw_cart(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(16, 14, 362, 174, @raylib.Color::new(8, 12, 18, 170))
   @raylib.draw_rectangle(
     @types.screen_w - 366,
@@ -612,7 +612,7 @@ fn draw_pause_overlay() -> Unit {
 }
 
 ///|
-fn draw_game_over_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -681,16 +681,16 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 ///|
 /// Draws one full frame of road scene, cart, HUD, and overlays.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_background(game)
-  draw_road(game)
-  draw_hazards(game)
-  draw_cart(game)
-  draw_hud(game)
+  game.draw_background()
+  game.draw_road()
+  game.draw_hazards()
+  game.draw_cart()
+  game.draw_hud()
 
   match game.state {
     Title => draw_title_overlay()
     Paused => draw_pause_overlay()
-    GameOver => draw_game_over_overlay(game)
+    GameOver => game.draw_game_over_overlay()
     Playing => ()
   }
 }

@@ -1,5 +1,5 @@
 ///|
-fn draw_ocean_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_ocean_background(game : @types.Game) -> Unit {
   for y = 0; y < @types.screen_h; y = y + 4 {
     let r = (7 + y * 20 / @types.screen_h).clamp(min=0, max=255)
     let g = (20 + y * 42 / @types.screen_h).clamp(min=0, max=255)
@@ -59,7 +59,7 @@ fn draw_arena() -> Unit {
 }
 
 ///|
-fn draw_hot_zone(game : @types.Game) -> Unit {
+fn @types.Game::draw_hot_zone(game : @types.Game) -> Unit {
   let active = @types.in_hot_zone_xy(game.sub_x, game.sub_y)
   @raylib.draw_circle(
     @types.hot_zone_x.to_int(),
@@ -76,7 +76,7 @@ fn draw_hot_zone(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_targets(game : @types.Game) -> Unit {
+fn @types.Game::draw_targets(game : @types.Game) -> Unit {
   for i in 0..<game.target_goal {
     if not(game.targets[i].active) {
       continue
@@ -112,7 +112,7 @@ fn draw_targets(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_mines(game : @types.Game) -> Unit {
+fn @types.Game::draw_mines(game : @types.Game) -> Unit {
   for i in 0..<game.mine_count {
     if not(game.mines[i].active) {
       continue
@@ -148,7 +148,7 @@ fn draw_mines(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_submarine(game : @types.Game) -> Unit {
+fn @types.Game::draw_submarine(game : @types.Game) -> Unit {
   let shake_x = @math.sinf(game.time_s * 96.0) * game.shake_t * 7.0
   let sx = game.sub_x + shake_x
   let sy = game.sub_y
@@ -197,7 +197,7 @@ fn draw_submarine(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_sonar_wave(game : @types.Game) -> Unit {
+fn @types.Game::draw_sonar_wave(game : @types.Game) -> Unit {
   if game.sonar_wave_t <= 0.0 {
     return
   }
@@ -219,7 +219,7 @@ fn draw_sonar_wave(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_bearing_indicator(game : @types.Game) -> Unit {
+fn @types.Game::draw_bearing_indicator(game : @types.Game) -> Unit {
   if game.state != Play {
     return
   }
@@ -286,7 +286,7 @@ fn draw_value_bar(
 }
 
 ///|
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   draw_value_bar(
     20,
     16,
@@ -417,7 +417,7 @@ fn draw_touch_button(
 }
 
 ///|
-fn draw_touch_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   if game.state != Play {
     return
   }
@@ -590,7 +590,7 @@ fn draw_menu_button(
 }
 
 ///|
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -676,7 +676,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_result_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -824,7 +824,7 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_title_preview(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_preview(game : @types.Game) -> Unit {
   let cx = Float::from_int(@types.screen_w / 2)
   let cy = Float::from_int(@types.screen_h / 2 - 26)
   let wave : Float = Float::from_int(120) + @math.sinf(game.time_s * 1.3) * 42.0
@@ -858,23 +858,23 @@ fn draw_title_preview(game : @types.Game) -> Unit {
 /// Renders the full frame for the current game state.
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(8, 22, 36, 255))
-  draw_ocean_background(game)
+  game.draw_ocean_background()
   draw_arena()
   if game.state == Title {
-    draw_hot_zone(game)
-    draw_title_preview(game)
-    draw_title_overlay(game)
+    game.draw_hot_zone()
+    game.draw_title_preview()
+    game.draw_title_overlay()
     return
   }
-  draw_hot_zone(game)
-  draw_targets(game)
-  draw_mines(game)
-  draw_sonar_wave(game)
-  draw_submarine(game)
-  draw_bearing_indicator(game)
-  draw_hud(game)
-  draw_touch_controls(game)
+  game.draw_hot_zone()
+  game.draw_targets()
+  game.draw_mines()
+  game.draw_sonar_wave()
+  game.draw_submarine()
+  game.draw_bearing_indicator()
+  game.draw_hud()
+  game.draw_touch_controls()
   if game.state == Win || game.state == Lose {
-    draw_result_overlay(game)
+    game.draw_result_overlay()
   }
 }

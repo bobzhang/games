@@ -1,7 +1,7 @@
 // Enemy spawning, movement, and special abilities
 
 ///|
-fn start_wave(game : @types.Game, wave : Int) -> Unit {
+fn @types.Game::start_wave(game : @types.Game, wave : Int) -> Unit {
   let def = @levels.get_wave_def(wave)
   game.wave_enemy_kind = def.0
   game.enemies_to_spawn = def.1
@@ -19,13 +19,13 @@ fn start_wave(game : @types.Game, wave : Int) -> Unit {
 }
 
 ///|
-fn update_spawning(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_spawning(game : @types.Game, dt : Float) -> Unit {
   if game.enemies_spawned >= game.enemies_to_spawn {
     return
   }
   game.spawn_timer -= dt
   if game.spawn_timer <= 0.0 {
-    spawn_enemy(game)
+    game.spawn_enemy()
     // Swarm enemies spawn faster
     let interval : Float = if game.wave_enemy_kind == @types.enemy_swarm {
       @types.fast_spawn_interval
@@ -37,7 +37,7 @@ fn update_spawning(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn spawn_enemy(game : @types.Game) -> Unit {
+fn @types.Game::spawn_enemy(game : @types.Game) -> Unit {
   let idx = @types.alloc_enemy(game)
   if idx < 0 {
     return
@@ -96,7 +96,7 @@ fn spawn_enemy(game : @types.Game) -> Unit {
 // Spawn child enemies from splitters
 
 ///|
-fn spawn_splitter_children(game : @types.Game, parent : @types.Enemy) -> Unit {
+fn @types.Game::spawn_splitter_children(game : @types.Game, parent : @types.Enemy) -> Unit {
   let child_count = @types.splitter_children
   for i in 0..<child_count {
     let idx = @types.alloc_enemy(game)
@@ -141,7 +141,7 @@ fn spawn_splitter_children(game : @types.Game, parent : @types.Enemy) -> Unit {
 }
 
 ///|
-fn update_enemies(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
   // Update all enemies
   for i in 0..<game.enemies.length() {
     let enemy = game.enemies[i]
@@ -149,10 +149,10 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
       continue
     }
     // Update status effects
-    update_enemy_status_effects(game, enemy, dt)
+    game.update_enemy_status_effects(enemy, dt)
     // Update healer ability
     if enemy.kind == @types.enemy_healer {
-      update_healer(game, i, dt)
+      game.update_healer(i, dt)
     }
     // Update shield regeneration
     if enemy.shield_max > 0.0 {
@@ -165,7 +165,7 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     // Move along path
     let effective_speed : Float = enemy.speed * enemy.slow_factor
     let speed = effective_speed * dt
-    move_enemy_along_path(game, i, speed)
+    game.move_enemy_along_path(i, speed)
     // Check if reached end
     if enemy.path_index >= game.path_count - 1 && enemy.path_progress >= 1.0 {
       enemy.active = false
@@ -176,7 +176,7 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_enemy_status_effects(
+fn @types.Game::update_enemy_status_effects(
   game : @types.Game,
   enemy : @types.Enemy,
   dt : Float,
@@ -214,7 +214,7 @@ fn update_enemy_status_effects(
   }
   // Check death from burn
   if enemy.hp <= 0.0 && enemy.active {
-    kill_enemy(game, enemy)
+    game.kill_enemy(enemy)
   }
 }
 
@@ -232,7 +232,7 @@ fn update_enemy_shield(enemy : @types.Enemy, dt : Float) -> Unit {
 }
 
 ///|
-fn update_healer(game : @types.Game, healer_idx : Int, dt : Float) -> Unit {
+fn @types.Game::update_healer(game : @types.Game, healer_idx : Int, dt : Float) -> Unit {
   let healer = game.enemies[healer_idx]
   healer.heal_timer += dt
   if healer.heal_timer < @types.healer_heal_interval {
@@ -272,7 +272,7 @@ fn update_healer(game : @types.Game, healer_idx : Int, dt : Float) -> Unit {
 }
 
 ///|
-fn kill_enemy(game : @types.Game, enemy : @types.Enemy) -> Unit {
+fn @types.Game::kill_enemy(game : @types.Game, enemy : @types.Enemy) -> Unit {
   enemy.active = false
   game.gold += enemy.gold_value
   game.score += enemy.score_value
@@ -284,12 +284,12 @@ fn kill_enemy(game : @types.Game, enemy : @types.Enemy) -> Unit {
   @types.spawn_gold_particles(game, enemy.x, enemy.y + 0.5, enemy.z)
   // Splitter: spawn children
   if enemy.spawn_children {
-    spawn_splitter_children(game, enemy)
+    game.spawn_splitter_children(enemy)
   }
 }
 
 ///|
-fn move_enemy_along_path(game : @types.Game, idx : Int, speed : Float) -> Unit {
+fn @types.Game::move_enemy_along_path(game : @types.Game, idx : Int, speed : Float) -> Unit {
   let enemy = game.enemies[idx]
   if enemy.path_index >= game.path_count - 1 {
     enemy.path_progress = 1.0
@@ -326,7 +326,7 @@ fn move_enemy_along_path(game : @types.Game, idx : Int, speed : Float) -> Unit {
 }
 
 ///|
-fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_projectiles(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.projectiles.length() {
     let proj = game.projectiles[i]
     if not(proj.active) {
@@ -374,7 +374,7 @@ fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
     )
     if dist < 0.5 {
       // Hit!
-      apply_projectile_hit(game, i)
+      game.apply_projectile_hit(i)
       proj.active = false
       continue
     }
@@ -390,7 +390,7 @@ fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn apply_projectile_hit(game : @types.Game, proj_idx : Int) -> Unit {
+fn @types.Game::apply_projectile_hit(game : @types.Game, proj_idx : Int) -> Unit {
   let proj = game.projectiles[proj_idx]
   // Determine tower kind for resistance calculation
   let tower_kind = proj.kind
@@ -406,15 +406,15 @@ fn apply_projectile_hit(game : @types.Game, proj_idx : Int) -> Unit {
         let dmg_factor : Float = 1.0 - dist / proj.splash_radius
         let raw_damage = proj.damage * dmg_factor
         let actual_damage = @types.calc_damage(raw_damage, tower_kind, enemy)
-        damage_enemy(game, i, actual_damage, proj.tower_idx)
+        game.damage_enemy(i, actual_damage, proj.tower_idx)
         // Apply splash status effects
-        apply_projectile_effects(game, proj, i)
+        game.apply_projectile_effects(proj, i)
       }
     }
     @types.spawn_explosion_particles(game, proj.x, proj.y, proj.z, 12)
   } else if proj.chain_count > 0 {
     // Chain lightning
-    apply_chain_lightning(game, proj)
+    game.apply_chain_lightning(proj)
     // Single target
   } else if proj.target_idx >= 0 && game.enemies[proj.target_idx].active {
     let enemy = game.enemies[proj.target_idx]
@@ -424,9 +424,9 @@ fn apply_projectile_hit(game : @types.Game, proj_idx : Int) -> Unit {
       proj.damage
     }
     let actual_damage = @types.calc_damage(raw_damage, tower_kind, enemy)
-    damage_enemy(game, proj.target_idx, actual_damage, proj.tower_idx)
+    game.damage_enemy(proj.target_idx, actual_damage, proj.tower_idx)
     // Apply status effects
-    apply_projectile_effects(game, proj, proj.target_idx)
+    game.apply_projectile_effects(proj, proj.target_idx)
     // Crit visual
     if proj.is_crit {
       @types.spawn_particles(
@@ -444,7 +444,7 @@ fn apply_projectile_hit(game : @types.Game, proj_idx : Int) -> Unit {
 }
 
 ///|
-fn apply_projectile_effects(
+fn @types.Game::apply_projectile_effects(
   game : @types.Game,
   proj : @types.Projectile,
   enemy_idx : Int,
@@ -488,7 +488,7 @@ fn apply_projectile_effects(
 }
 
 ///|
-fn apply_chain_lightning(game : @types.Game, proj : @types.Projectile) -> Unit {
+fn @types.Game::apply_chain_lightning(game : @types.Game, proj : @types.Projectile) -> Unit {
   let mut current_target = proj.target_idx
   let mut current_damage = proj.damage
   let chains = proj.chain_count
@@ -501,7 +501,7 @@ fn apply_chain_lightning(game : @types.Game, proj : @types.Projectile) -> Unit {
     let actual_damage = @types.calc_damage(
       current_damage, @types.tower_lightning, enemy,
     )
-    damage_enemy(game, current_target, actual_damage, proj.tower_idx)
+    game.damage_enemy(current_target, actual_damage, proj.tower_idx)
     @types.spawn_lightning_particles(game, enemy.x, enemy.y, enemy.z)
     // Add chain line visual
     @types.add_chain_line(
@@ -555,7 +555,7 @@ fn apply_chain_lightning(game : @types.Game, proj : @types.Projectile) -> Unit {
     let actual_damage = @types.calc_damage(
       current_damage, @types.tower_lightning, enemy,
     )
-    damage_enemy(game, best, actual_damage, proj.tower_idx)
+    game.damage_enemy(best, actual_damage, proj.tower_idx)
     @types.spawn_lightning_particles(game, enemy.x, enemy.y, enemy.z)
     @types.add_chain_line(
       game,
@@ -575,7 +575,7 @@ fn apply_chain_lightning(game : @types.Game, proj : @types.Projectile) -> Unit {
 }
 
 ///|
-fn damage_enemy(
+fn @types.Game::damage_enemy(
   game : @types.Game,
   idx : Int,
   damage : Float,
@@ -627,6 +627,6 @@ fn damage_enemy(
       game.towers[tower_idx].active {
       game.towers[tower_idx].kills += 1
     }
-    kill_enemy(game, enemy)
+    game.kill_enemy(enemy)
   }
 }

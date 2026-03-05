@@ -10,34 +10,34 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   } else {
     dt
   }
-  update_particles(game, dt)
-  update_chain_lines(game, dt)
-  update_notifications(game, dt)
-  update_wave_message(game, dt)
+  game.update_particles(dt)
+  game.update_chain_lines(dt)
+  game.update_notifications(dt)
+  game.update_wave_message(dt)
   if game.state == @types.state_menu {
-    update_menu(game, dt)
+    game.update_menu(dt)
   } else if game.state == @types.state_map_select {
-    update_map_select(game, dt)
+    game.update_map_select(dt)
   } else if game.state == @types.state_playing {
-    update_playing(game, game_dt)
+    game.update_playing(game_dt)
   } else if game.state == @types.state_paused {
-    update_paused(game, dt)
+    game.update_paused(dt)
   } else if game.state == @types.state_wave_prep {
-    update_wave_prep(game, dt)
+    game.update_wave_prep(dt)
   } else if game.state == @types.state_building {
-    update_building(game, dt)
+    game.update_building(dt)
   } else if game.state == @types.state_tower_info {
-    update_tower_info(game, dt)
+    game.update_tower_info(dt)
   } else if game.state == @types.state_game_over {
-    update_game_over(game, dt)
+    game.update_game_over(dt)
   } else if game.state == @types.state_victory {
-    update_victory(game, dt)
+    game.update_victory(dt)
   }
 }
 
 ///|
 /// Updates the main menu navigation and difficulty selection.
-fn update_menu(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
   game.menu_blink += dt * 3.5
   if @raylib.is_key_pressed(@raylib.KeyUp) {
     game.menu_cursor -= 1
@@ -79,7 +79,7 @@ fn update_menu(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Updates the map selection screen cursor and input handling.
-fn update_map_select(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_map_select(game : @types.Game, dt : Float) -> Unit {
   game.menu_blink += dt * 3.5
   if @raylib.is_key_pressed(@raylib.KeyUp) {
     game.menu_cursor -= 1
@@ -110,7 +110,7 @@ fn update_map_select(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Updates active gameplay including spawning, combat, and wave completion checks.
-fn update_playing(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
     game.state = @types.state_paused
@@ -145,13 +145,13 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
     }
   }
   // Select/deselect tower with number keys when not in build mode
-  handle_tower_selection(game)
-  update_camera(game, dt)
-  update_spawning(game, dt)
-  update_enemies(game, dt)
-  update_towers(game, dt)
-  update_projectiles(game, dt)
-  update_interest(game, dt)
+  game.handle_tower_selection()
+  game.update_camera(dt)
+  game.update_spawning(dt)
+  game.update_enemies(dt)
+  game.update_towers(dt)
+  game.update_projectiles(dt)
+  game.update_interest(dt)
   // Check wave complete
   if game.enemies_spawned >= game.enemies_to_spawn {
     let mut alive = false
@@ -188,22 +188,22 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Updates the pause screen handling resume and quit input.
-fn update_paused(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_paused(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
     game.state = @types.state_playing
   }
   // Allow quitting to menu
   if @raylib.is_key_pressed(@raylib.KeyQ) {
-    reset_game(game)
+    game.reset_game()
     game.state = @types.state_menu
   }
 }
 
 ///|
 /// Updates the wave preparation countdown and allows building during the timer.
-fn update_wave_prep(game : @types.Game, dt : Float) -> Unit {
-  update_camera(game, dt)
+fn @types.Game::update_wave_prep(game : @types.Game, dt : Float) -> Unit {
+  game.update_camera(dt)
   // Allow building during prep
   if @raylib.is_key_pressed(@raylib.KeyB) {
     game.prev_state = @types.state_wave_prep
@@ -211,7 +211,7 @@ fn update_wave_prep(game : @types.Game, dt : Float) -> Unit {
     return
   }
   // Tower selection with number keys
-  handle_tower_placement_keys(game)
+  game.handle_tower_placement_keys()
   // Speed control
   if @raylib.is_key_pressed(@raylib.KeyTab) {
     game.speed_setting = (game.speed_setting + 1) % 3
@@ -219,15 +219,15 @@ fn update_wave_prep(game : @types.Game, dt : Float) -> Unit {
   }
   game.wave_timer -= dt
   if game.wave_timer <= 0.0 || @raylib.is_key_pressed(@raylib.KeySpace) {
-    start_wave(game, game.current_wave)
+    game.start_wave(game.current_wave)
     game.state = @types.state_playing
   }
 }
 
 ///|
 /// Updates the tower building mode with cursor movement and placement input.
-fn update_building(game : @types.Game, dt : Float) -> Unit {
-  update_camera(game, dt)
+fn @types.Game::update_building(game : @types.Game, dt : Float) -> Unit {
+  game.update_camera(dt)
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyB) {
     // Return to previous state
@@ -238,7 +238,7 @@ fn update_building(game : @types.Game, dt : Float) -> Unit {
     }
     return
   }
-  handle_tower_placement_keys(game)
+  game.handle_tower_placement_keys()
   // Hover position (arrow keys for grid cursor)
   if @raylib.is_key_pressed(@raylib.KeyLeft) {
     game.hover_gx -= 1
@@ -268,14 +268,14 @@ fn update_building(game : @types.Game, dt : Float) -> Unit {
   // Place tower
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    try_place_tower(game)
+    game.try_place_tower()
   }
 }
 
 ///|
 /// Updates the tower info panel with upgrade, sell, and targeting controls.
-fn update_tower_info(game : @types.Game, dt : Float) -> Unit {
-  update_camera(game, dt)
+fn @types.Game::update_tower_info(game : @types.Game, dt : Float) -> Unit {
+  game.update_camera(dt)
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyT) {
     game.state = game.prev_state
@@ -283,17 +283,17 @@ fn update_tower_info(game : @types.Game, dt : Float) -> Unit {
   }
   // Upgrade tower with U
   if @raylib.is_key_pressed(@raylib.KeyU) {
-    try_upgrade_tower(game)
+    game.try_upgrade_tower()
   }
   // Sell tower with S
   if @raylib.is_key_pressed(@raylib.KeyS) {
-    try_sell_tower(game)
+    game.try_sell_tower()
     game.state = game.prev_state
     return
   }
   // Cycle targeting mode with F
   if @raylib.is_key_pressed(@raylib.KeyF) {
-    cycle_targeting_mode(game)
+    game.cycle_targeting_mode()
   }
   // Navigate between towers with Left/Right
   if @raylib.is_key_pressed(@raylib.KeyLeft) ||
@@ -323,27 +323,27 @@ fn update_tower_info(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Updates the game over screen waiting for return-to-menu input.
-fn update_game_over(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_game_over(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    reset_game(game)
+    game.reset_game()
     game.state = @types.state_menu
   }
 }
 
 ///|
 /// Updates the victory screen waiting for return-to-menu input.
-fn update_victory(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_victory(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    reset_game(game)
+    game.reset_game()
     game.state = @types.state_menu
   }
 }
 
 ///|
 /// Updates camera rotation, pan, zoom, and pitch from keyboard and mouse input.
-fn update_camera(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_camera(game : @types.Game, dt : Float) -> Unit {
   // Camera rotation with Q/E
   if @raylib.is_key_down(@raylib.KeyQ) {
     game.camera_angle += 60.0 * dt
@@ -396,7 +396,7 @@ fn update_camera(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Updates all active particles applying velocity, gravity, and lifetime decay.
-fn update_particles(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -428,7 +428,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Updates chain lightning visual lines and removes expired ones.
-fn update_chain_lines(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_chain_lines(game : @types.Game, dt : Float) -> Unit {
   for cl in game.chain_lines {
     if not(cl.active) {
       continue
@@ -442,7 +442,7 @@ fn update_chain_lines(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Updates the on-screen notification countdown timer.
-fn update_notifications(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_notifications(game : @types.Game, dt : Float) -> Unit {
   if game.notification_timer > 0.0 {
     game.notification_timer -= dt
   }
@@ -450,7 +450,7 @@ fn update_notifications(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Updates the wave announcement message countdown timer.
-fn update_wave_message(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_wave_message(game : @types.Game, dt : Float) -> Unit {
   if game.wave_message_timer > 0.0 {
     game.wave_message_timer -= dt
   }
@@ -458,7 +458,7 @@ fn update_wave_message(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Updates the gold interest system, awarding periodic income based on savings.
-fn update_interest(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_interest(game : @types.Game, dt : Float) -> Unit {
   game.interest_timer += dt
   if game.interest_timer >= @types.interest_interval {
     game.interest_timer = 0.0
@@ -474,7 +474,7 @@ fn update_interest(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Handles number key input to select tower types for placement.
-fn handle_tower_placement_keys(game : @types.Game) -> Unit {
+fn @types.Game::handle_tower_placement_keys(game : @types.Game) -> Unit {
   // Quick-place with number keys
   if @raylib.is_key_pressed(@raylib.KeyOne) {
     game.selected_tower_type = @types.tower_arrow
@@ -497,7 +497,7 @@ fn handle_tower_placement_keys(game : @types.Game) -> Unit {
 
 ///|
 /// Handles tower selection by finding the nearest tower to the camera target.
-fn handle_tower_selection(game : @types.Game) -> Unit {
+fn @types.Game::handle_tower_selection(game : @types.Game) -> Unit {
   // Select towers by moving cursor over them and pressing T
   // For now, find nearest tower to cursor
   if @raylib.is_key_pressed(@raylib.KeyT) {

@@ -1,12 +1,12 @@
 ///|
 /// Advances one frame of Xiao Xiao Le gameplay, input, and state transitions.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
-  handle_input(game)
-  update_game_logic(game, dt)
+  game.handle_input()
+  game.update_game_logic(dt)
 }
 
 ///|
-fn reset(game : @types.Game) -> Unit {
+fn @types.Game::reset(game : @types.Game) -> Unit {
   game.score = 0
   game.combo = 0
   game.max_combo = 0
@@ -19,7 +19,7 @@ fn reset(game : @types.Game) -> Unit {
   game.hint_t = 0.0
   game.msg = ""
   game.msg_t = 0.0
-  fill_board(game)
+  game.fill_board()
   // Ensure no initial matches
   let mut has_match = true
   while has_match {
@@ -52,16 +52,16 @@ fn reset(game : @types.Game) -> Unit {
     }
   }
   // Ensure at least one valid swap exists
-  if not(has_valid_swap(game)) {
-    reset(game) // retry
+  if not(game.has_valid_swap()) {
+    game.reset() // retry
     return
   }
-  snap_positions(game)
+  game.snap_positions()
   game.state = Play
 }
 
 ///|
-fn fill_board(game : @types.Game) -> Unit {
+fn @types.Game::fill_board(game : @types.Game) -> Unit {
   for i in 0..<@types.cell_count {
     game.board[i].kind = @types.GemKind::from_int(
       @raylib.get_random_value(0, @types.num_colors - 1),
@@ -72,7 +72,7 @@ fn fill_board(game : @types.Game) -> Unit {
 }
 
 ///|
-fn snap_positions(game : @types.Game) -> Unit {
+fn @types.Game::snap_positions(game : @types.Game) -> Unit {
   for r in 0..<@types.grid_rows {
     for c in 0..<@types.grid_cols {
       let g = game.board[@types.idx(r, c)]
@@ -87,7 +87,7 @@ fn snap_positions(game : @types.Game) -> Unit {
 }
 
 ///|
-fn try_swap(game : @types.Game, r1 : Int, c1 : Int, r2 : Int, c2 : Int) -> Unit {
+fn @types.Game::try_swap(game : @types.Game, r1 : Int, c1 : Int, r2 : Int, c2 : Int) -> Unit {
   // Check adjacency
   let dr = if r2 > r1 { r2 - r1 } else { r1 - r2 }
   let dc = if c2 > c1 { c2 - c1 } else { c1 - c2 }
@@ -118,7 +118,7 @@ fn try_swap(game : @types.Game, r1 : Int, c1 : Int, r2 : Int, c2 : Int) -> Unit 
 }
 
 ///|
-fn undo_swap(game : @types.Game) -> Unit {
+fn @types.Game::undo_swap(game : @types.Game) -> Unit {
   let i1 = @types.idx(game.swap_r1, game.swap_c1)
   let i2 = @types.idx(game.swap_r2, game.swap_c2)
   let tmp = game.board[i1].kind
@@ -136,7 +136,7 @@ fn undo_swap(game : @types.Game) -> Unit {
 }
 
 ///|
-fn find_matches(game : @types.Game) -> Int {
+fn @types.Game::find_matches(game : @types.Game) -> Int {
   let mut count = 0
   // Clear matched flags
   for i in 0..<@types.cell_count {
@@ -186,7 +186,7 @@ fn find_matches(game : @types.Game) -> Int {
 }
 
 ///|
-fn remove_matched(game : @types.Game) -> Int {
+fn @types.Game::remove_matched(game : @types.Game) -> Int {
   let mut removed = 0
   for i in 0..<@types.cell_count {
     if game.board[i].matched {
@@ -200,7 +200,7 @@ fn remove_matched(game : @types.Game) -> Int {
 }
 
 ///|
-fn apply_gravity(game : @types.Game) -> Bool {
+fn @types.Game::apply_gravity(game : @types.Game) -> Bool {
   let mut fell = false
   for c in 0..<@types.grid_cols {
     // Compact column downward
@@ -242,25 +242,25 @@ fn apply_gravity(game : @types.Game) -> Bool {
 }
 
 ///|
-fn has_valid_swap(game : @types.Game) -> Bool {
+fn @types.Game::has_valid_swap(game : @types.Game) -> Bool {
   for r in 0..<@types.grid_rows {
     for c in 0..<@types.grid_cols {
       // Try swap right
       if c + 1 < @types.grid_cols {
-        swap_kinds(game, r, c, r, c + 1)
-        let m = find_matches(game)
-        swap_kinds(game, r, c, r, c + 1)
-        clear_match_flags(game)
+        game.swap_kinds(r, c, r, c + 1)
+        let m = game.find_matches()
+        game.swap_kinds(r, c, r, c + 1)
+        game.clear_match_flags()
         if m > 0 {
           return true
         }
       }
       // Try swap down
       if r + 1 < @types.grid_rows {
-        swap_kinds(game, r, c, r + 1, c)
-        let m = find_matches(game)
-        swap_kinds(game, r, c, r + 1, c)
-        clear_match_flags(game)
+        game.swap_kinds(r, c, r + 1, c)
+        let m = game.find_matches()
+        game.swap_kinds(r, c, r + 1, c)
+        game.clear_match_flags()
         if m > 0 {
           return true
         }
@@ -271,15 +271,15 @@ fn has_valid_swap(game : @types.Game) -> Bool {
 }
 
 ///|
-fn find_hint(game : @types.Game) -> Unit {
+fn @types.Game::find_hint(game : @types.Game) -> Unit {
   game.hint_r1 = -1
   for r in 0..<@types.grid_rows {
     for c in 0..<@types.grid_cols {
       if c + 1 < @types.grid_cols {
-        swap_kinds(game, r, c, r, c + 1)
-        let m = find_matches(game)
-        swap_kinds(game, r, c, r, c + 1)
-        clear_match_flags(game)
+        game.swap_kinds(r, c, r, c + 1)
+        let m = game.find_matches()
+        game.swap_kinds(r, c, r, c + 1)
+        game.clear_match_flags()
         if m > 0 {
           game.hint_r1 = r
           game.hint_c1 = c
@@ -289,10 +289,10 @@ fn find_hint(game : @types.Game) -> Unit {
         }
       }
       if r + 1 < @types.grid_rows {
-        swap_kinds(game, r, c, r + 1, c)
-        let m = find_matches(game)
-        swap_kinds(game, r, c, r + 1, c)
-        clear_match_flags(game)
+        game.swap_kinds(r, c, r + 1, c)
+        let m = game.find_matches()
+        game.swap_kinds(r, c, r + 1, c)
+        game.clear_match_flags()
         if m > 0 {
           game.hint_r1 = r
           game.hint_c1 = c
@@ -306,7 +306,7 @@ fn find_hint(game : @types.Game) -> Unit {
 }
 
 ///|
-fn swap_kinds(
+fn @types.Game::swap_kinds(
   game : @types.Game,
   r1 : Int,
   c1 : Int,
@@ -321,14 +321,14 @@ fn swap_kinds(
 }
 
 ///|
-fn clear_match_flags(game : @types.Game) -> Unit {
+fn @types.Game::clear_match_flags(game : @types.Game) -> Unit {
   for i in 0..<@types.cell_count {
     game.board[i].matched = false
   }
 }
 
 ///|
-fn update_animations(game : @types.Game, dt : Float) -> Bool {
+fn @types.Game::update_animations(game : @types.Game, dt : Float) -> Bool {
   let mut all_done = true
   for i in 0..<@types.cell_count {
     let g = game.board[i]
@@ -373,25 +373,25 @@ fn update_animations(game : @types.Game, dt : Float) -> Bool {
 }
 
 ///|
-fn update_game_logic(game : @types.Game, dt : Float) -> Unit {
-  let done = update_animations(game, dt)
+fn @types.Game::update_game_logic(game : @types.Game, dt : Float) -> Unit {
+  let done = game.update_animations(dt)
   match game.state {
     Swap =>
       if done {
         // Check if swap produced matches
-        let m = find_matches(game)
+        let m = game.find_matches()
         if m > 0 {
           game.moves_left = game.moves_left - 1
           game.state = Remove
         } else {
           // Invalid swap: undo
-          undo_swap(game)
+          game.undo_swap()
           game.state = Swap // animate the undo
           // After undo animation finishes, go back to play
           // We detect this next frame when done=true and no matches
           // Actually we need a flag to know we're in undo mode
           // Simpler: just snap and return to play
-          snap_positions(game)
+          game.snap_positions()
           game.state = Play
           game.msg = "No match!"
           game.msg_t = 0.8
@@ -402,7 +402,7 @@ fn update_game_logic(game : @types.Game, dt : Float) -> Unit {
       if game.combo > game.max_combo {
         game.max_combo = game.combo
       }
-      let removed = remove_matched(game)
+      let removed = game.remove_matched()
       let points = removed * 10 * game.combo
       game.score = game.score + points
       if game.score > game.best_score {
@@ -412,12 +412,12 @@ fn update_game_logic(game : @types.Game, dt : Float) -> Unit {
         game.msg = "Combo x\{game.combo}!"
         game.msg_t = 1.2
       }
-      ignore(apply_gravity(game))
+      ignore(game.apply_gravity())
       game.state = Fall
     }
     Fall =>
       if done {
-        let m = find_matches(game)
+        let m = game.find_matches()
         if m > 0 {
           game.state = Remove // cascade
           // Check win/lose
@@ -429,13 +429,13 @@ fn update_game_logic(game : @types.Game, dt : Float) -> Unit {
           game.state = Play
           game.combo = 0
           // Find hint
-          find_hint(game)
+          game.find_hint()
           game.hint_t = 0.0
           // Check if any valid swaps exist; shuffle until valid
-          if not(has_valid_swap(game)) {
+          if not(game.has_valid_swap()) {
             let mut attempts = 0
             while attempts < 100 {
-              fill_board(game)
+              game.fill_board()
               // Remove any initial matches
               let mut has_match = true
               while has_match {
@@ -467,12 +467,12 @@ fn update_game_logic(game : @types.Game, dt : Float) -> Unit {
                   }
                 }
               }
-              if has_valid_swap(game) {
+              if game.has_valid_swap() {
                 break
               }
               attempts = attempts + 1
             }
-            snap_positions(game)
+            game.snap_positions()
             game.msg = "Shuffled!"
             game.msg_t = 1.5
           }

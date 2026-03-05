@@ -32,7 +32,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
 
           // Proximity detonation
           if dist_to_target < @types.missile_prox_radius {
-            missile_detonate(game, i)
+            game.missile_detonate(i)
             continue
           }
 
@@ -262,7 +262,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn missile_detonate(game : @types.Game, proj_idx : Int) -> Unit {
+fn @types.Game::missile_detonate(game : @types.Game, proj_idx : Int) -> Unit {
   let proj = game.projectiles[proj_idx]
   proj.active = false
 

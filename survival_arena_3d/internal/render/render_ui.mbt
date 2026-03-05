@@ -5,31 +5,31 @@
 /// shop/wave summary panels, and menu/pause/game-over overlays.
 pub fn draw_ui(game : @types.Game) -> Unit {
   match game.state {
-    Menu => draw_menu(game)
+    Menu => game.draw_menu()
     Playing => {
-      draw_hud(game)
-      draw_crosshair(game)
-      draw_weapon_display(game)
-      draw_damage_flash(game)
-      draw_message(game)
+      game.draw_hud()
+      game.draw_crosshair()
+      game.draw_weapon_display()
+      game.draw_damage_flash()
+      game.draw_message()
     }
     WaveComplete => {
-      draw_hud(game)
-      draw_crosshair(game)
-      draw_weapon_display(game)
-      draw_shop_ui(game)
-      draw_message(game)
+      game.draw_hud()
+      game.draw_crosshair()
+      game.draw_weapon_display()
+      game.draw_shop_ui()
+      game.draw_message()
     }
     Paused => {
-      draw_hud(game)
-      draw_pause_overlay(game)
+      game.draw_hud()
+      game.draw_pause_overlay()
     }
-    GameOver => draw_game_over(game)
+    GameOver => game.draw_game_over()
   }
 }
 
 ///|
-fn draw_menu(game : @types.Game) -> Unit {
+fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   let sw = @types.screen_width
   let sh = @types.screen_height
   @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(10, 10, 20, 255))
@@ -92,7 +92,7 @@ fn draw_menu(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   let sw = @types.screen_width
   let player = game.player
   // Top bar background
@@ -292,7 +292,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_crosshair(game : @types.Game) -> Unit {
+fn @types.Game::draw_crosshair(game : @types.Game) -> Unit {
   let sw = @types.screen_width
   let sh = @types.screen_height
   let cx = sw / 2
@@ -349,7 +349,7 @@ fn draw_crosshair(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_weapon_display(game : @types.Game) -> Unit {
+fn @types.Game::draw_weapon_display(game : @types.Game) -> Unit {
   let sh = @types.screen_height
   let sw = @types.screen_width
   let player = game.player
@@ -535,7 +535,7 @@ fn draw_weapon_display(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_damage_flash(game : @types.Game) -> Unit {
+fn @types.Game::draw_damage_flash(game : @types.Game) -> Unit {
   if game.player.flash_timer > 0.0 && game.player.damage_timer > 0.0 {
     let alpha = (game.player.flash_timer / 0.2 * 100.0).to_int()
     let a = alpha.clamp(min=0, max=100)
@@ -550,7 +550,7 @@ fn draw_damage_flash(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_message(game : @types.Game) -> Unit {
+fn @types.Game::draw_message(game : @types.Game) -> Unit {
   if game.message_timer > 0.0 {
     let alpha_f = @types.minf(game.message_timer * 2.0, 1.0) * 255.0
     let alpha = alpha_f.to_int()
@@ -571,7 +571,7 @@ fn draw_message(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_shop_ui(game : @types.Game) -> Unit {
+fn @types.Game::draw_shop_ui(game : @types.Game) -> Unit {
   let sw = @types.screen_width
   // Shop panel
   let panel_w = 320
@@ -683,7 +683,7 @@ fn draw_shop_ui(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_pause_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_pause_overlay(game : @types.Game) -> Unit {
   ignore(game)
   @raylib.draw_rectangle(
     0,
@@ -713,7 +713,7 @@ fn draw_pause_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_game_over(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
   let sw = @types.screen_width
   let sh = @types.screen_height
   let player = game.player

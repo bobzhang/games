@@ -40,7 +40,7 @@ fn cell_center_y(y : Int) -> Int {
 }
 
 ///|
-fn draw_bg(game : @types.Game) -> Unit {
+fn @types.Game::draw_bg(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(18, 16, 20, 255))
 
   let pulse : Float = Float::from_double(
@@ -73,7 +73,7 @@ fn draw_bg(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_cell_base(game : @types.Game, x : Int, y : Int) -> Unit {
+fn @types.Game::draw_cell_base(game : @types.Game, x : Int, y : Int) -> Unit {
   let px : Int = cell_screen_x(x)
   let py : Int = cell_screen_y(y)
   let t : Int = @types.tile_at(game, x, y)
@@ -118,7 +118,7 @@ fn draw_cell_base(game : @types.Game, x : Int, y : Int) -> Unit {
 }
 
 ///|
-fn draw_map(game : @types.Game) -> Unit {
+fn @types.Game::draw_map(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.map_x - 14,
     @types.map_y - 14,
@@ -137,7 +137,7 @@ fn draw_map(game : @types.Game) -> Unit {
 
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
-      draw_cell_base(game, x, y)
+      game.draw_cell_base(x, y)
     }
   }
 
@@ -168,7 +168,7 @@ fn draw_map(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_sites(game : @types.Game) -> Unit {
+fn @types.Game::draw_sites(game : @types.Game) -> Unit {
   for i in 0..<game.site_count {
     if not(game.sites[i].active) {
       continue
@@ -216,7 +216,7 @@ fn draw_sites(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_route_preview(game : @types.Game) -> Unit {
+fn @types.Game::draw_route_preview(game : @types.Game) -> Unit {
   let mut x : Int = game.truck_x
   let mut y : Int = game.truck_y
 
@@ -260,7 +260,7 @@ fn draw_route_preview(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_truck(game : @types.Game) -> Unit {
+fn @types.Game::draw_truck(game : @types.Game) -> Unit {
   let cx : Int = cell_center_x(game.truck_x)
   let cy : Int = cell_center_y(game.truck_y)
 
@@ -370,7 +370,7 @@ fn draw_button(
 }
 
 ///|
-fn draw_side_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
   let mouse_x : Float = game.mouse_x
   let mouse_y : Float = game.mouse_y
   let mouse_hold : Bool = game.mouse_hold
@@ -632,16 +632,16 @@ fn draw_side_panel(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_play_scene(game : @types.Game) -> Unit {
-  draw_map(game)
-  draw_route_preview(game)
-  draw_sites(game)
-  draw_truck(game)
-  draw_side_panel(game)
+fn @types.Game::draw_play_scene(game : @types.Game) -> Unit {
+  game.draw_map()
+  game.draw_route_preview()
+  game.draw_sites()
+  game.draw_truck()
+  game.draw_side_panel()
 }
 
 ///|
-fn draw_title_scene(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_scene(game : @types.Game) -> Unit {
   let mouse_x : Float = game.mouse_x
   let mouse_y : Float = game.mouse_y
   let mouse_hold : Bool = game.mouse_hold
@@ -753,7 +753,7 @@ fn draw_title_scene(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_result_scene(game : @types.Game) -> Unit {
+fn @types.Game::draw_result_scene(game : @types.Game) -> Unit {
   let mouse_x : Float = game.mouse_x
   let mouse_y : Float = game.mouse_y
   let mouse_hold : Bool = game.mouse_hold
@@ -886,7 +886,7 @@ fn draw_result_scene(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_message(game : @types.Game) -> Unit {
+fn @types.Game::draw_message(game : @types.Game) -> Unit {
   if game.msg_t <= 0.0 || game.msg == "" {
     return
   }
@@ -916,15 +916,15 @@ fn draw_message(game : @types.Game) -> Unit {
 ///|
 /// Draws the full frame for the current volcano rescue state.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_bg(game)
+  game.draw_bg()
 
   if game.state == @types.state_title {
-    draw_title_scene(game)
+    game.draw_title_scene()
   } else if game.state == @types.state_play {
-    draw_play_scene(game)
+    game.draw_play_scene()
   } else {
-    draw_result_scene(game)
+    game.draw_result_scene()
   }
 
-  draw_message(game)
+  game.draw_message()
 }

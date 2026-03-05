@@ -1,5 +1,5 @@
 ///|
-fn clear_particles(game : @types.Game) -> Unit {
+fn @types.Game::clear_particles(game : @types.Game) -> Unit {
   for particle in game.particles {
     particle.active = false
     particle.x = 0.0
@@ -13,7 +13,7 @@ fn clear_particles(game : @types.Game) -> Unit {
 }
 
 ///|
-fn emit_particle(
+fn @types.Game::emit_particle(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -41,7 +41,7 @@ fn emit_particle(
 }
 
 ///|
-fn burst(
+fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -49,8 +49,7 @@ fn burst(
   kind : @types.ParticleKind,
 ) -> Unit {
   for _i in 0..<n {
-    emit_particle(
-      game,
+    game.emit_particle(
       x + @types.randf(-10.0, 10.0),
       y + @types.randf(-10.0, 10.0),
       @types.randf(-180.0, 180.0),
@@ -63,7 +62,7 @@ fn burst(
 }
 
 ///|
-fn update_particles(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
       continue
@@ -92,7 +91,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn build_map(game : @types.Game) -> Unit {
+fn @types.Game::build_map(game : @types.Game) -> Unit {
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
       if x == 0 || x == @types.grid_w - 1 || y == 0 || y == @types.grid_h - 1 {
@@ -132,7 +131,7 @@ fn build_map(game : @types.Game) -> Unit {
 }
 
 ///|
-fn init_inspectors(game : @types.Game) -> Unit {
+fn @types.Game::init_inspectors(game : @types.Game) -> Unit {
   let plan : Array[(Int, Int, Int, Int, Int)] = [
     (4, @types.signal_panel_top_y(), 2, 22, 1),
     (12, @types.signal_panel_bottom_y(), 2, 22, -1),
@@ -164,7 +163,7 @@ fn init_inspectors(game : @types.Game) -> Unit {
 }
 
 ///|
-fn clear_trains(game : @types.Game) -> Unit {
+fn @types.Game::clear_trains(game : @types.Game) -> Unit {
   for train in game.trains {
     train.active = false
     train.x = 0.0
@@ -178,11 +177,11 @@ fn clear_trains(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_run(game : @types.Game) -> Unit {
-  build_map(game)
-  clear_trains(game)
-  init_inspectors(game)
-  clear_particles(game)
+fn @types.Game::start_run(game : @types.Game) -> Unit {
+  game.build_map()
+  game.clear_trains()
+  game.init_inspectors()
+  game.clear_particles()
 
   @types.actor_place(game.player, @types.start_x, @types.start_y)
 
@@ -225,7 +224,7 @@ fn start_run(game : @types.Game) -> Unit {
 }
 
 ///|
-fn go_title(game : @types.Game) -> Unit {
+fn @types.Game::go_title(game : @types.Game) -> Unit {
   game.state = Title
   game.req_dx = 0
   game.req_dy = 0
@@ -237,7 +236,7 @@ fn go_title(game : @types.Game) -> Unit {
 }
 
 ///|
-fn finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
+fn @types.Game::finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
   if game.state != Play {
     return
   }
@@ -252,8 +251,7 @@ fn finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
   if win {
     game.score = game.score + @types.score_win_bonus + game.lives * 150
     @types.set_msg(game, "Control room cracked. Operation complete.", 3.0)
-    burst(
-      game,
+    game.burst(
       Float::from_int(@types.cell_center_x(@types.train_exit_x)),
       Float::from_int(
         @types.cell_center_y(Float::from_int(@types.lane_to_y(1))),
@@ -271,7 +269,7 @@ fn finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
 }
 
 ///|
-fn cycle_hint(game : @types.Game) -> Unit {
+fn @types.Game::cycle_hint(game : @types.Game) -> Unit {
   game.hint_i = (game.hint_i + 1) % 4
   @types.set_msg(game, @types.hint_text(game.hint_i), 2.8)
 }
@@ -288,7 +286,7 @@ fn train_color_from_target(target_lane : Int) -> @types.TrainColor {
 }
 
 ///|
-fn active_train_count(game : @types.Game) -> Int {
+fn @types.Game::active_train_count(game : @types.Game) -> Int {
   let mut n : Int = 0
   for train in game.trains {
     if train.active {
@@ -299,8 +297,8 @@ fn active_train_count(game : @types.Game) -> Int {
 }
 
 ///|
-fn spawn_train(game : @types.Game) -> Bool {
-  let active_n : Int = active_train_count(game)
+fn @types.Game::spawn_train(game : @types.Game) -> Bool {
+  let active_n : Int = game.active_train_count()
   if active_n >= 8 {
     return false
   }
@@ -345,7 +343,7 @@ fn signal_cycle(v : Int) -> Int {
 }
 
 ///|
-fn try_toggle_switch(game : @types.Game) -> Bool {
+fn @types.Game::try_toggle_switch(game : @types.Game) -> Bool {
   if game.player.y != @types.signal_panel_top_y() &&
     game.player.y != @types.signal_panel_bottom_y() {
     return false
@@ -382,8 +380,7 @@ fn try_toggle_switch(game : @types.Game) -> Bool {
 
   @types.set_msg(game, "J" + (best_i + 1).to_string() + " -> " + mode_txt, 1.0)
 
-  burst(
-    game,
+  game.burst(
     Float::from_int(
       @types.cell_center_x(Float::from_int(@types.junction_x(best_i))),
     ),
@@ -396,7 +393,7 @@ fn try_toggle_switch(game : @types.Game) -> Bool {
 }
 
 ///|
-fn deploy_emp(game : @types.Game) -> Bool {
+fn @types.Game::deploy_emp(game : @types.Game) -> Bool {
   if game.action_cd > 0.0 || game.emp_energy < @types.emp_cost {
     return false
   }
@@ -439,8 +436,7 @@ fn deploy_emp(game : @types.Game) -> Bool {
 
   game.shake_t = 0.16
 
-  burst(
-    game,
+  game.burst(
     Float::from_int(@types.cell_center_x(game.player.fx)),
     Float::from_int(@types.cell_center_y(game.player.fy)),
     36,
@@ -451,7 +447,7 @@ fn deploy_emp(game : @types.Game) -> Bool {
 }
 
 ///|
-fn blocked_for_actor(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::blocked_for_actor(game : @types.Game, x : Int, y : Int) -> Bool {
   if not(@types.in_bounds(x, y)) {
     return true
   }
@@ -463,7 +459,7 @@ fn blocked_for_actor(game : @types.Game, x : Int, y : Int) -> Bool {
 }
 
 ///|
-fn try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool {
+fn @types.Game::try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool {
   if dx == 0 && dy == 0 {
     return false
   }
@@ -474,7 +470,7 @@ fn try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool {
   let tx : Int = game.player.x + dx
   let ty : Int = game.player.y + dy
 
-  if blocked_for_actor(game, tx, ty) {
+  if game.blocked_for_actor(tx, ty) {
     return false
   }
 
@@ -485,7 +481,7 @@ fn try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool {
 }
 
 ///|
-fn line_of_sight(
+fn @types.Game::line_of_sight(
   game : @types.Game,
   x0 : Int,
   y0 : Int,
@@ -530,8 +526,8 @@ fn inspector_seed_next(seed : Int) -> Int {
 }
 
 ///|
-fn blocked_for_inspector(game : @types.Game, x : Int, y : Int) -> Bool {
-  if blocked_for_actor(game, x, y) {
+fn @types.Game::blocked_for_inspector(game : @types.Game, x : Int, y : Int) -> Bool {
+  if game.blocked_for_actor(x, y) {
     return true
   }
 
@@ -549,7 +545,7 @@ fn blocked_for_inspector(game : @types.Game, x : Int, y : Int) -> Bool {
 }
 
 ///|
-fn choose_inspector_step(game : @types.Game, i : Int) -> (Int, Int) {
+fn @types.Game::choose_inspector_step(game : @types.Game, i : Int) -> (Int, Int) {
   let g = game.inspectors[i]
   let gx : Int = g.body.x
   let gy : Int = g.body.y
@@ -557,7 +553,7 @@ fn choose_inspector_step(game : @types.Game, i : Int) -> (Int, Int) {
   let py : Int = game.player.y
 
   let d : Int = @types.manhattan(gx, gy, px, py)
-  let sees : Bool = line_of_sight(game, gx, gy, px, py)
+  let sees : Bool = game.line_of_sight(gx, gy, px, py)
 
   if d <= 4 || (sees && d <= 8) {
     g.mode = Hunt
@@ -577,7 +573,7 @@ fn choose_inspector_step(game : @types.Game, i : Int) -> (Int, Int) {
     for k in 0..<4 {
       let nx : Int = gx + dirs[k].0
       let ny : Int = gy + dirs[k].1
-      if blocked_for_inspector(game, nx, ny) {
+      if game.blocked_for_inspector(nx, ny) {
         continue
       }
 
@@ -596,14 +592,14 @@ fn choose_inspector_step(game : @types.Game, i : Int) -> (Int, Int) {
   let mut nx : Int = gx + g.dir_x
   if nx < g.path_min_x ||
     nx > g.path_max_x ||
-    blocked_for_actor(game, nx, g.path_y) {
+    game.blocked_for_actor(nx, g.path_y) {
     g.dir_x = -g.dir_x
     nx = gx + g.dir_x
   }
 
   if nx >= g.path_min_x &&
     nx <= g.path_max_x &&
-    not(blocked_for_inspector(game, nx, g.path_y)) {
+    not(game.blocked_for_inspector(nx, g.path_y)) {
     return (g.dir_x, 0)
   }
 
@@ -615,7 +611,7 @@ fn choose_inspector_step(game : @types.Game, i : Int) -> (Int, Int) {
     let k : Int = (start + t) % 4
     let xx : Int = gx + dirs[k].0
     let yy : Int = gy + dirs[k].1
-    if blocked_for_inspector(game, xx, yy) {
+    if game.blocked_for_inspector(xx, yy) {
       continue
     }
 
@@ -626,7 +622,7 @@ fn choose_inspector_step(game : @types.Game, i : Int) -> (Int, Int) {
 }
 
 ///|
-fn update_inspectors(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_inspectors(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.inspectors.length() {
     if not(game.inspectors[i].active) {
       continue
@@ -660,7 +656,7 @@ fn update_inspectors(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    let step = choose_inspector_step(game, i)
+    let step = game.choose_inspector_step(i)
     if step.0 != 0 || step.1 != 0 {
       @types.actor_start_move(
         game.inspectors[i].body,
@@ -675,7 +671,7 @@ fn update_inspectors(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_trains(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_trains(game : @types.Game, dt : Float) -> Unit {
   for train in game.trains {
     if not(train.active) {
       continue
@@ -707,8 +703,7 @@ fn update_trains(game : @types.Game, dt : Float) -> Unit {
         game.routed_ok = game.routed_ok + 1
         game.score = game.score + @types.score_route_ok
 
-        burst(
-          game,
+        game.burst(
           Float::from_int(@types.cell_center_x(@types.train_exit_x)),
           Float::from_int(
             @types.cell_center_y(Float::from_int(@types.lane_to_y(train.lane))),
@@ -725,8 +720,7 @@ fn update_trains(game : @types.Game, dt : Float) -> Unit {
 
         @types.set_msg(game, "Wrong route! Keep target colors aligned.", 1.4)
 
-        burst(
-          game,
+        game.burst(
           Float::from_int(@types.cell_center_x(@types.train_exit_x)),
           Float::from_int(
             @types.cell_center_y(Float::from_int(@types.lane_to_y(train.lane))),
@@ -742,7 +736,7 @@ fn update_trains(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn resolve_train_collisions(game : @types.Game) -> Unit {
+fn @types.Game::resolve_train_collisions(game : @types.Game) -> Unit {
   for i in 0..<game.trains.length() {
     if not(game.trains[i].active) {
       continue
@@ -777,8 +771,7 @@ fn resolve_train_collisions(game : @types.Game) -> Unit {
 
       @types.set_msg(game, "Crash! Junction timing was wrong.", 1.8)
 
-      burst(
-        game,
+      game.burst(
         Float::from_int(@types.cell_center_x(crash_x)),
         Float::from_int(@types.cell_center_y(crash_y)),
         42,
@@ -791,7 +784,7 @@ fn resolve_train_collisions(game : @types.Game) -> Unit {
 }
 
 ///|
-fn handle_player_spotted(game : @types.Game) -> Unit {
+fn @types.Game::handle_player_spotted(game : @types.Game) -> Unit {
   if game.flash_t > 0.0 {
     return
   }
@@ -806,8 +799,7 @@ fn handle_player_spotted(game : @types.Game) -> Unit {
       game.flash_t = 1.0
       game.shake_t = 0.26
 
-      burst(
-        game,
+      game.burst(
         Float::from_int(@types.cell_center_x(game.player.fx)),
         Float::from_int(@types.cell_center_y(game.player.fy)),
         30,
@@ -815,7 +807,7 @@ fn handle_player_spotted(game : @types.Game) -> Unit {
       )
 
       if game.lives <= 0 {
-        finish_run(game, false, "Caught by transit inspectors")
+        game.finish_run(false, "Caught by transit inspectors")
       } else {
         @types.actor_place(game.player, @types.start_x, @types.start_y)
         game.move_cd = 0.20
@@ -828,7 +820,7 @@ fn handle_player_spotted(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_timers(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_timers(game : @types.Game, dt : Float) -> Unit {
   if game.msg_t > 0.0 {
     game.msg_t = game.msg_t - dt
   }
@@ -859,43 +851,43 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_play(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt
   game.time_left = game.time_left - dt
 
-  update_timers(game, dt)
+  game.update_timers(dt)
 
   game.emp_energy = @types.clampf(game.emp_energy + dt * 16.0, 0.0, 100.0)
 
   @types.actor_tick(game.player, dt, @types.player_move_t)
 
   if not(game.player.moving) && game.move_cd <= 0.0 {
-    ignore(try_move_player(game, game.req_dx, game.req_dy))
+    ignore(game.try_move_player(game.req_dx, game.req_dy))
   }
 
   if game.action_pressed {
-    if not(try_toggle_switch(game)) {
-      ignore(deploy_emp(game))
+    if not(game.try_toggle_switch()) {
+      ignore(game.deploy_emp())
     }
   }
 
   game.spawn_t = game.spawn_t - dt
   if game.spawn_t <= 0.0 {
-    ignore(spawn_train(game))
+    ignore(game.spawn_train())
 
     let diff : Float = Float::from_int(game.routed_ok) * 0.03 +
       Float::from_int(game.collisions) * 0.04
     game.spawn_t = @types.clampf(@types.randf(1.55, 2.35) - diff, 0.56, 2.2)
   }
 
-  update_trains(game, dt)
-  resolve_train_collisions(game)
-  update_inspectors(game, dt)
-  handle_player_spotted(game)
-  update_particles(game, dt)
+  game.update_trains(dt)
+  game.resolve_train_collisions()
+  game.update_inspectors(dt)
+  game.handle_player_spotted()
+  game.update_particles(dt)
 
   if game.state == Play && game.routed_ok >= @types.goal_routed {
-    finish_run(game, true, "")
+    game.finish_run(true, "")
   }
 
   if game.state == Play && (game.lives <= 0 || game.time_left <= 0.0) {
@@ -904,37 +896,37 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
     } else {
       "Shift ended before reaching route quota"
     }
-    finish_run(game, false, why)
+    game.finish_run(false, why)
   }
 }
 
 ///|
-fn update_title(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_title(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt
-  update_timers(game, dt)
-  update_particles(game, dt)
+  game.update_timers(dt)
+  game.update_particles(dt)
 }
 
 ///|
-fn update_result(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_result(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt
-  update_timers(game, dt)
-  update_particles(game, dt)
+  game.update_timers(dt)
+  game.update_particles(dt)
 }
 
 ///|
 /// Processes one simulation step: input phase, state update, and edge resets.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   match game.state {
-    Title => update_title_input(game)
-    Play => update_play_input(game)
-    Result => update_result_input(game)
+    Title => game.update_title_input()
+    Play => game.update_play_input()
+    Result => game.update_result_input()
   }
 
   match game.state {
-    Title => update_title(game, dt)
-    Play => update_play(game, dt)
-    Result => update_result(game, dt)
+    Title => game.update_title(dt)
+    Play => game.update_play(dt)
+    Result => game.update_result(dt)
   }
 
   game.action_pressed = false

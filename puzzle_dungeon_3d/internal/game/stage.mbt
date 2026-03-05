@@ -94,7 +94,7 @@ pub fn load_floor(game : @types.Game, floor : Int) -> Unit {
   // Calculate initial laser paths
   @types.calculate_laser_paths(game)
   // Check if exit should already be open (no plates, no diamonds, no laser targets)
-  check_exit(game)
+  game.check_exit()
   // Setup tutorial
   let tutorial_msg = @types.get_tutorial_for_floor(floor)
   if tutorial_msg.length() > 0 {
@@ -185,7 +185,7 @@ fn parse_tile_char(
 }
 
 ///|
-fn save_undo(game : @types.Game) -> Unit {
+fn @types.Game::save_undo(game : @types.Game) -> Unit {
   if game.undo_count >= @types.max_undo {
     // Shift everything down by 1
     for i in 0..<(@types.max_undo - 1) {
@@ -215,7 +215,7 @@ fn save_undo(game : @types.Game) -> Unit {
 }
 
 ///|
-fn undo_move(game : @types.Game) -> Unit {
+fn @types.Game::undo_move(game : @types.Game) -> Unit {
   if game.undo_count <= 0 {
     return
   }
@@ -254,11 +254,11 @@ fn undo_move(game : @types.Game) -> Unit {
   game.diamonds_total = @types.count_diamonds(game)
   // Recalculate laser paths
   @types.calculate_laser_paths(game)
-  check_exit(game)
+  game.check_exit()
 }
 
 ///|
-fn reset_progress(game : @types.Game) -> Unit {
+fn @types.Game::reset_progress(game : @types.Game) -> Unit {
   for i in 0..<@types.max_floors {
     game.floor_info[i].unlocked = false
     game.floor_info[i].completed = false

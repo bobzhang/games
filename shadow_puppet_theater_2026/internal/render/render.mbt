@@ -12,7 +12,7 @@ fn draw_thick_line(
 }
 
 ///|
-fn draw_backdrop(game : @types.Game) -> Unit {
+fn @types.Game::draw_backdrop(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(8, 8, 14, 255))
 
   for i in 0..<13 {
@@ -65,7 +65,7 @@ fn draw_backdrop(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_spotlight(game : @types.Game) -> Unit {
+fn @types.Game::draw_spotlight(game : @types.Game) -> Unit {
   let cx = @types.stage_screen_x + @types.stage_screen_w / 2
   let cy = @types.stage_screen_y + @types.stage_screen_h / 2 - 26
 
@@ -90,7 +90,7 @@ fn draw_spotlight(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stage_screen(game : @types.Game) -> Unit {
+fn @types.Game::draw_stage_screen(game : @types.Game) -> Unit {
   let warmth_f : Float = 170.0 + game.excitement * 0.72
   let alpha_f : Float = 126.0 + game.spotlight * 1.1
   let warmth = warmth_f.to_int().clamp(min=162, max=246)
@@ -215,7 +215,7 @@ fn draw_pose_shadow(
 }
 
 ///|
-fn draw_active_stage_pose(game : @types.Game) -> Unit {
+fn @types.Game::draw_active_stage_pose(game : @types.Game) -> Unit {
   let cx = @types.stage_screen_x + @types.stage_screen_w / 2
   let cy = @types.stage_screen_y + @types.stage_screen_h / 2 + 88
   let target = @types.target_pose(game)
@@ -264,7 +264,7 @@ fn draw_active_stage_pose(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_audience(game : @types.Game) -> Unit {
+fn @types.Game::draw_audience(game : @types.Game) -> Unit {
   let base_y = @types.screen_h - 34
   let cheer_amp : Float = 2.0 + game.excitement * 0.12
 
@@ -295,7 +295,7 @@ fn draw_audience(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_sequence_strip(game : @types.Game) -> Unit {
+fn @types.Game::draw_sequence_strip(game : @types.Game) -> Unit {
   let total = game.sequence.length()
   if total <= 0 {
     return
@@ -380,7 +380,7 @@ fn draw_meter(
 }
 
 ///|
-fn draw_hud_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
   let panel_x = @types.stage_screen_x + @types.stage_screen_w + 24
   let panel_y = 24
   let panel_w = @types.screen_w - panel_x - 20
@@ -578,7 +578,7 @@ fn draw_controls_strip() -> Unit {
 }
 
 ///|
-fn draw_message_banner(game : @types.Game) -> Unit {
+fn @types.Game::draw_message_banner(game : @types.Game) -> Unit {
   if game.message_t <= 0.0 {
     return
   }
@@ -608,7 +608,7 @@ fn draw_message_banner(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -683,7 +683,7 @@ fn draw_paused_overlay() -> Unit {
 }
 
 ///|
-fn draw_result_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -740,20 +740,20 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 ///|
 /// Renders the complete frame for the current show state.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_backdrop(game)
-  draw_spotlight(game)
-  draw_stage_screen(game)
-  draw_active_stage_pose(game)
-  draw_audience(game)
-  draw_sequence_strip(game)
-  draw_hud_panel(game)
+  game.draw_backdrop()
+  game.draw_spotlight()
+  game.draw_stage_screen()
+  game.draw_active_stage_pose()
+  game.draw_audience()
+  game.draw_sequence_strip()
+  game.draw_hud_panel()
   draw_controls_strip()
-  draw_message_banner(game)
+  game.draw_message_banner()
 
   match game.state {
-    Title => draw_title_overlay(game)
+    Title => game.draw_title_overlay()
     Paused => draw_paused_overlay()
-    Result => draw_result_overlay(game)
+    Result => game.draw_result_overlay()
     Play => ()
   }
 }

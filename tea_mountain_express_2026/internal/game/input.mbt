@@ -1,5 +1,5 @@
 ///|
-fn clear_input(game : @types.Game) -> Unit {
+fn @types.Game::clear_input(game : @types.Game) -> Unit {
   game.input_steer = 0
   game.input_tilt = 0
   game.input_brake_press = false
@@ -11,8 +11,8 @@ fn clear_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_input(game : @types.Game) -> Unit {
-  clear_input(game)
+fn @types.Game::update_input(game : @types.Game) -> Unit {
+  game.clear_input()
 
   if @raylib.is_key_pressed(@raylib.KeyA) ||
     @raylib.is_key_pressed(@raylib.KeyLeft) {

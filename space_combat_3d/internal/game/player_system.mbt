@@ -147,7 +147,7 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
     can_fire &&
     has_energy &&
     has_ammo {
-    fire_weapon(game)
+    game.fire_weapon()
     p.fire_timer = @types.weapon_cooldown(p.weapon)
     // Deduct energy
     let cost = @types.weapon_energy_cost(p.weapon)
@@ -160,12 +160,12 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
 
   // Tab to cycle targets
   if @raylib.is_key_pressed(@raylib.KeyTab) {
-    cycle_target(game)
+    game.cycle_target()
   }
 
   // T to target nearest
   if @raylib.is_key_pressed(@raylib.KeyT) {
-    target_nearest(game)
+    game.target_nearest()
   }
 
   // Engine particles
@@ -195,7 +195,7 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn fire_weapon(game : @types.Game) -> Unit {
+fn @types.Game::fire_weapon(game : @types.Game) -> Unit {
   let p = game.player
   let fwd = @types.forward_dir(p.yaw, p.pitch)
   let rgt = @types.right_dir(p.yaw)
@@ -203,19 +203,19 @@ fn fire_weapon(game : @types.Game) -> Unit {
   let damage_mult : Float = if p.weapon_boost_timer > 0.0 { 1.5 } else { 1.0 }
 
   if p.weapon == @types.weapon_laser {
-    fire_laser(game, fwd, rgt, damage_mult)
+    game.fire_laser(fwd, rgt, damage_mult)
   } else if p.weapon == @types.weapon_missile {
-    fire_missile(game, fwd, damage_mult)
+    game.fire_missile(fwd, damage_mult)
   } else if p.weapon == @types.weapon_plasma {
-    fire_plasma(game, fwd, damage_mult)
+    game.fire_plasma(fwd, damage_mult)
   } else if p.weapon == @types.weapon_railgun {
-    fire_railgun(game, fwd, damage_mult)
+    game.fire_railgun(fwd, damage_mult)
   }
   game.camera_shake = @types.maxf(game.camera_shake, 0.3)
 }
 
 ///|
-fn fire_laser(
+fn @types.Game::fire_laser(
   game : @types.Game,
   fwd : (Float, Float, Float),
   rgt : (Float, Float, Float),
@@ -249,7 +249,7 @@ fn fire_laser(
 }
 
 ///|
-fn fire_missile(
+fn @types.Game::fire_missile(
   game : @types.Game,
   fwd : (Float, Float, Float),
   damage_mult : Float,
@@ -278,7 +278,7 @@ fn fire_missile(
 }
 
 ///|
-fn fire_plasma(
+fn @types.Game::fire_plasma(
   game : @types.Game,
   fwd : (Float, Float, Float),
   damage_mult : Float,
@@ -307,7 +307,7 @@ fn fire_plasma(
 }
 
 ///|
-fn fire_railgun(
+fn @types.Game::fire_railgun(
   game : @types.Game,
   fwd : (Float, Float, Float),
   damage_mult : Float,
@@ -338,7 +338,7 @@ fn fire_railgun(
 }
 
 ///|
-fn cycle_target(game : @types.Game) -> Unit {
+fn @types.Game::cycle_target(game : @types.Game) -> Unit {
   let start = game.target_idx + 1
   // Search forward from current
   for i in start..<game.enemies.length() {
@@ -360,7 +360,7 @@ fn cycle_target(game : @types.Game) -> Unit {
 }
 
 ///|
-fn target_nearest(game : @types.Game) -> Unit {
+fn @types.Game::target_nearest(game : @types.Game) -> Unit {
   let p = game.player
   let idx = @types.find_nearest_enemy(game, p.x, p.y, p.z)
   if idx >= 0 {

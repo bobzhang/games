@@ -1,7 +1,7 @@
 // Tower targeting, firing, upgrading, selling, and special abilities
 
 ///|
-fn update_towers(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_towers(game : @types.Game, dt : Float) -> Unit {
   // First, reset buff bonuses on all towers
   for tower in game.towers {
     if not(tower.active) {
@@ -18,7 +18,7 @@ fn update_towers(game : @types.Game, dt : Float) -> Unit {
       continue
     }
     if tower.kind == @types.tower_buff {
-      apply_buff_tower(game, i)
+      game.apply_buff_tower(i)
     }
   }
   // Update all towers
@@ -44,7 +44,7 @@ fn update_towers(game : @types.Game, dt : Float) -> Unit {
     if tower.kind == @types.tower_buff {
       // Level 3 buff towers have a pulse ability
       if tower.level >= 3 {
-        update_buff_pulse(game, i, dt)
+        game.update_buff_pulse(i, dt)
       }
       continue
     }
@@ -71,24 +71,24 @@ fn update_towers(game : @types.Game, dt : Float) -> Unit {
     }
     // Fire if ready
     if tower.reload_timer <= 0.0 && best_idx >= 0 {
-      fire_tower(game, i)
+      game.fire_tower(i)
       let fire_rate = @types.tower_effective_rate(tower)
       tower.reload_timer = fire_rate
       // Level 3 arrow tower: double shot
       if tower.kind == @types.tower_arrow && tower.level >= 3 {
         // Fire a second projectile after a small delay (simulated by immediate fire)
-        fire_tower_secondary(game, i)
+        game.fire_tower_secondary(i)
       }
     }
     // Level 3 flame tower: fire aura (damages nearby enemies passively)
     if tower.kind == @types.tower_flame && tower.level >= 3 {
-      update_flame_aura(game, i, dt)
+      game.update_flame_aura(i, dt)
     }
   }
 }
 
 ///|
-fn apply_buff_tower(game : @types.Game, buff_idx : Int) -> Unit {
+fn @types.Game::apply_buff_tower(game : @types.Game, buff_idx : Int) -> Unit {
   let buff = game.towers[buff_idx]
   let bx = @types.grid_to_world_x(buff.gx)
   let bz = @types.grid_to_world_z(buff.gy)
@@ -123,7 +123,7 @@ fn apply_buff_tower(game : @types.Game, buff_idx : Int) -> Unit {
 }
 
 ///|
-fn update_buff_pulse(game : @types.Game, buff_idx : Int, dt : Float) -> Unit {
+fn @types.Game::update_buff_pulse(game : @types.Game, buff_idx : Int, dt : Float) -> Unit {
   let buff = game.towers[buff_idx]
   buff.special_timer -= dt
   if buff.special_timer <= 0.0 {
@@ -140,7 +140,7 @@ fn update_buff_pulse(game : @types.Game, buff_idx : Int, dt : Float) -> Unit {
       let dist = @types.distance2d(bx, bz, enemy.x, enemy.z)
       if dist <= range {
         let dmg : Float = 10.0 * Float::from_int(buff.level)
-        damage_enemy(game, i, dmg, buff_idx)
+        game.damage_enemy(i, dmg, buff_idx)
       }
     }
     @types.spawn_particles(game, bx, 1.0, bz, 15, 200, 150, 255)
@@ -149,7 +149,7 @@ fn update_buff_pulse(game : @types.Game, buff_idx : Int, dt : Float) -> Unit {
 }
 
 ///|
-fn update_flame_aura(game : @types.Game, tower_idx : Int, dt : Float) -> Unit {
+fn @types.Game::update_flame_aura(game : @types.Game, tower_idx : Int, dt : Float) -> Unit {
   let tower = game.towers[tower_idx]
   tower.special_timer -= dt
   if tower.special_timer <= 0.0 {
@@ -174,7 +174,7 @@ fn update_flame_aura(game : @types.Game, tower_idx : Int, dt : Float) -> Unit {
 }
 
 ///|
-fn fire_tower(game : @types.Game, tower_idx : Int) -> Unit {
+fn @types.Game::fire_tower(game : @types.Game, tower_idx : Int) -> Unit {
   let tower = game.towers[tower_idx]
   let idx = @types.alloc_projectile(game)
   if idx < 0 {
@@ -258,7 +258,7 @@ fn fire_tower(game : @types.Game, tower_idx : Int) -> Unit {
 // Secondary shot for level 3 arrow tower
 
 ///|
-fn fire_tower_secondary(game : @types.Game, tower_idx : Int) -> Unit {
+fn @types.Game::fire_tower_secondary(game : @types.Game, tower_idx : Int) -> Unit {
   let tower = game.towers[tower_idx]
   let idx = @types.alloc_projectile(game)
   if idx < 0 {
@@ -289,7 +289,7 @@ fn fire_tower_secondary(game : @types.Game, tower_idx : Int) -> Unit {
 }
 
 ///|
-fn try_place_tower(game : @types.Game) -> Unit {
+fn @types.Game::try_place_tower(game : @types.Game) -> Unit {
   if not(game.hover_valid) {
     return
   }
@@ -325,7 +325,7 @@ fn try_place_tower(game : @types.Game) -> Unit {
 }
 
 ///|
-fn try_upgrade_tower(game : @types.Game) -> Unit {
+fn @types.Game::try_upgrade_tower(game : @types.Game) -> Unit {
   if game.selected_tower_idx < 0 {
     return
   }
@@ -357,7 +357,7 @@ fn try_upgrade_tower(game : @types.Game) -> Unit {
 }
 
 ///|
-fn try_sell_tower(game : @types.Game) -> Unit {
+fn @types.Game::try_sell_tower(game : @types.Game) -> Unit {
   if game.selected_tower_idx < 0 {
     return
   }
@@ -378,7 +378,7 @@ fn try_sell_tower(game : @types.Game) -> Unit {
 }
 
 ///|
-fn cycle_targeting_mode(game : @types.Game) -> Unit {
+fn @types.Game::cycle_targeting_mode(game : @types.Game) -> Unit {
   if game.selected_tower_idx < 0 {
     return
   }

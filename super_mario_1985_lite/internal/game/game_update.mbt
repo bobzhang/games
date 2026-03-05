@@ -1,5 +1,5 @@
 ///|
-fn update_camera(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_camera(game : @types.Game, dt : Float) -> Unit {
   let width_f = Float::from_int(@types.screen_width)
   let mut target_x = if game.player.reached_flag {
     game.player.x - width_f * 0.45
@@ -16,7 +16,7 @@ fn update_camera(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn tick_level_timer(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::tick_level_timer(game : @types.Game, dt : Float) -> Unit {
   if game.player.reached_flag || game.state != @types.state_playing {
     return
   }
@@ -35,15 +35,15 @@ fn tick_level_timer(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_playing(game : @types.Game, input : @types.Input, dt : Float) -> Unit {
-  tick_level_timer(game, dt)
+fn @types.Game::update_playing(game : @types.Game, input : @types.Input, dt : Float) -> Unit {
+  game.tick_level_timer(dt)
   if game.state != @types.state_playing {
     return
   }
 
-  update_player(game, input, dt)
-  update_enemies(game, dt)
-  update_coins(game, dt)
+  game.update_player(input, dt)
+  game.update_enemies(dt)
+  game.update_coins(dt)
   @particles.update_particles(game, dt)
 
   if game.shake_t > 0.0 {
@@ -53,13 +53,13 @@ fn update_playing(game : @types.Game, input : @types.Input, dt : Float) -> Unit 
     }
   }
 
-  update_camera(game, dt)
+  game.update_camera(dt)
 }
 
 ///|
 /// Builds and initializes the level, then enters title state.
 pub fn init_game(game : @types.Game) -> Unit {
-  build_level(game)
+  game.build_level()
   game.state = @types.state_title
   game.time_left = @types.start_time_seconds
   game.time_accum = 0.0
@@ -77,18 +77,18 @@ pub fn update_game(
   if game.state == @types.state_title {
     @particles.update_particles(game, dt)
     if input.accept {
-      reset_full_run(game)
+      game.reset_full_run()
     }
     return
   }
 
   if game.state == @types.state_playing {
-    update_playing(game, input, dt)
+    game.update_playing(input, dt)
     return
   }
 
   @particles.update_particles(game, dt)
   if input.restart {
-    reset_full_run(game)
+    game.reset_full_run()
   }
 }

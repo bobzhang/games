@@ -36,7 +36,7 @@ fn pointer_on_rect(
 }
 
 ///|
-fn clear_input(game : @types.Game) -> Unit {
+fn @types.Game::clear_input(game : @types.Game) -> Unit {
   game.input_move = 0
   game.input_jump_press = false
   game.input_jump_hold = false
@@ -46,7 +46,7 @@ fn clear_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_pointer(game : @types.Game) -> Unit {
+fn @types.Game::update_pointer(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let touch_count = game.touch_count
@@ -60,11 +60,11 @@ fn update_pointer(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_title_input(game : @types.Game) -> Unit {
+fn @types.Game::update_title_input(game : @types.Game) -> Unit {
   let hold = game.mouse_hold
   let touch_count = game.touch_count
-  clear_input(game)
-  update_pointer(game)
+  game.clear_input()
+  game.update_pointer()
   game.touch_mode = touch_count > 0
   game.touch_count = touch_count
 
@@ -79,13 +79,13 @@ fn update_title_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_play_input(game : @types.Game) -> Unit {
+fn @types.Game::update_play_input(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
   let touch_count = game.touch_count
-  clear_input(game)
-  update_pointer(game)
+  game.clear_input()
+  game.update_pointer()
   game.touch_mode = touch_count > 0
   game.touch_count = touch_count
 
@@ -194,11 +194,11 @@ fn update_play_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_stage_clear_input(game : @types.Game) -> Unit {
+fn @types.Game::update_stage_clear_input(game : @types.Game) -> Unit {
   let hold = game.mouse_hold
   let touch_count = game.touch_count
-  clear_input(game)
-  update_pointer(game)
+  game.clear_input()
+  game.update_pointer()
 
   let key_restart = @raylib.is_key_pressed(@raylib.KeyR)
   let key_start = @raylib.is_key_pressed(@raylib.KeySpace) ||
@@ -211,11 +211,11 @@ fn update_stage_clear_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_result_input(game : @types.Game) -> Unit {
+fn @types.Game::update_result_input(game : @types.Game) -> Unit {
   let hold = game.mouse_hold
   let touch_count = game.touch_count
-  clear_input(game)
-  update_pointer(game)
+  game.clear_input()
+  game.update_pointer()
 
   let key_retry = @raylib.is_key_pressed(@raylib.KeyR) ||
     @raylib.is_key_pressed(@raylib.KeyEnter) ||

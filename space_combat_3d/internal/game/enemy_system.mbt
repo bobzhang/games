@@ -28,18 +28,18 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     let dist = @types.distance3d(e.x, e.y, e.z, px, py, pz)
 
     // AI state machine
-    update_ai_state(game, i, dist, dt)
+    game.update_ai_state(i, dist, dt)
 
     if e.kind == @types.enemy_fighter {
-      update_fighter_ai(game, i, dx, dy, dz, dist, dt)
+      game.update_fighter_ai(i, dx, dy, dz, dist, dt)
     } else if e.kind == @types.enemy_interceptor {
-      update_interceptor_ai(game, i, dx, dy, dz, dist, dt)
+      game.update_interceptor_ai(i, dx, dy, dz, dist, dt)
     } else if e.kind == @types.enemy_bomber {
-      update_bomber_ai(game, i, dx, dy, dz, dist, dt)
+      game.update_bomber_ai(i, dx, dy, dz, dist, dt)
     } else if e.kind == @types.enemy_cruiser {
-      update_cruiser_ai(game, i, dx, dy, dz, dist, dt)
+      game.update_cruiser_ai(i, dx, dy, dz, dist, dt)
     } else if e.kind == @types.enemy_capital {
-      update_capital_ai(game, i, dx, dy, dz, dist, dt)
+      game.update_capital_ai(i, dx, dy, dz, dist, dt)
     }
 
     // Move
@@ -57,7 +57,7 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     if e.fire_timer <= 0.0 && dist < 150.0 {
       // Only fire in attack or chase state
       if e.ai_state == @types.ai_attack || e.ai_state == @types.ai_chase {
-        enemy_fire(game, i, dx, dy, dz, dist)
+        game.enemy_fire(i, dx, dy, dz, dist)
         let rate : Float = if e.kind == @types.enemy_fighter {
           @types.fighter_fire_rate
         } else if e.kind == @types.enemy_interceptor {
@@ -80,11 +80,11 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
       e.turret_timer_1 -= dt
       e.turret_timer_2 -= dt
       if e.turret_timer_1 <= 0.0 {
-        capital_turret_fire(game, i, dx, dy, dz, dist, 1)
+        game.capital_turret_fire(i, dx, dy, dz, dist, 1)
         e.turret_timer_1 = 1.5 + @types.rand_rangef(game, 0.0, 1.0)
       }
       if e.turret_timer_2 <= 0.0 {
-        capital_turret_fire(game, i, dx, dy, dz, dist, 2)
+        game.capital_turret_fire(i, dx, dy, dz, dist, 2)
         e.turret_timer_2 = 2.0 + @types.rand_rangef(game, 0.0, 1.0)
       }
     }
@@ -92,7 +92,7 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_ai_state(
+fn @types.Game::update_ai_state(
   game : @types.Game,
   idx : Int,
   dist : Float,
@@ -179,7 +179,7 @@ fn update_ai_state(
 }
 
 ///|
-fn update_fighter_ai(
+fn @types.Game::update_fighter_ai(
   game : @types.Game,
   idx : Int,
   dx : Float,
@@ -276,7 +276,7 @@ fn update_fighter_ai(
 }
 
 ///|
-fn update_interceptor_ai(
+fn @types.Game::update_interceptor_ai(
   game : @types.Game,
   idx : Int,
   dx : Float,
@@ -335,7 +335,7 @@ fn update_interceptor_ai(
 }
 
 ///|
-fn update_bomber_ai(
+fn @types.Game::update_bomber_ai(
   game : @types.Game,
   idx : Int,
   dx : Float,
@@ -398,7 +398,7 @@ fn update_bomber_ai(
 }
 
 ///|
-fn update_cruiser_ai(
+fn @types.Game::update_cruiser_ai(
   game : @types.Game,
   idx : Int,
   dx : Float,
@@ -448,7 +448,7 @@ fn update_cruiser_ai(
 }
 
 ///|
-fn update_capital_ai(
+fn @types.Game::update_capital_ai(
   game : @types.Game,
   idx : Int,
   dx : Float,
@@ -487,7 +487,7 @@ fn update_capital_ai(
 }
 
 ///|
-fn enemy_fire(
+fn @types.Game::enemy_fire(
   game : @types.Game,
   idx : Int,
   dx : Float,
@@ -565,7 +565,7 @@ fn enemy_fire(
 }
 
 ///|
-fn capital_turret_fire(
+fn @types.Game::capital_turret_fire(
   game : @types.Game,
   idx : Int,
   dx : Float,
@@ -744,7 +744,7 @@ pub fn update_asteroids(game : @types.Game, dt : Float) -> Unit {
       damage_player(game, 20.0)
       a.hp -= 30.0
       if a.hp <= 0.0 {
-        destroy_asteroid(game, i)
+        game.destroy_asteroid(i)
       }
     }
 
@@ -762,7 +762,7 @@ pub fn update_asteroids(game : @types.Game, dt : Float) -> Unit {
           damage_enemy(game, j, 0.0)
         }
         if a.hp <= 0.0 {
-          destroy_asteroid(game, i)
+          game.destroy_asteroid(i)
           break
         }
       }
@@ -771,7 +771,7 @@ pub fn update_asteroids(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn destroy_asteroid(game : @types.Game, idx : Int) -> Unit {
+fn @types.Game::destroy_asteroid(game : @types.Game, idx : Int) -> Unit {
   let a = game.asteroids[idx]
   a.active = false
   game.score += @types.asteroid_score
@@ -827,6 +827,6 @@ pub fn damage_asteroid(game : @types.Game, idx : Int, damage : Float) -> Unit {
   let a = game.asteroids[idx]
   a.hp -= damage
   if a.hp <= 0.0 {
-    destroy_asteroid(game, idx)
+    game.destroy_asteroid(idx)
   }
 }

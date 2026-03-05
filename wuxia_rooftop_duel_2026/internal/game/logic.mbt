@@ -1,5 +1,5 @@
 ///|
-fn clear_enemies(game : @types.Game) -> Unit {
+fn @types.Game::clear_enemies(game : @types.Game) -> Unit {
   for enemy in game.enemies {
     enemy.active = false
     enemy.x = 0.0
@@ -18,7 +18,7 @@ fn clear_enemies(game : @types.Game) -> Unit {
 }
 
 ///|
-fn active_enemy_count(game : @types.Game) -> Int {
+fn @types.Game::active_enemy_count(game : @types.Game) -> Int {
   let mut count : Int = 0
   for enemy in game.enemies {
     if enemy.active {
@@ -42,7 +42,7 @@ fn wave_spawn_interval(wave : Int) -> Float {
 }
 
 ///|
-fn reset_player(game : @types.Game) -> Unit {
+fn @types.Game::reset_player(game : @types.Game) -> Unit {
   game.player_x = @types.arena_center_x()
   game.player_y = @types.arena_center_y() + 120.0
   game.player_vx = 0.0
@@ -64,9 +64,9 @@ fn reset_player(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_new_run(game : @types.Game) -> Unit {
-  clear_enemies(game)
-  reset_player(game)
+fn @types.Game::start_new_run(game : @types.Game) -> Unit {
+  game.clear_enemies()
+  game.reset_player()
 
   game.state = @types.state_playing
   game.wave = 1
@@ -89,7 +89,7 @@ fn start_new_run(game : @types.Game) -> Unit {
 }
 
 ///|
-fn finish_game_over(game : @types.Game) -> Unit {
+fn @types.Game::finish_game_over(game : @types.Game) -> Unit {
   if game.state != @types.state_playing {
     return
   }
@@ -114,7 +114,7 @@ fn finish_game_over(game : @types.Game) -> Unit {
 }
 
 ///|
-fn add_score_event(game : @types.Game, base : Int, stage_points : Int) -> Unit {
+fn @types.Game::add_score_event(game : @types.Game, base : Int, stage_points : Int) -> Unit {
   let combo_bonus_percent : Int = (240).min(game.combo * 13)
   let gained : Int = base * (100 + combo_bonus_percent) / 100
 
@@ -129,7 +129,7 @@ fn add_score_event(game : @types.Game, base : Int, stage_points : Int) -> Unit {
 }
 
 ///|
-fn hurt_player(game : @types.Game, dmg : Float) -> Unit {
+fn @types.Game::hurt_player(game : @types.Game, dmg : Float) -> Unit {
   if game.state != @types.state_playing || game.invuln_t > 0.0 {
     return
   }
@@ -141,14 +141,14 @@ fn hurt_player(game : @types.Game, dmg : Float) -> Unit {
   game.shake_t = @types.maxf(game.shake_t, 0.24)
 
   if game.health <= 0.0 {
-    finish_game_over(game)
+    game.finish_game_over()
   } else {
     @types.set_message(game, "Guard broken!", 0.65)
   }
 }
 
 ///|
-fn spawn_enemy(game : @types.Game) -> Bool {
+fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
   for enemy in game.enemies {
     if enemy.active {
       continue
@@ -202,7 +202,7 @@ fn spawn_enemy(game : @types.Game) -> Bool {
 }
 
 ///|
-fn defeat_enemy(game : @types.Game, idx : Int, parry_kill : Bool) -> Unit {
+fn @types.Game::defeat_enemy(game : @types.Game, idx : Int, parry_kill : Bool) -> Unit {
   if not(game.enemies[idx].active) {
     return
   }
@@ -212,7 +212,7 @@ fn defeat_enemy(game : @types.Game, idx : Int, parry_kill : Bool) -> Unit {
 
   let base : Int = if parry_kill { 54 } else { 38 }
   let stage : Int = if parry_kill { 24 } else { 18 }
-  add_score_event(game, base, stage)
+  game.add_score_event(base, stage)
 
   let stamina_gain : Float = if parry_kill { 16.0 } else { 8.0 }
   game.stamina = @types.minf(
@@ -223,7 +223,7 @@ fn defeat_enemy(game : @types.Game, idx : Int, parry_kill : Bool) -> Unit {
 }
 
 ///|
-fn stun_enemy_from_parry(
+fn @types.Game::stun_enemy_from_parry(
   game : @types.Game,
   idx : Int,
   from_strike : Bool,
@@ -253,17 +253,17 @@ fn stun_enemy_from_parry(
 
   game.enemies[idx].hp = game.enemies[idx].hp - dmg
 
-  add_score_event(game, if from_strike { 34 } else { 24 }, 12)
+  game.add_score_event(if from_strike { 34 } else { 24 }, 12)
   game.stamina = @types.minf(@types.player_max_stamina, game.stamina + 14.0)
   game.health = @types.minf(@types.player_max_health, game.health + 1.5)
 
   if game.enemies[idx].hp <= 0.0 {
-    defeat_enemy(game, idx, true)
+    game.defeat_enemy(idx, true)
   }
 }
 
 ///|
-fn resolve_parry_window(game : @types.Game) -> Int {
+fn @types.Game::resolve_parry_window(game : @types.Game) -> Int {
   if game.state != @types.state_playing || game.parry_t <= 0.0 {
     return 0
   }
@@ -294,7 +294,7 @@ fn resolve_parry_window(game : @types.Game) -> Int {
       continue
     }
 
-    stun_enemy_from_parry(game, i, false)
+    game.stun_enemy_from_parry(i, false)
     parried = parried + 1
   }
 
@@ -302,7 +302,7 @@ fn resolve_parry_window(game : @types.Game) -> Int {
 }
 
 ///|
-fn apply_attack_hit(
+fn @types.Game::apply_attack_hit(
   game : @types.Game,
   idx : Int,
   damage : Float,
@@ -331,14 +331,14 @@ fn apply_attack_hit(
   }
 
   if game.enemies[idx].hp <= 0.0 {
-    defeat_enemy(game, idx, false)
+    game.defeat_enemy(idx, false)
   }
 
   true
 }
 
 ///|
-fn try_player_attack(game : @types.Game, attack : Int) -> Bool {
+fn @types.Game::try_player_attack(game : @types.Game, attack : Int) -> Bool {
   if game.state != @types.state_playing {
     return false
   }
@@ -406,8 +406,7 @@ fn try_player_attack(game : @types.Game, attack : Int) -> Bool {
       continue
     }
 
-    let hit : Bool = apply_attack_hit(
-      game,
+    let hit : Bool = game.apply_attack_hit(
       i,
       damage,
       if attack == @types.attack_heavy {
@@ -420,8 +419,7 @@ fn try_player_attack(game : @types.Game, attack : Int) -> Bool {
 
     if hit {
       hit_count = hit_count + 1
-      add_score_event(
-        game,
+      game.add_score_event(
         if attack == @types.attack_heavy {
           22
         } else {
@@ -453,7 +451,7 @@ fn try_player_attack(game : @types.Game, attack : Int) -> Bool {
 }
 
 ///|
-fn trigger_parry_dash(game : @types.Game) -> Bool {
+fn @types.Game::trigger_parry_dash(game : @types.Game) -> Bool {
   if game.state != @types.state_playing {
     return false
   }
@@ -479,7 +477,7 @@ fn trigger_parry_dash(game : @types.Game) -> Bool {
   game.player_vx = game.player_vx + game.dash_dir_x * @types.dash_speed
   game.player_vy = game.player_vy + game.dash_dir_y * @types.dash_speed
 
-  let parry_now : Int = resolve_parry_window(game)
+  let parry_now : Int = game.resolve_parry_window()
   if parry_now > 0 {
     @types.set_message(game, "Perfect parry x" + parry_now.to_string(), 0.70)
     game.shake_t = @types.maxf(game.shake_t, 0.20)
@@ -489,7 +487,7 @@ fn trigger_parry_dash(game : @types.Game) -> Bool {
 }
 
 ///|
-fn update_player(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   game.player_vx = game.player_vx + game.move_x * @types.player_move_accel * dt
   game.player_vy = game.player_vy + game.move_y * @types.player_move_accel * dt
 
@@ -528,7 +526,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_enemy_seek(game : @types.Game, idx : Int, dt : Float) -> Unit {
+fn @types.Game::update_enemy_seek(game : @types.Game, idx : Int, dt : Float) -> Unit {
   let dir = @types.normalize(
     game.player_x - game.enemies[idx].x,
     game.player_y - game.enemies[idx].y,
@@ -570,7 +568,7 @@ fn update_enemy_seek(game : @types.Game, idx : Int, dt : Float) -> Unit {
 }
 
 ///|
-fn update_enemy_telegraph(game : @types.Game, idx : Int, dt : Float) -> Unit {
+fn @types.Game::update_enemy_telegraph(game : @types.Game, idx : Int, dt : Float) -> Unit {
   game.enemies[idx].state_t = @types.maxf(0.0, game.enemies[idx].state_t - dt)
 
   let dir = @types.normalize(
@@ -602,7 +600,7 @@ fn update_enemy_telegraph(game : @types.Game, idx : Int, dt : Float) -> Unit {
 }
 
 ///|
-fn update_enemy_strike(game : @types.Game, idx : Int, dt : Float) -> Unit {
+fn @types.Game::update_enemy_strike(game : @types.Game, idx : Int, dt : Float) -> Unit {
   game.enemies[idx].state_t = @types.maxf(0.0, game.enemies[idx].state_t - dt)
 
   game.enemies[idx].x = game.enemies[idx].x + game.enemies[idx].vx * dt
@@ -619,11 +617,10 @@ fn update_enemy_strike(game : @types.Game, idx : Int, dt : Float) -> Unit {
     ) <=
     hit_rr * hit_rr {
     if game.parry_t > 0.0 {
-      stun_enemy_from_parry(game, idx, true)
+      game.stun_enemy_from_parry(idx, true)
       @types.set_message(game, "Counter cut!", 0.50)
     } else {
-      hurt_player(
-        game,
+      game.hurt_player(
         @types.enemy_contact_damage + Float::from_int(game.wave) * 1.05,
       )
       game.enemies[idx].state = @types.enemy_state_recover
@@ -641,7 +638,7 @@ fn update_enemy_strike(game : @types.Game, idx : Int, dt : Float) -> Unit {
 }
 
 ///|
-fn update_enemy_recover(game : @types.Game, idx : Int, dt : Float) -> Unit {
+fn @types.Game::update_enemy_recover(game : @types.Game, idx : Int, dt : Float) -> Unit {
   game.enemies[idx].state_t = @types.maxf(0.0, game.enemies[idx].state_t - dt)
 
   game.enemies[idx].x = game.enemies[idx].x + game.enemies[idx].vx * dt
@@ -657,7 +654,7 @@ fn update_enemy_recover(game : @types.Game, idx : Int, dt : Float) -> Unit {
 }
 
 ///|
-fn update_enemy_stunned(game : @types.Game, idx : Int, dt : Float) -> Unit {
+fn @types.Game::update_enemy_stunned(game : @types.Game, idx : Int, dt : Float) -> Unit {
   game.enemies[idx].state_t = @types.maxf(0.0, game.enemies[idx].state_t - dt)
 
   game.enemies[idx].x = game.enemies[idx].x + game.enemies[idx].vx * dt
@@ -673,7 +670,7 @@ fn update_enemy_stunned(game : @types.Game, idx : Int, dt : Float) -> Unit {
 }
 
 ///|
-fn keep_enemy_inside_rooftop(game : @types.Game, idx : Int) -> Unit {
+fn @types.Game::keep_enemy_inside_rooftop(game : @types.Game, idx : Int) -> Unit {
   let left : Float = @types.arena_left() - 120.0
   let right : Float = @types.arena_right() + 120.0
   let top : Float = @types.arena_top() - 120.0
@@ -697,7 +694,7 @@ fn keep_enemy_inside_rooftop(game : @types.Game, idx : Int) -> Unit {
 }
 
 ///|
-fn update_enemies(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.enemies.length() {
     if not(game.enemies[i].active) {
       continue
@@ -707,23 +704,23 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
       dt * (1.4 + Float::from_int(i % 5) * 0.3)
 
     if game.enemies[i].state == @types.enemy_state_seek {
-      update_enemy_seek(game, i, dt)
+      game.update_enemy_seek(i, dt)
     } else if game.enemies[i].state == @types.enemy_state_telegraph {
-      update_enemy_telegraph(game, i, dt)
+      game.update_enemy_telegraph(i, dt)
     } else if game.enemies[i].state == @types.enemy_state_strike {
-      update_enemy_strike(game, i, dt)
+      game.update_enemy_strike(i, dt)
     } else if game.enemies[i].state == @types.enemy_state_recover {
-      update_enemy_recover(game, i, dt)
+      game.update_enemy_recover(i, dt)
     } else {
-      update_enemy_stunned(game, i, dt)
+      game.update_enemy_stunned(i, dt)
     }
 
-    keep_enemy_inside_rooftop(game, i)
+    game.keep_enemy_inside_rooftop(i)
   }
 }
 
 ///|
-fn update_wave_flow(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_wave_flow(game : @types.Game, dt : Float) -> Unit {
   let before_gap : Float = game.wave_gap_t
   game.wave_gap_t = @types.maxf(0.0, game.wave_gap_t - dt)
 
@@ -739,7 +736,7 @@ fn update_wave_flow(game : @types.Game, dt : Float) -> Unit {
   let interval : Float = wave_spawn_interval(game.wave)
 
   while game.spawn_cd <= 0.0 && game.wave_spawned < game.wave_enemies_total {
-    if spawn_enemy(game) {
+    if game.spawn_enemy() {
       game.wave_spawned = game.wave_spawned + 1
     }
     game.spawn_cd = game.spawn_cd + interval
@@ -753,7 +750,7 @@ fn update_wave_flow(game : @types.Game, dt : Float) -> Unit {
     return
   }
 
-  if active_enemy_count(game) > 0 {
+  if game.active_enemy_count() > 0 {
     return
   }
 
@@ -789,7 +786,7 @@ fn update_wave_flow(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_timers(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_timers(game : @types.Game, dt : Float) -> Unit {
   game.ui_t = game.ui_t + dt
   game.message_t = @types.maxf(0.0, game.message_t - dt)
   game.shake_t = @types.maxf(0.0, game.shake_t - dt)
@@ -800,8 +797,8 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_play_timers(game : @types.Game, dt : Float) -> Unit {
-  update_timers(game, dt)
+fn @types.Game::update_play_timers(game : @types.Game, dt : Float) -> Unit {
+  game.update_timers(dt)
 
   game.game_t = game.game_t + dt
   game.attack_cd = @types.maxf(0.0, game.attack_cd - dt)
@@ -831,36 +828,36 @@ fn update_play_timers(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_logic(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_logic(game : @types.Game, dt : Float) -> Unit {
   let step : Float = @types.clampf(dt, 0.0, 0.05)
 
   if game.state == @types.state_playing {
-    update_play_timers(game, step)
+    game.update_play_timers(step)
   } else {
-    update_timers(game, step)
+    game.update_timers(step)
     return
   }
 
-  update_player(game, step)
+  game.update_player(step)
 
   if game.parry_t > 0.0 {
-    let parried : Int = resolve_parry_window(game)
+    let parried : Int = game.resolve_parry_window()
     if parried > 0 {
       @types.set_message(game, "Perfect parry x" + parried.to_string(), 0.65)
     }
   }
 
-  update_wave_flow(game, step)
-  update_enemies(game, step)
+  game.update_wave_flow(step)
+  game.update_enemies(step)
 
   if game.health <= 0.0 {
-    finish_game_over(game)
+    game.finish_game_over()
   }
 }
 
 ///|
 /// Advances one frame of duel simulation and input-driven state changes.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
-  update_input(game, dt)
-  update_logic(game, dt)
+  game.update_input(dt)
+  game.update_logic(dt)
 }

@@ -86,7 +86,7 @@ pub fn load_map(game : @types.Game, map_idx : Int) -> Unit {
     }
   }
   // Trace path from start using BFS-like walk
-  trace_path(game, data, start_gx, start_gy, path_points)
+  game.trace_path(data, start_gx, start_gy, path_points)
   game.path_count = path_points.length().clamp(min=0, max=@types.max_path_nodes)
   for i in 0..<game.path_count {
     game.path_nodes[i] = path_points[i]
@@ -107,7 +107,7 @@ pub fn load_map(game : @types.Game, map_idx : Int) -> Unit {
 
 ///|
 /// Traces the enemy movement path from the start tile using neighbor walking.
-fn trace_path(
+fn @types.Game::trace_path(
   game : @types.Game,
   data : Array[String],
   start_gx : Int,
@@ -154,7 +154,7 @@ fn trace_path(
 
 ///|
 /// Resets all game state to initial values and clears all entity pools.
-fn reset_game(game : @types.Game) -> Unit {
+fn @types.Game::reset_game(game : @types.Game) -> Unit {
   game.gold = @types.starting_gold
   game.lives = @types.starting_lives
   game.score = 0

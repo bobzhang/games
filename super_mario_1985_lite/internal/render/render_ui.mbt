@@ -1,5 +1,5 @@
 ///|
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -65,7 +65,7 @@ fn draw_center_panel(
 }
 
 ///|
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   let _ = game
   draw_center_panel(
     "WORLD 1-1", "Run, jump, stomp goombas, and smash question blocks.", "Reach the flagpole and walk to the castle to clear the stage.",
@@ -74,7 +74,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_win_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_win_overlay(game : @types.Game) -> Unit {
   draw_center_panel(
     "COURSE CLEAR!",
     "You reached the castle.",
@@ -84,7 +84,7 @@ fn draw_win_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_game_over_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   draw_center_panel(
     "GAME OVER",
     "Time or lives reached zero.",
@@ -96,13 +96,13 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 ///|
 /// Draws HUD plus title/win/game-over overlays.
 pub fn draw_ui(game : @types.Game) -> Unit {
-  draw_hud(game)
+  game.draw_hud()
 
   if game.state == @types.state_title {
-    draw_title_overlay(game)
+    game.draw_title_overlay()
   } else if game.state == @types.state_win {
-    draw_win_overlay(game)
+    game.draw_win_overlay()
   } else if game.state == @types.state_game_over {
-    draw_game_over_overlay(game)
+    game.draw_game_over_overlay()
   }
 }

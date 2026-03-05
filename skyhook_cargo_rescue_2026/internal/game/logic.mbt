@@ -1,11 +1,11 @@
 ///|
-fn set_msg(game : @types.Game, msg : String, ttl : Float) -> Unit {
+fn @types.Game::set_msg(game : @types.Game, msg : String, ttl : Float) -> Unit {
   game.msg = msg
   game.msg_t = ttl
 }
 
 ///|
-fn clear_particles(game : @types.Game) -> Unit {
+fn @types.Game::clear_particles(game : @types.Game) -> Unit {
   for particle in game.particles {
     particle.active = false
     particle.x = 0.0
@@ -19,7 +19,7 @@ fn clear_particles(game : @types.Game) -> Unit {
 }
 
 ///|
-fn clear_world(game : @types.Game) -> Unit {
+fn @types.Game::clear_world(game : @types.Game) -> Unit {
   for survivor in game.survivors {
     survivor.active = false
     survivor.x = 0.0
@@ -55,7 +55,7 @@ fn clear_world(game : @types.Game) -> Unit {
 }
 
 ///|
-fn emit_particle(
+fn @types.Game::emit_particle(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -83,10 +83,9 @@ fn emit_particle(
 }
 
 ///|
-fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
+fn @types.Game::burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
   for _i in 0..<n {
-    emit_particle(
-      game,
+    game.emit_particle(
       x + @types.randf(-14.0, 14.0),
       y + @types.randf(-14.0, 14.0),
       @types.randf(-260.0, 260.0),
@@ -99,7 +98,7 @@ fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit 
 }
 
 ///|
-fn update_particles(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
       continue
@@ -122,7 +121,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn reset_heli(game : @types.Game) -> Unit {
+fn @types.Game::reset_heli(game : @types.Game) -> Unit {
   game.heli_x = Float::from_int(@types.world_x0 + @types.world_w / 2)
   game.heli_y = Float::from_int(@types.world_y0 + @types.world_h - 220)
   game.heli_vx = 0.0
@@ -137,13 +136,13 @@ fn reset_heli(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_run(game : @types.Game) -> Unit {
-  clear_world(game)
-  clear_particles(game)
+fn @types.Game::start_run(game : @types.Game) -> Unit {
+  game.clear_world()
+  game.clear_particles()
 
   game.state = @types.state_play
 
-  reset_heli(game)
+  game.reset_heli()
 
   game.boost_on = false
   game.lives = 3
@@ -178,11 +177,11 @@ fn start_run(game : @types.Game) -> Unit {
   game.shake_t = 0.0
   game.win = false
 
-  set_msg(game, "Rescue 18 survivors with the skyhook.", 2.8)
+  game.set_msg("Rescue 18 survivors with the skyhook.", 2.8)
 }
 
 ///|
-fn finish_run(game : @types.Game, win : Bool) -> Unit {
+fn @types.Game::finish_run(game : @types.Game, win : Bool) -> Unit {
   if game.state != @types.state_play {
     return
   }
@@ -199,16 +198,16 @@ fn finish_run(game : @types.Game, win : Bool) -> Unit {
   }
 
   if win {
-    set_msg(game, "All priority civilians extracted.", 3.0)
-    burst(game, @types.safe_cx(), @types.safe_cy(), 70, 2)
+    game.set_msg("All priority civilians extracted.", 3.0)
+    game.burst(@types.safe_cx(), @types.safe_cy(), 70, 2)
   } else {
-    set_msg(game, "Rescue mission failed in storm zone.", 3.0)
-    burst(game, game.heli_x, game.heli_y, 56, 1)
+    game.set_msg("Rescue mission failed in storm zone.", 3.0)
+    game.burst(game.heli_x, game.heli_y, 56, 1)
   }
 }
 
 ///|
-fn spawn_survivor(game : @types.Game) -> Bool {
+fn @types.Game::spawn_survivor(game : @types.Game) -> Bool {
   for survivor in game.survivors {
     if survivor.active {
       continue
@@ -236,7 +235,7 @@ fn spawn_survivor(game : @types.Game) -> Bool {
 }
 
 ///|
-fn spawn_hazard(game : @types.Game) -> Bool {
+fn @types.Game::spawn_hazard(game : @types.Game) -> Bool {
   for hazard in game.hazards {
     if hazard.active {
       continue
@@ -300,7 +299,7 @@ fn spawn_hazard(game : @types.Game) -> Bool {
 }
 
 ///|
-fn spawn_pickup(game : @types.Game) -> Bool {
+fn @types.Game::spawn_pickup(game : @types.Game) -> Bool {
   for pickup in game.pickups {
     if pickup.active {
       continue
@@ -332,7 +331,7 @@ fn spawn_pickup(game : @types.Game) -> Bool {
 }
 
 ///|
-fn count_active_survivors(game : @types.Game) -> Int {
+fn @types.Game::count_active_survivors(game : @types.Game) -> Int {
   let mut n : Int = 0
   for survivor in game.survivors {
     if survivor.active {
@@ -343,7 +342,7 @@ fn count_active_survivors(game : @types.Game) -> Int {
 }
 
 ///|
-fn try_toggle_hook(game : @types.Game) -> Bool {
+fn @types.Game::try_toggle_hook(game : @types.Game) -> Bool {
   if game.state != @types.state_play {
     return false
   }
@@ -352,16 +351,16 @@ fn try_toggle_hook(game : @types.Game) -> Bool {
   game.hook_target = if game.hook_extending { 240.0 } else { 46.0 }
 
   if game.hook_extending {
-    set_msg(game, "Hook extending.", 0.8)
+    game.set_msg("Hook extending.", 0.8)
   } else {
-    set_msg(game, "Hook retracting.", 0.8)
+    game.set_msg("Hook retracting.", 0.8)
   }
 
   true
 }
 
 ///|
-fn try_repair(game : @types.Game) -> Bool {
+fn @types.Game::try_repair(game : @types.Game) -> Bool {
   if game.state != @types.state_play {
     return false
   }
@@ -378,13 +377,13 @@ fn try_repair(game : @types.Game) -> Bool {
     180.0 * 180.0
 
   if not(near_pad) {
-    set_msg(game, "Return to rescue pad for repair.", 1.0)
+    game.set_msg("Return to rescue pad for repair.", 1.0)
     game.repair_cd = 0.22
     return false
   }
 
   if game.fuel < 8.0 {
-    set_msg(game, "Not enough fuel for field repair.", 1.0)
+    game.set_msg("Not enough fuel for field repair.", 1.0)
     game.repair_cd = 0.22
     return false
   }
@@ -394,14 +393,14 @@ fn try_repair(game : @types.Game) -> Bool {
   game.repair_cd = 1.1
 
   game.score = game.score + 14
-  set_msg(game, "Repair complete.", 1.1)
-  burst(game, game.heli_x, game.heli_y, 24, 2)
+  game.set_msg("Repair complete.", 1.1)
+  game.burst(game.heli_x, game.heli_y, 24, 2)
 
   true
 }
 
 ///|
-fn hurt_heli(game : @types.Game, dmg : Float) -> Unit {
+fn @types.Game::hurt_heli(game : @types.Game, dmg : Float) -> Unit {
   game.hull = game.hull - dmg
   game.combo = 0
   game.combo_t = 0.0
@@ -412,20 +411,20 @@ fn hurt_heli(game : @types.Game, dmg : Float) -> Unit {
     game.hull = 100.0
     game.fuel = @types.maxf(0.0, game.fuel - 16.0)
 
-    reset_heli(game)
-    set_msg(game, "Helicopter downed. Life lost.", 1.6)
-    burst(game, game.heli_x, game.heli_y, 34, 1)
+    game.reset_heli()
+    game.set_msg("Helicopter downed. Life lost.", 1.6)
+    game.burst(game.heli_x, game.heli_y, 34, 1)
 
     if game.lives <= 0 {
-      finish_run(game, false)
+      game.finish_run(false)
     }
   } else {
-    burst(game, game.heli_x, game.heli_y, 14, 1)
+    game.burst(game.heli_x, game.heli_y, 14, 1)
   }
 }
 
 ///|
-fn drop_carried_survivor(game : @types.Game) -> Unit {
+fn @types.Game::drop_carried_survivor(game : @types.Game) -> Unit {
   if game.carrying_idx < 0 || game.carrying_idx >= game.survivors.length() {
     game.carrying_idx = -1
     return
@@ -437,8 +436,8 @@ fn drop_carried_survivor(game : @types.Game) -> Unit {
     game.survivors[idx].carried = false
     game.lost = game.lost + 1
     game.score = (0).max(game.score - 18)
-    set_msg(game, "Passenger lost in storm.", 1.3)
-    burst(game, game.survivors[idx].x, game.survivors[idx].y, 22, 1)
+    game.set_msg("Passenger lost in storm.", 1.3)
+    game.burst(game.survivors[idx].x, game.survivors[idx].y, 22, 1)
   }
 
   game.carrying_idx = -1
@@ -447,7 +446,7 @@ fn drop_carried_survivor(game : @types.Game) -> Unit {
 }
 
 ///|
-fn rescue_carried_survivor(game : @types.Game) -> Unit {
+fn @types.Game::rescue_carried_survivor(game : @types.Game) -> Unit {
   if game.carrying_idx < 0 || game.carrying_idx >= game.survivors.length() {
     game.carrying_idx = -1
     return
@@ -469,8 +468,8 @@ fn rescue_carried_survivor(game : @types.Game) -> Unit {
       game.best_score = game.score
     }
 
-    set_msg(game, "Civilian delivered +" + bonus.to_string(), 1.1)
-    burst(game, @types.safe_cx(), @types.safe_cy(), 28, 2)
+    game.set_msg("Civilian delivered +" + bonus.to_string(), 1.1)
+    game.burst(@types.safe_cx(), @types.safe_cy(), 28, 2)
   }
 
   game.carrying_idx = -1
@@ -479,27 +478,27 @@ fn rescue_carried_survivor(game : @types.Game) -> Unit {
 }
 
 ///|
-fn collect_pickup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit {
+fn @types.Game::collect_pickup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit {
   if kind == @types.pickup_fuel {
     game.fuel = @types.minf(100.0, game.fuel + 30.0)
     game.score = game.score + 10
-    set_msg(game, "Fuel pod collected.", 1.0)
-    burst(game, x, y, 18, 0)
+    game.set_msg("Fuel pod collected.", 1.0)
+    game.burst(x, y, 18, 0)
   } else if kind == @types.pickup_medkit {
     game.hull = @types.minf(100.0, game.hull + 28.0)
     game.score = game.score + 10
-    set_msg(game, "Hull repairs online.", 1.0)
-    burst(game, x, y, 18, 2)
+    game.set_msg("Hull repairs online.", 1.0)
+    game.burst(x, y, 18, 2)
   } else {
     game.turbo_t = @types.maxf(game.turbo_t, 7.0)
     game.score = game.score + 16
-    set_msg(game, "Turbo rotor boost ready.", 1.0)
-    burst(game, x, y, 20, 2)
+    game.set_msg("Turbo rotor boost ready.", 1.0)
+    game.burst(x, y, 20, 2)
   }
 }
 
 ///|
-fn update_heli(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_heli(game : @types.Game, dt : Float) -> Unit {
   let wind_x : Float = @math.sinf(game.storm_t * 0.82 + game.heli_y * 0.010) *
     (52.0 + Float::from_int(game.wave) * 6.0)
   let wind_y : Float = @math.cosf(game.storm_t * 0.64 + game.heli_x * 0.008) *
@@ -542,8 +541,7 @@ fn update_heli(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.boost_on || game.turbo_t > 0.0 {
-    emit_particle(
-      game,
+    game.emit_particle(
       game.heli_x + @types.randf(-8.0, 8.0),
       game.heli_y + @types.randf(14.0, 22.0),
       @types.randf(-40.0, 40.0),
@@ -556,7 +554,7 @@ fn update_heli(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_hook(game : @types.Game, dt : Float) -> Float {
+fn @types.Game::update_hook(game : @types.Game, dt : Float) -> Float {
   let old_len : Float = game.hook_len
 
   if game.hook_extending {
@@ -586,8 +584,8 @@ fn update_hook(game : @types.Game, dt : Float) -> Float {
         game.carrying_idx = i
         game.survivors[i].carried = true
         game.survivors[i].panic = 0.0
-        set_msg(game, "Passenger latched.", 0.9)
-        burst(game, tip_x, tip_y, 16, 2)
+        game.set_msg("Passenger latched.", 0.9)
+        game.burst(tip_x, tip_y, 16, 2)
         break
       }
     }
@@ -608,7 +606,7 @@ fn update_hook(game : @types.Game, dt : Float) -> Float {
 
       if game.hook_len <= 64.0 &&
         @types.inside_safe_zone(game.survivors[idx].x, game.survivors[idx].y) {
-        rescue_carried_survivor(game)
+        game.rescue_carried_survivor()
       }
     } else {
       game.carrying_idx = -1
@@ -619,7 +617,7 @@ fn update_hook(game : @types.Game, dt : Float) -> Float {
 }
 
 ///|
-fn update_survivors(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_survivors(game : @types.Game, dt : Float) -> Unit {
   for survivor in game.survivors {
     if not(survivor.active) {
       continue
@@ -676,7 +674,7 @@ fn hazard_damage(kind : Int) -> Float {
 }
 
 ///|
-fn update_hazards(game : @types.Game, dt : Float, hook_speed : Float) -> Unit {
+fn @types.Game::update_hazards(game : @types.Game, dt : Float, hook_speed : Float) -> Unit {
   let tip_x : Float = @types.hook_tip_x(game)
   let tip_y : Float = @types.hook_tip_y(game)
 
@@ -726,7 +724,7 @@ fn update_hazards(game : @types.Game, dt : Float, hook_speed : Float) -> Unit {
     let rr_heli : Float = hazard.r + @types.heli_r - 4.0
     if @types.dist2(hazard.x, hazard.y, game.heli_x, game.heli_y) <=
       rr_heli * rr_heli {
-      hurt_heli(game, hazard_damage(hazard.kind))
+      game.hurt_heli(hazard_damage(hazard.kind))
       hazard.active = false
       if game.state != @types.state_play {
         return
@@ -746,7 +744,7 @@ fn update_hazards(game : @types.Game, dt : Float, hook_speed : Float) -> Unit {
           ) <=
           rr_car * rr_car {
           hazard.active = false
-          drop_carried_survivor(game)
+          game.drop_carried_survivor()
           continue
         }
       }
@@ -758,7 +756,7 @@ fn update_hazards(game : @types.Game, dt : Float, hook_speed : Float) -> Unit {
       let dmg : Float = if hook_speed > 460.0 { 34.0 } else { 18.0 }
       hazard.hp = hazard.hp - dmg
 
-      burst(game, hazard.x, hazard.y, 14, 0)
+      game.burst(hazard.x, hazard.y, 14, 0)
 
       if hazard.hp <= 0.0 {
         hazard.active = false
@@ -769,7 +767,7 @@ fn update_hazards(game : @types.Game, dt : Float, hook_speed : Float) -> Unit {
 }
 
 ///|
-fn update_pickups(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_pickups(game : @types.Game, dt : Float) -> Unit {
   for pickup in game.pickups {
     if not(pickup.active) {
       continue
@@ -801,13 +799,13 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
       let px : Float = pickup.x
       let py : Float = pickup.y
       pickup.active = false
-      collect_pickup(game, kind, px, py)
+      game.collect_pickup(kind, px, py)
     }
   }
 }
 
 ///|
-fn use_hint(game : @types.Game) -> Bool {
+fn @types.Game::use_hint(game : @types.Game) -> Bool {
   if game.state != @types.state_play || game.hint_left <= 0 {
     return false
   }
@@ -874,13 +872,13 @@ fn use_hint(game : @types.Game) -> Bool {
   game.hint_left = game.hint_left - 1
   game.score = (0).max(game.score - 5)
 
-  set_msg(game, msg, 1.3)
+  game.set_msg(msg, 1.3)
 
   true
 }
 
 ///|
-fn update_play(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   let step : Float = @types.clampf(dt, 0.0, 0.04)
 
   game.ui_t = game.ui_t + step
@@ -897,7 +895,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   game.turbo_t = @types.maxf(0.0, game.turbo_t - step)
   game.repair_cd = @types.maxf(0.0, game.repair_cd - step)
 
-  update_particles(game, step)
+  game.update_particles(step)
 
   if game.state != @types.state_play {
     return
@@ -907,12 +905,12 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   game.storm_t = game.storm_t + step
 
   if game.rescued >= @types.rescue_target {
-    finish_run(game, true)
+    game.finish_run(true)
     return
   }
 
   if game.game_t >= @types.run_time_goal {
-    finish_run(game, false)
+    game.finish_run(false)
     return
   }
 
@@ -925,8 +923,8 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   )
   if game.survivor_spawn_t >= spawn_survivor_every {
     game.survivor_spawn_t = game.survivor_spawn_t - spawn_survivor_every
-    if count_active_survivors(game) < 9 {
-      ignore(spawn_survivor(game))
+    if game.count_active_survivors() < 9 {
+      ignore(game.spawn_survivor())
     }
   }
 
@@ -937,23 +935,23 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   )
   while game.hazard_spawn_t >= spawn_hazard_every {
     game.hazard_spawn_t = game.hazard_spawn_t - spawn_hazard_every
-    ignore(spawn_hazard(game))
+    ignore(game.spawn_hazard())
   }
 
   game.pickup_spawn_t = game.pickup_spawn_t + step
   if game.pickup_spawn_t >= 3.0 {
     game.pickup_spawn_t = 0.0
-    ignore(spawn_pickup(game))
+    ignore(game.spawn_pickup())
   }
 
-  update_heli(game, step)
-  let hook_speed : Float = update_hook(game, step)
-  update_survivors(game, step)
-  update_hazards(game, step, hook_speed)
+  game.update_heli(step)
+  let hook_speed : Float = game.update_hook(step)
+  game.update_survivors(step)
+  game.update_hazards(step, hook_speed)
   if game.state != @types.state_play {
     return
   }
-  update_pickups(game, step)
+  game.update_pickups(step)
 
   let fuel_drain : Float = if game.boost_on || game.turbo_t > 0.0 {
     2.7 + Float::from_int(game.wave) * 0.12
@@ -968,14 +966,14 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.hull <= 0.0 {
-    hurt_heli(game, 100.0)
+    game.hurt_heli(100.0)
     if game.state != @types.state_play {
       return
     }
   }
 
   if game.lives <= 0 {
-    finish_run(game, false)
+    game.finish_run(false)
     return
   }
 
@@ -996,13 +994,13 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 
   // Handle input based on state
   if game.state == @types.state_title {
-    update_title_input(game)
-    update_play(game, dt)
+    game.update_title_input()
+    game.update_play(dt)
   } else if game.state == @types.state_play {
-    update_play_input(game, dt)
-    update_play(game, dt)
+    game.update_play_input(dt)
+    game.update_play(dt)
   } else {
-    update_result_input(game)
-    update_play(game, dt)
+    game.update_result_input()
+    game.update_play(dt)
   }
 }

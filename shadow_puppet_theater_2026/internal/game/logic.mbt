@@ -1,5 +1,5 @@
 ///|
-fn generate_sequence(game : @types.Game) -> Unit {
+fn @types.Game::generate_sequence(game : @types.Game) -> Unit {
   game.sequence.clear()
 
   let len = @types.sequence_len_for_stage(game.stage)
@@ -34,7 +34,7 @@ fn generate_sequence(game : @types.Game) -> Unit {
 }
 
 ///|
-fn init_title_scene(game : @types.Game) -> Unit {
+fn @types.Game::init_title_scene(game : @types.Game) -> Unit {
   game.state = Title
   game.stage = 1
   game.score = 0
@@ -61,7 +61,7 @@ fn init_title_scene(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_show(game : @types.Game) -> Unit {
+fn @types.Game::start_show(game : @types.Game) -> Unit {
   game.state = Play
   game.stage = 1
   game.score = 0
@@ -75,14 +75,14 @@ fn start_show(game : @types.Game) -> Unit {
   game.hit_count = 0
   game.miss_count = 0
   @types.reset_current_pose(game)
-  generate_sequence(game)
+  game.generate_sequence()
   @types.set_message(
     game, "Match each target silhouette before the cue clock runs out.", 3.5,
   )
 }
 
 ///|
-fn apply_pose_axis_input(game : @types.Game) -> Unit {
+fn @types.Game::apply_pose_axis_input(game : @types.Game) -> Unit {
   if game.input.axis_dx != 0 {
     game.current_pose.ax = (game.current_pose.ax + game.input.axis_dx).clamp(
       min=@types.pose_axis_min,
@@ -98,7 +98,7 @@ fn apply_pose_axis_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn try_activate_burst(game : @types.Game) -> Unit {
+fn @types.Game::try_activate_burst(game : @types.Game) -> Unit {
   if not(game.input.burst_pressed) {
     return
   }
@@ -118,7 +118,7 @@ fn try_activate_burst(game : @types.Game) -> Unit {
 }
 
 ///|
-fn apply_mistake(game : @types.Game, timeout : Bool) -> Unit {
+fn @types.Game::apply_mistake(game : @types.Game, timeout : Bool) -> Unit {
   game.miss_count = game.miss_count + 1
   game.combo = 0
   game.combo_t = 0.0
@@ -138,7 +138,7 @@ fn apply_mistake(game : @types.Game, timeout : Bool) -> Unit {
   game.excitement = @types.maxf(0.0, game.excitement - excite_loss)
 
   if timeout {
-    generate_sequence(game)
+    game.generate_sequence()
     @types.set_message(game, "Cue missed! New sequence enters.", 1.2)
   } else {
     game.cue_time_left = @types.maxf(
@@ -150,7 +150,7 @@ fn apply_mistake(game : @types.Game, timeout : Bool) -> Unit {
 }
 
 ///|
-fn complete_sequence(game : @types.Game) -> Unit {
+fn @types.Game::complete_sequence(game : @types.Game) -> Unit {
   let bonus = 160 + game.stage * 30 + game.combo * 8
   @types.add_score(game, bonus)
 
@@ -158,7 +158,7 @@ fn complete_sequence(game : @types.Game) -> Unit {
   game.excitement = @types.minf(@types.excitement_max, game.excitement + 14.0)
   game.spotlight = @types.minf(@types.spotlight_max, game.spotlight + 12.0)
 
-  generate_sequence(game)
+  game.generate_sequence()
   @types.set_message(
     game,
     "Act cleared! Scene " + game.stage.to_string() + " begins.",
@@ -167,7 +167,7 @@ fn complete_sequence(game : @types.Game) -> Unit {
 }
 
 ///|
-fn lock_current_pose(game : @types.Game) -> Unit {
+fn @types.Game::lock_current_pose(game : @types.Game) -> Unit {
   if game.sequence.length() <= 0 || game.target_idx >= game.sequence.length() {
     return
   }
@@ -205,17 +205,17 @@ fn lock_current_pose(game : @types.Game) -> Unit {
     game.cue_time_left = game.cue_time_limit
 
     if game.target_idx >= game.sequence.length() {
-      complete_sequence(game)
+      game.complete_sequence()
     } else {
       @types.set_message(game, "Great lock!", 0.55)
     }
   } else {
-    apply_mistake(game, false)
+    game.apply_mistake(false)
   }
 }
 
 ///|
-fn undo_last_pose(game : @types.Game) -> Unit {
+fn @types.Game::undo_last_pose(game : @types.Game) -> Unit {
   if game.history.length() <= 0 || game.target_idx <= 0 {
     @types.set_message(game, "No locked pose to undo.", 0.7)
     return
@@ -240,33 +240,33 @@ fn undo_last_pose(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_title_state(game : @types.Game) -> Unit {
+fn @types.Game::update_title_state(game : @types.Game) -> Unit {
   game.excitement = 18.0 + (0.5 + 0.5 * @math.sinf(game.scene_t * 0.8)) * 14.0
   game.spotlight = @types.spotlight_start + @math.sinf(game.scene_t * 0.6) * 8.0
 
   if game.input.start_pressed {
-    start_show(game)
+    game.start_show()
   }
 }
 
 ///|
-fn update_play_state(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_play_state(game : @types.Game, dt : Float) -> Unit {
   if game.input.pause_pressed {
     game.state = Paused
     @types.set_message(game, "Show paused. Press P to resume.", 99.0)
     return
   }
 
-  apply_pose_axis_input(game)
+  game.apply_pose_axis_input()
 
   if game.input.undo_pressed {
-    undo_last_pose(game)
+    game.undo_last_pose()
   }
 
-  try_activate_burst(game)
+  game.try_activate_burst()
 
   if game.input.lock_pressed {
-    lock_current_pose(game)
+    game.lock_current_pose()
   }
 
   let sim_dt = dt * @types.active_slow_factor(game)
@@ -288,7 +288,7 @@ fn update_play_state(game : @types.Game, dt : Float) -> Unit {
   game.spotlight = @types.maxf(0.0, game.spotlight - sim_dt * pressure)
 
   if game.cue_time_left <= 0.0 {
-    apply_mistake(game, true)
+    game.apply_mistake(true)
   }
 
   if game.spotlight <= 0.0 {
@@ -299,7 +299,7 @@ fn update_play_state(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_paused_state(game : @types.Game) -> Unit {
+fn @types.Game::update_paused_state(game : @types.Game) -> Unit {
   if game.input.pause_pressed {
     game.state = Play
     @types.set_message(game, "Show resumed.", 0.8)
@@ -307,24 +307,24 @@ fn update_paused_state(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_result_state(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_result_state(game : @types.Game, dt : Float) -> Unit {
   game.result_t = game.result_t + dt
 
   if game.input.start_pressed {
-    start_show(game)
+    game.start_show()
   }
 }
 
 ///|
 /// Initializes the game into a fresh title-scene state.
 pub fn init_game(game : @types.Game) -> Unit {
-  init_title_scene(game)
+  game.init_title_scene()
 }
 
 ///|
 /// Advances one frame of input sampling and state-specific gameplay updates.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
-  sample_input(game)
+  game.sample_input()
 
   game.scene_t = game.scene_t + dt
   game.beat_t = game.beat_t + dt
@@ -333,14 +333,14 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.burst_cd = @types.maxf(0.0, game.burst_cd - dt)
 
   if game.input.restart_pressed {
-    start_show(game)
+    game.start_show()
     return
   }
 
   match game.state {
-    Title => update_title_state(game)
-    Play => update_play_state(game, dt)
-    Paused => update_paused_state(game)
-    Result => update_result_state(game, dt)
+    Title => game.update_title_state()
+    Play => game.update_play_state(dt)
+    Paused => game.update_paused_state()
+    Result => game.update_result_state(dt)
   }
 }

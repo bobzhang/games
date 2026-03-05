@@ -53,7 +53,7 @@ fn draw_button(
 }
 
 ///|
-fn camera_x(game : @types.Game) -> Float {
+fn @types.Game::camera_x(game : @types.Game) -> Float {
   @types.clampf(
     game.hero.x - Float::from_int(@types.screen_w) * 0.34,
     0.0,
@@ -62,7 +62,7 @@ fn camera_x(game : @types.Game) -> Float {
 }
 
 ///|
-fn draw_background(game : @types.Game, cam_x : Float) -> Unit {
+fn @types.Game::draw_background(game : @types.Game, cam_x : Float) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -125,7 +125,7 @@ fn draw_background(game : @types.Game, cam_x : Float) -> Unit {
 }
 
 ///|
-fn draw_world_tiles(game : @types.Game, cam_x : Float) -> Unit {
+fn @types.Game::draw_world_tiles(game : @types.Game, cam_x : Float) -> Unit {
   for i in 0..<game.tile_count {
     let t = game.tiles[i]
     let sx = t.x - cam_x
@@ -188,7 +188,7 @@ fn draw_world_tiles(game : @types.Game, cam_x : Float) -> Unit {
 }
 
 ///|
-fn draw_checkpoints(game : @types.Game, cam_x : Float) -> Unit {
+fn @types.Game::draw_checkpoints(game : @types.Game, cam_x : Float) -> Unit {
   for i in 0..<game.checkpoint_count {
     let cp = game.checkpoints[i]
     let sx = cp.x - cam_x
@@ -234,7 +234,7 @@ fn draw_checkpoints(game : @types.Game, cam_x : Float) -> Unit {
 }
 
 ///|
-fn draw_goal(game : @types.Game, cam_x : Float) -> Unit {
+fn @types.Game::draw_goal(game : @types.Game, cam_x : Float) -> Unit {
   let sx = game.goal_x - cam_x
   let pulse : Float = 0.5 + 0.5 * @math.sinf(game.run_time_s * 4.0)
 
@@ -262,7 +262,7 @@ fn draw_goal(game : @types.Game, cam_x : Float) -> Unit {
 }
 
 ///|
-fn draw_player(game : @types.Game, cam_x : Float) -> Unit {
+fn @types.Game::draw_player(game : @types.Game, cam_x : Float) -> Unit {
   let hero = game.hero
   let sx = hero.x - cam_x
 
@@ -324,7 +324,7 @@ fn draw_player(game : @types.Game, cam_x : Float) -> Unit {
 }
 
 ///|
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(14, 12, 340, 116, @raylib.Color::new(8, 12, 18, 148))
   @raylib.draw_rectangle_lines(
     14,
@@ -408,7 +408,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_play_touch_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_play_touch_controls(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -483,7 +483,7 @@ fn draw_play_touch_controls(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -567,7 +567,7 @@ fn lose_reason_text(reason : @types.LoseReason) -> String {
 }
 
 ///|
-fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_stage_clear_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -617,7 +617,7 @@ fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_game_over_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -668,7 +668,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_victory_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_victory_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -727,24 +727,24 @@ fn draw_victory_overlay(game : @types.Game) -> Unit {
 ///|
 /// Draws one full frame of stage geometry, player, HUD, and overlays.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  let cam_x = camera_x(game)
+  let cam_x = game.camera_x()
 
-  draw_background(game, cam_x)
-  draw_world_tiles(game, cam_x)
-  draw_checkpoints(game, cam_x)
-  draw_goal(game, cam_x)
-  draw_player(game, cam_x)
-  draw_hud(game)
+  game.draw_background(cam_x)
+  game.draw_world_tiles(cam_x)
+  game.draw_checkpoints(cam_x)
+  game.draw_goal(cam_x)
+  game.draw_player(cam_x)
+  game.draw_hud()
 
   match game.state {
-    Title => draw_title_overlay(game)
-    StageClear => draw_stage_clear_overlay(game)
-    GameOver => draw_game_over_overlay(game)
-    Victory => draw_victory_overlay(game)
+    Title => game.draw_title_overlay()
+    StageClear => game.draw_stage_clear_overlay()
+    GameOver => game.draw_game_over_overlay()
+    Victory => game.draw_victory_overlay()
     Play => ()
   }
 
   if game.touch_mode && game.state == Play {
-    draw_play_touch_controls(game)
+    game.draw_play_touch_controls()
   }
 }

@@ -7,7 +7,7 @@ fn world_to_screen_y(world_y : Float, shake_y : Float) -> Float {
 }
 
 ///|
-fn draw_background(game : @types.Game, shake_y : Float) -> Unit {
+fn @types.Game::draw_background(game : @types.Game, shake_y : Float) -> Unit {
   let sky_top = @raylib.Color::new(130, 200, 255, 255)
   let sky_bottom = @raylib.Color::new(120, 180, 250, 255)
 
@@ -41,7 +41,7 @@ fn draw_background(game : @types.Game, shake_y : Float) -> Unit {
 }
 
 ///|
-fn draw_tile(
+fn @types.Game::draw_tile(
   game : @types.Game,
   tx : Int,
   ty : Int,
@@ -214,7 +214,7 @@ fn draw_tile(
 }
 
 ///|
-fn draw_tiles(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_tiles(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
   let start_tx = (@types.world_to_tile_x(cam_x) - 1).clamp(
     min=0,
     max=@types.world_tiles_w - 1,
@@ -226,13 +226,13 @@ fn draw_tiles(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
 
   for ty in 0..<@types.world_tiles_h {
     for tx in start_tx..<=end_tx {
-      draw_tile(game, tx, ty, @types.get_tile(game, tx, ty), cam_x, shake_y)
+      game.draw_tile(tx, ty, @types.get_tile(game, tx, ty), cam_x, shake_y)
     }
   }
 }
 
 ///|
-fn draw_flag(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_flag(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
   let pole_x = @types.world_to_screen_x(game.flag_x, cam_x).to_int()
   let top_y = world_to_screen_y(game.flag_top_y, shake_y).to_int()
   let bottom_y = world_to_screen_y(
@@ -268,7 +268,7 @@ fn draw_flag(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
 }
 
 ///|
-fn draw_coins(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_coins(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
   for c in game.coins {
     if not(c.active) {
       continue
@@ -328,7 +328,7 @@ fn draw_enemy(enemy : @types.Enemy, cam_x : Float, shake_y : Float) -> Unit {
 }
 
 ///|
-fn draw_enemies(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_enemies(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
   for e in game.enemies {
     if e.active {
       draw_enemy(e, cam_x, shake_y)
@@ -337,7 +337,7 @@ fn draw_enemies(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
 }
 
 ///|
-fn draw_player(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_player(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
   let player = game.player
   if player.invuln_t > 0.0 && (@raylib.get_time() * 18.0).to_int() % 2 == 0 {
     return
@@ -417,7 +417,7 @@ fn draw_player(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
 }
 
 ///|
-fn draw_particles(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_particles(game : @types.Game, cam_x : Float, shake_y : Float) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -437,11 +437,11 @@ pub fn draw_world(game : @types.Game) -> Unit {
   let shake_y = if game.shake_t > 0.0 { @types.randf(-3.0, 3.0) } else { 0.0 }
   let cam_x = game.camera_x + shake_x
 
-  draw_background(game, shake_y)
-  draw_tiles(game, cam_x, shake_y)
-  draw_flag(game, cam_x, shake_y)
-  draw_coins(game, cam_x, shake_y)
-  draw_enemies(game, cam_x, shake_y)
-  draw_player(game, cam_x, shake_y)
-  draw_particles(game, cam_x, shake_y)
+  game.draw_background(shake_y)
+  game.draw_tiles(cam_x, shake_y)
+  game.draw_flag(cam_x, shake_y)
+  game.draw_coins(cam_x, shake_y)
+  game.draw_enemies(cam_x, shake_y)
+  game.draw_player(cam_x, shake_y)
+  game.draw_particles(cam_x, shake_y)
 }

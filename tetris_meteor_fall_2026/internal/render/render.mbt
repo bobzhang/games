@@ -20,7 +20,7 @@ fn draw_board_cell(x : Int, y : Int, color_id : Int) -> Unit {
 }
 
 ///|
-fn ghost_y(game : @types.Game) -> Int {
+fn @types.Game::ghost_y(game : @types.Game) -> Int {
   let mut y = game.piece_y
   while not(
           @types.collides(
@@ -79,7 +79,7 @@ fn draw_preview(kind : Int, x : Int, y : Int, title : String) -> Unit {
 }
 
 ///|
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   draw_preview(game.next_kind, @types.side_panel_x, 80, "NEXT")
   draw_preview(game.hold_kind, @types.side_panel_x, 240, "HOLD")
 
@@ -152,7 +152,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   }
 
   if not(game.over) {
-    let gy = ghost_y(game)
+    let gy = game.ghost_y()
     let ghost = @raylib.Color::new(80, 80, 95, 160)
     draw_piece_blocks(
       game.piece_kind,
@@ -180,7 +180,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.draw_text(
     "TETRIS: METEOR FALL", @types.board_x, 2, 22, @raylib.raywhite,
   )
-  draw_hud(game)
+  game.draw_hud()
 
   if game.over {
     @raylib.draw_rectangle(

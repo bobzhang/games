@@ -1,11 +1,11 @@
 ///|
-fn set_message(game : @types.Game, msg : String, ttl : Float) -> Unit {
+fn @types.Game::set_message(game : @types.Game, msg : String, ttl : Float) -> Unit {
   game.message = msg
   game.message_t = ttl
 }
 
 ///|
-fn clear_raiders(game : @types.Game) -> Unit {
+fn @types.Game::clear_raiders(game : @types.Game) -> Unit {
   for raider in game.raiders {
     raider.active = false
     raider.kind = @types.raider_skirmisher
@@ -24,7 +24,7 @@ fn clear_raiders(game : @types.Game) -> Unit {
 }
 
 ///|
-fn clear_bullets(game : @types.Game) -> Unit {
+fn @types.Game::clear_bullets(game : @types.Game) -> Unit {
   for bullet in game.bullets {
     bullet.active = false
     bullet.x = 0.0
@@ -37,7 +37,7 @@ fn clear_bullets(game : @types.Game) -> Unit {
 }
 
 ///|
-fn clear_dust(game : @types.Game) -> Unit {
+fn @types.Game::clear_dust(game : @types.Game) -> Unit {
   for dust in game.dusts {
     dust.active = false
     dust.x = 0.0
@@ -51,7 +51,7 @@ fn clear_dust(game : @types.Game) -> Unit {
 }
 
 ///|
-fn reset_wagons(game : @types.Game) -> Unit {
+fn @types.Game::reset_wagons(game : @types.Game) -> Unit {
   for i in 0..<game.wagons.length() {
     game.wagons[i].x = @types.wagon_slot_x(i)
     game.wagons[i].y = @types.wagon_slot_y(i)
@@ -78,11 +78,11 @@ fn reset_hero(hero : @types.Player) -> Unit {
 }
 
 ///|
-fn start_run(game : @types.Game) -> Unit {
-  clear_raiders(game)
-  clear_bullets(game)
-  clear_dust(game)
-  reset_wagons(game)
+fn @types.Game::start_run(game : @types.Game) -> Unit {
+  game.clear_raiders()
+  game.clear_bullets()
+  game.clear_dust()
+  game.reset_wagons()
   reset_hero(game.hero)
 
   game.state = @types.state_play
@@ -100,11 +100,11 @@ fn start_run(game : @types.Game) -> Unit {
   game.time_s = 0.0
   game.flash_t = 0.0
   game.shake_t = 0.0
-  set_message(game, "Escort in motion", 1.2)
+  game.set_message("Escort in motion", 1.2)
 }
 
 ///|
-fn alloc_raider(game : @types.Game) -> Int {
+fn @types.Game::alloc_raider(game : @types.Game) -> Int {
   for i in 0..<game.raiders.length() {
     if not(game.raiders[i].active) {
       return i
@@ -123,7 +123,7 @@ fn alloc_raider(game : @types.Game) -> Int {
 }
 
 ///|
-fn alloc_bullet(game : @types.Game) -> Int {
+fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
   for i in 0..<game.bullets.length() {
     if not(game.bullets[i].active) {
       return i
@@ -142,7 +142,7 @@ fn alloc_bullet(game : @types.Game) -> Int {
 }
 
 ///|
-fn alloc_dust(game : @types.Game) -> Int {
+fn @types.Game::alloc_dust(game : @types.Game) -> Int {
   for i in 0..<game.dusts.length() {
     if not(game.dusts[i].active) {
       return i
@@ -152,7 +152,7 @@ fn alloc_dust(game : @types.Game) -> Int {
 }
 
 ///|
-fn emit_dust(
+fn @types.Game::emit_dust(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -162,7 +162,7 @@ fn emit_dust(
   size : Float,
   kind : Int,
 ) -> Unit {
-  let i = alloc_dust(game)
+  let i = game.alloc_dust()
   game.dusts[i].active = true
   game.dusts[i].x = x
   game.dusts[i].y = y
@@ -174,7 +174,7 @@ fn emit_dust(
 }
 
 ///|
-fn burst_dust(
+fn @types.Game::burst_dust(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -182,8 +182,7 @@ fn burst_dust(
   kind : Int,
 ) -> Unit {
   for _i in 0..<count {
-    emit_dust(
-      game,
+    game.emit_dust(
       x + @types.randf(-16.0, 16.0),
       y + @types.randf(-16.0, 16.0),
       @types.randf(-240.0, 240.0),
@@ -196,7 +195,7 @@ fn burst_dust(
 }
 
 ///|
-fn lane_y(game : @types.Game, index : Int) -> Float {
+fn @types.Game::lane_y(game : @types.Game, index : Int) -> Float {
   let i = index.clamp(min=0, max=@types.lane_count - 1)
   let fi = Float::from_int(i)
   let base = @types.lane_base_y(i)
@@ -210,7 +209,7 @@ fn lane_y(game : @types.Game, index : Int) -> Float {
 }
 
 ///|
-fn active_raider_count(game : @types.Game) -> Int {
+fn @types.Game::active_raider_count(game : @types.Game) -> Int {
   let mut c = 0
   for raider in game.raiders {
     if raider.active {
@@ -221,7 +220,7 @@ fn active_raider_count(game : @types.Game) -> Int {
 }
 
 ///|
-fn nearest_raider_index(
+fn @types.Game::nearest_raider_index(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -243,7 +242,7 @@ fn nearest_raider_index(
 }
 
 ///|
-fn nearest_wagon_index(
+fn @types.Game::nearest_wagon_index(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -266,7 +265,7 @@ fn nearest_wagon_index(
 }
 
 ///|
-fn all_wagons_broken(game : @types.Game) -> Bool {
+fn @types.Game::all_wagons_broken(game : @types.Game) -> Bool {
   for wagon in game.wagons {
     if wagon.hp > 0.0 {
       return false
@@ -276,7 +275,7 @@ fn all_wagons_broken(game : @types.Game) -> Bool {
 }
 
 ///|
-fn update_wagons(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_wagons(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.wagons.length() {
     if game.wagons[i].repair_cd > 0.0 {
       game.wagons[i].repair_cd = @types.maxf(0.0, game.wagons[i].repair_cd - dt)
@@ -291,7 +290,7 @@ fn update_wagons(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn heal_wagon(game : @types.Game, index : Int, value : Float) -> Unit {
+fn @types.Game::heal_wagon(game : @types.Game, index : Int, value : Float) -> Unit {
   if index < 0 || index >= game.wagons.length() {
     return
   }
@@ -303,7 +302,7 @@ fn heal_wagon(game : @types.Game, index : Int, value : Float) -> Unit {
 }
 
 ///|
-fn damage_wagon(game : @types.Game, index : Int, value : Float) -> Unit {
+fn @types.Game::damage_wagon(game : @types.Game, index : Int, value : Float) -> Unit {
   if index < 0 || index >= game.wagons.length() {
     return
   }
@@ -324,12 +323,12 @@ fn damage_wagon(game : @types.Game, index : Int, value : Float) -> Unit {
   if game.wagons[index].hp <= 0.0 {
     game.score = (0).max(game.score - 40)
     game.morale = @types.clampf(game.morale - 10.0, 0.0, @types.morale_max)
-    set_message(game, "A wagon is broken!", 1.1)
+    game.set_message("A wagon is broken!", 1.1)
   }
 }
 
 ///|
-fn kill_raider(game : @types.Game, index : Int, score_gain : Int) -> Unit {
+fn @types.Game::kill_raider(game : @types.Game, index : Int, score_gain : Int) -> Unit {
   if index < 0 || index >= game.raiders.length() {
     return
   }
@@ -340,7 +339,7 @@ fn kill_raider(game : @types.Game, index : Int, score_gain : Int) -> Unit {
 
   let x = game.raiders[index].x
   let y = game.raiders[index].y
-  burst_dust(game, x, y, 12, 1)
+  game.burst_dust(x, y, 12, 1)
 
   game.raiders[index].active = false
   game.kills = game.kills + 1
@@ -357,12 +356,12 @@ fn kill_raider(game : @types.Game, index : Int, score_gain : Int) -> Unit {
 
   if @types.chance(9) {
     game.repair_kits = (game.repair_kits + 1).clamp(min=0, max=@types.kit_max)
-    set_message(game, "Raider dropped a repair kit", 0.9)
+    game.set_message("Raider dropped a repair kit", 0.9)
   }
 }
 
 ///|
-fn choose_raider_kind(game : @types.Game) -> Int {
+fn @types.Game::choose_raider_kind(game : @types.Game) -> Int {
   let roll = @types.randi(0, 99)
 
   if game.checkpoint >= 3 {
@@ -397,8 +396,8 @@ fn choose_raider_kind(game : @types.Game) -> Int {
 }
 
 ///|
-fn choose_target_wagon(game : @types.Game, x : Float, y : Float) -> Int {
-  let target = nearest_wagon_index(game, x, y, true)
+fn @types.Game::choose_target_wagon(game : @types.Game, x : Float, y : Float) -> Int {
+  let target = game.nearest_wagon_index(x, y, true)
   if target >= 0 {
     target
   } else {
@@ -407,10 +406,10 @@ fn choose_target_wagon(game : @types.Game, x : Float, y : Float) -> Int {
 }
 
 ///|
-fn spawn_raider(game : @types.Game, lane : Int, kind : Int) -> Unit {
-  let i = alloc_raider(game)
+fn @types.Game::spawn_raider(game : @types.Game, lane : Int, kind : Int) -> Unit {
+  let i = game.alloc_raider()
   let x = Float::from_int(@types.screen_w) + @types.randf(60.0, 160.0)
-  let y = lane_y(game, lane) + @types.randf(-20.0, 20.0)
+  let y = game.lane_y(lane) + @types.randf(-20.0, 20.0)
 
   game.raiders[i].active = true
   game.raiders[i].kind = kind
@@ -418,7 +417,7 @@ fn spawn_raider(game : @types.Game, lane : Int, kind : Int) -> Unit {
   game.raiders[i].y = y
   game.raiders[i].vx = @types.randf(-30.0, 20.0)
   game.raiders[i].vy = @types.randf(-20.0, 20.0)
-  game.raiders[i].target_wagon = choose_target_wagon(game, x, y)
+  game.raiders[i].target_wagon = game.choose_target_wagon(x, y)
   game.raiders[i].lane = lane.clamp(min=0, max=@types.lane_count - 1)
   game.raiders[i].attack_cd = @types.randf(0.24, 0.68)
   game.raiders[i].flash_t = 0.0
@@ -442,7 +441,7 @@ fn spawn_raider(game : @types.Game, lane : Int, kind : Int) -> Unit {
 }
 
 ///|
-fn spawn_wave(game : @types.Game) -> Unit {
+fn @types.Game::spawn_wave(game : @types.Game) -> Unit {
   let mut count = 1
   if game.checkpoint >= 2 {
     count = 2
@@ -453,18 +452,18 @@ fn spawn_wave(game : @types.Game) -> Unit {
 
   for _i in 0..<count {
     let lane = @types.randi(0, @types.lane_count - 1)
-    spawn_raider(game, lane, choose_raider_kind(game))
+    game.spawn_raider(lane, game.choose_raider_kind())
   }
 }
 
 ///|
-fn update_spawner(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_spawner(game : @types.Game, dt : Float) -> Unit {
   game.spawn_t = game.spawn_t - dt
   if game.spawn_t > 0.0 {
     return
   }
 
-  spawn_wave(game)
+  game.spawn_wave()
 
   let pressure = Float::from_int(game.checkpoint) * 0.25 +
     game.distance * 0.00013
@@ -476,7 +475,7 @@ fn update_spawner(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn spawn_bullet(
+fn @types.Game::spawn_bullet(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -484,7 +483,7 @@ fn spawn_bullet(
   vy : Float,
   dmg : Float,
 ) -> Unit {
-  let i = alloc_bullet(game)
+  let i = game.alloc_bullet()
   game.bullets[i].active = true
   game.bullets[i].x = x
   game.bullets[i].y = y
@@ -495,7 +494,7 @@ fn spawn_bullet(
 }
 
 ///|
-fn try_shoot(game : @types.Game) -> Unit {
+fn @types.Game::try_shoot(game : @types.Game) -> Unit {
   if not(game.input_shoot_hold) {
     return
   }
@@ -507,7 +506,7 @@ fn try_shoot(game : @types.Game) -> Unit {
   if game.ammo <= 0 {
     game.hero.shoot_cd = 0.15
     if game.message_t <= 0.0 {
-      set_message(game, "Out of ammo", 0.55)
+      game.set_message("Out of ammo", 0.55)
     }
     return
   }
@@ -515,8 +514,7 @@ fn try_shoot(game : @types.Game) -> Unit {
   let mut dx = game.hero.facing_x
   let mut dy = game.hero.facing_y
 
-  let target = nearest_raider_index(
-    game,
+  let target = game.nearest_raider_index(
     game.hero.x,
     game.hero.y,
     950.0 * 950.0,
@@ -535,8 +533,7 @@ fn try_shoot(game : @types.Game) -> Unit {
     dy = dy / len
   }
 
-  spawn_bullet(
-    game,
+  game.spawn_bullet(
     game.hero.x + dx * (@types.player_radius + 7.0),
     game.hero.y + dy * (@types.player_radius + 7.0),
     dx * @types.bullet_speed,
@@ -546,8 +543,7 @@ fn try_shoot(game : @types.Game) -> Unit {
 
   game.hero.shoot_cd = @types.shoot_cd
   game.ammo = game.ammo - 1
-  emit_dust(
-    game,
+  game.emit_dust(
     game.hero.x + dx * 10.0,
     game.hero.y + dy * 10.0,
     dx * 120.0 + @types.randf(-70.0, 70.0),
@@ -559,7 +555,7 @@ fn try_shoot(game : @types.Game) -> Unit {
 }
 
 ///|
-fn try_repair(game : @types.Game) -> Unit {
+fn @types.Game::try_repair(game : @types.Game) -> Unit {
   if not(game.input_repair_press) {
     return
   }
@@ -585,28 +581,28 @@ fn try_repair(game : @types.Game) -> Unit {
   }
 
   if target < 0 {
-    set_message(game, "No damaged wagon nearby", 0.6)
+    game.set_message("No damaged wagon nearby", 0.6)
     return
   }
 
   if game.repair_kits <= 0 {
-    set_message(game, "No repair kits", 0.7)
+    game.set_message("No repair kits", 0.7)
     return
   }
 
   if game.wagons[target].repair_cd > 0.0 {
-    set_message(game, "Repair cooling down", 0.55)
+    game.set_message("Repair cooling down", 0.55)
     return
   }
 
   game.repair_kits = game.repair_kits - 1
-  heal_wagon(game, target, @types.repair_heal)
+  game.heal_wagon(target, @types.repair_heal)
   game.wagons[target].repair_cd = @types.repair_cd
   game.hero.repair_t = 0.26
   game.morale = @types.clampf(game.morale + 7.5, 0.0, @types.morale_max)
   game.score = game.score + 22
-  set_message(game, "Wagon repaired", 0.8)
-  burst_dust(game, game.wagons[target].x, game.wagons[target].y, 16, 3)
+  game.set_message("Wagon repaired", 0.8)
+  game.burst_dust(game.wagons[target].x, game.wagons[target].y, 16, 3)
 }
 
 ///|
@@ -640,7 +636,7 @@ fn clamp_hero_ring(hero : @types.Player) -> Unit {
 }
 
 ///|
-fn update_hero(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_hero(game : @types.Game, dt : Float) -> Unit {
   game.hero.shoot_cd = @types.maxf(0.0, game.hero.shoot_cd - dt)
   game.hero.roll_cd = @types.maxf(0.0, game.hero.roll_cd - dt)
   game.hero.invuln_t = @types.maxf(0.0, game.hero.invuln_t - dt)
@@ -674,7 +670,7 @@ fn update_hero(game : @types.Game, dt : Float) -> Unit {
     )
     game.shake_t = @types.maxf(game.shake_t, 0.08)
 
-    burst_dust(game, game.hero.x, game.hero.y, 8, 0)
+    game.burst_dust(game.hero.x, game.hero.y, 8, 0)
   }
 
   if game.hero.roll_t > 0.0 {
@@ -701,12 +697,12 @@ fn update_hero(game : @types.Game, dt : Float) -> Unit {
 
   clamp_hero_ring(game.hero)
 
-  try_shoot(game)
-  try_repair(game)
+  game.try_shoot()
+  game.try_repair()
 }
 
 ///|
-fn update_bullets(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
   for bullet in game.bullets {
     if not(bullet.active) {
       continue
@@ -745,8 +741,7 @@ fn update_bullets(game : @types.Game, dt : Float) -> Unit {
         game.raiders[j].flash_t = 0.12
         bullet.active = false
 
-        emit_dust(
-          game,
+        game.emit_dust(
           bullet.x,
           bullet.y,
           @types.randf(-90.0, 90.0),
@@ -757,7 +752,7 @@ fn update_bullets(game : @types.Game, dt : Float) -> Unit {
         )
 
         if game.raiders[j].hp <= 0.0 {
-          kill_raider(game, j, 14)
+          game.kill_raider(j, 14)
         }
       }
     }
@@ -765,7 +760,7 @@ fn update_bullets(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_raiders(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_raiders(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.raiders.length() {
     if not(game.raiders[i].active) {
       continue
@@ -776,8 +771,7 @@ fn update_raiders(game : @types.Game, dt : Float) -> Unit {
     if game.raiders[i].target_wagon < 0 ||
       game.raiders[i].target_wagon >= @types.wagon_count ||
       game.wagons[game.raiders[i].target_wagon].hp <= 0.0 {
-      game.raiders[i].target_wagon = choose_target_wagon(
-        game,
+      game.raiders[i].target_wagon = game.choose_target_wagon(
         game.raiders[i].x,
         game.raiders[i].y,
       )
@@ -792,7 +786,7 @@ fn update_raiders(game : @types.Game, dt : Float) -> Unit {
       ty = game.wagons[target_wagon].y
     }
 
-    let lane_track = lane_y(game, game.raiders[i].lane)
+    let lane_track = game.lane_y(game.raiders[i].lane)
     ty = @types.lerpf(ty, lane_track, 0.28)
 
     let dx = tx - game.raiders[i].x
@@ -843,7 +837,7 @@ fn update_raiders(game : @types.Game, dt : Float) -> Unit {
           @types.randf(8.0, 12.0)
         }
 
-        damage_wagon(game, target_wagon, dmg)
+        game.damage_wagon(target_wagon, dmg)
         game.raiders[i].attack_cd = if game.raiders[i].kind ==
           @types.raider_brute {
           @types.randf(0.72, 1.0)
@@ -851,8 +845,7 @@ fn update_raiders(game : @types.Game, dt : Float) -> Unit {
           @types.randf(0.92, 1.24)
         }
         game.morale = @types.clampf(game.morale - 1.8, 0.0, @types.morale_max)
-        emit_dust(
-          game,
+        game.emit_dust(
           game.wagons[target_wagon].x,
           game.wagons[target_wagon].y,
           @types.randf(-150.0, 150.0),
@@ -873,7 +866,7 @@ fn update_raiders(game : @types.Game, dt : Float) -> Unit {
       ) <=
       hero_hit_r * hero_hit_r {
       if game.hero.roll_t > 0.0 {
-        kill_raider(game, i, 18)
+        game.kill_raider(i, 18)
         continue
       }
 
@@ -881,7 +874,7 @@ fn update_raiders(game : @types.Game, dt : Float) -> Unit {
         game.hero.invuln_t = @types.player_invuln_time
         game.morale = @types.clampf(game.morale - 6.4, 0.0, @types.morale_max)
         game.shake_t = @types.maxf(game.shake_t, 0.2)
-        set_message(game, "Raiders breached your guard", 0.6)
+        game.set_message("Raiders breached your guard", 0.6)
       }
 
       let push_dx = game.raiders[i].x - game.hero.x
@@ -901,13 +894,13 @@ fn update_raiders(game : @types.Game, dt : Float) -> Unit {
     }
 
     if game.raiders[i].hp <= 0.0 {
-      kill_raider(game, i, 10)
+      game.kill_raider(i, 10)
     }
   }
 }
 
 ///|
-fn update_dust(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_dust(game : @types.Game, dt : Float) -> Unit {
   for dust in game.dusts {
     if not(dust.active) {
       continue
@@ -927,7 +920,7 @@ fn update_dust(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_resources(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_resources(game : @types.Game, dt : Float) -> Unit {
   game.ammo_regen_t = game.ammo_regen_t - dt
   if game.ammo < @types.ammo_max && game.ammo_regen_t <= 0.0 {
     game.ammo = game.ammo + 1
@@ -937,9 +930,9 @@ fn update_resources(game : @types.Game, dt : Float) -> Unit {
     )
   }
 
-  let pressure = Float::from_int(active_raider_count(game))
+  let pressure = Float::from_int(game.active_raider_count())
   let mut drain = @types.morale_decay + pressure * 0.012
-  if all_wagons_broken(game) {
+  if game.all_wagons_broken() {
     drain = drain + 8.0
   }
 
@@ -947,7 +940,7 @@ fn update_resources(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn award_checkpoint(game : @types.Game) -> Unit {
+fn @types.Game::award_checkpoint(game : @types.Game) -> Unit {
   game.checkpoint = game.checkpoint + 1
   game.score = game.score + 160 + game.checkpoint * 28
 
@@ -960,19 +953,18 @@ fn award_checkpoint(game : @types.Game) -> Unit {
   game.repair_kits = (game.repair_kits + 1).clamp(min=0, max=@types.kit_max)
 
   for i in 0..<game.wagons.length() {
-    heal_wagon(game, i, 20.0)
+    game.heal_wagon(i, 20.0)
   }
 
   game.flash_t = @types.maxf(game.flash_t, 0.48)
   game.shake_t = @types.maxf(game.shake_t, 0.2)
-  set_message(
-    game,
+  game.set_message(
     "Checkpoint \{game.checkpoint}/\{@types.checkpoint_total} secured",
     1.4,
   )
 
   for wagon in game.wagons {
-    burst_dust(game, wagon.x, wagon.y, 9, 3)
+    game.burst_dust(wagon.x, wagon.y, 9, 3)
   }
 
   if game.checkpoint >= @types.checkpoint_total {
@@ -980,17 +972,17 @@ fn award_checkpoint(game : @types.Game) -> Unit {
       game.best_score = game.score
     }
     game.state = @types.state_victory
-    set_message(game, "Caravan reached the final oasis", 2.0)
+    game.set_message("Caravan reached the final oasis", 2.0)
   }
 }
 
 ///|
-fn update_progress(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_progress(game : @types.Game, dt : Float) -> Unit {
   game.distance = game.distance + @types.caravan_speed(game.checkpoint) * dt
 
   while game.checkpoint < @types.checkpoint_total &&
         game.distance >= game.next_checkpoint {
-    award_checkpoint(game)
+    game.award_checkpoint()
     if game.state == @types.state_victory {
       return
     }
@@ -998,22 +990,22 @@ fn update_progress(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn end_run(game : @types.Game, victory : Bool) -> Unit {
+fn @types.Game::end_run(game : @types.Game, victory : Bool) -> Unit {
   if game.score > game.best_score {
     game.best_score = game.score
   }
 
   if victory {
     game.state = @types.state_victory
-    set_message(game, "Caravan secured all checkpoints", 1.8)
+    game.set_message("Caravan secured all checkpoints", 1.8)
   } else {
     game.state = @types.state_game_over
-    set_message(game, "Escort failed", 1.8)
+    game.set_message("Escort failed", 1.8)
   }
 }
 
 ///|
-fn update_play(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt
   game.flash_t = @types.maxf(0.0, game.flash_t - dt)
   game.shake_t = @types.maxf(0.0, game.shake_t - dt)
@@ -1025,34 +1017,34 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
     }
   }
 
-  update_wagons(game, dt)
-  update_hero(game, dt)
-  update_progress(game, dt)
+  game.update_wagons(dt)
+  game.update_hero(dt)
+  game.update_progress(dt)
   if game.state != @types.state_play {
-    update_bullets(game, dt)
-    update_dust(game, dt)
+    game.update_bullets(dt)
+    game.update_dust(dt)
     return
   }
 
-  update_spawner(game, dt)
-  update_raiders(game, dt)
-  update_bullets(game, dt)
-  update_dust(game, dt)
-  update_resources(game, dt)
+  game.update_spawner(dt)
+  game.update_raiders(dt)
+  game.update_bullets(dt)
+  game.update_dust(dt)
+  game.update_resources(dt)
 
   if game.morale <= 0.0 {
-    end_run(game, false)
+    game.end_run(false)
     return
   }
 
-  if all_wagons_broken(game) {
-    end_run(game, false)
+  if game.all_wagons_broken() {
+    game.end_run(false)
     return
   }
 }
 
 ///|
-fn update_title(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_title(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt * 0.55
   game.flash_t = 0.0
   game.shake_t = 0.0
@@ -1061,27 +1053,27 @@ fn update_title(game : @types.Game, dt : Float) -> Unit {
     game.message_t = @types.maxf(0.0, game.message_t - dt)
   }
 
-  update_wagons(game, dt * 0.55)
+  game.update_wagons(dt * 0.55)
 
   if game.input_confirm_press {
-    start_run(game)
+    game.start_run()
   }
 }
 
 ///|
-fn update_pause(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_pause(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt * 0.18
-  update_wagons(game, dt * 0.18)
-  update_dust(game, dt)
+  game.update_wagons(dt * 0.18)
+  game.update_dust(dt)
 
   if game.input_pause_press || game.input_confirm_press {
     game.state = @types.state_play
-    set_message(game, "Escort resumed", 0.8)
+    game.set_message("Escort resumed", 0.8)
   }
 }
 
 ///|
-fn update_end(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_end(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt * 0.35
   game.flash_t = @types.maxf(0.0, game.flash_t - dt)
   game.shake_t = @types.maxf(0.0, game.shake_t - dt)
@@ -1090,36 +1082,36 @@ fn update_end(game : @types.Game, dt : Float) -> Unit {
     game.message_t = @types.maxf(0.0, game.message_t - dt)
   }
 
-  update_wagons(game, dt * 0.35)
-  update_dust(game, dt)
+  game.update_wagons(dt * 0.35)
+  game.update_dust(dt)
 
   if game.input_confirm_press {
-    start_run(game)
+    game.start_run()
   }
 }
 
 ///|
 /// Advances the game simulation by one frame using the current input state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
-  update_input(game)
+  game.update_input()
 
   if game.input_restart_press {
-    start_run(game)
+    game.start_run()
     return
   }
 
   if game.state == @types.state_title {
-    update_title(game, dt)
+    game.update_title(dt)
   } else if game.state == @types.state_play {
     if game.input_pause_press {
       game.state = @types.state_pause
-      set_message(game, "Paused", 0.8)
+      game.set_message("Paused", 0.8)
       return
     }
-    update_play(game, dt)
+    game.update_play(dt)
   } else if game.state == @types.state_pause {
-    update_pause(game, dt)
+    game.update_pause(dt)
   } else {
-    update_end(game, dt)
+    game.update_end(dt)
   }
 }

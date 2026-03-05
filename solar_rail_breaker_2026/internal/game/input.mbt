@@ -1,5 +1,5 @@
 ///|
-fn clear_frame_input(game : @types.Game) -> Unit {
+fn @types.Game::clear_frame_input(game : @types.Game) -> Unit {
   game.input_turn = 0.0
   game.input_ring_move = 0
   game.input_fire_hold = false
@@ -9,7 +9,7 @@ fn clear_frame_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_pointer(game : @types.Game) -> Unit {
+fn @types.Game::update_pointer(game : @types.Game) -> Unit {
   game.pointer_x = game.mouse_x
   game.pointer_y = game.mouse_y
 
@@ -37,9 +37,9 @@ fn beam_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
-fn update_title_input(game : @types.Game) -> Unit {
-  clear_frame_input(game)
-  update_pointer(game)
+fn @types.Game::update_title_input(game : @types.Game) -> Unit {
+  game.clear_frame_input()
+  game.update_pointer()
 
   let mx = game.mouse_x
   let my = game.mouse_y
@@ -62,9 +62,9 @@ fn update_title_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_play_input(game : @types.Game) -> Unit {
-  clear_frame_input(game)
-  update_pointer(game)
+fn @types.Game::update_play_input(game : @types.Game) -> Unit {
+  game.clear_frame_input()
+  game.update_pointer()
 
   let mx = game.mouse_x
   let my = game.mouse_y
@@ -199,9 +199,9 @@ fn update_play_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_stage_clear_input(game : @types.Game) -> Unit {
-  clear_frame_input(game)
-  update_pointer(game)
+fn @types.Game::update_stage_clear_input(game : @types.Game) -> Unit {
+  game.clear_frame_input()
+  game.update_pointer()
 
   let hold = game.mouse_hold
   let touch_count = game.touch_count
@@ -217,9 +217,9 @@ fn update_stage_clear_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_result_input(game : @types.Game) -> Unit {
-  clear_frame_input(game)
-  update_pointer(game)
+fn @types.Game::update_result_input(game : @types.Game) -> Unit {
+  game.clear_frame_input()
+  game.update_pointer()
 
   let hold = game.mouse_hold
   let touch_count = game.touch_count

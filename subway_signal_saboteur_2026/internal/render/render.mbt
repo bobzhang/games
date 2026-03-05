@@ -1,5 +1,5 @@
 ///|
-fn shake_dx(game : @types.Game) -> Int {
+fn @types.Game::shake_dx(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -8,7 +8,7 @@ fn shake_dx(game : @types.Game) -> Int {
 }
 
 ///|
-fn shake_dy(game : @types.Game) -> Int {
+fn @types.Game::shake_dy(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -17,7 +17,7 @@ fn shake_dy(game : @types.Game) -> Int {
 }
 
 ///|
-fn pulse(game : @types.Game, f : Float) -> Float {
+fn @types.Game::pulse(game : @types.Game, f : Float) -> Float {
   0.5 + 0.5 * @math.sinf(game.time_s * f)
 }
 
@@ -31,7 +31,7 @@ fn train_target_color(id : @types.TrainColor) -> @raylib.Color {
 }
 
 ///|
-fn draw_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(8, 10, 18, 255))
 
   @raylib.draw_rectangle_gradient_v(
@@ -43,8 +43,8 @@ fn draw_background(game : @types.Game) -> Unit {
     @raylib.Color::new(8, 10, 18, 255),
   )
 
-  let g0 : Int = 24 + (pulse(game, 0.40) * 20.0).to_int()
-  let g1 : Int = 32 + (pulse(game, 0.68) * 26.0).to_int()
+  let g0 : Int = 24 + (game.pulse(0.40) * 20.0).to_int()
+  let g1 : Int = 32 + (game.pulse(0.68) * 26.0).to_int()
 
   @raylib.draw_circle(160, 108, 220.0, @raylib.Color::new(102, 132, 198, g0))
   @raylib.draw_circle(
@@ -64,7 +64,7 @@ fn draw_background(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_tiles(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_tiles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
       let rx : Int = @types.board_px(x) + ox
@@ -144,7 +144,7 @@ fn draw_tiles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn draw_junctions(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_junctions(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for i in 0..<@types.junction_n {
     let jx : Int = @types.junction_x(i)
 
@@ -219,7 +219,7 @@ fn draw_junctions(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn draw_trains(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_trains(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for train in game.trains {
     if not(train.active) {
       continue
@@ -260,7 +260,7 @@ fn draw_trains(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn draw_inspectors(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_inspectors(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for inspector in game.inspectors {
     if not(inspector.active) {
       continue
@@ -303,7 +303,7 @@ fn draw_inspectors(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let blink : Bool = game.flash_t > 0.0 &&
     (game.flash_t * 14.0).to_int() % 2 == 0
   if blink {
@@ -327,7 +327,7 @@ fn draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
       continue
@@ -349,13 +349,13 @@ fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn draw_board(game : @types.Game, ox : Int, oy : Int) -> Unit {
-  draw_tiles(game, ox, oy)
-  draw_junctions(game, ox, oy)
-  draw_trains(game, ox, oy)
-  draw_inspectors(game, ox, oy)
-  draw_player(game, ox, oy)
-  draw_particles(game, ox, oy)
+fn @types.Game::draw_board(game : @types.Game, ox : Int, oy : Int) -> Unit {
+  game.draw_tiles(ox, oy)
+  game.draw_junctions(ox, oy)
+  game.draw_trains(ox, oy)
+  game.draw_inspectors(ox, oy)
+  game.draw_player(ox, oy)
+  game.draw_particles(ox, oy)
 
   @raylib.draw_rectangle_lines(
     @types.board_x0 - 2 + ox,
@@ -367,7 +367,7 @@ fn draw_board(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn draw_touch_button(
+fn @types.Game::draw_touch_button(
   game : @types.Game,
   rect : (Int, Int, Int, Int),
   label : String,
@@ -418,66 +418,58 @@ fn draw_touch_button(
 }
 
 ///|
-fn draw_touch_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   if game.state != Play {
     return
   }
 
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_left(),
     "<",
     @raylib.Color::new(42, 64, 96, 116),
     @raylib.Color::new(74, 114, 168, 186),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_right(),
     ">",
     @raylib.Color::new(42, 64, 96, 116),
     @raylib.Color::new(74, 114, 168, 186),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_up(),
     "^",
     @raylib.Color::new(42, 64, 96, 116),
     @raylib.Color::new(74, 114, 168, 186),
   )
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_down(),
     "v",
     @raylib.Color::new(42, 64, 96, 116),
     @raylib.Color::new(74, 114, 168, 186),
   )
 
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_action(),
     "A",
     @raylib.Color::new(98, 62, 118, 134),
     @raylib.Color::new(168, 94, 212, 192),
   )
 
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_hint(),
     "Hint",
     @raylib.Color::new(44, 78, 110, 136),
     @raylib.Color::new(84, 144, 196, 198),
   )
 
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_restart(),
     "Retry",
     @raylib.Color::new(86, 62, 44, 136),
     @raylib.Color::new(170, 120, 78, 198),
   )
 
-  draw_touch_button(
-    game,
+  game.draw_touch_button(
     @types.btn_menu(),
     "Menu",
     @raylib.Color::new(70, 58, 90, 136),
@@ -486,7 +478,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.panel_x0,
     @types.board_y0,
@@ -704,7 +696,7 @@ fn draw_panel(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   let b = @types.start_button_rect()
   let hot : Bool = @types.pointer_on_rect(
     game.mouse_x,
@@ -799,7 +791,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_result_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   let b = @types.retry_button_rect()
   let hot : Bool = @types.pointer_on_rect(
     game.mouse_x,
@@ -898,18 +890,18 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 ///|
 /// Draws one full frame including world, panel, controls, and overlays.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_background(game)
+  game.draw_background()
 
-  let ox : Int = shake_dx(game)
-  let oy : Int = shake_dy(game)
+  let ox : Int = game.shake_dx()
+  let oy : Int = game.shake_dy()
 
-  draw_board(game, ox, oy)
-  draw_panel(game)
-  draw_touch_controls(game)
+  game.draw_board(ox, oy)
+  game.draw_panel()
+  game.draw_touch_controls()
 
   match game.state {
-    Title => draw_title_overlay(game)
-    Result => draw_result_overlay(game)
+    Title => game.draw_title_overlay()
+    Result => game.draw_result_overlay()
     Play => ()
   }
 }

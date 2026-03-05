@@ -1,5 +1,5 @@
 ///|
-fn title_hover(game : @types.Game) -> Bool {
+fn @types.Game::title_hover(game : @types.Game) -> Bool {
   let b = @types.start_button_rect()
   @types.pointer_on_rect(
     game.mouse_x,
@@ -14,7 +14,7 @@ fn title_hover(game : @types.Game) -> Bool {
 }
 
 ///|
-fn retry_hover(game : @types.Game) -> Bool {
+fn @types.Game::retry_hover(game : @types.Game) -> Bool {
   let b = @types.retry_button_rect()
   @types.pointer_on_rect(
     game.mouse_x,
@@ -29,50 +29,50 @@ fn retry_hover(game : @types.Game) -> Bool {
 }
 
 ///|
-fn update_title_input(game : @types.Game) -> Unit {
+fn @types.Game::update_title_input(game : @types.Game) -> Unit {
   let key_start : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
   let click_start : Bool = @raylib.is_mouse_button_pressed(
     @raylib.MouseButtonLeft,
   )
-  let tap_start : Bool = game.touch_cd <= 0.0 && title_hover(game)
+  let tap_start : Bool = game.touch_cd <= 0.0 && game.title_hover()
 
   if key_start || click_start || tap_start {
-    start_run(game)
+    game.start_run()
     game.touch_cd = 0.16
   }
 }
 
 ///|
-fn update_result_input(game : @types.Game) -> Unit {
+fn @types.Game::update_result_input(game : @types.Game) -> Unit {
   let key_retry : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyR)
   let click_retry : Bool = @raylib.is_mouse_button_pressed(
     @raylib.MouseButtonLeft,
   )
-  let tap_retry : Bool = game.touch_cd <= 0.0 && retry_hover(game)
+  let tap_retry : Bool = game.touch_cd <= 0.0 && game.retry_hover()
 
   if key_retry || click_retry || tap_retry {
-    start_run(game)
+    game.start_run()
     game.touch_cd = 0.16
   }
 }
 
 ///|
-fn update_play_input(game : @types.Game) -> Unit {
+fn @types.Game::update_play_input(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    go_title(game)
+    game.go_title()
     return
   }
 
   if @raylib.is_key_pressed(@raylib.KeyR) {
-    start_run(game)
+    game.start_run()
     return
   }
 
   if @raylib.is_key_pressed(@raylib.KeyH) {
-    cycle_hint(game)
+    game.cycle_hint()
   }
 
   let mut dx : Int = 0
@@ -156,20 +156,20 @@ fn update_play_input(game : @types.Game) -> Unit {
 
   if game.touch_cd <= 0.0 &&
     @types.pointer_on_rect(mx, my, hold, tc, h.0, h.1, h.2, h.3) {
-    cycle_hint(game)
+    game.cycle_hint()
     game.touch_cd = 0.16
   }
 
   if game.touch_cd <= 0.0 &&
     @types.pointer_on_rect(mx, my, hold, tc, r.0, r.1, r.2, r.3) {
-    start_run(game)
+    game.start_run()
     game.touch_cd = 0.16
     return
   }
 
   if game.touch_cd <= 0.0 &&
     @types.pointer_on_rect(mx, my, hold, tc, m.0, m.1, m.2, m.3) {
-    go_title(game)
+    game.go_title()
     game.touch_cd = 0.16
   }
 }

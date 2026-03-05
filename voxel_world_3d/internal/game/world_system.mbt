@@ -113,8 +113,7 @@ pub fn update_entity_spawning(game : @types.Game, dt : Float) -> Unit {
       surface_y = y + 1
       // break substitute: y = -1
       // Instead, just record and continue; first hit is fine since we go top-down
-      return spawn_entity_at(
-        game,
+      return game.spawn_entity_at(
         spawn_x,
         Float::from_int(surface_y) + 0.1,
         spawn_z,
@@ -126,7 +125,7 @@ pub fn update_entity_spawning(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn spawn_entity_at(game : @types.Game, x : Float, y : Float, z : Float) -> Unit {
+fn @types.Game::spawn_entity_at(game : @types.Game, x : Float, y : Float, z : Float) -> Unit {
   // Determine biome at spawn location
   let biome = @types.get_biome_at(x.to_int(), z.to_int())
   let rng_val = @types.rand_next(game)
@@ -196,14 +195,14 @@ pub fn update_entities(game : @types.Game, dt : Float) -> Unit {
       continue
     }
     // AI state machine
-    update_entity_ai(game, ent, dt, dist_to_player)
+    game.update_entity_ai(ent, dt, dist_to_player)
     // Apply physics
-    update_entity_physics(game, ent, dt)
+    game.update_entity_physics(ent, dt)
   }
 }
 
 ///|
-fn update_entity_ai(
+fn @types.Game::update_entity_ai(
   game : @types.Game,
   ent : @types.Entity,
   dt : Float,
@@ -309,7 +308,7 @@ fn update_entity_ai(
 }
 
 ///|
-fn update_entity_physics(
+fn @types.Game::update_entity_physics(
   game : @types.Game,
   ent : @types.Entity,
   dt : Float,

@@ -1,5 +1,5 @@
 ///|
-fn clear_effects(game : @types.Game) -> Unit {
+fn @types.Game::clear_effects(game : @types.Game) -> Unit {
   for spark in game.sparks {
     spark.active = false
     spark.x = 0.0
@@ -13,7 +13,7 @@ fn clear_effects(game : @types.Game) -> Unit {
 }
 
 ///|
-fn spawn_spark(
+fn @types.Game::spawn_spark(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -41,10 +41,9 @@ fn spawn_spark(
 }
 
 ///|
-fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
+fn @types.Game::burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
   for _i in 0..<n {
-    spawn_spark(
-      game,
+    game.spawn_spark(
       x + @types.randf(-8.0, 8.0),
       y + @types.randf(-8.0, 8.0),
       @types.randf(-240.0, 240.0),
@@ -57,7 +56,7 @@ fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit 
 }
 
 ///|
-fn update_sparks(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_sparks(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
       continue
@@ -77,7 +76,7 @@ fn update_sparks(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn player_segment_at(
+fn @types.Game::player_segment_at(
   game : @types.Game,
   x : Int,
   y : Int,
@@ -98,7 +97,7 @@ fn player_segment_at(
 }
 
 ///|
-fn rival_segment_at(
+fn @types.Game::rival_segment_at(
   game : @types.Game,
   x : Int,
   y : Int,
@@ -138,21 +137,21 @@ fn rival_segment_at(
 }
 
 ///|
-fn trap_at(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::trap_at(game : @types.Game, x : Int, y : Int) -> Bool {
   game.trap_active && game.trap_x == x && game.trap_y == y
 }
 
 ///|
-fn is_cell_empty(game : @types.Game, x : Int, y : Int) -> Bool {
-  if player_segment_at(game, x, y, false) {
+fn @types.Game::is_cell_empty(game : @types.Game, x : Int, y : Int) -> Bool {
+  if game.player_segment_at(x, y, false) {
     return false
   }
 
-  if rival_segment_at(game, x, y, -1, false) {
+  if game.rival_segment_at(x, y, -1, false) {
     return false
   }
 
-  if trap_at(game, x, y) {
+  if game.trap_at(x, y) {
     return false
   }
 
@@ -160,12 +159,12 @@ fn is_cell_empty(game : @types.Game, x : Int, y : Int) -> Bool {
 }
 
 ///|
-fn random_empty_cell(game : @types.Game) -> (Bool, Int, Int) {
+fn @types.Game::random_empty_cell(game : @types.Game) -> (Bool, Int, Int) {
   let mut empty_count : Int = 0
 
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
-      if is_cell_empty(game, x, y) {
+      if game.is_cell_empty(x, y) {
         empty_count = empty_count + 1
       }
     }
@@ -180,7 +179,7 @@ fn random_empty_cell(game : @types.Game) -> (Bool, Int, Int) {
 
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
-      if not(is_cell_empty(game, x, y)) {
+      if not(game.is_cell_empty(x, y)) {
         continue
       }
 
@@ -196,8 +195,8 @@ fn random_empty_cell(game : @types.Game) -> (Bool, Int, Int) {
 }
 
 ///|
-fn spawn_food(game : @types.Game) -> Bool {
-  let cell = random_empty_cell(game)
+fn @types.Game::spawn_food(game : @types.Game) -> Bool {
+  let cell = game.random_empty_cell()
   if not(cell.0) {
     return false
   }
@@ -214,12 +213,12 @@ fn spawn_food(game : @types.Game) -> Bool {
 }
 
 ///|
-fn spawn_trap(game : @types.Game) -> Bool {
+fn @types.Game::spawn_trap(game : @types.Game) -> Bool {
   if game.trap_active {
     return false
   }
 
-  let cell = random_empty_cell(game)
+  let cell = game.random_empty_cell()
   if not(cell.0) {
     return false
   }
@@ -231,12 +230,12 @@ fn spawn_trap(game : @types.Game) -> Bool {
   game.trap_flash = 0.0
 
   let (wx, wy) = @types.cell_world_center(game, game.trap_x, game.trap_y)
-  burst(game, wx, wy, 12, 2)
+  game.burst(wx, wy, 12, 2)
   true
 }
 
 ///|
-fn reset_player(game : @types.Game, cx : Int, cy : Int) -> Unit {
+fn @types.Game::reset_player(game : @types.Game, cx : Int, cy : Int) -> Unit {
   game.p_alive = true
   game.p_len = 5
   game.p_dir = @types.dir_right
@@ -255,7 +254,7 @@ fn reset_player(game : @types.Game, cx : Int, cy : Int) -> Unit {
 }
 
 ///|
-fn reset_rival(
+fn @types.Game::reset_rival(
   game : @types.Game,
   rid : Int,
   cx : Int,
@@ -282,8 +281,8 @@ fn reset_rival(
 }
 
 ///|
-fn start_match(game : @types.Game) -> Unit {
-  clear_effects(game)
+fn @types.Game::start_match(game : @types.Game) -> Unit {
+  game.clear_effects()
 
   game.state = @types.state_play
   game.score = 0
@@ -310,25 +309,25 @@ fn start_match(game : @types.Game) -> Unit {
   game.touch_cd = 0.0
   game.win = false
 
-  reset_player(game, @types.grid_w / 2, @types.grid_h / 2)
+  game.reset_player(@types.grid_w / 2, @types.grid_h / 2)
 
-  reset_rival(game, 0, 6, 4, @types.dir_right)
+  game.reset_rival(0, 6, 4, @types.dir_right)
   if game.rivals.length() > 1 {
-    reset_rival(game, 1, @types.grid_w - 7, @types.grid_h - 5, @types.dir_left)
+    game.reset_rival(1, @types.grid_w - 7, @types.grid_h - 5, @types.dir_left)
   }
 
-  ignore(spawn_food(game))
+  ignore(game.spawn_food())
 
   @types.set_msg(game, "Collect food and outlast rivals", 1.8)
 }
 
 ///|
-fn cell_hits_player(game : @types.Game, x : Int, y : Int) -> Bool {
-  player_segment_at(game, x, y, false)
+fn @types.Game::cell_hits_player(game : @types.Game, x : Int, y : Int) -> Bool {
+  game.player_segment_at(x, y, false)
 }
 
 ///|
-fn damage_player(game : @types.Game, msg : String) -> Unit {
+fn @types.Game::damage_player(game : @types.Game, msg : String) -> Unit {
   game.lives = game.lives - 1
   game.combo = 0
   game.combo_t = 0.0
@@ -339,7 +338,7 @@ fn damage_player(game : @types.Game, msg : String) -> Unit {
     game.p_seg_x[0],
     game.p_seg_y[0],
   )
-  burst(game, wx, wy, 22, 2)
+  game.burst(wx, wy, 22, 2)
 
   if game.lives <= 0 {
     game.state = @types.state_result
@@ -351,12 +350,12 @@ fn damage_player(game : @types.Game, msg : String) -> Unit {
     return
   }
 
-  reset_player(game, @types.grid_w / 2, @types.grid_h / 2)
+  game.reset_player(@types.grid_w / 2, @types.grid_h / 2)
   @types.set_msg(game, msg + "  Lives \{game.lives}", 1.0)
 }
 
 ///|
-fn rival_respawn(game : @types.Game, rid : Int) -> Unit {
+fn @types.Game::rival_respawn(game : @types.Game, rid : Int) -> Unit {
   if rid < 0 || rid >= game.rivals.length() {
     return
   }
@@ -366,11 +365,11 @@ fn rival_respawn(game : @types.Game, rid : Int) -> Unit {
   let sx : Int = if rid % 2 == 0 { 3 } else { @types.grid_w - 4 }
   let sy : Int = if rid % 2 == 0 { 3 } else { @types.grid_h - 4 }
   let dir : Int = if rid % 2 == 0 { @types.dir_right } else { @types.dir_left }
-  reset_rival(game, rid, sx, sy, dir)
+  game.reset_rival(rid, sx, sy, dir)
 }
 
 ///|
-fn grow_player_after_food(game : @types.Game) -> Unit {
+fn @types.Game::grow_player_after_food(game : @types.Game) -> Unit {
   if game.food_kind == @types.food_gold {
     game.p_grow = game.p_grow + 3
     game.score = game.score + 210
@@ -392,15 +391,15 @@ fn grow_player_after_food(game : @types.Game) -> Unit {
     game.best_score = game.score
   }
 
-  ignore(spawn_food(game))
+  ignore(game.spawn_food())
 
   if @raylib.get_random_value(0, 99) < 16 {
-    ignore(spawn_trap(game))
+    ignore(game.spawn_trap())
   }
 }
 
 ///|
-fn shift_player_forward(game : @types.Game, nx : Int, ny : Int) -> Unit {
+fn @types.Game::shift_player_forward(game : @types.Game, nx : Int, ny : Int) -> Unit {
   let cap : Int = game.p_len.min(@types.max_segments - 1)
 
   for i = cap; i > 0; i = i - 1 {
@@ -418,7 +417,7 @@ fn shift_player_forward(game : @types.Game, nx : Int, ny : Int) -> Unit {
 }
 
 ///|
-fn player_step(game : @types.Game) -> Unit {
+fn @types.Game::player_step(game : @types.Game) -> Unit {
   if not(game.p_alive) {
     return
   }
@@ -430,21 +429,20 @@ fn player_step(game : @types.Game) -> Unit {
   let nx : Int = @types.wrap_x(game.p_seg_x[0] + @types.dir_dx(game.p_dir))
   let ny : Int = @types.wrap_y(game.p_seg_y[0] + @types.dir_dy(game.p_dir))
 
-  let self_hit : Bool = player_segment_at(game, nx, ny, true)
-  let rival_hit : Bool = rival_segment_at(game, nx, ny, -1, false)
-  let trap_hit : Bool = trap_at(game, nx, ny)
+  let self_hit : Bool = game.player_segment_at(nx, ny, true)
+  let rival_hit : Bool = game.rival_segment_at(nx, ny, -1, false)
+  let trap_hit : Bool = game.trap_at(nx, ny)
 
   if self_hit || rival_hit || trap_hit {
-    damage_player(game, if trap_hit { "Trap hit" } else { "Crash" })
+    game.damage_player(if trap_hit { "Trap hit" } else { "Crash" })
     return
   }
 
-  shift_player_forward(game, nx, ny)
+  game.shift_player_forward(nx, ny)
 
   if nx == game.food_x && ny == game.food_y {
     let (wx, wy) = @types.cell_world_center(game, nx, ny)
-    burst(
-      game,
+    game.burst(
       wx,
       wy,
       if game.food_kind == @types.food_gold {
@@ -454,12 +452,12 @@ fn player_step(game : @types.Game) -> Unit {
       },
       1,
     )
-    grow_player_after_food(game)
+    game.grow_player_after_food()
   }
 }
 
 ///|
-fn shift_rival_forward(
+fn @types.Game::shift_rival_forward(
   game : @types.Game,
   rid : Int,
   nx : Int,
@@ -483,25 +481,25 @@ fn shift_rival_forward(
 }
 
 ///|
-fn rival_would_collide(
+fn @types.Game::rival_would_collide(
   game : @types.Game,
   rid : Int,
   nx : Int,
   ny : Int,
 ) -> Bool {
-  if player_segment_at(game, nx, ny, false) {
+  if game.player_segment_at(nx, ny, false) {
     return true
   }
 
-  if rival_segment_at(game, nx, ny, rid, true) {
+  if game.rival_segment_at(nx, ny, rid, true) {
     return true
   }
 
-  trap_at(game, nx, ny)
+  game.trap_at(nx, ny)
 }
 
 ///|
-fn rival_step(game : @types.Game, rid : Int) -> Unit {
+fn @types.Game::rival_step(game : @types.Game, rid : Int) -> Unit {
   if rid < 0 || rid >= game.rivals.length() {
     return
   }
@@ -511,7 +509,7 @@ fn rival_step(game : @types.Game, rid : Int) -> Unit {
     return
   }
 
-  rival.next_dir = ai_choose_dir(game, rid)
+  rival.next_dir = game.ai_choose_dir(rid)
   if not(@types.opposite_dir(rival.dir, rival.next_dir)) {
     rival.dir = rival.next_dir
   }
@@ -519,13 +517,13 @@ fn rival_step(game : @types.Game, rid : Int) -> Unit {
   let nx : Int = @types.wrap_x(rival.seg_x[0] + @types.dir_dx(rival.dir))
   let ny : Int = @types.wrap_y(rival.seg_y[0] + @types.dir_dy(rival.dir))
 
-  let hits_player : Bool = cell_hits_player(game, nx, ny)
-  let hits_rival : Bool = rival_segment_at(game, nx, ny, rid, true)
-  let hits_trap : Bool = trap_at(game, nx, ny)
+  let hits_player : Bool = game.cell_hits_player(nx, ny)
+  let hits_rival : Bool = game.rival_segment_at(nx, ny, rid, true)
+  let hits_trap : Bool = game.trap_at(nx, ny)
 
   if hits_player {
     if nx == game.p_seg_x[0] && ny == game.p_seg_y[0] {
-      damage_player(game, "Head clash")
+      game.damage_player("Head clash")
     } else {
       game.total_kills = game.total_kills + 1
       game.score = game.score + 120
@@ -533,20 +531,20 @@ fn rival_step(game : @types.Game, rid : Int) -> Unit {
         game.best_score = game.score
       }
       let (wx, wy) = @types.cell_world_center(game, nx, ny)
-      burst(game, wx, wy, 14, 0)
+      game.burst(wx, wy, 14, 0)
       @types.set_msg(game, "Rival crashed", 0.7)
     }
 
-    rival_respawn(game, rid)
+    game.rival_respawn(rid)
     return
   }
 
   if hits_rival || hits_trap {
-    rival_respawn(game, rid)
+    game.rival_respawn(rid)
     return
   }
 
-  shift_rival_forward(game, rid, nx, ny)
+  game.shift_rival_forward(rid, nx, ny)
 
   if nx == game.food_x && ny == game.food_y {
     let grow_gain : Int = if game.food_kind == @types.food_gold { 2 } else { 1 }
@@ -565,17 +563,17 @@ fn rival_step(game : @types.Game, rid : Int) -> Unit {
     rival.score = rival.score + score_gain
 
     let (wx, wy) = @types.cell_world_center(game, nx, ny)
-    burst(game, wx, wy, burst_count, 1)
-    ignore(spawn_food(game))
+    game.burst(wx, wy, burst_count, 1)
+    ignore(game.spawn_food())
 
     if @raylib.get_random_value(0, 99) < 14 {
-      ignore(spawn_trap(game))
+      ignore(game.spawn_trap())
     }
   }
 }
 
 ///|
-fn rival_total_score(game : @types.Game) -> Int {
+fn @types.Game::rival_total_score(game : @types.Game) -> Int {
   let mut s : Int = 0
   for rival in game.rivals {
     s = s + rival.score
@@ -584,7 +582,7 @@ fn rival_total_score(game : @types.Game) -> Int {
 }
 
 ///|
-fn update_hint(game : @types.Game) -> Unit {
+fn @types.Game::update_hint(game : @types.Game) -> Unit {
   if game.hint_t > 0.0 {
     return
   }
@@ -594,7 +592,7 @@ fn update_hint(game : @types.Game) -> Unit {
 }
 
 ///|
-fn use_hint(game : @types.Game) -> Bool {
+fn @types.Game::use_hint(game : @types.Game) -> Bool {
   if game.state != @types.state_play {
     return false
   }
@@ -603,7 +601,7 @@ fn use_hint(game : @types.Game) -> Bool {
     return false
   }
 
-  let best = suggest_player_dir(game)
+  let best = game.suggest_player_dir()
   if best < 0 {
     @types.set_msg(game, "No safe hint", 0.7)
     return false
@@ -623,13 +621,13 @@ fn use_hint(game : @types.Game) -> Bool {
 }
 
 ///|
-fn check_timeout(game : @types.Game) -> Unit {
+fn @types.Game::check_timeout(game : @types.Game) -> Unit {
   if game.game_t < @types.match_time_limit {
     return
   }
 
   game.state = @types.state_result
-  game.win = game.score >= rival_total_score(game)
+  game.win = game.score >= game.rival_total_score()
 
   if game.score > game.best_score {
     game.best_score = game.score
@@ -643,18 +641,18 @@ fn check_timeout(game : @types.Game) -> Unit {
 }
 
 ///|
-fn step_once(game : @types.Game) -> Unit {
+fn @types.Game::step_once(game : @types.Game) -> Unit {
   if game.state != @types.state_play {
     return
   }
 
-  player_step(game)
+  game.player_step()
   if game.state != @types.state_play {
     return
   }
 
   for rid in 0..<game.rivals.length() {
-    rival_step(game, rid)
+    game.rival_step(rid)
     if game.state != @types.state_play {
       return
     }
@@ -668,12 +666,12 @@ fn step_once(game : @types.Game) -> Unit {
   }
 
   if @raylib.get_random_value(0, 999) < 8 {
-    ignore(spawn_trap(game))
+    ignore(game.spawn_trap())
   }
 }
 
 ///|
-fn update_play(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   game.ui_t = game.ui_t + dt
 
   if game.state == @types.state_play {
@@ -703,7 +701,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
     }
   }
 
-  update_sparks(game, dt)
+  game.update_sparks(dt)
 
   if game.state != @types.state_play {
     return
@@ -724,15 +722,15 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
 
   while game.step_acc >= base_step {
     game.step_acc = game.step_acc - base_step
-    step_once(game)
+    game.step_once()
 
     if game.state != @types.state_play {
       break
     }
   }
 
-  update_hint(game)
-  check_timeout(game)
+  game.update_hint()
+  game.check_timeout()
 }
 
 ///|
@@ -745,13 +743,13 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     game.touch_count > 0
   let clamped_dt : Float = @types.clampf(dt, 0.0, 0.04)
   if game.state == @types.state_title {
-    update_title_input(game)
-    update_play(game, clamped_dt)
+    game.update_title_input()
+    game.update_play(clamped_dt)
   } else if game.state == @types.state_play {
-    update_play_input(game, clamped_dt)
-    update_play(game, clamped_dt)
+    game.update_play_input(clamped_dt)
+    game.update_play(clamped_dt)
   } else {
-    update_result_input(game)
-    update_play(game, clamped_dt)
+    game.update_result_input()
+    game.update_play(clamped_dt)
   }
 }

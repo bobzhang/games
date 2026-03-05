@@ -1,5 +1,5 @@
 ///|
-fn clear_objs(game : @types.Game) -> Unit {
+fn @types.Game::clear_objs(game : @types.Game) -> Unit {
   for obj in game.objs {
     obj.active = false
     obj.kind = @types.obj_wall
@@ -15,7 +15,7 @@ fn clear_objs(game : @types.Game) -> Unit {
 }
 
 ///|
-fn clear_particles(game : @types.Game) -> Unit {
+fn @types.Game::clear_particles(game : @types.Game) -> Unit {
   for particle in game.particles {
     particle.active = false
     particle.x = 0.0
@@ -29,7 +29,7 @@ fn clear_particles(game : @types.Game) -> Unit {
 }
 
 ///|
-fn clear_trails(game : @types.Game) -> Unit {
+fn @types.Game::clear_trails(game : @types.Game) -> Unit {
   for trail in game.trails {
     trail.active = false
     trail.x = 0.0
@@ -55,7 +55,7 @@ fn reset_hero(hero : @types.Player) -> Unit {
 }
 
 ///|
-fn alloc_obj_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_obj_slot(game : @types.Game) -> Int {
   for i in 0..<game.objs.length() {
     if not(game.objs[i].active) {
       return i
@@ -74,7 +74,7 @@ fn alloc_obj_slot(game : @types.Game) -> Int {
 }
 
 ///|
-fn alloc_particle_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_particle_slot(game : @types.Game) -> Int {
   for i in 0..<game.particles.length() {
     if not(game.particles[i].active) {
       return i
@@ -93,7 +93,7 @@ fn alloc_particle_slot(game : @types.Game) -> Int {
 }
 
 ///|
-fn alloc_trail_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_trail_slot(game : @types.Game) -> Int {
   for i in 0..<game.trails.length() {
     if not(game.trails[i].active) {
       return i
@@ -112,7 +112,7 @@ fn alloc_trail_slot(game : @types.Game) -> Int {
 }
 
 ///|
-fn spawn_obj(
+fn @types.Game::spawn_obj(
   game : @types.Game,
   kind : Int,
   lane : Int,
@@ -122,7 +122,7 @@ fn spawn_obj(
   h : Float,
   phase_only : Int,
 ) -> Unit {
-  let i = alloc_obj_slot(game)
+  let i = game.alloc_obj_slot()
   game.objs[i].active = true
   game.objs[i].kind = kind
   game.objs[i].lane = lane
@@ -136,7 +136,7 @@ fn spawn_obj(
 }
 
 ///|
-fn spawn_particle(
+fn @types.Game::spawn_particle(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -146,7 +146,7 @@ fn spawn_particle(
   size : Float,
   kind : Int,
 ) -> Unit {
-  let i = alloc_particle_slot(game)
+  let i = game.alloc_particle_slot()
   game.particles[i].active = true
   game.particles[i].x = x
   game.particles[i].y = y
@@ -158,7 +158,7 @@ fn spawn_particle(
 }
 
 ///|
-fn burst(
+fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -166,8 +166,7 @@ fn burst(
   kind : Int,
 ) -> Unit {
   for _i in 0..<amount {
-    spawn_particle(
-      game,
+    game.spawn_particle(
       x + @types.randf(-24.0, 24.0),
       y + @types.randf(-16.0, 16.0),
       @types.randf(-420.0, 420.0),
@@ -180,13 +179,13 @@ fn burst(
 }
 
 ///|
-fn spawn_trail(
+fn @types.Game::spawn_trail(
   game : @types.Game,
   lane_x : Float,
   jump_y : Float,
   beta : Bool,
 ) -> Unit {
-  let i = alloc_trail_slot(game)
+  let i = game.alloc_trail_slot()
   game.trails[i].active = true
   game.trails[i].x = lane_x
   game.trails[i].y = jump_y
@@ -197,7 +196,7 @@ fn spawn_trail(
 }
 
 ///|
-fn set_stage(game : @types.Game, stage : Int) -> Unit {
+fn @types.Game::set_stage(game : @types.Game, stage : Int) -> Unit {
   game.stage = stage
   game.stage_goal = @types.stage_base_distance +
     Float::from_int(stage - 1) * @types.stage_distance_growth
@@ -207,15 +206,14 @@ fn set_stage(game : @types.Game, stage : Int) -> Unit {
 }
 
 ///|
-fn spawn_orb_strip(
+fn @types.Game::spawn_orb_strip(
   game : @types.Game,
   z0 : Float,
   len : Int,
   lane : Int,
 ) -> Unit {
   for i in 0..<len {
-    spawn_obj(
-      game,
+    game.spawn_obj(
       @types.obj_orb,
       lane,
       z0 + Float::from_int(i) * 72.0,
@@ -228,17 +226,16 @@ fn spawn_orb_strip(
 }
 
 ///|
-fn spawn_wave(game : @types.Game, z_base : Float) -> Unit {
+fn @types.Game::spawn_wave(game : @types.Game, z_base : Float) -> Unit {
   let p = @types.randi(0, 99)
 
   if p < 20 {
     let safe = @types.randi(0, @types.lane_count - 1)
     for lane in 0..<@types.lane_count {
       if lane == safe {
-        spawn_orb_strip(game, z_base + 30.0, 4, lane)
+        game.spawn_orb_strip(z_base + 30.0, 4, lane)
       } else {
-        spawn_obj(
-          game,
+        game.spawn_obj(
           @types.obj_wall,
           lane,
           z_base + @types.randf(0.0, 56.0),
@@ -252,8 +249,7 @@ fn spawn_wave(game : @types.Game, z_base : Float) -> Unit {
   } else if p < 36 {
     let mut lane = @types.randi(0, @types.lane_count - 1)
     for i in 0..<6 {
-      spawn_obj(
-        game,
+      game.spawn_obj(
         @types.obj_wall,
         lane,
         z_base + Float::from_int(i) * 170.0,
@@ -269,8 +265,7 @@ fn spawn_wave(game : @types.Game, z_base : Float) -> Unit {
     }
   } else if p < 54 {
     for lane in 0..<@types.lane_count {
-      spawn_obj(
-        game,
+      game.spawn_obj(
         @types.obj_gate_alpha,
         lane,
         z_base + Float::from_int(lane) * 36.0,
@@ -279,8 +274,7 @@ fn spawn_wave(game : @types.Game, z_base : Float) -> Unit {
         176.0,
         1,
       )
-      spawn_obj(
-        game,
+      game.spawn_obj(
         @types.obj_gate_beta,
         lane,
         z_base + 260.0 + Float::from_int(lane) * 36.0,
@@ -290,20 +284,18 @@ fn spawn_wave(game : @types.Game, z_base : Float) -> Unit {
         2,
       )
     }
-    spawn_orb_strip(
-      game,
+    game.spawn_orb_strip(
       z_base + 122.0,
       5,
       @types.randi(0, @types.lane_count - 1),
     )
   } else if p < 72 {
     let lane = @types.randi(0, @types.lane_count - 1)
-    spawn_obj(game, @types.obj_boost, lane, z_base + 180.0, 0.0, 112.0, 48.0, 0)
-    spawn_orb_strip(game, z_base + 20.0, 3, lane)
+    game.spawn_obj(@types.obj_boost, lane, z_base + 180.0, 0.0, 112.0, 48.0, 0)
+    game.spawn_orb_strip(z_base + 20.0, 3, lane)
     for i in 0..<5 {
       let l = (lane + i + 1) % @types.lane_count
-      spawn_obj(
-        game,
+      game.spawn_obj(
         @types.obj_wall,
         l,
         z_base + 300.0 + Float::from_int(i) * 60.0,
@@ -316,8 +308,7 @@ fn spawn_wave(game : @types.Game, z_base : Float) -> Unit {
   } else if p < 88 {
     let lane = @types.randi(0, @types.lane_count - 1)
     for i in 0..<7 {
-      spawn_obj(
-        game,
+      game.spawn_obj(
         @types.obj_jump_bar,
         lane,
         z_base + Float::from_int(i) * 130.0,
@@ -332,8 +323,7 @@ fn spawn_wave(game : @types.Game, z_base : Float) -> Unit {
           min=0,
           max=@types.lane_count - 1,
         )
-        spawn_obj(
-          game,
+        game.spawn_obj(
           @types.obj_orb,
           side_lane,
           z_base + Float::from_int(i) * 130.0 + 32.0,
@@ -360,8 +350,7 @@ fn spawn_wave(game : @types.Game, z_base : Float) -> Unit {
       }
       let w : Float = if kind == @types.obj_orb { 56.0 } else { 96.0 }
       let h : Float = if kind == @types.obj_orb { 56.0 } else { 172.0 }
-      spawn_obj(
-        game,
+      game.spawn_obj(
         kind,
         lane,
         z_base + Float::from_int(i) * 110.0,
@@ -375,9 +364,9 @@ fn spawn_wave(game : @types.Game, z_base : Float) -> Unit {
 }
 
 ///|
-fn ensure_spawns(game : @types.Game) -> Unit {
+fn @types.Game::ensure_spawns(game : @types.Game) -> Unit {
   while game.next_spawn_z < 3000.0 {
-    spawn_wave(game, game.next_spawn_z)
+    game.spawn_wave(game.next_spawn_z)
     let step = @types.randf(240.0, 420.0) -
       Float::from_int(game.stage - 1) * 4.0
     game.next_spawn_z = game.next_spawn_z + @types.maxf(180.0, step)
@@ -385,7 +374,7 @@ fn ensure_spawns(game : @types.Game) -> Unit {
 }
 
 ///|
-fn apply_damage(game : @types.Game, amount : Float) -> Unit {
+fn @types.Game::apply_damage(game : @types.Game, amount : Float) -> Unit {
   if game.hero.invuln_t > 0.0 {
     return
   }
@@ -399,7 +388,7 @@ fn apply_damage(game : @types.Game, amount : Float) -> Unit {
   game.flash_t = 0.24
   game.shake_t = 0.28
 
-  burst(game, game.hero.lane_f, game.hero.y + 42.0, 24, 2)
+  game.burst(game.hero.lane_f, game.hero.y + 42.0, 24, 2)
 
   if game.health <= 0.0 {
     game.state = @types.state_game_over
@@ -411,14 +400,14 @@ fn apply_damage(game : @types.Game, amount : Float) -> Unit {
 }
 
 ///|
-fn start_run(game : @types.Game) -> Unit {
-  clear_objs(game)
-  clear_particles(game)
-  clear_trails(game)
+fn @types.Game::start_run(game : @types.Game) -> Unit {
+  game.clear_objs()
+  game.clear_particles()
+  game.clear_trails()
   reset_hero(game.hero)
 
   game.state = @types.state_play
-  set_stage(game, 1)
+  game.set_stage(1)
   game.speed_mul = 1.0
   game.boost_t = 0.0
   game.score = 0
@@ -442,14 +431,14 @@ fn start_run(game : @types.Game) -> Unit {
   game.touch_phase_prev = false
   game.touch_restart_prev = false
 
-  ensure_spawns(game)
+  game.ensure_spawns()
 }
 
 ///|
-fn init_title_scene(game : @types.Game) -> Unit {
-  clear_objs(game)
-  clear_particles(game)
-  clear_trails(game)
+fn @types.Game::init_title_scene(game : @types.Game) -> Unit {
+  game.clear_objs()
+  game.clear_particles()
+  game.clear_trails()
   reset_hero(game.hero)
 
   game.state = @types.state_title
@@ -475,11 +464,11 @@ fn init_title_scene(game : @types.Game) -> Unit {
   game.hint_t = 0.0
   game.next_spawn_z = 420.0
 
-  ensure_spawns(game)
+  game.ensure_spawns()
 }
 
 ///|
-fn handle_lane_input(game : @types.Game) -> Unit {
+fn @types.Game::handle_lane_input(game : @types.Game) -> Unit {
   if game.input_move == 0 {
     return
   }
@@ -491,7 +480,7 @@ fn handle_lane_input(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_player(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   let hero = game.hero
   hero.anim_t = hero.anim_t + dt
 
@@ -502,7 +491,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
     hero.hurt_t = @types.maxf(0.0, hero.hurt_t - dt)
   }
 
-  handle_lane_input(game)
+  game.handle_lane_input()
 
   let lane_target = @types.lane_world_x(hero.lane)
   hero.lane_f = @types.lerpf(
@@ -521,7 +510,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
     hero.vy = @types.player_jump_speed
     hero.grounded = false
     hero.jump_buf = 0.0
-    burst(game, hero.lane_f, 10.0, 10, 0)
+    game.burst(hero.lane_f, 10.0, 10, 0)
   }
 
   if not(hero.grounded) {
@@ -541,12 +530,12 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   let now_tick = (hero.anim_t / gate).to_int()
   let prev_tick = ((hero.anim_t - dt) / gate).to_int()
   if now_tick != prev_tick {
-    spawn_trail(game, hero.lane_f, hero.y, game.phase_beta)
+    game.spawn_trail(hero.lane_f, hero.y, game.phase_beta)
   }
 }
 
 ///|
-fn update_phase(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_phase(game : @types.Game, dt : Float) -> Unit {
   if game.phase_cd > 0.0 {
     game.phase_cd = @types.maxf(0.0, game.phase_cd - dt)
   }
@@ -555,12 +544,12 @@ fn update_phase(game : @types.Game, dt : Float) -> Unit {
     if game.phase_beta {
       game.phase_beta = false
       game.phase_cd = @types.phase_switch_cd
-      burst(game, game.hero.lane_f, game.hero.y + 34.0, 8, 0)
+      game.burst(game.hero.lane_f, game.hero.y + 34.0, 8, 0)
     } else if game.phase_energy > 8.0 {
       game.phase_beta = true
       game.phase_energy = game.phase_energy - 8.0
       game.phase_cd = @types.phase_switch_cd
-      burst(game, game.hero.lane_f, game.hero.y + 34.0, 8, 1)
+      game.burst(game.hero.lane_f, game.hero.y + 34.0, 8, 1)
     }
   }
 
@@ -582,7 +571,7 @@ fn update_phase(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn combo_mul(game : @types.Game) -> Float {
+fn @types.Game::combo_mul(game : @types.Game) -> Float {
   1.0 + Float::from_int(game.combo) * 0.08
 }
 
@@ -592,7 +581,7 @@ fn mark_hit_obj(o : @types.TrackObj) -> Unit {
 }
 
 ///|
-fn obj_affects_phase(game : @types.Game, o : @types.TrackObj) -> Bool {
+fn @types.Game::obj_affects_phase(game : @types.Game, o : @types.TrackObj) -> Bool {
   if o.phase_only == 1 {
     return not(game.phase_beta)
   }
@@ -603,7 +592,7 @@ fn obj_affects_phase(game : @types.Game, o : @types.TrackObj) -> Bool {
 }
 
 ///|
-fn update_objects(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_objects(game : @types.Game, dt : Float) -> Unit {
   let dz = game.speed * game.speed_mul * dt
   game.stage_progress = game.stage_progress + dz
 
@@ -647,8 +636,8 @@ fn update_objects(game : @types.Game, dt : Float) -> Unit {
         game.combo = (game.combo + 1).clamp(min=0, max=999)
         game.combo_t = @types.combo_decay_time
         game.score = game.score +
-          (Float::from_int(96 + game.combo * 6) * combo_mul(game)).to_int()
-        burst(game, @types.lane_world_x(o.lane), o.y_off + 22.0, 10, 0)
+          (Float::from_int(96 + game.combo * 6) * game.combo_mul()).to_int()
+        game.burst(@types.lane_world_x(o.lane), o.y_off + 22.0, 10, 0)
       }
       continue
     }
@@ -659,12 +648,12 @@ fn update_objects(game : @types.Game, dt : Float) -> Unit {
         game.boost_t = 1.4
         game.speed_mul = 1.78
         game.score = game.score + 280
-        burst(game, @types.lane_world_x(o.lane), 22.0, 16, 1)
+        game.burst(@types.lane_world_x(o.lane), 22.0, 16, 1)
       }
       continue
     }
 
-    if not(obj_affects_phase(game, o)) {
+    if not(game.obj_affects_phase(o)) {
       continue
     }
 
@@ -677,7 +666,7 @@ fn update_objects(game : @types.Game, dt : Float) -> Unit {
         continue
       }
       mark_hit_obj(o)
-      apply_damage(game, 14.0)
+      game.apply_damage(14.0)
       continue
     }
 
@@ -686,7 +675,7 @@ fn update_objects(game : @types.Game, dt : Float) -> Unit {
         continue
       }
       mark_hit_obj(o)
-      apply_damage(game, 17.0)
+      game.apply_damage(17.0)
       continue
     }
 
@@ -695,12 +684,12 @@ fn update_objects(game : @types.Game, dt : Float) -> Unit {
         continue
       }
       mark_hit_obj(o)
-      apply_damage(game, 20.0)
+      game.apply_damage(20.0)
       continue
     }
   }
 
-  ensure_spawns(game)
+  game.ensure_spawns()
 
   if game.boost_t > 0.0 {
     game.boost_t = @types.maxf(0.0, game.boost_t - dt)
@@ -711,7 +700,7 @@ fn update_objects(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_particles(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
       continue
@@ -742,7 +731,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_score(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_score(game : @types.Game, dt : Float) -> Unit {
   if game.combo_t > 0.0 {
     game.combo_t = @types.maxf(0.0, game.combo_t - dt)
     if game.combo_t <= 0.0 {
@@ -750,7 +739,7 @@ fn update_score(game : @types.Game, dt : Float) -> Unit {
     }
   }
 
-  let points = (game.speed * game.speed_mul * dt * 0.10 * combo_mul(game)).to_int()
+  let points = (game.speed * game.speed_mul * dt * 0.10 * game.combo_mul()).to_int()
   game.score = game.score + points
 
   if game.score > game.best_score {
@@ -759,9 +748,9 @@ fn update_score(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_play(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   if game.input_pause_press {
-    init_title_scene(game)
+    game.init_title_scene()
     return
   }
 
@@ -769,11 +758,11 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
     game.hint_t = @types.maxf(0.0, game.hint_t - dt)
   }
 
-  update_player(game, dt)
-  update_phase(game, dt)
-  update_objects(game, dt)
-  update_particles(game, dt)
-  update_score(game, dt)
+  game.update_player(dt)
+  game.update_phase(dt)
+  game.update_objects(dt)
+  game.update_particles(dt)
+  game.update_score(dt)
 
   if game.flash_t > 0.0 {
     game.flash_t = @types.maxf(0.0, game.flash_t - dt)
@@ -791,21 +780,21 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
       game.best_score = game.score
     }
     game.flash_t = 0.34
-    burst(game, game.hero.lane_f, game.hero.y + 26.0, 34, 1)
+    game.burst(game.hero.lane_f, game.hero.y + 26.0, 34, 1)
   }
 
   if game.input_restart_press {
-    start_run(game)
+    game.start_run()
   }
 }
 
 ///|
-fn update_stage_clear(game : @types.Game, dt : Float) -> Unit {
-  update_particles(game, dt)
+fn @types.Game::update_stage_clear(game : @types.Game, dt : Float) -> Unit {
+  game.update_particles(dt)
 
   game.result_t = game.result_t - dt
   if game.result_t <= 0.0 {
-    set_stage(game, game.stage + 1)
+    game.set_stage(game.stage + 1)
     game.state = @types.state_play
     game.result_t = 0.0
     game.stage_bonus = 0
@@ -814,22 +803,22 @@ fn update_stage_clear(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.input_restart_press {
-    start_run(game)
+    game.start_run()
   }
 }
 
 ///|
-fn update_game_over(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_game_over(game : @types.Game, dt : Float) -> Unit {
   game.result_t = game.result_t + dt
-  update_particles(game, dt)
+  game.update_particles(dt)
 
   if game.input_restart_press || (game.result_t > 0.35 && game.input_jump_press) {
-    start_run(game)
+    game.start_run()
   }
 }
 
 ///|
-fn update_title_scene(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_title_scene(game : @types.Game, dt : Float) -> Unit {
   game.title_t = game.title_t + dt
 
   let demo_dz = @types.base_speed * 0.52 * dt
@@ -845,11 +834,11 @@ fn update_title_scene(game : @types.Game, dt : Float) -> Unit {
     }
   }
 
-  ensure_spawns(game)
-  update_particles(game, dt)
+  game.ensure_spawns()
+  game.update_particles(dt)
 
   if game.input_jump_press || game.input_phase_press || game.input_restart_press {
-    start_run(game)
+    game.start_run()
   }
 }
 
@@ -858,36 +847,36 @@ fn update_title_scene(game : @types.Game, dt : Float) -> Unit {
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   // Handle input first based on current state
   if game.state == @types.state_title {
-    update_title_input(game)
+    game.update_title_input()
   } else if game.state == @types.state_play {
-    update_play_input(game)
+    game.update_play_input()
   } else if game.state == @types.state_stage_clear {
-    update_stage_clear_input(game)
+    game.update_stage_clear_input()
   } else {
-    update_result_input(game)
+    game.update_result_input()
   }
 
   // Then update game logic
   if game.state == @types.state_title {
-    update_title_scene(game, dt)
+    game.update_title_scene(dt)
     return
   }
 
   if game.state == @types.state_play {
-    update_play(game, dt)
+    game.update_play(dt)
     return
   }
 
   if game.state == @types.state_stage_clear {
-    update_stage_clear(game, dt)
+    game.update_stage_clear(dt)
     return
   }
 
-  update_game_over(game, dt)
+  game.update_game_over(dt)
 }
 
 ///|
 /// Initialize the game state to the animated title scene.
 pub fn init_game(game : @types.Game) -> Unit {
-  init_title_scene(game)
+  game.init_title_scene()
 }
