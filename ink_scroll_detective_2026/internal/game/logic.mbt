@@ -241,11 +241,11 @@ fn @types.Game::discover_clue(game : @types.Game, clue_index : Int) -> Unit {
 ///|
 /// Returns the index of a free incident slot, or the slot with the highest remaining timer.
 fn @types.Game::alloc_incident_slot(game : @types.Game) -> Int {
-  for i in 0..<game.incidents.length() {
-    if not(game.incidents[i].active) {
-      return i
+  for i, slot in game.incidents {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_timer = game.incidents[0].timer
@@ -256,6 +256,7 @@ fn @types.Game::alloc_incident_slot(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
