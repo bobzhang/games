@@ -105,11 +105,11 @@ fn reset_player(hero : @types.Player) -> Unit {
 ///|
 /// Returns the index of the first inactive segment slot, or the rightmost active segment if all slots are occupied.
 fn @types.Game::alloc_segment_slot(game : @types.Game) -> Int {
-  for i in 0..<game.segments.length() {
-    if not(game.segments[i].active) {
-      return i
+  for i, slot in game.segments {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best_i = 0
   let mut best_x = game.segments[0].x
@@ -121,16 +121,17 @@ fn @types.Game::alloc_segment_slot(game : @types.Game) -> Int {
   }
 
   best_i
+  }
 }
 
 ///|
 /// Returns the index of the first inactive obstacle slot, or evicts the farthest right active obstacle if all slots are occupied.
 fn @types.Game::alloc_obstacle_slot(game : @types.Game) -> Int {
-  for i in 0..<game.obstacles.length() {
-    if not(game.obstacles[i].active) {
-      return i
+  for i, slot in game.obstacles {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best_i = 0
   let mut best_x = game.obstacles[0].x
@@ -142,16 +143,17 @@ fn @types.Game::alloc_obstacle_slot(game : @types.Game) -> Int {
   }
 
   best_i
+  }
 }
 
 ///|
 /// Returns the index of the first inactive chip slot, or evicts the farthest right active chip if all slots are occupied.
 fn @types.Game::alloc_chip_slot(game : @types.Game) -> Int {
-  for i in 0..<game.chips.length() {
-    if not(game.chips[i].active) {
-      return i
+  for i, slot in game.chips {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best_i = 0
   let mut best_x = game.chips[0].x
@@ -163,16 +165,17 @@ fn @types.Game::alloc_chip_slot(game : @types.Game) -> Int {
   }
 
   best_i
+  }
 }
 
 ///|
 /// Returns the index of the first inactive anchor slot, or evicts the farthest right active anchor if all slots are occupied.
 fn @types.Game::alloc_anchor_slot(game : @types.Game) -> Int {
-  for i in 0..<game.anchors.length() {
-    if not(game.anchors[i].active) {
-      return i
+  for i, slot in game.anchors {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best_i = 0
   let mut best_x = game.anchors[0].x
@@ -184,16 +187,17 @@ fn @types.Game::alloc_anchor_slot(game : @types.Game) -> Int {
   }
 
   best_i
+  }
 }
 
 ///|
 /// Returns the index of the first inactive particle slot, or evicts the shortest-lived active particle if all slots are occupied.
 fn @types.Game::alloc_particle_slot(game : @types.Game) -> Int {
-  for i in 0..<game.particles.length() {
-    if not(game.particles[i].active) {
-      return i
+  for i, slot in game.particles {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best_i = 0
   let mut best_life = game.particles[0].life
@@ -205,16 +209,17 @@ fn @types.Game::alloc_particle_slot(game : @types.Game) -> Int {
   }
 
   best_i
+  }
 }
 
 ///|
 /// Returns the index of the first inactive ghost slot, or evicts the shortest-lived active ghost if all slots are occupied.
 fn @types.Game::alloc_ghost_slot(game : @types.Game) -> Int {
-  for i in 0..<game.ghosts.length() {
-    if not(game.ghosts[i].active) {
-      return i
+  for i, slot in game.ghosts {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best_i = 0
   let mut best_life = game.ghosts[0].life
@@ -226,6 +231,7 @@ fn @types.Game::alloc_ghost_slot(game : @types.Game) -> Int {
   }
 
   best_i
+  }
 }
 
 ///|
