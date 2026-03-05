@@ -1,5 +1,5 @@
 ///|
-fn alloc_particle(game : @types.Game) -> Int {
+fn @types.Game::alloc_particle(game : @types.Game) -> Int {
   for i in 0..<game.particles.length() {
     if not(game.particles[i].active) {
       return i
@@ -20,7 +20,7 @@ pub fn spawn_particle(
   size : Float,
   color : @raylib.Color,
 ) -> Unit {
-  let idx = alloc_particle(game)
+  let idx = game.alloc_particle()
   if idx < 0 {
     return
   }

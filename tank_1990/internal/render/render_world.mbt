@@ -1,6 +1,6 @@
 ///|
 /// Draws the animated parallax starfield background.
-fn draw_starfield(game : @types.Game) -> Unit {
+fn @types.Game::draw_starfield(game : @types.Game) -> Unit {
   @raylib.clear_background(game.profile.sky_bottom)
   @raylib.draw_rectangle_gradient_v(
     0,
@@ -40,7 +40,7 @@ fn draw_world_backdrop(shake_x : Float, shake_y : Float) -> Unit {
 
 ///|
 /// Draws a single map tile at the given tile coordinates.
-fn draw_single_tile(
+fn @types.Game::draw_single_tile(
   game : @types.Game,
   tx : Int,
   ty : Int,
@@ -160,7 +160,7 @@ fn draw_single_tile(
 
 ///|
 /// Draws all non-bush, non-empty terrain tiles.
-fn draw_terrain_layer(
+fn @types.Game::draw_terrain_layer(
   game : @types.Game,
   shake_x : Float,
   shake_y : Float,
@@ -171,14 +171,14 @@ fn draw_terrain_layer(
       if tile == @types.tile_empty || tile == @types.tile_bush {
         continue
       }
-      draw_single_tile(game, tx, ty, tile, shake_x, shake_y)
+      game.draw_single_tile(tx, ty, tile, shake_x, shake_y)
     }
   }
 }
 
 ///|
 /// Draws all bush tiles as the top foliage layer above tanks.
-fn draw_bush_layer(
+fn @types.Game::draw_bush_layer(
   game : @types.Game,
   shake_x : Float,
   shake_y : Float,
@@ -286,7 +286,11 @@ fn draw_tank(
 
 ///|
 /// Draws all active player tanks with invulnerability blink and shield rings.
-fn draw_players(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_players(
+  game : @types.Game,
+  shake_x : Float,
+  shake_y : Float,
+) -> Unit {
   for i in 0..<@types.max_players {
     if not(game.players[i].active) {
       continue
@@ -329,7 +333,11 @@ fn draw_players(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
 
 ///|
 /// Draws all active enemy tanks with spawn blink and heavy-type HP indicators.
-fn draw_enemies(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_enemies(
+  game : @types.Game,
+  shake_x : Float,
+  shake_y : Float,
+) -> Unit {
   for enemy in game.enemies {
     if not(enemy.active) {
       continue
@@ -361,7 +369,11 @@ fn draw_enemies(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
 
 ///|
 /// Draws all active bullets as colored circles.
-fn draw_bullets(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_bullets(
+  game : @types.Game,
+  shake_x : Float,
+  shake_y : Float,
+) -> Unit {
   for bullet in game.bullets {
     if not(bullet.active) {
       continue
@@ -384,7 +396,11 @@ fn draw_bullets(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
 
 ///|
 /// Draws all active particles with alpha fading based on remaining life.
-fn draw_particles(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_particles(
+  game : @types.Game,
+  shake_x : Float,
+  shake_y : Float,
+) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -402,7 +418,11 @@ fn draw_particles(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit 
 
 ///|
 /// Draws all active powerups with pulsing glow and blinking when near expiry.
-fn draw_powerups(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_powerups(
+  game : @types.Game,
+  shake_x : Float,
+  shake_y : Float,
+) -> Unit {
   for p in game.powerups {
     if not(p.active) {
       continue
@@ -429,15 +449,15 @@ fn draw_powerups(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
 pub fn draw_world(game : @types.Game) -> Unit {
   let (shake_x, shake_y) = @types.shake_offsets(game)
 
-  draw_starfield(game)
+  game.draw_starfield()
   draw_world_backdrop(shake_x, shake_y)
-  draw_terrain_layer(game, shake_x, shake_y)
-  draw_powerups(game, shake_x, shake_y)
-  draw_players(game, shake_x, shake_y)
-  draw_enemies(game, shake_x, shake_y)
-  draw_bullets(game, shake_x, shake_y)
-  draw_particles(game, shake_x, shake_y)
-  draw_bush_layer(game, shake_x, shake_y)
+  game.draw_terrain_layer(shake_x, shake_y)
+  game.draw_powerups(shake_x, shake_y)
+  game.draw_players(shake_x, shake_y)
+  game.draw_enemies(shake_x, shake_y)
+  game.draw_bullets(shake_x, shake_y)
+  game.draw_particles(shake_x, shake_y)
+  game.draw_bush_layer(shake_x, shake_y)
 
   if game.profile.fog_alpha > 0.0 {
     @raylib.draw_rectangle(

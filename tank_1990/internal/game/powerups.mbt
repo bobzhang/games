@@ -1,5 +1,5 @@
 ///|
-fn alloc_powerup(game : @types.Game) -> Int {
+fn @types.Game::alloc_powerup(game : @types.Game) -> Int {
   for i in 0..<game.powerups.length() {
     if not(game.powerups[i].active) {
       return i
@@ -9,8 +9,13 @@ fn alloc_powerup(game : @types.Game) -> Int {
 }
 
 ///|
-fn spawn_powerup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit {
-  let idx = alloc_powerup(game)
+fn @types.Game::spawn_powerup(
+  game : @types.Game,
+  kind : Int,
+  x : Float,
+  y : Float,
+) -> Unit {
+  let idx = game.alloc_powerup()
   if idx < 0 {
     return
   }
@@ -32,7 +37,11 @@ fn spawn_powerup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit {
 }
 
 ///|
-fn spawn_random_powerup(game : @types.Game, x : Float, y : Float) -> Unit {
+fn @types.Game::spawn_random_powerup(
+  game : @types.Game,
+  x : Float,
+  y : Float,
+) -> Unit {
   let roll = @types.rand_range(game, 0, 99)
   let kind = if roll < 18 {
     @types.powerup_shield
@@ -47,11 +56,14 @@ fn spawn_random_powerup(game : @types.Game, x : Float, y : Float) -> Unit {
   } else {
     @types.powerup_tank
   }
-  spawn_powerup(game, kind, x, y)
+  game.spawn_powerup(kind, x, y)
 }
 
 ///|
-fn clear_all_enemies_by_grenade(game : @types.Game, team : Int) -> Unit {
+fn @types.Game::clear_all_enemies_by_grenade(
+  game : @types.Game,
+  team : Int,
+) -> Unit {
   let mut killed = 0
   for enemy in game.enemies {
     if enemy.active {
@@ -70,7 +82,11 @@ fn clear_all_enemies_by_grenade(game : @types.Game, team : Int) -> Unit {
 }
 
 ///|
-fn apply_powerup(game : @types.Game, player_index : Int, kind : Int) -> Unit {
+fn @types.Game::apply_powerup(
+  game : @types.Game,
+  player_index : Int,
+  kind : Int,
+) -> Unit {
   let player = game.players[player_index]
   let team = @types.team_of_player(player_index)
   if kind == @types.powerup_shield {
@@ -86,14 +102,14 @@ fn apply_powerup(game : @types.Game, player_index : Int, kind : Int) -> Unit {
     }
     @particles.spawn_spark_burst(game, player.x, player.y, 20)
   } else if kind == @types.powerup_grenade {
-    clear_all_enemies_by_grenade(game, team)
+    game.clear_all_enemies_by_grenade(team)
     @types.push_camera_shake(game, 2.2)
   } else if kind == @types.powerup_clock {
     game.freeze_all_timer = @types.freeze_duration
     @particles.spawn_spark_burst(game, player.x, player.y, 26)
   } else if kind == @types.powerup_shovel {
-    cache_base_ring(game)
-    apply_shovel_fortress(game)
+    game.cache_base_ring()
+    game.apply_shovel_fortress()
     game.shovel_timer = @types.shovel_duration
     @particles.spawn_spark_burst(
       game,
@@ -109,7 +125,7 @@ fn apply_powerup(game : @types.Game, player_index : Int, kind : Int) -> Unit {
 }
 
 ///|
-fn update_powerups(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_powerups(game : @types.Game, dt : Float) -> Unit {
   for p in game.powerups {
     if not(p.active) {
       continue
@@ -130,7 +146,7 @@ fn update_powerups(game : @types.Game, dt : Float) -> Unit {
       }
       let r = @types.tank_half + @types.powerup_radius(p.kind)
       if @types.distance_sq(player.x, player.y, p.x, p.y) <= r * r {
-        apply_powerup(game, j, p.kind)
+        game.apply_powerup(j, p.kind)
         p.active = false
         break
       }
@@ -139,7 +155,7 @@ fn update_powerups(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_global_effects(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_global_effects(game : @types.Game, dt : Float) -> Unit {
   if game.freeze_all_timer > 0.0 {
     game.freeze_all_timer -= dt
     if game.freeze_all_timer < 0.0 {
@@ -151,7 +167,7 @@ fn update_global_effects(game : @types.Game, dt : Float) -> Unit {
     game.shovel_timer -= dt
     if game.shovel_timer <= 0.0 {
       game.shovel_timer = 0.0
-      restore_base_ring(game)
+      game.restore_base_ring()
     }
   }
 }
