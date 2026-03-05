@@ -20,7 +20,7 @@ fn ai_reset_flags(fighter : @types.Fighter) -> Unit {
 }
 
 ///|
-fn ai_should_block(
+fn @types.Game::ai_should_block(
   game : @types.Game,
   _fighter : @types.Fighter,
   opponent : @types.Fighter,
@@ -41,7 +41,7 @@ fn ai_should_block(
 }
 
 ///|
-fn ai_pick_desired_axis(
+fn @types.Game::ai_pick_desired_axis(
   game : @types.Game,
   fighter : @types.Fighter,
   opponent : @types.Fighter,
@@ -50,7 +50,7 @@ fn ai_pick_desired_axis(
   let dx = opponent.x - fighter.x
   let toward = if dx > 0.0 { 1 } else { -1 }
 
-  if ai_should_block(game, fighter, opponent, distance) {
+  if game.ai_should_block(fighter, opponent, distance) {
     return (-toward, if @types.rand_chance(game, 0.35) { 1 } else { 0 })
   }
 
@@ -76,7 +76,7 @@ fn ai_pick_desired_axis(
 }
 
 ///|
-fn ai_try_jump(
+fn @types.Game::ai_try_jump(
   game : @types.Game,
   fighter : @types.Fighter,
   distance : Float,
@@ -91,7 +91,7 @@ fn ai_try_jump(
 }
 
 ///|
-fn ai_try_attack(
+fn @types.Game::ai_try_attack(
   game : @types.Game,
   fighter : @types.Fighter,
   opponent : @types.Fighter,
@@ -203,7 +203,7 @@ fn rand_rangef_by_seedless(fighter : @types.Fighter) -> Float {
 }
 
 ///|
-fn update_cpu_input(game : @types.Game, slot : Int, dt : Float) -> Unit {
+fn @types.Game::update_cpu_input(game : @types.Game, slot : Int, dt : Float) -> Unit {
   let fighter = game.fighters[slot]
   let opponent = game.fighters[@types.other_slot(slot)]
 
@@ -223,18 +223,18 @@ fn update_cpu_input(game : @types.Game, slot : Int, dt : Float) -> Unit {
   let distance = @types.fighter_distance_x(fighter, opponent)
   ai_set_mode_from_distance(fighter, distance)
 
-  let (desired_x, desired_y0) = ai_pick_desired_axis(
-    game, fighter, opponent, distance,
+  let (desired_x, desired_y0) = game.ai_pick_desired_axis(
+    fighter, opponent, distance,
   )
   let mut desired_y = desired_y0
 
-  if ai_try_jump(game, fighter, distance) {
+  if game.ai_try_jump(fighter, distance) {
     desired_y = -1
   }
 
   push_cpu_direction(fighter, desired_x, desired_y)
 
-  ai_try_attack(game, fighter, opponent, distance)
+  game.ai_try_attack(fighter, opponent, distance)
   ai_apply_attack_flags(fighter)
 
   if fighter.input.any_attack_pressed {

@@ -1,6 +1,6 @@
 ///|
 /// Resets all logical input fields on the game to their default zero/false values.
-fn clear_input(game : @types.Game) -> Unit {
+fn @types.Game::clear_input(game : @types.Game) -> Unit {
   game.input_x = 0.0
   game.input_y = 0.0
   game.input_action_press = false
@@ -11,8 +11,8 @@ fn clear_input(game : @types.Game) -> Unit {
 
 ///|
 /// Reads keyboard, mouse, and touch input for the Title state and sets `input_start_press` when the start button is activated.
-fn update_title_input(game : @types.Game) -> Unit {
-  clear_input(game)
+fn @types.Game::update_title_input(game : @types.Game) -> Unit {
+  game.clear_input()
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -56,8 +56,8 @@ fn update_title_input(game : @types.Game) -> Unit {
 
 ///|
 /// Reads keyboard, mouse, and touch input for the Play state and sets `input_x`, `input_y`, and `input_action_press` for the current frame.
-fn update_play_input(game : @types.Game) -> Unit {
-  clear_input(game)
+fn @types.Game::update_play_input(game : @types.Game) -> Unit {
+  game.clear_input()
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -171,8 +171,8 @@ fn update_play_input(game : @types.Game) -> Unit {
 
 ///|
 /// Reads keyboard, mouse, and touch input for the Result state and sets `input_next_press` and `input_restart_press` for the current frame.
-fn update_result_input(game : @types.Game) -> Unit {
-  clear_input(game)
+fn @types.Game::update_result_input(game : @types.Game) -> Unit {
+  game.clear_input()
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold

@@ -84,7 +84,7 @@ fn compute_damage(
 }
 
 ///|
-fn apply_successful_hit(
+fn @types.Game::apply_successful_hit(
   game : @types.Game,
   attacker_slot : Int,
   defender_slot : Int,
@@ -196,7 +196,7 @@ fn apply_successful_hit(
 }
 
 ///|
-fn apply_blocked_hit(
+fn @types.Game::apply_blocked_hit(
   game : @types.Game,
   attacker_slot : Int,
   defender_slot : Int,
@@ -278,7 +278,7 @@ fn apply_blocked_hit(
 }
 
 ///|
-fn process_attack_contact(
+fn @types.Game::process_attack_contact(
   game : @types.Game,
   attacker_slot : Int,
   defender_slot : Int,
@@ -314,14 +314,14 @@ fn process_attack_contact(
   let hit_y = hitbox.y + hitbox.height * 0.5
 
   if can_defender_block(attacker, defender, mv) {
-    apply_blocked_hit(game, attacker_slot, defender_slot, hit_x, hit_y)
+    game.apply_blocked_hit(attacker_slot, defender_slot, hit_x, hit_y)
   } else {
-    apply_successful_hit(game, attacker_slot, defender_slot, hit_x, hit_y)
+    game.apply_successful_hit(attacker_slot, defender_slot, hit_x, hit_y)
   }
 }
 
 ///|
-fn update_combat(game : @types.Game) -> Unit {
-  process_attack_contact(game, 0, 1)
-  process_attack_contact(game, 1, 0)
+fn @types.Game::update_combat(game : @types.Game) -> Unit {
+  game.process_attack_contact(0, 1)
+  game.process_attack_contact(1, 0)
 }

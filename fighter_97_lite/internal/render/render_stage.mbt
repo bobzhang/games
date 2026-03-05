@@ -1,5 +1,5 @@
 ///|
-fn draw_stage_sky(game : @types.Game) -> Unit {
+fn @types.Game::draw_stage_sky(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(8, 10, 16, 255))
 
   let top_color = if game.state == StateMatchOver {
@@ -53,7 +53,7 @@ fn draw_stage_sky(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_city_layer(
+fn @types.Game::draw_city_layer(
   game : @types.Game,
   layer : Int,
   y_base : Int,
@@ -98,15 +98,15 @@ fn draw_city_layer(
 }
 
 ///|
-fn draw_stage_city(game : @types.Game) -> Unit {
-  draw_city_layer(game, 0, 430, 90, 160, @raylib.Color::new(18, 30, 46, 255))
-  draw_city_layer(game, 1, 448, 100, 185, @raylib.Color::new(24, 36, 56, 255))
-  draw_city_layer(game, 2, 468, 120, 220, @raylib.Color::new(29, 44, 66, 255))
-  draw_city_layer(game, 3, 498, 140, 260, @raylib.Color::new(36, 52, 76, 255))
+fn @types.Game::draw_stage_city(game : @types.Game) -> Unit {
+  game.draw_city_layer(0, 430, 90, 160, @raylib.Color::new(18, 30, 46, 255))
+  game.draw_city_layer(1, 448, 100, 185, @raylib.Color::new(24, 36, 56, 255))
+  game.draw_city_layer(2, 468, 120, 220, @raylib.Color::new(29, 44, 66, 255))
+  game.draw_city_layer(3, 498, 140, 260, @raylib.Color::new(36, 52, 76, 255))
 }
 
 ///|
-fn draw_stage_crowd(game : @types.Game) -> Unit {
+fn @types.Game::draw_stage_crowd(game : @types.Game) -> Unit {
   let crowd_y = 548
   @raylib.draw_rectangle(
     0,
@@ -159,7 +159,7 @@ fn draw_stage_crowd(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stage_floor(game : @types.Game) -> Unit {
+fn @types.Game::draw_stage_floor(game : @types.Game) -> Unit {
   let floor_top = 560
   @raylib.draw_rectangle(
     0,
@@ -214,7 +214,7 @@ fn draw_stage_floor(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stage_flash(game : @types.Game) -> Unit {
+fn @types.Game::draw_stage_flash(game : @types.Game) -> Unit {
   if game.stage_flash <= 0.0 {
     return
   }
@@ -233,11 +233,11 @@ fn draw_stage_flash(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stage(game : @types.Game) -> Unit {
-  draw_stage_sky(game)
-  draw_stage_city(game)
-  draw_stage_crowd(game)
-  draw_stage_floor(game)
+fn @types.Game::draw_stage(game : @types.Game) -> Unit {
+  game.draw_stage_sky()
+  game.draw_stage_city()
+  game.draw_stage_crowd()
+  game.draw_stage_floor()
   @effects.draw_particles(game)
-  draw_stage_flash(game)
+  game.draw_stage_flash()
 }

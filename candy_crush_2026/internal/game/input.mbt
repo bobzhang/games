@@ -1,6 +1,6 @@
 ///|
 /// Handles start input on the title screen via keyboard or pointer.
-fn update_title_input(game : @types.Game) -> Unit {
+fn @types.Game::update_title_input(game : @types.Game) -> Unit {
   if game.touch_count > 0 {
     game.touch_mode = true
   }
@@ -23,49 +23,49 @@ fn update_title_input(game : @types.Game) -> Unit {
   }
 
   if start {
-    restart_run(game)
+    game.restart_run()
   }
 }
 
 ///|
 /// Handles all gameplay input including cursor movement, selection, hint, shuffle, and restart.
-fn update_play_input(game : @types.Game) -> Unit {
+fn @types.Game::update_play_input(game : @types.Game) -> Unit {
   if game.touch_count > 0 {
     game.touch_mode = true
   }
 
   if @raylib.is_key_pressed(@raylib.KeyLeft) ||
     @raylib.is_key_pressed(@raylib.KeyA) {
-    move_cursor(game, -1, 0)
+    game.move_cursor(-1, 0)
   }
   if @raylib.is_key_pressed(@raylib.KeyRight) ||
     @raylib.is_key_pressed(@raylib.KeyD) {
-    move_cursor(game, 1, 0)
+    game.move_cursor(1, 0)
   }
   if @raylib.is_key_pressed(@raylib.KeyUp) ||
     @raylib.is_key_pressed(@raylib.KeyW) {
-    move_cursor(game, 0, -1)
+    game.move_cursor(0, -1)
   }
   if @raylib.is_key_pressed(@raylib.KeyDown) ||
     @raylib.is_key_pressed(@raylib.KeyS) {
-    move_cursor(game, 0, 1)
+    game.move_cursor(0, 1)
   }
 
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    select_or_swap(game, game.cursor_x, game.cursor_y)
+    game.select_or_swap(game.cursor_x, game.cursor_y)
   }
 
   if @raylib.is_key_pressed(@raylib.KeyH) {
-    use_hint(game)
+    game.use_hint()
   }
 
   if @raylib.is_key_pressed(@raylib.KeyJ) {
-    try_manual_shuffle(game)
+    game.try_manual_shuffle()
   }
 
   if @raylib.is_key_pressed(@raylib.KeyR) {
-    restart_level(game)
+    game.restart_level()
     return
   }
 
@@ -77,7 +77,7 @@ fn update_play_input(game : @types.Game) -> Unit {
   )
   if tap.0 && game.touch_cd <= 0.0 {
     game.touch_cd = @types.touch_action_cooldown
-    select_or_swap(game, tap.1, tap.2)
+    game.select_or_swap(tap.1, tap.2)
     return
   }
 
@@ -97,7 +97,7 @@ fn update_play_input(game : @types.Game) -> Unit {
       hint.3,
     ) {
     game.touch_cd = @types.touch_action_cooldown
-    use_hint(game)
+    game.use_hint()
     return
   }
 
@@ -113,7 +113,7 @@ fn update_play_input(game : @types.Game) -> Unit {
       shuffle.3,
     ) {
     game.touch_cd = @types.touch_action_cooldown
-    try_manual_shuffle(game)
+    game.try_manual_shuffle()
     return
   }
 
@@ -129,13 +129,13 @@ fn update_play_input(game : @types.Game) -> Unit {
       restart.3,
     ) {
     game.touch_cd = @types.touch_action_cooldown
-    restart_level(game)
+    game.restart_level()
   }
 }
 
 ///|
 /// Handles input on level-clear and game-over screens to advance or restart.
-fn update_result_input(game : @types.Game) -> Unit {
+fn @types.Game::update_result_input(game : @types.Game) -> Unit {
   if game.touch_count > 0 {
     game.touch_mode = true
   }
@@ -160,22 +160,22 @@ fn update_result_input(game : @types.Game) -> Unit {
   match game.state {
     LevelClear => {
       if action {
-        start_next_level(game)
+        game.start_next_level()
         return
       }
       if @raylib.is_key_pressed(@raylib.KeyR) {
-        restart_level(game)
+        game.restart_level()
         return
       }
     }
     _ =>
       if action {
-        restart_run(game)
+        game.restart_run()
         return
       }
   }
   if @raylib.is_key_pressed(@raylib.KeyT) {
     game.state = Title
-    clear_selection(game)
+    game.clear_selection()
   }
 }

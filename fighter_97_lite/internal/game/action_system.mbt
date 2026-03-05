@@ -142,7 +142,7 @@ fn choose_attack_from_input(
 }
 
 ///|
-fn try_start_attack(game : @types.Game, slot : Int) -> Unit {
+fn @types.Game::try_start_attack(game : @types.Game, slot : Int) -> Unit {
   let fighter = game.fighters[slot]
   let archetype = @types.fighter_archetype(game, fighter)
   let input = fighter.input
@@ -441,7 +441,7 @@ fn integrate_fighter_physics(
 }
 
 ///|
-fn update_facing(game : @types.Game) -> Unit {
+fn @types.Game::update_facing(game : @types.Game) -> Unit {
   let p1 = game.fighters[0]
   let p2 = game.fighters[1]
 
@@ -467,7 +467,7 @@ fn update_facing(game : @types.Game) -> Unit {
 }
 
 ///|
-fn resolve_push_collision(game : @types.Game) -> Unit {
+fn @types.Game::resolve_push_collision(game : @types.Game) -> Unit {
   let p1 = game.fighters[0]
   let p2 = game.fighters[1]
 
@@ -489,7 +489,7 @@ fn resolve_push_collision(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_fighter_core(game : @types.Game, slot : Int, dt : Float) -> Unit {
+fn @types.Game::update_fighter_core(game : @types.Game, slot : Int, dt : Float) -> Unit {
   let fighter = game.fighters[slot]
   let archetype = @types.fighter_archetype(game, fighter)
 
@@ -518,7 +518,7 @@ fn update_fighter_core(game : @types.Game, slot : Int, dt : Float) -> Unit {
     update_walk_and_crouch_state(fighter, archetype)
   }
 
-  try_start_attack(game, slot)
+  game.try_start_attack(slot)
 
   update_fighter_action_frame(fighter, dt)
   integrate_fighter_physics(fighter, archetype, dt)

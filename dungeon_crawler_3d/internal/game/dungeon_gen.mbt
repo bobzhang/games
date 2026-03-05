@@ -37,17 +37,17 @@ pub fn generate_dungeon(game : @types.Game) -> Unit {
   // Generate rooms
   game.room_count = 0
   for i in 0..<num_rooms {
-    try_place_room(game)
+    game.try_place_room()
     ignore(i)
   }
   // Ensure at least 2 rooms
   if game.room_count < 2 {
     // Force place rooms
     let r0 = @types.Room::new(2, 2, 6, 6)
-    carve_room(game, r0)
+    game.carve_room(r0)
     game.rooms[0] = r0
     let r1 = @types.Room::new(20, 20, 6, 6)
-    carve_room(game, r1)
+    game.carve_room(r1)
     game.rooms[1] = r1
     game.room_count = 2
   }
@@ -55,8 +55,7 @@ pub fn generate_dungeon(game : @types.Game) -> Unit {
   for i in 1..<game.room_count {
     let r0 = game.rooms[i - 1]
     let r1 = game.rooms[i]
-    carve_corridor(
-      game,
+    game.carve_corridor(
       r0.center_x(),
       r0.center_y(),
       r1.center_x(),
@@ -64,7 +63,7 @@ pub fn generate_dungeon(game : @types.Game) -> Unit {
     )
   }
   // Assign room types
-  assign_room_types(game)
+  game.assign_room_types()
   // Place player in first room
   let start_room = game.rooms[0]
   game.player_x = @types.grid_to_world_x(start_room.center_x())
@@ -75,34 +74,34 @@ pub fn generate_dungeon(game : @types.Game) -> Unit {
   game.stairs_z = last_room.center_y()
   @types.set_tile(game, game.stairs_x, game.stairs_z, @types.tile_stairs)
   // Place enemies (basic + extended)
-  place_enemies(game)
-  place_extended_enemies(game)
+  game.place_enemies()
+  game.place_extended_enemies()
   // Place loot
-  place_loot(game)
+  game.place_loot()
   // Place some doors at corridor entrances
-  place_doors(game)
+  game.place_doors()
   // Place locked doors
-  place_locked_doors(game)
+  game.place_locked_doors()
   // Place chests
-  place_chests(game)
+  game.place_chests()
   // Place traps
-  place_traps(game)
+  game.place_traps()
   // Place torches
-  place_torches(game)
+  game.place_torches()
   // Place shop if applicable
   if @levels.floor_has_shop(game.current_floor) {
-    place_shop(game)
+    game.place_shop()
   }
   // Place shrine if applicable
   if @levels.floor_has_shrine(game.current_floor) {
-    place_shrine(game)
+    game.place_shrine()
   }
   // Update explored around player
   @types.update_explored(game)
 }
 
 ///|
-fn try_place_room(game : @types.Game) -> Unit {
+fn @types.Game::try_place_room(game : @types.Game) -> Unit {
   if game.room_count >= @types.max_rooms {
     return
   }
@@ -125,7 +124,7 @@ fn try_place_room(game : @types.Game) -> Unit {
     }
     if not(overlap) {
       let room = @types.Room::new(x, y, w, h)
-      carve_room(game, room)
+      game.carve_room(room)
       game.rooms[game.room_count] = room
       game.room_count += 1
       return
@@ -135,7 +134,7 @@ fn try_place_room(game : @types.Game) -> Unit {
 }
 
 ///|
-fn carve_room(game : @types.Game, room : @types.Room) -> Unit {
+fn @types.Game::carve_room(game : @types.Game, room : @types.Room) -> Unit {
   for gy in room.y..<(room.y + room.h) {
     for gx in room.x..<(room.x + room.w) {
       @types.set_tile(game, gx, gy, @types.tile_floor)
@@ -144,7 +143,7 @@ fn carve_room(game : @types.Game, room : @types.Room) -> Unit {
 }
 
 ///|
-fn carve_corridor(
+fn @types.Game::carve_corridor(
   game : @types.Game,
   x1 : Int,
   y1 : Int,
@@ -183,7 +182,7 @@ fn carve_corridor(
 }
 
 ///|
-fn assign_room_types(game : @types.Game) -> Unit {
+fn @types.Game::assign_room_types(game : @types.Game) -> Unit {
   // First room is always normal (player start)
   game.rooms[0].kind = @types.room_normal
   // Last room: boss or normal
@@ -200,7 +199,7 @@ fn assign_room_types(game : @types.Game) -> Unit {
 }
 
 ///|
-fn place_enemies(game : @types.Game) -> Unit {
+fn @types.Game::place_enemies(game : @types.Game) -> Unit {
   let config = @levels.get_floor_config(game.current_floor)
   let num_skeletons = config.1
   let num_archers = config.2
@@ -213,8 +212,7 @@ fn place_enemies(game : @types.Game) -> Unit {
   let mut total_spawned = 0
   // Place skeletons
   for i in 0..<num_skeletons {
-    spawn_enemy_in_room(
-      game,
+    game.spawn_enemy_in_room(
       @types.enemy_skeleton,
       20 + hp_scale,
       5 + atk_scale,
@@ -226,8 +224,7 @@ fn place_enemies(game : @types.Game) -> Unit {
   }
   // Place archers
   for i in 0..<num_archers {
-    spawn_enemy_in_room(
-      game,
+    game.spawn_enemy_in_room(
       @types.enemy_archer,
       15 + hp_scale,
       4 + atk_scale,
@@ -239,8 +236,7 @@ fn place_enemies(game : @types.Game) -> Unit {
   }
   // Place golems
   for i in 0..<num_golems {
-    spawn_enemy_in_room(
-      game,
+    game.spawn_enemy_in_room(
       @types.enemy_golem,
       50 + hp_scale * 2,
       8 + atk_scale,
@@ -252,8 +248,7 @@ fn place_enemies(game : @types.Game) -> Unit {
   }
   // Place wraiths
   for i in 0..<num_wraiths {
-    spawn_enemy_in_room(
-      game,
+    game.spawn_enemy_in_room(
       @types.enemy_wraith,
       18 + hp_scale,
       6 + atk_scale,
@@ -295,7 +290,7 @@ fn place_enemies(game : @types.Game) -> Unit {
 }
 
 ///|
-fn place_extended_enemies(game : @types.Game) -> Unit {
+fn @types.Game::place_extended_enemies(game : @types.Game) -> Unit {
   let ext = @levels.get_extended_enemy_config(game.current_floor)
   let num_slimes = ext.0
   let num_bats = ext.1
@@ -308,8 +303,7 @@ fn place_extended_enemies(game : @types.Game) -> Unit {
   let mut extra = 0
   // Place slimes
   for i in 0..<num_slimes {
-    spawn_enemy_in_room(
-      game,
+    game.spawn_enemy_in_room(
       @types.enemy_slime,
       12 + hp_scale,
       3 + atk_scale,
@@ -321,8 +315,7 @@ fn place_extended_enemies(game : @types.Game) -> Unit {
   }
   // Place bats
   for i in 0..<num_bats {
-    spawn_enemy_in_room(
-      game,
+    game.spawn_enemy_in_room(
       @types.enemy_bat,
       8 + hp_scale / 2,
       4 + atk_scale,
@@ -334,8 +327,7 @@ fn place_extended_enemies(game : @types.Game) -> Unit {
   }
   // Place spiders
   for i in 0..<num_spiders {
-    spawn_enemy_in_room(
-      game,
+    game.spawn_enemy_in_room(
       @types.enemy_spider,
       16 + hp_scale,
       6 + atk_scale,
@@ -347,8 +339,7 @@ fn place_extended_enemies(game : @types.Game) -> Unit {
   }
   // Place minotaurs
   for i in 0..<num_minotaurs {
-    spawn_enemy_in_room(
-      game,
+    game.spawn_enemy_in_room(
       @types.enemy_minotaur,
       45 + hp_scale * 2,
       10 + atk_scale,
@@ -360,8 +351,7 @@ fn place_extended_enemies(game : @types.Game) -> Unit {
   }
   // Place lichs
   for i in 0..<num_lichs {
-    spawn_enemy_in_room(
-      game,
+    game.spawn_enemy_in_room(
       @types.enemy_lich,
       30 + hp_scale,
       8 + atk_scale * 2,
@@ -375,7 +365,7 @@ fn place_extended_enemies(game : @types.Game) -> Unit {
 }
 
 ///|
-fn spawn_enemy_in_room(
+fn @types.Game::spawn_enemy_in_room(
   game : @types.Game,
   kind : Int,
   hp : Int,
@@ -421,7 +411,7 @@ fn spawn_enemy_in_room(
 }
 
 ///|
-fn place_loot(game : @types.Game) -> Unit {
+fn @types.Game::place_loot(game : @types.Game) -> Unit {
   let config = @levels.get_floor_config(game.current_floor)
   let num_loot = config.6
   for i in 0..<num_loot {
@@ -480,7 +470,7 @@ fn place_loot(game : @types.Game) -> Unit {
 }
 
 ///|
-fn place_doors(game : @types.Game) -> Unit {
+fn @types.Game::place_doors(game : @types.Game) -> Unit {
   // Scan for corridor-like passages and place occasional doors
   for gy in 2..<(@types.grid_h - 2) {
     for gx in 2..<(@types.grid_w - 2) {
@@ -508,7 +498,7 @@ fn place_doors(game : @types.Game) -> Unit {
 }
 
 ///|
-fn place_locked_doors(game : @types.Game) -> Unit {
+fn @types.Game::place_locked_doors(game : @types.Game) -> Unit {
   let num_locked = @levels.get_locked_door_count(game.current_floor)
   if num_locked == 0 {
     return
@@ -549,7 +539,7 @@ fn place_locked_doors(game : @types.Game) -> Unit {
 }
 
 ///|
-fn place_chests(game : @types.Game) -> Unit {
+fn @types.Game::place_chests(game : @types.Game) -> Unit {
   // Place 1-3 chests in random rooms
   let num_chests = @types.rand_range(game, 1, 3)
   for i in 0..<num_chests {
@@ -605,7 +595,7 @@ fn place_chests(game : @types.Game) -> Unit {
 }
 
 ///|
-fn place_traps(game : @types.Game) -> Unit {
+fn @types.Game::place_traps(game : @types.Game) -> Unit {
   let num_traps = @levels.get_floor_trap_count(game.current_floor)
   for i in 0..<num_traps {
     let idx = @types.alloc_trap(game)
@@ -641,7 +631,7 @@ fn place_traps(game : @types.Game) -> Unit {
 }
 
 ///|
-fn place_torches(game : @types.Game) -> Unit {
+fn @types.Game::place_torches(game : @types.Game) -> Unit {
   let torches_per_room = @levels.get_torches_per_room(game.floor_theme)
   for r in 0..<game.room_count {
     let room = game.rooms[r]
@@ -685,7 +675,7 @@ fn place_torches(game : @types.Game) -> Unit {
 }
 
 ///|
-fn place_shop(game : @types.Game) -> Unit {
+fn @types.Game::place_shop(game : @types.Game) -> Unit {
   // Place shop in a middle room
   if game.room_count <= 2 {
     return
@@ -708,7 +698,7 @@ fn place_shop(game : @types.Game) -> Unit {
 }
 
 ///|
-fn place_shrine(game : @types.Game) -> Unit {
+fn @types.Game::place_shrine(game : @types.Game) -> Unit {
   // Place shrine in a middle room
   if game.room_count <= 2 {
     return

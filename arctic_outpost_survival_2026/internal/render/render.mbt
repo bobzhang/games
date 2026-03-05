@@ -1,12 +1,12 @@
 ///|
 /// Returns the sine of `game.ui_t * k`, used to animate background elements.
-fn bg_noise(game : @types.Game, k : Float) -> Float {
+fn @types.Game::bg_noise(game : @types.Game, k : Float) -> Float {
   @math.sinf(game.ui_t * k)
 }
 
 ///|
 /// Returns a random horizontal camera shake offset when the shake timer is active, or 0 otherwise.
-fn shake_x(game : @types.Game) -> Int {
+fn @types.Game::shake_x(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -16,7 +16,7 @@ fn shake_x(game : @types.Game) -> Int {
 
 ///|
 /// Returns a random vertical camera shake offset when the shake timer is active, or 0 otherwise.
-fn shake_y(game : @types.Game) -> Int {
+fn @types.Game::shake_y(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -26,11 +26,11 @@ fn shake_y(game : @types.Game) -> Int {
 
 ///|
 /// Draws the dark arctic background: a near-black fill, three slowly pulsing ambient glow circles, and 16 subtle horizontal gradient bands.
-fn draw_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(8, 16, 28, 255))
 
-  let n0 : Float = bg_noise(game, 0.43)
-  let n1 : Float = bg_noise(game, 0.76)
+  let n0 : Float = game.bg_noise(0.43)
+  let n1 : Float = game.bg_noise(0.76)
 
   @raylib.draw_circle(
     200,
@@ -127,7 +127,7 @@ fn draw_world_back(_game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws 80 animated blizzard streak lines across the world area with intensity and alpha scaled by the current wave number.
-fn draw_storm(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_storm(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let swirl : Float = 0.7 + Float::from_int(game.wave) * 0.08
   let alpha : Int = 36 + game.wave * 7
 
@@ -155,7 +155,7 @@ fn draw_storm(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the central generator: a dark outer ring, a heat-ratio-colored pulsing body circle, a dark inner circle, six orbiting satellite dots, and a "CORE" label.
-fn draw_core(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_core(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let heat_ratio : Float = @types.clampf(game.core_heat / 100.0, 0.0, 1.0)
   let pulse : Float = @math.sinf(game.ui_t * 6.0)
 
@@ -381,7 +381,7 @@ fn draw_bullet(b : @types.Bullet, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws all active particles as small circles with stepped alpha based on remaining life and colors by kind: violet for overdrive, pink for damage, and light-blue for default.
-fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
       continue
@@ -414,7 +414,7 @@ fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the player as a ring body with a triangular visor piece, a velocity-tilting eye dot, an aim-line toward the crosshair, and an overdrive pulsing ring when active.
-fn draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let x : Int = game.player_x.to_int() + ox
   let y : Int = game.player_y.to_int() + oy
 
@@ -470,7 +470,7 @@ fn draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws a pulsing yellow target ring at the hint location and a line from the player to it, fading out as the hint timer expires.
-fn draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_hint(game : @types.Game, ox : Int, oy : Int) -> Unit {
   if game.hint_t <= 0.0 {
     return
   }
@@ -527,7 +527,7 @@ fn draw_bar(
 
 ///|
 /// Draws the right-side HUD panel showing the game title, score, wave, lives, combo, suit HP, core heat, fuel, survival progress, ammo, overdrive timer, hint count, and control hints.
-fn draw_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.panel_x0,
     20,
@@ -761,7 +761,7 @@ fn draw_touch_button(
 
 ///|
 /// Draws all eight on-screen touch buttons (left, right, up, down, fire, repair, hint, restart) only during the Play state.
-fn draw_touch_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   if game.state != Play {
     return
   }
@@ -856,7 +856,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the in-world notification message centered above the play area, fading out as the message timer expires.
-fn draw_message(game : @types.Game) -> Unit {
+fn @types.Game::draw_message(game : @types.Game) -> Unit {
   if game.msg_t <= 0.0 || game.msg == "" {
     return
   }
@@ -890,7 +890,7 @@ fn draw_message(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the title screen overlay with a dimmed backdrop, the game title and description, and a hoverable START DEFENSE button.
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   let mx : Float = game.mouse_x
   let my : Float = game.mouse_y
   let hold : Bool = game.mouse_hold
@@ -973,7 +973,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the result screen overlay with a dimmed backdrop, a win/lose headline in the appropriate color, score and time stats, and a hoverable DEFEND AGAIN button.
-fn draw_result_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   let mx : Float = game.mouse_x
   let my : Float = game.mouse_y
   let hold : Bool = game.mouse_hold
@@ -1095,14 +1095,14 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 ///|
 /// Draws the full frame for the current game state.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_background(game)
+  game.draw_background()
 
-  let ox : Int = shake_x(game)
-  let oy : Int = shake_y(game)
+  let ox : Int = game.shake_x()
+  let oy : Int = game.shake_y()
 
   draw_world_back(game, ox, oy)
-  draw_storm(game, ox, oy)
-  draw_core(game, ox, oy)
+  game.draw_storm(ox, oy)
+  game.draw_core(ox, oy)
 
   for enemy in game.enemies {
     draw_enemy(enemy, ox, oy)
@@ -1116,17 +1116,17 @@ pub fn draw_frame(game : @types.Game) -> Unit {
     draw_bullet(bullet, ox, oy)
   }
 
-  draw_hint(game, ox, oy)
-  draw_particles(game, ox, oy)
-  draw_player(game, ox, oy)
+  game.draw_hint(ox, oy)
+  game.draw_particles(ox, oy)
+  game.draw_player(ox, oy)
 
-  draw_panel(game)
-  draw_touch_controls(game)
-  draw_message(game)
+  game.draw_panel()
+  game.draw_touch_controls()
+  game.draw_message()
 
   match game.state {
-    Title => draw_title_overlay(game)
-    Result => draw_result_overlay(game)
+    Title => game.draw_title_overlay()
+    Result => game.draw_result_overlay()
     Play => ()
   }
 }

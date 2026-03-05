@@ -11,7 +11,7 @@ fn wrap_index(value : Int, size : Int) -> Int {
 }
 
 ///|
-fn reset_round_fighters(game : @types.Game) -> Unit {
+fn @types.Game::reset_round_fighters(game : @types.Game) -> Unit {
   let p1 = game.fighters[0]
   let p2 = game.fighters[1]
 
@@ -38,7 +38,7 @@ fn reset_round_fighters(game : @types.Game) -> Unit {
 }
 
 ///|
-fn assign_selected_characters(game : @types.Game) -> Unit {
+fn @types.Game::assign_selected_characters(game : @types.Game) -> Unit {
   game.fighters[0].archetype_index = game.select_cursor_p1.clamp(
     min=0,
     max=@types.roster_count - 1,
@@ -55,7 +55,7 @@ fn assign_selected_characters(game : @types.Game) -> Unit {
 }
 
 ///|
-fn start_round_intro(game : @types.Game) -> Unit {
+fn @types.Game::start_round_intro(game : @types.Game) -> Unit {
   game.state = StateIntro
   game.intro_timer = @types.intro_duration
   game.round_timer = if game.mode_training {
@@ -73,18 +73,18 @@ fn start_round_intro(game : @types.Game) -> Unit {
   game.training_adv_text = ""
   game.training_adv_timer = 0.0
   game.dramatic_freeze = 0
-  reset_round_fighters(game)
+  game.reset_round_fighters()
 }
 
 ///|
-fn start_match(game : @types.Game) -> Unit {
+fn @types.Game::start_match(game : @types.Game) -> Unit {
   game.round_index = 1
-  assign_selected_characters(game)
-  start_round_intro(game)
+  game.assign_selected_characters()
+  game.start_round_intro()
 }
 
 ///|
-fn start_next_round(game : @types.Game) -> Unit {
+fn @types.Game::start_next_round(game : @types.Game) -> Unit {
   game.round_index += 1
 
   let p1 = game.fighters[0]
@@ -101,11 +101,11 @@ fn start_next_round(game : @types.Game) -> Unit {
     p2.super_meter = (p2.super_meter + 18).clamp(min=0, max=@types.super_max)
   }
 
-  start_round_intro(game)
+  game.start_round_intro()
 }
 
 ///|
-fn choose_round_winner(game : @types.Game) -> Int {
+fn @types.Game::choose_round_winner(game : @types.Game) -> Int {
   let p1 = game.fighters[0]
   let p2 = game.fighters[1]
 
@@ -129,7 +129,7 @@ fn choose_round_winner(game : @types.Game) -> Int {
 }
 
 ///|
-fn enter_round_over(game : @types.Game, winner : Int) -> Unit {
+fn @types.Game::enter_round_over(game : @types.Game, winner : Int) -> Unit {
   game.state = StateRoundOver
   game.round_over_timer = @types.round_over_duration
   game.winner_slot = winner
@@ -162,7 +162,7 @@ fn enter_round_over(game : @types.Game, winner : Int) -> Unit {
 }
 
 ///|
-fn enter_match_over(game : @types.Game) -> Unit {
+fn @types.Game::enter_match_over(game : @types.Game) -> Unit {
   game.state = StateMatchOver
   game.match_over_timer = @types.match_over_duration
 
@@ -180,7 +180,7 @@ fn enter_match_over(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_title(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_title(game : @types.Game, dt : Float) -> Unit {
   game.title_blink += dt * @types.title_blink_speed
   game.bg_scroll += dt * 12.0
 
@@ -198,7 +198,7 @@ fn update_title(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_select(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_select(game : @types.Game, dt : Float) -> Unit {
   game.select_blink += dt * @types.select_blink_speed
   game.bg_scroll += dt * 10.0
 
@@ -283,7 +283,7 @@ fn update_select(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.p1_confirmed && game.p2_confirmed {
-    start_match(game)
+    game.start_match()
   }
 
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
@@ -292,7 +292,7 @@ fn update_select(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_intro(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_intro(game : @types.Game, dt : Float) -> Unit {
   game.bg_scroll += dt * 20.0
   @effects.update_camera(game, dt)
   @effects.update_particles(game, dt)
@@ -320,7 +320,7 @@ fn update_intro(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn recover_fighter_resources(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::recover_fighter_resources(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<@types.max_players {
     let fighter = game.fighters[i]
     let archetype = @types.fighter_archetype(game, fighter)
@@ -332,7 +332,7 @@ fn recover_fighter_resources(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_training_resources(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_training_resources(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<@types.max_players {
     let fighter = game.fighters[i]
     let archetype = @types.fighter_archetype(game, fighter)
@@ -357,8 +357,8 @@ fn update_training_resources(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn reset_training_fight(game : @types.Game) -> Unit {
-  reset_round_fighters(game)
+fn @types.Game::reset_training_fight(game : @types.Game) -> Unit {
+  game.reset_round_fighters()
   for slot in 0..<@types.max_players {
     let fighter = game.fighters[slot]
     let archetype = @types.fighter_archetype(game, fighter)
@@ -378,7 +378,7 @@ fn reset_training_fight(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_fight(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_fight(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyP) {
     game.state = StatePause
     game.pause_blink = 0.0
@@ -393,12 +393,12 @@ fn update_fight(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.mode_training && @raylib.is_key_pressed(@raylib.KeyR) {
-    reset_training_fight(game)
+    game.reset_training_fight()
     return
   }
 
   game.bg_scroll += dt * 30.0
-  update_inputs(game, dt)
+  game.update_inputs(dt)
 
   if game.dramatic_freeze > 0 {
     game.dramatic_freeze -= 1
@@ -407,22 +407,22 @@ fn update_fight(game : @types.Game, dt : Float) -> Unit {
     return
   }
 
-  update_facing(game)
+  game.update_facing()
 
   for slot in 0..<@types.max_players {
-    update_fighter_core(game, slot, dt)
+    game.update_fighter_core(slot, dt)
   }
 
-  resolve_push_collision(game)
-  update_facing(game)
+  game.resolve_push_collision()
+  game.update_facing()
 
-  let threw = update_throws(game)
+  let threw = game.update_throws()
   if not(threw) {
-    update_combat(game)
+    game.update_combat()
   }
-  recover_fighter_resources(game, dt)
+  game.recover_fighter_resources(dt)
   if game.mode_training {
-    update_training_resources(game, dt)
+    game.update_training_resources(dt)
   }
 
   @effects.update_particles(game, dt)
@@ -440,13 +440,13 @@ fn update_fight(game : @types.Game, dt : Float) -> Unit {
   if game.fighters[0].health <= 0 ||
     game.fighters[1].health <= 0 ||
     game.round_timer <= 0.0 {
-    let winner = choose_round_winner(game)
-    enter_round_over(game, winner)
+    let winner = game.choose_round_winner()
+    game.enter_round_over(winner)
   }
 }
 
 ///|
-fn update_round_over(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_round_over(game : @types.Game, dt : Float) -> Unit {
   game.bg_scroll += dt * 16.0
   @effects.update_particles(game, dt)
   @effects.update_camera(game, dt)
@@ -467,14 +467,14 @@ fn update_round_over(game : @types.Game, dt : Float) -> Unit {
 
   if game.fighters[0].round_wins >= @types.max_round_wins ||
     game.fighters[1].round_wins >= @types.max_round_wins {
-    enter_match_over(game)
+    game.enter_match_over()
   } else {
-    start_next_round(game)
+    game.start_next_round()
   }
 }
 
 ///|
-fn update_match_over(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_match_over(game : @types.Game, dt : Float) -> Unit {
   game.bg_scroll += dt * 12.0
   @effects.update_particles(game, dt)
   @effects.update_camera(game, dt)
@@ -494,7 +494,7 @@ fn update_match_over(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_pause(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_pause(game : @types.Game, dt : Float) -> Unit {
   game.pause_blink += dt * 4.5
   @effects.update_particles(game, dt)
   @effects.update_camera(game, dt)
@@ -511,7 +511,7 @@ fn update_pause(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_announcer(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_announcer(game : @types.Game, dt : Float) -> Unit {
   if game.announcer_timer > 0.0 {
     game.announcer_timer -= dt
     if game.announcer_timer < 0.0 {
@@ -547,21 +547,21 @@ fn update_announcer(game : @types.Game, dt : Float) -> Unit {
 /// Advances one frame of state, round, and match logic.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_count += 1
-  update_announcer(game, dt)
+  game.update_announcer(dt)
 
   if game.state == StateTitle {
-    update_title(game, dt)
+    game.update_title(dt)
   } else if game.state == StateSelect {
-    update_select(game, dt)
+    game.update_select(dt)
   } else if game.state == StateIntro {
-    update_intro(game, dt)
+    game.update_intro(dt)
   } else if game.state == StateFight {
-    update_fight(game, dt)
+    game.update_fight(dt)
   } else if game.state == StateRoundOver {
-    update_round_over(game, dt)
+    game.update_round_over(dt)
   } else if game.state == StateMatchOver {
-    update_match_over(game, dt)
+    game.update_match_over(dt)
   } else if game.state == StatePause {
-    update_pause(game, dt)
+    game.update_pause(dt)
   }
 }

@@ -1,6 +1,6 @@
 ///|
 /// Returns true if the pointer is currently over the title-screen start button.
-fn title_hover(game : @types.Game) -> Bool {
+fn @types.Game::title_hover(game : @types.Game) -> Bool {
   let b = @types.start_button_rect()
   @types.pointer_on_rect(
     game.mouse_x,
@@ -16,7 +16,7 @@ fn title_hover(game : @types.Game) -> Bool {
 
 ///|
 /// Returns true if the pointer is currently over the result-screen retry button.
-fn result_hover(game : @types.Game) -> Bool {
+fn @types.Game::result_hover(game : @types.Game) -> Bool {
   let b = @types.retry_button_rect()
   @types.pointer_on_rect(
     game.mouse_x,
@@ -32,40 +32,40 @@ fn result_hover(game : @types.Game) -> Bool {
 
 ///|
 /// Reads keyboard, mouse, and touch input on the title screen and starts a new run when any start action is detected.
-fn update_title_input(game : @types.Game) -> Unit {
+fn @types.Game::update_title_input(game : @types.Game) -> Unit {
   let key_start : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
   let click_start : Bool = @raylib.is_mouse_button_pressed(
     @raylib.MouseButtonLeft,
   )
-  let tap_start : Bool = game.touch_cd <= 0.0 && title_hover(game)
+  let tap_start : Bool = game.touch_cd <= 0.0 && game.title_hover()
 
   if key_start || click_start || tap_start {
-    start_run(game)
+    game.start_run()
     game.touch_cd = 0.16
   }
 }
 
 ///|
 /// Reads keyboard, mouse, and touch input on the result screen and starts a new run when the retry action is detected.
-fn update_result_input(game : @types.Game) -> Unit {
+fn @types.Game::update_result_input(game : @types.Game) -> Unit {
   let key_retry : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyR)
   let click_retry : Bool = @raylib.is_mouse_button_pressed(
     @raylib.MouseButtonLeft,
   )
-  let tap_retry : Bool = game.touch_cd <= 0.0 && result_hover(game)
+  let tap_retry : Bool = game.touch_cd <= 0.0 && game.result_hover()
 
   if key_retry || click_retry || tap_retry {
-    start_run(game)
+    game.start_run()
     game.touch_cd = 0.16
   }
 }
 
 ///|
 /// Returns the position of the nearest active enemy as an auto-aim target, or a point directly above the player if no enemies are active.
-fn best_auto_aim(game : @types.Game) -> (Float, Float) {
+fn @types.Game::best_auto_aim(game : @types.Game) -> (Float, Float) {
   let mut tx : Float = game.player_x
   let mut ty : Float = game.player_y - 180.0
 
@@ -95,7 +95,7 @@ fn best_auto_aim(game : @types.Game) -> (Float, Float) {
 
 ///|
 /// Clamps the current aim position to remain within the playfield boundaries.
-fn clamp_aim_inside_world(game : @types.Game) -> Unit {
+fn @types.Game::clamp_aim_inside_world(game : @types.Game) -> Unit {
   game.aim_x = @types.clampf(
     game.aim_x,
     @types.world_left(),
@@ -110,14 +110,14 @@ fn clamp_aim_inside_world(game : @types.Game) -> Unit {
 
 ///|
 /// Reads all play-state input: movement axes from keyboard and touch d-pad, pointer-based aim, fire hold (with auto-aim fallback on touch), repair, hint, and restart actions.
-fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
+fn @types.Game::update_play_input(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
     game.state = Title
     return
   }
 
   if @raylib.is_key_pressed(@raylib.KeyR) {
-    start_run(game)
+    game.start_run()
     return
   }
 
@@ -218,12 +218,12 @@ fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
   )
 
   if key_fire_hold {
-    ignore(try_fire(game, game.aim_x, game.aim_y))
+    ignore(game.try_fire(game.aim_x, game.aim_y))
   } else if touch_fire {
-    let target = best_auto_aim(game)
+    let target = game.best_auto_aim()
     game.aim_x = target.0
     game.aim_y = target.1
-    ignore(try_fire(game, game.aim_x, game.aim_y))
+    ignore(game.try_fire(game.aim_x, game.aim_y))
   }
 
   if @raylib.is_key_pressed(@raylib.KeyE) ||
@@ -240,7 +240,7 @@ fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
         repair_btn.3,
       )
     ) {
-    ignore(try_repair(game))
+    ignore(game.try_repair())
     game.touch_cd = 0.14
   }
 
@@ -258,7 +258,7 @@ fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
         hint_btn.3,
       )
     ) {
-    ignore(use_hint(game))
+    ignore(game.use_hint())
     game.touch_cd = 0.16
   }
 
@@ -273,9 +273,9 @@ fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
       restart_btn.2,
       restart_btn.3,
     ) {
-    start_run(game)
+    game.start_run()
     game.touch_cd = 0.16
   }
 
-  clamp_aim_inside_world(game)
+  game.clamp_aim_inside_world()
 }

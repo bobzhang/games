@@ -48,7 +48,7 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     }
     if not(e.alerted) {
       // Patrol behavior for non-alerted enemies
-      update_patrol(game, e, dt)
+      game.update_patrol(e, dt)
       continue
     }
     // Attack cooldown
@@ -64,33 +64,33 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     e.facing_angle = @math.atan2f(dx, dz)
     // Movement and AI based on type
     if e.kind == @types.enemy_skeleton {
-      update_melee_enemy(game, e, dt, dist)
+      game.update_melee_enemy(e, dt, dist)
     } else if e.kind == @types.enemy_golem {
-      update_melee_enemy(game, e, dt, dist)
+      game.update_melee_enemy(e, dt, dist)
     } else if e.kind == @types.enemy_wraith {
-      update_melee_enemy(game, e, dt, dist)
+      game.update_melee_enemy(e, dt, dist)
     } else if e.kind == @types.enemy_dragon_boss {
-      update_boss_enemy(game, e, dt, dist)
+      game.update_boss_enemy(e, dt, dist)
     } else if e.kind == @types.enemy_archer {
-      update_archer_enemy(game, e, dt, dist)
+      game.update_archer_enemy(e, dt, dist)
     } else if e.kind == @types.enemy_slime {
-      update_slime_enemy(game, e, dt, dist)
+      game.update_slime_enemy(e, dt, dist)
     } else if e.kind == @types.enemy_bat {
-      update_bat_enemy(game, e, dt, dist)
+      game.update_bat_enemy(e, dt, dist)
     } else if e.kind == @types.enemy_spider {
-      update_spider_enemy(game, e, dt, dist)
+      game.update_spider_enemy(e, dt, dist)
     } else if e.kind == @types.enemy_minotaur {
-      update_minotaur_enemy(game, e, dt, dist)
+      game.update_minotaur_enemy(e, dt, dist)
     } else if e.kind == @types.enemy_lich {
-      update_lich_enemy(game, e, dt, dist)
+      game.update_lich_enemy(e, dt, dist)
     } else if e.kind == @types.enemy_mimic {
-      update_melee_enemy(game, e, dt, dist)
+      game.update_melee_enemy(e, dt, dist)
     }
   }
 }
 
 ///|
-fn update_patrol(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit {
+fn @types.Game::update_patrol(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit {
   e.move_timer += dt
   if e.move_timer > 2.0 {
     e.move_timer = 0.0
@@ -119,7 +119,7 @@ fn update_patrol(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit {
 }
 
 ///|
-fn update_melee_enemy(
+fn @types.Game::update_melee_enemy(
   game : @types.Game,
   e : @types.Enemy,
   dt : Float,
@@ -181,7 +181,7 @@ fn update_melee_enemy(
 }
 
 ///|
-fn update_archer_enemy(
+fn @types.Game::update_archer_enemy(
   game : @types.Game,
   e : @types.Enemy,
   dt : Float,
@@ -223,14 +223,14 @@ fn update_archer_enemy(
   }
   // Shoot at player
   if dist < @types.archer_range && e.attack_timer <= 0.0 {
-    shoot_projectile(game, e)
+    game.shoot_projectile(e)
     e.attack_timer = @types.archer_shoot_cooldown
   }
   ignore(dt)
 }
 
 ///|
-fn update_slime_enemy(
+fn @types.Game::update_slime_enemy(
   game : @types.Game,
   e : @types.Enemy,
   dt : Float,
@@ -282,7 +282,7 @@ fn update_slime_enemy(
 }
 
 ///|
-fn update_bat_enemy(
+fn @types.Game::update_bat_enemy(
   game : @types.Game,
   e : @types.Enemy,
   dt : Float,
@@ -330,7 +330,7 @@ fn update_bat_enemy(
 }
 
 ///|
-fn update_spider_enemy(
+fn @types.Game::update_spider_enemy(
   game : @types.Game,
   e : @types.Enemy,
   dt : Float,
@@ -353,7 +353,7 @@ fn update_spider_enemy(
     // Web attack at range
     if dist < 6.0 && e.ability_cooldown <= 0.0 {
       // Shoot web projectile
-      shoot_web(game, e)
+      game.shoot_web(e)
       e.ability_cooldown = 4.0
     }
     // Melee attack
@@ -374,7 +374,7 @@ fn update_spider_enemy(
 }
 
 ///|
-fn update_minotaur_enemy(
+fn @types.Game::update_minotaur_enemy(
   game : @types.Game,
   e : @types.Enemy,
   dt : Float,
@@ -467,7 +467,7 @@ fn update_minotaur_enemy(
 }
 
 ///|
-fn update_lich_enemy(
+fn @types.Game::update_lich_enemy(
   game : @types.Game,
   e : @types.Enemy,
   dt : Float,
@@ -509,12 +509,12 @@ fn update_lich_enemy(
   }
   // Spell attacks
   if dist < @types.archer_range && e.attack_timer <= 0.0 {
-    shoot_lich_bolt(game, e)
+    game.shoot_lich_bolt(e)
     e.attack_timer = 1.5
   }
   // Summon skeleton ability
   if e.ability_cooldown <= 0.0 && dist < 12.0 {
-    summon_skeleton(game, e)
+    game.summon_skeleton(e)
     e.ability_cooldown = 8.0
     @types.add_message(game, "Lich summons a skeleton!", 180, 50, 200)
   }
@@ -522,7 +522,7 @@ fn update_lich_enemy(
 }
 
 ///|
-fn update_boss_enemy(
+fn @types.Game::update_boss_enemy(
   game : @types.Game,
   e : @types.Enemy,
   dt : Float,
@@ -586,7 +586,7 @@ fn update_boss_enemy(
 }
 
 ///|
-fn shoot_projectile(game : @types.Game, e : @types.Enemy) -> Unit {
+fn @types.Game::shoot_projectile(game : @types.Game, e : @types.Enemy) -> Unit {
   let idx = @types.alloc_projectile(game)
   if idx < 0 {
     return
@@ -615,7 +615,7 @@ fn shoot_projectile(game : @types.Game, e : @types.Enemy) -> Unit {
 }
 
 ///|
-fn shoot_web(game : @types.Game, e : @types.Enemy) -> Unit {
+fn @types.Game::shoot_web(game : @types.Game, e : @types.Enemy) -> Unit {
   let idx = @types.alloc_projectile(game)
   if idx < 0 {
     return
@@ -643,7 +643,7 @@ fn shoot_web(game : @types.Game, e : @types.Enemy) -> Unit {
 }
 
 ///|
-fn shoot_lich_bolt(game : @types.Game, e : @types.Enemy) -> Unit {
+fn @types.Game::shoot_lich_bolt(game : @types.Game, e : @types.Enemy) -> Unit {
   let idx = @types.alloc_projectile(game)
   if idx < 0 {
     return
@@ -672,7 +672,7 @@ fn shoot_lich_bolt(game : @types.Game, e : @types.Enemy) -> Unit {
 }
 
 ///|
-fn summon_skeleton(game : @types.Game, e : @types.Enemy) -> Unit {
+fn @types.Game::summon_skeleton(game : @types.Game, e : @types.Enemy) -> Unit {
   let idx = @types.alloc_enemy(game)
   if idx < 0 {
     return

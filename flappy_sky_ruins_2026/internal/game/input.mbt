@@ -1,6 +1,6 @@
 ///|
 /// Returns true if the active pointer is currently over the title-screen start button.
-fn title_hover(game : @types.Game) -> Bool {
+fn @types.Game::title_hover(game : @types.Game) -> Bool {
   let r = @types.start_button_rect()
   @types.pointer_on_rect(
     game.mouse_x,
@@ -16,7 +16,7 @@ fn title_hover(game : @types.Game) -> Bool {
 
 ///|
 /// Returns true if the active pointer is currently over the result-screen retry button.
-fn result_hover(game : @types.Game) -> Bool {
+fn @types.Game::result_hover(game : @types.Game) -> Bool {
   let r = @types.retry_button_rect()
   @types.pointer_on_rect(
     game.mouse_x,
@@ -38,10 +38,10 @@ pub fn update_title_input(game : @types.Game) -> Unit {
   let click_start : Bool = @raylib.is_mouse_button_pressed(
     @raylib.MouseButtonLeft,
   )
-  let tap_start : Bool = game.touch_cd <= 0.0 && title_hover(game)
+  let tap_start : Bool = game.touch_cd <= 0.0 && game.title_hover()
 
   if key_start || click_start || tap_start {
-    start_match(game)
+    game.start_match()
     game.touch_cd = 0.15
   }
 }
@@ -55,10 +55,10 @@ pub fn update_result_input(game : @types.Game) -> Unit {
   let click_retry : Bool = @raylib.is_mouse_button_pressed(
     @raylib.MouseButtonLeft,
   )
-  let tap_retry : Bool = game.touch_cd <= 0.0 && result_hover(game)
+  let tap_retry : Bool = game.touch_cd <= 0.0 && game.result_hover()
 
   if key_retry || click_retry || tap_retry {
-    start_match(game)
+    game.start_match()
     game.touch_cd = 0.15
   }
 }
@@ -72,12 +72,12 @@ pub fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
   }
 
   if @raylib.is_key_pressed(@raylib.KeyR) {
-    start_match(game)
+    game.start_match()
     return
   }
 
   if @raylib.is_key_pressed(@raylib.KeyH) {
-    ignore(use_hint(game))
+    ignore(game.use_hint())
   }
 
   let flap_key : Bool = @raylib.is_key_pressed(@raylib.KeySpace) ||
@@ -85,7 +85,7 @@ pub fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
     @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
 
   if flap_key {
-    flap(game)
+    game.flap()
   }
 
   let boost_down : Bool = @raylib.is_key_down(@raylib.KeyLeftShift) ||
@@ -110,7 +110,7 @@ pub fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
     flap_rect.3,
   )
   if flap_touch {
-    flap(game)
+    game.flap()
   }
 
   let boost_touch : Bool = @types.pointer_on_rect(
@@ -136,7 +136,7 @@ pub fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
       restart_rect.2,
       restart_rect.3,
     ) {
-    start_match(game)
+    game.start_match()
     game.touch_cd = 0.16
   }
 
@@ -151,7 +151,7 @@ pub fn update_play_input(game : @types.Game, _dt : Float) -> Unit {
       hint_rect.2,
       hint_rect.3,
     ) {
-    ignore(use_hint(game))
+    ignore(game.use_hint())
     game.touch_cd = 0.16
   }
 }

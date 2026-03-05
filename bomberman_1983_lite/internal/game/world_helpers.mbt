@@ -1,5 +1,5 @@
 ///|
-fn damage_tile_at_point(
+fn @types.Game::damage_tile_at_point(
   game : @types.Game,
   world_x : Float,
   world_y : Float,
@@ -61,7 +61,7 @@ fn damage_tile_at_point(
 }
 
 ///|
-fn sight_blocked(
+fn @types.Game::sight_blocked(
   game : @types.Game,
   ax : Float,
   ay : Float,

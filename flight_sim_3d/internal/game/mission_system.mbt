@@ -17,7 +17,7 @@ pub fn update_mission_logic(game : @types.Game, dt : Float) -> Unit {
     mission.kind == @types.mission_canyon_run {
     // Check all checkpoints collected
     if mission.targets_done >= mission.target_count {
-      complete_mission(game)
+      game.complete_mission()
     }
   } else if mission.kind == @types.mission_destroy ||
     mission.kind == @types.mission_dogfight ||
@@ -25,41 +25,41 @@ pub fn update_mission_logic(game : @types.Game, dt : Float) -> Unit {
     mission.kind == @types.mission_boss {
     // Check all enemies destroyed
     if mission.targets_done >= mission.target_count {
-      complete_mission(game)
+      game.complete_mission()
     }
   } else if mission.kind == @types.mission_landing {
     // Landing checked in player_system
     if mission.targets_done >= mission.target_count {
-      complete_mission(game)
+      game.complete_mission()
     }
   } else if mission.kind == @types.mission_survive {
     // Survive for target_count seconds
     let survive_time = Float::from_int(mission.target_count)
     if game.mission_timer >= survive_time {
       mission.targets_done = mission.target_count
-      complete_mission(game)
+      game.complete_mission()
     } else {
       mission.targets_done = game.mission_timer.to_int()
     }
   } else if mission.kind == @types.mission_escort {
     if mission.targets_done >= mission.target_count {
-      complete_mission(game)
+      game.complete_mission()
     }
   } else if mission.kind == @types.mission_bombing_run ||
     mission.kind == @types.mission_attack_base {
     // Destroy buildings/installations
     if mission.targets_done >= mission.target_count {
-      complete_mission(game)
+      game.complete_mission()
     }
   } else if mission.kind == @types.mission_recon {
     // Fly near recon targets (use checkpoints as recon waypoints)
     if mission.targets_done >= mission.target_count {
-      complete_mission(game)
+      game.complete_mission()
     }
   } else if mission.kind == @types.mission_defense {
     // Destroy attacking enemies before time runs out
     if mission.targets_done >= mission.target_count {
-      complete_mission(game)
+      game.complete_mission()
     }
     // Check if any friendly buildings are still standing
     let buildings_alive = @types.count_active_buildings(game)
@@ -69,11 +69,11 @@ pub fn update_mission_logic(game : @types.Game, dt : Float) -> Unit {
     }
   } else if mission.kind == @types.mission_patrol {
     if mission.targets_done >= mission.target_count {
-      complete_mission(game)
+      game.complete_mission()
     }
   } else if mission.kind == @types.mission_night_mission {
     if mission.targets_done >= mission.target_count {
-      complete_mission(game)
+      game.complete_mission()
     }
   }
   // Periodic mission status messages
@@ -95,7 +95,7 @@ pub fn update_mission_logic(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn complete_mission(game : @types.Game) -> Unit {
+fn @types.Game::complete_mission(game : @types.Game) -> Unit {
   let mission = game.missions[game.current_mission]
   game.missions_completed += 1
   let time_bonus = @types.maxf(0.0, 120.0 - game.mission_timer).to_int() * 10
@@ -130,15 +130,15 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
       e.flash_timer -= dt
     }
     if e.kind == @types.enemy_type_air {
-      update_air_enemy_ai(game, e, player, dt)
+      game.update_air_enemy_ai(e, player, dt)
     } else {
-      update_ground_enemy(game, e, player, dt)
+      game.update_ground_enemy(e, player, dt)
     }
   }
 }
 
 ///|
-fn update_air_enemy_ai(
+fn @types.Game::update_air_enemy_ai(
   game : @types.Game,
   e : @types.Enemy,
   player : @types.Player,
@@ -175,15 +175,15 @@ fn update_air_enemy_ai(
   }
   // Execute AI behavior
   if e.ai_state == @types.ai_patrol {
-    ai_patrol(game, e, dt)
+    game.ai_patrol(e, dt)
   } else if e.ai_state == @types.ai_engage {
-    ai_engage(game, e, player, dt)
+    game.ai_engage(e, player, dt)
   } else if e.ai_state == @types.ai_evade {
-    ai_evade(game, e, player, dt)
+    game.ai_evade(e, player, dt)
   } else if e.ai_state == @types.ai_flee {
-    ai_flee(game, e, player, dt)
+    game.ai_flee(e, player, dt)
   } else {
-    ai_patrol(game, e, dt)
+    game.ai_patrol(e, dt)
   }
   // Apply velocity
   e.x += e.vx * dt
@@ -199,7 +199,7 @@ fn update_air_enemy_ai(
     e.fire_timer -= dt
     if e.fire_timer <= 0.0 {
       if dist_to_player < @types.enemy_fire_range {
-        enemy_fire(game, e, player)
+        game.enemy_fire(e, player)
         e.fire_timer = @types.enemy_fire_rate * (1.0 - e.aggression * 0.5)
       }
     }
@@ -207,7 +207,7 @@ fn update_air_enemy_ai(
 }
 
 ///|
-fn ai_patrol(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit {
+fn @types.Game::ai_patrol(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit {
   // Orbit around patrol center
   e.orbit_angle += e.speed * 0.02 * dt
   if e.orbit_angle > @types.two_pi {
@@ -229,7 +229,7 @@ fn ai_patrol(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit {
 }
 
 ///|
-fn ai_engage(
+fn @types.Game::ai_engage(
   game : @types.Game,
   e : @types.Enemy,
   player : @types.Player,
@@ -263,7 +263,7 @@ fn ai_engage(
 }
 
 ///|
-fn ai_evade(
+fn @types.Game::ai_evade(
   game : @types.Game,
   e : @types.Enemy,
   player : @types.Player,
@@ -291,7 +291,7 @@ fn ai_evade(
 }
 
 ///|
-fn ai_flee(
+fn @types.Game::ai_flee(
   game : @types.Game,
   e : @types.Enemy,
   player : @types.Player,
@@ -312,7 +312,7 @@ fn ai_flee(
 }
 
 ///|
-fn update_ground_enemy(
+fn @types.Game::update_ground_enemy(
   game : @types.Game,
   e : @types.Enemy,
   player : @types.Player,
@@ -323,7 +323,7 @@ fn update_ground_enemy(
   if e.fire_timer <= 0.0 {
     let dist = @types.distance3d(e.x, e.y, e.z, player.x, player.y, player.z)
     if dist < @types.enemy_fire_range {
-      enemy_fire(game, e, player)
+      game.enemy_fire(e, player)
       e.fire_timer = @types.enemy_fire_rate + @types.rand_rangef(game, 0.0, 1.0)
     }
   }
@@ -332,7 +332,7 @@ fn update_ground_enemy(
 }
 
 ///|
-fn enemy_fire(
+fn @types.Game::enemy_fire(
   game : @types.Game,
   e : @types.Enemy,
   player : @types.Player,
@@ -396,8 +396,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
       if proj.kind == @types.proj_bomb {
         @types.spawn_large_explosion(game, proj.x, ground, proj.z)
         // Area damage to buildings and enemies
-        bomb_area_damage(
-          game,
+        game.bomb_area_damage(
           proj.x,
           ground,
           proj.z,
@@ -477,7 +476,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn bomb_area_damage(
+fn @types.Game::bomb_area_damage(
   game : @types.Game,
   x : Float,
   y : Float,

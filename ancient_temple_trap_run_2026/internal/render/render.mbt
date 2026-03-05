@@ -1,6 +1,6 @@
 ///|
 /// Draws the dark stone background with horizontal gradient bands and two large pulsing ambient glow circles.
-fn draw_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(13, 10, 8, 255))
 
   for i in 0..<14 {
@@ -50,7 +50,7 @@ fn draw_world_bounds() -> Unit {
 
 ///|
 /// Draws each hazard zone as a filled rectangle colored by kind (lava vs. other) with an orange outline.
-fn draw_hazards(game : @types.Game) -> Unit {
+fn @types.Game::draw_hazards(game : @types.Game) -> Unit {
   for hazard in game.hazards {
     let col = if hazard.kind == @types.hazard_kind_lava {
       @raylib.Color::new(168, 50, 18, 222)
@@ -76,7 +76,7 @@ fn draw_hazards(game : @types.Game) -> Unit {
 
 ///|
 /// Draws each trap as a filled rectangle that turns bright red with a "HOT" label when the trap is in its active firing phase, and shows muted colors when safe.
-fn draw_traps(game : @types.Game) -> Unit {
+fn @types.Game::draw_traps(game : @types.Game) -> Unit {
   for trap in game.traps {
     let hot = @types.trap_is_hot(trap)
     let base_col = if hot {
@@ -120,7 +120,7 @@ fn draw_traps(game : @types.Game) -> Unit {
 
 ///|
 /// Draws each pressure plate as a filled rectangle that brightens to green when pressed, with a "PLATE" label centered inside.
-fn draw_plates(game : @types.Game) -> Unit {
+fn @types.Game::draw_plates(game : @types.Game) -> Unit {
   for plate in game.plates {
     @raylib.draw_rectangle(
       plate.x.to_int(),
@@ -152,7 +152,7 @@ fn draw_plates(game : @types.Game) -> Unit {
 
 ///|
 /// Draws each stone door as a filled rectangle that fades to translucent green when open (with opacity proportional to the remaining hold time) or appears as a solid brown block when closed.
-fn draw_doors(game : @types.Game) -> Unit {
+fn @types.Game::draw_doors(game : @types.Game) -> Unit {
   for door in game.doors {
     let ratio : Float = if door.hold_time > 0.0 {
       @types.clampf(door.timer / door.hold_time, 0.0, 1.0)
@@ -190,7 +190,7 @@ fn draw_doors(game : @types.Game) -> Unit {
 
 ///|
 /// Draws each uncollected relic as a golden filled circle with a pulsing outer glow ring and a bright outline.
-fn draw_relics(game : @types.Game) -> Unit {
+fn @types.Game::draw_relics(game : @types.Game) -> Unit {
   for i in 0..<game.relics.length() {
     if not(game.relics[i].active) {
       continue
@@ -221,7 +221,7 @@ fn draw_relics(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the exit gate as a filled rectangle that turns green with an "EXIT" label when all relics are collected, or remains red-brown with a "SEALED" label otherwise.
-fn draw_exit_gate(game : @types.Game) -> Unit {
+fn @types.Game::draw_exit_gate(game : @types.Game) -> Unit {
   let unlocked = @types.exit_unlocked(game)
 
   @raylib.draw_rectangle(
@@ -262,7 +262,7 @@ fn draw_exit_gate(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the player as a light-grey filled rectangle with a dark outline and a small eye dot; shows a teal glow circle behind the body while dashing.
-fn draw_player(game : @types.Game) -> Unit {
+fn @types.Game::draw_player(game : @types.Game) -> Unit {
   let px = (game.player.x - game.player.w * 0.5).to_int()
   let py = (game.player.y - game.player.h * 0.5).to_int()
 
@@ -300,15 +300,15 @@ fn draw_player(game : @types.Game) -> Unit {
 
 ///|
 /// Composites the full play-world in order: bounds, hazards, traps, plates, relics, doors, exit gate, and player.
-fn draw_world(game : @types.Game) -> Unit {
+fn @types.Game::draw_world(game : @types.Game) -> Unit {
   draw_world_bounds()
-  draw_hazards(game)
-  draw_traps(game)
-  draw_plates(game)
-  draw_relics(game)
-  draw_doors(game)
-  draw_exit_gate(game)
-  draw_player(game)
+  game.draw_hazards()
+  game.draw_traps()
+  game.draw_plates()
+  game.draw_relics()
+  game.draw_doors()
+  game.draw_exit_gate()
+  game.draw_player()
 }
 
 ///|
@@ -341,7 +341,7 @@ fn draw_meter(
 
 ///|
 /// Draws the side HUD panel showing the game title, current stage name, relic count, stamina meter, elapsed time, control hints, and a Retry Stage button.
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   let (px, py, pw, ph) = @types.panel_rect()
   @raylib.draw_rectangle(px, py, pw, ph, @raylib.Color::new(22, 26, 30, 236))
   @raylib.draw_rectangle_lines(
@@ -540,7 +540,7 @@ fn draw_touch_button(
 
 ///|
 /// Draws the five on-screen touch buttons (left, right, up, down, dash), highlighting each one based on whether the pointer currently rests on it.
-fn draw_touch_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   let (lx, ly, lw, lh) = @types.touch_left_rect()
   let (rx, ry, rw, rh) = @types.touch_right_rect()
   let (ux, uy, uw, uh) = @types.touch_up_rect()
@@ -636,7 +636,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the top-center notification banner with the current banner text faded by the remaining banner timer; does nothing when the timer has expired.
-fn draw_banner(game : @types.Game) -> Unit {
+fn @types.Game::draw_banner(game : @types.Game) -> Unit {
   if game.banner_t <= 0.0 {
     return
   }
@@ -667,7 +667,7 @@ fn draw_banner(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the title screen overlay with a dimmed backdrop, a card containing the game title, description lines, control hints, and a hoverable Start Expedition button.
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -748,7 +748,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the stage-clear overlay with a green-tinted panel showing the cleared stage name and hoverable Next and Retry buttons.
-fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_stage_clear_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -828,7 +828,7 @@ fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the failure overlay with a red-tinted panel showing "Expedition Lost", the specific failure reason text, and hoverable Title and Retry buttons.
-fn draw_failed_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_failed_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -908,7 +908,7 @@ fn draw_failed_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the victory overlay with a blue-tinted panel showing "Temple Escaped", a flavour message, and hoverable Run Again and Title buttons.
-fn draw_victory_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_victory_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -989,25 +989,25 @@ fn draw_victory_overlay(game : @types.Game) -> Unit {
 ///|
 /// Draw background, world, HUD, and the active state overlay.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_background(game)
+  game.draw_background()
 
   match game.state {
     Title => ()
     _ => {
-      draw_world(game)
-      draw_hud(game)
+      game.draw_world()
+      game.draw_hud()
       if game.state is Play && game.touch_mode {
-        draw_touch_controls(game)
+        game.draw_touch_controls()
       }
-      draw_banner(game)
+      game.draw_banner()
     }
   }
 
   match game.state {
-    Title => draw_title_overlay(game)
-    StageClear => draw_stage_clear_overlay(game)
-    Failed => draw_failed_overlay(game)
-    Victory => draw_victory_overlay(game)
+    Title => game.draw_title_overlay()
+    StageClear => game.draw_stage_clear_overlay()
+    Failed => game.draw_failed_overlay()
+    Victory => game.draw_victory_overlay()
     Play => ()
   }
 }

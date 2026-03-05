@@ -422,14 +422,14 @@ fn clear_input_edges(fighter : @types.Fighter) -> Unit {
 }
 
 ///|
-fn update_inputs(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_inputs(game : @types.Game, dt : Float) -> Unit {
   for slot in 0..<@types.max_players {
     let fighter = game.fighters[slot]
     clear_input_edges(fighter)
 
     if fighter.is_cpu && game.state == StateFight {
       reset_input_for_cpu(fighter, dt)
-      update_cpu_input(game, slot, dt)
+      game.update_cpu_input(slot, dt)
       finalize_cpu_input(fighter, dt)
     } else {
       sample_human_input(fighter, slot, dt)

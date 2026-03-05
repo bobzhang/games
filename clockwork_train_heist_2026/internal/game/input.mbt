@@ -1,6 +1,6 @@
 ///|
 /// Handles start input on the title screen via keyboard, mouse click, or touch tap.
-fn update_title_input(game : @types.Game) -> Unit {
+fn @types.Game::update_title_input(game : @types.Game) -> Unit {
   let key_start : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
   let click_start : Bool = @raylib.is_mouse_button_pressed(
@@ -9,14 +9,14 @@ fn update_title_input(game : @types.Game) -> Unit {
   let tap_start : Bool = game.touch_cd <= 0.0 && @types.title_hover(game)
 
   if key_start || click_start || tap_start {
-    start_run(game)
+    game.start_run()
     game.touch_cd = 0.16
   }
 }
 
 ///|
 /// Handles retry input on the result screen via keyboard, mouse click, or touch tap.
-fn update_result_input(game : @types.Game) -> Unit {
+fn @types.Game::update_result_input(game : @types.Game) -> Unit {
   let key_retry : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyR)
@@ -26,26 +26,26 @@ fn update_result_input(game : @types.Game) -> Unit {
   let tap_retry : Bool = game.touch_cd <= 0.0 && @types.retry_hover(game)
 
   if key_retry || click_retry || tap_retry {
-    start_run(game)
+    game.start_run()
     game.touch_cd = 0.16
   }
 }
 
 ///|
 /// Reads keyboard and touch input during gameplay for movement direction, smoke action, hints, restart, and menu navigation.
-fn update_play_input(game : @types.Game) -> Unit {
+fn @types.Game::update_play_input(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    go_title(game)
+    game.go_title()
     return
   }
 
   if @raylib.is_key_pressed(@raylib.KeyR) {
-    start_run(game)
+    game.start_run()
     return
   }
 
   if @raylib.is_key_pressed(@raylib.KeyH) {
-    cycle_hint(game)
+    game.cycle_hint()
   }
 
   let mut dx : Int = 0
@@ -120,18 +120,18 @@ fn update_play_input(game : @types.Game) -> Unit {
   let m = @types.btn_menu()
 
   if game.touch_cd <= 0.0 && @types.pointer_on_rect(game, h.0, h.1, h.2, h.3) {
-    cycle_hint(game)
+    game.cycle_hint()
     game.touch_cd = 0.16
   }
 
   if game.touch_cd <= 0.0 && @types.pointer_on_rect(game, r.0, r.1, r.2, r.3) {
-    start_run(game)
+    game.start_run()
     game.touch_cd = 0.16
     return
   }
 
   if game.touch_cd <= 0.0 && @types.pointer_on_rect(game, m.0, m.1, m.2, m.3) {
-    go_title(game)
+    game.go_title()
     game.touch_cd = 0.16
   }
 }

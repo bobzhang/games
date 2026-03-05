@@ -1,6 +1,6 @@
 ///|
 /// Clears the player hand to the empty ingredient state.
-fn clear_hand(game : @types.Game) -> Unit {
+fn @types.Game::clear_hand(game : @types.Game) -> Unit {
   game.hand.kind = @types.ingredient_none
   game.hand.flavor = 0
   game.hand.prepped = false
@@ -8,7 +8,7 @@ fn clear_hand(game : @types.Game) -> Unit {
 
 ///|
 /// Resets the prep board to its idle state with default timing target.
-fn clear_prep(game : @types.Game) -> Unit {
+fn @types.Game::clear_prep(game : @types.Game) -> Unit {
   game.prep.active = false
   game.prep.kind = @types.ingredient_none
   game.prep.flavor = 0
@@ -21,7 +21,7 @@ fn clear_prep(game : @types.Game) -> Unit {
 
 ///|
 /// Resets the hotpot to an empty, non-cooking state with default target.
-fn clear_pot(game : @types.Game) -> Unit {
+fn @types.Game::clear_pot(game : @types.Game) -> Unit {
   game.pot.broth = -1
   game.pot.protein = -1
   game.pot.veg = -1
@@ -34,7 +34,7 @@ fn clear_pot(game : @types.Game) -> Unit {
 
 ///|
 /// Deactivates all order slots and zeroes their fields.
-fn clear_orders(game : @types.Game) -> Unit {
+fn @types.Game::clear_orders(game : @types.Game) -> Unit {
   for i in 0..<@types.max_orders {
     game.orders[i].active = false
     game.orders[i].id = i + 1
@@ -50,7 +50,7 @@ fn clear_orders(game : @types.Game) -> Unit {
 
 ///|
 /// Initialises a fresh kitchen run: resets state, meters, timers, and spawns two orders.
-fn start_run(game : @types.Game) -> Unit {
+fn @types.Game::start_run(game : @types.Game) -> Unit {
   game.state = @types.state_playing
   game.cursor_x = 1
   game.cursor_y = 1
@@ -71,12 +71,12 @@ fn start_run(game : @types.Game) -> Unit {
   game.next_veg_pick = @raylib.get_random_value(0, @types.veg_count - 1)
   game.flash_t = 0.0
 
-  clear_hand(game)
-  clear_prep(game)
-  clear_pot(game)
-  clear_orders(game)
-  ignore(spawn_order(game))
-  ignore(spawn_order(game))
+  game.clear_hand()
+  game.clear_prep()
+  game.clear_pot()
+  game.clear_orders()
+  ignore(game.spawn_order())
+  ignore(game.spawn_order())
 
   @types.set_message(game, "Kitchen open. Build orders from the queue head.")
 }
@@ -103,7 +103,7 @@ fn spawn_patience(elapsed : Float) -> Float {
 
 ///|
 /// Returns the count of currently active orders in the queue.
-fn active_order_count(game : @types.Game) -> Int {
+fn @types.Game::active_order_count(game : @types.Game) -> Int {
   let mut count = 0
   for i in 0..<@types.max_orders {
     if game.orders[i].active {
@@ -115,7 +115,7 @@ fn active_order_count(game : @types.Game) -> Int {
 
 ///|
 /// Removes the order at `idx`, shifting remaining orders left and clearing the tail slot.
-fn remove_order_at(game : @types.Game, idx : Int) -> Unit {
+fn @types.Game::remove_order_at(game : @types.Game, idx : Int) -> Unit {
   if idx < 0 || idx >= @types.max_orders {
     return
   }
@@ -148,7 +148,7 @@ fn remove_order_at(game : @types.Game, idx : Int) -> Unit {
 
 ///|
 /// Spawns a new order in the first free slot; returns false if the queue is full.
-fn spawn_order(game : @types.Game) -> Bool {
+fn @types.Game::spawn_order(game : @types.Game) -> Bool {
   let mut slot = -1
   for i in 0..<@types.max_orders {
     if not(game.orders[i].active) {
@@ -188,7 +188,7 @@ fn spawn_order(game : @types.Game) -> Bool {
 
 ///|
 /// Moves the cursor by `(dx, dy)` within grid bounds and updates the HUD message.
-fn move_cursor(game : @types.Game, dx : Int, dy : Int) -> Unit {
+fn @types.Game::move_cursor(game : @types.Game, dx : Int, dy : Int) -> Unit {
   game.cursor_x = (game.cursor_x + dx).clamp(min=0, max=@types.station_cols - 1)
   game.cursor_y = (game.cursor_y + dy).clamp(min=0, max=@types.station_rows - 1)
   @types.set_message(
@@ -199,13 +199,13 @@ fn move_cursor(game : @types.Game, dx : Int, dy : Int) -> Unit {
 
 ///|
 /// Returns true when the pot has broth, protein, and veg set.
-fn pot_has_core(game : @types.Game) -> Bool {
+fn @types.Game::pot_has_core(game : @types.Game) -> Bool {
   game.pot.broth >= 0 && game.pot.protein >= 0 && game.pot.veg >= 0
 }
 
 ///|
 /// Returns true when the pot contains any ingredient or is cooking/ready.
-fn pot_has_anything(game : @types.Game) -> Bool {
+fn @types.Game::pot_has_anything(game : @types.Game) -> Bool {
   game.pot.broth >= 0 ||
   game.pot.protein >= 0 ||
   game.pot.veg >= 0 ||
@@ -215,7 +215,7 @@ fn pot_has_anything(game : @types.Game) -> Bool {
 
 ///|
 /// Handles J interaction at the broth station: cycles broth selection.
-fn interact_broth(game : @types.Game) -> Unit {
+fn @types.Game::interact_broth(game : @types.Game) -> Unit {
   if game.pot.ready || game.pot.cooking {
     @types.set_message(game, "Pot is locked while cooking/ready.")
     return
@@ -232,7 +232,7 @@ fn interact_broth(game : @types.Game) -> Unit {
 
 ///|
 /// Handles J interaction at the protein station: picks a raw protein into hand.
-fn interact_protein(game : @types.Game) -> Unit {
+fn @types.Game::interact_protein(game : @types.Game) -> Unit {
   if game.hand.kind != @types.ingredient_none {
     @types.set_message(game, "Hands full. Drop with K or trash station.")
     return
@@ -251,7 +251,7 @@ fn interact_protein(game : @types.Game) -> Unit {
 
 ///|
 /// Handles J interaction at the veg station: picks a raw vegetable into hand.
-fn interact_veg(game : @types.Game) -> Unit {
+fn @types.Game::interact_veg(game : @types.Game) -> Unit {
   if game.hand.kind != @types.ingredient_none {
     @types.set_message(game, "Hands full. Drop with K or trash station.")
     return
@@ -267,7 +267,7 @@ fn interact_veg(game : @types.Game) -> Unit {
 
 ///|
 /// Handles J interaction at the spice station: cycles the pot spice level.
-fn interact_spice(game : @types.Game) -> Unit {
+fn @types.Game::interact_spice(game : @types.Game) -> Unit {
   if game.pot.ready || game.pot.cooking {
     @types.set_message(game, "Spice can only be adjusted before cooking.")
     return
@@ -279,7 +279,7 @@ fn interact_spice(game : @types.Game) -> Unit {
 
 ///|
 /// Handles J interaction at the prep board: starts prep, reports progress, or collects output.
-fn interact_prep(game : @types.Game) -> Unit {
+fn @types.Game::interact_prep(game : @types.Game) -> Unit {
   if game.prep.active {
     let percent = (game.prep.progress /
       @types.maxf(game.prep.target, 0.01) *
@@ -340,13 +340,13 @@ fn interact_prep(game : @types.Game) -> Unit {
   game.prep.target = @types.prep_target_base +
     Float::from_int(game.hand.flavor) * 0.28
 
-  clear_hand(game)
+  game.clear_hand()
   @types.set_message(game, "Prep started.")
 }
 
 ///|
 /// Handles J interaction at the pot: loads prepped ingredients or starts cooking.
-fn interact_pot(game : @types.Game) -> Unit {
+fn @types.Game::interact_pot(game : @types.Game) -> Unit {
   if game.pot.ready {
     @types.set_message(game, "Hotpot ready. Serve it with K at counter.")
     return
@@ -358,7 +358,7 @@ fn interact_pot(game : @types.Game) -> Unit {
       return
     }
     game.pot.protein = game.hand.flavor
-    clear_hand(game)
+    game.clear_hand()
     @types.set_message(game, "Protein loaded into pot.")
     return
   }
@@ -369,7 +369,7 @@ fn interact_pot(game : @types.Game) -> Unit {
       return
     }
     game.pot.veg = game.hand.flavor
-    clear_hand(game)
+    game.clear_hand()
     @types.set_message(game, "Veg loaded into pot.")
     return
   }
@@ -384,7 +384,7 @@ fn interact_pot(game : @types.Game) -> Unit {
     return
   }
 
-  if not(pot_has_core(game)) {
+  if not(game.pot_has_core()) {
     @types.set_message(
       game, "Pot requires broth + protein + veg before cooking.",
     )
@@ -403,7 +403,7 @@ fn interact_pot(game : @types.Game) -> Unit {
 
 ///|
 /// Handles J interaction at the rush bell: adds boost meter charge with a cooldown.
-fn interact_rush(game : @types.Game) -> Unit {
+fn @types.Game::interact_rush(game : @types.Game) -> Unit {
   if game.rush_cd > 0.0 {
     let wait_s = game.rush_cd.to_int() + 1
     @types.set_message(game, "Rush bell cooling down \{wait_s}s")
@@ -421,19 +421,19 @@ fn interact_rush(game : @types.Game) -> Unit {
 
 ///|
 /// Handles J interaction at the trash station: discards the held ingredient.
-fn interact_trash(game : @types.Game) -> Unit {
+fn @types.Game::interact_trash(game : @types.Game) -> Unit {
   if game.hand.kind == @types.ingredient_none {
     @types.set_message(game, "Nothing in hand to trash.")
     return
   }
 
-  clear_hand(game)
+  game.clear_hand()
   @types.set_message(game, "Ingredient discarded.")
 }
 
 ///|
 /// Handles J interaction at the queue monitor: repeats the head order demand as a message.
-fn interact_queue(game : @types.Game) -> Unit {
+fn @types.Game::interact_queue(game : @types.Game) -> Unit {
   if game.orders[0].active {
     @types.set_message(
       game,
@@ -446,7 +446,7 @@ fn interact_queue(game : @types.Game) -> Unit {
 
 ///|
 /// Handles J interaction at the storage station: randomises the upcoming ingredient picks.
-fn interact_storage(game : @types.Game) -> Unit {
+fn @types.Game::interact_storage(game : @types.Game) -> Unit {
   game.next_protein_pick = @raylib.get_random_value(0, @types.protein_count - 1)
   game.next_veg_pick = @raylib.get_random_value(0, @types.veg_count - 1)
   @types.set_message(game, "Storage shuffled upcoming ingredients.")
@@ -454,33 +454,33 @@ fn interact_storage(game : @types.Game) -> Unit {
 
 ///|
 /// Dispatches J interaction to the appropriate station handler.
-fn handle_interact(game : @types.Game) -> Unit {
+fn @types.Game::handle_interact(game : @types.Game) -> Unit {
   let station = @types.station_at(game.cursor_x, game.cursor_y)
 
   if station == @types.station_broth {
-    interact_broth(game)
+    game.interact_broth()
   } else if station == @types.station_protein {
-    interact_protein(game)
+    game.interact_protein()
   } else if station == @types.station_veg {
-    interact_veg(game)
+    game.interact_veg()
   } else if station == @types.station_spice {
-    interact_spice(game)
+    game.interact_spice()
   } else if station == @types.station_prep {
-    interact_prep(game)
+    game.interact_prep()
   } else if station == @types.station_pot {
-    interact_pot(game)
+    game.interact_pot()
   } else if station == @types.station_rush {
-    interact_rush(game)
+    game.interact_rush()
   } else if station == @types.station_trash {
-    interact_trash(game)
+    game.interact_trash()
   } else if station == @types.station_queue {
-    interact_queue(game)
+    game.interact_queue()
   } else if station == @types.station_reputation {
     @types.set_message(
       game, "Reputation controls game over. Keep orders flowing.",
     )
   } else if station == @types.station_storage {
-    interact_storage(game)
+    game.interact_storage()
   } else {
     @types.set_message(game, "No interaction at this station.")
   }
@@ -488,7 +488,7 @@ fn handle_interact(game : @types.Game) -> Unit {
 
 ///|
 /// Returns true when the ready pot exactly matches the head order.
-fn serve_matches_head(game : @types.Game) -> Bool {
+fn @types.Game::serve_matches_head(game : @types.Game) -> Bool {
   if not(game.orders[0].active) {
     return false
   }
@@ -501,7 +501,7 @@ fn serve_matches_head(game : @types.Game) -> Bool {
 
 ///|
 /// Serves the ready pot against the head order, scoring or penalising accordingly.
-fn serve_head_order(game : @types.Game) -> Unit {
+fn @types.Game::serve_head_order(game : @types.Game) -> Unit {
   if not(game.pot.ready) {
     @types.set_message(game, "No finished pot to serve.")
     return
@@ -516,13 +516,13 @@ fn serve_head_order(game : @types.Game) -> Unit {
       0.0,
       @types.reputation_max,
     )
-    clear_pot(game)
+    game.clear_pot()
     game.flash_t = 0.35
     @types.set_message(game, "Served with no queue head. Reputation down.")
     return
   }
 
-  if serve_matches_head(game) {
+  if game.serve_matches_head() {
     let patience_ratio = @types.clampf(
       game.orders[0].patience / @types.maxf(game.orders[0].max_patience, 0.01),
       0.0,
@@ -548,8 +548,8 @@ fn serve_head_order(game : @types.Game) -> Unit {
     )
 
     game.served = game.served + 1
-    remove_order_at(game, 0)
-    clear_pot(game)
+    game.remove_order_at(0)
+    game.clear_pot()
     game.flash_t = 0.14
     @types.set_message(game, "Serve success +\{gain} (combo x\{game.combo})")
     return
@@ -563,24 +563,24 @@ fn serve_head_order(game : @types.Game) -> Unit {
     0.0,
     @types.reputation_max,
   )
-  clear_pot(game)
+  game.clear_pot()
   game.flash_t = 0.42
   @types.set_message(game, "Wrong order served! Combo broken.")
 }
 
 ///|
 /// Handles K input: serves at the counter, discards the pot, cancels prep, or drops hand.
-fn handle_serve_cancel(game : @types.Game) -> Unit {
+fn @types.Game::handle_serve_cancel(game : @types.Game) -> Unit {
   let station = @types.station_at(game.cursor_x, game.cursor_y)
 
   if station == @types.station_serve {
-    serve_head_order(game)
+    game.serve_head_order()
     return
   }
 
   if station == @types.station_pot {
-    if pot_has_anything(game) {
-      clear_pot(game)
+    if game.pot_has_anything() {
+      game.clear_pot()
       game.combo = 0
       game.combo_t = 0.0
       game.reputation = @types.clampf(
@@ -598,14 +598,14 @@ fn handle_serve_cancel(game : @types.Game) -> Unit {
 
   if station == @types.station_prep {
     if game.prep.active || game.prep.output_ready {
-      clear_prep(game)
+      game.clear_prep()
       @types.set_message(game, "Prep canceled.")
       return
     }
   }
 
   if game.hand.kind != @types.ingredient_none {
-    clear_hand(game)
+    game.clear_hand()
     @types.set_message(game, "Held item canceled.")
     return
   }
@@ -615,7 +615,7 @@ fn handle_serve_cancel(game : @types.Game) -> Unit {
 
 ///|
 /// Activates the speed boost if meter is sufficient and no boost is already active.
-fn trigger_boost(game : @types.Game) -> Unit {
+fn @types.Game::trigger_boost(game : @types.Game) -> Unit {
   if game.boost_t > 0.0 {
     @types.set_message(game, "Boost already active.")
     return
@@ -637,7 +637,7 @@ fn trigger_boost(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the current speed multiplier: boost value when boost is active, else 1.0.
-fn boost_multiplier(game : @types.Game) -> Float {
+fn @types.Game::boost_multiplier(game : @types.Game) -> Float {
   if game.boost_t > 0.0 {
     @types.boost_speed_mult
   } else {
@@ -647,7 +647,7 @@ fn boost_multiplier(game : @types.Game) -> Float {
 
 ///|
 /// Advances elapsed time, boost meter, boost timer, rush cooldown, combo timer, and flash timer.
-fn update_play_timers(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_play_timers(game : @types.Game, dt : Float) -> Unit {
   game.elapsed = game.elapsed + dt
 
   game.boost_meter = @types.clampf(
@@ -683,8 +683,8 @@ fn update_play_timers(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Advances prep and cooking progress, triggering completion events as thresholds are reached.
-fn update_prep_and_pot(game : @types.Game, dt : Float) -> Unit {
-  let speed = boost_multiplier(game)
+fn @types.Game::update_prep_and_pot(game : @types.Game, dt : Float) -> Unit {
+  let speed = game.boost_multiplier()
 
   if game.prep.active {
     game.prep.progress = game.prep.progress + dt * speed
@@ -710,7 +710,7 @@ fn update_prep_and_pot(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Ticks order patience timers, removing timed-out orders and updating trust and flash state.
-fn update_order_patience(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_order_patience(game : @types.Game, dt : Float) -> Unit {
   let mut i = 0
   while i < @types.max_orders {
     if not(game.orders[i].active) {
@@ -732,7 +732,7 @@ fn update_order_patience(game : @types.Game, dt : Float) -> Unit {
       )
       game.flash_t = 0.36
       @types.set_message(game, "A customer rage-quit from the queue.")
-      remove_order_at(game, i)
+      game.remove_order_at(i)
       continue
     }
 
@@ -742,14 +742,14 @@ fn update_order_patience(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Manages the order spawn countdown and spawns new orders or applies overflow pressure.
-fn update_order_spawn(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_order_spawn(game : @types.Game, dt : Float) -> Unit {
   game.spawn_cd = game.spawn_cd - dt
   if game.spawn_cd > 0.0 {
     return
   }
 
-  if active_order_count(game) < @types.max_orders {
-    ignore(spawn_order(game))
+  if game.active_order_count() < @types.max_orders {
+    ignore(game.spawn_order())
     game.spawn_cd = spawn_interval(game.elapsed)
   } else {
     game.combo = 0
@@ -767,19 +767,19 @@ fn update_order_spawn(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Handles one update tick in the title state: ticks message and transitions to play on start.
-fn update_title(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_title(game : @types.Game, dt : Float) -> Unit {
   if game.msg_t > 0.0 {
     game.msg_t = @types.maxf(0.0, game.msg_t - dt)
   }
 
   if game.input.press_start {
-    start_run(game)
+    game.start_run()
   }
 }
 
 ///|
 /// Handles one update tick in the paused state: ticks message and transitions back to play.
-fn update_paused(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_paused(game : @types.Game, dt : Float) -> Unit {
   if game.msg_t > 0.0 {
     game.msg_t = @types.maxf(0.0, game.msg_t - dt)
   }
@@ -792,7 +792,7 @@ fn update_paused(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Handles one update tick in the game-over state: ticks timers and transitions on restart.
-fn update_game_over(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_game_over(game : @types.Game, dt : Float) -> Unit {
   if game.msg_t > 0.0 {
     game.msg_t = @types.maxf(0.0, game.msg_t - dt)
   }
@@ -809,7 +809,7 @@ fn update_game_over(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Handles one full update tick during active gameplay including all input and timer systems.
-fn update_playing(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   if game.input.press_pause {
     game.state = @types.state_paused
     @types.set_message(game, "Shift paused.")
@@ -817,25 +817,25 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.input.move_x != 0 || game.input.move_y != 0 {
-    move_cursor(game, game.input.move_x, game.input.move_y)
+    game.move_cursor(game.input.move_x, game.input.move_y)
   }
 
   if game.input.press_boost {
-    trigger_boost(game)
+    game.trigger_boost()
   }
 
   if game.input.press_interact {
-    handle_interact(game)
+    game.handle_interact()
   }
 
   if game.input.press_serve_cancel {
-    handle_serve_cancel(game)
+    game.handle_serve_cancel()
   }
 
-  update_play_timers(game, dt)
-  update_prep_and_pot(game, dt)
-  update_order_patience(game, dt)
-  update_order_spawn(game, dt)
+  game.update_play_timers(dt)
+  game.update_prep_and_pot(dt)
+  game.update_order_patience(dt)
+  game.update_order_spawn(dt)
 
   if game.reputation <= 0.0 {
     game.state = @types.state_game_over
@@ -851,20 +851,20 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
 ///|
 /// Advances one frame of kitchen simulation and state transitions.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
-  update_input(game)
+  game.update_input()
 
   if game.input.press_restart {
-    start_run(game)
+    game.start_run()
     return
   }
 
   if game.state == @types.state_title {
-    update_title(game, dt)
+    game.update_title(dt)
   } else if game.state == @types.state_playing {
-    update_playing(game, dt)
+    game.update_playing(dt)
   } else if game.state == @types.state_paused {
-    update_paused(game, dt)
+    game.update_paused(dt)
   } else {
-    update_game_over(game, dt)
+    game.update_game_over(dt)
   }
 }

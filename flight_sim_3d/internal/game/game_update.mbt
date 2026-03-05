@@ -4,27 +4,27 @@
 /// Advances the game state by one frame, dispatching to the appropriate update handler.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
-  update_particles(game, dt)
-  update_messages(game, dt)
+  game.update_particles(dt)
+  game.update_messages(dt)
   if game.state == @types.state_menu {
-    update_menu(game, dt)
+    game.update_menu(dt)
   } else if game.state == @types.state_aircraft_select {
-    update_aircraft_select(game, dt)
+    game.update_aircraft_select(dt)
   } else if game.state == @types.state_mission_briefing {
-    update_briefing(game)
+    game.update_briefing()
   } else if game.state == @types.state_playing {
-    update_playing(game, dt)
+    game.update_playing(dt)
   } else if game.state == @types.state_paused {
-    update_paused(game)
+    game.update_paused()
   } else if game.state == @types.state_mission_complete {
-    update_mission_complete(game)
+    game.update_mission_complete()
   } else if game.state == @types.state_game_over {
-    update_game_over(game)
+    game.update_game_over()
   }
 }
 
 ///|
-fn update_menu(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
   game.menu_blink += dt * 3.5
   if @raylib.is_key_pressed(@raylib.KeyUp) {
     game.menu_cursor -= 1
@@ -46,7 +46,7 @@ fn update_menu(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_aircraft_select(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_aircraft_select(game : @types.Game, dt : Float) -> Unit {
   game.menu_blink += dt * 3.0
   if @raylib.is_key_pressed(@raylib.KeyLeft) {
     game.selected_aircraft -= 1
@@ -70,7 +70,7 @@ fn update_aircraft_select(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_briefing(game : @types.Game) -> Unit {
+fn @types.Game::update_briefing(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     start_mission(game, game.current_mission)
@@ -81,7 +81,7 @@ fn update_briefing(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_playing(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
     game.state = @types.state_paused
@@ -95,21 +95,21 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
     }
   }
   update_player(game, dt)
-  update_camera(game, dt)
-  update_terrain(game)
-  update_clouds(game)
+  game.update_camera(dt)
+  game.update_terrain()
+  game.update_clouds()
   update_enemies(game, dt)
-  update_turrets(game, dt)
+  game.update_turrets(dt)
   update_projectiles(game, dt)
-  update_buildings_projectile_check(game)
-  update_checkpoints(game)
+  game.update_buildings_projectile_check()
+  game.update_checkpoints()
   update_mission_logic(game, dt)
-  update_warnings(game, dt)
-  update_weather_effects(game, dt)
+  game.update_warnings(dt)
+  game.update_weather_effects(dt)
 }
 
 ///|
-fn update_paused(game : @types.Game) -> Unit {
+fn @types.Game::update_paused(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
     game.state = @types.state_playing
@@ -123,7 +123,7 @@ fn update_paused(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_mission_complete(game : @types.Game) -> Unit {
+fn @types.Game::update_mission_complete(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     game.state = @types.state_menu
@@ -131,7 +131,7 @@ fn update_mission_complete(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_game_over(game : @types.Game) -> Unit {
+fn @types.Game::update_game_over(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     game.state = @types.state_menu
@@ -142,7 +142,7 @@ fn update_game_over(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_particles(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -179,7 +179,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_messages(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_messages(game : @types.Game, dt : Float) -> Unit {
   for message in game.messages {
     if message.timer > 0.0 {
       message.timer -= dt
@@ -188,7 +188,7 @@ fn update_messages(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_camera(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_camera(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
   let (fx, fy, fz) = @types.get_forward(player.pitch, player.yaw)
   if game.camera_mode == @types.camera_mode_chase {
@@ -239,7 +239,7 @@ fn update_camera(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_terrain(game : @types.Game) -> Unit {
+fn @types.Game::update_terrain(game : @types.Game) -> Unit {
   let scale = @types.terrain_chunk_scale
   let cx = (game.player.x / scale).to_int()
   let cz = (game.player.z / scale).to_int()
@@ -312,7 +312,7 @@ fn update_terrain(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_clouds(game : @types.Game) -> Unit {
+fn @types.Game::update_clouds(game : @types.Game) -> Unit {
   // Generate clouds around player if needed
   let player = game.player
   let mut active_count = 0
@@ -366,7 +366,7 @@ fn update_clouds(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_checkpoints(game : @types.Game) -> Unit {
+fn @types.Game::update_checkpoints(game : @types.Game) -> Unit {
   let player = game.player
   for cp in game.checkpoints {
     if not(cp.active) {
@@ -393,7 +393,7 @@ fn update_checkpoints(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_turrets(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_turrets(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
   for t in game.turrets {
     if not(t.active) {
@@ -425,14 +425,14 @@ fn update_turrets(game : @types.Game, dt : Float) -> Unit {
     // Fire at player
     t.fire_timer -= dt
     if t.fire_timer <= 0.0 && rot_diff.abs() < 0.3 {
-      turret_fire(game, t, player)
+      game.turret_fire(t, player)
       t.fire_timer = @types.turret_fire_rate
     }
   }
 }
 
 ///|
-fn turret_fire(
+fn @types.Game::turret_fire(
   game : @types.Game,
   t : @types.Turret,
   player : @types.Player,
@@ -464,7 +464,7 @@ fn turret_fire(
 }
 
 ///|
-fn update_buildings_projectile_check(game : @types.Game) -> Unit {
+fn @types.Game::update_buildings_projectile_check(game : @types.Game) -> Unit {
   // Check if any player projectiles hit buildings
   for proj in game.projectiles {
     if not(proj.active) {
@@ -562,7 +562,7 @@ fn update_buildings_projectile_check(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_warnings(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_warnings(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
   game.warning_flash_timer += dt * 4.0
   // Fuel warning
@@ -596,7 +596,7 @@ fn update_warnings(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_weather_effects(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_weather_effects(game : @types.Game, dt : Float) -> Unit {
   let ws = game.weather_state
   // Spawn rain particles in storm/rain weather
   if ws.rain_intensity > 0.0 {

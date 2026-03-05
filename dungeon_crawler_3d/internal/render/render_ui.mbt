@@ -4,31 +4,31 @@
 /// Draws the 2D HUD and state overlays, including transient damage and message effects.
 pub fn draw_ui(game : @types.Game) -> Unit {
   if game.state == @types.state_menu {
-    draw_menu(game)
+    game.draw_menu()
   } else if game.state == @types.state_playing {
-    draw_hud(game)
-    draw_minimap(game)
+    game.draw_hud()
+    game.draw_minimap()
     draw_crosshair()
   } else if game.state == @types.state_paused {
-    draw_hud(game)
-    draw_minimap(game)
-    draw_pause_overlay(game)
+    game.draw_hud()
+    game.draw_minimap()
+    game.draw_pause_overlay()
   } else if game.state == @types.state_game_over {
-    draw_game_over(game)
+    game.draw_game_over()
   } else if game.state == @types.state_level_up {
-    draw_hud(game)
-    draw_level_up_overlay(game)
+    game.draw_hud()
+    game.draw_level_up_overlay()
   } else if game.state == @types.state_floor_complete {
-    draw_hud(game)
-    draw_floor_complete_overlay(game)
+    game.draw_hud()
+    game.draw_floor_complete_overlay()
   } else if game.state == @types.state_class_select {
-    draw_class_select(game)
+    game.draw_class_select()
   } else if game.state == @types.state_shop {
-    draw_hud(game)
-    draw_shop(game)
+    game.draw_hud()
+    game.draw_shop()
   } else if game.state == @types.state_shrine {
-    draw_hud(game)
-    draw_shrine(game)
+    game.draw_hud()
+    game.draw_shrine()
   }
   // Damage flash
   if game.damage_flash > 0.0 {
@@ -70,7 +70,7 @@ pub fn draw_ui(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_menu(game : @types.Game) -> Unit {
+fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -99,8 +99,8 @@ fn draw_menu(game : @types.Game) -> Unit {
     @raylib.Color::new(180, 150, 130, 255),
   )
   // Decorative torches
-  draw_menu_torch(game, @types.screen_width / 2 - 200, 300)
-  draw_menu_torch(game, @types.screen_width / 2 + 180, 300)
+  game.draw_menu_torch(@types.screen_width / 2 - 200, 300)
+  game.draw_menu_torch(@types.screen_width / 2 + 180, 300)
   // Menu items
   let items : Array[String] = ["New Game", "Continue"]
   for i in 0..<items.length() {
@@ -134,7 +134,7 @@ fn draw_menu(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_menu_torch(game : @types.Game, x : Int, y : Int) -> Unit {
+fn @types.Game::draw_menu_torch(game : @types.Game, x : Int, y : Int) -> Unit {
   // Torch post
   @raylib.draw_rectangle(x + 6, y, 8, 40, @raylib.Color::new(100, 70, 30, 255))
   // Flame (animated)
@@ -155,7 +155,7 @@ fn draw_menu_torch(game : @types.Game, x : Int, y : Int) -> Unit {
 }
 
 ///|
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   // Top bar
   @raylib.draw_rectangle(
     0,
@@ -323,7 +323,7 @@ fn draw_crosshair() -> Unit {
 }
 
 ///|
-fn draw_minimap(game : @types.Game) -> Unit {
+fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
   let mx = @types.minimap_x
   let my = @types.minimap_y
   let ms = @types.minimap_size
@@ -485,7 +485,7 @@ fn draw_minimap(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_pause_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_pause_overlay(game : @types.Game) -> Unit {
   ignore(game)
   @raylib.draw_rectangle(
     0,
@@ -515,7 +515,7 @@ fn draw_pause_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_game_over(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -553,7 +553,7 @@ fn draw_game_over(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_level_up_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_level_up_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -591,7 +591,7 @@ fn draw_level_up_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_floor_complete_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_floor_complete_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -643,7 +643,7 @@ fn draw_floor_complete_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_class_select(game : @types.Game) -> Unit {
+fn @types.Game::draw_class_select(game : @types.Game) -> Unit {
   // Full-screen dark background
   @raylib.draw_rectangle(
     0,
@@ -737,7 +737,7 @@ fn draw_class_select(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_shop(game : @types.Game) -> Unit {
+fn @types.Game::draw_shop(game : @types.Game) -> Unit {
   ignore(game)
   // Semi-transparent overlay
   @raylib.draw_rectangle(
@@ -768,7 +768,7 @@ fn draw_shop(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_shrine(game : @types.Game) -> Unit {
+fn @types.Game::draw_shrine(game : @types.Game) -> Unit {
   ignore(game)
   // Semi-transparent overlay
   @raylib.draw_rectangle(

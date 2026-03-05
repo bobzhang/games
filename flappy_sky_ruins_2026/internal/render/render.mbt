@@ -1,16 +1,16 @@
 ///|
 /// Returns a sine wave value sampled from `game.ui_t` scaled by `k`, used to animate background elements.
-fn bg_wave(game : @types.Game, k : Float) -> Float {
+fn @types.Game::bg_wave(game : @types.Game, k : Float) -> Float {
   Float::from_double(@math.sin((game.ui_t * k).to_double()))
 }
 
 ///|
 /// Draws the animated background with pulsing ambient circles and layered horizontal gradient bands.
-fn draw_bg(game : @types.Game) -> Unit {
+fn @types.Game::draw_bg(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(8, 12, 22, 255))
 
-  let w0 : Float = bg_wave(game, 0.66)
-  let w1 : Float = bg_wave(game, 0.93)
+  let w0 : Float = game.bg_wave(0.66)
+  let w1 : Float = game.bg_wave(0.93)
 
   @raylib.draw_circle(
     220,
@@ -44,7 +44,7 @@ fn draw_bg(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the world boundary rectangle with layered horizontal stripes and an animated horizon line.
-fn draw_world_back(game : @types.Game) -> Unit {
+fn @types.Game::draw_world_back(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.world_x0,
     @types.world_y0,
@@ -61,7 +61,7 @@ fn draw_world_back(game : @types.Game) -> Unit {
     @raylib.Color::new(150, 192, 226, 210),
   )
 
-  let wave : Float = bg_wave(game, 1.5)
+  let wave : Float = game.bg_wave(1.5)
   for i in 0..<20 {
     let y : Int = @types.world_y0 + i * 48
     @raylib.draw_rectangle(
@@ -183,7 +183,7 @@ fn draw_pickup(pk : @types.Pickup) -> Unit {
 
 ///|
 /// Draws the player bird with a tilt-based wing triangle, eye dot, and an optional shield ring when the shield is active.
-fn draw_player(game : @types.Game) -> Unit {
+fn @types.Game::draw_player(game : @types.Game) -> Unit {
   let tilt : Float = @types.clampf(game.vy * 0.0014, -0.35, 0.45)
 
   @raylib.draw_circle(
@@ -229,7 +229,7 @@ fn draw_player(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a pulsing golden ring at the hint target y position in the center of the world when a hint is active.
-fn draw_hint(game : @types.Game) -> Unit {
+fn @types.Game::draw_hint(game : @types.Game) -> Unit {
   if game.hint_t <= 0.0 {
     return
   }
@@ -250,7 +250,7 @@ fn draw_hint(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all active particles as small circles with color and opacity based on their kind and remaining life.
-fn draw_particles(game : @types.Game) -> Unit {
+fn @types.Game::draw_particles(game : @types.Game) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
       continue
@@ -319,7 +319,7 @@ fn draw_touch_button(
 
 ///|
 /// Draws the on-screen FLAP, BOOST, RESTART, and HINT touch buttons in the side panel area during active play.
-fn draw_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_controls(game : @types.Game) -> Unit {
   match game.state {
     Play => ()
     Title | Result => return
@@ -398,7 +398,7 @@ fn draw_controls(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the side panel with title, score, best score, lives, level, time, distance, combo, boost bar, shield status, control reference, and the transient message box.
-fn draw_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   let px : Int = @types.panel_x0
   let py : Int = 20
   let pw : Int = @types.panel_w
@@ -585,7 +585,7 @@ fn draw_panel(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the title screen with game name, description lines, and a hoverable start button.
-fn draw_title(game : @types.Game) -> Unit {
+fn @types.Game::draw_title(game : @types.Game) -> Unit {
   @raylib.draw_text(
     "Flappy Sky Ruins 2026",
     @types.screen_w / 2 - @raylib.measure_text("Flappy Sky Ruins 2026", 86) / 2,
@@ -632,7 +632,7 @@ fn draw_title(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the result overlay panel with win/fail heading, final score, distance, level, time, and a hoverable retry button.
-fn draw_result_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -710,8 +710,8 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the world background, all obstacles and pickups, the hint ring, and the player.
-fn draw_world(game : @types.Game) -> Unit {
-  draw_world_back(game)
+fn @types.Game::draw_world(game : @types.Game) -> Unit {
+  game.draw_world_back()
 
   for obstacle in game.obstacles {
     draw_obstacle(obstacle)
@@ -721,28 +721,28 @@ fn draw_world(game : @types.Game) -> Unit {
     draw_pickup(pickup)
   }
 
-  draw_hint(game)
-  draw_player(game)
+  game.draw_hint()
+  game.draw_player()
 }
 
 ///|
 /// Renders the complete frame for the current game state.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_bg(game)
+  game.draw_bg()
   match game.state {
-    Title => draw_title(game)
+    Title => game.draw_title()
     Play => {
-      draw_world(game)
-      draw_particles(game)
-      draw_panel(game)
-      draw_controls(game)
+      game.draw_world()
+      game.draw_particles()
+      game.draw_panel()
+      game.draw_controls()
     }
     Result => {
-      draw_world(game)
-      draw_particles(game)
-      draw_panel(game)
-      draw_controls(game)
-      draw_result_overlay(game)
+      game.draw_world()
+      game.draw_particles()
+      game.draw_panel()
+      game.draw_controls()
+      game.draw_result_overlay()
     }
   }
 }

@@ -11,7 +11,7 @@ fn draw_starfield() -> Unit {
 
 ///|
 /// Draws the player ship triangle and thrust flame, blinking during invulnerability.
-fn draw_ship(game : @types.Game) -> Unit {
+fn @types.Game::draw_ship(game : @types.Game) -> Unit {
   if game.ship_invuln > 0.0 {
     let blink = @raylib.get_time().to_int() % 2
     if blink == 0 {
@@ -60,7 +60,7 @@ fn draw_ship(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all active rocks as overlapping circles, color-coded by size tier.
-fn draw_rocks(game : @types.Game) -> Unit {
+fn @types.Game::draw_rocks(game : @types.Game) -> Unit {
   for rock in game.rocks {
     if not(rock.active) {
       continue
@@ -87,7 +87,7 @@ fn draw_rocks(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all active bullets as small yellow circles.
-fn draw_bullets(game : @types.Game) -> Unit {
+fn @types.Game::draw_bullets(game : @types.Game) -> Unit {
   for bullet in game.bullets {
     if not(bullet.active) {
       continue
@@ -103,7 +103,7 @@ fn draw_bullets(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the score, wave, lives counters, key hints, and game-over overlay.
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_text("ASTEROID SALVAGE 2026", 18, 14, 30, @raylib.skyblue)
   @raylib.draw_text("Score: \{game.score}", 18, 52, 24, @raylib.raywhite)
   @raylib.draw_text("Wave: \{game.wave}", 18, 80, 22, @raylib.raywhite)
@@ -127,9 +127,9 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.begin_drawing()
   @raylib.clear_background(@raylib.Color::new(7, 9, 18, 255))
   draw_starfield()
-  draw_rocks(game)
-  draw_bullets(game)
-  draw_ship(game)
-  draw_hud(game)
+  game.draw_rocks()
+  game.draw_bullets()
+  game.draw_ship()
+  game.draw_hud()
   @raylib.end_drawing()
 }

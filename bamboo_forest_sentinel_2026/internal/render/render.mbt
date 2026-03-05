@@ -42,7 +42,7 @@ fn draw_meter(
 
 ///|
 /// Draws the forest background: a dark green fill, 34 gently swaying bamboo stalks behind the world area, and 12 subtle horizontal gradient stripes across the screen.
-fn draw_forest_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_forest_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(9, 24, 14, 255))
 
   for i in 0..<34 {
@@ -118,7 +118,7 @@ fn draw_corridors() -> Unit {
 
 ///|
 /// Draws each beacon as a health-ratio-colored filled circle with an outline, a small integrity bar above it, a damage pulse ring on hit, and a "B#" label.
-fn draw_beacons(game : @types.Game) -> Unit {
+fn @types.Game::draw_beacons(game : @types.Game) -> Unit {
   for i in 0..<game.beacons.length() {
     let ratio = @types.clampf(
       game.beacons[i].integrity / @types.beacon_integrity_max,
@@ -187,7 +187,7 @@ fn draw_beacons(game : @types.Game) -> Unit {
 
 ///|
 /// Draws every trap slot as an empty circle outline; for active traps also draws a filled center, trigger-radius ring, a rearm progress ring, and a flash burst circle when recently triggered.
-fn draw_traps(game : @types.Game) -> Unit {
+fn @types.Game::draw_traps(game : @types.Game) -> Unit {
   for trap in game.traps {
     @raylib.draw_circle_lines(
       trap.x.to_int(),
@@ -241,7 +241,7 @@ fn draw_traps(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all active enemies as kind-colored filled circles with a slow-effect outline ring, a dark border, and a small HP bar above each one.
-fn draw_enemies(game : @types.Game) -> Unit {
+fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
   for enemy in game.enemies {
     if not(enemy.active) {
       continue
@@ -298,7 +298,7 @@ fn draw_enemies(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the player with a dash glow circle, a sweep expanding ring during moon-sweep FX, a slash line and tip circle during an attack, a body circle with outline, and a facing-direction nose dot.
-fn draw_player(game : @types.Game) -> Unit {
+fn @types.Game::draw_player(game : @types.Game) -> Unit {
   if game.player.dash_t > 0.0 {
     @raylib.draw_circle(
       game.player.x.to_int(),
@@ -365,7 +365,7 @@ fn draw_player(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the HUD panel showing the game title, night/score/best/kills, energy, sweep charge, trap cooldown, and beacon integrity meters, plus active enemy and spawn pool counts and full control hints.
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.hud_x,
     @types.hud_y,
@@ -509,7 +509,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a fading status text strip near the top of the world area; does nothing when the status timer has elapsed.
-fn draw_status_strip(game : @types.Game) -> Unit {
+fn @types.Game::draw_status_strip(game : @types.Game) -> Unit {
   if game.status_t <= 0.0 {
     return
   }
@@ -542,7 +542,7 @@ fn draw_status_strip(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the "Night N" banner centered in the world area, fading out as the night-banner timer elapses; does nothing outside the Playing state or when the timer has expired.
-fn draw_night_banner(game : @types.Game) -> Unit {
+fn @types.Game::draw_night_banner(game : @types.Game) -> Unit {
   if game.state != Playing || game.night_banner_t <= 0.0 {
     return
   }
@@ -618,7 +618,7 @@ fn draw_paused_overlay() -> Unit {
 
 ///|
 /// Draws the game-over overlay with a dark red tint, a "GAME OVER" heading, the game-over reason, nights survived, final score with best score, and a restart prompt.
-fn draw_game_over_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -656,15 +656,15 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 ///|
 /// Renders the full frame for the current game state.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_forest_background(game)
+  game.draw_forest_background()
   draw_corridors()
-  draw_traps(game)
-  draw_beacons(game)
-  draw_enemies(game)
-  draw_player(game)
-  draw_hud(game)
-  draw_night_banner(game)
-  draw_status_strip(game)
+  game.draw_traps()
+  game.draw_beacons()
+  game.draw_enemies()
+  game.draw_player()
+  game.draw_hud()
+  game.draw_night_banner()
+  game.draw_status_strip()
 
   if game.shake_t > 0.0 {
     let alpha = (@types.clampf(game.shake_t / @types.shake_hit_time, 0.0, 1.0) *
@@ -681,7 +681,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   match game.state {
     Title => draw_title_overlay()
     Paused => draw_paused_overlay()
-    GameOver => draw_game_over_overlay(game)
+    GameOver => game.draw_game_over_overlay()
     Playing => ()
   }
 }

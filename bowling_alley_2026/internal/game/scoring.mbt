@@ -32,7 +32,7 @@ fn show_roll(v : Int) -> String {
 
 ///|
 /// Resets the roll log, frame totals array, score, and roll count to zero.
-fn clear_rolls(game : @types.Game) -> Unit {
+fn @types.Game::clear_rolls(game : @types.Game) -> Unit {
   game.roll_count = 0
   for i in 0..<game.rolls.length() {
     game.rolls[i] = 0
@@ -45,7 +45,7 @@ fn clear_rolls(game : @types.Game) -> Unit {
 
 ///|
 /// Appends a knocked-pin count to the roll log if capacity allows.
-fn push_roll(game : @types.Game, knocked : Int) -> Unit {
+fn @types.Game::push_roll(game : @types.Game, knocked : Int) -> Unit {
   if game.roll_count >= game.rolls.length() {
     return
   }
@@ -55,7 +55,7 @@ fn push_roll(game : @types.Game, knocked : Int) -> Unit {
 
 ///|
 /// Walks the full roll log to recalculate per-frame running totals and the overall score using standard bowling rules.
-fn recompute_score(game : @types.Game) -> Unit {
+fn @types.Game::recompute_score(game : @types.Game) -> Unit {
   for i in 0..<10 {
     game.frame_totals[i] = -1
   }
@@ -129,7 +129,7 @@ fn recompute_score(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the roll-log index of the first delivery in the given frame number.
-fn frame_start_roll_idx(game : @types.Game, target : Int) -> Int {
+fn @types.Game::frame_start_roll_idx(game : @types.Game, target : Int) -> Int {
   let mut idx : Int = 0
 
   for frame in 0..<target {
@@ -154,7 +154,7 @@ fn frame_start_roll_idx(game : @types.Game, target : Int) -> Int {
 ///|
 /// Returns formatted roll marks for a frame as displayed on the scoreboard.
 pub fn frame_marks(game : @types.Game, frame : Int) -> (String, String, String) {
-  let idx : Int = frame_start_roll_idx(game, frame)
+  let idx : Int = game.frame_start_roll_idx(frame)
   let a : Int = maybe_roll(game.rolls, game.roll_count, idx)
   let b : Int = maybe_roll(game.rolls, game.roll_count, idx + 1)
   let c : Int = maybe_roll(game.rolls, game.roll_count, idx + 2)

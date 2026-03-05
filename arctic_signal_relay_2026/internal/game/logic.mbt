@@ -1,6 +1,6 @@
 ///|
 /// Deactivates all towers and resets their fields to zero.
-fn clear_towers(game : @types.Game) -> Unit {
+fn @types.Game::clear_towers(game : @types.Game) -> Unit {
   for tower in game.towers {
     tower.active = false
     tower.x = 0.0
@@ -13,7 +13,7 @@ fn clear_towers(game : @types.Game) -> Unit {
 
 ///|
 /// Deactivates all storms and resets their fields to zero.
-fn clear_storms(game : @types.Game) -> Unit {
+fn @types.Game::clear_storms(game : @types.Game) -> Unit {
   for storm in game.storms {
     storm.active = false
     storm.x = 0.0
@@ -54,14 +54,14 @@ fn stage_tower_need(stage : Int, idx : Int) -> Int {
 
 ///|
 /// Sets the in-game hint text and its display duration in seconds.
-fn set_hint(game : @types.Game, text : String, ttl : Float) -> Unit {
+fn @types.Game::set_hint(game : @types.Game, text : String, ttl : Float) -> Unit {
   game.hint_text = text
   game.hint_t = ttl
 }
 
 ///|
 /// Returns true if the candidate position `(x, y)` is far enough from the depot and all previously placed towers to be a valid tower spawn location.
-fn tower_spot_ok(
+fn @types.Game::tower_spot_ok(
   game : @types.Game,
   placed : Int,
   x : Float,
@@ -86,9 +86,9 @@ fn tower_spot_ok(
 
 ///|
 /// Resets and configures towers, storms, rover state, and objectives for the given stage number, then transitions the game to the Play state.
-fn setup_stage(game : @types.Game, stage : Int) -> Unit {
-  clear_towers(game)
-  clear_storms(game)
+fn @types.Game::setup_stage(game : @types.Game, stage : Int) -> Unit {
+  game.clear_towers()
+  game.clear_storms()
 
   game.state = Play
   game.stage = if stage < 1 { 1 } else { stage }
@@ -132,7 +132,7 @@ fn setup_stage(game : @types.Game, stage : Int) -> Unit {
         @types.world_top() + 120.0,
         @types.world_bottom() - 120.0,
       )
-      if tower_spot_ok(game, i, cand_x, cand_y) {
+      if game.tower_spot_ok(i, cand_x, cand_y) {
         tx = cand_x
         ty = cand_y
         break
@@ -196,14 +196,14 @@ fn setup_stage(game : @types.Game, stage : Int) -> Unit {
     )
   }
 
-  set_hint(game, "Load cells at depot, deliver to relay towers", 2.2)
+  game.set_hint("Load cells at depot, deliver to relay towers", 2.2)
 }
 
 ///|
 /// Initialises the game to the Title state with decorative towers and storms for the title screen backdrop.
 pub fn init_title_scene(game : @types.Game) -> Unit {
-  clear_towers(game)
-  clear_storms(game)
+  game.clear_towers()
+  game.clear_storms()
 
   game.state = Title
   game.stage = 1
@@ -224,7 +224,7 @@ pub fn init_title_scene(game : @types.Game) -> Unit {
   game.result_note = ""
   game.result_win = false
   game.flash_t = 0.0
-  set_hint(game, "Arctic relay prep", 0.0)
+  game.set_hint("Arctic relay prep", 0.0)
 
   for i in 0..<3 {
     game.towers[i].active = true
@@ -251,7 +251,7 @@ pub fn init_title_scene(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the index of the nearest active, incomplete tower within interaction range of `(x, y)`, or -1 if none is found.
-fn closest_pending_tower(game : @types.Game, x : Float, y : Float) -> Int {
+fn @types.Game::closest_pending_tower(game : @types.Game, x : Float, y : Float) -> Int {
   let mut best_idx = -1
   let mut best_d2 = @types.tower_interact_r() * @types.tower_interact_r()
 
@@ -275,7 +275,7 @@ fn closest_pending_tower(game : @types.Game, x : Float, y : Float) -> Int {
 
 ///|
 /// Updates the rover's `in_depot` flag and `nearby_tower` index based on its current position.
-fn update_proximity(game : @types.Game) -> Unit {
+fn @types.Game::update_proximity(game : @types.Game) -> Unit {
   game.in_depot = @types.dist2(
       game.rover_x,
       game.rover_y,
@@ -283,12 +283,12 @@ fn update_proximity(game : @types.Game) -> Unit {
       @types.depot_y(),
     ) <=
     @types.depot_r() * @types.depot_r()
-  game.nearby_tower = closest_pending_tower(game, game.rover_x, game.rover_y)
+  game.nearby_tower = game.closest_pending_tower(game.rover_x, game.rover_y)
 }
 
 ///|
 /// Advances all active storm cells by `dt` seconds, applying oscillating drift and bouncing them off the world boundary.
-fn update_storms(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_storms(game : @types.Game, dt : Float) -> Unit {
   let left = @types.world_left() + 20.0
   let right = @types.world_right() - 20.0
   let top = @types.world_top() + 20.0
@@ -327,7 +327,7 @@ fn update_storms(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Returns the combined storm intensity, wind X, and wind Y acting on position `(x, y)` from all active storms.
-fn storm_effect_at(
+fn @types.Game::storm_effect_at(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -367,7 +367,7 @@ fn storm_effect_at(
 
 ///|
 /// Applies player input and storm wind forces to the rover's velocity, clamps speed, and moves the rover while keeping it within the world boundary.
-fn update_rover(
+fn @types.Game::update_rover(
   game : @types.Game,
   dt : Float,
   intensity : Float,
@@ -437,7 +437,7 @@ fn update_rover(
 
 ///|
 /// Drains rover energy and heat based on movement speed and storm intensity, and recharges both while the rover is in the depot.
-fn update_resources(game : @types.Game, dt : Float, intensity : Float) -> Unit {
+fn @types.Game::update_resources(game : @types.Game, dt : Float, intensity : Float) -> Unit {
   let speed = game.rover_vx.abs() + game.rover_vy.abs()
   let energy_drain = @types.energy_idle_drain +
     speed * @types.energy_move_drain +
@@ -458,7 +458,7 @@ fn update_resources(game : @types.Game, dt : Float, intensity : Float) -> Unit {
 
 ///|
 /// Processes a player action press: loads a power cell at the depot or delivers one to a nearby tower, updating cargo, objectives, timer bonus, and hint text accordingly.
-fn apply_action(game : @types.Game) -> Unit {
+fn @types.Game::apply_action(game : @types.Game) -> Unit {
   if not(game.input_action_press) {
     return
   }
@@ -466,17 +466,17 @@ fn apply_action(game : @types.Game) -> Unit {
   if game.in_depot {
     if game.cargo_cells < @types.cargo_capacity {
       game.cargo_cells = game.cargo_cells + 1
-      set_hint(game, "Power cell secured in cargo bay", 1.0)
+      game.set_hint("Power cell secured in cargo bay", 1.0)
       game.flash_t = 0.12
     } else {
-      set_hint(game, "Cargo bay is full", 0.9)
+      game.set_hint("Cargo bay is full", 0.9)
     }
     return
   }
 
   if game.nearby_tower >= 0 {
     if game.cargo_cells <= 0 {
-      set_hint(game, "No power cell in cargo", 0.9)
+      game.set_hint("No power cell in cargo", 0.9)
       return
     }
 
@@ -491,20 +491,20 @@ fn apply_action(game : @types.Game) -> Unit {
         let bonus = @types.tower_online_bonus_base +
           Float::from_int(game.stage) * @types.tower_online_bonus_step
         game.timer_s = game.timer_s + bonus
-        set_hint(game, "Relay online, +\{bonus.to_int()}s", 1.3)
+        game.set_hint("Relay online, +\{bonus.to_int()}s", 1.3)
       } else {
-        set_hint(game, "Relay charge delivered", 0.8)
+        game.set_hint("Relay charge delivered", 0.8)
       }
     }
     return
   }
 
-  set_hint(game, "Move close to depot or a relay tower", 0.8)
+  game.set_hint("Move close to depot or a relay tower", 0.8)
 }
 
 ///|
 /// Transitions the game to the Result state, records the win/loss outcome with a note, triggers a flash effect, and updates `best_stage` on a win.
-fn set_result(game : @types.Game, win : Bool, note : String) -> Unit {
+fn @types.Game::set_result(game : @types.Game, win : Bool, note : String) -> Unit {
   game.state = Result
   game.result_win = win
   game.result_note = note
@@ -519,22 +519,22 @@ fn set_result(game : @types.Game, win : Bool, note : String) -> Unit {
 
 ///|
 /// Advances the Play state by one frame: ticks the mission timer, updates storms, applies storm effects to the rover, updates resources, animates tower pulses, processes action input, and checks win/loss conditions.
-fn update_play_state(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_play_state(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
     init_title_scene(game)
     return
   }
 
   game.timer_s = game.timer_s - dt
-  update_storms(game, dt)
+  game.update_storms(dt)
 
-  let effect = storm_effect_at(game, game.rover_x, game.rover_y)
+  let effect = game.storm_effect_at(game.rover_x, game.rover_y)
   game.storm_intensity = effect.0
 
-  update_rover(game, dt, effect.0, effect.1, effect.2)
+  game.update_rover(dt, effect.0, effect.1, effect.2)
 
-  update_proximity(game)
-  update_resources(game, dt, game.storm_intensity)
+  game.update_proximity()
+  game.update_resources(dt, game.storm_intensity)
 
   for i in 0..<game.towers.length() {
     if game.towers[i].active {
@@ -543,25 +543,25 @@ fn update_play_state(game : @types.Game, dt : Float) -> Unit {
     }
   }
 
-  apply_action(game)
+  game.apply_action()
 
   if game.objective_total > 0 && game.objective_done >= game.objective_total {
-    set_result(game, true, "All relay towers synchronized")
+    game.set_result(true, "All relay towers synchronized")
     return
   }
 
   if game.timer_s <= 0.0 {
-    set_result(game, false, "Shift timer expired")
+    game.set_result(false, "Shift timer expired")
     return
   }
 
   if game.rover_energy <= 0.0 {
-    set_result(game, false, "Battery depleted in whiteout")
+    game.set_result(false, "Battery depleted in whiteout")
     return
   }
 
   if game.rover_heat <= 0.0 {
-    set_result(game, false, "Rover heat loss critical")
+    game.set_result(false, "Rover heat loss critical")
     return
   }
 }
@@ -576,27 +576,27 @@ pub fn update_game(game : @types.Game, dt0 : Float) -> Unit {
 
   match game.state {
     Title => {
-      update_title_input(game)
-      update_storms(game, dt)
+      game.update_title_input()
+      game.update_storms(dt)
       if game.input_start_press {
-        setup_stage(game, 1)
+        game.setup_stage(1)
       }
     }
     Play => {
-      update_play_input(game)
-      update_play_state(game, dt)
+      game.update_play_input()
+      game.update_play_state(dt)
     }
     Result => {
-      update_result_input(game)
+      game.update_result_input()
       if game.input_next_press {
         let next_stage = if game.result_win {
           game.stage + 1
         } else {
           game.stage
         }
-        setup_stage(game, next_stage)
+        game.setup_stage(next_stage)
       } else if game.input_restart_press {
-        setup_stage(game, 1)
+        game.setup_stage(1)
       }
     }
   }

@@ -1,6 +1,6 @@
 ///|
 /// Zeroes all input axes and clears all single-frame action flags before reading new hardware state.
-fn clear_input(game : @types.Game) -> Unit {
+fn @types.Game::clear_input(game : @types.Game) -> Unit {
   game.input_x = 0.0
   game.input_y = 0.0
   game.input_burst_press = false
@@ -10,8 +10,8 @@ fn clear_input(game : @types.Game) -> Unit {
 
 ///|
 /// Reads keyboard, mouse, and touch input for the Title state and sets `input_restart_press` when the start button is activated.
-fn update_title_input(game : @types.Game) -> Unit {
-  clear_input(game)
+fn @types.Game::update_title_input(game : @types.Game) -> Unit {
+  game.clear_input()
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -42,8 +42,8 @@ fn update_title_input(game : @types.Game) -> Unit {
 
 ///|
 /// Reads directional keys and touch D-pad into `input_x/y`, sets burst and reel action flags from keyboard or touch buttons.
-fn update_play_input(game : @types.Game) -> Unit {
-  clear_input(game)
+fn @types.Game::update_play_input(game : @types.Game) -> Unit {
+  game.clear_input()
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -161,8 +161,8 @@ fn update_play_input(game : @types.Game) -> Unit {
 
 ///|
 /// Reads keyboard, mouse, and touch input for the result screens and sets `input_restart_press` when the retry button is activated.
-fn update_result_input(game : @types.Game) -> Unit {
-  clear_input(game)
+fn @types.Game::update_result_input(game : @types.Game) -> Unit {
+  game.clear_input()
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold

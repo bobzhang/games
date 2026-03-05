@@ -1,5 +1,5 @@
 ///|
-fn draw_enemy_counter(game : @types.Game, x : Int, y : Int) -> Unit {
+fn @types.Game::draw_enemy_counter(game : @types.Game, x : Int, y : Int) -> Unit {
   let pending = game.enemies_to_spawn - game.enemies_spawned
   let remaining = game.enemies_alive + (if pending > 0 { pending } else { 0 })
   @types.draw_shadow_text("TROOPS", x, y, 18, @raylib.raywhite)
@@ -19,7 +19,7 @@ fn draw_enemy_counter(game : @types.Game, x : Int, y : Int) -> Unit {
 }
 
 ///|
-fn draw_player_card(
+fn @types.Game::draw_player_card(
   game : @types.Game,
   player_index : Int,
   x : Int,
@@ -78,7 +78,7 @@ fn draw_player_card(
 }
 
 ///|
-fn draw_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.panel_x,
     @types.map_offset_y,
@@ -182,10 +182,9 @@ fn draw_panel(game : @types.Game) -> Unit {
     },
   )
 
-  draw_enemy_counter(game, @types.panel_x + 20, @types.map_offset_y + 158)
+  game.draw_enemy_counter(@types.panel_x + 20, @types.map_offset_y + 158)
 
-  draw_player_card(
-    game,
+  game.draw_player_card(
     0,
     @types.panel_x + 12,
     @types.map_offset_y + 330,
@@ -194,8 +193,7 @@ fn draw_panel(game : @types.Game) -> Unit {
   )
 
   if game.coop_enabled {
-    draw_player_card(
-      game,
+    game.draw_player_card(
       1,
       @types.panel_x + 12,
       @types.map_offset_y + 444,
@@ -283,7 +281,7 @@ fn draw_panel(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_menu_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_menu_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -367,7 +365,7 @@ fn draw_menu_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stage_intro_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_stage_intro_overlay(game : @types.Game) -> Unit {
   let alpha = @types.clampf(
     game.stage_intro_timer / @types.stage_intro_time,
     0.0,
@@ -427,7 +425,7 @@ fn draw_stage_intro_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_pause_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_pause_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -457,7 +455,7 @@ fn draw_pause_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_stage_clear_overlay(game : @types.Game) -> Unit {
   let t = @types.clampf(
     1.0 - game.stage_clear_timer / @types.stage_clear_time,
     0.0,
@@ -491,7 +489,7 @@ fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_game_over_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -516,7 +514,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_campaign_clear_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_campaign_clear_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -554,19 +552,19 @@ fn draw_campaign_clear_overlay(game : @types.Game) -> Unit {
 ///|
 /// Draws right-panel HUD and state overlays.
 pub fn draw_ui(game : @types.Game) -> Unit {
-  draw_panel(game)
+  game.draw_panel()
 
   if game.state == Menu {
-    draw_menu_overlay(game)
+    game.draw_menu_overlay()
   } else if game.state == StageIntro {
-    draw_stage_intro_overlay(game)
+    game.draw_stage_intro_overlay()
   } else if game.state == Paused {
-    draw_pause_overlay(game)
+    game.draw_pause_overlay()
   } else if game.state == StageClear {
-    draw_stage_clear_overlay(game)
+    game.draw_stage_clear_overlay()
   } else if game.state == GameOver {
-    draw_game_over_overlay(game)
+    game.draw_game_over_overlay()
   } else if game.state == CampaignClear {
-    draw_campaign_clear_overlay(game)
+    game.draw_campaign_clear_overlay()
   }
 }

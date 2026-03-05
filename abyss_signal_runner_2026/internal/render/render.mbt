@@ -59,7 +59,7 @@ fn draw_value_bar(
 
 ///|
 /// Returns a random camera shake displacement proportional to the remaining shake timer, or `(0, 0)` when no shake is active.
-fn shake_offset(game : @types.Game) -> (Float, Float) {
+fn @types.Game::shake_offset(game : @types.Game) -> (Float, Float) {
   if game.shake_t <= 0.0 {
     (0.0, 0.0)
   } else {
@@ -70,7 +70,7 @@ fn shake_offset(game : @types.Game) -> (Float, Float) {
 
 ///|
 /// Draws the deep-sea gradient background, two ambient glow circles, and 120 pseudo-random pulsing star particles.
-fn draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -125,7 +125,7 @@ fn draw_backdrop(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws the procedural cave walls row-by-row using dark fill rectangles on each side and glowing edge lines with a pulsing bioluminescent color.
-fn draw_cave(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_cave(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let step = 14
 
   for yi = 0; yi < @types.screen_h; yi = yi + step {
@@ -386,7 +386,7 @@ fn draw_obj_scrap(
 
 ///|
 /// Iterates over all active objects and dispatches to the appropriate per-kind draw function, skipping cloaked objects while sonar is inactive.
-fn draw_objects(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_objects(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for o in game.objs {
     if not(o.active) {
       continue
@@ -436,7 +436,7 @@ fn draw_objects(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws all active trail segments as small rectangles fading by their remaining life, using teal for dash trails and pale blue for wake trails.
-fn draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for t in game.trails {
     if not(t.active) {
       continue
@@ -461,7 +461,7 @@ fn draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws all active particles as small circles fading by remaining life, colored by kind: red-pink for damage, sky-blue for sonar, and mint-green for collection effects.
-fn draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -487,7 +487,7 @@ fn draw_particles(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws all active ripples as expanding circle outlines fading by remaining life, colored violet for sonar ripples and cyan for standard wake ripples.
-fn draw_ripples(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_ripples(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for r in game.ripples {
     if not(r.active) {
       continue
@@ -511,7 +511,7 @@ fn draw_ripples(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws the player submarine with a pulsing body, highlight dot, velocity-scaled tail fin, active-dash ring, invulnerability shield flash, and a wake trail emitter.
-fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let px = game.hero.x + cam_x
   let py = game.hero.y + cam_y
 
@@ -590,7 +590,7 @@ fn cooldown_text(cd : Float, total : Float) -> String {
 
 ///|
 /// Draws the play HUD: hull and oxygen bars, dash and sonar cooldown panels, score/best/stage panel, depth progress bar, and the active combo multiplier banner.
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   draw_value_bar(24, 20, 280, 26, game.hull, @types.hp_col(), "HULL")
   draw_value_bar(24, 54, 280, 26, game.oxygen, @types.oxygen_col(), "OXY")
 
@@ -771,7 +771,7 @@ fn draw_button_hint(
 
 ///|
 /// Draws all six touch control buttons (left, right, up, down, dash, sonar) using the current input state to highlight active buttons.
-fn draw_touch_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   let left = @types.btn_left_rect()
   let right = @types.btn_right_rect()
   let up = @types.btn_up_rect()
@@ -789,7 +789,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the title screen overlay with the game title, subtitle lines, a hoverable START DIVE button, a controls reference panel, and the best score if one exists.
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -906,7 +906,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the stage-clear overlay with an eased-in expanding panel showing the cleared stage number, a loading message, and a prompt to continue early.
-fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_stage_clear_overlay(game : @types.Game) -> Unit {
   let t = @types.ease_out_quad(
     @types.clampf(game.result_t / @types.stage_clear_delay, 0.0, 1.0),
   )
@@ -950,7 +950,7 @@ fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the game-over overlay with a darkened screen tint, "SIGNAL LOST" header, final score and stats, and a hoverable RETRY button.
-fn draw_game_over_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -1032,7 +1032,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws an expanding sonar ring centered on the player that fades out as the sonar timer elapses; does nothing when sonar is inactive.
-fn draw_signal_pulse(game : @types.Game) -> Unit {
+fn @types.Game::draw_signal_pulse(game : @types.Game) -> Unit {
   if game.sonar_t <= 0.0 {
     return
   }
@@ -1051,7 +1051,7 @@ fn draw_signal_pulse(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a brief tutorial hint bar at the bottom of the screen that fades out after the first 15 seconds of play.
-fn draw_play_hint(game : @types.Game) -> Unit {
+fn @types.Game::draw_play_hint(game : @types.Game) -> Unit {
   if game.hint_t > 15.0 {
     return
   }
@@ -1077,12 +1077,12 @@ fn draw_play_hint(game : @types.Game) -> Unit {
 
 ///|
 /// Composites the full world layer in depth order: trails, ripples, objects, particles, and the player.
-fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
-  draw_trails(game, cam_x, cam_y)
-  draw_ripples(game, cam_x, cam_y)
-  draw_objects(game, cam_x, cam_y)
-  draw_particles(game, cam_x, cam_y)
-  draw_player(game, cam_x, cam_y)
+fn @types.Game::draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+  game.draw_trails(cam_x, cam_y)
+  game.draw_ripples(cam_x, cam_y)
+  game.draw_objects(cam_x, cam_y)
+  game.draw_particles(cam_x, cam_y)
+  game.draw_player(cam_x, cam_y)
 }
 
 ///|
@@ -1090,14 +1090,14 @@ fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@types.bg_top())
 
-  let cam = shake_offset(game)
+  let cam = game.shake_offset()
   let cam_x = cam.0
   let cam_y = cam.1
 
-  draw_backdrop(game, cam_x, cam_y)
-  draw_cave(game, cam_x, cam_y)
-  draw_world(game, cam_x, cam_y)
-  draw_signal_pulse(game)
+  game.draw_backdrop(cam_x, cam_y)
+  game.draw_cave(cam_x, cam_y)
+  game.draw_world(cam_x, cam_y)
+  game.draw_signal_pulse()
 
   if game.flash_t > 0.0 {
     let a = (game.flash_t * 220.0).to_int().clamp(min=0, max=220)
@@ -1111,18 +1111,18 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   }
 
   if not(game.state is Title) {
-    draw_hud(game)
+    game.draw_hud()
   }
 
   match game.state {
-    Title => draw_title_overlay(game)
+    Title => game.draw_title_overlay()
     Play => {
-      draw_play_hint(game)
+      game.draw_play_hint()
       if game.touch_mode {
-        draw_touch_controls(game)
+        game.draw_touch_controls()
       }
     }
-    StageClear => draw_stage_clear_overlay(game)
-    GameOver => draw_game_over_overlay(game)
+    StageClear => game.draw_stage_clear_overlay()
+    GameOver => game.draw_game_over_overlay()
   }
 }

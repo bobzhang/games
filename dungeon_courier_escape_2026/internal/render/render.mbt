@@ -44,7 +44,7 @@ fn draw_meter(
 
 ///|
 /// Draws the dungeon floor with a scrolling grid, border walls, and decorative pillars.
-fn draw_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@types.col_bg_bottom())
 
   @raylib.draw_rectangle_gradient_v(
@@ -122,7 +122,7 @@ fn draw_background(game : @types.Game) -> Unit {
 
 ///|
 /// Draws each active exit as a pulsing blue ring with an "EXIT" label.
-fn draw_exits(game : @types.Game) -> Unit {
+fn @types.Game::draw_exits(game : @types.Game) -> Unit {
   for i in 0..<game.exits.length() {
     if not(game.exits[i].active) {
       continue
@@ -163,7 +163,7 @@ fn draw_exits(game : @types.Game) -> Unit {
 
 ///|
 /// Draws each active trap as a blinking pink circle with a small center dot.
-fn draw_traps(game : @types.Game) -> Unit {
+fn @types.Game::draw_traps(game : @types.Game) -> Unit {
   for trap in game.traps {
     if not(trap.active) {
       continue
@@ -198,7 +198,7 @@ fn draw_traps(game : @types.Game) -> Unit {
 
 ///|
 /// Draws each active, undelivered parcel as a pulsing yellow box with a crossbar.
-fn draw_parcels(game : @types.Game) -> Unit {
+fn @types.Game::draw_parcels(game : @types.Game) -> Unit {
   for parcel in game.parcels {
     if not(parcel.active) || parcel.delivered {
       continue
@@ -233,7 +233,7 @@ fn draw_parcels(game : @types.Game) -> Unit {
 
 ///|
 /// Draws each active smoke cloud as a translucent grey circle whose opacity fades with remaining life.
-fn draw_smokes(game : @types.Game) -> Unit {
+fn @types.Game::draw_smokes(game : @types.Game) -> Unit {
   for smoke in game.smokes {
     if not(smoke.active) {
       continue
@@ -314,7 +314,7 @@ fn draw_guard(g : @types.Guard) -> Unit {
 
 ///|
 /// Draws all active guards by calling `draw_guard` for each.
-fn draw_guards(game : @types.Game) -> Unit {
+fn @types.Game::draw_guards(game : @types.Game) -> Unit {
   for guard_val in game.guards {
     if guard_val.active {
       draw_guard(guard_val)
@@ -324,7 +324,7 @@ fn draw_guards(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the player circle with facing line, an optional carried-parcel indicator above the sprite, and a danger ring when stealth is critically low.
-fn draw_player(game : @types.Game) -> Unit {
+fn @types.Game::draw_player(game : @types.Game) -> Unit {
   @raylib.draw_circle(
     game.player.x.to_int(),
     game.player.y.to_int(),
@@ -378,7 +378,7 @@ fn draw_player(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the HUD bar with wave, delivery progress, score, smoke stock, countdown timer, health and stealth meters, control legend, and the transient hint banner.
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -497,7 +497,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a red tint over the play area whose opacity tracks `game.alarm_flash`.
-fn draw_alarm_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_alarm_overlay(game : @types.Game) -> Unit {
   if game.alarm_flash <= 0.0 {
     return
   }
@@ -645,7 +645,7 @@ fn draw_title_overlay() -> Unit {
 
 ///|
 /// Draws the retry overlay with the failure reason, wave reached, best wave, final score, delivery count, and a retry prompt.
-fn draw_retry_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_retry_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -726,19 +726,19 @@ fn draw_retry_overlay(game : @types.Game) -> Unit {
 ///|
 /// Renders the full frame for the current game state.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_background(game)
-  draw_exits(game)
-  draw_traps(game)
-  draw_parcels(game)
-  draw_smokes(game)
-  draw_guards(game)
-  draw_player(game)
-  draw_alarm_overlay(game)
-  draw_hud(game)
+  game.draw_background()
+  game.draw_exits()
+  game.draw_traps()
+  game.draw_parcels()
+  game.draw_smokes()
+  game.draw_guards()
+  game.draw_player()
+  game.draw_alarm_overlay()
+  game.draw_hud()
 
   match game.state {
     Title => draw_title_overlay()
-    Retry => draw_retry_overlay(game)
+    Retry => game.draw_retry_overlay()
     Play => ()
   }
 }

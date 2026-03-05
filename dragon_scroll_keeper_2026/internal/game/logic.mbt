@@ -1,13 +1,13 @@
 ///|
 /// Sets the HUD message string and its display lifetime in seconds.
-fn set_message(game : @types.Game, text : String, ttl : Float) -> Unit {
+fn @types.Game::set_message(game : @types.Game, text : String, ttl : Float) -> Unit {
   game.message = text
   game.message_t = ttl
 }
 
 ///|
 /// Resets every raider slot to its default inactive state.
-fn clear_raiders(game : @types.Game) -> Unit {
+fn @types.Game::clear_raiders(game : @types.Game) -> Unit {
   for i in 0..<game.raiders.length() {
     game.raiders[i] = @types.Raider::new()
   }
@@ -15,7 +15,7 @@ fn clear_raiders(game : @types.Game) -> Unit {
 
 ///|
 /// Resets every flame slot to its default inactive state.
-fn clear_flames(game : @types.Game) -> Unit {
+fn @types.Game::clear_flames(game : @types.Game) -> Unit {
   for i in 0..<game.flames.length() {
     game.flames[i] = @types.Flame::new()
   }
@@ -23,7 +23,7 @@ fn clear_flames(game : @types.Game) -> Unit {
 
 ///|
 /// Zeroes the severity of every breach and resets their raider and ember spawn cooldowns to fresh random values.
-fn clear_breaches(game : @types.Game) -> Unit {
+fn @types.Game::clear_breaches(game : @types.Game) -> Unit {
   for breach in game.breaches {
     breach.severity = 0.0
     breach.raider_cd = @types.randf(0.8, 1.6)
@@ -33,7 +33,7 @@ fn clear_breaches(game : @types.Game) -> Unit {
 
 ///|
 /// Repositions the keeper to the vault room centre and resets all keeper fields including stamina, ink shields, facing direction, and cooldown timers to their starting values.
-fn reset_keeper(game : @types.Game) -> Unit {
+fn @types.Game::reset_keeper(game : @types.Game) -> Unit {
   game.keeper.room = @types.vault_room
   game.keeper.x = @types.chamber_center_x()
   game.keeper.y = @types.chamber_center_y()
@@ -49,7 +49,7 @@ fn reset_keeper(game : @types.Game) -> Unit {
 
 ///|
 /// Increases the severity of the specified room's breach by `amount` (clamped to the max), and primes the raider and ember cooldowns if they are nearly expired.
-fn raise_breach(game : @types.Game, room : Int, amount : Float) -> Unit {
+fn @types.Game::raise_breach(game : @types.Game, room : Int, amount : Float) -> Unit {
   let idx = room.clamp(min=0, max=@types.chamber_count - 1)
   game.breaches[idx].severity = @types.clampf(
     game.breaches[idx].severity + amount,
@@ -67,11 +67,11 @@ fn raise_breach(game : @types.Game, room : Int, amount : Float) -> Unit {
 
 ///|
 /// Clears all entities, resets the keeper and all session stats to wave-1 starting values, transitions to the Playing state, and raises initial breaches to begin the first wave.
-fn start_new_run(game : @types.Game) -> Unit {
-  clear_breaches(game)
-  clear_raiders(game)
-  clear_flames(game)
-  reset_keeper(game)
+fn @types.Game::start_new_run(game : @types.Game) -> Unit {
+  game.clear_breaches()
+  game.clear_raiders()
+  game.clear_flames()
+  game.reset_keeper()
 
   game.state = Playing
   game.wave = 1
@@ -84,21 +84,21 @@ fn start_new_run(game : @types.Game) -> Unit {
   game.raiders_defeated = 0
   game.flames_cleared = 0
   game.seals_done = 0
-  set_message(
-    game, "Wave 1 begins. Seal breaches before the archive burns.", 2.4,
+  game.set_message(
+    "Wave 1 begins. Seal breaches before the archive burns.", 2.4,
   )
 
-  raise_breach(game, @types.vault_room, 26.0)
-  raise_breach(game, @types.randi(0, @types.chamber_count - 1), 20.0)
+  game.raise_breach(@types.vault_room, 26.0)
+  game.raise_breach(@types.randi(0, @types.chamber_count - 1), 20.0)
 }
 
 ///|
 /// Clears all entities, resets the keeper and session state, transitions to the Title state, and sets the title-screen idle message.
-fn return_to_title(game : @types.Game) -> Unit {
-  clear_breaches(game)
-  clear_raiders(game)
-  clear_flames(game)
-  reset_keeper(game)
+fn @types.Game::return_to_title(game : @types.Game) -> Unit {
+  game.clear_breaches()
+  game.clear_raiders()
+  game.clear_flames()
+  game.reset_keeper()
 
   game.state = Title
   game.wave = 1
@@ -107,12 +107,12 @@ fn return_to_title(game : @types.Game) -> Unit {
   game.breach_event_cd = 1.4
   game.scroll_integrity = @types.scroll_integrity_max
   game.seal_charges = @types.seal_charges_start
-  set_message(game, "Press J to begin guarding the dragon scroll vault.", 99.0)
+  game.set_message("Press J to begin guarding the dragon scroll vault.", 99.0)
 }
 
 ///|
 /// Transitions to the GameOver state (idempotent), updates best score, and sets the game-over message including the failure reason.
-fn enter_game_over(game : @types.Game, reason : String) -> Unit {
+fn @types.Game::enter_game_over(game : @types.Game, reason : String) -> Unit {
   if game.state == GameOver {
     return
   }
@@ -122,12 +122,12 @@ fn enter_game_over(game : @types.Game, reason : String) -> Unit {
     game.best_score = game.score
   }
 
-  set_message(game, reason + " Press J or R to restart.", 99.0)
+  game.set_message(reason + " Press J or R to restart.", 99.0)
 }
 
 ///|
 /// Returns the index of the first inactive raider slot, or -1 if all slots are occupied.
-fn alloc_raider(game : @types.Game) -> Int {
+fn @types.Game::alloc_raider(game : @types.Game) -> Int {
   for i in 0..<game.raiders.length() {
     if not(game.raiders[i].active) {
       return i
@@ -138,7 +138,7 @@ fn alloc_raider(game : @types.Game) -> Int {
 
 ///|
 /// Returns the index of the first inactive flame slot, or -1 if all slots are occupied.
-fn alloc_flame(game : @types.Game) -> Int {
+fn @types.Game::alloc_flame(game : @types.Game) -> Int {
   for i in 0..<game.flames.length() {
     if not(game.flames[i].active) {
       return i
@@ -149,8 +149,8 @@ fn alloc_flame(game : @types.Game) -> Int {
 
 ///|
 /// Allocates a raider slot, positions it near the specified room's breach anchor with wave-scaled HP, and returns whether the spawn succeeded.
-fn spawn_raider_from_room(game : @types.Game, room : Int) -> Bool {
-  let slot = alloc_raider(game)
+fn @types.Game::spawn_raider_from_room(game : @types.Game, room : Int) -> Bool {
+  let slot = game.alloc_raider()
   if slot < 0 {
     return false
   }
@@ -186,14 +186,14 @@ fn spawn_raider_from_room(game : @types.Game, room : Int) -> Bool {
 
 ///|
 /// Allocates a flame slot, clamping the position inside chamber bounds and the intensity to [10, 120], and returns whether the spawn succeeded.
-fn spawn_flame(
+fn @types.Game::spawn_flame(
   game : @types.Game,
   room : Int,
   x : Float,
   y : Float,
   intensity : Float,
 ) -> Bool {
-  let slot = alloc_flame(game)
+  let slot = game.alloc_flame()
   if slot < 0 {
     return false
   }
@@ -221,7 +221,7 @@ fn spawn_flame(
 
 ///|
 /// Deactivates a raider, increments the defeat counter, adds the score bonus, and partially replenishes the keeper's ink shield stock.
-fn defeat_raider(game : @types.Game, idx : Int, score_bonus : Int) -> Unit {
+fn @types.Game::defeat_raider(game : @types.Game, idx : Int, score_bonus : Int) -> Unit {
   if idx < 0 || idx >= game.raiders.length() || not(game.raiders[idx].active) {
     return
   }
@@ -237,7 +237,7 @@ fn defeat_raider(game : @types.Game, idx : Int, score_bonus : Int) -> Unit {
 
 ///|
 /// Returns the index of the nearest breach with positive severity in the given room within squared distance `max_d2`, or -1 if none qualify.
-fn nearest_open_breach_index(
+fn @types.Game::nearest_open_breach_index(
   game : @types.Game,
   room : Int,
   x : Float,
@@ -269,7 +269,7 @@ fn nearest_open_breach_index(
 
 ///|
 /// Returns the index of the nearest active raider in the given room within squared distance `max_d2`, or -1 if none qualify.
-fn nearest_raider_index(
+fn @types.Game::nearest_raider_index(
   game : @types.Game,
   room : Int,
   x : Float,
@@ -296,7 +296,7 @@ fn nearest_raider_index(
 
 ///|
 /// Returns the index of the nearest active flame in the given room within squared distance `max_d2`, or -1 if none qualify.
-fn nearest_flame_index(
+fn @types.Game::nearest_flame_index(
   game : @types.Game,
   room : Int,
   x : Float,
@@ -323,7 +323,7 @@ fn nearest_flame_index(
 
 ///|
 /// Moves the keeper by input axes at the appropriate speed, updates the facing direction, clamps position to chamber bounds, and handles room transitions through doorways on the left or right wall.
-fn update_keeper_motion(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_keeper_motion(game : @types.Game, dt : Float) -> Unit {
   let mut speed = @types.keeper_speed
   if game.keeper.extinguisher_mode {
     speed = speed * @types.keeper_mode_speed_scale
@@ -352,7 +352,7 @@ fn update_keeper_motion(game : @types.Game, dt : Float) -> Unit {
       (game.keeper.y - @types.door_center_y).abs() <= @types.door_half_h {
       game.keeper.room = game.keeper.room - 1
       next_x = right_wall - 1.0
-      set_message(game, "Entered " + @types.room_name(game.keeper.room), 0.45)
+      game.set_message("Entered " + @types.room_name(game.keeper.room), 0.45)
     } else {
       next_x = left_wall
     }
@@ -362,7 +362,7 @@ fn update_keeper_motion(game : @types.Game, dt : Float) -> Unit {
       (game.keeper.y - @types.door_center_y).abs() <= @types.door_half_h {
       game.keeper.room = game.keeper.room + 1
       next_x = left_wall + 1.0
-      set_message(game, "Entered " + @types.room_name(game.keeper.room), 0.45)
+      game.set_message("Entered " + @types.room_name(game.keeper.room), 0.45)
     } else {
       next_x = right_wall
     }
@@ -373,7 +373,7 @@ fn update_keeper_motion(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Decrements the action, shield cooldown, and shield duration timers, and regenerates stamina at the rate appropriate for the keeper's current mode.
-fn update_keeper_timers_and_resources(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_keeper_timers_and_resources(game : @types.Game, dt : Float) -> Unit {
   if game.keeper.action_cd > 0.0 {
     game.keeper.action_cd = @types.maxf(0.0, game.keeper.action_cd - dt)
   }
@@ -398,26 +398,25 @@ fn update_keeper_timers_and_resources(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Toggles the keeper between extinguisher mode and combat/sealing mode, and posts a brief status message.
-fn toggle_extinguisher_mode(game : @types.Game) -> Unit {
+fn @types.Game::toggle_extinguisher_mode(game : @types.Game) -> Unit {
   game.keeper.extinguisher_mode = not(game.keeper.extinguisher_mode)
   if game.keeper.extinguisher_mode {
-    set_message(game, "Extinguisher mode active.", 0.7)
+    game.set_message("Extinguisher mode active.", 0.7)
   } else {
-    set_message(game, "Combat and sealing mode active.", 0.7)
+    game.set_message("Combat and sealing mode active.", 0.7)
   }
 }
 
 ///|
 /// Spends stamina to strike the nearest raider in attack range, dealing wave-scaled damage, panicking it briefly, and defeating it with a score bonus when HP reaches zero.
-fn perform_attack_action(game : @types.Game) -> Unit {
+fn @types.Game::perform_attack_action(game : @types.Game) -> Unit {
   if game.keeper.stamina < @types.stamina_attack_cost {
-    set_message(game, "Stamina too low for a strike.", 0.55)
+    game.set_message("Stamina too low for a strike.", 0.55)
     return
   }
 
   let range2 = @types.attack_range * @types.attack_range
-  let idx = nearest_raider_index(
-    game,
+  let idx = game.nearest_raider_index(
     game.keeper.room,
     game.keeper.x,
     game.keeper.y,
@@ -425,7 +424,7 @@ fn perform_attack_action(game : @types.Game) -> Unit {
   )
 
   if idx < 0 {
-    set_message(game, "No raider in reach.", 0.45)
+    game.set_message("No raider in reach.", 0.45)
     return
   }
 
@@ -442,25 +441,24 @@ fn perform_attack_action(game : @types.Game) -> Unit {
   game.score = game.score + 8
 
   if game.raiders[idx].hp <= 0.0 {
-    defeat_raider(game, idx, 44 + game.wave * 4)
+    game.defeat_raider(idx, 44 + game.wave * 4)
   }
 }
 
 ///|
 /// Spends a seal charge and stamina to reduce the nearest breach's severity by a wave-scaled amount; awards score and replenishes ink shields when the breach is fully sealed.
-fn perform_seal_action(game : @types.Game) -> Unit {
+fn @types.Game::perform_seal_action(game : @types.Game) -> Unit {
   if game.seal_charges <= 0 {
-    set_message(game, "No seal charges left for this wave.", 0.65)
+    game.set_message("No seal charges left for this wave.", 0.65)
     return
   }
   if game.keeper.stamina < @types.stamina_seal_cost {
-    set_message(game, "Stamina too low to inscribe a seal.", 0.6)
+    game.set_message("Stamina too low to inscribe a seal.", 0.6)
     return
   }
 
   let range2 = @types.attack_range * @types.attack_range
-  let idx = nearest_open_breach_index(
-    game,
+  let idx = game.nearest_open_breach_index(
     game.keeper.room,
     game.keeper.x,
     game.keeper.y,
@@ -468,7 +466,7 @@ fn perform_seal_action(game : @types.Game) -> Unit {
   )
 
   if idx < 0 {
-    set_message(game, "Move closer to a breach to seal it.", 0.5)
+    game.set_message("Move closer to a breach to seal it.", 0.5)
     return
   }
 
@@ -494,23 +492,22 @@ fn perform_seal_action(game : @types.Game) -> Unit {
       @types.ink_shield_stock_max,
       game.keeper.ink_shields + 0.45,
     )
-    set_message(game, "Breach sealed. Ink shield reserve increased.", 1.0)
+    game.set_message("Breach sealed. Ink shield reserve increased.", 1.0)
   } else {
-    set_message(game, "Breach pressure reduced.", 0.55)
+    game.set_message("Breach pressure reduced.", 0.55)
   }
 }
 
 ///|
 /// Spends stamina to reduce the nearest flame's intensity by the extinguisher power; awards score and clears the flame slot when intensity reaches zero.
-fn perform_extinguish_action(game : @types.Game) -> Unit {
+fn @types.Game::perform_extinguish_action(game : @types.Game) -> Unit {
   if game.keeper.stamina < @types.stamina_extinguish_cost {
-    set_message(game, "Stamina too low to use extinguisher.", 0.55)
+    game.set_message("Stamina too low to use extinguisher.", 0.55)
     return
   }
 
   let range2 = @types.extinguisher_range * @types.extinguisher_range
-  let idx = nearest_flame_index(
-    game,
+  let idx = game.nearest_flame_index(
     game.keeper.room,
     game.keeper.x,
     game.keeper.y,
@@ -518,7 +515,7 @@ fn perform_extinguish_action(game : @types.Game) -> Unit {
   )
 
   if idx < 0 {
-    set_message(game, "No flame in extinguisher range.", 0.45)
+    game.set_message("No flame in extinguisher range.", 0.45)
     return
   }
 
@@ -535,24 +532,23 @@ fn perform_extinguish_action(game : @types.Game) -> Unit {
     game.flames[idx] = @types.Flame::new()
     game.flames_cleared = game.flames_cleared + 1
     game.score = game.score + 36 + game.wave * 3
-    set_message(game, "Flame extinguished.", 0.5)
+    game.set_message("Flame extinguished.", 0.5)
   }
 }
 
 ///|
 /// Dispatches the action button press to extinguish, seal, or attack depending on the keeper's current mode and the targets within range.
-fn handle_action_input(game : @types.Game) -> Unit {
+fn @types.Game::handle_action_input(game : @types.Game) -> Unit {
   if not(game.input_action_press) || game.keeper.action_cd > 0.0 {
     return
   }
 
   if game.keeper.extinguisher_mode {
-    perform_extinguish_action(game)
+    game.perform_extinguish_action()
     return
   }
 
-  let breach_idx = nearest_open_breach_index(
-    game,
+  let breach_idx = game.nearest_open_breach_index(
     game.keeper.room,
     game.keeper.x,
     game.keeper.y,
@@ -560,22 +556,21 @@ fn handle_action_input(game : @types.Game) -> Unit {
   )
 
   if breach_idx >= 0 && game.seal_charges > 0 {
-    perform_seal_action(game)
+    game.perform_seal_action()
   } else {
-    perform_attack_action(game)
+    game.perform_attack_action()
   }
 }
 
 ///|
 /// Consumes one ink shield stock to activate a burst that damages all raiders and quenches flames within the shield radius, partially restores scroll integrity, and awards score for each hit.
-fn trigger_ink_shield(game : @types.Game) -> Unit {
+fn @types.Game::trigger_ink_shield(game : @types.Game) -> Unit {
   if not(game.input_shield_press) {
     return
   }
 
   if game.keeper.shield_cd > 0.0 {
-    set_message(
-      game,
+    game.set_message(
       "Ink burst cooling down " +
       game.keeper.shield_cd.to_int().to_string() +
       "s",
@@ -585,7 +580,7 @@ fn trigger_ink_shield(game : @types.Game) -> Unit {
   }
 
   if game.keeper.ink_shields < 1.0 {
-    set_message(game, "No ink shield stock.", 0.5)
+    game.set_message("No ink shield stock.", 0.5)
     return
   }
 
@@ -617,7 +612,7 @@ fn trigger_ink_shield(game : @types.Game) -> Unit {
     raider_hits = raider_hits + 1
 
     if game.raiders[i].hp <= 0.0 {
-      defeat_raider(game, i, 30 + game.wave * 3)
+      game.defeat_raider(i, 30 + game.wave * 3)
     }
   }
 
@@ -652,12 +647,12 @@ fn trigger_ink_shield(game : @types.Game) -> Unit {
     game.scroll_integrity + 3.5,
   )
   game.score = game.score + 18 + raider_hits * 4 + flame_hits * 3
-  set_message(game, "Ink shield burst released.", 0.7)
+  game.set_message("Ink shield burst released.", 0.7)
 }
 
 ///|
 /// Advances the wave timer and, when the wave duration elapses, increments the wave counter, replenishes seal charges and ink shields, restores stamina and scroll integrity, awards wave-completion score, and raises two new breaches.
-fn update_wave_progress(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_wave_progress(game : @types.Game, dt : Float) -> Unit {
   game.wave_t = game.wave_t + dt
 
   if game.wave_t < game.wave_goal_t {
@@ -685,19 +680,16 @@ fn update_wave_progress(game : @types.Game, dt : Float) -> Unit {
     game.wave * 22 +
     game.scroll_integrity.to_int()
 
-  raise_breach(
-    game,
+  game.raise_breach(
     @types.randi(0, @types.chamber_count - 1),
     34.0 + Float::from_int(game.wave),
   )
-  raise_breach(
-    game,
+  game.raise_breach(
     @types.randi(0, @types.chamber_count - 1),
     16.0 + Float::from_int(game.wave),
   )
 
-  set_message(
-    game,
+  game.set_message(
     "Wave " + game.wave.to_string() + " surges. Charges replenished.",
     1.4,
   )
@@ -705,7 +697,7 @@ fn update_wave_progress(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Fires periodic breach events to raise pressure in random rooms, grows existing breaches by wave-scaled rate, spawns raiders and flames from breaches on their cooldowns, and returns the total scroll integrity drain for this frame.
-fn update_breach_system(game : @types.Game, dt : Float) -> Float {
+fn @types.Game::update_breach_system(game : @types.Game, dt : Float) -> Float {
   game.breach_event_cd = game.breach_event_cd - dt
 
   if game.breach_event_cd <= 0.0 {
@@ -721,7 +713,7 @@ fn update_breach_system(game : @types.Game, dt : Float) -> Float {
       let room = @types.randi(0, @types.chamber_count - 1)
       let pressure = @types.randf(12.0, 25.0) +
         Float::from_int(game.wave - 1) * 1.6
-      raise_breach(game, room, pressure)
+      game.raise_breach(room, pressure)
     }
 
     game.breach_event_cd = @types.maxf(
@@ -751,7 +743,7 @@ fn update_breach_system(game : @types.Game, dt : Float) -> Float {
 
     breach.raider_cd = breach.raider_cd - dt * (1.0 + pressure * 0.8)
     if breach.raider_cd <= 0.0 {
-      ignore(spawn_raider_from_room(game, breach.room))
+      ignore(game.spawn_raider_from_room(breach.room))
       breach.raider_cd = @types.maxf(
         @types.raider_spawn_cd_floor,
         @types.raider_spawn_cd_base -
@@ -764,8 +756,7 @@ fn update_breach_system(game : @types.Game, dt : Float) -> Float {
     breach.ember_cd = breach.ember_cd - dt * (1.0 + pressure * 0.5)
     if breach.ember_cd <= 0.0 {
       ignore(
-        spawn_flame(
-          game,
+        game.spawn_flame(
           breach.room,
           @types.breach_anchor_x(breach.room) + @types.randf(-26.0, 26.0),
           @types.breach_anchor_y(breach.room) + @types.randf(-24.0, 24.0),
@@ -787,7 +778,7 @@ fn update_breach_system(game : @types.Game, dt : Float) -> Float {
 
 ///|
 /// Moves all active raiders toward their room goal (or away from the keeper when panicked), advances them through doorways, inflicts integrity damage when they reach the vault core, drains keeper stamina on contact, and returns the total integrity loss for this frame.
-fn update_raiders(game : @types.Game, dt : Float) -> Float {
+fn @types.Game::update_raiders(game : @types.Game, dt : Float) -> Float {
   let mut integrity_loss : Float = 0.0
   let wavef = Float::from_int(game.wave - 1)
   let speed_base = @types.raider_speed_base +
@@ -882,7 +873,7 @@ fn update_raiders(game : @types.Game, dt : Float) -> Float {
 
 ///|
 /// Decays flame intensity each frame, feeds adjacent breach severity, spreads child flames when spread cooldown elapses, deactivates spent flames, and returns the total scroll integrity drain weighted by room and flame intensity.
-fn update_flames(game : @types.Game, dt : Float) -> Float {
+fn @types.Game::update_flames(game : @types.Game, dt : Float) -> Float {
   let mut integrity_loss : Float = 0.0
 
   for i in 0..<game.flames.length() {
@@ -920,8 +911,7 @@ fn update_flames(game : @types.Game, dt : Float) -> Float {
     if game.flames[i].spread_cd <= 0.0 {
       if game.flames[i].intensity >= 16.0 {
         ignore(
-          spawn_flame(
-            game,
+          game.spawn_flame(
             room,
             game.flames[i].x + @types.randf(-54.0, 54.0),
             game.flames[i].y + @types.randf(-42.0, 42.0),
@@ -944,38 +934,38 @@ fn update_flames(game : @types.Game, dt : Float) -> Float {
 
 ///|
 /// Handles the Title state: starts a new run when any of the action, shield, or restart inputs is pressed.
-fn update_title_state(game : @types.Game) -> Unit {
+fn @types.Game::update_title_state(game : @types.Game) -> Unit {
   if game.input_action_press ||
     game.input_shield_press ||
     game.input_restart_press {
-    start_new_run(game)
+    game.start_new_run()
   }
 }
 
 ///|
 /// Runs one Playing-state tick: handles pause and mode-toggle input, updates keeper timers/motion/abilities, advances wave progress, accumulates integrity loss from breaches/raiders/flames (reduced by active ink shield), and triggers game over when scroll integrity reaches zero.
-fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_playing_state(game : @types.Game, dt : Float) -> Unit {
   if game.input_pause_press {
     game.state = Paused
-    set_message(game, "Paused. P to resume, K for title.", 99.0)
+    game.set_message("Paused. P to resume, K for title.", 99.0)
     return
   }
 
   if game.input_cancel_press {
-    toggle_extinguisher_mode(game)
+    game.toggle_extinguisher_mode()
   }
 
-  update_keeper_timers_and_resources(game, dt)
-  update_keeper_motion(game, dt)
-  trigger_ink_shield(game)
-  handle_action_input(game)
+  game.update_keeper_timers_and_resources(dt)
+  game.update_keeper_motion(dt)
+  game.trigger_ink_shield()
+  game.handle_action_input()
 
-  update_wave_progress(game, dt)
+  game.update_wave_progress(dt)
 
   let mut integrity_loss : Float = 0.0
-  integrity_loss = integrity_loss + update_breach_system(game, dt)
-  integrity_loss = integrity_loss + update_raiders(game, dt)
-  integrity_loss = integrity_loss + update_flames(game, dt)
+  integrity_loss = integrity_loss + game.update_breach_system(dt)
+  integrity_loss = integrity_loss + game.update_raiders(dt)
+  integrity_loss = integrity_loss + game.update_flames(dt)
 
   if game.keeper.shield_t > 0.0 {
     integrity_loss = integrity_loss *
@@ -988,39 +978,39 @@ fn update_playing_state(game : @types.Game, dt : Float) -> Unit {
   )
 
   if game.scroll_integrity <= 0.0 {
-    enter_game_over(game, "The dragon scroll archive was lost.")
+    game.enter_game_over("The dragon scroll archive was lost.")
   }
 }
 
 ///|
 /// Handles the Paused state: resumes play on pause input, returns to title on cancel, and starts a new run on action or restart input.
-fn update_paused_state(game : @types.Game) -> Unit {
+fn @types.Game::update_paused_state(game : @types.Game) -> Unit {
   if game.input_pause_press {
     game.state = Playing
-    set_message(game, "Defense resumed.", 0.8)
+    game.set_message("Defense resumed.", 0.8)
     return
   }
 
   if game.input_cancel_press {
-    return_to_title(game)
+    game.return_to_title()
     return
   }
 
   if game.input_action_press || game.input_restart_press {
-    start_new_run(game)
+    game.start_new_run()
   }
 }
 
 ///|
 /// Handles the GameOver state: starts a new run on action or restart input, or returns to title on cancel input.
-fn update_game_over_state(game : @types.Game) -> Unit {
+fn @types.Game::update_game_over_state(game : @types.Game) -> Unit {
   if game.input_action_press || game.input_restart_press {
-    start_new_run(game)
+    game.start_new_run()
     return
   }
 
   if game.input_cancel_press {
-    return_to_title(game)
+    game.return_to_title()
   }
 }
 
@@ -1034,12 +1024,12 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     game.message_t = @types.maxf(0.0, game.message_t - step)
   }
 
-  update_input(game)
+  game.update_input()
 
   match game.state {
-    Title => update_title_state(game)
-    Playing => update_playing_state(game, step)
-    Paused => update_paused_state(game)
-    GameOver => update_game_over_state(game)
+    Title => game.update_title_state()
+    Playing => game.update_playing_state(step)
+    Paused => game.update_paused_state()
+    GameOver => game.update_game_over_state()
   }
 }

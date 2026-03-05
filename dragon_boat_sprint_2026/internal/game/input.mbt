@@ -1,6 +1,6 @@
 ///|
 /// Resets all input fields in the game's input snapshot to their neutral defaults.
-fn clear_input(game : @types.Game) -> Unit {
+fn @types.Game::clear_input(game : @types.Game) -> Unit {
   game.input.steer = 0.0
   game.input.paddle_pressed = false
   game.input.stabilize_down = false
@@ -12,8 +12,8 @@ fn clear_input(game : @types.Game) -> Unit {
 
 ///|
 /// Polls all keyboard keys and writes the current frame's input into the game snapshot.
-fn sample_input(game : @types.Game) -> Unit {
-  clear_input(game)
+fn @types.Game::sample_input(game : @types.Game) -> Unit {
+  game.clear_input()
 
   let mut steer : Float = 0.0
   if @raylib.is_key_down(@raylib.KeyA) || @raylib.is_key_down(@raylib.KeyLeft) {

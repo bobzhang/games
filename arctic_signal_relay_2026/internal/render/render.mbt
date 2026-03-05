@@ -38,7 +38,7 @@ fn draw_mask_rect(
 
 ///|
 /// Draws the full-screen gradient sky background with animated star particles.
-fn draw_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(8, 22, 38, 255))
 
   @raylib.draw_rectangle_gradient_v(
@@ -74,7 +74,7 @@ fn draw_background(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the world viewport background including the ice-grid overlay, border, and an animated depot glow circle.
-fn draw_world_back(game : @types.Game) -> Unit {
+fn @types.Game::draw_world_back(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.world_x0,
     @types.world_y0,
@@ -124,7 +124,7 @@ fn draw_world_back(game : @types.Game) -> Unit {
 
 ///|
 /// Draws lines from the depot to each active tower, with opacity proportional to delivery progress.
-fn draw_signal_links(game : @types.Game) -> Unit {
+fn @types.Game::draw_signal_links(game : @types.Game) -> Unit {
   for tower in game.towers {
     if not(tower.active) {
       continue
@@ -160,7 +160,7 @@ fn tower_col(active : Bool) -> @raylib.Color {
 
 ///|
 /// Draws all active relay towers with pulsing glow, delivery-slot indicators, interaction range ring, and a cell count label.
-fn draw_towers(game : @types.Game) -> Unit {
+fn @types.Game::draw_towers(game : @types.Game) -> Unit {
   for i in 0..<game.towers.length() {
     if not(game.towers[i].active) {
       continue
@@ -222,7 +222,7 @@ fn draw_towers(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the power cell depot including its base circle, outer ring, and an active-proximity highlight when the rover is docked.
-fn draw_depot(game : @types.Game) -> Unit {
+fn @types.Game::draw_depot(game : @types.Game) -> Unit {
   let x = @types.depot_x().to_int()
   let y = @types.depot_y().to_int()
 
@@ -268,7 +268,7 @@ fn draw_depot(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all active storm cells as translucent circles with swirling edge streaks to visualise wind direction.
-fn draw_storms(game : @types.Game) -> Unit {
+fn @types.Game::draw_storms(game : @types.Game) -> Unit {
   for storm in game.storms {
     if not(storm.active) {
       continue
@@ -310,7 +310,7 @@ fn draw_storms(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the rover body with energy/heat-tinted color, a direction indicator dot, and stacked cargo cell icons above.
-fn draw_rover(game : @types.Game) -> Unit {
+fn @types.Game::draw_rover(game : @types.Game) -> Unit {
   let x = game.rover_x.to_int()
   let y = game.rover_y.to_int()
 
@@ -365,7 +365,7 @@ fn draw_rover(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a blizzard fog overlay and visibility shadow mask around the rover when storm intensity is significant during Play.
-fn draw_whiteout(game : @types.Game) -> Unit {
+fn @types.Game::draw_whiteout(game : @types.Game) -> Unit {
   if game.state != Play || game.storm_intensity <= 0.02 {
     return
   }
@@ -491,7 +491,7 @@ fn draw_bar(
 
 ///|
 /// Draws the HUD side panel showing stage, timer, objective progress, cargo, energy, heat, storm load bars, control hints, and the transient hint message.
-fn draw_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.panel_x0,
     @types.world_y0,
@@ -680,7 +680,7 @@ fn draw_touch_btn(
 
 ///|
 /// Draws the D-pad directional buttons and the action button in the side panel during Play, with held-state highlighting.
-fn draw_touch_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   if game.state != Play {
     return
   }
@@ -794,7 +794,7 @@ fn draw_button(
 
 ///|
 /// Draws the full-screen title overlay with game title, description text, and the start button.
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -860,7 +860,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the full-screen result overlay with win/fail title, result note, objective summary, and primary/secondary action buttons.
-fn draw_result_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -937,20 +937,20 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 ///|
 /// Renders a complete frame: background, world, signal links, storms, towers, depot, rover, whiteout, HUD panel, touch controls, and the active state overlay.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_background(game)
-  draw_world_back(game)
-  draw_signal_links(game)
-  draw_storms(game)
-  draw_towers(game)
-  draw_depot(game)
-  draw_rover(game)
-  draw_whiteout(game)
-  draw_panel(game)
-  draw_touch_controls(game)
+  game.draw_background()
+  game.draw_world_back()
+  game.draw_signal_links()
+  game.draw_storms()
+  game.draw_towers()
+  game.draw_depot()
+  game.draw_rover()
+  game.draw_whiteout()
+  game.draw_panel()
+  game.draw_touch_controls()
 
   match game.state {
-    Title => draw_title_overlay(game)
+    Title => game.draw_title_overlay()
     Play => ()
-    Result => draw_result_overlay(game)
+    Result => game.draw_result_overlay()
   }
 }

@@ -1,6 +1,6 @@
 ///|
 /// Returns a random horizontal pixel offset when the screen-shake timer is active, or 0 otherwise.
-fn shake_dx(game : @types.Game) -> Int {
+fn @types.Game::shake_dx(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -10,7 +10,7 @@ fn shake_dx(game : @types.Game) -> Int {
 
 ///|
 /// Returns a random vertical pixel offset when the screen-shake timer is active, or 0 otherwise.
-fn shake_dy(game : @types.Game) -> Int {
+fn @types.Game::shake_dy(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -20,15 +20,15 @@ fn shake_dy(game : @types.Game) -> Int {
 
 ///|
 /// Returns a value oscillating between 0 and 1 using a sine wave at frequency `f` driven by `game.time_s`.
-fn pulse(game : @types.Game, f : Float) -> Float {
+fn @types.Game::pulse(game : @types.Game, f : Float) -> Float {
   0.5 + 0.5 * @math.sinf(game.time_s * f)
 }
 
 ///|
 /// Draws the deep-blue gradient background and the dark board backing rectangle.
-fn draw_background(game : @types.Game) -> Unit {
-  let a0 : Int = 24 + (pulse(game, 0.34) * 20.0).to_int()
-  let a1 : Int = 36 + (pulse(game, 0.52) * 26.0).to_int()
+fn @types.Game::draw_background(game : @types.Game) -> Unit {
+  let a0 : Int = 24 + (game.pulse(0.34) * 20.0).to_int()
+  let a1 : Int = 36 + (game.pulse(0.52) * 26.0).to_int()
 
   @raylib.clear_background(@raylib.Color::new(8, 10, 18, 255))
 
@@ -60,7 +60,7 @@ fn draw_background(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the base grid of floor and wall tiles with checkerboard shading and border lines.
-fn draw_grid_base(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_grid_base(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
       let rx : Int = @types.board_px(x) + ox
@@ -116,7 +116,7 @@ fn draw_grid_base(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Returns the shelf index at grid cell `(x, y)` for rendering purposes, or -1 if absent.
-fn shelf_index_at(game : @types.Game, x : Int, y : Int) -> Int {
+fn @types.Game::shelf_index_at(game : @types.Game, x : Int, y : Int) -> Int {
   for i in 0..<game.shelf_n {
     if game.shelf_x[i] == x && game.shelf_y[i] == y {
       return i
@@ -139,17 +139,17 @@ fn seal_index_at(x : Int, y : Int) -> Int {
 
 ///|
 /// Draws the three arcane seal circles with pulsing glow; filled green when a shelf is on top.
-fn draw_seals(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_seals(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for i in 0..<@types.seal_need {
     let p = @types.seal_pos(i)
     let cx : Int = @types.board_px(p.0) + @types.cell / 2 + ox
     let cy : Int = @types.board_py(p.1) + @types.cell / 2 + oy
-    let on : Bool = shelf_index_at(game, p.0, p.1) >= 0
+    let on : Bool = game.shelf_index_at(p.0, p.1) >= 0
 
     let glow : Int = if on {
       210
     } else {
-      100 + (pulse(game, 2.0 + Float::from_int(i)) * 66.0).to_int()
+      100 + (game.pulse(2.0 + Float::from_int(i)) * 66.0).to_int()
     }
 
     @raylib.draw_circle(
@@ -181,7 +181,7 @@ fn draw_seals(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws all uncollected pages as parchment rectangles with ruled lines and a soft glow aura.
-fn draw_pages(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_pages(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for i in 0..<@types.max_pages {
     if game.page_taken[i] {
       continue
@@ -193,7 +193,7 @@ fn draw_pages(game : @types.Game, ox : Int, oy : Int) -> Unit {
     let ry : Int = @types.board_py(y) + 12 + oy
 
     let glow : Int = 156 +
-      (pulse(game, 1.6 + Float::from_int(i) * 0.4) * 70.0).to_int()
+      (game.pulse(1.6 + Float::from_int(i) * 0.4) * 70.0).to_int()
 
     @raylib.draw_rectangle(
       rx,
@@ -236,7 +236,7 @@ fn draw_pages(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws all movable bookshelves; highlights in a warmer tone when positioned on a seal circle.
-fn draw_shelves(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_shelves(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for i in 0..<game.shelf_n {
     let x : Int = game.shelf_x[i]
     let y : Int = game.shelf_y[i]
@@ -284,7 +284,7 @@ fn draw_shelves(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the exit gate tile: green open state with a glowing dot, or locked blue-grey with crossed lines.
-fn draw_gate(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_gate(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let rx : Int = @types.board_px(@types.exit_x) + 4 + ox
   let ry : Int = @types.board_py(@types.exit_y) + 4 + oy
 
@@ -330,7 +330,7 @@ fn draw_gate(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the player character as a blue circle with face details; blinks during invincibility flash.
-fn draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let cx : Int = @types.cell_center_x(game.player.fx) + ox
   let cy : Int = @types.cell_center_y(game.player.fy) + oy
 
@@ -371,7 +371,7 @@ fn draw_ghost(
   let cx : Int = @types.cell_center_x(g.body.fx) + ox
   let cy : Int = @types.cell_center_y(g.body.fy) + oy
 
-  let bob : Int = (pulse(game, 4.6 + Float::from_int(i)) * 5.0).to_int()
+  let bob : Int = (game.pulse(4.6 + Float::from_int(i)) * 5.0).to_int()
 
   let body_col = match g.mode {
     Stunned => @raylib.Color::new(146, 132, 248, 214)
@@ -407,7 +407,7 @@ fn draw_ghost(
 
 ///|
 /// Draws all active particles as coloured circles at their interpolated positions.
-fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
       continue
@@ -430,19 +430,19 @@ fn draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the complete board: grid, seals, pages, shelves, gate, ghosts, player, and particles.
-fn draw_board(game : @types.Game, ox : Int, oy : Int) -> Unit {
-  draw_grid_base(game, ox, oy)
-  draw_seals(game, ox, oy)
-  draw_pages(game, ox, oy)
-  draw_shelves(game, ox, oy)
-  draw_gate(game, ox, oy)
+fn @types.Game::draw_board(game : @types.Game, ox : Int, oy : Int) -> Unit {
+  game.draw_grid_base(ox, oy)
+  game.draw_seals(ox, oy)
+  game.draw_pages(ox, oy)
+  game.draw_shelves(ox, oy)
+  game.draw_gate(ox, oy)
 
   for i in 0..<game.ghosts.length() {
     draw_ghost(game.ghosts[i], game, ox, oy, i)
   }
 
-  draw_player(game, ox, oy)
-  draw_particles(game, ox, oy)
+  game.draw_player(ox, oy)
+  game.draw_particles(ox, oy)
 
   @raylib.draw_rectangle_lines(
     @types.board_x0 - 2 + ox,
@@ -509,7 +509,7 @@ fn draw_touch_button(
 
 ///|
 /// Draws all on-screen D-pad, action, hint, restart, and menu touch buttons during Play state.
-fn draw_touch_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   if game.state != Play {
     return
   }
@@ -607,7 +607,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the right-side HUD panel showing title, counters, lantern energy bar, controls legend, and message banner.
-fn draw_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.panel_x0,
     @types.board_y0,
@@ -801,7 +801,7 @@ fn draw_panel(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the title screen overlay with game name, instruction text, and a hover-sensitive Start button.
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -884,7 +884,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the result overlay with win/loss title, reason text, score summary, and a hover-sensitive Retry button.
-fn draw_result_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -979,18 +979,18 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 ///|
 /// Draws the full frame for the current haunted library game state.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_background(game)
+  game.draw_background()
 
-  let ox : Int = shake_dx(game)
-  let oy : Int = shake_dy(game)
+  let ox : Int = game.shake_dx()
+  let oy : Int = game.shake_dy()
 
-  draw_board(game, ox, oy)
-  draw_panel(game)
-  draw_touch_controls(game)
+  game.draw_board(ox, oy)
+  game.draw_panel()
+  game.draw_touch_controls()
 
   match game.state {
-    Title => draw_title_overlay(game)
-    Result => draw_result_overlay(game)
+    Title => game.draw_title_overlay()
+    Result => game.draw_result_overlay()
     Play => ()
   }
 }

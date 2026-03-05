@@ -1,5 +1,5 @@
 ///|
-fn fighter_draw_pos(
+fn @types.Game::fighter_draw_pos(
   game : @types.Game,
   fighter : @types.Fighter,
 ) -> (Float, Float) {
@@ -22,7 +22,7 @@ fn fighter_flash_color(
 }
 
 ///|
-fn draw_fighter_shadow(
+fn @types.Game::draw_fighter_shadow(
   game : @types.Game,
   fighter : @types.Fighter,
   sx : Float,
@@ -44,7 +44,7 @@ fn draw_fighter_shadow(
 }
 
 ///|
-fn draw_fighter_body(
+fn @types.Game::draw_fighter_body(
   game : @types.Game,
   fighter : @types.Fighter,
   archetype : @types.CharacterArchetype,
@@ -232,7 +232,7 @@ fn draw_fighter_body(
 }
 
 ///|
-fn draw_fighter_nameplate(
+fn @types.Game::draw_fighter_nameplate(
   game : @types.Game,
   fighter : @types.Fighter,
   archetype : @types.CharacterArchetype,
@@ -262,12 +262,12 @@ fn draw_fighter_nameplate(
 }
 
 ///|
-fn draw_single_fighter(game : @types.Game, fighter : @types.Fighter) -> Unit {
+fn @types.Game::draw_single_fighter(game : @types.Game, fighter : @types.Fighter) -> Unit {
   let archetype = @types.fighter_archetype(game, fighter)
-  let (sx, sy) = fighter_draw_pos(game, fighter)
-  draw_fighter_shadow(game, fighter, sx)
-  draw_fighter_body(game, fighter, archetype)
-  draw_fighter_nameplate(game, fighter, archetype, sx, sy)
+  let (sx, sy) = game.fighter_draw_pos(fighter)
+  game.draw_fighter_shadow(fighter, sx)
+  game.draw_fighter_body(fighter, archetype)
+  game.draw_fighter_nameplate(fighter, archetype, sx, sy)
 
   if game.debug_overlay {
     let hurt = @types.hurtbox_for(fighter)
@@ -286,15 +286,15 @@ fn draw_single_fighter(game : @types.Game, fighter : @types.Fighter) -> Unit {
 }
 
 ///|
-fn draw_fighters(game : @types.Game) -> Unit {
+fn @types.Game::draw_fighters(game : @types.Game) -> Unit {
   let p1 = game.fighters[0]
   let p2 = game.fighters[1]
 
   if p1.y <= p2.y {
-    draw_single_fighter(game, p2)
-    draw_single_fighter(game, p1)
+    game.draw_single_fighter(p2)
+    game.draw_single_fighter(p1)
   } else {
-    draw_single_fighter(game, p1)
-    draw_single_fighter(game, p2)
+    game.draw_single_fighter(p1)
+    game.draw_single_fighter(p2)
   }
 }

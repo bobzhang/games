@@ -83,7 +83,7 @@ fn veg_slot_text(v : Int) -> String {
 
 ///|
 /// Returns a display string for the item currently held in hand.
-fn hand_text(game : @types.Game) -> String {
+fn @types.Game::hand_text(game : @types.Game) -> String {
   if game.hand.kind == @types.ingredient_none {
     "Empty"
   } else if game.hand.kind == @types.ingredient_protein {
@@ -101,7 +101,7 @@ fn hand_text(game : @types.Game) -> String {
 
 ///|
 /// Draws the animated dark background and full-screen flash overlay.
-fn draw_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(14, 16, 24, 255))
 
   let wave = @math.sinf(game.elapsed * 0.28)
@@ -150,7 +150,7 @@ fn draw_background(game : @types.Game) -> Unit {
 
 ///|
 /// Draws contextual status text and controls inside a station tile.
-fn draw_station_info(
+fn @types.Game::draw_station_info(
   game : @types.Game,
   station : Int,
   x : Int,
@@ -344,7 +344,7 @@ fn draw_station_info(
 
 ///|
 /// Draws the kitchen grid: background panel, all station tiles, cursor highlight.
-fn draw_kitchen(game : @types.Game) -> Unit {
+fn @types.Game::draw_kitchen(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.kitchen_left - 16,
     @types.kitchen_top - 56,
@@ -394,7 +394,7 @@ fn draw_kitchen(game : @types.Game) -> Unit {
         @raylib.Color::new(248, 250, 255, 248),
       )
 
-      draw_station_info(game, station, sx, sy)
+      game.draw_station_info(station, sx, sy)
 
       if x == game.cursor_x && y == game.cursor_y {
         let pulse : Float = 0.54 + 0.46 * @math.sinf(game.elapsed * 8.0)
@@ -417,7 +417,7 @@ fn draw_kitchen(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a single customer order card at the given screen position.
-fn draw_order_card(
+fn @types.Game::draw_order_card(
   game : @types.Game,
   i : Int,
   x : Int,
@@ -512,7 +512,7 @@ fn draw_order_card(
 
 ///|
 /// Draws the right-side panel: scores, meters, hand status, and order queue.
-fn draw_side_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
   let x = @types.panel_x()
   let w = @types.panel_w()
 
@@ -617,7 +617,7 @@ fn draw_side_panel(game : @types.Game) -> Unit {
   )
 
   @raylib.draw_text(
-    "Hand: \{hand_text(game)}",
+    "Hand: \{game.hand_text()}",
     x + 18,
     352,
     24,
@@ -633,13 +633,13 @@ fn draw_side_panel(game : @types.Game) -> Unit {
   )
 
   for i in 0..<@types.max_orders {
-    draw_order_card(game, i, x + 18, 430 + i * 80, w - 36, 72)
+    game.draw_order_card(i, x + 18, 430 + i * 80, w - 36, 72)
   }
 }
 
 ///|
 /// Draws the bottom controls bar and the current HUD message.
-fn draw_controls_bar(game : @types.Game) -> Unit {
+fn @types.Game::draw_controls_bar(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.kitchen_left,
     @types.screen_h - 94,
@@ -801,7 +801,7 @@ fn draw_pause_overlay() -> Unit {
 
 ///|
 /// Draws the game-over overlay with final score and stats.
-fn draw_game_over_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -859,16 +859,16 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 ///|
 /// Draws one full frame of kitchen tiles, UI, and overlays.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_background(game)
-  draw_kitchen(game)
-  draw_side_panel(game)
-  draw_controls_bar(game)
+  game.draw_background()
+  game.draw_kitchen()
+  game.draw_side_panel()
+  game.draw_controls_bar()
 
   if game.state == @types.state_title {
     draw_title_overlay(game)
   } else if game.state == @types.state_paused {
     draw_pause_overlay()
   } else if game.state == @types.state_game_over {
-    draw_game_over_overlay(game)
+    game.draw_game_over_overlay()
   }
 }

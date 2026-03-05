@@ -1,13 +1,13 @@
 ///|
 /// Sets the on-screen status message and starts its display timer.
-fn set_message(game : @types.Game, msg : String, ttl : Float) -> Unit {
+fn @types.Game::set_message(game : @types.Game, msg : String, ttl : Float) -> Unit {
   game.message = msg
   game.message_t = ttl
 }
 
 ///|
 /// Deactivates and zeroes every spark in the particle pool.
-fn clear_sparks(game : @types.Game) -> Unit {
+fn @types.Game::clear_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
     spark.active = false
     spark.x = 0.0
@@ -22,7 +22,7 @@ fn clear_sparks(game : @types.Game) -> Unit {
 
 ///|
 /// Activates the first inactive spark slot with the supplied position, velocity, lifetime, and kind.
-fn spawn_spark(
+fn @types.Game::spawn_spark(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -51,7 +51,7 @@ fn spawn_spark(
 
 ///|
 /// Emits `n` sparks with random positions and velocities around the given point.
-fn burst_sparks(
+fn @types.Game::burst_sparks(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -59,8 +59,7 @@ fn burst_sparks(
   kind : Int,
 ) -> Unit {
   for _i in 0..<n {
-    spawn_spark(
-      game,
+    game.spawn_spark(
       x + @types.randf(-12.0, 12.0),
       y + @types.randf(-12.0, 12.0),
       @types.randf(-220.0, 220.0),
@@ -74,7 +73,7 @@ fn burst_sparks(
 
 ///|
 /// Advances each active spark position, applies drag, and deactivates expired ones.
-fn update_sparks(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_sparks(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
       continue
@@ -95,7 +94,7 @@ fn update_sparks(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Returns the bowling ball to its start position with zeroed velocity and spin.
-fn reset_ball(game : @types.Game) -> Unit {
+fn @types.Game::reset_ball(game : @types.Game) -> Unit {
   game.ball_x = @types.ball_start_x
   game.ball_y = @types.ball_start_y
   game.ball_vx = 0.0
@@ -107,7 +106,7 @@ fn reset_ball(game : @types.Game) -> Unit {
 
 ///|
 /// Positions all ten pins in standard triangular formation and zeroes their motion state.
-fn reset_full_rack(game : @types.Game) -> Unit {
+fn @types.Game::reset_full_rack(game : @types.Game) -> Unit {
   let cx : Float = @types.ball_start_x
   let mut idx : Int = 0
 
@@ -146,7 +145,7 @@ fn reset_full_rack(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the number of pins that are still standing.
-fn count_standing(game : @types.Game) -> Int {
+fn @types.Game::count_standing(game : @types.Game) -> Int {
   let mut n : Int = 0
   for pin in game.pins {
     if pin.standing {
@@ -158,7 +157,7 @@ fn count_standing(game : @types.Game) -> Int {
 
 ///|
 /// Returns true when all knocked-down pins have slowed below the settle threshold.
-fn pins_are_quiet(game : @types.Game) -> Bool {
+fn @types.Game::pins_are_quiet(game : @types.Game) -> Bool {
   for pin in game.pins {
     if pin.standing {
       continue
@@ -175,14 +174,14 @@ fn pins_are_quiet(game : @types.Game) -> Bool {
 
 ///|
 /// Resets the ball and optionally the full rack, then allows the player to throw.
-fn prepare_roll(game : @types.Game, reset_rack : Bool) -> Unit {
+fn @types.Game::prepare_roll(game : @types.Game, reset_rack : Bool) -> Unit {
   if reset_rack {
-    reset_full_rack(game)
+    game.reset_full_rack()
   }
 
-  game.pins_left = count_standing(game)
+  game.pins_left = game.count_standing()
   game.pins_before_roll = game.pins_left
-  reset_ball(game)
+  game.reset_ball()
 
   game.can_throw = true
   game.charging = false
@@ -194,7 +193,7 @@ fn prepare_roll(game : @types.Game, reset_rack : Bool) -> Unit {
 
 ///|
 /// Zeroes all frame counters, stat totals, and the roll log for a new match.
-fn reset_match_stats(game : @types.Game) -> Unit {
+fn @types.Game::reset_match_stats(game : @types.Game) -> Unit {
   game.frame = 0
   game.roll_in_frame = 0
   game.first_roll = 0
@@ -207,42 +206,42 @@ fn reset_match_stats(game : @types.Game) -> Unit {
   game.game_t = 0.0
   game.ui_t = 0.0
   game.shake_t = 0.0
-  clear_rolls(game)
+  game.clear_rolls()
 }
 
 ///|
 /// Resets all match stats, clears sparks, and begins the first roll of frame 1.
-fn start_match(game : @types.Game) -> Unit {
-  reset_match_stats(game)
+fn @types.Game::start_match(game : @types.Game) -> Unit {
+  game.reset_match_stats()
   game.state = Play
   game.aim = 0.0
   game.spin = 0.0
-  clear_sparks(game)
+  game.clear_sparks()
 
-  prepare_roll(game, true)
-  set_message(game, "Frame 1: aim and hold power", 2.0)
+  game.prepare_roll(true)
+  game.set_message("Frame 1: aim and hold power", 2.0)
 }
 
 ///|
 /// Recomputes the final score, transitions to the result screen, and shows an end message.
-fn finalize_match(game : @types.Game) -> Unit {
-  recompute_score(game)
+fn @types.Game::finalize_match(game : @types.Game) -> Unit {
+  game.recompute_score()
   game.state = Result
   game.can_throw = false
   game.charging = false
 
   if game.score >= 220 {
-    set_message(game, "Legend game! Score \{game.score}", 2.4)
+    game.set_message("Legend game! Score \{game.score}", 2.4)
   } else if game.score >= 180 {
-    set_message(game, "Great run! Score \{game.score}", 2.4)
+    game.set_message("Great run! Score \{game.score}", 2.4)
   } else {
-    set_message(game, "Final score \{game.score}", 2.4)
+    game.set_message("Final score \{game.score}", 2.4)
   }
 }
 
 ///|
 /// Topples pin `i` with the given impulse, spawns a spark burst, and triggers a screen shake.
-fn knock_pin(
+fn @types.Game::knock_pin(
   game : @types.Game,
   i : Int,
   vx : Float,
@@ -261,15 +260,15 @@ fn knock_pin(
   game.pins[i].vx = vx
   game.pins[i].vy = vy
   game.pins[i].ang_v = @types.randf(-7.0, 7.0)
-  game.pins_left = count_standing(game)
+  game.pins_left = game.count_standing()
 
-  burst_sparks(game, game.pins[i].x, game.pins[i].y, 12, impact_kind)
+  game.burst_sparks(game.pins[i].x, game.pins[i].y, 12, impact_kind)
   game.shake_t = @types.maxf(game.shake_t, 0.08)
 }
 
 ///|
 /// Launches the ball from the current aim and power settings; returns false when throwing is not allowed.
-fn throw_ball(game : @types.Game) -> Bool {
+fn @types.Game::throw_ball(game : @types.Game) -> Bool {
   if game.state != Play || not(game.can_throw) {
     return false
   }
@@ -286,14 +285,14 @@ fn throw_ball(game : @types.Game) -> Bool {
   game.resolve_t = -1.0
   game.last_knock = 0
 
-  set_message(game, "Ball out", 0.7)
-  burst_sparks(game, game.ball_x, game.ball_y, 14, 0)
+  game.set_message("Ball out", 0.7)
+  game.burst_sparks(game.ball_x, game.ball_y, 14, 0)
   true
 }
 
 ///|
 /// Records a completed roll, updates frame progression and spare/strike counters, and prepares the next delivery.
-fn on_roll_scored(game : @types.Game, knocked : Int) -> Unit {
+fn @types.Game::on_roll_scored(game : @types.Game, knocked : Int) -> Unit {
   let k : Int = if knocked < 0 {
     0
   } else if knocked > game.pins_before_roll {
@@ -302,7 +301,7 @@ fn on_roll_scored(game : @types.Game, knocked : Int) -> Unit {
     knocked
   }
 
-  push_roll(game, k)
+  game.push_roll(k)
   game.last_knock = k
 
   if game.frame < 9 {
@@ -314,17 +313,16 @@ fn on_roll_scored(game : @types.Game, knocked : Int) -> Unit {
         game.roll_in_frame = 0
 
         if game.frame >= 10 {
-          finalize_match(game)
+          game.finalize_match()
           return
         }
 
-        prepare_roll(game, true)
-        set_message(game, "Strike! Frame \{game.frame + 1}", 1.3)
+        game.prepare_roll(true)
+        game.set_message("Strike! Frame \{game.frame + 1}", 1.3)
       } else {
         game.roll_in_frame = 1
-        prepare_roll(game, false)
-        set_message(
-          game,
+        game.prepare_roll(false)
+        game.set_message(
           "Frame \{game.frame + 1} roll 2: \{10 - k} pins left",
           1.2,
         )
@@ -332,25 +330,25 @@ fn on_roll_scored(game : @types.Game, knocked : Int) -> Unit {
     } else {
       if game.first_roll + k == 10 {
         game.spares = game.spares + 1
-        set_message(game, "Spare!", 1.1)
+        game.set_message("Spare!", 1.1)
       } else {
         game.opens = game.opens + 1
-        set_message(game, "Open frame", 1.0)
+        game.set_message("Open frame", 1.0)
       }
 
       game.frame = game.frame + 1
       game.roll_in_frame = 0
 
       if game.frame >= 10 {
-        finalize_match(game)
+        game.finalize_match()
         return
       }
 
-      prepare_roll(game, true)
-      set_message(game, "Frame \{game.frame + 1}", 1.0)
+      game.prepare_roll(true)
+      game.set_message("Frame \{game.frame + 1}", 1.0)
     }
 
-    recompute_score(game)
+    game.recompute_score()
     return
   }
 
@@ -361,15 +359,15 @@ fn on_roll_scored(game : @types.Game, knocked : Int) -> Unit {
     if k == 10 {
       game.strikes = game.strikes + 1
       game.roll_in_frame = 1
-      prepare_roll(game, true)
-      set_message(game, "10th frame strike, bonus balls", 1.4)
+      game.prepare_roll(true)
+      game.set_message("10th frame strike, bonus balls", 1.4)
     } else {
       game.roll_in_frame = 1
-      prepare_roll(game, false)
-      set_message(game, "10th frame roll 2", 1.1)
+      game.prepare_roll(false)
+      game.set_message("10th frame roll 2", 1.1)
     }
 
-    recompute_score(game)
+    game.recompute_score()
     return
   }
 
@@ -377,37 +375,37 @@ fn on_roll_scored(game : @types.Game, knocked : Int) -> Unit {
     if game.first_roll == 10 {
       if k == 10 {
         game.strikes = game.strikes + 1
-        prepare_roll(game, true)
+        game.prepare_roll(true)
       } else {
-        prepare_roll(game, false)
+        game.prepare_roll(false)
       }
 
       game.roll_in_frame = 2
-      set_message(game, "10th frame final ball", 1.1)
-      recompute_score(game)
+      game.set_message("10th frame final ball", 1.1)
+      game.recompute_score()
       return
     }
 
     if game.first_roll + k == 10 {
       game.spares = game.spares + 1
       game.roll_in_frame = 2
-      prepare_roll(game, true)
-      set_message(game, "Spare! bonus ball", 1.3)
-      recompute_score(game)
+      game.prepare_roll(true)
+      game.set_message("Spare! bonus ball", 1.3)
+      game.recompute_score()
       return
     }
 
     game.opens = game.opens + 1
-    finalize_match(game)
+    game.finalize_match()
     return
   }
 
-  finalize_match(game)
+  game.finalize_match()
 }
 
 ///|
 /// Moves the live ball, applies spin drift and lane drag, and detects lane-edge and slow-stop conditions.
-fn update_ball(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_ball(game : @types.Game, dt : Float) -> Unit {
   if not(game.ball_live) {
     return
   }
@@ -425,11 +423,11 @@ fn update_ball(game : @types.Game, dt : Float) -> Unit {
   if game.ball_x < min_x {
     game.ball_x = min_x
     game.ball_vx = game.ball_vx.abs() * 0.76
-    burst_sparks(game, game.ball_x, game.ball_y, 8, 2)
+    game.burst_sparks(game.ball_x, game.ball_y, 8, 2)
   } else if game.ball_x > max_x {
     game.ball_x = max_x
     game.ball_vx = -game.ball_vx.abs() * 0.76
-    burst_sparks(game, game.ball_x, game.ball_y, 8, 2)
+    game.burst_sparks(game.ball_x, game.ball_y, 8, 2)
   }
 
   if game.ball_y < @types.lane_top + 40.0 {
@@ -446,7 +444,7 @@ fn update_ball(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Tests the live ball against every standing pin and knocks any pin within collision range.
-fn collide_ball_pins(game : @types.Game) -> Unit {
+fn @types.Game::collide_ball_pins(game : @types.Game) -> Unit {
   if not(game.ball_live) {
     return
   }
@@ -480,8 +478,7 @@ fn collide_ball_pins(game : @types.Game) -> Unit {
       (game.ball_vx * game.ball_vx + game.ball_vy * game.ball_vy).sqrt(),
     )
 
-    knock_pin(
-      game,
+    game.knock_pin(
       i,
       nx * impulse * 1.04 + @types.randf(-50.0, 50.0),
       ny * impulse * 1.04 + @types.randf(-40.0, 30.0),
@@ -497,7 +494,7 @@ fn collide_ball_pins(game : @types.Game) -> Unit {
 
 ///|
 /// Integrates velocity and angular motion of knocked-down pins and clamps them within lane bounds.
-fn update_pin_motion(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_pin_motion(game : @types.Game, dt : Float) -> Unit {
   for pin in game.pins {
     if pin.standing {
       continue
@@ -535,7 +532,7 @@ fn update_pin_motion(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Propagates fast-moving knocked pins into nearby standing pins to simulate chain reactions.
-fn chain_pin_hits(game : @types.Game) -> Unit {
+fn @types.Game::chain_pin_hits(game : @types.Game) -> Unit {
   let hit : Float = @types.pin_radius * 2.0
   let hit2 : Float = hit * hit
 
@@ -565,8 +562,7 @@ fn chain_pin_hits(game : @types.Game) -> Unit {
         continue
       }
 
-      knock_pin(
-        game,
+      game.knock_pin(
         j,
         game.pins[i].vx * 0.62 + @types.randf(-32.0, 32.0),
         game.pins[i].vy * 0.62 + @types.randf(-28.0, 28.0),
@@ -580,7 +576,7 @@ fn chain_pin_hits(game : @types.Game) -> Unit {
 
 ///|
 /// Drives the full play-state simulation: timers, ball physics, collisions, and roll resolution.
-fn update_play(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   game.game_t = game.game_t + dt
   game.ui_t = game.ui_t + dt
 
@@ -594,11 +590,11 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
     game.touch_cd = game.touch_cd - dt
   }
 
-  update_sparks(game, dt)
-  update_ball(game, dt)
-  collide_ball_pins(game)
-  update_pin_motion(game, dt)
-  chain_pin_hits(game)
+  game.update_sparks(dt)
+  game.update_ball(dt)
+  game.collide_ball_pins()
+  game.update_pin_motion(dt)
+  game.chain_pin_hits()
 
   if game.ball_live {
     return
@@ -613,24 +609,24 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
     return
   }
 
-  if not(pins_are_quiet(game)) {
+  if not(game.pins_are_quiet()) {
     return
   }
 
-  let standing : Int = count_standing(game)
+  let standing : Int = game.count_standing()
   let knocked : Int = game.pins_before_roll - standing
-  on_roll_scored(game, knocked)
+  game.on_roll_scored(knocked)
 }
 
 ///|
 /// Advances one frame of state updates, input, and bowling simulation.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   match game.state {
-    Title => update_title_input(game)
+    Title => game.update_title_input()
     Play => {
-      update_play_input(game, dt)
-      update_play(game, dt)
+      game.update_play_input(dt)
+      game.update_play(dt)
     }
-    Result => update_result_input(game)
+    Result => game.update_result_input()
   }
 }

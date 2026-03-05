@@ -1,6 +1,6 @@
 ///|
 /// Activates the first inactive bullet slot and launches it from the ship's nose.
-fn fire_bullet(game : @types.Game) -> Unit {
+fn @types.Game::fire_bullet(game : @types.Game) -> Unit {
   for bullet in game.bullets {
     if not(bullet.active) {
       let dir_x : Float = Float::from_double(
@@ -23,7 +23,7 @@ fn fire_bullet(game : @types.Game) -> Unit {
 
 ///|
 /// Reads rotation, thrust, and fire inputs and updates ship kinematics each frame.
-fn update_ship(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_ship(game : @types.Game, dt : Float) -> Unit {
   let rotate_speed : Float = 4.5
   let thrust : Float = 180.0
 
@@ -73,6 +73,6 @@ fn update_ship(game : @types.Game, dt : Float) -> Unit {
       @raylib.is_key_down(@raylib.KeySpace) || @raylib.is_key_down(@raylib.KeyX)
     ) &&
     game.fire_cooldown <= 0.0 {
-    fire_bullet(game)
+    game.fire_bullet()
   }
 }

@@ -1,6 +1,6 @@
 ///|
 /// Returns a random horizontal screen-shake offset when the shake timer is active.
-fn shake_x(game : @types.Game) -> Int {
+fn @types.Game::shake_x(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -10,7 +10,7 @@ fn shake_x(game : @types.Game) -> Int {
 
 ///|
 /// Returns a random vertical screen-shake offset when the shake timer is active.
-fn shake_y(game : @types.Game) -> Int {
+fn @types.Game::shake_y(game : @types.Game) -> Int {
   if game.shake_t <= 0.0 {
     0
   } else {
@@ -53,7 +53,7 @@ fn draw_meter(
 
 ///|
 /// Draws the gradient sky background with animated glow circles, the street area backing, and a flash overlay when hit.
-fn draw_background(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_background(game : @types.Game, ox : Int, oy : Int) -> Unit {
   @raylib.clear_background(@raylib.Color::new(14, 16, 24, 255))
 
   @raylib.draw_rectangle_gradient_v(
@@ -110,7 +110,7 @@ fn draw_background(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws all parade lanes with alternating tone, center dash marks, lane number labels, and a border outline.
-fn draw_lanes(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_lanes(game : @types.Game, ox : Int, oy : Int) -> Unit {
   ignore(game)
 
   for lane in 0..<@types.lane_count {
@@ -273,7 +273,7 @@ fn draw_threat(threat : @types.Threat, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the lion dance troupe sprite, with color shifts for burst or guard states and a guard radius ring.
-fn draw_troupe(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_troupe(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let cx = game.troupe_x.to_int() + ox
   let cy = game.troupe_y.to_int() + oy
 
@@ -328,7 +328,7 @@ fn draw_troupe(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws expanding ring animations for active strike and burst action effects around the troupe center.
-fn draw_action_fx(game : @types.Game, ox : Int, oy : Int) -> Unit {
+fn @types.Game::draw_action_fx(game : @types.Game, ox : Int, oy : Int) -> Unit {
   let cx = game.troupe_x.to_int() + ox
   let cy = game.troupe_y.to_int() + oy
 
@@ -374,7 +374,7 @@ fn draw_action_fx(game : @types.Game, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Draws the HUD panel with score, combo, stats, hype/order/morale meters, and action cooldown readouts.
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(20, 18, 560, 188, @raylib.Color::new(10, 16, 26, 214))
   @raylib.draw_rectangle_lines(
     20,
@@ -543,7 +543,7 @@ fn draw_controls_legend() -> Unit {
 
 ///|
 /// Draws the transient HUD message with fade-out alpha when the message timer is active.
-fn draw_message(game : @types.Game) -> Unit {
+fn @types.Game::draw_message(game : @types.Game) -> Unit {
   if game.msg_t <= 0.0 {
     return
   }
@@ -575,7 +575,7 @@ fn draw_message(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the title-screen overlay with game name, instructions, and a blinking start prompt.
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   let p = @types.pulse(game, 1.2)
   let panel_w = 980
   let panel_h = 420
@@ -695,7 +695,7 @@ fn draw_pause_overlay() -> Unit {
 
 ///|
 /// Draws the game-over overlay with final score, cleared/leaked counts, and a restart prompt.
-fn draw_game_over_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -755,27 +755,27 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 ///|
 /// Draws one complete frame of street action, HUD, and overlays.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  let ox = shake_x(game)
-  let oy = shake_y(game)
+  let ox = game.shake_x()
+  let oy = game.shake_y()
 
-  draw_background(game, ox, oy)
-  draw_lanes(game, ox, oy)
+  game.draw_background(ox, oy)
+  game.draw_lanes(ox, oy)
 
   for threat in game.threats {
     draw_threat(threat, ox, oy)
   }
 
-  draw_action_fx(game, ox, oy)
-  draw_troupe(game, ox, oy)
+  game.draw_action_fx(ox, oy)
+  game.draw_troupe(ox, oy)
 
-  draw_hud(game)
+  game.draw_hud()
   draw_controls_legend()
-  draw_message(game)
+  game.draw_message()
 
   match game.state {
-    Title => draw_title_overlay(game)
+    Title => game.draw_title_overlay()
     Paused => draw_pause_overlay()
-    GameOver => draw_game_over_overlay(game)
+    GameOver => game.draw_game_over_overlay()
     Playing => ()
   }
 }

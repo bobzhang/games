@@ -92,7 +92,7 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   if player.y < ground {
     // Crash if going too fast or too steep
     if player.speed > 25.0 || player.pitch.abs() > 0.3 {
-      crash_player(game)
+      game.crash_player()
       return
     }
     player.y = ground
@@ -111,11 +111,11 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   }
   // Fire weapon
   if @raylib.is_key_down(@raylib.KeySpace) && player.fire_timer <= 0.0 {
-    fire_player_weapon(game)
+    game.fire_player_weapon()
     player.fire_timer = @types.fire_cooldown
   }
   // Landing check
-  check_landing(game, dt)
+  game.check_landing(dt)
   // Engine particles (exhaust trail)
   if game.frame_counter % 3 == 0 {
     let idx = @types.alloc_particle(game)
@@ -139,7 +139,7 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn fire_player_weapon(game : @types.Game) -> Unit {
+fn @types.Game::fire_player_weapon(game : @types.Game) -> Unit {
   let player = game.player
   let idx = @types.alloc_projectile(game)
   if idx < 0 {
@@ -161,7 +161,7 @@ fn fire_player_weapon(game : @types.Game) -> Unit {
 }
 
 ///|
-fn crash_player(game : @types.Game) -> Unit {
+fn @types.Game::crash_player(game : @types.Game) -> Unit {
   let player = game.player
   player.alive = false
   @types.spawn_explosion(game, player.x, player.y, player.z)
@@ -191,7 +191,7 @@ pub fn damage_player(game : @types.Game, amount : Float) -> Unit {
 }
 
 ///|
-fn check_landing(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::check_landing(game : @types.Game, dt : Float) -> Unit {
   let mission = game.missions[game.current_mission]
   if not(mission.has_landing) {
     return

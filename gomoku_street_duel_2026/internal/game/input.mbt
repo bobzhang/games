@@ -1,6 +1,6 @@
 ///|
 /// Returns the currently held directional input from keyboard arrow/WASD keys or the on-screen D-pad.
-fn detect_held_dir(game : @types.Game) -> @types.Dir {
+fn @types.Game::detect_held_dir(game : @types.Game) -> @types.Dir {
   let mut dir : @types.Dir = DirNone
 
   if @raylib.is_key_down(@raylib.KeyLeft) || @raylib.is_key_down(@raylib.KeyA) {
@@ -74,7 +74,7 @@ fn detect_held_dir(game : @types.Game) -> @types.Dir {
 
 ///|
 /// Returns true if the player triggered a stone-placement action via Enter/Space or the PLACE touch button.
-fn detect_place_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_place_press(game : @types.Game) -> Bool {
   let mut press : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
 
@@ -97,7 +97,7 @@ fn detect_place_press(game : @types.Game) -> Bool {
 
 ///|
 /// Returns true if the player triggered a hint request via H key or the HINT touch button.
-fn detect_hint_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_hint_press(game : @types.Game) -> Bool {
   let mut press : Bool = @raylib.is_key_pressed(@raylib.KeyH)
 
   let (x, y, w, h) = @types.hint_button_rect()
@@ -119,7 +119,7 @@ fn detect_hint_press(game : @types.Game) -> Bool {
 
 ///|
 /// Returns true if the player triggered an undo action via U/Z keys or the UNDO touch button.
-fn detect_undo_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_undo_press(game : @types.Game) -> Bool {
   let mut press : Bool = @raylib.is_key_pressed(@raylib.KeyU) ||
     @raylib.is_key_pressed(@raylib.KeyZ)
 
@@ -142,7 +142,7 @@ fn detect_undo_press(game : @types.Game) -> Bool {
 
 ///|
 /// Returns true if the player triggered a hint-clear action via C/Backspace keys or the CLEAR touch button.
-fn detect_clear_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_clear_press(game : @types.Game) -> Bool {
   let mut press : Bool = @raylib.is_key_pressed(@raylib.KeyC) ||
     @raylib.is_key_pressed(@raylib.KeyBackspace)
 
@@ -165,7 +165,7 @@ fn detect_clear_press(game : @types.Game) -> Bool {
 
 ///|
 /// Returns true if the player triggered a round-reset action via R key or the RESET touch button.
-fn detect_reset_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_reset_press(game : @types.Game) -> Bool {
   let mut press : Bool = @raylib.is_key_pressed(@raylib.KeyR)
 
   let (x, y, w, h) = @types.reset_button_rect()
@@ -187,7 +187,7 @@ fn detect_reset_press(game : @types.Game) -> Bool {
 
 ///|
 /// Returns true if the player triggered a game-start action via Enter/Space or the start touch button.
-fn detect_start_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_start_press(game : @types.Game) -> Bool {
   let mut press : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
 
@@ -210,7 +210,7 @@ fn detect_start_press(game : @types.Game) -> Bool {
 
 ///|
 /// Returns true if the player triggered a next-round action via Enter/Space/N or the NEXT touch button.
-fn detect_next_press(game : @types.Game) -> Bool {
+fn @types.Game::detect_next_press(game : @types.Game) -> Bool {
   let mut press : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyN)
@@ -234,7 +234,7 @@ fn detect_next_press(game : @types.Game) -> Bool {
 
 ///|
 /// Returns `(true, col, row)` if the current mouse click or touch point maps to a board cell, otherwise `(false, 0, 0)`.
-fn detect_board_tap(game : @types.Game) -> (Bool, Int, Int) {
+fn @types.Game::detect_board_tap(game : @types.Game) -> (Bool, Int, Int) {
   let (board_x, board_y, tile) = @types.board_metrics(game)
   let bw : Int = @types.board_n * tile
   let bh : Int = @types.board_n * tile

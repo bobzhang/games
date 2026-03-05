@@ -155,7 +155,7 @@ fn draw_training_input_panel(
 }
 
 ///|
-fn draw_training_adv_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_training_adv_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.screen_width / 2 - 210,
     116,
@@ -185,7 +185,7 @@ fn draw_training_adv_panel(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_fight_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_fight_hud(game : @types.Game) -> Unit {
   let p1 = game.fighters[0]
   let p2 = game.fighters[1]
   let a1 = @types.fighter_archetype(game, p1)
@@ -339,7 +339,7 @@ fn draw_fight_hud(game : @types.Game) -> Unit {
       @raylib.Color::new(166, 208, 244, 255),
     )
 
-    draw_training_adv_panel(game)
+    game.draw_training_adv_panel()
     draw_training_input_panel(
       24,
       116,
@@ -360,7 +360,7 @@ fn draw_fight_hud(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_announcer(game : @types.Game) -> Unit {
+fn @types.Game::draw_announcer(game : @types.Game) -> Unit {
   if game.announcer_text == "" || game.announcer_timer <= 0.0 {
     return
   }
@@ -381,7 +381,7 @@ fn draw_announcer(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_title_screen(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_screen(game : @types.Game) -> Unit {
   let glow = @math.sinf(game.title_blink) * 0.5 + 0.5
   let title_color = @raylib.color_lerp(
     @raylib.Color::new(248, 196, 98, 255),
@@ -567,7 +567,7 @@ fn draw_select_card(
 }
 
 ///|
-fn draw_select_screen(game : @types.Game) -> Unit {
+fn @types.Game::draw_select_screen(game : @types.Game) -> Unit {
   @types.draw_center_shadow_text(
     "CHARACTER SELECT",
     @types.screen_width / 2,
@@ -690,8 +690,8 @@ fn draw_select_screen(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_intro_overlay(game : @types.Game) -> Unit {
-  draw_announcer(game)
+fn @types.Game::draw_intro_overlay(game : @types.Game) -> Unit {
+  game.draw_announcer()
 
   let p1 = game.fighters[0]
   let p2 = game.fighters[1]
@@ -744,8 +744,8 @@ fn draw_intro_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_round_over_overlay(game : @types.Game) -> Unit {
-  draw_announcer(game)
+fn @types.Game::draw_round_over_overlay(game : @types.Game) -> Unit {
+  game.draw_announcer()
 
   if game.winner_slot == @types.winner_draw {
     @types.draw_center_shadow_text(
@@ -769,8 +769,8 @@ fn draw_round_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_match_over_overlay(game : @types.Game) -> Unit {
-  draw_announcer(game)
+fn @types.Game::draw_match_over_overlay(game : @types.Game) -> Unit {
+  game.draw_announcer()
 
   if game.winner_slot == @types.winner_draw {
     @types.draw_center_shadow_text(
@@ -827,7 +827,7 @@ fn draw_match_over_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_pause_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_pause_overlay(game : @types.Game) -> Unit {
   let pulse = @math.sinf(game.pause_blink) * 0.5 + 0.5
   @raylib.draw_rectangle(
     0,
@@ -853,7 +853,7 @@ fn draw_pause_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_debug_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_debug_overlay(game : @types.Game) -> Unit {
   if not(game.debug_overlay) {
     return
   }
@@ -896,30 +896,30 @@ fn draw_debug_overlay(game : @types.Game) -> Unit {
 ///|
 /// Renders the full frame for current game state.
 pub fn draw_game(game : @types.Game) -> Unit {
-  draw_stage(game)
+  game.draw_stage()
 
   if game.state == StateTitle {
-    draw_title_screen(game)
+    game.draw_title_screen()
   } else if game.state == StateSelect {
-    draw_select_screen(game)
+    game.draw_select_screen()
   } else {
-    draw_fighters(game)
-    draw_fight_hud(game)
+    game.draw_fighters()
+    game.draw_fight_hud()
 
     if game.state == StateIntro {
-      draw_intro_overlay(game)
+      game.draw_intro_overlay()
     } else if game.state == StateRoundOver {
-      draw_round_over_overlay(game)
+      game.draw_round_over_overlay()
     } else if game.state == StateMatchOver {
-      draw_match_over_overlay(game)
+      game.draw_match_over_overlay()
     } else {
-      draw_announcer(game)
+      game.draw_announcer()
     }
 
     if game.state == StatePause {
-      draw_pause_overlay(game)
+      game.draw_pause_overlay()
     }
   }
 
-  draw_debug_overlay(game)
+  game.draw_debug_overlay()
 }

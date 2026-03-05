@@ -1,6 +1,6 @@
 ///|
 /// Resets all input fields to their neutral/unpressed defaults.
-fn clear_input(game : @types.Game) -> Unit {
+fn @types.Game::clear_input(game : @types.Game) -> Unit {
   game.input.move_x = 0.0
   game.input.move_y = 0.0
   game.input.interact_press = false
@@ -12,8 +12,8 @@ fn clear_input(game : @types.Game) -> Unit {
 
 ///|
 /// Reads keyboard state for movement, sprint, interact, smoke, and menu actions, then normalises the movement vector.
-fn update_input(game : @types.Game) -> Unit {
-  clear_input(game)
+fn @types.Game::update_input(game : @types.Game) -> Unit {
+  game.clear_input()
 
   let mut ix : Float = 0.0
   let mut iy : Float = 0.0

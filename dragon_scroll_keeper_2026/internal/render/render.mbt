@@ -35,7 +35,7 @@ fn room_fill_color(room : Int) -> @raylib.Color {
 
 ///|
 /// Draws a pulsing vertical gradient background and 120 twinkling star particles scattered across the screen.
-fn draw_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_background(game : @types.Game) -> Unit {
   let pulse : Float = 0.5 +
     0.5 * Float::from_int((game.time_s * 60.0).to_int() % 120) / 120.0
   let top = @raylib.Color::new(10, 16, 24 + (pulse * 18.0).to_int(), 255)
@@ -61,7 +61,7 @@ fn draw_background(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the current chamber as a filled rectangle with a border and room-name label, plus cyan doorway indicators and arrow glyphs for any adjacent rooms.
-fn draw_chamber_shell(game : @types.Game) -> Unit {
+fn @types.Game::draw_chamber_shell(game : @types.Game) -> Unit {
   let x = @types.chamber_left.to_int()
   let y = @types.chamber_top.to_int()
   let w = @types.chamber_w.to_int()
@@ -130,7 +130,7 @@ fn draw_chamber_shell(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the dragon scroll vault core as a pulsing glow halo, a solid blue circle, an outer ring, and a "Dragon Scroll" label; only rendered when the keeper is in the vault room.
-fn draw_vault_core(game : @types.Game) -> Unit {
+fn @types.Game::draw_vault_core(game : @types.Game) -> Unit {
   if game.keeper.room != @types.vault_room {
     return
   }
@@ -159,7 +159,7 @@ fn draw_vault_core(game : @types.Game) -> Unit {
 
 ///|
 /// Draws each breach in the current room: an orange-red glow circle scaled to severity with a percentage label when open, or a green sealed ring when severity is zero.
-fn draw_breaches(game : @types.Game) -> Unit {
+fn @types.Game::draw_breaches(game : @types.Game) -> Unit {
   for breach in game.breaches {
     if breach.room != game.keeper.room {
       continue
@@ -211,7 +211,7 @@ fn draw_breaches(game : @types.Game) -> Unit {
 
 ///|
 /// Draws each active flame in the current room as two overlapping circles — an outer orange halo and a brighter inner core — both sized and coloured by the flame's intensity.
-fn draw_flames(game : @types.Game) -> Unit {
+fn @types.Game::draw_flames(game : @types.Game) -> Unit {
   for flame in game.flames {
     if not(flame.active) || flame.room != game.keeper.room {
       continue
@@ -235,7 +235,7 @@ fn draw_flames(game : @types.Game) -> Unit {
 
 ///|
 /// Draws each active raider in the current room as a red circle with a bright ring outline, brightening when panicked, and a small HP bar above.
-fn draw_raiders(game : @types.Game) -> Unit {
+fn @types.Game::draw_raiders(game : @types.Game) -> Unit {
   for raider in game.raiders {
     if not(raider.active) || raider.room != game.keeper.room {
       continue
@@ -271,7 +271,7 @@ fn draw_raiders(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the keeper as a coloured circle (teal in extinguisher mode, blue otherwise) with an outline, a facing direction line, an extinguisher range indicator when in that mode, and an ink-shield ring while the shield is active.
-fn draw_keeper(game : @types.Game) -> Unit {
+fn @types.Game::draw_keeper(game : @types.Game) -> Unit {
   let x = game.keeper.x.to_int()
   let y = game.keeper.y.to_int()
 
@@ -327,7 +327,7 @@ fn draw_keeper(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the count of active raiders currently in the specified room.
-fn count_raiders_in_room(game : @types.Game, room : Int) -> Int {
+fn @types.Game::count_raiders_in_room(game : @types.Game, room : Int) -> Int {
   let mut count = 0
   for raider in game.raiders {
     if raider.active && raider.room == room {
@@ -339,7 +339,7 @@ fn count_raiders_in_room(game : @types.Game, room : Int) -> Int {
 
 ///|
 /// Returns the count of active flames currently in the specified room.
-fn count_flames_in_room(game : @types.Game, room : Int) -> Int {
+fn @types.Game::count_flames_in_room(game : @types.Game, room : Int) -> Int {
   let mut count = 0
   for flame in game.flames {
     if flame.active && flame.room == room {
@@ -351,7 +351,7 @@ fn count_flames_in_room(game : @types.Game, room : Int) -> Int {
 
 ///|
 /// Draws the top-left minimap panel showing all rooms as small labelled cells with per-room breach severity bars and raider/flame counts; the current room is highlighted with a brighter border.
-fn draw_room_minimap(game : @types.Game) -> Unit {
+fn @types.Game::draw_room_minimap(game : @types.Game) -> Unit {
   let panel_x = 24
   let panel_y = 20
   let panel_w = 420
@@ -431,9 +431,9 @@ fn draw_room_minimap(game : @types.Game) -> Unit {
     )
     @raylib.draw_text(
       "R" +
-      count_raiders_in_room(game, room).to_string() +
+      game.count_raiders_in_room(room).to_string() +
       " F" +
-      count_flames_in_room(game, room).to_string(),
+      game.count_flames_in_room(room).to_string(),
       x + 8,
       y + 22,
       13,
@@ -482,7 +482,7 @@ fn draw_meter(
 
 ///|
 /// Draws the bottom HUD panel with scroll integrity and stamina meters, ink shield cooldown bar, wave and time display, seal charges, ink shield stock, score/best, current mode, and keyboard hint text.
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   let panel_x = 24
   let panel_y = @types.screen_h - 168
   let panel_w = @types.screen_w - 48
@@ -602,7 +602,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the current HUD message as a translucent banner above the HUD panel, fading in opacity with remaining message lifetime.
-fn draw_message(game : @types.Game) -> Unit {
+fn @types.Game::draw_message(game : @types.Game) -> Unit {
   if game.message_t <= 0.0 {
     return
   }
@@ -693,7 +693,7 @@ fn draw_paused_overlay() -> Unit {
 
 ///|
 /// Draws the GameOver overlay with a dark tint, "ARCHIVE LOST" headline, wave/score/best summary, defeat statistics, and restart or title prompts.
-fn draw_game_over_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -740,22 +740,22 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 ///|
 /// Renders the full frame for the current game state.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_background(game)
-  draw_chamber_shell(game)
-  draw_vault_core(game)
-  draw_breaches(game)
-  draw_flames(game)
-  draw_raiders(game)
-  draw_keeper(game)
+  game.draw_background()
+  game.draw_chamber_shell()
+  game.draw_vault_core()
+  game.draw_breaches()
+  game.draw_flames()
+  game.draw_raiders()
+  game.draw_keeper()
 
-  draw_room_minimap(game)
-  draw_hud(game)
-  draw_message(game)
+  game.draw_room_minimap()
+  game.draw_hud()
+  game.draw_message()
 
   match game.state {
     Title => draw_title_overlay()
     Playing => ()
     Paused => draw_paused_overlay()
-    GameOver => draw_game_over_overlay(game)
+    GameOver => game.draw_game_over_overlay()
   }
 }

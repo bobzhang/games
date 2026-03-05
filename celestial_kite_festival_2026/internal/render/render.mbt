@@ -25,7 +25,7 @@ fn draw_right_text(
 
 ///|
 /// Returns a random camera-shake offset scaled by the remaining shake intensity, or `(0, 0)` when the timer has expired.
-fn cam_shake(game : @types.Game) -> (Float, Float) {
+fn @types.Game::cam_shake(game : @types.Game) -> (Float, Float) {
   if game.shake_t <= 0.0 {
     (0.0, 0.0)
   } else {
@@ -36,7 +36,7 @@ fn cam_shake(game : @types.Game) -> (Float, Float) {
 
 ///|
 /// Draws the gradient night sky, animated moon, twinkling stars, and aurora ribbon bands with parallax camera offset.
-fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -116,7 +116,7 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws a layer of softly scrolling background clouds at slow parallax depth using triple overlapping circles.
-fn draw_far_clouds(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_far_clouds(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for i in 0..<24 {
     let fi = Float::from_int(i)
     let speed : Float = 14.0 + fi * 0.9
@@ -150,7 +150,7 @@ fn draw_far_clouds(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws horizontal wind-streak lines whose count and length vary with current wind intensity.
-fn draw_wind_lanes(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_wind_lanes(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let intensity = @types.clampf(
     game.wind_x.abs() /
     (@types.wind_base + Float::from_int(game.stage) * @types.wind_stage_bonus),
@@ -199,7 +199,7 @@ fn draw_play_bounds(cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws the string line from the anchor point at the bottom of the screen to the kite, thickening it when stretched past rope length.
-fn draw_anchor_and_rope(
+fn @types.Game::draw_anchor_and_rope(
   game : @types.Game,
   cam_x : Float,
   cam_y : Float,
@@ -243,7 +243,7 @@ fn draw_anchor_and_rope(
 
 ///|
 /// Draws all active kite trail rectangles fading out as their lifetime decreases.
-fn draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_trails(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for trail in game.trails {
     if not(trail.active) {
       continue
@@ -495,7 +495,7 @@ fn draw_obj(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws the player kite as a diamond with burst glow, tilt, a flowing tail of alternating coloured beads, reel ring, and hurt flash circle.
-fn draw_kite(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_kite(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let x = game.kite.x + cam_x
   let y = game.kite.y + cam_y
 
@@ -602,7 +602,7 @@ fn spark_col(kind : Int) -> @raylib.Color {
 
 ///|
 /// Draws all active sparks as fading circles and all active halos as expanding coloured ring outlines.
-fn draw_sparks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_sparks(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
       continue
@@ -701,7 +701,7 @@ fn draw_hud_bar(
 
 ///|
 /// Renders the HUD panel with calm, energy, score-goal, and time bars plus stage/score/wind text and the active combo display.
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -894,7 +894,7 @@ fn draw_button_visual(
 
 ///|
 /// Renders on-screen touch buttons when touch mode is active, showing the appropriate set for the current game state.
-fn draw_touch_controls(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   if not(game.touch_mode) {
     return
   }
@@ -926,7 +926,7 @@ fn draw_touch_controls(game : @types.Game) -> Unit {
 
 ///|
 /// Renders the title screen overlay with game name, subtitle, controls reference panel, and a highlighted start button.
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -1040,7 +1040,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Renders the stage-clear overlay with an animated slide-in "STAGE CLEAR" heading, bonus score, and next-stage message.
-fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_stage_clear_overlay(game : @types.Game) -> Unit {
   let t = @types.clampf(game.result_t / @types.stage_clear_wait, 0.0, 1.0)
   let y = @types.lerpf(230.0, 166.0, @types.ease_out_cubic(t)).to_int()
 
@@ -1069,7 +1069,7 @@ fn draw_stage_clear_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Renders the game-over screen with "FESTIVAL LOST" heading, final stats panel, and a highlighted retry button.
-fn draw_game_over_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -1171,7 +1171,7 @@ fn draw_game_over_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a full-screen pink flash overlay that fades quickly when the kite takes damage.
-fn draw_flash(game : @types.Game) -> Unit {
+fn @types.Game::draw_flash(game : @types.Game) -> Unit {
   if game.flash_t <= 0.0 {
     return
   }
@@ -1188,13 +1188,13 @@ fn draw_flash(game : @types.Game) -> Unit {
 
 ///|
 /// Composites the full play-world: sky, clouds, wind lanes, bounds, rope, trails, all objects (collectibles then hostiles), kite, and sparks.
-fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
-  draw_sky(game, cam_x, cam_y)
-  draw_far_clouds(game, cam_x, cam_y)
-  draw_wind_lanes(game, cam_x, cam_y)
+fn @types.Game::draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+  game.draw_sky(cam_x, cam_y)
+  game.draw_far_clouds(cam_x, cam_y)
+  game.draw_wind_lanes(cam_x, cam_y)
   draw_play_bounds(cam_x, cam_y)
-  draw_anchor_and_rope(game, cam_x, cam_y)
-  draw_trails(game, cam_x, cam_y)
+  game.draw_anchor_and_rope(cam_x, cam_y)
+  game.draw_trails(cam_x, cam_y)
 
   for obj in game.objs {
     if obj.active && @types.is_collectible(obj.kind) {
@@ -1208,8 +1208,8 @@ fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
     }
   }
 
-  draw_kite(game, cam_x, cam_y)
-  draw_sparks(game, cam_x, cam_y)
+  game.draw_kite(cam_x, cam_y)
+  game.draw_sparks(cam_x, cam_y)
 }
 
 ///|
@@ -1217,19 +1217,19 @@ fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(6, 12, 24, 255))
 
-  let shake = cam_shake(game)
-  draw_world(game, shake.0, shake.1)
-  draw_hud(game)
+  let shake = game.cam_shake()
+  game.draw_world(shake.0, shake.1)
+  game.draw_hud()
 
   match game.state {
-    Title => draw_title_overlay(game)
-    StageClear => draw_stage_clear_overlay(game)
-    GameOver => draw_game_over_overlay(game)
+    Title => game.draw_title_overlay()
+    StageClear => game.draw_stage_clear_overlay()
+    GameOver => game.draw_game_over_overlay()
     Play => ()
   }
 
-  draw_touch_controls(game)
-  draw_flash(game)
+  game.draw_touch_controls()
+  game.draw_flash()
 
   if game.state == Play && game.touch_mode {
     draw_center_text(

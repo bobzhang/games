@@ -1,5 +1,5 @@
 ///|
-fn alloc_bullet(game : @types.Game) -> Int {
+fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
   for i in 0..<game.bullets.length() {
     if not(game.bullets[i].active) {
       return i
@@ -9,7 +9,7 @@ fn alloc_bullet(game : @types.Game) -> Int {
 }
 
 ///|
-fn spawn_bullet(
+fn @types.Game::spawn_bullet(
   game : @types.Game,
   owner_team : @types.Team,
   x : Float,
@@ -18,7 +18,7 @@ fn spawn_bullet(
   speed : Float,
   power : Int,
 ) -> Unit {
-  let idx = alloc_bullet(game)
+  let idx = game.alloc_bullet()
   if idx < 0 {
     return
   }
@@ -36,7 +36,7 @@ fn spawn_bullet(
 }
 
 ///|
-fn bullet_hit_enemy(game : @types.Game, bullet : @types.Bullet) -> Bool {
+fn @types.Game::bullet_hit_enemy(game : @types.Game, bullet : @types.Bullet) -> Bool {
   for i in 0..<game.enemies.length() {
     if not(game.enemies[i].active) {
       continue
@@ -56,7 +56,7 @@ fn bullet_hit_enemy(game : @types.Game, bullet : @types.Bullet) -> Bool {
           Player2 => Player2
           _ => Player1
         }
-        destroy_enemy(game, i, team)
+        game.destroy_enemy(i, team)
       } else {
         enemy.blink_timer = 0.8
         @types.push_camera_shake(game, 0.8)
@@ -68,7 +68,7 @@ fn bullet_hit_enemy(game : @types.Game, bullet : @types.Bullet) -> Bool {
 }
 
 ///|
-fn bullet_hit_player(game : @types.Game, bullet : @types.Bullet) -> Bool {
+fn @types.Game::bullet_hit_player(game : @types.Game, bullet : @types.Bullet) -> Bool {
   for i in 0..<@types.max_players {
     let player = game.players[i]
     if not(player.active) {
@@ -77,7 +77,7 @@ fn bullet_hit_player(game : @types.Game, bullet : @types.Bullet) -> Bool {
     let radius = @types.tank_half + bullet.radius
     if @types.distance_sq(bullet.x, bullet.y, player.x, player.y) <=
       radius * radius {
-      on_player_destroyed(game, i)
+      game.on_player_destroyed(i)
       return true
     }
   }
@@ -85,7 +85,7 @@ fn bullet_hit_player(game : @types.Game, bullet : @types.Bullet) -> Bool {
 }
 
 ///|
-fn bullet_hit_core(game : @types.Game, bullet : @types.Bullet) -> Bool {
+fn @types.Game::bullet_hit_core(game : @types.Game, bullet : @types.Bullet) -> Bool {
   for i in 0..<game.cores.length() {
     if not(game.cores[i].active) {
       continue
@@ -97,7 +97,7 @@ fn bullet_hit_core(game : @types.Game, bullet : @types.Bullet) -> Bool {
         Player2 => Player2
         _ => Player1
       }
-      ignore(damage_core(game, i, team, bullet.power))
+      ignore(game.damage_core(i, team, bullet.power))
       return true
     }
   }
@@ -105,7 +105,7 @@ fn bullet_hit_core(game : @types.Game, bullet : @types.Bullet) -> Bool {
 }
 
 ///|
-fn update_bullet_vs_bullet(game : @types.Game) -> Unit {
+fn @types.Game::update_bullet_vs_bullet(game : @types.Game) -> Unit {
   for i in 0..<game.bullets.length() {
     if not(game.bullets[i].active) {
       continue
@@ -136,7 +136,7 @@ fn update_bullet_vs_bullet(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_bullets(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
   for bullet in game.bullets {
     if not(bullet.active) {
       continue
@@ -167,25 +167,25 @@ fn update_bullets(game : @types.Game, dt : Float) -> Unit {
         break
       }
 
-      if damage_tile_at_point(game, bullet.x, bullet.y, bullet.power) {
+      if game.damage_tile_at_point(bullet.x, bullet.y, bullet.power) {
         bullet.active = false
         hit_something = true
         break
       }
 
       if bullet.owner_team == Enemy {
-        if bullet_hit_player(game, bullet) {
+        if game.bullet_hit_player(bullet) {
           bullet.active = false
           hit_something = true
           break
         }
       } else {
-        if bullet_hit_core(game, bullet) {
+        if game.bullet_hit_core(bullet) {
           bullet.active = false
           hit_something = true
           break
         }
-        if bullet_hit_enemy(game, bullet) {
+        if game.bullet_hit_enemy(bullet) {
           bullet.active = false
           hit_something = true
           break
@@ -198,5 +198,5 @@ fn update_bullets(game : @types.Game, dt : Float) -> Unit {
     }
   }
 
-  update_bullet_vs_bullet(game)
+  game.update_bullet_vs_bullet()
 }

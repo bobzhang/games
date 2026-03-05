@@ -82,9 +82,9 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
     @raylib.is_key_pressed(@raylib.KeySpace) {
     if game.attack_cooldown_timer <= 0.0 {
       if game.player_weapon == @types.weapon_bow {
-        perform_bow_attack(game)
+        game.perform_bow_attack()
       } else {
-        perform_melee_attack(game)
+        game.perform_melee_attack()
       }
       game.attack_cooldown_timer = @types.get_weapon_cooldown(
         game.player_weapon,
@@ -96,7 +96,7 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   // Spell casting (RMB or Q)
   if @raylib.is_mouse_button_pressed(@raylib.MouseButtonRight) ||
     @raylib.is_key_pressed(@raylib.KeyQ) {
-    cast_selected_spell(game)
+    game.cast_selected_spell()
   }
   // Spell cooldown
   if game.spell_cooldown > 0.0 {
@@ -141,18 +141,18 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   let new_mana = new_mana_f.to_int()
   game.player_mana = new_mana.min(game.player_max_mana)
   // Pickup loot
-  check_loot_pickup(game)
+  game.check_loot_pickup()
   // Check stairs
-  check_stairs(game)
+  game.check_stairs()
   // Check chest interaction
   if @raylib.is_key_pressed(@raylib.KeyE) {
-    check_chest_open(game)
-    check_door_interact(game)
-    check_shop_interact(game)
-    check_shrine_interact(game)
+    game.check_chest_open()
+    game.check_door_interact()
+    game.check_shop_interact()
+    game.check_shrine_interact()
   }
   // Check traps
-  check_traps(game, dt)
+  game.check_traps(dt)
   // Update buffs
   @types.update_buffs(game, dt)
   // Update messages
@@ -203,12 +203,12 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   }
   // Check level up
   if game.player_xp >= game.player_xp_next {
-    level_up(game)
+    game.level_up()
   }
 }
 
 ///|
-fn perform_melee_attack(game : @types.Game) -> Unit {
+fn @types.Game::perform_melee_attack(game : @types.Game) -> Unit {
   let attack_dir_x = @math.sinf(game.camera_yaw)
   let attack_dir_z = @math.cosf(game.camera_yaw)
   let weapon_range = @types.get_weapon_range(game.player_weapon)
@@ -273,7 +273,7 @@ fn perform_melee_attack(game : @types.Game) -> Unit {
 }
 
 ///|
-fn perform_bow_attack(game : @types.Game) -> Unit {
+fn @types.Game::perform_bow_attack(game : @types.Game) -> Unit {
   let idx = @types.alloc_projectile(game)
   if idx < 0 {
     return
@@ -309,7 +309,7 @@ fn perform_bow_attack(game : @types.Game) -> Unit {
 }
 
 ///|
-fn cast_selected_spell(game : @types.Game) -> Unit {
+fn @types.Game::cast_selected_spell(game : @types.Game) -> Unit {
   if game.selected_spell < 0 || game.selected_spell >= game.spells.length() {
     return
   }
@@ -330,22 +330,22 @@ fn cast_selected_spell(game : @types.Game) -> Unit {
   game.player_mana -= cost
   game.spell_cooldown = 0.5
   if spell_type == @types.spell_fireball {
-    cast_fireball(game)
+    game.cast_fireball()
   } else if spell_type == @types.spell_ice_bolt {
-    cast_ice_bolt(game)
+    game.cast_ice_bolt()
   } else if spell_type == @types.spell_heal {
-    cast_heal(game)
+    game.cast_heal()
   } else if spell_type == @types.spell_shield {
-    cast_shield(game)
+    game.cast_shield()
   } else if spell_type == @types.spell_lightning {
-    cast_lightning(game)
+    game.cast_lightning()
   } else if spell_type == @types.spell_teleport {
-    cast_teleport(game)
+    game.cast_teleport()
   }
 }
 
 ///|
-fn cast_fireball(game : @types.Game) -> Unit {
+fn @types.Game::cast_fireball(game : @types.Game) -> Unit {
   let idx = @types.alloc_projectile(game)
   if idx < 0 {
     return
@@ -382,7 +382,7 @@ fn cast_fireball(game : @types.Game) -> Unit {
 }
 
 ///|
-fn cast_ice_bolt(game : @types.Game) -> Unit {
+fn @types.Game::cast_ice_bolt(game : @types.Game) -> Unit {
   let idx = @types.alloc_projectile(game)
   if idx < 0 {
     return
@@ -419,7 +419,7 @@ fn cast_ice_bolt(game : @types.Game) -> Unit {
 }
 
 ///|
-fn cast_heal(game : @types.Game) -> Unit {
+fn @types.Game::cast_heal(game : @types.Game) -> Unit {
   let int_bonus = game.player_int_stat / 2
   let heal = @types.heal_amount + int_bonus
   game.player_hp = (game.player_hp + heal).min(game.player_max_hp)
@@ -437,7 +437,7 @@ fn cast_heal(game : @types.Game) -> Unit {
 }
 
 ///|
-fn cast_shield(game : @types.Game) -> Unit {
+fn @types.Game::cast_shield(game : @types.Game) -> Unit {
   let int_bonus = game.player_int_stat / 4
   @types.add_buff(
     game,
@@ -459,7 +459,7 @@ fn cast_shield(game : @types.Game) -> Unit {
 }
 
 ///|
-fn cast_lightning(game : @types.Game) -> Unit {
+fn @types.Game::cast_lightning(game : @types.Game) -> Unit {
   // Hit nearest enemy in front of player
   let attack_dir_x = @math.sinf(game.camera_yaw)
   let attack_dir_z = @math.cosf(game.camera_yaw)
@@ -531,7 +531,7 @@ fn cast_lightning(game : @types.Game) -> Unit {
 }
 
 ///|
-fn cast_teleport(game : @types.Game) -> Unit {
+fn @types.Game::cast_teleport(game : @types.Game) -> Unit {
   // Teleport forward in facing direction
   let dir_x = @math.sinf(game.camera_yaw)
   let dir_z = @math.cosf(game.camera_yaw)
@@ -665,7 +665,7 @@ pub fn kill_enemy(game : @types.Game, idx : Int) -> Unit {
 }
 
 ///|
-fn check_loot_pickup(game : @types.Game) -> Unit {
+fn @types.Game::check_loot_pickup(game : @types.Game) -> Unit {
   for l in game.loot {
     if not(l.active) {
       continue
@@ -756,7 +756,7 @@ fn check_loot_pickup(game : @types.Game) -> Unit {
 }
 
 ///|
-fn check_stairs(game : @types.Game) -> Unit {
+fn @types.Game::check_stairs(game : @types.Game) -> Unit {
   let stairs_wx = @types.grid_to_world_x(game.stairs_x)
   let stairs_wz = @types.grid_to_world_z(game.stairs_z)
   let dist = @types.dist2d(game.player_x, game.player_z, stairs_wx, stairs_wz)
@@ -780,7 +780,7 @@ fn check_stairs(game : @types.Game) -> Unit {
 }
 
 ///|
-fn check_chest_open(game : @types.Game) -> Unit {
+fn @types.Game::check_chest_open(game : @types.Game) -> Unit {
   let check_x = game.player_x + @math.sinf(game.camera_yaw) * 1.5
   let check_z = game.player_z + @math.cosf(game.camera_yaw) * 1.5
   let gx = @types.world_to_grid_x(check_x)
@@ -839,7 +839,7 @@ fn check_chest_open(game : @types.Game) -> Unit {
       // Spell scroll
       let spell_roll = @types.rand_range(game, 1, 6)
       let spell = spell_roll
-      let added = add_spell_to_player(game, spell)
+      let added = game.add_spell_to_player(spell)
       if added {
         game.message_text = "Chest: \{@types.get_spell_name(spell)} spell!"
         @types.add_message(
@@ -865,7 +865,7 @@ fn check_chest_open(game : @types.Game) -> Unit {
 }
 
 ///|
-fn check_door_interact(game : @types.Game) -> Unit {
+fn @types.Game::check_door_interact(game : @types.Game) -> Unit {
   let check_x = game.player_x + @math.sinf(game.camera_yaw) * 1.5
   let check_z = game.player_z + @math.cosf(game.camera_yaw) * 1.5
   let gx = @types.world_to_grid_x(check_x)
@@ -901,7 +901,7 @@ fn check_door_interact(game : @types.Game) -> Unit {
 }
 
 ///|
-fn check_shop_interact(game : @types.Game) -> Unit {
+fn @types.Game::check_shop_interact(game : @types.Game) -> Unit {
   let check_x = game.player_x + @math.sinf(game.camera_yaw) * 1.5
   let check_z = game.player_z + @math.cosf(game.camera_yaw) * 1.5
   let gx = @types.world_to_grid_x(check_x)
@@ -915,7 +915,7 @@ fn check_shop_interact(game : @types.Game) -> Unit {
 }
 
 ///|
-fn check_shrine_interact(game : @types.Game) -> Unit {
+fn @types.Game::check_shrine_interact(game : @types.Game) -> Unit {
   let check_x = game.player_x + @math.sinf(game.camera_yaw) * 1.5
   let check_z = game.player_z + @math.cosf(game.camera_yaw) * 1.5
   let gx = @types.world_to_grid_x(check_x)
@@ -933,7 +933,7 @@ fn check_shrine_interact(game : @types.Game) -> Unit {
 }
 
 ///|
-fn check_traps(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::check_traps(game : @types.Game, dt : Float) -> Unit {
   let pgx = @types.world_to_grid_x(game.player_x)
   let pgz = @types.world_to_grid_z(game.player_z)
   for trap in game.traps {
@@ -997,7 +997,7 @@ fn check_traps(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn add_spell_to_player(game : @types.Game, spell_type : Int) -> Bool {
+fn @types.Game::add_spell_to_player(game : @types.Game, spell_type : Int) -> Bool {
   // Check if already have this spell
   for spell in game.spells {
     if spell.active && spell.spell_type == spell_type {
@@ -1016,7 +1016,7 @@ fn add_spell_to_player(game : @types.Game, spell_type : Int) -> Bool {
 }
 
 ///|
-fn level_up(game : @types.Game) -> Unit {
+fn @types.Game::level_up(game : @types.Game) -> Unit {
   game.player_xp -= game.player_xp_next
   game.player_level += 1
   game.player_xp_next = @levels.get_xp_for_level(game.player_level)

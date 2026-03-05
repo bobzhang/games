@@ -10,7 +10,7 @@ fn enemy_spawn_x(slot : Int) -> Float {
 }
 
 ///|
-fn alloc_enemy_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_enemy_slot(game : @types.Game) -> Int {
   for i in 0..<game.enemies.length() {
     if not(game.enemies[i].active) {
       return i
@@ -20,7 +20,7 @@ fn alloc_enemy_slot(game : @types.Game) -> Int {
 }
 
 ///|
-fn spawn_enemy(game : @types.Game) -> Bool {
+fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
   if game.enemies_spawned >= game.enemies_to_spawn {
     return false
   }
@@ -28,7 +28,7 @@ fn spawn_enemy(game : @types.Game) -> Bool {
     return false
   }
 
-  let slot = alloc_enemy_slot(game)
+  let slot = game.alloc_enemy_slot()
   if slot < 0 {
     return false
   }
@@ -43,7 +43,7 @@ fn spawn_enemy(game : @types.Game) -> Bool {
     return false
   }
 
-  let kind = stage_enemy_kind(game, game.stage_index, game.enemies_spawned)
+  let kind = game.stage_enemy_kind(game.stage_index, game.enemies_spawned)
   game.enemies[slot] = @types.Tank::new_enemy(kind, sx, sy)
   game.enemies_spawned += 1
   game.enemies_alive += 1
@@ -52,7 +52,7 @@ fn spawn_enemy(game : @types.Game) -> Bool {
 }
 
 ///|
-fn choose_enemy_target_player(game : @types.Game, enemy : @types.Tank) -> Int {
+fn @types.Game::choose_enemy_target_player(game : @types.Game, enemy : @types.Tank) -> Int {
   let mut best_idx = -1
   let mut best_dist : Float = Float::from_int(1000000000)
   for i in 0..<@types.max_players {
@@ -69,8 +69,8 @@ fn choose_enemy_target_player(game : @types.Game, enemy : @types.Tank) -> Int {
 }
 
 ///|
-fn enemy_desired_dir(game : @types.Game, enemy : @types.Tank) -> Int {
-  let target_player = choose_enemy_target_player(game, enemy)
+fn @types.Game::enemy_desired_dir(game : @types.Game, enemy : @types.Tank) -> Int {
+  let target_player = game.choose_enemy_target_player(enemy)
   let mut target_x = @types.tile_center_x(@types.base_tile_x)
   let mut target_y = @types.tile_center_y(@types.base_tile_y)
 
@@ -106,7 +106,7 @@ fn enemy_desired_dir(game : @types.Game, enemy : @types.Tank) -> Int {
 }
 
 ///|
-fn try_move_enemy(
+fn @types.Game::try_move_enemy(
   game : @types.Game,
   enemy_index : Int,
   dir : Int,
@@ -135,13 +135,13 @@ fn enemy_shoot_if_ready(_game : @types.Game, _enemy_index : Int) -> Unit {
 }
 
 ///|
-fn update_enemy_spawn(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_enemy_spawn(game : @types.Game, dt : Float) -> Unit {
   if game.enemies_spawned >= game.enemies_to_spawn {
     return
   }
   game.spawn_timer -= dt
   if game.spawn_timer <= 0.0 {
-    if spawn_enemy(game) {
+    if game.spawn_enemy() {
       game.spawn_timer = @types.enemy_spawn_period * game.profile.spawn_scale
     } else {
       game.spawn_timer = 0.25 * game.profile.spawn_scale
@@ -150,7 +150,7 @@ fn update_enemy_spawn(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn update_enemies(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.enemies.length() {
     if not(game.enemies[i].active) {
       continue
@@ -179,11 +179,11 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
 
     if enemy.ai_move_timer <= 0.0 {
       enemy.ai_move_timer = @types.rand_rangef(game, 0.35, 1.25)
-      let new_dir = enemy_desired_dir(game, enemy)
+      let new_dir = game.enemy_desired_dir(enemy)
       enemy.dir = new_dir
     }
 
-    let moved = try_move_enemy(game, i, enemy.dir, dt)
+    let moved = game.try_move_enemy(i, enemy.dir, dt)
     if not(moved) {
       enemy.ai_stuck_timer += dt
       if enemy.ai_stuck_timer > 0.14 {
@@ -207,14 +207,14 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
       let hit_r = @types.tank_half + @types.tank_half - 2.0
       if @types.distance_sq(enemy.x, enemy.y, player.x, player.y) <=
         hit_r * hit_r {
-        on_player_destroyed(game, p)
+        game.on_player_destroyed(p)
       }
     }
   }
 }
 
 ///|
-fn destroy_enemy(
+fn @types.Game::destroy_enemy(
   game : @types.Game,
   enemy_index : Int,
   killer_team : @types.Team,
@@ -239,11 +239,11 @@ fn destroy_enemy(
   let base_bias = if enemy.enemy_kind == Heavy { 22 } else { 14 }
   let drop_bias = (base_bias + game.profile.drop_bonus).clamp(min=4, max=55)
   if drop_roll < drop_bias {
-    spawn_random_powerup(game, enemy.x, enemy.y)
+    game.spawn_random_powerup(enemy.x, enemy.y)
   }
 }
 
 ///|
-fn stage_is_clear(game : @types.Game) -> Bool {
+fn @types.Game::stage_is_clear(game : @types.Game) -> Bool {
   game.enemies_spawned >= game.enemies_to_spawn && game.enemies_alive <= 0
 }

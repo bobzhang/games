@@ -1,5 +1,5 @@
 ///|
-fn alloc_bomb(game : @types.Game) -> Int {
+fn @types.Game::alloc_bomb(game : @types.Game) -> Int {
   for i in 0..<game.bombs.length() {
     if not(game.bombs[i].active) {
       return i
@@ -9,7 +9,7 @@ fn alloc_bomb(game : @types.Game) -> Int {
 }
 
 ///|
-fn can_player_place_bomb(game : @types.Game, player_index : Int) -> Bool {
+fn @types.Game::can_player_place_bomb(game : @types.Game, player_index : Int) -> Bool {
   let player = game.players[player_index]
   if not(player.active) {
     return false
@@ -42,11 +42,11 @@ fn can_player_place_bomb(game : @types.Game, player_index : Int) -> Bool {
 }
 
 ///|
-fn place_player_bomb(game : @types.Game, player_index : Int) -> Unit {
-  if not(can_player_place_bomb(game, player_index)) {
+fn @types.Game::place_player_bomb(game : @types.Game, player_index : Int) -> Unit {
+  if not(game.can_player_place_bomb(player_index)) {
     return
   }
-  let idx = alloc_bomb(game)
+  let idx = game.alloc_bomb()
   if idx < 0 {
     return
   }
@@ -82,7 +82,7 @@ fn is_blast_blocking_tile(tile : @types.TileKind) -> Bool {
 }
 
 ///|
-fn mark_chain_bombs(game : @types.Game, tx : Int, ty : Int) -> Unit {
+fn @types.Game::mark_chain_bombs(game : @types.Game, tx : Int, ty : Int) -> Unit {
   for b in game.bombs {
     if not(b.active) || b.exploding {
       continue
@@ -96,7 +96,7 @@ fn mark_chain_bombs(game : @types.Game, tx : Int, ty : Int) -> Unit {
 }
 
 ///|
-fn hit_entities_on_tile(
+fn @types.Game::hit_entities_on_tile(
   game : @types.Game,
   team : @types.Team,
   tx : Int,
@@ -109,7 +109,7 @@ fn hit_entities_on_tile(
     }
     if @types.world_x_to_tile(enemy.x) == tx &&
       @types.world_y_to_tile(enemy.y) == ty {
-      destroy_enemy(game, i, team)
+      game.destroy_enemy(i, team)
     }
   }
 
@@ -120,13 +120,13 @@ fn hit_entities_on_tile(
     }
     if @types.world_x_to_tile(player.x) == tx &&
       @types.world_y_to_tile(player.y) == ty {
-      on_player_destroyed(game, i)
+      game.on_player_destroyed(i)
     }
   }
 }
 
 ///|
-fn detonate_tile(
+fn @types.Game::detonate_tile(
   game : @types.Game,
   team : @types.Team,
   tx : Int,
@@ -140,8 +140,8 @@ fn detonate_tile(
   let cy = @types.tile_center_y(ty)
   @particles.spawn_spark_burst(game, cx, cy, 7)
 
-  hit_entities_on_tile(game, team, tx, ty)
-  mark_chain_bombs(game, tx, ty)
+  game.hit_entities_on_tile(team, tx, ty)
+  game.mark_chain_bombs(tx, ty)
 
   let tile = @types.get_tile(game, tx, ty)
   match tile {
@@ -163,7 +163,7 @@ fn detonate_tile(
 }
 
 ///|
-fn trigger_bomb(game : @types.Game, bomb_index : Int) -> Unit {
+fn @types.Game::trigger_bomb(game : @types.Game, bomb_index : Int) -> Unit {
   if bomb_index < 0 || bomb_index >= game.bombs.length() {
     return
   }
@@ -181,7 +181,7 @@ fn trigger_bomb(game : @types.Game, bomb_index : Int) -> Unit {
   let team = bomb.owner_team
   let range = bomb.blast_range
 
-  ignore(detonate_tile(game, team, tx, ty))
+  ignore(game.detonate_tile(team, tx, ty))
   for dir in 0..<4 {
     let dx = if dir == 0 {
       0
@@ -207,7 +207,7 @@ fn trigger_bomb(game : @types.Game, bomb_index : Int) -> Unit {
       if not(@types.in_tile_bounds(nx, ny)) {
         break
       }
-      if not(detonate_tile(game, team, nx, ny)) {
+      if not(game.detonate_tile(team, nx, ny)) {
         break
       }
     }
@@ -218,7 +218,7 @@ fn trigger_bomb(game : @types.Game, bomb_index : Int) -> Unit {
 }
 
 ///|
-fn update_bombs(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_bombs(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.bombs.length() {
     let bomb = game.bombs[i]
     if not(bomb.active) {
@@ -235,7 +235,7 @@ fn update_bombs(game : @types.Game, dt : Float) -> Unit {
 
     bomb.fuse -= dt
     if bomb.fuse <= 0.0 {
-      trigger_bomb(game, i)
+      game.trigger_bomb(i)
     }
   }
 }

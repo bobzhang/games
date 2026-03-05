@@ -1,5 +1,5 @@
 ///|
-fn clear_cores(game : @types.Game) -> Unit {
+fn @types.Game::clear_cores(game : @types.Game) -> Unit {
   for i in 0..<game.cores.length() {
     game.cores[i] = @types.BioCore::inactive()
   }
@@ -8,7 +8,7 @@ fn clear_cores(game : @types.Game) -> Unit {
 }
 
 ///|
-fn alloc_core_slot(game : @types.Game) -> Int {
+fn @types.Game::alloc_core_slot(game : @types.Game) -> Int {
   for i in 0..<game.cores.length() {
     if not(game.cores[i].active) {
       return i
@@ -18,13 +18,13 @@ fn alloc_core_slot(game : @types.Game) -> Int {
 }
 
 ///|
-fn spawn_core_entity(
+fn @types.Game::spawn_core_entity(
   game : @types.Game,
   x : Float,
   y : Float,
   hp : Int,
 ) -> Bool {
-  let slot = alloc_core_slot(game)
+  let slot = game.alloc_core_slot()
   if slot < 0 {
     return false
   }
@@ -55,7 +55,7 @@ fn tile_is_core_spawnable(tile : @types.Tile) -> Bool {
 }
 
 ///|
-fn try_spawn_core_at_tile(
+fn @types.Game::try_spawn_core_at_tile(
   game : @types.Game,
   tx : Int,
   ty : Int,
@@ -86,12 +86,12 @@ fn try_spawn_core_at_tile(
     }
   }
 
-  spawn_core_entity(game, x, y, hp)
+  game.spawn_core_entity(x, y, hp)
 }
 
 ///|
-fn seed_stage_cores(game : @types.Game, stage : Int) -> Unit {
-  clear_cores(game)
+fn @types.Game::seed_stage_cores(game : @types.Game, stage : Int) -> Unit {
+  game.clear_cores()
   let wave = stage + 1
   let hp = @types.core_hp_base + wave * 2
   game.cores_goal = core_goal_for_stage(stage)
@@ -102,7 +102,7 @@ fn seed_stage_cores(game : @types.Game, stage : Int) -> Unit {
     tries += 1
     let tx = @types.rand_range(game, 2, @types.map_tiles_w - 3)
     let ty = @types.rand_range(game, 2, @types.map_tiles_h - 3)
-    if try_spawn_core_at_tile(game, tx, ty, hp) {
+    if game.try_spawn_core_at_tile(tx, ty, hp) {
       placed += 1
     }
   }
@@ -114,7 +114,7 @@ fn seed_stage_cores(game : @types.Game, stage : Int) -> Unit {
       for tx = 2
           tx < @types.map_tiles_w - 2 && placed < game.cores_goal
           tx = tx + 1 {
-        if try_spawn_core_at_tile(game, tx, ty, hp) {
+        if game.try_spawn_core_at_tile(tx, ty, hp) {
           placed += 1
         }
       }
@@ -125,7 +125,7 @@ fn seed_stage_cores(game : @types.Game, stage : Int) -> Unit {
 }
 
 ///|
-fn core_objective_done(game : @types.Game) -> Bool {
+fn @types.Game::core_objective_done(game : @types.Game) -> Bool {
   if game.cores_goal <= 0 {
     true
   } else {
@@ -134,7 +134,7 @@ fn core_objective_done(game : @types.Game) -> Bool {
 }
 
 ///|
-fn damage_core(
+fn @types.Game::damage_core(
   game : @types.Game,
   index : Int,
   team : @types.Team,
@@ -170,7 +170,7 @@ fn damage_core(
 }
 
 ///|
-fn update_cores(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_cores(game : @types.Game, dt : Float) -> Unit {
   for core in game.cores {
     if not(core.active) {
       continue

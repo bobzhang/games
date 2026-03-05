@@ -1,19 +1,19 @@
 ///|
 /// Sets the HUD status message and starts its display timer.
-fn set_message(game : @types.Game, msg : String, ttl : Float) -> Unit {
+fn @types.Game::set_message(game : @types.Game, msg : String, ttl : Float) -> Unit {
   game.msg = msg
   game.msg_t = ttl
 }
 
 ///|
 /// Adds `delta` to the score, clamping the result to a minimum of zero.
-fn add_score(game : @types.Game, delta : Int) -> Unit {
+fn @types.Game::add_score(game : @types.Game, delta : Int) -> Unit {
   game.score = (0).max(game.score + delta)
 }
 
 ///|
 /// Deactivates and zeroes all entries in the hazard pool.
-fn clear_hazards(game : @types.Game) -> Unit {
+fn @types.Game::clear_hazards(game : @types.Game) -> Unit {
   for hazard in game.hazards {
     hazard.active = false
     hazard.kind = @types.hazard_debris
@@ -27,7 +27,7 @@ fn clear_hazards(game : @types.Game) -> Unit {
 
 ///|
 /// Initialises all rival boats with staggered lane positions, random speed biases, and stroke offsets.
-fn setup_rivals(game : @types.Game) -> Unit {
+fn @types.Game::setup_rivals(game : @types.Game) -> Unit {
   for i in 0..<game.rivals.length() {
     let lane_seed : Float = if i == 0 {
       -0.78
@@ -51,9 +51,9 @@ fn setup_rivals(game : @types.Game) -> Unit {
 
 ///|
 /// Resets all race state fields, clears hazards, sets up rivals, and begins a new sprint.
-fn reset_run(game : @types.Game) -> Unit {
-  clear_hazards(game)
-  setup_rivals(game)
+fn @types.Game::reset_run(game : @types.Game) -> Unit {
+  game.clear_hazards()
+  game.setup_rivals()
 
   game.state = Play
   game.distance = 0.0
@@ -82,12 +82,12 @@ fn reset_run(game : @types.Game) -> Unit {
   game.game_t = 0.0
   game.hazard_spawn_t = 0.35
 
-  set_message(game, "Sprint started! Tap J in rhythm.", 2.2)
+  game.set_message("Sprint started! Tap J in rhythm.", 2.2)
 }
 
 ///|
 /// Returns the player's current race rank by counting rivals ahead of the player.
-fn current_rank(game : @types.Game) -> Int {
+fn @types.Game::current_rank(game : @types.Game) -> Int {
   let mut ahead : Int = 0
 
   for rival in game.rivals {
@@ -101,7 +101,7 @@ fn current_rank(game : @types.Game) -> Int {
 
 ///|
 /// Activates the first free hazard slot ahead of the player with a random kind, lane, and size.
-fn spawn_hazard(game : @types.Game) -> Bool {
+fn @types.Game::spawn_hazard(game : @types.Game) -> Bool {
   for hazard in game.hazards {
     if hazard.active {
       continue
@@ -134,7 +134,7 @@ fn spawn_hazard(game : @types.Game) -> Bool {
 
 ///|
 /// Advances the beat clock, cools down the stroke timer, and decays the streak and rhythm meter when the player misses a beat.
-fn update_rhythm(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_rhythm(game : @types.Game, dt : Float) -> Unit {
   game.rhythm_t = game.rhythm_t + dt
   while game.rhythm_t >= @types.beat_period {
     game.rhythm_t = game.rhythm_t - @types.beat_period
@@ -156,11 +156,11 @@ fn update_rhythm(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Evaluates a paddle stroke against the beat window and adjusts speed, rhythm meter, and streak accordingly.
-fn apply_paddle(game : @types.Game) -> Unit {
+fn @types.Game::apply_paddle(game : @types.Game) -> Unit {
   if game.stroke_cd > 0.0 {
     game.rhythm_meter = @types.maxf(0.0, game.rhythm_meter - 8.0)
     game.wobble = @types.minf(1.8, game.wobble + 0.06)
-    set_message(game, "Stroke too rushed", 0.45)
+    game.set_message("Stroke too rushed", 0.45)
     return
   }
 
@@ -177,22 +177,22 @@ fn apply_paddle(game : @types.Game) -> Unit {
     )
     game.speed = game.speed + 48.0 + Float::from_int(game.streak) * 1.8
     game.wobble = @types.maxf(0.0, game.wobble - 0.11)
-    add_score(game, 15 + game.streak * 3)
-    set_message(game, "Perfect stroke!", 0.5)
+    game.add_score(15 + game.streak * 3)
+    game.set_message("Perfect stroke!", 0.5)
   } else if miss <= @types.beat_good_window {
     game.streak = (game.streak + 1).clamp(min=0, max=30)
     game.rhythm_meter = @types.minf(100.0, game.rhythm_meter + 12.0)
     game.speed = game.speed + 33.0 + Float::from_int(game.streak)
     game.wobble = @types.maxf(0.0, game.wobble - 0.04)
-    add_score(game, 9 + game.streak * 2)
-    set_message(game, "Good stroke", 0.35)
+    game.add_score(9 + game.streak * 2)
+    game.set_message("Good stroke", 0.35)
   } else {
     game.streak = 0
     game.rhythm_meter = @types.maxf(0.0, game.rhythm_meter - 16.0)
     game.speed = @types.maxf(70.0, game.speed - 22.0)
     game.wobble = @types.minf(1.8, game.wobble + 0.14)
-    add_score(game, -10)
-    set_message(game, "Off-beat stroke", 0.7)
+    game.add_score(-10)
+    game.set_message("Off-beat stroke", 0.7)
   }
 
   if game.streak > game.best_streak {
@@ -205,20 +205,20 @@ fn apply_paddle(game : @types.Game) -> Unit {
 
 ///|
 /// Activates a dragon burst if the player pressed the burst key and the rhythm meter is full.
-fn try_burst(game : @types.Game) -> Unit {
+fn @types.Game::try_burst(game : @types.Game) -> Unit {
   if game.burst_t <= 0.0 &&
     game.input.burst_pressed &&
     game.rhythm_meter >= 100.0 {
     game.burst_t = 1.2
     game.rhythm_meter = 0.0
-    add_score(game, 90)
-    set_message(game, "Dragon burst!", 1.0)
+    game.add_score(90)
+    game.set_message("Dragon burst!", 1.0)
   }
 }
 
 ///|
 /// Applies steer input and wave-driven drift to the player's lane position and updates the wobble level.
-fn update_wave_lane(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_wave_lane(game : @types.Game, dt : Float) -> Unit {
   game.wave_t = game.wave_t + dt
 
   let wave_force : Float = 0.5 +
@@ -247,7 +247,7 @@ fn update_wave_lane(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Calculates target speed from streak, rhythm, burst, and wobble modifiers, then advances distance and awards pace score.
-fn update_speed_distance(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_speed_distance(game : @types.Game, dt : Float) -> Unit {
   let streak_bonus : Float = Float::from_int(game.streak.min(20)) * 2.4
   let rhythm_bonus : Float = game.rhythm_meter * 0.22
   let burst_bonus : Float = if game.burst_t > 0.0 { 108.0 } else { 0.0 }
@@ -270,18 +270,18 @@ fn update_speed_distance(game : @types.Game, dt : Float) -> Unit {
   game.distance = game.distance + game.speed * dt
   game.game_t = game.game_t + dt
 
-  add_score(game, (game.speed * dt * 0.085).to_int())
+  game.add_score((game.speed * dt * 0.085).to_int())
 
   game.burst_t = @types.maxf(0.0, game.burst_t - dt)
 }
 
 ///|
 /// Counts down the spawn timer and spawns a new hazard when it expires, increasing frequency with distance.
-fn update_hazard_spawning(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_hazard_spawning(game : @types.Game, dt : Float) -> Unit {
   game.hazard_spawn_t = game.hazard_spawn_t - dt
 
   if game.hazard_spawn_t <= 0.0 {
-    ignore(spawn_hazard(game))
+    ignore(game.spawn_hazard())
     let pace : Float = @types.maxf(0.2, 0.74 - game.distance / 9000.0)
     game.hazard_spawn_t = pace + @types.randf(0.0, 0.32)
   }
@@ -289,7 +289,7 @@ fn update_hazard_spawning(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Advances hazard drift, culls passed hazards, and resolves player collisions with debris or waves.
-fn update_hazards(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_hazards(game : @types.Game, dt : Float) -> Unit {
   for hazard in game.hazards {
     if not(hazard.active) {
       continue
@@ -328,18 +328,18 @@ fn update_hazards(game : @types.Game, dt : Float) -> Unit {
         }
         game.hit_count = game.hit_count + 1
 
-        add_score(game, -28)
-        set_message(game, "Debris impact!", 0.85)
+        game.add_score(-28)
+        game.set_message("Debris impact!", 0.85)
       } else if game.input.stabilize_down {
         game.rhythm_meter = @types.minf(100.0, game.rhythm_meter + 3.5)
-        add_score(game, 6)
-        set_message(game, "Wave absorbed", 0.45)
+        game.add_score(6)
+        game.set_message("Wave absorbed", 0.45)
       } else {
         game.speed = @types.maxf(72.0, game.speed - 24.0)
         game.rhythm_meter = @types.maxf(0.0, game.rhythm_meter - 11.0)
         game.wobble = @types.minf(1.8, game.wobble + 0.22)
-        add_score(game, -12)
-        set_message(game, "Wave rocked the boat", 0.7)
+        game.add_score(-12)
+        game.set_message("Wave rocked the boat", 0.7)
       }
 
       hazard.active = false
@@ -349,7 +349,7 @@ fn update_hazards(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Simulates rival boat movement, handles boat-boat proximity effects, and updates the player's best rank.
-fn update_rivals(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_rivals(game : @types.Game, dt : Float) -> Unit {
   for rival in game.rivals {
     if not(rival.active) {
       continue
@@ -389,7 +389,7 @@ fn update_rivals(game : @types.Game, dt : Float) -> Unit {
     if near_dist < 15.0 && near_lane < 0.2 {
       if game.speed >= rival_speed {
         rival.dist = rival.dist - dt * 20.0
-        add_score(game, 5)
+        game.add_score(5)
       } else {
         game.speed = @types.maxf(68.0, game.speed - 14.0)
         game.wobble = @types.minf(1.8, game.wobble + 0.1)
@@ -397,21 +397,21 @@ fn update_rivals(game : @types.Game, dt : Float) -> Unit {
     }
   }
 
-  let rank : Int = current_rank(game)
+  let rank : Int = game.current_rank()
   if rank < game.best_rank {
     game.best_rank = rank
     if rank == 1 {
-      add_score(game, 85)
-      set_message(game, "You took the lead!", 1.1)
+      game.add_score(85)
+      game.set_message("You took the lead!", 1.1)
     } else {
-      add_score(game, 28)
+      game.add_score(28)
     }
   }
 }
 
 ///|
 /// Checks whether the player has passed the next checkpoint and awards bonus score if so.
-fn update_checkpoints(game : @types.Game) -> Unit {
+fn @types.Game::update_checkpoints(game : @types.Game) -> Unit {
   if game.checkpoint_idx >= @types.checkpoint_count {
     return
   }
@@ -420,10 +420,9 @@ fn update_checkpoints(game : @types.Game) -> Unit {
   if game.distance >= next_dist {
     game.checkpoint_idx = game.checkpoint_idx + 1
     game.rhythm_meter = @types.minf(100.0, game.rhythm_meter + 16.0)
-    add_score(game, 120 + game.streak * 10)
+    game.add_score(120 + game.streak * 10)
 
-    set_message(
-      game,
+    game.set_message(
       "Checkpoint " +
       game.checkpoint_idx.to_string() +
       "/" +
@@ -435,14 +434,14 @@ fn update_checkpoints(game : @types.Game) -> Unit {
 
 ///|
 /// Finalises the race by computing finish bonuses, recording rank and time, and transitioning to the result screen.
-fn finish_run(game : @types.Game) -> Unit {
+fn @types.Game::finish_run(game : @types.Game) -> Unit {
   if game.state != Play {
     return
   }
 
   game.state = Result
   game.finish_time = game.game_t
-  game.finish_rank = current_rank(game)
+  game.finish_rank = game.current_rank()
 
   let place_bonus : Int = if game.finish_rank == 1 {
     650
@@ -468,34 +467,34 @@ fn finish_run(game : @types.Game) -> Unit {
     time_bonus,
   )
 
-  set_message(game, "Finish! Rank #" + game.finish_rank.to_string(), 2.4)
+  game.set_message("Finish! Rank #" + game.finish_rank.to_string(), 2.4)
 }
 
 ///|
 /// Runs all play-state subsystems each frame: rhythm, paddling, burst, lane, speed, hazards, rivals, and checkpoints.
-fn update_play(game : @types.Game, dt : Float) -> Unit {
-  update_rhythm(game, dt)
+fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
+  game.update_rhythm(dt)
 
   if game.input.paddle_pressed {
-    apply_paddle(game)
+    game.apply_paddle()
   }
 
-  try_burst(game)
-  update_wave_lane(game, dt)
-  update_speed_distance(game, dt)
-  update_hazard_spawning(game, dt)
-  update_hazards(game, dt)
-  update_rivals(game, dt)
-  update_checkpoints(game)
+  game.try_burst()
+  game.update_wave_lane(dt)
+  game.update_speed_distance(dt)
+  game.update_hazard_spawning(dt)
+  game.update_hazards(dt)
+  game.update_rivals(dt)
+  game.update_checkpoints()
 
   if game.distance >= @types.finish_distance {
-    finish_run(game)
+    game.finish_run()
   }
 }
 
 ///|
 /// Counts down the message display timer and clears the text when it expires.
-fn tick_message(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::tick_message(game : @types.Game, dt : Float) -> Unit {
   game.msg_t = game.msg_t - dt
   if game.msg_t <= 0.0 {
     game.msg_t = 0.0
@@ -506,32 +505,32 @@ fn tick_message(game : @types.Game, dt : Float) -> Unit {
 ///|
 /// Advances one frame of race simulation, input, hazards, and ranking.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
-  sample_input(game)
+  game.sample_input()
   game.ui_t = game.ui_t + dt
 
   if game.msg_t > 0.0 {
-    tick_message(game, dt)
+    game.tick_message(dt)
   }
 
   if game.input.restart_pressed {
-    reset_run(game)
+    game.reset_run()
     return
   }
 
   match game.state {
-    Title => if game.input.start_pressed { reset_run(game) }
+    Title => if game.input.start_pressed { game.reset_run() }
     Paused =>
       if game.input.pause_pressed {
         game.state = Play
-        set_message(game, "Race resumed", 0.8)
+        game.set_message("Race resumed", 0.8)
       }
-    Result => if game.input.start_pressed { reset_run(game) }
+    Result => if game.input.start_pressed { game.reset_run() }
     Play =>
       if game.input.pause_pressed {
         game.state = Paused
-        set_message(game, "Race paused", 0.8)
+        game.set_message("Race paused", 0.8)
       } else {
-        update_play(game, dt)
+        game.update_play(dt)
       }
   }
 }

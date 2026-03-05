@@ -1,6 +1,6 @@
 ///|
 /// Draws the animated dark background with two pulsing ambient blobs and layered horizontal stripe bands.
-fn draw_bg(game : @types.Game) -> Unit {
+fn @types.Game::draw_bg(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 14, 22, 255))
 
   let wave : Float = Float::from_double(
@@ -146,7 +146,7 @@ fn draw_stone(
 
 ///|
 /// Draws a double golden ring at the active hint cell when a hint is currently shown.
-fn draw_hint(
+fn @types.Game::draw_hint(
   game : @types.Game,
   board_x : Int,
   board_y : Int,
@@ -171,7 +171,7 @@ fn draw_hint(
 
 ///|
 /// Draws a small ring over the last human move (gold) and the last AI move (blue) to highlight the most recent stones.
-fn draw_last_markers(
+fn @types.Game::draw_last_markers(
   game : @types.Game,
   board_x : Int,
   board_y : Int,
@@ -202,7 +202,7 @@ fn draw_last_markers(
 
 ///|
 /// Draws the full board: grid, all placed stones, hint ring, last-move markers, and the cursor ring during active play.
-fn draw_board(game : @types.Game) -> Unit {
+fn @types.Game::draw_board(game : @types.Game) -> Unit {
   let (board_x, board_y, tile) = @types.board_metrics(game)
 
   draw_board_grid(board_x, board_y, tile)
@@ -216,8 +216,8 @@ fn draw_board(game : @types.Game) -> Unit {
     }
   }
 
-  draw_hint(game, board_x, board_y, tile)
-  draw_last_markers(game, board_x, board_y, tile)
+  game.draw_hint(board_x, board_y, tile)
+  game.draw_last_markers(board_x, board_y, tile)
 
   if game.state == Play {
     let cx : Int = board_x + game.cursor_x * tile
@@ -273,7 +273,7 @@ fn draw_button(
 
 ///|
 /// Draws the side panel with game title, turn indicator, move count, time, win/draw scores, hints remaining, keyboard reference, action buttons (PLACE/HINT/UNDO/CLEAR/RESET), and the transient message box.
-fn draw_side_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
   let px : Int = @types.panel_x()
   let py : Int = 20
   let pw : Int = 396
@@ -475,7 +475,7 @@ fn draw_side_panel(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the on-screen D-pad (L/R/U/D buttons) with active highlight when the corresponding direction is pressed.
-fn draw_touch_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
   let cx : Int = @types.dpad_center_x()
   let cy : Int = @types.dpad_center_y()
   let s : Int = @types.dpad_size()
@@ -607,7 +607,7 @@ fn draw_touch_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all active sparks as small circles with color and opacity determined by their kind and remaining lifetime.
-fn draw_sparks(game : @types.Game) -> Unit {
+fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
     if not(spark.active) {
       continue
@@ -646,7 +646,7 @@ fn draw_sparks(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the title screen with game name, description lines, and a hoverable start-duel button.
-fn draw_title(game : @types.Game) -> Unit {
+fn @types.Game::draw_title(game : @types.Game) -> Unit {
   @raylib.draw_text(
     "Gomoku Street Duel 2026",
     @types.screen_w / 2 -
@@ -698,7 +698,7 @@ fn draw_title(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the result overlay panel with win/draw/loss heading, move count, game time, and a hoverable next-round button.
-fn draw_result_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -774,23 +774,23 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 ///|
 /// Renders board, HUD, and overlays for the current duel state.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_bg(game)
+  game.draw_bg()
 
   match game.state {
     Title => {
-      draw_title(game)
+      game.draw_title()
       return
     }
     Play => ()
     Result => ()
   }
 
-  draw_board(game)
-  draw_side_panel(game)
-  draw_touch_overlay(game)
-  draw_sparks(game)
+  game.draw_board()
+  game.draw_side_panel()
+  game.draw_touch_overlay()
+  game.draw_sparks()
 
   if game.state == Result {
-    draw_result_overlay(game)
+    game.draw_result_overlay()
   }
 }

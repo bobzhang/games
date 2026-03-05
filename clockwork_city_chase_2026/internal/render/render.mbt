@@ -68,7 +68,7 @@ fn draw_bar(
 
 ///|
 /// Returns a random (x, y) screen-shake offset scaled by the current shake timer, or (0, 0) when no shake is active.
-fn shake_offset(game : @types.Game) -> (Float, Float) {
+fn @types.Game::shake_offset(game : @types.Game) -> (Float, Float) {
   if game.shake_t <= 0.0 {
     (0.0, 0.0)
   } else {
@@ -79,7 +79,7 @@ fn shake_offset(game : @types.Game) -> (Float, Float) {
 
 ///|
 /// Draws the dark gradient sky background, two large animated glow blobs, and 140 parallax-scrolling twinkling stars with camera offset applied.
-fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   @raylib.draw_rectangle_gradient_v(
     0,
     0,
@@ -136,7 +136,7 @@ fn draw_sky(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws scrolling cityscape silhouette buildings along the horizon line above the track, with pulsing neon accent bands on every third building.
-fn draw_horizon(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_horizon(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let base_y = Float::from_int(@types.hud_h) + 20.0
 
   for i in 0..<44 {
@@ -175,7 +175,7 @@ fn draw_horizon(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Renders the procedural road surface row-by-row, drawing off-road gutters in dark tones, the road fill with alternating mid stripes, cyan left and pink right border lines, and dashed lane dividers.
-fn draw_track(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_track(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let step = 12
 
   for yi = @types.hud_h; yi < @types.screen_h + step; yi = yi + step {
@@ -465,7 +465,7 @@ fn draw_pickup(
 
 ///|
 /// Iterates all active objects, applies cloaking transparency where applicable, dispatches to the per-kind draw function, and draws a small HP bar above hostile enemies.
-fn draw_objs(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_objs(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for o in game.objs {
     if not(o.active) {
       continue
@@ -512,7 +512,7 @@ fn draw_objs(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws each active projectile as a coloured dot (teal for player, violet/amber/pink for enemy types) with a short velocity-aligned trail line.
-fn draw_shots(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_shots(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for s in game.shots {
     if not(s.active) {
       continue
@@ -551,7 +551,7 @@ fn draw_shots(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws all active spark particles as coloured circles that fade out as their life decreases; three visual kinds use teal, pink, and violet tones.
-fn draw_spark_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_spark_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for s in game.sparks {
     if not(s.active) {
       continue
@@ -577,7 +577,7 @@ fn draw_spark_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws all active shock-ring effects as expanding circle outlines that fade out as their life decreases; three kinds use cyan, pink, and violet colours.
-fn draw_ring_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_ring_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for r in game.rings {
     if not(r.active) {
       continue
@@ -603,7 +603,7 @@ fn draw_ring_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws all active ghost after-images as fading rotated rectangles in cyan (dash) or pale-blue (default) tones.
-fn draw_ghost_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_ghost_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   for g in game.ghosts {
     if not(g.active) {
       continue
@@ -627,7 +627,7 @@ fn draw_ghost_fx(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws the player car as a tilted rectangle body with a cockpit cutout, front headlight, twin engine flares, muzzle flashes, a dash aura ring, and an invulnerability flicker shield; body tints red while the hurt timer is active.
-fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+fn @types.Game::draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
   let x = game.hero.x + cam_x
   let y = game.hero.y + cam_y
 
@@ -720,7 +720,7 @@ fn draw_player(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 
 ///|
 /// Draws the expanding EMP pulse circle centred on the player, fading out as the pulse radius grows toward `emp_radius`.
-fn draw_emp_wave(game : @types.Game) -> Unit {
+fn @types.Game::draw_emp_wave(game : @types.Game) -> Unit {
   if game.emp_t <= 0.0 {
     return
   }
@@ -749,7 +749,7 @@ fn cooldown_text(cd : Float, total : Float) -> String {
 
 ///|
 /// Draws the top HUD panel with armor and heat bars, dash and EMP cooldown readouts, score/best/stage/coins/kills text, a distance progress bar, and the active combo label.
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -962,7 +962,7 @@ fn draw_btn(
 
 ///|
 /// Draws the on-screen D-pad and action buttons (fire, dash, EMP) for touch/mobile play, highlighting each button while its corresponding input is held.
-fn draw_touch(game : @types.Game) -> Unit {
+fn @types.Game::draw_touch(game : @types.Game) -> Unit {
   let left = @types.btn_left_rect()
   let right = @types.btn_right_rect()
   let up = @types.btn_up_rect()
@@ -982,7 +982,7 @@ fn draw_touch(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a fading hint banner at the bottom of the screen during the first 16 seconds of play explaining the dash and EMP mechanics.
-fn draw_play_hint(game : @types.Game) -> Unit {
+fn @types.Game::draw_play_hint(game : @types.Game) -> Unit {
   if game.hint_t > 16.0 {
     return
   }
@@ -1008,7 +1008,7 @@ fn draw_play_hint(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the Title screen overlay with game title, subtitle text, control instructions, a hoverable start button, and the best-score display.
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -1122,7 +1122,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the StageClear panel that slides in with an eased animation, showing the completed stage number and a continue prompt.
-fn draw_stage_clear(game : @types.Game) -> Unit {
+fn @types.Game::draw_stage_clear(game : @types.Game) -> Unit {
   let t = @types.ease_out_cubic(
     @types.clampf(game.result_t / @types.stage_clear_wait, 0.0, 1.0),
   )
@@ -1166,7 +1166,7 @@ fn draw_stage_clear(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the GameOver overlay with a dark tint, "CHASE LOST" headline, final score and stat summary, and a hoverable retry button.
-fn draw_game_over(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
   let mx = game.mouse_x
   let my = game.mouse_y
   let hold = game.mouse_hold
@@ -1244,13 +1244,13 @@ fn draw_game_over(game : @types.Game) -> Unit {
 
 ///|
 /// Composites the play-world layer in depth order: ghost after-images, rings, objects, shots, spark particles, and then the player car.
-fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
-  draw_ghost_fx(game, cam_x, cam_y)
-  draw_ring_fx(game, cam_x, cam_y)
-  draw_objs(game, cam_x, cam_y)
-  draw_shots(game, cam_x, cam_y)
-  draw_spark_fx(game, cam_x, cam_y)
-  draw_player(game, cam_x, cam_y)
+fn @types.Game::draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
+  game.draw_ghost_fx(cam_x, cam_y)
+  game.draw_ring_fx(cam_x, cam_y)
+  game.draw_objs(cam_x, cam_y)
+  game.draw_shots(cam_x, cam_y)
+  game.draw_spark_fx(cam_x, cam_y)
+  game.draw_player(cam_x, cam_y)
 }
 
 ///|
@@ -1258,15 +1258,15 @@ fn draw_world(game : @types.Game, cam_x : Float, cam_y : Float) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   @raylib.clear_background(@types.bg_top())
 
-  let cam = shake_offset(game)
+  let cam = game.shake_offset()
   let cam_x = cam.0
   let cam_y = cam.1
 
-  draw_sky(game, cam_x, cam_y)
-  draw_horizon(game, cam_x, cam_y)
-  draw_track(game, cam_x, cam_y)
-  draw_world(game, cam_x, cam_y)
-  draw_emp_wave(game)
+  game.draw_sky(cam_x, cam_y)
+  game.draw_horizon(cam_x, cam_y)
+  game.draw_track(cam_x, cam_y)
+  game.draw_world(cam_x, cam_y)
+  game.draw_emp_wave()
 
   if game.flash_t > 0.0 {
     let aa = (game.flash_t * 220.0).to_int().clamp(min=0, max=220)
@@ -1281,18 +1281,18 @@ pub fn draw_frame(game : @types.Game) -> Unit {
 
   match game.state {
     Title => ()
-    _ => draw_hud(game)
+    _ => game.draw_hud()
   }
 
   match game.state {
-    Title => draw_title_overlay(game)
+    Title => game.draw_title_overlay()
     Play => {
-      draw_play_hint(game)
+      game.draw_play_hint()
       if game.touch_mode {
-        draw_touch(game)
+        game.draw_touch()
       }
     }
-    StageClear => draw_stage_clear(game)
-    GameOver => draw_game_over(game)
+    StageClear => game.draw_stage_clear()
+    GameOver => game.draw_game_over()
   }
 }

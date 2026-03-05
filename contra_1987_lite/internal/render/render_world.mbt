@@ -1,5 +1,5 @@
 ///|
-fn draw_starfield(game : @types.Game) -> Unit {
+fn @types.Game::draw_starfield(game : @types.Game) -> Unit {
   @raylib.clear_background(game.profile.sky_bottom)
   @raylib.draw_rectangle_gradient_v(
     0,
@@ -37,7 +37,7 @@ fn draw_world_backdrop(shake_x : Float, shake_y : Float) -> Unit {
 }
 
 ///|
-fn draw_single_tile(
+fn @types.Game::draw_single_tile(
   game : @types.Game,
   tx : Int,
   ty : Int,
@@ -156,7 +156,7 @@ fn draw_single_tile(
 }
 
 ///|
-fn draw_terrain_layer(
+fn @types.Game::draw_terrain_layer(
   game : @types.Game,
   shake_x : Float,
   shake_y : Float,
@@ -167,13 +167,13 @@ fn draw_terrain_layer(
       if tile == Empty || tile == Bush {
         continue
       }
-      draw_single_tile(game, tx, ty, tile, shake_x, shake_y)
+      game.draw_single_tile(tx, ty, tile, shake_x, shake_y)
     }
   }
 }
 
 ///|
-fn draw_bush_layer(
+fn @types.Game::draw_bush_layer(
   game : @types.Game,
   shake_x : Float,
   shake_y : Float,
@@ -279,7 +279,7 @@ fn draw_tank(
 }
 
 ///|
-fn draw_cores(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_cores(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
   for core in game.cores {
     if not(core.active) {
       continue
@@ -322,7 +322,7 @@ fn draw_cores(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
 }
 
 ///|
-fn draw_players(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_players(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
   for i in 0..<@types.max_players {
     if not(game.players[i].active) {
       continue
@@ -364,7 +364,7 @@ fn draw_players(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
 }
 
 ///|
-fn draw_enemies(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_enemies(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
   for enemy in game.enemies {
     if not(enemy.active) {
       continue
@@ -395,7 +395,7 @@ fn draw_enemies(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
 }
 
 ///|
-fn draw_bullets(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_bullets(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
   for bullet in game.bullets {
     if not(bullet.active) {
       continue
@@ -417,7 +417,7 @@ fn draw_bullets(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
 }
 
 ///|
-fn draw_particles(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_particles(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -491,7 +491,7 @@ fn powerup_radius(kind : @types.PowerupKind) -> Float {
 }
 
 ///|
-fn draw_powerups(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
+fn @types.Game::draw_powerups(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
   for p in game.powerups {
     if not(p.active) {
       continue
@@ -518,16 +518,16 @@ fn draw_powerups(game : @types.Game, shake_x : Float, shake_y : Float) -> Unit {
 pub fn draw_world(game : @types.Game) -> Unit {
   let (shake_x, shake_y) = @types.shake_offsets(game)
 
-  draw_starfield(game)
+  game.draw_starfield()
   draw_world_backdrop(shake_x, shake_y)
-  draw_terrain_layer(game, shake_x, shake_y)
-  draw_cores(game, shake_x, shake_y)
-  draw_powerups(game, shake_x, shake_y)
-  draw_players(game, shake_x, shake_y)
-  draw_enemies(game, shake_x, shake_y)
-  draw_bullets(game, shake_x, shake_y)
-  draw_particles(game, shake_x, shake_y)
-  draw_bush_layer(game, shake_x, shake_y)
+  game.draw_terrain_layer(shake_x, shake_y)
+  game.draw_cores(shake_x, shake_y)
+  game.draw_powerups(shake_x, shake_y)
+  game.draw_players(shake_x, shake_y)
+  game.draw_enemies(shake_x, shake_y)
+  game.draw_bullets(shake_x, shake_y)
+  game.draw_particles(shake_x, shake_y)
+  game.draw_bush_layer(shake_x, shake_y)
 
   if game.profile.fog_alpha > 0.0 {
     @raylib.draw_rectangle(

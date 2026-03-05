@@ -1,6 +1,6 @@
 ///|
 /// Zeroes all input axes and clears all single-frame action flags before reading new hardware state.
-fn clear_input(game : @types.Game) -> Unit {
+fn @types.Game::clear_input(game : @types.Game) -> Unit {
   game.input_x = 0.0
   game.input_y = 0.0
   game.input_action_press = false
@@ -12,8 +12,8 @@ fn clear_input(game : @types.Game) -> Unit {
 
 ///|
 /// Reads WASD/arrow directional keys into the clamped `input_x/y` axes, and maps J/K/Space/P/R to the action, cancel, shield, pause, and restart press flags.
-fn update_input(game : @types.Game) -> Unit {
-  clear_input(game)
+fn @types.Game::update_input(game : @types.Game) -> Unit {
+  game.clear_input()
 
   if @raylib.is_key_down(@raylib.KeyA) || @raylib.is_key_down(@raylib.KeyLeft) {
     game.input_x = game.input_x - 1.0

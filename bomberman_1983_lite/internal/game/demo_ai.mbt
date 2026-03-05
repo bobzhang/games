@@ -12,7 +12,7 @@ fn opposite_dir(dir : Int) -> Int {
 }
 
 ///|
-fn demo_nearest_enemy(game : @types.Game, x : Float, y : Float) -> (Int, Float) {
+fn @types.Game::demo_nearest_enemy(game : @types.Game, x : Float, y : Float) -> (Int, Float) {
   let mut best_idx = -1
   let mut best_dist : Float = Float::from_int(1000000000)
   for i in 0..<game.enemies.length() {
@@ -29,7 +29,7 @@ fn demo_nearest_enemy(game : @types.Game, x : Float, y : Float) -> (Int, Float) 
 }
 
 ///|
-fn demo_nearest_powerup(
+fn @types.Game::demo_nearest_powerup(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -50,7 +50,7 @@ fn demo_nearest_powerup(
 }
 
 ///|
-fn demo_can_step(
+fn @types.Game::demo_can_step(
   game : @types.Game,
   index : Int,
   dir : Int,
@@ -78,7 +78,7 @@ fn demo_can_step(
 }
 
 ///|
-fn demo_priority_dir(
+fn @types.Game::demo_priority_dir(
   game : @types.Game,
   index : Int,
   dt : Float,
@@ -87,13 +87,13 @@ fn demo_priority_dir(
   c : Int,
   d : Int,
 ) -> Int {
-  if demo_can_step(game, index, a, dt) {
+  if game.demo_can_step(index, a, dt) {
     a
-  } else if demo_can_step(game, index, b, dt) {
+  } else if game.demo_can_step(index, b, dt) {
     b
-  } else if demo_can_step(game, index, c, dt) {
+  } else if game.demo_can_step(index, c, dt) {
     c
-  } else if demo_can_step(game, index, d, dt) {
+  } else if game.demo_can_step(index, d, dt) {
     d
   } else {
     -1
@@ -101,7 +101,7 @@ fn demo_priority_dir(
 }
 
 ///|
-fn demo_choose_move_dir(
+fn @types.Game::demo_choose_move_dir(
   game : @types.Game,
   index : Int,
   dt : Float,
@@ -116,8 +116,7 @@ fn demo_choose_move_dir(
   let vert = if dy < 0.0 { @types.dir_up } else { @types.dir_down }
 
   let mut move_dir = if dx.abs() > dy.abs() {
-    demo_priority_dir(
-      game,
+    game.demo_priority_dir(
       index,
       dt,
       horiz,
@@ -126,8 +125,7 @@ fn demo_choose_move_dir(
       opposite_dir(vert),
     )
   } else {
-    demo_priority_dir(
-      game,
+    game.demo_priority_dir(
       index,
       dt,
       vert,
@@ -139,7 +137,7 @@ fn demo_choose_move_dir(
 
   if move_dir < 0 {
     let random_dir = @types.rand_range(game, 0, 3)
-    if demo_can_step(game, index, random_dir, dt) {
+    if game.demo_can_step(index, random_dir, dt) {
       move_dir = random_dir
     }
   }
@@ -167,7 +165,7 @@ fn demo_line_shot_dir(
 }
 
 ///|
-fn demo_target_position(
+fn @types.Game::demo_target_position(
   game : @types.Game,
   player : @types.Tank,
   nearest_enemy : Int,
@@ -193,7 +191,7 @@ fn demo_target_position(
 }
 
 ///|
-fn demo_player_command(
+fn @types.Game::demo_player_command(
   game : @types.Game,
   index : Int,
   dt : Float,
@@ -203,17 +201,16 @@ fn demo_player_command(
     return (-1, false)
   }
 
-  let (nearest_enemy, enemy_dist) = demo_nearest_enemy(game, player.x, player.y)
-  let (nearest_powerup, powerup_dist) = demo_nearest_powerup(
-    game,
+  let (nearest_enemy, enemy_dist) = game.demo_nearest_enemy(player.x, player.y)
+  let (nearest_powerup, powerup_dist) = game.demo_nearest_powerup(
     player.x,
     player.y,
   )
-  let (target_x, target_y) = demo_target_position(
-    game, player, nearest_enemy, enemy_dist, nearest_powerup, powerup_dist,
+  let (target_x, target_y) = game.demo_target_position(
+    player, nearest_enemy, enemy_dist, nearest_powerup, powerup_dist,
   )
 
-  let mut move_dir = demo_choose_move_dir(game, index, dt, target_x, target_y)
+  let mut move_dir = game.demo_choose_move_dir(index, dt, target_x, target_y)
   let mut shoot = false
 
   if nearest_enemy >= 0 {
@@ -224,7 +221,7 @@ fn demo_player_command(
       enemy.x,
       enemy.y,
     )
-    if aligned && not(sight_blocked(game, player.x, player.y, enemy.x, enemy.y)) {
+    if aligned && not(game.sight_blocked(player.x, player.y, enemy.x, enemy.y)) {
       move_dir = line_dir
       shoot = true
     }

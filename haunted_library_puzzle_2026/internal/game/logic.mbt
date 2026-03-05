@@ -12,7 +12,7 @@ fn in_bounds(x : Int, y : Int) -> Bool {
 
 ///|
 /// Returns the tile type at `(x, y)`, treating out-of-bounds cells as `Wall`.
-fn tile_at(game : @types.Game, x : Int, y : Int) -> @types.Tile {
+fn @types.Game::tile_at(game : @types.Game, x : Int, y : Int) -> @types.Tile {
   if not(in_bounds(x, y)) {
     Wall
   } else {
@@ -22,7 +22,7 @@ fn tile_at(game : @types.Game, x : Int, y : Int) -> @types.Tile {
 
 ///|
 /// Sets the tile at `(x, y)` to `t`; silently ignores out-of-bounds coordinates.
-fn set_tile(game : @types.Game, x : Int, y : Int, t : @types.Tile) -> Unit {
+fn @types.Game::set_tile(game : @types.Game, x : Int, y : Int, t : @types.Tile) -> Unit {
   if not(in_bounds(x, y)) {
     return
   }
@@ -31,7 +31,7 @@ fn set_tile(game : @types.Game, x : Int, y : Int, t : @types.Tile) -> Unit {
 
 ///|
 /// Sets the game message string and its display duration.
-fn set_msg(game : @types.Game, msg : String, ttl : Float) -> Unit {
+fn @types.Game::set_msg(game : @types.Game, msg : String, ttl : Float) -> Unit {
   game.msg = msg
   game.msg_t = ttl
 }
@@ -91,7 +91,7 @@ fn actor_tick(a : @types.Actor, dt : Float, move_t : Float) -> Unit {
 
 ///|
 /// Deactivates all particles and zeroes their fields.
-fn clear_particles(game : @types.Game) -> Unit {
+fn @types.Game::clear_particles(game : @types.Game) -> Unit {
   for particle in game.particles {
     particle.active = false
     particle.x = 0.0
@@ -106,7 +106,7 @@ fn clear_particles(game : @types.Game) -> Unit {
 
 ///|
 /// Finds the first inactive particle slot and initialises it with the given position, velocity, lifetime, size, and kind.
-fn emit_particle(
+fn @types.Game::emit_particle(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -135,7 +135,7 @@ fn emit_particle(
 
 ///|
 /// Emits `n` particles centred near `(x, y)` with random velocity and lifetime using `emit_particle`.
-fn burst(
+fn @types.Game::burst(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -143,8 +143,7 @@ fn burst(
   kind : @types.ParticleKind,
 ) -> Unit {
   for _i in 0..<n {
-    emit_particle(
-      game,
+    game.emit_particle(
       x + @types.randf(-10.0, 10.0),
       y + @types.randf(-10.0, 10.0),
       @types.randf(-180.0, 180.0),
@@ -158,7 +157,7 @@ fn burst(
 
 ///|
 /// Advances all active particles: decrements lifetime, applies velocity, and applies per-kind drag and gravity.
-fn update_particles(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
       continue
@@ -188,7 +187,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Returns the index of the shelf located at grid cell `(x, y)`, or -1 if none exists.
-fn shelf_index_at(game : @types.Game, x : Int, y : Int) -> Int {
+fn @types.Game::shelf_index_at(game : @types.Game, x : Int, y : Int) -> Int {
   for i in 0..<game.shelf_n {
     if game.shelf_x[i] == x && game.shelf_y[i] == y {
       return i
@@ -199,7 +198,7 @@ fn shelf_index_at(game : @types.Game, x : Int, y : Int) -> Int {
 
 ///|
 /// Returns the index of an uncollected page at grid cell `(x, y)`, or -1 if none exists.
-fn page_index_at(game : @types.Game, x : Int, y : Int) -> Int {
+fn @types.Game::page_index_at(game : @types.Game, x : Int, y : Int) -> Int {
   for i in 0..<@types.max_pages {
     if not(game.page_taken[i]) && game.page_x[i] == x && game.page_y[i] == y {
       return i
@@ -210,7 +209,7 @@ fn page_index_at(game : @types.Game, x : Int, y : Int) -> Int {
 
 ///|
 /// Returns the index of an active ghost at `(x, y)` other than `skip`, or -1 if none exists.
-fn ghost_index_at(game : @types.Game, x : Int, y : Int, skip : Int) -> Int {
+fn @types.Game::ghost_index_at(game : @types.Game, x : Int, y : Int, skip : Int) -> Int {
   for i in 0..<game.ghosts.length() {
     if i == skip || not(game.ghosts[i].active) {
       continue
@@ -226,12 +225,12 @@ fn ghost_index_at(game : @types.Game, x : Int, y : Int, skip : Int) -> Int {
 
 ///|
 /// Returns true if `(x, y)` is out of bounds, a wall tile, or a locked exit tile.
-fn blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
+fn @types.Game::blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
   if not(in_bounds(x, y)) {
     return true
   }
 
-  let t : @types.Tile = tile_at(game, x, y)
+  let t : @types.Tile = game.tile_at(x, y)
   if t == Wall {
     return true
   }
@@ -241,27 +240,27 @@ fn blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
 
 ///|
 /// Returns true if `(x, y)` is blocked for ghost `gid` by the map, a shelf, or another ghost.
-fn blocked_for_actor(game : @types.Game, gid : Int, x : Int, y : Int) -> Bool {
-  if blocked_by_map(game, x, y) {
+fn @types.Game::blocked_for_actor(game : @types.Game, gid : Int, x : Int, y : Int) -> Bool {
+  if game.blocked_by_map(x, y) {
     return true
   }
-  if shelf_index_at(game, x, y) >= 0 {
+  if game.shelf_index_at(x, y) >= 0 {
     return true
   }
 
-  let g2 : Int = ghost_index_at(game, x, y, gid)
+  let g2 : Int = game.ghost_index_at(x, y, gid)
   g2 >= 0
 }
 
 ///|
 /// Fills the map with border walls, interior wall columns with gaps, horizontal wall rows with corridor openings, and places the exit tile.
-fn clear_map(game : @types.Game) -> Unit {
+fn @types.Game::clear_map(game : @types.Game) -> Unit {
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
       if x == 0 || y == 0 || x == @types.grid_w - 1 || y == @types.grid_h - 1 {
-        set_tile(game, x, y, Wall)
+        game.set_tile(x, y, Wall)
       } else {
-        set_tile(game, x, y, Floor)
+        game.set_tile(x, y, Floor)
       }
     }
   }
@@ -270,7 +269,7 @@ fn clear_map(game : @types.Game) -> Unit {
     for y in 1..<(@types.grid_h - 1) {
       let keep_gap : Bool = y == 2 || y == @types.grid_h - 3 || (x + y) % 5 == 0
       if not(keep_gap) {
-        set_tile(game, x, y, Wall)
+        game.set_tile(x, y, Wall)
       }
     }
   }
@@ -279,18 +278,18 @@ fn clear_map(game : @types.Game) -> Unit {
     for x in 2..<(@types.grid_w - 2) {
       let keep_gap : Bool = x == 5 || x == 10 || x == 15
       if not(keep_gap) {
-        set_tile(game, x, y, Wall)
+        game.set_tile(x, y, Wall)
       }
     }
   }
 
-  set_tile(game, @types.exit_x, @types.exit_y, Exit)
-  set_tile(game, @types.start_x, @types.start_y, Floor)
+  game.set_tile(@types.exit_x, @types.exit_y, Exit)
+  game.set_tile(@types.start_x, @types.start_y, Floor)
 }
 
 ///|
 /// Populates shelves, pages, and ghost spawn positions from hard-coded layout data for the puzzle.
-fn load_layout(game : @types.Game) -> Unit {
+fn @types.Game::load_layout(game : @types.Game) -> Unit {
   let shelf_list : Array[(Int, Int)] = [
     (5, 9),
     (7, 9),
@@ -351,11 +350,11 @@ fn load_layout(game : @types.Game) -> Unit {
 
 ///|
 /// Counts and returns how many seals currently have a shelf pushed onto their position.
-fn count_seals_on(game : @types.Game) -> Int {
+fn @types.Game::count_seals_on(game : @types.Game) -> Int {
   let mut n : Int = 0
   for i in 0..<@types.seal_need {
     let p = @types.seal_pos(i)
-    if shelf_index_at(game, p.0, p.1) >= 0 {
+    if game.shelf_index_at(p.0, p.1) >= 0 {
       n = n + 1
     }
   }
@@ -364,9 +363,9 @@ fn count_seals_on(game : @types.Game) -> Int {
 
 ///|
 /// Recomputes `seals_on`, updates `gate_open`, and triggers flash/shake/score effects when the gate first opens.
-fn update_gate(game : @types.Game) -> Unit {
+fn @types.Game::update_gate(game : @types.Game) -> Unit {
   let old_open : Bool = game.gate_open
-  game.seals_on = count_seals_on(game)
+  game.seals_on = game.count_seals_on()
   game.gate_open = game.seals_on == @types.seal_need &&
     game.pages == @types.max_pages
 
@@ -374,9 +373,8 @@ fn update_gate(game : @types.Game) -> Unit {
     game.score = game.score + @types.seal_score * @types.seal_need
     game.flash_t = 0.35
     game.shake_t = 0.35
-    set_msg(game, "Gate unlocked. Escape through the south archive door.", 2.4)
-    burst(
-      game,
+    game.set_msg("Gate unlocked. Escape through the south archive door.", 2.4)
+    game.burst(
       Float::from_int(@types.cell_center_x(Float::from_int(@types.exit_x))),
       Float::from_int(@types.cell_center_y(Float::from_int(@types.exit_y))),
       44,
@@ -388,9 +386,9 @@ fn update_gate(game : @types.Game) -> Unit {
 ///|
 /// Resets the puzzle state and starts a fresh gameplay run.
 pub fn start_run(game : @types.Game) -> Unit {
-  clear_map(game)
-  load_layout(game)
-  clear_particles(game)
+  game.clear_map()
+  game.load_layout()
+  game.clear_particles()
 
   actor_place(game.player, @types.start_x, @types.start_y)
 
@@ -423,7 +421,7 @@ pub fn start_run(game : @types.Game) -> Unit {
 
   game.hint_i = 0
 
-  set_msg(game, "Find 5 pages. Seal 3 runes. Reach exit.", 2.6)
+  game.set_msg("Find 5 pages. Seal 3 runes. Reach exit.", 2.6)
 }
 
 ///|
@@ -437,12 +435,12 @@ pub fn go_title(game : @types.Game) -> Unit {
   game.touch_cd = 0.0
   game.flash_t = 0.0
   game.shake_t = 0.0
-  clear_particles(game)
+  game.clear_particles()
 }
 
 ///|
 /// Transitions to the Result state, records the win/loss reason, applies escape bonus on win, and emits particle burst.
-fn finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
+fn @types.Game::finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
   if game.state != Play {
     return
   }
@@ -456,18 +454,16 @@ fn finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
 
   if win {
     game.score = game.score + @types.escape_score + game.lives * 120
-    set_msg(game, "Archive saved. The spirits quiet down.", 3.2)
-    burst(
-      game,
+    game.set_msg("Archive saved. The spirits quiet down.", 3.2)
+    game.burst(
       Float::from_int(@types.cell_center_x(Float::from_int(@types.exit_x))),
       Float::from_int(@types.cell_center_y(Float::from_int(@types.exit_y))),
       72,
       Gold,
     )
   } else {
-    set_msg(game, "You were lost in the stacks.", 2.8)
-    burst(
-      game,
+    game.set_msg("You were lost in the stacks.", 2.8)
+    game.burst(
       Float::from_int(@types.cell_center_x(game.player.fx)),
       Float::from_int(@types.cell_center_y(game.player.fy)),
       40,
@@ -480,24 +476,24 @@ fn finish_run(game : @types.Game, win : Bool, reason : String) -> Unit {
 /// Cycles the contextual hint index and updates the message banner.
 pub fn cycle_hint(game : @types.Game) -> Unit {
   game.hint_i = (game.hint_i + 1) % 4
-  set_msg(game, @types.seal_hint(game.hint_i), 2.8)
+  game.set_msg(@types.seal_hint(game.hint_i), 2.8)
 }
 
 ///|
 /// Attempts to push shelf `sidx` one step in direction `(dx, dy)`; returns false if the destination is blocked.
-fn push_shelf(game : @types.Game, sidx : Int, dx : Int, dy : Int) -> Bool {
+fn @types.Game::push_shelf(game : @types.Game, sidx : Int, dx : Int, dy : Int) -> Bool {
   let nx : Int = game.shelf_x[sidx] + dx
   let ny : Int = game.shelf_y[sidx] + dy
 
-  if blocked_by_map(game, nx, ny) {
+  if game.blocked_by_map(nx, ny) {
     return false
   }
 
-  if shelf_index_at(game, nx, ny) >= 0 {
+  if game.shelf_index_at(nx, ny) >= 0 {
     return false
   }
 
-  if ghost_index_at(game, nx, ny, -1) >= 0 {
+  if game.ghost_index_at(nx, ny, -1) >= 0 {
     return false
   }
 
@@ -508,7 +504,7 @@ fn push_shelf(game : @types.Game, sidx : Int, dx : Int, dy : Int) -> Bool {
 
 ///|
 /// Attempts to move the player one step in direction `(dx, dy)`, pushing a shelf if one is in the way; returns false if blocked.
-fn try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool {
+fn @types.Game::try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool {
   if dx == 0 && dy == 0 {
     return false
   }
@@ -519,16 +515,16 @@ fn try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool {
   let tx : Int = game.player.x + dx
   let ty : Int = game.player.y + dy
 
-  if blocked_by_map(game, tx, ty) {
+  if game.blocked_by_map(tx, ty) {
     return false
   }
 
-  if ghost_index_at(game, tx, ty, -1) >= 0 {
+  if game.ghost_index_at(tx, ty, -1) >= 0 {
     return false
   }
 
-  let sidx : Int = shelf_index_at(game, tx, ty)
-  if sidx >= 0 && not(push_shelf(game, sidx, dx, dy)) {
+  let sidx : Int = game.shelf_index_at(tx, ty)
+  if sidx >= 0 && not(game.push_shelf(sidx, dx, dy)) {
     return false
   }
 
@@ -536,8 +532,7 @@ fn try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool {
   game.steps = game.steps + 1
   game.move_cd = 0.03
 
-  burst(
-    game,
+  game.burst(
     Float::from_int(@types.cell_center_x(Float::from_int(tx))),
     Float::from_int(@types.cell_center_y(Float::from_int(ty))),
     8,
@@ -549,12 +544,12 @@ fn try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool {
 
 ///|
 /// Collects the page at the player's current tile if one exists and the player is not mid-move.
-fn collect_page_if_needed(game : @types.Game) -> Unit {
+fn @types.Game::collect_page_if_needed(game : @types.Game) -> Unit {
   if game.player.moving {
     return
   }
 
-  let i : Int = page_index_at(game, game.player.x, game.player.y)
+  let i : Int = game.page_index_at(game.player.x, game.player.y)
   if i < 0 {
     return
   }
@@ -564,10 +559,9 @@ fn collect_page_if_needed(game : @types.Game) -> Unit {
   game.score = game.score + @types.page_score
   game.flash_t = 0.22
 
-  set_msg(game, "Recovered page " + game.pages.to_string() + "/5", 1.8)
+  game.set_msg("Recovered page " + game.pages.to_string() + "/5", 1.8)
 
-  burst(
-    game,
+  game.burst(
     Float::from_int(@types.cell_center_x(Float::from_int(game.player.x))),
     Float::from_int(@types.cell_center_y(Float::from_int(game.player.y))),
     26,
@@ -577,7 +571,7 @@ fn collect_page_if_needed(game : @types.Game) -> Unit {
 
 ///|
 /// Returns true if the axis-aligned line between `(x0,y0)` and `(x1,y1)` is unobstructed by walls and shelves.
-fn line_of_sight(
+fn @types.Game::line_of_sight(
   game : @types.Game,
   x0 : Int,
   y0 : Int,
@@ -588,7 +582,7 @@ fn line_of_sight(
     let y_min : Int = y0.min(y1)
     let y_max : Int = y0.max(y1)
     for y in (y_min + 1)..<y_max {
-      if tile_at(game, x0, y) == Wall || shelf_index_at(game, x0, y) >= 0 {
+      if game.tile_at(x0, y) == Wall || game.shelf_index_at(x0, y) >= 0 {
         return false
       }
     }
@@ -599,7 +593,7 @@ fn line_of_sight(
     let x_min : Int = x0.min(x1)
     let x_max : Int = x0.max(x1)
     for x in (x_min + 1)..<x_max {
-      if tile_at(game, x, y0) == Wall || shelf_index_at(game, x, y0) >= 0 {
+      if game.tile_at(x, y0) == Wall || game.shelf_index_at(x, y0) >= 0 {
         return false
       }
     }
@@ -622,7 +616,7 @@ fn ghost_seed_next(seed : Int) -> Int {
 
 ///|
 /// Selects the next move direction for ghost `gid`: greedy Manhattan minimisation when hunting, or seeded pseudo-random patrol otherwise.
-fn ghost_choose_step(game : @types.Game, gid : Int) -> (Int, Int) {
+fn @types.Game::ghost_choose_step(game : @types.Game, gid : Int) -> (Int, Int) {
   let g = game.ghosts[gid]
   let gx : Int = g.body.x
   let gy : Int = g.body.y
@@ -630,7 +624,7 @@ fn ghost_choose_step(game : @types.Game, gid : Int) -> (Int, Int) {
   let py : Int = game.player.y
 
   let dist : Int = @types.manhattan(gx, gy, px, py)
-  let sees : Bool = line_of_sight(game, gx, gy, px, py)
+  let sees : Bool = game.line_of_sight(gx, gy, px, py)
   let hunt_now : Bool = dist <= 4 || (sees && dist <= 8)
 
   if hunt_now {
@@ -652,7 +646,7 @@ fn ghost_choose_step(game : @types.Game, gid : Int) -> (Int, Int) {
     for i in 0..<4 {
       let nx : Int = gx + dirs[i].0
       let ny : Int = gy + dirs[i].1
-      if blocked_for_actor(game, gid, nx, ny) {
+      if game.blocked_for_actor(gid, nx, ny) {
         continue
       }
 
@@ -676,7 +670,7 @@ fn ghost_choose_step(game : @types.Game, gid : Int) -> (Int, Int) {
     let nx : Int = gx + dirs[k].0
     let ny : Int = gy + dirs[k].1
 
-    if blocked_for_actor(game, gid, nx, ny) {
+    if game.blocked_for_actor(gid, nx, ny) {
       continue
     }
 
@@ -688,7 +682,7 @@ fn ghost_choose_step(game : @types.Game, gid : Int) -> (Int, Int) {
 
 ///|
 /// Ticks all active ghost actors, handles stun countdowns and alert decay, and triggers ghost movement decisions.
-fn update_ghosts(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_ghosts(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.ghosts.length() {
     if not(game.ghosts[i].active) {
       continue
@@ -722,7 +716,7 @@ fn update_ghosts(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    let step = ghost_choose_step(game, i)
+    let step = game.ghost_choose_step(i)
     if step.0 != 0 || step.1 != 0 {
       actor_start_move(
         game.ghosts[i].body,
@@ -737,7 +731,7 @@ fn update_ghosts(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Attempts a stun pulse: stuns all ghosts within Manhattan distance 2, costs 30 energy, and awards score per hit.
-fn try_stun_pulse(game : @types.Game) -> Bool {
+fn @types.Game::try_stun_pulse(game : @types.Game) -> Bool {
   if game.action_cd > 0.0 || game.stun_energy < 30.0 {
     return false
   }
@@ -769,9 +763,8 @@ fn try_stun_pulse(game : @types.Game) -> Bool {
   if hits > 0 {
     game.score = game.score + hits * 60
     game.flash_t = 0.20
-    set_msg(game, "Pulse hit " + hits.to_string() + " spirit(s).", 1.5)
-    burst(
-      game,
+    game.set_msg("Pulse hit " + hits.to_string() + " spirit(s).", 1.5)
+    game.burst(
       Float::from_int(@types.cell_center_x(game.player.fx)),
       Float::from_int(@types.cell_center_y(game.player.fy)),
       24,
@@ -779,14 +772,14 @@ fn try_stun_pulse(game : @types.Game) -> Bool {
     )
     true
   } else {
-    set_msg(game, "Pulse missed. Close in before casting.", 1.2)
+    game.set_msg("Pulse missed. Close in before casting.", 1.2)
     false
   }
 }
 
 ///|
 /// Checks whether any non-stunned active ghost occupies the player's cell and applies a life penalty with respawn or game-over.
-fn handle_player_hit(game : @types.Game) -> Unit {
+fn @types.Game::handle_player_hit(game : @types.Game) -> Unit {
   if game.flash_t > 0.0 {
     return
   }
@@ -802,8 +795,7 @@ fn handle_player_hit(game : @types.Game) -> Unit {
       game.flash_t = 1.25
       game.shake_t = 0.35
 
-      burst(
-        game,
+      game.burst(
         Float::from_int(@types.cell_center_x(game.player.fx)),
         Float::from_int(@types.cell_center_y(game.player.fy)),
         34,
@@ -811,12 +803,12 @@ fn handle_player_hit(game : @types.Game) -> Unit {
       )
 
       if game.lives <= 0 {
-        finish_run(game, false, "Caught by spectral librarians")
+        game.finish_run(false, "Caught by spectral librarians")
       } else {
         actor_place(game.player, @types.start_x, @types.start_y)
         game.player.moving = false
         game.move_cd = 0.20
-        set_msg(game, "A ghost touched you. Retreat and reroute.", 1.8)
+        game.set_msg("A ghost touched you. Retreat and reroute.", 1.8)
       }
 
       break
@@ -826,7 +818,7 @@ fn handle_player_hit(game : @types.Game) -> Unit {
 
 ///|
 /// Decrements all time-based counters: msg_t, flash_t, shake_t, move_cd, action_cd, touch_cd.
-fn update_timers(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_timers(game : @types.Game, dt : Float) -> Unit {
   if game.msg_t > 0.0 {
     game.msg_t = game.msg_t - dt
   }
@@ -854,64 +846,64 @@ fn update_timers(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Runs one frame of active gameplay: advances timers, ticks player and ghosts, handles input, collects pages, updates gate, checks win/loss.
-fn update_play(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   game.time_s = game.time_s + dt
 
-  update_timers(game, dt)
+  game.update_timers(dt)
   actor_tick(game.player, dt, @types.player_move_time)
 
   game.stun_energy = @types.clampf(game.stun_energy + dt * 16.0, 0.0, 100.0)
 
   if not(game.player.moving) && game.move_cd <= 0.0 {
-    ignore(try_move_player(game, game.req_dx, game.req_dy))
+    ignore(game.try_move_player(game.req_dx, game.req_dy))
   }
 
   if game.action_pressed {
-    ignore(try_stun_pulse(game))
+    ignore(game.try_stun_pulse())
   }
 
-  update_ghosts(game, dt)
-  collect_page_if_needed(game)
-  update_gate(game)
-  handle_player_hit(game)
+  game.update_ghosts(dt)
+  game.collect_page_if_needed()
+  game.update_gate()
+  game.handle_player_hit()
 
   if not(game.player.moving) &&
     game.gate_open &&
     game.player.x == @types.exit_x &&
     game.player.y == @types.exit_y {
-    finish_run(game, true, "")
+    game.finish_run(true, "")
   }
 
   if game.time_s >= 240.0 {
-    finish_run(game, false, "Midnight consumed the archive")
+    game.finish_run(false, "Midnight consumed the archive")
   }
 
-  update_particles(game, dt)
+  game.update_particles(dt)
 }
 
 ///|
 /// Runs one frame of title-screen logic: advances timers, increments time_s, and ticks particles.
-fn update_title(game : @types.Game, dt : Float) -> Unit {
-  update_timers(game, dt)
+fn @types.Game::update_title(game : @types.Game, dt : Float) -> Unit {
+  game.update_timers(dt)
   game.time_s = game.time_s + dt
-  update_particles(game, dt)
+  game.update_particles(dt)
 }
 
 ///|
 /// Runs one frame of result-screen logic: advances timers, increments time_s, and ticks particles.
-fn update_result(game : @types.Game, dt : Float) -> Unit {
-  update_timers(game, dt)
+fn @types.Game::update_result(game : @types.Game, dt : Float) -> Unit {
+  game.update_timers(dt)
   game.time_s = game.time_s + dt
-  update_particles(game, dt)
+  game.update_particles(dt)
 }
 
 ///|
 /// Advances one frame of game simulation based on the active flow state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   match game.state {
-    Title => update_title(game, dt)
-    Play => update_play(game, dt)
-    Result => update_result(game, dt)
+    Title => game.update_title(dt)
+    Play => game.update_play(dt)
+    Result => game.update_result(dt)
   }
   game.action_pressed = false
 }

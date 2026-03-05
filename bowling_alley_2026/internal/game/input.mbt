@@ -1,6 +1,6 @@
 ///|
 /// Handles keyboard, mouse, and touch input on the title screen to start a match.
-fn update_title_input(game : @types.Game) -> Unit {
+fn @types.Game::update_title_input(game : @types.Game) -> Unit {
   let key_start : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
 
@@ -17,14 +17,14 @@ fn update_title_input(game : @types.Game) -> Unit {
     )
 
   if key_start || click_start || tap_start {
-    start_match(game)
+    game.start_match()
     game.touch_cd = 0.18
   }
 }
 
 ///|
 /// Handles keyboard, mouse, and touch input on the result screen to retry a match.
-fn update_result_input(game : @types.Game) -> Unit {
+fn @types.Game::update_result_input(game : @types.Game) -> Unit {
   let key_retry : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyR)
@@ -42,16 +42,16 @@ fn update_result_input(game : @types.Game) -> Unit {
     )
 
   if key_retry || click_retry || tap_retry {
-    start_match(game)
+    game.start_match()
     game.touch_cd = 0.18
   }
 }
 
 ///|
 /// Reads aim, spin, and power-charge inputs during play and triggers a throw on release.
-fn update_play_input(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_play_input(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyR) {
-    start_match(game)
+    game.start_match()
     return
   }
 
@@ -59,7 +59,7 @@ fn update_play_input(game : @types.Game, dt : Float) -> Unit {
     game.state = Title
     game.can_throw = false
     game.charging = false
-    set_message(game, "", 0.0)
+    game.set_message("", 0.0)
     return
   }
 
@@ -174,7 +174,7 @@ fn update_play_input(game : @types.Game, dt : Float) -> Unit {
   if hold_power {
     if not(game.charging) {
       game.charging = true
-      set_message(game, "Charging power... release to throw", 0.5)
+      game.set_message("Charging power... release to throw", 0.5)
     }
 
     game.power = game.power + dt * 1.4 * game.power_dir
@@ -186,6 +186,6 @@ fn update_play_input(game : @types.Game, dt : Float) -> Unit {
       game.power_dir = 1.0
     }
   } else if game.charging {
-    ignore(throw_ball(game))
+    ignore(game.throw_ball())
   }
 }

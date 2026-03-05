@@ -1,6 +1,6 @@
 ///|
 /// Deactivates all particles and zeros their position, velocity, life, size, and kind fields.
-fn clear_particles(game : @types.Game) -> Unit {
+fn @types.Game::clear_particles(game : @types.Game) -> Unit {
   for particle in game.particles {
     particle.active = false
     particle.x = 0.0
@@ -15,7 +15,7 @@ fn clear_particles(game : @types.Game) -> Unit {
 
 ///|
 /// Deactivates all enemies, pickups, and bullets, resetting their fields to safe defaults.
-fn clear_world(game : @types.Game) -> Unit {
+fn @types.Game::clear_world(game : @types.Game) -> Unit {
   for enemy in game.enemies {
     enemy.active = false
     enemy.x = 0.0
@@ -52,7 +52,7 @@ fn clear_world(game : @types.Game) -> Unit {
 
 ///|
 /// Activates the first inactive particle slot and initializes it with the given position, velocity, lifetime, size, and kind.
-fn emit_particle(
+fn @types.Game::emit_particle(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -81,10 +81,9 @@ fn emit_particle(
 
 ///|
 /// Emits `n` particles of the given kind in random directions from a jittered position around `(x, y)`.
-fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
+fn @types.Game::burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit {
   for _i in 0..<n {
-    emit_particle(
-      game,
+    game.emit_particle(
       x + @types.randf(-14.0, 14.0),
       y + @types.randf(-14.0, 14.0),
       @types.randf(-260.0, 260.0),
@@ -98,7 +97,7 @@ fn burst(game : @types.Game, x : Float, y : Float, n : Int, kind : Int) -> Unit 
 
 ///|
 /// Advances all active particles by `dt`: decays lifetime, moves by velocity, and applies kind-dependent velocity damping and gravity.
-fn update_particles(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
     if not(particle.active) {
       continue
@@ -122,7 +121,7 @@ fn update_particles(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Repositions the player to the lower-center of the world and zeroes all movement and aim state.
-fn reset_player(game : @types.Game) -> Unit {
+fn @types.Game::reset_player(game : @types.Game) -> Unit {
   game.player_x = Float::from_int(@types.world_x0 + @types.world_w / 2)
   game.player_y = Float::from_int(@types.world_y0 + @types.world_h - 180)
   game.player_vx = 0.0
@@ -135,12 +134,12 @@ fn reset_player(game : @types.Game) -> Unit {
 
 ///|
 /// Resets the entire game state for a fresh run: clears world and particles, resets player, initializes all resource and timer fields to starting values, and shows the opening message.
-fn start_run(game : @types.Game) -> Unit {
-  clear_world(game)
-  clear_particles(game)
+fn @types.Game::start_run(game : @types.Game) -> Unit {
+  game.clear_world()
+  game.clear_particles()
 
   game.state = Play
-  reset_player(game)
+  game.reset_player()
 
   game.lives = 3
   game.suit_hp = 100.0
@@ -180,7 +179,7 @@ fn start_run(game : @types.Game) -> Unit {
 
 ///|
 /// Transitions to the Result state, updates the best score, emits a celebration or collapse burst, and shows the appropriate end message; does nothing if not in Play.
-fn finish_run(game : @types.Game, win : Bool) -> Unit {
+fn @types.Game::finish_run(game : @types.Game, win : Bool) -> Unit {
   if game.state != Play {
     return
   }
@@ -196,16 +195,16 @@ fn finish_run(game : @types.Game, win : Bool) -> Unit {
 
   if win {
     @types.set_msg(game, "Outpost survived the polar night.", 3.0)
-    burst(game, @types.core_x(), @types.core_y(), 70, 2)
+    game.burst(@types.core_x(), @types.core_y(), 70, 2)
   } else {
     @types.set_msg(game, "Outpost collapsed in the storm.", 3.0)
-    burst(game, @types.core_x(), @types.core_y(), 56, 1)
+    game.burst(@types.core_x(), @types.core_y(), 56, 1)
   }
 }
 
 ///|
 /// Finds the first inactive enemy slot and spawns a randomly-typed enemy (wolf, brute, or shard) at a random point on one of the four world-edge sides, with stats scaled by the current wave; returns false if all slots are occupied.
-fn spawn_enemy(game : @types.Game) -> Bool {
+fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
   for enemy in game.enemies {
     if enemy.active {
       continue
@@ -273,7 +272,7 @@ fn spawn_enemy(game : @types.Game) -> Bool {
 
 ///|
 /// Finds the first inactive pickup slot and spawns a randomly-typed supply drop (fuel, medkit, ammo, or overdrive) that falls from above the world; returns false if all slots are occupied.
-fn spawn_pickup(game : @types.Game) -> Bool {
+fn @types.Game::spawn_pickup(game : @types.Game) -> Bool {
   for pickup in game.pickups {
     if pickup.active {
       continue
@@ -308,7 +307,7 @@ fn spawn_pickup(game : @types.Game) -> Bool {
 
 ///|
 /// Finds the first inactive bullet slot and fires a projectile from `(x, y)` toward `(tx, ty)` with the given power and kind; returns false if all slots are occupied.
-fn spawn_bullet(
+fn @types.Game::spawn_bullet(
   game : @types.Game,
   x : Float,
   y : Float,
@@ -342,7 +341,7 @@ fn spawn_bullet(
 
 ///|
 /// Fires one bullet toward `(tx, ty)` if the game is in Play, ammo is available, and the fire cooldown has elapsed; uses pierce bullets and faster fire rate during overdrive; applies recoil to the player.
-fn try_fire(game : @types.Game, tx : Float, ty : Float) -> Bool {
+fn @types.Game::try_fire(game : @types.Game, tx : Float, ty : Float) -> Bool {
   if game.state != Play {
     return false
   }
@@ -363,7 +362,7 @@ fn try_fire(game : @types.Game, tx : Float, ty : Float) -> Bool {
   }
   let power : Float = if overdrive { 38.0 } else { 24.0 }
 
-  if not(spawn_bullet(game, game.player_x, game.player_y, tx, ty, power, kind)) {
+  if not(game.spawn_bullet(game.player_x, game.player_y, tx, ty, power, kind)) {
     return false
   }
 
@@ -374,14 +373,14 @@ fn try_fire(game : @types.Game, tx : Float, ty : Float) -> Bool {
   game.player_vx = game.player_vx - dir.0 * 28.0
   game.player_vy = game.player_vy - dir.1 * 28.0
 
-  burst(game, game.player_x, game.player_y, if overdrive { 8 } else { 5 }, 0)
+  game.burst(game.player_x, game.player_y, if overdrive { 8 } else { 5 }, 0)
 
   true
 }
 
 ///|
 /// Restores core heat, suit HP, and ammo by consuming fuel if the player is near the generator and the repair cooldown has elapsed; fails with a message if out of range or low on fuel.
-fn try_repair(game : @types.Game) -> Bool {
+fn @types.Game::try_repair(game : @types.Game) -> Bool {
   if game.state != Play {
     return false
   }
@@ -417,7 +416,7 @@ fn try_repair(game : @types.Game) -> Bool {
   game.repair_cd = 1.10
 
   @types.set_msg(game, "Generator repaired: heat stabilized.", 1.4)
-  burst(game, @types.core_x(), @types.core_y(), 28, 2)
+  game.burst(@types.core_x(), @types.core_y(), 28, 2)
 
   true
 }
@@ -448,7 +447,7 @@ fn enemy_core_damage(kind : Int) -> Float {
 
 ///|
 /// Applies `dmg` to the player's suit HP (reduced by 28% during overdrive), resets combo, triggers camera shake, and deducts a life with player respawn if the suit is destroyed; calls `finish_run` if all lives are gone.
-fn hurt_player(game : @types.Game, dmg : Float) -> Unit {
+fn @types.Game::hurt_player(game : @types.Game, dmg : Float) -> Unit {
   if game.overdrive_t > 0.0 {
     game.suit_hp = game.suit_hp - dmg * 0.72
   } else {
@@ -463,44 +462,44 @@ fn hurt_player(game : @types.Game, dmg : Float) -> Unit {
     game.lives = game.lives - 1
     game.suit_hp = 100.0
     game.fuel = @types.maxf(0.0, game.fuel - 18.0)
-    reset_player(game)
+    game.reset_player()
     @types.set_msg(game, "Suit breached. Life lost.", 1.6)
-    burst(game, game.player_x, game.player_y, 34, 1)
+    game.burst(game.player_x, game.player_y, 34, 1)
 
     if game.lives <= 0 {
-      finish_run(game, false)
+      game.finish_run(false)
       return
     }
   } else {
     @types.set_msg(game, "Hostile contact.", 0.9)
-    burst(game, game.player_x, game.player_y, 16, 1)
+    game.burst(game.player_x, game.player_y, 16, 1)
   }
 }
 
 ///|
 /// Applies the pickup effect by kind (fuel refills core heat, medkit heals suit, ammo crate restores ammo, overdrive activates pierce mode), adds score, increments combo, and shows a status message.
-fn collect_pickup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit {
+fn @types.Game::collect_pickup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit {
   if kind == @types.pickup_fuel {
     game.fuel = @types.minf(100.0, game.fuel + 26.0)
     game.core_heat = @types.minf(100.0, game.core_heat + 6.0)
     game.score = game.score + 16
     @types.set_msg(game, "Fuel cache secured.", 1.2)
-    burst(game, x, y, 20, 0)
+    game.burst(x, y, 20, 0)
   } else if kind == @types.pickup_medkit {
     game.suit_hp = @types.minf(100.0, game.suit_hp + 34.0)
     game.score = game.score + 16
     @types.set_msg(game, "Medkit applied.", 1.2)
-    burst(game, x, y, 18, 2)
+    game.burst(x, y, 18, 2)
   } else if kind == @types.pickup_ammo {
     game.ammo = (460).min(game.ammo + 48)
     game.score = game.score + 14
     @types.set_msg(game, "Ammo crate recovered.", 1.2)
-    burst(game, x, y, 18, 0)
+    game.burst(x, y, 18, 0)
   } else {
     game.overdrive_t = @types.maxf(game.overdrive_t, 7.0)
     game.score = game.score + 26
     @types.set_msg(game, "Overdrive engaged.", 1.2)
-    burst(game, x, y, 24, 2)
+    game.burst(x, y, 24, 2)
   }
 
   game.combo = (12).min(game.combo + 1)
@@ -509,7 +508,7 @@ fn collect_pickup(game : @types.Game, kind : Int, x : Float, y : Float) -> Unit 
 
 ///|
 /// Applies movement acceleration from input axes, damps velocity, moves the player, clamps to world boundaries with bounce, and emits overdrive trail particles.
-fn update_player(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   let accel : Float = if game.overdrive_t > 0.0 { 940.0 } else { 720.0 }
 
   game.player_vx = game.player_vx + game.move_x * accel * dt
@@ -543,8 +542,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.overdrive_t > 0.0 {
-    emit_particle(
-      game,
+    game.emit_particle(
       game.player_x + @types.randf(-6.0, 6.0),
       game.player_y + @types.randf(-6.0, 6.0),
       @types.randf(-80.0, 80.0),
@@ -558,7 +556,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Applies bullet damage to the target enemy, deactivates normal bullets on hit or degrades pierce bullets until below the kill threshold, and on enemy death awards combo-scaled score and may spawn a pickup.
-fn bullet_hit_enemy(game : @types.Game, bi : Int, ei : Int) -> Unit {
+fn @types.Game::bullet_hit_enemy(game : @types.Game, bi : Int, ei : Int) -> Unit {
   game.enemies[ei].hp = game.enemies[ei].hp - game.bullets[bi].power
 
   if game.bullets[bi].kind == @types.bullet_normal {
@@ -570,7 +568,7 @@ fn bullet_hit_enemy(game : @types.Game, bi : Int, ei : Int) -> Unit {
     }
   }
 
-  burst(game, game.enemies[ei].x, game.enemies[ei].y, 9, 0)
+  game.burst(game.enemies[ei].x, game.enemies[ei].y, 9, 0)
 
   if game.enemies[ei].hp <= 0.0 {
     let kind : Int = game.enemies[ei].kind
@@ -590,16 +588,16 @@ fn bullet_hit_enemy(game : @types.Game, bi : Int, ei : Int) -> Unit {
     game.score = game.score + base_score + game.combo * 2
 
     if @raylib.get_random_value(0, 99) < 12 {
-      ignore(spawn_pickup(game))
+      ignore(game.spawn_pickup())
     }
 
-    burst(game, game.enemies[ei].x, game.enemies[ei].y, 20, 1)
+    game.burst(game.enemies[ei].x, game.enemies[ei].y, 20, 1)
   }
 }
 
 ///|
 /// Moves all active bullets, deactivates them on lifetime expiry or when they leave the world boundary, and checks each bullet for collision with all active enemies.
-fn update_bullets(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
   for bi in 0..<game.bullets.length() {
     if not(game.bullets[bi].active) {
       continue
@@ -633,7 +631,7 @@ fn update_bullets(game : @types.Game, dt : Float) -> Unit {
           game.enemies[ei].y,
         ) <=
         rr * rr {
-        bullet_hit_enemy(game, bi, ei)
+        game.bullet_hit_enemy(bi, ei)
 
         if not(game.bullets[bi].active) {
           break
@@ -645,7 +643,7 @@ fn update_bullets(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Returns the base movement speed for an enemy of the given kind, scaled up by the current wave number.
-fn enemy_speed(game : @types.Game, kind : Int) -> Float {
+fn @types.Game::enemy_speed(game : @types.Game, kind : Int) -> Float {
   if kind == @types.enemy_wolf {
     130.0 + Float::from_int(game.wave) * 10.0
   } else if kind == @types.enemy_brute {
@@ -657,7 +655,7 @@ fn enemy_speed(game : @types.Game, kind : Int) -> Float {
 
 ///|
 /// Advances all active enemies: updates their phase timer, steers toward the player (wolves) or core (brutes/shards) with a sinusoidal swirl offset, deactivates out-of-bounds enemies, and applies touch damage to the player or core heat damage on contact.
-fn update_enemies(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
   for enemy in game.enemies {
     if not(enemy.active) {
       continue
@@ -688,7 +686,7 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     }
 
     let dir = @types.normalize(target_x - enemy.x, target_y - enemy.y)
-    let speed : Float = enemy_speed(game, enemy.kind)
+    let speed : Float = game.enemy_speed(enemy.kind)
 
     let swirl_x : Float = if enemy.kind == @types.enemy_shard {
       @math.sinf(enemy.phase * 5.0) * 120.0
@@ -723,7 +721,7 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     let player_rr : Float = enemy.r + @types.player_r - 3.0
     if @types.dist2(enemy.x, enemy.y, game.player_x, game.player_y) <=
       player_rr * player_rr {
-      hurt_player(game, enemy_touch_damage(enemy.kind))
+      game.hurt_player(enemy_touch_damage(enemy.kind))
 
       enemy.active = if enemy.kind == @types.enemy_brute { true } else { false }
 
@@ -745,7 +743,7 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
       game.shake_t = @types.maxf(game.shake_t, 0.30)
 
       @types.set_msg(game, "Core under attack!", 0.8)
-      burst(game, @types.core_x(), @types.core_y(), 14, 1)
+      game.burst(@types.core_x(), @types.core_y(), 14, 1)
 
       if enemy.kind == @types.enemy_brute {
         enemy.hp = enemy.hp - 34.0
@@ -764,7 +762,7 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Moves all active pickups with a sinusoidal horizontal drift and wave-scaled downward fall, bounces them off side walls, deactivates them when they fall below the world, and collects them on player contact.
-fn update_pickups(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_pickups(game : @types.Game, dt : Float) -> Unit {
   for pickup in game.pickups {
     if not(pickup.active) {
       continue
@@ -795,14 +793,14 @@ fn update_pickups(game : @types.Game, dt : Float) -> Unit {
       let px : Float = pickup.x
       let py : Float = pickup.y
       pickup.active = false
-      collect_pickup(game, kind, px, py)
+      game.collect_pickup(kind, px, py)
     }
   }
 }
 
 ///|
 /// Consumes one hint charge and marks the nearest needed supply pickup (fuel or ammo when low) or the safest of five vertical lanes based on enemy threat weighting; deducts 6 score points.
-fn use_hint(game : @types.Game) -> Bool {
+fn @types.Game::use_hint(game : @types.Game) -> Bool {
   if game.state != Play || game.hint_left <= 0 {
     return false
   }
@@ -889,7 +887,7 @@ fn use_hint(game : @types.Game) -> Bool {
 
 ///|
 /// Drains core heat each frame by a base rate plus wave-scaled enemy pressure and a sinusoidal storm intensity.
-fn passive_heat_decay(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::passive_heat_decay(game : @types.Game, dt : Float) -> Unit {
   let storm : Float = 0.5 +
     @math.sinf(game.storm_t * 1.2) * 0.3 +
     @math.cosf(game.storm_t * 0.7) * 0.2
@@ -901,7 +899,7 @@ fn passive_heat_decay(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 /// Runs the full play-state simulation step: ticks all timers and cooldowns, updates particles, advances game time and storm, scales wave difficulty, drains fuel and suit HP, spawns enemies and pickups, updates all entities, and triggers win or loss conditions.
-fn update_play(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   let step : Float = @types.clampf(dt, 0.0, 0.04)
 
   game.ui_t = game.ui_t + step
@@ -919,7 +917,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   game.repair_cd = @types.maxf(0.0, game.repair_cd - step)
   game.overdrive_t = @types.maxf(0.0, game.overdrive_t - step)
 
-  update_particles(game, step)
+  game.update_particles(step)
 
   if game.state != Play {
     return
@@ -929,13 +927,13 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   game.storm_t = game.storm_t + step
 
   if game.game_t >= @types.survival_time_goal {
-    finish_run(game, true)
+    game.finish_run(true)
     return
   }
 
   game.wave = (1 + (game.game_t / 22.0).to_int()).clamp(min=1, max=12)
 
-  passive_heat_decay(game, step)
+  game.passive_heat_decay(step)
 
   game.fuel = @types.maxf(
     0.0,
@@ -946,7 +944,7 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.suit_hp <= 0.0 {
-    hurt_player(game, 100.0)
+    game.hurt_player(100.0)
     if game.state != Play {
       return
     }
@@ -959,30 +957,30 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
   )
   while game.spawn_t >= spawn_interval {
     game.spawn_t = game.spawn_t - spawn_interval
-    ignore(spawn_enemy(game))
+    ignore(game.spawn_enemy())
   }
 
   game.pickup_t = game.pickup_t + step
   if game.pickup_t >= 1.95 {
     game.pickup_t = 0.0
-    ignore(spawn_pickup(game))
+    ignore(game.spawn_pickup())
   }
 
-  update_player(game, step)
-  update_bullets(game, step)
-  update_enemies(game, step)
+  game.update_player(step)
+  game.update_bullets(step)
+  game.update_enemies(step)
   if game.state != Play {
     return
   }
-  update_pickups(game, step)
+  game.update_pickups(step)
 
   if game.core_heat <= 0.0 {
-    finish_run(game, false)
+    game.finish_run(false)
     return
   }
 
   if game.lives <= 0 {
-    finish_run(game, false)
+    game.finish_run(false)
     return
   }
 
@@ -996,16 +994,16 @@ fn update_play(game : @types.Game, dt : Float) -> Unit {
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   match game.state {
     Title => {
-      update_title_input(game)
-      update_play(game, dt)
+      game.update_title_input()
+      game.update_play(dt)
     }
     Play => {
-      update_play_input(game, dt)
-      update_play(game, dt)
+      game.update_play_input(dt)
+      game.update_play(dt)
     }
     Result => {
-      update_result_input(game)
-      update_play(game, dt)
+      game.update_result_input()
+      game.update_play(dt)
     }
   }
 }

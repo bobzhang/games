@@ -3,23 +3,23 @@
 ///|
 /// Draws the entire 3D world including terrain, entities, effects, and weather.
 pub fn draw_world(game : @types.Game) -> Unit {
-  let camera = build_camera(game)
+  let camera = game.build_camera()
   @raylib.begin_mode_3d(camera)
   draw_celestial_body(game)
-  draw_terrain(game)
-  draw_terrain_details(game)
-  draw_buildings(game)
-  draw_turrets_3d(game)
-  draw_checkpoints(game)
-  draw_enemies(game)
-  draw_projectiles(game)
+  game.draw_terrain()
+  game.draw_terrain_details()
+  game.draw_buildings()
+  game.draw_turrets_3d()
+  game.draw_checkpoints()
+  game.draw_enemies()
+  game.draw_projectiles()
   draw_tracer_trails(game)
-  draw_particles_3d(game)
-  draw_player_aircraft(game)
+  game.draw_particles_3d()
+  game.draw_player_aircraft()
   draw_engine_trail(game)
   draw_damage_smoke(game)
   draw_enemy_damage_trails(game)
-  draw_landing_zone(game)
+  game.draw_landing_zone()
   draw_clouds(game)
   draw_rain_effect(game)
   draw_fog_overlay(game)
@@ -27,7 +27,7 @@ pub fn draw_world(game : @types.Game) -> Unit {
 }
 
 ///|
-fn build_camera(game : @types.Game) -> @raylib.Camera3D {
+fn @types.Game::build_camera(game : @types.Game) -> @raylib.Camera3D {
   @raylib.Camera3D::new(
     @raylib.Vector3::new(game.cam_x, game.cam_y, game.cam_z),
     @raylib.Vector3::new(
@@ -42,7 +42,7 @@ fn build_camera(game : @types.Game) -> @raylib.Camera3D {
 }
 
 ///|
-fn draw_terrain(game : @types.Game) -> Unit {
+fn @types.Game::draw_terrain(game : @types.Game) -> Unit {
   let scale = @types.terrain_chunk_scale
   for t in game.terrain {
     if not(t.active) {
@@ -74,7 +74,7 @@ fn draw_terrain(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_checkpoints(game : @types.Game) -> Unit {
+fn @types.Game::draw_checkpoints(game : @types.Game) -> Unit {
   for cp in game.checkpoints {
     if not(cp.active) || cp.collected {
       continue
@@ -119,7 +119,7 @@ fn draw_checkpoints(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_enemies(game : @types.Game) -> Unit {
+fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
   for e in game.enemies {
     if not(e.active) {
       continue
@@ -218,7 +218,7 @@ fn draw_enemies(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_projectiles(game : @types.Game) -> Unit {
+fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
   for p in game.projectiles {
     if not(p.active) {
       continue
@@ -247,7 +247,7 @@ fn draw_projectiles(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_particles_3d(game : @types.Game) -> Unit {
+fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -265,7 +265,7 @@ fn draw_particles_3d(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_player_aircraft(game : @types.Game) -> Unit {
+fn @types.Game::draw_player_aircraft(game : @types.Game) -> Unit {
   let player = game.player
   if not(player.alive) {
     return
@@ -344,7 +344,7 @@ fn draw_player_aircraft(game : @types.Game) -> Unit {
 // Draw buildings with type-specific detail
 
 ///|
-fn draw_buildings(game : @types.Game) -> Unit {
+fn @types.Game::draw_buildings(game : @types.Game) -> Unit {
   for b in game.buildings {
     if not(b.active) {
       continue
@@ -577,7 +577,7 @@ fn draw_buildings(game : @types.Game) -> Unit {
 // Draw anti-aircraft turrets with detail
 
 ///|
-fn draw_turrets_3d(game : @types.Game) -> Unit {
+fn @types.Game::draw_turrets_3d(game : @types.Game) -> Unit {
   for t in game.turrets {
     if not(t.active) {
       continue
@@ -670,7 +670,7 @@ fn draw_turrets_3d(game : @types.Game) -> Unit {
 // Draw terrain detail: trees and rocks at close range
 
 ///|
-fn draw_terrain_details(game : @types.Game) -> Unit {
+fn @types.Game::draw_terrain_details(game : @types.Game) -> Unit {
   let scale = @types.terrain_chunk_scale
   let detail_range : Float = 50.0
   for t in game.terrain {
@@ -748,7 +748,7 @@ fn draw_terrain_details(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_landing_zone(game : @types.Game) -> Unit {
+fn @types.Game::draw_landing_zone(game : @types.Game) -> Unit {
   let mission = game.missions[game.current_mission]
   if not(mission.has_landing) {
     return

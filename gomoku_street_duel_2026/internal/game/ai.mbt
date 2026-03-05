@@ -1,6 +1,6 @@
 ///|
 /// Returns true if any cell within Manhattan radius `r` of `(x, y)` is occupied.
-fn has_neighbor(game : @types.Game, x : Int, y : Int, r : Int) -> Bool {
+fn @types.Game::has_neighbor(game : @types.Game, x : Int, y : Int, r : Int) -> Bool {
   for yy in (y - r)..<=(y + r) {
     for xx in (x - r)..<=(x + r) {
       if xx == x && yy == y {
@@ -18,7 +18,7 @@ fn has_neighbor(game : @types.Game, x : Int, y : Int, r : Int) -> Bool {
 
 ///|
 /// Counts consecutive cells belonging to `p` from `(x, y)` in direction `(dx, dy)` and returns `(count, 1)` if the next cell is empty or `(count, 0)` otherwise.
-fn count_chain_and_open(
+fn @types.Game::count_chain_and_open(
   game : @types.Game,
   x : Int,
   y : Int,
@@ -70,7 +70,7 @@ fn line_pattern_score(total : Int, open : Int) -> Int {
 
 ///|
 /// Evaluates the threat score for player `p` along one axis direction `(dx, dy)` from `(x, y)` by combining counts on both sides with `line_pattern_score`.
-fn score_dir(
+fn @types.Game::score_dir(
   game : @types.Game,
   x : Int,
   y : Int,
@@ -78,8 +78,8 @@ fn score_dir(
   dx : Int,
   dy : Int,
 ) -> Int {
-  let left = count_chain_and_open(game, x, y, p, -dx, -dy)
-  let right = count_chain_and_open(game, x, y, p, dx, dy)
+  let left = game.count_chain_and_open(x, y, p, -dx, -dy)
+  let right = game.count_chain_and_open(x, y, p, dx, dy)
 
   let total : Int = left.0 + right.0
   let open : Int = left.1 + right.1
@@ -89,7 +89,7 @@ fn score_dir(
 
 ///|
 /// Returns a heuristic placement score for player `p` at empty cell `(x, y)`, summing directional threat scores and a center-proximity bonus; returns -1 if the cell is occupied.
-fn score_cell_for(
+fn @types.Game::score_cell_for(
   game : @types.Game,
   x : Int,
   y : Int,
@@ -100,10 +100,10 @@ fn score_cell_for(
   }
 
   let mut score : Int = 0
-  score = score + score_dir(game, x, y, p, 1, 0)
-  score = score + score_dir(game, x, y, p, 0, 1)
-  score = score + score_dir(game, x, y, p, 1, 1)
-  score = score + score_dir(game, x, y, p, 1, -1)
+  score = score + game.score_dir(x, y, p, 1, 0)
+  score = score + game.score_dir(x, y, p, 0, 1)
+  score = score + game.score_dir(x, y, p, 1, 1)
+  score = score + game.score_dir(x, y, p, 1, -1)
 
   let cx : Int = @types.board_n / 2
   let dist : Int = Float::from_int(x - cx).abs().to_int() +
@@ -115,7 +115,7 @@ fn score_cell_for(
 
 ///|
 /// Returns true if placing player `p` at `(x, y)` would immediately complete a five-in-a-row.
-fn would_win_if_place(
+fn @types.Game::would_win_if_place(
   game : @types.Game,
   x : Int,
   y : Int,
@@ -126,14 +126,14 @@ fn would_win_if_place(
   }
 
   @types.set_cell(game, x, y, p)
-  let win : Bool = check_five_from(game, x, y, p)
+  let win : Bool = game.check_five_from(x, y, p)
   @types.set_cell(game, x, y, Empty)
   win
 }
 
 ///|
 /// Returns `(found, x, y, score)` for the highest-scoring empty cell for player `p`, prioritising immediate wins, blocking the opponent's wins, and combined offensive/defensive heuristics.
-fn best_move_for(
+fn @types.Game::best_move_for(
   game : @types.Game,
   p : @types.Player,
   opp : @types.Player,
@@ -153,19 +153,19 @@ fn best_move_for(
         continue
       }
 
-      if not(has_neighbor(game, x, y, 2)) {
+      if not(game.has_neighbor(x, y, 2)) {
         continue
       }
 
       let mut s : Int = 0
 
-      if would_win_if_place(game, x, y, p) {
+      if game.would_win_if_place(x, y, p) {
         s = 1000000
-      } else if would_win_if_place(game, x, y, opp) {
+      } else if game.would_win_if_place(x, y, opp) {
         s = 760000
       } else {
-        let off : Int = score_cell_for(game, x, y, p)
-        let def : Int = score_cell_for(game, x, y, opp)
+        let off : Int = game.score_cell_for(x, y, p)
+        let def : Int = game.score_cell_for(x, y, opp)
         s = off + def * 11 / 10
       }
 
@@ -196,12 +196,12 @@ fn best_move_for(
 
 ///|
 /// Executes the AI's turn by selecting and placing the best move when it is the AI's turn and the delay timer has expired; declares a draw if no move is available.
-fn ai_step(game : @types.Game) -> Unit {
+fn @types.Game::ai_step(game : @types.Game) -> Unit {
   if game.state != Play || game.turn != AI || game.ai_delay > 0.0 {
     return
   }
 
-  let mv = best_move_for(game, AI, Human)
+  let mv = game.best_move_for(AI, Human)
   if not(mv.0) {
     game.state = Result
     game.winner = Empty
@@ -212,7 +212,7 @@ fn ai_step(game : @types.Game) -> Unit {
 
   let x : Int = mv.1
   let y : Int = mv.2
-  ignore(place_stone(game, x, y, AI))
+  ignore(game.place_stone(x, y, AI))
 
   if game.state == Play {
     @types.set_message(game, "AI moved", 0.45)
@@ -221,7 +221,7 @@ fn ai_step(game : @types.Game) -> Unit {
 
 ///|
 /// Spends one hint charge to show the AI-recommended move for the human player, moves the cursor there, and emits hint sparks; returns true on success.
-fn use_hint(game : @types.Game) -> Bool {
+fn @types.Game::use_hint(game : @types.Game) -> Bool {
   if game.state != Play || game.turn != Human {
     return false
   }
@@ -231,7 +231,7 @@ fn use_hint(game : @types.Game) -> Bool {
     return false
   }
 
-  let mv = best_move_for(game, Human, AI)
+  let mv = game.best_move_for(Human, AI)
   if not(mv.0) {
     @types.set_message(game, "No suggestion", 0.8)
     return false

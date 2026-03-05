@@ -147,7 +147,7 @@ fn draw_special_overlay(cx : Int, cy : Int, sp : Int) -> Unit {
 
 ///|
 /// Draws each board cell including its candy, jelly underlay, special overlay, and flash effect.
-fn draw_board_cells(game : @types.Game) -> Unit {
+fn @types.Game::draw_board_cells(game : @types.Game) -> Unit {
   let bx = @types.board_x()
   let by = @types.board_y()
 
@@ -218,7 +218,7 @@ fn draw_board_cells(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the cursor outline, selected-cell highlight, animated hint markers, and swap flash overlay.
-fn draw_selection(game : @types.Game) -> Unit {
+fn @types.Game::draw_selection(game : @types.Game) -> Unit {
   let bx = @types.board_x()
   let by = @types.board_y()
 
@@ -324,7 +324,7 @@ fn draw_selection(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the right-side UI panel with level, score, move/jelly counters, and action buttons.
-fn draw_side_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.panel_x(),
     @types.panel_y(),
@@ -480,7 +480,7 @@ fn draw_side_panel(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the fading HUD message banner above the board when a message is active.
-fn draw_message(game : @types.Game) -> Unit {
+fn @types.Game::draw_message(game : @types.Game) -> Unit {
   if game.message_t <= 0.0 {
     return
   }
@@ -513,7 +513,7 @@ fn draw_message(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the full-screen title overlay with game name, instructions, and start button.
-fn draw_title_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -568,7 +568,7 @@ fn draw_title_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the level-clear or game-over overlay with score summary and the appropriate action button.
-fn draw_result_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -642,13 +642,13 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   draw_background()
   draw_board_frame()
-  draw_board_cells(game)
-  draw_selection(game)
-  draw_side_panel(game)
-  draw_message(game)
+  game.draw_board_cells()
+  game.draw_selection()
+  game.draw_side_panel()
+  game.draw_message()
   match game.state {
-    Title => draw_title_overlay(game)
-    LevelClear | GameOver => draw_result_overlay(game)
+    Title => game.draw_title_overlay()
+    LevelClear | GameOver => game.draw_result_overlay()
     Play => ()
   }
   if game.state == Play && game.touch_mode {

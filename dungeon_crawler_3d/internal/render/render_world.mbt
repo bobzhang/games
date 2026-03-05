@@ -3,19 +3,19 @@
 ///|
 /// Draws the 3D dungeon world with tiles, actors, projectiles, and particle effects.
 pub fn draw_world(game : @types.Game) -> Unit {
-  let camera = build_camera(game)
+  let camera = game.build_camera()
   @raylib.begin_mode_3d(camera)
-  draw_dungeon(game)
-  draw_enemies_3d(game)
-  draw_loot_3d(game)
-  draw_projectiles_3d(game)
-  draw_particles_3d(game)
-  draw_sword_swing(game)
+  game.draw_dungeon()
+  game.draw_enemies_3d()
+  game.draw_loot_3d()
+  game.draw_projectiles_3d()
+  game.draw_particles_3d()
+  game.draw_sword_swing()
   @raylib.end_mode_3d()
 }
 
 ///|
-fn build_camera(game : @types.Game) -> @raylib.Camera3D {
+fn @types.Game::build_camera(game : @types.Game) -> @raylib.Camera3D {
   let eye_x = game.player_x
   let eye_y = @types.player_eye_height
   let eye_z = game.player_z
@@ -36,7 +36,7 @@ fn build_camera(game : @types.Game) -> @raylib.Camera3D {
 }
 
 ///|
-fn draw_dungeon(game : @types.Game) -> Unit {
+fn @types.Game::draw_dungeon(game : @types.Game) -> Unit {
   // Only draw tiles near the player for performance
   let pgx = @types.world_to_grid_x(game.player_x)
   let pgz = @types.world_to_grid_z(game.player_z)
@@ -215,7 +215,7 @@ fn draw_chest(wx : Float, wz : Float, game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_enemies_3d(game : @types.Game) -> Unit {
+fn @types.Game::draw_enemies_3d(game : @types.Game) -> Unit {
   for e in game.enemies {
     if not(e.active) {
       continue
@@ -508,7 +508,7 @@ fn draw_enemy_health_bar(e : @types.Enemy, game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_loot_3d(game : @types.Game) -> Unit {
+fn @types.Game::draw_loot_3d(game : @types.Game) -> Unit {
   for l in game.loot {
     if not(l.active) {
       continue
@@ -562,7 +562,7 @@ fn draw_loot_3d(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_projectiles_3d(game : @types.Game) -> Unit {
+fn @types.Game::draw_projectiles_3d(game : @types.Game) -> Unit {
   for p in game.projectiles {
     if not(p.active) {
       continue
@@ -582,7 +582,7 @@ fn draw_projectiles_3d(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_particles_3d(game : @types.Game) -> Unit {
+fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
   for p in game.particles {
     if not(p.active) {
       continue
@@ -601,7 +601,7 @@ fn draw_particles_3d(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_sword_swing(game : @types.Game) -> Unit {
+fn @types.Game::draw_sword_swing(game : @types.Game) -> Unit {
   if not(game.swing_active) {
     return
   }

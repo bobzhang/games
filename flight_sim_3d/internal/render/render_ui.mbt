@@ -2,28 +2,28 @@
 /// Draws the full 2D user interface overlay for the current game state.
 pub fn draw_ui(game : @types.Game) -> Unit {
   if game.state == @types.state_menu {
-    draw_menu(game)
+    game.draw_menu()
   } else if game.state == @types.state_aircraft_select {
-    draw_aircraft_select(game)
+    game.draw_aircraft_select()
   } else if game.state == @types.state_mission_briefing {
-    draw_mission_briefing(game)
+    game.draw_mission_briefing()
   } else if game.state == @types.state_playing {
-    draw_hud(game)
-    draw_radar(game)
-    draw_warning_indicators(game)
+    game.draw_hud()
+    game.draw_radar()
+    game.draw_warning_indicators()
   } else if game.state == @types.state_paused {
-    draw_hud(game)
+    game.draw_hud()
     draw_pause_overlay()
   } else if game.state == @types.state_mission_complete {
-    draw_hud(game)
-    draw_mission_complete_detailed(game)
+    game.draw_hud()
+    game.draw_mission_complete_detailed()
   } else if game.state == @types.state_game_over {
-    draw_game_over_detailed(game)
+    game.draw_game_over_detailed()
   }
 }
 
 ///|
-fn draw_menu(game : @types.Game) -> Unit {
+fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -122,7 +122,7 @@ fn draw_menu(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_hud(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   let player = game.player
   // Top bar
   @raylib.draw_rectangle(
@@ -323,7 +323,7 @@ fn draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_line(cx, cy - 15, cx, cy - 5, @raylib.Color::new(0, 255, 0, 180))
   @raylib.draw_line(cx, cy + 5, cx, cy + 15, @raylib.Color::new(0, 255, 0, 180))
   // Mission objective text
-  draw_objective(game)
+  game.draw_objective()
   // Message display
   if game.message_timer > 0.0 {
     let msg_w = @raylib.measure_text(game.message_text, 22)
@@ -392,7 +392,7 @@ fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_objective(game : @types.Game) -> Unit {
+fn @types.Game::draw_objective(game : @types.Game) -> Unit {
   let mission = game.missions[game.current_mission]
   let obj_text = if mission.kind == @types.mission_checkpoint {
     "Checkpoints: \{mission.targets_done}/\{mission.target_count}"
@@ -481,7 +481,7 @@ fn draw_pause_overlay() -> Unit {
 }
 
 ///|
-fn draw_mission_complete_detailed(game : @types.Game) -> Unit {
+fn @types.Game::draw_mission_complete_detailed(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -634,7 +634,7 @@ fn draw_mission_complete_detailed(game : @types.Game) -> Unit {
 }
 
 ///|
-fn draw_game_over_detailed(game : @types.Game) -> Unit {
+fn @types.Game::draw_game_over_detailed(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -695,7 +695,7 @@ fn draw_game_over_detailed(game : @types.Game) -> Unit {
 // Aircraft selection screen
 
 ///|
-fn draw_aircraft_select(game : @types.Game) -> Unit {
+fn @types.Game::draw_aircraft_select(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -833,7 +833,7 @@ fn draw_aircraft_select(game : @types.Game) -> Unit {
 // Mission briefing overlay
 
 ///|
-fn draw_mission_briefing(game : @types.Game) -> Unit {
+fn @types.Game::draw_mission_briefing(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -961,7 +961,7 @@ fn draw_mission_briefing(game : @types.Game) -> Unit {
 // Mini radar display
 
 ///|
-fn draw_radar(game : @types.Game) -> Unit {
+fn @types.Game::draw_radar(game : @types.Game) -> Unit {
   let radar_x = @types.screen_width - 130
   let radar_y = @types.screen_height - 160
   let radar_r = @types.radar_size / 2
@@ -1088,7 +1088,7 @@ fn draw_radar(game : @types.Game) -> Unit {
 // Warning indicators
 
 ///|
-fn draw_warning_indicators(game : @types.Game) -> Unit {
+fn @types.Game::draw_warning_indicators(game : @types.Game) -> Unit {
   let flash_sin = @math.sinf(
     game.warning_flash_timer * @types.warning_flash_rate,
   )

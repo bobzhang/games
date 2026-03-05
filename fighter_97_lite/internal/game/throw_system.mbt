@@ -47,7 +47,7 @@ fn throw_horizontal_velocity(
 }
 
 ///|
-fn apply_throw_tech(
+fn @types.Game::apply_throw_tech(
   game : @types.Game,
   first_slot : Int,
   second_slot : Int,
@@ -88,7 +88,7 @@ fn apply_throw_tech(
 }
 
 ///|
-fn apply_throw_hit(
+fn @types.Game::apply_throw_hit(
   game : @types.Game,
   attacker_slot : Int,
   defender_slot : Int,
@@ -144,7 +144,7 @@ fn apply_throw_hit(
 }
 
 ///|
-fn try_throw(
+fn @types.Game::try_throw(
   game : @types.Game,
   attacker_slot : Int,
   defender_slot : Int,
@@ -173,16 +173,16 @@ fn try_throw(
   }
 
   if defender.throw_tech_timer > 0 {
-    apply_throw_tech(game, attacker_slot, defender_slot)
+    game.apply_throw_tech(attacker_slot, defender_slot)
     return true
   }
 
-  apply_throw_hit(game, attacker_slot, defender_slot)
+  game.apply_throw_hit(attacker_slot, defender_slot)
   true
 }
 
 ///|
-fn update_throws(game : @types.Game) -> Bool {
+fn @types.Game::update_throws(game : @types.Game) -> Bool {
   let p1 = game.fighters[0]
   let p2 = game.fighters[1]
   let p1_intent = fighter_throw_intent(p1, p2)
@@ -199,15 +199,14 @@ fn update_throws(game : @types.Game) -> Bool {
     p2_intent &&
     @types.fighter_is_throw_vulnerable(p1) &&
     @types.fighter_is_throw_vulnerable(p2) {
-    apply_throw_tech(game, 0, 1)
+    game.apply_throw_tech(0, 1)
     return true
   }
 
   let first = if game.frame_count % 2 == 0 { 0 } else { 1 }
   let second = @types.other_slot(first)
 
-  if try_throw(
-      game,
+  if game.try_throw(
       first,
       second,
       if first == 0 {
@@ -219,8 +218,7 @@ fn update_throws(game : @types.Game) -> Bool {
     return true
   }
 
-  if try_throw(
-      game,
+  if game.try_throw(
       second,
       first,
       if second == 0 {

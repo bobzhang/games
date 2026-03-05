@@ -7,14 +7,14 @@ fn lane_to_x(lane : Float) -> Float {
 
 ///|
 /// Converts a world distance value to a screen Y coordinate relative to the player's boat position.
-fn world_y(game : @types.Game, dist : Float) -> Float {
+fn @types.Game::world_y(game : @types.Game, dist : Float) -> Float {
   Float::from_int(@types.boat_y) -
   (dist - game.distance) * @types.distance_to_px
 }
 
 ///|
 /// Clears the screen and draws pulsing ambient glow circles and tinted horizontal bands.
-fn draw_background(game : @types.Game) -> Unit {
+fn @types.Game::draw_background(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(10, 20, 34, 255))
 
   let glow0 : Float = 0.5 + 0.5 * @math.sinf(game.ui_t * 0.62)
@@ -58,7 +58,7 @@ fn draw_background(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the river rectangle, vertical lane dividers, and animated horizontal ripple lines.
-fn draw_river_surface(game : @types.Game) -> Unit {
+fn @types.Game::draw_river_surface(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.river_x,
     @types.river_y,
@@ -105,7 +105,7 @@ fn draw_river_surface(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a labelled horizontal line across the river for each upcoming checkpoint in the visible range.
-fn draw_checkpoint_lines(game : @types.Game) -> Unit {
+fn @types.Game::draw_checkpoint_lines(game : @types.Game) -> Unit {
   for i in game.checkpoint_idx..<@types.checkpoint_count {
     let dist : Float = @types.checkpoint_distance(i)
     let rel : Float = dist - game.distance
@@ -113,7 +113,7 @@ fn draw_checkpoint_lines(game : @types.Game) -> Unit {
       continue
     }
 
-    let y : Int = world_y(game, dist).to_int()
+    let y : Int = game.world_y(dist).to_int()
     let alpha : Int = (Float::from_int(220) - rel.abs() * 0.08)
       .to_int()
       .clamp(min=50, max=220)
@@ -139,7 +139,7 @@ fn draw_checkpoint_lines(game : @types.Game) -> Unit {
 
 ///|
 /// Draws all visible active hazards: rectangular debris logs or concentric wave rings.
-fn draw_hazards(game : @types.Game) -> Unit {
+fn @types.Game::draw_hazards(game : @types.Game) -> Unit {
   for hazard in game.hazards {
     if not(hazard.active) {
       continue
@@ -154,7 +154,7 @@ fn draw_hazards(game : @types.Game) -> Unit {
       hazard.lane + @math.sinf(game.ui_t * 0.9 + hazard.phase) * 0.03,
     ).to_int()
 
-    let y : Int = world_y(game, hazard.dist).to_int()
+    let y : Int = game.world_y(hazard.dist).to_int()
 
     if hazard.kind == @types.hazard_debris {
       let w : Int = (hazard.size * 1.7).to_int()
@@ -291,7 +291,7 @@ fn rival_hull_color(id : Int) -> @raylib.Color {
 
 ///|
 /// Draws all active rival boats visible within the scrolling viewport, scaled by relative distance.
-fn draw_rivals(game : @types.Game) -> Unit {
+fn @types.Game::draw_rivals(game : @types.Game) -> Unit {
   for rival in game.rivals {
     if not(rival.active) {
       continue
@@ -302,7 +302,7 @@ fn draw_rivals(game : @types.Game) -> Unit {
       continue
     }
 
-    let y : Int = world_y(game, rival.dist).to_int()
+    let y : Int = game.world_y(rival.dist).to_int()
     let x : Int = lane_to_x(rival.lane).to_int()
 
     let scale : Float = @types.clampf(
@@ -326,7 +326,7 @@ fn draw_rivals(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the player's boat with burst and stabilise tints, a flag, and a rhythm-pulse ring.
-fn draw_player_boat(game : @types.Game) -> Unit {
+fn @types.Game::draw_player_boat(game : @types.Game) -> Unit {
   let x : Int = lane_to_x(game.lane).to_int()
   let y : Int = @types.boat_y
 
@@ -383,7 +383,7 @@ fn draw_player_boat(game : @types.Game) -> Unit {
 
 ///|
 /// Returns the player's current race rank by counting rivals ahead of the player.
-fn current_rank(game : @types.Game) -> Int {
+fn @types.Game::current_rank(game : @types.Game) -> Int {
   let mut ahead : Int = 0
 
   for rival in game.rivals {
@@ -397,7 +397,7 @@ fn current_rank(game : @types.Game) -> Int {
 
 ///|
 /// Draws the right-side HUD panel with distance, speed, rank, score, rhythm meter, beat lane, and control reference.
-fn draw_hud_panel(game : @types.Game) -> Unit {
+fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     @types.hud_x,
     @types.river_y,
@@ -430,7 +430,7 @@ fn draw_hud_panel(game : @types.Game) -> Unit {
 
   let rank_now : Int = match game.state {
     Result => game.finish_rank
-    _ => current_rank(game)
+    _ => game.current_rank()
   }
 
   @raylib.draw_text(
@@ -674,7 +674,7 @@ fn draw_hud_panel(game : @types.Game) -> Unit {
 
 ///|
 /// Draws a centred translucent banner with the current status message when it is active.
-fn draw_message_banner(game : @types.Game) -> Unit {
+fn @types.Game::draw_message_banner(game : @types.Game) -> Unit {
   if game.msg_t <= 0.0 || game.msg == "" {
     return
   }
@@ -841,7 +841,7 @@ fn draw_pause_overlay() -> Unit {
 
 ///|
 /// Draws the post-race result overlay with rank, score, time, streak, checkpoints, and a replay prompt.
-fn draw_result_overlay(game : @types.Game) -> Unit {
+fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     0,
     0,
@@ -934,19 +934,19 @@ fn draw_result_overlay(game : @types.Game) -> Unit {
 ///|
 /// Renders river world, racers, HUD, and state overlays for one frame.
 pub fn draw_frame(game : @types.Game) -> Unit {
-  draw_background(game)
-  draw_river_surface(game)
-  draw_checkpoint_lines(game)
-  draw_hazards(game)
-  draw_rivals(game)
-  draw_player_boat(game)
-  draw_hud_panel(game)
-  draw_message_banner(game)
+  game.draw_background()
+  game.draw_river_surface()
+  game.draw_checkpoint_lines()
+  game.draw_hazards()
+  game.draw_rivals()
+  game.draw_player_boat()
+  game.draw_hud_panel()
+  game.draw_message_banner()
 
   match game.state {
     Title => draw_title_overlay()
     Paused => draw_pause_overlay()
-    Result => draw_result_overlay(game)
+    Result => game.draw_result_overlay()
     Play => ()
   }
 }
