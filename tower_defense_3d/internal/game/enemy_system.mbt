@@ -27,10 +27,9 @@ fn @types.Game::update_spawning(game : @types.Game, dt : Float) -> Unit {
   if game.spawn_timer <= 0.0 {
     game.spawn_enemy()
     // Swarm enemies spawn faster
-    let interval : Float = if game.wave_enemy_kind == Swarm {
-      @types.fast_spawn_interval
-    } else {
-      @types.spawn_interval
+    let interval : Float = match game.wave_enemy_kind {
+      Swarm => { @types.fast_spawn_interval }
+      _ => { @types.spawn_interval }
     }
     game.spawn_timer = interval
   }

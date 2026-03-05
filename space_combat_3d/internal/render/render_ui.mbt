@@ -3,28 +3,29 @@
 ///|
 /// Draws the 2D UI overlay for the current game state.
 pub fn draw_ui(game : @types.Game) -> Unit {
-  if game.state == StateMenu {
-    game.draw_menu()
-  } else if game.state == StatePlaying {
-    game.draw_hud()
-    game.draw_crosshair()
-    if game.message_timer > 0.0 {
+  match game.state {
+    StateMenu => { game.draw_menu() }
+    StatePlaying => {
+      game.draw_hud()
+      game.draw_crosshair()
+      if game.message_timer > 0.0 {
       game.draw_message()
+      }
     }
-  } else if game.state == StatePaused {
-    game.draw_hud()
-    game.draw_pause_overlay()
-  } else if game.state == StateMissionComplete {
-    game.draw_hud()
-    game.draw_mission_complete()
-  } else if game.state == StateGameOver {
-    game.draw_game_over()
-  } else if game.state == StateMissionBriefing {
-    game.draw_mission_briefing()
-  } else if game.state == StateMissionSelect {
-    game.draw_mission_select()
-  } else if game.state == StateLoadout {
-    game.draw_loadout()
+    StatePaused => {
+      game.draw_hud()
+      game.draw_pause_overlay()
+    }
+    StateMissionComplete => {
+      game.draw_hud()
+      game.draw_mission_complete()
+    }
+    StateGameOver => { game.draw_game_over() }
+    StateMissionBriefing => { game.draw_mission_briefing() }
+    StateMissionSelect => { game.draw_mission_select() }
+    StateLoadout => { game.draw_loadout() }
+  
+    _ => ()
   }
 }
 
@@ -247,30 +248,25 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(150, 150, 170, 255),
   )
   let wpn_name = @types.weapon_name(p.weapon)
-  let wpn_color = if p.weapon == Laser {
-    @raylib.Color::new(255, 255, 100, 255)
-  } else if p.weapon == Missile {
-    @raylib.Color::new(255, 180, 80, 255)
-  } else {
-    @raylib.Color::new(100, 255, 150, 255)
+  let wpn_color = match p.weapon {
+    Laser => { @raylib.Color::new(255, 255, 100, 255) }
+    Missile => { @raylib.Color::new(255, 180, 80, 255) }
+    _ => { @raylib.Color::new(100, 255, 150, 255) }
   }
   @raylib.draw_text(wpn_name, wpn_x + 5, wpn_y + 25, 20, wpn_color)
 
   // Weapon selection keys
-  let key1_color = if p.weapon == Laser {
-    @raylib.Color::new(255, 255, 100, 255)
-  } else {
-    @raylib.Color::new(100, 100, 100, 255)
+  let key1_color = match p.weapon {
+    Laser => { @raylib.Color::new(255, 255, 100, 255) }
+    _ => { @raylib.Color::new(100, 100, 100, 255) }
   }
-  let key2_color = if p.weapon == Missile {
-    @raylib.Color::new(255, 180, 80, 255)
-  } else {
-    @raylib.Color::new(100, 100, 100, 255)
+  let key2_color = match p.weapon {
+    Missile => { @raylib.Color::new(255, 180, 80, 255) }
+    _ => { @raylib.Color::new(100, 100, 100, 255) }
   }
-  let key3_color = if p.weapon == Plasma {
-    @raylib.Color::new(100, 255, 150, 255)
-  } else {
-    @raylib.Color::new(100, 100, 100, 255)
+  let key3_color = match p.weapon {
+    Plasma => { @raylib.Color::new(100, 255, 150, 255) }
+    _ => { @raylib.Color::new(100, 100, 100, 255) }
   }
   @raylib.draw_text("1", wpn_x + 90, wpn_y + 25, 18, key1_color)
   @raylib.draw_text("2", wpn_x + 110, wpn_y + 25, 18, key2_color)

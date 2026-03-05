@@ -185,24 +185,31 @@ pub fn get_biome_terrain_height(wx : Int, wz : Int, biome : Biome) -> Int {
   let n = terrain_noise(fx, fz)
   let mut height_base : Float = Float::from_int(base_height)
   let mut amplitude : Float = terrain_amplitude
-  if biome == Plains {
-    height_base = Float::from_int(base_height) + 2.0
-    amplitude = 6.0
-  } else if biome == Forest {
-    height_base = Float::from_int(base_height) + 3.0
-    amplitude = 10.0
-  } else if biome == Desert {
-    height_base = Float::from_int(base_height) - 1.0
-    amplitude = 5.0
-  } else if biome == Mountains {
-    height_base = Float::from_int(base_height) + 10.0
-    amplitude = 22.0
-  } else if biome == Tundra {
-    height_base = Float::from_int(base_height) + 1.0
-    amplitude = 8.0
-  } else if biome == Swamp {
-    height_base = Float::from_int(base_height) - 2.0
-    amplitude = 3.0
+  match biome {
+    Plains => {
+      height_base = Float::from_int(base_height) + 2.0
+      amplitude = 6.0
+    }
+    Forest => {
+      height_base = Float::from_int(base_height) + 3.0
+      amplitude = 10.0
+    }
+    Desert => {
+      height_base = Float::from_int(base_height) - 1.0
+      amplitude = 5.0
+    }
+    Mountains => {
+      height_base = Float::from_int(base_height) + 10.0
+      amplitude = 22.0
+    }
+    Tundra => {
+      height_base = Float::from_int(base_height) + 1.0
+      amplitude = 8.0
+    }
+    Swamp => {
+      height_base = Float::from_int(base_height) - 2.0
+      amplitude = 3.0
+    }
   }
   let h = height_base + n * amplitude
   h.to_int().clamp(min=1, max=chunk_y - 10)
@@ -222,16 +229,12 @@ pub fn should_place_tree(wx : Int, wz : Int, biome : Biome) -> Bool {
   let v = @math.sinf(fx * 0.73 + 5.1) * @math.cosf(fz * 0.91 + 3.7)
   let v2 = @math.sinf(fx * 1.37 + fz * 0.53) * 0.5
   let combined = (v + v2) * 0.5
-  let threshold : Float = if biome == Forest {
-    0.35
-  } else if biome == Plains {
-    0.7
-  } else if biome == Swamp {
-    0.5
-  } else if biome == Tundra {
-    0.8
-  } else {
-    999.0
+  let threshold : Float = match biome {
+    Forest => 0.35
+    Plains => 0.7
+    Swamp => 0.5
+    Tundra => 0.8
+    _ => 999.0
   }
   combined > threshold
 }
@@ -397,12 +400,10 @@ pub fn generate_chunk_terrain(chunk : Chunk, game : Game) -> Unit {
       if height >= base_height - 1 && should_place_tree(wx, wz, local_biome) {
         if surface_block == block_grass || surface_block == block_snow {
           // Place trunk (variable height)
-          let trunk_height : Int = if local_biome == Forest {
-            5
-          } else if local_biome == Tundra {
-            3
-          } else {
-            4
+          let trunk_height : Int = match local_biome {
+            Forest => 5
+            Tundra => 3
+            _ => 4
           }
           for ty in 0..<trunk_height {
             chunk.set_block(lx, height + ty, lz, block_wood)
@@ -683,20 +684,14 @@ pub fn entity_name(kind : Int) -> String {
 ///|
 /// Returns display name for a biome id.
 pub fn biome_name(kind : Biome) -> String {
-  if kind == Plains {
-    "Plains"
-  } else if kind == Forest {
-    "Forest"
-  } else if kind == Desert {
-    "Desert"
-  } else if kind == Mountains {
-    "Mountains"
-  } else if kind == Tundra {
-    "Tundra"
-  } else if kind == Swamp {
-    "Swamp"
-  } else {
-    "Unknown"
+  match kind {
+    Plains => "Plains"
+    Forest => "Forest"
+    Desert => "Desert"
+    Mountains => "Mountains"
+    Tundra => "Tundra"
+    Swamp => "Swamp"
+    _ => "Unknown"
   }
 }
 

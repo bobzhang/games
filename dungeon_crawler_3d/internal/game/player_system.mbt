@@ -329,18 +329,14 @@ fn @types.Game::cast_selected_spell(game : @types.Game) -> Unit {
   }
   game.player_mana -= cost
   game.spell_cooldown = 0.5
-  if spell_type == Fireball {
-    game.cast_fireball()
-  } else if spell_type == IceBolt {
-    game.cast_ice_bolt()
-  } else if spell_type == Heal {
-    game.cast_heal()
-  } else if spell_type == Shield {
-    game.cast_shield()
-  } else if spell_type == Lightning {
-    game.cast_lightning()
-  } else if spell_type == Teleport {
-    game.cast_teleport()
+  match spell_type {
+    Fireball => game.cast_fireball()
+    IceBolt => game.cast_ice_bolt()
+    Heal => game.cast_heal()
+    Shield => game.cast_shield()
+    Lightning => game.cast_lightning()
+    Teleport => game.cast_teleport()
+    _ => ()
   }
 }
 
@@ -956,27 +952,33 @@ fn @types.Game::check_traps(game : @types.Game, dt : Float) -> Unit {
       trap.visible = true
       let wx = @types.grid_to_world_x(trap.gx)
       let wz = @types.grid_to_world_z(trap.gz)
-      if trap.kind == Spike {
-        damage_player(game, @types.spike_damage)
-        @types.add_message(game, "Stepped on spikes!", 255, 80, 80)
-        @types.spawn_particles(game, wx, 0.3, wz, 8, 200, 50, 50)
-      } else if trap.kind == Arrow {
-        damage_player(game, @types.arrow_trap_damage)
-        @types.add_message(game, "Arrow trap!", 255, 100, 50)
-        @types.spawn_particles(game, wx, 1.0, wz, 6, 200, 150, 50)
-      } else if trap.kind == Flame {
-        damage_player(game, @types.flame_damage)
-        @types.add_message(game, "Flame trap!", 255, 100, 30)
-        @types.spawn_particles(game, wx, 1.0, wz, 12, 255, 100, 30)
-      } else if trap.kind == Poison {
-        game.poison_remaining = @types.poison_duration
-        game.poison_timer = 0.0
-        @types.add_message(game, "Poison gas!", 100, 200, 50)
-        @types.spawn_particles(game, wx, 0.5, wz, 10, 100, 200, 50)
-      } else if trap.kind == Pitfall {
-        damage_player(game, @types.pitfall_damage)
-        @types.add_message(game, "Pitfall trap!", 200, 100, 50)
-        @types.spawn_particles(game, wx, 0.1, wz, 8, 150, 100, 50)
+      match trap.kind {
+        Spike => {
+          damage_player(game, @types.spike_damage)
+          @types.add_message(game, "Stepped on spikes!", 255, 80, 80)
+          @types.spawn_particles(game, wx, 0.3, wz, 8, 200, 50, 50)
+        }
+        Arrow => {
+          damage_player(game, @types.arrow_trap_damage)
+          @types.add_message(game, "Arrow trap!", 255, 100, 50)
+          @types.spawn_particles(game, wx, 1.0, wz, 6, 200, 150, 50)
+        }
+        Flame => {
+          damage_player(game, @types.flame_damage)
+          @types.add_message(game, "Flame trap!", 255, 100, 30)
+          @types.spawn_particles(game, wx, 1.0, wz, 12, 255, 100, 30)
+        }
+        Poison => {
+          game.poison_remaining = @types.poison_duration
+          game.poison_timer = 0.0
+          @types.add_message(game, "Poison gas!", 100, 200, 50)
+          @types.spawn_particles(game, wx, 0.5, wz, 10, 100, 200, 50)
+        }
+        Pitfall => {
+          damage_player(game, @types.pitfall_damage)
+          @types.add_message(game, "Pitfall trap!", 200, 100, 50)
+          @types.spawn_particles(game, wx, 0.1, wz, 8, 150, 100, 50)
+        }
       }
     }
     // Nearby traps become visible (perception)
@@ -1030,17 +1032,21 @@ fn @types.Game::level_up(game : @types.Game) -> Unit {
   game.player_atk += @types.atk_per_level
   game.player_def += @types.def_per_level
   // Stat bonuses based on class
-  if game.player_class == Warrior {
-    game.player_str += 2
-    game.player_max_hp += 5
-    game.player_hp += 5
-  } else if game.player_class == Rogue {
-    game.player_dex += 2
-    game.player_atk += 1
-  } else if game.player_class == Mage {
-    game.player_int_stat += 2
-    game.player_max_mana += 5
-    game.player_mana += 5
+  match game.player_class {
+    Warrior => {
+      game.player_str += 2
+      game.player_max_hp += 5
+      game.player_hp += 5
+    }
+    Rogue => {
+      game.player_dex += 2
+      game.player_atk += 1
+    }
+    Mage => {
+      game.player_int_stat += 2
+      game.player_max_mana += 5
+      game.player_mana += 5
+    }
   }
   game.level_up_timer = 3.0
   game.message_text = "LEVEL UP! Lv.\{game.player_level}"

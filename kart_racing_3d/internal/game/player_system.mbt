@@ -344,50 +344,52 @@ pub fn use_powerup(game : @types.Game, kart_idx : Int) -> Unit {
     return
   }
   let item = kart.held_powerup
-  if item == Boost {
-    kart.boost_timer = @types.boost_duration
-    kart.boost_power = @types.boost_speed_add
-    @types.spawn_particles(game, kart.x, kart.y + 0.3, kart.z, 10, 255, 200, 0)
-  } else if item == Shield {
-    kart.shield_timer = @types.shield_duration
-    @types.spawn_particles(game, kart.x, kart.y + 0.5, kart.z, 8, 100, 200, 255)
-  } else if item == Missile {
-    game.fire_missile(kart_idx)
-  } else if item == OilSlick {
-    game.drop_item(kart_idx, OilSlick)
-  } else if item == Lightning {
-    game.activate_lightning(kart_idx)
-  } else if item == Star {
-    kart.star_timer = @types.star_duration
-    kart.invincible_timer = @types.star_duration
-    @types.spawn_particles(
-      game,
-      kart.x,
-      kart.y + 0.5,
-      kart.z,
-      15,
-      255,
-      255,
-      100,
-    )
-  } else if item == Banana {
-    game.drop_item(kart_idx, Banana)
-  } else if item == TripleMushroom {
-    kart.boost_timer = @types.triple_mushroom_boost
-    kart.boost_power = @types.boost_speed_add
-    kart.item_count = 2 // 2 more uses remaining
-    @types.spawn_particles(
-      game,
-      kart.x,
-      kart.y + 0.3,
-      kart.z,
-      10,
-      255,
-      150,
-      200,
-    )
-    // Don't clear the item - it has remaining uses
-    return
+  match item {
+    Boost => {
+      kart.boost_timer = @types.boost_duration
+      kart.boost_power = @types.boost_speed_add
+      @types.spawn_particles(game, kart.x, kart.y + 0.3, kart.z, 10, 255, 200, 0)
+    }
+    Shield => {
+      kart.shield_timer = @types.shield_duration
+      @types.spawn_particles(game, kart.x, kart.y + 0.5, kart.z, 8, 100, 200, 255)
+    }
+    Missile => { game.fire_missile(kart_idx) }
+    OilSlick => { game.drop_item(kart_idx, OilSlick) }
+    Lightning => { game.activate_lightning(kart_idx) }
+    Star => {
+      kart.star_timer = @types.star_duration
+      kart.invincible_timer = @types.star_duration
+      @types.spawn_particles(
+        game,
+        kart.x,
+        kart.y + 0.5,
+        kart.z,
+        15,
+        255,
+        255,
+        100,
+      )
+    }
+    Banana => { game.drop_item(kart_idx, Banana) }
+    TripleMushroom => {
+      kart.boost_timer = @types.triple_mushroom_boost
+      kart.boost_power = @types.boost_speed_add
+      kart.item_count = 2 // 2 more uses remaining
+      @types.spawn_particles(
+        game,
+        kart.x,
+        kart.y + 0.3,
+        kart.z,
+        10,
+        255,
+        150,
+        200,
+      )
+      // Don't clear the item - it has remaining uses
+      return
+    }
+    _ => ()
   }
   // Handle triple mushroom remaining uses
   if kart.held_powerup == TripleMushroom && kart.item_count > 0 {

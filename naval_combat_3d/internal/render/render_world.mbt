@@ -320,12 +320,10 @@ fn @types.Game::draw_enemy_ships(game : @types.Game) -> Unit {
       @raylib.Color::new(0, 200, 0, 220),
     )
     // AI state indicator
-    let indicator_color = if enemy.ai_state == Patrol {
-      @raylib.Color::new(100, 100, 255, 150)
-    } else if enemy.ai_state == Chase {
-      @raylib.Color::new(255, 255, 100, 150)
-    } else {
-      @raylib.Color::new(255, 100, 100, 150)
+    let indicator_color = match enemy.ai_state {
+      Patrol => @raylib.Color::new(100, 100, 255, 150)
+      Chase => @raylib.Color::new(255, 255, 100, 150)
+      _ => @raylib.Color::new(255, 100, 100, 150)
     }
     @raylib.draw_sphere(
       @raylib.Vector3::new(enemy.x, 5.2, enemy.z),

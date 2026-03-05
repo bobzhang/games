@@ -469,16 +469,12 @@ pub fn find_nearest_enemy(game : Game, x : Float, y : Float, z : Float) -> Int {
 ///|
 /// Returns the display name for the given `weapon` type.
 pub fn weapon_name(weapon : WeaponKind) -> String {
-  if weapon == Laser {
-    "LASER"
-  } else if weapon == Missile {
-    "MISSILE"
-  } else if weapon == Plasma {
-    "PLASMA"
-  } else if weapon == Railgun {
-    "RAILGUN"
-  } else {
-    "UNKNOWN"
+  match weapon {
+    Laser => { "LASER" }
+    Missile => { "MISSILE" }
+    Plasma => { "PLASMA" }
+    Railgun => { "RAILGUN" }
+    _ => { "UNKNOWN" }
   }
 }
 
@@ -487,16 +483,12 @@ pub fn weapon_name(weapon : WeaponKind) -> String {
 ///|
 /// Returns the fire cooldown interval in seconds for the given `weapon` type.
 pub fn weapon_cooldown(weapon : WeaponKind) -> Float {
-  if weapon == Laser {
-    laser_cooldown
-  } else if weapon == Missile {
-    missile_cooldown
-  } else if weapon == Plasma {
-    plasma_cooldown
-  } else if weapon == Railgun {
-    railgun_cooldown
-  } else {
-    1.0
+  match weapon {
+    Laser => (laser_cooldown)
+    Missile => (missile_cooldown)
+    Plasma => (plasma_cooldown)
+    Railgun => (railgun_cooldown)
+    _ => { 1.0 }
   }
 }
 
@@ -505,16 +497,12 @@ pub fn weapon_cooldown(weapon : WeaponKind) -> Float {
 ///|
 /// Returns the energy cost per shot for the given `weapon` type.
 pub fn weapon_energy_cost(weapon : WeaponKind) -> Float {
-  if weapon == Laser {
-    laser_energy_cost
-  } else if weapon == Missile {
-    0.0
-  } else if weapon == Plasma {
-    plasma_energy_cost
-  } else if weapon == Railgun {
-    railgun_energy_cost
-  } else {
-    0.0
+  match weapon {
+    Laser => (laser_energy_cost)
+    Missile => { 0.0 }
+    Plasma => (plasma_energy_cost)
+    Railgun => (railgun_energy_cost)
+    _ => { 0.0 }
   }
 }
 
@@ -523,16 +511,12 @@ pub fn weapon_energy_cost(weapon : WeaponKind) -> Float {
 ///|
 /// Returns the projectile speed for the given `weapon` type.
 pub fn weapon_proj_speed(weapon : WeaponKind) -> Float {
-  if weapon == Laser {
-    laser_speed
-  } else if weapon == Missile {
-    missile_speed
-  } else if weapon == Plasma {
-    plasma_speed
-  } else if weapon == Railgun {
-    railgun_speed
-  } else {
-    100.0
+  match weapon {
+    Laser => (laser_speed)
+    Missile => (missile_speed)
+    Plasma => (plasma_speed)
+    Railgun => (railgun_speed)
+    _ => { 100.0 }
   }
 }
 
@@ -643,25 +627,30 @@ pub fn formation_offset(
   spacing : Float,
 ) -> (Float, Float, Float) {
   let fi = Float::from_int(index)
-  if pattern == V {
-    // V formation: alternating left/right, pushed back
-    let side : Float = if index % 2 == 0 { 1.0 } else { -1.0 }
-    let rank = Float::from_int((index + 1) / 2)
-    (side * rank * spacing, 0.0, -rank * spacing * 0.8)
-  } else if pattern == Line {
-    // Line abreast
-    let half = fi - 3.0
-    (half * spacing, 0.0, 0.0)
-  } else if pattern == Circle {
-    // Circle formation
-    let angle = fi * (two_pi / 8.0)
-    let r = spacing * 2.0
-    (@math.cosf(angle) * r, 0.0, @math.sinf(angle) * r)
-  } else {
-    // Wedge (arrow)
-    let side : Float = if index % 2 == 0 { 1.0 } else { -1.0 }
-    let rank = Float::from_int((index + 1) / 2)
-    (side * rank * spacing * 0.7, rank * spacing * 0.3, -rank * spacing)
+  match pattern {
+    V => {
+      // V formation: alternating left/right, pushed back
+      let side : Float = if index % 2 == 0 { 1.0 } else { -1.0 }
+      let rank = Float::from_int((index + 1) / 2)
+      (side * rank * spacing, 0.0, -rank * spacing * 0.8)
+    }
+    Line => {
+      // Line abreast
+      let half = fi - 3.0
+      (half * spacing, 0.0, 0.0)
+    }
+    Circle => {
+      // Circle formation
+      let angle = fi * (two_pi / 8.0)
+      let r = spacing * 2.0
+      (@math.cosf(angle) * r, 0.0, @math.sinf(angle) * r)
+    }
+    _ => {
+      // Wedge (arrow)
+      let side : Float = if index % 2 == 0 { 1.0 } else { -1.0 }
+      let rank = Float::from_int((index + 1) / 2)
+      (side * rank * spacing * 0.7, rank * spacing * 0.3, -rank * spacing)
+    }
   }
 }
 

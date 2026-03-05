@@ -112,10 +112,10 @@ pub fn check_dropped_item_collisions(game : @types.Game) -> Unit {
           continue
         }
         // Apply item effect
-        if item.item_type == Banana {
-          game.apply_banana_hit(ki)
-        } else if item.item_type == OilSlick {
-          game.apply_oil_slick_hit(ki)
+        match item.item_type {
+          Banana => { game.apply_banana_hit(ki) }
+          OilSlick => { game.apply_oil_slick_hit(ki) }
+          _ => ()
         }
         item.active = false
       }

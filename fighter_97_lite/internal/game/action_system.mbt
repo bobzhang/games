@@ -257,30 +257,35 @@ fn update_fighter_action_frame(fighter : @types.Fighter, dt : Float) -> Unit {
 
 ///|
 fn update_stun_and_knockdown(fighter : @types.Fighter) -> Unit {
-  if fighter.action == ActionHitstun {
-    fighter.hitstun -= 1
-    fighter.vx *= 0.92
-    if fighter.hitstun <= 0 {
-      set_idle_state(fighter)
+  match fighter.action {
+    ActionHitstun => {
+      fighter.hitstun -= 1
+      fighter.vx *= 0.92
+      if fighter.hitstun <= 0 {
+        set_idle_state(fighter)
+      }
     }
-  } else if fighter.action == ActionBlockstun {
-    fighter.blockstun -= 1
-    fighter.vx *= 0.9
-    if fighter.blockstun <= 0 {
-      set_idle_state(fighter)
+    ActionBlockstun => {
+      fighter.blockstun -= 1
+      fighter.vx *= 0.9
+      if fighter.blockstun <= 0 {
+        set_idle_state(fighter)
+      }
     }
-  } else if fighter.action == ActionKnockdown {
-    fighter.knockdown -= 1
-    fighter.vx *= 0.94
-    if fighter.knockdown <= 0 {
-      fighter.action = ActionWakeup
-      fighter.action_elapsed = 0.0
-      fighter.action_frame = 0
-      fighter.on_ground = true
-      fighter.vy = 0.0
-      fighter.crouching = false
-      fighter.invuln = @types.wakeup_invuln_frames
+    ActionKnockdown => {
+      fighter.knockdown -= 1
+      fighter.vx *= 0.94
+      if fighter.knockdown <= 0 {
+        fighter.action = ActionWakeup
+        fighter.action_elapsed = 0.0
+        fighter.action_frame = 0
+        fighter.on_ground = true
+        fighter.vy = 0.0
+        fighter.crouching = false
+        fighter.invuln = @types.wakeup_invuln_frames
+      }
     }
+    _ => ()
   }
 }
 

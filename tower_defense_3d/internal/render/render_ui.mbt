@@ -508,46 +508,53 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
       let tile = @types.get_tile(game, gx, gy)
       let cx = mx + gx * cw
       let cy = my + gy * ch
-      if tile == Path {
-        @raylib.draw_rectangle(
+      match tile {
+        Path => {
+          @raylib.draw_rectangle(
           cx,
           cy,
           cw,
           ch,
           @raylib.Color::new(160, 140, 100, 200),
-        )
-      } else if tile == Start {
-        @raylib.draw_rectangle(
+          )
+        }
+        Start => {
+          @raylib.draw_rectangle(
           cx,
           cy,
           cw,
           ch,
           @raylib.Color::new(50, 200, 50, 255),
-        )
-      } else if tile == End {
-        @raylib.draw_rectangle(
+          )
+        }
+        End => {
+          @raylib.draw_rectangle(
           cx,
           cy,
           cw,
           ch,
           @raylib.Color::new(200, 50, 50, 255),
-        )
-      } else if tile == Water {
-        @raylib.draw_rectangle(
+          )
+        }
+        Water => {
+          @raylib.draw_rectangle(
           cx,
           cy,
           cw,
           ch,
           @raylib.Color::new(40, 80, 180, 200),
-        )
-      } else if tile == Rock {
-        @raylib.draw_rectangle(
+          )
+        }
+        Rock => {
+          @raylib.draw_rectangle(
           cx,
           cy,
           cw,
           ch,
           @raylib.Color::new(80, 75, 70, 200),
-        )
+          )
+        }
+        _ => ()
       }
     }
   }

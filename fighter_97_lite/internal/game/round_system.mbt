@@ -555,19 +555,14 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_count += 1
   game.update_announcer(dt)
 
-  if game.state == StateTitle {
-    game.update_title(dt)
-  } else if game.state == StateSelect {
-    game.update_select(dt)
-  } else if game.state == StateIntro {
-    game.update_intro(dt)
-  } else if game.state == StateFight {
-    game.update_fight(dt)
-  } else if game.state == StateRoundOver {
-    game.update_round_over(dt)
-  } else if game.state == StateMatchOver {
-    game.update_match_over(dt)
-  } else if game.state == StatePause {
-    game.update_pause(dt)
+  match game.state {
+    StateTitle => { game.update_title(dt) }
+    StateSelect => { game.update_select(dt) }
+    StateIntro => { game.update_intro(dt) }
+    StateFight => { game.update_fight(dt) }
+    StateRoundOver => { game.update_round_over(dt) }
+    StateMatchOver => { game.update_match_over(dt) }
+    StatePause => { game.update_pause(dt) }
+    _ => ()
   }
 }

@@ -349,57 +349,59 @@ pub fn get_spawn_type_for_biome(
       0
     }
     // Passive mobs during day, biome-dependent
-  } else if biome == Plains {
-    if r < 35 {
-      @types.entity_cow
-    } else if r < 65 {
-      @types.entity_pig
-    } else if r < 85 {
-      @types.entity_chicken
-    } else {
-      0
-    }
-  } else if biome == Forest {
-    if r < 30 {
-      @types.entity_pig
-    } else if r < 55 {
-      @types.entity_chicken
-    } else if r < 70 {
-      @types.entity_cow
-    } else {
-      0
-    }
-  } else if biome == Desert {
-    // Very few spawns in desert
-    if r < 10 {
-      @types.entity_chicken
-    } else {
-      0
-    }
-  } else if biome == Mountains {
-    if r < 25 {
-      @types.entity_cow
-    } else {
-      0
-    }
-  } else if biome == Tundra {
-    if r < 20 {
-      @types.entity_cow
-    } else if r < 35 {
-      @types.entity_pig
-    } else {
-      0
-    }
-  } else if biome == Swamp {
-    if r < 20 {
-      @types.entity_pig
-    } else if r < 40 {
-      @types.entity_chicken
-    } else {
-      0
-    }
   } else {
-    0
+    match biome {
+      Plains =>
+        if r < 35 {
+          @types.entity_cow
+        } else if r < 65 {
+          @types.entity_pig
+        } else if r < 85 {
+          @types.entity_chicken
+        } else {
+          0
+        }
+      Forest =>
+        if r < 30 {
+          @types.entity_pig
+        } else if r < 55 {
+          @types.entity_chicken
+        } else if r < 70 {
+          @types.entity_cow
+        } else {
+          0
+        }
+      Desert =>
+        // Very few spawns in desert
+        if r < 10 {
+          @types.entity_chicken
+        } else {
+          0
+        }
+      Mountains =>
+        if r < 25 {
+          @types.entity_cow
+        } else {
+          0
+        }
+      Tundra =>
+        if r < 20 {
+          @types.entity_cow
+        } else if r < 35 {
+          @types.entity_pig
+        } else {
+          0
+        }
+      Swamp =>
+        if r < 20 {
+          @types.entity_pig
+        } else if r < 40 {
+          @types.entity_chicken
+        } else {
+          0
+        }
+      _ => 0
+    }
   }
 }
 

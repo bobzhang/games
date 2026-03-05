@@ -5,33 +5,26 @@
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   // Apply speed multiplier to dt for gameplay (not menu/UI)
-  let game_dt : Float = if game.state == Playing {
-    dt * game.speed_multiplier
-  } else {
-    dt
+  let game_dt : Float = match game.state {
+    Playing => { dt * game.speed_multiplier }
+    _ => (dt)
   }
   game.update_particles(dt)
   game.update_chain_lines(dt)
   game.update_notifications(dt)
   game.update_wave_message(dt)
-  if game.state == Menu {
-    game.update_menu(dt)
-  } else if game.state == MapSelect {
-    game.update_map_select(dt)
-  } else if game.state == Playing {
-    game.update_playing(game_dt)
-  } else if game.state == Paused {
-    game.update_paused(dt)
-  } else if game.state == WavePrep {
-    game.update_wave_prep(dt)
-  } else if game.state == Building {
-    game.update_building(dt)
-  } else if game.state == TowerInfo {
-    game.update_tower_info(dt)
-  } else if game.state == GameOver {
-    game.update_game_over(dt)
-  } else if game.state == Victory {
-    game.update_victory(dt)
+  match game.state {
+    Menu => { game.update_menu(dt) }
+    MapSelect => { game.update_map_select(dt) }
+    Playing => { game.update_playing(game_dt) }
+    Paused => { game.update_paused(dt) }
+    WavePrep => { game.update_wave_prep(dt) }
+    Building => { game.update_building(dt) }
+    TowerInfo => { game.update_tower_info(dt) }
+    GameOver => { game.update_game_over(dt) }
+    Victory => { game.update_victory(dt) }
+  
+    _ => ()
   }
 }
 
@@ -231,10 +224,9 @@ fn @types.Game::update_building(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyB) {
     // Return to previous state
-    if game.prev_state == Playing {
-      game.state = Playing
-    } else {
-      game.state = WavePrep
+    match game.prev_state {
+      Playing => { game.state = Playing }
+      _ => { game.state = WavePrep }
     }
     return
   }

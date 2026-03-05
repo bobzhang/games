@@ -42,24 +42,19 @@ pub fn make_move(
   mv.hitbox_y = hitbox_y
   mv.hitbox_w = hitbox_w
   mv.hitbox_h = hitbox_h
-  mv.meter_gain_on_use = if move_kind == MoveKindNormal {
-    4
-  } else if move_kind == MoveKindSpecial {
-    3
-  } else {
-    0
+  mv.meter_gain_on_use = match move_kind {
+    MoveKindNormal => { 4 }
+    MoveKindSpecial => { 3 }
+    _ => { 0 }
   }
-  mv.meter_gain_on_hit = if move_kind == MoveKindNormal {
-    8
-  } else if move_kind == MoveKindSpecial {
-    12
-  } else {
-    0
+  mv.meter_gain_on_hit = match move_kind {
+    MoveKindNormal => { 8 }
+    MoveKindSpecial => { 12 }
+    _ => { 0 }
   }
-  mv.hitstop_frames = if move_kind == MoveKindSuper {
-    hitstop_super
-  } else {
-    hitstop_default
+  mv.hitstop_frames = match move_kind {
+    MoveKindSuper => hitstop_super
+    _ => hitstop_default
   }
   mv.cancel_window_start = startup_frames + active_frames
   mv.cancel_window_end = total_frames - 3

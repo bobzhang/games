@@ -225,18 +225,22 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
     p.y += p.vy * dt
     p.z += p.vz * dt
     // Different physics per particle type
-    if p.kind == Shell {
-      p.vy -= 12.0 * dt
-      p.vx *= 0.98
-      p.vz *= 0.98
-    } else if p.kind == Spark {
-      p.vy -= 5.0 * dt
-      p.vx *= 0.92
-      p.vz *= 0.92
-    } else {
-      p.vy -= 8.0 * dt
-      p.vx *= 0.96
-      p.vz *= 0.96
+    match p.kind {
+      Shell => {
+        p.vy -= 12.0 * dt
+        p.vx *= 0.98
+        p.vz *= 0.98
+      }
+      Spark => {
+        p.vy -= 5.0 * dt
+        p.vx *= 0.92
+        p.vz *= 0.92
+      }
+      _ => {
+        p.vy -= 8.0 * dt
+        p.vx *= 0.96
+        p.vz *= 0.96
+      }
     }
     // Floor collision
     if p.y < 0.0 {
@@ -688,14 +692,11 @@ fn @types.Game::update_crates(game : @types.Game, dt : Float) -> Unit {
       // Give ammo
       let weapon = crate.kind
       let wi = weapon.to_int()
-      let add_ammo = if weapon == Shotgun {
-        6
-      } else if weapon == Rifle {
-        15
-      } else if weapon == Minigun {
-        50
-      } else {
-        2
+      let add_ammo = match weapon {
+        Shotgun => 6
+        Rifle => 15
+        Minigun => 50
+        _ => 2
       }
       game.player.ammo[wi] += add_ammo
       @types.show_message(

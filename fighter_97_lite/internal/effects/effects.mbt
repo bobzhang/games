@@ -56,12 +56,10 @@ pub fn spawn_hit_spark(
   kind : @types.SparkKind,
   count : Int,
 ) -> Unit {
-  let color = if kind == SparkKindBlock {
-    @raylib.Color::new(135, 186, 255, 255)
-  } else if kind == SparkKindSuper {
-    @raylib.Color::new(255, 216, 120, 255)
-  } else {
-    @raylib.Color::new(255, 138, 86, 255)
+  let color = match kind {
+    SparkKindBlock => { @raylib.Color::new(135, 186, 255, 255) }
+    SparkKindSuper => { @raylib.Color::new(255, 216, 120, 255) }
+    _ => { @raylib.Color::new(255, 138, 86, 255) }
   }
 
   for i in 0..<count {

@@ -145,50 +145,52 @@ fn @types.Game::update_ai_state(
     return
   }
   // State machine
-  if enemy.ai_state == Patrol {
-    if dist_to_player < enemy.detect_range {
-      // Transition based on personality
-      match enemy.ai_personality {
-        Aggressive | Berserker => enemy.ai_state = Chase
-        Flanker => enemy.ai_state = Flank
-        Defensive => enemy.ai_state = Attack
-        Retreater => enemy.ai_state = Chase
+  match enemy.ai_state {
+    Patrol =>
+      if dist_to_player < enemy.detect_range {
+        // Transition based on personality
+        match enemy.ai_personality {
+          Aggressive | Berserker => enemy.ai_state = Chase
+          Flanker => enemy.ai_state = Flank
+          Defensive => enemy.ai_state = Attack
+          Retreater => enemy.ai_state = Chase
+        }
+      }
+    Chase =>
+      if dist_to_player < enemy.attack_range {
+        if enemy.ai_personality == Flanker {
+          enemy.ai_state = BroadsideRun
+        } else {
+          enemy.ai_state = Attack
+        }
+      } else if dist_to_player > enemy.detect_range * 1.5 {
+        enemy.ai_state = Patrol
+      }
+    Attack => {
+      if dist_to_player > enemy.attack_range * 1.3 {
+        enemy.ai_state = Chase
+      }
+      // Berserkers try to close distance for boarding
+      if enemy.ai_personality == Berserker &&
+        dist_to_player < @types.boarding_range * 2.0 {
+        // Stay attacking, try to board
+        ignore(game)
       }
     }
-  } else if enemy.ai_state == Chase {
-    if dist_to_player < enemy.attack_range {
-      if enemy.ai_personality == Flanker {
+    Retreat =>
+      if hp_ratio > enemy.retreat_hp_pct + 0.1 {
+        enemy.ai_state = Patrol
+      }
+    Flank =>
+      if dist_to_player < enemy.attack_range * 0.7 {
         enemy.ai_state = BroadsideRun
-      } else {
-        enemy.ai_state = Attack
+      } else if dist_to_player > enemy.detect_range * 1.5 {
+        enemy.ai_state = Patrol
       }
-    } else if dist_to_player > enemy.detect_range * 1.5 {
-      enemy.ai_state = Patrol
-    }
-  } else if enemy.ai_state == Attack {
-    if dist_to_player > enemy.attack_range * 1.3 {
-      enemy.ai_state = Chase
-    }
-    // Berserkers try to close distance for boarding
-    if enemy.ai_personality == Berserker &&
-      dist_to_player < @types.boarding_range * 2.0 {
-      // Stay attacking, try to board
-      ignore(game)
-    }
-  } else if enemy.ai_state == Retreat {
-    if hp_ratio > enemy.retreat_hp_pct + 0.1 {
-      enemy.ai_state = Patrol
-    }
-  } else if enemy.ai_state == Flank {
-    if dist_to_player < enemy.attack_range * 0.7 {
-      enemy.ai_state = BroadsideRun
-    } else if dist_to_player > enemy.detect_range * 1.5 {
-      enemy.ai_state = Patrol
-    }
-  } else if enemy.ai_state == BroadsideRun {
-    if dist_to_player > enemy.attack_range * 1.2 {
-      enemy.ai_state = Chase
-    }
+    BroadsideRun =>
+      if dist_to_player > enemy.attack_range * 1.2 {
+        enemy.ai_state = Chase
+      }
   }
 }
 
@@ -544,14 +546,11 @@ fn @types.Game::fire_enemy_broadside(
     let aim_dz = pz - cb.z
     let aim_dist = @types.distance2d(cb.x, cb.z, px, pz)
     let cannon_spd = @types.get_cannon_speed(enemy.cannon_type)
-    let inaccuracy : Float = if enemy.ship_class == ManOfWar {
-      1.5
-    } else if enemy.ship_class == Galleon {
-      2.0
-    } else if enemy.ship_class == Frigate {
-      2.5
-    } else {
-      3.0
+    let inaccuracy : Float = match enemy.ship_class {
+      ManOfWar => 1.5
+      Galleon => 2.0
+      Frigate => 2.5
+      _ => 3.0
     }
     if aim_dist > 0.1 {
       cb.vx = aim_dx / aim_dist * cannon_spd +

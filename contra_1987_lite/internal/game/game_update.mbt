@@ -17,41 +17,46 @@ fn @types.Game::damage_tile_at_point(
   }
 
   let idx = @types.tile_index(tx, ty)
-  if tile == Brick {
-    game.map_hp[idx] -= power
-    if game.map_hp[idx] <= 0 {
-      @types.set_tile(game, tx, ty, Empty, 0)
+  match tile {
+    Brick => {
+      game.map_hp[idx] -= power
+      if game.map_hp[idx] <= 0 {
+        @types.set_tile(game, tx, ty, Empty, 0)
+        @particles.spawn_explosion(
+          game,
+          @types.tile_center_x(tx),
+          @types.tile_center_y(ty),
+          0.45,
+        )
+      } else {
+        @particles.spawn_spark_burst(game, world_x, world_y, 6)
+      }
+    }
+    Steel => {
+      if power >= 3 {
+        @types.set_tile(game, tx, ty, Empty, 0)
+        @particles.spawn_explosion(
+          game,
+          @types.tile_center_x(tx),
+          @types.tile_center_y(ty),
+          0.7,
+        )
+      } else {
+        @particles.spawn_spark_burst(game, world_x, world_y, 9)
+      }
+    }
+    Base => {
+      game.base_alive = false
+      game.base_flash = 1.0
       @particles.spawn_explosion(
         game,
         @types.tile_center_x(tx),
         @types.tile_center_y(ty),
-        0.45,
+        2.1,
       )
-    } else {
-      @particles.spawn_spark_burst(game, world_x, world_y, 6)
+      @types.push_camera_shake(game, 3.6)
     }
-  } else if tile == Steel {
-    if power >= 3 {
-      @types.set_tile(game, tx, ty, Empty, 0)
-      @particles.spawn_explosion(
-        game,
-        @types.tile_center_x(tx),
-        @types.tile_center_y(ty),
-        0.7,
-      )
-    } else {
-      @particles.spawn_spark_burst(game, world_x, world_y, 9)
-    }
-  } else if tile == Base {
-    game.base_alive = false
-    game.base_flash = 1.0
-    @particles.spawn_explosion(
-      game,
-      @types.tile_center_x(tx),
-      @types.tile_center_y(ty),
-      2.1,
-    )
-    @types.push_camera_shake(game, 3.6)
+    _ => ()
   }
   true
 }
@@ -287,19 +292,14 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     game.demo_elapsed += dt
   }
 
-  if game.state == Menu {
-    game.update_menu(dt)
-  } else if game.state == StageIntro {
-    game.update_stage_intro(dt)
-  } else if game.state == Playing {
-    game.update_playing(dt)
-  } else if game.state == Paused {
-    game.update_paused(dt)
-  } else if game.state == StageClear {
-    game.update_stage_clear(dt)
-  } else if game.state == GameOver {
-    game.update_game_over(dt)
-  } else if game.state == CampaignClear {
-    game.update_campaign_clear(dt)
+  match game.state {
+    Menu => { game.update_menu(dt) }
+    StageIntro => { game.update_stage_intro(dt) }
+    Playing => { game.update_playing(dt) }
+    Paused => { game.update_paused(dt) }
+    StageClear => { game.update_stage_clear(dt) }
+    GameOver => { game.update_game_over(dt) }
+    CampaignClear => { game.update_campaign_clear(dt) }
+    _ => ()
   }
 }

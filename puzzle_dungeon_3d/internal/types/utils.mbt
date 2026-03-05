@@ -43,24 +43,20 @@ pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
 ///|
 /// Returns the grid-x step (`-1`, `0`, `1`) represented by a direction.
 pub fn dir_dx(dir : Dir) -> Int {
-  if dir == DirRight {
-    1
-  } else if dir == DirLeft {
-    -1
-  } else {
-    0
+  match dir {
+    DirRight => { 1 }
+    DirLeft => { -1 }
+    _ => { 0 }
   }
 }
 
 ///|
 /// Returns the grid-y step (`-1`, `0`, `1`) represented by a direction.
 pub fn dir_dy(dir : Dir) -> Int {
-  if dir == DirDown {
-    1
-  } else if dir == DirUp {
-    -1
-  } else {
-    0
+  match dir {
+    DirDown => { 1 }
+    DirUp => { -1 }
+    _ => { 0 }
   }
 }
 
@@ -164,16 +160,12 @@ pub fn is_conveyor(tile : Tile) -> Bool {
 ///|
 /// Returns conveyor travel direction encoded by a conveyor tile.
 pub fn conveyor_direction(tile : Tile) -> Dir {
-  if tile == TileConveyorUp {
-    DirUp
-  } else if tile == TileConveyorRight {
-    DirRight
-  } else if tile == TileConveyorDown {
-    DirDown
-  } else if tile == TileConveyorLeft {
-    DirLeft
-  } else {
-    DirNone
+  match tile {
+    TileConveyorUp => { DirUp }
+    TileConveyorRight => { DirRight }
+    TileConveyorDown => { DirDown }
+    TileConveyorLeft => { DirLeft }
+    _ => { DirNone }
   }
 }
 
@@ -198,16 +190,12 @@ pub fn is_laser_source(tile : Tile) -> Bool {
 ///|
 /// Returns initial beam direction for a laser source tile.
 pub fn laser_source_direction(tile : Tile) -> Dir {
-  if tile == TileLaserSourceRight {
-    DirRight
-  } else if tile == TileLaserSourceDown {
-    DirDown
-  } else if tile == TileLaserSourceLeft {
-    DirLeft
-  } else if tile == TileLaserSourceUp {
-    DirUp
-  } else {
-    DirNone
+  match tile {
+    TileLaserSourceRight => { DirRight }
+    TileLaserSourceDown => { DirDown }
+    TileLaserSourceLeft => { DirLeft }
+    TileLaserSourceUp => { DirUp }
+    _ => { DirNone }
   }
 }
 
@@ -217,59 +205,47 @@ pub fn laser_source_direction(tile : Tile) -> Dir {
 /// Reflects an incoming beam direction against a specific mirror tile.
 pub fn mirror_reflect(tile : Tile, incoming_dir : Dir) -> Dir {
   // NE mirror: / shape - reflects up<->right, down<->left
-  if tile == TileMirrorNe {
-    if incoming_dir == DirLeft {
-      DirUp
-    } else if incoming_dir == DirDown {
-      DirRight
-    } else if incoming_dir == DirRight {
-      DirDown
-    } else if incoming_dir == DirUp {
-      DirLeft
-    } else {
-      DirNone
+  match tile {
+    TileMirrorNe => {
+      match incoming_dir {
+        DirLeft => { DirUp }
+        DirDown => { DirRight }
+        DirRight => { DirDown }
+        DirUp => { DirLeft }
+        _ => { DirNone }
+      }
     }
-  } else if tile == TileMirrorNw {
-    // NW mirror: \ shape - reflects up<->left, down<->right
-    if incoming_dir == DirRight {
-      DirUp
-    } else if incoming_dir == DirDown {
-      DirLeft
-    } else if incoming_dir == DirLeft {
-      DirDown
-    } else if incoming_dir == DirUp {
-      DirRight
-    } else {
-      DirNone
+    TileMirrorNw => {
+      // NW mirror: \ shape - reflects up<->left, down<->right
+      match incoming_dir {
+        DirRight => { DirUp }
+        DirDown => { DirLeft }
+        DirLeft => { DirDown }
+        DirUp => { DirRight }
+        _ => { DirNone }
+      }
     }
-  } else if tile == TileMirrorSe {
-    // SE mirror: \ shape going other way
-    if incoming_dir == DirLeft {
-      DirDown
-    } else if incoming_dir == DirUp {
-      DirRight
-    } else if incoming_dir == DirRight {
-      DirUp
-    } else if incoming_dir == DirDown {
-      DirLeft
-    } else {
-      DirNone
+    TileMirrorSe => {
+      // SE mirror: \ shape going other way
+      match incoming_dir {
+        DirLeft => { DirDown }
+        DirUp => { DirRight }
+        DirRight => { DirUp }
+        DirDown => { DirLeft }
+        _ => { DirNone }
+      }
     }
-  } else if tile == TileMirrorSw {
-    // SW mirror: / shape going other way
-    if incoming_dir == DirRight {
-      DirDown
-    } else if incoming_dir == DirUp {
-      DirLeft
-    } else if incoming_dir == DirLeft {
-      DirUp
-    } else if incoming_dir == DirDown {
-      DirRight
-    } else {
-      DirNone
+    TileMirrorSw => {
+      // SW mirror: / shape going other way
+      match incoming_dir {
+        DirRight => { DirDown }
+        DirUp => { DirLeft }
+        DirLeft => { DirUp }
+        DirDown => { DirRight }
+        _ => { DirNone }
+      }
     }
-  } else {
-    DirNone
+    _ => { DirNone }
   }
 }
 
@@ -501,66 +477,49 @@ pub fn get_world_for_floor(floor : Int) -> World {
 ///|
 /// Returns the `(r, g, b)` floor color tuple for a world theme.
 pub fn get_world_floor_color(world : World) -> (Int, Int, Int) {
-  if world == WorldIce {
-    (ice_floor_r, ice_floor_g, ice_floor_b)
-  } else if world == WorldLava {
-    (lava_floor_r, lava_floor_g, lava_floor_b)
-  } else if world == WorldGarden {
-    (garden_floor_r, garden_floor_g, garden_floor_b)
-  } else if world == WorldVoid {
-    (void_floor_r, void_floor_g, void_floor_b)
-  } else {
-    (dungeon_floor_r, dungeon_floor_g, dungeon_floor_b)
+  match world {
+    WorldIce => { (ice_floor_r, ice_floor_g, ice_floor_b) }
+    WorldLava => { (lava_floor_r, lava_floor_g, lava_floor_b) }
+    WorldGarden => { (garden_floor_r, garden_floor_g, garden_floor_b) }
+    WorldVoid => { (void_floor_r, void_floor_g, void_floor_b) }
+    _ => { (dungeon_floor_r, dungeon_floor_g, dungeon_floor_b) }
   }
 }
 
 ///|
 /// Returns the `(r, g, b)` wall color tuple for a world theme.
 pub fn get_world_wall_color(world : World) -> (Int, Int, Int) {
-  if world == WorldIce {
-    (ice_wall_r, ice_wall_g, ice_wall_b)
-  } else if world == WorldLava {
-    (lava_wall_r, lava_wall_g, lava_wall_b)
-  } else if world == WorldGarden {
-    (garden_wall_r, garden_wall_g, garden_wall_b)
-  } else if world == WorldVoid {
-    (void_wall_r, void_wall_g, void_wall_b)
-  } else {
-    (dungeon_wall_r, dungeon_wall_g, dungeon_wall_b)
+  match world {
+    WorldIce => { (ice_wall_r, ice_wall_g, ice_wall_b) }
+    WorldLava => { (lava_wall_r, lava_wall_g, lava_wall_b) }
+    WorldGarden => { (garden_wall_r, garden_wall_g, garden_wall_b) }
+    WorldVoid => { (void_wall_r, void_wall_g, void_wall_b) }
+    _ => { (dungeon_wall_r, dungeon_wall_g, dungeon_wall_b) }
   }
 }
 
 ///|
 /// Returns the `(r, g, b)` accent color tuple for a world theme.
 pub fn get_world_accent_color(world : World) -> (Int, Int, Int) {
-  if world == WorldIce {
-    (ice_accent_r, ice_accent_g, ice_accent_b)
-  } else if world == WorldLava {
-    (lava_accent_r, lava_accent_g, lava_accent_b)
-  } else if world == WorldGarden {
-    (garden_accent_r, garden_accent_g, garden_accent_b)
-  } else if world == WorldVoid {
-    (void_accent_r, void_accent_g, void_accent_b)
-  } else {
-    (dungeon_accent_r, dungeon_accent_g, dungeon_accent_b)
+  match world {
+    WorldIce => { (ice_accent_r, ice_accent_g, ice_accent_b) }
+    WorldLava => { (lava_accent_r, lava_accent_g, lava_accent_b) }
+    WorldGarden => { (garden_accent_r, garden_accent_g, garden_accent_b) }
+    WorldVoid => { (void_accent_r, void_accent_g, void_accent_b) }
+    _ => { (dungeon_accent_r, dungeon_accent_g, dungeon_accent_b) }
   }
 }
 
 ///|
 /// Returns localized world name text for menu and HUD displays.
 pub fn get_world_name(world : World) -> String {
-  if world == WorldDungeon {
-    world_name_0
-  } else if world == WorldIce {
-    world_name_1
-  } else if world == WorldLava {
-    world_name_2
-  } else if world == WorldGarden {
-    world_name_3
-  } else if world == WorldVoid {
-    world_name_4
-  } else {
-    "Unknown"
+  match world {
+    WorldDungeon => (world_name_0)
+    WorldIce => (world_name_1)
+    WorldLava => (world_name_2)
+    WorldGarden => (world_name_3)
+    WorldVoid => (world_name_4)
+    _ => { "Unknown" }
   }
 }
 
@@ -717,14 +676,18 @@ pub fn resolve_conveyors(game : Game) -> Unit {
           e.gy = ny
           e.anim_timer = push_anim_duration
           // Check pit/cracked
-          if target_tile == TilePit {
-            e.falling = true
-            e.fall_timer = fall_anim_duration
-            set_tile(game, nx, ny, TileFloor)
-          } else if target_tile == TileCracked {
-            set_tile(game, nx, ny, TilePit)
-            e.falling = true
-            e.fall_timer = fall_anim_duration
+          match target_tile {
+            TilePit => {
+              e.falling = true
+              e.fall_timer = fall_anim_duration
+              set_tile(game, nx, ny, TileFloor)
+            }
+            TileCracked => {
+              set_tile(game, nx, ny, TilePit)
+              e.falling = true
+              e.fall_timer = fall_anim_duration
+            }
+            _ => ()
           }
         }
       }
@@ -814,14 +777,16 @@ pub fn toggle_bridges(game : Game) -> Unit {
   for gy in 0..<grid_h {
     for gx in 0..<grid_w {
       let tile = get_tile(game, gx, gy)
-      if tile == TileBridgeOff {
-        set_tile(game, gx, gy, TileBridgeOn)
-      } else if tile == TileBridgeOn {
-        // Only retract if no entity on it
-        let eidx = entity_at(game, gx, gy)
-        if eidx < 0 {
+      match tile {
+        TileBridgeOff => { set_tile(game, gx, gy, TileBridgeOn) }
+        TileBridgeOn => {
+          // Only retract if no entity on it
+          let eidx = entity_at(game, gx, gy)
+          if eidx < 0 {
           set_tile(game, gx, gy, TileBridgeOff)
+          }
         }
+        _ => ()
       }
     }
   }
@@ -882,16 +847,12 @@ pub fn setup_decorations(game : Game) -> Unit {
             d.z = Float::from_int(gy) + rand_rangef(game, -0.3, 0.3)
             d.scale = rand_rangef(game, 0.5, 1.2)
             d.phase = rand_rangef(game, 0.0, 6.28)
-            if world == WorldDungeon {
-              d.kind = DecoTorch
-            } else if world == WorldIce {
-              d.kind = DecoCrystal
-            } else if world == WorldLava {
-              d.kind = DecoMagmaPool
-            } else if world == WorldGarden {
-              d.kind = DecoFlower
-            } else {
-              d.kind = DecoFloatingRock
+            match world {
+              WorldDungeon => { d.kind = DecoTorch }
+              WorldIce => { d.kind = DecoCrystal }
+              WorldLava => { d.kind = DecoMagmaPool }
+              WorldGarden => { d.kind = DecoFlower }
+              _ => { d.kind = DecoFloatingRock }
             }
             game.decoration_count += 1
           }

@@ -120,14 +120,11 @@ fn @types.Game::restore_base_ring(game : @types.Game) -> Unit {
     let ty = @types.base_ring_y[i]
     let cached = game.base_tiles_cached[i]
     if @types.get_tile(game, tx, ty) != Base {
-      if cached == Steel {
-        @types.set_tile(game, tx, ty, Steel, 999)
-      } else if cached == Brick {
-        @types.set_tile(game, tx, ty, Brick, 1)
-      } else if cached == Empty {
-        @types.set_tile(game, tx, ty, Empty, 0)
-      } else {
-        @types.set_tile(game, tx, ty, cached, 1)
+      match cached {
+        Steel => { @types.set_tile(game, tx, ty, Steel, 999) }
+        Brick => { @types.set_tile(game, tx, ty, Brick, 1) }
+        Empty => { @types.set_tile(game, tx, ty, Empty, 0) }
+        _ => { @types.set_tile(game, tx, ty, cached, 1) }
       }
     }
   }

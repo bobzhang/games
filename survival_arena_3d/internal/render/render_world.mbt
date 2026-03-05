@@ -303,14 +303,11 @@ fn @types.Game::draw_crates(game : @types.Game) -> Unit {
     }
     let cs = @types.crate_size
     // Crate body
-    let crate_color = if crate.kind == Shotgun {
-      @raylib.Color::new(180, 120, 50, 255)
-    } else if crate.kind == Rifle {
-      @raylib.Color::new(50, 150, 50, 255)
-    } else if crate.kind == Minigun {
-      @raylib.Color::new(80, 80, 180, 255)
-    } else {
-      @raylib.Color::new(180, 50, 50, 255)
+    let crate_color = match crate.kind {
+      Shotgun => @raylib.Color::new(180, 120, 50, 255)
+      Rifle => @raylib.Color::new(50, 150, 50, 255)
+      Minigun => @raylib.Color::new(80, 80, 180, 255)
+      _ => @raylib.Color::new(180, 50, 50, 255)
     }
     @raylib.draw_cube(
       @raylib.Vector3::new(crate.x, cs * 0.5, crate.z),
@@ -427,97 +424,101 @@ fn @types.Game::draw_traps(game : @types.Game) -> Unit {
       continue
     }
     let trap_active = trap.active_timer > 0.0
-    if trap.kind == Spike {
-      // Spike trap - base plate with spikes
-      let plate_color = @raylib.Color::new(90, 80, 70, 255)
-      @raylib.draw_cube(
-        @raylib.Vector3::new(trap.x, 0.05, trap.z),
-        1.8,
-        0.1,
-        1.8,
-        plate_color,
-      )
-      // Spikes
-      let spike_height : Float = if trap_active { 0.8 } else { 0.1 }
-      let spike_color = if trap_active {
-        @raylib.Color::new(200, 50, 50, 255)
-      } else {
-        @raylib.Color::new(150, 150, 150, 255)
+    match trap.kind {
+      Spike => {
+        // Spike trap - base plate with spikes
+        let plate_color = @raylib.Color::new(90, 80, 70, 255)
+        @raylib.draw_cube(
+          @raylib.Vector3::new(trap.x, 0.05, trap.z),
+          1.8,
+          0.1,
+          1.8,
+          plate_color,
+        )
+        // Spikes
+        let spike_height : Float = if trap_active { 0.8 } else { 0.1 }
+        let spike_color = if trap_active {
+          @raylib.Color::new(200, 50, 50, 255)
+        } else {
+          @raylib.Color::new(150, 150, 150, 255)
+        }
+        for sx in -1..<=1 {
+          for sz in -1..<=1 {
+            let spike_x = trap.x + Float::from_int(sx) * 0.5
+            let spike_z = trap.z + Float::from_int(sz) * 0.5
+            @raylib.draw_cube(
+              @raylib.Vector3::new(spike_x, spike_height / 2.0 + 0.1, spike_z),
+              0.08,
+              spike_height,
+              0.08,
+              spike_color,
+            )
+          }
+        }
       }
-      for sx in -1..<=1 {
-        for sz in -1..<=1 {
-          let spike_x = trap.x + Float::from_int(sx) * 0.5
-          let spike_z = trap.z + Float::from_int(sz) * 0.5
+      Flame => {
+        // Flame trap - vent with fire
+        @raylib.draw_cube(
+          @raylib.Vector3::new(trap.x, 0.05, trap.z),
+          1.5,
+          0.1,
+          1.5,
+          @raylib.Color::new(60, 60, 60, 255),
+        )
+        @raylib.draw_cube(
+          @raylib.Vector3::new(trap.x, 0.08, trap.z),
+          1.0,
+          0.06,
+          1.0,
+          @raylib.Color::new(40, 40, 40, 255),
+        )
+        if trap_active {
+          // Fire visual
           @raylib.draw_cube(
-            @raylib.Vector3::new(spike_x, spike_height / 2.0 + 0.1, spike_z),
-            0.08,
-            spike_height,
-            0.08,
-            spike_color,
+            @raylib.Vector3::new(trap.x, 0.6, trap.z),
+            0.8,
+            1.0,
+            0.8,
+            @raylib.Color::new(255, 150, 30, 150),
+          )
+          @raylib.draw_cube(
+            @raylib.Vector3::new(trap.x, 1.0, trap.z),
+            0.4,
+            0.8,
+            0.4,
+            @raylib.Color::new(255, 200, 50, 120),
           )
         }
       }
-    } else if trap.kind == Flame {
-      // Flame trap - vent with fire
-      @raylib.draw_cube(
-        @raylib.Vector3::new(trap.x, 0.05, trap.z),
-        1.5,
-        0.1,
-        1.5,
-        @raylib.Color::new(60, 60, 60, 255),
-      )
-      @raylib.draw_cube(
-        @raylib.Vector3::new(trap.x, 0.08, trap.z),
-        1.0,
-        0.06,
-        1.0,
-        @raylib.Color::new(40, 40, 40, 255),
-      )
-      if trap_active {
-        // Fire visual
+      _ => {
+        // Electric trap
         @raylib.draw_cube(
-          @raylib.Vector3::new(trap.x, 0.6, trap.z),
-          0.8,
-          1.0,
-          0.8,
-          @raylib.Color::new(255, 150, 30, 150),
+          @raylib.Vector3::new(trap.x, 0.15, trap.z),
+          1.5,
+          0.3,
+          1.5,
+          @raylib.Color::new(50, 60, 80, 255),
         )
-        @raylib.draw_cube(
-          @raylib.Vector3::new(trap.x, 1.0, trap.z),
-          0.4,
+        let glow_color = if trap_active {
+          @raylib.Color::new(100, 150, 255, 200)
+        } else {
+          @raylib.Color::new(50, 80, 150, 150)
+        }
+        // Tesla coil
+        @raylib.draw_cylinder(
+          @raylib.Vector3::new(trap.x, 0.3, trap.z),
+          0.15,
+          0.1,
           0.8,
-          0.4,
-          @raylib.Color::new(255, 200, 50, 120),
+          8,
+          glow_color,
+        )
+        @raylib.draw_sphere(
+          @raylib.Vector3::new(trap.x, 1.2, trap.z),
+          0.2,
+          glow_color,
         )
       }
-    } else {
-      // Electric trap
-      @raylib.draw_cube(
-        @raylib.Vector3::new(trap.x, 0.15, trap.z),
-        1.5,
-        0.3,
-        1.5,
-        @raylib.Color::new(50, 60, 80, 255),
-      )
-      let glow_color = if trap_active {
-        @raylib.Color::new(100, 150, 255, 200)
-      } else {
-        @raylib.Color::new(50, 80, 150, 150)
-      }
-      // Tesla coil
-      @raylib.draw_cylinder(
-        @raylib.Vector3::new(trap.x, 0.3, trap.z),
-        0.15,
-        0.1,
-        0.8,
-        8,
-        glow_color,
-      )
-      @raylib.draw_sphere(
-        @raylib.Vector3::new(trap.x, 1.2, trap.z),
-        0.2,
-        glow_color,
-      )
     }
   }
 }
@@ -629,22 +630,15 @@ fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
     }
     let color = enemy_color(enemy.kind, enemy.flash_timer > 0.0)
     let size = enemy.size
-    if enemy.kind == Zombie {
-      draw_zombie(enemy, color, size)
-    } else if enemy.kind == Runner {
-      draw_runner(enemy, color, size)
-    } else if enemy.kind == Brute {
-      draw_brute(enemy, color, size)
-    } else if enemy.kind == Spitter {
-      draw_spitter(enemy, color, size)
-    } else if enemy.kind == Exploder {
-      draw_exploder(enemy, color, size, game.frame_counter)
-    } else if enemy.kind == Necromancer {
-      draw_necromancer(enemy, color, size, game.frame_counter)
-    } else if enemy.kind == Shielded {
-      draw_shielded(enemy, color, size)
-    } else {
-      draw_boss(enemy, color, size, game.frame_counter)
+    match enemy.kind {
+      Zombie => draw_zombie(enemy, color, size)
+      Runner => draw_runner(enemy, color, size)
+      Brute => draw_brute(enemy, color, size)
+      Spitter => draw_spitter(enemy, color, size)
+      Exploder => draw_exploder(enemy, color, size, game.frame_counter)
+      Necromancer => draw_necromancer(enemy, color, size, game.frame_counter)
+      Shielded => draw_shielded(enemy, color, size)
+      _ => draw_boss(enemy, color, size, game.frame_counter)
     }
     // Health bar (only if damaged)
     if enemy.hp < enemy.max_hp {
@@ -1251,23 +1245,16 @@ fn enemy_color(kind : @types.EnemyKind, is_flashing : Bool) -> @raylib.Color {
   if is_flashing {
     return @raylib.Color::new(255, 255, 255, 255)
   }
-  if kind == Zombie {
-    @raylib.Color::new(80, 140, 60, 255)
-  } else if kind == Runner {
-    @raylib.Color::new(60, 180, 80, 255)
-  } else if kind == Brute {
-    @raylib.Color::new(120, 80, 160, 255)
-  } else if kind == Spitter {
-    @raylib.Color::new(60, 160, 100, 255)
-  } else if kind == Exploder {
-    @raylib.Color::new(200, 140, 50, 255)
-  } else if kind == Necromancer {
-    @raylib.Color::new(100, 50, 150, 255)
-  } else if kind == Shielded {
-    @raylib.Color::new(80, 100, 160, 255)
-  } else {
+  match kind {
+    Zombie => @raylib.Color::new(80, 140, 60, 255)
+    Runner => @raylib.Color::new(60, 180, 80, 255)
+    Brute => @raylib.Color::new(120, 80, 160, 255)
+    Spitter => @raylib.Color::new(60, 160, 100, 255)
+    Exploder => @raylib.Color::new(200, 140, 50, 255)
+    Necromancer => @raylib.Color::new(100, 50, 150, 255)
+    Shielded => @raylib.Color::new(80, 100, 160, 255)
     // Boss
-    @raylib.Color::new(180, 40, 180, 255)
+    _ => @raylib.Color::new(180, 40, 180, 255)
   }
 }
 
@@ -1384,30 +1371,34 @@ fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
     }
     let alpha = (p.life / p.max_life * 255.0).to_int()
     let a = alpha.clamp(min=0, max=255)
-    if p.kind == Shell {
-      // Shell casings: elongated
-      @raylib.draw_cube(
-        @raylib.Vector3::new(p.x, p.y, p.z),
-        0.02,
-        0.06,
-        0.02,
-        @raylib.Color::new(p.r, p.g, p.b, a),
-      )
-    } else if p.kind == Spark {
-      // Sparks: bright, small
-      @raylib.draw_sphere(
-        @raylib.Vector3::new(p.x, p.y, p.z),
-        p.size * 0.5,
-        @raylib.Color::new(p.r, p.g, p.b, a),
-      )
-    } else {
-      @raylib.draw_cube(
-        @raylib.Vector3::new(p.x, p.y, p.z),
-        p.size,
-        p.size,
-        p.size,
-        @raylib.Color::new(p.r, p.g, p.b, a),
-      )
+    match p.kind {
+      Shell => {
+        // Shell casings: elongated
+        @raylib.draw_cube(
+          @raylib.Vector3::new(p.x, p.y, p.z),
+          0.02,
+          0.06,
+          0.02,
+          @raylib.Color::new(p.r, p.g, p.b, a),
+        )
+      }
+      Spark => {
+        // Sparks: bright, small
+        @raylib.draw_sphere(
+          @raylib.Vector3::new(p.x, p.y, p.z),
+          p.size * 0.5,
+          @raylib.Color::new(p.r, p.g, p.b, a),
+        )
+      }
+      _ => {
+        @raylib.draw_cube(
+          @raylib.Vector3::new(p.x, p.y, p.z),
+          p.size,
+          p.size,
+          p.size,
+          @raylib.Color::new(p.r, p.g, p.b, a),
+        )
+      }
     }
   }
 }

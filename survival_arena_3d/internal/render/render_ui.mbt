@@ -377,161 +377,168 @@ fn @types.Game::draw_weapon_display(game : @types.Game) -> Unit {
       @raylib.Color::new(255, 200, 50, fa),
     )
   }
-  if weapon == Pistol {
-    // Pistol shape
-    @raylib.draw_rectangle(
-      gun_x - 6,
-      gun_y,
-      12,
-      30,
-      @raylib.Color::new(80, 80, 90, 255),
-    )
-    @raylib.draw_rectangle(
-      gun_x - 4,
-      gun_y - 15,
-      8,
-      18,
-      @raylib.Color::new(100, 100, 110, 255),
-    )
-  } else if weapon == Shotgun {
-    // Shotgun shape - wider
-    @raylib.draw_rectangle(
-      gun_x - 8,
-      gun_y,
-      16,
-      35,
-      @raylib.Color::new(120, 80, 40, 255),
-    )
-    @raylib.draw_rectangle(
-      gun_x - 5,
-      gun_y - 25,
-      10,
-      28,
-      @raylib.Color::new(90, 90, 100, 255),
-    )
-    @raylib.draw_rectangle(
-      gun_x - 5,
-      gun_y - 28,
-      10,
-      6,
-      @raylib.Color::new(70, 70, 80, 255),
-    )
-  } else if weapon == Rifle {
-    // Rifle shape - long
-    @raylib.draw_rectangle(
-      gun_x - 6,
-      gun_y,
-      12,
-      30,
-      @raylib.Color::new(50, 80, 50, 255),
-    )
-    @raylib.draw_rectangle(
-      gun_x - 4,
-      gun_y - 35,
-      8,
-      38,
-      @raylib.Color::new(80, 90, 80, 255),
-    )
-    @raylib.draw_rectangle(
-      gun_x - 3,
-      gun_y - 40,
-      6,
-      8,
-      @raylib.Color::new(60, 70, 60, 255),
-    )
-  } else if weapon == Sniper {
-    // Sniper shape - very long barrel with scope
-    @raylib.draw_rectangle(
-      gun_x - 5,
-      gun_y,
-      10,
-      32,
-      @raylib.Color::new(60, 60, 70, 255),
-    )
-    @raylib.draw_rectangle(
-      gun_x - 3,
-      gun_y - 45,
-      6,
-      48,
-      @raylib.Color::new(90, 90, 100, 255),
-    )
-    // Scope
-    @raylib.draw_rectangle(
-      gun_x - 6,
-      gun_y - 30,
-      12,
-      6,
-      @raylib.Color::new(40, 40, 50, 255),
-    )
-    @raylib.draw_rectangle(
-      gun_x - 2,
-      gun_y - 50,
-      4,
-      8,
-      @raylib.Color::new(70, 70, 80, 255),
-    )
-  } else if weapon == Minigun {
-    // Minigun shape - wide with multiple barrels
-    @raylib.draw_rectangle(
-      gun_x - 10,
-      gun_y,
-      20,
-      28,
-      @raylib.Color::new(70, 70, 80, 255),
-    )
-    @raylib.draw_rectangle(
-      gun_x - 8,
-      gun_y - 30,
-      16,
-      34,
-      @raylib.Color::new(90, 90, 100, 255),
-    )
-    // Multiple barrels
-    @raylib.draw_rectangle(
-      gun_x - 6,
-      gun_y - 38,
-      4,
-      12,
-      @raylib.Color::new(100, 100, 110, 255),
-    )
-    @raylib.draw_rectangle(
-      gun_x + 2,
-      gun_y - 38,
-      4,
-      12,
-      @raylib.Color::new(100, 100, 110, 255),
-    )
-    // Ammo box
-    @raylib.draw_rectangle(
-      gun_x + 10,
-      gun_y - 5,
-      12,
-      16,
-      @raylib.Color::new(60, 80, 50, 255),
-    )
-  } else {
-    // Rocket launcher - chunky
-    @raylib.draw_rectangle(
-      gun_x - 10,
-      gun_y,
-      20,
-      30,
-      @raylib.Color::new(60, 80, 60, 255),
-    )
-    @raylib.draw_rectangle(
-      gun_x - 8,
-      gun_y - 30,
-      16,
-      35,
-      @raylib.Color::new(80, 80, 60, 255),
-    )
-    @raylib.draw_rectangle(
-      gun_x - 10,
-      gun_y - 15,
-      20,
-      8,
-      @raylib.Color::new(120, 50, 30, 255),
-    )
+  match weapon {
+    Pistol => {
+      // Pistol shape
+      @raylib.draw_rectangle(
+        gun_x - 6,
+        gun_y,
+        12,
+        30,
+        @raylib.Color::new(80, 80, 90, 255),
+      )
+      @raylib.draw_rectangle(
+        gun_x - 4,
+        gun_y - 15,
+        8,
+        18,
+        @raylib.Color::new(100, 100, 110, 255),
+      )
+    }
+    Shotgun => {
+      // Shotgun shape - wider
+      @raylib.draw_rectangle(
+        gun_x - 8,
+        gun_y,
+        16,
+        35,
+        @raylib.Color::new(120, 80, 40, 255),
+      )
+      @raylib.draw_rectangle(
+        gun_x - 5,
+        gun_y - 25,
+        10,
+        28,
+        @raylib.Color::new(90, 90, 100, 255),
+      )
+      @raylib.draw_rectangle(
+        gun_x - 5,
+        gun_y - 28,
+        10,
+        6,
+        @raylib.Color::new(70, 70, 80, 255),
+      )
+    }
+    Rifle => {
+      // Rifle shape - long
+      @raylib.draw_rectangle(
+        gun_x - 6,
+        gun_y,
+        12,
+        30,
+        @raylib.Color::new(50, 80, 50, 255),
+      )
+      @raylib.draw_rectangle(
+        gun_x - 4,
+        gun_y - 35,
+        8,
+        38,
+        @raylib.Color::new(80, 90, 80, 255),
+      )
+      @raylib.draw_rectangle(
+        gun_x - 3,
+        gun_y - 40,
+        6,
+        8,
+        @raylib.Color::new(60, 70, 60, 255),
+      )
+    }
+    Sniper => {
+      // Sniper shape - very long barrel with scope
+      @raylib.draw_rectangle(
+        gun_x - 5,
+        gun_y,
+        10,
+        32,
+        @raylib.Color::new(60, 60, 70, 255),
+      )
+      @raylib.draw_rectangle(
+        gun_x - 3,
+        gun_y - 45,
+        6,
+        48,
+        @raylib.Color::new(90, 90, 100, 255),
+      )
+      // Scope
+      @raylib.draw_rectangle(
+        gun_x - 6,
+        gun_y - 30,
+        12,
+        6,
+        @raylib.Color::new(40, 40, 50, 255),
+      )
+      @raylib.draw_rectangle(
+        gun_x - 2,
+        gun_y - 50,
+        4,
+        8,
+        @raylib.Color::new(70, 70, 80, 255),
+      )
+    }
+    Minigun => {
+      // Minigun shape - wide with multiple barrels
+      @raylib.draw_rectangle(
+        gun_x - 10,
+        gun_y,
+        20,
+        28,
+        @raylib.Color::new(70, 70, 80, 255),
+      )
+      @raylib.draw_rectangle(
+        gun_x - 8,
+        gun_y - 30,
+        16,
+        34,
+        @raylib.Color::new(90, 90, 100, 255),
+      )
+      // Multiple barrels
+      @raylib.draw_rectangle(
+        gun_x - 6,
+        gun_y - 38,
+        4,
+        12,
+        @raylib.Color::new(100, 100, 110, 255),
+      )
+      @raylib.draw_rectangle(
+        gun_x + 2,
+        gun_y - 38,
+        4,
+        12,
+        @raylib.Color::new(100, 100, 110, 255),
+      )
+      // Ammo box
+      @raylib.draw_rectangle(
+        gun_x + 10,
+        gun_y - 5,
+        12,
+        16,
+        @raylib.Color::new(60, 80, 50, 255),
+      )
+    }
+    _ => {
+      // Rocket launcher - chunky
+      @raylib.draw_rectangle(
+        gun_x - 10,
+        gun_y,
+        20,
+        30,
+        @raylib.Color::new(60, 80, 60, 255),
+      )
+      @raylib.draw_rectangle(
+        gun_x - 8,
+        gun_y - 30,
+        16,
+        35,
+        @raylib.Color::new(80, 80, 60, 255),
+      )
+      @raylib.draw_rectangle(
+        gun_x - 10,
+        gun_y - 15,
+        20,
+        8,
+        @raylib.Color::new(120, 50, 30, 255),
+      )
+    }
   }
 }
 

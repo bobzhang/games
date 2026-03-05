@@ -765,96 +765,72 @@ pub fn mission_difficulty_speed_mult(mission : Int) -> Float {
 ///|
 /// Returns the maximum hull hit points for the given `ship_class`.
 pub fn ship_class_hull(ship_class : ShipKind) -> Float {
-  if ship_class == Fighter {
-    fighter_class_hull
-  } else if ship_class == Interceptor {
-    interceptor_class_hull
-  } else if ship_class == Bomber {
-    bomber_class_hull
-  } else if ship_class == Cruiser {
-    cruiser_class_hull
-  } else {
-    capital_class_hull
+  match ship_class {
+    Fighter => (fighter_class_hull)
+    Interceptor => (interceptor_class_hull)
+    Bomber => (bomber_class_hull)
+    Cruiser => (cruiser_class_hull)
+    _ => (capital_class_hull)
   }
 }
 
 ///|
 /// Returns the maximum shield capacity for the given `ship_class`.
 pub fn ship_class_shield(ship_class : ShipKind) -> Float {
-  if ship_class == Fighter {
-    fighter_class_shield
-  } else if ship_class == Interceptor {
-    interceptor_class_shield
-  } else if ship_class == Bomber {
-    bomber_class_shield
-  } else if ship_class == Cruiser {
-    cruiser_class_shield
-  } else {
-    capital_class_shield
+  match ship_class {
+    Fighter => (fighter_class_shield)
+    Interceptor => (interceptor_class_shield)
+    Bomber => (bomber_class_shield)
+    Cruiser => (cruiser_class_shield)
+    _ => (capital_class_shield)
   }
 }
 
 ///|
 /// Returns the base movement speed for the given `ship_class`.
 pub fn ship_class_speed(ship_class : ShipKind) -> Float {
-  if ship_class == Fighter {
-    fighter_class_speed
-  } else if ship_class == Interceptor {
-    interceptor_class_speed
-  } else if ship_class == Bomber {
-    bomber_class_speed
-  } else if ship_class == Cruiser {
-    cruiser_class_speed
-  } else {
-    capital_class_speed
+  match ship_class {
+    Fighter => (fighter_class_speed)
+    Interceptor => (interceptor_class_speed)
+    Bomber => (bomber_class_speed)
+    Cruiser => (cruiser_class_speed)
+    _ => (capital_class_speed)
   }
 }
 
 ///|
 /// Returns the turn rate for the given `ship_class`.
 pub fn ship_class_turn(ship_class : ShipKind) -> Float {
-  if ship_class == Fighter {
-    fighter_class_turn
-  } else if ship_class == Interceptor {
-    interceptor_class_turn
-  } else if ship_class == Bomber {
-    bomber_class_turn
-  } else if ship_class == Cruiser {
-    cruiser_class_turn
-  } else {
-    capital_class_turn
+  match ship_class {
+    Fighter => (fighter_class_turn)
+    Interceptor => (interceptor_class_turn)
+    Bomber => (bomber_class_turn)
+    Cruiser => (cruiser_class_turn)
+    _ => (capital_class_turn)
   }
 }
 
 ///|
 /// Returns the afterburner boost speed for the given `ship_class`.
 pub fn ship_class_boost(ship_class : ShipKind) -> Float {
-  if ship_class == Fighter {
-    fighter_class_boost
-  } else if ship_class == Interceptor {
-    interceptor_class_boost
-  } else if ship_class == Bomber {
-    bomber_class_boost
-  } else if ship_class == Cruiser {
-    cruiser_class_boost
-  } else {
-    capital_class_boost
+  match ship_class {
+    Fighter => (fighter_class_boost)
+    Interceptor => (interceptor_class_boost)
+    Bomber => (bomber_class_boost)
+    Cruiser => (cruiser_class_boost)
+    _ => (capital_class_boost)
   }
 }
 
 ///|
 /// Returns the display name for the given `ship_class`.
 pub fn ship_class_name(ship_class : ShipKind) -> String {
-  if ship_class == Fighter {
-    "Fighter"
-  } else if ship_class == Interceptor {
-    "Interceptor"
-  } else if ship_class == Bomber {
-    "Bomber"
-  } else if ship_class == Cruiser {
-    "Cruiser"
-  } else {
-    "Capital Ship"
+  match ship_class {
+    Fighter => { "Fighter" }
+    Interceptor => { "Interceptor" }
+    Bomber => { "Bomber" }
+    Cruiser => { "Cruiser" }
+    _ => { "Capital Ship" }
   }
 }
 
@@ -863,24 +839,16 @@ pub fn ship_class_name(ship_class : ShipKind) -> String {
 ///|
 /// Returns the human-readable description for the given `obj_type`.
 pub fn objective_type_name(obj_type : Objective) -> String {
-  if obj_type == DestroyAll {
-    "Destroy all enemies"
-  } else if obj_type == Escort {
-    "Escort ally ship"
-  } else if obj_type == DefendStation {
-    "Defend the station"
-  } else if obj_type == BossFight {
-    "Destroy the capital ship"
-  } else if obj_type == Ambush {
-    "Survive the ambush"
-  } else if obj_type == PatrolMission {
-    "Clear patrol waypoints"
-  } else if obj_type == Survive {
-    "Survive for the duration"
-  } else if obj_type == DestroyCount {
-    "Destroy target count"
-  } else {
-    "Unknown objective"
+  match obj_type {
+    DestroyAll => { "Destroy all enemies" }
+    Escort => { "Escort ally ship" }
+    DefendStation => { "Defend the station" }
+    BossFight => { "Destroy the capital ship" }
+    Ambush => { "Survive the ambush" }
+    PatrolMission => { "Clear patrol waypoints" }
+    Survive => { "Survive for the duration" }
+    DestroyCount => { "Destroy target count" }
+    _ => { "Unknown objective" }
   }
 }
 

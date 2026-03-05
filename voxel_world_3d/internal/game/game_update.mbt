@@ -5,18 +5,13 @@
 /// and ticking all active simulation systems while in play mode.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
-  if game.state == Menu {
-    game.update_menu(dt)
-  } else if game.state == Playing {
-    game.update_playing(dt)
-  } else if game.state == Paused {
-    game.update_paused(dt)
-  } else if game.state == Inventory {
-    game.update_inventory(dt)
-  } else if game.state == Crafting {
-    game.update_crafting(dt)
-  } else if game.state == GameOver {
-    game.update_game_over(dt)
+  match game.state {
+    Menu => game.update_menu(dt)
+    Playing => game.update_playing(dt)
+    Paused => game.update_paused(dt)
+    Inventory => game.update_inventory(dt)
+    Crafting => game.update_crafting(dt)
+    GameOver => game.update_game_over(dt)
   }
 }
 

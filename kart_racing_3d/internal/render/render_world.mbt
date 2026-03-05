@@ -379,12 +379,10 @@ fn @types.Game::draw_powerups(game : @types.Game) -> Unit {
     let py = pu.y + bob
     let spin = Float::from_int(game.frame_counter) * 0.05
     let size : Float = 0.5
-    let color = if pu.kind == Boost {
-      @raylib.Color::new(255, 200, 0, 220)
-    } else if pu.kind == Shield {
-      @raylib.Color::new(80, 180, 255, 220)
-    } else {
-      @raylib.Color::new(255, 80, 60, 220)
+    let color = match pu.kind {
+      Boost => { @raylib.Color::new(255, 200, 0, 220) }
+      Shield => { @raylib.Color::new(80, 180, 255, 220) }
+      _ => { @raylib.Color::new(255, 80, 60, 220) }
     }
     // Rotating cube for powerup
     @raylib.draw_cube(
@@ -896,63 +894,68 @@ fn @types.Game::draw_surface_indicators(game : @types.Game) -> Unit {
     let mx = (wp0.x + wp1.x) / 2.0
     let my = (wp0.y + wp1.y) / 2.0
     let mz = (wp0.z + wp1.z) / 2.0
-    if seg.surface_type == BoostPad {
-      // Boost pad arrows
-      let pulse = @math.sinf(Float::from_int(game.frame_counter) * 0.15)
-      let alpha_f : Float = 150.0 + pulse * 50.0
-      let alpha = alpha_f.to_int().clamp(min=100, max=200)
-      @raylib.draw_cube(
-        @raylib.Vector3::new(mx, my + 0.08, mz),
-        @types.road_width * seg.width_mult * 0.8,
-        0.06,
-        3.0,
-        @raylib.Color::new(255, 200, 0, alpha),
-      )
-      // Arrow chevrons
-      @raylib.draw_cube(
-        @raylib.Vector3::new(mx, my + 0.09, mz - 0.8),
-        @types.road_width * seg.width_mult * 0.5,
-        0.04,
-        0.3,
-        @raylib.Color::new(255, 255, 100, alpha),
-      )
-      @raylib.draw_cube(
-        @raylib.Vector3::new(mx, my + 0.09, mz + 0.8),
-        @types.road_width * seg.width_mult * 0.5,
-        0.04,
-        0.3,
-        @raylib.Color::new(255, 255, 100, alpha),
-      )
-    } else if seg.surface_type == Dirt {
-      // Dirt patch texture
-      @raylib.draw_cube(
-        @raylib.Vector3::new(mx - 1.0, my + 0.02, mz + 0.5),
-        1.5,
-        0.01,
-        1.2,
-        @raylib.Color::new(140, 110, 70, 80),
-      )
-      @raylib.draw_cube(
-        @raylib.Vector3::new(mx + 1.5, my + 0.02, mz - 0.3),
-        1.0,
-        0.01,
-        0.8,
-        @raylib.Color::new(150, 120, 75, 60),
-      )
-    } else if seg.surface_type == SurfaceIce {
-      // Ice shimmer
-      let shimmer = @math.sinf(
-        Float::from_int(game.frame_counter) * 0.1 + Float::from_int(i),
-      )
-      let ice_alpha_f : Float = 50.0 + shimmer * 20.0
-      let ice_alpha = ice_alpha_f.to_int().clamp(min=30, max=80)
-      @raylib.draw_cube(
-        @raylib.Vector3::new(mx, my + 0.05, mz),
-        @types.road_width * seg.width_mult,
-        0.03,
-        3.0,
-        @raylib.Color::new(200, 220, 255, ice_alpha),
-      )
+    match seg.surface_type {
+      BoostPad => {
+        // Boost pad arrows
+        let pulse = @math.sinf(Float::from_int(game.frame_counter) * 0.15)
+        let alpha_f : Float = 150.0 + pulse * 50.0
+        let alpha = alpha_f.to_int().clamp(min=100, max=200)
+        @raylib.draw_cube(
+          @raylib.Vector3::new(mx, my + 0.08, mz),
+          @types.road_width * seg.width_mult * 0.8,
+          0.06,
+          3.0,
+          @raylib.Color::new(255, 200, 0, alpha),
+        )
+        // Arrow chevrons
+        @raylib.draw_cube(
+          @raylib.Vector3::new(mx, my + 0.09, mz - 0.8),
+          @types.road_width * seg.width_mult * 0.5,
+          0.04,
+          0.3,
+          @raylib.Color::new(255, 255, 100, alpha),
+        )
+        @raylib.draw_cube(
+          @raylib.Vector3::new(mx, my + 0.09, mz + 0.8),
+          @types.road_width * seg.width_mult * 0.5,
+          0.04,
+          0.3,
+          @raylib.Color::new(255, 255, 100, alpha),
+        )
+      }
+      Dirt => {
+        // Dirt patch texture
+        @raylib.draw_cube(
+          @raylib.Vector3::new(mx - 1.0, my + 0.02, mz + 0.5),
+          1.5,
+          0.01,
+          1.2,
+          @raylib.Color::new(140, 110, 70, 80),
+        )
+        @raylib.draw_cube(
+          @raylib.Vector3::new(mx + 1.5, my + 0.02, mz - 0.3),
+          1.0,
+          0.01,
+          0.8,
+          @raylib.Color::new(150, 120, 75, 60),
+        )
+      }
+      SurfaceIce => {
+        // Ice shimmer
+        let shimmer = @math.sinf(
+          Float::from_int(game.frame_counter) * 0.1 + Float::from_int(i),
+        )
+        let ice_alpha_f : Float = 50.0 + shimmer * 20.0
+        let ice_alpha = ice_alpha_f.to_int().clamp(min=30, max=80)
+        @raylib.draw_cube(
+          @raylib.Vector3::new(mx, my + 0.05, mz),
+          @types.road_width * seg.width_mult,
+          0.03,
+          3.0,
+          @raylib.Color::new(200, 220, 255, ice_alpha),
+        )
+      }
+      _ => ()
     }
   }
 }
@@ -985,40 +988,44 @@ fn @types.Game::draw_skybox_elements(game : @types.Game) -> Unit {
     )
   }
   // Theme-specific sky objects
-  if theme == Night {
-    // Stars in the sky
-    for s in 0..<12 {
-      let sa = Float::from_int(s) * @types.two_pi / 12.0 +
-        game.preview_rotation * 0.1
-      let sr : Float = 50.0 + Float::from_int(s % 3) * 10.0
-      let star_x = player.x + @math.sinf(sa) * sr
-      let star_z = player.z + @math.cosf(sa) * sr
-      let star_y : Float = 25.0 + Float::from_int(s % 4) * 5.0
-      let twinkle = @math.sinf(
-        Float::from_int(game.frame_counter) * 0.1 + Float::from_int(s),
-      )
-      let star_alpha_f : Float = 150.0 + twinkle * 80.0
-      let star_alpha = star_alpha_f.to_int().clamp(min=80, max=230)
-      @raylib.draw_sphere(
-        @raylib.Vector3::new(star_x, star_y, star_z),
-        0.15,
-        @raylib.Color::new(255, 255, 230, star_alpha),
-      )
+  match theme {
+    Night => {
+      // Stars in the sky
+      for s in 0..<12 {
+        let sa = Float::from_int(s) * @types.two_pi / 12.0 +
+          game.preview_rotation * 0.1
+        let sr : Float = 50.0 + Float::from_int(s % 3) * 10.0
+        let star_x = player.x + @math.sinf(sa) * sr
+        let star_z = player.z + @math.cosf(sa) * sr
+        let star_y : Float = 25.0 + Float::from_int(s % 4) * 5.0
+        let twinkle = @math.sinf(
+          Float::from_int(game.frame_counter) * 0.1 + Float::from_int(s),
+        )
+        let star_alpha_f : Float = 150.0 + twinkle * 80.0
+        let star_alpha = star_alpha_f.to_int().clamp(min=80, max=230)
+        @raylib.draw_sphere(
+          @raylib.Vector3::new(star_x, star_y, star_z),
+          0.15,
+          @raylib.Color::new(255, 255, 230, star_alpha),
+        )
+      }
     }
-  } else if theme == Volcano {
-    // Smoke/ash in the air
-    for s in 0..<6 {
-      let sa = Float::from_int(s) * @types.two_pi / 6.0
-      let sr : Float = 30.0 + Float::from_int(s) * 5.0
-      let smoke_x = player.x + @math.sinf(sa) * sr
-      let smoke_z = player.z + @math.cosf(sa) * sr
-      let smoke_y : Float = 10.0 + Float::from_int(s % 3) * 3.0
-      @raylib.draw_sphere(
-        @raylib.Vector3::new(smoke_x, smoke_y, smoke_z),
-        2.0,
-        @raylib.Color::new(80, 60, 50, 40),
-      )
+    Volcano => {
+      // Smoke/ash in the air
+      for s in 0..<6 {
+        let sa = Float::from_int(s) * @types.two_pi / 6.0
+        let sr : Float = 30.0 + Float::from_int(s) * 5.0
+        let smoke_x = player.x + @math.sinf(sa) * sr
+        let smoke_z = player.z + @math.cosf(sa) * sr
+        let smoke_y : Float = 10.0 + Float::from_int(s % 3) * 3.0
+        @raylib.draw_sphere(
+          @raylib.Vector3::new(smoke_x, smoke_y, smoke_z),
+          2.0,
+          @raylib.Color::new(80, 60, 50, 40),
+        )
+      }
     }
+    _ => ()
   }
   ignore(sky_c)
 }

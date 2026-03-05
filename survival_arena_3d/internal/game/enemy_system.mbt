@@ -36,22 +36,15 @@ fn @types.Game::update_enemies_ai(game : @types.Game, dt : Float) -> Unit {
     // Update facing angle towards player
     enemy.facing_angle = @math.atan2f(dx, dz)
     // AI behavior based on type
-    if enemy.kind == Spitter {
-      game.update_spitter_ai(i, dx, dz, dist, dt)
-    } else if enemy.kind == Exploder {
-      game.update_exploder_ai(i, dx, dz, dist, dt)
-    } else if enemy.kind == Necromancer {
-      game.update_necromancer_ai(i, dx, dz, dist, dt)
-    } else if enemy.kind == Shielded {
-      game.update_shielded_ai(i, dx, dz, dist, dt)
-    } else if enemy.kind == Boss {
-      game.update_boss_ai(i, dx, dz, dist, dt)
-    } else if enemy.kind == Runner {
-      game.update_runner_ai(i, dx, dz, dist, dt)
-    } else if enemy.kind == Brute {
-      game.update_brute_ai(i, dx, dz, dist, dt)
-    } else {
-      game.update_melee_ai(i, dx, dz, dist, dt)
+    match enemy.kind {
+      Spitter => game.update_spitter_ai(i, dx, dz, dist, dt)
+      Exploder => game.update_exploder_ai(i, dx, dz, dist, dt)
+      Necromancer => game.update_necromancer_ai(i, dx, dz, dist, dt)
+      Shielded => game.update_shielded_ai(i, dx, dz, dist, dt)
+      Boss => game.update_boss_ai(i, dx, dz, dist, dt)
+      Runner => game.update_runner_ai(i, dx, dz, dist, dt)
+      Brute => game.update_brute_ai(i, dx, dz, dist, dt)
+      _ => game.update_melee_ai(i, dx, dz, dist, dt)
     }
     // Apply velocity
     enemy.x += enemy.vx * dt
@@ -129,42 +122,46 @@ fn @types.Game::update_enemies_ai(game : @types.Game, dt : Float) -> Unit {
       let tdist = @types.distance2d(enemy.x, enemy.z, trap.x, trap.z)
       if tdist < 2.0 && trap.cooldown_timer <= 0.0 {
         // Trap triggers
-        if trap.kind == Spike {
-          enemy.hp -= trap.damage
-          enemy.flash_timer = 0.1
-          trap.cooldown_timer = @types.trap_spike_cooldown
-          trap.active_timer = 0.3
-          @types.spawn_particles(game, enemy.x, 0.3, enemy.z, 5, 200, 50, 50)
-        } else if trap.kind == Flame {
-          enemy.hp -= trap.damage * dt * 3.0
-          trap.active_timer = @types.trap_flame_duration
-          @types.spawn_particles_typed(
-            game,
-            enemy.x,
-            0.5,
-            enemy.z,
-            2,
-            255,
-            150,
-            30,
-            Explosion,
-          )
-        } else if trap.kind == Electric {
-          enemy.hp -= trap.damage
-          enemy.stun_timer = @types.trap_electric_stun
-          trap.cooldown_timer = @types.trap_electric_cooldown
-          trap.active_timer = 0.5
-          @types.spawn_particles_typed(
-            game,
-            enemy.x,
-            0.5,
-            enemy.z,
-            4,
-            100,
-            150,
-            255,
-            Spark,
-          )
+        match trap.kind {
+          Spike => {
+            enemy.hp -= trap.damage
+            enemy.flash_timer = 0.1
+            trap.cooldown_timer = @types.trap_spike_cooldown
+            trap.active_timer = 0.3
+            @types.spawn_particles(game, enemy.x, 0.3, enemy.z, 5, 200, 50, 50)
+          }
+          Flame => {
+            enemy.hp -= trap.damage * dt * 3.0
+            trap.active_timer = @types.trap_flame_duration
+            @types.spawn_particles_typed(
+              game,
+              enemy.x,
+              0.5,
+              enemy.z,
+              2,
+              255,
+              150,
+              30,
+              Explosion,
+            )
+          }
+          Electric => {
+            enemy.hp -= trap.damage
+            enemy.stun_timer = @types.trap_electric_stun
+            trap.cooldown_timer = @types.trap_electric_cooldown
+            trap.active_timer = 0.5
+            @types.spawn_particles_typed(
+              game,
+              enemy.x,
+              0.5,
+              enemy.z,
+              4,
+              100,
+              150,
+              255,
+              Spark,
+            )
+          }
         }
         if enemy.hp <= 0.0 {
           game.kill_enemy(i)
@@ -852,58 +849,40 @@ fn @types.Game::kill_enemy(game : @types.Game, idx : Int) -> Unit {
     @types.add_kill_feed(game, "MULTI KILL!", 255, 50, 50)
   }
   // Death particles - color varies by enemy type
-  let r = if enemy.kind == Zombie {
-    100
-  } else if enemy.kind == Runner {
-    50
-  } else if enemy.kind == Brute {
-    80
-  } else if enemy.kind == Spitter {
-    50
-  } else if enemy.kind == Exploder {
-    255
-  } else if enemy.kind == Necromancer {
-    150
-  } else if enemy.kind == Shielded {
-    100
-  } else {
-    200
+  let r = match enemy.kind {
+    Zombie => 100
+    Runner => 50
+    Brute => 80
+    Spitter => 50
+    Exploder => 255
+    Necromancer => 150
+    Shielded => 100
+    _ => 200
   }
-  let g = if enemy.kind == Zombie {
-    180
-  } else if enemy.kind == Runner {
-    200
-  } else if enemy.kind == Brute {
-    60
-  } else if enemy.kind == Spitter {
-    200
-  } else if enemy.kind == Exploder {
-    150
-  } else if enemy.kind == Necromancer {
-    50
-  } else if enemy.kind == Shielded {
-    100
-  } else {
-    50
+  let g = match enemy.kind {
+    Zombie => 180
+    Runner => 200
+    Brute => 60
+    Spitter => 200
+    Exploder => 150
+    Necromancer => 50
+    Shielded => 100
+    _ => 50
   }
-  let b = if enemy.kind == Zombie {
-    50
-  } else if enemy.kind == Runner {
-    50
-  } else if enemy.kind == Brute {
-    150
-  } else if enemy.kind == Spitter {
-    50
-  } else if enemy.kind == Exploder {
-    30
-  } else if enemy.kind == Necromancer {
-    255
-  } else if enemy.kind == Shielded {
-    200
-  } else {
-    200
+  let b = match enemy.kind {
+    Zombie => 50
+    Runner => 50
+    Brute => 150
+    Spitter => 50
+    Exploder => 30
+    Necromancer => 255
+    Shielded => 200
+    _ => 200
   }
-  let particle_count = if enemy.kind == Boss { 25 } else { 10 }
+  let particle_count = match enemy.kind {
+    Boss => 25
+    _ => 10
+  }
   @types.spawn_particles(
     game,
     enemy.x,

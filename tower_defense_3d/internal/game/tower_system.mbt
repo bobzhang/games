@@ -236,17 +236,20 @@ fn @types.Game::fire_tower(game : @types.Game, tower_idx : Int) -> Unit {
     0.0
   }
   // Lightning tower: chain
-  if tower.kind == Lightning {
-    let chains : Int = if tower.level >= 3 {
+  match tower.kind {
+    Lightning => {
+      let chains : Int = if tower.level >= 3 {
       @types.chain_count + 2
-    } else {
+      } else {
       @types.chain_count
+      }
+      proj.chain_count = chains
+      proj.chain_range = @types.chain_range
     }
-    proj.chain_count = chains
-    proj.chain_range = @types.chain_range
-  } else {
-    proj.chain_count = 0
-    proj.chain_range = 0.0
+    _ => {
+      proj.chain_count = 0
+      proj.chain_range = 0.0
+    }
   }
   // Sniper tower: crit
   proj.is_crit = if tower.kind == Sniper {

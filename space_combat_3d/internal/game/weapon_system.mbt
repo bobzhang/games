@@ -108,32 +108,23 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
           game.player.shots_hit += 1
 
           // Hit sparks by weapon type
-          let spark_r : Int = if proj.kind == Laser {
-            255
-          } else if proj.kind == Missile {
-            255
-          } else if proj.kind == Plasma {
-            100
-          } else {
-            150
+          let spark_r : Int = match proj.kind {
+            Laser => { 255 }
+            Missile => { 255 }
+            Plasma => { 100 }
+            _ => { 150 }
           }
-          let spark_g : Int = if proj.kind == Laser {
-            50
-          } else if proj.kind == Missile {
-            180
-          } else if proj.kind == Plasma {
-            255
-          } else {
-            200
+          let spark_g : Int = match proj.kind {
+            Laser => { 50 }
+            Missile => { 180 }
+            Plasma => { 255 }
+            _ => { 200 }
           }
-          let spark_b : Int = if proj.kind == Laser {
-            50
-          } else if proj.kind == Missile {
-            50
-          } else if proj.kind == Plasma {
-            100
-          } else {
-            255
+          let spark_b : Int = match proj.kind {
+            Laser => { 50 }
+            Missile => { 50 }
+            Plasma => { 100 }
+            _ => { 255 }
           }
           @types.spawn_particles(
             game,

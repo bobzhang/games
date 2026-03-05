@@ -51,12 +51,10 @@ fn @types.Game::draw_drift_spark_trails(game : @types.Game) -> Unit {
       cos_a * @types.kart_length * 0.4 +
       sin_a * spark_side * @types.kart_width * 0.2
     // Spark intensity based on drift level
-    let intensity : Float = if kart.drift_level == Mini {
-      0.6
-    } else if kart.drift_level == Super {
-      0.8
-    } else {
-      1.0
+    let intensity : Float = match kart.drift_level {
+      Mini => { 0.6 }
+      Super => { 0.8 }
+      _ => { 1.0 }
     }
     let spark_size : Float = 0.12 * intensity
     let pulse = @math.sinf(
@@ -187,44 +185,48 @@ fn @types.Game::draw_dropped_items_3d(game : @types.Game) -> Unit {
     if not(item.active) {
       continue
     }
-    if item.item_type == Banana {
-      let bob : Float = @math.sinf(item.rotation) * 0.05
-      @raylib.draw_cube(
-        @raylib.Vector3::new(item.x, item.y + bob, item.z),
-        0.5,
-        0.15,
-        0.3,
-        @raylib.Color::new(255, 230, 50, 255),
-      )
-      @raylib.draw_cube(
-        @raylib.Vector3::new(item.x, item.y + 0.1 + bob, item.z),
-        0.15,
-        0.2,
-        0.15,
-        @raylib.Color::new(140, 100, 30, 255),
-      )
-    } else if item.item_type == OilSlick {
-      let pulse = @math.sinf(
-        Float::from_int(game.frame_counter) * 0.1 + Float::from_int(i),
-      )
-      let slick_size : Float = 1.2 + pulse * 0.1
-      let slick_depth : Float = slick_size * 0.8
-      @raylib.draw_cube(
-        @raylib.Vector3::new(item.x, item.y + 0.02, item.z),
-        slick_size,
-        0.04,
-        slick_depth,
-        @raylib.Color::new(30, 30, 40, 200),
-      )
-      let sheen_w : Float = slick_size * 0.3
-      let sheen_d : Float = slick_size * 0.2
-      @raylib.draw_cube(
-        @raylib.Vector3::new(item.x + 0.2, item.y + 0.03, item.z + 0.1),
-        sheen_w,
-        0.02,
-        sheen_d,
-        @raylib.Color::new(60, 50, 80, 150),
-      )
+    match item.item_type {
+      Banana => {
+        let bob : Float = @math.sinf(item.rotation) * 0.05
+        @raylib.draw_cube(
+          @raylib.Vector3::new(item.x, item.y + bob, item.z),
+          0.5,
+          0.15,
+          0.3,
+          @raylib.Color::new(255, 230, 50, 255),
+        )
+        @raylib.draw_cube(
+          @raylib.Vector3::new(item.x, item.y + 0.1 + bob, item.z),
+          0.15,
+          0.2,
+          0.15,
+          @raylib.Color::new(140, 100, 30, 255),
+        )
+      }
+      OilSlick => {
+        let pulse = @math.sinf(
+          Float::from_int(game.frame_counter) * 0.1 + Float::from_int(i),
+        )
+        let slick_size : Float = 1.2 + pulse * 0.1
+        let slick_depth : Float = slick_size * 0.8
+        @raylib.draw_cube(
+          @raylib.Vector3::new(item.x, item.y + 0.02, item.z),
+          slick_size,
+          0.04,
+          slick_depth,
+          @raylib.Color::new(30, 30, 40, 200),
+        )
+        let sheen_w : Float = slick_size * 0.3
+        let sheen_d : Float = slick_size * 0.2
+        @raylib.draw_cube(
+          @raylib.Vector3::new(item.x + 0.2, item.y + 0.03, item.z + 0.1),
+          sheen_w,
+          0.02,
+          sheen_d,
+          @raylib.Color::new(60, 50, 80, 150),
+        )
+      }
+      _ => ()
     }
     // Warning indicator for nearby player
     let player = game.karts[@types.player_kart]

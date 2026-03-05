@@ -38,22 +38,17 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     }
   }
 
-  if game.state == StateMenu {
-    game.update_menu(dt)
-  } else if game.state == StatePlaying {
-    game.update_playing(dt)
-  } else if game.state == StatePaused {
-    game.update_paused()
-  } else if game.state == StateMissionComplete {
-    game.update_mission_complete()
-  } else if game.state == StateGameOver {
-    game.update_game_over()
-  } else if game.state == StateMissionBriefing {
-    game.update_mission_briefing()
-  } else if game.state == StateMissionSelect {
-    game.update_mission_select()
-  } else if game.state == StateLoadout {
-    game.update_loadout()
+  match game.state {
+    StateMenu => { game.update_menu(dt) }
+    StatePlaying => { game.update_playing(dt) }
+    StatePaused => { game.update_paused() }
+    StateMissionComplete => { game.update_mission_complete() }
+    StateGameOver => { game.update_game_over() }
+    StateMissionBriefing => { game.update_mission_briefing() }
+    StateMissionSelect => { game.update_mission_select() }
+    StateLoadout => { game.update_loadout() }
+  
+    _ => ()
   }
 }
 
@@ -590,22 +585,28 @@ fn @types.Game::start_mission(game : @types.Game, mission : Int) -> Unit {
   game.objectives[0].obj_type = obj_type
   game.objectives[0].current_count = 0
   game.objectives[0].complete = false
-  if obj_type == DestroyAll {
-    game.objectives[0].target_count = total_enemies
-    game.objectives[0].description = "Destroy all enemies"
-  } else if obj_type == DestroyCount {
-    let target = @levels.mission_objective_target(mission)
-    game.objectives[0].target_count = target
-    game.objectives[0].description = "Destroy \{target} enemies"
-  } else if obj_type == BossFight {
-    game.objectives[0].target_count = 1
-    game.objectives[0].description = "Destroy the capital ship"
-  } else if obj_type == DefendStation {
-    game.objectives[0].target_count = total_enemies
-    game.objectives[0].description = "Defend the station"
-  } else {
-    game.objectives[0].target_count = total_enemies
-    game.objectives[0].description = "Complete objectives"
+  match obj_type {
+    DestroyAll => {
+      game.objectives[0].target_count = total_enemies
+      game.objectives[0].description = "Destroy all enemies"
+    }
+    DestroyCount => {
+      let target = @levels.mission_objective_target(mission)
+      game.objectives[0].target_count = target
+      game.objectives[0].description = "Destroy \{target} enemies"
+    }
+    BossFight => {
+      game.objectives[0].target_count = 1
+      game.objectives[0].description = "Destroy the capital ship"
+    }
+    DefendStation => {
+      game.objectives[0].target_count = total_enemies
+      game.objectives[0].description = "Defend the station"
+    }
+    _ => {
+      game.objectives[0].target_count = total_enemies
+      game.objectives[0].description = "Complete objectives"
+    }
   }
 
   game.message_text = @levels.mission_name(mission)
@@ -849,32 +850,39 @@ fn @types.Game::collect_powerup(game : @types.Game, idx : Int) -> Unit {
   let p = game.player
   pu.active = false
 
-  if pu.kind == Health {
-    p.hull += @types.powerup_health_amount
-    if p.hull > p.max_hull {
+  match pu.kind {
+    Health => {
+      p.hull += @types.powerup_health_amount
+      if p.hull > p.max_hull {
       p.hull = p.max_hull
+      }
+      game.message_text = "HULL REPAIRED"
+      game.message_timer = 1.5
+      @types.add_kill_feed(game, "+HULL", 0, 255, 0)
     }
-    game.message_text = "HULL REPAIRED"
-    game.message_timer = 1.5
-    @types.add_kill_feed(game, "+HULL", 0, 255, 0)
-  } else if pu.kind == Shield {
-    p.shield += @types.powerup_shield_amount
-    if p.shield > p.max_shield {
+    Shield => {
+      p.shield += @types.powerup_shield_amount
+      if p.shield > p.max_shield {
       p.shield = p.max_shield
+      }
+      game.message_text = "SHIELD BOOST"
+      game.message_timer = 1.5
+      @types.add_kill_feed(game, "+SHIELD", 80, 160, 255)
     }
-    game.message_text = "SHIELD BOOST"
-    game.message_timer = 1.5
-    @types.add_kill_feed(game, "+SHIELD", 80, 160, 255)
-  } else if pu.kind == WeaponBoost {
-    p.weapon_boost_timer = @types.powerup_weapon_duration
-    game.message_text = "WEAPON POWER UP"
-    game.message_timer = 1.5
-    @types.add_kill_feed(game, "+WEAPON", 255, 200, 50)
-  } else if pu.kind == SpeedBoost {
-    p.speed_boost_timer = @types.powerup_speed_duration
-    game.message_text = "SPEED BOOST"
-    game.message_timer = 1.5
-    @types.add_kill_feed(game, "+SPEED", 255, 255, 100)
+    WeaponBoost => {
+      p.weapon_boost_timer = @types.powerup_weapon_duration
+      game.message_text = "WEAPON POWER UP"
+      game.message_timer = 1.5
+      @types.add_kill_feed(game, "+WEAPON", 255, 200, 50)
+    }
+    SpeedBoost => {
+      p.speed_boost_timer = @types.powerup_speed_duration
+      game.message_text = "SPEED BOOST"
+      game.message_timer = 1.5
+      @types.add_kill_feed(game, "+SPEED", 255, 255, 100)
+    }
+  
+    _ => ()
   }
   @types.spawn_particles(game, pu.x, pu.y, pu.z, 10, 255, 255, 200)
 

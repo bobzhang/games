@@ -6,22 +6,17 @@
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   game.update_particles(dt)
-  if game.state == StateMenu {
-    game.update_menu(dt)
-  } else if game.state == StatePlaying {
-    game.update_playing(dt)
-  } else if game.state == StatePaused {
-    game.update_paused(dt)
-  } else if game.state == StateLevelComplete {
-    game.update_level_complete(dt)
-  } else if game.state == StateGameOver {
-    game.update_game_over(dt)
-  } else if game.state == StateFloorSelect {
-    game.update_floor_select(dt)
-  } else if game.state == StateCampaignComplete {
-    game.update_campaign_complete(dt)
-  } else if game.state == StateWorldSelect {
-    game.update_world_select(dt)
+  match game.state {
+    StateMenu => { game.update_menu(dt) }
+    StatePlaying => { game.update_playing(dt) }
+    StatePaused => { game.update_paused(dt) }
+    StateLevelComplete => { game.update_level_complete(dt) }
+    StateGameOver => { game.update_game_over(dt) }
+    StateFloorSelect => { game.update_floor_select(dt) }
+    StateCampaignComplete => { game.update_campaign_complete(dt) }
+    StateWorldSelect => { game.update_world_select(dt) }
+  
+    _ => ()
   }
   // Update transition
   if game.transition_timer > 0.0 {
@@ -179,8 +174,9 @@ fn @types.Game::update_decoration_particles(
       if not(d.active) {
         continue
       }
-      if d.kind == DecoTorch {
-        @types.spawn_ambient_particles(
+      match d.kind {
+        DecoTorch => {
+          @types.spawn_ambient_particles(
           game,
           d.x,
           0.6,
@@ -191,9 +187,10 @@ fn @types.Game::update_decoration_particles(
           50,
           0.1,
           0.8,
-        )
-      } else if d.kind == DecoCrystal {
-        @types.spawn_ambient_particles(
+          )
+        }
+        DecoCrystal => {
+          @types.spawn_ambient_particles(
           game,
           d.x,
           0.4,
@@ -204,9 +201,10 @@ fn @types.Game::update_decoration_particles(
           255,
           0.1,
           0.4,
-        )
-      } else if d.kind == DecoMagmaPool {
-        @types.spawn_ambient_particles(
+          )
+        }
+        DecoMagmaPool => {
+          @types.spawn_ambient_particles(
           game,
           d.x,
           0.1,
@@ -217,9 +215,10 @@ fn @types.Game::update_decoration_particles(
           20,
           0.15,
           0.3,
-        )
-      } else if d.kind == DecoFloatingRock {
-        @types.spawn_ambient_particles(
+          )
+        }
+        DecoFloatingRock => {
+          @types.spawn_ambient_particles(
           game,
           d.x,
           0.5,
@@ -230,7 +229,10 @@ fn @types.Game::update_decoration_particles(
           200,
           0.1,
           0.3,
-        )
+          )
+        }
+      
+        _ => ()
       }
     }
   }

@@ -172,14 +172,11 @@ fn @types.Game::enemy_shoot_if_ready(
   }
 
   if not(should_fire) {
-    let chance = if enemy.enemy_kind == Fast {
-      16
-    } else if enemy.enemy_kind == Heavy {
-      11
-    } else if enemy.enemy_kind == Sniper {
-      26
-    } else {
-      13
+    let chance = match enemy.enemy_kind {
+      Fast => { 16 }
+      Heavy => { 11 }
+      Sniper => { 26 }
+      _ => { 13 }
     }
     should_fire = @types.rand_range(game, 0, 99) < chance
   }

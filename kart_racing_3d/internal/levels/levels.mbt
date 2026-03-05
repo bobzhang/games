@@ -793,24 +793,16 @@ pub fn get_track_elevation_info(cup : Int, race : Int) -> String {
 /// Returns the RGB secondary sky gradient color for the given track's theme.
 pub fn get_sky_gradient_color(cup : Int, race : Int) -> (Int, Int, Int) {
   let theme = get_track_theme(cup, race)
-  if theme == Circuit {
-    (180, 220, 255)
-  } else if theme == Beach {
-    (200, 230, 255)
-  } else if theme == Mountain {
-    (180, 200, 230)
-  } else if theme == Castle {
-    (120, 130, 170)
-  } else if theme == Desert {
-    (240, 220, 160)
-  } else if theme == ThemeIce {
-    (210, 230, 250)
-  } else if theme == Night {
-    (10, 12, 30)
-  } else if theme == Volcano {
-    (160, 90, 50)
-  } else {
-    (180, 220, 255)
+  match theme {
+    Circuit => { (180, 220, 255) }
+    Beach => { (200, 230, 255) }
+    Mountain => { (180, 200, 230) }
+    Castle => { (120, 130, 170) }
+    Desert => { (240, 220, 160) }
+    ThemeIce => { (210, 230, 250) }
+    Night => { (10, 12, 30) }
+    Volcano => { (160, 90, 50) }
+    _ => { (180, 220, 255) }
   }
 }
 

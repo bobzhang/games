@@ -4,31 +4,34 @@
 /// Draws screen-space UI for all game states, including HUD, menus, inventory,
 /// crafting panels, and contextual overlays.
 pub fn draw_ui(game : @types.Game) -> Unit {
-  if game.state == Menu {
-    game.draw_menu()
-  } else if game.state == Playing {
-    game.draw_hud()
-    draw_crosshair()
-    game.draw_health_hunger_bars()
-    game.draw_air_bar()
-    if game.show_debug {
-      game.draw_debug_info()
+  match game.state {
+    Menu => game.draw_menu()
+    Playing => {
+      game.draw_hud()
+      draw_crosshair()
+      game.draw_health_hunger_bars()
+      game.draw_air_bar()
+      if game.show_debug {
+        game.draw_debug_info()
+      }
     }
-  } else if game.state == Paused {
-    game.draw_hud()
-    draw_crosshair()
-    game.draw_health_hunger_bars()
-    game.draw_pause_overlay()
-  } else if game.state == Inventory {
-    game.draw_hud()
-    game.draw_health_hunger_bars()
-    game.draw_inventory_screen()
-  } else if game.state == Crafting {
-    game.draw_hud()
-    game.draw_health_hunger_bars()
-    game.draw_crafting_screen()
-  } else if game.state == GameOver {
-    game.draw_game_over_screen()
+    Paused => {
+      game.draw_hud()
+      draw_crosshair()
+      game.draw_health_hunger_bars()
+      game.draw_pause_overlay()
+    }
+    Inventory => {
+      game.draw_hud()
+      game.draw_health_hunger_bars()
+      game.draw_inventory_screen()
+    }
+    Crafting => {
+      game.draw_hud()
+      game.draw_health_hunger_bars()
+      game.draw_crafting_screen()
+    }
+    GameOver => game.draw_game_over_screen()
   }
   // Biome name display
   if game.state == Playing {
@@ -1086,50 +1089,32 @@ fn @types.Game::draw_biome_indicator(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, 120),
   )
   // Biome color indicator dot
-  let dot_r : Int = if biome == Plains {
-    100
-  } else if biome == Forest {
-    30
-  } else if biome == Desert {
-    210
-  } else if biome == Mountains {
-    140
-  } else if biome == Tundra {
-    200
-  } else if biome == Swamp {
-    60
-  } else {
-    150
+  let dot_r : Int = match biome {
+    Plains => 100
+    Forest => 30
+    Desert => 210
+    Mountains => 140
+    Tundra => 200
+    Swamp => 60
+    _ => 150
   }
-  let dot_g : Int = if biome == Plains {
-    180
-  } else if biome == Forest {
-    120
-  } else if biome == Desert {
-    180
-  } else if biome == Mountains {
-    140
-  } else if biome == Tundra {
-    220
-  } else if biome == Swamp {
-    100
-  } else {
-    150
+  let dot_g : Int = match biome {
+    Plains => 180
+    Forest => 120
+    Desert => 180
+    Mountains => 140
+    Tundra => 220
+    Swamp => 100
+    _ => 150
   }
-  let dot_b : Int = if biome == Plains {
-    80
-  } else if biome == Forest {
-    50
-  } else if biome == Desert {
-    100
-  } else if biome == Mountains {
-    160
-  } else if biome == Tundra {
-    240
-  } else if biome == Swamp {
-    70
-  } else {
-    150
+  let dot_b : Int = match biome {
+    Plains => 80
+    Forest => 50
+    Desert => 100
+    Mountains => 160
+    Tundra => 240
+    Swamp => 70
+    _ => 150
   }
   @raylib.draw_rectangle(
     text_x - 14,

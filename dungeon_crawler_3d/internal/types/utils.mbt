@@ -422,80 +422,56 @@ pub fn add_message(
 ///|
 /// Returns melee/ranged reach for the given weapon type.
 pub fn get_weapon_range(weapon_type : WeaponKind) -> Float {
-  if weapon_type == Sword {
-    sword_range
-  } else if weapon_type == Axe {
-    axe_range
-  } else if weapon_type == Mace {
-    mace_range
-  } else if weapon_type == Dagger {
-    dagger_range
-  } else if weapon_type == Staff {
-    staff_range
-  } else if weapon_type == Bow {
-    bow_range
-  } else {
-    sword_range
+  match weapon_type {
+    Sword => sword_range
+    Axe => axe_range
+    Mace => mace_range
+    Dagger => dagger_range
+    Staff => staff_range
+    Bow => bow_range
+    _ => sword_range
   }
 }
 
 ///|
 /// Returns attack cooldown duration in seconds for the given weapon type.
 pub fn get_weapon_cooldown(weapon_type : WeaponKind) -> Float {
-  if weapon_type == Sword {
-    sword_cooldown
-  } else if weapon_type == Axe {
-    axe_cooldown
-  } else if weapon_type == Mace {
-    mace_cooldown
-  } else if weapon_type == Dagger {
-    dagger_cooldown
-  } else if weapon_type == Staff {
-    staff_cooldown
-  } else if weapon_type == Bow {
-    bow_cooldown
-  } else {
-    sword_cooldown
+  match weapon_type {
+    Sword => sword_cooldown
+    Axe => axe_cooldown
+    Mace => mace_cooldown
+    Dagger => dagger_cooldown
+    Staff => staff_cooldown
+    Bow => bow_cooldown
+    _ => sword_cooldown
   }
 }
 
 ///|
 /// Returns attack damage multiplier for the given weapon type.
 pub fn get_weapon_damage_mult(weapon_type : WeaponKind) -> Float {
-  if weapon_type == Sword {
-    sword_damage_mult
-  } else if weapon_type == Axe {
-    axe_damage_mult
-  } else if weapon_type == Mace {
-    mace_damage_mult
-  } else if weapon_type == Dagger {
-    dagger_damage_mult
-  } else if weapon_type == Staff {
-    staff_damage_mult
-  } else if weapon_type == Bow {
-    bow_damage_mult
-  } else {
-    sword_damage_mult
+  match weapon_type {
+    Sword => sword_damage_mult
+    Axe => axe_damage_mult
+    Mace => mace_damage_mult
+    Dagger => dagger_damage_mult
+    Staff => staff_damage_mult
+    Bow => bow_damage_mult
+    _ => sword_damage_mult
   }
 }
 
 ///|
 /// Returns display name for a weapon type id.
 pub fn get_weapon_name(weapon_type : WeaponKind) -> String {
-  if weapon_type == Sword {
-    "Sword"
-  } else if weapon_type == Axe {
-    "Axe"
-  } else if weapon_type == Mace {
-    "Mace"
-  } else if weapon_type == Dagger {
-    "Dagger"
-  } else if weapon_type == Staff {
-    "Staff"
-  } else if weapon_type == Bow {
-    "Bow"
-  } else {
-    "Unknown"
+  match weapon_type {
+    Sword => "Sword"
+    Axe => "Axe"
+    Mace => "Mace"
+    Dagger => "Dagger"
+    Staff => "Staff"
+    Bow => "Bow"
+    _ => "Unknown"
   }
 }
 
@@ -518,40 +494,28 @@ pub fn get_armor_defense(armor_type : Int) -> Int {
 ///|
 /// Returns display name for a spell type id.
 pub fn get_spell_name(spell_type : Spell) -> String {
-  if spell_type == Fireball {
-    "Fireball"
-  } else if spell_type == IceBolt {
-    "Ice Bolt"
-  } else if spell_type == Heal {
-    "Heal"
-  } else if spell_type == Shield {
-    "Shield"
-  } else if spell_type == Lightning {
-    "Lightning"
-  } else if spell_type == Teleport {
-    "Teleport"
-  } else {
-    "None"
+  match spell_type {
+    Fireball => "Fireball"
+    IceBolt => "Ice Bolt"
+    Heal => "Heal"
+    Shield => "Shield"
+    Lightning => "Lightning"
+    Teleport => "Teleport"
+    _ => "None"
   }
 }
 
 ///|
 /// Returns mana cost for a spell type.
 pub fn get_spell_mana_cost(spell_type : Spell) -> Int {
-  if spell_type == Fireball {
-    fireball_mana_cost
-  } else if spell_type == IceBolt {
-    ice_bolt_mana_cost
-  } else if spell_type == Heal {
-    heal_mana_cost
-  } else if spell_type == Shield {
-    shield_mana_cost
-  } else if spell_type == Lightning {
-    lightning_mana_cost
-  } else if spell_type == Teleport {
-    teleport_mana_cost
-  } else {
-    0
+  match spell_type {
+    Fireball => fireball_mana_cost
+    IceBolt => ice_bolt_mana_cost
+    Heal => heal_mana_cost
+    Shield => shield_mana_cost
+    Lightning => lightning_mana_cost
+    Teleport => teleport_mana_cost
+    _ => 0
   }
 }
 
@@ -591,30 +555,19 @@ pub fn calc_player_attack(game : Game) -> Int {
 ///|
 /// Returns display name for an enemy kind id.
 pub fn get_enemy_name(kind : EnemyKind) -> String {
-  if kind == Skeleton {
-    "Skeleton"
-  } else if kind == Archer {
-    "Archer"
-  } else if kind == Golem {
-    "Golem"
-  } else if kind == Wraith {
-    "Wraith"
-  } else if kind == DragonBoss {
-    "Dragon"
-  } else if kind == Slime {
-    "Slime"
-  } else if kind == Bat {
-    "Bat"
-  } else if kind == Spider {
-    "Spider"
-  } else if kind == Minotaur {
-    "Minotaur"
-  } else if kind == Lich {
-    "Lich"
-  } else if kind == Mimic {
-    "Mimic"
-  } else {
-    "Unknown"
+  match kind {
+    Skeleton => "Skeleton"
+    Archer => "Archer"
+    Golem => "Golem"
+    Wraith => "Wraith"
+    DragonBoss => "Dragon"
+    Slime => "Slime"
+    Bat => "Bat"
+    Spider => "Spider"
+    Minotaur => "Minotaur"
+    Lich => "Lich"
+    Mimic => "Mimic"
+    _ => "Unknown"
   }
 }
 
@@ -788,18 +741,13 @@ pub fn trap_kind_from_int(n : Int) -> TrapKind {
 ///|
 /// Cycles to the next weapon in order.
 pub fn next_weapon(w : WeaponKind) -> WeaponKind {
-  if w == Sword {
-    Axe
-  } else if w == Axe {
-    Mace
-  } else if w == Mace {
-    Dagger
-  } else if w == Dagger {
-    Staff
-  } else if w == Staff {
-    Bow
-  } else {
-    Sword
+  match w {
+    Sword => Axe
+    Axe => Mace
+    Mace => Dagger
+    Dagger => Staff
+    Staff => Bow
+    _ => Sword
   }
 }
 

@@ -63,28 +63,19 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     let dz = game.player_z - e.z
     e.facing_angle = @math.atan2f(dx, dz)
     // Movement and AI based on type
-    if e.kind == Skeleton {
-      game.update_melee_enemy(e, dt, dist)
-    } else if e.kind == Golem {
-      game.update_melee_enemy(e, dt, dist)
-    } else if e.kind == Wraith {
-      game.update_melee_enemy(e, dt, dist)
-    } else if e.kind == DragonBoss {
-      game.update_boss_enemy(e, dt, dist)
-    } else if e.kind == Archer {
-      game.update_archer_enemy(e, dt, dist)
-    } else if e.kind == Slime {
-      game.update_slime_enemy(e, dt, dist)
-    } else if e.kind == Bat {
-      game.update_bat_enemy(e, dt, dist)
-    } else if e.kind == Spider {
-      game.update_spider_enemy(e, dt, dist)
-    } else if e.kind == Minotaur {
-      game.update_minotaur_enemy(e, dt, dist)
-    } else if e.kind == Lich {
-      game.update_lich_enemy(e, dt, dist)
-    } else if e.kind == Mimic {
-      game.update_melee_enemy(e, dt, dist)
+    match e.kind {
+      Skeleton => game.update_melee_enemy(e, dt, dist)
+      Golem => game.update_melee_enemy(e, dt, dist)
+      Wraith => game.update_melee_enemy(e, dt, dist)
+      DragonBoss => game.update_boss_enemy(e, dt, dist)
+      Archer => game.update_archer_enemy(e, dt, dist)
+      Slime => game.update_slime_enemy(e, dt, dist)
+      Bat => game.update_bat_enemy(e, dt, dist)
+      Spider => game.update_spider_enemy(e, dt, dist)
+      Minotaur => game.update_minotaur_enemy(e, dt, dist)
+      Lich => game.update_lich_enemy(e, dt, dist)
+      Mimic => game.update_melee_enemy(e, dt, dist)
+      _ => ()
     }
   }
 }
@@ -130,21 +121,17 @@ fn @types.Game::update_melee_enemy(
   dist : Float,
 ) -> Unit {
   // Choose move speed based on type
-  let base_speed : Float = if e.kind == Wraith {
-    @types.wraith_move_speed
-  } else if e.kind == Golem {
-    @types.golem_move_speed
-  } else if e.kind == DragonBoss {
-    @types.golem_move_speed
-  } else {
-    @types.enemy_move_speed
+  let base_speed : Float = match e.kind {
+    Wraith => @types.wraith_move_speed
+    Golem => @types.golem_move_speed
+    DragonBoss => @types.golem_move_speed
+    _ => @types.enemy_move_speed
   }
   let move_speed = base_speed * e.speed_mult
   // Move towards player if not in melee range
-  let melee_range : Float = if e.kind == DragonBoss {
-    @types.enemy_melee_range + 1.0
-  } else {
-    @types.enemy_melee_range
+  let melee_range : Float = match e.kind {
+    DragonBoss => @types.enemy_melee_range + 1.0
+    _ => @types.enemy_melee_range
   }
   if dist > melee_range {
     // Move toward player

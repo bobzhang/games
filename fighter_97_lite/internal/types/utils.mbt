@@ -206,38 +206,23 @@ pub fn fighter_total_guard(archetype : CharacterArchetype) -> Int {
 ///|
 /// Returns a short debug label for an action enum.
 pub fn action_name(action : Action) -> String {
-  if action == ActionIdle {
-    "idle"
-  } else if action == ActionWalkForward {
-    "walk_fwd"
-  } else if action == ActionWalkBack {
-    "walk_back"
-  } else if action == ActionCrouch {
-    "crouch"
-  } else if action == ActionJump {
-    "jump"
-  } else if action == ActionDashForward {
-    "dash_fwd"
-  } else if action == ActionDashBack {
-    "dash_back"
-  } else if action == ActionAttack {
-    "attack"
-  } else if action == ActionThrow {
-    "throw"
-  } else if action == ActionHitstun {
-    "hit"
-  } else if action == ActionBlockstun {
-    "block"
-  } else if action == ActionKnockdown {
-    "down"
-  } else if action == ActionWakeup {
-    "wake"
-  } else if action == ActionVictory {
-    "victory"
-  } else if action == ActionIntro {
-    "intro"
-  } else {
-    "unknown"
+  match action {
+    ActionIdle => { "idle" }
+    ActionWalkForward => { "walk_fwd" }
+    ActionWalkBack => { "walk_back" }
+    ActionCrouch => { "crouch" }
+    ActionJump => { "jump" }
+    ActionDashForward => { "dash_fwd" }
+    ActionDashBack => { "dash_back" }
+    ActionAttack => { "attack" }
+    ActionThrow => { "throw" }
+    ActionHitstun => { "hit" }
+    ActionBlockstun => { "block" }
+    ActionKnockdown => { "down" }
+    ActionWakeup => { "wake" }
+    ActionVictory => { "victory" }
+    ActionIntro => { "intro" }
+    _ => { "unknown" }
   }
 }
 

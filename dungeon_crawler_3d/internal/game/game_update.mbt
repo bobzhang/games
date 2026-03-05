@@ -4,24 +4,16 @@
 /// Advances one frame of dungeon gameplay by dispatching updates for the active game state.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
-  if game.state == StateMenu {
-    game.update_menu(dt)
-  } else if game.state == StatePlaying {
-    game.update_playing(dt)
-  } else if game.state == StatePaused {
-    game.update_paused(dt)
-  } else if game.state == StateGameOver {
-    game.update_game_over(dt)
-  } else if game.state == StateLevelUp {
-    game.update_level_up(dt)
-  } else if game.state == StateFloorComplete {
-    game.update_floor_complete(dt)
-  } else if game.state == StateClassSelect {
-    game.update_class_select(dt)
-  } else if game.state == StateShop {
-    game.update_shop(dt)
-  } else if game.state == StateShrine {
-    game.update_shrine(dt)
+  match game.state {
+    StateMenu => game.update_menu(dt)
+    StatePlaying => game.update_playing(dt)
+    StatePaused => game.update_paused(dt)
+    StateGameOver => game.update_game_over(dt)
+    StateLevelUp => game.update_level_up(dt)
+    StateFloorComplete => game.update_floor_complete(dt)
+    StateClassSelect => game.update_class_select(dt)
+    StateShop => game.update_shop(dt)
+    StateShrine => game.update_shrine(dt)
   }
   // Update message
   if game.message_timer > 0.0 {
