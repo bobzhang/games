@@ -915,12 +915,10 @@ fn @types.Game::draw_message(game : @types.Game) -> Unit {
 pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_bg()
 
-  if game.state == Title {
-    game.draw_title_scene()
-  } else if game.state == Play {
-    game.draw_play_scene()
-  } else {
-    game.draw_result_scene()
+  match game.state {
+    Title => game.draw_title_scene()
+    Play => game.draw_play_scene()
+    _ => game.draw_result_scene()
   }
 
   game.draw_message()

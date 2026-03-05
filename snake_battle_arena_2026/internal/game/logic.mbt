@@ -759,14 +759,18 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.mouse_hold = @raylib.is_mouse_button_down(@raylib.MouseButtonLeft) ||
     game.touch_count > 0
   let clamped_dt : Float = @types.clampf(dt, 0.0, 0.04)
-  if game.state == Title {
-    game.update_title_input()
-    game.update_play(clamped_dt)
-  } else if game.state == Play {
-    game.update_play_input(clamped_dt)
-    game.update_play(clamped_dt)
-  } else {
-    game.update_result_input()
-    game.update_play(clamped_dt)
+  match game.state {
+    Title => {
+      game.update_title_input()
+      game.update_play(clamped_dt)
+    }
+    Play => {
+      game.update_play_input(clamped_dt)
+      game.update_play(clamped_dt)
+    }
+    _ => {
+      game.update_result_input()
+      game.update_play(clamped_dt)
+    }
   }
 }

@@ -490,27 +490,32 @@ fn @types.Game::collect_pickup(
   x : Float,
   y : Float,
 ) -> Unit {
-  if kind == Fuel {
-    game.fuel = @types.minf(100.0, game.fuel + 26.0)
-    game.core_heat = @types.minf(100.0, game.core_heat + 6.0)
-    game.score = game.score + 16
-    @types.set_msg(game, "Fuel cache secured.", 1.2)
-    game.burst(x, y, 20, Default)
-  } else if kind == Medkit {
-    game.suit_hp = @types.minf(100.0, game.suit_hp + 34.0)
-    game.score = game.score + 16
-    @types.set_msg(game, "Medkit applied.", 1.2)
-    game.burst(x, y, 18, OverdriveEffect)
-  } else if kind == Ammo {
-    game.ammo = (460).min(game.ammo + 48)
-    game.score = game.score + 14
-    @types.set_msg(game, "Ammo crate recovered.", 1.2)
-    game.burst(x, y, 18, Default)
-  } else {
-    game.overdrive_t = @types.maxf(game.overdrive_t, 7.0)
-    game.score = game.score + 26
-    @types.set_msg(game, "Overdrive engaged.", 1.2)
-    game.burst(x, y, 24, OverdriveEffect)
+  match kind {
+    Fuel => {
+      game.fuel = @types.minf(100.0, game.fuel + 26.0)
+      game.core_heat = @types.minf(100.0, game.core_heat + 6.0)
+      game.score = game.score + 16
+      @types.set_msg(game, "Fuel cache secured.", 1.2)
+      game.burst(x, y, 20, Default)
+    }
+    Medkit => {
+      game.suit_hp = @types.minf(100.0, game.suit_hp + 34.0)
+      game.score = game.score + 16
+      @types.set_msg(game, "Medkit applied.", 1.2)
+      game.burst(x, y, 18, OverdriveEffect)
+    }
+    Ammo => {
+      game.ammo = (460).min(game.ammo + 48)
+      game.score = game.score + 14
+      @types.set_msg(game, "Ammo crate recovered.", 1.2)
+      game.burst(x, y, 18, Default)
+    }
+    _ => {
+      game.overdrive_t = @types.maxf(game.overdrive_t, 7.0)
+      game.score = game.score + 26
+      @types.set_msg(game, "Overdrive engaged.", 1.2)
+      game.burst(x, y, 24, OverdriveEffect)
+    }
   }
 
   game.combo = (12).min(game.combo + 1)
@@ -704,12 +709,10 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
     let dir = @types.normalize(target_x - enemy.x, target_y - enemy.y)
     let speed : Float = game.enemy_speed(enemy.kind)
 
-    let swirl_x : Float = if enemy.kind == Shard {
-      @math.sinf(enemy.phase * 5.0) * 120.0
-    } else if enemy.kind == Wolf {
-      @math.sinf(enemy.phase * 3.0) * 64.0
-    } else {
-      @math.sinf(enemy.phase * 1.3) * 24.0
+    let swirl_x : Float = match enemy.kind {
+      Shard => @math.sinf(enemy.phase * 5.0) * 120.0
+      Wolf => @math.sinf(enemy.phase * 3.0) * 64.0
+      _ => @math.sinf(enemy.phase * 1.3) * 24.0
     }
 
     let swirl_y : Float = if enemy.kind == Shard {

@@ -928,102 +928,106 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 
   game.update_timers(dt)
 
-  if game.state == Title {
-    if detect_start_press(
-        game.mouse_x,
-        game.mouse_y,
-        game.mouse_press,
-        game.touch_count,
-      ) {
-      game.start_campaign()
-    }
-  } else if game.state == Play {
-    let restart_press : Bool = detect_restart_press(
-      game.mouse_x,
-      game.mouse_y,
-      game.mouse_press,
-      game.touch_count,
-    )
-
-    if restart_press && game.touch_cd <= 0.0 {
-      game.touch_cd = 0.2
-      game.restart_level()
-    } else {
-      let dir : @types.Dir = detect_dir_press(
+  match game.state {
+    Title =>
+      if detect_start_press(
+          game.mouse_x,
+          game.mouse_y,
+          game.mouse_press,
+          game.touch_count,
+        ) {
+        game.start_campaign()
+      }
+    Play => {
+      let restart_press : Bool = detect_restart_press(
         game.mouse_x,
         game.mouse_y,
         game.mouse_press,
         game.touch_count,
       )
-      if dir != None && game.touch_cd <= 0.0 {
-        game.touch_cd = 0.08
-        ignore(game.append_manual_step(dir))
-      }
 
-      let tap = detect_map_target(
-        game.mouse_x,
-        game.mouse_y,
-        game.mouse_press,
-        game.touch_count,
-      )
-      if tap.0 && game.touch_cd <= 0.0 {
-        game.touch_cd = 0.12
-        ignore(game.plan_route_to(tap.1, tap.2))
-      }
-
-      if detect_execute_press(
+      if restart_press && game.touch_cd <= 0.0 {
+        game.touch_cd = 0.2
+        game.restart_level()
+      } else {
+        let dir : @types.Dir = detect_dir_press(
           game.mouse_x,
           game.mouse_y,
           game.mouse_press,
           game.touch_count,
-        ) &&
-        game.touch_cd <= 0.0 {
-        game.touch_cd = 0.14
-        game.begin_route()
-      }
+        )
+        if dir != None && game.touch_cd <= 0.0 {
+          game.touch_cd = 0.08
+          ignore(game.append_manual_step(dir))
+        }
 
-      if detect_clear_route_press(
+        let tap = detect_map_target(
           game.mouse_x,
           game.mouse_y,
           game.mouse_press,
           game.touch_count,
-        ) &&
-        game.touch_cd <= 0.0 {
-        game.touch_cd = 0.14
-        game.clear_planned_route()
+        )
+        if tap.0 && game.touch_cd <= 0.0 {
+          game.touch_cd = 0.12
+          ignore(game.plan_route_to(tap.1, tap.2))
+        }
+
+        if detect_execute_press(
+            game.mouse_x,
+            game.mouse_y,
+            game.mouse_press,
+            game.touch_count,
+          ) &&
+          game.touch_cd <= 0.0 {
+          game.touch_cd = 0.14
+          game.begin_route()
+        }
+
+        if detect_clear_route_press(
+            game.mouse_x,
+            game.mouse_y,
+            game.mouse_press,
+            game.touch_count,
+          ) &&
+          game.touch_cd <= 0.0 {
+          game.touch_cd = 0.14
+          game.clear_planned_route()
+        }
+
+        if detect_coolant_press(
+            game.mouse_x,
+            game.mouse_y,
+            game.mouse_press,
+            game.touch_count,
+          ) &&
+          game.touch_cd <= 0.0 {
+          game.touch_cd = 0.18
+          game.use_coolant()
+        }
       }
 
-      if detect_coolant_press(
-          game.mouse_x,
-          game.mouse_y,
-          game.mouse_press,
-          game.touch_count,
-        ) &&
-        game.touch_cd <= 0.0 {
-        game.touch_cd = 0.18
-        game.use_coolant()
-      }
+      game.update_play(dt)
     }
-
-    game.update_play(dt)
-  } else if detect_restart_press(
-      game.mouse_x,
-      game.mouse_y,
-      game.mouse_press,
-      game.touch_count,
-    ) &&
-    game.touch_cd <= 0.0 {
-    game.touch_cd = 0.2
-    game.restart_level()
-  } else if detect_next_press(
-      game.mouse_x,
-      game.mouse_y,
-      game.mouse_press,
-      game.touch_count,
-    ) &&
-    game.touch_cd <= 0.0 &&
-    game.result == Win {
-    game.touch_cd = 0.2
-    game.next_level_or_title()
+    _ =>
+      if detect_restart_press(
+          game.mouse_x,
+          game.mouse_y,
+          game.mouse_press,
+          game.touch_count,
+        ) &&
+        game.touch_cd <= 0.0 {
+        game.touch_cd = 0.2
+        game.restart_level()
+      } else if detect_next_press(
+          game.mouse_x,
+          game.mouse_y,
+          game.mouse_press,
+          game.touch_count,
+        ) &&
+        game.touch_cd <= 0.0 &&
+        game.result == Win {
+        game.touch_cd = 0.2
+        game.next_level_or_title()
+      }
   }
 }

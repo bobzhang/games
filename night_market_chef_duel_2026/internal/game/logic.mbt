@@ -493,23 +493,27 @@ fn @types.Game::update_cooking_passive(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.boost_t > 0.0 {
-    if game.cooking.stage == Prep {
-      game.cooking.prep_progress = game.cooking.prep_progress +
-        dt * @types.boost_prep_rate
-      let need = @types.dish_prep_need(game.cooking.dish)
-      if game.cooking.prep_progress >= need {
-        game.cooking.prep_progress = need
-        game.cooking.stage = Heat
+    match game.cooking.stage {
+      Prep => {
+        game.cooking.prep_progress = game.cooking.prep_progress +
+          dt * @types.boost_prep_rate
+        let need = @types.dish_prep_need(game.cooking.dish)
+        if game.cooking.prep_progress >= need {
+          game.cooking.prep_progress = need
+          game.cooking.stage = Heat
+        }
       }
-    } else if game.cooking.stage == Heat {
-      let on_lane = match (game.cursor, game.cooking.lane) {
-        (GrillStation, Grill) | (WokStation, Wok) => true
-        _ => false
+      Heat => {
+        let on_lane = match (game.cursor, game.cooking.lane) {
+          (GrillStation, Grill) | (WokStation, Wok) => true
+          _ => false
+        }
+        if on_lane {
+          game.cooking.cook_progress = game.cooking.cook_progress +
+            dt * @types.boost_heat_rate
+        }
       }
-      if on_lane {
-        game.cooking.cook_progress = game.cooking.cook_progress +
-          dt * @types.boost_heat_rate
-      }
+      _ => ()
     }
   }
 

@@ -955,90 +955,94 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   let hold = game.mouse_hold
   let touch_count = game.touch_count
 
-  if game.state == Play {
-    draw_button_visual(
-      "<",
-      @types.btn_left_rect(),
-      game.input_x < -0.2,
-      mx,
-      my,
-      hold,
-      touch_count,
-    )
-    draw_button_visual(
-      ">",
-      @types.btn_right_rect(),
-      game.input_x > 0.2,
-      mx,
-      my,
-      hold,
-      touch_count,
-    )
-    draw_button_visual(
-      "^",
-      @types.btn_up_rect(),
-      game.input_y < -0.2,
-      mx,
-      my,
-      hold,
-      touch_count,
-    )
-    draw_button_visual(
-      "v",
-      @types.btn_down_rect(),
-      game.input_y > 0.2,
-      mx,
-      my,
-      hold,
-      touch_count,
-    )
-    draw_button_visual(
-      "ACT",
-      @types.btn_interact_rect(),
-      game.input_interact_press,
-      mx,
-      my,
-      hold,
-      touch_count,
-    )
-    draw_button_visual(
-      "FOCUS",
-      @types.btn_focus_rect(),
-      game.input_focus_hold,
-      mx,
-      my,
-      hold,
-      touch_count,
-    )
-    draw_button_visual(
-      "DASH",
-      @types.btn_dash_rect(),
-      game.input_dash_press,
-      mx,
-      my,
-      hold,
-      touch_count,
-    )
-  } else if game.state == Title {
-    draw_button_visual(
-      "START",
-      @types.title_start_rect(),
-      false,
-      mx,
-      my,
-      hold,
-      touch_count,
-    )
-  } else {
-    draw_button_visual(
-      "RETRY",
-      @types.retry_rect(),
-      false,
-      mx,
-      my,
-      hold,
-      touch_count,
-    )
+  match game.state {
+    Play => {
+      draw_button_visual(
+        "<",
+        @types.btn_left_rect(),
+        game.input_x < -0.2,
+        mx,
+        my,
+        hold,
+        touch_count,
+      )
+      draw_button_visual(
+        ">",
+        @types.btn_right_rect(),
+        game.input_x > 0.2,
+        mx,
+        my,
+        hold,
+        touch_count,
+      )
+      draw_button_visual(
+        "^",
+        @types.btn_up_rect(),
+        game.input_y < -0.2,
+        mx,
+        my,
+        hold,
+        touch_count,
+      )
+      draw_button_visual(
+        "v",
+        @types.btn_down_rect(),
+        game.input_y > 0.2,
+        mx,
+        my,
+        hold,
+        touch_count,
+      )
+      draw_button_visual(
+        "ACT",
+        @types.btn_interact_rect(),
+        game.input_interact_press,
+        mx,
+        my,
+        hold,
+        touch_count,
+      )
+      draw_button_visual(
+        "FOCUS",
+        @types.btn_focus_rect(),
+        game.input_focus_hold,
+        mx,
+        my,
+        hold,
+        touch_count,
+      )
+      draw_button_visual(
+        "DASH",
+        @types.btn_dash_rect(),
+        game.input_dash_press,
+        mx,
+        my,
+        hold,
+        touch_count,
+      )
+    }
+    Title => {
+      draw_button_visual(
+        "START",
+        @types.title_start_rect(),
+        false,
+        mx,
+        my,
+        hold,
+        touch_count,
+      )
+    }
+    _ => {
+      draw_button_visual(
+        "RETRY",
+        @types.retry_rect(),
+        false,
+        mx,
+        my,
+        hold,
+        touch_count,
+      )
+    }
   }
 }
 

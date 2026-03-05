@@ -309,12 +309,10 @@ fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
       128
     }
 
-    let c : @raylib.Color = if spark.kind == Death {
-      @raylib.Color::new(255, 164, 122, a)
-    } else if spark.kind == Eat {
-      @raylib.Color::new(255, 228, 140, a)
-    } else {
-      @raylib.Color::new(140, 220, 174, a)
+    let c : @raylib.Color = match spark.kind {
+      Death => @raylib.Color::new(255, 164, 122, a)
+      Eat => @raylib.Color::new(255, 228, 140, a)
+      _ => @raylib.Color::new(140, 220, 174, a)
     }
 
     @raylib.draw_circle(spark.x.to_int(), spark.y.to_int(), 1.0 + spark.size, c)

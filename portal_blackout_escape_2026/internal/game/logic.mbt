@@ -1037,20 +1037,16 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
 /// Advances one frame of blackout gameplay, input, and state transitions.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   // Process input at the start of each frame
-  if game.state == Title {
-    game.update_title_input()
-  } else if game.state == Play {
-    game.update_play_input()
-  } else {
-    game.update_result_input()
+  match game.state {
+    Title => game.update_title_input()
+    Play => game.update_play_input()
+    _ => game.update_result_input()
   }
 
-  if game.state == Title {
-    game.update_title(dt)
-  } else if game.state == Play {
-    game.update_play(dt)
-  } else {
-    game.update_result(dt)
+  match game.state {
+    Title => game.update_title(dt)
+    Play => game.update_play(dt)
+    _ => game.update_result(dt)
   }
 
   game.action_pressed = false

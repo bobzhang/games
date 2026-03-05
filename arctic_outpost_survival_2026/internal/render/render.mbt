@@ -228,53 +228,57 @@ fn draw_enemy(enemy : @types.Enemy, ox : Int, oy : Int) -> Unit {
 
   let c0 : @raylib.Color = enemy_color(enemy.kind)
 
-  if enemy.kind == Wolf {
-    @raylib.draw_circle(x, y, enemy.r, c0)
-    @raylib.draw_triangle(
-      @raylib.Vector2::new(Float::from_int(x - 10), Float::from_int(y - 8)),
-      @raylib.Vector2::new(Float::from_int(x - 18), Float::from_int(y - 22)),
-      @raylib.Vector2::new(Float::from_int(x - 2), Float::from_int(y - 18)),
-      @raylib.Color::new(206, 232, 248, 238),
-    )
-    @raylib.draw_triangle(
-      @raylib.Vector2::new(Float::from_int(x + 10), Float::from_int(y - 8)),
-      @raylib.Vector2::new(Float::from_int(x + 2), Float::from_int(y - 22)),
-      @raylib.Vector2::new(Float::from_int(x + 18), Float::from_int(y - 18)),
-      @raylib.Color::new(206, 232, 248, 238),
-    )
-  } else if enemy.kind == Brute {
-    @raylib.draw_circle(
-      x,
-      y,
-      enemy.r + 4.0,
-      @raylib.Color::new(112, 136, 162, 248),
-    )
-    @raylib.draw_circle(x, y, enemy.r - 2.0, c0)
-    @raylib.draw_circle_lines(
-      x,
-      y,
-      enemy.r + 6.0,
-      @raylib.Color::new(218, 236, 246, 188),
-    )
-  } else {
-    let r : Float = enemy.r
-    for k in 0..<4 {
-      let a0 : Float = enemy.phase + Float::from_int(k) * 1.57
-      let a1 : Float = a0 + 0.7
-      let a2 : Float = a0 - 0.7
-
+  match enemy.kind {
+    Wolf => {
+      @raylib.draw_circle(x, y, enemy.r, c0)
       @raylib.draw_triangle(
-        @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
-        @raylib.Vector2::new(
-          (enemy.x + @math.cosf(a1) * (r + 8.0)).to_int() |> Float::from_int,
-          (enemy.y + @math.sinf(a1) * (r + 8.0)).to_int() |> Float::from_int,
-        ),
-        @raylib.Vector2::new(
-          (enemy.x + @math.cosf(a2) * (r + 8.0)).to_int() |> Float::from_int,
-          (enemy.y + @math.sinf(a2) * (r + 8.0)).to_int() |> Float::from_int,
-        ),
-        c0,
+        @raylib.Vector2::new(Float::from_int(x - 10), Float::from_int(y - 8)),
+        @raylib.Vector2::new(Float::from_int(x - 18), Float::from_int(y - 22)),
+        @raylib.Vector2::new(Float::from_int(x - 2), Float::from_int(y - 18)),
+        @raylib.Color::new(206, 232, 248, 238),
       )
+      @raylib.draw_triangle(
+        @raylib.Vector2::new(Float::from_int(x + 10), Float::from_int(y - 8)),
+        @raylib.Vector2::new(Float::from_int(x + 2), Float::from_int(y - 22)),
+        @raylib.Vector2::new(Float::from_int(x + 18), Float::from_int(y - 18)),
+        @raylib.Color::new(206, 232, 248, 238),
+      )
+    }
+    Brute => {
+      @raylib.draw_circle(
+        x,
+        y,
+        enemy.r + 4.0,
+        @raylib.Color::new(112, 136, 162, 248),
+      )
+      @raylib.draw_circle(x, y, enemy.r - 2.0, c0)
+      @raylib.draw_circle_lines(
+        x,
+        y,
+        enemy.r + 6.0,
+        @raylib.Color::new(218, 236, 246, 188),
+      )
+    }
+    _ => {
+      let r : Float = enemy.r
+      for k in 0..<4 {
+        let a0 : Float = enemy.phase + Float::from_int(k) * 1.57
+        let a1 : Float = a0 + 0.7
+        let a2 : Float = a0 - 0.7
+
+        @raylib.draw_triangle(
+          @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
+          @raylib.Vector2::new(
+            (enemy.x + @math.cosf(a1) * (r + 8.0)).to_int() |> Float::from_int,
+            (enemy.y + @math.sinf(a1) * (r + 8.0)).to_int() |> Float::from_int,
+          ),
+          @raylib.Vector2::new(
+            (enemy.x + @math.cosf(a2) * (r + 8.0)).to_int() |> Float::from_int,
+            (enemy.y + @math.sinf(a2) * (r + 8.0)).to_int() |> Float::from_int,
+          ),
+          c0,
+        )
+      }
     }
   }
 
@@ -314,38 +318,40 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
     @raylib.Color::new(244, 250, 255, 210),
   )
 
-  if p.kind == Fuel {
-    @raylib.draw_rectangle(
-      x - 5,
-      y - 8,
-      10,
-      16,
-      @raylib.Color::new(58, 38, 24, 230),
-    )
-  } else if p.kind == Medkit {
-    @raylib.draw_line(
-      x - 6,
-      y,
-      x + 6,
-      y,
-      @raylib.Color::new(250, 248, 248, 240),
-    )
-    @raylib.draw_line(
-      x,
-      y - 6,
-      x,
-      y + 6,
-      @raylib.Color::new(250, 248, 248, 240),
-    )
-  } else if p.kind == Ammo {
-    @raylib.draw_circle(x, y, 4.0, @raylib.Color::new(22, 36, 50, 234))
-  } else {
-    @raylib.draw_circle_lines(
-      x,
-      y,
-      rr - 5.0,
-      @raylib.Color::new(236, 214, 255, 224),
-    )
+  match p.kind {
+    Fuel =>
+      @raylib.draw_rectangle(
+        x - 5,
+        y - 8,
+        10,
+        16,
+        @raylib.Color::new(58, 38, 24, 230),
+      )
+    Medkit => {
+      @raylib.draw_line(
+        x - 6,
+        y,
+        x + 6,
+        y,
+        @raylib.Color::new(250, 248, 248, 240),
+      )
+      @raylib.draw_line(
+        x,
+        y - 6,
+        x,
+        y + 6,
+        @raylib.Color::new(250, 248, 248, 240),
+      )
+    }
+    Ammo =>
+      @raylib.draw_circle(x, y, 4.0, @raylib.Color::new(22, 36, 50, 234))
+    _ =>
+      @raylib.draw_circle_lines(
+        x,
+        y,
+        rr - 5.0,
+        @raylib.Color::new(236, 214, 255, 224),
+      )
   }
 }
 
