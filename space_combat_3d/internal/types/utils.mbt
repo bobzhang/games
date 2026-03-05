@@ -195,8 +195,8 @@ pub fn rand_bool(game : Game, chance : Float) -> Bool {
 ///|
 /// Returns the index of the first inactive enemy slot, or -1 if the pool is full.
 pub fn alloc_enemy(game : Game) -> Int {
-  for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
+  for i, slot in game.enemies {
+    if !slot.active {
       return i
     }
   }
@@ -206,8 +206,8 @@ pub fn alloc_enemy(game : Game) -> Int {
 ///|
 /// Returns the index of the first inactive projectile slot, or -1 if the pool is full.
 pub fn alloc_projectile(game : Game) -> Int {
-  for i in 0..<game.projectiles.length() {
-    if not(game.projectiles[i].active) {
+  for i, slot in game.projectiles {
+    if !slot.active {
       return i
     }
   }
@@ -217,8 +217,8 @@ pub fn alloc_projectile(game : Game) -> Int {
 ///|
 /// Returns the index of the first inactive particle slot, or -1 if the pool is full.
 pub fn alloc_particle(game : Game) -> Int {
-  for i in 0..<game.particles.length() {
-    if not(game.particles[i].active) {
+  for i, slot in game.particles {
+    if !slot.active {
       return i
     }
   }
@@ -228,8 +228,8 @@ pub fn alloc_particle(game : Game) -> Int {
 ///|
 /// Returns the index of the first inactive asteroid slot, or -1 if the pool is full.
 pub fn alloc_asteroid(game : Game) -> Int {
-  for i in 0..<game.asteroids.length() {
-    if not(game.asteroids[i].active) {
+  for i, slot in game.asteroids {
+    if !slot.active {
       return i
     }
   }
@@ -239,8 +239,8 @@ pub fn alloc_asteroid(game : Game) -> Int {
 ///|
 /// Returns the index of the first inactive power-up slot, or -1 if the pool is full.
 pub fn alloc_powerup(game : Game) -> Int {
-  for i in 0..<game.powerups.length() {
-    if not(game.powerups[i].active) {
+  for i, slot in game.powerups {
+    if !slot.active {
       return i
     }
   }
@@ -250,8 +250,8 @@ pub fn alloc_powerup(game : Game) -> Int {
 ///|
 /// Returns the index of the first inactive station slot, or -1 if the pool is full.
 pub fn alloc_station(game : Game) -> Int {
-  for i in 0..<game.stations.length() {
-    if not(game.stations[i].active) {
+  for i, slot in game.stations {
+    if !slot.active {
       return i
     }
   }
@@ -261,8 +261,8 @@ pub fn alloc_station(game : Game) -> Int {
 ///|
 /// Returns the index of the first inactive debris slot, or -1 if the pool is full.
 pub fn alloc_debris(game : Game) -> Int {
-  for i in 0..<game.debris.length() {
-    if not(game.debris[i].active) {
+  for i, slot in game.debris {
+    if !slot.active {
       return i
     }
   }
