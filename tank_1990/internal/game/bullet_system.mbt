@@ -1,11 +1,12 @@
 ///|
 fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
-  for i in 0..<game.bullets.length() {
-    if not(game.bullets[i].active) {
-      return i
+  for i, bullet in game.bullets {
+    if !bullet.active {
+      break i
     }
+  } nobreak {
+    -1
   }
-  -1
 }
 
 ///|

@@ -1,5 +1,5 @@
 {
-  "name": "tonyfettes/raylib-examples",
+  "name": "bobzhang/games",
   "version": "0.1.0",
   "deps": {
     "tonyfettes/raylib": "0.2.2",
