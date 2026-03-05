@@ -131,7 +131,7 @@ pub(all) struct Player {
   mut ammo_mg : Int
   mut ammo_rockets : Int
   mut ammo_bombs : Int
-  mut current_weapon : Int
+  mut current_weapon : WeaponKind
   mut stalling : Bool
   mut stall_timer : Float
   mut damage_smoke : Bool
@@ -169,7 +169,7 @@ pub fn Player::new() -> Player {
     ammo_mg: fighter_ammo_mg,
     ammo_rockets: fighter_ammo_rockets,
     ammo_bombs: fighter_ammo_bombs,
-    current_weapon: weapon_machine_gun,
+    current_weapon: MachineGun,
     stalling: false,
     stall_timer: 0.0,
     damage_smoke: false,
@@ -220,7 +220,7 @@ pub(all) struct Enemy {
   mut orbit_angle : Float
   mut orbit_radius : Float
   mut target_y : Float
-  mut ai_state : Int
+  mut ai_state : AiState
   mut patrol_cx : Float
   mut patrol_cz : Float
   mut patrol_index : Int
@@ -251,7 +251,7 @@ pub fn Enemy::inactive() -> Enemy {
     orbit_angle: 0.0,
     orbit_radius: 30.0,
     target_y: 25.0,
-    ai_state: ai_patrol,
+    ai_state: Patrol,
     patrol_cx: 0.0,
     patrol_cz: 0.0,
     patrol_index: 0,
@@ -511,7 +511,7 @@ pub fn Cloud::inactive() -> Cloud {
 ///|
 /// Current weather conditions including visibility, wind, and precipitation.
 pub(all) struct WeatherState {
-  mut kind : Int
+  mut kind : Weather
   mut visibility : Float
   mut turbulence : Float
   mut wind_dir_x : Float
@@ -526,7 +526,7 @@ pub(all) struct WeatherState {
 /// Creates a new weather state defaulting to clear skies.
 pub fn WeatherState::new() -> WeatherState {
   {
-    kind: weather_clear,
+    kind: Clear,
     visibility: fog_clear_dist,
     turbulence: 0.0,
     wind_dir_x: 1.0,
@@ -540,39 +540,39 @@ pub fn WeatherState::new() -> WeatherState {
 
 ///|
 /// Sets all weather parameters based on the given weather type `kind`.
-pub fn WeatherState::set_weather(self : WeatherState, kind : Int) -> Unit {
+pub fn WeatherState::set_weather(self : WeatherState, kind : Weather) -> Unit {
   self.kind = kind
-  if kind == weather_clear {
+  if kind == Clear {
     self.visibility = fog_clear_dist
     self.turbulence = turb_clear
     self.wind_speed = wind_clear
     self.rain_intensity = 0.0
     self.time_of_day = 0.5
-  } else if kind == weather_cloudy {
+  } else if kind == Cloudy {
     self.visibility = fog_cloudy_dist
     self.turbulence = turb_cloudy
     self.wind_speed = wind_cloudy
     self.rain_intensity = 0.0
     self.time_of_day = 0.5
-  } else if kind == weather_fog {
+  } else if kind == Fog {
     self.visibility = fog_fog_dist
     self.turbulence = turb_fog
     self.wind_speed = wind_fog
     self.rain_intensity = 0.0
     self.time_of_day = 0.4
-  } else if kind == weather_rain {
+  } else if kind == Rain {
     self.visibility = fog_rain_dist
     self.turbulence = turb_rain
     self.wind_speed = wind_rain
     self.rain_intensity = 0.7
     self.time_of_day = 0.35
-  } else if kind == weather_storm {
+  } else if kind == Storm {
     self.visibility = fog_storm_dist
     self.turbulence = turb_storm
     self.wind_speed = wind_storm
     self.rain_intensity = 1.0
     self.time_of_day = 0.25
-  } else if kind == weather_night {
+  } else if kind == Night {
     self.visibility = fog_night_dist
     self.turbulence = turb_night
     self.wind_speed = wind_night
@@ -607,7 +607,7 @@ pub(all) struct Mission {
   description : String
   mut target_count : Int
   mut targets_done : Int
-  weather : Int
+  weather : Weather
   enemy_count : Int
   enemy_air_count : Int
   has_landing : Bool
@@ -626,7 +626,7 @@ pub(all) struct Mission {
 ///|
 /// Top-level game state containing all entities, UI, scoring, and world data.
 pub(all) struct Game {
-  mut state : Int
+  mut state : GameState
 
   // Player
   player : Player
@@ -638,7 +638,7 @@ pub(all) struct Game {
   mut cam_target_x : Float
   mut cam_target_y : Float
   mut cam_target_z : Float
-  mut camera_mode : Int
+  mut camera_mode : CameraMode
 
   // Mission
   mut current_mission : Int
@@ -663,7 +663,7 @@ pub(all) struct Game {
 
   // Weather
   weather_state : WeatherState
-  mut weather : Int
+  mut weather : Weather
   mut draw_distance : Float
 
   // Score
@@ -708,7 +708,7 @@ pub(all) struct Game {
 pub fn Game::new() -> Game {
   let missions = build_missions()
   {
-    state: state_menu,
+    state: Menu,
     player: Player::new(),
     cam_x: 0.0,
     cam_y: 34.0,
@@ -716,7 +716,7 @@ pub fn Game::new() -> Game {
     cam_target_x: 0.0,
     cam_target_y: 30.0,
     cam_target_z: 0.0,
-    camera_mode: camera_mode_chase,
+    camera_mode: Chase,
     current_mission: 0,
     mission_timer: 0.0,
     missions_completed: 0,
@@ -733,7 +733,7 @@ pub fn Game::new() -> Game {
     last_terrain_cx: -9999,
     last_terrain_cz: -9999,
     weather_state: WeatherState::new(),
-    weather: weather_clear,
+    weather: Clear,
     draw_distance: fog_clear_dist,
     score: 0,
     kills: 0,
@@ -770,7 +770,7 @@ fn build_missions() -> Array[Mission] {
     description: "Fly through all checkpoint rings",
     target_count: 5,
     targets_done: 0,
-    weather: weather_clear,
+    weather: Clear,
     enemy_count: 0,
     enemy_air_count: 0,
     has_landing: false,
@@ -790,7 +790,7 @@ fn build_missions() -> Array[Mission] {
     description: "Destroy all ground targets",
     target_count: 4,
     targets_done: 0,
-    weather: weather_clear,
+    weather: Clear,
     enemy_count: 4,
     enemy_air_count: 0,
     has_landing: false,
@@ -810,7 +810,7 @@ fn build_missions() -> Array[Mission] {
     description: "Shoot down enemy fighters",
     target_count: 3,
     targets_done: 0,
-    weather: weather_clear,
+    weather: Clear,
     enemy_count: 0,
     enemy_air_count: 3,
     has_landing: false,
@@ -830,7 +830,7 @@ fn build_missions() -> Array[Mission] {
     description: "Navigate checkpoints in heavy fog",
     target_count: 6,
     targets_done: 0,
-    weather: weather_fog,
+    weather: Fog,
     enemy_count: 0,
     enemy_air_count: 0,
     has_landing: false,
@@ -850,7 +850,7 @@ fn build_missions() -> Array[Mission] {
     description: "Land at the marked runway",
     target_count: 1,
     targets_done: 0,
-    weather: weather_clear,
+    weather: Clear,
     enemy_count: 0,
     enemy_air_count: 0,
     has_landing: true,
@@ -870,7 +870,7 @@ fn build_missions() -> Array[Mission] {
     description: "Clear the valley of enemies",
     target_count: 6,
     targets_done: 0,
-    weather: weather_clear,
+    weather: Clear,
     enemy_count: 3,
     enemy_air_count: 3,
     has_landing: false,
@@ -890,7 +890,7 @@ fn build_missions() -> Array[Mission] {
     description: "Fly through rings in a storm",
     target_count: 7,
     targets_done: 0,
-    weather: weather_storm,
+    weather: Storm,
     enemy_count: 0,
     enemy_air_count: 0,
     has_landing: false,
@@ -910,7 +910,7 @@ fn build_missions() -> Array[Mission] {
     description: "Defeat the enemy squadron",
     target_count: 5,
     targets_done: 0,
-    weather: weather_cloudy,
+    weather: Cloudy,
     enemy_count: 0,
     enemy_air_count: 5,
     has_landing: false,
@@ -930,7 +930,7 @@ fn build_missions() -> Array[Mission] {
     description: "Destroy enemy base installations",
     target_count: 6,
     targets_done: 0,
-    weather: weather_fog,
+    weather: Fog,
     enemy_count: 2,
     enemy_air_count: 2,
     has_landing: false,
@@ -950,7 +950,7 @@ fn build_missions() -> Array[Mission] {
     description: "Survive for 60 seconds",
     target_count: 60,
     targets_done: 0,
-    weather: weather_clear,
+    weather: Clear,
     enemy_count: 2,
     enemy_air_count: 4,
     has_landing: false,
@@ -970,7 +970,7 @@ fn build_missions() -> Array[Mission] {
     description: "Photograph targets at night",
     target_count: 4,
     targets_done: 0,
-    weather: weather_night,
+    weather: Night,
     enemy_count: 2,
     enemy_air_count: 1,
     has_landing: false,
@@ -990,7 +990,7 @@ fn build_missions() -> Array[Mission] {
     description: "High speed canyon checkpoint run",
     target_count: 8,
     targets_done: 0,
-    weather: weather_clear,
+    weather: Clear,
     enemy_count: 2,
     enemy_air_count: 2,
     has_landing: false,
@@ -1010,7 +1010,7 @@ fn build_missions() -> Array[Mission] {
     description: "Defend the base from attack",
     target_count: 8,
     targets_done: 0,
-    weather: weather_rain,
+    weather: Rain,
     enemy_count: 4,
     enemy_air_count: 4,
     has_landing: false,
@@ -1030,7 +1030,7 @@ fn build_missions() -> Array[Mission] {
     description: "Survive 90 seconds in storm",
     target_count: 90,
     targets_done: 0,
-    weather: weather_storm,
+    weather: Storm,
     enemy_count: 3,
     enemy_air_count: 5,
     has_landing: false,
@@ -1050,7 +1050,7 @@ fn build_missions() -> Array[Mission] {
     description: "Eliminate the ace commander",
     target_count: 10,
     targets_done: 0,
-    weather: weather_storm,
+    weather: Storm,
     enemy_count: 5,
     enemy_air_count: 5,
     has_landing: false,

@@ -9,7 +9,7 @@ pub fn update_mission_logic(game : @types.Game, dt : Float) -> Unit {
   if mission.time_limit > 0.0 && game.mission_timer >= mission.time_limit {
     if mission.kind != @types.mission_survive {
       @types.show_message(game, "TIME'S UP!", 3.0)
-      game.state = @types.state_game_over
+      game.state = GameOver
       return
     }
   }
@@ -65,7 +65,7 @@ pub fn update_mission_logic(game : @types.Game, dt : Float) -> Unit {
     let buildings_alive = @types.count_active_buildings(game)
     if buildings_alive <= 0 && mission.building_count > 0 {
       @types.show_message(game, "Base destroyed - mission failed!", 3.0)
-      game.state = @types.state_game_over
+      game.state = GameOver
     }
   } else if mission.kind == @types.mission_patrol {
     if mission.targets_done >= mission.target_count {
@@ -114,7 +114,7 @@ fn @types.Game::complete_mission(game : @types.Game) -> Unit {
     game.best_scores[game.current_mission] = game.mission_score
   }
   @types.show_message(game, "Mission Complete: " + mission.name + "!", 4.0)
-  game.state = @types.state_mission_complete
+  game.state = MissionComplete
 }
 
 ///|
@@ -161,26 +161,26 @@ fn @types.Game::update_air_enemy_ai(
   }
   // AI state transitions
   let hp_ratio = e.hp / e.max_hp
-  if hp_ratio < @types.ai_flee_hp_ratio && e.ai_state != @types.ai_flee {
-    e.ai_state = @types.ai_flee
+  if hp_ratio < @types.ai_flee_hp_ratio && e.ai_state != Flee {
+    e.ai_state = Flee
     e.maneuver_timer = 0.0
-  } else if e.evade_timer > 0.0 && e.ai_state != @types.ai_flee {
-    e.ai_state = @types.ai_evade
+  } else if e.evade_timer > 0.0 && e.ai_state != Flee {
+    e.ai_state = Evade
   } else if dist_to_player < @types.ai_engage_range &&
-    e.ai_state == @types.ai_patrol {
-    e.ai_state = @types.ai_engage
+    e.ai_state == Patrol {
+    e.ai_state = Engage
   } else if dist_to_player > @types.ai_disengage_range &&
-    e.ai_state == @types.ai_engage {
-    e.ai_state = @types.ai_patrol
+    e.ai_state == Engage {
+    e.ai_state = Patrol
   }
   // Execute AI behavior
-  if e.ai_state == @types.ai_patrol {
+  if e.ai_state == Patrol {
     game.ai_patrol(e, dt)
-  } else if e.ai_state == @types.ai_engage {
+  } else if e.ai_state == Engage {
     game.ai_engage(e, player, dt)
-  } else if e.ai_state == @types.ai_evade {
+  } else if e.ai_state == Evade {
     game.ai_evade(e, player, dt)
-  } else if e.ai_state == @types.ai_flee {
+  } else if e.ai_state == Flee {
     game.ai_flee(e, player, dt)
   } else {
     game.ai_patrol(e, dt)
@@ -195,7 +195,7 @@ fn @types.Game::update_air_enemy_ai(
     e.y = ground
   }
   // Fire at player if engaging
-  if e.ai_state == @types.ai_engage {
+  if e.ai_state == Engage {
     e.fire_timer -= dt
     if e.fire_timer <= 0.0 {
       if dist_to_player < @types.enemy_fire_range {
@@ -289,7 +289,7 @@ fn @types.Game::ai_evade(
   e.heading = @math.atan2f(e.vx, e.vz)
   // Transition back to engage when evade timer expires
   if e.evade_timer <= 0.0 {
-    e.ai_state = @types.ai_engage
+    e.ai_state = Engage
   }
   ignore(game)
 }

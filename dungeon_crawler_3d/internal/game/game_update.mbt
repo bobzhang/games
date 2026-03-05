@@ -180,7 +180,7 @@ fn @types.Game::update_class_select(game : @types.Game, dt : Float) -> Unit {
   }
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    game.player_class = game.class_select_cursor
+    game.player_class = @types.ship_class_from_int(game.class_select_cursor)
     game.start_new_game()
   }
 }

@@ -647,15 +647,11 @@ pub fn calculate_rating(score : Int) -> String {
 
 ///|
 /// Returns the short display name for the weapon type `kind`.
-pub fn weapon_name(kind : Int) -> String {
-  if kind == weapon_machine_gun {
-    "MG"
-  } else if kind == weapon_rockets {
-    "RKT"
-  } else if kind == weapon_bombs {
-    "BMB"
-  } else {
-    "???"
+pub fn weapon_name(kind : WeaponKind) -> String {
+  match kind {
+    MachineGun => "MG"
+    Rockets => "RKT"
+    Bombs => "BMB"
   }
 }
 
@@ -664,12 +660,10 @@ pub fn weapon_name(kind : Int) -> String {
 ///|
 /// Returns the remaining ammo count for the player's currently equipped weapon.
 pub fn get_ammo(player : Player) -> Int {
-  if player.current_weapon == weapon_machine_gun {
-    player.ammo_mg
-  } else if player.current_weapon == weapon_rockets {
-    player.ammo_rockets
-  } else {
-    player.ammo_bombs
+  match player.current_weapon {
+    MachineGun => player.ammo_mg
+    Rockets => player.ammo_rockets
+    Bombs => player.ammo_bombs
   }
 }
 
@@ -677,21 +671,14 @@ pub fn get_ammo(player : Player) -> Int {
 
 ///|
 /// Returns the display name string for the weather type `kind`.
-pub fn weather_name(kind : Int) -> String {
-  if kind == weather_clear {
-    "CLEAR"
-  } else if kind == weather_cloudy {
-    "CLOUDY"
-  } else if kind == weather_fog {
-    "FOG"
-  } else if kind == weather_rain {
-    "RAIN"
-  } else if kind == weather_storm {
-    "STORM"
-  } else if kind == weather_night {
-    "NIGHT"
-  } else {
-    ""
+pub fn weather_name(kind : Weather) -> String {
+  match kind {
+    Clear => "CLEAR"
+    Cloudy => "CLOUDY"
+    Fog => "FOG"
+    Rain => "RAIN"
+    Storm => "STORM"
+    Night => "NIGHT"
   }
 }
 

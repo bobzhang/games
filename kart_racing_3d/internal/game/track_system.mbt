@@ -73,7 +73,7 @@ fn @types.Game::spawn_karts(game : @types.Game) -> Unit {
     kart.waypoint_progress = 0.0
     kart.total_progress = 0.0
     kart.place = i + 1
-    kart.held_powerup = @types.powerup_none
+    kart.held_powerup = NoPowerup
     kart.boost_timer = 0.0
     kart.shield_timer = 0.0
     kart.drift_left = false
@@ -119,7 +119,7 @@ fn @types.Game::spawn_track_powerups(game : @types.Game) -> Unit {
     p1.x = mx + px * 1.5
     p1.y = my
     p1.z = mz + pz * 1.5
-    p1.kind = @types.rand_range(game, 1, 3)
+    p1.kind = @types.powerup_kind_from_int(@types.rand_range(game, 1, 3))
     p1.respawn_timer = 0.0
     p1.collected = false
     pu_idx = pu_idx + 1
@@ -129,7 +129,7 @@ fn @types.Game::spawn_track_powerups(game : @types.Game) -> Unit {
       p2.x = mx - px * 1.5
       p2.y = my
       p2.z = mz - pz * 1.5
-      p2.kind = @types.rand_range(game, 1, 3)
+      p2.kind = @types.powerup_kind_from_int(@types.rand_range(game, 1, 3))
       p2.respawn_timer = 0.0
       p2.collected = false
       pu_idx = pu_idx + 1
@@ -320,7 +320,7 @@ pub fn update_powerup_respawns(game : @types.Game, dt : Float) -> Unit {
       pu.respawn_timer -= dt
       if pu.respawn_timer <= 0.0 {
         pu.collected = false
-        pu.kind = @types.rand_range(game, 1, 3)
+        pu.kind = @types.powerup_kind_from_int(@types.rand_range(game, 1, 3))
       }
     }
   }
@@ -336,7 +336,7 @@ pub fn check_powerup_collisions(game : @types.Game) -> Unit {
     if not(kart.active) || kart.finished {
       continue
     }
-    if kart.held_powerup != @types.powerup_none {
+    if kart.held_powerup != NoPowerup {
       continue
     }
     for pu in game.powerups {

@@ -1,3 +1,50 @@
+///|
+/// Drift boost charge level from none through mini, super, and ultra.
+pub(all) enum DriftLevel {
+  DriftNone
+  Mini
+  Super
+  Ultra
+} derive(Eq)
+
+///|
+/// Types of powerup items that can be held or used.
+pub(all) enum PowerupKind {
+  NoPowerup
+  Boost
+  Shield
+  Missile
+  OilSlick
+  Lightning
+  Star
+  Banana
+  TripleMushroom
+} derive(Eq)
+
+///|
+/// Track surface material types affecting grip and speed.
+pub(all) enum Surface {
+  Road
+  Dirt
+  Grass
+  BoostPad
+  Oil
+  SurfaceIce
+} derive(Eq)
+
+///|
+/// Visual theme categories for track environments.
+pub(all) enum Theme {
+  Circuit
+  Beach
+  Mountain
+  Castle
+  Desert
+  ThemeIce
+  Night
+  Volcano
+} derive(Eq)
+
 // Screen
 
 ///|
@@ -112,42 +159,6 @@ pub let air_steer_mult : Float = 0.4
 // Powerup types
 
 ///|
-/// Powerup type ID for no held item.
-pub let powerup_none : Int = 0
-
-///|
-/// Powerup type ID for speed boost mushroom.
-pub let powerup_boost : Int = 1
-
-///|
-/// Powerup type ID for defensive shield.
-pub let powerup_shield : Int = 2
-
-///|
-/// Powerup type ID for homing missile.
-pub let powerup_missile : Int = 3
-
-///|
-/// Powerup type ID for droppable oil slick trap.
-pub let powerup_oil_slick : Int = 4
-
-///|
-/// Powerup type ID for lightning bolt strike.
-pub let powerup_lightning : Int = 5
-
-///|
-/// Powerup type ID for invincibility star.
-pub let powerup_star : Int = 6
-
-///|
-/// Powerup type ID for droppable banana peel trap.
-pub let powerup_banana : Int = 7
-
-///|
-/// Powerup type ID for triple mushroom boost.
-pub let powerup_triple_mushroom : Int = 8
-
-///|
 /// Total number of distinct powerup types including none.
 pub let powerup_type_count : Int = 9
 
@@ -223,30 +234,6 @@ pub let seg_straight : Int = 0
 
 // Track surface types
 
-///|
-/// Surface type ID for standard paved road.
-pub let surface_road : Int = 0
-
-///|
-/// Surface type ID for off-road dirt.
-pub let surface_dirt : Int = 1
-
-///|
-/// Surface type ID for off-road grass.
-pub let surface_grass : Int = 2
-
-///|
-/// Surface type ID for a speed boost pad.
-pub let surface_boost_pad : Int = 3
-
-///|
-/// Surface type ID for an oil-slicked area.
-pub let surface_oil : Int = 4
-
-///|
-/// Surface type ID for icy terrain.
-pub let surface_ice : Int = 5
-
 // Surface grip multipliers
 
 ///|
@@ -300,22 +287,6 @@ pub let speed_mult_oil : Float = 0.9
 pub let speed_mult_ice : Float = 0.95
 
 // Drift boost levels
-
-///|
-/// Drift level ID for no active drift boost.
-pub let drift_level_none : Int = 0
-
-///|
-/// Drift level ID for mini turbo boost.
-pub let drift_level_mini : Int = 1
-
-///|
-/// Drift level ID for super turbo boost.
-pub let drift_level_super : Int = 2
-
-///|
-/// Drift level ID for ultra turbo boost.
-pub let drift_level_ultra : Int = 3
 
 // Drift level timing thresholds (seconds of sustained drift)
 
@@ -466,38 +437,6 @@ pub let kart_colors : Array[(Int, Int, Int)] = [
 ]
 
 // Track theme indices
-
-///|
-/// Theme index for standard circuit tracks.
-pub let theme_circuit : Int = 0
-
-///|
-/// Theme index for beach tracks.
-pub let theme_beach : Int = 1
-
-///|
-/// Theme index for mountain tracks.
-pub let theme_mountain : Int = 2
-
-///|
-/// Theme index for castle tracks.
-pub let theme_castle : Int = 3
-
-///|
-/// Theme index for desert tracks.
-pub let theme_desert : Int = 4
-
-///|
-/// Theme index for ice tracks.
-pub let theme_ice : Int = 5
-
-///|
-/// Theme index for night city tracks.
-pub let theme_night : Int = 6
-
-///|
-/// Theme index for volcano tracks.
-pub let theme_volcano : Int = 7
 
 // Theme sky colors (r, g, b)
 

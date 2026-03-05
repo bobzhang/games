@@ -1,23 +1,23 @@
 ///|
 /// Draws the full 2D user interface overlay for the current game state.
 pub fn draw_ui(game : @types.Game) -> Unit {
-  if game.state == @types.state_menu {
+  if game.state == Menu {
     game.draw_menu()
-  } else if game.state == @types.state_aircraft_select {
+  } else if game.state == AircraftSelect {
     game.draw_aircraft_select()
-  } else if game.state == @types.state_mission_briefing {
+  } else if game.state == MissionBriefing {
     game.draw_mission_briefing()
-  } else if game.state == @types.state_playing {
+  } else if game.state == Playing {
     game.draw_hud()
     game.draw_radar()
     game.draw_warning_indicators()
-  } else if game.state == @types.state_paused {
+  } else if game.state == Paused {
     game.draw_hud()
     draw_pause_overlay()
-  } else if game.state == @types.state_mission_complete {
+  } else if game.state == MissionComplete {
     game.draw_hud()
     game.draw_mission_complete_detailed()
-  } else if game.state == @types.state_game_over {
+  } else if game.state == GameOver {
     game.draw_game_over_detailed()
   }
 }
@@ -83,9 +83,9 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
     }
     @raylib.draw_text(mission.description, 230, y + 26, 14, desc_color)
     // Weather icon
-    let weather_text = if mission.weather == @types.weather_fog {
+    let weather_text = if mission.weather == Fog {
       "[FOG]"
-    } else if mission.weather == @types.weather_storm {
+    } else if mission.weather == Storm {
       "[STORM]"
     } else {
       ""
@@ -370,13 +370,13 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(150, 150, 170, 255),
   )
   // Weather indicator
-  if game.weather != @types.weather_clear {
-    let weather_text = if game.weather == @types.weather_fog {
+  if game.weather != Clear {
+    let weather_text = if game.weather == Fog {
       "FOG"
     } else {
       "STORM"
     }
-    let weather_color = if game.weather == @types.weather_fog {
+    let weather_color = if game.weather == Fog {
       @raylib.Color::new(200, 200, 150, 255)
     } else {
       @raylib.Color::new(255, 150, 50, 255)
@@ -1223,9 +1223,9 @@ fn @types.Game::draw_warning_indicators(game : @types.Game) -> Unit {
   }
   @raylib.draw_text(ammo_text, weapon_x + 8, weapon_y + 28, 16, ammo_color)
   // Camera mode
-  let cam_text = if game.camera_mode == @types.camera_mode_chase {
+  let cam_text = if game.camera_mode == Chase {
     "CAM: Chase"
-  } else if game.camera_mode == @types.camera_mode_cockpit {
+  } else if game.camera_mode == Cockpit {
     "CAM: Cockpit"
   } else {
     "CAM: Free"

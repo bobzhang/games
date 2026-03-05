@@ -60,13 +60,13 @@ pub fn update_player_kart(game : @types.Game, dt : Float) -> Unit {
         kart.drift_right = true
       }
       kart.drift_timer = 0.0
-      kart.drift_level = @types.drift_level_none
+      kart.drift_level = DriftNone
       kart.drift_angle = 0.0
     }
     kart.drift_timer += dt
     // Update drift level based on accumulated time
     let new_level = @types.calc_drift_level(kart.drift_timer)
-    if new_level > kart.drift_level {
+    if @types.drift_level_to_int(new_level) > @types.drift_level_to_int(kart.drift_level) {
       kart.drift_level = new_level
       // Emit level-up particles
       let dc = @types.get_drift_spark_color(new_level)
@@ -85,7 +85,7 @@ pub fn update_player_kart(game : @types.Game, dt : Float) -> Unit {
     let drift_dir : Float = if kart.drift_left { 0.3 } else { -0.3 }
     kart.drift_angle = @types.lerpf(kart.drift_angle, drift_dir, dt * 3.0)
     // Emit drift sparks based on level
-    if kart.drift_level > @types.drift_level_none && game.frame_counter % 3 == 0 {
+    if kart.drift_level != DriftNone && game.frame_counter % 3 == 0 {
       let dc = @types.get_drift_spark_color(kart.drift_level)
       let sin_a = @math.sinf(kart.angle)
       let cos_a = @math.cosf(kart.angle)
@@ -112,7 +112,7 @@ pub fn update_player_kart(game : @types.Game, dt : Float) -> Unit {
     }
   } else {
     // Release drift = boost based on level
-    if kart.drift_level > @types.drift_level_none {
+    if kart.drift_level != DriftNone {
       let drift_mult = @types.get_kart_drift_boost_mult(kart)
       let boost_power = @types.get_drift_boost_power(kart.drift_level) *
         drift_mult
@@ -134,7 +134,7 @@ pub fn update_player_kart(game : @types.Game, dt : Float) -> Unit {
     kart.drift_left = false
     kart.drift_right = false
     kart.drift_timer = 0.0
-    kart.drift_level = @types.drift_level_none
+    kart.drift_level = DriftNone
     kart.drift_angle = @types.lerpf(kart.drift_angle, 0.0, dt * 5.0)
   }
   // Apply steering
@@ -340,24 +340,24 @@ fn @types.Game::clamp_kart_to_track_bounds(
 /// Activates the held powerup for the specified kart and clears it from inventory.
 pub fn use_powerup(game : @types.Game, kart_idx : Int) -> Unit {
   let kart = game.karts[kart_idx]
-  if kart.held_powerup == @types.powerup_none {
+  if kart.held_powerup == NoPowerup {
     return
   }
   let item = kart.held_powerup
-  if item == @types.powerup_boost {
+  if item == Boost {
     kart.boost_timer = @types.boost_duration
     kart.boost_power = @types.boost_speed_add
     @types.spawn_particles(game, kart.x, kart.y + 0.3, kart.z, 10, 255, 200, 0)
-  } else if item == @types.powerup_shield {
+  } else if item == Shield {
     kart.shield_timer = @types.shield_duration
     @types.spawn_particles(game, kart.x, kart.y + 0.5, kart.z, 8, 100, 200, 255)
-  } else if item == @types.powerup_missile {
+  } else if item == Missile {
     game.fire_missile(kart_idx)
-  } else if item == @types.powerup_oil_slick {
-    game.drop_item(kart_idx, @types.powerup_oil_slick)
-  } else if item == @types.powerup_lightning {
+  } else if item == OilSlick {
+    game.drop_item(kart_idx, OilSlick)
+  } else if item == Lightning {
     game.activate_lightning(kart_idx)
-  } else if item == @types.powerup_star {
+  } else if item == Star {
     kart.star_timer = @types.star_duration
     kart.invincible_timer = @types.star_duration
     @types.spawn_particles(
@@ -370,9 +370,9 @@ pub fn use_powerup(game : @types.Game, kart_idx : Int) -> Unit {
       255,
       100,
     )
-  } else if item == @types.powerup_banana {
-    game.drop_item(kart_idx, @types.powerup_banana)
-  } else if item == @types.powerup_triple_mushroom {
+  } else if item == Banana {
+    game.drop_item(kart_idx, Banana)
+  } else if item == TripleMushroom {
     kart.boost_timer = @types.triple_mushroom_boost
     kart.boost_power = @types.boost_speed_add
     kart.item_count = 2 // 2 more uses remaining
@@ -390,15 +390,15 @@ pub fn use_powerup(game : @types.Game, kart_idx : Int) -> Unit {
     return
   }
   // Handle triple mushroom remaining uses
-  if kart.held_powerup == @types.powerup_triple_mushroom && kart.item_count > 0 {
+  if kart.held_powerup == TripleMushroom && kart.item_count > 0 {
     kart.item_count -= 1
     if kart.item_count <= 0 {
-      kart.held_powerup = @types.powerup_none
+      kart.held_powerup = NoPowerup
       kart.item_count = 0
     }
     return
   }
-  kart.held_powerup = @types.powerup_none
+  kart.held_powerup = NoPowerup
   kart.item_count = 0
 }
 
@@ -428,7 +428,7 @@ fn @types.Game::fire_missile(game : @types.Game, kart_idx : Int) -> Unit {
 fn @types.Game::drop_item(
   game : @types.Game,
   kart_idx : Int,
-  item_type : Int,
+  item_type : @types.PowerupKind,
 ) -> Unit {
   let kart = game.karts[kart_idx]
   let idx = @types.alloc_dropped_item(game)
@@ -444,7 +444,7 @@ fn @types.Game::drop_item(
   item.z = kart.z - @math.cosf(kart.angle) * 2.0
   item.owner = kart_idx
   item.rotation = 0.0
-  if item_type == @types.powerup_banana {
+  if item_type == Banana {
     item.lifetime = @types.banana_lifetime
   } else {
     item.lifetime = @types.oil_slick_lifetime

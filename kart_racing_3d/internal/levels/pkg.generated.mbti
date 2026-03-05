@@ -1,6 +1,10 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "tonyfettes/raylib-examples/kart_racing_3d/internal/levels"
 
+import {
+  "tonyfettes/raylib-examples/kart_racing_3d/internal/types",
+}
+
 // Values
 pub fn get_cup_name(Int) -> String
 
@@ -34,7 +38,7 @@ pub fn get_track_sky_color(Int, Int) -> (Int, Int, Int)
 
 pub fn get_track_surface_info(Int, Int) -> String
 
-pub fn get_track_theme(Int, Int) -> Int
+pub fn get_track_theme(Int, Int) -> @types.Theme
 
 pub fn get_track_waypoints(Int, Int) -> Array[(Float, Float, Float)]
 

@@ -306,54 +306,30 @@ pub fn get_cup_name(cup : Int) -> String {
 
 ///|
 /// Returns the visual theme index for the given track.
-pub fn get_track_theme(cup : Int, race : Int) -> Int {
+pub fn get_track_theme(cup : Int, race : Int) -> @types.Theme {
   let track_id = cup * 4 + race
-  if track_id == 0 {
-    return 0
-  } // Circuit
-  if track_id == 1 {
-    return 0
-  } // Circuit
-  if track_id == 2 {
-    return 0
-  } // Circuit
   if track_id == 3 {
-    return 1
-  } // Beach
-  if track_id == 4 {
-    return 2
-  } // Mountain
+    return Beach
+  }
+  if track_id == 4 || track_id == 7 {
+    return Mountain
+  }
   if track_id == 5 {
-    return 3
-  } // Castle
-  if track_id == 6 {
-    return 0
-  } // Circuit
-  if track_id == 7 {
-    return 2
-  } // Mountain
-  if track_id == 8 {
-    return 0
-  } // Circuit
+    return Castle
+  }
   if track_id == 9 {
-    return 4
-  } // Desert
+    return Desert
+  }
   if track_id == 10 {
-    return 5
-  } // Ice
+    return ThemeIce
+  }
   if track_id == 11 {
-    return 6
-  } // Night
-  if track_id == 12 {
-    return 0
-  } // Circuit (rainbow)
+    return Night
+  }
   if track_id == 13 {
-    return 7
-  } // Volcano
-  if track_id == 14 {
-    return 0
-  } // Circuit (underwater)
-  0 // Circuit (Grand Prix)
+    return Volcano
+  }
+  Circuit
 }
 
 // Track ground colors for variety
@@ -361,7 +337,7 @@ pub fn get_track_theme(cup : Int, race : Int) -> Int {
 ///|
 /// Returns the RGB ground plane color for the given track based on its theme.
 pub fn get_track_ground_color(cup : Int, race : Int) -> (Int, Int, Int) {
-  let theme = get_track_theme(cup, race)
+  let theme = @types.theme_to_int(get_track_theme(cup, race))
   if theme < @types.theme_ground_colors.length() {
     @types.theme_ground_colors[theme]
   } else {
@@ -397,7 +373,7 @@ pub fn get_track_road_color(cup : Int, race : Int) -> (Int, Int, Int) {
 ///|
 /// Returns the RGB sky background color for the given track based on its theme.
 pub fn get_track_sky_color(cup : Int, race : Int) -> (Int, Int, Int) {
-  let theme = get_track_theme(cup, race)
+  let theme = @types.theme_to_int(get_track_theme(cup, race))
   if theme < @types.theme_sky_colors.length() {
     @types.theme_sky_colors[theme]
   } else {
@@ -817,21 +793,21 @@ pub fn get_track_elevation_info(cup : Int, race : Int) -> String {
 /// Returns the RGB secondary sky gradient color for the given track's theme.
 pub fn get_sky_gradient_color(cup : Int, race : Int) -> (Int, Int, Int) {
   let theme = get_track_theme(cup, race)
-  if theme == @types.theme_circuit {
+  if theme == Circuit {
     (180, 220, 255)
-  } else if theme == @types.theme_beach {
+  } else if theme == Beach {
     (200, 230, 255)
-  } else if theme == @types.theme_mountain {
+  } else if theme == Mountain {
     (180, 200, 230)
-  } else if theme == @types.theme_castle {
+  } else if theme == Castle {
     (120, 130, 170)
-  } else if theme == @types.theme_desert {
+  } else if theme == Desert {
     (240, 220, 160)
-  } else if theme == @types.theme_ice {
+  } else if theme == ThemeIce {
     (210, 230, 250)
-  } else if theme == @types.theme_night {
+  } else if theme == Night {
     (10, 12, 30)
-  } else if theme == @types.theme_volcano {
+  } else if theme == Volcano {
     (160, 90, 50)
   } else {
     (180, 220, 255)

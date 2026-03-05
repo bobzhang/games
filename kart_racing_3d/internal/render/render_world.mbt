@@ -379,9 +379,9 @@ fn @types.Game::draw_powerups(game : @types.Game) -> Unit {
     let py = pu.y + bob
     let spin = Float::from_int(game.frame_counter) * 0.05
     let size : Float = 0.5
-    let color = if pu.kind == @types.powerup_boost {
+    let color = if pu.kind == Boost {
       @raylib.Color::new(255, 200, 0, 220)
-    } else if pu.kind == @types.powerup_shield {
+    } else if pu.kind == Shield {
       @raylib.Color::new(80, 180, 255, 220)
     } else {
       @raylib.Color::new(255, 80, 60, 220)
@@ -896,7 +896,7 @@ fn @types.Game::draw_surface_indicators(game : @types.Game) -> Unit {
     let mx = (wp0.x + wp1.x) / 2.0
     let my = (wp0.y + wp1.y) / 2.0
     let mz = (wp0.z + wp1.z) / 2.0
-    if seg.surface_type == @types.surface_boost_pad {
+    if seg.surface_type == BoostPad {
       // Boost pad arrows
       let pulse = @math.sinf(Float::from_int(game.frame_counter) * 0.15)
       let alpha_f : Float = 150.0 + pulse * 50.0
@@ -923,7 +923,7 @@ fn @types.Game::draw_surface_indicators(game : @types.Game) -> Unit {
         0.3,
         @raylib.Color::new(255, 255, 100, alpha),
       )
-    } else if seg.surface_type == @types.surface_dirt {
+    } else if seg.surface_type == Dirt {
       // Dirt patch texture
       @raylib.draw_cube(
         @raylib.Vector3::new(mx - 1.0, my + 0.02, mz + 0.5),
@@ -939,7 +939,7 @@ fn @types.Game::draw_surface_indicators(game : @types.Game) -> Unit {
         0.8,
         @raylib.Color::new(150, 120, 75, 60),
       )
-    } else if seg.surface_type == @types.surface_ice {
+    } else if seg.surface_type == SurfaceIce {
       // Ice shimmer
       let shimmer = @math.sinf(
         Float::from_int(game.frame_counter) * 0.1 + Float::from_int(i),
@@ -985,7 +985,7 @@ fn @types.Game::draw_skybox_elements(game : @types.Game) -> Unit {
     )
   }
   // Theme-specific sky objects
-  if theme == @types.theme_night {
+  if theme == Night {
     // Stars in the sky
     for s in 0..<12 {
       let sa = Float::from_int(s) * @types.two_pi / 12.0 +
@@ -1005,7 +1005,7 @@ fn @types.Game::draw_skybox_elements(game : @types.Game) -> Unit {
         @raylib.Color::new(255, 255, 230, star_alpha),
       )
     }
-  } else if theme == @types.theme_volcano {
+  } else if theme == Volcano {
     // Smoke/ash in the air
     for s in 0..<6 {
       let sa = Float::from_int(s) * @types.two_pi / 6.0

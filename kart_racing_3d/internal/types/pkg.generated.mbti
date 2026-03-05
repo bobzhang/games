@@ -34,7 +34,7 @@ pub let bump_spin_threshold : Float
 
 pub fn calc_bump_force(Float, Float) -> (Float, Float)
 
-pub fn calc_drift_level(Float) -> Int
+pub fn calc_drift_level(Float) -> DriftLevel
 
 pub fn calc_rubber_band_mult(Float, Float, Int) -> Float
 
@@ -96,19 +96,13 @@ pub let deco_tree_palm : Int
 
 pub let deco_tree_pine : Int
 
-pub fn detect_surface_type(Game, Float, Float) -> Int
+pub fn detect_surface_type(Game, Float, Float) -> Surface
 
 pub fn distance2d(Float, Float, Float, Float) -> Float
 
 pub let drift_friction_mult : Float
 
-pub let drift_level_mini : Int
-
-pub let drift_level_none : Int
-
-pub let drift_level_super : Int
-
-pub let drift_level_ultra : Int
+pub fn drift_level_to_int(DriftLevel) -> Int
 
 pub let drift_mini_boost : Float
 
@@ -134,11 +128,11 @@ pub fn find_target_ahead(Game, Int) -> Int
 
 pub fn format_time(Float) -> String
 
-pub fn get_drift_boost_duration(Int) -> Float
+pub fn get_drift_boost_duration(DriftLevel) -> Float
 
-pub fn get_drift_boost_power(Int) -> Float
+pub fn get_drift_boost_power(DriftLevel) -> Float
 
-pub fn get_drift_spark_color(Int) -> (Int, Int, Int)
+pub fn get_drift_spark_color(DriftLevel) -> (Int, Int, Int)
 
 pub fn get_kart_accel(Kart) -> Float
 
@@ -152,9 +146,9 @@ pub fn get_kart_weight(Kart) -> Float
 
 pub fn get_segment(Game, Int) -> TrackSegment
 
-pub fn get_surface_grip(Int) -> Float
+pub fn get_surface_grip(Surface) -> Float
 
-pub fn get_surface_speed_mult(Int) -> Float
+pub fn get_surface_speed_mult(Surface) -> Float
 
 pub fn get_track_direction(Game, Int) -> (Float, Float)
 
@@ -258,23 +252,7 @@ pub let player_kart : Int
 
 pub fn position_points(Int) -> Int
 
-pub let powerup_banana : Int
-
-pub let powerup_boost : Int
-
-pub let powerup_lightning : Int
-
-pub let powerup_missile : Int
-
-pub let powerup_none : Int
-
-pub let powerup_oil_slick : Int
-
-pub let powerup_shield : Int
-
-pub let powerup_star : Int
-
-pub let powerup_triple_mushroom : Int
+pub fn powerup_kind_from_int(Int) -> PowerupKind
 
 pub let powerup_type_count : Int
 
@@ -322,37 +300,11 @@ pub let star_duration : Float
 
 pub let star_speed_add : Float
 
-pub let surface_boost_pad : Int
-
-pub let surface_dirt : Int
-
-pub let surface_grass : Int
-
-pub let surface_ice : Int
-
-pub let surface_oil : Int
-
-pub let surface_road : Int
-
-pub let theme_beach : Int
-
-pub let theme_castle : Int
-
-pub let theme_circuit : Int
-
-pub let theme_desert : Int
-
 pub let theme_ground_colors : Array[(Int, Int, Int)]
-
-pub let theme_ice : Int
-
-pub let theme_mountain : Int
-
-pub let theme_night : Int
 
 pub let theme_sky_colors : Array[(Int, Int, Int)]
 
-pub let theme_volcano : Int
+pub fn theme_to_int(Theme) -> Int
 
 pub let total_laps : Int
 
@@ -377,9 +329,17 @@ pub(all) struct CupStanding {
   mut points : Array[Int]
 }
 
+pub(all) enum DriftLevel {
+  DriftNone
+  Mini
+  Super
+  Ultra
+}
+pub impl Eq for DriftLevel
+
 pub(all) struct DroppedItem {
   mut active : Bool
-  mut item_type : Int
+  mut item_type : PowerupKind
   mut x : Float
   mut y : Float
   mut z : Float
@@ -401,7 +361,7 @@ pub(all) struct Game {
   waypoints : Array[Waypoint]
   mut waypoint_count : Int
   segments : Array[TrackSegment]
-  mut track_theme : Int
+  mut track_theme : Theme
   mut track_name : String
   karts : Array[Kart]
   powerups : Array[Powerup]
@@ -467,7 +427,7 @@ pub(all) struct Kart {
   mut waypoint_progress : Float
   mut total_progress : Float
   mut place : Int
-  mut held_powerup : Int
+  mut held_powerup : PowerupKind
   mut item_count : Int
   mut boost_timer : Float
   mut boost_power : Float
@@ -475,7 +435,7 @@ pub(all) struct Kart {
   mut drift_left : Bool
   mut drift_right : Bool
   mut drift_timer : Float
-  mut drift_level : Int
+  mut drift_level : DriftLevel
   mut drift_angle : Float
   mut spin_timer : Float
   mut stunned_timer : Float
@@ -485,7 +445,7 @@ pub(all) struct Kart {
   mut finish_time : Float
   mut finished : Bool
   mut is_player : Bool
-  mut on_surface_type : Int
+  mut on_surface_type : Surface
   mut wrong_way : Bool
   mut wrong_way_timer : Float
   mut air_timer : Float
@@ -526,12 +486,25 @@ pub(all) struct Powerup {
   mut x : Float
   mut y : Float
   mut z : Float
-  mut kind : Int
+  mut kind : PowerupKind
   mut respawn_timer : Float
   mut collected : Bool
   mut bob_offset : Float
 }
 pub fn Powerup::inactive() -> Self
+
+pub(all) enum PowerupKind {
+  NoPowerup
+  Boost
+  Shield
+  Missile
+  OilSlick
+  Lightning
+  Star
+  Banana
+  TripleMushroom
+}
+pub impl Eq for PowerupKind
 
 pub(all) struct Projectile {
   mut active : Bool
@@ -556,9 +529,31 @@ pub(all) struct RaceResult {
 }
 pub fn RaceResult::default() -> Self
 
+pub(all) enum Surface {
+  Road
+  Dirt
+  Grass
+  BoostPad
+  Oil
+  SurfaceIce
+}
+pub impl Eq for Surface
+
+pub(all) enum Theme {
+  Circuit
+  Beach
+  Mountain
+  Castle
+  Desert
+  ThemeIce
+  Night
+  Volcano
+}
+pub impl Eq for Theme
+
 pub(all) struct TrackData {
   mut track_name : String
-  mut theme : Int
+  mut theme : Theme
   mut lap_count : Int
   mut cup_index : Int
   mut segments : Array[TrackSegment]
@@ -567,7 +562,7 @@ pub fn TrackData::default() -> Self
 
 pub(all) struct TrackSegment {
   mut seg_type : Int
-  mut surface_type : Int
+  mut surface_type : Surface
   mut width_mult : Float
   mut banking : Float
   mut has_item_boxes : Bool

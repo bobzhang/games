@@ -30,7 +30,7 @@ pub fn update_dropped_items(game : @types.Game, dt : Float) -> Unit {
       continue
     }
     // Banana rotation animation
-    if item.item_type == @types.powerup_banana {
+    if item.item_type == Banana {
       item.rotation += dt * 2.0
       if item.rotation > @types.two_pi {
         item.rotation -= @types.two_pi
@@ -68,7 +68,7 @@ pub fn check_dropped_item_collisions(game : @types.Game) -> Unit {
       }
       // Don't hit your own item for a brief grace period (first 0.5s)
       let grace_time : Float = item.lifetime
-      let max_life : Float = if item.item_type == @types.powerup_banana {
+      let max_life : Float = if item.item_type == Banana {
         @types.banana_lifetime
       } else {
         @types.oil_slick_lifetime
@@ -112,9 +112,9 @@ pub fn check_dropped_item_collisions(game : @types.Game) -> Unit {
           continue
         }
         // Apply item effect
-        if item.item_type == @types.powerup_banana {
+        if item.item_type == Banana {
           game.apply_banana_hit(ki)
-        } else if item.item_type == @types.powerup_oil_slick {
+        } else if item.item_type == OilSlick {
           game.apply_oil_slick_hit(ki)
         }
         item.active = false
@@ -256,7 +256,7 @@ pub fn update_item_box_respawns(game : @types.Game, dt : Float) -> Unit {
         // Respawn with position-aware item type
         // Items near the start/finish are more likely to be basic
         let variety = @types.rand_range(game, 1, @types.powerup_type_count - 1)
-        pu.kind = variety
+        pu.kind = @types.powerup_kind_from_int(variety)
         // Respawn sparkle
         @types.spawn_typed_particles(
           game,

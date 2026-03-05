@@ -13,32 +13,32 @@ fn main {
     }
     @game.update_game(game, dt)
     @raylib.begin_drawing()
-    let sky_b : Int = if game.weather == @types.weather_storm {
+    let sky_b : Int = if game.weather == Storm {
       80
-    } else if game.weather == @types.weather_fog {
+    } else if game.weather == Fog {
       160
     } else {
       235
     }
-    let sky_g : Int = if game.weather == @types.weather_storm {
+    let sky_g : Int = if game.weather == Storm {
       80
-    } else if game.weather == @types.weather_fog {
+    } else if game.weather == Fog {
       170
     } else {
       206
     }
-    let sky_r : Int = if game.weather == @types.weather_storm {
+    let sky_r : Int = if game.weather == Storm {
       60
-    } else if game.weather == @types.weather_fog {
+    } else if game.weather == Fog {
       180
     } else {
       135
     }
     @raylib.clear_background(@raylib.Color::new(sky_r, sky_g, sky_b, 255))
-    if game.state == @types.state_playing ||
-      game.state == @types.state_paused ||
-      game.state == @types.state_mission_complete ||
-      game.state == @types.state_game_over {
+    if game.state == Playing ||
+      game.state == Paused ||
+      game.state == MissionComplete ||
+      game.state == GameOver {
       @render.draw_world(game)
     }
     @render.draw_ui(game)

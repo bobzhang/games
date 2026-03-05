@@ -226,15 +226,15 @@ fn @types.Game::draw_enemies_3d(game : @types.Game) -> Unit {
       continue
     }
     let flash = e.hit_flash > 0.0
-    if e.kind == @types.enemy_skeleton {
+    if e.kind == Skeleton {
       draw_skeleton(e.x, e.z, flash, game)
-    } else if e.kind == @types.enemy_archer {
+    } else if e.kind == Archer {
       draw_archer(e.x, e.z, flash, game)
-    } else if e.kind == @types.enemy_golem {
+    } else if e.kind == Golem {
       draw_golem(e.x, e.z, flash, game)
-    } else if e.kind == @types.enemy_wraith {
+    } else if e.kind == Wraith {
       draw_wraith(e.x, e.z, flash, game)
-    } else if e.kind == @types.enemy_dragon_boss {
+    } else if e.kind == DragonBoss {
       draw_dragon(e.x, e.z, flash, game)
     }
     // Health bar above enemy
@@ -478,9 +478,9 @@ fn draw_dragon(
 fn draw_enemy_health_bar(e : @types.Enemy, game : @types.Game) -> Unit {
   ignore(game)
   // Draw a simple health bar as cubes above the enemy
-  let bar_y : Float = if e.kind == @types.enemy_dragon_boss {
+  let bar_y : Float = if e.kind == DragonBoss {
     3.0
-  } else if e.kind == @types.enemy_golem {
+  } else if e.kind == Golem {
     2.3
   } else {
     1.8

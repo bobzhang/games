@@ -17,11 +17,11 @@ pub fn draw_clouds(game : @types.Game) -> Unit {
     }
     // Determine cloud color based on weather and time of day
     let tod = game.weather_state.time_of_day
-    let base_gray : Int = if game.weather_state.kind == @types.weather_storm {
+    let base_gray : Int = if game.weather_state.kind == Storm {
       80
-    } else if game.weather_state.kind == @types.weather_rain {
+    } else if game.weather_state.kind == Rain {
       120
-    } else if game.weather_state.kind == @types.weather_night {
+    } else if game.weather_state.kind == Night {
       40
     } else {
       220
@@ -123,7 +123,7 @@ pub fn draw_fog_overlay(game : @types.Game) -> Unit {
   let ws = game.weather_state
   let visibility = ws.visibility
   // Draw ground-level fog cubes near player
-  if ws.kind == @types.weather_fog || ws.kind == @types.weather_storm {
+  if ws.kind == Fog || ws.kind == Storm {
     let player = game.player
     let fog_count = 8
     for i in 0..<fog_count {
@@ -131,7 +131,7 @@ pub fn draw_fog_overlay(game : @types.Game) -> Unit {
       let fog_x = player.x + @math.sinf(seed_f * 2.1) * 40.0
       let fog_z = player.z + @math.cosf(seed_f * 1.7) * 40.0
       let fog_y = @types.terrain_height_at(fog_x, fog_z) + 3.0
-      let fog_alpha : Int = if ws.kind == @types.weather_fog { 60 } else { 40 }
+      let fog_alpha : Int = if ws.kind == Fog { 60 } else { 40 }
       let fog_size_x : Float = 20.0 + @math.sinf(seed_f * 0.9) * 8.0
       let fog_size_y : Float = 4.0 + @math.cosf(seed_f * 1.3) * 2.0
       let fog_size_z : Float = 18.0 + @math.cosf(seed_f * 0.7) * 6.0

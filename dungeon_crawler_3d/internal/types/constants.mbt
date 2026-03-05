@@ -74,54 +74,6 @@ pub let tile_boss_door : Int = 10
 
 // Enemy types
 
-///|
-/// Numeric id for none.
-pub let enemy_none : Int = 0
-
-///|
-/// Numeric id for skeleton.
-pub let enemy_skeleton : Int = 1
-
-///|
-/// Numeric id for archer.
-pub let enemy_archer : Int = 2
-
-///|
-/// Numeric id for golem.
-pub let enemy_golem : Int = 3
-
-///|
-/// Numeric id for wraith.
-pub let enemy_wraith : Int = 4
-
-///|
-/// Numeric id for dragon boss.
-pub let enemy_dragon_boss : Int = 5
-
-///|
-/// Numeric id for slime.
-pub let enemy_slime : Int = 6
-
-///|
-/// Numeric id for bat.
-pub let enemy_bat : Int = 7
-
-///|
-/// Numeric id for spider.
-pub let enemy_spider : Int = 8
-
-///|
-/// Numeric id for minotaur.
-pub let enemy_minotaur : Int = 9
-
-///|
-/// Numeric id for lich.
-pub let enemy_lich : Int = 10
-
-///|
-/// Numeric id for mimic.
-pub let enemy_mimic : Int = 11
-
 // Enemy states
 
 ///|
@@ -180,30 +132,6 @@ pub let loot_boss_key : Int = 9
 
 // Weapon types
 
-///|
-/// Numeric id for sword.
-pub let weapon_sword : Int = 0
-
-///|
-/// Numeric id for axe.
-pub let weapon_axe : Int = 1
-
-///|
-/// Numeric id for mace.
-pub let weapon_mace : Int = 2
-
-///|
-/// Numeric id for dagger.
-pub let weapon_dagger : Int = 3
-
-///|
-/// Numeric id for staff.
-pub let weapon_staff : Int = 4
-
-///|
-/// Numeric id for bow.
-pub let weapon_bow : Int = 5
-
 // Armor types
 
 ///|
@@ -228,55 +156,7 @@ pub let armor_plate : Int = 4
 
 // Spell types
 
-///|
-/// Numeric id for none.
-pub let spell_none : Int = 0
-
-///|
-/// Numeric id for fireball.
-pub let spell_fireball : Int = 1
-
-///|
-/// Numeric id for ice bolt.
-pub let spell_ice_bolt : Int = 2
-
-///|
-/// Numeric id for heal.
-pub let spell_heal : Int = 3
-
-///|
-/// Numeric id for shield.
-pub let spell_shield : Int = 4
-
-///|
-/// Numeric id for lightning.
-pub let spell_lightning : Int = 5
-
-///|
-/// Numeric id for teleport.
-pub let spell_teleport : Int = 6
-
 // Trap types
-
-///|
-/// Numeric id for spike.
-pub let trap_spike : Int = 0
-
-///|
-/// Numeric id for arrow.
-pub let trap_arrow : Int = 1
-
-///|
-/// Numeric id for flame.
-pub let trap_flame : Int = 2
-
-///|
-/// Numeric id for poison.
-pub let trap_poison : Int = 3
-
-///|
-/// Numeric id for pitfall.
-pub let trap_pitfall : Int = 4
 
 // Item rarity
 
@@ -333,18 +213,6 @@ pub let state_shrine : Int = 8
 pub let state_class_select : Int = 11
 
 // Player classes
-
-///|
-/// Numeric id for warrior.
-pub let class_warrior : Int = 0
-
-///|
-/// Numeric id for rogue.
-pub let class_rogue : Int = 1
-
-///|
-/// Numeric id for mage.
-pub let class_mage : Int = 2
 
 // Pools
 
@@ -851,6 +719,60 @@ pub let pi : Float = 3.14159265
 ///|
 /// Mana-related value for mana regen rate.
 pub let mana_regen_rate : Float = 1.5
+
+
+///|
+pub(all) enum ShipClass {
+  Warrior
+  Rogue
+  Mage
+} derive(Eq)
+
+///|
+pub(all) enum EnemyKind {
+  None
+  Skeleton
+  Archer
+  Golem
+  Wraith
+  DragonBoss
+  Slime
+  Bat
+  Spider
+  Minotaur
+  Lich
+  Mimic
+} derive(Eq)
+
+///|
+pub(all) enum Spell {
+  None
+  Fireball
+  IceBolt
+  Heal
+  Shield
+  Lightning
+  Teleport
+} derive(Eq)
+
+///|
+pub(all) enum TrapKind {
+  Spike
+  Arrow
+  Flame
+  Poison
+  Pitfall
+} derive(Eq)
+
+///|
+pub(all) enum WeaponKind {
+  Sword
+  Axe
+  Mace
+  Dagger
+  Staff
+  Bow
+} derive(Eq)
 
 // Boss intro duration
 

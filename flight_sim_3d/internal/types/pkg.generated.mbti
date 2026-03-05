@@ -4,19 +4,11 @@ package "tonyfettes/raylib-examples/flight_sim_3d/internal/types"
 // Values
 pub let ai_disengage_range : Float
 
-pub let ai_engage : Int
-
 pub let ai_engage_range : Float
-
-pub let ai_evade : Int
 
 pub let ai_evade_duration : Float
 
-pub let ai_flee : Int
-
 pub let ai_flee_hp_ratio : Float
-
-pub let ai_patrol : Int
 
 pub let aircraft_bomber : Int
 
@@ -115,12 +107,6 @@ pub let camera_distance : Float
 pub let camera_fovy : Float
 
 pub let camera_height : Float
-
-pub let camera_mode_chase : Int
-
-pub let camera_mode_cockpit : Int
-
-pub let camera_mode_free : Int
 
 pub let camera_smooth : Float
 
@@ -360,20 +346,6 @@ pub fn spawn_smoke(Game, Float, Float, Float, Int) -> Unit
 
 pub let stall_warning_speed_ratio : Float
 
-pub let state_aircraft_select : Int
-
-pub let state_game_over : Int
-
-pub let state_menu : Int
-
-pub let state_mission_briefing : Int
-
-pub let state_mission_complete : Int
-
-pub let state_paused : Int
-
-pub let state_playing : Int
-
 pub let terrain_chunk_scale : Float
 
 pub let terrain_forest_level : Float
@@ -440,27 +412,9 @@ pub let warning_flash_rate : Float
 
 pub let warning_fuel_rate : Float
 
-pub let weapon_bombs : Int
+pub fn weapon_name(WeaponKind) -> String
 
-pub let weapon_machine_gun : Int
-
-pub fn weapon_name(Int) -> String
-
-pub let weapon_rockets : Int
-
-pub let weather_clear : Int
-
-pub let weather_cloudy : Int
-
-pub let weather_fog : Int
-
-pub fn weather_name(Int) -> String
-
-pub let weather_night : Int
-
-pub let weather_rain : Int
-
-pub let weather_storm : Int
+pub fn weather_name(Weather) -> String
 
 pub let wind_clear : Float
 
@@ -477,6 +431,14 @@ pub let wind_storm : Float
 // Errors
 
 // Types and methods
+pub(all) enum AiState {
+  Patrol
+  Engage
+  Evade
+  Flee
+}
+pub impl Eq for AiState
+
 pub(all) struct AircraftStats {
   kind : Int
   name : String
@@ -511,6 +473,13 @@ pub(all) struct Building {
   mut flash_timer : Float
 }
 pub fn Building::inactive() -> Self
+
+pub(all) enum CameraMode {
+  Chase
+  Cockpit
+  Free
+}
+pub impl Eq for CameraMode
 
 pub(all) struct Checkpoint {
   mut active : Bool
@@ -553,7 +522,7 @@ pub(all) struct Enemy {
   mut orbit_angle : Float
   mut orbit_radius : Float
   mut target_y : Float
-  mut ai_state : Int
+  mut ai_state : AiState
   mut patrol_cx : Float
   mut patrol_cz : Float
   mut patrol_index : Int
@@ -565,7 +534,7 @@ pub(all) struct Enemy {
 pub fn Enemy::inactive() -> Self
 
 pub(all) struct Game {
-  mut state : Int
+  mut state : GameState
   player : Player
   mut cam_x : Float
   mut cam_y : Float
@@ -573,7 +542,7 @@ pub(all) struct Game {
   mut cam_target_x : Float
   mut cam_target_y : Float
   mut cam_target_z : Float
-  mut camera_mode : Int
+  mut camera_mode : CameraMode
   mut current_mission : Int
   mut mission_timer : Float
   mut missions_completed : Int
@@ -590,7 +559,7 @@ pub(all) struct Game {
   mut last_terrain_cx : Int
   mut last_terrain_cz : Int
   weather_state : WeatherState
-  mut weather : Int
+  mut weather : Weather
   mut draw_distance : Float
   mut score : Int
   mut kills : Int
@@ -624,13 +593,24 @@ pub(all) struct GameMessage {
 }
 pub fn GameMessage::empty() -> Self
 
+pub(all) enum GameState {
+  Menu
+  Playing
+  Paused
+  MissionComplete
+  GameOver
+  AircraftSelect
+  MissionBriefing
+}
+pub impl Eq for GameState
+
 pub(all) struct Mission {
   name : String
   kind : Int
   description : String
   mut target_count : Int
   mut targets_done : Int
-  weather : Int
+  weather : Weather
   enemy_count : Int
   enemy_air_count : Int
   has_landing : Bool
@@ -682,7 +662,7 @@ pub(all) struct Player {
   mut ammo_mg : Int
   mut ammo_rockets : Int
   mut ammo_bombs : Int
-  mut current_weapon : Int
+  mut current_weapon : WeaponKind
   mut stalling : Bool
   mut stall_timer : Float
   mut damage_smoke : Bool
@@ -743,8 +723,25 @@ pub(all) struct Turret {
 }
 pub fn Turret::inactive() -> Self
 
+pub(all) enum WeaponKind {
+  MachineGun
+  Rockets
+  Bombs
+}
+pub impl Eq for WeaponKind
+
+pub(all) enum Weather {
+  Clear
+  Cloudy
+  Fog
+  Rain
+  Storm
+  Night
+}
+pub impl Eq for Weather
+
 pub(all) struct WeatherState {
-  mut kind : Int
+  mut kind : Weather
   mut visibility : Float
   mut turbulence : Float
   mut wind_dir_x : Float
@@ -755,7 +752,7 @@ pub(all) struct WeatherState {
   mut time_of_day : Float
 }
 pub fn WeatherState::new() -> Self
-pub fn WeatherState::set_weather(Self, Int) -> Unit
+pub fn WeatherState::set_weather(Self, Weather) -> Unit
 
 // Type aliases
 

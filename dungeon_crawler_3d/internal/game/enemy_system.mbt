@@ -38,7 +38,7 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
       }
     }
     // Mimic special: don't move until alerted
-    if e.kind == @types.enemy_mimic && not(e.alerted) {
+    if e.kind == Mimic && not(e.alerted) {
       continue
     }
     // Check if player is in sight range
@@ -63,27 +63,27 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     let dz = game.player_z - e.z
     e.facing_angle = @math.atan2f(dx, dz)
     // Movement and AI based on type
-    if e.kind == @types.enemy_skeleton {
+    if e.kind == Skeleton {
       game.update_melee_enemy(e, dt, dist)
-    } else if e.kind == @types.enemy_golem {
+    } else if e.kind == Golem {
       game.update_melee_enemy(e, dt, dist)
-    } else if e.kind == @types.enemy_wraith {
+    } else if e.kind == Wraith {
       game.update_melee_enemy(e, dt, dist)
-    } else if e.kind == @types.enemy_dragon_boss {
+    } else if e.kind == DragonBoss {
       game.update_boss_enemy(e, dt, dist)
-    } else if e.kind == @types.enemy_archer {
+    } else if e.kind == Archer {
       game.update_archer_enemy(e, dt, dist)
-    } else if e.kind == @types.enemy_slime {
+    } else if e.kind == Slime {
       game.update_slime_enemy(e, dt, dist)
-    } else if e.kind == @types.enemy_bat {
+    } else if e.kind == Bat {
       game.update_bat_enemy(e, dt, dist)
-    } else if e.kind == @types.enemy_spider {
+    } else if e.kind == Spider {
       game.update_spider_enemy(e, dt, dist)
-    } else if e.kind == @types.enemy_minotaur {
+    } else if e.kind == Minotaur {
       game.update_minotaur_enemy(e, dt, dist)
-    } else if e.kind == @types.enemy_lich {
+    } else if e.kind == Lich {
       game.update_lich_enemy(e, dt, dist)
-    } else if e.kind == @types.enemy_mimic {
+    } else if e.kind == Mimic {
       game.update_melee_enemy(e, dt, dist)
     }
   }
@@ -130,18 +130,18 @@ fn @types.Game::update_melee_enemy(
   dist : Float,
 ) -> Unit {
   // Choose move speed based on type
-  let base_speed : Float = if e.kind == @types.enemy_wraith {
+  let base_speed : Float = if e.kind == Wraith {
     @types.wraith_move_speed
-  } else if e.kind == @types.enemy_golem {
+  } else if e.kind == Golem {
     @types.golem_move_speed
-  } else if e.kind == @types.enemy_dragon_boss {
+  } else if e.kind == DragonBoss {
     @types.golem_move_speed
   } else {
     @types.enemy_move_speed
   }
   let move_speed = base_speed * e.speed_mult
   // Move towards player if not in melee range
-  let melee_range : Float = if e.kind == @types.enemy_dragon_boss {
+  let melee_range : Float = if e.kind == DragonBoss {
     @types.enemy_melee_range + 1.0
   } else {
     @types.enemy_melee_range
@@ -571,7 +571,7 @@ fn @types.Game::update_boss_enemy(
       if pidx >= 0 {
         let p = game.projectiles[pidx]
         p.active = true
-        p.kind = @types.spell_fireball
+        p.kind = Fireball
         p.x = e.x
         p.z = e.z
         p.vx = @math.sinf(angle) * 6.0
@@ -597,7 +597,7 @@ fn @types.Game::shoot_projectile(game : @types.Game, e : @types.Enemy) -> Unit {
   }
   let p = game.projectiles[idx]
   p.active = true
-  p.kind = 0
+  p.kind = None
   p.x = e.x
   p.z = e.z
   // Direction toward player
@@ -626,7 +626,7 @@ fn @types.Game::shoot_web(game : @types.Game, e : @types.Enemy) -> Unit {
   }
   let p = game.projectiles[idx]
   p.active = true
-  p.kind = @types.spell_ice_bolt // Reuse ice_bolt visual
+  p.kind = IceBolt // Reuse ice_bolt visual
   p.x = e.x
   p.z = e.z
   let dx = game.player_x - e.x
@@ -654,7 +654,7 @@ fn @types.Game::shoot_lich_bolt(game : @types.Game, e : @types.Enemy) -> Unit {
   }
   let p = game.projectiles[idx]
   p.active = true
-  p.kind = @types.spell_lightning
+  p.kind = Lightning
   p.x = e.x
   p.z = e.z
   let dx = game.player_x - e.x
@@ -683,7 +683,7 @@ fn @types.Game::summon_skeleton(game : @types.Game, e : @types.Enemy) -> Unit {
   }
   let se = game.enemies[idx]
   se.active = true
-  se.kind = @types.enemy_skeleton
+  se.kind = Skeleton
   // Spawn near the lich
   se.x = e.x + @types.rand_rangef(game, -2.0, 2.0)
   se.z = e.z + @types.rand_rangef(game, -2.0, 2.0)

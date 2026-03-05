@@ -4,7 +4,7 @@
 /// Runtime enemy entity used by AI, combat, and rendering systems.
 pub(all) struct Enemy {
   mut active : Bool
-  mut kind : Int
+  mut kind : EnemyKind
   mut x : Float
   mut z : Float
   mut hp : Int
@@ -31,7 +31,7 @@ pub(all) struct Enemy {
 pub fn Enemy::inactive() -> Enemy {
   {
     active: false,
-    kind: enemy_none,
+    kind: None,
     x: 0.0,
     z: 0.0,
     hp: 0,
@@ -60,7 +60,7 @@ pub fn Enemy::inactive() -> Enemy {
 /// Runtime projectile entity for enemy attacks and player spells.
 pub(all) struct Projectile {
   mut active : Bool
-  mut kind : Int
+  mut kind : Spell
   mut x : Float
   mut z : Float
   mut vx : Float
@@ -77,7 +77,7 @@ pub(all) struct Projectile {
 pub fn Projectile::inactive() -> Projectile {
   {
     active: false,
-    kind: 0,
+    kind: None,
     x: 0.0,
     z: 0.0,
     vx: 0.0,
@@ -182,7 +182,7 @@ pub fn InvItem::empty() -> InvItem {
 /// Trap entity placed on the dungeon grid with arming and trigger state.
 pub(all) struct Trap {
   mut active : Bool
-  mut kind : Int
+  mut kind : TrapKind
   mut gx : Int
   mut gz : Int
   mut armed : Bool
@@ -196,7 +196,7 @@ pub(all) struct Trap {
 pub fn Trap::inactive() -> Trap {
   {
     active: false,
-    kind: trap_spike,
+    kind: Spike,
     gx: 0,
     gz: 0,
     armed: true,
@@ -334,14 +334,14 @@ pub fn FloorInfo::new() -> FloorInfo {
 ///|
 /// Spell slot in the player's loadout bar.
 pub(all) struct SpellSlot {
-  mut spell_type : Int
+  mut spell_type : Spell
   mut active : Bool
 }
 
 ///|
 /// Creates an inactive spell slot.
 pub fn SpellSlot::empty() -> SpellSlot {
-  { spell_type: spell_none, active: false }
+  { spell_type: None, active: false }
 }
 
 // Active buff on player
@@ -408,9 +408,9 @@ pub(all) struct Game {
   mut player_gold : Int
   mut player_keys : Int
   mut player_boss_keys : Int
-  mut player_weapon : Int
+  mut player_weapon : WeaponKind
   mut player_armor : Int
-  mut player_class : Int
+  mut player_class : ShipClass
   mut player_kills : Int
   mut player_total_gold : Int
 
@@ -578,9 +578,9 @@ pub fn Game::new() -> Game {
     player_gold: 0,
     player_keys: 0,
     player_boss_keys: 0,
-    player_weapon: weapon_sword,
+    player_weapon: Sword,
     player_armor: armor_none,
-    player_class: class_warrior,
+    player_class: Warrior,
     player_kills: 0,
     player_total_gold: 0,
     swing_timer: 0.0,

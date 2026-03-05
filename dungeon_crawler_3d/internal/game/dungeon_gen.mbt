@@ -213,7 +213,7 @@ fn @types.Game::place_enemies(game : @types.Game) -> Unit {
   // Place skeletons
   for i in 0..<num_skeletons {
     game.spawn_enemy_in_room(
-      @types.enemy_skeleton,
+      Skeleton,
       20 + hp_scale,
       5 + atk_scale,
       2 + def_scale,
@@ -225,7 +225,7 @@ fn @types.Game::place_enemies(game : @types.Game) -> Unit {
   // Place archers
   for i in 0..<num_archers {
     game.spawn_enemy_in_room(
-      @types.enemy_archer,
+      Archer,
       15 + hp_scale,
       4 + atk_scale,
       1 + def_scale,
@@ -237,7 +237,7 @@ fn @types.Game::place_enemies(game : @types.Game) -> Unit {
   // Place golems
   for i in 0..<num_golems {
     game.spawn_enemy_in_room(
-      @types.enemy_golem,
+      Golem,
       50 + hp_scale * 2,
       8 + atk_scale,
       5 + def_scale * 2,
@@ -249,7 +249,7 @@ fn @types.Game::place_enemies(game : @types.Game) -> Unit {
   // Place wraiths
   for i in 0..<num_wraiths {
     game.spawn_enemy_in_room(
-      @types.enemy_wraith,
+      Wraith,
       18 + hp_scale,
       6 + atk_scale,
       1 + def_scale,
@@ -267,7 +267,7 @@ fn @types.Game::place_enemies(game : @types.Game) -> Unit {
     if idx >= 0 {
       let e = game.enemies[idx]
       e.active = true
-      e.kind = @types.enemy_dragon_boss
+      e.kind = DragonBoss
       e.x = wx
       e.z = wz
       e.hp = @levels.get_boss_hp(game.current_floor)
@@ -304,7 +304,7 @@ fn @types.Game::place_extended_enemies(game : @types.Game) -> Unit {
   // Place slimes
   for i in 0..<num_slimes {
     game.spawn_enemy_in_room(
-      @types.enemy_slime,
+      Slime,
       12 + hp_scale,
       3 + atk_scale,
       0 + def_scale,
@@ -316,7 +316,7 @@ fn @types.Game::place_extended_enemies(game : @types.Game) -> Unit {
   // Place bats
   for i in 0..<num_bats {
     game.spawn_enemy_in_room(
-      @types.enemy_bat,
+      Bat,
       8 + hp_scale / 2,
       4 + atk_scale,
       0,
@@ -328,7 +328,7 @@ fn @types.Game::place_extended_enemies(game : @types.Game) -> Unit {
   // Place spiders
   for i in 0..<num_spiders {
     game.spawn_enemy_in_room(
-      @types.enemy_spider,
+      Spider,
       16 + hp_scale,
       6 + atk_scale,
       2 + def_scale,
@@ -340,7 +340,7 @@ fn @types.Game::place_extended_enemies(game : @types.Game) -> Unit {
   // Place minotaurs
   for i in 0..<num_minotaurs {
     game.spawn_enemy_in_room(
-      @types.enemy_minotaur,
+      Minotaur,
       45 + hp_scale * 2,
       10 + atk_scale,
       4 + def_scale * 2,
@@ -352,7 +352,7 @@ fn @types.Game::place_extended_enemies(game : @types.Game) -> Unit {
   // Place lichs
   for i in 0..<num_lichs {
     game.spawn_enemy_in_room(
-      @types.enemy_lich,
+      Lich,
       30 + hp_scale,
       8 + atk_scale * 2,
       3 + def_scale,
@@ -367,7 +367,7 @@ fn @types.Game::place_extended_enemies(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::spawn_enemy_in_room(
   game : @types.Game,
-  kind : Int,
+  kind : @types.EnemyKind,
   hp : Int,
   atk : Int,
   def : Int,
@@ -569,7 +569,7 @@ fn @types.Game::place_chests(game : @types.Game) -> Unit {
           if idx >= 0 {
             let e = game.enemies[idx]
             e.active = true
-            e.kind = @types.enemy_mimic
+            e.kind = Mimic
             e.x = @types.grid_to_world_x(gx)
             e.z = @types.grid_to_world_z(gy)
             let hp_s = @levels.get_enemy_hp_scale(game.current_floor)
@@ -615,9 +615,11 @@ fn @types.Game::place_traps(game : @types.Game) -> Unit {
       @types.set_tile(game, gx, gy, @types.tile_trap)
       let trap = game.traps[idx]
       trap.active = true
-      trap.kind = @levels.get_available_trap_type(
-        game.current_floor,
-        @types.rand_next(game),
+      trap.kind = @types.trap_kind_from_int(
+        @levels.get_available_trap_type(
+          game.current_floor,
+          @types.rand_next(game),
+        ),
       )
       trap.gx = gx
       trap.gz = gy

@@ -247,7 +247,7 @@ fn @types.Game::update_camera_chase(game : @types.Game, dt : Float) -> Unit {
   // Camera shake when stunned or on rough surfaces
   if kart.spin_timer > 0.0 || kart.stunned_timer > 0.0 {
     game.camera_shake = @types.lerpf(game.camera_shake, 0.3, 0.1)
-  } else if kart.on_surface_type == @types.surface_dirt {
+  } else if kart.on_surface_type == Dirt {
     game.camera_shake = @types.lerpf(game.camera_shake, 0.05, 0.1)
   } else {
     game.camera_shake = @types.lerpf(game.camera_shake, 0.0, 0.1)
@@ -278,7 +278,7 @@ fn @types.Game::update_kart_surface(game : @types.Game, kart_idx : Int) -> Unit 
   }
   kart.on_surface_type = @types.detect_surface_type(game, kart.x, kart.z)
   // Boost pad effect
-  if kart.on_surface_type == @types.surface_boost_pad && kart.on_ground {
+  if kart.on_surface_type == BoostPad && kart.on_ground {
     if kart.boost_timer < 0.3 {
       kart.boost_timer = 0.3
       kart.boost_power = @types.boost_speed_add * 0.5
@@ -371,11 +371,11 @@ fn @types.Game::emit_surface_particles(game : @types.Game) -> Unit {
       continue
     }
     // Dust on dirt/grass
-    if kart.on_surface_type == @types.surface_dirt ||
-      kart.on_surface_type == @types.surface_grass {
+    if kart.on_surface_type == Dirt ||
+      kart.on_surface_type == Grass {
       if game.frame_counter % 6 == i % 6 {
         let dc : (Int, Int, Int) = if kart.on_surface_type ==
-          @types.surface_dirt {
+          Dirt {
           (160, 130, 80)
         } else {
           (80, 140, 60)
@@ -396,7 +396,7 @@ fn @types.Game::emit_surface_particles(game : @types.Game) -> Unit {
       }
     }
     // Sparks on boost pad
-    if kart.on_surface_type == @types.surface_boost_pad {
+    if kart.on_surface_type == BoostPad {
       if game.frame_counter % 3 == i % 3 {
         @types.spawn_typed_particles(
           game,
@@ -414,7 +414,7 @@ fn @types.Game::emit_surface_particles(game : @types.Game) -> Unit {
       }
     }
     // Ice spray on ice surface
-    if kart.on_surface_type == @types.surface_ice {
+    if kart.on_surface_type == SurfaceIce {
       if game.frame_counter % 8 == i % 8 {
         @types.spawn_typed_particles(
           game,

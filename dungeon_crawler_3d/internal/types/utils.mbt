@@ -421,18 +421,18 @@ pub fn add_message(
 
 ///|
 /// Returns melee/ranged reach for the given weapon type.
-pub fn get_weapon_range(weapon_type : Int) -> Float {
-  if weapon_type == weapon_sword {
+pub fn get_weapon_range(weapon_type : WeaponKind) -> Float {
+  if weapon_type == Sword {
     sword_range
-  } else if weapon_type == weapon_axe {
+  } else if weapon_type == Axe {
     axe_range
-  } else if weapon_type == weapon_mace {
+  } else if weapon_type == Mace {
     mace_range
-  } else if weapon_type == weapon_dagger {
+  } else if weapon_type == Dagger {
     dagger_range
-  } else if weapon_type == weapon_staff {
+  } else if weapon_type == Staff {
     staff_range
-  } else if weapon_type == weapon_bow {
+  } else if weapon_type == Bow {
     bow_range
   } else {
     sword_range
@@ -441,18 +441,18 @@ pub fn get_weapon_range(weapon_type : Int) -> Float {
 
 ///|
 /// Returns attack cooldown duration in seconds for the given weapon type.
-pub fn get_weapon_cooldown(weapon_type : Int) -> Float {
-  if weapon_type == weapon_sword {
+pub fn get_weapon_cooldown(weapon_type : WeaponKind) -> Float {
+  if weapon_type == Sword {
     sword_cooldown
-  } else if weapon_type == weapon_axe {
+  } else if weapon_type == Axe {
     axe_cooldown
-  } else if weapon_type == weapon_mace {
+  } else if weapon_type == Mace {
     mace_cooldown
-  } else if weapon_type == weapon_dagger {
+  } else if weapon_type == Dagger {
     dagger_cooldown
-  } else if weapon_type == weapon_staff {
+  } else if weapon_type == Staff {
     staff_cooldown
-  } else if weapon_type == weapon_bow {
+  } else if weapon_type == Bow {
     bow_cooldown
   } else {
     sword_cooldown
@@ -461,18 +461,18 @@ pub fn get_weapon_cooldown(weapon_type : Int) -> Float {
 
 ///|
 /// Returns attack damage multiplier for the given weapon type.
-pub fn get_weapon_damage_mult(weapon_type : Int) -> Float {
-  if weapon_type == weapon_sword {
+pub fn get_weapon_damage_mult(weapon_type : WeaponKind) -> Float {
+  if weapon_type == Sword {
     sword_damage_mult
-  } else if weapon_type == weapon_axe {
+  } else if weapon_type == Axe {
     axe_damage_mult
-  } else if weapon_type == weapon_mace {
+  } else if weapon_type == Mace {
     mace_damage_mult
-  } else if weapon_type == weapon_dagger {
+  } else if weapon_type == Dagger {
     dagger_damage_mult
-  } else if weapon_type == weapon_staff {
+  } else if weapon_type == Staff {
     staff_damage_mult
-  } else if weapon_type == weapon_bow {
+  } else if weapon_type == Bow {
     bow_damage_mult
   } else {
     sword_damage_mult
@@ -481,18 +481,18 @@ pub fn get_weapon_damage_mult(weapon_type : Int) -> Float {
 
 ///|
 /// Returns display name for a weapon type id.
-pub fn get_weapon_name(weapon_type : Int) -> String {
-  if weapon_type == weapon_sword {
+pub fn get_weapon_name(weapon_type : WeaponKind) -> String {
+  if weapon_type == Sword {
     "Sword"
-  } else if weapon_type == weapon_axe {
+  } else if weapon_type == Axe {
     "Axe"
-  } else if weapon_type == weapon_mace {
+  } else if weapon_type == Mace {
     "Mace"
-  } else if weapon_type == weapon_dagger {
+  } else if weapon_type == Dagger {
     "Dagger"
-  } else if weapon_type == weapon_staff {
+  } else if weapon_type == Staff {
     "Staff"
-  } else if weapon_type == weapon_bow {
+  } else if weapon_type == Bow {
     "Bow"
   } else {
     "Unknown"
@@ -517,18 +517,18 @@ pub fn get_armor_defense(armor_type : Int) -> Int {
 
 ///|
 /// Returns display name for a spell type id.
-pub fn get_spell_name(spell_type : Int) -> String {
-  if spell_type == spell_fireball {
+pub fn get_spell_name(spell_type : Spell) -> String {
+  if spell_type == Fireball {
     "Fireball"
-  } else if spell_type == spell_ice_bolt {
+  } else if spell_type == IceBolt {
     "Ice Bolt"
-  } else if spell_type == spell_heal {
+  } else if spell_type == Heal {
     "Heal"
-  } else if spell_type == spell_shield {
+  } else if spell_type == Shield {
     "Shield"
-  } else if spell_type == spell_lightning {
+  } else if spell_type == Lightning {
     "Lightning"
-  } else if spell_type == spell_teleport {
+  } else if spell_type == Teleport {
     "Teleport"
   } else {
     "None"
@@ -537,18 +537,18 @@ pub fn get_spell_name(spell_type : Int) -> String {
 
 ///|
 /// Returns mana cost for a spell type.
-pub fn get_spell_mana_cost(spell_type : Int) -> Int {
-  if spell_type == spell_fireball {
+pub fn get_spell_mana_cost(spell_type : Spell) -> Int {
+  if spell_type == Fireball {
     fireball_mana_cost
-  } else if spell_type == spell_ice_bolt {
+  } else if spell_type == IceBolt {
     ice_bolt_mana_cost
-  } else if spell_type == spell_heal {
+  } else if spell_type == Heal {
     heal_mana_cost
-  } else if spell_type == spell_shield {
+  } else if spell_type == Shield {
     shield_mana_cost
-  } else if spell_type == spell_lightning {
+  } else if spell_type == Lightning {
     lightning_mana_cost
-  } else if spell_type == spell_teleport {
+  } else if spell_type == Teleport {
     teleport_mana_cost
   } else {
     0
@@ -590,28 +590,28 @@ pub fn calc_player_attack(game : Game) -> Int {
 
 ///|
 /// Returns display name for an enemy kind id.
-pub fn get_enemy_name(kind : Int) -> String {
-  if kind == enemy_skeleton {
+pub fn get_enemy_name(kind : EnemyKind) -> String {
+  if kind == Skeleton {
     "Skeleton"
-  } else if kind == enemy_archer {
+  } else if kind == Archer {
     "Archer"
-  } else if kind == enemy_golem {
+  } else if kind == Golem {
     "Golem"
-  } else if kind == enemy_wraith {
+  } else if kind == Wraith {
     "Wraith"
-  } else if kind == enemy_dragon_boss {
+  } else if kind == DragonBoss {
     "Dragon"
-  } else if kind == enemy_slime {
+  } else if kind == Slime {
     "Slime"
-  } else if kind == enemy_bat {
+  } else if kind == Bat {
     "Bat"
-  } else if kind == enemy_spider {
+  } else if kind == Spider {
     "Spider"
-  } else if kind == enemy_minotaur {
+  } else if kind == Minotaur {
     "Minotaur"
-  } else if kind == enemy_lich {
+  } else if kind == Lich {
     "Lich"
-  } else if kind == enemy_mimic {
+  } else if kind == Mimic {
     "Mimic"
   } else {
     "Unknown"
@@ -764,6 +764,76 @@ pub fn get_loot_name(kind : Int) -> String {
     "Boss Key"
   } else {
     "Unknown"
+  }
+}
+
+///|
+/// Converts an integer to a TrapKind enum value.
+pub fn trap_kind_from_int(n : Int) -> TrapKind {
+  if n == 0 {
+    Spike
+  } else if n == 1 {
+    Arrow
+  } else if n == 2 {
+    Flame
+  } else if n == 3 {
+    Poison
+  } else if n == 4 {
+    Pitfall
+  } else {
+    Spike
+  }
+}
+
+///|
+/// Cycles to the next weapon in order.
+pub fn next_weapon(w : WeaponKind) -> WeaponKind {
+  if w == Sword {
+    Axe
+  } else if w == Axe {
+    Mace
+  } else if w == Mace {
+    Dagger
+  } else if w == Dagger {
+    Staff
+  } else if w == Staff {
+    Bow
+  } else {
+    Sword
+  }
+}
+
+///|
+/// Converts an integer to a Spell enum value.
+pub fn spell_from_int(n : Int) -> Spell {
+  if n == 1 {
+    Fireball
+  } else if n == 2 {
+    IceBolt
+  } else if n == 3 {
+    Heal
+  } else if n == 4 {
+    Shield
+  } else if n == 5 {
+    Lightning
+  } else if n == 6 {
+    Teleport
+  } else {
+    None
+  }
+}
+
+///|
+/// Converts an integer to a ShipClass enum value.
+pub fn ship_class_from_int(n : Int) -> ShipClass {
+  if n == 0 {
+    Warrior
+  } else if n == 1 {
+    Rogue
+  } else if n == 2 {
+    Mage
+  } else {
+    Warrior
   }
 }
 

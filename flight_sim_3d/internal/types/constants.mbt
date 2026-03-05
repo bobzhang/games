@@ -10,34 +10,6 @@ pub let screen_height : Int = 720
 
 // Game states
 
-///|
-/// Game state identifier for the main menu screen.
-pub let state_menu : Int = 0
-
-///|
-/// Game state identifier for active gameplay.
-pub let state_playing : Int = 1
-
-///|
-/// Game state identifier for the pause screen.
-pub let state_paused : Int = 2
-
-///|
-/// Game state identifier for the mission complete screen.
-pub let state_mission_complete : Int = 3
-
-///|
-/// Game state identifier for the game over screen.
-pub let state_game_over : Int = 4
-
-///|
-/// Game state identifier for the aircraft selection screen.
-pub let state_aircraft_select : Int = 5
-
-///|
-/// Game state identifier for the mission briefing screen.
-pub let state_mission_briefing : Int = 6
-
 // PI constant
 
 ///|
@@ -320,18 +292,6 @@ pub let camera_height : Float = 4.0
 /// Camera interpolation smoothing speed.
 pub let camera_smooth : Float = 5.0
 
-///|
-/// Camera mode identifier for third-person chase view.
-pub let camera_mode_chase : Int = 0
-
-///|
-/// Camera mode identifier for first-person cockpit view.
-pub let camera_mode_cockpit : Int = 1
-
-///|
-/// Camera mode identifier for free orbiting view.
-pub let camera_mode_free : Int = 2
-
 // Terrain
 
 ///|
@@ -363,18 +323,6 @@ pub let terrain_snow_level : Float = 12.0
 pub let terrain_forest_level : Float = 5.0
 
 // Weapon types
-
-///|
-/// Weapon type identifier for machine guns.
-pub let weapon_machine_gun : Int = 0
-
-///|
-/// Weapon type identifier for rockets.
-pub let weapon_rockets : Int = 1
-
-///|
-/// Weapon type identifier for bombs.
-pub let weapon_bombs : Int = 2
 
 // Machine gun parameters
 
@@ -469,22 +417,6 @@ pub let enemy_type_air : Int = 0
 pub let enemy_type_ground : Int = 1
 
 // Enemy AI states
-
-///|
-/// AI state identifier for patrol behavior.
-pub let ai_patrol : Int = 0
-
-///|
-/// AI state identifier for engaging the player.
-pub let ai_engage : Int = 1
-
-///|
-/// AI state identifier for evasive maneuvers.
-pub let ai_evade : Int = 2
-
-///|
-/// AI state identifier for fleeing when critically damaged.
-pub let ai_flee : Int = 3
 
 // Enemy AI parameters
 
@@ -664,30 +596,6 @@ pub let total_missions : Int = 15
 
 // Weather
 
-///|
-/// Weather type identifier for clear skies.
-pub let weather_clear : Int = 0
-
-///|
-/// Weather type identifier for cloudy conditions.
-pub let weather_cloudy : Int = 1
-
-///|
-/// Weather type identifier for heavy fog.
-pub let weather_fog : Int = 2
-
-///|
-/// Weather type identifier for rain.
-pub let weather_rain : Int = 3
-
-///|
-/// Weather type identifier for severe storms.
-pub let weather_storm : Int = 4
-
-///|
-/// Weather type identifier for nighttime conditions.
-pub let weather_night : Int = 5
-
 // Weather parameters
 
 ///|
@@ -865,5 +773,49 @@ pub let warning_fuel_rate : Float = 3.0
 ///|
 /// Low-altitude warning flash rate in Hz.
 pub let warning_altitude_rate : Float = 5.0
+
+
+///|
+pub(all) enum AiState {
+  Patrol
+  Engage
+  Evade
+  Flee
+} derive(Eq)
+
+///|
+pub(all) enum CameraMode {
+  Chase
+  Cockpit
+  Free
+} derive(Eq)
+
+///|
+pub(all) enum GameState {
+  Menu
+  Playing
+  Paused
+  MissionComplete
+  GameOver
+  AircraftSelect
+  MissionBriefing
+} derive(Eq)
+
+///|
+pub(all) enum WeaponKind {
+  MachineGun
+  Rockets
+  Bombs
+} derive(Eq)
+
+///|
+pub(all) enum Weather {
+  Clear
+  Cloudy
+  Fog
+  Rain
+  Storm
+  Night
+} derive(Eq)
 
 // Mission par times (for time bonus calculation)

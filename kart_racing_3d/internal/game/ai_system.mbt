@@ -74,13 +74,13 @@ pub fn update_ai_karts(game : @types.Game, dt : Float) -> Unit {
           kart.drift_right = true
         }
         kart.drift_timer = 0.0
-        kart.drift_level = @types.drift_level_none
+        kart.drift_level = DriftNone
       }
       kart.drift_timer += dt
       kart.drift_level = @types.calc_drift_level(kart.drift_timer)
     } else {
       // Release drift for boost
-      if kart.drift_level > @types.drift_level_none {
+      if kart.drift_level != DriftNone {
         let drift_mult = @types.get_kart_drift_boost_mult(kart)
         let boost_power = @types.get_drift_boost_power(kart.drift_level) *
           drift_mult
@@ -91,7 +91,7 @@ pub fn update_ai_karts(game : @types.Game, dt : Float) -> Unit {
       kart.drift_left = false
       kart.drift_right = false
       kart.drift_timer = 0.0
-      kart.drift_level = @types.drift_level_none
+      kart.drift_level = DriftNone
     }
     // AI braking for sharp turns ahead
     let next_seg_idx = (kart.waypoint_idx + 1) % wc
@@ -186,7 +186,7 @@ fn @types.Game::ai_use_item(
   dt : Float,
 ) -> Unit {
   let kart = game.karts[kart_idx]
-  if kart.held_powerup == @types.powerup_none {
+  if kart.held_powerup == NoPowerup {
     return
   }
   kart.ai_use_item_timer -= dt
@@ -198,8 +198,8 @@ fn @types.Game::ai_use_item(
       max=3,
     )]
   let item = kart.held_powerup
-  let should_use : Bool = if item == @types.powerup_boost ||
-    item == @types.powerup_triple_mushroom {
+  let should_use : Bool = if item == Boost ||
+    item == TripleMushroom {
     // Use boost anytime (not in sharp turn)
     let wc = game.waypoint_count
     let next_wp = @types.get_waypoint(game, (kart.waypoint_idx + 1) % wc)
@@ -207,10 +207,10 @@ fn @types.Game::ai_use_item(
     let dz = next_wp.z - kart.z
     let turn = @types.angle_diff(kart.angle, @math.atan2f(dx, dz)).abs()
     turn < 0.5
-  } else if item == @types.powerup_shield {
+  } else if item == Shield {
     // Use shield when in danger (near opponents)
     game.has_nearby_opponent(kart_idx, 15.0)
-  } else if item == @types.powerup_missile {
+  } else if item == Missile {
     // Fire when someone is ahead and fairly close
     let target = @types.find_target_ahead(game, kart_idx)
     if target >= 0 {
@@ -224,13 +224,13 @@ fn @types.Game::ai_use_item(
     } else {
       false
     }
-  } else if item == @types.powerup_oil_slick || item == @types.powerup_banana {
+  } else if item == OilSlick || item == Banana {
     // Drop behind when someone is close behind
     game.has_nearby_opponent_behind(kart_idx, 10.0)
-  } else if item == @types.powerup_lightning {
+  } else if item == Lightning {
     // Use when in lower positions
     kart.place >= 4
-  } else if item == @types.powerup_star {
+  } else if item == Star {
     // Use when near opponents to ram them
     game.has_nearby_opponent(kart_idx, 12.0) || kart.place >= 3
   } else {

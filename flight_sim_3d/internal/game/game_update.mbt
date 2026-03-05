@@ -6,19 +6,19 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   game.update_particles(dt)
   game.update_messages(dt)
-  if game.state == @types.state_menu {
+  if game.state == Menu {
     game.update_menu(dt)
-  } else if game.state == @types.state_aircraft_select {
+  } else if game.state == AircraftSelect {
     game.update_aircraft_select(dt)
-  } else if game.state == @types.state_mission_briefing {
+  } else if game.state == MissionBriefing {
     game.update_briefing()
-  } else if game.state == @types.state_playing {
+  } else if game.state == Playing {
     game.update_playing(dt)
-  } else if game.state == @types.state_paused {
+  } else if game.state == Paused {
     game.update_paused()
-  } else if game.state == @types.state_mission_complete {
+  } else if game.state == MissionComplete {
     game.update_mission_complete()
-  } else if game.state == @types.state_game_over {
+  } else if game.state == GameOver {
     game.update_game_over()
   }
 }
@@ -41,7 +41,7 @@ fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     game.current_mission = game.menu_cursor
-    game.state = @types.state_aircraft_select
+    game.state = AircraftSelect
   }
 }
 
@@ -62,10 +62,10 @@ fn @types.Game::update_aircraft_select(game : @types.Game, dt : Float) -> Unit {
   }
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    game.state = @types.state_mission_briefing
+    game.state = MissionBriefing
   }
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.state_menu
+    game.state = Menu
   }
 }
 
@@ -76,7 +76,7 @@ fn @types.Game::update_briefing(game : @types.Game) -> Unit {
     start_mission(game, game.current_mission)
   }
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.state_aircraft_select
+    game.state = AircraftSelect
   }
 }
 
@@ -84,14 +84,15 @@ fn @types.Game::update_briefing(game : @types.Game) -> Unit {
 fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
-    game.state = @types.state_paused
+    game.state = Paused
     return
   }
   // Camera mode switch
   if @raylib.is_key_pressed(@raylib.KeyC) {
-    game.camera_mode += 1
-    if game.camera_mode > @types.camera_mode_free {
-      game.camera_mode = @types.camera_mode_chase
+    game.camera_mode = match game.camera_mode {
+      Chase => Cockpit
+      Cockpit => Free
+      Free => Chase
     }
   }
   update_player(game, dt)
@@ -112,10 +113,10 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::update_paused(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) ||
     @raylib.is_key_pressed(@raylib.KeyP) {
-    game.state = @types.state_playing
+    game.state = Playing
   }
   if @raylib.is_key_pressed(@raylib.KeyQ) {
-    game.state = @types.state_menu
+    game.state = Menu
   }
   if @raylib.is_key_pressed(@raylib.KeyR) {
     start_mission(game, game.current_mission)
@@ -126,7 +127,7 @@ fn @types.Game::update_paused(game : @types.Game) -> Unit {
 fn @types.Game::update_mission_complete(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    game.state = @types.state_menu
+    game.state = Menu
   }
 }
 
@@ -134,7 +135,7 @@ fn @types.Game::update_mission_complete(game : @types.Game) -> Unit {
 fn @types.Game::update_game_over(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    game.state = @types.state_menu
+    game.state = Menu
   }
   if @raylib.is_key_pressed(@raylib.KeyR) {
     start_mission(game, game.current_mission)
@@ -191,7 +192,7 @@ fn @types.Game::update_messages(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::update_camera(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
   let (fx, fy, fz) = @types.get_forward(player.pitch, player.yaw)
-  if game.camera_mode == @types.camera_mode_chase {
+  if game.camera_mode == Chase {
     // Chase camera: behind and above the aircraft
     let (tcx, tcy, tcz) = @types.chase_camera_pos(
       player.x,
@@ -212,7 +213,7 @@ fn @types.Game::update_camera(game : @types.Game, dt : Float) -> Unit {
     game.cam_target_x = player.x + fx * 5.0
     game.cam_target_y = player.y + fy * 5.0
     game.cam_target_z = player.z + fz * 5.0
-  } else if game.camera_mode == @types.camera_mode_cockpit {
+  } else if game.camera_mode == Cockpit {
     // Cockpit camera: at aircraft position, looking forward
     game.cam_x = player.x + fx * 0.5
     game.cam_y = player.y + 0.3
@@ -328,12 +329,12 @@ fn @types.Game::update_clouds(game : @types.Game) -> Unit {
     }
   }
   // Spawn new clouds if below target count
-  let target_clouds : Int = if game.weather_state.kind == @types.weather_clear {
+  let target_clouds : Int = if game.weather_state.kind == Clear {
     8
-  } else if game.weather_state.kind == @types.weather_cloudy ||
-    game.weather_state.kind == @types.weather_rain {
+  } else if game.weather_state.kind == Cloudy ||
+    game.weather_state.kind == Rain {
     25
-  } else if game.weather_state.kind == @types.weather_storm {
+  } else if game.weather_state.kind == Storm {
     30
   } else {
     12
@@ -353,7 +354,7 @@ fn @types.Game::update_clouds(game : @types.Game) -> Unit {
         c.size_y = @types.rand_rangef(game, 2.0, 5.0)
         c.size_z = @types.rand_rangef(game, 5.0, 12.0)
         let base_alpha : Int = if game.weather_state.kind ==
-          @types.weather_storm {
+          Storm {
           160
         } else {
           100
@@ -652,7 +653,7 @@ pub fn start_mission(game : @types.Game, mission_idx : Int) -> Unit {
   player.fire_timer = 0.0
   player.damage_flash = 0.0
   player.alive = true
-  player.current_weapon = @types.weapon_machine_gun
+  player.current_weapon = MachineGun
   player.stalling = false
   player.stall_timer = 0.0
   player.damage_smoke = false
@@ -670,7 +671,7 @@ pub fn start_mission(game : @types.Game, mission_idx : Int) -> Unit {
   game.weather_state.set_weather(mission.weather)
   game.draw_distance = game.weather_state.visibility
   // Camera
-  game.camera_mode = @types.camera_mode_chase
+  game.camera_mode = Chase
   // Reset warnings
   game.fuel_warning = false
   game.stall_warning = false
@@ -755,7 +756,7 @@ pub fn start_mission(game : @types.Game, mission_idx : Int) -> Unit {
       e.orbit_angle = 0.0
       e.orbit_radius = 0.0
       e.target_y = e.y
-      e.ai_state = @types.ai_patrol
+      e.ai_state = Patrol
       e.patrol_cx = ex
       e.patrol_cz = ez
       e.patrol_index = 0
@@ -788,7 +789,7 @@ pub fn start_mission(game : @types.Game, mission_idx : Int) -> Unit {
       e.orbit_angle = @types.rand_rangef(game, 0.0, @types.pi * 2.0)
       e.orbit_radius = @types.rand_rangef(game, 25.0, 50.0)
       e.target_y = ey
-      e.ai_state = @types.ai_patrol
+      e.ai_state = Patrol
       e.patrol_cx = ex
       e.patrol_cz = ez
       e.patrol_index = 0
@@ -876,6 +877,6 @@ pub fn start_mission(game : @types.Game, mission_idx : Int) -> Unit {
       }
     }
   }
-  game.state = @types.state_playing
+  game.state = Playing
   @types.show_message(game, mission.name + ": " + mission.description, 4.0)
 }

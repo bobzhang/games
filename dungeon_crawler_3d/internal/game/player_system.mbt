@@ -81,7 +81,7 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
     if game.attack_cooldown_timer <= 0.0 {
-      if game.player_weapon == @types.weapon_bow {
+      if game.player_weapon == Bow {
         game.perform_bow_attack()
       } else {
         game.perform_melee_attack()
@@ -107,7 +107,7 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   }
   // Cycle weapon with Tab
   if @raylib.is_key_pressed(@raylib.KeyTab) {
-    game.player_weapon = (game.player_weapon + 1) % 6
+    game.player_weapon = @types.next_weapon(game.player_weapon)
     @types.add_message(
       game,
       "Weapon: \{@types.get_weapon_name(game.player_weapon)}",
@@ -280,7 +280,7 @@ fn @types.Game::perform_bow_attack(game : @types.Game) -> Unit {
   }
   let p = game.projectiles[idx]
   p.active = true
-  p.kind = @types.spell_none
+  p.kind = None
   p.x = game.player_x
   p.z = game.player_z
   let dir_x = @math.sinf(game.camera_yaw)
@@ -329,17 +329,17 @@ fn @types.Game::cast_selected_spell(game : @types.Game) -> Unit {
   }
   game.player_mana -= cost
   game.spell_cooldown = 0.5
-  if spell_type == @types.spell_fireball {
+  if spell_type == Fireball {
     game.cast_fireball()
-  } else if spell_type == @types.spell_ice_bolt {
+  } else if spell_type == IceBolt {
     game.cast_ice_bolt()
-  } else if spell_type == @types.spell_heal {
+  } else if spell_type == Heal {
     game.cast_heal()
-  } else if spell_type == @types.spell_shield {
+  } else if spell_type == Shield {
     game.cast_shield()
-  } else if spell_type == @types.spell_lightning {
+  } else if spell_type == Lightning {
     game.cast_lightning()
-  } else if spell_type == @types.spell_teleport {
+  } else if spell_type == Teleport {
     game.cast_teleport()
   }
 }
@@ -352,7 +352,7 @@ fn @types.Game::cast_fireball(game : @types.Game) -> Unit {
   }
   let p = game.projectiles[idx]
   p.active = true
-  p.kind = @types.spell_fireball
+  p.kind = Fireball
   p.x = game.player_x
   p.z = game.player_z
   let dir_x = @math.sinf(game.camera_yaw)
@@ -389,7 +389,7 @@ fn @types.Game::cast_ice_bolt(game : @types.Game) -> Unit {
   }
   let p = game.projectiles[idx]
   p.active = true
-  p.kind = @types.spell_ice_bolt
+  p.kind = IceBolt
   p.x = game.player_x
   p.z = game.player_z
   let dir_x = @math.sinf(game.camera_yaw)
@@ -603,11 +603,11 @@ pub fn kill_enemy(game : @types.Game, idx : Int) -> Unit {
     80,
   )
   // Drop loot (40% base + bonus for rarer enemies)
-  let drop_chance = if e.kind == @types.enemy_dragon_boss {
+  let drop_chance = if e.kind == DragonBoss {
     100
-  } else if e.kind == @types.enemy_lich || e.kind == @types.enemy_minotaur {
+  } else if e.kind == Lich || e.kind == Minotaur {
     60
-  } else if e.kind == @types.enemy_golem {
+  } else if e.kind == Golem {
     50
   } else {
     40
@@ -639,7 +639,7 @@ pub fn kill_enemy(game : @types.Game, idx : Int) -> Unit {
         l.value = @types.rand_range(game, 10, 40)
       }
       // Boss drops boss key
-      if e.kind == @types.enemy_dragon_boss {
+      if e.kind == DragonBoss {
         l.kind = @types.loot_boss_key
       }
       l.x = e.x
@@ -788,7 +788,7 @@ fn @types.Game::check_chest_open(game : @types.Game) -> Unit {
   if @types.get_tile(game, gx, gz) == @types.tile_chest {
     // Check for mimic
     for e in game.enemies {
-      if e.active && e.kind == @types.enemy_mimic {
+      if e.active && e.kind == Mimic {
         let egx = @types.world_to_grid_x(e.x)
         let egz = @types.world_to_grid_z(e.z)
         if egx == gx && egz == gz {
@@ -838,7 +838,7 @@ fn @types.Game::check_chest_open(game : @types.Game) -> Unit {
     } else {
       // Spell scroll
       let spell_roll = @types.rand_range(game, 1, 6)
-      let spell = spell_roll
+      let spell = @types.spell_from_int(spell_roll)
       let added = game.add_spell_to_player(spell)
       if added {
         game.message_text = "Chest: \{@types.get_spell_name(spell)} spell!"
@@ -956,24 +956,24 @@ fn @types.Game::check_traps(game : @types.Game, dt : Float) -> Unit {
       trap.visible = true
       let wx = @types.grid_to_world_x(trap.gx)
       let wz = @types.grid_to_world_z(trap.gz)
-      if trap.kind == @types.trap_spike {
+      if trap.kind == Spike {
         damage_player(game, @types.spike_damage)
         @types.add_message(game, "Stepped on spikes!", 255, 80, 80)
         @types.spawn_particles(game, wx, 0.3, wz, 8, 200, 50, 50)
-      } else if trap.kind == @types.trap_arrow {
+      } else if trap.kind == Arrow {
         damage_player(game, @types.arrow_trap_damage)
         @types.add_message(game, "Arrow trap!", 255, 100, 50)
         @types.spawn_particles(game, wx, 1.0, wz, 6, 200, 150, 50)
-      } else if trap.kind == @types.trap_flame {
+      } else if trap.kind == Flame {
         damage_player(game, @types.flame_damage)
         @types.add_message(game, "Flame trap!", 255, 100, 30)
         @types.spawn_particles(game, wx, 1.0, wz, 12, 255, 100, 30)
-      } else if trap.kind == @types.trap_poison {
+      } else if trap.kind == Poison {
         game.poison_remaining = @types.poison_duration
         game.poison_timer = 0.0
         @types.add_message(game, "Poison gas!", 100, 200, 50)
         @types.spawn_particles(game, wx, 0.5, wz, 10, 100, 200, 50)
-      } else if trap.kind == @types.trap_pitfall {
+      } else if trap.kind == Pitfall {
         damage_player(game, @types.pitfall_damage)
         @types.add_message(game, "Pitfall trap!", 200, 100, 50)
         @types.spawn_particles(game, wx, 0.1, wz, 8, 150, 100, 50)
@@ -999,7 +999,7 @@ fn @types.Game::check_traps(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::add_spell_to_player(
   game : @types.Game,
-  spell_type : Int,
+  spell_type : @types.Spell,
 ) -> Bool {
   // Check if already have this spell
   for spell in game.spells {
@@ -1030,14 +1030,14 @@ fn @types.Game::level_up(game : @types.Game) -> Unit {
   game.player_atk += @types.atk_per_level
   game.player_def += @types.def_per_level
   // Stat bonuses based on class
-  if game.player_class == @types.class_warrior {
+  if game.player_class == Warrior {
     game.player_str += 2
     game.player_max_hp += 5
     game.player_hp += 5
-  } else if game.player_class == @types.class_rogue {
+  } else if game.player_class == Rogue {
     game.player_dex += 2
     game.player_atk += 1
-  } else if game.player_class == @types.class_mage {
+  } else if game.player_class == Mage {
     game.player_int_stat += 2
     game.player_max_mana += 5
     game.player_mana += 5

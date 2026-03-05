@@ -29,7 +29,7 @@ fn @types.Game::draw_drift_spark_trails(game : @types.Game) -> Unit {
     if not(kart.drift_left) && not(kart.drift_right) {
       continue
     }
-    if kart.drift_level <= @types.drift_level_none {
+    if kart.drift_level == DriftNone {
       continue
     }
     let dc = @types.get_drift_spark_color(kart.drift_level)
@@ -51,9 +51,9 @@ fn @types.Game::draw_drift_spark_trails(game : @types.Game) -> Unit {
       cos_a * @types.kart_length * 0.4 +
       sin_a * spark_side * @types.kart_width * 0.2
     // Spark intensity based on drift level
-    let intensity : Float = if kart.drift_level == @types.drift_level_mini {
+    let intensity : Float = if kart.drift_level == Mini {
       0.6
-    } else if kart.drift_level == @types.drift_level_super {
+    } else if kart.drift_level == Super {
       0.8
     } else {
       1.0
@@ -87,7 +87,7 @@ fn @types.Game::draw_drift_spark_trails(game : @types.Game) -> Unit {
       @raylib.Color::new(dc.0, dc.1, dc.2, 120),
     )
     // Ultra drift gets extra bright center spark
-    if kart.drift_level == @types.drift_level_ultra {
+    if kart.drift_level == Ultra {
       let ultra_size : Float = spark_size * 0.4
       @raylib.draw_sphere(
         @raylib.Vector3::new(sx1, kart.y + 0.12, sz1),
@@ -187,7 +187,7 @@ fn @types.Game::draw_dropped_items_3d(game : @types.Game) -> Unit {
     if not(item.active) {
       continue
     }
-    if item.item_type == @types.powerup_banana {
+    if item.item_type == Banana {
       let bob : Float = @math.sinf(item.rotation) * 0.05
       @raylib.draw_cube(
         @raylib.Vector3::new(item.x, item.y + bob, item.z),
@@ -203,7 +203,7 @@ fn @types.Game::draw_dropped_items_3d(game : @types.Game) -> Unit {
         0.15,
         @raylib.Color::new(140, 100, 30, 255),
       )
-    } else if item.item_type == @types.powerup_oil_slick {
+    } else if item.item_type == OilSlick {
       let pulse = @math.sinf(
         Float::from_int(game.frame_counter) * 0.1 + Float::from_int(i),
       )
@@ -254,8 +254,8 @@ fn @types.Game::draw_dust_trails(game : @types.Game) -> Unit {
     if kart.speed < 5.0 {
       continue
     }
-    if kart.on_surface_type != @types.surface_dirt &&
-      kart.on_surface_type != @types.surface_grass {
+    if kart.on_surface_type != Dirt &&
+      kart.on_surface_type != Grass {
       continue
     }
     let sin_a = @math.sinf(kart.angle)
@@ -267,7 +267,7 @@ fn @types.Game::draw_dust_trails(game : @types.Game) -> Unit {
     let dust_size : Float = 0.3 * speed_factor
     let dust_alpha_f : Float = 120.0 * speed_factor
     let dust_alpha = dust_alpha_f.to_int()
-    let dc : (Int, Int, Int) = if kart.on_surface_type == @types.surface_dirt {
+    let dc : (Int, Int, Int) = if kart.on_surface_type == Dirt {
       (160, 130, 80)
     } else {
       (80, 140, 60)

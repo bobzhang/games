@@ -166,7 +166,7 @@ fn @types.Game::crash_player(game : @types.Game) -> Unit {
   player.alive = false
   @types.spawn_explosion(game, player.x, player.y, player.z)
   @types.show_message(game, "CRASHED!", 3.0)
-  game.state = @types.state_game_over
+  game.state = GameOver
 }
 
 ///|
@@ -186,7 +186,7 @@ pub fn damage_player(game : @types.Game, amount : Float) -> Unit {
     player.alive = false
     @types.spawn_explosion(game, player.x, player.y, player.z)
     @types.show_message(game, "SHOT DOWN!", 3.0)
-    game.state = @types.state_game_over
+    game.state = GameOver
   }
 }
 

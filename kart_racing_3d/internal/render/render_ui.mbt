@@ -1,50 +1,34 @@
 // Get item name for display
 
 ///|
-fn get_item_display_name(item_type : Int) -> String {
-  if item_type == @types.powerup_boost {
-    "BOOST"
-  } else if item_type == @types.powerup_shield {
-    "SHIELD"
-  } else if item_type == @types.powerup_missile {
-    "MISSILE"
-  } else if item_type == @types.powerup_oil_slick {
-    "OIL SLICK"
-  } else if item_type == @types.powerup_lightning {
-    "LIGHTNING"
-  } else if item_type == @types.powerup_star {
-    "STAR"
-  } else if item_type == @types.powerup_banana {
-    "BANANA"
-  } else if item_type == @types.powerup_triple_mushroom {
-    "TRIPLE"
-  } else {
-    "NONE"
+fn get_item_display_name(item_type : @types.PowerupKind) -> String {
+  match item_type {
+    Boost => "BOOST"
+    Shield => "SHIELD"
+    Missile => "MISSILE"
+    OilSlick => "OIL SLICK"
+    Lightning => "LIGHTNING"
+    Star => "STAR"
+    Banana => "BANANA"
+    TripleMushroom => "TRIPLE"
+    NoPowerup => "NONE"
   }
 }
 
 // Get item color for display (r, g, b)
 
 ///|
-fn get_item_display_color(item_type : Int) -> (Int, Int, Int) {
-  if item_type == @types.powerup_boost {
-    (255, 200, 0)
-  } else if item_type == @types.powerup_shield {
-    (80, 180, 255)
-  } else if item_type == @types.powerup_missile {
-    (255, 80, 30)
-  } else if item_type == @types.powerup_oil_slick {
-    (100, 100, 110)
-  } else if item_type == @types.powerup_lightning {
-    (255, 255, 100)
-  } else if item_type == @types.powerup_star {
-    (255, 255, 50)
-  } else if item_type == @types.powerup_banana {
-    (255, 230, 50)
-  } else if item_type == @types.powerup_triple_mushroom {
-    (255, 150, 200)
-  } else {
-    (200, 200, 200)
+fn get_item_display_color(item_type : @types.PowerupKind) -> (Int, Int, Int) {
+  match item_type {
+    Boost => (255, 200, 0)
+    Shield => (80, 180, 255)
+    Missile => (255, 80, 30)
+    OilSlick => (100, 100, 110)
+    Lightning => (255, 255, 100)
+    Star => (255, 255, 50)
+    Banana => (255, 230, 50)
+    TripleMushroom => (255, 150, 200)
+    NoPowerup => (200, 200, 200)
   }
 }
 
@@ -509,41 +493,41 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(150, 150, 170, 255),
   )
   // Powerup indicator (bottom right)
-  if kart.held_powerup != @types.powerup_none {
-    let pu_name = if kart.held_powerup == @types.powerup_boost {
+  if kart.held_powerup != NoPowerup {
+    let pu_name = if kart.held_powerup == Boost {
       "BOOST"
-    } else if kart.held_powerup == @types.powerup_shield {
+    } else if kart.held_powerup == Shield {
       "SHIELD"
-    } else if kart.held_powerup == @types.powerup_missile {
+    } else if kart.held_powerup == Missile {
       "MISSILE"
-    } else if kart.held_powerup == @types.powerup_oil_slick {
+    } else if kart.held_powerup == OilSlick {
       "OIL"
-    } else if kart.held_powerup == @types.powerup_lightning {
+    } else if kart.held_powerup == Lightning {
       "BOLT"
-    } else if kart.held_powerup == @types.powerup_star {
+    } else if kart.held_powerup == Star {
       "STAR"
-    } else if kart.held_powerup == @types.powerup_banana {
+    } else if kart.held_powerup == Banana {
       "BANANA"
-    } else if kart.held_powerup == @types.powerup_triple_mushroom {
+    } else if kart.held_powerup == TripleMushroom {
       "x3 BOOST"
     } else {
       "ITEM"
     }
-    let pu_color = if kart.held_powerup == @types.powerup_boost {
+    let pu_color = if kart.held_powerup == Boost {
       @raylib.Color::new(255, 200, 0, 255)
-    } else if kart.held_powerup == @types.powerup_shield {
+    } else if kart.held_powerup == Shield {
       @raylib.Color::new(80, 180, 255, 255)
-    } else if kart.held_powerup == @types.powerup_missile {
+    } else if kart.held_powerup == Missile {
       @raylib.Color::new(255, 80, 60, 255)
-    } else if kart.held_powerup == @types.powerup_oil_slick {
+    } else if kart.held_powerup == OilSlick {
       @raylib.Color::new(100, 100, 110, 255)
-    } else if kart.held_powerup == @types.powerup_lightning {
+    } else if kart.held_powerup == Lightning {
       @raylib.Color::new(255, 255, 100, 255)
-    } else if kart.held_powerup == @types.powerup_star {
+    } else if kart.held_powerup == Star {
       @raylib.Color::new(255, 255, 50, 255)
-    } else if kart.held_powerup == @types.powerup_banana {
+    } else if kart.held_powerup == Banana {
       @raylib.Color::new(255, 230, 50, 255)
-    } else if kart.held_powerup == @types.powerup_triple_mushroom {
+    } else if kart.held_powerup == TripleMushroom {
       @raylib.Color::new(255, 150, 200, 255)
     } else {
       @raylib.Color::new(200, 200, 200, 255)
@@ -988,7 +972,7 @@ pub fn draw_item_indicator(game : @types.Game) -> Unit {
   if not(kart.active) {
     return
   }
-  if kart.held_powerup == @types.powerup_none {
+  if kart.held_powerup == NoPowerup {
     return
   }
   let box_x = @types.screen_width - 130
@@ -1016,7 +1000,7 @@ pub fn draw_item_indicator(game : @types.Game) -> Unit {
   let item_color = @raylib.Color::new(ic.0, ic.1, ic.2, 255)
   @raylib.draw_text(item_name, box_x + 8, box_y + 5, 16, item_color)
   // Item count for triple mushroom
-  if kart.held_powerup == @types.powerup_triple_mushroom && kart.item_count > 0 {
+  if kart.held_powerup == TripleMushroom && kart.item_count > 0 {
     let count = kart.item_count + 1
     let count_text = "x\{count}"
     @raylib.draw_text(

@@ -29,7 +29,7 @@ pub(all) struct Waypoint {
 /// Metadata for a segment between two waypoints describing surface, geometry, and features.
 pub(all) struct TrackSegment {
   mut seg_type : Int
-  mut surface_type : Int
+  mut surface_type : Surface
   mut width_mult : Float
   mut banking : Float
   mut has_item_boxes : Bool
@@ -43,7 +43,7 @@ pub(all) struct TrackSegment {
 pub fn TrackSegment::default() -> TrackSegment {
   {
     seg_type: seg_straight,
-    surface_type: surface_road,
+    surface_type: Road,
     width_mult: 1.0,
     banking: 0.0,
     has_item_boxes: false,
@@ -74,7 +74,7 @@ pub(all) struct Kart {
   mut waypoint_progress : Float
   mut total_progress : Float
   mut place : Int
-  mut held_powerup : Int
+  mut held_powerup : PowerupKind
   mut item_count : Int
   mut boost_timer : Float
   mut boost_power : Float
@@ -82,7 +82,7 @@ pub(all) struct Kart {
   mut drift_left : Bool
   mut drift_right : Bool
   mut drift_timer : Float
-  mut drift_level : Int
+  mut drift_level : DriftLevel
   mut drift_angle : Float
   mut spin_timer : Float
   mut stunned_timer : Float
@@ -92,7 +92,7 @@ pub(all) struct Kart {
   mut finish_time : Float
   mut finished : Bool
   mut is_player : Bool
-  mut on_surface_type : Int
+  mut on_surface_type : Surface
   mut wrong_way : Bool
   mut wrong_way_timer : Float
   mut air_timer : Float
@@ -130,7 +130,7 @@ pub fn Kart::inactive() -> Kart {
     waypoint_progress: 0.0,
     total_progress: 0.0,
     place: 0,
-    held_powerup: powerup_none,
+    held_powerup: NoPowerup,
     item_count: 0,
     boost_timer: 0.0,
     boost_power: 0.0,
@@ -138,7 +138,7 @@ pub fn Kart::inactive() -> Kart {
     drift_left: false,
     drift_right: false,
     drift_timer: 0.0,
-    drift_level: drift_level_none,
+    drift_level: DriftNone,
     drift_angle: 0.0,
     spin_timer: 0.0,
     stunned_timer: 0.0,
@@ -148,7 +148,7 @@ pub fn Kart::inactive() -> Kart {
     finish_time: 0.0,
     finished: false,
     is_player: false,
-    on_surface_type: surface_road,
+    on_surface_type: Road,
     wrong_way: false,
     wrong_way_timer: 0.0,
     air_timer: 0.0,
@@ -175,7 +175,7 @@ pub(all) struct Powerup {
   mut x : Float
   mut y : Float
   mut z : Float
-  mut kind : Int
+  mut kind : PowerupKind
   mut respawn_timer : Float
   mut collected : Bool
   mut bob_offset : Float
@@ -189,7 +189,7 @@ pub fn Powerup::inactive() -> Powerup {
     x: 0.0,
     y: 0.0,
     z: 0.0,
-    kind: powerup_none,
+    kind: NoPowerup,
     respawn_timer: 0.0,
     collected: false,
     bob_offset: 0.0,
@@ -202,7 +202,7 @@ pub fn Powerup::inactive() -> Powerup {
 /// A dropped hazard item placed on the track by a kart.
 pub(all) struct DroppedItem {
   mut active : Bool
-  mut item_type : Int
+  mut item_type : PowerupKind
   mut x : Float
   mut y : Float
   mut z : Float
@@ -216,7 +216,7 @@ pub(all) struct DroppedItem {
 pub fn DroppedItem::inactive() -> DroppedItem {
   {
     active: false,
-    item_type: powerup_none,
+    item_type: NoPowerup,
     x: 0.0,
     y: 0.0,
     z: 0.0,
@@ -346,7 +346,7 @@ pub(all) struct CupStanding {
 /// Complete definition of a single race track.
 pub(all) struct TrackData {
   mut track_name : String
-  mut theme : Int
+  mut theme : Theme
   mut lap_count : Int
   mut cup_index : Int
   mut segments : Array[TrackSegment]
@@ -357,7 +357,7 @@ pub(all) struct TrackData {
 pub fn TrackData::default() -> TrackData {
   {
     track_name: "Unknown",
-    theme: theme_circuit,
+    theme: Circuit,
     lap_count: total_laps,
     cup_index: 0,
     segments: [],
@@ -408,7 +408,7 @@ pub(all) struct Game {
   waypoints : Array[Waypoint]
   mut waypoint_count : Int
   segments : Array[TrackSegment]
-  mut track_theme : Int
+  mut track_theme : Theme
   mut track_name : String
 
   // Entity pools
@@ -493,7 +493,7 @@ pub fn Game::new() -> Game {
       }
       arr
     },
-    track_theme: theme_circuit,
+    track_theme: Circuit,
     track_name: "",
     karts: {
       let arr : Array[Kart] = []

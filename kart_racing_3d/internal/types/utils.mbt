@@ -1,4 +1,46 @@
 ///|
+/// Returns the integer index for a Theme value.
+pub fn theme_to_int(t : Theme) -> Int {
+  match t {
+    Circuit => 0
+    Beach => 1
+    Mountain => 2
+    Castle => 3
+    Desert => 4
+    ThemeIce => 5
+    Night => 6
+    Volcano => 7
+  }
+}
+
+///|
+/// Returns a PowerupKind from its integer index.
+pub fn powerup_kind_from_int(i : Int) -> PowerupKind {
+  match i {
+    1 => Boost
+    2 => Shield
+    3 => Missile
+    4 => OilSlick
+    5 => Lightning
+    6 => Star
+    7 => Banana
+    8 => TripleMushroom
+    _ => NoPowerup
+  }
+}
+
+///|
+/// Returns the integer rank for a DriftLevel value (for ordering comparisons).
+pub fn drift_level_to_int(level : DriftLevel) -> Int {
+  match level {
+    DriftNone => 0
+    Mini => 1
+    Super => 2
+    Ultra => 3
+  }
+}
+
+///|
 /// Returns `v` clamped between `low` and `high`.
 pub fn clampf(v : Float, low : Float, high : Float) -> Float {
   if v < low {
@@ -72,21 +114,14 @@ pub fn angle_diff(from : Float, to : Float) -> Float {
 
 ///|
 /// Returns the grip multiplier for the given `surface` type.
-pub fn get_surface_grip(surface : Int) -> Float {
-  if surface == surface_road {
-    grip_road
-  } else if surface == surface_dirt {
-    grip_dirt
-  } else if surface == surface_grass {
-    grip_grass
-  } else if surface == surface_boost_pad {
-    grip_boost_pad
-  } else if surface == surface_oil {
-    grip_oil
-  } else if surface == surface_ice {
-    grip_ice
-  } else {
-    grip_road
+pub fn get_surface_grip(surface : Surface) -> Float {
+  match surface {
+    Road => grip_road
+    Dirt => grip_dirt
+    Grass => grip_grass
+    BoostPad => grip_boost_pad
+    Oil => grip_oil
+    SurfaceIce => grip_ice
   }
 }
 
@@ -94,21 +129,14 @@ pub fn get_surface_grip(surface : Int) -> Float {
 
 ///|
 /// Returns the top speed multiplier for the given `surface` type.
-pub fn get_surface_speed_mult(surface : Int) -> Float {
-  if surface == surface_road {
-    speed_mult_road
-  } else if surface == surface_dirt {
-    speed_mult_dirt
-  } else if surface == surface_grass {
-    speed_mult_grass
-  } else if surface == surface_boost_pad {
-    speed_mult_boost_pad
-  } else if surface == surface_oil {
-    speed_mult_oil
-  } else if surface == surface_ice {
-    speed_mult_ice
-  } else {
-    speed_mult_road
+pub fn get_surface_speed_mult(surface : Surface) -> Float {
+  match surface {
+    Road => speed_mult_road
+    Dirt => speed_mult_dirt
+    Grass => speed_mult_grass
+    BoostPad => speed_mult_boost_pad
+    Oil => speed_mult_oil
+    SurfaceIce => speed_mult_ice
   }
 }
 
@@ -116,15 +144,12 @@ pub fn get_surface_speed_mult(surface : Int) -> Float {
 
 ///|
 /// Returns the speed bonus for the given drift boost `level`.
-pub fn get_drift_boost_power(level : Int) -> Float {
-  if level == drift_level_mini {
-    drift_mini_boost
-  } else if level == drift_level_super {
-    drift_super_boost
-  } else if level == drift_level_ultra {
-    drift_ultra_boost
-  } else {
-    0.0
+pub fn get_drift_boost_power(level : DriftLevel) -> Float {
+  match level {
+    Mini => drift_mini_boost
+    Super => drift_super_boost
+    Ultra => drift_ultra_boost
+    DriftNone => 0.0
   }
 }
 
@@ -132,15 +157,12 @@ pub fn get_drift_boost_power(level : Int) -> Float {
 
 ///|
 /// Returns the duration in seconds for the given drift boost `level`.
-pub fn get_drift_boost_duration(level : Int) -> Float {
-  if level == drift_level_mini {
-    drift_mini_duration
-  } else if level == drift_level_super {
-    drift_super_duration
-  } else if level == drift_level_ultra {
-    drift_ultra_duration
-  } else {
-    0.0
+pub fn get_drift_boost_duration(level : DriftLevel) -> Float {
+  match level {
+    Mini => drift_mini_duration
+    Super => drift_super_duration
+    Ultra => drift_ultra_duration
+    DriftNone => 0.0
   }
 }
 
@@ -148,15 +170,15 @@ pub fn get_drift_boost_duration(level : Int) -> Float {
 
 ///|
 /// Returns the drift boost level achieved after `drift_time` seconds of sustained drift.
-pub fn calc_drift_level(drift_time : Float) -> Int {
+pub fn calc_drift_level(drift_time : Float) -> DriftLevel {
   if drift_time >= drift_ultra_threshold {
-    drift_level_ultra
+    Ultra
   } else if drift_time >= drift_super_threshold {
-    drift_level_super
+    Super
   } else if drift_time >= drift_mini_threshold {
-    drift_level_mini
+    Mini
   } else {
-    drift_level_none
+    DriftNone
   }
 }
 
@@ -164,15 +186,12 @@ pub fn calc_drift_level(drift_time : Float) -> Int {
 
 ///|
 /// Returns the RGB color for drift spark particles at the given drift `level`.
-pub fn get_drift_spark_color(level : Int) -> (Int, Int, Int) {
-  if level == drift_level_mini {
-    (80, 150, 255) // Blue
-  } else if level == drift_level_super {
-    (255, 180, 50) // Orange
-  } else if level == drift_level_ultra {
-    (255, 80, 200) // Pink
-  } else {
-    (200, 200, 200) // Default gray
+pub fn get_drift_spark_color(level : DriftLevel) -> (Int, Int, Int) {
+  match level {
+    Mini => (80, 150, 255) // Blue
+    Super => (255, 180, 50) // Orange
+    Ultra => (255, 80, 200) // Pink
+    DriftNone => (200, 200, 200) // Default gray
   }
 }
 
@@ -449,10 +468,10 @@ pub fn is_on_ramp(game : Game, kart : Kart) -> Bool {
 
 ///|
 /// Returns the surface type at position (`x`, `z`) based on distance from the nearest track segment.
-pub fn detect_surface_type(game : Game, x : Float, z : Float) -> Int {
+pub fn detect_surface_type(game : Game, x : Float, z : Float) -> Surface {
   let wc = game.waypoint_count
   if wc < 2 {
-    return surface_road
+    return Road
   }
   // Find nearest segment
   let mut best_dist : Float = 99999.0
@@ -470,17 +489,17 @@ pub fn detect_surface_type(game : Game, x : Float, z : Float) -> Int {
   // If within road width, use segment surface
   if best_dist < road_half * seg.width_mult {
     // Check for boost pad or special surface
-    if seg.surface_type != surface_road {
+    if seg.surface_type != Road {
       return seg.surface_type
     }
-    return surface_road
+    return Road
   }
   // Slightly off road - dirt
   if best_dist < road_half * seg.width_mult + 2.0 {
-    return surface_dirt
+    return Dirt
   }
   // Far off road - grass
-  surface_grass
+  Grass
 }
 
 // Detect wrong way: check if kart heading is opposite to track direction
