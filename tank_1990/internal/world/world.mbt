@@ -104,10 +104,9 @@ pub fn sight_blocked(
       @types.world_x_to_tile(px),
       @types.world_y_to_tile(py),
     )
-    if tile == @types.tile_brick ||
-      tile == @types.tile_steel ||
-      tile == @types.tile_base {
-      return true
+    match tile {
+      Brick | Steel | Base => return true
+      _ => ()
     }
   }
   false

@@ -75,7 +75,7 @@ fn @types.Game::choose_enemy_target_player(
 fn @types.Game::enemy_desired_dir(
   game : @types.Game,
   enemy : @types.Tank,
-) -> Int {
+) -> @types.Dir {
   let target_player = game.choose_enemy_target_player(enemy)
   let mut target_x = @types.tile_center_x(@types.base_tile_x)
   let mut target_y = @types.tile_center_y(@types.base_tile_y)
@@ -90,8 +90,8 @@ fn @types.Game::enemy_desired_dir(
 
   let dx = target_x - enemy.x
   let dy = target_y - enemy.y
-  let horiz = if dx < 0.0 { @types.dir_left } else { @types.dir_right }
-  let vert = if dy < 0.0 { @types.dir_up } else { @types.dir_down }
+  let horiz : @types.Dir = if dx < 0.0 { Left } else { Right }
+  let vert : @types.Dir = if dy < 0.0 { Up } else { Down }
 
   let r = @types.rand_range(game, 0, 99)
   if dx.abs() > dy.abs() {
@@ -100,14 +100,14 @@ fn @types.Game::enemy_desired_dir(
     } else if r < 92 {
       vert
     } else {
-      @types.rand_range(game, 0, 3)
+      @types.rand_dir(game)
     }
   } else if r < 72 {
     vert
   } else if r < 92 {
     horiz
   } else {
-    @types.rand_range(game, 0, 3)
+    @types.rand_dir(game)
   }
 }
 
@@ -115,7 +115,7 @@ fn @types.Game::enemy_desired_dir(
 fn @types.Game::try_move_enemy(
   game : @types.Game,
   enemy_index : Int,
-  dir : Int,
+  dir : @types.Dir,
   dt : Float,
 ) -> Bool {
   let enemy = game.enemies[enemy_index]
@@ -172,14 +172,11 @@ fn @types.Game::enemy_shoot_if_ready(
   }
 
   if not(should_fire) {
-    let chance = if enemy.enemy_kind == @types.enemy_fast {
-      16
-    } else if enemy.enemy_kind == @types.enemy_heavy {
-      11
-    } else if enemy.enemy_kind == @types.enemy_sniper {
-      26
-    } else {
-      13
+    let chance = match enemy.enemy_kind {
+      Fast => 16
+      Heavy => 11
+      Sniper => 26
+      Basic => 13
     }
     should_fire = @types.rand_range(game, 0, 99) < chance
   }
@@ -189,20 +186,15 @@ fn @types.Game::enemy_shoot_if_ready(
       @types.dir_vector_x(enemy.dir) * (@types.tank_half + 3.0)
     let muzzle_y = enemy.y +
       @types.dir_vector_y(enemy.dir) * (@types.tank_half + 3.0)
-    let speed = if enemy.enemy_kind == @types.enemy_sniper {
-      @types.bullet_speed_enemy + 40.0
-    } else {
-      @types.bullet_speed_enemy
+    let speed = match enemy.enemy_kind {
+      Sniper => @types.bullet_speed_enemy + 40.0
+      _ => @types.bullet_speed_enemy
     }
-    let power = if enemy.enemy_kind == @types.enemy_heavy { 2 } else { 1 }
-    game.spawn_bullet(
-      @types.team_enemy,
-      muzzle_x,
-      muzzle_y,
-      enemy.dir,
-      speed,
-      power,
-    )
+    let power = match enemy.enemy_kind {
+      Heavy => 2
+      _ => 1
+    }
+    game.spawn_bullet(Enemy, muzzle_x, muzzle_y, enemy.dir, speed, power)
     enemy.reload_timer = enemy.reload_delay
     @particles.spawn_spark_burst(game, muzzle_x, muzzle_y, 4)
   }
@@ -262,7 +254,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
       enemy.ai_stuck_timer += dt
       if enemy.ai_stuck_timer > 0.14 {
         enemy.ai_stuck_timer = 0.0
-        enemy.dir = @types.rand_range(game, 0, 3)
+        enemy.dir = @types.rand_dir(game)
       }
     } else {
       enemy.ai_stuck_timer = 0.0
@@ -279,7 +271,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::destroy_enemy(
   game : @types.Game,
   enemy_index : Int,
-  killer_team : Int,
+  killer_team : @types.Team,
 ) -> Unit {
   if not(game.enemies[enemy_index].active) {
     return
@@ -298,7 +290,10 @@ fn @types.Game::destroy_enemy(
 
   // Chance to drop a powerup.
   let drop_roll = @types.rand_range(game, 0, 99)
-  let base_bias = if enemy.enemy_kind == @types.enemy_heavy { 22 } else { 14 }
+  let base_bias = match enemy.enemy_kind {
+    Heavy => 22
+    _ => 14
+  }
   let drop_bias = (base_bias + game.profile.drop_bonus).clamp(min=4, max=55)
   if drop_roll < drop_bias {
     game.spawn_random_powerup(enemy.x, enemy.y)

@@ -187,132 +187,70 @@ pub let level_count : Int = 96
 pub let map_pattern_count : Int = 48
 
 ///|
-/// Team identifier for no team affiliation.
-pub let team_none : Int = 0
+pub(all) enum Team {
+  None
+  Player1
+  Player2
+  Enemy
+} derive(Eq)
 
 ///|
-/// Team identifier for player one.
-pub let team_player1 : Int = 1
+pub(all) enum Dir {
+  Up
+  Right
+  Down
+  Left
+} derive(Eq)
 
 ///|
-/// Team identifier for player two.
-pub let team_player2 : Int = 2
+pub fn Dir::from_int(v : Int) -> Dir {
+  match v {
+    0 => Up
+    1 => Right
+    2 => Down
+    _ => Left
+  }
+}
 
 ///|
-/// Team identifier for all enemies.
-pub let team_enemy : Int = 3
+pub(all) enum Tile {
+  Empty
+  Brick
+  Steel
+  Water
+  Bush
+  Ice
+  Base
+} derive(Eq)
 
 ///|
-/// Direction constant for up.
-pub let dir_up : Int = 0
+pub(all) enum GameState {
+  Menu
+  StageIntro
+  Playing
+  Paused
+  StageClear
+  GameOver
+  CampaignClear
+} derive(Eq)
 
 ///|
-/// Direction constant for right.
-pub let dir_right : Int = 1
+pub(all) enum EnemyKind {
+  Basic
+  Fast
+  Heavy
+  Sniper
+} derive(Eq)
 
 ///|
-/// Direction constant for down.
-pub let dir_down : Int = 2
-
-///|
-/// Direction constant for left.
-pub let dir_left : Int = 3
-
-///|
-/// Tile type for an empty passable cell.
-pub let tile_empty : Int = 0
-
-///|
-/// Tile type for a destructible brick wall.
-pub let tile_brick : Int = 1
-
-///|
-/// Tile type for an indestructible steel wall.
-pub let tile_steel : Int = 2
-
-///|
-/// Tile type for impassable water.
-pub let tile_water : Int = 3
-
-///|
-/// Tile type for bush concealment.
-pub let tile_bush : Int = 4
-
-///|
-/// Tile type for slippery ice terrain.
-pub let tile_ice : Int = 5
-
-///|
-/// Tile type for the player base structure.
-pub let tile_base : Int = 6
-
-///|
-/// Game state constant for the main menu.
-pub let state_menu : Int = 0
-
-///|
-/// Game state constant for the stage introduction screen.
-pub let state_stage_intro : Int = 1
-
-///|
-/// Game state constant for active gameplay.
-pub let state_playing : Int = 2
-
-///|
-/// Game state constant for the paused state.
-pub let state_paused : Int = 3
-
-///|
-/// Game state constant for the stage clear screen.
-pub let state_stage_clear : Int = 4
-
-///|
-/// Game state constant for the game over screen.
-pub let state_game_over : Int = 5
-
-///|
-/// Game state constant for the campaign completion screen.
-pub let state_campaign_clear : Int = 6
-
-///|
-/// Enemy type constant for basic tanks.
-pub let enemy_basic : Int = 0
-
-///|
-/// Enemy type constant for fast tanks.
-pub let enemy_fast : Int = 1
-
-///|
-/// Enemy type constant for heavy armored tanks.
-pub let enemy_heavy : Int = 2
-
-///|
-/// Enemy type constant for sniper tanks.
-pub let enemy_sniper : Int = 3
-
-///|
-/// Powerup type for temporary shield protection.
-pub let powerup_shield : Int = 0
-
-///|
-/// Powerup type for weapon upgrade star.
-pub let powerup_star : Int = 1
-
-///|
-/// Powerup type for grenade that destroys all on-screen enemies.
-pub let powerup_grenade : Int = 2
-
-///|
-/// Powerup type for clock that freezes all enemies.
-pub let powerup_clock : Int = 3
-
-///|
-/// Powerup type for shovel that fortifies the base.
-pub let powerup_shovel : Int = 4
-
-///|
-/// Powerup type for extra life tank.
-pub let powerup_tank : Int = 5
+pub(all) enum PowerupKind {
+  Shield
+  Star
+  Grenade
+  Clock
+  Shovel
+  Tank
+} derive(Eq)
 
 ///|
 /// World X coordinate of the left enemy spawn point.

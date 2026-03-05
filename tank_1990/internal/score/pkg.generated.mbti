@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "tonyfettes/raylib-examples/raylib_tank_1990/internal/score"
+package "tonyfettes/raylib-examples/tank_1990/internal/score"
 
 import {
-  "tonyfettes/raylib-examples/raylib_tank_1990/internal/types",
+  "tonyfettes/raylib-examples/tank_1990/internal/types",
 }
 
 // Values
@@ -10,7 +10,7 @@ pub fn bump_combo(@types.Game) -> Unit
 
 pub fn combo_multiplier(@types.Game) -> Int
 
-pub fn grant_score(@types.Game, Int, Int) -> Unit
+pub fn grant_score(@types.Game, @types.Team, Int) -> Unit
 
 pub fn update_combo(@types.Game, Float) -> Unit
 

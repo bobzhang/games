@@ -17,41 +17,45 @@ fn @types.Game::damage_tile_at_point(
   }
 
   let idx = @types.tile_index(tx, ty)
-  if tile == @types.tile_brick {
-    game.map_hp[idx] -= power
-    if game.map_hp[idx] <= 0 {
-      @types.set_tile(game, tx, ty, @types.tile_empty, 0)
+  match tile {
+    Brick => {
+      game.map_hp[idx] -= power
+      if game.map_hp[idx] <= 0 {
+        @types.set_tile(game, tx, ty, Empty, 0)
+        @particles.spawn_explosion(
+          game,
+          @types.tile_center_x(tx),
+          @types.tile_center_y(ty),
+          0.45,
+        )
+      } else {
+        @particles.spawn_spark_burst(game, world_x, world_y, 6)
+      }
+    }
+    Steel =>
+      if power >= 3 {
+        @types.set_tile(game, tx, ty, Empty, 0)
+        @particles.spawn_explosion(
+          game,
+          @types.tile_center_x(tx),
+          @types.tile_center_y(ty),
+          0.7,
+        )
+      } else {
+        @particles.spawn_spark_burst(game, world_x, world_y, 9)
+      }
+    Base => {
+      game.base_alive = false
+      game.base_flash = 1.0
       @particles.spawn_explosion(
         game,
         @types.tile_center_x(tx),
         @types.tile_center_y(ty),
-        0.45,
+        2.1,
       )
-    } else {
-      @particles.spawn_spark_burst(game, world_x, world_y, 6)
+      @types.push_camera_shake(game, 3.6)
     }
-  } else if tile == @types.tile_steel {
-    if power >= 3 {
-      @types.set_tile(game, tx, ty, @types.tile_empty, 0)
-      @particles.spawn_explosion(
-        game,
-        @types.tile_center_x(tx),
-        @types.tile_center_y(ty),
-        0.7,
-      )
-    } else {
-      @particles.spawn_spark_burst(game, world_x, world_y, 9)
-    }
-  } else if tile == @types.tile_base {
-    game.base_alive = false
-    game.base_flash = 1.0
-    @particles.spawn_explosion(
-      game,
-      @types.tile_center_x(tx),
-      @types.tile_center_y(ty),
-      2.1,
-    )
-    @types.push_camera_shake(game, 3.6)
+    _ => ()
   }
   true
 }
@@ -72,10 +76,10 @@ fn @types.Game::update_starfield(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 fn @types.Game::enter_game_over(game : @types.Game) -> Unit {
-  if game.state == @types.state_game_over {
+  if game.state == GameOver {
     return
   }
-  game.state = @types.state_game_over
+  game.state = GameOver
   game.game_over_timer = if game.demo_mode {
     0.8
   } else {
@@ -154,7 +158,7 @@ fn @types.Game::update_stage_intro(game : @types.Game, dt : Float) -> Unit {
   game.stage_intro_timer -= dt
   if game.stage_intro_timer <= 0.0 {
     game.stage_intro_timer = 0.0
-    game.state = @types.state_playing
+    game.state = Playing
   }
 }
 
@@ -167,7 +171,7 @@ fn @types.Game::update_stage_clear(game : @types.Game, dt : Float) -> Unit {
 
   game.stage_index += 1
   if game.stage_index >= @types.level_count {
-    game.state = @types.state_campaign_clear
+    game.state = CampaignClear
     game.campaign_clear_timer = if game.demo_mode {
       1.0
     } else {
@@ -185,7 +189,7 @@ fn @types.Game::update_campaign_clear(game : @types.Game, dt : Float) -> Unit {
     if game.demo_mode {
       game.start_demo_campaign()
     } else {
-      game.state = @types.state_menu
+      game.state = Menu
       game.menu_cursor = 0
     }
   }
@@ -198,7 +202,7 @@ fn @types.Game::update_game_over_state(game : @types.Game, dt : Float) -> Unit {
     if game.demo_mode {
       game.start_demo_campaign()
     } else {
-      game.state = @types.state_menu
+      game.state = Menu
       game.menu_cursor = 0
     }
   }
@@ -208,13 +212,13 @@ fn @types.Game::update_game_over_state(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   if game.demo_mode && @raylib.is_key_pressed(@raylib.KeyEscape) {
     game.demo_mode = false
-    game.state = @types.state_menu
+    game.state = Menu
     game.menu_cursor = 0
     return
   }
 
   if not(game.demo_mode) && @raylib.is_key_pressed(@raylib.KeyP) {
-    game.state = @types.state_paused
+    game.state = Paused
     return
   }
 
@@ -249,7 +253,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.stage_is_clear() {
-    game.state = @types.state_stage_clear
+    game.state = StageClear
     game.stage_clear_timer = if game.demo_mode {
       0.65
     } else {
@@ -269,10 +273,10 @@ fn @types.Game::update_paused(game : @types.Game, dt : Float) -> Unit {
   game.pause_blink += dt * 4.5
   @particles.update_particles(game, dt)
   if @raylib.is_key_pressed(@raylib.KeyP) {
-    game.state = @types.state_playing
+    game.state = Playing
   }
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.state_menu
+    game.state = Menu
     game.menu_cursor = 0
   }
 }
@@ -282,23 +286,17 @@ fn @types.Game::update_paused(game : @types.Game, dt : Float) -> Unit {
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
   game.update_starfield(dt)
-  if game.demo_mode && game.state != @types.state_menu {
+  if game.demo_mode && game.state != Menu {
     game.demo_elapsed += dt
   }
 
-  if game.state == @types.state_menu {
-    game.update_menu(dt)
-  } else if game.state == @types.state_stage_intro {
-    game.update_stage_intro(dt)
-  } else if game.state == @types.state_playing {
-    game.update_playing(dt)
-  } else if game.state == @types.state_paused {
-    game.update_paused(dt)
-  } else if game.state == @types.state_stage_clear {
-    game.update_stage_clear(dt)
-  } else if game.state == @types.state_game_over {
-    game.update_game_over_state(dt)
-  } else if game.state == @types.state_campaign_clear {
-    game.update_campaign_clear(dt)
+  match game.state {
+    Menu => game.update_menu(dt)
+    StageIntro => game.update_stage_intro(dt)
+    Playing => game.update_playing(dt)
+    Paused => game.update_paused(dt)
+    StageClear => game.update_stage_clear(dt)
+    GameOver => game.update_game_over_state(dt)
+    CampaignClear => game.update_campaign_clear(dt)
   }
 }

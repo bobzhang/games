@@ -42,6 +42,12 @@ pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
 }
 
 ///|
+/// Returns a random direction.
+pub fn rand_dir(game : Game) -> Dir {
+  Dir::from_int(rand_range(game, 0, 3))
+}
+
+///|
 /// Converts tile coordinates to a linear map index.
 pub fn tile_index(tx : Int, ty : Int) -> Int {
   ty * map_tiles_w + tx
@@ -55,17 +61,17 @@ pub fn in_tile_bounds(tx : Int, ty : Int) -> Bool {
 
 ///|
 /// Returns the tile type at the given tile coordinates, or steel if out of bounds.
-pub fn get_tile(game : Game, tx : Int, ty : Int) -> Int {
+pub fn get_tile(game : Game, tx : Int, ty : Int) -> Tile {
   if in_tile_bounds(tx, ty) {
     game.map_tiles[tile_index(tx, ty)]
   } else {
-    tile_steel
+    Steel
   }
 }
 
 ///|
 /// Sets the tile type and hit points at the given tile coordinates.
-pub fn set_tile(game : Game, tx : Int, ty : Int, tile : Int, hp : Int) -> Unit {
+pub fn set_tile(game : Game, tx : Int, ty : Int, tile : Tile, hp : Int) -> Unit {
   if in_tile_bounds(tx, ty) {
     let idx = tile_index(tx, ty)
     game.map_tiles[idx] = tile
@@ -123,25 +129,21 @@ pub fn tile_to_screen_y(ty : Int, shake_y : Float) -> Int {
 
 ///|
 /// Returns the X component of a unit direction vector.
-pub fn dir_vector_x(dir : Int) -> Float {
-  if dir == dir_left {
-    -1.0
-  } else if dir == dir_right {
-    1.0
-  } else {
-    0.0
+pub fn dir_vector_x(dir : Dir) -> Float {
+  match dir {
+    Left => -1.0
+    Right => 1.0
+    _ => 0.0
   }
 }
 
 ///|
 /// Returns the Y component of a unit direction vector.
-pub fn dir_vector_y(dir : Int) -> Float {
-  if dir == dir_up {
-    -1.0
-  } else if dir == dir_down {
-    1.0
-  } else {
-    0.0
+pub fn dir_vector_y(dir : Dir) -> Float {
+  match dir {
+    Up => -1.0
+    Down => 1.0
+    _ => 0.0
   }
 }
 
@@ -173,54 +175,51 @@ pub fn distance_sq(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 
 ///|
 /// Returns whether the tile type blocks tank movement.
-pub fn is_tile_solid_for_tank(tile : Int) -> Bool {
-  tile == tile_brick ||
-  tile == tile_steel ||
-  tile == tile_water ||
-  tile == tile_base
+pub fn is_tile_solid_for_tank(tile : Tile) -> Bool {
+  match tile {
+    Brick | Steel | Water | Base => true
+    _ => false
+  }
 }
 
 ///|
 /// Returns whether the tile type blocks bullets.
-pub fn is_tile_solid_for_bullet(tile : Int) -> Bool {
-  tile == tile_brick || tile == tile_steel || tile == tile_base
+pub fn is_tile_solid_for_bullet(tile : Tile) -> Bool {
+  match tile {
+    Brick | Steel | Base => true
+    _ => false
+  }
 }
 
 ///|
 /// Returns the score value awarded for destroying an enemy of the given `kind`.
-pub fn enemy_score(kind : Int) -> Int {
-  if kind == enemy_fast {
-    200
-  } else if kind == enemy_heavy {
-    400
-  } else if kind == enemy_sniper {
-    300
-  } else {
-    100
+pub fn enemy_score(kind : EnemyKind) -> Int {
+  match kind {
+    Fast => 200
+    Heavy => 400
+    Sniper => 300
+    Basic => 100
   }
 }
 
 ///|
 /// Returns the display color for an enemy of the given `kind`.
-pub fn enemy_color(kind : Int) -> @raylib.Color {
-  if kind == enemy_fast {
-    @raylib.orange
-  } else if kind == enemy_heavy {
-    @raylib.red
-  } else if kind == enemy_sniper {
-    @raylib.purple
-  } else {
-    @raylib.yellow
+pub fn enemy_color(kind : EnemyKind) -> @raylib.Color {
+  match kind {
+    Fast => @raylib.orange
+    Heavy => @raylib.red
+    Sniper => @raylib.purple
+    Basic => @raylib.yellow
   }
 }
 
 ///|
 /// Returns the team identifier for the given player `index`.
-pub fn team_of_player(index : Int) -> Int {
+pub fn team_of_player(index : Int) -> Team {
   if index == 0 {
-    team_player1
+    Player1
   } else {
-    team_player2
+    Player2
   }
 }
 
@@ -296,60 +295,39 @@ pub fn pulse_color(base : @raylib.Color, phase : Float) -> @raylib.Color {
 
 ///|
 /// Returns the display color for a powerup of the given `kind`.
-pub fn powerup_color(kind : Int) -> @raylib.Color {
-  if kind == powerup_shield {
-    @raylib.skyblue
-  } else if kind == powerup_star {
-    @raylib.gold
-  } else if kind == powerup_grenade {
-    @raylib.red
-  } else if kind == powerup_clock {
-    @raylib.lime
-  } else if kind == powerup_shovel {
-    @raylib.brown
-  } else if kind == powerup_tank {
-    @raylib.orange
-  } else {
-    @raylib.white
+pub fn powerup_color(kind : PowerupKind) -> @raylib.Color {
+  match kind {
+    Shield => @raylib.skyblue
+    Star => @raylib.gold
+    Grenade => @raylib.red
+    Clock => @raylib.lime
+    Shovel => @raylib.brown
+    Tank => @raylib.orange
   }
 }
 
 ///|
 /// Returns the single-character label for a powerup of the given `kind`.
-pub fn powerup_text(kind : Int) -> String {
-  if kind == powerup_shield {
-    "S"
-  } else if kind == powerup_star {
-    "*"
-  } else if kind == powerup_grenade {
-    "G"
-  } else if kind == powerup_clock {
-    "C"
-  } else if kind == powerup_shovel {
-    "H"
-  } else if kind == powerup_tank {
-    "+"
-  } else {
-    "?"
+pub fn powerup_text(kind : PowerupKind) -> String {
+  match kind {
+    Shield => "S"
+    Star => "*"
+    Grenade => "G"
+    Clock => "C"
+    Shovel => "H"
+    Tank => "+"
   }
 }
 
 ///|
 /// Returns the collision radius for a powerup of the given `kind`.
-pub fn powerup_radius(kind : Int) -> Float {
-  if kind == powerup_shield {
-    11.0
-  } else if kind == powerup_star {
-    10.0
-  } else if kind == powerup_grenade {
-    12.0
-  } else if kind == powerup_clock {
-    11.0
-  } else if kind == powerup_shovel {
-    11.0
-  } else if kind == powerup_tank {
-    12.0
-  } else {
-    10.0
+pub fn powerup_radius(kind : PowerupKind) -> Float {
+  match kind {
+    Shield => 11.0
+    Star => 10.0
+    Grenade => 12.0
+    Clock => 11.0
+    Shovel => 11.0
+    Tank => 12.0
   }
 }
