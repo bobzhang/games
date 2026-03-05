@@ -44,45 +44,49 @@ fn @types.Game::clear_pulses(game : @types.Game) -> Unit {
 ///|
 /// Returns the index of the first inactive node slot, or -1 if the pool is full.
 fn @types.Game::alloc_node(game : @types.Game) -> Int {
-  for i in 0..<game.nodes.length() {
-    if not(game.nodes[i].active) {
-      return i
+  for i, slot in game.nodes {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   -1
+  }
 }
 
 ///|
 /// Returns the index of the first inactive enemy slot, or -1 if the pool is full.
 fn @types.Game::alloc_enemy(game : @types.Game) -> Int {
-  for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
-      return i
+  for i, slot in game.enemies {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   -1
+  }
 }
 
 ///|
 /// Returns the index of the first inactive bolt slot, or -1 if the pool is full.
 fn @types.Game::alloc_bolt(game : @types.Game) -> Int {
-  for i in 0..<game.bolts.length() {
-    if not(game.bolts[i].active) {
-      return i
+  for i, slot in game.bolts {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   -1
+  }
 }
 
 ///|
 /// Returns the index of the first inactive pulse slot, or -1 if the pool is full.
 fn @types.Game::alloc_pulse(game : @types.Game) -> Int {
-  for i in 0..<game.pulses.length() {
-    if not(game.pulses[i].active) {
-      return i
+  for i, slot in game.pulses {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   -1
+  }
 }
 
 ///|
