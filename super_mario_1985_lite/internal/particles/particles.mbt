@@ -8,12 +8,13 @@ pub fn clear_particles(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::alloc_particle(game : @types.Game) -> Int {
-  for i in 0..<game.particles.length() {
-    if not(game.particles[i].active) {
-      return i
+  for i, slot in game.particles {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   -1
+  }
 }
 
 ///|

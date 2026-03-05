@@ -10,22 +10,24 @@ fn @types.Game::clear_dynamic_world(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::alloc_enemy(game : @types.Game) -> Int {
-  for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
-      return i
+  for i, slot in game.enemies {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   -1
+  }
 }
 
 ///|
 fn @types.Game::alloc_coin(game : @types.Game) -> Int {
-  for i in 0..<game.coins.length() {
-    if not(game.coins[i].active) {
-      return i
+  for i, slot in game.coins {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
   -1
+  }
 }
 
 ///|
