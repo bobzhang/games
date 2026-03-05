@@ -1,5 +1,6 @@
 import {
   "tonyfettes/raylib",
+  "moonbitlang/core/cmp",
   "tonyfettes/raylib-examples/tank_1990/internal/game",
   "tonyfettes/raylib-examples/tank_1990/internal/render",
   "tonyfettes/raylib-examples/tank_1990/internal/types",

@@ -749,8 +749,7 @@ fn update_thieves(game : @types.Game, dt : Float) -> Unit {
       let gate = @types.gate_position()
       let dx = gate.0 - thief.x
       let dy = gate.1 - thief.y
-      let inv = Float::from_int(1) /
-        @types.maxf(@math.hypotf(dx, dy), 0.001)
+      let inv = Float::from_int(1) / @types.maxf(@math.hypotf(dx, dy), 0.001)
       vx = dx * inv * (thief.speed * 0.36)
       vy = dy * inv * (thief.speed * 0.36)
     }

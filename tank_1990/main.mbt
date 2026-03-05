@@ -8,11 +8,8 @@ fn main {
 
   let game = @types.Game::new()
 
-  while not(@raylib.window_should_close()) {
-    let mut dt = @raylib.get_frame_time()
-    if dt > 0.05 {
-      dt = 0.05
-    }
+  while !@raylib.window_should_close() {
+    let dt = @cmp.minimum(@raylib.get_frame_time(), 0.05)
 
     @game.update_game(game, dt)
 

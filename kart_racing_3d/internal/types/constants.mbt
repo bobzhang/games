@@ -722,4 +722,3 @@ pub let track_difficulty_ratings : Array[Int] = [
    4, // Deep Trench
    5, // Grand Prix
 ]
-
