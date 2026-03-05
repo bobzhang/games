@@ -8,7 +8,7 @@ pub(all) struct Traffic {
   mut vy : Float
   mut w : Float
   mut h : Float
-  mut kind : Int
+  mut kind : TrafficKind
   mut phase : Float
 }
 
@@ -23,7 +23,7 @@ pub fn Traffic::new() -> Traffic {
     vy: 0.0,
     w: 0.0,
     h: 0.0,
-    kind: traffic_sedan,
+    kind: Sedan,
     phase: 0.0,
   }
 }
@@ -64,7 +64,7 @@ pub(all) struct Pickup {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut kind : Int
+  mut kind : PickupKind
   mut phase : Float
 }
 
@@ -77,7 +77,7 @@ pub fn Pickup::new() -> Pickup {
     y: 0.0,
     vx: 0.0,
     vy: 0.0,
-    kind: pickup_fuel,
+    kind: Fuel,
     phase: 0.0,
   }
 }
@@ -117,7 +117,7 @@ pub(all) struct Game {
   orders : Array[Order]
   pickups : Array[Pickup]
   particles : Array[Particle]
-  mut state : Int
+  mut state : GameState
   mut rider_x : Float
   mut rider_y : Float
   mut rider_vx : Float
@@ -167,7 +167,7 @@ pub fn Game::new() -> Game {
     orders: Array::makei(max_orders, fn(_i) { Order::new() }),
     pickups: Array::makei(max_pickups, fn(_i) { Pickup::new() }),
     particles: Array::makei(max_particles, fn(_i) { Particle::new() }),
-    state: state_title,
+    state: Title,
     rider_x: Float::from_int(world_x0 + world_w / 2),
     rider_y: Float::from_int(world_y0 + world_h / 2),
     rider_vx: 0.0,

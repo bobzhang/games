@@ -11,40 +11,28 @@ pub let screen_h : Int = 980
 pub let target_fps : Int = 120
 
 ///|
-/// State id used for the title screen.
-pub let state_title : Int = 0
+/// Represents the high-level game screen state.
+pub(all) enum GameState {
+  Title
+  Play
+  Result
+} derive(Eq)
 
 ///|
-/// State id used for active gameplay.
-pub let state_play : Int = 1
+/// Represents the kind of traffic vehicle.
+pub(all) enum TrafficKind {
+  Sedan
+  Bus
+  Van
+} derive(Eq)
 
 ///|
-/// State id used for the result screen.
-pub let state_result : Int = 2
-
-///|
-/// Traffic kind id for sedan vehicles.
-pub let traffic_sedan : Int = 0
-
-///|
-/// Traffic kind id for buses.
-pub let traffic_bus : Int = 1
-
-///|
-/// Traffic kind id for vans.
-pub let traffic_van : Int = 2
-
-///|
-/// Pickup kind id for fuel refills.
-pub let pickup_fuel : Int = 0
-
-///|
-/// Pickup kind id for scooter repairs.
-pub let pickup_repair : Int = 1
-
-///|
-/// Pickup kind id for temporary speed boosts.
-pub let pickup_speed : Int = 2
+/// Represents the kind of pickup item.
+pub(all) enum PickupKind {
+  Fuel
+  Repair
+  Speed
+} derive(Eq)
 
 ///|
 /// Maximum number of traffic entities in the pool.

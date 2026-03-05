@@ -11,50 +11,6 @@ pub let screen_h : Int = 720
 pub let target_fps : Int = 120
 
 ///|
-/// Title screen state id.
-pub let state_title : Int = 0
-
-///|
-/// Active heist gameplay state id.
-pub let state_play : Int = 1
-
-///|
-/// Stage-clear transition state id.
-pub let state_stage_clear : Int = 2
-
-///|
-/// Game-over state id.
-pub let state_game_over : Int = 3
-
-///|
-/// Entity kind id for patrol guards.
-pub let ent_guard : Int = 0
-
-///|
-/// Entity kind id for flying drones.
-pub let ent_drone : Int = 1
-
-///|
-/// Entity kind id for stationary turrets.
-pub let ent_turret : Int = 2
-
-///|
-/// Entity kind id for explosive crates.
-pub let ent_crate : Int = 3
-
-///|
-/// Entity kind id for armor pickups.
-pub let ent_medkit : Int = 4
-
-///|
-/// Entity kind id for heat pickups.
-pub let ent_battery : Int = 5
-
-///|
-/// Entity kind id for signal loot pickups.
-pub let ent_signal : Int = 6
-
-///|
 /// Maximum entities tracked in the pool.
 pub let max_ents : Int = 380
 
@@ -377,3 +333,24 @@ pub fn armor_col() -> @raylib.Color {
 pub fn heat_col() -> @raylib.Color {
   @raylib.Color::new(116, 244, 196, 255)
 }
+
+///|
+/// Entity kind for enemies and pickups.
+pub(all) enum EntityKind {
+  Guard
+  Drone
+  Turret
+  Crate
+  Medkit
+  Battery
+  Signal
+} derive(Eq)
+
+///|
+/// Game state machine states.
+pub(all) enum GameState {
+  Title
+  Play
+  StageClear
+  GameOver
+} derive(Eq)

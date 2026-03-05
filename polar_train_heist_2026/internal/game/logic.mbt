@@ -3,7 +3,7 @@
 fn @types.Game::clear_ents(game : @types.Game) -> Unit {
   for ent in game.ents {
     ent.active = false
-    ent.kind = @types.ent_guard
+    ent.kind = Guard
     ent.x = 0.0
     ent.y = 0.0
     ent.vx = 0.0
@@ -315,7 +315,7 @@ fn @types.Game::spawn_shot(
 /// Activates an entity slot and initializes it with the given kind, lane, position, and combat stats.
 fn @types.Game::spawn_ent(
   game : @types.Game,
-  kind : Int,
+  kind : @types.EntityKind,
   lane : Int,
   x : Float,
   vx : Float,
@@ -392,7 +392,7 @@ fn @types.Game::hurt_player(game : @types.Game, dmg : Float) -> Unit {
   game.clear_combo()
 
   if game.armor <= 0.0 {
-    game.state = @types.state_game_over
+    game.state = GameOver
     game.result_t = 0.0
   }
 }
@@ -407,7 +407,7 @@ fn @types.Game::start_stage(game : @types.Game, stage : Int) -> Unit {
   game.clear_shadows()
   reset_player(game.hero)
 
-  game.state = @types.state_play
+  game.state = Play
   game.stage = stage
   game.distance = 0.0
   game.stage_goal = @types.stage_goal_base +
@@ -452,7 +452,7 @@ fn @types.Game::init_title_scene(game : @types.Game) -> Unit {
   game.clear_shadows()
   reset_player(game.hero)
 
-  game.state = @types.state_title
+  game.state = Title
   game.stage = 1
   game.distance = 0.0
   game.stage_goal = @types.stage_goal_base
@@ -497,7 +497,7 @@ fn @types.Game::spawn_pack(game : @types.Game, x : Float) -> Unit {
 
     if roll < 30 {
       game.spawn_ent(
-        @types.ent_guard,
+        Guard,
         lane,
         x + @types.randf(-16.0, 18.0),
         @types.randf(-70.0, -30.0),
@@ -511,7 +511,7 @@ fn @types.Game::spawn_pack(game : @types.Game, x : Float) -> Unit {
       )
     } else if roll < 52 {
       game.spawn_ent(
-        @types.ent_drone,
+        Drone,
         lane,
         x + @types.randf(-20.0, 20.0),
         @types.randf(-40.0, 20.0),
@@ -525,7 +525,7 @@ fn @types.Game::spawn_pack(game : @types.Game, x : Float) -> Unit {
       )
     } else if roll < 66 {
       game.spawn_ent(
-        @types.ent_turret,
+        Turret,
         lane,
         x + @types.randf(-10.0, 10.0),
         @types.randf(-20.0, 10.0),
@@ -539,7 +539,7 @@ fn @types.Game::spawn_pack(game : @types.Game, x : Float) -> Unit {
       )
     } else if roll < 78 {
       game.spawn_ent(
-        @types.ent_crate,
+        Crate,
         lane,
         x + @types.randf(-16.0, 16.0),
         @types.randf(-20.0, 10.0),
@@ -553,7 +553,7 @@ fn @types.Game::spawn_pack(game : @types.Game, x : Float) -> Unit {
       )
     } else if roll < 88 {
       game.spawn_ent(
-        @types.ent_medkit,
+        Medkit,
         lane,
         x + @types.randf(-20.0, 20.0),
         @types.randf(-20.0, 20.0),
@@ -567,7 +567,7 @@ fn @types.Game::spawn_pack(game : @types.Game, x : Float) -> Unit {
       )
     } else if roll < 96 {
       game.spawn_ent(
-        @types.ent_battery,
+        Battery,
         lane,
         x + @types.randf(-20.0, 20.0),
         @types.randf(-20.0, 20.0),
@@ -581,7 +581,7 @@ fn @types.Game::spawn_pack(game : @types.Game, x : Float) -> Unit {
       )
     } else {
       game.spawn_ent(
-        @types.ent_signal,
+        Signal,
         lane,
         x + @types.randf(-20.0, 20.0),
         @types.randf(-20.0, 20.0),
@@ -640,7 +640,7 @@ fn @types.Game::apply_hook(game : @types.Game) -> Unit {
       let x = ent.x
       let y = ent.y
       ent.active = false
-      game.add_score(if kind == @types.ent_crate { 150 } else { 88 })
+      game.add_score(if kind == Crate { 150 } else { 88 })
       game.push_combo()
       game.burst(x, y, 18, 1)
       game.spawn_ring(x, y, 10.0, 0.5, 1)
@@ -834,7 +834,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
 ///|
 /// Fires one or two enemy projectiles from the given entity based on its kind.
 fn @types.Game::enemy_fire(game : @types.Game, e : @types.Ent) -> Unit {
-  if e.kind == @types.ent_guard {
+  if e.kind == Guard {
     game.spawn_shot(
       false,
       e.x - e.w * 0.4,
@@ -845,7 +845,7 @@ fn @types.Game::enemy_fire(game : @types.Game, e : @types.Ent) -> Unit {
       9.0,
       0,
     )
-  } else if e.kind == @types.ent_drone {
+  } else if e.kind == Drone {
     let dx = game.hero.x - e.x
     let dy = game.hero.y - e.y
     let n2 = @types.maxf(dx * dx + dy * dy, 1.0)
@@ -860,7 +860,7 @@ fn @types.Game::enemy_fire(game : @types.Game, e : @types.Ent) -> Unit {
       11.0,
       1,
     )
-  } else if e.kind == @types.ent_turret {
+  } else if e.kind == Turret {
     game.spawn_shot(
       false,
       e.x - 10.0,
@@ -904,11 +904,11 @@ fn @types.Game::kill_ent(
 
 ///|
 /// Applies the effect of a collected pickup: medkits restore armor, batteries restore heat, signals reduce hook cooldown and add loot.
-fn @types.Game::collect_pickup(game : @types.Game, kind : Int) -> Unit {
-  if kind == @types.ent_medkit {
+fn @types.Game::collect_pickup(game : @types.Game, kind : @types.EntityKind) -> Unit {
+  if kind == Medkit {
     game.armor = @types.minf(@types.armor_max, game.armor + 18.0)
     game.add_score(44)
-  } else if kind == @types.ent_battery {
+  } else if kind == Battery {
     game.heat = @types.minf(@types.heat_max, game.heat + @types.heat_pickup)
     game.add_score(40)
   } else {
@@ -935,15 +935,15 @@ fn @types.Game::update_ents(game : @types.Game, dt : Float) -> Unit {
     game.ents[i].spin = game.ents[i].spin + dt * 1.9
     game.ents[i].shot_cd = game.ents[i].shot_cd - dt
 
-    if game.ents[i].kind == @types.ent_guard {
+    if game.ents[i].kind == Guard {
       game.ents[i].x = game.ents[i].x +
         @math.sinf(game.ents[i].spin * 2.4) * 22.0 * dt
-    } else if game.ents[i].kind == @types.ent_drone {
+    } else if game.ents[i].kind == Drone {
       game.ents[i].y = @types.lane_y(game.ents[i].lane) +
         @math.sinf(game.ents[i].spin * 3.0) * 22.0
-    } else if game.ents[i].kind == @types.ent_turret {
+    } else if game.ents[i].kind == Turret {
       game.ents[i].y = @types.lane_y(game.ents[i].lane) - 6.0
-    } else if game.ents[i].kind == @types.ent_crate {
+    } else if game.ents[i].kind == Crate {
       game.ents[i].w = 52.0 + @math.sinf(game.ents[i].spin * 2.0) * 4.0
       game.ents[i].h = 52.0 + @math.sinf(game.ents[i].spin * 2.6) * 4.0
     }
@@ -957,11 +957,11 @@ fn @types.Game::update_ents(game : @types.Game, dt : Float) -> Unit {
       game.ents[i].shot_cd <= 0.0 &&
       game.ents[i].x < Float::from_int(@types.screen_w) - 20.0 {
       game.enemy_fire(game.ents[i])
-      game.ents[i].shot_cd = if game.ents[i].kind == @types.ent_guard {
+      game.ents[i].shot_cd = if game.ents[i].kind == Guard {
         @types.randf(0.74, 1.42)
-      } else if game.ents[i].kind == @types.ent_drone {
+      } else if game.ents[i].kind == Drone {
         @types.randf(0.44, 1.02)
-      } else if game.ents[i].kind == @types.ent_turret {
+      } else if game.ents[i].kind == Turret {
         @types.randf(0.92, 1.72)
       } else {
         @types.randf(1.1, 1.8)
@@ -985,15 +985,15 @@ fn @types.Game::update_ents(game : @types.Game, dt : Float) -> Unit {
       } else if dash_hit {
         game.kill_ent(i, game.ents[i].reward, 0)
       } else {
-        let dmg : Float = if kind == @types.ent_crate {
+        let dmg : Float = if kind == Crate {
           20.0
-        } else if kind == @types.ent_turret {
+        } else if kind == Turret {
           16.0
         } else {
           13.0
         }
         game.hurt_player(dmg)
-        if kind != @types.ent_crate {
+        if kind != Crate {
           game.ents[i].active = false
         }
       }
@@ -1196,8 +1196,8 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
     game.hurt_player(100.0)
   }
 
-  if game.state == @types.state_play && game.distance >= game.stage_goal {
-    game.state = @types.state_stage_clear
+  if game.state == Play && game.distance >= game.stage_goal {
+    game.state = StageClear
     game.result_t = 0.0
     game.add_score(320 + game.stage * 120)
     game.armor = @types.minf(@types.armor_max, game.armor + 14.0)
@@ -1268,9 +1268,9 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.hint_t = game.hint_t + dt
 
   // Handle input based on game state
-  if game.state == @types.state_title {
+  if game.state == Title {
     game.update_title_input()
-  } else if game.state == @types.state_play {
+  } else if game.state == Play {
     game.update_play_input()
   } else {
     game.update_result_input()
@@ -1278,11 +1278,11 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 
   game.update_timers(dt)
 
-  if game.state == @types.state_title {
+  if game.state == Title {
     game.update_title(dt)
-  } else if game.state == @types.state_play {
+  } else if game.state == Play {
     game.update_play(dt)
-  } else if game.state == @types.state_stage_clear {
+  } else if game.state == StageClear {
     game.update_stage_clear(dt)
   } else {
     game.update_game_over(dt)

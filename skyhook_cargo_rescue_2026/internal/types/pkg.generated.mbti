@@ -24,12 +24,6 @@ pub fn clampf(Float, Float, Float) -> Float
 
 pub fn dist2(Float, Float, Float, Float) -> Float
 
-pub let hazard_cloud : Int
-
-pub let hazard_drone : Int
-
-pub let hazard_ice : Int
-
 pub let heli_r : Float
 
 pub fn hook_tip_x(Game) -> Float
@@ -53,12 +47,6 @@ pub fn minf(Float, Float) -> Float
 pub let panel_w : Int
 
 pub let panel_x0 : Int
-
-pub let pickup_fuel : Int
-
-pub let pickup_medkit : Int
-
-pub let pickup_turbo : Int
 
 pub fn point_in_rect(Float, Float, Int, Int, Int, Int) -> Bool
 
@@ -92,12 +80,6 @@ pub let screen_w : Int
 
 pub fn start_button_rect() -> (Int, Int, Int, Int)
 
-pub let state_play : Int
-
-pub let state_result : Int
-
-pub let state_title : Int
-
 pub let survivor_r : Float
 
 pub let target_fps : Int
@@ -126,7 +108,7 @@ pub(all) struct Game {
   hazards : Array[Hazard]
   pickups : Array[Pickup]
   particles : Array[Particle]
-  mut state : Int
+  mut state : GameState
   mut heli_x : Float
   mut heli_y : Float
   mut heli_vx : Float
@@ -172,6 +154,13 @@ pub(all) struct Game {
 }
 pub fn Game::new() -> Self
 
+pub(all) enum GameState {
+  Title
+  Play
+  Result
+}
+pub impl Eq for GameState
+
 pub(all) struct Hazard {
   mut active : Bool
   mut x : Float
@@ -180,10 +169,17 @@ pub(all) struct Hazard {
   mut vy : Float
   mut r : Float
   mut hp : Float
-  mut kind : Int
+  mut kind : HazardKind
   mut phase : Float
 }
 pub fn Hazard::new() -> Self
+
+pub(all) enum HazardKind {
+  Cloud
+  Drone
+  Ice
+}
+pub impl Eq for HazardKind
 
 pub(all) struct Particle {
   mut active : Bool
@@ -203,10 +199,17 @@ pub(all) struct Pickup {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut kind : Int
+  mut kind : PickupKind
   mut phase : Float
 }
 pub fn Pickup::new() -> Self
+
+pub(all) enum PickupKind {
+  Fuel
+  Medkit
+  Turbo
+}
+pub impl Eq for PickupKind
 
 pub(all) struct Survivor {
   mut active : Bool

@@ -158,13 +158,11 @@ fn @types.Game::draw_world_back(game : @types.Game, ox : Int, oy : Int) -> Unit 
 
 ///|
 /// Returns the fill colour for a traffic vehicle based on its kind (sedan, van, or bus).
-fn traffic_color(kind : Int) -> @raylib.Color {
-  if kind == @types.traffic_sedan {
-    @raylib.Color::new(204, 112, 104, 244)
-  } else if kind == @types.traffic_van {
-    @raylib.Color::new(128, 166, 216, 244)
-  } else {
-    @raylib.Color::new(212, 184, 118, 244)
+fn traffic_color(kind : @types.TrafficKind) -> @raylib.Color {
+  match kind {
+    Sedan => @raylib.Color::new(204, 112, 104, 244)
+    Van => @raylib.Color::new(128, 166, 216, 244)
+    Bus => @raylib.Color::new(212, 184, 118, 244)
   }
 }
 
@@ -251,13 +249,11 @@ fn draw_order(o : @types.Order, highlight : Bool, ox : Int, oy : Int) -> Unit {
 
 ///|
 /// Returns the fill colour for a pickup item based on its kind (fuel, repair, or speed).
-fn pickup_color(kind : Int) -> @raylib.Color {
-  if kind == @types.pickup_fuel {
-    @raylib.Color::new(255, 198, 110, 244)
-  } else if kind == @types.pickup_repair {
-    @raylib.Color::new(255, 138, 164, 244)
-  } else {
-    @raylib.Color::new(206, 162, 255, 244)
+fn pickup_color(kind : @types.PickupKind) -> @raylib.Color {
+  match kind {
+    Fuel => @raylib.Color::new(255, 198, 110, 244)
+    Repair => @raylib.Color::new(255, 138, 164, 244)
+    Speed => @raylib.Color::new(206, 162, 255, 244)
   }
 }
 
@@ -279,36 +275,38 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
     rr + 3.0,
     @raylib.Color::new(246, 252, 255, 210),
   )
-  if p.kind == @types.pickup_fuel {
-    @raylib.draw_rectangle(
-      x - 5,
-      y - 8,
-      10,
-      16,
-      @raylib.Color::new(58, 36, 20, 230),
-    )
-  } else if p.kind == @types.pickup_repair {
-    @raylib.draw_line(
-      x - 6,
-      y,
-      x + 6,
-      y,
-      @raylib.Color::new(250, 248, 248, 240),
-    )
-    @raylib.draw_line(
-      x,
-      y - 6,
-      x,
-      y + 6,
-      @raylib.Color::new(250, 248, 248, 240),
-    )
-  } else {
-    @raylib.draw_circle_lines(
-      x,
-      y,
-      rr - 4.0,
-      @raylib.Color::new(236, 214, 255, 220),
-    )
+  match p.kind {
+    Fuel =>
+      @raylib.draw_rectangle(
+        x - 5,
+        y - 8,
+        10,
+        16,
+        @raylib.Color::new(58, 36, 20, 230),
+      )
+    Repair => {
+      @raylib.draw_line(
+        x - 6,
+        y,
+        x + 6,
+        y,
+        @raylib.Color::new(250, 248, 248, 240),
+      )
+      @raylib.draw_line(
+        x,
+        y - 6,
+        x,
+        y + 6,
+        @raylib.Color::new(250, 248, 248, 240),
+      )
+    }
+    Speed =>
+      @raylib.draw_circle_lines(
+        x,
+        y,
+        rr - 4.0,
+        @raylib.Color::new(236, 214, 255, 220),
+      )
   }
 }
 
@@ -672,7 +670,7 @@ fn @types.Game::draw_touch_button(
 ///|
 /// Draws all on-screen touch control buttons for directional movement, boost, action, hint, and restart.
 fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
   game.draw_touch_button(
@@ -975,9 +973,9 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_panel()
   game.draw_touch_controls()
   game.draw_msg()
-  if game.state == @types.state_title {
-    game.draw_title_overlay()
-  } else if game.state == @types.state_result {
-    game.draw_result_overlay()
+  match game.state {
+    Title => game.draw_title_overlay()
+    Result => game.draw_result_overlay()
+    Play => ()
   }
 }

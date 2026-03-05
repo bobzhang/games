@@ -2,7 +2,7 @@
 /// Runtime entity record for enemies and pickups.
 pub(all) struct Ent {
   mut active : Bool
-  mut kind : Int
+  mut kind : EntityKind
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -98,7 +98,7 @@ pub(all) struct Game {
   rings : Array[Ring]
   shadows : Array[Shadow]
   hero : Player
-  mut state : Int
+  mut state : GameState
   mut stage : Int
   mut distance : Float
   mut stage_goal : Float
@@ -144,7 +144,7 @@ pub(all) struct Game {
 pub fn Ent::new() -> Ent {
   {
     active: false,
-    kind: ent_guard,
+    kind: Guard,
     x: 0.0,
     y: 0.0,
     vx: 0.0,
@@ -246,7 +246,7 @@ pub fn Game::new() -> Game {
     rings: Array::makei(max_rings, fn(_i) { Ring::new() }),
     shadows: Array::makei(max_shadows, fn(_i) { Shadow::new() }),
     hero: Player::new(),
-    state: state_title,
+    state: Title,
     stage: 1,
     distance: 0.0,
     stage_goal: stage_goal_base,

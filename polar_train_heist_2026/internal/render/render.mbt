@@ -379,21 +379,15 @@ fn @types.Game::draw_speed_lines(
 
 ///|
 /// Returns the base display color for an entity kind id.
-fn ent_base_col(kind : Int) -> @raylib.Color {
-  if kind == @types.ent_guard {
-    @raylib.Color::new(255, 136, 162, 255)
-  } else if kind == @types.ent_drone {
-    @raylib.Color::new(114, 236, 255, 255)
-  } else if kind == @types.ent_turret {
-    @raylib.Color::new(255, 186, 118, 255)
-  } else if kind == @types.ent_crate {
-    @raylib.Color::new(220, 150, 100, 255)
-  } else if kind == @types.ent_medkit {
-    @raylib.Color::new(255, 108, 130, 255)
-  } else if kind == @types.ent_battery {
-    @types.heat_col()
-  } else {
-    @raylib.Color::new(212, 172, 255, 255)
+fn ent_base_col(kind : @types.EntityKind) -> @raylib.Color {
+  match kind {
+    Guard => @raylib.Color::new(255, 136, 162, 255)
+    Drone => @raylib.Color::new(114, 236, 255, 255)
+    Turret => @raylib.Color::new(255, 186, 118, 255)
+    Crate => @raylib.Color::new(220, 150, 100, 255)
+    Medkit => @raylib.Color::new(255, 108, 130, 255)
+    Battery => @types.heat_col()
+    Signal => @raylib.Color::new(212, 172, 255, 255)
   }
 }
 
@@ -609,7 +603,7 @@ fn draw_pickup(
   let x = e.x + cam_x
   let y = e.y + cam_y
 
-  if e.kind == @types.ent_medkit {
+  if e.kind == Medkit {
     @raylib.draw_circle(x.to_int(), y.to_int(), 18.0, col)
     @raylib.draw_rectangle(
       (x - 5.0).to_int(),
@@ -625,7 +619,7 @@ fn draw_pickup(
       10,
       @raylib.Color::new(255, 242, 242, 236),
     )
-  } else if e.kind == @types.ent_battery {
+  } else if e.kind == Battery {
     @raylib.draw_rectangle(
       (x - 15.0).to_int(),
       (y - 17.0).to_int(),
@@ -683,13 +677,13 @@ fn draw_ent(e : @types.Ent, cam_x : Float, cam_y : Float) -> Unit {
     col = a_col(col, 84)
   }
 
-  if e.kind == @types.ent_guard {
+  if e.kind == Guard {
     draw_guard(e, col, cam_x, cam_y)
-  } else if e.kind == @types.ent_drone {
+  } else if e.kind == Drone {
     draw_drone(e, col, cam_x, cam_y)
-  } else if e.kind == @types.ent_turret {
+  } else if e.kind == Turret {
     draw_turret(e, col, cam_x, cam_y)
-  } else if e.kind == @types.ent_crate {
+  } else if e.kind == Crate {
     draw_crate(e, col, cam_x, cam_y)
   } else {
     draw_pickup(e, col, cam_x, cam_y)
@@ -701,7 +695,7 @@ fn draw_ent(e : @types.Ent, cam_x : Float, cam_y : Float) -> Unit {
     let hpy = e.y - e.h * 0.72 + cam_y
     let pct = @types.clampf(
       e.hp /
-      @types.maxf(1.0, if e.kind == @types.ent_crate { 35.0 } else { 24.0 }),
+      @types.maxf(1.0, if e.kind == Crate { 35.0 } else { 24.0 }),
       0.0,
       1.0,
     )
@@ -1180,7 +1174,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     )
   }
 
-  if game.state == @types.state_play {
+  if game.state == Play {
     @raylib.draw_text(
       "A/D move  W/SPACE jump  J shoot  K dash  L hook",
       20,
@@ -1250,7 +1244,7 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
     return
   }
 
-  if game.state == @types.state_play {
+  if game.state == Play {
     draw_button_visual("<", @types.btn_left_rect(), game.input_x < -0.2, game)
     draw_button_visual(">", @types.btn_right_rect(), game.input_x > 0.2, game)
     draw_button_visual(
@@ -1277,7 +1271,7 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
       game.input_hook_press,
       game,
     )
-  } else if game.state == @types.state_title {
+  } else if game.state == Title {
     draw_button_visual("START", @types.title_start_rect(), false, game)
   } else {
     draw_button_visual("RETRY", @types.retry_rect(), false, game)
@@ -1580,18 +1574,18 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_world(shake.0, shake.1)
   game.draw_hud()
 
-  if game.state == @types.state_title {
+  if game.state == Title {
     game.draw_title_overlay()
-  } else if game.state == @types.state_stage_clear {
+  } else if game.state == StageClear {
     game.draw_stage_clear_overlay()
-  } else if game.state == @types.state_game_over {
+  } else if game.state == GameOver {
     game.draw_game_over_overlay()
   }
 
   game.draw_touch_controls()
   game.draw_flash()
 
-  if game.state == @types.state_play && game.touch_mode {
+  if game.state == Play && game.touch_mode {
     draw_center_text(
       "Mobile: tap control pads  |  Swipe not required",
       @types.screen_h - 24,

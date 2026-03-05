@@ -31,7 +31,7 @@ fn @types.Game::clear_world(game : @types.Game) -> Unit {
     traffic_elem.vy = 0.0
     traffic_elem.w = 0.0
     traffic_elem.h = 0.0
-    traffic_elem.kind = @types.traffic_sedan
+    traffic_elem.kind = Sedan
     traffic_elem.phase = 0.0
   }
   for order in game.orders {
@@ -50,7 +50,7 @@ fn @types.Game::clear_world(game : @types.Game) -> Unit {
     pickup.y = 0.0
     pickup.vx = 0.0
     pickup.vy = 0.0
-    pickup.kind = @types.pickup_fuel
+    pickup.kind = Fuel
     pickup.phase = 0.0
   }
 }
@@ -145,7 +145,7 @@ fn @types.Game::reset_rider(game : @types.Game) -> Unit {
 fn @types.Game::start_run(game : @types.Game) -> Unit {
   game.clear_world()
   game.clear_particles()
-  game.state = @types.state_play
+  game.state = Play
   game.reset_rider()
   game.lives = 3
   game.scooter_hp = 100.0
@@ -178,10 +178,10 @@ fn @types.Game::start_run(game : @types.Game) -> Unit {
 ///|
 /// Ends the current run, sets the win or lose outcome, updates best score, and triggers the result burst effect.
 fn @types.Game::finish_run(game : @types.Game, win : Bool) -> Unit {
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
-  game.state = @types.state_result
+  game.state = Result
   game.win = win
   game.move_x = 0.0
   game.move_y = 0.0
@@ -261,12 +261,12 @@ fn @types.Game::spawn_traffic(game : @types.Game) -> Bool {
       continue
     }
     let kind_roll : Int = @raylib.get_random_value(0, 99)
-    let kind : Int = if kind_roll < 58 {
-      @types.traffic_sedan
+    let kind : @types.TrafficKind = if kind_roll < 58 {
+      Sedan
     } else if kind_roll < 84 {
-      @types.traffic_van
+      Van
     } else {
-      @types.traffic_bus
+      Bus
     }
     let lane : Int = @raylib.get_random_value(0, 1)
     if lane == 0 {
@@ -289,15 +289,10 @@ fn @types.Game::spawn_traffic(game : @types.Game) -> Bool {
         @types.randf(-280.0, -180.0)
       }
       traffic_elem.vy = @types.randf(-16.0, 16.0)
-      if kind == @types.traffic_sedan {
-        traffic_elem.w = 48.0
-        traffic_elem.h = 30.0
-      } else if kind == @types.traffic_van {
-        traffic_elem.w = 60.0
-        traffic_elem.h = 34.0
-      } else {
-        traffic_elem.w = 88.0
-        traffic_elem.h = 40.0
+      match kind {
+        Sedan => { traffic_elem.w = 48.0; traffic_elem.h = 30.0 }
+        Van => { traffic_elem.w = 60.0; traffic_elem.h = 34.0 }
+        Bus => { traffic_elem.w = 88.0; traffic_elem.h = 40.0 }
       }
     } else {
       let x_lane : Float = @types.world_left() +
@@ -319,15 +314,10 @@ fn @types.Game::spawn_traffic(game : @types.Game) -> Bool {
       } else {
         @types.randf(-280.0, -180.0)
       }
-      if kind == @types.traffic_sedan {
-        traffic_elem.w = 30.0
-        traffic_elem.h = 48.0
-      } else if kind == @types.traffic_van {
-        traffic_elem.w = 34.0
-        traffic_elem.h = 60.0
-      } else {
-        traffic_elem.w = 40.0
-        traffic_elem.h = 88.0
+      match kind {
+        Sedan => { traffic_elem.w = 30.0; traffic_elem.h = 48.0 }
+        Van => { traffic_elem.w = 34.0; traffic_elem.h = 60.0 }
+        Bus => { traffic_elem.w = 40.0; traffic_elem.h = 88.0 }
       }
     }
     traffic_elem.active = true
@@ -359,11 +349,11 @@ fn @types.Game::spawn_pickup(game : @types.Game) -> Bool {
     pickup.phase = @types.randf(0.0, 6.28)
     let roll : Int = @raylib.get_random_value(0, 99)
     pickup.kind = if roll < 46 {
-      @types.pickup_fuel
+      Fuel
     } else if roll < 78 {
-      @types.pickup_repair
+      Repair
     } else {
-      @types.pickup_speed
+      Speed
     }
     return true
   }
@@ -373,7 +363,7 @@ fn @types.Game::spawn_pickup(game : @types.Game) -> Bool {
 ///|
 /// Attempts a scooter repair at the depot, consuming fuel and restoring HP if conditions are met.
 fn @types.Game::try_repair(game : @types.Game) -> Bool {
-  if game.state != @types.state_play {
+  if game.state != Play {
     return false
   }
   if game.action_cd > 0.0 {
@@ -408,11 +398,10 @@ fn @types.Game::try_repair(game : @types.Game) -> Bool {
 
 ///|
 /// Returns the collection radius for a pickup based on its kind.
-fn pickup_distance(kind : Int) -> Float {
-  if kind == @types.pickup_speed {
-    28.0
-  } else {
-    24.0
+fn pickup_distance(kind : @types.PickupKind) -> Float {
+  match kind {
+    Speed => 28.0
+    _ => 24.0
   }
 }
 
@@ -420,25 +409,29 @@ fn pickup_distance(kind : Int) -> Float {
 /// Applies a collected pickup's effect (fuel, HP, or turbo boost) and spawns a burst particle effect.
 fn @types.Game::collect_pickup(
   game : @types.Game,
-  kind : Int,
+  kind : @types.PickupKind,
   x : Float,
   y : Float,
 ) -> Unit {
-  if kind == @types.pickup_fuel {
-    game.fuel = @types.minf(100.0, game.fuel + 30.0)
-    game.score = game.score + 10
-    game.set_msg("Fuel canister collected.", 1.0)
-    game.burst(x, y, 16, 0)
-  } else if kind == @types.pickup_repair {
-    game.scooter_hp = @types.minf(100.0, game.scooter_hp + 24.0)
-    game.score = game.score + 10
-    game.set_msg("Quick repair kit used.", 1.0)
-    game.burst(x, y, 16, 2)
-  } else {
-    game.turbo_t = @types.maxf(game.turbo_t, 7.0)
-    game.score = game.score + 16
-    game.set_msg("Nitro drink activated.", 1.0)
-    game.burst(x, y, 20, 2)
+  match kind {
+    Fuel => {
+      game.fuel = @types.minf(100.0, game.fuel + 30.0)
+      game.score = game.score + 10
+      game.set_msg("Fuel canister collected.", 1.0)
+      game.burst(x, y, 16, 0)
+    }
+    Repair => {
+      game.scooter_hp = @types.minf(100.0, game.scooter_hp + 24.0)
+      game.score = game.score + 10
+      game.set_msg("Quick repair kit used.", 1.0)
+      game.burst(x, y, 16, 2)
+    }
+    Speed => {
+      game.turbo_t = @types.maxf(game.turbo_t, 7.0)
+      game.score = game.score + 16
+      game.set_msg("Nitro drink activated.", 1.0)
+      game.burst(x, y, 20, 2)
+    }
   }
 }
 
@@ -530,8 +523,12 @@ fn @types.Game::update_traffic(game : @types.Game, dt : Float) -> Unit {
     if not(traffic_elem.active) {
       continue
     }
-    traffic_elem.phase = traffic_elem.phase +
-      dt * (1.4 + Float::from_int(traffic_elem.kind) * 0.6)
+    let kind_f : Float = match traffic_elem.kind {
+      Sedan => 0.0
+      Bus => 1.0
+      Van => 2.0
+    }
+    traffic_elem.phase = traffic_elem.phase + dt * (1.4 + kind_f * 0.6)
     let sway_x : Float = @math.sinf(traffic_elem.phase * 2.0) * 10.0
     let sway_y : Float = @math.cosf(traffic_elem.phase * 1.7) * 10.0
     traffic_elem.x = traffic_elem.x + (traffic_elem.vx + sway_x) * dt
@@ -553,16 +550,14 @@ fn @types.Game::update_traffic(game : @types.Game, dt : Float) -> Unit {
       traffic_elem.h,
     )
     if hit {
-      let dmg : Float = if traffic_elem.kind == @types.traffic_bus {
-        32.0
-      } else if traffic_elem.kind == @types.traffic_van {
-        22.0
-      } else {
-        16.0
+      let dmg : Float = match traffic_elem.kind {
+        Bus => 32.0
+        Van => 22.0
+        Sedan => 16.0
       }
       game.hurt_rider(dmg)
       traffic_elem.active = false
-      if game.state != @types.state_play {
+      if game.state != Play {
         return
       }
     }
@@ -599,7 +594,7 @@ fn @types.Game::update_pickups(game : @types.Game, dt : Float) -> Unit {
     }
     let rr : Float = @types.rider_r + pickup_distance(pickup.kind)
     if @types.dist2(game.rider_x, game.rider_y, pickup.x, pickup.y) <= rr * rr {
-      let kind : Int = pickup.kind
+      let kind : @types.PickupKind = pickup.kind
       let px : Float = pickup.x
       let py : Float = pickup.y
       pickup.active = false
@@ -696,7 +691,7 @@ fn @types.Game::update_orders(game : @types.Game, dt : Float) -> Unit {
 ///|
 /// Spends a hint to mark the nearest relevant target (drop-off, fuel pickup, or restaurant) and displays a guidance message.
 fn @types.Game::use_hint(game : @types.Game) -> Bool {
-  if game.state != @types.state_play || game.hint_left <= 0 {
+  if game.state != Play || game.hint_left <= 0 {
     return false
   }
   let mut hx : Float = @types.depot_x()
@@ -713,7 +708,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
     if game.fuel < 40.0 {
       for i in 0..<game.pickups.length() {
         if not(game.pickups[i].active) ||
-          game.pickups[i].kind != @types.pickup_fuel {
+          game.pickups[i].kind != Fuel {
           continue
         }
         let d2 : Float = @types.dist2(
@@ -775,7 +770,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   game.turbo_t = @types.maxf(0.0, game.turbo_t - step)
   game.action_cd = @types.maxf(0.0, game.action_cd - step)
   game.update_particles(step)
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
   game.game_t = game.game_t + step
@@ -816,7 +811,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   game.update_rider(step)
   game.update_orders(step)
   game.update_traffic(step)
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
   game.update_pickups(step)
@@ -831,7 +826,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   }
   if game.scooter_hp <= 0.0 {
     game.hurt_rider(100.0)
-    if game.state != @types.state_play {
+    if game.state != Play {
       return
     }
   }
@@ -847,14 +842,18 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
 ///|
 /// Advances one frame of delivery logic, input handling, and game-state flow.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
-  if game.state == @types.state_title {
-    game.update_title_input()
-    game.update_play(dt)
-  } else if game.state == @types.state_play {
-    game.update_play_input(dt)
-    game.update_play(dt)
-  } else {
-    game.update_result_input()
-    game.update_play(dt)
+  match game.state {
+    Title => {
+      game.update_title_input()
+      game.update_play(dt)
+    }
+    Play => {
+      game.update_play_input(dt)
+      game.update_play(dt)
+    }
+    Result => {
+      game.update_result_input()
+      game.update_play(dt)
+    }
   }
 }

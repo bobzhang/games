@@ -62,7 +62,7 @@ fn @types.Game::update_result_input(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::update_play_input(game : @types.Game, _dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.state_title
+    game.state = Title
     return
   }
 

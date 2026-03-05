@@ -39,7 +39,7 @@ fn @types.Game::clear_world(game : @types.Game) -> Unit {
     hazard.vy = 0.0
     hazard.r = 0.0
     hazard.hp = 0.0
-    hazard.kind = @types.hazard_cloud
+    hazard.kind = Cloud
     hazard.phase = 0.0
   }
 
@@ -49,7 +49,7 @@ fn @types.Game::clear_world(game : @types.Game) -> Unit {
     pickup.y = 0.0
     pickup.vx = 0.0
     pickup.vy = 0.0
-    pickup.kind = @types.pickup_fuel
+    pickup.kind = Fuel
     pickup.phase = 0.0
   }
 }
@@ -146,7 +146,7 @@ fn @types.Game::start_run(game : @types.Game) -> Unit {
   game.clear_world()
   game.clear_particles()
 
-  game.state = @types.state_play
+  game.state = Play
 
   game.reset_heli()
 
@@ -188,11 +188,11 @@ fn @types.Game::start_run(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::finish_run(game : @types.Game, win : Bool) -> Unit {
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
 
-  game.state = @types.state_result
+  game.state = Result
   game.win = win
 
   game.move_x = 0.0
@@ -248,12 +248,12 @@ fn @types.Game::spawn_hazard(game : @types.Game) -> Bool {
     }
 
     let roll : Int = @raylib.get_random_value(0, 99)
-    let kind : Int = if roll < 52 {
-      @types.hazard_cloud
+    let kind : @types.HazardKind = if roll < 52 {
+      Cloud
     } else if roll < 82 {
-      @types.hazard_drone
+      Drone
     } else {
-      @types.hazard_ice
+      Ice
     }
 
     let side : Int = @raylib.get_random_value(0, 2)
@@ -281,21 +281,25 @@ fn @types.Game::spawn_hazard(game : @types.Game) -> Bool {
     hazard.kind = kind
     hazard.phase = @types.randf(0.0, 6.28)
 
-    if kind == @types.hazard_cloud {
-      hazard.r = @types.randf(32.0, 46.0)
-      hazard.hp = @types.randf(20.0, 28.0)
-      hazard.vx = @types.randf(-58.0, 58.0)
-      hazard.vy = @types.randf(48.0, 96.0) + Float::from_int(game.wave) * 6.0
-    } else if kind == @types.hazard_drone {
-      hazard.r = @types.randf(20.0, 28.0)
-      hazard.hp = @types.randf(34.0, 44.0)
-      hazard.vx = @types.randf(-24.0, 24.0)
-      hazard.vy = @types.randf(-24.0, 24.0)
-    } else {
-      hazard.r = @types.randf(16.0, 22.0)
-      hazard.hp = @types.randf(12.0, 18.0)
-      hazard.vx = @types.randf(-34.0, 34.0)
-      hazard.vy = @types.randf(160.0, 240.0) + Float::from_int(game.wave) * 14.0
+    match kind {
+      Cloud => {
+        hazard.r = @types.randf(32.0, 46.0)
+        hazard.hp = @types.randf(20.0, 28.0)
+        hazard.vx = @types.randf(-58.0, 58.0)
+        hazard.vy = @types.randf(48.0, 96.0) + Float::from_int(game.wave) * 6.0
+      }
+      Drone => {
+        hazard.r = @types.randf(20.0, 28.0)
+        hazard.hp = @types.randf(34.0, 44.0)
+        hazard.vx = @types.randf(-24.0, 24.0)
+        hazard.vy = @types.randf(-24.0, 24.0)
+      }
+      Ice => {
+        hazard.r = @types.randf(16.0, 22.0)
+        hazard.hp = @types.randf(12.0, 18.0)
+        hazard.vx = @types.randf(-34.0, 34.0)
+        hazard.vy = @types.randf(160.0, 240.0) + Float::from_int(game.wave) * 14.0
+      }
     }
 
     return true
@@ -323,11 +327,11 @@ fn @types.Game::spawn_pickup(game : @types.Game) -> Bool {
 
     let roll : Int = @raylib.get_random_value(0, 99)
     pickup.kind = if roll < 52 {
-      @types.pickup_fuel
+      Fuel
     } else if roll < 82 {
-      @types.pickup_medkit
+      Medkit
     } else {
-      @types.pickup_turbo
+      Turbo
     }
 
     return true
@@ -349,7 +353,7 @@ fn @types.Game::count_active_survivors(game : @types.Game) -> Int {
 
 ///|
 fn @types.Game::try_toggle_hook(game : @types.Game) -> Bool {
-  if game.state != @types.state_play {
+  if game.state != Play {
     return false
   }
 
@@ -367,7 +371,7 @@ fn @types.Game::try_toggle_hook(game : @types.Game) -> Bool {
 
 ///|
 fn @types.Game::try_repair(game : @types.Game) -> Bool {
-  if game.state != @types.state_play {
+  if game.state != Play {
     return false
   }
   if game.repair_cd > 0.0 {
@@ -486,25 +490,29 @@ fn @types.Game::rescue_carried_survivor(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::collect_pickup(
   game : @types.Game,
-  kind : Int,
+  kind : @types.PickupKind,
   x : Float,
   y : Float,
 ) -> Unit {
-  if kind == @types.pickup_fuel {
-    game.fuel = @types.minf(100.0, game.fuel + 30.0)
-    game.score = game.score + 10
-    game.set_msg("Fuel pod collected.", 1.0)
-    game.burst(x, y, 18, 0)
-  } else if kind == @types.pickup_medkit {
-    game.hull = @types.minf(100.0, game.hull + 28.0)
-    game.score = game.score + 10
-    game.set_msg("Hull repairs online.", 1.0)
-    game.burst(x, y, 18, 2)
-  } else {
-    game.turbo_t = @types.maxf(game.turbo_t, 7.0)
-    game.score = game.score + 16
-    game.set_msg("Turbo rotor boost ready.", 1.0)
-    game.burst(x, y, 20, 2)
+  match kind {
+    Fuel => {
+      game.fuel = @types.minf(100.0, game.fuel + 30.0)
+      game.score = game.score + 10
+      game.set_msg("Fuel pod collected.", 1.0)
+      game.burst(x, y, 18, 0)
+    }
+    Medkit => {
+      game.hull = @types.minf(100.0, game.hull + 28.0)
+      game.score = game.score + 10
+      game.set_msg("Hull repairs online.", 1.0)
+      game.burst(x, y, 18, 2)
+    }
+    Turbo => {
+      game.turbo_t = @types.maxf(game.turbo_t, 7.0)
+      game.score = game.score + 16
+      game.set_msg("Turbo rotor boost ready.", 1.0)
+      game.burst(x, y, 20, 2)
+    }
   }
 }
 
@@ -674,13 +682,11 @@ fn @types.Game::update_survivors(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-fn hazard_damage(kind : Int) -> Float {
-  if kind == @types.hazard_drone {
-    24.0
-  } else if kind == @types.hazard_cloud {
-    16.0
-  } else {
-    20.0
+fn hazard_damage(kind : @types.HazardKind) -> Float {
+  match kind {
+    Drone => 24.0
+    Cloud => 16.0
+    Ice => 20.0
   }
 }
 
@@ -698,28 +704,36 @@ fn @types.Game::update_hazards(
       continue
     }
 
-    hazard.phase = hazard.phase +
-      dt * (1.0 + Float::from_int(hazard.kind) * 0.8)
+    let kind_f : Float = match hazard.kind {
+      Cloud => 0.0
+      Drone => 1.0
+      Ice => 2.0
+    }
+    hazard.phase = hazard.phase + dt * (1.0 + kind_f * 0.8)
 
-    if hazard.kind == @types.hazard_cloud {
-      hazard.vx = hazard.vx + @math.sinf(hazard.phase * 1.4) * dt * 80.0
-      hazard.vy = hazard.vy + dt * 24.0
-    } else if hazard.kind == @types.hazard_drone {
-      let tx : Float = if game.carrying_idx >= 0 { tip_x } else { game.heli_x }
-      let ty : Float = if game.carrying_idx >= 0 { tip_y } else { game.heli_y }
+    match hazard.kind {
+      Cloud => {
+        hazard.vx = hazard.vx + @math.sinf(hazard.phase * 1.4) * dt * 80.0
+        hazard.vy = hazard.vy + dt * 24.0
+      }
+      Drone => {
+        let tx : Float = if game.carrying_idx >= 0 { tip_x } else { game.heli_x }
+        let ty : Float = if game.carrying_idx >= 0 { tip_y } else { game.heli_y }
 
-      let dx : Float = tx - hazard.x
-      let dy : Float = ty - hazard.y
+        let dx : Float = tx - hazard.x
+        let dy : Float = ty - hazard.y
 
-      let w : Float = dx.abs() + dy.abs()
-      let nx : Float = if w <= 0.001 { 0.0 } else { dx / w }
-      let ny : Float = if w <= 0.001 { 0.0 } else { dy / w }
+        let w : Float = dx.abs() + dy.abs()
+        let nx : Float = if w <= 0.001 { 0.0 } else { dx / w }
+        let ny : Float = if w <= 0.001 { 0.0 } else { dy / w }
 
-      hazard.vx = hazard.vx * (1.0 - dt * 2.4) + nx * dt * 420.0
-      hazard.vy = hazard.vy * (1.0 - dt * 2.4) + ny * dt * 420.0
-    } else {
-      hazard.vx = hazard.vx + @math.sinf(hazard.phase * 3.0) * dt * 96.0
-      hazard.vy = hazard.vy + dt * 54.0
+        hazard.vx = hazard.vx * (1.0 - dt * 2.4) + nx * dt * 420.0
+        hazard.vy = hazard.vy * (1.0 - dt * 2.4) + ny * dt * 420.0
+      }
+      Ice => {
+        hazard.vx = hazard.vx + @math.sinf(hazard.phase * 3.0) * dt * 96.0
+        hazard.vy = hazard.vy + dt * 54.0
+      }
     }
 
     hazard.vx = @types.clampf(hazard.vx, -260.0, 260.0)
@@ -741,7 +755,7 @@ fn @types.Game::update_hazards(
       rr_heli * rr_heli {
       game.hurt_heli(hazard_damage(hazard.kind))
       hazard.active = false
-      if game.state != @types.state_play {
+      if game.state != Play {
         return
       }
       continue
@@ -810,7 +824,7 @@ fn @types.Game::update_pickups(game : @types.Game, dt : Float) -> Unit {
 
     let rr : Float = @types.heli_r + 16.0
     if @types.dist2(game.heli_x, game.heli_y, pickup.x, pickup.y) <= rr * rr {
-      let kind : Int = pickup.kind
+      let kind : @types.PickupKind = pickup.kind
       let px : Float = pickup.x
       let py : Float = pickup.y
       pickup.active = false
@@ -821,7 +835,7 @@ fn @types.Game::update_pickups(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 fn @types.Game::use_hint(game : @types.Game) -> Bool {
-  if game.state != @types.state_play || game.hint_left <= 0 {
+  if game.state != Play || game.hint_left <= 0 {
     return false
   }
 
@@ -838,7 +852,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
 
     if game.fuel < 40.0 {
       for pickup in game.pickups {
-        if not(pickup.active) || pickup.kind != @types.pickup_fuel {
+        if not(pickup.active) || pickup.kind != Fuel {
           continue
         }
 
@@ -912,7 +926,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
 
   game.update_particles(step)
 
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
 
@@ -963,7 +977,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   let hook_speed : Float = game.update_hook(step)
   game.update_survivors(step)
   game.update_hazards(step, hook_speed)
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
   game.update_pickups(step)
@@ -982,7 +996,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
 
   if game.hull <= 0.0 {
     game.hurt_heli(100.0)
-    if game.state != @types.state_play {
+    if game.state != Play {
       return
     }
   }
@@ -1008,14 +1022,18 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     game.touch_count > 0
 
   // Handle input based on state
-  if game.state == @types.state_title {
-    game.update_title_input()
-    game.update_play(dt)
-  } else if game.state == @types.state_play {
-    game.update_play_input(dt)
-    game.update_play(dt)
-  } else {
-    game.update_result_input()
-    game.update_play(dt)
+  match game.state {
+    Title => {
+      game.update_title_input()
+      game.update_play(dt)
+    }
+    Play => {
+      game.update_play_input(dt)
+      game.update_play(dt)
+    }
+    Result => {
+      game.update_result_input()
+      game.update_play(dt)
+    }
   }
 }

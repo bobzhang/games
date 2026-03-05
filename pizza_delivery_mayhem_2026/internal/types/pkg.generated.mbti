@@ -48,12 +48,6 @@ pub let panel_w : Int
 
 pub let panel_x0 : Int
 
-pub let pickup_fuel : Int
-
-pub let pickup_repair : Int
-
-pub let pickup_speed : Int
-
 pub fn point_in_rect(Float, Float, Int, Int, Int, Int) -> Bool
 
 pub fn point_in_rectf(Float, Float, Float, Float, Float, Float) -> Bool
@@ -82,19 +76,7 @@ pub let screen_w : Int
 
 pub fn start_button_rect() -> (Int, Int, Int, Int)
 
-pub let state_play : Int
-
-pub let state_result : Int
-
-pub let state_title : Int
-
 pub let target_fps : Int
-
-pub let traffic_bus : Int
-
-pub let traffic_sedan : Int
-
-pub let traffic_van : Int
 
 pub fn world_bottom() -> Float
 
@@ -120,7 +102,7 @@ pub(all) struct Game {
   orders : Array[Order]
   pickups : Array[Pickup]
   particles : Array[Particle]
-  mut state : Int
+  mut state : GameState
   mut rider_x : Float
   mut rider_y : Float
   mut rider_vx : Float
@@ -163,6 +145,13 @@ pub(all) struct Game {
 }
 pub fn Game::new() -> Self
 
+pub(all) enum GameState {
+  Title
+  Play
+  Result
+}
+pub impl Eq for GameState
+
 pub(all) struct Order {
   mut active : Bool
   mut picked : Bool
@@ -193,10 +182,17 @@ pub(all) struct Pickup {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut kind : Int
+  mut kind : PickupKind
   mut phase : Float
 }
 pub fn Pickup::new() -> Self
+
+pub(all) enum PickupKind {
+  Fuel
+  Repair
+  Speed
+}
+pub impl Eq for PickupKind
 
 pub(all) struct Traffic {
   mut active : Bool
@@ -206,10 +202,17 @@ pub(all) struct Traffic {
   mut vy : Float
   mut w : Float
   mut h : Float
-  mut kind : Int
+  mut kind : TrafficKind
   mut phase : Float
 }
 pub fn Traffic::new() -> Self
+
+pub(all) enum TrafficKind {
+  Sedan
+  Bus
+  Van
+}
+pub impl Eq for TrafficKind
 
 // Type aliases
 

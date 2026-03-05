@@ -21,7 +21,7 @@ pub(all) struct Hazard {
   mut vy : Float
   mut r : Float
   mut hp : Float
-  mut kind : Int
+  mut kind : HazardKind
   mut phase : Float
 }
 
@@ -33,7 +33,7 @@ pub(all) struct Pickup {
   mut y : Float
   mut vx : Float
   mut vy : Float
-  mut kind : Int
+  mut kind : PickupKind
   mut phase : Float
 }
 
@@ -57,7 +57,7 @@ pub(all) struct Game {
   hazards : Array[Hazard]
   pickups : Array[Pickup]
   particles : Array[Particle]
-  mut state : Int
+  mut state : GameState
   mut heli_x : Float
   mut heli_y : Float
   mut heli_vx : Float
@@ -128,7 +128,7 @@ pub fn Hazard::new() -> Hazard {
     vy: 0.0,
     r: 0.0,
     hp: 0.0,
-    kind: hazard_cloud,
+    kind: Cloud,
     phase: 0.0,
   }
 }
@@ -142,7 +142,7 @@ pub fn Pickup::new() -> Pickup {
     y: 0.0,
     vx: 0.0,
     vy: 0.0,
-    kind: pickup_fuel,
+    kind: Fuel,
     phase: 0.0,
   }
 }
@@ -170,7 +170,7 @@ pub fn Game::new() -> Game {
     hazards: Array::makei(max_hazards, fn(_i) { Hazard::new() }),
     pickups: Array::makei(max_pickups, fn(_i) { Pickup::new() }),
     particles: Array::makei(max_particles, fn(_i) { Particle::new() }),
-    state: state_title,
+    state: Title,
     heli_x: Float::from_int(world_x0 + world_w / 2),
     heli_y: Float::from_int(world_y0 + world_h - 220),
     heli_vx: 0.0,

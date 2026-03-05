@@ -52,21 +52,7 @@ pub fn ease_out_cubic(Float) -> Float
 
 pub let enemy_shot_speed : Float
 
-pub let ent_battery : Int
-
-pub let ent_crate : Int
-
-pub let ent_drone : Int
-
-pub let ent_guard : Int
-
 pub fn ent_hit_r(Ent) -> Float
-
-pub let ent_medkit : Int
-
-pub let ent_signal : Int
-
-pub let ent_turret : Int
 
 pub let fall_max : Float
 
@@ -96,9 +82,9 @@ pub let hud_h : Int
 
 pub let invuln_time : Float
 
-pub fn is_hostile(Int) -> Bool
+pub fn is_hostile(EntityKind) -> Bool
 
-pub fn is_pickup(Int) -> Bool
+pub fn is_pickup(EntityKind) -> Bool
 
 pub let jump_speed : Float
 
@@ -174,14 +160,6 @@ pub let stage_goal_bonus : Float
 
 pub let stage_scroll_bonus : Float
 
-pub let state_game_over : Int
-
-pub let state_play : Int
-
-pub let state_stage_clear : Int
-
-pub let state_title : Int
-
 pub let target_fps : Int
 
 pub fn title_start_rect() -> (Float, Float, Float, Float)
@@ -191,7 +169,7 @@ pub fn title_start_rect() -> (Float, Float, Float, Float)
 // Types and methods
 pub(all) struct Ent {
   mut active : Bool
-  mut kind : Int
+  mut kind : EntityKind
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -206,6 +184,17 @@ pub(all) struct Ent {
   mut reward : Int
 }
 pub fn Ent::new() -> Self
+
+pub(all) enum EntityKind {
+  Guard
+  Drone
+  Turret
+  Crate
+  Medkit
+  Battery
+  Signal
+}
+pub impl Eq for EntityKind
 
 pub(all) struct Fx {
   mut active : Bool
@@ -226,7 +215,7 @@ pub(all) struct Game {
   rings : Array[Ring]
   shadows : Array[Shadow]
   hero : Player
-  mut state : Int
+  mut state : GameState
   mut stage : Int
   mut distance : Float
   mut stage_goal : Float
@@ -267,6 +256,14 @@ pub(all) struct Game {
   mut touch_count : Int
 }
 pub fn Game::new() -> Self
+
+pub(all) enum GameState {
+  Title
+  Play
+  StageClear
+  GameOver
+}
+pub impl Eq for GameState
 
 pub(all) struct Player {
   mut x : Float

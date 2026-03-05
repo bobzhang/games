@@ -79,17 +79,20 @@ pub fn lane_y(lane : Int) -> Float {
 
 ///|
 /// Returns whether an entity kind is hostile.
-pub fn is_hostile(kind : Int) -> Bool {
-  kind == ent_guard ||
-  kind == ent_drone ||
-  kind == ent_turret ||
-  kind == ent_crate
+pub fn is_hostile(kind : EntityKind) -> Bool {
+  match kind {
+    Guard | Drone | Turret | Crate => true
+    _ => false
+  }
 }
 
 ///|
 /// Returns whether an entity kind is a pickup.
-pub fn is_pickup(kind : Int) -> Bool {
-  kind == ent_medkit || kind == ent_battery || kind == ent_signal
+pub fn is_pickup(kind : EntityKind) -> Bool {
+  match kind {
+    Medkit | Battery | Signal => true
+    _ => false
+  }
 }
 
 ///|

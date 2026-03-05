@@ -223,13 +223,11 @@ fn draw_survivor(s : @types.Survivor, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn hazard_color(kind : Int) -> @raylib.Color {
-  if kind == @types.hazard_cloud {
-    @raylib.Color::new(142, 166, 186, 238)
-  } else if kind == @types.hazard_drone {
-    @raylib.Color::new(128, 150, 188, 246)
-  } else {
-    @raylib.Color::new(182, 220, 255, 244)
+fn hazard_color(kind : @types.HazardKind) -> @raylib.Color {
+  match kind {
+    Cloud => @raylib.Color::new(142, 166, 186, 238)
+    Drone => @raylib.Color::new(128, 150, 188, 246)
+    Ice => @raylib.Color::new(182, 220, 255, 244)
   }
 }
 
@@ -243,85 +241,87 @@ fn draw_hazard(h : @types.Hazard, ox : Int, oy : Int) -> Unit {
   let y : Int = h.y.to_int() + oy
   let c0 : @raylib.Color = hazard_color(h.kind)
 
-  if h.kind == @types.hazard_cloud {
-    @raylib.draw_circle(x - 16, y + 4, h.r * 0.62, c0)
-    @raylib.draw_circle(x + 12, y + 2, h.r * 0.56, c0)
-    @raylib.draw_circle(x, y - 8, h.r * 0.68, c0)
+  match h.kind {
+    Cloud => {
+      @raylib.draw_circle(x - 16, y + 4, h.r * 0.62, c0)
+      @raylib.draw_circle(x + 12, y + 2, h.r * 0.56, c0)
+      @raylib.draw_circle(x, y - 8, h.r * 0.68, c0)
 
-    let bolt_x : Int = (h.x + @math.sinf(h.phase * 3.0) * 12.0).to_int() + ox
-    @raylib.draw_line(
-      bolt_x,
-      y,
-      bolt_x - 8,
-      y + 20,
-      @raylib.Color::new(255, 236, 164, 220),
-    )
-    @raylib.draw_line(
-      bolt_x - 8,
-      y + 20,
-      bolt_x + 6,
-      y + 36,
-      @raylib.Color::new(255, 236, 164, 220),
-    )
-  } else if h.kind == @types.hazard_drone {
-    @raylib.draw_circle(x, y, h.r, c0)
-    @raylib.draw_circle_lines(
-      x,
-      y,
-      h.r + 4.0,
-      @raylib.Color::new(218, 236, 246, 188),
-    )
-    @raylib.draw_line(
-      x - h.r.to_int(),
-      y,
-      x + h.r.to_int(),
-      y,
-      @raylib.Color::new(210, 224, 238, 206),
-    )
-    @raylib.draw_circle(x + 5, y - 5, 3.0, @raylib.Color::new(28, 40, 58, 220))
-  } else {
-    let r : Float = h.r
-    @raylib.draw_triangle(
-      @raylib.Vector2::new(
-        Float::from_int(x),
-        Float::from_int(y - r.to_int() - 4),
-      ),
-      @raylib.Vector2::new(
-        Float::from_int(x - r.to_int() - 5),
-        Float::from_int(y + r.to_int() + 4),
-      ),
-      @raylib.Vector2::new(
-        Float::from_int(x + r.to_int() + 5),
-        Float::from_int(y + r.to_int() + 4),
-      ),
-      c0,
-    )
-    @raylib.draw_triangle_lines(
-      @raylib.Vector2::new(
-        Float::from_int(x),
-        Float::from_int(y - r.to_int() - 4),
-      ),
-      @raylib.Vector2::new(
-        Float::from_int(x - r.to_int() - 5),
-        Float::from_int(y + r.to_int() + 4),
-      ),
-      @raylib.Vector2::new(
-        Float::from_int(x + r.to_int() + 5),
-        Float::from_int(y + r.to_int() + 4),
-      ),
-      @raylib.Color::new(232, 246, 255, 196),
-    )
+      let bolt_x : Int = (h.x + @math.sinf(h.phase * 3.0) * 12.0).to_int() + ox
+      @raylib.draw_line(
+        bolt_x,
+        y,
+        bolt_x - 8,
+        y + 20,
+        @raylib.Color::new(255, 236, 164, 220),
+      )
+      @raylib.draw_line(
+        bolt_x - 8,
+        y + 20,
+        bolt_x + 6,
+        y + 36,
+        @raylib.Color::new(255, 236, 164, 220),
+      )
+    }
+    Drone => {
+      @raylib.draw_circle(x, y, h.r, c0)
+      @raylib.draw_circle_lines(
+        x,
+        y,
+        h.r + 4.0,
+        @raylib.Color::new(218, 236, 246, 188),
+      )
+      @raylib.draw_line(
+        x - h.r.to_int(),
+        y,
+        x + h.r.to_int(),
+        y,
+        @raylib.Color::new(210, 224, 238, 206),
+      )
+      @raylib.draw_circle(x + 5, y - 5, 3.0, @raylib.Color::new(28, 40, 58, 220))
+    }
+    Ice => {
+      let r : Float = h.r
+      @raylib.draw_triangle(
+        @raylib.Vector2::new(
+          Float::from_int(x),
+          Float::from_int(y - r.to_int() - 4),
+        ),
+        @raylib.Vector2::new(
+          Float::from_int(x - r.to_int() - 5),
+          Float::from_int(y + r.to_int() + 4),
+        ),
+        @raylib.Vector2::new(
+          Float::from_int(x + r.to_int() + 5),
+          Float::from_int(y + r.to_int() + 4),
+        ),
+        c0,
+      )
+      @raylib.draw_triangle_lines(
+        @raylib.Vector2::new(
+          Float::from_int(x),
+          Float::from_int(y - r.to_int() - 4),
+        ),
+        @raylib.Vector2::new(
+          Float::from_int(x - r.to_int() - 5),
+          Float::from_int(y + r.to_int() + 4),
+        ),
+        @raylib.Vector2::new(
+          Float::from_int(x + r.to_int() + 5),
+          Float::from_int(y + r.to_int() + 4),
+        ),
+        @raylib.Color::new(232, 246, 255, 196),
+      )
+    }
   }
 }
 
 ///|
-fn pickup_color(kind : Int) -> @raylib.Color {
-  if kind == @types.pickup_fuel {
-    @raylib.Color::new(255, 194, 108, 244)
-  } else if kind == @types.pickup_medkit {
-    @raylib.Color::new(255, 132, 162, 244)
-  } else {
-    @raylib.Color::new(202, 156, 255, 244)
+fn pickup_color(kind : @types.PickupKind) -> @raylib.Color {
+  match kind {
+    Fuel => @raylib.Color::new(255, 194, 108, 244)
+    Medkit => @raylib.Color::new(255, 132, 162, 244)
+    Turbo => @raylib.Color::new(202, 156, 255, 244)
   }
 }
 
@@ -347,36 +347,38 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
     @raylib.Color::new(246, 252, 255, 210),
   )
 
-  if p.kind == @types.pickup_fuel {
-    @raylib.draw_rectangle(
-      x - 5,
-      y - 8,
-      10,
-      16,
-      @raylib.Color::new(62, 40, 22, 230),
-    )
-  } else if p.kind == @types.pickup_medkit {
-    @raylib.draw_line(
-      x - 6,
-      y,
-      x + 6,
-      y,
-      @raylib.Color::new(250, 248, 248, 240),
-    )
-    @raylib.draw_line(
-      x,
-      y - 6,
-      x,
-      y + 6,
-      @raylib.Color::new(250, 248, 248, 240),
-    )
-  } else {
-    @raylib.draw_circle_lines(
-      x,
-      y,
-      rr - 4.0,
-      @raylib.Color::new(236, 212, 255, 216),
-    )
+  match p.kind {
+    Fuel =>
+      @raylib.draw_rectangle(
+        x - 5,
+        y - 8,
+        10,
+        16,
+        @raylib.Color::new(62, 40, 22, 230),
+      )
+    Medkit => {
+      @raylib.draw_line(
+        x - 6,
+        y,
+        x + 6,
+        y,
+        @raylib.Color::new(250, 248, 248, 240),
+      )
+      @raylib.draw_line(
+        x,
+        y - 6,
+        x,
+        y + 6,
+        @raylib.Color::new(250, 248, 248, 240),
+      )
+    }
+    Turbo =>
+      @raylib.draw_circle_lines(
+        x,
+        y,
+        rr - 4.0,
+        @raylib.Color::new(236, 212, 255, 216),
+      )
   }
 }
 
@@ -779,7 +781,7 @@ fn @types.Game::draw_touch_button(
 
 ///|
 fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
 
@@ -1107,9 +1109,9 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_touch_controls()
   game.draw_msg()
 
-  if game.state == @types.state_title {
-    game.draw_title_overlay()
-  } else if game.state == @types.state_result {
-    game.draw_result_overlay()
+  match game.state {
+    Title => game.draw_title_overlay()
+    Result => game.draw_result_overlay()
+    Play => ()
   }
 }

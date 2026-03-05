@@ -11,42 +11,6 @@ pub let screen_h : Int = 980
 pub let target_fps : Int = 120
 
 ///|
-/// State id used for the title screen.
-pub let state_title : Int = 0
-
-///|
-/// State id used for active gameplay.
-pub let state_play : Int = 1
-
-///|
-/// State id used for the result screen.
-pub let state_result : Int = 2
-
-///|
-/// Hazard kind id for drifting cloud hazards.
-pub let hazard_cloud : Int = 0
-
-///|
-/// Hazard kind id for hostile drone hazards.
-pub let hazard_drone : Int = 1
-
-///|
-/// Hazard kind id for falling ice hazards.
-pub let hazard_ice : Int = 2
-
-///|
-/// Pickup kind id for fuel supplies.
-pub let pickup_fuel : Int = 0
-
-///|
-/// Pickup kind id for emergency medkits.
-pub let pickup_medkit : Int = 1
-
-///|
-/// Pickup kind id for turbo boosts.
-pub let pickup_turbo : Int = 2
-
-///|
 /// Maximum number of survivor entities in the pool.
 pub let max_survivors : Int = 90
 
@@ -185,6 +149,30 @@ pub fn btn_hint() -> (Int, Int, Int, Int) {
 pub fn btn_restart() -> (Int, Int, Int, Int) {
   (1462, 606, 110, 90)
 }
+
+///|
+/// Distinguishes the kind of hazard entity.
+pub(all) enum HazardKind {
+  Cloud
+  Drone
+  Ice
+} derive(Eq)
+
+///|
+/// Distinguishes the kind of pickup entity.
+pub(all) enum PickupKind {
+  Fuel
+  Medkit
+  Turbo
+} derive(Eq)
+
+///|
+/// Identifies the current phase of the game loop.
+pub(all) enum GameState {
+  Title
+  Play
+  Result
+} derive(Eq)
 
 ///|
 /// Returns the on-screen repair button rectangle.
