@@ -41,11 +41,10 @@ fn @types.Game::bullet_hit_enemy(
   game : @types.Game,
   bullet : @types.Bullet,
 ) -> Bool {
-  for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
+  for i, enemy in game.enemies {
+    if !enemy.active {
       continue
     }
-    let enemy = game.enemies[i]
     if enemy.invuln_timer > 0.0 {
       continue
     }
@@ -96,11 +95,10 @@ fn @types.Game::bullet_hit_core(
   game : @types.Game,
   bullet : @types.Bullet,
 ) -> Bool {
-  for i in 0..<game.cores.length() {
-    if not(game.cores[i].active) {
+  for i, core in game.cores {
+    if !core.active {
       continue
     }
-    let core = game.cores[i]
     let r = @types.core_radius + bullet.radius
     if @types.distance_sq(bullet.x, bullet.y, core.x, core.y) <= r * r {
       let team : @types.Team = match bullet.owner_team {
