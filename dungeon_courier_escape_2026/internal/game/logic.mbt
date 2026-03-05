@@ -381,11 +381,11 @@ fn @types.Game::fail_mission(game : @types.Game, reason : String) -> Unit {
 ///|
 /// Returns the index of a free smoke slot, or the slot with the least remaining life if none are available.
 fn @types.Game::alloc_smoke_slot(game : @types.Game) -> Int {
-  for i in 0..<game.smokes.length() {
-    if not(game.smokes[i].active) {
-      return i
+  for i, slot in game.smokes {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut oldest = 0
   let mut life = game.smokes[0].life
@@ -397,6 +397,7 @@ fn @types.Game::alloc_smoke_slot(game : @types.Game) -> Int {
   }
 
   oldest
+  }
 }
 
 ///|
