@@ -73,11 +73,11 @@ fn reset_hero(hero : @types.Player) -> Unit {
 ///|
 /// Finds and returns the index of the first inactive object slot, or evicts the slot with the largest Y value if the pool is full.
 fn @types.Game::alloc_obj(game : @types.Game) -> Int {
-  for i in 0..<game.objs.length() {
-    if not(game.objs[i].active) {
-      return i
+  for i, slot in game.objs {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_y = game.objs[0].y
@@ -88,16 +88,17 @@ fn @types.Game::alloc_obj(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 /// Finds and returns the index of the first inactive particle slot, or evicts the slot with the shortest remaining lifetime if the pool is full.
 fn @types.Game::alloc_particle(game : @types.Game) -> Int {
-  for i in 0..<game.particles.length() {
-    if not(game.particles[i].active) {
-      return i
+  for i, slot in game.particles {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.particles[0].life
@@ -108,16 +109,17 @@ fn @types.Game::alloc_particle(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 /// Finds and returns the index of the first inactive ripple slot, or evicts the slot with the shortest remaining lifetime if the pool is full.
 fn @types.Game::alloc_ripple(game : @types.Game) -> Int {
-  for i in 0..<game.ripples.length() {
-    if not(game.ripples[i].active) {
-      return i
+  for i, slot in game.ripples {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.ripples[0].life
@@ -128,6 +130,7 @@ fn @types.Game::alloc_ripple(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
