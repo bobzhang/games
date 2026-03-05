@@ -3,11 +3,10 @@ fn @types.Game::bullet_hit_enemy(
   game : @types.Game,
   bullet : @types.Bullet,
 ) -> Bool {
-  for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
+  for i, enemy in game.enemies {
+    if !enemy.active {
       continue
     }
-    let enemy = game.enemies[i]
     if enemy.invuln_timer > 0.0 {
       continue
     }
