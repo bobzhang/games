@@ -56,11 +56,11 @@ fn reset_hero(hero : @types.Player) -> Unit {
 
 ///|
 fn @types.Game::alloc_obj_slot(game : @types.Game) -> Int {
-  for i in 0..<game.objs.length() {
-    if not(game.objs[i].active) {
-      return i
+  for i, slot in game.objs {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best_i = 0
   let mut best_z = game.objs[0].z
@@ -71,15 +71,16 @@ fn @types.Game::alloc_obj_slot(game : @types.Game) -> Int {
     }
   }
   best_i
+  }
 }
 
 ///|
 fn @types.Game::alloc_particle_slot(game : @types.Game) -> Int {
-  for i in 0..<game.particles.length() {
-    if not(game.particles[i].active) {
-      return i
+  for i, slot in game.particles {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best_i = 0
   let mut best_life = game.particles[0].life
@@ -90,15 +91,16 @@ fn @types.Game::alloc_particle_slot(game : @types.Game) -> Int {
     }
   }
   best_i
+  }
 }
 
 ///|
 fn @types.Game::alloc_trail_slot(game : @types.Game) -> Int {
-  for i in 0..<game.trails.length() {
-    if not(game.trails[i].active) {
-      return i
+  for i, slot in game.trails {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best_i = 0
   let mut best_life = game.trails[0].life
@@ -109,6 +111,7 @@ fn @types.Game::alloc_trail_slot(game : @types.Game) -> Int {
     }
   }
   best_i
+  }
 }
 
 ///|
