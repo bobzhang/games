@@ -447,8 +447,8 @@ pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
 ///|
 /// Returns the first inactive enemy slot index, or `-1` when full.
 pub fn alloc_enemy(game : Game) -> Int {
-  for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
+  for i, slot in game.enemies {
+    if !slot.active {
       return i
     }
   }
@@ -458,8 +458,8 @@ pub fn alloc_enemy(game : Game) -> Int {
 ///|
 /// Returns the first inactive cannonball slot index, or `-1` when full.
 pub fn alloc_cannonball(game : Game) -> Int {
-  for i in 0..<game.cannonballs.length() {
-    if not(game.cannonballs[i].active) {
+  for i, slot in game.cannonballs {
+    if !slot.active {
       return i
     }
   }
@@ -469,8 +469,8 @@ pub fn alloc_cannonball(game : Game) -> Int {
 ///|
 /// Returns the first inactive particle slot index, or `-1` when full.
 pub fn alloc_particle(game : Game) -> Int {
-  for i in 0..<game.particles.length() {
-    if not(game.particles[i].active) {
+  for i, slot in game.particles {
+    if !slot.active {
       return i
     }
   }
@@ -480,8 +480,8 @@ pub fn alloc_particle(game : Game) -> Int {
 ///|
 /// Returns the first inactive wake slot index, or `-1` when full.
 pub fn alloc_wake(game : Game) -> Int {
-  for i in 0..<game.wakes.length() {
-    if not(game.wakes[i].active) {
+  for i, slot in game.wakes {
+    if !slot.active {
       return i
     }
   }
@@ -491,8 +491,8 @@ pub fn alloc_wake(game : Game) -> Int {
 ///|
 /// Returns the first inactive debris slot index, or `-1` when full.
 pub fn alloc_debris(game : Game) -> Int {
-  for i in 0..<game.debris_pool.length() {
-    if not(game.debris_pool[i].active) {
+  for i, slot in game.debris_pool {
+    if !slot.active {
       return i
     }
   }
@@ -502,8 +502,8 @@ pub fn alloc_debris(game : Game) -> Int {
 ///|
 /// Returns a free battle-message slot, replacing the oldest if necessary.
 pub fn alloc_message(game : Game) -> Int {
-  for i in 0..<game.messages.length() {
-    if not(game.messages[i].active) {
+  for i, slot in game.messages {
+    if !slot.active {
       return i
     }
   }
