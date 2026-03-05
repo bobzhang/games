@@ -74,11 +74,11 @@ fn @types.Game::reset_player(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::alloc_spark(game : @types.Game) -> Int {
-  for i in 0..<game.sparks.length() {
-    if not(game.sparks[i].active) {
-      return i
+  for i, slot in game.sparks {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.sparks[0].life
@@ -89,15 +89,16 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 fn @types.Game::alloc_ring(game : @types.Game) -> Int {
-  for i in 0..<game.rings.length() {
-    if not(game.rings[i].active) {
-      return i
+  for i, slot in game.rings {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.rings[0].life
@@ -108,15 +109,16 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
 fn @types.Game::alloc_shadow(game : @types.Game) -> Int {
-  for i in 0..<game.shadows.length() {
-    if not(game.shadows[i].active) {
-      return i
+  for i, slot in game.shadows {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_life = game.shadows[0].life
@@ -127,6 +129,7 @@ fn @types.Game::alloc_shadow(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
@@ -259,11 +262,11 @@ fn @types.Game::find_open_slot(game : @types.Game) -> Int {
 
 ///|
 fn @types.Game::alloc_customer(game : @types.Game) -> Int {
-  for i in 0..<game.customers.length() {
-    if not(game.customers[i].active) {
-      return i
+  for i, slot in game.customers {
+    if !slot.active {
+      break i
     }
-  }
+  } nobreak {
 
   let mut best = 0
   let mut best_patience = game.customers[0].patience
@@ -274,6 +277,7 @@ fn @types.Game::alloc_customer(game : @types.Game) -> Int {
     }
   }
   best
+  }
 }
 
 ///|
