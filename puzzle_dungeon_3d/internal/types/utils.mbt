@@ -263,8 +263,8 @@ pub fn entity_at(game : Game, gx : Int, gy : Int) -> Int {
 ///|
 /// Finds a free particle slot in the pooled particle array.
 pub fn alloc_particle(game : Game) -> Int {
-  for i in 0..<game.particles.length() {
-    if not(game.particles[i].active) {
+  for i, slot in game.particles {
+    if !slot.active {
       return i
     }
   }
