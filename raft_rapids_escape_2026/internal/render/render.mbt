@@ -135,13 +135,11 @@ fn @types.Game::draw_currents(game : @types.Game, ox : Int, oy : Int) -> Unit {
 }
 
 ///|
-fn obstacle_color(kind : Int) -> @raylib.Color {
-  if kind == @types.obstacle_rock {
-    @raylib.Color::new(106, 132, 146, 245)
-  } else if kind == @types.obstacle_log {
-    @raylib.Color::new(132, 98, 58, 245)
-  } else {
-    @raylib.Color::new(192, 92, 102, 245)
+fn obstacle_color(kind : @types.ObstacleKind) -> @raylib.Color {
+  match kind {
+    Rock => @raylib.Color::new(106, 132, 146, 245)
+    Log => @raylib.Color::new(132, 98, 58, 245)
+    Mine => @raylib.Color::new(192, 92, 102, 245)
   }
 }
 
@@ -158,97 +156,93 @@ fn draw_obstacle(ob : @types.Obstacle, ox : Int, oy : Int) -> Unit {
 
   let c0 : @raylib.Color = obstacle_color(ob.kind)
 
-  if ob.kind == @types.obstacle_rock {
-    @raylib.draw_rectangle(x, y, w, h, c0)
-    @raylib.draw_circle(
-      x + w / 2,
-      y + h / 2,
-      Float::from_int(w.min(h)) * 0.42,
-      @raylib.Color::new(160, 184, 196, 180),
-    )
-    @raylib.draw_rectangle_lines(
-      x,
-      y,
-      w,
-      h,
-      @raylib.Color::new(220, 236, 242, 170),
-    )
-  } else if ob.kind == @types.obstacle_log {
-    @raylib.draw_rectangle(x, y, w, h, c0)
-    @raylib.draw_circle(
-      x + 8,
-      y + h / 2,
-      Float::from_int(h) * 0.42,
-      @raylib.Color::new(146, 112, 74, 240),
-    )
-    @raylib.draw_circle(
-      x + w - 8,
-      y + h / 2,
-      Float::from_int(h) * 0.42,
-      @raylib.Color::new(146, 112, 74, 240),
-    )
-
-    for i in 0..<4 {
-      let px : Int = x + 16 + i * (w - 32) / 3
-      @raylib.draw_line(
-        px,
-        y + 4,
-        px,
-        y + h - 4,
-        @raylib.Color::new(92, 70, 40, 210),
+  match ob.kind {
+    Rock => {
+      @raylib.draw_rectangle(x, y, w, h, c0)
+      @raylib.draw_circle(
+        x + w / 2,
+        y + h / 2,
+        Float::from_int(w.min(h)) * 0.42,
+        @raylib.Color::new(160, 184, 196, 180),
+      )
+      @raylib.draw_rectangle_lines(
+        x,
+        y,
+        w,
+        h,
+        @raylib.Color::new(220, 236, 242, 170),
       )
     }
-  } else {
-    let r : Float = Float::from_int(w.min(h)) * 0.42
-    let cx : Int = x + w / 2
-    let cy : Int = y + h / 2
-
-    @raylib.draw_circle(cx, cy, r, c0)
-    @raylib.draw_circle_lines(
-      cx,
-      cy,
-      r + 3.0,
-      @raylib.Color::new(255, 208, 208, 180),
-    )
-
-    for i in 0..<8 {
-      let a : Float = ob.phase + Float::from_int(i) * 0.785
-      let px0 : Int = (Float::from_int(cx) + @math.cosf(a) * (r - 2.0)).to_int()
-      let py0 : Int = (Float::from_int(cy) + @math.sinf(a) * (r - 2.0)).to_int()
-      let px1 : Int = (Float::from_int(cx) + @math.cosf(a) * (r + 10.0)).to_int()
-      let py1 : Int = (Float::from_int(cy) + @math.sinf(a) * (r + 10.0)).to_int()
-      @raylib.draw_line(
-        px0,
-        py0,
-        px1,
-        py1,
-        @raylib.Color::new(255, 214, 128, 220),
+    Log => {
+      @raylib.draw_rectangle(x, y, w, h, c0)
+      @raylib.draw_circle(
+        x + 8,
+        y + h / 2,
+        Float::from_int(h) * 0.42,
+        @raylib.Color::new(146, 112, 74, 240),
       )
+      @raylib.draw_circle(
+        x + w - 8,
+        y + h / 2,
+        Float::from_int(h) * 0.42,
+        @raylib.Color::new(146, 112, 74, 240),
+      )
+      for i in 0..<4 {
+        let px : Int = x + 16 + i * (w - 32) / 3
+        @raylib.draw_line(
+          px,
+          y + 4,
+          px,
+          y + h - 4,
+          @raylib.Color::new(92, 70, 40, 210),
+        )
+      }
+    }
+    Mine => {
+      let r : Float = Float::from_int(w.min(h)) * 0.42
+      let cx : Int = x + w / 2
+      let cy : Int = y + h / 2
+      @raylib.draw_circle(cx, cy, r, c0)
+      @raylib.draw_circle_lines(
+        cx,
+        cy,
+        r + 3.0,
+        @raylib.Color::new(255, 208, 208, 180),
+      )
+      for i in 0..<8 {
+        let a : Float = ob.phase + Float::from_int(i) * 0.785
+        let px0 : Int = (Float::from_int(cx) + @math.cosf(a) * (r - 2.0)).to_int()
+        let py0 : Int = (Float::from_int(cy) + @math.sinf(a) * (r - 2.0)).to_int()
+        let px1 : Int = (Float::from_int(cx) + @math.cosf(a) * (r + 10.0)).to_int()
+        let py1 : Int = (Float::from_int(cy) + @math.sinf(a) * (r + 10.0)).to_int()
+        @raylib.draw_line(
+          px0,
+          py0,
+          px1,
+          py1,
+          @raylib.Color::new(255, 214, 128, 220),
+        )
+      }
     }
   }
 }
 
 ///|
-fn pickup_color(kind : Int) -> @raylib.Color {
-  if kind == @types.pickup_coin {
-    @raylib.Color::new(118, 232, 255, 245)
-  } else if kind == @types.pickup_fuel {
-    @raylib.Color::new(255, 198, 106, 245)
-  } else if kind == @types.pickup_shield {
-    @raylib.Color::new(172, 214, 255, 245)
-  } else {
-    @raylib.Color::new(255, 130, 166, 245)
+fn pickup_color(kind : @types.PickupKind) -> @raylib.Color {
+  match kind {
+    Coin => @raylib.Color::new(118, 232, 255, 245)
+    Fuel => @raylib.Color::new(255, 198, 106, 245)
+    Shield => @raylib.Color::new(172, 214, 255, 245)
+    Repair => @raylib.Color::new(255, 130, 166, 245)
   }
 }
 
 ///|
-fn pickup_radius(kind : Int) -> Float {
-  if kind == @types.pickup_coin {
-    16.0
-  } else if kind == @types.pickup_repair {
-    20.0
-  } else {
-    18.0
+fn pickup_radius(kind : @types.PickupKind) -> Float {
+  match kind {
+    Coin => 16.0
+    Repair => 20.0
+    _ => 18.0
   }
 }
 
@@ -273,36 +267,39 @@ fn draw_pickup(pk : @types.Pickup, ox : Int, oy : Int) -> Unit {
     @raylib.Color::new(250, 252, 255, 210),
   )
 
-  if pk.kind == @types.pickup_fuel {
-    @raylib.draw_rectangle(
-      x - 5,
-      y - 8,
-      10,
-      16,
-      @raylib.Color::new(56, 42, 28, 220),
-    )
-  } else if pk.kind == @types.pickup_shield {
-    @raylib.draw_circle_lines(
-      x,
-      y,
-      rr - 5.0,
-      @raylib.Color::new(218, 240, 255, 190),
-    )
-  } else if pk.kind == @types.pickup_repair {
-    @raylib.draw_line(
-      x - 7,
-      y,
-      x + 7,
-      y,
-      @raylib.Color::new(255, 248, 248, 220),
-    )
-    @raylib.draw_line(
-      x,
-      y - 7,
-      x,
-      y + 7,
-      @raylib.Color::new(255, 248, 248, 220),
-    )
+  match pk.kind {
+    Fuel =>
+      @raylib.draw_rectangle(
+        x - 5,
+        y - 8,
+        10,
+        16,
+        @raylib.Color::new(56, 42, 28, 220),
+      )
+    Shield =>
+      @raylib.draw_circle_lines(
+        x,
+        y,
+        rr - 5.0,
+        @raylib.Color::new(218, 240, 255, 190),
+      )
+    Repair => {
+      @raylib.draw_line(
+        x - 7,
+        y,
+        x + 7,
+        y,
+        @raylib.Color::new(255, 248, 248, 220),
+      )
+      @raylib.draw_line(
+        x,
+        y - 7,
+        x,
+        y + 7,
+        @raylib.Color::new(255, 248, 248, 220),
+      )
+    }
+    Coin => ()
   }
 }
 
@@ -321,12 +318,10 @@ fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
       112
     }
 
-    let c : @raylib.Color = if particle.kind == 2 {
-      @raylib.Color::new(194, 236, 255, a)
-    } else if particle.kind == 1 {
-      @raylib.Color::new(255, 156, 138, a)
-    } else {
-      @raylib.Color::new(144, 224, 255, a)
+    let c : @raylib.Color = match particle.kind {
+      Bubble => @raylib.Color::new(194, 236, 255, a)
+      Hit => @raylib.Color::new(255, 156, 138, a)
+      Water => @raylib.Color::new(144, 224, 255, a)
     }
 
     @raylib.draw_circle(
@@ -670,7 +665,7 @@ fn @types.Game::draw_touch_button(
 
 ///|
 fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
 
@@ -987,9 +982,9 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_touch_controls()
   game.draw_msg()
 
-  if game.state == @types.state_title {
-    game.draw_title_overlay()
-  } else if game.state == @types.state_result {
-    game.draw_result_overlay()
+  match game.state {
+    Title => game.draw_title_overlay()
+    Result => game.draw_result_overlay()
+    Play => ()
   }
 }

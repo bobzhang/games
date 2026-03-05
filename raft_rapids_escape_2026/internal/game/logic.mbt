@@ -8,7 +8,7 @@ fn @types.Game::clear_particles(game : @types.Game) -> Unit {
     particle.vy = 0.0
     particle.life = 0.0
     particle.size = 0.0
-    particle.kind = 0
+    particle.kind = Water
   }
 }
 
@@ -22,7 +22,7 @@ fn @types.Game::clear_world(game : @types.Game) -> Unit {
     obstacle.h = 0.0
     obstacle.vx = 0.0
     obstacle.vy = 0.0
-    obstacle.kind = @types.obstacle_rock
+    obstacle.kind = Rock
     obstacle.phase = 0.0
   }
 
@@ -30,7 +30,7 @@ fn @types.Game::clear_world(game : @types.Game) -> Unit {
     pickup.active = false
     pickup.x = 0.0
     pickup.y = 0.0
-    pickup.kind = @types.pickup_coin
+    pickup.kind = Coin
     pickup.phase = 0.0
   }
 }
@@ -44,7 +44,7 @@ fn @types.Game::emit_particle(
   vy : Float,
   life : Float,
   size : Float,
-  kind : Int,
+  kind : @types.ParticleKind,
 ) -> Unit {
   for particle in game.particles {
     if particle.active {
@@ -69,7 +69,7 @@ fn @types.Game::splash(
   x : Float,
   y : Float,
   n : Int,
-  kind : Int,
+  kind : @types.ParticleKind,
 ) -> Unit {
   for _i in 0..<n {
     game.emit_particle(
@@ -100,10 +100,10 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
     particle.x = particle.x + particle.vx * dt
     particle.y = particle.y + particle.vy * dt
 
-    let drag : Float = if particle.kind == 2 { 2.8 } else { 1.9 }
+    let drag : Float = if particle.kind == Bubble { 2.8 } else { 1.9 }
     particle.vx = particle.vx * (1.0 - dt * drag)
     particle.vy = particle.vy * (1.0 - dt * (drag - 0.5)) +
-      dt * (if particle.kind == 2 { 250.0 } else { 160.0 })
+      dt * (if particle.kind == Bubble { 250.0 } else { 160.0 })
   }
 }
 
@@ -122,7 +122,7 @@ fn @types.Game::start_run(game : @types.Game) -> Unit {
   game.clear_world()
   game.clear_particles()
 
-  game.state = @types.state_play
+  game.state = Play
   game.reset_raft()
 
   game.lives = 3
@@ -157,11 +157,11 @@ fn @types.Game::start_run(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::finish_run(game : @types.Game, win : Bool) -> Unit {
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
 
-  game.state = @types.state_result
+  game.state = Result
   game.win = win
   game.boost_on = false
   game.move_x = 0.0
@@ -173,10 +173,10 @@ fn @types.Game::finish_run(game : @types.Game, win : Bool) -> Unit {
 
   if win {
     @types.set_msg(game, "You conquered the rapids!", 3.0)
-    game.splash(game.raft_x, game.raft_y, 60, 2)
+    game.splash(game.raft_x, game.raft_y, 60, Bubble)
   } else {
     @types.set_msg(game, "Expedition ended. Repair and run again.", 3.0)
-    game.splash(game.raft_x, game.raft_y, 45, 1)
+    game.splash(game.raft_x, game.raft_y, 45, Hit)
   }
 }
 
@@ -198,39 +198,36 @@ fn circle_rect_hit(
 }
 
 ///|
-fn obstacle_hit_cost(kind : Int) -> Int {
-  if kind == @types.obstacle_mine {
-    2
-  } else {
-    1
+fn obstacle_hit_cost(kind : @types.ObstacleKind) -> Int {
+  match kind {
+    Mine => 2
+    _ => 1
   }
 }
 
 ///|
-fn obstacle_hit_fuel(kind : Int) -> Float {
-  if kind == @types.obstacle_mine {
-    18.0
-  } else if kind == @types.obstacle_log {
-    11.0
-  } else {
-    8.0
+fn obstacle_hit_fuel(kind : @types.ObstacleKind) -> Float {
+  match kind {
+    Mine => 18.0
+    Log => 11.0
+    Rock => 8.0
   }
 }
 
 ///|
 fn @types.Game::hurt_player(
   game : @types.Game,
-  kind : Int,
+  kind : @types.ObstacleKind,
   x : Float,
   y : Float,
 ) -> Unit {
-  game.splash(x, y, if kind == @types.obstacle_mine { 40 } else { 26 }, 1)
+  game.splash(x, y, if kind == Mine { 40 } else { 26 }, Hit)
   game.shake_t = @types.maxf(game.shake_t, 0.34)
 
   if game.shield_t > 0.0 {
     game.shield_t = @types.maxf(
       0.0,
-      game.shield_t - (if kind == @types.obstacle_mine { 1.6 } else { 0.9 }),
+      game.shield_t - (if kind == Mine { 1.6 } else { 0.9 }),
     )
     game.score = game.score + 8
     game.combo = 0
@@ -248,12 +245,10 @@ fn @types.Game::hurt_player(
   game.combo = 0
   game.combo_t = 0.0
 
-  if kind == @types.obstacle_mine {
-    @types.set_msg(game, "Mine blast! Heavy damage.", 1.6)
-  } else if kind == @types.obstacle_log {
-    @types.set_msg(game, "Crushed into a drifting log.", 1.4)
-  } else {
-    @types.set_msg(game, "Rock impact! Keep control.", 1.2)
+  match kind {
+    Mine => @types.set_msg(game, "Mine blast! Heavy damage.", 1.6)
+    Log => @types.set_msg(game, "Crushed into a drifting log.", 1.4)
+    Rock => @types.set_msg(game, "Rock impact! Keep control.", 1.2)
   }
 
   if game.lives <= 0 {
@@ -262,57 +257,56 @@ fn @types.Game::hurt_player(
 }
 
 ///|
-fn pickup_radius(kind : Int) -> Float {
-  if kind == @types.pickup_coin {
-    16.0
-  } else if kind == @types.pickup_repair {
-    20.0
-  } else {
-    18.0
+fn pickup_radius(kind : @types.PickupKind) -> Float {
+  match kind {
+    Coin => 16.0
+    Repair => 20.0
+    _ => 18.0
   }
 }
 
 ///|
 fn @types.Game::collect_pickup(
   game : @types.Game,
-  kind : Int,
+  kind : @types.PickupKind,
   x : Float,
   y : Float,
 ) -> Unit {
-  if kind == @types.pickup_coin {
-    game.combo = (15).min(game.combo + 1)
-    game.combo_t = 2.2
-
-    game.score = game.score + 16 + game.combo * 4
-    game.fuel = @types.minf(100.0, game.fuel + 1.3)
-
-    if game.combo >= 4 {
-      @types.set_msg(game, "Combo coins +" + game.combo.to_string(), 0.9)
+  match kind {
+    Coin => {
+      game.combo = (15).min(game.combo + 1)
+      game.combo_t = 2.2
+      game.score = game.score + 16 + game.combo * 4
+      game.fuel = @types.minf(100.0, game.fuel + 1.3)
+      if game.combo >= 4 {
+        @types.set_msg(game, "Combo coins +" + game.combo.to_string(), 0.9)
+      }
+      game.splash(x, y, 10 + game.combo, Water)
     }
-
-    game.splash(x, y, 10 + game.combo, 0)
-  } else if kind == @types.pickup_fuel {
-    game.fuel = @types.minf(100.0, game.fuel + 30.0)
-    game.score = game.score + 20
-    @types.set_msg(game, "Fuel canister recovered.", 1.5)
-    game.splash(x, y, 24, 0)
-  } else if kind == @types.pickup_shield {
-    game.shield_t = @types.maxf(game.shield_t, 7.0)
-    game.score = game.score + 24
-    @types.set_msg(game, "Shield bubble online.", 1.5)
-    game.splash(x, y, 28, 2)
-  } else {
-    if game.lives < 5 {
-      game.lives = game.lives + 1
-      @types.set_msg(game, "Repair kit: hull restored.", 1.5)
-    } else {
-      game.score = game.score + 50
-      game.fuel = @types.minf(100.0, game.fuel + 10.0)
-      @types.set_msg(game, "Repair converted to bonus points.", 1.5)
+    Fuel => {
+      game.fuel = @types.minf(100.0, game.fuel + 30.0)
+      game.score = game.score + 20
+      @types.set_msg(game, "Fuel canister recovered.", 1.5)
+      game.splash(x, y, 24, Water)
     }
-    game.splash(x, y, 26, 2)
+    Shield => {
+      game.shield_t = @types.maxf(game.shield_t, 7.0)
+      game.score = game.score + 24
+      @types.set_msg(game, "Shield bubble online.", 1.5)
+      game.splash(x, y, 28, Bubble)
+    }
+    Repair => {
+      if game.lives < 5 {
+        game.lives = game.lives + 1
+        @types.set_msg(game, "Repair kit: hull restored.", 1.5)
+      } else {
+        game.score = game.score + 50
+        game.fuel = @types.minf(100.0, game.fuel + 10.0)
+        @types.set_msg(game, "Repair converted to bonus points.", 1.5)
+      }
+      game.splash(x, y, 26, Bubble)
+    }
   }
-
   game.score = (0).max(game.score)
   if game.score > game.best_score {
     game.best_score = game.score
@@ -327,28 +321,24 @@ fn @types.Game::spawn_obstacle(game : @types.Game) -> Bool {
     }
 
     let roll : Int = @raylib.get_random_value(0, 99)
-    let kind : Int = if roll < 46 {
-      @types.obstacle_rock
+    let kind : @types.ObstacleKind = if roll < 46 {
+      Rock
     } else if roll < 84 {
-      @types.obstacle_log
+      Log
     } else {
-      @types.obstacle_mine
+      Mine
     }
 
-    let w : Float = if kind == @types.obstacle_rock {
-      @types.randf(56.0, 90.0)
-    } else if kind == @types.obstacle_log {
-      @types.randf(120.0, 210.0)
-    } else {
-      @types.randf(50.0, 74.0)
+    let w : Float = match kind {
+      Rock => @types.randf(56.0, 90.0)
+      Log => @types.randf(120.0, 210.0)
+      Mine => @types.randf(50.0, 74.0)
     }
 
-    let h : Float = if kind == @types.obstacle_rock {
-      @types.randf(48.0, 82.0)
-    } else if kind == @types.obstacle_log {
-      @types.randf(32.0, 52.0)
-    } else {
-      @types.randf(50.0, 74.0)
+    let h : Float = match kind {
+      Rock => @types.randf(48.0, 82.0)
+      Log => @types.randf(32.0, 52.0)
+      Mine => @types.randf(50.0, 74.0)
     }
 
     obstacle.active = true
@@ -363,12 +353,10 @@ fn @types.Game::spawn_obstacle(game : @types.Game) -> Bool {
     obstacle.y = @types.world_top() - h - @types.randf(30.0, 180.0)
 
     obstacle.vx = @types.randf(-42.0, 42.0)
-    obstacle.vy = if kind == @types.obstacle_log {
-      @types.randf(220.0, 300.0) + Float::from_int(game.level) * 20.0
-    } else if kind == @types.obstacle_mine {
-      @types.randf(170.0, 240.0) + Float::from_int(game.level) * 16.0
-    } else {
-      @types.randf(190.0, 270.0) + Float::from_int(game.level) * 18.0
+    obstacle.vy = match kind {
+      Log => @types.randf(220.0, 300.0) + Float::from_int(game.level) * 20.0
+      Mine => @types.randf(170.0, 240.0) + Float::from_int(game.level) * 16.0
+      Rock => @types.randf(190.0, 270.0) + Float::from_int(game.level) * 18.0
     }
     obstacle.phase = @types.randf(0.0, 6.28)
 
@@ -395,13 +383,13 @@ fn @types.Game::spawn_pickup(game : @types.Game) -> Bool {
 
     let roll : Int = @raylib.get_random_value(0, 99)
     pickup.kind = if roll < 58 {
-      @types.pickup_coin
+      Coin
     } else if roll < 80 {
-      @types.pickup_fuel
+      Fuel
     } else if roll < 92 {
-      @types.pickup_shield
+      Shield
     } else {
-      @types.pickup_repair
+      Repair
     }
 
     return true
@@ -433,7 +421,7 @@ fn @types.Game::update_raft(game : @types.Game, dt : Float) -> Unit {
   if boost_mul > 1.1 {
     game.raft_vx = game.raft_vx * 1.03
     game.raft_vy = game.raft_vy * 1.03
-    game.splash(game.raft_x, game.raft_y + @types.raft_r * 0.6, 3, 0)
+    game.splash(game.raft_x, game.raft_y + @types.raft_r * 0.6, 3, Water)
   }
 
   game.raft_x = game.raft_x + game.raft_vx * dt * boost_mul
@@ -467,7 +455,7 @@ fn @types.Game::update_raft(game : @types.Game, dt : Float) -> Unit {
   }
 
   if wall_hit {
-    game.splash(game.raft_x, game.raft_y, 8, 0)
+    game.splash(game.raft_x, game.raft_y, 8, Water)
     game.shake_t = @types.maxf(game.shake_t, 0.14)
     game.fuel = @types.maxf(0.0, game.fuel - 1.8)
   }
@@ -480,15 +468,17 @@ fn @types.Game::update_obstacles(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    obstacle.phase = obstacle.phase +
-      dt * (1.3 + Float::from_int(obstacle.kind))
+    let kind_f : Float = match obstacle.kind {
+      Rock => 0.0
+      Log => 1.0
+      Mine => 2.0
+    }
+    obstacle.phase = obstacle.phase + dt * (1.3 + kind_f)
 
-    let sway : Float = if obstacle.kind == @types.obstacle_log {
-      @math.sinf(obstacle.phase * 1.9) * 32.0
-    } else if obstacle.kind == @types.obstacle_mine {
-      @math.sinf(obstacle.phase * 2.6) * 19.0
-    } else {
-      @math.sinf(obstacle.phase * 1.3) * 24.0
+    let sway : Float = match obstacle.kind {
+      Log => @math.sinf(obstacle.phase * 1.9) * 32.0
+      Mine => @math.sinf(obstacle.phase * 2.6) * 19.0
+      Rock => @math.sinf(obstacle.phase * 1.3) * 24.0
     }
 
     obstacle.x = obstacle.x +
@@ -523,14 +513,14 @@ fn @types.Game::update_obstacles(game : @types.Game, dt : Float) -> Unit {
     )
 
     if hit {
-      let kind : Int = obstacle.kind
+      let kind = obstacle.kind
       let ox : Float = obstacle.x + obstacle.w * 0.5
       let oy : Float = obstacle.y + obstacle.h * 0.5
 
       obstacle.active = false
       game.hurt_player(kind, ox, oy)
 
-      if game.state != @types.state_play {
+      if game.state != Play {
         return
       }
     }
@@ -580,7 +570,7 @@ fn @types.Game::update_pickups(game : @types.Game, dt : Float) -> Unit {
     )
 
     if d2 <= r * r {
-      let kind : Int = pickup.kind
+      let kind = pickup.kind
       let px : Float = pickup.x
       let py : Float = pickup.y
       pickup.active = false
@@ -591,7 +581,7 @@ fn @types.Game::update_pickups(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 fn @types.Game::use_hint(game : @types.Game) -> Bool {
-  if game.state != @types.state_play || game.hint_left <= 0 {
+  if game.state != Play || game.hint_left <= 0 {
     return false
   }
 
@@ -624,7 +614,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
       let dx : Float = (ox - lane_x).abs()
       cost = cost + @types.maxf(0.0, 220.0 - dx)
 
-      if obstacle.kind == @types.obstacle_mine {
+      if obstacle.kind == Mine {
         cost = cost + @types.maxf(0.0, 100.0 - dx)
       }
     }
@@ -643,7 +633,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
       continue
     }
 
-    if pickup.kind != @types.pickup_fuel && pickup.kind != @types.pickup_shield {
+    if pickup.kind != Fuel && pickup.kind != Shield {
       continue
     }
 
@@ -700,7 +690,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
 
   game.update_particles(step)
 
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
 
@@ -746,7 +736,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   game.update_raft(step)
 
   game.update_obstacles(step)
-  if game.state != @types.state_play {
+  if game.state != Play {
     return
   }
 
@@ -785,14 +775,18 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.mouse_hold = @raylib.is_mouse_button_down(@raylib.MouseButtonLeft) ||
     game.touch_count > 0
 
-  if game.state == @types.state_title {
-    game.update_title_input()
-    game.update_play(dt)
-  } else if game.state == @types.state_play {
-    game.update_play_input(dt)
-    game.update_play(dt)
-  } else {
-    game.update_result_input()
-    game.update_play(dt)
+  match game.state {
+    Title => {
+      game.update_title_input()
+      game.update_play(dt)
+    }
+    Play => {
+      game.update_play_input(dt)
+      game.update_play(dt)
+    }
+    Result => {
+      game.update_result_input()
+      game.update_play(dt)
+    }
   }
 }

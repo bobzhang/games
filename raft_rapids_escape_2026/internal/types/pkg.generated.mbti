@@ -28,23 +28,9 @@ pub fn maxf(Float, Float) -> Float
 
 pub fn minf(Float, Float) -> Float
 
-pub let obstacle_log : Int
-
-pub let obstacle_mine : Int
-
-pub let obstacle_rock : Int
-
 pub let panel_w : Int
 
 pub let panel_x0 : Int
-
-pub let pickup_coin : Int
-
-pub let pickup_fuel : Int
-
-pub let pickup_repair : Int
-
-pub let pickup_shield : Int
 
 pub fn point_dist2(Float, Float, Float, Float) -> Float
 
@@ -67,12 +53,6 @@ pub let screen_w : Int
 pub fn set_msg(Game, String, Float) -> Unit
 
 pub fn start_button_rect() -> (Int, Int, Int, Int)
-
-pub let state_play : Int
-
-pub let state_result : Int
-
-pub let state_title : Int
 
 pub let target_fps : Int
 
@@ -103,7 +83,7 @@ pub(all) struct Game {
   obstacles : Array[Obstacle]
   pickups : Array[Pickup]
   particles : Array[Particle]
-  mut state : Int
+  mut state : GameState
   mut raft_x : Float
   mut raft_y : Float
   mut raft_vx : Float
@@ -140,6 +120,13 @@ pub(all) struct Game {
 }
 pub fn Game::new() -> Self
 
+pub(all) enum GameState {
+  Title
+  Play
+  Result
+}
+pub impl Eq for GameState
+
 pub(all) struct Obstacle {
   mut active : Bool
   mut x : Float
@@ -148,10 +135,17 @@ pub(all) struct Obstacle {
   mut h : Float
   mut vx : Float
   mut vy : Float
-  mut kind : Int
+  mut kind : ObstacleKind
   mut phase : Float
 }
 pub fn Obstacle::new() -> Self
+
+pub(all) enum ObstacleKind {
+  Rock
+  Log
+  Mine
+}
+pub impl Eq for ObstacleKind
 
 pub(all) struct Particle {
   mut active : Bool
@@ -161,18 +155,33 @@ pub(all) struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : ParticleKind
 }
 pub fn Particle::new() -> Self
+
+pub(all) enum ParticleKind {
+  Water
+  Hit
+  Bubble
+}
+pub impl Eq for ParticleKind
 
 pub(all) struct Pickup {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut kind : Int
+  mut kind : PickupKind
   mut phase : Float
 }
 pub fn Pickup::new() -> Self
+
+pub(all) enum PickupKind {
+  Coin
+  Fuel
+  Shield
+  Repair
+}
+pub impl Eq for PickupKind
 
 // Type aliases
 

@@ -12,7 +12,7 @@ pub(all) struct Wagon {
 /// Stores runtime data for Raider.
 pub(all) struct Raider {
   mut active : Bool
-  mut kind : Int
+  mut kind : RaiderKind
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -77,7 +77,7 @@ pub(all) struct Game {
   bullets : Array[Bullet]
   dusts : Array[Dust]
   hero : Player
-  mut state : Int
+  mut state : GameState
   mut score : Int
   mut best_score : Int
   mut kills : Int
@@ -123,7 +123,7 @@ pub fn Wagon::new(index : Int) -> Wagon {
 pub fn Raider::new() -> Raider {
   {
     active: false,
-    kind: raider_skirmisher,
+    kind: Skirmisher,
     x: 0.0,
     y: 0.0,
     vx: 0.0,
@@ -193,7 +193,7 @@ pub fn Game::new() -> Game {
     bullets,
     dusts,
     hero: Player::new(),
-    state: state_title,
+    state: Title,
     score: 0,
     best_score: 0,
     kills: 0,

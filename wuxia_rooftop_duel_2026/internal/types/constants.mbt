@@ -11,54 +11,6 @@ pub let screen_h : Int = 920
 pub let target_fps : Int = 120
 
 ///|
-/// Integer id for the title state.
-pub let state_title : Int = 0
-
-///|
-/// Integer id for active duel gameplay.
-pub let state_playing : Int = 1
-
-///|
-/// Integer id for paused gameplay.
-pub let state_paused : Int = 2
-
-///|
-/// Integer id for game-over state.
-pub let state_game_over : Int = 3
-
-///|
-/// Enemy AI state id for target seeking.
-pub let enemy_state_seek : Int = 0
-
-///|
-/// Enemy AI state id for attack telegraphing.
-pub let enemy_state_telegraph : Int = 1
-
-///|
-/// Enemy AI state id for strike execution.
-pub let enemy_state_strike : Int = 2
-
-///|
-/// Enemy AI state id for post-strike recovery.
-pub let enemy_state_recover : Int = 3
-
-///|
-/// Enemy AI state id for parry stun.
-pub let enemy_state_stunned : Int = 4
-
-///|
-/// Attack id representing no active attack.
-pub let attack_none : Int = 0
-
-///|
-/// Attack id representing the light slash.
-pub let attack_light : Int = 1
-
-///|
-/// Attack id representing the heavy slash.
-pub let attack_heavy : Int = 2
-
-///|
 /// Maximum enemies allocated in the enemy pool.
 pub let max_enemy_slots : Int = 84
 
@@ -261,3 +213,31 @@ pub let spawn_interval_base : Float = 0.96
 ///|
 /// Minimum enemy spawn interval cap.
 pub let spawn_interval_min : Float = 0.30
+
+
+///|
+/// Player attack type.
+pub(all) enum Attack {
+  None
+  Light
+  Heavy
+} derive(Eq)
+
+///|
+/// Enemy AI behavior state.
+pub(all) enum EnemyState {
+  Seek
+  Telegraph
+  Strike
+  Recover
+  Stunned
+} derive(Eq)
+
+///|
+/// Top-level game state.
+pub(all) enum GameState {
+  Title
+  Playing
+  Paused
+  GameOver
+} derive(Eq)

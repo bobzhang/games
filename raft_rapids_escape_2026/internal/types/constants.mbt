@@ -11,46 +11,6 @@ pub let screen_h : Int = 980
 pub let target_fps : Int = 120
 
 ///|
-/// Title-screen state id.
-pub let state_title : Int = 0
-
-///|
-/// Active gameplay state id.
-pub let state_play : Int = 1
-
-///|
-/// Result-screen state id.
-pub let state_result : Int = 2
-
-///|
-/// Obstacle kind id for rocks.
-pub let obstacle_rock : Int = 0
-
-///|
-/// Obstacle kind id for floating logs.
-pub let obstacle_log : Int = 1
-
-///|
-/// Obstacle kind id for mines.
-pub let obstacle_mine : Int = 2
-
-///|
-/// Pickup kind id for score coins.
-pub let pickup_coin : Int = 0
-
-///|
-/// Pickup kind id for fuel canisters.
-pub let pickup_fuel : Int = 1
-
-///|
-/// Pickup kind id for temporary shields.
-pub let pickup_shield : Int = 2
-
-///|
-/// Pickup kind id for life repair kits.
-pub let pickup_repair : Int = 3
-
-///|
 /// Capacity of obstacle pool.
 pub let max_obstacles : Int = 120
 
@@ -147,3 +107,36 @@ pub fn btn_restart() -> (Int, Int, Int, Int) {
 pub fn btn_hint() -> (Int, Int, Int, Int) {
   (1582, 606, 110, 92)
 }
+
+///|
+/// Kind of obstacle entity in the river lane.
+pub(all) enum ObstacleKind {
+  Rock
+  Log
+  Mine
+} derive(Eq)
+
+///|
+/// Kind of collectible pickup entity.
+pub(all) enum PickupKind {
+  Coin
+  Fuel
+  Shield
+  Repair
+} derive(Eq)
+
+///|
+/// Kind of visual particle effect.
+pub(all) enum ParticleKind {
+  Water
+  Hit
+  Bubble
+} derive(Eq)
+
+///|
+/// High-level game screen state.
+pub(all) enum GameState {
+  Title
+  Play
+  Result
+} derive(Eq)

@@ -10,7 +10,7 @@ pub(all) struct Enemy {
   mut max_hp : Float
   mut radius : Float
   mut speed : Float
-  mut state : Int
+  mut state : EnemyState
   mut state_t : Float
   mut telegraph_total_t : Float
   mut visual_phase : Float
@@ -20,7 +20,7 @@ pub(all) struct Enemy {
 /// Complete mutable state for a wuxia rooftop duel run.
 pub(all) struct Game {
   enemies : Array[Enemy]
-  mut state : Int
+  mut state : GameState
   mut player_x : Float
   mut player_y : Float
   mut player_vx : Float
@@ -38,7 +38,7 @@ pub(all) struct Game {
   mut dash_dir_y : Float
   mut attack_cd : Float
   mut attack_anim_t : Float
-  mut attack_kind : Int
+  mut attack_kind : Attack
   mut wave : Int
   mut wave_enemies_total : Int
   mut wave_spawned : Int
@@ -71,7 +71,7 @@ pub fn Enemy::new() -> Enemy {
     max_hp: 0.0,
     radius: 20.0,
     speed: 0.0,
-    state: enemy_state_seek,
+    state: Seek,
     state_t: 0.0,
     telegraph_total_t: 0.0,
     visual_phase: 0.0,
@@ -83,7 +83,7 @@ pub fn Enemy::new() -> Enemy {
 pub fn Game::new() -> Game {
   {
     enemies: Array::makei(max_enemy_slots, fn(_i) { Enemy::new() }),
-    state: state_title,
+    state: Title,
     player_x: arena_center_x(),
     player_y: arena_center_y() + 130.0,
     player_vx: 0.0,
@@ -101,7 +101,7 @@ pub fn Game::new() -> Game {
     dash_dir_y: 0.0,
     attack_cd: 0.0,
     attack_anim_t: 0.0,
-    attack_kind: attack_none,
+    attack_kind: None,
     wave: 1,
     wave_enemies_total: 0,
     wave_spawned: 0,

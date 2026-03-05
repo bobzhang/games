@@ -12,7 +12,7 @@ fn @types.Game::set_message(
 fn @types.Game::clear_raiders(game : @types.Game) -> Unit {
   for raider in game.raiders {
     raider.active = false
-    raider.kind = @types.raider_skirmisher
+    raider.kind = Skirmisher
     raider.x = 0.0
     raider.y = 0.0
     raider.vx = 0.0
@@ -89,7 +89,7 @@ fn @types.Game::start_run(game : @types.Game) -> Unit {
   game.reset_wagons()
   reset_hero(game.hero)
 
-  game.state = @types.state_play
+  game.state = Play
   game.score = 0
   game.kills = 0
   game.checkpoint = 0
@@ -377,37 +377,37 @@ fn @types.Game::kill_raider(
 }
 
 ///|
-fn @types.Game::choose_raider_kind(game : @types.Game) -> Int {
+fn @types.Game::choose_raider_kind(game : @types.Game) -> @types.RaiderKind {
   let roll = @types.randi(0, 99)
 
   if game.checkpoint >= 3 {
     if roll < 34 {
-      @types.raider_brute
+      Brute
     } else if roll < 72 {
-      @types.raider_rider
+      Rider
     } else {
-      @types.raider_skirmisher
+      Skirmisher
     }
   } else if game.checkpoint >= 2 {
     if roll < 28 {
-      @types.raider_brute
+      Brute
     } else if roll < 56 {
-      @types.raider_rider
+      Rider
     } else {
-      @types.raider_skirmisher
+      Skirmisher
     }
   } else if game.checkpoint >= 1 {
     if roll < 20 {
-      @types.raider_brute
+      Brute
     } else if roll < 42 {
-      @types.raider_rider
+      Rider
     } else {
-      @types.raider_skirmisher
+      Skirmisher
     }
   } else if roll < 15 {
-    @types.raider_brute
+    Brute
   } else {
-    @types.raider_skirmisher
+    Skirmisher
   }
 }
 
@@ -429,7 +429,7 @@ fn @types.Game::choose_target_wagon(
 fn @types.Game::spawn_raider(
   game : @types.Game,
   lane : Int,
-  kind : Int,
+  kind : @types.RaiderKind,
 ) -> Unit {
   let i = game.alloc_raider()
   let x = Float::from_int(@types.screen_w) + @types.randf(60.0, 160.0)
@@ -446,21 +446,25 @@ fn @types.Game::spawn_raider(
   game.raiders[i].attack_cd = @types.randf(0.24, 0.68)
   game.raiders[i].flash_t = 0.0
 
-  if kind == @types.raider_brute {
-    game.raiders[i].speed = @types.randf(76.0, 96.0) +
-      Float::from_int(game.checkpoint) * 6.0
-    game.raiders[i].hp = @types.randf(84.0, 108.0)
-    game.raiders[i].radius = 22.0
-  } else if kind == @types.raider_rider {
-    game.raiders[i].speed = @types.randf(132.0, 162.0) +
-      Float::from_int(game.checkpoint) * 8.0
-    game.raiders[i].hp = @types.randf(52.0, 72.0)
-    game.raiders[i].radius = 14.0
-  } else {
-    game.raiders[i].speed = @types.randf(102.0, 128.0) +
-      Float::from_int(game.checkpoint) * 7.0
-    game.raiders[i].hp = @types.randf(46.0, 62.0)
-    game.raiders[i].radius = 16.0
+  match kind {
+    Brute => {
+      game.raiders[i].speed = @types.randf(76.0, 96.0) +
+        Float::from_int(game.checkpoint) * 6.0
+      game.raiders[i].hp = @types.randf(84.0, 108.0)
+      game.raiders[i].radius = 22.0
+    }
+    Rider => {
+      game.raiders[i].speed = @types.randf(132.0, 162.0) +
+        Float::from_int(game.checkpoint) * 8.0
+      game.raiders[i].hp = @types.randf(52.0, 72.0)
+      game.raiders[i].radius = 14.0
+    }
+    _ => {
+      game.raiders[i].speed = @types.randf(102.0, 128.0) +
+        Float::from_int(game.checkpoint) * 7.0
+      game.raiders[i].hp = @types.randf(46.0, 62.0)
+      game.raiders[i].radius = 16.0
+    }
   }
 }
 
@@ -853,20 +857,16 @@ fn @types.Game::update_raiders(game : @types.Game, dt : Float) -> Unit {
       game.raiders[i].attack_cd = game.raiders[i].attack_cd - dt
 
       if in_attack && game.raiders[i].attack_cd <= 0.0 {
-        let dmg = if game.raiders[i].kind == @types.raider_brute {
-          @types.randf(14.0, 19.0)
-        } else if game.raiders[i].kind == @types.raider_rider {
-          @types.randf(9.0, 13.0)
-        } else {
-          @types.randf(8.0, 12.0)
+        let dmg = match game.raiders[i].kind {
+          Brute => @types.randf(14.0, 19.0)
+          Rider => @types.randf(9.0, 13.0)
+          _ => @types.randf(8.0, 12.0)
         }
 
         game.damage_wagon(target_wagon, dmg)
-        game.raiders[i].attack_cd = if game.raiders[i].kind ==
-          @types.raider_brute {
-          @types.randf(0.72, 1.0)
-        } else {
-          @types.randf(0.92, 1.24)
+        game.raiders[i].attack_cd = match game.raiders[i].kind {
+          Brute => @types.randf(0.72, 1.0)
+          _ => @types.randf(0.92, 1.24)
         }
         game.morale = @types.clampf(game.morale - 1.8, 0.0, @types.morale_max)
         game.emit_dust(
@@ -995,7 +995,7 @@ fn @types.Game::award_checkpoint(game : @types.Game) -> Unit {
     if game.score > game.best_score {
       game.best_score = game.score
     }
-    game.state = @types.state_victory
+    game.state = Victory
     game.set_message("Caravan reached the final oasis", 2.0)
   }
 }
@@ -1007,7 +1007,7 @@ fn @types.Game::update_progress(game : @types.Game, dt : Float) -> Unit {
   while game.checkpoint < @types.checkpoint_total &&
         game.distance >= game.next_checkpoint {
     game.award_checkpoint()
-    if game.state == @types.state_victory {
+    if game.state == Victory {
       return
     }
   }
@@ -1020,10 +1020,10 @@ fn @types.Game::end_run(game : @types.Game, victory : Bool) -> Unit {
   }
 
   if victory {
-    game.state = @types.state_victory
+    game.state = Victory
     game.set_message("Caravan secured all checkpoints", 1.8)
   } else {
-    game.state = @types.state_game_over
+    game.state = GameOver
     game.set_message("Escort failed", 1.8)
   }
 }
@@ -1044,7 +1044,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   game.update_wagons(dt)
   game.update_hero(dt)
   game.update_progress(dt)
-  if game.state != @types.state_play {
+  if game.state != Play {
     game.update_bullets(dt)
     game.update_dust(dt)
     return
@@ -1091,7 +1091,7 @@ fn @types.Game::update_pause(game : @types.Game, dt : Float) -> Unit {
   game.update_dust(dt)
 
   if game.input_pause_press || game.input_confirm_press {
-    game.state = @types.state_play
+    game.state = Play
     game.set_message("Escort resumed", 0.8)
   }
 }
@@ -1124,18 +1124,17 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     return
   }
 
-  if game.state == @types.state_title {
-    game.update_title(dt)
-  } else if game.state == @types.state_play {
-    if game.input_pause_press {
-      game.state = @types.state_pause
-      game.set_message("Paused", 0.8)
-      return
+  match game.state {
+    Title => game.update_title(dt)
+    Play => {
+      if game.input_pause_press {
+        game.state = Pause
+        game.set_message("Paused", 0.8)
+        return
+      }
+      game.update_play(dt)
     }
-    game.update_play(dt)
-  } else if game.state == @types.state_pause {
-    game.update_pause(dt)
-  } else {
-    game.update_end(dt)
+    Pause => game.update_pause(dt)
+    _ => game.update_end(dt)
   }
 }

@@ -11,26 +11,6 @@ pub let screen_h : Int = 820
 pub let target_fps : Int = 120
 
 ///|
-/// Gameplay tuning constant for state title.
-pub let state_title : Int = 0
-
-///|
-/// Gameplay tuning constant for state play.
-pub let state_play : Int = 1
-
-///|
-/// Gameplay tuning constant for state pause.
-pub let state_pause : Int = 2
-
-///|
-/// Gameplay tuning constant for state game over.
-pub let state_game_over : Int = 3
-
-///|
-/// Gameplay tuning constant for state victory.
-pub let state_victory : Int = 4
-
-///|
 /// Gameplay tuning constant for wagon count.
 pub let wagon_count : Int = 3
 
@@ -183,18 +163,6 @@ pub let spawn_interval_base : Float = 1.35
 pub let spawn_interval_min : Float = 0.34
 
 ///|
-/// Gameplay tuning constant for raider skirmisher.
-pub let raider_skirmisher : Int = 0
-
-///|
-/// Gameplay tuning constant for raider brute.
-pub let raider_brute : Int = 1
-
-///|
-/// Gameplay tuning constant for raider rider.
-pub let raider_rider : Int = 2
-
-///|
 /// World layout coordinate for desert lane top.
 pub let desert_lane_top : Float = 228.0
 
@@ -213,3 +181,22 @@ pub let caravan_center_x : Float = Float::from_int(screen_w) * 0.48
 ///|
 /// World layout coordinate for caravan center y.
 pub let caravan_center_y : Float = Float::from_int(screen_h) * 0.57
+
+
+///|
+/// Distinguishes raider archetypes with different stats.
+pub(all) enum RaiderKind {
+  Skirmisher
+  Brute
+  Rider
+} derive(Eq)
+
+///|
+/// Tracks the current phase of the game session.
+pub(all) enum GameState {
+  Title
+  Play
+  Pause
+  GameOver
+  Victory
+} derive(Eq)

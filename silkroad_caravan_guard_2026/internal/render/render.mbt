@@ -23,7 +23,7 @@ fn draw_right_text(
 
 ///|
 fn @types.Game::cam_shake(game : @types.Game) -> (Float, Float) {
-  if game.state != @types.state_play || game.shake_t <= 0.0 {
+  if game.state != Play || game.shake_t <= 0.0 {
     (0.0, 0.0)
   } else {
     let amp = @types.minf(20.0, game.shake_t * 80.0)
@@ -58,7 +58,7 @@ fn @types.Game::active_raider_count(game : @types.Game) -> Int {
 
 ///|
 fn @types.Game::checkpoint_progress(game : @types.Game) -> Float {
-  if game.state == @types.state_victory {
+  if game.state == Victory {
     1.0
   } else {
     let span = @types.maxf(1.0, game.next_checkpoint - game.checkpoint_start)
@@ -227,7 +227,7 @@ fn @types.Game::draw_perimeter(
     t = t + @types.tau / 110.0
   }
 
-  if game.state == @types.state_play {
+  if game.state == Play {
     let prog = game.checkpoint_progress()
     let ring_r = @types.perimeter_outer_rx +
       10.0 +
@@ -389,12 +389,10 @@ fn @types.Game::draw_raiders(
     let x = raider.x + cam_x
     let y = raider.y + cam_y
 
-    let mut col = if raider.kind == @types.raider_brute {
-      @raylib.Color::new(212, 86, 62, 255)
-    } else if raider.kind == @types.raider_rider {
-      @raylib.Color::new(252, 166, 68, 255)
-    } else {
-      @raylib.Color::new(236, 112, 84, 255)
+    let mut col = match raider.kind {
+      Brute => @raylib.Color::new(212, 86, 62, 255)
+      Rider => @raylib.Color::new(252, 166, 68, 255)
+      _ => @raylib.Color::new(236, 112, 84, 255)
     }
 
     if raider.flash_t > 0.0 {
@@ -422,12 +420,10 @@ fn @types.Game::draw_raiders(
     let right = @raylib.Vector2::new(x + ny * 5.0, y - nx * 5.0)
     @raylib.draw_triangle(tip, left, right, @raylib.Color::new(42, 32, 28, 220))
 
-    let raider_max_hp : Float = if raider.kind == @types.raider_brute {
-      108.0
-    } else if raider.kind == @types.raider_rider {
-      72.0
-    } else {
-      62.0
+    let raider_max_hp : Float = match raider.kind {
+      Brute => 108.0
+      Rider => 72.0
+      _ => 62.0
     }
     let hp = @types.clamp01(raider.hp / raider_max_hp)
     @raylib.draw_rectangle(
@@ -869,13 +865,13 @@ fn @types.Game::draw_end_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(4, 8, 14, 154),
   )
 
-  let title = if game.state == @types.state_victory {
+  let title = if game.state == Victory {
     "Route Cleared"
   } else {
     "Caravan Lost"
   }
 
-  let title_col = if game.state == @types.state_victory {
+  let title_col = if game.state == Victory {
     @raylib.Color::new(148, 246, 212, 255)
   } else {
     @raylib.Color::new(250, 140, 108, 255)
@@ -956,18 +952,18 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   let (cam_x, cam_y) = game.cam_shake()
   game.draw_world(cam_x, cam_y)
 
-  if game.state == @types.state_title {
+  if game.state == Title {
     game.draw_title_overlay()
     return
   }
 
   game.draw_hud()
 
-  if game.state == @types.state_pause {
+  if game.state == Pause {
     draw_pause_overlay()
   }
 
-  if game.state == @types.state_game_over || game.state == @types.state_victory {
+  if game.state == GameOver || game.state == Victory {
     game.draw_end_overlay()
   }
 

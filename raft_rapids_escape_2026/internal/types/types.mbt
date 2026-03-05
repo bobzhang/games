@@ -8,7 +8,7 @@ pub(all) struct Obstacle {
   mut h : Float
   mut vx : Float
   mut vy : Float
-  mut kind : Int
+  mut kind : ObstacleKind
   mut phase : Float
 }
 
@@ -18,7 +18,7 @@ pub(all) struct Pickup {
   mut active : Bool
   mut x : Float
   mut y : Float
-  mut kind : Int
+  mut kind : PickupKind
   mut phase : Float
 }
 
@@ -32,7 +32,7 @@ pub(all) struct Particle {
   mut vy : Float
   mut life : Float
   mut size : Float
-  mut kind : Int
+  mut kind : ParticleKind
 }
 
 ///|
@@ -41,7 +41,7 @@ pub(all) struct Game {
   obstacles : Array[Obstacle]
   pickups : Array[Pickup]
   particles : Array[Particle]
-  mut state : Int
+  mut state : GameState
   mut raft_x : Float
   mut raft_y : Float
   mut raft_vx : Float
@@ -88,7 +88,7 @@ pub fn Obstacle::new() -> Obstacle {
     h: 0.0,
     vx: 0.0,
     vy: 0.0,
-    kind: obstacle_rock,
+    kind: Rock,
     phase: 0.0,
   }
 }
@@ -96,7 +96,7 @@ pub fn Obstacle::new() -> Obstacle {
 ///|
 /// Create an inactive pickup slot.
 pub fn Pickup::new() -> Pickup {
-  { active: false, x: 0.0, y: 0.0, kind: pickup_coin, phase: 0.0 }
+  { active: false, x: 0.0, y: 0.0, kind: Coin, phase: 0.0 }
 }
 
 ///|
@@ -110,7 +110,7 @@ pub fn Particle::new() -> Particle {
     vy: 0.0,
     life: 0.0,
     size: 0.0,
-    kind: 0,
+    kind: Water,
   }
 }
 
@@ -121,7 +121,7 @@ pub fn Game::new() -> Game {
     obstacles: Array::makei(max_obstacles, fn(_i) { Obstacle::new() }),
     pickups: Array::makei(max_pickups, fn(_i) { Pickup::new() }),
     particles: Array::makei(max_particles, fn(_i) { Particle::new() }),
-    state: state_title,
+    state: Title,
     raft_x: Float::from_int(world_x0 + world_w / 2),
     raft_y: Float::from_int(world_y0 + world_h - 180),
     raft_vx: 0.0,

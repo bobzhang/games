@@ -90,12 +90,6 @@ pub let player_roll_time : Float
 
 pub let player_speed : Float
 
-pub let raider_brute : Int
-
-pub let raider_rider : Int
-
-pub let raider_skirmisher : Int
-
 pub fn randf(Float, Float) -> Float
 
 pub fn randi(Int, Int) -> Int
@@ -115,16 +109,6 @@ pub let shoot_cd : Float
 pub let spawn_interval_base : Float
 
 pub let spawn_interval_min : Float
-
-pub let state_game_over : Int
-
-pub let state_pause : Int
-
-pub let state_play : Int
-
-pub let state_title : Int
-
-pub let state_victory : Int
 
 pub let target_fps : Int
 
@@ -172,7 +156,7 @@ pub(all) struct Game {
   bullets : Array[Bullet]
   dusts : Array[Dust]
   hero : Player
-  mut state : Int
+  mut state : GameState
   mut score : Int
   mut best_score : Int
   mut kills : Int
@@ -202,6 +186,15 @@ pub(all) struct Game {
 }
 pub fn Game::new() -> Self
 
+pub(all) enum GameState {
+  Title
+  Play
+  Pause
+  GameOver
+  Victory
+}
+pub impl Eq for GameState
+
 pub(all) struct Player {
   mut x : Float
   mut y : Float
@@ -221,7 +214,7 @@ pub fn Player::new() -> Self
 
 pub(all) struct Raider {
   mut active : Bool
-  mut kind : Int
+  mut kind : RaiderKind
   mut x : Float
   mut y : Float
   mut vx : Float
@@ -235,6 +228,13 @@ pub(all) struct Raider {
   mut radius : Float
 }
 pub fn Raider::new() -> Self
+
+pub(all) enum RaiderKind {
+  Skirmisher
+  Brute
+  Rider
+}
+pub impl Eq for RaiderKind
 
 pub(all) struct Wagon {
   mut x : Float

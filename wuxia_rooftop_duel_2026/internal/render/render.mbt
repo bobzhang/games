@@ -115,14 +115,11 @@ fn draw_rooftop(ox : Int, oy : Int) -> Unit {
 
 ///|
 fn enemy_color(enemy : @types.Enemy) -> @raylib.Color {
-  if enemy.state == @types.enemy_state_strike {
-    @raylib.Color::new(236, 112, 128, 242)
-  } else if enemy.state == @types.enemy_state_telegraph {
-    @raylib.Color::new(244, 200, 126, 242)
-  } else if enemy.state == @types.enemy_state_stunned {
-    @raylib.Color::new(128, 220, 218, 242)
-  } else {
-    @raylib.Color::new(188, 202, 232, 236)
+  match enemy.state {
+    Strike => @raylib.Color::new(236, 112, 128, 242)
+    Telegraph => @raylib.Color::new(244, 200, 126, 242)
+    Stunned => @raylib.Color::new(128, 220, 218, 242)
+    _ => @raylib.Color::new(188, 202, 232, 236)
   }
 }
 
@@ -155,7 +152,7 @@ fn draw_enemy(
     @raylib.Color::new(36, 42, 64, 200),
   )
 
-  if enemy.state == @types.enemy_state_telegraph {
+  if enemy.state == Telegraph {
     let ratio : Float = @types.clampf(
       enemy.state_t / @types.maxf(0.001, enemy.telegraph_total_t),
       0.0,
@@ -181,7 +178,7 @@ fn draw_enemy(
     )
   }
 
-  if enemy.state == @types.enemy_state_stunned {
+  if enemy.state == Stunned {
     @raylib.draw_line(
       ex - 9,
       ey - 14,
@@ -270,24 +267,21 @@ fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
   )
 
   if game.attack_anim_t > 0.0 {
-    let attack_reach : Float = if game.attack_kind == @types.attack_heavy {
-      @types.heavy_attack_range
-    } else {
-      @types.light_attack_range
+    let attack_reach : Float = match game.attack_kind {
+      Heavy => @types.heavy_attack_range
+      _ => @types.light_attack_range
     }
 
     @raylib.draw_circle_lines(
       (game.player_x + game.facing_x * attack_reach * 0.58).to_int() + ox,
       (game.player_y + game.facing_y * attack_reach * 0.58).to_int() + oy,
-      if game.attack_kind == @types.attack_heavy {
-        44.0
-      } else {
-        28.0
+      match game.attack_kind {
+        Heavy => 44.0
+        _ => 28.0
       },
-      if game.attack_kind == @types.attack_heavy {
-        @raylib.Color::new(255, 196, 132, 240)
-      } else {
-        @raylib.Color::new(164, 222, 255, 236)
+      match game.attack_kind {
+        Heavy => @raylib.Color::new(255, 196, 132, 240)
+        _ => @raylib.Color::new(164, 222, 255, 236)
       },
     )
   }
@@ -667,11 +661,10 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_hud()
   game.draw_message()
 
-  if game.state == @types.state_title {
-    draw_title_overlay()
-  } else if game.state == @types.state_paused {
-    draw_paused_overlay()
-  } else if game.state == @types.state_game_over {
-    game.draw_game_over_overlay()
+  match game.state {
+    Title => draw_title_overlay()
+    Paused => draw_paused_overlay()
+    GameOver => game.draw_game_over_overlay()
+    _ => ()
   }
 }

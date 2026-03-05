@@ -10,7 +10,7 @@ fn @types.Game::clear_enemies(game : @types.Game) -> Unit {
     enemy.max_hp = 0.0
     enemy.radius = 20.0
     enemy.speed = 0.0
-    enemy.state = @types.enemy_state_seek
+    enemy.state = Seek
     enemy.state_t = 0.0
     enemy.telegraph_total_t = 0.0
     enemy.visual_phase = 0.0
@@ -60,7 +60,7 @@ fn @types.Game::reset_player(game : @types.Game) -> Unit {
   game.dash_dir_y = 0.0
   game.attack_cd = 0.0
   game.attack_anim_t = 0.0
-  game.attack_kind = @types.attack_none
+  game.attack_kind = None
 }
 
 ///|
@@ -68,7 +68,7 @@ fn @types.Game::start_new_run(game : @types.Game) -> Unit {
   game.clear_enemies()
   game.reset_player()
 
-  game.state = @types.state_playing
+  game.state = Playing
   game.wave = 1
   game.wave_enemies_total = wave_enemy_total(game.wave)
   game.wave_spawned = 0
@@ -90,11 +90,11 @@ fn @types.Game::start_new_run(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::finish_game_over(game : @types.Game) -> Unit {
-  if game.state != @types.state_playing {
+  if game.state != Playing {
     return
   }
 
-  game.state = @types.state_game_over
+  game.state = GameOver
   game.move_x = 0.0
   game.move_y = 0.0
   game.player_vx = game.player_vx * 0.2
@@ -134,7 +134,7 @@ fn @types.Game::add_score_event(
 
 ///|
 fn @types.Game::hurt_player(game : @types.Game, dmg : Float) -> Unit {
-  if game.state != @types.state_playing || game.invuln_t > 0.0 {
+  if game.state != Playing || game.invuln_t > 0.0 {
     return
   }
 
@@ -194,7 +194,7 @@ fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
     enemy.speed = 126.0 + wave_f * 10.0 + @types.randf(-18.0, 18.0)
     enemy.vx = 0.0
     enemy.vy = 0.0
-    enemy.state = @types.enemy_state_seek
+    enemy.state = Seek
     enemy.state_t = 0.0
     enemy.telegraph_total_t = 0.0
     enemy.visual_phase = @types.randf(0.0, 6.28)
@@ -240,7 +240,7 @@ fn @types.Game::stun_enemy_from_parry(
     return
   }
 
-  game.enemies[idx].state = @types.enemy_state_stunned
+  game.enemies[idx].state = Stunned
   game.enemies[idx].state_t = @types.enemy_stunned_t
   game.enemies[idx].telegraph_total_t = 0.0
 
@@ -272,7 +272,7 @@ fn @types.Game::stun_enemy_from_parry(
 
 ///|
 fn @types.Game::resolve_parry_window(game : @types.Game) -> Int {
-  if game.state != @types.state_playing || game.parry_t <= 0.0 {
+  if game.state != Playing || game.parry_t <= 0.0 {
     return 0
   }
 
@@ -283,7 +283,7 @@ fn @types.Game::resolve_parry_window(game : @types.Game) -> Int {
       continue
     }
 
-    if game.enemies[i].state != @types.enemy_state_telegraph {
+    if game.enemies[i].state != Telegraph {
       continue
     }
 
@@ -332,9 +332,9 @@ fn @types.Game::apply_attack_hit(
   game.enemies[idx].vy = game.enemies[idx].vy + push.1 * knockback
 
   if telegraph_stagger &&
-    game.enemies[idx].state == @types.enemy_state_telegraph &&
+    game.enemies[idx].state == Telegraph &&
     game.enemies[idx].state_t <= @types.enemy_parry_window + 0.08 {
-    game.enemies[idx].state = @types.enemy_state_stunned
+    game.enemies[idx].state = Stunned
     game.enemies[idx].state_t = @types.enemy_stunned_t * 0.7
   }
 
@@ -346,50 +346,44 @@ fn @types.Game::apply_attack_hit(
 }
 
 ///|
-fn @types.Game::try_player_attack(game : @types.Game, attack : Int) -> Bool {
-  if game.state != @types.state_playing {
+fn @types.Game::try_player_attack(game : @types.Game, attack : @types.Attack) -> Bool {
+  if game.state != Playing {
     return false
   }
   if game.attack_cd > 0.0 {
     return false
   }
 
-  let cost : Float = if attack == @types.attack_heavy {
-    @types.heavy_attack_cost
-  } else {
-    @types.light_attack_cost
+  let cost : Float = match attack {
+    Heavy => @types.heavy_attack_cost
+    _ => @types.light_attack_cost
   }
   if game.stamina < cost {
     @types.set_message(game, "Not enough stamina.", 0.55)
     return false
   }
 
-  let damage : Float = if attack == @types.attack_heavy {
-    @types.heavy_attack_damage
-  } else {
-    @types.light_attack_damage
+  let damage : Float = match attack {
+    Heavy => @types.heavy_attack_damage
+    _ => @types.light_attack_damage
   }
-  let reach : Float = if attack == @types.attack_heavy {
-    @types.heavy_attack_range
-  } else {
-    @types.light_attack_range
+  let reach : Float = match attack {
+    Heavy => @types.heavy_attack_range
+    _ => @types.light_attack_range
   }
-  let arc_dot : Float = if attack == @types.attack_heavy {
-    @types.heavy_attack_arc_dot
-  } else {
-    @types.light_attack_arc_dot
+  let arc_dot : Float = match attack {
+    Heavy => @types.heavy_attack_arc_dot
+    _ => @types.light_attack_arc_dot
   }
 
   game.stamina = game.stamina - cost
-  game.attack_cd = if attack == @types.attack_heavy {
-    @types.heavy_attack_cooldown
-  } else {
-    @types.light_attack_cooldown
+  game.attack_cd = match attack {
+    Heavy => @types.heavy_attack_cooldown
+    _ => @types.light_attack_cooldown
   }
-  game.attack_anim_t = if attack == @types.attack_heavy {
-    @types.heavy_attack_anim_t
-  } else {
-    @types.light_attack_anim_t
+  game.attack_anim_t = match attack {
+    Heavy => @types.heavy_attack_anim_t
+    _ => @types.light_attack_anim_t
   }
   game.attack_kind = attack
 
@@ -417,26 +411,23 @@ fn @types.Game::try_player_attack(game : @types.Game, attack : Int) -> Bool {
     let hit : Bool = game.apply_attack_hit(
       i,
       damage,
-      if attack == @types.attack_heavy {
-        380.0
-      } else {
-        260.0
+      match attack {
+        Heavy => 380.0
+        _ => 260.0
       },
-      attack == @types.attack_heavy,
+      attack == Heavy,
     )
 
     if hit {
       hit_count = hit_count + 1
       game.add_score_event(
-        if attack == @types.attack_heavy {
-          22
-        } else {
-          14
+        match attack {
+          Heavy => 22
+          _ => 14
         },
-        if attack == @types.attack_heavy {
-          11
-        } else {
-          7
+        match attack {
+          Heavy => 11
+          _ => 7
         },
       )
     }
@@ -447,10 +438,9 @@ fn @types.Game::try_player_attack(game : @types.Game, attack : Int) -> Bool {
   } else {
     game.shake_t = @types.maxf(
       game.shake_t,
-      if attack == @types.attack_heavy {
-        0.15
-      } else {
-        0.10
+      match attack {
+        Heavy => 0.15
+        _ => 0.10
       },
     )
   }
@@ -460,7 +450,7 @@ fn @types.Game::try_player_attack(game : @types.Game, attack : Int) -> Bool {
 
 ///|
 fn @types.Game::trigger_parry_dash(game : @types.Game) -> Bool {
-  if game.state != @types.state_playing {
+  if game.state != Playing {
     return false
   }
   if game.parry_t > 0.0 {
@@ -571,7 +561,7 @@ fn @types.Game::update_enemy_seek(
     let telegraph_t : Float = @types.randf(
       @types.enemy_telegraph_min, @types.enemy_telegraph_max,
     )
-    game.enemies[idx].state = @types.enemy_state_telegraph
+    game.enemies[idx].state = Telegraph
     game.enemies[idx].state_t = telegraph_t
     game.enemies[idx].telegraph_total_t = telegraph_t
     game.enemies[idx].vx = game.enemies[idx].vx * 0.22
@@ -606,7 +596,7 @@ fn @types.Game::update_enemy_telegraph(
       game.player_y - game.enemies[idx].y,
     )
 
-    game.enemies[idx].state = @types.enemy_state_strike
+    game.enemies[idx].state = Strike
     game.enemies[idx].state_t = @types.enemy_strike_t
 
     let strike_speed : Float = 520.0 + Float::from_int(game.wave) * 18.0
@@ -643,7 +633,7 @@ fn @types.Game::update_enemy_strike(
       game.hurt_player(
         @types.enemy_contact_damage + Float::from_int(game.wave) * 1.05,
       )
-      game.enemies[idx].state = @types.enemy_state_recover
+      game.enemies[idx].state = Recover
       game.enemies[idx].state_t = @types.enemy_recover_t
       game.enemies[idx].vx = -game.enemies[idx].vx * 0.36
       game.enemies[idx].vy = -game.enemies[idx].vy * 0.36
@@ -652,7 +642,7 @@ fn @types.Game::update_enemy_strike(
   }
 
   if game.enemies[idx].state_t <= 0.0 {
-    game.enemies[idx].state = @types.enemy_state_recover
+    game.enemies[idx].state = Recover
     game.enemies[idx].state_t = @types.enemy_recover_t
   }
 }
@@ -672,7 +662,7 @@ fn @types.Game::update_enemy_recover(
   game.enemies[idx].vy = game.enemies[idx].vy * (1.0 - dt * 6.0)
 
   if game.enemies[idx].state_t <= 0.0 {
-    game.enemies[idx].state = @types.enemy_state_seek
+    game.enemies[idx].state = Seek
     game.enemies[idx].state_t = 0.0
   }
 }
@@ -692,7 +682,7 @@ fn @types.Game::update_enemy_stunned(
   game.enemies[idx].vy = game.enemies[idx].vy * (1.0 - dt * 7.8)
 
   if game.enemies[idx].state_t <= 0.0 {
-    game.enemies[idx].state = @types.enemy_state_seek
+    game.enemies[idx].state = Seek
     game.enemies[idx].state_t = 0.0
   }
 }
@@ -734,16 +724,12 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
     game.enemies[i].visual_phase = game.enemies[i].visual_phase +
       dt * (1.4 + Float::from_int(i % 5) * 0.3)
 
-    if game.enemies[i].state == @types.enemy_state_seek {
-      game.update_enemy_seek(i, dt)
-    } else if game.enemies[i].state == @types.enemy_state_telegraph {
-      game.update_enemy_telegraph(i, dt)
-    } else if game.enemies[i].state == @types.enemy_state_strike {
-      game.update_enemy_strike(i, dt)
-    } else if game.enemies[i].state == @types.enemy_state_recover {
-      game.update_enemy_recover(i, dt)
-    } else {
-      game.update_enemy_stunned(i, dt)
+    match game.enemies[i].state {
+      Seek => game.update_enemy_seek(i, dt)
+      Telegraph => game.update_enemy_telegraph(i, dt)
+      Strike => game.update_enemy_strike(i, dt)
+      Recover => game.update_enemy_recover(i, dt)
+      Stunned => game.update_enemy_stunned(i, dt)
     }
 
     game.keep_enemy_inside_rooftop(i)
@@ -844,7 +830,7 @@ fn @types.Game::update_play_timers(game : @types.Game, dt : Float) -> Unit {
   }
 
   if game.attack_anim_t <= 0.0 {
-    game.attack_kind = @types.attack_none
+    game.attack_kind = None
   }
 
   let regen : Float = if game.attack_anim_t > 0.0 || game.parry_t > 0.0 {
@@ -862,11 +848,12 @@ fn @types.Game::update_play_timers(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::update_logic(game : @types.Game, dt : Float) -> Unit {
   let step : Float = @types.clampf(dt, 0.0, 0.05)
 
-  if game.state == @types.state_playing {
-    game.update_play_timers(step)
-  } else {
-    game.update_timers(step)
-    return
+  match game.state {
+    Playing => game.update_play_timers(step)
+    _ => {
+      game.update_timers(step)
+      return
+    }
   }
 
   game.update_player(step)

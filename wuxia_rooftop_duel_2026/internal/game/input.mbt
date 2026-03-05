@@ -24,30 +24,31 @@ fn @types.Game::update_input(game : @types.Game, _dt : Float) -> Unit {
     return
   }
 
-  if game.state == @types.state_title {
-    if should_start_duel() {
-      game.start_new_run()
+  match game.state {
+    Title => {
+      if should_start_duel() {
+        game.start_new_run()
+      }
+      return
     }
-    return
-  }
-
-  if game.state == @types.state_game_over {
-    if should_start_duel() {
-      game.start_new_run()
+    GameOver => {
+      if should_start_duel() {
+        game.start_new_run()
+      }
+      return
     }
-    return
-  }
-
-  if game.state == @types.state_paused {
-    if @raylib.is_key_pressed(@raylib.KeyP) {
-      game.state = @types.state_playing
-      @types.set_message(game, "Duel resumed.", 0.8)
+    Paused => {
+      if @raylib.is_key_pressed(@raylib.KeyP) {
+        game.state = Playing
+        @types.set_message(game, "Duel resumed.", 0.8)
+      }
+      return
     }
-    return
+    Playing => ()
   }
 
   if @raylib.is_key_pressed(@raylib.KeyP) {
-    game.state = @types.state_paused
+    game.state = Paused
     @types.set_message(game, "Paused.", 10.0)
     return
   }
@@ -71,11 +72,11 @@ fn @types.Game::update_input(game : @types.Game, _dt : Float) -> Unit {
   }
 
   if @raylib.is_key_pressed(@raylib.KeyJ) {
-    ignore(game.try_player_attack(@types.attack_light))
+    ignore(game.try_player_attack(Light))
   }
 
   if @raylib.is_key_pressed(@raylib.KeyK) {
-    ignore(game.try_player_attack(@types.attack_heavy))
+    ignore(game.try_player_attack(Heavy))
   }
 
   if @raylib.is_key_pressed(@raylib.KeyL) ||

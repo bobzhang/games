@@ -67,7 +67,7 @@ fn @types.Game::update_play_input(game : @types.Game, _dt : Float) -> Unit {
   let touch_count = game.touch_count
 
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
-    game.state = @types.state_title
+    game.state = Title
     return
   }
 
