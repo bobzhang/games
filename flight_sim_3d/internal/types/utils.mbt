@@ -248,8 +248,8 @@ pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
 ///|
 /// Returns the index of a free enemy slot, or -1 if none available.
 pub fn alloc_enemy(game : Game) -> Int {
-  for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
+  for i, slot in game.enemies {
+    if !slot.active {
       return i
     }
   }
@@ -259,8 +259,8 @@ pub fn alloc_enemy(game : Game) -> Int {
 ///|
 /// Returns the index of a free turret slot, or -1 if none available.
 pub fn alloc_turret(game : Game) -> Int {
-  for i in 0..<game.turrets.length() {
-    if not(game.turrets[i].active) {
+  for i, slot in game.turrets {
+    if !slot.active {
       return i
     }
   }
@@ -270,8 +270,8 @@ pub fn alloc_turret(game : Game) -> Int {
 ///|
 /// Returns the index of a free projectile slot, or -1 if none available.
 pub fn alloc_projectile(game : Game) -> Int {
-  for i in 0..<game.projectiles.length() {
-    if not(game.projectiles[i].active) {
+  for i, slot in game.projectiles {
+    if !slot.active {
       return i
     }
   }
@@ -281,8 +281,8 @@ pub fn alloc_projectile(game : Game) -> Int {
 ///|
 /// Returns the index of a free particle slot, or -1 if none available.
 pub fn alloc_particle(game : Game) -> Int {
-  for i in 0..<game.particles.length() {
-    if not(game.particles[i].active) {
+  for i, slot in game.particles {
+    if !slot.active {
       return i
     }
   }
@@ -292,8 +292,8 @@ pub fn alloc_particle(game : Game) -> Int {
 ///|
 /// Returns the index of a free checkpoint slot, or -1 if none available.
 pub fn alloc_checkpoint(game : Game) -> Int {
-  for i in 0..<game.checkpoints.length() {
-    if not(game.checkpoints[i].active) {
+  for i, slot in game.checkpoints {
+    if !slot.active {
       return i
     }
   }
@@ -303,8 +303,8 @@ pub fn alloc_checkpoint(game : Game) -> Int {
 ///|
 /// Returns the index of a free building slot, or -1 if none available.
 pub fn alloc_building(game : Game) -> Int {
-  for i in 0..<game.buildings.length() {
-    if not(game.buildings[i].active) {
+  for i, slot in game.buildings {
+    if !slot.active {
       return i
     }
   }
@@ -314,8 +314,8 @@ pub fn alloc_building(game : Game) -> Int {
 ///|
 /// Returns the index of a free cloud slot, or -1 if none available.
 pub fn alloc_cloud(game : Game) -> Int {
-  for i in 0..<game.clouds.length() {
-    if not(game.clouds[i].active) {
+  for i, slot in game.clouds {
+    if !slot.active {
       return i
     }
   }
