@@ -11,6 +11,7 @@ pub let screen_height : Int = 720
 // Game states
 
 ///|
+/// Current game state.
 pub(all) enum GameState {
   StateMenu
   StatePlaying
@@ -848,7 +849,6 @@ pub fn objective_type_name(obj_type : Objective) -> String {
     PatrolMission => { "Clear patrol waypoints" }
     Survive => { "Survive for the duration" }
     DestroyCount => { "Destroy target count" }
-    _ => { "Unknown objective" }
   }
 }
 

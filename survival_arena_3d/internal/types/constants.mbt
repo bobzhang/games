@@ -608,6 +608,7 @@ pub let pi : Float = 3.14159265
 
 
 ///|
+/// Enemy variant.
 pub(all) enum EnemyKind {
   Zombie
   Runner
@@ -620,6 +621,7 @@ pub(all) enum EnemyKind {
 } derive(Eq)
 
 ///|
+/// Particle effect type.
 pub(all) enum ParticleKind {
   Blood
   Muzzle
@@ -630,6 +632,7 @@ pub(all) enum ParticleKind {
 } derive(Eq)
 
 ///|
+/// Trap type.
 pub(all) enum Trap {
   Spike
   Flame
@@ -637,6 +640,7 @@ pub(all) enum Trap {
 } derive(Eq)
 
 ///|
+/// Weapon variant.
 pub(all) enum WeaponKind {
   Pistol
   Shotgun

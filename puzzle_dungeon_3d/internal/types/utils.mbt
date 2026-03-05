@@ -519,7 +519,6 @@ pub fn get_world_name(world : World) -> String {
     WorldLava => (world_name_2)
     WorldGarden => (world_name_3)
     WorldVoid => (world_name_4)
-    _ => { "Unknown" }
   }
 }
 

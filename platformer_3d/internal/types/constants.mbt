@@ -1104,6 +1104,7 @@ pub let pu_slow_fall_b : Int = 200
 
 
 ///|
+/// Decoration type.
 pub(all) enum Deco {
   Tree
   Rock
@@ -1118,6 +1119,7 @@ pub(all) enum Deco {
 } derive(Eq)
 
 ///|
+/// Current game state.
 pub(all) enum GameState {
   Menu
   Playing

@@ -802,7 +802,6 @@ pub fn get_sky_gradient_color(cup : Int, race : Int) -> (Int, Int, Int) {
     ThemeIce => { (210, 230, 250) }
     Night => { (10, 12, 30) }
     Volcano => { (160, 90, 50) }
-    _ => { (180, 220, 255) }
   }
 }
 

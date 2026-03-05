@@ -179,7 +179,6 @@ fn @types.Game::update_air_enemy_ai(
     Engage => game.ai_engage(e, player, dt)
     Evade => game.ai_evade(e, player, dt)
     Flee => game.ai_flee(e, player, dt)
-    _ => game.ai_patrol(e, dt)
   }
   // Apply velocity
   e.x += e.vx * dt

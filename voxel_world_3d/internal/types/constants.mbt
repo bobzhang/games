@@ -596,6 +596,7 @@ pub let gravity_block_interval : Float = 0.15
 
 
 ///|
+/// AI behavior state.
 pub(all) enum AiState {
   Idle
   Wander
@@ -605,6 +606,7 @@ pub(all) enum AiState {
 } derive(Eq)
 
 ///|
+/// World biome type.
 pub(all) enum Biome {
   Plains
   Forest
@@ -615,6 +617,7 @@ pub(all) enum Biome {
 } derive(Eq)
 
 ///|
+/// Current game state.
 pub(all) enum GameState {
   Menu
   Playing

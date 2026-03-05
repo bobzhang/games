@@ -472,7 +472,6 @@ fn powerup_color(kind : @types.PowerupKind) -> @raylib.Color {
     Clock => { @raylib.lime }
     Shovel => { @raylib.brown }
     ExtraLife => { @raylib.orange }
-    _ => { @raylib.white }
   }
 }
 
@@ -485,7 +484,6 @@ fn powerup_text(kind : @types.PowerupKind) -> String {
     Clock => { "C" }
     Shovel => { "H" }
     ExtraLife => { "+" }
-    _ => { "?" }
   }
 }
 
@@ -498,7 +496,6 @@ fn powerup_radius(kind : @types.PowerupKind) -> Float {
     Clock => { 11.0 }
     Shovel => { 11.0 }
     ExtraLife => { 12.0 }
-    _ => { 10.0 }
   }
 }
 

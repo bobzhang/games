@@ -568,6 +568,7 @@ pub let minimap_y : Int = 60
 
 
 ///|
+/// Enemy variant.
 pub(all) enum EnemyKind {
   Basic
   Fast
@@ -582,6 +583,7 @@ pub(all) enum EnemyKind {
 } derive(Eq)
 
 ///|
+/// Current game state.
 pub(all) enum GameState {
   Menu
   Playing
@@ -595,6 +597,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Tower targeting priority.
 pub(all) enum TargetPriority {
   First
   Last
@@ -603,6 +606,7 @@ pub(all) enum TargetPriority {
 } derive(Eq)
 
 ///|
+/// Map tile type.
 pub(all) enum Tile {
   Grass
   Path
@@ -613,6 +617,7 @@ pub(all) enum Tile {
 } derive(Eq)
 
 ///|
+/// Tower variant.
 pub(all) enum TowerKind {
   Arrow
   Cannon

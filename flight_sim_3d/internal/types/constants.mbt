@@ -776,6 +776,7 @@ pub let warning_altitude_rate : Float = 5.0
 
 
 ///|
+/// AI behavior state.
 pub(all) enum AiState {
   Patrol
   Engage
@@ -784,6 +785,7 @@ pub(all) enum AiState {
 } derive(Eq)
 
 ///|
+/// Camera view mode.
 pub(all) enum CameraMode {
   Chase
   Cockpit
@@ -791,6 +793,7 @@ pub(all) enum CameraMode {
 } derive(Eq)
 
 ///|
+/// Current game state.
 pub(all) enum GameState {
   Menu
   Playing
@@ -802,6 +805,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Weapon variant.
 pub(all) enum WeaponKind {
   MachineGun
   Rockets
@@ -809,6 +813,7 @@ pub(all) enum WeaponKind {
 } derive(Eq)
 
 ///|
+/// Weather condition.
 pub(all) enum Weather {
   Clear
   Cloudy

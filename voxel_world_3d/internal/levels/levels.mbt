@@ -400,7 +400,6 @@ pub fn get_spawn_type_for_biome(
         } else {
           0
         }
-      _ => 0
     }
   }
 }

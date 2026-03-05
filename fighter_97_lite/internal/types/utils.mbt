@@ -222,7 +222,6 @@ pub fn action_name(action : Action) -> String {
     ActionWakeup => { "wake" }
     ActionVictory => { "victory" }
     ActionIntro => { "intro" }
-    _ => { "unknown" }
   }
 }
 

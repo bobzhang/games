@@ -177,6 +177,7 @@ pub let theme_crypt : Int = 0
 // Game states
 
 ///|
+/// Current game state.
 pub(all) enum GameState {
   StateMenu
   StatePlaying
@@ -190,6 +191,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Convert a game state to an integer.
 pub fn GameState::to_int(self : GameState) -> Int {
   match self {
     StateMenu => 0
@@ -205,6 +207,7 @@ pub fn GameState::to_int(self : GameState) -> Int {
 }
 
 ///|
+/// Convert an integer to a game state.
 pub fn GameState::from_int(v : Int) -> GameState {
   match v {
     0 => StateMenu
@@ -729,6 +732,7 @@ pub let mana_regen_rate : Float = 1.5
 
 
 ///|
+/// Player class.
 pub(all) enum ShipClass {
   Warrior
   Rogue
@@ -736,6 +740,7 @@ pub(all) enum ShipClass {
 } derive(Eq)
 
 ///|
+/// Enemy variant.
 pub(all) enum EnemyKind {
   None
   Skeleton
@@ -752,6 +757,7 @@ pub(all) enum EnemyKind {
 } derive(Eq)
 
 ///|
+/// Spell type.
 pub(all) enum Spell {
   None
   Fireball
@@ -763,6 +769,7 @@ pub(all) enum Spell {
 } derive(Eq)
 
 ///|
+/// Trap variant.
 pub(all) enum TrapKind {
   Spike
   Arrow
@@ -772,6 +779,7 @@ pub(all) enum TrapKind {
 } derive(Eq)
 
 ///|
+/// Weapon variant.
 pub(all) enum WeaponKind {
   Sword
   Axe

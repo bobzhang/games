@@ -995,6 +995,5 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
       if reset_press || next_press {
         game.reload_level()
       }
-    _ => ()
   }
 }

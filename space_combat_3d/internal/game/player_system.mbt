@@ -207,8 +207,6 @@ fn @types.Game::fire_weapon(game : @types.Game) -> Unit {
     Missile => { game.fire_missile(fwd, damage_mult) }
     Plasma => { game.fire_plasma(fwd, damage_mult) }
     Railgun => { game.fire_railgun(fwd, damage_mult) }
-  
-    _ => ()
   }
   game.camera_shake = @types.maxf(game.camera_shake, 0.3)
 }

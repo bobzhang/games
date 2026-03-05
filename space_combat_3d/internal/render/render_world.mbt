@@ -1076,8 +1076,6 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
           @raylib.Color::new(100, 150, 255, 120),
           )
         }
-      
-        _ => ()
       }
       // Enemy projectiles
     } else if proj.kind == Plasma {

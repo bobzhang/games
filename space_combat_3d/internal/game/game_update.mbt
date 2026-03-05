@@ -47,8 +47,6 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     StateMissionBriefing => { game.update_mission_briefing() }
     StateMissionSelect => { game.update_mission_select() }
     StateLoadout => { game.update_loadout() }
-  
-    _ => ()
   }
 }
 
@@ -881,8 +879,6 @@ fn @types.Game::collect_powerup(game : @types.Game, idx : Int) -> Unit {
       game.message_timer = 1.5
       @types.add_kill_feed(game, "+SPEED", 255, 255, 100)
     }
-  
-    _ => ()
   }
   @types.spawn_particles(game, pu.x, pu.y, pu.z, 10, 255, 255, 200)
 

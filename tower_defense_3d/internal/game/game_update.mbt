@@ -23,8 +23,6 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     TowerInfo => { game.update_tower_info(dt) }
     GameOver => { game.update_game_over(dt) }
     Victory => { game.update_victory(dt) }
-  
-    _ => ()
   }
 }
 

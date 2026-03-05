@@ -691,7 +691,6 @@ pub fn biome_name(kind : Biome) -> String {
     Mountains => "Mountains"
     Tundra => "Tundra"
     Swamp => "Swamp"
-    _ => "Unknown"
   }
 }
 

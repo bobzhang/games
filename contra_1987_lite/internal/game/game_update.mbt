@@ -300,6 +300,5 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     StageClear => { game.update_stage_clear(dt) }
     GameOver => { game.update_game_over(dt) }
     CampaignClear => { game.update_campaign_clear(dt) }
-    _ => ()
   }
 }

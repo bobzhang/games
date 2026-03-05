@@ -24,8 +24,6 @@ pub fn draw_ui(game : @types.Game) -> Unit {
     StateMissionBriefing => { game.draw_mission_briefing() }
     StateMissionSelect => { game.draw_mission_select() }
     StateLoadout => { game.draw_loadout() }
-  
-    _ => ()
   }
 }
 

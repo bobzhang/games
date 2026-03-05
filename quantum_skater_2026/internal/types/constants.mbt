@@ -11,6 +11,7 @@ pub let screen_h : Int = 768
 pub let target_fps : Int = 120
 
 ///|
+/// Track object type.
 pub(all) enum ObjKind {
   Wall
   Orb
@@ -82,6 +83,7 @@ pub let combo_decay_time : Float = 3.8
 
 
 ///|
+/// Current game state.
 pub(all) enum GameState {
   Title
   Play

@@ -257,8 +257,6 @@ fn @types.Game::draw_towers(game : @types.Game) -> Unit {
       Sniper => { draw_sniper_tower(wx, wz, tower.level, tower.angle, color, game) }
       Splash => { draw_splash_tower(wx, wz, tower.level, color, game) }
       Buff => { draw_buff_tower(wx, wz, tower.level, color, game) }
-    
-      _ => ()
     }
     // Draw level indicators (rings around base)
     draw_level_indicators(wx, wz, tower.level, color)
@@ -828,7 +826,6 @@ fn tower_color(kind : @types.TowerKind) -> @raylib.Color {
     Sniper => { @raylib.Color::new(150, 50, 50, 255) }
     Splash => { @raylib.Color::new(100, 150, 100, 255) }
     Buff => { @raylib.Color::new(160, 100, 200, 255) }
-    _ => { @raylib.Color::new(150, 150, 150, 255) }
   }
 }
 
@@ -852,8 +849,6 @@ fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
       Shield => { draw_shield_enemy(enemy, color) }
       Camo => { draw_camo_enemy(enemy, color) }
       Splitter => { draw_splitter_enemy(enemy, color) }
-    
-      _ => ()
     }
     // Health bar
     draw_enemy_health_bar(enemy)
@@ -1369,7 +1364,6 @@ fn enemy_color(kind : @types.EnemyKind) -> @raylib.Color {
     Shield => { @raylib.Color::new(60, 100, 200, 255) }
     Camo => { @raylib.Color::new(140, 140, 140, 255) }
     Splitter => { @raylib.Color::new(160, 80, 120, 255) }
-    _ => { @raylib.Color::new(180, 60, 60, 255) }
   }
 }
 

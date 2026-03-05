@@ -355,7 +355,6 @@ fn @types.Game::draw_weapon_display(game : @types.Game) -> Unit {
   let player = game.player
   // Weapon view model (simplified gun shape in 2D)
   let weapon = player.current_weapon
-  let weapon_i = weapon.to_int()
   let gun_x = sw / 2 + 80
   let gun_y = sh - 140
   // Muzzle flash

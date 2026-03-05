@@ -474,7 +474,6 @@ pub fn weapon_name(weapon : WeaponKind) -> String {
     Missile => { "MISSILE" }
     Plasma => { "PLASMA" }
     Railgun => { "RAILGUN" }
-    _ => { "UNKNOWN" }
   }
 }
 
@@ -488,7 +487,6 @@ pub fn weapon_cooldown(weapon : WeaponKind) -> Float {
     Missile => (missile_cooldown)
     Plasma => (plasma_cooldown)
     Railgun => (railgun_cooldown)
-    _ => { 1.0 }
   }
 }
 
@@ -502,7 +500,6 @@ pub fn weapon_energy_cost(weapon : WeaponKind) -> Float {
     Missile => { 0.0 }
     Plasma => (plasma_energy_cost)
     Railgun => (railgun_energy_cost)
-    _ => { 0.0 }
   }
 }
 
@@ -516,7 +513,6 @@ pub fn weapon_proj_speed(weapon : WeaponKind) -> Float {
     Missile => (missile_speed)
     Plasma => (plasma_speed)
     Railgun => (railgun_speed)
-    _ => { 100.0 }
   }
 }
 

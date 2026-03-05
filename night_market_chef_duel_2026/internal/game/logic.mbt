@@ -513,7 +513,6 @@ fn @types.Game::update_cooking_passive(game : @types.Game, dt : Float) -> Unit {
             dt * @types.boost_heat_rate
         }
       }
-      _ => ()
     }
   }
 

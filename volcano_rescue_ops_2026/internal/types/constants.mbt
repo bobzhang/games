@@ -84,6 +84,7 @@ pub let step_interval : Float = 0.22
 
 
 ///|
+/// Movement direction.
 pub(all) enum Dir {
   None
   Up
@@ -93,6 +94,7 @@ pub(all) enum Dir {
 } derive(Eq)
 
 ///|
+/// Game outcome.
 pub(all) enum GameResult {
   None
   Win
@@ -100,6 +102,7 @@ pub(all) enum GameResult {
 } derive(Eq)
 
 ///|
+/// Current game state.
 pub(all) enum GameState {
   Title
   Play
@@ -107,6 +110,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Map tile type.
 pub(all) enum Tile {
   Ground
   Rock

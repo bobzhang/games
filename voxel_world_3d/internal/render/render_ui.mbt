@@ -1096,7 +1096,6 @@ fn @types.Game::draw_biome_indicator(game : @types.Game) -> Unit {
     Mountains => 140
     Tundra => 200
     Swamp => 60
-    _ => 150
   }
   let dot_g : Int = match biome {
     Plains => 180
@@ -1105,7 +1104,6 @@ fn @types.Game::draw_biome_indicator(game : @types.Game) -> Unit {
     Mountains => 140
     Tundra => 220
     Swamp => 100
-    _ => 150
   }
   let dot_b : Int = match biome {
     Plains => 80
@@ -1114,7 +1112,6 @@ fn @types.Game::draw_biome_indicator(game : @types.Game) -> Unit {
     Mountains => 160
     Tundra => 240
     Swamp => 70
-    _ => 150
   }
   @raylib.draw_rectangle(
     text_x - 14,

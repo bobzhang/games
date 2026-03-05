@@ -183,8 +183,6 @@ fn @types.Game::update_ai_state(
       e.ai_timer = 1.0
       }
     }
-  
-    _ => ()
   }
 }
 

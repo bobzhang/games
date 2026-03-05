@@ -429,7 +429,6 @@ pub fn get_weapon_range(weapon_type : WeaponKind) -> Float {
     Dagger => dagger_range
     Staff => staff_range
     Bow => bow_range
-    _ => sword_range
   }
 }
 
@@ -443,7 +442,6 @@ pub fn get_weapon_cooldown(weapon_type : WeaponKind) -> Float {
     Dagger => dagger_cooldown
     Staff => staff_cooldown
     Bow => bow_cooldown
-    _ => sword_cooldown
   }
 }
 
@@ -457,7 +455,6 @@ pub fn get_weapon_damage_mult(weapon_type : WeaponKind) -> Float {
     Dagger => dagger_damage_mult
     Staff => staff_damage_mult
     Bow => bow_damage_mult
-    _ => sword_damage_mult
   }
 }
 
@@ -471,7 +468,6 @@ pub fn get_weapon_name(weapon_type : WeaponKind) -> String {
     Dagger => "Dagger"
     Staff => "Staff"
     Bow => "Bow"
-    _ => "Unknown"
   }
 }
 

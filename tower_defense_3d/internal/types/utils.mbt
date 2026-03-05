@@ -251,7 +251,6 @@ pub fn tower_cost_for(kind : TowerKind) -> Int {
     Sniper => (cost_sniper)
     Splash => (cost_splash)
     Buff => (cost_buff)
-    _ => { 999 }
   }
 }
 
@@ -321,7 +320,6 @@ pub fn tower_range(kind : TowerKind) -> Float {
     Sniper => (range_sniper)
     Splash => (range_splash)
     Buff => (range_buff)
-    _ => { 0.0 }
   }
 }
 
@@ -349,7 +347,6 @@ pub fn tower_damage(kind : TowerKind) -> Float {
     Sniper => (dmg_sniper)
     Splash => (dmg_splash)
     Buff => (dmg_buff)
-    _ => { 0.0 }
   }
 }
 
@@ -377,7 +374,6 @@ pub fn tower_fire_rate(kind : TowerKind) -> Float {
     Sniper => (rate_sniper)
     Splash => (rate_splash)
     Buff => (rate_buff)
-    _ => { 1.0 }
   }
 }
 
@@ -406,7 +402,6 @@ pub fn tower_name(kind : TowerKind) -> String {
     Sniper => { "Sniper" }
     Splash => { "Splash" }
     Buff => { "Buff" }
-    _ => { "Unknown" }
   }
 }
 
@@ -424,7 +419,6 @@ pub fn enemy_name(kind : EnemyKind) -> String {
     Shield => { "Shield" }
     Camo => { "Stealth" }
     Splitter => { "Splitter" }
-    _ => { "Unknown" }
   }
 }
 
@@ -436,7 +430,6 @@ pub fn targeting_mode_name(mode : TargetPriority) -> String {
     Last => { "Last" }
     Strongest => { "Strong" }
     Closest => { "Close" }
-    _ => { "First" }
   }
 }
 
@@ -519,7 +512,6 @@ pub fn enemy_armor_value(kind : EnemyKind) -> Float {
     Shield => (armor_shield)
     Camo => (armor_camo)
     Splitter => (armor_splitter)
-    _ => { 0.0 }
   }
 }
 
@@ -963,7 +955,6 @@ fn get_level3_special_desc(kind : TowerKind) -> String {
     Sniper => { "Armor break" }
     Splash => { "Stun chance" }
     Buff => { "Buff pulse" }
-    _ => { "Special" }
   }
 }
 

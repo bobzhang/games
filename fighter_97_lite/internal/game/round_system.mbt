@@ -563,6 +563,5 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     StateRoundOver => { game.update_round_over(dt) }
     StateMatchOver => { game.update_match_over(dt) }
     StatePause => { game.update_pause(dt) }
-    _ => ()
   }
 }

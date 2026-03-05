@@ -699,6 +699,7 @@ pub let fleet_follow_dist : Float = 15.0
 
 
 ///|
+/// AI behavior state.
 pub(all) enum AiState {
   Patrol
   Chase
@@ -709,6 +710,7 @@ pub(all) enum AiState {
 } derive(Eq)
 
 ///|
+/// AI personality type.
 pub(all) enum AiPersonality {
   Aggressive
   Defensive
@@ -718,6 +720,7 @@ pub(all) enum AiPersonality {
 } derive(Eq)
 
 ///|
+/// Cannon type.
 pub(all) enum Cannon {
   Light
   Medium
@@ -727,6 +730,7 @@ pub(all) enum Cannon {
 } derive(Eq)
 
 ///|
+/// Ship class.
 pub(all) enum ShipClass {
   Sloop
   Brigantine
@@ -736,6 +740,7 @@ pub(all) enum ShipClass {
 } derive(Eq)
 
 ///|
+/// Island variant.
 pub(all) enum IslandKind {
   Small
   Medium
@@ -744,6 +749,7 @@ pub(all) enum IslandKind {
 } derive(Eq)
 
 ///|
+/// Sail configuration.
 pub(all) enum Sail {
   Furled
   Half
@@ -751,6 +757,7 @@ pub(all) enum Sail {
 } derive(Eq)
 
 ///|
+/// Current game state.
 pub(all) enum GameState {
   Menu
   Playing

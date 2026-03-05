@@ -162,8 +162,6 @@ fn @types.Game::draw_wall(
       @raylib.Color::new(120, 60, 200, 100),
       )
     }
-  
-    _ => ()
   }
 }
 

@@ -187,6 +187,7 @@ pub let level_count : Int = 96
 pub let map_pattern_count : Int = 48
 
 ///|
+/// Team affiliation.
 pub(all) enum Team {
   None
   Player1
@@ -195,6 +196,7 @@ pub(all) enum Team {
 } derive(Eq)
 
 ///|
+/// Movement direction.
 pub(all) enum Dir {
   Up
   Right
@@ -203,6 +205,7 @@ pub(all) enum Dir {
 } derive(Eq)
 
 ///|
+/// Convert an integer to a direction.
 pub fn Dir::from_int(v : Int) -> Dir {
   match v {
     0 => Up
@@ -213,6 +216,7 @@ pub fn Dir::from_int(v : Int) -> Dir {
 }
 
 ///|
+/// Map tile type.
 pub(all) enum Tile {
   Empty
   Brick
@@ -224,6 +228,7 @@ pub(all) enum Tile {
 } derive(Eq)
 
 ///|
+/// Current game state.
 pub(all) enum GameState {
   Menu
   StageIntro
@@ -235,6 +240,7 @@ pub(all) enum GameState {
 } derive(Eq)
 
 ///|
+/// Enemy variant.
 pub(all) enum EnemyKind {
   Basic
   Fast
@@ -243,6 +249,7 @@ pub(all) enum EnemyKind {
 } derive(Eq)
 
 ///|
+/// Power-up variant.
 pub(all) enum PowerupKind {
   Shield
   Star
