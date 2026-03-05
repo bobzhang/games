@@ -196,8 +196,8 @@ pub fn tower_at(game : Game, gx : Int, gy : Int) -> Int {
 ///|
 /// Returns the index of the first inactive tower slot, or -1 if full.
 pub fn alloc_tower(game : Game) -> Int {
-  for i in 0..<game.towers.length() {
-    if not(game.towers[i].active) {
+  for i, slot in game.towers {
+    if !slot.active {
       return i
     }
   }
@@ -207,8 +207,8 @@ pub fn alloc_tower(game : Game) -> Int {
 ///|
 /// Returns the index of the first inactive enemy slot, or -1 if full.
 pub fn alloc_enemy(game : Game) -> Int {
-  for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
+  for i, slot in game.enemies {
+    if !slot.active {
       return i
     }
   }
@@ -218,8 +218,8 @@ pub fn alloc_enemy(game : Game) -> Int {
 ///|
 /// Returns the index of the first inactive projectile slot, or -1 if full.
 pub fn alloc_projectile(game : Game) -> Int {
-  for i in 0..<game.projectiles.length() {
-    if not(game.projectiles[i].active) {
+  for i, slot in game.projectiles {
+    if !slot.active {
       return i
     }
   }
@@ -229,8 +229,8 @@ pub fn alloc_projectile(game : Game) -> Int {
 ///|
 /// Returns the index of the first inactive particle slot, or -1 if full.
 pub fn alloc_particle(game : Game) -> Int {
-  for i in 0..<game.particles.length() {
-    if not(game.particles[i].active) {
+  for i, slot in game.particles {
+    if !slot.active {
       return i
     }
   }
