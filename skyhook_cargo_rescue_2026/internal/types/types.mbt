@@ -9,6 +9,8 @@ pub(all) struct Survivor {
   mut carried : Bool
   mut panic : Float
   mut phase : Float
+
+  fn new() -> Survivor
 }
 
 ///|
@@ -23,6 +25,8 @@ pub(all) struct Hazard {
   mut hp : Float
   mut kind : HazardKind
   mut phase : Float
+
+  fn new() -> Hazard
 }
 
 ///|
@@ -35,6 +39,8 @@ pub(all) struct Pickup {
   mut vy : Float
   mut kind : PickupKind
   mut phase : Float
+
+  fn new() -> Pickup
 }
 
 ///|
@@ -48,6 +54,8 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : Int
+
+  fn new() -> Particle
 }
 
 ///|
@@ -100,10 +108,13 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates an inactive survivor with default values.
+#deprecated
 pub fn Survivor::new() -> Survivor {
   {
     active: false,
@@ -119,6 +130,7 @@ pub fn Survivor::new() -> Survivor {
 
 ///|
 /// Creates an inactive hazard with default values.
+#deprecated
 pub fn Hazard::new() -> Hazard {
   {
     active: false,
@@ -135,12 +147,14 @@ pub fn Hazard::new() -> Hazard {
 
 ///|
 /// Creates an inactive pickup with default values.
+#deprecated
 pub fn Pickup::new() -> Pickup {
   { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, kind: Fuel, phase: 0.0 }
 }
 
 ///|
 /// Creates an inactive particle with default values.
+#deprecated
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -156,12 +170,13 @@ pub fn Particle::new() -> Particle {
 
 ///|
 /// Creates a new game state with preallocated object pools.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    survivors: Array::makei(max_survivors, fn(_i) { Survivor::new() }),
-    hazards: Array::makei(max_hazards, fn(_i) { Hazard::new() }),
-    pickups: Array::makei(max_pickups, fn(_i) { Pickup::new() }),
-    particles: Array::makei(max_particles, fn(_i) { Particle::new() }),
+    survivors: Array::makei(max_survivors, fn(_i) { Survivor() }),
+    hazards: Array::makei(max_hazards, fn(_i) { Hazard() }),
+    pickups: Array::makei(max_pickups, fn(_i) { Pickup() }),
+    particles: Array::makei(max_particles, fn(_i) { Particle() }),
     state: Title,
     heli_x: Float::from_int(world_x0 + world_w / 2),
     heli_y: Float::from_int(world_y0 + world_h - 220),
