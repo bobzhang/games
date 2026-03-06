@@ -10,6 +10,8 @@ pub(all) struct Enemy {
   mut hp : Float
   mut kind : EnemyKind
   mut phase : Float
+
+  fn new() -> Enemy
 }
 
 ///|
@@ -22,6 +24,8 @@ pub(all) struct Pickup {
   mut vy : Float
   mut kind : PickupKind
   mut phase : Float
+
+  fn new() -> Pickup
 }
 
 ///|
@@ -35,6 +39,8 @@ pub(all) struct Bullet {
   mut life : Float
   mut power : Float
   mut kind : BulletKind
+
+  fn new() -> Bullet
 }
 
 ///|
@@ -48,6 +54,8 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
+
+  fn new() -> Particle
 }
 
 ///|
@@ -105,10 +113,13 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates an inactive enemy with default field values.
+#deprecated
 pub fn Enemy::new() -> Enemy {
   {
     active: false,
@@ -125,12 +136,14 @@ pub fn Enemy::new() -> Enemy {
 
 ///|
 /// Creates an inactive pickup with default field values.
+#deprecated
 pub fn Pickup::new() -> Pickup {
   { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, kind: Fuel, phase: 0.0 }
 }
 
 ///|
 /// Creates an inactive bullet with default field values.
+#deprecated
 pub fn Bullet::new() -> Bullet {
   {
     active: false,
@@ -146,6 +159,7 @@ pub fn Bullet::new() -> Bullet {
 
 ///|
 /// Creates an inactive particle with default field values.
+#deprecated
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -161,12 +175,13 @@ pub fn Particle::new() -> Particle {
 
 ///|
 /// Creates a new game state with preallocated object pools.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    enemies: Array::makei(max_enemies, fn(_i) { Enemy::new() }),
-    pickups: Array::makei(max_pickups, fn(_i) { Pickup::new() }),
-    bullets: Array::makei(max_bullets, fn(_i) { Bullet::new() }),
-    particles: Array::makei(max_particles, fn(_i) { Particle::new() }),
+    enemies: Array::makei(max_enemies, fn(_i) { Enemy() }),
+    pickups: Array::makei(max_pickups, fn(_i) { Pickup() }),
+    bullets: Array::makei(max_bullets, fn(_i) { Bullet() }),
+    particles: Array::makei(max_particles, fn(_i) { Particle() }),
     state: Title,
     player_x: Float::from_int(world_x0 + world_w / 2),
     player_y: Float::from_int(world_y0 + world_h - 180),
