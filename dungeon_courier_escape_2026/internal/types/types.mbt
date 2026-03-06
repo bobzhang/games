@@ -17,6 +17,8 @@ pub(all) struct Player {
   mut health : Float
   mut stealth : Float
   mut carrying_parcel : Int
+
+  fn new() -> Player
 }
 
 ///|
@@ -27,6 +29,8 @@ pub(all) struct Parcel {
   mut x : Float
   mut y : Float
   mut pulse : Float
+
+  fn new() -> Parcel
 }
 
 ///|
@@ -36,6 +40,8 @@ pub(all) struct ExitMarker {
   x : Float
   y : Float
   radius : Float
+
+  fn new(x : Float, y : Float) -> ExitMarker
 }
 
 ///|
@@ -59,6 +65,8 @@ pub(all) struct Guard {
   mut investigate_t : Float
   mut target_x : Float
   mut target_y : Float
+
+  fn new() -> Guard
 }
 
 ///|
@@ -70,6 +78,8 @@ pub(all) struct Trap {
   mut radius : Float
   mut blink_t : Float
   mut cooldown : Float
+
+  fn new() -> Trap
 }
 
 ///|
@@ -80,6 +90,8 @@ pub(all) struct Smoke {
   mut y : Float
   mut radius : Float
   mut life : Float
+
+  fn new() -> Smoke
 }
 
 ///|
@@ -92,6 +104,8 @@ pub(all) struct InputState {
   mut sprint_hold : Bool
   mut start_press : Bool
   mut retry_press : Bool
+
+  fn new() -> InputState
 }
 
 ///|
@@ -118,10 +132,13 @@ pub(all) struct Game {
   mut hint : String
   mut fail_reason : String
   mut best_wave : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a default Player value for a new session.
+#deprecated
 pub fn Player::new() -> Player {
   {
     x: player_spawn_x(),
@@ -137,18 +154,21 @@ pub fn Player::new() -> Player {
 
 ///|
 /// Creates a default Parcel value for a new session.
+#deprecated
 pub fn Parcel::new() -> Parcel {
   { active: false, delivered: false, x: 0.0, y: 0.0, pulse: 0.0 }
 }
 
 ///|
 /// Creates a default ExitMarker value for a new session.
+#deprecated
 pub fn ExitMarker::new(x : Float, y : Float) -> ExitMarker {
   { active: true, x, y, radius: exit_radius }
 }
 
 ///|
 /// Creates a default Guard value for a new session.
+#deprecated
 pub fn Guard::new() -> Guard {
   {
     active: false,
@@ -174,18 +194,21 @@ pub fn Guard::new() -> Guard {
 
 ///|
 /// Creates a default Trap value for a new session.
+#deprecated
 pub fn Trap::new() -> Trap {
   { active: false, x: 0.0, y: 0.0, radius: 0.0, blink_t: 0.0, cooldown: 0.0 }
 }
 
 ///|
 /// Creates a default Smoke value for a new session.
+#deprecated
 pub fn Smoke::new() -> Smoke {
   { active: false, x: 0.0, y: 0.0, radius: smoke_radius_base, life: 0.0 }
 }
 
 ///|
 /// Creates a default InputState value for a new session.
+#deprecated
 pub fn InputState::new() -> InputState {
   {
     move_x: 0.0,
@@ -200,20 +223,21 @@ pub fn InputState::new() -> InputState {
 
 ///|
 /// Creates a default Game value for a new session.
+#deprecated
 pub fn Game::new() -> Game {
   let exits = Array::makei(max_exits, fn(i) {
     let p = default_exit_pos(i)
-    ExitMarker::new(p.0, p.1)
+    ExitMarker(p.0, p.1)
   })
 
   {
-    player: Player::new(),
-    parcels: Array::makei(max_parcels, fn(_i) { Parcel::new() }),
+    player: Player(),
+    parcels: Array::makei(max_parcels, fn(_i) { Parcel() }),
     exits,
-    guards: Array::makei(max_guards, fn(_i) { Guard::new() }),
-    traps: Array::makei(max_traps, fn(_i) { Trap::new() }),
-    smokes: Array::makei(max_smokes, fn(_i) { Smoke::new() }),
-    input: InputState::new(),
+    guards: Array::makei(max_guards, fn(_i) { Guard() }),
+    traps: Array::makei(max_traps, fn(_i) { Trap() }),
+    smokes: Array::makei(max_smokes, fn(_i) { Smoke() }),
+    input: InputState(),
     state: Title,
     wave: 1,
     score: 0,
