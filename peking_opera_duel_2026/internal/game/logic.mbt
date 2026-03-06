@@ -37,7 +37,7 @@ fn @types.Game::init_title_state(game : @types.Game) -> Unit {
   game.beat_interval = @types.beat_start_interval
   game.next_prompt_t = 0.7
   game.prompt_active = false
-  game.prompt = @types.Prompt::new(0, 0, Spear, 0.0)
+  game.prompt = Prompt(0, 0, Spear, 0.0)
   game.prompt_serial = 0
   game.burst_t = 0.0
   game.burst_cd = 0.0
@@ -64,7 +64,7 @@ fn @types.Game::start_duel(game : @types.Game) -> Unit {
   game.beat_interval = @types.beat_start_interval
   game.next_prompt_t = 0.9
   game.prompt_active = false
-  game.prompt = @types.Prompt::new(0, 0, Spear, 0.0)
+  game.prompt = Prompt(0, 0, Spear, 0.0)
   game.prompt_serial = 0
   game.burst_t = 0.0
   game.burst_cd = 0.0
@@ -139,7 +139,7 @@ fn @types.Game::spawn_prompt(game : @types.Game) -> Unit {
     }
   }
 
-  game.prompt = @types.Prompt::new(
+  game.prompt = Prompt(
     lane_x, lane_y, stance, @types.prompt_lead_time,
   )
   game.prompt_active = true

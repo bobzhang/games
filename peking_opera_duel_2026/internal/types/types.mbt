@@ -18,6 +18,8 @@ pub(all) struct InputState {
   mut pause_pressed : Bool
   mut restart_pressed : Bool
   mut confirm_pressed : Bool
+
+  fn new() -> InputState
 }
 
 ///|
@@ -27,6 +29,13 @@ pub(all) struct Prompt {
   lane_y : Int
   stance : Stance
   mut time_left : Float
+
+  fn new(
+  lane_x : Int,
+  lane_y : Int,
+  stance : Stance,
+  time_left : Float,
+) -> Prompt
 }
 
 ///|
@@ -58,10 +67,13 @@ pub(all) struct Game {
   mut message : String
   mut message_t : Float
   mut game_over_reason : String
+
+  fn new() -> Game
 }
 
 ///|
 /// Build an empty input state with all controls released.
+#deprecated
 pub fn InputState::new() -> InputState {
   {
     axis_x: 0,
@@ -77,6 +89,7 @@ pub fn InputState::new() -> InputState {
 
 ///|
 /// Construct a prompt at the given lane and stance.
+#deprecated
 pub fn Prompt::new(
   lane_x : Int,
   lane_y : Int,
@@ -88,9 +101,10 @@ pub fn Prompt::new(
 
 ///|
 /// Create a fresh duel state initialized to the title screen.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    input: InputState::new(),
+    input: InputState(),
     state: Title,
     lane_x: 0,
     lane_y: 0,
@@ -107,7 +121,7 @@ pub fn Game::new() -> Game {
     beat_interval: beat_start_interval,
     next_prompt_t: 0.7,
     prompt_active: false,
-    prompt: Prompt::new(0, 0, Spear, 0.0),
+    prompt: Prompt(0, 0, Spear, 0.0),
     prompt_serial: 0,
     burst_t: 0.0,
     burst_cd: 0.0,
