@@ -35,6 +35,8 @@ pub(all) struct Entity {
   mut spin : Float
   mut cloak : Bool
   mut reward : Int
+
+  fn new() -> Entity
 }
 
 ///|
@@ -49,6 +51,8 @@ pub(all) struct Bullet {
   mut life : Float
   mut dmg : Float
   mut kind : Int
+
+  fn new() -> Bullet
 }
 
 ///|
@@ -62,6 +66,8 @@ pub(all) struct Spark {
   mut life : Float
   mut size : Float
   mut kind : Int
+
+  fn new() -> Spark
 }
 
 ///|
@@ -73,6 +79,8 @@ pub(all) struct GlowRing {
   mut r : Float
   mut life : Float
   mut kind : Int
+
+  fn new() -> GlowRing
 }
 
 ///|
@@ -86,6 +94,8 @@ pub(all) struct Afterimage {
   mut rot : Float
   mut life : Float
   mut kind : Int
+
+  fn new() -> Afterimage
 }
 
 ///|
@@ -102,6 +112,8 @@ pub(all) struct Player {
   mut hurt_t : Float
   mut muzzle_t : Float
   mut engine_t : Float
+
+  fn new() -> Player
 }
 
 ///|
@@ -151,10 +163,13 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a default Entity value for a new session.
+#deprecated
 pub fn Entity::new() -> Entity {
   {
     active: false,
@@ -175,6 +190,7 @@ pub fn Entity::new() -> Entity {
 
 ///|
 /// Creates a default Bullet value for a new session.
+#deprecated
 pub fn Bullet::new() -> Bullet {
   {
     active: false,
@@ -191,6 +207,7 @@ pub fn Bullet::new() -> Bullet {
 
 ///|
 /// Creates a default Spark value for a new session.
+#deprecated
 pub fn Spark::new() -> Spark {
   {
     active: false,
@@ -206,12 +223,14 @@ pub fn Spark::new() -> Spark {
 
 ///|
 /// Creates a default GlowRing value for a new session.
+#deprecated
 pub fn GlowRing::new() -> GlowRing {
   { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
 }
 
 ///|
 /// Creates a default Afterimage value for a new session.
+#deprecated
 pub fn Afterimage::new() -> Afterimage {
   {
     active: false,
@@ -227,6 +246,7 @@ pub fn Afterimage::new() -> Afterimage {
 
 ///|
 /// Creates a default Player value for a new session.
+#deprecated
 pub fn Player::new() -> Player {
   {
     x: Float::from_int(screen_w / 2),
@@ -245,14 +265,15 @@ pub fn Player::new() -> Player {
 
 ///|
 /// Creates a default Game value for a new session.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    entities: Array::makei(max_entities, fn(_i) { Entity::new() }),
-    bullets: Array::makei(max_bullets, fn(_i) { Bullet::new() }),
-    sparks: Array::makei(max_sparks, fn(_i) { Spark::new() }),
-    rings: Array::makei(max_glow_rings, fn(_i) { GlowRing::new() }),
-    images: Array::makei(max_afterimages, fn(_i) { Afterimage::new() }),
-    hero: Player::new(),
+    entities: Array::makei(max_entities, fn(_i) { Entity() }),
+    bullets: Array::makei(max_bullets, fn(_i) { Bullet() }),
+    sparks: Array::makei(max_sparks, fn(_i) { Spark() }),
+    rings: Array::makei(max_glow_rings, fn(_i) { GlowRing() }),
+    images: Array::makei(max_afterimages, fn(_i) { Afterimage() }),
+    hero: Player(),
     state: Title,
     stage: 1,
     distance: 0.0,
