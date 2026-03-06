@@ -5,7 +5,7 @@ fn main {
     @types.screen_width, @types.screen_height, "Survival Arena 3D",
   )
   @raylib.set_target_fps(60)
-  let game = @types.Game::new()
+  let game = @types.Game()
   while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {

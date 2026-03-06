@@ -61,10 +61,13 @@ pub(all) struct Player {
   weapon_damage_level : Array[Int]
   weapon_rate_level : Array[Int]
   weapon_mag_level : Array[Int]
+
+  fn new() -> Player
 }
 
 ///|
 /// Constructs a fresh player with starter weapons, base stats, and empty combo/boost timers.
+#deprecated
 pub fn Player::new() -> Player {
   let ammo : Array[Int] = [
     ammo_pistol, ammo_shotgun, ammo_rifle, ammo_sniper, ammo_rocket, ammo_minigun,
@@ -313,10 +316,13 @@ pub(all) struct Crate {
   mut z : Float
   mut respawn_timer : Float
   mut kind : WeaponKind
+
+  fn new(x : Float, z : Float, kind : WeaponKind) -> Crate
 }
 
 ///|
 /// Creates an active crate instance at world position `(x, z)` with a weapon kind.
+#deprecated
 pub fn Crate::new(x : Float, z : Float, kind : WeaponKind) -> Crate {
   { active: true, x, z, respawn_timer: 0.0, kind }
 }
@@ -455,10 +461,13 @@ pub(all) struct WeaponState {
   mut reload_timer : Float
   mut reloading : Bool
   mut reload_time : Float
+
+  fn new() -> WeaponState
 }
 
 ///|
 /// Creates default weapon reload state.
+#deprecated
 pub fn WeaponState::new() -> WeaponState {
   { reload_timer: 0.0, reloading: false, reload_time: 0.0 }
 }
@@ -568,16 +577,19 @@ pub(all) struct Game {
   mut highest_combo : Int
   mut total_damage_dealt : Float
   mut total_damage_taken : Float
+
+  fn new() -> Game
 }
 
 ///|
 /// Constructs a new match state with initialized arena layout, pooled entities,
 /// player defaults, and zeroed runtime statistics.
+#deprecated
 pub fn Game::new() -> Game {
   // Create weapons array
   let weapons : Array[WeaponState] = []
   for _i in 0..<weapon_count {
-    weapons.push(WeaponState::new())
+    weapons.push(WeaponState())
   }
   // Create pillars in a circle pattern
   let pillars : Array[Pillar] = []
@@ -590,12 +602,12 @@ pub fn Game::new() -> Game {
   }
   // Create ammo crates at various positions
   let crates : Array[Crate] = []
-  crates.push(Crate::new(12.0, 12.0, Shotgun))
-  crates.push(Crate::new(-12.0, 12.0, Rifle))
-  crates.push(Crate::new(12.0, -12.0, Rocket))
-  crates.push(Crate::new(-12.0, -12.0, Shotgun))
-  crates.push(Crate::new(0.0, 15.0, Rifle))
-  crates.push(Crate::new(0.0, -15.0, Minigun))
+  crates.push(Crate(12.0, 12.0, Shotgun))
+  crates.push(Crate(-12.0, 12.0, Rifle))
+  crates.push(Crate(12.0, -12.0, Rocket))
+  crates.push(Crate(-12.0, -12.0, Shotgun))
+  crates.push(Crate(0.0, 15.0, Rifle))
+  crates.push(Crate(0.0, -15.0, Minigun))
   // Create low walls for cover
   let low_walls : Array[LowWall] = []
   low_walls.push({
@@ -692,7 +704,7 @@ pub fn Game::new() -> Game {
   )
   {
     state: Menu,
-    player: Player::new(),
+    player: Player(),
     weapons,
     current_wave: 0,
     wave_timer: 0.0,
