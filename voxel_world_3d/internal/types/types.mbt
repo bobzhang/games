@@ -8,10 +8,13 @@ pub(all) struct Chunk {
   cz : Int
   mut dirty : Bool
   mut biome : Biome
+
+  fn new(cx : Int, cz : Int) -> Chunk
 }
 
 ///|
 /// Creates a new empty chunk initialized with `block_air`.
+#deprecated
 pub fn Chunk::new(cx : Int, cz : Int) -> Chunk {
   let size = chunk_x * chunk_y * chunk_z
   { blocks: Array::make(size, block_air), cx, cz, dirty: true, biome: Plains }
@@ -70,10 +73,13 @@ pub fn ItemSlot::make(item_id : Int, count : Int) -> ItemSlot {
 pub(all) struct Inventory {
   slots : Array[ItemSlot]
   mut selected : Int
+
+  fn new() -> Inventory
 }
 
 ///|
 /// Creates a new inventory with starter blocks/tools in the hotbar.
+#deprecated
 pub fn Inventory::new() -> Inventory {
   let slots : Array[ItemSlot] = []
   for i in 0..<inventory_slots {
@@ -179,10 +185,13 @@ pub(all) struct Player {
   mut air_timer : Float
   // Starvation
   mut starve_timer : Float
+
+  fn new() -> Player
 }
 
 ///|
 /// Creates a new player with default survival stats and starter inventory.
+#deprecated
 pub fn Player::new() -> Player {
   let spawn_x = Float::from_int(world_chunks_x * chunk_x) / 2.0
   let spawn_z = Float::from_int(world_chunks_z * chunk_z) / 2.0
@@ -214,7 +223,7 @@ pub fn Player::new() -> Player {
     damage_flash: 0.0,
     fall_start_y: 40.0,
     was_on_ground: false,
-    inventory: Inventory::new(),
+    inventory: Inventory(),
     underwater: false,
     air_timer: 0.0,
     starve_timer: 0.0,
@@ -234,10 +243,13 @@ pub(all) struct BlockHit {
   mut ny : Int
   mut nz : Int
   mut distance : Float
+
+  fn new() -> BlockHit
 }
 
 ///|
 /// Creates an empty block-hit record.
+#deprecated
 pub fn BlockHit::new() -> BlockHit {
   { hit: false, bx: 0, by: 0, bz: 0, nx: 0, ny: 0, nz: 0, distance: 0.0 }
 }
@@ -346,10 +358,21 @@ pub(all) struct CraftingRecipe {
   output_id : Int
   output_count : Int
   name : String
+
+  fn new(
+  in1_id : Int,
+  in1_count : Int,
+  in2_id : Int,
+  in2_count : Int,
+  out_id : Int,
+  out_count : Int,
+  name : String,
+) -> CraftingRecipe
 }
 
 ///|
 /// Constructs a crafting recipe record.
+#deprecated
 pub fn CraftingRecipe::new(
   in1_id : Int,
   in1_count : Int,
@@ -460,17 +483,20 @@ pub(all) struct Game {
   // Death screen
   mut death_timer : Float
   mut respawn_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a new voxel world game state, allocates pools, and generates initial chunk terrain.
+#deprecated
 pub fn Game::new() -> Game {
   // Create chunks
   let total_chunks = world_chunks_x * world_chunks_z
   let chunks : Array[Chunk] = []
   for cz in 0..<world_chunks_z {
     for cx in 0..<world_chunks_x {
-      chunks.push(Chunk::new(cx, cz))
+      chunks.push(Chunk(cx, cz))
     }
   }
   // Create entity pool
@@ -487,7 +513,7 @@ pub fn Game::new() -> Game {
   }
   let game : Game = {
     state: Menu,
-    player: Player::new(),
+    player: Player(),
     chunks,
     cam_pos_x: 0.0,
     cam_pos_y: 40.0,
@@ -495,7 +521,7 @@ pub fn Game::new() -> Game {
     cam_target_x: 0.0,
     cam_target_y: 40.0,
     cam_target_z: -1.0,
-    target: BlockHit::new(),
+    target: BlockHit(),
     day_timer: 30.0,
     day_count: 1,
     sky_r: 135,
