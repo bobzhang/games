@@ -9,7 +9,7 @@ fn main {
 
   @raylib.set_target_fps(@types.target_fps)
 
-  let game = @types.Game::new()
+  let game = @types.Game()
   @game.init_title_scene_pub(game)
 
   while !@raylib.window_should_close() {

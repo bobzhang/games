@@ -14,6 +14,8 @@ pub(all) struct Student {
   mut skill : Float
   mut fatigue : Float
   mut room : Room
+
+  fn new(name : String, skill : Float) -> Student
 }
 
 ///|
@@ -27,6 +29,8 @@ pub(all) struct Input {
   mut pause_pressed : Bool
   mut restart_pressed : Bool
   mut start_pressed : Bool
+
+  fn new() -> Input
 }
 
 ///|
@@ -55,6 +59,8 @@ pub(all) struct Game {
   mut weeks_survived : Int
   mut best_week : Int
   mut defeat_reason : String
+
+  fn new() -> Game
 }
 
 ///|
@@ -95,12 +101,14 @@ pub fn starting_skill(slot : Int) -> Float {
 
 ///|
 /// Create a student starting in rest with low fatigue.
+#deprecated
 pub fn Student::new(name : String, skill : Float) -> Student {
   { name, skill, fatigue: 12.0, room: Rest }
 }
 
 ///|
 /// Build a zeroed input snapshot with no pressed actions.
+#deprecated
 pub fn Input::new() -> Input {
   {
     move_x: 0,
@@ -116,15 +124,16 @@ pub fn Input::new() -> Input {
 
 ///|
 /// Create a new run initialized to title state and starter roster.
+#deprecated
 pub fn Game::new() -> Game {
   let roster : Array[Student] = []
 
   for i in 0..<student_count {
-    roster.push(Student::new(student_name(i), starting_skill(i)))
+    roster.push(Student(student_name(i), starting_skill(i)))
   }
 
   {
-    input: Input::new(),
+    input: Input(),
     students: roster,
     state: Title,
     week: 1,
