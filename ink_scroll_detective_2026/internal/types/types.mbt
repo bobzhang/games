@@ -7,6 +7,8 @@ pub(all) struct Clue {
   chain : Int
   mut discovered : Bool
   mut glow_t : Float
+
+  fn new(index : Int) -> Clue
 }
 
 ///|
@@ -17,6 +19,8 @@ pub(all) struct Suspect {
   home_y : Int
   mut deduction_unlocked : Bool
   mut suspicion : Float
+
+  fn new(index : Int) -> Suspect
 }
 
 ///|
@@ -29,6 +33,8 @@ pub(all) struct Incident {
   mut timer : Float
   mut severity : Int
   mut pulse_t : Float
+
+  fn new() -> Incident
 }
 
 ///|
@@ -36,6 +42,8 @@ pub(all) struct Incident {
 pub(all) struct DistrictPulse {
   mut heat : Float
   drift : Float
+
+  fn new(index : Int) -> DistrictPulse
 }
 
 ///|
@@ -81,6 +89,8 @@ pub(all) struct Game {
   mut input_focus_press : Bool
   mut input_pause_press : Bool
   mut input_restart_press : Bool
+
+  fn new() -> Game
 }
 
 ///|
@@ -140,6 +150,7 @@ fn is_reserved_cell(cell_x : Int, cell_y : Int) -> Bool {
 
 ///|
 /// Creates a clue at a deterministic grid position for `index`.
+#deprecated
 pub fn Clue::new(index : Int) -> Clue {
   let suspect = index % suspect_count
   let chain = index / suspect_count % chains_per_suspect
@@ -160,6 +171,7 @@ pub fn Clue::new(index : Int) -> Clue {
 
 ///|
 /// Creates a suspect profile from a suspect index.
+#deprecated
 pub fn Suspect::new(index : Int) -> Suspect {
   {
     name: suspect_name(index),
@@ -172,6 +184,7 @@ pub fn Suspect::new(index : Int) -> Suspect {
 
 ///|
 /// Creates an inactive incident with default values.
+#deprecated
 pub fn Incident::new() -> Incident {
   {
     active: false,
@@ -186,6 +199,7 @@ pub fn Incident::new() -> Incident {
 
 ///|
 /// Creates a district pulse state seeded by district index.
+#deprecated
 pub fn DistrictPulse::new(index : Int) -> DistrictPulse {
   let drift_seed = Float::from_int((index * 71 + 17) % 1000) / 1000.0
   { heat: 0.0, drift: drift_seed * tau }
@@ -193,12 +207,13 @@ pub fn DistrictPulse::new(index : Int) -> DistrictPulse {
 
 ///|
 /// Creates a new case state with clues, suspects, and timers initialized.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    clues: Array::makei(clue_count, fn(i) { Clue::new(i) }),
-    suspects: Array::makei(suspect_count, fn(i) { Suspect::new(i) }),
-    incidents: Array::makei(max_incidents, fn(_i) { Incident::new() }),
-    pulses: Array::makei(district_count, fn(i) { DistrictPulse::new(i) }),
+    clues: Array::makei(clue_count, fn(i) { Clue(i) }),
+    suspects: Array::makei(suspect_count, fn(i) { Suspect(i) }),
+    incidents: Array::makei(max_incidents, fn(_i) { Incident() }),
+    pulses: Array::makei(district_count, fn(i) { DistrictPulse(i) }),
     chain_progress: Array::make(suspect_count * chains_per_suspect, 0),
     evidence_score: Array::make(suspect_count, 0),
     state: Title,
