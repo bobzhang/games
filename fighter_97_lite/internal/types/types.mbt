@@ -117,10 +117,13 @@ pub(all) struct InputState {
   mut buffered_motion : Motion
   mut motion_timer : Float
   mut attack_buffer_timer : Float
+
+  fn new() -> InputState
 }
 
 ///|
 /// Creates a cleared input state with neutral buffers.
+#deprecated
 pub fn InputState::new() -> InputState {
   {
     x: 0,
@@ -326,10 +329,13 @@ pub(all) struct Fighter {
   mut ai_wants_super : Bool
   mut ai_wants_throw : Bool
   mut input : InputState
+
+  fn new(slot : Int, is_cpu : Bool) -> Fighter
 }
 
 ///|
 /// Creates a fighter with default stats and controls.
+#deprecated
 pub fn Fighter::new(slot : Int, is_cpu : Bool) -> Fighter {
   {
     slot,
@@ -378,7 +384,7 @@ pub fn Fighter::new(slot : Int, is_cpu : Bool) -> Fighter {
     ai_wants_special: false,
     ai_wants_super: false,
     ai_wants_throw: false,
-    input: InputState::new(),
+    input: InputState(),
   }
 }
 
@@ -421,17 +427,20 @@ pub(all) struct Game {
   particles : Array[Particle]
   hit_sparks : Array[Particle]
   mut debug_overlay : Bool
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a fresh game state with roster and fighters initialized.
+#deprecated
 pub fn Game::new() -> Game {
   {
     state: StateTitle,
     frame_count: 0,
     rng_state: 0x4A71C39F,
     roster: build_roster(),
-    fighters: [Fighter::new(0, false), Fighter::new(1, true)],
+    fighters: [Fighter(0, false), Fighter(1, true)],
     mode_vs_cpu: true,
     mode_training: false,
     select_cursor_p1: 0,

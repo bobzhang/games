@@ -6,7 +6,7 @@ fn main {
   )
   @raylib.set_target_fps(60)
 
-  let game = @types.Game::new()
+  let game = @types.Game()
 
   while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()

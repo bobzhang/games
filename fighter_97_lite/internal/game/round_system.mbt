@@ -372,7 +372,7 @@ fn @types.Game::reset_training_fight(game : @types.Game) -> Unit {
     fighter.guard_meter = @types.fighter_total_guard(archetype)
     fighter.super_meter = @types.super_max
     set_idle_state(fighter)
-    fighter.input = @types.InputState::new()
+    fighter.input = InputState()
   }
   game.round_timer = -1.0
   game.dramatic_freeze = 0

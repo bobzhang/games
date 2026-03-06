@@ -276,7 +276,7 @@ pub fn reset_fighter_round_state(fighter : Fighter) -> Unit {
   fighter.shake_timer = 0.0
   fighter.hurt_shake_x = 0.0
   fighter.hurt_shake_y = 0.0
-  fighter.input = InputState::new()
+  fighter.input = InputState()
 }
 
 ///|
