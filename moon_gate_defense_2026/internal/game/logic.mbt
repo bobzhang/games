@@ -13,7 +13,7 @@ fn @types.Game::set_status(
 /// Deactivates all node slots, resetting them to default values.
 fn @types.Game::clear_nodes(game : @types.Game) -> Unit {
   for i in 0..<game.nodes.length() {
-    game.nodes[i] = @types.Node::new()
+    game.nodes[i] = Node()
   }
 }
 
@@ -21,7 +21,7 @@ fn @types.Game::clear_nodes(game : @types.Game) -> Unit {
 /// Deactivates all enemy slots, resetting them to default values.
 fn @types.Game::clear_enemies(game : @types.Game) -> Unit {
   for i in 0..<game.enemies.length() {
-    game.enemies[i] = @types.Enemy::new()
+    game.enemies[i] = Enemy()
   }
 }
 
@@ -29,7 +29,7 @@ fn @types.Game::clear_enemies(game : @types.Game) -> Unit {
 /// Deactivates all bolt projectile slots, resetting them to default values.
 fn @types.Game::clear_bolts(game : @types.Game) -> Unit {
   for i in 0..<game.bolts.length() {
-    game.bolts[i] = @types.Bolt::new()
+    game.bolts[i] = Bolt()
   }
 }
 
@@ -37,7 +37,7 @@ fn @types.Game::clear_bolts(game : @types.Game) -> Unit {
 /// Deactivates all pulse effect slots, resetting them to default values.
 fn @types.Game::clear_pulses(game : @types.Game) -> Unit {
   for i in 0..<game.pulses.length() {
-    game.pulses[i] = @types.PulseFx::new()
+    game.pulses[i] = PulseFx()
   }
 }
 
@@ -326,7 +326,7 @@ fn @types.Game::try_sell_node(game : @types.Game) -> Unit {
 
   let refund = @types.node_sell_refund(game.nodes[node_index].level)
   game.energy = @types.minf(@types.energy_max, game.energy + refund)
-  game.nodes[node_index] = @types.Node::new()
+  game.nodes[node_index] = Node()
 
   game.emit_pulse(
     @types.cell_center_x(game.cursor_x),

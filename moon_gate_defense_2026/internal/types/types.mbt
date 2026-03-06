@@ -8,6 +8,8 @@ pub(all) struct Node {
   mut facing : Dir
   mut cooldown : Float
   mut pulse : Float
+
+  fn new() -> Node
 }
 
 ///|
@@ -26,6 +28,8 @@ pub(all) struct Enemy {
   reward : Int
   gate_damage : Float
   mut phase : Float
+
+  fn new() -> Enemy
 }
 
 ///|
@@ -38,6 +42,8 @@ pub(all) struct Bolt {
   vy : Float
   mut life : Float
   dmg : Float
+
+  fn new() -> Bolt
 }
 
 ///|
@@ -50,6 +56,8 @@ pub(all) struct PulseFx {
   mut life : Float
   max_life : Float
   kind : Int
+
+  fn new() -> PulseFx
 }
 
 ///|
@@ -87,10 +95,13 @@ pub(all) struct Game {
   mut input_barrier_press : Bool
   mut input_pause_press : Bool
   mut input_restart_press : Bool
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates an inactive node with default targeting values.
+#deprecated
 pub fn Node::new() -> Node {
   {
     active: false,
@@ -105,6 +116,7 @@ pub fn Node::new() -> Node {
 
 ///|
 /// Creates an inactive enemy record with zeroed runtime state.
+#deprecated
 pub fn Enemy::new() -> Enemy {
   {
     active: false,
@@ -125,12 +137,14 @@ pub fn Enemy::new() -> Enemy {
 
 ///|
 /// Creates an inactive projectile record.
+#deprecated
 pub fn Bolt::new() -> Bolt {
   { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, life: 0.0, dmg: 0.0 }
 }
 
 ///|
 /// Creates an inactive pulse effect record.
+#deprecated
 pub fn PulseFx::new() -> PulseFx {
   {
     active: false,
@@ -145,11 +159,12 @@ pub fn PulseFx::new() -> PulseFx {
 
 ///|
 /// Creates a fresh game state with pooled entity arrays and title-screen defaults.
+#deprecated
 pub fn Game::new() -> Game {
-  let nodes = Array::makei(max_nodes, fn(_i) { Node::new() })
-  let enemies = Array::makei(max_enemies, fn(_i) { Enemy::new() })
-  let bolts = Array::makei(max_bolts, fn(_i) { Bolt::new() })
-  let pulses = Array::makei(max_pulses, fn(_i) { PulseFx::new() })
+  let nodes = Array::makei(max_nodes, fn(_i) { Node() })
+  let enemies = Array::makei(max_enemies, fn(_i) { Enemy() })
+  let bolts = Array::makei(max_bolts, fn(_i) { Bolt() })
+  let pulses = Array::makei(max_pulses, fn(_i) { PulseFx() })
 
   {
     nodes,
