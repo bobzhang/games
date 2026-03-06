@@ -449,10 +449,13 @@ pub(all) struct Wind {
   mut shift_timer : Float
   mut shift_interval : Float
   mut turbulence : Float
+
+  fn new() -> Wind
 }
 
 ///|
 /// Creates a moderate default wind profile.
+#deprecated
 pub fn Wind::new() -> Wind {
   {
     direction: 0.5,
@@ -509,10 +512,13 @@ pub(all) struct BattleObjective {
   mut completed : Bool
   mut failed : Bool
   mut description : String
+
+  fn new() -> BattleObjective
 }
 
 ///|
 /// Creates a default "destroy all" objective.
+#deprecated
 pub fn BattleObjective::new() -> BattleObjective {
   {
     objective_type: objective_destroy_all,
@@ -541,10 +547,13 @@ pub(all) struct BattleStats {
   mut accuracy_shots : Int
   mut boarding_wins : Int
   mut fortresses_destroyed : Int
+
+  fn new() -> BattleStats
 }
 
 ///|
 /// Creates zeroed battle statistics.
+#deprecated
 pub fn BattleStats::new() -> BattleStats {
   {
     ships_sunk: 0,
@@ -753,10 +762,13 @@ pub(all) struct Game {
   mut convoy_target_x : Float
   mut convoy_target_z : Float
   mut convoy_arrived_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Constructs a fresh naval game state with initialized pools and menu defaults.
+#deprecated
 pub fn Game::new() -> Game {
   {
     state: Menu,
@@ -766,11 +778,11 @@ pub fn Game::new() -> Game {
     current_battle: 0,
     enemies_alive: 0,
     total_battles: 12,
-    wind: Wind::new(),
+    wind: Wind(),
     wind_angle: 0.5,
     wind_speed: wind_strength,
-    objective: BattleObjective::new(),
-    battle_stats: BattleStats::new(),
+    objective: BattleObjective(),
+    battle_stats: BattleStats(),
     enemies: {
       let arr : Array[EnemyShip] = []
       for i in 0..<max_enemies {
