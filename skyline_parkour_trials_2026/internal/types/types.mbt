@@ -32,6 +32,8 @@ pub(all) struct Tile {
   mut y : Float
   mut w : Float
   mut h : Float
+
+  fn new() -> Tile
 }
 
 ///|
@@ -43,6 +45,8 @@ pub(all) struct Checkpoint {
   mut h : Float
   mut bonus_s : Int
   mut taken : Bool
+
+  fn new() -> Checkpoint
 }
 
 ///|
@@ -59,6 +63,8 @@ pub(all) struct Player {
   mut coyote_t : Float
   mut jump_buffer_t : Float
   mut facing : Int
+
+  fn new() -> Player
 }
 
 ///|
@@ -101,22 +107,27 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates an empty solid tile placeholder.
+#deprecated
 pub fn Tile::new() -> Tile {
   { kind: Solid, x: 0.0, y: 0.0, w: 0.0, h: 0.0 }
 }
 
 ///|
 /// Creates an unchecked checkpoint placeholder.
+#deprecated
 pub fn Checkpoint::new() -> Checkpoint {
   { x: 0.0, y: 0.0, w: 0.0, h: 0.0, bonus_s: 0, taken: false }
 }
 
 ///|
 /// Creates player state with default movement timers.
+#deprecated
 pub fn Player::new() -> Player {
   {
     x: 0.0,
@@ -135,11 +146,12 @@ pub fn Player::new() -> Player {
 
 ///|
 /// Creates a new game state with preallocated tiles and checkpoints.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    tiles: Array::makei(max_tiles, fn(_i) { Tile::new() }),
-    checkpoints: Array::makei(max_checkpoints, fn(_i) { Checkpoint::new() }),
-    hero: Player::new(),
+    tiles: Array::makei(max_tiles, fn(_i) { Tile() }),
+    checkpoints: Array::makei(max_checkpoints, fn(_i) { Checkpoint() }),
+    hero: Player(),
     tile_count: 0,
     checkpoint_count: 0,
     state: Title,
