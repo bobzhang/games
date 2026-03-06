@@ -91,6 +91,8 @@ pub(all) struct Player {
   h : Float
   mut stamina : Float
   mut dash_on : Bool
+
+  fn new() -> Player
 }
 
 ///|
@@ -129,10 +131,13 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Create a player at default spawn with full stamina.
+#deprecated
 pub fn Player::new() -> Player {
   {
     x: world_x + 90.0,
@@ -146,9 +151,10 @@ pub fn Player::new() -> Player {
 
 ///|
 /// Build a fresh game initialized to title state.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    player: Player::new(),
+    player: Player(),
     relics: [],
     traps: [],
     hazards: [],
