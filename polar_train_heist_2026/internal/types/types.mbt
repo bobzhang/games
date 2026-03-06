@@ -15,6 +15,8 @@ pub(all) struct Ent {
   mut spin : Float
   mut cloak : Bool
   mut reward : Int
+
+  fn new() -> Ent
 }
 
 ///|
@@ -29,6 +31,8 @@ pub(all) struct Shot {
   mut life : Float
   mut dmg : Float
   mut kind : Int
+
+  fn new() -> Shot
 }
 
 ///|
@@ -42,6 +46,8 @@ pub(all) struct Fx {
   mut life : Float
   mut size : Float
   mut kind : Int
+
+  fn new() -> Fx
 }
 
 ///|
@@ -53,6 +59,8 @@ pub(all) struct Ring {
   mut r : Float
   mut life : Float
   mut kind : Int
+
+  fn new() -> Ring
 }
 
 ///|
@@ -66,6 +74,8 @@ pub(all) struct Shadow {
   mut rot : Float
   mut life : Float
   mut kind : Int
+
+  fn new() -> Shadow
 }
 
 ///|
@@ -87,6 +97,8 @@ pub(all) struct Player {
   mut hurt_t : Float
   mut muzzle_t : Float
   mut anim_t : Float
+
+  fn new() -> Player
 }
 
 ///|
@@ -137,10 +149,13 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates an inactive entity record with default fields.
+#deprecated
 pub fn Ent::new() -> Ent {
   {
     active: false,
@@ -162,6 +177,7 @@ pub fn Ent::new() -> Ent {
 
 ///|
 /// Creates an inactive shot record.
+#deprecated
 pub fn Shot::new() -> Shot {
   {
     active: false,
@@ -178,6 +194,7 @@ pub fn Shot::new() -> Shot {
 
 ///|
 /// Creates an inactive particle effect record.
+#deprecated
 pub fn Fx::new() -> Fx {
   {
     active: false,
@@ -193,12 +210,14 @@ pub fn Fx::new() -> Fx {
 
 ///|
 /// Creates an inactive ring effect record.
+#deprecated
 pub fn Ring::new() -> Ring {
   { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
 }
 
 ///|
 /// Creates an inactive shadow effect record.
+#deprecated
 pub fn Shadow::new() -> Shadow {
   {
     active: false,
@@ -214,6 +233,7 @@ pub fn Shadow::new() -> Shadow {
 
 ///|
 /// Creates a player initialized on the middle lane.
+#deprecated
 pub fn Player::new() -> Player {
   let lane = 1
   {
@@ -238,14 +258,15 @@ pub fn Player::new() -> Player {
 
 ///|
 /// Creates a fresh game state with pooled objects and title defaults.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    ents: Array::makei(max_ents, fn(_i) { Ent::new() }),
-    shots: Array::makei(max_shots, fn(_i) { Shot::new() }),
-    fxs: Array::makei(max_fx, fn(_i) { Fx::new() }),
-    rings: Array::makei(max_rings, fn(_i) { Ring::new() }),
-    shadows: Array::makei(max_shadows, fn(_i) { Shadow::new() }),
-    hero: Player::new(),
+    ents: Array::makei(max_ents, fn(_i) { Ent() }),
+    shots: Array::makei(max_shots, fn(_i) { Shot() }),
+    fxs: Array::makei(max_fx, fn(_i) { Fx() }),
+    rings: Array::makei(max_rings, fn(_i) { Ring() }),
+    shadows: Array::makei(max_shadows, fn(_i) { Shadow() }),
+    hero: Player(),
     state: Title,
     stage: 1,
     distance: 0.0,
