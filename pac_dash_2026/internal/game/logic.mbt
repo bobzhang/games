@@ -112,7 +112,7 @@ fn @types.Game::reset_positions(game : @types.Game) -> Unit {
 pub fn init_game(game : @types.Game) -> Unit {
   game.ghosts.clear()
   game.ghosts.push(
-    @types.Ghost::new(
+    Ghost(
       @types.maze_cols / 2,
       @types.maze_rows / 2 - 1,
       @types.maze_cols - 2,
@@ -121,7 +121,7 @@ pub fn init_game(game : @types.Game) -> Unit {
     ),
   )
   game.ghosts.push(
-    @types.Ghost::new(
+    Ghost(
       @types.maze_cols / 2 - 1,
       @types.maze_rows / 2,
       1,
@@ -130,7 +130,7 @@ pub fn init_game(game : @types.Game) -> Unit {
     ),
   )
   game.ghosts.push(
-    @types.Ghost::new(
+    Ghost(
       @types.maze_cols / 2 + 1,
       @types.maze_rows / 2,
       @types.maze_cols - 2,
@@ -139,7 +139,7 @@ pub fn init_game(game : @types.Game) -> Unit {
     ),
   )
   game.ghosts.push(
-    @types.Ghost::new(
+    Ghost(
       @types.maze_cols / 2,
       @types.maze_rows / 2 + 1,
       1,

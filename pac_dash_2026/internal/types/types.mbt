@@ -10,10 +10,19 @@ pub(all) struct Ghost {
   scatter_x : Int
   scatter_y : Int
   color : @raylib.Color
+
+  fn new(
+  x : Int,
+  y : Int,
+  scatter_x : Int,
+  scatter_y : Int,
+  color : @raylib.Color,
+) -> Ghost
 }
 
 ///|
 /// Creates a ghost at spawn with its scatter target and color.
+#deprecated
 pub fn Ghost::new(
   x : Int,
   y : Int,
@@ -56,10 +65,13 @@ pub(all) struct Game {
   mut step_timer_ghost : Float
   mut game_over : Bool
   mut win : Bool
+
+  fn new() -> Game
 }
 
 ///|
 /// Allocates a fresh game state with empty maze layers and default counters.
+#deprecated
 pub fn Game::new() -> Game {
   {
     walls: Array::make(maze_cols * maze_rows, 0),
