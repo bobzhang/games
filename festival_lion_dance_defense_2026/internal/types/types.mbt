@@ -26,10 +26,13 @@ pub(all) struct InputState {
   mut press_pause : Bool
   mut press_restart : Bool
   mut press_start : Bool
+
+  fn new() -> InputState
 }
 
 ///|
 /// Creates a cleared input state with no active commands.
+#deprecated
 pub fn InputState::new() -> InputState {
   {
     move_x: 0,
@@ -54,10 +57,13 @@ pub(all) struct Threat {
   mut radius : Float
   mut stun_t : Float
   mut spin : Float
+
+  fn new() -> Threat
 }
 
 ///|
 /// Creates an inactive threat slot for the threat pool.
+#deprecated
 pub fn Threat::new() -> Threat {
   {
     active: false,
@@ -102,14 +108,17 @@ pub(all) struct Game {
   mut msg : String
   mut msg_t : Float
   mut time_s : Float
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a new game with initialized troupe, pools, and meters.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    input: InputState::new(),
-    threats: Array::makei(max_threats, fn(_i) { Threat::new() }),
+    input: InputState(),
+    threats: Array::makei(max_threats, fn(_i) { Threat() }),
     state: Title,
     troupe_x: Float::from_int(street_left + 220),
     troupe_y: lane_y(troupe_start_lane),
