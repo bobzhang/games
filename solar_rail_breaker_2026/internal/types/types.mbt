@@ -11,6 +11,8 @@ pub(all) struct Enemy {
   mut phase_mask : Int
   mut size : Float
   mut spin : Float
+
+  fn new() -> Enemy
 }
 
 ///|
@@ -24,6 +26,8 @@ pub(all) struct Bullet {
   mut life : Float
   mut dmg : Float
   mut kind : BulletKind
+
+  fn new() -> Bullet
 }
 
 ///|
@@ -37,6 +41,8 @@ pub(all) struct EnemyBullet {
   mut life : Float
   mut dmg : Float
   mut kind : EnemyBulletKind
+
+  fn new() -> EnemyBullet
 }
 
 ///|
@@ -49,6 +55,8 @@ pub(all) struct Flare {
   mut spin_v : Float
   mut t : Float
   mut danger : Float
+
+  fn new() -> Flare
 }
 
 ///|
@@ -62,6 +70,8 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
+
+  fn new() -> Particle
 }
 
 ///|
@@ -73,6 +83,8 @@ pub(all) struct Shock {
   mut a1 : Float
   mut life : Float
   mut beta : Bool
+
+  fn new() -> Shock
 }
 
 ///|
@@ -88,6 +100,8 @@ pub(all) struct Player {
   mut invuln : Float
   mut hurt_t : Float
   mut anim_t : Float
+
+  fn new() -> Player
 }
 
 ///|
@@ -137,10 +151,13 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a default Enemy value for a new session.
+#deprecated
 pub fn Enemy::new() -> Enemy {
   {
     active: false,
@@ -158,6 +175,7 @@ pub fn Enemy::new() -> Enemy {
 
 ///|
 /// Creates a default Bullet value for a new session.
+#deprecated
 pub fn Bullet::new() -> Bullet {
   {
     active: false,
@@ -173,6 +191,7 @@ pub fn Bullet::new() -> Bullet {
 
 ///|
 /// Creates a default EnemyBullet value for a new session.
+#deprecated
 pub fn EnemyBullet::new() -> EnemyBullet {
   {
     active: false,
@@ -188,6 +207,7 @@ pub fn EnemyBullet::new() -> EnemyBullet {
 
 ///|
 /// Creates a default Flare value for a new session.
+#deprecated
 pub fn Flare::new() -> Flare {
   {
     active: false,
@@ -202,6 +222,7 @@ pub fn Flare::new() -> Flare {
 
 ///|
 /// Creates a default Particle value for a new session.
+#deprecated
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -217,12 +238,14 @@ pub fn Particle::new() -> Particle {
 
 ///|
 /// Creates a default Shock value for a new session.
+#deprecated
 pub fn Shock::new() -> Shock {
   { active: false, ring: 0, a0: 0.0, a1: 0.0, life: 0.0, beta: false }
 }
 
 ///|
 /// Creates a default Player value for a new session.
+#deprecated
 pub fn Player::new() -> Player {
   {
     ring: 1,
@@ -240,15 +263,16 @@ pub fn Player::new() -> Player {
 
 ///|
 /// Creates a default Game value for a new session.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    enemies: Array::makei(max_enemies, fn(_i) { Enemy::new() }),
-    bullets: Array::makei(max_bullets, fn(_i) { Bullet::new() }),
-    enemy_bullets: Array::makei(max_enemy_bullets, fn(_i) { EnemyBullet::new() }),
-    flares: Array::makei(max_flares, fn(_i) { Flare::new() }),
-    particles: Array::makei(max_particles, fn(_i) { Particle::new() }),
-    shocks: Array::makei(max_shocks, fn(_i) { Shock::new() }),
-    player: Player::new(),
+    enemies: Array::makei(max_enemies, fn(_i) { Enemy() }),
+    bullets: Array::makei(max_bullets, fn(_i) { Bullet() }),
+    enemy_bullets: Array::makei(max_enemy_bullets, fn(_i) { EnemyBullet() }),
+    flares: Array::makei(max_flares, fn(_i) { Flare() }),
+    particles: Array::makei(max_particles, fn(_i) { Particle() }),
+    shocks: Array::makei(max_shocks, fn(_i) { Shock() }),
+    player: Player(),
     state: Title,
     stage: 1,
     stage_time_left: stage_time,
