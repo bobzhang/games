@@ -95,10 +95,13 @@ pub(all) struct Game {
   mut mouse_hold : Bool
   mut mouse_press : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a new campaign state with default buffers and counters.
+#deprecated
 pub fn Game::new() -> Game {
   let undo_arr : Array[UndoPair] = Array::makei(max_undos, fn(_i) {
     {
