@@ -10,10 +10,13 @@ pub(all) struct Traffic {
   mut h : Float
   mut kind : TrafficKind
   mut phase : Float
+
+  fn new() -> Traffic
 }
 
 ///|
 /// Creates an inactive traffic entity with default values.
+#deprecated
 pub fn Traffic::new() -> Traffic {
   {
     active: false,
@@ -39,10 +42,13 @@ pub(all) struct Order {
   mut y_to : Float
   mut timer : Float
   mut value : Int
+
+  fn new() -> Order
 }
 
 ///|
 /// Creates an inactive order entity with default values.
+#deprecated
 pub fn Order::new() -> Order {
   {
     active: false,
@@ -66,10 +72,13 @@ pub(all) struct Pickup {
   mut vy : Float
   mut kind : PickupKind
   mut phase : Float
+
+  fn new() -> Pickup
 }
 
 ///|
 /// Creates an inactive pickup entity with default values.
+#deprecated
 pub fn Pickup::new() -> Pickup {
   { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, kind: Fuel, phase: 0.0 }
 }
@@ -85,10 +94,13 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : Int
+
+  fn new() -> Particle
 }
 
 ///|
 /// Creates an inactive particle entity with default values.
+#deprecated
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -149,16 +161,19 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a new game state with preallocated object pools.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    traffic: Array::makei(max_traffic, fn(_i) { Traffic::new() }),
-    orders: Array::makei(max_orders, fn(_i) { Order::new() }),
-    pickups: Array::makei(max_pickups, fn(_i) { Pickup::new() }),
-    particles: Array::makei(max_particles, fn(_i) { Particle::new() }),
+    traffic: Array::makei(max_traffic, fn(_i) { Traffic() }),
+    orders: Array::makei(max_orders, fn(_i) { Order() }),
+    pickups: Array::makei(max_pickups, fn(_i) { Pickup() }),
+    particles: Array::makei(max_particles, fn(_i) { Particle() }),
     state: Title,
     rider_x: Float::from_int(world_x0 + world_w / 2),
     rider_y: Float::from_int(world_y0 + world_h / 2),
