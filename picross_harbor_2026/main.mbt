@@ -7,7 +7,7 @@ fn main {
   defer @raylib.close_window()
   @raylib.set_target_fps(@types.target_fps)
 
-  let game = @types.Game::new()
+  let game = @types.Game()
 
   while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()

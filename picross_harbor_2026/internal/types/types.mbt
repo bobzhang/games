@@ -73,10 +73,13 @@ pub(all) struct Game {
   mut mouse_hold : Bool
   mut mouse_press : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Construct a fresh game with cleared boards and counters.
+#deprecated
 pub fn Game::new() -> Game {
   let undo_arr : Array[UndoStep] = Array::makei(8192, fn(_i) {
     {
