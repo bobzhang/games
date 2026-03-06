@@ -12,6 +12,8 @@ pub(all) enum GameState {
 pub(all) struct Pose {
   mut ax : Int
   mut ay : Int
+
+  fn new(ax : Int, ay : Int) -> Pose
 }
 
 ///|
@@ -25,6 +27,8 @@ pub(all) struct Input {
   mut pause_pressed : Bool
   mut restart_pressed : Bool
   mut start_pressed : Bool
+
+  fn new() -> Input
 }
 
 ///|
@@ -55,16 +59,20 @@ pub(all) struct Game {
   mut miss_count : Int
   mut message : String
   mut message_t : Float
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a pose with explicit axis values.
+#deprecated
 pub fn Pose::new(ax : Int, ay : Int) -> Pose {
   { ax, ay }
 }
 
 ///|
 /// Creates an empty input snapshot with all actions released.
+#deprecated
 pub fn Input::new() -> Input {
   {
     axis_dx: 0,
@@ -80,9 +88,10 @@ pub fn Input::new() -> Input {
 
 ///|
 /// Creates a new game in title state with default meters and timers.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    input: Input::new(),
+    input: Input(),
     sequence: [],
     history: [],
     state: Title,
@@ -96,7 +105,7 @@ pub fn Game::new() -> Game {
     cue_time_left: 0.0,
     cue_time_limit: cue_base_time,
     target_idx: 0,
-    current_pose: Pose::new(0, 0),
+    current_pose: Pose(0, 0),
     burst_t: 0.0,
     burst_cd: 0.0,
     combo_t: 0.0,

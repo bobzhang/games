@@ -65,7 +65,7 @@ pub fn target_pose(game : Game) -> Pose {
   if game.target_idx < game.sequence.length() {
     game.sequence[game.target_idx]
   } else {
-    Pose::new(0, 0)
+    Pose(0, 0)
   }
 }
 

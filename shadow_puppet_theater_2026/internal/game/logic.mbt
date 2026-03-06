@@ -22,7 +22,7 @@ fn @types.Game::generate_sequence(game : @types.Game) -> Unit {
       }
     }
 
-    game.sequence.push(@types.Pose::new(ax, ay))
+    game.sequence.push(Pose(ax, ay))
     prev_ax = ax
     prev_ay = ay
   }
@@ -176,7 +176,7 @@ fn @types.Game::lock_current_pose(game : @types.Game) -> Unit {
 
   if @types.same_pose(game.current_pose, target) {
     game.history.push(
-      @types.Pose::new(game.current_pose.ax, game.current_pose.ay),
+      Pose(game.current_pose.ax, game.current_pose.ay),
     )
     game.target_idx = game.target_idx + 1
     game.hit_count = game.hit_count + 1
