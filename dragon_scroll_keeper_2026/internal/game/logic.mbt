@@ -13,7 +13,7 @@ fn @types.Game::set_message(
 /// Resets every raider slot to its default inactive state.
 fn @types.Game::clear_raiders(game : @types.Game) -> Unit {
   for i in 0..<game.raiders.length() {
-    game.raiders[i] = @types.Raider::new()
+    game.raiders[i] = Raider()
   }
 }
 
@@ -21,7 +21,7 @@ fn @types.Game::clear_raiders(game : @types.Game) -> Unit {
 /// Resets every flame slot to its default inactive state.
 fn @types.Game::clear_flames(game : @types.Game) -> Unit {
   for i in 0..<game.flames.length() {
-    game.flames[i] = @types.Flame::new()
+    game.flames[i] = Flame()
   }
 }
 
@@ -240,7 +240,7 @@ fn @types.Game::defeat_raider(
     return
   }
 
-  game.raiders[idx] = @types.Raider::new()
+  game.raiders[idx] = Raider()
   game.raiders_defeated = game.raiders_defeated + 1
   game.score = game.score + score_bonus
   game.keeper.ink_shields = @types.minf(
@@ -546,7 +546,7 @@ fn @types.Game::perform_extinguish_action(game : @types.Game) -> Unit {
   game.score = game.score + 16
 
   if game.flames[idx].intensity <= 0.0 {
-    game.flames[idx] = @types.Flame::new()
+    game.flames[idx] = Flame()
     game.flames_cleared = game.flames_cleared + 1
     game.score = game.score + 36 + game.wave * 3
     game.set_message("Flame extinguished.", 0.5)
@@ -653,7 +653,7 @@ fn @types.Game::trigger_ink_shield(game : @types.Game) -> Unit {
     flame_hits = flame_hits + 1
 
     if game.flames[i].intensity <= 0.0 {
-      game.flames[i] = @types.Flame::new()
+      game.flames[i] = Flame()
       game.flames_cleared = game.flames_cleared + 1
       game.score = game.score + 20
     }
@@ -903,7 +903,7 @@ fn @types.Game::update_flames(game : @types.Game, dt : Float) -> Float {
       game.flames[i].intensity - @types.flame_decay * dt,
     )
     if game.flames[i].intensity <= 0.5 {
-      game.flames[i] = @types.Flame::new()
+      game.flames[i] = Flame()
       continue
     }
 

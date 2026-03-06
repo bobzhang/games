@@ -5,6 +5,8 @@ pub(all) struct Breach {
   mut severity : Float
   mut raider_cd : Float
   mut ember_cd : Float
+
+  fn new(room : Int) -> Breach
 }
 
 ///|
@@ -18,6 +20,8 @@ pub(all) struct Raider {
   max_hp : Float
   mut panic_t : Float
   mut attack_cd : Float
+
+  fn new() -> Raider
 }
 
 ///|
@@ -29,6 +33,8 @@ pub(all) struct Flame {
   y : Float
   mut intensity : Float
   mut spread_cd : Float
+
+  fn new() -> Flame
 }
 
 ///|
@@ -54,6 +60,8 @@ pub(all) struct Keeper {
   mut shield_cd : Float
   mut shield_t : Float
   mut ink_shields : Float
+
+  fn new() -> Keeper
 }
 
 ///|
@@ -85,16 +93,20 @@ pub(all) struct Game {
   mut input_shield_press : Bool
   mut input_pause_press : Bool
   mut input_restart_press : Bool
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a default Breach value for a new session.
+#deprecated
 pub fn Breach::new(room : Int) -> Breach {
   { room, severity: 0.0, raider_cd: randf(0.8, 1.6), ember_cd: randf(0.7, 1.4) }
 }
 
 ///|
 /// Creates a default Raider value for a new session.
+#deprecated
 pub fn Raider::new() -> Raider {
   {
     active: false,
@@ -110,12 +122,14 @@ pub fn Raider::new() -> Raider {
 
 ///|
 /// Creates a default Flame value for a new session.
+#deprecated
 pub fn Flame::new() -> Flame {
   { active: false, room: 0, x: 0.0, y: 0.0, intensity: 0.0, spread_cd: 0.0 }
 }
 
 ///|
 /// Creates a default Keeper value for a new session.
+#deprecated
 pub fn Keeper::new() -> Keeper {
   {
     room: vault_room,
@@ -134,12 +148,13 @@ pub fn Keeper::new() -> Keeper {
 
 ///|
 /// Creates a default Game value for a new session.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    breaches: Array::makei(chamber_count, fn(room) { Breach::new(room) }),
-    raiders: Array::makei(max_raiders, fn(_i) { Raider::new() }),
-    flames: Array::makei(max_flames, fn(_i) { Flame::new() }),
-    keeper: Keeper::new(),
+    breaches: Array::makei(chamber_count, fn(room) { Breach(room) }),
+    raiders: Array::makei(max_raiders, fn(_i) { Raider() }),
+    flames: Array::makei(max_flames, fn(_i) { Flame() }),
+    keeper: Keeper(),
     state: Title,
     wave: 1,
     wave_t: 0.0,
