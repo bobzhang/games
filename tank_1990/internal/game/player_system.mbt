@@ -1,4 +1,6 @@
 ///|
+/// Checks whether the player at the given index is enabled. Player 0 is always
+/// enabled; player 1 is only enabled when co-op mode is turned on.
 fn @types.Game::is_player_enabled(game : @types.Game, index : Int) -> Bool {
   if index == 0 {
     true
@@ -8,6 +10,9 @@ fn @types.Game::is_player_enabled(game : @types.Game, index : Int) -> Bool {
 }
 
 ///|
+/// Reads the keyboard to determine which direction the player wants to move.
+/// Player 0 uses the arrow keys; player 1 uses W/A/S/D. Returns None if no
+/// movement key is held down.
 fn read_player_move_dir(index : Int) -> @types.Dir? {
   if index == 0 {
     if @raylib.is_key_down(@raylib.KeyUp) {
@@ -35,6 +40,8 @@ fn read_player_move_dir(index : Int) -> @types.Dir? {
 }
 
 ///|
+/// Returns true if the shoot key for the given player is currently held down.
+/// Player 0 shoots with Right Shift or Enter; player 1 shoots with Space.
 fn is_player_shoot_pressed(index : Int) -> Bool {
   if index == 0 {
     @raylib.is_key_down(@raylib.KeyRightShift) ||
@@ -45,6 +52,8 @@ fn is_player_shoot_pressed(index : Int) -> Bool {
 }
 
 ///|
+/// Checks whether the player's tank is currently standing on an ice tile, which
+/// causes the tank to slide and skid.
 fn @types.Game::player_is_on_ice(
   game : @types.Game,
   player : @types.Tank,
@@ -55,6 +64,9 @@ fn @types.Game::player_is_on_ice(
 }
 
 ///|
+/// Determines whether the player is allowed to fire a bullet right now. A player
+/// cannot fire if the tank is inactive, the reload cooldown has not expired, or
+/// the maximum number of active bullets for this player has been reached.
 fn @types.Game::can_player_fire(game : @types.Game, index : Int) -> Bool {
   let player = game.players[index]
   if not(player.active) {
@@ -77,6 +89,9 @@ fn @types.Game::can_player_fire(game : @types.Game, index : Int) -> Bool {
 }
 
 ///|
+/// Ticks down all per-player timers each frame, including the reload cooldown,
+/// invulnerability timer, shield timer, ice-skid timer, and the visual blink
+/// counter used for flashing effects.
 fn @types.Game::update_player_reload_timers(
   game : @types.Game,
   dt : Float,
@@ -112,6 +127,9 @@ fn @types.Game::update_player_reload_timers(
 }
 
 ///|
+/// Attempts to move a player's tank one step in the given direction. The move is
+/// rejected if the new position would collide with a wall, another player, or an
+/// enemy tank.
 fn @types.Game::try_move_player(
   game : @types.Game,
   index : Int,
@@ -144,6 +162,9 @@ fn @types.Game::try_move_player(
 }
 
 ///|
+/// Processes player input (or demo AI commands) each frame for every active
+/// player. Handles movement, ice skidding, and firing bullets when the shoot
+/// key is pressed and the player is allowed to fire.
 fn @types.Game::update_player_input(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<@types.max_players {
     if not(game.is_player_enabled(i)) {
@@ -203,6 +224,10 @@ fn @types.Game::update_player_input(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Handles what happens when a player's tank is hit. If the player has
+/// invulnerability or a shield active the hit is absorbed with a spark effect.
+/// Otherwise the tank is destroyed: lives are decremented, weapon level drops,
+/// an explosion is spawned, and a respawn timer begins.
 fn @types.Game::on_player_destroyed(game : @types.Game, index : Int) -> Unit {
   let player = game.players[index]
   if not(player.active) {
@@ -228,6 +253,9 @@ fn @types.Game::on_player_destroyed(game : @types.Game, index : Int) -> Unit {
 }
 
 ///|
+/// Counts down the respawn timer for each destroyed player who still has lives
+/// remaining. When the timer reaches zero the tank is placed back on the field
+/// and a respawn particle burst is shown.
 fn @types.Game::update_player_respawns(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<@types.max_players {
     if not(game.is_player_enabled(i)) {
@@ -249,6 +277,8 @@ fn @types.Game::update_player_respawns(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Returns true when every enabled player is both inactive (destroyed) and has
+/// zero lives left, meaning the game is over.
 fn @types.Game::all_players_out(game : @types.Game) -> Bool {
   let mut living = 0
   for i in 0..<@types.max_players {

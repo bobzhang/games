@@ -1,4 +1,5 @@
 ///|
+/// Returns the opposite direction (e.g. Up becomes Down, Left becomes Right).
 fn opposite_dir(dir : @types.Dir) -> @types.Dir {
   match dir {
     Up => Down
@@ -9,6 +10,7 @@ fn opposite_dir(dir : @types.Dir) -> @types.Dir {
 }
 
 ///|
+/// Finds the nearest active enemy to the given position and returns its index and squared distance.
 fn @types.Game::demo_nearest_enemy(
   game : @types.Game,
   x : Float,
@@ -30,6 +32,7 @@ fn @types.Game::demo_nearest_enemy(
 }
 
 ///|
+/// Finds the nearest active power-up to the given position and returns its index and squared distance.
 fn @types.Game::demo_nearest_powerup(
   game : @types.Game,
   x : Float,
@@ -51,6 +54,7 @@ fn @types.Game::demo_nearest_powerup(
 }
 
 ///|
+/// Checks whether the player tank at the given index can move one step in the specified direction without colliding with walls, other players, or enemies.
 fn @types.Game::demo_can_step(
   game : @types.Game,
   index : Int,
@@ -79,6 +83,7 @@ fn @types.Game::demo_can_step(
 }
 
 ///|
+/// Tries each of four candidate directions in priority order and returns the first one the player can actually step into, or None if all are blocked.
 fn @types.Game::demo_priority_dir(
   game : @types.Game,
   index : Int,
@@ -102,6 +107,7 @@ fn @types.Game::demo_priority_dir(
 }
 
 ///|
+/// Decides which direction the AI player should move to reach the target position, preferring the axis with the larger gap and falling back to a random direction if stuck.
 fn @types.Game::demo_choose_move_dir(
   game : @types.Game,
   index : Int,
@@ -147,6 +153,7 @@ fn @types.Game::demo_choose_move_dir(
 }
 
 ///|
+/// Determines if the player and target are roughly aligned on the same row or column so a straight shot is possible, returning the aiming direction and whether alignment was found.
 fn demo_line_shot_dir(
   player_x : Float,
   player_y : Float,
@@ -166,6 +173,7 @@ fn demo_line_shot_dir(
 }
 
 ///|
+/// Picks a target position for the AI player to move toward: a nearby power-up if one is close enough, the nearest enemy otherwise, or a guard position near the base when no enemies remain.
 fn @types.Game::demo_target_position(
   game : @types.Game,
   player : @types.Tank,
@@ -192,6 +200,7 @@ fn @types.Game::demo_target_position(
 }
 
 ///|
+/// Produces the AI move direction and shoot decision for one demo player each frame, combining target selection, pathfinding, line-of-sight shooting, and random fire.
 fn @types.Game::demo_player_command(
   game : @types.Game,
   index : Int,

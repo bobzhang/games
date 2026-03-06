@@ -1,4 +1,5 @@
 ///|
+/// Finds and returns the index of the first inactive powerup slot, or -1 if all slots are full.
 fn @types.Game::alloc_powerup(game : @types.Game) -> Int {
   for i, slot in game.powerups {
     if !slot.active {
@@ -10,6 +11,7 @@ fn @types.Game::alloc_powerup(game : @types.Game) -> Int {
 }
 
 ///|
+/// Places a new powerup of the given kind at the specified position, clamped within the map boundaries.
 fn @types.Game::spawn_powerup(
   game : @types.Game,
   kind : @types.PowerupKind,
@@ -38,6 +40,7 @@ fn @types.Game::spawn_powerup(
 }
 
 ///|
+/// Spawns a powerup with a randomly chosen kind at the given position, using weighted probabilities for each type.
 fn @types.Game::spawn_random_powerup(
   game : @types.Game,
   x : Float,
@@ -61,6 +64,7 @@ fn @types.Game::spawn_random_powerup(
 }
 
 ///|
+/// Destroys all active enemies on the field, spawning explosions and awarding score for each kill plus a combo bonus.
 fn @types.Game::clear_all_enemies_by_grenade(
   game : @types.Game,
   team : @types.Team,
@@ -83,6 +87,7 @@ fn @types.Game::clear_all_enemies_by_grenade(
 }
 
 ///|
+/// Activates a collected powerup effect on the specified player, such as granting a shield, upgrading weapons, or adding a life.
 fn @types.Game::apply_powerup(
   game : @types.Game,
   player_index : Int,
@@ -133,6 +138,7 @@ fn @types.Game::apply_powerup(
 }
 
 ///|
+/// Advances all active powerups each frame: counts down their lifetime, checks for player pickup collisions, and deactivates expired ones.
 fn @types.Game::update_powerups(game : @types.Game, dt : Float) -> Unit {
   for p in game.powerups {
     if not(p.active) {
@@ -163,6 +169,7 @@ fn @types.Game::update_powerups(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Ticks down global effect timers such as the enemy freeze clock and the shovel fortress duration, restoring the base when the shovel expires.
 fn @types.Game::update_global_effects(game : @types.Game, dt : Float) -> Unit {
   if game.freeze_all_timer > 0.0 {
     game.freeze_all_timer -= dt

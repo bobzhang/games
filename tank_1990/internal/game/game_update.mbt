@@ -1,4 +1,5 @@
 ///|
+/// Applies damage to the map tile at the given world coordinates, destroying or weakening it based on bullet power. Returns true if the tile was solid (and thus blocked the bullet).
 fn @types.Game::damage_tile_at_point(
   game : @types.Game,
   world_x : Float,
@@ -61,6 +62,7 @@ fn @types.Game::damage_tile_at_point(
 }
 
 ///|
+/// Moves background stars downward over time and wraps them back to the top when they scroll off-screen, creating a scrolling starfield effect.
 fn @types.Game::update_starfield(game : @types.Game, dt : Float) -> Unit {
   for star in game.stars {
     star.y += star.speed * dt
@@ -75,6 +77,7 @@ fn @types.Game::update_starfield(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Transitions the game into the GameOver state and starts the game-over countdown timer.
 fn @types.Game::enter_game_over(game : @types.Game) -> Unit {
   if game.state == GameOver {
     return
@@ -88,6 +91,7 @@ fn @types.Game::enter_game_over(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Starts a new player-controlled campaign by disabling demo mode and beginning from the first stage.
 fn @types.Game::start_manual_campaign(game : @types.Game) -> Unit {
   game.demo_mode = false
   game.demo_elapsed = 0.0
@@ -95,6 +99,7 @@ fn @types.Game::start_manual_campaign(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Starts an AI-controlled demo campaign with cooperative mode enabled and gives demo players extra lives and faster reload.
 fn @types.Game::start_demo_campaign(game : @types.Game) -> Unit {
   game.demo_mode = true
   game.coop_enabled = true
@@ -113,6 +118,7 @@ fn @types.Game::start_demo_campaign(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Handles input and navigation on the main menu screen, including cursor movement, co-op toggle, and starting a game or demo.
 fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
   game.menu_blink += dt * @types.menu_select_blink_speed
 
@@ -154,6 +160,7 @@ fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Counts down the stage intro timer and transitions to the Playing state once it reaches zero.
 fn @types.Game::update_stage_intro(game : @types.Game, dt : Float) -> Unit {
   game.stage_intro_timer -= dt
   if game.stage_intro_timer <= 0.0 {
@@ -163,6 +170,7 @@ fn @types.Game::update_stage_intro(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Counts down the stage-clear timer, then advances to the next stage or triggers the campaign-clear state if all stages are complete.
 fn @types.Game::update_stage_clear(game : @types.Game, dt : Float) -> Unit {
   game.stage_clear_timer -= dt
   if game.stage_clear_timer > 0.0 {
@@ -183,6 +191,7 @@ fn @types.Game::update_stage_clear(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Counts down the campaign-clear timer, then restarts the demo or returns to the main menu depending on the current mode.
 fn @types.Game::update_campaign_clear(game : @types.Game, dt : Float) -> Unit {
   game.campaign_clear_timer -= dt
   if game.campaign_clear_timer <= 0.0 {
@@ -196,6 +205,7 @@ fn @types.Game::update_campaign_clear(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Counts down the game-over timer, then restarts the demo or returns to the main menu depending on the current mode.
 fn @types.Game::update_game_over_state(game : @types.Game, dt : Float) -> Unit {
   game.game_over_timer -= dt
   if game.game_over_timer <= 0.0 {
@@ -209,6 +219,7 @@ fn @types.Game::update_game_over_state(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs one frame of active gameplay: processes input, updates all entities (players, enemies, bullets, powerups, particles), checks win/loss conditions, and handles camera shake and visual effects.
 fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   if game.demo_mode && @raylib.is_key_pressed(@raylib.KeyEscape) {
     game.demo_mode = false
@@ -269,6 +280,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Updates the pause screen: animates the blink indicator, continues particle effects, and listens for unpause or quit input.
 fn @types.Game::update_paused(game : @types.Game, dt : Float) -> Unit {
   game.pause_blink += dt * 4.5
   @particles.update_particles(game, dt)

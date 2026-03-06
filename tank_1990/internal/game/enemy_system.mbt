@@ -1,4 +1,5 @@
 ///|
+/// Returns the x-coordinate for an enemy spawn point based on the given lane slot (0, 1, or 2).
 fn enemy_spawn_x(slot : Int) -> Float {
   if slot == 0 {
     @types.enemy_spawn_x0
@@ -10,6 +11,7 @@ fn enemy_spawn_x(slot : Int) -> Float {
 }
 
 ///|
+/// Finds the first inactive enemy slot in the enemies array and returns its index, or -1 if all slots are in use.
 fn @types.Game::alloc_enemy_slot(game : @types.Game) -> Int {
   for i, slot in game.enemies {
     if !slot.active {
@@ -21,6 +23,7 @@ fn @types.Game::alloc_enemy_slot(game : @types.Game) -> Int {
 }
 
 ///|
+/// Attempts to spawn a new enemy tank at a random lane. Returns true if an enemy was successfully placed, or false if the spawn limit was reached, the field is full, or the chosen position is blocked.
 fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
   if game.enemies_spawned >= game.enemies_to_spawn {
     return false
@@ -53,6 +56,7 @@ fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
 }
 
 ///|
+/// Picks the closest active player to the given enemy tank and returns that player's index, or -1 if no players are alive.
 fn @types.Game::choose_enemy_target_player(
   game : @types.Game,
   enemy : @types.Tank,
@@ -73,6 +77,7 @@ fn @types.Game::choose_enemy_target_player(
 }
 
 ///|
+/// Decides which direction an enemy tank wants to move. It usually aims toward the nearest player or the base, with some randomness mixed in to keep movement unpredictable.
 fn @types.Game::enemy_desired_dir(
   game : @types.Game,
   enemy : @types.Tank,
@@ -113,6 +118,7 @@ fn @types.Game::enemy_desired_dir(
 }
 
 ///|
+/// Tries to move the enemy tank at the given index one step in the specified direction. Returns true if the move succeeded, or false if the path is blocked by walls, other enemies, or players.
 fn @types.Game::try_move_enemy(
   game : @types.Game,
   enemy_index : Int,
@@ -140,6 +146,7 @@ fn @types.Game::try_move_enemy(
 }
 
 ///|
+/// Checks whether the enemy tank at the given index should fire a bullet this frame. It considers line-of-sight to players and the base, reload cooldown, and a random chance that varies by enemy type.
 fn @types.Game::enemy_shoot_if_ready(
   game : @types.Game,
   enemy_index : Int,
@@ -202,6 +209,7 @@ fn @types.Game::enemy_shoot_if_ready(
 }
 
 ///|
+/// Counts down the spawn timer each frame and spawns a new enemy when the timer expires, as long as there are still enemies left to introduce in the current stage.
 fn @types.Game::update_enemy_spawn(game : @types.Game, dt : Float) -> Unit {
   if game.enemies_spawned >= game.enemies_to_spawn {
     return
@@ -217,6 +225,7 @@ fn @types.Game::update_enemy_spawn(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Runs one frame of AI logic for every active enemy: updates cooldown timers, picks a movement direction, moves the tank, and fires bullets when appropriate. Enemies are frozen while the freeze-all timer is active.
 fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
   for i, enemy in game.enemies {
     if !enemy.active {
@@ -268,6 +277,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+/// Removes the enemy at the given index from play, awards score to the killing team with a combo multiplier, triggers an explosion effect, and may drop a random powerup.
 fn @types.Game::destroy_enemy(
   game : @types.Game,
   enemy_index : Int,
@@ -301,6 +311,7 @@ fn @types.Game::destroy_enemy(
 }
 
 ///|
+/// Returns true when all enemies for the current stage have been spawned and destroyed, meaning the player has cleared the stage.
 fn @types.Game::stage_is_clear(game : @types.Game) -> Bool {
   game.enemies_spawned >= game.enemies_to_spawn && game.enemies_alive <= 0
 }

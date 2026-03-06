@@ -1,4 +1,5 @@
 ///|
+/// Initializes the game window, creates the game state, and runs the main loop that updates and renders each frame until the window is closed.
 fn main {
   @raylib.set_config_flags(@raylib.FlagMsaa4xHint)
   @raylib.init_window(

@@ -1,4 +1,5 @@
 ///|
+/// Holds preloaded graphical assets (font and animation textures) used by the renderer.
 priv struct RenderAssets {
   ui_font : @raylib.Font?
   explosion_frames : Array[@raylib.Texture]
@@ -6,14 +7,17 @@ priv struct RenderAssets {
 }
 
 ///|
+/// Creates a new `RenderAssets` with no font loaded and empty animation frame lists.
 fn RenderAssets::new() -> RenderAssets {
   { ui_font: None, explosion_frames: [], smoke_frames: [] }
 }
 
 ///|
+/// The shared, module-level render assets instance used throughout the game.
 let assets : RenderAssets = RenderAssets::new()
 
 ///|
+/// Selects a texture from the given array using `seed` as an index (wrapping around), or returns `None` if the array is empty.
 fn pick_texture(
   textures : Array[@raylib.Texture],
   seed : Int,

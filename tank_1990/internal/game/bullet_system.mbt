@@ -1,4 +1,6 @@
 ///|
+/// Finds and returns the index of the first inactive bullet slot that can be reused.
+/// Returns -1 if all bullet slots are currently in use.
 fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
   for i, bullet in game.bullets {
     if !bullet.active {
@@ -10,6 +12,8 @@ fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
 }
 
 ///|
+/// Creates a new bullet traveling in the given direction at the specified speed.
+/// Allocates a bullet slot, sets its position, velocity, damage, and time-to-live.
 fn @types.Game::spawn_bullet(
   game : @types.Game,
   owner_team : @types.Team,
@@ -37,6 +41,9 @@ fn @types.Game::spawn_bullet(
 }
 
 ///|
+/// Checks whether a bullet collides with any active enemy tank.
+/// If a hit is detected, the enemy takes damage, sparks are spawned, and the
+/// enemy is destroyed if its health drops to zero. Returns true on a hit.
 fn @types.Game::bullet_hit_enemy(
   game : @types.Game,
   bullet : @types.Bullet,
@@ -71,6 +78,8 @@ fn @types.Game::bullet_hit_enemy(
 }
 
 ///|
+/// Checks whether a bullet collides with any active player tank.
+/// If a hit is detected, the player is destroyed and the function returns true.
 fn @types.Game::bullet_hit_player(
   game : @types.Game,
   bullet : @types.Bullet,
@@ -91,6 +100,9 @@ fn @types.Game::bullet_hit_player(
 }
 
 ///|
+/// Detects collisions between bullets from opposing teams.
+/// When two enemy bullets overlap, both are destroyed and a spark effect is spawned
+/// at the midpoint between them.
 fn @types.Game::update_bullet_vs_bullet(game : @types.Game) -> Unit {
   for i in 0..<game.bullets.length() {
     if !game.bullets[i].active {
@@ -122,6 +134,9 @@ fn @types.Game::update_bullet_vs_bullet(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Advances every active bullet by one frame. Each bullet is moved in sub-steps
+/// for accurate collision detection against walls, tiles, players, and enemies.
+/// Bullets that expire, leave the world, or hit something are deactivated.
 fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
   for bullet in game.bullets {
     if !bullet.active {

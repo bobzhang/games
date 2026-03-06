@@ -1,4 +1,5 @@
 ///|
+/// Finds and returns the index of the first inactive particle slot, or -1 if all slots are full.
 fn @types.Game::alloc_particle(game : @types.Game) -> Int {
   for i, slot in game.particles {
     if !slot.active {
