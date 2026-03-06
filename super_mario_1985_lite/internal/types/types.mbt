@@ -26,10 +26,13 @@ pub(all) struct Player {
   mut score : Int
   mut reached_flag : Bool
   mut flag_phase : Int
+
+  fn new() -> Player
 }
 
 ///|
 /// Creates a player with default movement and score state.
+#deprecated
 pub fn Player::new() -> Player {
   {
     x: player_start_x,
@@ -163,10 +166,13 @@ pub(all) struct Game {
   enemies : Array[Enemy]
   coins : Array[Coin]
   particles : Array[Particle]
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a fresh game state with allocated tile/entity pools.
+#deprecated
 pub fn Game::new() -> Game {
   {
     state: Title,
@@ -181,7 +187,7 @@ pub fn Game::new() -> Game {
     start_y: 0.0,
     shake_t: 0.0,
     tiles: Array::make(world_tiles_w * world_tiles_h, Empty),
-    player: Player::new(),
+    player: Player(),
     enemies: Array::makei(max_enemies, fn(_i) { Enemy::inactive() }),
     coins: Array::makei(max_coins, fn(_i) { Coin::inactive() }),
     particles: Array::makei(max_particles, fn(_i) { Particle::inactive() }),

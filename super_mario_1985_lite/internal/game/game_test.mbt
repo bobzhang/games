@@ -1,6 +1,6 @@
 ///|
 fn setup_game() -> @types.Game {
-  let game = @types.Game::new()
+  let game = @types.Game()
   @types.fill_rect_tile(
     game,
     0,
