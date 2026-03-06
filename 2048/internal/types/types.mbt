@@ -24,6 +24,7 @@ pub(all) struct Tile {
 
 ///|
 /// Creates an empty tile with neutral animation state.
+#deprecated
 pub fn Tile::new() -> Tile {
   {
     value: 0,
@@ -68,6 +69,7 @@ pub(all) struct Game {
 
 ///|
 /// Allocates a fresh game state with cleared board and score counters.
+#deprecated
 pub fn Game::new() -> Game {
   let g : Game = {
     tiles: Array::makei(cell_count, _i => Tile()),

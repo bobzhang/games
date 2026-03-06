@@ -29,14 +29,12 @@ fn render_to_png(game : @types.Game, path : String) -> Unit {
 
 ///|
 /// Builds a game in the Title state for testing.
-fn make_title_game() -> @types.Game {
-  @types.Game::new()
-}
+fn make_title_game() -> @types.Game { @types.Game() }
 
 ///|
 /// Builds a game in Play state with a specific board layout for testing.
 fn make_play_game() -> @types.Game {
-  let game = @types.Game::new()
+  let game = @types.Game()
   game.state = Play
   game.score = 1234
   game.best_score = 5678
@@ -67,7 +65,7 @@ fn make_won_game() -> @types.Game {
 ///|
 /// Builds a game in Over state for testing.
 fn make_over_game() -> @types.Game {
-  let game = @types.Game::new()
+  let game = @types.Game()
   game.state = Over
   game.score = 9876
   game.best_score = 9876
