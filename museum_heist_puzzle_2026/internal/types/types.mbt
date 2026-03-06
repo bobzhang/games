@@ -81,10 +81,13 @@ pub(all) struct Game {
   mut mouse_hold : Bool
   mut mouse_press : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a new game state with defaults and empty entity lists.
+#deprecated
 pub fn Game::new() -> Game {
   {
     tiles: Array::make(board_cells, Floor),
