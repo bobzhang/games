@@ -462,10 +462,13 @@ pub(all) struct Game {
   // Lap tracking
   mut fastest_lap_kart : Int
   mut fastest_lap_time : Float
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a new game instance with default initial state.
+#deprecated
 pub fn Game::new() -> Game {
   {
     state: Menu,
