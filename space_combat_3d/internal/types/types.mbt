@@ -35,10 +35,13 @@ pub(all) struct Player {
   mut kills : Int
   mut shots_fired : Int
   mut shots_hit : Int
+
+  fn new() -> Player
 }
 
 ///|
 /// Creates a new player ship with default fighter class stats.
+#deprecated
 pub fn Player::new() -> Player {
   {
     x: 0.0,
@@ -417,10 +420,17 @@ pub(all) struct MissionObjective {
   mut current_count : Int
   mut complete : Bool
   mut description : String
+
+  fn new(
+  obj_type : Objective,
+  target_count : Int,
+  description : String,
+) -> MissionObjective
 }
 
 ///|
 /// Creates a new mission objective with the given type, target count, and description.
+#deprecated
 pub fn MissionObjective::new(
   obj_type : Objective,
   target_count : Int,
@@ -524,10 +534,13 @@ pub(all) struct Game {
   // RNG
   mut rng_state : Int
   mut frame_counter : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a new game instance with all entity pools initialized and background stars generated.
+#deprecated
 pub fn Game::new() -> Game {
   let stars_arr : Array[Star] = []
   let mut rng = 54321
@@ -607,7 +620,7 @@ pub fn Game::new() -> Game {
 
   let objectives_arr : Array[MissionObjective] = []
   for i in 0..<4 {
-    objectives_arr.push(MissionObjective::new(DestroyAll, 0, ""))
+    objectives_arr.push(MissionObjective(DestroyAll, 0, ""))
     ignore(i)
   }
 
@@ -619,7 +632,7 @@ pub fn Game::new() -> Game {
 
   {
     state: StateMenu,
-    player: Player::new(),
+    player: Player(),
     target_idx: -1,
     target_lock_timer: 0.0,
     score: 0,
