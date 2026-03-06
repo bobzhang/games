@@ -9,6 +9,8 @@ pub(all) struct Spark {
   mut life : Float
   mut size : Float
   mut kind : SparkKind
+
+  fn new() -> Spark
 }
 
 ///|
@@ -24,6 +26,8 @@ pub(all) struct Rival {
   color_kind : Int
   seg_x : Array[Int]
   seg_y : Array[Int]
+
+  fn new(kind : Int) -> Rival
 }
 
 ///|
@@ -71,10 +75,13 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Create an inactive spark slot.
+#deprecated
 pub fn Spark::new() -> Spark {
   {
     active: false,
@@ -90,6 +97,7 @@ pub fn Spark::new() -> Spark {
 
 ///|
 /// Create a rival snake with initial direction and buffers.
+#deprecated
 pub fn Rival::new(kind : Int) -> Rival {
   {
     alive: true,
@@ -115,17 +123,18 @@ pub fn Rival::new(kind : Int) -> Rival {
 
 ///|
 /// Build a new run in title state with initialized pools.
+#deprecated
 pub fn Game::new() -> Game {
   {
     p_seg_x: Array::make(max_segments, 0),
     p_seg_y: Array::make(max_segments, 0),
-    sparks: Array::makei(1300, fn(_i) { Spark::new() }),
+    sparks: Array::makei(1300, fn(_i) { Spark() }),
     p_alive: true,
     p_len: 5,
     p_dir: Right,
     p_next_dir: Right,
     p_grow: 0,
-    rivals: Array::makei(max_rivals, fn(i) { Rival::new(i) }),
+    rivals: Array::makei(max_rivals, fn(i) { Rival(i) }),
     food_x: 0,
     food_y: 0,
     food_kind: Normal,
