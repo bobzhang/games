@@ -313,7 +313,7 @@ fn @types.Game::try_place_tower(game : @types.Game) -> Unit {
     @types.set_notification(game, "Max towers reached!", 1.5)
     return
   }
-  game.towers[idx] = @types.Tower::new(
+  game.towers[idx] = Tower(
     game.selected_tower_type,
     game.hover_gx,
     game.hover_gy,

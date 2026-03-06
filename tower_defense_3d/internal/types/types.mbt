@@ -7,6 +7,12 @@ pub(all) struct StatusEffect {
   mut duration : Float
   mut strength : Float
   mut tick_timer : Float
+
+  fn new(
+  kind : Int,
+  duration : Float,
+  strength : Float,
+) -> StatusEffect
 }
 
 ///|
@@ -17,6 +23,7 @@ pub fn StatusEffect::none() -> StatusEffect {
 
 ///|
 /// Creates a status effect with the given `kind`, `duration`, and `strength`.
+#deprecated
 pub fn StatusEffect::new(
   kind : Int,
   duration : Float,
@@ -47,6 +54,8 @@ pub(all) struct Tower {
   mut buff_range : Float
   mut buff_rate : Float
   mut sell_value : Int
+
+  fn new(kind : TowerKind, gx : Int, gy : Int) -> Tower
 }
 
 ///|
@@ -75,6 +84,7 @@ pub fn Tower::inactive() -> Tower {
 
 ///|
 /// Creates a new active tower of the given `kind` at grid position (`gx`, `gy`).
+#deprecated
 pub fn Tower::new(kind : TowerKind, gx : Int, gy : Int) -> Tower {
   {
     active: true,
@@ -458,6 +468,8 @@ pub(all) struct Game {
   // Lightning chain visualization
   mut chain_lines : Array[ChainLine]
   mut chain_line_count : Int
+
+  fn new() -> Game
 }
 
 // Chain lightning visual line
@@ -492,6 +504,7 @@ pub fn ChainLine::inactive() -> ChainLine {
 
 ///|
 /// Creates a new game instance with default settings and empty entity pools.
+#deprecated
 pub fn Game::new() -> Game {
   {
     state: Menu,
