@@ -52,6 +52,8 @@ pub(all) struct Actor {
   mut fy : Float
   mut t : Float
   mut moving : Bool
+
+  fn new() -> Actor
 }
 
 ///|
@@ -65,6 +67,8 @@ pub(all) struct Train {
   mut speed : Float
   mut passed_junction : Int
   mut color_id : TrainColor
+
+  fn new() -> Train
 }
 
 ///|
@@ -81,6 +85,8 @@ pub(all) struct Inspector {
   mut stun_t : Float
   mut seed : Int
   mut alert_t : Float
+
+  fn new() -> Inspector
 }
 
 ///|
@@ -94,6 +100,8 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
+
+  fn new() -> Particle
 }
 
 ///|
@@ -135,10 +143,13 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a player actor initialized at the configured start cell.
+#deprecated
 pub fn Actor::new() -> Actor {
   {
     x: start_x,
@@ -156,6 +167,7 @@ pub fn Actor::new() -> Actor {
 
 ///|
 /// Creates an inactive train entry for the train object pool.
+#deprecated
 pub fn Train::new() -> Train {
   {
     active: false,
@@ -171,10 +183,11 @@ pub fn Train::new() -> Train {
 
 ///|
 /// Creates an inactive inspector with default patrol parameters.
+#deprecated
 pub fn Inspector::new() -> Inspector {
   {
     active: false,
-    body: Actor::new(),
+    body: Actor(),
     mode: Patrol,
     move_cd: 0.0,
     dir_x: 1,
@@ -189,6 +202,7 @@ pub fn Inspector::new() -> Inspector {
 
 ///|
 /// Creates an inactive particle entry for the particle pool.
+#deprecated
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -204,15 +218,16 @@ pub fn Particle::new() -> Particle {
 
 ///|
 /// Creates a new game state with initialized pools and counters.
+#deprecated
 pub fn Game::new() -> Game {
   {
     map: Array::make(grid_w * grid_h, Void),
     switch_state: Array::make(junction_n, 0),
-    trains: Array::makei(max_trains, fn(_i) { Train::new() }),
-    inspectors: Array::makei(max_inspectors, fn(_i) { Inspector::new() }),
-    particles: Array::makei(max_particles, fn(_i) { Particle::new() }),
+    trains: Array::makei(max_trains, fn(_i) { Train() }),
+    inspectors: Array::makei(max_inspectors, fn(_i) { Inspector() }),
+    particles: Array::makei(max_particles, fn(_i) { Particle() }),
     state: Title,
-    player: Actor::new(),
+    player: Actor(),
     lives: max_lives,
     score: 0,
     best_score: 0,
