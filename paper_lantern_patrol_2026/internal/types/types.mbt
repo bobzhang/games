@@ -18,10 +18,13 @@ pub(all) struct InputState {
   mut press_pause : Bool
   mut press_restart : Bool
   mut press_start : Bool
+
+  fn new() -> InputState
 }
 
 ///|
 /// Creates a default InputState value for a new session.
+#deprecated
 pub fn InputState::new() -> InputState {
   {
     move_x: 0,
@@ -46,10 +49,13 @@ pub(all) struct Patrol {
   mut guard_t : Float
   mut calm_t : Float
   mut calm_cd : Float
+
+  fn new() -> Patrol
 }
 
 ///|
 /// Creates a default Patrol value for a new session.
+#deprecated
 pub fn Patrol::new() -> Patrol {
   let gate = gate_position()
   {
@@ -76,10 +82,13 @@ pub(all) struct Lantern {
   mut target_shrine : Int
   mut escorting : Bool
   mut wobble : Float
+
+  fn new() -> Lantern
 }
 
 ///|
 /// Creates a default Lantern value for a new session.
+#deprecated
 pub fn Lantern::new() -> Lantern {
   {
     active: false,
@@ -105,10 +114,13 @@ pub(all) struct Gust {
   mut radius : Float
   mut power : Float
   mut life : Float
+
+  fn new() -> Gust
 }
 
 ///|
 /// Creates a default Gust value for a new session.
+#deprecated
 pub fn Gust::new() -> Gust {
   {
     active: false,
@@ -133,10 +145,13 @@ pub(all) struct Spark {
   mut life : Float
   mut power : Float
   mut size : Float
+
+  fn new() -> Spark
 }
 
 ///|
 /// Creates a default Spark value for a new session.
+#deprecated
 pub fn Spark::new() -> Spark {
   {
     active: false,
@@ -162,10 +177,13 @@ pub(all) struct Thief {
   mut target : Int
   mut steal_cd : Float
   mut life : Float
+
+  fn new() -> Thief
 }
 
 ///|
 /// Creates a default Thief value for a new session.
+#deprecated
 pub fn Thief::new() -> Thief {
   {
     active: false,
@@ -205,18 +223,21 @@ pub(all) struct Game {
   mut status_t : Float
   mut screen_flash_t : Float
   mut game_over_reason : String
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a default Game value for a new session.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    input: InputState::new(),
-    patrol: Patrol::new(),
-    lanterns: Array::makei(max_lanterns, fn(_i) { Lantern::new() }),
-    gusts: Array::makei(max_gusts, fn(_i) { Gust::new() }),
-    sparks: Array::makei(max_sparks, fn(_i) { Spark::new() }),
-    thieves: Array::makei(max_thieves, fn(_i) { Thief::new() }),
+    input: InputState(),
+    patrol: Patrol(),
+    lanterns: Array::makei(max_lanterns, fn(_i) { Lantern() }),
+    gusts: Array::makei(max_gusts, fn(_i) { Gust() }),
+    sparks: Array::makei(max_sparks, fn(_i) { Spark() }),
+    thieves: Array::makei(max_thieves, fn(_i) { Thief() }),
     state: Title,
     score: 0,
     best_score: 0,
