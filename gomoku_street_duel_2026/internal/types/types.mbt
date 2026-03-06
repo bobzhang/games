@@ -87,10 +87,13 @@ pub(all) struct Game {
   mut mouse_hold : Bool
   mut mouse_press : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a fresh game state with empty board and history buffers.
+#deprecated
 pub fn Game::new() -> Game {
   let sparks_arr : Array[Spark] = Array::makei(900, fn(_i) {
     {
