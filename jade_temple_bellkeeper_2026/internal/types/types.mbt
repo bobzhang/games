@@ -25,6 +25,8 @@ pub(all) struct Foe {
   mut shot_cd : Float
   mut reward : Int
   mut marked : Bool
+
+  fn new() -> Foe
 }
 
 ///|
@@ -38,6 +40,8 @@ pub(all) struct Bolt {
   mut life : Float
   mut dmg : Float
   mut kind : Int
+
+  fn new() -> Bolt
 }
 
 ///|
@@ -51,6 +55,8 @@ pub(all) struct Spark {
   mut life : Float
   mut size : Float
   mut kind : Int
+
+  fn new() -> Spark
 }
 
 ///|
@@ -62,6 +68,8 @@ pub(all) struct Ring {
   mut r : Float
   mut life : Float
   mut kind : Int
+
+  fn new() -> Ring
 }
 
 ///|
@@ -74,6 +82,8 @@ pub(all) struct Echo {
   mut h : Float
   mut life : Float
   mut rot : Float
+
+  fn new() -> Echo
 }
 
 ///|
@@ -92,6 +102,8 @@ pub(all) struct Hero {
   mut hurt_t : Float
   mut aura_t : Float
   mut anim_t : Float
+
+  fn new() -> Hero
 }
 
 ///|
@@ -145,10 +157,13 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates an inactive foe record with default values.
+#deprecated
 pub fn Foe::new() -> Foe {
   {
     active: false,
@@ -170,6 +185,7 @@ pub fn Foe::new() -> Foe {
 
 ///|
 /// Creates an inactive bolt record.
+#deprecated
 pub fn Bolt::new() -> Bolt {
   {
     active: false,
@@ -185,6 +201,7 @@ pub fn Bolt::new() -> Bolt {
 
 ///|
 /// Creates an inactive spark effect record.
+#deprecated
 pub fn Spark::new() -> Spark {
   {
     active: false,
@@ -200,18 +217,21 @@ pub fn Spark::new() -> Spark {
 
 ///|
 /// Creates an inactive ring effect record.
+#deprecated
 pub fn Ring::new() -> Ring {
   { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
 }
 
 ///|
 /// Creates an inactive echo effect record.
+#deprecated
 pub fn Echo::new() -> Echo {
   { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, rot: 0.0 }
 }
 
 ///|
 /// Creates a hero positioned near the shrine with default stats.
+#deprecated
 pub fn Hero::new() -> Hero {
   {
     x: shrine_x(),
@@ -232,6 +252,7 @@ pub fn Hero::new() -> Hero {
 
 ///|
 /// Creates a fresh game state with pooled objects and title defaults.
+#deprecated
 pub fn Game::new() -> Game {
   let bells = Array::makei(bell_count, fn(i) {
     let p = bell_pos(i)
@@ -240,12 +261,12 @@ pub fn Game::new() -> Game {
 
   {
     bells,
-    foes: Array::makei(max_foes, fn(_i) { Foe::new() }),
-    bolts: Array::makei(max_bolts, fn(_i) { Bolt::new() }),
-    sparks: Array::makei(max_sparks, fn(_i) { Spark::new() }),
-    rings: Array::makei(max_rings, fn(_i) { Ring::new() }),
-    echoes: Array::makei(max_echoes, fn(_i) { Echo::new() }),
-    hero: Hero::new(),
+    foes: Array::makei(max_foes, fn(_i) { Foe() }),
+    bolts: Array::makei(max_bolts, fn(_i) { Bolt() }),
+    sparks: Array::makei(max_sparks, fn(_i) { Spark() }),
+    rings: Array::makei(max_rings, fn(_i) { Ring() }),
+    echoes: Array::makei(max_echoes, fn(_i) { Echo() }),
+    hero: Hero(),
     state: Title,
     stage: 1,
     stage_goal: stage_goal_base,
