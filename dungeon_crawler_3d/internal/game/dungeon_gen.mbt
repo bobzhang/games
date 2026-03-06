@@ -43,10 +43,10 @@ pub fn generate_dungeon(game : @types.Game) -> Unit {
   // Ensure at least 2 rooms
   if game.room_count < 2 {
     // Force place rooms
-    let r0 = @types.Room::new(2, 2, 6, 6)
+    let r0 = @types.Room(2, 2, 6, 6)
     game.carve_room(r0)
     game.rooms[0] = r0
-    let r1 = @types.Room::new(20, 20, 6, 6)
+    let r1 = @types.Room(20, 20, 6, 6)
     game.carve_room(r1)
     game.rooms[1] = r1
     game.room_count = 2
@@ -123,7 +123,7 @@ fn @types.Game::try_place_room(game : @types.Game) -> Unit {
       }
     }
     if !overlap {
-      let room = @types.Room::new(x, y, w, h)
+      let room = @types.Room(x, y, w, h)
       game.carve_room(room)
       game.rooms[game.room_count] = room
       game.room_count += 1

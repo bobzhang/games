@@ -271,10 +271,13 @@ pub(all) struct Room {
   mut kind : Int
   mut explored : Bool
   mut enemies_cleared : Bool
+
+  fn new(x : Int, y : Int, w : Int, h : Int) -> Room
 }
 
 ///|
 /// Constructs a room with bounds and default room-state flags.
+#deprecated
 pub fn Room::new(x : Int, y : Int, w : Int, h : Int) -> Room {
   { x, y, w, h, kind: 0, explored: false, enemies_cleared: false }
 }
@@ -321,10 +324,13 @@ pub(all) struct FloorInfo {
   mut cleared : Bool
   mut enemies_killed : Int
   mut enemies_total : Int
+
+  fn new() -> FloorInfo
 }
 
 ///|
 /// Creates an uncleared floor info record.
+#deprecated
 pub fn FloorInfo::new() -> FloorInfo {
   { cleared: false, enemies_killed: 0, enemies_total: 0 }
 }
@@ -505,19 +511,22 @@ pub(all) struct Game {
   // RNG
   mut rng_state : Int
   mut frame_counter : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Constructs a fresh game state with initialized pools and class-select defaults.
+#deprecated
 pub fn Game::new() -> Game {
   let floor_info : Array[FloorInfo] = []
   for i in 0..<max_floors {
-    floor_info.push(FloorInfo::new())
+    floor_info.push(FloorInfo())
     ignore(i)
   }
   let rooms : Array[Room] = []
   for i in 0..<max_rooms {
-    rooms.push(Room::new(0, 0, 0, 0))
+    rooms.push(Room(0, 0, 0, 0))
     ignore(i)
   }
   let inventory : Array[InvItem] = []
