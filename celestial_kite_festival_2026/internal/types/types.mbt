@@ -24,6 +24,8 @@ pub(all) struct SkyObj {
   mut phase : Float
   mut value : Int
   mut flagged : Bool
+
+  fn new() -> SkyObj
 }
 
 ///|
@@ -37,6 +39,8 @@ pub(all) struct Spark {
   mut life : Float
   mut size : Float
   mut kind : Int
+
+  fn new() -> Spark
 }
 
 ///|
@@ -48,6 +52,8 @@ pub(all) struct Halo {
   mut r : Float
   mut life : Float
   mut kind : Int
+
+  fn new() -> Halo
 }
 
 ///|
@@ -60,6 +66,8 @@ pub(all) struct Trail {
   mut w : Float
   mut h : Float
   mut rot : Float
+
+  fn new() -> Trail
 }
 
 ///|
@@ -86,6 +94,8 @@ pub(all) struct Kite {
   mut burst_glow : Float
   mut reel_glow : Float
   mut anim_t : Float
+
+  fn new() -> Kite
 }
 
 ///|
@@ -135,10 +145,13 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a default SkyObj value for a new session.
+#deprecated
 pub fn SkyObj::new() -> SkyObj {
   {
     active: false,
@@ -159,6 +172,7 @@ pub fn SkyObj::new() -> SkyObj {
 
 ///|
 /// Creates a default Spark value for a new session.
+#deprecated
 pub fn Spark::new() -> Spark {
   {
     active: false,
@@ -174,18 +188,21 @@ pub fn Spark::new() -> Spark {
 
 ///|
 /// Creates a default Halo value for a new session.
+#deprecated
 pub fn Halo::new() -> Halo {
   { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
 }
 
 ///|
 /// Creates a default Trail value for a new session.
+#deprecated
 pub fn Trail::new() -> Trail {
   { active: false, x: 0.0, y: 0.0, life: 0.0, w: 0.0, h: 0.0, rot: 0.0 }
 }
 
 ///|
 /// Creates a default Kite value for a new session.
+#deprecated
 pub fn Kite::new() -> Kite {
   {
     x: Float::from_int(screen_w) * 0.5,
@@ -205,13 +222,14 @@ pub fn Kite::new() -> Kite {
 
 ///|
 /// Creates a default Game value for a new session.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    objs: Array::makei(max_objs, fn(_i) { SkyObj::new() }),
-    sparks: Array::makei(max_sparks, fn(_i) { Spark::new() }),
-    halos: Array::makei(max_halos, fn(_i) { Halo::new() }),
-    trails: Array::makei(max_trails, fn(_i) { Trail::new() }),
-    kite: Kite::new(),
+    objs: Array::makei(max_objs, fn(_i) { SkyObj() }),
+    sparks: Array::makei(max_sparks, fn(_i) { Spark() }),
+    halos: Array::makei(max_halos, fn(_i) { Halo() }),
+    trails: Array::makei(max_trails, fn(_i) { Trail() }),
+    kite: Kite(),
     state: Title,
     stage: 1,
     stage_goal: stage_goal_base,
