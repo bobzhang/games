@@ -24,10 +24,13 @@ pub(all) struct Game {
   mut over : Bool
   bag : Array[Int]
   mut bag_pos : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Allocates default game state and empty board buffers.
+#deprecated
 pub fn Game::new() -> Game {
   {
     board: Array::make(board_cols * board_rows, 0),
