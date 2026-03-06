@@ -204,12 +204,12 @@ fn detect_map_target(
   touch_count : Int,
 ) -> (Bool, Int, Int) {
   let sample = @types.sample_pointer(mouse_x, mouse_y, mouse_press, touch_count)
-  if not(sample.0) {
+  if !sample.0 {
     return (false, 0, 0)
   }
 
   let (mx, my, mw, mh) = @types.map_rect()
-  if not(@types.inside_rect(sample.1, sample.2, mx, my, mw, mh)) {
+  if !@types.inside_rect(sample.1, sample.2, mx, my, mw, mh) {
     return (false, 0, 0)
   }
 

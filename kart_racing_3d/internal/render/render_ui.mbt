@@ -625,7 +625,7 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
   // Draw karts
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
-    if not(kart.active) {
+    if !kart.active {
       continue
     }
     let kx = map_x + 10 + ((kart.x - min_x + 5.0) * scale).to_int()
@@ -732,7 +732,7 @@ fn @types.Game::draw_race_results(game : @types.Game) -> Unit {
   // Results table
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
-    if not(kart.active) {
+    if !kart.active {
       continue
     }
     let y = 200 + (kart.place - 1) * 32
@@ -881,7 +881,7 @@ pub fn draw_lap_times(game : @types.Game) -> Unit {
     return
   }
   let kart = game.karts[@types.player_kart]
-  if not(kart.active) {
+  if !kart.active {
     return
   }
   let base_y = 50
@@ -953,7 +953,7 @@ pub fn draw_lap_times(game : @types.Game) -> Unit {
 /// Draws the held powerup indicator box with item name, color, and usage hint.
 pub fn draw_item_indicator(game : @types.Game) -> Unit {
   let kart = game.karts[@types.player_kart]
-  if not(kart.active) {
+  if !kart.active {
     return
   }
   if kart.held_powerup == NoPowerup {
@@ -1330,7 +1330,7 @@ pub fn draw_standings_sidebar(game : @types.Game) -> Unit {
   for p in 1..<=@types.max_karts {
     for i in 0..<@types.max_karts {
       let kart = game.karts[i]
-      if not(kart.active) {
+      if !kart.active {
         continue
       }
       if kart.place != p {

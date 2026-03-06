@@ -174,7 +174,7 @@ fn @types.Game::draw_obj(
   cam_x : Float,
   cam_y : Float,
 ) -> Unit {
-  if not(o.active) {
+  if !o.active {
     return
   }
 
@@ -299,7 +299,7 @@ fn @types.Game::draw_trails(
   cam_y : Float,
 ) -> Unit {
   for t in game.trails {
-    if not(t.active) {
+    if !t.active {
       continue
     }
 
@@ -328,7 +328,7 @@ fn @types.Game::draw_particles(
   cam_y : Float,
 ) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
 

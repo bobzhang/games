@@ -106,7 +106,7 @@ fn @types.Game::burst(
 ///|
 fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 
@@ -358,7 +358,7 @@ fn @types.Game::try_toggle_hook(game : @types.Game) -> Bool {
     return false
   }
 
-  game.hook_extending = not(game.hook_extending)
+  game.hook_extending = !game.hook_extending
   game.hook_target = if game.hook_extending { 240.0 } else { 46.0 }
 
   if game.hook_extending {
@@ -387,7 +387,7 @@ fn @types.Game::try_repair(game : @types.Game) -> Bool {
     ) <=
     180.0 * 180.0
 
-  if not(near_pad) {
+  if !near_pad {
     game.set_msg("Return to rescue pad for repair.", 1.0)
     game.repair_cd = 0.22
     return false
@@ -594,7 +594,7 @@ fn @types.Game::update_hook(game : @types.Game, dt : Float) -> Float {
 
   if game.carrying_idx < 0 && game.hook_len > 82.0 {
     for i in 0..<game.survivors.length() {
-      if not(game.survivors[i].active) || game.survivors[i].carried {
+      if !game.survivors[i].active || game.survivors[i].carried {
         continue
       }
 
@@ -639,7 +639,7 @@ fn @types.Game::update_hook(game : @types.Game, dt : Float) -> Float {
 ///|
 fn @types.Game::update_survivors(game : @types.Game, dt : Float) -> Unit {
   for survivor in game.survivors {
-    if not(survivor.active) {
+    if !survivor.active {
       continue
     }
 
@@ -701,7 +701,7 @@ fn @types.Game::update_hazards(
   let tip_y : Float = @types.hook_tip_y(game)
 
   for hazard in game.hazards {
-    if not(hazard.active) {
+    if !hazard.active {
       continue
     }
 
@@ -807,7 +807,7 @@ fn @types.Game::update_hazards(
 ///|
 fn @types.Game::update_pickups(game : @types.Game, dt : Float) -> Unit {
   for pickup in game.pickups {
-    if not(pickup.active) {
+    if !pickup.active {
       continue
     }
 
@@ -861,7 +861,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
 
     if game.fuel < 40.0 {
       for pickup in game.pickups {
-        if not(pickup.active) || pickup.kind != Fuel {
+        if !pickup.active || pickup.kind != Fuel {
           continue
         }
 
@@ -883,7 +883,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
 
     if best_d2 >= 900000000.0 {
       for survivor in game.survivors {
-        if not(survivor.active) || survivor.carried {
+        if !survivor.active || survivor.carried {
           continue
         }
 

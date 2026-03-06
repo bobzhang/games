@@ -278,7 +278,7 @@ fn add_station(
   name : String,
 ) -> Int {
   for i in 0..<stations.length() {
-    if not(stations[i].active) {
+    if !stations[i].active {
       stations[i].active = true
       stations[i].x = x
       stations[i].y = y
@@ -298,7 +298,7 @@ fn add_station(
 /// Activates the first free segment slot connecting stations `a` and `b` on the given line, and returns its index.
 fn add_segment(segments : Array[Segment], a : Int, b : Int, line : Int) -> Int {
   for i in 0..<segments.length() {
-    if not(segments[i].active) {
+    if !segments[i].active {
       segments[i].active = true
       segments[i].a = a
       segments[i].b = b
@@ -326,7 +326,7 @@ fn add_train(
   color_id : Int,
 ) -> Int {
   for i in 0..<trains.length() {
-    if not(trains[i].active) {
+    if !trains[i].active {
       trains[i].active = true
       trains[i].route_id = route_id
       trains[i].route_pos = route_pos
@@ -353,7 +353,7 @@ fn add_particle(
   kind : Int,
 ) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       part.active = true
       part.kind = kind
       part.x = x
@@ -388,7 +388,7 @@ fn burst_particles(
 /// Advances all active particles by `dt` seconds, applying drag and fading them out when their life reaches zero.
 fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
 
@@ -410,7 +410,7 @@ fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
 /// Renders all active particles as circles sized by their remaining life.
 fn draw_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
 
@@ -465,7 +465,7 @@ fn next_route_pos(route : Array[Int], pos : Int, dir : Int) -> (Int, Int) {
 /// Returns the index of the active segment connecting stations `a` and `b` (in either order), or -1 if not found.
 fn find_segment(segments : Array[Segment], a : Int, b : Int) -> Int {
   for i in 0..<segments.length() {
-    if not(segments[i].active) {
+    if !segments[i].active {
       continue
     }
     let x : Int = segments[i].a
@@ -584,7 +584,7 @@ fn update_stations(stations : Array[Station], dt : Float, tier : Int) -> Float {
   let mut total_strain : Float = 0.0
 
   for station in stations {
-    if not(station.active) {
+    if !station.active {
       continue
     }
 
@@ -628,7 +628,7 @@ fn update_segments(
   let mut health_sum : Float = 0.0
 
   for segment in segments {
-    if not(segment.active) {
+    if !segment.active {
       continue
     }
 
@@ -699,7 +699,7 @@ fn update_trains(
   let mut boarded_gain : Int = 0
 
   for train in trains {
-    if not(train.active) {
+    if !train.active {
       continue
     }
 
@@ -796,7 +796,7 @@ fn nearest_faulty_segment(
   let mut best_y : Float = y
 
   for i in 0..<segments.length() {
-    if not(segments[i].active) || segments[i].fault_t <= 0.0 {
+    if !segments[i].active || segments[i].fault_t <= 0.0 {
       continue
     }
 
@@ -831,7 +831,7 @@ fn apply_repair(
   let mut repaired : Int = 0
 
   for segment in segments {
-    if not(segment.active) {
+    if !segment.active {
       continue
     }
 
@@ -955,7 +955,7 @@ fn draw_segments(
   t : Float,
 ) -> Unit {
   for i in 0..<segments.length() {
-    if not(segments[i].active) {
+    if !segments[i].active {
       continue
     }
 
@@ -1010,7 +1010,7 @@ fn draw_segments(
 /// Draws all active stations as line-coloured circles scaled by crowd size, with name and crowd count labels.
 fn draw_stations(stations : Array[Station]) -> Unit {
   for station in stations {
-    if not(station.active) {
+    if !station.active {
       continue
     }
 
@@ -1075,7 +1075,7 @@ fn draw_trains(
   route1 : Array[Int],
 ) -> Unit {
   for train in trains {
-    if not(train.active) {
+    if !train.active {
       continue
     }
 
@@ -1271,7 +1271,7 @@ fn draw_button(
   enabled : Bool,
   hover : Bool,
 ) -> Unit {
-  let fill = if not(enabled) {
+  let fill = if !enabled {
     @raylib.Color::new(68, 76, 92, 212)
   } else if hover {
     @raylib.Color::new(112, 154, 236, 246)
@@ -1439,7 +1439,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -1666,7 +1666,7 @@ fn main {
 
         for _i in 0..<shock_n {
           let sid : Int = @raylib.get_random_value(0, segments.length() - 1)
-          if not(segments[sid].active) {
+          if !segments[sid].active {
             continue
           }
           segments[sid].health = segments[sid].health - randf(6.0, 14.0)

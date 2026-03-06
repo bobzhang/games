@@ -352,7 +352,7 @@ fn @types.Game::update_world_intro(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     p.life -= dt
@@ -373,7 +373,7 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_score_flies(game : @types.Game, dt : Float) -> Unit {
   for sf in game.score_flies {
-    if not(sf.active) {
+    if !sf.active {
       continue
     }
     sf.timer += dt
@@ -425,7 +425,7 @@ fn @types.Game::update_camera(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
   for e in game.enemies {
-    if not(e.active) {
+    if !e.active {
       continue
     }
     e.anim_timer += dt
@@ -548,7 +548,7 @@ fn @types.Game::update_enemy_turret(
 ///|
 fn @types.Game::update_powerups(game : @types.Game, dt : Float) -> Unit {
   for pu in game.powerups {
-    if not(pu.active) || pu.collected {
+    if !pu.active || pu.collected {
       continue
     }
     pu.bob_timer += dt
@@ -634,7 +634,7 @@ fn @types.Game::expire_powerup(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::update_projectiles(game : @types.Game, dt : Float) -> Unit {
   for proj in game.projectiles {
-    if not(proj.active) {
+    if !proj.active {
       continue
     }
     proj.life -= dt
@@ -676,7 +676,7 @@ fn @types.Game::update_projectiles(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_hazards(game : @types.Game, dt : Float) -> Unit {
   for h in game.hazards {
-    if not(h.active) {
+    if !h.active {
       continue
     }
     h.timer += dt
@@ -728,11 +728,11 @@ fn @types.Game::check_hazard_collision(game : @types.Game) -> Unit {
     return
   }
   for h in game.hazards {
-    if not(h.active) {
+    if !h.active {
       continue
     }
     // Fire jets only hit when on
-    if h.kind == @types.hazard_fire_jet && not(h.on) {
+    if h.kind == @types.hazard_fire_jet && !h.on {
       continue
     }
     if @types.sphere_aabb(
@@ -776,7 +776,7 @@ fn @types.Game::check_enemy_collision(game : @types.Game) -> Unit {
     return
   }
   for e in game.enemies {
-    if not(e.active) || e.stunned {
+    if !e.active || e.stunned {
       continue
     }
     let dist = @types.dist3d(game.px, game.py, game.pz, e.x, e.y, e.z)
@@ -846,7 +846,7 @@ fn @types.Game::check_enemy_collision(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::check_checkpoint_collision(game : @types.Game) -> Unit {
   for cp in game.checkpoints {
-    if not(cp.active) || cp.activated {
+    if !cp.active || cp.activated {
       continue
     }
     let dist = @types.dist3d(game.px, game.py, game.pz, cp.x, cp.y, cp.z)

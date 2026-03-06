@@ -34,7 +34,7 @@ struct Mine {
 /// Spawns a new relic at a random underwater position in the first available slot.
 fn spawn_relic(rs : Array[Relic]) -> Unit {
   for rs_elem in rs {
-    if not(rs_elem.alive) {
+    if !rs_elem.alive {
       rs_elem.alive = true
       rs_elem.x = Float::from_int(@raylib.get_random_value(110, sw - 110))
       rs_elem.y = Float::from_int(@raylib.get_random_value(220, sh - 70))
@@ -49,7 +49,7 @@ fn spawn_relic(rs : Array[Relic]) -> Unit {
 /// Spawns a new mine at a random underwater position in the first available slot.
 fn spawn_mine(ms : Array[Mine]) -> Unit {
   for ms_elem in ms {
-    if not(ms_elem.alive) {
+    if !ms_elem.alive {
       ms_elem.alive = true
       ms_elem.x = Float::from_int(@raylib.get_random_value(120, sw - 120))
       ms_elem.y = Float::from_int(@raylib.get_random_value(200, sh - 80))
@@ -112,7 +112,7 @@ fn main {
     spawn_mine(mines)
   }
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -141,7 +141,7 @@ fn main {
       }
     }
 
-    if not(over) {
+    if !over {
       timer = timer - dt
       if timer <= 0.0 {
         timer = 0.0
@@ -223,7 +223,7 @@ fn main {
       }
 
       for mine in mines {
-        if not(mine.alive) {
+        if !mine.alive {
           continue
         }
 
@@ -249,7 +249,7 @@ fn main {
       }
 
       for relic in relics {
-        if not(relic.alive) {
+        if !relic.alive {
           continue
         }
         let dx = relic.x - px

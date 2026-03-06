@@ -167,7 +167,7 @@ fn @types.Game::draw_map(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_sites(game : @types.Game) -> Unit {
   for i in 0..<game.site_count {
-    if not(game.sites[i].active) {
+    if !game.sites[i].active {
       continue
     }
 
@@ -872,7 +872,7 @@ fn @types.Game::draw_result_scene(game : @types.Game) -> Unit {
     },
   )
 
-  if not(can_next) {
+  if !can_next {
     draw_center_text(
       "Next mission unlocks on success",
       612,

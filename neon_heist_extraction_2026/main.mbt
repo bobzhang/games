@@ -304,7 +304,7 @@ fn bounce_from_walls(
   let mut nvy : Float = vy
 
   for wall in walls {
-    if not(wall.active) {
+    if !wall.active {
       continue
     }
 
@@ -459,7 +459,7 @@ fn add_guard(
   wave : Int,
 ) -> Bool {
   for guard_val in guards {
-    if not(guard_val.active) {
+    if !guard_val.active {
       guard_val.active = true
       guard_val.kind = kind
       guard_val.x = x
@@ -496,7 +496,7 @@ fn add_bullet(
   life : Float,
 ) -> Bool {
   for bullet in bullets {
-    if not(bullet.active) {
+    if !bullet.active {
       bullet.active = true
       bullet.team = team
       bullet.kind = kind
@@ -526,7 +526,7 @@ fn add_camera(
   gain : Float,
 ) -> Bool {
   for camera in cameras {
-    if not(camera.active) {
+    if !camera.active {
       camera.active = true
       camera.x = x
       camera.y = y
@@ -548,7 +548,7 @@ fn add_camera(
 /// Activates the first free terminal slot at position `(x, y)` with unhacked state and zero hack progress.
 fn add_terminal(terminals : Array[Terminal], x : Float, y : Float) -> Bool {
   for terminal in terminals {
-    if not(terminal.active) {
+    if !terminal.active {
       terminal.active = true
       terminal.x = x
       terminal.y = y
@@ -564,7 +564,7 @@ fn add_terminal(terminals : Array[Terminal], x : Float, y : Float) -> Bool {
 /// Activates the first free vault slot at position `(x, y)` in a closed, unlooted state.
 fn add_vault(vaults : Array[Vault], x : Float, y : Float) -> Bool {
   for vault in vaults {
-    if not(vault.active) {
+    if !vault.active {
       vault.active = true
       vault.x = x
       vault.y = y
@@ -589,7 +589,7 @@ fn add_loot(
   life : Float,
 ) -> Bool {
   for loot_elem in loot {
-    if not(loot_elem.active) {
+    if !loot_elem.active {
       loot_elem.active = true
       loot_elem.kind = kind
       loot_elem.x = x
@@ -615,7 +615,7 @@ fn add_wall(
   h : Float,
 ) -> Bool {
   for wall in walls {
-    if not(wall.active) {
+    if !wall.active {
       wall.active = true
       wall.x = x
       wall.y = y
@@ -640,7 +640,7 @@ fn add_particle(
   life : Float,
 ) -> Bool {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       part.active = true
       part.kind = kind
       part.x = x
@@ -1128,7 +1128,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -1397,7 +1397,7 @@ fn main {
         burst(particles, player.x, player.y, 80, 0.34, 3)
 
         for camera in cameras {
-          if not(camera.active) {
+          if !camera.active {
             continue
           }
           if dist2(player.x, player.y, camera.x, camera.y) <= 330.0 * 330.0 {
@@ -1406,7 +1406,7 @@ fn main {
         }
 
         for guard_val in guards {
-          if not(guard_val.active) {
+          if !guard_val.active {
             continue
           }
           if dist2(player.x, player.y, guard_val.x, guard_val.y) <=
@@ -1522,7 +1522,7 @@ fn main {
       let mut hacked_this_frame : Bool = false
       if hack_hold {
         for terminal in terminals {
-          if not(terminal.active) || terminal.hacked {
+          if !terminal.active || terminal.hacked {
             continue
           }
           if dist2(player.x, player.y, terminal.x, terminal.y) <= 62.0 * 62.0 {
@@ -1541,9 +1541,9 @@ fn main {
         }
       }
 
-      if not(hacked_this_frame) {
+      if !hacked_this_frame {
         for terminal in terminals {
-          if terminal.active && not(terminal.hacked) {
+          if terminal.active && !terminal.hacked {
             terminal.progress = clampf(
               terminal.progress - dt * 10.0,
               0.0,
@@ -1564,7 +1564,7 @@ fn main {
 
       // vault spawn
       for vault in vaults {
-        if not(vault.active) || not(vault.open) || vault.spawned {
+        if !vault.active || !vault.open || vault.spawned {
           continue
         }
         if dist2(player.x, player.y, vault.x, vault.y) <= 100.0 * 100.0 {
@@ -1591,7 +1591,7 @@ fn main {
 
       // camera update/detection
       for camera in cameras {
-        if not(camera.active) {
+        if !camera.active {
           continue
         }
 
@@ -1632,7 +1632,7 @@ fn main {
 
       // guards update
       for guard_val in guards {
-        if not(guard_val.active) {
+        if !guard_val.active {
           continue
         }
 
@@ -1867,7 +1867,7 @@ fn main {
 
       // loot update
       for loot_elem in loot {
-        if not(loot_elem.active) {
+        if !loot_elem.active {
           continue
         }
 
@@ -1910,7 +1910,7 @@ fn main {
 
       // bullet update + collisions
       for bullet in bullets {
-        if not(bullet.active) {
+        if !bullet.active {
           continue
         }
 
@@ -1934,7 +1934,7 @@ fn main {
         // wall hit
         let mut blocked : Bool = false
         for w in 0..<walls.length() {
-          if not(walls[w].active) {
+          if !walls[w].active {
             continue
           }
           if circle_rect_hit(
@@ -1962,7 +1962,7 @@ fn main {
             if consumed {
               continue
             }
-            if not(guard_val.active) {
+            if !guard_val.active {
               continue
             }
             let rr : Float = bullet.r + guard_radius(guard_val.kind)
@@ -1976,7 +1976,7 @@ fn main {
 
           if bullet.active {
             for camera in cameras {
-              if not(camera.active) {
+              if !camera.active {
                 continue
               }
               if dist2(bullet.x, bullet.y, camera.x, camera.y) <=
@@ -2002,7 +2002,7 @@ fn main {
 
       // particle update
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
         particle.life = particle.life - dt
@@ -2120,7 +2120,7 @@ fn main {
 
     // walls
     for wall in walls {
-      if not(wall.active) {
+      if !wall.active {
         continue
       }
       @raylib.draw_rectangle(
@@ -2141,7 +2141,7 @@ fn main {
 
     // terminals
     for terminal in terminals {
-      if not(terminal.active) {
+      if !terminal.active {
         continue
       }
       let col = if terminal.hacked {
@@ -2164,7 +2164,7 @@ fn main {
         @raylib.Color::new(232, 240, 250, 180),
       )
 
-      if not(terminal.hacked) {
+      if !terminal.hacked {
         let prog_fill : Int = (clampf(terminal.progress / 100.0, 0.0, 1.0) *
         40.0).to_int()
         @raylib.draw_rectangle(
@@ -2186,7 +2186,7 @@ fn main {
 
     // vaults
     for vault in vaults {
-      if not(vault.active) {
+      if !vault.active {
         continue
       }
       let col = if vault.open {
@@ -2212,7 +2212,7 @@ fn main {
 
     // cameras + view cone
     for camera in cameras {
-      if not(camera.active) {
+      if !camera.active {
         continue
       }
 
@@ -2265,7 +2265,7 @@ fn main {
 
     // loot
     for loot_elem in loot {
-      if not(loot_elem.active) {
+      if !loot_elem.active {
         continue
       }
       let col = if loot_elem.kind == 0 {
@@ -2285,7 +2285,7 @@ fn main {
 
     // guards
     for guard_val in guards {
-      if not(guard_val.active) {
+      if !guard_val.active {
         continue
       }
       if guard_val.kind == 0 {
@@ -2330,7 +2330,7 @@ fn main {
 
     // bullets
     for bullet in bullets {
-      if not(bullet.active) {
+      if !bullet.active {
         continue
       }
       let col = if bullet.team == 1 {
@@ -2380,7 +2380,7 @@ fn main {
 
     // particles
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
       let alpha : Int = (clampf(particle.life / 0.84, 0.0, 1.0) * 255.0).to_int()

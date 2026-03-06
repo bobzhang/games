@@ -557,11 +557,11 @@ fn trace_laser(game : Game, start_gx : Int, start_gy : Int, dir : Dir) -> Unit {
     // Trace in current direction
     let mut hit_something = false
     let mut steps = 0
-    while not(hit_something) && steps < grid_w + grid_h {
+    while !hit_something && steps < grid_w + grid_h {
       cx = cx + dx
       cy = cy + dy
       steps = steps + 1
-      if not(in_bounds(cx, cy)) {
+      if !in_bounds(cx, cy) {
         // Hit boundary - record segment and stop
         add_laser_segment(
           game,
@@ -618,7 +618,7 @@ fn trace_laser(game : Game, start_gx : Int, start_gy : Int, dir : Dir) -> Unit {
         hit_something = true
       }
     }
-    if not(hit_something) {
+    if !hit_something {
       return
     }
   }
@@ -653,7 +653,7 @@ fn add_laser_segment(
 pub fn resolve_conveyors(game : Game) -> Unit {
   // Process each entity on a conveyor
   for e in game.entities {
-    if not(e.active) || e.falling {
+    if !e.active || e.falling {
       continue
     }
     let tile = get_tile(game, e.gx, e.gy)
@@ -702,12 +702,12 @@ pub fn ice_slide_entity(game : Game, entity_idx : Int, dir : Dir) -> Unit {
   while sliding {
     let nx = e.gx + dx
     let ny = e.gy + dy
-    if not(in_bounds(nx, ny)) {
+    if !in_bounds(nx, ny) {
       sliding = false
     } else {
       let target_tile = get_tile(game, nx, ny)
       let target_entity = entity_at(game, nx, ny)
-      if not(is_pushable_onto(target_tile)) || target_entity >= 0 {
+      if !is_pushable_onto(target_tile) || target_entity >= 0 {
         sliding = false
       } else {
         e.gx = nx
@@ -753,7 +753,7 @@ pub fn update_gates(game : Game) -> Unit {
           color_gate_g,
           color_gate_b,
         )
-      } else if tile == TileGateOpen && not(plates_ok) {
+      } else if tile == TileGateOpen && !plates_ok {
         // Only close if no entity standing on it
         let eidx = entity_at(game, gx, gy)
         if eidx < 0 {

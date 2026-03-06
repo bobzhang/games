@@ -78,7 +78,7 @@ fn main {
 
   roll_prices(prices, day)
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     if @raylib.is_key_pressed(@raylib.KeyR) {
       day = 1
       fuel = 12
@@ -97,7 +97,7 @@ fn main {
       roll_prices(prices, day)
     }
 
-    if not(won) && not(lost) {
+    if !won && !lost {
       if @raylib.is_key_pressed(@raylib.KeyUp) {
         selected_good = (selected_good - 1).clamp(min=0, max=goods_count - 1)
       }

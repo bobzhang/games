@@ -148,7 +148,7 @@ fn emit_particle(
   kind : Int,
 ) -> Unit {
   for i in 0..<particles.length() {
-    if not(particles[i].active) {
+    if !particles[i].active {
       particles[i] = { active: true, x, y, vx, vy, size, t: 0.0, life, kind }
       break
     }
@@ -203,7 +203,7 @@ fn spawn_projectile(
   life : Float,
 ) -> Unit {
   for i in 0..<projectiles.length() {
-    if not(projectiles[i].active) {
+    if !projectiles[i].active {
       projectiles[i] = {
         active: true,
         kind,
@@ -229,7 +229,7 @@ fn spawn_orb(
   value : Int,
 ) -> Unit {
   for i in 0..<orbs.length() {
-    if not(orbs[i].active) {
+    if !orbs[i].active {
       orbs[i] = { active: true, kind, x, y, value, t: 0.0, life: 22.0 }
       break
     }
@@ -244,7 +244,7 @@ fn spawn_enemy(
   center_y : Float,
 ) -> Unit {
   for i in 0..<enemies.length() {
-    if not(enemies[i].active) {
+    if !enemies[i].active {
       let edge : Int = @raylib.get_random_value(0, 3)
       let kind : Int = if @raylib.get_random_value(0, 100) < 25 + level * 6 {
         1
@@ -343,7 +343,7 @@ fn draw_bar(
 
 ///|
 fn draw_touch_controls(show : Bool) -> Unit {
-  if not(show) {
+  if !show {
     return
   }
 
@@ -600,7 +600,7 @@ fn main {
 
   reset_round(level)
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -868,7 +868,7 @@ fn main {
         mage.frost_cd = 4.8
         burst_particles(particles, mage.x, mage.y, 52, 150.0, 1)
         for enemy in enemies {
-          if not(enemy.active) {
+          if !enemy.active {
             continue
           }
           let d2 : Float = dist2(mage.x, mage.y, enemy.x, enemy.y)
@@ -887,7 +887,7 @@ fn main {
           let mut best : Int = -1
           let mut best_d2 : Float = 99999999.0
           for i in 0..<enemies.length() {
-            if not(enemies[i].active) {
+            if !enemies[i].active {
               continue
             }
             let d2 : Float = dist2(mage.x, mage.y, enemies[i].x, enemies[i].y)
@@ -929,7 +929,7 @@ fn main {
       }
 
       for enemy in enemies {
-        if not(enemy.active) {
+        if !enemy.active {
           continue
         }
 
@@ -1029,7 +1029,7 @@ fn main {
       }
 
       for projectile in projectiles {
-        if not(projectile.active) {
+        if !projectile.active {
           continue
         }
 
@@ -1052,7 +1052,7 @@ fn main {
 
         if projectile.from_player {
           for enemy in enemies {
-            if not(enemy.active) {
+            if !enemy.active {
               continue
             }
             if dist2(projectile.x, projectile.y, enemy.x, enemy.y) <=
@@ -1070,7 +1070,7 @@ fn main {
       }
 
       for enemy in enemies {
-        if not(enemy.active) {
+        if !enemy.active {
           continue
         }
 
@@ -1111,7 +1111,7 @@ fn main {
       }
 
       for orb in orbs {
-        if not(orb.active) {
+        if !orb.active {
           continue
         }
 
@@ -1153,7 +1153,7 @@ fn main {
       }
 
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
         particle.t = particle.t + dt
@@ -1227,7 +1227,7 @@ fn main {
     }
 
     for orb in orbs {
-      if not(orb.active) {
+      if !orb.active {
         continue
       }
       let ox : Float = orb.x - cam_x + shake_x
@@ -1254,7 +1254,7 @@ fn main {
     }
 
     for enemy in enemies {
-      if not(enemy.active) {
+      if !enemy.active {
         continue
       }
       let ex : Float = enemy.x - cam_x + shake_x
@@ -1302,7 +1302,7 @@ fn main {
     }
 
     for projectile in projectiles {
-      if not(projectile.active) {
+      if !projectile.active {
         continue
       }
       let px : Float = projectile.x - cam_x + shake_x
@@ -1359,7 +1359,7 @@ fn main {
     )
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
       let px : Float = particle.x - cam_x + shake_x

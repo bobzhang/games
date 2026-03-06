@@ -31,7 +31,7 @@ fn spawn_train(
   cargo : Int,
 ) -> Unit {
   for train in trains {
-    if not(train.alive) {
+    if !train.alive {
       train.alive = true
       train.x = if from_left { 80.0 } else { Float::from_int(sw - 80) }
       train.lane = lane
@@ -63,7 +63,7 @@ fn apply_gate(train : Train, gate_i : Int, enabled : Bool) -> Unit {
   }
   train.gate_mask = train.gate_mask | bit
 
-  if not(enabled) {
+  if !enabled {
     return
   }
 
@@ -151,7 +151,7 @@ fn main {
   let mut over = false
   let mut msg = "Keys 1/2/3 toggle switches, R restart"
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -172,15 +172,15 @@ fn main {
       msg = "Shift restarted. Route red/blue cargo correctly."
     }
 
-    if not(over) {
+    if !over {
       if @raylib.is_key_pressed(@raylib.KeyOne) {
-        gate0 = not(gate0)
+        gate0 = !gate0
       }
       if @raylib.is_key_pressed(@raylib.KeyTwo) {
-        gate1 = not(gate1)
+        gate1 = !gate1
       }
       if @raylib.is_key_pressed(@raylib.KeyThree) {
-        gate2 = not(gate2)
+        gate2 = !gate2
       }
 
       spawn_tick = spawn_tick + dt
@@ -193,7 +193,7 @@ fn main {
       }
 
       for train in trains {
-        if not(train.alive) {
+        if !train.alive {
           continue
         }
 
@@ -241,11 +241,11 @@ fn main {
 
       // Collision check
       for i in 0..<trains.length() {
-        if not(trains[i].alive) {
+        if !trains[i].alive {
           continue
         }
         for j in (i + 1)..<trains.length() {
-          if not(trains[j].alive) {
+          if !trains[j].alive {
             continue
           }
           if trains[i].lane == trains[j].lane {

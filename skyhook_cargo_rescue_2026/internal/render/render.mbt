@@ -195,7 +195,7 @@ fn survivor_color(s : @types.Survivor) -> @raylib.Color {
 
 ///|
 fn draw_survivor(s : @types.Survivor, ox : Int, oy : Int) -> Unit {
-  if not(s.active) {
+  if !s.active {
     return
   }
 
@@ -233,7 +233,7 @@ fn hazard_color(kind : @types.HazardKind) -> @raylib.Color {
 
 ///|
 fn draw_hazard(h : @types.Hazard, ox : Int, oy : Int) -> Unit {
-  if not(h.active) {
+  if !h.active {
     return
   }
 
@@ -332,7 +332,7 @@ fn pickup_color(kind : @types.PickupKind) -> @raylib.Color {
 
 ///|
 fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
-  if not(p.active) {
+  if !p.active {
     return
   }
 
@@ -390,7 +390,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
 ///|
 fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 

@@ -141,7 +141,7 @@ fn @types.Game::draw_lane(game : @types.Game) -> (Int, Int) {
 ///|
 /// Draws an aim line and target circle projected from the ball in the current aim direction.
 fn @types.Game::draw_aim_guide(game : @types.Game, sx : Int, sy : Int) -> Unit {
-  if not(game.can_throw) {
+  if !game.can_throw {
     return
   }
 
@@ -258,7 +258,7 @@ fn @types.Game::draw_ball(game : @types.Game, sx : Int, sy : Int) -> Unit {
 /// Renders all active spark particles with color and alpha based on kind and remaining lifetime.
 fn @types.Game::draw_sparks(game : @types.Game, sx : Int, sy : Int) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 

@@ -276,7 +276,7 @@ fn spawn_particle(
       continue
     }
 
-    if not(ps_elem.active) {
+    if !ps_elem.active {
       ps_elem.active = true
       ps_elem.x = x
       ps_elem.y = y
@@ -353,7 +353,7 @@ fn setup_markers(ms : Array[Marker]) -> Int {
 fn spawn_traffic(ts : Array[Traffic], wave : Int) -> Bool {
   let mut slot = -1
   for i in 0..<ts.length() {
-    if slot < 0 && not(ts[i].active) {
+    if slot < 0 && !ts[i].active {
       slot = i
     }
   }
@@ -440,7 +440,7 @@ fn spawn_passenger(
 ) -> Bool {
   let mut slot = -1
   for i in 0..<ps.length() {
-    if slot < 0 && not(ps[i].active) {
+    if slot < 0 && !ps[i].active {
       slot = i
     }
   }
@@ -484,7 +484,7 @@ fn spawn_fuel(
 ) -> Bool {
   let mut slot = -1
   for i in 0..<fs.length() {
-    if slot < 0 && not(fs[i].active) {
+    if slot < 0 && !fs[i].active {
       slot = i
     }
   }
@@ -646,7 +646,7 @@ fn main {
 
   reset_game()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -768,7 +768,7 @@ fn main {
       taxi.vy = taxi.vy + ay * dt
 
       let mut drag : Float = 2.7
-      if not(road_hit(taxi.x, taxi.y)) {
+      if !road_hit(taxi.x, taxi.y) {
         drag = 4.3
       }
       taxi.vx = taxi.vx * (Float::from_int(1) - dt * drag)
@@ -806,7 +806,7 @@ fn main {
         burst(particles, taxi.x, taxi.y, 16, 0.26, 2)
 
         for traffic_elem in traffic {
-          if not(traffic_elem.active) {
+          if !traffic_elem.active {
             continue
           }
 
@@ -850,7 +850,7 @@ fn main {
       }
 
       for traffic_elem in traffic {
-        if not(traffic_elem.active) {
+        if !traffic_elem.active {
           continue
         }
 
@@ -900,7 +900,7 @@ fn main {
       }
 
       for i in 0..<passengers.length() {
-        if not(passengers[i].active) {
+        if !passengers[i].active {
           continue
         }
 
@@ -968,7 +968,7 @@ fn main {
       }
 
       for i in 0..<fuels.length() {
-        if not(fuels[i].active) {
+        if !fuels[i].active {
           continue
         }
 
@@ -992,7 +992,7 @@ fn main {
       }
 
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
 
@@ -1090,7 +1090,7 @@ fn main {
     }
 
     for fuel in fuels {
-      if not(fuel.active) {
+      if !fuel.active {
         continue
       }
       let blink = if (fuel.t * 6.0).to_int() % 2 == 0 { 255 } else { 180 }
@@ -1110,7 +1110,7 @@ fn main {
     }
 
     for passenger in passengers {
-      if not(passenger.active) {
+      if !passenger.active {
         continue
       }
 
@@ -1151,7 +1151,7 @@ fn main {
     }
 
     for traffic_elem in traffic {
-      if not(traffic_elem.active) {
+      if !traffic_elem.active {
         continue
       }
 
@@ -1182,7 +1182,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 

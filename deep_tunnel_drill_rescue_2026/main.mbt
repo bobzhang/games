@@ -273,7 +273,7 @@ fn add_particle(
   kind : Int,
 ) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       part.active = true
       part.kind = kind
       part.x = x
@@ -308,7 +308,7 @@ fn burst_particles(
 /// Advances all active particles by dt, applying drag, gravity, and deactivating expired ones.
 fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
 
@@ -330,7 +330,7 @@ fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
 /// Draws all active particles as colored circles sized by remaining life.
 fn draw_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
 
@@ -536,7 +536,7 @@ fn drop_bomb(
     for ox in -2..<=2 {
       let tx : Int = gx + ox
       let ty : Int = gy + oy
-      if not(in_bounds(tx, ty)) {
+      if !in_bounds(tx, ty) {
         continue
       }
 
@@ -1273,7 +1273,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -1429,7 +1429,7 @@ fn main {
       nx = clampf(nx, world_l + 8.0, world_r - 8.0)
       let (rx, _ry, dug_x) = try_move_axis(player, tiles, nx, ny, parts)
       player.x = rx
-      if not(dug_x) && (move_l || move_r) {
+      if !dug_x && (move_l || move_r) {
         player.fuel = player.fuel - dt * 0.08
       }
 
@@ -1438,7 +1438,7 @@ fn main {
       ny = clampf(ny, world_t + 8.0, world_b - 8.0)
       let (_rx2, ry2, dug_y) = try_move_axis(player, tiles, nx, ny, parts)
       player.y = ry2
-      if not(dug_y) && (move_u || move_d) {
+      if !dug_y && (move_u || move_d) {
         player.fuel = player.fuel - dt * 0.08
       }
 

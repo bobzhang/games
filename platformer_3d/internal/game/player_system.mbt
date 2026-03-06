@@ -38,7 +38,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   // Dash mechanic
   if @raylib.is_key_pressed(@raylib.KeyLeftShift) &&
     game.dash_cooldown_timer <= 0.0 &&
-    not(game.dashing) {
+    !game.dashing {
     if input_len > 0.01 {
       game.dashing = true
       game.dash_timer = @types.dash_duration
@@ -156,7 +156,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   // Wall slide detection
   game.wall_slide = false
   game.can_wall_jump = false
-  if not(game.grounded) && game.vy < 0.0 {
+  if !game.grounded && game.vy < 0.0 {
     game.check_wall_slide()
   }
 
@@ -205,8 +205,8 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
     )
   } else if game.jump_buffer_timer > 0.0 &&
     game.has_double_jump &&
-    not(game.double_jumped) &&
-    not(game.grounded) &&
+    !game.double_jumped &&
+    !game.grounded &&
     game.coyote_timer <= 0.0 {
     // Double jump
     game.vy = @types.double_jump_force
@@ -280,7 +280,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   game.resolve_platform_collisions()
 
   // Landing squash animation
-  if game.grounded && not(was_grounded) && game.vy <= 0.0 {
+  if game.grounded && !was_grounded && game.vy <= 0.0 {
     game.anim_land_squash = 0.3
     if game.vy < -5.0 {
       @types.spawn_particles(
@@ -323,7 +323,7 @@ fn @types.Game::check_wall_slide(game : @types.Game) -> Unit {
   let check_dist : Float = 0.15
   // Check left and right walls
   for plat in game.platforms {
-    if not(plat.active) {
+    if !plat.active {
       continue
     }
     if plat.kind == @types.plat_bouncy || plat.kind == @types.plat_ice {
@@ -364,11 +364,11 @@ fn @types.Game::check_wall_slide(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::apply_conveyor_force(game : @types.Game, dt : Float) -> Unit {
-  if not(game.grounded) {
+  if !game.grounded {
     return
   }
   for plat in game.platforms {
-    if not(plat.active) {
+    if !plat.active {
       continue
     }
     if plat.kind != @types.plat_conveyor_l &&
@@ -399,7 +399,7 @@ fn @types.Game::pull_collectibles_magnet(
 ) -> Unit {
   let mag_range = @types.powerup_magnet_range
   for c in game.collectibles {
-    if not(c.active) || c.collected {
+    if !c.active || c.collected {
       continue
     }
     let dist = @types.dist3d(game.px, game.py, game.pz, c.x, c.y, c.z)
@@ -419,11 +419,11 @@ fn @types.Game::resolve_platform_collisions(game : @types.Game) -> Unit {
   let pr = @types.player_radius
   let ph = @types.player_height
   for plat in game.platforms {
-    if not(plat.active) {
+    if !plat.active {
       continue
     }
     // Phasing platforms
-    if plat.kind == @types.plat_phasing && not(plat.phase_visible) {
+    if plat.kind == @types.plat_phasing && !plat.phase_visible {
       continue
     }
     // AABB check: player as box centered at (px, py, pz) with size (pr*2, ph, pr*2)
@@ -485,12 +485,12 @@ fn @types.Game::resolve_platform_collisions(game : @types.Game) -> Unit {
             game.on_ice = true
           }
           // Falling platform trigger
-          if plat.kind == @types.plat_falling && not(plat.touched) {
+          if plat.kind == @types.plat_falling && !plat.touched {
             plat.touched = true
             plat.fall_timer = @types.fall_delay
           }
           // Crumbling platform trigger
-          if plat.kind == @types.plat_crumbling && not(plat.crumbling) {
+          if plat.kind == @types.plat_crumbling && !plat.crumbling {
             plat.crumbling = true
             plat.crumble_timer = @types.crumble_time
           }
@@ -551,7 +551,7 @@ fn @types.Game::carry_player_on_platform(
 ///|
 fn @types.Game::update_platforms(game : @types.Game, dt : Float) -> Unit {
   for plat in game.platforms {
-    if not(plat.active) {
+    if !plat.active {
       continue
     }
     // Moving platforms
@@ -577,7 +577,7 @@ fn @types.Game::update_platforms(game : @types.Game, dt : Float) -> Unit {
         )
         plat.x = plat.base_x + shake
         plat.z = plat.base_z + shake
-      } else if not(plat.falling) {
+      } else if !plat.falling {
         plat.falling = true
         plat.x = plat.base_x
         plat.z = plat.base_z
@@ -632,7 +632,7 @@ fn @types.Game::update_platforms(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_collectibles(game : @types.Game, dt : Float) -> Unit {
   for c in game.collectibles {
-    if not(c.active) || c.collected {
+    if !c.active || c.collected {
       continue
     }
     c.bob_timer += dt

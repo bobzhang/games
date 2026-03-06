@@ -5,14 +5,14 @@ fn @types.Game::damage_tile_at_point(
   world_y : Float,
   power : Int,
 ) -> Bool {
-  if not(@world.point_in_world(world_x, world_y)) {
+  if !@world.point_in_world(world_x, world_y) {
     return true
   }
 
   let tx = @types.world_x_to_tile(world_x)
   let ty = @types.world_y_to_tile(world_y)
   let tile = @types.get_tile(game, tx, ty)
-  if not(@types.is_tile_solid_for_bullet(tile)) {
+  if !@types.is_tile_solid_for_bullet(tile) {
     return false
   }
 

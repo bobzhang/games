@@ -194,7 +194,7 @@ fn hazard_color(kind : @types.HazardKind) -> @raylib.Color {
 ///|
 fn @types.Game::draw_hazards(game : @types.Game) -> Unit {
   for hazard in game.hazards {
-    if not(hazard.active) {
+    if !hazard.active {
       continue
     }
 

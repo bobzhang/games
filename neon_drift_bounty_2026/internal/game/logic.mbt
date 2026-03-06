@@ -629,7 +629,7 @@ fn @types.Game::apply_hack_pulse(game : @types.Game) -> Unit {
   let kill2 = @types.hack_pulse_kill * @types.hack_pulse_kill
 
   for entity in game.entities {
-    if not(entity.active) {
+    if !entity.active {
       continue
     }
 
@@ -654,7 +654,7 @@ fn @types.Game::apply_hack_pulse(game : @types.Game) -> Unit {
   }
 
   for bullet in game.bullets {
-    if not(bullet.active) || bullet.from_player {
+    if !bullet.active || bullet.from_player {
       continue
     }
 
@@ -931,7 +931,7 @@ fn @types.Game::update_entities(game : @types.Game, dt : Float) -> Unit {
   let ram_hit = game.boost_t > 0.0
 
   for i in 0..<game.entities.length() {
-    if not(game.entities[i].active) {
+    if !game.entities[i].active {
       continue
     }
 
@@ -1017,7 +1017,7 @@ fn @types.Game::update_entities(game : @types.Game, dt : Float) -> Unit {
 /// Moves all active bullets, deactivates expired or out-of-bounds bullets, and resolves player-bullet and entity-bullet hit detection.
 fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
   for bullet in game.bullets {
-    if not(bullet.active) {
+    if !bullet.active {
       continue
     }
 
@@ -1038,8 +1038,7 @@ fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
     if bullet.from_player {
       let mut hit = false
       for j in 0..<game.entities.length() {
-        if not(game.entities[j].active) ||
-          @types.is_pickup(game.entities[j].kind) {
+        if !game.entities[j].active || @types.is_pickup(game.entities[j].kind) {
           continue
         }
 
@@ -1091,7 +1090,7 @@ fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
 /// Updates sparks, glow rings, and afterimages: advances their positions and lifetimes, and deactivates expired entries.
 fn @types.Game::update_effects(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 
@@ -1105,7 +1104,7 @@ fn @types.Game::update_effects(game : @types.Game, dt : Float) -> Unit {
   }
 
   for ring in game.rings {
-    if not(ring.active) {
+    if !ring.active {
       continue
     }
 
@@ -1117,7 +1116,7 @@ fn @types.Game::update_effects(game : @types.Game, dt : Float) -> Unit {
   }
 
   for image in game.images {
-    if not(image.active) {
+    if !image.active {
       continue
     }
 

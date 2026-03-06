@@ -45,7 +45,7 @@ fn right_bank(y : Int, center : Float, curve : Float) -> Float {
 ///|
 fn spawn_bullet(bullets : Array[Bullet], x : Float, y : Float) -> Unit {
   for bullet in bullets {
-    if not(bullet.alive) {
+    if !bullet.alive {
       bullet.alive = true
       bullet.x = x
       bullet.y = y
@@ -63,7 +63,7 @@ fn spawn_enemy(
   y : Float,
 ) -> Unit {
   for enemy in enemies {
-    if not(enemy.alive) {
+    if !enemy.alive {
       enemy.alive = true
       enemy.kind = kind
       enemy.x = x
@@ -124,7 +124,7 @@ fn main {
   let mut over = false
   let mut msg = "Arrows/WASD fly, Space/J shoot, collect fuel crates"
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -149,7 +149,7 @@ fn main {
       msg = "Mission restarted. Fly low and survive."
     }
 
-    if not(over) {
+    if !over {
       let mut move_x : Float = 0.0
       let mut move_y : Float = 0.0
       if @raylib.is_key_down(@raylib.KeyA) ||
@@ -250,7 +250,7 @@ fn main {
       }
 
       for bullet in bullets {
-        if not(bullet.alive) {
+        if !bullet.alive {
           continue
         }
         bullet.y = bullet.y + bullet.vy * dt
@@ -260,7 +260,7 @@ fn main {
       }
 
       for enemy in enemies {
-        if not(enemy.alive) {
+        if !enemy.alive {
           continue
         }
 
@@ -301,11 +301,11 @@ fn main {
       }
 
       for bullet in bullets {
-        if not(bullet.alive) {
+        if !bullet.alive {
           continue
         }
         for enemy in enemies {
-          if not(enemy.alive) {
+          if !enemy.alive {
             continue
           }
           let dx = enemy.x - bullet.x
@@ -333,7 +333,7 @@ fn main {
       }
 
       for enemy in enemies {
-        if not(enemy.alive) {
+        if !enemy.alive {
           continue
         }
         let dx = enemy.x - player_x

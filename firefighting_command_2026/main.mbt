@@ -95,7 +95,7 @@ fn main {
   let mut over = false
   let mut msg = "WASD/Arrows move, Space spray, R restart"
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -118,7 +118,7 @@ fn main {
       msg = "City response restarted."
     }
 
-    if not(over) {
+    if !over {
       if @raylib.is_key_pressed(@raylib.KeyA) ||
         @raylib.is_key_pressed(@raylib.KeyLeft) {
         if truck_c > 0 {

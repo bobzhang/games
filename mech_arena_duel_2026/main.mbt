@@ -40,7 +40,7 @@ fn spawn_shot(
   from_enemy : Bool,
 ) -> Unit {
   for shot in shots {
-    if not(shot.alive) {
+    if !shot.alive {
       shot.alive = true
       shot.x = x
       shot.y = y
@@ -56,7 +56,7 @@ fn spawn_shot(
 /// Activates the first inactive bot slot, placing it at a random arena position with HP and fire cooldown scaled to the current wave.
 fn spawn_bot(bots : Array[Bot], wave : Int) -> Unit {
   for bot in bots {
-    if not(bot.alive) {
+    if !bot.alive {
       bot.alive = true
       bot.x = Float::from_int(@raylib.get_random_value(200, sw - 100))
       bot.y = Float::from_int(@raylib.get_random_value(140, sh - 120))
@@ -127,7 +127,7 @@ fn main {
     spawn_bot(bots, wave)
   }
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -153,7 +153,7 @@ fn main {
       }
     }
 
-    if not(over) {
+    if !over {
       let mut mx : Float = 0.0
       let mut my : Float = 0.0
       if @raylib.is_key_down(@raylib.KeyA) ||
@@ -226,7 +226,7 @@ fn main {
       // AI update
       let mut alive_count = 0
       for bot in bots {
-        if not(bot.alive) {
+        if !bot.alive {
           continue
         }
         alive_count = alive_count + 1
@@ -274,7 +274,7 @@ fn main {
 
       // Shot update + collision
       for shot in shots {
-        if not(shot.alive) {
+        if !shot.alive {
           continue
         }
         shot.x = shot.x + shot.vx * dt
@@ -296,7 +296,7 @@ fn main {
           }
         } else {
           for bot in bots {
-            if not(bot.alive) {
+            if !bot.alive {
               continue
             }
             if (shot.x - bot.x).abs() < 18.0 && (shot.y - bot.y).abs() < 18.0 {

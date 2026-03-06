@@ -124,7 +124,7 @@ fn @types.Game::draw_background(game : @types.Game) -> Unit {
 /// Draws each active exit as a pulsing blue ring with an "EXIT" label.
 fn @types.Game::draw_exits(game : @types.Game) -> Unit {
   for i in 0..<game.exits.length() {
-    if not(game.exits[i].active) {
+    if !game.exits[i].active {
       continue
     }
 
@@ -165,7 +165,7 @@ fn @types.Game::draw_exits(game : @types.Game) -> Unit {
 /// Draws each active trap as a blinking pink circle with a small center dot.
 fn @types.Game::draw_traps(game : @types.Game) -> Unit {
   for trap in game.traps {
-    if not(trap.active) {
+    if !trap.active {
       continue
     }
 
@@ -200,7 +200,7 @@ fn @types.Game::draw_traps(game : @types.Game) -> Unit {
 /// Draws each active, undelivered parcel as a pulsing yellow box with a crossbar.
 fn @types.Game::draw_parcels(game : @types.Game) -> Unit {
   for parcel in game.parcels {
-    if not(parcel.active) || parcel.delivered {
+    if !parcel.active || parcel.delivered {
       continue
     }
 
@@ -235,7 +235,7 @@ fn @types.Game::draw_parcels(game : @types.Game) -> Unit {
 /// Draws each active smoke cloud as a translucent grey circle whose opacity fades with remaining life.
 fn @types.Game::draw_smokes(game : @types.Game) -> Unit {
   for smoke in game.smokes {
-    if not(smoke.active) {
+    if !smoke.active {
       continue
     }
 

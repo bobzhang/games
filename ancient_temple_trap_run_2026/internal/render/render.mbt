@@ -192,7 +192,7 @@ fn @types.Game::draw_doors(game : @types.Game) -> Unit {
 /// Draws each uncollected relic as a golden filled circle with a pulsing outer glow ring and a bright outline.
 fn @types.Game::draw_relics(game : @types.Game) -> Unit {
   for i in 0..<game.relics.length() {
-    if not(game.relics[i].active) {
+    if !game.relics[i].active {
       continue
     }
 

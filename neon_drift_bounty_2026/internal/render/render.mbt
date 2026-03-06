@@ -497,7 +497,7 @@ fn @types.Game::draw_entities(
   cam_y : Float,
 ) -> Unit {
   for e in game.entities {
-    if not(e.active) {
+    if !e.active {
       continue
     }
 
@@ -552,7 +552,7 @@ fn @types.Game::draw_bullets(
   cam_y : Float,
 ) -> Unit {
   for b in game.bullets {
-    if not(b.active) {
+    if !b.active {
       continue
     }
 
@@ -595,7 +595,7 @@ fn @types.Game::draw_sparks(
   cam_y : Float,
 ) -> Unit {
   for s in game.sparks {
-    if not(s.active) {
+    if !s.active {
       continue
     }
 
@@ -625,7 +625,7 @@ fn @types.Game::draw_rings(
   cam_y : Float,
 ) -> Unit {
   for r in game.rings {
-    if not(r.active) {
+    if !r.active {
       continue
     }
 
@@ -655,7 +655,7 @@ fn @types.Game::draw_afterimages(
   cam_y : Float,
 ) -> Unit {
   for it in game.images {
-    if not(it.active) {
+    if !it.active {
       continue
     }
 

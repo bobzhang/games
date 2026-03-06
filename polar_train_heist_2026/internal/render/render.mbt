@@ -399,7 +399,7 @@ fn @types.Game::draw_shadow_blobs(
   cam_y : Float,
 ) -> Unit {
   for shadow in game.shadows {
-    if not(shadow.active) {
+    if !shadow.active {
       continue
     }
 
@@ -668,7 +668,7 @@ fn draw_pickup(
 ///|
 /// Draws a single active entity dispatching to the appropriate shape renderer and overlays a health bar for hostile kinds.
 fn draw_ent(e : @types.Ent, cam_x : Float, cam_y : Float) -> Unit {
-  if not(e.active) {
+  if !e.active {
     return
   }
 
@@ -867,7 +867,7 @@ fn @types.Game::draw_shots(
   cam_y : Float,
 ) -> Unit {
   for shot in game.shots {
-    if not(shot.active) {
+    if !shot.active {
       continue
     }
 
@@ -928,7 +928,7 @@ fn @types.Game::draw_fx(
   cam_y : Float,
 ) -> Unit {
   for fx in game.fxs {
-    if not(fx.active) {
+    if !fx.active {
       continue
     }
 
@@ -958,7 +958,7 @@ fn @types.Game::draw_fx(
   }
 
   for ring in game.rings {
-    if not(ring.active) {
+    if !ring.active {
       continue
     }
 
@@ -1235,7 +1235,7 @@ fn draw_button_visual(
 ///|
 /// Draws on-screen touch control buttons when touch mode is active, adapting layout to the current game state.
 fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
-  if not(game.touch_mode) {
+  if !game.touch_mode {
     return
   }
 

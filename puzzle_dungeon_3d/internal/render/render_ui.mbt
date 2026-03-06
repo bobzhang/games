@@ -360,7 +360,7 @@ fn @types.Game::draw_floor_select(game : @types.Game) -> Unit {
         @raylib.draw_text("*", x + 10 + s * 16, y + 45, 20, star_color)
       }
     }
-    if not(info.unlocked) {
+    if !info.unlocked {
       @raylib.draw_text(
         "LOCKED",
         x + 10,

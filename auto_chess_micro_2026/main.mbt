@@ -127,7 +127,7 @@ fn find_target(units : Array[Piece], idx : Int) -> Int {
   let mut best = -1
   let mut best_d = 1_000_000
   for i in 0..<units.length() {
-    if i == idx || not(units[i].alive) || units[i].team == self.team {
+    if i == idx || !units[i].alive || units[i].team == self.team {
       continue
     }
     let d = manhattan(self.x, self.y, units[i].x, units[i].y)
@@ -206,7 +206,7 @@ fn main {
   let mut won = false
   let mut lost = false
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let dt = @raylib.get_frame_time()
 
     if @raylib.is_key_pressed(@raylib.KeyR) {
@@ -224,7 +224,7 @@ fn main {
       lost = false
     }
 
-    if not(won) && not(lost) {
+    if !won && !lost {
       if phase == phase_prep {
         if @raylib.is_key_pressed(@raylib.KeyOne) {
           selected_role = 0
@@ -272,7 +272,7 @@ fn main {
         }
       } else {
         for i in 0..<units.length() {
-          if not(units[i].alive) {
+          if !units[i].alive {
             continue
           }
           units[i].cooldown = units[i].cooldown - dt
@@ -310,7 +310,7 @@ fn main {
               nx < gw &&
               ny >= 0 &&
               ny < gh &&
-              not(occupied(units, nx, ny)) {
+              !occupied(units, nx, ny) {
               units[i].x = nx
               units[i].y = ny
             }

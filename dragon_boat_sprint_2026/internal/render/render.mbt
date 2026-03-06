@@ -141,7 +141,7 @@ fn @types.Game::draw_checkpoint_lines(game : @types.Game) -> Unit {
 /// Draws all visible active hazards: rectangular debris logs or concentric wave rings.
 fn @types.Game::draw_hazards(game : @types.Game) -> Unit {
   for hazard in game.hazards {
-    if not(hazard.active) {
+    if !hazard.active {
       continue
     }
 
@@ -293,7 +293,7 @@ fn rival_hull_color(id : Int) -> @raylib.Color {
 /// Draws all active rival boats visible within the scrolling viewport, scaled by relative distance.
 fn @types.Game::draw_rivals(game : @types.Game) -> Unit {
   for rival in game.rivals {
-    if not(rival.active) {
+    if !rival.active {
       continue
     }
 

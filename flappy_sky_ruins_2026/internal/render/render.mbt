@@ -90,7 +90,7 @@ fn @types.Game::draw_world_back(game : @types.Game) -> Unit {
 ///|
 /// Draws an obstacle's top and bottom pillars with color based on kind, and adds a rotating arm for spinner obstacles.
 fn draw_obstacle(ob : @types.Obstacle) -> Unit {
-  if not(ob.active) {
+  if !ob.active {
     return
   }
 
@@ -162,7 +162,7 @@ fn pickup_color(kind : @types.PickupKind) -> @raylib.Color {
 ///|
 /// Draws a pickup as a pulsing colored circle with an outer glow ring.
 fn draw_pickup(pk : @types.Pickup) -> Unit {
-  if not(pk.active) {
+  if !pk.active {
     return
   }
 
@@ -255,7 +255,7 @@ fn @types.Game::draw_hint(game : @types.Game) -> Unit {
 /// Draws all active particles as small circles with color and opacity based on their kind and remaining life.
 fn @types.Game::draw_particles(game : @types.Game) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 

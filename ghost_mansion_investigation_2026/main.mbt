@@ -218,7 +218,7 @@ fn spawn_particle(
     if done {
       continue
     }
-    if not(ps_elem.active) {
+    if !ps_elem.active {
       ps_elem.active = true
       ps_elem.x = x
       ps_elem.y = y
@@ -334,7 +334,7 @@ fn spawn_ghost(gs : Array[Ghost], level : Int) -> Unit {
       continue
     }
 
-    if not(gs_elem.active) {
+    if !gs_elem.active {
       gs_elem.active = true
       gs_elem.kind = @raylib.get_random_value(0, 2)
       gs_elem.radius = if gs_elem.kind == 2 { 20.0 } else { 18.0 }
@@ -347,10 +347,10 @@ fn spawn_ghost(gs : Array[Ghost], level : Int) -> Unit {
         Float::from_int(100)
 
       let mut placed = false
-      while not(placed) {
+      while !placed {
         let x = Float::from_int(@raylib.get_random_value(70, sw - 70))
         let y = Float::from_int(@raylib.get_random_value(152, sh - 70))
-        if not(blocked(x, y, gs_elem.radius, level)) {
+        if !blocked(x, y, gs_elem.radius, level) {
           gs_elem.x = x
           gs_elem.y = y
           placed = true
@@ -487,7 +487,7 @@ fn main {
   let pulse_x = sw - 122
   let pulse_y = sh - 170
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -576,7 +576,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
       particle.x = particle.x + particle.vx * dt
@@ -588,7 +588,7 @@ fn main {
       }
     }
 
-    if not(over) && transition_t <= 0.0 {
+    if !over && transition_t <= 0.0 {
       timer = timer - dt
       if timer <= 0.0 {
         timer = 0.0
@@ -699,7 +699,7 @@ fn main {
         burst(particles, player.x, player.y, 24, 0.52, 2)
 
         for ghost in ghosts {
-          if not(ghost.active) {
+          if !ghost.active {
             continue
           }
           if sqdist(player.x, player.y, ghost.x, ghost.y) <= 172.0 * 172.0 {
@@ -722,7 +722,7 @@ fn main {
       let mut nearby_terror : Float = 0.0
 
       for ghost in ghosts {
-        if not(ghost.active) {
+        if !ghost.active {
           continue
         }
 
@@ -829,7 +829,7 @@ fn main {
       }
 
       for clue in clues {
-        if not(clue.active) {
+        if !clue.active {
           continue
         }
 
@@ -970,7 +970,7 @@ fn main {
     )
 
     for clue in clues {
-      if not(clue.active) {
+      if !clue.active {
         continue
       }
 
@@ -988,7 +988,7 @@ fn main {
     }
 
     for ghost in ghosts {
-      if not(ghost.active) {
+      if !ghost.active {
         continue
       }
 
@@ -1116,7 +1116,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 

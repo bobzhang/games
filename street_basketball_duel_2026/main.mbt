@@ -122,7 +122,7 @@ fn spawn_particle(
     if done {
       continue
     }
-    if not(ps_elem.active) {
+    if !ps_elem.active {
       ps_elem.active = true
       ps_elem.x = x
       ps_elem.y = y
@@ -256,7 +256,7 @@ fn update_athlete_move(
     a.vx = a.vx + accel * dt
   }
 
-  if not(move_left) && not(move_right) {
+  if !move_left && !move_right {
     a.vx = a.vx * (Float::from_int(1) - dt * 7.2)
   }
 
@@ -469,7 +469,7 @@ fn main {
   let dash_x = sw - 100
   let dash_y = sh - 170
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -508,7 +508,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 
@@ -522,7 +522,7 @@ fn main {
       }
     }
 
-    if not(over) {
+    if !over {
       tick_athlete(player, dt)
       tick_athlete(rival, dt)
 
@@ -779,7 +779,7 @@ fn main {
           scored = true
         }
 
-        if not(scored) &&
+        if !scored &&
           ball.last_y < rim_y - 4.0 &&
           ball.y >= rim_y &&
           (ball.x - left_hoop_x).abs() <= 12.0 &&
@@ -802,7 +802,7 @@ fn main {
           scored = true
         }
 
-        if not(scored) {
+        if !scored {
           let player_hand_x = player.x + 18.0
           let player_hand_y = player.y - 46.0
           let rival_hand_x = rival.x - 18.0
@@ -1157,7 +1157,7 @@ fn main {
     )
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 
@@ -1339,7 +1339,7 @@ fn main {
       @raylib.Color::new(224, 236, 248, 255),
     )
 
-    if rally_wait > 0.0 && not(over) {
+    if rally_wait > 0.0 && !over {
       let c = rally_wait.to_int() + 1
       @raylib.draw_text(
         "Inbound in \{c}",

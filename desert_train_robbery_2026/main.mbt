@@ -179,7 +179,7 @@ fn spawn_particle(
     if done {
       continue
     }
-    if not(ps_elem.active) {
+    if !ps_elem.active {
       ps_elem.active = true
       ps_elem.x = x
       ps_elem.y = y
@@ -232,7 +232,7 @@ fn spawn_bullet(
       continue
     }
 
-    if not(bs_elem.active) {
+    if !bs_elem.active {
       bs_elem.active = true
       bs_elem.owner = owner
       bs_elem.x = x
@@ -334,7 +334,7 @@ fn spawn_sheriff(
       continue
     }
 
-    if not(sheriff.active) {
+    if !sheriff.active {
       sheriff.active = true
       sheriff.wagon_idx = idx
       sheriff.rel_x = Float::from_int(
@@ -447,7 +447,7 @@ fn main {
   let loot_x = sw - 104
   let loot_y = sh - 170
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -564,7 +564,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 
@@ -578,7 +578,7 @@ fn main {
       }
     }
 
-    if not(over) && transition_t <= 0.0 {
+    if !over && transition_t <= 0.0 {
       timer = timer - dt
       if timer <= 0.0 {
         timer = 0.0
@@ -673,7 +673,7 @@ fn main {
       if move_r {
         player.vx = player.vx + accel * dt
       }
-      if not(move_l) && not(move_r) {
+      if !move_l && !move_r {
         player.vx = player.vx * (Float::from_int(1) - dt * 7.0)
       }
 
@@ -716,7 +716,7 @@ fn main {
         }
       }
 
-      if not(landed) && player.y > ground_y {
+      if !landed && player.y > ground_y {
         player.y = ground_y
         player.vy = 0.0
       }
@@ -779,7 +779,7 @@ fn main {
       }
 
       for sheriff in sheriffs {
-        if not(sheriff.active) {
+        if !sheriff.active {
           continue
         }
 
@@ -858,7 +858,7 @@ fn main {
       }
 
       for bullet in bullets {
-        if not(bullet.active) {
+        if !bullet.active {
           continue
         }
 
@@ -879,7 +879,7 @@ fn main {
 
         if bullet.owner == 1 {
           for sheriff in sheriffs {
-            if not(sheriff.active) {
+            if !sheriff.active {
               continue
             }
 
@@ -1065,7 +1065,7 @@ fn main {
     }
 
     for sheriff in sheriffs {
-      if not(sheriff.active) {
+      if !sheriff.active {
         continue
       }
 
@@ -1148,7 +1148,7 @@ fn main {
     }
 
     for bullet in bullets {
-      if not(bullet.active) {
+      if !bullet.active {
         continue
       }
 
@@ -1168,7 +1168,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 

@@ -446,7 +446,7 @@ fn @types.Game::draw_order_card(
   w : Int,
   h : Int,
 ) -> Unit {
-  if not(game.orders[i].active) {
+  if !game.orders[i].active {
     @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(28, 34, 48, 192))
     @raylib.draw_rectangle_lines(
       x,

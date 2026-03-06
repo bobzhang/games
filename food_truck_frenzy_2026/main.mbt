@@ -170,7 +170,7 @@ fn pointer_on_rect(
     hit = true
   }
 
-  if not(hit) {
+  if !hit {
     for i in 0..<touch_count {
       let p = @raylib.get_touch_position(i)
       if inside_rect(p.x, p.y, x, y, w, h) {
@@ -199,7 +199,7 @@ fn pointer_on_circle(
     hit = true
   }
 
-  if not(hit) {
+  if !hit {
     for i in 0..<touch_count {
       let p = @raylib.get_touch_position(i)
       if dist2(p.x, p.y, cx, cy) <= r * r {
@@ -450,7 +450,7 @@ fn burst_particles(
 /// Updates all active particles by advancing position, applying drag and gravity, and expiring finished ones.
 fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
     part.life = part.life - dt
@@ -576,7 +576,7 @@ fn choose_recipe_for_cook(
   let mut best_time : Float = 10000.0
 
   for order in orders {
-    if not(order.active) {
+    if !order.active {
       continue
     }
     let k : Int = order.kind
@@ -587,7 +587,7 @@ fn choose_recipe_for_cook(
     if ready + cooking >= pending {
       continue
     }
-    if not(recipe_can_make(k, ingredients)) {
+    if !recipe_can_make(k, ingredients) {
       continue
     }
     if order.deadline < best_time {
@@ -614,7 +614,7 @@ fn choose_recipe_for_cook(
 fn open_stove_slot(stoves : Array[StoveSlot]) -> Int {
   let mut idx : Int = -1
   for i in 0..<stoves.length() {
-    if not(stoves[i].active) {
+    if !stoves[i].active {
       idx = i
       break
     }
@@ -632,7 +632,7 @@ fn earliest_servable_order_index(
   let mut best_deadline : Float = 10000.0
 
   for i in 0..<orders.length() {
-    if not(orders[i].active) {
+    if !orders[i].active {
       continue
     }
     if meals[orders[i].kind] <= 0 {
@@ -801,7 +801,7 @@ fn draw_orders_panel(
 
   let mut draw_y : Int = panel_y + 56
   for order in orders {
-    if not(order.active) {
+    if !order.active {
       continue
     }
 
@@ -1021,7 +1021,7 @@ fn draw_stoves(
 /// Draws all active supply boxes with recipe-colored fill, an amount label, and a pulsing glow ring.
 fn draw_supply_boxes(boxes : Array[SupplyBox], scene_t : Float) -> Unit {
   for box in boxes {
-    if not(box.active) {
+    if !box.active {
       continue
     }
     let pulse : Float = @math.sinf(scene_t * 5.8 + box.pulse) * 0.5 + 0.5
@@ -1059,7 +1059,7 @@ fn draw_supply_boxes(boxes : Array[SupplyBox], scene_t : Float) -> Unit {
 /// Draws all active particles with fade-out alpha based on remaining lifetime.
 fn draw_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
     let alpha : Int = clampf(part.life * 255.0, 0.0, 255.0).to_int()
@@ -1697,7 +1697,7 @@ fn main {
   reset_run()
   state = 0
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -1942,7 +1942,7 @@ fn main {
       // Orders tick
       let mut active_orders : Int = 0
       for order in orders {
-        if not(order.active) {
+        if !order.active {
           continue
         }
         active_orders = active_orders + 1
@@ -1964,7 +1964,7 @@ fn main {
       // Stove updates
       let cook_speed : Float = 0.72 + clean * 0.006
       for stove in stoves {
-        if not(stove.active) {
+        if !stove.active {
           continue
         }
         stove.progress = stove.progress + dt * cook_speed
@@ -1993,7 +1993,7 @@ fn main {
 
       // Supply box updates
       for box in boxes {
-        if not(box.active) {
+        if !box.active {
           continue
         }
         box.life = box.life - dt
@@ -2039,7 +2039,7 @@ fn main {
         }
 
         // Stove cook
-        if not(did_action) &&
+        if !did_action &&
           inside_rectf(
             chef.x,
             chef.y,
@@ -2077,7 +2077,7 @@ fn main {
         }
 
         // Serve window
-        if not(did_action) &&
+        if !did_action &&
           inside_rectf(
             chef.x,
             chef.y,
@@ -2114,7 +2114,7 @@ fn main {
         }
 
         // Sink clean
-        if not(did_action) &&
+        if !did_action &&
           inside_rectf(
             chef.x,
             chef.y,
@@ -2139,7 +2139,7 @@ fn main {
         }
 
         // Fan cool
-        if not(did_action) &&
+        if !did_action &&
           inside_rectf(
             chef.x,
             chef.y,

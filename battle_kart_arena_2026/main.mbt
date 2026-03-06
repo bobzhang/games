@@ -162,7 +162,7 @@ fn track_contains(x : Float, y : Float, margin : Float) -> Bool {
     x <= inner_r + margin &&
     y >= inner_t - margin &&
     y <= inner_b + margin
-  in_outer && not(in_inner)
+  in_outer && !in_inner
 }
 
 ///|
@@ -301,7 +301,7 @@ fn spawn_spark(
     if done {
       continue
     }
-    if not(spark.active) {
+    if !spark.active {
       spark.active = true
       spark.x = x
       spark.y = y
@@ -354,7 +354,7 @@ fn spawn_shot(
     if done {
       continue
     }
-    if not(shot.active) {
+    if !shot.active {
       shot.active = true
       shot.x = x
       shot.y = y
@@ -503,7 +503,7 @@ fn main {
   let mut won = false
   let mut msg = "WASD drive, Space/J fire, Shift/K boost."
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -545,7 +545,7 @@ fn main {
       }
     }
 
-    if not(over) {
+    if !over {
       let mut left = @raylib.is_key_down(@raylib.KeyA) ||
         @raylib.is_key_down(@raylib.KeyLeft)
       let mut right = @raylib.is_key_down(@raylib.KeyD) ||
@@ -628,7 +628,7 @@ fn main {
       karts[0].y = karts[0].y + sinf_deg(karts[0].angle) * karts[0].speed * dt
       resolve_track_collision(karts[0])
 
-      if not(track_contains(karts[0].x, karts[0].y, 10.0)) {
+      if !track_contains(karts[0].x, karts[0].y, 10.0) {
         karts[0].speed = karts[0].speed * 0.86
       }
 
@@ -722,7 +722,7 @@ fn main {
       }
 
       for shot in shots {
-        if not(shot.active) {
+        if !shot.active {
           continue
         }
 
@@ -793,7 +793,7 @@ fn main {
           ai_won = true
         }
       }
-      if ai_won && not(over) {
+      if ai_won && !over {
         over = true
         won = false
         msg = "AI finished first."
@@ -801,7 +801,7 @@ fn main {
     }
 
     for spark in sparks {
-      if not(spark.active) {
+      if !spark.active {
         continue
       }
       spark.x = spark.x + spark.vx * dt
@@ -870,7 +870,7 @@ fn main {
     )
 
     for pickup in pickups {
-      if not(pickup.active) {
+      if !pickup.active {
         continue
       }
       let x = (pickup.x + shake_x).to_int()
@@ -907,7 +907,7 @@ fn main {
     }
 
     for shot in shots {
-      if not(shot.active) {
+      if !shot.active {
         continue
       }
       let x = (shot.x + shake_x).to_int()
@@ -916,7 +916,7 @@ fn main {
     }
 
     for spark in sparks {
-      if not(spark.active) {
+      if !spark.active {
         continue
       }
       let a = (spark.ttl * 255.0).to_int()

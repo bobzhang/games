@@ -11,7 +11,7 @@ fn main {
   let game = @types.Game::new()
   @game.init_title_scene(game)
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let dt = @raylib.get_frame_time()
     game.mouse_x = Float::from_int(@raylib.get_mouse_x())
     game.mouse_y = Float::from_int(@raylib.get_mouse_y())

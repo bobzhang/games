@@ -112,7 +112,7 @@ fn main {
 
   reveal(seen, px, py, 2)
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let dt = @raylib.get_frame_time()
 
     if @raylib.is_key_pressed(@raylib.KeyR) {
@@ -130,7 +130,7 @@ fn main {
       reveal(seen, px, py, 2)
     }
 
-    if not(over) {
+    if !over {
       timer = timer - dt
       if timer <= 0.0 {
         timer = 0.0
@@ -166,7 +166,7 @@ fn main {
       if acted {
         let nx = px + dx
         let ny = py + dy
-        if nx >= 0 && nx < gw && ny >= 0 && ny < gh && not(blocked[idx(nx, ny)]) {
+        if nx >= 0 && nx < gw && ny >= 0 && ny < gh && !blocked[idx(nx, ny)] {
           px = nx
           py = ny
           steps = steps + 1
@@ -190,7 +190,7 @@ fn main {
       }
 
       for relic in relics {
-        if not(relic.taken) && relic.x == px && relic.y == py {
+        if !relic.taken && relic.x == px && relic.y == py {
           relic.taken = true
           bag_value = bag_value + relic.value
           msg = "Relic found +\{relic.value}."
@@ -205,7 +205,7 @@ fn main {
 
       let mut all_taken = true
       for relic in relics {
-        if not(relic.taken) {
+        if !relic.taken {
           all_taken = false
         }
       }
@@ -225,7 +225,7 @@ fn main {
         let rx = ox + x * cell
         let ry = oy + y * cell
 
-        if not(seen[idx(x, y)]) {
+        if !seen[idx(x, y)] {
           @raylib.draw_rectangle(
             rx,
             ry,
@@ -257,7 +257,7 @@ fn main {
     }
 
     for relic in relics {
-      if not(relic.taken) && seen[idx(relic.x, relic.y)] {
+      if !relic.taken && seen[idx(relic.x, relic.y)] {
         let rx = ox + relic.x * cell + cell / 2
         let ry = oy + relic.y * cell + cell / 2
         @raylib.draw_circle(rx, ry, 10.0, @raylib.gold)

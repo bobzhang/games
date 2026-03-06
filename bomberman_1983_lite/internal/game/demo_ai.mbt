@@ -17,7 +17,7 @@ fn @types.Game::demo_nearest_enemy(
   let mut best_idx = -1
   let mut best_dist : Float = Float::from_int(1000000000)
   for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
+    if !game.enemies[i].active {
       continue
     }
     let d = @types.distance_sq(x, y, game.enemies[i].x, game.enemies[i].y)
@@ -38,7 +38,7 @@ fn @types.Game::demo_nearest_powerup(
   let mut best_idx = -1
   let mut best_dist : Float = Float::from_int(1000000000)
   for i in 0..<game.powerups.length() {
-    if not(game.powerups[i].active) {
+    if !game.powerups[i].active {
       continue
     }
     let d = @types.distance_sq(x, y, game.powerups[i].x, game.powerups[i].y)
@@ -58,7 +58,7 @@ fn @types.Game::demo_can_step(
   dt : Float,
 ) -> Bool {
   let player = game.players[index]
-  if not(player.active) {
+  if !player.active {
     return false
   }
 
@@ -198,7 +198,7 @@ fn @types.Game::demo_player_command(
   dt : Float,
 ) -> (@types.Dir?, Bool) {
   let player = game.players[index]
-  if not(player.active) {
+  if !player.active {
     return (None, false)
   }
 
@@ -222,13 +222,13 @@ fn @types.Game::demo_player_command(
       enemy.x,
       enemy.y,
     )
-    if aligned && not(game.sight_blocked(player.x, player.y, enemy.x, enemy.y)) {
+    if aligned && !game.sight_blocked(player.x, player.y, enemy.x, enemy.y) {
       move_dir = Some(line_dir)
       shoot = true
     }
   }
 
-  if not(shoot) {
+  if !shoot {
     let base_x = @types.tile_center_x(@types.base_tile_x)
     let base_y = @types.tile_center_y(@types.base_tile_y)
     let (line_dir, aligned) = demo_line_shot_dir(
@@ -243,7 +243,7 @@ fn @types.Game::demo_player_command(
     }
   }
 
-  if not(shoot) && @types.rand_range(game, 0, 99) < 4 {
+  if !shoot && @types.rand_range(game, 0, 99) < 4 {
     shoot = true
   }
 

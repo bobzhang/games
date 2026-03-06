@@ -4,7 +4,7 @@
 fn @types.Game::update_towers(game : @types.Game, dt : Float) -> Unit {
   // First, reset buff bonuses on all towers
   for tower in game.towers {
-    if not(tower.active) {
+    if !tower.active {
       continue
     }
     tower.buff_damage = 0.0
@@ -14,7 +14,7 @@ fn @types.Game::update_towers(game : @types.Game, dt : Float) -> Unit {
   // Apply buff tower bonuses
   for i in 0..<game.towers.length() {
     let tower = game.towers[i]
-    if not(tower.active) {
+    if !tower.active {
       continue
     }
     if tower.kind == Buff {
@@ -24,7 +24,7 @@ fn @types.Game::update_towers(game : @types.Game, dt : Float) -> Unit {
   // Update all towers
   for i in 0..<game.towers.length() {
     let tower = game.towers[i]
-    if not(tower.active) {
+    if !tower.active {
       continue
     }
     // Update reload timer
@@ -104,7 +104,7 @@ fn @types.Game::apply_buff_tower(game : @types.Game, buff_idx : Int) -> Unit {
       continue
     }
     let other = game.towers[i]
-    if not(other.active) {
+    if !other.active {
       continue
     }
     if other.kind == Buff {
@@ -138,7 +138,7 @@ fn @types.Game::update_buff_pulse(
     let range = @types.tower_effective_range(buff)
     for i in 0..<game.enemies.length() {
       let enemy = game.enemies[i]
-      if not(enemy.active) {
+      if !enemy.active {
         continue
       }
       let dist = @types.distance2d(bx, bz, enemy.x, enemy.z)
@@ -166,7 +166,7 @@ fn @types.Game::update_flame_aura(
     let tz = @types.grid_to_world_z(tower.gy)
     let aura_range : Float = @types.tower_effective_range(tower) * 0.6
     for enemy in game.enemies {
-      if not(enemy.active) {
+      if !enemy.active {
         continue
       }
       let dist = @types.distance2d(tx, tz, enemy.x, enemy.z)
@@ -300,7 +300,7 @@ fn @types.Game::fire_tower_secondary(
 
 ///|
 fn @types.Game::try_place_tower(game : @types.Game) -> Unit {
-  if not(game.hover_valid) {
+  if !game.hover_valid {
     return
   }
   let cost = @types.tower_cost(game.selected_tower_type)
@@ -340,7 +340,7 @@ fn @types.Game::try_upgrade_tower(game : @types.Game) -> Unit {
     return
   }
   let tower = game.towers[game.selected_tower_idx]
-  if not(tower.active) {
+  if !tower.active {
     return
   }
   if tower.level >= 3 {
@@ -372,7 +372,7 @@ fn @types.Game::try_sell_tower(game : @types.Game) -> Unit {
     return
   }
   let tower = game.towers[game.selected_tower_idx]
-  if not(tower.active) {
+  if !tower.active {
     return
   }
   let sell_val = @types.tower_sell_value(tower.kind, tower.level)
@@ -393,7 +393,7 @@ fn @types.Game::cycle_targeting_mode(game : @types.Game) -> Unit {
     return
   }
   let tower = game.towers[game.selected_tower_idx]
-  if not(tower.active) {
+  if !tower.active {
     return
   }
   tower.targeting_mode = @types.target_priority_from_int(

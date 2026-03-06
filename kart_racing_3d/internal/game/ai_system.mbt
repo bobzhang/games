@@ -7,7 +7,7 @@ pub fn update_ai_karts(game : @types.Game, dt : Float) -> Unit {
   let player_progress = player.total_progress
   for i in 1..<@types.max_karts {
     let kart = game.karts[i]
-    if not(kart.active) || kart.finished {
+    if !kart.active || kart.finished {
       continue
     }
     // Update timers
@@ -67,7 +67,7 @@ pub fn update_ai_karts(game : @types.Game, dt : Float) -> Unit {
       kart.speed > 12.0 &&
       diff_stats.2 > 0.7
     if should_drift {
-      if not(kart.drift_left) && not(kart.drift_right) {
+      if !kart.drift_left && !kart.drift_right {
         if angle_delta > 0.0 {
           kart.drift_left = true
         } else {
@@ -170,7 +170,7 @@ fn update_ai_timers(kart : @types.Kart, dt : Float) -> Unit {
     kart.star_timer -= dt
     kart.invincible_timer = kart.star_timer
   }
-  if not(kart.on_ground) {
+  if !kart.on_ground {
     kart.air_timer += dt
   } else {
     kart.air_timer = 0.0
@@ -262,7 +262,7 @@ fn @types.Game::has_nearby_opponent(
       continue
     }
     let other = game.karts[i]
-    if not(other.active) || other.finished {
+    if !other.active || other.finished {
       continue
     }
     if @types.distance2d(kart.x, kart.z, other.x, other.z) < range {
@@ -286,7 +286,7 @@ fn @types.Game::has_nearby_opponent_behind(
       continue
     }
     let other = game.karts[i]
-    if not(other.active) || other.finished {
+    if !other.active || other.finished {
       continue
     }
     if other.total_progress >= kart.total_progress {

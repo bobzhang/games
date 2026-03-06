@@ -338,7 +338,7 @@ pub fn signed_frames_text(frames : Int) -> String {
 ///|
 /// Sets a training-mode note with timed display.
 pub fn set_training_note(game : Game, text : String) -> Unit {
-  if not(game.mode_training) {
+  if !game.mode_training {
     return
   }
   game.training_adv_text = text

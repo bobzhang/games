@@ -122,7 +122,7 @@ fn @types.Game::complete_mission(game : @types.Game) -> Unit {
 pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
   for e in game.enemies {
-    if not(e.active) {
+    if !e.active {
       continue
     }
     // Flash timer
@@ -364,7 +364,7 @@ fn @types.Game::enemy_fire(
 pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
   for proj in game.projectiles {
-    if not(proj.active) {
+    if !proj.active {
       continue
     }
     proj.x += proj.dx * proj.speed * dt
@@ -425,7 +425,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
     } else {
       // Check hit enemies
       for e in game.enemies {
-        if not(e.active) {
+        if !e.active {
           continue
         }
         let dist = @types.distance3d(proj.x, proj.y, proj.z, e.x, e.y, e.z)
@@ -483,7 +483,7 @@ fn @types.Game::bomb_area_damage(
 ) -> Unit {
   // Damage enemies in blast radius
   for e in game.enemies {
-    if not(e.active) {
+    if !e.active {
       continue
     }
     let dist = @types.distance3d(x, y, z, e.x, e.y, e.z)
@@ -510,10 +510,10 @@ fn @types.Game::bomb_area_damage(
   }
   // Damage buildings in blast radius
   for b in game.buildings {
-    if not(b.active) {
+    if !b.active {
       continue
     }
-    if not(b.destructible) {
+    if !b.destructible {
       continue
     }
     let dist = @types.distance3d(x, y, z, b.x, b.y + b.height / 2.0, b.z)
@@ -539,7 +539,7 @@ fn @types.Game::bomb_area_damage(
   }
   // Damage turrets in blast radius
   for t in game.turrets {
-    if not(t.active) {
+    if !t.active {
       continue
     }
     let dist = @types.distance3d(x, y, z, t.x, t.y, t.z)

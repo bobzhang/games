@@ -778,7 +778,7 @@ pub fn add_damage_indicator(
   let angle = @math.atan2f(from_z - game.player.z, from_x - game.player.x)
   // Find inactive slot
   for damage_indicator in game.damage_indicators {
-    if not(damage_indicator.active) {
+    if !damage_indicator.active {
       damage_indicator.active = true
       damage_indicator.angle = angle - game.player.yaw
       damage_indicator.timer = 1.0
@@ -819,7 +819,7 @@ pub fn push_from_barricades(
   let mut rx = x
   let mut rz = z
   for b in game.barricades {
-    if not(b.active) {
+    if !b.active {
       continue
     }
     let result = push_from_box(

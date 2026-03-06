@@ -206,7 +206,7 @@ fn spawn_part(
     if done {
       continue
     }
-    if not(part.active) {
+    if !part.active {
       part.active = true
       part.x = x
       part.y = y
@@ -245,7 +245,7 @@ fn spawn_shot(shots : Array[Shot], x : Float, y : Float) -> Unit {
     if done {
       continue
     }
-    if not(shot.active) {
+    if !shot.active {
       shot.active = true
       shot.x = x
       shot.y = y
@@ -267,7 +267,7 @@ fn spawn_enemy(enemies : Array[Enemy], sector : Int) -> Unit {
     if done {
       continue
     }
-    if not(enemy.active) {
+    if !enemy.active {
       enemy.active = true
       enemy.x = Float::from_int(sw + 40 + @raylib.get_random_value(0, 120))
       enemy.y = Float::from_int(
@@ -306,7 +306,7 @@ fn spawn_split(
       if done {
         continue
       }
-      if not(enemy.active) {
+      if !enemy.active {
         enemy.active = true
         enemy.x = x + Float::from_int(@raylib.get_random_value(-10, 10))
         enemy.y = y + Float::from_int(@raylib.get_random_value(-10, 10))
@@ -374,7 +374,7 @@ fn main {
   let mut won = false
   let mut msg = "W/S move, Space/J fire, K pulse. Protect core integrity."
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -438,7 +438,7 @@ fn main {
       }
     }
 
-    if not(over) {
+    if !over {
       sector_timer = sector_timer + dt
       if sector_timer >= 42.0 {
         sector = sector + 1
@@ -523,7 +523,7 @@ fn main {
         burst(parts, px, py, 42, 1.12, 0)
 
         for enemy in enemies {
-          if not(enemy.active) {
+          if !enemy.active {
             continue
           }
           let dx = enemy.x - px
@@ -548,7 +548,7 @@ fn main {
       }
 
       for shot in shots {
-        if not(shot.active) {
+        if !shot.active {
           continue
         }
         shot.x = shot.x + shot.vx * dt
@@ -561,7 +561,7 @@ fn main {
       let mut core_hit = 0
 
       for enemy in enemies {
-        if not(enemy.active) {
+        if !enemy.active {
           continue
         }
 
@@ -589,7 +589,7 @@ fn main {
       }
 
       for shot in shots {
-        if not(shot.active) {
+        if !shot.active {
           continue
         }
 
@@ -598,7 +598,7 @@ fn main {
           if hit {
             continue
           }
-          if not(enemy.active) {
+          if !enemy.active {
             continue
           }
 
@@ -646,7 +646,7 @@ fn main {
     }
 
     for part in parts {
-      if not(part.active) {
+      if !part.active {
         continue
       }
       part.x = part.x + part.vx * dt
@@ -749,7 +749,7 @@ fn main {
     )
 
     for shot in shots {
-      if not(shot.active) {
+      if !shot.active {
         continue
       }
       let sx = shot.x + shake_x
@@ -763,7 +763,7 @@ fn main {
     }
 
     for enemy in enemies {
-      if not(enemy.active) {
+      if !enemy.active {
         continue
       }
       let ex = enemy.x + shake_x
@@ -814,7 +814,7 @@ fn main {
     }
 
     for part in parts {
-      if not(part.active) {
+      if !part.active {
         continue
       }
       let a = (part.ttl * 255.0).to_int()

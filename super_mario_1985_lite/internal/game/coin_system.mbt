@@ -7,7 +7,7 @@ fn @types.Game::update_coins(game : @types.Game, dt : Float) -> Unit {
   let py1 = player.y + @types.player_half_h()
 
   for coin in game.coins {
-    if not(coin.active) {
+    if !coin.active {
       continue
     }
 

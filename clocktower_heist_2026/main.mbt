@@ -257,7 +257,7 @@ fn spawn_particle(
     if done {
       continue
     }
-    if not(ps_elem.active) {
+    if !ps_elem.active {
       ps_elem.active = true
       ps_elem.x = x
       ps_elem.y = y
@@ -308,7 +308,7 @@ fn spawn_bullet(
     if done {
       continue
     }
-    if not(bs_elem.active) {
+    if !bs_elem.active {
       bs_elem.active = true
       bs_elem.owner = owner
       bs_elem.x = x
@@ -564,7 +564,7 @@ fn main {
   let cloak_x = sw - 104
   let cloak_y = sh - 170
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -662,7 +662,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
       particle.x = particle.x + particle.vx * dt
@@ -674,7 +674,7 @@ fn main {
       }
     }
 
-    if not(over) && transition_t <= 0.0 {
+    if !over && transition_t <= 0.0 {
       timer = timer - dt
       if timer <= 0.0 {
         timer = 0.0
@@ -788,7 +788,7 @@ fn main {
         burst(particles, player.x, player.y, 24, 0.54, 3)
 
         for guard_val in guards {
-          if not(guard_val.active) {
+          if !guard_val.active {
             continue
           }
           if sqdist(player.x, player.y, guard_val.x, guard_val.y) <=
@@ -813,7 +813,7 @@ fn main {
       player.stamina = clampf(player.stamina, 0.0, 100.0)
 
       for guard_val in guards {
-        if not(guard_val.active) {
+        if !guard_val.active {
           continue
         }
 
@@ -906,8 +906,8 @@ fn main {
             ty * dt * 3.0
         }
 
-        if not(chase) && dir_d < 20.0 {
-          guard_val.to_b = not(guard_val.to_b)
+        if !chase && dir_d < 20.0 {
+          guard_val.to_b = !guard_val.to_b
         }
 
         let old_x = guard_val.x
@@ -920,7 +920,7 @@ fn main {
           guard_val.y = old_y
           guard_val.vx = -guard_val.vx * 0.5
           guard_val.vy = -guard_val.vy * 0.5
-          guard_val.to_b = not(guard_val.to_b)
+          guard_val.to_b = !guard_val.to_b
         }
 
         if guard_val.shoot_cd <= 0.0 && guard_val.stun_t <= 0.0 && d <= 360.0 {
@@ -958,7 +958,7 @@ fn main {
       }
 
       for bullet in bullets {
-        if not(bullet.active) {
+        if !bullet.active {
           continue
         }
 
@@ -1002,7 +1002,7 @@ fn main {
       }
 
       for card in cards {
-        if not(card.active) {
+        if !card.active {
           continue
         }
 
@@ -1016,7 +1016,7 @@ fn main {
         }
       }
 
-      if collected >= target_cards && not(vault_open) {
+      if collected >= target_cards && !vault_open {
         if inside_rect(player.x, player.y, 986, 186, 218, 162) {
           hack_progress = hack_progress + dt * 34.0
           if hack_progress >= 100.0 {
@@ -1220,7 +1220,7 @@ fn main {
     )
 
     for card in cards {
-      if not(card.active) {
+      if !card.active {
         continue
       }
 
@@ -1244,7 +1244,7 @@ fn main {
     }
 
     for guard_val in guards {
-      if not(guard_val.active) {
+      if !guard_val.active {
         continue
       }
 
@@ -1379,7 +1379,7 @@ fn main {
     }
 
     for bullet in bullets {
-      if not(bullet.active) {
+      if !bullet.active {
         continue
       }
       @raylib.draw_line(
@@ -1392,7 +1392,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
       let col = if particle.kind == 0 {

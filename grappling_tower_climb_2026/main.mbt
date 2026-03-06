@@ -291,7 +291,7 @@ fn add_platform(
 ) -> Bool {
   let mut slot : Int = -1
   for i in 0..<platforms.length() {
-    if not(platforms[i].active) {
+    if !platforms[i].active {
       slot = i
       break
     }
@@ -318,7 +318,7 @@ fn add_platform(
 fn add_anchor(anchors : Array[Anchor], x : Float, y : Float) -> Bool {
   let mut slot : Int = -1
   for i in 0..<anchors.length() {
-    if not(anchors[i].active) {
+    if !anchors[i].active {
       slot = i
       break
     }
@@ -345,7 +345,7 @@ fn add_drone(
 ) -> Bool {
   let mut slot : Int = -1
   for i in 0..<drones.length() {
-    if not(drones[i].active) {
+    if !drones[i].active {
       slot = i
       break
     }
@@ -384,7 +384,7 @@ fn add_bullet(
 ) -> Bool {
   let mut slot : Int = -1
   for i in 0..<bullets.length() {
-    if not(bullets[i].active) {
+    if !bullets[i].active {
       slot = i
       break
     }
@@ -415,7 +415,7 @@ fn add_crystal(
 ) -> Bool {
   let mut slot : Int = -1
   for i in 0..<crystals.length() {
-    if not(crystals[i].active) {
+    if !crystals[i].active {
       slot = i
       break
     }
@@ -449,7 +449,7 @@ fn burst(
     if left <= 0 {
       break
     }
-    if not(part.active) {
+    if !part.active {
       part.active = true
       part.x = x
       part.y = y
@@ -717,7 +717,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -860,7 +860,7 @@ fn main {
 
       // Update moving platforms.
       for platform in platforms {
-        if not(platform.active) {
+        if !platform.active {
           continue
         }
 
@@ -882,7 +882,7 @@ fn main {
 
       // Find grapple target or apply rope.
       if grapple_hold {
-        if not(pilot.grapple_on) {
+        if !pilot.grapple_on {
           let mut best_i : Int = -1
           let mut best_d2 : Float = 99999999.0
           for i in 0..<anchors.length() {
@@ -1051,7 +1051,7 @@ fn main {
 
       pilot.grounded = false
       for platform in platforms {
-        if not(platform.active) {
+        if !platform.active {
           continue
         }
 
@@ -1070,7 +1070,7 @@ fn main {
         }
       }
 
-      if not(pilot.grounded) {
+      if !pilot.grounded {
         // coyote timer decays elsewhere; keep as-is
         ignore(())
       }
@@ -1115,7 +1115,7 @@ fn main {
       }
 
       for drone in drones {
-        if not(drone.active) {
+        if !drone.active {
           continue
         }
 
@@ -1196,7 +1196,7 @@ fn main {
 
       // Bullets.
       for bullet in bullets {
-        if not(bullet.active) {
+        if !bullet.active {
           continue
         }
 
@@ -1232,7 +1232,7 @@ fn main {
 
       // Crystals.
       for crystal in crystals {
-        if not(crystal.active) {
+        if !crystal.active {
           continue
         }
 
@@ -1263,7 +1263,7 @@ fn main {
 
       // Particles.
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
 
@@ -1389,7 +1389,7 @@ fn main {
 
     // Platforms.
     for platform in platforms {
-      if not(platform.active) {
+      if !platform.active {
         continue
       }
 

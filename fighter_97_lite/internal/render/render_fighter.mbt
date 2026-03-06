@@ -52,7 +52,7 @@ fn @types.Game::draw_fighter_body(
   let mut body_h = @types.fighter_body_height
   if fighter.crouching {
     body_h = body_h * @types.f(0.72)
-  } else if not(fighter.on_ground) {
+  } else if !fighter.on_ground {
     body_h = body_h * @types.f(0.88)
   }
 

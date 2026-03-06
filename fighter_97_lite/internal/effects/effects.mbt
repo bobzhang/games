@@ -127,7 +127,7 @@ pub fn spawn_ground_skid(game : @types.Game, fighter : @types.Fighter) -> Unit {
 /// Updates movement and lifetime for a particle array.
 pub fn update_particle_list(list : Array[@types.Particle], dt : Float) -> Unit {
   for p in list {
-    if not(p.active) {
+    if !p.active {
       continue
     }
 
@@ -160,7 +160,7 @@ pub fn draw_particle_list(
   camera_y : Float,
 ) -> Unit {
   for p in list {
-    if not(p.active) {
+    if !p.active {
       continue
     }
 

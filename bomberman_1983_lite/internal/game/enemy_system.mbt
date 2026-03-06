@@ -190,7 +190,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
     }
 
     let moved = game.try_move_enemy(i, enemy.dir, dt)
-    if not(moved) {
+    if !moved {
       enemy.ai_stuck_timer += dt
       if enemy.ai_stuck_timer > 0.14 {
         enemy.ai_stuck_timer = 0.0
@@ -207,7 +207,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
 
     for p in 0..<@types.max_players {
       let player = game.players[p]
-      if not(player.active) {
+      if !player.active {
         continue
       }
       let hit_r = @types.tank_half + @types.tank_half - 2.0
@@ -225,7 +225,7 @@ fn @types.Game::destroy_enemy(
   enemy_index : Int,
   killer_team : @types.Team,
 ) -> Unit {
-  if not(game.enemies[enemy_index].active) {
+  if !game.enemies[enemy_index].active {
     return
   }
 

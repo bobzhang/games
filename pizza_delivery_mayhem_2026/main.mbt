@@ -10,7 +10,7 @@ fn main {
   defer @raylib.close_audio_device()
   @raylib.set_target_fps(@types.target_fps)
   let game : @types.Game = @types.Game::new()
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let dt : Float = @types.clampf(@raylib.get_frame_time(), 0.0, 0.04)
     game.mouse_x = @raylib.get_mouse_x() |> Float::from_int
     game.mouse_y = @raylib.get_mouse_y() |> Float::from_int

@@ -64,7 +64,7 @@ fn @types.Game::burst(
 ///|
 fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 
@@ -309,7 +309,7 @@ fn @types.Game::spawn_train(game : @types.Game) -> Bool {
 
   let mut slot : Int = -1
   for i in 0..<game.trains.length() {
-    if not(game.trains[i].active) {
+    if !game.trains[i].active {
       slot = i
       break
     }
@@ -408,7 +408,7 @@ fn @types.Game::deploy_emp(game : @types.Game) -> Bool {
 
   let mut hits : Int = 0
   for inspector in game.inspectors {
-    if not(inspector.active) || inspector.mode == Stunned {
+    if !inspector.active || inspector.mode == Stunned {
       continue
     }
 
@@ -452,7 +452,7 @@ fn @types.Game::deploy_emp(game : @types.Game) -> Bool {
 
 ///|
 fn @types.Game::blocked_for_actor(game : @types.Game, x : Int, y : Int) -> Bool {
-  if not(@types.in_bounds(x, y)) {
+  if !@types.in_bounds(x, y) {
     return true
   }
 
@@ -540,7 +540,7 @@ fn @types.Game::blocked_for_inspector(
   }
 
   for inspector in game.inspectors {
-    if not(inspector.active) {
+    if !inspector.active {
       continue
     }
 
@@ -610,7 +610,7 @@ fn @types.Game::choose_inspector_step(
 
   if nx >= g.path_min_x &&
     nx <= g.path_max_x &&
-    not(game.blocked_for_inspector(nx, g.path_y)) {
+    !game.blocked_for_inspector(nx, g.path_y) {
     return (g.dir_x, 0)
   }
 
@@ -635,7 +635,7 @@ fn @types.Game::choose_inspector_step(
 ///|
 fn @types.Game::update_inspectors(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.inspectors.length() {
-    if not(game.inspectors[i].active) {
+    if !game.inspectors[i].active {
       continue
     }
 
@@ -684,7 +684,7 @@ fn @types.Game::update_inspectors(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_trains(game : @types.Game, dt : Float) -> Unit {
   for train in game.trains {
-    if not(train.active) {
+    if !train.active {
       continue
     }
 
@@ -749,12 +749,12 @@ fn @types.Game::update_trains(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::resolve_train_collisions(game : @types.Game) -> Unit {
   for i in 0..<game.trains.length() {
-    if not(game.trains[i].active) {
+    if !game.trains[i].active {
       continue
     }
 
     for j in (i + 1)..<game.trains.length() {
-      if not(game.trains[j].active) {
+      if !game.trains[j].active {
         continue
       }
 
@@ -801,7 +801,7 @@ fn @types.Game::handle_player_spotted(game : @types.Game) -> Unit {
   }
 
   for inspector in game.inspectors {
-    if not(inspector.active) || inspector.mode == Stunned {
+    if !inspector.active || inspector.mode == Stunned {
       continue
     }
 
@@ -872,12 +872,12 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
 
   @types.actor_tick(game.player, dt, @types.player_move_t)
 
-  if not(game.player.moving) && game.move_cd <= 0.0 {
+  if !game.player.moving && game.move_cd <= 0.0 {
     ignore(game.try_move_player(game.req_dx, game.req_dy))
   }
 
   if game.action_pressed {
-    if not(game.try_toggle_switch()) {
+    if !game.try_toggle_switch() {
       ignore(game.deploy_emp())
     }
   }

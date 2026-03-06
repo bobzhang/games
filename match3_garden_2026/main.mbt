@@ -83,7 +83,7 @@ fn fill_board_no_matches(board : Array[Int]) -> Unit {
             bad = true
           }
         }
-        if not(bad) {
+        if !bad {
           break
         }
         t = random_tile()
@@ -217,7 +217,7 @@ fn main {
   let mut best_combo = 0
   let mut msg = "Arrow keys move, Enter/Space select+swap, R restart"
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     if @raylib.is_key_pressed(@raylib.KeyR) {
       fill_board_no_matches(board)
       cur_x = 0

@@ -213,7 +213,7 @@ fn spawn_particle(
       continue
     }
 
-    if not(ps_elem.active) {
+    if !ps_elem.active {
       ps_elem.active = true
       ps_elem.x = x
       ps_elem.y = y
@@ -419,7 +419,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -511,9 +511,9 @@ fn main {
         }
       }
 
-      let steer : Int = if move_l && not(move_r) {
+      let steer : Int = if move_l && !move_r {
         -1
-      } else if move_r && not(move_l) {
+      } else if move_r && !move_l {
         1
       } else {
         0
@@ -612,7 +612,7 @@ fn main {
       }
 
       for i in 0..<checkpoint_count {
-        if not(checkpoints[i].active) {
+        if !checkpoints[i].active {
           continue
         }
 
@@ -650,7 +650,7 @@ fn main {
       }
 
       for hazard in hazards {
-        if not(hazard.active) {
+        if !hazard.active {
           continue
         }
 
@@ -684,7 +684,7 @@ fn main {
       }
 
       for pickup in pickups {
-        if not(pickup.active) {
+        if !pickup.active {
           continue
         }
 
@@ -721,7 +721,7 @@ fn main {
       }
 
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
 
@@ -791,7 +791,7 @@ fn main {
     }
 
     for i in 0..<checkpoint_count {
-      if not(checkpoints[i].active) {
+      if !checkpoints[i].active {
         continue
       }
 
@@ -837,7 +837,7 @@ fn main {
     }
 
     for hazard in hazards {
-      if not(hazard.active) {
+      if !hazard.active {
         continue
       }
 
@@ -879,7 +879,7 @@ fn main {
     }
 
     for pickup in pickups {
-      if not(pickup.active) {
+      if !pickup.active {
         continue
       }
 
@@ -910,7 +910,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 

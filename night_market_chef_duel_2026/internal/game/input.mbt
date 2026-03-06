@@ -25,15 +25,15 @@ fn @types.Game::capture_input(game : @types.Game) -> Unit {
   let down = @raylib.is_key_pressed(@raylib.KeyDown) ||
     @raylib.is_key_pressed(@raylib.KeyS)
 
-  if left && not(right) {
+  if left && !right {
     game.input.move_x = -1
-  } else if right && not(left) {
+  } else if right && !left {
     game.input.move_x = 1
   }
 
-  if up && not(down) {
+  if up && !down {
     game.input.move_y = -1
-  } else if down && not(up) {
+  } else if down && !up {
     game.input.move_y = 1
   }
 

@@ -240,7 +240,7 @@ fn @types.Game::detect_board_tap(game : @types.Game) -> (Bool, Int, Int) {
   let bh : Int = @types.board_n * tile
 
   fn map(px : Float, py : Float) -> (Bool, Int, Int) {
-    if not(@types.inside_rect(px, py, board_x, board_y, bw, bh)) {
+    if !@types.inside_rect(px, py, board_x, board_y, bw, bh) {
       return (false, 0, 0)
     }
 

@@ -147,7 +147,7 @@ fn powerup_radius(kind : @types.PowerupKind) -> Float {
 ///|
 fn @types.Game::update_powerups(game : @types.Game, dt : Float) -> Unit {
   for p in game.powerups {
-    if not(p.active) {
+    if !p.active {
       continue
     }
 
@@ -161,7 +161,7 @@ fn @types.Game::update_powerups(game : @types.Game, dt : Float) -> Unit {
 
     for j in 0..<@types.max_players {
       let player = game.players[j]
-      if not(player.active) {
+      if !player.active {
         continue
       }
       let r = @types.tank_half + powerup_radius(p.kind)

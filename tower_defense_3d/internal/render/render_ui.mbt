@@ -555,7 +555,7 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
   }
   // Draw towers on minimap
   for tower in game.towers {
-    if not(tower.active) {
+    if !tower.active {
       continue
     }
     let cx = mx + tower.gx * cw
@@ -570,7 +570,7 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
   }
   // Draw enemies on minimap
   for enemy in game.enemies {
-    if not(enemy.active) {
+    if !enemy.active {
       continue
     }
     let egx = @types.world_to_grid_x(enemy.x)
@@ -802,7 +802,7 @@ fn @types.Game::draw_tower_info_panel(game : @types.Game) -> Unit {
     return
   }
   let tower = game.towers[game.selected_tower_idx]
-  if not(tower.active) {
+  if !tower.active {
     return
   }
   let px = @types.screen_width - 260

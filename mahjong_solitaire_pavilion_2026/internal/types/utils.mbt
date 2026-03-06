@@ -210,7 +210,7 @@ pub fn burst_tile(
 /// Advances spark particle simulation and lifetimes.
 pub fn update_sparks(game : Game, dt : Float) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 
@@ -269,7 +269,7 @@ pub fn free_tile(game : Game, x : Int, y : Int) -> Bool {
     active_at(game, x + 1, y) &&
     cell_at(game, x + 1, y) > 0
 
-  not(left_block && right_block)
+  !(left_block && right_block)
 }
 
 ///|
@@ -334,7 +334,7 @@ pub fn pointer_on_rect(
     hit = true
   }
 
-  if not(hit) {
+  if !hit {
     for i in 0..<touch_count {
       let p = @raylib.get_touch_position(i)
       if inside_rect(p.x, p.y, x, y, w, h) {

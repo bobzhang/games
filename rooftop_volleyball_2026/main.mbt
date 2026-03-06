@@ -126,7 +126,7 @@ fn spawn_particle(
       continue
     }
 
-    if not(ps_elem.active) {
+    if !ps_elem.active {
       ps_elem.active = true
       ps_elem.x = x
       ps_elem.y = y
@@ -279,7 +279,7 @@ fn update_athlete_movement(
     a.vx = a.vx + accel * dt
   }
 
-  if not(move_left) && not(move_right) {
+  if !move_left && !move_right {
     a.vx = a.vx * (Float::from_int(1) - dt * 7.6)
   }
 
@@ -350,7 +350,7 @@ fn attempt_hit_ball(
   )
 
   // Air-time contact allows a downward spike toward the opposite floor.
-  if not(a.on_ground) && ball.y > a.y - 20.0 {
+  if !a.on_ground && ball.y > a.y - 20.0 {
     target_y = Float::from_int(@raylib.get_random_value(120, 280))
   }
 
@@ -534,7 +534,7 @@ fn main {
   let mut won = false
   let mut round_msg = "A/D move, W jump, J hit, K dash"
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -579,7 +579,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 
@@ -593,7 +593,7 @@ fn main {
       }
     }
 
-    if not(over) {
+    if !over {
       if rally_wait > 0.0 {
         rally_wait = rally_wait - dt
         if rally_wait < 0.0 {
@@ -714,7 +714,7 @@ fn main {
         }
       }
 
-      if not(ball.active) && rally_wait <= 0.0 {
+      if !ball.active && rally_wait <= 0.0 {
         if ball.serve_owner == 1 {
           if p_hit || p_jump {
             ball.active = true
@@ -1092,7 +1092,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 
@@ -1310,7 +1310,7 @@ fn main {
       @raylib.Color::new(224, 236, 248, 255),
     )
 
-    if rally_wait > 0.0 && not(over) {
+    if rally_wait > 0.0 && !over {
       let countdown = rally_wait.to_int() + 1
       @raylib.draw_text(
         "Next rally \{countdown}",

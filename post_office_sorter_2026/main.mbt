@@ -39,7 +39,7 @@ fn reset_packages(ps : Array[Package]) -> Unit {
 /// Activates the first available slot in the pool with a randomized lane, destination code, and speed.
 fn spawn_package(ps : Array[Package]) -> Unit {
   for ps_elem in ps {
-    if not(ps_elem.alive) {
+    if !ps_elem.alive {
       let lane = @raylib.get_random_value(0, lane_count - 1)
       ps_elem.alive = true
       ps_elem.x = 80.0
@@ -105,7 +105,7 @@ fn main {
   let mut over = false
   let mut msg = "W/S move sorter lane, A/D switch sorter position, 1-4 remap lane"
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -126,7 +126,7 @@ fn main {
       reset_packages(packages)
     }
 
-    if not(over) {
+    if !over {
       if @raylib.is_key_pressed(@raylib.KeyW) ||
         @raylib.is_key_pressed(@raylib.KeyUp) {
         if sorter_lane > 0 {
@@ -175,7 +175,7 @@ fn main {
       }
 
       for pkg in packages {
-        if not(pkg.alive) {
+        if !pkg.alive {
           continue
         }
 

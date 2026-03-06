@@ -200,7 +200,7 @@ fn pointer_on_rect(
     hit = true
   }
 
-  if not(hit) {
+  if !hit {
     for i in 0..<touch_count {
       let p = @raylib.get_touch_position(i)
       if inside_rect(p.x, p.y, x, y, w, h) {
@@ -228,7 +228,7 @@ fn pointer_on_circle(
     hit = true
   }
 
-  if not(hit) {
+  if !hit {
     for i in 0..<touch_count {
       let p = @raylib.get_touch_position(i)
       if dist2(p.x, p.y, cx, cy) <= r * r {
@@ -368,7 +368,7 @@ fn burst_particles(
 ///|
 fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
     part.life = part.life - dt
@@ -693,7 +693,7 @@ fn nearest_fault_index(
   let mut best : Float = radius * radius
 
   for i in 0..<faults.length() {
-    if not(faults[i].active) {
+    if !faults[i].active {
       continue
     }
 
@@ -862,7 +862,7 @@ fn draw_power_lines(
   fn edge_fault_level(faults : Array[Fault], a : Int, b : Int) -> Float {
     let mut v : Float = 0.0
     for fault in faults {
-      if not(fault.active) {
+      if !fault.active {
         continue
       }
       let t : Int = fault.tower_id
@@ -986,7 +986,7 @@ fn draw_towers(
 ///|
 fn draw_winds(winds : Array[WindTunnel], scene_t : Float) -> Unit {
   for wind in winds {
-    if not(wind.active) {
+    if !wind.active {
       continue
     }
 
@@ -1023,7 +1023,7 @@ fn draw_winds(winds : Array[WindTunnel], scene_t : Float) -> Unit {
 ///|
 fn draw_storms(storms : Array[StormCell], scene_t : Float) -> Unit {
   for storm in storms {
-    if not(storm.active) {
+    if !storm.active {
       continue
     }
 
@@ -1047,7 +1047,7 @@ fn draw_storms(storms : Array[StormCell], scene_t : Float) -> Unit {
 ///|
 fn draw_drops(drops : Array[SupplyDrop], scene_t : Float) -> Unit {
   for drop in drops {
-    if not(drop.active) {
+    if !drop.active {
       continue
     }
 
@@ -1094,7 +1094,7 @@ fn draw_drops(drops : Array[SupplyDrop], scene_t : Float) -> Unit {
 ///|
 fn draw_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
 
@@ -1171,7 +1171,7 @@ fn draw_faults_panel(
 
   let mut y : Int = panel_y + 426
   for fault in faults {
-    if not(fault.active) {
+    if !fault.active {
       continue
     }
 
@@ -1924,7 +1924,7 @@ fn main {
   reset_run()
   state = 0
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -2125,7 +2125,7 @@ fn main {
 
       let mut wind_penalty : Float = 0.0
       for wind in winds {
-        if not(wind.active) {
+        if !wind.active {
           continue
         }
         wind.pulse = wind.pulse + dt * 2.8
@@ -2197,7 +2197,7 @@ fn main {
         burst_particles(parts, craft.x, craft.y, 18, 2)
 
         for fault in faults {
-          if not(fault.active) {
+          if !fault.active {
             continue
           }
           if dist2(
@@ -2212,7 +2212,7 @@ fn main {
         }
 
         for storm in storms {
-          if not(storm.active) {
+          if !storm.active {
             continue
           }
           if dist2(craft.x, craft.y, storm.x, storm.y) <= 240.0 * 240.0 {
@@ -2253,7 +2253,7 @@ fn main {
 
       // update storms and interactions
       for storm in storms {
-        if not(storm.active) {
+        if !storm.active {
           continue
         }
 
@@ -2297,7 +2297,7 @@ fn main {
 
       // update drops and pickup
       for drop in drops {
-        if not(drop.active) {
+        if !drop.active {
           continue
         }
 
@@ -2335,7 +2335,7 @@ fn main {
       let queue_penalty : Float = Float::from_int(active_faults_count(faults)) *
         0.03
       for fault in faults {
-        if not(fault.active) {
+        if !fault.active {
           continue
         }
 
@@ -2415,7 +2415,7 @@ fn main {
           }
         }
 
-        if not(did) && at_substation {
+        if !did && at_substation {
           craft.battery = minf(craft.battery_max, craft.battery + 36.0)
           craft.hull = minf(craft.hull_max, craft.hull + 14.0)
           did = true
@@ -2424,7 +2424,7 @@ fn main {
           burst_particles(parts, craft.x, craft.y, 10, 0)
         }
 
-        if not(did) {
+        if !did {
           let fi : Int = nearest_fault_index(
             faults,
             towers,

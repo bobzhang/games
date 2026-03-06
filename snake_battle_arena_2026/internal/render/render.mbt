@@ -133,7 +133,7 @@ fn @types.Game::draw_trap(
   by : Int,
   tile : Int,
 ) -> Unit {
-  if not(game.trap_active) {
+  if !game.trap_active {
     return
   }
 
@@ -239,7 +239,7 @@ fn @types.Game::draw_rival(
   tile : Int,
 ) -> Unit {
   let rival = game.rivals[rid]
-  if not(rival.alive) {
+  if !rival.alive {
     return
   }
 
@@ -297,7 +297,7 @@ fn @types.Game::draw_hint(
 ///|
 fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 

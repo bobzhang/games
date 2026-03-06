@@ -174,7 +174,7 @@ fn main {
   let mut over = false
   let mut msg = "A/D adjust angle, W/S adjust power, Space fire."
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -211,7 +211,7 @@ fn main {
       }
     }
 
-    if not(over) {
+    if !over {
       if shot_active {
         shot_vx = shot_vx + wind * dt * 0.20
         shot_vy = shot_vy + gravity * dt
@@ -229,12 +229,12 @@ fn main {
           iy = Float::from_int(ground_y)
         }
 
-        if not(impact) && shot_y >= Float::from_int(ground_y) {
+        if !impact && shot_y >= Float::from_int(ground_y) {
           impact = true
           iy = Float::from_int(ground_y)
         }
 
-        if not(impact) &&
+        if !impact &&
           inside_rect(
             shot_x,
             shot_y,
@@ -246,7 +246,7 @@ fn main {
           impact = true
         }
 
-        if not(impact) &&
+        if !impact &&
           inside_rect(
             shot_x,
             shot_y,
@@ -258,7 +258,7 @@ fn main {
           impact = true
         }
 
-        if not(impact) &&
+        if !impact &&
           inside_rect(
             shot_x,
             shot_y,
@@ -572,7 +572,7 @@ fn main {
       @raylib.Color::new(252, 228, 140, 255),
     )
 
-    if player_turn && not(shot_active) && not(over) {
+    if player_turn && !shot_active && !over {
       let ox = Float::from_int(player_x + castle_w - 10)
       let oy = Float::from_int(ground_y - castle_h + 24)
       let cs = cosf_deg(player_angle)

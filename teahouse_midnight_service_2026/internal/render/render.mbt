@@ -461,7 +461,7 @@ fn draw_customer_chair(x : Float, y : Float) -> Unit {
 
 ///|
 fn draw_customer(c : @types.Customer, cam_x : Float, cam_y : Float) -> Unit {
-  if not(c.active) {
+  if !c.active {
     return
   }
 
@@ -629,7 +629,7 @@ fn @types.Game::draw_sparks(
   cam_y : Float,
 ) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 
@@ -669,7 +669,7 @@ fn @types.Game::draw_sparks(
   }
 
   for ring in game.rings {
-    if not(ring.active) {
+    if !ring.active {
       continue
     }
 
@@ -691,7 +691,7 @@ fn @types.Game::draw_sparks(
   }
 
   for shadow in game.shadows {
-    if not(shadow.active) {
+    if !shadow.active {
       continue
     }
 
@@ -946,7 +946,7 @@ fn draw_button_visual(
 
 ///|
 fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
-  if not(game.touch_mode) {
+  if !game.touch_mode {
     return
   }
 

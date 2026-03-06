@@ -100,7 +100,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   let new_x = ship.x + dx + ship.drift_x * dt * 0.3
   let new_z = ship.z + dz + ship.drift_z * dt * 0.3
   // Island collision
-  if not(@types.check_island_collision(game, new_x, new_z, ship.ship_width)) {
+  if !@types.check_island_collision(game, new_x, new_z, ship.ship_width) {
     // Boundary check
     let half : Float = @types.ocean_size / 2.0 - 5.0
     ship.x = @types.clampf(new_x, -half, half)
@@ -270,7 +270,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
     let mut nearest_dist : Float = @types.boarding_range
     for i in 0..<game.enemies.length() {
       let e = game.enemies[i]
-      if not(e.active) {
+      if !e.active {
         continue
       }
       let d = @types.distance2d(ship.x, ship.z, e.x, e.z)
@@ -295,7 +295,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   update_boarding(game, dt)
   // Fleet command (F key to toggle, then number keys)
   if @raylib.is_key_pressed(@raylib.KeyF) {
-    game.fleet_command_mode = not(game.fleet_command_mode)
+    game.fleet_command_mode = !game.fleet_command_mode
     if game.fleet_command_mode {
       @types.add_battle_message(
         game, "Fleet Command: Select order", 150, 200, 255,
@@ -325,7 +325,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   }
   // Toggle minimap (M key)
   if @raylib.is_key_pressed(@raylib.KeyM) {
-    game.show_minimap = not(game.show_minimap)
+    game.show_minimap = !game.show_minimap
   }
   // Camera follow with scroll wheel zoom
   let wheel = @raylib.get_mouse_wheel_move()
@@ -394,7 +394,7 @@ fn get_ammo_name(ammo_type : Int) -> String {
 ///|
 fn @types.Game::set_fleet_order(game : @types.Game, order : Int) -> Unit {
   for fs in game.fleet_ships {
-    if not(fs.active) {
+    if !fs.active {
       continue
     }
     fs.order = order

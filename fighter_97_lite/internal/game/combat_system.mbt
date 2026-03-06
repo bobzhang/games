@@ -19,7 +19,7 @@ fn can_defender_block(
   defender : @types.Fighter,
   mv : @types.MoveSpec,
 ) -> Bool {
-  if not(defender.on_ground) {
+  if !defender.on_ground {
     return false
   }
 
@@ -33,14 +33,14 @@ fn can_defender_block(
     return false
   }
 
-  if not(defender_holding_away(attacker, defender)) {
+  if !defender_holding_away(attacker, defender) {
     return false
   }
 
   if mv.low_attack {
     defender.input.hold_down
   } else if mv.overhead_attack {
-    not(defender.input.hold_down)
+    !defender.input.hold_down
   } else {
     true
   }
@@ -289,7 +289,7 @@ fn @types.Game::process_attack_contact(
     return
   }
 
-  if not(attack_is_active(attacker)) {
+  if !attack_is_active(attacker) {
     return
   }
 
@@ -305,7 +305,7 @@ fn @types.Game::process_attack_contact(
   let hitbox = @types.attack_hitbox_for(attacker, mv)
   let hurtbox = @types.hurtbox_for(defender)
 
-  if not(@raylib.check_collision_recs(hitbox, hurtbox)) {
+  if !@raylib.check_collision_recs(hitbox, hurtbox) {
     return
   }
 

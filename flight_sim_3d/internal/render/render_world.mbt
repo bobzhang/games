@@ -45,7 +45,7 @@ fn @types.Game::build_camera(game : @types.Game) -> @raylib.Camera3D {
 fn @types.Game::draw_terrain(game : @types.Game) -> Unit {
   let scale = @types.terrain_chunk_scale
   for t in game.terrain {
-    if not(t.active) {
+    if !t.active {
       continue
     }
     let wx = Float::from_int(t.grid_x) * scale
@@ -76,7 +76,7 @@ fn @types.Game::draw_terrain(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_checkpoints(game : @types.Game) -> Unit {
   for cp in game.checkpoints {
-    if not(cp.active) || cp.collected {
+    if !cp.active || cp.collected {
       continue
     }
     // Draw checkpoint ring using cubes arranged in a circle
@@ -121,7 +121,7 @@ fn @types.Game::draw_checkpoints(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
   for e in game.enemies {
-    if not(e.active) {
+    if !e.active {
       continue
     }
     // Check distance to player for culling
@@ -220,7 +220,7 @@ fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
   for p in game.projectiles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     let color = if p.is_enemy {
@@ -249,7 +249,7 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     let alpha = (p.life / p.max_life * 255.0).to_int()
@@ -267,7 +267,7 @@ fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_player_aircraft(game : @types.Game) -> Unit {
   let player = game.player
-  if not(player.alive) {
+  if !player.alive {
     return
   }
   // Draw player aircraft (visible from chase cam)
@@ -346,7 +346,7 @@ fn @types.Game::draw_player_aircraft(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_buildings(game : @types.Game) -> Unit {
   for b in game.buildings {
-    if not(b.active) {
+    if !b.active {
       continue
     }
     // Distance culling
@@ -579,7 +579,7 @@ fn @types.Game::draw_buildings(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_turrets_3d(game : @types.Game) -> Unit {
   for t in game.turrets {
-    if not(t.active) {
+    if !t.active {
       continue
     }
     // Distance culling
@@ -674,7 +674,7 @@ fn @types.Game::draw_terrain_details(game : @types.Game) -> Unit {
   let scale = @types.terrain_chunk_scale
   let detail_range : Float = 50.0
   for t in game.terrain {
-    if not(t.active) {
+    if !t.active {
       continue
     }
     let wx = Float::from_int(t.grid_x) * scale
@@ -750,7 +750,7 @@ fn @types.Game::draw_terrain_details(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_landing_zone(game : @types.Game) -> Unit {
   let mission = game.missions[game.current_mission]
-  if not(mission.has_landing) {
+  if !mission.has_landing {
     return
   }
   // Draw landing strip

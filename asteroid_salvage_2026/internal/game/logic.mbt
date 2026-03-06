@@ -2,7 +2,7 @@
 /// Moves all active bullets, wrapping at screen edges, and deactivates expired ones.
 fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
   for bullet in game.bullets {
-    if not(bullet.active) {
+    if !bullet.active {
       continue
     }
     bullet.x = @types.wrap_x(bullet.x + bullet.vx * dt)
@@ -18,7 +18,7 @@ fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
 /// Moves all active rocks forward by their velocity, wrapping at screen edges.
 fn @types.Game::update_rocks(game : @types.Game, dt : Float) -> Unit {
   for rock in game.rocks {
-    if not(rock.active) {
+    if !rock.active {
       continue
     }
     rock.x = @types.wrap_x(rock.x + rock.vx * dt)
@@ -59,11 +59,11 @@ fn @types.Game::split_rock(
 /// Tests each active bullet against each active rock and calls `split_rock` on a hit.
 fn @types.Game::bullet_vs_rocks(game : @types.Game) -> Unit {
   for bullet in game.bullets {
-    if not(bullet.active) {
+    if !bullet.active {
       continue
     }
     for rock_copy in game.rocks {
-      if not(rock_copy.active) {
+      if !rock_copy.active {
         continue
       }
       let dx = bullet.x - rock_copy.x
@@ -90,7 +90,7 @@ fn @types.Game::ship_vs_rocks(game : @types.Game) -> Unit {
 
   let ship_r : Float = 11.0
   for rock in game.rocks {
-    if not(rock.active) {
+    if !rock.active {
       continue
     }
     let dx = game.ship_x - rock.x

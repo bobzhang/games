@@ -364,7 +364,7 @@ fn draw_ghost(
   oy : Int,
   i : Int,
 ) -> Unit {
-  if not(g.active) {
+  if !g.active {
     return
   }
 
@@ -409,7 +409,7 @@ fn draw_ghost(
 /// Draws all active particles as coloured circles at their interpolated positions.
 fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 

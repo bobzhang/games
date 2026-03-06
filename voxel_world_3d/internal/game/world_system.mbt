@@ -140,7 +140,7 @@ fn @types.Game::spawn_entity_at(
   }
   // Find free entity slot
   for i in 0..<@types.entity_max {
-    if not(game.entities[i].active) {
+    if !game.entities[i].active {
       let ent = game.entities[i]
       ent.active = true
       ent.kind = kind
@@ -174,7 +174,7 @@ pub fn update_entities(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
   for i in 0..<@types.entity_max {
     let ent = game.entities[i]
-    if not(ent.active) {
+    if !ent.active {
       continue
     }
     // Animation timer
@@ -325,7 +325,7 @@ fn @types.Game::update_entity_physics(
   let by = ent.y.to_int()
   let bz = ent.z.to_int()
   let block_at_new_x = @types.get_world_block(game, bx, by, bz)
-  if not(@types.is_solid(block_at_new_x)) {
+  if !@types.is_solid(block_at_new_x) {
     ent.x = new_x
   } else {
     ent.vx = 0.0
@@ -334,7 +334,7 @@ fn @types.Game::update_entity_physics(
   let new_z = ent.z + ent.vz * dt
   let bz2 = new_z.to_int()
   let block_at_new_z = @types.get_world_block(game, ent.x.to_int(), by, bz2)
-  if not(@types.is_solid(block_at_new_z)) {
+  if !@types.is_solid(block_at_new_z) {
     ent.z = new_z
   } else {
     ent.vz = 0.0
@@ -348,7 +348,7 @@ fn @types.Game::update_entity_physics(
     by2,
     ent.z.to_int(),
   )
-  if not(@types.is_solid(block_at_new_y)) {
+  if !@types.is_solid(block_at_new_y) {
     ent.y = new_y
     ent.on_ground = false
   } else {

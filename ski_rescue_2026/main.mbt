@@ -31,7 +31,7 @@ fn reset_objs(objs : Array[Obj]) -> Unit {
 ///|
 fn spawn_obj(objs : Array[Obj], lane : Int, kind : Int) -> Unit {
   for obj in objs {
-    if not(obj.alive) {
+    if !obj.alive {
       obj.alive = true
       obj.lane = lane
       obj.x = lane_x(lane)
@@ -67,7 +67,7 @@ fn main {
   let mut over = false
   let mut msg = "A/D or arrows: move lanes, R restart"
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -89,7 +89,7 @@ fn main {
       reset_objs(objs)
     }
 
-    if not(over) {
+    if !over {
       if @raylib.is_key_pressed(@raylib.KeyA) ||
         @raylib.is_key_pressed(@raylib.KeyLeft) {
         if player_lane > 0 {
@@ -129,7 +129,7 @@ fn main {
       }
 
       for obj in objs {
-        if not(obj.alive) {
+        if !obj.alive {
           continue
         }
 

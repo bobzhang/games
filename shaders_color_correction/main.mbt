@@ -109,7 +109,7 @@ fn main {
   let key_r = 82
 
   // Main game loop
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     // Update
     // Select texture to draw
     if @raylib.is_key_pressed(key_one) {

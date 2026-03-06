@@ -290,7 +290,7 @@ fn @types.Game::draw_coins(
   shake_y : Float,
 ) -> Unit {
   for c in game.coins {
-    if not(c.active) {
+    if !c.active {
       continue
     }
     let sx = @types.world_to_screen_x(c.x, cam_x).to_int()
@@ -451,7 +451,7 @@ fn @types.Game::draw_particles(
   shake_y : Float,
 ) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     let alpha = @types.clampf(p.life / p.max_life, 0.0, 1.0)

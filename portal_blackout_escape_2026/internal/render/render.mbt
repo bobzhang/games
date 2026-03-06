@@ -216,7 +216,7 @@ fn @types.Game::draw_portals(game : @types.Game, ox : Int, oy : Int) -> Unit {
 /// Draws all active energy cores as colored circles with a soft glow halo.
 fn @types.Game::draw_cores(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for core in game.cores {
-    if not(core.active) {
+    if !core.active {
       continue
     }
 
@@ -245,7 +245,7 @@ fn @types.Game::draw_cores(game : @types.Game, ox : Int, oy : Int) -> Unit {
 /// Draws all active flare beacons as fading light pools with alpha proportional to remaining lifetime.
 fn @types.Game::draw_flares(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for flare in game.flares {
-    if not(flare.active) {
+    if !flare.active {
       continue
     }
 
@@ -262,7 +262,7 @@ fn @types.Game::draw_flares(game : @types.Game, ox : Int, oy : Int) -> Unit {
 /// Draws all active drones with mode-dependent color (stunned=purple, hunting=red, patrol=color_id).
 fn @types.Game::draw_drones(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for drone in game.drones {
-    if not(drone.active) {
+    if !drone.active {
       continue
     }
 
@@ -328,7 +328,7 @@ fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
 /// Draws all active particles as colored circles colored by kind.
 fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 
@@ -353,7 +353,7 @@ fn @types.Game::light_alpha(game : @types.Game, x : Int, y : Int) -> Int {
   let mut best : Int = @types.manhattan(x, y, game.player.x, game.player.y)
 
   for flare in game.flares {
-    if not(flare.active) {
+    if !flare.active {
       continue
     }
 

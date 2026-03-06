@@ -206,7 +206,7 @@ fn spawn_spark(
     if done {
       continue
     }
-    if not(spark.active) {
+    if !spark.active {
       spark.active = true
       spark.x = x
       spark.y = y
@@ -260,7 +260,7 @@ fn spawn_shot(
     if done {
       continue
     }
-    if not(shot.active) {
+    if !shot.active {
       shot.active = true
       shot.x = x
       shot.y = y
@@ -318,7 +318,7 @@ fn spawn_enemy(enemies : Array[Enemy], sector : Int) -> Unit {
     if done {
       continue
     }
-    if not(enemy.active) {
+    if !enemy.active {
       enemy.active = true
       enemy.x = ex
       enemy.y = ey
@@ -367,7 +367,7 @@ fn main {
   let mut won = false
   let mut msg = "A/D rotate shield, Space/J fire. Block enemies before impact."
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -411,7 +411,7 @@ fn main {
       }
     }
 
-    if not(over) {
+    if !over {
       sector_timer = sector_timer + dt
       if sector_timer >= 46.0 {
         sector_timer = 0.0
@@ -488,7 +488,7 @@ fn main {
       }
 
       for shot in shots {
-        if not(shot.active) {
+        if !shot.active {
           continue
         }
 
@@ -508,7 +508,7 @@ fn main {
       let mut planet_hit = 0
 
       for i in 0..<enemies.length() {
-        if not(enemies[i].active) {
+        if !enemies[i].active {
           continue
         }
 
@@ -595,7 +595,7 @@ fn main {
       }
 
       for shot in shots {
-        if not(shot.active) {
+        if !shot.active {
           continue
         }
 
@@ -604,7 +604,7 @@ fn main {
           if hit {
             continue
           }
-          if not(enemy.active) {
+          if !enemy.active {
             continue
           }
 
@@ -636,7 +636,7 @@ fn main {
     }
 
     for spark in sparks {
-      if not(spark.active) {
+      if !spark.active {
         continue
       }
       spark.x = spark.x + spark.vx * dt
@@ -747,7 +747,7 @@ fn main {
     )
 
     for enemy in enemies {
-      if not(enemy.active) {
+      if !enemy.active {
         continue
       }
       let ex = enemy.x + shake_x
@@ -798,7 +798,7 @@ fn main {
     }
 
     for shot in shots {
-      if not(shot.active) {
+      if !shot.active {
         continue
       }
       let sx = shot.x + shake_x
@@ -818,7 +818,7 @@ fn main {
     }
 
     for spark in sparks {
-      if not(spark.active) {
+      if !spark.active {
         continue
       }
       let a = (spark.ttl * 255.0).to_int()

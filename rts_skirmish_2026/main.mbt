@@ -30,7 +30,7 @@ struct Unit {
 fn spawn_unit(units : Array[Unit], team : Int, kind : Int, lane : Int) -> Bool {
   let mut slot = -1
   for i in 0..<units.length() {
-    if slot < 0 && not(units[i].alive) {
+    if slot < 0 && !units[i].alive {
       slot = i
     }
   }
@@ -63,7 +63,7 @@ fn closest_enemy(units : Array[Unit], me : Int) -> Int {
   let mut best = -1
   let mut best_d : Float = 1_000_000.0
   for i in 0..<units.length() {
-    if i == me || not(units[i].alive) {
+    if i == me || !units[i].alive {
       continue
     }
     if units[i].team == units[me].team || units[i].lane != units[me].lane {
@@ -112,7 +112,7 @@ fn main {
   let mut won = false
   let mut lost = false
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -136,7 +136,7 @@ fn main {
       lost = false
     }
 
-    if not(won) && not(lost) {
+    if !won && !lost {
       if @raylib.is_key_pressed(@raylib.KeyOne) {
         lane_select = 0
       }
@@ -196,7 +196,7 @@ fn main {
       }
 
       for i in 0..<units.length() {
-        if not(units[i].alive) {
+        if !units[i].alive {
           continue
         }
         units[i].cooldown = units[i].cooldown - dt

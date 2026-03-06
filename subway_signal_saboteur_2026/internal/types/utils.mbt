@@ -217,7 +217,7 @@ pub fn in_bounds(x : Int, y : Int) -> Bool {
 ///|
 /// Reads a tile at `(x, y)` and returns `Void` when out of bounds.
 pub fn tile_at(game : Game, x : Int, y : Int) -> Tile {
-  if not(in_bounds(x, y)) {
+  if !in_bounds(x, y) {
     Void
   } else {
     game.map[idx(x, y)]
@@ -227,7 +227,7 @@ pub fn tile_at(game : Game, x : Int, y : Int) -> Tile {
 ///|
 /// Writes a tile at `(x, y)` when the coordinates are in bounds.
 pub fn set_tile(game : Game, x : Int, y : Int, t : Tile) -> Unit {
-  if not(in_bounds(x, y)) {
+  if !in_bounds(x, y) {
     return
   }
   game.map[idx(x, y)] = t
@@ -273,7 +273,7 @@ pub fn actor_start_move(a : Actor, tx : Int, ty : Int) -> Unit {
 ///|
 /// Advances actor interpolation by `dt` and commits on completion.
 pub fn actor_tick(a : Actor, dt : Float, move_t : Float) -> Unit {
-  if not(a.moving) {
+  if !a.moving {
     a.fx = Float::from_int(a.x)
     a.fy = Float::from_int(a.y)
     return

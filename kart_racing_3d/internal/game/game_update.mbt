@@ -155,7 +155,7 @@ fn @types.Game::update_racing(game : @types.Game, dt : Float) -> Unit {
     // Auto-finish any remaining karts
     for i in 0..<@types.max_karts {
       let kart = game.karts[i]
-      if kart.active && not(kart.finished) {
+      if kart.active && !kart.finished {
         kart.finished = true
         kart.finish_time = game.race_time + Float::from_int(kart.place) * 2.0
       }
@@ -207,7 +207,7 @@ fn @types.Game::update_cup_complete(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_camera_chase(game : @types.Game, dt : Float) -> Unit {
   let kart = game.karts[@types.player_kart]
-  if not(kart.active) {
+  if !kart.active {
     return
   }
   // Target camera position behind the kart
@@ -273,7 +273,7 @@ fn @types.Game::update_camera_chase(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_kart_surface(game : @types.Game, kart_idx : Int) -> Unit {
   let kart = game.karts[kart_idx]
-  if not(kart.active) {
+  if !kart.active {
     return
   }
   kart.on_surface_type = @types.detect_surface_type(game, kart.x, kart.z)
@@ -295,7 +295,7 @@ fn @types.Game::update_kart_wrong_way(
   dt : Float,
 ) -> Unit {
   let kart = game.karts[kart_idx]
-  if not(kart.active) || kart.finished {
+  if !kart.active || kart.finished {
     return
   }
   kart.wrong_way = @types.is_wrong_way(game, kart)
@@ -329,7 +329,7 @@ fn @types.Game::update_star_effects(game : @types.Game, dt : Float) -> Unit {
   game.star_rainbow_timer += dt * 5.0
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
-    if not(kart.active) {
+    if !kart.active {
       continue
     }
     if kart.star_timer > 0.0 {
@@ -364,7 +364,7 @@ fn @types.Game::update_star_effects(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::emit_surface_particles(game : @types.Game) -> Unit {
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
-    if not(kart.active) || not(kart.on_ground) {
+    if !kart.active || !kart.on_ground {
       continue
     }
     if kart.speed < 3.0 {

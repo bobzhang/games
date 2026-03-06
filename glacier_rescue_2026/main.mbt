@@ -200,7 +200,7 @@ fn emit_particle(
   kind : Int,
 ) -> Unit {
   for i in 0..<particles.length() {
-    if not(particles[i].active) {
+    if !particles[i].active {
       particles[i] = { active: true, x, y, vx, vy, size, t: 0.0, life, kind }
       break
     }
@@ -300,7 +300,7 @@ fn spawn_hazards(hazards : FixedArray[Hazard], level : Int) -> Unit {
 /// Spawns a new avalanche at a random vertical position with speed and width scaled to the level.
 fn spawn_avalanche(avalanches : FixedArray[Avalanche], level : Int) -> Unit {
   for i in 0..<avalanches.length() {
-    if not(avalanches[i].active) {
+    if !avalanches[i].active {
       let y = randf(160.0, world_h - 240.0)
       let wide = randf(260.0, 520.0)
       avalanches[i] = {
@@ -320,7 +320,7 @@ fn spawn_avalanche(avalanches : FixedArray[Avalanche], level : Int) -> Unit {
 /// Spawns a flare at the given world position, activating it in the flare pool.
 fn spawn_flare(flares : FixedArray[Flare], x : Float, y : Float) -> Unit {
   for i in 0..<flares.length() {
-    if not(flares[i].active) {
+    if !flares[i].active {
       flares[i] = { active: true, x, y, r: 36.0, t: 0.0, life: 3.8 }
       break
     }
@@ -359,7 +359,7 @@ fn draw_bar(
 ///|
 /// Draws the on-screen touch control buttons for movement, boost, and flare if show is true.
 fn draw_touch_controls(show : Bool) -> Unit {
-  if not(show) {
+  if !show {
     return
   }
 
@@ -607,7 +607,7 @@ fn main {
 
   reset_round(level)
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -848,7 +848,7 @@ fn main {
         cold_rate = cold_rate + 3.2
       }
       for flare in flares {
-        if not(flare.active) {
+        if !flare.active {
           continue
         }
         let d2 = dist2(heli.x, heli.y, flare.x, flare.y)
@@ -874,7 +874,7 @@ fn main {
 
       let mut impact = false
       for hazard in hazards {
-        if not(hazard.active) {
+        if !hazard.active {
           continue
         }
 
@@ -929,7 +929,7 @@ fn main {
       }
 
       for avalanche in avalanches {
-        if not(avalanche.active) {
+        if !avalanche.active {
           continue
         }
 
@@ -960,17 +960,17 @@ fn main {
 
       let mut carrying_now : Int = 0
       for survivor in survivors {
-        if not(survivor.active) {
+        if !survivor.active {
           continue
         }
 
         survivor.panic_t = survivor.panic_t + dt
         survivor.beacon_t = survivor.beacon_t + dt * (1.2 + storm.severity)
 
-        if not(survivor.carried) {
+        if !survivor.carried {
           let mut freeze_rate : Float = 2.4 + storm.severity * 4.1
           for flare in flares {
-            if not(flare.active) {
+            if !flare.active {
               continue
             }
             let d2 = dist2(survivor.x, survivor.y, flare.x, flare.y)
@@ -1018,7 +1018,7 @@ fn main {
 
       if near_base && speed < 86.0 && heli.onboard > 0 {
         for survivor in survivors {
-          if not(survivor.active) || not(survivor.carried) {
+          if !survivor.active || !survivor.carried {
             continue
           }
           survivor.active = false
@@ -1038,7 +1038,7 @@ fn main {
       }
 
       for flare in flares {
-        if not(flare.active) {
+        if !flare.active {
           continue
         }
         flare.t = flare.t + dt
@@ -1084,7 +1084,7 @@ fn main {
       }
 
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
         particle.t = particle.t + dt
@@ -1161,7 +1161,7 @@ fn main {
     }
 
     for avalanche in avalanches {
-      if not(avalanche.active) {
+      if !avalanche.active {
         continue
       }
       let sx = (avalanche.x - cam_x + shake_x).to_int()
@@ -1183,7 +1183,7 @@ fn main {
     }
 
     for hazard in hazards {
-      if not(hazard.active) {
+      if !hazard.active {
         continue
       }
       let hx = hazard.x - cam_x + shake_x
@@ -1233,7 +1233,7 @@ fn main {
     }
 
     for flare in flares {
-      if not(flare.active) {
+      if !flare.active {
         continue
       }
       let fx = flare.x - cam_x + shake_x
@@ -1282,7 +1282,7 @@ fn main {
     )
 
     for survivor in survivors {
-      if not(survivor.active) {
+      if !survivor.active {
         continue
       }
 
@@ -1318,7 +1318,7 @@ fn main {
         burst_particles(particles, survivor.x, survivor.y, 4, 26.0, 1)
       }
 
-      if not(survivor.carried) {
+      if !survivor.carried {
         @raylib.draw_circle_lines(
           sx.to_int(),
           sy.to_int(),
@@ -1375,7 +1375,7 @@ fn main {
     )
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
       let px = particle.x - cam_x + shake_x

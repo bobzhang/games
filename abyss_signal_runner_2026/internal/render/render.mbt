@@ -400,7 +400,7 @@ fn @types.Game::draw_objects(
   cam_y : Float,
 ) -> Unit {
   for o in game.objs {
-    if not(o.active) {
+    if !o.active {
       continue
     }
 
@@ -454,7 +454,7 @@ fn @types.Game::draw_trails(
   cam_y : Float,
 ) -> Unit {
   for t in game.trails {
-    if not(t.active) {
+    if !t.active {
       continue
     }
 
@@ -483,7 +483,7 @@ fn @types.Game::draw_particles(
   cam_y : Float,
 ) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
 
@@ -513,7 +513,7 @@ fn @types.Game::draw_ripples(
   cam_y : Float,
 ) -> Unit {
   for r in game.ripples {
-    if not(r.active) {
+    if !r.active {
       continue
     }
 
@@ -1142,7 +1142,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
     )
   }
 
-  if not(game.state is Title) {
+  if !(game.state is Title) {
     game.draw_hud()
   }
 

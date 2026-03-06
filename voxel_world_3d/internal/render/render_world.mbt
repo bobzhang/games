@@ -172,7 +172,7 @@ fn @types.Game::draw_chunk_blocks(
           @types.is_face_visible(game, wx, ly + 1, wz) ||
           @types.is_face_visible(game, wx, ly, wz - 1) ||
           @types.is_face_visible(game, wx, ly, wz + 1)
-        if not(has_visible_face) {
+        if !has_visible_face {
           continue
         }
         // Draw the block with distance-based fog
@@ -328,7 +328,7 @@ fn @types.Game::draw_chunk_decorations(
     for lz in 0..<@types.chunk_z {
       for lx in 0..<@types.chunk_x {
         let block = chunk.get_block(lx, ly, lz)
-        if not(@types.is_decoration(block)) {
+        if !@types.is_decoration(block) {
           continue
         }
         let wx = base_wx + lx
@@ -423,7 +423,7 @@ fn @types.Game::draw_chunk_decorations(
 ///|
 fn @types.Game::draw_block_highlight(game : @types.Game) -> Unit {
   let target = game.target
-  if not(target.hit) {
+  if !target.hit {
     return
   }
   let fx = Float::from_int(target.bx) + 0.5
@@ -450,7 +450,7 @@ fn @types.Game::draw_block_highlight(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_mining_progress(game : @types.Game) -> Unit {
   let player = game.player
-  if not(player.mining_active) {
+  if !player.mining_active {
     return
   }
   let fx = Float::from_int(player.mining_block_x) + 0.5
@@ -486,7 +486,7 @@ fn @types.Game::draw_mining_progress(game : @types.Game) -> Unit {
 fn @types.Game::draw_entities(game : @types.Game) -> Unit {
   for i in 0..<@types.entity_max {
     let ent = game.entities[i]
-    if not(ent.active) {
+    if !ent.active {
       continue
     }
     // Check distance for culling
@@ -1050,7 +1050,7 @@ fn draw_entity_leg(
 ///|
 fn @types.Game::draw_face_highlight(game : @types.Game) -> Unit {
   let target = game.target
-  if not(target.hit) {
+  if !target.hit {
     return
   }
   let fx = Float::from_int(target.bx) + 0.5

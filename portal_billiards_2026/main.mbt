@@ -336,7 +336,7 @@ fn main {
   let mut won = false
   let mut msg = "Aim with mouse/touch. W/S power. Space shoot."
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -357,7 +357,7 @@ fn main {
       msg = "Table reset."
     }
 
-    if not(over) {
+    if !over {
       if @raylib.is_key_down(@raylib.KeyW) || @raylib.is_key_down(@raylib.KeyUp) {
         power = power + 220.0 * dt
       }
@@ -403,7 +403,7 @@ fn main {
 
       let moving = moving_any(balls)
 
-      if fire && not(moving) && shots_left > 0 && balls[0].active {
+      if fire && !moving && shots_left > 0 && balls[0].active {
         let dx = aim_x - balls[0].x
         let dy = aim_y - balls[0].y
         let d = @math.hypotf(dx, dy)
@@ -416,7 +416,7 @@ fn main {
       }
 
       for ball in balls {
-        if not(ball.active) {
+        if !ball.active {
           continue
         }
 
@@ -466,13 +466,13 @@ fn main {
         let bottom = Float::from_int(table_y + table_h) - ball_r
 
         if ball.x <= left {
-          if not(goal_opening(ball.y)) {
+          if !goal_opening(ball.y) {
             ball.x = left
             ball.vx = ball.vx.abs() * 0.94
           }
         }
         if ball.x >= right {
-          if not(goal_opening(ball.y)) {
+          if !goal_opening(ball.y) {
             ball.x = right
             ball.vx = -ball.vx.abs() * 0.94
           }
@@ -514,11 +514,11 @@ fn main {
       }
 
       for i in 0..<balls.length() {
-        if not(balls[i].active) {
+        if !balls[i].active {
           continue
         }
         for j in (i + 1)..<balls.length() {
-          if not(balls[j].active) {
+          if !balls[j].active {
             continue
           }
 
@@ -552,7 +552,7 @@ fn main {
       }
 
       let still_moving = moving_any(balls)
-      if not(still_moving) && shots_left <= 0 && not(all_targets_cleared(balls)) {
+      if !still_moving && shots_left <= 0 && !all_targets_cleared(balls) {
         over = true
         won = false
         msg = "Out of shots. Press R to retry."
@@ -661,7 +661,7 @@ fn main {
     }
 
     for ball in balls {
-      if not(ball.active) {
+      if !ball.active {
         continue
       }
       let x = ball.x.to_int()
@@ -682,7 +682,7 @@ fn main {
       )
     }
 
-    if balls[0].active && not(moving_any(balls)) && not(over) {
+    if balls[0].active && !moving_any(balls) && !over {
       let dx = aim_x - balls[0].x
       let dy = aim_y - balls[0].y
       let d = @math.hypotf(dx, dy)

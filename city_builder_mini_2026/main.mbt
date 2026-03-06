@@ -122,7 +122,7 @@ fn main {
   let mut lost = false
   let mut won = false
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -156,7 +156,7 @@ fn main {
       tool = 4
     }
 
-    if not(lost) && not(won) {
+    if !lost && !won {
       if @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
         let mx = @raylib.get_mouse_x()
         let my = @raylib.get_mouse_y()

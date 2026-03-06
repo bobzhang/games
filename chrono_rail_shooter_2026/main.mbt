@@ -294,7 +294,7 @@ fn add_enemy(
   level : Int,
 ) -> Bool {
   for enemy in enemies {
-    if not(enemy.active) {
+    if !enemy.active {
       enemy.active = true
       enemy.kind = kind
       enemy.x = x
@@ -332,7 +332,7 @@ fn add_bullet(
   life : Float,
 ) -> Bool {
   for bullet in bullets {
-    if not(bullet.active) {
+    if !bullet.active {
       bullet.active = true
       bullet.team = team
       bullet.kind = kind
@@ -359,7 +359,7 @@ fn add_pickup(
   vy : Float,
 ) -> Bool {
   for pickup in pickups {
-    if not(pickup.active) {
+    if !pickup.active {
       pickup.active = true
       pickup.kind = kind
       pickup.x = x
@@ -385,7 +385,7 @@ fn add_particle(
   life : Float,
 ) -> Bool {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       part.active = true
       part.kind = kind
       part.x = x
@@ -413,7 +413,7 @@ fn add_panel(
   boost : Bool,
 ) -> Bool {
   for panel in panels {
-    if not(panel.active) {
+    if !panel.active {
       panel.active = true
       panel.x = x
       panel.y = y
@@ -806,7 +806,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -1131,12 +1131,12 @@ fn main {
         let x = randf(rail_l + w * 0.5 + 2.0, rail_r - w * 0.5 - 2.0)
         let hazard : Bool = @raylib.get_random_value(0, 99) <
           clampf(20.0 + Float::from_int(level) * 1.8, 20.0, 64.0).to_int()
-        let boost : Bool = not(hazard) && @raylib.get_random_value(0, 99) < 14
+        let boost : Bool = !hazard && @raylib.get_random_value(0, 99) < 14
         ignore(add_panel(panels, x, -60.0, w, h, hazard, boost))
       }
 
       for panel in panels {
-        if not(panel.active) {
+        if !panel.active {
           continue
         }
 
@@ -1168,7 +1168,7 @@ fn main {
 
       enemy_cd = enemy_cd - dt
       if enemy_cd <= 0.0 {
-        if not(boss.active) {
+        if !boss.active {
           let roll = @raylib.get_random_value(0, 99)
           let mut kind = 0
           if level >= 3 && roll >= 45 {
@@ -1205,7 +1205,7 @@ fn main {
         }
       }
 
-      if not(boss_triggered) && player.distance >= distance_goal * 0.68 {
+      if !boss_triggered && player.distance >= distance_goal * 0.68 {
         boss_triggered = true
         boss.active = true
         boss.x = (rail_l + rail_r) * 0.5
@@ -1221,7 +1221,7 @@ fn main {
       }
 
       for enemy in enemies {
-        if not(enemy.active) {
+        if !enemy.active {
           continue
         }
 
@@ -1406,7 +1406,7 @@ fn main {
       }
 
       for bullet in bullets {
-        if not(bullet.active) {
+        if !bullet.active {
           continue
         }
 
@@ -1437,7 +1437,7 @@ fn main {
             if hit_done {
               continue
             }
-            if not(enemy.active) {
+            if !enemy.active {
               continue
             }
 
@@ -1494,7 +1494,7 @@ fn main {
       }
 
       for i in 0..<pickups.length() {
-        if not(pickups[i].active) {
+        if !pickups[i].active {
           continue
         }
 
@@ -1527,7 +1527,7 @@ fn main {
       }
 
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
 
@@ -1550,7 +1550,7 @@ fn main {
         msg_t = 3.2
       }
 
-      if player.distance >= distance_goal && not(boss.active) {
+      if player.distance >= distance_goal && !boss.active {
         state = 2
         msg = "Route complete"
         msg_t = 2.4
@@ -1614,7 +1614,7 @@ fn main {
     )
 
     for panel in panels {
-      if not(panel.active) {
+      if !panel.active {
         continue
       }
 
@@ -1657,7 +1657,7 @@ fn main {
     }
 
     for pickup in pickups {
-      if not(pickup.active) {
+      if !pickup.active {
         continue
       }
 
@@ -1678,7 +1678,7 @@ fn main {
     }
 
     for enemy in enemies {
-      if not(enemy.active) {
+      if !enemy.active {
         continue
       }
 
@@ -1775,7 +1775,7 @@ fn main {
     }
 
     for bullet in bullets {
-      if not(bullet.active) {
+      if !bullet.active {
         continue
       }
 
@@ -1800,7 +1800,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 

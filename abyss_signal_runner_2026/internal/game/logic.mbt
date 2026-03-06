@@ -485,7 +485,7 @@ fn @types.Game::trigger_sonar(game : @types.Game) -> Unit {
   let destroy2 = @types.sonar_destroy_r * @types.sonar_destroy_r
 
   for obj in game.objs {
-    if not(obj.active) {
+    if !obj.active {
       continue
     }
 
@@ -628,7 +628,7 @@ fn @types.Game::update_objects(game : @types.Game, dt : Float) -> Unit {
   let hero_dash_hit = game.dash_t > 0.0
 
   for i in 0..<game.objs.length() {
-    if not(game.objs[i].active) {
+    if !game.objs[i].active {
       continue
     }
 
@@ -764,7 +764,7 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   let flow = game.scroll_speed * 0.22
 
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 
@@ -780,7 +780,7 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   }
 
   for ripple in game.ripples {
-    if not(ripple.active) {
+    if !ripple.active {
       continue
     }
 
@@ -793,7 +793,7 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   }
 
   for trail in game.trails {
-    if not(trail.active) {
+    if !trail.active {
       continue
     }
 

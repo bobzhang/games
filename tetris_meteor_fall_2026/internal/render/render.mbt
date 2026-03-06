@@ -22,14 +22,12 @@ fn draw_board_cell(x : Int, y : Int, color_id : Int) -> Unit {
 ///|
 fn @types.Game::ghost_y(game : @types.Game) -> Int {
   let mut y = game.piece_y
-  while not(
-          @types.collides(
-            game,
-            game.piece_kind,
-            game.piece_rot,
-            game.piece_x,
-            y + 1,
-          ),
+  while !@types.collides(
+          game,
+          game.piece_kind,
+          game.piece_rot,
+          game.piece_x,
+          y + 1,
         ) {
     y = y + 1
   }
@@ -151,7 +149,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
     }
   }
 
-  if not(game.over) {
+  if !game.over {
     let gy = game.ghost_y()
     let ghost = @raylib.Color::new(80, 80, 95, 160)
     draw_piece_blocks(

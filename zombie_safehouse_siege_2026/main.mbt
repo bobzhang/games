@@ -231,7 +231,7 @@ fn spawn_particle(
       continue
     }
 
-    if not(ps_elem.active) {
+    if !ps_elem.active {
       ps_elem.active = true
       ps_elem.x = x
       ps_elem.y = y
@@ -278,7 +278,7 @@ fn spawn_bullet(
       continue
     }
 
-    if not(bs_elem.active) {
+    if !bs_elem.active {
       bs_elem.active = true
       bs_elem.kind = kind
       bs_elem.x = x
@@ -296,7 +296,7 @@ fn spawn_bullet(
 fn spawn_zombie(zs : Array[Zombie], wave : Int) -> Bool {
   let mut slot : Int = -1
   for i in 0..<zs.length() {
-    if slot < 0 && not(zs[i].active) {
+    if slot < 0 && !zs[i].active {
       slot = i
     }
   }
@@ -366,7 +366,7 @@ fn spawn_zombie(zs : Array[Zombie], wave : Int) -> Bool {
 fn spawn_scrap(ss : Array[Scrap], x : Float, y : Float, value : Int) -> Bool {
   let mut slot : Int = -1
   for i in 0..<ss.length() {
-    if slot < 0 && not(ss[i].active) {
+    if slot < 0 && !ss[i].active {
       slot = i
     }
   }
@@ -589,7 +589,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -867,7 +867,7 @@ fn main {
 
       if phase == 0 {
         for scrap in scraps {
-          if not(scrap.active) {
+          if !scrap.active {
             continue
           }
 
@@ -925,7 +925,7 @@ fn main {
       }
 
       for zombie in zombies {
-        if not(zombie.active) {
+        if !zombie.active {
           continue
         }
 
@@ -1071,7 +1071,7 @@ fn main {
       }
 
       for bullet in bullets {
-        if not(bullet.active) {
+        if !bullet.active {
           continue
         }
 
@@ -1093,7 +1093,7 @@ fn main {
         }
 
         for zombie in zombies {
-          if not(zombie.active) {
+          if !zombie.active {
             continue
           }
 
@@ -1132,7 +1132,7 @@ fn main {
         let mut best_d2 : Float = 99999999.0
 
         for i in 0..<zombies.length() {
-          if not(zombies[i].active) {
+          if !zombies[i].active {
             continue
           }
 
@@ -1177,7 +1177,7 @@ fn main {
       }
 
       for scrap in scraps {
-        if not(scrap.active) {
+        if !scrap.active {
           continue
         }
         scrap.t = scrap.t + dt
@@ -1188,7 +1188,7 @@ fn main {
       }
 
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
 
@@ -1347,7 +1347,7 @@ fn main {
     }
 
     for scrap in scraps {
-      if not(scrap.active) {
+      if !scrap.active {
         continue
       }
 
@@ -1377,7 +1377,7 @@ fn main {
     }
 
     for bullet in bullets {
-      if not(bullet.active) {
+      if !bullet.active {
         continue
       }
 
@@ -1391,7 +1391,7 @@ fn main {
     }
 
     for zombie in zombies {
-      if not(zombie.active) {
+      if !zombie.active {
         continue
       }
 
@@ -1456,7 +1456,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 

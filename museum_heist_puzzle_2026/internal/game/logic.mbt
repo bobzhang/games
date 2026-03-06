@@ -396,7 +396,7 @@ fn @types.Game::update_title(
   game : @types.Game,
   input : @types.FrameInput,
 ) -> Unit {
-  if not(game.actions_ready()) {
+  if !game.actions_ready() {
     return
   }
 
@@ -413,7 +413,7 @@ fn @types.Game::update_win(
   game : @types.Game,
   input : @types.FrameInput,
 ) -> Unit {
-  if not(game.actions_ready()) {
+  if !game.actions_ready() {
     return
   }
 
@@ -430,7 +430,7 @@ fn @types.Game::update_lose(
   game : @types.Game,
   input : @types.FrameInput,
 ) -> Unit {
-  if not(game.actions_ready()) {
+  if !game.actions_ready() {
     return
   }
 
@@ -445,7 +445,7 @@ fn @types.Game::update_campaign_clear(
   game : @types.Game,
   input : @types.FrameInput,
 ) -> Unit {
-  if not(game.actions_ready()) {
+  if !game.actions_ready() {
     return
   }
 

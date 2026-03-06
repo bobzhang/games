@@ -214,7 +214,7 @@ fn emit_particle(
   kind : Int,
 ) -> Unit {
   for i in 0..<particles.length() {
-    if not(particles[i].active) {
+    if !particles[i].active {
       particles[i] = { active: true, x, y, vx, vy, size, t: 0.0, life, kind }
       break
     }
@@ -271,7 +271,7 @@ fn spawn_projectile(
   life : Float,
 ) -> Unit {
   for i in 0..<projectiles.length() {
-    if not(projectiles[i].active) {
+    if !projectiles[i].active {
       projectiles[i] = {
         active: true,
         kind,
@@ -323,7 +323,7 @@ fn spawn_enemy(
   cave_bottom : FixedArray[Float],
 ) -> Unit {
   for i in 0..<enemies.length() {
-    if not(enemies[i].active) {
+    if !enemies[i].active {
       let kind : Int = if @raylib.get_random_value(0, 100) < 22 + level * 6 {
         1
       } else {
@@ -411,7 +411,7 @@ fn draw_bar(
 ///|
 /// Renders on-screen touch control buttons for movement, firing, and abilities if `show` is true.
 fn draw_touch_controls(show : Bool) -> Unit {
-  if not(show) {
+  if !show {
     return
   }
 
@@ -664,7 +664,7 @@ fn main {
 
   reset_round(level)
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -905,7 +905,7 @@ fn main {
         player.pulse_cd = 5.8
         burst_particles(particles, player.x, player.y, 58, 160.0, 1)
         for enemy in enemies {
-          if not(enemy.active) {
+          if !enemy.active {
             continue
           }
           let d2 : Float = dist2(player.x, player.y, enemy.x, enemy.y)
@@ -923,7 +923,7 @@ fn main {
           let mut best : Int = -1
           let mut best_d2 : Float = 99999999.0
           for i in 0..<enemies.length() {
-            if not(enemies[i].active) {
+            if !enemies[i].active {
               continue
             }
             let d2 : Float = dist2(
@@ -1004,7 +1004,7 @@ fn main {
       }
 
       for enemy in enemies {
-        if not(enemy.active) {
+        if !enemy.active {
           continue
         }
 
@@ -1111,7 +1111,7 @@ fn main {
       }
 
       for projectile in projectiles {
-        if not(projectile.active) {
+        if !projectile.active {
           continue
         }
 
@@ -1134,7 +1134,7 @@ fn main {
 
         if projectile.from_player {
           for enemy in enemies {
-            if not(enemy.active) {
+            if !enemy.active {
               continue
             }
             if dist2(projectile.x, projectile.y, enemy.x, enemy.y) <=
@@ -1162,7 +1162,7 @@ fn main {
       }
 
       for enemy in enemies {
-        if not(enemy.active) {
+        if !enemy.active {
           continue
         }
 
@@ -1191,7 +1191,7 @@ fn main {
       }
 
       for crystal in crystals {
-        if not(crystal.active) {
+        if !crystal.active {
           continue
         }
 
@@ -1209,7 +1209,7 @@ fn main {
       }
 
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
         particle.t = particle.t + dt
@@ -1327,7 +1327,7 @@ fn main {
     )
 
     for crystal in crystals {
-      if not(crystal.active) {
+      if !crystal.active {
         continue
       }
       let cx : Float = crystal.x - cam_x + shake_x
@@ -1356,7 +1356,7 @@ fn main {
     }
 
     for enemy in enemies {
-      if not(enemy.active) {
+      if !enemy.active {
         continue
       }
       let ex : Float = enemy.x - cam_x + shake_x
@@ -1404,7 +1404,7 @@ fn main {
     }
 
     for projectile in projectiles {
-      if not(projectile.active) {
+      if !projectile.active {
         continue
       }
       let px : Float = projectile.x - cam_x + shake_x
@@ -1474,7 +1474,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
       let px : Float = particle.x - cam_x + shake_x

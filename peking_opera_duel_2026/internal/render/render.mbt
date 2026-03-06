@@ -255,7 +255,7 @@ fn @types.Game::draw_focus_cursor(game : @types.Game) -> Unit {
 ///|
 /// Draws the active rhythm prompt as a shrinking circle at the target lane position with urgency-tinted color and timing label, or a waiting message when no prompt is live.
 fn @types.Game::draw_active_prompt(game : @types.Game) -> Unit {
-  if not(game.prompt_active) {
+  if !game.prompt_active {
     @types.draw_center_text(
       "Listen for the next drum cue...",
       @types.stage_top + @types.stage_h / 2 - 16,

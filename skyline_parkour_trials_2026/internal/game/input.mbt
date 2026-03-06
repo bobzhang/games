@@ -49,7 +49,7 @@ fn @types.Game::update_title_input(game : @types.Game) -> Unit {
     start.2,
     start.3,
   )
-  let touch_start = start_touch && not(game.touch_next_prev)
+  let touch_start = start_touch && !game.touch_next_prev
 
   game.input_next_press = key_start || mouse_start || touch_start
   game.touch_next_prev = start_touch
@@ -148,11 +148,11 @@ fn @types.Game::update_play_input(game : @types.Game) -> Unit {
     @raylib.is_key_down(@raylib.KeyE)
 
   game.input_jump_press = key_jump_press ||
-    (touch_jump && not(game.touch_jump_prev))
+    (touch_jump && !game.touch_jump_prev)
   game.input_jump_hold = key_jump_hold || touch_jump
   game.input_climb_hold = key_climb_hold || touch_climb
   game.input_restart_press = @raylib.is_key_pressed(@raylib.KeyR) ||
-    (touch_restart && not(game.touch_restart_prev))
+    (touch_restart && !game.touch_restart_prev)
 
   game.touch_jump_prev = touch_jump
   game.touch_restart_prev = touch_restart
@@ -214,10 +214,10 @@ fn @types.Game::update_stage_clear_input(game : @types.Game) -> Unit {
 
   game.input_next_press = key_next ||
     mouse_next ||
-    (touch_next && not(game.touch_next_prev))
+    (touch_next && !game.touch_next_prev)
   game.input_restart_press = key_restart ||
     mouse_restart ||
-    (touch_restart && not(game.touch_restart_prev))
+    (touch_restart && !game.touch_restart_prev)
 
   game.touch_next_prev = touch_next
   game.touch_restart_prev = touch_restart
@@ -279,10 +279,10 @@ fn @types.Game::update_game_over_input(game : @types.Game) -> Unit {
 
   game.input_next_press = key_retry ||
     mouse_retry ||
-    (touch_retry && not(game.touch_next_prev))
+    (touch_retry && !game.touch_next_prev)
   game.input_restart_press = key_reset ||
     mouse_reset ||
-    (touch_reset && not(game.touch_restart_prev))
+    (touch_reset && !game.touch_restart_prev)
 
   game.touch_next_prev = touch_retry
   game.touch_restart_prev = touch_reset
@@ -344,10 +344,10 @@ fn @types.Game::update_victory_input(game : @types.Game) -> Unit {
 
   game.input_next_press = key_next ||
     mouse_next ||
-    (touch_next && not(game.touch_next_prev))
+    (touch_next && !game.touch_next_prev)
   game.input_restart_press = key_restart ||
     mouse_restart ||
-    (touch_restart && not(game.touch_restart_prev))
+    (touch_restart && !game.touch_restart_prev)
 
   game.touch_next_prev = touch_next
   game.touch_restart_prev = touch_restart

@@ -196,7 +196,7 @@ fn pointer_on_rect(
   if mouse_hold && inside_rect(mouse_x, mouse_y, x, y, w, h) {
     hit = true
   }
-  if not(hit) {
+  if !hit {
     for i in 0..<touch_count {
       let p = @raylib.get_touch_position(i)
       if inside_rect(p.x, p.y, x, y, w, h) {
@@ -222,7 +222,7 @@ fn pointer_on_circle(
   if mouse_hold && dist2(mouse_x, mouse_y, cx, cy) <= r * r {
     hit = true
   }
-  if not(hit) {
+  if !hit {
     for i in 0..<touch_count {
       let p = @raylib.get_touch_position(i)
       if dist2(p.x, p.y, cx, cy) <= r * r {
@@ -431,7 +431,7 @@ fn burst_particles(
 /// Updates all active particles by advancing position, applying drag, and expiring finished ones.
 fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
     part.life = part.life - dt
@@ -562,7 +562,7 @@ fn formation_quality(
   let mut n : Int = 0
 
   for i in 0..<drones.length() {
-    if not(drones[i].active) {
+    if !drones[i].active {
       continue
     }
     let target : Vec2f = pattern_target(
@@ -781,7 +781,7 @@ fn draw_stations(
 /// Draws all active wind gusts as pulsing concentric circles.
 fn draw_gusts(gusts : Array[Gust], scene_t : Float) -> Unit {
   for gust in gusts {
-    if not(gust.active) {
+    if !gust.active {
       continue
     }
     let pulse : Float = @math.sinf(scene_t * 5.0 + gust.pulse) * 0.5 + 0.5
@@ -805,7 +805,7 @@ fn draw_gusts(gusts : Array[Gust], scene_t : Float) -> Unit {
 /// Draws all active drones with color-coded battery and temperature indicators.
 fn draw_drones(drones : Array[Drone], scene_t : Float) -> Unit {
   for d in drones {
-    if not(d.active) {
+    if !d.active {
       continue
     }
 
@@ -852,7 +852,7 @@ fn draw_drones(drones : Array[Drone], scene_t : Float) -> Unit {
 /// Draws all active firework projectiles as colored circles.
 fn draw_fireworks(fireworks : Array[Firework]) -> Unit {
   for firework in fireworks {
-    if not(firework.active) {
+    if !firework.active {
       continue
     }
     @raylib.draw_circle_v(
@@ -873,7 +873,7 @@ fn draw_fireworks(fireworks : Array[Firework]) -> Unit {
 /// Draws all active particles with fade-out alpha based on remaining lifetime.
 fn draw_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
 
@@ -941,7 +941,7 @@ fn draw_requests_panel(
 
   let mut y : Int = panel_y + 438
   for request in requests {
-    if not(request.active) {
+    if !request.active {
       continue
     }
 
@@ -1717,7 +1717,7 @@ fn main {
   reset_run()
   state = 0
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -1941,7 +1941,7 @@ fn main {
         if near == 0 {
           let mut revived : Bool = false
           for drone in drones {
-            if not(drone.active) && not(revived) {
+            if !drone.active && !revived {
               drone.active = true
               drone.x = director.x + randf(-30.0, 30.0)
               drone.y = director.y + randf(-30.0, 30.0)
@@ -2031,7 +2031,7 @@ fn main {
 
       // Update gusts
       for gust in gusts {
-        if not(gust.active) {
+        if !gust.active {
           continue
         }
         gust.life = gust.life - dt
@@ -2050,7 +2050,7 @@ fn main {
 
       // Update fireworks
       for firework in fireworks {
-        if not(firework.active) {
+        if !firework.active {
           continue
         }
         firework.life = firework.life - dt
@@ -2083,7 +2083,7 @@ fn main {
       // Update drones
       let mut active_count : Int = 0
       for i in 0..<drones.length() {
-        if not(drones[i].active) {
+        if !drones[i].active {
           continue
         }
 
@@ -2112,7 +2112,7 @@ fn main {
         drones[i].vy = drones[i].vy + dy * dt * attract
 
         for gust in gusts {
-          if not(gust.active) {
+          if !gust.active {
             continue
           }
           let d2v : Float = dist2(drones[i].x, drones[i].y, gust.x, gust.y)
@@ -2200,7 +2200,7 @@ fn main {
         ) *
         0.06
       for i in 0..<requests.length() {
-        if not(requests[i].active) {
+        if !requests[i].active {
           continue
         }
 

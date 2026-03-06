@@ -7,7 +7,7 @@
 pub fn draw_clouds(game : @types.Game) -> Unit {
   for i in 0..<game.clouds.length() {
     let c = game.clouds[i]
-    if not(c.active) {
+    if !c.active {
       continue
     }
     // Distance culling
@@ -151,7 +151,7 @@ pub fn draw_fog_overlay(game : @types.Game) -> Unit {
 /// Draws the engine exhaust trail behind the player aircraft.
 pub fn draw_engine_trail(game : @types.Game) -> Unit {
   let player = game.player
-  if not(player.alive) {
+  if !player.alive {
     return
   }
   if player.throttle < 0.2 {
@@ -197,7 +197,7 @@ pub fn draw_engine_trail(game : @types.Game) -> Unit {
 /// Draws smoke and fire trails behind the player aircraft when damaged.
 pub fn draw_damage_smoke(game : @types.Game) -> Unit {
   let player = game.player
-  if not(player.alive) {
+  if !player.alive {
     return
   }
   let hp_ratio = player.hp / player.max_hp
@@ -260,7 +260,7 @@ pub fn draw_damage_smoke(game : @types.Game) -> Unit {
 /// Draws extended tracer lines and bright tips behind all active projectiles.
 pub fn draw_tracer_trails(game : @types.Game) -> Unit {
   for proj in game.projectiles {
-    if not(proj.active) {
+    if !proj.active {
       continue
     }
     // Draw extended trail behind projectile
@@ -363,7 +363,7 @@ pub fn draw_celestial_body(game : @types.Game) -> Unit {
 /// Draws smoke and fire trails behind damaged air enemies.
 pub fn draw_enemy_damage_trails(game : @types.Game) -> Unit {
   for e in game.enemies {
-    if not(e.active) {
+    if !e.active {
       continue
     }
     if e.kind != @types.enemy_type_air {

@@ -48,7 +48,7 @@ fn board_font_size(tile : Int) -> Int {
 /// Draws all active spark particles as colored circles at their current world positions.
 fn @types.Game::draw_spark_layer(game : @types.Game) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 

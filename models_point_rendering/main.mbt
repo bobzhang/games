@@ -99,11 +99,11 @@ fn main {
   @raylib.set_target_fps(60)
 
   // Main game loop
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     // Update
     camera = @raylib.update_camera(camera, @raylib.CameraOrbital)
     if @raylib.is_key_pressed(@raylib.KeySpace) {
-      use_draw_model_points = not(use_draw_model_points)
+      use_draw_model_points = !use_draw_model_points
     }
     if @raylib.is_key_pressed(@raylib.KeyUp) {
       num_points = if num_points * 10 > MaxPoints {

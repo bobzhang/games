@@ -116,16 +116,16 @@ pub fn is_blocked(game : Game, wx : Float, wz : Float, radius : Float) -> Bool {
   let gz0 = world_to_grid_z(wz - radius)
   let gx1 = world_to_grid_x(wx + radius)
   let gz1 = world_to_grid_z(wz + radius)
-  if not(is_walkable(get_tile(game, gx0, gz0))) {
+  if !is_walkable(get_tile(game, gx0, gz0)) {
     return true
   }
-  if not(is_walkable(get_tile(game, gx1, gz0))) {
+  if !is_walkable(get_tile(game, gx1, gz0)) {
     return true
   }
-  if not(is_walkable(get_tile(game, gx0, gz1))) {
+  if !is_walkable(get_tile(game, gx0, gz1)) {
     return true
   }
-  if not(is_walkable(get_tile(game, gx1, gz1))) {
+  if !is_walkable(get_tile(game, gx1, gz1)) {
     return true
   }
   false
@@ -600,16 +600,16 @@ pub fn pathfind_step(
   let step : Float = 0.5
   let test_x = from_x + nx * step
   let test_z = from_z + nz * step
-  if not(is_blocked(game, test_x, test_z, radius)) {
+  if !is_blocked(game, test_x, test_z, radius) {
     return (nx, nz)
   }
   // Try sliding along X
-  if not(is_blocked(game, test_x, from_z, radius)) {
+  if !is_blocked(game, test_x, from_z, radius) {
     let x_dir = signf(nx)
     return (x_dir, 0.0)
   }
   // Try sliding along Z
-  if not(is_blocked(game, from_x, test_z, radius)) {
+  if !is_blocked(game, from_x, test_z, radius) {
     let z_dir = signf(nz)
     return (0.0, z_dir)
   }
@@ -646,7 +646,7 @@ pub fn add_buff(game : Game, kind : Int, duration : Float, value : Int) -> Unit 
   }
   // Find empty slot
   for buff in game.buffs {
-    if not(buff.active) {
+    if !buff.active {
       buff.active = true
       buff.kind = kind
       buff.timer = duration

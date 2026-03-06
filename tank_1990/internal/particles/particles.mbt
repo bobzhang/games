@@ -140,7 +140,7 @@ pub fn spawn_respawn_burst(game : @types.Game, x : Float, y : Float) -> Unit {
 /// Updates all active particles by advancing position, applying drag and gravity, and removing expired ones.
 pub fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     p.life -= dt * p.fade

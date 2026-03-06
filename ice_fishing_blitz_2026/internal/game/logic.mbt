@@ -107,7 +107,7 @@ fn @types.Game::burst(
 /// Advances all active particles: move, apply drag and gravity, deactivate on expiry.
 fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 
@@ -373,7 +373,7 @@ fn @types.Game::try_toggle_grab(game : @types.Game) -> Bool {
     return false
   }
 
-  game.grab_on = not(game.grab_on)
+  game.grab_on = !game.grab_on
 
   if game.grab_on {
     @types.set_msg(game, "Hook clamp ON.", 0.8)
@@ -448,7 +448,7 @@ fn @types.Game::land_carrying_fish(game : @types.Game) -> Unit {
   }
 
   let idx : Int = game.carrying_idx
-  if not(game.fish[idx].active) {
+  if !game.fish[idx].active {
     game.carrying_idx = -1
     return
   }
@@ -579,7 +579,7 @@ fn @types.Game::update_fish(game : @types.Game, dt : Float) -> Unit {
   let mut active_count : Int = 0
 
   for i in 0..<game.fish.length() {
-    if not(game.fish[i].active) {
+    if !game.fish[i].active {
       continue
     }
 
@@ -664,7 +664,7 @@ fn @types.Game::update_fish(game : @types.Game, dt : Float) -> Unit {
 /// Advances all active hazards: applies kind-specific movement, bounces or despawns, applies line damage on hit.
 fn @types.Game::update_hazards(game : @types.Game, dt : Float) -> Unit {
   for hazard in game.hazards {
-    if not(hazard.active) {
+    if !hazard.active {
       continue
     }
 
@@ -758,7 +758,7 @@ fn @types.Game::update_hazards(game : @types.Game, dt : Float) -> Unit {
 /// Advances all active pickups: applies drift and wave motion, bounces off walls, detects hook collection.
 fn @types.Game::update_pickups(game : @types.Game, dt : Float) -> Unit {
   for pickup in game.pickups {
-    if not(pickup.active) {
+    if !pickup.active {
       continue
     }
 
@@ -816,7 +816,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
   } else if game.bait < 40.0 {
     let mut best_d2 : Float = 1000000000.0
     for pickup in game.pickups {
-      if not(pickup.active) || pickup.kind != Bait {
+      if !pickup.active || pickup.kind != Bait {
         continue
       }
 
@@ -839,7 +839,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
     let mut best_d2 : Float = 1000000000.0
 
     for fish_elem in game.fish {
-      if not(fish_elem.active) || fish_elem.hooked {
+      if !fish_elem.active || fish_elem.hooked {
         continue
       }
 

@@ -97,7 +97,7 @@ fn main {
   let mut over = false
   let mut msg = "Mouse aim, W/S power, Space shoot, R restart"
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -123,7 +123,7 @@ fn main {
       msg = "Course restarted."
     }
 
-    if not(over) {
+    if !over {
       if @raylib.is_key_down(@raylib.KeyW) || @raylib.is_key_down(@raylib.KeyUp) {
         power = power + 260.0 * dt
       }
@@ -138,9 +138,7 @@ fn main {
         power = 760.0
       }
 
-      if @raylib.is_key_pressed(@raylib.KeySpace) &&
-        not(moving) &&
-        shots_left > 0 {
+      if @raylib.is_key_pressed(@raylib.KeySpace) && !moving && shots_left > 0 {
         let m = @raylib.get_mouse_position()
         let mut dx = m.x - bx
         let mut dy = m.y - by
@@ -237,7 +235,7 @@ fn main {
             }
           }
 
-          if shots_left <= 0 && not(moving) {
+          if shots_left <= 0 && !moving {
             over = true
             msg = "Out of shots."
           }
@@ -276,7 +274,7 @@ fn main {
     @raylib.draw_circle(hx.to_int(), hy.to_int(), 6.0, @raylib.black)
 
     let m = @raylib.get_mouse_position()
-    if not(moving) && not(over) {
+    if !moving && !over {
       @raylib.draw_line(
         bx.to_int(),
         by.to_int(),

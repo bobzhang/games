@@ -63,7 +63,7 @@ fn @types.Game::update_play_input(game : @types.Game, dt : Float) -> Unit {
     return
   }
 
-  if not(game.can_throw) {
+  if !game.can_throw {
     return
   }
 
@@ -172,7 +172,7 @@ fn @types.Game::update_play_input(game : @types.Game, dt : Float) -> Unit {
   let hold_power : Bool = hold_key || touch_power
 
   if hold_power {
-    if not(game.charging) {
+    if !game.charging {
       game.charging = true
       game.set_message("Charging power... release to throw", 0.5)
     }

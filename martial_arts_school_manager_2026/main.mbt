@@ -12,7 +12,7 @@ fn main {
   let game = @types.Game::new()
   @game.init_title_scene_pub(game)
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let dt = @types.clampf(@raylib.get_frame_time(), 0.0, 0.05)
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {

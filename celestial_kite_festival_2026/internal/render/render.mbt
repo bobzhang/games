@@ -261,7 +261,7 @@ fn @types.Game::draw_trails(
   cam_y : Float,
 ) -> Unit {
   for trail in game.trails {
-    if not(trail.active) {
+    if !trail.active {
       continue
     }
 
@@ -451,7 +451,7 @@ fn draw_koi(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
 ///|
 /// Dispatches rendering for a single active sky object, then overlays an HP bar for hostiles and a warning ring when the lifetime is low.
 fn draw_obj(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
-  if not(o.active) {
+  if !o.active {
     return
   }
 
@@ -628,7 +628,7 @@ fn @types.Game::draw_sparks(
   cam_y : Float,
 ) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 
@@ -658,7 +658,7 @@ fn @types.Game::draw_sparks(
   }
 
   for halo in game.halos {
-    if not(halo.active) {
+    if !halo.active {
       continue
     }
 
@@ -919,7 +919,7 @@ fn draw_button_visual(
 ///|
 /// Renders on-screen touch buttons when touch mode is active, showing the appropriate set for the current game state.
 fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
-  if not(game.touch_mode) {
+  if !game.touch_mode {
     return
   }
 

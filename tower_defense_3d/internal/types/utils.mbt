@@ -559,11 +559,11 @@ pub fn find_target(
   let mut best_score : Float = -999999.0
   for j in 0..<game.enemies.length() {
     let enemy = game.enemies[j]
-    if not(enemy.active) {
+    if !enemy.active {
       continue
     }
     // Skip camo enemies if tower cannot detect them
-    if enemy.is_camo && not(can_see_camo) {
+    if enemy.is_camo && !can_see_camo {
       continue
     }
     let dist = distance2d(wx, wz, enemy.x, enemy.z)
@@ -853,7 +853,7 @@ pub fn spawn_build_particles(
 ///|
 /// Returns whether a tower can be placed at grid position (`gx`, `gy`).
 pub fn can_place_tower(game : Game, gx : Int, gy : Int) -> Bool {
-  if not(in_bounds(gx, gy)) {
+  if !in_bounds(gx, gy) {
     return false
   }
   let tile = get_tile(game, gx, gy)
@@ -971,7 +971,7 @@ pub fn add_chain_line(
   z2 : Float,
 ) -> Unit {
   for cl in game.chain_lines {
-    if not(cl.active) {
+    if !cl.active {
       cl.active = true
       cl.x1 = x1
       cl.y1 = y1

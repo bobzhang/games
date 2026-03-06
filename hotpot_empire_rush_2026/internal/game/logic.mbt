@@ -151,7 +151,7 @@ fn @types.Game::remove_order_at(game : @types.Game, idx : Int) -> Unit {
 fn @types.Game::spawn_order(game : @types.Game) -> Bool {
   let mut slot = -1
   for i in 0..<@types.max_orders {
-    if not(game.orders[i].active) {
+    if !game.orders[i].active {
       slot = i
       break
     }
@@ -383,7 +383,7 @@ fn @types.Game::interact_pot(game : @types.Game) -> Unit {
     return
   }
 
-  if not(game.pot_has_core()) {
+  if !game.pot_has_core() {
     @types.set_message(
       game, "Pot requires broth + protein + veg before cooking.",
     )
@@ -478,7 +478,7 @@ fn @types.Game::handle_interact(game : @types.Game) -> Unit {
 ///|
 /// Returns true when the ready pot exactly matches the head order.
 fn @types.Game::serve_matches_head(game : @types.Game) -> Bool {
-  if not(game.orders[0].active) {
+  if !game.orders[0].active {
     return false
   }
 
@@ -491,12 +491,12 @@ fn @types.Game::serve_matches_head(game : @types.Game) -> Bool {
 ///|
 /// Serves the ready pot against the head order, scoring or penalising accordingly.
 fn @types.Game::serve_head_order(game : @types.Game) -> Unit {
-  if not(game.pot.ready) {
+  if !game.pot.ready {
     @types.set_message(game, "No finished pot to serve.")
     return
   }
 
-  if not(game.orders[0].active) {
+  if !game.orders[0].active {
     game.combo = 0
     game.combo_t = 0.0
     game.failed = game.failed + 1
@@ -702,7 +702,7 @@ fn @types.Game::update_prep_and_pot(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::update_order_patience(game : @types.Game, dt : Float) -> Unit {
   let mut i = 0
   while i < @types.max_orders {
-    if not(game.orders[i].active) {
+    if !game.orders[i].active {
       i = i + 1
       continue
     }

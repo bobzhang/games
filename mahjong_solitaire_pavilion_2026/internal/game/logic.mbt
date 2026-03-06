@@ -53,10 +53,10 @@ fn @types.Game::set_pattern_active(game : @types.Game, pattern : Int) -> Unit {
         on = (r2 >= 0.18 && r2 <= 1.08) || nx.abs() <= 0.12 || ny.abs() <= 0.12
       } else {
         let ring : Bool = nx * nx + ny * ny <= 1.08
-        let cut1 : Bool = not(nx.abs() < 0.22 && ny < -0.32)
-        let cut2 : Bool = not(nx.abs() < 0.22 && ny > 0.32)
-        let cut3 : Bool = not(ny.abs() < 0.2 && nx < -0.42)
-        let cut4 : Bool = not(ny.abs() < 0.2 && nx > 0.42)
+        let cut1 : Bool = !(nx.abs() < 0.22 && ny < -0.32)
+        let cut2 : Bool = !(nx.abs() < 0.22 && ny > 0.32)
+        let cut3 : Bool = !(ny.abs() < 0.2 && nx < -0.42)
+        let cut4 : Bool = !(ny.abs() < 0.2 && nx > 0.42)
         on = ring && cut1 && cut2 && cut3 && cut4
       }
 
@@ -133,7 +133,7 @@ fn @types.Game::find_any_move(game : @types.Game) -> (Bool, Int, Int, Int, Int) 
   for y1 in 1..<=game.board_h {
     for x1 in 1..<=game.board_w {
       let k1 : Int = @types.cell_at(game, x1, y1)
-      if k1 <= 0 || not(@types.free_tile(game, x1, y1)) {
+      if k1 <= 0 || !@types.free_tile(game, x1, y1) {
         continue
       }
 
@@ -202,7 +202,7 @@ fn @types.Game::reshuffle(game : @types.Game, consume_ticket : Bool) -> Bool {
     }
   }
 
-  if not(good) {
+  if !good {
     game.message = "Unable to shuffle"
     game.message_t = 0.8
     return false
@@ -362,7 +362,7 @@ fn @types.Game::pick_tile(game : @types.Game, x : Int, y : Int) -> Unit {
     return
   }
 
-  if not(@types.free_tile(game, x, y)) {
+  if !@types.free_tile(game, x, y) {
     game.on_bad_pick(x, y)
     return
   }
@@ -370,7 +370,7 @@ fn @types.Game::pick_tile(game : @types.Game, x : Int, y : Int) -> Unit {
   game.cursor_x = x
   game.cursor_y = y
 
-  if not(game.select_active) {
+  if !game.select_active {
     game.select_active = true
     game.select_x = x
     game.select_y = y
@@ -390,7 +390,7 @@ fn @types.Game::pick_tile(game : @types.Game, x : Int, y : Int) -> Unit {
   let sy : Int = game.select_y
   let sk : Int = @types.cell_at(game, sx, sy)
 
-  if sk <= 0 || not(@types.free_tile(game, sx, sy)) {
+  if sk <= 0 || !@types.free_tile(game, sx, sy) {
     game.select_x = x
     game.select_y = y
     game.message = "Switched selection"
@@ -429,7 +429,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
   }
 
   let m = game.find_any_move()
-  if not(m.0) {
+  if !m.0 {
     game.message = "No pair available"
     game.message_t = 0.9
     return false
@@ -477,7 +477,7 @@ fn @types.Game::undo_last(game : @types.Game) -> Bool {
 
   game.undo_len = game.undo_len - 1
   let step : @types.UndoPair = game.undo[game.undo_len]
-  if not(step.valid) {
+  if !step.valid {
     return false
   }
 

@@ -14,7 +14,7 @@ fn main {
 
   let game : @types.Game = @types.Game::new()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let dt : Float = @raylib.get_frame_time()
     game.mouse_x = @raylib.get_mouse_x() |> Float::from_int
     game.mouse_y = @raylib.get_mouse_y() |> Float::from_int

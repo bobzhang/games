@@ -170,7 +170,7 @@ fn @types.Game::handle_hazard_collision(game : @types.Game, i : Int) -> Unit {
 ///|
 fn @types.Game::update_hazards(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.hazards.length() {
-    if not(game.hazards[i].active) {
+    if !game.hazards[i].active {
       continue
     }
 
@@ -183,7 +183,7 @@ fn @types.Game::update_hazards(game : @types.Game, dt : Float) -> Unit {
     }
 
     if game.hazards[i].lane == game.lane &&
-      not(game.hazards[i].near_miss_awarded) &&
+      !game.hazards[i].near_miss_awarded &&
       game.hazards[i].y > @types.cart_y + @types.hazard_pass_window {
       game.hazards[i].near_miss_awarded = true
       game.near_miss_combo = game.near_miss_combo + 1
@@ -237,13 +237,13 @@ fn @types.Game::resolve_checkpoint(game : @types.Game) -> Unit {
     game.multiplier = 1
 
     let mut rep_loss = @types.delivery_reputation_loss_base
-    if not(on_time) {
+    if !on_time {
       rep_loss = rep_loss + @types.delivery_reputation_loss_late
     }
-    if not(quality_ready) {
+    if !quality_ready {
       rep_loss = rep_loss + @types.delivery_reputation_loss_quality
     }
-    if not(durability_ready) {
+    if !durability_ready {
       rep_loss = rep_loss + @types.delivery_reputation_loss_durability
     }
 
@@ -252,13 +252,13 @@ fn @types.Game::resolve_checkpoint(game : @types.Game) -> Unit {
     game.near_miss_combo = 0
 
     let mut reason = "Contract penalty:"
-    if not(on_time) {
+    if !on_time {
       reason = reason + " late"
     }
-    if not(quality_ready) {
+    if !quality_ready {
       reason = reason + " poor tea"
     }
-    if not(durability_ready) {
+    if !durability_ready {
       reason = reason + " damaged cart"
     }
 

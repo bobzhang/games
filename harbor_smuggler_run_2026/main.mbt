@@ -174,7 +174,7 @@ fn spawn_particle(
       continue
     }
 
-    if not(ps_elem.active) {
+    if !ps_elem.active {
       ps_elem.active = true
       ps_elem.x = x
       ps_elem.y = y
@@ -238,7 +238,7 @@ fn spawn_patrol(ps : Array[Patrol], level : Int, wave_t : Float) -> Unit {
       continue
     }
 
-    if not(ps_elem.active) {
+    if !ps_elem.active {
       ps_elem.active = true
       ps_elem.kind = kind
       ps_elem.radius = if kind == 2 { 20.0 } else { 18.0 }
@@ -292,7 +292,7 @@ fn spawn_crate(cs : Array[Crate], level : Int, wave_t : Float) -> Unit {
       continue
     }
 
-    if not(cs_elem.active) {
+    if !cs_elem.active {
       let drift = Float::from_int(@raylib.get_random_value(-16, 16))
       cs_elem.active = true
       cs_elem.x = Float::from_int(@raylib.get_random_value(110, 920)) + drift
@@ -407,7 +407,7 @@ fn main {
   let stealth_x = sw - 122
   let stealth_y = sh - 170
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -517,7 +517,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 
@@ -531,7 +531,7 @@ fn main {
       }
     }
 
-    if not(over) && transition_t <= 0.0 {
+    if !over && transition_t <= 0.0 {
       timer = timer - dt
       if timer <= 0.0 {
         timer = 0.0
@@ -655,7 +655,7 @@ fn main {
       }
 
       for crate in crates {
-        if not(crate.active) {
+        if !crate.active {
           continue
         }
 
@@ -710,7 +710,7 @@ fn main {
       }
 
       for patrol in patrols {
-        if not(patrol.active) {
+        if !patrol.active {
           continue
         }
 
@@ -947,7 +947,7 @@ fn main {
     )
 
     for crate in crates {
-      if not(crate.active) {
+      if !crate.active {
         continue
       }
 
@@ -978,7 +978,7 @@ fn main {
     }
 
     for patrol in patrols {
-      if not(patrol.active) {
+      if !patrol.active {
         continue
       }
 
@@ -1078,7 +1078,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 

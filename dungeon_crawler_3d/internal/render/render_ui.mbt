@@ -349,10 +349,10 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
     for dx in 0..<(ms / @types.minimap_cell) {
       let gx = start_gx + dx
       let gz = start_gz + dy
-      if not(@types.in_bounds(gx, gz)) {
+      if !@types.in_bounds(gx, gz) {
         continue
       }
-      if not(game.explored[@types.tile_index(gx, gz)]) {
+      if !game.explored[@types.tile_index(gx, gz)] {
         continue
       }
       let tile = @types.get_tile(game, gx, gz)
@@ -404,15 +404,15 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
   }
   // Draw enemies on minimap
   for e in game.enemies {
-    if not(e.active) {
+    if !e.active {
       continue
     }
     let egx = @types.world_to_grid_x(e.x)
     let egz = @types.world_to_grid_z(e.z)
-    if not(@types.in_bounds(egx, egz)) {
+    if !@types.in_bounds(egx, egz) {
       continue
     }
-    if not(game.explored[@types.tile_index(egx, egz)]) {
+    if !game.explored[@types.tile_index(egx, egz)] {
       continue
     }
     // Only show if close enough
@@ -434,15 +434,15 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
   }
   // Draw loot on minimap
   for l in game.loot {
-    if not(l.active) {
+    if !l.active {
       continue
     }
     let lgx = @types.world_to_grid_x(l.x)
     let lgz = @types.world_to_grid_z(l.z)
-    if not(@types.in_bounds(lgx, lgz)) {
+    if !@types.in_bounds(lgx, lgz) {
       continue
     }
-    if not(game.explored[@types.tile_index(lgx, lgz)]) {
+    if !game.explored[@types.tile_index(lgx, lgz)] {
       continue
     }
     let lx = mx + (lgx - start_gx) * @types.minimap_cell

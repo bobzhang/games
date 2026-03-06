@@ -271,7 +271,7 @@ fn @types.Game::nearest_active_lantern(
   let mut best_d2 = max_d2
 
   for i in 0..<game.lanterns.length() {
-    if not(game.lanterns[i].active) || game.lanterns[i].flame <= 0.0 {
+    if !game.lanterns[i].active || game.lanterns[i].flame <= 0.0 {
       continue
     }
 
@@ -345,7 +345,7 @@ fn @types.Game::release_escort(game : @types.Game) -> Unit {
 ///|
 /// Links the patrol to lantern at `idx` as its current escort, releasing any previous link.
 fn @types.Game::set_escort(game : @types.Game, idx : Int) -> Unit {
-  if idx < 0 || idx >= game.lanterns.length() || not(game.lanterns[idx].active) {
+  if idx < 0 || idx >= game.lanterns.length() || !game.lanterns[idx].active {
     return
   }
 
@@ -357,7 +357,7 @@ fn @types.Game::set_escort(game : @types.Game, idx : Int) -> Unit {
 ///|
 /// Awards score for delivering lantern `idx` to its shrine, updates combo, and deactivates the lantern.
 fn @types.Game::deliver_lantern(game : @types.Game, idx : Int) -> Unit {
-  if idx < 0 || idx >= game.lanterns.length() || not(game.lanterns[idx].active) {
+  if idx < 0 || idx >= game.lanterns.length() || !game.lanterns[idx].active {
     return
   }
 
@@ -389,7 +389,7 @@ fn @types.Game::deliver_lantern(game : @types.Game, idx : Int) -> Unit {
 ///|
 /// Deactivates lantern `idx` when its flame reaches zero, increments the extinguished count, and resets combo.
 fn @types.Game::extinguish_lantern(game : @types.Game, idx : Int) -> Unit {
-  if idx < 0 || idx >= game.lanterns.length() || not(game.lanterns[idx].active) {
+  if idx < 0 || idx >= game.lanterns.length() || !game.lanterns[idx].active {
     return
   }
 
@@ -640,7 +640,7 @@ fn @types.Game::update_spawning(game : @types.Game, dt : Float) -> Unit {
 /// Moves all active gusts, applies calm-field dampening, and deactivates gusts that leave the play area or expire.
 fn @types.Game::update_gusts(game : @types.Game, dt : Float) -> Unit {
   for gust in game.gusts {
-    if not(gust.active) {
+    if !gust.active {
       continue
     }
 
@@ -670,7 +670,7 @@ fn @types.Game::update_gusts(game : @types.Game, dt : Float) -> Unit {
 /// Moves all active ember sparks, applies calm-field drag, and deactivates sparks that expire or leave bounds.
 fn @types.Game::update_sparks(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 
@@ -703,7 +703,7 @@ fn @types.Game::update_sparks(game : @types.Game, dt : Float) -> Unit {
 /// Moves all active thieves toward the nearest lantern, applies guard-push repulsion, and drains lantern flame on contact.
 fn @types.Game::update_thieves(game : @types.Game, dt : Float) -> Unit {
   for thief in game.thieves {
-    if not(thief.active) {
+    if !thief.active {
       continue
     }
 
@@ -785,7 +785,7 @@ fn @types.Game::update_thieves(game : @types.Game, dt : Float) -> Unit {
 /// Updates all active lanterns: applies escort pull, gust influence, spark damage, boundary bounce, and flame drain or extinguish.
 fn @types.Game::update_lanterns(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.lanterns.length() {
-    if not(game.lanterns[i].active) {
+    if !game.lanterns[i].active {
       continue
     }
 
@@ -839,7 +839,7 @@ fn @types.Game::update_lanterns(game : @types.Game, dt : Float) -> Unit {
     game.lanterns[i].vy = game.lanterns[i].vy + @types.randf(-15.0, 15.0) * dt
 
     for gust in game.gusts {
-      if not(gust.active) {
+      if !gust.active {
         continue
       }
 
@@ -864,7 +864,7 @@ fn @types.Game::update_lanterns(game : @types.Game, dt : Float) -> Unit {
     }
 
     for spark in game.sparks {
-      if not(spark.active) {
+      if !spark.active {
         continue
       }
 

@@ -409,7 +409,7 @@ fn draw_relic(
 ///|
 /// Dispatches to the correct per-kind draw function and renders the hit ring and HP bar for hostile foes.
 fn draw_foe(f : @types.Foe, cam_x : Float, cam_y : Float) -> Unit {
-  if not(f.active) {
+  if !f.active {
     return
   }
 
@@ -543,7 +543,7 @@ fn @types.Game::draw_bolts(
   cam_y : Float,
 ) -> Unit {
   for bolt in game.bolts {
-    if not(bolt.active) {
+    if !bolt.active {
       continue
     }
 
@@ -583,7 +583,7 @@ fn @types.Game::draw_fx(
   cam_y : Float,
 ) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 
@@ -616,7 +616,7 @@ fn @types.Game::draw_fx(
   }
 
   for ring in game.rings {
-    if not(ring.active) {
+    if !ring.active {
       continue
     }
 
@@ -638,7 +638,7 @@ fn @types.Game::draw_fx(
   }
 
   for echo_item in game.echoes {
-    if not(echo_item.active) {
+    if !echo_item.active {
       continue
     }
 
@@ -913,7 +913,7 @@ fn draw_button_visual(
 ///|
 /// Renders all on-screen touch buttons appropriate for the current game state, only when touch mode is active.
 fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
-  if not(game.touch_mode) {
+  if !game.touch_mode {
     return
   }
 

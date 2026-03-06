@@ -32,7 +32,7 @@ fn @types.Game::update_title_input(game : @types.Game) -> Unit {
   let key_start = @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyEnter)
   let mouse_start = @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
-  let touch_start = hover && not(game.touch_restart_prev)
+  let touch_start = hover && !game.touch_restart_prev
 
   game.input_restart_press = key_start || mouse_start || touch_start
 
@@ -159,7 +159,7 @@ fn @types.Game::update_play_input(game : @types.Game) -> Unit {
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
   game.input_interact_press = key_interact ||
-    (t_interact && not(game.touch_interact_prev))
+    (t_interact && !game.touch_interact_prev)
 
   let key_focus = @raylib.is_key_down(@raylib.KeyK) ||
     @raylib.is_key_down(@raylib.KeyLeftShift) ||
@@ -168,7 +168,7 @@ fn @types.Game::update_play_input(game : @types.Game) -> Unit {
 
   let key_dash = @raylib.is_key_pressed(@raylib.KeyL) ||
     @raylib.is_mouse_button_pressed(@raylib.MouseButtonRight)
-  game.input_dash_press = key_dash || (t_dash && not(game.touch_dash_prev))
+  game.input_dash_press = key_dash || (t_dash && !game.touch_dash_prev)
 
   game.input_restart_press = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeyR)
@@ -202,7 +202,7 @@ fn @types.Game::update_result_input(game : @types.Game) -> Unit {
     @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeyR)
   let mouse_retry = @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
-  let touch_retry = hover && not(game.touch_restart_prev)
+  let touch_retry = hover && !game.touch_restart_prev
 
   game.input_restart_press = key_retry || mouse_retry || touch_retry
 

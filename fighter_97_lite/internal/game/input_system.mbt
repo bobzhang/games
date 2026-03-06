@@ -100,11 +100,11 @@ fn detect_motion_qcf(input : @types.InputState) -> Bool {
   let mut seen_diag = false
   for i = 20; i >= 0; i = i - 1 {
     let d = recent_direction(input, i)
-    if not(seen_down) {
+    if !seen_down {
       if dir_is_down(d) {
         seen_down = true
       }
-    } else if not(seen_diag) {
+    } else if !seen_diag {
       if d == DirDownForward {
         seen_diag = true
       } else if dir_is_forward(d) {
@@ -172,7 +172,7 @@ fn set_button_state(
   down : Bool,
   prev_down : Bool,
 ) -> (Bool, Bool) {
-  (down && not(prev_down), not(down) && prev_down)
+  (down && !prev_down, !down && prev_down)
 }
 
 ///|

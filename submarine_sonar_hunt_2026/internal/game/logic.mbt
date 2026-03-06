@@ -246,7 +246,7 @@ fn @types.Game::fire_sonar(game : @types.Game) -> Unit {
   game.last_pulse_range = pulse_range
   let mut found_this_pulse = 0
   for i in 0..<game.target_goal {
-    if not(game.targets[i].active) || game.targets[i].detected {
+    if !game.targets[i].active || game.targets[i].detected {
       continue
     }
     if @types.dist2(
@@ -264,7 +264,7 @@ fn @types.Game::fire_sonar(game : @types.Game) -> Unit {
   }
   let mine_reveal_range = pulse_range * 1.08
   for i in 0..<game.mine_count {
-    if not(game.mines[i].active) || not(game.mines[i].armed) {
+    if !game.mines[i].active || !game.mines[i].armed {
       continue
     }
     if @types.dist2(game.sub_x, game.sub_y, game.mines[i].x, game.mines[i].y) <=
@@ -383,7 +383,7 @@ fn @types.Game::update_resources(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_contacts(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.target_goal {
-    if not(game.targets[i].active) {
+    if !game.targets[i].active {
       continue
     }
     if game.targets[i].pulse_t > 0.0 {
@@ -391,13 +391,13 @@ fn @types.Game::update_contacts(game : @types.Game, dt : Float) -> Unit {
     }
   }
   for i in 0..<game.mine_count {
-    if not(game.mines[i].active) {
+    if !game.mines[i].active {
       continue
     }
     if game.mines[i].reveal_t > 0.0 {
       game.mines[i].reveal_t = @types.maxf(0.0, game.mines[i].reveal_t - dt)
     }
-    if not(game.mines[i].armed) {
+    if !game.mines[i].armed {
       continue
     }
     let hit_r = @types.sub_r + game.mines[i].r

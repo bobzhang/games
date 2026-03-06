@@ -87,7 +87,7 @@ fn @types.Game::splash(
 ///|
 fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 
@@ -464,7 +464,7 @@ fn @types.Game::update_raft(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_obstacles(game : @types.Game, dt : Float) -> Unit {
   for obstacle in game.obstacles {
-    if not(obstacle.active) {
+    if !obstacle.active {
       continue
     }
 
@@ -530,7 +530,7 @@ fn @types.Game::update_obstacles(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_pickups(game : @types.Game, dt : Float) -> Unit {
   for pickup in game.pickups {
-    if not(pickup.active) {
+    if !pickup.active {
       continue
     }
 
@@ -602,7 +602,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
     let mut cost : Float = 0.0
 
     for obstacle in game.obstacles {
-      if not(obstacle.active) {
+      if !obstacle.active {
         continue
       }
 
@@ -629,7 +629,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
   let mut pickup_dist : Float = 1_000_000.0
 
   for pickup in game.pickups {
-    if not(pickup.active) {
+    if !pickup.active {
       continue
     }
 

@@ -30,7 +30,7 @@ pub fn in_grid(game : Game, x : Int, y : Int) -> Bool {
 ///|
 /// Read puzzle solution value at `(x, y)` safely.
 pub fn solution_at(game : Game, x : Int, y : Int) -> Bool {
-  if not(in_grid(game, x, y)) {
+  if !in_grid(game, x, y) {
     false
   } else {
     game.solution[board_index(x, y)]
@@ -40,7 +40,7 @@ pub fn solution_at(game : Game, x : Int, y : Int) -> Bool {
 ///|
 /// Read player cell state at `(x, y)` safely.
 pub fn cell_at(game : Game, x : Int, y : Int) -> Cell {
-  if not(in_grid(game, x, y)) {
+  if !in_grid(game, x, y) {
     Unknown
   } else {
     game.cells[board_index(x, y)]
@@ -97,7 +97,7 @@ pub fn pointer_on_rect(
     hit = true
   }
 
-  if not(hit) {
+  if !hit {
     for i in 0..<touch_count {
       let p = @raylib.get_touch_position(i)
       if inside_rect(p.x, p.y, x, y, w, h) {
@@ -198,7 +198,7 @@ pub fn row_solved(game : Game, y : Int) -> Bool {
       return false
     }
 
-    if not(sol) && state == Fill {
+    if !sol && state == Fill {
       return false
     }
   }
@@ -217,7 +217,7 @@ pub fn col_solved(game : Game, x : Int) -> Bool {
       return false
     }
 
-    if not(sol) && state == Fill {
+    if !sol && state == Fill {
       return false
     }
   }

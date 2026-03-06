@@ -90,7 +90,7 @@ fn @types.Game::far_from_exits(
 ) -> Bool {
   let min_d2 = min_dist * min_dist
   for exit in game.exits {
-    if not(exit.active) {
+    if !exit.active {
       continue
     }
     if @types.dist2(x, y, exit.x, exit.y) < min_d2 {
@@ -118,7 +118,7 @@ fn @types.Game::far_from_active_parcels(
 ) -> Bool {
   let min_d2 = min_dist * min_dist
   for i in 0..<upto {
-    if not(game.parcels[i].active) {
+    if !game.parcels[i].active {
       continue
     }
     if @types.dist2(x, y, game.parcels[i].x, game.parcels[i].y) < min_d2 {
@@ -138,13 +138,13 @@ fn @types.Game::setup_parcels(game : @types.Game, count : Int) -> Unit {
 
     for _attempt in 0..<64 {
       let p = random_world_point(@types.parcel_spawn_margin)
-      if not(game.far_from_exits(p.0, p.1, 116.0)) {
+      if !game.far_from_exits(p.0, p.1, 116.0) {
         continue
       }
-      if not(far_from_spawn(p.0, p.1, 150.0)) {
+      if !far_from_spawn(p.0, p.1, 150.0) {
         continue
       }
-      if not(game.far_from_active_parcels(p.0, p.1, 82.0, i)) {
+      if !game.far_from_active_parcels(p.0, p.1, 82.0, i) {
         continue
       }
 
@@ -157,7 +157,7 @@ fn @types.Game::setup_parcels(game : @types.Game, count : Int) -> Unit {
       break
     }
 
-    if not(placed) {
+    if !placed {
       let fx = @types.world_left + 130.0 + Float::from_int(i % 4) * 270.0
       let fy = @types.world_top + 140.0 + Float::from_int(i / 4) * 190.0
       game.parcels[i].active = true
@@ -248,10 +248,10 @@ fn @types.Game::setup_traps(
 
     for _attempt in 0..<48 {
       let p = random_world_point(@types.trap_spawn_margin)
-      if not(game.far_from_exits(p.0, p.1, 88.0)) {
+      if !game.far_from_exits(p.0, p.1, 88.0) {
         continue
       }
-      if not(far_from_spawn(p.0, p.1, 112.0)) {
+      if !far_from_spawn(p.0, p.1, 112.0) {
         continue
       }
 
@@ -265,7 +265,7 @@ fn @types.Game::setup_traps(
       break
     }
 
-    if not(placed) {
+    if !placed {
       game.traps[i].active = true
       game.traps[i].x = @types.world_left +
         120.0 +
@@ -427,7 +427,7 @@ fn @types.Game::nearest_parcel(game : @types.Game, max_d2 : Float) -> Int {
   let mut best_d2 = max_d2
 
   for i in 0..<game.parcels.length() {
-    if not(game.parcels[i].active) || game.parcels[i].delivered {
+    if !game.parcels[i].active || game.parcels[i].delivered {
       continue
     }
 
@@ -453,7 +453,7 @@ fn @types.Game::nearest_exit(game : @types.Game, max_d2 : Float) -> Int {
   let mut best_d2 = max_d2
 
   for i in 0..<game.exits.length() {
-    if not(game.exits[i].active) {
+    if !game.exits[i].active {
       continue
     }
 
@@ -483,9 +483,7 @@ fn @types.Game::try_interact(game : @types.Game) -> Unit {
 
     if exit_idx >= 0 {
       let pidx = game.player.carrying_parcel
-      if pidx >= 0 &&
-        game.parcels[pidx].active &&
-        not(game.parcels[pidx].delivered) {
+      if pidx >= 0 && game.parcels[pidx].active && !game.parcels[pidx].delivered {
         game.parcels[pidx].active = false
         game.parcels[pidx].delivered = true
         game.player.carrying_parcel = -1
@@ -602,7 +600,7 @@ fn @types.Game::update_player_motion(game : @types.Game, dt : Float) -> Float {
 /// Advances each active smoke's lifetime and deactivates it when expired.
 fn @types.Game::update_smokes(game : @types.Game, dt : Float) -> Unit {
   for smoke in game.smokes {
-    if not(smoke.active) {
+    if !smoke.active {
       continue
     }
 
@@ -620,7 +618,7 @@ fn @types.Game::player_smoke_cover(game : @types.Game) -> Float {
   let mut factor : Float = 1.0
 
   for smoke in game.smokes {
-    if not(smoke.active) {
+    if !smoke.active {
       continue
     }
 
@@ -646,12 +644,12 @@ fn @types.Game::nearest_smoke_target(
   let mut best_d2 : Float = 0.0
 
   for smoke in game.smokes {
-    if not(smoke.active) {
+    if !smoke.active {
       continue
     }
 
     let d2 = @types.dist2(x, y, smoke.x, smoke.y)
-    if not(found) || d2 < best_d2 {
+    if !found || d2 < best_d2 {
       found = true
       best_x = smoke.x
       best_y = smoke.y
@@ -685,7 +683,7 @@ fn @types.Game::update_guards(game : @types.Game, dt : Float) -> Float {
     Float::from_int(game.wave - 1) * (0.08 : Float)
 
   for guard_val in game.guards {
-    if not(guard_val.active) {
+    if !guard_val.active {
       continue
     }
 
@@ -725,7 +723,7 @@ fn @types.Game::update_guards(game : @types.Game, dt : Float) -> Float {
       ty = guard_val.target_y
       move_speed = guard_val.speed * 1.12
     } else if @types.dist2(guard_val.x, guard_val.y, tx, ty) <= 18.0 * 18.0 {
-      guard_val.to_b = not(guard_val.to_b)
+      guard_val.to_b = !guard_val.to_b
       tx = if guard_val.to_b {
         guard_val.patrol_b_x
       } else {
@@ -810,7 +808,7 @@ fn @types.Game::update_traps(game : @types.Game, dt : Float) -> Float {
   let mut pressure : Float = 0.0
 
   for trap in game.traps {
-    if not(trap.active) {
+    if !trap.active {
       continue
     }
 
@@ -843,7 +841,7 @@ fn @types.Game::update_traps(game : @types.Game, dt : Float) -> Float {
 /// Advances the pulse animation phase on all active parcels.
 fn @types.Game::update_parcel_pulses(game : @types.Game, dt : Float) -> Unit {
   for parcel in game.parcels {
-    if not(parcel.active) {
+    if !parcel.active {
       continue
     }
     parcel.pulse = parcel.pulse + dt * 3.2

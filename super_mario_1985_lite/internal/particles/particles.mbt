@@ -125,7 +125,7 @@ pub fn spawn_hurt_burst(game : @types.Game, x : Float, y : Float) -> Unit {
 /// Advances active particle motion and lifetime.
 pub fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     p.life = p.life - dt

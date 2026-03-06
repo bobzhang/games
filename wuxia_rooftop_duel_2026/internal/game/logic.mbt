@@ -211,7 +211,7 @@ fn @types.Game::defeat_enemy(
   idx : Int,
   parry_kill : Bool,
 ) -> Unit {
-  if not(game.enemies[idx].active) {
+  if !game.enemies[idx].active {
     return
   }
 
@@ -236,7 +236,7 @@ fn @types.Game::stun_enemy_from_parry(
   idx : Int,
   from_strike : Bool,
 ) -> Unit {
-  if not(game.enemies[idx].active) {
+  if !game.enemies[idx].active {
     return
   }
 
@@ -279,7 +279,7 @@ fn @types.Game::resolve_parry_window(game : @types.Game) -> Int {
   let mut parried : Int = 0
 
   for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
+    if !game.enemies[i].active {
       continue
     }
 
@@ -317,7 +317,7 @@ fn @types.Game::apply_attack_hit(
   knockback : Float,
   telegraph_stagger : Bool,
 ) -> Bool {
-  if not(game.enemies[idx].active) {
+  if !game.enemies[idx].active {
     return false
   }
 
@@ -393,7 +393,7 @@ fn @types.Game::try_player_attack(
   let mut hit_count : Int = 0
 
   for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
+    if !game.enemies[i].active {
       continue
     }
 
@@ -720,7 +720,7 @@ fn @types.Game::keep_enemy_inside_rooftop(
 ///|
 fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
+    if !game.enemies[i].active {
       continue
     }
 

@@ -295,7 +295,7 @@ fn @types.Game::update_hazard_spawning(game : @types.Game, dt : Float) -> Unit {
 /// Advances hazard drift, culls passed hazards, and resolves player collisions with debris or waves.
 fn @types.Game::update_hazards(game : @types.Game, dt : Float) -> Unit {
   for hazard in game.hazards {
-    if not(hazard.active) {
+    if !hazard.active {
       continue
     }
 
@@ -355,7 +355,7 @@ fn @types.Game::update_hazards(game : @types.Game, dt : Float) -> Unit {
 /// Simulates rival boat movement, handles boat-boat proximity effects, and updates the player's best rank.
 fn @types.Game::update_rivals(game : @types.Game, dt : Float) -> Unit {
   for rival in game.rivals {
-    if not(rival.active) {
+    if !rival.active {
       continue
     }
 

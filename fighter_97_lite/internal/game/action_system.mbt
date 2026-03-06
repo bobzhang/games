@@ -147,7 +147,7 @@ fn @types.Game::try_start_attack(game : @types.Game, slot : Int) -> Unit {
   let archetype = @types.fighter_archetype(game, fighter)
   let input = fighter.input
 
-  if not(input.any_attack_pressed) {
+  if !input.any_attack_pressed {
     return
   }
 
@@ -166,7 +166,7 @@ fn @types.Game::try_start_attack(game : @types.Game, slot : Int) -> Unit {
     return
   }
 
-  if fighter.action == ActionAttack && not(can_cancel_current_move(fighter)) {
+  if fighter.action == ActionAttack && !can_cancel_current_move(fighter) {
     return
   }
 
@@ -175,7 +175,7 @@ fn @types.Game::try_start_attack(game : @types.Game, slot : Int) -> Unit {
   if mv.airborne_only && fighter.on_ground {
     return
   }
-  if mv.crouch_only && not(fighter.crouching) {
+  if mv.crouch_only && !fighter.crouching {
     return
   }
 
@@ -311,7 +311,7 @@ fn update_walk_and_crouch_state(
     return
   }
 
-  if not(fighter.on_ground) {
+  if !fighter.on_ground {
     return
   }
 
@@ -384,7 +384,7 @@ fn update_jump_state(
   }
 
   let input = fighter.input
-  if fighter.on_ground && input.hold_up && not(input.hold_down) {
+  if fighter.on_ground && input.hold_up && !input.hold_down {
     fighter.on_ground = false
     fighter.action = ActionJump
     fighter.action_elapsed = 0.0
@@ -408,7 +408,7 @@ fn integrate_fighter_physics(
   archetype : @types.CharacterArchetype,
   dt : Float,
 ) -> Unit {
-  if not(fighter.on_ground) {
+  if !fighter.on_ground {
     fighter.vy += @types.gravity_force * dt * archetype.jump_mul
   } else {
     fighter.vy = 0.0
@@ -420,7 +420,7 @@ fn integrate_fighter_physics(
   fighter.x = @types.stage_clamp_x(fighter.x)
 
   if fighter.y >= @types.floor_y {
-    if not(fighter.on_ground) {
+    if !fighter.on_ground {
       fighter.y = @types.floor_y
       fighter.on_ground = true
       fighter.vy = 0.0

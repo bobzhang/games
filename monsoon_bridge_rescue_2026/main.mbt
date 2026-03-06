@@ -261,7 +261,7 @@ fn pointer_on_rect(
     hit = true
   }
 
-  if not(hit) {
+  if !hit {
     for i in 0..<touch_count {
       let p = @raylib.get_touch_position(i)
       if inside_rect(p.x, p.y, x, y, w, h) {
@@ -290,7 +290,7 @@ fn pointer_on_circle(
     hit = true
   }
 
-  if not(hit) {
+  if !hit {
     for i in 0..<touch_count {
       let p = @raylib.get_touch_position(i)
       if point_in_circle(p.x, p.y, cx, cy, r) {
@@ -656,7 +656,7 @@ fn spawn_wake(
 /// Advances all active wake particles one frame: moves them and decays velocity, deactivates expired ones.
 fn update_wakes(wakes : Array[WakeParticle], dt : Float) -> Unit {
   for wake in wakes {
-    if not(wake.active) {
+    if !wake.active {
       continue
     }
     wake.life = wake.life - dt
@@ -683,7 +683,7 @@ fn update_rain(
   wind_x : Float,
 ) -> Unit {
   for rain_elem in rain {
-    if not(rain_elem.active) {
+    if !rain_elem.active {
       continue
     }
     rain_elem.life = rain_elem.life - dt
@@ -716,7 +716,7 @@ fn calm_rafts(
 ) -> Unit {
   let r2 : Float = radius * radius
   for raft in rafts {
-    if not(raft.active) {
+    if !raft.active {
       continue
     }
     let d2 : Float = dist2(x, y, raft.x, raft.y)
@@ -886,7 +886,7 @@ fn draw_spans(spans : Array[BridgeSpan], scene_t : Float) -> Unit {
 /// Draws all active rafts as coloured circles with panic-tinted fills and blinking flare indicators.
 fn draw_rafts(rafts : Array[RaftGroup], scene_t : Float) -> Unit {
   for raft in rafts {
-    if not(raft.active) {
+    if !raft.active {
       continue
     }
     let panic_col : Int = 90 + (clampf(raft.panic, 0.0, 1.0) * 130.0).to_int()
@@ -921,7 +921,7 @@ fn draw_rafts(rafts : Array[RaftGroup], scene_t : Float) -> Unit {
 /// Draws all active debris pieces as filled rectangles with lighter border outlines.
 fn draw_debris_field(debris : Array[Debris]) -> Unit {
   for debris in debris {
-    if not(debris.active) {
+    if !debris.active {
       continue
     }
     let w : Float = debris.size * 1.8
@@ -947,7 +947,7 @@ fn draw_debris_field(debris : Array[Debris]) -> Unit {
 /// Draws all active lightning strikes: telegraph ring while charging, flash blast when triggered.
 fn draw_strikes(strikes : Array[LightningStrike], scene_t : Float) -> Unit {
   for strike in strikes {
-    if not(strike.active) {
+    if !strike.active {
       continue
     }
 
@@ -992,7 +992,7 @@ fn draw_strikes(strikes : Array[LightningStrike], scene_t : Float) -> Unit {
 /// Draws all active supply crates as blinking labelled squares with a glow halo effect.
 fn draw_supplies(supplies : Array[SupplyCrate], scene_t : Float) -> Unit {
   for supply in supplies {
-    if not(supply.active) {
+    if !supply.active {
       continue
     }
     let blink : Float = @math.sinf(scene_t * 6.2 + supply.blink) * 0.5 + 0.5
@@ -1038,7 +1038,7 @@ fn draw_supplies(supplies : Array[SupplyCrate], scene_t : Float) -> Unit {
 /// Draws all active rain drops as short angled line segments with wind-driven horizontal offset.
 fn draw_rain(rain : Array[RainDrop], wind_x : Float) -> Unit {
   for rain_elem in rain {
-    if not(rain_elem.active) {
+    if !rain_elem.active {
       continue
     }
     let x0 : Float = rain_elem.x
@@ -1058,7 +1058,7 @@ fn draw_rain(rain : Array[RainDrop], wind_x : Float) -> Unit {
 /// Draws all active wake particles as translucent circles that fade with remaining life.
 fn draw_wakes(wakes : Array[WakeParticle]) -> Unit {
   for wake in wakes {
-    if not(wake.active) {
+    if !wake.active {
       continue
     }
     let alpha : Int = clampf(wake.life * 255.0, 0.0, 255.0).to_int()
@@ -1883,7 +1883,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -2246,7 +2246,7 @@ fn main {
 
       // Raft updates
       for raft in rafts {
-        if not(raft.active) {
+        if !raft.active {
           continue
         }
         let raft_flow : FlowSample = find_flow(
@@ -2280,7 +2280,7 @@ fn main {
 
       // Debris updates + collisions
       for debris in debris {
-        if not(debris.active) {
+        if !debris.active {
           continue
         }
         let debris_flow : FlowSample = find_flow(
@@ -2328,7 +2328,7 @@ fn main {
 
       // Lightning updates + effects
       for strike in strikes {
-        if not(strike.active) {
+        if !strike.active {
           continue
         }
         strike.pulse = strike.pulse + dt * 7.2
@@ -2361,7 +2361,7 @@ fn main {
 
       // Supplies
       for supply in supplies {
-        if not(supply.active) {
+        if !supply.active {
           continue
         }
         let sup_flow : FlowSample = find_flow(
@@ -2439,7 +2439,7 @@ fn main {
         let mut nearest_raft : Int = -1
         let mut best_d2 : Float = 54.0 * 54.0
         for i in 0..<rafts.length() {
-          if not(rafts[i].active) {
+          if !rafts[i].active {
             continue
           }
           let d2 : Float = dist2(boat.x, boat.y, rafts[i].x, rafts[i].y)
@@ -2472,7 +2472,7 @@ fn main {
         }
 
         // Repair nearest span
-        if not(did_action) {
+        if !did_action {
           let si : Int = nearest_span_index(spans, boat.x, boat.y, 68.0)
           if si >= 0 && boat.kits > 0 {
             let repair : Float = randf(8.0, 14.0)

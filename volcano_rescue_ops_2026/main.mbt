@@ -6,7 +6,7 @@ fn main {
   defer @raylib.close_window()
   @raylib.set_target_fps(@types.target_fps)
   let game : @types.Game = @types.Game::new()
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05

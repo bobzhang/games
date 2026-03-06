@@ -64,7 +64,7 @@ fn @types.Game::burst(
 ///|
 fn @types.Game::update_sparks(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 
@@ -111,7 +111,7 @@ fn @types.Game::rival_segment_at(
   ignore_tail : Bool,
 ) -> Bool {
   for rid in 0..<game.rivals.length() {
-    if not(game.rivals[rid].alive) {
+    if !game.rivals[rid].alive {
       continue
     }
 
@@ -185,7 +185,7 @@ fn @types.Game::random_empty_cell(game : @types.Game) -> (Bool, Int, Int) {
 
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
-      if not(game.is_cell_empty(x, y)) {
+      if !game.is_cell_empty(x, y) {
         continue
       }
 
@@ -203,7 +203,7 @@ fn @types.Game::random_empty_cell(game : @types.Game) -> (Bool, Int, Int) {
 ///|
 fn @types.Game::spawn_food(game : @types.Game) -> Bool {
   let cell = game.random_empty_cell()
-  if not(cell.0) {
+  if !cell.0 {
     return false
   }
 
@@ -225,7 +225,7 @@ fn @types.Game::spawn_trap(game : @types.Game) -> Bool {
   }
 
   let cell = game.random_empty_cell()
-  if not(cell.0) {
+  if !cell.0 {
     return false
   }
 
@@ -431,11 +431,11 @@ fn @types.Game::shift_player_forward(
 
 ///|
 fn @types.Game::player_step(game : @types.Game) -> Unit {
-  if not(game.p_alive) {
+  if !game.p_alive {
     return
   }
 
-  if not(@types.opposite_dir(game.p_dir, game.p_next_dir)) {
+  if !@types.opposite_dir(game.p_dir, game.p_next_dir) {
     game.p_dir = game.p_next_dir
   }
 
@@ -509,12 +509,12 @@ fn @types.Game::rival_step(game : @types.Game, rid : Int) -> Unit {
   }
 
   let rival = game.rivals[rid]
-  if not(rival.alive) {
+  if !rival.alive {
     return
   }
 
   rival.next_dir = game.ai_choose_dir(rid)
-  if not(@types.opposite_dir(rival.dir, rival.next_dir)) {
+  if !@types.opposite_dir(rival.dir, rival.next_dir) {
     rival.dir = rival.next_dir
   }
 

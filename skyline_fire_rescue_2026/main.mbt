@@ -234,7 +234,7 @@ fn add_building(
   name : String,
 ) -> Bool {
   for building in buildings {
-    if not(building.active) {
+    if !building.active {
       building.active = true
       building.x = x
       building.y = y
@@ -312,7 +312,7 @@ fn setup_city(buildings : Array[Building]) -> Unit {
   )
 
   for building in buildings {
-    if not(building.active) {
+    if !building.active {
       continue
     }
     if building.fire < 1.0 {
@@ -333,7 +333,7 @@ fn add_drop(
   kind : Int,
 ) -> Bool {
   for drop in drops {
-    if not(drop.active) {
+    if !drop.active {
       drop.active = true
       drop.x = x
       drop.y = y
@@ -356,7 +356,7 @@ fn add_particle(
   kind : Int,
 ) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       part.active = true
       part.kind = kind
       part.x = x
@@ -389,7 +389,7 @@ fn burst_particles(
 ///|
 fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
 
@@ -410,7 +410,7 @@ fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
 ///|
 fn draw_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
 
@@ -443,7 +443,7 @@ fn update_drops(
   let mut hit_power : Float = 0.0
 
   for drop in drops {
-    if not(drop.active) {
+    if !drop.active {
       continue
     }
 
@@ -467,7 +467,7 @@ fn update_drops(
     let r : Float = if drop.kind == 0 { 4.0 } else { 6.0 }
 
     for building in buildings {
-      if not(building.active) || building.collapsed {
+      if !building.active || building.collapsed {
         continue
       }
 
@@ -507,7 +507,7 @@ fn nearest_viable_building(
   let mut best_d2 : Float = 99999999.0
 
   for i in 0..<buildings.length() {
-    if not(buildings[i].active) || buildings[i].collapsed {
+    if !buildings[i].active || buildings[i].collapsed {
       continue
     }
 
@@ -535,7 +535,7 @@ fn update_fire_system(
   let mut collapsed_n : Int = 0
 
   for i in 0..<buildings.length() {
-    if not(buildings[i].active) {
+    if !buildings[i].active {
       continue
     }
 
@@ -663,7 +663,7 @@ fn try_rescue(
   let mut loaded : Int = 0
 
   for building in buildings {
-    if not(building.active) || building.collapsed {
+    if !building.active || building.collapsed {
       continue
     }
     if building.people <= 0 {
@@ -818,7 +818,7 @@ fn draw_special_zones() -> Unit {
 ///|
 fn draw_buildings(buildings : Array[Building], t : Float) -> Unit {
   for i in 0..<buildings.length() {
-    if not(buildings[i].active) {
+    if !buildings[i].active {
       continue
     }
 
@@ -858,7 +858,7 @@ fn draw_buildings(buildings : Array[Building], t : Float) -> Unit {
       }
     }
 
-    if not(buildings[i].collapsed) {
+    if !buildings[i].collapsed {
       let fire_n : Int = (buildings[i].fire / 18.0).to_int().clamp(min=0, max=7)
       for f in 0..<fire_n {
         let fx : Float = buildings[i].x + randf(10.0, buildings[i].w - 10.0)
@@ -938,7 +938,7 @@ fn draw_buildings(buildings : Array[Building], t : Float) -> Unit {
 ///|
 fn draw_drops(drops : Array[WaterDrop]) -> Unit {
   for drop in drops {
-    if not(drop.active) {
+    if !drop.active {
       continue
     }
 
@@ -1227,7 +1227,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -1458,7 +1458,7 @@ fn main {
       if event_cd <= 0.0 {
         event_cd = randf(8.0, 14.0)
         let bid : Int = @raylib.get_random_value(0, buildings.length() - 1)
-        if buildings[bid].active && not(buildings[bid].collapsed) {
+        if buildings[bid].active && !buildings[bid].collapsed {
           buildings[bid].fire = buildings[bid].fire + randf(8.0, 18.0)
           if buildings[bid].fire > 120.0 {
             buildings[bid].fire = 120.0

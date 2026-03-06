@@ -116,7 +116,7 @@ fn set_goal(
 ///|
 /// Returns true when (x, y) is out of bounds or occupied by a wall.
 fn is_wall(walls : Array[Bool], x : Int, y : Int) -> Bool {
-  if not(in_bounds(x, y)) {
+  if !in_bounds(x, y) {
     true
   } else {
     walls[idx(x, y)]
@@ -128,7 +128,7 @@ fn is_wall(walls : Array[Bool], x : Int, y : Int) -> Bool {
 fn orb_at(orbs : Array[Orb], skip : Int, x : Int, y : Int) -> Bool {
   let mut found = false
   for i in 0..<orbs.length() {
-    if i == skip || not(orbs[i].active) {
+    if i == skip || !orbs[i].active {
       continue
     }
     if orbs[i].x == x && orbs[i].y == y {
@@ -294,9 +294,7 @@ fn try_move_player(
 ) -> (Int, Int, Bool) {
   let nx = px + dx
   let ny = py + dy
-  if not(in_bounds(nx, ny)) ||
-    is_wall(walls, nx, ny) ||
-    orb_at(orbs, -1, nx, ny) {
+  if !in_bounds(nx, ny) || is_wall(walls, nx, ny) || orb_at(orbs, -1, nx, ny) {
     (px, py, false)
   } else {
     (nx, ny, true)
@@ -315,7 +313,7 @@ fn apply_pulse(
   let mut moved = 0
 
   for i in 0..<orbs.length() {
-    if not(orbs[i].active) {
+    if !orbs[i].active {
       continue
     }
 
@@ -337,7 +335,7 @@ fn apply_pulse(
       sy = signi(dy)
     }
 
-    if not(attract) {
+    if !attract {
       sx = -sx
       sy = -sy
     }
@@ -346,9 +344,9 @@ fn apply_pulse(
     let ny = orbs[i].y + sy
 
     if in_bounds(nx, ny) &&
-      not(is_wall(walls, nx, ny)) &&
-      not(orb_at(orbs, i, nx, ny)) &&
-      not(nx == px && ny == py) {
+      !is_wall(walls, nx, ny) &&
+      !orb_at(orbs, i, nx, ny) &&
+      !(nx == px && ny == py) {
       orbs[i].x = nx
       orbs[i].y = ny
       moved = moved + 1
@@ -391,7 +389,7 @@ fn main {
   let mut transition_t : Float = 0.0
   let mut msg = "Move with arrows/WASD, Space pulse, Tab toggles mode."
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let dt = @raylib.get_frame_time()
 
     if @raylib.is_key_pressed(@raylib.KeyR) {
@@ -433,10 +431,10 @@ fn main {
       }
     }
 
-    if not(over) && transition_t <= 0.0 {
+    if !over && transition_t <= 0.0 {
       if @raylib.is_key_pressed(@raylib.KeyTab) ||
         @raylib.is_key_pressed(@raylib.KeyT) {
-        attract_mode = not(attract_mode)
+        attract_mode = !attract_mode
         msg = if attract_mode { "Mode: ATTRACT" } else { "Mode: REPEL" }
       }
 
@@ -498,7 +496,7 @@ fn main {
           pulse = true
           action = true
         } else if inside_rect(m.x, m.y, mode_x, mode_y, 184, 88) {
-          attract_mode = not(attract_mode)
+          attract_mode = !attract_mode
           msg = if attract_mode { "Mode: ATTRACT" } else { "Mode: REPEL" }
         }
       }
@@ -648,7 +646,7 @@ fn main {
     }
 
     for orb in orbs {
-      if not(orb.active) {
+      if !orb.active {
         continue
       }
       let x = ox + orb.x * cell + cell / 2

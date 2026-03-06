@@ -628,7 +628,7 @@ fn @types.Game::apply_emp(game : @types.Game) -> Unit {
   let kill2 = @types.emp_kill_radius * @types.emp_kill_radius
 
   for obj in game.objs {
-    if not(obj.active) {
+    if !obj.active {
       continue
     }
 
@@ -653,7 +653,7 @@ fn @types.Game::apply_emp(game : @types.Game) -> Unit {
   }
 
   for shot in game.shots {
-    if not(shot.active) || shot.from_player {
+    if !shot.active || shot.from_player {
       continue
     }
 
@@ -925,7 +925,7 @@ fn @types.Game::update_objs(game : @types.Game, dt : Float) -> Unit {
   let ram = game.dash_t > 0.0
 
   for i in 0..<game.objs.length() {
-    if not(game.objs[i].active) {
+    if !game.objs[i].active {
       continue
     }
 
@@ -1006,7 +1006,7 @@ fn @types.Game::update_objs(game : @types.Game, dt : Float) -> Unit {
 /// Moves all active shots, deactivates expired or out-of-bounds shots, resolves player shots against enemies (dealing damage or triggering kills), and resolves enemy shots against the player.
 fn @types.Game::update_shots(game : @types.Game, dt : Float) -> Unit {
   for shot in game.shots {
-    if not(shot.active) {
+    if !shot.active {
       continue
     }
 
@@ -1027,7 +1027,7 @@ fn @types.Game::update_shots(game : @types.Game, dt : Float) -> Unit {
     if shot.from_player {
       let mut hit = false
       for j in 0..<game.objs.length() {
-        if not(game.objs[j].active) || @types.is_pickup(game.objs[j].kind) {
+        if !game.objs[j].active || @types.is_pickup(game.objs[j].kind) {
           continue
         }
 
@@ -1074,7 +1074,7 @@ fn @types.Game::update_shots(game : @types.Game, dt : Float) -> Unit {
 /// Advances and ages all active spark particles, expanding rings, and dash ghost after-images; deactivates any that have exhausted their lifetime.
 fn @types.Game::update_fx(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 
@@ -1088,7 +1088,7 @@ fn @types.Game::update_fx(game : @types.Game, dt : Float) -> Unit {
   }
 
   for ring in game.rings {
-    if not(ring.active) {
+    if !ring.active {
       continue
     }
 
@@ -1100,7 +1100,7 @@ fn @types.Game::update_fx(game : @types.Game, dt : Float) -> Unit {
   }
 
   for ghost in game.ghosts {
-    if not(ghost.active) {
+    if !ghost.active {
       continue
     }
 

@@ -249,7 +249,7 @@ pub fn player_world_xy(player : Player) -> (Float, Float) {
 /// Returns whether phase mask active is true for the current query.
 pub fn phase_mask_active(mask : Int, beta : Bool) -> Bool {
   if mask == 1 {
-    not(beta)
+    !beta
   } else if mask == 2 {
     beta
   } else {

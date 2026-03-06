@@ -126,7 +126,7 @@ fn main {
 
   roll_hand(hand)
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     if @raylib.is_key_pressed(@raylib.KeyR) {
       player_hp = 80
       player_block = 0
@@ -140,12 +140,12 @@ fn main {
       roll_hand(hand)
     }
 
-    if not(won) && not(lost) {
+    if !won && !lost {
       for slot in 0..<hand.length() {
         let key_hit = (slot == 0 && @raylib.is_key_pressed(@raylib.KeyOne)) ||
           (slot == 1 && @raylib.is_key_pressed(@raylib.KeyTwo)) ||
           (slot == 2 && @raylib.is_key_pressed(@raylib.KeyThree))
-        if not(key_hit) {
+        if !key_hit {
           continue
         }
 
@@ -199,7 +199,7 @@ fn main {
         break
       }
 
-      if not(won) && @raylib.is_key_pressed(@raylib.KeyE) {
+      if !won && @raylib.is_key_pressed(@raylib.KeyE) {
         let (php, pblk, ehp, eblk, turn_log) = enemy_turn(
           player_hp, player_block, enemy_hp, enemy_block, turn_no,
         )

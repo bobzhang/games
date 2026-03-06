@@ -158,7 +158,7 @@ fn spawn_particle(
     if done {
       continue
     }
-    if not(ps_elem.active) {
+    if !ps_elem.active {
       ps_elem.active = true
       ps_elem.x = x
       ps_elem.y = y
@@ -407,7 +407,7 @@ fn main {
 
   reset_game()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -519,7 +519,7 @@ fn main {
 
         let touch_down : Bool = mouse_down &&
           inside_rect(mouse.x, mouse.y, x, touch_area_y, lane_w, touch_area_h)
-        let touch_press : Bool = touch_down && not(lane_touch_prev[lane])
+        let touch_press : Bool = touch_down && !lane_touch_prev[lane]
 
         lane_down[lane] = key_d || touch_down
         lane_press[lane] = key_p || touch_press
@@ -528,14 +528,14 @@ fn main {
 
       if song_t >= -0.25 {
         for lane in 0..<lane_count {
-          if not(lane_press[lane]) {
+          if !lane_press[lane] {
             continue
           }
 
           let mut best : Int = -1
           let mut best_dist : Float = 99.0
           for i in 0..<note_count {
-            if not(notes[i].active) {
+            if !notes[i].active {
               continue
             }
             if notes[i].lane != lane {
@@ -583,7 +583,7 @@ fn main {
         }
 
         for i in 0..<note_count {
-          if not(notes[i].active) {
+          if !notes[i].active {
             continue
           }
 
@@ -608,7 +608,7 @@ fn main {
               spawn_particle(particles, lane_center(lane), hit_y + 4.0, 0.20, 0)
             }
 
-            if not(lane_down[lane]) &&
+            if !lane_down[lane] &&
               song_t > notes[i].time + 0.05 &&
               song_t < notes[i].end_time - 0.03 {
               notes[i].state = 3
@@ -654,7 +654,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
       particle.t = particle.t + dt
@@ -774,7 +774,7 @@ fn main {
     )
 
     for i in 0..<note_count {
-      if not(notes[i].active) {
+      if !notes[i].active {
         continue
       }
 
@@ -866,7 +866,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 

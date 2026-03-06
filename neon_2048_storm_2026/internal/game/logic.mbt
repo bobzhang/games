@@ -68,7 +68,7 @@ fn @types.Game::burst(
 /// Advances all active sparks one frame: moves, damps velocity, and expires them.
 fn @types.Game::update_sparks(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 
@@ -121,7 +121,7 @@ fn @types.Game::save_undo(game : @types.Game) -> Unit {
 ///|
 /// Restores the last saved undo snapshot; returns false if undo is unavailable.
 fn @types.Game::restore_undo(game : @types.Game) -> Bool {
-  if not(game.can_undo) {
+  if !game.can_undo {
     @types.set_msg(game, "Nothing to undo", 0.7)
     return false
   }
@@ -365,7 +365,7 @@ fn @types.Game::apply_post_turn(game : @types.Game) -> Unit {
     return
   }
 
-  if not(game.board_has_move()) {
+  if !game.board_has_move() {
     game.finish_lose()
   }
 }
@@ -489,7 +489,7 @@ fn @types.Game::try_move(game : @types.Game, dir : @types.Direction) -> Bool {
     merge_count = merge_count + r.4
   }
 
-  if not(changed_any) {
+  if !changed_any {
     game.can_undo = false
     @types.set_msg(game, "No movement", 0.45)
     return false
@@ -533,12 +533,12 @@ fn @types.Game::use_zap(game : @types.Game, x : Int, y : Int) -> Bool {
     return false
   }
 
-  if not(game.zap_ready) {
+  if !game.zap_ready {
     @types.set_msg(game, "Zap not charged", 0.7)
     return false
   }
 
-  if not(@types.in_board(x, y)) {
+  if !@types.in_board(x, y) {
     return false
   }
 

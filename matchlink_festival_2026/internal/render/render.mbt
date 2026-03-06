@@ -50,7 +50,7 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
 /// Draws all active spark particles as coloured circles, using kind-specific colours for match, link, fail, and hint effects.
 fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 
@@ -76,7 +76,7 @@ fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
 ///|
 /// Draws the active link path flash as a sequence of thick yellow line segments with dot markers at each waypoint.
 fn @types.Game::draw_link_path(game : @types.Game) -> Unit {
-  if not(game.path_active) || game.path_points < 2 {
+  if !game.path_active || game.path_points < 2 {
     return
   }
 
@@ -104,7 +104,7 @@ fn @types.Game::draw_link_path(game : @types.Game) -> Unit {
 ///|
 /// Draws yellow highlight rectangles around the two tiles indicated by the active hint.
 fn @types.Game::draw_hint_pair(game : @types.Game) -> Unit {
-  if not(game.hint_active) {
+  if !game.hint_active {
     return
   }
 

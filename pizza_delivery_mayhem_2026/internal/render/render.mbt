@@ -169,7 +169,7 @@ fn traffic_color(kind : @types.TrafficKind) -> @raylib.Color {
 ///|
 /// Draws a traffic vehicle as a filled rectangle with an outline and a centre dot.
 fn draw_traffic(t : @types.Traffic, ox : Int, oy : Int) -> Unit {
-  if not(t.active) {
+  if !t.active {
     return
   }
   let x : Int = (t.x - t.w * 0.5).to_int() + ox
@@ -194,7 +194,7 @@ fn draw_traffic(t : @types.Traffic, ox : Int, oy : Int) -> Unit {
 ///|
 /// Draws an active delivery order as a line between source and destination, with pickup or drop-off circle and label.
 fn draw_order(o : @types.Order, highlight : Bool, ox : Int, oy : Int) -> Unit {
-  if not(o.active) {
+  if !o.active {
     return
   }
   let src_x : Int = o.x_from.to_int() + ox
@@ -208,7 +208,7 @@ fn draw_order(o : @types.Order, highlight : Bool, ox : Int, oy : Int) -> Unit {
     dst_y,
     @raylib.Color::new(216, 238, 250, if highlight { 180 } else { 90 }),
   )
-  if not(o.picked) {
+  if !o.picked {
     @raylib.draw_circle(
       src_x,
       src_y,
@@ -260,7 +260,7 @@ fn pickup_color(kind : @types.PickupKind) -> @raylib.Color {
 ///|
 /// Draws a pulsing pickup circle with a kind-specific icon (fuel canister, repair cross, or speed ring).
 fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
-  if not(p.active) {
+  if !p.active {
     return
   }
   let x : Int = p.x.to_int() + ox
@@ -314,7 +314,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
 /// Draws all active particles as circles with alpha that fades as their lifetime decreases.
 fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
     let a : Int = if particle.life > 0.7 {

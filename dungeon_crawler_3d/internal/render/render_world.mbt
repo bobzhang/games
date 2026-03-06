@@ -81,7 +81,7 @@ fn draw_wall(
     @types.is_walkable(@types.get_tile(game, gx + 1, gz)) ||
     @types.is_walkable(@types.get_tile(game, gx, gz - 1)) ||
     @types.is_walkable(@types.get_tile(game, gx, gz + 1))
-  if not(has_floor_neighbor) {
+  if !has_floor_neighbor {
     return // Interior wall - don't draw
   }
   let cs = @types.cell_size
@@ -217,7 +217,7 @@ fn draw_chest(wx : Float, wz : Float, game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_enemies_3d(game : @types.Game) -> Unit {
   for e in game.enemies {
-    if not(e.active) {
+    if !e.active {
       continue
     }
     // Distance check - don't draw far enemies
@@ -505,7 +505,7 @@ fn draw_enemy_health_bar(e : @types.Enemy, game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_loot_3d(game : @types.Game) -> Unit {
   for l in game.loot {
-    if not(l.active) {
+    if !l.active {
       continue
     }
     let bob = @math.sinf(l.bob_phase) * 0.1
@@ -559,7 +559,7 @@ fn @types.Game::draw_loot_3d(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_projectiles_3d(game : @types.Game) -> Unit {
   for p in game.projectiles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     @raylib.draw_sphere(
@@ -579,7 +579,7 @@ fn @types.Game::draw_projectiles_3d(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     let alpha_f = p.life / p.max_life
@@ -597,7 +597,7 @@ fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::draw_sword_swing(game : @types.Game) -> Unit {
-  if not(game.swing_active) {
+  if !game.swing_active {
     return
   }
   // Draw a sword slash effect in front of the player

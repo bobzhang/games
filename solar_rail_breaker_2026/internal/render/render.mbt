@@ -148,7 +148,7 @@ fn @types.Game::draw_flares(
   cam_y : Float,
 ) -> Unit {
   for f0 in game.flares {
-    if not(f0.active) {
+    if !f0.active {
       continue
     }
 
@@ -211,7 +211,7 @@ fn @types.Game::draw_enemy(
   cam_x : Float,
   cam_y : Float,
 ) -> Unit {
-  if not(e.active) {
+  if !e.active {
     return
   }
 
@@ -219,7 +219,7 @@ fn @types.Game::draw_enemy(
   let s = world_to_screen(p.0, p.1, cam_x, cam_y)
   let col = enemy_color(game, e)
 
-  if not(@types.phase_mask_active(e.phase_mask, game.phase_beta)) {
+  if !@types.phase_mask_active(e.phase_mask, game.phase_beta) {
     @raylib.draw_circle(
       s.0.to_int(),
       s.1.to_int(),
@@ -298,7 +298,7 @@ fn @types.Game::draw_bullets(
   cam_y : Float,
 ) -> Unit {
   for b in game.bullets {
-    if not(b.active) {
+    if !b.active {
       continue
     }
 
@@ -322,7 +322,7 @@ fn @types.Game::draw_bullets(
   }
 
   for b in game.enemy_bullets {
-    if not(b.active) {
+    if !b.active {
       continue
     }
 
@@ -344,7 +344,7 @@ fn @types.Game::draw_particles(
   cam_y : Float,
 ) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
 
@@ -368,7 +368,7 @@ fn @types.Game::draw_shocks(
   cam_y : Float,
 ) -> Unit {
   for s in game.shocks {
-    if not(s.active) {
+    if !s.active {
       continue
     }
 

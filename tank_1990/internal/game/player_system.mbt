@@ -69,7 +69,7 @@ fn @types.Game::player_is_on_ice(
 /// the maximum number of active bullets for this player has been reached.
 fn @types.Game::can_player_fire(game : @types.Game, index : Int) -> Bool {
   let player = game.players[index]
-  if not(player.active) {
+  if !player.active {
     return false
   }
   if player.reload_timer > 0.0 {
@@ -137,7 +137,7 @@ fn @types.Game::try_move_player(
   dt : Float,
 ) -> Unit {
   let player = game.players[index]
-  if not(player.active) {
+  if !player.active {
     return
   }
 
@@ -167,12 +167,12 @@ fn @types.Game::try_move_player(
 /// key is pressed and the player is allowed to fire.
 fn @types.Game::update_player_input(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<@types.max_players {
-    if not(game.is_player_enabled(i)) {
+    if !game.is_player_enabled(i) {
       continue
     }
 
     let player = game.players[i]
-    if not(player.active) {
+    if !player.active {
       continue
     }
 
@@ -230,7 +230,7 @@ fn @types.Game::update_player_input(game : @types.Game, dt : Float) -> Unit {
 /// an explosion is spawned, and a respawn timer begins.
 fn @types.Game::on_player_destroyed(game : @types.Game, index : Int) -> Unit {
   let player = game.players[index]
-  if not(player.active) {
+  if !player.active {
     return
   }
   if player.invuln_timer > 0.0 || player.shield_timer > 0.0 {
@@ -258,7 +258,7 @@ fn @types.Game::on_player_destroyed(game : @types.Game, index : Int) -> Unit {
 /// and a respawn particle burst is shown.
 fn @types.Game::update_player_respawns(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<@types.max_players {
-    if not(game.is_player_enabled(i)) {
+    if !game.is_player_enabled(i) {
       continue
     }
     let player = game.players[i]
@@ -282,7 +282,7 @@ fn @types.Game::update_player_respawns(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::all_players_out(game : @types.Game) -> Bool {
   let mut living = 0
   for i in 0..<@types.max_players {
-    if not(game.is_player_enabled(i)) {
+    if !game.is_player_enabled(i) {
       continue
     }
     let player = game.players[i]

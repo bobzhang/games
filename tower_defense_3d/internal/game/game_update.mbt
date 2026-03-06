@@ -115,11 +115,11 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   }
   // Toggle range display
   if @raylib.is_key_pressed(@raylib.KeyR) {
-    game.show_ranges = not(game.show_ranges)
+    game.show_ranges = !game.show_ranges
   }
   // Toggle minimap
   if @raylib.is_key_pressed(@raylib.KeyM) {
-    game.show_minimap = not(game.show_minimap)
+    game.show_minimap = !game.show_minimap
   }
   // Speed control
   if @raylib.is_key_pressed(@raylib.KeyTab) {
@@ -152,7 +152,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
         break
       }
     }
-    if not(alive) && game.wave_active {
+    if !alive && game.wave_active {
       // Wave complete
       game.wave_active = false
       let info = @levels.get_wave_info(game.current_wave)
@@ -388,7 +388,7 @@ fn @types.Game::update_camera(game : @types.Game, dt : Float) -> Unit {
 /// Updates all active particles applying velocity, gravity, and lifetime decay.
 fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     p.life -= dt
@@ -420,7 +420,7 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
 /// Updates chain lightning visual lines and removes expired ones.
 fn @types.Game::update_chain_lines(game : @types.Game, dt : Float) -> Unit {
   for cl in game.chain_lines {
-    if not(cl.active) {
+    if !cl.active {
       continue
     }
     cl.life -= dt
@@ -498,7 +498,7 @@ fn @types.Game::handle_tower_selection(game : @types.Game) -> Unit {
     let cam_z = game.camera_target_z
     for i in 0..<game.towers.length() {
       let tower = game.towers[i]
-      if not(tower.active) {
+      if !tower.active {
         continue
       }
       let tx = @types.grid_to_world_x(tower.gx)

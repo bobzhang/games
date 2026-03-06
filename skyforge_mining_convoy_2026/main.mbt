@@ -159,7 +159,7 @@ fn emit_particle(
   kind : Int,
 ) -> Unit {
   for i in 0..<particles.length() {
-    if not(particles[i].active) {
+    if !particles[i].active {
       particles[i] = { active: true, x, y, vx, vy, size, t: 0.0, life, kind }
       break
     }
@@ -214,7 +214,7 @@ fn spawn_bullet(
   life : Float,
 ) -> Unit {
   for i in 0..<bullets.length() {
-    if not(bullets[i].active) {
+    if !bullets[i].active {
       bullets[i] = { active: true, from_player, x, y, vx, vy, dmg, life }
       break
     }
@@ -224,7 +224,7 @@ fn spawn_bullet(
 ///|
 fn spawn_ore(ores : FixedArray[Ore], x : Float, y : Float, value : Int) -> Unit {
   for i in 0..<ores.length() {
-    if not(ores[i].active) {
+    if !ores[i].active {
       ores[i] = { active: true, x, y, value, t: 0.0, life: 24.0 }
       break
     }
@@ -238,7 +238,7 @@ fn spawn_enemy(
   convoy_x : Float,
 ) -> Unit {
   for i in 0..<enemies.length() {
-    if not(enemies[i].active) {
+    if !enemies[i].active {
       let kind : Int = if @raylib.get_random_value(0, 100) < 26 + level * 6 {
         1
       } else {
@@ -319,7 +319,7 @@ fn draw_bar(
 
 ///|
 fn draw_touch_controls(show : Bool) -> Unit {
-  if not(show) {
+  if !show {
     return
   }
 
@@ -585,7 +585,7 @@ fn main {
 
   reset_round(level)
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -823,7 +823,7 @@ fn main {
         pilot.pulse_cd = 5.8
         burst_particles(particles, pilot.x, pilot.y, 60, 164.0, 1)
         for enemy in enemies {
-          if not(enemy.active) {
+          if !enemy.active {
             continue
           }
           let d2 : Float = dist2(pilot.x, pilot.y, enemy.x, enemy.y)
@@ -840,7 +840,7 @@ fn main {
           let mut best : Int = -1
           let mut best_d2 : Float = 99999999.0
           for i in 0..<enemies.length() {
-            if not(enemies[i].active) {
+            if !enemies[i].active {
               continue
             }
             let d2 : Float = dist2(pilot.x, pilot.y, enemies[i].x, enemies[i].y)
@@ -890,7 +890,7 @@ fn main {
 
       let mut alive_trucks : Int = 0
       for truck in trucks {
-        if not(truck.active) {
+        if !truck.active {
           continue
         }
         alive_trucks = alive_trucks + 1
@@ -928,7 +928,7 @@ fn main {
       }
 
       for enemy in enemies {
-        if not(enemy.active) {
+        if !enemy.active {
           continue
         }
 
@@ -964,7 +964,7 @@ fn main {
           let mut best : Int = -1
           let mut best_d2 : Float = 99999999.0
           for j in 0..<trucks.length() {
-            if not(trucks[j].active) {
+            if !trucks[j].active {
               continue
             }
             let d2 : Float = dist2(enemy.x, enemy.y, trucks[j].x, trucks[j].y)
@@ -1056,7 +1056,7 @@ fn main {
           }
 
           for truck in trucks {
-            if not(truck.active) {
+            if !truck.active {
               continue
             }
             if dist2(enemy.x, enemy.y, truck.x, truck.y) <= 34.0 * 34.0 {
@@ -1072,7 +1072,7 @@ fn main {
       }
 
       for bullet in bullets {
-        if not(bullet.active) {
+        if !bullet.active {
           continue
         }
 
@@ -1095,7 +1095,7 @@ fn main {
 
         if bullet.from_player {
           for enemy in enemies {
-            if not(enemy.active) {
+            if !enemy.active {
               continue
             }
             if dist2(bullet.x, bullet.y, enemy.x, enemy.y) <= 22.0 * 22.0 {
@@ -1120,7 +1120,7 @@ fn main {
           }
 
           for truck in trucks {
-            if not(truck.active) {
+            if !truck.active {
               continue
             }
             if dist2(bullet.x, bullet.y, truck.x, truck.y) <= 24.0 * 24.0 {
@@ -1135,7 +1135,7 @@ fn main {
       }
 
       for enemy in enemies {
-        if not(enemy.active) {
+        if !enemy.active {
           continue
         }
         if enemy.hp <= 0.0 {
@@ -1170,7 +1170,7 @@ fn main {
       }
 
       for i in 0..<ores.length() {
-        if not(ores[i].active) {
+        if !ores[i].active {
           continue
         }
 
@@ -1196,7 +1196,7 @@ fn main {
       }
 
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
         particle.t = particle.t + dt
@@ -1305,7 +1305,7 @@ fn main {
     )
 
     for ore in ores {
-      if not(ore.active) {
+      if !ore.active {
         continue
       }
       let ox : Float = ore.x - cam_x + shake_x
@@ -1333,7 +1333,7 @@ fn main {
     }
 
     for truck in trucks {
-      if not(truck.active) {
+      if !truck.active {
         continue
       }
       let tx : Float = truck.x - cam_x + shake_x
@@ -1380,7 +1380,7 @@ fn main {
     }
 
     for enemy in enemies {
-      if not(enemy.active) {
+      if !enemy.active {
         continue
       }
       let ex : Float = enemy.x - cam_x + shake_x
@@ -1419,7 +1419,7 @@ fn main {
     }
 
     for bullet in bullets {
-      if not(bullet.active) {
+      if !bullet.active {
         continue
       }
       let px : Float = bullet.x - cam_x + shake_x
@@ -1475,7 +1475,7 @@ fn main {
     )
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
       let px : Float = particle.x - cam_x + shake_x

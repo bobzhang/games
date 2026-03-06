@@ -226,7 +226,7 @@ fn @types.Game::apply_offbeat_penalty(game : @types.Game) -> Unit {
 ///|
 /// Attempts to register a hit against the active prompt: checks timing, lane, and stance alignment, applying a perfect/good hit or a miss accordingly.
 fn @types.Game::try_hit_prompt(game : @types.Game) -> Unit {
-  if not(game.prompt_active) {
+  if !game.prompt_active {
     game.apply_offbeat_penalty()
     return
   }
@@ -241,7 +241,7 @@ fn @types.Game::try_hit_prompt(game : @types.Game) -> Unit {
     return
   }
 
-  if not(lane_ok) || not(stance_ok) {
+  if !lane_ok || !stance_ok {
     game.apply_miss(
       "Mismatch: lane focus or stance was wrong.", @types.mismatch_harmony_extra,
     )
@@ -296,7 +296,7 @@ fn @types.Game::try_deflect(game : @types.Game) -> Unit {
 ///|
 /// Activates the focus burst if the burst button is pressed and the cooldown has expired, or shows a cooldown message if it is still recharging.
 fn @types.Game::try_activate_burst(game : @types.Game) -> Unit {
-  if not(game.input.burst_pressed) {
+  if !game.input.burst_pressed {
     return
   }
 
@@ -413,7 +413,7 @@ fn @types.Game::update_playing_state(game : @types.Game, dt : Float) -> Unit {
     return
   }
 
-  if not(game.prompt_active) && game.next_prompt_t <= 0.0 {
+  if !game.prompt_active && game.next_prompt_t <= 0.0 {
     game.spawn_prompt()
     game.next_prompt_t = game.beat_interval
   }

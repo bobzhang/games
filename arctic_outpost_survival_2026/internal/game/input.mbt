@@ -72,7 +72,7 @@ fn @types.Game::best_auto_aim(game : @types.Game) -> (Float, Float) {
   let mut best : Float = 1_000_000_000.0
 
   for enemy in game.enemies {
-    if not(enemy.active) {
+    if !enemy.active {
       continue
     }
 

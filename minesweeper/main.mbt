@@ -47,7 +47,7 @@ fn count_adjacent(mines : Array[Int], row : Int, col : Int) -> Int {
   let mut count = 0
   for dr in -1..<=1 {
     for dc in -1..<=1 {
-      if not(dr == 0 && dc == 0) {
+      if !(dr == 0 && dc == 0) {
         let nr = row + dr
         let nc = col + dc
         if in_bounds(nr, nc) && mines[cell_index(nr, nc)] != 0 {
@@ -122,7 +122,7 @@ fn flood_fill(
   row : Int,
   col : Int,
 ) -> Unit {
-  if not(in_bounds(row, col)) {
+  if !in_bounds(row, col) {
     return
   }
   let idx = cell_index(row, col)
@@ -133,7 +133,7 @@ fn flood_fill(
   if adjacent[idx] == 0 {
     for dr in -1..<=1 {
       for dc in -1..<=1 {
-        if not(dr == 0 && dc == 0) {
+        if !(dr == 0 && dc == 0) {
           flood_fill(mines, revealed, flagged, adjacent, row + dr, col + dc)
         }
       }
@@ -193,7 +193,7 @@ fn main {
   let highlight_light = @raylib.Color::new(224, 224, 224, 255)
   let highlight_dark = @raylib.Color::new(128, 128, 128, 255)
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     // === UPDATE ===
     // Restart
     if @raylib.is_key_pressed(@raylib.KeyR) {

@@ -199,7 +199,7 @@ fn draw_train_shell(ox : Int, oy : Int) -> Unit {
 /// Draws all active loot items on the map with kind-specific icons and a glow halo.
 fn @types.Game::draw_loot(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for loot in game.loots {
-    if not(loot.active) {
+    if !loot.active {
       continue
     }
 
@@ -283,7 +283,7 @@ fn @types.Game::draw_loot(game : @types.Game, ox : Int, oy : Int) -> Unit {
 /// Draws all active smoke clouds with pulsing opacity based on their remaining lifetime.
 fn @types.Game::draw_smokes(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for i in 0..<game.smokes.length() {
-    if not(game.smokes[i].active) {
+    if !game.smokes[i].active {
       continue
     }
 
@@ -316,7 +316,7 @@ fn draw_guard(
   ox : Int,
   oy : Int,
 ) -> Unit {
-  if not(g.active) {
+  if !g.active {
     return
   }
 
@@ -391,7 +391,7 @@ fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
 /// Draws all active particles as colored circles sized by the particle's size field.
 fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 

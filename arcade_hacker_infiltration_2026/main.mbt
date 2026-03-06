@@ -271,7 +271,7 @@ fn terminal_at(terminals : Array[Terminal], gx : Int, gy : Int) -> Int {
     if terminals[i].active &&
       terminals[i].gx == gx &&
       terminals[i].gy == gy &&
-      not(terminals[i].hacked) {
+      !terminals[i].hacked {
       found = i
       break
     }
@@ -395,7 +395,7 @@ fn spawn_guard(
 ) -> Bool {
   let mut slot : Int = -1
   for i in 0..<guards.length() {
-    if not(guards[i].active) {
+    if !guards[i].active {
       slot = i
       break
     }
@@ -430,7 +430,7 @@ fn spawn_pickup(
 ) -> Bool {
   let mut slot : Int = -1
   for i in 0..<pickups.length() {
-    if not(pickups[i].active) {
+    if !pickups[i].active {
       slot = i
       break
     }
@@ -463,7 +463,7 @@ fn burst(
       break
     }
 
-    if not(part.active) {
+    if !part.active {
       part.active = true
       part.x = x
       part.y = y
@@ -481,7 +481,7 @@ fn burst(
 ///|
 /// Draws a guard at its current grid position with body, head, and optional stun indicator.
 fn draw_guard(g : Guard) -> Unit {
-  if not(g.active) {
+  if !g.active {
     ignore(())
   } else {
     let body_col = if g.kind == 0 {
@@ -528,7 +528,7 @@ fn draw_guard(g : Guard) -> Unit {
 ///|
 /// Draws a camera at its grid position with a direction indicator, greyed out when disabled.
 fn draw_camera(c : Camera) -> Unit {
-  if not(c.active) {
+  if !c.active {
     ignore(())
   } else {
     let cx = cell_center_x(c.gx)
@@ -664,7 +664,7 @@ fn main {
   let mut move_repeat_t : Float = 0.0
 
   let cell_free_for_spawn = fn(gx : Int, gy : Int, min_dist : Int) {
-    if not(can_walk(tiles, gx, gy)) {
+    if !can_walk(tiles, gx, gy) {
       false
     } else if (gx - player.gx).abs() + (gy - player.gy).abs() < min_dist {
       false
@@ -782,7 +782,7 @@ fn main {
         if cell_free_for_spawn(gx, gy, 6) {
           let mut slot : Int = -1
           for k in 0..<terminals.length() {
-            if not(terminals[k].active) {
+            if !terminals[k].active {
               slot = k
               break
             }
@@ -807,7 +807,7 @@ fn main {
         if cell_free_for_spawn(gx, gy, 5) {
           let mut slot : Int = -1
           for k in 0..<cameras.length() {
-            if not(cameras[k].active) {
+            if !cameras[k].active {
               slot = k
               break
             }
@@ -921,7 +921,7 @@ fn main {
 
       let nx = player.gx + dx
       let ny = player.gy + dy
-      if not(can_walk(tiles, nx, ny)) {
+      if !can_walk(tiles, nx, ny) {
         msg = "Path blocked"
         msg_t = 0.25
       } else if guard_at(guards, nx, ny) >= 0 {
@@ -936,7 +936,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -1094,7 +1094,7 @@ fn main {
       if hack_press && player.hack_cd <= 0.0 {
         let mut target : Int = -1
         for i in 0..<terminals.length() {
-          if terminals[i].active && not(terminals[i].hacked) {
+          if terminals[i].active && !terminals[i].hacked {
             let d = (terminals[i].gx - player.gx).abs() +
               (terminals[i].gy - player.gy).abs()
             if d <= 1 {
@@ -1209,7 +1209,7 @@ fn main {
       }
 
       for camera in cameras {
-        if not(camera.active) {
+        if !camera.active {
           continue
         }
 
@@ -1236,7 +1236,7 @@ fn main {
       }
 
       for guard_val in guards {
-        if not(guard_val.active) {
+        if !guard_val.active {
           continue
         }
 
@@ -1339,7 +1339,7 @@ fn main {
           let mut nx = guard_val.gx + dx
           let mut ny = guard_val.gy + dy
 
-          let bad_step = not(can_walk(tiles, nx, ny)) ||
+          let bad_step = !can_walk(tiles, nx, ny) ||
             guard_at(guards, nx, ny) >= 0 ||
             (nx == player.gx && ny == player.gy)
 
@@ -1360,7 +1360,7 @@ fn main {
 
           if can_walk(tiles, nx, ny) &&
             guard_at(guards, nx, ny) < 0 &&
-            not(nx == player.gx && ny == player.gy) {
+            !(nx == player.gx && ny == player.gy) {
             guard_val.gx = nx
             guard_val.gy = ny
           } else {
@@ -1487,7 +1487,7 @@ fn main {
       }
 
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
 
@@ -1568,7 +1568,7 @@ fn main {
 
     // Camera cone projection.
     for camera in cameras {
-      if not(camera.active) || camera.disable_t > 0.0 {
+      if !camera.active || camera.disable_t > 0.0 {
         continue
       }
 
@@ -1587,7 +1587,7 @@ fn main {
         } else {
           camera.gy
         }
-        if not(in_bounds(gx, gy)) || tiles[idx(gx, gy)] == 1 {
+        if !in_bounds(gx, gy) || tiles[idx(gx, gy)] == 1 {
           break
         }
 
@@ -1617,7 +1617,7 @@ fn main {
       tile - 12,
       exit_col,
     )
-    if not(exit_open) {
+    if !exit_open {
       @raylib.draw_line(
         exit_px + 10,
         exit_py + 10,
@@ -1690,7 +1690,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 

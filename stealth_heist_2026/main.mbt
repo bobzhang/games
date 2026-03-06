@@ -200,7 +200,7 @@ fn move_guard_toward_player(
 ///|
 fn all_cards_collected(cards : Array[Card]) -> Bool {
   for card in cards {
-    if not(card.collected) {
+    if !card.collected {
       return false
     }
   }
@@ -248,7 +248,7 @@ fn main {
   let mut lost = false
   let mut msg = "Move with arrows/WASD. Space uses smoke. Reach extraction at E."
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     if @raylib.is_key_pressed(@raylib.KeyR) {
       build_map(map)
       reset_guards(guards)
@@ -265,7 +265,7 @@ fn main {
 
     let mut acted = false
 
-    if not(won) && not(lost) {
+    if !won && !lost {
       let mut move_dir = -1
       if @raylib.is_key_pressed(@raylib.KeyA) ||
         @raylib.is_key_pressed(@raylib.KeyLeft) {
@@ -309,7 +309,7 @@ fn main {
       }
 
       for i in 0..<cards.length() {
-        if not(cards[i].collected) &&
+        if !cards[i].collected &&
           cards[i].x == player_x &&
           cards[i].y == player_y {
           cards[i].collected = true
@@ -353,7 +353,7 @@ fn main {
               }
               guard_val.dir = (guard_val.dir + 1) % 4
             }
-            if not(moved) {
+            if !moved {
               guard_val.dir = (guard_val.dir + 1) % 4
             }
           }
@@ -427,7 +427,7 @@ fn main {
     }
 
     for card in cards {
-      if not(card.collected) {
+      if !card.collected {
         let cx = map_x + card.x * tile + tile / 2
         let cy = map_y + card.y * tile + tile / 2
         @raylib.draw_circle(cx, cy, 12.0, @raylib.gold)

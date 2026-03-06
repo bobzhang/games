@@ -13,7 +13,7 @@ fn @types.Game::update_enemies_ai(game : @types.Game, dt : Float) -> Unit {
   // Update each enemy
   for i in 0..<game.enemies.length() {
     let enemy = game.enemies[i]
-    if not(enemy.active) {
+    if !enemy.active {
       continue
     }
     // Stun timer
@@ -68,7 +68,7 @@ fn @types.Game::update_enemies_ai(game : @types.Game, dt : Float) -> Unit {
     }
     // Barricade collision + barricade damage
     for barr in game.barricades {
-      if not(barr.active) {
+      if !barr.active {
         continue
       }
       let bdist = @types.distance2d(enemy.x, enemy.z, barr.x, barr.z)
@@ -97,7 +97,7 @@ fn @types.Game::update_enemies_ai(game : @types.Game, dt : Float) -> Unit {
     // Enemy-enemy collision (simple push apart)
     for j in (i + 1)..<game.enemies.length() {
       let other = game.enemies[j]
-      if not(other.active) {
+      if !other.active {
         continue
       }
       let edx = other.x - enemy.x
@@ -116,7 +116,7 @@ fn @types.Game::update_enemies_ai(game : @types.Game, dt : Float) -> Unit {
     }
     // Trap interaction
     for trap in game.traps {
-      if not(trap.active) {
+      if !trap.active {
         continue
       }
       let tdist = @types.distance2d(enemy.x, enemy.z, trap.x, trap.z)
@@ -385,7 +385,7 @@ fn @types.Game::update_exploder_ai(
   let enemy = game.enemies[idx]
   ignore(dt)
   // Exploders rush toward player
-  if not(enemy.explode_triggered) {
+  if !enemy.explode_triggered {
     if dist > 0.5 {
       let nx = dx / dist
       let nz = dz / dist
@@ -474,7 +474,7 @@ fn @types.Game::update_necromancer_ai(
     // Try to find a dead enemy to revive (using can_revive flag)
     let mut revived = false
     for target in game.enemies {
-      if not(target.active) && target.can_revive {
+      if !target.active && target.can_revive {
         let revive_dist = @types.distance2d(
           enemy.x,
           enemy.z,
@@ -893,7 +893,7 @@ fn @types.Game::kill_enemy(game : @types.Game, idx : Int) -> Unit {
     b,
   )
   // Exploder death explosion
-  if enemy.kind == Exploder && not(enemy.explode_triggered) {
+  if enemy.kind == Exploder && !enemy.explode_triggered {
     game.apply_explosion(
       enemy.x,
       enemy.y,

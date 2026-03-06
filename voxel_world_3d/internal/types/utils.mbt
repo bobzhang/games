@@ -864,7 +864,7 @@ pub fn spawn_particle(
   lifetime : Float,
 ) -> Unit {
   for i in 0..<particle_max {
-    if not(game.particles[i].active) {
+    if !game.particles[i].active {
       let p = game.particles[i]
       p.active = true
       p.x = px

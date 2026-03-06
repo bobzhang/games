@@ -190,7 +190,7 @@ pub fn nearest_undetected_target(game : Game) -> (Float, Float, Bool) {
   let mut found = false
   let mut best_d : Float = 1_000_000_000.0
   for i in 0..<game.target_goal {
-    if not(game.targets[i].active) || game.targets[i].detected {
+    if !game.targets[i].active || game.targets[i].detected {
       continue
     }
     let d = dist2(game.sub_x, game.sub_y, game.targets[i].x, game.targets[i].y)

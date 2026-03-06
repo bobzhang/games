@@ -10,7 +10,7 @@ fn main {
   let game = @types.Game::new()
   @game.reset_to_title(game)
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let dt = @raylib.get_frame_time()
     let mouse = @raylib.get_mouse_position()
     game.mouse_x = mouse.x

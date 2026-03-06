@@ -9,12 +9,11 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   player.pitch -= mouse_delta.y * @types.player_mouse_sensitivity
   player.pitch = @types.clampf(player.pitch, -1.4, 1.4)
   // Sprint
-  player.sprint = @raylib.is_key_down(@raylib.KeyLeftShift) &&
-    not(player.crouching)
+  player.sprint = @raylib.is_key_down(@raylib.KeyLeftShift) && !player.crouching
   // Crouch toggle
   if @raylib.is_key_pressed(@raylib.KeyLeftControl) ||
     @raylib.is_key_pressed(@raylib.KeyC) {
-    player.crouching = not(player.crouching)
+    player.crouching = !player.crouching
   }
   // Smooth crouch lerp
   let crouch_target : Float = if player.crouching { 1.0 } else { 0.0 }
@@ -175,7 +174,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
     }
   }
   // Minigun spin decay when not firing
-  if not(player.minigun_spinning) && player.minigun_spin > 0.0 {
+  if !player.minigun_spinning && player.minigun_spin > 0.0 {
     player.minigun_spin -= dt * 2.0
     if player.minigun_spin < 0.0 {
       player.minigun_spin = 0.0

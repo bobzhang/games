@@ -151,7 +151,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
   // Update all enemies
   for i in 0..<game.enemies.length() {
     let enemy = game.enemies[i]
-    if not(enemy.active) {
+    if !enemy.active {
       continue
     }
     // Update status effects
@@ -255,7 +255,7 @@ fn @types.Game::update_healer(
       continue
     }
     let other = game.enemies[j]
-    if not(other.active) {
+    if !other.active {
       continue
     }
     let dist = @types.distance2d(healer.x, healer.z, other.x, other.z)
@@ -343,16 +343,16 @@ fn @types.Game::move_enemy_along_path(
 fn @types.Game::update_projectiles(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.projectiles.length() {
     let proj = game.projectiles[i]
-    if not(proj.active) {
+    if !proj.active {
       continue
     }
     // Check if target still valid
-    if proj.target_idx < 0 || not(game.enemies[proj.target_idx].active) {
+    if proj.target_idx < 0 || !game.enemies[proj.target_idx].active {
       // Find nearest enemy as fallback
       let mut best = -1
       let mut best_dist : Float = 999.0
       for j in 0..<game.enemies.length() {
-        if not(game.enemies[j].active) {
+        if !game.enemies[j].active {
           continue
         }
         let d = @types.distance3d(
@@ -415,7 +415,7 @@ fn @types.Game::apply_projectile_hit(
     // Splash damage
     for i in 0..<game.enemies.length() {
       let enemy = game.enemies[i]
-      if not(enemy.active) {
+      if !enemy.active {
         continue
       }
       let dist = @types.distance2d(proj.x, proj.z, enemy.x, enemy.z)
@@ -486,7 +486,7 @@ fn @types.Game::apply_projectile_effects(
   if proj.stun_chance > 0.0 {
     if @types.rand_bool(game, proj.stun_chance) {
       // Bosses can't be stunned
-      if not(enemy.is_boss) {
+      if !enemy.is_boss {
         enemy.stun_timer = proj.stun_duration
         @types.spawn_particles(
           game,
@@ -546,7 +546,7 @@ fn @types.Game::apply_chain_lightning(
     let mut best = -1
     let mut best_dist : Float = @types.chain_range + 1.0
     for j in 0..<game.enemies.length() {
-      if not(game.enemies[j].active) {
+      if !game.enemies[j].active {
         continue
       }
       if visited[j] {

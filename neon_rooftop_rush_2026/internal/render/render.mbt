@@ -128,7 +128,7 @@ fn @types.Game::draw_segments(
   cam_y : Float,
 ) -> Unit {
   for segment in game.segments {
-    if not(segment.active) {
+    if !segment.active {
       continue
     }
 
@@ -196,7 +196,7 @@ fn @types.Game::draw_segments(
 ///|
 /// Draws a single grapple anchor as a pulsing neon orb with a halo ring, blending blue and pink based on its glow phase.
 fn draw_anchor(a : @types.Anchor, cam_x : Float, cam_y : Float) -> Unit {
-  if not(a.active) {
+  if !a.active {
     return
   }
 
@@ -228,7 +228,7 @@ fn draw_anchor(a : @types.Anchor, cam_x : Float, cam_y : Float) -> Unit {
 ///|
 /// Draws a single obstacle using its kind-specific visual: a vented box for vents, a neon signpost for signs, a glowing ellipse for drones, and dual pulsing laser beams for lasers.
 fn draw_obstacle(ob : @types.Obstacle, cam_x : Float, cam_y : Float) -> Unit {
-  if not(ob.active) {
+  if !ob.active {
     return
   }
 
@@ -365,7 +365,7 @@ fn @types.Game::draw_chips(
   cam_y : Float,
 ) -> Unit {
   for chip in game.chips {
-    if not(chip.active) {
+    if !chip.active {
       continue
     }
 
@@ -403,7 +403,7 @@ fn @types.Game::draw_particles(
   cam_y : Float,
 ) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
 
@@ -423,7 +423,7 @@ fn @types.Game::draw_particles(
   }
 
   for g in game.ghosts {
-    if not(g.active) {
+    if !g.active {
       continue
     }
 

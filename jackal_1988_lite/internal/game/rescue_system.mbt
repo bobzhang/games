@@ -40,7 +40,7 @@ fn @types.Game::try_spawn_hostage_at_tile(
   tx : Int,
   ty : Int,
 ) -> Bool {
-  if not(@types.in_tile_bounds(tx, ty)) {
+  if !@types.in_tile_bounds(tx, ty) {
     return false
   }
   if Float::from_int(tx - @types.base_tile_x).abs() <= 2.0 &&
@@ -48,7 +48,7 @@ fn @types.Game::try_spawn_hostage_at_tile(
     return false
   }
   let tile = @types.get_tile(game, tx, ty)
-  if not(tile_is_hostage_spawnable(tile)) {
+  if !tile_is_hostage_spawnable(tile) {
     return false
   }
 
@@ -117,7 +117,7 @@ fn @types.Game::update_hostages(game : @types.Game, dt : Float) -> Unit {
   let pickup_r2 = @types.rescue_pickup_radius * @types.rescue_pickup_radius
 
   for hostage in game.hostages {
-    if not(hostage.active) {
+    if !hostage.active {
       continue
     }
 
@@ -126,7 +126,7 @@ fn @types.Game::update_hostages(game : @types.Game, dt : Float) -> Unit {
 
     for p in 0..<@types.max_players {
       let player = game.players[p]
-      if not(player.active) {
+      if !player.active {
         continue
       }
 
@@ -140,7 +140,7 @@ fn @types.Game::update_hostages(game : @types.Game, dt : Float) -> Unit {
         @particles.spawn_spark_burst(game, hostage.x, hostage.y - 8.0, 12)
         @particles.spawn_respawn_burst(game, hostage.x, hostage.y)
 
-        if game.rescue_objective_done() && not(game.rescue_stage_bonus_awarded) {
+        if game.rescue_objective_done() && !game.rescue_stage_bonus_awarded {
           game.rescue_stage_bonus_awarded = true
           @score.grant_score(game, team, @types.rescue_stage_bonus)
           @particles.spawn_spark_burst(

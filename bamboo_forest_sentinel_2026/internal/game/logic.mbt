@@ -271,7 +271,7 @@ fn @types.Game::damage_enemy(
     return false
   }
 
-  if not(game.enemies[enemy_index].active) {
+  if !game.enemies[enemy_index].active {
     return false
   }
 
@@ -313,7 +313,7 @@ fn @types.Game::perform_basic_attack(game : @types.Game) -> Unit {
   let mut kills = 0
 
   for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
+    if !game.enemies[i].active {
       continue
     }
 
@@ -413,7 +413,7 @@ fn @types.Game::trigger_sweep(game : @types.Game) -> Unit {
   let mut kills = 0
 
   for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
+    if !game.enemies[i].active {
       continue
     }
 
@@ -451,7 +451,7 @@ fn @types.Game::handle_player_actions(game : @types.Game) -> Unit {
   }
 
   if game.input.press_j {
-    if not(game.try_place_trap()) {
+    if !game.try_place_trap() {
       game.perform_basic_attack()
     }
   }
@@ -573,7 +573,7 @@ fn @types.Game::update_traps(game : @types.Game, dt : Float) -> Unit {
       trap.flash_t = @types.maxf(trap.flash_t - dt, 0.0)
     }
 
-    if not(trap.active) || trap.trigger_cd > 0.0 {
+    if !trap.active || trap.trigger_cd > 0.0 {
       continue
     }
 
@@ -581,7 +581,7 @@ fn @types.Game::update_traps(game : @types.Game, dt : Float) -> Unit {
     let mut best_d2 = @types.squaref(@types.trap_trigger_radius)
 
     for j in 0..<game.enemies.length() {
-      if not(game.enemies[j].active) {
+      if !game.enemies[j].active {
         continue
       }
 
@@ -614,7 +614,7 @@ fn @types.Game::update_traps(game : @types.Game, dt : Float) -> Unit {
 /// Advances all active enemies: decays slow timers, re-targets to the best alive beacon, moves toward it with a sinusoidal sway, and applies beacon integrity damage on contact before deactivating.
 fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
+    if !game.enemies[i].active {
       continue
     }
 

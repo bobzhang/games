@@ -382,7 +382,7 @@ fn @types.Game::draw_raiders(
   cam_y : Float,
 ) -> Unit {
   for raider in game.raiders {
-    if not(raider.active) {
+    if !raider.active {
       continue
     }
 
@@ -450,7 +450,7 @@ fn @types.Game::draw_bullets(
   cam_y : Float,
 ) -> Unit {
   for bullet in game.bullets {
-    if not(bullet.active) {
+    if !bullet.active {
       continue
     }
 
@@ -471,7 +471,7 @@ fn @types.Game::draw_dust(
   cam_y : Float,
 ) -> Unit {
   for dust in game.dusts {
-    if not(dust.active) {
+    if !dust.active {
       continue
     }
 

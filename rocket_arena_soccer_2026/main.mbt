@@ -184,7 +184,7 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 fn spawn_pickup(items : Array[Pickup]) -> Bool {
   let mut slot : Int = -1
   for i in 0..<items.length() {
-    if not(items[i].active) {
+    if !items[i].active {
       slot = i
       break
     }
@@ -217,7 +217,7 @@ fn burst(
     if left <= 0 {
       break
     }
-    if not(part.active) {
+    if !part.active {
       part.active = true
       part.x = x
       part.y = y
@@ -689,7 +689,7 @@ fn main {
 
   reset_match()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -1053,7 +1053,7 @@ fn main {
         }
 
         for pickup in pickups {
-          if not(pickup.active) {
+          if !pickup.active {
             continue
           }
 
@@ -1114,7 +1114,7 @@ fn main {
       }
 
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
 
@@ -1204,7 +1204,7 @@ fn main {
     draw_car(ai, false)
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 

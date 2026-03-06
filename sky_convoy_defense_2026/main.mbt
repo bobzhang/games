@@ -136,7 +136,7 @@ fn spawn_bullet(
     if done {
       continue
     }
-    if not(bullet.active) {
+    if !bullet.active {
       bullet.active = true
       bullet.x = x
       bullet.y = y
@@ -155,7 +155,7 @@ fn spawn_bomb(bombs : Array[Bomb], x : Float, y : Float, sector : Int) -> Unit {
     if done {
       continue
     }
-    if not(bomb.active) {
+    if !bomb.active {
       bomb.active = true
       bomb.x = x
       bomb.y = y
@@ -172,7 +172,7 @@ fn spawn_drone(drones : Array[Drone], sector : Int) -> Unit {
     if done {
       continue
     }
-    if not(drone.active) {
+    if !drone.active {
       let side = @raylib.get_random_value(0, 1)
       let kind = @raylib.get_random_value(0, 2)
       let y = Float::from_int(@raylib.get_random_value(78, 290))
@@ -267,7 +267,7 @@ fn main {
   let mut won = false
   let mut msg = "A/D move, W/S aim, Space/J fire. Protect the convoy."
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -308,7 +308,7 @@ fn main {
       }
     }
 
-    if not(over) {
+    if !over {
       progress = progress + Float::from_int(56 + sector * 12) * dt
       if progress > target_progress {
         progress = target_progress
@@ -393,7 +393,7 @@ fn main {
       let mut convoy_damage = 0
 
       for drone in drones {
-        if not(drone.active) {
+        if !drone.active {
           continue
         }
 
@@ -459,7 +459,7 @@ fn main {
       }
 
       for bomb in bombs {
-        if not(bomb.active) {
+        if !bomb.active {
           continue
         }
 
@@ -484,7 +484,7 @@ fn main {
       }
 
       for bullet in bullets {
-        if not(bullet.active) {
+        if !bullet.active {
           continue
         }
 
@@ -506,7 +506,7 @@ fn main {
           if hit {
             continue
           }
-          if not(drone.active) {
+          if !drone.active {
             continue
           }
 
@@ -719,7 +719,7 @@ fn main {
     )
 
     for drone in drones {
-      if not(drone.active) {
+      if !drone.active {
         continue
       }
       if drone.kind == 0 {
@@ -787,7 +787,7 @@ fn main {
     }
 
     for bomb in bombs {
-      if not(bomb.active) {
+      if !bomb.active {
         continue
       }
       @raylib.draw_line(
@@ -806,7 +806,7 @@ fn main {
     }
 
     for bullet in bullets {
-      if not(bullet.active) {
+      if !bullet.active {
         continue
       }
       @raylib.draw_circle(

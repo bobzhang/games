@@ -41,7 +41,7 @@ fn @types.Game::start_demo_campaign(game : @types.Game) -> Unit {
   game.start_new_campaign()
 
   for i in 0..<@types.max_players {
-    if not(game.players[i].active) {
+    if !game.players[i].active {
       continue
     }
     game.players[i].lives = 6
@@ -70,7 +70,7 @@ fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
   }
 
   if @raylib.is_key_pressed(@raylib.KeyC) {
-    game.coop_enabled = not(game.coop_enabled)
+    game.coop_enabled = !game.coop_enabled
   }
   if @raylib.is_key_pressed(@raylib.KeyD) {
     game.start_demo_campaign()
@@ -84,7 +84,7 @@ fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
     } else if game.menu_cursor == 1 {
       game.start_demo_campaign()
     } else if game.menu_cursor == 2 {
-      game.coop_enabled = not(game.coop_enabled)
+      game.coop_enabled = !game.coop_enabled
     } else {
       @raylib.close_window()
     }
@@ -155,7 +155,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
     return
   }
 
-  if not(game.demo_mode) && @raylib.is_key_pressed(@raylib.KeyP) {
+  if !game.demo_mode && @raylib.is_key_pressed(@raylib.KeyP) {
     game.state = Paused
     return
   }
@@ -181,7 +181,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
     }
   }
 
-  if not(game.base_alive) {
+  if !game.base_alive {
     game.enter_game_over()
     return
   }

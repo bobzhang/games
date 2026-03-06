@@ -211,7 +211,7 @@ pub fn pointer_to_cell(
   let bh = board_pixel_h()
 
   fn to_cell(px : Float, py : Float) -> (Bool, Int, Int) {
-    if not(inside_rect(px, py, bx, by, bw, bh)) {
+    if !inside_rect(px, py, bx, by, bw, bh) {
       return (false, 0, 0)
     }
 

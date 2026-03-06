@@ -64,7 +64,7 @@ fn main {
 
   @raylib.set_target_fps(20)
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     // Update
     prev_mouse_pos = mouse_pos
     mouse_pos = @raylib.get_mouse_position()
@@ -79,9 +79,9 @@ fn main {
     )
 
     if @raylib.is_mouse_button_down(@raylib.MouseButtonLeft) &&
-      not(@raylib.check_collision_point_rec(mouse_pos, reset_button_rec)) &&
-      not(@raylib.check_collision_point_rec(mouse_pos, back_button_rec)) &&
-      not(@raylib.check_collision_point_rec(mouse_pos, next_button_rec)) {
+      !@raylib.check_collision_point_rec(mouse_pos, reset_button_rec) &&
+      !@raylib.check_collision_point_rec(mouse_pos, back_button_rec) &&
+      !@raylib.check_collision_point_rec(mouse_pos, next_button_rec) {
       for s = 0
           s < symmetry && total_line_counter < max_draw_lines - 1
           s = s + 1 {

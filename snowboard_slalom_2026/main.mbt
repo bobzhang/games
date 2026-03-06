@@ -183,7 +183,7 @@ fn spawn_particle(
       continue
     }
 
-    if not(ps_elem.active) {
+    if !ps_elem.active {
       ps_elem.active = true
       ps_elem.x = x
       ps_elem.y = y
@@ -377,7 +377,7 @@ fn main {
 
   reset_game()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -459,9 +459,9 @@ fn main {
         }
       }
 
-      let steer_axis : Int = if move_l && not(move_r) {
+      let steer_axis : Int = if move_l && !move_r {
         -1
-      } else if move_r && not(move_l) {
+      } else if move_r && !move_l {
         1
       } else {
         0
@@ -550,7 +550,7 @@ fn main {
       }
 
       for i in 0..<gate_count {
-        if not(gates[i].active) {
+        if !gates[i].active {
           continue
         }
 
@@ -588,7 +588,7 @@ fn main {
       }
 
       for i in 0..<obstacles.length() {
-        if not(obstacles[i].active) {
+        if !obstacles[i].active {
           continue
         }
 
@@ -617,7 +617,7 @@ fn main {
       }
 
       for pickup in pickups {
-        if not(pickup.active) {
+        if !pickup.active {
           continue
         }
 
@@ -653,7 +653,7 @@ fn main {
       }
 
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
 
@@ -722,7 +722,7 @@ fn main {
     }
 
     for i in 0..<gate_count {
-      if not(gates[i].active) {
+      if !gates[i].active {
         continue
       }
 
@@ -768,7 +768,7 @@ fn main {
     }
 
     for obstacle in obstacles {
-      if not(obstacle.active) {
+      if !obstacle.active {
         continue
       }
 
@@ -803,7 +803,7 @@ fn main {
     }
 
     for pickup in pickups {
-      if not(pickup.active) {
+      if !pickup.active {
         continue
       }
 
@@ -830,7 +830,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 

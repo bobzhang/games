@@ -50,7 +50,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
       if next_press || reset_press {
         let odd_round : Bool = (game.human_wins + game.ai_wins + game.draws) % 2 ==
           1
-        game.reset_round(not(odd_round))
+        game.reset_round(!odd_round)
       }
   }
 }

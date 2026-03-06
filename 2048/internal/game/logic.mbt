@@ -76,7 +76,7 @@ fn @types.Game::save_state(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::undo(game : @types.Game) -> Unit {
-  if not(game.can_undo) {
+  if !game.can_undo {
     return
   }
   for i in 0..<@types.cell_count {
@@ -127,7 +127,7 @@ fn @types.Game::try_move(game : @types.Game, dr : Int, dc : Int) -> Bool {
             target_c = j
             j = j + dc
           } else if game.tiles[jidx].value == game.tiles[idx].value &&
-            not(game.tiles[jidx].is_merged) {
+            !game.tiles[jidx].is_merged {
             target_c = j
             break
           } else {
@@ -171,7 +171,7 @@ fn @types.Game::try_move(game : @types.Game, dr : Int, dc : Int) -> Bool {
             target_r = j
             j = j + dr
           } else if game.tiles[jidx].value == game.tiles[idx].value &&
-            not(game.tiles[jidx].is_merged) {
+            !game.tiles[jidx].is_merged {
             target_r = j
             break
           } else {
@@ -199,7 +199,7 @@ fn @types.Game::try_move(game : @types.Game, dr : Int, dc : Int) -> Bool {
       }
     }
   }
-  if not(moved) {
+  if !moved {
     game.can_undo = old_can_undo
     game.prev_score = old_prev_score
     for i in 0..<@types.cell_count {
@@ -219,7 +219,7 @@ fn @types.Game::try_move(game : @types.Game, dr : Int, dc : Int) -> Bool {
     }
     game.animating = true
     game.spawn_tile()
-    if not(game.keep_playing) {
+    if !game.keep_playing {
       for i in 0..<@types.cell_count {
         if game.tiles[i].value >= 2048 {
           game.state = Won
@@ -335,7 +335,7 @@ fn @types.Game::update_animations(game : @types.Game, dt : Float) -> Unit {
       }
     }
   }
-  game.animating = not(all_done)
+  game.animating = !all_done
   if game.msg_t > 0.0 {
     game.msg_t = game.msg_t - dt
     if game.msg_t <= 0.0 {

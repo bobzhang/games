@@ -97,7 +97,7 @@ fn init_map() -> Array[Int] {
 ///|
 /// Returns true if the given cell is within bounds, passable, and not blocked by an active bomb.
 fn is_walkable(map : Array[Int], x : Int, y : Int, bomb : Bomb) -> Bool {
-  if not(in_grid(x, y)) {
+  if !in_grid(x, y) {
     return false
   }
   if map[idx(x, y)] != 0 {
@@ -112,7 +112,7 @@ fn is_walkable(map : Array[Int], x : Int, y : Int, bomb : Bomb) -> Bool {
 ///|
 /// Returns true if the blast from an active exploding bomb reaches the target cell.
 fn fire_hits(map : Array[Int], bomb : Bomb, tx : Int, ty : Int) -> Bool {
-  if not(bomb.active) || bomb.blast <= 0.0 {
+  if !bomb.active || bomb.blast <= 0.0 {
     return false
   }
   if tx == bomb.x && ty == bomb.y {
@@ -127,7 +127,7 @@ fn fire_hits(map : Array[Int], bomb : Bomb, tx : Int, ty : Int) -> Bool {
     for _step in 0..<3 {
       x = x + dx
       y = y + dy
-      if not(in_grid(x, y)) {
+      if !in_grid(x, y) {
         break
       }
       let cell = map[idx(x, y)]
@@ -148,7 +148,7 @@ fn fire_hits(map : Array[Int], bomb : Bomb, tx : Int, ty : Int) -> Bool {
 ///|
 /// Destroys breakable blocks in the bomb's blast radius and returns the count of blocks destroyed.
 fn apply_explosion(map : Array[Int], bomb : Bomb) -> Int {
-  if not(bomb.active) || bomb.blast <= 0.0 {
+  if !bomb.active || bomb.blast <= 0.0 {
     return 0
   }
 
@@ -161,7 +161,7 @@ fn apply_explosion(map : Array[Int], bomb : Bomb) -> Int {
     for _step in 0..<3 {
       x = x + dx
       y = y + dy
-      if not(in_grid(x, y)) {
+      if !in_grid(x, y) {
         break
       }
       let id = idx(x, y)
@@ -192,7 +192,7 @@ fn draw_fire_arm(
   for _step in 0..<3 {
     x = x + dx
     y = y + dy
-    if not(in_grid(x, y)) {
+    if !in_grid(x, y) {
       break
     }
     let cell = map[idx(x, y)]
@@ -230,7 +230,7 @@ fn main {
   let mut win = false
   let mut lose = false
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -256,7 +256,7 @@ fn main {
       lose = false
     }
 
-    if not(win) && not(lose) {
+    if !win && !lose {
       move_cd = move_cd - dt
       if move_cd < 0.0 {
         move_cd = 0.0
@@ -291,7 +291,7 @@ fn main {
         }
       }
 
-      if @raylib.is_key_pressed(@raylib.KeySpace) && not(bomb.active) {
+      if @raylib.is_key_pressed(@raylib.KeySpace) && !bomb.active {
         bomb.active = true
         bomb.x = player_x
         bomb.y = player_y
@@ -319,7 +319,7 @@ fn main {
       }
 
       for enemy in enemies {
-        if not(enemy.alive) {
+        if !enemy.alive {
           continue
         }
 

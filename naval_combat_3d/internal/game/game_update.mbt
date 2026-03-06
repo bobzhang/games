@@ -117,7 +117,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
     }
     // Enemy wakes
     for e in game.enemies {
-      if not(e.active) {
+      if !e.active {
         continue
       }
       if e.speed > @types.wake_min_speed {
@@ -262,7 +262,7 @@ fn @types.Game::update_game_over(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     p.life -= dt
@@ -303,7 +303,7 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_wakes(game : @types.Game, dt : Float) -> Unit {
   for w in game.wakes {
-    if not(w.active) {
+    if !w.active {
       continue
     }
     w.age += dt
@@ -320,7 +320,7 @@ fn @types.Game::update_wakes(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_debris(game : @types.Game, dt : Float) -> Unit {
   for d in game.debris_pool {
-    if not(d.active) {
+    if !d.active {
       continue
     }
     d.life -= dt
@@ -349,7 +349,7 @@ fn @types.Game::update_debris(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_messages(game : @types.Game, dt : Float) -> Unit {
   for msg in game.messages {
-    if not(msg.active) {
+    if !msg.active {
       continue
     }
     msg.timer -= dt
@@ -414,7 +414,7 @@ fn @types.Game::update_ship_effects(game : @types.Game, dt : Float) -> Unit {
   // Enemy ship effects
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]
-    if not(e.active) {
+    if !e.active {
       continue
     }
     e.bob_phase += dt * (1.8 + Float::from_int(i) * 0.1)
@@ -461,7 +461,7 @@ fn @types.Game::update_fleet_ships(game : @types.Game, dt : Float) -> Unit {
   let pz = game.player.z
   for i in 0..<game.fleet_ships.length() {
     let fs = game.fleet_ships[i]
-    if not(fs.active) {
+    if !fs.active {
       continue
     }
     fs.bob_phase += dt * 2.0
@@ -495,7 +495,7 @@ fn @types.Game::update_fleet_ships(game : @types.Game, dt : Float) -> Unit {
       let mut nearest_idx = -1
       for j in 0..<game.enemies.length() {
         let e = game.enemies[j]
-        if not(e.active) {
+        if !e.active {
           continue
         }
         let d = @types.distance2d(fs.x, fs.z, e.x, e.z)
@@ -553,7 +553,7 @@ fn @types.Game::update_fleet_ships(game : @types.Game, dt : Float) -> Unit {
         let mut near_dist : Float = 25.0
         for j in 0..<game.enemies.length() {
           let e = game.enemies[j]
-          if not(e.active) {
+          if !e.active {
             continue
           }
           let d = @types.distance2d(fs.x, fs.z, e.x, e.z)
@@ -575,7 +575,7 @@ fn @types.Game::update_fleet_ships(game : @types.Game, dt : Float) -> Unit {
     let move_speed = fs.speed * dt
     let new_x = fs.x + @math.sinf(fs.heading) * move_speed
     let new_z = fs.z + @math.cosf(fs.heading) * move_speed
-    if not(@types.check_island_collision(game, new_x, new_z, 1.5)) {
+    if !@types.check_island_collision(game, new_x, new_z, 1.5) {
       let half : Float = @types.ocean_size / 2.0 - 5.0
       fs.x = @types.clampf(new_x, -half, half)
       fs.z = @types.clampf(new_z, -half, half)
@@ -642,7 +642,7 @@ fn @types.Game::fire_fleet_broadside(
 ///|
 fn @types.Game::update_convoy(game : @types.Game, dt : Float) -> Unit {
   for cs in game.convoy_ships {
-    if not(cs.active) {
+    if !cs.active {
       continue
     }
     if cs.arrived {
@@ -694,10 +694,10 @@ fn @types.Game::update_convoy(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::update_fortress_combat(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.island_count {
     let island = game.islands[i]
-    if not(island.active) {
+    if !island.active {
       continue
     }
-    if not(island.has_fortress) {
+    if !island.has_fortress {
       continue
     }
     if island.fortress_hp <= 0.0 {
@@ -797,7 +797,7 @@ fn @types.Game::check_objectives(game : @types.Game) -> Unit {
         fortress_alive = true
       }
     }
-    if alive == 0 && not(fortress_alive) {
+    if alive == 0 && !fortress_alive {
       obj.completed = true
       game.complete_battle()
     }
@@ -806,7 +806,7 @@ fn @types.Game::check_objectives(game : @types.Game) -> Unit {
     let convoy_alive = @types.count_convoy_alive(game)
     let mut all_arrived = true
     for cs in game.convoy_ships {
-      if cs.active && not(cs.arrived) {
+      if cs.active && !cs.arrived {
         all_arrived = false
       }
     }

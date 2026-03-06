@@ -158,7 +158,7 @@ fn @types.Game::best_move_for(
         continue
       }
 
-      if not(game.has_neighbor(x, y, 2)) {
+      if !game.has_neighbor(x, y, 2) {
         continue
       }
 
@@ -176,7 +176,7 @@ fn @types.Game::best_move_for(
 
       s = s + @raylib.get_random_value(0, 6)
 
-      if not(found) || s > best_score {
+      if !found || s > best_score {
         found = true
         best_score = s
         best_x = x
@@ -185,7 +185,7 @@ fn @types.Game::best_move_for(
     }
   }
 
-  if not(found) {
+  if !found {
     for y in 0..<@types.board_n {
       for x in 0..<@types.board_n {
         if @types.cell_at(game, x, y) == Empty {
@@ -207,7 +207,7 @@ fn @types.Game::ai_step(game : @types.Game) -> Unit {
   }
 
   let mv = game.best_move_for(AI, Human)
-  if not(mv.0) {
+  if !mv.0 {
     game.state = Result
     game.winner = Empty
     game.draws = game.draws + 1
@@ -237,7 +237,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
   }
 
   let mv = game.best_move_for(Human, AI)
-  if not(mv.0) {
+  if !mv.0 {
     @types.set_message(game, "No suggestion", 0.8)
     return false
   }

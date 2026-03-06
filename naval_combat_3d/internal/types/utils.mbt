@@ -777,7 +777,7 @@ pub fn check_island_collision(
 ) -> Bool {
   for i in 0..<game.island_count {
     let island = game.islands[i]
-    if not(island.active) {
+    if !island.active {
       continue
     }
     let dist = distance2d(x, z, island.x, island.z)

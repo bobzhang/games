@@ -225,7 +225,7 @@ fn add_particle(
   kind : Int,
 ) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       part.active = true
       part.x = x
       part.y = y
@@ -271,7 +271,7 @@ fn burst(
 /// Advances all active particles: move, apply kind-specific drag and gravity, deactivate on expiry.
 fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
     part.life = part.life - dt
@@ -375,7 +375,7 @@ fn setup_ice_field(
 
     let mut overlap : Bool = false
     for ice_elem in ice {
-      if not(ice_elem.active) {
+      if !ice_elem.active {
         continue
       }
       let rr : Float = ice_elem.radius + 16.0
@@ -532,7 +532,7 @@ fn update_ice(
   let mut hazard_sum : Float = 0.0
 
   for i in 0..<ice.length() {
-    if not(ice[i].active) {
+    if !ice[i].active {
       continue
     }
 
@@ -589,7 +589,7 @@ fn update_storms(
   world_b : Float,
 ) -> Unit {
   for storm in storms {
-    if not(storm.active) {
+    if !storm.active {
       continue
     }
 
@@ -634,7 +634,7 @@ fn update_player_damage_from_hazards(
   let mut damage : Float = 0.0
 
   for storm in storms {
-    if not(storm.active) {
+    if !storm.active {
       continue
     }
     let d2 : Float = dist2(ship.x, ship.y, storm.x, storm.y)
@@ -651,7 +651,7 @@ fn update_player_damage_from_hazards(
   }
 
   for ice_elem in ice {
-    if not(ice_elem.active) {
+    if !ice_elem.active {
       continue
     }
     let rr : Float = ice_elem.radius + 12.0
@@ -682,7 +682,7 @@ fn carve_ice_with_cutter(
   dt : Float,
   cutting : Bool,
 ) -> (Int, Float) {
-  if not(cutting) || ship.energy <= 0.0 {
+  if !cutting || ship.energy <= 0.0 {
     ship.cutter_heat = maxf(0.0, ship.cutter_heat - dt * 1.7)
     (0, 0.0)
   } else {
@@ -693,7 +693,7 @@ fn carve_ice_with_cutter(
     let mut score_gain : Float = 0.0
 
     for ice_elem in ice {
-      if not(ice_elem.active) {
+      if !ice_elem.active {
         continue
       }
 
@@ -737,7 +737,7 @@ fn repair_nearby_convoys(
   } else {
     let mut count : Int = 0
     for convoy in convoys {
-      if not(convoy.active) {
+      if !convoy.active {
         continue
       }
       if convoy.hp >= 99.0 {
@@ -781,7 +781,7 @@ fn scan_hazards(
     let mut kind : Int = 0
 
     for ice_elem in ice {
-      if not(ice_elem.active) || ice_elem.hard < 24.0 {
+      if !ice_elem.active || ice_elem.hard < 24.0 {
         continue
       }
       let d2v : Float = dist2(ship.x, ship.y, ice_elem.x, ice_elem.y)
@@ -794,7 +794,7 @@ fn scan_hazards(
     }
 
     for storm in storms {
-      if not(storm.active) {
+      if !storm.active {
         continue
       }
       let d2v : Float = dist2(ship.x, ship.y, storm.x, storm.y)
@@ -835,7 +835,7 @@ fn update_convoys(
   let mut wait_accum : Float = 0.0
 
   for convoy in convoys {
-    if not(convoy.active) {
+    if !convoy.active {
       continue
     }
 
@@ -863,7 +863,7 @@ fn update_convoys(
     let mut block_damage : Float = 0.0
 
     for ice_elem in ice {
-      if not(ice_elem.active) {
+      if !ice_elem.active {
         continue
       }
 
@@ -881,7 +881,7 @@ fn update_convoys(
 
     let mut storm_slow : Float = 0.0
     for storm in storms {
-      if not(storm.active) {
+      if !storm.active {
         continue
       }
 
@@ -1020,7 +1020,7 @@ fn draw_route(route : Array[Waypoint]) -> Unit {
 /// Draws all active ice chunks with hardness-colored fill and crack glow.
 fn draw_ice(ice : Array[IceChunk], scene_t : Float) -> Unit {
   for ice_elem in ice {
-    if not(ice_elem.active) {
+    if !ice_elem.active {
       continue
     }
 
@@ -1070,7 +1070,7 @@ fn draw_ice(ice : Array[IceChunk], scene_t : Float) -> Unit {
 /// Draws all active storm cells with pulsing translucent circles and lightning bolt.
 fn draw_storms(storms : Array[StormCell], scene_t : Float) -> Unit {
   for storm in storms {
-    if not(storm.active) {
+    if !storm.active {
       continue
     }
 
@@ -1129,7 +1129,7 @@ fn convoy_color(hp : Float, panic : Float) -> @raylib.Color {
 /// Draws all active convoy ships with blink-on-repair highlight and status text.
 fn draw_convoys(convoys : Array[ConvoyShip]) -> Unit {
   for convoy in convoys {
-    if not(convoy.active) {
+    if !convoy.active {
       continue
     }
 
@@ -1263,7 +1263,7 @@ fn draw_player(ship : PlayerShip, scene_t : Float) -> Unit {
 /// Draws all active particles with kind-specific fill color.
 fn draw_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
 
@@ -1744,7 +1744,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -2027,13 +2027,13 @@ fn main {
               break
             }
           }
-          if not(ok) {
+          if !ok {
             refill = refill + 1
             continue
           }
 
           for ice_elem in ice {
-            if not(ice_elem.active) {
+            if !ice_elem.active {
               ice_elem.active = true
               ice_elem.x = x
               ice_elem.y = y

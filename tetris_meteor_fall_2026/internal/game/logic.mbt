@@ -120,14 +120,12 @@ fn @types.Game::spawn_piece(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::hard_drop(game : @types.Game) -> Unit {
   let mut traveled = 0
-  while not(
-          @types.collides(
-            game,
-            game.piece_kind,
-            game.piece_rot,
-            game.piece_x,
-            game.piece_y + 1,
-          ),
+  while !@types.collides(
+          game,
+          game.piece_kind,
+          game.piece_rot,
+          game.piece_x,
+          game.piece_y + 1,
         ) {
     game.piece_y = game.piece_y + 1
     traveled = traveled + 1
@@ -136,7 +134,7 @@ fn @types.Game::hard_drop(game : @types.Game) -> Unit {
   game.lock_piece()
   let cleared = game.clear_lines()
   game.apply_line_score(cleared)
-  if not(game.over) {
+  if !game.over {
     game.spawn_piece()
   }
 }
@@ -159,7 +157,7 @@ fn @types.Game::try_rotate(game : @types.Game, dir : Int) -> Unit {
   let kicks : Array[Int] = [0, -1, 1, -2, 2]
   for kick in kicks {
     let x = game.piece_x + kick
-    if not(@types.collides(game, game.piece_kind, new_rot, x, game.piece_y)) {
+    if !@types.collides(game, game.piece_kind, new_rot, x, game.piece_y) {
       game.piece_rot = new_rot
       game.piece_x = x
       return
@@ -266,11 +264,11 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   let interval = game.drop_interval * speed_scale
   if game.drop_timer >= interval {
     game.drop_timer = 0.0
-    if not(game.try_move(0, 1)) {
+    if !game.try_move(0, 1) {
       game.lock_piece()
       let cleared = game.clear_lines()
       game.apply_line_score(cleared)
-      if not(game.over) {
+      if !game.over {
         game.spawn_piece()
       }
     }

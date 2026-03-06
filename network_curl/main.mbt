@@ -96,7 +96,7 @@ async fn main {
 
     // ── Render loop ────────────────────────────────────────────────────────
     let visible = (SCREEN_HEIGHT - HEADER_H - FOOTER_H) / LINE_HEIGHT
-    while not(@raylib.window_should_close()) {
+    while !@raylib.window_should_close() {
       @async.pause()
 
       let total = state.lines.length()

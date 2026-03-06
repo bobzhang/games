@@ -68,7 +68,7 @@ fn @types.Game::burst(
 /// Advances each active particle's position and velocity with drag, then deactivates particles whose lifetime has expired.
 fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 
@@ -280,7 +280,7 @@ fn point_hits_obstacle(
   py : Float,
   pr : Float,
 ) -> Bool {
-  if not(ob.active) {
+  if !ob.active {
     return false
   }
 
@@ -311,7 +311,7 @@ fn point_hits_pickup(
   py : Float,
   pr : Float,
 ) -> Bool {
-  if not(pk.active) {
+  if !pk.active {
     return false
   }
 
@@ -358,7 +358,7 @@ fn @types.Game::damage_player(game : @types.Game, msg : String) -> Unit {
 ///|
 /// Deactivates pickup `i`, emits a collection burst, and applies its effect: score bonus, boost refill, shield activation, or extra life.
 fn @types.Game::collect_pickup(game : @types.Game, i : Int) -> Unit {
-  if not(game.pickups[i].active) {
+  if !game.pickups[i].active {
     return
   }
 
@@ -407,7 +407,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
   let mut best_dist : Float = 1000000000.0
 
   for obstacle in game.obstacles {
-    if not(obstacle.active) {
+    if !obstacle.active {
       continue
     }
 
@@ -434,7 +434,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
 /// Scrolls each active obstacle leftward, advances its phase, triggers scoring when passed, and deactivates obstacles that leave the screen.
 fn @types.Game::update_obstacles(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.obstacles.length() {
-    if not(game.obstacles[i].active) {
+    if !game.obstacles[i].active {
       continue
     }
 
@@ -453,7 +453,7 @@ fn @types.Game::update_obstacles(game : @types.Game, dt : Float) -> Unit {
 /// Scrolls each active pickup leftward with a sinusoidal vertical bob, and deactivates pickups that leave the screen.
 fn @types.Game::update_pickups(game : @types.Game, dt : Float) -> Unit {
   for pickup in game.pickups {
-    if not(pickup.active) {
+    if !pickup.active {
       continue
     }
 
@@ -496,7 +496,7 @@ fn @types.Game::update_physics(game : @types.Game, dt : Float) -> Unit {
 /// Checks the player circle against all active obstacles and pickups, calling `damage_player` or `collect_pickup` on contact.
 fn @types.Game::update_collisions(game : @types.Game) -> Unit {
   for obstacle in game.obstacles {
-    if not(obstacle.active) {
+    if !obstacle.active {
       continue
     }
 

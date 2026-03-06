@@ -23,10 +23,10 @@ pub fn draw_effects(game : @types.Game) -> Unit {
 fn @types.Game::draw_drift_spark_trails(game : @types.Game) -> Unit {
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
-    if not(kart.active) {
+    if !kart.active {
       continue
     }
-    if not(kart.drift_left) && not(kart.drift_right) {
+    if !kart.drift_left && !kart.drift_right {
       continue
     }
     if kart.drift_level == DriftNone {
@@ -102,7 +102,7 @@ fn @types.Game::draw_drift_spark_trails(game : @types.Game) -> Unit {
 fn @types.Game::draw_boost_exhaust_flames(game : @types.Game) -> Unit {
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
-    if not(kart.active) {
+    if !kart.active {
       continue
     }
     if kart.boost_timer <= 0.0 {
@@ -182,7 +182,7 @@ fn @types.Game::draw_boost_exhaust_flames(game : @types.Game) -> Unit {
 fn @types.Game::draw_dropped_items_3d(game : @types.Game) -> Unit {
   for i in 0..<game.dropped_items.length() {
     let item = game.dropped_items[i]
-    if not(item.active) {
+    if !item.active {
       continue
     }
     match item.item_type {
@@ -250,7 +250,7 @@ fn @types.Game::draw_dropped_items_3d(game : @types.Game) -> Unit {
 fn @types.Game::draw_dust_trails(game : @types.Game) -> Unit {
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
-    if not(kart.active) || not(kart.on_ground) {
+    if !kart.active || !kart.on_ground {
       continue
     }
     if kart.speed < 5.0 {
@@ -299,7 +299,7 @@ fn @types.Game::draw_dust_trails(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_speed_lines(game : @types.Game) -> Unit {
   let kart = game.karts[@types.player_kart]
-  if not(kart.active) {
+  if !kart.active {
     return
   }
   if kart.boost_timer <= 0.0 && kart.star_timer <= 0.0 {
@@ -372,7 +372,7 @@ fn @types.Game::draw_start_confetti(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_wrong_way_indicator(game : @types.Game) -> Unit {
   let kart = game.karts[@types.player_kart]
-  if not(kart.active) || not(kart.wrong_way) {
+  if !kart.active || !kart.wrong_way {
     return
   }
   if kart.wrong_way_timer < 0.5 {
@@ -414,7 +414,7 @@ fn @types.Game::draw_wrong_way_indicator(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::draw_lightning_flash(game : @types.Game) -> Unit {
-  if not(game.lightning_active) {
+  if !game.lightning_active {
     return
   }
   let remaining = game.lightning_timer
@@ -447,7 +447,7 @@ fn @types.Game::draw_lightning_flash(game : @types.Game) -> Unit {
 fn @types.Game::draw_star_glow(game : @types.Game) -> Unit {
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
-    if not(kart.active) || kart.star_timer <= 0.0 {
+    if !kart.active || kart.star_timer <= 0.0 {
       continue
     }
     let phase : Float = game.star_rainbow_timer + Float::from_int(i) * 1.2
@@ -480,7 +480,7 @@ fn @types.Game::draw_star_glow(game : @types.Game) -> Unit {
 fn @types.Game::draw_shield_bubbles(game : @types.Game) -> Unit {
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
-    if not(kart.active) || kart.shield_timer <= 0.0 {
+    if !kart.active || kart.shield_timer <= 0.0 {
       continue
     }
     let pulse = @math.sinf(

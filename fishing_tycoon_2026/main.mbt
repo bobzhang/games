@@ -45,7 +45,7 @@ fn fish_value(kind : Int) -> Int {
 /// Spawns a new fish in the first available slot, choosing rarity based on rare_bonus.
 fn spawn_fish(fishes : Array[Fish], rare_bonus : Int) -> Unit {
   for fish in fishes {
-    if not(fish.alive) {
+    if !fish.alive {
       let roll = @raylib.get_random_value(0, 99)
       let kind = if roll < 62 - rare_bonus {
         0
@@ -108,7 +108,7 @@ fn main {
   let mut over = false
   let mut msg = "A/D move boat, Space/J cast hook, 1/2/3 buy upgrades"
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -134,7 +134,7 @@ fn main {
       msg = "New fishing day started."
     }
 
-    if not(over) {
+    if !over {
       day_timer = day_timer - dt
       if day_timer <= 0.0 {
         day_timer = 0.0
@@ -231,7 +231,7 @@ fn main {
       }
 
       for i in 0..<fishes.length() {
-        if not(fishes[i].alive) {
+        if !fishes[i].alive {
           continue
         }
 

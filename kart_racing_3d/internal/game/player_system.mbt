@@ -4,7 +4,7 @@
 /// Updates the player kart's input, steering, drift mechanics, and physics each frame.
 pub fn update_player_kart(game : @types.Game, dt : Float) -> Unit {
   let kart = game.karts[@types.player_kart]
-  if not(kart.active) || kart.finished {
+  if !kart.active || kart.finished {
     return
   }
   // Update timers
@@ -52,7 +52,7 @@ pub fn update_player_kart(game : @types.Game, dt : Float) -> Unit {
     @raylib.is_key_down(@raylib.KeyX)
   let drifting = drift_key && steer_input.abs() > 0.01 && kart.speed > 5.0
   if drifting {
-    if not(kart.drift_left) && not(kart.drift_right) {
+    if !kart.drift_left && !kart.drift_right {
       // Initiate drift
       if steer_input > 0.0 {
         kart.drift_left = true
@@ -231,7 +231,7 @@ fn update_kart_timers(kart : @types.Kart, dt : Float) -> Unit {
   if kart.lightning_timer > 0.0 {
     kart.lightning_timer -= dt
   }
-  if not(kart.on_ground) {
+  if !kart.on_ground {
     kart.air_timer += dt
   } else {
     kart.air_timer = 0.0
@@ -268,7 +268,7 @@ pub fn apply_kart_physics(
   }
   if kart.y <= effective_ground {
     // Landing bounce
-    if not(kart.on_ground) && kart.air_timer > 0.3 {
+    if !kart.on_ground && kart.air_timer > 0.3 {
       kart.bounce_timer = 0.2
       @types.spawn_particles(game, kart.x, kart.y, kart.z, 4, 200, 200, 200)
     }
@@ -279,7 +279,7 @@ pub fn apply_kart_physics(
     kart.vy = kart.vy - @types.gravity * dt
     kart.y = kart.y + kart.vy * dt
     if kart.y < effective_ground {
-      if not(kart.on_ground) && kart.air_timer > 0.3 {
+      if !kart.on_ground && kart.air_timer > 0.3 {
         kart.bounce_timer = 0.2
       }
       kart.y = effective_ground
@@ -487,7 +487,7 @@ fn @types.Game::activate_lightning(
       continue
     }
     let kart = game.karts[i]
-    if not(kart.active) || kart.finished {
+    if !kart.active || kart.finished {
       continue
     }
     if kart.star_timer > 0.0 || kart.invincible_timer > 0.0 {
@@ -533,12 +533,12 @@ fn @types.Game::activate_lightning(
 pub fn check_kart_collisions(game : @types.Game) -> Unit {
   for i in 0..<@types.max_karts {
     let ka = game.karts[i]
-    if not(ka.active) {
+    if !ka.active {
       continue
     }
     for j in (i + 1)..<@types.max_karts {
       let kb = game.karts[j]
-      if not(kb.active) {
+      if !kb.active {
         continue
       }
       let dx = kb.x - ka.x

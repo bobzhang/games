@@ -137,7 +137,7 @@ pub fn spawn_respawn_burst(game : @types.Game, x : Float, y : Float) -> Unit {
 /// Advances active particle movement and lifetimes.
 pub fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     p.life -= dt * p.fade

@@ -239,7 +239,7 @@ fn @types.Game::draw_path_markers(game : @types.Game) -> Unit {
 /// Draws all active towers with type-specific models, level indicators, and buff auras.
 fn @types.Game::draw_towers(game : @types.Game) -> Unit {
   for tower in game.towers {
-    if not(tower.active) {
+    if !tower.active {
       continue
     }
     let wx = @types.grid_to_world_x(tower.gx)
@@ -745,12 +745,12 @@ fn draw_level_indicators(
 ///|
 /// Draws range circles around all active towers when range display is enabled.
 fn @types.Game::draw_tower_range_indicators(game : @types.Game) -> Unit {
-  if not(game.show_ranges) {
+  if !game.show_ranges {
     return
   }
   for i in 0..<game.towers.length() {
     let tower = game.towers[i]
-    if not(tower.active) {
+    if !tower.active {
       continue
     }
     let wx = @types.grid_to_world_x(tower.gx)
@@ -780,7 +780,7 @@ fn @types.Game::draw_selected_tower_highlight(game : @types.Game) -> Unit {
     return
   }
   let tower = game.towers[game.selected_tower_idx]
-  if not(tower.active) {
+  if !tower.active {
     return
   }
   let wx = @types.grid_to_world_x(tower.gx)
@@ -831,7 +831,7 @@ fn tower_color(kind : @types.TowerKind) -> @raylib.Color {
 /// Draws all active enemies with type-specific models, health bars, and shield bars.
 fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
   for enemy in game.enemies {
-    if not(enemy.active) {
+    if !enemy.active {
       continue
     }
     let color = enemy_color(enemy.kind)
@@ -1271,7 +1271,7 @@ fn draw_enemy_shield_bar(enemy : @types.Enemy) -> Unit {
 /// Draws visual indicators for active status effects including slow, burn, stun, and armor break.
 fn @types.Game::draw_enemy_status_visuals(game : @types.Game) -> Unit {
   for enemy in game.enemies {
-    if not(enemy.active) {
+    if !enemy.active {
       continue
     }
     let size : Float = if enemy.is_boss {
@@ -1369,7 +1369,7 @@ fn enemy_color(kind : @types.EnemyKind) -> @raylib.Color {
 /// Draws all active projectiles with type-specific shapes and visual effects.
 fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
   for proj in game.projectiles {
-    if not(proj.active) {
+    if !proj.active {
       continue
     }
     match proj.kind {
@@ -1469,7 +1469,7 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
 /// Draws chain lightning visual lines as interpolated cube segments between source and target.
 fn @types.Game::draw_chain_lightning_lines(game : @types.Game) -> Unit {
   for cl in game.chain_lines {
-    if not(cl.active) {
+    if !cl.active {
       continue
     }
     let alpha = (cl.life / 0.3 * 255.0).to_int()
@@ -1497,7 +1497,7 @@ fn @types.Game::draw_chain_lightning_lines(game : @types.Game) -> Unit {
 /// Draws all active 3D particles as small cubes with lifetime-based alpha fade.
 fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     let alpha = (p.life / p.max_life * 255.0).to_int()

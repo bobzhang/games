@@ -196,7 +196,7 @@ fn @types.Game::draw_traps(game : @types.Game) -> Unit {
       @raylib.Color::new(70, 108, 72, 140),
     )
 
-    if not(trap.active) {
+    if !trap.active {
       continue
     }
 
@@ -243,7 +243,7 @@ fn @types.Game::draw_traps(game : @types.Game) -> Unit {
 /// Draws all active enemies as kind-colored filled circles with a slow-effect outline ring, a dark border, and a small HP bar above each one.
 fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
   for enemy in game.enemies {
-    if not(enemy.active) {
+    if !enemy.active {
       continue
     }
 

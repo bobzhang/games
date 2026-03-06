@@ -6,7 +6,7 @@
 /// Updates lifetime, animation, and gravity settling for all dropped track hazards.
 pub fn update_dropped_items(game : @types.Game, dt : Float) -> Unit {
   for item in game.dropped_items {
-    if not(item.active) {
+    if !item.active {
       continue
     }
     // Decrease lifetime
@@ -55,7 +55,7 @@ pub fn update_dropped_items(game : @types.Game, dt : Float) -> Unit {
 pub fn check_dropped_item_collisions(game : @types.Game) -> Unit {
   for ki in 0..<@types.max_karts {
     let kart = game.karts[ki]
-    if not(kart.active) || kart.finished {
+    if !kart.active || kart.finished {
       continue
     }
     // Skip if already spinning or stunned
@@ -63,7 +63,7 @@ pub fn check_dropped_item_collisions(game : @types.Game) -> Unit {
       continue
     }
     for item in game.dropped_items {
-      if not(item.active) {
+      if !item.active {
         continue
       }
       // Don't hit your own item for a brief grace period (first 0.5s)
@@ -180,7 +180,7 @@ fn @types.Game::apply_oil_slick_hit(game : @types.Game, kart_idx : Int) -> Unit 
 /// Updates homing guidance and trail particles for all active missile projectiles.
 pub fn update_projectile_homing(game : @types.Game, dt : Float) -> Unit {
   for proj in game.projectiles {
-    if not(proj.active) {
+    if !proj.active {
       continue
     }
     // Only home if we have a valid target
@@ -188,7 +188,7 @@ pub fn update_projectile_homing(game : @types.Game, dt : Float) -> Unit {
       continue
     }
     let target = game.karts[proj.target_kart]
-    if not(target.active) || target.finished {
+    if !target.active || target.finished {
       // Lost target, find a new one
       proj.target_kart = @types.find_target_ahead(game, proj.owner)
       continue
@@ -246,7 +246,7 @@ pub fn update_projectile_homing(game : @types.Game, dt : Float) -> Unit {
 /// Updates respawn timers and bobbing animation for collected item box pickups.
 pub fn update_item_box_respawns(game : @types.Game, dt : Float) -> Unit {
   for pu in game.powerups {
-    if not(pu.active) {
+    if !pu.active {
       continue
     }
     if pu.collected {

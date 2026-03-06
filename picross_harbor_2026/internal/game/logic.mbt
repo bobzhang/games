@@ -66,7 +66,7 @@ fn contribution_correct(cell_state : @types.Cell, sol : Bool) -> Int {
 /// Returns 1 if the cell is filled but the solution requires it to be empty, otherwise 0.
 fn contribution_wrong(cell_state : @types.Cell, sol : Bool) -> Int {
   if cell_state == Fill {
-    if not(sol) {
+    if !sol {
       1
     } else {
       0
@@ -278,7 +278,7 @@ fn @types.Game::burst_cell(
 /// Advances all active spark particles by dt: integrates velocity, applies drag and gravity, and deactivates expired sparks.
 fn @types.Game::update_sparks(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 
@@ -387,8 +387,7 @@ fn @types.Game::fail_level(game : @types.Game) -> Unit {
 
   for y in 0..<game.grid_h {
     for x in 0..<game.grid_w {
-      if @types.cell_at(game, x, y) == Fill &&
-        not(@types.solution_at(game, x, y)) {
+      if @types.cell_at(game, x, y) == Fill && !@types.solution_at(game, x, y) {
         game.burst_cell(x, y, 10, Error)
       }
     }
@@ -410,7 +409,7 @@ fn @types.Game::apply_cell_state(
     return false
   }
 
-  if not(@types.in_grid(game, x, y)) {
+  if !@types.in_grid(game, x, y) {
     return false
   }
 
@@ -446,7 +445,7 @@ fn @types.Game::apply_cell_state(
   game.filled_wrong = game.filled_wrong + contribution_wrong(new_state, sol)
 
   if count_mistake {
-    if new_state == Fill && not(sol) && prev_state != Fill {
+    if new_state == Fill && !sol && prev_state != Fill {
       game.mistakes = game.mistakes + 1
       game.message = "Wrong fill"
       game.message_t = 0.8
@@ -547,8 +546,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
 
   for y in 0..<game.grid_h {
     for x in 0..<game.grid_w {
-      if not(@types.solution_at(game, x, y)) &&
-        @types.cell_at(game, x, y) == Fill {
+      if !@types.solution_at(game, x, y) && @types.cell_at(game, x, y) == Fill {
         game.cursor_x = x
         game.cursor_y = y
         return game.apply_cell_state(x, y, Cross, false, true, Hint)
@@ -558,7 +556,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
 
   for y in 0..<game.grid_h {
     for x in 0..<game.grid_w {
-      if not(@types.solution_at(game, x, y)) &&
+      if !@types.solution_at(game, x, y) &&
         @types.cell_at(game, x, y) == Unknown {
         game.cursor_x = x
         game.cursor_y = y
@@ -579,7 +577,7 @@ fn @types.Game::undo_action(game : @types.Game) -> Bool {
 
   game.undo_len = game.undo_len - 1
   let step : @types.UndoStep = game.undo[game.undo_len]
-  if not(step.valid) {
+  if !step.valid {
     return false
   }
 

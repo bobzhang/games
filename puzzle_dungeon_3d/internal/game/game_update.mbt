@@ -121,7 +121,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
     game.tutorial_timer += dt
   }
   // Player input (only when not moving)
-  if not(game.player_moving) {
+  if !game.player_moving {
     let mut dir : @types.Dir = DirNone
     if @raylib.is_key_pressed(@raylib.KeyUp) ||
       @raylib.is_key_pressed(@raylib.KeyW) {
@@ -154,7 +154,7 @@ fn @types.Game::update_timed_spikes(game : @types.Game, dt : Float) -> Unit {
   game.spike_timer += dt
   if game.spike_timer >= @types.spike_cycle_time {
     game.spike_timer -= @types.spike_cycle_time
-    game.spike_phase = not(game.spike_phase)
+    game.spike_phase = !game.spike_phase
     // Toggle all spikes
     game.toggle_spikes()
   }
@@ -170,7 +170,7 @@ fn @types.Game::update_decoration_particles(
   if game.frame_counter % 30 == 0 {
     for i in 0..<game.decoration_count {
       let d = game.decorations[i]
-      if not(d.active) {
+      if !d.active {
         continue
       }
       match d.kind {

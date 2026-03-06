@@ -507,7 +507,7 @@ fn @types.Game::draw_health_hunger_bars(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::draw_air_bar(game : @types.Game) -> Unit {
-  if not(game.player.underwater) {
+  if !game.player.underwater {
     return
   }
   let bar_width = 150

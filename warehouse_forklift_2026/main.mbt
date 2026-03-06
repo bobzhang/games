@@ -62,7 +62,7 @@ fn is_target(targets : Array[Pos], x : Int, y : Int) -> Bool {
 ///|
 fn all_delivered(crates : Array[Pos], targets : Array[Pos]) -> Bool {
   for crate in crates {
-    if not(is_target(targets, crate.x, crate.y)) {
+    if !is_target(targets, crate.x, crate.y) {
       return false
     }
   }
@@ -137,7 +137,7 @@ fn main {
   let mut won = false
   let mut msg = "Move with WASD/Arrows. Push crates onto yellow docks."
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     if @raylib.is_key_pressed(@raylib.KeyR) {
       let (sx, sy) = reset_level(walls, crates, targets)
       px = sx
@@ -149,7 +149,7 @@ fn main {
       msg = "Level restarted."
     }
 
-    if not(won) {
+    if !won {
       let mut dx = 0
       let mut dy = 0
       let mut acted = false

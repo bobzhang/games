@@ -62,7 +62,7 @@ fn @types.Game::try_spawn_core_at_tile(
   ty : Int,
   hp : Int,
 ) -> Bool {
-  if not(@types.in_tile_bounds(tx, ty)) {
+  if !@types.in_tile_bounds(tx, ty) {
     return false
   }
   if Float::from_int(tx - @types.base_tile_x).abs() <= 2.0 &&
@@ -71,7 +71,7 @@ fn @types.Game::try_spawn_core_at_tile(
   }
 
   let tile = @types.get_tile(game, tx, ty)
-  if not(tile_is_core_spawnable(tile)) {
+  if !tile_is_core_spawnable(tile) {
     return false
   }
 
@@ -79,7 +79,7 @@ fn @types.Game::try_spawn_core_at_tile(
   let y = @types.tile_center_y(ty)
 
   for core in game.cores {
-    if not(core.active) {
+    if !core.active {
       continue
     }
     if @types.distance_sq(x, y, core.x, core.y) <= 3000.0 {
@@ -146,7 +146,7 @@ fn @types.Game::damage_core(
   }
 
   let core = game.cores[index]
-  if not(core.active) {
+  if !core.active {
     return false
   }
 
@@ -173,7 +173,7 @@ fn @types.Game::damage_core(
 ///|
 fn @types.Game::update_cores(game : @types.Game, dt : Float) -> Unit {
   for core in game.cores {
-    if not(core.active) {
+    if !core.active {
       continue
     }
     core.pulse += dt * 3.8

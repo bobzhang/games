@@ -76,7 +76,7 @@ fn @types.Game::tower_spot_ok(
   }
 
   for i in 0..<placed {
-    if not(game.towers[i].active) {
+    if !game.towers[i].active {
       continue
     }
 
@@ -264,7 +264,7 @@ fn @types.Game::closest_pending_tower(
   let mut best_d2 = @types.tower_interact_r() * @types.tower_interact_r()
 
   for i in 0..<game.towers.length() {
-    if not(game.towers[i].active) {
+    if !game.towers[i].active {
       continue
     }
     if game.towers[i].delivered >= game.towers[i].need {
@@ -303,7 +303,7 @@ fn @types.Game::update_storms(game : @types.Game, dt : Float) -> Unit {
   let bottom = @types.world_bottom() - 20.0
 
   for storm in game.storms {
-    if not(storm.active) {
+    if !storm.active {
       continue
     }
 
@@ -471,7 +471,7 @@ fn @types.Game::update_resources(
 ///|
 /// Processes a player action press: loads a power cell at the depot or delivers one to a nearby tower, updating cargo, objectives, timer bonus, and hint text accordingly.
 fn @types.Game::apply_action(game : @types.Game) -> Unit {
-  if not(game.input_action_press) {
+  if !game.input_action_press {
     return
   }
 

@@ -236,7 +236,7 @@ fn @types.Game::defeat_raider(
   idx : Int,
   score_bonus : Int,
 ) -> Unit {
-  if idx < 0 || idx >= game.raiders.length() || not(game.raiders[idx].active) {
+  if idx < 0 || idx >= game.raiders.length() || !game.raiders[idx].active {
     return
   }
 
@@ -294,7 +294,7 @@ fn @types.Game::nearest_raider_index(
   let mut best_d2 = max_d2
 
   for i in 0..<game.raiders.length() {
-    if not(game.raiders[i].active) || game.raiders[i].room != room {
+    if !game.raiders[i].active || game.raiders[i].room != room {
       continue
     }
 
@@ -321,7 +321,7 @@ fn @types.Game::nearest_flame_index(
   let mut best_d2 = max_d2
 
   for i in 0..<game.flames.length() {
-    if not(game.flames[i].active) || game.flames[i].room != room {
+    if !game.flames[i].active || game.flames[i].room != room {
       continue
     }
 
@@ -416,7 +416,7 @@ fn @types.Game::update_keeper_timers_and_resources(
 ///|
 /// Toggles the keeper between extinguisher mode and combat/sealing mode, and posts a brief status message.
 fn @types.Game::toggle_extinguisher_mode(game : @types.Game) -> Unit {
-  game.keeper.extinguisher_mode = not(game.keeper.extinguisher_mode)
+  game.keeper.extinguisher_mode = !game.keeper.extinguisher_mode
   if game.keeper.extinguisher_mode {
     game.set_message("Extinguisher mode active.", 0.7)
   } else {
@@ -556,7 +556,7 @@ fn @types.Game::perform_extinguish_action(game : @types.Game) -> Unit {
 ///|
 /// Dispatches the action button press to extinguish, seal, or attack depending on the keeper's current mode and the targets within range.
 fn @types.Game::handle_action_input(game : @types.Game) -> Unit {
-  if not(game.input_action_press) || game.keeper.action_cd > 0.0 {
+  if !game.input_action_press || game.keeper.action_cd > 0.0 {
     return
   }
 
@@ -582,7 +582,7 @@ fn @types.Game::handle_action_input(game : @types.Game) -> Unit {
 ///|
 /// Consumes one ink shield stock to activate a burst that damages all raiders and quenches flames within the shield radius, partially restores scroll integrity, and awards score for each hit.
 fn @types.Game::trigger_ink_shield(game : @types.Game) -> Unit {
-  if not(game.input_shield_press) {
+  if !game.input_shield_press {
     return
   }
 
@@ -610,7 +610,7 @@ fn @types.Game::trigger_ink_shield(game : @types.Game) -> Unit {
   let mut flame_hits = 0
 
   for i in 0..<game.raiders.length() {
-    if not(game.raiders[i].active) || game.raiders[i].room != game.keeper.room {
+    if !game.raiders[i].active || game.raiders[i].room != game.keeper.room {
       continue
     }
 
@@ -634,7 +634,7 @@ fn @types.Game::trigger_ink_shield(game : @types.Game) -> Unit {
   }
 
   for i in 0..<game.flames.length() {
-    if not(game.flames[i].active) || game.flames[i].room != game.keeper.room {
+    if !game.flames[i].active || game.flames[i].room != game.keeper.room {
       continue
     }
 
@@ -802,7 +802,7 @@ fn @types.Game::update_raiders(game : @types.Game, dt : Float) -> Float {
     wavef * @types.raider_speed_wave_bonus
 
   for raider in game.raiders {
-    if not(raider.active) {
+    if !raider.active {
       continue
     }
 
@@ -894,7 +894,7 @@ fn @types.Game::update_flames(game : @types.Game, dt : Float) -> Float {
   let mut integrity_loss : Float = 0.0
 
   for i in 0..<game.flames.length() {
-    if not(game.flames[i].active) {
+    if !game.flames[i].active {
       continue
     }
 

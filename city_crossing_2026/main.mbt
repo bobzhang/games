@@ -145,7 +145,7 @@ fn reset_homes(homes : Array[Bool]) -> Unit {
 fn homes_done(homes : Array[Bool]) -> Bool {
   let mut ok = true
   for home in homes {
-    if not(home) {
+    if !home {
       ok = false
     }
   }
@@ -233,7 +233,7 @@ fn main {
   let mut over = false
   let mut msg = "Arrow/WASD move. Reach all home slots without crashing."
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -254,7 +254,7 @@ fn main {
       msg = "Crossing restarted."
     }
 
-    if not(over) {
+    if !over {
       timer = timer - dt
       if timer <= 0.0 {
         timer = 55.0
@@ -370,7 +370,7 @@ fn main {
         }
       }
 
-      if not(dead) && is_river_row(row) {
+      if !dead && is_river_row(row) {
         let mut on_log = false
         let mut drift : Float = 0.0
         for log in logs {
@@ -397,7 +397,7 @@ fn main {
         }
       }
 
-      if not(dead) && row == 0 {
+      if !dead && row == 0 {
         let mut dock = -1
         for i in 0..<homes.length() {
           if (px - slot_center_x(i)).abs() <= Float::from_int(cell) * 0.38 {

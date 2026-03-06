@@ -150,7 +150,7 @@ fn @types.Game::try_throw(
   defender_slot : Int,
   attacker_intent : Bool,
 ) -> Bool {
-  if not(attacker_intent) {
+  if !attacker_intent {
     return false
   }
 
@@ -161,14 +161,14 @@ fn @types.Game::try_throw(
     return false
   }
 
-  if not(fighter_can_attempt_throw(attacker)) {
+  if !fighter_can_attempt_throw(attacker) {
     return false
   }
-  if not(@types.fighter_is_throw_vulnerable(defender)) {
+  if !@types.fighter_is_throw_vulnerable(defender) {
     return false
   }
 
-  if not(throw_in_range(attacker, defender)) {
+  if !throw_in_range(attacker, defender) {
     return false
   }
 

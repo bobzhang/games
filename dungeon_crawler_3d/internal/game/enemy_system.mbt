@@ -4,7 +4,7 @@
 /// Updates enemy AI state, movement, attacks, and alert logic for the current frame.
 pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
   for e in game.enemies {
-    if not(e.active) {
+    if !e.active {
       continue
     }
     // Hit flash timer
@@ -38,7 +38,7 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
       }
     }
     // Mimic special: don't move until alerted
-    if e.kind == Mimic && not(e.alerted) {
+    if e.kind == Mimic && !e.alerted {
       continue
     }
     // Check if player is in sight range
@@ -46,7 +46,7 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     if dist < @types.enemy_sight_range {
       e.alerted = true
     }
-    if not(e.alerted) {
+    if !e.alerted {
       // Patrol behavior for non-alerted enemies
       game.update_patrol(e, dt)
       continue
@@ -104,10 +104,10 @@ fn @types.Game::update_patrol(
     let new_x = e.x + nx * speed * dt
     let new_z = e.z + nz * speed * dt
     let radius : Float = 0.4
-    if not(@types.is_blocked(game, new_x, e.z, radius)) {
+    if !@types.is_blocked(game, new_x, e.z, radius) {
       e.x = new_x
     }
-    if not(@types.is_blocked(game, e.x, new_z, radius)) {
+    if !@types.is_blocked(game, e.x, new_z, radius) {
       e.z = new_z
     }
   }
@@ -141,10 +141,10 @@ fn @types.Game::update_melee_enemy(
     let new_x = e.x + nx * move_speed * dt
     let new_z = e.z + nz * move_speed * dt
     let radius : Float = 0.4
-    if not(@types.is_blocked(game, new_x, e.z, radius)) {
+    if !@types.is_blocked(game, new_x, e.z, radius) {
       e.x = new_x
     }
-    if not(@types.is_blocked(game, e.x, new_z, radius)) {
+    if !@types.is_blocked(game, e.x, new_z, radius) {
       e.z = new_z
     }
     // In melee range - attack
@@ -192,10 +192,10 @@ fn @types.Game::update_archer_enemy(
       let new_x = e.x + nx * move_speed * dt
       let new_z = e.z + nz * move_speed * dt
       let radius : Float = 0.4
-      if not(@types.is_blocked(game, new_x, e.z, radius)) {
+      if !@types.is_blocked(game, new_x, e.z, radius) {
         e.x = new_x
       }
-      if not(@types.is_blocked(game, e.x, new_z, radius)) {
+      if !@types.is_blocked(game, e.x, new_z, radius) {
         e.z = new_z
       }
     }
@@ -205,10 +205,10 @@ fn @types.Game::update_archer_enemy(
     let new_x = e.x + dir.0 * move_speed * dt
     let new_z = e.z + dir.1 * move_speed * dt
     let radius : Float = 0.4
-    if not(@types.is_blocked(game, new_x, e.z, radius)) {
+    if !@types.is_blocked(game, new_x, e.z, radius) {
       e.x = new_x
     }
-    if not(@types.is_blocked(game, e.x, new_z, radius)) {
+    if !@types.is_blocked(game, e.x, new_z, radius) {
       e.z = new_z
     }
   }
@@ -246,10 +246,10 @@ fn @types.Game::update_slime_enemy(
       let new_x = e.x + dir.0 * hop_dist
       let new_z = e.z + dir.1 * hop_dist
       let radius : Float = 0.4
-      if not(@types.is_blocked(game, new_x, e.z, radius)) {
+      if !@types.is_blocked(game, new_x, e.z, radius) {
         e.x = new_x
       }
-      if not(@types.is_blocked(game, e.x, new_z, radius)) {
+      if !@types.is_blocked(game, e.x, new_z, radius) {
         e.z = new_z
       }
       // Spawn slime trail particles
@@ -296,10 +296,10 @@ fn @types.Game::update_bat_enemy(
       let new_x = e.x + nx * move_speed * dt
       let new_z = e.z + nz * move_speed * dt
       let radius : Float = 0.3
-      if not(@types.is_blocked(game, new_x, e.z, radius)) {
+      if !@types.is_blocked(game, new_x, e.z, radius) {
         e.x = new_x
       }
-      if not(@types.is_blocked(game, e.x, new_z, radius)) {
+      if !@types.is_blocked(game, e.x, new_z, radius) {
         e.z = new_z
       }
     }
@@ -335,10 +335,10 @@ fn @types.Game::update_spider_enemy(
     let new_x = e.x + dir.0 * move_speed * dt
     let new_z = e.z + dir.1 * move_speed * dt
     let radius : Float = 0.4
-    if not(@types.is_blocked(game, new_x, e.z, radius)) {
+    if !@types.is_blocked(game, new_x, e.z, radius) {
       e.x = new_x
     }
-    if not(@types.is_blocked(game, e.x, new_z, radius)) {
+    if !@types.is_blocked(game, e.x, new_z, radius) {
       e.z = new_z
     }
     // Web attack at range
@@ -434,10 +434,10 @@ fn @types.Game::update_minotaur_enemy(
       let new_x = e.x + dir.0 * move_speed * dt
       let new_z = e.z + dir.1 * move_speed * dt
       let radius : Float = 0.5
-      if not(@types.is_blocked(game, new_x, e.z, radius)) {
+      if !@types.is_blocked(game, new_x, e.z, radius) {
         e.x = new_x
       }
-      if not(@types.is_blocked(game, e.x, new_z, radius)) {
+      if !@types.is_blocked(game, e.x, new_z, radius) {
         e.z = new_z
       }
     } else if e.attack_timer <= 0.0 {
@@ -478,10 +478,10 @@ fn @types.Game::update_lich_enemy(
       let new_x = e.x + nx * move_speed * dt
       let new_z = e.z + nz * move_speed * dt
       let radius : Float = 0.4
-      if not(@types.is_blocked(game, new_x, e.z, radius)) {
+      if !@types.is_blocked(game, new_x, e.z, radius) {
         e.x = new_x
       }
-      if not(@types.is_blocked(game, e.x, new_z, radius)) {
+      if !@types.is_blocked(game, e.x, new_z, radius) {
         e.z = new_z
       }
     }
@@ -491,10 +491,10 @@ fn @types.Game::update_lich_enemy(
     let new_x = e.x + dir.0 * move_speed * dt
     let new_z = e.z + dir.1 * move_speed * dt
     let radius : Float = 0.4
-    if not(@types.is_blocked(game, new_x, e.z, radius)) {
+    if !@types.is_blocked(game, new_x, e.z, radius) {
       e.x = new_x
     }
-    if not(@types.is_blocked(game, e.x, new_z, radius)) {
+    if !@types.is_blocked(game, e.x, new_z, radius) {
       e.z = new_z
     }
   }
@@ -527,10 +527,10 @@ fn @types.Game::update_boss_enemy(
     let new_x = e.x + dir.0 * base_speed * dt
     let new_z = e.z + dir.1 * base_speed * dt
     let radius : Float = 0.6
-    if not(@types.is_blocked(game, new_x, e.z, radius)) {
+    if !@types.is_blocked(game, new_x, e.z, radius) {
       e.x = new_x
     }
-    if not(@types.is_blocked(game, e.x, new_z, radius)) {
+    if !@types.is_blocked(game, e.x, new_z, radius) {
       e.z = new_z
     }
     // Melee attack
@@ -702,7 +702,7 @@ fn @types.Game::summon_skeleton(game : @types.Game, e : @types.Enemy) -> Unit {
 /// Simulates projectile movement and resolves projectile collisions with walls, player, and enemies.
 pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
   for p in game.projectiles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     p.lifetime -= dt
@@ -716,7 +716,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
     // Check wall collision
     let gx = @types.world_to_grid_x(new_x)
     let gz = @types.world_to_grid_z(new_z)
-    if not(@types.is_walkable(@types.get_tile(game, gx, gz))) {
+    if !@types.is_walkable(@types.get_tile(game, gx, gz)) {
       p.active = false
       // Hit wall particles
       @types.spawn_particles(game, new_x, 1.0, new_z, 4, 200, 200, 50)
@@ -749,7 +749,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
       // Player projectile: check hit enemies
       for j in 0..<game.enemies.length() {
         let enemy = game.enemies[j]
-        if not(enemy.active) {
+        if !enemy.active {
           continue
         }
         let edist = @types.dist2d(p.x, p.z, enemy.x, enemy.z)
@@ -787,7 +787,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
 /// Advances particle lifetimes and kinematics for combat and ambient effects.
 pub fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     p.life -= dt
@@ -810,7 +810,7 @@ pub fn update_particles(game : @types.Game, dt : Float) -> Unit {
 /// Updates loot bobbing phase timers used by pickup idle animation.
 pub fn update_loot_bob(game : @types.Game, dt : Float) -> Unit {
   for l in game.loot {
-    if not(l.active) {
+    if !l.active {
       continue
     }
     l.bob_phase += dt * 3.0

@@ -56,10 +56,10 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   let new_z = game.player_z + move_z * speed
   // Collision detection - try X then Z separately for sliding
   let radius : Float = 0.3
-  if not(@types.is_blocked(game, new_x, game.player_z, radius)) {
+  if !@types.is_blocked(game, new_x, game.player_z, radius) {
     game.player_x = new_x
   }
-  if not(@types.is_blocked(game, game.player_x, new_z, radius)) {
+  if !@types.is_blocked(game, game.player_x, new_z, radius) {
     game.player_z = new_z
   }
   // Attack cooldown timer
@@ -215,7 +215,7 @@ fn @types.Game::perform_melee_attack(game : @types.Game) -> Unit {
   let mut hit_any = false
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]
-    if not(e.active) {
+    if !e.active {
       continue
     }
     // Check distance
@@ -314,7 +314,7 @@ fn @types.Game::cast_selected_spell(game : @types.Game) -> Unit {
     return
   }
   let slot = game.spells[game.selected_spell]
-  if not(slot.active) {
+  if !slot.active {
     @types.add_message(game, "No spell in this slot!", 200, 100, 100)
     return
   }
@@ -465,7 +465,7 @@ fn @types.Game::cast_lightning(game : @types.Game) -> Unit {
   let mut best_dist : Float = 15.0
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]
-    if not(e.active) {
+    if !e.active {
       continue
     }
     let dist = @types.dist2d(game.player_x, game.player_z, e.x, e.z)
@@ -506,7 +506,7 @@ fn @types.Game::cast_lightning(game : @types.Game) -> Unit {
         continue
       }
       let e2 = game.enemies[j]
-      if not(e2.active) {
+      if !e2.active {
         continue
       }
       let chain_dist = @types.dist2d(chain_x, chain_z, e2.x, e2.z)
@@ -540,7 +540,7 @@ fn @types.Game::cast_teleport(game : @types.Game) -> Unit {
   for step = 8; step >= 1; step = step - 1 {
     let test_x = game.player_x + dir_x * Float::from_int(step)
     let test_z = game.player_z + dir_z * Float::from_int(step)
-    if not(@types.is_blocked(game, test_x, test_z, radius)) {
+    if !@types.is_blocked(game, test_x, test_z, radius) {
       dest_x = test_x
       dest_z = test_z
       found = true
@@ -663,7 +663,7 @@ pub fn kill_enemy(game : @types.Game, idx : Int) -> Unit {
 ///|
 fn @types.Game::check_loot_pickup(game : @types.Game) -> Unit {
   for l in game.loot {
-    if not(l.active) {
+    if !l.active {
       continue
     }
     let dist = @types.dist2d(game.player_x, game.player_z, l.x, l.z)
@@ -933,7 +933,7 @@ fn @types.Game::check_traps(game : @types.Game, dt : Float) -> Unit {
   let pgx = @types.world_to_grid_x(game.player_x)
   let pgz = @types.world_to_grid_z(game.player_z)
   for trap in game.traps {
-    if not(trap.active) {
+    if !trap.active {
       continue
     }
     // Update cooldown
@@ -982,7 +982,7 @@ fn @types.Game::check_traps(game : @types.Game, dt : Float) -> Unit {
       }
     }
     // Nearby traps become visible (perception)
-    if not(trap.visible) {
+    if !trap.visible {
       let trap_dist_sq = @types.dist2d_sq(
         game.player_x,
         game.player_z,
@@ -1011,7 +1011,7 @@ fn @types.Game::add_spell_to_player(
   }
   // Find empty slot
   for spell in game.spells {
-    if not(spell.active) {
+    if !spell.active {
       spell.active = true
       spell.spell_type = spell_type
       return true

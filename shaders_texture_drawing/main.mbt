@@ -35,7 +35,7 @@ fn main {
   )
   @raylib.set_target_fps(60)
   // Main game loop
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     // Update
     time = Float::from_double(@raylib.get_time())
     @raylib.set_shader_value(

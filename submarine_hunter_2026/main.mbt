@@ -26,7 +26,7 @@ struct Enemy {
 ///|
 fn spawn_torpedo(ts : Array[Torpedo], x : Float, y : Float, vx : Float) -> Unit {
   for ts_elem in ts {
-    if not(ts_elem.alive) {
+    if !ts_elem.alive {
       ts_elem.alive = true
       ts_elem.x = x
       ts_elem.y = y
@@ -39,7 +39,7 @@ fn spawn_torpedo(ts : Array[Torpedo], x : Float, y : Float, vx : Float) -> Unit 
 ///|
 fn spawn_enemy(es : Array[Enemy]) -> Unit {
   for es_elem in es {
-    if not(es_elem.alive) {
+    if !es_elem.alive {
       es_elem.alive = true
       es_elem.x = Float::from_int(sw + 80)
       es_elem.y = Float::from_int(@raylib.get_random_value(190, sh - 70))
@@ -110,7 +110,7 @@ fn main {
   let mut over = false
   let mut msg = "WASD/Arrows move, J/Space fire, K sonar ping"
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -133,7 +133,7 @@ fn main {
       reset_enemies(enemies)
     }
 
-    if not(over) {
+    if !over {
       let mut mx : Float = 0.0
       let mut my : Float = 0.0
       if @raylib.is_key_down(@raylib.KeyA) ||
@@ -193,7 +193,7 @@ fn main {
       }
 
       for enemy in enemies {
-        if not(enemy.alive) {
+        if !enemy.alive {
           continue
         }
 
@@ -223,7 +223,7 @@ fn main {
       }
 
       for player_t_elem in player_t {
-        if not(player_t_elem.alive) {
+        if !player_t_elem.alive {
           continue
         }
         player_t_elem.x = player_t_elem.x + player_t_elem.vx * dt
@@ -233,7 +233,7 @@ fn main {
       }
 
       for enemy_t_elem in enemy_t {
-        if not(enemy_t_elem.alive) {
+        if !enemy_t_elem.alive {
           continue
         }
         enemy_t_elem.x = enemy_t_elem.x + enemy_t_elem.vx * dt
@@ -249,11 +249,11 @@ fn main {
       }
 
       for player_t_elem in player_t {
-        if not(player_t_elem.alive) {
+        if !player_t_elem.alive {
           continue
         }
         for enemy in enemies {
-          if not(enemy.alive) {
+          if !enemy.alive {
             continue
           }
           if dist_sq(player_t_elem.x, player_t_elem.y, enemy.x, enemy.y) <
@@ -313,7 +313,7 @@ fn main {
 
     for enemy in enemies {
       if enemy.alive {
-        let visible = not(enemy.stealth) || sonar_active > 0.0
+        let visible = !enemy.stealth || sonar_active > 0.0
         let c = if visible {
           @raylib.red
         } else {

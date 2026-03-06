@@ -233,7 +233,7 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
   draw_player(ppx, ppy, tile, game.pulse_t)
 
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 

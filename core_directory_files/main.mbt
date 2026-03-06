@@ -27,7 +27,7 @@ fn main {
   let list_item_focused : Ref[Int] = { val: -1 }
   @raylib.set_target_fps(60)
   // Main game loop
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     // Update
     if btn_back_pressed {
       directory = @raylib.get_prev_directory_path(directory)

@@ -37,7 +37,7 @@ fn reset_hazards(hazards : Array[Hazard]) -> Unit {
 /// Activates the first free hazard slot and places it off the right edge of the screen on the specified lane.
 fn spawn_hazard(hazards : Array[Hazard], lane : Int, kind : Int) -> Unit {
   for hazard in hazards {
-    if not(hazard.alive) {
+    if !hazard.alive {
       hazard.alive = true
       hazard.x = Float::from_int(sw + 60)
       hazard.lane = lane
@@ -73,7 +73,7 @@ fn main {
   let mut over = false
   let mut msg = "W/S or Up/Down switch rails, Space/J jump, R restart"
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -94,7 +94,7 @@ fn main {
       msg = "Run restarted."
     }
 
-    if not(over) {
+    if !over {
       if @raylib.is_key_pressed(@raylib.KeyW) ||
         @raylib.is_key_pressed(@raylib.KeyUp) {
         if cart_lane > 0 {
@@ -144,7 +144,7 @@ fn main {
       }
 
       for hazard in hazards {
-        if not(hazard.alive) {
+        if !hazard.alive {
           continue
         }
 

@@ -60,7 +60,7 @@ fn spawn_enemy(enemies : Array[Enemy], t : Float) -> Unit {
   }
 
   for enemy in enemies {
-    if not(enemy.alive) {
+    if !enemy.alive {
       enemy.alive = true
       enemy.x = x
       enemy.y = y
@@ -93,7 +93,7 @@ fn fire_shot(
   let vx = dx / d * speed
   let vy = dy / d * speed
   for shot in shots {
-    if not(shot.active) {
+    if !shot.active {
       shot.active = true
       shot.x = x
       shot.y = y
@@ -140,7 +140,7 @@ fn main {
   let mut game_over = false
   let mut won = false
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -174,7 +174,7 @@ fn main {
       won = false
     }
 
-    if not(game_over) && not(won) {
+    if !game_over && !won {
       if selecting {
         if @raylib.is_key_pressed(@raylib.KeyOne) {
           fire_cd = fire_cd * 0.84
@@ -246,7 +246,7 @@ fn main {
           let mut best = -1
           let mut best_d2 : Float = 1_000_000_000_000.0
           for i in 0..<enemies.length() {
-            if not(enemies[i].alive) {
+            if !enemies[i].alive {
               continue
             }
             let dx = enemies[i].x - px
@@ -272,7 +272,7 @@ fn main {
         }
 
         for shot in shots {
-          if not(shot.active) {
+          if !shot.active {
             continue
           }
           shot.x = shot.x + shot.vx * dt
@@ -288,7 +288,7 @@ fn main {
           }
 
           for enemy in enemies {
-            if not(enemy.alive) {
+            if !enemy.alive {
               continue
             }
             let dx = shot.x - enemy.x
@@ -306,7 +306,7 @@ fn main {
         }
 
         for enemy in enemies {
-          if not(enemy.alive) {
+          if !enemy.alive {
             continue
           }
           let dx = px - enemy.x

@@ -159,7 +159,7 @@ fn occupied_by(
 ) -> Bool {
   let mut occ = false
   for i in 0..<count {
-    if i == skip || not(cars[i].active) {
+    if i == skip || !cars[i].active {
       continue
     }
     if cars[i].horizontal {
@@ -177,7 +177,7 @@ fn occupied_by(
 fn find_car_at(cars : Array[Car], count : Int, gx : Int, gy : Int) -> Int {
   let mut found = -1
   for i in 0..<count {
-    if not(cars[i].active) {
+    if !cars[i].active {
       continue
     }
     if cars[i].horizontal {
@@ -193,7 +193,7 @@ fn find_car_at(cars : Array[Car], count : Int, gx : Int, gy : Int) -> Int {
 
 ///|
 fn can_move(cars : Array[Car], count : Int, car_id : Int, step : Int) -> Bool {
-  if car_id < 0 || car_id >= count || not(cars[car_id].active) {
+  if car_id < 0 || car_id >= count || !cars[car_id].active {
     return false
   }
   if step == 0 {
@@ -206,26 +206,26 @@ fn can_move(cars : Array[Car], count : Int, car_id : Int, step : Int) -> Bool {
     } else {
       cars[car_id].x + cars[car_id].len
     }
-    if not(in_board(target, cars[car_id].y)) {
+    if !in_board(target, cars[car_id].y) {
       return false
     }
-    not(occupied_by(cars, count, car_id, target, cars[car_id].y))
+    !occupied_by(cars, count, car_id, target, cars[car_id].y)
   } else {
     let target = if step < 0 {
       cars[car_id].y - 1
     } else {
       cars[car_id].y + cars[car_id].len
     }
-    if not(in_board(cars[car_id].x, target)) {
+    if !in_board(cars[car_id].x, target) {
       return false
     }
-    not(occupied_by(cars, count, car_id, cars[car_id].x, target))
+    !occupied_by(cars, count, car_id, cars[car_id].x, target)
   }
 }
 
 ///|
 fn try_move(cars : Array[Car], count : Int, car_id : Int, step : Int) -> Bool {
-  if not(can_move(cars, count, car_id, step)) {
+  if !can_move(cars, count, car_id, step) {
     return false
   }
 
@@ -278,7 +278,7 @@ fn main {
   let mut transition_t : Float = 0.0
   let mut msg = "Select a car, then use arrows/WASD to slide."
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let dt = @raylib.get_frame_time()
 
     if @raylib.is_key_pressed(@raylib.KeyR) {
@@ -316,7 +316,7 @@ fn main {
       }
     }
 
-    if not(over) && transition_t <= 0.0 {
+    if !over && transition_t <= 0.0 {
       let m = @raylib.get_mouse_position()
       if @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
         if inside_rect(m.x, m.y, ox, oy, gw * cell, gh * cell) {
@@ -517,7 +517,7 @@ fn main {
     )
 
     for i in 0..<car_count {
-      if not(cars[i].active) {
+      if !cars[i].active {
         continue
       }
 

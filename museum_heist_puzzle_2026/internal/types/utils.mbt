@@ -243,7 +243,7 @@ pub fn in_guard_front(g : Guard, dx : Int, dy : Int) -> Bool {
 ///|
 /// Returns whether guard `g` can currently see cell `(cx, cy)`.
 pub fn guard_sees_cell(game : Game, g : Guard, cx : Int, cy : Int) -> Bool {
-  if not(in_bounds(cx, cy)) {
+  if !in_bounds(cx, cy) {
     return false
   }
   if tile_at(game, cx, cy) == Wall {
@@ -259,7 +259,7 @@ pub fn guard_sees_cell(game : Game, g : Guard, cx : Int, cy : Int) -> Bool {
   if dist > g.view_range {
     return false
   }
-  if not(in_guard_front(g, dx, dy)) {
+  if !in_guard_front(g, dx, dy) {
     return false
   }
 
@@ -355,7 +355,7 @@ pub fn pointer_on_rect(
     hit = true
   }
 
-  if not(hit) {
+  if !hit {
     for i in 0..<touch_count {
       let p = @raylib.get_touch_position(i)
       if inside_rect(p.x, p.y, x, y, w, h) {

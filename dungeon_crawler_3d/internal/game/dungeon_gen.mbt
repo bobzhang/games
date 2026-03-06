@@ -122,7 +122,7 @@ fn @types.Game::try_place_room(game : @types.Game) -> Unit {
         overlap = true
       }
     }
-    if not(overlap) {
+    if !overlap {
       let room = @types.Room::new(x, y, w, h)
       game.carve_room(room)
       game.rooms[game.room_count] = room

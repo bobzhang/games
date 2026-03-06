@@ -260,7 +260,7 @@ fn relic_at(relics : Array[Relic], gx : Int, gy : Int) -> Int {
   let mut found : Int = -1
   for i in 0..<relics.length() {
     if relics[i].active &&
-      not(relics[i].taken) &&
+      !relics[i].taken &&
       relics[i].gx == gx &&
       relics[i].gy == gy {
       found = i
@@ -296,7 +296,7 @@ fn burst(
     if left <= 0 {
       break
     }
-    if not(part.active) {
+    if !part.active {
       part.active = true
       part.x = x
       part.y = y
@@ -396,7 +396,7 @@ fn main {
   let mut move_repeat_t : Float = 0.0
 
   let can_walk = fn(gx : Int, gy : Int) -> Bool {
-    if not(in_bounds(gx, gy)) {
+    if !in_bounds(gx, gy) {
       false
     } else if tiles[idx(gx, gy)] == 1 {
       false
@@ -406,7 +406,7 @@ fn main {
   }
 
   let cell_free_for_spawn = fn(gx : Int, gy : Int, min_dist : Int) -> Bool {
-    if not(can_walk(gx, gy)) {
+    if !can_walk(gx, gy) {
       false
     } else if (gx - player.gx).abs() + (gy - player.gy).abs() < min_dist {
       false
@@ -484,7 +484,7 @@ fn main {
           }
         }
       }
-      if not(placed) {
+      if !placed {
         ignore(())
       }
     }
@@ -502,7 +502,7 @@ fn main {
         if cell_free_for_spawn(gx, gy, 4) {
           let mut slot : Int = -1
           for k in 0..<plates.length() {
-            if not(plates[k].active) {
+            if !plates[k].active {
               slot = k
               break
             }
@@ -527,7 +527,7 @@ fn main {
         if cell_free_for_spawn(gx, gy, 3) {
           let mut slot : Int = -1
           for k in 0..<crates.length() {
-            if not(crates[k].active) {
+            if !crates[k].active {
               slot = k
               break
             }
@@ -551,7 +551,7 @@ fn main {
         if cell_free_for_spawn(gx, gy, 5) {
           let mut slot : Int = -1
           for k in 0..<relics.length() {
-            if not(relics[k].active) {
+            if !relics[k].active {
               slot = k
               break
             }
@@ -576,7 +576,7 @@ fn main {
         if cell_free_for_spawn(gx, gy, 6) {
           let mut slot : Int = -1
           for k in 0..<enemies.length() {
-            if not(enemies[k].active) {
+            if !enemies[k].active {
               slot = k
               break
             }
@@ -619,10 +619,10 @@ fn main {
                 break
               }
             }
-            if not(exists) {
+            if !exists {
               let mut slot : Int = -1
               for k in 0..<spikes.length() {
-                if not(spikes[k].active) {
+                if !spikes[k].active {
                   slot = k
                   break
                 }
@@ -666,7 +666,7 @@ fn main {
   let update_plate_state = fn() {
     plates_pressed = 0
     for plate in plates {
-      if not(plate.active) {
+      if !plate.active {
         continue
       }
 
@@ -725,7 +725,7 @@ fn main {
 
       let nx = player.gx + dx
       let ny = player.gy + dy
-      if not(can_walk(nx, ny)) {
+      if !can_walk(nx, ny) {
         burst(
           particles,
           cell_center_x(player.gx),
@@ -745,7 +745,7 @@ fn main {
           if can_walk(bx, by) &&
             crate_at(crates, bx, by) < 0 &&
             enemy_at(enemies, bx, by) < 0 &&
-            not(exit_open && bx == exit_x && by == exit_y) {
+            !(exit_open && bx == exit_x && by == exit_y) {
             crates[crate_slot].gx = bx
             crates[crate_slot].gy = by
             player.gx = nx
@@ -765,7 +765,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -1036,7 +1036,7 @@ fn main {
         for y in (player.gy - 1)..<=(player.gy + 1) {
           for x in (player.gx - 1)..<=(player.gx + 1) {
             if in_bounds(x, y) &&
-              not(x == 0 || y == 0 || x == map_w - 1 || y == map_h - 1) {
+              !(x == 0 || y == 0 || x == map_w - 1 || y == map_h - 1) {
               if tiles[idx(x, y)] == 1 {
                 tiles[idx(x, y)] = 0
               }
@@ -1063,7 +1063,7 @@ fn main {
       }
 
       for i in 0..<enemies.length() {
-        if not(enemies[i].active) {
+        if !enemies[i].active {
           continue
         }
 
@@ -1125,7 +1125,7 @@ fn main {
 
           let mut tx = enemies[i].gx + dxm
           let mut ty = enemies[i].gy + dym
-          if not(can_walk(tx, ty)) ||
+          if !can_walk(tx, ty) ||
             crate_at(crates, tx, ty) >= 0 ||
             enemy_at(enemies, tx, ty) >= 0 ||
             (tx == player.gx && ty == player.gy) {
@@ -1145,7 +1145,7 @@ fn main {
           if can_walk(tx, ty) &&
             crate_at(crates, tx, ty) < 0 &&
             enemy_at(enemies, tx, ty) < 0 &&
-            not(tx == player.gx && ty == player.gy) {
+            !(tx == player.gx && ty == player.gy) {
             enemies[i].gx = tx
             enemies[i].gy = ty
           }
@@ -1176,7 +1176,7 @@ fn main {
       }
 
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
 
@@ -1263,7 +1263,7 @@ fn main {
     }
 
     for spike in spikes {
-      if not(spike.active) {
+      if !spike.active {
         continue
       }
 
@@ -1298,7 +1298,7 @@ fn main {
     }
 
     for plate in plates {
-      if not(plate.active) {
+      if !plate.active {
         continue
       }
       let cx = cell_center_x(plate.gx)
@@ -1331,7 +1331,7 @@ fn main {
       tile - 16,
       gate_col,
     )
-    if not(exit_open) {
+    if !exit_open {
       @raylib.draw_line(
         exit_px + 10,
         exit_py + 10,
@@ -1349,7 +1349,7 @@ fn main {
     }
 
     for relic in relics {
-      if relic.active && not(relic.taken) {
+      if relic.active && !relic.taken {
         let cx = cell_center_x(relic.gx)
         let cy = cell_center_y(relic.gy)
         @raylib.draw_triangle(
@@ -1423,7 +1423,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 

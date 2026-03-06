@@ -44,7 +44,7 @@ fn @types.Game::update_title_input(game : @types.Game) -> Unit {
       start_btn.3,
     )
 
-  let touch_start = hover && not(game.touch_start_prev)
+  let touch_start = hover && !game.touch_start_prev
 
   game.input_start_press = key_start || mouse_start || touch_start
 
@@ -159,7 +159,7 @@ fn @types.Game::update_play_input(game : @types.Game) -> Unit {
       mx, my, @types.world_x0, @types.world_y0, @types.world_w, @types.world_h,
     )
 
-  let touch_action = action_hover && not(game.touch_action_prev)
+  let touch_action = action_hover && !game.touch_action_prev
 
   game.input_action_press = key_action || mouse_action || touch_action
 
@@ -221,8 +221,8 @@ fn @types.Game::update_result_input(game : @types.Game) -> Unit {
       secondary.3,
     )
 
-  let touch_next = primary_hover && not(game.touch_next_prev)
-  let touch_restart = secondary_hover && not(game.touch_restart_prev)
+  let touch_next = primary_hover && !game.touch_next_prev
+  let touch_restart = secondary_hover && !game.touch_restart_prev
 
   game.input_next_press = key_next || mouse_next || touch_next
   game.input_restart_press = key_restart || mouse_restart || touch_restart

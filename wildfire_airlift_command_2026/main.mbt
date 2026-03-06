@@ -305,7 +305,7 @@ fn burst(
 ///|
 fn update_parts(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
 
@@ -435,7 +435,7 @@ fn init_debris(
 
     let mut near_zone : Bool = false
     for zone in zones {
-      if not(zone.active) {
+      if !zone.active {
         continue
       }
       if dist2(x, y, zone.x, zone.y) < 120.0 * 120.0 {
@@ -449,7 +449,7 @@ fn init_debris(
 
     let mut overlap : Bool = false
     for debris in debris {
-      if not(debris.active) {
+      if !debris.active {
         continue
       }
       let rr : Float = debris.size + 12.0
@@ -665,7 +665,7 @@ fn update_fires(
   world_b : Float,
 ) -> Unit {
   for fire in fires {
-    if not(fire.active) {
+    if !fire.active {
       continue
     }
 
@@ -716,7 +716,7 @@ fn update_smokes(
   world_b : Float,
 ) -> Unit {
   for smoke in smokes {
-    if not(smoke.active) {
+    if !smoke.active {
       continue
     }
 
@@ -747,7 +747,7 @@ fn update_debris(
   world_b : Float,
 ) -> Unit {
   for debris in debris {
-    if not(debris.active) {
+    if !debris.active {
       continue
     }
 
@@ -794,7 +794,7 @@ fn update_groups(
   let mut panic_sum : Float = 0.0
 
   for group in groups {
-    if not(group.active) {
+    if !group.active {
       continue
     }
 
@@ -823,7 +823,7 @@ fn update_groups(
     }
 
     for fire in fires {
-      if not(fire.active) {
+      if !fire.active {
         continue
       }
 
@@ -836,7 +836,7 @@ fn update_groups(
     }
 
     for smoke in smokes {
-      if not(smoke.active) {
+      if !smoke.active {
         continue
       }
 
@@ -874,7 +874,7 @@ fn rescue_groups(
     let mut groups_hit : Int = 0
 
     for group in groups {
-      if not(group.active) || group.count <= 0 {
+      if !group.active || group.count <= 0 {
         continue
       }
 
@@ -927,7 +927,7 @@ fn suppress_fire(
     let mut reduction : Float = 0.0
 
     for fire in fires {
-      if not(fire.active) {
+      if !fire.active {
         continue
       }
 
@@ -979,7 +979,7 @@ fn nearest_urgent_group(
   let mut bd2 : Float = 999999999.0
 
   for group in groups {
-    if not(group.active) || group.panic < 30.0 {
+    if !group.active || group.panic < 30.0 {
       continue
     }
 
@@ -1009,7 +1009,7 @@ fn nearest_hot_fire(
   let mut bd2 : Float = 999999999.0
 
   for fire in fires {
-    if not(fire.active) || fire.intensity < 0.8 {
+    if !fire.active || fire.intensity < 0.8 {
       continue
     }
 
@@ -1136,7 +1136,7 @@ fn draw_base(base : Base) -> Unit {
 ///|
 fn draw_zones(zones : Array[EvacZone], t : Float) -> Unit {
   for i in 0..<zones.length() {
-    if not(zones[i].active) {
+    if !zones[i].active {
       continue
     }
 
@@ -1195,7 +1195,7 @@ fn draw_zones(zones : Array[EvacZone], t : Float) -> Unit {
 ///|
 fn draw_groups(groups : Array[EvacGroup], t : Float) -> Unit {
   for group in groups {
-    if not(group.active) {
+    if !group.active {
       continue
     }
 
@@ -1246,7 +1246,7 @@ fn draw_groups(groups : Array[EvacGroup], t : Float) -> Unit {
 ///|
 fn draw_fires(fires : Array[FireZone], t : Float) -> Unit {
   for fire in fires {
-    if not(fire.active) {
+    if !fire.active {
       continue
     }
 
@@ -1287,7 +1287,7 @@ fn draw_fires(fires : Array[FireZone], t : Float) -> Unit {
 ///|
 fn draw_smokes(smokes : Array[SmokePlume], t : Float) -> Unit {
   for smoke in smokes {
-    if not(smoke.active) {
+    if !smoke.active {
       continue
     }
 
@@ -1317,7 +1317,7 @@ fn draw_smokes(smokes : Array[SmokePlume], t : Float) -> Unit {
 ///|
 fn draw_debris(debris : Array[Debris], t : Float) -> Unit {
   for debris in debris {
-    if not(debris.active) {
+    if !debris.active {
       continue
     }
 
@@ -1448,7 +1448,7 @@ fn draw_player(player : Player, t : Float) -> Unit {
 ///|
 fn draw_parts(parts : Array[Particle]) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
 
@@ -1890,7 +1890,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -2018,7 +2018,7 @@ fn main {
       let mut fuel_mul : Float = 1.0
       let mut smoke_damage : Float = 0.0
       for fire in fires {
-        if not(fire.active) {
+        if !fire.active {
           continue
         }
 
@@ -2034,7 +2034,7 @@ fn main {
       }
 
       for smoke in smokes {
-        if not(smoke.active) {
+        if !smoke.active {
           continue
         }
 
@@ -2150,7 +2150,7 @@ fn main {
         let (fg, gx, gy, gp) = nearest_urgent_group(groups, player.x, player.y)
         let (ff, fx, fy, fi) = nearest_hot_fire(fires, player.x, player.y)
 
-        if fg && (not(ff) || gp >= 62.0) {
+        if fg && (!ff || gp >= 62.0) {
           player.ping_cd = 2.0
           player.ping_t = 2.0
           player.ping_x = gx
@@ -2182,7 +2182,7 @@ fn main {
       // Debris collision damage
       let mut collision_dmg : Float = 0.0
       for debris in debris {
-        if not(debris.active) {
+        if !debris.active {
           continue
         }
 
@@ -2206,7 +2206,7 @@ fn main {
 
       // Zone queues rise over time, especially near fire/smoke
       for zone in zones {
-        if not(zone.active) {
+        if !zone.active {
           continue
         }
 
@@ -2219,7 +2219,7 @@ fn main {
 
         let mut fire_load : Float = 0.0
         for fire in fires {
-          if not(fire.active) {
+          if !fire.active {
             continue
           }
 
@@ -2232,7 +2232,7 @@ fn main {
         }
 
         for smoke in smokes {
-          if not(smoke.active) {
+          if !smoke.active {
             continue
           }
 

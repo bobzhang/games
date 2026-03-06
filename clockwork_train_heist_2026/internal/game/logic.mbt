@@ -17,7 +17,7 @@ fn @types.Game::tile_at(
   x : Int,
   y : Int,
 ) -> @types.TileKind {
-  if not(in_bounds(x, y)) {
+  if !in_bounds(x, y) {
     Wall
   } else {
     game.map[idx(x, y)]
@@ -32,7 +32,7 @@ fn @types.Game::set_tile(
   y : Int,
   t : @types.TileKind,
 ) -> Unit {
-  if not(in_bounds(x, y)) {
+  if !in_bounds(x, y) {
     return
   }
   game.map[idx(x, y)] = t
@@ -78,7 +78,7 @@ fn actor_start_move(a : @types.Actor, tx : Int, ty : Int) -> Unit {
 ///|
 /// Advances the actor's movement interpolation by `dt` seconds, snapping to the target when complete.
 fn actor_tick(a : @types.Actor, dt : Float, move_t : Float) -> Unit {
-  if not(a.moving) {
+  if !a.moving {
     a.fx = Float::from_int(a.x)
     a.fy = Float::from_int(a.y)
     return
@@ -169,7 +169,7 @@ fn @types.Game::burst(
 /// Advances all active particles by `dt` seconds, applying velocity, drag, and gravity.
 fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 
@@ -199,7 +199,7 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
 /// Returns true if any active smoke cloud covers the cell at `(x, y)` within Manhattan distance 1.
 fn @types.Game::smoke_cover_at(game : @types.Game, x : Int, y : Int) -> Bool {
   for smoke in game.smokes {
-    if not(smoke.active) {
+    if !smoke.active {
       continue
     }
 
@@ -221,7 +221,7 @@ fn @types.Game::guard_index_at(
   skip : Int,
 ) -> Int {
   for i in 0..<game.guards.length() {
-    if i == skip || not(game.guards[i].active) {
+    if i == skip || !game.guards[i].active {
       continue
     }
 
@@ -237,7 +237,7 @@ fn @types.Game::guard_index_at(
 /// Returns the index of an active loot item at `(x, y)`, or -1 if none is present.
 fn @types.Game::loot_index_at(game : @types.Game, x : Int, y : Int) -> Int {
   for i in 0..<game.loots.length() {
-    if not(game.loots[i].active) {
+    if !game.loots[i].active {
       continue
     }
 
@@ -252,13 +252,13 @@ fn @types.Game::loot_index_at(game : @types.Game, x : Int, y : Int) -> Int {
 ///|
 /// Returns true if the tile at `(x, y)` is impassable for the player, considering the vault-open state for the exit.
 fn @types.Game::blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
-  if not(in_bounds(x, y)) {
+  if !in_bounds(x, y) {
     return true
   }
 
   match game.tile_at(x, y) {
     Wall => true
-    Exit => not(game.vault_open)
+    Exit => !game.vault_open
     Floor | Door => false
   }
 }
@@ -530,7 +530,7 @@ fn @types.Game::deploy_smoke(game : @types.Game) -> Bool {
 
   let mut slot : Int = -1
   for i in 0..<game.smokes.length() {
-    if not(game.smokes[i].active) {
+    if !game.smokes[i].active {
       slot = i
       break
     }
@@ -554,7 +554,7 @@ fn @types.Game::deploy_smoke(game : @types.Game) -> Bool {
 
   let mut stunned : Int = 0
   for guard_val in game.guards {
-    if not(guard_val.active) || guard_val.mode == Stunned {
+    if !guard_val.active || guard_val.mode == Stunned {
       continue
     }
 
@@ -597,7 +597,7 @@ fn @types.Game::deploy_smoke(game : @types.Game) -> Bool {
 /// Advances all active smoke cloud timers and emits ambient smoke particles each frame.
 fn @types.Game::update_smokes(game : @types.Game, dt : Float) -> Unit {
   for smoke in game.smokes {
-    if not(smoke.active) {
+    if !smoke.active {
       continue
     }
 
@@ -734,7 +734,7 @@ fn @types.Game::guard_choose_patrol_step(
 
     if nx >= g.patrol_min &&
       nx <= g.patrol_max &&
-      not(game.blocked_for_guard(gid, nx, gy)) {
+      !game.blocked_for_guard(gid, nx, gy) {
       return (g.dir_x, 0)
     }
   }
@@ -750,7 +750,7 @@ fn @types.Game::guard_choose_patrol_step(
 
     if ny >= g.patrol_min &&
       ny <= g.patrol_max &&
-      not(game.blocked_for_guard(gid, gx, ny)) {
+      !game.blocked_for_guard(gid, gx, ny) {
       return (0, g.dir_y)
     }
   }
@@ -777,7 +777,7 @@ fn @types.Game::guard_choose_patrol_step(
 /// Advances all active guards: ticks movement interpolation, updates stun and alert timers, and chooses the next step.
 fn @types.Game::update_guards(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.guards.length() {
-    if not(game.guards[i].active) {
+    if !game.guards[i].active {
       continue
     }
 
@@ -822,7 +822,7 @@ fn @types.Game::update_guards(game : @types.Game, dt : Float) -> Unit {
       game.player.y,
     )
 
-    if not(game.smoke_cover_at(game.player.x, game.player.y)) &&
+    if !game.smoke_cover_at(game.player.x, game.player.y) &&
       (d <= 3 || (sees && d <= 8)) {
       game.guards[i].mode = Hunt
       game.guards[i].alert_t = 1.1
@@ -918,7 +918,7 @@ fn @types.Game::collect_loot(game : @types.Game) -> Unit {
     Glitter,
   )
 
-  if game.loot_taken >= @types.loot_need && not(game.vault_open) {
+  if game.loot_taken >= @types.loot_need && !game.vault_open {
     game.vault_open = true
     game.score = game.score + 260
     game.shake_t = 0.30
@@ -945,7 +945,7 @@ fn @types.Game::handle_player_caught(game : @types.Game) -> Unit {
   }
 
   for i in 0..<game.guards.length() {
-    if not(game.guards[i].active) || game.guards[i].mode == Stunned {
+    if !game.guards[i].active || game.guards[i].mode == Stunned {
       continue
     }
 
@@ -974,7 +974,7 @@ fn @types.Game::handle_player_caught(game : @types.Game) -> Unit {
     game.move_cd = 0.24
 
     for guard_val in game.guards {
-      if not(guard_val.active) {
+      if !guard_val.active {
         continue
       }
       guard_val.mode = Stunned
@@ -1043,7 +1043,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
 
   actor_tick(game.player, dt, @types.player_move_t)
 
-  if not(game.player.moving) && game.move_cd <= 0.0 {
+  if !game.player.moving && game.move_cd <= 0.0 {
     ignore(game.try_move_player(game.req_dx, game.req_dy))
   }
 
@@ -1057,7 +1057,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   game.handle_player_caught()
 
   if game.state == Play &&
-    not(game.player.moving) &&
+    !game.player.moving &&
     game.vault_open &&
     game.player.x == @types.exit_x &&
     game.player.y == @types.exit_y {

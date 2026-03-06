@@ -6,7 +6,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
   let pz = game.player.z
   for i in 0..<game.enemies.length() {
     let enemy = game.enemies[i]
-    if not(enemy.active) {
+    if !enemy.active {
       continue
     }
     let dist_to_player = @types.distance2d(enemy.x, enemy.z, px, pz)
@@ -52,9 +52,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
     let drift_x = new_x + drift.0 * dt * 0.3
     let drift_z = new_z + drift.1 * dt * 0.3
     // Island collision
-    if not(
-        @types.check_island_collision(game, drift_x, drift_z, enemy.ship_width),
-      ) {
+    if !@types.check_island_collision(game, drift_x, drift_z, enemy.ship_width) {
       let half : Float = @types.ocean_size / 2.0 - 5.0
       enemy.x = @types.clampf(drift_x, -half, half)
       enemy.z = @types.clampf(drift_z, -half, half)
@@ -68,7 +66,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
         continue
       }
       let other = game.enemies[j]
-      if not(other.active) {
+      if !other.active {
         continue
       }
       let d = @types.distance2d(enemy.x, enemy.z, other.x, other.z)
@@ -486,7 +484,7 @@ fn @types.Game::maybe_target_convoy(
     game.player.z,
   )
   for cs in game.convoy_ships {
-    if not(cs.active) {
+    if !cs.active {
       continue
     }
     if cs.arrived {

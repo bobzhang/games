@@ -281,7 +281,7 @@ fn burst(
 /// Advances all active particles by `dt`, applying drag and gravity by kind, and deactivating expired ones.
 fn update_parts(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
 
@@ -376,7 +376,7 @@ fn init_reefs(
 
     let mut near_light : Bool = false
     for light in lights {
-      if not(light.active) {
+      if !light.active {
         continue
       }
       if dist2(x, y, light.x, light.y) < 120.0 * 120.0 {
@@ -390,7 +390,7 @@ fn init_reefs(
 
     let mut overlap : Bool = false
     for reef in reefs {
-      if not(reef.active) {
+      if !reef.active {
         continue
       }
 
@@ -444,7 +444,7 @@ fn active_pirates(pirates : Array[Pirate]) -> Int {
 fn peak_demand(lights : Array[Lighthouse]) -> Float {
   let mut best : Float = 0.0
   for light in lights {
-    if not(light.active) {
+    if !light.active {
       continue
     }
     if light.demand > best {
@@ -569,7 +569,7 @@ fn update_storms(
   world_b : Float,
 ) -> Unit {
   for storm in storms {
-    if not(storm.active) {
+    if !storm.active {
       continue
     }
 
@@ -609,7 +609,7 @@ fn highest_demand_light(lights : Array[Lighthouse]) -> Int {
   let mut best_i : Int = -1
   let mut best : Float = -1.0
   for i in 0..<lights.length() {
-    if not(lights[i].active) {
+    if !lights[i].active {
       continue
     }
     if lights[i].demand > best {
@@ -639,7 +639,7 @@ fn update_pirates(
   let best_light : Int = highest_demand_light(lights)
 
   for i in 0..<pirates.length() {
-    if not(pirates[i].active) {
+    if !pirates[i].active {
       continue
     }
 
@@ -715,7 +715,7 @@ fn update_light_demands(
   let mut demand_sum : Float = 0.0
 
   for light in lights {
-    if not(light.active) {
+    if !light.active {
       continue
     }
 
@@ -764,7 +764,7 @@ fn deliver_to_lights(
     let mut lights_served : Int = 0
 
     for light in lights {
-      if not(light.active) || light.demand <= 0.1 || player.cargo <= 0 {
+      if !light.active || light.demand <= 0.1 || player.cargo <= 0 {
         continue
       }
 
@@ -807,7 +807,7 @@ fn nearest_urgent_light(
   let mut best_dem : Float = 0.0
 
   for light in lights {
-    if not(light.active) || light.demand < 40.0 {
+    if !light.active || light.demand < 40.0 {
       continue
     }
 
@@ -917,7 +917,7 @@ fn draw_harbor(
 /// Draws all active lighthouses with animated beams, demand bars, and warning pulse effects.
 fn draw_lights(lights : Array[Lighthouse], t : Float) -> Unit {
   for i in 0..<lights.length() {
-    if not(lights[i].active) {
+    if !lights[i].active {
       continue
     }
 
@@ -977,7 +977,7 @@ fn draw_lights(lights : Array[Lighthouse], t : Float) -> Unit {
 /// Draws all active reef hazards as pulsing jagged shapes with animated radius.
 fn draw_reefs(reefs : Array[Reef], t : Float) -> Unit {
   for reef in reefs {
-    if not(reef.active) {
+    if !reef.active {
       continue
     }
 
@@ -1009,7 +1009,7 @@ fn draw_reefs(reefs : Array[Reef], t : Float) -> Unit {
 /// Draws all active storms as swirling translucent circles with animated radial lines.
 fn draw_storms(storms : Array[Storm], t : Float) -> Unit {
   for storm in storms {
-    if not(storm.active) {
+    if !storm.active {
       continue
     }
 
@@ -1051,7 +1051,7 @@ fn draw_storms(storms : Array[Storm], t : Float) -> Unit {
 /// Draws all active pirate vessels with blinking warning indicators and wake trails.
 fn draw_pirates(pirates : Array[Pirate], t : Float) -> Unit {
   for i in 0..<pirates.length() {
-    if not(pirates[i].active) {
+    if !pirates[i].active {
       continue
     }
 
@@ -1168,7 +1168,7 @@ fn draw_player(player : Player, t : Float) -> Unit {
 /// Draws all active particles with alpha fading based on remaining lifetime and kind-based color.
 fn draw_parts(parts : Array[Particle]) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
 
@@ -1581,7 +1581,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -1824,7 +1824,7 @@ fn main {
       // Reef collisions
       let mut reef_damage : Float = 0.0
       for reef in reefs {
-        if not(reef.active) {
+        if !reef.active {
           continue
         }
 
@@ -1853,7 +1853,7 @@ fn main {
 
       let mut storm_damage : Float = 0.0
       for storm in storms {
-        if not(storm.active) {
+        if !storm.active {
           continue
         }
 

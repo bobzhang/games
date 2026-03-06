@@ -154,7 +154,7 @@ fn @types.Game::expand_special_marks(game : @types.Game) -> Unit {
     changed = false
 
     for i in 0..<@types.board_cells {
-      if not(game.marks[i]) {
+      if !game.marks[i] {
         continue
       }
 
@@ -171,7 +171,7 @@ fn @types.Game::expand_special_marks(game : @types.Game) -> Unit {
         Row =>
           for x in 0..<@types.board_cols {
             let j = @types.idx(x, cy)
-            if not(game.marks[j]) {
+            if !game.marks[j] {
               game.marks[j] = true
               changed = true
             }
@@ -179,7 +179,7 @@ fn @types.Game::expand_special_marks(game : @types.Game) -> Unit {
         Col =>
           for y in 0..<@types.board_rows {
             let j = @types.idx(cx, y)
-            if not(game.marks[j]) {
+            if !game.marks[j] {
               game.marks[j] = true
               changed = true
             }
@@ -191,7 +191,7 @@ fn @types.Game::expand_special_marks(game : @types.Game) -> Unit {
               let y = cy + dy
               if @types.in_board(x, y) {
                 let j = @types.idx(x, y)
-                if not(game.marks[j]) {
+                if !game.marks[j] {
                   game.marks[j] = true
                   changed = true
                 }
@@ -209,7 +209,7 @@ fn @types.Game::remove_marked_cells(game : @types.Game) -> Int {
   let mut removed = 0
 
   for i in 0..<@types.board_cells {
-    if not(game.marks[i]) {
+    if !game.marks[i] {
       continue
     }
 
@@ -378,7 +378,7 @@ fn @types.Game::shuffle_board(game : @types.Game) -> Bool {
       game.specials[i] = None
     }
 
-    if not(has_any_match(game.kinds)) && has_possible_swap(game.kinds) {
+    if !has_any_match(game.kinds) && has_possible_swap(game.kinds) {
       return true
     }
   }
@@ -438,7 +438,7 @@ fn @types.Game::fill_board_without_initial_matches(game : @types.Game) -> Unit {
           }
         }
 
-        if not(bad) {
+        if !bad {
           break
         }
 
@@ -627,11 +627,11 @@ fn @types.Game::attempt_swap(
   x1 : Int,
   y1 : Int,
 ) -> Bool {
-  if not(@types.in_board(x0, y0)) || not(@types.in_board(x1, y1)) {
+  if !@types.in_board(x0, y0) || !@types.in_board(x1, y1) {
     return false
   }
 
-  if not(@types.is_adjacent(x0, y0, x1, y1)) {
+  if !@types.is_adjacent(x0, y0, x1, y1) {
     return false
   }
 
@@ -641,7 +641,7 @@ fn @types.Game::attempt_swap(
   @types.swapi(game.kinds, a, b)
   @types.swap_special(game.specials, a, b)
 
-  if not(has_any_match(game.kinds)) {
+  if !has_any_match(game.kinds) {
     @types.swapi(game.kinds, a, b)
     @types.swap_special(game.specials, a, b)
     game.set_message("Swap did not make a match.")
@@ -665,7 +665,7 @@ fn @types.Game::attempt_swap(
     return true
   }
 
-  if not(has_possible_swap(game.kinds)) {
+  if !has_possible_swap(game.kinds) {
     if game.shuffle_board() {
       game.set_message("No possible swaps. Board shuffled.")
     } else {
@@ -679,7 +679,7 @@ fn @types.Game::attempt_swap(
 ///|
 /// Selects a cell on first tap or attempts a swap if an adjacent cell is already selected.
 fn @types.Game::select_or_swap(game : @types.Game, x : Int, y : Int) -> Unit {
-  if not(@types.in_board(x, y)) {
+  if !@types.in_board(x, y) {
     return
   }
 
@@ -687,7 +687,7 @@ fn @types.Game::select_or_swap(game : @types.Game, x : Int, y : Int) -> Unit {
   game.cursor_y = y
   game.hint_active = false
 
-  if not(game.selected) {
+  if !game.selected {
     game.selected = true
     game.sel_x = x
     game.sel_y = y

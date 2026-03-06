@@ -92,21 +92,21 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   // Apply velocity with collision detection
   // Horizontal movement (X)
   let new_x = player.x + player.vx * dt
-  if not(game.check_player_collision(new_x, player.y, player.z)) {
+  if !game.check_player_collision(new_x, player.y, player.z) {
     player.x = new_x
   } else {
     player.vx = 0.0
   }
   // Horizontal movement (Z)
   let new_z = player.z + player.vz * dt
-  if not(game.check_player_collision(player.x, player.y, new_z)) {
+  if !game.check_player_collision(player.x, player.y, new_z) {
     player.z = new_z
   } else {
     player.vz = 0.0
   }
   // Vertical movement (Y)
   let new_y = player.y + player.vy * dt
-  if not(game.check_player_collision(player.x, new_y, player.z)) {
+  if !game.check_player_collision(player.x, new_y, player.z) {
     player.y = new_y
     player.on_ground = false
   } else {

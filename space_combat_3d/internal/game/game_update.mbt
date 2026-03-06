@@ -147,7 +147,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   }
 
   // Boost fuel regeneration (when not boosting)
-  if not(game.player.boosting) && game.player.boost_fuel < @types.max_boost_fuel {
+  if !game.player.boosting && game.player.boost_fuel < @types.max_boost_fuel {
     game.player.boost_fuel += @types.boost_fuel_regen * dt
     if game.player.boost_fuel > @types.max_boost_fuel {
       game.player.boost_fuel = @types.max_boost_fuel
@@ -176,7 +176,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   // Validate target
   if game.target_idx >= 0 {
     if game.target_idx >= game.enemies.length() ||
-      not(game.enemies[game.target_idx].active) {
+      !game.enemies[game.target_idx].active {
       game.target_idx = -1
     }
   }
@@ -211,7 +211,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   } else if obj_type == DefendStation {
     // Check if all enemies eliminated while station survives
     let station_alive = game.check_station_alive(@types.station_friendly)
-    if not(station_alive) {
+    if !station_alive {
       game.state = StateGameOver
       game.message_text = "STATION DESTROYED"
       game.message_timer = 3.0
@@ -821,7 +821,7 @@ fn @types.Game::update_powerups(game : @types.Game, dt : Float) -> Unit {
   let p = game.player
   for i in 0..<game.powerups.length() {
     let pu = game.powerups[i]
-    if not(pu.active) {
+    if !pu.active {
       continue
     }
 
@@ -892,7 +892,7 @@ fn @types.Game::collect_powerup(game : @types.Game, idx : Int) -> Unit {
 ///|
 fn @types.Game::update_stations(game : @types.Game, dt : Float) -> Unit {
   for s in game.stations {
-    if not(s.active) {
+    if !s.active {
       continue
     }
     // Rotate the station
@@ -915,7 +915,7 @@ fn @types.Game::update_stations(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_debris(game : @types.Game, dt : Float) -> Unit {
   for d in game.debris {
-    if not(d.active) {
+    if !d.active {
       continue
     }
     d.life -= dt

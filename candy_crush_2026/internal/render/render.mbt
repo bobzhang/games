@@ -7,7 +7,7 @@ fn draw_button(
   hover : Bool,
   enabled : Bool,
 ) -> Unit {
-  let bg = if not(enabled) {
+  let bg = if !enabled {
     @raylib.Color::new(52, 62, 84, 188)
   } else if hover {
     @raylib.Color::new(92, 160, 242, 226)

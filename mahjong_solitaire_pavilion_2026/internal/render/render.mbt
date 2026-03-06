@@ -66,7 +66,7 @@ fn @types.Game::draw_bg(game : @types.Game) -> Unit {
 /// Draws all active spark particles with kind-dependent colours.
 fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 
@@ -92,7 +92,7 @@ fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
 ///|
 /// Draws golden highlight rectangles around the two hinted tile positions when a hint is active.
 fn @types.Game::draw_hint(game : @types.Game) -> Unit {
-  if not(game.hint_active) {
+  if !game.hint_active {
     return
   }
 
@@ -153,7 +153,7 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
       let px : Int = board_x + (x - 1) * tile
       let py : Int = board_y + (y - 1) * tile
 
-      if not(@types.active_at(game, x, y)) {
+      if !@types.active_at(game, x, y) {
         @raylib.draw_rectangle(
           px,
           py,
@@ -193,7 +193,7 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
           },
         )
 
-        if not(@types.free_tile(game, x, y)) {
+        if !@types.free_tile(game, x, y) {
           @raylib.draw_rectangle(
             px + 5,
             py + 5,

@@ -85,7 +85,7 @@ fn main {
   let mut over = false
   let mut msg = "1-4 play queued track, A ad break (+budget, -listeners), R restart"
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -105,7 +105,7 @@ fn main {
       msg = "Broadcast shift restarted."
     }
 
-    if not(over) {
+    if !over {
       shift_time = shift_time - dt
       if shift_time <= 0.0 {
         shift_time = 0.0

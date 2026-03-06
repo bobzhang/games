@@ -26,7 +26,7 @@ pub fn tunnel_wrap_x(x : Int) -> Int {
 /// Returns whether a tile is walkable for player and ghosts.
 pub fn is_walkable(game : Game, x : Int, y : Int) -> Bool {
   let wrapped_x = tunnel_wrap_x(x)
-  if not(in_map(wrapped_x, y)) {
+  if !in_map(wrapped_x, y) {
     return false
   }
   game.walls[map_index(wrapped_x, y)] == 0

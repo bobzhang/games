@@ -319,7 +319,7 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 fn spawn_enemy(enemies : Array[Enemy], level : Int) -> Bool {
   let mut slot : Int = -1
   for i in 0..<enemies.length() {
-    if not(enemies[i].active) {
+    if !enemies[i].active {
       slot = i
       break
     }
@@ -376,7 +376,7 @@ fn spawn_bullet(
 ) -> Bool {
   let mut slot : Int = -1
   for i in 0..<bullets.length() {
-    if not(bullets[i].active) {
+    if !bullets[i].active {
       slot = i
       break
     }
@@ -401,7 +401,7 @@ fn spawn_bullet(
 fn spawn_core(cores : Array[Core], x : Float, y : Float, value : Int) -> Bool {
   let mut slot : Int = -1
   for i in 0..<cores.length() {
-    if not(cores[i].active) {
+    if !cores[i].active {
       slot = i
       break
     }
@@ -434,7 +434,7 @@ fn burst(
     if left <= 0 {
       break
     }
-    if not(part.active) {
+    if !part.active {
       part.active = true
       part.x = x
       part.y = y
@@ -657,7 +657,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -912,7 +912,7 @@ fn main {
 
       // Replay ghosts.
       for g in 0..<ghost_count {
-        if not(ghosts[g].active) {
+        if !ghosts[g].active {
           continue
         }
 
@@ -1024,7 +1024,7 @@ fn main {
       }
 
       for enemy in enemies {
-        if not(enemy.active) {
+        if !enemy.active {
           continue
         }
 
@@ -1117,7 +1117,7 @@ fn main {
       }
 
       for bullet in bullets {
-        if not(bullet.active) {
+        if !bullet.active {
           continue
         }
 
@@ -1171,7 +1171,7 @@ fn main {
       }
 
       for i in 0..<cores.length() {
-        if not(cores[i].active) {
+        if !cores[i].active {
           continue
         }
 
@@ -1196,7 +1196,7 @@ fn main {
       }
 
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
 
@@ -1417,7 +1417,7 @@ fn main {
     )
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 

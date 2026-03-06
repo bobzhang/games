@@ -162,24 +162,24 @@ fn @types.Game::enemy_shoot_if_ready(
     let player = game.players[target_player]
     if (player.x - enemy.x).abs() < Float::from_int(@types.tile_size) * 0.5 ||
       (player.y - enemy.y).abs() < Float::from_int(@types.tile_size) * 0.5 {
-      if not(@world.sight_blocked(game, enemy.x, enemy.y, player.x, player.y)) {
+      if !@world.sight_blocked(game, enemy.x, enemy.y, player.x, player.y) {
         should_fire = true
       }
     }
   }
 
-  if not(should_fire) {
+  if !should_fire {
     let base_x = @types.tile_center_x(@types.base_tile_x)
     let base_y = @types.tile_center_y(@types.base_tile_y)
     if (base_x - enemy.x).abs() < Float::from_int(@types.tile_size) * 0.5 ||
       (base_y - enemy.y).abs() < Float::from_int(@types.tile_size) * 0.5 {
-      if not(@world.sight_blocked(game, enemy.x, enemy.y, base_x, base_y)) {
+      if !@world.sight_blocked(game, enemy.x, enemy.y, base_x, base_y) {
         should_fire = true
       }
     }
   }
 
-  if not(should_fire) {
+  if !should_fire {
     let chance = match enemy.enemy_kind {
       Fast => 16
       Heavy => 11
@@ -259,7 +259,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
     }
 
     let moved = game.try_move_enemy(i, enemy.dir, dt)
-    if not(moved) {
+    if !moved {
       enemy.ai_stuck_timer += dt
       if enemy.ai_stuck_timer > 0.14 {
         enemy.ai_stuck_timer = 0.0
@@ -283,7 +283,7 @@ fn @types.Game::destroy_enemy(
   enemy_index : Int,
   killer_team : @types.Team,
 ) -> Unit {
-  if not(game.enemies[enemy_index].active) {
+  if !game.enemies[enemy_index].active {
     return
   }
 

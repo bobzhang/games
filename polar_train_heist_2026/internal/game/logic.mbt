@@ -624,7 +624,7 @@ fn @types.Game::apply_hook(game : @types.Game) -> Unit {
   let kill2 = @types.hook_kill_radius * @types.hook_kill_radius
 
   for ent in game.ents {
-    if not(ent.active) {
+    if !ent.active {
       continue
     }
 
@@ -649,7 +649,7 @@ fn @types.Game::apply_hook(game : @types.Game) -> Unit {
   }
 
   for shot in game.shots {
-    if not(shot.active) || shot.from_player {
+    if !shot.active || shot.from_player {
       continue
     }
 
@@ -801,7 +801,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   game.hero.x = @types.clampf(game.hero.x, left_bound, right_bound)
 
   if game.hero.y >= game.hero.ground_y {
-    if not(game.hero.grounded) && game.hero.vy > 140.0 {
+    if !game.hero.grounded && game.hero.vy > 140.0 {
       game.burst(game.hero.x, game.hero.ground_y + 24.0, 10, 2)
     }
 
@@ -933,7 +933,7 @@ fn @types.Game::update_ents(game : @types.Game, dt : Float) -> Unit {
   let dash_hit = game.dash_t > 0.0
 
   for i in 0..<game.ents.length() {
-    if not(game.ents[i].active) {
+    if !game.ents[i].active {
       continue
     }
 
@@ -1011,7 +1011,7 @@ fn @types.Game::update_ents(game : @types.Game, dt : Float) -> Unit {
 /// Advances all active projectiles, expires those out of bounds, and resolves player and enemy hit detection.
 fn @types.Game::update_shots(game : @types.Game, dt : Float) -> Unit {
   for shot in game.shots {
-    if not(shot.active) {
+    if !shot.active {
       continue
     }
 
@@ -1034,7 +1034,7 @@ fn @types.Game::update_shots(game : @types.Game, dt : Float) -> Unit {
       let mut hit = false
 
       for j in 0..<game.ents.length() {
-        if not(game.ents[j].active) || @types.is_pickup(game.ents[j].kind) {
+        if !game.ents[j].active || @types.is_pickup(game.ents[j].kind) {
           continue
         }
 
@@ -1081,7 +1081,7 @@ fn @types.Game::update_shots(game : @types.Game, dt : Float) -> Unit {
 /// Advances all active particles, rings, and shadows, expiring those whose lifetime has elapsed.
 fn @types.Game::update_fx(game : @types.Game, dt : Float) -> Unit {
   for fx in game.fxs {
-    if not(fx.active) {
+    if !fx.active {
       continue
     }
 
@@ -1095,7 +1095,7 @@ fn @types.Game::update_fx(game : @types.Game, dt : Float) -> Unit {
   }
 
   for ring in game.rings {
-    if not(ring.active) {
+    if !ring.active {
       continue
     }
 
@@ -1107,7 +1107,7 @@ fn @types.Game::update_fx(game : @types.Game, dt : Float) -> Unit {
   }
 
   for shadow in game.shadows {
-    if not(shadow.active) {
+    if !shadow.active {
       continue
     }
 

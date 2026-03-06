@@ -214,7 +214,7 @@ fn circle_rect_hit(
 ///|
 fn any_wall_hit(x : Float, y : Float, r : Float, walls : Array[Wall]) -> Bool {
   for wall in walls {
-    if not(wall.active) {
+    if !wall.active {
       continue
     }
     if circle_rect_hit(x, y, r, wall.x, wall.y, wall.w, wall.h) {
@@ -343,7 +343,7 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 ///|
 fn add_anchor(anchors : Array[Anchor], x : Float, y : Float, r : Float) -> Bool {
   for anchor in anchors {
-    if not(anchor.active) {
+    if !anchor.active {
       anchor.active = true
       anchor.x = x
       anchor.y = y
@@ -367,7 +367,7 @@ fn add_enemy(
   wave : Int,
 ) -> Bool {
   for enemy in enemies {
-    if not(enemy.active) {
+    if !enemy.active {
       enemy.active = true
       enemy.kind = kind
       enemy.x = x
@@ -398,7 +398,7 @@ fn add_bullet(
   life : Float,
 ) -> Bool {
   for bullet in bullets {
-    if not(bullet.active) {
+    if !bullet.active {
       bullet.active = true
       bullet.team = team
       bullet.kind = kind
@@ -427,7 +427,7 @@ fn add_orb(
   life : Float,
 ) -> Bool {
   for orb in orbs {
-    if not(orb.active) {
+    if !orb.active {
       orb.active = true
       orb.kind = kind
       orb.x = x
@@ -452,7 +452,7 @@ fn add_wall(
   h : Float,
 ) -> Bool {
   for wall in walls {
-    if not(wall.active) {
+    if !wall.active {
       wall.active = true
       wall.x = x
       wall.y = y
@@ -476,7 +476,7 @@ fn add_particle(
   life : Float,
 ) -> Bool {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       part.active = true
       part.kind = kind
       part.x = x
@@ -921,7 +921,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -998,7 +998,7 @@ fn main {
       }
 
       // wave logic
-      if not(wave_active) {
+      if !wave_active {
         wave_prep_t = wave_prep_t - dt
         if wave_prep_t <= 0.0 {
           wave_active = true
@@ -1190,7 +1190,7 @@ fn main {
         burst(particles, player.x, player.y, 76, 0.33, 3)
 
         for enemy in enemies {
-          if not(enemy.active) {
+          if !enemy.active {
             continue
           }
           let d2 : Float = dist2(player.x, player.y, enemy.x, enemy.y)
@@ -1211,7 +1211,7 @@ fn main {
         }
 
         for anchor in anchors {
-          if not(anchor.active) {
+          if !anchor.active {
             continue
           }
           if dist2(player.x, player.y, anchor.x, anchor.y) <= 220.0 * 220.0 {
@@ -1303,7 +1303,7 @@ fn main {
 
       // anchors capture and fire
       for i in 0..<anchors.length() {
-        if not(anchors[i].active) {
+        if !anchors[i].active {
           continue
         }
 
@@ -1320,7 +1320,7 @@ fn main {
 
         let mut enemy_near : Int = 0
         for enemy in enemies {
-          if not(enemy.active) {
+          if !enemy.active {
             continue
           }
           if dist2(enemy.x, enemy.y, anchors[i].x, anchors[i].y) <=
@@ -1363,7 +1363,7 @@ fn main {
             let mut target_i : Int = -1
             let mut best_d2 : Float = 99999999.0
             for e in 0..<enemies.length() {
-              if not(enemies[e].active) {
+              if !enemies[e].active {
                 continue
               }
               let d2 : Float = dist2(
@@ -1451,7 +1451,7 @@ fn main {
 
       // enemies update
       for enemy in enemies {
-        if not(enemy.active) {
+        if !enemy.active {
           continue
         }
 
@@ -1469,7 +1469,7 @@ fn main {
         let mut nearest_anchor : Int = -1
         let mut best_anchor_d2 : Float = 99999999.0
         for a in 0..<anchors.length() {
-          if not(anchors[a].active) {
+          if !anchors[a].active {
             continue
           }
           if anchors[a].owner == -1 {
@@ -1662,7 +1662,7 @@ fn main {
 
       // orbs
       for orb in orbs {
-        if not(orb.active) {
+        if !orb.active {
           continue
         }
 
@@ -1698,7 +1698,7 @@ fn main {
 
       // bullets
       for bullet in bullets {
-        if not(bullet.active) {
+        if !bullet.active {
           continue
         }
 
@@ -1722,7 +1722,7 @@ fn main {
         // walls
         let mut blocked : Bool = false
         for w in 0..<walls.length() {
-          if not(walls[w].active) {
+          if !walls[w].active {
             continue
           }
           if circle_rect_hit(
@@ -1750,7 +1750,7 @@ fn main {
             if consumed {
               continue
             }
-            if not(enemy.active) {
+            if !enemy.active {
               continue
             }
             let rr : Float = bullet.r + enemy_radius(enemy.kind)
@@ -1764,7 +1764,7 @@ fn main {
 
           if bullet.active {
             for anchor in anchors {
-              if not(anchor.active) || anchor.owner != -1 {
+              if !anchor.active || anchor.owner != -1 {
                 continue
               }
               if dist2(bullet.x, bullet.y, anchor.x, anchor.y) <=
@@ -1788,7 +1788,7 @@ fn main {
           }
 
           for anchor in anchors {
-            if not(anchor.active) || anchor.owner != 1 {
+            if !anchor.active || anchor.owner != 1 {
               continue
             }
             if dist2(bullet.x, bullet.y, anchor.x, anchor.y) <=
@@ -1807,7 +1807,7 @@ fn main {
 
       // particles
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
         particle.life = particle.life - dt
@@ -1893,7 +1893,7 @@ fn main {
 
     // walls
     for wall in walls {
-      if not(wall.active) {
+      if !wall.active {
         continue
       }
       @raylib.draw_rectangle(
@@ -1914,7 +1914,7 @@ fn main {
 
     // anchors
     for anchor in anchors {
-      if not(anchor.active) {
+      if !anchor.active {
         continue
       }
 
@@ -1954,7 +1954,7 @@ fn main {
 
     // orbs
     for orb in orbs {
-      if not(orb.active) {
+      if !orb.active {
         continue
       }
       let col = if orb.kind == 0 {
@@ -1972,7 +1972,7 @@ fn main {
 
     // enemies
     for enemy in enemies {
-      if not(enemy.active) {
+      if !enemy.active {
         continue
       }
       if enemy.kind == 0 {
@@ -2017,7 +2017,7 @@ fn main {
 
     // bullets
     for bullet in bullets {
-      if not(bullet.active) {
+      if !bullet.active {
         continue
       }
       let col = if bullet.team == 1 {
@@ -2067,7 +2067,7 @@ fn main {
 
     // particles
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
       let alpha : Int = (clampf(particle.life / 0.84, 0.0, 1.0) * 255.0).to_int()

@@ -79,7 +79,7 @@ fn @types.Game::burst_sparks(
 /// Advances each active spark position, applies drag, and deactivates expired ones.
 fn @types.Game::update_sparks(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 
@@ -256,7 +256,7 @@ fn @types.Game::knock_pin(
     return
   }
 
-  if not(game.pins[i].standing) {
+  if !game.pins[i].standing {
     return
   }
 
@@ -273,7 +273,7 @@ fn @types.Game::knock_pin(
 ///|
 /// Launches the ball from the current aim and power settings; returns false when throwing is not allowed.
 fn @types.Game::throw_ball(game : @types.Game) -> Bool {
-  if game.state != Play || not(game.can_throw) {
+  if game.state != Play || !game.can_throw {
     return false
   }
 
@@ -410,7 +410,7 @@ fn @types.Game::on_roll_scored(game : @types.Game, knocked : Int) -> Unit {
 ///|
 /// Moves the live ball, applies spin drift and lane drag, and detects lane-edge and slow-stop conditions.
 fn @types.Game::update_ball(game : @types.Game, dt : Float) -> Unit {
-  if not(game.ball_live) {
+  if !game.ball_live {
     return
   }
 
@@ -449,7 +449,7 @@ fn @types.Game::update_ball(game : @types.Game, dt : Float) -> Unit {
 ///|
 /// Tests the live ball against every standing pin and knocks any pin within collision range.
 fn @types.Game::collide_ball_pins(game : @types.Game) -> Unit {
-  if not(game.ball_live) {
+  if !game.ball_live {
     return
   }
 
@@ -457,7 +457,7 @@ fn @types.Game::collide_ball_pins(game : @types.Game) -> Unit {
   let hit_r2 : Float = hit_r * hit_r
 
   for i in 0..<game.pins.length() {
-    if not(game.pins[i].standing) {
+    if !game.pins[i].standing {
       continue
     }
 
@@ -552,7 +552,7 @@ fn @types.Game::chain_pin_hits(game : @types.Game) -> Unit {
     }
 
     for j in 0..<game.pins.length() {
-      if i == j || not(game.pins[j].standing) {
+      if i == j || !game.pins[j].standing {
         continue
       }
 
@@ -613,7 +613,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
     return
   }
 
-  if not(game.pins_are_quiet()) {
+  if !game.pins_are_quiet() {
     return
   }
 

@@ -80,7 +80,7 @@ fn @types.Game::start_run(game : @types.Game) -> Unit {
 fn @types.Game::spawn_threat(game : @types.Game) -> Unit {
   let mut slot = -1
   for i in 0..<game.threats.length() {
-    if not(game.threats[i].active) {
+    if !game.threats[i].active {
       slot = i
       break
     }
@@ -227,7 +227,7 @@ fn @types.Game::clear_threat_at(
   if i < 0 || i >= game.threats.length() {
     return
   }
-  if not(game.threats[i].active) {
+  if !game.threats[i].active {
     return
   }
 
@@ -329,7 +329,7 @@ fn @types.Game::handle_strike(game : @types.Game) -> Unit {
 
   let mut cleared_now = 0
   for i in 0..<game.threats.length() {
-    if not(game.threats[i].active) {
+    if !game.threats[i].active {
       continue
     }
 
@@ -377,7 +377,7 @@ fn @types.Game::handle_guard(game : @types.Game) -> Unit {
   let mut stunned_now = 0
 
   for threat in game.threats {
-    if not(threat.active) {
+    if !threat.active {
       continue
     }
     if threat.kind != @types.threat_incident {
@@ -499,7 +499,7 @@ fn @types.Game::update_spawn(game : @types.Game, dt : Float) -> Unit {
 /// Advances all active threats: decrements stun timers, moves threats leftward, resolves contact and breach events.
 fn @types.Game::update_threats(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.threats.length() {
-    if not(game.threats[i].active) {
+    if !game.threats[i].active {
       continue
     }
 
@@ -582,7 +582,7 @@ fn @types.Game::apply_burst_field(game : @types.Game) -> Unit {
 
   let mut cleared_now = 0
   for i in 0..<game.threats.length() {
-    if not(game.threats[i].active) {
+    if !game.threats[i].active {
       continue
     }
 

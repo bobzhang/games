@@ -76,7 +76,7 @@ fn spawn_drop(
   speed : Float,
 ) -> Unit {
   for drop in drops {
-    if not(drop.alive) {
+    if !drop.alive {
       drop.alive = true
       drop.lane = lane
       drop.x = lane_x(lane)
@@ -122,7 +122,7 @@ fn main {
   let mut over = false
   let mut msg = "A/D move, catch ingredients, Space serves finished order"
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -145,7 +145,7 @@ fn main {
       reset_drops(drops)
     }
 
-    if not(over) {
+    if !over {
       timer = timer - dt
       if timer <= 0.0 {
         timer = 0.0
@@ -197,7 +197,7 @@ fn main {
       }
 
       for drop in drops {
-        if not(drop.alive) {
+        if !drop.alive {
           continue
         }
 

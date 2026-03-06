@@ -165,7 +165,7 @@ pub fn update_play_input(game : @types.Game) -> Unit {
   )
 
   let down_now : Bool = action_key_down || action_touch_down
-  game.action_pressed = down_now && not(game.action_down)
+  game.action_pressed = down_now && !game.action_down
   game.action_down = down_now
 
   let h = @types.btn_hint()

@@ -30,7 +30,7 @@ fn main {
 
   @raylib.set_target_fps(60)
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let theta = angle.val * deg2rad
     let max_branches = @math.powf(
       2.0,

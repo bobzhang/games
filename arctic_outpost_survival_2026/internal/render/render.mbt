@@ -219,7 +219,7 @@ fn enemy_color(kind : @types.EnemyKind) -> @raylib.Color {
 ///|
 /// Draws an enemy using a shape specific to its kind: wolf as a circle with ear triangles, brute as a double ring, and shard as four spinning blade triangles.
 fn draw_enemy(enemy : @types.Enemy, ox : Int, oy : Int) -> Unit {
-  if not(enemy.active) {
+  if !enemy.active {
     return
   }
 
@@ -299,7 +299,7 @@ fn pickup_color(kind : @types.PickupKind) -> @raylib.Color {
 ///|
 /// Draws a pickup as a pulsing filled circle with a white outline ring and a kind-specific inner icon (canister, cross, dot, or inner ring).
 fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
-  if not(p.active) {
+  if !p.active {
     return
   }
 
@@ -357,7 +357,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
 ///|
 /// Draws a bullet as a small circle, using violet for pierce bullets and cyan for normal bullets.
 fn draw_bullet(b : @types.Bullet, ox : Int, oy : Int) -> Unit {
-  if not(b.active) {
+  if !b.active {
     return
   }
 
@@ -383,7 +383,7 @@ fn draw_bullet(b : @types.Bullet, ox : Int, oy : Int) -> Unit {
 /// Draws all active particles as small circles with stepped alpha based on remaining life and colors by kind: violet for overdrive, pink for damage, and light-blue for default.
 fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 

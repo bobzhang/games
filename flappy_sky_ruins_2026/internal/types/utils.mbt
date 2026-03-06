@@ -70,7 +70,7 @@ pub fn pointer_on_rect(
   rw : Int,
   rh : Int,
 ) -> Bool {
-  if not(hold) && touch_count <= 0 {
+  if !hold && touch_count <= 0 {
     return false
   }
 

@@ -19,7 +19,7 @@ fn main {
 
   @raylib.set_target_fps(60)
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let sw = Float::from_int(@raylib.get_screen_width())
     let sh = Float::from_int(@raylib.get_screen_height())
     let rec = @raylib.Rectangle::new(

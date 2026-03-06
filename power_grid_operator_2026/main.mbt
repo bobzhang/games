@@ -87,7 +87,7 @@ fn main {
   let mut over = false
   let mut msg = "Q/A Plant1  W/S Plant2  E/D Plant3  Space battery reserve"
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -107,7 +107,7 @@ fn main {
       msg = "Grid shift restarted."
     }
 
-    if not(over) {
+    if !over {
       if @raylib.is_key_down(@raylib.KeyQ) {
         plant_output[0] = clamp_int(plant_output[0] + 2, 0, 220)
       }

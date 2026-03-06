@@ -13,7 +13,7 @@ fn in_bounds(x : Int, y : Int) -> Bool {
 ///|
 /// Returns the tile type at `(x, y)`, treating out-of-bounds cells as `Wall`.
 fn @types.Game::tile_at(game : @types.Game, x : Int, y : Int) -> @types.Tile {
-  if not(in_bounds(x, y)) {
+  if !in_bounds(x, y) {
     Wall
   } else {
     game.map[idx(x, y)]
@@ -28,7 +28,7 @@ fn @types.Game::set_tile(
   y : Int,
   t : @types.Tile,
 ) -> Unit {
-  if not(in_bounds(x, y)) {
+  if !in_bounds(x, y) {
     return
   }
   game.map[idx(x, y)] = t
@@ -73,7 +73,7 @@ fn actor_start_move(a : @types.Actor, tx : Int, ty : Int) -> Unit {
 ///|
 /// Advances actor interpolation for one frame; updates `fx`/`fy` and snaps to target when `t` reaches 1.
 fn actor_tick(a : @types.Actor, dt : Float, move_t : Float) -> Unit {
-  if not(a.moving) {
+  if !a.moving {
     a.fx = Float::from_int(a.x)
     a.fy = Float::from_int(a.y)
     return
@@ -164,7 +164,7 @@ fn @types.Game::burst(
 /// Advances all active particles: decrements lifetime, applies velocity, and applies per-kind drag and gravity.
 fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 
@@ -205,7 +205,7 @@ fn @types.Game::shelf_index_at(game : @types.Game, x : Int, y : Int) -> Int {
 /// Returns the index of an uncollected page at grid cell `(x, y)`, or -1 if none exists.
 fn @types.Game::page_index_at(game : @types.Game, x : Int, y : Int) -> Int {
   for i in 0..<@types.max_pages {
-    if not(game.page_taken[i]) && game.page_x[i] == x && game.page_y[i] == y {
+    if !game.page_taken[i] && game.page_x[i] == x && game.page_y[i] == y {
       return i
     }
   }
@@ -221,7 +221,7 @@ fn @types.Game::ghost_index_at(
   skip : Int,
 ) -> Int {
   for i in 0..<game.ghosts.length() {
-    if i == skip || not(game.ghosts[i].active) {
+    if i == skip || !game.ghosts[i].active {
       continue
     }
 
@@ -236,7 +236,7 @@ fn @types.Game::ghost_index_at(
 ///|
 /// Returns true if `(x, y)` is out of bounds, a wall tile, or a locked exit tile.
 fn @types.Game::blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
-  if not(in_bounds(x, y)) {
+  if !in_bounds(x, y) {
     return true
   }
 
@@ -245,7 +245,7 @@ fn @types.Game::blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
     return true
   }
 
-  t == Exit && not(game.gate_open)
+  t == Exit && !game.gate_open
 }
 
 ///|
@@ -283,7 +283,7 @@ fn @types.Game::clear_map(game : @types.Game) -> Unit {
   for x = 3; x < @types.grid_w - 2; x = x + 4 {
     for y in 1..<(@types.grid_h - 1) {
       let keep_gap : Bool = y == 2 || y == @types.grid_h - 3 || (x + y) % 5 == 0
-      if not(keep_gap) {
+      if !keep_gap {
         game.set_tile(x, y, Wall)
       }
     }
@@ -292,7 +292,7 @@ fn @types.Game::clear_map(game : @types.Game) -> Unit {
   for y = 3; y < @types.grid_h - 2; y = y + 4 {
     for x in 2..<(@types.grid_w - 2) {
       let keep_gap : Bool = x == 5 || x == 10 || x == 15
-      if not(keep_gap) {
+      if !keep_gap {
         game.set_tile(x, y, Wall)
       }
     }
@@ -384,7 +384,7 @@ fn @types.Game::update_gate(game : @types.Game) -> Unit {
   game.gate_open = game.seals_on == @types.seal_need &&
     game.pages == @types.max_pages
 
-  if game.gate_open && not(old_open) {
+  if game.gate_open && !old_open {
     game.score = game.score + @types.seal_score * @types.seal_need
     game.flash_t = 0.35
     game.shake_t = 0.35
@@ -548,7 +548,7 @@ fn @types.Game::try_move_player(game : @types.Game, dx : Int, dy : Int) -> Bool 
   }
 
   let sidx : Int = game.shelf_index_at(tx, ty)
-  if sidx >= 0 && not(game.push_shelf(sidx, dx, dy)) {
+  if sidx >= 0 && !game.push_shelf(sidx, dx, dy) {
     return false
   }
 
@@ -708,7 +708,7 @@ fn @types.Game::ghost_choose_step(game : @types.Game, gid : Int) -> (Int, Int) {
 /// Ticks all active ghost actors, handles stun countdowns and alert decay, and triggers ghost movement decisions.
 fn @types.Game::update_ghosts(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.ghosts.length() {
-    if not(game.ghosts[i].active) {
+    if !game.ghosts[i].active {
       continue
     }
 
@@ -762,7 +762,7 @@ fn @types.Game::try_stun_pulse(game : @types.Game) -> Bool {
 
   let mut hits : Int = 0
   for ghost in game.ghosts {
-    if not(ghost.active) || ghost.mode == Stunned {
+    if !ghost.active || ghost.mode == Stunned {
       continue
     }
 
@@ -809,7 +809,7 @@ fn @types.Game::handle_player_hit(game : @types.Game) -> Unit {
   }
 
   for i in 0..<game.ghosts.length() {
-    if not(game.ghosts[i].active) || game.ghosts[i].mode == Stunned {
+    if !game.ghosts[i].active || game.ghosts[i].mode == Stunned {
       continue
     }
 
@@ -878,7 +878,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
 
   game.stun_energy = @types.clampf(game.stun_energy + dt * 16.0, 0.0, 100.0)
 
-  if not(game.player.moving) && game.move_cd <= 0.0 {
+  if !game.player.moving && game.move_cd <= 0.0 {
     ignore(game.try_move_player(game.req_dx, game.req_dy))
   }
 
@@ -891,7 +891,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   game.update_gate()
   game.handle_player_hit()
 
-  if not(game.player.moving) &&
+  if !game.player.moving &&
     game.gate_open &&
     game.player.x == @types.exit_x &&
     game.player.y == @types.exit_y {

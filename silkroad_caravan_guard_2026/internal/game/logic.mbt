@@ -234,7 +234,7 @@ fn @types.Game::nearest_raider_index(
   let mut best = -1
   let mut best_d2 = max_dist2
   for i in 0..<game.raiders.length() {
-    if not(game.raiders[i].active) {
+    if !game.raiders[i].active {
       continue
     }
     let d2 = @types.dist2(x, y, game.raiders[i].x, game.raiders[i].y)
@@ -350,7 +350,7 @@ fn @types.Game::kill_raider(
     return
   }
 
-  if not(game.raiders[index].active) {
+  if !game.raiders[index].active {
     return
   }
 
@@ -524,7 +524,7 @@ fn @types.Game::spawn_bullet(
 
 ///|
 fn @types.Game::try_shoot(game : @types.Game) -> Unit {
-  if not(game.input_shoot_hold) {
+  if !game.input_shoot_hold {
     return
   }
 
@@ -585,7 +585,7 @@ fn @types.Game::try_shoot(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::try_repair(game : @types.Game) -> Unit {
-  if not(game.input_repair_press) {
+  if !game.input_repair_press {
     return
   }
 
@@ -733,7 +733,7 @@ fn @types.Game::update_hero(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
   for bullet in game.bullets {
-    if not(bullet.active) {
+    if !bullet.active {
       continue
     }
 
@@ -755,11 +755,11 @@ fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
     }
 
     for j in 0..<game.raiders.length() {
-      if not(bullet.active) {
+      if !bullet.active {
         break
       }
 
-      if not(game.raiders[j].active) {
+      if !game.raiders[j].active {
         continue
       }
 
@@ -791,7 +791,7 @@ fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_raiders(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.raiders.length() {
-    if not(game.raiders[i].active) {
+    if !game.raiders[i].active {
       continue
     }
 
@@ -927,7 +927,7 @@ fn @types.Game::update_raiders(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_dust(game : @types.Game, dt : Float) -> Unit {
   for dust in game.dusts {
-    if not(dust.active) {
+    if !dust.active {
       continue
     }
 

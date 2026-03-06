@@ -304,7 +304,7 @@ fn @types.Game::update_incidents(game : @types.Game, dt : Float) -> Unit {
   let slowdown : Float = if game.focus_t > 0.0 { 0.72 } else { 1.0 }
 
   for incident in game.incidents {
-    if not(incident.active) {
+    if !incident.active {
       continue
     }
 
@@ -356,7 +356,7 @@ fn @types.Game::update_district_pulses(game : @types.Game, dt : Float) -> Unit {
     }
 
     for incident in game.incidents {
-      if not(incident.active) {
+      if !incident.active {
         continue
       }
 
@@ -410,7 +410,7 @@ fn @types.Game::move_cursor(game : @types.Game) -> Unit {
 ///|
 /// Activates focus or shows cooldown message when the focus key is pressed.
 fn @types.Game::handle_focus_input(game : @types.Game) -> Unit {
-  if not(game.input_focus_press) {
+  if !game.input_focus_press {
     return
   }
 
@@ -429,7 +429,7 @@ fn @types.Game::handle_focus_input(game : @types.Game) -> Unit {
 ///|
 /// Marks or clears the marked suspect when K is pressed at a suspect or empty cell.
 fn @types.Game::handle_cancel_or_mark(game : @types.Game) -> Unit {
-  if not(game.input_cancel_press) {
+  if !game.input_cancel_press {
     return
   }
 
@@ -551,7 +551,7 @@ fn @types.Game::inspect_suspect(game : @types.Game, suspect : Int) -> Unit {
 ///|
 /// Dispatches J input: resolve incident, discover clue, inspect suspect, or show no-lead message.
 fn @types.Game::handle_inspect(game : @types.Game) -> Unit {
-  if not(game.input_inspect_press) {
+  if !game.input_inspect_press {
     return
   }
 

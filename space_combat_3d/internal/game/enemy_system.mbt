@@ -9,7 +9,7 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
 
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]
-    if not(e.active) {
+    if !e.active {
       continue
     }
 
@@ -723,7 +723,7 @@ pub fn damage_enemy(game : @types.Game, idx : Int, damage : Float) -> Unit {
 pub fn update_asteroids(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.asteroids.length() {
     let a = game.asteroids[i]
-    if not(a.active) {
+    if !a.active {
       continue
     }
     // Move
@@ -758,7 +758,7 @@ pub fn update_asteroids(game : @types.Game, dt : Float) -> Unit {
     // Check collision with enemies
     for j in 0..<game.enemies.length() {
       let e = game.enemies[j]
-      if not(e.active) {
+      if !e.active {
         continue
       }
       let edist = @types.distance3d(a.x, a.y, a.z, e.x, e.y, e.z)

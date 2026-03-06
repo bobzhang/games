@@ -284,7 +284,7 @@ fn @types.Game::draw_cursor(
 /// Draws all currently active spark particles with colour determined by their kind.
 fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 

@@ -319,7 +319,7 @@ fn @types.Game::refresh_doors(game : @types.Game, dt : Float) -> Unit {
     door.open = door.timer > 0.0
 
     // Prevent doors from sealing while the player is inside the doorway volume.
-    if not(door.open) &&
+    if !door.open &&
       @types.player_hits_rect(game, door.x, door.y, door.w, door.h) {
       door.open = true
     }
@@ -336,7 +336,7 @@ fn @types.Game::collides_closed_door(
   let (px, py, pw, ph) = @types.player_rect_at(game, x, y)
 
   for door in game.doors {
-    if not(door.open) &&
+    if !door.open &&
       @types.rects_overlap(px, py, pw, ph, door.x, door.y, door.w, door.h) {
       return true
     }
@@ -393,7 +393,7 @@ fn @types.Game::move_player(game : @types.Game, dt : Float) -> Unit {
     @types.world_x + half_w,
     @types.world_x + @types.world_w - half_w,
   )
-  if not(game.collides_closed_door(nx, game.player.y)) {
+  if !game.collides_closed_door(nx, game.player.y) {
     game.player.x = nx
   }
 
@@ -402,7 +402,7 @@ fn @types.Game::move_player(game : @types.Game, dt : Float) -> Unit {
     @types.world_y + half_h,
     @types.world_y + @types.world_h - half_h,
   )
-  if not(game.collides_closed_door(game.player.x, ny)) {
+  if !game.collides_closed_door(game.player.x, ny) {
     game.player.y = ny
   }
 }
@@ -411,7 +411,7 @@ fn @types.Game::move_player(game : @types.Game, dt : Float) -> Unit {
 /// Checks each active relic for proximity to the player and, on contact, deactivates it, increments the collected count, grants a stamina bonus, and shows a brief banner.
 fn @types.Game::collect_relics(game : @types.Game) -> Unit {
   for relic in game.relics {
-    if not(relic.active) {
+    if !relic.active {
       continue
     }
 
@@ -434,7 +434,7 @@ fn @types.Game::collect_relics(game : @types.Game) -> Unit {
 ///|
 /// Transitions the game to the Failed state with the given `reason` string and shows a failure banner; does nothing if the game is not currently in the Play state.
 fn @types.Game::fail_stage(game : @types.Game, reason : String) -> Unit {
-  if not(game.state is Play) {
+  if !(game.state is Play) {
     return
   }
 
@@ -474,19 +474,17 @@ fn @types.Game::check_traps(game : @types.Game) -> Bool {
 ///|
 /// Checks whether the player has reached the exit gate; if the exit is locked, shows a reminder banner; if unlocked, transitions to StageClear or Victory depending on whether more stages remain.
 fn @types.Game::reach_exit(game : @types.Game) -> Unit {
-  if not(
-      @types.player_hits_rect(
-        game,
-        game.exit_x,
-        game.exit_y,
-        game.exit_w,
-        game.exit_h,
-      ),
+  if !@types.player_hits_rect(
+      game,
+      game.exit_x,
+      game.exit_y,
+      game.exit_w,
+      game.exit_h,
     ) {
     return
   }
 
-  if not(@types.exit_unlocked(game)) {
+  if !@types.exit_unlocked(game) {
     if game.banner_t <= 0.0 {
       @types.set_banner(game, "Exit sealed: collect every relic", 1.2)
     }

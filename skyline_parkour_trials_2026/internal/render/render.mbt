@@ -266,7 +266,7 @@ fn @types.Game::draw_player(game : @types.Game, cam_x : Float) -> Unit {
   let hero = game.hero
   let sx = hero.x - cam_x
 
-  let body_col = if not(hero.on_ground) && hero.wall_window_t > 0.0 {
+  let body_col = if !hero.on_ground && hero.wall_window_t > 0.0 {
     @types.col_player_wall()
   } else {
     @types.col_player_run()

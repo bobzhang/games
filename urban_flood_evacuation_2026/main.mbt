@@ -263,7 +263,7 @@ fn burst(
 ///|
 fn update_parts(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
 
@@ -390,7 +390,7 @@ fn init_barriers(
 
     let mut near_shelter : Bool = false
     for shelter in shelters {
-      if not(shelter.active) {
+      if !shelter.active {
         continue
       }
       if dist2(x, y, shelter.x, shelter.y) < 120.0 * 120.0 {
@@ -404,7 +404,7 @@ fn init_barriers(
 
     let mut overlap : Bool = false
     for barrier in barriers {
-      if not(barrier.active) {
+      if !barrier.active {
         continue
       }
       let rr : Float = barrier.size + 12.0
@@ -581,7 +581,7 @@ fn update_floods(
   world_b : Float,
 ) -> Unit {
   for flood in floods {
-    if not(flood.active) {
+    if !flood.active {
       continue
     }
 
@@ -625,7 +625,7 @@ fn update_barriers(
   world_b : Float,
 ) -> Unit {
   for barrier in barriers {
-    if not(barrier.active) {
+    if !barrier.active {
       continue
     }
 
@@ -671,7 +671,7 @@ fn update_groups(
   let mut panic_sum : Float = 0.0
 
   for group in groups {
-    if not(group.active) {
+    if !group.active {
       continue
     }
 
@@ -700,7 +700,7 @@ fn update_groups(
     }
 
     for flood in floods {
-      if not(flood.active) {
+      if !flood.active {
         continue
       }
 
@@ -738,7 +738,7 @@ fn rescue_groups(
     let mut groups_hit : Int = 0
 
     for group in groups {
-      if not(group.active) || group.count <= 0 {
+      if !group.active || group.count <= 0 {
         continue
       }
 
@@ -791,7 +791,7 @@ fn nearest_urgent_group(
   let mut bd2 : Float = 999999999.0
 
   for group in groups {
-    if not(group.active) || group.panic < 30.0 {
+    if !group.active || group.panic < 30.0 {
       continue
     }
 
@@ -912,7 +912,7 @@ fn draw_safe_zone(sx : Int, sy : Int, sw : Int, sh : Int) -> Unit {
 ///|
 fn draw_shelters(shelters : Array[Shelter], t : Float) -> Unit {
   for i in 0..<shelters.length() {
-    if not(shelters[i].active) {
+    if !shelters[i].active {
       continue
     }
 
@@ -962,7 +962,7 @@ fn draw_shelters(shelters : Array[Shelter], t : Float) -> Unit {
 ///|
 fn draw_groups(groups : Array[Group], t : Float) -> Unit {
   for group in groups {
-    if not(group.active) {
+    if !group.active {
       continue
     }
 
@@ -1013,7 +1013,7 @@ fn draw_groups(groups : Array[Group], t : Float) -> Unit {
 ///|
 fn draw_floods(floods : Array[FloodCell], t : Float) -> Unit {
   for flood in floods {
-    if not(flood.active) {
+    if !flood.active {
       continue
     }
 
@@ -1043,7 +1043,7 @@ fn draw_floods(floods : Array[FloodCell], t : Float) -> Unit {
 ///|
 fn draw_barriers(barriers : Array[Barrier], t : Float) -> Unit {
   for barrier in barriers {
-    if not(barrier.active) {
+    if !barrier.active {
       continue
     }
 
@@ -1137,7 +1137,7 @@ fn draw_player(player : Player, t : Float) -> Unit {
 ///|
 fn draw_parts(parts : Array[Particle]) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
 
@@ -1555,7 +1555,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -1680,7 +1680,7 @@ fn main {
       let mut flood_drag : Float = 0.0
       let mut fuel_mul : Float = 1.0
       for flood in floods {
-        if not(flood.active) {
+        if !flood.active {
           continue
         }
 
@@ -1808,7 +1808,7 @@ fn main {
       // Barrier collision damage
       let mut collision_dmg : Float = 0.0
       for barrier in barriers {
-        if not(barrier.active) {
+        if !barrier.active {
           continue
         }
 
@@ -1832,7 +1832,7 @@ fn main {
 
       // Shelter queues rise over time, especially during floods
       for shelter in shelters {
-        if not(shelter.active) {
+        if !shelter.active {
           continue
         }
 
@@ -1845,7 +1845,7 @@ fn main {
 
         let mut flood_load : Float = 0.0
         for flood in floods {
-          if not(flood.active) {
+          if !flood.active {
             continue
           }
 

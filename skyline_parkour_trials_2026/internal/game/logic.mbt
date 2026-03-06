@@ -462,7 +462,7 @@ fn @types.Game::update_hero_movement(game : @types.Game, dt : Float) -> Unit {
 
   hero.vx = @types.clampf(hero.vx, -@types.run_max_speed, @types.run_max_speed)
 
-  if not(hero.on_ground) && hero.wall_window_t > 0.0 {
+  if !hero.on_ground && hero.wall_window_t > 0.0 {
     hero.vy = @types.minf(hero.vy, @types.wall_slide_speed)
     if game.input_climb_hold && hero.wall_climb_t > 0.0 {
       hero.vy = @types.maxf(
@@ -487,7 +487,7 @@ fn @types.Game::update_hero_movement(game : @types.Game, dt : Float) -> Unit {
     }
   }
 
-  if not(game.input_jump_hold) && hero.vy < 0.0 {
+  if !game.input_jump_hold && hero.vy < 0.0 {
     hero.vy = hero.vy + @types.jump_cut_gravity * dt
   }
 

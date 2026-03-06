@@ -157,9 +157,7 @@ pub fn handle_block_interaction(game : @types.Game, dt : Float) -> Unit {
       let place_z = target.bz + target.nz
       // Make sure placement position is valid and not occupied
       let existing = @types.get_world_block(game, place_x, place_y, place_z)
-      if not(@types.is_solid(existing)) &&
-        place_y >= 0 &&
-        place_y < @types.chunk_y {
+      if !@types.is_solid(existing) && place_y >= 0 && place_y < @types.chunk_y {
         // Make sure we are not placing inside the player
         let pr = @types.player_radius + 0.1
         let fpx = Float::from_int(place_x) + 0.5
@@ -171,7 +169,7 @@ pub fn handle_block_interaction(game : @types.Game, dt : Float) -> Unit {
         let collides = ddx < pr + 0.5 &&
           ddy < @types.player_height * 0.5 + 0.5 &&
           ddz < pr + 0.5
-        if not(collides) {
+        if !collides {
           // Use item from inventory
           let sel = player.inventory.selected
           let slot = player.inventory.slots[sel]

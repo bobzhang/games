@@ -427,7 +427,7 @@ fn @types.Game::ring_bell(game : @types.Game, bell_i : Int) -> Unit {
   let rr2 = @types.bell_shock_radius * @types.bell_shock_radius
 
   for foe in game.foes {
-    if not(foe.active) {
+    if !foe.active {
       continue
     }
 
@@ -481,7 +481,7 @@ fn @types.Game::ring_bell(game : @types.Game, bell_i : Int) -> Unit {
   }
 
   for bolt in game.bolts {
-    if not(bolt.active) {
+    if !bolt.active {
       continue
     }
 
@@ -803,7 +803,7 @@ fn @types.Game::update_foes(game : @types.Game, dt : Float) -> Unit {
   let dash_hit = game.hero.dash_t > 0.0
 
   for i in 0..<game.foes.length() {
-    if not(game.foes[i].active) {
+    if !game.foes[i].active {
       continue
     }
 
@@ -981,7 +981,7 @@ fn @types.Game::update_foes(game : @types.Game, dt : Float) -> Unit {
 /// Advances all active bolts, removing those that expire or leave bounds, and applies damage on hero collision.
 fn @types.Game::update_bolts(game : @types.Game, dt : Float) -> Unit {
   for bolt in game.bolts {
-    if not(bolt.active) {
+    if !bolt.active {
       continue
     }
 
@@ -1022,7 +1022,7 @@ fn @types.Game::update_bolts(game : @types.Game, dt : Float) -> Unit {
 /// Advances all active spark, ring, and echo effects, expiring those whose lifetimes reach zero.
 fn @types.Game::update_effects(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 
@@ -1040,7 +1040,7 @@ fn @types.Game::update_effects(game : @types.Game, dt : Float) -> Unit {
   }
 
   for ring in game.rings {
-    if not(ring.active) {
+    if !ring.active {
       continue
     }
 
@@ -1053,7 +1053,7 @@ fn @types.Game::update_effects(game : @types.Game, dt : Float) -> Unit {
   }
 
   for echo_item in game.echoes {
-    if not(echo_item.active) {
+    if !echo_item.active {
       continue
     }
 

@@ -8,7 +8,7 @@ fn @types.Game::try_move_player(game : @types.Game, dir : @types.Dir) -> Unit {
   let ny = game.player_gy + dy
   game.player_dir = dir
   // Check bounds
-  if not(@types.in_bounds(nx, ny)) {
+  if !@types.in_bounds(nx, ny) {
     return
   }
   let target_tile = @types.get_tile(game, nx, ny)
@@ -49,7 +49,7 @@ fn @types.Game::try_move_player(game : @types.Game, dir : @types.Dir) -> Unit {
         // Try to push block
         let bx = nx + dx
         let by = ny + dy
-        if not(@types.in_bounds(bx, by)) {
+        if !@types.in_bounds(bx, by) {
           return
         }
         let behind_tile = @types.get_tile(game, bx, by)
@@ -85,7 +85,7 @@ fn @types.Game::try_move_player(game : @types.Game, dir : @types.Dir) -> Unit {
           }
           return // Can't push into another entity (non-chainable)
         }
-        if not(@types.is_pushable_onto(behind_tile)) {
+        if !@types.is_pushable_onto(behind_tile) {
           return
         }
         // Save undo before move
@@ -145,7 +145,7 @@ fn @types.Game::try_move_player(game : @types.Game, dir : @types.Dir) -> Unit {
     }
   } else {
     // Empty tile - just move
-    if not(@types.is_walkable(target_tile)) {
+    if !@types.is_walkable(target_tile) {
       return
     }
     game.save_undo()
@@ -376,7 +376,7 @@ fn @types.Game::handle_ice_sliding(
   while sliding {
     let slide_x = cur_x + dx
     let slide_y = cur_y + dy
-    if not(@types.in_bounds(slide_x, slide_y)) {
+    if !@types.in_bounds(slide_x, slide_y) {
       sliding = false
     } else {
       let slide_tile = @types.get_tile(game, slide_x, slide_y)
@@ -505,7 +505,7 @@ fn @types.Game::update_entity_animations(
   dt : Float,
 ) -> Unit {
   for e in game.entities {
-    if not(e.active) {
+    if !e.active {
       continue
     }
     if e.falling {
@@ -560,7 +560,7 @@ fn @types.Game::check_exit(game : @types.Game) -> Unit {
   let lasers_ok = game.laser_targets_total == 0 ||
     game.laser_targets_hit >= game.laser_targets_total
   let should_open = plates_ok && diamonds_ok && lasers_ok
-  if should_open && not(game.exit_open) {
+  if should_open && !game.exit_open {
     game.exit_open = true
     // Set exit tiles to open
     for gy in 0..<@types.grid_h {
@@ -580,7 +580,7 @@ fn @types.Game::check_exit(game : @types.Game) -> Unit {
         }
       }
     }
-  } else if not(should_open) && game.exit_open {
+  } else if !should_open && game.exit_open {
     game.exit_open = false
     for gy in 0..<@types.grid_h {
       for gx in 0..<@types.grid_w {
@@ -640,7 +640,7 @@ fn @types.Game::complete_floor(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::check_achievements(game : @types.Game) -> Unit {
   // First clear
-  if not(game.achievements[@types.achievement_first_clear].unlocked) {
+  if !game.achievements[@types.achievement_first_clear].unlocked {
     game.achievements[@types.achievement_first_clear].unlocked = true
     game.show_achievement("First Steps - Completed a level!")
   }
@@ -650,22 +650,20 @@ fn @types.Game::check_achievements(game : @types.Game) -> Unit {
   let world_start = world_idx * @types.floors_per_world
   let mut world_done = true
   for i in world_start..<(world_start + @types.floors_per_world) {
-    if i < @types.max_floors && not(game.floor_info[i].completed) {
+    if i < @types.max_floors && !game.floor_info[i].completed {
       world_done = false
     }
   }
   if world_done {
     let ach_id = @types.achievement_world_1 + world_idx
-    if ach_id < @types.max_achievements &&
-      not(game.achievements[ach_id].unlocked) {
+    if ach_id < @types.max_achievements && !game.achievements[ach_id].unlocked {
       game.achievements[ach_id].unlocked = true
       let wname = @types.get_world_name(world)
       game.show_achievement("Completed \{wname}!")
     }
   }
   // No undo achievement
-  if not(game.used_undo) &&
-    not(game.achievements[@types.achievement_no_undo].unlocked) {
+  if !game.used_undo && !game.achievements[@types.achievement_no_undo].unlocked {
     if game.current_floor >= 5 {
       game.achievements[@types.achievement_no_undo].unlocked = true
       game.show_achievement("Purist - No undo used!")

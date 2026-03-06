@@ -255,7 +255,7 @@ fn @types.Game::step_ghost(game : @types.Game, ghost : @types.Ghost) -> Unit {
     }
     let nx = ghost.x + dx
     let ny = ghost.y + dy
-    if not(@types.is_walkable(game, nx, ny)) {
+    if !@types.is_walkable(game, nx, ny) {
       continue
     }
     found = true
@@ -268,7 +268,7 @@ fn @types.Game::step_ghost(game : @types.Game, ghost : @types.Ghost) -> Unit {
     }
   }
 
-  if not(found) {
+  if !found {
     // Dead-end: reverse as fallback.
     best_dx = -ghost.dir_x
     best_dy = -ghost.dir_y
@@ -323,7 +323,7 @@ fn @types.Game::update_phase(game : @types.Game, dt : Float) -> Unit {
   game.phase_timer = game.phase_timer + dt
   if game.phase_timer >= 7.0 {
     game.phase_timer = 0.0
-    game.chase_mode = not(game.chase_mode)
+    game.chase_mode = !game.chase_mode
     for ghost in game.ghosts {
       ghost.dir_x = -ghost.dir_x
       ghost.dir_y = -ghost.dir_y

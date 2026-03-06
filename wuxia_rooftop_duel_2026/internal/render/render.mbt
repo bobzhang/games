@@ -130,7 +130,7 @@ fn draw_enemy(
   ox : Int,
   oy : Int,
 ) -> Unit {
-  if not(enemy.active) {
+  if !enemy.active {
     return
   }
 

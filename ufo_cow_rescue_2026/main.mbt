@@ -219,7 +219,7 @@ fn spawn_particle(
     if done {
       continue
     }
-    if not(part.active) {
+    if !part.active {
       part.active = true
       part.x = x
       part.y = y
@@ -253,7 +253,7 @@ fn burst(
 fn spawn_cow(cows : Array[Cow]) -> Bool {
   let mut slot : Int = -1
   for i in 0..<cows.length() {
-    if slot < 0 && not(cows[i].active) {
+    if slot < 0 && !cows[i].active {
       slot = i
     }
   }
@@ -276,7 +276,7 @@ fn spawn_cow(cows : Array[Cow]) -> Bool {
 fn spawn_farmer(farmers : Array[Farmer], level : Int) -> Bool {
   let mut slot : Int = -1
   for i in 0..<farmers.length() {
-    if slot < 0 && not(farmers[i].active) {
+    if slot < 0 && !farmers[i].active {
       slot = i
     }
   }
@@ -306,7 +306,7 @@ fn spawn_enemy_bullet(
 ) -> Bool {
   let mut slot : Int = -1
   for i in 0..<bullets.length() {
-    if slot < 0 && not(bullets[i].active) {
+    if slot < 0 && !bullets[i].active {
       slot = i
     }
   }
@@ -334,7 +334,7 @@ fn spawn_enemy_bullet(
 fn spawn_pickup(items : Array[Pickup]) -> Bool {
   let mut slot : Int = -1
   for i in 0..<items.length() {
-    if slot < 0 && not(items[i].active) {
+    if slot < 0 && !items[i].active {
       slot = i
     }
   }
@@ -494,7 +494,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -720,7 +720,7 @@ fn main {
       }
 
       for cow in cows {
-        if not(cow.active) {
+        if !cow.active {
           continue
         }
 
@@ -758,7 +758,7 @@ fn main {
             cow.state = 2
           }
 
-          if not(beam_on) {
+          if !beam_on {
             cow.state = 0
             cow.y = ground_y
           }
@@ -766,7 +766,7 @@ fn main {
           cow.x = ufo.x
           cow.y = ufo.y + 42.0
 
-          if not(beam_on) {
+          if !beam_on {
             cow.state = 0
             cow.y = ground_y
             cow.vx = randf(-20.0, 20.0)
@@ -784,7 +784,7 @@ fn main {
       }
 
       for farmer in farmers {
-        if not(farmer.active) {
+        if !farmer.active {
           continue
         }
 
@@ -812,7 +812,7 @@ fn main {
         if beam_on {
           tx = ufo.x
           farmer.panic_t = 0.7
-        } else if not(found_cow) {
+        } else if !found_cow {
           tx = ufo.x
         }
 
@@ -862,7 +862,7 @@ fn main {
       }
 
       for bullet in bullets {
-        if not(bullet.active) {
+        if !bullet.active {
           continue
         }
 
@@ -890,7 +890,7 @@ fn main {
       }
 
       for pickup in pickups {
-        if not(pickup.active) {
+        if !pickup.active {
           continue
         }
         pickup.t = pickup.t + dt
@@ -920,7 +920,7 @@ fn main {
       }
 
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
 
@@ -1021,7 +1021,7 @@ fn main {
     )
 
     for pickup in pickups {
-      if not(pickup.active) {
+      if !pickup.active {
         continue
       }
       let blink : Int = if (pickup.t * 8.0).to_int() % 2 == 0 {
@@ -1046,7 +1046,7 @@ fn main {
     }
 
     for cow in cows {
-      if not(cow.active) {
+      if !cow.active {
         continue
       }
 
@@ -1071,7 +1071,7 @@ fn main {
     }
 
     for farmer in farmers {
-      if not(farmer.active) {
+      if !farmer.active {
         continue
       }
       let mut col = @raylib.Color::new(178, 96, 86, 255)
@@ -1095,7 +1095,7 @@ fn main {
     }
 
     for bullet in bullets {
-      if not(bullet.active) {
+      if !bullet.active {
         continue
       }
       @raylib.draw_circle(
@@ -1107,7 +1107,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
       let k = particle.t / particle.life

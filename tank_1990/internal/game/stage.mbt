@@ -185,7 +185,7 @@ fn @types.Game::respawn_player_tank(game : @types.Game, index : Int) -> Unit {
 /// lives are respawned; players with zero lives are deactivated.
 fn @types.Game::prepare_players_for_stage(game : @types.Game) -> Unit {
   for i in 0..<@types.max_players {
-    if i == 1 && not(game.coop_enabled) {
+    if i == 1 && !game.coop_enabled {
       game.players[i].active = false
       game.players[i].lives = 0
       game.players[i].respawn_timer = 0.0
@@ -246,7 +246,7 @@ fn @types.Game::reset_campaign(game : @types.Game) -> Unit {
     } else {
       @types.Tank::new_player(1, @types.player2_spawn_x, @types.player2_spawn_y)
     }
-    if i == 1 && not(game.coop_enabled) {
+    if i == 1 && !game.coop_enabled {
       game.players[i].active = false
       game.players[i].lives = 0
     }

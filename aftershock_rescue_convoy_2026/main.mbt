@@ -328,7 +328,7 @@ fn burst(
 /// Updates all active particles by advancing their positions and applying physics each frame.
 fn update_parts(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
 
@@ -460,7 +460,7 @@ fn init_obstacles(
 
     let mut near_dist : Bool = false
     for district in districts {
-      if not(district.active) {
+      if !district.active {
         continue
       }
       if dist2(x, y, district.x, district.y) < 120.0 * 120.0 {
@@ -474,7 +474,7 @@ fn init_obstacles(
 
     let mut overlap : Bool = false
     for obstacle in obstacles {
-      if not(obstacle.active) {
+      if !obstacle.active {
         continue
       }
       let rr : Float = obstacle.size + 12.0
@@ -699,7 +699,7 @@ fn update_cracks(
   world_b : Float,
 ) -> Unit {
   for crack in cracks {
-    if not(crack.active) {
+    if !crack.active {
       continue
     }
 
@@ -750,7 +750,7 @@ fn update_dusts(
   world_b : Float,
 ) -> Unit {
   for dust in dusts {
-    if not(dust.active) {
+    if !dust.active {
       continue
     }
 
@@ -782,7 +782,7 @@ fn update_obstacles(
   world_b : Float,
 ) -> Unit {
   for obstacle in obstacles {
-    if not(obstacle.active) {
+    if !obstacle.active {
       continue
     }
 
@@ -830,7 +830,7 @@ fn update_groups(
   let mut panic_sum : Float = 0.0
 
   for group in groups {
-    if not(group.active) {
+    if !group.active {
       continue
     }
 
@@ -859,7 +859,7 @@ fn update_groups(
     }
 
     for crack in cracks {
-      if not(crack.active) {
+      if !crack.active {
         continue
       }
 
@@ -872,7 +872,7 @@ fn update_groups(
     }
 
     for dust in dusts {
-      if not(dust.active) {
+      if !dust.active {
         continue
       }
 
@@ -911,7 +911,7 @@ fn rescue_groups(
     let mut groups_hit : Int = 0
 
     for group in groups {
-      if not(group.active) || group.count <= 0 {
+      if !group.active || group.count <= 0 {
         continue
       }
 
@@ -965,7 +965,7 @@ fn stabilize_cracks(
     let mut reduction : Float = 0.0
 
     for crack in cracks {
-      if not(crack.active) {
+      if !crack.active {
         continue
       }
 
@@ -1016,7 +1016,7 @@ fn nearest_urgent_group(
   let mut bd2 : Float = 999999999.0
 
   for group in groups {
-    if not(group.active) || group.panic < 30.0 {
+    if !group.active || group.panic < 30.0 {
       continue
     }
 
@@ -1047,7 +1047,7 @@ fn nearest_hot_crack(
   let mut bd2 : Float = 999999999.0
 
   for crack in cracks {
-    if not(crack.active) || crack.intensity < 0.8 {
+    if !crack.active || crack.intensity < 0.8 {
       continue
     }
 
@@ -1177,7 +1177,7 @@ fn draw_hospital(hospital : Hospital) -> Unit {
 /// Draws all active districts with status indicators and alarm effects.
 fn draw_districts(districts : Array[District], t : Float) -> Unit {
   for i in 0..<districts.length() {
-    if not(districts[i].active) {
+    if !districts[i].active {
       continue
     }
 
@@ -1237,7 +1237,7 @@ fn draw_districts(districts : Array[District], t : Float) -> Unit {
 /// Draws all active survivor groups with panic-coloured icons and flare effects.
 fn draw_groups(groups : Array[SurvivorGroup], t : Float) -> Unit {
   for group in groups {
-    if not(group.active) {
+    if !group.active {
       continue
     }
 
@@ -1289,7 +1289,7 @@ fn draw_groups(groups : Array[SurvivorGroup], t : Float) -> Unit {
 /// Draws all active crack zones as pulsing hazard circles with spark effects.
 fn draw_cracks(cracks : Array[CrackZone], t : Float) -> Unit {
   for crack in cracks {
-    if not(crack.active) {
+    if !crack.active {
       continue
     }
 
@@ -1331,7 +1331,7 @@ fn draw_cracks(cracks : Array[CrackZone], t : Float) -> Unit {
 /// Draws all active dust clouds as semi-transparent pulsing circles.
 fn draw_dusts(dusts : Array[DustCloud], t : Float) -> Unit {
   for dust in dusts {
-    if not(dust.active) {
+    if !dust.active {
       continue
     }
 
@@ -1362,7 +1362,7 @@ fn draw_dusts(dusts : Array[DustCloud], t : Float) -> Unit {
 /// Draws all active obstacles as wobbling circles coloured by hardness.
 fn draw_obstacles(obstacles : Array[Obstacle], t : Float) -> Unit {
   for obstacle in obstacles {
-    if not(obstacle.active) {
+    if !obstacle.active {
       continue
     }
 
@@ -1477,7 +1477,7 @@ fn draw_player(player : Player, t : Float) -> Unit {
 /// Draws all active particles as coloured circles.
 fn draw_parts(parts : Array[Particle]) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
 
@@ -1923,7 +1923,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -2051,7 +2051,7 @@ fn main {
       let mut battery_mul : Float = 1.0
       let mut dust_damage : Float = 0.0
       for crack in cracks {
-        if not(crack.active) {
+        if !crack.active {
           continue
         }
 
@@ -2067,7 +2067,7 @@ fn main {
       }
 
       for dust in dusts {
-        if not(dust.active) {
+        if !dust.active {
           continue
         }
 
@@ -2192,7 +2192,7 @@ fn main {
         let (fg, gx, gy, gp) = nearest_urgent_group(groups, player.x, player.y)
         let (fc, cx, cy, ci) = nearest_hot_crack(cracks, player.x, player.y)
 
-        if fg && (not(fc) || gp >= 62.0) {
+        if fg && (!fc || gp >= 62.0) {
           player.ping_cd = 2.0
           player.ping_t = 2.0
           player.ping_x = gx
@@ -2224,7 +2224,7 @@ fn main {
       // Obstacle collision damage
       let mut collision_dmg : Float = 0.0
       for obstacle in obstacles {
-        if not(obstacle.active) {
+        if !obstacle.active {
           continue
         }
 
@@ -2248,7 +2248,7 @@ fn main {
 
       // District queues rise over time, especially near cracks/dust
       for district in districts {
-        if not(district.active) {
+        if !district.active {
           continue
         }
 
@@ -2261,7 +2261,7 @@ fn main {
 
         let mut crack_load : Float = 0.0
         for crack in cracks {
-          if not(crack.active) {
+          if !crack.active {
             continue
           }
 
@@ -2274,7 +2274,7 @@ fn main {
         }
 
         for dust in dusts {
-          if not(dust.active) {
+          if !dust.active {
             continue
           }
 

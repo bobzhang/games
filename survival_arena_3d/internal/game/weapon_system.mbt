@@ -330,7 +330,7 @@ fn @types.Game::fire_projectile(
 ///|
 fn @types.Game::update_projectiles(game : @types.Game, dt : Float) -> Unit {
   for proj in game.projectiles {
-    if not(proj.active) {
+    if !proj.active {
       continue
     }
     // Move projectile
@@ -338,7 +338,7 @@ fn @types.Game::update_projectiles(game : @types.Game, dt : Float) -> Unit {
     proj.y += proj.dy * proj.speed * dt
     proj.z += proj.dz * proj.speed * dt
     // Rocket has slight gravity
-    if proj.kind == @types.Rocket.to_int() && not(proj.is_enemy) {
+    if proj.kind == @types.Rocket.to_int() && !proj.is_enemy {
       proj.dy -= 1.5 * dt
     }
     // Lifetime
@@ -362,7 +362,7 @@ fn @types.Game::update_projectiles(game : @types.Game, dt : Float) -> Unit {
       continue
     }
     // Arena wall collision
-    if not(@types.in_arena(proj.x, proj.z)) {
+    if !@types.in_arena(proj.x, proj.z) {
       if proj.splash_radius > 0.0 {
         game.apply_explosion(
           proj.x,
@@ -412,7 +412,7 @@ fn @types.Game::update_projectiles(game : @types.Game, dt : Float) -> Unit {
     if proj.is_enemy {
       let mut hit_barricade = false
       for barr in game.barricades {
-        if not(barr.active) {
+        if !barr.active {
           continue
         }
         let bdist = @types.distance2d(proj.x, proj.z, barr.x, barr.z)
@@ -451,7 +451,7 @@ fn @types.Game::update_projectiles(game : @types.Game, dt : Float) -> Unit {
       let mut hit = false
       for j in 0..<game.enemies.length() {
         let enemy = game.enemies[j]
-        if not(enemy.active) {
+        if !enemy.active {
           continue
         }
         let edist = @types.distance3d(
@@ -521,7 +521,7 @@ fn @types.Game::apply_explosion(
   // Damage all enemies in radius
   for i in 0..<game.enemies.length() {
     let enemy = game.enemies[i]
-    if not(enemy.active) {
+    if !enemy.active {
       continue
     }
     let dist = @types.distance3d(x, y, z, enemy.x, enemy.y, enemy.z)
@@ -559,7 +559,7 @@ fn @types.Game::apply_explosion(
   }
   // Damage barricades
   for barr in game.barricades {
-    if not(barr.active) {
+    if !barr.active {
       continue
     }
     let bdist = @types.distance2d(x, z, barr.x, barr.z)

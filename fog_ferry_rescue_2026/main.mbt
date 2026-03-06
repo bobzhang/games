@@ -282,7 +282,7 @@ fn burst(
 /// Updates all active particles by advancing position, applying kind-specific physics, and expiring finished ones.
 fn update_parts(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
 
@@ -404,7 +404,7 @@ fn init_debris(
 
     let mut near_dock : Bool = false
     for dock in docks {
-      if not(dock.active) {
+      if !dock.active {
         continue
       }
       if dist2(x, y, dock.x, dock.y) < 120.0 * 120.0 {
@@ -418,7 +418,7 @@ fn init_debris(
 
     let mut overlap : Bool = false
     for debris in debris {
-      if not(debris.active) {
+      if !debris.active {
         continue
       }
       let rr : Float = debris.size + 12.0
@@ -602,7 +602,7 @@ fn update_fogs(
   world_b : Float,
 ) -> Unit {
   for fog in fogs {
-    if not(fog.active) {
+    if !fog.active {
       continue
     }
 
@@ -647,7 +647,7 @@ fn update_debris(
   world_b : Float,
 ) -> Unit {
   for debris in debris {
-    if not(debris.active) {
+    if !debris.active {
       continue
     }
 
@@ -694,7 +694,7 @@ fn update_groups(
   let mut panic_sum : Float = 0.0
 
   for group in groups {
-    if not(group.active) {
+    if !group.active {
       continue
     }
 
@@ -723,7 +723,7 @@ fn update_groups(
     }
 
     for fog in fogs {
-      if not(fog.active) {
+      if !fog.active {
         continue
       }
 
@@ -762,7 +762,7 @@ fn rescue_groups(
     let mut group_count : Int = 0
 
     for group in groups {
-      if not(group.active) || group.count <= 0 {
+      if !group.active || group.count <= 0 {
         continue
       }
 
@@ -815,7 +815,7 @@ fn nearest_urgent_group(
   let mut bd2 : Float = 999999999.0
 
   for group in groups {
-    if not(group.active) || group.panic < 30.0 {
+    if !group.active || group.panic < 30.0 {
       continue
     }
 
@@ -915,7 +915,7 @@ fn draw_harbor(hx : Int, hy : Int, hw : Int, hh : Int) -> Unit {
 /// Draws all active docks with queue-scaled beacon glow and ID labels.
 fn draw_docks(docks : Array[Dock], t : Float) -> Unit {
   for i in 0..<docks.length() {
-    if not(docks[i].active) {
+    if !docks[i].active {
       continue
     }
 
@@ -966,7 +966,7 @@ fn draw_docks(docks : Array[Dock], t : Float) -> Unit {
 /// Draws all active survivor groups with panic-colored markers, flare pulses, and status labels.
 fn draw_groups(groups : Array[Group], t : Float) -> Unit {
   for group in groups {
-    if not(group.active) {
+    if !group.active {
       continue
     }
 
@@ -1018,7 +1018,7 @@ fn draw_groups(groups : Array[Group], t : Float) -> Unit {
 /// Draws all active fog cells as translucent pulsing circles with density-scaled opacity.
 fn draw_fogs(fogs : Array[FogCell], t : Float) -> Unit {
   for fog in fogs {
-    if not(fog.active) {
+    if !fog.active {
       continue
     }
 
@@ -1049,7 +1049,7 @@ fn draw_fogs(fogs : Array[FogCell], t : Float) -> Unit {
 /// Draws all active debris pieces as wobbling circles with hardness-based coloring.
 fn draw_debris(debris : Array[Debris], t : Float) -> Unit {
   for debris in debris {
-    if not(debris.active) {
+    if !debris.active {
       continue
     }
 
@@ -1145,7 +1145,7 @@ fn draw_player(player : Player, t : Float) -> Unit {
 /// Draws all active particles with kind-based colors as circles.
 fn draw_parts(parts : Array[Particle]) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
 
@@ -1559,7 +1559,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -1684,7 +1684,7 @@ fn main {
       let mut fog_drag : Float = 0.0
       let mut fog_fuel_mul : Float = 1.0
       for fog in fogs {
-        if not(fog.active) {
+        if !fog.active {
           continue
         }
 
@@ -1816,7 +1816,7 @@ fn main {
       // Debris collision damage
       let mut collision_dmg : Float = 0.0
       for debris in debris {
-        if not(debris.active) {
+        if !debris.active {
           continue
         }
 
@@ -1840,13 +1840,13 @@ fn main {
 
       // Dock queues rise over time, especially during fog
       for dock in docks {
-        if not(dock.active) {
+        if !dock.active {
           continue
         }
 
         let mut fog_load : Float = 0.0
         for fog in fogs {
-          if not(fog.active) {
+          if !fog.active {
             continue
           }
 

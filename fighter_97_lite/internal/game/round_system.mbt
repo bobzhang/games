@@ -193,7 +193,7 @@ fn @types.Game::update_title(game : @types.Game, dt : Float) -> Unit {
   }
 
   if @raylib.is_key_pressed(@raylib.KeyF1) {
-    game.debug_overlay = not(game.debug_overlay)
+    game.debug_overlay = !game.debug_overlay
   }
 }
 
@@ -203,7 +203,7 @@ fn @types.Game::update_select(game : @types.Game, dt : Float) -> Unit {
   game.bg_scroll += dt * 10.0
 
   if @raylib.is_key_pressed(@raylib.KeyT) {
-    game.mode_training = not(game.mode_training)
+    game.mode_training = !game.mode_training
     if game.mode_training {
       game.mode_vs_cpu = true
       game.p2_confirmed = true
@@ -213,7 +213,7 @@ fn @types.Game::update_select(game : @types.Game, dt : Float) -> Unit {
   }
 
   if @raylib.is_key_pressed(@raylib.KeySpace) {
-    game.mode_vs_cpu = not(game.mode_vs_cpu)
+    game.mode_vs_cpu = !game.mode_vs_cpu
     if game.mode_vs_cpu {
       game.p2_confirmed = true
     } else {
@@ -245,7 +245,7 @@ fn @types.Game::update_select(game : @types.Game, dt : Float) -> Unit {
       game.select_cursor_p2 - 1,
       @types.roster_count,
     )
-    if not(game.mode_vs_cpu) {
+    if !game.mode_vs_cpu {
       game.p2_confirmed = false
     }
   }
@@ -254,7 +254,7 @@ fn @types.Game::update_select(game : @types.Game, dt : Float) -> Unit {
       game.select_cursor_p2 + 1,
       @types.roster_count,
     )
-    if not(game.mode_vs_cpu) {
+    if !game.mode_vs_cpu {
       game.p2_confirmed = false
     }
   }
@@ -268,7 +268,7 @@ fn @types.Game::update_select(game : @types.Game, dt : Float) -> Unit {
     game.p1_confirmed = true
   }
 
-  if not(game.mode_vs_cpu) {
+  if !game.mode_vs_cpu {
     if @raylib.is_key_pressed(@raylib.KeyU) ||
       @raylib.is_key_pressed(@raylib.KeyEnter) {
       game.p2_confirmed = true
@@ -277,7 +277,7 @@ fn @types.Game::update_select(game : @types.Game, dt : Float) -> Unit {
 
   if @raylib.is_key_pressed(@raylib.KeyBackspace) {
     game.p1_confirmed = false
-    if not(game.mode_vs_cpu) {
+    if !game.mode_vs_cpu {
       game.p2_confirmed = false
     }
   }
@@ -423,7 +423,7 @@ fn @types.Game::update_fight(game : @types.Game, dt : Float) -> Unit {
   game.update_facing()
 
   let threw = game.update_throws()
-  if not(threw) {
+  if !threw {
     game.update_combat()
   }
   game.recover_fighter_resources(dt)

@@ -152,7 +152,7 @@ fn @types.Game::draw_hint(
   board_y : Int,
   tile : Int,
 ) -> Unit {
-  if not(game.hint_active) {
+  if !game.hint_active {
     return
   }
 
@@ -609,7 +609,7 @@ fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
 /// Draws all active sparks as small circles with color and opacity determined by their kind and remaining lifetime.
 fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 

@@ -78,7 +78,7 @@ fn mob_at(mobs : Array[Mob], x : Int, y : Int) -> Int {
 
 ///|
 fn passable(level : Array[Int], mobs : Array[Mob], x : Int, y : Int) -> Bool {
-  if not(inside(x, y)) {
+  if !inside(x, y) {
     return false
   }
   if level[mindex(x, y)] != 0 {
@@ -174,7 +174,7 @@ fn main {
   let mut victory = false
   let mut defeat = false
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     if @raylib.is_key_pressed(@raylib.KeyR) {
       let fresh = gen_level()
       for i in 0..<level.length() {
@@ -193,7 +193,7 @@ fn main {
       mobs[3] = { alive: true, x: map_w - 8, y: 3, hp: 4 }
     }
 
-    if not(victory) && not(defeat) {
+    if !victory && !defeat {
       let mut dx = 0
       let mut dy = 0
       if @raylib.is_key_pressed(@raylib.KeyUp) ||
@@ -233,7 +233,7 @@ fn main {
 
         // Enemy turn
         for mob in mobs {
-          if not(mob.alive) {
+          if !mob.alive {
             continue
           }
           let dist = (mob.x - hero_x).abs() + (mob.y - hero_y).abs()
@@ -244,7 +244,7 @@ fn main {
           let (sx, sy) = step_toward(mob.x, mob.y, hero_x, hero_y)
           let nx = mob.x + sx
           let ny = mob.y + sy
-          if passable(level, mobs, nx, ny) && not(nx == hero_x && ny == hero_y) {
+          if passable(level, mobs, nx, ny) && !(nx == hero_x && ny == hero_y) {
             mob.x = nx
             mob.y = ny
           } else {
@@ -255,7 +255,7 @@ fn main {
               let wx = mob.x + rx
               let wy = mob.y + ry
               if passable(level, mobs, wx, wy) &&
-                not(wx == hero_x && wy == hero_y) {
+                !(wx == hero_x && wy == hero_y) {
                 mob.x = wx
                 mob.y = wy
                 break

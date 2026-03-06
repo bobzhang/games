@@ -187,7 +187,7 @@ fn pointer_on_rect(
     hit = true
   }
 
-  if not(hit) {
+  if !hit {
     for i in 0..<touch_count {
       let p = @raylib.get_touch_position(i)
       if inside_rect(p.x, p.y, x, y, w, h) {
@@ -215,7 +215,7 @@ fn pointer_on_circle(
     hit = true
   }
 
-  if not(hit) {
+  if !hit {
     for i in 0..<touch_count {
       let p = @raylib.get_touch_position(i)
       if dist2(p.x, p.y, cx, cy) <= r * r {
@@ -352,7 +352,7 @@ fn burst_particles(
 ///|
 fn update_particles(parts : Array[Particle], dt : Float) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
     part.life = part.life - dt
@@ -797,7 +797,7 @@ fn draw_pads(
 ///|
 fn draw_wind_tunnels(winds : Array[WindTunnel], scene_t : Float) -> Unit {
   for wind in winds {
-    if not(wind.active) {
+    if !wind.active {
       continue
     }
 
@@ -839,7 +839,7 @@ fn draw_wind_tunnels(winds : Array[WindTunnel], scene_t : Float) -> Unit {
 ///|
 fn draw_birds(birds : Array[Bird], scene_t : Float) -> Unit {
   for bird in birds {
-    if not(bird.active) {
+    if !bird.active {
       continue
     }
 
@@ -864,7 +864,7 @@ fn draw_birds(birds : Array[Bird], scene_t : Float) -> Unit {
 ///|
 fn draw_crates(crates : Array[Crate], scene_t : Float) -> Unit {
   for crate in crates {
-    if not(crate.active) {
+    if !crate.active {
       continue
     }
 
@@ -911,7 +911,7 @@ fn draw_crates(crates : Array[Crate], scene_t : Float) -> Unit {
 ///|
 fn draw_particles(parts : Array[Particle]) -> Unit {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       continue
     }
     let a : Int = clampf(part.life * 255.0, 0.0, 255.0).to_int()
@@ -985,7 +985,7 @@ fn draw_deliveries_panel(
 
   let mut y : Int = panel_y + 430
   for delivery in deliveries {
-    if not(delivery.active) {
+    if !delivery.active {
       continue
     }
 
@@ -1728,7 +1728,7 @@ fn main {
   reset_run()
   state = 0
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -1929,7 +1929,7 @@ fn main {
 
       let mut wind_drain : Float = 0.0
       for wind in winds {
-        if not(wind.active) {
+        if !wind.active {
           continue
         }
         wind.pulse = wind.pulse + dt * 2.8
@@ -2041,7 +2041,7 @@ fn main {
         ) *
         0.01
       for delivery in deliveries {
-        if not(delivery.active) {
+        if !delivery.active {
           continue
         }
 
@@ -2061,7 +2061,7 @@ fn main {
 
       // Birds update and collision
       for bird in birds {
-        if not(bird.active) {
+        if !bird.active {
           continue
         }
 
@@ -2111,7 +2111,7 @@ fn main {
 
       // Crate update and pickup
       for crate in crates {
-        if not(crate.active) {
+        if !crate.active {
           continue
         }
 
@@ -2176,7 +2176,7 @@ fn main {
           }
         }
 
-        if not(did) {
+        if !did {
           let pad_id : Int = nearest_pad_id(pads, glider.x, glider.y, 92.0)
           if pad_id >= 0 {
             if glider.bags > 0 {
@@ -2200,7 +2200,7 @@ fn main {
                 }
               }
 
-              if not(delivered) {
+              if !delivered {
                 msg = "No request for this pad right now."
                 msg_t = 1.0
               }

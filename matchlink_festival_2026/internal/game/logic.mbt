@@ -191,7 +191,7 @@ fn compose_with_start(
   ay : Int,
   tail : @types.LinkPath,
 ) -> @types.LinkPath {
-  if not(tail.found) {
+  if !tail.found {
     return @types.empty_path()
   }
 
@@ -238,11 +238,11 @@ fn @types.Game::find_link_path(
       continue
     }
 
-    if x != ax && not(game.empty_or_target(x, ay, bx, by)) {
+    if x != ax && !game.empty_or_target(x, ay, bx, by) {
       continue
     }
 
-    if not(game.line_clear(ax, ay, x, ay)) {
+    if !game.line_clear(ax, ay, x, ay) {
       continue
     }
 
@@ -259,11 +259,11 @@ fn @types.Game::find_link_path(
       continue
     }
 
-    if y != ay && not(game.empty_or_target(ax, y, bx, by)) {
+    if y != ay && !game.empty_or_target(ax, y, bx, by) {
       continue
     }
 
-    if not(game.line_clear(ax, ay, ax, y)) {
+    if !game.line_clear(ax, ay, ax, y) {
       continue
     }
 
@@ -284,7 +284,7 @@ fn @types.Game::set_path_flash(
   game : @types.Game,
   path : @types.LinkPath,
 ) -> Unit {
-  if not(path.found) {
+  if !path.found {
     @types.clear_path_flash(game)
     return
   }
@@ -403,7 +403,7 @@ fn @types.Game::reshuffle_board(
     }
   }
 
-  if not(made) {
+  if !made {
     game.message = "No valid shuffle"
     game.message_t = 0.9
     return false
@@ -559,7 +559,7 @@ fn @types.Game::pick_cell(game : @types.Game, x : Int, y : Int) -> Unit {
   game.cursor_x = x
   game.cursor_y = y
 
-  if not(game.select_active) {
+  if !game.select_active {
     game.select_active = true
     game.select_x = x
     game.select_y = y
@@ -613,7 +613,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
   }
 
   let m = game.find_any_move()
-  if not(m.0) {
+  if !m.0 {
     game.message = "No pair available"
     game.message_t = 0.9
     return false
@@ -777,7 +777,7 @@ fn @types.Game::load_level(game : @types.Game, level_id : Int) -> Unit {
     ignore(game.reshuffle_board(false))
   }
 
-  if not(ok) {
+  if !ok {
     game.message = "Generating board..."
     game.message_t = 0.8
   }

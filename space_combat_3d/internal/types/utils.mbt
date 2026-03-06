@@ -452,7 +452,7 @@ pub fn find_nearest_enemy(game : Game, x : Float, y : Float, z : Float) -> Int {
   let mut best_dist : Float = 999999.0
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]
-    if not(e.active) {
+    if !e.active {
       continue
     }
     let dist = distance3d(x, y, z, e.x, e.y, e.z)
@@ -661,7 +661,7 @@ pub fn check_objective_progress(
 ) -> Unit {
   for i in 0..<game.objectives_count {
     let obj = game.objectives[i]
-    if obj.obj_type == obj_type && not(obj.complete) {
+    if obj.obj_type == obj_type && !obj.complete {
       obj.current_count = obj.current_count + increment
       if obj.current_count >= obj.target_count {
         obj.current_count = obj.target_count

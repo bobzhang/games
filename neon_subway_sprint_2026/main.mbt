@@ -221,7 +221,7 @@ fn burst_particle(
     if done {
       continue
     }
-    if not(particle.active) {
+    if !particle.active {
       particle.active = true
       particle.x = x
       particle.y = y
@@ -298,7 +298,7 @@ fn spawn_obstacle(
     if done {
       continue
     }
-    if not(obstacle.active) {
+    if !obstacle.active {
       obstacle.active = true
       obstacle.lane = lane
       obstacle.x = Float::from_int(sw + 140) + wobble
@@ -332,7 +332,7 @@ fn spawn_coin(coins : Array[Coin], level : Int, wave_t : Float) -> Unit {
     if done {
       continue
     }
-    if not(coin.active) {
+    if !coin.active {
       coin.active = true
       coin.lane = lane
       coin.x = Float::from_int(sw + @raylib.get_random_value(40, 220))
@@ -361,7 +361,7 @@ fn spawn_powerup(powerups : Array[Powerup]) -> Unit {
     if done {
       continue
     }
-    if not(powerup.active) {
+    if !powerup.active {
       powerup.active = true
       powerup.lane = lane
       powerup.kind = kind
@@ -508,7 +508,7 @@ fn main {
 
   let mut msg = "W/S lane switch, K jump, J dash."
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -620,7 +620,7 @@ fn main {
       }
     }
 
-    if not(over) && transition_t <= 0.0 {
+    if !over && transition_t <= 0.0 {
       timer = timer - dt
       if timer <= 0.0 {
         timer = 0.0
@@ -731,7 +731,7 @@ fn main {
       }
 
       train_cd = train_cd - dt
-      if train_cd <= 0.0 && not(train.active) {
+      if train_cd <= 0.0 && !train.active {
         spawn_train(train, level)
         let jitter = Float::from_int(@raylib.get_random_value(78, 138)) /
           Float::from_int(100)
@@ -742,7 +742,7 @@ fn main {
       let run_y = runner.y - 28.0
 
       for obstacle in obstacles {
-        if not(obstacle.active) {
+        if !obstacle.active {
           continue
         }
 
@@ -793,7 +793,7 @@ fn main {
       }
 
       for coin in coins {
-        if not(coin.active) {
+        if !coin.active {
           continue
         }
 
@@ -832,7 +832,7 @@ fn main {
       }
 
       for powerup in powerups {
-        if not(powerup.active) {
+        if !powerup.active {
           continue
         }
 
@@ -909,7 +909,7 @@ fn main {
       }
 
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
 
@@ -1083,7 +1083,7 @@ fn main {
     }
 
     for obstacle in obstacles {
-      if not(obstacle.active) {
+      if !obstacle.active {
         continue
       }
 
@@ -1165,7 +1165,7 @@ fn main {
     }
 
     for coin in coins {
-      if not(coin.active) {
+      if !coin.active {
         continue
       }
       let cx = (coin.x + shake_x).to_int()
@@ -1196,7 +1196,7 @@ fn main {
     }
 
     for powerup in powerups {
-      if not(powerup.active) {
+      if !powerup.active {
         continue
       }
       let px = (powerup.x + shake_x).to_int()
@@ -1251,7 +1251,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 

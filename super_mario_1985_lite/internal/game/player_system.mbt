@@ -128,7 +128,7 @@ fn @types.Game::resolve_player_y(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_flag_sequence(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
-  if not(player.reached_flag) {
+  if !player.reached_flag {
     return
   }
 
@@ -233,9 +233,9 @@ fn @types.Game::update_player(
 
   let left = input.move_left
   let right = input.move_right
-  let move_axis = if left && not(right) {
+  let move_axis = if left && !right {
     -1
-  } else if right && not(left) {
+  } else if right && !left {
     1
   } else {
     0
@@ -270,7 +270,7 @@ fn @types.Game::update_player(
     player.jump_buf_t = 0.0
   }
 
-  if not(input.jump_held) && player.vy < 0.0 {
+  if !input.jump_held && player.vy < 0.0 {
     player.vy += @types.gravity * dt * (1.0 - @types.jump_cut_multiplier)
   }
 

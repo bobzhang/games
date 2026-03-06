@@ -145,7 +145,7 @@ fn obstacle_color(kind : @types.ObstacleKind) -> @raylib.Color {
 
 ///|
 fn draw_obstacle(ob : @types.Obstacle, ox : Int, oy : Int) -> Unit {
-  if not(ob.active) {
+  if !ob.active {
     return
   }
 
@@ -248,7 +248,7 @@ fn pickup_radius(kind : @types.PickupKind) -> Float {
 
 ///|
 fn draw_pickup(pk : @types.Pickup, ox : Int, oy : Int) -> Unit {
-  if not(pk.active) {
+  if !pk.active {
     return
   }
 
@@ -306,7 +306,7 @@ fn draw_pickup(pk : @types.Pickup, ox : Int, oy : Int) -> Unit {
 ///|
 fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 

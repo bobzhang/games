@@ -341,7 +341,7 @@ fn add_drone(
   level : Int,
 ) -> Bool {
   for drone in drones {
-    if not(drone.active) {
+    if !drone.active {
       drone.active = true
       drone.kind = kind
       drone.x = x
@@ -378,7 +378,7 @@ fn add_bullet(
   life : Float,
 ) -> Bool {
   for bullet in bullets {
-    if not(bullet.active) {
+    if !bullet.active {
       bullet.active = true
       bullet.team = team
       bullet.kind = kind
@@ -407,7 +407,7 @@ fn add_scrap(
   value : Int,
 ) -> Bool {
   for scrap in scraps {
-    if not(scrap.active) {
+    if !scrap.active {
       scrap.active = true
       scrap.kind = kind
       scrap.x = x
@@ -434,7 +434,7 @@ fn add_mine(
   r : Float,
 ) -> Bool {
   for mine in mines {
-    if not(mine.active) {
+    if !mine.active {
       mine.active = true
       mine.x = x
       mine.y = y
@@ -462,7 +462,7 @@ fn add_particle(
   life : Float,
 ) -> Bool {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       part.active = true
       part.kind = kind
       part.x = x
@@ -948,14 +948,14 @@ fn main {
   }
 
   let pop_mine = fn(m : Mine, team : Int) {
-    if not(m.active) {
+    if !m.active {
       ignore(())
     } else {
       m.active = false
       burst(particles, m.x, m.y, 26, 0.28, 2)
 
       for bullet in bullets {
-        if not(bullet.active) {
+        if !bullet.active {
           continue
         }
         if dist2(bullet.x, bullet.y, m.x, m.y) <=
@@ -965,7 +965,7 @@ fn main {
       }
 
       for drone in drones {
-        if not(drone.active) {
+        if !drone.active {
           continue
         }
         if dist2(drone.x, drone.y, m.x, m.y) <=
@@ -1014,7 +1014,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -1198,7 +1198,7 @@ fn main {
 
       // Wreck collisions
       for wreck in wrecks {
-        if not(wreck.active) {
+        if !wreck.active {
           continue
         }
 
@@ -1242,7 +1242,7 @@ fn main {
 
       if player.tractor_on {
         for scrap in scraps {
-          if not(scrap.active) {
+          if !scrap.active {
             continue
           }
 
@@ -1282,7 +1282,7 @@ fn main {
         }
 
         for drone in drones {
-          if not(drone.active) {
+          if !drone.active {
             continue
           }
           if dist2(player.x, player.y, drone.x, drone.y) <= 340.0 * 340.0 {
@@ -1300,7 +1300,7 @@ fn main {
         }
 
         for mine in mines {
-          if not(mine.active) {
+          if !mine.active {
             continue
           }
           if dist2(player.x, player.y, mine.x, mine.y) <= 280.0 * 280.0 {
@@ -1320,7 +1320,7 @@ fn main {
 
         let mut best_d2 : Float = 999999999.0
         for drone in drones {
-          if not(drone.active) {
+          if !drone.active {
             continue
           }
           let d2 : Float = dist2(player.x, player.y, drone.x, drone.y)
@@ -1516,7 +1516,7 @@ fn main {
         )
       }
 
-      if not(boss_seen) && player.deposited >= 80 {
+      if !boss_seen && player.deposited >= 80 {
         boss_seen = true
         boss.active = true
         boss.x = world_w * 0.5
@@ -1534,7 +1534,7 @@ fn main {
 
       // Update mines.
       for mine in mines {
-        if not(mine.active) {
+        if !mine.active {
           continue
         }
 
@@ -1577,7 +1577,7 @@ fn main {
 
           let mut detonated : Bool = false
           for drone in drones {
-            if not(drone.active) {
+            if !drone.active {
               continue
             }
             if dist2(mine.x, mine.y, drone.x, drone.y) <=
@@ -1603,7 +1603,7 @@ fn main {
 
       // Update drones.
       for drone in drones {
-        if not(drone.active) {
+        if !drone.active {
           continue
         }
 
@@ -1649,7 +1649,7 @@ fn main {
 
         // Simple avoidance from nearest wreck.
         for wreck in wrecks {
-          if not(wreck.active) {
+          if !wreck.active {
             continue
           }
           let rr = drone_radius(drone.kind) + wreck.radius + 20.0
@@ -1859,7 +1859,7 @@ fn main {
 
       // Update bullets and resolve collisions.
       for bullet in bullets {
-        if not(bullet.active) {
+        if !bullet.active {
           continue
         }
 
@@ -1883,7 +1883,7 @@ fn main {
         // Wreck block.
         let mut blocked : Bool = false
         for wreck in wrecks {
-          if not(wreck.active) {
+          if !wreck.active {
             continue
           }
           let rr : Float = bullet.radius + wreck.radius
@@ -1904,7 +1904,7 @@ fn main {
             if hit_done {
               continue
             }
-            if not(drone.active) {
+            if !drone.active {
               continue
             }
 
@@ -1956,7 +1956,7 @@ fn main {
 
           if bullet.active {
             for mine in mines {
-              if not(mine.active) {
+              if !mine.active {
                 continue
               }
               let rr : Float = bullet.radius + mine.radius
@@ -1978,7 +1978,7 @@ fn main {
 
       // Update scrap.
       for scrap in scraps {
-        if not(scrap.active) {
+        if !scrap.active {
           continue
         }
 
@@ -2017,7 +2017,7 @@ fn main {
 
       // Update particles.
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
 
@@ -2049,7 +2049,7 @@ fn main {
       }
 
       if player.deposited >= target_salvage {
-        if not(boss_seen) || boss_defeated {
+        if !boss_seen || boss_defeated {
           state = 2
           msg = "Mission completed"
           msg_t = 2.4
@@ -2144,7 +2144,7 @@ fn main {
 
     // Wrecks.
     for wreck in wrecks {
-      if not(wreck.active) {
+      if !wreck.active {
         continue
       }
       let wx = (wreck.x - cam_x).to_int()
@@ -2171,7 +2171,7 @@ fn main {
 
     // Mines.
     for mine in mines {
-      if not(mine.active) {
+      if !mine.active {
         continue
       }
       let mx = (mine.x - cam_x).to_int()
@@ -2213,7 +2213,7 @@ fn main {
 
     // Scrap.
     for scrap in scraps {
-      if not(scrap.active) {
+      if !scrap.active {
         continue
       }
       let sx = (scrap.x - cam_x).to_int()
@@ -2240,7 +2240,7 @@ fn main {
 
     // Drones.
     for drone in drones {
-      if not(drone.active) {
+      if !drone.active {
         continue
       }
 
@@ -2319,7 +2319,7 @@ fn main {
 
     // Bullets.
     for bullet in bullets {
-      if not(bullet.active) {
+      if !bullet.active {
         continue
       }
       let bx = (bullet.x - cam_x).to_int()
@@ -2374,7 +2374,7 @@ fn main {
         @raylib.Color::new(102, 222, 248, 116),
       )
       for scrap in scraps {
-        if not(scrap.active) || not(scrap.magnet) {
+        if !scrap.active || !scrap.magnet {
           continue
         }
         @raylib.draw_line(
@@ -2398,7 +2398,7 @@ fn main {
 
     // Particles.
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 
@@ -2575,7 +2575,7 @@ fn main {
     @raylib.draw_circle(bmx, bmy, 4.0, @raylib.Color::new(130, 230, 252, 250))
 
     for drone in drones {
-      if not(drone.active) {
+      if !drone.active {
         continue
       }
       let ex : Int = map_x + (drone.x * map_fx).to_int()

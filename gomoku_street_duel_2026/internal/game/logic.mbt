@@ -141,7 +141,7 @@ fn @types.Game::place_stone(
     return false
   }
 
-  if not(@types.in_board(x, y)) {
+  if !@types.in_board(x, y) {
     return false
   }
 
@@ -204,7 +204,7 @@ fn @types.Game::place_stone(
 /// Pops the most recent history entry, removes that stone from the board, decrements the move count, and emits undo sparks; returns false if history is empty.
 fn @types.Game::undo_round_step(game : @types.Game) -> Bool {
   let pop = game.pop_history()
-  if not(pop.0) {
+  if !pop.0 {
     return false
   }
 
@@ -235,13 +235,13 @@ fn @types.Game::undo_last_turn(game : @types.Game) -> Bool {
 
   if game.turn == AI {
     // Human just moved, rollback one move.
-    if not(game.undo_round_step()) {
+    if !game.undo_round_step() {
       return false
     }
     game.turn = Human
   } else {
     // AI just moved, rollback AI + previous human when possible.
-    if not(game.undo_round_step()) {
+    if !game.undo_round_step() {
       return false
     }
     ignore(game.undo_round_step())
@@ -330,7 +330,7 @@ fn @types.Game::update_cursor_hold(
 /// Advances each active spark's position and velocity with drag, then deactivates sparks whose lifetime has expired.
 fn @types.Game::update_sparks(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 

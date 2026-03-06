@@ -4,7 +4,7 @@
 /// Updates player aircraft controls, physics, fuel consumption, and weapon firing.
 pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
-  if not(player.alive) {
+  if !player.alive {
     return
   }
   // Throttle
@@ -48,8 +48,7 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   let max_roll : Float = @types.pi * 0.8
   player.roll = @types.clampf(player.roll, -max_roll, max_roll)
   // Roll auto-center when no input
-  if not(@raylib.is_key_down(@raylib.KeyQ)) &&
-    not(@raylib.is_key_down(@raylib.KeyE)) {
+  if !@raylib.is_key_down(@raylib.KeyQ) && !@raylib.is_key_down(@raylib.KeyE) {
     if player.roll > 0.01 {
       player.roll -= 0.8 * dt
       if player.roll < 0.0 {
@@ -173,7 +172,7 @@ fn @types.Game::crash_player(game : @types.Game) -> Unit {
 /// Applies `amount` damage to the player, triggering damage flash or destruction if HP reaches zero.
 pub fn damage_player(game : @types.Game, amount : Float) -> Unit {
   let player = game.player
-  if not(player.alive) {
+  if !player.alive {
     return
   }
   if player.damage_flash > 0.0 {
@@ -193,7 +192,7 @@ pub fn damage_player(game : @types.Game, amount : Float) -> Unit {
 ///|
 fn @types.Game::check_landing(game : @types.Game, dt : Float) -> Unit {
   let mission = game.missions[game.current_mission]
-  if not(mission.has_landing) {
+  if !mission.has_landing {
     return
   }
   let player = game.player
@@ -205,7 +204,7 @@ fn @types.Game::check_landing(game : @types.Game, dt : Float) -> Unit {
   let altitude_above_ground = player.y - ground
   // Check if near landing zone
   if dist_h < 15.0 && altitude_above_ground < 3.0 {
-    if not(game.landing_approach) {
+    if !game.landing_approach {
       game.landing_approach = true
       @types.show_message(game, "Landing approach - slow down!", 2.0)
     }

@@ -32,7 +32,7 @@ fn main {
   @raylib.set_target_fps(60)
 
   // Main game loop
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     // Update
     // Handle button interactions
     if btn_cut_pressed {
@@ -95,7 +95,7 @@ fn main {
         256,
         text_box_edit_mode,
       ) {
-      text_box_edit_mode = not(text_box_edit_mode)
+      text_box_edit_mode = !text_box_edit_mode
     }
 
     // Random text button

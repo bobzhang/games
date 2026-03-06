@@ -298,7 +298,7 @@ fn @types.Game::draw_ramps(game : @types.Game) -> Unit {
 fn @types.Game::draw_crates(game : @types.Game) -> Unit {
   for i in 0..<game.crates.length() {
     let crate = game.crates[i]
-    if not(crate.active) {
+    if !crate.active {
       continue
     }
     let cs = @types.crate_size
@@ -348,7 +348,7 @@ fn @types.Game::draw_crates(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_barricades(game : @types.Game) -> Unit {
   for b in game.barricades {
-    if not(b.active) {
+    if !b.active {
       continue
     }
     let bs = @types.barricade_size
@@ -420,7 +420,7 @@ fn @types.Game::draw_barricades(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_traps(game : @types.Game) -> Unit {
   for trap in game.traps {
-    if not(trap.active) {
+    if !trap.active {
       continue
     }
     let trap_active = trap.active_timer > 0.0
@@ -527,7 +527,7 @@ fn @types.Game::draw_traps(game : @types.Game) -> Unit {
 fn @types.Game::draw_pickups_3d(game : @types.Game) -> Unit {
   for i in 0..<game.pickups.length() {
     let pickup = game.pickups[i]
-    if not(pickup.active) {
+    if !pickup.active {
       continue
     }
     let rot_angle = Float::from_int(game.frame_counter) * 0.03 +
@@ -614,7 +614,7 @@ fn @types.Game::draw_pickups_3d(game : @types.Game) -> Unit {
     // Life indicator (fading when about to expire)
     if pickup.life < 5.0 {
       let blink = @math.sinf(Float::from_int(game.frame_counter) * 0.2) > 0.0
-      if not(blink) {
+      if !blink {
         continue
       }
     }
@@ -625,7 +625,7 @@ fn @types.Game::draw_pickups_3d(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
   for enemy in game.enemies {
-    if not(enemy.active) {
+    if !enemy.active {
       continue
     }
     let color = enemy_color(enemy.kind, enemy.flash_timer > 0.0)
@@ -1261,7 +1261,7 @@ fn enemy_color(kind : @types.EnemyKind, is_flashing : Bool) -> @raylib.Color {
 ///|
 fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
   for proj in game.projectiles {
-    if not(proj.active) {
+    if !proj.active {
       continue
     }
     if proj.is_enemy {
@@ -1366,7 +1366,7 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     let alpha = (p.life / p.max_life * 255.0).to_int()

@@ -221,7 +221,7 @@ fn @types.Game::draw_junctions(game : @types.Game, ox : Int, oy : Int) -> Unit {
 ///|
 fn @types.Game::draw_trains(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for train in game.trains {
-    if not(train.active) {
+    if !train.active {
       continue
     }
 
@@ -262,7 +262,7 @@ fn @types.Game::draw_trains(game : @types.Game, ox : Int, oy : Int) -> Unit {
 ///|
 fn @types.Game::draw_inspectors(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for inspector in game.inspectors {
-    if not(inspector.active) {
+    if !inspector.active {
       continue
     }
 
@@ -329,7 +329,7 @@ fn @types.Game::draw_player(game : @types.Game, ox : Int, oy : Int) -> Unit {
 ///|
 fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 

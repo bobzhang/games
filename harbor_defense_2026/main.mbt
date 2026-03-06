@@ -244,7 +244,7 @@ fn clear_particles(parts : Array[Particle]) -> Unit {
 fn spawn_enemy(enemies : Array[EnemyShip], wave : Int) -> Bool {
   let mut slot : Int = -1
   for i in 0..<enemies.length() {
-    if not(enemies[i].active) {
+    if !enemies[i].active {
       slot = i
       break
     }
@@ -284,7 +284,7 @@ fn spawn_enemy(enemies : Array[EnemyShip], wave : Int) -> Bool {
 fn spawn_boat(boats : Array[CivilianBoat]) -> Bool {
   let mut slot : Int = -1
   for i in 0..<boats.length() {
-    if not(boats[i].active) {
+    if !boats[i].active {
       slot = i
       break
     }
@@ -324,7 +324,7 @@ fn spawn_projectile(
 ) -> Bool {
   let mut slot : Int = -1
   for i in 0..<projectiles.length() {
-    if not(projectiles[i].active) {
+    if !projectiles[i].active {
       slot = i
       break
     }
@@ -351,7 +351,7 @@ fn spawn_projectile(
 fn spawn_pickup(pickups : Array[Pickup], x : Float, y : Float) -> Bool {
   let mut slot : Int = -1
   for i in 0..<pickups.length() {
-    if not(pickups[i].active) {
+    if !pickups[i].active {
       slot = i
       break
     }
@@ -385,7 +385,7 @@ fn burst(
     if left <= 0 {
       break
     }
-    if not(part.active) {
+    if !part.active {
       part.active = true
       part.x = x
       part.y = y
@@ -403,7 +403,7 @@ fn burst(
 ///|
 /// Draws an active enemy ship using layered rectangles sized by kind; silently no-ops if the ship is inactive.
 fn draw_enemy(e : EnemyShip) -> Unit {
-  if not(e.active) {
+  if !e.active {
     ignore(())
   } else {
     let body_col = if e.kind == 0 {
@@ -472,7 +472,7 @@ fn draw_enemy(e : EnemyShip) -> Unit {
 ///|
 /// Draws an active civilian boat with a panic colour tint when recently struck; silently no-ops if the boat is inactive.
 fn draw_boat(boat : CivilianBoat) -> Unit {
-  if not(boat.active) {
+  if !boat.active {
     ignore(())
   } else {
     let panic_tint : Int = if boat.panic_t > 0.0 { 72 } else { 0 }
@@ -685,7 +685,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -801,7 +801,7 @@ fn main {
       cannon.x = cannon.x + cannon.vx * dt
       cannon.x = clampf(cannon.x, 56.0, world_w - 56.0)
 
-      if fire_down && cannon.fire_cd <= 0.0 && not(cannon.overheated) {
+      if fire_down && cannon.fire_cd <= 0.0 && !cannon.overheated {
         let spread : Float = Float::from_int(@raylib.get_random_value(-7, 7)) /
           100.0
         let mut speed : Float = -560.0
@@ -896,7 +896,7 @@ fn main {
       }
 
       for enemy in enemies {
-        if not(enemy.active) {
+        if !enemy.active {
           continue
         }
 
@@ -951,7 +951,7 @@ fn main {
       }
 
       for i in 0..<boats.length() {
-        if not(boats[i].active) {
+        if !boats[i].active {
           continue
         }
 
@@ -992,7 +992,7 @@ fn main {
       }
 
       for projectile in projectiles {
-        if not(projectile.active) {
+        if !projectile.active {
           continue
         }
 
@@ -1092,7 +1092,7 @@ fn main {
       }
 
       for pickup in pickups {
-        if not(pickup.active) {
+        if !pickup.active {
           continue
         }
 
@@ -1139,7 +1139,7 @@ fn main {
       }
 
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
 
@@ -1265,7 +1265,7 @@ fn main {
     }
 
     for projectile in projectiles {
-      if not(projectile.active) {
+      if !projectile.active {
         continue
       }
 
@@ -1288,7 +1288,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 

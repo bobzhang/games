@@ -140,7 +140,7 @@ fn spawn_spark(
     if placed {
       continue
     }
-    if not(spark.active) {
+    if !spark.active {
       spark.active = true
       spark.x = x
       spark.y = y
@@ -287,7 +287,7 @@ fn main {
   let mut won = false
   let mut msg = "WASD move, arrows aim, Space/J strike. First to sector goals."
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -362,14 +362,14 @@ fn main {
     zone_t = zone_t + dt
     if zone_t >= 5.2 {
       zone_t = 0.0
-      zone_left = not(zone_left)
+      zone_left = !zone_left
     }
     zone_phase = zone_phase + dt * 0.9
     if zone_phase > 1.0 {
       zone_phase = zone_phase - 1.0
     }
 
-    if not(over) {
+    if !over {
       px_prev = px
       py_prev = py
       aix_prev = aix
@@ -686,7 +686,7 @@ fn main {
     }
 
     for spark in sparks {
-      if not(spark.active) {
+      if !spark.active {
         continue
       }
       spark.x = spark.x + spark.vx * dt
@@ -836,7 +836,7 @@ fn main {
     )
 
     for spark in sparks {
-      if not(spark.active) {
+      if !spark.active {
         continue
       }
       let a = (spark.ttl * 255.0).to_int()

@@ -489,7 +489,7 @@ fn @types.Game::apply_damage(game : @types.Game, dmg : Float) -> Unit {
 
 ///|
 fn @types.Game::kill_enemy(game : @types.Game, i : Int) -> Unit {
-  if not(game.enemies[i].active) {
+  if !game.enemies[i].active {
     return
   }
 
@@ -551,16 +551,14 @@ fn @types.Game::try_beam(game : @types.Game) -> Unit {
   game.spawn_shock(ring, a0, a1, 0.34, game.phase_beta)
 
   for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
+    if !game.enemies[i].active {
       continue
     }
     if game.enemies[i].ring != ring {
       continue
     }
 
-    if not(
-        @types.phase_mask_active(game.enemies[i].phase_mask, game.phase_beta),
-      ) {
+    if !@types.phase_mask_active(game.enemies[i].phase_mask, game.phase_beta) {
       continue
     }
 
@@ -831,7 +829,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
   for b in game.bullets {
-    if not(b.active) {
+    if !b.active {
       continue
     }
 
@@ -851,13 +849,11 @@ fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
     }
 
     for j in 0..<game.enemies.length() {
-      if not(game.enemies[j].active) {
+      if !game.enemies[j].active {
         continue
       }
 
-      if not(
-          @types.phase_mask_active(game.enemies[j].phase_mask, game.phase_beta),
-        ) {
+      if !@types.phase_mask_active(game.enemies[j].phase_mask, game.phase_beta) {
         continue
       }
 
@@ -891,7 +887,7 @@ fn @types.Game::update_enemy_bullets(game : @types.Game, dt : Float) -> Unit {
   let player_xy = @types.player_world_xy(game.player)
 
   for b in game.enemy_bullets {
-    if not(b.active) {
+    if !b.active {
       continue
     }
 
@@ -920,7 +916,7 @@ fn @types.Game::update_enemy_bullets(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_flares(game : @types.Game, dt : Float) -> Unit {
   for f0 in game.flares {
-    if not(f0.active) {
+    if !f0.active {
       continue
     }
 
@@ -953,7 +949,7 @@ fn @types.Game::update_flares(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
 
@@ -970,7 +966,7 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   }
 
   for shock in game.shocks {
-    if not(shock.active) {
+    if !shock.active {
       continue
     }
 
@@ -1120,7 +1116,7 @@ fn @types.Game::update_title(game : @types.Game, dt : Float) -> Unit {
   }
 
   for enemy in game.enemies {
-    if not(enemy.active) {
+    if !enemy.active {
       continue
     }
 

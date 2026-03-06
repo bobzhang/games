@@ -1,8 +1,8 @@
 ///|
 fn axis(negative : Bool, positive : Bool) -> Float {
-  if negative && not(positive) {
+  if negative && !positive {
     -1.0
-  } else if positive && not(negative) {
+  } else if positive && !negative {
     1.0
   } else {
     0.0

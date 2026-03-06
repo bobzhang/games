@@ -109,7 +109,7 @@ fn @types.Game::burst(
 /// Advances all active particles by dt, applying drag and gravity, and deactivates expired ones.
 fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
     particle.life = particle.life - dt
@@ -395,7 +395,7 @@ fn @types.Game::try_repair(game : @types.Game) -> Bool {
     Float::from_int(@types.depot_w() + 40),
     Float::from_int(@types.depot_h() + 40),
   )
-  if not(near_depot) {
+  if !near_depot {
     game.set_msg("Return to depot for repairs.", 1.0)
     game.action_cd = 0.22
     return false
@@ -538,7 +538,7 @@ fn @types.Game::update_rider(game : @types.Game, dt : Float) -> Unit {
 /// Advances all active traffic vehicles by dt with sway motion, removes out-of-bounds vehicles, and applies collision damage to the rider.
 fn @types.Game::update_traffic(game : @types.Game, dt : Float) -> Unit {
   for traffic_elem in game.traffic {
-    if not(traffic_elem.active) {
+    if !traffic_elem.active {
       continue
     }
     let kind_f : Float = match traffic_elem.kind {
@@ -586,7 +586,7 @@ fn @types.Game::update_traffic(game : @types.Game, dt : Float) -> Unit {
 /// Advances all active pickups by dt with sinusoidal drift, bounces them off world edges, and collects any within range of the rider.
 fn @types.Game::update_pickups(game : @types.Game, dt : Float) -> Unit {
   for pickup in game.pickups {
-    if not(pickup.active) {
+    if !pickup.active {
       continue
     }
     pickup.phase = pickup.phase + dt * 2.4
@@ -663,7 +663,7 @@ fn order_time_bonus(timer_left : Float) -> Int {
 /// Ticks order timers, expires late orders, handles pickup and drop-off interactions, and updates score and combo.
 fn @types.Game::update_orders(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.orders.length() {
-    if not(game.orders[i].active) {
+    if !game.orders[i].active {
       continue
     }
     game.orders[i].timer = game.orders[i].timer - dt
@@ -681,7 +681,7 @@ fn @types.Game::update_orders(game : @types.Game, dt : Float) -> Unit {
       }
       continue
     }
-    if not(game.orders[i].picked) {
+    if !game.orders[i].picked {
       if game.cargo_idx < 0 && game.action_on && game.near_order_pick(i) {
         game.orders[i].picked = true
         game.cargo_idx = i
@@ -725,7 +725,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
     let mut best_d2 : Float = 1000000000.0
     if game.fuel < 40.0 {
       for i in 0..<game.pickups.length() {
-        if not(game.pickups[i].active) || game.pickups[i].kind != Fuel {
+        if !game.pickups[i].active || game.pickups[i].kind != Fuel {
           continue
         }
         let d2 : Float = @types.dist2(
@@ -744,7 +744,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
     }
     if best_d2 >= 900000000.0 {
       for order in game.orders {
-        if not(order.active) || order.picked {
+        if !order.active || order.picked {
           continue
         }
         let d2 : Float = @types.dist2(

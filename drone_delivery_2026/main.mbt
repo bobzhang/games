@@ -20,7 +20,7 @@ struct Orb {
 /// Activates an inactive orb slot at the given position with a random velocity.
 fn spawn_orb(orbs : Array[Orb], cx : Float, cy : Float) -> Unit {
   for orb in orbs {
-    if not(orb.alive) {
+    if !orb.alive {
       orb.alive = true
       orb.x = cx
       orb.y = cy
@@ -93,7 +93,7 @@ fn main {
 
   let mut orb_spawn_tick : Float = 0.0
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -121,7 +121,7 @@ fn main {
       orb_spawn_tick = 0.0
     }
 
-    if not(over) {
+    if !over {
       timer = timer - dt
       if timer <= 0.0 {
         timer = 0.0
@@ -195,7 +195,7 @@ fn main {
       }
 
       for orb in orbs {
-        if not(orb.alive) {
+        if !orb.alive {
           continue
         }
 
@@ -219,7 +219,7 @@ fn main {
         }
       }
 
-      if not(has_package) {
+      if !has_package {
         if dist_sq(drone_x, drone_y, pick_x, pick_y) < 28.0 * 28.0 {
           has_package = true
           timer = timer + 7.0
@@ -277,7 +277,7 @@ fn main {
       }
     }
 
-    if not(has_package) {
+    if !has_package {
       @raylib.draw_circle(pick_x.to_int(), pick_y.to_int(), 16.0, @raylib.lime)
       @raylib.draw_text(
         "P",

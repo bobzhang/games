@@ -68,7 +68,7 @@ fn @types.Game::burst(
 /// Advances all active sparks by `dt` seconds, applying drag and gravity, deactivating expired ones.
 fn @types.Game::update_sparks(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 
@@ -109,7 +109,7 @@ fn @types.Game::adjacent_mines(game : @types.Game, x : Int, y : Int) -> Int {
       }
       let nx : Int = x + ox
       let ny : Int = y + oy
-      if not(@types.in_board(nx, ny)) {
+      if !@types.in_board(nx, ny) {
         continue
       }
       if game.cells[@types.idx(nx, ny)].mine {
@@ -261,7 +261,7 @@ fn @types.Game::cell_world_center(
 ///|
 /// Reveals a single cell at (`x`, `y`): awards score or deducts a life on mine hit, emits particles, and may trigger game over.
 fn @types.Game::reveal_single(game : @types.Game, x : Int, y : Int) -> Bool {
-  if not(@types.in_board(x, y)) {
+  if !@types.in_board(x, y) {
     return false
   }
 
@@ -328,7 +328,7 @@ fn @types.Game::flood_reveal(game : @types.Game, sx : Int, sy : Int) -> Unit {
     let y : Int = game.queue_y[qh]
     qh = qh + 1
 
-    if not(@types.in_board(x, y)) {
+    if !@types.in_board(x, y) {
       continue
     }
 
@@ -337,7 +337,7 @@ fn @types.Game::flood_reveal(game : @types.Game, sx : Int, sy : Int) -> Unit {
       continue
     }
 
-    if not(game.reveal_single(x, y)) {
+    if !game.reveal_single(x, y) {
       continue
     }
 
@@ -357,7 +357,7 @@ fn @types.Game::flood_reveal(game : @types.Game, sx : Int, sy : Int) -> Unit {
 
         let nx : Int = x + ox
         let ny : Int = y + oy
-        if not(@types.in_board(nx, ny)) {
+        if !@types.in_board(nx, ny) {
           continue
         }
 
@@ -405,7 +405,7 @@ fn @types.Game::reveal_cell(game : @types.Game, x : Int, y : Int) -> Bool {
     return false
   }
 
-  if not(@types.in_board(x, y)) {
+  if !@types.in_board(x, y) {
     return false
   }
 
@@ -424,7 +424,7 @@ fn @types.Game::reveal_cell(game : @types.Game, x : Int, y : Int) -> Bool {
     return false
   }
 
-  if game.cells[i0].around == 0 && not(game.cells[i0].mine) {
+  if game.cells[i0].around == 0 && !game.cells[i0].mine {
     game.flood_reveal(x, y)
   } else {
     ignore(game.reveal_single(x, y))
@@ -443,7 +443,7 @@ fn @types.Game::toggle_flag(game : @types.Game, x : Int, y : Int) -> Bool {
   if game.state != Play {
     return false
   }
-  if not(@types.in_board(x, y)) {
+  if !@types.in_board(x, y) {
     return false
   }
 
@@ -484,9 +484,7 @@ fn @types.Game::safe_hint_target(game : @types.Game) -> (Bool, Int, Int) {
     let y : Int = @raylib.get_random_value(0, @types.board_h - 1)
     let i : Int = @types.idx(x, y)
 
-    if not(game.cells[i].mine) &&
-      not(game.cells[i].revealed) &&
-      not(game.cells[i].flagged) {
+    if !game.cells[i].mine && !game.cells[i].revealed && !game.cells[i].flagged {
       return (true, x, y)
     }
 
@@ -496,9 +494,9 @@ fn @types.Game::safe_hint_target(game : @types.Game) -> (Bool, Int, Int) {
   for y in 0..<@types.board_h {
     for x in 0..<@types.board_w {
       let i : Int = @types.idx(x, y)
-      if not(game.cells[i].mine) &&
-        not(game.cells[i].revealed) &&
-        not(game.cells[i].flagged) {
+      if !game.cells[i].mine &&
+        !game.cells[i].revealed &&
+        !game.cells[i].flagged {
         return (true, x, y)
       }
     }
@@ -525,7 +523,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
   }
 
   let pick = game.safe_hint_target()
-  if not(pick.0) {
+  if !pick.0 {
     return false
   }
 

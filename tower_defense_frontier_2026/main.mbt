@@ -79,7 +79,7 @@ fn main {
   let mut paused_between_wave = false
   let mut game_over = false
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -104,7 +104,7 @@ fn main {
       game_over = false
     }
 
-    if not(game_over) {
+    if !game_over {
       // Mouse tower placement
       if @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
         let mx = @raylib.get_mouse_x()
@@ -113,7 +113,7 @@ fn main {
         let slot = (mx - grid_x) / cell_w
         if lane >= 0 && lane < lanes && slot >= 0 && slot < slots {
           let id = tower_index(lane, slot)
-          if not(towers[id].built) && gold >= 40 {
+          if !towers[id].built && gold >= 40 {
             towers[id].built = true
             towers[id].cooldown = 0.0
             gold = gold - 40
@@ -136,7 +136,7 @@ fn main {
           wave_spawn_timer = 0.75
           let lane = @raylib.get_random_value(0, lanes - 1)
           for enemy in enemies {
-            if not(enemy.alive) {
+            if !enemy.alive {
               enemy.alive = true
               enemy.lane = lane
               enemy.x = Float::from_int(screen_w - 30)
@@ -152,7 +152,7 @@ fn main {
       // Update enemies and count alive
       let mut active_enemies = 0
       for enemy in enemies {
-        if not(enemy.alive) {
+        if !enemy.alive {
           continue
         }
         active_enemies = active_enemies + 1
@@ -168,7 +168,7 @@ fn main {
 
       // Towers attack nearest enemy ahead in same lane
       for tower in towers {
-        if not(tower.built) {
+        if !tower.built {
           continue
         }
         tower.cooldown = tower.cooldown - dt
@@ -181,7 +181,7 @@ fn main {
         let mut best = -1
         let mut best_x : Float = 1_000_000_000.0
         for i in 0..<enemies.length() {
-          if not(enemies[i].alive) || enemies[i].lane != lane {
+          if !enemies[i].alive || enemies[i].lane != lane {
             continue
           }
           let d = enemies[i].x - tx
@@ -204,14 +204,14 @@ fn main {
       }
 
       // Next wave trigger
-      if not(paused_between_wave) && wave_spawn_left == 0 {
+      if !paused_between_wave && wave_spawn_left == 0 {
         let mut any_alive = false
         for enemy in enemies {
           if enemy.alive {
             any_alive = true
           }
         }
-        if not(any_alive) {
+        if !any_alive {
           paused_between_wave = true
           between_wave_timer = 2.5
           gold = gold + 30
@@ -287,7 +287,7 @@ fn main {
     )
     @raylib.draw_text("R restart", 820, 56, 20, @raylib.gray)
 
-    if paused_between_wave && not(game_over) {
+    if paused_between_wave && !game_over {
       @raylib.draw_text(
         "NEXT WAVE IN \{between_wave_timer.to_int() + 1}",
         365,

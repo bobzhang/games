@@ -531,7 +531,7 @@ pub fn find_target_ahead(game : Game, kart_idx : Int) -> Int {
       continue
     }
     let other = game.karts[i]
-    if not(other.active) || other.finished {
+    if !other.active || other.finished {
       continue
     }
     if other.total_progress <= kart.total_progress {
@@ -550,7 +550,7 @@ pub fn find_target_ahead(game : Game, kart_idx : Int) -> Int {
         continue
       }
       let other = game.karts[i]
-      if not(other.active) || other.finished {
+      if !other.active || other.finished {
         continue
       }
       let d = distance2d(kart.x, kart.z, other.x, other.z)

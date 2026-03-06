@@ -78,7 +78,7 @@ fn @types.Game::bullet_hit_player(
 ) -> Bool {
   for i in 0..<@types.max_players {
     let player = game.players[i]
-    if not(player.active) {
+    if !player.active {
       continue
     }
     let radius = @types.tank_half + bullet.radius
@@ -94,11 +94,11 @@ fn @types.Game::bullet_hit_player(
 ///|
 fn @types.Game::update_bullet_vs_bullet(game : @types.Game) -> Unit {
   for i in 0..<game.bullets.length() {
-    if not(game.bullets[i].active) {
+    if !game.bullets[i].active {
       continue
     }
     for j in (i + 1)..<game.bullets.length() {
-      if not(game.bullets[j].active) {
+      if !game.bullets[j].active {
         continue
       }
       if game.bullets[i].owner_team == game.bullets[j].owner_team {
@@ -125,7 +125,7 @@ fn @types.Game::update_bullet_vs_bullet(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
   for bullet in game.bullets {
-    if not(bullet.active) {
+    if !bullet.active {
       continue
     }
 
@@ -141,14 +141,14 @@ fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
     let mut hit_something = false
 
     for _s in 0..<steps {
-      if not(bullet.active) {
+      if !bullet.active {
         break
       }
 
       bullet.x += bullet.vx * step_dt
       bullet.y += bullet.vy * step_dt
 
-      if not(@world.point_in_world(bullet.x, bullet.y)) {
+      if !@world.point_in_world(bullet.x, bullet.y) {
         bullet.active = false
         hit_something = true
         break

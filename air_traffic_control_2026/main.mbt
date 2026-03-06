@@ -31,7 +31,7 @@ struct Plane {
 /// Spawns a new plane into the first inactive slot in the planes array.
 fn spawn_plane(planes : Array[Plane]) -> Unit {
   for plane in planes {
-    if not(plane.alive) {
+    if !plane.alive {
       let r = @raylib.get_random_value(0, runway_count - 1)
       plane.alive = true
       plane.runway = r
@@ -74,7 +74,7 @@ fn main {
   let mut over = false
   let mut msg = "1/2/3 toggle runway open/close, keep landings safe"
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -94,15 +94,15 @@ fn main {
       reset_planes(planes)
     }
 
-    if not(over) {
+    if !over {
       if @raylib.is_key_pressed(@raylib.KeyOne) {
-        runway_open[0] = not(runway_open[0])
+        runway_open[0] = !runway_open[0]
       }
       if @raylib.is_key_pressed(@raylib.KeyTwo) {
-        runway_open[1] = not(runway_open[1])
+        runway_open[1] = !runway_open[1]
       }
       if @raylib.is_key_pressed(@raylib.KeyThree) {
-        runway_open[2] = not(runway_open[2])
+        runway_open[2] = !runway_open[2]
       }
 
       for r in 0..<runway_count {
@@ -124,7 +124,7 @@ fn main {
       }
 
       for plane in planes {
-        if not(plane.alive) {
+        if !plane.alive {
           continue
         }
 
@@ -162,11 +162,11 @@ fn main {
 
       // Near-collision warning between planes on same runway
       for i in 0..<planes.length() {
-        if not(planes[i].alive) {
+        if !planes[i].alive {
           continue
         }
         for j in (i + 1)..<planes.length() {
-          if not(planes[j].alive) {
+          if !planes[j].alive {
             continue
           }
           if planes[i].runway == planes[j].runway {

@@ -105,7 +105,7 @@ fn main {
   let mut win = false
   let mut wide_paddle = false
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > (0.05 : Float) {
       dt = 0.05
@@ -132,7 +132,7 @@ fn main {
       wide_paddle = false
     }
 
-    if not(game_over) {
+    if !game_over {
       let mut dir : Float = 0.0
       if @raylib.is_key_down(@raylib.KeyLeft) ||
         @raylib.is_key_down(@raylib.KeyA) {
@@ -180,7 +180,7 @@ fn main {
 
       let mut alive_count = 0
       for brick in bricks {
-        if not(brick.alive) {
+        if !brick.alive {
           continue
         }
         alive_count = alive_count + 1
@@ -212,7 +212,7 @@ fn main {
         if brick.hp <= 0 {
           brick.alive = false
           score = score + 40
-          if not(wide_paddle) && @raylib.get_random_value(0, 11) == 0 {
+          if !wide_paddle && @raylib.get_random_value(0, 11) == 0 {
             wide_paddle = true
             paddle_w = paddle_w + 30.0
             if paddle_w > (190.0 : Float) {

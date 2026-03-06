@@ -51,7 +51,7 @@ fn @types.Game::update_title_input(game : @types.Game) -> Unit {
   let key_start = @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyEnter)
   let mouse_start = @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
-  let touch_start = touch_count > 0 && hold && not(game.touch_restart_prev)
+  let touch_start = touch_count > 0 && hold && !game.touch_restart_prev
 
   game.input_fire_hold = key_start || mouse_start || touch_start
   game.input_restart_press = game.input_fire_hold
@@ -171,10 +171,10 @@ fn @types.Game::update_play_input(game : @types.Game) -> Unit {
     @raylib.is_key_pressed(@raylib.KeyDown) ||
     @raylib.is_key_pressed(@raylib.KeyE)
 
-  if key_in_press || (t_in && not(game.touch_in_prev)) {
+  if key_in_press || (t_in && !game.touch_in_prev) {
     game.input_ring_move = -1
   }
-  if key_out_press || (t_out && not(game.touch_out_prev)) {
+  if key_out_press || (t_out && !game.touch_out_prev) {
     game.input_ring_move = 1
   }
 
@@ -186,10 +186,10 @@ fn @types.Game::update_play_input(game : @types.Game) -> Unit {
   let key_beam = @raylib.is_key_pressed(@raylib.KeyK) ||
     @raylib.is_key_pressed(@raylib.KeyL) ||
     @raylib.is_key_pressed(@raylib.KeyLeftShift)
-  game.input_beam_press = key_beam || (t_beam && not(game.touch_beam_prev))
+  game.input_beam_press = key_beam || (t_beam && !game.touch_beam_prev)
 
   game.input_restart_press = @raylib.is_key_pressed(@raylib.KeyR) ||
-    (t_restart && not(game.touch_restart_prev))
+    (t_restart && !game.touch_restart_prev)
   game.input_pause_press = @raylib.is_key_pressed(@raylib.KeyEscape)
 
   game.touch_in_prev = t_in
@@ -209,7 +209,7 @@ fn @types.Game::update_stage_clear_input(game : @types.Game) -> Unit {
   let key_restart = @raylib.is_key_pressed(@raylib.KeyR)
   let key_start = @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyEnter)
-  let touch_restart = touch_count > 0 && hold && not(game.touch_restart_prev)
+  let touch_restart = touch_count > 0 && hold && !game.touch_restart_prev
 
   game.input_restart_press = key_restart || touch_restart
   game.input_fire_hold = key_start
@@ -228,7 +228,7 @@ fn @types.Game::update_result_input(game : @types.Game) -> Unit {
     @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
   let click_retry = @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
-  let touch_retry = touch_count > 0 && hold && not(game.touch_restart_prev)
+  let touch_retry = touch_count > 0 && hold && !game.touch_restart_prev
 
   game.input_restart_press = key_retry || click_retry || touch_retry
   game.input_fire_hold = game.input_restart_press

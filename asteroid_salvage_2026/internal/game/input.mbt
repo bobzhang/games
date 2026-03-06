@@ -2,7 +2,7 @@
 /// Activates the first inactive bullet slot and launches it from the ship's nose.
 fn @types.Game::fire_bullet(game : @types.Game) -> Unit {
   for bullet in game.bullets {
-    if not(bullet.active) {
+    if !bullet.active {
       let dir_x : Float = Float::from_double(
         @math.cos(game.ship_angle.to_double()),
       )

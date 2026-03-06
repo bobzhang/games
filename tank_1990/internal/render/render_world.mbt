@@ -300,7 +300,7 @@ fn @types.Game::draw_players(
   shake_y : Float,
 ) -> Unit {
   for i in 0..<@types.max_players {
-    if not(game.players[i].active) {
+    if !game.players[i].active {
       continue
     }
     let player = game.players[i]
@@ -347,7 +347,7 @@ fn @types.Game::draw_enemies(
   shake_y : Float,
 ) -> Unit {
   for enemy in game.enemies {
-    if not(enemy.active) {
+    if !enemy.active {
       continue
     }
     if enemy.invuln_timer > 0.0 {
@@ -383,7 +383,7 @@ fn @types.Game::draw_bullets(
   shake_y : Float,
 ) -> Unit {
   for bullet in game.bullets {
-    if not(bullet.active) {
+    if !bullet.active {
       continue
     }
     let color = match bullet.owner_team {
@@ -408,7 +408,7 @@ fn @types.Game::draw_particles(
   shake_y : Float,
 ) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     let alpha = @types.clampf(p.life / p.max_life, 0.0, 1.0)
@@ -430,11 +430,11 @@ fn @types.Game::draw_powerups(
   shake_y : Float,
 ) -> Unit {
   for p in game.powerups {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     let blink_visible = p.ttl > 3.0 || (p.blink * 8.0).to_int() % 2 == 0
-    if not(blink_visible) {
+    if !blink_visible {
       continue
     }
 

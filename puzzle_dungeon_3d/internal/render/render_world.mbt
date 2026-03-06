@@ -882,7 +882,7 @@ fn @types.Game::draw_laser_beams(game : @types.Game) -> Unit {
   let a = pulse_alpha.clamp(min=80, max=255)
   for i in 0..<game.laser_segment_count {
     let seg = game.laser_segments[i]
-    if not(seg.active) {
+    if !seg.active {
       continue
     }
     let sx = Float::from_int(seg.start_gx)
@@ -940,7 +940,7 @@ fn @types.Game::draw_laser_beams(game : @types.Game) -> Unit {
 fn @types.Game::draw_entities(game : @types.Game) -> Unit {
   let world = game.current_world
   for e in game.entities {
-    if not(e.active) {
+    if !e.active {
       continue
     }
     let wx = e.anim_x
@@ -1235,7 +1235,7 @@ fn @types.Game::draw_decorations(game : @types.Game) -> Unit {
   let fc = Float::from_int(game.frame_counter)
   for i in 0..<game.decoration_count {
     let d = game.decorations[i]
-    if not(d.active) {
+    if !d.active {
       continue
     }
     match d.kind {
@@ -1338,7 +1338,7 @@ fn @types.Game::draw_decorations(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_shadows(game : @types.Game) -> Unit {
   for e in game.entities {
-    if not(e.active) || e.falling {
+    if !e.active || e.falling {
       continue
     }
     @raylib.draw_cube(
@@ -1354,7 +1354,7 @@ fn @types.Game::draw_shadows(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     let alpha_f = p.life / p.max_life

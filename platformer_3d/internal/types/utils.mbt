@@ -141,7 +141,7 @@ pub fn point_above_platform(
 pub fn find_shadow_y(game : Game, px : Float, py : Float, pz : Float) -> Float {
   let mut best_y : Float = -25.0
   for plat in game.platforms {
-    if not(plat.active) {
+    if !plat.active {
       continue
     }
     if point_above_platform(px, pz, plat.x, plat.z, plat.w, plat.d) {

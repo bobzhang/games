@@ -112,7 +112,7 @@ fn spawn_meteor(meteors : Array[Meteor], level : Int) -> Unit {
     if placed {
       continue
     }
-    if not(meteor.active) {
+    if !meteor.active {
       meteor.active = true
       meteor.x = Float::from_int(@raylib.get_random_value(20, sw - 20))
       meteor.y = -18.0
@@ -262,7 +262,7 @@ fn main {
   let mut won = false
   let mut msg = "A/D rotate, W thrust. Land softly on the highlighted pad."
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -306,7 +306,7 @@ fn main {
       }
     }
 
-    if not(over) {
+    if !over {
       wind_t = wind_t + dt
       wind = wind_base + @math.sinf(wind_t * 1.25) * 24.0
 
@@ -402,7 +402,7 @@ fn main {
 
         let mut meteor_hit = false
         for meteor in meteors {
-          if not(meteor.active) {
+          if !meteor.active {
             continue
           }
           meteor.y = meteor.y + meteor.vy * dt
@@ -579,7 +579,7 @@ fn main {
     )
 
     for meteor in meteors {
-      if not(meteor.active) {
+      if !meteor.active {
         continue
       }
       @raylib.draw_line(

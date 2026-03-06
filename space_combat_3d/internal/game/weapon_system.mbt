@@ -5,7 +5,7 @@
 pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.projectiles.length() {
     let proj = game.projectiles[i]
-    if not(proj.active) {
+    if !proj.active {
       continue
     }
 
@@ -95,7 +95,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
       // Check against enemies
       for j in 0..<game.enemies.length() {
         let e = game.enemies[j]
-        if not(e.active) {
+        if !e.active {
           continue
         }
         let dist = @types.distance3d(proj.x, proj.y, proj.z, e.x, e.y, e.z)
@@ -135,7 +135,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
             spark_b,
           )
 
-          if not(proj.piercing) {
+          if !proj.piercing {
             proj.active = false
             hit_something = true
             break
@@ -146,10 +146,10 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
       }
 
       // Check against asteroids
-      if proj.active && not(hit_something) {
+      if proj.active && !hit_something {
         for j in 0..<game.asteroids.length() {
           let a = game.asteroids[j]
-          if not(a.active) {
+          if !a.active {
             continue
           }
           let dist = @types.distance3d(proj.x, proj.y, proj.z, a.x, a.y, a.z)
@@ -165,7 +165,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
               130,
               100,
             )
-            if not(proj.piercing) {
+            if !proj.piercing {
               proj.active = false
               break
             }
@@ -177,7 +177,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
       // Check against enemy stations
       if proj.active {
         for s in game.stations {
-          if not(s.active) {
+          if !s.active {
             continue
           }
           if s.kind != @types.station_enemy {
@@ -196,7 +196,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
               100,
               50,
             )
-            if not(proj.piercing) {
+            if !proj.piercing {
               proj.active = false
               break
             }
@@ -222,7 +222,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
       // Enemy projectiles also hit friendly stations
       if proj.active {
         for s in game.stations {
-          if not(s.active) {
+          if !s.active {
             continue
           }
           if s.kind != @types.station_friendly {
@@ -262,7 +262,7 @@ fn @types.Game::missile_detonate(game : @types.Game, proj_idx : Int) -> Unit {
   // Area damage to nearby enemies
   for j in 0..<game.enemies.length() {
     let e = game.enemies[j]
-    if not(e.active) {
+    if !e.active {
       continue
     }
     let dist = @types.distance3d(proj.x, proj.y, proj.z, e.x, e.y, e.z)
@@ -278,7 +278,7 @@ fn @types.Game::missile_detonate(game : @types.Game, proj_idx : Int) -> Unit {
   // Also damage nearby asteroids
   for j in 0..<game.asteroids.length() {
     let a = game.asteroids[j]
-    if not(a.active) {
+    if !a.active {
       continue
     }
     let dist = @types.distance3d(proj.x, proj.y, proj.z, a.x, a.y, a.z)
@@ -294,7 +294,7 @@ fn @types.Game::missile_detonate(game : @types.Game, proj_idx : Int) -> Unit {
 /// Updates all active particles including lifetime decay, movement, and size changes.
 pub fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     p.life -= dt

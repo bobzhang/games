@@ -191,7 +191,7 @@ fn clear_sparks(sp : Array[Spark]) -> Unit {
 /// Activates an inactive spark at (x, y) with a random velocity and lifetime.
 fn add_spark(sp : Array[Spark], x : Float, y : Float, kind : Int) -> Unit {
   for sp_elem in sp {
-    if not(sp_elem.active) {
+    if !sp_elem.active {
       sp_elem.active = true
       sp_elem.x = x
       sp_elem.y = y
@@ -225,7 +225,7 @@ fn burst_sparks(
 /// Advances all active sparks by dt, applying drag and deactivating expired ones.
 fn update_sparks(sp : Array[Spark], dt : Float) -> Unit {
   for sp_elem in sp {
-    if not(sp_elem.active) {
+    if !sp_elem.active {
       continue
     }
     sp_elem.life = sp_elem.life - dt
@@ -244,7 +244,7 @@ fn update_sparks(sp : Array[Spark], dt : Float) -> Unit {
 /// Draws all active sparks as colored circles with size scaled to remaining lifetime.
 fn draw_sparks(sp : Array[Spark]) -> Unit {
   for sp_elem in sp {
-    if not(sp_elem.active) {
+    if !sp_elem.active {
       continue
     }
 
@@ -429,7 +429,7 @@ fn init_dice(dice : Array[Dice]) -> Unit {
 /// Rolls all unused dice (or all dice if force_all), assigning new random face and value.
 fn roll_dice(dice : Array[Dice], art : Artifacts, force_all : Bool) -> Unit {
   for i in 0..<dice.length() {
-    if force_all || not(dice[i].used) {
+    if force_all || !dice[i].used {
       dice[i].face = roll_face(art)
       dice[i].value = @raylib.get_random_value(1, 6)
       dice[i].used = false
@@ -671,7 +671,7 @@ fn draw_button(
   enabled : Bool,
   hover : Bool,
 ) -> Unit {
-  let fill = if not(enabled) {
+  let fill = if !enabled {
     @raylib.Color::new(58, 66, 82, 200)
   } else if hover {
     @raylib.Color::new(104, 138, 216, 242)
@@ -990,7 +990,7 @@ fn main {
 
   begin_new_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -1107,7 +1107,7 @@ fn main {
           rerolls_left = rerolls_left - 1
           player.energy = player.energy - 1
           for i in 0..<dice.length() {
-            if not(dice[i].used) {
+            if !dice[i].used {
               dice[i].face = roll_face(art)
               dice[i].value = @raylib.get_random_value(1, 6)
               dice[i].pulse_t = 0.12 + Float::from_int(i) * 0.02
@@ -1126,7 +1126,7 @@ fn main {
           end_turn_trigger = true
         }
 
-        if clicked_die >= 0 && player.energy > 0 && not(dice[clicked_die].used) {
+        if clicked_die >= 0 && player.energy > 0 && !dice[clicked_die].used {
           let (new_msg, dealt) = apply_face(
             dice[clicked_die].face,
             dice[clicked_die].value,

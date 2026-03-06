@@ -102,7 +102,7 @@ fn @types.Game::try_move_player(
   dt : Float,
 ) -> Unit {
   let player = game.players[index]
-  if not(player.active) {
+  if !player.active {
     return
   }
 
@@ -129,12 +129,12 @@ fn @types.Game::try_move_player(
 ///|
 fn @types.Game::update_player_input(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<@types.max_players {
-    if not(game.is_player_enabled(i)) {
+    if !game.is_player_enabled(i) {
       continue
     }
 
     let player = game.players[i]
-    if not(player.active) {
+    if !player.active {
       continue
     }
 
@@ -166,7 +166,7 @@ fn @types.Game::update_player_input(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::on_player_destroyed(game : @types.Game, index : Int) -> Unit {
   let player = game.players[index]
-  if not(player.active) {
+  if !player.active {
     return
   }
   if player.invuln_timer > 0.0 || player.shield_timer > 0.0 {
@@ -191,7 +191,7 @@ fn @types.Game::on_player_destroyed(game : @types.Game, index : Int) -> Unit {
 ///|
 fn @types.Game::update_player_respawns(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<@types.max_players {
-    if not(game.is_player_enabled(i)) {
+    if !game.is_player_enabled(i) {
       continue
     }
     let player = game.players[i]
@@ -213,7 +213,7 @@ fn @types.Game::update_player_respawns(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::all_players_out(game : @types.Game) -> Bool {
   let mut living = 0
   for i in 0..<@types.max_players {
-    if not(game.is_player_enabled(i)) {
+    if !game.is_player_enabled(i) {
       continue
     }
     let player = game.players[i]

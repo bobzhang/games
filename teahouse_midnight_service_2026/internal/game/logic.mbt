@@ -250,7 +250,7 @@ fn @types.Game::slot_used(game : @types.Game, slot : Int) -> Bool {
 ///|
 fn @types.Game::find_open_slot(game : @types.Game) -> Int {
   for s in 0..<@types.customer_slots {
-    if not(game.slot_used(s)) {
+    if !game.slot_used(s) {
       return s
     }
   }
@@ -369,7 +369,7 @@ fn @types.Game::nearest_customer(
   let mut best_d2 = reach * reach
 
   for i in 0..<game.customers.length() {
-    if not(game.customers[i].active) {
+    if !game.customers[i].active {
       continue
     }
 
@@ -417,7 +417,7 @@ fn @types.Game::serve_customer(game : @types.Game, ci : Int) -> Unit {
   }
 
   let c = game.customers[ci]
-  if not(c.active) {
+  if !c.active {
     return
   }
 
@@ -478,17 +478,17 @@ fn @types.Game::apply_interact(game : @types.Game) -> Unit {
   if @types.near_station(
       px, py, @types.brew_x, @types.brew_y, @types.interact_reach,
     ) {
-    if not(game.brew_active) &&
+    if !game.brew_active &&
       game.ready_cup is None &&
       game.player.carry_water &&
-      not(game.player.carry_leaf is None) {
+      !(game.player.carry_leaf is None) {
       game.start_brew()
       game.player.interact_t = 0.26
     }
     return
   }
 
-  if not(game.ready_cup is None) &&
+  if !(game.ready_cup is None) &&
     @types.near_station(
       px,
       py,
@@ -604,7 +604,7 @@ fn @types.Game::update_customers(game : @types.Game, dt : Float) -> Unit {
   let drain = game.customer_drain_rate()
 
   for customer in game.customers {
-    if not(customer.active) {
+    if !customer.active {
       continue
     }
 
@@ -643,7 +643,7 @@ fn @types.Game::update_customers(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 fn @types.Game::update_brew(game : @types.Game, dt : Float) -> Unit {
-  if not(game.brew_active) {
+  if !game.brew_active {
     return
   }
 
@@ -685,7 +685,7 @@ fn @types.Game::update_focus(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_effects(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 
@@ -703,7 +703,7 @@ fn @types.Game::update_effects(game : @types.Game, dt : Float) -> Unit {
   }
 
   for ring in game.rings {
-    if not(ring.active) {
+    if !ring.active {
       continue
     }
 
@@ -716,7 +716,7 @@ fn @types.Game::update_effects(game : @types.Game, dt : Float) -> Unit {
   }
 
   for shadow in game.shadows {
-    if not(shadow.active) {
+    if !shadow.active {
       continue
     }
 

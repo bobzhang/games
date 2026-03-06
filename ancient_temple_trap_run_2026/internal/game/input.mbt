@@ -48,7 +48,7 @@ fn @types.Game::update_title_input(game : @types.Game) -> Unit {
     w,
     h,
   )
-  let touch_press = touch_hover && not(game.touch_start_prev)
+  let touch_press = touch_hover && !game.touch_start_prev
 
   game.input_start_press = key_press || mouse_press || touch_press
   game.touch_start_prev = touch_hover
@@ -167,7 +167,7 @@ fn @types.Game::update_play_input(game : @types.Game) -> Unit {
     rst_w,
     rst_h,
   )
-  let touch_restart = restart_hover && not(game.touch_restart_prev)
+  let touch_restart = restart_hover && !game.touch_restart_prev
 
   game.input_restart_press = key_restart || mouse_restart || touch_restart
   game.touch_restart_prev = restart_hover
@@ -224,8 +224,8 @@ fn @types.Game::update_stage_clear_input(game : @types.Game) -> Unit {
     rst_h,
   )
 
-  let touch_next = touch_next_hover && not(game.touch_next_prev)
-  let touch_restart = touch_restart_hover && not(game.touch_restart_prev)
+  let touch_next = touch_next_hover && !game.touch_next_prev
+  let touch_restart = touch_restart_hover && !game.touch_restart_prev
 
   game.input_next_press = key_next || mouse_next || touch_next
   game.input_restart_press = key_restart || mouse_restart || touch_restart
@@ -287,8 +287,8 @@ fn @types.Game::update_failed_input(game : @types.Game) -> Unit {
     retry_h,
   )
 
-  let touch_title = touch_title_hover && not(game.touch_next_prev)
-  let touch_retry = touch_retry_hover && not(game.touch_restart_prev)
+  let touch_title = touch_title_hover && !game.touch_next_prev
+  let touch_retry = touch_retry_hover && !game.touch_restart_prev
 
   game.input_next_press = key_title || mouse_title || touch_title
   game.input_restart_press = key_retry || mouse_retry || touch_retry
@@ -349,8 +349,8 @@ fn @types.Game::update_victory_input(game : @types.Game) -> Unit {
     title_h,
   )
 
-  let touch_again = touch_again_hover && not(game.touch_next_prev)
-  let touch_title = touch_title_hover && not(game.touch_restart_prev)
+  let touch_again = touch_again_hover && !game.touch_next_prev
+  let touch_title = touch_title_hover && !game.touch_restart_prev
 
   game.input_next_press = key_again || mouse_again || touch_again
   game.input_restart_press = key_title || mouse_title || touch_title

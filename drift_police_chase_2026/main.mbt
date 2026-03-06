@@ -158,7 +158,7 @@ fn emit_particle(
   kind : Int,
 ) -> Unit {
   for i in 0..<particles.length() {
-    if not(particles[i].active) {
+    if !particles[i].active {
       particles[i] = { active: true, x, y, vx, vy, size, t: 0.0, life, kind }
       break
     }
@@ -256,7 +256,7 @@ fn init_cops(cops : FixedArray[Cop], level : Int) -> Unit {
 /// Activates an inactive smoke screen slot at the given world position.
 fn spawn_smoke(smokes : FixedArray[Smoke], x : Float, y : Float) -> Unit {
   for i in 0..<smokes.length() {
-    if not(smokes[i].active) {
+    if !smokes[i].active {
       smokes[i] = { active: true, x, y, r: 36.0, t: 0.0, life: 3.8 }
       break
     }
@@ -295,7 +295,7 @@ fn draw_bar(
 ///|
 /// Draws on-screen directional pad and action buttons for touch input when show is true.
 fn draw_touch_controls(show : Bool) -> Unit {
-  if not(show) {
+  if !show {
     return
   }
 
@@ -515,7 +515,7 @@ fn main {
 
   reset_round(level)
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -732,7 +732,7 @@ fn main {
       }
 
       for smoke in smokes {
-        if not(smoke.active) {
+        if !smoke.active {
           continue
         }
         smoke.t = smoke.t + dt
@@ -754,7 +754,7 @@ fn main {
 
       let mut near_cops : Int = 0
       for cop in cops {
-        if not(cop.active) {
+        if !cop.active {
           continue
         }
 
@@ -785,7 +785,7 @@ fn main {
 
         let mut in_smoke : Bool = false
         for smoke in smokes {
-          if not(smoke.active) {
+          if !smoke.active {
             continue
           }
           let sd2 : Float = dist2(cop.x, cop.y, smoke.x, smoke.y)
@@ -869,7 +869,7 @@ fn main {
       heat = clampf(heat, 0.0, 120.0)
 
       for i in 0..<pickups.length() {
-        if not(pickups[i].active) {
+        if !pickups[i].active {
           continue
         }
 
@@ -908,7 +908,7 @@ fn main {
       }
 
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
         particle.t = particle.t + dt
@@ -1022,7 +1022,7 @@ fn main {
     }
 
     for smoke in smokes {
-      if not(smoke.active) {
+      if !smoke.active {
         continue
       }
       let sx : Float = smoke.x - cam_x + shake_x
@@ -1050,7 +1050,7 @@ fn main {
     }
 
     for pickup in pickups {
-      if not(pickup.active) {
+      if !pickup.active {
         continue
       }
       let px : Float = pickup.x - cam_x + shake_x
@@ -1087,7 +1087,7 @@ fn main {
     }
 
     for i in 0..<cops.length() {
-      if not(cops[i].active) {
+      if !cops[i].active {
         continue
       }
 
@@ -1203,7 +1203,7 @@ fn main {
     )
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
 

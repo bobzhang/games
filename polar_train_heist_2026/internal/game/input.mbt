@@ -30,7 +30,7 @@ fn @types.Game::update_title_input(game : @types.Game) -> Unit {
   let key_start = @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyEnter)
   let mouse_start = @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
-  let touch_start = hover && not(game.touch_restart_prev)
+  let touch_start = hover && !game.touch_restart_prev
 
   game.input_restart_press = key_start || mouse_start || touch_start
   game.touch_restart_prev = hover
@@ -127,7 +127,7 @@ fn @types.Game::update_play_input(game : @types.Game) -> Unit {
   let key_jump = @raylib.is_key_pressed(@raylib.KeyW) ||
     @raylib.is_key_pressed(@raylib.KeyUp) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
-  game.input_jump_press = key_jump || (t_jump && not(game.touch_jump_prev))
+  game.input_jump_press = key_jump || (t_jump && !game.touch_jump_prev)
 
   let key_fire = @raylib.is_key_down(@raylib.KeyJ) ||
     @raylib.is_key_down(@raylib.KeyZ) ||
@@ -140,8 +140,8 @@ fn @types.Game::update_play_input(game : @types.Game) -> Unit {
   let key_hook = @raylib.is_key_pressed(@raylib.KeyL) ||
     @raylib.is_key_pressed(@raylib.KeyE)
 
-  game.input_dash_press = key_dash || (t_dash && not(game.touch_dash_prev))
-  game.input_hook_press = key_hook || (t_hook && not(game.touch_hook_prev))
+  game.input_dash_press = key_dash || (t_dash && !game.touch_dash_prev)
+  game.input_hook_press = key_hook || (t_hook && !game.touch_hook_prev)
 
   game.input_restart_press = @raylib.is_key_pressed(@raylib.KeyR) ||
     @raylib.is_key_pressed(@raylib.KeyEnter)
@@ -173,7 +173,7 @@ fn @types.Game::update_result_input(game : @types.Game) -> Unit {
     @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeyR)
   let mouse_retry = @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
-  let touch_retry = hover && not(game.touch_restart_prev)
+  let touch_retry = hover && !game.touch_restart_prev
 
   game.input_restart_press = key_retry || mouse_retry || touch_retry
   game.touch_restart_prev = hover

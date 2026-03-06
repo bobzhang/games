@@ -502,7 +502,7 @@ fn @types.Game::kill_enemy(
   enemy_index : Int,
   by_barrier : Bool,
 ) -> Unit {
-  if enemy_index < 0 || not(game.enemies[enemy_index].active) {
+  if enemy_index < 0 || !game.enemies[enemy_index].active {
     return
   }
 
@@ -551,7 +551,7 @@ fn @types.Game::kill_enemy(
 /// Ticks guardian cooldowns and fires bolts at the nearest in-cone enemy within range.
 fn @types.Game::update_nodes(game : @types.Game, dt : Float) -> Unit {
   for node in game.nodes {
-    if not(node.active) {
+    if !node.active {
       continue
     }
 
@@ -574,7 +574,7 @@ fn @types.Game::update_nodes(game : @types.Game, dt : Float) -> Unit {
     let mut best = -1
     let mut best_d2 = range2
     for j in 0..<game.enemies.length() {
-      if not(game.enemies[j].active) {
+      if !game.enemies[j].active {
         continue
       }
 
@@ -618,7 +618,7 @@ fn @types.Game::update_nodes(game : @types.Game, dt : Float) -> Unit {
 /// Advances all bolts, deactivates out-of-bounds ones, and applies damage and pulses on enemy hit.
 fn @types.Game::update_bolts(game : @types.Game, dt : Float) -> Unit {
   for bolt in game.bolts {
-    if not(bolt.active) {
+    if !bolt.active {
       continue
     }
 
@@ -640,7 +640,7 @@ fn @types.Game::update_bolts(game : @types.Game, dt : Float) -> Unit {
     }
 
     for j in 0..<game.enemies.length() {
-      if not(game.enemies[j].active) {
+      if !game.enemies[j].active {
         continue
       }
 
@@ -668,7 +668,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
   let gy = @types.gate_y()
 
   for i in 0..<game.enemies.length() {
-    if not(game.enemies[i].active) {
+    if !game.enemies[i].active {
       continue
     }
 
@@ -774,7 +774,7 @@ fn @types.Game::trigger_barrier(game : @types.Game) -> Unit {
 /// Expands and expires all active ring pulse effects each frame.
 fn @types.Game::update_pulses(game : @types.Game, dt : Float) -> Unit {
   for pulse in game.pulses {
-    if not(pulse.active) {
+    if !pulse.active {
       continue
     }
 

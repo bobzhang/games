@@ -81,7 +81,7 @@ fn @types.Game::ai_try_jump(
   fighter : @types.Fighter,
   distance : Float,
 ) -> Bool {
-  if not(fighter.on_ground) {
+  if !fighter.on_ground {
     return false
   }
   if distance < 130.0 || distance > 360.0 {
@@ -113,7 +113,7 @@ fn @types.Game::ai_try_attack(
     return
   }
 
-  let opp_air = not(opponent.on_ground)
+  let opp_air = !opponent.on_ground
 
   if fighter.on_ground &&
     opponent.on_ground &&

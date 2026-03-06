@@ -139,7 +139,7 @@ fn @types.Game::update_game_over(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     p.x += p.vx * dt
@@ -363,7 +363,7 @@ fn @types.Game::update_clouds(game : @types.Game) -> Unit {
 fn @types.Game::update_checkpoints(game : @types.Game) -> Unit {
   let player = game.player
   for cp in game.checkpoints {
-    if not(cp.active) {
+    if !cp.active {
       continue
     }
     if cp.collected {
@@ -390,7 +390,7 @@ fn @types.Game::update_checkpoints(game : @types.Game) -> Unit {
 fn @types.Game::update_turrets(game : @types.Game, dt : Float) -> Unit {
   let player = game.player
   for t in game.turrets {
-    if not(t.active) {
+    if !t.active {
       continue
     }
     // Flash timer
@@ -461,17 +461,17 @@ fn @types.Game::turret_fire(
 fn @types.Game::update_buildings_projectile_check(game : @types.Game) -> Unit {
   // Check if any player projectiles hit buildings
   for proj in game.projectiles {
-    if not(proj.active) {
+    if !proj.active {
       continue
     }
     if proj.is_enemy {
       continue
     }
     for b in game.buildings {
-      if not(b.active) {
+      if !b.active {
         continue
       }
-      if not(b.destructible) {
+      if !b.destructible {
         continue
       }
       let hit = @types.point_in_aabb(
@@ -514,14 +514,14 @@ fn @types.Game::update_buildings_projectile_check(game : @types.Game) -> Unit {
   }
   // Also check projectiles vs turrets
   for proj in game.projectiles {
-    if not(proj.active) {
+    if !proj.active {
       continue
     }
     if proj.is_enemy {
       continue
     }
     for t in game.turrets {
-      if not(t.active) {
+      if !t.active {
         continue
       }
       let dist = @types.distance3d(proj.x, proj.y, proj.z, t.x, t.y + 1.0, t.z)
@@ -574,10 +574,10 @@ fn @types.Game::update_warnings(game : @types.Game, dt : Float) -> Unit {
   // Incoming fire warning
   let mut incoming = false
   for p in game.projectiles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
-    if not(p.is_enemy) {
+    if !p.is_enemy {
       continue
     }
     let d = @types.distance3d(p.x, p.y, p.z, player.x, player.y, player.z)

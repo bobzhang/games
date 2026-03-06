@@ -20,7 +20,7 @@ fn main {
 
   @raylib.set_target_fps(60)
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let point_count = segments.val.to_int()
     let angle_step : Float = Float::from_int(360) /
       Float::from_int(point_count) *

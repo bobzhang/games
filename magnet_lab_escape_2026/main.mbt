@@ -371,7 +371,7 @@ fn add_platform(
   speed : Float,
 ) -> Bool {
   for platform in platforms {
-    if not(platform.active) {
+    if !platform.active {
       platform.active = true
       platform.x = x
       platform.y = y
@@ -391,7 +391,7 @@ fn add_platform(
 /// Activates an inactive gate at position `x` requiring `req` delivered cores to open.
 fn add_gate(gates : Array[Gate], x : Float, req : Int) -> Bool {
   for gate in gates {
-    if not(gate.active) {
+    if !gate.active {
       gate.active = true
       gate.x = x
       gate.req = req
@@ -414,7 +414,7 @@ fn add_core(
   value : Int,
 ) -> Bool {
   for core in cores {
-    if not(core.active) {
+    if !core.active {
       core.active = true
       core.kind = kind
       core.x = x
@@ -448,7 +448,7 @@ fn add_box(
   vy : Float,
 ) -> Bool {
   for box in boxes {
-    if not(box.active) {
+    if !box.active {
       box.active = true
       box.kind = kind
       box.x = x
@@ -479,7 +479,7 @@ fn add_drone(
   level : Int,
 ) -> Bool {
   for drone in drones {
-    if not(drone.active) {
+    if !drone.active {
       drone.active = true
       drone.kind = kind
       drone.x = x
@@ -516,7 +516,7 @@ fn add_bolt(
   life : Float,
 ) -> Bool {
   for bolt in bolts {
-    if not(bolt.active) {
+    if !bolt.active {
       bolt.active = true
       bolt.team = team
       bolt.kind = kind
@@ -546,7 +546,7 @@ fn add_particle(
   life : Float,
 ) -> Bool {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       part.active = true
       part.kind = kind
       part.x = x
@@ -602,7 +602,7 @@ fn gate_block_circle(
   let mut nx : Float = x
   let mut nvx : Float = vx
   for gate in gates {
-    if not(gate.active) || gate.open {
+    if !gate.active || gate.open {
       continue
     }
 
@@ -1062,7 +1062,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -1103,13 +1103,13 @@ fn main {
 
       // Gate progression.
       for gate in gates {
-        if not(gate.active) {
+        if !gate.active {
           continue
         }
 
         let was_open : Bool = gate.open
         gate.open = player.delivered >= gate.req
-        if not(was_open) && gate.open {
+        if !was_open && gate.open {
           msg = "Gate unlocked: requirement \{gate.req} cores"
           msg_t = 0.86
           burst(particles, gate.x, floor_y - 140.0, 36, 0.26, 3)
@@ -1235,7 +1235,7 @@ fn main {
         player.vx = player.vx + accel * dt
       }
 
-      if not(move_l) && not(move_r) {
+      if !move_l && !move_r {
         player.vx = player.vx * (1.0 - dt * 8.6)
       }
 
@@ -1251,7 +1251,7 @@ fn main {
 
       // Update moving platforms.
       for platform in platforms {
-        if not(platform.active) {
+        if !platform.active {
           continue
         }
         if platform.moving {
@@ -1308,7 +1308,7 @@ fn main {
       }
 
       for platform in platforms {
-        if not(platform.active) {
+        if !platform.active {
           continue
         }
 
@@ -1389,7 +1389,7 @@ fn main {
         let sign : Float = Float::from_int(player.polarity)
 
         for core in cores {
-          if not(core.active) {
+          if !core.active {
             continue
           }
           let dx : Float = player.x - core.x
@@ -1410,7 +1410,7 @@ fn main {
         }
 
         for box in boxes {
-          if not(box.active) {
+          if !box.active {
             continue
           }
           let dx : Float = player.x - box.x
@@ -1431,7 +1431,7 @@ fn main {
         }
 
         for bolt in bolts {
-          if not(bolt.active) || bolt.team != 2 {
+          if !bolt.active || bolt.team != 2 {
             continue
           }
           let dx : Float = player.x - bolt.x
@@ -1455,7 +1455,7 @@ fn main {
       if drone_cd <= 0.0 {
         let mut frontier : Float = world_w - 260.0
         for gate in gates {
-          if gate.active && not(gate.open) && gate.x < frontier {
+          if gate.active && !gate.open && gate.x < frontier {
             frontier = gate.x - 80.0
           }
         }
@@ -1485,7 +1485,7 @@ fn main {
         core_cd = randf(2.2, 4.6)
         let mut frontier : Float = world_w - 320.0
         for gate in gates {
-          if gate.active && not(gate.open) && gate.x < frontier {
+          if gate.active && !gate.open && gate.x < frontier {
             frontier = gate.x - 180.0
           }
         }
@@ -1506,7 +1506,7 @@ fn main {
 
       // Update cores.
       for core in cores {
-        if not(core.active) {
+        if !core.active {
           continue
         }
 
@@ -1549,7 +1549,7 @@ fn main {
         }
 
         for platform in platforms {
-          if not(platform.active) {
+          if !platform.active {
             continue
           }
           let left : Float = platform.x - platform.w * 0.5
@@ -1584,7 +1584,7 @@ fn main {
         let speed2 : Float = core.vx * core.vx + core.vy * core.vy
         if speed2 >= 170.0 * 170.0 {
           for drone in drones {
-            if not(drone.active) {
+            if !drone.active {
               continue
             }
             let rr : Float = core.r + drone_radius(drone.kind)
@@ -1611,7 +1611,7 @@ fn main {
 
       // Update boxes.
       for box in boxes {
-        if not(box.active) {
+        if !box.active {
           continue
         }
 
@@ -1647,7 +1647,7 @@ fn main {
         }
 
         for platform in platforms {
-          if not(platform.active) {
+          if !platform.active {
             continue
           }
           let left : Float = platform.x - platform.w * 0.5
@@ -1670,7 +1670,7 @@ fn main {
         let speed2 : Float = box.vx * box.vx + box.vy * box.vy
         if speed2 >= 180.0 * 180.0 {
           for drone in drones {
-            if not(drone.active) {
+            if !drone.active {
               continue
             }
             let rr : Float = box.r + drone_radius(drone.kind)
@@ -1703,7 +1703,7 @@ fn main {
 
       // Update drones.
       for drone in drones {
-        if not(drone.active) {
+        if !drone.active {
           continue
         }
 
@@ -1890,7 +1890,7 @@ fn main {
 
       // Update bolts.
       for i in 0..<bolts.length() {
-        if not(bolts[i].active) {
+        if !bolts[i].active {
           continue
         }
 
@@ -1932,7 +1932,7 @@ fn main {
         bolts[i].vx = bvx
 
         for platform in platforms {
-          if not(platform.active) {
+          if !platform.active {
             continue
           }
           let left : Float = platform.x - platform.w * 0.5
@@ -1948,7 +1948,7 @@ fn main {
           }
         }
 
-        if not(bolts[i].active) {
+        if !bolts[i].active {
           continue
         }
 
@@ -1958,7 +1958,7 @@ fn main {
             if hit_done {
               continue
             }
-            if not(drone.active) {
+            if !drone.active {
               continue
             }
             let rr : Float = bolts[i].r + drone_radius(drone.kind)
@@ -1972,7 +1972,7 @@ fn main {
 
           if bolts[i].active {
             for box in boxes {
-              if not(box.active) {
+              if !box.active {
                 continue
               }
               let rr : Float = bolts[i].r + box.r
@@ -1992,7 +1992,7 @@ fn main {
 
       // Particle update.
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
 
@@ -2106,7 +2106,7 @@ fn main {
 
     // Platforms.
     for platform in platforms {
-      if not(platform.active) {
+      if !platform.active {
         continue
       }
 
@@ -2139,7 +2139,7 @@ fn main {
 
     // Gates.
     for gate in gates {
-      if not(gate.active) {
+      if !gate.active {
         continue
       }
 
@@ -2186,7 +2186,7 @@ fn main {
 
     // Cores.
     for core in cores {
-      if not(core.active) {
+      if !core.active {
         continue
       }
       let cx : Int = (core.x - cam_x).to_int()
@@ -2211,7 +2211,7 @@ fn main {
 
     // Boxes.
     for box in boxes {
-      if not(box.active) {
+      if !box.active {
         continue
       }
       let bx : Int = (box.x - box.r - cam_x).to_int()
@@ -2242,7 +2242,7 @@ fn main {
 
     // Drones.
     for drone in drones {
-      if not(drone.active) {
+      if !drone.active {
         continue
       }
 
@@ -2295,7 +2295,7 @@ fn main {
 
     // Bolts.
     for bolt in bolts {
-      if not(bolt.active) {
+      if !bolt.active {
         continue
       }
       let bx : Int = (bolt.x - cam_x).to_int()
@@ -2352,7 +2352,7 @@ fn main {
         @raylib.Color::new(112, 224, 248, 110),
       )
       for core in cores {
-        if not(core.active) || not(core.magnetized) {
+        if !core.active || !core.magnetized {
           continue
         }
         @raylib.draw_line(
@@ -2364,7 +2364,7 @@ fn main {
         )
       }
       for box in boxes {
-        if not(box.active) || not(box.magnetized) {
+        if !box.active || !box.magnetized {
           continue
         }
         @raylib.draw_line(
@@ -2379,7 +2379,7 @@ fn main {
 
     // Particles.
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
       let alpha : Int = (clampf(particle.life / 0.82, 0.0, 1.0) * 255.0).to_int()
@@ -2569,7 +2569,7 @@ fn main {
     )
 
     for gate in gates {
-      if not(gate.active) {
+      if !gate.active {
         continue
       }
       let gx : Int = nav_x +

@@ -99,7 +99,7 @@ fn @types.Game::apply_pose_axis_input(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::try_activate_burst(game : @types.Game) -> Unit {
-  if not(game.input.burst_pressed) {
+  if !game.input.burst_pressed {
     return
   }
 

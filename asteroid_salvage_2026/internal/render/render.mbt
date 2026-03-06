@@ -62,7 +62,7 @@ fn @types.Game::draw_ship(game : @types.Game) -> Unit {
 /// Draws all active rocks as overlapping circles, color-coded by size tier.
 fn @types.Game::draw_rocks(game : @types.Game) -> Unit {
   for rock in game.rocks {
-    if not(rock.active) {
+    if !rock.active {
       continue
     }
     let color = match rock.size {
@@ -89,7 +89,7 @@ fn @types.Game::draw_rocks(game : @types.Game) -> Unit {
 /// Draws all active bullets as small yellow circles.
 fn @types.Game::draw_bullets(game : @types.Game) -> Unit {
   for bullet in game.bullets {
-    if not(bullet.active) {
+    if !bullet.active {
       continue
     }
     @raylib.draw_circle(

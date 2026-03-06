@@ -260,7 +260,7 @@ fn draw_incident(threat : @types.Threat, ox : Int, oy : Int) -> Unit {
 ///|
 /// Dispatches rendering to the appropriate threat-specific draw function based on kind.
 fn draw_threat(threat : @types.Threat, ox : Int, oy : Int) -> Unit {
-  if not(threat.active) {
+  if !threat.active {
     return
   }
 

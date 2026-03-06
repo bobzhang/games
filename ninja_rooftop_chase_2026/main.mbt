@@ -232,7 +232,7 @@ fn spawn_particle(
       continue
     }
 
-    if not(part.active) {
+    if !part.active {
       part.active = true
       part.x = x
       part.y = y
@@ -277,7 +277,7 @@ fn spawn_shot(
 ) -> Bool {
   let mut slot : Int = -1
   for i in 0..<shots.length() {
-    if slot < 0 && not(shots[i].active) {
+    if slot < 0 && !shots[i].active {
       slot = i
     }
   }
@@ -302,7 +302,7 @@ fn spawn_shot(
 fn spawn_obstacle(obs : Array[Obstacle], level : Int) -> Bool {
   let mut slot : Int = -1
   for i in 0..<obs.length() {
-    if slot < 0 && not(obs[i].active) {
+    if slot < 0 && !obs[i].active {
       slot = i
     }
   }
@@ -343,7 +343,7 @@ fn spawn_obstacle(obs : Array[Obstacle], level : Int) -> Bool {
 fn spawn_pickup(items : Array[Pickup]) -> Bool {
   let mut slot : Int = -1
   for i in 0..<items.length() {
-    if slot < 0 && not(items[i].active) {
+    if slot < 0 && !items[i].active {
       slot = i
     }
   }
@@ -369,7 +369,7 @@ fn nearest_obstacle_dy(obs : Array[Obstacle], player_dist : Float) -> Int {
   ignore(player_dist)
   let mut closest : Int = 9999
   for ob in obs {
-    if not(ob.active) {
+    if !ob.active {
       continue
     }
     let dx = (ob.x - player_x).to_int()
@@ -529,7 +529,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -767,7 +767,7 @@ fn main {
       }
 
       for obstacle in obstacles {
-        if not(obstacle.active) {
+        if !obstacle.active {
           continue
         }
 
@@ -850,7 +850,7 @@ fn main {
       }
 
       for shot in shots {
-        if not(shot.active) {
+        if !shot.active {
           continue
         }
 
@@ -868,7 +868,7 @@ fn main {
 
         if shot.from_player {
           for obstacle in obstacles {
-            if not(obstacle.active) {
+            if !obstacle.active {
               continue
             }
             if obstacle.kind != 2 && obstacle.kind != 3 {
@@ -906,7 +906,7 @@ fn main {
       }
 
       for pickup in pickups {
-        if not(pickup.active) {
+        if !pickup.active {
           continue
         }
 
@@ -945,7 +945,7 @@ fn main {
       }
 
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
 
@@ -1026,7 +1026,7 @@ fn main {
     }
 
     for pickup in pickups {
-      if not(pickup.active) {
+      if !pickup.active {
         continue
       }
 
@@ -1053,7 +1053,7 @@ fn main {
     }
 
     for obstacle in obstacles {
-      if not(obstacle.active) {
+      if !obstacle.active {
         continue
       }
 
@@ -1119,7 +1119,7 @@ fn main {
     }
 
     for shot in shots {
-      if not(shot.active) {
+      if !shot.active {
         continue
       }
 
@@ -1133,7 +1133,7 @@ fn main {
     }
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
       let k = particle.t / particle.life

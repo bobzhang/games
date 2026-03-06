@@ -31,7 +31,7 @@ fn @types.Game::reset(game : @types.Game) -> Unit {
           game.board[@types.idx(r, c + 1)].kind &&
           game.board[@types.idx(r, c)].kind ==
           game.board[@types.idx(r, c + 2)].kind &&
-          not(game.board[@types.idx(r, c)].kind.is_empty()) {
+          !game.board[@types.idx(r, c)].kind.is_empty() {
           game.board[@types.idx(r, c + 2)].kind = @types.GemKind::from_int(
             @raylib.get_random_value(0, @types.num_colors - 1),
           )
@@ -42,7 +42,7 @@ fn @types.Game::reset(game : @types.Game) -> Unit {
           game.board[@types.idx(r + 1, c)].kind &&
           game.board[@types.idx(r, c)].kind ==
           game.board[@types.idx(r + 2, c)].kind &&
-          not(game.board[@types.idx(r, c)].kind.is_empty()) {
+          !game.board[@types.idx(r, c)].kind.is_empty() {
           game.board[@types.idx(r + 2, c)].kind = @types.GemKind::from_int(
             @raylib.get_random_value(0, @types.num_colors - 1),
           )
@@ -52,7 +52,7 @@ fn @types.Game::reset(game : @types.Game) -> Unit {
     }
   }
   // Ensure at least one valid swap exists
-  if not(game.has_valid_swap()) {
+  if !game.has_valid_swap() {
     game.reset() // retry
     return
   }
@@ -212,7 +212,7 @@ fn @types.Game::apply_gravity(game : @types.Game) -> Bool {
     // Compact column downward
     let mut write_r = @types.grid_rows - 1
     for r = @types.grid_rows - 1; r >= 0; r = r - 1 {
-      if not(game.board[@types.idx(r, c)].kind.is_empty()) {
+      if !game.board[@types.idx(r, c)].kind.is_empty() {
         if write_r != r {
           let wi = @types.idx(write_r, c)
           let ri = @types.idx(r, c)
@@ -438,7 +438,7 @@ fn @types.Game::update_game_logic(game : @types.Game, dt : Float) -> Unit {
           game.find_hint()
           game.hint_t = 0.0
           // Check if any valid swaps exist; shuffle until valid
-          if not(game.has_valid_swap()) {
+          if !game.has_valid_swap() {
             let mut attempts = 0
             while attempts < 100 {
               game.fill_board()
@@ -453,7 +453,7 @@ fn @types.Game::update_game_logic(game : @types.Game, dt : Float) -> Unit {
                       game.board[@types.idx(r2, c2 + 1)].kind &&
                       game.board[@types.idx(r2, c2)].kind ==
                       game.board[@types.idx(r2, c2 + 2)].kind &&
-                      not(game.board[@types.idx(r2, c2)].kind.is_empty()) {
+                      !game.board[@types.idx(r2, c2)].kind.is_empty() {
                       game.board[@types.idx(r2, c2 + 2)].kind = @types.GemKind::from_int(
                         @raylib.get_random_value(0, @types.num_colors - 1),
                       )
@@ -464,7 +464,7 @@ fn @types.Game::update_game_logic(game : @types.Game, dt : Float) -> Unit {
                       game.board[@types.idx(r2 + 1, c2)].kind &&
                       game.board[@types.idx(r2, c2)].kind ==
                       game.board[@types.idx(r2 + 2, c2)].kind &&
-                      not(game.board[@types.idx(r2, c2)].kind.is_empty()) {
+                      !game.board[@types.idx(r2, c2)].kind.is_empty() {
                       game.board[@types.idx(r2 + 2, c2)].kind = @types.GemKind::from_int(
                         @raylib.get_random_value(0, @types.num_colors - 1),
                       )

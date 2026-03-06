@@ -220,7 +220,7 @@ fn spawn_spark(
     if done {
       continue
     }
-    if not(spark.active) {
+    if !spark.active {
       spark.active = true
       spark.x = x
       spark.y = y
@@ -270,7 +270,7 @@ fn spawn_bullet(
     if done {
       continue
     }
-    if not(bullet.active) {
+    if !bullet.active {
       bullet.active = true
       bullet.x = x
       bullet.y = y
@@ -290,7 +290,7 @@ fn spawn_meteor(meteors : Array[Meteor], level : Int) -> Unit {
     if done {
       continue
     }
-    if not(meteor.active) {
+    if !meteor.active {
       let lane = @raylib.get_random_value(0, lane_n - 1)
       let target_x = Float::from_int(@raylib.get_random_value(80, sw - 160))
       let spawn_x = target_x +
@@ -332,7 +332,7 @@ fn spawn_ore(ores : Array[Ore], x : Float, y : Float, amount : Int) -> Unit {
     if done {
       continue
     }
-    if not(ore.active) {
+    if !ore.active {
       ore.active = true
       ore.x = x
       ore.y = y
@@ -476,7 +476,7 @@ fn main {
   let mut over = false
   let mut won = false
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -541,7 +541,7 @@ fn main {
       }
     }
 
-    if not(over) {
+    if !over {
       timer = timer - dt
       if timer <= 0.0 {
         timer = 0.0
@@ -711,7 +711,7 @@ fn main {
       }
 
       for i in 0..<meteors.length() {
-        if not(meteors[i].active) {
+        if !meteors[i].active {
           continue
         }
 
@@ -729,7 +729,7 @@ fn main {
         let mut killed = false
 
         for bullet in bullets {
-          if not(bullet.active) {
+          if !bullet.active {
             continue
           }
           let hit_r = meteors[i].r + 5.0
@@ -774,7 +774,7 @@ fn main {
 
         let mut truck_hit = false
         for t in 0..<trucks.length() {
-          if not(trucks[t].alive) {
+          if !trucks[t].alive {
             continue
           }
           let tx = trucks[t].x
@@ -813,7 +813,7 @@ fn main {
       }
 
       for ore in ores {
-        if not(ore.active) {
+        if !ore.active {
           continue
         }
 
@@ -845,7 +845,7 @@ fn main {
 
         let mut loaded = false
         for truck in trucks {
-          if not(truck.alive) {
+          if !truck.alive {
             continue
           }
 
@@ -867,7 +867,7 @@ fn main {
       }
 
       for spark in sparks {
-        if not(spark.active) {
+        if !spark.active {
           continue
         }
 
@@ -998,7 +998,7 @@ fn main {
     )
 
     for truck in trucks {
-      if not(truck.alive) {
+      if !truck.alive {
         continue
       }
 
@@ -1056,7 +1056,7 @@ fn main {
     }
 
     for meteor in meteors {
-      if not(meteor.active) {
+      if !meteor.active {
         continue
       }
 
@@ -1087,7 +1087,7 @@ fn main {
     }
 
     for ore in ores {
-      if not(ore.active) {
+      if !ore.active {
         continue
       }
       let ox = ore.x.to_int()
@@ -1109,7 +1109,7 @@ fn main {
     }
 
     for bullet in bullets {
-      if not(bullet.active) {
+      if !bullet.active {
         continue
       }
       @raylib.draw_line(
@@ -1122,7 +1122,7 @@ fn main {
     }
 
     for spark in sparks {
-      if not(spark.active) {
+      if !spark.active {
         continue
       }
       let c = if spark.kind == 0 {

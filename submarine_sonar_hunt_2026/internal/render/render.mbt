@@ -78,7 +78,7 @@ fn @types.Game::draw_hot_zone(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_targets(game : @types.Game) -> Unit {
   for i in 0..<game.target_goal {
-    if not(game.targets[i].active) {
+    if !game.targets[i].active {
       continue
     }
     let tx = game.targets[i].x.to_int()
@@ -114,12 +114,12 @@ fn @types.Game::draw_targets(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_mines(game : @types.Game) -> Unit {
   for i in 0..<game.mine_count {
-    if not(game.mines[i].active) {
+    if !game.mines[i].active {
       continue
     }
     let mx = game.mines[i].x.to_int()
     let my = game.mines[i].y.to_int()
-    let visible = not(game.mines[i].armed) || game.mines[i].reveal_t > 0.0
+    let visible = !game.mines[i].armed || game.mines[i].reveal_t > 0.0
     if visible {
       let alpha = if game.mines[i].armed {
         (Float::from_int(90) + game.mines[i].reveal_t * Float::from_int(70))
@@ -224,7 +224,7 @@ fn @types.Game::draw_bearing_indicator(game : @types.Game) -> Unit {
     return
   }
   let target = @types.nearest_undetected_target(game)
-  if not(target.2) {
+  if !target.2 {
     return
   }
   let dx = target.0 - game.sub_x

@@ -105,7 +105,7 @@ fn @types.Game::burst(
 /// Advances all active particles by `dt`: decays lifetime, moves by velocity, and applies kind-dependent velocity damping and gravity.
 fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 
@@ -368,7 +368,7 @@ fn @types.Game::try_fire(game : @types.Game, tx : Float, ty : Float) -> Bool {
   let kind : @types.BulletKind = if overdrive { Pierce } else { Normal }
   let power : Float = if overdrive { 38.0 } else { 24.0 }
 
-  if not(game.spawn_bullet(game.player_x, game.player_y, tx, ty, power, kind)) {
+  if !game.spawn_bullet(game.player_x, game.player_y, tx, ty, power, kind) {
     return false
   }
 
@@ -411,7 +411,7 @@ fn @types.Game::try_repair(game : @types.Game) -> Bool {
     ) <=
     (@types.core_r + 130.0) * (@types.core_r + 130.0)
 
-  if not(near_core) {
+  if !near_core {
     @types.set_msg(game, "Move closer to generator to repair.", 1.1)
     game.repair_cd = 0.22
     return false
@@ -622,7 +622,7 @@ fn @types.Game::bullet_hit_enemy(
 /// Moves all active bullets, deactivates them on lifetime expiry or when they leave the world boundary, and checks each bullet for collision with all active enemies.
 fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
   for bi in 0..<game.bullets.length() {
-    if not(game.bullets[bi].active) {
+    if !game.bullets[bi].active {
       continue
     }
 
@@ -640,7 +640,7 @@ fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
     }
 
     for ei in 0..<game.enemies.length() {
-      if not(game.enemies[ei].active) {
+      if !game.enemies[ei].active {
         continue
       }
 
@@ -656,7 +656,7 @@ fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
         rr * rr {
         game.bullet_hit_enemy(bi, ei)
 
-        if not(game.bullets[bi].active) {
+        if !game.bullets[bi].active {
           break
         }
       }
@@ -681,7 +681,7 @@ fn @types.Game::enemy_speed(
 /// Advances all active enemies: updates their phase timer, steers toward the player (wolves) or core (brutes/shards) with a sinusoidal swirl offset, deactivates out-of-bounds enemies, and applies touch damage to the player or core heat damage on contact.
 fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
   for enemy in game.enemies {
-    if not(enemy.active) {
+    if !enemy.active {
       continue
     }
 
@@ -791,7 +791,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
 /// Moves all active pickups with a sinusoidal horizontal drift and wave-scaled downward fall, bounces them off side walls, deactivates them when they fall below the world, and collects them on player contact.
 fn @types.Game::update_pickups(game : @types.Game, dt : Float) -> Unit {
   for pickup in game.pickups {
-    if not(pickup.active) {
+    if !pickup.active {
       continue
     }
 
@@ -839,7 +839,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
   if game.fuel < 42.0 || game.ammo < 40 {
     let mut best_d2 : Float = 1_000_000_000.0
     for pickup in game.pickups {
-      if not(pickup.active) {
+      if !pickup.active {
         continue
       }
 
@@ -849,7 +849,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
         pickup.kind == Ammo
       }
 
-      if not(want) {
+      if !want {
         continue
       }
 
@@ -869,7 +869,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
     }
   }
 
-  if not(found_pickup) {
+  if !found_pickup {
     let mut safest_score : Float = 1_000_000_000.0
 
     for lane in 0..<5 {
@@ -880,7 +880,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
 
       let mut threat : Float = 0.0
       for enemy in game.enemies {
-        if not(enemy.active) {
+        if !enemy.active {
           continue
         }
 

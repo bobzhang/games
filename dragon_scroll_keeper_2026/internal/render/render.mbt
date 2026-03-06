@@ -213,7 +213,7 @@ fn @types.Game::draw_breaches(game : @types.Game) -> Unit {
 /// Draws each active flame in the current room as two overlapping circles — an outer orange halo and a brighter inner core — both sized and coloured by the flame's intensity.
 fn @types.Game::draw_flames(game : @types.Game) -> Unit {
   for flame in game.flames {
-    if not(flame.active) || flame.room != game.keeper.room {
+    if !flame.active || flame.room != game.keeper.room {
       continue
     }
 
@@ -237,7 +237,7 @@ fn @types.Game::draw_flames(game : @types.Game) -> Unit {
 /// Draws each active raider in the current room as a red circle with a bright ring outline, brightening when panicked, and a small HP bar above.
 fn @types.Game::draw_raiders(game : @types.Game) -> Unit {
   for raider in game.raiders {
-    if not(raider.active) || raider.room != game.keeper.room {
+    if !raider.active || raider.room != game.keeper.room {
       continue
     }
 

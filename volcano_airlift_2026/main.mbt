@@ -115,7 +115,7 @@ fn spawn_cloud(clouds : Array[Cloud], level : Int) -> Unit {
     if done {
       continue
     }
-    if not(cloud.active) {
+    if !cloud.active {
       cloud.active = true
       cloud.x = x
       cloud.y = y
@@ -241,7 +241,7 @@ fn main {
   let mut won = false
   let mut msg = "A/D steer, W lift, S descend, Space pickup/drop."
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -344,7 +344,7 @@ fn main {
       }
     }
 
-    if not(over) && transition_t <= 0.0 {
+    if !over && transition_t <= 0.0 {
       timer = timer - dt
       if timer <= 0.0 {
         timer = 0.0
@@ -485,7 +485,7 @@ fn main {
         }
       }
 
-      if action && not(carrying) {
+      if action && !carrying {
         for i in 0..<total {
           if survivors[i].state != 0 {
             continue
@@ -520,7 +520,7 @@ fn main {
       }
 
       for i in 0..<clouds.length() {
-        if not(clouds[i].active) {
+        if !clouds[i].active {
           continue
         }
 
@@ -681,7 +681,7 @@ fn main {
 
     // Clouds
     for cloud in clouds {
-      if not(cloud.active) {
+      if !cloud.active {
         continue
       }
       let cx = (cloud.x + shake_x).to_int()
@@ -702,7 +702,7 @@ fn main {
     }
 
     // Helicopter
-    if not(over) || won {
+    if !over || won {
       let hx_i = (hx + shake_x).to_int()
       let hy_i = hy.to_int()
 

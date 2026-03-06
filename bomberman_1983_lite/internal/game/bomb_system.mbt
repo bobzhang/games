@@ -15,7 +15,7 @@ fn @types.Game::can_player_place_bomb(
   player_index : Int,
 ) -> Bool {
   let player = game.players[player_index]
-  if not(player.active) {
+  if !player.active {
     return false
   }
   if player.reload_timer > 0.0 {
@@ -50,7 +50,7 @@ fn @types.Game::place_player_bomb(
   game : @types.Game,
   player_index : Int,
 ) -> Unit {
-  if not(game.can_player_place_bomb(player_index)) {
+  if !game.can_player_place_bomb(player_index) {
     return
   }
   let idx = game.alloc_bomb()
@@ -95,7 +95,7 @@ fn @types.Game::mark_chain_bombs(
   ty : Int,
 ) -> Unit {
   for b in game.bombs {
-    if not(b.active) || b.exploding {
+    if !b.active || b.exploding {
       continue
     }
     if b.tile_x == tx &&
@@ -115,7 +115,7 @@ fn @types.Game::hit_entities_on_tile(
 ) -> Unit {
   for i in 0..<game.enemies.length() {
     let enemy = game.enemies[i]
-    if not(enemy.active) {
+    if !enemy.active {
       continue
     }
     if @types.world_x_to_tile(enemy.x) == tx &&
@@ -126,7 +126,7 @@ fn @types.Game::hit_entities_on_tile(
 
   for i in 0..<@types.max_players {
     let player = game.players[i]
-    if not(player.active) {
+    if !player.active {
       continue
     }
     if @types.world_x_to_tile(player.x) == tx &&
@@ -143,7 +143,7 @@ fn @types.Game::detonate_tile(
   tx : Int,
   ty : Int,
 ) -> Bool {
-  if not(@types.in_tile_bounds(tx, ty)) {
+  if !@types.in_tile_bounds(tx, ty) {
     return false
   }
 
@@ -169,7 +169,7 @@ fn @types.Game::detonate_tile(
       @types.push_camera_shake(game, 2.2)
       return false
     }
-    _ => not(is_blast_blocking_tile(tile))
+    _ => !is_blast_blocking_tile(tile)
   }
 }
 
@@ -179,7 +179,7 @@ fn @types.Game::trigger_bomb(game : @types.Game, bomb_index : Int) -> Unit {
     return
   }
   let bomb = game.bombs[bomb_index]
-  if not(bomb.active) || bomb.exploding {
+  if !bomb.active || bomb.exploding {
     return
   }
 
@@ -215,10 +215,10 @@ fn @types.Game::trigger_bomb(game : @types.Game, bomb_index : Int) -> Unit {
     for step in 1..<=range {
       let nx = tx + dx * step
       let ny = ty + dy * step
-      if not(@types.in_tile_bounds(nx, ny)) {
+      if !@types.in_tile_bounds(nx, ny) {
         break
       }
-      if not(game.detonate_tile(team, nx, ny)) {
+      if !game.detonate_tile(team, nx, ny) {
         break
       }
     }
@@ -232,7 +232,7 @@ fn @types.Game::trigger_bomb(game : @types.Game, bomb_index : Int) -> Unit {
 fn @types.Game::update_bombs(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.bombs.length() {
     let bomb = game.bombs[i]
-    if not(bomb.active) {
+    if !bomb.active {
       continue
     }
 

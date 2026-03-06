@@ -50,7 +50,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   }
   // Toggle debug info
   if @raylib.is_key_pressed(@raylib.KeyF3) {
-    game.show_debug = not(game.show_debug)
+    game.show_debug = !game.show_debug
   }
   // Update game systems
   update_player(game, dt)
@@ -413,7 +413,7 @@ fn @types.Game::update_player_stats(game : @types.Game, dt : Float) -> Unit {
     }
   }
   // Fall damage
-  if player.on_ground && not(player.was_on_ground) {
+  if player.on_ground && !player.was_on_ground {
     let fall_dist = player.fall_start_y - player.y
     if fall_dist > @types.fall_damage_threshold {
       let damage = ((fall_dist - @types.fall_damage_threshold) *
@@ -424,7 +424,7 @@ fn @types.Game::update_player_stats(game : @types.Game, dt : Float) -> Unit {
       }
     }
   }
-  if not(player.on_ground) && player.was_on_ground {
+  if !player.on_ground && player.was_on_ground {
     player.fall_start_y = player.y
   }
   player.was_on_ground = player.on_ground
@@ -516,7 +516,7 @@ fn @types.Game::update_block_physics(game : @types.Game, dt : Float) -> Unit {
         let block = @types.get_world_block(game, wx, wy, wz)
         if @types.is_gravity_block(block) {
           let below = @types.get_world_block(game, wx, wy - 1, wz)
-          if not(@types.is_solid(below)) && below != @types.block_water {
+          if !@types.is_solid(below) && below != @types.block_water {
             // Block falls one step
             @types.set_world_block(game, wx, wy, wz, @types.block_air)
             @types.set_world_block(game, wx, wy - 1, wz, block)

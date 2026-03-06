@@ -126,7 +126,7 @@ fn @types.Game::draw_world_back(game : @types.Game) -> Unit {
 /// Draws lines from the depot to each active tower, with opacity proportional to delivery progress.
 fn @types.Game::draw_signal_links(game : @types.Game) -> Unit {
   for tower in game.towers {
-    if not(tower.active) {
+    if !tower.active {
       continue
     }
 
@@ -270,7 +270,7 @@ fn @types.Game::draw_depot(game : @types.Game) -> Unit {
 /// Draws all active storm cells as translucent circles with swirling edge streaks to visualise wind direction.
 fn @types.Game::draw_storms(game : @types.Game) -> Unit {
   for storm in game.storms {
-    if not(storm.active) {
+    if !storm.active {
       continue
     }
 

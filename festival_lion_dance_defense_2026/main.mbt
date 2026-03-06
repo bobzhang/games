@@ -12,7 +12,7 @@ fn main {
   let game = @types.Game::new()
   @types.set_msg(game, "Press J / Enter / Space to begin.", 2.2)
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let dt = @types.clampf(@raylib.get_frame_time(), 0.0, 0.05)
 
     @game.update_game(game, dt)

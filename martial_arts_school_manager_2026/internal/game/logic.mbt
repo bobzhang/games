@@ -226,7 +226,7 @@ fn @types.Game::burst_time_scale(game : @types.Game) -> Float {
 ///|
 /// Activates time-burst mode if the burst key is pressed and the cooldown has expired.
 fn @types.Game::try_activate_burst(game : @types.Game) -> Unit {
-  if not(game.input.burst_pressed) {
+  if !game.input.burst_pressed {
     return
   }
 

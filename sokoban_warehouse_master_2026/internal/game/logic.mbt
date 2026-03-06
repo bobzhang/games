@@ -105,7 +105,7 @@ fn @types.Game::apply_level_rows(
     }
   }
 
-  if not(found_player) {
+  if !found_player {
     let mut placed : Bool = false
     for y in 0..<game.grid_h {
       for x in 0..<game.grid_w {
@@ -206,7 +206,7 @@ fn @types.Game::burst_cell(
 ///|
 fn @types.Game::update_sparks(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 
@@ -259,7 +259,7 @@ fn @types.Game::attempt_move(game : @types.Game, dx : Int, dy : Int) -> Bool {
   }
 
   let target_tile = @types.tile_at(game, nx, ny)
-  if not(@types.walkable_tile(target_tile)) {
+  if !@types.walkable_tile(target_tile) {
     game.blocked_feedback(nx, ny)
     return false
   }
@@ -287,7 +287,7 @@ fn @types.Game::attempt_move(game : @types.Game, dx : Int, dy : Int) -> Bool {
     }
 
     let behind_tile = @types.tile_at(game, bx, by)
-    if not(@types.walkable_tile(behind_tile)) || @types.box_at(game, bx, by) {
+    if !@types.walkable_tile(behind_tile) || @types.box_at(game, bx, by) {
       game.blocked_feedback(nx, ny)
       return false
     }
@@ -330,7 +330,7 @@ fn @types.Game::undo_move(game : @types.Game) -> Bool {
   game.undo_len = game.undo_len - 1
   let step = game.undo[game.undo_len]
 
-  if not(step.valid) {
+  if !step.valid {
     return false
   }
 

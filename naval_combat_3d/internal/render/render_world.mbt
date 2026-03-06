@@ -77,7 +77,7 @@ fn @types.Game::draw_ocean(game : @types.Game) -> Unit {
 fn @types.Game::draw_islands(game : @types.Game) -> Unit {
   for i in 0..<game.island_count {
     let island = game.islands[i]
-    if not(island.active) {
+    if !island.active {
       continue
     }
     // Base rock - draw as a cluster of cubes
@@ -248,7 +248,7 @@ fn @types.Game::draw_player_ship(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_enemy_ships(game : @types.Game) -> Unit {
   for enemy in game.enemies {
-    if not(enemy.active) {
+    if !enemy.active {
       continue
     }
     let sin_h = @math.sinf(enemy.heading)
@@ -338,7 +338,7 @@ fn @types.Game::draw_enemy_ships(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_cannonballs(game : @types.Game) -> Unit {
   for cb in game.cannonballs {
-    if not(cb.active) {
+    if !cb.active {
       continue
     }
     let color = if cb.from_player {
@@ -363,7 +363,7 @@ fn @types.Game::draw_cannonballs(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     let alpha = (p.life / p.max_life * 255.0).to_int()

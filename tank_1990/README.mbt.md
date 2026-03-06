@@ -80,7 +80,7 @@ The API surface below is generated from `pkg.generated.mbti` files.
 
 Single entry point that advances one frame of simulation.
 
-```moonbit
+```moonbit nocheck
 pub fn update_game(@types.Game, Float) -> Unit
 ```
 
@@ -88,7 +88,7 @@ pub fn update_game(@types.Game, Float) -> Unit
 
 Stage layout data and difficulty profiles for the 96-stage campaign.
 
-```moonbit
+```moonbit nocheck
 pub fn get_stage_profile(Int) -> @types.StageProfile
 pub fn level_pattern(Int) -> Array[String]
 ```
@@ -97,7 +97,7 @@ pub fn level_pattern(Int) -> Array[String]
 
 Spawn and update visual effects (explosions, sparks, smoke).
 
-```moonbit
+```moonbit nocheck
 pub fn spawn_explosion(@types.Game, Float, Float, Float) -> Unit
 pub fn spawn_particle(@types.Game, Float, Float, Float, Float, Float, Float, @raylib.Color) -> Unit
 pub fn spawn_respawn_burst(@types.Game, Float, Float) -> Unit
@@ -109,7 +109,7 @@ pub fn update_particles(@types.Game, Float) -> Unit
 
 Drawing functions for the world, UI, and all texture assets.
 
-```moonbit
+```moonbit nocheck
 pub fn draw_ui(@types.Game) -> Unit
 pub fn draw_world(@types.Game) -> Unit
 pub fn init_assets() -> Unit
@@ -119,7 +119,7 @@ pub fn unload_assets() -> Unit
 <details>
 <summary>31 exported values total -- click to expand full list</summary>
 
-```moonbit
+```moonbit nocheck
 pub fn bullet_texture(Int) -> @raylib.Texture?
 pub fn draw_text_centered(String, Int, Int, Int, @raylib.Color) -> Unit
 pub fn draw_text_shadow(String, Int, Int, Int, @raylib.Color) -> Unit
@@ -154,7 +154,7 @@ pub fn ui_panel_line_texture() -> @raylib.Texture?
 
 Scoring, combo tracking, and score grants.
 
-```moonbit
+```moonbit nocheck
 pub fn bump_combo(@types.Game) -> Unit
 pub fn combo_multiplier(@types.Game) -> Int
 pub fn grant_score(@types.Game, Int, Int) -> Unit
@@ -181,7 +181,7 @@ Core data structures, constants, enums, and utility functions shared across all 
 <details>
 <summary>140 exported values -- click to expand full list</summary>
 
-```moonbit
+```moonbit nocheck
 pub fn absf(Float) -> Float
 pub let base_ring_count : Int
 pub let base_ring_x : Array[Int]
@@ -320,7 +320,7 @@ pub fn world_y_to_tile(Float) -> Int
 
 Spatial queries: bounds checking, line-of-sight, and tank-vs-world/tank collision.
 
-```moonbit
+```moonbit nocheck
 pub fn point_in_world(Float, Float) -> Bool
 pub fn sight_blocked(@types.Game, Float, Float, Float, Float) -> Bool
 pub fn tank_hits_enemies(@types.Game, Float, Float, Int) -> Bool

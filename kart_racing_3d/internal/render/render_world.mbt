@@ -235,7 +235,7 @@ fn @types.Game::draw_trackside_objects(game : @types.Game) -> Unit {
 fn @types.Game::draw_karts(game : @types.Game) -> Unit {
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
-    if not(kart.active) {
+    if !kart.active {
       continue
     }
     let colors = @types.kart_colors
@@ -369,7 +369,7 @@ fn @types.Game::draw_karts(game : @types.Game) -> Unit {
 fn @types.Game::draw_powerups(game : @types.Game) -> Unit {
   for i in 0..<game.powerups.length() {
     let pu = game.powerups[i]
-    if not(pu.active) || pu.collected {
+    if !pu.active || pu.collected {
       continue
     }
     let bob = @math.sinf(
@@ -414,7 +414,7 @@ fn @types.Game::draw_powerups(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
   for proj in game.projectiles {
-    if not(proj.active) {
+    if !proj.active {
       continue
     }
     @raylib.draw_sphere(
@@ -436,7 +436,7 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     let alpha = (p.life / p.max_life * 255.0).to_int()
@@ -1034,7 +1034,7 @@ fn @types.Game::draw_skybox_elements(game : @types.Game) -> Unit {
 fn @types.Game::draw_kart_details(game : @types.Game) -> Unit {
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
-    if not(kart.active) {
+    if !kart.active {
       continue
     }
     let ci = i.clamp(min=0, max=@types.kart_accent_colors.length() - 1)

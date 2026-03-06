@@ -306,7 +306,7 @@ fn @types.Game::draw_cursor(
 /// Draws all active spark particles as alpha-faded circles colour-coded by kind.
 fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 

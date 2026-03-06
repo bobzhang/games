@@ -39,7 +39,7 @@ fn reset_patients(ps : Array[Patient]) -> Unit {
 /// Finds the first inactive patient slot and spawns a new patient in a random ward with probability-weighted severity.
 fn spawn_patient(ps : Array[Patient]) -> Unit {
   for ps_elem in ps {
-    if not(ps_elem.alive) {
+    if !ps_elem.alive {
       let w = @raylib.get_random_value(0, ward_count - 1)
       let r = @raylib.get_random_value(0, 99)
       let sev = if r < 42 { 0 } else if r < 82 { 1 } else { 2 }
@@ -129,7 +129,7 @@ fn main {
   let mut over = false
   let mut msg = "A/D move wards, Space admit first patient in ward"
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -152,7 +152,7 @@ fn main {
       msg = "Shift restarted."
     }
 
-    if not(over) {
+    if !over {
       timer = timer - dt
       if timer <= 0.0 {
         timer = 0.0
@@ -196,7 +196,7 @@ fn main {
       }
 
       for patient in patients {
-        if not(patient.alive) {
+        if !patient.alive {
           continue
         }
 
@@ -237,7 +237,7 @@ fn main {
         }
       }
 
-      if not(treating) &&
+      if !treating &&
         (
           @raylib.is_key_pressed(@raylib.KeySpace) ||
           @raylib.is_key_pressed(@raylib.KeyEnter)

@@ -72,7 +72,7 @@ fn @types.Game::pop_route_step(game : @types.Game) -> @types.Dir {
 fn @types.Game::is_walkable(game : @types.Game, x : Int, y : Int) -> Bool {
   @types.in_bounds(x, y) &&
   @types.tile_at(game, x, y) != Rock &&
-  not(@types.lava_at(game, x, y))
+  !@types.lava_at(game, x, y)
 }
 
 ///|
@@ -95,7 +95,7 @@ fn @types.Game::add_site(
 ) -> Unit {
   if game.site_count >= @types.max_sites ||
     waiting <= 0 ||
-    not(@types.in_bounds(x, y)) {
+    !@types.in_bounds(x, y) {
     return
   }
 
@@ -383,7 +383,7 @@ fn @types.Game::append_manual_step(
   game.selected_tx = -1
   game.selected_ty = -1
 
-  if not(ok) {
+  if !ok {
     game.set_message("Route queue full", 0.8)
   }
 
@@ -427,12 +427,12 @@ fn @types.Game::plan_route_to(game : @types.Game, tx : Int, ty : Int) -> Bool {
   game.selected_tx = tx
   game.selected_ty = ty
 
-  if not(@types.in_bounds(tx, ty)) {
+  if !@types.in_bounds(tx, ty) {
     game.last_plan_ok = false
     return false
   }
 
-  if not(game.is_walkable(tx, ty)) {
+  if !game.is_walkable(tx, ty) {
     game.last_plan_ok = false
     game.set_message("Target cell is blocked", 0.85)
     return false
@@ -453,7 +453,7 @@ fn @types.Game::plan_route_to(game : @types.Game, tx : Int, ty : Int) -> Bool {
   tail = tail + 1
   visited[start] = true
 
-  while head < tail && not(visited[goal]) {
+  while head < tail && !visited[goal] {
     let cur : Int = q[head]
     head = head + 1
 
@@ -474,10 +474,10 @@ fn @types.Game::plan_route_to(game : @types.Game, tx : Int, ty : Int) -> Bool {
       let nx : Int = cx + @types.route_dx(dir)
       let ny : Int = cy + @types.route_dy(dir)
 
-      if not(@types.in_bounds(nx, ny)) {
+      if !@types.in_bounds(nx, ny) {
         continue
       }
-      if not(game.is_walkable(nx, ny)) {
+      if !game.is_walkable(nx, ny) {
         continue
       }
 
@@ -494,7 +494,7 @@ fn @types.Game::plan_route_to(game : @types.Game, tx : Int, ty : Int) -> Bool {
     }
   }
 
-  if not(visited[goal]) {
+  if !visited[goal] {
     game.last_plan_ok = false
     game.set_message("No safe path available", 0.95)
     return false
@@ -555,7 +555,7 @@ fn @types.Game::pickup_civilians(game : @types.Game) -> Unit {
   }
 
   for i in 0..<game.site_count {
-    if not(game.sites[i].active) || game.sites[i].waiting <= 0 {
+    if !game.sites[i].active || game.sites[i].waiting <= 0 {
       continue
     }
 
@@ -621,7 +621,7 @@ fn @types.Game::move_step(game : @types.Game, dir : @types.Dir) -> Bool {
   let nx : Int = game.truck_x + @types.route_dx(dir)
   let ny : Int = game.truck_y + @types.route_dy(dir)
 
-  if not(game.is_walkable(nx, ny)) {
+  if !game.is_walkable(nx, ny) {
     game.route_running = false
     game.set_message("Route blocked by lava or debris", 0.9)
     return false
@@ -646,7 +646,7 @@ fn @types.Game::move_step(game : @types.Game, dir : @types.Dir) -> Bool {
 
 ///|
 fn @types.Game::update_route_run(game : @types.Game, dt : Float) -> Unit {
-  if not(game.route_running) {
+  if !game.route_running {
     return
   }
 
@@ -666,7 +666,7 @@ fn @types.Game::update_route_run(game : @types.Game, dt : Float) -> Unit {
       break
     }
 
-    if not(game.move_step(dir)) {
+    if !game.move_step(dir) {
       break
     }
   }
@@ -733,7 +733,7 @@ fn @types.Game::burn_sites_from_lava(game : @types.Game) -> Unit {
   let mut losses : Int = 0
 
   for i in 0..<game.site_count {
-    if not(game.sites[i].active) || game.sites[i].waiting <= 0 {
+    if !game.sites[i].active || game.sites[i].waiting <= 0 {
       continue
     }
 
@@ -780,7 +780,7 @@ fn @types.Game::try_spread_to(
   ny : Int,
   base : Int,
 ) -> Unit {
-  if not(@types.in_bounds(nx, ny)) {
+  if !@types.in_bounds(nx, ny) {
     return
   }
   if @types.tile_at(game, nx, ny) == Rock {
@@ -808,7 +808,7 @@ fn @types.Game::spread_lava_once(game : @types.Game) -> Unit {
 
   for y in 0..<@types.grid_h {
     for x in 0..<@types.grid_w {
-      if not(@types.lava_at(game, x, y)) {
+      if !@types.lava_at(game, x, y) {
         continue
       }
 
@@ -873,8 +873,8 @@ fn @types.Game::evaluate_mission_state(game : @types.Game) -> Unit {
     return
   }
 
-  if game.fuel <= 0.0 && not(game.tile_is_depot(game.truck_x, game.truck_y)) {
-    if game.route_len <= 0 && not(game.route_running) {
+  if game.fuel <= 0.0 && !game.tile_is_depot(game.truck_x, game.truck_y) {
+    if game.route_len <= 0 && !game.route_running {
       game.finish_mission(false, "Fuel exhausted")
     }
   }

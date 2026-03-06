@@ -4,7 +4,7 @@
 fn @types.Game::update_cannonballs(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.cannonballs.length() {
     let cb = game.cannonballs[i]
-    if not(cb.active) {
+    if !cb.active {
       continue
     }
     // Update lifetime
@@ -71,11 +71,11 @@ fn @types.Game::check_cannonball_vs_enemies(
   cb_idx : Int,
 ) -> Unit {
   let cb = game.cannonballs[cb_idx]
-  if not(cb.active) {
+  if !cb.active {
     return
   }
   for enemy in game.enemies {
-    if not(enemy.active) {
+    if !enemy.active {
       continue
     }
     let dist = @types.distance3d(cb.x, cb.y, cb.z, enemy.x, 1.0, enemy.z)
@@ -165,7 +165,7 @@ fn @types.Game::check_cannonball_vs_player(
   cb_idx : Int,
 ) -> Unit {
   let cb = game.cannonballs[cb_idx]
-  if not(cb.active) {
+  if !cb.active {
     return
   }
   let ship = game.player
@@ -251,11 +251,11 @@ fn @types.Game::check_cannonball_vs_fleet(
   cb_idx : Int,
 ) -> Unit {
   let cb = game.cannonballs[cb_idx]
-  if not(cb.active) {
+  if !cb.active {
     return
   }
   for fs in game.fleet_ships {
-    if not(fs.active) {
+    if !fs.active {
       continue
     }
     let dist = @types.distance3d(cb.x, cb.y, cb.z, fs.x, 1.0, fs.z)
@@ -283,11 +283,11 @@ fn @types.Game::check_cannonball_vs_convoy(
   cb_idx : Int,
 ) -> Unit {
   let cb = game.cannonballs[cb_idx]
-  if not(cb.active) {
+  if !cb.active {
     return
   }
   for cs in game.convoy_ships {
-    if not(cs.active) {
+    if !cs.active {
       continue
     }
     if cs.arrived {
@@ -315,15 +315,15 @@ fn @types.Game::check_cannonball_vs_fortress(
   cb_idx : Int,
 ) -> Unit {
   let cb = game.cannonballs[cb_idx]
-  if not(cb.active) {
+  if !cb.active {
     return
   }
   for i in 0..<game.island_count {
     let island = game.islands[i]
-    if not(island.active) {
+    if !island.active {
       continue
     }
-    if not(island.has_fortress) {
+    if !island.has_fortress {
       continue
     }
     if island.fortress_hp <= 0.0 {
@@ -381,7 +381,7 @@ pub fn update_boarding(game : @types.Game, dt : Float) -> Unit {
     return
   }
   let enemy = game.enemies[ship.boarding_target]
-  if not(enemy.active) {
+  if !enemy.active {
     ship.boarding_target = -1
     return
   }

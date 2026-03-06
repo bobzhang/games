@@ -68,7 +68,7 @@ fn main {
   let mut msg = "A/D power  W/S arc  Space shoot  R restart"
   let mut over = false
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -89,7 +89,7 @@ fn main {
       msg = "Tournament restarted."
     }
 
-    if not(over) {
+    if !over {
       if @raylib.is_key_down(@raylib.KeyA) ||
         @raylib.is_key_down(@raylib.KeyLeft) {
         arc_power = arc_power - 220.0 * dt
@@ -126,7 +126,7 @@ fn main {
       }
 
       if @raylib.is_key_pressed(@raylib.KeySpace) &&
-        not(arrow.alive) &&
+        !arrow.alive &&
         arrows_left > 0 {
         arrow.alive = true
         arrow.x = archer_x + 26.0
@@ -157,7 +157,7 @@ fn main {
         arrow.y = arrow.y + arrow.vy * dt
 
         for target in targets {
-          if not(target.alive) {
+          if !target.alive {
             continue
           }
           let dx = target.x - arrow.x
@@ -199,7 +199,7 @@ fn main {
         msg = "Wave cleared +50."
       }
 
-      if arrows_left <= 0 && not(arrow.alive) {
+      if arrows_left <= 0 && !arrow.alive {
         over = true
         msg = "Tournament ended."
       }

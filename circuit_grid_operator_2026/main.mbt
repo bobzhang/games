@@ -202,7 +202,7 @@ fn inside_rect(
 ///|
 /// Returns the flat cell index at screen position (px, py), or -1 if outside the board.
 fn pick_cell(px : Float, py : Float) -> Int {
-  if not(board_contains(px, py)) {
+  if !board_contains(px, py) {
     return -1
   }
 
@@ -312,7 +312,7 @@ fn clear_pulses(ps : Array[Pulse]) -> Unit {
 /// Activates an idle pulse particle at (x, y) with a random velocity and visual kind.
 fn add_pulse(ps : Array[Pulse], x : Float, y : Float, kind : Int) -> Unit {
   for ps_elem in ps {
-    if not(ps_elem.active) {
+    if !ps_elem.active {
       ps_elem.active = true
       ps_elem.x = x
       ps_elem.y = y
@@ -346,7 +346,7 @@ fn burst_pulses(
 /// Advances all active pulse particles by dt seconds, applying movement and drag, and deactivates expired ones.
 fn update_pulses(ps : Array[Pulse], dt : Float) -> Unit {
   for ps_elem in ps {
-    if not(ps_elem.active) {
+    if !ps_elem.active {
       continue
     }
 
@@ -367,7 +367,7 @@ fn update_pulses(ps : Array[Pulse], dt : Float) -> Unit {
 /// Draws all active pulse particles as colored circles scaled by remaining lifetime.
 fn draw_pulses(ps : Array[Pulse]) -> Unit {
   for ps_elem in ps {
-    if not(ps_elem.active) {
+    if !ps_elem.active {
       continue
     }
 
@@ -630,13 +630,13 @@ fn run_network_step(
     let cur_charge : Float = cells[cur].charge
 
     for dir in 0..<4 {
-      if not(has_port(cells[cur].kind, cells[cur].rot, dir)) {
+      if !has_port(cells[cur].kind, cells[cur].rot, dir) {
         continue
       }
 
       let nx : Int = cx + dir_dx(dir)
       let ny : Int = cy + dir_dy(dir)
-      if not(in_bounds(nx, ny)) {
+      if !in_bounds(nx, ny) {
         continue
       }
 
@@ -645,7 +645,7 @@ fn run_network_step(
         continue
       }
 
-      if not(has_port(cells[ni].kind, cells[ni].rot, opposite(dir))) {
+      if !has_port(cells[ni].kind, cells[ni].rot, opposite(dir)) {
         continue
       }
 
@@ -758,7 +758,7 @@ fn draw_cell_wires(
   }
 
   for dir in 0..<4 {
-    if not(has_port(kind, rot, dir)) {
+    if !has_port(kind, rot, dir) {
       continue
     }
 
@@ -959,7 +959,7 @@ fn draw_button(
   enabled : Bool,
   hover : Bool,
 ) -> Unit {
-  let fill = if not(enabled) {
+  let fill = if !enabled {
     @raylib.Color::new(64, 72, 92, 210)
   } else if hover {
     @raylib.Color::new(114, 162, 238, 246)
@@ -1366,7 +1366,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -1599,7 +1599,7 @@ fn main {
         }
       }
 
-      if click && not(patch_hover) && not(row_hover) && not(over_hover) {
+      if click && !patch_hover && !row_hover && !over_hover {
         let ci : Int = pick_cell(mouse.x, mouse.y)
         if ci >= 0 {
           selected = ci

@@ -854,7 +854,7 @@ fn @types.Game::draw_pause_overlay(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::draw_debug_overlay(game : @types.Game) -> Unit {
-  if not(game.debug_overlay) {
+  if !game.debug_overlay {
     return
   }
 

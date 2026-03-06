@@ -36,7 +36,7 @@ fn hit(
   bw : Int,
   bh : Int,
 ) -> Bool {
-  not(ax + aw < bx || ax > bx + bw || ay + ah < by || ay > by + bh)
+  !(ax + aw < bx || ax > bx + bw || ay + ah < by || ay > by + bh)
 }
 
 ///|
@@ -86,7 +86,7 @@ fn main {
   let mut deaths = 0
   let mut won = false
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     if @raylib.is_key_pressed(@raylib.KeyR) {
       cp = 0
       spawn_x = checkpoints[0]
@@ -98,7 +98,7 @@ fn main {
       won = false
     }
 
-    if not(won) {
+    if !won {
       vx = 0
       if @raylib.is_key_down(@raylib.KeyLeft) ||
         @raylib.is_key_down(@raylib.KeyA) {

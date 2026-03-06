@@ -270,7 +270,7 @@ fn @types.Game::draw_suspects(game : @types.Game) -> Unit {
 /// Draws active incidents with severity-scaled pulsing circles and countdown timer.
 fn @types.Game::draw_incidents(game : @types.Game) -> Unit {
   for incident in game.incidents {
-    if not(incident.active) {
+    if !incident.active {
       continue
     }
 

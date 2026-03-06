@@ -183,7 +183,7 @@ fn fish_color(kind : @types.FishKind) -> @raylib.Color {
 ///|
 /// Draws one fish entity with body, tail, eye, and hook glow if hooked.
 fn draw_fish(f : @types.Fish, ox : Int, oy : Int) -> Unit {
-  if not(f.active) {
+  if !f.active {
     return
   }
 
@@ -247,7 +247,7 @@ fn hazard_color(kind : @types.HazardKind) -> @raylib.Color {
 ///|
 /// Draws one hazard entity with kind-specific shape: jellyfish, eel, or ice chunk.
 fn draw_hazard(h : @types.Hazard, ox : Int, oy : Int) -> Unit {
-  if not(h.active) {
+  if !h.active {
     return
   }
 
@@ -333,7 +333,7 @@ fn pickup_color(kind : @types.PickupKind) -> @raylib.Color {
 ///|
 /// Draws one pickup entity with pulsing circle and kind-specific icon.
 fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
-  if not(p.active) {
+  if !p.active {
     return
   }
 
@@ -391,7 +391,7 @@ fn draw_pickup(p : @types.Pickup, ox : Int, oy : Int) -> Unit {
 /// Draws all active particles with opacity based on remaining lifetime.
 fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 

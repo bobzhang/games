@@ -71,11 +71,11 @@ fn @types.Game::draw_world_floor(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_platforms(game : @types.Game) -> Unit {
   for plat in game.platforms {
-    if not(plat.active) {
+    if !plat.active {
       continue
     }
     // Phasing platforms: skip if invisible
-    if plat.kind == @types.plat_phasing && not(plat.phase_visible) {
+    if plat.kind == @types.plat_phasing && !plat.phase_visible {
       continue
     }
     let alpha : Int = if plat.crumbling {
@@ -165,7 +165,7 @@ fn @types.Game::draw_platform_special(
       @raylib.Color::new(255, 200, 50, 255),
     )
   }
-  if plat.kind == @types.plat_falling && plat.touched && not(plat.falling) {
+  if plat.kind == @types.plat_falling && plat.touched && !plat.falling {
     // Warning flash
     let flash = @math.sinf(Float::from_int(game.frame_counter) * 0.3)
     if flash > 0.0 {
@@ -273,7 +273,7 @@ fn draw_platform_rails(plat : @types.Platform) -> Unit {
 ///|
 fn @types.Game::draw_collectibles(game : @types.Game) -> Unit {
   for c in game.collectibles {
-    if not(c.active) || c.collected {
+    if !c.active || c.collected {
       continue
     }
     let bob = @math.sinf(c.bob_timer * 2.5) * 0.2
@@ -474,7 +474,7 @@ fn draw_key(x : Float, y : Float, z : Float, spin : Float) -> Unit {
 ///|
 fn @types.Game::draw_powerups_3d(game : @types.Game) -> Unit {
   for pu in game.powerups {
-    if not(pu.active) || pu.collected {
+    if !pu.active || pu.collected {
       continue
     }
     let bob = @math.sinf(pu.bob_timer * @types.powerup_bob_speed) * 0.3
@@ -562,7 +562,7 @@ fn @types.Game::draw_powerups_3d(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_hazards(game : @types.Game) -> Unit {
   for h in game.hazards {
-    if not(h.active) {
+    if !h.active {
       continue
     }
     if h.kind == @types.hazard_spike {
@@ -776,7 +776,7 @@ fn draw_crusher(h : @types.Hazard) -> Unit {
 ///|
 fn @types.Game::draw_enemies_3d(game : @types.Game) -> Unit {
   for e in game.enemies {
-    if not(e.active) {
+    if !e.active {
       continue
     }
     // Stunned enemies flash
@@ -988,7 +988,7 @@ fn draw_enemy_turret(e : @types.Enemy) -> Unit {
 ///|
 fn @types.Game::draw_projectiles_3d(game : @types.Game) -> Unit {
   for proj in game.projectiles {
-    if not(proj.active) {
+    if !proj.active {
       continue
     }
     @raylib.draw_sphere(
@@ -1008,7 +1008,7 @@ fn @types.Game::draw_projectiles_3d(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_checkpoints(game : @types.Game) -> Unit {
   for cp in game.checkpoints {
-    if not(cp.active) {
+    if !cp.active {
       continue
     }
     let color = if cp.activated {
@@ -1275,7 +1275,7 @@ fn @types.Game::draw_player_shadow(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_decorations(game : @types.Game) -> Unit {
   for d in game.decorations {
-    if not(d.active) {
+    if !d.active {
       continue
     }
     match d.kind {
@@ -1515,7 +1515,7 @@ fn draw_lamp(d : @types.Decoration) -> Unit {
 ///|
 fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     let life_ratio : Float = p.life / p.max_life

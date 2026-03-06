@@ -1018,7 +1018,7 @@ fn @types.Game::draw_radar(game : @types.Game) -> Unit {
   let player = game.player
   let radar_scale = @types.radar_range / Float::from_int(radar_r)
   for e in game.enemies {
-    if not(e.active) {
+    if !e.active {
       continue
     }
     let dx = e.x - player.x
@@ -1046,7 +1046,7 @@ fn @types.Game::draw_radar(game : @types.Game) -> Unit {
   }
   // Turret blips
   for t in game.turrets {
-    if not(t.active) {
+    if !t.active {
       continue
     }
     let dx = t.x - player.x

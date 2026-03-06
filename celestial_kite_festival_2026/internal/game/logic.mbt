@@ -601,7 +601,7 @@ fn @types.Game::apply_burst(game : @types.Game) -> Unit {
 
   let rr2 = @types.burst_radius * @types.burst_radius
   for obj in game.objs {
-    if not(obj.active) {
+    if !obj.active {
       continue
     }
 
@@ -769,7 +769,7 @@ fn @types.Game::update_objs(game : @types.Game, dt : Float) -> Unit {
   let kite_rr = @types.kite_hit_r(game.kite)
 
   for obj in game.objs {
-    if not(obj.active) {
+    if !obj.active {
       continue
     }
 
@@ -873,7 +873,7 @@ fn @types.Game::update_objs(game : @types.Game, dt : Float) -> Unit {
 /// Advances positions and lifetimes of all active sparks, halos, and trails, deactivating any that have expired.
 fn @types.Game::update_sparks(game : @types.Game, dt : Float) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 
@@ -891,7 +891,7 @@ fn @types.Game::update_sparks(game : @types.Game, dt : Float) -> Unit {
   }
 
   for halo in game.halos {
-    if not(halo.active) {
+    if !halo.active {
       continue
     }
 
@@ -903,7 +903,7 @@ fn @types.Game::update_sparks(game : @types.Game, dt : Float) -> Unit {
   }
 
   for trail in game.trails {
-    if not(trail.active) {
+    if !trail.active {
       continue
     }
 

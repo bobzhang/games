@@ -42,9 +42,9 @@ fn @types.Game::direction_score_player(
     let tx : Int = @types.wrap_x(nx + @types.dir_dx(d))
     let ty : Int = @types.wrap_y(ny + @types.dir_dy(d))
 
-    if not(game.player_segment_at(tx, ty, true)) &&
-      not(game.rival_segment_at(tx, ty, -1, false)) &&
-      not(game.trap_at(tx, ty)) {
+    if !game.player_segment_at(tx, ty, true) &&
+      !game.rival_segment_at(tx, ty, -1, false) &&
+      !game.trap_at(tx, ty) {
       score = score + 36
     }
   }
@@ -98,7 +98,7 @@ fn @types.Game::direction_score_rival(
   for d in all_dirs {
     let tx : Int = @types.wrap_x(nx + @types.dir_dx(d))
     let ty : Int = @types.wrap_y(ny + @types.dir_dy(d))
-    if not(game.rival_would_collide(rid, tx, ty)) {
+    if !game.rival_would_collide(rid, tx, ty) {
       score = score + 26
     }
   }

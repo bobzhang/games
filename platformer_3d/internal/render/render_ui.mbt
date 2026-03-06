@@ -368,7 +368,7 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
   let mut min_z : Float = game.pz
   let mut max_z : Float = game.pz
   for p in game.platforms {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     if p.x < min_x {
@@ -392,7 +392,7 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
   let offset_z : Float = Float::from_int(mm_y + 5) - min_z * scale + 5.0
   // Draw platforms on minimap
   for p in game.platforms {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     let px = (p.x * scale + offset_x).to_int()
@@ -429,7 +429,7 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
   )
   // Enemies on minimap
   for e in game.enemies {
-    if not(e.active) {
+    if !e.active {
       continue
     }
     let ex = (e.x * scale + offset_x).to_int()
@@ -1100,7 +1100,7 @@ fn @types.Game::draw_campaign_complete(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_score_flies(game : @types.Game) -> Unit {
   for sf in game.score_flies {
-    if not(sf.active) {
+    if !sf.active {
       continue
     }
     let progress : Float = sf.timer / sf.max_time

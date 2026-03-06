@@ -213,7 +213,7 @@ fn @types.Game::update_game_over(game : @types.Game, _dt : Float) -> Unit {
 ///|
 fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     p.life -= dt
@@ -268,7 +268,7 @@ fn @types.Game::update_message(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_pickups(game : @types.Game, dt : Float) -> Unit {
   for pickup in game.pickups {
-    if not(pickup.active) {
+    if !pickup.active {
       continue
     }
     // Update float animation
@@ -352,7 +352,7 @@ fn @types.Game::apply_pickup(game : @types.Game, kind : Int) -> Unit {
 ///|
 fn @types.Game::update_traps(game : @types.Game, dt : Float) -> Unit {
   for trap in game.traps {
-    if not(trap.active) {
+    if !trap.active {
       continue
     }
     if trap.cooldown_timer > 0.0 {
@@ -366,7 +366,7 @@ fn @types.Game::update_traps(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 fn @types.Game::check_wave_status(game : @types.Game) -> Unit {
-  if not(game.wave_active) {
+  if !game.wave_active {
     return
   }
   // Check if all enemies spawned and all dead
@@ -614,7 +614,7 @@ fn @types.Game::buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
     @types.show_message(game, "Speed up! Now \{pct}%", 1.5)
   } else if item_idx == 9 {
     // Buy @types.Sniper
-    if not(game.player.owns_weapon[@types.Sniper.to_int()]) {
+    if !game.player.owns_weapon[@types.Sniper.to_int()] {
       game.player.money -= cost
       game.player.owns_weapon[@types.Sniper.to_int()] = true
       game.player.ammo[@types.Sniper.to_int()] = @types.ammo_sniper
@@ -623,7 +623,7 @@ fn @types.Game::buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
     }
   } else if item_idx == 10 {
     // Buy @types.Rocket Launcher
-    if not(game.player.owns_weapon[@types.Rocket.to_int()]) {
+    if !game.player.owns_weapon[@types.Rocket.to_int()] {
       game.player.money -= cost
       game.player.owns_weapon[@types.Rocket.to_int()] = true
       game.player.ammo[@types.Rocket.to_int()] = @types.ammo_rocket
@@ -632,7 +632,7 @@ fn @types.Game::buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
     }
   } else if item_idx == 11 {
     // Buy @types.Minigun
-    if not(game.player.owns_weapon[@types.Minigun.to_int()]) {
+    if !game.player.owns_weapon[@types.Minigun.to_int()] {
       game.player.money -= cost
       game.player.owns_weapon[@types.Minigun.to_int()] = true
       game.player.ammo[@types.Minigun.to_int()] = @types.ammo_minigun
@@ -679,7 +679,7 @@ fn @types.Game::buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
 ///|
 fn @types.Game::update_crates(game : @types.Game, dt : Float) -> Unit {
   for crate in game.crates {
-    if not(crate.active) {
+    if !crate.active {
       crate.respawn_timer -= dt
       if crate.respawn_timer <= 0.0 {
         crate.active = true

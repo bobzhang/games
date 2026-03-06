@@ -85,7 +85,7 @@ fn main {
   @raylib.set_target_fps(60)
 
   // Main game loop
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     // Update
     let angle_rad : Float = angle * deg2rad
     let cos_rad : Float = @math.cosf(angle_rad)
@@ -117,7 +117,7 @@ fn main {
       center.y - radius,
     )
 
-    angle = wrap(angle + (if not(pause.val) { 1.0 } else { 0.0 }), 0.0, 360.0)
+    angle = wrap(angle + (if !pause.val { 1.0 } else { 0.0 }), 0.0, 360.0)
 
     // Draw
     @raylib.begin_drawing()

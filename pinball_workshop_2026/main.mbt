@@ -186,7 +186,7 @@ fn main {
   let mut lives = 3
   let mut game_over = false
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt = @raylib.get_frame_time()
     if dt > 0.05 {
       dt = 0.05
@@ -199,8 +199,8 @@ fn main {
       reset_ball(ball)
     }
 
-    if not(game_over) {
-      if not(ball.live) && @raylib.is_key_pressed(@raylib.KeySpace) {
+    if !game_over {
+      if !ball.live && @raylib.is_key_pressed(@raylib.KeySpace) {
         ball.live = true
         ball.vx = -190.0
         ball.vy = -260.0
@@ -338,7 +338,7 @@ fn main {
         ball_r,
         @raylib.gray,
       )
-      if not(game_over) {
+      if !game_over {
         @raylib.draw_text(
           "PRESS SPACE TO LAUNCH", 320, 630, 22, @raylib.lightgray,
         )

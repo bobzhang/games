@@ -13,7 +13,7 @@ fn in_bounds(x : Int, y : Int) -> Bool {
 ///|
 /// Returns the tile type at `(x, y)`, returning `tile_wall` for out-of-bounds coordinates.
 fn @types.Game::tile_at(game : @types.Game, x : Int, y : Int) -> @types.Tile {
-  if not(in_bounds(x, y)) {
+  if !in_bounds(x, y) {
     Wall
   } else {
     game.map[idx(x, y)]
@@ -28,7 +28,7 @@ fn @types.Game::set_tile(
   y : Int,
   t : @types.Tile,
 ) -> Unit {
-  if not(in_bounds(x, y)) {
+  if !in_bounds(x, y) {
     return
   }
   game.map[idx(x, y)] = t
@@ -74,7 +74,7 @@ fn actor_start_move(a : @types.Actor, tx : Int, ty : Int) -> Unit {
 ///|
 /// Advances the actor's interpolated float position each frame, committing tile coordinates when `t` reaches 1.0.
 fn actor_tick(a : @types.Actor, dt : Float, move_t : Float) -> Unit {
-  if not(a.moving) {
+  if !a.moving {
     a.fx = Float::from_int(a.x)
     a.fy = Float::from_int(a.y)
     return
@@ -165,7 +165,7 @@ fn @types.Game::burst(
 /// Advances all active particles by `dt`, applying drag and gravity, and deactivates expired ones.
 fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 
@@ -189,7 +189,7 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
 /// Returns true if any active flare is within Manhattan distance 2 of `(x, y)`, hiding the player from drone detection.
 fn @types.Game::flare_cover_at(game : @types.Game, x : Int, y : Int) -> Bool {
   for flare in game.flares {
-    if not(flare.active) {
+    if !flare.active {
       continue
     }
 
@@ -206,7 +206,7 @@ fn @types.Game::flare_cover_at(game : @types.Game, x : Int, y : Int) -> Bool {
 /// Returns the index of the active core at tile `(x, y)`, or -1 if none present.
 fn @types.Game::core_index_at(game : @types.Game, x : Int, y : Int) -> Int {
   for i in 0..<game.cores.length() {
-    if not(game.cores[i].active) {
+    if !game.cores[i].active {
       continue
     }
 
@@ -227,7 +227,7 @@ fn @types.Game::drone_index_at(
   skip : Int,
 ) -> Int {
   for i in 0..<game.drones.length() {
-    if i == skip || not(game.drones[i].active) {
+    if i == skip || !game.drones[i].active {
       continue
     }
 
@@ -255,7 +255,7 @@ fn @types.Game::build_map(game : @types.Game) -> Unit {
   for x = 3; x < @types.grid_w - 2; x = x + 4 {
     for y in 1..<(@types.grid_h - 1) {
       let keep_gap : Bool = y == 2 || y == 6 || y == 10
-      if not(keep_gap) {
+      if !keep_gap {
         game.set_tile(x, y, Wall)
       }
     }
@@ -264,7 +264,7 @@ fn @types.Game::build_map(game : @types.Game) -> Unit {
   for y = 3; y < @types.grid_h - 2; y = y + 4 {
     for x in 2..<(@types.grid_w - 2) {
       let keep_gap : Bool = x == 5 || x == 9 || x == 13 || x == 17
-      if not(keep_gap) {
+      if !keep_gap {
         game.set_tile(x, y, Wall)
       }
     }
@@ -471,7 +471,7 @@ fn @types.Game::cycle_hint(game : @types.Game) -> Unit {
 ///|
 /// Returns true if tile `(x, y)` is a wall or a locked exit (exit tile when portal is offline).
 fn @types.Game::blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
-  if not(in_bounds(x, y)) {
+  if !in_bounds(x, y) {
     return true
   }
 
@@ -480,7 +480,7 @@ fn @types.Game::blocked_by_map(game : @types.Game, x : Int, y : Int) -> Bool {
     return true
   }
 
-  t == Exit && not(game.portal_on)
+  t == Exit && !game.portal_on
 }
 
 ///|
@@ -548,7 +548,7 @@ fn @types.Game::collect_core(game : @types.Game) -> Unit {
     YellowFlash,
   )
 
-  if game.cores_taken >= @types.core_need && not(game.portal_on) {
+  if game.cores_taken >= @types.core_need && !game.portal_on {
     game.portal_on = true
     game.score = game.score + 260
     game.shake_t = 0.34
@@ -648,7 +648,7 @@ fn @types.Game::choose_drone_step(game : @types.Game, i : Int) -> (Int, Int) {
   let sees : Bool = game.line_of_sight(gx, gy, px, py)
   let flare_cover : Bool = game.flare_cover_at(px, py)
 
-  if dist <= 3 || (sees && dist <= 7 && not(flare_cover)) {
+  if dist <= 3 || (sees && dist <= 7 && !flare_cover) {
     d.mode = Hunt
     d.alert_t = 1.2
   } else {
@@ -694,7 +694,7 @@ fn @types.Game::choose_drone_step(game : @types.Game, i : Int) -> (Int, Int) {
 
     if nx >= d.patrol_min &&
       nx <= d.patrol_max &&
-      not(game.blocked_for_drone(i, nx, gy)) {
+      !game.blocked_for_drone(i, nx, gy) {
       return (d.dir_x, 0)
     }
   }
@@ -710,7 +710,7 @@ fn @types.Game::choose_drone_step(game : @types.Game, i : Int) -> (Int, Int) {
 
     if ny >= d.patrol_min &&
       ny <= d.patrol_max &&
-      not(game.blocked_for_drone(i, gx, ny)) {
+      !game.blocked_for_drone(i, gx, ny) {
       return (0, d.dir_y)
     }
   }
@@ -736,7 +736,7 @@ fn @types.Game::choose_drone_step(game : @types.Game, i : Int) -> (Int, Int) {
 /// Ticks all active drones each frame: advances interpolation, drains stun timers, and issues movement steps when cooldown expires.
 fn @types.Game::update_drones(game : @types.Game, dt : Float) -> Unit {
   for i in 0..<game.drones.length() {
-    if not(game.drones[i].active) {
+    if !game.drones[i].active {
       continue
     }
 
@@ -785,7 +785,7 @@ fn @types.Game::update_drones(game : @types.Game, dt : Float) -> Unit {
 /// Counts down flare lifetimes each frame and emits smoke particles; deactivates flares whose time has expired.
 fn @types.Game::update_flares(game : @types.Game, dt : Float) -> Unit {
   for flare in game.flares {
-    if not(flare.active) {
+    if !flare.active {
       continue
     }
 
@@ -820,7 +820,7 @@ fn @types.Game::deploy_flare(game : @types.Game) -> Bool {
 
   let mut slot : Int = -1
   for i in 0..<game.flares.length() {
-    if not(game.flares[i].active) {
+    if !game.flares[i].active {
       slot = i
       break
     }
@@ -844,7 +844,7 @@ fn @types.Game::deploy_flare(game : @types.Game) -> Bool {
 
   let mut stunned : Int = 0
   for drone in game.drones {
-    if not(drone.active) || drone.mode == Stunned {
+    if !drone.active || drone.mode == Stunned {
       continue
     }
 
@@ -883,7 +883,7 @@ fn @types.Game::deploy_flare(game : @types.Game) -> Bool {
 ///|
 /// Teleports the player between portal A and B if standing on one and the portal is active; returns true on success.
 fn @types.Game::try_portal(game : @types.Game) -> Bool {
-  if not(game.portal_on) || game.teleport_cd > 0.0 {
+  if !game.portal_on || game.teleport_cd > 0.0 {
     return false
   }
 
@@ -920,7 +920,7 @@ fn @types.Game::handle_player_hit(game : @types.Game) -> Unit {
   }
 
   for drone in game.drones {
-    if not(drone.active) || drone.mode == Stunned {
+    if !drone.active || drone.mode == Stunned {
       continue
     }
 
@@ -1009,12 +1009,12 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
 
   actor_tick(game.player, dt, @types.player_move_t)
 
-  if not(game.player.moving) && game.move_cd <= 0.0 {
+  if !game.player.moving && game.move_cd <= 0.0 {
     ignore(game.try_move_player(game.req_dx, game.req_dy))
   }
 
   if game.action_pressed {
-    if not(game.try_portal()) {
+    if !game.try_portal() {
       ignore(game.deploy_flare())
     }
   }
@@ -1026,7 +1026,7 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
   game.update_particles(dt)
 
   if game.state == Play &&
-    not(game.player.moving) &&
+    !game.player.moving &&
     game.portal_on &&
     game.player.x == @types.exit_x &&
     game.player.y == @types.exit_y {

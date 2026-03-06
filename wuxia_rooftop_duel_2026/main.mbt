@@ -7,7 +7,7 @@ fn main {
   defer @raylib.close_window()
   @raylib.set_target_fps(@types.target_fps)
   let game : @types.Game = @types.Game::new()
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let dt : Float = @types.clampf(@raylib.get_frame_time(), 0.0, 0.05)
     @game.update_game(game, dt)
     @raylib.begin_drawing()

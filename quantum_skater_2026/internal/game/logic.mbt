@@ -509,9 +509,9 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
     game.burst(hero.lane_f, 10.0, 10, 0)
   }
 
-  if not(hero.grounded) {
+  if !hero.grounded {
     hero.vy = hero.vy - @types.player_gravity * dt
-    if hero.vy > 0.0 && not(game.input_jump_hold) {
+    if hero.vy > 0.0 && !game.input_jump_hold {
       hero.vy = hero.vy - @types.player_gravity * dt * 0.75
     }
     hero.y = hero.y + hero.vy * dt
@@ -582,7 +582,7 @@ fn @types.Game::obj_affects_phase(
   o : @types.TrackObj,
 ) -> Bool {
   if o.phase_only == 1 {
-    return not(game.phase_beta)
+    return !game.phase_beta
   }
   if o.phase_only == 2 {
     return game.phase_beta
@@ -596,7 +596,7 @@ fn @types.Game::update_objects(game : @types.Game, dt : Float) -> Unit {
   game.stage_progress = game.stage_progress + dz
 
   for o in game.objs {
-    if not(o.active) {
+    if !o.active {
       continue
     }
 
@@ -618,7 +618,7 @@ fn @types.Game::update_objects(game : @types.Game, dt : Float) -> Unit {
 
     let lane_dx = @types.lane_world_x(o.lane) - game.hero.lane_f
     let same_lane = lane_dx * lane_dx < 70.0 * 70.0
-    if not(same_lane) {
+    if !same_lane {
       continue
     }
 
@@ -652,7 +652,7 @@ fn @types.Game::update_objects(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    if not(game.obj_affects_phase(o)) {
+    if !game.obj_affects_phase(o) {
       continue
     }
 
@@ -701,7 +701,7 @@ fn @types.Game::update_objects(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 
@@ -718,7 +718,7 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   }
 
   for trail in game.trails {
-    if not(trail.active) {
+    if !trail.active {
       continue
     }
 
@@ -822,7 +822,7 @@ fn @types.Game::update_title_scene(game : @types.Game, dt : Float) -> Unit {
 
   let demo_dz = @types.base_speed * 0.52 * dt
   for obj in game.objs {
-    if not(obj.active) {
+    if !obj.active {
       continue
     }
 

@@ -258,7 +258,7 @@ fn draw_gate() -> Unit {
 /// Draws all active wind gusts as circle outlines with a velocity direction line.
 fn @types.Game::draw_gusts(game : @types.Game) -> Unit {
   for gust in game.gusts {
-    if not(gust.active) {
+    if !gust.active {
       continue
     }
 
@@ -287,7 +287,7 @@ fn @types.Game::draw_gusts(game : @types.Game) -> Unit {
 /// Draws all active ember sparks as orange-to-white filled circles fading with lifetime.
 fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 
@@ -310,7 +310,7 @@ fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
 /// Draws all active thieves as red circles with an outline and a targeting line to their current lantern.
 fn @types.Game::draw_thieves(game : @types.Game) -> Unit {
   for thief in game.thieves {
-    if not(thief.active) {
+    if !thief.active {
       continue
     }
 
@@ -345,7 +345,7 @@ fn @types.Game::draw_thieves(game : @types.Game) -> Unit {
 /// Draws all active lanterns with their frame, inner glow, flame dot, flame bar, shrine guide line, and escort ring.
 fn @types.Game::draw_lanterns(game : @types.Game) -> Unit {
   for i in 0..<game.lanterns.length() {
-    if not(game.lanterns[i].active) {
+    if !game.lanterns[i].active {
       continue
     }
 

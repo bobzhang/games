@@ -326,7 +326,7 @@ fn add_enemy(
   wave : Int,
 ) -> Bool {
   for enemy in enemies {
-    if not(enemy.active) {
+    if !enemy.active {
       enemy.active = true
       enemy.kind = kind
       enemy.x = x
@@ -363,7 +363,7 @@ fn add_bullet(
   life : Float,
 ) -> Bool {
   for bullet in bullets {
-    if not(bullet.active) {
+    if !bullet.active {
       bullet.active = true
       bullet.team = team
       bullet.kind = kind
@@ -389,7 +389,7 @@ fn add_turret(
   y : Float,
 ) -> Bool {
   for turret in turrets {
-    if not(turret.active) {
+    if !turret.active {
       turret.active = true
       turret.kind = kind
       turret.x = x
@@ -421,7 +421,7 @@ fn add_scrap(
   life : Float,
 ) -> Bool {
   for scrap in scraps {
-    if not(scrap.active) {
+    if !scrap.active {
       scrap.active = true
       scrap.kind = kind
       scrap.x = x
@@ -450,7 +450,7 @@ fn add_particle(
   life : Float,
 ) -> Bool {
   for part in parts {
-    if not(part.active) {
+    if !part.active {
       part.active = true
       part.kind = kind
       part.x = x
@@ -521,7 +521,7 @@ fn can_place_turret(turrets : Array[Turret], x : Float, y : Float) -> Bool {
   }
 
   for turret in turrets {
-    if not(turret.active) {
+    if !turret.active {
       continue
     }
     if dist2(x, y, turret.x, turret.y) <= 56.0 * 56.0 {
@@ -869,7 +869,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -947,7 +947,7 @@ fn main {
       }
 
       // Wave progression.
-      if not(wave_active) {
+      if !wave_active {
         wave_pre_t = wave_pre_t - dt
         if wave_pre_t <= 0.0 {
           if wave > max_waves {
@@ -1033,10 +1033,8 @@ fn main {
       if build_mode {
         place_press = touch_press
       } else if touch_down &&
-        not(
-          inside_rect(mouse.x, mouse.y, 20, sh - 220, 228, 198) ||
-          inside_rect(mouse.x, mouse.y, sw - 338, sh - 236, 308, 214),
-        ) {
+        !(inside_rect(mouse.x, mouse.y, 20, sh - 220, 228, 198) ||
+        inside_rect(mouse.x, mouse.y, sw - 338, sh - 236, 308, 214)) {
         fire_hold = true
       }
 
@@ -1131,7 +1129,7 @@ fn main {
         player.aim_y = inp_y * inv
       }
 
-      if not(build_mode) {
+      if !build_mode {
         let mx : Float = mouse.x
         let my : Float = mouse.y
         if mx >= arena_l && mx <= arena_r && my >= arena_t && my <= arena_b {
@@ -1221,7 +1219,7 @@ fn main {
             msg = "Not enough scrap"
             msg_t = 0.5
             place_cd = 0.18
-          } else if not(can_place_turret(turrets, build_x, build_y)) {
+          } else if !can_place_turret(turrets, build_x, build_y) {
             msg = "Invalid placement"
             msg_t = 0.4
             place_cd = 0.15
@@ -1236,7 +1234,7 @@ fn main {
       }
 
       // Player fire (disabled while build mode).
-      if not(build_mode) &&
+      if !build_mode &&
         fire_hold &&
         player.fire_cd <= 0.0 &&
         player.heat <= 94.0 {
@@ -1306,7 +1304,7 @@ fn main {
       }
 
       // Bomb pulse.
-      if not(build_mode) &&
+      if !build_mode &&
         bomb_press &&
         player.bomb_cd <= 0.0 &&
         player.energy >= 36.0 {
@@ -1337,7 +1335,7 @@ fn main {
 
       // Turret update.
       for turret in turrets {
-        if not(turret.active) {
+        if !turret.active {
           continue
         }
 
@@ -1349,7 +1347,7 @@ fn main {
         let mut best_d2 : Float = 99999999.0
 
         for e in 0..<enemies.length() {
-          if not(enemies[e].active) {
+          if !enemies[e].active {
             continue
           }
           let d2 : Float = dist2(turret.x, turret.y, enemies[e].x, enemies[e].y)
@@ -1421,7 +1419,7 @@ fn main {
 
       // Enemies update.
       for enemy in enemies {
-        if not(enemy.active) {
+        if !enemy.active {
           continue
         }
 
@@ -1566,7 +1564,7 @@ fn main {
 
         // Ramming turrets.
         for turret in turrets {
-          if not(turret.active) {
+          if !turret.active {
             continue
           }
           if dist2(enemy.x, enemy.y, turret.x, turret.y) <=
@@ -1610,7 +1608,7 @@ fn main {
 
       // Scraps update.
       for i in 0..<scraps.length() {
-        if not(scraps[i].active) {
+        if !scraps[i].active {
           continue
         }
 
@@ -1640,7 +1638,7 @@ fn main {
 
       // Bullet update + hit resolve.
       for bullet in bullets {
-        if not(bullet.active) {
+        if !bullet.active {
           continue
         }
 
@@ -1667,7 +1665,7 @@ fn main {
             if consumed {
               continue
             }
-            if not(enemy.active) {
+            if !enemy.active {
               continue
             }
             let rr : Float = bullet.r + enemy_radius(enemy.kind)
@@ -1695,7 +1693,7 @@ fn main {
           }
 
           for turret in turrets {
-            if not(turret.active) {
+            if !turret.active {
               continue
             }
             if dist2(bullet.x, bullet.y, turret.x, turret.y) <=
@@ -1710,7 +1708,7 @@ fn main {
 
       // Particle update.
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
 
@@ -1821,7 +1819,7 @@ fn main {
 
     // Turrets.
     for turret in turrets {
-      if not(turret.active) {
+      if !turret.active {
         continue
       }
 
@@ -1853,7 +1851,7 @@ fn main {
 
     // Scraps.
     for scrap in scraps {
-      if not(scrap.active) {
+      if !scrap.active {
         continue
       }
       let col = if scrap.kind == 0 {
@@ -1873,7 +1871,7 @@ fn main {
 
     // Enemies.
     for enemy in enemies {
-      if not(enemy.active) {
+      if !enemy.active {
         continue
       }
       if enemy.kind == 0 {
@@ -1910,7 +1908,7 @@ fn main {
 
     // Bullets.
     for bullet in bullets {
-      if not(bullet.active) {
+      if !bullet.active {
         continue
       }
       let col = if bullet.team == 1 {
@@ -1983,7 +1981,7 @@ fn main {
 
     // Particles.
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
       let alpha : Int = (clampf(particle.life / 0.82, 0.0, 1.0) * 255.0).to_int()

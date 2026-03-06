@@ -159,7 +159,7 @@ fn @types.Game::selected_is_valid(game : @types.Game) -> Bool {
 ///|
 /// Clears `selected_order` if the referenced order is no longer active.
 fn @types.Game::ensure_selected_order(game : @types.Game) -> Unit {
-  if not(game.selected_is_valid()) {
+  if !game.selected_is_valid() {
     game.selected_order = -1
   }
 }
@@ -258,7 +258,7 @@ fn @types.Game::boost_multiplier(game : @types.Game) -> Float {
 ///|
 /// Moves the cooked dish to the ready slot if cook progress has met the required threshold.
 fn @types.Game::finish_cooking_if_ready(game : @types.Game) -> Unit {
-  if not(game.cooking.active) || game.cooking.stage != Heat {
+  if !game.cooking.active || game.cooking.stage != Heat {
     return
   }
 
@@ -314,7 +314,7 @@ fn @types.Game::apply_press_j_at_heat(
   game : @types.Game,
   lane : @types.Lane,
 ) -> Unit {
-  if not(game.cooking.active) || game.cooking.stage != Heat {
+  if !game.cooking.active || game.cooking.stage != Heat {
     return
   }
 
@@ -483,7 +483,7 @@ fn @types.Game::update_boost(game : @types.Game, dt : Float) -> Unit {
 ///|
 /// Passively advances cooking progress during an active boost and finalises the dish when complete.
 fn @types.Game::update_cooking_passive(game : @types.Game, dt : Float) -> Unit {
-  if not(game.cooking.active) {
+  if !game.cooking.active {
     return
   }
 

@@ -165,7 +165,7 @@ fn emit_particle(
   kind : Int,
 ) -> Unit {
   for i in 0..<particles.length() {
-    if not(particles[i].active) {
+    if !particles[i].active {
       particles[i] = { active: true, x, y, vx, vy, size, t: 0.0, life, kind }
       break
     }
@@ -219,7 +219,7 @@ fn spawn_bullet(
   life : Float,
 ) -> Unit {
   for i in 0..<bullets.length() {
-    if not(bullets[i].active) {
+    if !bullets[i].active {
       bullets[i] = { active: true, kind, x, y, vx, vy, dmg, life }
       break
     }
@@ -234,7 +234,7 @@ fn spawn_drop(
   value : Int,
 ) -> Unit {
   for i in 0..<drops.length() {
-    if not(drops[i].active) {
+    if !drops[i].active {
       drops[i] = { active: true, x, y, value, t: 0.0, life: 20.0 }
       break
     }
@@ -249,7 +249,7 @@ fn spawn_enemy(
   core_y : Float,
 ) -> Unit {
   for i in 0..<enemies.length() {
-    if not(enemies[i].active) {
+    if !enemies[i].active {
       let edge : Int = @raylib.get_random_value(0, 3)
       let kind : Int = if @raylib.get_random_value(0, 100) < 22 + level * 6 {
         1
@@ -345,7 +345,7 @@ fn draw_bar(
 
 ///|
 fn draw_touch_controls(show : Bool) -> Unit {
-  if not(show) {
+  if !show {
     return
   }
 
@@ -622,7 +622,7 @@ fn main {
 
   reset_round(level)
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -859,7 +859,7 @@ fn main {
         hero.pulse_cd = 8.0
         burst_particles(particles, hero.x, hero.y, 60, 160.0, 1)
         for enemy in enemies {
-          if not(enemy.active) {
+          if !enemy.active {
             continue
           }
           let d2 : Float = dist2(hero.x, hero.y, enemy.x, enemy.y)
@@ -905,7 +905,7 @@ fn main {
             slot = turrets.length() - 1
           }
 
-          if not(turrets[slot].active) && hero.scrap >= 120 {
+          if !turrets[slot].active && hero.scrap >= 120 {
             hero.scrap = hero.scrap - 120
             turrets[slot] = {
               active: true,
@@ -951,7 +951,7 @@ fn main {
       }
 
       for turret in turrets {
-        if not(turret.active) {
+        if !turret.active {
           continue
         }
 
@@ -972,7 +972,7 @@ fn main {
           let mut best : Int = -1
           let mut best_d2 : Float = 99999999.0
           for j in 0..<enemies.length() {
-            if not(enemies[j].active) {
+            if !enemies[j].active {
               continue
             }
             let d2 : Float = dist2(
@@ -1008,7 +1008,7 @@ fn main {
       }
 
       for enemy in enemies {
-        if not(enemy.active) {
+        if !enemy.active {
           continue
         }
 
@@ -1104,7 +1104,7 @@ fn main {
           }
 
           for turret in turrets {
-            if not(turret.active) {
+            if !turret.active {
               continue
             }
             if dist2(enemy.x, enemy.y, turret.x, turret.y) <= 30.0 * 30.0 {
@@ -1119,7 +1119,7 @@ fn main {
       }
 
       for bullet in bullets {
-        if not(bullet.active) {
+        if !bullet.active {
           continue
         }
 
@@ -1142,7 +1142,7 @@ fn main {
 
         let mut hit : Bool = false
         for enemy in enemies {
-          if not(enemy.active) {
+          if !enemy.active {
             continue
           }
           if dist2(bullet.x, bullet.y, enemy.x, enemy.y) <= 22.0 * 22.0 {
@@ -1166,7 +1166,7 @@ fn main {
       }
 
       for enemy in enemies {
-        if not(enemy.active) {
+        if !enemy.active {
           continue
         }
 
@@ -1185,7 +1185,7 @@ fn main {
       }
 
       for drop in drops {
-        if not(drop.active) {
+        if !drop.active {
           continue
         }
         drop.t = drop.t + dt
@@ -1219,7 +1219,7 @@ fn main {
       }
 
       for particle in particles {
-        if not(particle.active) {
+        if !particle.active {
           continue
         }
 
@@ -1330,7 +1330,7 @@ fn main {
     }
 
     for turret in turrets {
-      if not(turret.active) {
+      if !turret.active {
         continue
       }
       let tx : Float = turret.x - cam_x + shake_x
@@ -1364,7 +1364,7 @@ fn main {
     }
 
     for drop in drops {
-      if not(drop.active) {
+      if !drop.active {
         continue
       }
       let dx : Float = drop.x - cam_x + shake_x
@@ -1392,7 +1392,7 @@ fn main {
     }
 
     for enemy in enemies {
-      if not(enemy.active) {
+      if !enemy.active {
         continue
       }
       let ex : Float = enemy.x - cam_x + shake_x
@@ -1429,7 +1429,7 @@ fn main {
     }
 
     for bullet in bullets {
-      if not(bullet.active) {
+      if !bullet.active {
         continue
       }
       let bx : Float = bullet.x - cam_x + shake_x
@@ -1485,7 +1485,7 @@ fn main {
     )
 
     for particle in particles {
-      if not(particle.active) {
+      if !particle.active {
         continue
       }
       let px : Float = particle.x - cam_x + shake_x

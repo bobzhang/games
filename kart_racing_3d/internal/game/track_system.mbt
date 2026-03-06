@@ -143,7 +143,7 @@ fn @types.Game::spawn_track_powerups(game : @types.Game) -> Unit {
 /// Updates the waypoint index, segment progress, and lap count for the specified kart.
 pub fn update_kart_waypoint(game : @types.Game, kart_idx : Int) -> Unit {
   let kart = game.karts[kart_idx]
-  if not(kart.active) || kart.finished {
+  if !kart.active || kart.finished {
     return
   }
   let wc = game.waypoint_count
@@ -236,7 +236,7 @@ pub fn update_positions(game : @types.Game) -> Unit {
 /// Returns whether all active karts have crossed the finish line.
 pub fn all_karts_finished(game : @types.Game) -> Bool {
   for i in 0..<@types.max_karts {
-    if game.karts[i].active && not(game.karts[i].finished) {
+    if game.karts[i].active && !game.karts[i].finished {
       return false
     }
   }
@@ -313,7 +313,7 @@ pub fn reset_cup_points(game : @types.Game) -> Unit {
 /// Updates respawn countdown timers for collected powerup pickups on the track.
 pub fn update_powerup_respawns(game : @types.Game, dt : Float) -> Unit {
   for pu in game.powerups {
-    if not(pu.active) {
+    if !pu.active {
       continue
     }
     if pu.collected {
@@ -333,14 +333,14 @@ pub fn update_powerup_respawns(game : @types.Game, dt : Float) -> Unit {
 pub fn check_powerup_collisions(game : @types.Game) -> Unit {
   for ki in 0..<@types.max_karts {
     let kart = game.karts[ki]
-    if not(kart.active) || kart.finished {
+    if !kart.active || kart.finished {
       continue
     }
     if kart.held_powerup != NoPowerup {
       continue
     }
     for pu in game.powerups {
-      if not(pu.active) || pu.collected {
+      if !pu.active || pu.collected {
         continue
       }
       let d = @types.distance2d(kart.x, kart.z, pu.x, pu.z)
@@ -361,7 +361,7 @@ pub fn check_powerup_collisions(game : @types.Game) -> Unit {
 /// Updates movement, lifetime, and kart collision detection for all active projectiles.
 pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
   for proj in game.projectiles {
-    if not(proj.active) {
+    if !proj.active {
       continue
     }
     proj.life -= dt
@@ -380,7 +380,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
         continue
       }
       let kart = game.karts[ki]
-      if not(kart.active) || kart.finished {
+      if !kart.active || kart.finished {
         continue
       }
       if kart.spin_timer > 0.0 {
@@ -427,7 +427,7 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
 /// Updates position, velocity, and lifetime for all active visual particles.
 pub fn update_particles(game : @types.Game, dt : Float) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     p.life -= dt

@@ -189,7 +189,7 @@ pub fn burst_cell(
 /// Advances spark particle simulation and lifetimes.
 pub fn update_sparks(game : Game, dt : Float) -> Unit {
   for spark in game.sparks {
-    if not(spark.active) {
+    if !spark.active {
       continue
     }
 
@@ -253,7 +253,7 @@ pub fn pointer_on_rect(
     hit = true
   }
 
-  if not(hit) {
+  if !hit {
     for i in 0..<touch_count {
       let p = @raylib.get_touch_position(i)
       if inside_rect(p.x, p.y, x, y, w, h) {

@@ -483,7 +483,7 @@ fn @types.Game::draw_objs(
   cam_y : Float,
 ) -> Unit {
   for o in game.objs {
-    if not(o.active) {
+    if !o.active {
       continue
     }
 
@@ -534,7 +534,7 @@ fn @types.Game::draw_shots(
   cam_y : Float,
 ) -> Unit {
   for s in game.shots {
-    if not(s.active) {
+    if !s.active {
       continue
     }
 
@@ -577,7 +577,7 @@ fn @types.Game::draw_spark_fx(
   cam_y : Float,
 ) -> Unit {
   for s in game.sparks {
-    if not(s.active) {
+    if !s.active {
       continue
     }
 
@@ -607,7 +607,7 @@ fn @types.Game::draw_ring_fx(
   cam_y : Float,
 ) -> Unit {
   for r in game.rings {
-    if not(r.active) {
+    if !r.active {
       continue
     }
 
@@ -637,7 +637,7 @@ fn @types.Game::draw_ghost_fx(
   cam_y : Float,
 ) -> Unit {
   for g in game.ghosts {
-    if not(g.active) {
+    if !g.active {
       continue
     }
 

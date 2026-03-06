@@ -134,7 +134,7 @@ fn @types.Game::trace_path(
       let ny = cy + dirs[d].1
       if @types.in_bounds(nx, ny) {
         let idx = @types.tile_index(nx, ny)
-        if not(visited[idx]) {
+        if !visited[idx] {
           let ntile = @types.get_tile(game, nx, ny)
           if ntile == Path || ntile == End {
             cx = nx
@@ -145,7 +145,7 @@ fn @types.Game::trace_path(
         }
       }
     }
-    if not(found) {
+    if !found {
       return
     }
   }

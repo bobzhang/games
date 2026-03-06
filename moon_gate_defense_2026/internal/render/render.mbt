@@ -193,7 +193,7 @@ fn @types.Game::draw_nodes(
   cam_y : Float,
 ) -> Unit {
   for node in game.nodes {
-    if not(node.active) {
+    if !node.active {
       continue
     }
 
@@ -252,7 +252,7 @@ fn @types.Game::draw_enemies(
   cam_y : Float,
 ) -> Unit {
   for enemy in game.enemies {
-    if not(enemy.active) {
+    if !enemy.active {
       continue
     }
 
@@ -307,7 +307,7 @@ fn @types.Game::draw_bolts(
   cam_y : Float,
 ) -> Unit {
   for bolt in game.bolts {
-    if not(bolt.active) {
+    if !bolt.active {
       continue
     }
 
@@ -352,7 +352,7 @@ fn @types.Game::draw_pulses(
   cam_y : Float,
 ) -> Unit {
   for pulse in game.pulses {
-    if not(pulse.active) {
+    if !pulse.active {
       continue
     }
 

@@ -86,7 +86,7 @@ fn @types.Game::bullet_hit_player(
 ) -> Bool {
   for i in 0..<@types.max_players {
     let player = game.players[i]
-    if not(player.active) {
+    if !player.active {
       continue
     }
     let radius = @types.tank_half + bullet.radius

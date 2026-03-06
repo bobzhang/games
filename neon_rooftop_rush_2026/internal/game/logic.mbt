@@ -363,7 +363,7 @@ fn @types.Game::best_right_edge(game : @types.Game) -> (Float, Float) {
   let mut right_x : Float = -10000.0
   let mut right_y : Float = 460.0
   for segment in game.segments {
-    if not(segment.active) {
+    if !segment.active {
       continue
     }
 
@@ -478,7 +478,7 @@ fn @types.Game::spawn_stage_chunk(game : @types.Game) -> Unit {
 fn @types.Game::ensure_world(game : @types.Game) -> Unit {
   let mut right : Float = -10000.0
   for segment in game.segments {
-    if not(segment.active) {
+    if !segment.active {
       continue
     }
 
@@ -543,7 +543,7 @@ fn @types.Game::shift_world(game : @types.Game, dx : Float) -> Unit {
   }
 
   for obstacle in game.obstacles {
-    if not(obstacle.active) {
+    if !obstacle.active {
       continue
     }
 
@@ -565,7 +565,7 @@ fn @types.Game::shift_world(game : @types.Game, dx : Float) -> Unit {
   }
 
   for chip in game.chips {
-    if not(chip.active) {
+    if !chip.active {
       continue
     }
 
@@ -578,7 +578,7 @@ fn @types.Game::shift_world(game : @types.Game, dx : Float) -> Unit {
   }
 
   for anchor in game.anchors {
-    if not(anchor.active) {
+    if !anchor.active {
       continue
     }
 
@@ -600,7 +600,7 @@ fn @types.Game::find_floor(
   let mut best_y = Float::from_int(@types.screen_h) + 400.0
 
   for segment in game.segments {
-    if not(segment.active) {
+    if !segment.active {
       continue
     }
 
@@ -667,7 +667,7 @@ fn @types.Game::try_grapple(game : @types.Game) -> Bool {
   let mut best_y = hero_cy
 
   for anchor in game.anchors {
-    if not(anchor.active) {
+    if !anchor.active {
       continue
     }
 
@@ -689,7 +689,7 @@ fn @types.Game::try_grapple(game : @types.Game) -> Bool {
     }
   }
 
-  if not(found) {
+  if !found {
     return false
   }
 
@@ -759,7 +759,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
     hero.vy = @types.approachf(hero.vy, -110.0, 1200.0 * dt)
   } else {
     hero.vy = hero.vy + @types.world_gravity * dt
-    if hero.vy < 0.0 && not(game.input_jump_hold) {
+    if hero.vy < 0.0 && !game.input_jump_hold {
       hero.vy = hero.vy + @types.world_gravity * dt * 0.75
     }
   }
@@ -816,7 +816,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
     hero.grounded = false
   }
 
-  if not(hero.grounded) && hero.grapple_t <= 0.0 {
+  if !hero.grounded && hero.grapple_t <= 0.0 {
     if hero.slide_t > 0.0 {
       hero.slide_t = 0.0
     }
@@ -879,7 +879,7 @@ fn @types.Game::gain_combo(game : @types.Game, amount : Int) -> Unit {
 fn @types.Game::update_obstacles(game : @types.Game, dt : Float) -> Unit {
   let hb = hero_hitbox(game.hero)
   for obstacle in game.obstacles {
-    if not(obstacle.active) {
+    if !obstacle.active {
       continue
     }
 
@@ -896,17 +896,15 @@ fn @types.Game::update_obstacles(game : @types.Game, dt : Float) -> Unit {
       obstacle.hit_lock = @types.maxf(0.0, obstacle.hit_lock - dt)
     }
 
-    if not(
-        @types.rect_overlap(
-          hb.0,
-          hb.1,
-          hb.2,
-          hb.3,
-          obstacle.x,
-          obstacle.y,
-          obstacle.w,
-          obstacle.h,
-        ),
+    if !@types.rect_overlap(
+        hb.0,
+        hb.1,
+        hb.2,
+        hb.3,
+        obstacle.x,
+        obstacle.y,
+        obstacle.w,
+        obstacle.h,
       ) {
       continue
     }
@@ -968,7 +966,7 @@ fn @types.Game::update_chips(game : @types.Game, _dt : Float) -> Unit {
   let cy = hero.y + hero.h * 0.45
 
   for chip in game.chips {
-    if not(chip.active) {
+    if !chip.active {
       continue
     }
 
@@ -990,7 +988,7 @@ fn @types.Game::update_chips(game : @types.Game, _dt : Float) -> Unit {
 /// Advances all active particles (position, velocity drag, gravity, lifetime) and ghost trail images (lifetime countdown), deactivating expired entries.
 fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   for particle in game.particles {
-    if not(particle.active) {
+    if !particle.active {
       continue
     }
 
@@ -1008,7 +1006,7 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
   }
 
   for ghost in game.ghosts {
-    if not(ghost.active) {
+    if !ghost.active {
       continue
     }
 

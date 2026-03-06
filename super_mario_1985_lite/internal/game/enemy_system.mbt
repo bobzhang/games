@@ -130,7 +130,7 @@ fn @types.Game::stomp_enemy(game : @types.Game, enemy : @types.Enemy) -> Unit {
 ///|
 fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
   for enemy in game.enemies {
-    if not(enemy.active) {
+    if !enemy.active {
       continue
     }
 
@@ -150,7 +150,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
     game.enemy_resolve_x(enemy, dt)
     game.enemy_resolve_y(enemy, dt)
 
-    if not(game.enemy_ground_ahead(enemy)) {
+    if !game.enemy_ground_ahead(enemy) {
       enemy.vx = -enemy.vx
       enemy.dir = -enemy.dir
     }

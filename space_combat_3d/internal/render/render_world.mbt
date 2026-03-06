@@ -373,7 +373,7 @@ fn @types.Game::draw_player_ship(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
   for e in game.enemies {
-    if not(e.active) {
+    if !e.active {
       continue
     }
 
@@ -706,7 +706,7 @@ fn draw_capital_ship(
 ///|
 fn @types.Game::draw_asteroids(game : @types.Game) -> Unit {
   for a in game.asteroids {
-    if not(a.active) {
+    if !a.active {
       continue
     }
 
@@ -792,7 +792,7 @@ fn @types.Game::draw_asteroids(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_stations(game : @types.Game) -> Unit {
   for s in game.stations {
-    if not(s.active) {
+    if !s.active {
       continue
     }
 
@@ -912,7 +912,7 @@ fn @types.Game::draw_stations(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_powerups(game : @types.Game) -> Unit {
   for pu in game.powerups {
-    if not(pu.active) {
+    if !pu.active {
       continue
     }
 
@@ -1006,7 +1006,7 @@ fn @types.Game::draw_powerups(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
   for proj in game.projectiles {
-    if not(proj.active) {
+    if !proj.active {
       continue
     }
 
@@ -1105,7 +1105,7 @@ fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
   for p in game.particles {
-    if not(p.active) {
+    if !p.active {
       continue
     }
     let alpha_f : Float = p.life / p.max_life * 255.0
@@ -1141,7 +1141,7 @@ fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_debris_3d(game : @types.Game) -> Unit {
   for d in game.debris {
-    if not(d.active) {
+    if !d.active {
       continue
     }
     let alpha_f : Float = @types.minf(d.life / 2.0, 1.0) * 255.0
@@ -1165,7 +1165,7 @@ fn @types.Game::draw_target_indicator(game : @types.Game) -> Unit {
     return
   }
   let e = game.enemies[game.target_idx]
-  if not(e.active) {
+  if !e.active {
     return
   }
 
@@ -1241,7 +1241,7 @@ fn @types.Game::draw_lead_indicator(game : @types.Game) -> Unit {
     return
   }
   let e = game.enemies[game.target_idx]
-  if not(e.active) {
+  if !e.active {
     return
   }
 
@@ -1287,7 +1287,7 @@ fn @types.Game::draw_lead_indicator(game : @types.Game) -> Unit {
 fn @types.Game::draw_waypoint_markers(game : @types.Game) -> Unit {
   // Draw markers for stations
   for s in game.stations {
-    if not(s.active) {
+    if !s.active {
       continue
     }
     let marker_y = s.y + 8.0

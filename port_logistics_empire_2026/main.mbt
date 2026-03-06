@@ -274,7 +274,7 @@ fn add_node(
   name : String,
 ) -> Int {
   for i in 0..<nodes.length() {
-    if not(nodes[i].active) {
+    if !nodes[i].active {
       nodes[i].active = true
       nodes[i].kind = kind
       nodes[i].x = x
@@ -298,7 +298,7 @@ fn add_node(
 /// Returns the index of an active route connecting nodes a and b (either direction), or -1 if none exists.
 fn find_route(routes : Array[Route], a : Int, b : Int) -> Int {
   for i in 0..<routes.length() {
-    if not(routes[i].active) {
+    if !routes[i].active {
       continue
     }
     let x : Int = routes[i].a
@@ -314,7 +314,7 @@ fn find_route(routes : Array[Route], a : Int, b : Int) -> Int {
 /// Activates the first free route slot connecting nodes a and b at level 1 with full HP.
 fn add_route(routes : Array[Route], a : Int, b : Int) -> Int {
   for i in 0..<routes.length() {
-    if not(routes[i].active) {
+    if !routes[i].active {
       routes[i].active = true
       routes[i].a = a
       routes[i].b = b
@@ -361,7 +361,7 @@ fn add_truck(
   level : Int,
 ) -> Int {
   for i in 0..<trucks.length() {
-    if not(trucks[i].active) {
+    if !trucks[i].active {
       trucks[i].active = true
       trucks[i].route = route_id
       trucks[i].dir = if dir >= 0 { 1 } else { -1 }
@@ -381,7 +381,7 @@ fn add_truck(
 /// Activates the first free spark slot at position (x, y) with a random velocity, lifetime, and size.
 fn add_spark(sp : Array[Spark], x : Float, y : Float, kind : Int) -> Unit {
   for sp_elem in sp {
-    if not(sp_elem.active) {
+    if !sp_elem.active {
       sp_elem.active = true
       sp_elem.x = x
       sp_elem.y = y
@@ -415,7 +415,7 @@ fn burst_sparks(
 /// Advances all active sparks by dt, applying drag and gravity, and deactivates expired ones.
 fn update_sparks(sp : Array[Spark], dt : Float) -> Unit {
   for sp_elem in sp {
-    if not(sp_elem.active) {
+    if !sp_elem.active {
       continue
     }
     sp_elem.life = sp_elem.life - dt
@@ -434,7 +434,7 @@ fn update_sparks(sp : Array[Spark], dt : Float) -> Unit {
 /// Draws all active sparks as colour-coded circles that shrink as their lifetime expires.
 fn draw_sparks(sp : Array[Spark]) -> Unit {
   for sp_elem in sp {
-    if not(sp_elem.active) {
+    if !sp_elem.active {
       continue
     }
     let c = if sp_elem.kind == 0 {
@@ -484,7 +484,7 @@ fn point_seg_dist2(
 /// Returns the index of the first active node whose radius contains the pointer position, or -1.
 fn pick_node(nodes : Array[Node], mx : Float, my : Float) -> Int {
   for i in 0..<nodes.length() {
-    if not(nodes[i].active) {
+    if !nodes[i].active {
       continue
     }
     if dist2(mx, my, nodes[i].x, nodes[i].y) <= nodes[i].r * nodes[i].r {
@@ -505,12 +505,12 @@ fn pick_route(
   let mut best : Int = -1
   let mut best_d2 : Float = 99999999.0
   for i in 0..<routes.length() {
-    if not(routes[i].active) {
+    if !routes[i].active {
       continue
     }
     let a : Int = routes[i].a
     let b : Int = routes[i].b
-    if a < 0 || b < 0 || not(nodes[a].active) || not(nodes[b].active) {
+    if a < 0 || b < 0 || !nodes[a].active || !nodes[b].active {
       continue
     }
 
@@ -605,7 +605,7 @@ fn load_from_node_to_target(
   truck.cargo_kind = 0
   truck.cargo = 0
 
-  if not(nodes[from_idx].active) || not(nodes[to_idx].active) {
+  if !nodes[from_idx].active || !nodes[to_idx].active {
     return
   }
 
@@ -676,7 +676,7 @@ fn update_nodes(nodes : Array[Node], dt : Float, cycle : Int) -> (Int, Int) {
   let mut bonus_cash : Int = 0
 
   for node in nodes {
-    if not(node.active) {
+    if !node.active {
       continue
     }
 
@@ -744,7 +744,7 @@ fn update_routes(routes : Array[Route], dt : Float, storm_t : Float) -> Int {
   let mut broken_n : Int = 0
 
   for route in routes {
-    if not(route.active) {
+    if !route.active {
       continue
     }
 
@@ -788,12 +788,12 @@ fn update_trucks(
   sparks : Array[Spark],
 ) -> Unit {
   for truck in trucks {
-    if not(truck.active) {
+    if !truck.active {
       continue
     }
 
     let rid : Int = truck.route
-    if rid < 0 || rid >= routes.length() || not(routes[rid].active) {
+    if rid < 0 || rid >= routes.length() || !routes[rid].active {
       truck.active = false
       continue
     }
@@ -862,7 +862,7 @@ fn update_trucks(
 fn damage_random_route(routes : Array[Route], amount : Float) -> Int {
   for _try_i in 0..<48 {
     let idx : Int = @raylib.get_random_value(0, routes.length() - 1)
-    if not(routes[idx].active) {
+    if !routes[idx].active {
       continue
     }
     routes[idx].hp = routes[idx].hp - amount
@@ -906,7 +906,7 @@ fn draw_button(
   enabled : Bool,
   hover : Bool,
 ) -> Unit {
-  let fill = if not(enabled) {
+  let fill = if !enabled {
     @raylib.Color::new(72, 78, 92, 208)
   } else if hover {
     @raylib.Color::new(102, 150, 230, 242)
@@ -987,12 +987,12 @@ fn draw_routes(
   storm_t : Float,
 ) -> Unit {
   for i in 0..<routes.length() {
-    if not(routes[i].active) {
+    if !routes[i].active {
       continue
     }
     let a : Int = routes[i].a
     let b : Int = routes[i].b
-    if a < 0 || b < 0 || not(nodes[a].active) || not(nodes[b].active) {
+    if a < 0 || b < 0 || !nodes[a].active || !nodes[b].active {
       continue
     }
 
@@ -1051,7 +1051,7 @@ fn draw_routes(
 /// Draws all active nodes as pulsing coloured circles with name, kind label, stock counts, and selection ring.
 fn draw_nodes(nodes : Array[Node], selected_node : Int) -> Unit {
   for i in 0..<nodes.length() {
-    if not(nodes[i].active) {
+    if !nodes[i].active {
       continue
     }
 
@@ -1205,12 +1205,12 @@ fn draw_trucks(
   nodes : Array[Node],
 ) -> Unit {
   for truck in trucks {
-    if not(truck.active) {
+    if !truck.active {
       continue
     }
 
     let rid : Int = truck.route
-    if rid < 0 || rid >= routes.length() || not(routes[rid].active) {
+    if rid < 0 || rid >= routes.length() || !routes[rid].active {
       continue
     }
 
@@ -1608,7 +1608,7 @@ fn main {
 
   reset_run()
 
-  while not(@raylib.window_should_close()) {
+  while !@raylib.window_should_close() {
     let mut dt : Float = @raylib.get_frame_time()
     if dt > 0.033 {
       dt = 0.033
@@ -1670,7 +1670,7 @@ fn main {
       }
 
       for i in 0..<routes.length() {
-        if not(routes[i].active) {
+        if !routes[i].active {
           continue
         }
         if routes[i].spawn_cd <= 0.0 {
@@ -1741,7 +1741,7 @@ fn main {
         }
 
         for node in nodes {
-          if not(node.active) || node.kind == 0 {
+          if !node.active || node.kind == 0 {
             continue
           }
           if @raylib.get_random_value(0, 99) < 15 {
@@ -1851,7 +1851,7 @@ fn main {
           if budget >= repair_cost {
             let mut repaired : Int = 0
             for route in routes {
-              if not(route.active) {
+              if !route.active {
                 continue
               }
               if route.hp < 100.0 {
@@ -1876,7 +1876,7 @@ fn main {
           if budget >= surge_cost {
             budget = budget - surge_cost
             for node in nodes {
-              if not(node.active) {
+              if !node.active {
                 continue
               }
               if node.kind == 0 {
@@ -1905,7 +1905,7 @@ fn main {
           }
         }
 
-        if click && not(upgrade_hover) && not(repair_hover) && not(surge_hover) {
+        if click && !upgrade_hover && !repair_hover && !surge_hover {
           let n : Int = pick_node(nodes, mouse.x, mouse.y)
           if n >= 0 {
             if selected_node < 0 {

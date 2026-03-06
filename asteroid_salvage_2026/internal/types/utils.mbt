@@ -75,7 +75,7 @@ pub fn spawn_rock(
   vy : Float,
 ) -> Unit {
   for rock in game.rocks {
-    if not(rock.active) {
+    if !rock.active {
       rock.active = true
       rock.size = size
       rock.radius = match size {
