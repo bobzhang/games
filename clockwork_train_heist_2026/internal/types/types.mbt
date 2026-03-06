@@ -52,6 +52,8 @@ pub(all) struct Actor {
   mut fy : Float
   mut t : Float
   mut moving : Bool
+
+  fn new() -> Actor
 }
 
 ///|
@@ -69,6 +71,8 @@ pub(all) struct Guard {
   mut seed : Int
   mut alert_t : Float
   mut color_id : Int
+
+  fn new() -> Guard
 }
 
 ///|
@@ -79,6 +83,8 @@ pub(all) struct Loot {
   mut y : Int
   mut kind : LootKind
   mut value : Int
+
+  fn new() -> Loot
 }
 
 ///|
@@ -88,6 +94,8 @@ pub(all) struct Smoke {
   mut x : Int
   mut y : Int
   mut t : Float
+
+  fn new() -> Smoke
 }
 
 ///|
@@ -101,6 +109,8 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
+
+  fn new() -> Particle
 }
 
 ///|
@@ -139,10 +149,13 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates an actor initialized at the starting tile.
+#deprecated
 pub fn Actor::new() -> Actor {
   {
     x: start_x,
@@ -160,10 +173,11 @@ pub fn Actor::new() -> Actor {
 
 ///|
 /// Creates an inactive guard with default patrol parameters.
+#deprecated
 pub fn Guard::new() -> Guard {
   {
     active: false,
-    body: Actor::new(),
+    body: Actor(),
     mode: Patrol,
     move_cd: 0.0,
     stun_t: 0.0,
@@ -179,18 +193,21 @@ pub fn Guard::new() -> Guard {
 
 ///|
 /// Creates an inactive loot slot.
+#deprecated
 pub fn Loot::new() -> Loot {
   { active: false, x: 0, y: 0, kind: Gold, value: 0 }
 }
 
 ///|
 /// Creates an inactive smoke slot.
+#deprecated
 pub fn Smoke::new() -> Smoke {
   { active: false, x: 0, y: 0, t: 0.0 }
 }
 
 ///|
 /// Creates an inactive particle slot.
+#deprecated
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -206,15 +223,16 @@ pub fn Particle::new() -> Particle {
 
 ///|
 /// Creates a new game state with all pools preallocated.
+#deprecated
 pub fn Game::new() -> Game {
   {
     map: Array::make(grid_w * grid_h, Wall),
-    guards: Array::makei(max_guards, fn(_i) { Guard::new() }),
-    loots: Array::makei(max_loot, fn(_i) { Loot::new() }),
-    smokes: Array::makei(max_smokes, fn(_i) { Smoke::new() }),
-    particles: Array::makei(max_particles, fn(_i) { Particle::new() }),
+    guards: Array::makei(max_guards, fn(_i) { Guard() }),
+    loots: Array::makei(max_loot, fn(_i) { Loot() }),
+    smokes: Array::makei(max_smokes, fn(_i) { Smoke() }),
+    particles: Array::makei(max_particles, fn(_i) { Particle() }),
     state: Title,
-    player: Actor::new(),
+    player: Actor(),
     lives: 3,
     score: 0,
     best_score: 0,
