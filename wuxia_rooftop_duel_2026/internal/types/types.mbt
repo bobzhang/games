@@ -14,6 +14,8 @@ pub(all) struct Enemy {
   mut state_t : Float
   mut telegraph_total_t : Float
   mut visual_phase : Float
+
+  fn new() -> Enemy
 }
 
 ///|
@@ -56,10 +58,13 @@ pub(all) struct Game {
   mut shake_t : Float
   mut message : String
   mut message_t : Float
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates an inactive enemy slot with default combat parameters.
+#deprecated
 pub fn Enemy::new() -> Enemy {
   {
     active: false,
@@ -80,9 +85,10 @@ pub fn Enemy::new() -> Enemy {
 
 ///|
 /// Creates a new game state with initialized player and wave counters.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    enemies: Array::makei(max_enemy_slots, fn(_i) { Enemy::new() }),
+    enemies: Array::makei(max_enemy_slots, fn(_i) { Enemy() }),
     state: Title,
     player_x: arena_center_x(),
     player_y: arena_center_y() + 130.0,
