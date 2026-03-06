@@ -25,6 +25,8 @@ pub(all) struct Hazard {
   mut size : Float
   mut kind : HazardKind
   mut near_miss_awarded : Bool
+
+  fn new() -> Hazard
 }
 
 ///|
@@ -64,10 +66,13 @@ pub(all) struct Game {
   mut input_pause_press : Bool
   mut input_restart_press : Bool
   mut input_confirm_press : Bool
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates an inactive hazard slot for the hazard pool.
+#deprecated
 pub fn Hazard::new() -> Hazard {
   {
     active: false,
@@ -82,9 +87,10 @@ pub fn Hazard::new() -> Hazard {
 
 ///|
 /// Creates a new game state with initialized route and resources.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    hazards: Array::makei(max_hazards, fn(_i) { Hazard::new() }),
+    hazards: Array::makei(max_hazards, fn(_i) { Hazard() }),
     state: Title,
     lane: lane_count / 2,
     lane_x: lane_center_x(0.0, lane_count / 2, cart_y),
