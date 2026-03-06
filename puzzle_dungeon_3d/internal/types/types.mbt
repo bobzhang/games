@@ -345,10 +345,13 @@ pub(all) struct FloorInfo {
   mut completed : Bool
   mut best_moves : Int
   mut stars : Int
+
+  fn new() -> FloorInfo
 }
 
 ///|
 /// Creates default floor progress (locked, incomplete, and no stars).
+#deprecated
 pub fn FloorInfo::new() -> FloorInfo {
   { unlocked: false, completed: false, best_moves: 999, stars: 0 }
 }
@@ -360,10 +363,13 @@ pub fn FloorInfo::new() -> FloorInfo {
 pub(all) struct AchievementInfo {
   mut unlocked : Bool
   mut show_timer : Float
+
+  fn new() -> AchievementInfo
 }
 
 ///|
 /// Creates a locked achievement entry with no active display timer.
+#deprecated
 pub fn AchievementInfo::new() -> AchievementInfo {
   { unlocked: false, show_timer: 0.0 }
 }
@@ -469,21 +475,24 @@ pub(all) struct Game {
   mut total_moves : Int
   mut total_undos : Int
   mut levels_completed : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Constructs a fresh campaign state with initialized pools, default UI cursors,
 /// and floor zero unlocked.
+#deprecated
 pub fn Game::new() -> Game {
   let floor_info : Array[FloorInfo] = []
   for i in 0..<max_floors {
-    floor_info.push(FloorInfo::new())
+    floor_info.push(FloorInfo())
     ignore(i)
   }
   floor_info[0].unlocked = true
   let achievements : Array[AchievementInfo] = []
   for i in 0..<max_achievements {
-    achievements.push(AchievementInfo::new())
+    achievements.push(AchievementInfo())
     ignore(i)
   }
   {
