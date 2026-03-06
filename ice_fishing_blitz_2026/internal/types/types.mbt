@@ -11,6 +11,8 @@ pub(all) struct Fish {
   mut kind : FishKind
   mut phase : Float
   mut hooked : Bool
+
+  fn new() -> Fish
 }
 
 ///|
@@ -25,6 +27,8 @@ pub(all) struct Hazard {
   mut dmg : Float
   mut kind : HazardKind
   mut phase : Float
+
+  fn new() -> Hazard
 }
 
 ///|
@@ -53,6 +57,8 @@ pub(all) struct Pickup {
   mut vy : Float
   mut kind : PickupKind
   mut phase : Float
+
+  fn new() -> Pickup
 }
 
 ///|
@@ -66,6 +72,8 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
+
+  fn new() -> Particle
 }
 
 ///|
@@ -116,10 +124,13 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates an inactive fish slot for the fish pool.
+#deprecated
 pub fn Fish::new() -> Fish {
   {
     active: false,
@@ -137,6 +148,7 @@ pub fn Fish::new() -> Fish {
 
 ///|
 /// Creates an inactive hazard slot for the hazard pool.
+#deprecated
 pub fn Hazard::new() -> Hazard {
   {
     active: false,
@@ -153,12 +165,14 @@ pub fn Hazard::new() -> Hazard {
 
 ///|
 /// Creates an inactive pickup slot for the pickup pool.
+#deprecated
 pub fn Pickup::new() -> Pickup {
   { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, kind: Bait, phase: 0.0 }
 }
 
 ///|
 /// Creates an inactive particle slot for the particle pool.
+#deprecated
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -174,12 +188,13 @@ pub fn Particle::new() -> Particle {
 
 ///|
 /// Creates a new game state with initialized pools and meters.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    fish: Array::makei(max_fish, fn(_i) { Fish::new() }),
-    hazards: Array::makei(max_hazards, fn(_i) { Hazard::new() }),
-    pickups: Array::makei(max_pickups, fn(_i) { Pickup::new() }),
-    particles: Array::makei(max_particles, fn(_i) { Particle::new() }),
+    fish: Array::makei(max_fish, fn(_i) { Fish() }),
+    hazards: Array::makei(max_hazards, fn(_i) { Hazard() }),
+    pickups: Array::makei(max_pickups, fn(_i) { Pickup() }),
+    particles: Array::makei(max_particles, fn(_i) { Particle() }),
     state: Title,
     hook_x: Float::from_int(hole_x),
     hook_y: Float::from_int(water_top + 70),
