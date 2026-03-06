@@ -34,6 +34,8 @@ pub(all) struct Spark {
   mut life : Float
   mut size : Float
   mut kind : SparkKind
+
+  fn new() -> Spark
 }
 
 ///|
@@ -77,10 +79,13 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates an inactive spark instance for the particle pool.
+#deprecated
 pub fn Spark::new() -> Spark {
   {
     active: false,
@@ -96,11 +101,12 @@ pub fn Spark::new() -> Spark {
 
 ///|
 /// Creates a new game in title state with initialized buffers and counters.
+#deprecated
 pub fn Game::new() -> Game {
   {
     board: Array::make(max_cells, 0),
     prev_board: Array::make(max_cells, 0),
-    sparks: Array::makei(1200, fn(_i) { Spark::new() }),
+    sparks: Array::makei(1200, fn(_i) { Spark() }),
     line_vals: Array::make(board_n, 0),
     line_out: Array::make(board_n, 0),
     state: Title,
