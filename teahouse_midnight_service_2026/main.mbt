@@ -8,7 +8,7 @@ fn main {
   @raylib.init_audio_device()
   defer @raylib.close_audio_device()
   @raylib.set_target_fps(@types.target_fps)
-  let game = @types.Game::new()
+  let game = @types.Game()
   @types.init_title_scene(game)
   while !@raylib.window_should_close() {
     let dt = @types.clampf(@raylib.get_frame_time(), 0.0, 0.033)
