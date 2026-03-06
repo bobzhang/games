@@ -9,7 +9,7 @@ fn main {
 
   @raylib.set_target_fps(@types.target_fps)
 
-  let game = @types.Game::new()
+  let game = @types.Game()
   @types.set_message(game, "Press J to start the first shift.")
 
   while !@raylib.window_should_close() {

@@ -9,10 +9,13 @@ pub(all) struct InputState {
   mut press_pause : Bool
   mut press_restart : Bool
   mut press_start : Bool
+
+  fn new() -> InputState
 }
 
 ///|
 /// Creates a cleared input state with no active actions.
+#deprecated
 pub fn InputState::new() -> InputState {
   {
     move_x: 0,
@@ -38,10 +41,13 @@ pub(all) struct Order {
   mut patience : Float
   mut max_patience : Float
   mut pulse : Float
+
+  fn new(id : Int) -> Order
 }
 
 ///|
 /// Creates an inactive order entry with the given stable id.
+#deprecated
 pub fn Order::new(id : Int) -> Order {
   {
     active: false,
@@ -81,10 +87,13 @@ pub(all) struct PrepState {
   mut output_ready : Bool
   mut out_kind : Ingredient
   mut out_flavor : Int
+
+  fn new() -> PrepState
 }
 
 ///|
 /// Creates a reset prep state with default timing targets.
+#deprecated
 pub fn PrepState::new() -> PrepState {
   {
     active: false,
@@ -109,10 +118,13 @@ pub(all) struct PotState {
   mut progress : Float
   mut target : Float
   mut ready : Bool
+
+  fn new() -> PotState
 }
 
 ///|
 /// Creates an empty pot state with base cooking target.
+#deprecated
 pub fn PotState::new() -> PotState {
   {
     broth: -1,
@@ -155,16 +167,19 @@ pub(all) struct Game {
   mut msg : String
   mut msg_t : Float
   mut flash_t : Float
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a new game with initialized queue, meters, and stats.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    input: InputState::new(),
-    orders: Array::makei(max_orders, fn(i) { Order::new(i + 1) }),
-    prep: PrepState::new(),
-    pot: PotState::new(),
+    input: InputState(),
+    orders: Array::makei(max_orders, fn(i) { Order(i + 1) }),
+    prep: PrepState(),
+    pot: PotState(),
     hand: Item::empty(),
     state: Title,
     cursor_x: 1,
