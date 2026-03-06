@@ -7,10 +7,13 @@ pub(all) struct Bullet {
   mut vx : Float
   mut vy : Float
   mut ttl : Float
+
+  fn new() -> Bullet
 }
 
 ///|
 /// Returns an inactive bullet placeholder.
+#deprecated
 pub fn Bullet::new() -> Bullet {
   { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0 }
 }
@@ -25,10 +28,13 @@ pub(all) struct Rock {
   mut vy : Float
   mut radius : Float
   mut size : Int
+
+  fn new() -> Rock
 }
 
 ///|
 /// Returns an inactive rock placeholder.
+#deprecated
 pub fn Rock::new() -> Rock {
   { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, radius: 0.0, size: 0 }
 }
@@ -50,10 +56,13 @@ pub(all) struct Game {
   mut lives : Int
   mut wave : Int
   mut game_over : Bool
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a new game state with centered ship and empty entity pools.
+#deprecated
 pub fn Game::new() -> Game {
   {
     ship_x: Float::from_int(screen_width) * 0.5,
@@ -64,8 +73,8 @@ pub fn Game::new() -> Game {
     fire_cooldown: 0.0,
     ship_invuln: 0.0,
     thrusting: false,
-    bullets: Array::make(bullet_max, Bullet::new()),
-    rocks: Array::make(rock_max, Rock::new()),
+    bullets: Array::make(bullet_max, Bullet()),
+    rocks: Array::make(rock_max, Rock()),
     score: 0,
     lives: 3,
     wave: 1,
