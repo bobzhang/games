@@ -11,10 +11,13 @@ pub(all) struct TrackObj {
   mut phase_only : Int
   mut spin : Float
   mut hit_lock : Float
+
+  fn new() -> TrackObj
 }
 
 ///|
 /// Create an inactive default track object slot.
+#deprecated
 pub fn TrackObj::new() -> TrackObj {
   {
     active: false,
@@ -41,10 +44,13 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : Int
+
+  fn new() -> Particle
 }
 
 ///|
 /// Create an inactive default particle slot.
+#deprecated
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -68,10 +74,13 @@ pub(all) struct Trail {
   mut h : Float
   mut life : Float
   mut beta : Bool
+
+  fn new() -> Trail
 }
 
 ///|
 /// Create an inactive default trail slot.
+#deprecated
 pub fn Trail::new() -> Trail {
   { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, beta: false }
 }
@@ -88,10 +97,13 @@ pub(all) struct Player {
   mut invuln_t : Float
   mut hurt_t : Float
   mut anim_t : Float
+
+  fn new() -> Player
 }
 
 ///|
 /// Create the player centered on lane 2 and grounded.
+#deprecated
 pub fn Player::new() -> Player {
   {
     lane: 2,
@@ -154,16 +166,19 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
+
+  fn new() -> Game
 }
 
 ///|
 /// Construct a new game session in title state with empty pools.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    objs: Array::makei(max_objs, fn(_i) { TrackObj::new() }),
-    particles: Array::makei(max_particles, fn(_i) { Particle::new() }),
-    trails: Array::makei(max_trails, fn(_i) { Trail::new() }),
-    hero: Player::new(),
+    objs: Array::makei(max_objs, fn(_i) { TrackObj() }),
+    particles: Array::makei(max_particles, fn(_i) { Particle() }),
+    trails: Array::makei(max_trails, fn(_i) { Trail() }),
+    hero: Player(),
     state: Title,
     stage: 1,
     stage_goal: stage_base_distance,
