@@ -31,6 +31,8 @@ pub(all) struct Obj {
   mut cloak : Bool
   mut spin : Float
   mut life : Float
+
+  fn new() -> Obj
 }
 
 ///|
@@ -44,6 +46,8 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : Int
+
+  fn new() -> Particle
 }
 
 ///|
@@ -55,6 +59,8 @@ pub(all) struct Ripple {
   mut r : Float
   mut life : Float
   mut kind : Int
+
+  fn new() -> Ripple
 }
 
 ///|
@@ -67,6 +73,8 @@ pub(all) struct Trail {
   mut h : Float
   mut life : Float
   mut kind : Int
+
+  fn new() -> Trail
 }
 
 ///|
@@ -80,6 +88,8 @@ pub(all) struct Player {
   mut invuln : Float
   mut hurt_t : Float
   mut anim_t : Float
+
+  fn new() -> Player
 }
 
 ///|
@@ -125,10 +135,13 @@ pub(all) struct Game {
   mut my : Float
   mut hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates an inactive object slot for the object pool.
+#deprecated
 pub fn Obj::new() -> Obj {
   {
     active: false,
@@ -146,6 +159,7 @@ pub fn Obj::new() -> Obj {
 
 ///|
 /// Creates an inactive particle slot for the particle pool.
+#deprecated
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -161,18 +175,21 @@ pub fn Particle::new() -> Particle {
 
 ///|
 /// Creates an inactive ripple slot for the ripple pool.
+#deprecated
 pub fn Ripple::new() -> Ripple {
   { active: false, x: 0.0, y: 0.0, r: 0.0, life: 0.0, kind: 0 }
 }
 
 ///|
 /// Creates an inactive trail slot for the trail pool.
+#deprecated
 pub fn Trail::new() -> Trail {
   { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0, life: 0.0, kind: 0 }
 }
 
 ///|
 /// Creates a player initialized at the default on-screen start position.
+#deprecated
 pub fn Player::new() -> Player {
   {
     x: Float::from_int(screen_w / 2),
@@ -188,13 +205,14 @@ pub fn Player::new() -> Player {
 
 ///|
 /// Creates a new game state with initialized pools and stage counters.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    objs: Array::makei(max_objs, fn(_i) { Obj::new() }),
-    particles: Array::makei(max_particles, fn(_i) { Particle::new() }),
-    ripples: Array::makei(max_ripples, fn(_i) { Ripple::new() }),
-    trails: Array::makei(max_trails, fn(_i) { Trail::new() }),
-    hero: Player::new(),
+    objs: Array::makei(max_objs, fn(_i) { Obj() }),
+    particles: Array::makei(max_particles, fn(_i) { Particle() }),
+    ripples: Array::makei(max_ripples, fn(_i) { Ripple() }),
+    trails: Array::makei(max_trails, fn(_i) { Trail() }),
+    hero: Player(),
     state: Title,
     stage: 1,
     distance: 0.0,
