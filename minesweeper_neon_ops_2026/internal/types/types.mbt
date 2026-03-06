@@ -31,6 +31,8 @@ pub(all) struct Cell {
   mut flagged : Bool
   mut exploded : Bool
   mut around : Int
+
+  fn new() -> Cell
 }
 
 ///|
@@ -44,6 +46,8 @@ pub(all) struct Spark {
   mut life : Float
   mut size : Float
   mut kind : Int
+
+  fn new() -> Spark
 }
 
 ///|
@@ -84,16 +88,20 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a fresh unrevealed, non-mined cell.
+#deprecated
 pub fn Cell::new() -> Cell {
   { mine: false, revealed: false, flagged: false, exploded: false, around: 0 }
 }
 
 ///|
 /// Creates an inactive spark instance for the particle pool.
+#deprecated
 pub fn Spark::new() -> Spark {
   {
     active: false,
@@ -109,10 +117,11 @@ pub fn Spark::new() -> Spark {
 
 ///|
 /// Creates a new game in title state with default resources and counters.
+#deprecated
 pub fn Game::new() -> Game {
   {
-    cells: Array::makei(max_cells, fn(_i) { Cell::new() }),
-    sparks: Array::makei(1400, fn(_i) { Spark::new() }),
+    cells: Array::makei(max_cells, fn(_i) { Cell() }),
+    sparks: Array::makei(1400, fn(_i) { Spark() }),
     queue_x: Array::make(max_cells, 0),
     queue_y: Array::make(max_cells, 0),
     state: Title,
