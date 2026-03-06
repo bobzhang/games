@@ -367,10 +367,23 @@ pub(all) struct StageProfile {
   sky_bottom : @raylib.Color
   fog_alpha : Float
   ui_accent : @raylib.Color
+
+  fn new(
+    title : String,
+    subtitle : String,
+    enemy_bonus : Int,
+    spawn_scale : Float,
+    drop_bonus : Int,
+    sky_top : @raylib.Color,
+    sky_bottom : @raylib.Color,
+    fog_alpha : Float,
+    ui_accent : @raylib.Color,
+  ) -> StageProfile
 }
 
 ///|
 /// Creates a stage profile with gameplay and palette parameters.
+#deprecated
 pub fn StageProfile::new(
   title : String,
   subtitle : String,
@@ -398,7 +411,7 @@ pub fn StageProfile::new(
 ///|
 /// Returns baseline profile values used as defaults.
 pub fn default_stage_profile() -> StageProfile {
-  StageProfile::new(
+  StageProfile(
     "Border Skirmish",
     "Standard armored engagement",
     0,
