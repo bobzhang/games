@@ -11,6 +11,8 @@ pub(all) struct Actor {
   mut fy : Float
   mut t : Float
   mut moving : Bool
+
+  fn new() -> Actor
 }
 
 ///|
@@ -28,6 +30,8 @@ pub(all) struct Drone {
   mut seed : Int
   mut alert_t : Float
   mut color_id : Int
+
+  fn new() -> Drone
 }
 
 ///|
@@ -37,6 +41,8 @@ pub(all) struct Core {
   mut x : Int
   mut y : Int
   mut kind : CoreKind
+
+  fn new() -> Core
 }
 
 ///|
@@ -46,6 +52,8 @@ pub(all) struct Flare {
   mut x : Int
   mut y : Int
   mut t : Float
+
+  fn new() -> Flare
 }
 
 ///|
@@ -59,6 +67,8 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
+
+  fn new() -> Particle
 }
 
 ///|
@@ -98,10 +108,13 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a player actor at the configured start tile.
+#deprecated
 pub fn Actor::new() -> Actor {
   {
     x: start_x,
@@ -119,10 +132,11 @@ pub fn Actor::new() -> Actor {
 
 ///|
 /// Creates an inactive drone entry for the drone pool.
+#deprecated
 pub fn Drone::new() -> Drone {
   {
     active: false,
-    body: Actor::new(),
+    body: Actor(),
     mode: Patrol,
     move_cd: 0.0,
     stun_t: 0.0,
@@ -138,18 +152,21 @@ pub fn Drone::new() -> Drone {
 
 ///|
 /// Creates an inactive core entry for the core pool.
+#deprecated
 pub fn Core::new() -> Core {
   { active: false, x: 0, y: 0, kind: Orange }
 }
 
 ///|
 /// Creates an inactive flare entry for the flare pool.
+#deprecated
 pub fn Flare::new() -> Flare {
   { active: false, x: 0, y: 0, t: 0.0 }
 }
 
 ///|
 /// Creates an inactive particle entry for the particle pool.
+#deprecated
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -165,15 +182,16 @@ pub fn Particle::new() -> Particle {
 
 ///|
 /// Creates a new game state with initialized pools and counters.
+#deprecated
 pub fn Game::new() -> Game {
   {
     map: Array::make(grid_w * grid_h, Wall),
-    drones: Array::makei(max_drones, fn(_i) { Drone::new() }),
-    cores: Array::makei(max_cores, fn(_i) { Core::new() }),
-    flares: Array::makei(max_flares, fn(_i) { Flare::new() }),
-    particles: Array::makei(max_particles, fn(_i) { Particle::new() }),
+    drones: Array::makei(max_drones, fn(_i) { Drone() }),
+    cores: Array::makei(max_cores, fn(_i) { Core() }),
+    flares: Array::makei(max_flares, fn(_i) { Flare() }),
+    particles: Array::makei(max_particles, fn(_i) { Particle() }),
     state: Title,
-    player: Actor::new(),
+    player: Actor(),
     lives: max_lives,
     score: 0,
     best_score: 0,
