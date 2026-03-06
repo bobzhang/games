@@ -101,10 +101,13 @@ pub(all) struct Game {
   mut mouse_hold : Bool
   mut mouse_press : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates an empty campaign state with preallocated undo and spark pools.
+#deprecated
 pub fn Game::new() -> Game {
   let undo_arr : Array[UndoStep] = Array::makei(4096, fn(_i) {
     {
