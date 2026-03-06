@@ -43,6 +43,8 @@ pub(all) struct Actor {
   mut fy : Float
   mut t : Float
   mut moving : Bool
+
+  fn new() -> Actor
 }
 
 ///|
@@ -55,6 +57,8 @@ pub(all) struct Ghost {
   mut move_cd : Float
   mut seed : Int
   mut alert_t : Float
+
+  fn new() -> Ghost
 }
 
 ///|
@@ -68,6 +72,8 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
+
+  fn new() -> Particle
 }
 
 ///|
@@ -110,10 +116,13 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates an actor initialized at the starting tile.
+#deprecated
 pub fn Actor::new() -> Actor {
   {
     x: start_x,
@@ -131,10 +140,11 @@ pub fn Actor::new() -> Actor {
 
 ///|
 /// Creates an inactive ghost with default patrol state.
+#deprecated
 pub fn Ghost::new() -> Ghost {
   {
     active: false,
-    body: Actor::new(),
+    body: Actor(),
     mode: Patrol,
     stun_t: 0.0,
     move_cd: 0.0,
@@ -145,6 +155,7 @@ pub fn Ghost::new() -> Ghost {
 
 ///|
 /// Creates an inactive particle with default values.
+#deprecated
 pub fn Particle::new() -> Particle {
   {
     active: false,
@@ -160,6 +171,7 @@ pub fn Particle::new() -> Particle {
 
 ///|
 /// Creates a new game state with preallocated arrays and defaults.
+#deprecated
 pub fn Game::new() -> Game {
   {
     map: Array::make(grid_w * grid_h, Floor),
@@ -169,10 +181,10 @@ pub fn Game::new() -> Game {
     page_x: Array::make(max_pages, 0),
     page_y: Array::make(max_pages, 0),
     page_taken: Array::make(max_pages, false),
-    ghosts: Array::makei(max_ghosts, fn(_i) { Ghost::new() }),
-    particles: Array::makei(max_particles, fn(_i) { Particle::new() }),
+    ghosts: Array::makei(max_ghosts, fn(_i) { Ghost() }),
+    particles: Array::makei(max_particles, fn(_i) { Particle() }),
     state: Title,
-    player: Actor::new(),
+    player: Actor(),
     lives: 3,
     pages: 0,
     seals_on: 0,

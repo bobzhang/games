@@ -12,7 +12,7 @@ fn main {
 
   @raylib.set_target_fps(@types.target_fps)
 
-  let game : @types.Game = @types.Game::new()
+  let game = @types.Game()
 
   while !@raylib.window_should_close() {
     let dt : Float = @types.clampf(@raylib.get_frame_time(), 0.0, 0.04)
