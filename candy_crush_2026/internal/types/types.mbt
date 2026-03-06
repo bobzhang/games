@@ -47,10 +47,13 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_press : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
 
 ///|
 /// Creates a new game state with default board buffers and counters.
+#deprecated
 pub fn Game::new() -> Game {
   {
     kinds: Array::make(board_cells, 0),
