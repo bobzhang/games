@@ -571,28 +571,23 @@ fn nearest_miner(
   px : Float,
   py : Float,
 ) -> (Int, Int, Float) {
-  let mut best_x : Int = -1
-  let mut best_y : Int = -1
-  let mut best_d2 : Float = 99999999.0
-
-  for gy in 0..<grid_h {
-    for gx in 0..<grid_w {
-      if get_tile(tiles, gx, gy) != tile_miner {
-        continue
-      }
-
-      let cx : Float = cell_center_x(gx)
-      let cy : Float = cell_center_y(gy)
-      let d2 : Float = dist2(px, py, cx, cy)
-      if d2 < best_d2 {
-        best_d2 = d2
-        best_x = gx
-        best_y = gy
-      }
+  let total_cells : Int = grid_w * grid_h
+  for idx in 0..<total_cells; best_x = -1, best_y = -1, best_d2 = 99999999.0F {
+    let gy : Int = idx / grid_w
+    let gx : Int = idx % grid_w
+    if get_tile(tiles, gx, gy) != tile_miner {
+      continue
     }
-  }
 
-  (best_x, best_y, best_d2)
+    let cx : Float = cell_center_x(gx)
+    let cy : Float = cell_center_y(gy)
+    let d2 : Float = dist2(px, py, cx, cy)
+    if d2 < best_d2 {
+      continue gx, gy, d2
+    }
+  } nobreak {
+    (best_x, best_y, best_d2)
+  }
 }
 
 ///|
