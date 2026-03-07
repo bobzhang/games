@@ -231,19 +231,17 @@ fn @types.Game::nearest_raider_index(
   y : Float,
   max_dist2 : Float,
 ) -> Int {
-  let mut best = -1
-  let mut best_d2 = max_dist2
-  for i in 0..<game.raiders.length() {
+  for i in 0..<game.raiders.length(); best = -1, best_d2 = max_dist2 {
     if !game.raiders[i].active {
       continue
     }
     let d2 = @types.dist2(x, y, game.raiders[i].x, game.raiders[i].y)
     if d2 < best_d2 {
-      best_d2 = d2
-      best = i
+      continue i, d2
     }
+  } nobreak {
+    best
   }
-  best
 }
 
 ///|
@@ -253,20 +251,18 @@ fn @types.Game::nearest_wagon_index(
   y : Float,
   only_alive : Bool,
 ) -> Int {
-  let mut best = -1
-  let mut best_d2 : Float = 99999999.0
-  for i in 0..<game.wagons.length() {
+  for i in 0..<game.wagons.length(); best = -1, best_d2 = 99999999.0F {
     if only_alive && game.wagons[i].hp <= 0.0 {
       continue
     }
 
     let d2 = @types.dist2(x, y, game.wagons[i].x, game.wagons[i].y)
     if d2 < best_d2 {
-      best_d2 = d2
-      best = i
+      continue i, d2
     }
+  } nobreak {
+    best
   }
-  best
 }
 
 ///|
@@ -589,10 +585,8 @@ fn @types.Game::try_repair(game : @types.Game) -> Unit {
     return
   }
 
-  let mut target = -1
-  let mut best_d2 = @types.repair_range * @types.repair_range
-
-  for i in 0..<game.wagons.length() {
+  let target = for i in 0..<game.wagons.length();
+      target = -1, best_d2 = @types.repair_range * @types.repair_range {
     if game.wagons[i].hp >= game.wagons[i].max_hp {
       continue
     }
@@ -604,9 +598,10 @@ fn @types.Game::try_repair(game : @types.Game) -> Unit {
       game.wagons[i].y,
     )
     if d2 < best_d2 {
-      best_d2 = d2
-      target = i
+      continue i, d2
     }
+  } nobreak {
+    target
   }
 
   if target < 0 {
