@@ -101,12 +101,11 @@ fn @types.Game::alloc_obj(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.objs.length(); best = 0, best_y = game.objs[0].y {
-      if game.objs[i].y > best_y {
-        continue i, game.objs[i].y
-      }
-    } nobreak {
+    let best = @utils.max_index_by(game.objs, fn(a, b) { a.y > b.y })
+    if best >= 0 {
       best
+    } else {
+      0
     }
   }
 }
