@@ -110,12 +110,11 @@ fn @types.Game::alloc_segment_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.segments.length(); best_i = 0, best_x = game.segments[0].x {
-      if game.segments[i].x < best_x {
-        continue i, game.segments[i].x
-      }
-    } nobreak {
-      best_i
+    let best = @utils.min_index_by(game.segments, fn(a, b) { a.x < b.x })
+    if best >= 0 {
+      best
+    } else {
+      0
     }
   }
 }
@@ -128,14 +127,11 @@ fn @types.Game::alloc_obstacle_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for
-      i in 1..<game.obstacles.length()
-      best_i = 0, best_x = game.obstacles[0].x {
-      if game.obstacles[i].x < best_x {
-        continue i, game.obstacles[i].x
-      }
-    } nobreak {
-      best_i
+    let best = @utils.min_index_by(game.obstacles, fn(a, b) { a.x < b.x })
+    if best >= 0 {
+      best
+    } else {
+      0
     }
   }
 }
@@ -148,12 +144,11 @@ fn @types.Game::alloc_chip_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.chips.length(); best_i = 0, best_x = game.chips[0].x {
-      if game.chips[i].x < best_x {
-        continue i, game.chips[i].x
-      }
-    } nobreak {
-      best_i
+    let best = @utils.min_index_by(game.chips, fn(a, b) { a.x < b.x })
+    if best >= 0 {
+      best
+    } else {
+      0
     }
   }
 }
@@ -166,12 +161,11 @@ fn @types.Game::alloc_anchor_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.anchors.length(); best_i = 0, best_x = game.anchors[0].x {
-      if game.anchors[i].x < best_x {
-        continue i, game.anchors[i].x
-      }
-    } nobreak {
-      best_i
+    let best = @utils.min_index_by(game.anchors, fn(a, b) { a.x < b.x })
+    if best >= 0 {
+      best
+    } else {
+      0
     }
   }
 }
