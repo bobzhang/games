@@ -1094,16 +1094,16 @@ fn main {
       }
 
       if hack_press && player.hack_cd <= 0.0 {
-        let mut target : Int = -1
-        for i in 0..<terminals.length() {
+        let target = for i in 0..<terminals.length() {
           if terminals[i].active && !terminals[i].hacked {
             let d = (terminals[i].gx - player.gx).abs() +
               (terminals[i].gy - player.gy).abs()
             if d <= 1 {
-              target = i
-              break
+              break i
             }
           }
+        } nobreak {
+          -1
         }
 
         if target >= 0 {
