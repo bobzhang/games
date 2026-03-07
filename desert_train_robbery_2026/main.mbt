@@ -352,17 +352,17 @@ fn spawn_sheriff(
 ///|
 /// Returns the index of the wagon the player is standing on top of, or -1 if none.
 fn player_support_wagon(player : Rider, wagons : Array[Wagon]) -> Int {
-  let mut idx = -1
-  for i in 0..<wagons.length() {
+  for i in 0..<wagons.length(); idx = -1 {
     let left = wagons[i].x + 10.0
     let right = wagons[i].x + wagons[i].len - 10.0
     if player.x >= left &&
       player.x <= right &&
       (player.y - wagons[i].roof_y).abs() <= 6.0 {
-      idx = i
+      continue i
     }
+  } nobreak {
+    idx
   }
-  idx
 }
 
 ///|
