@@ -106,9 +106,11 @@ fn main {
   let mut wide_paddle = false
 
   while !@raylib.window_should_close() {
-    let mut dt = @raylib.get_frame_time()
-    if dt > (0.05 : Float) {
-      dt = 0.05
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > (0.05 : Float) {
+      (0.05 : Float)
+    } else {
+      frame_dt
     }
 
     if @raylib.is_key_pressed(@raylib.KeyR) {
