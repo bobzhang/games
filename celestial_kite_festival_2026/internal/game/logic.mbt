@@ -87,12 +87,14 @@ fn @types.Game::alloc_obj(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.objs.length(); best = 0, best_life = game.objs[0].life {
-      if game.objs[i].life < best_life {
-        continue i, game.objs[i].life
-      }
-    } nobreak {
+    let best = @utils.min_index_by(
+      game.objs,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
       best
+    } else {
+      0
     }
   }
 }
@@ -105,12 +107,14 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.sparks.length(); best = 0, best_life = game.sparks[0].life {
-      if game.sparks[i].life < best_life {
-        continue i, game.sparks[i].life
-      }
-    } nobreak {
+    let best = @utils.min_index_by(
+      game.sparks,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
       best
+    } else {
+      0
     }
   }
 }
@@ -123,12 +127,14 @@ fn @types.Game::alloc_halo(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.halos.length(); best = 0, best_life = game.halos[0].life {
-      if game.halos[i].life < best_life {
-        continue i, game.halos[i].life
-      }
-    } nobreak {
+    let best = @utils.min_index_by(
+      game.halos,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
       best
+    } else {
+      0
     }
   }
 }
@@ -141,12 +147,14 @@ fn @types.Game::alloc_trail(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.trails.length(); best = 0, best_life = game.trails[0].life {
-      if game.trails[i].life < best_life {
-        continue i, game.trails[i].life
-      }
-    } nobreak {
+    let best = @utils.min_index_by(
+      game.trails,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
       best
+    } else {
+      0
     }
   }
 }
