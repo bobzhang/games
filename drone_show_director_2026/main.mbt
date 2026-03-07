@@ -600,18 +600,16 @@ fn nearest_station_kind(
   y : Float,
   radius : Float,
 ) -> Int {
-  let mut found : Int = -1
-  let mut best : Float = radius * radius
-  for station in stations {
+  for station in stations; found = -1, best = radius * radius {
     let cx : Float = station.x + station.w * 0.5
     let cy : Float = station.y + station.h * 0.5
     let d2v : Float = dist2(x, y, cx, cy)
     if d2v <= best {
-      best = d2v
-      found = station.kind
+      continue station.kind, d2v
     }
+  } nobreak {
+    found
   }
-  found
 }
 
 ///|
