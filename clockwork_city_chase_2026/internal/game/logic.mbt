@@ -101,15 +101,13 @@ fn @types.Game::alloc_obj(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_y = game.objs[0].y
-    for i in 1..<game.objs.length() {
+    for i in 1..<game.objs.length(); best = 0, best_y = game.objs[0].y {
       if game.objs[i].y > best_y {
-        best_y = game.objs[i].y
-        best = i
+        continue i, game.objs[i].y
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -121,15 +119,13 @@ fn @types.Game::alloc_shot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.shots[0].life
-    for i in 1..<game.shots.length() {
+    for i in 1..<game.shots.length(); best = 0, best_life = game.shots[0].life {
       if game.shots[i].life < best_life {
-        best_life = game.shots[i].life
-        best = i
+        continue i, game.shots[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -141,15 +137,13 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.sparks[0].life
-    for i in 1..<game.sparks.length() {
+    for i in 1..<game.sparks.length(); best = 0, best_life = game.sparks[0].life {
       if game.sparks[i].life < best_life {
-        best_life = game.sparks[i].life
-        best = i
+        continue i, game.sparks[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -161,15 +155,13 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.rings[0].life
-    for i in 1..<game.rings.length() {
+    for i in 1..<game.rings.length(); best = 0, best_life = game.rings[0].life {
       if game.rings[i].life < best_life {
-        best_life = game.rings[i].life
-        best = i
+        continue i, game.rings[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -181,15 +173,13 @@ fn @types.Game::alloc_ghost(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.ghosts[0].life
-    for i in 1..<game.ghosts.length() {
+    for i in 1..<game.ghosts.length(); best = 0, best_life = game.ghosts[0].life {
       if game.ghosts[i].life < best_life {
-        best_life = game.ghosts[i].life
-        best = i
+        continue i, game.ghosts[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
