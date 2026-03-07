@@ -790,12 +790,8 @@ fn nearest_faulty_segment(
   x : Float,
   y : Float,
 ) -> (Int, Float, Float, Float) {
-  let mut best : Int = -1
-  let mut best_d2 : Float = 99999999.0
-  let mut best_x : Float = x
-  let mut best_y : Float = y
-
-  for i in 0..<segments.length() {
+  for i in 0..<segments.length();
+      best = -1, best_d2 = 99999999.0F, best_x = x, best_y = y {
     if !segments[i].active || segments[i].fault_t <= 0.0 {
       continue
     }
@@ -806,14 +802,11 @@ fn nearest_faulty_segment(
       0.5
     let d2 : Float = dist2(x, y, mx, my)
     if d2 < best_d2 {
-      best_d2 = d2
-      best = i
-      best_x = mx
-      best_y = my
+      continue i, d2, mx, my
     }
+  } nobreak {
+    (best, best_d2, best_x, best_y)
   }
-
-  (best, best_d2, best_x, best_y)
 }
 
 ///|
