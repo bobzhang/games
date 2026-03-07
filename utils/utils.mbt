@@ -34,3 +34,14 @@ pub fn[T] first_index_by(items : Array[T], pred : (T) -> Bool) -> Int {
   }
   -1
 }
+
+///|
+/// Returns the index of the first element satisfying the index-aware predicate `pred`, or `-1` when no element matches.
+pub fn[T] first_indexi_by(items : Array[T], pred : (Int, T) -> Bool) -> Int {
+  for i, item in items {
+    if pred(i, item) {
+      return i
+    }
+  }
+  -1
+}
