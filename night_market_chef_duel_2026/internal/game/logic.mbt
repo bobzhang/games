@@ -102,12 +102,7 @@ fn @types.Game::base_patience(game : @types.Game, dish : @types.Dish) -> Float {
 ///|
 /// Returns the index of the first inactive order slot, or -1 if all slots are occupied.
 fn @types.Game::find_free_order_slot(game : @types.Game) -> Int {
-  for i, slot in game.orders {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.orders, fn(slot) { !slot.active })
 }
 
 ///|
