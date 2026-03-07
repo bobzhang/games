@@ -266,29 +266,28 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   // Boarding (B key when near enemy)
   if @raylib.is_key_pressed(@raylib.KeyB) && ship.boarding_target < 0 {
     // Find nearest enemy in boarding range
-    let mut nearest_idx = -1
-    let mut nearest_dist : Float = @types.boarding_range
-    for i in 0..<game.enemies.length() {
+    for i in 0..<game.enemies.length();
+        nearest_idx = -1, nearest_dist = @types.boarding_range {
       let e = game.enemies[i]
       if !e.active {
         continue
       }
       let d = @types.distance2d(ship.x, ship.z, e.x, e.z)
       if d < nearest_dist {
-        nearest_dist = d
-        nearest_idx = i
+        continue i, d
       }
-    }
-    if nearest_idx >= 0 {
-      ship.boarding_target = nearest_idx
-      ship.boarding_timer = @types.boarding_duration
-      let cn = @types.get_class_name(game.enemies[nearest_idx].ship_class)
-      @types.add_battle_message(game, "Boarding \{cn}!", 255, 255, 100)
-      @types.add_battle_log(game, "Attempting to board \{cn}")
-    } else {
-      @types.add_battle_message(
-        game, "No ship in boarding range", 200, 200, 200,
-      )
+    } nobreak {
+      if nearest_idx >= 0 {
+        ship.boarding_target = nearest_idx
+        ship.boarding_timer = @types.boarding_duration
+        let cn = @types.get_class_name(game.enemies[nearest_idx].ship_class)
+        @types.add_battle_message(game, "Boarding \{cn}!", 255, 255, 100)
+        @types.add_battle_log(game, "Attempting to board \{cn}")
+      } else {
+        @types.add_battle_message(
+          game, "No ship in boarding range", 200, 200, 200,
+        )
+      }
     }
   }
   // Update boarding
