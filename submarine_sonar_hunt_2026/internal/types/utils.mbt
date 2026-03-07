@@ -185,21 +185,18 @@ pub fn pointer_on_rect(
 ///|
 /// Returns AI or spawn-planning data for nearest undetected target.
 pub fn nearest_undetected_target(game : Game) -> (Float, Float, Bool) {
-  let mut best_x = game.sub_x
-  let mut best_y = game.sub_y
-  let mut found = false
-  let mut best_d : Float = 1_000_000_000.0
-  for i in 0..<game.target_goal {
+  let (best_x, best_y, found) = for i in 0..<game.target_goal;
+      best_x = game.sub_x, best_y = game.sub_y, found = false,
+      best_d = 1_000_000_000.0F {
     if !game.targets[i].active || game.targets[i].detected {
       continue
     }
     let d = dist2(game.sub_x, game.sub_y, game.targets[i].x, game.targets[i].y)
     if d < best_d {
-      best_d = d
-      best_x = game.targets[i].x
-      best_y = game.targets[i].y
-      found = true
+      continue game.targets[i].x, game.targets[i].y, true, d
     }
+  } nobreak {
+    (best_x, best_y, found)
   }
   (best_x, best_y, found)
 }
