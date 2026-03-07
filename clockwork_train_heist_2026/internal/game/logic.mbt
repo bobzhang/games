@@ -220,17 +220,12 @@ fn @types.Game::guard_index_at(
   y : Int,
   skip : Int,
 ) -> Int {
-  for i in 0..<game.guards.length() {
-    if i == skip || !game.guards[i].active {
-      continue
-    }
-
-    if game.guards[i].body.x == x && game.guards[i].body.y == y {
-      return i
-    }
-  }
-
-  -1
+  @utils.first_indexi_by(
+    game.guards,
+    fn(i, slot) {
+      i != skip && slot.active && slot.body.x == x && slot.body.y == y
+    },
+  )
 }
 
 ///|
