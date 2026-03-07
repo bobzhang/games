@@ -165,10 +165,8 @@ fn @types.Game::nearest_trap_slot(
   want_active : Bool,
   max_distance : Float,
 ) -> Int {
-  let mut best = -1
-  let mut best_d2 = @types.squaref(max_distance)
-
-  for i in 0..<game.traps.length() {
+  for i in 0..<game.traps.length();
+      best = -1, best_d2 = @types.squaref(max_distance) {
     if game.traps[i].active != want_active {
       continue
     }
@@ -180,12 +178,11 @@ fn @types.Game::nearest_trap_slot(
       game.traps[i].y,
     )
     if d2 <= best_d2 {
-      best = i
-      best_d2 = d2
+      continue i, d2
     }
+  } nobreak {
+    best
   }
-
-  best
 }
 
 ///|
@@ -577,10 +574,8 @@ fn @types.Game::update_traps(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    let mut hit_index = -1
-    let mut best_d2 = @types.squaref(@types.trap_trigger_radius)
-
-    for j in 0..<game.enemies.length() {
+    let hit_index = for j in 0..<game.enemies.length();
+        hit_index = -1, best_d2 = @types.squaref(@types.trap_trigger_radius) {
       if !game.enemies[j].active {
         continue
       }
@@ -592,9 +587,10 @@ fn @types.Game::update_traps(game : @types.Game, dt : Float) -> Unit {
         game.enemies[j].y,
       )
       if d2 <= best_d2 {
-        hit_index = j
-        best_d2 = d2
+        continue j, d2
       }
+    } nobreak {
+      hit_index
     }
 
     if hit_index >= 0 {
