@@ -47,7 +47,7 @@ fn @types.Game::spawn_particle(
 ///|
 /// Spawns a golden burst used when collecting a coin.
 pub fn spawn_coin_burst(game : @types.Game, x : Float, y : Float) -> Unit {
-  for i in 0..<10 {
+  for _ in 0..<10 {
     let a = @types.randf(0.0, 6.28)
     let s = @types.randf(45.0, 160.0)
     game.spawn_particle(
@@ -70,7 +70,7 @@ pub fn spawn_block_burst(
   y : Float,
   color : @raylib.Color,
 ) -> Unit {
-  for i in 0..<12 {
+  for _ in 0..<12 {
     let a = @types.randf(0.0, 6.28)
     let s = @types.randf(60.0, 220.0)
     game.spawn_particle(
@@ -88,7 +88,7 @@ pub fn spawn_block_burst(
 ///|
 /// Spawns a brown impact burst for enemy stomps.
 pub fn spawn_stomp_burst(game : @types.Game, x : Float, y : Float) -> Unit {
-  for i in 0..<15 {
+  for _ in 0..<15 {
     let a = @types.randf(0.0, 6.28)
     let s = @types.randf(55.0, 200.0)
     game.spawn_particle(
@@ -106,7 +106,7 @@ pub fn spawn_stomp_burst(game : @types.Game, x : Float, y : Float) -> Unit {
 ///|
 /// Spawns a red burst to signal player damage.
 pub fn spawn_hurt_burst(game : @types.Game, x : Float, y : Float) -> Unit {
-  for i in 0..<18 {
+  for _ in 0..<18 {
     let a = @types.randf(0.0, 6.28)
     let s = @types.randf(80.0, 260.0)
     game.spawn_particle(

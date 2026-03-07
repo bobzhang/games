@@ -174,7 +174,7 @@ fn spawn_burst(
   speed_scale : Float,
   color_bias : Int,
 ) -> Unit {
-  for i in 0..<n {
+  for _ in 0..<n {
     spawn_spark(sparks, x, y, speed_scale, color_bias)
   }
 }

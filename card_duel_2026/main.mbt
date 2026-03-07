@@ -62,7 +62,7 @@ fn deal_damage(hp : Int, block : Int, dmg : Int) -> (Int, Int) {
 /// Clears the current hand and fills it with three randomly drawn cards.
 fn roll_hand(hand : Array[Int]) -> Unit {
   hand.clear()
-  for i in 0..<3 {
+  for _ in 0..<3 {
     hand.push(@raylib.get_random_value(0, card_count - 1))
   }
 }
