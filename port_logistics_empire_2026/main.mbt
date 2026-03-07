@@ -502,14 +502,12 @@ fn pick_route(
   mx : Float,
   my : Float,
 ) -> Int {
-  let mut best : Int = -1
-  let mut best_d2 : Float = 99999999.0
-  for i in 0..<routes.length() {
-    if !routes[i].active {
+  for i, route in routes; best = -1, best_d2 = 99999999.0F {
+    if !route.active {
       continue
     }
-    let a : Int = routes[i].a
-    let b : Int = routes[i].b
+    let a : Int = route.a
+    let b : Int = route.b
     if a < 0 || b < 0 || !nodes[a].active || !nodes[b].active {
       continue
     }
@@ -523,14 +521,14 @@ fn pick_route(
       nodes[b].y,
     )
     if d2 < best_d2 {
-      best_d2 = d2
-      best = i
+      continue i, d2
     }
-  }
-  if best >= 0 && best_d2 <= 17.0 * 17.0 {
-    best
-  } else {
-    -1
+  } nobreak {
+    if best >= 0 && best_d2 <= 17.0 * 17.0 {
+      best
+    } else {
+      -1
+    }
   }
 }
 
