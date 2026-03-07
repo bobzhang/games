@@ -102,15 +102,13 @@ fn @types.Game::alloc_enemy(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_hp = game.enemies[0].hp
-    for i in 1..<game.enemies.length() {
+    for i in 1..<game.enemies.length(); best = 0, best_hp = game.enemies[0].hp {
       if game.enemies[i].hp < best_hp {
-        best_hp = game.enemies[i].hp
-        best = i
+        continue i, game.enemies[i].hp
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -121,15 +119,13 @@ fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.bullets[0].life
-    for i in 1..<game.bullets.length() {
+    for i in 1..<game.bullets.length(); best = 0, best_life = game.bullets[0].life {
       if game.bullets[i].life < best_life {
-        best_life = game.bullets[i].life
-        best = i
+        continue i, game.bullets[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -140,15 +136,13 @@ fn @types.Game::alloc_enemy_bullet(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.enemy_bullets[0].life
-    for i in 1..<game.enemy_bullets.length() {
+    for i in 1..<game.enemy_bullets.length(); best = 0, best_life = game.enemy_bullets[0].life {
       if game.enemy_bullets[i].life < best_life {
-        best_life = game.enemy_bullets[i].life
-        best = i
+        continue i, game.enemy_bullets[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -159,15 +153,13 @@ fn @types.Game::alloc_flare(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_t = game.flares[0].t
-    for i in 1..<game.flares.length() {
+    for i in 1..<game.flares.length(); best = 0, best_t = game.flares[0].t {
       if game.flares[i].t < best_t {
-        best_t = game.flares[i].t
-        best = i
+        continue i, game.flares[i].t
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -178,15 +170,13 @@ fn @types.Game::alloc_particle(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.particles[0].life
-    for i in 1..<game.particles.length() {
+    for i in 1..<game.particles.length(); best = 0, best_life = game.particles[0].life {
       if game.particles[i].life < best_life {
-        best_life = game.particles[i].life
-        best = i
+        continue i, game.particles[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -197,15 +187,13 @@ fn @types.Game::alloc_shock(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.shocks[0].life
-    for i in 1..<game.shocks.length() {
+    for i in 1..<game.shocks.length(); best = 0, best_life = game.shocks[0].life {
       if game.shocks[i].life < best_life {
-        best_life = game.shocks[i].life
-        best = i
+        continue i, game.shocks[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
