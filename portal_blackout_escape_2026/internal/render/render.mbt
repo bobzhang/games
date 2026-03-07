@@ -350,17 +350,18 @@ fn @types.Game::draw_particles(game : @types.Game, ox : Int, oy : Int) -> Unit {
 ///|
 /// Computes the blackout overlay alpha for tile `(x, y)` based on Manhattan distance to the player and any active flares.
 fn @types.Game::light_alpha(game : @types.Game, x : Int, y : Int) -> Int {
-  let mut best : Int = @types.manhattan(x, y, game.player.x, game.player.y)
-
-  for flare in game.flares {
+  let best = for flare in game.flares;
+      best = @types.manhattan(x, y, game.player.x, game.player.y) {
     if !flare.active {
       continue
     }
 
     let d : Int = @types.manhattan(x, y, flare.x, flare.y)
     if d < best {
-      best = d
+      continue d
     }
+  } nobreak {
+    best
   }
 
   if best <= 1 {
