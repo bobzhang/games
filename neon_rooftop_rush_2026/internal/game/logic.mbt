@@ -646,11 +646,8 @@ fn @types.Game::try_grapple(game : @types.Game) -> Bool {
   let hero_cx = game.hero.x + game.hero.w * 0.5
   let hero_cy = game.hero.y + game.hero.h * 0.32
 
-  let mut found = false
-  let mut best_dist : Float = 1000000000.0
-  let mut best_y = hero_cy
-
-  for anchor in game.anchors {
+  let (found, best_y) = for anchor in game.anchors;
+      found = false, best_dist = 1000000000.0F, best_y = hero_cy {
     if !anchor.active {
       continue
     }
@@ -667,10 +664,10 @@ fn @types.Game::try_grapple(game : @types.Game) -> Bool {
 
     let d2 = dx * dx + dy * dy
     if d2 < best_dist {
-      best_dist = d2
-      best_y = anchor.y
-      found = true
+      continue true, d2, anchor.y
     }
+  } nobreak {
+    (found, best_y)
   }
 
   if !found {
