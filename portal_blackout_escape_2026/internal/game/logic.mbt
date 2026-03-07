@@ -661,10 +661,7 @@ fn @types.Game::choose_drone_step(game : @types.Game, i : Int) -> (Int, Int) {
   let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
   if d.mode == Hunt {
-    let mut best_k : Int = -1
-    let mut best_d : Int = 999999
-
-    for k in 0..<4 {
+    let best_k = for k in 0..<4; best_k = -1, best_d = 999999 {
       let nx : Int = gx + dirs[k].0
       let ny : Int = gy + dirs[k].1
       if game.blocked_for_drone(i, nx, ny) {
@@ -673,9 +670,10 @@ fn @types.Game::choose_drone_step(game : @types.Game, i : Int) -> (Int, Int) {
 
       let dd : Int = @types.manhattan(nx, ny, px, py)
       if dd < best_d {
-        best_d = dd
-        best_k = k
+        continue k, dd
       }
+    } nobreak {
+      best_k
     }
 
     if best_k >= 0 {
