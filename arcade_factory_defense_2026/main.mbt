@@ -1345,18 +1345,16 @@ fn main {
         turret.fire_cd = turret.fire_cd - dt
 
         let range : Float = turret_range(turret.kind)
-        let mut target_i : Int = -1
-        let mut best_d2 : Float = 99999999.0
-
-        for e in 0..<enemies.length() {
+        let target_i = for e in 0..<enemies.length(); target_i = -1, best_d2 = 99999999.0F {
           if !enemies[e].active {
             continue
           }
           let d2 : Float = dist2(turret.x, turret.y, enemies[e].x, enemies[e].y)
           if d2 <= range * range && d2 < best_d2 {
-            best_d2 = d2
-            target_i = e
+            continue e, d2
           }
+        } nobreak {
+          target_i
         }
 
         if target_i >= 0 && turret.fire_cd <= 0.0 {
