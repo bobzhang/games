@@ -205,17 +205,10 @@ fn @types.Game::flare_cover_at(game : @types.Game, x : Int, y : Int) -> Bool {
 ///|
 /// Returns the index of the active core at tile `(x, y)`, or -1 if none present.
 fn @types.Game::core_index_at(game : @types.Game, x : Int, y : Int) -> Int {
-  for i in 0..<game.cores.length() {
-    if !game.cores[i].active {
-      continue
-    }
-
-    if game.cores[i].x == x && game.cores[i].y == y {
-      return i
-    }
-  }
-
-  -1
+  @utils.first_index_by(
+    game.cores,
+    fn(core) { core.active && core.x == x && core.y == y },
+  )
 }
 
 ///|
