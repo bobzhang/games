@@ -608,9 +608,11 @@ fn main {
   reset_round(level)
 
   while !@raylib.window_should_close() {
-    let mut dt = @raylib.get_frame_time()
-    if dt > 0.033 {
-      dt = 0.033
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.033F {
+      0.033F
+    } else {
+      frame_dt
     }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
