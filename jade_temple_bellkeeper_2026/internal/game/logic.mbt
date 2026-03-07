@@ -115,15 +115,13 @@ fn @types.Game::alloc_foe(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.foes[0].life
-    for i in 1..<game.foes.length() {
+    for i in 1..<game.foes.length(); best = 0, best_life = game.foes[0].life {
       if game.foes[i].life < best_life {
-        best_life = game.foes[i].life
-        best = i
+        continue i, game.foes[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -135,15 +133,13 @@ fn @types.Game::alloc_bolt(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.bolts[0].life
-    for i in 1..<game.bolts.length() {
+    for i in 1..<game.bolts.length(); best = 0, best_life = game.bolts[0].life {
       if game.bolts[i].life < best_life {
-        best_life = game.bolts[i].life
-        best = i
+        continue i, game.bolts[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -155,15 +151,13 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.sparks[0].life
-    for i in 1..<game.sparks.length() {
+    for i in 1..<game.sparks.length(); best = 0, best_life = game.sparks[0].life {
       if game.sparks[i].life < best_life {
-        best_life = game.sparks[i].life
-        best = i
+        continue i, game.sparks[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -175,15 +169,13 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.rings[0].life
-    for i in 1..<game.rings.length() {
+    for i in 1..<game.rings.length(); best = 0, best_life = game.rings[0].life {
       if game.rings[i].life < best_life {
-        best_life = game.rings[i].life
-        best = i
+        continue i, game.rings[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -195,15 +187,13 @@ fn @types.Game::alloc_echo(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.echoes[0].life
-    for i in 1..<game.echoes.length() {
+    for i in 1..<game.echoes.length(); best = 0, best_life = game.echoes[0].life {
       if game.echoes[i].life < best_life {
-        best_life = game.echoes[i].life
-        best = i
+        continue i, game.echoes[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
