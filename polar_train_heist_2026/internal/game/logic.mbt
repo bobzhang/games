@@ -107,12 +107,11 @@ fn @types.Game::alloc_ent(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.ents.length(); best = 0, best_x = game.ents[0].x {
-      if game.ents[i].x < best_x {
-        continue i, game.ents[i].x
-      }
-    } nobreak {
+    let best = @utils.min_index_by(game.ents, fn(a, b) { a.x < b.x })
+    if best >= 0 {
       best
+    } else {
+      0
     }
   }
 }
