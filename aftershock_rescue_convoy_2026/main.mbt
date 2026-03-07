@@ -666,25 +666,25 @@ fn active_critical(groups : Array[SurvivorGroup]) -> Int {
 ///|
 /// Returns the highest panic value among all active survivor groups.
 fn peak_group_panic(groups : Array[SurvivorGroup]) -> Float {
-  let mut best : Float = 0.0
-  for group in groups {
+  for group in groups; best = 0.0F {
     if group.active && group.panic > best {
-      best = group.panic
+      continue group.panic
     }
+  } nobreak {
+    best
   }
-  best
 }
 
 ///|
 /// Returns the highest intensity value among all active crack zones.
 fn peak_crack_intensity(cracks : Array[CrackZone]) -> Float {
-  let mut best : Float = 0.0
-  for crack in cracks {
+  for crack in cracks; best = 0.0F {
     if crack.active && crack.intensity > best {
-      best = crack.intensity
+      continue crack.intensity
     }
+  } nobreak {
+    best
   }
-  best
 }
 
 ///|
