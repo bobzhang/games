@@ -244,15 +244,14 @@ fn main {
           @raylib.is_key_pressed(@raylib.KeySpace) ||
           @raylib.is_key_pressed(@raylib.KeyEnter)
         ) {
-        let mut pick = -1
-        let mut best_y : Float = 1_000_000.0
-        for i in 0..<patients.length() {
+        let pick = for i in 0..<patients.length(); pick = -1, best_y = 1_000_000.0F {
           if patients[i].alive && patients[i].ward == nurse_ward {
             if patients[i].y < best_y {
-              best_y = patients[i].y
-              pick = i
+              continue i, patients[i].y
             }
           }
+        } nobreak {
+          pick
         }
         if pick >= 0 {
           tr_sev = patients[pick].severity
