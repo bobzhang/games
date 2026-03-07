@@ -291,34 +291,19 @@ pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
 ///|
 /// Returns the index of the first inactive projectile slot, or -1 if full.
 pub fn alloc_projectile(game : Game) -> Int {
-  for i, slot in game.projectiles {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.projectiles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive particle slot, or -1 if full.
 pub fn alloc_particle(game : Game) -> Int {
-  for i, slot in game.particles {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.particles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive dropped item slot, or -1 if full.
 pub fn alloc_dropped_item(game : Game) -> Int {
-  for i, slot in game.dropped_items {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.dropped_items, fn(slot) { !slot.active })
 }
 
 ///|
