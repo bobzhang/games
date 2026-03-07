@@ -2438,17 +2438,17 @@ fn main {
         let mut did_action : Bool = false
 
         // Pick up from nearest raft
-        let mut nearest_raft : Int = -1
-        let mut best_d2 : Float = 54.0 * 54.0
-        for i in 0..<rafts.length() {
+        let nearest_raft = for i in 0..<rafts.length();
+            nearest_raft = -1, best_d2 = 54.0F * 54.0F {
           if !rafts[i].active {
             continue
           }
           let d2 : Float = dist2(boat.x, boat.y, rafts[i].x, rafts[i].y)
           if d2 <= best_d2 {
-            best_d2 = d2
-            nearest_raft = i
+            continue i, d2
           }
+        } nobreak {
+          nearest_raft
         }
         if nearest_raft >= 0 {
           let can_take : Int = boat.capacity - boat.passengers
