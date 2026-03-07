@@ -115,12 +115,14 @@ fn @types.Game::alloc_foe(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.foes.length(); best = 0, best_life = game.foes[0].life {
-      if game.foes[i].life < best_life {
-        continue i, game.foes[i].life
-      }
-    } nobreak {
+    let best = @utils.min_index_by(
+      game.foes,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
       best
+    } else {
+      0
     }
   }
 }
@@ -133,12 +135,14 @@ fn @types.Game::alloc_bolt(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.bolts.length(); best = 0, best_life = game.bolts[0].life {
-      if game.bolts[i].life < best_life {
-        continue i, game.bolts[i].life
-      }
-    } nobreak {
+    let best = @utils.min_index_by(
+      game.bolts,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
       best
+    } else {
+      0
     }
   }
 }
@@ -151,12 +155,14 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.sparks.length(); best = 0, best_life = game.sparks[0].life {
-      if game.sparks[i].life < best_life {
-        continue i, game.sparks[i].life
-      }
-    } nobreak {
+    let best = @utils.min_index_by(
+      game.sparks,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
       best
+    } else {
+      0
     }
   }
 }
@@ -169,12 +175,14 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.rings.length(); best = 0, best_life = game.rings[0].life {
-      if game.rings[i].life < best_life {
-        continue i, game.rings[i].life
-      }
-    } nobreak {
+    let best = @utils.min_index_by(
+      game.rings,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
       best
+    } else {
+      0
     }
   }
 }
@@ -187,12 +195,14 @@ fn @types.Game::alloc_echo(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.echoes.length(); best = 0, best_life = game.echoes[0].life {
-      if game.echoes[i].life < best_life {
-        continue i, game.echoes[i].life
-      }
-    } nobreak {
+    let best = @utils.min_index_by(
+      game.echoes,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
       best
+    } else {
+      0
     }
   }
 }
