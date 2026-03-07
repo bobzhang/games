@@ -96,11 +96,10 @@ fn @types.Game::alloc_particle(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for
-      i in 1..<game.particles.length()
-      best = 0, best_life = game.particles[0].life {
-      if game.particles[i].life < best_life {
-        continue i, game.particles[i].life
+    guard game.particles is [first, .. rest] else { return 0 }
+    for i, particle in rest; best = 0, best_life = first.life {
+      if particle.life < best_life {
+        continue i + 1, particle.life
       }
     } nobreak {
       best
