@@ -1,4 +1,5 @@
 import {
+  "bobzhang/games/utils",
   "moonbitlang/core/math",
   "tonyfettes/raylib",
   "bobzhang/games/haunted_library_puzzle_2026/internal/types",

@@ -220,17 +220,12 @@ fn @types.Game::ghost_index_at(
   y : Int,
   skip : Int,
 ) -> Int {
-  for i in 0..<game.ghosts.length() {
-    if i == skip || !game.ghosts[i].active {
-      continue
-    }
-
-    if game.ghosts[i].body.x == x && game.ghosts[i].body.y == y {
-      return i
-    }
-  }
-
-  -1
+  @utils.first_indexi_by(
+    game.ghosts,
+    fn(i, ghost) {
+      i != skip && ghost.active && ghost.body.x == x && ghost.body.y == y
+    },
+  )
 }
 
 ///|
