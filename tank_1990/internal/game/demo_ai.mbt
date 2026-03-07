@@ -38,19 +38,17 @@ fn @types.Game::demo_nearest_powerup(
   x : Float,
   y : Float,
 ) -> (Int, Float) {
-  let mut best_idx = -1
-  let mut best_dist : Float = Float::from_int(1000000000)
-  for i in 0..<game.powerups.length() {
-    if !game.powerups[i].active {
+  for i, powerup in game.powerups; best_idx = -1, best_dist = 1000000000.F {
+    if !powerup.active {
       continue
     }
-    let d = @types.distance_sq(x, y, game.powerups[i].x, game.powerups[i].y)
+    let d = @types.distance_sq(x, y, powerup.x, powerup.y)
     if d < best_dist {
-      best_dist = d
-      best_idx = i
+      continue i, d
     }
+  } nobreak {
+    (best_idx, best_dist)
   }
-  (best_idx, best_dist)
 }
 
 ///|
