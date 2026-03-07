@@ -260,30 +260,28 @@ pub fn get_ground_height(game : @types.Game, x : Float, z : Float) -> Float {
   if wc < 2 {
     return 0.0
   }
-  let mut best_dist : Float = 99999.0
-  let mut best_idx = 0
-  for i in 0..<wc {
+  for i in 0..<wc; best_dist = 99999.0F, best_idx = 0 {
     let wp = game.waypoints[i]
     let d = @types.distance2d(x, z, wp.x, wp.z)
     if d < best_dist {
-      best_dist = d
-      best_idx = i
+      continue d, i
     }
+  } nobreak {
+    let wp0 = game.waypoints[best_idx]
+    let next_idx = (best_idx + 1) % wc
+    let wp1 = game.waypoints[next_idx]
+    let seg_len = @types.distance2d(wp0.x, wp0.z, wp1.x, wp1.z)
+    if seg_len < 0.01 {
+      return wp0.y
+    }
+    // Project point onto segment
+    let dx = wp1.x - wp0.x
+    let dz = wp1.z - wp0.z
+    let px = x - wp0.x
+    let pz = z - wp0.z
+    let t = @types.clampf((px * dx + pz * dz) / (seg_len * seg_len), 0.0, 1.0)
+    @types.lerpf(wp0.y, wp1.y, t)
   }
-  let wp0 = game.waypoints[best_idx]
-  let next_idx = (best_idx + 1) % wc
-  let wp1 = game.waypoints[next_idx]
-  let seg_len = @types.distance2d(wp0.x, wp0.z, wp1.x, wp1.z)
-  if seg_len < 0.01 {
-    return wp0.y
-  }
-  // Project point onto segment
-  let dx = wp1.x - wp0.x
-  let dz = wp1.z - wp0.z
-  let px = x - wp0.x
-  let pz = z - wp0.z
-  let t = @types.clampf((px * dx + pz * dz) / (seg_len * seg_len), 0.0, 1.0)
-  @types.lerpf(wp0.y, wp1.y, t)
 }
 
 // Apply finish-race scoring

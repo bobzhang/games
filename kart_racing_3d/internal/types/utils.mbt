@@ -474,32 +474,30 @@ pub fn detect_surface_type(game : Game, x : Float, z : Float) -> Surface {
     return Road
   }
   // Find nearest segment
-  let mut best_dist : Float = 99999.0
-  let mut best_seg = 0
-  for i in 0..<wc {
+  for i in 0..<wc; best_dist = 99999.0F, best_seg = 0 {
     let wp = game.waypoints[i]
     let d = distance2d(x, z, wp.x, wp.z)
     if d < best_dist {
-      best_dist = d
-      best_seg = i
+      continue d, i
     }
-  }
-  // Check segment surface type
-  let seg = game.segments[best_seg]
-  // If within road width, use segment surface
-  if best_dist < road_half * seg.width_mult {
-    // Check for boost pad or special surface
-    if seg.surface_type != Road {
-      return seg.surface_type
+  } nobreak {
+    // Check segment surface type
+    let seg = game.segments[best_seg]
+    // If within road width, use segment surface
+    if best_dist < road_half * seg.width_mult {
+      // Check for boost pad or special surface
+      if seg.surface_type != Road {
+        return seg.surface_type
+      }
+      return Road
     }
-    return Road
+    // Slightly off road - dirt
+    if best_dist < road_half * seg.width_mult + 2.0 {
+      return Dirt
+    }
+    // Far off road - grass
+    Grass
   }
-  // Slightly off road - dirt
-  if best_dist < road_half * seg.width_mult + 2.0 {
-    return Dirt
-  }
-  // Far off road - grass
-  Grass
 }
 
 // Detect wrong way: check if kart heading is opposite to track direction
@@ -524,9 +522,7 @@ pub fn is_wrong_way(game : Game, kart : Kart) -> Bool {
 /// Returns the index of the nearest opponent ahead of `kart_idx`, or the nearest behind if none ahead.
 pub fn find_target_ahead(game : Game, kart_idx : Int) -> Int {
   let kart = game.karts[kart_idx]
-  let mut best_idx = -1
-  let mut best_dist : Float = 99999.0
-  for i in 0..<max_karts {
+  for i in 0..<max_karts; best_idx = -1, best_dist = 99999.0F {
     if i == kart_idx {
       continue
     }
@@ -539,28 +535,30 @@ pub fn find_target_ahead(game : Game, kart_idx : Int) -> Int {
     }
     let d = distance2d(kart.x, kart.z, other.x, other.z)
     if d < best_dist {
-      best_dist = d
-      best_idx = i
+      continue i, d
+    }
+  } nobreak {
+    // If nobody is ahead, target nearest behind
+    if best_idx < 0 {
+      for i in 0..<max_karts; best_dist = best_dist, best_idx = best_idx {
+        if i == kart_idx {
+          continue
+        }
+        let other = game.karts[i]
+        if !other.active || other.finished {
+          continue
+        }
+        let d = distance2d(kart.x, kart.z, other.x, other.z)
+        if d < best_dist {
+          continue d, i
+        }
+      } nobreak {
+        best_idx
+      }
+    } else {
+      best_idx
     }
   }
-  // If nobody is ahead, target nearest behind
-  if best_idx < 0 {
-    for i in 0..<max_karts {
-      if i == kart_idx {
-        continue
-      }
-      let other = game.karts[i]
-      if !other.active || other.finished {
-        continue
-      }
-      let d = distance2d(kart.x, kart.z, other.x, other.z)
-      if d < best_dist {
-        best_dist = d
-        best_idx = i
-      }
-    }
-  }
-  best_idx
 }
 
 // Find nearest opponent behind the given kart
