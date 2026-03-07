@@ -23,3 +23,14 @@ pub fn[T] max_index_by(items : Array[T], greater : (T, T) -> Bool) -> Int {
     best
   }
 }
+
+///|
+/// Returns the index of the first element satisfying `pred`, or `-1` when no element matches.
+pub fn[T] first_index_by(items : Array[T], pred : (T) -> Bool) -> Int {
+  for i, item in items {
+    if pred(item) {
+      return i
+    }
+  }
+  -1
+}
