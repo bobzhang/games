@@ -194,7 +194,10 @@ pub(all) struct Customer {
   mut mood : Float
   mut served_t : Float
   mut angry : Bool
+
+  fn new() -> Customer
 }
+#deprecated
 pub fn Customer::new() -> Self
 
 pub(all) struct Game {
@@ -240,7 +243,10 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -265,7 +271,10 @@ pub(all) struct Player {
   mut anim_t : Float
   mut carry_water : Bool
   mut carry_leaf : Tea?
+
+  fn new() -> Player
 }
+#deprecated
 pub fn Player::new() -> Self
 
 pub(all) struct Ring {
@@ -275,7 +284,10 @@ pub(all) struct Ring {
   mut r : Float
   mut life : Float
   mut kind : Int
+
+  fn new() -> Ring
 }
+#deprecated
 pub fn Ring::new() -> Self
 
 pub(all) struct Shadow {
@@ -286,7 +298,10 @@ pub(all) struct Shadow {
   mut h : Float
   mut life : Float
   mut rot : Float
+
+  fn new() -> Shadow
 }
+#deprecated
 pub fn Shadow::new() -> Self
 
 pub(all) struct Spark {
@@ -298,7 +313,10 @@ pub(all) struct Spark {
   mut life : Float
   mut size : Float
   mut kind : Int
+
+  fn new() -> Spark
 }
+#deprecated
 pub fn Spark::new() -> Self
 
 pub(all) enum Tea {

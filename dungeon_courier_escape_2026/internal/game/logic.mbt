@@ -627,8 +627,9 @@ fn @types.Game::nearest_smoke_target(
   x : Float,
   y : Float,
 ) -> (Bool, Float, Float, Float) {
-  for smoke in game.smokes;
-      found = false, best_x = 0.0F, best_y = 0.0F, best_d2 = 0.0F {
+  for
+    smoke in game.smokes
+    found = false, best_x = 0.0F, best_y = 0.0F, best_d2 = 0.0F {
     if !smoke.active {
       continue
     }

@@ -194,7 +194,10 @@ pub(all) struct Game {
   mut status_t : Float
   mut screen_flash_t : Float
   mut game_over_reason : String
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -214,7 +217,10 @@ pub(all) struct Gust {
   mut radius : Float
   mut power : Float
   mut life : Float
+
+  fn new() -> Gust
 }
+#deprecated
 pub fn Gust::new() -> Self
 
 pub(all) struct InputState {
@@ -226,7 +232,10 @@ pub(all) struct InputState {
   mut press_pause : Bool
   mut press_restart : Bool
   mut press_start : Bool
+
+  fn new() -> InputState
 }
+#deprecated
 pub fn InputState::new() -> Self
 
 pub(all) struct Lantern {
@@ -239,7 +248,10 @@ pub(all) struct Lantern {
   mut target_shrine : Int
   mut escorting : Bool
   mut wobble : Float
+
+  fn new() -> Lantern
 }
+#deprecated
 pub fn Lantern::new() -> Self
 
 pub(all) struct Patrol {
@@ -251,7 +263,10 @@ pub(all) struct Patrol {
   mut guard_t : Float
   mut calm_t : Float
   mut calm_cd : Float
+
+  fn new() -> Patrol
 }
+#deprecated
 pub fn Patrol::new() -> Self
 
 pub(all) struct Spark {
@@ -263,7 +278,10 @@ pub(all) struct Spark {
   mut life : Float
   mut power : Float
   mut size : Float
+
+  fn new() -> Spark
 }
+#deprecated
 pub fn Spark::new() -> Self
 
 pub(all) struct Thief {
@@ -276,7 +294,10 @@ pub(all) struct Thief {
   mut target : Int
   mut steal_cd : Float
   mut life : Float
+
+  fn new() -> Thief
 }
+#deprecated
 pub fn Thief::new() -> Self
 
 // Type aliases

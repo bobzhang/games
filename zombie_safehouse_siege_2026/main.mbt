@@ -591,11 +591,7 @@ fn main {
 
   while !@raylib.window_should_close() {
     let frame_dt = @raylib.get_frame_time()
-    let dt = if frame_dt > 0.033F {
-      0.033F
-    } else {
-      frame_dt
-    }
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
       @raylib.toggle_fullscreen()
@@ -1130,7 +1126,9 @@ fn main {
       }
 
       if phase == 1 && home.level >= 2 && home.turret_cd <= 0.0 {
-        let target = for i in 0..<zombies.length(); target = -1, best_d2 = 99999999.0F {
+        let target = for
+          i in 0..<zombies.length()
+          target = -1, best_d2 = 99999999.0F {
           if !zombies[i].active {
             continue
           }

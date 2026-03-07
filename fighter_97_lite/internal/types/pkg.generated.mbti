@@ -391,7 +391,10 @@ pub(all) struct Fighter {
   mut ai_wants_super : Bool
   mut ai_wants_throw : Bool
   mut input : InputState
+
+  fn new(Int, Bool) -> Fighter
 }
+#deprecated
 pub fn Fighter::new(Int, Bool) -> Self
 
 pub(all) struct Game {
@@ -431,7 +434,10 @@ pub(all) struct Game {
   particles : Array[Particle]
   hit_sparks : Array[Particle]
   mut debug_overlay : Bool
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -473,7 +479,10 @@ pub(all) struct InputState {
   mut buffered_motion : Motion
   mut motion_timer : Float
   mut attack_buffer_timer : Float
+
+  fn new() -> InputState
 }
+#deprecated
 pub fn InputState::new() -> Self
 
 pub(all) enum Motion {

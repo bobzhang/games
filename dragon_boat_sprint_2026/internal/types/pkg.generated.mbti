@@ -91,7 +91,10 @@ pub(all) struct Game {
   mut hazard_spawn_t : Float
   mut msg : String
   mut msg_t : Float
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -110,7 +113,10 @@ pub(all) struct Hazard {
   mut size : Float
   mut drift : Float
   mut phase : Float
+
+  fn new() -> Hazard
 }
+#deprecated
 pub fn Hazard::new() -> Self
 
 pub(all) struct Input {
@@ -121,7 +127,10 @@ pub(all) struct Input {
   mut pause_pressed : Bool
   mut restart_pressed : Bool
   mut start_pressed : Bool
+
+  fn new() -> Input
 }
+#deprecated
 pub fn Input::new() -> Self
 
 pub(all) struct Rival {
@@ -131,7 +140,10 @@ pub(all) struct Rival {
   mut dist : Float
   mut speed_bias : Float
   mut stroke_t : Float
+
+  fn new() -> Rival
 }
+#deprecated
 pub fn Rival::new() -> Self
 
 // Type aliases

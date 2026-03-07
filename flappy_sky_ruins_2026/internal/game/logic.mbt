@@ -403,7 +403,9 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
     return false
   }
 
-  let best_y = for obstacle in game.obstacles; best_y = game.py, best_dist = 1000000000.0F {
+  let best_y = for
+    obstacle in game.obstacles
+    best_y = game.py, best_dist = 1000000000.0F {
     if !obstacle.active {
       continue
     }

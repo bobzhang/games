@@ -21,8 +21,9 @@ fn @types.Game::preferred_alive_beacon(
     return preferred
   }
 
-  let (best_index, best_integrity) = for i in 0..<game.beacons.length();
-      best_index = -1, best_integrity = -1.0F {
+  let (best_index, best_integrity) = for
+    i in 0..<game.beacons.length()
+    best_index = -1, best_integrity = -1.0F {
     if game.beacons[i].integrity > best_integrity {
       continue i, game.beacons[i].integrity
     }
@@ -164,8 +165,9 @@ fn @types.Game::nearest_trap_slot(
   want_active : Bool,
   max_distance : Float,
 ) -> Int {
-  for i in 0..<game.traps.length();
-      best = -1, best_d2 = @types.squaref(max_distance) {
+  for
+    i in 0..<game.traps.length()
+    best = -1, best_d2 = @types.squaref(max_distance) {
     if game.traps[i].active != want_active {
       continue
     }
@@ -573,8 +575,9 @@ fn @types.Game::update_traps(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    let hit_index = for j in 0..<game.enemies.length();
-        hit_index = -1, best_d2 = @types.squaref(@types.trap_trigger_radius) {
+    let hit_index = for
+      j in 0..<game.enemies.length()
+      hit_index = -1, best_d2 = @types.squaref(@types.trap_trigger_radius) {
       if !game.enemies[j].active {
         continue
       }

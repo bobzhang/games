@@ -100,7 +100,10 @@ pub(all) struct CookingState {
   mut stage : CookStage
   mut prep_progress : Float
   mut cook_progress : Float
+
+  fn new() -> CookingState
 }
+#deprecated
 pub fn CookingState::new() -> Self
 
 pub(all) enum Dish {
@@ -134,7 +137,10 @@ pub(all) struct Game {
   mut boost_cd : Float
   mut flash_t : Float
   mut shake_t : Float
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -154,7 +160,10 @@ pub(all) struct InputState {
   mut press_pause : Bool
   mut press_restart : Bool
   mut press_start : Bool
+
+  fn new() -> InputState
 }
+#deprecated
 pub fn InputState::new() -> Self
 
 pub(all) enum Lane {
@@ -179,7 +188,10 @@ pub(all) struct Order {
   mut patience_max : Float
   mut reward : Int
   mut ticket_no : Int
+
+  fn new() -> Order
 }
+#deprecated
 pub fn Order::new() -> Self
 
 // Type aliases

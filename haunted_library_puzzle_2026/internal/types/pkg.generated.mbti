@@ -116,7 +116,10 @@ pub(all) struct Actor {
   mut fy : Float
   mut t : Float
   mut moving : Bool
+
+  fn new() -> Actor
 }
+#deprecated
 pub fn Actor::new() -> Self
 
 pub(all) struct Game {
@@ -157,7 +160,10 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -175,7 +181,10 @@ pub(all) struct Ghost {
   mut move_cd : Float
   mut seed : Int
   mut alert_t : Float
+
+  fn new() -> Ghost
 }
+#deprecated
 pub fn Ghost::new() -> Self
 
 pub(all) enum GhostMode {
@@ -194,7 +203,10 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
+
+  fn new() -> Particle
 }
+#deprecated
 pub fn Particle::new() -> Self
 
 pub(all) enum ParticleKind {

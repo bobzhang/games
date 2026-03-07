@@ -148,11 +148,12 @@ fn @types.Game::best_move_for(
   }
 
   let total_cells : Int = @types.board_n * @types.board_n
-  let (found, best_score, best_x, best_y) = for idx in 0..<total_cells;
-      found = false,
-      best_score = -1,
-      best_x = @types.board_n / 2,
-      best_y = @types.board_n / 2 {
+  let (found, best_score, best_x, best_y) = for
+    idx in 0..<total_cells
+    found = false,
+    best_score = -1,
+    best_x = @types.board_n / 2,
+    best_y = @types.board_n / 2 {
     let y : Int = idx / @types.board_n
     let x : Int = idx % @types.board_n
     if @types.cell_at(game, x, y) != Empty {

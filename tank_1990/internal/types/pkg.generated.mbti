@@ -68,8 +68,6 @@ pub let freeze_duration : Float
 
 pub let game_over_delay : Float
 
-pub fn get_tile(Game, Int, Int) -> Tile
-
 pub fn in_tile_bounds(Int, Int) -> Bool
 
 pub fn is_tile_solid_for_bullet(Tile) -> Bool
@@ -149,8 +147,6 @@ pub fn rects_overlap(@raylib.Rectangle, @raylib.Rectangle) -> Bool
 pub let screen_height : Int
 
 pub let screen_width : Int
-
-pub fn set_tile(Game, Int, Int, Tile, Int) -> Unit
 
 pub fn shake_offsets(Game) -> (Float, Float)
 
@@ -277,7 +273,9 @@ pub(all) struct Game {
   powerups : Array[Powerup]
   stars : Array[Star]
 }
+pub fn Game::get_tile(Self, Int, Int) -> Tile
 pub fn Game::new() -> Self
+pub fn Game::set_tile(Self, Int, Int, Tile, Int) -> Unit
 
 pub(all) enum GameState {
   Menu
@@ -337,7 +335,10 @@ pub(all) struct StageProfile {
   sky_bottom : @raylib.Color
   fog_alpha : Float
   ui_accent : @raylib.Color
+
+  fn new(String, String, Int, Float, Int, @raylib.Color, @raylib.Color, Float, @raylib.Color) -> StageProfile
 }
+#deprecated
 pub fn StageProfile::new(String, String, Int, Float, Int, @raylib.Color, @raylib.Color, Float, @raylib.Color) -> Self
 
 pub(all) struct Star {

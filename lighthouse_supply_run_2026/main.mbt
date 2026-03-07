@@ -798,9 +798,13 @@ fn nearest_urgent_light(
   x : Float,
   y : Float,
 ) -> (Bool, Float, Float, Float) {
-  for light in lights;
-      found = false, best_d2 = 999999999.0F, best_x = x, best_y = y,
-      best_dem = 0.0F {
+  for
+    light in lights
+    found = false,
+    best_d2 = 999999999.0F,
+    best_x = x,
+    best_y = y,
+    best_dem = 0.0F {
     if !light.active || light.demand < 40.0 {
       continue
     }
@@ -1573,11 +1577,7 @@ fn main {
 
   while !@raylib.window_should_close() {
     let frame_dt = @raylib.get_frame_time()
-    let dt = if frame_dt > 0.033F {
-      0.033F
-    } else {
-      frame_dt
-    }
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
     scene_t = scene_t + dt
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {

@@ -266,8 +266,9 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   // Boarding (B key when near enemy)
   if @raylib.is_key_pressed(@raylib.KeyB) && ship.boarding_target < 0 {
     // Find nearest enemy in boarding range
-    for i in 0..<game.enemies.length();
-        nearest_idx = -1, nearest_dist = @types.boarding_range {
+    for
+      i in 0..<game.enemies.length()
+      nearest_idx = -1, nearest_dist = @types.boarding_range {
       let e = game.enemies[i]
       if !e.active {
         continue

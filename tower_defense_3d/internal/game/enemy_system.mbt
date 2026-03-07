@@ -541,8 +541,9 @@ fn @types.Game::apply_chain_lightning(
   for c in 0..<chains {
     current_damage = current_damage * @types.chain_damage_decay
     // Find nearest unvisited enemy within chain range
-    for j, enemy in game.enemies;
-        best = -1, best_dist = @types.chain_range + 1.0F {
+    for
+      j, enemy in game.enemies
+      best = -1, best_dist = @types.chain_range + 1.0F {
       if !enemy.active {
         continue
       }

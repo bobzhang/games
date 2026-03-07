@@ -833,9 +833,12 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
   }
 
   let (best_x, best_y, found_pickup) = if game.fuel < 42.0 || game.ammo < 40 {
-    for pickup in game.pickups;
-        best_x = @types.core_x(), best_y = @types.core_y(), found_pickup = false,
-        best_d2 = 1_000_000_000.0F {
+    for
+      pickup in game.pickups
+      best_x = @types.core_x(),
+      best_y = @types.core_y(),
+      found_pickup = false,
+      best_d2 = 1_000_000_000.0F {
       if !pickup.active {
         continue
       }
@@ -868,8 +871,9 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
   }
 
   if !found_pickup {
-    let (best_x, best_y) = for lane in 0..<5;
-        best_x = best_x, best_y = best_y, safest_score = 1_000_000_000.0F {
+    let (best_x, best_y) = for
+      lane in 0..<5
+      best_x = best_x, best_y = best_y, safest_score = 1_000_000_000.0F {
       let lx : Float = @types.world_left() +
         120.0 +
         Float::from_int(lane) * (Float::from_int(@types.world_w) - 240.0) / 4.0

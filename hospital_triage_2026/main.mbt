@@ -131,11 +131,7 @@ fn main {
 
   while !@raylib.window_should_close() {
     let frame_dt = @raylib.get_frame_time()
-    let dt = if frame_dt > 0.05F {
-      0.05F
-    } else {
-      frame_dt
-    }
+    let dt = if frame_dt > 0.05F { 0.05F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyR) {
       reset_patients(patients)
@@ -244,7 +240,9 @@ fn main {
           @raylib.is_key_pressed(@raylib.KeySpace) ||
           @raylib.is_key_pressed(@raylib.KeyEnter)
         ) {
-        let pick = for i in 0..<patients.length(); pick = -1, best_y = 1_000_000.0F {
+        let pick = for
+          i in 0..<patients.length()
+          pick = -1, best_y = 1_000_000.0F {
           if patients[i].alive && patients[i].ward == nurse_ward {
             if patients[i].y < best_y {
               continue i, patients[i].y

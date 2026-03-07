@@ -14,8 +14,9 @@ fn @types.Game::demo_nearest_enemy(
   x : Float,
   y : Float,
 ) -> (Int, Float) {
-  for i, enemy in game.enemies;
-      best_idx = -1, best_dist = Float::from_int(1000000000) {
+  for
+    i, enemy in game.enemies
+    best_idx = -1, best_dist = Float::from_int(1000000000) {
     if !enemy.active {
       continue
     }
@@ -34,8 +35,9 @@ fn @types.Game::demo_nearest_powerup(
   x : Float,
   y : Float,
 ) -> (Int, Float) {
-  for i, powerup in game.powerups;
-      best_idx = -1, best_dist = Float::from_int(1000000000) {
+  for
+    i, powerup in game.powerups
+    best_idx = -1, best_dist = Float::from_int(1000000000) {
     if !powerup.active {
       continue
     }
@@ -250,11 +252,7 @@ fn @types.Game::demo_player_command(
     (move_dir, shoot)
   }
 
-  let shoot = if shoot {
-    true
-  } else {
-    @types.rand_range(game, 0, 99) < 4
-  }
+  let shoot = if shoot { true } else { @types.rand_range(game, 0, 99) < 4 }
 
   (move_dir, shoot)
 }

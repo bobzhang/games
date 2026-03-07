@@ -182,7 +182,10 @@ pub(all) struct Ent {
   mut spin : Float
   mut cloak : Bool
   mut reward : Int
+
+  fn new() -> Ent
 }
+#deprecated
 pub fn Ent::new() -> Self
 
 pub(all) enum EntityKind {
@@ -205,7 +208,10 @@ pub(all) struct Fx {
   mut life : Float
   mut size : Float
   mut kind : Int
+
+  fn new() -> Fx
 }
+#deprecated
 pub fn Fx::new() -> Self
 
 pub(all) struct Game {
@@ -254,7 +260,10 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -282,7 +291,10 @@ pub(all) struct Player {
   mut hurt_t : Float
   mut muzzle_t : Float
   mut anim_t : Float
+
+  fn new() -> Player
 }
+#deprecated
 pub fn Player::new() -> Self
 
 pub(all) struct Ring {
@@ -292,7 +304,10 @@ pub(all) struct Ring {
   mut r : Float
   mut life : Float
   mut kind : Int
+
+  fn new() -> Ring
 }
+#deprecated
 pub fn Ring::new() -> Self
 
 pub(all) struct Shadow {
@@ -304,7 +319,10 @@ pub(all) struct Shadow {
   mut rot : Float
   mut life : Float
   mut kind : Int
+
+  fn new() -> Shadow
 }
+#deprecated
 pub fn Shadow::new() -> Self
 
 pub(all) struct Shot {
@@ -317,7 +335,10 @@ pub(all) struct Shot {
   mut life : Float
   mut dmg : Float
   mut kind : Int
+
+  fn new() -> Shot
 }
+#deprecated
 pub fn Shot::new() -> Self
 
 // Type aliases

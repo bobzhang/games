@@ -142,7 +142,10 @@ pub(all) struct Enemy {
   mut state_t : Float
   mut telegraph_total_t : Float
   mut visual_phase : Float
+
+  fn new() -> Enemy
 }
+#deprecated
 pub fn Enemy::new() -> Self
 
 pub(all) enum EnemyState {
@@ -192,7 +195,10 @@ pub(all) struct Game {
   mut shake_t : Float
   mut message : String
   mut message_t : Float
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {

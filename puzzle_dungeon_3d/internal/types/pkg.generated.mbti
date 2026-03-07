@@ -364,7 +364,10 @@ pub fn world_to_int(World) -> Int
 pub(all) struct AchievementInfo {
   mut unlocked : Bool
   mut show_timer : Float
+
+  fn new() -> AchievementInfo
 }
+#deprecated
 pub fn AchievementInfo::new() -> Self
 
 pub(all) enum DecoKind {
@@ -430,7 +433,10 @@ pub(all) struct FloorInfo {
   mut completed : Bool
   mut best_moves : Int
   mut stars : Int
+
+  fn new() -> FloorInfo
 }
+#deprecated
 pub fn FloorInfo::new() -> Self
 
 pub(all) struct Game {
@@ -499,7 +505,10 @@ pub(all) struct Game {
   mut total_moves : Int
   mut total_undos : Int
   mut levels_completed : Int
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {

@@ -1883,11 +1883,7 @@ fn main {
 
   while !@raylib.window_should_close() {
     let frame_dt = @raylib.get_frame_time()
-    let dt = if frame_dt > 0.033F {
-      0.033F
-    } else {
-      frame_dt
-    }
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
     scene_t = scene_t + dt
 
     let mouse = @raylib.get_mouse_position()
@@ -2436,8 +2432,9 @@ fn main {
         let mut did_action : Bool = false
 
         // Pick up from nearest raft
-        let nearest_raft = for i in 0..<rafts.length();
-            nearest_raft = -1, best_d2 = 54.0F * 54.0F {
+        let nearest_raft = for
+          i in 0..<rafts.length()
+          nearest_raft = -1, best_d2 = 54.0F * 54.0F {
           if !rafts[i].active {
             continue
           }

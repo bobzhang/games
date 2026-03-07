@@ -113,7 +113,9 @@ fn @types.Game::alloc_shadow(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.shadows.length(); best = 0, best_life = game.shadows[0].life {
+    for
+      i in 1..<game.shadows.length()
+      best = 0, best_life = game.shadows[0].life {
       if game.shadows[i].life < best_life {
         continue i, game.shadows[i].life
       }
@@ -258,7 +260,9 @@ fn @types.Game::alloc_customer(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.customers.length(); best = 0, best_patience = game.customers[0].patience {
+    for
+      i in 1..<game.customers.length()
+      best = 0, best_patience = game.customers[0].patience {
       if game.customers[i].patience < best_patience {
         continue i, game.customers[i].patience
       }

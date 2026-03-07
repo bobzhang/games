@@ -119,7 +119,9 @@ fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.bullets.length(); best = 0, best_life = game.bullets[0].life {
+    for
+      i in 1..<game.bullets.length()
+      best = 0, best_life = game.bullets[0].life {
       if game.bullets[i].life < best_life {
         continue i, game.bullets[i].life
       }
@@ -136,7 +138,9 @@ fn @types.Game::alloc_enemy_bullet(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.enemy_bullets.length(); best = 0, best_life = game.enemy_bullets[0].life {
+    for
+      i in 1..<game.enemy_bullets.length()
+      best = 0, best_life = game.enemy_bullets[0].life {
       if game.enemy_bullets[i].life < best_life {
         continue i, game.enemy_bullets[i].life
       }
@@ -170,7 +174,9 @@ fn @types.Game::alloc_particle(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.particles.length(); best = 0, best_life = game.particles[0].life {
+    for
+      i in 1..<game.particles.length()
+      best = 0, best_life = game.particles[0].life {
       if game.particles[i].life < best_life {
         continue i, game.particles[i].life
       }

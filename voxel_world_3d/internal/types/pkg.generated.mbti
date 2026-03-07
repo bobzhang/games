@@ -390,7 +390,10 @@ pub(all) struct BlockHit {
   mut ny : Int
   mut nz : Int
   mut distance : Float
+
+  fn new() -> BlockHit
 }
+#deprecated
 pub fn BlockHit::new() -> Self
 
 pub(all) struct Chunk {
@@ -399,8 +402,11 @@ pub(all) struct Chunk {
   cz : Int
   mut dirty : Bool
   mut biome : Biome
+
+  fn new(Int, Int) -> Chunk
 }
 pub fn Chunk::get_block(Self, Int, Int, Int) -> Int
+#deprecated
 pub fn Chunk::new(Int, Int) -> Self
 pub fn Chunk::set_block(Self, Int, Int, Int, Int) -> Unit
 
@@ -412,7 +418,10 @@ pub(all) struct CraftingRecipe {
   output_id : Int
   output_count : Int
   name : String
+
+  fn new(Int, Int, Int, Int, Int, Int, String) -> CraftingRecipe
 }
+#deprecated
 pub fn CraftingRecipe::new(Int, Int, Int, Int, Int, Int, String) -> Self
 
 pub(all) struct Entity {
@@ -477,7 +486,10 @@ pub(all) struct Game {
   mut prev_pos_z : Float
   mut death_timer : Float
   mut respawn_count : Int
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -493,8 +505,11 @@ pub impl Eq for GameState
 pub(all) struct Inventory {
   slots : Array[ItemSlot]
   mut selected : Int
+
+  fn new() -> Inventory
 }
 pub fn Inventory::add_item(Self, Int, Int) -> Int
+#deprecated
 pub fn Inventory::new() -> Self
 
 pub(all) struct ItemSlot {
@@ -553,7 +568,10 @@ pub(all) struct Player {
   mut underwater : Bool
   mut air_timer : Float
   mut starve_timer : Float
+
+  fn new() -> Player
 }
+#deprecated
 pub fn Player::new() -> Self
 
 // Type aliases

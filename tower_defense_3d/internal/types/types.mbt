@@ -8,11 +8,7 @@ pub(all) struct StatusEffect {
   mut strength : Float
   mut tick_timer : Float
 
-  fn new(
-  kind : Int,
-  duration : Float,
-  strength : Float,
-) -> StatusEffect
+  fn new(kind : Int, duration : Float, strength : Float) -> StatusEffect
 }
 
 ///|

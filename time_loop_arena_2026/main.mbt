@@ -659,11 +659,7 @@ fn main {
 
   while !@raylib.window_should_close() {
     let frame_dt = @raylib.get_frame_time()
-    let dt = if frame_dt > 0.033F {
-      0.033F
-    } else {
-      frame_dt
-    }
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
       @raylib.toggle_fullscreen()
@@ -1041,8 +1037,11 @@ fn main {
         }
 
         // Nearest target among pilot and active ghosts.
-        let (tx, ty) = for g in 0..<ghost_count;
-            tx = pilot.x, ty = pilot.y, best_d2 = dist2(enemy.x, enemy.y, pilot.x, pilot.y) {
+        let (tx, ty) = for
+          g in 0..<ghost_count
+          tx = pilot.x,
+          ty = pilot.y,
+          best_d2 = dist2(enemy.x, enemy.y, pilot.x, pilot.y) {
           if ghosts[g].active {
             let gd2 = dist2(enemy.x, enemy.y, ghosts[g].x, ghosts[g].y)
             if gd2 < best_d2 {

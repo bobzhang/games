@@ -88,7 +88,10 @@ pub(all) struct Game {
   mut hint_t : Float
   mut msg : String
   mut msg_t : Float
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {

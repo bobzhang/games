@@ -499,8 +499,9 @@ fn @types.Game::ring_bell(game : @types.Game, bell_i : Int) -> Unit {
 ///|
 /// Returns the index of the bell within ring reach of the hero, or -1 if none is close enough.
 fn @types.Game::find_nearest_bell(game : @types.Game) -> Int {
-  for i in 0..<@types.bell_count;
-      best = -1, best_d2 = @types.bell_ring_reach * @types.bell_ring_reach {
+  for
+    i in 0..<@types.bell_count
+    best = -1, best_d2 = @types.bell_ring_reach * @types.bell_ring_reach {
     let d2 = @types.dist2(
       game.hero.x,
       game.hero.y,

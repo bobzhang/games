@@ -790,8 +790,9 @@ fn nearest_faulty_segment(
   x : Float,
   y : Float,
 ) -> (Int, Float, Float, Float) {
-  for i in 0..<segments.length();
-      best = -1, best_d2 = 99999999.0F, best_x = x, best_y = y {
+  for
+    i in 0..<segments.length()
+    best = -1, best_d2 = 99999999.0F, best_x = x, best_y = y {
     if !segments[i].active || segments[i].fault_t <= 0.0 {
       continue
     }
@@ -1434,11 +1435,7 @@ fn main {
 
   while !@raylib.window_should_close() {
     let frame_dt = @raylib.get_frame_time()
-    let dt = if frame_dt > 0.033F {
-      0.033F
-    } else {
-      frame_dt
-    }
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
       @raylib.toggle_fullscreen()

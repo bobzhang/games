@@ -131,7 +131,9 @@ fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.bullets.length(); oldest = 0, best_life = game.bullets[0].life {
+    for
+      i in 1..<game.bullets.length()
+      oldest = 0, best_life = game.bullets[0].life {
       if game.bullets[i].life < best_life {
         continue i, game.bullets[i].life
       }
@@ -581,8 +583,9 @@ fn @types.Game::try_repair(game : @types.Game) -> Unit {
     return
   }
 
-  let target = for i in 0..<game.wagons.length();
-      target = -1, best_d2 = @types.repair_range * @types.repair_range {
+  let target = for
+    i in 0..<game.wagons.length()
+    target = -1, best_d2 = @types.repair_range * @types.repair_range {
     if game.wagons[i].hp >= game.wagons[i].max_hp {
       continue
     }

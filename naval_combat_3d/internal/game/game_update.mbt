@@ -491,8 +491,9 @@ fn @types.Game::update_fleet_ships(game : @types.Game, dt : Float) -> Unit {
       fs.speed = @types.lerpf(fs.speed, target_speed, dt * 2.0)
     } else if fs.order == @types.fleet_order_attack {
       // Find nearest enemy and engage
-      for j in 0..<game.enemies.length();
-          nearest_dist = 999.0F, nearest_idx = -1 {
+      for
+        j in 0..<game.enemies.length()
+        nearest_dist = 999.0F, nearest_idx = -1 {
         let e = game.enemies[j]
         if !e.active {
           continue

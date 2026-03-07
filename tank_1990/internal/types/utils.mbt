@@ -71,7 +71,13 @@ pub fn Game::get_tile(game : Game, tx : Int, ty : Int) -> Tile {
 
 ///|
 /// Sets the tile type and hit points at the given tile coordinates.
-pub fn Game::set_tile(game : Game, tx : Int, ty : Int, tile : Tile, hp : Int) -> Unit {
+pub fn Game::set_tile(
+  game : Game,
+  tx : Int,
+  ty : Int,
+  tile : Tile,
+  hp : Int,
+) -> Unit {
   if in_tile_bounds(tx, ty) {
     let idx = tile_index(tx, ty)
     game.map_tiles[idx] = tile

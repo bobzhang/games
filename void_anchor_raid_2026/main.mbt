@@ -923,11 +923,7 @@ fn main {
 
   while !@raylib.window_should_close() {
     let frame_dt = @raylib.get_frame_time()
-    let dt = if frame_dt > 0.033F {
-      0.033F
-    } else {
-      frame_dt
-    }
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
       @raylib.toggle_fullscreen()
@@ -1362,7 +1358,9 @@ fn main {
         // anchor weapon
         if anchors[i].fire_cd <= 0.0 {
           if anchors[i].owner == 1 {
-            let target_i = for e in 0..<enemies.length(); target_i = -1, best_d2 = 99999999.0F {
+            let target_i = for
+              e in 0..<enemies.length()
+              target_i = -1, best_d2 = 99999999.0F {
               if !enemies[e].active {
                 continue
               }
@@ -1467,8 +1465,9 @@ fn main {
         let mut target_x : Float = player.x
         let mut target_y : Float = player.y
 
-        let nearest_anchor = for a in 0..<anchors.length();
-            nearest_anchor = -1, best_anchor_d2 = 99999999.0F {
+        let nearest_anchor = for
+          a in 0..<anchors.length()
+          nearest_anchor = -1, best_anchor_d2 = 99999999.0F {
           if !anchors[a].active {
             continue
           }

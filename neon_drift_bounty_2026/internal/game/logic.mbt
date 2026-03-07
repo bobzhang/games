@@ -119,7 +119,9 @@ fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.bullets.length(); best = 0, best_life = game.bullets[0].life {
+    for
+      i in 1..<game.bullets.length()
+      best = 0, best_life = game.bullets[0].life {
       if game.bullets[i].life < best_life {
         continue i, game.bullets[i].life
       }

@@ -196,7 +196,10 @@ pub(all) struct Bolt {
   mut life : Float
   mut dmg : Float
   mut kind : Int
+
+  fn new() -> Bolt
 }
+#deprecated
 pub fn Bolt::new() -> Self
 
 pub(all) struct Echo {
@@ -207,7 +210,10 @@ pub(all) struct Echo {
   mut h : Float
   mut life : Float
   mut rot : Float
+
+  fn new() -> Echo
 }
+#deprecated
 pub fn Echo::new() -> Self
 
 pub(all) struct Foe {
@@ -225,7 +231,10 @@ pub(all) struct Foe {
   mut shot_cd : Float
   mut reward : Int
   mut marked : Bool
+
+  fn new() -> Foe
 }
+#deprecated
 pub fn Foe::new() -> Self
 
 pub(all) enum FoeKind {
@@ -276,7 +285,10 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -301,7 +313,10 @@ pub(all) struct Hero {
   mut hurt_t : Float
   mut aura_t : Float
   mut anim_t : Float
+
+  fn new() -> Hero
 }
+#deprecated
 pub fn Hero::new() -> Self
 
 pub(all) struct Ring {
@@ -311,7 +326,10 @@ pub(all) struct Ring {
   mut r : Float
   mut life : Float
   mut kind : Int
+
+  fn new() -> Ring
 }
+#deprecated
 pub fn Ring::new() -> Self
 
 pub(all) struct Spark {
@@ -323,7 +341,10 @@ pub(all) struct Spark {
   mut life : Float
   mut size : Float
   mut kind : Int
+
+  fn new() -> Spark
 }
+#deprecated
 pub fn Spark::new() -> Self
 
 // Type aliases

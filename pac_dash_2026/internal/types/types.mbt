@@ -12,12 +12,12 @@ pub(all) struct Ghost {
   color : @raylib.Color
 
   fn new(
-  x : Int,
-  y : Int,
-  scatter_x : Int,
-  scatter_y : Int,
-  color : @raylib.Color,
-) -> Ghost
+    x : Int,
+    y : Int,
+    scatter_x : Int,
+    scatter_y : Int,
+    color : @raylib.Color,
+  ) -> Ghost
 }
 
 ///|

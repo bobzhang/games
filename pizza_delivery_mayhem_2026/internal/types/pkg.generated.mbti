@@ -142,7 +142,10 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -161,7 +164,10 @@ pub(all) struct Order {
   mut y_to : Float
   mut timer : Float
   mut value : Int
+
+  fn new() -> Order
 }
+#deprecated
 pub fn Order::new() -> Self
 
 pub(all) struct Particle {
@@ -173,7 +179,10 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : Int
+
+  fn new() -> Particle
 }
+#deprecated
 pub fn Particle::new() -> Self
 
 pub(all) struct Pickup {
@@ -184,7 +193,10 @@ pub(all) struct Pickup {
   mut vy : Float
   mut kind : PickupKind
   mut phase : Float
+
+  fn new() -> Pickup
 }
+#deprecated
 pub fn Pickup::new() -> Self
 
 pub(all) enum PickupKind {
@@ -204,7 +216,10 @@ pub(all) struct Traffic {
   mut h : Float
   mut kind : TrafficKind
   mut phase : Float
+
+  fn new() -> Traffic
 }
+#deprecated
 pub fn Traffic::new() -> Self
 
 pub(all) enum TrafficKind {

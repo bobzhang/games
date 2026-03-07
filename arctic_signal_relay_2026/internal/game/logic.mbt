@@ -260,8 +260,10 @@ fn @types.Game::closest_pending_tower(
   x : Float,
   y : Float,
 ) -> Int {
-  for i in 0..<game.towers.length();
-      best_idx = -1, best_d2 = @types.tower_interact_r() * @types.tower_interact_r() {
+  for
+    i in 0..<game.towers.length()
+    best_idx = -1,
+    best_d2 = @types.tower_interact_r() * @types.tower_interact_r() {
     if !game.towers[i].active {
       continue
     }

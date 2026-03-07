@@ -57,8 +57,9 @@ fn @types.Game::choose_enemy_target_player(
   game : @types.Game,
   enemy : @types.Tank,
 ) -> Int {
-  for i in 0..<@types.max_players;
-      best_idx = -1, best_dist = Float::from_int(1000000000) {
+  for
+    i in 0..<@types.max_players
+    best_idx = -1, best_dist = Float::from_int(1000000000) {
     let player = game.players[i]
     if player.active {
       let d = @types.distance_sq(enemy.x, enemy.y, player.x, player.y)

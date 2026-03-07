@@ -666,11 +666,7 @@ fn main {
 
   while !@raylib.window_should_close() {
     let frame_dt = @raylib.get_frame_time()
-    let dt = if frame_dt > 0.033F {
-      0.033F
-    } else {
-      frame_dt
-    }
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
       @raylib.toggle_fullscreen()
@@ -926,12 +922,7 @@ fn main {
             if !enemy.active {
               continue
             }
-            let d2 : Float = dist2(
-              player.x,
-              player.y,
-              enemy.x,
-              enemy.y,
-            )
+            let d2 : Float = dist2(player.x, player.y, enemy.x, enemy.y)
             if d2 < best_d2 && d2 <= 420.0 * 420.0 && enemy.shock_t <= 0.08 {
               continue i, d2
             }

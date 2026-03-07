@@ -4,10 +4,11 @@ fn compute_hilbert_step(order : Int, index : Int) -> (Float, Float) {
   let hilbert_points_x : FixedArray[Float] = [0.0, 0.0, 1.0, 1.0]
   let hilbert_points_y : FixedArray[Float] = [0.0, 1.0, 1.0, 0.0]
   let hilbert_index = index & 3
-  for j in 1..<order;
-      vx = hilbert_points_x[hilbert_index],
-      vy = hilbert_points_y[hilbert_index],
-      idx = index {
+  for
+    j in 1..<order
+    vx = hilbert_points_x[hilbert_index],
+    vy = hilbert_points_y[hilbert_index],
+    idx = index {
     let idx = (idx.reinterpret_as_uint() >> 2).reinterpret_as_int()
     let hi = idx & 3
     let len : Float = Float::from_int(1 << j)

@@ -137,7 +137,10 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -158,7 +161,10 @@ pub(all) struct Rival {
   color_kind : Int
   seg_x : Array[Int]
   seg_y : Array[Int]
+
+  fn new(Int) -> Rival
 }
+#deprecated
 pub fn Rival::new(Int) -> Self
 
 pub(all) struct Spark {
@@ -170,7 +176,10 @@ pub(all) struct Spark {
   mut life : Float
   mut size : Float
   mut kind : SparkKind
+
+  fn new() -> Spark
 }
+#deprecated
 pub fn Spark::new() -> Self
 
 pub(all) enum SparkKind {

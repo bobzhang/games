@@ -719,11 +719,7 @@ fn main {
 
   while !@raylib.window_should_close() {
     let frame_dt = @raylib.get_frame_time()
-    let dt = if frame_dt > 0.033F {
-      0.033F
-    } else {
-      frame_dt
-    }
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
       @raylib.toggle_fullscreen()
@@ -885,8 +881,9 @@ fn main {
       // Find grapple target or apply rope.
       if grapple_hold {
         if !pilot.grapple_on {
-          let (best_i, best_d2) = for i in 0..<anchors.length();
-              best_i = -1, best_d2 = 99999999.0F {
+          let (best_i, best_d2) = for
+            i in 0..<anchors.length()
+            best_i = -1, best_d2 = 99999999.0F {
             if anchors[i].active {
               let d2 = dist2(pilot.x, pilot.y, anchors[i].x, anchors[i].y)
               if d2 <= 290.0 * 290.0 && d2 < best_d2 {

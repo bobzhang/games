@@ -78,7 +78,9 @@ fn @types.Game::alloc_particle_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.particles.length(); best_i = 0, best_life = game.particles[0].life {
+    for
+      i in 1..<game.particles.length()
+      best_i = 0, best_life = game.particles[0].life {
       if game.particles[i].life < best_life {
         continue i, game.particles[i].life
       }
@@ -95,7 +97,9 @@ fn @types.Game::alloc_trail_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.trails.length(); best_i = 0, best_life = game.trails[0].life {
+    for
+      i in 1..<game.trails.length()
+      best_i = 0, best_life = game.trails[0].life {
       if game.trails[i].life < best_life {
         continue i, game.trails[i].life
       }

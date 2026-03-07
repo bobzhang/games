@@ -137,7 +137,10 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -167,7 +170,10 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : Int
+
+  fn new() -> Particle
 }
+#deprecated
 pub fn Particle::new() -> Self
 
 pub(all) struct Player {
@@ -180,7 +186,10 @@ pub(all) struct Player {
   mut invuln_t : Float
   mut hurt_t : Float
   mut anim_t : Float
+
+  fn new() -> Player
 }
+#deprecated
 pub fn Player::new() -> Self
 
 pub(all) struct TrackObj {
@@ -194,7 +203,10 @@ pub(all) struct TrackObj {
   mut phase_only : Int
   mut spin : Float
   mut hit_lock : Float
+
+  fn new() -> TrackObj
 }
+#deprecated
 pub fn TrackObj::new() -> Self
 
 pub(all) struct Trail {
@@ -205,7 +217,10 @@ pub(all) struct Trail {
   mut h : Float
   mut life : Float
   mut beta : Bool
+
+  fn new() -> Trail
 }
+#deprecated
 pub fn Trail::new() -> Self
 
 // Type aliases

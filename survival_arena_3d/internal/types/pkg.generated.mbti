@@ -383,7 +383,10 @@ pub(all) struct Crate {
   mut z : Float
   mut respawn_timer : Float
   mut kind : WeaponKind
+
+  fn new(Float, Float, WeaponKind) -> Crate
 }
+#deprecated
 pub fn Crate::new(Float, Float, WeaponKind) -> Self
 
 pub(all) struct DamageIndicator {
@@ -495,7 +498,10 @@ pub(all) struct Game {
   mut highest_combo : Int
   mut total_damage_dealt : Float
   mut total_damage_taken : Float
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -614,7 +620,10 @@ pub(all) struct Player {
   weapon_damage_level : Array[Int]
   weapon_rate_level : Array[Int]
   weapon_mag_level : Array[Int]
+
+  fn new() -> Player
 }
+#deprecated
 pub fn Player::new() -> Self
 
 pub(all) struct Projectile {
@@ -676,7 +685,10 @@ pub(all) struct WeaponState {
   mut reload_timer : Float
   mut reloading : Bool
   mut reload_time : Float
+
+  fn new() -> WeaponState
 }
+#deprecated
 pub fn WeaponState::new() -> Self
 
 // Type aliases

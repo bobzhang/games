@@ -142,11 +142,7 @@ fn main {
 
   while !@raylib.window_should_close() {
     let frame_dt = @raylib.get_frame_time()
-    let dt = if frame_dt > 0.05F {
-      0.05F
-    } else {
-      frame_dt
-    }
+    let dt = if frame_dt > 0.05F { 0.05F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyR) {
       for enemy in enemies {
@@ -245,8 +241,7 @@ fn main {
         // Auto fire nearest enemy.
         fire_timer = fire_timer - dt
         if fire_timer <= 0.0 {
-          for i, enemy in enemies;
-              best = -1, best_d2 = 1_000_000_000_000.0F {
+          for i, enemy in enemies; best = -1, best_d2 = 1_000_000_000_000.0F {
             if !enemy.alive {
               continue
             }

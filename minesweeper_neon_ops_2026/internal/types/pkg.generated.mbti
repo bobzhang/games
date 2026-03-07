@@ -81,7 +81,10 @@ pub(all) struct Cell {
   mut flagged : Bool
   mut exploded : Bool
   mut around : Int
+
+  fn new() -> Cell
 }
+#deprecated
 pub fn Cell::new() -> Self
 
 pub(all) struct Game {
@@ -120,7 +123,10 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -154,7 +160,10 @@ pub(all) struct Spark {
   mut life : Float
   mut size : Float
   mut kind : Int
+
+  fn new() -> Spark
 }
+#deprecated
 pub fn Spark::new() -> Self
 
 // Type aliases

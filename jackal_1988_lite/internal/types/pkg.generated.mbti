@@ -366,7 +366,10 @@ pub(all) struct StageProfile {
   sky_bottom : @raylib.Color
   fog_alpha : Float
   ui_accent : @raylib.Color
+
+  fn new(String, String, Int, Float, Int, @raylib.Color, @raylib.Color, Float, @raylib.Color) -> StageProfile
 }
+#deprecated
 pub fn StageProfile::new(String, String, Int, Float, Int, @raylib.Color, @raylib.Color, Float, @raylib.Color) -> Self
 
 pub(all) struct Star {

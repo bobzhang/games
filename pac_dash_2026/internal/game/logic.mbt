@@ -121,13 +121,7 @@ pub fn init_game(game : @types.Game) -> Unit {
     ),
   )
   game.ghosts.push(
-    Ghost(
-      @types.maze_cols / 2 - 1,
-      @types.maze_rows / 2,
-      1,
-      1,
-      @raylib.pink,
-    ),
+    Ghost(@types.maze_cols / 2 - 1, @types.maze_rows / 2, 1, 1, @raylib.pink),
   )
   game.ghosts.push(
     Ghost(

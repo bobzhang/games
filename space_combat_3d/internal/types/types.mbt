@@ -422,10 +422,10 @@ pub(all) struct MissionObjective {
   mut description : String
 
   fn new(
-  obj_type : Objective,
-  target_count : Int,
-  description : String,
-) -> MissionObjective
+    obj_type : Objective,
+    target_count : Int,
+    description : String,
+  ) -> MissionObjective
 }
 
 ///|

@@ -871,11 +871,7 @@ fn main {
 
   while !@raylib.window_should_close() {
     let frame_dt = @raylib.get_frame_time()
-    let dt = if frame_dt > 0.033F {
-      0.033F
-    } else {
-      frame_dt
-    }
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
       @raylib.toggle_fullscreen()
@@ -1345,7 +1341,9 @@ fn main {
         turret.fire_cd = turret.fire_cd - dt
 
         let range : Float = turret_range(turret.kind)
-        let target_i = for e in 0..<enemies.length(); target_i = -1, best_d2 = 99999999.0F {
+        let target_i = for
+          e in 0..<enemies.length()
+          target_i = -1, best_d2 = 99999999.0F {
           if !enemies[e].active {
             continue
           }

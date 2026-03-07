@@ -122,13 +122,19 @@ pub(all) struct Clue {
   chain : Int
   mut discovered : Bool
   mut glow_t : Float
+
+  fn new(Int) -> Clue
 }
+#deprecated
 pub fn Clue::new(Int) -> Self
 
 pub(all) struct DistrictPulse {
   mut heat : Float
   drift : Float
+
+  fn new(Int) -> DistrictPulse
 }
+#deprecated
 pub fn DistrictPulse::new(Int) -> Self
 
 pub(all) struct Game {
@@ -163,7 +169,10 @@ pub(all) struct Game {
   mut input_focus_press : Bool
   mut input_pause_press : Bool
   mut input_restart_press : Bool
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -182,7 +191,10 @@ pub(all) struct Incident {
   mut timer : Float
   mut severity : Int
   mut pulse_t : Float
+
+  fn new() -> Incident
 }
+#deprecated
 pub fn Incident::new() -> Self
 
 pub(all) struct Suspect {
@@ -191,7 +203,10 @@ pub(all) struct Suspect {
   home_y : Int
   mut deduction_unlocked : Bool
   mut suspicion : Float
+
+  fn new(Int) -> Suspect
 }
+#deprecated
 pub fn Suspect::new(Int) -> Self
 
 // Type aliases

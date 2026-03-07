@@ -623,9 +623,12 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
     best_x
   }
 
-  let (best_x, best_y, pickup_found) = for pickup in game.pickups;
-      best_x = best_x, best_y = best_y, pickup_found = false,
-      pickup_dist = 1_000_000.0F {
+  let (best_x, best_y, pickup_found) = for
+    pickup in game.pickups
+    best_x = best_x,
+    best_y = best_y,
+    pickup_found = false,
+    pickup_dist = 1_000_000.0F {
     if !pickup.active {
       continue
     }

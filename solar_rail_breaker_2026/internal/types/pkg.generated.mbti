@@ -142,7 +142,10 @@ pub(all) struct Bullet {
   mut life : Float
   mut dmg : Float
   mut kind : BulletKind
+
+  fn new() -> Bullet
 }
+#deprecated
 pub fn Bullet::new() -> Self
 
 pub(all) enum BulletKind {
@@ -161,7 +164,10 @@ pub(all) struct Enemy {
   mut phase_mask : Int
   mut size : Float
   mut spin : Float
+
+  fn new() -> Enemy
 }
+#deprecated
 pub fn Enemy::new() -> Self
 
 pub(all) struct EnemyBullet {
@@ -173,7 +179,10 @@ pub(all) struct EnemyBullet {
   mut life : Float
   mut dmg : Float
   mut kind : EnemyBulletKind
+
+  fn new() -> EnemyBullet
 }
+#deprecated
 pub fn EnemyBullet::new() -> Self
 
 pub(all) enum EnemyBulletKind {
@@ -198,7 +207,10 @@ pub(all) struct Flare {
   mut spin_v : Float
   mut t : Float
   mut danger : Float
+
+  fn new() -> Flare
 }
+#deprecated
 pub fn Flare::new() -> Self
 
 pub(all) struct Game {
@@ -246,7 +258,10 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -266,7 +281,10 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
+
+  fn new() -> Particle
 }
+#deprecated
 pub fn Particle::new() -> Self
 
 pub(all) enum ParticleKind {
@@ -287,7 +305,10 @@ pub(all) struct Player {
   mut invuln : Float
   mut hurt_t : Float
   mut anim_t : Float
+
+  fn new() -> Player
 }
+#deprecated
 pub fn Player::new() -> Self
 
 pub(all) struct Shock {
@@ -297,7 +318,10 @@ pub(all) struct Shock {
   mut a1 : Float
   mut life : Float
   mut beta : Bool
+
+  fn new() -> Shock
 }
+#deprecated
 pub fn Shock::new() -> Self
 
 // Type aliases

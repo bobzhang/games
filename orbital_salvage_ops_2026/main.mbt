@@ -1016,11 +1016,7 @@ fn main {
 
   while !@raylib.window_should_close() {
     let frame_dt = @raylib.get_frame_time()
-    let dt = if frame_dt > 0.033F {
-      0.033F
-    } else {
-      frame_dt
-    }
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
       @raylib.toggle_fullscreen()
@@ -1317,8 +1313,9 @@ fn main {
       }
 
       if fire_hold && player.fire_cd <= 0.0 && player.heat <= 92.0 {
-        let (aim_x, aim_y, best_d2) = for drone in drones;
-            aim_x = player.face_x, aim_y = player.face_y, best_d2 = 999999999.0F {
+        let (aim_x, aim_y, best_d2) = for
+          drone in drones
+          aim_x = player.face_x, aim_y = player.face_y, best_d2 = 999999999.0F {
           if !drone.active {
             continue
           }

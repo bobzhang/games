@@ -175,9 +175,7 @@ fn @types.Game::lock_current_pose(game : @types.Game) -> Unit {
   let target = game.sequence[game.target_idx]
 
   if @types.same_pose(game.current_pose, target) {
-    game.history.push(
-      Pose(game.current_pose.ax, game.current_pose.ay),
-    )
+    game.history.push(Pose(game.current_pose.ax, game.current_pose.ay))
     game.target_idx = game.target_idx + 1
     game.hit_count = game.hit_count + 1
 

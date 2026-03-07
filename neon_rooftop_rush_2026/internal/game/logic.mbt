@@ -128,8 +128,9 @@ fn @types.Game::alloc_obstacle_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.obstacles.length();
-        best_i = 0, best_x = game.obstacles[0].x {
+    for
+      i in 1..<game.obstacles.length()
+      best_i = 0, best_x = game.obstacles[0].x {
       if game.obstacles[i].x < best_x {
         continue i, game.obstacles[i].x
       }
@@ -183,8 +184,9 @@ fn @types.Game::alloc_particle_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.particles.length();
-        best_i = 0, best_life = game.particles[0].life {
+    for
+      i in 1..<game.particles.length()
+      best_i = 0, best_life = game.particles[0].life {
       if game.particles[i].life < best_life {
         continue i, game.particles[i].life
       }
@@ -202,7 +204,9 @@ fn @types.Game::alloc_ghost_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.ghosts.length(); best_i = 0, best_life = game.ghosts[0].life {
+    for
+      i in 1..<game.ghosts.length()
+      best_i = 0, best_life = game.ghosts[0].life {
       if game.ghosts[i].life < best_life {
         continue i, game.ghosts[i].life
       }
@@ -580,8 +584,9 @@ fn @types.Game::find_floor(
   game : @types.Game,
   center_x : Float,
 ) -> (Bool, Float) {
-  let (found, best_y) = for segment in game.segments;
-      found = false, best_y = Float::from_int(@types.screen_h) + 400.0 {
+  let (found, best_y) = for
+    segment in game.segments
+    found = false, best_y = Float::from_int(@types.screen_h) + 400.0 {
     if !segment.active {
       continue
     }
@@ -645,8 +650,9 @@ fn @types.Game::try_grapple(game : @types.Game) -> Bool {
   let hero_cx = game.hero.x + game.hero.w * 0.5
   let hero_cy = game.hero.y + game.hero.h * 0.32
 
-  let (found, best_y) = for anchor in game.anchors;
-      found = false, best_dist = 1000000000.0F, best_y = hero_cy {
+  let (found, best_y) = for
+    anchor in game.anchors
+    found = false, best_dist = 1000000000.0F, best_y = hero_cy {
     if !anchor.active {
       continue
     }

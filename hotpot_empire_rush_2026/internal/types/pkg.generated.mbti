@@ -128,7 +128,10 @@ pub(all) struct Game {
   mut msg : String
   mut msg_t : Float
   mut flash_t : Float
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -155,7 +158,10 @@ pub(all) struct InputState {
   mut press_pause : Bool
   mut press_restart : Bool
   mut press_start : Bool
+
+  fn new() -> InputState
 }
+#deprecated
 pub fn InputState::new() -> Self
 
 pub(all) struct Item {
@@ -175,7 +181,10 @@ pub(all) struct Order {
   mut patience : Float
   mut max_patience : Float
   mut pulse : Float
+
+  fn new(Int) -> Order
 }
+#deprecated
 pub fn Order::new(Int) -> Self
 
 pub(all) struct PotState {
@@ -187,7 +196,10 @@ pub(all) struct PotState {
   mut progress : Float
   mut target : Float
   mut ready : Bool
+
+  fn new() -> PotState
 }
+#deprecated
 pub fn PotState::new() -> Self
 
 pub(all) struct PrepState {
@@ -199,7 +211,10 @@ pub(all) struct PrepState {
   mut output_ready : Bool
   mut out_kind : Ingredient
   mut out_flavor : Int
+
+  fn new() -> PrepState
 }
+#deprecated
 pub fn PrepState::new() -> Self
 
 pub(all) enum Station {

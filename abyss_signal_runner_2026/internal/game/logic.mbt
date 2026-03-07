@@ -96,7 +96,9 @@ fn @types.Game::alloc_particle(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.particles.length(); best = 0, best_life = game.particles[0].life {
+    for
+      i in 1..<game.particles.length()
+      best = 0, best_life = game.particles[0].life {
       if game.particles[i].life < best_life {
         continue i, game.particles[i].life
       }
@@ -114,7 +116,9 @@ fn @types.Game::alloc_ripple(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.ripples.length(); best = 0, best_life = game.ripples[0].life {
+    for
+      i in 1..<game.ripples.length()
+      best = 0, best_life = game.ripples[0].life {
       if game.ripples[i].life < best_life {
         continue i, game.ripples[i].life
       }

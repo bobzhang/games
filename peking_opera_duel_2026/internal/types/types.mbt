@@ -31,11 +31,11 @@ pub(all) struct Prompt {
   mut time_left : Float
 
   fn new(
-  lane_x : Int,
-  lane_y : Int,
-  stance : Stance,
-  time_left : Float,
-) -> Prompt
+    lane_x : Int,
+    lane_y : Int,
+    stance : Stance,
+    time_left : Float,
+  ) -> Prompt
 }
 
 ///|
