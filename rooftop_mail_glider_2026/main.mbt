@@ -612,20 +612,16 @@ fn nearest_pad_id(
   y : Float,
   radius : Float,
 ) -> Int {
-  let mut found : Int = -1
-  let mut best : Float = radius * radius
-
-  for pad in pads {
+  for pad in pads; found = -1, best = radius * radius {
     let cx : Float = pad.x + pad.w * 0.5
     let cy : Float = pad.y + pad.h * 0.5
     let d2v : Float = dist2(x, y, cx, cy)
     if d2v <= best {
-      best = d2v
-      found = pad.id
+      continue pad.id, d2v
     }
+  } nobreak {
+    found
   }
-
-  found
 }
 
 ///|
