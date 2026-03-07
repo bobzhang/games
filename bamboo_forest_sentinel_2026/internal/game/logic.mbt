@@ -21,14 +21,13 @@ fn @types.Game::preferred_alive_beacon(
     return preferred
   }
 
-  let mut best_index = -1
-  let mut best_integrity : Float = -1.0
-
-  for i in 0..<game.beacons.length() {
+  let (best_index, best_integrity) = for i in 0..<game.beacons.length();
+      best_index = -1, best_integrity = -1.0F {
     if game.beacons[i].integrity > best_integrity {
-      best_integrity = game.beacons[i].integrity
-      best_index = i
+      continue i, game.beacons[i].integrity
     }
+  } nobreak {
+    (best_index, best_integrity)
   }
 
   if best_integrity <= 0.0 {
