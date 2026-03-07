@@ -219,17 +219,12 @@ fn @types.Game::drone_index_at(
   y : Int,
   skip : Int,
 ) -> Int {
-  for i in 0..<game.drones.length() {
-    if i == skip || !game.drones[i].active {
-      continue
-    }
-
-    if game.drones[i].body.x == x && game.drones[i].body.y == y {
-      return i
-    }
-  }
-
-  -1
+  @utils.first_indexi_by(
+    game.drones,
+    fn(i, drone) {
+      i != skip && drone.active && drone.body.x == x && drone.body.y == y
+    },
+  )
 }
 
 ///|
