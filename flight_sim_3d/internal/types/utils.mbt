@@ -248,78 +248,43 @@ pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
 ///|
 /// Returns the index of a free enemy slot, or -1 if none available.
 pub fn alloc_enemy(game : Game) -> Int {
-  for i, slot in game.enemies {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.enemies, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of a free turret slot, or -1 if none available.
 pub fn alloc_turret(game : Game) -> Int {
-  for i, slot in game.turrets {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.turrets, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of a free projectile slot, or -1 if none available.
 pub fn alloc_projectile(game : Game) -> Int {
-  for i, slot in game.projectiles {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.projectiles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of a free particle slot, or -1 if none available.
 pub fn alloc_particle(game : Game) -> Int {
-  for i, slot in game.particles {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.particles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of a free checkpoint slot, or -1 if none available.
 pub fn alloc_checkpoint(game : Game) -> Int {
-  for i, slot in game.checkpoints {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.checkpoints, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of a free building slot, or -1 if none available.
 pub fn alloc_building(game : Game) -> Int {
-  for i, slot in game.buildings {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.buildings, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of a free cloud slot, or -1 if none available.
 pub fn alloc_cloud(game : Game) -> Int {
-  for i, slot in game.clouds {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.clouds, fn(slot) { !slot.active })
 }
 
 // Spawn particles at position
