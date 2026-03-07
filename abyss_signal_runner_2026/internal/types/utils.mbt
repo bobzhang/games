@@ -296,12 +296,11 @@ pub fn alloc_trail(game : Game) -> Int {
     }
   }
 
-  for i in 1..<game.trails.length(); best = 0, best_life = game.trails[0].life {
-    if game.trails[i].life < best_life {
-      continue i, game.trails[i].life
-    }
-  } nobreak {
+  let best = @utils.min_index_by(game.trails, fn(a, b) { a.life < b.life })
+  if best >= 0 {
     best
+  } else {
+    0
   }
 }
 
