@@ -101,12 +101,11 @@ fn @types.Game::alloc_entity(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.entities.length(); best = 0, best_y = game.entities[0].y {
-      if game.entities[i].y > best_y {
-        continue i, game.entities[i].y
-      }
-    } nobreak {
+    let best = @utils.max_index_by(game.entities, fn(a, b) { a.y > b.y })
+    if best >= 0 {
       best
+    } else {
+      0
     }
   }
 }
