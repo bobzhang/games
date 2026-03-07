@@ -251,18 +251,18 @@ fn nearest_checkpoint_dy(
   cp_count : Int,
   rider_y : Float,
 ) -> Float {
-  let mut best : Float = 9999999.0
-  for i in 0..<cp_count {
+  for i in 0..<cp_count; best = 9999999.0F {
     if cps[i].state != 0 {
       continue
     }
 
     let dy : Float = cps[i].y - rider_y
     if dy >= -40.0 && dy < best {
-      best = dy
+      continue dy
     }
+  } nobreak {
+    best
   }
-  best
 }
 
 ///|
