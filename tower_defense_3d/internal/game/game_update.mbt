@@ -491,13 +491,9 @@ fn @types.Game::handle_tower_selection(game : @types.Game) -> Unit {
   // Select towers by moving cursor over them and pressing T
   // For now, find nearest tower to cursor
   if @raylib.is_key_pressed(@raylib.KeyT) {
-    // Find nearest active tower
-    let mut best_idx = -1
-    let mut best_dist : Float = 999.0
     let cam_x = game.camera_target_x
     let cam_z = game.camera_target_z
-    for i in 0..<game.towers.length() {
-      let tower = game.towers[i]
+    for i, tower in game.towers; best_idx = -1, best_dist = 999.0F {
       if !tower.active {
         continue
       }
@@ -505,10 +501,10 @@ fn @types.Game::handle_tower_selection(game : @types.Game) -> Unit {
       let tz = @types.grid_to_world_z(tower.gy)
       let dist = @types.distance2d(cam_x, cam_z, tx, tz)
       if dist < best_dist {
-        best_dist = dist
-        best_idx = i
+        continue i, dist
       }
+    } nobreak {
+      game.selected_tower_idx = best_idx
     }
-    game.selected_tower_idx = best_idx
   }
 }

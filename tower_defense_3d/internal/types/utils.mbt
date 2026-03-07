@@ -555,10 +555,7 @@ pub fn find_target(
   mode : TargetPriority,
   can_see_camo : Bool,
 ) -> Int {
-  let mut best_idx = -1
-  let mut best_score : Float = -999999.0
-  for j in 0..<game.enemies.length() {
-    let enemy = game.enemies[j]
+  for j, enemy in game.enemies; best_idx = -1, best_score = -999999.0F {
     if !enemy.active {
       continue
     }
@@ -583,12 +580,12 @@ pub fn find_target(
           -dist
       }
       if score > best_score {
-        best_score = score
-        best_idx = j
+        continue j, score
       }
     }
+  } nobreak {
+    best_idx
   }
-  best_idx
 }
 
 // Count active enemies
