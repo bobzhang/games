@@ -242,9 +242,11 @@ fn main {
   let mut msg = "A/D steer, W lift, S descend, Space pickup/drop."
 
   while !@raylib.window_should_close() {
-    let mut dt = @raylib.get_frame_time()
-    if dt > 0.05 {
-      dt = 0.05
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.05F {
+      0.05F
+    } else {
+      frame_dt
     }
 
     rotor_t = rotor_t + dt * 20.0
