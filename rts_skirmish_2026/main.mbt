@@ -60,9 +60,7 @@ fn spawn_unit(units : Array[Unit], team : Int, kind : Int, lane : Int) -> Bool {
 
 ///|
 fn closest_enemy(units : Array[Unit], me : Int) -> Int {
-  let mut best = -1
-  let mut best_d : Float = 1_000_000.0
-  for i in 0..<units.length() {
+  for i in 0..<units.length(); best = -1, best_d = 1_000_000.0F {
     if i == me || !units[i].alive {
       continue
     }
@@ -71,11 +69,11 @@ fn closest_enemy(units : Array[Unit], me : Int) -> Int {
     }
     let d = (units[i].x - units[me].x).abs()
     if d < best_d {
-      best_d = d
-      best = i
+      continue i, d
     }
+  } nobreak {
+    best
   }
-  best
 }
 
 ///|
