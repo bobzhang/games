@@ -344,18 +344,14 @@ fn @types.Game::spawn_customer(game : @types.Game) -> Unit {
 
 ///|
 fn nearest_leaf_station(px : Float, py : Float, reach : Float) -> Int {
-  let mut best = -1
-  let mut best_d2 = reach * reach
-
-  for tea in 0..<@types.tea_count {
+  for tea in 0..<@types.tea_count; best = -1, best_d2 = reach * reach {
     let d2 = @types.dist2(px, py, @types.leaf_x(), @types.leaf_y(tea))
     if d2 <= best_d2 {
-      best_d2 = d2
-      best = tea
+      continue tea, d2
     }
+  } nobreak {
+    best
   }
-
-  best
 }
 
 ///|
@@ -365,22 +361,18 @@ fn @types.Game::nearest_customer(
   y : Float,
   reach : Float,
 ) -> Int {
-  let mut best = -1
-  let mut best_d2 = reach * reach
-
-  for i in 0..<game.customers.length() {
+  for i in 0..<game.customers.length(); best = -1, best_d2 = reach * reach {
     if !game.customers[i].active {
       continue
     }
 
     let d2 = @types.dist2(x, y, game.customers[i].x, game.customers[i].y)
     if d2 <= best_d2 {
-      best_d2 = d2
-      best = i
+      continue i, d2
     }
+  } nobreak {
+    best
   }
-
-  best
 }
 
 ///|
