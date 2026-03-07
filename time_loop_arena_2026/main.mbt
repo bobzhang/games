@@ -1041,19 +1041,16 @@ fn main {
         }
 
         // Nearest target among pilot and active ghosts.
-        let mut tx = pilot.x
-        let mut ty = pilot.y
-        let mut best_d2 = dist2(enemy.x, enemy.y, pilot.x, pilot.y)
-
-        for g in 0..<ghost_count {
+        let (tx, ty) = for g in 0..<ghost_count;
+            tx = pilot.x, ty = pilot.y, best_d2 = dist2(enemy.x, enemy.y, pilot.x, pilot.y) {
           if ghosts[g].active {
             let gd2 = dist2(enemy.x, enemy.y, ghosts[g].x, ghosts[g].y)
             if gd2 < best_d2 {
-              best_d2 = gd2
-              tx = ghosts[g].x
-              ty = ghosts[g].y
+              continue ghosts[g].x, ghosts[g].y, gd2
             }
           }
+        } nobreak {
+          (tx, ty)
         }
 
         let dx : Float = tx - enemy.x
