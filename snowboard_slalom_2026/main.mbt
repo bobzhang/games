@@ -219,16 +219,16 @@ fn nearest_gate_y(
   gate_count : Int,
   rider_y : Float,
 ) -> Float {
-  let mut best : Float = 9999999.0
-  for i in 0..<gate_count {
+  for i in 0..<gate_count; best = 9999999.0F {
     if gates[i].state == 0 {
       let dy = gates[i].y - rider_y
       if dy >= -50.0 && dy < best {
-        best = dy
+        continue dy
       }
     }
+  } nobreak {
+    best
   }
-  best
 }
 
 ///|
