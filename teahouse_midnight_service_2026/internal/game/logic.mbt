@@ -79,15 +79,13 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.sparks[0].life
-    for i in 1..<game.sparks.length() {
+    for i in 1..<game.sparks.length(); best = 0, best_life = game.sparks[0].life {
       if game.sparks[i].life < best_life {
-        best_life = game.sparks[i].life
-        best = i
+        continue i, game.sparks[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -98,15 +96,13 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.rings[0].life
-    for i in 1..<game.rings.length() {
+    for i in 1..<game.rings.length(); best = 0, best_life = game.rings[0].life {
       if game.rings[i].life < best_life {
-        best_life = game.rings[i].life
-        best = i
+        continue i, game.rings[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -117,15 +113,13 @@ fn @types.Game::alloc_shadow(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.shadows[0].life
-    for i in 1..<game.shadows.length() {
+    for i in 1..<game.shadows.length(); best = 0, best_life = game.shadows[0].life {
       if game.shadows[i].life < best_life {
-        best_life = game.shadows[i].life
-        best = i
+        continue i, game.shadows[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -264,15 +258,13 @@ fn @types.Game::alloc_customer(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_patience = game.customers[0].patience
-    for i in 1..<game.customers.length() {
+    for i in 1..<game.customers.length(); best = 0, best_patience = game.customers[0].patience {
       if game.customers[i].patience < best_patience {
-        best_patience = game.customers[i].patience
-        best = i
+        continue i, game.customers[i].patience
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
