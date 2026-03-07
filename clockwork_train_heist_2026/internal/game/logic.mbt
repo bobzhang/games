@@ -236,17 +236,10 @@ fn @types.Game::guard_index_at(
 ///|
 /// Returns the index of an active loot item at `(x, y)`, or -1 if none is present.
 fn @types.Game::loot_index_at(game : @types.Game, x : Int, y : Int) -> Int {
-  for i in 0..<game.loots.length() {
-    if !game.loots[i].active {
-      continue
-    }
-
-    if game.loots[i].x == x && game.loots[i].y == y {
-      return i
-    }
-  }
-
-  -1
+  @utils.first_index_by(
+    game.loots,
+    fn(loot) { loot.active && loot.x == x && loot.y == y },
+  )
 }
 
 ///|
