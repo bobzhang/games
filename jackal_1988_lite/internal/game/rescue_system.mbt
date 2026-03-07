@@ -75,29 +75,36 @@ fn @types.Game::seed_stage_hostages(game : @types.Game, stage : Int) -> Unit {
   game.clear_hostages()
   game.hostages_goal = hostage_goal_for_stage(stage)
 
-  let mut placed = 0
-  let mut attempts = 0
-  while placed < game.hostages_goal && attempts < 900 {
-    attempts += 1
+  let placed = for attempts = 0, placed = 0 {
+    if placed >= game.hostages_goal || attempts >= 900 {
+      break placed
+    }
     let tx = @types.rand_range(game, 1, @types.map_tiles_w - 2)
     let ty = @types.rand_range(game, 2, @types.map_tiles_h - 4)
     if game.try_spawn_hostage_at_tile(tx, ty) {
-      placed += 1
+      continue attempts + 1, placed + 1
     }
+    continue attempts + 1, placed
   }
 
-  if placed < game.hostages_goal {
-    for ty = 3
-        ty < @types.map_tiles_h - 3 && placed < game.hostages_goal
-        ty = ty + 1 {
-      for tx = 2
-          tx < @types.map_tiles_w - 2 && placed < game.hostages_goal
-          tx = tx + 1 {
-        if game.try_spawn_hostage_at_tile(tx, ty) {
-          placed += 1
-        }
+  let placed = if placed < game.hostages_goal {
+    for ty = 3, placed = placed {
+      if ty >= @types.map_tiles_h - 3 || placed >= game.hostages_goal {
+        break placed
       }
+      let placed = for tx = 2, placed = placed {
+        if tx >= @types.map_tiles_w - 2 || placed >= game.hostages_goal {
+          break placed
+        }
+        if game.try_spawn_hostage_at_tile(tx, ty) {
+          continue tx + 1, placed + 1
+        }
+        continue tx + 1, placed
+      }
+      continue ty + 1, placed
     }
+  } else {
+    placed
   }
 
   game.hostages_goal = placed
