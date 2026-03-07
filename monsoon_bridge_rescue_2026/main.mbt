@@ -738,18 +738,16 @@ fn nearest_span_index(
   y : Float,
   radius : Float,
 ) -> Int {
-  let mut found : Int = -1
-  let mut best : Float = radius * radius
-  for i in 0..<spans.length() {
+  for i in 0..<spans.length(); found = -1, best = radius * radius {
     let cx : Float = spans[i].x + spans[i].w * 0.5
     let cy : Float = spans[i].y + spans[i].h * 0.5
     let d2 : Float = dist2(x, y, cx, cy)
     if d2 <= best {
-      best = d2
-      found = i
+      continue i, d2
     }
+  } nobreak {
+    found
   }
-  found
 }
 
 ///|
