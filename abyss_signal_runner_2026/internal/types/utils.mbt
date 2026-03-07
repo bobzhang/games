@@ -296,15 +296,13 @@ pub fn alloc_trail(game : Game) -> Int {
     }
   }
 
-  let mut best = 0
-  let mut best_life = game.trails[0].life
-  for i in 1..<game.trails.length() {
+  for i in 1..<game.trails.length(); best = 0, best_life = game.trails[0].life {
     if game.trails[i].life < best_life {
-      best_life = game.trails[i].life
-      best = i
+      continue i, game.trails[i].life
     }
+  } nobreak {
+    best
   }
-  best
 }
 
 ///|

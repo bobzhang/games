@@ -78,15 +78,13 @@ fn @types.Game::alloc_obj(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_y = game.objs[0].y
-    for i in 1..<game.objs.length() {
+    for i in 1..<game.objs.length(); best = 0, best_y = game.objs[0].y {
       if game.objs[i].y > best_y {
-        best_y = game.objs[i].y
-        best = i
+        continue i, game.objs[i].y
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -98,15 +96,13 @@ fn @types.Game::alloc_particle(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.particles[0].life
-    for i in 1..<game.particles.length() {
+    for i in 1..<game.particles.length(); best = 0, best_life = game.particles[0].life {
       if game.particles[i].life < best_life {
-        best_life = game.particles[i].life
-        best = i
+        continue i, game.particles[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -118,15 +114,13 @@ fn @types.Game::alloc_ripple(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.ripples[0].life
-    for i in 1..<game.ripples.length() {
+    for i in 1..<game.ripples.length(); best = 0, best_life = game.ripples[0].life {
       if game.ripples[i].life < best_life {
-        best_life = game.ripples[i].life
-        best = i
+        continue i, game.ripples[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
