@@ -572,10 +572,7 @@ fn choose_recipe_for_cook(
   meals : Array[Int],
   ingredients : Array[Int],
 ) -> Int {
-  let mut best_kind : Int = -1
-  let mut best_time : Float = 10000.0
-
-  for order in orders {
+  let best_kind = for order in orders; best_kind = -1, best_time = 10000.0F {
     if !order.active {
       continue
     }
@@ -591,19 +588,21 @@ fn choose_recipe_for_cook(
       continue
     }
     if order.deadline < best_time {
-      best_time = order.deadline
-      best_kind = k
+      continue k, order.deadline
     }
+  } nobreak {
+    best_kind
   }
 
   if best_kind >= 0 {
     best_kind
   } else {
-    let mut fallback : Int = -1
-    for k in 0..<5 {
+    let fallback = for k in 0..<5; fallback = -1 {
       if recipe_can_make(k, ingredients) {
-        fallback = k
+        continue k
       }
+    } nobreak {
+      fallback
     }
     fallback
   }
@@ -612,14 +611,13 @@ fn choose_recipe_for_cook(
 ///|
 /// Returns the index of the first inactive stove slot, or -1 if all slots are busy.
 fn open_stove_slot(stoves : Array[StoveSlot]) -> Int {
-  let mut idx : Int = -1
   for i in 0..<stoves.length() {
     if !stoves[i].active {
-      idx = i
-      break
+      break i
     }
+  } nobreak {
+    -1
   }
-  idx
 }
 
 ///|
@@ -628,10 +626,7 @@ fn earliest_servable_order_index(
   orders : Array[Order],
   meals : Array[Int],
 ) -> Int {
-  let mut idx : Int = -1
-  let mut best_deadline : Float = 10000.0
-
-  for i in 0..<orders.length() {
+  for i in 0..<orders.length(); idx = -1, best_deadline = 10000.0F {
     if !orders[i].active {
       continue
     }
@@ -639,12 +634,11 @@ fn earliest_servable_order_index(
       continue
     }
     if orders[i].deadline < best_deadline {
-      best_deadline = orders[i].deadline
-      idx = i
+      continue i, orders[i].deadline
     }
+  } nobreak {
+    idx
   }
-
-  idx
 }
 
 ///|
