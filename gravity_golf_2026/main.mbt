@@ -98,9 +98,11 @@ fn main {
   let mut msg = "Mouse aim, W/S power, Space shoot, R restart"
 
   while !@raylib.window_should_close() {
-    let mut dt = @raylib.get_frame_time()
-    if dt > 0.05 {
-      dt = 0.05
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.05F {
+      0.05F
+    } else {
+      frame_dt
     }
 
     if @raylib.is_key_pressed(@raylib.KeyR) {
