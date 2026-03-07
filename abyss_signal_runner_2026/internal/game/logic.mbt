@@ -96,13 +96,14 @@ fn @types.Game::alloc_particle(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    guard game.particles is [first, .. rest] else { return 0 }
-    for i, particle in rest; best = 0, best_life = first.life {
-      if particle.life < best_life {
-        continue i + 1, particle.life
-      }
-    } nobreak {
+    let best = @utils.min_index_by(
+      game.particles,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
       best
+    } else {
+      0
     }
   }
 }
@@ -115,14 +116,14 @@ fn @types.Game::alloc_ripple(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for
-      i in 1..<game.ripples.length()
-      best = 0, best_life = game.ripples[0].life {
-      if game.ripples[i].life < best_life {
-        continue i, game.ripples[i].life
-      }
-    } nobreak {
+    let best = @utils.min_index_by(
+      game.ripples,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
       best
+    } else {
+      0
     }
   }
 }
