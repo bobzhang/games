@@ -267,22 +267,18 @@ fn @types.Game::nearest_active_lantern(
   y : Float,
   max_d2 : Float,
 ) -> Int {
-  let mut best = -1
-  let mut best_d2 = max_d2
-
-  for i in 0..<game.lanterns.length() {
+  for i in 0..<game.lanterns.length(); best = -1, best_d2 = max_d2 {
     if !game.lanterns[i].active || game.lanterns[i].flame <= 0.0 {
       continue
     }
 
     let d2 = @types.dist2(x, y, game.lanterns[i].x, game.lanterns[i].y)
     if d2 <= best_d2 {
-      best = i
-      best_d2 = d2
+      continue i, d2
     }
+  } nobreak {
+    best
   }
-
-  best
 }
 
 ///|
