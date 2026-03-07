@@ -130,25 +130,23 @@ fn @types.Game::recompute_score(game : @types.Game) -> Unit {
 ///|
 /// Returns the roll-log index of the first delivery in the given frame number.
 fn @types.Game::frame_start_roll_idx(game : @types.Game, target : Int) -> Int {
-  let mut idx : Int = 0
-
-  for frame in 0..<target {
+  for frame in 0..<target; idx = 0 {
     if frame >= 9 {
-      break
+      break idx
     }
 
     if idx >= game.roll_count {
-      break
+      break idx
     }
 
     if game.rolls[idx] == 10 {
-      idx = idx + 1
+      continue idx + 1
     } else {
-      idx = idx + 2
+      continue idx + 2
     }
+  } nobreak {
+    idx
   }
-
-  idx
 }
 
 ///|
