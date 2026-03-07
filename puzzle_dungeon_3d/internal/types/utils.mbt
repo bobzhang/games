@@ -250,25 +250,16 @@ pub fn mirror_reflect(tile : Tile, incoming_dir : Dir) -> Dir {
 ///|
 /// Returns index of an active entity at `(gx, gy)`, or `-1` when empty.
 pub fn entity_at(game : Game, gx : Int, gy : Int) -> Int {
-  for i in 0..<game.entities.length() {
-    if game.entities[i].active &&
-      game.entities[i].gx == gx &&
-      game.entities[i].gy == gy {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(
+    game.entities,
+    fn(entity) { entity.active && entity.gx == gx && entity.gy == gy },
+  )
 }
 
 ///|
 /// Finds a free particle slot in the pooled particle array.
 pub fn alloc_particle(game : Game) -> Int {
-  for i, slot in game.particles {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.particles, fn(slot) { !slot.active })
 }
 
 // RNG
