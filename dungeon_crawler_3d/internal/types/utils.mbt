@@ -211,67 +211,37 @@ pub fn rand_weighted(game : Game, weights : Array[Int]) -> Int {
 ///|
 /// Returns the first inactive enemy slot index, or `-1` if none.
 pub fn alloc_enemy(game : Game) -> Int {
-  for i, slot in game.enemies {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.enemies, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the first inactive projectile slot index, or `-1` if none.
 pub fn alloc_projectile(game : Game) -> Int {
-  for i, slot in game.projectiles {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.projectiles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the first inactive particle slot index, or `-1` if none.
 pub fn alloc_particle(game : Game) -> Int {
-  for i, slot in game.particles {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.particles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the first inactive loot slot index, or `-1` if none.
 pub fn alloc_loot(game : Game) -> Int {
-  for i, slot in game.loot {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.loot, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the first inactive trap slot index, or `-1` if none.
 pub fn alloc_trap(game : Game) -> Int {
-  for i, slot in game.traps {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.traps, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the first inactive torch slot index, or `-1` if none.
 pub fn alloc_torch(game : Game) -> Int {
-  for i, slot in game.torches {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.torches, fn(slot) { !slot.active })
 }
 
 // Spawn particles
