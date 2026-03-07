@@ -886,30 +886,28 @@ fn main {
         mage.storm_cd = 7.2
         let mut hits : Int = 0
         for _j in 0..<8 {
-          let mut best : Int = -1
-          let mut best_d2 : Float = 99999999.0
-          for i in 0..<enemies.length() {
-            if !enemies[i].active {
+          for i, enemy in enemies; best = -1, best_d2 = 99999999.0F {
+            if !enemy.active {
               continue
             }
-            let d2 : Float = dist2(mage.x, mage.y, enemies[i].x, enemies[i].y)
-            if d2 < best_d2 && d2 <= 420.0 * 420.0 && enemies[i].shock_t <= 0.08 {
-              best = i
-              best_d2 = d2
+            let d2 : Float = dist2(mage.x, mage.y, enemy.x, enemy.y)
+            if d2 < best_d2 && d2 <= 420.0 * 420.0 && enemy.shock_t <= 0.08 {
+              continue i, d2
             }
-          }
-          if best >= 0 {
-            enemies[best].hp = enemies[best].hp - 48.0
-            enemies[best].shock_t = 1.4
-            hits = hits + 1
-            burst_particles(
-              particles,
-              enemies[best].x,
-              enemies[best].y,
-              22,
-              120.0,
-              2,
-            )
+          } nobreak {
+            if best >= 0 {
+              enemies[best].hp = enemies[best].hp - 48.0
+              enemies[best].shock_t = 1.4
+              hits = hits + 1
+              burst_particles(
+                particles,
+                enemies[best].x,
+                enemies[best].y,
+                22,
+                120.0,
+                2,
+              )
+            }
           }
         }
         if hits > 0 {
