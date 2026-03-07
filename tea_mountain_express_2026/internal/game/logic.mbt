@@ -75,15 +75,13 @@ fn @types.Game::alloc_hazard_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut farthest_y = game.hazards[0].y
-    for i in 1..<game.hazards.length() {
+    for i in 1..<game.hazards.length(); best = 0, farthest_y = game.hazards[0].y {
       if game.hazards[i].y > farthest_y {
-        farthest_y = game.hazards[i].y
-        best = i
+        continue i, game.hazards[i].y
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
