@@ -403,10 +403,7 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
     return false
   }
 
-  let mut best_y : Float = game.py
-  let mut best_dist : Float = 1000000000.0
-
-  for obstacle in game.obstacles {
+  let best_y = for obstacle in game.obstacles; best_y = game.py, best_dist = 1000000000.0F {
     if !obstacle.active {
       continue
     }
@@ -417,9 +414,10 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
 
     let d : Float = obstacle.x - game.px
     if d < best_dist {
-      best_dist = d
-      best_y = @types.obstacle_gap_mid(obstacle)
+      continue @types.obstacle_gap_mid(obstacle), d
     }
+  } nobreak {
+    best_y
   }
 
   game.hint_left = game.hint_left - 1
