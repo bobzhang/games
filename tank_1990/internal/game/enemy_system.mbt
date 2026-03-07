@@ -61,19 +61,18 @@ fn @types.Game::choose_enemy_target_player(
   game : @types.Game,
   enemy : @types.Tank,
 ) -> Int {
-  let mut best_idx = -1
-  let mut best_dist : Float = Float::from_int(1000000000)
-  for i in 0..<@types.max_players {
+  for i in 0..<@types.max_players;
+      best_idx = -1, best_dist = Float::from_int(1000000000) {
     let player = game.players[i]
     if player.active {
       let d = @types.distance_sq(enemy.x, enemy.y, player.x, player.y)
       if d < best_dist {
-        best_dist = d
-        best_idx = i
+        continue i, d
       }
     }
+  } nobreak {
+    best_idx
   }
-  best_idx
 }
 
 ///|
@@ -83,15 +82,17 @@ fn @types.Game::enemy_desired_dir(
   enemy : @types.Tank,
 ) -> @types.Dir {
   let target_player = game.choose_enemy_target_player(enemy)
-  let mut target_x = @types.tile_center_x(@types.base_tile_x)
-  let mut target_y = @types.tile_center_y(@types.base_tile_y)
-
-  if target_player >= 0 {
+  let base_x = @types.tile_center_x(@types.base_tile_x)
+  let base_y = @types.tile_center_y(@types.base_tile_y)
+  let (target_x, target_y) = if target_player >= 0 {
     let player = game.players[target_player]
     if @types.rand_range(game, 0, 99) < 62 {
-      target_x = player.x
-      target_y = player.y
+      (player.x, player.y)
+    } else {
+      (base_x, base_y)
     }
+  } else {
+    (base_x, base_y)
   }
 
   let dx = target_x - enemy.x
@@ -156,37 +157,42 @@ fn @types.Game::enemy_shoot_if_ready(
     return
   }
 
-  let mut should_fire = false
   let target_player = game.choose_enemy_target_player(enemy)
-  if target_player >= 0 {
+  let fire_on_player = if target_player >= 0 {
     let player = game.players[target_player]
     if (player.x - enemy.x).abs() < Float::from_int(@types.tile_size) * 0.5 ||
       (player.y - enemy.y).abs() < Float::from_int(@types.tile_size) * 0.5 {
-      if !@world.sight_blocked(game, enemy.x, enemy.y, player.x, player.y) {
-        should_fire = true
-      }
+      !@world.sight_blocked(game, enemy.x, enemy.y, player.x, player.y)
+    } else {
+      false
     }
+  } else {
+    false
   }
 
-  if !should_fire {
+  let fire_on_base = if fire_on_player {
+    false
+  } else {
     let base_x = @types.tile_center_x(@types.base_tile_x)
     let base_y = @types.tile_center_y(@types.base_tile_y)
     if (base_x - enemy.x).abs() < Float::from_int(@types.tile_size) * 0.5 ||
       (base_y - enemy.y).abs() < Float::from_int(@types.tile_size) * 0.5 {
-      if !@world.sight_blocked(game, enemy.x, enemy.y, base_x, base_y) {
-        should_fire = true
-      }
+      !@world.sight_blocked(game, enemy.x, enemy.y, base_x, base_y)
+    } else {
+      false
     }
   }
 
-  if !should_fire {
+  let should_fire = if fire_on_player || fire_on_base {
+    true
+  } else {
     let chance = match enemy.enemy_kind {
       Fast => 16
       Heavy => 11
       Sniper => 26
       Basic => 13
     }
-    should_fire = @types.rand_range(game, 0, 99) < chance
+    @types.rand_range(game, 0, 99) < chance
   }
 
   if should_fire {

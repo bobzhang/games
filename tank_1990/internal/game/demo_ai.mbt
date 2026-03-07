@@ -16,19 +16,18 @@ fn @types.Game::demo_nearest_enemy(
   x : Float,
   y : Float,
 ) -> (Int, Float) {
-  let mut best_idx = -1
-  let mut best_dist : Float = Float::from_int(1000000000)
-  for i in 0..<game.enemies.length() {
-    if !game.enemies[i].active {
+  for i, enemy in game.enemies;
+      best_idx = -1, best_dist = Float::from_int(1000000000) {
+    if !enemy.active {
       continue
     }
-    let d = @types.distance_sq(x, y, game.enemies[i].x, game.enemies[i].y)
+    let d = @types.distance_sq(x, y, enemy.x, enemy.y)
     if d < best_dist {
-      best_dist = d
-      best_idx = i
+      continue i, d
     }
+  } nobreak {
+    (best_idx, best_dist)
   }
-  (best_idx, best_dist)
 }
 
 ///|
@@ -120,7 +119,7 @@ fn @types.Game::demo_choose_move_dir(
   let horiz : @types.Dir = if dx < 0.0 { Left } else { Right }
   let vert : @types.Dir = if dy < 0.0 { Up } else { Down }
 
-  let mut move_dir = if dx.abs() > dy.abs() {
+  let primary_dir : @types.Dir? = if dx.abs() > dy.abs() {
     game.demo_priority_dir(
       index,
       dt,
@@ -140,14 +139,17 @@ fn @types.Game::demo_choose_move_dir(
     )
   }
 
-  if move_dir is None {
-    let random_dir = @types.rand_dir(game)
-    if game.demo_can_step(index, random_dir, dt) {
-      move_dir = Some(random_dir)
+  match primary_dir {
+    Some(dir) => Some(dir)
+    None => {
+      let random_dir = @types.rand_dir(game)
+      if game.demo_can_step(index, random_dir, dt) {
+        Some(random_dir)
+      } else {
+        None
+      }
     }
   }
-
-  move_dir
 }
 
 ///|
@@ -218,10 +220,8 @@ fn @types.Game::demo_player_command(
     player, nearest_enemy, enemy_dist, nearest_powerup, powerup_dist,
   )
 
-  let mut move_dir = game.demo_choose_move_dir(index, dt, target_x, target_y)
-  let mut shoot = false
-
-  if nearest_enemy >= 0 {
+  let move_dir0 = game.demo_choose_move_dir(index, dt, target_x, target_y)
+  let (move_dir, shoot) = if nearest_enemy >= 0 {
     let enemy = game.enemies[nearest_enemy]
     let (line_dir, aligned) = demo_line_shot_dir(
       player.x,
@@ -231,12 +231,15 @@ fn @types.Game::demo_player_command(
     )
     if aligned &&
       !@world.sight_blocked(game, player.x, player.y, enemy.x, enemy.y) {
-      move_dir = Some(line_dir)
-      shoot = true
+      (Some(line_dir), true)
+    } else {
+      (move_dir0, false)
     }
+  } else {
+    (move_dir0, false)
   }
 
-  if !shoot {
+  let (move_dir, shoot) = if !shoot {
     let base_x = @types.tile_center_x(@types.base_tile_x)
     let base_y = @types.tile_center_y(@types.base_tile_y)
     let (line_dir, aligned) = demo_line_shot_dir(
@@ -246,13 +249,18 @@ fn @types.Game::demo_player_command(
       base_y,
     )
     if aligned && @types.rand_range(game, 0, 99) < 8 {
-      move_dir = Some(line_dir)
-      shoot = true
+      (Some(line_dir), true)
+    } else {
+      (move_dir, false)
     }
+  } else {
+    (move_dir, shoot)
   }
 
-  if !shoot && @types.rand_range(game, 0, 99) < 4 {
-    shoot = true
+  let shoot = if shoot {
+    true
+  } else {
+    @types.rand_range(game, 0, 99) < 4
   }
 
   (move_dir, shoot)
