@@ -61,12 +61,11 @@ fn @types.Game::alloc_obj_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.objs.length(); best_i = 0, best_z = game.objs[0].z {
-      if game.objs[i].z < best_z {
-        continue i, game.objs[i].z
-      }
-    } nobreak {
-      best_i
+    let best = @utils.min_index_by(game.objs, fn(a, b) { a.z < b.z })
+    if best >= 0 {
+      best
+    } else {
+      0
     }
   }
 }
