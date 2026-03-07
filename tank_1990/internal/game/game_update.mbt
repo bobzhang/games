@@ -12,7 +12,7 @@ fn @types.Game::damage_tile_at_point(
 
   let tx = @types.world_x_to_tile(world_x)
   let ty = @types.world_y_to_tile(world_y)
-  let tile = @types.get_tile(game, tx, ty)
+  let tile = game.get_tile(tx, ty)
   if !@types.is_tile_solid_for_bullet(tile) {
     return false
   }
@@ -22,7 +22,7 @@ fn @types.Game::damage_tile_at_point(
     Brick => {
       game.map_hp[idx] -= power
       if game.map_hp[idx] <= 0 {
-        @types.set_tile(game, tx, ty, Empty, 0)
+        game.set_tile(tx, ty, Empty, 0)
         @particles.spawn_explosion(
           game,
           @types.tile_center_x(tx),
@@ -35,7 +35,7 @@ fn @types.Game::damage_tile_at_point(
     }
     Steel =>
       if power >= 3 {
-        @types.set_tile(game, tx, ty, Empty, 0)
+        game.set_tile(tx, ty, Empty, 0)
         @particles.spawn_explosion(
           game,
           @types.tile_center_x(tx),

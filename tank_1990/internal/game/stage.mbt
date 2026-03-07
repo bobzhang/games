@@ -106,7 +106,7 @@ fn @types.Game::cache_base_ring(game : @types.Game) -> Unit {
   for i in 0..<@types.base_ring_count {
     let tx = @types.base_ring_x[i]
     let ty = @types.base_ring_y[i]
-    game.base_tiles_cached[i] = @types.get_tile(game, tx, ty)
+    game.base_tiles_cached[i] = game.get_tile(tx, ty)
   }
 }
 
@@ -117,9 +117,9 @@ fn @types.Game::apply_shovel_fortress(game : @types.Game) -> Unit {
   for i in 0..<@types.base_ring_count {
     let tx = @types.base_ring_x[i]
     let ty = @types.base_ring_y[i]
-    let tile = @types.get_tile(game, tx, ty)
+    let tile = game.get_tile(tx, ty)
     if tile != Base {
-      @types.set_tile(game, tx, ty, Steel, 999)
+      game.set_tile(tx, ty, Steel, 999)
     }
   }
 }
@@ -132,12 +132,12 @@ fn @types.Game::restore_base_ring(game : @types.Game) -> Unit {
     let tx = @types.base_ring_x[i]
     let ty = @types.base_ring_y[i]
     let cached = game.base_tiles_cached[i]
-    if @types.get_tile(game, tx, ty) != Base {
+    if game.get_tile(tx, ty) != Base {
       match cached {
-        Steel => @types.set_tile(game, tx, ty, Steel, 999)
-        Brick => @types.set_tile(game, tx, ty, Brick, 1)
-        Empty => @types.set_tile(game, tx, ty, Empty, 0)
-        _ => @types.set_tile(game, tx, ty, cached, 1)
+        Steel => game.set_tile(tx, ty, Steel, 999)
+        Brick => game.set_tile(tx, ty, Brick, 1)
+        Empty => game.set_tile(tx, ty, Empty, 0)
+        _ => game.set_tile(tx, ty, cached, 1)
       }
     }
   }
@@ -213,7 +213,7 @@ fn @types.Game::load_stage_map(game : @types.Game, stage : Int) -> Unit {
     for x in 0..<@types.map_tiles_w {
       let ch = bytes[x]
       let (tile, hp) = parse_level_char(ch)
-      @types.set_tile(game, x, y, tile, hp)
+      game.set_tile(x, y, tile, hp)
     }
   }
 
@@ -221,13 +221,13 @@ fn @types.Game::load_stage_map(game : @types.Game, stage : Int) -> Unit {
   for i in 0..<@types.base_ring_count {
     let tx = @types.base_ring_x[i]
     let ty = @types.base_ring_y[i]
-    if @types.get_tile(game, tx, ty) == Empty {
-      @types.set_tile(game, tx, ty, Brick, 1)
+    if game.get_tile(tx, ty) == Empty {
+      game.set_tile(tx, ty, Brick, 1)
     }
   }
 
-  @types.set_tile(game, @types.base_tile_x, @types.base_tile_y, Base, 1)
-  @types.set_tile(game, @types.base_tile_x + 1, @types.base_tile_y, Base, 1)
+  game.set_tile(@types.base_tile_x, @types.base_tile_y, Base, 1)
+  game.set_tile(@types.base_tile_x + 1, @types.base_tile_y, Base, 1)
 
   game.base_alive = true
   game.cache_base_ring()

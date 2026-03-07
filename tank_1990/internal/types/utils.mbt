@@ -61,7 +61,7 @@ pub fn in_tile_bounds(tx : Int, ty : Int) -> Bool {
 
 ///|
 /// Returns the tile type at the given tile coordinates, or steel if out of bounds.
-pub fn get_tile(game : Game, tx : Int, ty : Int) -> Tile {
+pub fn Game::get_tile(game : Game, tx : Int, ty : Int) -> Tile {
   if in_tile_bounds(tx, ty) {
     game.map_tiles[tile_index(tx, ty)]
   } else {
@@ -71,7 +71,7 @@ pub fn get_tile(game : Game, tx : Int, ty : Int) -> Tile {
 
 ///|
 /// Sets the tile type and hit points at the given tile coordinates.
-pub fn set_tile(game : Game, tx : Int, ty : Int, tile : Tile, hp : Int) -> Unit {
+pub fn Game::set_tile(game : Game, tx : Int, ty : Int, tile : Tile, hp : Int) -> Unit {
   if in_tile_bounds(tx, ty) {
     let idx = tile_index(tx, ty)
     game.map_tiles[idx] = tile

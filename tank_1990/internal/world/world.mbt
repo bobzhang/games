@@ -25,7 +25,7 @@ pub fn tank_hits_world(game : @types.Game, x : Float, y : Float) -> Bool {
 
   for ty in min_ty..<=max_ty {
     for tx in min_tx..<=max_tx {
-      let tile = @types.get_tile(game, tx, ty)
+      let tile = game.get_tile(tx, ty)
       if @types.is_tile_solid_for_tank(tile) {
         return true
       }
@@ -99,8 +99,7 @@ pub fn sight_blocked(
     let t = Float::from_int(i) / Float::from_int(n)
     let px = ax + dx * t
     let py = ay + dy * t
-    let tile = @types.get_tile(
-      game,
+    let tile = game.get_tile(
       @types.world_x_to_tile(px),
       @types.world_y_to_tile(py),
     )

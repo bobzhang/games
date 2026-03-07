@@ -60,7 +60,7 @@ fn @types.Game::player_is_on_ice(
 ) -> Bool {
   let tx = @types.world_x_to_tile(player.x)
   let ty = @types.world_y_to_tile(player.y)
-  @types.get_tile(game, tx, ty) == Ice
+  game.get_tile(tx, ty) == Ice
 }
 
 ///|

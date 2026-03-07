@@ -174,7 +174,7 @@ fn @types.Game::draw_terrain_layer(
 ) -> Unit {
   for ty in 0..<@types.map_tiles_h {
     for tx in 0..<@types.map_tiles_w {
-      let tile = @types.get_tile(game, tx, ty)
+      let tile = game.get_tile(tx, ty)
       match tile {
         Empty | Bush => continue
         _ => game.draw_single_tile(tx, ty, tile, shake_x, shake_y)
@@ -192,7 +192,7 @@ fn @types.Game::draw_bush_layer(
 ) -> Unit {
   for ty in 0..<@types.map_tiles_h {
     for tx in 0..<@types.map_tiles_w {
-      if @types.get_tile(game, tx, ty) != Bush {
+      if game.get_tile(tx, ty) != Bush {
         continue
       }
       let sx = @types.tile_to_screen_x(tx, shake_x)
