@@ -119,14 +119,14 @@ fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for
-      i in 1..<game.bullets.length()
-      best = 0, best_life = game.bullets[0].life {
-      if game.bullets[i].life < best_life {
-        continue i, game.bullets[i].life
-      }
-    } nobreak {
+    let best = @utils.min_index_by(
+      game.bullets,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
       best
+    } else {
+      0
     }
   }
 }
@@ -139,12 +139,14 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.sparks.length(); best = 0, best_life = game.sparks[0].life {
-      if game.sparks[i].life < best_life {
-        continue i, game.sparks[i].life
-      }
-    } nobreak {
+    let best = @utils.min_index_by(
+      game.sparks,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
       best
+    } else {
+      0
     }
   }
 }
@@ -157,12 +159,14 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.rings.length(); best = 0, best_life = game.rings[0].life {
-      if game.rings[i].life < best_life {
-        continue i, game.rings[i].life
-      }
-    } nobreak {
+    let best = @utils.min_index_by(
+      game.rings,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
       best
+    } else {
+      0
     }
   }
 }
@@ -175,12 +179,14 @@ fn @types.Game::alloc_image(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.images.length(); best = 0, best_life = game.images[0].life {
-      if game.images[i].life < best_life {
-        continue i, game.images[i].life
-      }
-    } nobreak {
+    let best = @utils.min_index_by(
+      game.images,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
       best
+    } else {
+      0
     }
   }
 }
