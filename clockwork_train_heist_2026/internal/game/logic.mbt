@@ -688,10 +688,7 @@ fn @types.Game::guard_choose_chase_step(
 
   let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
-  let mut best_i : Int = -1
-  let mut best_d : Int = 999999
-
-  for i in 0..<4 {
+  let best_i = for i in 0..<4; best_i = -1, best_d = 999999 {
     let nx : Int = gx + dirs[i].0
     let ny : Int = gy + dirs[i].1
 
@@ -701,9 +698,10 @@ fn @types.Game::guard_choose_chase_step(
 
     let d : Int = @types.manhattan(nx, ny, px, py)
     if d < best_d {
-      best_d = d
-      best_i = i
+      continue i, d
     }
+  } nobreak {
+    best_i
   }
 
   if best_i < 0 {
