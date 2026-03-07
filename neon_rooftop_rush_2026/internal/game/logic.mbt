@@ -580,10 +580,8 @@ fn @types.Game::find_floor(
   game : @types.Game,
   center_x : Float,
 ) -> (Bool, Float) {
-  let mut found = false
-  let mut best_y = Float::from_int(@types.screen_h) + 400.0
-
-  for segment in game.segments {
+  let (found, best_y) = for segment in game.segments;
+      found = false, best_y = Float::from_int(@types.screen_h) + 400.0 {
     if !segment.active {
       continue
     }
@@ -592,10 +590,11 @@ fn @types.Game::find_floor(
     let s1 = segment.x + segment.w - 4.0
     if center_x >= s0 && center_x <= s1 {
       if segment.y < best_y {
-        best_y = segment.y
-        found = true
+        continue true, segment.y
       }
     }
+  } nobreak {
+    (found, best_y)
   }
 
   (found, best_y)
