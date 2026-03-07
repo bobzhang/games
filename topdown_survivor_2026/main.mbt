@@ -245,31 +245,30 @@ fn main {
         // Auto fire nearest enemy.
         fire_timer = fire_timer - dt
         if fire_timer <= 0.0 {
-          let mut best = -1
-          let mut best_d2 : Float = 1_000_000_000_000.0
-          for i in 0..<enemies.length() {
-            if !enemies[i].alive {
+          for i, enemy in enemies;
+              best = -1, best_d2 = 1_000_000_000_000.0F {
+            if !enemy.alive {
               continue
             }
-            let dx = enemies[i].x - px
-            let dy = enemies[i].y - py
+            let dx = enemy.x - px
+            let dy = enemy.y - py
             let d2 = dx * dx + dy * dy
             if d2 < best_d2 {
-              best_d2 = d2
-              best = i
+              continue i, d2
             }
-          }
-          if best >= 0 {
-            fire_timer = fire_cd
-            fire_shot(
-              shots,
-              px,
-              py,
-              enemies[best].x,
-              enemies[best].y,
-              bullet_speed,
-              bullet_dmg,
-            )
+          } nobreak {
+            if best >= 0 {
+              fire_timer = fire_cd
+              fire_shot(
+                shots,
+                px,
+                py,
+                enemies[best].x,
+                enemies[best].y,
+                bullet_speed,
+                bullet_dmg,
+              )
+            }
           }
         }
 
