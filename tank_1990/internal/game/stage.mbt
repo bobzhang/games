@@ -209,8 +209,7 @@ fn @types.Game::prepare_players_for_stage(game : @types.Game) -> Unit {
 fn @types.Game::load_stage_map(game : @types.Game, stage : Int) -> Unit {
   let rows = @levels.level_pattern(stage)
   for y in 0..<@types.map_tiles_h {
-    let row = rows[y]
-    let bytes = @utf8.encode(row)
+    let bytes = rows[y]
     for x in 0..<@types.map_tiles_w {
       let ch = bytes[x]
       let (tile, hp) = parse_level_char(ch)
