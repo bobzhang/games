@@ -107,15 +107,13 @@ fn @types.Game::alloc_ent(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_x = game.ents[0].x
-    for i in 1..<game.ents.length() {
+    for i in 1..<game.ents.length(); best = 0, best_x = game.ents[0].x {
       if game.ents[i].x < best_x {
-        best_x = game.ents[i].x
-        best = i
+        continue i, game.ents[i].x
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -127,15 +125,13 @@ fn @types.Game::alloc_shot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.shots[0].life
-    for i in 1..<game.shots.length() {
+    for i in 1..<game.shots.length(); best = 0, best_life = game.shots[0].life {
       if game.shots[i].life < best_life {
-        best_life = game.shots[i].life
-        best = i
+        continue i, game.shots[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -147,15 +143,13 @@ fn @types.Game::alloc_fx(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.fxs[0].life
-    for i in 1..<game.fxs.length() {
+    for i in 1..<game.fxs.length(); best = 0, best_life = game.fxs[0].life {
       if game.fxs[i].life < best_life {
-        best_life = game.fxs[i].life
-        best = i
+        continue i, game.fxs[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -167,15 +161,13 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.rings[0].life
-    for i in 1..<game.rings.length() {
+    for i in 1..<game.rings.length(); best = 0, best_life = game.rings[0].life {
       if game.rings[i].life < best_life {
-        best_life = game.rings[i].life
-        best = i
+        continue i, game.rings[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -187,15 +179,13 @@ fn @types.Game::alloc_shadow(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.shadows[0].life
-    for i in 1..<game.shadows.length() {
+    for i in 1..<game.shadows.length(); best = 0, best_life = game.shadows[0].life {
       if game.shadows[i].life < best_life {
-        best_life = game.shadows[i].life
-        best = i
+        continue i, game.shadows[i].life
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
