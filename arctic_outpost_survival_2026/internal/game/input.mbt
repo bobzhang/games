@@ -66,12 +66,9 @@ fn @types.Game::update_result_input(game : @types.Game) -> Unit {
 ///|
 /// Returns the position of the nearest active enemy as an auto-aim target, or a point directly above the player if no enemies are active.
 fn @types.Game::best_auto_aim(game : @types.Game) -> (Float, Float) {
-  let mut tx : Float = game.player_x
-  let mut ty : Float = game.player_y - 180.0
-
-  let mut best : Float = 1_000_000_000.0
-
-  for enemy in game.enemies {
+  let (tx, ty) = for enemy in game.enemies;
+      tx = game.player_x, ty = game.player_y - 180.0,
+      best = 1_000_000_000.0F {
     if !enemy.active {
       continue
     }
@@ -84,10 +81,10 @@ fn @types.Game::best_auto_aim(game : @types.Game) -> (Float, Float) {
     )
 
     if d2 < best {
-      best = d2
-      tx = enemy.x
-      ty = enemy.y
+      continue enemy.x, enemy.y, d2
     }
+  } nobreak {
+    (tx, ty)
   }
 
   (tx, ty)
