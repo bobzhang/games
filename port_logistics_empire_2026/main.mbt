@@ -273,59 +273,50 @@ fn add_node(
   r : Float,
   name : String,
 ) -> Int {
-  for i in 0..<nodes.length() {
-    if !nodes[i].active {
-      nodes[i].active = true
-      nodes[i].kind = kind
-      nodes[i].x = x
-      nodes[i].y = y
-      nodes[i].r = r
-      nodes[i].raw = 0
-      nodes[i].goods = 0
-      nodes[i].demand = 0
-      nodes[i].delivered = 0
-      nodes[i].prod_cd = randf(0.1, 0.8)
-      nodes[i].pulse = randf(0.0, 30.0)
-      nodes[i].outage_t = 0.0
-      nodes[i].name = name
-      return i
-    }
+  let i = @utils.first_index_by(nodes, fn(node) { !node.active })
+  if i < 0 {
+    return -1
   }
-  -1
+  nodes[i].active = true
+  nodes[i].kind = kind
+  nodes[i].x = x
+  nodes[i].y = y
+  nodes[i].r = r
+  nodes[i].raw = 0
+  nodes[i].goods = 0
+  nodes[i].demand = 0
+  nodes[i].delivered = 0
+  nodes[i].prod_cd = randf(0.1, 0.8)
+  nodes[i].pulse = randf(0.0, 30.0)
+  nodes[i].outage_t = 0.0
+  nodes[i].name = name
+  i
 }
 
 ///|
 /// Returns the index of an active route connecting nodes a and b (either direction), or -1 if none exists.
 fn find_route(routes : Array[Route], a : Int, b : Int) -> Int {
-  for i in 0..<routes.length() {
-    if !routes[i].active {
-      continue
-    }
-    let x : Int = routes[i].a
-    let y : Int = routes[i].b
-    if (x == a && y == b) || (x == b && y == a) {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(
+    routes,
+    fn(route) { route.active && ((route.a == a && route.b == b) || (route.a == b && route.b == a)) },
+  )
 }
 
 ///|
 /// Activates the first free route slot connecting nodes a and b at level 1 with full HP.
 fn add_route(routes : Array[Route], a : Int, b : Int) -> Int {
-  for i in 0..<routes.length() {
-    if !routes[i].active {
-      routes[i].active = true
-      routes[i].a = a
-      routes[i].b = b
-      routes[i].level = 1
-      routes[i].hp = 100.0
-      routes[i].spawn_cd = randf(0.22, 0.86)
-      routes[i].blink = 0.36
-      return i
-    }
+  let i = @utils.first_index_by(routes, fn(route) { !route.active })
+  if i < 0 {
+    return -1
   }
-  -1
+  routes[i].active = true
+  routes[i].a = a
+  routes[i].b = b
+  routes[i].level = 1
+  routes[i].hp = 100.0
+  routes[i].spawn_cd = randf(0.22, 0.86)
+  routes[i].blink = 0.36
+  i
 }
 
 ///|
@@ -360,21 +351,20 @@ fn add_truck(
   dir : Int,
   level : Int,
 ) -> Int {
-  for i in 0..<trucks.length() {
-    if !trucks[i].active {
-      trucks[i].active = true
-      trucks[i].route = route_id
-      trucks[i].dir = if dir >= 0 { 1 } else { -1 }
-      trucks[i].t = if trucks[i].dir > 0 { 0.0 } else { 1.0 }
-      trucks[i].speed = randf(0.88, 1.18) + Float::from_int(level) * 0.03
-      trucks[i].cargo_kind = 0
-      trucks[i].cargo = 0
-      trucks[i].blink = 0.22
-      trucks[i].stuck_t = 0.0
-      return i
-    }
+  let i = @utils.first_index_by(trucks, fn(truck) { !truck.active })
+  if i < 0 {
+    return -1
   }
-  -1
+  trucks[i].active = true
+  trucks[i].route = route_id
+  trucks[i].dir = if dir >= 0 { 1 } else { -1 }
+  trucks[i].t = if trucks[i].dir > 0 { 0.0 } else { 1.0 }
+  trucks[i].speed = randf(0.88, 1.18) + Float::from_int(level) * 0.03
+  trucks[i].cargo_kind = 0
+  trucks[i].cargo = 0
+  trucks[i].blink = 0.22
+  trucks[i].stuck_t = 0.0
+  i
 }
 
 ///|
@@ -483,15 +473,10 @@ fn point_seg_dist2(
 ///|
 /// Returns the index of the first active node whose radius contains the pointer position, or -1.
 fn pick_node(nodes : Array[Node], mx : Float, my : Float) -> Int {
-  for i in 0..<nodes.length() {
-    if !nodes[i].active {
-      continue
-    }
-    if dist2(mx, my, nodes[i].x, nodes[i].y) <= nodes[i].r * nodes[i].r {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(
+    nodes,
+    fn(node) { node.active && dist2(mx, my, node.x, node.y) <= node.r * node.r },
+  )
 }
 
 ///|
