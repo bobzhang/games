@@ -373,13 +373,13 @@ fn setup_level(
 ///|
 /// Returns the number of trucks that are currently alive.
 fn alive_truck_count(trucks : Array[Truck]) -> Int {
-  let mut c = 0
-  for truck in trucks {
+  for truck in trucks; c = 0 {
     if truck.alive {
-      c = c + 1
+      continue c + 1
     }
+  } nobreak {
+    c
   }
-  c
 }
 
 ///|
@@ -389,22 +389,18 @@ fn nearest_truck_for_repair(
   px : Float,
   py : Float,
 ) -> Int {
-  let mut best = -1
-  let mut best_d2 : Float = 130.0 * 130.0
-
-  for i in 0..<trucks.length() {
+  for i in 0..<trucks.length(); best = -1, best_d2 = 130.0F * 130.0F {
     if trucks[i].alive && trucks[i].hp < 8 {
       let tx = trucks[i].x
       let ty = lane_y(trucks[i].lane) - 12.0
       let d2 = sqdist(px, py, tx, ty)
       if d2 < best_d2 {
-        best_d2 = d2
-        best = i
+        continue i, d2
       }
     }
+  } nobreak {
+    best
   }
-
-  best
 }
 
 ///|
