@@ -102,12 +102,11 @@ fn @types.Game::alloc_enemy(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.enemies.length(); best = 0, best_hp = game.enemies[0].hp {
-      if game.enemies[i].hp < best_hp {
-        continue i, game.enemies[i].hp
-      }
-    } nobreak {
+    let best = @utils.min_index_by(game.enemies, fn(a, b) { a.hp < b.hp })
+    if best >= 0 {
       best
+    } else {
+      0
     }
   }
 }
@@ -157,12 +156,11 @@ fn @types.Game::alloc_flare(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    for i in 1..<game.flares.length(); best = 0, best_t = game.flares[0].t {
-      if game.flares[i].t < best_t {
-        continue i, game.flares[i].t
-      }
-    } nobreak {
+    let best = @utils.min_index_by(game.flares, fn(a, b) { a.t < b.t })
+    if best >= 0 {
       best
+    } else {
+      0
     }
   }
 }
