@@ -246,15 +246,13 @@ fn @types.Game::alloc_incident_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_timer = game.incidents[0].timer
-    for i in 1..<game.incidents.length() {
+    for i in 1..<game.incidents.length(); best = 0, best_timer = game.incidents[0].timer {
       if game.incidents[i].timer > best_timer {
-        best = i
-        best_timer = game.incidents[i].timer
+        continue i, game.incidents[i].timer
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
