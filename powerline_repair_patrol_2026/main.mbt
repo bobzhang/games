@@ -689,10 +689,7 @@ fn nearest_fault_index(
   y : Float,
   radius : Float,
 ) -> Int {
-  let mut found : Int = -1
-  let mut best : Float = radius * radius
-
-  for i in 0..<faults.length() {
+  for i in 0..<faults.length(); found = -1, best = radius * radius {
     if !faults[i].active {
       continue
     }
@@ -700,12 +697,11 @@ fn nearest_fault_index(
     let tid : Int = faults[i].tower_id
     let d2v : Float = dist2(x, y, towers[tid].x, towers[tid].y)
     if d2v <= best {
-      best = d2v
-      found = i
+      continue i, d2v
     }
+  } nobreak {
+    found
   }
-
-  found
 }
 
 ///|
