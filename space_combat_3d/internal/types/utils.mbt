@@ -448,20 +448,17 @@ pub fn count_enemies_of_type(game : Game, kind : Int) -> Int {
 ///|
 /// Returns the index of the nearest active enemy to the given position, or -1 if none.
 pub fn find_nearest_enemy(game : Game, x : Float, y : Float, z : Float) -> Int {
-  let mut best_idx = -1
-  let mut best_dist : Float = 999999.0
-  for i in 0..<game.enemies.length() {
-    let e = game.enemies[i]
+  for i, e in game.enemies; best_idx = -1, best_dist = 999999.0F {
     if !e.active {
       continue
     }
     let dist = distance3d(x, y, z, e.x, e.y, e.z)
     if dist < best_dist {
-      best_dist = dist
-      best_idx = i
+      continue i, dist
     }
+  } nobreak {
+    best_idx
   }
-  best_idx
 }
 
 // Weapon name
