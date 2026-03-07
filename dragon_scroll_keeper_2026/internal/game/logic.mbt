@@ -258,10 +258,7 @@ fn @types.Game::nearest_open_breach_index(
   y : Float,
   max_d2 : Float,
 ) -> Int {
-  let mut best = -1
-  let mut best_d2 = max_d2
-
-  for i in 0..<game.breaches.length() {
+  for i in 0..<game.breaches.length(); best = -1, best_d2 = max_d2 {
     if game.breaches[i].room != room || game.breaches[i].severity <= 0.0 {
       continue
     }
@@ -273,12 +270,11 @@ fn @types.Game::nearest_open_breach_index(
       @types.breach_anchor_y(game.breaches[i].room),
     )
     if d2 <= best_d2 {
-      best = i
-      best_d2 = d2
+      continue i, d2
     }
+  } nobreak {
+    best
   }
-
-  best
 }
 
 ///|
@@ -290,22 +286,18 @@ fn @types.Game::nearest_raider_index(
   y : Float,
   max_d2 : Float,
 ) -> Int {
-  let mut best = -1
-  let mut best_d2 = max_d2
-
-  for i in 0..<game.raiders.length() {
+  for i in 0..<game.raiders.length(); best = -1, best_d2 = max_d2 {
     if !game.raiders[i].active || game.raiders[i].room != room {
       continue
     }
 
     let d2 = @types.dist2(x, y, game.raiders[i].x, game.raiders[i].y)
     if d2 <= best_d2 {
-      best = i
-      best_d2 = d2
+      continue i, d2
     }
+  } nobreak {
+    best
   }
-
-  best
 }
 
 ///|
@@ -317,22 +309,18 @@ fn @types.Game::nearest_flame_index(
   y : Float,
   max_d2 : Float,
 ) -> Int {
-  let mut best = -1
-  let mut best_d2 = max_d2
-
-  for i in 0..<game.flames.length() {
+  for i in 0..<game.flames.length(); best = -1, best_d2 = max_d2 {
     if !game.flames[i].active || game.flames[i].room != room {
       continue
     }
 
     let d2 = @types.dist2(x, y, game.flames[i].x, game.flames[i].y)
     if d2 <= best_d2 {
-      best = i
-      best_d2 = d2
+      continue i, d2
     }
+  } nobreak {
+    best
   }
-
-  best
 }
 
 ///|
