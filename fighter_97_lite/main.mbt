@@ -9,9 +9,11 @@ fn main {
   let game = @types.Game()
 
   while !@raylib.window_should_close() {
-    let mut dt = @raylib.get_frame_time()
-    if dt > @types.max_frame_dt {
-      dt = @types.max_frame_dt
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > @types.max_frame_dt {
+      @types.max_frame_dt
+    } else {
+      frame_dt
     }
 
     @game.update_game(game, dt)
