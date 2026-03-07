@@ -110,16 +110,13 @@ fn @types.Game::alloc_segment_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best_i = 0
-    let mut best_x = game.segments[0].x
-    for i in 1..<game.segments.length() {
+    for i in 1..<game.segments.length(); best_i = 0, best_x = game.segments[0].x {
       if game.segments[i].x < best_x {
-        best_x = game.segments[i].x
-        best_i = i
+        continue i, game.segments[i].x
       }
+    } nobreak {
+      best_i
     }
-
-    best_i
   }
 }
 
@@ -131,16 +128,14 @@ fn @types.Game::alloc_obstacle_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best_i = 0
-    let mut best_x = game.obstacles[0].x
-    for i in 1..<game.obstacles.length() {
+    for i in 1..<game.obstacles.length();
+        best_i = 0, best_x = game.obstacles[0].x {
       if game.obstacles[i].x < best_x {
-        best_x = game.obstacles[i].x
-        best_i = i
+        continue i, game.obstacles[i].x
       }
+    } nobreak {
+      best_i
     }
-
-    best_i
   }
 }
 
@@ -152,16 +147,13 @@ fn @types.Game::alloc_chip_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best_i = 0
-    let mut best_x = game.chips[0].x
-    for i in 1..<game.chips.length() {
+    for i in 1..<game.chips.length(); best_i = 0, best_x = game.chips[0].x {
       if game.chips[i].x < best_x {
-        best_x = game.chips[i].x
-        best_i = i
+        continue i, game.chips[i].x
       }
+    } nobreak {
+      best_i
     }
-
-    best_i
   }
 }
 
@@ -173,16 +165,13 @@ fn @types.Game::alloc_anchor_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best_i = 0
-    let mut best_x = game.anchors[0].x
-    for i in 1..<game.anchors.length() {
+    for i in 1..<game.anchors.length(); best_i = 0, best_x = game.anchors[0].x {
       if game.anchors[i].x < best_x {
-        best_x = game.anchors[i].x
-        best_i = i
+        continue i, game.anchors[i].x
       }
+    } nobreak {
+      best_i
     }
-
-    best_i
   }
 }
 
@@ -194,16 +183,14 @@ fn @types.Game::alloc_particle_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best_i = 0
-    let mut best_life = game.particles[0].life
-    for i in 1..<game.particles.length() {
+    for i in 1..<game.particles.length();
+        best_i = 0, best_life = game.particles[0].life {
       if game.particles[i].life < best_life {
-        best_life = game.particles[i].life
-        best_i = i
+        continue i, game.particles[i].life
       }
+    } nobreak {
+      best_i
     }
-
-    best_i
   }
 }
 
@@ -215,16 +202,13 @@ fn @types.Game::alloc_ghost_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best_i = 0
-    let mut best_life = game.ghosts[0].life
-    for i in 1..<game.ghosts.length() {
+    for i in 1..<game.ghosts.length(); best_i = 0, best_life = game.ghosts[0].life {
       if game.ghosts[i].life < best_life {
-        best_life = game.ghosts[i].life
-        best_i = i
+        continue i, game.ghosts[i].life
       }
+    } nobreak {
+      best_i
     }
-
-    best_i
   }
 }
 
