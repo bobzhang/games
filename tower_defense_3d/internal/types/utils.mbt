@@ -183,58 +183,34 @@ pub fn world_to_grid_y(wz : Float) -> Int {
 ///|
 /// Returns the tower pool index at grid position (`gx`, `gy`), or -1 if none.
 pub fn tower_at(game : Game, gx : Int, gy : Int) -> Int {
-  for i in 0..<game.towers.length() {
-    if game.towers[i].active &&
-      game.towers[i].gx == gx &&
-      game.towers[i].gy == gy {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(
+    game.towers,
+    fn(tower) { tower.active && tower.gx == gx && tower.gy == gy },
+  )
 }
 
 ///|
 /// Returns the index of the first inactive tower slot, or -1 if full.
 pub fn alloc_tower(game : Game) -> Int {
-  for i, slot in game.towers {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.towers, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive enemy slot, or -1 if full.
 pub fn alloc_enemy(game : Game) -> Int {
-  for i, slot in game.enemies {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.enemies, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive projectile slot, or -1 if full.
 pub fn alloc_projectile(game : Game) -> Int {
-  for i, slot in game.projectiles {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.projectiles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive particle slot, or -1 if full.
 pub fn alloc_particle(game : Game) -> Int {
-  for i, slot in game.particles {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.particles, fn(slot) { !slot.active })
 }
 
 // Tower cost lookup (base cost)
