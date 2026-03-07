@@ -634,24 +634,24 @@ fn active_critical(groups : Array[EvacGroup]) -> Int {
 
 ///|
 fn peak_group_panic(groups : Array[EvacGroup]) -> Float {
-  let mut best : Float = 0.0
-  for group in groups {
+  for group in groups; best = 0.0F {
     if group.active && group.panic > best {
-      best = group.panic
+      continue group.panic
     }
+  } nobreak {
+    best
   }
-  best
 }
 
 ///|
 fn peak_fire_intensity(fires : Array[FireZone]) -> Float {
-  let mut best : Float = 0.0
-  for fire in fires {
+  for fire in fires; best = 0.0F {
     if fire.active && fire.intensity > best {
-      best = fire.intensity
+      continue fire.intensity
     }
+  } nobreak {
+    best
   }
-  best
 }
 
 ///|
