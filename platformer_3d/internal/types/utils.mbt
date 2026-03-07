@@ -190,12 +190,7 @@ pub fn shadow_scale(py : Float, shadow_y : Float) -> Float {
 ///|
 /// Returns the first inactive particle slot index, or `-1` if full.
 pub fn alloc_particle(game : Game) -> Int {
-  for i, slot in game.particles {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.particles, fn(slot) { !slot.active })
 }
 
 ///|
@@ -324,12 +319,7 @@ pub fn spawn_particle_ring(
 ///|
 /// Returns the first inactive projectile slot index, or `-1` if full.
 pub fn alloc_projectile(game : Game) -> Int {
-  for i, slot in game.projectiles {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.projectiles, fn(slot) { !slot.active })
 }
 
 // Allocate score fly slot
