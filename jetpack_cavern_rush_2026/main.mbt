@@ -922,38 +922,36 @@ fn main {
         player.fuel = player.fuel - 56.0
         player.storm_cd = 7.6
         for _ in 0..<7 {
-          let mut best : Int = -1
-          let mut best_d2 : Float = 99999999.0
-          for i in 0..<enemies.length() {
-            if !enemies[i].active {
+          for i, enemy in enemies; best = -1, best_d2 = 99999999.0F {
+            if !enemy.active {
               continue
             }
             let d2 : Float = dist2(
               player.x,
               player.y,
-              enemies[i].x,
-              enemies[i].y,
+              enemy.x,
+              enemy.y,
             )
-            if d2 < best_d2 && d2 <= 420.0 * 420.0 && enemies[i].shock_t <= 0.08 {
-              best = i
-              best_d2 = d2
+            if d2 < best_d2 && d2 <= 420.0 * 420.0 && enemy.shock_t <= 0.08 {
+              continue i, d2
             }
-          }
-          if best >= 0 {
-            enemies[best].hp = enemies[best].hp - 46.0
-            enemies[best].shock_t = 1.4
-            player.combo = player.combo + 1
-            if player.combo > 60 {
-              player.combo = 60
+          } nobreak {
+            if best >= 0 {
+              enemies[best].hp = enemies[best].hp - 46.0
+              enemies[best].shock_t = 1.4
+              player.combo = player.combo + 1
+              if player.combo > 60 {
+                player.combo = 60
+              }
+              burst_particles(
+                particles,
+                enemies[best].x,
+                enemies[best].y,
+                20,
+                112.0,
+                2,
+              )
             }
-            burst_particles(
-              particles,
-              enemies[best].x,
-              enemies[best].y,
-              20,
-              112.0,
-              2,
-            )
           }
         }
       }
