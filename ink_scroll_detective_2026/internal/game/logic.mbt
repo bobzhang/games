@@ -71,12 +71,10 @@ fn @types.Game::suspect_index_at_cell(
   cell_x : Int,
   cell_y : Int,
 ) -> Int {
-  for i in 0..<game.suspects.length() {
-    if game.suspects[i].home_x == cell_x && game.suspects[i].home_y == cell_y {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(
+    game.suspects,
+    fn(suspect) { suspect.home_x == cell_x && suspect.home_y == cell_y },
+  )
 }
 
 ///|
@@ -87,16 +85,14 @@ fn @types.Game::clue_index_at_cell(
   cell_y : Int,
   undiscovered_only : Bool,
 ) -> Int {
-  for i in 0..<game.clues.length() {
-    if game.clues[i].x != cell_x || game.clues[i].y != cell_y {
-      continue
-    }
-    if undiscovered_only && game.clues[i].discovered {
-      continue
-    }
-    return i
-  }
-  -1
+  @utils.first_index_by(
+    game.clues,
+    fn(clue) {
+      clue.x == cell_x &&
+      clue.y == cell_y &&
+      (!undiscovered_only || !clue.discovered)
+    },
+  )
 }
 
 ///|
@@ -106,14 +102,10 @@ fn @types.Game::incident_index_at_cell(
   cell_x : Int,
   cell_y : Int,
 ) -> Int {
-  for i in 0..<game.incidents.length() {
-    if game.incidents[i].active &&
-      game.incidents[i].x == cell_x &&
-      game.incidents[i].y == cell_y {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(
+    game.incidents,
+    fn(incident) { incident.active && incident.x == cell_x && incident.y == cell_y },
+  )
 }
 
 ///|
