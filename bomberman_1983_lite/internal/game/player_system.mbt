@@ -211,15 +211,16 @@ fn @types.Game::update_player_respawns(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 fn @types.Game::all_players_out(game : @types.Game) -> Bool {
-  let mut living = 0
-  for i in 0..<@types.max_players {
+  let living = for i in 0..<@types.max_players; living = 0 {
     if !game.is_player_enabled(i) {
       continue
     }
     let player = game.players[i]
     if player.active || player.lives > 0 {
-      living += 1
+      continue living + 1
     }
+  } nobreak {
+    living
   }
   living == 0
 }
