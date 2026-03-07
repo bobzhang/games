@@ -814,8 +814,8 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
     hy = @types.topf() + 40.0
     text = "Hint: bring hooked fish up."
   } else if game.bait < 40.0 {
-    let mut best_d2 : Float = 1000000000.0
-    for pickup in game.pickups {
+    let (next_hx, next_hy, next_text) = for pickup in game.pickups;
+        best_d2 = 1000000000.0F, hx = hx, hy = hy, text = text {
       if !pickup.active || pickup.kind != Bait {
         continue
       }
@@ -828,17 +828,17 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
       )
 
       if d2 < best_d2 {
-        best_d2 = d2
-        hx = pickup.x
-        hy = pickup.y
-        text = "Hint: bait crate marked."
+        continue d2, pickup.x, pickup.y, "Hint: bait crate marked."
       }
+    } nobreak {
+      (hx, hy, text)
     }
+    hx = next_hx
+    hy = next_hy
+    text = next_text
   } else {
-    let mut best_score : Int = -1
-    let mut best_d2 : Float = 1000000000.0
-
-    for fish_elem in game.fish {
+    let (next_hx, next_hy, next_text) = for fish_elem in game.fish;
+        best_score = -1, best_d2 = 1000000000.0F, hx = hx, hy = hy, text = text {
       if !fish_elem.active || fish_elem.hooked {
         continue
       }
@@ -852,13 +852,15 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
 
       if fish_elem.value > best_score ||
         (fish_elem.value == best_score && d2 < best_d2) {
-        best_score = fish_elem.value
-        best_d2 = d2
-        hx = fish_elem.x
-        hy = fish_elem.y
-        text = "Hint: high-value fish marked."
+        continue fish_elem.value, d2, fish_elem.x, fish_elem.y,
+          "Hint: high-value fish marked."
       }
+    } nobreak {
+      (hx, hy, text)
     }
+    hx = next_hx
+    hy = next_hy
+    text = next_text
   }
 
   game.hint_x = hx
