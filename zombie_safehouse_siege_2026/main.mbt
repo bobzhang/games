@@ -1201,12 +1201,7 @@ fn main {
         }
       }
 
-      let mut alive_zombies : Int = 0
-      for zombie in zombies {
-        if zombie.active {
-          alive_zombies = alive_zombies + 1
-        }
-      }
+      let alive_zombies = @utils.count_by(zombies, fn(zombie) { zombie.active })
 
       if phase == 1 &&
         phase_t <= 0.0 &&
