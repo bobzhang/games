@@ -349,6 +349,8 @@ pub(all) struct Game {
   mut mario_target_x : Float
   // ── Misc ──
   mut frame_counter : Int
+  mut frame_times : Array[Float]
+  mut frame_time_cursor : Int
   mut rng_state : Int
   // ── Decoration ──
   clouds : Array[Cloud]
@@ -357,6 +359,7 @@ pub(all) struct Game {
 ///|
 /// Creates a new game in title-screen state.
 pub fn Game::new() -> Game {
+  let default_frame_time : Float = Float::from_int(1) / Float::from_int(target_fps)
   {
     state: Title,
     world_num: 1,
@@ -388,6 +391,8 @@ pub fn Game::new() -> Game {
     mario_auto: false,
     mario_target_x: 0.0,
     frame_counter: 0,
+    frame_times: Array::make(120, default_frame_time),
+    frame_time_cursor: 0,
     rng_state: 0x13572468,
     clouds: Array::makei(12, fn(i) {
       {

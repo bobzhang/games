@@ -21,6 +21,7 @@ pub fn draw_ui(game : @types.Game) -> Unit {
     GameOver => draw_game_over(game)
     Victory => draw_victory(game)
   }
+  draw_perf_overlay(game)
 }
 
 ///|
@@ -285,5 +286,68 @@ fn draw_victory(game : @types.Game) -> Unit {
     let prompt = "PRESS ENTER TO PLAY AGAIN"
     let tw_p = @raylib.measure_text(prompt, 20)
     @raylib.draw_text(prompt, 480 - tw_p / 2, 480, 20, hud_white)
+  }
+}
+
+///|
+fn draw_perf_overlay(game : @types.Game) -> Unit {
+  let panel_w = 176
+  let panel_h = 78
+  let panel_x = @types.screen_w - panel_w - 12
+  let panel_y = @types.screen_h - panel_h - 12
+  let latest_index = if game.frame_time_cursor == 0 {
+    game.frame_times.length() - 1
+  } else {
+    game.frame_time_cursor - 1
+  }
+  let latest_dt = game.frame_times[latest_index]
+  let latest_ms = latest_dt * 1000.0F
+  let latest_fps = if latest_dt > 0.0001F {
+    (Float::from_int(1) / latest_dt).to_int()
+  } else {
+    0
+  }
+  let target_ms : Float = 1000.0F / Float::from_int(@types.target_fps)
+  @raylib.draw_rectangle(panel_x, panel_y, panel_w, panel_h, @raylib.Color::new(0, 0, 0, 170))
+  @raylib.draw_rectangle_lines(panel_x, panel_y, panel_w, panel_h, @raylib.Color::new(255, 255, 255, 60))
+  @raylib.draw_text("FPS", panel_x + 8, panel_y + 6, 16, hud_white)
+  let fps_color = if latest_ms <= target_ms {
+    @raylib.Color::new(80, 220, 120, 255)
+  } else if latest_ms <= target_ms * 1.5 {
+    hud_yellow
+  } else {
+    @raylib.Color::new(228, 80, 80, 255)
+  }
+  @raylib.draw_text(latest_fps.to_string(), panel_x + 44, panel_y + 6, 16, fps_color)
+  let ms_text = latest_ms.to_string()
+  @raylib.draw_text(ms_text + " ms", panel_x + 92, panel_y + 6, 16, hud_white)
+  let graph_x = panel_x + 8
+  let graph_y = panel_y + 28
+  let graph_w = panel_w - 16
+  let graph_h = panel_h - 38
+  @raylib.draw_rectangle(graph_x, graph_y, graph_w, graph_h, @raylib.Color::new(255, 255, 255, 18))
+  let target_line_y = graph_y + graph_h -
+    (target_ms / 33.333F * Float::from_int(graph_h)).to_int().clamp(min=0, max=graph_h)
+  @raylib.draw_line(graph_x, target_line_y, graph_x + graph_w, target_line_y, @raylib.Color::new(80, 220, 120, 120))
+  let sample_count = graph_w
+  let history_len = game.frame_times.length()
+  let mut start = game.frame_time_cursor - sample_count
+  while start < 0 {
+    start += history_len
+  }
+  for i in 0..<sample_count {
+    let idx = (start + i) % history_len
+    let ms = game.frame_times[idx] * 1000.0F
+    let height = (ms / 33.333F * Float::from_int(graph_h)).to_int().clamp(min=1, max=graph_h)
+    let x = graph_x + i
+    let y = graph_y + graph_h - height
+    let col = if ms <= target_ms {
+      @raylib.Color::new(80, 220, 120, 220)
+    } else if ms <= target_ms * 1.5 {
+      @raylib.Color::new(252, 200, 32, 220)
+    } else {
+      @raylib.Color::new(228, 80, 80, 220)
+    }
+    @raylib.draw_line(x, graph_y + graph_h, x, y, col)
   }
 }
