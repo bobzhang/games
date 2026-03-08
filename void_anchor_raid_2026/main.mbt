@@ -521,35 +521,17 @@ fn burst(
 
 ///|
 fn count_active_enemies(enemies : Array[Enemy]) -> Int {
-  let mut n : Int = 0
-  for enemy in enemies {
-    if enemy.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(enemies, fn(enemy) { enemy.active })
 }
 
 ///|
 fn count_owned_anchors(anchors : Array[Anchor], owner : Int) -> Int {
-  let mut n : Int = 0
-  for anchor in anchors {
-    if anchor.active && anchor.owner == owner {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(anchors, fn(anchor) { anchor.active && anchor.owner == owner })
 }
 
 ///|
 fn count_total_anchors(anchors : Array[Anchor]) -> Int {
-  let mut n : Int = 0
-  for anchor in anchors {
-    if anchor.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(anchors, fn(anchor) { anchor.active })
 }
 
 ///|
