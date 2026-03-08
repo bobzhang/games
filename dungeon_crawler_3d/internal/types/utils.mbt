@@ -593,12 +593,7 @@ pub fn pathfind_step(
 ///|
 /// Returns whether the player currently has an active buff kind.
 pub fn has_buff(game : Game, kind : Int) -> Bool {
-  for buff in game.buffs {
-    if buff.active && buff.kind == kind {
-      return true
-    }
-  }
-  false
+  @utils.any_by(game.buffs, fn(buff) { buff.active && buff.kind == kind })
 }
 
 // Add a buff to player
