@@ -322,25 +322,13 @@ fn add_route(routes : Array[Route], a : Int, b : Int) -> Int {
 ///|
 /// Returns the number of currently active routes.
 fn count_active_routes(routes : Array[Route]) -> Int {
-  let mut n : Int = 0
-  for route in routes {
-    if route.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(routes, fn(route) { route.active })
 }
 
 ///|
 /// Returns the number of currently active trucks.
 fn count_active_trucks(trucks : Array[Truck]) -> Int {
-  let mut n : Int = 0
-  for truck in trucks {
-    if truck.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(trucks, fn(truck) { truck.active })
 }
 
 ///|
