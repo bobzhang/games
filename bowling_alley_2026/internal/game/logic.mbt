@@ -148,13 +148,7 @@ fn @types.Game::reset_full_rack(game : @types.Game) -> Unit {
 ///|
 /// Returns the number of pins that are still standing.
 fn @types.Game::count_standing(game : @types.Game) -> Int {
-  let mut n : Int = 0
-  for pin in game.pins {
-    if pin.standing {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(game.pins, fn(pin) { pin.standing })
 }
 
 ///|
