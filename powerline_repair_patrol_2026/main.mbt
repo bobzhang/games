@@ -2591,11 +2591,5 @@ fn main {
 
 ///|
 fn active_faults_count(faults : Array[Fault]) -> Int {
-  let mut c : Int = 0
-  for fault in faults {
-    if fault.active {
-      c = c + 1
-    }
-  }
-  c
+  @utils.count_by(faults, fn(fault) { fault.active })
 }
