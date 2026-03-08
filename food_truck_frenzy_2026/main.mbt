@@ -543,25 +543,13 @@ fn spawn_supply_box(
 ///|
 /// Returns the count of active orders waiting for the given recipe kind.
 fn find_pending_for_kind(orders : Array[Order], kind : Int) -> Int {
-  let mut c : Int = 0
-  for order in orders {
-    if order.active && order.kind == kind {
-      c = c + 1
-    }
-  }
-  c
+  @utils.count_by(orders, fn(order) { order.active && order.kind == kind })
 }
 
 ///|
 /// Returns the count of active stove slots currently cooking the given recipe kind.
 fn find_cooking_for_kind(stoves : Array[StoveSlot], kind : Int) -> Int {
-  let mut c : Int = 0
-  for stove in stoves {
-    if stove.active && stove.kind == kind {
-      c = c + 1
-    }
-  }
-  c
+  @utils.count_by(stoves, fn(stove) { stove.active && stove.kind == kind })
 }
 
 ///|
@@ -2203,12 +2191,7 @@ fn main {
     } else {
       draw_floor_grid(world_x, world_y, world_w, world_h, scene_t)
 
-      let mut active_orders : Int = 0
-      for order in orders {
-        if order.active {
-          active_orders = active_orders + 1
-        }
-      }
+      let active_orders = @utils.count_by(orders, fn(order) { order.active })
 
       for station in stations {
         let near : Bool = inside_rectf(
