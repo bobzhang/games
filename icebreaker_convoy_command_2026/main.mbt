@@ -485,37 +485,19 @@ fn spawn_storm(
 ///|
 /// Returns the count of active ice chunks.
 fn active_ice_count(ice : Array[IceChunk]) -> Int {
-  let mut n : Int = 0
-  for ice_elem in ice {
-    if ice_elem.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(ice, fn(ice_elem) { ice_elem.active })
 }
 
 ///|
 /// Returns the count of active convoy ships.
 fn active_convoy_count(convoys : Array[ConvoyShip]) -> Int {
-  let mut n : Int = 0
-  for convoy in convoys {
-    if convoy.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(convoys, fn(convoy) { convoy.active })
 }
 
 ///|
 /// Returns the count of active storm cells.
 fn active_storm_count(storms : Array[StormCell]) -> Int {
-  let mut n : Int = 0
-  for storm in storms {
-    if storm.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(storms, fn(storm) { storm.active })
 }
 
 ///|
