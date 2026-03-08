@@ -616,6 +616,10 @@ fn main {
             turn_in_loop = 0
             player.x = start_x
             player.y = start_y
+            for i in 0..<ghost_count {
+              ghosts[i].x = start_x
+              ghosts[i].y = start_y
+            }
             message = "Loop \{loop_no}. Past selves replay the breach."
           } else if action == action_wait {
             message = "Waited. Ghost timing can matter."
