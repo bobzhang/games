@@ -45,3 +45,21 @@ pub fn[T] first_indexi_by(items : Array[T], pred : (Int, T) -> Bool) -> Int {
   }
   -1
 }
+
+///|
+/// Returns whether any element satisfies `pred`.
+pub fn[T] any_by(items : Array[T], pred : (T) -> Bool) -> Bool {
+  first_index_by(items, pred) >= 0
+}
+
+///|
+/// Returns the number of elements satisfying `pred`.
+pub fn[T] count_by(items : Array[T], pred : (T) -> Bool) -> Int {
+  for item in items; count = 0 {
+    if pred(item) {
+      continue count + 1
+    }
+  } nobreak {
+    count
+  }
+}
