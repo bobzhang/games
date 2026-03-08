@@ -1,0 +1,347 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/mario/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub let air_accel : Float
+
+pub let bounce_velocity : Float
+
+pub let camera_offset_x : Float
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub let coyote_time : Float
+
+pub let fireball_bounce_vel : Float
+
+pub let fireball_gravity : Float
+
+pub let fireball_speed_x : Float
+
+pub fn get_tile(Game, Int, Int) -> TileKind
+
+pub let goomba_speed : Float
+
+pub let gravity_high : Float
+
+pub let gravity_low : Float
+
+pub let ground_accel : Float
+
+pub let ground_decel : Float
+
+pub let grow_duration : Float
+
+pub let invuln_duration : Float
+
+pub fn is_bumpable(TileKind) -> Bool
+
+pub fn is_solid(TileKind) -> Bool
+
+pub let jump_buffer_time : Float
+
+pub let jump_velocity : Float
+
+pub let koopa_speed : Float
+
+pub fn lerpf(Float, Float, Float) -> Float
+
+pub let level_time : Float
+
+pub let max_bumped_blocks : Int
+
+pub let max_enemies : Int
+
+pub let max_fall_speed : Float
+
+pub let max_fireballs : Int
+
+pub let max_items : Int
+
+pub let max_particles : Int
+
+pub let max_score_popups : Int
+
+pub let mushroom_speed : Float
+
+pub let player_half_w : Float
+
+pub let player_height_big : Float
+
+pub let player_height_small : Float
+
+pub fn rand_next(Game) -> Int
+
+pub fn rand_range(Game, Int, Int) -> Int
+
+pub fn rand_rangef(Game, Float, Float) -> Float
+
+pub let run_speed : Float
+
+pub let score_brick : Int
+
+pub let score_coin : Int
+
+pub let score_fire_flower : Int
+
+pub let score_mushroom : Int
+
+pub let score_star : Int
+
+pub let screen_h : Int
+
+pub let screen_w : Int
+
+pub fn set_tile(Game, Int, Int, TileKind) -> Unit
+
+pub let shell_speed : Float
+
+pub let shrink_duration : Float
+
+pub fn signf(Float) -> Float
+
+pub let star_bounce_vel : Float
+
+pub fn star_color(Int) -> @raylib.Color
+
+pub let star_duration : Float
+
+pub let star_speed : Float
+
+pub fn stomp_score(Int) -> Int
+
+pub let target_fps : Int
+
+pub let tile_size : Int
+
+pub let tile_sizef : Float
+
+pub fn tile_to_world_x(Int) -> Float
+
+pub fn tile_to_world_y(Int) -> Float
+
+pub let total_levels : Int
+
+pub let walk_speed : Float
+
+pub fn world_to_tile_x(Float) -> Int
+
+pub fn world_to_tile_y(Float) -> Int
+
+// Errors
+
+// Types and methods
+pub(all) struct BumpedBlock {
+  mut active : Bool
+  mut tile_x : Int
+  mut tile_y : Int
+  mut offset_y : Float
+  mut velocity : Float
+}
+pub fn BumpedBlock::new() -> Self
+
+pub(all) struct Cloud {
+  mut x : Float
+  mut y : Float
+  mut w : Float
+  mut speed : Float
+}
+
+pub(all) struct Enemy {
+  mut active : Bool
+  mut kind : EnemyKind
+  mut x : Float
+  mut y : Float
+  mut vx : Float
+  mut vy : Float
+  mut on_ground : Bool
+  mut dead : Bool
+  mut dead_timer : Float
+  mut squished : Bool
+  mut anim_timer : Float
+  mut anim_frame : Int
+  mut shell_moving : Bool
+  mut width : Float
+  mut height : Float
+}
+pub fn Enemy::new(EnemyKind, Float, Float) -> Self
+
+pub(all) enum EnemyKind {
+  Goomba
+  KoopaTroopa
+  KoopaShell
+}
+pub impl Eq for EnemyKind
+
+pub(all) struct Fireball {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut vx : Float
+  mut vy : Float
+}
+pub fn Fireball::new() -> Self
+
+pub(all) struct Game {
+  mut state : GameState
+  mut world_num : Int
+  mut level_num : Int
+  mut level_index : Int
+  player : Player
+  enemies : Array[Enemy]
+  items : Array[Item]
+  fireballs : Array[Fireball]
+  particles : Array[Particle]
+  score_popups : Array[ScorePopup]
+  bumped_blocks : Array[BumpedBlock]
+  mut map_tiles : Array[TileKind]
+  mut map_width : Int
+  mut map_height : Int
+  mut camera_x : Float
+  mut score : Int
+  mut coins : Int
+  mut lives : Int
+  mut time_remaining : Float
+  mut intro_timer : Float
+  mut clear_timer : Float
+  mut death_timer : Float
+  mut game_over_timer : Float
+  mut flag_y : Float
+  mut flag_target_y : Float
+  mut flag_done : Bool
+  mut mario_auto : Bool
+  mut mario_target_x : Float
+  mut frame_counter : Int
+  mut frame_times : Array[Float]
+  mut frame_time_cursor : Int
+  mut rng_state : Int
+  clouds : Array[Cloud]
+}
+pub fn Game::new() -> Self
+
+pub(all) enum GameState {
+  Title
+  LevelIntro
+  Playing
+  Paused
+  LevelClear
+  PlayerDied
+  GameOver
+  Victory
+}
+pub impl Eq for GameState
+
+pub(all) struct Item {
+  mut active : Bool
+  mut kind : ItemKind
+  mut x : Float
+  mut y : Float
+  mut vx : Float
+  mut vy : Float
+  mut on_ground : Bool
+  mut emerging : Bool
+  mut emerge_start_y : Float
+  mut emerge_target_y : Float
+}
+pub fn Item::new() -> Self
+
+pub(all) enum ItemKind {
+  Mushroom
+  FireFlower
+  Star
+  OneUp
+  CoinPopup
+}
+pub impl Eq for ItemKind
+
+pub(all) struct Particle {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut vx : Float
+  mut vy : Float
+  mut life : Float
+  mut max_life : Float
+  mut size : Float
+  mut color : @raylib.Color
+  mut has_gravity : Bool
+}
+pub fn Particle::new() -> Self
+
+pub(all) struct Player {
+  mut x : Float
+  mut y : Float
+  mut vx : Float
+  mut vy : Float
+  mut power : PowerState
+  mut facing_right : Bool
+  mut on_ground : Bool
+  mut was_on_ground : Bool
+  mut ducking : Bool
+  mut invuln_timer : Float
+  mut star_timer : Float
+  mut dead : Bool
+  mut death_timer : Float
+  mut death_vy : Float
+  mut anim_timer : Float
+  mut anim_frame : Int
+  mut grow_timer : Float
+  mut shrink_timer : Float
+  mut coyote_timer : Float
+  mut jump_buffer : Float
+  mut skid_timer : Float
+  mut stomp_combo : Int
+}
+pub fn Player::height(Self) -> Float
+pub fn Player::new(Float, Float) -> Self
+
+pub(all) enum PowerState {
+  Small
+  Big
+  Fire
+}
+pub impl Eq for PowerState
+
+pub(all) struct ScorePopup {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut vy : Float
+  mut life : Float
+  mut text : String
+}
+pub fn ScorePopup::new() -> Self
+
+pub(all) enum TileKind {
+  Empty
+  Ground
+  BrickBlock
+  QuestionCoin
+  QuestionMushroom
+  QuestionStar
+  QuestionOneUp
+  UsedBlock
+  HiddenCoin
+  HiddenOneUp
+  PipeTopLeft
+  PipeTopRight
+  PipeBodyLeft
+  PipeBodyRight
+  Flagpole
+  FlagTop
+  CastleBlock
+  CastleTop
+  CastleDoor
+}
+pub impl Eq for TileKind
+
+// Type aliases
+
+// Traits
+

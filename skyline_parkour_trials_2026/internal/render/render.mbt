@@ -5,8 +5,8 @@ fn draw_center_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
 }
 
 ///|
@@ -42,8 +42,8 @@ fn draw_button(
     @raylib.Color::new(220, 236, 255, 208),
   )
 
-  let tw = @raylib.measure_text(label, 24)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(label, 24)
+  @draw.draw_text(
     label,
     (rect.0 + rect.2 * 0.5).to_int() - tw / 2,
     (rect.1 + rect.3 * 0.5).to_int() - 12,
@@ -334,21 +334,21 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(160, 188, 232, 180),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "TIME \{@types.timer_string(game.timer_s)}",
     26,
     26,
     38,
     @types.col_text_main(),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "STAGE \{game.stage}/\{@types.stage_count}",
     28,
     74,
     24,
     @types.col_text_dim(),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "CHECKPOINTS \{game.checkpoints_hit}",
     184,
     76,
@@ -370,14 +370,14 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     74,
     @raylib.Color::new(160, 188, 232, 170),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "RUN \{@types.run_string(game.run_time_s)} s",
     @types.screen_w - 238,
     26,
     26,
     @types.col_text_main(),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "R: restart run",
     @types.screen_w - 236,
     56,
@@ -386,7 +386,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   )
 
   if game.state == Play {
-    @raylib.draw_text(
+    @draw.draw_text(
       "A/D or Arrow: move   SPACE: jump   SHIFT: wall climb",
       22,
       @types.screen_h - 30,
@@ -397,7 +397,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
 
   if game.bonus_popup_t > 0.0 {
     let alpha = (game.bonus_popup_t * 255.0).to_int().clamp(min=0, max=255)
-    @raylib.draw_text(
+    @draw.draw_text(
       "+\{game.bonus_popup_value}s",
       28,
       122,

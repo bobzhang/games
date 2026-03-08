@@ -52,6 +52,7 @@ fn main {
   let sound = @raylib.load_sound("resources/coin.wav")
   @raylib.play_music_stream(music)
   @raylib.set_target_fps(60)
+  @draw.init_font()
   while !@raylib.window_should_close() {
     @raylib.update_music_stream(music)
     if @raylib.is_key_pressed(@raylib.KeyLeft) {
@@ -71,10 +72,10 @@ fn main {
     }
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
-    @raylib.draw_text(
+    @draw.draw_text(
       "MUSIC SHOULD BE PLAYING!", 255, 150, 20, @raylib.lightgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "EXPONENT = \{exponent[0]}",
       215,
       180,
@@ -92,16 +93,18 @@ fn main {
       )
     }
     @raylib.draw_rectangle_lines(199, 199, 402, 34, @raylib.gray)
-    @raylib.draw_text(
+    @draw.draw_text(
       "PRESS SPACE TO PLAY OTHER SOUND", 200, 250, 20, @raylib.lightgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "USE LEFT AND RIGHT ARROWS TO ALTER DISTORTION", 140, 280, 20, @raylib.lightgray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
   @raylib.unload_music_stream(music)
   @raylib.detach_audio_mixed_processor(process_audio)
   @raylib.close_audio_device()
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -336,6 +336,7 @@ fn spawn_enemy(enemies : Array[Enemy], sector : Int) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "Orbital Shield Command 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let enemies : Array[Enemy] = Array::makei(max_enemies, fn(_i) {
     { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, hp: 0, kind: 0, active: false }
@@ -839,21 +840,21 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 98, @raylib.Color::new(8, 12, 20, 228))
-    @raylib.draw_text(
+    @draw.draw_text(
       "ORBITAL SHIELD COMMAND 2026",
       16,
       20,
       34,
       @raylib.Color::new(236, 242, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Sector \{sector}/3",
       474,
       28,
       30,
       @raylib.Color::new(246, 228, 136, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{score}",
       668,
       28,
@@ -875,7 +876,7 @@ fn main {
       20,
       @raylib.Color::new(98, 226, 138, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Core HP \{planet_hp}",
       976,
       54,
@@ -891,7 +892,7 @@ fn main {
       12,
       @raylib.Color::new(112, 198, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Sector timer",
       326,
       68,
@@ -908,7 +909,7 @@ fn main {
       166,
       @raylib.Color::new(10, 16, 28, 220),
     )
-    @raylib.draw_text("Touch", 64, sh - 186, 20, @raylib.white)
+    @draw.draw_text("Touch", 64, sh - 186, 20, @raylib.white)
 
     @raylib.draw_rectangle(
       ctl_x,
@@ -917,7 +918,7 @@ fn main {
       54,
       @raylib.Color::new(44, 62, 88, 255),
     )
-    @raylib.draw_text("LEFT", ctl_x + 18, ctl_y + 18, 20, @raylib.white)
+    @draw.draw_text("LEFT", ctl_x + 18, ctl_y + 18, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x + 86,
       ctl_y,
@@ -925,7 +926,7 @@ fn main {
       54,
       @raylib.Color::new(44, 62, 88, 255),
     )
-    @raylib.draw_text("RIGHT", ctl_x + 95, ctl_y + 18, 20, @raylib.white)
+    @draw.draw_text("RIGHT", ctl_x + 95, ctl_y + 18, 20, @raylib.white)
 
     let fire_x = sw - 212
     let fire_y = sh - 152
@@ -936,7 +937,7 @@ fn main {
       116,
       @raylib.Color::new(186, 82, 76, 255),
     )
-    @raylib.draw_text("FIRE", fire_x + 58, fire_y + 42, 36, @raylib.white)
+    @draw.draw_text("FIRE", fire_x + 58, fire_y + 42, 36, @raylib.white)
 
     @raylib.draw_rectangle(
       184,
@@ -945,7 +946,7 @@ fn main {
       36,
       @raylib.Color::new(10, 16, 24, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       194,
       sh - 46,
@@ -962,7 +963,7 @@ fn main {
         216,
         @raylib.Color::new(16, 24, 40, 244),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "PLANET SECURED"
         } else {
@@ -977,7 +978,7 @@ fn main {
           @raylib.Color::new(250, 128, 128, 255)
         },
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R to restart",
         sw / 2 - 124,
         sh / 2 + 38,
@@ -986,8 +987,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

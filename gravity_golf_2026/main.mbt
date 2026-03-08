@@ -66,6 +66,7 @@ fn setup_level(
 fn main {
   @raylib.init_window(sw, sh, "Gravity Golf 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let wells : Array[Well] = Array::makei(4, fn(_i) {
     { x: 0.0, y: 0.0, mass: 0.0, r: 0.0 }
@@ -284,13 +285,13 @@ fn main {
 
     @raylib.draw_circle(bx.to_int(), by.to_int(), 8.0, @raylib.raywhite)
 
-    @raylib.draw_text("GRAVITY GOLF 2026", 20, 16, 40, @raylib.skyblue)
-    @raylib.draw_text("Level \{level}/3", 20, 62, 28, @raylib.white)
-    @raylib.draw_text("Shots \{shots_left}", 180, 62, 28, @raylib.orange)
-    @raylib.draw_text("Power \{power.to_int()}", 330, 62, 28, @raylib.raywhite)
-    @raylib.draw_text("Score \{score}", 540, 62, 28, @raylib.lime)
+    @draw.draw_text("GRAVITY GOLF 2026", 20, 16, 40, @raylib.skyblue)
+    @draw.draw_text("Level \{level}/3", 20, 62, 28, @raylib.white)
+    @draw.draw_text("Shots \{shots_left}", 180, 62, 28, @raylib.orange)
+    @draw.draw_text("Power \{power.to_int()}", 330, 62, 28, @raylib.raywhite)
+    @draw.draw_text("Score \{score}", 540, 62, 28, @raylib.lime)
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Aim with mouse. W/S adjust power. Space launches ball.", 20, 694, 24, @raylib.lightgray,
     )
     @raylib.draw_rectangle(
@@ -300,7 +301,7 @@ fn main {
       24,
       @raylib.Color::new(8, 10, 14, 220),
     )
-    @raylib.draw_text(msg, 26, 729, 18, @raylib.raywhite)
+    @draw.draw_text(msg, 26, 729, 18, @raylib.raywhite)
 
     if over {
       @raylib.draw_rectangle(
@@ -310,12 +311,14 @@ fn main {
         190,
         @raylib.fade(@raylib.black, 0.82),
       )
-      @raylib.draw_text("ROUND OVER", 430, 320, 56, @raylib.orange)
-      @raylib.draw_text("Press R to restart", 450, 386, 34, @raylib.white)
+      @draw.draw_text("ROUND OVER", 430, 320, 56, @raylib.orange)
+      @draw.draw_text("Press R to restart", 450, 386, 34, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -98,6 +98,7 @@ fn reset_enemies(enemies : Array[Enemy]) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "River Raid 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let bullets : Array[Bullet] = Array::makei(140, fn(_i) {
     { alive: false, x: 0.0, y: 0.0, vy: -620.0 }
@@ -411,7 +412,7 @@ fn main {
             22,
             @raylib.gold,
           )
-          @raylib.draw_text(
+          @draw.draw_text(
             "F",
             (enemy.x - 6.0).to_int(),
             (enemy.y - 8.0).to_int(),
@@ -447,11 +448,11 @@ fn main {
       @raylib.white,
     )
 
-    @raylib.draw_text("RIVER RAID 2026", 20, 16, 38, @raylib.skyblue)
-    @raylib.draw_text("Score \{score}", 20, 62, 28, @raylib.white)
-    @raylib.draw_text("Distance \{distance}m", 240, 62, 28, @raylib.white)
+    @draw.draw_text("RIVER RAID 2026", 20, 16, 38, @raylib.skyblue)
+    @draw.draw_text("Score \{score}", 20, 62, 28, @raylib.white)
+    @draw.draw_text("Distance \{distance}m", 240, 62, 28, @raylib.white)
 
-    @raylib.draw_text("HP", 20, 104, 22, @raylib.red)
+    @draw.draw_text("HP", 20, 104, 22, @raylib.red)
     @raylib.draw_rectangle(
       62,
       108,
@@ -461,7 +462,7 @@ fn main {
     )
     @raylib.draw_rectangle(62, 108, hp * 220 / 100, 16, @raylib.red)
 
-    @raylib.draw_text("Fuel", 20, 132, 22, @raylib.gold)
+    @draw.draw_text("Fuel", 20, 132, 22, @raylib.gold)
     @raylib.draw_rectangle(
       62,
       136,
@@ -478,7 +479,7 @@ fn main {
       36,
       @raylib.Color::new(15, 19, 22, 220),
     )
-    @raylib.draw_text(msg, 30, 674, 22, @raylib.raywhite)
+    @draw.draw_text(msg, 30, 674, 22, @raylib.raywhite)
 
     if over {
       @raylib.draw_rectangle(
@@ -488,12 +489,14 @@ fn main {
         160,
         @raylib.fade(@raylib.black, 0.8),
       )
-      @raylib.draw_text("MISSION FAILED", 410, 290, 42, @raylib.orange)
-      @raylib.draw_text("Press R to relaunch", 430, 345, 30, @raylib.white)
+      @draw.draw_text("MISSION FAILED", 410, 290, 42, @raylib.orange)
+      @draw.draw_text("Press R to relaunch", 430, 345, 30, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -67,7 +67,7 @@ fn draw_piece_blocks(
 
 ///|
 fn draw_preview(kind : Int, x : Int, y : Int, title : String) -> Unit {
-  @raylib.draw_text(title, x, y, 24, @raylib.raywhite)
+  @draw.draw_text(title, x, y, 24, @raylib.raywhite)
   @raylib.draw_rectangle_lines(x - 8, y + 30, 120, 120, @raylib.darkgray)
   if kind < 0 {
     return
@@ -81,8 +81,8 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   draw_preview(game.next_kind, @types.side_panel_x, 80, "NEXT")
   draw_preview(game.hold_kind, @types.side_panel_x, 240, "HOLD")
 
-  @raylib.draw_text("SCORE", @types.side_panel_x, 410, 22, @raylib.lightgray)
-  @raylib.draw_text(
+  @draw.draw_text("SCORE", @types.side_panel_x, 410, 22, @raylib.lightgray)
+  @draw.draw_text(
     "\{game.score}",
     @types.side_panel_x,
     438,
@@ -90,8 +90,8 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.orange,
   )
 
-  @raylib.draw_text("LINES", @types.side_panel_x, 488, 22, @raylib.lightgray)
-  @raylib.draw_text(
+  @draw.draw_text("LINES", @types.side_panel_x, 488, 22, @raylib.lightgray)
+  @draw.draw_text(
     "\{game.lines}",
     @types.side_panel_x,
     516,
@@ -99,8 +99,8 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.raywhite,
   )
 
-  @raylib.draw_text("LEVEL", @types.side_panel_x, 560, 22, @raylib.lightgray)
-  @raylib.draw_text(
+  @draw.draw_text("LEVEL", @types.side_panel_x, 560, 22, @raylib.lightgray)
+  @draw.draw_text(
     "\{game.level}",
     @types.side_panel_x,
     588,
@@ -109,13 +109,13 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   )
 
   let controls_y = 620
-  @raylib.draw_text("L/R Move", 20, controls_y, 18, @raylib.gray)
-  @raylib.draw_text("UP/X Rotate", 120, controls_y, 18, @raylib.gray)
-  @raylib.draw_text("Z CCW", 270, controls_y, 18, @raylib.gray)
-  @raylib.draw_text("C Hold", 350, controls_y, 18, @raylib.gray)
-  @raylib.draw_text("DOWN Soft", 20, controls_y + 22, 18, @raylib.gray)
-  @raylib.draw_text("SPACE Hard", 140, controls_y + 22, 18, @raylib.gray)
-  @raylib.draw_text("R Restart", 290, controls_y + 22, 18, @raylib.gray)
+  @draw.draw_text("L/R Move", 20, controls_y, 18, @raylib.gray)
+  @draw.draw_text("UP/X Rotate", 120, controls_y, 18, @raylib.gray)
+  @draw.draw_text("Z CCW", 270, controls_y, 18, @raylib.gray)
+  @draw.draw_text("C Hold", 350, controls_y, 18, @raylib.gray)
+  @draw.draw_text("DOWN Soft", 20, controls_y + 22, 18, @raylib.gray)
+  @draw.draw_text("SPACE Hard", 140, controls_y + 22, 18, @raylib.gray)
+  @draw.draw_text("R Restart", 290, controls_y + 22, 18, @raylib.gray)
 }
 
 ///|
@@ -175,7 +175,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
     )
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "TETRIS: METEOR FALL", @types.board_x, 2, 22, @raylib.raywhite,
   )
   game.draw_hud()
@@ -188,14 +188,14 @@ pub fn draw_frame(game : @types.Game) -> Unit {
       130,
       @raylib.fade(@raylib.black, 0.75),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "GAME OVER",
       @types.board_x + 56,
       @types.board_y + 248,
       38,
       @raylib.red,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Press R to restart",
       @types.board_x + 65,
       @types.board_y + 302,
@@ -204,5 +204,6 @@ pub fn draw_frame(game : @types.Game) -> Unit {
     )
   }
 
+  @fps.draw()
   @raylib.end_drawing()
 }

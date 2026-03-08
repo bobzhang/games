@@ -2,9 +2,25 @@
 package "bobzhang/games/utils"
 
 // Values
-pub fn[T] max_index_by(Array[T], (T, T) -> Bool) -> Int
+pub fn[T] any_by(ArrayView[T], (T) -> Bool) -> Bool
 
-pub fn[T] min_index_by(Array[T], (T, T) -> Bool) -> Int
+pub fn[T] any_by_view(ArrayView[T], (T) -> Bool) -> Bool
+
+pub fn[T] count_by(ArrayView[T], (T) -> Bool) -> Int
+
+pub fn[T] count_by_view(ArrayView[T], (T) -> Bool) -> Int
+
+pub fn[T] first_index_by(ArrayView[T], (T) -> Bool) -> Int
+
+pub fn[T] first_index_by_view(ArrayView[T], (T) -> Bool) -> Int
+
+pub fn[T] first_indexi_by(ArrayView[T], (Int, T) -> Bool) -> Int
+
+pub fn[T] first_indexi_by_view(ArrayView[T], (Int, T) -> Bool) -> Int
+
+pub fn[T] max_index_by(ArrayView[T], (T, T) -> Bool) -> Int
+
+pub fn[T] min_index_by(ArrayView[T], (T, T) -> Bool) -> Int
 
 // Errors
 

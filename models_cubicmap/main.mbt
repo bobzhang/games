@@ -45,6 +45,7 @@ fn main {
   let mut pause = false
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -62,9 +63,10 @@ fn main {
     @raylib.begin_mode_3d(camera)
     @raylib.draw_model(model, map_position, 1.0, @raylib.white)
     @raylib.end_mode_3d()
-    @raylib.draw_text("cubicmap image used to", 658, 90, 10, @raylib.gray)
-    @raylib.draw_text("generate map 3d model", 658, 104, 10, @raylib.gray)
+    @draw.draw_text("cubicmap image used to", 658, 90, 10, @raylib.gray)
+    @draw.draw_text("generate map 3d model", 658, 104, 10, @raylib.gray)
     @raylib.draw_fps(10, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -72,5 +74,6 @@ fn main {
   @raylib.unload_texture(cubicmap)
   @raylib.unload_texture(texture)
   @raylib.unload_model(model)
+  @draw.cleanup()
   @raylib.close_window()
 }

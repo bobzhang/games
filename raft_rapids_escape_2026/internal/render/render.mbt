@@ -459,14 +459,14 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(164, 210, 236, 200),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "RAFT RAPIDS ESCAPE",
     @types.panel_x0 + 24,
     36,
     34,
     @raylib.Color::new(226, 244, 255, 245),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "2026 expedition",
     @types.panel_x0 + 24,
     76,
@@ -474,14 +474,14 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(148, 196, 222, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score " + game.score.to_string(),
     @types.panel_x0 + 24,
     138,
     30,
     @raylib.Color::new(236, 244, 255, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best " + game.best_score.to_string(),
     @types.panel_x0 + 24,
     174,
@@ -489,14 +489,14 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(190, 220, 234, 228),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Lives " + game.lives.to_string(),
     @types.panel_x0 + 24,
     220,
     24,
     @raylib.Color::new(255, 214, 214, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Level " + game.level.to_string(),
     @types.panel_x0 + 170,
     220,
@@ -504,7 +504,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(200, 226, 255, 240),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Distance " + game.distance.to_string() + " m",
     @types.panel_x0 + 24,
     254,
@@ -520,7 +520,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     1.0,
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Fuel",
     @types.panel_x0 + 24,
     306,
@@ -537,7 +537,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(58, 44, 26, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Shield",
     @types.panel_x0 + 24,
     364,
@@ -554,7 +554,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(36, 56, 74, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Run time",
     @types.panel_x0 + 24,
     422,
@@ -571,7 +571,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(30, 64, 44, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Combo x" + game.combo.to_string(),
     @types.panel_x0 + 24,
     484,
@@ -583,7 +583,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     },
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Hints left " + game.hint_left.to_string(),
     @types.panel_x0 + 24,
     516,
@@ -591,21 +591,21 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(202, 224, 248, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Desktop: WASD/Arrows move",
     @types.panel_x0 + 24,
     568,
     20,
     @raylib.Color::new(170, 206, 226, 214),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Shift/J boost, H hint, R restart",
     @types.panel_x0 + 24,
     594,
     20,
     @raylib.Color::new(170, 206, 226, 214),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mobile: touch buttons on right",
     @types.panel_x0 + 24,
     620,
@@ -653,8 +653,8 @@ fn @types.Game::draw_touch_button(
   )
 
   let fs : Int = if rect.3 <= 96 { 24 } else { 30 }
-  let tw : Int = @raylib.measure_text(label, fs)
-  @raylib.draw_text(
+  let tw : Int = @draw.measure_text(label, fs)
+  @draw.draw_text(
     label,
     rect.0 + (rect.2 - tw) / 2,
     rect.1 + (rect.3 - fs) / 2,
@@ -725,17 +725,17 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   let title : String = "RAFT RAPIDS ESCAPE"
   let sub : String = "Survive 180 seconds through chaotic river channels"
 
-  let tw : Int = @raylib.measure_text(title, 82)
-  let sw : Int = @raylib.measure_text(sub, 30)
+  let tw : Int = @draw.measure_text(title, 82)
+  let sw : Int = @draw.measure_text(sub, 30)
 
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
     @types.screen_w / 2 - tw / 2,
     180,
     82,
     @raylib.Color::new(230, 248, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     sub,
     @types.screen_w / 2 - sw / 2,
     282,
@@ -746,16 +746,16 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   let p0 : String = "Collect coins/fuel, keep raft intact, use hints smartly"
   let p1 : String = "Desktop: WASD + Shift | Mobile: right-side touch pad"
 
-  @raylib.draw_text(
+  @draw.draw_text(
     p0,
-    @types.screen_w / 2 - @raylib.measure_text(p0, 26) / 2,
+    @types.screen_w / 2 - @draw.measure_text(p0, 26) / 2,
     360,
     26,
     @raylib.Color::new(184, 220, 242, 222),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     p1,
-    @types.screen_w / 2 - @raylib.measure_text(p1, 26) / 2,
+    @types.screen_w / 2 - @draw.measure_text(p1, 26) / 2,
     396,
     26,
     @raylib.Color::new(184, 220, 242, 222),
@@ -793,8 +793,8 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   )
 
   let txt : String = "START EXPEDITION"
-  let txt_w : Int = @raylib.measure_text(txt, 44)
-  @raylib.draw_text(
+  let txt_w : Int = @draw.measure_text(txt, 44)
+  @draw.draw_text(
     txt,
     b.0 + (b.2 - txt_w) / 2,
     b.1 + 34,
@@ -824,9 +824,9 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     "Raft lost in the flood."
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     head,
-    @types.screen_w / 2 - @raylib.measure_text(head, 76) / 2,
+    @types.screen_w / 2 - @draw.measure_text(head, 76) / 2,
     180,
     76,
     if game.win {
@@ -835,9 +835,9 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
       @raylib.Color::new(255, 182, 174, 246)
     },
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     sub,
-    @types.screen_w / 2 - @raylib.measure_text(sub, 34) / 2,
+    @types.screen_w / 2 - @draw.measure_text(sub, 34) / 2,
     272,
     34,
     @raylib.Color::new(208, 228, 242, 236),
@@ -852,30 +852,30 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     @types.run_time_goal.to_int().to_string() +
     " s"
 
-  @raylib.draw_text(
+  @draw.draw_text(
     l0,
-    @types.screen_w / 2 - @raylib.measure_text(l0, 38) / 2,
+    @types.screen_w / 2 - @draw.measure_text(l0, 38) / 2,
     350,
     38,
     @raylib.Color::new(238, 246, 252, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     l1,
-    @types.screen_w / 2 - @raylib.measure_text(l1, 32) / 2,
+    @types.screen_w / 2 - @draw.measure_text(l1, 32) / 2,
     396,
     32,
     @raylib.Color::new(206, 230, 244, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     l2,
-    @types.screen_w / 2 - @raylib.measure_text(l2, 32) / 2,
+    @types.screen_w / 2 - @draw.measure_text(l2, 32) / 2,
     434,
     32,
     @raylib.Color::new(206, 230, 244, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     l3,
-    @types.screen_w / 2 - @raylib.measure_text(l3, 32) / 2,
+    @types.screen_w / 2 - @draw.measure_text(l3, 32) / 2,
     472,
     32,
     @raylib.Color::new(206, 230, 244, 236),
@@ -913,9 +913,9 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   )
 
   let txt : String = "RUN AGAIN"
-  @raylib.draw_text(
+  @draw.draw_text(
     txt,
-    b.0 + (b.2 - @raylib.measure_text(txt, 42)) / 2,
+    b.0 + (b.2 - @draw.measure_text(txt, 42)) / 2,
     b.1 + 32,
     42,
     @raylib.Color::new(242, 249, 255, 248),
@@ -934,7 +934,7 @@ fn @types.Game::draw_msg(game : @types.Game) -> Unit {
     90 + (game.msg_t * 140.0).to_int()
   }
 
-  let w : Int = @raylib.measure_text(game.msg, 28) + 36
+  let w : Int = @draw.measure_text(game.msg, 28) + 36
   let x : Int = @types.world_x0 + (@types.world_w - w) / 2
   let y : Int = @types.world_y0 + 18
 
@@ -946,7 +946,7 @@ fn @types.Game::draw_msg(game : @types.Game) -> Unit {
     46,
     @raylib.Color::new(198, 228, 246, (240).min(a + 10)),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     game.msg,
     x + 18,
     y + 10,

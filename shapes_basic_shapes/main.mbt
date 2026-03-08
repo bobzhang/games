@@ -11,6 +11,7 @@ fn main {
   let mut rotation : Float = 0.0
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -21,7 +22,7 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "some basic shapes available on raylib", 20, 20, 20, @raylib.darkgray,
     )
 
@@ -97,9 +98,11 @@ fn main {
     // this way, all LINES are rendered in a single draw pass
     @raylib.draw_line(18, 42, screen_width - 18, 42, @raylib.black)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

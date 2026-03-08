@@ -54,6 +54,7 @@ fn main {
   @raylib.set_model_material_shader(model, 0, shader)
   @raylib.disable_cursor()
   @raylib.set_target_fps(60)
+  @draw.init_font()
   // Main game loop
   while !@raylib.window_should_close() {
     // Update
@@ -81,14 +82,16 @@ fn main {
     @raylib.end_shader_mode()
     @raylib.draw_grid(10, 1.0)
     @raylib.end_mode_3d()
-    @raylib.draw_text(
+    @draw.draw_text(
       "Use mouse to rotate the camera", 10, 10, 20, @raylib.darkgray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
   // De-Initialization
   @raylib.unload_model(model)
   @raylib.unload_shader(shader)
   @raylib.unload_texture(texture)
+  @draw.cleanup()
   @raylib.close_window()
 }

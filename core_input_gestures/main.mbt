@@ -17,6 +17,7 @@ fn main {
   let mut current_gesture = @raylib.GestureNone
   let mut last_gesture = @raylib.GestureNone
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -72,7 +73,7 @@ fn main {
       screen_height - 30,
       @raylib.raywhite,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "GESTURES TEST AREA",
       screen_width - 270,
       screen_height - 40,
@@ -98,7 +99,7 @@ fn main {
         )
       }
       if i < gesture_strings.length() - 1 {
-        @raylib.draw_text(
+        @draw.draw_text(
           gesture_strings[i],
           35,
           36 + 20 * i,
@@ -106,7 +107,7 @@ fn main {
           @raylib.darkgray,
         )
       } else {
-        @raylib.draw_text(
+        @draw.draw_text(
           gesture_strings[i],
           35,
           36 + 20 * i,
@@ -116,13 +117,15 @@ fn main {
       }
     }
     @raylib.draw_rectangle_lines(10, 29, 200, screen_height - 50, @raylib.gray)
-    @raylib.draw_text("DETECTED GESTURES", 50, 15, 10, @raylib.gray)
+    @draw.draw_text("DETECTED GESTURES", 50, 15, 10, @raylib.gray)
     if current_gesture != @raylib.GestureNone {
       @raylib.draw_circle_v(touch_position, 30.0, @raylib.maroon)
     }
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

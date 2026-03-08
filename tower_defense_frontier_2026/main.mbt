@@ -59,6 +59,7 @@ fn enemy_color(hp_ratio : Float) -> @raylib.Color {
 fn main {
   @raylib.init_window(screen_w, screen_h, "Tower Defense Frontier 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let towers : Array[Tower] = Array::makei(lanes * slots, fn(i) {
     { built: false, lane: i / slots, slot: i % slots, cooldown: 0.0 }
@@ -276,18 +277,18 @@ fn main {
       }
     }
 
-    @raylib.draw_text("TOWER DEFENSE FRONTIER 2026", 20, 20, 32, @raylib.yellow)
-    @raylib.draw_text("Lives: \{lives}", 26, 56, 24, @raylib.raywhite)
-    @raylib.draw_text("Gold: \{gold}", 170, 56, 24, @raylib.raywhite)
-    @raylib.draw_text("Score: \{score}", 310, 56, 24, @raylib.raywhite)
-    @raylib.draw_text("Wave: \{wave}", 480, 56, 24, @raylib.raywhite)
-    @raylib.draw_text(
+    @draw.draw_text("TOWER DEFENSE FRONTIER 2026", 20, 20, 32, @raylib.yellow)
+    @draw.draw_text("Lives: \{lives}", 26, 56, 24, @raylib.raywhite)
+    @draw.draw_text("Gold: \{gold}", 170, 56, 24, @raylib.raywhite)
+    @draw.draw_text("Score: \{score}", 310, 56, 24, @raylib.raywhite)
+    @draw.draw_text("Wave: \{wave}", 480, 56, 24, @raylib.raywhite)
+    @draw.draw_text(
       "Click slot to build tower (40)", 680, 24, 22, @raylib.gray,
     )
-    @raylib.draw_text("R restart", 820, 56, 20, @raylib.gray)
+    @draw.draw_text("R restart", 820, 56, 20, @raylib.gray)
 
     if paused_between_wave && !game_over {
-      @raylib.draw_text(
+      @draw.draw_text(
         "NEXT WAVE IN \{between_wave_timer.to_int() + 1}",
         365,
         610,
@@ -304,12 +305,14 @@ fn main {
         120,
         @raylib.fade(@raylib.black, 0.78),
       )
-      @raylib.draw_text("FRONTIER LOST", 370, 306, 42, @raylib.red)
-      @raylib.draw_text("Press R to restart", 390, 350, 24, @raylib.raywhite)
+      @draw.draw_text("FRONTIER LOST", 370, 306, 42, @raylib.red)
+      @draw.draw_text("Press R to restart", 390, 350, 24, @raylib.raywhite)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -263,6 +263,7 @@ fn main {
   ]
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let model_pos = @raylib.Vector3::new(0.0, 0.0, 0.0)
 
@@ -368,13 +369,13 @@ fn main {
       60,
       @raylib.fade(@raylib.darkblue, 0.5),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "MOUSE LEFT BUTTON to CYCLE VOX MODELS", 40, 410, 10, @raylib.blue,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "MOUSE MIDDLE BUTTON to ZOOM OR ROTATE CAMERA", 40, 420, 10, @raylib.blue,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "UP-DOWN-LEFT-RIGHT KEYS to MOVE CAMERA", 40, 430, 10, @raylib.blue,
     )
 
@@ -382,7 +383,7 @@ fn main {
     let vox_display_names = [
       "chr_knight.vox", "chr_sword.vox", "monu9.vox", "fez.vox",
     ]
-    @raylib.draw_text(
+    @draw.draw_text(
       "File: " + vox_display_names[current_model],
       10,
       10,
@@ -390,6 +391,7 @@ fn main {
       @raylib.gray,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -398,5 +400,6 @@ fn main {
     @raylib.unload_model(models[i])
   }
   @raylib.unload_shader(shader)
+  @draw.cleanup()
   @raylib.close_window()
 }

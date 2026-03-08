@@ -29,8 +29,8 @@ fn draw_button(
   )
 
   let ts = 28
-  let tw = @raylib.measure_text(label, ts)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(label, ts)
+  @draw.draw_text(
     label,
     rect.0 + rect.2 / 2 - tw / 2,
     rect.1 + 15,
@@ -43,8 +43,8 @@ fn draw_button(
   )
 
   let cs = 20
-  let cw = @raylib.measure_text(caption, cs)
-  @raylib.draw_text(
+  let cw = @draw.measure_text(caption, cs)
+  @draw.draw_text(
     caption,
     rect.0 + rect.2 / 2 - cw / 2,
     rect.1 + rect.3 - 28,
@@ -339,14 +339,14 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(118, 160, 214, 206),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "CANDY CRUSH 2026",
     @types.panel_x() + 34,
     36,
     36,
     @raylib.Color::new(238, 244, 255, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Match 3+ to clear jelly",
     @types.panel_x() + 34,
     82,
@@ -354,21 +354,21 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(186, 214, 242, 228),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "LEVEL  " + game.level.to_string(),
     @types.panel_x() + 34,
     140,
     30,
     @raylib.Color::new(240, 245, 255, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "SCORE  " + game.score.to_string(),
     @types.panel_x() + 34,
     182,
     30,
     @raylib.Color::new(255, 232, 172, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "BEST   " + game.best_score.to_string(),
     @types.panel_x() + 34,
     224,
@@ -376,7 +376,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(196, 220, 255, 234),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "MOVES  " + game.moves_left.to_string(),
     @types.panel_x() + 34,
     560,
@@ -387,7 +387,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
       @raylib.Color::new(236, 248, 255, 244)
     },
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "JELLY  " + game.jelly_left.to_string(),
     @types.panel_x() + 34,
     604,
@@ -398,7 +398,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
       @raylib.Color::new(236, 248, 255, 244)
     },
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "MAX CHAIN  x" + game.chain_best.to_string(),
     @types.panel_x() + 34,
     648,
@@ -461,14 +461,14 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     true,
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Keyboard: Arrows/WASD + Enter",
     @types.panel_x() + 34,
     @types.screen_h - 78,
     20,
     @raylib.Color::new(176, 206, 236, 226),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Touch: tap candies to swap",
     @types.panel_x() + 34,
     @types.screen_h - 52,
@@ -501,7 +501,7 @@ fn @types.Game::draw_message(game : @types.Game) -> Unit {
     @raylib.Color::new(150, 190, 234, alpha),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     game.message,
     @types.board_x() + 16,
     @types.board_y() - 44,
@@ -521,14 +521,14 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(8, 14, 24, 154),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "CANDY CRUSH 2026",
     @types.screen_w / 2 - 270,
     146,
     72,
     @raylib.Color::new(242, 248, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Build chains, trigger specials, clear every jelly tile.",
     @types.screen_w / 2 - 338,
     240,
@@ -536,14 +536,14 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(198, 220, 246, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Desktop: Arrow/WASD + Enter, H hint, J shuffle, R restart",
     @types.screen_w / 2 - 360,
     304,
     26,
     @raylib.Color::new(188, 214, 240, 230),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mobile: tap one candy then an adjacent candy to swap",
     @types.screen_w / 2 - 350,
     340,
@@ -580,7 +580,7 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     LevelClear => "LEVEL CLEARED"
     _ => "OUT OF MOVES"
   }
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
     @types.screen_w / 2 - 250,
     164,
@@ -591,7 +591,7 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     },
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score " +
     game.score.to_string() +
     "    Best " +
@@ -601,7 +601,7 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     34,
     @raylib.Color::new(236, 246, 255, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Max chain x" + game.chain_best.to_string(),
     @types.screen_w / 2 - 130,
     308,
@@ -627,7 +627,7 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     _ => draw_button("Play Again", "Enter / Space / Tap", action, hover, true)
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Press T to return to title",
     @types.screen_w / 2 - 148,
     action.1 + 112,
@@ -651,7 +651,7 @@ pub fn draw_frame(game : @types.Game) -> Unit {
     Play => ()
   }
   if game.state == Play && game.touch_mode {
-    @raylib.draw_text(
+    @draw.draw_text(
       "Touch ready: tap two adjacent candies",
       @types.board_x(),
       @types.board_y() + @types.board_pixel_h() + 14,

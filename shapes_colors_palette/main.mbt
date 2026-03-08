@@ -40,6 +40,7 @@ fn main {
   let color_state : Array[Int] = Array::make(max_colors_count, 0)
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -56,8 +57,8 @@ fn main {
     // Draw
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
-    @raylib.draw_text("raylib colors palette", 28, 42, 20, @raylib.black)
-    @raylib.draw_text(
+    @draw.draw_text("raylib colors palette", 28, 42, 20, @raylib.black)
+    @draw.draw_text(
       "press SPACE to see all colors",
       @raylib.get_screen_width() - 180,
       @raylib.get_screen_height() - 40,
@@ -82,8 +83,8 @@ fn main {
           6.0,
           @raylib.fade(@raylib.black, 0.3),
         )
-        let text_width = @raylib.measure_text(color_names[i], 10)
-        @raylib.draw_text(
+        let text_width = @draw.measure_text(color_names[i], 10)
+        @draw.draw_text(
           color_names[i],
           (rec.x + rec.width - Float::from_int(text_width) - 12.0).to_int(),
           (rec.y + rec.height - 20.0).to_int(),
@@ -92,9 +93,11 @@ fn main {
         )
       }
     }
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

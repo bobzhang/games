@@ -312,6 +312,7 @@ fn main {
   let mut show_lines = false
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -435,15 +436,16 @@ fn main {
           @raylib.darkblue,
         )
       }
-      @raylib.draw_text("(F1) Hide Shadow Volumes", 10, 50, 10, @raylib.green)
+      @draw.draw_text("(F1) Hide Shadow Volumes", 10, 50, 10, @raylib.green)
     } else {
-      @raylib.draw_text("(F1) Show Shadow Volumes", 10, 50, 10, @raylib.green)
+      @draw.draw_text("(F1) Show Shadow Volumes", 10, 50, 10, @raylib.green)
     }
     @raylib.draw_fps(screen_width - 80, 10)
-    @raylib.draw_text("Drag to move light #1", 10, 10, 10, @raylib.darkgreen)
-    @raylib.draw_text(
+    @draw.draw_text("Drag to move light #1", 10, 10, 10, @raylib.darkgreen)
+    @draw.draw_text(
       "Right click to add new light", 10, 30, 10, @raylib.darkgreen,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -458,5 +460,6 @@ fn main {
       }
     }
   }
+  @draw.cleanup()
   @raylib.close_window()
 }

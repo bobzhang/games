@@ -3,6 +3,7 @@ import {
   "tonyfettes/raylib",
   "bobzhang/games/tank_1990/internal/score",
   "bobzhang/games/tank_1990/internal/types",
+  "bobzhang/games/utils/draw",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

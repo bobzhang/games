@@ -22,8 +22,8 @@ fn draw_title() -> Unit {
   let cx = @types.screen_w / 2
   let title = "Xiao Xiao Le"
   let ts = 52
-  let tw = @raylib.measure_text(title, ts)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, ts)
+  @draw.draw_text(
     title,
     cx - tw / 2,
     200,
@@ -32,16 +32,16 @@ fn draw_title() -> Unit {
   )
   let sub = "Match 3 or more gems to score!"
   let ss = 22
-  let sw = @raylib.measure_text(sub, ss)
-  @raylib.draw_text(sub, cx - sw / 2, 280, ss, @types.panel_text_color)
+  let sw = @draw.measure_text(sub, ss)
+  @draw.draw_text(sub, cx - sw / 2, 280, ss, @types.panel_text_color)
   let inst = "Click to select and swap adjacent gems"
   let is_ = 18
-  let iw = @raylib.measure_text(inst, is_)
-  @raylib.draw_text(inst, cx - iw / 2, 320, is_, @types.panel_label_color)
+  let iw = @draw.measure_text(inst, is_)
+  @draw.draw_text(inst, cx - iw / 2, 320, is_, @types.panel_label_color)
   let start = "Click or press Enter to start"
   let start_s = 20
-  let start_w = @raylib.measure_text(start, start_s)
-  @raylib.draw_text(
+  let start_w = @draw.measure_text(start, start_s)
+  @draw.draw_text(
     start,
     cx - start_w / 2,
     420,
@@ -55,11 +55,11 @@ fn draw_title() -> Unit {
 ///|
 fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   // Level
-  @raylib.draw_text("Level", 36, 20, 16, @types.panel_label_color)
-  @raylib.draw_text(game.level.to_string(), 36, 38, 32, @types.panel_text_color)
+  @draw.draw_text("Level", 36, 20, 16, @types.panel_label_color)
+  @draw.draw_text(game.level.to_string(), 36, 38, 32, @types.panel_text_color)
   // Score
-  @raylib.draw_text("Score", 160, 20, 16, @types.panel_label_color)
-  @raylib.draw_text(
+  @draw.draw_text("Score", 160, 20, 16, @types.panel_label_color)
+  @draw.draw_text(
     game.score.to_string(),
     160,
     38,
@@ -68,18 +68,18 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   )
   // Target
   let target_str = "/ \{game.target_score}"
-  @raylib.draw_text(target_str, 280, 46, 16, @types.panel_label_color)
+  @draw.draw_text(target_str, 280, 46, 16, @types.panel_label_color)
   // Moves
-  @raylib.draw_text("Moves", 460, 20, 16, @types.panel_label_color)
+  @draw.draw_text("Moves", 460, 20, 16, @types.panel_label_color)
   let moves_color = if game.moves_left <= 5 {
     @raylib.Color::new(231, 76, 60, 255)
   } else {
     @types.panel_text_color
   }
-  @raylib.draw_text(game.moves_left.to_string(), 460, 38, 32, moves_color)
+  @draw.draw_text(game.moves_left.to_string(), 460, 38, 32, moves_color)
   // Best
-  @raylib.draw_text("Best", 570, 20, 16, @types.panel_label_color)
-  @raylib.draw_text(
+  @draw.draw_text("Best", 570, 20, 16, @types.panel_label_color)
+  @draw.draw_text(
     game.best_score.to_string(),
     570,
     38,
@@ -90,7 +90,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   if game.msg_t > 0.0 {
     let alpha = @types.clampf(game.msg_t * 3.0, 0.0, 1.0)
     let a = (alpha * 255.0).to_int()
-    @raylib.draw_text(game.msg, 36, 90, 24, @raylib.Color::new(241, 196, 15, a))
+    @draw.draw_text(game.msg, 36, 90, 24, @raylib.Color::new(241, 196, 15, a))
   }
   // Progress bar
   let bar_x = 36
@@ -235,8 +235,8 @@ fn @types.Game::draw_overlay_over(game : @types.Game) -> Unit {
   let cy = @types.board_top + bh / 2 - 8
   let txt = "Game Over"
   let ts = 48
-  let tw = @raylib.measure_text(txt, ts)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(txt, ts)
+  @draw.draw_text(
     txt,
     cx - tw / 2,
     cy - 60,
@@ -245,12 +245,12 @@ fn @types.Game::draw_overlay_over(game : @types.Game) -> Unit {
   )
   let score_text = "Score: \{game.score}"
   let ss = 24
-  let sw = @raylib.measure_text(score_text, ss)
-  @raylib.draw_text(score_text, cx - sw / 2, cy, ss, @types.panel_text_color)
+  let sw = @draw.measure_text(score_text, ss)
+  @draw.draw_text(score_text, cx - sw / 2, cy, ss, @types.panel_text_color)
   let sub = "Enter: Retry  |  R: Level 1  |  Esc: Title"
   let sub_s = 16
-  let sub_w = @raylib.measure_text(sub, sub_s)
-  @raylib.draw_text(
+  let sub_w = @draw.measure_text(sub, sub_s)
+  @draw.draw_text(
     sub,
     cx - sub_w / 2,
     cy + 40,
@@ -278,8 +278,8 @@ fn @types.Game::draw_overlay_clear(game : @types.Game) -> Unit {
   let cy = @types.board_top + bh / 2 - 8
   let txt = "Level Clear!"
   let ts = 48
-  let tw = @raylib.measure_text(txt, ts)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(txt, ts)
+  @draw.draw_text(
     txt,
     cx - tw / 2,
     cy - 60,
@@ -288,12 +288,12 @@ fn @types.Game::draw_overlay_clear(game : @types.Game) -> Unit {
   )
   let score_text = "Score: \{game.score}"
   let ss = 24
-  let sw = @raylib.measure_text(score_text, ss)
-  @raylib.draw_text(score_text, cx - sw / 2, cy, ss, @types.panel_text_color)
+  let sw = @draw.measure_text(score_text, ss)
+  @draw.draw_text(score_text, cx - sw / 2, cy, ss, @types.panel_text_color)
   let sub = "Enter: Next Level  |  R: Level 1"
   let sub_s = 16
-  let sub_w = @raylib.measure_text(sub, sub_s)
-  @raylib.draw_text(
+  let sub_w = @draw.measure_text(sub, sub_s)
+  @draw.draw_text(
     sub,
     cx - sub_w / 2,
     cy + 40,

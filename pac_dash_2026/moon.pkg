@@ -3,6 +3,7 @@ import {
   "bobzhang/games/pac_dash_2026/internal/game",
   "bobzhang/games/pac_dash_2026/internal/render",
   "bobzhang/games/pac_dash_2026/internal/types",
+  "bobzhang/games/utils/draw",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

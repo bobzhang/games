@@ -408,6 +408,7 @@ fn nearest_truck_for_repair(
 fn main {
   @raylib.init_window(sw, sh, "Meteor Miner Convoy 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let trucks : Array[Truck] = Array::makei(truck_n, fn(i) {
     {
@@ -983,7 +984,7 @@ fn main {
       14,
       @raylib.Color::new(172, 206, 220, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "REFINERY",
       sw - 118,
       468,
@@ -1025,7 +1026,7 @@ fn main {
         6.0,
         @raylib.Color::new(28, 30, 36, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "\\{truck.cargo}",
         tx - 6,
         ty - 10,
@@ -1071,7 +1072,7 @@ fn main {
         r * 0.35,
         @raylib.Color::new(102, 72, 50, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "\\{meteor.hp}",
         mx - 5,
         my - 9,
@@ -1093,7 +1094,7 @@ fn main {
         4.0,
         @raylib.Color::new(182, 252, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "+\\{ore.amount}",
         ox - 9,
         oy - 22,
@@ -1170,28 +1171,28 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 106, @raylib.Color::new(8, 12, 22, 228))
-    @raylib.draw_text(
+    @draw.draw_text(
       "METEOR MINER CONVOY 2026",
       16,
       18,
       34,
       @raylib.Color::new(236, 246, 255, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Sector \\{level}/3",
       480,
       24,
       30,
       @raylib.Color::new(250, 226, 146, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Deliveries \\{deliveries}/\\{target}",
       654,
       24,
       30,
       @raylib.Color::new(220, 236, 255, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Ore \\{ore_bank}",
       1044,
       24,
@@ -1199,35 +1200,35 @@ fn main {
       @raylib.Color::new(122, 246, 236, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Pilot HP \\{player_hp}",
       20,
       70,
       24,
       @raylib.Color::new(226, 242, 255, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Energy \\{energy.to_int()}%",
       220,
       70,
       24,
       @raylib.Color::new(226, 242, 255, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Timer \\{timer.to_int()}",
       470,
       70,
       24,
       @raylib.Color::new(255, 214, 146, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \\{score}",
       684,
       70,
       24,
       @raylib.Color::new(226, 242, 255, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Alive Trucks \\{alive_truck_count(trucks)}",
       932,
       70,
@@ -1293,7 +1294,7 @@ fn main {
       188,
       @raylib.Color::new(8, 14, 28, 220),
     )
-    @raylib.draw_text("Touch", 90, sh - 188, 20, @raylib.white)
+    @draw.draw_text("Touch", 90, sh - 188, 20, @raylib.white)
     let pad_x = 18
     let pad_y = sh - 182
     @raylib.draw_rectangle(
@@ -1303,7 +1304,7 @@ fn main {
       54,
       @raylib.Color::new(50, 70, 98, 255),
     )
-    @raylib.draw_text("U", pad_x + 104, pad_y + 16, 24, @raylib.white)
+    @draw.draw_text("U", pad_x + 104, pad_y + 16, 24, @raylib.white)
     @raylib.draw_rectangle(
       pad_x,
       pad_y + 54,
@@ -1311,7 +1312,7 @@ fn main {
       54,
       @raylib.Color::new(50, 70, 98, 255),
     )
-    @raylib.draw_text("L", pad_x + 28, pad_y + 70, 24, @raylib.white)
+    @draw.draw_text("L", pad_x + 28, pad_y + 70, 24, @raylib.white)
     @raylib.draw_rectangle(
       pad_x + 152,
       pad_y + 54,
@@ -1319,7 +1320,7 @@ fn main {
       54,
       @raylib.Color::new(50, 70, 98, 255),
     )
-    @raylib.draw_text("R", pad_x + 180, pad_y + 70, 24, @raylib.white)
+    @draw.draw_text("R", pad_x + 180, pad_y + 70, 24, @raylib.white)
     @raylib.draw_rectangle(
       pad_x + 76,
       pad_y + 108,
@@ -1327,7 +1328,7 @@ fn main {
       54,
       @raylib.Color::new(50, 70, 98, 255),
     )
-    @raylib.draw_text("D", pad_x + 104, pad_y + 124, 24, @raylib.white)
+    @draw.draw_text("D", pad_x + 104, pad_y + 124, 24, @raylib.white)
 
     let fire_x = sw - 258
     let fire_y = sh - 170
@@ -1340,7 +1341,7 @@ fn main {
       156,
       @raylib.Color::new(186, 82, 70, 255),
     )
-    @raylib.draw_text("FIRE", fire_x + 24, fire_y + 62, 30, @raylib.white)
+    @draw.draw_text("FIRE", fire_x + 24, fire_y + 62, 30, @raylib.white)
     @raylib.draw_rectangle(
       repair_x,
       repair_y,
@@ -1348,7 +1349,7 @@ fn main {
       156,
       @raylib.Color::new(70, 138, 126, 255),
     )
-    @raylib.draw_text("REPAIR", repair_x + 6, repair_y + 62, 24, @raylib.white)
+    @draw.draw_text("REPAIR", repair_x + 6, repair_y + 62, 24, @raylib.white)
 
     @raylib.draw_rectangle(
       250,
@@ -1357,7 +1358,7 @@ fn main {
       44,
       @raylib.Color::new(6, 10, 18, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       264,
       sh - 50,
@@ -1374,7 +1375,7 @@ fn main {
         224,
         @raylib.Color::new(16, 24, 42, 242),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "MISSION COMPLETE"
         } else {
@@ -1389,7 +1390,7 @@ fn main {
           @raylib.Color::new(255, 138, 138, 255)
         },
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R to restart",
         sw / 2 - 124,
         sh / 2 + 44,
@@ -1398,8 +1399,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

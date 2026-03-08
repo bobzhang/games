@@ -341,7 +341,7 @@ fn @types.Game::draw_sequence_strip(game : @types.Game) -> Unit {
       @raylib.Color::new(180, 162, 132, 198),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       (i + 1).to_string(),
       x + 8,
       y + 8,
@@ -369,7 +369,7 @@ fn draw_meter(
   }
   let fill_w : Int = (Float::from_int(w) * ratio).to_int()
 
-  @raylib.draw_text(label, x, y, 22, @raylib.Color::new(246, 242, 234, 255))
+  @draw.draw_text(label, x, y, 22, @raylib.Color::new(246, 242, 234, 255))
   @raylib.draw_rectangle(x, y + 27, w, 16, bg)
   @raylib.draw_rectangle(x, y + 27, fill_w, 16, fg)
   @raylib.draw_rectangle_lines(
@@ -403,14 +403,14 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(196, 168, 140, 226),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "SHADOW PUPPET",
     panel_x + 20,
     panel_y + 14,
     30,
     @raylib.Color::new(250, 232, 188, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Scene " + game.stage.to_string(),
     panel_x + 22,
     panel_y + 56,
@@ -418,14 +418,14 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(236, 222, 200, 240),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score " + game.score.to_string(),
     panel_x + 22,
     panel_y + 94,
     24,
     @raylib.Color::new(244, 236, 220, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best " + game.best_score.to_string(),
     panel_x + 22,
     panel_y + 124,
@@ -433,14 +433,14 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(190, 182, 170, 230),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Combo x" + game.combo.to_string(),
     panel_x + 22,
     panel_y + 162,
     28,
     @raylib.Color::new(250, 208, 126, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best combo x" + game.best_combo.to_string(),
     panel_x + 22,
     panel_y + 198,
@@ -509,7 +509,7 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
   )
 
   let target = @types.target_pose(game)
-  @raylib.draw_text(
+  @draw.draw_text(
     "Current Pose: (" +
     game.current_pose.ax.to_string() +
     ", " +
@@ -520,7 +520,7 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
     21,
     @raylib.Color::new(238, 236, 228, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Target Pose: (" +
     target.ax.to_string() +
     ", " +
@@ -532,7 +532,7 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(244, 210, 148, 240),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Hits " +
     game.hit_count.to_string() +
     "   Misses " +
@@ -542,7 +542,7 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
     20,
     @raylib.Color::new(214, 208, 198, 230),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Slowdown " +
     (@types.active_slow_factor(game) * 100.0).to_int().to_string() +
     "%",
@@ -563,14 +563,14 @@ fn draw_controls_strip() -> Unit {
     @raylib.Color::new(18, 12, 16, 238),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Arrows/WASD move pose axes   J lock pose   K undo last lock",
     34,
     @types.screen_h - 76,
     26,
     @raylib.Color::new(244, 236, 220, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "SPACE spotlight burst (slowdown)   P pause   R restart",
     34,
     @types.screen_h - 42,
@@ -600,7 +600,7 @@ fn @types.Game::draw_message_banner(game : @types.Game) -> Unit {
     h,
     @raylib.Color::new(248, 214, 156, alpha),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     game.message,
     x + 20,
     y + 11,
@@ -619,35 +619,35 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(8, 8, 14, 170),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "SHADOW PUPPET THEATER 2026",
     320,
     220,
     64,
     @raylib.Color::new(250, 230, 176, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Recreate each silhouette sequence under pressure.",
     424,
     314,
     34,
     @raylib.Color::new(242, 234, 220, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Perfect locks raise audience excitement; mistakes drain spotlight energy.",
     306,
     360,
     28,
     @raylib.Color::new(212, 206, 198, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "ENTER / J / SPACE to start",
     548,
     460,
     38,
     @raylib.Color::new(252, 214, 132, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best Score " +
     game.best_score.to_string() +
     "    Best Combo x" +
@@ -668,14 +668,14 @@ fn draw_paused_overlay() -> Unit {
     @types.screen_h,
     @raylib.Color::new(6, 10, 16, 150),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "PAUSED",
     @types.screen_w / 2 - 128,
     @types.screen_h / 2 - 70,
     84,
     @raylib.Color::new(248, 234, 194, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Press P to resume",
     @types.screen_w / 2 - 176,
     @types.screen_h / 2 + 18,
@@ -696,21 +696,21 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
 
   let rise_f : Float = @math.sinf(game.result_t * 2.6) * 8.0
   let rise = rise_f.to_int()
-  @raylib.draw_text(
+  @draw.draw_text(
     "CURTAIN FALL",
     520,
     214 + rise,
     72,
     @raylib.Color::new(252, 224, 170, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Final Score " + game.score.to_string(),
     612,
     334,
     42,
     @raylib.Color::new(246, 240, 226, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Scene " +
     game.stage.to_string() +
     "   Best Combo x" +
@@ -720,7 +720,7 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     34,
     @raylib.Color::new(228, 216, 196, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Hits " +
     game.hit_count.to_string() +
     "   Misses " +
@@ -730,7 +730,7 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     30,
     @raylib.Color::new(212, 206, 198, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Press R / ENTER / J / SPACE to restart",
     454,
     520,

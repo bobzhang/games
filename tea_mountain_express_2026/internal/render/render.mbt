@@ -5,8 +5,8 @@ fn draw_center_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
 }
 
 ///|
@@ -31,7 +31,7 @@ fn draw_meter(
     h,
     @raylib.Color::new(206, 220, 236, 120),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
     x + 8,
     y + h / 2 - 9,
@@ -262,7 +262,7 @@ fn @types.Game::draw_hazards(game : @types.Game) -> Unit {
       "C"
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       cue,
       (x - 6.0).to_int(),
       (y - size - 18.0).to_int(),
@@ -435,21 +435,21 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     0.0,
     game.next_checkpoint_distance - game.distance,
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Speed " + game.speed.to_int().to_string() + " km/h",
     @types.screen_w - 348,
     66,
     24,
     @raylib.Color::new(236, 240, 248, 230),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Next checkpoint " + dist_left.to_int().to_string() + " m",
     @types.screen_w - 348,
     96,
     24,
     @raylib.Color::new(236, 240, 248, 230),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Checkpoint " + game.checkpoint_index.to_string(),
     @types.screen_w - 348,
     126,
@@ -457,21 +457,21 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(236, 240, 248, 230),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score " + game.score.to_string(),
     24,
     @types.screen_h - 58,
     30,
     @raylib.Color::new(246, 248, 252, 230),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Multiplier x" + game.multiplier.to_string(),
     330,
     @types.screen_h - 56,
     28,
     @raylib.Color::new(255, 220, 138, 230),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Deliveries " +
     game.successful_deliveries.to_string() +
     " / Fail " +
@@ -544,7 +544,7 @@ fn draw_title_overlay() -> Unit {
     @raylib.Color::new(216, 228, 242, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Controls",
     @types.screen_w / 2 - 84,
     382,
@@ -552,21 +552,21 @@ fn draw_title_overlay() -> Unit {
     @raylib.Color::new(255, 226, 160, 230),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "A/D or Left/Right: lane switch     W/S or Up/Down: tilt",
     @types.screen_w / 2 - 360,
     436,
     30,
     @raylib.Color::new(236, 244, 252, 230),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "J: quick brake + confirm           K: stabilize cargo",
     @types.screen_w / 2 - 360,
     478,
     30,
     @raylib.Color::new(236, 244, 252, 230),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Space: boost (cooldown + overheat risk)     P: pause     R: restart",
     @types.screen_w / 2 - 360,
     520,

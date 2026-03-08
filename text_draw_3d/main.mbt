@@ -431,6 +431,7 @@ fn main {
   let mut show_text_boundry = false
   @raylib.disable_cursor()
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -829,7 +830,7 @@ fn main {
     @raylib.end_mode_3d()
 
     // Draw 2D info text & stats
-    @raylib.draw_text(
+    @draw.draw_text(
       "Drag & drop a font file to change the font!\nType something, see what happens!\n\nPress [F3] to toggle the camera",
       10, 35, 10, @raylib.black,
     )
@@ -844,8 +845,8 @@ fn main {
       " quads (" +
       (quads * 4).to_string() +
       " verts)"
-    let stats_width = @raylib.measure_text(stats_text, 10)
-    @raylib.draw_text(
+    let stats_width = @draw.measure_text(stats_text, 10)
+    @draw.draw_text(
       stats_text,
       screen_width - 20 - stats_width,
       10,
@@ -853,8 +854,8 @@ fn main {
       @raylib.darkgreen,
     )
     let help1 = "[Home]/[End] to add/remove 3D text layers"
-    let help1_w = @raylib.measure_text(help1, 10)
-    @raylib.draw_text(
+    let help1_w = @draw.measure_text(help1, 10)
+    @draw.draw_text(
       help1,
       screen_width - 20 - help1_w,
       25,
@@ -862,8 +863,8 @@ fn main {
       @raylib.darkgray,
     )
     let help2 = "[Insert]/[Delete] to increase/decrease distance between layers"
-    let help2_w = @raylib.measure_text(help2, 10)
-    @raylib.draw_text(
+    let help2_w = @draw.measure_text(help2, 10)
+    @draw.draw_text(
       help2,
       screen_width - 20 - help2_w,
       40,
@@ -871,8 +872,8 @@ fn main {
       @raylib.darkgray,
     )
     let help3 = "click the [CUBE] for a random color"
-    let help3_w = @raylib.measure_text(help3, 10)
-    @raylib.draw_text(
+    let help3_w = @draw.measure_text(help3, 10)
+    @draw.draw_text(
       help3,
       screen_width - 20 - help3_w,
       55,
@@ -880,8 +881,8 @@ fn main {
       @raylib.darkgray,
     )
     let help4 = "[Tab] to toggle multicolor mode"
-    let help4_w = @raylib.measure_text(help4, 10)
-    @raylib.draw_text(
+    let help4_w = @draw.measure_text(help4, 10)
+    @draw.draw_text(
       help4,
       screen_width - 20 - help4_w,
       70,
@@ -889,10 +890,12 @@ fn main {
       @raylib.darkgray,
     )
     @raylib.draw_fps(10, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_font(font)
+  @draw.cleanup()
   @raylib.close_window()
 }

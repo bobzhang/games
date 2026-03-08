@@ -50,8 +50,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   )
   // Title
   let title = "TOWER DEFENSE 3D"
-  let tw = @raylib.measure_text(title, 48)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, 48)
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     100,
@@ -60,8 +60,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   )
   // Subtitle
   let sub = "Build towers. Survive the waves. Defend your base."
-  let sw = @raylib.measure_text(sub, 18)
-  @raylib.draw_text(
+  let sw = @draw.measure_text(sub, 18)
+  @draw.draw_text(
     sub,
     (@types.screen_width - sw) / 2,
     160,
@@ -96,8 +96,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
     }
     let prefix = if is_sel { "> " } else { "  " }
     let text = prefix + items[i]
-    let full_w = @raylib.measure_text(text, 28)
-    @raylib.draw_text(text, (@types.screen_width - full_w) / 2, y, 28, color)
+    let full_w = @draw.measure_text(text, 28)
+    @draw.draw_text(text, (@types.screen_width - full_w) / 2, y, 28, color)
   }
   // Difficulty description
   let diff_desc = if game.difficulty == 0 {
@@ -107,8 +107,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   } else {
     "Standard difficulty"
   }
-  let dw = @raylib.measure_text(diff_desc, 14)
-  @raylib.draw_text(
+  let dw = @draw.measure_text(diff_desc, 14)
+  @draw.draw_text(
     diff_desc,
     (@types.screen_width - dw) / 2,
     295 + 55,
@@ -117,7 +117,7 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   )
   // Features list
   let features_y = 480
-  @raylib.draw_text(
+  @draw.draw_text(
     "Features:",
     (@types.screen_width - 300) / 2,
     features_y,
@@ -130,8 +130,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   ]
   for i in 0..<feature_items.length() {
     let fy = features_y + 22 + i * 18
-    let feat_w = @raylib.measure_text(feature_items[i], 13)
-    @raylib.draw_text(
+    let feat_w = @draw.measure_text(feature_items[i], 13)
+    @draw.draw_text(
       feature_items[i],
       (@types.screen_width - feat_w) / 2,
       fy,
@@ -141,11 +141,11 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
     ignore(i)
   }
   // Controls
-  @raylib.draw_text(
+  @draw.draw_text(
     "Arrows: Select | Enter: Confirm | Left/Right: Difficulty",
     (
       @types.screen_width -
-      @raylib.measure_text(
+      @draw.measure_text(
         "Arrows: Select | Enter: Confirm | Left/Right: Difficulty", 14,
       )
     ) /
@@ -167,8 +167,8 @@ fn @types.Game::draw_map_select(game : @types.Game) -> Unit {
     @raylib.Color::new(20, 25, 30, 255),
   )
   let title = "SELECT MAP"
-  let tw = @raylib.measure_text(title, 40)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, 40)
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     30,
@@ -208,9 +208,9 @@ fn @types.Game::draw_map_select(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(200, 200, 220, 255)
     }
-    @raylib.draw_text(info.name, 120, y + 8, 24, name_color)
+    @draw.draw_text(info.name, 120, y + 8, 24, name_color)
     // Description
-    @raylib.draw_text(
+    @draw.draw_text(
       info.description,
       120,
       y + 35,
@@ -219,7 +219,7 @@ fn @types.Game::draw_map_select(game : @types.Game) -> Unit {
     )
     // Difficulty stars
     let diff_text = "Difficulty: " + difficulty_stars(info.difficulty)
-    @raylib.draw_text(
+    @draw.draw_text(
       diff_text,
       120,
       y + 55,
@@ -228,7 +228,7 @@ fn @types.Game::draw_map_select(game : @types.Game) -> Unit {
     )
     // Gold bonus
     if info.starting_gold_bonus > 0 {
-      @raylib.draw_text(
+      @draw.draw_text(
         "+\{info.starting_gold_bonus}g bonus",
         120,
         y + 73,
@@ -240,11 +240,11 @@ fn @types.Game::draw_map_select(game : @types.Game) -> Unit {
     draw_map_preview(info, @types.screen_width - 280, y + 10, 150, 75)
     ignore(i)
   }
-  @raylib.draw_text(
+  @draw.draw_text(
     "Arrows: Select | Enter: Play | Esc: Back",
     (
       @types.screen_width -
-      @raylib.measure_text("Arrows: Select | Enter: Play | Esc: Back", 16)
+      @draw.measure_text("Arrows: Select | Enter: Play | Esc: Back", 16)
     ) /
     2,
     @types.screen_height - 40,
@@ -357,7 +357,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, 180),
   )
   // Gold
-  @raylib.draw_text(
+  @draw.draw_text(
     "Gold: \{game.gold}",
     10,
     12,
@@ -372,9 +372,9 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   } else {
     @raylib.Color::new(255, 80, 80, 255)
   }
-  @raylib.draw_text("Lives: \{game.lives}", 180, 12, 20, lives_color)
+  @draw.draw_text("Lives: \{game.lives}", 180, 12, 20, lives_color)
   // Wave
-  @raylib.draw_text(
+  @draw.draw_text(
     "Wave: \{game.current_wave + 1}/\{@types.max_waves}",
     350,
     12,
@@ -382,7 +382,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(200, 220, 255, 255),
   )
   // Score
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score: \{game.score}",
     530,
     12,
@@ -392,7 +392,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   // Enemies alive count
   let alive = @types.count_active_enemies(game)
   if alive > 0 {
-    @raylib.draw_text(
+    @draw.draw_text(
       "Enemies: \{alive}",
       700,
       12,
@@ -402,7 +402,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   }
   // Tower count
   let tower_count = @types.count_active_towers(game)
-  @raylib.draw_text(
+  @draw.draw_text(
     "Towers: \{tower_count}",
     870,
     12,
@@ -417,7 +417,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     30,
     @raylib.Color::new(0, 0, 0, 140),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "B:Build Q/E:Rotate W/A/S/D:Pan R:Ranges M:Map P:Pause Tab:Speed T:Tower Info Z/X:Pitch",
     10,
     @types.screen_height - 24,
@@ -444,7 +444,7 @@ fn @types.Game::draw_economy_panel(game : @types.Game) -> Unit {
   let interest_pct = game.interest_timer / @types.interest_interval
   let bar_wf : Float = 130.0 * interest_pct
   let bar_w = bar_wf.to_int()
-  @raylib.draw_text(
+  @draw.draw_text(
     "Interest:",
     px + 5,
     py + 5,
@@ -466,7 +466,7 @@ fn @types.Game::draw_economy_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(100, 180, 50, 200),
   )
   // Kill count this wave
-  @raylib.draw_text(
+  @draw.draw_text(
     "Kills: \{game.enemies_killed_this_wave}",
     px + 5,
     py + 32,
@@ -474,7 +474,7 @@ fn @types.Game::draw_economy_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(200, 150, 150, 255),
   )
   // Total kills
-  @raylib.draw_text(
+  @draw.draw_text(
     "Total: \{game.total_kills}",
     px + 5,
     py + 46,
@@ -593,7 +593,7 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
     @raylib.Color::new(100, 120, 100, 200),
   )
   // Label
-  @raylib.draw_text(
+  @draw.draw_text(
     "Map",
     mx,
     my - 14,
@@ -606,7 +606,7 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
 /// Draws the wave preparation overlay with countdown timer and next wave preview.
 fn @types.Game::draw_wave_prep_overlay(game : @types.Game) -> Unit {
   let timer_text = "Next wave in: \{game.wave_timer.to_int() + 1}"
-  let tw = @raylib.measure_text(timer_text, 30)
+  let tw = @draw.measure_text(timer_text, 30)
   @raylib.draw_rectangle(
     (@types.screen_width - tw) / 2 - 15,
     50,
@@ -614,7 +614,7 @@ fn @types.Game::draw_wave_prep_overlay(game : @types.Game) -> Unit {
     45,
     @raylib.Color::new(0, 0, 0, 180),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     timer_text,
     (@types.screen_width - tw) / 2,
     58,
@@ -634,7 +634,7 @@ fn @types.Game::draw_wave_prep_overlay(game : @types.Game) -> Unit {
     )
     let entry = info.entries[0]
     let enemy_name = @types.enemy_name(entry.enemy_kind)
-    @raylib.draw_text(
+    @draw.draw_text(
       "Next: \{entry.count}x \{enemy_name}",
       (@types.screen_width - 280) / 2,
       preview_y + 5,
@@ -642,15 +642,15 @@ fn @types.Game::draw_wave_prep_overlay(game : @types.Game) -> Unit {
       @raylib.Color::new(220, 200, 180, 255),
     )
     if info.is_boss_wave {
-      @raylib.draw_text(
+      @draw.draw_text(
         "!! BOSS WAVE !!",
-        (@types.screen_width - @raylib.measure_text("!! BOSS WAVE !!", 18)) / 2,
+        (@types.screen_width - @draw.measure_text("!! BOSS WAVE !!", 18)) / 2,
         preview_y + 28,
         18,
         @raylib.Color::new(255, 80, 80, 255),
       )
     } else {
-      @raylib.draw_text(
+      @draw.draw_text(
         "Bonus: +\{info.bonus_gold}g",
         (@types.screen_width - 280) / 2,
         preview_y + 28,
@@ -659,11 +659,11 @@ fn @types.Game::draw_wave_prep_overlay(game : @types.Game) -> Unit {
       )
     }
   }
-  @raylib.draw_text(
+  @draw.draw_text(
     "Space: Start Now | B: Build Towers",
     (
       @types.screen_width -
-      @raylib.measure_text("Space: Start Now | B: Build Towers", 16)
+      @draw.measure_text("Space: Start Now | B: Build Towers", 16)
     ) /
     2,
     160,
@@ -693,7 +693,7 @@ fn @types.Game::draw_build_ui(game : @types.Game) -> Unit {
     panel_h,
     @raylib.Color::new(80, 100, 130, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "BUILD TOWER",
     panel_x + 10,
     panel_y + 8,
@@ -742,8 +742,8 @@ fn @types.Game::draw_build_ui(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(100, 80, 80, 255)
     }
-    @raylib.draw_text(entry.1, panel_x + 12, y + 5, 16, text_color)
-    @raylib.draw_text(
+    @draw.draw_text(entry.1, panel_x + 12, y + 5, 16, text_color)
+    @draw.draw_text(
       "\{entry.2}g",
       panel_x + 12,
       y + 22,
@@ -751,7 +751,7 @@ fn @types.Game::draw_build_ui(game : @types.Game) -> Unit {
       @raylib.Color::new(255, 215, 0, 200),
     )
     // Description
-    @raylib.draw_text(
+    @draw.draw_text(
       entry.3,
       panel_x + 80,
       y + 22,
@@ -761,7 +761,7 @@ fn @types.Game::draw_build_ui(game : @types.Game) -> Unit {
     // Stats preview
     let dmg = @types.tower_damage(entry.0)
     let rng = @types.tower_range(entry.0)
-    @raylib.draw_text(
+    @draw.draw_text(
       "D:\{dmg.to_int()} R:\{rng.to_int()}",
       panel_x + 12,
       y + 36,
@@ -770,7 +770,7 @@ fn @types.Game::draw_build_ui(game : @types.Game) -> Unit {
     )
   }
   // Controls reminder
-  @raylib.draw_text(
+  @draw.draw_text(
     "Arrows:Move Enter:Place",
     panel_x + 10,
     panel_y + panel_h - 18,
@@ -778,7 +778,7 @@ fn @types.Game::draw_build_ui(game : @types.Game) -> Unit {
     @raylib.Color::new(130, 130, 150, 255),
   )
   // Show cursor position
-  @raylib.draw_text(
+  @draw.draw_text(
     "Pos: \{game.hover_gx},\{game.hover_gy}",
     10,
     50,
@@ -792,7 +792,7 @@ fn @types.Game::draw_build_ui(game : @types.Game) -> Unit {
   } else {
     @raylib.Color::new(255, 80, 80, 255)
   }
-  @raylib.draw_text("Cost: \{cost}g", 10, 72, 16, cost_color)
+  @draw.draw_text("Cost: \{cost}g", 10, 72, 16, cost_color)
 }
 
 ///|
@@ -819,7 +819,7 @@ fn @types.Game::draw_tower_info_panel(game : @types.Game) -> Unit {
   )
   // Tower name and level
   let name = @types.tower_name(tower.kind)
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{name} Lv.\{tower.level}",
     px + 10,
     py + 8,
@@ -834,7 +834,7 @@ fn @types.Game::draw_tower_info_panel(game : @types.Game) -> Unit {
   } else {
     "***"
   }
-  @raylib.draw_text(
+  @draw.draw_text(
     level_text,
     px + pw - 50,
     py + 10,
@@ -854,28 +854,28 @@ fn @types.Game::draw_tower_info_panel(game : @types.Game) -> Unit {
   let rng = @types.tower_effective_range(tower)
   let rate = @types.tower_effective_rate(tower)
   let dps : Float = dmg / rate
-  @raylib.draw_text(
+  @draw.draw_text(
     "Damage: \{dmg.to_int()}",
     px + 10,
     stat_y,
     16,
     @raylib.Color::new(255, 150, 100, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Range: \{rng.to_int()}",
     px + 10,
     stat_y + 20,
     16,
     @raylib.Color::new(100, 200, 255, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Fire Rate: \{rate.to_int()}s",
     px + 10,
     stat_y + 40,
     16,
     @raylib.Color::new(200, 200, 100, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "DPS: \{dps.to_int()}",
     px + 10,
     stat_y + 60,
@@ -884,7 +884,7 @@ fn @types.Game::draw_tower_info_panel(game : @types.Game) -> Unit {
   )
   // Targeting mode
   let mode_name = @types.targeting_mode_name(tower.targeting_mode)
-  @raylib.draw_text(
+  @draw.draw_text(
     "Target: \{mode_name}",
     px + 10,
     stat_y + 85,
@@ -899,14 +899,14 @@ fn @types.Game::draw_tower_info_panel(game : @types.Game) -> Unit {
     1,
     @raylib.Color::new(50, 60, 80, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Kills: \{tower.kills}",
     px + 10,
     stat_y + 112,
     14,
     @raylib.Color::new(200, 150, 150, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Damage: \{tower.total_damage.to_int()}",
     px + 10,
     stat_y + 130,
@@ -915,7 +915,7 @@ fn @types.Game::draw_tower_info_panel(game : @types.Game) -> Unit {
   )
   // Buff indicators
   if tower.buff_damage > 0.0 || tower.buff_range > 0.0 || tower.buff_rate > 0.0 {
-    @raylib.draw_text(
+    @draw.draw_text(
       "BUFFED",
       px + 10,
       stat_y + 150,
@@ -939,14 +939,14 @@ fn @types.Game::draw_tower_info_panel(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(255, 100, 100, 255)
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       "[U] Upgrade: \{upgrade_info.cost}g",
       px + 10,
       stat_y + 180,
       16,
       upgrade_color,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       upgrade_info.special_desc,
       px + 10,
       stat_y + 200,
@@ -956,14 +956,14 @@ fn @types.Game::draw_tower_info_panel(game : @types.Game) -> Unit {
     // Stat comparison preview
     let new_dmg = @types.tower_damage(tower.kind) * upgrade_info.damage_mult
     let new_rng = @types.tower_range(tower.kind) * upgrade_info.range_mult
-    @raylib.draw_text(
+    @draw.draw_text(
       "DMG: \{dmg.to_int()} -> \{new_dmg.to_int()}",
       px + 10,
       stat_y + 218,
       12,
       @raylib.Color::new(255, 200, 100, 200),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "RNG: \{rng.to_int()} -> \{new_rng.to_int()}",
       px + 10,
       stat_y + 233,
@@ -971,7 +971,7 @@ fn @types.Game::draw_tower_info_panel(game : @types.Game) -> Unit {
       @raylib.Color::new(150, 200, 255, 200),
     )
   } else {
-    @raylib.draw_text(
+    @draw.draw_text(
       "MAX LEVEL",
       px + 10,
       stat_y + 180,
@@ -981,7 +981,7 @@ fn @types.Game::draw_tower_info_panel(game : @types.Game) -> Unit {
   }
   // Sell section
   let sell_val = @types.tower_sell_value(tower.kind, tower.level)
-  @raylib.draw_text(
+  @draw.draw_text(
     "[S] Sell: \{sell_val}g",
     px + 10,
     stat_y + 260,
@@ -989,7 +989,7 @@ fn @types.Game::draw_tower_info_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 180, 50, 255),
   )
   // Targeting mode change
-  @raylib.draw_text(
+  @draw.draw_text(
     "[F] Cycle Target | [<>] Nav Towers",
     px + 10,
     stat_y + 285,
@@ -997,7 +997,7 @@ fn @types.Game::draw_tower_info_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(130, 130, 150, 255),
   )
   // Close instruction
-  @raylib.draw_text(
+  @draw.draw_text(
     "[T/Esc] Close",
     px + 10,
     stat_y + 305,
@@ -1015,7 +1015,7 @@ fn @types.Game::draw_wave_message(game : @types.Game) -> Unit {
   let alpha_f : Float = @types.minf(game.wave_message_timer / 0.5, 1.0) * 255.0
   let alpha = alpha_f.to_int().clamp(min=0, max=255)
   let msg = game.wave_message
-  let mw = @raylib.measure_text(msg, 32)
+  let mw = @draw.measure_text(msg, 32)
   let msg_y = @types.screen_height / 3
   @raylib.draw_rectangle(
     (@types.screen_width - mw) / 2 - 15,
@@ -1034,7 +1034,7 @@ fn @types.Game::draw_wave_message(game : @types.Game) -> Unit {
   } else {
     @raylib.Color::new(255, 255, 200, alpha)
   }
-  @raylib.draw_text(msg, (@types.screen_width - mw) / 2, msg_y, 32, color)
+  @draw.draw_text(msg, (@types.screen_width - mw) / 2, msg_y, 32, color)
 }
 
 ///|
@@ -1046,7 +1046,7 @@ fn @types.Game::draw_notification(game : @types.Game) -> Unit {
   let alpha_f : Float = @types.minf(game.notification_timer / 0.3, 1.0) * 255.0
   let alpha = alpha_f.to_int().clamp(min=0, max=255)
   let msg = game.notification_text
-  let mw = @raylib.measure_text(msg, 16)
+  let mw = @draw.measure_text(msg, 16)
   let ny = @types.screen_height - 60
   @raylib.draw_rectangle(
     (@types.screen_width - mw) / 2 - 10,
@@ -1055,7 +1055,7 @@ fn @types.Game::draw_notification(game : @types.Game) -> Unit {
     24,
     @raylib.Color::new(0, 0, 0, alpha / 2),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     msg,
     (@types.screen_width - mw) / 2,
     ny,
@@ -1078,7 +1078,7 @@ fn @types.Game::draw_speed_indicator(game : @types.Game) -> Unit {
     @raylib.Color::new(80, 50, 50, 200)
   }
   @raylib.draw_rectangle(sx - 5, sy - 3, 55, 22, bg_color)
-  @raylib.draw_text(
+  @draw.draw_text(
     speed_text,
     sx,
     sy,
@@ -1099,19 +1099,19 @@ fn @types.Game::draw_pause_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, 160),
   )
   let text = "PAUSED"
-  let tw = @raylib.measure_text(text, 60)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(text, 60)
+  @draw.draw_text(
     text,
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 60,
     60,
     @raylib.white,
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "P: Resume | Q: Quit to Menu",
     (
       @types.screen_width -
-      @raylib.measure_text("P: Resume | Q: Quit to Menu", 20)
+      @draw.measure_text("P: Resume | Q: Quit to Menu", 20)
     ) /
     2,
     @types.screen_height / 2 + 10,
@@ -1127,28 +1127,28 @@ fn @types.Game::draw_pause_overlay(game : @types.Game) -> Unit {
     100,
     @raylib.Color::new(0, 0, 0, 120),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Towers Built: \{game.towers_built} | Sold: \{game.towers_sold}",
     (@types.screen_width - 280) / 2,
     stats_y + 10,
     14,
     @raylib.Color::new(180, 180, 200, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Total Kills: \{game.total_kills}",
     (@types.screen_width - 280) / 2,
     stats_y + 30,
     14,
     @raylib.Color::new(180, 180, 200, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Damage Dealt: \{game.damage_dealt.to_int()}",
     (@types.screen_width - 280) / 2,
     stats_y + 50,
     14,
     @raylib.Color::new(180, 180, 200, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Gold Earned: \{game.total_gold_earned} | Spent: \{game.total_gold_spent}",
     (@types.screen_width - 280) / 2,
     stats_y + 70,
@@ -1168,8 +1168,8 @@ fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
     @raylib.Color::new(30, 0, 0, 230),
   )
   let text = "GAME OVER"
-  let tw = @raylib.measure_text(text, 60)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(text, 60)
+  @draw.draw_text(
     text,
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 100,
@@ -1186,51 +1186,51 @@ fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, 120),
   )
   let sx = (@types.screen_width - 330) / 2
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score: \{game.score}",
     sx,
     stats_y + 10,
     22,
     @raylib.Color::new(200, 200, 200, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Wave Reached: \{game.current_wave + 1}/\{@types.max_waves}",
     sx,
     stats_y + 38,
     18,
     @raylib.Color::new(200, 220, 255, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Total Kills: \{game.total_kills}",
     sx,
     stats_y + 62,
     16,
     @raylib.Color::new(200, 150, 150, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Towers Built: \{game.towers_built}",
     sx,
     stats_y + 82,
     16,
     @raylib.Color::new(150, 200, 255, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Gold Earned: \{game.total_gold_earned}",
     sx,
     stats_y + 102,
     16,
     @raylib.Color::new(255, 215, 0, 200),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Damage Dealt: \{game.damage_dealt.to_int()}",
     sx,
     stats_y + 122,
     16,
     @raylib.Color::new(255, 180, 100, 200),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Enter: Return to Menu",
-    (@types.screen_width - @raylib.measure_text("Enter: Return to Menu", 18)) /
+    (@types.screen_width - @draw.measure_text("Enter: Return to Menu", 18)) /
     2,
     @types.screen_height / 2 + 150,
     18,
@@ -1249,8 +1249,8 @@ fn @types.Game::draw_victory(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 30, 0, 230),
   )
   let text = "VICTORY!"
-  let tw = @raylib.measure_text(text, 60)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(text, 60)
+  @draw.draw_text(
     text,
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 100,
@@ -1267,42 +1267,42 @@ fn @types.Game::draw_victory(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, 120),
   )
   let sx = (@types.screen_width - 330) / 2
-  @raylib.draw_text(
+  @draw.draw_text(
     "Final Score: \{game.score}",
     sx,
     stats_y + 10,
     22,
     @raylib.Color::new(255, 255, 200, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Lives Remaining: \{game.lives}",
     sx,
     stats_y + 38,
     18,
     @raylib.Color::new(100, 255, 100, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Total Kills: \{game.total_kills}",
     sx,
     stats_y + 62,
     16,
     @raylib.Color::new(200, 150, 150, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Towers Built: \{game.towers_built} | Sold: \{game.towers_sold}",
     sx,
     stats_y + 82,
     16,
     @raylib.Color::new(150, 200, 255, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Gold Earned: \{game.total_gold_earned} | Spent: \{game.total_gold_spent}",
     sx,
     stats_y + 102,
     16,
     @raylib.Color::new(255, 215, 0, 200),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Damage Dealt: \{game.damage_dealt.to_int()}",
     sx,
     stats_y + 122,
@@ -1311,16 +1311,16 @@ fn @types.Game::draw_victory(game : @types.Game) -> Unit {
   )
   // Difficulty bonus display
   let diff_text = "Difficulty: " + @types.difficulty_name(game.difficulty)
-  @raylib.draw_text(
+  @draw.draw_text(
     diff_text,
     sx,
     stats_y + 142,
     16,
     @raylib.Color::new(200, 200, 220, 200),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Enter: Return to Menu",
-    (@types.screen_width - @raylib.measure_text("Enter: Return to Menu", 18)) /
+    (@types.screen_width - @draw.measure_text("Enter: Return to Menu", 18)) /
     2,
     @types.screen_height / 2 + 170,
     18,

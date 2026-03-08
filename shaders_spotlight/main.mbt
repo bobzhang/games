@@ -203,6 +203,7 @@ fn main {
   }
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -276,26 +277,28 @@ fn main {
     @raylib.draw_rectangle(0, 0, screen_width, screen_height, @raylib.white)
     @raylib.end_shader_mode()
     @raylib.draw_fps(10, 10)
-    @raylib.draw_text("Move the mouse!", 10, 30, 20, @raylib.green)
-    @raylib.draw_text(
+    @draw.draw_text("Move the mouse!", 10, 30, 20, @raylib.green)
+    @draw.draw_text(
       "Pitch Black",
       (Float::from_int(screen_width) * 0.2).to_int(),
       screen_height / 2,
       20,
       @raylib.green,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Dark",
       (Float::from_int(screen_width) * 0.66).to_int(),
       screen_height / 2,
       20,
       @raylib.green,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_texture(tex_ray)
   @raylib.unload_shader(shdr_spot)
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -60,6 +60,7 @@ fn roll_prices(prices : Array[Int], day : Int) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "Space Trader 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let prices : Array[Int] = Array::make(planet_count * goods_count, 0)
   let cargo : Array[Int] = Array::make(goods_count, 0)
@@ -221,18 +222,18 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(10, 12, 20, 255))
 
-    @raylib.draw_text("SPACE TRADER 2026", 20, 16, 36, @raylib.skyblue)
-    @raylib.draw_text("Day \{day}", 24, 58, 24, @raylib.raywhite)
-    @raylib.draw_text(
+    @draw.draw_text("SPACE TRADER 2026", 20, 16, 36, @raylib.skyblue)
+    @draw.draw_text("Day \{day}", 24, 58, 24, @raylib.raywhite)
+    @draw.draw_text(
       "Dock: \{planet_names[at]}",
       140,
       58,
       24,
       @raylib.raywhite,
     )
-    @raylib.draw_text("Cash \{cash}", 450, 58, 24, @raylib.gold)
-    @raylib.draw_text("Fuel \{fuel}", 620, 58, 24, @raylib.orange)
-    @raylib.draw_text("Hull \{hp}", 760, 58, 24, @raylib.lime)
+    @draw.draw_text("Cash \{cash}", 450, 58, 24, @raylib.gold)
+    @draw.draw_text("Fuel \{fuel}", 620, 58, 24, @raylib.orange)
+    @draw.draw_text("Hull \{hp}", 760, 58, 24, @raylib.lime)
 
     @raylib.draw_rectangle(
       24,
@@ -241,7 +242,7 @@ fn main {
       470,
       @raylib.Color::new(22, 26, 38, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Commodities @ current dock", 36, 114, 24, @raylib.lightgray,
     )
     for g in 0..<goods_count {
@@ -256,9 +257,9 @@ fn main {
         )
       }
       let p = prices[at * goods_count + g]
-      @raylib.draw_text("\{good_names[g]}", 44, y, 28, @raylib.raywhite)
-      @raylib.draw_text("Price \{p}", 220, y, 26, @raylib.orange)
-      @raylib.draw_text("Cargo \{cargo[g]}", 330, y, 26, @raylib.lime)
+      @draw.draw_text("\{good_names[g]}", 44, y, 28, @raylib.raywhite)
+      @draw.draw_text("Price \{p}", 220, y, 26, @raylib.orange)
+      @draw.draw_text("Cargo \{cargo[g]}", 330, y, 26, @raylib.lime)
     }
 
     @raylib.draw_rectangle(
@@ -268,7 +269,7 @@ fn main {
       260,
       @raylib.Color::new(22, 26, 38, 255),
     )
-    @raylib.draw_text("Navigation", 494, 114, 24, @raylib.lightgray)
+    @draw.draw_text("Navigation", 494, 114, 24, @raylib.lightgray)
     for p in 0..<planet_count {
       let y = 152 + p * 30
       let color = if p == at {
@@ -278,11 +279,11 @@ fn main {
       } else {
         @raylib.raywhite
       }
-      @raylib.draw_text("\{p}. \{planet_names[p]}", 496, y, 24, color)
+      @draw.draw_text("\{p}. \{planet_names[p]}", 496, y, 24, color)
     }
 
     let net_worth = wealth(cash, cargo, prices, at)
-    @raylib.draw_text(
+    @draw.draw_text(
       "Net worth: \{net_worth} / 7000",
       494,
       340,
@@ -297,12 +298,12 @@ fn main {
       190,
       @raylib.Color::new(22, 26, 38, 255),
     )
-    @raylib.draw_text("Controls", 494, 394, 24, @raylib.lightgray)
-    @raylib.draw_text("UP/DOWN select good", 494, 426, 22, @raylib.gray)
-    @raylib.draw_text("B buy, S sell", 494, 452, 22, @raylib.gray)
-    @raylib.draw_text("LEFT/RIGHT select planet", 494, 478, 22, @raylib.gray)
-    @raylib.draw_text("T travel, N next day", 494, 504, 22, @raylib.gray)
-    @raylib.draw_text(
+    @draw.draw_text("Controls", 494, 394, 24, @raylib.lightgray)
+    @draw.draw_text("UP/DOWN select good", 494, 426, 22, @raylib.gray)
+    @draw.draw_text("B buy, S sell", 494, 452, 22, @raylib.gray)
+    @draw.draw_text("LEFT/RIGHT select planet", 494, 478, 22, @raylib.gray)
+    @draw.draw_text("T travel, N next day", 494, 504, 22, @raylib.gray)
+    @draw.draw_text(
       "F buy fuel, H repair, R restart", 494, 530, 22, @raylib.gray,
     )
 
@@ -313,7 +314,7 @@ fn main {
       92,
       @raylib.Color::new(22, 26, 38, 255),
     )
-    @raylib.draw_text(log, 40, 622, 26, @raylib.raywhite)
+    @draw.draw_text(log, 40, 622, 26, @raylib.raywhite)
 
     if won || lost {
       @raylib.draw_rectangle(
@@ -323,7 +324,7 @@ fn main {
         130,
         @raylib.fade(@raylib.black, 0.82),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "MISSION SUCCESS"
         } else {
@@ -338,11 +339,13 @@ fn main {
           @raylib.red
         },
       )
-      @raylib.draw_text("Press R to restart", 410, 336, 26, @raylib.raywhite)
+      @draw.draw_text("Press R to restart", 410, 336, 26, @raylib.raywhite)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

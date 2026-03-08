@@ -485,6 +485,7 @@ fn setup_level(
 fn main {
   @raylib.init_window(sw, sh, "Clocktower Heist 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let player : Thief = {
     x: 84.0,
@@ -1190,7 +1191,7 @@ fn main {
       @raylib.Color::new(98, 112, 136, 120)
     }
     @raylib.draw_rectangle(986, 186, 218, 162, vault_col)
-    @raylib.draw_text(
+    @draw.draw_text(
       "VAULT",
       1040,
       146,
@@ -1209,7 +1210,7 @@ fn main {
         @raylib.Color::new(108, 130, 160, 120)
       },
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "EXIT",
       74,
       612,
@@ -1411,28 +1412,28 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 116, @raylib.Color::new(6, 10, 18, 232))
-    @raylib.draw_text(
+    @draw.draw_text(
       "CLOCKTOWER HEIST 2026",
       16,
       16,
       34,
       @raylib.Color::new(236, 246, 255, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Floor \{level}/3",
       420,
       24,
       30,
       @raylib.Color::new(248, 226, 142, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Cards \{collected}/\{target_cards}",
       606,
       24,
       30,
       @raylib.Color::new(216, 236, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{score}",
       924,
       24,
@@ -1440,35 +1441,35 @@ fn main {
       @raylib.Color::new(216, 236, 252, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "HP \{player.hp}",
       20,
       76,
       24,
       @raylib.Color::new(220, 236, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Stamina \{player.stamina.to_int()}%",
       122,
       76,
       24,
       @raylib.Color::new(220, 236, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Hack \{hack_progress.to_int()}%",
       372,
       76,
       24,
       @raylib.Color::new(220, 236, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Timer \{timer.to_int()}",
       564,
       76,
       24,
       @raylib.Color::new(252, 222, 150, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Stars \{stars}",
       736,
       76,
@@ -1476,7 +1477,7 @@ fn main {
       @raylib.Color::new(252, 232, 132, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       if player.cloak_t > 0.0 {
         "Cloak ON"
       } else {
@@ -1558,7 +1559,7 @@ fn main {
       186,
       @raylib.Color::new(8, 14, 28, 220),
     )
-    @raylib.draw_text("Touch", 90, sh - 186, 20, @raylib.white)
+    @draw.draw_text("Touch", 90, sh - 186, 20, @raylib.white)
 
     @raylib.draw_rectangle(
       pad_x + 76,
@@ -1567,7 +1568,7 @@ fn main {
       54,
       @raylib.Color::new(54, 72, 102, 255),
     )
-    @raylib.draw_text("UP", pad_x + 92, pad_y + 16, 24, @raylib.white)
+    @draw.draw_text("UP", pad_x + 92, pad_y + 16, 24, @raylib.white)
     @raylib.draw_rectangle(
       pad_x,
       pad_y + 54,
@@ -1575,7 +1576,7 @@ fn main {
       54,
       @raylib.Color::new(54, 72, 102, 255),
     )
-    @raylib.draw_text("LT", pad_x + 20, pad_y + 70, 24, @raylib.white)
+    @draw.draw_text("LT", pad_x + 20, pad_y + 70, 24, @raylib.white)
     @raylib.draw_rectangle(
       pad_x + 152,
       pad_y + 54,
@@ -1583,7 +1584,7 @@ fn main {
       54,
       @raylib.Color::new(54, 72, 102, 255),
     )
-    @raylib.draw_text("RT", pad_x + 172, pad_y + 70, 24, @raylib.white)
+    @draw.draw_text("RT", pad_x + 172, pad_y + 70, 24, @raylib.white)
     @raylib.draw_rectangle(
       pad_x + 76,
       pad_y + 108,
@@ -1591,7 +1592,7 @@ fn main {
       54,
       @raylib.Color::new(54, 72, 102, 255),
     )
-    @raylib.draw_text("DN", pad_x + 90, pad_y + 124, 24, @raylib.white)
+    @draw.draw_text("DN", pad_x + 90, pad_y + 124, 24, @raylib.white)
 
     @raylib.draw_rectangle(
       sprint_x,
@@ -1600,7 +1601,7 @@ fn main {
       154,
       @raylib.Color::new(214, 110, 82, 255),
     )
-    @raylib.draw_text("SPRNT", sprint_x + 6, sprint_y + 58, 24, @raylib.white)
+    @draw.draw_text("SPRNT", sprint_x + 6, sprint_y + 58, 24, @raylib.white)
     @raylib.draw_rectangle(
       pulse_x,
       pulse_y,
@@ -1608,7 +1609,7 @@ fn main {
       154,
       @raylib.Color::new(100, 162, 220, 255),
     )
-    @raylib.draw_text("PULSE", pulse_x + 12, pulse_y + 58, 24, @raylib.white)
+    @draw.draw_text("PULSE", pulse_x + 12, pulse_y + 58, 24, @raylib.white)
     @raylib.draw_rectangle(
       cloak_x,
       cloak_y,
@@ -1616,7 +1617,7 @@ fn main {
       154,
       @raylib.Color::new(96, 186, 122, 255),
     )
-    @raylib.draw_text("CLOAK", cloak_x + 8, cloak_y + 58, 24, @raylib.white)
+    @draw.draw_text("CLOAK", cloak_x + 8, cloak_y + 58, 24, @raylib.white)
 
     @raylib.draw_rectangle(
       250,
@@ -1625,7 +1626,7 @@ fn main {
       42,
       @raylib.Color::new(6, 10, 18, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       262,
       sh - 50,
@@ -1635,7 +1636,7 @@ fn main {
 
     if transition_t > 0.0 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 12, 20, 112))
-      @raylib.draw_text(
+      @draw.draw_text(
         "FLOOR CLEARED",
         sw / 2 - 188,
         sh / 2 - 28,
@@ -1653,7 +1654,7 @@ fn main {
         224,
         @raylib.Color::new(16, 24, 42, 244),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "HEIST MASTER"
         } else {
@@ -1668,7 +1669,7 @@ fn main {
           @raylib.Color::new(252, 140, 140, 255)
         },
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R to restart",
         sw / 2 - 124,
         sh / 2 + 48,
@@ -1677,8 +1678,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

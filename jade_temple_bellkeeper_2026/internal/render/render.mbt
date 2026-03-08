@@ -6,8 +6,8 @@ fn draw_center_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
 }
 
 ///|
@@ -19,8 +19,8 @@ fn draw_right_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, x - tw, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, x - tw, y, size, col)
 }
 
 ///|
@@ -690,7 +690,7 @@ fn draw_bar(
     @raylib.Color::new(148, 208, 244, 168),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
     x + 8,
     y + h / 2 - 8,
@@ -760,21 +760,21 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @types.cyan(),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "STAGE " + game.stage.to_string(),
     684,
     14,
     24,
     @raylib.Color::new(212, 240, 255, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "SCORE " + game.score.to_string(),
     684,
     42,
     22,
     @types.a_col(@types.amber(), 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "GOAL " + game.stage_goal.to_string(),
     684,
     68,
@@ -817,7 +817,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
       18,
       @raylib.Color::new(132, 200, 244, 178),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "B" + (i + 1).to_string(),
       bx + 24,
       77,
@@ -844,7 +844,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
 
   match game.state {
     Play =>
-      @raylib.draw_text(
+      @draw.draw_text(
         "WASD move  J/SPACE ring  K/SHIFT dash",
         20,
         @types.hud_h + 8,
@@ -900,8 +900,8 @@ fn draw_button_visual(
   )
 
   let ts = 28
-  let tw = @raylib.measure_text(label, ts)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(label, ts)
+  @draw.draw_text(
     label,
     (rect.0 + rect.2 * 0.5 - Float::from_int(tw) * 0.5).to_int(),
     (rect.1 + rect.3 * 0.5 - Float::from_int(ts) * 0.5).to_int(),

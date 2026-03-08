@@ -5,10 +5,12 @@ fn main {
   @raylib.init_window(
     @types.screen_w, @types.screen_h, "raylib [game] pizza_delivery_mayhem_2026",
   )
+  @draw.cleanup()
   defer @raylib.close_window()
   @raylib.init_audio_device()
   defer @raylib.close_audio_device()
   @raylib.set_target_fps(@types.target_fps)
+  @draw.init_font()
   let game = @types.Game()
   while !@raylib.window_should_close() {
     let dt : Float = @types.clampf(@raylib.get_frame_time(), 0.0, 0.04)
@@ -20,6 +22,7 @@ fn main {
     @game.update_game(game, dt)
     @raylib.begin_drawing()
     @render.draw_frame(game)
+    @fps.draw()
     @raylib.end_drawing()
   }
 }

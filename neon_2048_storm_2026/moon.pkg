@@ -3,6 +3,8 @@ import {
   "bobzhang/games/neon_2048_storm_2026/internal/game",
   "bobzhang/games/neon_2048_storm_2026/internal/render",
   "bobzhang/games/neon_2048_storm_2026/internal/types",
+  "bobzhang/games/utils/draw",
+  "bobzhang/games/utils/fps",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

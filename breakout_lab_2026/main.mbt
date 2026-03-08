@@ -85,6 +85,7 @@ fn brick_color(hp : Int) -> @raylib.Color {
 fn main {
   @raylib.init_window(arena_w, arena_h, "Breakout Lab 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let bricks = make_bricks()
   let mut paddle_x : Float = fi(arena_w) * (0.5 : Float) - 55.0
@@ -281,10 +282,10 @@ fn main {
       @raylib.raywhite,
     )
 
-    @raylib.draw_text("BREAKOUT LAB 2026", 22, 18, 34, @raylib.skyblue)
-    @raylib.draw_text("Score: \{score}", 24, 58, 24, @raylib.raywhite)
-    @raylib.draw_text("Lives: \{lives}", 220, 58, 24, @raylib.raywhite)
-    @raylib.draw_text("A/D or <- -> move  R restart", 560, 22, 20, @raylib.gray)
+    @draw.draw_text("BREAKOUT LAB 2026", 22, 18, 34, @raylib.skyblue)
+    @draw.draw_text("Score: \{score}", 24, 58, 24, @raylib.raywhite)
+    @draw.draw_text("Lives: \{lives}", 220, 58, 24, @raylib.raywhite)
+    @draw.draw_text("A/D or <- -> move  R restart", 560, 22, 20, @raylib.gray)
 
     if game_over {
       @raylib.draw_rectangle(
@@ -294,7 +295,7 @@ fn main {
         130,
         @raylib.fade(@raylib.black, 0.75),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if win {
           "STAGE CLEAR"
         } else {
@@ -309,11 +310,13 @@ fn main {
           @raylib.red
         },
       )
-      @raylib.draw_text("Press R to restart", 372, 372, 26, @raylib.raywhite)
+      @draw.draw_text("Press R to restart", 372, 372, 26, @raylib.raywhite)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

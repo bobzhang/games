@@ -3,6 +3,8 @@ import {
   "bobzhang/games/bamboo_forest_sentinel_2026/internal/types",
   "bobzhang/games/bamboo_forest_sentinel_2026/internal/game",
   "bobzhang/games/bamboo_forest_sentinel_2026/internal/render",
+  "bobzhang/games/utils/draw",
+  "bobzhang/games/utils/fps",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

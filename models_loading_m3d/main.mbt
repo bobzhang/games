@@ -37,6 +37,7 @@ fn main {
   @raylib.disable_cursor() // Limit cursor to relative movement inside the window
 
   @raylib.set_target_fps(60) // Set our game to run at 60 frames-per-second
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -136,35 +137,35 @@ fn main {
 
     @raylib.end_mode_3d()
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "PRESS SPACE to PLAY MODEL ANIMATION",
       10,
       @raylib.get_screen_height() - 80,
       10,
       @raylib.maroon,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "PRESS N to STEP ONE ANIMATION FRAME",
       10,
       @raylib.get_screen_height() - 60,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "PRESS C to CYCLE THROUGH ANIMATIONS",
       10,
       @raylib.get_screen_height() - 40,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "PRESS M to toggle MESH, B to toggle SKELETON DRAWING",
       10,
       @raylib.get_screen_height() - 20,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "(c) CesiumMan model by KhronosGroup",
       @raylib.get_screen_width() - 210,
       @raylib.get_screen_height() - 20,
@@ -172,11 +173,13 @@ fn main {
       @raylib.gray,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_model_animations(anims)
   @raylib.unload_model(model)
+  @draw.cleanup()
   @raylib.close_window()
 }

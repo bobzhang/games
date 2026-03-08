@@ -61,6 +61,7 @@ fn main {
   let mut current_texture = 0
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -82,22 +83,23 @@ fn main {
       30,
       @raylib.fade(@raylib.white, 0.5),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "MOUSE LEFT BUTTON to CYCLE PROCEDURAL TEXTURES", 40, 410, 10, @raylib.white,
     )
     match current_texture {
-      0 => @raylib.draw_text("VERTICAL GRADIENT", 560, 10, 20, @raylib.raywhite)
+      0 => @draw.draw_text("VERTICAL GRADIENT", 560, 10, 20, @raylib.raywhite)
       1 =>
-        @raylib.draw_text("HORIZONTAL GRADIENT", 540, 10, 20, @raylib.raywhite)
-      2 => @raylib.draw_text("DIAGONAL GRADIENT", 540, 10, 20, @raylib.raywhite)
-      3 => @raylib.draw_text("RADIAL GRADIENT", 580, 10, 20, @raylib.lightgray)
-      4 => @raylib.draw_text("SQUARE GRADIENT", 580, 10, 20, @raylib.lightgray)
-      5 => @raylib.draw_text("CHECKED", 680, 10, 20, @raylib.raywhite)
-      6 => @raylib.draw_text("WHITE NOISE", 640, 10, 20, @raylib.red)
-      7 => @raylib.draw_text("PERLIN NOISE", 640, 10, 20, @raylib.red)
-      8 => @raylib.draw_text("CELLULAR", 670, 10, 20, @raylib.raywhite)
+        @draw.draw_text("HORIZONTAL GRADIENT", 540, 10, 20, @raylib.raywhite)
+      2 => @draw.draw_text("DIAGONAL GRADIENT", 540, 10, 20, @raylib.raywhite)
+      3 => @draw.draw_text("RADIAL GRADIENT", 580, 10, 20, @raylib.lightgray)
+      4 => @draw.draw_text("SQUARE GRADIENT", 580, 10, 20, @raylib.lightgray)
+      5 => @draw.draw_text("CHECKED", 680, 10, 20, @raylib.raywhite)
+      6 => @draw.draw_text("WHITE NOISE", 640, 10, 20, @raylib.red)
+      7 => @draw.draw_text("PERLIN NOISE", 640, 10, 20, @raylib.red)
+      8 => @draw.draw_text("CELLULAR", 670, 10, 20, @raylib.raywhite)
       _ => ()
     }
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -107,5 +109,6 @@ fn main {
     @raylib.unload_texture(textures[i])
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

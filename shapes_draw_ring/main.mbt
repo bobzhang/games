@@ -25,6 +25,7 @@ fn main {
   let mut draw_circle_lines = false
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -158,46 +159,46 @@ fn main {
     }
 
     // Draw parameter text
-    @raylib.draw_text(
+    @draw.draw_text(
       "StartAngle: \{start_angle.to_int()}",
       600,
       40,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text("[LEFT/RIGHT]", 600, 55, 10, @raylib.gray)
-    @raylib.draw_text(
+    @draw.draw_text("[LEFT/RIGHT]", 600, 55, 10, @raylib.gray)
+    @draw.draw_text(
       "EndAngle: \{end_angle.to_int()}",
       600,
       70,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text("[UP/DOWN]", 600, 85, 10, @raylib.gray)
-    @raylib.draw_text(
+    @draw.draw_text("[UP/DOWN]", 600, 85, 10, @raylib.gray)
+    @draw.draw_text(
       "InnerRadius: \{inner_radius.to_int()}",
       600,
       120,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text("[W/S]", 600, 135, 10, @raylib.gray)
-    @raylib.draw_text(
+    @draw.draw_text("[W/S]", 600, 135, 10, @raylib.gray)
+    @draw.draw_text(
       "OuterRadius: \{outer_radius.to_int()}",
       600,
       150,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text("[A/D]", 600, 165, 10, @raylib.gray)
-    @raylib.draw_text(
+    @draw.draw_text("[A/D]", 600, 165, 10, @raylib.gray)
+    @draw.draw_text(
       "Segments: \{segments.to_int()}",
       600,
       200,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text("[Q/E]", 600, 215, 10, @raylib.gray)
+    @draw.draw_text("[Q/E]", 600, 215, 10, @raylib.gray)
 
     let diff = end_angle - start_angle
     let min_segments_val = diff / 90.0
@@ -213,26 +214,26 @@ fn main {
     } else {
       @raylib.darkgray
     }
-    @raylib.draw_text("MODE: \{mode}", 600, 240, 10, color)
+    @draw.draw_text("MODE: \{mode}", 600, 240, 10, color)
 
     let ring_text = if draw_ring { "ON" } else { "OFF" }
     let ring_lines_text = if draw_ring_lines { "ON" } else { "OFF" }
     let circle_lines_text = if draw_circle_lines { "ON" } else { "OFF" }
-    @raylib.draw_text(
+    @draw.draw_text(
       "[1] Draw Ring: \{ring_text}",
       600,
       320,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "[2] Draw RingLines: \{ring_lines_text}",
       600,
       350,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "[3] Draw CircleLines: \{circle_lines_text}",
       600,
       380,
@@ -242,9 +243,11 @@ fn main {
 
     @raylib.draw_fps(10, 10)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

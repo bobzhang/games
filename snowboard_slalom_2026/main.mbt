@@ -290,6 +290,7 @@ fn setup_course(
 fn main {
   @raylib.init_window(sw, sh, "Snowboard Slalom 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let rider : Rider = {
     x: 640.0,
@@ -902,14 +903,14 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 74, @raylib.Color::new(8, 12, 22, 222))
-    @raylib.draw_text(
+    @draw.draw_text(
       "SNOWBOARD SLALOM 2026",
       20,
       14,
       30,
       @raylib.Color::new(236, 244, 255, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "A/D steer  J jump trick  K boost",
       20,
       48,
@@ -917,28 +918,28 @@ fn main {
       @raylib.Color::new(178, 204, 236, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{rider.score}",
       470,
       16,
       28,
       @raylib.Color::new(246, 216, 118, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Combo \{rider.combo}",
       670,
       16,
       28,
       @raylib.Color::new(170, 238, 194, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Clean \{gates_clean}/\{gate_count}",
       860,
       16,
       28,
       @raylib.Color::new(180, 226, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{time_left.to_int()}s",
       1100,
       16,
@@ -954,7 +955,7 @@ fn main {
       10,
       @raylib.Color::new(108, 224, 154, 255),
     )
-    @raylib.draw_text("HP", 20, 96, 16, @raylib.Color::new(182, 208, 230, 255))
+    @draw.draw_text("HP", 20, 96, 16, @raylib.Color::new(182, 208, 230, 255))
 
     @raylib.draw_rectangle(
       254,
@@ -970,7 +971,7 @@ fn main {
       10,
       @raylib.Color::new(116, 198, 248, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "STAMINA",
       254,
       96,
@@ -980,7 +981,7 @@ fn main {
 
     let dist_left : Float = course_end - rider.y
     let next_gate_dy = nearest_gate_y(gates, gate_count, rider.y)
-    @raylib.draw_text(
+    @draw.draw_text(
       "Finish \{dist_left.to_int()}m",
       520,
       82,
@@ -988,7 +989,7 @@ fn main {
       @raylib.Color::new(234, 238, 248, 255),
     )
     if next_gate_dy < 9000000.0 {
-      @raylib.draw_text(
+      @draw.draw_text(
         "Next gate \{next_gate_dy.to_int()}m",
         700,
         82,
@@ -996,14 +997,14 @@ fn main {
         @raylib.Color::new(196, 226, 248, 255),
       )
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       "Missed \{gates_miss}",
       920,
       82,
       20,
       @raylib.Color::new(242, 162, 172, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Wave \{wave}",
       1080,
       82,
@@ -1027,7 +1028,7 @@ fn main {
       72,
       @raylib.Color::new(58, 82, 114, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "LEFT",
       lpx + 18,
       lpy + 80,
@@ -1041,7 +1042,7 @@ fn main {
       72,
       @raylib.Color::new(58, 82, 114, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "RIGHT",
       lpx + 124,
       lpy + 80,
@@ -1065,7 +1066,7 @@ fn main {
       82,
       @raylib.Color::new(90, 156, 226, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "JUMP",
       rbx + 18,
       rby + 36,
@@ -1079,7 +1080,7 @@ fn main {
       82,
       @raylib.Color::new(214, 112, 92, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "BOOST",
       rbx + 132,
       rby + 36,
@@ -1094,7 +1095,7 @@ fn main {
       40,
       @raylib.Color::new(8, 10, 16, 214),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       sw / 2 - 302,
       sh - 44,
@@ -1111,28 +1112,28 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 244),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "SNOWBOARD SLALOM",
         sw / 2 - 264,
         sh / 2 - 132,
         62,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Thread gates, avoid trees and rocks, chain tricks in the air",
         sw / 2 - 352,
         sh / 2 - 30,
         30,
         @raylib.Color::new(182, 214, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mobile: left-right pad, jump and boost buttons",
         sw / 2 - 280,
         sh / 2 + 16,
         28,
         @raylib.Color::new(182, 214, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "ENTER or tap to start",
         sw / 2 - 166,
         sh / 2 + 106,
@@ -1148,35 +1149,35 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "COURSE CLEARED",
         sw / 2 - 220,
         sh / 2 - 132,
         60,
         @raylib.Color::new(248, 236, 186, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{rider.score}",
         sw / 2 - 150,
         sh / 2 - 38,
         44,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Clean gates: \{gates_clean} / \{gate_count}",
         sw / 2 - 220,
         sh / 2 + 20,
         34,
         @raylib.Color::new(170, 236, 198, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Missed gates: \{gates_miss}",
         sw / 2 - 180,
         sh / 2 + 62,
         34,
         @raylib.Color::new(236, 172, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 178,
         sh / 2 + 122,
@@ -1192,35 +1193,35 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "RUN FAILED",
         sw / 2 - 168,
         sh / 2 - 132,
         60,
         @raylib.Color::new(246, 140, 154, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{rider.score}",
         sw / 2 - 150,
         sh / 2 - 38,
         44,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Clean gates: \{gates_clean}",
         sw / 2 - 160,
         sh / 2 + 20,
         34,
         @raylib.Color::new(172, 236, 202, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Time left: \{time_left.to_int()}s",
         sw / 2 - 160,
         sh / 2 + 62,
         34,
         @raylib.Color::new(236, 172, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 178,
         sh / 2 + 122,
@@ -1229,6 +1230,7 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
 
     if state == 2 || state == 3 {
@@ -1239,5 +1241,6 @@ fn main {
     }
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

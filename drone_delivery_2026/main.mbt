@@ -61,6 +61,7 @@ fn dist_sq(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 fn main {
   @raylib.init_window(sw, sh, "Drone Delivery 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let orbs : Array[Orb] = Array::makei(110, fn(_i) {
     { alive: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0 }
@@ -277,7 +278,7 @@ fn main {
 
     if !has_package {
       @raylib.draw_circle(pick_x.to_int(), pick_y.to_int(), 16.0, @raylib.lime)
-      @raylib.draw_text(
+      @draw.draw_text(
         "P",
         (pick_x - 6.0).to_int(),
         (pick_y - 11.0).to_int(),
@@ -291,7 +292,7 @@ fn main {
         16.0,
         @raylib.orange,
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "D",
         (drop_x - 7.0).to_int(),
         (drop_y - 11.0).to_int(),
@@ -334,13 +335,13 @@ fn main {
       @raylib.gray,
     )
 
-    @raylib.draw_text("DRONE DELIVERY 2026", 20, 16, 40, @raylib.skyblue)
-    @raylib.draw_text("Score \{score}", 20, 64, 30, @raylib.white)
-    @raylib.draw_text("Deliveries \{deliveries}", 220, 64, 30, @raylib.lime)
-    @raylib.draw_text("Combo x\{combo}", 460, 64, 30, @raylib.yellow)
+    @draw.draw_text("DRONE DELIVERY 2026", 20, 16, 40, @raylib.skyblue)
+    @draw.draw_text("Score \{score}", 20, 64, 30, @raylib.white)
+    @draw.draw_text("Deliveries \{deliveries}", 220, 64, 30, @raylib.lime)
+    @draw.draw_text("Combo x\{combo}", 460, 64, 30, @raylib.yellow)
 
     let t = timer.to_int()
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{t}s",
       660,
       64,
@@ -352,7 +353,7 @@ fn main {
       },
     )
 
-    @raylib.draw_text("Battery", 20, 104, 24, @raylib.green)
+    @draw.draw_text("Battery", 20, 104, 24, @raylib.green)
     @raylib.draw_rectangle(
       110,
       110,
@@ -368,7 +369,7 @@ fn main {
       @raylib.green,
     )
 
-    @raylib.draw_text("Heat", 360, 104, 24, @raylib.red)
+    @draw.draw_text("Heat", 360, 104, 24, @raylib.red)
     @raylib.draw_rectangle(
       430,
       110,
@@ -385,7 +386,7 @@ fn main {
       30,
       @raylib.Color::new(8, 10, 16, 220),
     )
-    @raylib.draw_text(msg, 28, 699, 20, @raylib.raywhite)
+    @draw.draw_text(msg, 28, 699, 20, @raylib.raywhite)
 
     if over {
       @raylib.draw_rectangle(
@@ -395,12 +396,14 @@ fn main {
         180,
         @raylib.fade(@raylib.black, 0.82),
       )
-      @raylib.draw_text("SHIFT OVER", 430, 308, 50, @raylib.orange)
-      @raylib.draw_text("Press R to restart", 430, 366, 34, @raylib.white)
+      @draw.draw_text("SHIFT OVER", 430, 308, 50, @raylib.orange)
+      @draw.draw_text("Press R to restart", 430, 366, 34, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

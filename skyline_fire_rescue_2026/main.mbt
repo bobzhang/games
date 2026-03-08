@@ -766,14 +766,14 @@ fn draw_special_zones() -> Unit {
     reservoir_h,
     @raylib.Color::new(196, 226, 252, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "WATER RESERVOIR",
     reservoir_x + 20,
     reservoir_y + 8,
     24,
     @raylib.Color::new(238, 248, 255, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Hover here to refill",
     reservoir_x + 20,
     reservoir_y + 40,
@@ -795,14 +795,14 @@ fn draw_special_zones() -> Unit {
     hospital_h,
     @raylib.Color::new(208, 242, 220, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "CITY HOSPITAL",
     hospital_x + 36,
     hospital_y + 8,
     26,
     @raylib.Color::new(240, 252, 244, 252),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Drop rescued civilians",
     hospital_x + 24,
     hospital_y + 42,
@@ -893,7 +893,7 @@ fn draw_buildings(buildings : Array[Building], t : Float) -> Unit {
     }
 
     if buildings[i].people > 0 {
-      @raylib.draw_text(
+      @draw.draw_text(
         "\{buildings[i].people}",
         bx + bw - 26,
         by + 6,
@@ -920,7 +920,7 @@ fn draw_buildings(buildings : Array[Building], t : Float) -> Unit {
     @raylib.draw_rectangle(bx + 4, by + bh - 10, hpw, 6, hp_col)
 
     if buildings[i].collapsed {
-      @raylib.draw_text(
+      @draw.draw_text(
         "COLLAPSED",
         bx + 12,
         by + bh / 2 - 12,
@@ -1002,7 +1002,7 @@ fn draw_helicopter(heli : Helicopter, t : Float) -> Unit {
   )
 
   if heli.passengers > 0 {
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{heli.passengers}",
       (x + 18.0).to_int(),
       (y - 8.0).to_int(),
@@ -1053,28 +1053,28 @@ fn draw_touch_ui() -> Unit {
     @raylib.Color::new(80, 102, 154, 160),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "UP",
     pad_x + 107,
     pad_y + 16,
     24,
     @raylib.Color::new(234, 242, 255, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "LT",
     pad_x + 24,
     pad_y + 84,
     24,
     @raylib.Color::new(234, 242, 255, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "RT",
     pad_x + 188,
     pad_y + 84,
     24,
     @raylib.Color::new(234, 242, 255, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "DN",
     pad_x + 103,
     pad_y + 152,
@@ -1090,7 +1090,7 @@ fn draw_touch_ui() -> Unit {
     62.0,
     @raylib.Color::new(242, 118, 106, 176),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "DROP",
     fire_x - 36,
     fire_y - 14,
@@ -1106,7 +1106,7 @@ fn draw_touch_ui() -> Unit {
     54.0,
     @raylib.Color::new(118, 202, 132, 176),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "RES",
     rescue_x - 24,
     rescue_y - 14,
@@ -1119,6 +1119,7 @@ fn draw_touch_ui() -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] skyline fire rescue 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let heli : Helicopter = {
     x: 220.0,
@@ -1530,14 +1531,14 @@ fn main {
       @raylib.Color::new(164, 188, 230, 242),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "SKYLINE FIRE RESCUE",
       1002,
       44,
       34,
       @raylib.Color::new(236, 246, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Extinguish, rescue, deliver",
       1004,
       82,
@@ -1545,14 +1546,14 @@ fn main {
       @raylib.Color::new(188, 214, 252, 238),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Timer",
       1004,
       130,
       24,
       @raylib.Color::new(224, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{timer.to_int()}s",
       1126,
       130,
@@ -1560,14 +1561,14 @@ fn main {
       @raylib.Color::new(248, 228, 148, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Rescued",
       1004,
       172,
       24,
       @raylib.Color::new(224, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{rescued_total}/42",
       1126,
       172,
@@ -1575,14 +1576,14 @@ fn main {
       @raylib.Color::new(136, 224, 164, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Casualties",
       1004,
       214,
       24,
       @raylib.Color::new(224, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{casualties_total}/34",
       1126,
       214,
@@ -1590,14 +1591,14 @@ fn main {
       @raylib.Color::new(244, 132, 148, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Collapses",
       1004,
       256,
       24,
       @raylib.Color::new(224, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{collapsed_total}",
       1126,
       256,
@@ -1605,14 +1606,14 @@ fn main {
       @raylib.Color::new(244, 176, 134, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Tier",
       1004,
       298,
       24,
       @raylib.Color::new(224, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{tier}",
       1126,
       298,
@@ -1620,14 +1621,14 @@ fn main {
       @raylib.Color::new(252, 218, 126, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score",
       1004,
       340,
       24,
       @raylib.Color::new(224, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{score}",
       1126,
       340,
@@ -1635,7 +1636,7 @@ fn main {
       @raylib.Color::new(134, 210, 252, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Water",
       1004,
       388,
@@ -1665,7 +1666,7 @@ fn main {
       24,
       @raylib.Color::new(186, 212, 250, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{heli.water.to_int()}/\{heli.water_max.to_int()}",
       1120,
       446,
@@ -1673,14 +1674,14 @@ fn main {
       @raylib.Color::new(224, 240, 255, 246),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Passengers",
       1004,
       484,
       24,
       @raylib.Color::new(224, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{heli.passengers}/\{heli.capacity}",
       1140,
       484,
@@ -1688,35 +1689,35 @@ fn main {
       @raylib.Color::new(224, 248, 228, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Controls",
       1004,
       544,
       28,
       @raylib.Color::new(236, 246, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "WASD/Arrows: move",
       1004,
       578,
       22,
       @raylib.Color::new(200, 222, 252, 238),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Space/J: water drop",
       1004,
       606,
       22,
       @raylib.Color::new(200, 222, 252, 238),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "K/H or button: rescue",
       1004,
       634,
       22,
       @raylib.Color::new(200, 222, 252, 238),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Mobile: tap controls",
       1004,
       662,
@@ -1727,7 +1728,7 @@ fn main {
     draw_touch_ui()
 
     if msg_t > 0.0 {
-      let bw : Int = @raylib.measure_text(msg, 30) + 44
+      let bw : Int = @draw.measure_text(msg, 30) + 44
       let bx : Int = sw / 2 - bw / 2
       @raylib.draw_rectangle(
         bx,
@@ -1743,7 +1744,7 @@ fn main {
         52,
         @raylib.Color::new(184, 208, 246, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         msg,
         bx + 22,
         32,
@@ -1754,14 +1755,14 @@ fn main {
 
     if state == 0 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 12, 20, 204))
-      @raylib.draw_text(
+      @draw.draw_text(
         "SKYLINE FIRE RESCUE",
         sw / 2 - 334,
         150,
         74,
         @raylib.Color::new(238, 246, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Arcade rescue simulation",
         sw / 2 - 176,
         244,
@@ -1784,28 +1785,28 @@ fn main {
         @raylib.Color::new(166, 196, 246, 246),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "Desktop",
         sw / 2 - 434,
         350,
         32,
         @raylib.Color::new(242, 246, 255, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Fly to fires and cool them down",
         sw / 2 - 434,
         390,
         28,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Rescue people and deliver to hospital",
         sw / 2 - 434,
         424,
         28,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Refill water at reservoir",
         sw / 2 - 434,
         458,
@@ -1813,28 +1814,28 @@ fn main {
         @raylib.Color::new(210, 228, 252, 248),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mobile",
         sw / 2 + 74,
         350,
         32,
         @raylib.Color::new(242, 246, 255, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Hold D-pad to move",
         sw / 2 + 74,
         390,
         28,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Tap DROP and RES buttons",
         sw / 2 + 74,
         424,
         28,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Fully touch-playable",
         sw / 2 + 74,
         458,
@@ -1856,7 +1857,7 @@ fn main {
         92,
         @raylib.Color::new(230, 240, 255, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "START MISSION",
         sw / 2 - 120,
         638,
@@ -1865,28 +1866,28 @@ fn main {
       )
     } else if state == 2 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 18, 10, 196))
-      @raylib.draw_text(
+      @draw.draw_text(
         "CITY SAVED",
         sw / 2 - 184,
         194,
         88,
         @raylib.Color::new(162, 246, 180, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Rescued \{rescued_total} civilians",
         sw / 2 - 206,
         324,
         42,
         @raylib.Color::new(232, 248, 236, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score \{score}",
         sw / 2 - 84,
         376,
         38,
         @raylib.Color::new(244, 232, 160, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Tap or Enter to restart",
         sw / 2 - 170,
         460,
@@ -1895,28 +1896,28 @@ fn main {
       )
     } else if state == 3 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(24, 8, 14, 204))
-      @raylib.draw_text(
+      @draw.draw_text(
         "MISSION FAILED",
         sw / 2 - 268,
         194,
         86,
         @raylib.Color::new(252, 162, 178, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Rescued \{rescued_total}/42",
         sw / 2 - 160,
         324,
         42,
         @raylib.Color::new(242, 232, 236, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Casualties \{casualties_total}",
         sw / 2 - 138,
         376,
         38,
         @raylib.Color::new(248, 214, 158, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Tap or Enter to retry",
         sw / 2 - 160,
         460,
@@ -1925,8 +1926,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

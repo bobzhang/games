@@ -9,6 +9,7 @@ fn main {
   )
   let mut gamepad = 0
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -24,7 +25,7 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
     if @raylib.is_gamepad_available(gamepad) {
-      @raylib.draw_text(
+      @draw.draw_text(
         "GP\{gamepad}: \{@raylib.get_gamepad_name(gamepad)}",
         10,
         10,
@@ -231,7 +232,7 @@ fn main {
 
       // Draw detected axes
       let axis_count = @raylib.get_gamepad_axis_count(gamepad)
-      @raylib.draw_text(
+      @draw.draw_text(
         "DETECTED AXIS [\{axis_count}]:",
         10,
         50,
@@ -240,7 +241,7 @@ fn main {
       )
       for i in 0..<axis_count {
         let axis_val = @raylib.get_gamepad_axis_movement(gamepad, i)
-        @raylib.draw_text(
+        @draw.draw_text(
           "AXIS \{i}: \{axis_val}",
           20,
           70 + 20 * i,
@@ -252,7 +253,7 @@ fn main {
       // Draw detected button
       let button_pressed = @raylib.get_gamepad_button_pressed()
       if button_pressed != @raylib.GamepadButtonUnknown {
-        @raylib.draw_text(
+        @draw.draw_text(
           "DETECTED BUTTON: \{button_pressed}",
           10,
           430,
@@ -260,10 +261,10 @@ fn main {
           @raylib.red,
         )
       } else {
-        @raylib.draw_text("DETECTED BUTTON: NONE", 10, 430, 10, @raylib.gray)
+        @draw.draw_text("DETECTED BUTTON: NONE", 10, 430, 10, @raylib.gray)
       }
     } else {
-      @raylib.draw_text("GP\{gamepad}: NOT DETECTED", 10, 10, 10, @raylib.gray)
+      @draw.draw_text("GP\{gamepad}: NOT DETECTED", 10, 10, 10, @raylib.gray)
       // Draw generic gamepad placeholder
       @raylib.draw_rectangle_rounded(
         @raylib.Rectangle::new(175.0, 110.0, 460.0, 220.0),
@@ -271,20 +272,22 @@ fn main {
         16,
         @raylib.lightgray,
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "No gamepad detected. Connect a gamepad and try again.", 200, 215, 10, @raylib.gray,
       )
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       "Use LEFT/RIGHT arrow keys to switch gamepad",
       10,
       screen_height - 20,
       10,
       @raylib.darkgray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -219,6 +219,7 @@ fn main {
   ]
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -295,14 +296,16 @@ fn main {
     @raylib.end_mode_3d()
 
     @raylib.draw_fps(10, 10)
-    @raylib.draw_text(
+    @draw.draw_text(
       "Use keys [Y][R][G][B] to toggle lights", 10, 40, 20, @raylib.darkgray,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_shader(shader)
+  @draw.cleanup()
   @raylib.close_window()
 }

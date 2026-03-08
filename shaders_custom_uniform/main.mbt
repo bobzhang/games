@@ -48,6 +48,7 @@ fn main {
   let target = @raylib.load_render_texture(screen_width, screen_height)
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -104,7 +105,7 @@ fn main {
     )
     @raylib.draw_grid(10, 1.0)
     @raylib.end_mode_3d()
-    @raylib.draw_text("TEXT DRAWN IN RENDER TEXTURE", 200, 10, 30, @raylib.red)
+    @draw.draw_text("TEXT DRAWN IN RENDER TEXTURE", 200, 10, 30, @raylib.red)
     @raylib.end_texture_mode()
 
     // Draw render texture to screen with shader applied
@@ -127,7 +128,7 @@ fn main {
     )
     @raylib.end_shader_mode()
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Move mouse to change swirl center",
       10,
       screen_height - 30,
@@ -135,11 +136,13 @@ fn main {
       @raylib.darkgray,
     )
     @raylib.draw_fps(10, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_shader(shader)
   @raylib.unload_render_texture(target)
+  @draw.cleanup()
   @raylib.close_window()
 }

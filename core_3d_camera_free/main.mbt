@@ -21,6 +21,7 @@ fn main {
   @raylib.disable_cursor() // Limit cursor to relative movement inside the window
 
   @raylib.set_target_fps(60) // Set our game to run at 60 frames-per-second
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -46,19 +47,21 @@ fn main {
     @raylib.end_mode_3d()
     @raylib.draw_rectangle(10, 10, 320, 93, @raylib.fade(@raylib.skyblue, 0.5))
     @raylib.draw_rectangle_lines(10, 10, 320, 93, @raylib.blue)
-    @raylib.draw_text(
+    @draw.draw_text(
       "Free camera default controls:", 20, 20, 10, @raylib.black,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "- Mouse Wheel to Zoom in-out", 40, 40, 10, @raylib.darkgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "- Mouse Wheel Pressed to Pan", 40, 60, 10, @raylib.darkgray,
     )
-    @raylib.draw_text("- Z to zoom to (0, 0, 0)", 40, 80, 10, @raylib.darkgray)
+    @draw.draw_text("- Z to zoom to (0, 0, 0)", 40, 80, 10, @raylib.darkgray)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

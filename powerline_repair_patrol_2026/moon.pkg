@@ -2,6 +2,8 @@ import {
   "bobzhang/games/utils",
   "moonbitlang/core/math",
   "tonyfettes/raylib",
+  "bobzhang/games/utils/draw",
+  "bobzhang/games/utils/fps",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

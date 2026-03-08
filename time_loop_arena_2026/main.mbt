@@ -502,6 +502,7 @@ fn rebuild_ghosts(
 fn main {
   @raylib.init_window(sw, sh, "Time Loop Arena 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let pilot : Pilot = {
     x: center_x,
@@ -1444,14 +1445,14 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 74, @raylib.Color::new(8, 10, 20, 228))
-    @raylib.draw_text(
+    @draw.draw_text(
       "TIME LOOP ARENA 2026",
       16,
       12,
       30,
       @raylib.Color::new(236, 246, 255, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "WASD move  J fire  K dash  L chrono bomb",
       16,
       48,
@@ -1459,28 +1460,28 @@ fn main {
       @raylib.Color::new(176, 206, 236, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{pilot.score}/\{target_score}",
       500,
       14,
       28,
       @raylib.Color::new(250, 218, 132, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Loop \{pilot.loops_cleared + 1}",
       766,
       14,
       28,
       @raylib.Color::new(166, 236, 200, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{mission_time.to_int()}s",
       930,
       14,
       28,
       @raylib.Color::new(248, 188, 132, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Strikes \{strike_count}",
       1102,
       14,
@@ -1496,7 +1497,7 @@ fn main {
       10,
       @raylib.Color::new(112, 226, 160, 255),
     )
-    @raylib.draw_text("HP", 16, 98, 16, @raylib.Color::new(186, 212, 232, 255))
+    @draw.draw_text("HP", 16, 98, 16, @raylib.Color::new(186, 212, 232, 255))
 
     @raylib.draw_rectangle(
       252,
@@ -1512,7 +1513,7 @@ fn main {
       10,
       @raylib.Color::new(116, 198, 248, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "ENERGY",
       252,
       98,
@@ -1520,28 +1521,28 @@ fn main {
       @raylib.Color::new(186, 212, 232, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Echoes \{ghost_count}",
       500,
       84,
       20,
       @raylib.Color::new(156, 236, 206, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Combo \{pilot.combo}",
       620,
       84,
       20,
       @raylib.Color::new(252, 224, 162, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Dash \{pilot.dash_cd.to_int()}  Bomb \{pilot.bomb_cd.to_int()}",
       760,
       84,
       20,
       @raylib.Color::new(206, 190, 162, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Loop t \{loop_t.to_int()}s",
       1040,
       84,
@@ -1556,7 +1557,7 @@ fn main {
       38,
       @raylib.Color::new(8, 12, 18, 214),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       sw / 2 - 320,
       sh - 44,
@@ -1581,7 +1582,7 @@ fn main {
       58,
       @raylib.Color::new(56, 82, 116, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "L",
       p0x + 30,
       p0y + 74,
@@ -1595,7 +1596,7 @@ fn main {
       58,
       @raylib.Color::new(56, 82, 116, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "R",
       p0x + 190,
       p0y + 74,
@@ -1609,7 +1610,7 @@ fn main {
       58,
       @raylib.Color::new(56, 82, 116, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "U",
       p0x + 110,
       p0y + 16,
@@ -1623,7 +1624,7 @@ fn main {
       58,
       @raylib.Color::new(56, 82, 116, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "D",
       p0x + 110,
       p0y + 132,
@@ -1647,7 +1648,7 @@ fn main {
       92,
       @raylib.Color::new(214, 118, 102, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "DASH",
       p1x + 32,
       p1y + 44,
@@ -1661,7 +1662,7 @@ fn main {
       92,
       @raylib.Color::new(86, 148, 216, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "BOMB",
       p1x + 164,
       p1y + 44,
@@ -1675,7 +1676,7 @@ fn main {
       100,
       @raylib.Color::new(98, 186, 138, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "FIRE",
       p1x + 120,
       p1y + 154,
@@ -1692,35 +1693,35 @@ fn main {
         412,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "TIME LOOP ARENA",
         sw / 2 - 278,
         sh / 2 - 132,
         64,
         @raylib.Color::new(236, 246, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Every 20s the timeline rewinds and your past run becomes an echo ally.",
         sw / 2 - 400,
         sh / 2 - 28,
         30,
         @raylib.Color::new(182, 214, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mobile: left pad movement, right buttons dash/bomb/fire",
         sw / 2 - 342,
         sh / 2 + 16,
         30,
         @raylib.Color::new(182, 214, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Reach 3200 score before HP or time runs out",
         sw / 2 - 272,
         sh / 2 + 60,
         32,
         @raylib.Color::new(252, 212, 132, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "ENTER or tap to start",
         sw / 2 - 184,
         sh / 2 + 124,
@@ -1736,28 +1737,28 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "TIMELINE STABLE",
         sw / 2 - 238,
         sh / 2 - 132,
         62,
         @raylib.Color::new(248, 236, 186, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{pilot.score}",
         sw / 2 - 148,
         sh / 2 - 34,
         44,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Loops cleared: \{pilot.loops_cleared}  Strikes: \{strike_count}",
         sw / 2 - 250,
         sh / 2 + 18,
         34,
         @raylib.Color::new(172, 236, 202, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 178,
         sh / 2 + 124,
@@ -1773,28 +1774,28 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "TIMELINE COLLAPSED",
         sw / 2 - 294,
         sh / 2 - 132,
         62,
         @raylib.Color::new(246, 140, 154, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{pilot.score}",
         sw / 2 - 148,
         sh / 2 - 34,
         44,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Loops: \{pilot.loops_cleared}  Strikes: \{strike_count}",
         sw / 2 - 208,
         sh / 2 + 18,
         34,
         @raylib.Color::new(236, 172, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 178,
         sh / 2 + 124,
@@ -1803,6 +1804,7 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
 
     if state == 2 || state == 3 {
@@ -1813,5 +1815,6 @@ fn main {
     }
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

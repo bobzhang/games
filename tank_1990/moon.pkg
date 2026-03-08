@@ -4,6 +4,8 @@ import {
   "bobzhang/games/tank_1990/internal/game",
   "bobzhang/games/tank_1990/internal/render",
   "bobzhang/games/tank_1990/internal/types",
+  "bobzhang/games/utils/draw",
+  "bobzhang/games/utils/fps",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

@@ -237,6 +237,7 @@ fn solved(cars : Array[Car]) -> Bool {
 fn main {
   @raylib.init_window(sw, sh, "Rush Hour Escape 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let cars : Array[Car] = Array::makei(max_cars, fn(_i) {
     {
@@ -417,35 +418,35 @@ fn main {
     @raylib.clear_background(@raylib.Color::new(12, 16, 24, 255))
 
     @raylib.draw_rectangle(0, 0, sw, 104, @raylib.Color::new(8, 12, 20, 230))
-    @raylib.draw_text(
+    @draw.draw_text(
       "RUSH HOUR ESCAPE 2026",
       18,
       22,
       36,
       @raylib.Color::new(236, 244, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Level \{level}/3",
       484,
       34,
       30,
       @raylib.Color::new(244, 226, 136, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Moves \{moves}",
       660,
       34,
       30,
       @raylib.Color::new(218, 234, 250, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Par \{par}",
       830,
       34,
       30,
       @raylib.Color::new(198, 228, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{score}",
       980,
       34,
@@ -497,7 +498,7 @@ fn main {
       cell - 16,
       @raylib.Color::new(246, 110, 110, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "EXIT",
       ox + gw * cell + 20,
       gate_y + 20,
@@ -553,7 +554,7 @@ fn main {
       }
 
       if cars[i].player {
-        @raylib.draw_text(
+        @draw.draw_text(
           "P",
           x + 10,
           y + 8,
@@ -571,7 +572,7 @@ fn main {
         gh * cell,
         @raylib.Color::new(20, 30, 48, 120),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "LEVEL CLEAR",
         ox + 146,
         oy + gh * cell / 2 - 24,
@@ -589,7 +590,7 @@ fn main {
       182,
       @raylib.Color::new(10, 16, 24, 220),
     )
-    @raylib.draw_text("Touch", 62, sh - 192, 20, @raylib.white)
+    @draw.draw_text("Touch", 62, sh - 192, 20, @raylib.white)
 
     @raylib.draw_rectangle(
       ctl_x + 84,
@@ -598,7 +599,7 @@ fn main {
       52,
       @raylib.Color::new(46, 64, 88, 255),
     )
-    @raylib.draw_text("UP", ctl_x + 108, ctl_y + 16, 20, @raylib.white)
+    @draw.draw_text("UP", ctl_x + 108, ctl_y + 16, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x,
       ctl_y + 58,
@@ -606,7 +607,7 @@ fn main {
       52,
       @raylib.Color::new(46, 64, 88, 255),
     )
-    @raylib.draw_text("LEFT", ctl_x + 12, ctl_y + 74, 20, @raylib.white)
+    @draw.draw_text("LEFT", ctl_x + 12, ctl_y + 74, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x + 84,
       ctl_y + 58,
@@ -614,7 +615,7 @@ fn main {
       52,
       @raylib.Color::new(46, 64, 88, 255),
     )
-    @raylib.draw_text("RIGHT", ctl_x + 90, ctl_y + 74, 20, @raylib.white)
+    @draw.draw_text("RIGHT", ctl_x + 90, ctl_y + 74, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x + 84,
       ctl_y + 116,
@@ -622,7 +623,7 @@ fn main {
       52,
       @raylib.Color::new(46, 64, 88, 255),
     )
-    @raylib.draw_text("DOWN", ctl_x + 90, ctl_y + 132, 20, @raylib.white)
+    @draw.draw_text("DOWN", ctl_x + 90, ctl_y + 132, 20, @raylib.white)
 
     @raylib.draw_rectangle(
       188,
@@ -631,7 +632,7 @@ fn main {
       36,
       @raylib.Color::new(10, 16, 24, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       198,
       sh - 48,
@@ -639,7 +640,7 @@ fn main {
       @raylib.Color::new(224, 236, 246, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Stars \{stars}",
       sw - 180,
       sh - 188,
@@ -656,7 +657,7 @@ fn main {
         188,
         @raylib.Color::new(16, 24, 40, 242),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "TRAFFIC MASTER"
         } else {
@@ -671,7 +672,7 @@ fn main {
           @raylib.Color::new(250, 132, 132, 255)
         },
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R to restart",
         sw / 2 - 124,
         sh / 2 + 40,
@@ -680,8 +681,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

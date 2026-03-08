@@ -3,6 +3,8 @@ import {
   "tonyfettes/raylib/raygui",
   "tonyfettes/raylib/rl",
   "moonbitlang/core/math",
+  "bobzhang/games/utils/draw",
+  "bobzhang/games/utils/fps",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

@@ -35,8 +35,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(10, 10, 20, 255))
   // Title
   let title = "SURVIVAL ARENA 3D"
-  let tw = @raylib.measure_text(title, 52)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, 52)
+  @draw.draw_text(
     title,
     (sw - tw) / 2,
     140,
@@ -45,8 +45,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   )
   // Subtitle
   let sub = "Wave-based FPS Survival"
-  let sub_w = @raylib.measure_text(sub, 22)
-  @raylib.draw_text(
+  let sub_w = @draw.measure_text(sub, 22)
+  @draw.draw_text(
     sub,
     (sw - sub_w) / 2,
     200,
@@ -61,8 +61,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
     @raylib.Color::new(200, 200, 80, 255)
   }
   let start_text = "Press ENTER or SPACE to Start"
-  let start_w = @raylib.measure_text(start_text, 26)
-  @raylib.draw_text(start_text, (sw - start_w) / 2, 300, 26, start_color)
+  let start_w = @draw.measure_text(start_text, 26)
+  @draw.draw_text(start_text, (sw - start_w) / 2, 300, 26, start_color)
   // Controls info
   let controls : Array[String] = [
     "WASD - Move | Mouse - Look", "Left Click - Shoot | Shift - Sprint", "1-4 / Scroll - Switch Weapon",
@@ -70,8 +70,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   ]
   for i in 0..<controls.length() {
     let text = controls[i]
-    let cw = @raylib.measure_text(text, 16)
-    @raylib.draw_text(
+    let cw = @draw.measure_text(text, 16)
+    @draw.draw_text(
       text,
       (sw - cw) / 2,
       400 + i * 26,
@@ -81,8 +81,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   }
   // Game info
   let info = "Survive 20 waves of enemies. Collect ammo crates. Buy upgrades between waves."
-  let iw = @raylib.measure_text(info, 14)
-  @raylib.draw_text(
+  let iw = @draw.measure_text(info, 14)
+  @draw.draw_text(
     info,
     (sw - iw) / 2,
     sh - 60,
@@ -98,7 +98,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   // Top bar background
   @raylib.draw_rectangle(0, 0, sw, 44, @raylib.Color::new(0, 0, 0, 160))
   // Wave info
-  @raylib.draw_text(
+  @draw.draw_text(
     "Wave: \{game.current_wave + 1}/\{@types.max_waves}",
     10,
     12,
@@ -106,7 +106,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(200, 220, 255, 255),
   )
   // Score
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score: \{player.score}",
     200,
     12,
@@ -114,7 +114,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(200, 200, 200, 255),
   )
   // Gold
-  @raylib.draw_text(
+  @draw.draw_text(
     "Gold: \{player.money}",
     400,
     12,
@@ -122,7 +122,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 215, 0, 255),
   )
   // Kills
-  @raylib.draw_text(
+  @draw.draw_text(
     "Kills: \{player.kills}",
     580,
     12,
@@ -131,7 +131,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   )
   // FPS
   let fps = @raylib.get_fps()
-  @raylib.draw_text(
+  @draw.draw_text(
     "FPS: \{fps}",
     sw - 100,
     12,
@@ -163,7 +163,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(220, 50, 30, 255)
   }
   @raylib.draw_rectangle(bar_x, bar_y, hp_fill_w, bar_h, hp_color)
-  @raylib.draw_text(
+  @draw.draw_text(
     "HP: \{player.hp.to_int()}/\{@types.player_max_hp.to_int()}",
     bar_x + 5,
     bar_y + 2,
@@ -188,7 +188,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     bar_h,
     @raylib.Color::new(50, 120, 220, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Armor: \{player.armor.to_int()}/\{@types.player_max_armor.to_int()}",
     bar_x + 5,
     armor_y + 2,
@@ -207,7 +207,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   )
   let weapon = player.current_weapon.to_int()
   let weapon_text = @types.weapon_name(weapon)
-  @raylib.draw_text(
+  @draw.draw_text(
     weapon_text,
     ammo_x,
     ammo_y,
@@ -225,7 +225,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   } else {
     @raylib.Color::new(255, 80, 80, 255)
   }
-  @raylib.draw_text(ammo_text, ammo_x, ammo_y + 22, 18, ammo_color)
+  @draw.draw_text(ammo_text, ammo_x, ammo_y + 22, 18, ammo_color)
   // Weapon slots indicator
   let slot_y = sh - 95
   for i in 0..<@types.weapon_count {
@@ -249,7 +249,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
       },
     )
     let key_text = "\{i + 1}"
-    @raylib.draw_text(
+    @draw.draw_text(
       key_text,
       slot_x + 4,
       slot_y + 4,
@@ -269,7 +269,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     } else {
       "MG"
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       short_name,
       slot_x + 18,
       slot_y + 8,
@@ -281,7 +281,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   if game.wave_active {
     let alive = @types.count_active_enemies(game)
     let remaining = game.enemies_to_spawn - game.enemies_spawned + alive
-    @raylib.draw_text(
+    @draw.draw_text(
       "Enemies: \{remaining}",
       sw / 2 - 50,
       50,
@@ -563,7 +563,7 @@ fn @types.Game::draw_message(game : @types.Game) -> Unit {
     let alpha = alpha_f.to_int()
     let a = alpha.clamp(min=0, max=255)
     let text = game.message_text
-    let tw = @raylib.measure_text(text, 22)
+    let tw = @draw.measure_text(text, 22)
     let cx = (@types.screen_width - tw) / 2
     let cy = 80
     @raylib.draw_rectangle(
@@ -573,7 +573,7 @@ fn @types.Game::draw_message(game : @types.Game) -> Unit {
       32,
       @raylib.Color::new(0, 0, 0, a / 2),
     )
-    @raylib.draw_text(text, cx, cy, 22, @raylib.Color::new(255, 255, 200, a))
+    @draw.draw_text(text, cx, cy, 22, @raylib.Color::new(255, 255, 200, a))
   }
 }
 
@@ -601,8 +601,8 @@ fn @types.Game::draw_shop_ui(game : @types.Game) -> Unit {
   )
   // Title
   let title = "SHOP - Between Waves"
-  let ttw = @raylib.measure_text(title, 20)
-  @raylib.draw_text(
+  let ttw = @draw.measure_text(title, 20)
+  @draw.draw_text(
     title,
     panel_x + (panel_w - ttw) / 2,
     panel_y + 10,
@@ -611,8 +611,8 @@ fn @types.Game::draw_shop_ui(game : @types.Game) -> Unit {
   )
   // Timer
   let timer_text = "Next wave in: \{game.wave_timer.to_int() + 1}s (SPACE to skip)"
-  let ttw2 = @raylib.measure_text(timer_text, 14)
-  @raylib.draw_text(
+  let ttw2 = @draw.measure_text(timer_text, 14)
+  @draw.draw_text(
     timer_text,
     panel_x + (panel_w - ttw2) / 2,
     panel_y + 35,
@@ -662,8 +662,8 @@ fn @types.Game::draw_shop_ui(game : @types.Game) -> Unit {
       @raylib.Color::new(100, 80, 80, 255)
     }
     let prefix = if is_sel { "> " } else { "  " }
-    @raylib.draw_text(prefix + item.0, panel_x + 18, iy + 5, 16, text_color)
-    @raylib.draw_text(
+    @draw.draw_text(prefix + item.0, panel_x + 18, iy + 5, 16, text_color)
+    @draw.draw_text(
       "\{item.1}g",
       panel_x + panel_w - 60,
       iy + 5,
@@ -672,7 +672,7 @@ fn @types.Game::draw_shop_ui(game : @types.Game) -> Unit {
     )
   }
   // Gold display
-  @raylib.draw_text(
+  @draw.draw_text(
     "Gold: \{game.player.money}",
     panel_x + 10,
     panel_y + panel_h - 30,
@@ -680,7 +680,7 @@ fn @types.Game::draw_shop_ui(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 215, 0, 255),
   )
   // Controls hint
-  @raylib.draw_text(
+  @draw.draw_text(
     "Up/Down: Select | E/Enter: Buy",
     panel_x + panel_w - 220,
     panel_y + panel_h - 30,
@@ -700,8 +700,8 @@ fn @types.Game::draw_pause_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, 150),
   )
   let text = "PAUSED"
-  let tw = @raylib.measure_text(text, 60)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(text, 60)
+  @draw.draw_text(
     text,
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 60,
@@ -709,8 +709,8 @@ fn @types.Game::draw_pause_overlay(game : @types.Game) -> Unit {
     @raylib.white,
   )
   let sub = "ESC - Resume | Q - Quit to Menu"
-  let sw2 = @raylib.measure_text(sub, 20)
-  @raylib.draw_text(
+  let sw2 = @draw.measure_text(sub, 20)
+  @draw.draw_text(
     sub,
     (@types.screen_width - sw2) / 2,
     @types.screen_height / 2 + 20,
@@ -738,8 +738,8 @@ fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
   } else {
     @raylib.Color::new(255, 80, 60, 255)
   }
-  let tw = @raylib.measure_text(title, 60)
-  @raylib.draw_text(title, (sw - tw) / 2, sh / 2 - 100, 60, title_color)
+  let tw = @draw.measure_text(title, 60)
+  @draw.draw_text(title, (sw - tw) / 2, sh / 2 - 100, 60, title_color)
   // Stats
   let stats : Array[String] = [
     "Score: \{player.score}",
@@ -749,8 +749,8 @@ fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
   ]
   for i in 0..<stats.length() {
     let text = stats[i]
-    let stw = @raylib.measure_text(text, 22)
-    @raylib.draw_text(
+    let stw = @draw.measure_text(text, 22)
+    @draw.draw_text(
       text,
       (sw - stw) / 2,
       sh / 2 - 20 + i * 30,
@@ -759,8 +759,8 @@ fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
     )
   }
   let restart_text = "Press ENTER or SPACE to return to Menu"
-  let rw = @raylib.measure_text(restart_text, 18)
-  @raylib.draw_text(
+  let rw = @draw.measure_text(restart_text, 18)
+  @draw.draw_text(
     restart_text,
     (sw - rw) / 2,
     sh / 2 + 120,

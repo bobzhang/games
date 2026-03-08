@@ -3,6 +3,7 @@ import {
   "tonyfettes/raylib",
   "bobzhang/games/flight_sim_3d/internal/levels",
   "bobzhang/games/flight_sim_3d/internal/types",
+  "bobzhang/games/utils/draw",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

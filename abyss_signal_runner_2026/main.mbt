@@ -5,12 +5,14 @@ fn main {
   @raylib.init_window(
     @types.screen_w, @types.screen_h, "raylib [game] abyss_signal_runner_2026",
   )
+  @draw.cleanup()
   defer @raylib.close_window()
 
   @raylib.init_audio_device()
   defer @raylib.close_audio_device()
 
   @raylib.set_target_fps(@types.target_fps)
+  @draw.init_font()
 
   let game = @types.Game()
   @game.init_game(game)
@@ -28,6 +30,7 @@ fn main {
 
     @raylib.begin_drawing()
     @render.draw_frame(game)
+    @fps.draw()
     @raylib.end_drawing()
   }
 }

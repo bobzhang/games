@@ -35,6 +35,7 @@ fn main {
   let target = @raylib.load_render_texture(screen_width, screen_height)
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -112,10 +113,11 @@ fn main {
     @raylib.end_shader_mode()
 
     @raylib.draw_rectangle(0, 9, 580, 30, @raylib.fade(@raylib.lightgray, 0.7))
-    @raylib.draw_text("CURRENT POSTPRO SHADER:", 10, 15, 20, @raylib.black)
-    @raylib.draw_text(shader_names[current_shader], 330, 15, 20, @raylib.red)
-    @raylib.draw_text("< >", 540, 10, 30, @raylib.darkblue)
+    @draw.draw_text("CURRENT POSTPRO SHADER:", 10, 15, 20, @raylib.black)
+    @draw.draw_text(shader_names[current_shader], 330, 15, 20, @raylib.red)
+    @draw.draw_text("< >", 540, 10, 30, @raylib.darkblue)
     @raylib.draw_fps(700, 15)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -124,5 +126,6 @@ fn main {
     @raylib.unload_shader(shaders[i])
   }
   @raylib.unload_render_texture(target)
+  @draw.cleanup()
   @raylib.close_window()
 }

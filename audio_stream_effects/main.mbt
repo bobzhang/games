@@ -93,6 +93,7 @@ fn main {
   let mut enable_effect_lpf = false
   let mut enable_effect_delay = false
   @raylib.set_target_fps(60)
+  @draw.init_font()
   while !@raylib.window_should_close() {
     @raylib.update_music_stream(music)
     // Restart music
@@ -136,7 +137,7 @@ fn main {
     // Draw
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
-    @raylib.draw_text(
+    @draw.draw_text(
       "MUSIC SHOULD BE PLAYING!", 245, 150, 20, @raylib.lightgray,
     )
     @raylib.draw_rectangle(200, 180, 400, 12, @raylib.lightgray)
@@ -148,14 +149,14 @@ fn main {
       @raylib.maroon,
     )
     @raylib.draw_rectangle_lines(200, 180, 400, 12, @raylib.gray)
-    @raylib.draw_text(
+    @draw.draw_text(
       "PRESS SPACE TO RESTART MUSIC", 215, 230, 20, @raylib.lightgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "PRESS P TO PAUSE/RESUME MUSIC", 208, 260, 20, @raylib.lightgray,
     )
     let lpf_status = if enable_effect_lpf { "ON" } else { "OFF" }
-    @raylib.draw_text(
+    @draw.draw_text(
       "PRESS F TO TOGGLE LPF EFFECT: \{lpf_status}",
       200,
       320,
@@ -163,16 +164,18 @@ fn main {
       @raylib.gray,
     )
     let delay_status = if enable_effect_delay { "ON" } else { "OFF" }
-    @raylib.draw_text(
+    @draw.draw_text(
       "PRESS D TO TOGGLE DELAY EFFECT: \{delay_status}",
       180,
       350,
       20,
       @raylib.gray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
   @raylib.unload_music_stream(music)
   @raylib.close_audio_device()
+  @draw.cleanup()
   @raylib.close_window()
 }

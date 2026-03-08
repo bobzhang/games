@@ -6,8 +6,8 @@ fn draw_centered(
   size : Int,
   color : @raylib.Color,
 ) -> Unit {
-  let width = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - width / 2, y, size, color)
+  let width = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - width / 2, y, size, color)
 }
 
 ///|
@@ -27,7 +27,7 @@ fn draw_meter(
     @types.clampf(value / max_value, 0.0, 1.0)
   }
 
-  @raylib.draw_text(label, x, y, 21, @raylib.Color::new(220, 228, 242, 244))
+  @draw.draw_text(label, x, y, 21, @raylib.Color::new(220, 228, 242, 244))
   @raylib.draw_rectangle(x, y + 24, w, 18, @raylib.Color::new(24, 30, 42, 244))
   @raylib.draw_rectangle(
     x + 1,
@@ -158,7 +158,7 @@ fn @types.Game::draw_playfield(game : @types.Game) -> Unit {
     @raylib.Color::new(154, 176, 214, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Windy Festival Streets",
     @types.play_x + 18,
     @types.play_y + 14,
@@ -167,7 +167,7 @@ fn @types.Game::draw_playfield(game : @types.Game) -> Unit {
   )
 
   if game.patrol.calm_t > 0.0 {
-    @raylib.draw_text(
+    @draw.draw_text(
       "Calm field active",
       @types.play_x + @types.play_w - 214,
       @types.play_y + 14,
@@ -206,7 +206,7 @@ fn @types.Game::draw_shrines(game : @types.Game) -> Unit {
       @raylib.Color::new(112, 232, 196, 150),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "S\{i + 1}",
       p.0.to_int() - 10,
       p.1.to_int() - 10,
@@ -215,7 +215,7 @@ fn @types.Game::draw_shrines(game : @types.Game) -> Unit {
     )
 
     if queue > 0 {
-      @raylib.draw_text(
+      @draw.draw_text(
         "x\{queue}",
         p.0.to_int() + 24,
         p.1.to_int() - 12,
@@ -245,7 +245,7 @@ fn draw_gate() -> Unit {
     172,
     @raylib.Color::new(236, 194, 130, 202),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "GATE",
     (gate.0 - 28.0).to_int(),
     (gate.1 - 14.0).to_int(),
@@ -520,14 +520,14 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(126, 164, 214, 226),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "PAPER LANTERN PATROL",
     @types.hud_x + 14,
     @types.hud_y + 16,
     30,
     @raylib.Color::new(236, 242, 254, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "2026 Festival Night",
     @types.hud_x + 14,
     @types.hud_y + 50,
@@ -535,14 +535,14 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(184, 206, 236, 238),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score \{game.score}",
     @types.hud_x + 14,
     @types.hud_y + 88,
     29,
     @raylib.Color::new(250, 214, 152, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best \{game.best_score}",
     @types.hud_x + 14,
     @types.hud_y + 120,
@@ -550,21 +550,21 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(214, 230, 248, 238),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Deliveries \{game.deliveries}",
     @types.hud_x + 14,
     @types.hud_y + 154,
     22,
     @raylib.Color::new(206, 238, 218, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Extinguished \{game.extinguished}/\{@types.extinguish_limit}",
     @types.hud_x + 14,
     @types.hud_y + 182,
     22,
     @types.a_col(@types.danger_col(), 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Combo x\{@types.maxf(Float::from_int(game.combo), 1.0).to_int()}",
     @types.hud_x + 14,
     @types.hud_y + 210,
@@ -608,14 +608,14 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(244, 206, 136, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Active Lanterns \{@types.active_lantern_count(game)}",
     @types.hud_x + 14,
     @types.hud_y + 428,
     21,
     @raylib.Color::new(220, 236, 220, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Gusts \{@types.active_gust_count(game)}  Thieves \{@types.active_thief_count(game)}",
     @types.hud_x + 14,
     @types.hud_y + 454,
@@ -623,42 +623,42 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(220, 236, 220, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Controls",
     @types.hud_x + 14,
     @types.hud_y + 502,
     24,
     @raylib.Color::new(238, 244, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Move: WASD / Arrows",
     @types.hud_x + 14,
     @types.hud_y + 534,
     20,
     @raylib.Color::new(212, 226, 246, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "J: Interact / Escort / Pickup",
     @types.hud_x + 14,
     @types.hud_y + 560,
     20,
     @raylib.Color::new(212, 226, 246, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "K: Cancel escort / Guard",
     @types.hud_x + 14,
     @types.hud_y + 586,
     20,
     @raylib.Color::new(212, 226, 246, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Space: Calm-wind field",
     @types.hud_x + 14,
     @types.hud_y + 612,
     20,
     @raylib.Color::new(212, 226, 246, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "P: Pause    R: Restart",
     @types.hud_x + 14,
     @types.hud_y + 638,

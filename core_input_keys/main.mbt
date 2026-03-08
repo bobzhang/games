@@ -11,6 +11,7 @@ fn main {
     Float::from_int(screen_height) / 2.0,
   )
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -43,13 +44,15 @@ fn main {
     // Draw
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
-    @raylib.draw_text(
+    @draw.draw_text(
       "move the ball with arrow keys", 10, 10, 20, @raylib.darkgray,
     )
     @raylib.draw_circle_v(ball_position, 50.0, @raylib.maroon)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

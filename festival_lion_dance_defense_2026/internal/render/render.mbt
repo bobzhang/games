@@ -42,7 +42,7 @@ fn draw_meter(
   )
 
   let pct = (t * 100.0).to_int().clamp(min=0, max=100)
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{label} \{pct}%",
     x + 8,
     y + 4,
@@ -150,7 +150,7 @@ fn @types.Game::draw_lanes(game : @types.Game, ox : Int, oy : Int) -> Unit {
       x = x + 56
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "L\{lane + 1}",
       @types.street_left - 40 + ox,
       y0 + @types.lane_height / 2 - 9,
@@ -384,7 +384,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(252, 214, 140, 182),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "LION DANCE DEFENSE",
     40,
     30,
@@ -392,14 +392,14 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(252, 236, 196, 244),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score \{game.score}",
     42,
     72,
     28,
     @raylib.Color::new(250, 246, 238, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best \{game.best_score}",
     240,
     72,
@@ -407,14 +407,14 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(250, 246, 238, 212),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Combo x\{game.combo}",
     42,
     104,
     24,
     @raylib.Color::new(252, 216, 142, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Cleared \{game.cleared}  Leaked \{game.leaked}",
     240,
     104,
@@ -422,7 +422,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(242, 232, 218, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Lane \{game.troupe_lane + 1}",
     42,
     132,
@@ -469,7 +469,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     "\{game.burst_cd.to_int() + 1}s"
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Burst CD: \{burst_eta}",
     1062,
     34,
@@ -489,7 +489,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     "\{(game.guard_cd * 10.0).to_int()}t"
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Strike: \{strike_eta}   Guard: \{guard_eta}",
     1062,
     72,
@@ -497,7 +497,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(226, 236, 252, 210),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Survival: \{game.elapsed.to_int()}s",
     1062,
     110,
@@ -505,7 +505,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(226, 236, 252, 190),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Incident must be stunned (K) before strike (J).",
     1062,
     142,
@@ -532,7 +532,7 @@ fn draw_controls_legend() -> Unit {
     @raylib.Color::new(140, 164, 194, 120),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "WASD/Arrows Move   J Strike/Clear   K Guard/Stun   Space Hype Burst   P Pause   R Restart",
     38,
     @types.screen_h - 54,
@@ -564,7 +564,7 @@ fn @types.Game::draw_message(game : @types.Game) -> Unit {
     @raylib.Color::new(246, 214, 156, alpha),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     game.msg,
     402,
     @types.screen_h - 120,
@@ -597,7 +597,7 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(250, 216, 142, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "FESTIVAL LION DANCE DEFENSE 2026",
     panel_x + 56,
     panel_y + 42,
@@ -605,7 +605,7 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(252, 236, 198, 246),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Intercept firecracker hazards and crowd incidents before they break the parade lanes.",
     panel_x + 58,
     panel_y + 122,
@@ -613,7 +613,7 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(234, 242, 252, 230),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Chain clean defenses to build hype. If crowd order drops, morale drains fast.",
     panel_x + 58,
     panel_y + 158,
@@ -621,7 +621,7 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(234, 242, 252, 230),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "J: Strike clear    K: Guard stun    Space: Hype burst",
     panel_x + 58,
     panel_y + 216,
@@ -629,7 +629,7 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(252, 220, 150, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "WASD/Arrows to move across lanes    P pause    R restart",
     panel_x + 58,
     panel_y + 252,
@@ -643,7 +643,7 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(250, 206, 122, 210)
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Press J / Enter / Space to begin",
     panel_x + 258,
     panel_y + 326,
@@ -677,14 +677,14 @@ fn draw_pause_overlay() -> Unit {
     @raylib.Color::new(188, 212, 244, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "PAUSED",
     700,
     370,
     56,
     @raylib.Color::new(246, 238, 224, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "P to resume   R to restart",
     602,
     450,
@@ -719,7 +719,7 @@ fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(252, 176, 162, 226),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "PARADE OVER",
     640,
     300,
@@ -727,7 +727,7 @@ fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(252, 210, 190, 246),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score \{game.score}   Best \{game.best_score}",
     560,
     392,
@@ -735,7 +735,7 @@ fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(244, 238, 228, 238),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Cleared \{game.cleared}   Leaked \{game.leaked}   Peak Combo x\{game.combo}",
     510,
     438,
@@ -743,7 +743,7 @@ fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(236, 230, 222, 230),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Press R / J / Enter to run again",
     580,
     530,

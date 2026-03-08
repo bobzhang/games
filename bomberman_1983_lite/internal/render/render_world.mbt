@@ -554,7 +554,7 @@ fn @types.Game::draw_powerups(
 
     @raylib.draw_circle(sx, sy, radius, @raylib.color_alpha(color, 0.25))
     @raylib.draw_circle_lines(sx, sy, radius + 1.0, color)
-    @raylib.draw_text(powerup_text(p.kind), sx - 5, sy - 8, 16, color)
+    @draw.draw_text(powerup_text(p.kind), sx - 5, sy - 8, 16, color)
   }
 }
 

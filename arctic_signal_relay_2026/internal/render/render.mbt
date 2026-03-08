@@ -6,8 +6,8 @@ fn draw_center_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
 }
 
 ///|
@@ -210,9 +210,9 @@ fn @types.Game::draw_towers(game : @types.Game) -> Unit {
     }
 
     let txt = "\{game.towers[i].delivered}/\{game.towers[i].need}"
-    @raylib.draw_text(
+    @draw.draw_text(
       txt,
-      x - @raylib.measure_text(txt, 18) / 2,
+      x - @draw.measure_text(txt, 18) / 2,
       y - 10,
       18,
       @raylib.Color::new(238, 246, 255, 230),
@@ -248,9 +248,9 @@ fn @types.Game::draw_depot(game : @types.Game) -> Unit {
     @raylib.Color::new(42, 110, 148, 250),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "CELL",
-    x - @raylib.measure_text("CELL", 16) / 2,
+    x - @draw.measure_text("CELL", 16) / 2,
     y - 8,
     16,
     @raylib.Color::new(232, 246, 255, 250),
@@ -456,7 +456,7 @@ fn draw_bar(
     @types.clampf(value / maxv, 0.0, 1.0)
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
     x,
     y - 20,
@@ -480,9 +480,9 @@ fn draw_bar(
   )
 
   let txt = "\{value.to_int()}/\{maxv.to_int()}"
-  @raylib.draw_text(
+  @draw.draw_text(
     txt,
-    x + w - @raylib.measure_text(txt, 16) - 8,
+    x + w - @draw.measure_text(txt, 16) - 8,
     y + 4,
     16,
     @raylib.Color::new(246, 250, 255, 230),
@@ -508,7 +508,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(164, 196, 216, 184),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "ARCTIC RELAY OPS",
     @types.panel_x0 + 22,
     @types.world_y0 + 18,
@@ -516,7 +516,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(230, 244, 255, 248),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Stage: \{game.stage}",
     @types.panel_x0 + 22,
     @types.world_y0 + 62,
@@ -524,7 +524,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(194, 226, 246, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best Stage: \{game.best_stage}",
     @types.panel_x0 + 190,
     @types.world_y0 + 62,
@@ -538,7 +538,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(182, 228, 250, 244)
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Timer: \{@types.maxf(0.0, game.timer_s).to_int()}s",
     @types.panel_x0 + 22,
     @types.world_y0 + 98,
@@ -546,7 +546,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     timer_col,
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Objective: \{game.objective_done}/\{game.objective_total}",
     @types.panel_x0 + 22,
     @types.world_y0 + 136,
@@ -554,7 +554,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(232, 246, 255, 230),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Cargo Cells: \{game.cargo_cells}/\{@types.cargo_capacity}",
     @types.panel_x0 + 22,
     @types.world_y0 + 168,
@@ -595,7 +595,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(210, 224, 250, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Depot: load cells + recover heat/energy",
     @types.panel_x0 + 22,
     @types.world_y0 + 374,
@@ -603,7 +603,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(170, 204, 224, 224),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Desktop: WASD/Arrows move",
     @types.panel_x0 + 22,
     @types.world_y0 + 416,
@@ -611,7 +611,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(184, 216, 236, 226),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Action: E / Space / Enter / LMB",
     @types.panel_x0 + 22,
     @types.world_y0 + 440,
@@ -619,7 +619,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(184, 216, 236, 226),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Esc: return to title",
     @types.panel_x0 + 22,
     @types.world_y0 + 464,
@@ -636,7 +636,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
       40,
       @raylib.Color::new(12, 26, 40, a),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       game.hint_text,
       @types.world_x0 + 26,
       @types.world_y0 + @types.world_h - 48,
@@ -669,9 +669,9 @@ fn draw_touch_btn(
     @raylib.Color::new(204, 232, 248, if held { 240 } else { 164 }),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
-    rect.0 + rect.2 / 2 - @raylib.measure_text(label, 24) / 2,
+    rect.0 + rect.2 / 2 - @draw.measure_text(label, 24) / 2,
     rect.1 + rect.3 / 2 - 12,
     24,
     @raylib.Color::new(246, 250, 255, 242),
@@ -783,9 +783,9 @@ fn draw_button(
     @raylib.Color::new(222, 240, 252, 240),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
-    rect.0 + rect.2 / 2 - @raylib.measure_text(label, 34) / 2,
+    rect.0 + rect.2 / 2 - @draw.measure_text(label, 34) / 2,
     rect.1 + rect.3 / 2 - 17,
     34,
     @raylib.Color::new(246, 252, 255, 246),

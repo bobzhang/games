@@ -31,6 +31,7 @@ fn main {
   let mut player_y : Float = 100.0
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -83,7 +84,7 @@ fn main {
       )
       if i != dpad_keydown {
         // Draw label
-        @raylib.draw_text(
+        @draw.draw_text(
           dpad_labels[i],
           dpad_collider_x[i].to_int() - 7,
           dpad_collider_y[i].to_int() - 8,
@@ -97,7 +98,7 @@ fn main {
       @raylib.Rectangle::new(player_x - 4.0, player_y - 4.0, 75.0, 28.0),
       @raylib.red,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Player",
       player_x.to_int(),
       player_y.to_int(),
@@ -105,9 +106,11 @@ fn main {
       @raylib.white,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

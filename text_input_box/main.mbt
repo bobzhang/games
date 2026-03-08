@@ -29,6 +29,7 @@ fn main {
   let mut mouse_on_text = false
   let mut frames_counter = 0
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -72,7 +73,7 @@ fn main {
     // Draw
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
-    @raylib.draw_text("PLACE MOUSE OVER INPUT BOX!", 240, 140, 20, @raylib.gray)
+    @draw.draw_text("PLACE MOUSE OVER INPUT BOX!", 240, 140, 20, @raylib.gray)
     @raylib.draw_rectangle_rec(text_box, @raylib.lightgray)
     if mouse_on_text {
       @raylib.draw_rectangle_lines(
@@ -91,14 +92,14 @@ fn main {
         @raylib.darkgray,
       )
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       name,
       text_box.x.to_int() + 5,
       text_box.y.to_int() + 8,
       40,
       @raylib.maroon,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "INPUT CHARS: \{letter_count}/\{max_input_chars}",
       315,
       250,
@@ -109,24 +110,26 @@ fn main {
       if letter_count < max_input_chars {
         // Draw blinking underscore char
         if frames_counter / 20 % 2 == 0 {
-          @raylib.draw_text(
+          @draw.draw_text(
             "_",
-            text_box.x.to_int() + 8 + @raylib.measure_text(name, 40),
+            text_box.x.to_int() + 8 + @draw.measure_text(name, 40),
             text_box.y.to_int() + 12,
             40,
             @raylib.maroon,
           )
         }
       } else {
-        @raylib.draw_text(
+        @draw.draw_text(
           "Press BACKSPACE to delete chars...", 230, 300, 20, @raylib.gray,
         )
       }
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -67,6 +67,7 @@ fn reset_sector_values(sectors : Array[Sector]) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "Power Grid Operator 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let sectors : Array[Sector] = Array::makei(sector_n, fn(_i) {
     { demand: 100, trend: 0 }
@@ -219,9 +220,9 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(20, 24, 34, 255))
 
-    @raylib.draw_text("POWER GRID OPERATOR 2026", 20, 18, 40, @raylib.skyblue)
-    @raylib.draw_text("Score \{score}", 20, 66, 30, @raylib.white)
-    @raylib.draw_text(
+    @draw.draw_text("POWER GRID OPERATOR 2026", 20, 18, 40, @raylib.skyblue)
+    @draw.draw_text("Score \{score}", 20, 66, 30, @raylib.white)
+    @draw.draw_text(
       "Lives \{lives}",
       210,
       66,
@@ -233,9 +234,9 @@ fn main {
       },
     )
 
-    @raylib.draw_text("Demand \{demand}", 420, 66, 32, @raylib.orange)
-    @raylib.draw_text("Supply \{supply}", 620, 66, 32, @raylib.lime)
-    @raylib.draw_text(
+    @draw.draw_text("Demand \{demand}", 420, 66, 32, @raylib.orange)
+    @draw.draw_text("Supply \{supply}", 620, 66, 32, @raylib.lime)
+    @draw.draw_text(
       "Balance \{diff}",
       820,
       66,
@@ -259,8 +260,8 @@ fn main {
       )
       let h = sectors[i].demand
       @raylib.draw_rectangle(x + 8, 360 - h, 70, h, @raylib.orange)
-      @raylib.draw_text("S\{i + 1}", x + 26, 378, 24, @raylib.raywhite)
-      @raylib.draw_text(
+      @draw.draw_text("S\{i + 1}", x + 26, 378, 24, @raylib.raywhite)
+      @draw.draw_text(
         "\{sectors[i].demand}",
         x + 20,
         330 - h,
@@ -281,8 +282,8 @@ fn main {
       )
       let h = plant_output[i]
       @raylib.draw_rectangle(x + 10, 400 - h, 76, h, @raylib.lime)
-      @raylib.draw_text("P\{i + 1}", x + 34, 420, 24, @raylib.raywhite)
-      @raylib.draw_text(
+      @draw.draw_text("P\{i + 1}", x + 34, 420, 24, @raylib.raywhite)
+      @draw.draw_text(
         "\{plant_output[i]}",
         x + 26,
         370 - h,
@@ -292,7 +293,7 @@ fn main {
     }
 
     // Stress bars
-    @raylib.draw_text("Overheat", 60, 470, 24, @raylib.red)
+    @draw.draw_text("Overheat", 60, 470, 24, @raylib.red)
     @raylib.draw_rectangle(
       170,
       476,
@@ -302,7 +303,7 @@ fn main {
     )
     @raylib.draw_rectangle(170, 476, (overheat * 3.2).to_int(), 18, @raylib.red)
 
-    @raylib.draw_text("Outage Risk", 60, 512, 24, @raylib.orange)
+    @draw.draw_text("Outage Risk", 60, 512, 24, @raylib.orange)
     @raylib.draw_rectangle(
       170,
       518,
@@ -319,7 +320,7 @@ fn main {
     )
 
     let cd = if emergency_cd > 0.0 { emergency_cd.to_int() } else { 0 }
-    @raylib.draw_text(
+    @draw.draw_text(
       "Battery Reserve: +90 for 6s (CD \{cd}s)",
       620,
       470,
@@ -327,10 +328,10 @@ fn main {
       @raylib.skyblue,
     )
     if emergency_time > 0.0 {
-      @raylib.draw_text("BATTERY ACTIVE", 620, 505, 28, @raylib.lime)
+      @draw.draw_text("BATTERY ACTIVE", 620, 505, 28, @raylib.lime)
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Q/A Plant1  W/S Plant2  E/D Plant3  Space battery", 20, 652, 24, @raylib.lightgray,
     )
     @raylib.draw_rectangle(
@@ -340,7 +341,7 @@ fn main {
       30,
       @raylib.Color::new(10, 14, 20, 220),
     )
-    @raylib.draw_text(msg, 28, 691, 20, @raylib.raywhite)
+    @draw.draw_text(msg, 28, 691, 20, @raylib.raywhite)
 
     if over {
       @raylib.draw_rectangle(
@@ -350,12 +351,14 @@ fn main {
         190,
         @raylib.fade(@raylib.black, 0.82),
       )
-      @raylib.draw_text("GRID COLLAPSE", 415, 316, 56, @raylib.red)
-      @raylib.draw_text("Press R to restart", 445, 378, 34, @raylib.white)
+      @draw.draw_text("GRID COLLAPSE", 415, 316, 56, @raylib.red)
+      @draw.draw_text("Press R to restart", 445, 378, 34, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

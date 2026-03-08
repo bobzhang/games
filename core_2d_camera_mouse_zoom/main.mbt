@@ -17,6 +17,7 @@ fn main {
   let mut zoom_mode = 0 // 0-Mouse Wheel, 1-Mouse Move
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -146,23 +147,25 @@ fn main {
       @raylib.black,
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "[1][2] Select mouse zoom mode (Wheel or Move)", 20, 20, 20, @raylib.darkgray,
     )
     if zoom_mode == 0 {
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mouse left button drag to move, mouse wheel to zoom", 20, 50, 20, @raylib.darkgray,
       )
     } else {
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mouse left button drag to move, mouse press and move to zoom", 20, 50, 20,
         @raylib.darkgray,
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

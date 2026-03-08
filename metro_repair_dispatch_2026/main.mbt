@@ -971,7 +971,7 @@ fn draw_segments(
     // tiny health tag
     let mx : Int = ((ax + bx) * 0.5).to_int()
     let my : Int = ((ay + by) * 0.5).to_int()
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{segments[i].health.to_int()}%",
       mx - 22,
       my - 10,
@@ -1007,7 +1007,7 @@ fn draw_stations(stations : Array[Station]) -> Unit {
       @raylib.Color::new(24, 34, 52, 248),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       station.name,
       (station.x - 54.0).to_int(),
       (station.y - r - 22.0).to_int(),
@@ -1015,7 +1015,7 @@ fn draw_stations(stations : Array[Station]) -> Unit {
       @raylib.Color::new(232, 242, 255, 242),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{station.crowd}",
       (station.x - 8.0).to_int(),
       (station.y - 8.0).to_int(),
@@ -1075,7 +1075,7 @@ fn draw_trains(
       @raylib.Color::new(26, 34, 50, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{train.passengers}",
       (x - 7.0).to_int(),
       (y - 26.0).to_int(),
@@ -1173,28 +1173,28 @@ fn draw_touch_ui() -> Unit {
     @raylib.Color::new(80, 104, 154, 160),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "UP",
     pad_x + 107,
     pad_y + 16,
     24,
     @raylib.Color::new(236, 244, 255, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "LT",
     pad_x + 24,
     pad_y + 84,
     24,
     @raylib.Color::new(236, 244, 255, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "RT",
     pad_x + 188,
     pad_y + 84,
     24,
     @raylib.Color::new(236, 244, 255, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "DN",
     pad_x + 103,
     pad_y + 152,
@@ -1210,7 +1210,7 @@ fn draw_touch_ui() -> Unit {
     62.0,
     @raylib.Color::new(244, 132, 108, 176),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "FIX",
     repair_x - 26,
     repair_y - 13,
@@ -1226,7 +1226,7 @@ fn draw_touch_ui() -> Unit {
     54.0,
     @raylib.Color::new(118, 202, 132, 176),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "SCAN",
     scan_x - 34,
     scan_y - 13,
@@ -1262,8 +1262,8 @@ fn draw_button(
     h,
     @raylib.Color::new(214, 228, 252, 246),
   )
-  let tw : Int = @raylib.measure_text(label, 23)
-  @raylib.draw_text(
+  let tw : Int = @draw.measure_text(label, 23)
+  @draw.draw_text(
     label,
     x + (w - tw) / 2,
     y + h / 2 - 11,
@@ -1277,6 +1277,7 @@ fn draw_button(
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] metro repair dispatch 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let stations : Array[Station] = Array::makei(max_stations, fn(_i) {
     {
@@ -1763,14 +1764,14 @@ fn main {
       depot_h,
       @raylib.Color::new(196, 224, 252, 238),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "DEPOT",
       depot_x + 52,
       depot_y + 16,
       30,
       @raylib.Color::new(236, 246, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Recharge + Repair",
       depot_x + 22,
       depot_y + 54,
@@ -1827,14 +1828,14 @@ fn main {
       @raylib.Color::new(164, 188, 234, 242),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "METRO REPAIR DISPATCH",
       panel_x + 14,
       42,
       34,
       @raylib.Color::new(236, 246, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Keep lines alive while passenger demand spikes",
       panel_x + 16,
       82,
@@ -1842,14 +1843,14 @@ fn main {
       @raylib.Color::new(194, 218, 252, 236),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time",
       panel_x + 16,
       124,
       24,
       @raylib.Color::new(220, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{timer.to_int()}s",
       panel_x + 108,
       124,
@@ -1857,14 +1858,14 @@ fn main {
       @raylib.Color::new(248, 228, 148, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Delivered",
       panel_x + 16,
       160,
       24,
       @raylib.Color::new(220, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{delivered}/\{target_delivered}",
       panel_x + 138,
       160,
@@ -1872,14 +1873,14 @@ fn main {
       @raylib.Color::new(136, 224, 162, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Faults",
       panel_x + 16,
       196,
       24,
       @raylib.Color::new(220, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{count_faults(segments)}",
       panel_x + 96,
       196,
@@ -1887,14 +1888,14 @@ fn main {
       @raylib.Color::new(248, 136, 150, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Tier",
       panel_x + 182,
       196,
       24,
       @raylib.Color::new(220, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{tier}",
       panel_x + 242,
       196,
@@ -1902,14 +1903,14 @@ fn main {
       @raylib.Color::new(248, 214, 126, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score",
       panel_x + 16,
       232,
       24,
       @raylib.Color::new(220, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{score}",
       panel_x + 94,
       232,
@@ -1917,14 +1918,14 @@ fn main {
       @raylib.Color::new(138, 214, 252, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Outages handled",
       panel_x + 16,
       268,
       24,
       @raylib.Color::new(220, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{outages_handled}",
       panel_x + 194,
       268,
@@ -1932,14 +1933,14 @@ fn main {
       @raylib.Color::new(226, 238, 254, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Delay total",
       panel_x + 16,
       304,
       24,
       @raylib.Color::new(220, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{delay_accum.to_int()}s",
       panel_x + 146,
       304,
@@ -1947,28 +1948,28 @@ fn main {
       @raylib.Color::new(244, 198, 136, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Crowd peak",
       panel_x + 16,
       340,
       24,
       @raylib.Color::new(220, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{crowd_peak}",
       panel_x + 144,
       340,
       30,
       @raylib.Color::new(244, 198, 136, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Strain",
       panel_x + 182,
       340,
       24,
       @raylib.Color::new(220, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{strain_total.to_int()}",
       panel_x + 266,
       340,
@@ -1983,7 +1984,7 @@ fn main {
       maxv : Float,
       col : @raylib.Color,
     ) -> Unit {
-      @raylib.draw_text(
+      @draw.draw_text(
         label,
         panel_x + 16,
         y,
@@ -2007,7 +2008,7 @@ fn main {
         22,
         @raylib.Color::new(184, 208, 246, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "\{value.to_int()}/\{maxv.to_int()}",
         panel_x + panel_w - 136,
         y + 54,
@@ -2031,35 +2032,35 @@ fn main {
       @raylib.Color::new(134, 236, 164, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Controls",
       panel_x + 16,
       556,
       28,
       @raylib.Color::new(236, 246, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "WASD/Arrows: move",
       panel_x + 16,
       590,
       22,
       @raylib.Color::new(198, 220, 252, 238),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "J/Space: repair",
       panel_x + 16,
       616,
       22,
       @raylib.Color::new(198, 220, 252, 238),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "K/H: scan nearest fault",
       panel_x + 16,
       642,
       22,
       @raylib.Color::new(198, 220, 252, 238),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Mobile: touch d-pad + buttons",
       panel_x + 16,
       668,
@@ -2069,7 +2070,7 @@ fn main {
 
     draw_touch_ui()
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Dispatch drone to fault hotspots before crowd overload.",
       world_x + 6,
       world_y - 6,
@@ -2078,7 +2079,7 @@ fn main {
     )
 
     if msg_t > 0.0 {
-      let bw : Int = @raylib.measure_text(msg, 30) + 44
+      let bw : Int = @draw.measure_text(msg, 30) + 44
       let bx : Int = sw / 2 - bw / 2
       @raylib.draw_rectangle(
         bx,
@@ -2094,7 +2095,7 @@ fn main {
         52,
         @raylib.Color::new(186, 210, 248, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         msg,
         bx + 22,
         28,
@@ -2105,14 +2106,14 @@ fn main {
 
     if state == 0 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(10, 14, 24, 206))
-      @raylib.draw_text(
+      @draw.draw_text(
         "METRO REPAIR DISPATCH",
         sw / 2 - 352,
         152,
         74,
         @raylib.Color::new(236, 246, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Transit network operations under pressure",
         sw / 2 - 266,
         244,
@@ -2135,28 +2136,28 @@ fn main {
         @raylib.Color::new(166, 196, 246, 246),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "Desktop",
         sw / 2 - 436,
         346,
         32,
         @raylib.Color::new(242, 246, 255, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Repair faults before trains stall",
         sw / 2 - 436,
         386,
         28,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Keep crowds below overload",
         sw / 2 - 436,
         420,
         28,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Hit target delivered count",
         sw / 2 - 436,
         454,
@@ -2164,28 +2165,28 @@ fn main {
         @raylib.Color::new(210, 228, 252, 248),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mobile",
         sw / 2 + 74,
         346,
         32,
         @raylib.Color::new(242, 246, 255, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Hold D-pad to move",
         sw / 2 + 74,
         386,
         28,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Tap FIX and SCAN buttons",
         sw / 2 + 74,
         420,
         28,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Fully touch playable",
         sw / 2 + 74,
         454,
@@ -2204,28 +2205,28 @@ fn main {
       )
     } else if state == 2 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 20, 10, 194))
-      @raylib.draw_text(
+      @draw.draw_text(
         "NETWORK STABLE",
         sw / 2 - 252,
         192,
         84,
         @raylib.Color::new(164, 246, 182, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Delivered \{delivered}/\{target_delivered}",
         sw / 2 - 212,
         324,
         40,
         @raylib.Color::new(232, 248, 236, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score \{score}",
         sw / 2 - 86,
         374,
         36,
         @raylib.Color::new(244, 232, 160, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Tap or Enter",
         sw / 2 - 96,
         454,
@@ -2234,28 +2235,28 @@ fn main {
       )
     } else if state == 3 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(24, 8, 14, 206))
-      @raylib.draw_text(
+      @draw.draw_text(
         "SERVICE FAILURE",
         sw / 2 - 258,
         194,
         86,
         @raylib.Color::new(252, 164, 178, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Delivered \{delivered}/\{target_delivered}",
         sw / 2 - 212,
         326,
         40,
         @raylib.Color::new(242, 232, 236, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Delay \{delay_accum.to_int()}s  Peak crowd \{crowd_peak}",
         sw / 2 - 262,
         376,
         34,
         @raylib.Color::new(244, 216, 154, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Tap or Enter to retry",
         sw / 2 - 164,
         454,
@@ -2264,8 +2265,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -95,6 +95,7 @@ fn main {
   let mut seconds : Float = 0.0
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -122,13 +123,15 @@ fn main {
       @raylib.draw_line(0, i * 20, screen_width, i * 20, @raylib.darkblue)
     }
     @raylib.draw_rectangle(100, 100, 600, 250, @raylib.skyblue)
-    @raylib.draw_text("WAVE SHADER EFFECT", 250, 200, 30, @raylib.white)
+    @draw.draw_text("WAVE SHADER EFFECT", 250, 200, 30, @raylib.white)
     @raylib.end_shader_mode()
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_shader(shader)
+  @draw.cleanup()
   @raylib.close_window()
 }

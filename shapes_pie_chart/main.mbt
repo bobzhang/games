@@ -66,6 +66,7 @@ fn main {
   let radius : Float = 205.0
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -170,7 +171,7 @@ fn main {
           let label_y = center_y +
             @math.sinf(mid_angle * deg2rad) * label_radius -
             text_size.y / 2.0
-          @raylib.draw_text(
+          @draw.draw_text(
             label_text,
             label_x.to_int(),
             label_y.to_int(),
@@ -372,9 +373,11 @@ fn main {
 
     @raylib.end_scissor_mode()
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

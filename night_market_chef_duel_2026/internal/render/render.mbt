@@ -6,8 +6,8 @@ fn draw_center_text(
   size : Int,
   color : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, color)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, color)
 }
 
 ///|
@@ -157,7 +157,7 @@ fn @types.Game::draw_order_slot(game : @types.Game, slot : Int) -> Unit {
       dish_color(game.orders[slot].dish),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "#" +
       game.orders[slot].ticket_no.to_string() +
       " " +
@@ -183,7 +183,7 @@ fn @types.Game::draw_order_slot(game : @types.Game, slot : Int) -> Unit {
       patience_color(ratio),
     )
   } else {
-    @raylib.draw_text(
+    @draw.draw_text(
       "No order",
       (x + 18.0).to_int(),
       (y + 18.0).to_int(),
@@ -196,7 +196,7 @@ fn @types.Game::draw_order_slot(game : @types.Game, slot : Int) -> Unit {
 ///|
 /// Draws the QUEUE label and all order slot rows in the left panel.
 fn @types.Game::draw_orders_panel(game : @types.Game) -> Unit {
-  @raylib.draw_text(
+  @draw.draw_text(
     "QUEUE",
     72,
     @types.hud_h + 24,
@@ -226,8 +226,8 @@ fn draw_station_base(
   @raylib.draw_rectangle(rx, ry, w, h, fill)
   @raylib.draw_rectangle_lines(rx, ry, w, h, border)
 
-  let tw = @raylib.measure_text(label, 24)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(label, 24)
+  @draw.draw_text(
     label,
     rx + w / 2 - tw / 2,
     ry - 28,
@@ -276,7 +276,7 @@ fn @types.Game::draw_prep_station(game : @types.Game) -> Unit {
       game.cooking.prep_progress / need
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Cut " + @types.dish_name(game.cooking.dish),
       (@types.prep_x - 88.0).to_int(),
       (@types.prep_y - 52.0).to_int(),
@@ -294,7 +294,7 @@ fn @types.Game::draw_prep_station(game : @types.Game) -> Unit {
       @raylib.Color::new(116, 210, 255, 240),
     )
   } else {
-    @raylib.draw_text(
+    @draw.draw_text(
       "Press J to start prep",
       (@types.prep_x - 98.0).to_int(),
       (@types.prep_y + 26.0).to_int(),
@@ -451,7 +451,7 @@ fn @types.Game::draw_pass_station(game : @types.Game) -> Unit {
       dish_color(game.ready_dish),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       @types.dish_name(game.ready_dish),
       (@types.pass_x - 50.0).to_int(),
       (@types.pass_y - 6.0).to_int(),
@@ -469,7 +469,7 @@ fn @types.Game::draw_pass_station(game : @types.Game) -> Unit {
       @raylib.Color::new(246, 214, 103, 240),
     )
   } else {
-    @raylib.draw_text(
+    @draw.draw_text(
       "Press K to serve",
       (@types.pass_x - 90.0).to_int(),
       (@types.pass_y + 28.0).to_int(),
@@ -532,14 +532,14 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(80, 96, 124, 160),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "SCORE " + game.score.to_string(),
     24,
     18,
     30,
     @raylib.Color::new(242, 244, 248, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "BEST " + game.best_score.to_string(),
     24,
     54,
@@ -547,7 +547,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(165, 210, 255, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "COMBO x" + game.combo.to_string(),
     334,
     18,
@@ -559,7 +559,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     },
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "SERVED " +
     game.served_orders.to_string() +
     "   FAIL " +
@@ -572,7 +572,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(224, 230, 238, 230),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     game.selected_order_line(),
     24,
     86,
@@ -588,7 +588,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     1.0
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     if game.boost_t > 0.0 {
       "BOOST ACTIVE"
     } else if game.boost_cd > 0.0 {
@@ -627,7 +627,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
           Wok => "WOK"
         }
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       "Cooking: " + @types.dish_name(game.cooking.dish) + " @ " + stage,
       558,
       86,
@@ -635,7 +635,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
       @raylib.Color::new(255, 232, 176, 236),
     )
   } else if game.ready_dish != DishNone {
-    @raylib.draw_text(
+    @draw.draw_text(
       "Dish Ready: " + @types.dish_name(game.ready_dish) + " (Serve at pass)",
       558,
       86,
@@ -643,7 +643,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
       @raylib.Color::new(181, 240, 156, 236),
     )
   } else {
-    @raylib.draw_text(
+    @draw.draw_text(
       "Cursor: " + @types.node_name(game.cursor),
       558,
       86,
@@ -663,7 +663,7 @@ fn draw_hint_line() -> Unit {
     34,
     @raylib.Color::new(14, 14, 18, 224),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Arrows/WASD move cursor | J cook/select | K serve/cancel | Space dash boost | P pause | R restart",
     18,
     @types.screen_h - 27,

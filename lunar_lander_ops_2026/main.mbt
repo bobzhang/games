@@ -214,6 +214,7 @@ fn set_level(
 fn main {
   @raylib.init_window(sw, sh, "Lunar Lander Ops 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let heights : Array[Float] = Array::make(points, 0.0)
   let meteors : Array[Meteor] = Array::makei(max_meteors, fn(_i) {
@@ -568,7 +569,7 @@ fn main {
       8,
       @raylib.Color::new(82, 62, 28, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "LANDING PAD",
       pad_x.to_int() - 20,
       (pad_y - 38.0).to_int(),
@@ -678,35 +679,35 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 94, @raylib.Color::new(12, 18, 30, 220))
-    @raylib.draw_text(
+    @draw.draw_text(
       "LUNAR LANDER OPS 2026",
       20,
       18,
       36,
       @raylib.Color::new(232, 240, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Sector: \{level}/4",
       480,
       24,
       28,
       @raylib.Color::new(240, 226, 136, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Lives: \{lives}",
       666,
       24,
       28,
       @raylib.Color::new(236, 244, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score: \{score}",
       790,
       24,
       28,
       @raylib.Color::new(236, 244, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Wind: \{wind.to_int()}",
       984,
       24,
@@ -723,7 +724,7 @@ fn main {
       14,
       @raylib.Color::new(110, 228, 140, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Fuel \{fuel.to_int()}",
       310,
       66,
@@ -731,7 +732,7 @@ fn main {
       @raylib.Color::new(220, 238, 246, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Safe touchdown: |Vx|<=34, |Vy|<=46, |Angle|<=12",
       520,
       66,
@@ -748,7 +749,7 @@ fn main {
       170,
       @raylib.Color::new(12, 18, 28, 220),
     )
-    @raylib.draw_text("Touch", 74, sh - 186, 20, @raylib.white)
+    @draw.draw_text("Touch", 74, sh - 186, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x,
       ctl_y,
@@ -756,7 +757,7 @@ fn main {
       54,
       @raylib.Color::new(46, 64, 90, 255),
     )
-    @raylib.draw_text("LEFT", ctl_x + 16, ctl_y + 16, 22, @raylib.white)
+    @draw.draw_text("LEFT", ctl_x + 16, ctl_y + 16, 22, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x + 92,
       ctl_y,
@@ -764,7 +765,7 @@ fn main {
       54,
       @raylib.Color::new(46, 64, 90, 255),
     )
-    @raylib.draw_text("RIGHT", ctl_x + 100, ctl_y + 16, 22, @raylib.white)
+    @draw.draw_text("RIGHT", ctl_x + 100, ctl_y + 16, 22, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x,
       ctl_y + 64,
@@ -772,7 +773,7 @@ fn main {
       62,
       @raylib.Color::new(182, 82, 70, 255),
     )
-    @raylib.draw_text("THRUST", ctl_x + 50, ctl_y + 84, 26, @raylib.white)
+    @draw.draw_text("THRUST", ctl_x + 50, ctl_y + 84, 26, @raylib.white)
 
     @raylib.draw_rectangle(
       214,
@@ -781,7 +782,7 @@ fn main {
       38,
       @raylib.Color::new(12, 18, 30, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       224,
       sh - 50,
@@ -798,7 +799,7 @@ fn main {
         216,
         @raylib.Color::new(16, 24, 40, 242),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "MISSION ACCOMPLISHED"
         } else {
@@ -813,7 +814,7 @@ fn main {
           @raylib.Color::new(246, 126, 126, 255)
         },
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R to restart",
         sw / 2 - 130,
         sh / 2 + 34,
@@ -822,8 +823,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

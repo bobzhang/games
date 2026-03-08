@@ -4,10 +4,12 @@ fn main {
   @raylib.init_window(
     @types.screen_w, @types.screen_h, "raylib [game] teahouse_midnight_service_2026",
   )
+  @draw.cleanup()
   defer @raylib.close_window()
   @raylib.init_audio_device()
   defer @raylib.close_audio_device()
   @raylib.set_target_fps(@types.target_fps)
+  @draw.init_font()
   let game = @types.Game()
   @types.init_title_scene(game)
   while !@raylib.window_should_close() {
@@ -15,6 +17,7 @@ fn main {
     @game.update_game(game, dt)
     @raylib.begin_drawing()
     @render.draw_frame(game)
+    @fps.draw()
     @raylib.end_drawing()
   }
 }

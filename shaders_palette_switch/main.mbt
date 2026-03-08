@@ -58,6 +58,7 @@ fn main {
   let mut current_palette = 0
   let line_height = screen_height / colors_per_palette
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -98,14 +99,16 @@ fn main {
       )
     }
     @raylib.end_shader_mode()
-    @raylib.draw_text("< >", 10, 10, 30, @raylib.darkblue)
-    @raylib.draw_text("CURRENT PALETTE:", 60, 15, 20, @raylib.raywhite)
-    @raylib.draw_text(palette_text[current_palette], 300, 15, 20, @raylib.red)
+    @draw.draw_text("< >", 10, 10, 30, @raylib.darkblue)
+    @draw.draw_text("CURRENT PALETTE:", 60, 15, 20, @raylib.raywhite)
+    @draw.draw_text(palette_text[current_palette], 300, 15, 20, @raylib.red)
     @raylib.draw_fps(700, 15)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_shader(shader)
+  @draw.cleanup()
   @raylib.close_window()
 }

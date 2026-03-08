@@ -68,6 +68,7 @@ fn main {
   let mut state = 0
   let mut frames_counter = 0
   @raylib.set_target_fps(60)
+  @draw.init_font()
   while !@raylib.window_should_close() {
     if state == 0 {
       frames_counter += 1
@@ -149,14 +150,16 @@ fn main {
       rotation,
       @raylib.fade(@raylib.black, alpha),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "PRESS [SPACE] TO RESET BOX ANIMATION!",
       10,
       screen_height - 25,
       20,
       @raylib.lightgray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
+  @draw.cleanup()
   @raylib.close_window()
 }

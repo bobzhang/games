@@ -19,6 +19,7 @@ fn main {
   let mut segments : Float = 10.0
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -113,38 +114,38 @@ fn main {
     )
 
     // Draw GUI-like text controls
-    @raylib.draw_text(
+    @draw.draw_text(
       "StartAngle: \{start_angle.to_int()}",
       600,
       40,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text("[LEFT/RIGHT] to adjust", 600, 55, 10, @raylib.gray)
-    @raylib.draw_text(
+    @draw.draw_text("[LEFT/RIGHT] to adjust", 600, 55, 10, @raylib.gray)
+    @draw.draw_text(
       "EndAngle: \{end_angle.to_int()}",
       600,
       80,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text("[UP/DOWN] to adjust", 600, 95, 10, @raylib.gray)
-    @raylib.draw_text(
+    @draw.draw_text("[UP/DOWN] to adjust", 600, 95, 10, @raylib.gray)
+    @draw.draw_text(
       "Radius: \{outer_radius.to_int()}",
       600,
       130,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text("[W/S] to adjust", 600, 145, 10, @raylib.gray)
-    @raylib.draw_text(
+    @draw.draw_text("[W/S] to adjust", 600, 145, 10, @raylib.gray)
+    @draw.draw_text(
       "Segments: \{segments.to_int()}",
       600,
       170,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text("[A/D] to adjust", 600, 185, 10, @raylib.gray)
+    @draw.draw_text("[A/D] to adjust", 600, 185, 10, @raylib.gray)
 
     let diff = end_angle - start_angle
     let min_segments = if diff > 0.0 {
@@ -162,13 +163,15 @@ fn main {
     } else {
       @raylib.darkgray
     }
-    @raylib.draw_text("MODE: \{mode}", 600, 210, 10, color)
+    @draw.draw_text("MODE: \{mode}", 600, 210, 10, color)
 
     @raylib.draw_fps(10, 10)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

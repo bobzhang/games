@@ -270,6 +270,7 @@ fn main {
   )
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -360,8 +361,9 @@ fn main {
     let density_text = "Use KEY_UP/KEY_DOWN to change fog density [" +
       format_float(fog_density) +
       "]"
-    @raylib.draw_text(density_text, 10, 10, 20, @raylib.raywhite)
+    @draw.draw_text(density_text, 10, 10, 20, @raylib.raywhite)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -371,5 +373,6 @@ fn main {
   @raylib.unload_model(model_c)
   @raylib.unload_texture(texture)
   @raylib.unload_shader(shader)
+  @draw.cleanup()
   @raylib.close_window()
 }

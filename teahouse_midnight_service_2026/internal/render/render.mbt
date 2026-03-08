@@ -5,8 +5,8 @@ fn draw_center_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
 }
 
 ///|
@@ -17,8 +17,8 @@ fn draw_right_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, x - tw, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, x - tw, y, size, col)
 }
 
 ///|
@@ -151,7 +151,7 @@ fn @types.Game::draw_room_base(
 
 ///|
 fn draw_station_tag(label : String, x : Float, y : Float, hot : Bool) -> Unit {
-  let w = @raylib.measure_text(label, 18) + 20
+  let w = @draw.measure_text(label, 18) + 20
   @raylib.draw_rectangle(
     (x - Float::from_int(w) * 0.5).to_int(),
     (y - 36.0).to_int(),
@@ -163,7 +163,7 @@ fn draw_station_tag(label : String, x : Float, y : Float, hot : Bool) -> Unit {
       @raylib.Color::new(30, 44, 66, 170)
     },
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
     (x - Float::from_int(w) * 0.5 + 10.0).to_int(),
     (y - 34.0).to_int(),
@@ -279,7 +279,7 @@ fn @types.Game::draw_leaf_racks(
       )
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       @types.tea_name(tea),
       (x + 54.0).to_int(),
       (y - 10.0).to_int(),
@@ -742,7 +742,7 @@ fn draw_bar(
     @raylib.Color::new(148, 208, 246, 172),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
     x + 8,
     y + h / 2 - 8,
@@ -811,21 +811,21 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @types.cyan(),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "STAGE " + game.stage.to_string(),
     684,
     14,
     24,
     @raylib.Color::new(214, 240, 255, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "SCORE " + game.score.to_string(),
     684,
     42,
     22,
     @types.a_col(@types.amber(), 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "GOAL " + game.stage_goal.to_string(),
     684,
     68,
@@ -848,7 +848,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(170, 214, 236, 228),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     if game.focus_mode {
       "FOCUS MODE"
     } else {
@@ -880,7 +880,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   }
 
   if game.state == Play {
-    @raylib.draw_text(
+    @draw.draw_text(
       "WASD move  J/E/SPACE interact  K hold focus  L dash",
       20,
       @types.hud_h + 8,
@@ -934,8 +934,8 @@ fn draw_button_visual(
   )
 
   let ts = 24
-  let tw = @raylib.measure_text(label, ts)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(label, ts)
+  @draw.draw_text(
     label,
     (rect.0 + rect.2 * 0.5 - Float::from_int(tw) * 0.5).to_int(),
     (rect.1 + rect.3 * 0.5 - Float::from_int(ts) * 0.5).to_int(),

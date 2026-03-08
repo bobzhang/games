@@ -346,6 +346,7 @@ fn apply_choice(choice : Int, weapon : Int, chassis : Int, booster : Int, platin
 fn main {
   @raylib.init_window(screen_w, screen_h, "Scrapyard Mech Pit 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let bullets : Array[Bullet] = Array::makei(max_bullets, fn(_i) {
     { active: false, x: 0.0F, y: 0.0F, vx: 0.0F, vy: 0.0F, life: 0.0F, dmg: 0.0F, friendly: true, r: 3.0F }
@@ -668,12 +669,12 @@ fn main {
 
     if title {
       @raylib.draw_rectangle_gradient_v(0, 0, screen_w, screen_h, @raylib.Color::new(28, 20, 18, 255), @raylib.Color::new(10, 10, 14, 255))
-      @raylib.draw_text("SCRAPYARD MECH PIT 2026", 204, 148, 58, @raylib.Color::new(246, 244, 238, 255))
-      @raylib.draw_text("Arena survival with salvage-built mech parts.", 330, 238, 30, @raylib.Color::new(255, 193, 116, 255))
-      @raylib.draw_text("WASD move  |  Mouse aim + fire  |  Space dash", 290, 398, 30, @raylib.Color::new(162, 218, 255, 255))
-      @raylib.draw_text("Between waves, choose one of three scrap upgrades.", 250, 440, 30, @raylib.Color::new(162, 218, 255, 255))
+      @draw.draw_text("SCRAPYARD MECH PIT 2026", 204, 148, 58, @raylib.Color::new(246, 244, 238, 255))
+      @draw.draw_text("Arena survival with salvage-built mech parts.", 330, 238, 30, @raylib.Color::new(255, 193, 116, 255))
+      @draw.draw_text("WASD move  |  Mouse aim + fire  |  Space dash", 290, 398, 30, @raylib.Color::new(162, 218, 255, 255))
+      @draw.draw_text("Between waves, choose one of three scrap upgrades.", 250, 440, 30, @raylib.Color::new(162, 218, 255, 255))
       @raylib.draw_rectangle(422, 618, 440, 82, @raylib.Color::new(98, 74, 42, 255))
-      @raylib.draw_text("PRESS ENTER TO DROP IN", 460, 646, 30, @raylib.Color::new(248, 245, 236, 255))
+      @draw.draw_text("PRESS ENTER TO DROP IN", 460, 646, 30, @raylib.Color::new(248, 245, 236, 255))
     } else {
       @raylib.draw_rectangle(arena_x, arena_y, arena_w, arena_h, @raylib.Color::new(26, 28, 34, 255))
       @raylib.draw_rectangle_lines(arena_x, arena_y, arena_w, arena_h, @raylib.Color::new(92, 86, 74, 255))
@@ -712,44 +713,46 @@ fn main {
       @raylib.draw_line(px.to_int(), py.to_int(), mouse.x.to_int(), mouse.y.to_int(), @raylib.Color::new(160, 210, 255, 90))
 
       @raylib.draw_rectangle(1035, 90, 210, 660, @raylib.Color::new(18, 18, 24, 255))
-      @raylib.draw_text("Wave \{wave}/6", 1058, 114, 34, @raylib.Color::new(242, 246, 248, 255))
-      @raylib.draw_text("HP", 1058, 162, 24, @raylib.Color::new(214, 222, 230, 255))
+      @draw.draw_text("Wave \{wave}/6", 1058, 114, 34, @raylib.Color::new(242, 246, 248, 255))
+      @draw.draw_text("HP", 1058, 162, 24, @raylib.Color::new(214, 222, 230, 255))
       @raylib.draw_rectangle(1058, 194, 160, 12, @raylib.Color::new(36, 42, 48, 255))
       @raylib.draw_rectangle(1058, 194, (160.0F * clampf(hp, 0.0F, max_hp(chassis, plating)) / max_hp(chassis, plating)).to_int(), 12, @raylib.Color::new(236, 106, 106, 255))
-      @raylib.draw_text("Scrap \{scrap_bank}", 1058, 236, 26, @raylib.Color::new(255, 206, 118, 255))
-      @raylib.draw_text(weapon_name(weapon), 1058, 294, 22, @raylib.Color::new(134, 192, 255, 255))
-      @raylib.draw_text(chassis_name(chassis), 1058, 326, 22, @raylib.Color::new(138, 232, 182, 255))
-      @raylib.draw_text(booster_name(booster), 1058, 358, 22, @raylib.Color::new(255, 206, 118, 255))
-      @raylib.draw_text("Plating \{plating}", 1058, 408, 20, @raylib.Color::new(230, 148, 255, 255))
-      @raylib.draw_text("Overclock \{overclock}", 1058, 434, 20, @raylib.Color::new(230, 148, 255, 255))
-      @raylib.draw_text(message, 1058, 488, 22, @raylib.Color::new(228, 234, 240, 255))
-      @raylib.draw_text("LMB fire", 1058, 666, 20, @raylib.Color::new(166, 218, 255, 255))
-      @raylib.draw_text("WASD move", 1058, 692, 20, @raylib.Color::new(166, 218, 255, 255))
-      @raylib.draw_text("Space dash", 1058, 718, 20, @raylib.Color::new(166, 218, 255, 255))
+      @draw.draw_text("Scrap \{scrap_bank}", 1058, 236, 26, @raylib.Color::new(255, 206, 118, 255))
+      @draw.draw_text(weapon_name(weapon), 1058, 294, 22, @raylib.Color::new(134, 192, 255, 255))
+      @draw.draw_text(chassis_name(chassis), 1058, 326, 22, @raylib.Color::new(138, 232, 182, 255))
+      @draw.draw_text(booster_name(booster), 1058, 358, 22, @raylib.Color::new(255, 206, 118, 255))
+      @draw.draw_text("Plating \{plating}", 1058, 408, 20, @raylib.Color::new(230, 148, 255, 255))
+      @draw.draw_text("Overclock \{overclock}", 1058, 434, 20, @raylib.Color::new(230, 148, 255, 255))
+      @draw.draw_text(message, 1058, 488, 22, @raylib.Color::new(228, 234, 240, 255))
+      @draw.draw_text("LMB fire", 1058, 666, 20, @raylib.Color::new(166, 218, 255, 255))
+      @draw.draw_text("WASD move", 1058, 692, 20, @raylib.Color::new(166, 218, 255, 255))
+      @draw.draw_text("Space dash", 1058, 718, 20, @raylib.Color::new(166, 218, 255, 255))
 
       if choosing {
         @raylib.draw_rectangle(0, 0, screen_w, screen_h, @raylib.fade(@raylib.black, 0.64F))
-        @raylib.draw_text("SALVAGE PICK", 468, 92, 56, @raylib.Color::new(247, 243, 236, 255))
+        @draw.draw_text("SALVAGE PICK", 468, 92, 56, @raylib.Color::new(247, 243, 236, 255))
         for i in 0..<3 {
           let y = 180 + i * 180
           @raylib.draw_rectangle(1045, y, 200, 150, choice_color(choices[i]))
           @raylib.draw_rectangle_lines(1045, y, 200, 150, @raylib.Color::new(16, 18, 22, 255))
-          @raylib.draw_text("\{i + 1}", 1060, y + 14, 28, @raylib.Color::new(20, 20, 24, 255))
-          @raylib.draw_text(choice_name(choices[i]), 1062, y + 48, 20, @raylib.Color::new(16, 20, 24, 255))
-          @raylib.draw_text(choice_desc(choices[i]), 1062, y + 82, 18, @raylib.Color::new(20, 24, 28, 255))
+          @draw.draw_text("\{i + 1}", 1060, y + 14, 28, @raylib.Color::new(20, 20, 24, 255))
+          @draw.draw_text(choice_name(choices[i]), 1062, y + 48, 20, @raylib.Color::new(16, 20, 24, 255))
+          @draw.draw_text(choice_desc(choices[i]), 1062, y + 82, 18, @raylib.Color::new(20, 24, 28, 255))
         }
       }
 
       if over {
         @raylib.draw_rectangle(0, 0, screen_w, screen_h, @raylib.fade(@raylib.black, 0.62F))
-        @raylib.draw_text(if won { "PIT CLEARED" } else { "MECH DOWN" }, 420, 250, 68, if won { @raylib.Color::new(146, 242, 188, 255) } else { @raylib.Color::new(255, 122, 122, 255) })
-        @raylib.draw_text(message, 360, 340, 34, @raylib.Color::new(242, 246, 248, 255))
-        @raylib.draw_text("Press R to rebuild", 468, 430, 32, @raylib.Color::new(255, 206, 118, 255))
+        @draw.draw_text(if won { "PIT CLEARED" } else { "MECH DOWN" }, 420, 250, 68, if won { @raylib.Color::new(146, 242, 188, 255) } else { @raylib.Color::new(255, 122, 122, 255) })
+        @draw.draw_text(message, 360, 340, 34, @raylib.Color::new(242, 246, 248, 255))
+        @draw.draw_text("Press R to rebuild", 468, 430, 32, @raylib.Color::new(255, 206, 118, 255))
       }
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

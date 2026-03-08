@@ -10,6 +10,7 @@ fn main {
   let hiscore = 200450
   let lives = 5
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -18,12 +19,12 @@ fn main {
     @raylib.clear_background(@raylib.raywhite)
 
     // MoonBit string interpolation replaces C's TextFormat
-    @raylib.draw_text("Score: \{score}", 200, 80, 20, @raylib.red)
-    @raylib.draw_text("HiScore: \{hiscore}", 200, 120, 20, @raylib.green)
-    @raylib.draw_text("Lives: \{lives}", 200, 160, 40, @raylib.blue)
+    @draw.draw_text("Score: \{score}", 200, 80, 20, @raylib.red)
+    @draw.draw_text("HiScore: \{hiscore}", 200, 120, 20, @raylib.green)
+    @draw.draw_text("Lives: \{lives}", 200, 160, 40, @raylib.blue)
 
     let frame_time = @raylib.get_frame_time() * 1000.0
-    @raylib.draw_text(
+    @draw.draw_text(
       "Elapsed Time: \{frame_time} ms",
       200,
       220,
@@ -31,9 +32,11 @@ fn main {
       @raylib.black,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

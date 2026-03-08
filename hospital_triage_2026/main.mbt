@@ -107,6 +107,7 @@ fn severity_name(sev : Int) -> String {
 fn main {
   @raylib.init_window(sw, sh, "Hospital Triage 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let patients : Array[Patient] = Array::makei(140, fn(_i) {
     { alive: false, ward: 0, x: 0.0, y: 0.0, severity: 0, wait: 0.0 }
@@ -301,7 +302,7 @@ fn main {
         520,
         @raylib.Color::new(180, 190, 205, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "WARD \{w + 1}",
         (x - 56.0).to_int(),
         168,
@@ -314,7 +315,7 @@ fn main {
       if patient.alive {
         let c = severity_color(patient.severity)
         @raylib.draw_circle(patient.x.to_int(), patient.y.to_int(), 15.0, c)
-        @raylib.draw_text(
+        @draw.draw_text(
           severity_name(patient.severity),
           (patient.x - 26.0).to_int(),
           (patient.y - 30.0).to_int(),
@@ -341,16 +342,16 @@ fn main {
       150,
       @raylib.Color::new(214, 228, 242, 255),
     )
-    @raylib.draw_text("TREATMENT", sw - 262, 194, 28, @raylib.darkblue)
+    @draw.draw_text("TREATMENT", sw - 262, 194, 28, @raylib.darkblue)
     if treating {
-      @raylib.draw_text(
+      @draw.draw_text(
         "Patient: \{severity_name(tr_sev)}",
         sw - 270,
         236,
         24,
         severity_color(tr_sev),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "ETA \{tr_time_left.to_int()}s",
         sw - 270,
         270,
@@ -358,7 +359,7 @@ fn main {
         @raylib.black,
       )
     } else {
-      @raylib.draw_text("Bed Available", sw - 260, 250, 26, @raylib.lime)
+      @draw.draw_text("Bed Available", sw - 260, 250, 26, @raylib.lime)
     }
 
     @raylib.draw_rectangle(
@@ -368,8 +369,8 @@ fn main {
       108,
       @raylib.Color::new(21, 39, 58, 220),
     )
-    @raylib.draw_text("HOSPITAL TRIAGE 2026", 28, 22, 36, @raylib.skyblue)
-    @raylib.draw_text(
+    @draw.draw_text("HOSPITAL TRIAGE 2026", 28, 22, 36, @raylib.skyblue)
+    @draw.draw_text(
       "Score \{score}  Treated \{treated}  Failed \{failed}  Lives \{lives}",
       28,
       66,
@@ -378,7 +379,7 @@ fn main {
     )
 
     let t = timer.to_int()
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{t}s",
       710,
       28,
@@ -390,7 +391,7 @@ fn main {
       },
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Critical patients expire faster and cost more lives.", 20, 654, 24, @raylib.darkgray,
     )
     @raylib.draw_rectangle(
@@ -400,7 +401,7 @@ fn main {
       30,
       @raylib.Color::new(28, 42, 58, 220),
     )
-    @raylib.draw_text(msg, 28, 693, 20, @raylib.raywhite)
+    @draw.draw_text(msg, 28, 693, 20, @raylib.raywhite)
 
     if over {
       @raylib.draw_rectangle(
@@ -410,7 +411,7 @@ fn main {
         180,
         @raylib.fade(@raylib.black, 0.82),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if lives > 0 {
           "SHIFT COMPLETE"
         } else {
@@ -425,11 +426,13 @@ fn main {
           @raylib.red
         },
       )
-      @raylib.draw_text("Press R to restart", 430, 370, 34, @raylib.white)
+      @draw.draw_text("Press R to restart", 430, 370, 34, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

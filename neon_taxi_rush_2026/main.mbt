@@ -508,6 +508,7 @@ fn spawn_fuel(
 fn main {
   @raylib.init_window(sw, sh, "Neon Taxi Rush 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let traffic : Array[Traffic] = Array::makei(max_traffic, fn(_i) {
     {
@@ -1239,14 +1240,14 @@ fn main {
       )
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "NEON TAXI RUSH 2026",
       20,
       14,
       30,
       @raylib.Color::new(236, 242, 255, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "WASD move  J boost  K horn  L pick/drop",
       20,
       48,
@@ -1254,21 +1255,21 @@ fn main {
       @raylib.Color::new(184, 204, 236, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Cash \{taxi.cash} / \{target_cash}",
       520,
       16,
       28,
       @raylib.Color::new(246, 212, 118, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{timer.to_int()}s",
       802,
       16,
       28,
       @raylib.Color::new(198, 228, 248, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Served \{served}",
       1000,
       16,
@@ -1276,28 +1277,28 @@ fn main {
       @raylib.Color::new(172, 238, 194, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Wave \{wave}",
       520,
       48,
       22,
       @raylib.Color::new(210, 232, 248, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Combo \{taxi.combo}",
       640,
       48,
       22,
       @raylib.Color::new(250, 194, 102, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Rating \{rating_str(taxi.rating)}",
       776,
       48,
       22,
       @raylib.Color::new(162, 238, 202, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Missed \{misses}",
       978,
       48,
@@ -1313,7 +1314,7 @@ fn main {
       10,
       @raylib.Color::new(112, 220, 160, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "CAB HP",
       20,
       96,
@@ -1335,7 +1336,7 @@ fn main {
       10,
       @raylib.Color::new(108, 196, 248, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "FUEL",
       254,
       96,
@@ -1344,7 +1345,7 @@ fn main {
     )
 
     if taxi.carry_idx >= 0 {
-      @raylib.draw_text(
+      @draw.draw_text(
         "Passenger onboard",
         520,
         82,
@@ -1352,7 +1353,7 @@ fn main {
         @raylib.Color::new(248, 240, 200, 255),
       )
     } else {
-      @raylib.draw_text(
+      @draw.draw_text(
         "No passenger",
         520,
         82,
@@ -1377,7 +1378,7 @@ fn main {
       56,
       @raylib.Color::new(58, 80, 112, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "U",
       p0x + 108,
       p0y + 16,
@@ -1391,7 +1392,7 @@ fn main {
       56,
       @raylib.Color::new(58, 80, 112, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "L",
       p0x + 28,
       p0y + 72,
@@ -1405,7 +1406,7 @@ fn main {
       56,
       @raylib.Color::new(58, 80, 112, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "R",
       p0x + 188,
       p0y + 72,
@@ -1419,7 +1420,7 @@ fn main {
       56,
       @raylib.Color::new(58, 80, 112, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "D",
       p0x + 108,
       p0y + 128,
@@ -1443,7 +1444,7 @@ fn main {
       80,
       @raylib.Color::new(88, 160, 228, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "BOOST",
       p1x + 12,
       p1y + 28,
@@ -1457,7 +1458,7 @@ fn main {
       80,
       @raylib.Color::new(216, 114, 92, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "HORN",
       p1x + 132,
       p1y + 28,
@@ -1471,7 +1472,7 @@ fn main {
       104,
       @raylib.Color::new(118, 178, 124, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "PICK/DROP",
       p1x + 68,
       p1y + 132,
@@ -1486,7 +1487,7 @@ fn main {
       40,
       @raylib.Color::new(8, 10, 16, 214),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       sw / 2 - 282,
       sh - 44,
@@ -1503,28 +1504,28 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 244),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "NEON TAXI RUSH",
         sw / 2 - 232,
         sh / 2 - 126,
         62,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Pick riders, weave traffic, chain fast deliveries",
         sw / 2 - 266,
         sh / 2 - 34,
         30,
         @raylib.Color::new(178, 210, 244, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mobile: left pad move, right buttons boost/horn/pick",
         sw / 2 - 302,
         sh / 2 + 10,
         28,
         @raylib.Color::new(178, 210, 244, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "ENTER or tap to start",
         sw / 2 - 166,
         sh / 2 + 102,
@@ -1540,28 +1541,28 @@ fn main {
         388,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "SHIFT COMPLETE",
         sw / 2 - 206,
         sh / 2 - 132,
         60,
         @raylib.Color::new(248, 236, 188, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Cash: \{taxi.cash}",
         sw / 2 - 128,
         sh / 2 - 36,
         42,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Served: \{served}  Rating: \{rating_str(taxi.rating)}",
         sw / 2 - 246,
         sh / 2 + 18,
         34,
         @raylib.Color::new(174, 236, 202, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 182,
         sh / 2 + 116,
@@ -1577,28 +1578,28 @@ fn main {
         388,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "SHIFT FAILED",
         sw / 2 - 172,
         sh / 2 - 132,
         60,
         @raylib.Color::new(248, 140, 152, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Cash: \{taxi.cash}",
         sw / 2 - 128,
         sh / 2 - 36,
         42,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Missed riders: \{misses}",
         sw / 2 - 168,
         sh / 2 + 18,
         34,
         @raylib.Color::new(236, 172, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 182,
         sh / 2 + 116,
@@ -1607,6 +1608,7 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
 
     if state == 2 || state == 3 {
@@ -1617,5 +1619,6 @@ fn main {
     }
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

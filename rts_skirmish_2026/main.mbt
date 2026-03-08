@@ -80,6 +80,7 @@ fn closest_enemy(units : Array[Unit], me : Int) -> Int {
 fn main {
   @raylib.init_window(sw, sh, "RTS Skirmish 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let units : Array[Unit] = Array::makei(240, fn(_i) {
     {
@@ -285,7 +286,7 @@ fn main {
           @raylib.orange
         }
         @raylib.draw_circle(unit.x.to_int(), y, 12.0, color)
-        @raylib.draw_text(
+        @draw.draw_text(
           "\{unit.hp}",
           unit.x.to_int() - 10,
           y - 26,
@@ -295,29 +296,29 @@ fn main {
       }
     }
 
-    @raylib.draw_text("RTS SKIRMISH 2026", 20, 16, 34, @raylib.skyblue)
-    @raylib.draw_text(
+    @draw.draw_text("RTS SKIRMISH 2026", 20, 16, 34, @raylib.skyblue)
+    @draw.draw_text(
       "Base HP \{player_base_hp} vs \{enemy_base_hp}",
       24,
       56,
       24,
       @raylib.raywhite,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Workers \{player_workers}  Res \{player_res}",
       360,
       56,
       24,
       @raylib.lime,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Enemy workers \{enemy_workers}",
       650,
       56,
       24,
       @raylib.orange,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Q worker(45)  W swordsman(70)  E ranger(90)  1/2/3 lane", 120, 620, 24, @raylib.gray,
     )
 
@@ -328,7 +329,7 @@ fn main {
       32,
       @raylib.Color::new(28, 30, 36, 255),
     )
-    @raylib.draw_text(msg, 48, 660, 20, @raylib.raywhite)
+    @draw.draw_text(msg, 48, 660, 20, @raylib.raywhite)
 
     if won || lost {
       @raylib.draw_rectangle(
@@ -338,7 +339,7 @@ fn main {
         120,
         @raylib.fade(@raylib.black, 0.8),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "ENEMY BASE DOWN"
         } else {
@@ -353,11 +354,13 @@ fn main {
           @raylib.red
         },
       )
-      @raylib.draw_text("Press R to restart", 420, 352, 26, @raylib.raywhite)
+      @draw.draw_text("Press R to restart", 420, 352, 26, @raylib.raywhite)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -34,6 +34,7 @@ fn main {
     @raylib.ShaderUniformFloat,
   )
   @raylib.set_target_fps(60)
+  @draw.init_font()
   // Main game loop
   while !@raylib.window_should_close() {
     // Update
@@ -50,13 +51,15 @@ fn main {
     @raylib.begin_shader_mode(shader)
     @raylib.draw_texture(texture, 0, 0, @raylib.white)
     @raylib.end_shader_mode()
-    @raylib.draw_text(
+    @draw.draw_text(
       "BACKGROUND is PAINTED and ANIMATED on SHADER!", 10, 10, 20, @raylib.maroon,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
   // De-Initialization
   @raylib.unload_shader(shader)
   @raylib.unload_texture(texture)
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -78,6 +78,7 @@ fn main {
       list_item_focused,
     )
     |> ignore
+    @fps.draw()
     @raylib.end_drawing()
   }
   // De-Initialization

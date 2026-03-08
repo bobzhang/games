@@ -19,6 +19,7 @@ fn main {
   let cube_position = @raylib.Vector3::new(0.0, 0.0, 0.0)
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -35,15 +36,17 @@ fn main {
 
     @raylib.end_mode_3d()
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Welcome to the third dimension!", 10, 40, 20, @raylib.darkgray,
     )
 
     @raylib.draw_fps(10, 10)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

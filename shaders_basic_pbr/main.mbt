@@ -478,6 +478,7 @@ fn main {
   )
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -594,11 +595,11 @@ fn main {
 
     @raylib.end_mode_3d()
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Toggle lights: [1][2][3][4]", 10, 40, 20, @raylib.lightgray,
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "(c) Old Rusty Car model by Renafox (https://skfb.ly/LxRy)",
       screen_width - 320,
       screen_height - 20,
@@ -608,6 +609,7 @@ fn main {
 
     @raylib.draw_fps(10, 10)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -615,5 +617,6 @@ fn main {
   @raylib.unload_model(car)
   @raylib.unload_model(floor_model)
   @raylib.unload_shader(shader)
+  @draw.cleanup()
   @raylib.close_window()
 }

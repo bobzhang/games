@@ -262,9 +262,9 @@ fn draw_button(
   )
 
   let fs : Int = 28
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
-    x + w / 2 - @raylib.measure_text(label, fs) / 2,
+    x + w / 2 - @draw.measure_text(label, fs) / 2,
     y + h / 2 - fs / 2,
     fs,
     @raylib.Color::new(244, 250, 255, 248),
@@ -288,14 +288,14 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(114, 156, 188, 206),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Gomoku Street Duel",
     px + 20,
     py + 22,
     36,
     @raylib.Color::new(238, 248, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Five-in-a-row 2026",
     px + 20,
     py + 64,
@@ -303,7 +303,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(188, 216, 236, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     if game.turn == Human {
       "Turn: You"
     } else {
@@ -315,14 +315,14 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(226, 236, 250, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Moves \{game.move_count}",
     px + 20,
     py + 152,
     28,
     @raylib.Color::new(214, 230, 246, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time \{game.game_time.to_int()}s",
     px + 20,
     py + 186,
@@ -330,21 +330,21 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(214, 230, 246, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Wins \{game.human_wins}",
     px + 20,
     py + 236,
     28,
     @raylib.Color::new(220, 236, 250, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "AI Wins \{game.ai_wins}",
     px + 20,
     py + 270,
     28,
     @raylib.Color::new(220, 236, 250, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Draws \{game.draws}",
     px + 20,
     py + 304,
@@ -352,7 +352,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(220, 236, 250, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Hints \{game.hints_left}",
     px + 20,
     py + 354,
@@ -360,35 +360,35 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(214, 228, 246, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Keyboard",
     px + 20,
     py + 408,
     24,
     @raylib.Color::new(220, 236, 250, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Move: WASD/Arrows",
     px + 20,
     py + 436,
     22,
     @raylib.Color::new(186, 210, 232, 232),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Place: Enter/Space",
     px + 20,
     py + 462,
     22,
     @raylib.Color::new(186, 210, 232, 232),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Hint: H  Undo: U/Z",
     px + 20,
     py + 488,
     22,
     @raylib.Color::new(186, 210, 232, 232),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Clear: C  Reset: R",
     px + 20,
     py + 514,
@@ -463,7 +463,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
       52,
       @raylib.Color::new(174, 208, 234, 238),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       game.message,
       px + 30,
       py + ph - 70,
@@ -575,28 +575,28 @@ fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle_lines(cx - s / 2, cy - s - 18, s, s, edge)
   @raylib.draw_rectangle_lines(cx - s / 2, cy + 18, s, s, edge)
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "L",
     cx - s + 16 - 18,
     cy - 8,
     28,
     @raylib.Color::new(236, 246, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "R",
     cx + 18 + 20,
     cy - 8,
     28,
     @raylib.Color::new(236, 246, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "U",
     cx - 10,
     cy - s - 2,
     28,
     @raylib.Color::new(236, 246, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "D",
     cx - 10,
     cy + s + 26,
@@ -647,27 +647,27 @@ fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
 ///|
 /// Draws the title screen with game name, description lines, and a hoverable start-duel button.
 fn @types.Game::draw_title(game : @types.Game) -> Unit {
-  @raylib.draw_text(
+  @draw.draw_text(
     "Gomoku Street Duel 2026",
     @types.screen_w / 2 -
-    @raylib.measure_text("Gomoku Street Duel 2026", 84) / 2,
+    @draw.measure_text("Gomoku Street Duel 2026", 84) / 2,
     108,
     84,
     @raylib.Color::new(238, 248, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Place five stones in a line before the AI does.",
     @types.screen_w / 2 -
-    @raylib.measure_text("Place five stones in a line before the AI does.", 34) /
+    @draw.measure_text("Place five stones in a line before the AI does.", 34) /
     2,
     248,
     34,
     @raylib.Color::new(192, 220, 240, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Heuristic AI, touch controls, hints, and undo.",
     @types.screen_w / 2 -
-    @raylib.measure_text("Heuristic AI, touch controls, hints, and undo.", 34) /
+    @draw.measure_text("Heuristic AI, touch controls, hints, and undo.", 34) /
     2,
     290,
     34,
@@ -727,21 +727,21 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     Empty => "Draw"
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
-    px + pw / 2 - @raylib.measure_text(title, 64) / 2,
+    px + pw / 2 - @draw.measure_text(title, 64) / 2,
     py + 36,
     64,
     @raylib.Color::new(246, 252, 255, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Moves: \{game.move_count}",
     px + 94,
     py + 160,
     36,
     @raylib.Color::new(220, 236, 250, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time: \{game.game_time.to_int()}s",
     px + 94,
     py + 206,

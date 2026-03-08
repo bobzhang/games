@@ -276,7 +276,7 @@ fn draw_value_bar(
     @raylib.Color::new(136, 210, 240, 170),
   )
   let txt = label + " " + value.to_int().to_string()
-  @raylib.draw_text(
+  @draw.draw_text(
     txt,
     x + 8,
     y + 5,
@@ -331,14 +331,14 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     106,
     @raylib.Color::new(136, 210, 240, 170),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "MISSION " + game.mission.to_string(),
     @types.screen_w - 280,
     26,
     22,
     @raylib.Color::new(234, 246, 255, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "TARGETS " +
     game.targets_found.to_string() +
     " / " +
@@ -353,7 +353,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   } else {
     (game.sonar_cd * 100.0).to_int().to_string() + "cs"
   }
-  @raylib.draw_text(
+  @draw.draw_text(
     "SONAR " + sonar_ready,
     @types.screen_w - 280,
     84,
@@ -369,7 +369,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   } else {
     "TIP: THERMAL ZONE AMPLIFIES SONAR, BUT DRAINS OXYGEN"
   }
-  @raylib.draw_text(
+  @draw.draw_text(
     zone_text,
     20,
     @types.screen_h - 34,
@@ -406,8 +406,8 @@ fn draw_touch_button(
       (alpha + 60).clamp(min=0, max=255),
     ),
   )
-  let tw = @raylib.measure_text(label, 22)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(label, 22)
+  @draw.draw_text(
     label,
     rect.0 + (rect.2 - tw) / 2,
     rect.1 + rect.3 / 2 - 11,
@@ -553,8 +553,8 @@ fn draw_center_text(
   size : Int,
   color : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, color)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, color)
 }
 
 ///|
@@ -579,8 +579,8 @@ fn draw_menu_button(
     rect.3,
     @raylib.Color::new(accent.0, accent.1, accent.2, 230),
   )
-  let tw = @raylib.measure_text(label, 28)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(label, 28)
+  @draw.draw_text(
     label,
     rect.0 + (rect.2 - tw) / 2,
     rect.1 + rect.3 / 2 - 14,
@@ -628,21 +628,21 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     24,
     @raylib.Color::new(184, 226, 242, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Keyboard: WASD/Arrows move  |  SPACE/F sonar pulse  |  Shift boost",
     @types.screen_w / 2 - 326,
     282,
     22,
     @raylib.Color::new(190, 232, 248, 220),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Thermal zone: stronger pulse range but much faster oxygen drain.",
     @types.screen_w / 2 - 276,
     322,
     22,
     @raylib.Color::new(244, 196, 152, 220),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Touch: left pad moves, PING triggers sonar, BOOST consumes fuel for speed.",
     @types.screen_w / 2 - 306,
     360,
@@ -666,7 +666,7 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     start_hover,
     (126, 250, 176),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Press Enter/Space or tap button",
     @types.screen_w / 2 - 144,
     start_btn.1 + 82,
@@ -794,8 +794,8 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
       next_btn.3,
       @raylib.Color::new(92, 120, 140, 156),
     )
-    let tw = @raylib.measure_text("NEXT", 28)
-    @raylib.draw_text(
+    let tw = @draw.measure_text("NEXT", 28)
+    @draw.draw_text(
       "NEXT",
       next_btn.0 + (next_btn.2 - tw) / 2,
       next_btn.1 + next_btn.3 / 2 - 14,
@@ -814,7 +814,7 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     title_btn.3,
   )
   draw_menu_button(title_btn, "TITLE", title_hover, (248, 208, 142))
-  @raylib.draw_text(
+  @draw.draw_text(
     "R/Enter restart  |  N next (win)  |  T/Esc title",
     @types.screen_w / 2 - 216,
     title_btn.1 + 70,

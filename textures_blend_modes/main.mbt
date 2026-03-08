@@ -27,6 +27,7 @@ fn main {
   let blend_count_max = 4
   let mut blend_mode = 0
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -60,7 +61,7 @@ fn main {
     @raylib.end_blend_mode()
 
     // Draw the texts
-    @raylib.draw_text(
+    @draw.draw_text(
       "Press SPACE to change blend modes.", 310, 350, 10, @raylib.gray,
     )
     let blend_text = match blend_mode {
@@ -70,19 +71,21 @@ fn main {
       3 => "Current: BLEND_ADD_COLORS"
       _ => ""
     }
-    @raylib.draw_text(blend_text, screen_width / 2 - 60, 370, 10, @raylib.gray)
-    @raylib.draw_text(
+    @draw.draw_text(blend_text, screen_width / 2 - 60, 370, 10, @raylib.gray)
+    @draw.draw_text(
       "(c) Cyberpunk Street Environment by Luis Zuno (@ansimuz)",
       screen_width - 330,
       screen_height - 20,
       10,
       @raylib.gray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_texture(fg_texture)
   @raylib.unload_texture(bg_texture)
+  @draw.cleanup()
   @raylib.close_window()
 }

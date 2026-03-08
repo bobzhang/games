@@ -37,6 +37,7 @@ fn main {
   let divider_loc = @raylib.get_shader_location(shader, "divider")
   let mut divider_value : Float = 0.5
   @raylib.set_target_fps(60)
+  @draw.init_font()
   // Main game loop
   while !@raylib.window_should_close() {
     // Update
@@ -66,18 +67,20 @@ fn main {
     // but an additional texture unit is enabled for texBlue (sampler2D texture1)
     @raylib.draw_texture(tex_red, 0, 0, @raylib.white)
     @raylib.end_shader_mode()
-    @raylib.draw_text(
+    @draw.draw_text(
       "Use KEY_LEFT/KEY_RIGHT to move texture mixing in shader!",
       80,
       @raylib.get_screen_height() - 40,
       20,
       @raylib.raywhite,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
   // De-Initialization
   @raylib.unload_shader(shader)
   @raylib.unload_texture(tex_red)
   @raylib.unload_texture(tex_blue)
+  @draw.cleanup()
   @raylib.close_window()
 }

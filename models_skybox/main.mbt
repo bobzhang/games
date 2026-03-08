@@ -76,6 +76,7 @@ fn main {
 
   @raylib.disable_cursor() // Limit cursor to relative movement inside the window
   @raylib.set_target_fps(60) // Set our game to run at 60 frames-per-second
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -103,7 +104,7 @@ fn main {
 
     @raylib.end_mode_3d()
 
-    @raylib.draw_text(
+    @draw.draw_text(
       ": " + @raylib.get_file_name(skybox_file_name),
       10,
       @raylib.get_screen_height() - 20,
@@ -112,6 +113,7 @@ fn main {
     )
     @raylib.draw_fps(10, 10)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -119,5 +121,6 @@ fn main {
   @raylib.unload_shader(skybox_shader)
   @raylib.unload_texture(cubemap)
   @raylib.unload_model(skybox)
+  @draw.cleanup()
   @raylib.close_window()
 }

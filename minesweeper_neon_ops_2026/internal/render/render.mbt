@@ -174,9 +174,9 @@ fn draw_cell_revealed(
   if around > 0 {
     let s : String = around.to_string()
     let fs : Int = tile / 2 + 6
-    @raylib.draw_text(
+    @draw.draw_text(
       s,
-      x + tile / 2 - @raylib.measure_text(s, fs) / 2,
+      x + tile / 2 - @draw.measure_text(s, fs) / 2,
       y + tile / 2 - fs / 2,
       fs,
       number_color(around),
@@ -358,9 +358,9 @@ fn @types.Game::draw_progress_bar(
   )
 
   let s : String = "\{pct}%"
-  @raylib.draw_text(
+  @draw.draw_text(
     s,
-    x + w / 2 - @raylib.measure_text(s, 24) / 2,
+    x + w / 2 - @draw.measure_text(s, 24) / 2,
     y + h / 2 - 12,
     24,
     @raylib.Color::new(244, 250, 255, 248),
@@ -397,9 +397,9 @@ fn draw_touch_button(
     @raylib.Color::new(184, 216, 242, 224),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
-    x + w / 2 - @raylib.measure_text(label, 28) / 2,
+    x + w / 2 - @draw.measure_text(label, 28) / 2,
     y + h / 2 - 14,
     28,
     @raylib.Color::new(246, 252, 255, 248),
@@ -496,14 +496,14 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(126, 166, 202, 216),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Minesweeper Neon Ops",
     px + 18,
     py + 20,
     42,
     @raylib.Color::new(236, 246, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "City Grid 2026",
     px + 18,
     py + 66,
@@ -511,14 +511,14 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(196, 220, 244, 238),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score \{game.score}",
     px + 18,
     py + 108,
     34,
     @raylib.Color::new(226, 240, 254, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best \{game.best_score}",
     px + 280,
     py + 108,
@@ -526,21 +526,21 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(194, 220, 246, 238),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Lives \{game.lives}",
     px + 18,
     py + 152,
     30,
     @raylib.Color::new(214, 232, 252, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mines \{game.mine_count}",
     px + 170,
     py + 152,
     30,
     @raylib.Color::new(214, 232, 252, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Flags Left \{@types.flags_left(game)}",
     px + 340,
     py + 152,
@@ -548,21 +548,21 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(214, 232, 252, 244),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time \{game.game_t.to_int()}s",
     px + 18,
     py + 190,
     30,
     @raylib.Color::new(214, 232, 252, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mistakes \{game.mistakes}",
     px + 210,
     py + 190,
     30,
     @raylib.Color::new(214, 232, 252, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Combo x\{game.combo}",
     px + 400,
     py + 190,
@@ -572,7 +572,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
 
   game.draw_progress_bar(px + 18, py + 234, pw - 36, 36)
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Unrevealed Safe Cells: \{@types.unrevealed_safe_cells(game)}",
     px + 18,
     py + 282,
@@ -585,7 +585,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     Flag => "Flag"
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Current Mode: \{mode_name}",
     px + 18,
     py + 326,
@@ -594,7 +594,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   )
 
   if game.combo > 1 {
-    @raylib.draw_text(
+    @draw.draw_text(
       "Combo Bonus x\{game.combo}",
       px + 18,
       py + 364,
@@ -603,42 +603,42 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     )
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Controls",
     px + 18,
     py + 428,
     28,
     @raylib.Color::new(228, 242, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Move: WASD/Arrows",
     px + 18,
     py + 460,
     24,
     @raylib.Color::new(194, 218, 242, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Reveal: Enter/Space",
     px + 18,
     py + 486,
     24,
     @raylib.Color::new(194, 218, 242, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Flag: F / Right Click",
     px + 18,
     py + 512,
     24,
     @raylib.Color::new(194, 218, 242, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mode: M  Hint: H",
     px + 18,
     py + 538,
     24,
     @raylib.Color::new(194, 218, 242, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Restart: R  Back: ESC",
     px + 18,
     py + 564,
@@ -661,7 +661,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
       56,
       @raylib.Color::new(176, 208, 236, 230),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       game.msg,
       px + 30,
       py + 620,
@@ -678,18 +678,18 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
   let my = game.mouse_y
   let hold = game.mouse_hold
   let touch_count = game.touch_count
-  @raylib.draw_text(
+  @draw.draw_text(
     "Minesweeper Neon Ops 2026",
     @types.screen_w / 2 -
-    @raylib.measure_text("Minesweeper Neon Ops 2026", 84) / 2,
+    @draw.measure_text("Minesweeper Neon Ops 2026", 84) / 2,
     108,
     84,
     @raylib.Color::new(236, 246, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Classic minefield puzzle remixed with lives, combo scoring, and tactical hints.",
     @types.screen_w / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Classic minefield puzzle remixed with lives, combo scoring, and tactical hints.",
       34,
     ) /
@@ -698,10 +698,10 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
     34,
     @raylib.Color::new(196, 220, 244, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Touch controls are available for mobile play.",
     @types.screen_w / 2 -
-    @raylib.measure_text("Touch controls are available for mobile play.", 34) /
+    @draw.measure_text("Touch controls are available for mobile play.", 34) /
     2,
     288,
     34,
@@ -721,10 +721,10 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
     @raylib.Color::new(88, 148, 204, 228),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Tip: first reveal is always safe, so start aggressively near the center.",
     @types.screen_w / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Tip: first reveal is always safe, so start aggressively near the center.",
       30,
     ) /
@@ -770,43 +770,43 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     "Operation Failed"
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
-    px + pw / 2 - @raylib.measure_text(title, 64) / 2,
+    px + pw / 2 - @draw.measure_text(title, 64) / 2,
     py + 32,
     64,
     @raylib.Color::new(244, 250, 255, 250),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score \{game.score}",
     px + 110,
     py + 136,
     42,
     @raylib.Color::new(226, 242, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Grade \{@types.grade_name(game.grade)}  \{@types.grade_title(game.grade)}",
     px + 110,
     py + 186,
     38,
     @raylib.Color::new(216, 236, 254, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time \{game.game_t.to_int()}s",
     px + 110,
     py + 236,
     34,
     @raylib.Color::new(206, 228, 248, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mistakes \{game.mistakes}",
     px + 110,
     py + 276,
     34,
     @raylib.Color::new(206, 228, 248, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best Combo x\{game.combo_best}",
     px + 110,
     py + 316,

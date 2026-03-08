@@ -886,14 +886,14 @@ fn draw_board(
       }
 
       if cells[i].kind == 6 {
-        @raylib.draw_text(
+        @draw.draw_text(
           "D\{cells[i].demand}",
           gx + 6,
           gy + 6,
           20,
           @raylib.Color::new(236, 252, 236, 246),
         )
-        @raylib.draw_text(
+        @draw.draw_text(
           "S\{cells[i].stored}",
           gx + 6,
           gy + 28,
@@ -903,7 +903,7 @@ fn draw_board(
       }
 
       if cells[i].kind == 5 {
-        @raylib.draw_text(
+        @draw.draw_text(
           cells[i].label,
           gx + 7,
           gy + 8,
@@ -913,7 +913,7 @@ fn draw_board(
       }
 
       if cells[i].kind > 0 && cells[i].kind < 5 {
-        @raylib.draw_text(
+        @draw.draw_text(
           "\{cells[i].rot}",
           gx + cell_sz - 18,
           gy + 6,
@@ -970,8 +970,8 @@ fn draw_button(
     @raylib.Color::new(216, 230, 252, 246),
   )
 
-  let tw : Int = @raylib.measure_text(label, 24)
-  @raylib.draw_text(
+  let tw : Int = @draw.measure_text(label, 24)
+  @draw.draw_text(
     label,
     x + (w - tw) / 2,
     y + h / 2 - 12,
@@ -1011,14 +1011,14 @@ fn draw_panel(
     @raylib.Color::new(170, 194, 238, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "CIRCUIT GRID OPERATOR",
     panel_x + 16,
     34,
     36,
     @raylib.Color::new(238, 246, 255, 252),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Rotate nodes. Route charge. Survive cascading faults.",
     panel_x + 16,
     76,
@@ -1026,14 +1026,14 @@ fn draw_panel(
     @raylib.Color::new(190, 214, 252, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time",
     panel_x + 16,
     120,
     24,
     @raylib.Color::new(220, 232, 252, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{timer.to_int()}s",
     panel_x + 116,
     120,
@@ -1041,14 +1041,14 @@ fn draw_panel(
     @raylib.Color::new(248, 232, 150, 252),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Budget",
     panel_x + 240,
     120,
     24,
     @raylib.Color::new(220, 232, 252, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "$\{budget}",
     panel_x + 346,
     120,
@@ -1056,14 +1056,14 @@ fn draw_panel(
     @raylib.Color::new(134, 232, 160, 252),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Delivered",
     panel_x + 16,
     158,
     24,
     @raylib.Color::new(220, 232, 252, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{delivered}/\{goal}",
     panel_x + 150,
     158,
@@ -1071,14 +1071,14 @@ fn draw_panel(
     @raylib.Color::new(134, 212, 250, 252),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Tier",
     panel_x + 280,
     158,
     24,
     @raylib.Color::new(220, 232, 252, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{tier}",
     panel_x + 346,
     158,
@@ -1110,7 +1110,7 @@ fn draw_panel(
     20,
     @raylib.Color::new(182, 202, 238, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Stability \{stability.to_int()}%",
     panel_x + 16,
     228,
@@ -1118,21 +1118,21 @@ fn draw_panel(
     @raylib.Color::new(224, 236, 252, 246),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Faults \{faults}",
     panel_x + 16,
     258,
     22,
     @raylib.Color::new(236, 204, 212, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Flow \{net_rate}/tick",
     panel_x + 170,
     258,
     22,
     @raylib.Color::new(196, 226, 252, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Fault ETA \{storm_cd.to_int()}s",
     panel_x + 316,
     258,
@@ -1141,7 +1141,7 @@ fn draw_panel(
   )
 
   if overclock_t > 0.0 {
-    @raylib.draw_text(
+    @draw.draw_text(
       "OVERCLOCK ACTIVE \{overclock_t.to_int()}s",
       panel_x + 16,
       286,
@@ -1149,7 +1149,7 @@ fn draw_panel(
       @raylib.Color::new(252, 226, 142, 252),
     )
   } else {
-    @raylib.draw_text(
+    @draw.draw_text(
       "Overclock offline",
       panel_x + 16,
       286,
@@ -1172,7 +1172,7 @@ fn draw_panel(
     190,
     @raylib.Color::new(160, 184, 228, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Selection",
     panel_x + 28,
     344,
@@ -1181,28 +1181,28 @@ fn draw_panel(
   )
 
   if selected >= 0 && selected < cells.length() {
-    @raylib.draw_text(
+    @draw.draw_text(
       "Type: \{wire_name(cells[selected].kind)}",
       panel_x + 28,
       384,
       24,
       @raylib.Color::new(224, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Rotation: \{cells[selected].rot}",
       panel_x + 28,
       416,
       24,
       @raylib.Color::new(214, 230, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Health: \{cells[selected].health.to_int()}%",
       panel_x + 28,
       448,
       24,
       @raylib.Color::new(214, 230, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Charge: \{(cells[selected].charge * 100.0).to_int()}%",
       panel_x + 220,
       448,
@@ -1210,14 +1210,14 @@ fn draw_panel(
       @raylib.Color::new(244, 232, 150, 246),
     )
     if cells[selected].kind == 6 {
-      @raylib.draw_text(
+      @draw.draw_text(
         "Demand: \{cells[selected].demand}",
         panel_x + 28,
         480,
         24,
         @raylib.Color::new(192, 238, 208, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Stored: \{cells[selected].stored}",
         panel_x + 220,
         480,
@@ -1225,7 +1225,7 @@ fn draw_panel(
         @raylib.Color::new(192, 238, 208, 246),
       )
     } else if cells[selected].kind == 5 {
-      @raylib.draw_text(
+      @draw.draw_text(
         "Source node",
         panel_x + 28,
         480,
@@ -1235,7 +1235,7 @@ fn draw_panel(
     }
 
     if cells[selected].fault_t > 0.0 {
-      @raylib.draw_text(
+      @draw.draw_text(
         "Fault time: \{cells[selected].fault_t.to_int()}s",
         panel_x + 28,
         508,
@@ -1244,7 +1244,7 @@ fn draw_panel(
       )
     }
   } else {
-    @raylib.draw_text(
+    @draw.draw_text(
       "Tap a tile to inspect and rotate.",
       panel_x + 28,
       386,
@@ -1253,21 +1253,21 @@ fn draw_panel(
     )
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mobile",
     panel_x + 16,
     676,
     24,
     @raylib.Color::new(230, 240, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Tap tiles + action buttons.",
     panel_x + 100,
     676,
     22,
     @raylib.Color::new(198, 220, 252, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "No keyboard required.",
     panel_x + 16,
     706,
@@ -1281,6 +1281,7 @@ fn draw_panel(
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] circuit grid operator 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let cells : Array[Cell] = Array::makei(max_cells, fn(_i) {
     {
@@ -1745,7 +1746,7 @@ fn main {
 
     draw_pulses(pulses)
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Tap tiles to rotate / repair / build",
       board_x + 6,
       42,
@@ -1754,7 +1755,7 @@ fn main {
     )
 
     if msg_t > 0.0 {
-      let bw : Int = @raylib.measure_text(msg, 30) + 44
+      let bw : Int = @draw.measure_text(msg, 30) + 44
       let bx : Int = sw / 2 - bw / 2
       @raylib.draw_rectangle(
         bx,
@@ -1770,7 +1771,7 @@ fn main {
         52,
         @raylib.Color::new(186, 210, 248, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         msg,
         bx + 22,
         28,
@@ -1781,14 +1782,14 @@ fn main {
 
     if state == 0 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 12, 22, 208))
-      @raylib.draw_text(
+      @draw.draw_text(
         "CIRCUIT GRID OPERATOR",
         sw / 2 - 348,
         152,
         72,
         @raylib.Color::new(236, 246, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Infrastructure puzzle in real-time",
         sw / 2 - 230,
         244,
@@ -1811,28 +1812,28 @@ fn main {
         @raylib.Color::new(166, 196, 246, 246),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "Desktop",
         sw / 2 - 442,
         346,
         32,
         @raylib.Color::new(242, 246, 255, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Click tiles to rotate and route flow",
         sw / 2 - 442,
         386,
         28,
         @raylib.Color::new(210, 228, 252, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- F / R / O for global actions",
         sw / 2 - 442,
         420,
         28,
         @raylib.Color::new(210, 228, 252, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Deliver to all sinks before timeout",
         sw / 2 - 442,
         454,
@@ -1840,28 +1841,28 @@ fn main {
         @raylib.Color::new(210, 228, 252, 246),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mobile",
         sw / 2 + 76,
         346,
         32,
         @raylib.Color::new(242, 246, 255, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Tap grid tiles",
         sw / 2 + 76,
         386,
         28,
         @raylib.Color::new(210, 228, 252, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Tap right-side action buttons",
         sw / 2 + 76,
         420,
         28,
         @raylib.Color::new(210, 228, 252, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Full touch support",
         sw / 2 + 76,
         454,
@@ -1880,28 +1881,28 @@ fn main {
       )
     } else if state == 2 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 20, 10, 198))
-      @raylib.draw_text(
+      @draw.draw_text(
         "GRID STABILIZED",
         sw / 2 - 272,
         182,
         84,
         @raylib.Color::new(162, 246, 178, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Delivered \{delivered}/\{goal}",
         sw / 2 - 170,
         312,
         42,
         @raylib.Color::new(230, 248, 236, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Final stability \{stability.to_int()}%",
         sw / 2 - 180,
         364,
         34,
         @raylib.Color::new(244, 230, 158, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Tap or press Enter",
         sw / 2 - 132,
         450,
@@ -1910,28 +1911,28 @@ fn main {
       )
     } else if state == 3 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(24, 8, 14, 208))
-      @raylib.draw_text(
+      @draw.draw_text(
         "BLACKOUT",
         sw / 2 - 170,
         186,
         90,
         @raylib.Color::new(252, 162, 178, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Delivered \{delivered}/\{goal}",
         sw / 2 - 170,
         320,
         40,
         @raylib.Color::new(242, 232, 236, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Budget $\{budget}  Stability \{stability.to_int()}%",
         sw / 2 - 262,
         372,
         34,
         @raylib.Color::new(244, 222, 154, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Tap or Enter to retry",
         sw / 2 - 160,
         454,
@@ -1940,8 +1941,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

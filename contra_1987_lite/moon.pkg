@@ -3,6 +3,8 @@ import {
   "bobzhang/games/contra_1987_lite/internal/game",
   "bobzhang/games/contra_1987_lite/internal/render",
   "bobzhang/games/contra_1987_lite/internal/types",
+  "bobzhang/games/utils/draw",
+  "bobzhang/games/utils/fps",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

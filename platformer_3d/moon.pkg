@@ -4,6 +4,8 @@ import {
   "bobzhang/games/platformer_3d/internal/levels",
   "bobzhang/games/platformer_3d/internal/render",
   "bobzhang/games/platformer_3d/internal/types",
+  "bobzhang/games/utils/draw",
+  "bobzhang/games/utils/fps",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

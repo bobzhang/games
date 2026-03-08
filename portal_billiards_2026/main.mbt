@@ -317,6 +317,7 @@ fn color_for_id(i : Int) -> @raylib.Color {
 fn main {
   @raylib.init_window(sw, sh, "Portal Billiards 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let balls : Array[Ball] = Array::makei(max_balls, fn(i) {
     { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, active: false, id: i, portal_cd: 0.0 }
@@ -576,28 +577,28 @@ fn main {
     @raylib.clear_background(@raylib.Color::new(12, 18, 28, 255))
 
     @raylib.draw_rectangle(0, 0, sw, 104, @raylib.Color::new(8, 14, 22, 230))
-    @raylib.draw_text(
+    @draw.draw_text(
       "PORTAL BILLIARDS 2026",
       18,
       24,
       36,
       @raylib.Color::new(236, 244, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Level \{level}/3",
       460,
       34,
       30,
       @raylib.Color::new(248, 226, 134, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Shots \{shots_left}",
       650,
       34,
       30,
       @raylib.Color::new(220, 236, 250, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{score}",
       846,
       34,
@@ -715,7 +716,7 @@ fn main {
       14,
       @raylib.Color::new(88, 204, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Power \{power.to_int()}",
       282,
       106,
@@ -732,7 +733,7 @@ fn main {
       170,
       @raylib.Color::new(10, 16, 26, 220),
     )
-    @raylib.draw_text("Touch", 60, sh - 188, 20, @raylib.white)
+    @draw.draw_text("Touch", 60, sh - 188, 20, @raylib.white)
 
     @raylib.draw_rectangle(
       ctl_x,
@@ -741,7 +742,7 @@ fn main {
       54,
       @raylib.Color::new(44, 62, 88, 255),
     )
-    @raylib.draw_text("POW-", ctl_x + 10, ctl_y + 18, 22, @raylib.white)
+    @draw.draw_text("POW-", ctl_x + 10, ctl_y + 18, 22, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x + 84,
       ctl_y,
@@ -749,7 +750,7 @@ fn main {
       54,
       @raylib.Color::new(44, 62, 88, 255),
     )
-    @raylib.draw_text("POW+", ctl_x + 93, ctl_y + 18, 22, @raylib.white)
+    @draw.draw_text("POW+", ctl_x + 93, ctl_y + 18, 22, @raylib.white)
 
     let fire_x = sw - 204
     let fire_y = sh - 152
@@ -760,7 +761,7 @@ fn main {
       116,
       @raylib.Color::new(182, 82, 78, 255),
     )
-    @raylib.draw_text("SHOOT", fire_x + 34, fire_y + 44, 34, @raylib.white)
+    @draw.draw_text("SHOOT", fire_x + 34, fire_y + 44, 34, @raylib.white)
 
     @raylib.draw_rectangle(
       178,
@@ -769,7 +770,7 @@ fn main {
       36,
       @raylib.Color::new(10, 16, 24, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       188,
       sh - 46,
@@ -786,7 +787,7 @@ fn main {
         200,
         @raylib.Color::new(16, 24, 40, 242),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "TABLE MASTER"
         } else {
@@ -801,7 +802,7 @@ fn main {
           @raylib.Color::new(250, 132, 132, 255)
         },
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R to restart",
         sw / 2 - 124,
         sh / 2 + 40,
@@ -810,8 +811,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

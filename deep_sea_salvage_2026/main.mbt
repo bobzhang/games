@@ -81,6 +81,7 @@ fn reset_mines(ms : Array[Mine]) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "Deep Sea Salvage 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let relics : Array[Relic] = Array::makei(90, fn(_i) {
     { alive: false, x: 0.0, y: 0.0, size: 14.0, value: 20 }
@@ -343,10 +344,10 @@ fn main {
       @raylib.gray,
     )
 
-    @raylib.draw_text("DEEP SEA SALVAGE 2026", 20, 16, 40, @raylib.skyblue)
-    @raylib.draw_text("Bank \{bank}", 20, 62, 30, @raylib.lime)
-    @raylib.draw_text("Cargo \{cargo_value}", 200, 62, 30, @raylib.gold)
-    @raylib.draw_text(
+    @draw.draw_text("DEEP SEA SALVAGE 2026", 20, 16, 40, @raylib.skyblue)
+    @draw.draw_text("Bank \{bank}", 20, 62, 30, @raylib.lime)
+    @draw.draw_text("Cargo \{cargo_value}", 200, 62, 30, @raylib.gold)
+    @draw.draw_text(
       "Hull \{hull}",
       420,
       62,
@@ -359,7 +360,7 @@ fn main {
     )
 
     let t = timer.to_int()
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{t}s",
       600,
       62,
@@ -371,7 +372,7 @@ fn main {
       },
     )
 
-    @raylib.draw_text("Oxygen", 20, 104, 24, @raylib.skyblue)
+    @draw.draw_text("Oxygen", 20, 104, 24, @raylib.skyblue)
     @raylib.draw_rectangle(
       118,
       110,
@@ -387,7 +388,7 @@ fn main {
       @raylib.skyblue,
     )
 
-    @raylib.draw_text("Fuel", 360, 104, 24, @raylib.orange)
+    @draw.draw_text("Fuel", 360, 104, 24, @raylib.orange)
     @raylib.draw_rectangle(
       424,
       110,
@@ -397,7 +398,7 @@ fn main {
     )
     @raylib.draw_rectangle(424, 110, (fuel * 2.2).to_int(), 14, @raylib.orange)
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Tip: surface to bank cargo and refill oxygen faster", 20, 684, 24, @raylib.lightgray,
     )
     @raylib.draw_rectangle(
@@ -407,7 +408,7 @@ fn main {
       24,
       @raylib.Color::new(8, 14, 20, 220),
     )
-    @raylib.draw_text(msg, 26, 721, 18, @raylib.raywhite)
+    @draw.draw_text(msg, 26, 721, 18, @raylib.raywhite)
 
     if over {
       @raylib.draw_rectangle(
@@ -417,12 +418,14 @@ fn main {
         190,
         @raylib.fade(@raylib.black, 0.82),
       )
-      @raylib.draw_text("DIVE OVER", 450, 320, 56, @raylib.orange)
-      @raylib.draw_text("Press R to restart", 450, 386, 34, @raylib.white)
+      @draw.draw_text("DIVE OVER", 450, 320, 56, @raylib.orange)
+      @draw.draw_text("Press R to restart", 450, 386, 34, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

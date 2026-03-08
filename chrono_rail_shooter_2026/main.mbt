@@ -511,28 +511,28 @@ fn draw_touch_ui(state : Int) -> Unit {
       56,
       @raylib.Color::new(20, 34, 52, 166),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "L",
       pad_x + 35,
       pad_y + 88,
       24,
       @raylib.Color::new(186, 220, 244, 240),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "R",
       pad_x + 170,
       pad_y + 88,
       24,
       @raylib.Color::new(186, 220, 244, 240),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "U",
       pad_x + 102,
       pad_y + 28,
       24,
       @raylib.Color::new(186, 220, 244, 240),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "D",
       pad_x + 101,
       pad_y + 148,
@@ -584,28 +584,28 @@ fn draw_touch_ui(state : Int) -> Unit {
       @raylib.Color::new(28, 40, 58, 178),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "FIRE",
       btn_x + 44,
       btn_y + 46,
       22,
       @raylib.Color::new(244, 250, 254, 242),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "DASH",
       btn_x + 185,
       btn_y + 46,
       22,
       @raylib.Color::new(244, 250, 254, 242),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "ROCK",
       btn_x + 42,
       btn_y + 140,
       22,
       @raylib.Color::new(244, 250, 254, 242),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "EMP",
       btn_x + 198,
       btn_y + 140,
@@ -620,6 +620,7 @@ fn draw_touch_ui(state : Int) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] chrono rail shooter 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let player : Player = {
     x: (rail_l + rail_r) * 0.5,
@@ -1763,7 +1764,7 @@ fn main {
         12,
         @raylib.Color::new(214, 102, 228, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "BOSS",
         380,
         14,
@@ -1859,28 +1860,28 @@ fn main {
 
     @raylib.draw_rectangle(0, 0, sw, 76, @raylib.Color::new(8, 10, 18, 228))
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Chrono Rail Shooter",
       16,
       10,
       28,
       @raylib.Color::new(208, 234, 250, 248),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{player.score}",
       16,
       44,
       20,
       @raylib.Color::new(246, 226, 170, 248),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Combo \{player.combo}",
       194,
       44,
       20,
       @raylib.Color::new(182, 242, 200, 248),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Best \{player.best_combo}",
       350,
       44,
@@ -1888,7 +1889,7 @@ fn main {
       @raylib.Color::new(166, 206, 250, 248),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Distance \{player.distance.to_int()} / \{distance_goal.to_int()}",
       524,
       44,
@@ -1896,7 +1897,7 @@ fn main {
       @raylib.Color::new(222, 232, 246, 248),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "FPS \{@raylib.get_fps()}",
       sw - 114,
       12,
@@ -1916,7 +1917,7 @@ fn main {
       12,
       @raylib.Color::new(224, 98, 116, 255),
     )
-    @raylib.draw_text("HP", 16, 100, 16, @raylib.Color::new(236, 206, 216, 255))
+    @draw.draw_text("HP", 16, 100, 16, @raylib.Color::new(236, 206, 216, 255))
 
     @raylib.draw_rectangle(
       16,
@@ -1932,7 +1933,7 @@ fn main {
       12,
       @raylib.Color::new(88, 188, 236, 255),
     )
-    @raylib.draw_text("EN", 16, 142, 16, @raylib.Color::new(200, 224, 246, 255))
+    @draw.draw_text("EN", 16, 142, 16, @raylib.Color::new(200, 224, 246, 255))
 
     @raylib.draw_rectangle(
       16,
@@ -1948,7 +1949,7 @@ fn main {
       12,
       @raylib.Color::new(238, 170, 94, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "HEAT",
       16,
       184,
@@ -1956,21 +1957,21 @@ fn main {
       @raylib.Color::new(240, 222, 194, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Rocket \{(player.rocket_cd * 10.0).to_int()}",
       290,
       96,
       18,
       @raylib.Color::new(228, 234, 248, 240),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Dash \{(player.dash_cd * 10.0).to_int()}",
       290,
       124,
       18,
       @raylib.Color::new(228, 234, 248, 240),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "EMP \{(player.emp_cd * 10.0).to_int()}",
       290,
       152,
@@ -1986,7 +1987,7 @@ fn main {
         34,
         @raylib.Color::new(14, 18, 28, 208),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         msg,
         438,
         sh - 54,
@@ -2014,42 +2015,42 @@ fn main {
         @raylib.Color::new(100, 152, 200, 206),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "CHRONO RAIL SHOOTER 2026",
         300,
         198,
         48,
         @raylib.Color::new(190, 236, 252, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "A timeline rogue squad is attacking your train",
         332,
         274,
         26,
         @raylib.Color::new(216, 226, 244, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Move: WASD / Arrows   Fire: J or Space",
         342,
         324,
         24,
         @raylib.Color::new(198, 220, 240, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Dash: K   Rocket: E   EMP: L   Shield: RightShift",
         292,
         360,
         24,
         @raylib.Color::new(198, 220, 240, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Touch: left panel to move, right panel for skills",
         332,
         396,
         24,
         @raylib.Color::new(198, 220, 240, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press Enter or tap to start",
         456,
         462,
@@ -2073,28 +2074,28 @@ fn main {
         @raylib.Color::new(108, 214, 184, 220),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "MISSION CLEAR",
         440,
         250,
         56,
         @raylib.Color::new(168, 246, 206, 254),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Final Score: \{player.score}",
         476,
         334,
         34,
         @raylib.Color::new(232, 246, 252, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Best Combo: \{player.best_combo}",
         480,
         374,
         30,
         @raylib.Color::new(210, 232, 250, 244),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R / Enter / Tap to run again",
         414,
         438,
@@ -2118,28 +2119,28 @@ fn main {
         @raylib.Color::new(198, 94, 110, 220),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "MISSION FAILED",
         440,
         250,
         56,
         @raylib.Color::new(248, 166, 176, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{player.score}",
         522,
         334,
         34,
         @raylib.Color::new(232, 246, 252, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Distance: \{player.distance.to_int()}m",
         480,
         374,
         30,
         @raylib.Color::new(210, 232, 250, 244),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R / Enter / Tap to retry",
         432,
         438,
@@ -2148,8 +2149,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

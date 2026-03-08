@@ -226,6 +226,7 @@ fn main {
   let fbo = @rl.load_framebuffer()
   if fbo == 0U {
     @raylib.trace_log(@raylib.LogWarning, "Failed to create framebuffer")
+  @draw.cleanup()
     @raylib.close_window()
     return
   }
@@ -297,6 +298,7 @@ fn main {
   // NOTE: rlFramebufferComplete() automatically unbinds the framebuffer.
   if !@rl.framebuffer_complete(fbo) {
     @raylib.trace_log(@raylib.LogWarning, "Framebuffer is not complete")
+  @draw.cleanup()
     @raylib.close_window()
     return
   }
@@ -388,6 +390,7 @@ fn main {
   @rl.enable_depth_test()
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -536,7 +539,7 @@ fn main {
       @rl.disable_shader()
       @raylib.end_mode_3d()
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "FINAL RESULT",
         10,
         screen_height - 30,
@@ -560,7 +563,7 @@ fn main {
         @raylib.Vector2::new(0.0, 0.0),
         @raylib.raywhite,
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "POSITION TEXTURE",
         10,
         screen_height - 30,
@@ -584,7 +587,7 @@ fn main {
         @raylib.Vector2::new(0.0, 0.0),
         @raylib.raywhite,
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "NORMAL TEXTURE",
         10,
         screen_height - 30,
@@ -608,7 +611,7 @@ fn main {
         @raylib.Vector2::new(0.0, 0.0),
         @raylib.raywhite,
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "ALBEDO TEXTURE",
         10,
         screen_height - 30,
@@ -617,15 +620,16 @@ fn main {
       )
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Toggle lights keys: [Y][R][G][B]", 10, 40, 20, @raylib.darkgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Switch G-buffer textures: [1][2][3][4]", 10, 70, 20, @raylib.darkgray,
     )
 
     @raylib.draw_fps(10, 10)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -643,5 +647,6 @@ fn main {
   @rl.unload_texture(gbuffer.albedo_spec_texture)
   @rl.unload_texture(gbuffer.depth_renderbuffer)
 
+  @draw.cleanup()
   @raylib.close_window()
 }

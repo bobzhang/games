@@ -310,7 +310,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(70, 94, 128, 88),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "L",
     pad_x + 30,
     pad_y + 88,
@@ -325,7 +325,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(70, 94, 128, 88),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "R",
     pad_x + 198,
     pad_y + 88,
@@ -340,7 +340,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(70, 94, 128, 88),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "U",
     pad_x + 112,
     pad_y + 26,
@@ -355,7 +355,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(70, 94, 128, 88),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "D",
     pad_x + 112,
     pad_y + 150,
@@ -370,7 +370,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(196, 118, 98, 94),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "BOOST",
     act_x + 42,
     pad_y + 42,
@@ -385,7 +385,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(120, 142, 210, 94),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "SMOKE",
     act_x + 44,
     pad_y + 142,
@@ -400,9 +400,11 @@ fn main {
   @raylib.init_window(
     sw, sh, "raylib [moonbit] example - drift police chase 2026",
   )
+  @draw.cleanup()
   defer @raylib.close_window()
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let cops = FixedArray::make(max_cops, {
     active: false,
@@ -959,6 +961,7 @@ fn main {
     }
 
     @raylib.begin_drawing()
+    @fps.draw()
     defer @raylib.end_drawing()
 
     @raylib.clear_background(@raylib.Color::new(10, 16, 28, 255))
@@ -1246,14 +1249,14 @@ fn main {
       @raylib.Color::new(220, 232, 246, 138),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "DRIFT POLICE CHASE 2026",
       30,
       26,
       34,
       @raylib.Color::new(236, 244, 254, 250),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Move: WASD/Arrows  Boost: Shift/Space  Smoke: E",
       32,
       66,
@@ -1270,7 +1273,7 @@ fn main {
       @raylib.Color::new(226, 120, 110, 255),
       @raylib.Color::new(86, 52, 52, 230),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Integrity",
       256,
       96,
@@ -1287,7 +1290,7 @@ fn main {
       @raylib.Color::new(108, 212, 170, 255),
       @raylib.Color::new(60, 80, 68, 230),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Heat",
       256,
       124,
@@ -1309,7 +1312,7 @@ fn main {
       @raylib.Color::new(120, 188, 248, 255),
       @raylib.Color::new(54, 70, 94, 230),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Boost",
       256,
       152,
@@ -1317,7 +1320,7 @@ fn main {
       @raylib.Color::new(216, 230, 244, 242),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Cash \{player.cash}/\{goal_cash}   Combo x\{player.combo}   Level \{level}",
       32,
       182,
@@ -1333,14 +1336,14 @@ fn main {
       @raylib.Color::new(154, 230, 176, 255)
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Wanted Heat: \{heat.to_int()}",
       sw - 356,
       22,
       34,
       heat_col,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time: \{time_left.to_int()}s",
       sw - 356,
       60,
@@ -1358,14 +1361,14 @@ fn main {
     } else {
       "Boost CD \{player.boost_cd.to_int()}"
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       boost_txt,
       sw - 356,
       96,
       24,
       @raylib.Color::new(188, 220, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       smoke_txt,
       sw - 356,
       122,
@@ -1375,7 +1378,7 @@ fn main {
 
     if announce_t > 0.0 {
       let alpha : Int = clampf(announce_t * 90.0, 0.0, 220.0).to_int()
-      @raylib.draw_text(
+      @draw.draw_text(
         "Collect cash drops and outrun the police net.",
         sw / 2 - 320,
         214,
@@ -1386,28 +1389,28 @@ fn main {
 
     if state == 0 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 12, 20, 220))
-      @raylib.draw_text(
+      @draw.draw_text(
         "DRIFT POLICE CHASE",
         sw / 2 - 342,
         sh / 2 - 116,
         78,
         @raylib.Color::new(238, 246, 252, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "High-speed escape through a neon city dragnet.",
         sw / 2 - 342,
         sh / 2 - 12,
         34,
         @raylib.Color::new(188, 214, 240, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Boost breaks pursuit. Smoke blinds cops and cools heat.",
         sw / 2 - 386,
         sh / 2 + 30,
         32,
         @raylib.Color::new(226, 232, 242, 238),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press ENTER to start",
         sw / 2 - 188,
         sh / 2 + 92,
@@ -1418,21 +1421,21 @@ fn main {
 
     if state == 2 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(10, 24, 20, 188))
-      @raylib.draw_text(
+      @draw.draw_text(
         "GETAWAY COMPLETE",
         sw / 2 - 308,
         sh / 2 - 80,
         72,
         @raylib.Color::new(214, 252, 214, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Cash \{player.cash}   HP \{player.hp.to_int()}   Heat \{heat.to_int()}",
         sw / 2 - 286,
         sh / 2 + 8,
         38,
         @raylib.Color::new(236, 246, 238, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press ENTER for next chase",
         sw / 2 - 240,
         sh / 2 + 68,
@@ -1441,21 +1444,21 @@ fn main {
       )
     } else if state == 3 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(22, 8, 8, 196))
-      @raylib.draw_text(
+      @draw.draw_text(
         "BUSTED",
         sw / 2 - 132,
         sh / 2 - 80,
         80,
         @raylib.Color::new(252, 192, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Cash \{player.cash}/\{goal_cash}   Time \{time_left.to_int()}s",
         sw / 2 - 252,
         sh / 2 + 8,
         38,
         @raylib.Color::new(246, 228, 220, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press ENTER to retry",
         sw / 2 - 184,
         sh / 2 + 68,

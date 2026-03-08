@@ -334,6 +334,7 @@ fn main {
   let mut easing_x = num_easings - 1 // None
   let mut easing_y = num_easings - 1 // None
   @raylib.set_target_fps(60)
+  @draw.init_font()
   while !@raylib.window_should_close() {
     if @raylib.is_key_pressed(@raylib.KeyT) {
       bounded_t = !bounded_t
@@ -403,49 +404,49 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
     let bound_char = if bounded_t { "b" } else { "u" }
-    @raylib.draw_text(
+    @draw.draw_text(
       "Easing x: \{easing_names[easing_x]}",
       20,
       font_size,
       font_size,
       @raylib.lightgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Easing y: \{easing_names[easing_y]}",
       20,
       font_size * 2,
       font_size,
       @raylib.lightgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "t (\{bound_char}) = \{t} d = \{d}",
       20,
       font_size * 3,
       font_size,
       @raylib.lightgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Use ENTER to play or pause movement, use SPACE to restart",
       20,
       screen_height - font_size * 2,
       font_size,
       @raylib.lightgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Use Q and W or A and S keys to change duration",
       20,
       screen_height - font_size * 3,
       font_size,
       @raylib.lightgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Use LEFT or RIGHT keys to choose easing for the x axis",
       20,
       screen_height - font_size * 4,
       font_size,
       @raylib.lightgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Use UP or DOWN keys to choose easing for the y axis",
       20,
       screen_height - font_size * 5,
@@ -457,7 +458,9 @@ fn main {
       16.0,
       @raylib.maroon,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
+  @draw.cleanup()
   @raylib.close_window()
 }

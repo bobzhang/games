@@ -34,6 +34,7 @@ fn main {
   let position = @raylib.Vector3::new(0.0, 0.0, 0.0)
   @raylib.disable_cursor()
   @raylib.set_target_fps(60)
+  @draw.init_font()
   // Main game loop
   while !@raylib.window_should_close() {
     // Update
@@ -45,7 +46,7 @@ fn main {
     @raylib.draw_model(model, position, 0.2, @raylib.white)
     @raylib.draw_grid(10, 1.0)
     @raylib.end_mode_3d()
-    @raylib.draw_text(
+    @draw.draw_text(
       "(c) Watermill 3D model by Alberto Cano",
       screen_width - 210,
       screen_height - 20,
@@ -53,11 +54,13 @@ fn main {
       @raylib.gray,
     )
     @raylib.draw_fps(10, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
   // De-Initialization
   @raylib.unload_shader(shader)
   @raylib.unload_texture(texture)
   @raylib.unload_model(model)
+  @draw.cleanup()
   @raylib.close_window()
 }

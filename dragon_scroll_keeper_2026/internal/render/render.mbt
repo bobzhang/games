@@ -6,8 +6,8 @@ fn draw_center_text(
   size : Int,
   color : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, color)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, color)
 }
 
 ///|
@@ -93,7 +93,7 @@ fn @types.Game::draw_chamber_shell(game : @types.Game) -> Unit {
       door_h,
       @raylib.Color::new(76, 148, 184, 180),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "<",
       x + 10,
       door_y + door_h / 2 - 12,
@@ -110,7 +110,7 @@ fn @types.Game::draw_chamber_shell(game : @types.Game) -> Unit {
       door_h,
       @raylib.Color::new(76, 148, 184, 180),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       ">",
       x + w - 30,
       door_y + door_h / 2 - 12,
@@ -119,7 +119,7 @@ fn @types.Game::draw_chamber_shell(game : @types.Game) -> Unit {
     )
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     @types.room_name(game.keeper.room),
     x + 20,
     y + 14,
@@ -148,7 +148,7 @@ fn @types.Game::draw_vault_core(game : @types.Game) -> Unit {
     52.0 + pulse,
     @raylib.Color::new(184, 226, 246, 190),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Dragon Scroll",
     x - 70,
     y - 10,
@@ -184,7 +184,7 @@ fn @types.Game::draw_breaches(game : @types.Game) -> Unit {
         radius + 8.0,
         @raylib.Color::new(246, 158, 110, 220),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Breach " + severity.to_int().to_string() + "%",
         x.to_int() - 50,
         y.to_int() - 40,
@@ -198,7 +198,7 @@ fn @types.Game::draw_breaches(game : @types.Game) -> Unit {
         18.0,
         @raylib.Color::new(128, 206, 166, 190),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "sealed",
         x.to_int() - 26,
         y.to_int() - 8,
@@ -422,14 +422,14 @@ fn @types.Game::draw_room_minimap(game : @types.Game) -> Unit {
       @raylib.Color::new(238, 128, 92, 240),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       @types.room_name(room),
       x + 8,
       y + 8,
       15,
       @raylib.Color::new(236, 244, 252, 235),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "R" +
       game.count_raiders_in_room(room).to_string() +
       " F" +
@@ -455,7 +455,7 @@ fn draw_meter(
   value_text : String,
 ) -> Unit {
   let r = @types.clamp01(ratio)
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
     x,
     y - 22,
@@ -471,7 +471,7 @@ fn draw_meter(
     h,
     @raylib.Color::new(148, 176, 200, 200),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     value_text,
     x + w + 12,
     y + 2,
@@ -542,7 +542,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     game.keeper.shield_cd.to_int().to_string() + "s",
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Wave " +
     game.wave.to_string() +
     "  Time " +
@@ -554,21 +554,21 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(246, 214, 136, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Seal charges: " + game.seal_charges.to_string(),
     panel_x + 710,
     panel_y + 36,
     22,
     @raylib.Color::new(246, 206, 170, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Ink shields: " + game.keeper.ink_shields.to_int().to_string(),
     panel_x + 710,
     panel_y + 64,
     22,
     @raylib.Color::new(192, 228, 255, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score: " +
     game.score.to_string() +
     "  Best: " +
@@ -579,7 +579,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(236, 242, 248, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     if game.keeper.extinguisher_mode {
       "Mode: Extinguisher"
     } else {
@@ -591,7 +591,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(196, 218, 242, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "WASD move  J action/seal  K mode/cancel  Space shield  P pause  R restart",
     panel_x + 20,
     panel_y + 118,
@@ -619,7 +619,7 @@ fn @types.Game::draw_message(game : @types.Game) -> Unit {
     28,
     @raylib.Color::new(12, 20, 30, alpha),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     game.message,
     36,
     y + 6,

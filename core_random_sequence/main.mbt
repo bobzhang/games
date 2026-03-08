@@ -22,6 +22,7 @@ fn main {
   )
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -96,8 +97,8 @@ fn main {
     )
 
     let rect_count_text = "\{rect_count} rectangles"
-    let rect_count_text_size = @raylib.measure_text(rect_count_text, font_size)
-    @raylib.draw_text(
+    let rect_count_text_size = @draw.measure_text(rect_count_text, font_size)
+    @draw.draw_text(
       rect_count_text,
       screen_width - rect_count_text_size - 10,
       10,
@@ -106,10 +107,12 @@ fn main {
     )
 
     @raylib.draw_fps(10, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }
 
@@ -184,13 +187,13 @@ fn draw_text_center_key_help(
   font_size : Int,
   color : @raylib.Color,
 ) -> Unit {
-  let space_size = @raylib.measure_text(" ", font_size)
-  let press_size = @raylib.measure_text("Press", font_size)
-  let key_size = @raylib.measure_text(key, font_size)
+  let space_size = @draw.measure_text(" ", font_size)
+  let press_size = @draw.measure_text("Press", font_size)
+  let key_size = @draw.measure_text(key, font_size)
   let mut text_size_current = 0
-  @raylib.draw_text("Press", pos_x, pos_y, font_size, color)
+  @draw.draw_text("Press", pos_x, pos_y, font_size, color)
   text_size_current += press_size + 2 * space_size
-  @raylib.draw_text(
+  @draw.draw_text(
     key,
     pos_x + text_size_current,
     pos_y,
@@ -205,5 +208,5 @@ fn draw_text_center_key_help(
     @raylib.red,
   )
   text_size_current += key_size + 2 * space_size
-  @raylib.draw_text(text, pos_x + text_size_current, pos_y, font_size, color)
+  @draw.draw_text(text, pos_x + text_size_current, pos_y, font_size, color)
 }

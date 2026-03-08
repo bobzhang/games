@@ -34,6 +34,7 @@ fn main {
   let mut collision = false // Collision detection
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -113,10 +114,10 @@ fn main {
       @raylib.draw_rectangle_rec(box_collision, @raylib.lime)
 
       // Draw collision message
-      @raylib.draw_text(
+      @draw.draw_text(
         "COLLISION!",
         @raylib.get_screen_width() / 2 -
-        @raylib.measure_text("COLLISION!", 20) / 2,
+        @draw.measure_text("COLLISION!", 20) / 2,
         screen_upper_limit / 2 - 10,
         20,
         @raylib.black,
@@ -125,7 +126,7 @@ fn main {
       // Draw collision area
       let collision_area = box_collision.width.to_int() *
         box_collision.height.to_int()
-      @raylib.draw_text(
+      @draw.draw_text(
         "Collision Area: \{collision_area}",
         @raylib.get_screen_width() / 2 - 100,
         screen_upper_limit + 10,
@@ -135,7 +136,7 @@ fn main {
     }
 
     // Draw help instructions
-    @raylib.draw_text(
+    @draw.draw_text(
       "Press SPACE to PAUSE/RESUME",
       20,
       screen_height - 35,
@@ -145,9 +146,11 @@ fn main {
 
     @raylib.draw_fps(10, 10)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

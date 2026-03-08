@@ -3,6 +3,7 @@ import {
   "bobzhang/games/mario/internal/types",
   "bobzhang/games/mario/internal/game",
   "bobzhang/games/mario/internal/render",
+  "bobzhang/games/utils/draw",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

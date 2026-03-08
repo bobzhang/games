@@ -3,6 +3,8 @@ import {
   "bobzhang/games/bomberman_1983_lite/internal/game",
   "bobzhang/games/bomberman_1983_lite/internal/render",
   "bobzhang/games/bomberman_1983_lite/internal/types",
+  "bobzhang/games/utils/draw",
+  "bobzhang/games/utils/fps",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

@@ -97,6 +97,7 @@ fn main {
   let mut colors = result.1
   let mut model = @raylib.load_model_from_mesh(result.2)
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -152,26 +153,28 @@ fn main {
     @raylib.end_mode_3d()
 
     // Draw UI text
-    @raylib.draw_text(
+    @draw.draw_text(
       "Point Count: " + num_points.to_string(),
       10,
       screen_height - 50,
       40,
       @raylib.white,
     )
-    @raylib.draw_text("UP - Increase points", 10, 40, 20, @raylib.white)
-    @raylib.draw_text("DOWN - Decrease points", 10, 70, 20, @raylib.white)
-    @raylib.draw_text("SPACE - Drawing function", 10, 100, 20, @raylib.white)
+    @draw.draw_text("UP - Increase points", 10, 40, 20, @raylib.white)
+    @draw.draw_text("DOWN - Decrease points", 10, 70, 20, @raylib.white)
+    @draw.draw_text("SPACE - Drawing function", 10, 100, 20, @raylib.white)
     if use_draw_model_points {
-      @raylib.draw_text("Using: DrawModelPoints()", 10, 130, 20, @raylib.green)
+      @draw.draw_text("Using: DrawModelPoints()", 10, 130, 20, @raylib.green)
     } else {
-      @raylib.draw_text("Using: DrawPoint3D()", 10, 130, 20, @raylib.red)
+      @draw.draw_text("Using: DrawPoint3D()", 10, 130, 20, @raylib.red)
     }
     @raylib.draw_fps(10, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_model(model)
+  @draw.cleanup()
   @raylib.close_window()
 }

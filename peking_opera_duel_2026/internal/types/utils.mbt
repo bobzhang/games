@@ -99,6 +99,6 @@ pub fn draw_center_text(
   size : Int,
   tint : @raylib.Color,
 ) -> Unit {
-  let w = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, screen_w / 2 - w / 2, y, size, tint)
+  let w = @draw.measure_text(text, size)
+  @draw.draw_text(text, screen_w / 2 - w / 2, y, size, tint)
 }

@@ -216,8 +216,8 @@ pub fn draw_centered_text(
   font_size : Int,
   color : @raylib.Color,
 ) -> Unit {
-  let w = @raylib.measure_text(text, font_size)
-  @raylib.draw_text(text, center_x - w / 2, y, font_size, color)
+  let w = @draw.measure_text(text, font_size)
+  @draw.draw_text(text, center_x - w / 2, y, font_size, color)
 }
 
 ///|
@@ -229,8 +229,8 @@ pub fn draw_shadow_text(
   size : Int,
   color : @raylib.Color,
 ) -> Unit {
-  @raylib.draw_text(text, x + 2, y + 2, size, @raylib.black)
-  @raylib.draw_text(text, x, y, size, color)
+  @draw.draw_text(text, x + 2, y + 2, size, @raylib.black)
+  @draw.draw_text(text, x, y, size, color)
 }
 
 ///|

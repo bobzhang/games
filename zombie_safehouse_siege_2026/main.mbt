@@ -405,6 +405,7 @@ fn seed_day_scraps(ss : Array[Scrap], wave : Int) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "Zombie Safehouse Siege 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let zombies : Array[Zombie] = Array::makei(max_zombies, fn(_i) {
     {
@@ -1494,14 +1495,14 @@ fn main {
       )
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "ZOMBIE SAFEHOUSE SIEGE 2026",
       20,
       14,
       30,
       @raylib.Color::new(236, 242, 255, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "WASD move  J fire  K dash  L/R action",
       22,
       48,
@@ -1509,7 +1510,7 @@ fn main {
       @raylib.Color::new(178, 204, 236, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "WAVE \{wave}",
       588,
       16,
@@ -1522,8 +1523,8 @@ fn main {
     } else {
       @raylib.Color::new(240, 144, 156, 255)
     }
-    @raylib.draw_text(phase_label, 696, 16, 26, phase_col)
-    @raylib.draw_text(
+    @draw.draw_text(phase_label, 696, 16, 26, phase_col)
+    @draw.draw_text(
       "TIME \{phase_t.to_int()}s",
       786,
       16,
@@ -1531,14 +1532,14 @@ fn main {
       @raylib.Color::new(216, 224, 236, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "SCRAP \{scrap_bank}",
       972,
       14,
       28,
       @raylib.Color::new(246, 214, 118, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "SCORE \{score}",
       972,
       44,
@@ -1554,7 +1555,7 @@ fn main {
       12,
       @raylib.Color::new(104, 222, 154, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "PLAYER",
       20,
       94,
@@ -1576,7 +1577,7 @@ fn main {
       12,
       @raylib.Color::new(104, 186, 240, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "SAFEHOUSE T\{home.level}",
       242,
       94,
@@ -1598,7 +1599,7 @@ fn main {
       12,
       @raylib.Color::new(118, 224, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "SHIELD",
       506,
       94,
@@ -1620,7 +1621,7 @@ fn main {
       12,
       @raylib.Color::new(248, 190, 104, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "STAMINA",
       712,
       94,
@@ -1628,14 +1629,14 @@ fn main {
       @raylib.Color::new(186, 208, 230, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "AMMO \{player.ammo}/\{player.max_ammo}",
       922,
       82,
       22,
       @raylib.Color::new(246, 232, 176, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Kills \{rescued}",
       1140,
       82,
@@ -1657,7 +1658,7 @@ fn main {
       56,
       @raylib.Color::new(58, 80, 112, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "U",
       pad_x + 104,
       pad_y + 16,
@@ -1671,7 +1672,7 @@ fn main {
       56,
       @raylib.Color::new(58, 80, 112, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "L",
       pad_x + 28,
       pad_y + 72,
@@ -1685,7 +1686,7 @@ fn main {
       56,
       @raylib.Color::new(58, 80, 112, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "R",
       pad_x + 184,
       pad_y + 72,
@@ -1699,7 +1700,7 @@ fn main {
       56,
       @raylib.Color::new(58, 80, 112, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "D",
       pad_x + 104,
       pad_y + 128,
@@ -1721,7 +1722,7 @@ fn main {
       78,
       @raylib.Color::new(208, 92, 86, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "FIRE",
       btn_x + 22,
       btn_y + 36,
@@ -1735,7 +1736,7 @@ fn main {
       78,
       @raylib.Color::new(96, 156, 222, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "DASH",
       btn_x + 128,
       btn_y + 36,
@@ -1749,7 +1750,7 @@ fn main {
       104,
       @raylib.Color::new(112, 174, 122, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "ACTION",
       btn_x + 82,
       btn_y + 138,
@@ -1764,7 +1765,7 @@ fn main {
       40,
       @raylib.Color::new(8, 10, 16, 216),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       sw / 2 - 304,
       sh - 44,
@@ -1781,35 +1782,35 @@ fn main {
         420,
         @raylib.Color::new(14, 20, 32, 242),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "ZOMBIE SAFEHOUSE SIEGE",
         sw / 2 - 292,
         sh / 2 - 150,
         58,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Day: collect scrap and upgrade the base",
         sw / 2 - 238,
         sh / 2 - 56,
         30,
         @raylib.Color::new(174, 214, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Night: survive waves, defend safehouse, use turret",
         sw / 2 - 268,
         sh / 2 - 14,
         30,
         @raylib.Color::new(174, 214, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mobile: left pad move, right buttons fire/dash/action",
         sw / 2 - 318,
         sh / 2 + 28,
         28,
         @raylib.Color::new(174, 214, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "ENTER or tap to start",
         sw / 2 - 166,
         sh / 2 + 116,
@@ -1825,35 +1826,35 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "DISTRICT SAVED",
         sw / 2 - 194,
         sh / 2 - 130,
         58,
         @raylib.Color::new(246, 238, 188, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Final score: \{score}",
         sw / 2 - 168,
         sh / 2 - 42,
         42,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Scrap collected: \{day_collected}",
         sw / 2 - 196,
         sh / 2 + 8,
         34,
         @raylib.Color::new(172, 222, 192, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Kills: \{rescued}",
         sw / 2 - 112,
         sh / 2 + 52,
         34,
         @raylib.Color::new(182, 228, 236, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 176,
         sh / 2 + 118,
@@ -1869,28 +1870,28 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "SIEGE FAILED",
         sw / 2 - 194,
         sh / 2 - 130,
         58,
         @raylib.Color::new(246, 132, 142, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         msg,
         sw / 2 - 198,
         sh / 2 - 40,
         40,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{score}   Wave: \{wave}",
         sw / 2 - 180,
         sh / 2 + 14,
         34,
         @raylib.Color::new(182, 228, 236, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 176,
         sh / 2 + 118,
@@ -1899,6 +1900,7 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
 
     if state == 2 || state == 3 {
@@ -1909,5 +1911,6 @@ fn main {
     }
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

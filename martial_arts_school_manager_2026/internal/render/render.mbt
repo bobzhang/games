@@ -129,10 +129,10 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   )
 
   let title = "Martial Arts School Manager 2026"
-  @raylib.draw_text(title, 48, 34, 38, @raylib.Color::new(238, 228, 198, 245))
+  @draw.draw_text(title, 48, 34, 38, @raylib.Color::new(238, 228, 198, 245))
 
   let week_text = "Week " + game.week.to_string()
-  @raylib.draw_text(
+  @draw.draw_text(
     week_text,
     52,
     84,
@@ -141,7 +141,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   )
 
   let funds_text = "Funds " + game.funds.to_int().to_string()
-  @raylib.draw_text(
+  @draw.draw_text(
     funds_text,
     240,
     84,
@@ -154,7 +154,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   )
 
   let rep_text = "Reputation " + game.reputation.to_int().to_string()
-  @raylib.draw_text(
+  @draw.draw_text(
     rep_text,
     470,
     84,
@@ -168,7 +168,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
 
   let avg_fatigue = game.mean_fatigue()
   let fatigue_text = "Avg Fatigue " + avg_fatigue.to_int().to_string()
-  @raylib.draw_text(fatigue_text, 790, 84, 30, fatigue_color(avg_fatigue))
+  @draw.draw_text(fatigue_text, 790, 84, 30, fatigue_color(avg_fatigue))
 
   let week_ratio : Float = if game.week_duration <= 0.0 {
     0.0
@@ -176,7 +176,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @types.clampf(1.0 - game.week_time_left / game.week_duration, 0.0, 1.0)
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Week Progress",
     1090,
     38,
@@ -195,7 +195,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   let timer_text = "Time left " +
     @types.maxf(0.0, game.week_time_left).to_int().to_string() +
     "s"
-  @raylib.draw_text(
+  @draw.draw_text(
     timer_text,
     1090,
     104,
@@ -211,7 +211,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     "Burst READY"
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     burst_text,
     1320,
     104,
@@ -255,14 +255,14 @@ fn @types.Game::draw_student_table(game : @types.Game) -> Unit {
     @raylib.Color::new(106, 130, 166, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Students",
     info_x,
     panel_y + 22,
     30,
     @raylib.Color::new(228, 236, 248, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Assign each student to Rest / Train / Spar / Defense",
     info_x,
     panel_y + 56,
@@ -274,7 +274,7 @@ fn @types.Game::draw_student_table(game : @types.Game) -> Unit {
     let x = grid_x + col * (cell_w + cell_gap)
     let room = @types.Room::from_int(col)
     let title = @types.room_name(room)
-    let tw = @raylib.measure_text(title, 24)
+    let tw = @draw.measure_text(title, 24)
     @raylib.draw_rectangle(
       x,
       panel_y + 20,
@@ -289,7 +289,7 @@ fn @types.Game::draw_student_table(game : @types.Game) -> Unit {
       52,
       with_alpha(room_color(room), 200),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       title,
       x + cell_w / 2 - tw / 2,
       panel_y + 34,
@@ -311,14 +311,14 @@ fn @types.Game::draw_student_table(game : @types.Game) -> Unit {
         @raylib.Color::new(22, 34, 50, 186)
       },
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       game.students[i].name,
       info_x,
       y + 10,
       30,
       @raylib.Color::new(240, 240, 232, 240),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Skill " + game.students[i].skill.to_int().to_string(),
       info_x,
       y + 45,
@@ -333,7 +333,7 @@ fn @types.Game::draw_student_table(game : @types.Game) -> Unit {
       game.students[i].skill / 130.0,
       @raylib.Color::new(108, 196, 252, 236),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Fatigue " + game.students[i].fatigue.to_int().to_string(),
       info_x,
       y + 64,
@@ -381,8 +381,8 @@ fn @types.Game::draw_student_table(game : @types.Game) -> Unit {
         },
       )
       let label = if assigned { "Assigned" } else { "Press J" }
-      let lw = @raylib.measure_text(label, 20)
-      @raylib.draw_text(
+      let lw = @draw.measure_text(label, 20)
+      @draw.draw_text(
         label,
         x + cell_w / 2 - lw / 2,
         y + 30,
@@ -403,7 +403,7 @@ fn @types.Game::draw_student_table(game : @types.Game) -> Unit {
     "   Next in " +
     @types.maxf(0.0, game.incident_timer).to_int().to_string() +
     "s"
-  @raylib.draw_text(
+  @draw.draw_text(
     incidents_text,
     panel_x + 22,
     panel_y + panel_h - 44,
@@ -423,7 +423,7 @@ fn draw_footer_help() -> Unit {
     42,
     @raylib.Color::new(10, 14, 24, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     footer,
     24,
     @types.screen_h - 33,
@@ -455,8 +455,8 @@ fn @types.Game::draw_message(game : @types.Game) -> Unit {
     64,
     @raylib.Color::new(154, 180, 214, alpha),
   )
-  let tw = @raylib.measure_text(game.message, 28)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(game.message, 28)
+  @draw.draw_text(
     game.message,
     @types.screen_w / 2 - tw / 2,
     831,
@@ -476,8 +476,8 @@ fn @types.Game::draw_week_banner(game : @types.Game) -> Unit {
     .to_int()
     .clamp(min=0, max=230)
   let text = "WEEK " + game.week.to_string()
-  let tw = @raylib.measure_text(text, 56)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(text, 56)
+  @draw.draw_text(
     text,
     @types.screen_w / 2 - tw / 2,
     142,
@@ -499,8 +499,8 @@ fn draw_overlay_card(
   let h = 460
   @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(6, 10, 18, 232))
   @raylib.draw_rectangle_lines(x, y, w, h, border)
-  let title_w = @raylib.measure_text(title, 52)
-  @raylib.draw_text(
+  let title_w = @draw.measure_text(title, 52)
+  @draw.draw_text(
     title,
     x + w / 2 - title_w / 2,
     y + 34,
@@ -508,7 +508,7 @@ fn draw_overlay_card(
     @raylib.Color::new(248, 238, 208, 244),
   )
   for i in 0..<lines.length() {
-    @raylib.draw_text(
+    @draw.draw_text(
       lines[i],
       x + 60,
       y + 132 + i * 44,
@@ -555,8 +555,8 @@ fn draw_paused_overlay() -> Unit {
     @raylib.Color::new(0, 0, 0, 120),
   )
   let text = "PAUSED"
-  let tw = @raylib.measure_text(text, 78)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(text, 78)
+  @draw.draw_text(
     text,
     @types.screen_w / 2 - tw / 2,
     @types.screen_h / 2 - 84,
@@ -564,8 +564,8 @@ fn draw_paused_overlay() -> Unit {
     @raylib.Color::new(248, 236, 204, 240),
   )
   let sub = "Press P to resume"
-  let sw = @raylib.measure_text(sub, 36)
-  @raylib.draw_text(
+  let sw = @draw.measure_text(sub, 36)
+  @draw.draw_text(
     sub,
     @types.screen_w / 2 - sw / 2,
     @types.screen_h / 2 + 6,

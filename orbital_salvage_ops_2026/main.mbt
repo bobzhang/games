@@ -607,28 +607,28 @@ fn draw_touch_ui(state : Int) -> Unit {
       @raylib.Color::new(22, 40, 58, 184),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "L",
       pad_x + 38,
       pad_y + 86,
       28,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "R",
       pad_x + 176,
       pad_y + 86,
       28,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "U",
       pad_x + 106,
       pad_y + 24,
       28,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "D",
       pad_x + 105,
       pad_y + 148,
@@ -680,28 +680,28 @@ fn draw_touch_ui(state : Int) -> Unit {
       @raylib.Color::new(24, 52, 70, 196),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "FIRE",
       btn_x + 42,
       btn_y + 46,
       24,
       @raylib.Color::new(246, 252, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "TRACT",
       btn_x + 178,
       btn_y + 46,
       24,
       @raylib.Color::new(246, 252, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "BOOST",
       btn_x + 36,
       btn_y + 142,
       24,
       @raylib.Color::new(246, 252, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "PULSE",
       btn_x + 180,
       btn_y + 142,
@@ -716,6 +716,7 @@ fn draw_touch_ui(state : Int) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] orbital salvage ops 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let player : Player = {
     x: world_w * 0.5,
@@ -2420,7 +2421,7 @@ fn main {
 
     // HUD.
     @raylib.draw_rectangle(0, 0, sw, 84, @raylib.Color::new(8, 12, 20, 236))
-    @raylib.draw_text(
+    @draw.draw_text(
       "Orbital Salvage Ops 2026",
       16,
       10,
@@ -2428,21 +2429,21 @@ fn main {
       @raylib.Color::new(206, 236, 250, 248),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{player.score}",
       18,
       46,
       22,
       @raylib.Color::new(252, 226, 166, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Combo \{player.combo}",
       220,
       46,
       22,
       @raylib.Color::new(166, 236, 188, 250),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Best \{player.best_combo}",
       402,
       46,
@@ -2450,14 +2451,14 @@ fn main {
       @raylib.Color::new(170, 214, 252, 250),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Cargo \{player.cargo}",
       572,
       46,
       22,
       @raylib.Color::new(220, 236, 252, 248),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Deposited \{player.deposited}/\{target_salvage}",
       716,
       46,
@@ -2465,7 +2466,7 @@ fn main {
       @raylib.Color::new(220, 236, 252, 248),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{timer.to_int()}s",
       1048,
       46,
@@ -2481,7 +2482,7 @@ fn main {
       12,
       @raylib.Color::new(224, 98, 116, 255),
     )
-    @raylib.draw_text("HP", 16, 108, 17, @raylib.Color::new(236, 204, 212, 255))
+    @draw.draw_text("HP", 16, 108, 17, @raylib.Color::new(236, 204, 212, 255))
 
     @raylib.draw_rectangle(
       16,
@@ -2497,7 +2498,7 @@ fn main {
       12,
       @raylib.Color::new(88, 190, 242, 255),
     )
-    @raylib.draw_text("EN", 16, 148, 17, @raylib.Color::new(204, 228, 250, 255))
+    @draw.draw_text("EN", 16, 148, 17, @raylib.Color::new(204, 228, 250, 255))
 
     @raylib.draw_rectangle(
       16,
@@ -2513,7 +2514,7 @@ fn main {
       12,
       @raylib.Color::new(246, 170, 96, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "HEAT",
       16,
       188,
@@ -2521,14 +2522,14 @@ fn main {
       @raylib.Color::new(244, 222, 190, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Pulse CD \{(player.pulse_cd * 10.0).to_int()}",
       300,
       98,
       20,
       @raylib.Color::new(220, 232, 246, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Boost CD \{(player.boost_cd * 10.0).to_int()}",
       300,
       126,
@@ -2536,7 +2537,7 @@ fn main {
       @raylib.Color::new(220, 232, 246, 246),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "FPS \{@raylib.get_fps()}",
       sw - 120,
       16,
@@ -2594,7 +2595,7 @@ fn main {
         36,
         @raylib.Color::new(12, 18, 30, 216),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         msg,
         sw / 2 - 300,
         sh - 60,
@@ -2622,49 +2623,49 @@ fn main {
         @raylib.Color::new(92, 152, 208, 206),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "ORBITAL SALVAGE OPS 2026",
         270,
         188,
         56,
         @raylib.Color::new(188, 236, 252, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Recover 120 salvage units and deliver to extraction beacon.",
         290,
         286,
         30,
         @raylib.Color::new(214, 228, 246, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Enemies scale over time. Mine blasts can damage everyone.",
         292,
         332,
         30,
         @raylib.Color::new(214, 228, 246, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Move: WASD/Arrows   Fire: J/Space   Tractor: K",
         300,
         390,
         28,
         @raylib.Color::new(196, 220, 242, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Boost: RightShift   EMP Pulse: L",
         430,
         432,
         28,
         @raylib.Color::new(196, 220, 242, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Touch controls shown in bottom corners.",
         416,
         472,
         28,
         @raylib.Color::new(196, 220, 242, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press Enter or tap to begin",
         466,
         548,
@@ -2688,28 +2689,28 @@ fn main {
         @raylib.Color::new(104, 220, 188, 214),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "MISSION SUCCESS",
         452,
         242,
         62,
         @raylib.Color::new(164, 246, 206, 254),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Final Score: \{player.score}",
         490,
         338,
         36,
         @raylib.Color::new(236, 246, 252, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Delivered: \{player.deposited}   Best Combo: \{player.best_combo}",
         404,
         388,
         30,
         @raylib.Color::new(214, 236, 252, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R / Enter / Tap to run again",
         430,
         472,
@@ -2733,28 +2734,28 @@ fn main {
         @raylib.Color::new(214, 106, 120, 214),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "MISSION FAILED",
         470,
         242,
         62,
         @raylib.Color::new(248, 164, 176, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{player.score}",
         560,
         338,
         36,
         @raylib.Color::new(236, 246, 252, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Delivered: \{player.deposited} / \{target_salvage}",
         490,
         388,
         30,
         @raylib.Color::new(214, 236, 252, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R / Enter / Tap to retry",
         456,
         472,
@@ -2763,8 +2764,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -3,6 +3,8 @@ import {
   "bobzhang/games/super_mario_1985_lite/internal/game",
   "bobzhang/games/super_mario_1985_lite/internal/render",
   "bobzhang/games/super_mario_1985_lite/internal/types",
+  "bobzhang/games/utils/draw",
+  "bobzhang/games/utils/fps",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

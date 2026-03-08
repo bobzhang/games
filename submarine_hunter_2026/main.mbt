@@ -77,6 +77,7 @@ fn dist_sq(ax : Float, ay : Float, bx : Float, by : Float) -> Float {
 fn main {
   @raylib.init_window(sw, sh, "Submarine Hunter 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let player_t : Array[Torpedo] = Array::makei(90, fn(_i) {
     { alive: false, x: 0.0, y: 0.0, vx: 0.0 }
@@ -364,11 +365,11 @@ fn main {
       @raylib.gray,
     )
 
-    @raylib.draw_text("SUBMARINE HUNTER 2026", 20, 16, 40, @raylib.skyblue)
-    @raylib.draw_text("Score \{score}", 20, 64, 30, @raylib.white)
-    @raylib.draw_text("Kills \{kills}", 220, 64, 30, @raylib.lime)
+    @draw.draw_text("SUBMARINE HUNTER 2026", 20, 16, 40, @raylib.skyblue)
+    @draw.draw_text("Score \{score}", 20, 64, 30, @raylib.white)
+    @draw.draw_text("Kills \{kills}", 220, 64, 30, @raylib.lime)
 
-    @raylib.draw_text("Hull", 420, 66, 24, @raylib.red)
+    @draw.draw_text("Hull", 420, 66, 24, @raylib.red)
     @raylib.draw_rectangle(
       480,
       72,
@@ -378,9 +379,9 @@ fn main {
     )
     @raylib.draw_rectangle(480, 72, hp * 220 / 100, 14, @raylib.red)
 
-    @raylib.draw_text("Sonar", 740, 66, 24, @raylib.lime)
+    @draw.draw_text("Sonar", 740, 66, 24, @raylib.lime)
     let sonar_val = if sonar_cd > 0.0 { sonar_cd.to_int() } else { 0 }
-    @raylib.draw_text("CD \{sonar_val}s", 810, 66, 24, @raylib.raywhite)
+    @draw.draw_text("CD \{sonar_val}s", 810, 66, 24, @raylib.raywhite)
 
     @raylib.draw_rectangle(
       20,
@@ -389,7 +390,7 @@ fn main {
       30,
       @raylib.Color::new(8, 12, 18, 220),
     )
-    @raylib.draw_text(msg, 28, 699, 20, @raylib.raywhite)
+    @draw.draw_text(msg, 28, 699, 20, @raylib.raywhite)
 
     if over {
       @raylib.draw_rectangle(
@@ -399,12 +400,14 @@ fn main {
         180,
         @raylib.fade(@raylib.black, 0.82),
       )
-      @raylib.draw_text("MISSION FAILED", 370, 308, 50, @raylib.red)
-      @raylib.draw_text("Press R to relaunch", 420, 366, 34, @raylib.white)
+      @draw.draw_text("MISSION FAILED", 370, 308, 50, @raylib.red)
+      @draw.draw_text("Press R to relaunch", 420, 366, 34, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

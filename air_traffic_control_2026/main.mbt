@@ -57,6 +57,7 @@ fn reset_planes(planes : Array[Plane]) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "Air Traffic Control 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let planes : Array[Plane] = Array::makei(100, fn(_i) {
     { alive: false, runway: 0, x: 0.0, y: 0.0, vy: 80.0, fuel: 20.0 }
@@ -212,7 +213,7 @@ fn main {
         @raylib.Color::new(62, 66, 72, 255),
       )
       @raylib.draw_line(x.to_int(), 180, x.to_int(), 680, @raylib.lightgray)
-      @raylib.draw_text(
+      @draw.draw_text(
         "RWY \{r + 1}",
         (x - 42.0).to_int(),
         184,
@@ -241,7 +242,7 @@ fn main {
           @raylib.Vector2::new(plane.x + 12.0, plane.y + 10.0),
           c,
         )
-        @raylib.draw_text(
+        @draw.draw_text(
           "\{plane.fuel.to_int()}",
           (plane.x + 14.0).to_int(),
           (plane.y - 12.0).to_int(),
@@ -258,8 +259,8 @@ fn main {
       110,
       @raylib.Color::new(12, 18, 30, 220),
     )
-    @raylib.draw_text("AIR TRAFFIC CONTROL 2026", 26, 22, 36, @raylib.skyblue)
-    @raylib.draw_text(
+    @draw.draw_text("AIR TRAFFIC CONTROL 2026", 26, 22, 36, @raylib.skyblue)
+    @draw.draw_text(
       "Score \{score}  Landed \{landed}  Missed \{missed}  Lives \{lives}",
       28,
       66,
@@ -267,7 +268,7 @@ fn main {
       @raylib.raywhite,
     )
 
-    @raylib.draw_text("Stress", 670, 30, 28, @raylib.darkblue)
+    @draw.draw_text("Stress", 670, 30, 28, @raylib.darkblue)
     @raylib.draw_rectangle(
       760,
       36,
@@ -284,7 +285,7 @@ fn main {
       30,
       @raylib.Color::new(12, 18, 30, 220),
     )
-    @raylib.draw_text(msg, 28, 699, 20, @raylib.raywhite)
+    @draw.draw_text(msg, 28, 699, 20, @raylib.raywhite)
 
     if over {
       @raylib.draw_rectangle(
@@ -294,12 +295,14 @@ fn main {
         180,
         @raylib.fade(@raylib.black, 0.82),
       )
-      @raylib.draw_text("SHIFT FAILED", 420, 310, 52, @raylib.red)
-      @raylib.draw_text("Press R to restart", 430, 370, 34, @raylib.white)
+      @draw.draw_text("SHIFT FAILED", 420, 310, 52, @raylib.red)
+      @draw.draw_text("Press R to restart", 430, 370, 34, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

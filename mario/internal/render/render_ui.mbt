@@ -21,7 +21,7 @@ pub fn draw_ui(game : @types.Game) -> Unit {
     GameOver => draw_game_over(game)
     Victory => draw_victory(game)
   }
-  draw_perf_overlay(game)
+  @fps.draw()
 }
 
 ///|
@@ -29,26 +29,26 @@ fn draw_hud(game : @types.Game) -> Unit {
   // Top bar background
   @raylib.draw_rectangle(0, 0, @types.screen_w, 36, hud_bg)
   // MARIO label + score
-  @raylib.draw_text("MARIO", 30, 4, 16, hud_white)
+  @draw.draw_text("MARIO", 30, 4, 16, hud_white)
   let score_str = game.score.to_string()
-  @raylib.draw_text(score_str, 30, 18, 16, hud_white)
+  @draw.draw_text(score_str, 30, 18, 16, hud_white)
   // Coins
   @raylib.draw_rectangle(220, 8, 10, 14, hud_coin)
   @raylib.draw_rectangle(222, 6, 6, 4, hud_coin)
   let coin_text = "x" + (if game.coins < 10 { "0" } else { "" }) +
     game.coins.to_string()
-  @raylib.draw_text(coin_text, 236, 10, 16, hud_white)
+  @draw.draw_text(coin_text, 236, 10, 16, hud_white)
   // World
-  @raylib.draw_text("WORLD", 400, 4, 16, hud_white)
+  @draw.draw_text("WORLD", 400, 4, 16, hud_white)
   let world_text = game.world_num.to_string() + "-" + game.level_num.to_string()
-  @raylib.draw_text(world_text, 410, 18, 16, hud_white)
+  @draw.draw_text(world_text, 410, 18, 16, hud_white)
   // Time
-  @raylib.draw_text("TIME", 600, 4, 16, hud_white)
+  @draw.draw_text("TIME", 600, 4, 16, hud_white)
   let time_text = game.time_remaining.to_int().to_string()
-  @raylib.draw_text(time_text, 608, 18, 16, hud_white)
+  @draw.draw_text(time_text, 608, 18, 16, hud_white)
   // Lives
   let lives_text = "x" + game.lives.to_string()
-  @raylib.draw_text(lives_text, 780, 10, 16, hud_white)
+  @draw.draw_text(lives_text, 780, 10, 16, hud_white)
   // Small Mario icon for lives
   @raylib.draw_rectangle(760, 6, 12, 6, @raylib.Color::new(228, 0, 0, 255))
   @raylib.draw_rectangle(762, 12, 8, 6, @raylib.Color::new(252, 188, 116, 255))
@@ -60,12 +60,12 @@ fn draw_hud(game : @types.Game) -> Unit {
     Fire => "[FIRE]"
   }
   if power_text.length() > 0 {
-    @raylib.draw_text(power_text, 860, 10, 16, hud_yellow)
+    @draw.draw_text(power_text, 860, 10, 16, hud_yellow)
   }
   // Star timer
   if game.player.star_timer > 0.0 {
     let star_text = "STAR:" + game.player.star_timer.to_int().to_string()
-    @raylib.draw_text(
+    @draw.draw_text(
       star_text,
       860,
       10,
@@ -114,30 +114,30 @@ fn draw_title_screen(game : @types.Game) -> Unit {
   // Title text
   let title1 = "SUPER"
   let title2 = "MARIO"
-  let tw1 = @raylib.measure_text(title1, 60)
-  let tw2 = @raylib.measure_text(title2, 60)
-  @raylib.draw_text(
+  let tw1 = @draw.measure_text(title1, 60)
+  let tw2 = @draw.measure_text(title2, 60)
+  @draw.draw_text(
     title1,
     480 - tw1 / 2 + 3,
     198 + 3,
     60,
     @raylib.Color::new(100, 0, 0, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     title1,
     480 - tw1 / 2,
     198,
     60,
     @raylib.Color::new(252, 252, 252, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     title2,
     480 - tw2 / 2 + 3,
     253 + 3,
     60,
     @raylib.Color::new(100, 0, 0, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     title2,
     480 - tw2 / 2,
     253,
@@ -146,8 +146,8 @@ fn draw_title_screen(game : @types.Game) -> Unit {
   )
   // Subtitle
   let sub = "M O O N B I T   E D I T I O N"
-  let tw_sub = @raylib.measure_text(sub, 16)
-  @raylib.draw_text(
+  let tw_sub = @draw.measure_text(sub, 16)
+  @draw.draw_text(
     sub,
     480 - tw_sub / 2,
     330,
@@ -158,8 +158,8 @@ fn draw_title_screen(game : @types.Game) -> Unit {
   let blink = game.frame_counter / 30 % 2
   if blink == 0 {
     let prompt = "PRESS ENTER TO START"
-    let tw_p = @raylib.measure_text(prompt, 24)
-    @raylib.draw_text(
+    let tw_p = @draw.measure_text(prompt, 24)
+    @draw.draw_text(
       prompt,
       480 - tw_p / 2,
       420,
@@ -168,14 +168,14 @@ fn draw_title_screen(game : @types.Game) -> Unit {
     )
   }
   // Controls info
-  @raylib.draw_text(
+  @draw.draw_text(
     "ARROWS / WASD = Move     SPACE / UP / W = Jump",
     140,
     480,
     16,
     @raylib.Color::new(252, 252, 252, 200),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "SHIFT / Z / X = Run & Fire     P / ESC = Pause",
     140,
     500,
@@ -183,7 +183,7 @@ fn draw_title_screen(game : @types.Game) -> Unit {
     @raylib.Color::new(252, 252, 252, 200),
   )
   // Credits
-  @raylib.draw_text(
+  @draw.draw_text(
     "Built with MoonBit + Raylib",
     340,
     680,
@@ -198,8 +198,8 @@ fn draw_level_intro(game : @types.Game) -> Unit {
   // World text
   let world_text = "WORLD  " + game.world_num.to_string() + " - " +
     game.level_num.to_string()
-  let tw = @raylib.measure_text(world_text, 40)
-  @raylib.draw_text(world_text, 480 - tw / 2, 280, 40, hud_white)
+  let tw = @draw.measure_text(world_text, 40)
+  @draw.draw_text(world_text, 480 - tw / 2, 280, 40, hud_white)
   // Mario icon + lives
   @raylib.draw_rectangle(400, 360, 20, 10, @raylib.Color::new(228, 0, 0, 255))
   @raylib.draw_rectangle(402, 370, 16, 8, @raylib.Color::new(
@@ -207,7 +207,7 @@ fn draw_level_intro(game : @types.Game) -> Unit {
   ))
   @raylib.draw_rectangle(400, 378, 20, 12, @raylib.Color::new(32, 64, 200, 255))
   let lives_text = "x  " + game.lives.to_string()
-  @raylib.draw_text(lives_text, 440, 365, 28, hud_white)
+  @draw.draw_text(lives_text, 440, 365, 28, hud_white)
 }
 
 ///|
@@ -220,9 +220,9 @@ fn draw_pause_overlay(game : @types.Game) -> Unit {
     hud_yellow
   }
   let text = "P A U S E D"
-  let tw = @raylib.measure_text(text, 48)
-  @raylib.draw_text(text, 480 - tw / 2, 320, 48, color)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(text, 48)
+  @draw.draw_text(text, 480 - tw / 2, 320, 48, color)
+  @draw.draw_text(
     "Press P or ESC to resume",
     350,
     390,
@@ -235,8 +235,8 @@ fn draw_pause_overlay(game : @types.Game) -> Unit {
 fn draw_game_over(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(0, 0, 0, 255))
   let text = "G A M E   O V E R"
-  let tw = @raylib.measure_text(text, 48)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(text, 48)
+  @draw.draw_text(
     text,
     480 - tw / 2,
     300,
@@ -244,14 +244,14 @@ fn draw_game_over(game : @types.Game) -> Unit {
     @raylib.Color::new(228, 0, 0, 255),
   )
   let score_text = "FINAL SCORE: " + game.score.to_string()
-  let tw2 = @raylib.measure_text(score_text, 24)
-  @raylib.draw_text(score_text, 480 - tw2 / 2, 380, 24, hud_white)
+  let tw2 = @draw.measure_text(score_text, 24)
+  @draw.draw_text(score_text, 480 - tw2 / 2, 380, 24, hud_white)
   if game.game_over_timer > 3.0 {
     let blink = game.frame_counter / 30 % 2
     if blink == 0 {
       let prompt = "PRESS ENTER"
-      let tw_p = @raylib.measure_text(prompt, 20)
-      @raylib.draw_text(prompt, 480 - tw_p / 2, 440, 20, hud_white)
+      let tw_p = @draw.measure_text(prompt, 20)
+      @draw.draw_text(prompt, 480 - tw_p / 2, 440, 20, hud_white)
     }
   }
 }
@@ -268,86 +268,24 @@ fn draw_victory(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 148, 252, 255),
   ]
   let text1 = "CONGRATULATIONS!"
-  let tw1 = @raylib.measure_text(text1, 40)
+  let tw1 = @draw.measure_text(text1, 40)
   let col_idx = (game.frame_counter / 8) % 5
-  @raylib.draw_text(text1, 480 - tw1 / 2, 200, 40, colors[col_idx])
+  @draw.draw_text(text1, 480 - tw1 / 2, 200, 40, colors[col_idx])
   let text2 = "YOU SAVED THE MUSHROOM KINGDOM!"
-  let tw2 = @raylib.measure_text(text2, 24)
-  @raylib.draw_text(text2, 480 - tw2 / 2, 280, 24, hud_white)
+  let tw2 = @draw.measure_text(text2, 24)
+  @draw.draw_text(text2, 480 - tw2 / 2, 280, 24, hud_white)
   let score_text = "FINAL SCORE: " + game.score.to_string()
-  let tw3 = @raylib.measure_text(score_text, 28)
-  @raylib.draw_text(score_text, 480 - tw3 / 2, 350, 28, hud_yellow)
+  let tw3 = @draw.measure_text(score_text, 28)
+  @draw.draw_text(score_text, 480 - tw3 / 2, 350, 28, hud_yellow)
   let coins_text = "COINS: " + game.coins.to_string()
-  let tw4 = @raylib.measure_text(coins_text, 24)
-  @raylib.draw_text(coins_text, 480 - tw4 / 2, 400, 24, hud_coin)
+  let tw4 = @draw.measure_text(coins_text, 24)
+  @draw.draw_text(coins_text, 480 - tw4 / 2, 400, 24, hud_coin)
   // Blinking prompt
   let blink = game.frame_counter / 30 % 2
   if blink == 0 {
     let prompt = "PRESS ENTER TO PLAY AGAIN"
-    let tw_p = @raylib.measure_text(prompt, 20)
-    @raylib.draw_text(prompt, 480 - tw_p / 2, 480, 20, hud_white)
+    let tw_p = @draw.measure_text(prompt, 20)
+    @draw.draw_text(prompt, 480 - tw_p / 2, 480, 20, hud_white)
   }
 }
 
-///|
-fn draw_perf_overlay(game : @types.Game) -> Unit {
-  let panel_w = 176
-  let panel_h = 78
-  let panel_x = @types.screen_w - panel_w - 12
-  let panel_y = @types.screen_h - panel_h - 12
-  let latest_index = if game.frame_time_cursor == 0 {
-    game.frame_times.length() - 1
-  } else {
-    game.frame_time_cursor - 1
-  }
-  let latest_dt = game.frame_times[latest_index]
-  let latest_ms = latest_dt * 1000.0F
-  let latest_fps = if latest_dt > 0.0001F {
-    (Float::from_int(1) / latest_dt).to_int()
-  } else {
-    0
-  }
-  let target_ms : Float = 1000.0F / Float::from_int(@types.target_fps)
-  @raylib.draw_rectangle(panel_x, panel_y, panel_w, panel_h, @raylib.Color::new(0, 0, 0, 170))
-  @raylib.draw_rectangle_lines(panel_x, panel_y, panel_w, panel_h, @raylib.Color::new(255, 255, 255, 60))
-  @raylib.draw_text("FPS", panel_x + 8, panel_y + 6, 16, hud_white)
-  let fps_color = if latest_ms <= target_ms {
-    @raylib.Color::new(80, 220, 120, 255)
-  } else if latest_ms <= target_ms * 1.5 {
-    hud_yellow
-  } else {
-    @raylib.Color::new(228, 80, 80, 255)
-  }
-  @raylib.draw_text(latest_fps.to_string(), panel_x + 44, panel_y + 6, 16, fps_color)
-  let ms_text = latest_ms.to_string()
-  @raylib.draw_text(ms_text + " ms", panel_x + 92, panel_y + 6, 16, hud_white)
-  let graph_x = panel_x + 8
-  let graph_y = panel_y + 28
-  let graph_w = panel_w - 16
-  let graph_h = panel_h - 38
-  @raylib.draw_rectangle(graph_x, graph_y, graph_w, graph_h, @raylib.Color::new(255, 255, 255, 18))
-  let target_line_y = graph_y + graph_h -
-    (target_ms / 33.333F * Float::from_int(graph_h)).to_int().clamp(min=0, max=graph_h)
-  @raylib.draw_line(graph_x, target_line_y, graph_x + graph_w, target_line_y, @raylib.Color::new(80, 220, 120, 120))
-  let sample_count = graph_w
-  let history_len = game.frame_times.length()
-  let mut start = game.frame_time_cursor - sample_count
-  while start < 0 {
-    start += history_len
-  }
-  for i in 0..<sample_count {
-    let idx = (start + i) % history_len
-    let ms = game.frame_times[idx] * 1000.0F
-    let height = (ms / 33.333F * Float::from_int(graph_h)).to_int().clamp(min=1, max=graph_h)
-    let x = graph_x + i
-    let y = graph_y + graph_h - height
-    let col = if ms <= target_ms {
-      @raylib.Color::new(80, 220, 120, 220)
-    } else if ms <= target_ms * 1.5 {
-      @raylib.Color::new(252, 200, 32, 220)
-    } else {
-      @raylib.Color::new(228, 80, 80, 220)
-    }
-    @raylib.draw_line(x, graph_y + graph_h, x, y, col)
-  }
-}

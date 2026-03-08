@@ -795,7 +795,7 @@ fn draw_player(player : Player, t : Float) -> Unit {
   )
 
   if player.carried > 0 {
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{player.carried}",
       (x + 14.0).to_int(),
       (y - 9.0).to_int(),
@@ -847,28 +847,28 @@ fn draw_touch_ui() -> Unit {
     @raylib.Color::new(84, 108, 160, 164),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "UP",
     pad_x + 110,
     pad_y + 16,
     24,
     @raylib.Color::new(236, 244, 255, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "LT",
     pad_x + 26,
     pad_y + 84,
     24,
     @raylib.Color::new(236, 244, 255, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "RT",
     pad_x + 191,
     pad_y + 84,
     24,
     @raylib.Color::new(236, 244, 255, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "DN",
     pad_x + 106,
     pad_y + 152,
@@ -884,7 +884,7 @@ fn draw_touch_ui() -> Unit {
     62.0,
     @raylib.Color::new(242, 132, 108, 172),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "BOMB",
     bomb_x - 40,
     bomb_y - 14,
@@ -900,7 +900,7 @@ fn draw_touch_ui() -> Unit {
     54.0,
     @raylib.Color::new(122, 206, 136, 174),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "SON",
     sonar_x - 24,
     sonar_y - 14,
@@ -938,14 +938,14 @@ fn draw_ui(
     @raylib.Color::new(164, 188, 234, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "DEEP TUNNEL DRILL RESCUE",
     panel_x + 14,
     42,
     34,
     @raylib.Color::new(236, 246, 255, 252),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Dig, rescue, return to base",
     panel_x + 16,
     80,
@@ -953,14 +953,14 @@ fn draw_ui(
     @raylib.Color::new(192, 216, 252, 238),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Timer",
     panel_x + 16,
     126,
     24,
     @raylib.Color::new(220, 236, 252, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{timer.to_int()}s",
     panel_x + 130,
     126,
@@ -968,14 +968,14 @@ fn draw_ui(
     @raylib.Color::new(248, 228, 150, 252),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Rescued",
     panel_x + 16,
     162,
     24,
     @raylib.Color::new(220, 236, 252, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{rescued}/\{target}",
     panel_x + 130,
     162,
@@ -983,14 +983,14 @@ fn draw_ui(
     @raylib.Color::new(136, 226, 162, 252),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Miners left",
     panel_x + 16,
     198,
     24,
     @raylib.Color::new(220, 236, 252, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{miners_left}",
     panel_x + 170,
     198,
@@ -998,14 +998,14 @@ fn draw_ui(
     @raylib.Color::new(228, 238, 252, 252),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Casualties",
     panel_x + 16,
     234,
     24,
     @raylib.Color::new(220, 236, 252, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{casualties}",
     panel_x + 150,
     234,
@@ -1013,14 +1013,14 @@ fn draw_ui(
     @raylib.Color::new(244, 132, 150, 252),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Tier",
     panel_x + 16,
     270,
     24,
     @raylib.Color::new(220, 236, 252, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{tier}",
     panel_x + 80,
     270,
@@ -1028,14 +1028,14 @@ fn draw_ui(
     @raylib.Color::new(248, 216, 126, 252),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Crystals",
     panel_x + 156,
     270,
     24,
     @raylib.Color::new(220, 236, 252, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{crystals}",
     panel_x + 262,
     270,
@@ -1043,14 +1043,14 @@ fn draw_ui(
     @raylib.Color::new(132, 214, 252, 252),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score",
     panel_x + 16,
     306,
     24,
     @raylib.Color::new(220, 236, 252, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{score}",
     panel_x + 94,
     306,
@@ -1065,7 +1065,7 @@ fn draw_ui(
     maxv : Float,
     col : @raylib.Color,
   ) -> Unit {
-    @raylib.draw_text(
+    @draw.draw_text(
       label,
       panel_x + 16,
       y,
@@ -1089,7 +1089,7 @@ fn draw_ui(
       22,
       @raylib.Color::new(182, 206, 246, 248),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{value.to_int()}/\{maxv.to_int()}",
       panel_x + panel_w - 130,
       y + 56,
@@ -1127,14 +1127,14 @@ fn draw_ui(
     @raylib.Color::new(244, 136, 146, 252),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Bombs \{player.bombs}",
     panel_x + 16,
     666,
     28,
     @raylib.Color::new(242, 226, 150, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Carried \{player.carried}/\{player.carry_max}",
     panel_x + 170,
     666,
@@ -1143,7 +1143,7 @@ fn draw_ui(
   )
 
   if impossible {
-    @raylib.draw_text(
+    @draw.draw_text(
       "Target impossible: too many losses",
       panel_x + 16,
       702,
@@ -1151,7 +1151,7 @@ fn draw_ui(
       @raylib.Color::new(252, 176, 188, 248),
     )
   } else {
-    @raylib.draw_text(
+    @draw.draw_text(
       "Base converts 3 crystals -> +1 bomb",
       panel_x + 16,
       702,
@@ -1166,6 +1166,7 @@ fn draw_ui(
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] deep tunnel drill rescue 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let tiles : Array[Int] = Array::make(grid_w * grid_h, tile_empty)
 
@@ -1641,7 +1642,7 @@ fn main {
       base_h,
       @raylib.Color::new(196, 224, 252, 236),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "BASE",
       base_x + 28,
       base_y + 22,
@@ -1679,7 +1680,7 @@ fn main {
 
     draw_touch_ui()
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Tap tiles by moving through dirt. Base refills + unloads.",
       world_x + 6,
       30,
@@ -1688,7 +1689,7 @@ fn main {
     )
 
     if msg_t > 0.0 {
-      let bw : Int = @raylib.measure_text(msg, 30) + 44
+      let bw : Int = @draw.measure_text(msg, 30) + 44
       let bx : Int = sw / 2 - bw / 2
       @raylib.draw_rectangle(
         bx,
@@ -1704,7 +1705,7 @@ fn main {
         52,
         @raylib.Color::new(186, 210, 248, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         msg,
         bx + 22,
         28,
@@ -1715,14 +1716,14 @@ fn main {
 
     if state == 0 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(10, 14, 24, 206))
-      @raylib.draw_text(
+      @draw.draw_text(
         "DEEP TUNNEL DRILL RESCUE",
         sw / 2 - 410,
         150,
         76,
         @raylib.Color::new(236, 246, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Underground rescue + drilling roguelite",
         sw / 2 - 268,
         242,
@@ -1745,28 +1746,28 @@ fn main {
         @raylib.Color::new(166, 196, 246, 246),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "Desktop",
         sw / 2 - 436,
         346,
         32,
         @raylib.Color::new(242, 246, 255, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- WASD/Arrows move and drill dirt",
         sw / 2 - 436,
         386,
         28,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- J/Space bomb, K/H sonar, R rescue",
         sw / 2 - 436,
         420,
         28,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Return to base to refill and unload",
         sw / 2 - 436,
         454,
@@ -1774,28 +1775,28 @@ fn main {
         @raylib.Color::new(210, 228, 252, 248),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mobile",
         sw / 2 + 74,
         346,
         32,
         @raylib.Color::new(242, 246, 255, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Hold D-pad to move",
         sw / 2 + 74,
         386,
         28,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Tap BOMB / SON buttons",
         sw / 2 + 74,
         420,
         28,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Fully touch playable",
         sw / 2 + 74,
         454,
@@ -1817,7 +1818,7 @@ fn main {
         92,
         @raylib.Color::new(230, 240, 255, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "START DRILL SHIFT",
         sw / 2 - 158,
         638,
@@ -1826,28 +1827,28 @@ fn main {
       )
     } else if state == 2 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 20, 10, 194))
-      @raylib.draw_text(
+      @draw.draw_text(
         "MISSION SUCCESS",
         sw / 2 - 298,
         186,
         86,
         @raylib.Color::new(164, 246, 182, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Rescued \{rescued_total}/\{target_miners}",
         sw / 2 - 176,
         324,
         42,
         @raylib.Color::new(232, 248, 236, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score \{score}",
         sw / 2 - 84,
         376,
         38,
         @raylib.Color::new(244, 232, 160, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Tap or Enter",
         sw / 2 - 94,
         456,
@@ -1856,28 +1857,28 @@ fn main {
       )
     } else if state == 3 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(24, 8, 14, 206))
-      @raylib.draw_text(
+      @draw.draw_text(
         "MISSION FAILED",
         sw / 2 - 266,
         194,
         86,
         @raylib.Color::new(252, 164, 178, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Rescued \{rescued_total}/\{target_miners}",
         sw / 2 - 176,
         326,
         42,
         @raylib.Color::new(242, 232, 236, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Casualties \{casualties_total}  Score \{score}",
         sw / 2 - 236,
         378,
         36,
         @raylib.Color::new(244, 216, 154, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Tap or Enter to retry",
         sw / 2 - 164,
         456,
@@ -1886,8 +1887,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -27,6 +27,7 @@ fn main {
   let enemy_sphere_size : Float = 1.5
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -135,13 +136,15 @@ fn main {
 
     @raylib.draw_grid(10, 1.0)
     @raylib.end_mode_3d()
-    @raylib.draw_text(
+    @draw.draw_text(
       "Move player with arrow keys to collide", 220, 40, 20, @raylib.gray,
     )
     @raylib.draw_fps(10, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -61,6 +61,7 @@ fn main {
   let mut time : Float = 0.0
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -92,9 +93,10 @@ fn main {
 
     @raylib.end_mode_3d()
 
-    @raylib.draw_text("Vertex displacement", 10, 10, 20, @raylib.darkgray)
+    @draw.draw_text("Vertex displacement", 10, 10, 20, @raylib.darkgray)
     @raylib.draw_fps(10, 40)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -102,5 +104,6 @@ fn main {
   @raylib.unload_shader(shader)
   @raylib.unload_model(plane_model)
   @raylib.unload_texture(perlin_noise_map)
+  @draw.cleanup()
   @raylib.close_window()
 }

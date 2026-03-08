@@ -3,6 +3,8 @@ import {
   "bobzhang/games/fighter_97_lite/internal/types",
   "bobzhang/games/fighter_97_lite/internal/game",
   "bobzhang/games/fighter_97_lite/internal/render",
+  "bobzhang/games/utils/draw",
+  "bobzhang/games/utils/fps",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

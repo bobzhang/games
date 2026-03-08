@@ -27,6 +27,7 @@ fn main {
   let mut frame_counter = 0 // General frames counter
 
   @raylib.set_target_fps(60) // Set our game to run at 60 frames-per-second
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -64,29 +65,29 @@ fn main {
     // Draw
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
-    @raylib.draw_text(
+    @draw.draw_text(
       "TOTAL GIF FRAMES:  " + anim_frames.to_string(),
       50,
       30,
       20,
       @raylib.lightgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "CURRENT FRAME: " + current_anim_frame.to_string(),
       50,
       60,
       20,
       @raylib.gray,
     )
-    @raylib.draw_text("FRAMES DELAY: ", 100, 305, 10, @raylib.darkgray)
-    @raylib.draw_text(
+    @draw.draw_text("FRAMES DELAY: ", 100, 305, 10, @raylib.darkgray)
+    @draw.draw_text(
       frame_delay.to_string() + " frames",
       620,
       305,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "PRESS RIGHT/LEFT KEYS to CHANGE SPEED!", 290, 350, 10, @raylib.darkgray,
     )
     for i in 0..<max_frame_delay {
@@ -102,18 +103,20 @@ fn main {
       140,
       @raylib.white,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "(c) Scarfy sprite by Eiden Marsal",
       screen_width - 200,
       screen_height - 20,
       10,
       @raylib.gray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_texture(tex_scarfy_anim) // Unload texture
   @raylib.unload_image(im_scarfy_anim) // Unload image (contains all frames)
+  @draw.cleanup()
   @raylib.close_window() // Close window and OpenGL context
 }

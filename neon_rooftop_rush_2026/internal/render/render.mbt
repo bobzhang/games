@@ -6,8 +6,8 @@ fn draw_center_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
 }
 
 ///|
@@ -286,7 +286,7 @@ fn draw_obstacle(ob : @types.Obstacle, cam_x : Float, cam_y : Float) -> Unit {
         ob.h.to_int(),
         @types.neon_pink(),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "N",
         x.to_int() + ob.w.to_int() / 2 - 8,
         y.to_int() + 2,
@@ -687,7 +687,7 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
       @types.ui_light()
     },
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "SLIDE",
     sr.0.to_int() + 20,
     sr.1.to_int() + 40,
@@ -698,7 +698,7 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
       @types.ui_light()
     },
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "HOOK",
     gr.0.to_int() + 24,
     gr.1.to_int() + 40,
@@ -723,15 +723,15 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(130, 174, 220, 190),
   )
 
-  @raylib.draw_text("NEON ROOFTOP RUSH", 28, 24, 28, @types.neon_blue())
-  @raylib.draw_text(
+  @draw.draw_text("NEON ROOFTOP RUSH", 28, 24, 28, @types.neon_blue())
+  @draw.draw_text(
     "Score: \{game.score}   Best: \{game.best_score}",
     30,
     56,
     22,
     @types.ui_light(),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Stage \{game.stage}   Chips \{game.chips_collected}   Combo x\{game.combo}",
     30,
     82,
@@ -762,7 +762,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     16,
     @raylib.Color::new(220, 240, 250, 200),
   )
-  @raylib.draw_text("HEALTH", 500, 2, 16, @types.ui_light())
+  @draw.draw_text("HEALTH", 500, 2, 16, @types.ui_light())
 
   let stamina_w = 250
   let stamina_fill = (Float::from_int(stamina_w) * game.stamina / 100.0).to_int()
@@ -787,7 +787,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     16,
     @raylib.Color::new(220, 240, 250, 200),
   )
-  @raylib.draw_text("GRAPPLE", 500, 48, 16, @types.ui_light())
+  @draw.draw_text("GRAPPLE", 500, 48, 16, @types.ui_light())
 
   let stage_p = @types.clampf(
     game.stage_progress / @types.maxf(1.0, game.stage_goal),
@@ -817,7 +817,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     18,
     @raylib.Color::new(210, 242, 230, 200),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Stage Progress \{(stage_p * 100.0).to_int()}%",
     840,
     46,
@@ -833,7 +833,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     46,
     @raylib.Color::new(160, 194, 230, 210),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "RESTART",
     1161,
     30,
@@ -855,7 +855,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
 
   if game.hint_t > 0.0 {
     let a = (game.hint_t / 8.0 * 255.0).to_int().clamp(min=0, max=255)
-    @raylib.draw_text(
+    @draw.draw_text(
       "Hint: chain chips + hook takedowns to keep combo alive",
       28,
       118,
@@ -899,11 +899,11 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(120, 184, 236, 220),
   )
 
-  @raylib.draw_text("Controls", 348, 326, 34, @types.neon_lime())
-  @raylib.draw_text("Jump: Space / W / Up", 356, 374, 26, @types.ui_light())
-  @raylib.draw_text("Slide: S / Down / Shift", 356, 408, 26, @types.ui_light())
-  @raylib.draw_text("Grapple Hook: J / K / L", 356, 442, 26, @types.ui_light())
-  @raylib.draw_text(
+  @draw.draw_text("Controls", 348, 326, 34, @types.neon_lime())
+  @draw.draw_text("Jump: Space / W / Up", 356, 374, 26, @types.ui_light())
+  @draw.draw_text("Slide: S / Down / Shift", 356, 408, 26, @types.ui_light())
+  @draw.draw_text("Grapple Hook: J / K / L", 356, 442, 26, @types.ui_light())
+  @draw.draw_text(
     "Mobile: tap on-screen Jump / Slide / Hook",
     356,
     476,

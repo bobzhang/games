@@ -385,6 +385,7 @@ fn nearest_obstacle_dy(obs : Array[Obstacle], player_dist : Float) -> Int {
 fn main {
   @raylib.init_window(sw, sh, "Ninja Rooftop Chase 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let player : Player = {
     lane: 1,
@@ -1203,14 +1204,14 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 74, @raylib.Color::new(8, 12, 22, 226))
-    @raylib.draw_text(
+    @draw.draw_text(
       "NINJA ROOFTOP CHASE 2026",
       20,
       14,
       30,
       @raylib.Color::new(236, 244, 255, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "A/D lane  W jump  S slide  J slash  K throw  L dash",
       20,
       48,
@@ -1218,28 +1219,28 @@ fn main {
       @raylib.Color::new(178, 204, 236, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{player.score}",
       560,
       16,
       28,
       @raylib.Color::new(246, 216, 118, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Combo \{player.combo}",
       740,
       16,
       28,
       @raylib.Color::new(170, 238, 194, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Dist \{player.distance.to_int()}m",
       920,
       16,
       28,
       @raylib.Color::new(180, 226, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{time_left.to_int()}s",
       1110,
       16,
@@ -1255,7 +1256,7 @@ fn main {
       10,
       @raylib.Color::new(108, 224, 154, 255),
     )
-    @raylib.draw_text("HP", 20, 96, 16, @raylib.Color::new(182, 208, 230, 255))
+    @draw.draw_text("HP", 20, 96, 16, @raylib.Color::new(182, 208, 230, 255))
 
     @raylib.draw_rectangle(
       254,
@@ -1271,7 +1272,7 @@ fn main {
       10,
       @raylib.Color::new(116, 198, 248, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "ENERGY",
       254,
       96,
@@ -1280,28 +1281,28 @@ fn main {
     )
 
     let nearest : Int = nearest_obstacle_dy(obstacles, player.distance)
-    @raylib.draw_text(
+    @draw.draw_text(
       "Kills \{kills}",
       520,
       84,
       20,
       @raylib.Color::new(172, 236, 198, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Coins \{player.coins}",
       640,
       84,
       20,
       @raylib.Color::new(246, 222, 150, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Missed \{missed}",
       772,
       84,
       20,
       @raylib.Color::new(242, 162, 172, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Level \{level}",
       900,
       84,
@@ -1309,7 +1310,7 @@ fn main {
       @raylib.Color::new(250, 206, 132, 255),
     )
     if nearest < 9000 {
-      @raylib.draw_text(
+      @draw.draw_text(
         "Next threat \{nearest}px",
         1012,
         84,
@@ -1334,7 +1335,7 @@ fn main {
       56,
       @raylib.Color::new(58, 82, 114, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "UP",
       p0x + 20,
       p0y + 74,
@@ -1348,7 +1349,7 @@ fn main {
       56,
       @raylib.Color::new(58, 82, 114, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "DN",
       p0x + 172,
       p0y + 74,
@@ -1362,7 +1363,7 @@ fn main {
       56,
       @raylib.Color::new(58, 82, 114, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "JMP",
       p0x + 90,
       p0y + 16,
@@ -1376,7 +1377,7 @@ fn main {
       56,
       @raylib.Color::new(58, 82, 114, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "SLD",
       p0x + 90,
       p0y + 128,
@@ -1400,7 +1401,7 @@ fn main {
       84,
       @raylib.Color::new(88, 156, 228, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "SLASH",
       p1x + 12,
       p1y + 40,
@@ -1414,7 +1415,7 @@ fn main {
       84,
       @raylib.Color::new(214, 112, 94, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "THROW",
       p1x + 128,
       p1y + 40,
@@ -1428,7 +1429,7 @@ fn main {
       92,
       @raylib.Color::new(112, 178, 126, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "DASH",
       p1x + 96,
       p1y + 136,
@@ -1443,7 +1444,7 @@ fn main {
       40,
       @raylib.Color::new(8, 10, 16, 214),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       sw / 2 - 302,
       sh - 44,
@@ -1460,35 +1461,35 @@ fn main {
         392,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "NINJA ROOFTOP CHASE",
         sw / 2 - 286,
         sh / 2 - 132,
         58,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Rush across neon rooftops and survive the chase",
         sw / 2 - 302,
         sh / 2 - 30,
         30,
         @raylib.Color::new(182, 214, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mobile: left pad for lane/jump/slide, right pad for combat/dash",
         sw / 2 - 412,
         sh / 2 + 14,
         24,
         @raylib.Color::new(182, 214, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Reach 5600m before time ends",
         sw / 2 - 190,
         sh / 2 + 52,
         28,
         @raylib.Color::new(250, 212, 132, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "ENTER or tap to start",
         sw / 2 - 166,
         sh / 2 + 112,
@@ -1504,35 +1505,35 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "CHASE ESCAPED",
         sw / 2 - 206,
         sh / 2 - 132,
         60,
         @raylib.Color::new(248, 236, 186, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{player.score}",
         sw / 2 - 148,
         sh / 2 - 36,
         44,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Kills: \{kills}  Coins: \{player.coins}",
         sw / 2 - 188,
         sh / 2 + 18,
         34,
         @raylib.Color::new(170, 236, 198, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Missed threats: \{missed}",
         sw / 2 - 176,
         sh / 2 + 60,
         34,
         @raylib.Color::new(236, 172, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 178,
         sh / 2 + 122,
@@ -1548,35 +1549,35 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "CHASE FAILED",
         sw / 2 - 188,
         sh / 2 - 132,
         60,
         @raylib.Color::new(246, 140, 154, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{player.score}",
         sw / 2 - 148,
         sh / 2 - 36,
         44,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Distance: \{player.distance.to_int()}m",
         sw / 2 - 186,
         sh / 2 + 18,
         34,
         @raylib.Color::new(172, 236, 202, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Time left: \{time_left.to_int()}s",
         sw / 2 - 176,
         sh / 2 + 60,
         34,
         @raylib.Color::new(236, 172, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 178,
         sh / 2 + 122,
@@ -1585,6 +1586,7 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
 
     if state == 2 || state == 3 {
@@ -1595,5 +1597,6 @@ fn main {
     }
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

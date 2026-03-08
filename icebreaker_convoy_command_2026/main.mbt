@@ -1140,7 +1140,7 @@ fn draw_convoys(convoys : Array[ConvoyShip]) -> Unit {
       @raylib.Color::new(74, 114, 146, 228),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "#\{convoy.id} \{convoy.hp.to_int()}%",
       x - 20,
       y - 26,
@@ -1331,14 +1331,14 @@ fn draw_harbors(
     @raylib.Color::new(104, 148, 186, 235),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "BASE",
     left_x + 8,
     mid_y + 96,
     24,
     @raylib.Color::new(212, 236, 255, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "EXIT",
     right_x + 8,
     mid_y + 106,
@@ -1380,9 +1380,9 @@ fn draw_touch_controls(
       h,
       @raylib.Color::new(166, 204, 236, 236),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       label,
-      x + w / 2 - @raylib.measure_text(label, 28) / 2,
+      x + w / 2 - @draw.measure_text(label, 28) / 2,
       y + 11,
       28,
       @raylib.Color::new(232, 246, 255, 250),
@@ -1448,9 +1448,9 @@ fn draw_touch_controls(
       @raylib.Color::new(10, 20, 36, 180),
     )
     @raylib.draw_circle(x.to_int(), y.to_int(), r, fill)
-    @raylib.draw_text(
+    @draw.draw_text(
       label,
-      x.to_int() - @raylib.measure_text(label, 24) / 2,
+      x.to_int() - @draw.measure_text(label, 24) / 2,
       y.to_int() - 11,
       24,
       @raylib.Color::new(232, 246, 255, 246),
@@ -1490,7 +1490,7 @@ fn draw_action_bar(
   maxv : Float,
   color : @raylib.Color,
 ) -> Unit {
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
     panel_x + 18,
     y,
@@ -1518,7 +1518,7 @@ fn draw_action_bar(
     20,
     @raylib.Color::new(168, 202, 234, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{value.to_int()}/\{maxv.to_int()}",
     panel_x + 270,
     y + 52,
@@ -1551,9 +1551,9 @@ fn draw_button(
     h,
     @raylib.Color::new(202, 228, 252, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     text,
-    x + w / 2 - @raylib.measure_text(text, 34) / 2,
+    x + w / 2 - @draw.measure_text(text, 34) / 2,
     y + h / 2 - 17,
     34,
     @raylib.Color::new(238, 248, 255, 252),
@@ -1568,9 +1568,11 @@ fn main {
   @raylib.init_window(
     sw, sh, "raylib [core] example - icebreaker convoy command",
   )
+  @draw.cleanup()
   defer @raylib.close_window()
 
   @raylib.set_target_fps(120)
+  @draw.init_font()
 
   let world_x : Int = 20
   let world_y : Int = 20
@@ -2056,6 +2058,7 @@ fn main {
     }
 
     @raylib.begin_drawing()
+    @fps.draw()
     defer @raylib.end_drawing()
 
     @raylib.clear_background(@raylib.Color::new(8, 16, 28, 255))
@@ -2101,14 +2104,14 @@ fn main {
       @raylib.Color::new(126, 168, 208, 240),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "ICEBREAKER CONVOY COMMAND",
       panel_x + 16,
       36,
       34,
       @raylib.Color::new(236, 246, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Cut lanes. Escort freighters. Survive storms.",
       panel_x + 16,
       78,
@@ -2116,14 +2119,14 @@ fn main {
       @raylib.Color::new(192, 220, 248, 240),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time",
       panel_x + 16,
       118,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{timer.to_int()}s",
       panel_x + 102,
       118,
@@ -2131,14 +2134,14 @@ fn main {
       @raylib.Color::new(248, 220, 152, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Delivered",
       panel_x + 16,
       154,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{delivered}/\{target_delivered}",
       panel_x + 140,
       154,
@@ -2146,14 +2149,14 @@ fn main {
       @raylib.Color::new(138, 228, 164, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Lost",
       panel_x + 16,
       190,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{sunk}/\{sunk_limit}",
       panel_x + 84,
       190,
@@ -2161,14 +2164,14 @@ fn main {
       @raylib.Color::new(248, 148, 158, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Tier",
       panel_x + 206,
       190,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{tier}",
       panel_x + 266,
       190,
@@ -2176,14 +2179,14 @@ fn main {
       @raylib.Color::new(248, 214, 130, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score",
       panel_x + 16,
       226,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{score}",
       panel_x + 92,
       226,
@@ -2191,14 +2194,14 @@ fn main {
       @raylib.Color::new(156, 220, 252, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Ice cleared",
       panel_x + 16,
       262,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{ice_cleared}",
       panel_x + 154,
       262,
@@ -2206,14 +2209,14 @@ fn main {
       @raylib.Color::new(206, 232, 252, 248),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Traffic delay",
       panel_x + 16,
       298,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{wait_accum.to_int()}s",
       panel_x + 162,
       298,
@@ -2221,14 +2224,14 @@ fn main {
       @raylib.Color::new(244, 204, 146, 248),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Active convoys",
       panel_x + 16,
       334,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{active_convoy_count(convoys)}",
       panel_x + 182,
       334,
@@ -2236,14 +2239,14 @@ fn main {
       @raylib.Color::new(192, 226, 252, 248),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Ice hazard",
       panel_x + 16,
       370,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{last_hazard_sum.to_int()}",
       panel_x + 154,
       370,
@@ -2276,42 +2279,42 @@ fn main {
       @raylib.Color::new(246, 182, 122, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Controls",
       panel_x + 16,
       642,
       30,
       @raylib.Color::new(236, 246, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "WASD / Arrows : move",
       panel_x + 16,
       680,
       22,
       @raylib.Color::new(198, 220, 252, 236),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "J / Space : hold cutter",
       panel_x + 16,
       706,
       22,
       @raylib.Color::new(198, 220, 252, 236),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "L / U : repair nearby",
       panel_x + 16,
       732,
       22,
       @raylib.Color::new(198, 220, 252, 236),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "K / H : sonar ping",
       panel_x + 16,
       758,
       22,
       @raylib.Color::new(198, 220, 252, 236),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Mobile: d-pad + CUT/FIX/SCAN",
       panel_x + 16,
       784,
@@ -2322,7 +2325,7 @@ fn main {
     draw_touch_controls(sw, sh, mouse.x, mouse.y, hold)
 
     if msg_t > 0.0 {
-      let bw : Int = @raylib.measure_text(msg, 30) + 44
+      let bw : Int = @draw.measure_text(msg, 30) + 44
       let bx : Int = world_x + world_w / 2 - bw / 2
       @raylib.draw_rectangle(
         bx,
@@ -2338,7 +2341,7 @@ fn main {
         52,
         @raylib.Color::new(188, 214, 248, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         msg,
         bx + 22,
         30,
@@ -2349,14 +2352,14 @@ fn main {
 
     if state == 0 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 14, 24, 214))
-      @raylib.draw_text(
+      @draw.draw_text(
         "ICEBREAKER CONVOY COMMAND",
         sw / 2 - 470,
         146,
         82,
         @raylib.Color::new(236, 246, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Arctic logistics survival",
         sw / 2 - 206,
         238,
@@ -2379,35 +2382,35 @@ fn main {
         @raylib.Color::new(166, 196, 244, 244),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mission",
         sw / 2 - 484,
         338,
         34,
         @raylib.Color::new(236, 246, 255, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Escort freighters from BASE to EXIT",
         sw / 2 - 484,
         382,
         29,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Cut through heavy ice before convoy stalls",
         sw / 2 - 484,
         418,
         29,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Repair damaged ships and dodge storms",
         sw / 2 - 484,
         454,
         29,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Touch controls fully supported",
         sw / 2 - 484,
         490,
@@ -2415,28 +2418,28 @@ fn main {
         @raylib.Color::new(210, 228, 252, 248),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "Failure",
         sw / 2 + 72,
         338,
         34,
         @raylib.Color::new(236, 246, 255, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Timer reaches zero",
         sw / 2 + 72,
         382,
         29,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Too many convoy losses",
         sw / 2 + 72,
         418,
         29,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Icebreaker hull collapses",
         sw / 2 + 72,
         454,
@@ -2455,28 +2458,28 @@ fn main {
       draw_button(sw / 2 - 210, 638, 420, 94, "START OPERATION", hover_start)
     } else if state == 2 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 24, 14, 204))
-      @raylib.draw_text(
+      @draw.draw_text(
         "CONVOY SECURED",
         sw / 2 - 274,
         194,
         86,
         @raylib.Color::new(168, 248, 186, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Delivered \{delivered}/\{target_delivered}",
         sw / 2 - 190,
         336,
         42,
         @raylib.Color::new(236, 248, 240, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score \{score}",
         sw / 2 - 100,
         390,
         38,
         @raylib.Color::new(250, 234, 164, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Tap or Enter",
         sw / 2 - 96,
         472,
@@ -2485,28 +2488,28 @@ fn main {
       )
     } else if state == 3 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(26, 8, 14, 214))
-      @raylib.draw_text(
+      @draw.draw_text(
         "OPERATION FAILED",
         sw / 2 - 286,
         194,
         84,
         @raylib.Color::new(248, 156, 166, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Delivered \{delivered}/\{target_delivered}",
         sw / 2 - 190,
         334,
         42,
         @raylib.Color::new(246, 230, 236, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Losses \{sunk}/\{sunk_limit}",
         sw / 2 - 124,
         386,
         38,
         @raylib.Color::new(252, 190, 198, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Tap or Enter",
         sw / 2 - 96,
         468,

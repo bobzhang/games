@@ -45,6 +45,7 @@ fn reset_targets(ts : Array[Target]) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "Archery Tournament 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let arrow : Arrow = { alive: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0 }
 
@@ -262,7 +263,7 @@ fn main {
           target.r * 0.36,
           @raylib.blue,
         )
-        @raylib.draw_text(
+        @draw.draw_text(
           "\{target.points}",
           (target.x - 14.0).to_int(),
           (target.y - 10.0).to_int(),
@@ -288,13 +289,13 @@ fn main {
       )
     }
 
-    @raylib.draw_text("ARCHERY TOURNAMENT 2026", 20, 18, 40, @raylib.darkblue)
-    @raylib.draw_text("Score \{score}", 20, 66, 30, @raylib.black)
-    @raylib.draw_text("Arrows \{arrows_left}", 220, 66, 30, @raylib.maroon)
-    @raylib.draw_text("Combo x\{combo}", 430, 66, 30, @raylib.orange)
-    @raylib.draw_text("Best Hit \{best_hit}", 620, 66, 30, @raylib.lime)
+    @draw.draw_text("ARCHERY TOURNAMENT 2026", 20, 18, 40, @raylib.darkblue)
+    @draw.draw_text("Score \{score}", 20, 66, 30, @raylib.black)
+    @draw.draw_text("Arrows \{arrows_left}", 220, 66, 30, @raylib.maroon)
+    @draw.draw_text("Combo x\{combo}", 430, 66, 30, @raylib.orange)
+    @draw.draw_text("Best Hit \{best_hit}", 620, 66, 30, @raylib.lime)
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Power \{arc_power.to_int()}",
       20,
       108,
@@ -316,7 +317,7 @@ fn main {
       @raylib.blue,
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Arc \{arc_lift.to_int()}",
       410,
       108,
@@ -338,7 +339,7 @@ fn main {
       @raylib.green,
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Wind \{wind.to_int()}",
       760,
       108,
@@ -359,7 +360,7 @@ fn main {
       30,
       @raylib.Color::new(18, 24, 30, 220),
     )
-    @raylib.draw_text(msg, 28, 699, 20, @raylib.raywhite)
+    @draw.draw_text(msg, 28, 699, 20, @raylib.raywhite)
 
     if over {
       @raylib.draw_rectangle(
@@ -369,12 +370,14 @@ fn main {
         190,
         @raylib.fade(@raylib.black, 0.82),
       )
-      @raylib.draw_text("TOURNAMENT OVER", 360, 320, 56, @raylib.orange)
-      @raylib.draw_text("Press R to restart", 450, 384, 34, @raylib.white)
+      @draw.draw_text("TOURNAMENT OVER", 360, 320, 56, @raylib.orange)
+      @draw.draw_text("Press R to restart", 450, 384, 34, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

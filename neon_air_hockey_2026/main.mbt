@@ -233,6 +233,7 @@ fn paddle_hit(
 fn main {
   @raylib.init_window(sw, sh, "Neon Air Hockey 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let sparks : Array[Spark] = Array::makei(max_sparks, fn(_i) {
     { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, active: false }
@@ -771,7 +772,7 @@ fn main {
         70.0,
         @raylib.Color::new(72, 206, 246, glow),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "BOOST",
         tx + 176,
         table_y + table_h / 2 - 10,
@@ -785,7 +786,7 @@ fn main {
         70.0,
         @raylib.Color::new(250, 164, 96, glow),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "BOOST",
         tx + table_w - 244,
         table_y + table_h / 2 - 10,
@@ -849,28 +850,28 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 96, @raylib.Color::new(8, 12, 20, 230))
-    @raylib.draw_text(
+    @draw.draw_text(
       "NEON AIR HOCKEY 2026",
       20,
       20,
       34,
       @raylib.Color::new(232, 242, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Sector \{sector}/3",
       420,
       28,
       30,
       @raylib.Color::new(246, 230, 136, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{score}",
       604,
       28,
       30,
       @raylib.Color::new(220, 236, 250, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "You \{p_goals} - \{ai_goals} AI",
       810,
       28,
@@ -878,7 +879,7 @@ fn main {
       @raylib.Color::new(182, 224, 250, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Total \{p_total}:\{ai_total}",
       1120,
       30,
@@ -888,7 +889,7 @@ fn main {
 
     if faceoff_t > 0.0 {
       let t = (faceoff_t * 10.0).to_int() + 1
-      @raylib.draw_text(
+      @draw.draw_text(
         "Faceoff in \{t}",
         sw / 2 - 76,
         table_y + 18,
@@ -906,7 +907,7 @@ fn main {
       160,
       @raylib.Color::new(10, 16, 28, 220),
     )
-    @raylib.draw_text("Touch", 58, sh - 180, 20, @raylib.white)
+    @draw.draw_text("Touch", 58, sh - 180, 20, @raylib.white)
 
     @raylib.draw_rectangle(
       ctl_x,
@@ -915,7 +916,7 @@ fn main {
       52,
       @raylib.Color::new(46, 66, 94, 255),
     )
-    @raylib.draw_text("LEFT", ctl_x + 10, ctl_y + 16, 20, @raylib.white)
+    @draw.draw_text("LEFT", ctl_x + 10, ctl_y + 16, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x + 80,
       ctl_y,
@@ -923,7 +924,7 @@ fn main {
       52,
       @raylib.Color::new(46, 66, 94, 255),
     )
-    @raylib.draw_text("RIGHT", ctl_x + 85, ctl_y + 16, 20, @raylib.white)
+    @draw.draw_text("RIGHT", ctl_x + 85, ctl_y + 16, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x,
       ctl_y + 58,
@@ -931,7 +932,7 @@ fn main {
       52,
       @raylib.Color::new(46, 66, 94, 255),
     )
-    @raylib.draw_text("DOWN", ctl_x + 8, ctl_y + 74, 20, @raylib.white)
+    @draw.draw_text("DOWN", ctl_x + 8, ctl_y + 74, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x + 80,
       ctl_y + 58,
@@ -939,7 +940,7 @@ fn main {
       52,
       @raylib.Color::new(46, 66, 94, 255),
     )
-    @raylib.draw_text("UP", ctl_x + 102, ctl_y + 74, 20, @raylib.white)
+    @draw.draw_text("UP", ctl_x + 102, ctl_y + 74, 20, @raylib.white)
 
     let fire_x = sw - 210
     let fire_y = sh - 150
@@ -950,10 +951,10 @@ fn main {
       116,
       @raylib.Color::new(190, 76, 84, 255),
     )
-    @raylib.draw_text("STRIKE", fire_x + 32, fire_y + 44, 34, @raylib.white)
+    @draw.draw_text("STRIKE", fire_x + 32, fire_y + 44, 34, @raylib.white)
 
     if dash_cd > 0.0 {
-      @raylib.draw_text(
+      @draw.draw_text(
         "Dash CD \{dash_cd.to_int() + 1}",
         fire_x + 30,
         fire_y - 24,
@@ -961,7 +962,7 @@ fn main {
         @raylib.Color::new(254, 220, 152, 255),
       )
     } else {
-      @raylib.draw_text(
+      @draw.draw_text(
         "Power Strike Ready",
         fire_x + 5,
         fire_y - 24,
@@ -977,7 +978,7 @@ fn main {
       36,
       @raylib.Color::new(10, 16, 24, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       196,
       sh - 48,
@@ -994,7 +995,7 @@ fn main {
         200,
         @raylib.Color::new(16, 24, 40, 242),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "CHAMPION"
         } else {
@@ -1009,7 +1010,7 @@ fn main {
           @raylib.Color::new(250, 132, 132, 255)
         },
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R to restart",
         sw / 2 - 124,
         sh / 2 + 40,
@@ -1018,8 +1019,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

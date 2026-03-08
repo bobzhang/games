@@ -252,6 +252,7 @@ fn main {
       @raylib.pink,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 

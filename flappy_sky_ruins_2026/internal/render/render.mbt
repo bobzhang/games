@@ -311,9 +311,9 @@ fn draw_touch_button(
     @raylib.Color::new(184, 216, 242, 218),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
-    rect.0 + rect.2 / 2 - @raylib.measure_text(label, 30) / 2,
+    rect.0 + rect.2 / 2 - @draw.measure_text(label, 30) / 2,
     rect.1 + rect.3 / 2 - 15,
     30,
     @raylib.Color::new(246, 252, 255, 248),
@@ -416,14 +416,14 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(126, 170, 206, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Flappy Sky Ruins",
     px + 20,
     py + 20,
     42,
     @raylib.Color::new(236, 246, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "2026 Expedition",
     px + 20,
     py + 66,
@@ -431,14 +431,14 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(196, 220, 246, 238),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score \{game.score}",
     px + 20,
     py + 110,
     36,
     @raylib.Color::new(226, 242, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best \{game.best_score}",
     px + 252,
     py + 110,
@@ -446,21 +446,21 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(206, 228, 248, 240),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Lives \{game.lives}",
     px + 20,
     py + 154,
     30,
     @raylib.Color::new(212, 232, 252, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Level \{game.level}",
     px + 176,
     py + 154,
     30,
     @raylib.Color::new(212, 232, 252, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time \{game.game_t.to_int()}s",
     px + 320,
     py + 154,
@@ -468,14 +468,14 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(212, 232, 252, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Distance \{game.distance}",
     px + 20,
     py + 194,
     30,
     @raylib.Color::new(212, 232, 252, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Combo x\{game.combo}",
     px + 240,
     py + 194,
@@ -487,7 +487,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     },
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Boost",
     px + 20,
     py + 236,
@@ -517,7 +517,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   )
 
   let shield_text : String = if game.shield_t > 0.0 { "ON" } else { "OFF" }
-  @raylib.draw_text(
+  @draw.draw_text(
     "Shield \{shield_text}",
     px + 20,
     py + 314,
@@ -525,35 +525,35 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(212, 232, 252, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Controls",
     px + 20,
     py + 360,
     28,
     @raylib.Color::new(228, 242, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Flap: Space / Tap",
     px + 20,
     py + 392,
     24,
     @raylib.Color::new(194, 218, 242, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Boost: Shift / J",
     px + 20,
     py + 418,
     24,
     @raylib.Color::new(194, 218, 242, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Hint: H",
     px + 20,
     py + 444,
     24,
     @raylib.Color::new(194, 218, 242, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Restart: R",
     px + 20,
     py + 470,
@@ -576,7 +576,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
       56,
       @raylib.Color::new(176, 208, 236, 230),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       game.msg,
       px + 30,
       py + 578,
@@ -589,18 +589,18 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
 ///|
 /// Draws the title screen with game name, description lines, and a hoverable start button.
 fn @types.Game::draw_title(game : @types.Game) -> Unit {
-  @raylib.draw_text(
+  @draw.draw_text(
     "Flappy Sky Ruins 2026",
-    @types.screen_w / 2 - @raylib.measure_text("Flappy Sky Ruins 2026", 86) / 2,
+    @types.screen_w / 2 - @draw.measure_text("Flappy Sky Ruins 2026", 86) / 2,
     110,
     86,
     @raylib.Color::new(238, 248, 255, 248),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Flap through collapsing ruins, collect relics, and survive for 3 minutes.",
     @types.screen_w / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Flap through collapsing ruins, collect relics, and survive for 3 minutes.",
       34,
     ) /
@@ -609,10 +609,10 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
     34,
     @raylib.Color::new(196, 220, 244, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mobile touch controls are built in.",
     @types.screen_w / 2 -
-    @raylib.measure_text("Mobile touch controls are built in.", 34) / 2,
+    @draw.measure_text("Mobile touch controls are built in.", 34) / 2,
     294,
     34,
     @raylib.Color::new(196, 220, 244, 238),
@@ -660,36 +660,36 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
 
   let title : String = if game.win { "Run Complete" } else { "Run Failed" }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
-    px + pw / 2 - @raylib.measure_text(title, 64) / 2,
+    px + pw / 2 - @draw.measure_text(title, 64) / 2,
     py + 34,
     64,
     @raylib.Color::new(244, 250, 255, 250),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score \{game.score}",
     px + 100,
     py + 132,
     44,
     @raylib.Color::new(226, 242, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Distance \{game.distance}",
     px + 100,
     py + 182,
     40,
     @raylib.Color::new(214, 232, 252, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Level \{game.level}",
     px + 100,
     py + 228,
     40,
     @raylib.Color::new(214, 232, 252, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time \{game.game_t.to_int()}s",
     px + 100,
     py + 274,

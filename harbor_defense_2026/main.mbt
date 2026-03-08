@@ -552,6 +552,7 @@ fn draw_cannon(c : Cannon) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "Harbor Defense 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let cannon : Cannon = {
     x: 640.0,
@@ -1317,14 +1318,14 @@ fn main {
     draw_cannon(cannon)
 
     @raylib.draw_rectangle(0, 0, sw, 78, @raylib.Color::new(6, 12, 22, 222))
-    @raylib.draw_text(
+    @draw.draw_text(
       "HARBOR DEFENSE 2026",
       18,
       14,
       30,
       @raylib.Color::new(236, 244, 255, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "A/D move  J fire  K depth charge  L shield",
       18,
       48,
@@ -1332,28 +1333,28 @@ fn main {
       @raylib.Color::new(176, 208, 236, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{cannon.score}",
       572,
       14,
       28,
       @raylib.Color::new(246, 212, 124, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Kills \{cannon.kills}/\{target_kills}",
       768,
       14,
       28,
       @raylib.Color::new(172, 238, 202, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Wave \{wave}",
       1000,
       14,
       28,
       @raylib.Color::new(166, 222, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{timer.to_int()}s",
       1120,
       14,
@@ -1369,7 +1370,7 @@ fn main {
       10,
       @raylib.Color::new(112, 226, 156, 255),
     )
-    @raylib.draw_text("HP", 20, 104, 16, @raylib.Color::new(186, 212, 234, 255))
+    @draw.draw_text("HP", 20, 104, 16, @raylib.Color::new(186, 212, 234, 255))
 
     @raylib.draw_rectangle(
       280,
@@ -1385,7 +1386,7 @@ fn main {
       10,
       @raylib.Color::new(246, 154, 128, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "HEAT",
       280,
       104,
@@ -1393,21 +1394,21 @@ fn main {
       @raylib.Color::new(186, 212, 234, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Combo \{cannon.combo}",
       544,
       88,
       20,
       @raylib.Color::new(250, 228, 162, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Civilians saved \{civilians_escaped}",
       680,
       88,
       20,
       @raylib.Color::new(172, 236, 204, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Lost \{civilians_lost}/18",
       940,
       88,
@@ -1415,14 +1416,14 @@ fn main {
       @raylib.Color::new(242, 162, 170, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Bomb \{cannon.bomb_cd.to_int()}s",
       20,
       126,
       18,
       @raylib.Color::new(220, 198, 138, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Shield \{cannon.shield_cd.to_int()}s",
       180,
       126,
@@ -1430,7 +1431,7 @@ fn main {
       @raylib.Color::new(170, 216, 252, 255),
     )
     if cannon.overheated {
-      @raylib.draw_text(
+      @draw.draw_text(
         "OVERHEATED",
         360,
         126,
@@ -1446,7 +1447,7 @@ fn main {
       38,
       @raylib.Color::new(8, 12, 18, 210),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       message,
       sw / 2 - 300,
       sh - 44,
@@ -1461,7 +1462,7 @@ fn main {
       92,
       @raylib.Color::new(62, 84, 110, 214),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "LEFT",
       44,
       sh - 120,
@@ -1475,7 +1476,7 @@ fn main {
       92,
       @raylib.Color::new(62, 84, 110, 214),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "RIGHT",
       154,
       sh - 120,
@@ -1490,7 +1491,7 @@ fn main {
       176,
       @raylib.Color::new(94, 146, 208, 214),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "FIRE",
       sw - 154,
       sh - 132,
@@ -1505,7 +1506,7 @@ fn main {
       84,
       @raylib.Color::new(110, 186, 162, 214),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "SHIELD",
       sw - 326,
       sh - 202,
@@ -1520,7 +1521,7 @@ fn main {
       84,
       @raylib.Color::new(204, 124, 98, 214),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "BOMB",
       sw - 314,
       sh - 112,
@@ -1537,35 +1538,35 @@ fn main {
         424,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "HARBOR DEFENSE",
         sw / 2 - 284,
         sh / 2 - 136,
         66,
         @raylib.Color::new(238, 246, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Repel raiders, protect civilian boats, hold the line.",
         sw / 2 - 314,
         sh / 2 - 24,
         32,
         @raylib.Color::new(180, 216, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mobile: left/right + FIRE, tap SHIELD/BOMB for abilities",
         sw / 2 - 364,
         sh / 2 + 18,
         30,
         @raylib.Color::new(180, 216, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Win at 82 kills. Lose at 18 civilian losses.",
         sw / 2 - 272,
         sh / 2 + 66,
         32,
         @raylib.Color::new(252, 212, 132, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "ENTER or tap to start",
         sw / 2 - 186,
         sh / 2 + 126,
@@ -1581,35 +1582,35 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "HARBOR SECURED",
         sw / 2 - 242,
         sh / 2 - 132,
         62,
         @raylib.Color::new(248, 236, 186, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{cannon.score}",
         sw / 2 - 150,
         sh / 2 - 34,
         44,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Kills: \{cannon.kills}  Saved: \{civilians_escaped}",
         sw / 2 - 214,
         sh / 2 + 18,
         34,
         @raylib.Color::new(172, 236, 202, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Civilian losses: \{civilians_lost}",
         sw / 2 - 174,
         sh / 2 + 62,
         34,
         @raylib.Color::new(236, 172, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 178,
         sh / 2 + 124,
@@ -1625,35 +1626,35 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "HARBOR FALLEN",
         sw / 2 - 224,
         sh / 2 - 132,
         62,
         @raylib.Color::new(246, 140, 154, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{cannon.score}",
         sw / 2 - 150,
         sh / 2 - 34,
         44,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Kills: \{cannon.kills} / \{target_kills}",
         sw / 2 - 176,
         sh / 2 + 18,
         34,
         @raylib.Color::new(172, 236, 202, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Civilian losses: \{civilians_lost}",
         sw / 2 - 174,
         sh / 2 + 62,
         34,
         @raylib.Color::new(236, 172, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 178,
         sh / 2 + 124,
@@ -1662,6 +1663,7 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
 
     if state == 2 || state == 3 {
@@ -1672,5 +1674,6 @@ fn main {
     }
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

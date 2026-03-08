@@ -415,6 +415,7 @@ fn in_lantern(player : Investigator, gx : Float, gy : Float) -> Bool {
 fn main {
   @raylib.init_window(sw, sh, "Ghost Mansion Investigation 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let player : Investigator = {
     x: 86.0,
@@ -959,7 +960,7 @@ fn main {
       @raylib.Color::new(110, 134, 166, 122)
     }
     @raylib.draw_rectangle(1108, 150, 146, 116, exit_col)
-    @raylib.draw_text(
+    @draw.draw_text(
       "EXIT",
       1140,
       188,
@@ -1137,7 +1138,7 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 116, @raylib.Color::new(6, 10, 18, 232))
-    @raylib.draw_text(
+    @draw.draw_text(
       "GHOST MANSION INVESTIGATION 2026",
       16,
       16,
@@ -1145,21 +1146,21 @@ fn main {
       @raylib.Color::new(236, 246, 255, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Floor \{level}/3",
       468,
       24,
       30,
       @raylib.Color::new(248, 226, 142, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Clues \{collected}/\{target}",
       652,
       24,
       30,
       @raylib.Color::new(216, 236, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{score}",
       956,
       24,
@@ -1167,35 +1168,35 @@ fn main {
       @raylib.Color::new(216, 236, 252, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "HP \{player.hp}",
       20,
       76,
       24,
       @raylib.Color::new(220, 236, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Sanity \{player.sanity.to_int()}%",
       120,
       76,
       24,
       @raylib.Color::new(220, 236, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Battery \{player.battery.to_int()}%",
       360,
       76,
       24,
       @raylib.Color::new(220, 236, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Timer \{timer.to_int()}",
       596,
       76,
       24,
       @raylib.Color::new(252, 222, 150, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Stars \{stars}",
       772,
       76,
@@ -1249,7 +1250,7 @@ fn main {
       186,
       @raylib.Color::new(8, 14, 28, 220),
     )
-    @raylib.draw_text("Touch", 90, sh - 186, 20, @raylib.white)
+    @draw.draw_text("Touch", 90, sh - 186, 20, @raylib.white)
 
     @raylib.draw_rectangle(
       pad_x + 76,
@@ -1258,7 +1259,7 @@ fn main {
       54,
       @raylib.Color::new(54, 72, 102, 255),
     )
-    @raylib.draw_text("UP", pad_x + 92, pad_y + 16, 24, @raylib.white)
+    @draw.draw_text("UP", pad_x + 92, pad_y + 16, 24, @raylib.white)
     @raylib.draw_rectangle(
       pad_x,
       pad_y + 54,
@@ -1266,7 +1267,7 @@ fn main {
       54,
       @raylib.Color::new(54, 72, 102, 255),
     )
-    @raylib.draw_text("LT", pad_x + 20, pad_y + 70, 24, @raylib.white)
+    @draw.draw_text("LT", pad_x + 20, pad_y + 70, 24, @raylib.white)
     @raylib.draw_rectangle(
       pad_x + 152,
       pad_y + 54,
@@ -1274,7 +1275,7 @@ fn main {
       54,
       @raylib.Color::new(54, 72, 102, 255),
     )
-    @raylib.draw_text("RT", pad_x + 172, pad_y + 70, 24, @raylib.white)
+    @draw.draw_text("RT", pad_x + 172, pad_y + 70, 24, @raylib.white)
     @raylib.draw_rectangle(
       pad_x + 76,
       pad_y + 108,
@@ -1282,7 +1283,7 @@ fn main {
       54,
       @raylib.Color::new(54, 72, 102, 255),
     )
-    @raylib.draw_text("DN", pad_x + 90, pad_y + 124, 24, @raylib.white)
+    @draw.draw_text("DN", pad_x + 90, pad_y + 124, 24, @raylib.white)
 
     @raylib.draw_rectangle(
       sprint_x,
@@ -1291,7 +1292,7 @@ fn main {
       154,
       @raylib.Color::new(214, 110, 82, 255),
     )
-    @raylib.draw_text("SPRINT", sprint_x + 8, sprint_y + 58, 26, @raylib.white)
+    @draw.draw_text("SPRINT", sprint_x + 8, sprint_y + 58, 26, @raylib.white)
     @raylib.draw_rectangle(
       pulse_x,
       pulse_y,
@@ -1299,7 +1300,7 @@ fn main {
       154,
       @raylib.Color::new(100, 162, 220, 255),
     )
-    @raylib.draw_text("PULSE", pulse_x + 12, pulse_y + 58, 26, @raylib.white)
+    @draw.draw_text("PULSE", pulse_x + 12, pulse_y + 58, 26, @raylib.white)
 
     @raylib.draw_rectangle(
       250,
@@ -1308,7 +1309,7 @@ fn main {
       42,
       @raylib.Color::new(6, 10, 18, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       262,
       sh - 50,
@@ -1318,7 +1319,7 @@ fn main {
 
     if transition_t > 0.0 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 12, 20, 110))
-      @raylib.draw_text(
+      @draw.draw_text(
         "FLOOR CLEAR",
         sw / 2 - 164,
         sh / 2 - 28,
@@ -1336,7 +1337,7 @@ fn main {
         224,
         @raylib.Color::new(16, 24, 42, 244),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "CASE CLOSED"
         } else {
@@ -1351,7 +1352,7 @@ fn main {
           @raylib.Color::new(252, 140, 140, 255)
         },
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R to restart",
         sw / 2 - 124,
         sh / 2 + 48,
@@ -1360,8 +1361,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

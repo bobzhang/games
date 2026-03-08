@@ -750,9 +750,9 @@ fn draw_stations(
       _ => "BROADCAST"
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       label,
-      s.x.to_int() + s.w.to_int() / 2 - @raylib.measure_text(label, 18) / 2,
+      s.x.to_int() + s.w.to_int() / 2 - @draw.measure_text(label, 18) / 2,
       s.y.to_int() + s.h.to_int() / 2 - 9,
       18,
       @raylib.Color::new(18, 24, 34, 242),
@@ -923,7 +923,7 @@ fn draw_requests_panel(
   quality : Float,
   scene_t : Float,
 ) -> Unit {
-  @raylib.draw_text(
+  @draw.draw_text(
     "Audience Requests",
     panel_x + 18,
     panel_y + 398,
@@ -979,7 +979,7 @@ fn draw_requests_panel(
       pc,
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "#\{request.id} \{pattern_short(request.pattern)}",
       panel_x + 66,
       y + 10,
@@ -988,9 +988,9 @@ fn draw_requests_panel(
     )
 
     let dd_txt : String = "\{request.deadline.to_int()}s"
-    @raylib.draw_text(
+    @draw.draw_text(
       dd_txt,
-      panel_x + panel_w - 24 - @raylib.measure_text(dd_txt, 22),
+      panel_x + panel_w - 24 - @draw.measure_text(dd_txt, 22),
       y + 12,
       22,
       if urgency > 0.72 {
@@ -1000,7 +1000,7 @@ fn draw_requests_panel(
       },
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Need Q\{request.min_quality.to_int()}  Reward \{request.reward}",
       panel_x + 66,
       y + 40,
@@ -1078,7 +1078,7 @@ fn draw_hud(
     @raylib.Color::new(166, 188, 214, 196),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "DRONE SHOW DIRECTOR 2026",
     panel_x + 18,
     panel_y + 16,
@@ -1090,28 +1090,28 @@ fn draw_hud(
   let ss : Int = timer.to_int() % 60
   let ss_txt : String = if ss < 10 { "0\{ss}" } else { "\{ss}" }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time \{mm}:\{ss_txt}",
     panel_x + 20,
     panel_y + 58,
     28,
     @raylib.Color::new(236, 246, 255, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score \{score}/\{score_target}",
     panel_x + 20,
     panel_y + 92,
     26,
     @raylib.Color::new(250, 226, 136, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Pattern: \{pattern_name(pattern)}",
     panel_x + 20,
     panel_y + 124,
     22,
     pattern_color(pattern),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Combo x\{combo}  Drones \{active_drones}  Lost \{drone_losses}",
     panel_x + 20,
     panel_y + 152,
@@ -1149,7 +1149,7 @@ fn draw_hud(
       h,
       @raylib.Color::new(222, 234, 248, 186),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       title,
       x,
       y - 20,
@@ -1213,14 +1213,14 @@ fn draw_hud(
     148,
     @raylib.Color::new(116, 146, 182, 196),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Controls",
     panel_x + 24,
     panel_y + panel_h - 160,
     24,
     @raylib.Color::new(236, 246, 255, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Move: WASD/Arrows\nBoost: Space/J\nAct: L/U\nCycle Pattern: Q/E",
     panel_x + 24,
     panel_y + panel_h - 124,
@@ -1228,7 +1228,7 @@ fn draw_hud(
     @raylib.Color::new(190, 216, 244, 230),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     msg,
     panel_x + 20,
     panel_y + 372,
@@ -1311,9 +1311,9 @@ fn draw_touch_controls(
       cell - 4,
       @raylib.Color::new(186, 212, 236, 170),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       label,
-      x + (cell - 4) / 2 - @raylib.measure_text(label, 24) / 2,
+      x + (cell - 4) / 2 - @draw.measure_text(label, 24) / 2,
       y + (cell - 4) / 2 - 12,
       24,
       @raylib.Color::new(236, 246, 255, 236),
@@ -1367,9 +1367,9 @@ fn draw_touch_controls(
       r,
       @raylib.Color::new(226, 238, 250, 212),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       label,
-      (x - Float::from_int(@raylib.measure_text(label, 20) / 2)).to_int(),
+      (x - Float::from_int(@draw.measure_text(label, 20) / 2)).to_int(),
       (y - 10.0).to_int(),
       20,
       @raylib.Color::new(246, 252, 255, 238),
@@ -1399,17 +1399,17 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
     )
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "DRONE SHOW DIRECTOR 2026",
-    sw / 2 - @raylib.measure_text("DRONE SHOW DIRECTOR 2026", 70) / 2,
+    sw / 2 - @draw.measure_text("DRONE SHOW DIRECTOR 2026", 70) / 2,
     176,
     70,
     @raylib.Color::new(236, 246, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Conduct a swarm in real time: switch formations, satisfy audience requests, and survive weather turbulence.",
     sw / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Conduct a swarm in real time: switch formations, satisfy audience requests, and survive weather turbulence.",
       28,
     ) /
@@ -1438,17 +1438,17 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
     bh,
     @raylib.Color::new(224, 236, 252, 226),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "PRESS ENTER / TAP TO START",
-    sw / 2 - @raylib.measure_text("PRESS ENTER / TAP TO START", 38) / 2,
+    sw / 2 - @draw.measure_text("PRESS ENTER / TAP TO START", 38) / 2,
     by + bh / 2 - 19,
     38,
     @raylib.Color::new(246, 252, 255, 246),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mobile: D-pad + BOOST + ACT + NEXT",
-    sw / 2 - @raylib.measure_text("Mobile: D-pad + BOOST + ACT + NEXT", 24) / 2,
+    sw / 2 - @draw.measure_text("Mobile: D-pad + BOOST + ACT + NEXT", 24) / 2,
     620,
     24,
     @raylib.Color::new(182, 208, 236, 228),
@@ -1471,9 +1471,9 @@ fn draw_end(
   @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 12, 20, 222))
   let title : String = if win { "SHOW OVATION" } else { "SHOW COLLAPSED" }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
-    sw / 2 - @raylib.measure_text(title, 78) / 2,
+    sw / 2 - @draw.measure_text(title, 78) / 2,
     206,
     78,
     if win {
@@ -1483,24 +1483,24 @@ fn draw_end(
     },
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score: \{score}/\{target}",
-    sw / 2 - @raylib.measure_text("Score: \{score}/\{target}", 40) / 2,
+    sw / 2 - @draw.measure_text("Score: \{score}/\{target}", 40) / 2,
     326,
     40,
     @raylib.Color::new(236, 246, 255, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Reputation: \{rep.to_int()}%",
-    sw / 2 - @raylib.measure_text("Reputation: \{rep.to_int()}%", 34) / 2,
+    sw / 2 - @draw.measure_text("Reputation: \{rep.to_int()}%", 34) / 2,
     376,
     34,
     @raylib.Color::new(216, 232, 250, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Served: \{served}  Failed: \{failed}  Drone Losses: \{losses}",
     sw / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Served: \{served}  Failed: \{failed}  Drone Losses: \{losses}",
       30,
     ) /
@@ -1509,9 +1509,9 @@ fn draw_end(
     30,
     @raylib.Color::new(206, 224, 244, 232),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Press Enter / R to run another show",
-    sw / 2 - @raylib.measure_text("Press Enter / R to run another show", 32) / 2,
+    sw / 2 - @draw.measure_text("Press Enter / R to run another show", 32) / 2,
     528,
     32,
     @raylib.Color::new(244, 250, 255, 236),
@@ -1524,8 +1524,10 @@ fn main {
   let sw : Int = 1700
   let sh : Int = 960
   @raylib.init_window(sw, sh, "raylib [game] drone show director 2026")
+  @draw.cleanup()
   defer @raylib.close_window()
   @raylib.set_target_fps(120)
+  @draw.init_font()
 
   let world_x : Int = 20
   let world_y : Int = 20
@@ -2362,6 +2364,7 @@ fn main {
       }
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 }

@@ -100,6 +100,7 @@ fn main {
   )
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Key constants
   let key_one = 49
@@ -183,12 +184,12 @@ fn main {
     )
 
     // Draw UI info text
-    @raylib.draw_text("Color Correction", 585, 40, 20, @raylib.gray)
-    @raylib.draw_text("Picture", 602, 75, 10, @raylib.gray)
-    @raylib.draw_text(
+    @draw.draw_text("Color Correction", 585, 40, 20, @raylib.gray)
+    @draw.draw_text("Picture", 602, 75, 10, @raylib.gray)
+    @draw.draw_text(
       "Press [1] - [4] to Change Picture", 600, 230, 8, @raylib.gray,
     )
-    @raylib.draw_text("Press [R] to Reset Values", 600, 250, 8, @raylib.gray)
+    @draw.draw_text("Press [R] to Reset Values", 600, 250, 8, @raylib.gray)
 
     // Draw GUI controls
     @raygui.gui_toggle_group(
@@ -229,6 +230,7 @@ fn main {
 
     @raylib.draw_fps(710, 10)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -237,5 +239,6 @@ fn main {
     @raylib.unload_texture(textures[i])
   }
   @raylib.unload_shader(shdr_color_correction)
+  @draw.cleanup()
   @raylib.close_window()
 }

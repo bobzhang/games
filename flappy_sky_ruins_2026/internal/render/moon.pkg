@@ -2,6 +2,7 @@ import {
   "moonbitlang/core/math",
   "tonyfettes/raylib",
   "bobzhang/games/flappy_sky_ruins_2026/internal/types",
+  "bobzhang/games/utils/draw",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

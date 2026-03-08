@@ -17,6 +17,7 @@ fn main {
   let mut pause = false
   let mut frames_counter = 0
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -51,7 +52,7 @@ fn main {
       Float::from_int(ball_radius),
       @raylib.maroon,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "PRESS SPACE to PAUSE BALL MOVEMENT",
       10,
       @raylib.get_screen_height() - 25,
@@ -61,12 +62,14 @@ fn main {
 
     // On pause, we draw a blinking message
     if pause && frames_counter / 30 % 2 != 0 {
-      @raylib.draw_text("PAUSED", 350, 200, 30, @raylib.gray)
+      @draw.draw_text("PAUSED", 350, 200, 30, @raylib.gray)
     }
     @raylib.draw_fps(10, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -688,8 +688,8 @@ fn draw_button(
     @raylib.Color::new(194, 214, 252, 235),
   )
 
-  let tw : Int = @raylib.measure_text(label, 26)
-  @raylib.draw_text(
+  let tw : Int = @draw.measure_text(label, 26)
+  @draw.draw_text(
     label,
     x + (w - tw) / 2,
     y + h / 2 - 13,
@@ -784,7 +784,7 @@ fn draw_touch_help() -> Unit {
     54,
     @raylib.Color::new(16, 20, 30, 180),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mobile: tap dice to play, tap REROLL and END TURN buttons.",
     38,
     sh - 66,
@@ -798,6 +798,7 @@ fn draw_touch_help() -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] dice roguelite arena 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let mut state : Int = 0 // 0 menu, 1 battle, 2 reward, 3 game over, 4 victory
   let mut turn : Int = 0 // 0 player turn, 1 enemy anim
@@ -1285,14 +1286,14 @@ fn main {
     draw_panel(40, 28, 620, 180, @raylib.Color::new(104, 142, 232, 220))
     draw_panel(706, 28, 620, 180, @raylib.Color::new(230, 124, 126, 220))
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Pilot",
       62,
       44,
       34,
       @raylib.Color::new(210, 236, 255, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Enemy",
       730,
       44,
@@ -1300,7 +1301,7 @@ fn main {
       @raylib.Color::new(255, 214, 214, 255),
     )
 
-    @raylib.draw_text("HP", 64, 88, 24, @raylib.Color::new(220, 228, 244, 255))
+    @draw.draw_text("HP", 64, 88, 24, @raylib.Color::new(220, 228, 244, 255))
     draw_bar(
       114,
       92,
@@ -1310,7 +1311,7 @@ fn main {
       player.max_hp,
       @raylib.Color::new(120, 226, 156, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{player.hp}/\{player.max_hp}",
       636 - 138,
       90,
@@ -1318,7 +1319,7 @@ fn main {
       @raylib.Color::new(232, 248, 236, 255),
     )
 
-    @raylib.draw_text("HP", 730, 88, 24, @raylib.Color::new(220, 228, 244, 255))
+    @draw.draw_text("HP", 730, 88, 24, @raylib.Color::new(220, 228, 244, 255))
     draw_bar(
       780,
       92,
@@ -1328,7 +1329,7 @@ fn main {
       enemy.max_hp,
       @raylib.Color::new(242, 128, 122, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{enemy.hp}/\{enemy.max_hp}",
       1290 - 136,
       90,
@@ -1336,21 +1337,21 @@ fn main {
       @raylib.Color::new(255, 236, 236, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Shield \{player.shield}",
       64,
       132,
       26,
       @raylib.Color::new(146, 196, 248, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Poison \{player.poison}",
       262,
       132,
       26,
       @raylib.Color::new(130, 222, 136, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Energy \{player.energy}",
       464,
       132,
@@ -1358,21 +1359,21 @@ fn main {
       @raylib.Color::new(236, 218, 136, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{enemy_name(enemy.kind)}",
       730,
       132,
       26,
       enemy_color(enemy.kind),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Shield \{enemy.shield}",
       964,
       132,
       24,
       @raylib.Color::new(156, 202, 250, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Poison \{enemy.poison}",
       1132,
       132,
@@ -1389,13 +1390,13 @@ fn main {
     } else {
       @raylib.Color::new(136, 242, 144, 255)
     }
-    @raylib.draw_text("Intent: \{intent_text(enemy)}", 730, 162, 22, intent_col)
+    @draw.draw_text("Intent: \{intent_text(enemy)}", 730, 162, 22, intent_col)
 
     draw_panel(40, 228, 1286, 500, @raylib.Color::new(106, 124, 166, 224))
 
     @raylib.draw_circle(330, 468, 70.0, @raylib.Color::new(76, 112, 202, 190))
     @raylib.draw_circle(330, 468, 46.0, @raylib.Color::new(106, 170, 244, 232))
-    @raylib.draw_text("YOU", 292, 454, 28, @raylib.Color::new(18, 28, 42, 250))
+    @draw.draw_text("YOU", 292, 454, 28, @raylib.Color::new(18, 28, 42, 250))
 
     let mut enemy_x : Int = 978
     if turn == 1 {
@@ -1404,7 +1405,7 @@ fn main {
 
     @raylib.draw_circle(enemy_x, 360, 82.0, enemy_color(enemy.kind))
     @raylib.draw_circle(enemy_x, 360, 58.0, @raylib.Color::new(30, 30, 44, 84))
-    @raylib.draw_text(
+    @draw.draw_text(
       "ENEMY",
       enemy_x - 62,
       348,
@@ -1457,9 +1458,9 @@ fn main {
         } else {
           @raylib.Color::new(250, 246, 132, 252)
         }
-        @raylib.draw_text("\{dice_elem.value}", x + 10, y + 8, 36, vcol)
+        @draw.draw_text("\{dice_elem.value}", x + 10, y + 8, 36, vcol)
 
-        @raylib.draw_text(
+        @draw.draw_text(
           face_name(dice_elem.face),
           x + 10,
           y + 98,
@@ -1508,21 +1509,21 @@ fn main {
         end_hover,
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "Rerolls: \{rerolls_left}",
         1028,
         442,
         24,
         @raylib.Color::new(216, 232, 252, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Floor \{player.floor}/12",
         1030,
         628,
         30,
         @raylib.Color::new(246, 226, 142, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Gold \{player.gold}",
         1030,
         664,
@@ -1530,14 +1531,14 @@ fn main {
         @raylib.Color::new(242, 220, 128, 252),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "Tap any dice to trigger it",
         66,
         638,
         30,
         @raylib.Color::new(212, 230, 252, 236),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Combos \{combo_hits}",
         66,
         674,
@@ -1550,14 +1551,14 @@ fn main {
 
     if state == 0 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(6, 8, 14, 196))
-      @raylib.draw_text(
+      @draw.draw_text(
         "DICE ROGUELITE ARENA",
         sw / 2 - 322,
         180,
         62,
         @raylib.Color::new(232, 242, 252, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Build a run in 12 floors",
         sw / 2 - 170,
         266,
@@ -1572,28 +1573,28 @@ fn main {
         230,
         @raylib.Color::new(150, 178, 244, 236),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Desktop",
         sw / 2 - 390,
         348,
         30,
         @raylib.Color::new(242, 246, 254, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Click dice to play actions",
         sw / 2 - 390,
         390,
         28,
         @raylib.Color::new(218, 232, 252, 244),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R = reroll, E = end turn",
         sw / 2 - 390,
         426,
         28,
         @raylib.Color::new(218, 232, 252, 244),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Pick one upgrade after each win",
         sw / 2 - 390,
         462,
@@ -1601,28 +1602,28 @@ fn main {
         @raylib.Color::new(218, 232, 252, 244),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mobile",
         sw / 2 + 56,
         348,
         30,
         @raylib.Color::new(242, 246, 254, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Tap dice and tap buttons",
         sw / 2 + 56,
         390,
         28,
         @raylib.Color::new(218, 232, 252, 244),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "All actions are touch-friendly",
         sw / 2 + 56,
         426,
         28,
         @raylib.Color::new(218, 232, 252, 244),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "No keyboard required",
         sw / 2 + 56,
         462,
@@ -1641,14 +1642,14 @@ fn main {
       )
     } else if state == 2 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(6, 10, 18, 190))
-      @raylib.draw_text(
+      @draw.draw_text(
         "Choose One Upgrade",
         sw / 2 - 240,
         172,
         56,
         @raylib.Color::new(238, 246, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "[1] [2] [3] or tap card",
         sw / 2 - 144,
         236,
@@ -1676,21 +1677,21 @@ fn main {
           @raylib.Color::new(218, 232, 252, 250),
         )
 
-        @raylib.draw_text(
+        @draw.draw_text(
           "\{i + 1}",
           x + 14,
           y + 10,
           28,
           @raylib.Color::new(250, 236, 142, 252),
         )
-        @raylib.draw_text(
+        @draw.draw_text(
           rewards[i].title,
           x + 18,
           y + 52,
           34,
           @raylib.Color::new(242, 248, 255, 252),
         )
-        @raylib.draw_text(
+        @draw.draw_text(
           rewards[i].desc,
           x + 18,
           y + 108,
@@ -1700,28 +1701,28 @@ fn main {
       }
     } else if state == 3 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(10, 8, 12, 208))
-      @raylib.draw_text(
+      @draw.draw_text(
         "RUN FAILED",
         sw / 2 - 170,
         194,
         76,
         @raylib.Color::new(252, 158, 170, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Reached floor \{player.floor}",
         sw / 2 - 144,
         300,
         36,
         @raylib.Color::new(232, 232, 246, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Wins \{player.wins}    Gold \{player.gold}",
         sw / 2 - 180,
         350,
         34,
         @raylib.Color::new(222, 216, 150, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Tap or press Enter/R to return",
         sw / 2 - 216,
         436,
@@ -1730,28 +1731,28 @@ fn main {
       )
     } else if state == 4 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 12, 8, 186))
-      @raylib.draw_text(
+      @draw.draw_text(
         "ARENA CLEARED",
         sw / 2 - 246,
         176,
         74,
         @raylib.Color::new(168, 246, 174, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "All 12 floors conquered",
         sw / 2 - 184,
         286,
         36,
         @raylib.Color::new(224, 246, 228, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Gold \{player.gold}    HP \{player.hp}",
         sw / 2 - 168,
         340,
         34,
         @raylib.Color::new(244, 232, 154, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Tap or press Enter for new run",
         sw / 2 - 208,
         432,
@@ -1761,7 +1762,7 @@ fn main {
     }
 
     if msg_t > 0.0 {
-      let box_w = @raylib.measure_text(msg, 30) + 44
+      let box_w = @draw.measure_text(msg, 30) + 44
       let box_x = sw / 2 - box_w / 2
       @raylib.draw_rectangle(
         box_x,
@@ -1777,7 +1778,7 @@ fn main {
         52,
         @raylib.Color::new(184, 208, 242, 242),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         msg,
         box_x + 22,
         218,
@@ -1788,8 +1789,10 @@ fn main {
 
     draw_sparks(sparks)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

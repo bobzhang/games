@@ -35,6 +35,7 @@ fn main {
 
   let mut frames_counter = 0
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -79,7 +80,7 @@ fn main {
       @raylib.white,
     )
     @raylib.end_shader_mode()
-    @raylib.draw_text(
+    @draw.draw_text(
       "Frame: " + frames_counter.to_string(),
       20,
       screen_height - 40,
@@ -87,6 +88,7 @@ fn main {
       @raylib.white,
     )
     @raylib.draw_fps(10, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -94,5 +96,6 @@ fn main {
   @raylib.unload_texture(tex_diffuse)
   @raylib.unload_texture(tex_mask)
   @raylib.unload_shader(shader)
+  @draw.cleanup()
   @raylib.close_window()
 }

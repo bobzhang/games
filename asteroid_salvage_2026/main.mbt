@@ -5,6 +5,7 @@ fn main {
     @types.screen_width, @types.screen_height, "Asteroid Salvage 2026",
   )
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let game = @types.Game()
   @types.reset_game(game)
@@ -16,5 +17,6 @@ fn main {
     @render.draw_frame(game)
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -85,6 +85,7 @@ fn main {
   let mut run_time : Float = 0.0
   @raylib.disable_cursor()
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -143,17 +144,19 @@ fn main {
       @raylib.white,
     )
     @raylib.end_shader_mode()
-    @raylib.draw_text(
+    @draw.draw_text(
       "(c) Raymarching shader by Inigo Quilez. MIT License.",
       @raylib.get_screen_width() - 280,
       @raylib.get_screen_height() - 20,
       10,
       @raylib.black,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_shader(shader)
+  @draw.cleanup()
   @raylib.close_window()
 }

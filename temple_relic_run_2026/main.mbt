@@ -315,6 +315,7 @@ fn burst(
 fn main {
   @raylib.init_window(sw, sh, "Temple Relic Run 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let tiles : Array[Int] = Array::makei(map_w * map_h, fn(_i) { 0 })
 
@@ -1472,14 +1473,14 @@ fn main {
     )
 
     @raylib.draw_rectangle(0, 0, sw, 74, @raylib.Color::new(10, 8, 6, 228))
-    @raylib.draw_text(
+    @draw.draw_text(
       "TEMPLE RELIC RUN 2026",
       18,
       14,
       30,
       @raylib.Color::new(246, 236, 206, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "WASD move  J slash  K dash  L relic charge",
       18,
       48,
@@ -1487,28 +1488,28 @@ fn main {
       @raylib.Color::new(206, 188, 152, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Stage \{stage}/\{max_stage}",
       520,
       14,
       28,
       @raylib.Color::new(252, 218, 132, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{player.score}",
       700,
       14,
       28,
       @raylib.Color::new(176, 236, 196, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Timer \{total_time.to_int()}s",
       932,
       14,
       28,
       @raylib.Color::new(168, 220, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Losses \{losses}",
       1120,
       14,
@@ -1524,7 +1525,7 @@ fn main {
       10,
       @raylib.Color::new(118, 226, 158, 255),
     )
-    @raylib.draw_text("HP", 18, 98, 16, @raylib.Color::new(218, 202, 174, 255))
+    @draw.draw_text("HP", 18, 98, 16, @raylib.Color::new(218, 202, 174, 255))
 
     @raylib.draw_rectangle(
       254,
@@ -1540,7 +1541,7 @@ fn main {
       10,
       @raylib.Color::new(122, 196, 246, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "STAMINA",
       254,
       98,
@@ -1548,28 +1549,28 @@ fn main {
       @raylib.Color::new(218, 202, 174, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Relics \{relic_left}",
       500,
       84,
       20,
       @raylib.Color::new(152, 226, 246, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Plates \{plates_pressed}/\{plate_goal}",
       610,
       84,
       20,
       @raylib.Color::new(252, 214, 122, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Combo \{player.combo}",
       800,
       84,
       20,
       @raylib.Color::new(252, 224, 162, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Slash \{player.slash_cd.to_int()}  Dash \{player.dash_cd.to_int()}  Bomb \{player.bomb_cd.to_int()}",
       920,
       84,
@@ -1584,7 +1585,7 @@ fn main {
       38,
       @raylib.Color::new(10, 8, 6, 214),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       sw / 2 - 340,
       sh - 44,
@@ -1608,7 +1609,7 @@ fn main {
       58,
       @raylib.Color::new(88, 76, 60, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "L",
       px0 + 30,
       py0 + 72,
@@ -1622,7 +1623,7 @@ fn main {
       58,
       @raylib.Color::new(88, 76, 60, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "R",
       px0 + 190,
       py0 + 72,
@@ -1636,7 +1637,7 @@ fn main {
       58,
       @raylib.Color::new(88, 76, 60, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "U",
       px0 + 110,
       py0 + 16,
@@ -1650,7 +1651,7 @@ fn main {
       58,
       @raylib.Color::new(88, 76, 60, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "D",
       px0 + 110,
       py0 + 128,
@@ -1674,7 +1675,7 @@ fn main {
       92,
       @raylib.Color::new(112, 152, 198, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "SLASH",
       bx0 + 28,
       by0 + 48,
@@ -1688,7 +1689,7 @@ fn main {
       92,
       @raylib.Color::new(196, 136, 88, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "DASH",
       bx0 + 166,
       by0 + 48,
@@ -1702,7 +1703,7 @@ fn main {
       100,
       @raylib.Color::new(138, 182, 112, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "CHARGE",
       bx0 + 94,
       by0 + 154,
@@ -1719,35 +1720,35 @@ fn main {
         420,
         @raylib.Color::new(22, 18, 12, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "TEMPLE RELIC RUN",
         sw / 2 - 306,
         sh / 2 - 132,
         66,
         @raylib.Color::new(246, 236, 206, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Push crates onto plates, recover relics, unlock the gate.",
         sw / 2 - 352,
         sh / 2 - 26,
         32,
         @raylib.Color::new(208, 188, 154, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mobile: left pad moves, right buttons slash/dash/charge",
         sw / 2 - 368,
         sh / 2 + 18,
         30,
         @raylib.Color::new(208, 188, 154, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Clear 5 stages before time runs out",
         sw / 2 - 222,
         sh / 2 + 66,
         34,
         @raylib.Color::new(252, 214, 132, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "ENTER or tap to start",
         sw / 2 - 188,
         sh / 2 + 126,
@@ -1763,28 +1764,28 @@ fn main {
         380,
         @raylib.Color::new(22, 18, 12, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "TEMPLE MASTERED",
         sw / 2 - 262,
         sh / 2 - 132,
         62,
         @raylib.Color::new(248, 236, 186, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{player.score}",
         sw / 2 - 148,
         sh / 2 - 34,
         44,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Losses: \{losses}  Time left: \{total_time.to_int()}s",
         sw / 2 - 220,
         sh / 2 + 20,
         34,
         @raylib.Color::new(172, 236, 202, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 178,
         sh / 2 + 122,
@@ -1800,28 +1801,28 @@ fn main {
         380,
         @raylib.Color::new(22, 18, 12, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "RUN FAILED",
         sw / 2 - 176,
         sh / 2 - 132,
         62,
         @raylib.Color::new(246, 140, 154, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{player.score}",
         sw / 2 - 148,
         sh / 2 - 34,
         44,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Stage: \{stage}  Losses: \{losses}",
         sw / 2 - 166,
         sh / 2 + 20,
         34,
         @raylib.Color::new(236, 172, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 178,
         sh / 2 + 122,
@@ -1830,6 +1831,7 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
 
     if state == 2 || state == 3 {
@@ -1840,5 +1842,6 @@ fn main {
     }
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -12,6 +12,7 @@ fn main {
   let mut scissor_mode = true
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -47,7 +48,7 @@ fn main {
       @raylib.get_screen_height(),
       @raylib.red,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Move the mouse around to reveal this text!", 190, 200, 20, @raylib.lightgray,
     )
 
@@ -62,13 +63,15 @@ fn main {
       1.0,
       @raylib.black,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Press S to toggle scissor test", 10, 10, 20, @raylib.black,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

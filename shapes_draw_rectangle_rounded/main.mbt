@@ -19,6 +19,7 @@ fn main {
   let mut draw_rounded_lines = false
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -149,63 +150,65 @@ fn main {
     }
 
     // Draw parameter text
-    @raylib.draw_text("Width: \{width.to_int()}", 640, 40, 10, @raylib.darkgray)
-    @raylib.draw_text("[LEFT/RIGHT]", 640, 55, 10, @raylib.gray)
-    @raylib.draw_text(
+    @draw.draw_text("Width: \{width.to_int()}", 640, 40, 10, @raylib.darkgray)
+    @draw.draw_text("[LEFT/RIGHT]", 640, 55, 10, @raylib.gray)
+    @draw.draw_text(
       "Height: \{height.to_int()}",
       640,
       70,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text("[UP/DOWN]", 640, 85, 10, @raylib.gray)
-    @raylib.draw_text("Roundness: \{roundness}", 640, 110, 10, @raylib.darkgray)
-    @raylib.draw_text("[W/S]", 640, 125, 10, @raylib.gray)
-    @raylib.draw_text(
+    @draw.draw_text("[UP/DOWN]", 640, 85, 10, @raylib.gray)
+    @draw.draw_text("Roundness: \{roundness}", 640, 110, 10, @raylib.darkgray)
+    @draw.draw_text("[W/S]", 640, 125, 10, @raylib.gray)
+    @draw.draw_text(
       "Thickness: \{line_thick}",
       640,
       150,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text("[Q/E]", 640, 165, 10, @raylib.gray)
-    @raylib.draw_text(
+    @draw.draw_text("[Q/E]", 640, 165, 10, @raylib.gray)
+    @draw.draw_text(
       "Segments: \{segments.to_int()}",
       640,
       190,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text("[A/D]", 640, 205, 10, @raylib.gray)
+    @draw.draw_text("[A/D]", 640, 205, 10, @raylib.gray)
 
     let mode = if segments >= 4.0 { "MANUAL" } else { "AUTO" }
     let color = if segments >= 4.0 { @raylib.maroon } else { @raylib.darkgray }
-    @raylib.draw_text("MODE: \{mode}", 640, 240, 10, color)
+    @draw.draw_text("MODE: \{mode}", 640, 240, 10, color)
 
     let rr_text = if draw_rounded_rect { "ON" } else { "OFF" }
     let rl_text = if draw_rounded_lines { "ON" } else { "OFF" }
     let r_text = if draw_rect { "ON" } else { "OFF" }
-    @raylib.draw_text(
+    @draw.draw_text(
       "[1] DrawRoundedRect: \{rr_text}",
       640,
       320,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "[2] DrawRoundedLines: \{rl_text}",
       640,
       350,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text("[3] DrawRect: \{r_text}", 640, 380, 10, @raylib.darkgray)
+    @draw.draw_text("[3] DrawRect: \{r_text}", 640, 380, 10, @raylib.darkgray)
 
     @raylib.draw_fps(10, 10)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

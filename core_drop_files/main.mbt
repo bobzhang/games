@@ -8,6 +8,7 @@ fn main {
   )
   let file_paths : Array[String] = []
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -25,11 +26,11 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
     if file_paths.length() == 0 {
-      @raylib.draw_text(
+      @draw.draw_text(
         "Drop your files to this window!", 100, 40, 20, @raylib.darkgray,
       )
     } else {
-      @raylib.draw_text("Dropped files:", 100, 40, 20, @raylib.darkgray)
+      @draw.draw_text("Dropped files:", 100, 40, 20, @raylib.darkgray)
       for i in 0..<file_paths.length() {
         if i % 2 == 0 {
           @raylib.draw_rectangle(
@@ -48,9 +49,9 @@ fn main {
             @raylib.fade(@raylib.lightgray, 0.3),
           )
         }
-        @raylib.draw_text(file_paths[i], 120, 100 + 40 * i, 10, @raylib.gray)
+        @draw.draw_text(file_paths[i], 120, 100 + 40 * i, 10, @raylib.gray)
       }
-      @raylib.draw_text(
+      @draw.draw_text(
         "Drop new files...",
         100,
         110 + 40 * file_paths.length(),
@@ -58,9 +59,11 @@ fn main {
         @raylib.darkgray,
       )
     }
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

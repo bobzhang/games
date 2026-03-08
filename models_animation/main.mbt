@@ -38,6 +38,7 @@ fn main {
 
   @raylib.disable_cursor()
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -67,16 +68,17 @@ fn main {
     )
     @raylib.draw_grid(10, 1.0)
     @raylib.end_mode_3d()
-    @raylib.draw_text(
+    @draw.draw_text(
       "PRESS SPACE to PLAY MODEL ANIMATION", 10, 10, 20, @raylib.maroon,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "(c) Guy IQM 3D model by @culacant",
       screen_width - 200,
       screen_height - 20,
       10,
       @raylib.gray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -84,5 +86,6 @@ fn main {
   @raylib.unload_texture(texture)
   @raylib.unload_model_animations(anims)
   @raylib.unload_model(model)
+  @draw.cleanup()
   @raylib.close_window()
 }

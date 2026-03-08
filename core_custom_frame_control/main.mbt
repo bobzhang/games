@@ -6,6 +6,7 @@ fn main {
   @raylib.init_window(
     screen_width, screen_height, "raylib [core] example - custom frame control",
   )
+  @draw.init_font()
 
   // Custom timing variables
   let mut previous_time = @raylib.get_time() // Previous time measure
@@ -69,14 +70,14 @@ fn main {
     )
 
     let ms = (time_counter * 1000.0).to_int()
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{ms} ms",
       position.to_int() - 40,
       @raylib.get_screen_height() / 2 - 100,
       20,
       @raylib.maroon,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "PosX: \{position.to_int()}",
       position.to_int() - 50,
       @raylib.get_screen_height() / 2 + 40,
@@ -84,25 +85,25 @@ fn main {
       @raylib.black,
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Circle is moving at a constant 200 pixels/sec,\nindependently of the frame rate.",
       10, 10, 20, @raylib.darkgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "PRESS SPACE to PAUSE MOVEMENT",
       10,
       @raylib.get_screen_height() - 60,
       20,
       @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "PRESS UP | DOWN to CHANGE TARGET FPS",
       10,
       @raylib.get_screen_height() - 30,
       20,
       @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "TARGET FPS: \{target_fps}",
       @raylib.get_screen_width() - 220,
       10,
@@ -114,7 +115,7 @@ fn main {
     } else {
       0
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       "CURRENT FPS: \{current_fps}",
       @raylib.get_screen_width() - 220,
       40,
@@ -122,6 +123,7 @@ fn main {
       @raylib.green,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
 
     // NOTE: In case raylib is configured to SUPPORT_CUSTOM_FRAME_CONTROL,
@@ -148,5 +150,6 @@ fn main {
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

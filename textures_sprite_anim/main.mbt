@@ -27,6 +27,7 @@ fn main {
   let mut frames_counter = 0
   let mut frames_speed = 8 // Number of spritesheet frames shown by second
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -69,9 +70,9 @@ fn main {
       frame_rec_height.to_int(),
       @raylib.red,
     )
-    @raylib.draw_text("FRAME SPEED: ", 165, 210, 10, @raylib.darkgray)
-    @raylib.draw_text("\{frames_speed} FPS", 575, 210, 10, @raylib.darkgray)
-    @raylib.draw_text(
+    @draw.draw_text("FRAME SPEED: ", 165, 210, 10, @raylib.darkgray)
+    @draw.draw_text("\{frames_speed} FPS", 575, 210, 10, @raylib.darkgray)
+    @draw.draw_text(
       "PRESS RIGHT/LEFT KEYS to CHANGE SPEED!", 290, 240, 10, @raylib.darkgray,
     )
     for i in 0..<max_frame_speed {
@@ -84,17 +85,19 @@ fn main {
       frame_rec_x, frame_rec_y, frame_rec_width, frame_rec_height,
     )
     @raylib.draw_texture_rec(scarfy, frame_rec, position, @raylib.white)
-    @raylib.draw_text(
+    @draw.draw_text(
       "(c) Scarfy sprite by Eiden Marsal",
       screen_width - 200,
       screen_height - 20,
       10,
       @raylib.gray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_texture(scarfy)
+  @draw.cleanup()
   @raylib.close_window()
 }

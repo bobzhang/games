@@ -40,6 +40,7 @@ fn main {
   }
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -106,18 +107,18 @@ fn main {
         colors[i],
       )
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       "If executed inside a window,\nyou can resize the window,\nand see the screen scaling!",
       10, 25, 20, @raylib.white,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Default Mouse: [\{mouse.x.to_int()} , \{mouse.y.to_int()}]",
       350,
       25,
       20,
       @raylib.green,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Virtual Mouse: [\{virtual_mouse.x.to_int()} , \{virtual_mouse.y.to_int()}]",
       350,
       55,
@@ -155,10 +156,12 @@ fn main {
       0.0,
       @raylib.white,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_render_texture(target)
+  @draw.cleanup()
   @raylib.close_window()
 }

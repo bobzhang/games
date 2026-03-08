@@ -328,6 +328,7 @@ fn generate_course(
 fn main {
   @raylib.init_window(sw, sh, "Mountain Bike Downhill 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let rider : Rider = {
     x: 640.0,
@@ -1002,14 +1003,14 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 74, @raylib.Color::new(8, 12, 22, 222))
-    @raylib.draw_text(
+    @draw.draw_text(
       "MOUNTAIN BIKE DOWNHILL 2026",
       20,
       14,
       30,
       @raylib.Color::new(236, 244, 255, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "A/D steer  W pedal  S brake  J jump  K boost",
       20,
       48,
@@ -1017,28 +1018,28 @@ fn main {
       @raylib.Color::new(178, 204, 236, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{rider.score}",
       500,
       16,
       28,
       @raylib.Color::new(246, 216, 118, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Combo \{rider.combo}",
       700,
       16,
       28,
       @raylib.Color::new(170, 238, 194, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Clean \{clean_count}/\{checkpoint_count}",
       880,
       16,
       28,
       @raylib.Color::new(180, 226, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{time_left.to_int()}s",
       1110,
       16,
@@ -1054,7 +1055,7 @@ fn main {
       10,
       @raylib.Color::new(108, 224, 154, 255),
     )
-    @raylib.draw_text("HP", 20, 96, 16, @raylib.Color::new(182, 208, 230, 255))
+    @draw.draw_text("HP", 20, 96, 16, @raylib.Color::new(182, 208, 230, 255))
 
     @raylib.draw_rectangle(
       254,
@@ -1070,7 +1071,7 @@ fn main {
       10,
       @raylib.Color::new(116, 198, 248, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "STAMINA",
       254,
       96,
@@ -1084,7 +1085,7 @@ fn main {
       checkpoint_count,
       rider.y,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Finish \{dist_left.to_int()}m",
       520,
       82,
@@ -1092,7 +1093,7 @@ fn main {
       @raylib.Color::new(234, 238, 248, 255),
     )
     if next_cp_dy < 9000000.0 {
-      @raylib.draw_text(
+      @draw.draw_text(
         "Next CP \{next_cp_dy.to_int()}m",
         700,
         82,
@@ -1100,21 +1101,21 @@ fn main {
         @raylib.Color::new(196, 226, 248, 255),
       )
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       "Miss \{miss_count}",
       900,
       82,
       20,
       @raylib.Color::new(242, 162, 172, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Tier \{tier}",
       1020,
       82,
       20,
       @raylib.Color::new(250, 206, 132, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Coins \{rider.coins}",
       1120,
       82,
@@ -1138,7 +1139,7 @@ fn main {
       56,
       @raylib.Color::new(58, 82, 114, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "L",
       lpx + 28,
       lpy + 72,
@@ -1152,7 +1153,7 @@ fn main {
       56,
       @raylib.Color::new(58, 82, 114, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "R",
       lpx + 182,
       lpy + 72,
@@ -1166,7 +1167,7 @@ fn main {
       56,
       @raylib.Color::new(58, 82, 114, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "PED",
       lpx + 94,
       lpy + 16,
@@ -1180,7 +1181,7 @@ fn main {
       56,
       @raylib.Color::new(58, 82, 114, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "BRK",
       lpx + 92,
       lpy + 128,
@@ -1204,7 +1205,7 @@ fn main {
       84,
       @raylib.Color::new(88, 156, 228, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "JUMP",
       rbx + 16,
       rby + 40,
@@ -1218,7 +1219,7 @@ fn main {
       84,
       @raylib.Color::new(214, 112, 94, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "BOOST",
       rbx + 128,
       rby + 40,
@@ -1233,7 +1234,7 @@ fn main {
       40,
       @raylib.Color::new(8, 10, 16, 214),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       sw / 2 - 312,
       sh - 44,
@@ -1250,28 +1251,28 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 244),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "MOUNTAIN BIKE DOWNHILL",
         sw / 2 - 326,
         sh / 2 - 132,
         56,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Thread checkpoints, keep speed, and chain aerial tricks",
         sw / 2 - 346,
         sh / 2 - 30,
         30,
         @raylib.Color::new(182, 214, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mobile: left controls steer/pedal/brake, right controls jump/boost",
         sw / 2 - 420,
         sh / 2 + 14,
         26,
         @raylib.Color::new(182, 214, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "ENTER or tap to start",
         sw / 2 - 166,
         sh / 2 + 106,
@@ -1287,35 +1288,35 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "RUN CLEARED",
         sw / 2 - 180,
         sh / 2 - 132,
         60,
         @raylib.Color::new(248, 236, 186, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{rider.score}",
         sw / 2 - 150,
         sh / 2 - 38,
         44,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Clean checkpoints: \{clean_count}/\{checkpoint_count}",
         sw / 2 - 276,
         sh / 2 + 18,
         32,
         @raylib.Color::new(170, 236, 198, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Misses: \{miss_count}  Coins: \{rider.coins}",
         sw / 2 - 198,
         sh / 2 + 58,
         32,
         @raylib.Color::new(236, 172, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 178,
         sh / 2 + 122,
@@ -1331,35 +1332,35 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "RUN FAILED",
         sw / 2 - 170,
         sh / 2 - 132,
         60,
         @raylib.Color::new(246, 140, 154, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{rider.score}",
         sw / 2 - 150,
         sh / 2 - 38,
         44,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Clean checkpoints: \{clean_count}",
         sw / 2 - 210,
         sh / 2 + 18,
         32,
         @raylib.Color::new(172, 236, 202, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Time left: \{time_left.to_int()}s",
         sw / 2 - 186,
         sh / 2 + 58,
         32,
         @raylib.Color::new(236, 172, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 178,
         sh / 2 + 122,
@@ -1368,6 +1369,7 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
 
     if state == 2 || state == 3 {
@@ -1378,5 +1380,6 @@ fn main {
     }
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -127,7 +127,7 @@ fn @types.Game::draw_checkpoint_lines(game : @types.Game) -> Unit {
     )
 
     let label : String = "CP" + (i + 1).to_string()
-    @raylib.draw_text(
+    @draw.draw_text(
       label,
       @types.river_x + 18,
       y - 26,
@@ -314,7 +314,7 @@ fn @types.Game::draw_rivals(game : @types.Game) -> Unit {
 
     draw_boat(x, y, scale, hull, @raylib.Color::new(246, 250, 255, 220), false)
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "R" + rival.id.to_string(),
       x - 16,
       y - (scale * 38.0).to_int(),
@@ -408,14 +408,14 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(140, 190, 214, 214),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Dragon Boat Sprint",
     @types.hud_x + 22,
     @types.river_y + 20,
     40,
     @raylib.Color::new(238, 248, 255, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Festival 2026",
     @types.hud_x + 22,
     @types.river_y + 66,
@@ -428,7 +428,7 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
     _ => game.current_rank()
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Distance  " +
     game.distance.to_int().to_string() +
     "m / " +
@@ -439,14 +439,14 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
     28,
     @raylib.Color::new(216, 232, 246, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Speed     " + game.speed.to_int().to_string() + " m/s",
     @types.hud_x + 22,
     @types.river_y + 150,
     28,
     @raylib.Color::new(216, 232, 246, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Rank      #" + rank_now.to_string(),
     @types.hud_x + 22,
     @types.river_y + 184,
@@ -454,14 +454,14 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(252, 232, 162, 244),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score     " + game.score.to_string(),
     @types.hud_x + 22,
     @types.river_y + 224,
     30,
     @raylib.Color::new(254, 246, 210, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Streak    " +
     game.streak.to_string() +
     "  (Best " +
@@ -472,7 +472,7 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
     28,
     @raylib.Color::new(214, 230, 246, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Checkpoints  " +
     game.checkpoint_idx.to_string() +
     "/" +
@@ -482,7 +482,7 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
     28,
     @raylib.Color::new(214, 230, 246, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Debris Hits  " + game.hit_count.to_string(),
     @types.hud_x + 22,
     @types.river_y + 328,
@@ -495,7 +495,7 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
   let meter_w : Int = @types.hud_w - 48
   let meter_h : Int = 30
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Rhythm Meter",
     meter_x,
     meter_y - 32,
@@ -542,7 +542,7 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
     "Build meter with timed J strokes"
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     burst_text,
     meter_x,
     meter_y + 38,
@@ -555,7 +555,7 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
   let beat_w : Int = meter_w
   let beat_h : Int = 18
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Beat Lane",
     beat_x,
     beat_y - 30,
@@ -600,7 +600,7 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(242, 246, 255, 244),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Tap J when marker hits either gold edge",
     beat_x,
     beat_y + 26,
@@ -608,42 +608,42 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(210, 228, 242, 226),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Controls",
     @types.hud_x + 24,
     @types.river_y + 584,
     30,
     @raylib.Color::new(238, 246, 255, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "A/D or Left/Right : Lane steer",
     @types.hud_x + 24,
     @types.river_y + 624,
     24,
     @raylib.Color::new(206, 226, 242, 234),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "J : Paddle stroke (timing)",
     @types.hud_x + 24,
     @types.river_y + 654,
     24,
     @raylib.Color::new(206, 226, 242, 234),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "K : Stabilize against waves",
     @types.hud_x + 24,
     @types.river_y + 684,
     24,
     @raylib.Color::new(206, 226, 242, 234),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Space : Burst when meter full",
     @types.hud_x + 24,
     @types.river_y + 714,
     24,
     @raylib.Color::new(206, 226, 242, 234),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "P : Pause    R : Restart",
     @types.hud_x + 24,
     @types.river_y + 744,
@@ -651,14 +651,14 @@ fn @types.Game::draw_hud_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(206, 226, 242, 234),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Festival sprint: rhythm streak boosts top speed.",
     @types.hud_x + 24,
     @types.river_y + 802,
     23,
     @raylib.Color::new(206, 222, 238, 216),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Avoid debris, absorb waves, clear checkpoints, win rank.",
     @types.hud_x + 24,
     @types.river_y + 832,
@@ -697,9 +697,9 @@ fn @types.Game::draw_message_banner(game : @types.Game) -> Unit {
     @raylib.Color::new(190, 226, 244, alpha),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     game.msg,
-    x + box_w / 2 - @raylib.measure_text(game.msg, 30) / 2,
+    x + box_w / 2 - @draw.measure_text(game.msg, 30) / 2,
     y + 13,
     30,
     @raylib.Color::new(246, 252, 255, alpha),
@@ -718,31 +718,31 @@ fn draw_title_overlay() -> Unit {
   )
 
   let title = "Dragon Boat Sprint Festival"
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
-    @types.screen_w / 2 - @raylib.measure_text(title, 64) / 2,
+    @types.screen_w / 2 - @draw.measure_text(title, 64) / 2,
     180,
     64,
     @raylib.Color::new(244, 252, 255, 248),
   )
 
   let sub = "2026"
-  @raylib.draw_text(
+  @draw.draw_text(
     sub,
-    @types.screen_w / 2 - @raylib.measure_text(sub, 44) / 2,
+    @types.screen_w / 2 - @draw.measure_text(sub, 44) / 2,
     250,
     44,
     @raylib.Color::new(255, 220, 150, 240),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Steer lanes, sync paddle rhythm, survive waves and debris.",
     @types.screen_w / 2 - 420,
     340,
     36,
     @raylib.Color::new(216, 234, 246, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Outrace rivals, clear checkpoints, and sprint to the festival finish.",
     @types.screen_w / 2 - 470,
     390,
@@ -765,28 +765,28 @@ fn draw_title_overlay() -> Unit {
     @raylib.Color::new(180, 216, 238, 224),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "A/D or Left/Right  steer lane bias",
     @types.screen_w / 2 - 340,
     536,
     30,
     @raylib.Color::new(232, 242, 250, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "J  paddle stroke on beat edges",
     @types.screen_w / 2 - 340,
     574,
     30,
     @raylib.Color::new(232, 242, 250, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "K  stabilize during wave impacts",
     @types.screen_w / 2 - 340,
     612,
     30,
     @raylib.Color::new(232, 242, 250, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Space burst when rhythm meter is full",
     @types.screen_w / 2 - 340,
     650,
@@ -795,9 +795,9 @@ fn draw_title_overlay() -> Unit {
   )
 
   let start_msg = "Press Enter, J, or Space to start"
-  @raylib.draw_text(
+  @draw.draw_text(
     start_msg,
-    @types.screen_w / 2 - @raylib.measure_text(start_msg, 42) / 2,
+    @types.screen_w / 2 - @draw.measure_text(start_msg, 42) / 2,
     770,
     42,
     @raylib.Color::new(255, 228, 158, 246),
@@ -816,18 +816,18 @@ fn draw_pause_overlay() -> Unit {
   )
 
   let title = "PAUSED"
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
-    @types.screen_w / 2 - @raylib.measure_text(title, 86) / 2,
+    @types.screen_w / 2 - @draw.measure_text(title, 86) / 2,
     330,
     86,
     @raylib.Color::new(244, 248, 255, 246),
   )
 
   let msg = "Press P to resume or R to restart"
-  @raylib.draw_text(
+  @draw.draw_text(
     msg,
-    @types.screen_w / 2 - @raylib.measure_text(msg, 40) / 2,
+    @types.screen_w / 2 - @draw.measure_text(msg, 40) / 2,
     450,
     40,
     @raylib.Color::new(220, 236, 248, 238),
@@ -861,15 +861,15 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   )
 
   let title = "Festival Finish"
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
-    @types.screen_w / 2 - @raylib.measure_text(title, 62) / 2,
+    @types.screen_w / 2 - @draw.measure_text(title, 62) / 2,
     220,
     62,
     @raylib.Color::new(246, 252, 255, 246),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Rank #" + game.finish_rank.to_string(),
     @types.screen_w / 2 - 110,
     306,
@@ -877,28 +877,28 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(254, 226, 148, 244),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Final Score  " + game.score.to_string(),
     @types.screen_w / 2 - 220,
     382,
     42,
     @raylib.Color::new(238, 246, 255, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Finish Time  " + game.finish_time.to_int().to_string() + "s",
     @types.screen_w / 2 - 220,
     432,
     38,
     @raylib.Color::new(220, 234, 248, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best Rhythm Streak  " + game.best_streak.to_string(),
     @types.screen_w / 2 - 220,
     478,
     38,
     @raylib.Color::new(220, 234, 248, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Checkpoints  " +
     game.checkpoint_idx.to_string() +
     "/" +
@@ -908,7 +908,7 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     38,
     @raylib.Color::new(220, 234, 248, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Debris Hits  " + game.hit_count.to_string(),
     @types.screen_w / 2 - 220,
     570,
@@ -917,9 +917,9 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   )
 
   let msg = "Press Enter/J/Space for another run, or R to restart immediately"
-  @raylib.draw_text(
+  @draw.draw_text(
     msg,
-    @types.screen_w / 2 - @raylib.measure_text(msg, 30) / 2,
+    @types.screen_w / 2 - @draw.measure_text(msg, 30) / 2,
     692,
     30,
     @raylib.Color::new(240, 246, 254, 236),

@@ -43,6 +43,7 @@ fn main {
   @raylib.unload_image(image) // Unload heightmap image from RAM
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -56,7 +57,7 @@ fn main {
     @raylib.draw_model(model, map_position, 1.0, @raylib.red)
     @raylib.draw_grid(20, 1.0)
     @raylib.end_mode_3d()
-    @raylib.draw_text(
+    @draw.draw_text(
       "Heightmap model generated from image",
       10,
       screen_height - 30,
@@ -64,11 +65,13 @@ fn main {
       @raylib.darkgray,
     )
     @raylib.draw_fps(10, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_texture(texture)
   @raylib.unload_model(model)
+  @draw.cleanup()
   @raylib.close_window()
 }

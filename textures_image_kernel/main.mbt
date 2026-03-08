@@ -106,6 +106,7 @@ fn main {
     @raylib.draw_texture(cat_gaussian_texture, 400, 0, @raylib.white)
     @raylib.draw_texture(texture, 600, 0, @raylib.white)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 

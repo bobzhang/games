@@ -582,28 +582,28 @@ fn draw_touch_ui(state : Int) -> Unit {
       @raylib.Color::new(24, 42, 62, 186),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "L",
       pad_x + 36,
       pad_y + 88,
       28,
       @raylib.Color::new(216, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "R",
       pad_x + 180,
       pad_y + 88,
       28,
       @raylib.Color::new(216, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "U",
       pad_x + 106,
       pad_y + 24,
       28,
       @raylib.Color::new(216, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "D",
       pad_x + 105,
       pad_y + 146,
@@ -655,28 +655,28 @@ fn draw_touch_ui(state : Int) -> Unit {
       @raylib.Color::new(24, 50, 72, 196),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "FIRE",
       btn_x + 44,
       btn_y + 46,
       24,
       @raylib.Color::new(246, 252, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "DASH",
       btn_x + 190,
       btn_y + 46,
       24,
       @raylib.Color::new(246, 252, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "BUILD",
       btn_x + 34,
       btn_y + 146,
       24,
       @raylib.Color::new(246, 252, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "BOMB",
       btn_x + 182,
       btn_y + 146,
@@ -691,6 +691,7 @@ fn draw_touch_ui(state : Int) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] arcade factory defense 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let player : Player = {
     x: core_x,
@@ -1996,56 +1997,56 @@ fn main {
 
     // HUD.
     @raylib.draw_rectangle(0, 0, sw, 86, @raylib.Color::new(8, 12, 20, 232))
-    @raylib.draw_text(
+    @draw.draw_text(
       "Arcade Factory Defense 2026",
       16,
       10,
       30,
       @raylib.Color::new(210, 236, 252, 248),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Wave \{wave}/\{max_waves}",
       18,
       48,
       22,
       @raylib.Color::new(244, 228, 170, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{player.score}",
       206,
       48,
       22,
       @raylib.Color::new(214, 236, 252, 248),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Scrap \{player.scrap}",
       376,
       48,
       22,
       @raylib.Color::new(170, 236, 194, 250),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Combo \{player.combo}",
       548,
       48,
       22,
       @raylib.Color::new(170, 210, 252, 250),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Best \{player.best_combo}",
       706,
       48,
       22,
       @raylib.Color::new(170, 210, 252, 250),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Enemies \{count_active_enemies(enemies)}",
       874,
       48,
       22,
       @raylib.Color::new(248, 210, 170, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "FPS \{@raylib.get_fps()}",
       sw - 118,
       12,
@@ -2066,7 +2067,7 @@ fn main {
       12,
       @raylib.Color::new(98, 200, 236, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "CORE",
       16,
       112,
@@ -2088,7 +2089,7 @@ fn main {
       10,
       @raylib.Color::new(230, 102, 122, 255),
     )
-    @raylib.draw_text("HP", 16, 146, 16, @raylib.Color::new(238, 206, 216, 255))
+    @draw.draw_text("HP", 16, 146, 16, @raylib.Color::new(238, 206, 216, 255))
 
     @raylib.draw_rectangle(
       16,
@@ -2104,7 +2105,7 @@ fn main {
       10,
       @raylib.Color::new(90, 190, 240, 255),
     )
-    @raylib.draw_text("EN", 16, 178, 16, @raylib.Color::new(206, 230, 252, 255))
+    @draw.draw_text("EN", 16, 178, 16, @raylib.Color::new(206, 230, 252, 255))
 
     @raylib.draw_rectangle(
       16,
@@ -2120,7 +2121,7 @@ fn main {
       10,
       @raylib.Color::new(244, 172, 98, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "HEAT",
       16,
       210,
@@ -2135,28 +2136,28 @@ fn main {
       "CANNON (26)"
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Build [B]: \{build_label}",
       280,
       100,
       20,
       @raylib.Color::new(222, 234, 248, 242),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Type [T]: \{turret_label}",
       280,
       128,
       20,
       @raylib.Color::new(222, 234, 248, 242),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Dash [K] \{(player.dash_cd * 10.0).to_int()}",
       280,
       156,
       20,
       @raylib.Color::new(222, 234, 248, 242),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Bomb [L] \{(player.bomb_cd * 10.0).to_int()}",
       280,
       184,
@@ -2172,7 +2173,7 @@ fn main {
         36,
         @raylib.Color::new(12, 18, 30, 212),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         msg,
         sw / 2 - 310,
         sh - 58,
@@ -2200,42 +2201,42 @@ fn main {
         @raylib.Color::new(94, 154, 210, 206),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "ARCADE FACTORY DEFENSE 2026",
         188,
         186,
         54,
         @raylib.Color::new(188, 236, 252, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Build turret lines, collect scrap, and survive 10 waves.",
         236,
         284,
         30,
         @raylib.Color::new(214, 228, 246, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Move: WASD / Arrows   Fire: J/Space",
         330,
         338,
         28,
         @raylib.Color::new(196, 220, 242, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Build: B   Turret Type: T   Dash: K   Bomb: L",
         272,
         378,
         28,
         @raylib.Color::new(196, 220, 242, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Touch UI supports movement + skills on mobile.",
         320,
         420,
         28,
         @raylib.Color::new(196, 220, 242, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press Enter or tap to begin",
         442,
         510,
@@ -2259,28 +2260,28 @@ fn main {
         @raylib.Color::new(104, 220, 188, 214),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "FACTORY SECURED",
         372,
         246,
         60,
         @raylib.Color::new(164, 246, 206, 254),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Final Score: \{player.score}",
         454,
         338,
         36,
         @raylib.Color::new(236, 246, 252, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Best Combo: \{player.best_combo}   Scrap: \{player.scrap}",
         394,
         388,
         30,
         @raylib.Color::new(214, 236, 252, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R / Enter / Tap to run again",
         404,
         470,
@@ -2304,28 +2305,28 @@ fn main {
         @raylib.Color::new(214, 106, 120, 214),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "DEFENSE FAILED",
         404,
         246,
         60,
         @raylib.Color::new(248, 164, 176, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{player.score}",
         498,
         338,
         36,
         @raylib.Color::new(236, 246, 252, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Wave Reached: \{wave}",
         500,
         388,
         30,
         @raylib.Color::new(214, 236, 252, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R / Enter / Tap to retry",
         430,
         470,
@@ -2334,8 +2335,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

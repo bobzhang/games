@@ -110,6 +110,7 @@ fn fire_shot(
 fn main {
   @raylib.init_window(sw, sh, "Topdown Survivor 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let enemies : Array[Enemy] = Array::makei(260, fn(_i) {
     { alive: false, x: 0.0, y: 0.0, hp: 0, speed: 0.0 }
@@ -364,18 +365,18 @@ fn main {
 
     @raylib.draw_circle(px.to_int(), py.to_int(), 12.0, @raylib.skyblue)
 
-    @raylib.draw_text("TOPDOWN SURVIVOR 2026", 20, 16, 34, @raylib.lime)
-    @raylib.draw_text("HP \{hp}/\{max_hp}", 24, 56, 24, @raylib.raywhite)
-    @raylib.draw_text("Lvl \{level}", 220, 56, 24, @raylib.raywhite)
-    @raylib.draw_text("XP \{xp}/\{xp_need}", 320, 56, 24, @raylib.raywhite)
-    @raylib.draw_text(
+    @draw.draw_text("TOPDOWN SURVIVOR 2026", 20, 16, 34, @raylib.lime)
+    @draw.draw_text("HP \{hp}/\{max_hp}", 24, 56, 24, @raylib.raywhite)
+    @draw.draw_text("Lvl \{level}", 220, 56, 24, @raylib.raywhite)
+    @draw.draw_text("XP \{xp}/\{xp_need}", 320, 56, 24, @raylib.raywhite)
+    @draw.draw_text(
       "Time \{survive_time.to_int()} / 180",
       510,
       56,
       24,
       @raylib.raywhite,
     )
-    @raylib.draw_text("Move: WASD/Arrows  R restart", 730, 24, 22, @raylib.gray)
+    @draw.draw_text("Move: WASD/Arrows  R restart", 730, 24, 22, @raylib.gray)
 
     @raylib.draw_rectangle(
       24,
@@ -384,7 +385,7 @@ fn main {
       48,
       @raylib.Color::new(24, 30, 24, 255),
     )
-    @raylib.draw_text(msg, 34, 635, 22, @raylib.raywhite)
+    @draw.draw_text(msg, 34, 635, 22, @raylib.raywhite)
 
     if selecting {
       @raylib.draw_rectangle(
@@ -394,8 +395,8 @@ fn main {
         140,
         @raylib.fade(@raylib.black, 0.8),
       )
-      @raylib.draw_text("LEVEL UP", 430, 250, 42, @raylib.yellow)
-      @raylib.draw_text(
+      @draw.draw_text("LEVEL UP", 430, 250, 42, @raylib.yellow)
+      @draw.draw_text(
         "1 Faster fire  2 Damage  3 Speed+HP", 286, 308, 30, @raylib.raywhite,
       )
     }
@@ -408,7 +409,7 @@ fn main {
         120,
         @raylib.fade(@raylib.black, 0.8),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "SURVIVED"
         } else {
@@ -423,11 +424,13 @@ fn main {
           @raylib.red
         },
       )
-      @raylib.draw_text("Press R to restart", 380, 334, 26, @raylib.raywhite)
+      @draw.draw_text("Press R to restart", 380, 334, 26, @raylib.raywhite)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

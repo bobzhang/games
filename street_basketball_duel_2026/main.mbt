@@ -396,6 +396,7 @@ fn draw_hoop(x : Float, side : Int) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "Street Basketball Duel 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let player : Athlete = {
     x: 294.0,
@@ -1177,7 +1178,7 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 118, @raylib.Color::new(6, 10, 18, 232))
-    @raylib.draw_text(
+    @draw.draw_text(
       "STREET BASKETBALL DUEL 2026",
       16,
       16,
@@ -1185,21 +1186,21 @@ fn main {
       @raylib.Color::new(236, 246, 255, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Player \{player.score}",
       446,
       22,
       36,
       @raylib.Color::new(104, 224, 250, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Rival \{rival.score}",
       744,
       22,
       36,
       @raylib.Color::new(250, 132, 222, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Target \{set_target}",
       572,
       72,
@@ -1207,14 +1208,14 @@ fn main {
       @raylib.Color::new(238, 236, 172, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{match_time.to_int()}",
       892,
       72,
       30,
       @raylib.Color::new(252, 222, 150, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Stars \{stars}",
       1090,
       72,
@@ -1222,14 +1223,14 @@ fn main {
       @raylib.Color::new(252, 230, 132, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "P-Energy \{player.energy.to_int()}%",
       20,
       78,
       24,
       @raylib.Color::new(216, 236, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "R-Energy \{rival.energy.to_int()}%",
       250,
       78,
@@ -1267,7 +1268,7 @@ fn main {
       172,
       @raylib.Color::new(8, 14, 28, 220),
     )
-    @raylib.draw_text("Touch", 78, sh - 174, 20, @raylib.white)
+    @draw.draw_text("Touch", 78, sh - 174, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_left_x,
       ctl_left_y,
@@ -1275,7 +1276,7 @@ fn main {
       152,
       @raylib.Color::new(52, 72, 100, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "LEFT",
       ctl_left_x + 18,
       ctl_left_y + 62,
@@ -1289,7 +1290,7 @@ fn main {
       152,
       @raylib.Color::new(52, 72, 100, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "RIGHT",
       ctl_right_x + 10,
       ctl_right_y + 62,
@@ -1304,7 +1305,7 @@ fn main {
       152,
       @raylib.Color::new(72, 154, 220, 255),
     )
-    @raylib.draw_text("JUMP", jump_x + 16, jump_y + 58, 30, @raylib.white)
+    @draw.draw_text("JUMP", jump_x + 16, jump_y + 58, 30, @raylib.white)
     @raylib.draw_rectangle(
       shoot_x,
       shoot_y,
@@ -1312,7 +1313,7 @@ fn main {
       152,
       @raylib.Color::new(214, 110, 82, 255),
     )
-    @raylib.draw_text("SHOOT", shoot_x + 8, shoot_y + 58, 30, @raylib.white)
+    @draw.draw_text("SHOOT", shoot_x + 8, shoot_y + 58, 30, @raylib.white)
     @raylib.draw_rectangle(
       dash_x,
       dash_y,
@@ -1320,7 +1321,7 @@ fn main {
       152,
       @raylib.Color::new(96, 188, 124, 255),
     )
-    @raylib.draw_text("DASH", dash_x + 8, dash_y + 58, 26, @raylib.white)
+    @draw.draw_text("DASH", dash_x + 8, dash_y + 58, 26, @raylib.white)
 
     @raylib.draw_rectangle(
       224,
@@ -1329,7 +1330,7 @@ fn main {
       38,
       @raylib.Color::new(6, 10, 18, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       236,
       sh - 46,
@@ -1339,7 +1340,7 @@ fn main {
 
     if rally_wait > 0.0 && !over {
       let c = rally_wait.to_int() + 1
-      @raylib.draw_text(
+      @draw.draw_text(
         "Inbound in \{c}",
         sw / 2 - 100,
         sh / 2 - 30,
@@ -1357,7 +1358,7 @@ fn main {
         224,
         @raylib.Color::new(16, 24, 42, 244),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "VICTORY"
         } else {
@@ -1372,7 +1373,7 @@ fn main {
           @raylib.Color::new(252, 140, 140, 255)
         },
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R to restart",
         sw / 2 - 124,
         sh / 2 + 46,
@@ -1381,8 +1382,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

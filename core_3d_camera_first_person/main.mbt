@@ -47,6 +47,7 @@ fn main {
   @raylib.disable_cursor() // Limit cursor to relative movement inside the window
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -180,25 +181,25 @@ fn main {
     @raylib.draw_rectangle(5, 5, 330, 100, @raylib.fade(@raylib.skyblue, 0.5))
     @raylib.draw_rectangle_lines(5, 5, 330, 100, @raylib.blue)
 
-    @raylib.draw_text("Camera controls:", 15, 15, 10, @raylib.black)
-    @raylib.draw_text(
+    @draw.draw_text("Camera controls:", 15, 15, 10, @raylib.black)
+    @draw.draw_text(
       "- Move keys: W, A, S, D, Space, Left-Ctrl", 15, 30, 10, @raylib.black,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "- Look around: arrow keys or mouse", 15, 45, 10, @raylib.black,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "- Camera mode keys: 1, 2, 3, 4", 15, 60, 10, @raylib.black,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "- Zoom keys: num-plus, num-minus or mouse scroll", 15, 75, 10, @raylib.black,
     )
-    @raylib.draw_text("- Camera projection key: P", 15, 90, 10, @raylib.black)
+    @draw.draw_text("- Camera projection key: P", 15, 90, 10, @raylib.black)
 
     @raylib.draw_rectangle(600, 5, 195, 100, @raylib.fade(@raylib.skyblue, 0.5))
     @raylib.draw_rectangle_lines(600, 5, 195, 100, @raylib.blue)
 
-    @raylib.draw_text("Camera status:", 610, 15, 10, @raylib.black)
+    @draw.draw_text("Camera status:", 610, 15, 10, @raylib.black)
 
     let mode_str = if camera_mode == @raylib.CameraFree {
       "FREE"
@@ -211,7 +212,7 @@ fn main {
     } else {
       "CUSTOM"
     }
-    @raylib.draw_text("- Mode: \{mode_str}", 610, 30, 10, @raylib.black)
+    @draw.draw_text("- Mode: \{mode_str}", 610, 30, 10, @raylib.black)
 
     let proj_str = if camera.projection == @raylib.CameraPerspective {
       "PERSPECTIVE"
@@ -220,23 +221,23 @@ fn main {
     } else {
       "CUSTOM"
     }
-    @raylib.draw_text("- Projection: \{proj_str}", 610, 45, 10, @raylib.black)
+    @draw.draw_text("- Projection: \{proj_str}", 610, 45, 10, @raylib.black)
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "- Position: (\{camera.position.x}, \{camera.position.y}, \{camera.position.z})",
       610,
       60,
       10,
       @raylib.black,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "- Target: (\{camera.target.x}, \{camera.target.y}, \{camera.target.z})",
       610,
       75,
       10,
       @raylib.black,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "- Up: (\{camera.up.x}, \{camera.up.y}, \{camera.up.z})",
       610,
       90,
@@ -244,9 +245,11 @@ fn main {
       @raylib.black,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

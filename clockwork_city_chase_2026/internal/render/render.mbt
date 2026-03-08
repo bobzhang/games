@@ -6,8 +6,8 @@ fn draw_center_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
 }
 
 ///|
@@ -19,8 +19,8 @@ fn draw_right_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, x - tw, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, x - tw, y, size, col)
 }
 
 ///|
@@ -57,7 +57,7 @@ fn draw_bar(
     @raylib.Color::new(160, 210, 244, 180),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
     x + 8,
     y + h / 2 - 8,
@@ -441,7 +441,7 @@ fn draw_pickup(
 
   match o.kind {
     Coin =>
-      @raylib.draw_text(
+      @draw.draw_text(
         "$",
         (x - 8.0).to_int(),
         (y - 12.0).to_int(),
@@ -465,7 +465,7 @@ fn draw_pickup(
       )
     }
     _ =>
-      @raylib.draw_text(
+      @draw.draw_text(
         "E",
         (x - 9.0).to_int(),
         (y - 12.0).to_int(),
@@ -830,8 +830,8 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     56,
     @raylib.Color::new(134, 208, 242, 170),
   )
-  @raylib.draw_text("DASH", 338, 24, 18, @raylib.Color::new(206, 230, 248, 230))
-  @raylib.draw_text(
+  @draw.draw_text("DASH", 338, 24, 18, @raylib.Color::new(206, 230, 248, 230))
+  @draw.draw_text(
     cooldown_text(game.dash_cd, @types.dash_cd_time),
     338,
     44,
@@ -851,8 +851,8 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     56,
     @raylib.Color::new(152, 192, 244, 170),
   )
-  @raylib.draw_text("EMP", 498, 24, 18, @raylib.Color::new(212, 224, 255, 230))
-  @raylib.draw_text(
+  @draw.draw_text("EMP", 498, 24, 18, @raylib.Color::new(212, 224, 255, 230))
+  @draw.draw_text(
     cooldown_text(game.emp_cd, @types.emp_cd_time),
     498,
     44,
@@ -879,21 +879,21 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(128, 202, 236, 170),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "SCORE " + game.score.to_string(),
     @types.screen_w - 344,
     22,
     24,
     @raylib.Color::new(228, 248, 255, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "BEST " + game.best_score.to_string(),
     @types.screen_w - 344,
     50,
     18,
     @raylib.Color::new(178, 226, 244, 230),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "STAGE " +
     game.stage.to_string() +
     "  COINS " +
@@ -986,8 +986,8 @@ fn draw_btn(
     edge,
   )
 
-  let tw = @raylib.measure_text(text, 24)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(text, 24)
+  @draw.draw_text(
     text,
     (rect.0 + rect.2 * 0.5 - Float::from_int(tw) * 0.5).to_int(),
     (rect.1 + rect.3 * 0.5 - 12.0).to_int(),

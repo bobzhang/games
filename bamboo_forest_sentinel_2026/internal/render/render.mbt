@@ -6,8 +6,8 @@ fn draw_centered(
   size : Int,
   color : @raylib.Color,
 ) -> Unit {
-  let width = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - width / 2, y, size, color)
+  let width = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - width / 2, y, size, color)
 }
 
 ///|
@@ -22,7 +22,7 @@ fn draw_meter(
 ) -> Unit {
   let clamped = @types.clampf(ratio, 0.0, 1.0)
 
-  @raylib.draw_text(label, x, y, 22, @raylib.Color::new(225, 238, 220, 248))
+  @draw.draw_text(label, x, y, 22, @raylib.Color::new(225, 238, 220, 248))
   @raylib.draw_rectangle(x, y + 28, w, 24, @raylib.Color::new(36, 46, 35, 240))
   @raylib.draw_rectangle(
     x + 2,
@@ -175,7 +175,7 @@ fn @types.Game::draw_beacons(game : @types.Game) -> Unit {
       @raylib.Color::new(146, 226, 130, 238),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "B\{i + 1}",
       game.beacons[i].x.to_int() - 9,
       game.beacons[i].y.to_int() - 8,
@@ -381,21 +381,21 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(118, 188, 130, 218),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "BAMBOO FOREST SENTINEL",
     @types.hud_x + 16,
     @types.hud_y + 16,
     28,
     @raylib.Color::new(214, 246, 196, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Night \{game.night}  Score \{game.score}",
     @types.hud_x + 18,
     @types.hud_y + 58,
     24,
     @raylib.Color::new(228, 236, 212, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best \{game.best_score}  Kills \{game.kills}",
     @types.hud_x + 18,
     @types.hud_y + 88,
@@ -448,14 +448,14 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(236, 112, 92, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Active infiltrators: \{@types.active_enemy_count(game)}",
     @types.hud_x + 18,
     @types.hud_y + 430,
     22,
     @raylib.Color::new(238, 230, 206, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Remaining this night: \{game.spawn_pool.max(0)}",
     @types.hud_x + 18,
     @types.hud_y + 458,
@@ -463,42 +463,42 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(238, 230, 206, 238),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Controls",
     @types.hud_x + 18,
     @types.hud_y + 520,
     24,
     @raylib.Color::new(214, 246, 196, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Move: WASD / Arrows",
     @types.hud_x + 18,
     @types.hud_y + 554,
     20,
     @raylib.Color::new(226, 234, 218, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "J: Attack or place trap",
     @types.hud_x + 18,
     @types.hud_y + 580,
     20,
     @raylib.Color::new(226, 234, 218, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "K: Remove nearby trap",
     @types.hud_x + 18,
     @types.hud_y + 606,
     20,
     @raylib.Color::new(226, 234, 218, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Space: Dash / full-charge sweep",
     @types.hud_x + 18,
     @types.hud_y + 632,
     20,
     @raylib.Color::new(226, 234, 218, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "P: Pause    R: Restart",
     @types.hud_x + 18,
     @types.hud_y + 658,

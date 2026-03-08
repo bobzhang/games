@@ -222,6 +222,7 @@ fn collected_cards(cards : Array[Card]) -> Int {
 fn main {
   @raylib.init_window(sw, sh, "Stealth Heist 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let map : Array[Int] = Array::make(map_w * map_h, 0)
   build_map(map)
@@ -421,7 +422,7 @@ fn main {
             tile - 17,
             @raylib.Color::new(40, 90, 44, 255),
           )
-          @raylib.draw_text("E", px + 16, py + 10, 30, @raylib.lime)
+          @draw.draw_text("E", px + 16, py + 10, 30, @raylib.lime)
         }
       }
     }
@@ -450,7 +451,7 @@ fn main {
       )
       @raylib.draw_circle_lines(gx, gy, 15.0, @raylib.white)
       if guard_val.stunned > 0 {
-        @raylib.draw_text("Z", gx - 6, gy - 34, 24, @raylib.lightgray)
+        @draw.draw_text("Z", gx - 6, gy - 34, 24, @raylib.lightgray)
       }
     }
 
@@ -459,10 +460,10 @@ fn main {
     @raylib.draw_circle(px, py, 14.0, @raylib.skyblue)
     @raylib.draw_circle_lines(px, py, 14.0, @raylib.white)
 
-    @raylib.draw_text("STEALTH HEIST 2026", 24, 16, 40, @raylib.skyblue)
-    @raylib.draw_text("Turns: \{turns}", 24, 64, 28, @raylib.raywhite)
-    @raylib.draw_text("Smoke: \{smoke}", 24, 96, 28, @raylib.raywhite)
-    @raylib.draw_text(
+    @draw.draw_text("STEALTH HEIST 2026", 24, 16, 40, @raylib.skyblue)
+    @draw.draw_text("Turns: \{turns}", 24, 64, 28, @raylib.raywhite)
+    @draw.draw_text("Smoke: \{smoke}", 24, 96, 28, @raylib.raywhite)
+    @draw.draw_text(
       "Alert: \{alert}/5",
       24,
       128,
@@ -473,7 +474,7 @@ fn main {
         @raylib.orange
       },
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Cards: \{collected_cards(cards)} / 3",
       24,
       160,
@@ -488,7 +489,7 @@ fn main {
       36,
       @raylib.Color::new(10, 14, 18, 220),
     )
-    @raylib.draw_text(msg, 32, 672, 22, @raylib.raywhite)
+    @draw.draw_text(msg, 32, 672, 22, @raylib.raywhite)
 
     if won || lost {
       @raylib.draw_rectangle(
@@ -498,7 +499,7 @@ fn main {
         170,
         @raylib.fade(@raylib.black, 0.8),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "HEIST SUCCESS"
         } else {
@@ -513,11 +514,13 @@ fn main {
           @raylib.red
         },
       )
-      @raylib.draw_text("Press R to run again", 412, 360, 30, @raylib.white)
+      @draw.draw_text("Press R to run again", 412, 360, 30, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

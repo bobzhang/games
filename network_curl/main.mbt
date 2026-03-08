@@ -68,6 +68,8 @@ async fn main {
     "raylib - async network demo",
   )
   @raylib.set_target_fps(60)
+  @draw.init_font()
+  @draw.cleanup()
   defer @raylib.close_window()
 
   let state : AppState = {
@@ -140,7 +142,7 @@ async fn main {
 
       // Header bar
       @raylib.draw_rectangle(0, 0, SCREEN_WIDTH, HEADER_H, @raylib.darkblue)
-      @raylib.draw_text(
+      @draw.draw_text(
         "GET \{TARGET_URL}",
         MARGIN,
         (HEADER_H - FONT_SIZE) / 2,
@@ -150,8 +152,8 @@ async fn main {
 
       // Content area
       if state.loading {
-        let tw = @raylib.measure_text(state.status, 20)
-        @raylib.draw_text(
+        let tw = @draw.measure_text(state.status, 20)
+        @draw.draw_text(
           state.status,
           (SCREEN_WIDTH - tw) / 2,
           SCREEN_HEIGHT / 2 - 10,
@@ -166,7 +168,7 @@ async fn main {
         }
         for idx in state.scroll..<end_line {
           let y = HEADER_H + (idx - state.scroll) * LINE_HEIGHT
-          @raylib.draw_text(
+          @draw.draw_text(
             state.lines[idx],
             MARGIN,
             y,
@@ -184,7 +186,7 @@ async fn main {
           FOOTER_H,
           @raylib.lightgray,
         )
-        @raylib.draw_text(
+        @draw.draw_text(
           "\{state.status}  |  \{state.scroll + 1}-\{end_line}  |  arrows/scroll",
           MARGIN,
           footer_y + (FOOTER_H - FONT_SIZE) / 2,
@@ -193,6 +195,7 @@ async fn main {
         )
       }
 
+      @fps.draw()
       @raylib.end_drawing()
       // Render loop exited → with_task_group cancels HTTP task automatically
     }

@@ -7,8 +7,8 @@ fn draw_centered_text(
   size : Int,
   color : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, center_x - tw / 2, y, size, color)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, center_x - tw / 2, y, size, color)
 }
 
 ///|
@@ -160,9 +160,9 @@ fn @types.Game::draw_exit(game : @types.Game) -> Unit {
     @types.tile_size - 16,
     @raylib.Color::new(238, 226, 194, 210),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "E",
-    ex + @types.tile_size / 2 - @raylib.measure_text("E", 22) / 2,
+    ex + @types.tile_size / 2 - @draw.measure_text("E", 22) / 2,
     ey + 10,
     22,
     @raylib.Color::new(22, 24, 28, 240),
@@ -278,14 +278,14 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(112, 142, 174, 198),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Museum Heist Puzzle 2026",
     @types.panel_x + 20,
     @types.panel_y + 18,
     30,
     @raylib.Color::new(236, 245, 255, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Stealth + Patrol Vision",
     @types.panel_x + 20,
     @types.panel_y + 58,
@@ -293,14 +293,14 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(170, 212, 246, 232),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Floor \{game.level_index + 1}/\{game.level_count}",
     @types.panel_x + 20,
     @types.panel_y + 106,
     26,
     @raylib.Color::new(244, 232, 204, 235),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     game.level_name,
     @types.panel_x + 20,
     @types.panel_y + 138,
@@ -308,7 +308,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(254, 216, 144, 250),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Artifacts \{game.artifacts_collected}/\{game.artifacts_total}",
     @types.panel_x + 20,
     @types.panel_y + 190,
@@ -320,7 +320,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
   } else {
     "Find all artifacts"
   }
-  @raylib.draw_text(
+  @draw.draw_text(
     exit_status,
     @types.panel_x + 20,
     @types.panel_y + 226,
@@ -332,7 +332,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     Lose => "Status: Caught"
     _ => if game.alarm_t > 0.0 { "Status: Alert" } else { "Status: Hidden" }
   }
-  @raylib.draw_text(
+  @draw.draw_text(
     stealth_status,
     @types.panel_x + 20,
     @types.panel_y + 270,
@@ -340,21 +340,21 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 188, 176, 230),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Desktop",
     @types.panel_x + 20,
     @types.panel_y + 328,
     25,
     @raylib.Color::new(214, 232, 252, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "WASD / Arrow Keys: Move",
     @types.panel_x + 20,
     @types.panel_y + 360,
     22,
     @raylib.Color::new(184, 206, 232, 230),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "R: Restart floor  |  Enter/Space: Confirm",
     @types.panel_x + 20,
     @types.panel_y + 388,
@@ -362,21 +362,21 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(164, 190, 220, 230),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Touch",
     @types.panel_x + 20,
     @types.panel_y + 440,
     25,
     @raylib.Color::new(214, 232, 252, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Hold D-pad to sneak",
     @types.panel_x + 20,
     @types.panel_y + 472,
     22,
     @raylib.Color::new(184, 206, 232, 230),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Tap action buttons for menu flow",
     @types.panel_x + 20,
     @types.panel_y + 500,
@@ -691,10 +691,10 @@ fn @types.Game::draw_win_overlay(game : @types.Game) -> Unit {
   draw_action_button(rx, ry, rw, rh, "RETRY FLOOR", retry_hot, true)
   draw_action_button(nx, ny, nw, nh, "NEXT FLOOR", next_hot, false)
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Upcoming: Floor \{game.level_index + 2}",
     @types.screen_w / 2 -
-    @raylib.measure_text("Upcoming: Floor \{game.level_index + 2}", 24) / 2,
+    @draw.measure_text("Upcoming: Floor \{game.level_index + 2}", 24) / 2,
     495,
     24,
     @raylib.Color::new(240, 216, 160, 232),

@@ -3,6 +3,7 @@ import {
   "tonyfettes/raylib",
   "bobzhang/games/bowling_alley_2026/internal/game",
   "bobzhang/games/bowling_alley_2026/internal/types",
+  "bobzhang/games/utils/draw",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

@@ -35,6 +35,7 @@ fn main {
   let mut wave_length = 1
 
   @raylib.set_target_fps(30)
+  @draw.init_font()
 
   while !@raylib.window_should_close() {
     // Sample mouse input
@@ -105,14 +106,14 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "sine frequency: \{frequency.to_int()}",
       screen_width - 220,
       10,
       20,
       @raylib.red,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "click mouse button to change frequency or pan", 10, 10, 20, @raylib.darkgray,
     )
 
@@ -125,10 +126,12 @@ fn main {
       @raylib.draw_pixel_v(@raylib.Vector2::new(pos_x, pos_y), @raylib.red)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   @raylib.unload_audio_stream(stream)
   @raylib.close_audio_device()
+  @draw.cleanup()
   @raylib.close_window()
 }

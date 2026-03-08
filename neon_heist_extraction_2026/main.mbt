@@ -811,28 +811,28 @@ fn draw_touch_ui(state : Int) -> Unit {
       @raylib.Color::new(24, 42, 62, 186),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "L",
       pad_x + 36,
       pad_y + 88,
       28,
       @raylib.Color::new(216, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "R",
       pad_x + 180,
       pad_y + 88,
       28,
       @raylib.Color::new(216, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "U",
       pad_x + 106,
       pad_y + 24,
       28,
       @raylib.Color::new(216, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "D",
       pad_x + 105,
       pad_y + 146,
@@ -884,28 +884,28 @@ fn draw_touch_ui(state : Int) -> Unit {
       @raylib.Color::new(24, 50, 72, 196),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "FIRE",
       btn_x + 44,
       btn_y + 46,
       24,
       @raylib.Color::new(246, 252, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "HACK",
       btn_x + 186,
       btn_y + 46,
       24,
       @raylib.Color::new(246, 252, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "DASH",
       btn_x + 40,
       btn_y + 146,
       24,
       @raylib.Color::new(246, 252, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "EMP",
       btn_x + 196,
       btn_y + 146,
@@ -920,6 +920,7 @@ fn draw_touch_ui(state : Int) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] neon heist extraction 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let walls : Array[Wall] = Array::makei(max_walls, fn(_i) {
     { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0 }
@@ -2090,7 +2091,7 @@ fn main {
       extraction_r,
       @raylib.Color::new(134, 228, 255, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "EXTRACT",
       (extraction_x - 42.0).to_int(),
       (extraction_y - 12.0).to_int(),
@@ -2383,56 +2384,56 @@ fn main {
 
     // HUD
     @raylib.draw_rectangle(0, 0, sw, 86, @raylib.Color::new(8, 12, 20, 232))
-    @raylib.draw_text(
+    @draw.draw_text(
       "Neon Heist Extraction 2026",
       16,
       10,
       30,
       @raylib.Color::new(210, 236, 252, 248),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{player.score}",
       20,
       48,
       22,
       @raylib.Color::new(246, 228, 170, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Loot \{player.loot}",
       204,
       48,
       22,
       @raylib.Color::new(214, 236, 252, 248),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Delivered \{player.delivered}/\{loot_goal}",
       350,
       48,
       22,
       @raylib.Color::new(170, 236, 194, 250),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Combo \{player.combo}",
       616,
       48,
       22,
       @raylib.Color::new(170, 210, 252, 250),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Best \{player.best_combo}",
       776,
       48,
       22,
       @raylib.Color::new(170, 210, 252, 250),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{timer.to_int()}s",
       950,
       48,
       22,
       @raylib.Color::new(248, 214, 174, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "FPS \{@raylib.get_fps()}",
       sw - 118,
       12,
@@ -2453,7 +2454,7 @@ fn main {
       12,
       @raylib.Color::new(238, 104, 122, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "ALARM",
       16,
       110,
@@ -2475,7 +2476,7 @@ fn main {
       10,
       @raylib.Color::new(230, 102, 122, 255),
     )
-    @raylib.draw_text("HP", 16, 144, 16, @raylib.Color::new(238, 206, 216, 255))
+    @draw.draw_text("HP", 16, 144, 16, @raylib.Color::new(238, 206, 216, 255))
 
     @raylib.draw_rectangle(
       16,
@@ -2491,7 +2492,7 @@ fn main {
       10,
       @raylib.Color::new(90, 190, 240, 255),
     )
-    @raylib.draw_text("EN", 16, 176, 16, @raylib.Color::new(206, 230, 252, 255))
+    @draw.draw_text("EN", 16, 176, 16, @raylib.Color::new(206, 230, 252, 255))
 
     @raylib.draw_rectangle(
       16,
@@ -2507,7 +2508,7 @@ fn main {
       10,
       @raylib.Color::new(244, 172, 98, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "HEAT",
       16,
       208,
@@ -2515,14 +2516,14 @@ fn main {
       @raylib.Color::new(246, 222, 194, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Hack [K]  Dash [L] \{(player.dash_cd * 10.0).to_int()}  EMP [O] \{(player.emp_cd * 10.0).to_int()}",
       332,
       100,
       20,
       @raylib.Color::new(224, 236, 250, 244),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Terminals \{count_hacked(terminals)} / \{count_terminals(terminals)}   Guards \{count_active_guards(guards)}",
       332,
       130,
@@ -2538,7 +2539,7 @@ fn main {
         36,
         @raylib.Color::new(12, 18, 30, 212),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         msg,
         sw / 2 - 310,
         sh - 58,
@@ -2566,49 +2567,49 @@ fn main {
         @raylib.Color::new(94, 154, 210, 206),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "NEON HEIST EXTRACTION 2026",
         186,
         186,
         54,
         @raylib.Color::new(188, 236, 252, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Hack terminals, crack vaults, and extract 42 loot units.",
         232,
         284,
         30,
         @raylib.Color::new(214, 228, 246, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Avoid cameras and keep alarm under 100.",
         352,
         330,
         30,
         @raylib.Color::new(214, 228, 246, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Move: WASD / Arrows   Fire: J / Space",
         320,
         388,
         28,
         @raylib.Color::new(196, 220, 242, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Hack: K   Dash: L   EMP: O",
         438,
         430,
         28,
         @raylib.Color::new(196, 220, 242, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Touch controls are shown on screen for mobile.",
         322,
         470,
         28,
         @raylib.Color::new(196, 220, 242, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press Enter or tap to begin",
         444,
         552,
@@ -2632,28 +2633,28 @@ fn main {
         @raylib.Color::new(104, 220, 188, 214),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "EXTRACTION SUCCESS",
         330,
         246,
         60,
         @raylib.Color::new(164, 246, 206, 254),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Final Score: \{player.score}",
         454,
         338,
         36,
         @raylib.Color::new(236, 246, 252, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Delivered: \{player.delivered}   Best Combo: \{player.best_combo}",
         380,
         388,
         30,
         @raylib.Color::new(214, 236, 252, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R / Enter / Tap to run again",
         404,
         470,
@@ -2677,28 +2678,28 @@ fn main {
         @raylib.Color::new(214, 106, 120, 214),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "HEIST FAILED",
         430,
         246,
         60,
         @raylib.Color::new(248, 164, 176, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{player.score}",
         498,
         338,
         36,
         @raylib.Color::new(236, 246, 252, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Loot Delivered: \{player.delivered}/\{loot_goal}",
         404,
         388,
         30,
         @raylib.Color::new(214, 236, 252, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R / Enter / Tap to retry",
         430,
         470,
@@ -2707,8 +2708,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

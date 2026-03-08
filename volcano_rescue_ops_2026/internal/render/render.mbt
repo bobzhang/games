@@ -5,8 +5,8 @@ fn draw_center_text(
   size : Int,
   color : @raylib.Color,
 ) -> Unit {
-  let w : Int = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - w / 2, y, size, color)
+  let w : Int = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - w / 2, y, size, color)
 }
 
 ///|
@@ -186,9 +186,9 @@ fn @types.Game::draw_sites(game : @types.Game) -> Unit {
       )
 
       let label : String = game.sites[i].waiting.to_string()
-      @raylib.draw_text(
+      @draw.draw_text(
         label,
-        cx - @raylib.measure_text(label, 20) / 2,
+        cx - @draw.measure_text(label, 20) / 2,
         cy - 11,
         20,
         @raylib.Color::new(20, 28, 34, 255),
@@ -291,9 +291,9 @@ fn @types.Game::draw_truck(game : @types.Game) -> Unit {
       12.0,
       @raylib.Color::new(94, 176, 228, 240),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       txt,
-      cx + 17 - @raylib.measure_text(txt, 18) / 2,
+      cx + 17 - @draw.measure_text(txt, 18) / 2,
       cy - 26,
       18,
       @raylib.Color::new(15, 21, 28, 255),
@@ -327,7 +327,7 @@ fn draw_metric_bar(
   )
 
   let s : String = label + " " + value.to_int().to_string() + "%"
-  @raylib.draw_text(s, x + 8, y + h / 2 - 11, 22, text)
+  @draw.draw_text(s, x + 8, y + h / 2 - 11, 22, text)
 }
 
 ///|
@@ -357,9 +357,9 @@ fn draw_button(
     @raylib.Color::new(220, 220, 230, 110),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
-    rect.0 + rect.2 / 2 - @raylib.measure_text(label, 28) / 2,
+    rect.0 + rect.2 / 2 - @draw.measure_text(label, 28) / 2,
     rect.1 + rect.3 / 2 - 14,
     28,
     @raylib.Color::new(248, 248, 252, 240),
@@ -390,7 +390,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
   )
 
   let title : String = "VOLCANO OPS // " + @types.level_title(game.level_index)
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
     @types.panel_x + 18,
     34,
@@ -398,7 +398,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(250, 214, 152, 240),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Rescued " + @types.current_goal_progress(game),
     @types.panel_x + 18,
     76,
@@ -406,7 +406,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(234, 238, 246, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Carrying " +
     game.carrying.to_string() +
     "  Waiting " +
@@ -420,7 +420,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
   )
 
   let remain : Int = (0).max((game.mission_limit - game.mission_time).to_int())
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time " + remain.to_string() + "s",
     @types.panel_x + 18,
     146,
@@ -467,7 +467,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(228, 255, 246, 248),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Queue " +
     game.route_len.to_string() +
     (if game.route_running { " (moving)" } else { " (planning)" }),
@@ -612,14 +612,14 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(82, 174, 148, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Desktop: WASD/arrows add route, E/Enter execute, C spray, R restart",
     @types.panel_x + 20,
     @types.screen_h - 322,
     18,
     @raylib.Color::new(176, 194, 208, 220),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Touch: tap map to auto-plan around lava, use D-pad and buttons",
     @types.panel_x + 20,
     @types.screen_h - 298,
@@ -672,14 +672,14 @@ fn @types.Game::draw_title_scene(game : @types.Game) -> Unit {
     @raylib.Color::new(154, 178, 198, 136),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Objective",
     @types.screen_w / 2 - 482,
     360,
     34,
     @raylib.Color::new(255, 204, 148, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Rescue enough civilians by picking them up and delivering to the shelter.",
     @types.screen_w / 2 - 482,
     404,
@@ -687,7 +687,7 @@ fn @types.Game::draw_title_scene(game : @types.Game) -> Unit {
     @raylib.Color::new(222, 232, 242, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Lava expands every few seconds. Tap cells to auto-plan routes around hazards.",
     @types.screen_w / 2 - 482,
     442,
@@ -695,7 +695,7 @@ fn @types.Game::draw_title_scene(game : @types.Game) -> Unit {
     @raylib.Color::new(222, 232, 242, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Manage heat, fuel, and coolant. Depots refill resources but can be overrun.",
     @types.screen_w / 2 - 482,
     480,
@@ -703,7 +703,7 @@ fn @types.Game::draw_title_scene(game : @types.Game) -> Unit {
     @raylib.Color::new(222, 232, 242, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Keyboard: WASD/Arrows plan, Enter execute, C coolant, R restart, N next mission.",
     @types.screen_w / 2 - 482,
     526,
@@ -711,7 +711,7 @@ fn @types.Game::draw_title_scene(game : @types.Game) -> Unit {
     @raylib.Color::new(194, 208, 224, 230),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Touch: Tap map and on-screen controls. Gameplay is fully mobile-compatible.",
     @types.screen_w / 2 - 482,
     556,
@@ -738,9 +738,9 @@ fn @types.Game::draw_title_scene(game : @types.Game) -> Unit {
     @raylib.Color::new(216, 122, 56, 238),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "3 missions",
-    @types.screen_w / 2 - @raylib.measure_text("3 missions", 24) / 2,
+    @types.screen_w / 2 - @draw.measure_text("3 missions", 24) / 2,
     @types.screen_h - 72,
     24,
     @raylib.Color::new(194, 208, 224, 220),
@@ -888,7 +888,7 @@ fn @types.Game::draw_message(game : @types.Game) -> Unit {
     return
   }
 
-  let text_w : Int = @raylib.measure_text(game.msg, 26)
+  let text_w : Int = @draw.measure_text(game.msg, 26)
   let box_w : Int = text_w + 44
 
   @raylib.draw_rectangle(

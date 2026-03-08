@@ -107,7 +107,7 @@ fn @types.Game::draw_traps(game : @types.Game) -> Unit {
     )
 
     if hot {
-      @raylib.draw_text(
+      @draw.draw_text(
         "HOT",
         trap.x.to_int() + 8,
         trap.y.to_int() + 6,
@@ -140,7 +140,7 @@ fn @types.Game::draw_plates(game : @types.Game) -> Unit {
       plate.h.to_int(),
       @raylib.Color::new(186, 234, 210, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "PLATE",
       plate.x.to_int() + 18,
       plate.y.to_int() + 32,
@@ -247,7 +247,7 @@ fn @types.Game::draw_exit_gate(game : @types.Game) -> Unit {
     },
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     if unlocked {
       "EXIT"
     } else {
@@ -321,7 +321,7 @@ fn draw_meter(
   ratio : Float,
   fill : @raylib.Color,
 ) -> Unit {
-  @raylib.draw_text(label, x, y, 22, @raylib.Color::new(236, 232, 226, 248))
+  @draw.draw_text(label, x, y, 22, @raylib.Color::new(236, 232, 226, 248))
   @raylib.draw_rectangle(x, y + 28, w, 24, @raylib.Color::new(58, 50, 44, 236))
   @raylib.draw_rectangle(
     x + 2,
@@ -352,7 +352,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(120, 146, 170, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Ancient Temple Trap Run",
     px + 24,
     py + 26,
@@ -360,7 +360,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(246, 238, 208, 248),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Stage \{game.stage_index + 1}/\{game.stage_count}: \{@types.stage_name(game.stage_index)}",
     px + 24,
     py + 66,
@@ -368,7 +368,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(222, 230, 240, 240),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Relics \{game.collected_relics}/\{game.required_relics}",
     px + 24,
     py + 108,
@@ -393,7 +393,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     },
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time \{game.stage_time.to_int()}s",
     px + 24,
     py + 220,
@@ -401,28 +401,28 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(222, 228, 240, 244),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Controls",
     px + 24,
     py + 268,
     24,
     @raylib.Color::new(248, 238, 212, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Move: WASD / Arrows",
     px + 24,
     py + 300,
     22,
     @raylib.Color::new(214, 222, 230, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Dash: Shift (drains stamina)",
     px + 24,
     py + 330,
     22,
     @raylib.Color::new(214, 222, 230, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Restart stage: R",
     px + 24,
     py + 360,
@@ -430,14 +430,14 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(214, 222, 230, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Step on plates to open doors.",
     px + 24,
     py + 420,
     22,
     @raylib.Color::new(208, 236, 218, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Cross before the hold timer runs out.",
     px + 24,
     py + 448,
@@ -454,9 +454,9 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     rh,
     @raylib.Color::new(214, 198, 172, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Retry Stage",
-    rx + rw / 2 - @raylib.measure_text("Retry Stage", 24) / 2,
+    rx + rw / 2 - @draw.measure_text("Retry Stage", 24) / 2,
     ry + rh / 2 - 12,
     24,
     @raylib.Color::new(248, 240, 224, 246),
@@ -492,9 +492,9 @@ fn draw_button(
     h,
     @raylib.Color::new(224, 232, 244, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
-    x + w / 2 - @raylib.measure_text(label, 32) / 2,
+    x + w / 2 - @draw.measure_text(label, 32) / 2,
     y + h / 2 - 16,
     32,
     @raylib.Color::new(246, 248, 252, 248),
@@ -529,9 +529,9 @@ fn draw_touch_button(
     h,
     @raylib.Color::new(216, 230, 248, 160),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
-    x + w / 2 - @raylib.measure_text(label, 30) / 2,
+    x + w / 2 - @draw.measure_text(label, 30) / 2,
     y + h / 2 - 15,
     30,
     @raylib.Color::new(242, 248, 255, 210),
@@ -644,7 +644,7 @@ fn @types.Game::draw_banner(game : @types.Game) -> Unit {
   let alpha = @types.clampf(game.banner_t / 1.4, 0.0, 1.0)
   let a : Int = (alpha * 210.0).to_int()
 
-  let bw = @raylib.measure_text(game.banner_text, 30) + 56
+  let bw = @draw.measure_text(game.banner_text, 30) + 56
   let bx = @types.screen_w / 2 - bw / 2
   let by = 22
 
@@ -656,7 +656,7 @@ fn @types.Game::draw_banner(game : @types.Game) -> Unit {
     44,
     @raylib.Color::new(222, 234, 248, a),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     game.banner_text,
     bx + 28,
     by + 11,
@@ -693,7 +693,7 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(216, 198, 148, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "ANCIENT TEMPLE: TRAP RUN",
     card_x + 60,
     card_y + 44,
@@ -701,14 +701,14 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(250, 228, 152, 250),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Collect relics, hold plates, and dash through closing stone doors.",
     card_x + 60,
     card_y + 118,
     28,
     @raylib.Color::new(220, 232, 242, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Timed traps and hazard pits will end the run instantly.",
     card_x + 60,
     card_y + 156,
@@ -716,7 +716,7 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(220, 232, 242, 244),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Desktop: WASD/Arrows + Shift  |  Mobile: touch d-pad + DASH",
     card_x + 60,
     card_y + 204,
@@ -768,14 +768,14 @@ fn @types.Game::draw_stage_clear_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(182, 240, 210, 240),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Stage Cleared",
     px + 232,
     py + 40,
     52,
     @raylib.Color::new(176, 248, 202, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{@types.stage_name(game.stage_index)} conquered",
     px + 188,
     py + 106,
@@ -848,14 +848,14 @@ fn @types.Game::draw_failed_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(242, 164, 154, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Expedition Lost",
     px + 230,
     py + 38,
     56,
     @raylib.Color::new(255, 180, 168, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     game.fail_reason,
     px + 58,
     py + 122,
@@ -928,14 +928,14 @@ fn @types.Game::draw_victory_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(186, 228, 244, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Temple Escaped",
     px + 216,
     py + 36,
     56,
     @raylib.Color::new(172, 232, 250, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Every relic recovered. The cursed vault is now behind you.",
     px + 90,
     py + 122,

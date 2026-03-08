@@ -30,6 +30,7 @@ fn main {
   let mut scrolling_fore : Float = 0.0
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -102,10 +103,10 @@ fn main {
       @raylib.white,
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "BACKGROUND SCROLLING & PARALLAX", 10, 10, 20, @raylib.red,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "(c) Cyberpunk Street Environment by Luis Zuno (@ansimuz)",
       screen_width - 330,
       screen_height - 20,
@@ -113,6 +114,7 @@ fn main {
       @raylib.raywhite,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -120,5 +122,6 @@ fn main {
   @raylib.unload_texture(background)
   @raylib.unload_texture(midground)
   @raylib.unload_texture(foreground)
+  @draw.cleanup()
   @raylib.close_window()
 }

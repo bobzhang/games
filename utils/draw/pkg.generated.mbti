@@ -1,0 +1,24 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/utils/draw"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn cleanup() -> Unit
+
+pub fn draw_text(String, Int, Int, Int, @raylib.Color) -> Unit
+
+pub fn init_font() -> Unit
+
+pub fn measure_text(String, Int) -> Int
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

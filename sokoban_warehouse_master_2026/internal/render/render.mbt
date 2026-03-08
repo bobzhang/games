@@ -274,14 +274,14 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(98, 140, 174, 192),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Warehouse Master 2026",
     panel_x + 22,
     panel_y + 22,
     34,
     @raylib.Color::new(240, 248, 255, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Sokoban Campaign",
     panel_x + 22,
     panel_y + 64,
@@ -289,14 +289,14 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(170, 208, 232, 238),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Level \{game.level_index + 1}/\{game.level_count}",
     panel_x + 22,
     panel_y + 114,
     28,
     @raylib.Color::new(226, 236, 250, 235),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     game.level_name,
     panel_x + 22,
     panel_y + 148,
@@ -305,28 +305,28 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
   )
 
   let goals_done : Int = @types.goal_filled_count(game)
-  @raylib.draw_text(
+  @draw.draw_text(
     "Goals \{goals_done}/\{game.goals_total}",
     panel_x + 22,
     panel_y + 204,
     26,
     @raylib.Color::new(240, 236, 210, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Moves \{game.moves}  (Par \{game.level_par})",
     panel_x + 22,
     panel_y + 238,
     25,
     @raylib.Color::new(212, 230, 246, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Pushes \{game.pushes}",
     panel_x + 22,
     panel_y + 270,
     25,
     @raylib.Color::new(212, 230, 246, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time \{game.elapsed.to_int()}s",
     panel_x + 22,
     panel_y + 302,
@@ -334,14 +334,14 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(212, 230, 246, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Campaign stars \{game.campaign_stars}",
     panel_x + 22,
     panel_y + 348,
     25,
     @raylib.Color::new(255, 218, 118, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Total moves \{game.total_moves}",
     panel_x + 22,
     panel_y + 382,
@@ -349,35 +349,35 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(212, 228, 243, 230),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Keyboard",
     panel_x + 22,
     panel_y + 442,
     24,
     @raylib.Color::new(220, 236, 250, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Move: WASD / Arrows",
     panel_x + 22,
     panel_y + 472,
     22,
     @raylib.Color::new(188, 212, 232, 230),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Undo: Z / Backspace",
     panel_x + 22,
     panel_y + 500,
     22,
     @raylib.Color::new(188, 212, 232, 230),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Reset: R",
     panel_x + 22,
     panel_y + 528,
     22,
     @raylib.Color::new(188, 212, 232, 230),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Next: Enter / Space",
     panel_x + 22,
     panel_y + 556,
@@ -400,7 +400,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
       48,
       @raylib.Color::new(148, 192, 225, 236),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       game.message,
       panel_x + 34,
       panel_y + panel_h - 66,
@@ -511,28 +511,28 @@ fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle_lines(cx - s / 2, cy - s - 18, s, s, border)
   @raylib.draw_rectangle_lines(cx - s / 2, cy + 18, s, s, border)
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "L",
     cx - s + 12 - 18,
     cy - 10,
     28,
     @raylib.Color::new(236, 246, 255, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "R",
     cx + 18 + 20,
     cy - 10,
     28,
     @raylib.Color::new(236, 246, 255, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "U",
     cx - 9,
     cy - s - 2,
     28,
     @raylib.Color::new(236, 246, 255, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "D",
     cx - 10,
     cy + s + 26,
@@ -547,7 +547,7 @@ fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
 
   @raylib.draw_rectangle(ux, uy, uw, uh, @raylib.Color::new(58, 74, 98, 178))
   @raylib.draw_rectangle_lines(ux, uy, uw, uh, border)
-  @raylib.draw_text(
+  @draw.draw_text(
     "UNDO",
     ux + 22,
     uy + 22,
@@ -563,7 +563,7 @@ fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(76, 64, 56, 178),
   )
   @raylib.draw_rectangle_lines(ux, uy + uh + 14, uw, uh, border)
-  @raylib.draw_text(
+  @draw.draw_text(
     "RESET",
     ux + 18,
     uy + uh + 36,
@@ -574,26 +574,26 @@ fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::draw_title(game : @types.Game) -> Unit {
-  @raylib.draw_text(
+  @draw.draw_text(
     "Warehouse Master 2026",
-    @types.screen_w / 2 - @raylib.measure_text("Warehouse Master 2026", 76) / 2,
+    @types.screen_w / 2 - @draw.measure_text("Warehouse Master 2026", 76) / 2,
     120,
     76,
     @raylib.Color::new(236, 245, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Classic Sokoban reimagined with mobile controls,",
     @types.screen_w / 2 -
-    @raylib.measure_text("Classic Sokoban reimagined with mobile controls,", 34) /
+    @draw.measure_text("Classic Sokoban reimagined with mobile controls,", 34) /
     2,
     236,
     34,
     @raylib.Color::new(194, 218, 237, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "undo tactics, and 12 handcrafted warehouse stages.",
     @types.screen_w / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "undo tactics, and 12 handcrafted warehouse stages.", 34,
     ) /
     2,
@@ -633,26 +633,26 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
     @raylib.Color::new(214, 238, 255, 248),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Start Campaign",
-    bx + bw / 2 - @raylib.measure_text("Start Campaign", 44) / 2,
+    bx + bw / 2 - @draw.measure_text("Start Campaign", 44) / 2,
     by + 22,
     44,
     @raylib.Color::new(244, 250, 255, 250),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Move crates onto all goal marks.",
     @types.screen_w / 2 -
-    @raylib.measure_text("Move crates onto all goal marks.", 30) / 2,
+    @draw.measure_text("Move crates onto all goal marks.", 30) / 2,
     418,
     30,
     @raylib.Color::new(224, 234, 245, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Don't trap crates against walls unless the tile is a goal.",
     @types.screen_w / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Don't trap crates against walls unless the tile is a goal.", 30,
     ) /
     2,
@@ -686,28 +686,28 @@ fn @types.Game::draw_level_clear_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(166, 206, 236, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Level Cleared",
-    px + pw / 2 - @raylib.measure_text("Level Cleared", 60) / 2,
+    px + pw / 2 - @draw.measure_text("Level Cleared", 60) / 2,
     py + 36,
     60,
     @raylib.Color::new(245, 252, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Moves: \{game.moves} (Par \{game.level_par})",
     px + 92,
     py + 140,
     34,
     @raylib.Color::new(220, 236, 250, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Pushes: \{game.pushes}",
     px + 92,
     py + 184,
     34,
     @raylib.Color::new(220, 236, 250, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time: \{game.elapsed.to_int()}s",
     px + 92,
     py + 228,
@@ -722,7 +722,7 @@ fn @types.Game::draw_level_clear_panel(game : @types.Game) -> Unit {
   } else {
     "Stars: *"
   }
-  @raylib.draw_text(
+  @draw.draw_text(
     star_line,
     px + 92,
     py + 274,
@@ -760,9 +760,9 @@ fn @types.Game::draw_level_clear_panel(game : @types.Game) -> Unit {
     bh,
     @raylib.Color::new(216, 240, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Next Shift",
-    bx + bw / 2 - @raylib.measure_text("Next Shift", 42) / 2,
+    bx + bw / 2 - @draw.measure_text("Next Shift", 42) / 2,
     by + 20,
     42,
     @raylib.Color::new(244, 252, 255, 248),
@@ -793,35 +793,35 @@ fn @types.Game::draw_campaign_clear(game : @types.Game) -> Unit {
     @raylib.Color::new(166, 206, 236, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Campaign Complete",
-    px + pw / 2 - @raylib.measure_text("Campaign Complete", 66) / 2,
+    px + pw / 2 - @draw.measure_text("Campaign Complete", 66) / 2,
     py + 34,
     66,
     @raylib.Color::new(246, 252, 255, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Total stars: \{game.campaign_stars}",
     px + 100,
     py + 152,
     42,
     @raylib.Color::new(255, 220, 124, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Total moves: \{game.total_moves}",
     px + 100,
     py + 204,
     36,
     @raylib.Color::new(222, 236, 250, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Total pushes: \{game.total_pushes}",
     px + 100,
     py + 248,
     36,
     @raylib.Color::new(222, 236, 250, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Total time: \{game.total_elapsed.to_int()}s",
     px + 100,
     py + 292,
@@ -829,7 +829,7 @@ fn @types.Game::draw_campaign_clear(game : @types.Game) -> Unit {
     @raylib.Color::new(222, 236, 250, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Press Enter / Space or tap button to restart campaign",
     px + 100,
     py + 354,
@@ -867,9 +867,9 @@ fn @types.Game::draw_campaign_clear(game : @types.Game) -> Unit {
     bh,
     @raylib.Color::new(216, 240, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Restart",
-    bx + bw / 2 - @raylib.measure_text("Restart", 42) / 2,
+    bx + bw / 2 - @draw.measure_text("Restart", 42) / 2,
     by + 20,
     42,
     @raylib.Color::new(246, 252, 255, 248),

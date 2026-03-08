@@ -28,6 +28,7 @@ fn main {
   let mut current_font_filter = 0
 
   @raylib.set_target_fps(60) // Set our game to run at 60 frames-per-second
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -59,16 +60,16 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Use mouse wheel to change font size", 20, 20, 10, @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Use KEY_RIGHT and KEY_LEFT to move text", 20, 40, 10, @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Use 1, 2, 3 to change texture filter", 20, 60, 10, @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Drop a new TTF font for dynamic loading", 20, 80, 10, @raylib.darkgray,
     )
 
@@ -88,14 +89,14 @@ fn main {
       80,
       @raylib.lightgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Font size: " + font_size.to_string(),
       20,
       screen_height - 50,
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Text size: [" +
       text_size.x.to_string() +
       ", " +
@@ -106,20 +107,22 @@ fn main {
       10,
       @raylib.darkgray,
     )
-    @raylib.draw_text("CURRENT TEXTURE FILTER:", 250, 400, 20, @raylib.gray)
+    @draw.draw_text("CURRENT TEXTURE FILTER:", 250, 400, 20, @raylib.gray)
 
     if current_font_filter == 0 {
-      @raylib.draw_text("POINT", 570, 400, 20, @raylib.black)
+      @draw.draw_text("POINT", 570, 400, 20, @raylib.black)
     } else if current_font_filter == 1 {
-      @raylib.draw_text("BILINEAR", 570, 400, 20, @raylib.black)
+      @draw.draw_text("BILINEAR", 570, 400, 20, @raylib.black)
     } else if current_font_filter == 2 {
-      @raylib.draw_text("TRILINEAR", 570, 400, 20, @raylib.black)
+      @draw.draw_text("TRILINEAR", 570, 400, 20, @raylib.black)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_font(font) // Font unloading
+  @draw.cleanup()
   @raylib.close_window() // Close window and OpenGL context
 }

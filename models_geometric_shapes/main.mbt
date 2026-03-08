@@ -116,6 +116,7 @@ fn main {
     @raylib.draw_grid(10, 1.0)
     @raylib.end_mode_3d()
     @raylib.draw_fps(10, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
 

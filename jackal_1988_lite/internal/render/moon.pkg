@@ -3,6 +3,7 @@ import {
   "tonyfettes/raylib",
   "bobzhang/games/jackal_1988_lite/internal/score",
   "bobzhang/games/jackal_1988_lite/internal/types",
+  "bobzhang/games/utils/draw",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

@@ -83,6 +83,7 @@ fn main {
       @raylib.draw_texture_rec(explosion, frame_rec, position, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 

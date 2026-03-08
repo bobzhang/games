@@ -3,6 +3,8 @@ import {
   "bobzhang/games/sokoban_warehouse_master_2026/internal/game",
   "bobzhang/games/sokoban_warehouse_master_2026/internal/render",
   "bobzhang/games/sokoban_warehouse_master_2026/internal/types",
+  "bobzhang/games/utils/draw",
+  "bobzhang/games/utils/fps",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

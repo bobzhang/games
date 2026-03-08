@@ -112,6 +112,7 @@ fn enemy_turn(
 fn main {
   @raylib.init_window(sw, sh, "Card Duel 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let hand : Array[Int] = []
   let mut player_hp = 80
@@ -227,9 +228,9 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(18, 20, 30, 255))
 
-    @raylib.draw_text("CARD DUEL 2026", 24, 20, 34, @raylib.skyblue)
-    @raylib.draw_text("Turn \{turn_no}", 28, 60, 24, @raylib.raywhite)
-    @raylib.draw_text("Energy \{energy}", 160, 60, 24, @raylib.yellow)
+    @draw.draw_text("CARD DUEL 2026", 24, 20, 34, @raylib.skyblue)
+    @draw.draw_text("Turn \{turn_no}", 28, 60, 24, @raylib.raywhite)
+    @draw.draw_text("Energy \{energy}", 160, 60, 24, @raylib.yellow)
 
     @raylib.draw_rectangle(
       60,
@@ -238,9 +239,9 @@ fn main {
       170,
       @raylib.Color::new(34, 48, 72, 255),
     )
-    @raylib.draw_text("PLAYER", 82, 138, 28, @raylib.raywhite)
-    @raylib.draw_text("HP: \{player_hp}", 86, 178, 30, @raylib.lime)
-    @raylib.draw_text("Block: \{player_block}", 86, 218, 28, @raylib.gray)
+    @draw.draw_text("PLAYER", 82, 138, 28, @raylib.raywhite)
+    @draw.draw_text("HP: \{player_hp}", 86, 178, 30, @raylib.lime)
+    @draw.draw_text("Block: \{player_block}", 86, 218, 28, @raylib.gray)
 
     @raylib.draw_rectangle(
       540,
@@ -249,9 +250,9 @@ fn main {
       170,
       @raylib.Color::new(72, 38, 44, 255),
     )
-    @raylib.draw_text("RIVAL", 564, 138, 28, @raylib.raywhite)
-    @raylib.draw_text("HP: \{enemy_hp}", 568, 178, 30, @raylib.red)
-    @raylib.draw_text("Block: \{enemy_block}", 568, 218, 28, @raylib.gray)
+    @draw.draw_text("RIVAL", 564, 138, 28, @raylib.raywhite)
+    @draw.draw_text("HP: \{enemy_hp}", 568, 178, 30, @raylib.red)
+    @draw.draw_text("Block: \{enemy_block}", 568, 218, 28, @raylib.gray)
 
     for i in 0..<hand.length() {
       let x = 120 + i * 260
@@ -265,19 +266,19 @@ fn main {
         @raylib.Color::new(34, 34, 46, 255),
       )
       @raylib.draw_rectangle_lines(x, y, 220, 190, @raylib.lightgray)
-      @raylib.draw_text("\{i + 1}", x + 10, y + 10, 28, @raylib.yellow)
-      @raylib.draw_text(card_name(card), x + 20, y + 56, 30, @raylib.raywhite)
-      @raylib.draw_text(
+      @draw.draw_text("\{i + 1}", x + 10, y + 10, 28, @raylib.yellow)
+      @draw.draw_text(card_name(card), x + 20, y + 56, 30, @raylib.raywhite)
+      @draw.draw_text(
         "Cost \{card_cost(card)}",
         x + 20,
         y + 98,
         26,
         @raylib.orange,
       )
-      @raylib.draw_text(card_desc(card), x + 20, y + 138, 24, @raylib.gray)
+      @draw.draw_text(card_desc(card), x + 20, y + 138, 24, @raylib.gray)
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Keys: 1/2/3 play card, E end turn, R restart", 200, 580, 24, @raylib.gray,
     )
     @raylib.draw_rectangle(
@@ -287,7 +288,7 @@ fn main {
       56,
       @raylib.Color::new(24, 24, 34, 255),
     )
-    @raylib.draw_text(log, 56, 638, 22, @raylib.raywhite)
+    @draw.draw_text(log, 56, 638, 22, @raylib.raywhite)
 
     if won || lost {
       @raylib.draw_rectangle(
@@ -297,7 +298,7 @@ fn main {
         120,
         @raylib.fade(@raylib.black, 0.78),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "VICTORY"
         } else {
@@ -312,11 +313,13 @@ fn main {
           @raylib.red
         },
       )
-      @raylib.draw_text("Press R to rematch", 384, 336, 26, @raylib.raywhite)
+      @draw.draw_text("Press R to rematch", 384, 336, 26, @raylib.raywhite)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

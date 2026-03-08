@@ -6,8 +6,8 @@ fn draw_center_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
 }
 
 ///|
@@ -19,8 +19,8 @@ fn draw_right_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, x - tw, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, x - tw, y, size, col)
 }
 
 ///|
@@ -1020,7 +1020,7 @@ fn draw_hud_bar(
     @raylib.Color::new(152, 214, 244, 170),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
     x + 8,
     y + h / 2 - 8,
@@ -1060,7 +1060,7 @@ fn draw_cooldown(
     18,
     @raylib.Color::new(134, 188, 236, 180),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
     x + 6,
     y + 1,
@@ -1128,14 +1128,14 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   draw_cooldown("HOOK", game.hook_cd, @types.hook_cd_time, 454, 54, 100)
   draw_cooldown("FIRE", game.fire_cd, @types.fire_cd_base, 568, 54, 92)
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "STAGE " + game.stage.to_string(),
     690,
     16,
     24,
     @raylib.Color::new(214, 240, 255, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "SCORE " + game.score.to_string(),
     690,
     46,
@@ -1170,7 +1170,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   }
 
   if game.state == Play {
-    @raylib.draw_text(
+    @draw.draw_text(
       "A/D move  W/SPACE jump  J shoot  K dash  L hook",
       20,
       @types.hud_h + 8,
@@ -1222,8 +1222,8 @@ fn draw_button_visual(
   )
 
   let ts = 28
-  let tw = @raylib.measure_text(label, ts)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(label, ts)
+  @draw.draw_text(
     label,
     (rect.0 + rect.2 * 0.5 - Float::from_int(tw) * 0.5).to_int(),
     (rect.1 + rect.3 * 0.5 - Float::from_int(ts) * 0.5).to_int(),

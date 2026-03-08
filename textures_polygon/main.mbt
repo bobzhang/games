@@ -95,6 +95,7 @@ fn main {
   let mut angle : Float = 0.0 // Rotation angle (in degrees)
 
   @raylib.set_target_fps(60) // Set our game to run at 60 frames-per-second
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -111,7 +112,7 @@ fn main {
 
     @raylib.clear_background(@raylib.raywhite)
 
-    @raylib.draw_text("textured polygon", 20, 20, 20, @raylib.darkgray)
+    @draw.draw_text("textured polygon", 20, 20, 20, @raylib.darkgray)
 
     draw_texture_poly(
       texture,
@@ -125,10 +126,12 @@ fn main {
       @raylib.white,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_texture(texture) // Unload texture
+  @draw.cleanup()
   @raylib.close_window() // Close window and OpenGL context
 }

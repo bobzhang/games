@@ -116,6 +116,7 @@ fn main {
     |> ignore
 
     @raylib.draw_fps(10, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
 

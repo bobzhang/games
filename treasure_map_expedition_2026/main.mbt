@@ -87,6 +87,7 @@ fn reveal(seen : Array[Bool], cx : Int, cy : Int, rad : Int) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "Treasure Map Expedition 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let blocked : Array[Bool] = Array::make(gw * gh, false)
   let seen : Array[Bool] = Array::make(gw * gh, false)
@@ -251,7 +252,7 @@ fn main {
             cell - 17,
             @raylib.Color::new(190, 170, 110, 255),
           )
-          @raylib.draw_text("C", rx + 16, ry + 10, 26, @raylib.black)
+          @draw.draw_text("C", rx + 16, ry + 10, 26, @raylib.black)
         }
       }
     }
@@ -270,15 +271,15 @@ fn main {
     @raylib.draw_circle(pxs, pys, 14.0, @raylib.skyblue)
     @raylib.draw_circle_lines(pxs, pys, 14.0, @raylib.white)
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "TREASURE MAP EXPEDITION 2026", 20, 16, 34, @raylib.skyblue,
     )
-    @raylib.draw_text("Bank \{bank}", 20, 56, 26, @raylib.lime)
-    @raylib.draw_text("Bag \{bag_value}", 180, 56, 26, @raylib.gold)
-    @raylib.draw_text("Steps \{steps}", 340, 56, 26, @raylib.white)
+    @draw.draw_text("Bank \{bank}", 20, 56, 26, @raylib.lime)
+    @draw.draw_text("Bag \{bag_value}", 180, 56, 26, @raylib.gold)
+    @draw.draw_text("Steps \{steps}", 340, 56, 26, @raylib.white)
 
     let t = timer.to_int()
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{t}s",
       500,
       56,
@@ -290,7 +291,7 @@ fn main {
       },
     )
 
-    @raylib.draw_text("Stamina", 680, 56, 24, @raylib.raywhite)
+    @draw.draw_text("Stamina", 680, 56, 24, @raylib.raywhite)
     @raylib.draw_rectangle(
       770,
       62,
@@ -300,7 +301,7 @@ fn main {
     )
     @raylib.draw_rectangle(770, 62, stamina * 220 / 100, 14, @raylib.skyblue)
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Find relics in fog and return to camp to secure them.", 20, 694, 22, @raylib.lightgray,
     )
     @raylib.draw_rectangle(
@@ -310,7 +311,7 @@ fn main {
       24,
       @raylib.Color::new(8, 12, 8, 220),
     )
-    @raylib.draw_text(msg, 26, 727, 18, @raylib.raywhite)
+    @draw.draw_text(msg, 26, 727, 18, @raylib.raywhite)
 
     if over {
       @raylib.draw_rectangle(
@@ -320,12 +321,14 @@ fn main {
         190,
         @raylib.fade(@raylib.black, 0.82),
       )
-      @raylib.draw_text("EXPEDITION END", 360, 320, 56, @raylib.orange)
-      @raylib.draw_text("Press R to restart", 450, 386, 34, @raylib.white)
+      @draw.draw_text("EXPEDITION END", 360, 320, 56, @raylib.orange)
+      @draw.draw_text("Press R to restart", 450, 386, 34, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

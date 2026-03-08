@@ -49,6 +49,7 @@ fn main {
   let spacing : Float = 4.0
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -174,7 +175,7 @@ fn main {
       40,
       @raylib.fade(@raylib.raywhite, 0.8),
     )
-    @raylib.draw_text("PLAYER1: W/S to move", 10, 10, 20, @raylib.maroon)
+    @draw.draw_text("PLAYER1: W/S to move", 10, 10, 20, @raylib.maroon)
     @raylib.end_texture_mode()
 
     // Draw Player2 view to the render texture
@@ -224,7 +225,7 @@ fn main {
       40,
       @raylib.fade(@raylib.raywhite, 0.8),
     )
-    @raylib.draw_text("PLAYER2: UP/DOWN to move", 10, 10, 20, @raylib.darkblue)
+    @draw.draw_text("PLAYER2: UP/DOWN to move", 10, 10, 20, @raylib.darkblue)
     @raylib.end_texture_mode()
 
     // Draw both views render textures to the screen side by side
@@ -249,11 +250,13 @@ fn main {
       @raylib.get_screen_height(),
       @raylib.lightgray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_render_texture(screen_player1)
   @raylib.unload_render_texture(screen_player2)
+  @draw.cleanup()
   @raylib.close_window()
 }

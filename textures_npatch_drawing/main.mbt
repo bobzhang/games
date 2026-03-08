@@ -70,6 +70,7 @@ fn main {
   )
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -159,14 +160,16 @@ fn main {
     // Draw the source texture
     @raylib.draw_rectangle_lines(5, 88, 74, 266, @raylib.blue)
     @raylib.draw_texture(npatch_texture, 10, 93, @raylib.white)
-    @raylib.draw_text("TEXTURE", 15, 360, 10, @raylib.darkgray)
-    @raylib.draw_text(
+    @draw.draw_text("TEXTURE", 15, 360, 10, @raylib.darkgray)
+    @draw.draw_text(
       "Move the mouse to stretch or shrink the n-patches", 10, 20, 20, @raylib.darkgray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_texture(npatch_texture)
+  @draw.cleanup()
   @raylib.close_window()
 }

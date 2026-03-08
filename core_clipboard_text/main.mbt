@@ -30,6 +30,7 @@ fn main {
   @raygui.gui_set_icon_scale(2)
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -84,7 +85,7 @@ fn main {
       @raylib.Rectangle::new(50.0, 20.0, 700.0, 36.0),
       "Use the BUTTONS or KEY SHORTCUTS:",
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "[CTRL+X] - CUT | [CTRL+C] COPY | [CTRL+V] | PASTE", 50, 60, 20, @raylib.maroon,
     )
 
@@ -144,9 +145,11 @@ fn main {
     )
     @raygui.gui_enable()
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

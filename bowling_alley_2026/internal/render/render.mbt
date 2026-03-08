@@ -295,7 +295,7 @@ fn @types.Game::draw_score_grid(
   py : Int,
   pw : Int,
 ) -> Unit {
-  @raylib.draw_text(
+  @draw.draw_text(
     "Frames",
     px + 16,
     py + 12,
@@ -326,9 +326,9 @@ fn @types.Game::draw_score_grid(
       @raylib.Color::new(168, 198, 224, 228),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{f + 1}",
-      x + fw / 2 - @raylib.measure_text("\{f + 1}", 24) / 2,
+      x + fw / 2 - @draw.measure_text("\{f + 1}", 24) / 2,
       py + 58,
       24,
       @raylib.Color::new(236, 244, 255, 246),
@@ -336,7 +336,7 @@ fn @types.Game::draw_score_grid(
 
     let (a, b, c) = @game.frame_marks(game, f)
 
-    @raylib.draw_text(
+    @draw.draw_text(
       a,
       x + 12,
       py + 92,
@@ -344,7 +344,7 @@ fn @types.Game::draw_score_grid(
       @raylib.Color::new(244, 250, 255, 248),
     )
     let second_x : Int = if f < 9 { x + 40 } else { x + 46 }
-    @raylib.draw_text(
+    @draw.draw_text(
       b,
       second_x,
       py + 92,
@@ -352,7 +352,7 @@ fn @types.Game::draw_score_grid(
       @raylib.Color::new(244, 250, 255, 248),
     )
     if f == 9 {
-      @raylib.draw_text(
+      @draw.draw_text(
         c,
         x + 80,
         py + 92,
@@ -366,9 +366,9 @@ fn @types.Game::draw_score_grid(
     } else {
       ""
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       total_str,
-      x + fw / 2 - @raylib.measure_text(total_str, 28) / 2,
+      x + fw / 2 - @draw.measure_text(total_str, 28) / 2,
       py + 128,
       28,
       @raylib.Color::new(220, 236, 252, 242),
@@ -393,35 +393,35 @@ fn @types.Game::draw_control_hint(
   px : Int,
   py : Int,
 ) -> Unit {
-  @raylib.draw_text(
+  @draw.draw_text(
     "Controls",
     px,
     py,
     30,
     @raylib.Color::new(236, 246, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Aim: A/D or Left/Right",
     px,
     py + 34,
     24,
     @raylib.Color::new(198, 218, 238, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Spin: Q/E",
     px,
     py + 62,
     24,
     @raylib.Color::new(198, 218, 238, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Hold + Release: Space/Enter/Touch",
     px,
     py + 90,
     24,
     @raylib.Color::new(198, 218, 238, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Restart: R  Back: ESC",
     px,
     py + 118,
@@ -444,7 +444,7 @@ fn @types.Game::draw_control_hint(
       52,
       @raylib.Color::new(182, 210, 236, 232),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       game.message,
       px + 14,
       py + 176,
@@ -468,7 +468,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(128, 170, 204, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Bowling Alley 2026",
     px + 20,
     py + 20,
@@ -476,14 +476,14 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(238, 248, 255, 248),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score \{game.score}",
     px + 20,
     py + 72,
     36,
     @raylib.Color::new(228, 240, 252, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best \{game.best_score}",
     px + 260,
     py + 72,
@@ -491,14 +491,14 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(196, 220, 244, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Frame \{game.frame + 1}/10",
     px + 20,
     py + 116,
     30,
     @raylib.Color::new(214, 232, 250, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Pins Left \{game.pins_left}",
     px + 250,
     py + 116,
@@ -506,7 +506,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(214, 232, 250, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Strikes \{game.strikes}   Spares \{game.spares}   Opens \{game.opens}",
     px + 20,
     py + 152,
@@ -520,21 +520,21 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
   let sp : Int = (game.spin * 100.0).to_int()
   let pwv : Int = (game.power * 100.0).to_int()
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Aim \{ap / 10}.\{(Float::from_int(ap % 10)).abs().to_int()} deg",
     px + 20,
     py + 410,
     28,
     @raylib.Color::new(214, 232, 250, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Spin \{sp}%",
     px + 20,
     py + 442,
     28,
     @raylib.Color::new(214, 232, 250, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Last Knock \{game.last_knock}",
     px + 230,
     py + 442,
@@ -564,7 +564,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(184, 212, 236, 230),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Power \{pwv}%",
     px + 28,
     py + 482,
@@ -604,9 +604,9 @@ fn draw_touch_button(
     h,
     @raylib.Color::new(182, 214, 242, 214),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
-    x + w / 2 - @raylib.measure_text(label, 30) / 2,
+    x + w / 2 - @draw.measure_text(label, 30) / 2,
     y + h / 2 - 15,
     30,
     @raylib.Color::new(244, 250, 255, 248),
@@ -723,19 +723,19 @@ fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
 ///|
 /// Draws the title screen with game description, control hints, and a start button.
 fn @types.Game::draw_title(game : @types.Game) -> Unit {
-  @raylib.draw_text(
+  @draw.draw_text(
     "Bowling Alley Showdown 2026",
     @types.screen_w / 2 -
-    @raylib.measure_text("Bowling Alley Showdown 2026", 86) / 2,
+    @draw.measure_text("Bowling Alley Showdown 2026", 86) / 2,
     110,
     86,
     @raylib.Color::new(238, 248, 255, 248),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Hit strikes, build combos, and survive the pressure of a full 10-frame run.",
     @types.screen_w / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Hit strikes, build combos, and survive the pressure of a full 10-frame run.",
       32,
     ) /
@@ -744,10 +744,10 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
     32,
     @raylib.Color::new(198, 220, 242, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mobile-ready touch controls are on screen in-game.",
     @types.screen_w / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Mobile-ready touch controls are on screen in-game.", 32,
     ) /
     2,
@@ -774,10 +774,10 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
     @raylib.Color::new(92, 146, 188, 232),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Keyboard: A/D aim, Q/E spin, hold+release Space",
     @types.screen_w / 2 -
-    @raylib.measure_text("Keyboard: A/D aim, Q/E spin, hold+release Space", 30) /
+    @draw.measure_text("Keyboard: A/D aim, Q/E spin, hold+release Space", 30) /
     2,
     760,
     30,
@@ -820,29 +820,29 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     "Keep Training"
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Match Complete",
-    px + pw / 2 - @raylib.measure_text("Match Complete", 66) / 2,
+    px + pw / 2 - @draw.measure_text("Match Complete", 66) / 2,
     py + 34,
     66,
     @raylib.Color::new(242, 250, 255, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Final Score \{game.score}",
-    px + pw / 2 - @raylib.measure_text("Final Score \{game.score}", 52) / 2,
+    px + pw / 2 - @draw.measure_text("Final Score \{game.score}", 52) / 2,
     py + 124,
     52,
     @raylib.Color::new(228, 242, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     grade,
-    px + pw / 2 - @raylib.measure_text(grade, 44) / 2,
+    px + pw / 2 - @draw.measure_text(grade, 44) / 2,
     py + 188,
     44,
     @raylib.Color::new(202, 226, 248, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Strikes \{game.strikes}    Spares \{game.spares}    Opens \{game.opens}",
     px + 120,
     py + 262,

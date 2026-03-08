@@ -869,7 +869,7 @@ fn draw_spans(spans : Array[BridgeSpan], scene_t : Float) -> Unit {
         rr,
         @raylib.Color::new(255, 68, 46, 128),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "!",
         (ax - 4.0).to_int(),
         (ay - 10.0).to_int(),
@@ -905,7 +905,7 @@ fn draw_rafts(rafts : Array[RaftGroup], scene_t : Float) -> Unit {
       5.0 + blink * 3.0,
       @raylib.Color::new(255, 110, 72, 180),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{raft.survivors}",
       (raft.x - 8.0).to_int(),
       (raft.y - 7.0).to_int(),
@@ -1018,7 +1018,7 @@ fn draw_supplies(supplies : Array[SupplyCrate], scene_t : Float) -> Unit {
       18.0 + blink * 8.0,
       @raylib.Color::new(236, 248, 255, (blink * 70.0).to_int()),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       if supply.kind == 0 {
         "K"
       } else {
@@ -1128,7 +1128,7 @@ fn draw_world_panels(
     dock.h,
     @raylib.Color::new(154, 238, 190, 220),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "SUPPLY DOCK",
     dock.x.to_int() + 14,
     dock.y.to_int() + 12,
@@ -1150,7 +1150,7 @@ fn draw_world_panels(
     camp.h,
     @raylib.Color::new(240, 242, 148, 220),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "EVAC CAMP",
     camp.x.to_int() + 16,
     camp.y.to_int() + 12,
@@ -1210,7 +1210,7 @@ fn draw_hud_meter(
     h,
     @raylib.Color::new(224, 232, 244, 186),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
     x,
     y - 22,
@@ -1293,9 +1293,9 @@ fn draw_touch_controls(
       cell - 4,
       @raylib.Color::new(188, 214, 236, 170),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       label,
-      x + (cell - 4) / 2 - @raylib.measure_text(label, 26) / 2,
+      x + (cell - 4) / 2 - @draw.measure_text(label, 26) / 2,
       y + (cell - 4) / 2 - 13,
       26,
       @raylib.Color::new(232, 240, 248, 236),
@@ -1349,9 +1349,9 @@ fn draw_touch_controls(
       r,
       @raylib.Color::new(224, 238, 250, 210),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       label,
-      (cx - Float::from_int(@raylib.measure_text(label, 22) / 2)).to_int(),
+      (cx - Float::from_int(@draw.measure_text(label, 22) / 2)).to_int(),
       (cy - 11.0).to_int(),
       22,
       @raylib.Color::new(250, 252, 255, 240),
@@ -1396,14 +1396,14 @@ fn draw_panel(
     @raylib.Color::new(168, 186, 214, 196),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "MONSOON BRIDGE RESCUE",
     panel_x + 18,
     panel_y + 16,
     30,
     @raylib.Color::new(232, 242, 255, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Keep bridge alive, rescue survivors, outrun storm",
     panel_x + 18,
     panel_y + 56,
@@ -1442,28 +1442,28 @@ fn draw_panel(
     @raylib.Color::new(98, 214, 124, 232),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Kits \{boat.kits}/\{boat.kit_max}  |  Onboard \{boat.passengers}/\{boat.capacity}",
     panel_x + 20,
     panel_y + 246,
     24,
     @raylib.Color::new(232, 242, 252, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Rescued \{rescued}/\{rescue_target}",
     panel_x + 20,
     panel_y + 282,
     28,
     @raylib.Color::new(244, 250, 184, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Lost \{lost}/\{lost_limit}",
     panel_x + 20,
     panel_y + 320,
     24,
     @raylib.Color::new(248, 162, 144, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Bridge goal >= \{bridge_goal.to_int()}%",
     panel_x + 20,
     panel_y + 354,
@@ -1474,7 +1474,7 @@ fn draw_panel(
   let mm : Int = timer.to_int() / 60
   let ss : Int = timer.to_int() % 60
   let ss_txt : String = if ss < 10 { "0\{ss}" } else { "\{ss}" }
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time \{mm}:\{ss_txt}  |  Storm Wave \{wave}",
     panel_x + 20,
     panel_y + 390,
@@ -1496,14 +1496,14 @@ fn draw_panel(
     156,
     @raylib.Color::new(118, 146, 182, 194),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Controls",
     panel_x + 26,
     panel_y + panel_h - 164,
     24,
     @raylib.Color::new(236, 246, 255, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Move: WASD/Arrows\nBoost: Space/J\nAct: L/U\nPing Siren: K/H",
     panel_x + 26,
     panel_y + panel_h - 126,
@@ -1511,7 +1511,7 @@ fn draw_panel(
     @raylib.Color::new(188, 214, 244, 228),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     msg,
     panel_x + 20,
     panel_y + 434,
@@ -1537,17 +1537,17 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
     )
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "MONSOON BRIDGE RESCUE 2026",
-    sw / 2 - @raylib.measure_text("MONSOON BRIDGE RESCUE 2026", 66) / 2,
+    sw / 2 - @draw.measure_text("MONSOON BRIDGE RESCUE 2026", 66) / 2,
     180,
     66,
     @raylib.Color::new(236, 246, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Pilot through river currents, rescue rafts, and keep bridge spans above collapse threshold.",
     sw / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Pilot through river currents, rescue rafts, and keep bridge spans above collapse threshold.",
       28,
     ) /
@@ -1557,10 +1557,10 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
     @raylib.Color::new(182, 206, 228, 240),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Dock refuels and restocks kits | Evac camp unloads survivors | Siren calms panic",
     sw / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Dock refuels and restocks kits | Evac camp unloads survivors | Siren calms panic",
       26,
     ) /
@@ -1589,18 +1589,18 @@ fn draw_menu(sw : Int, sh : Int, scene_t : Float) -> Unit {
     bh,
     @raylib.Color::new(216, 236, 255, 226),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "PRESS ENTER / TAP TO START",
-    sw / 2 - @raylib.measure_text("PRESS ENTER / TAP TO START", 36) / 2,
+    sw / 2 - @draw.measure_text("PRESS ENTER / TAP TO START", 36) / 2,
     by + bh / 2 - 18,
     36,
     @raylib.Color::new(246, 252, 255, 246),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mobile: use on-screen D-pad + BOOST / ACT / PING",
     sw / 2 -
-    @raylib.measure_text("Mobile: use on-screen D-pad + BOOST / ACT / PING", 24) /
+    @draw.measure_text("Mobile: use on-screen D-pad + BOOST / ACT / PING", 24) /
     2,
     610,
     24,
@@ -1629,25 +1629,25 @@ fn draw_end_screen(
     @raylib.Color::new(250, 148, 132, 246)
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
-    sw / 2 - @raylib.measure_text(title, 72) / 2,
+    sw / 2 - @draw.measure_text(title, 72) / 2,
     210,
     72,
     title_col,
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Rescued: \{rescued}/\{target}",
-    sw / 2 - @raylib.measure_text("Rescued: \{rescued}/\{target}", 36) / 2,
+    sw / 2 - @draw.measure_text("Rescued: \{rescued}/\{target}", 36) / 2,
     326,
     36,
     @raylib.Color::new(236, 244, 255, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Bridge min integrity: \{min_integrity.to_int()}% (goal \{goal.to_int()}%)",
     sw / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Bridge min integrity: \{min_integrity.to_int()}% (goal \{goal.to_int()}%)",
       32,
     ) /
@@ -1656,19 +1656,19 @@ fn draw_end_screen(
     32,
     @raylib.Color::new(216, 232, 250, 232),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Lost: \{lost} | Time left: \{timer.to_int()}s",
     sw / 2 -
-    @raylib.measure_text("Lost: \{lost} | Time left: \{timer.to_int()}s", 30) /
+    @draw.measure_text("Lost: \{lost} | Time left: \{timer.to_int()}s", 30) /
     2,
     414,
     30,
     @raylib.Color::new(202, 218, 238, 224),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Press Enter / R to play again",
-    sw / 2 - @raylib.measure_text("Press Enter / R to play again", 32) / 2,
+    sw / 2 - @draw.measure_text("Press Enter / R to play again", 32) / 2,
     520,
     32,
     @raylib.Color::new(244, 250, 255, 236),
@@ -1681,8 +1681,10 @@ fn main {
   let sw : Int = 1700
   let sh : Int = 960
   @raylib.init_window(sw, sh, "raylib [game] monsoon bridge rescue 2026")
+  @draw.cleanup()
   defer @raylib.close_window()
   @raylib.set_target_fps(120)
+  @draw.init_font()
 
   let world_x : Int = 24
   let world_y : Int = 24
@@ -2594,6 +2596,7 @@ fn main {
       }
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 }

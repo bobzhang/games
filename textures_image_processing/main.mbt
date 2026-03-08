@@ -31,6 +31,7 @@ fn main {
   let mut mouse_hover_rec = -1
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -100,7 +101,7 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
 
-    @raylib.draw_text("IMAGE PROCESSING:", 40, 30, 10, @raylib.darkgray)
+    @draw.draw_text("IMAGE PROCESSING:", 40, 30, 10, @raylib.darkgray)
 
     // Draw rectangles
     for i in 0..<num_processes {
@@ -129,8 +130,8 @@ fn main {
       } else {
         @raylib.darkgray
       }
-      let text_width = @raylib.measure_text(process_text[i], 10)
-      @raylib.draw_text(
+      let text_width = @draw.measure_text(process_text[i], 10)
+      @draw.draw_text(
         process_text[i],
         (toggle_rec.x + 150.0 / 2.0 - Float::from_int(text_width) / 2.0).to_int(),
         toggle_rec.y.to_int() + 11,
@@ -153,6 +154,7 @@ fn main {
       @raylib.black,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -160,5 +162,6 @@ fn main {
   @raylib.unload_texture(texture)
   @raylib.unload_image(im_origin)
   @raylib.unload_image(im_copy)
+  @draw.cleanup()
   @raylib.close_window()
 }

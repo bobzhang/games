@@ -14,6 +14,7 @@ fn main {
   let shader = @raylib.load_shader("", "resources/shaders/glsl330/grayscale.fs")
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -22,14 +23,14 @@ fn main {
     @raylib.clear_background(@raylib.raywhite)
 
     // Draw shapes without shader (normal colors)
-    @raylib.draw_text("USING DEFAULT SHADER", 20, 40, 10, @raylib.red)
+    @draw.draw_text("USING DEFAULT SHADER", 20, 40, 10, @raylib.red)
     @raylib.draw_circle(80, 120, 35.0, @raylib.darkblue)
     @raylib.draw_circle_gradient(80, 220, 60.0, @raylib.green, @raylib.skyblue)
     @raylib.draw_circle_lines(80, 340, 80.0, @raylib.darkblue)
 
     // Draw shapes with shader applied (grayscale)
     @raylib.begin_shader_mode(shader)
-    @raylib.draw_text("USING CUSTOM SHADER", 190, 40, 10, @raylib.red)
+    @draw.draw_text("USING CUSTOM SHADER", 190, 40, 10, @raylib.red)
     @raylib.draw_rectangle(190, 90, 120, 60, @raylib.red)
     @raylib.draw_rectangle_gradient_h(
       160, 170, 180, 130, @raylib.maroon, @raylib.gold,
@@ -38,7 +39,7 @@ fn main {
     @raylib.end_shader_mode()
 
     // Draw more shapes without shader
-    @raylib.draw_text("USING DEFAULT SHADER", 370, 40, 10, @raylib.red)
+    @draw.draw_text("USING DEFAULT SHADER", 370, 40, 10, @raylib.red)
     @raylib.draw_triangle(
       @raylib.Vector2::new(430.0, 80.0),
       @raylib.Vector2::new(370.0, 150.0),
@@ -64,10 +65,12 @@ fn main {
     @raylib.draw_rectangle(550, 100, 200, 300, @raylib.blue)
     @raylib.end_shader_mode()
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_shader(shader)
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -40,6 +40,7 @@ fn main {
   @raylib.disable_cursor() // Limit cursor to relative movement inside the window
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -81,10 +82,11 @@ fn main {
 
     @raylib.end_mode_3d()
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Use the T/G to switch animation", 10, 10, 20, @raylib.gray,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -92,5 +94,6 @@ fn main {
   @raylib.unload_model_animations(model_animations)
   @raylib.unload_model(character_model)
   @raylib.unload_shader(skinning_shader)
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -20,6 +20,7 @@ fn main {
   )
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -123,7 +124,7 @@ fn main {
     )
     @raylib.draw_grid(10, 1.0)
     @raylib.end_mode_3d()
-    @raylib.draw_text(
+    @draw.draw_text(
       "Press Spacebar to switch camera type",
       10,
       @raylib.get_screen_height() - 30,
@@ -131,14 +132,16 @@ fn main {
       @raylib.darkgray,
     )
     if camera.projection == @raylib.CameraOrthographic {
-      @raylib.draw_text("ORTHOGRAPHIC", 10, 40, 20, @raylib.black)
+      @draw.draw_text("ORTHOGRAPHIC", 10, 40, 20, @raylib.black)
     } else if camera.projection == @raylib.CameraPerspective {
-      @raylib.draw_text("PERSPECTIVE", 10, 40, 20, @raylib.black)
+      @draw.draw_text("PERSPECTIVE", 10, 40, 20, @raylib.black)
     }
     @raylib.draw_fps(10, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

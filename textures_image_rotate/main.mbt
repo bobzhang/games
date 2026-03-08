@@ -24,6 +24,7 @@ fn main {
 
   let mut current_texture = 0
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -57,9 +58,10 @@ fn main {
       screen_height / 2 - tex_heights[current_texture] / 2,
       @raylib.white,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Press LEFT MOUSE BUTTON to rotate the image clockwise", 250, 420, 10, @raylib.darkgray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -67,5 +69,6 @@ fn main {
   for i in 0..<num_textures {
     @raylib.unload_texture(textures[i])
   }
+  @draw.cleanup()
   @raylib.close_window()
 }

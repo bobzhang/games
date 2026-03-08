@@ -334,7 +334,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(8, 10, 18, 180),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "WUXIA ROOFTOP DUEL 2026",
     20,
     14,
@@ -342,7 +342,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(232, 240, 255, 246),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Wave " + game.wave.to_string(),
     700,
     22,
@@ -350,7 +350,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(246, 222, 166, 240),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score " + game.score.to_string(),
     860,
     22,
@@ -358,7 +358,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(218, 236, 252, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best " + game.best_score.to_string(),
     1080,
     22,
@@ -403,15 +403,15 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(64, 52, 26, 220),
   )
 
-  @raylib.draw_text("HP", 20, 40, 16, @raylib.Color::new(242, 210, 220, 228))
-  @raylib.draw_text(
+  @draw.draw_text("HP", 20, 40, 16, @raylib.Color::new(242, 210, 220, 228))
+  @draw.draw_text(
     "STAMINA",
     320,
     40,
     16,
     @raylib.Color::new(198, 230, 242, 228),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "WAVE KILLS",
     620,
     40,
@@ -419,7 +419,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(242, 228, 178, 228),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Combo x" + game.combo.to_string(),
     910,
     52,
@@ -431,7 +431,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     },
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Stage " +
     game.stage_score.to_string() +
     "  Last bonus +" +
@@ -442,7 +442,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(232, 214, 170, 222),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Move: WASD/Arrows  Light: J  Heavy: K  Parry-Dash: L/Space  Pause: P  Restart: R",
     140,
     @types.screen_h - 32,
@@ -463,7 +463,7 @@ fn @types.Game::draw_message(game : @types.Game) -> Unit {
     90 + (game.message_t * 142.0).to_int()
   }
 
-  let w : Int = @raylib.measure_text(game.message, 30) + 42
+  let w : Int = @draw.measure_text(game.message, 30) + 42
   let x : Int = @types.screen_w / 2 - w / 2
   let y : Int = @types.arena_y + 16
 
@@ -475,7 +475,7 @@ fn @types.Game::draw_message(game : @types.Game) -> Unit {
     48,
     @raylib.Color::new(206, 226, 250, (255).min(alpha + 18)),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     game.message,
     x + 20,
     y + 10,
@@ -497,43 +497,43 @@ fn draw_title_overlay() -> Unit {
   let t0 : String = "WUXIA ROOFTOP DUEL"
   let t1 : String = "Read telegraphs. Parry inside the red window. Survive endless waves."
 
-  @raylib.draw_text(
+  @draw.draw_text(
     t0,
-    @types.screen_w / 2 - @raylib.measure_text(t0, 78) / 2,
+    @types.screen_w / 2 - @draw.measure_text(t0, 78) / 2,
     190,
     78,
     @raylib.Color::new(238, 246, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     t1,
-    @types.screen_w / 2 - @raylib.measure_text(t1, 30) / 2,
+    @types.screen_w / 2 - @draw.measure_text(t1, 30) / 2,
     286,
     30,
     @raylib.Color::new(202, 222, 244, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Controls",
     @types.screen_w / 2 - 110,
     382,
     44,
     @raylib.Color::new(248, 226, 180, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Move: WASD / Arrows",
     @types.screen_w / 2 - 180,
     444,
     32,
     @raylib.Color::new(226, 236, 252, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "J: Light slash   K: Heavy slash",
     @types.screen_w / 2 - 220,
     486,
     32,
     @raylib.Color::new(226, 236, 252, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "L or Space: Parry-Dash   P: Pause   R: Restart",
     @types.screen_w / 2 - 300,
     528,
@@ -542,9 +542,9 @@ fn draw_title_overlay() -> Unit {
   )
 
   let start : String = "Press Enter / Space / J / K to start"
-  @raylib.draw_text(
+  @draw.draw_text(
     start,
-    @types.screen_w / 2 - @raylib.measure_text(start, 38) / 2,
+    @types.screen_w / 2 - @draw.measure_text(start, 38) / 2,
     646,
     38,
     @raylib.Color::new(180, 246, 216, 244),
@@ -562,18 +562,18 @@ fn draw_paused_overlay() -> Unit {
   )
 
   let title : String = "PAUSED"
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
-    @types.screen_w / 2 - @raylib.measure_text(title, 88) / 2,
+    @types.screen_w / 2 - @draw.measure_text(title, 88) / 2,
     260,
     88,
     @raylib.Color::new(244, 246, 255, 248),
   )
 
   let line : String = "Press P to resume. Press R to restart the duel."
-  @raylib.draw_text(
+  @draw.draw_text(
     line,
-    @types.screen_w / 2 - @raylib.measure_text(line, 36) / 2,
+    @types.screen_w / 2 - @draw.measure_text(line, 36) / 2,
     382,
     36,
     @raylib.Color::new(214, 226, 246, 238),
@@ -591,9 +591,9 @@ fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   )
 
   let title : String = "DUEL LOST"
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
-    @types.screen_w / 2 - @raylib.measure_text(title, 84) / 2,
+    @types.screen_w / 2 - @draw.measure_text(title, 84) / 2,
     210,
     84,
     @raylib.Color::new(255, 182, 194, 248),
@@ -604,39 +604,39 @@ fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
   let l2 : String = "Reached wave " + game.wave.to_string()
   let l3 : String = "Time survived " + game.game_t.to_int().to_string() + " s"
 
-  @raylib.draw_text(
+  @draw.draw_text(
     l0,
-    @types.screen_w / 2 - @raylib.measure_text(l0, 42) / 2,
+    @types.screen_w / 2 - @draw.measure_text(l0, 42) / 2,
     340,
     42,
     @raylib.Color::new(238, 242, 252, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     l1,
-    @types.screen_w / 2 - @raylib.measure_text(l1, 38) / 2,
+    @types.screen_w / 2 - @draw.measure_text(l1, 38) / 2,
     392,
     38,
     @raylib.Color::new(220, 230, 246, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     l2,
-    @types.screen_w / 2 - @raylib.measure_text(l2, 34) / 2,
+    @types.screen_w / 2 - @draw.measure_text(l2, 34) / 2,
     440,
     34,
     @raylib.Color::new(220, 230, 246, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     l3,
-    @types.screen_w / 2 - @raylib.measure_text(l3, 34) / 2,
+    @types.screen_w / 2 - @draw.measure_text(l3, 34) / 2,
     482,
     34,
     @raylib.Color::new(220, 230, 246, 236),
   )
 
   let hint : String = "Press R to restart or Enter/Space to re-enter the rooftop."
-  @raylib.draw_text(
+  @draw.draw_text(
     hint,
-    @types.screen_w / 2 - @raylib.measure_text(hint, 32) / 2,
+    @types.screen_w / 2 - @draw.measure_text(hint, 32) / 2,
     610,
     32,
     @raylib.Color::new(194, 240, 216, 244),

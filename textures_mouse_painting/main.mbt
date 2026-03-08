@@ -51,6 +51,7 @@ fn main {
   @raylib.end_texture_mode()
 
   @raylib.set_target_fps(120)
+  @draw.init_font()
 
   while !@raylib.window_should_close() {
     let mouse_pos = @raylib.get_mouse_position()
@@ -238,7 +239,7 @@ fn main {
       @raylib.black
     }
     @raylib.draw_rectangle_lines_ex(btn_save_rec, 2.0, save_color)
-    @raylib.draw_text("SAVE!", 755, 20, 10, save_color)
+    @draw.draw_text("SAVE!", 755, 20, 10, save_color)
 
     // Save message
     if show_save_message {
@@ -256,14 +257,16 @@ fn main {
         80,
         @raylib.black,
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "IMAGE SAVED:  my_amazing_texture_painting.png", 150, 180, 20, @raylib.raywhite,
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   @raylib.unload_render_texture(target)
+  @draw.cleanup()
   @raylib.close_window()
 }

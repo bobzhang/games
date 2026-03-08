@@ -90,6 +90,7 @@ fn reset_shots(shots : Array[Shot]) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "Mech Arena Duel 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let shots : Array[Shot] = Array::makei(260, fn(_i) {
     { alive: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, from_enemy: false }
@@ -346,7 +347,7 @@ fn main {
           36,
           @raylib.white,
         )
-        @raylib.draw_text(
+        @draw.draw_text(
           "\{bot.hp}",
           (bot.x - 10.0).to_int(),
           (bot.y - 30.0).to_int(),
@@ -378,12 +379,12 @@ fn main {
       @raylib.white,
     )
 
-    @raylib.draw_text("MECH ARENA DUEL 2026", 20, 18, 40, @raylib.skyblue)
-    @raylib.draw_text("Score \{score}", 20, 64, 30, @raylib.white)
-    @raylib.draw_text("Kills \{kills}", 220, 64, 30, @raylib.lime)
-    @raylib.draw_text("Wave \{wave}", 390, 64, 30, @raylib.orange)
+    @draw.draw_text("MECH ARENA DUEL 2026", 20, 18, 40, @raylib.skyblue)
+    @draw.draw_text("Score \{score}", 20, 64, 30, @raylib.white)
+    @draw.draw_text("Kills \{kills}", 220, 64, 30, @raylib.lime)
+    @draw.draw_text("Wave \{wave}", 390, 64, 30, @raylib.orange)
 
-    @raylib.draw_text("HP", 590, 66, 24, @raylib.red)
+    @draw.draw_text("HP", 590, 66, 24, @raylib.red)
     @raylib.draw_rectangle(
       640,
       72,
@@ -393,7 +394,7 @@ fn main {
     )
     @raylib.draw_rectangle(640, 72, php * 230 / 120, 14, @raylib.red)
 
-    @raylib.draw_text("Heat", 900, 66, 24, @raylib.orange)
+    @draw.draw_text("Heat", 900, 66, 24, @raylib.orange)
     @raylib.draw_rectangle(
       950,
       72,
@@ -410,7 +411,7 @@ fn main {
     )
 
     if wave_bonus > 0 {
-      @raylib.draw_text("Wave bonus +\{wave_bonus}", 820, 106, 24, @raylib.lime)
+      @draw.draw_text("Wave bonus +\{wave_bonus}", 820, 106, 24, @raylib.lime)
     }
 
     @raylib.draw_rectangle(
@@ -420,7 +421,7 @@ fn main {
       30,
       @raylib.Color::new(10, 12, 16, 220),
     )
-    @raylib.draw_text(msg, 28, 699, 20, @raylib.raywhite)
+    @draw.draw_text(msg, 28, 699, 20, @raylib.raywhite)
 
     if over {
       @raylib.draw_rectangle(
@@ -430,12 +431,14 @@ fn main {
         190,
         @raylib.fade(@raylib.black, 0.82),
       )
-      @raylib.draw_text("MECH DOWN", 450, 320, 56, @raylib.red)
-      @raylib.draw_text("Press R to restart", 450, 386, 34, @raylib.white)
+      @draw.draw_text("MECH DOWN", 450, 320, 56, @raylib.red)
+      @draw.draw_text("Press R to restart", 450, 386, 34, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

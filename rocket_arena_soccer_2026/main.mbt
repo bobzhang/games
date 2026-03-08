@@ -588,6 +588,7 @@ fn draw_field_lines() -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "Rocket Arena Soccer 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let player : Car = {
     x: field_l + 188.0,
@@ -1231,14 +1232,14 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 76, @raylib.Color::new(6, 10, 18, 228))
-    @raylib.draw_text(
+    @draw.draw_text(
       "ROCKET ARENA SOCCER 2026",
       16,
       12,
       30,
       @raylib.Color::new(238, 246, 255, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "WASD drive  J boost  K dash  L pulse",
       16,
       48,
@@ -1246,15 +1247,15 @@ fn main {
       @raylib.Color::new(178, 208, 236, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "YOU \{player_score}",
       528,
       14,
       36,
       @raylib.Color::new(142, 228, 255, 255),
     )
-    @raylib.draw_text("-", 656, 14, 36, @raylib.Color::new(236, 244, 255, 255))
-    @raylib.draw_text(
+    @draw.draw_text("-", 656, 14, 36, @raylib.Color::new(236, 244, 255, 255))
+    @draw.draw_text(
       "\{ai_score} AI",
       688,
       14,
@@ -1262,7 +1263,7 @@ fn main {
       @raylib.Color::new(255, 176, 152, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{match_time.to_int()}s",
       920,
       16,
@@ -1278,7 +1279,7 @@ fn main {
       10,
       @raylib.Color::new(112, 198, 248, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "BOOST",
       16,
       100,
@@ -1286,14 +1287,14 @@ fn main {
       @raylib.Color::new(182, 208, 230, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Dash \{player.dash_cd.to_int()}  Pulse \{player.pulse_cd.to_int()}",
       270,
       86,
       20,
       @raylib.Color::new(206, 188, 160, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Style \{style_pts}",
       540,
       86,
@@ -1315,7 +1316,7 @@ fn main {
       10,
       @raylib.Color::new(248, 162, 136, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "AI BOOST",
       920,
       98,
@@ -1324,7 +1325,7 @@ fn main {
     )
 
     if goal_pause_t > 0.0 {
-      @raylib.draw_text(
+      @draw.draw_text(
         "KICKOFF",
         sw / 2 - 88,
         120,
@@ -1340,7 +1341,7 @@ fn main {
       38,
       @raylib.Color::new(8, 12, 18, 214),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       sw / 2 - 320,
       sh - 44,
@@ -1365,7 +1366,7 @@ fn main {
       58,
       @raylib.Color::new(56, 82, 116, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "L",
       p0x + 30,
       p0y + 74,
@@ -1379,7 +1380,7 @@ fn main {
       58,
       @raylib.Color::new(56, 82, 116, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "R",
       p0x + 190,
       p0y + 74,
@@ -1393,7 +1394,7 @@ fn main {
       58,
       @raylib.Color::new(56, 82, 116, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "F",
       p0x + 110,
       p0y + 16,
@@ -1407,7 +1408,7 @@ fn main {
       58,
       @raylib.Color::new(56, 82, 116, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "B",
       p0x + 110,
       p0y + 132,
@@ -1431,7 +1432,7 @@ fn main {
       92,
       @raylib.Color::new(214, 118, 98, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "DASH",
       p1x + 32,
       p1y + 44,
@@ -1445,7 +1446,7 @@ fn main {
       92,
       @raylib.Color::new(86, 148, 216, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "PULSE",
       p1x + 154,
       p1y + 44,
@@ -1459,7 +1460,7 @@ fn main {
       100,
       @raylib.Color::new(98, 186, 138, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "BOOST",
       p1x + 106,
       p1y + 154,
@@ -1476,28 +1477,28 @@ fn main {
         408,
         @raylib.Color::new(12, 18, 30, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "ROCKET ARENA SOCCER",
         sw / 2 - 328,
         sh / 2 - 130,
         64,
         @raylib.Color::new(238, 246, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score 7 goals first. Use boost, dash and pulse to outplay the AI.",
         sw / 2 - 358,
         sh / 2 - 26,
         30,
         @raylib.Color::new(182, 214, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mobile: left pad drive, right panel dash/pulse/boost",
         sw / 2 - 334,
         sh / 2 + 16,
         30,
         @raylib.Color::new(182, 214, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "ENTER or tap to start",
         sw / 2 - 184,
         sh / 2 + 122,
@@ -1513,28 +1514,28 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "CHAMPIONS",
         sw / 2 - 184,
         sh / 2 - 132,
         62,
         @raylib.Color::new(248, 236, 186, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Final: \{player_score} - \{ai_score}",
         sw / 2 - 176,
         sh / 2 - 30,
         44,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Style points: \{style_pts}",
         sw / 2 - 166,
         sh / 2 + 20,
         34,
         @raylib.Color::new(172, 236, 202, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 178,
         sh / 2 + 124,
@@ -1550,28 +1551,28 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "DEFEAT",
         sw / 2 - 114,
         sh / 2 - 132,
         62,
         @raylib.Color::new(246, 140, 154, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Final: \{player_score} - \{ai_score}",
         sw / 2 - 176,
         sh / 2 - 30,
         44,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Style points: \{style_pts}",
         sw / 2 - 166,
         sh / 2 + 20,
         34,
         @raylib.Color::new(236, 172, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 178,
         sh / 2 + 124,
@@ -1580,6 +1581,7 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
 
     if state == 2 || state == 3 {
@@ -1590,5 +1592,6 @@ fn main {
     }
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -537,6 +537,7 @@ fn generate_layer(
 fn main {
   @raylib.init_window(sw, sh, "Grappling Tower Climb 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let pilot : Pilot = {
     x: (tower_l + tower_r) * 0.5,
@@ -1587,14 +1588,14 @@ fn main {
 
     // HUD.
     @raylib.draw_rectangle(0, 0, sw, 76, @raylib.Color::new(8, 10, 20, 228))
-    @raylib.draw_text(
+    @draw.draw_text(
       "GRAPPLING TOWER CLIMB 2026",
       16,
       12,
       30,
       @raylib.Color::new(236, 246, 255, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "WASD move  W/SPACE jump  J grapple  K dash  L bomb",
       16,
       48,
@@ -1602,21 +1603,21 @@ fn main {
       @raylib.Color::new(176, 208, 236, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{pilot.score}",
       620,
       14,
       30,
       @raylib.Color::new(248, 216, 126, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Height \{pilot.best_h.to_int()}/\{target_h.to_int()}m",
       812,
       14,
       30,
       @raylib.Color::new(164, 236, 202, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{time_left.to_int()}s",
       1092,
       14,
@@ -1632,7 +1633,7 @@ fn main {
       10,
       @raylib.Color::new(112, 224, 160, 255),
     )
-    @raylib.draw_text("HP", 16, 98, 16, @raylib.Color::new(186, 210, 232, 255))
+    @draw.draw_text("HP", 16, 98, 16, @raylib.Color::new(186, 210, 232, 255))
 
     @raylib.draw_rectangle(
       252,
@@ -1648,7 +1649,7 @@ fn main {
       10,
       @raylib.Color::new(118, 198, 248, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "ENERGY",
       252,
       98,
@@ -1656,14 +1657,14 @@ fn main {
       @raylib.Color::new(186, 210, 232, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Combo \{pilot.combo}",
       500,
       84,
       20,
       @raylib.Color::new(252, 224, 162, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Dash \{pilot.dash_cd.to_int()}  Bomb \{pilot.bomb_cd.to_int()}",
       620,
       84,
@@ -1678,7 +1679,7 @@ fn main {
       38,
       @raylib.Color::new(8, 12, 18, 214),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       sw / 2 - 310,
       sh - 44,
@@ -1703,7 +1704,7 @@ fn main {
       58,
       @raylib.Color::new(56, 82, 116, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "L",
       p0x + 30,
       p0y + 74,
@@ -1717,7 +1718,7 @@ fn main {
       58,
       @raylib.Color::new(56, 82, 116, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "R",
       p0x + 190,
       p0y + 74,
@@ -1731,7 +1732,7 @@ fn main {
       58,
       @raylib.Color::new(56, 82, 116, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "U",
       p0x + 110,
       p0y + 16,
@@ -1745,7 +1746,7 @@ fn main {
       58,
       @raylib.Color::new(56, 82, 116, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "D",
       p0x + 110,
       p0y + 132,
@@ -1769,7 +1770,7 @@ fn main {
       92,
       @raylib.Color::new(214, 118, 102, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "DASH",
       p1x + 32,
       p1y + 44,
@@ -1783,7 +1784,7 @@ fn main {
       92,
       @raylib.Color::new(86, 148, 216, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "BOMB",
       p1x + 164,
       p1y + 44,
@@ -1797,7 +1798,7 @@ fn main {
       100,
       @raylib.Color::new(98, 186, 138, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "GRAPPLE",
       p1x + 90,
       p1y + 154,
@@ -1814,35 +1815,35 @@ fn main {
         412,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "GRAPPLING TOWER CLIMB",
         sw / 2 - 354,
         sh / 2 - 132,
         62,
         @raylib.Color::new(236, 246, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Chain grapples between anchors, evade drones, and climb fast.",
         sw / 2 - 336,
         sh / 2 - 28,
         30,
         @raylib.Color::new(182, 214, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mobile: left pad move/jump, right panel dash/bomb/grapple",
         sw / 2 - 356,
         sh / 2 + 16,
         30,
         @raylib.Color::new(182, 214, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Reach 3200m before time or HP runs out",
         sw / 2 - 236,
         sh / 2 + 60,
         32,
         @raylib.Color::new(252, 212, 132, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "ENTER or tap to start",
         sw / 2 - 184,
         sh / 2 + 124,
@@ -1858,28 +1859,28 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "SUMMIT REACHED",
         sw / 2 - 244,
         sh / 2 - 132,
         62,
         @raylib.Color::new(248, 236, 186, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{pilot.score}",
         sw / 2 - 148,
         sh / 2 - 34,
         44,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Best height: \{pilot.best_h.to_int()}m",
         sw / 2 - 192,
         sh / 2 + 18,
         34,
         @raylib.Color::new(172, 236, 202, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 178,
         sh / 2 + 124,
@@ -1895,28 +1896,28 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "CLIMB FAILED",
         sw / 2 - 206,
         sh / 2 - 132,
         62,
         @raylib.Color::new(246, 140, 154, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{pilot.score}",
         sw / 2 - 148,
         sh / 2 - 34,
         44,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Best height: \{pilot.best_h.to_int()}m",
         sw / 2 - 192,
         sh / 2 + 18,
         34,
         @raylib.Color::new(236, 172, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 178,
         sh / 2 + 124,
@@ -1925,6 +1926,7 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
 
     if state == 2 || state == 3 {
@@ -1935,5 +1937,6 @@ fn main {
     }
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

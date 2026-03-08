@@ -48,6 +48,7 @@ fn main {
   )
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -156,7 +157,7 @@ fn main {
     }
     for i in 0..<(screen_width / player_size_int) {
       for j in 0..<(screen_height / player_size_int) {
-        @raylib.draw_text(
+        @draw.draw_text(
           "[\{i},\{j}]",
           10 + player_size_int * i,
           15 + player_size_int * j,
@@ -176,7 +177,7 @@ fn main {
       30,
       @raylib.fade(@raylib.raywhite, 0.6),
     )
-    @raylib.draw_text("PLAYER1: W/S/A/D to move", 10, 10, 10, @raylib.maroon)
+    @draw.draw_text("PLAYER1: W/S/A/D to move", 10, 10, 10, @raylib.maroon)
     @raylib.end_texture_mode()
 
     @raylib.begin_texture_mode(screen_camera2)
@@ -206,7 +207,7 @@ fn main {
     }
     for i in 0..<(screen_width / player_size_int) {
       for j in 0..<(screen_height / player_size_int) {
-        @raylib.draw_text(
+        @draw.draw_text(
           "[\{i},\{j}]",
           10 + player_size_int * i,
           15 + player_size_int * j,
@@ -226,7 +227,7 @@ fn main {
       30,
       @raylib.fade(@raylib.raywhite, 0.6),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "PLAYER2: UP/DOWN/LEFT/RIGHT to move", 10, 10, 10, @raylib.darkblue,
     )
     @raylib.end_texture_mode()
@@ -253,11 +254,13 @@ fn main {
       @raylib.get_screen_height(),
       @raylib.lightgray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_render_texture(screen_camera1)
   @raylib.unload_render_texture(screen_camera2)
+  @draw.cleanup()
   @raylib.close_window()
 }

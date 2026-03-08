@@ -26,6 +26,7 @@ fn main {
   let mut current_sound = 0
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -41,9 +42,10 @@ fn main {
     // Draw
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
-    @raylib.draw_text(
+    @draw.draw_text(
       "Press SPACE to PLAY a WAV sound!", 200, 180, 20, @raylib.lightgray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -53,5 +55,6 @@ fn main {
   }
   @raylib.unload_sound(sound_array[0])
   @raylib.close_audio_device()
+  @draw.cleanup()
   @raylib.close_window()
 }

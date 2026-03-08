@@ -6,8 +6,8 @@ fn draw_center_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
 }
 
 ///|
@@ -19,8 +19,8 @@ fn draw_right_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, x - tw, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, x - tw, y, size, col)
 }
 
 ///|
@@ -156,7 +156,7 @@ fn draw_district_ids() -> Unit {
   for y in 0..<@types.city_rows {
     for x in 0..<@types.city_cols {
       let id = @types.cell_index(x, y)
-      @raylib.draw_text(
+      @draw.draw_text(
         id.to_string(),
         @types.cell_left_i(x) + 8,
         @types.cell_top_i(y) + 8,
@@ -247,7 +247,7 @@ fn @types.Game::draw_suspects(game : @types.Game) -> Unit {
     }
 
     if game.suspects[i].deduction_unlocked {
-      @raylib.draw_text(
+      @draw.draw_text(
         "D",
         (x - 5.0).to_int(),
         (y - 37.0).to_int(),
@@ -256,7 +256,7 @@ fn @types.Game::draw_suspects(game : @types.Game) -> Unit {
       )
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       game.suspects[i].name,
       (x - 46.0).to_int(),
       (y + 22.0).to_int(),
@@ -304,7 +304,7 @@ fn @types.Game::draw_incidents(game : @types.Game) -> Unit {
       a_col(core_col, 150),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       incident.timer.to_int().to_string(),
       (x - 8.0).to_int(),
       (y - 8.0).to_int(),
@@ -376,7 +376,7 @@ fn draw_meter(
     h,
     @raylib.Color::new(120, 148, 188, 180),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
     x + 8,
     y - 20,
@@ -440,14 +440,14 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(8, 12, 22, 216),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "INK SCROLL // DETECTIVE",
     22,
     14,
     26,
     @raylib.Color::new(224, 238, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     state_label(game.state),
     24,
     48,
@@ -507,7 +507,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(144, 224, 248, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Incidents " +
     game.active_incident_count().to_string() +
     "  Solved " +
@@ -528,7 +528,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     "None"
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Marked suspect: " + marked,
     548,
     58,
@@ -544,7 +544,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
       56,
       @raylib.Color::new(8, 12, 22, 206),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       game.message,
       22,
       @types.screen_h - 40,
@@ -575,7 +575,7 @@ fn @types.Game::draw_suspect_board(game : @types.Game) -> Unit {
     @raylib.Color::new(88, 122, 166, 200),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Evidence Board",
     panel_x + 14,
     @types.city_origin_y_i + 10,
@@ -587,7 +587,7 @@ fn @types.Game::draw_suspect_board(game : @types.Game) -> Unit {
     let y = @types.city_origin_y_i + 50 + i * 136
     let col = suspect_col(i)
 
-    @raylib.draw_text(
+    @draw.draw_text(
       game.suspects[i].name,
       panel_x + 14,
       y,
@@ -620,7 +620,7 @@ fn @types.Game::draw_suspect_board(game : @types.Game) -> Unit {
       @raylib.Color::new(120, 150, 188, 180),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Confidence " + conf.to_string(),
       panel_x + 14,
       y + 52,
@@ -629,7 +629,7 @@ fn @types.Game::draw_suspect_board(game : @types.Game) -> Unit {
     )
 
     let chains = game.completed_chains(i)
-    @raylib.draw_text(
+    @draw.draw_text(
       "Chains " +
       chains.to_string() +
       "/" +
@@ -645,7 +645,7 @@ fn @types.Game::draw_suspect_board(game : @types.Game) -> Unit {
     } else {
       "Deduction locked"
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       ded,
       panel_x + 14,
       y + 96,

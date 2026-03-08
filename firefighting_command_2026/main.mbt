@@ -74,6 +74,7 @@ fn active_fire_count(zones : Array[Zone]) -> Int {
 fn main {
   @raylib.init_window(sw, sh, "Firefighting Command 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let zones : Array[Zone] = Array::makei(cols * rows, fn(_i) {
     { fire: 0.0, has_house: true }
@@ -284,7 +285,7 @@ fn main {
             10.0 + f * 0.08,
             @raylib.red,
           )
-          @raylib.draw_text(
+          @draw.draw_text(
             "\{f.to_int()}%",
             (x - 22.0).to_int(),
             (y + 30.0).to_int(),
@@ -322,11 +323,11 @@ fn main {
       @raylib.black,
     )
 
-    @raylib.draw_text("FIREFIGHTING COMMAND 2026", 20, 18, 38, @raylib.skyblue)
-    @raylib.draw_text("Budget \{budget}", 20, 64, 28, @raylib.white)
-    @raylib.draw_text("Saved \{saved}", 220, 64, 28, @raylib.lime)
-    @raylib.draw_text("Lost \{lost}", 380, 64, 28, @raylib.orange)
-    @raylib.draw_text(
+    @draw.draw_text("FIREFIGHTING COMMAND 2026", 20, 18, 38, @raylib.skyblue)
+    @draw.draw_text("Budget \{budget}", 20, 64, 28, @raylib.white)
+    @draw.draw_text("Saved \{saved}", 220, 64, 28, @raylib.lime)
+    @draw.draw_text("Lost \{lost}", 380, 64, 28, @raylib.orange)
+    @draw.draw_text(
       "Lives \{lives}",
       520,
       64,
@@ -338,7 +339,7 @@ fn main {
       },
     )
 
-    @raylib.draw_text("Water", 740, 60, 24, @raylib.skyblue)
+    @draw.draw_text("Water", 740, 60, 24, @raylib.skyblue)
     @raylib.draw_rectangle(
       810,
       64,
@@ -349,7 +350,7 @@ fn main {
     @raylib.draw_rectangle(810, 64, (water * 2.5).to_int(), 16, @raylib.skyblue)
 
     let active = active_fire_count(zones)
-    @raylib.draw_text("Active Fires: \{active}", 20, 650, 24, @raylib.raywhite)
+    @draw.draw_text("Active Fires: \{active}", 20, 650, 24, @raylib.raywhite)
     @raylib.draw_rectangle(
       20,
       688,
@@ -357,7 +358,7 @@ fn main {
       30,
       @raylib.Color::new(12, 17, 24, 220),
     )
-    @raylib.draw_text(msg, 28, 693, 20, @raylib.raywhite)
+    @draw.draw_text(msg, 28, 693, 20, @raylib.raywhite)
 
     if over {
       @raylib.draw_rectangle(
@@ -367,12 +368,14 @@ fn main {
         180,
         @raylib.fade(@raylib.black, 0.82),
       )
-      @raylib.draw_text("CITY LOST", 455, 312, 52, @raylib.red)
-      @raylib.draw_text("Press R to restart", 430, 370, 34, @raylib.white)
+      @draw.draw_text("CITY LOST", 455, 312, 52, @raylib.red)
+      @draw.draw_text("Press R to restart", 430, 370, 34, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

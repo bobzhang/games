@@ -770,21 +770,21 @@ fn draw_touch_ui(state : Int) -> Unit {
       @raylib.Color::new(24, 40, 60, 182),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "L",
       pad_x + 36,
       pad_y + 86,
       28,
       @raylib.Color::new(214, 236, 252, 244),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "R",
       pad_x + 182,
       pad_y + 86,
       28,
       @raylib.Color::new(214, 236, 252, 244),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "J",
       pad_x + 107,
       pad_y + 24,
@@ -836,28 +836,28 @@ fn draw_touch_ui(state : Int) -> Unit {
       @raylib.Color::new(26, 48, 68, 196),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "FIRE",
       btn_x + 44,
       btn_y + 44,
       24,
       @raylib.Color::new(246, 252, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "MAG",
       btn_x + 198,
       btn_y + 44,
       24,
       @raylib.Color::new(246, 252, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "DASH",
       btn_x + 40,
       btn_y + 150,
       24,
       @raylib.Color::new(246, 252, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "POL",
       btn_x + 210,
       btn_y + 150,
@@ -872,6 +872,7 @@ fn draw_touch_ui(state : Int) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] magnet lab escape 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let platforms : Array[Platform] = Array::makei(max_platforms, fn(_i) {
     {
@@ -2094,7 +2095,7 @@ fn main {
       @raylib.Color::new(128, 222, 254, 220),
     )
     @raylib.draw_circle(rx, ry, 26.0, @raylib.Color::new(186, 248, 255, 216))
-    @raylib.draw_text(
+    @draw.draw_text(
       "REACTOR",
       rx - 48,
       ry - 112,
@@ -2150,7 +2151,7 @@ fn main {
           floor_y.to_int(),
           @raylib.Color::new(90, 170, 124, 88),
         )
-        @raylib.draw_text(
+        @draw.draw_text(
           "OPEN",
           gx - 22,
           58,
@@ -2172,7 +2173,7 @@ fn main {
           floor_y.to_int() - 84,
           @raylib.Color::new(236, 188, 196, 210),
         )
-        @raylib.draw_text(
+        @draw.draw_text(
           "\{gate.req}",
           gx - 16,
           58,
@@ -2401,7 +2402,7 @@ fn main {
     // HUD top.
     @raylib.draw_rectangle(0, 0, sw, 82, @raylib.Color::new(8, 12, 20, 230))
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Magnet Lab Escape 2026",
       16,
       10,
@@ -2409,49 +2410,49 @@ fn main {
       @raylib.Color::new(208, 236, 250, 248),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{player.score}",
       20,
       46,
       22,
       @raylib.Color::new(252, 228, 166, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Delivered \{player.delivered}/\{target_cores}",
       206,
       46,
       22,
       @raylib.Color::new(214, 236, 252, 248),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Cargo \{player.cargo}",
       494,
       46,
       22,
       @raylib.Color::new(214, 236, 252, 248),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Combo \{player.combo}",
       634,
       46,
       22,
       @raylib.Color::new(170, 236, 192, 250),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Best \{player.best_combo}",
       788,
       46,
       22,
       @raylib.Color::new(170, 210, 252, 250),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{timer.to_int()}s",
       954,
       46,
       22,
       @raylib.Color::new(248, 214, 174, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "FPS \{@raylib.get_fps()}",
       sw - 116,
       12,
@@ -2472,7 +2473,7 @@ fn main {
       11,
       @raylib.Color::new(226, 98, 116, 255),
     )
-    @raylib.draw_text("HP", 16, 106, 16, @raylib.Color::new(238, 206, 216, 255))
+    @draw.draw_text("HP", 16, 106, 16, @raylib.Color::new(238, 206, 216, 255))
 
     @raylib.draw_rectangle(
       16,
@@ -2488,7 +2489,7 @@ fn main {
       11,
       @raylib.Color::new(88, 188, 236, 255),
     )
-    @raylib.draw_text("EN", 16, 142, 16, @raylib.Color::new(206, 230, 252, 255))
+    @draw.draw_text("EN", 16, 142, 16, @raylib.Color::new(206, 230, 252, 255))
 
     @raylib.draw_rectangle(
       16,
@@ -2504,7 +2505,7 @@ fn main {
       11,
       @raylib.Color::new(244, 170, 96, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "HEAT",
       16,
       178,
@@ -2512,7 +2513,7 @@ fn main {
       @raylib.Color::new(246, 222, 192, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Dash \{(player.dash_cd * 10.0).to_int()}",
       272,
       100,
@@ -2520,7 +2521,7 @@ fn main {
       @raylib.Color::new(228, 238, 250, 244),
     )
     let polarity_label : String = if player.polarity > 0 { "+" } else { "-" }
-    @raylib.draw_text(
+    @draw.draw_text(
       "Polarity \{polarity_label}",
       272,
       128,
@@ -2588,7 +2589,7 @@ fn main {
         36,
         @raylib.Color::new(12, 18, 30, 210),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         msg,
         sw / 2 - 320,
         sh - 58,
@@ -2616,49 +2617,49 @@ fn main {
         @raylib.Color::new(98, 154, 208, 206),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "MAGNET LAB ESCAPE 2026",
         282,
         188,
         56,
         @raylib.Color::new(188, 236, 252, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Deliver 120 cores to the reactor while surviving drone waves.",
         250,
         286,
         30,
         @raylib.Color::new(214, 228, 246, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Closed gates unlock at delivery milestones.",
         360,
         330,
         30,
         @raylib.Color::new(214, 228, 246, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Move: A/D or Arrows   Jump: W/Up/Space",
         326,
         388,
         28,
         @raylib.Color::new(194, 220, 242, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Magnet: J (hold)   Polarity: K   Fire: L   Dash: RightShift",
         226,
         430,
         28,
         @raylib.Color::new(194, 220, 242, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Touch controls are shown on screen for mobile.",
         326,
         472,
         28,
         @raylib.Color::new(194, 220, 242, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press Enter or tap to begin",
         440,
         550,
@@ -2682,28 +2683,28 @@ fn main {
         @raylib.Color::new(106, 220, 188, 214),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "ESCAPE COMPLETE",
         390,
         244,
         62,
         @raylib.Color::new(164, 246, 206, 254),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{player.score}",
         500,
         338,
         36,
         @raylib.Color::new(236, 246, 252, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Delivered: \{player.delivered}   Best Combo: \{player.best_combo}",
         372,
         388,
         30,
         @raylib.Color::new(214, 236, 252, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R / Enter / Tap to run again",
         420,
         470,
@@ -2727,28 +2728,28 @@ fn main {
         @raylib.Color::new(214, 106, 120, 214),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "MISSION FAILED",
         420,
         244,
         62,
         @raylib.Color::new(248, 164, 176, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{player.score}",
         500,
         338,
         36,
         @raylib.Color::new(236, 246, 252, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Delivered: \{player.delivered} / \{target_cores}",
         438,
         388,
         30,
         @raylib.Color::new(214, 236, 252, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R / Enter / Tap to retry",
         440,
         470,
@@ -2757,8 +2758,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

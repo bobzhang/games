@@ -106,6 +106,7 @@ fn main {
   let mut moon_orbit_rotation : Float = 0.0
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -160,14 +161,16 @@ fn main {
 
     @raylib.end_mode_3d()
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "EARTH ORBITING AROUND THE SUN!", 400, 10, 20, @raylib.maroon,
     )
     @raylib.draw_fps(10, 10)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

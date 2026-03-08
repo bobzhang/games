@@ -131,6 +131,7 @@ fn main {
       @raylib.white,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 

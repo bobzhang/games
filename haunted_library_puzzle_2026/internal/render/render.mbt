@@ -497,8 +497,8 @@ fn draw_touch_button(
   )
 
   let fs : Int = if rect.3 >= 100 { 32 } else { 22 }
-  let tw : Int = @raylib.measure_text(label, fs)
-  @raylib.draw_text(
+  let tw : Int = @draw.measure_text(label, fs)
+  @draw.draw_text(
     label,
     rect.0 + rect.2 / 2 - tw / 2,
     rect.1 + rect.3 / 2 - fs / 2,
@@ -623,14 +623,14 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(96, 122, 156, 190),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "HAUNTED LIBRARY",
     @types.panel_x0 + 20,
     @types.board_y0 + 20,
     36,
     @raylib.Color::new(228, 238, 252, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "PUZZLE 2026",
     @types.panel_x0 + 20,
     @types.board_y0 + 58,
@@ -638,21 +638,21 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(164, 194, 224, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Pages " + game.pages.to_string() + "/5",
     @types.panel_x0 + 22,
     @types.board_y0 + 120,
     28,
     @raylib.Color::new(250, 232, 186, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Seals " + game.seals_on.to_string() + "/3",
     @types.panel_x0 + 22,
     @types.board_y0 + 156,
     28,
     @raylib.Color::new(176, 236, 206, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Lives " + game.lives.to_string(),
     @types.panel_x0 + 22,
     @types.board_y0 + 192,
@@ -660,21 +660,21 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 186, 202, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score " + game.score.to_string(),
     @types.panel_x0 + 22,
     @types.board_y0 + 240,
     30,
     @raylib.Color::new(220, 238, 255, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Steps " + game.steps.to_string(),
     @types.panel_x0 + 22,
     @types.board_y0 + 276,
     24,
     @raylib.Color::new(178, 206, 234, 222),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time " + game.time_s.to_int().to_string() + "s",
     @types.panel_x0 + 22,
     @types.board_y0 + 306,
@@ -682,7 +682,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(178, 206, 234, 222),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Lantern Energy",
     @types.panel_x0 + 22,
     @types.board_y0 + 356,
@@ -724,7 +724,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     "Gate: LOCKED"
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     gate_txt,
     @types.panel_x0 + 22,
     @types.board_y0 + 430,
@@ -736,28 +736,28 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     },
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Desktop:",
     @types.panel_x0 + 22,
     @types.board_y0 + 490,
     24,
     @raylib.Color::new(206, 228, 250, 228),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Move WASD / Arrows",
     @types.panel_x0 + 30,
     @types.board_y0 + 520,
     21,
     @raylib.Color::new(166, 204, 236, 216),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Pulse Space / E",
     @types.panel_x0 + 30,
     @types.board_y0 + 546,
     21,
     @raylib.Color::new(166, 204, 236, 216),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "H Hint, R Retry, Esc Menu",
     @types.panel_x0 + 30,
     @types.board_y0 + 572,
@@ -765,7 +765,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(166, 204, 236, 216),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mobile: Left D-pad, Right A/H/Retry/Menu",
     @types.panel_x0 + 22,
     @types.board_y0 + 620,
@@ -789,7 +789,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
       @raylib.Color::new(142, 186, 226, 180),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       game.msg,
       @types.panel_x0 + 30,
       @types.board_y0 + @types.board_h - 64,
@@ -818,19 +818,19 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   )
 
   let t0 : String = "HAUNTED LIBRARY PUZZLE"
-  @raylib.draw_text(
+  @draw.draw_text(
     t0,
-    @types.board_x0 + @types.board_w / 2 - @raylib.measure_text(t0, 58) / 2,
+    @types.board_x0 + @types.board_w / 2 - @draw.measure_text(t0, 58) / 2,
     @types.board_y0 + 154,
     58,
     @raylib.Color::new(236, 244, 255, 246),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Recover 5 lost pages, push shelves onto 3 runes, then escape.",
     @types.board_x0 +
     @types.board_w / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Recover 5 lost pages, push shelves onto 3 runes, then escape.", 28,
     ) /
     2,
@@ -839,11 +839,11 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(184, 214, 240, 232),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Ghosts hunt in straight sightlines. Use pulse wisely.",
     @types.board_x0 +
     @types.board_w / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Ghosts hunt in straight sightlines. Use pulse wisely.", 26,
     ) /
     2,
@@ -873,9 +873,9 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   )
 
   let label : String = "START RUN"
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
-    b.0 + b.2 / 2 - @raylib.measure_text(label, 36) / 2,
+    b.0 + b.2 / 2 - @draw.measure_text(label, 36) / 2,
     b.1 + 18,
     36,
     @raylib.Color::new(244, 250, 255, 248),
@@ -902,9 +902,9 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
 
   let title : String = if game.win { "ARCHIVE SAVED" } else { "RUN FAILED" }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
-    @types.board_x0 + @types.board_w / 2 - @raylib.measure_text(title, 62) / 2,
+    @types.board_x0 + @types.board_w / 2 - @draw.measure_text(title, 62) / 2,
     @types.board_y0 + 196,
     62,
     if game.win {
@@ -920,9 +920,9 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     game.loss_reason
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     reason,
-    @types.board_x0 + @types.board_w / 2 - @raylib.measure_text(reason, 28) / 2,
+    @types.board_x0 + @types.board_w / 2 - @draw.measure_text(reason, 28) / 2,
     @types.board_y0 + 288,
     28,
     @raylib.Color::new(196, 220, 246, 236),
@@ -936,11 +936,11 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     game.seals_on.to_string() +
     "/3"
 
-  @raylib.draw_text(
+  @draw.draw_text(
     score_line,
     @types.board_x0 +
     @types.board_w / 2 -
-    @raylib.measure_text(score_line, 30) / 2,
+    @draw.measure_text(score_line, 30) / 2,
     @types.board_y0 + 338,
     30,
     @raylib.Color::new(234, 240, 255, 238),
@@ -967,9 +967,9 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   )
 
   let label : String = "RUN AGAIN"
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
-    b.0 + b.2 / 2 - @raylib.measure_text(label, 34) / 2,
+    b.0 + b.2 / 2 - @draw.measure_text(label, 34) / 2,
     b.1 + 20,
     34,
     @raylib.Color::new(246, 252, 255, 248),

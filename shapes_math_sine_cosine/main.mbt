@@ -83,6 +83,7 @@ fn main {
   }
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -185,35 +186,35 @@ fn main {
     )
 
     // Wave graph axis labels
-    @raylib.draw_text(
+    @draw.draw_text(
       "1",
       (start.x - 8.0).to_int(),
       start.y.to_int(),
       6,
       @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "0",
       (start.x - 8.0).to_int(),
       (start.y + start.height / 2.0 - 6.0).to_int(),
       6,
       @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "-1",
       (start.x - 12.0).to_int(),
       (start.y + start.height - 8.0).to_int(),
       6,
       @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "0",
       (start.x - 2.0).to_int(),
       (start.y + start.height + 4.0).to_int(),
       6,
       @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "360",
       (start.x + start.width - 8.0).to_int(),
       (start.y + start.height + 4.0).to_int(),
@@ -235,7 +236,7 @@ fn main {
       1.0,
       @raylib.red,
     )
-    @raylib.draw_text("Sine " + sin_rad.to_string(), 640, 190, 6, @raylib.red)
+    @draw.draw_text("Sine " + sin_rad.to_string(), 640, 190, 6, @raylib.red)
     @raylib.draw_circle_v(
       @raylib.Vector2::new(
         start.x + angle / 360.0 * start.width,
@@ -260,7 +261,7 @@ fn main {
       1.0,
       @raylib.blue,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Cosine " + cos_rad.to_string(),
       640,
       210,
@@ -286,7 +287,7 @@ fn main {
     )
     // DrawLineDashed replaced with draw_line_ex (solid line)
     @raylib.draw_line_ex(center, tangent_point, 1.0, @raylib.purple)
-    @raylib.draw_text(
+    @draw.draw_text(
       "Tangent " + tangent.to_string(),
       640,
       230,
@@ -295,7 +296,7 @@ fn main {
     )
 
     // Cotangent (orange)
-    @raylib.draw_text(
+    @draw.draw_text(
       "Cotangent " + cotangent.to_string(),
       640,
       250,
@@ -312,7 +313,7 @@ fn main {
       36,
       @raylib.beige,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Complementary  " + complementary.to_int().to_string() + "\u00B0",
       640,
       150,
@@ -329,7 +330,7 @@ fn main {
       36,
       @raylib.darkblue,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Supplementary  " + supplementary.to_int().to_string() + "\u00B0",
       640,
       130,
@@ -346,7 +347,7 @@ fn main {
       36,
       @raylib.pink,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Explementary  " + explementary.to_int().to_string() + "\u00B0",
       640,
       170,
@@ -408,9 +409,11 @@ fn main {
 
     @raylib.draw_fps(10, 10)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

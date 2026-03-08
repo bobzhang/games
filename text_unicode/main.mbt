@@ -414,6 +414,7 @@ fn main {
 
   randomize_emoji()
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -594,7 +595,7 @@ fn main {
         10.0,
         1.0,
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         info,
         (text_rect.x + text_rect.width - info_sz.x).to_int(),
         (msg_rect_y + msg_rect_h - info_sz.y - (2.0 : Float)).to_int(),
@@ -604,14 +605,14 @@ fn main {
     }
 
     // Draw the info text
-    @raylib.draw_text(
+    @draw.draw_text(
       "These emojis have something to tell you, click each to find out!",
       (screen_width - 650) / 2,
       screen_height - 40,
       20,
       @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Each emoji is a unicode character from a font, not a texture... Press [SPACEBAR] to refresh",
       (screen_width - 484) / 2,
       screen_height - 16,
@@ -619,6 +620,7 @@ fn main {
       @raylib.gray,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -626,5 +628,6 @@ fn main {
   @raylib.unload_font(font_default)
   @raylib.unload_font(font_asian)
   @raylib.unload_font(font_emoji)
+  @draw.cleanup()
   @raylib.close_window()
 }

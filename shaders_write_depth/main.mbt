@@ -86,6 +86,7 @@ fn main {
       @raylib.white,
     )
     @raylib.draw_fps(10, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
 

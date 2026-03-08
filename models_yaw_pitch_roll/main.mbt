@@ -32,6 +32,7 @@ fn main {
   let mut roll : Float = 0.0
   let mut yaw : Float = 0.0
   @raylib.set_target_fps(60)
+  @draw.init_font()
   // Main game loop
   while !@raylib.window_should_close() {
     // Update
@@ -94,26 +95,28 @@ fn main {
       70,
       @raylib.fade(@raylib.darkgreen, 0.5),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Pitch controlled with: KEY_UP / KEY_DOWN", 40, 380, 10, @raylib.darkgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Roll controlled with: KEY_LEFT / KEY_RIGHT", 40, 400, 10, @raylib.darkgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Yaw controlled with: KEY_A / KEY_S", 40, 420, 10, @raylib.darkgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "(c) WWI Plane Model created by GiaHanLam",
       screen_width - 240,
       screen_height - 20,
       10,
       @raylib.darkgray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
   // De-Initialization
   @raylib.unload_model(model)
   @raylib.unload_texture(texture)
+  @draw.cleanup()
   @raylib.close_window()
 }

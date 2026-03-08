@@ -16,6 +16,7 @@ fn main {
   @raylib.unload_image(image) // Once image has been converted to texture and uploaded to VRAM, it can be unloaded from RAM
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -31,13 +32,15 @@ fn main {
       screen_height / 2 - 256 / 2,
       @raylib.white,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "this IS a texture loaded from an image!", 300, 370, 10, @raylib.gray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_texture(texture)
+  @draw.cleanup()
   @raylib.close_window()
 }

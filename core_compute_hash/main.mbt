@@ -60,6 +60,7 @@ fn main {
   let mut base64_text = ""
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -175,7 +176,7 @@ fn main {
 
     // Use draw_text for the focused-style bonus label since GuiState
     // constructors are not accessible from outside the raygui package
-    @raylib.draw_text(
+    @draw.draw_text(
       "BONUS - BASE64 ENCODED STRING:", 40, 350, 10, @raylib.blue,
     )
     @raygui.gui_label(
@@ -193,9 +194,11 @@ fn main {
 
     @raygui.gui_set_style(@raygui.ControlTextbox, @raygui.TextReadonly, 0)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

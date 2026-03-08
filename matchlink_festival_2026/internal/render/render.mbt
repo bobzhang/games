@@ -191,9 +191,9 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
         )
 
         let label : String = "\{k}"
-        @raylib.draw_text(
+        @draw.draw_text(
           label,
-          px + tile / 2 - @raylib.measure_text(label, text_size) / 2,
+          px + tile / 2 - @draw.measure_text(label, text_size) / 2,
           py + tile / 2 - text_size / 2,
           text_size,
           @raylib.Color::new(245, 252, 255, 250),
@@ -277,9 +277,9 @@ fn draw_button(
   )
 
   let fs : Int = 28
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
-    x + w / 2 - @raylib.measure_text(label, fs) / 2,
+    x + w / 2 - @draw.measure_text(label, fs) / 2,
     y + h / 2 - fs / 2,
     fs,
     @raylib.Color::new(244, 250, 255, 248),
@@ -303,14 +303,14 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(114, 156, 188, 206),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "MatchLink Festival",
     px + 20,
     py + 22,
     36,
     @raylib.Color::new(238, 248, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Lianliankan 2026",
     px + 20,
     py + 64,
@@ -318,14 +318,14 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(188, 216, 236, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Level \{game.level_index + 1}/\{game.level_count}",
     px + 20,
     py + 110,
     30,
     @raylib.Color::new(226, 236, 250, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     game.level_name,
     px + 20,
     py + 146,
@@ -333,28 +333,28 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(252, 224, 142, 246),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score \{game.score}",
     px + 20,
     py + 198,
     30,
     @raylib.Color::new(230, 240, 252, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Combo \{game.combo}",
     px + 20,
     py + 232,
     28,
     @raylib.Color::new(210, 228, 246, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time \{game.timer.to_int()}s",
     px + 20,
     py + 266,
     28,
     @raylib.Color::new(210, 228, 246, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Remaining \{game.remaining}",
     px + 20,
     py + 300,
@@ -390,14 +390,14 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(172, 208, 236, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Hints \{game.hints_left}  Shuffles \{game.shuffles_left}",
     px + 20,
     py + 378,
     26,
     @raylib.Color::new(214, 228, 246, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Cleared \{game.total_levels}  Time \{game.total_time.to_int()}s",
     px + 20,
     py + 410,
@@ -405,49 +405,49 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(198, 218, 238, 230),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Keyboard",
     px + 20,
     py + 458,
     24,
     @raylib.Color::new(220, 236, 250, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Move: WASD / Arrows",
     px + 20,
     py + 486,
     22,
     @raylib.Color::new(186, 210, 232, 232),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Select: Enter/Space",
     px + 20,
     py + 512,
     22,
     @raylib.Color::new(186, 210, 232, 232),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Hint: H",
     px + 20,
     py + 538,
     22,
     @raylib.Color::new(186, 210, 232, 232),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Shuffle: J",
     px + 20,
     py + 564,
     22,
     @raylib.Color::new(186, 210, 232, 232),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Clear sel: C",
     px + 20,
     py + 590,
     22,
     @raylib.Color::new(186, 210, 232, 232),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Reset: R",
     px + 20,
     py + 616,
@@ -522,7 +522,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
       52,
       @raylib.Color::new(174, 208, 234, 238),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       game.message,
       px + 30,
       py + ph - 70,
@@ -634,28 +634,28 @@ fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle_lines(cx - s / 2, cy - s - 18, s, s, edge)
   @raylib.draw_rectangle_lines(cx - s / 2, cy + 18, s, s, edge)
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "L",
     cx - s + 16 - 18,
     cy - 8,
     28,
     @raylib.Color::new(236, 246, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "R",
     cx + 18 + 20,
     cy - 8,
     28,
     @raylib.Color::new(236, 246, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "U",
     cx - 10,
     cy - s - 2,
     28,
     @raylib.Color::new(236, 246, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "D",
     cx - 10,
     cy + s + 26,
@@ -667,18 +667,18 @@ fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
 ///|
 /// Draws the title screen with game name, subtitle, instruction lines, and the Start Festival button.
 fn @types.Game::draw_title(game : @types.Game) -> Unit {
-  @raylib.draw_text(
+  @draw.draw_text(
     "MatchLink Festival 2026",
     @types.screen_w / 2 -
-    @raylib.measure_text("MatchLink Festival 2026", 86) / 2,
+    @draw.measure_text("MatchLink Festival 2026", 86) / 2,
     104,
     86,
     @raylib.Color::new(238, 248, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Classic Lianliankan puzzle: match identical lantern tiles.",
     @types.screen_w / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Classic Lianliankan puzzle: match identical lantern tiles.", 34,
     ) /
     2,
@@ -686,10 +686,10 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
     34,
     @raylib.Color::new(192, 220, 240, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Links may use up to two turns. Race the timer and chain combos.",
     @types.screen_w / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Links may use up to two turns. Race the timer and chain combos.", 34,
     ) /
     2,
@@ -745,28 +745,28 @@ fn @types.Game::draw_level_clear_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(166, 206, 236, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Stage Cleared",
-    px + pw / 2 - @raylib.measure_text("Stage Cleared", 62) / 2,
+    px + pw / 2 - @draw.measure_text("Stage Cleared", 62) / 2,
     py + 34,
     62,
     @raylib.Color::new(246, 252, 255, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score: \{game.score}",
     px + 96,
     py + 150,
     36,
     @raylib.Color::new(220, 236, 250, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time left: \{game.timer.to_int()}s",
     px + 96,
     py + 196,
     36,
     @raylib.Color::new(220, 236, 250, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Hints left: \{game.hints_left}",
     px + 96,
     py + 242,
@@ -821,21 +821,21 @@ fn @types.Game::draw_fail_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(246, 178, 170, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Festival Over",
-    px + pw / 2 - @raylib.measure_text("Festival Over", 62) / 2,
+    px + pw / 2 - @draw.measure_text("Festival Over", 62) / 2,
     py + 34,
     62,
     @raylib.Color::new(255, 238, 236, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Your score: \{game.score}",
     px + 94,
     py + 152,
     38,
     @raylib.Color::new(252, 220, 214, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Press R or tap Retry",
     px + 94,
     py + 206,
@@ -890,28 +890,28 @@ fn @types.Game::draw_campaign_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(166, 206, 236, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Festival Completed",
-    px + pw / 2 - @raylib.measure_text("Festival Completed", 68) / 2,
+    px + pw / 2 - @draw.measure_text("Festival Completed", 68) / 2,
     py + 34,
     68,
     @raylib.Color::new(246, 252, 255, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Final score: \{game.score}",
     px + 112,
     py + 156,
     42,
     @raylib.Color::new(255, 220, 126, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Stages cleared: \{game.total_levels}",
     px + 112,
     py + 212,
     36,
     @raylib.Color::new(220, 236, 250, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Play time: \{game.total_time.to_int()}s",
     px + 112,
     py + 254,
@@ -919,7 +919,7 @@ fn @types.Game::draw_campaign_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(220, 236, 250, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Press Enter / Space or tap button to restart",
     px + 112,
     py + 334,

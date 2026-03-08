@@ -345,9 +345,9 @@ fn draw_touch_button(
     @raylib.Color::new(182, 214, 240, 218),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
-    rect.0 + rect.2 / 2 - @raylib.measure_text(label, 30) / 2,
+    rect.0 + rect.2 / 2 - @draw.measure_text(label, 30) / 2,
     rect.1 + rect.3 / 2 - 15,
     30,
     @raylib.Color::new(246, 252, 255, 248),
@@ -490,14 +490,14 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(124, 168, 204, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Snake Battle Arena",
     px + 20,
     py + 20,
     42,
     @raylib.Color::new(236, 246, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Neon Circuit 2026",
     px + 20,
     py + 66,
@@ -505,14 +505,14 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(196, 220, 246, 238),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score \{game.score}",
     px + 20,
     py + 110,
     36,
     @raylib.Color::new(228, 242, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best \{game.best_score}",
     px + 260,
     py + 110,
@@ -520,21 +520,21 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(206, 228, 248, 240),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Lives \{game.lives}",
     px + 20,
     py + 154,
     30,
     @raylib.Color::new(212, 232, 252, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Kills \{game.total_kills}",
     px + 190,
     py + 154,
     30,
     @raylib.Color::new(212, 232, 252, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time \{(@types.match_time_limit - game.game_t).to_int()}s",
     px + 320,
     py + 154,
@@ -542,7 +542,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(212, 232, 252, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Combo x\{game.combo}",
     px + 20,
     py + 194,
@@ -554,7 +554,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     },
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Boost",
     px + 20,
     py + 236,
@@ -589,7 +589,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   } else {
     "Normal"
   }
-  @raylib.draw_text(
+  @draw.draw_text(
     "Food: \{food_name}",
     px + 20,
     py + 316,
@@ -597,35 +597,35 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(212, 232, 252, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Controls",
     px + 20,
     py + 364,
     28,
     @raylib.Color::new(228, 242, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Move: WASD / Arrows",
     px + 20,
     py + 396,
     24,
     @raylib.Color::new(194, 218, 242, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Boost: Shift/J",
     px + 20,
     py + 422,
     24,
     @raylib.Color::new(194, 218, 242, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Hint: H   Restart: R",
     px + 20,
     py + 448,
     24,
     @raylib.Color::new(194, 218, 242, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Goal: outscore rivals before timer",
     px + 20,
     py + 474,
@@ -633,7 +633,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(194, 218, 242, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Rival A \{game.rivals[0].score}",
     px + 20,
     py + 524,
@@ -641,7 +641,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(236, 160, 156, 242),
   )
   if game.rivals.length() > 1 {
-    @raylib.draw_text(
+    @draw.draw_text(
       "Rival B \{game.rivals[1].score}",
       px + 220,
       py + 524,
@@ -665,7 +665,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
       56,
       @raylib.Color::new(176, 208, 236, 230),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       game.msg,
       px + 30,
       py + 582,
@@ -682,19 +682,19 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
   let hold = game.mouse_hold
   let tc = game.touch_count
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Snake Battle Arena 2026",
     @types.screen_w / 2 -
-    @raylib.measure_text("Snake Battle Arena 2026", 86) / 2,
+    @draw.measure_text("Snake Battle Arena 2026", 86) / 2,
     110,
     86,
     @raylib.Color::new(238, 248, 255, 248),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Fast snake duels with AI rivals, traps, combo scoring, and boost management.",
     @types.screen_w / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Fast snake duels with AI rivals, traps, combo scoring, and boost management.",
       34,
     ) /
@@ -703,10 +703,10 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
     34,
     @raylib.Color::new(196, 220, 244, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Touch controls are available for mobile web play.",
     @types.screen_w / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Touch controls are available for mobile web play.", 34,
     ) /
     2,
@@ -757,36 +757,36 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
 
   let title : String = if game.win { "Victory" } else { "Defeat" }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
-    px + pw / 2 - @raylib.measure_text(title, 64) / 2,
+    px + pw / 2 - @draw.measure_text(title, 64) / 2,
     py + 34,
     64,
     @raylib.Color::new(244, 250, 255, 250),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score \{game.score}",
     px + 100,
     py + 132,
     44,
     @raylib.Color::new(226, 242, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Rivals \{game.rival_total_score()}",
     px + 100,
     py + 182,
     40,
     @raylib.Color::new(214, 232, 252, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Kills \{game.total_kills}   Lives \{game.lives}",
     px + 100,
     py + 228,
     36,
     @raylib.Color::new(214, 232, 252, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time \{game.game_t.to_int()}s",
     px + 100,
     py + 272,

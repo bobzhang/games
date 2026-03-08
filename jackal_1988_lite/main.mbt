@@ -5,6 +5,7 @@ fn main {
     @types.screen_width, @types.screen_height, "raylib [game] jackal 1988 lite",
   )
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let game = @types.Game::new()
 
@@ -17,8 +18,10 @@ fn main {
     @raylib.begin_drawing()
     @render.draw_world(game)
     @render.draw_ui(game)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

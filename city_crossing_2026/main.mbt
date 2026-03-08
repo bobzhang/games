@@ -206,6 +206,7 @@ fn spawn_pos() -> (Float, Float) {
 fn main {
   @raylib.init_window(sw, sh, "City Crossing 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let cars : Array[Car] = Array::makei(12, fn(_i) {
     { x: 0.0, row: 5, w: 1, speed: 0.0, color: 0 }
@@ -446,14 +447,14 @@ fn main {
     @raylib.clear_background(@raylib.Color::new(14, 18, 24, 255))
 
     @raylib.draw_rectangle(0, 0, sw, 90, @raylib.Color::new(26, 32, 44, 255))
-    @raylib.draw_text(
+    @draw.draw_text(
       "City Crossing 2026",
       24,
       20,
       34,
       @raylib.Color::new(234, 244, 248, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Lives: \{lives}   Score: \{score}   Level: \{level}   Time: \{timer.to_int()}",
       392,
       28,
@@ -619,7 +620,7 @@ fn main {
       178,
       @raylib.Color::new(18, 26, 36, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Touch",
       104,
       sh - 208,
@@ -634,7 +635,7 @@ fn main {
       52,
       @raylib.Color::new(42, 56, 78, 255),
     )
-    @raylib.draw_text("UP", ctl_x + 93, ctl_y + 14, 22, @raylib.white)
+    @draw.draw_text("UP", ctl_x + 93, ctl_y + 14, 22, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x,
       ctl_y + 54,
@@ -642,7 +643,7 @@ fn main {
       52,
       @raylib.Color::new(42, 56, 78, 255),
     )
-    @raylib.draw_text("LEFT", ctl_x + 10, ctl_y + 68, 20, @raylib.white)
+    @draw.draw_text("LEFT", ctl_x + 10, ctl_y + 68, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x + 144,
       ctl_y + 54,
@@ -650,7 +651,7 @@ fn main {
       52,
       @raylib.Color::new(42, 56, 78, 255),
     )
-    @raylib.draw_text("RIGHT", ctl_x + 149, ctl_y + 68, 20, @raylib.white)
+    @draw.draw_text("RIGHT", ctl_x + 149, ctl_y + 68, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x + 72,
       ctl_y + 108,
@@ -658,7 +659,7 @@ fn main {
       52,
       @raylib.Color::new(42, 56, 78, 255),
     )
-    @raylib.draw_text("DOWN", ctl_x + 80, ctl_y + 122, 20, @raylib.white)
+    @draw.draw_text("DOWN", ctl_x + 80, ctl_y + 122, 20, @raylib.white)
 
     @raylib.draw_rectangle(
       300,
@@ -667,7 +668,7 @@ fn main {
       42,
       @raylib.Color::new(12, 20, 30, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       312,
       sh - 56,
@@ -684,14 +685,14 @@ fn main {
         192,
         @raylib.Color::new(20, 30, 44, 240),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "City Crossing Over",
         sw / 2 - 170,
         sh / 2 - 48,
         44,
         @raylib.Color::new(250, 228, 140, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R to restart",
         sw / 2 - 118,
         sh / 2 + 18,
@@ -700,8 +701,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -104,20 +104,20 @@ fn @types.Game::draw_bullets(game : @types.Game) -> Unit {
 ///|
 /// Draws the score, wave, lives counters, key hints, and game-over overlay.
 fn @types.Game::draw_hud(game : @types.Game) -> Unit {
-  @raylib.draw_text("ASTEROID SALVAGE 2026", 18, 14, 30, @raylib.skyblue)
-  @raylib.draw_text("Score: \{game.score}", 18, 52, 24, @raylib.raywhite)
-  @raylib.draw_text("Wave: \{game.wave}", 18, 80, 22, @raylib.raywhite)
-  @raylib.draw_text("Lives: \{game.lives}", 18, 106, 22, @raylib.raywhite)
+  @draw.draw_text("ASTEROID SALVAGE 2026", 18, 14, 30, @raylib.skyblue)
+  @draw.draw_text("Score: \{game.score}", 18, 52, 24, @raylib.raywhite)
+  @draw.draw_text("Wave: \{game.wave}", 18, 80, 22, @raylib.raywhite)
+  @draw.draw_text("Lives: \{game.lives}", 18, 106, 22, @raylib.raywhite)
 
-  @raylib.draw_text("A/D or <-/-> rotate", 690, 20, 18, @raylib.gray)
-  @raylib.draw_text("W or UP thrust", 690, 42, 18, @raylib.gray)
-  @raylib.draw_text("SPACE fire", 690, 64, 18, @raylib.gray)
-  @raylib.draw_text("R restart", 690, 86, 18, @raylib.gray)
+  @draw.draw_text("A/D or <-/-> rotate", 690, 20, 18, @raylib.gray)
+  @draw.draw_text("W or UP thrust", 690, 42, 18, @raylib.gray)
+  @draw.draw_text("SPACE fire", 690, 64, 18, @raylib.gray)
+  @draw.draw_text("R restart", 690, 86, 18, @raylib.gray)
 
   if game.game_over {
     @raylib.draw_rectangle(250, 250, 460, 130, @raylib.fade(@raylib.black, 0.8))
-    @raylib.draw_text("MISSION FAILED", 320, 284, 42, @raylib.red)
-    @raylib.draw_text("Press R to restart", 360, 334, 28, @raylib.raywhite)
+    @draw.draw_text("MISSION FAILED", 320, 284, 42, @raylib.red)
+    @draw.draw_text("Press R to restart", 360, 334, 28, @raylib.raywhite)
   }
 }
 
@@ -131,5 +131,6 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_bullets()
   game.draw_ship()
   game.draw_hud()
+  @fps.draw()
   @raylib.end_drawing()
 }

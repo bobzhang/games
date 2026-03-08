@@ -2,6 +2,7 @@ import {
   "moonbitlang/core/math",
   "tonyfettes/raylib",
   "bobzhang/games/paper_lantern_patrol_2026/internal/types",
+  "bobzhang/games/utils/draw",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

@@ -3,6 +3,8 @@ import {
   "bobzhang/games/2048/internal/types",
   "bobzhang/games/2048/internal/game",
   "bobzhang/games/2048/internal/render",
+  "bobzhang/games/utils/draw",
+  "bobzhang/games/utils/fps",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

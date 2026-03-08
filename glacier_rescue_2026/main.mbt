@@ -374,7 +374,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(80, 108, 142, 84),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "L",
     cx + 30,
     cy + 90,
@@ -389,7 +389,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(80, 108, 142, 84),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "R",
     cx + 198,
     cy + 90,
@@ -404,7 +404,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(80, 108, 142, 84),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "U",
     cx + 113,
     cy + 28,
@@ -419,7 +419,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(80, 108, 142, 84),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "D",
     cx + 112,
     cy + 151,
@@ -434,7 +434,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(196, 110, 92, 94),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "BOOST",
     right + 42,
     cy + 45,
@@ -449,7 +449,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(110, 146, 212, 94),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "FLARE",
     right + 48,
     cy + 143,
@@ -462,9 +462,11 @@ fn draw_touch_controls(show : Bool) -> Unit {
 /// Initialises the window, runs the main game loop, and handles all update and draw logic.
 fn main {
   @raylib.init_window(sw, sh, "raylib [moonbit] example - glacier rescue 2026")
+  @draw.cleanup()
   defer @raylib.close_window()
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let survivors = FixedArray::make(max_survivors, {
     active: false,
@@ -1136,6 +1138,7 @@ fn main {
     }
 
     @raylib.begin_drawing()
+    @fps.draw()
     defer @raylib.end_drawing()
 
     @raylib.clear_background(@raylib.Color::new(10, 20, 34, 255))
@@ -1271,7 +1274,7 @@ fn main {
       52.0,
       @raylib.Color::new(112, 182, 236, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "BASE",
       (base_x - cam_x - 28.0 + shake_x).to_int(),
       (base_y - cam_y - 8.0 + shake_y).to_int(),
@@ -1423,14 +1426,14 @@ fn main {
       @raylib.Color::new(222, 232, 246, 136),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "GLACIER RESCUE 2026",
       32,
       28,
       34,
       @raylib.Color::new(228, 238, 252, 245),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Move: WASD/Arrows  Boost: Shift/Space  Flare: E",
       34,
       66,
@@ -1447,7 +1450,7 @@ fn main {
       @raylib.Color::new(108, 222, 160, 255),
       @raylib.Color::new(54, 78, 72, 230),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Fuel",
       260,
       96,
@@ -1464,7 +1467,7 @@ fn main {
       @raylib.Color::new(232, 144, 118, 255),
       @raylib.Color::new(78, 52, 52, 230),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Hull",
       260,
       124,
@@ -1481,7 +1484,7 @@ fn main {
       @raylib.Color::new(120, 182, 246, 255),
       @raylib.Color::new(56, 70, 92, 230),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Core Temp",
       260,
       152,
@@ -1489,7 +1492,7 @@ fn main {
       @raylib.Color::new(214, 230, 246, 240),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Rescued \{heli.rescued}/\{mission_target}   Onboard \{heli.onboard}   Lost \{heli.lost}",
       34,
       180,
@@ -1497,7 +1500,7 @@ fn main {
       @raylib.Color::new(242, 244, 250, 246),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{mission_time.to_int()}s   Level \{level}   Score \{heli.score}",
       sw - 430,
       24,
@@ -1515,14 +1518,14 @@ fn main {
     } else {
       "Flare CD \{heli.flare_cd.to_int()}"
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       boost_txt,
       sw - 430,
       62,
       24,
       @raylib.Color::new(242, 208, 164, 236),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       flare_txt,
       sw - 430,
       88,
@@ -1532,7 +1535,7 @@ fn main {
 
     if announce_t > 0.0 {
       let a = clampf(announce_t * 90.0, 0.0, 220.0).to_int()
-      @raylib.draw_text(
+      @draw.draw_text(
         "Rescue mission live. Extract survivors to BASE.",
         sw / 2 - 300,
         216,
@@ -1543,28 +1546,28 @@ fn main {
 
     if state == 0 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 12, 20, 220))
-      @raylib.draw_text(
+      @draw.draw_text(
         "GLACIER RESCUE",
         sw / 2 - 260,
         sh / 2 - 112,
         76,
         @raylib.Color::new(236, 246, 252, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Pilot through storm fronts, pick up survivors, and return to BASE.",
         sw / 2 - 412,
         sh / 2 - 20,
         32,
         @raylib.Color::new(186, 214, 238, 245),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "BOOST burns fuel fast. FLARE reveals and warms survivors.",
         sw / 2 - 362,
         sh / 2 + 22,
         32,
         @raylib.Color::new(220, 228, 240, 238),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press ENTER to start",
         sw / 2 - 182,
         sh / 2 + 86,
@@ -1575,21 +1578,21 @@ fn main {
 
     if state == 2 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(10, 24, 20, 188))
-      @raylib.draw_text(
+      @draw.draw_text(
         "MISSION COMPLETE",
         sw / 2 - 280,
         sh / 2 - 82,
         72,
         @raylib.Color::new(214, 252, 210, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score \{heli.score}  |  Saved \{heli.rescued}  |  Lost \{heli.lost}",
         sw / 2 - 250,
         sh / 2 + 6,
         36,
         @raylib.Color::new(236, 246, 238, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press ENTER for next mission",
         sw / 2 - 250,
         sh / 2 + 64,
@@ -1598,21 +1601,21 @@ fn main {
       )
     } else if state == 3 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(22, 8, 8, 198))
-      @raylib.draw_text(
+      @draw.draw_text(
         "MISSION FAILED",
         sw / 2 - 230,
         sh / 2 - 82,
         72,
         @raylib.Color::new(254, 194, 186, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Rescued \{heli.rescued}/\{mission_target}  Lost \{heli.lost}",
         sw / 2 - 240,
         sh / 2 + 6,
         38,
         @raylib.Color::new(246, 226, 218, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press ENTER to retry",
         sw / 2 - 184,
         sh / 2 + 64,

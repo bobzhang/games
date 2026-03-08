@@ -52,6 +52,7 @@ fn main {
   let mut shader_auto_reloading = false
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -112,7 +113,7 @@ fn main {
     } else {
       @raylib.black
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       "PRESS [A] to TOGGLE SHADER AUTOLOADING: \{auto_text}",
       10,
       10,
@@ -120,11 +121,11 @@ fn main {
       auto_color,
     )
     if !shader_auto_reloading {
-      @raylib.draw_text(
+      @draw.draw_text(
         "MOUSE CLICK to SHADER RE-LOADING", 10, 30, 10, @raylib.black,
       )
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       "Shader last modification: \{frag_shader_mod_time}",
       10,
       430,
@@ -132,10 +133,12 @@ fn main {
       @raylib.black,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_shader(shader)
+  @draw.cleanup()
   @raylib.close_window()
 }

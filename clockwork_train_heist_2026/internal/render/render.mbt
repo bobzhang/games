@@ -466,9 +466,9 @@ fn @types.Game::draw_touch_button(
   )
 
   let fs : Int = if rect.3 >= 100 { 32 } else { 22 }
-  let tw : Int = @raylib.measure_text(label, fs)
+  let tw : Int = @draw.measure_text(label, fs)
 
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
     rect.0 + rect.2 / 2 - tw / 2,
     rect.1 + rect.3 / 2 - fs / 2,
@@ -557,14 +557,14 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(96, 126, 162, 194),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "CLOCKWORK TRAIN",
     @types.panel_x0 + 20,
     @types.board_y0 + 20,
     34,
     @raylib.Color::new(236, 244, 255, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "HEIST 2026",
     @types.panel_x0 + 20,
     @types.board_y0 + 56,
@@ -572,7 +572,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(176, 208, 238, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Loot " + game.loot_taken.to_string() + "/" + @types.loot_need.to_string(),
     @types.panel_x0 + 20,
     @types.board_y0 + 114,
@@ -580,7 +580,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(248, 230, 166, 238),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Lives " + game.lives.to_string(),
     @types.panel_x0 + 20,
     @types.board_y0 + 148,
@@ -588,7 +588,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(244, 186, 196, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score " + game.score.to_string(),
     @types.panel_x0 + 20,
     @types.board_y0 + 196,
@@ -596,7 +596,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(220, 236, 252, 238),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best " + game.best_score.to_string(),
     @types.panel_x0 + 20,
     @types.board_y0 + 230,
@@ -610,7 +610,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(192, 228, 252, 234)
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time " + game.time_left.to_int().to_string() + "s",
     @types.panel_x0 + 20,
     @types.board_y0 + 258,
@@ -618,7 +618,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     timer_col,
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     if game.vault_open {
       "Cable: OPEN"
     } else {
@@ -634,7 +634,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     },
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Smoke Energy",
     @types.panel_x0 + 20,
     @types.board_y0 + 348,
@@ -668,28 +668,28 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(214, 226, 244, 178),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Desktop:",
     @types.panel_x0 + 20,
     @types.board_y0 + 432,
     24,
     @raylib.Color::new(206, 228, 248, 232),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Move WASD / Arrows",
     @types.panel_x0 + 30,
     @types.board_y0 + 462,
     21,
     @raylib.Color::new(170, 206, 236, 220),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Smoke Space / E",
     @types.panel_x0 + 30,
     @types.board_y0 + 488,
     21,
     @raylib.Color::new(170, 206, 236, 220),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "H Hint, R Retry, Esc Menu",
     @types.panel_x0 + 30,
     @types.board_y0 + 514,
@@ -697,7 +697,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(170, 206, 236, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mobile: left D-pad, right A/H/Retry/Menu",
     @types.panel_x0 + 20,
     @types.board_y0 + 562,
@@ -721,7 +721,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
       @raylib.Color::new(140, 182, 222, 178),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       game.msg,
       @types.panel_x0 + 24,
       @types.board_y0 + @types.board_h - 66,
@@ -746,19 +746,19 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   )
 
   let t0 : String = "CLOCKWORK TRAIN HEIST"
-  @raylib.draw_text(
+  @draw.draw_text(
     t0,
-    @types.board_x0 + @types.board_w / 2 - @raylib.measure_text(t0, 56) / 2,
+    @types.board_x0 + @types.board_w / 2 - @draw.measure_text(t0, 56) / 2,
     @types.board_y0 + 160,
     56,
     @raylib.Color::new(236, 244, 255, 246),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Sneak through train cars, steal loot, deploy smoke, then escape.",
     @types.board_x0 +
     @types.board_w / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Sneak through train cars, steal loot, deploy smoke, then escape.", 28,
     ) /
     2,
@@ -767,11 +767,11 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(186, 214, 240, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Guards patrol routes and chase on sight in straight corridors.",
     @types.board_x0 +
     @types.board_w / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Guards patrol routes and chase on sight in straight corridors.", 26,
     ) /
     2,
@@ -780,11 +780,11 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(186, 214, 240, 232),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Need 6 loot pieces to open the cable lock.",
     @types.board_x0 +
     @types.board_w / 2 -
-    @raylib.measure_text("Need 6 loot pieces to open the cable lock.", 28) / 2,
+    @draw.measure_text("Need 6 loot pieces to open the cable lock.", 28) / 2,
     @types.board_y0 + 326,
     28,
     @raylib.Color::new(244, 228, 166, 236),
@@ -811,9 +811,9 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
   )
 
   let label : String = "START HEIST"
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
-    b.0 + b.2 / 2 - @raylib.measure_text(label, 36) / 2,
+    b.0 + b.2 / 2 - @draw.measure_text(label, 36) / 2,
     b.1 + 18,
     36,
     @raylib.Color::new(244, 250, 255, 248),
@@ -838,9 +838,9 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
 
   let title : String = if game.win { "HEIST COMPLETE" } else { "HEIST FAILED" }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
-    @types.board_x0 + @types.board_w / 2 - @raylib.measure_text(title, 62) / 2,
+    @types.board_x0 + @types.board_w / 2 - @draw.measure_text(title, 62) / 2,
     @types.board_y0 + 190,
     62,
     if game.win {
@@ -856,9 +856,9 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     game.loss_reason
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     reason,
-    @types.board_x0 + @types.board_w / 2 - @raylib.measure_text(reason, 28) / 2,
+    @types.board_x0 + @types.board_w / 2 - @draw.measure_text(reason, 28) / 2,
     @types.board_y0 + 284,
     28,
     @raylib.Color::new(196, 220, 246, 236),
@@ -873,11 +873,11 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     "   Lives " +
     game.lives.to_string()
 
-  @raylib.draw_text(
+  @draw.draw_text(
     score_line,
     @types.board_x0 +
     @types.board_w / 2 -
-    @raylib.measure_text(score_line, 30) / 2,
+    @draw.measure_text(score_line, 30) / 2,
     @types.board_y0 + 336,
     30,
     @raylib.Color::new(232, 240, 255, 238),
@@ -904,9 +904,9 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
   )
 
   let label : String = "RUN AGAIN"
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
-    b.0 + b.2 / 2 - @raylib.measure_text(label, 34) / 2,
+    b.0 + b.2 / 2 - @draw.measure_text(label, 34) / 2,
     b.1 + 20,
     34,
     @raylib.Color::new(246, 252, 255, 248),

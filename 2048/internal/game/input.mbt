@@ -90,7 +90,7 @@ fn @types.Game::handle_won_input(game : @types.Game) -> Unit {
     let cy = @types.board_top + @types.board_size / 2
     let btn_text = "Keep Going"
     let bs = 24
-    let bw = @raylib.measure_text(btn_text, bs) + 40
+    let bw = @draw.measure_text(btn_text, bs) + 40
     let bh = 48
     let bx = cx - bw / 2
     let by = cy + 10

@@ -113,6 +113,7 @@ fn reset_level(
 fn main {
   @raylib.init_window(sw, sh, "Warehouse Forklift 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let walls : Array[Bool] = Array::make(gw * gh, false)
   let crates : Array[Pos] = Array::makei(4, fn(_i) { { x: 1, y: 1 } })
@@ -272,7 +273,7 @@ fn main {
         cell - 24,
         @raylib.black,
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if docked {
           "OK"
         } else {
@@ -298,12 +299,12 @@ fn main {
     @raylib.draw_circle(pxs + 18, pys + cell - 2, 5.0, @raylib.black)
     @raylib.draw_circle(pxs + cell - 18, pys + cell - 2, 5.0, @raylib.black)
 
-    @raylib.draw_text("WAREHOUSE FORKLIFT 2026", 20, 18, 38, @raylib.skyblue)
-    @raylib.draw_text("Score \{score}", 20, 60, 28, @raylib.white)
-    @raylib.draw_text("Moves \{moves}", 220, 60, 28, @raylib.raywhite)
-    @raylib.draw_text("Pushes \{pushes}", 390, 60, 28, @raylib.raywhite)
+    @draw.draw_text("WAREHOUSE FORKLIFT 2026", 20, 18, 38, @raylib.skyblue)
+    @draw.draw_text("Score \{score}", 20, 60, 28, @raylib.white)
+    @draw.draw_text("Moves \{moves}", 220, 60, 28, @raylib.raywhite)
+    @draw.draw_text("Pushes \{pushes}", 390, 60, 28, @raylib.raywhite)
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Goal: move all crates onto yellow docks", 20, 692, 24, @raylib.lightgray,
     )
     @raylib.draw_rectangle(
@@ -313,7 +314,7 @@ fn main {
       28,
       @raylib.Color::new(12, 16, 22, 220),
     )
-    @raylib.draw_text(msg, 28, 728, 18, @raylib.raywhite)
+    @draw.draw_text(msg, 28, 728, 18, @raylib.raywhite)
 
     if won {
       @raylib.draw_rectangle(
@@ -323,12 +324,14 @@ fn main {
         180,
         @raylib.fade(@raylib.black, 0.82),
       )
-      @raylib.draw_text("SHIPMENT COMPLETE", 340, 322, 52, @raylib.lime)
-      @raylib.draw_text("Press R to replay", 450, 382, 34, @raylib.white)
+      @draw.draw_text("SHIPMENT COMPLETE", 340, 322, 52, @raylib.lime)
+      @draw.draw_text("Press R to replay", 450, 382, 34, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

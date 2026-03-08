@@ -9,6 +9,7 @@ fn main {
   let mut ball_position = @raylib.Vector2::new(-100.0, -100.0)
   let mut ball_color = @raylib.darkblue
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -34,13 +35,15 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
     @raylib.draw_circle_v(ball_position, 40.0, ball_color)
-    @raylib.draw_text(
+    @draw.draw_text(
       "move ball with mouse and click mouse button to change color", 10, 10, 20,
       @raylib.darkgray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -5,6 +5,7 @@ fn main {
     @types.screen_width, @types.screen_height, @types.game_title,
   )
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let game = @types.Game()
 
@@ -20,8 +21,10 @@ fn main {
 
     @raylib.begin_drawing()
     @render.draw_game(game)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

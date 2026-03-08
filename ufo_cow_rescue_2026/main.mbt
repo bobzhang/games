@@ -358,6 +358,7 @@ fn spawn_pickup(items : Array[Pickup]) -> Bool {
 fn main {
   @raylib.init_window(sw, sh, "UFO Cow Rescue 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let ufo : Ufo = {
     x: 640.0,
@@ -1172,14 +1173,14 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 74, @raylib.Color::new(8, 12, 22, 226))
-    @raylib.draw_text(
+    @draw.draw_text(
       "UFO COW RESCUE 2026",
       20,
       14,
       30,
       @raylib.Color::new(236, 244, 255, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "WASD move  J beam  K dash  L EMP",
       20,
       48,
@@ -1187,28 +1188,28 @@ fn main {
       @raylib.Color::new(178, 204, 236, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{ufo.score}",
       540,
       16,
       28,
       @raylib.Color::new(246, 216, 118, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Rescued \{ufo.rescued}/\{target}",
       710,
       16,
       28,
       @raylib.Color::new(170, 238, 194, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Level \{level}",
       958,
       16,
       28,
       @raylib.Color::new(180, 226, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{timer.to_int()}s",
       1090,
       16,
@@ -1224,7 +1225,7 @@ fn main {
       10,
       @raylib.Color::new(108, 224, 154, 255),
     )
-    @raylib.draw_text("HP", 20, 96, 16, @raylib.Color::new(182, 208, 230, 255))
+    @draw.draw_text("HP", 20, 96, 16, @raylib.Color::new(182, 208, 230, 255))
 
     @raylib.draw_rectangle(
       254,
@@ -1240,7 +1241,7 @@ fn main {
       10,
       @raylib.Color::new(116, 198, 248, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "ENERGY",
       254,
       96,
@@ -1248,21 +1249,21 @@ fn main {
       @raylib.Color::new(182, 208, 230, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Combo \{ufo.combo}",
       500,
       84,
       20,
       @raylib.Color::new(246, 222, 152, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Kills \{kills}",
       620,
       84,
       20,
       @raylib.Color::new(172, 236, 198, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Missed cows \{missed}",
       740,
       84,
@@ -1286,7 +1287,7 @@ fn main {
       58,
       @raylib.Color::new(58, 82, 114, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "L",
       p0x + 30,
       p0y + 76,
@@ -1300,7 +1301,7 @@ fn main {
       58,
       @raylib.Color::new(58, 82, 114, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "R",
       p0x + 190,
       p0y + 76,
@@ -1314,7 +1315,7 @@ fn main {
       58,
       @raylib.Color::new(58, 82, 114, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "U",
       p0x + 110,
       p0y + 18,
@@ -1328,7 +1329,7 @@ fn main {
       58,
       @raylib.Color::new(58, 82, 114, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "D",
       p0x + 110,
       p0y + 134,
@@ -1352,7 +1353,7 @@ fn main {
       88,
       @raylib.Color::new(88, 156, 228, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "BEAM",
       p1x + 22,
       p1y + 42,
@@ -1366,7 +1367,7 @@ fn main {
       88,
       @raylib.Color::new(214, 112, 94, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "DASH",
       p1x + 154,
       p1y + 42,
@@ -1380,7 +1381,7 @@ fn main {
       98,
       @raylib.Color::new(112, 178, 126, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "EMP",
       p1x + 124,
       p1y + 142,
@@ -1395,7 +1396,7 @@ fn main {
       40,
       @raylib.Color::new(8, 10, 16, 214),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       sw / 2 - 302,
       sh - 44,
@@ -1412,35 +1413,35 @@ fn main {
         392,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "UFO COW RESCUE",
         sw / 2 - 250,
         sh / 2 - 132,
         60,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Beam up cows before dawn. Farmers will fight back.",
         sw / 2 - 302,
         sh / 2 - 30,
         30,
         @raylib.Color::new(182, 214, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mobile: left pad moves, right pad beam/dash/EMP",
         sw / 2 - 324,
         sh / 2 + 14,
         28,
         @raylib.Color::new(182, 214, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Rescue 22 cows to win",
         sw / 2 - 150,
         sh / 2 + 54,
         32,
         @raylib.Color::new(250, 212, 132, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "ENTER or tap to start",
         sw / 2 - 166,
         sh / 2 + 114,
@@ -1456,35 +1457,35 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "MISSION COMPLETE",
         sw / 2 - 232,
         sh / 2 - 132,
         60,
         @raylib.Color::new(248, 236, 186, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{ufo.score}",
         sw / 2 - 148,
         sh / 2 - 36,
         44,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Rescued: \{ufo.rescued}  Kills: \{kills}",
         sw / 2 - 206,
         sh / 2 + 18,
         34,
         @raylib.Color::new(170, 236, 198, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Missed cows: \{missed}",
         sw / 2 - 160,
         sh / 2 + 60,
         34,
         @raylib.Color::new(236, 172, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 178,
         sh / 2 + 122,
@@ -1500,35 +1501,35 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "MISSION FAILED",
         sw / 2 - 206,
         sh / 2 - 132,
         60,
         @raylib.Color::new(246, 140, 154, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{ufo.score}",
         sw / 2 - 148,
         sh / 2 - 36,
         44,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Rescued: \{ufo.rescued} / \{target}",
         sw / 2 - 180,
         sh / 2 + 18,
         34,
         @raylib.Color::new(172, 236, 202, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Time left: \{timer.to_int()}s",
         sw / 2 - 166,
         sh / 2 + 60,
         34,
         @raylib.Color::new(236, 172, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 178,
         sh / 2 + 122,
@@ -1537,6 +1538,7 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
 
     if state == 2 || state == 3 {
@@ -1547,5 +1549,6 @@ fn main {
     }
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

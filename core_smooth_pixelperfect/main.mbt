@@ -60,6 +60,7 @@ fn main {
   let mut rotation : Float = 0.0
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -119,14 +120,14 @@ fn main {
       target, source_rec, dest_rec, origin, 0.0, @raylib.white,
     )
     @raylib.end_mode_2d()
-    @raylib.draw_text(
+    @draw.draw_text(
       "Screen resolution: \{screen_width}x\{screen_height}",
       10,
       10,
       20,
       @raylib.darkblue,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "World resolution: \{virtual_screen_width}x\{virtual_screen_height}",
       10,
       40,
@@ -134,10 +135,12 @@ fn main {
       @raylib.darkgreen,
     )
     @raylib.draw_fps(@raylib.get_screen_width() - 95, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_render_texture(target)
+  @draw.cleanup()
   @raylib.close_window()
 }

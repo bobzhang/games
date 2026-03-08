@@ -257,6 +257,7 @@ fn build_chart(notes : Array[Note]) -> (Int, Float) {
 fn main {
   @raylib.init_window(sw, sh, "Rhythm Street Beats 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let notes : Array[Note] = Array::makei(max_notes, fn(_i) {
     {
@@ -885,14 +886,14 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 80, @raylib.Color::new(8, 10, 16, 232))
-    @raylib.draw_text(
+    @draw.draw_text(
       "RHYTHM STREET BEATS 2026",
       26,
       16,
       30,
       @raylib.Color::new(232, 240, 255, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "D F J K / Arrow Keys | Touch lane pads",
       26,
       50,
@@ -910,28 +911,28 @@ fn main {
       acc = weighted / Float::from_int(total_judged) * 100.0
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "SCORE \{score}",
       700,
       16,
       28,
       @raylib.Color::new(255, 246, 186, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "COMBO \{combo}",
       700,
       48,
       20,
       @raylib.Color::new(168, 246, 214, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "BEST \{best_combo}",
       880,
       48,
       20,
       @raylib.Color::new(184, 206, 246, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "ACC \{acc.to_int()}%",
       1038,
       48,
@@ -953,7 +954,7 @@ fn main {
       10,
       @raylib.Color::new(104, 230, 148, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "LIFE",
       642,
       70,
@@ -975,7 +976,7 @@ fn main {
       10,
       @raylib.Color::new(246, 172, 74, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "FEVER",
       914,
       70,
@@ -1004,14 +1005,14 @@ fn main {
       114,
       fever_btn_col,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "SPACE",
       track_x + lane_w * lane_count + 72,
       sh - 174,
       28,
       @raylib.Color::new(16, 20, 28, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "FEVER",
       track_x + lane_w * lane_count + 72,
       sh - 138,
@@ -1037,7 +1038,7 @@ fn main {
       } else {
         "K"
       }
-      @raylib.draw_text(
+      @draw.draw_text(
         label,
         x + lane_w / 2 - 10,
         y + 54,
@@ -1051,7 +1052,7 @@ fn main {
       if time_left < 0.0 {
         time_left = 0.0
       }
-      @raylib.draw_text(
+      @draw.draw_text(
         "TIME \{time_left.to_int()}s",
         26,
         sh - 62,
@@ -1062,14 +1063,14 @@ fn main {
       if song_t < 0.0 {
         let countdown = (-song_t).to_int() + 1
         @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(0, 0, 0, 130))
-        @raylib.draw_text(
+        @draw.draw_text(
           "GET READY",
           sw / 2 - 146,
           sh / 2 - 90,
           48,
           @raylib.Color::new(244, 236, 252, 255),
         )
-        @raylib.draw_text(
+        @draw.draw_text(
           "\{countdown}",
           sw / 2 - 24,
           sh / 2 - 20,
@@ -1090,7 +1091,7 @@ fn main {
       }
 
       let y = sh / 2 - 140 + (judge_t * 36.0).to_int()
-      @raylib.draw_text(judge_text, sw / 2 - 124, y, 54, c)
+      @draw.draw_text(judge_text, sw / 2 - 124, y, 54, c)
     }
 
     if state == 0 {
@@ -1102,28 +1103,28 @@ fn main {
         380,
         @raylib.Color::new(12, 18, 30, 238),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "RHYTHM STREET BEATS",
         sw / 2 - 266,
         sh / 2 - 130,
         52,
         @raylib.Color::new(238, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Hit notes on the yellow line. Build combo and trigger FEVER.",
         sw / 2 - 260,
         sh / 2 - 44,
         28,
         @raylib.Color::new(176, 208, 242, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Tap lane pads on mobile. Hold notes until they end.",
         sw / 2 - 236,
         sh / 2 + 0,
         26,
         @raylib.Color::new(176, 208, 242, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "ENTER or click to start",
         sw / 2 - 162,
         sh / 2 + 92,
@@ -1152,14 +1153,14 @@ fn main {
       }
 
       let title = if life <= 0.0 { "TRACK FAILED" } else { "TRACK CLEAR" }
-      @raylib.draw_text(
+      @draw.draw_text(
         title,
         sw / 2 - 174,
         sh / 2 - 158,
         54,
         @raylib.Color::new(248, 242, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "GRADE \{grade}",
         sw / 2 - 128,
         sh / 2 - 86,
@@ -1167,28 +1168,28 @@ fn main {
         @raylib.Color::new(255, 202, 112, 255),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "SCORE: \{score}",
         sw / 2 - 360,
         sh / 2 - 12,
         36,
         @raylib.Color::new(236, 244, 252, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "BEST COMBO: \{best_combo}",
         sw / 2 - 360,
         sh / 2 + 34,
         34,
         @raylib.Color::new(166, 236, 210, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "PERFECT \{perfect}  GREAT \{great}  GOOD \{good}  MISS \{miss}",
         sw / 2 - 360,
         sh / 2 + 80,
         30,
         @raylib.Color::new(188, 206, 236, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "ACC \{acc.to_int()}%",
         sw / 2 + 170,
         sh / 2 - 12,
@@ -1196,7 +1197,7 @@ fn main {
         @raylib.Color::new(252, 192, 98, 255),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "ENTER: menu    R: replay",
         sw / 2 - 182,
         sh / 2 + 154,
@@ -1205,8 +1206,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

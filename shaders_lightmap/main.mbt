@@ -113,6 +113,7 @@ fn main {
   @raylib.end_texture_mode()
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -146,14 +147,14 @@ fn main {
       @raylib.white,
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "lightmap",
       render_w - 66,
       16 + MapSize * 8,
       10,
       @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "10x10 pixels",
       render_w - 76,
       30 + MapSize * 8,
@@ -161,6 +162,7 @@ fn main {
       @raylib.gray,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -169,5 +171,6 @@ fn main {
   @raylib.unload_shader(shader)
   @raylib.unload_texture(texture)
   @raylib.unload_texture(light)
+  @draw.cleanup()
   @raylib.close_window()
 }

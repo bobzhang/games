@@ -18,6 +18,7 @@ fn main {
   let draw_rounded_lines : Ref[Bool] = { val: false }
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   while !@raylib.window_should_close() {
     let sw = Float::from_int(@raylib.get_screen_width())
@@ -140,11 +141,13 @@ fn main {
     } else {
       @raylib.darkgray
     }
-    @raylib.draw_text("MODE: " + mode_text, 640, 280, 10, mode_color)
+    @draw.draw_text("MODE: " + mode_text, 640, 280, 10, mode_color)
 
     @raylib.draw_fps(10, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

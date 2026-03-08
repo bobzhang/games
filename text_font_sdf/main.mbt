@@ -49,6 +49,7 @@ fn main {
   let mut current_font = 0 // 0 - fontDefault, 1 - fontSDF
 
   @raylib.set_target_fps(60) // Set our game to run at 60 frames-per-second
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -119,26 +120,26 @@ fn main {
     }
 
     if current_font == 1 {
-      @raylib.draw_text("SDF!", 320, 20, 80, @raylib.red)
+      @draw.draw_text("SDF!", 320, 20, 80, @raylib.red)
     } else {
-      @raylib.draw_text("default font", 315, 40, 30, @raylib.gray)
+      @draw.draw_text("default font", 315, 40, 30, @raylib.gray)
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "FONT SIZE: 16.0",
       @raylib.get_screen_width() - 240,
       20,
       20,
       @raylib.darkgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "RENDER SIZE: " + font_size.to_string(),
       @raylib.get_screen_width() - 240,
       50,
       20,
       @raylib.darkgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Use MOUSE WHEEL to SCALE TEXT!",
       @raylib.get_screen_width() - 240,
       90,
@@ -146,7 +147,7 @@ fn main {
       @raylib.darkgray,
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "HOLD SPACE to USE SDF FONT VERSION!",
       340,
       @raylib.get_screen_height() - 30,
@@ -154,6 +155,7 @@ fn main {
       @raylib.maroon,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -161,5 +163,6 @@ fn main {
   @raylib.unload_font(font_default) // Default font unloading
   @raylib.unload_font(font_sdf) // SDF font unloading
   @raylib.unload_shader(shader) // Unload SDF shader
+  @draw.cleanup()
   @raylib.close_window() // Close window and OpenGL context
 }

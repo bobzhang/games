@@ -51,6 +51,7 @@ fn main {
   let mut play_frame_counter = 0
   let mut current_play_frame = 0
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -295,16 +296,16 @@ fn main {
       1.0,
       @raylib.fade(@raylib.blue, 0.8),
     )
-    @raylib.draw_text("Controls:", 20, 20, 10, @raylib.black)
-    @raylib.draw_text(
+    @draw.draw_text("Controls:", 20, 20, 10, @raylib.black)
+    @draw.draw_text(
       "- RIGHT | LEFT: Player movement", 30, 40, 10, @raylib.darkgray,
     )
-    @raylib.draw_text("- SPACE: Player jump", 30, 60, 10, @raylib.darkgray)
-    @raylib.draw_text("- R: Reset game state", 30, 80, 10, @raylib.darkgray)
-    @raylib.draw_text(
+    @draw.draw_text("- SPACE: Player jump", 30, 60, 10, @raylib.darkgray)
+    @draw.draw_text("- R: Reset game state", 30, 80, 10, @raylib.darkgray)
+    @draw.draw_text(
       "- S: START/STOP RECORDING INPUT EVENTS", 30, 110, 10, @raylib.black,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "- A: REPLAY LAST RECORDED INPUT EVENTS", 30, 130, 10, @raylib.black,
     )
 
@@ -322,7 +323,7 @@ fn main {
       @raylib.draw_circle(30, 175, 10.0, @raylib.maroon)
       if frame_counter / 15 % 2 == 1 {
         let ae_count = @raylib.automation_event_list_count(aelist)
-        @raylib.draw_text(
+        @draw.draw_text(
           "RECORDING EVENTS... [\{ae_count}]",
           50,
           170,
@@ -347,7 +348,7 @@ fn main {
         @raylib.darkgreen,
       )
       if frame_counter / 15 % 2 == 1 {
-        @raylib.draw_text(
+        @draw.draw_text(
           "PLAYING RECORDED EVENTS... [\{current_play_frame}]",
           50,
           170,
@@ -356,9 +357,11 @@ fn main {
         )
       }
     }
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

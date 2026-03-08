@@ -391,8 +391,8 @@ fn @types.Game::draw_wrong_way_indicator(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 0, 0, alpha),
   )
   let text = "WRONG WAY!"
-  let tw = @raylib.measure_text(text, 48)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(text, 48)
+  @draw.draw_text(
     text,
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 80,
@@ -400,8 +400,8 @@ fn @types.Game::draw_wrong_way_indicator(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 255, 255, 255),
   )
   let sub = "Turn Around!"
-  let sw = @raylib.measure_text(sub, 24)
-  @raylib.draw_text(
+  let sw = @draw.measure_text(sub, 24)
+  @draw.draw_text(
     sub,
     (@types.screen_width - sw) / 2,
     @types.screen_height / 2 - 25,

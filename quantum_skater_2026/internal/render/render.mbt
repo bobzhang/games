@@ -5,8 +5,8 @@ fn draw_center_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
 }
 
 ///|
@@ -500,28 +500,28 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
     },
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "<",
     l.0.to_int() + 42,
     l.1.to_int() + 30,
     42,
     ui_text(l_hot),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     ">",
     r.0.to_int() + 42,
     r.1.to_int() + 30,
     42,
     ui_text(r_hot),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "J",
     j.0.to_int() + 38,
     j.1.to_int() + 30,
     42,
     ui_text(j_hot),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "P",
     p.0.to_int() + 38,
     p.1.to_int() + 30,
@@ -587,15 +587,15 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(132, 188, 234, 190),
   )
 
-  @raylib.draw_text("QUANTUM SKATER", 30, 28, 30, @types.color_lane_alpha())
-  @raylib.draw_text(
+  @draw.draw_text("QUANTUM SKATER", 30, 28, 30, @types.color_lane_alpha())
+  @draw.draw_text(
     "Score: \{game.score}   Best: \{game.best_score}",
     30,
     58,
     22,
     @raylib.Color::new(228, 238, 252, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Stage \{game.stage}   Orbs \{game.orbs}   Combo x\{game.combo}",
     30,
     86,
@@ -614,7 +614,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     16,
     @raylib.Color::new(220, 236, 250, 210),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "HEALTH",
     590,
     2,
@@ -633,7 +633,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     16,
     @raylib.Color::new(220, 236, 250, 210),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     if game.phase_beta {
       "PHASE BETA"
     } else {
@@ -677,7 +677,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     20,
     @raylib.Color::new(220, 238, 248, 220),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "TRACK \{(p * 100.0).to_int()}%",
     900,
     48,
@@ -693,7 +693,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     44,
     @raylib.Color::new(164, 196, 226, 210),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "RESTART",
     1238,
     28,
@@ -703,7 +703,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
 
   if game.hint_t > 0.0 {
     let a = (game.hint_t / 9.0 * 255.0).to_int().clamp(min=0, max=255)
-    @raylib.draw_text(
+    @draw.draw_text(
       "Hint: Shift phase to pass matching gates",
       30,
       124,
@@ -746,28 +746,28 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(130, 188, 240, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "A/D or Left/Right: lane swap",
     340,
     330,
     28,
     @raylib.Color::new(230, 240, 252, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Space / W / Up: jump",
     340,
     368,
     28,
     @raylib.Color::new(230, 240, 252, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "E / Shift / K: phase shift",
     340,
     406,
     28,
     @raylib.Color::new(230, 240, 252, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mobile: use <- -> J P buttons",
     340,
     444,

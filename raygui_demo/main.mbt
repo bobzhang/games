@@ -185,6 +185,7 @@ fn main {
       }
     }
     @raylib.draw_fps(740, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
   @raylib.close_window()

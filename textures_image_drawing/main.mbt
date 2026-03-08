@@ -60,6 +60,7 @@ fn main {
   let tex_height = 284
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -81,19 +82,21 @@ fn main {
       @raylib.darkgray,
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "We are drawing only one texture from various images composed!", 240, 350,
       10, @raylib.darkgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Source images have been cropped, scaled, flipped and copied one over the other.",
       190, 370, 10, @raylib.darkgray,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_texture(texture)
+  @draw.cleanup()
   @raylib.close_window()
 }

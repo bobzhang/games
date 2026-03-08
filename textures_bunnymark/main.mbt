@@ -33,6 +33,7 @@ fn main {
   let mut bunnies_count = 0
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -98,8 +99,8 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, screen_width, 40, @raylib.black)
-    @raylib.draw_text("bunnies: \{bunnies_count}", 120, 10, 20, @raylib.green)
-    @raylib.draw_text(
+    @draw.draw_text("bunnies: \{bunnies_count}", 120, 10, 20, @raylib.green)
+    @draw.draw_text(
       "batched draw calls: \{1 + bunnies_count / max_batch_elements}",
       320,
       10,
@@ -109,10 +110,12 @@ fn main {
 
     @raylib.draw_fps(10, 10)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_texture(tex_bunny)
+  @draw.cleanup()
   @raylib.close_window()
 }

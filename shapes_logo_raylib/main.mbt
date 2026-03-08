@@ -7,6 +7,7 @@ fn main {
     screen_width, screen_height, "raylib [shapes] example - raylib logo using shapes",
   )
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -27,17 +28,19 @@ fn main {
       224,
       @raylib.raywhite,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "raylib",
       screen_width / 2 - 44,
       screen_height / 2 + 48,
       50,
       @raylib.black,
     )
-    @raylib.draw_text("this is NOT a texture!", 350, 370, 10, @raylib.gray)
+    @draw.draw_text("this is NOT a texture!", 350, 370, 10, @raylib.gray)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -358,7 +358,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(84, 110, 146, 86),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "L",
     pad_x + 30,
     pad_y + 88,
@@ -373,7 +373,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(84, 110, 146, 86),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "R",
     pad_x + 198,
     pad_y + 88,
@@ -388,7 +388,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(84, 110, 146, 86),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "U",
     pad_x + 112,
     pad_y + 26,
@@ -403,7 +403,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(84, 110, 146, 86),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "D",
     pad_x + 112,
     pad_y + 150,
@@ -418,7 +418,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     56,
     @raylib.Color::new(220, 110, 88, 92),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "FIRE",
     act_x + 70,
     pad_y + 26,
@@ -433,7 +433,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     56,
     @raylib.Color::new(118, 198, 248, 92),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "FROST",
     act_x + 12,
     pad_y + 88,
@@ -448,7 +448,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     56,
     @raylib.Color::new(162, 138, 252, 92),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "STORM",
     act_x + 118,
     pad_y + 88,
@@ -463,7 +463,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     70,
     @raylib.Color::new(110, 216, 164, 92),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "DASH",
     act_x + 76,
     pad_y + 156,
@@ -477,9 +477,11 @@ fn main {
   @raylib.init_window(
     sw, sh, "raylib [moonbit] example - spellforge arena 2026",
   )
+  @draw.cleanup()
   defer @raylib.close_window()
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let enemies = FixedArray::make(max_enemies, {
     active: false,
@@ -1198,6 +1200,7 @@ fn main {
     }
 
     @raylib.begin_drawing()
+    @fps.draw()
     defer @raylib.end_drawing()
 
     @raylib.clear_background(@raylib.Color::new(12, 18, 30, 255))
@@ -1393,14 +1396,14 @@ fn main {
       @raylib.Color::new(224, 236, 250, 138),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "SPELLFORGE ARENA 2026",
       30,
       22,
       34,
       @raylib.Color::new(236, 244, 254, 250),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Fire:J/Mouse  Frost:K  Storm:L  Dash:Shift/Space",
       32,
       62,
@@ -1417,7 +1420,7 @@ fn main {
       @raylib.Color::new(232, 130, 118, 255),
       @raylib.Color::new(90, 52, 52, 230),
     )
-    @raylib.draw_text("HP", 272, 92, 22, @raylib.Color::new(216, 230, 244, 244))
+    @draw.draw_text("HP", 272, 92, 22, @raylib.Color::new(216, 230, 244, 244))
 
     draw_bar(
       30,
@@ -1428,7 +1431,7 @@ fn main {
       @raylib.Color::new(118, 206, 252, 255),
       @raylib.Color::new(56, 78, 94, 230),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Mana",
       272,
       120,
@@ -1450,7 +1453,7 @@ fn main {
       @raylib.Color::new(146, 232, 186, 255),
       @raylib.Color::new(56, 90, 74, 230),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Dash",
       272,
       148,
@@ -1458,7 +1461,7 @@ fn main {
       @raylib.Color::new(216, 230, 244, 244),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{mage.score}   Combo x\{mage.combo}   Level \{level}",
       32,
       184,
@@ -1477,21 +1480,21 @@ fn main {
       "Storm CD \{mage.storm_cd.to_int()}"
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time: \{timer.to_int()}s",
       sw - 334,
       24,
       34,
       @raylib.Color::new(246, 246, 252, 250),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       frost_text,
       sw - 334,
       64,
       24,
       @raylib.Color::new(170, 222, 252, 248),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       storm_text,
       sw - 334,
       90,
@@ -1501,7 +1504,7 @@ fn main {
 
     if announce_t > 0.0 {
       let alpha : Int = clampf(announce_t * 90.0, 0.0, 220.0).to_int()
-      @raylib.draw_text(
+      @draw.draw_text(
         "Chain spell effects to build combo and survive the arena.",
         sw / 2 - 372,
         224,
@@ -1512,28 +1515,28 @@ fn main {
 
     if state == 0 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 12, 20, 224))
-      @raylib.draw_text(
+      @draw.draw_text(
         "SPELLFORGE ARENA",
         sw / 2 - 336,
         sh / 2 - 116,
         80,
         @raylib.Color::new(238, 246, 252, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Wield fire, frost, and storm to dominate the circle.",
         sw / 2 - 370,
         sh / 2 - 12,
         34,
         @raylib.Color::new(192, 216, 242, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Keep mana flowing by collecting dropped orbs.",
         sw / 2 - 300,
         sh / 2 + 30,
         32,
         @raylib.Color::new(226, 232, 244, 238),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press ENTER to start",
         sw / 2 - 190,
         sh / 2 + 92,
@@ -1544,21 +1547,21 @@ fn main {
 
     if state == 2 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(10, 24, 20, 188))
-      @raylib.draw_text(
+      @draw.draw_text(
         "RITUAL COMPLETE",
         sw / 2 - 276,
         sh / 2 - 82,
         74,
         @raylib.Color::new(214, 252, 214, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score \{mage.score}   HP \{mage.hp.to_int()}   Mana \{mage.mana.to_int()}",
         sw / 2 - 324,
         sh / 2 + 8,
         38,
         @raylib.Color::new(236, 246, 238, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press ENTER for next ritual",
         sw / 2 - 250,
         sh / 2 + 70,
@@ -1567,21 +1570,21 @@ fn main {
       )
     } else if state == 3 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(22, 8, 8, 198))
-      @raylib.draw_text(
+      @draw.draw_text(
         "RITUAL BROKEN",
         sw / 2 - 258,
         sh / 2 - 82,
         74,
         @raylib.Color::new(252, 192, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score \{mage.score}   Time \{timer.to_int()}s",
         sw / 2 - 204,
         sh / 2 + 8,
         38,
         @raylib.Color::new(246, 228, 220, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press ENTER to retry",
         sw / 2 - 184,
         sh / 2 + 70,

@@ -202,6 +202,7 @@ fn swap_tiles(
 fn main {
   @raylib.init_window(sw, sh, "Match-3 Garden 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let board : Array[Int] = Array::make(board_w * board_h, 0)
   fill_board_no_matches(board)
@@ -301,10 +302,10 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(19, 26, 33, 255))
 
-    @raylib.draw_text("MATCH-3 GARDEN 2026", 24, 20, 40, @raylib.lime)
-    @raylib.draw_text("Score: \{score}", 24, 76, 30, @raylib.raywhite)
-    @raylib.draw_text("Moves: \{moves_left}", 24, 112, 30, @raylib.yellow)
-    @raylib.draw_text("Best Combo: x\{best_combo}", 24, 148, 28, @raylib.orange)
+    @draw.draw_text("MATCH-3 GARDEN 2026", 24, 20, 40, @raylib.lime)
+    @draw.draw_text("Score: \{score}", 24, 76, 30, @raylib.raywhite)
+    @draw.draw_text("Moves: \{moves_left}", 24, 112, 30, @raylib.yellow)
+    @draw.draw_text("Best Combo: x\{best_combo}", 24, 148, 28, @raylib.orange)
 
     @raylib.draw_rectangle(
       board_px - 10,
@@ -373,7 +374,7 @@ fn main {
       64,
       @raylib.Color::new(10, 15, 20, 220),
     )
-    @raylib.draw_text(msg, 212, 648, 24, @raylib.raywhite)
+    @draw.draw_text(msg, 212, 648, 24, @raylib.raywhite)
 
     if moves_left <= 0 {
       @raylib.draw_rectangle(
@@ -383,14 +384,16 @@ fn main {
         150,
         @raylib.fade(@raylib.black, 0.8),
       )
-      @raylib.draw_text("GARDEN SHIFT ENDED", 350, 294, 36, @raylib.skyblue)
-      @raylib.draw_text(
+      @draw.draw_text("GARDEN SHIFT ENDED", 350, 294, 36, @raylib.skyblue)
+      @draw.draw_text(
         "Press R to start a new shift", 360, 344, 26, @raylib.white,
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -56,6 +56,7 @@ fn main {
     @raylib.draw_text_ex(
       font3, msg3, font_position3, base_size3, 2.0, @raylib.white,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 

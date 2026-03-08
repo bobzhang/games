@@ -26,8 +26,8 @@ fn @types.Game::draw_title(_game : @types.Game) -> Unit {
   let cx = @types.screen_w / 2
   let title = "2048"
   let title_size = 90
-  let tw = @raylib.measure_text(title, title_size)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, title_size)
+  @draw.draw_text(
     title,
     cx - tw / 2,
     180,
@@ -36,12 +36,12 @@ fn @types.Game::draw_title(_game : @types.Game) -> Unit {
   )
   let sub = "Join the numbers and get to the 2048 tile!"
   let sub_size = 20
-  let sw = @raylib.measure_text(sub, sub_size)
-  @raylib.draw_text(sub, cx - sw / 2, 290, sub_size, @types.header_text_color)
+  let sw = @draw.measure_text(sub, sub_size)
+  @draw.draw_text(sub, cx - sw / 2, 290, sub_size, @types.header_text_color)
   let inst = "Arrow keys or WASD to move tiles"
   let inst_size = 18
-  let iw = @raylib.measure_text(inst, inst_size)
-  @raylib.draw_text(inst, cx - iw / 2, 340, inst_size, @types.header_text_color)
+  let iw = @draw.measure_text(inst, inst_size)
+  @draw.draw_text(inst, cx - iw / 2, 340, inst_size, @types.header_text_color)
   ignore(iw)
   let bx = cx - 120
   let by = 430
@@ -55,8 +55,8 @@ fn @types.Game::draw_title(_game : @types.Game) -> Unit {
   )
   let start_text = "New Game"
   let st_size = 28
-  let stw = @raylib.measure_text(start_text, st_size)
-  @raylib.draw_text(
+  let stw = @draw.measure_text(start_text, st_size)
+  @draw.draw_text(
     start_text,
     bx + (bw - stw) / 2,
     by + 16,
@@ -65,8 +65,8 @@ fn @types.Game::draw_title(_game : @types.Game) -> Unit {
   )
   let ctrl = "Z: Undo  |  R: Restart"
   let ctrl_size = 16
-  let cw = @raylib.measure_text(ctrl, ctrl_size)
-  @raylib.draw_text(
+  let cw = @draw.measure_text(ctrl, ctrl_size)
+  @draw.draw_text(
     ctrl,
     cx - cw / 2,
     520,
@@ -78,7 +78,7 @@ fn @types.Game::draw_title(_game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::draw_header(game : @types.Game) -> Unit {
-  @raylib.draw_text(
+  @draw.draw_text(
     "2048",
     @types.board_left + 4,
     24,
@@ -98,8 +98,8 @@ fn @types.Game::draw_header(game : @types.Game) -> Unit {
     @types.btn_color,
   )
   let ng_text = "New Game"
-  let ng_w = @raylib.measure_text(ng_text, 16)
-  @raylib.draw_text(
+  let ng_w = @draw.measure_text(ng_text, 16)
+  @draw.draw_text(
     ng_text,
     ngx + (btn_w - ng_w) / 2,
     btn_y + 12,
@@ -119,8 +119,8 @@ fn @types.Game::draw_header(game : @types.Game) -> Unit {
     undo_color,
   )
   let undo_text = "Undo (Z)"
-  let uw = @raylib.measure_text(undo_text, 16)
-  @raylib.draw_text(
+  let uw = @draw.measure_text(undo_text, 16)
+  @draw.draw_text(
     undo_text,
     ux + (btn_w - uw) / 2,
     btn_y + 12,
@@ -131,7 +131,7 @@ fn @types.Game::draw_header(game : @types.Game) -> Unit {
     let alpha = @types.clampf(game.msg_t * 2.0, 0.0, 1.0)
     let a = (alpha * 255.0).to_int()
     let msg_size = 18
-    @raylib.draw_text(
+    @draw.draw_text(
       game.msg,
       @types.board_left + 4,
       160,
@@ -157,8 +157,8 @@ fn draw_score_box(
     @types.score_bg_color,
   )
   let label_size = 11
-  let lw = @raylib.measure_text(label, label_size)
-  @raylib.draw_text(
+  let lw = @draw.measure_text(label, label_size)
+  @draw.draw_text(
     label,
     x + (w - lw) / 2,
     y + 6,
@@ -167,8 +167,8 @@ fn draw_score_box(
   )
   let val_str = value.to_string()
   let val_size = 22
-  let vw = @raylib.measure_text(val_str, val_size)
-  @raylib.draw_text(
+  let vw = @draw.measure_text(val_str, val_size)
+  @draw.draw_text(
     val_str,
     x + (w - vw) / 2,
     y + 22,
@@ -218,11 +218,11 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
     @raylib.draw_rectangle_rounded(@types.rectf(x, y, w, h), 0.08, 6, color)
     let txt = tile.value.to_string()
     let font_size = @types.tile_font_size(tile.value)
-    let tw = @raylib.measure_text(txt, font_size)
+    let tw = @draw.measure_text(txt, font_size)
     let text_color = @types.tile_text_color(tile.value)
     let tx = tile.anim_x + (cs - Float::from_int(tw)) / 2.0
     let ty = tile.anim_y + (cs - Float::from_int(font_size)) / 2.0
-    @raylib.draw_text(txt, tx.to_int(), ty.to_int(), font_size, text_color)
+    @draw.draw_text(txt, tx.to_int(), ty.to_int(), font_size, text_color)
   }
 }
 
@@ -239,8 +239,8 @@ fn @types.Game::draw_overlay_won(game : @types.Game) -> Unit {
   let cy = @types.board_top + @types.board_size / 2
   let txt = "You Win!"
   let ts = 48
-  let tw = @raylib.measure_text(txt, ts)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(txt, ts)
+  @draw.draw_text(
     txt,
     cx - tw / 2,
     cy - 60,
@@ -249,7 +249,7 @@ fn @types.Game::draw_overlay_won(game : @types.Game) -> Unit {
   )
   let btn_text = "Keep Going"
   let bs = 24
-  let bw = @raylib.measure_text(btn_text, bs) + 40
+  let bw = @draw.measure_text(btn_text, bs) + 40
   let bh = 48
   let bx = cx - bw / 2
   let by = cy + 10
@@ -259,8 +259,8 @@ fn @types.Game::draw_overlay_won(game : @types.Game) -> Unit {
     6,
     @types.btn_color,
   )
-  let btw = @raylib.measure_text(btn_text, bs)
-  @raylib.draw_text(
+  let btw = @draw.measure_text(btn_text, bs)
+  @draw.draw_text(
     btn_text,
     bx + (bw - btw) / 2,
     by + 12,
@@ -283,8 +283,8 @@ fn draw_overlay_over() -> Unit {
   let cy = @types.board_top + @types.board_size / 2
   let txt = "Game Over!"
   let ts = 48
-  let tw = @raylib.measure_text(txt, ts)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(txt, ts)
+  @draw.draw_text(
     txt,
     cx - tw / 2,
     cy - 40,
@@ -293,8 +293,8 @@ fn draw_overlay_over() -> Unit {
   )
   let sub = "Press R to restart"
   let ss = 20
-  let sw = @raylib.measure_text(sub, ss)
-  @raylib.draw_text(
+  let sw = @draw.measure_text(sub, ss)
+  @draw.draw_text(
     sub,
     cx - sw / 2,
     cy + 20,

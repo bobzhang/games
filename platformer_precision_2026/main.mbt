@@ -44,6 +44,7 @@ fn hit(
 fn main {
   @raylib.init_window(sw, sh, "Platformer Precision 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let platforms : Array[Platform] = [
     { x: 0, y: 630, w: 4200, h: 80 },
@@ -216,16 +217,16 @@ fn main {
     @raylib.draw_rectangle(3800 - cam_x, 180, 24, 120, @raylib.yellow)
     @raylib.draw_rectangle(px - cam_x, py, pw, ph, @raylib.blue)
 
-    @raylib.draw_text("PLATFORMER PRECISION 2026", 20, 16, 34, @raylib.darkblue)
-    @raylib.draw_text(
+    @draw.draw_text("PLATFORMER PRECISION 2026", 20, 16, 34, @raylib.darkblue)
+    @draw.draw_text(
       "Checkpoint: \{cp + 1}/\{checkpoints.length()}",
       24,
       54,
       24,
       @raylib.black,
     )
-    @raylib.draw_text("Deaths: \{deaths}", 380, 54, 24, @raylib.black)
-    @raylib.draw_text(
+    @draw.draw_text("Deaths: \{deaths}", 380, 54, 24, @raylib.black)
+    @draw.draw_text(
       "A/D move | SPACE jump | R restart", 700, 20, 22, @raylib.darkgray,
     )
 
@@ -237,12 +238,14 @@ fn main {
         130,
         @raylib.fade(@raylib.black, 0.75),
       )
-      @raylib.draw_text("COURSE CLEARED", 390, 318, 46, @raylib.lime)
-      @raylib.draw_text("Press R to run again", 424, 366, 26, @raylib.raywhite)
+      @draw.draw_text("COURSE CLEARED", 390, 318, 46, @raylib.lime)
+      @draw.draw_text("Press R to run again", 424, 366, 26, @raylib.raywhite)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

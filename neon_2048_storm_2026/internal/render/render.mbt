@@ -161,9 +161,9 @@ fn @types.Game::draw_cell(
       tile - 8,
       @raylib.Color::new(202, 214, 234, 170),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "#",
-      px + tile / 2 - @raylib.measure_text("#", 44) / 2,
+      px + tile / 2 - @draw.measure_text("#", 44) / 2,
       py + tile / 2 - 22,
       44,
       @raylib.Color::new(232, 236, 244, 236),
@@ -201,9 +201,9 @@ fn @types.Game::draw_cell(
     )
     let s : String = v.to_string()
     let fs : Int = if v < 100 { 54 } else if v < 1000 { 46 } else { 40 }
-    @raylib.draw_text(
+    @draw.draw_text(
       s,
-      px + tile / 2 - @raylib.measure_text(s, fs) / 2,
+      px + tile / 2 - @draw.measure_text(s, fs) / 2,
       py + tile / 2 - fs / 2,
       fs,
       tile_text_color(v),
@@ -338,9 +338,9 @@ fn draw_touch_button(
     @raylib.Color::new(184, 216, 242, 218),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
-    x + w / 2 - @raylib.measure_text(label, 30) / 2,
+    x + w / 2 - @draw.measure_text(label, 30) / 2,
     y + h / 2 - 15,
     30,
     @raylib.Color::new(246, 252, 255, 248),
@@ -496,14 +496,14 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(126, 170, 206, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Neon 2048 Storm",
     px + 20,
     py + 20,
     44,
     @raylib.Color::new(236, 246, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Grid Duel 2026",
     px + 20,
     py + 68,
@@ -511,14 +511,14 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(194, 220, 246, 238),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score \{game.score}",
     px + 20,
     py + 112,
     36,
     @raylib.Color::new(226, 240, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best \{game.best_score}",
     px + 260,
     py + 112,
@@ -526,14 +526,14 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(206, 228, 248, 240),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Moves \{game.moves}",
     px + 20,
     py + 154,
     30,
     @raylib.Color::new(212, 232, 252, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time \{game.game_t.to_int()}s",
     px + 200,
     py + 154,
@@ -541,7 +541,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(212, 232, 252, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Max Tile \{game.max_tile}",
     px + 20,
     py + 194,
@@ -553,14 +553,14 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     },
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Storm In \{game.turns_to_storm}",
     px + 20,
     py + 236,
     30,
     @raylib.Color::new(214, 232, 252, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Debris \{game.blockers_spawned}",
     px + 220,
     py + 236,
@@ -568,7 +568,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(214, 232, 252, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Zap Charge",
     px + 20,
     py + 286,
@@ -601,15 +601,15 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     30,
     @raylib.Color::new(186, 214, 238, 230),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{game.zap_charge}%",
-    px + pw / 2 - @raylib.measure_text("\{game.zap_charge}%", 24) / 2,
+    px + pw / 2 - @draw.measure_text("\{game.zap_charge}%", 24) / 2,
     py + 322,
     24,
     @raylib.Color::new(244, 250, 255, 248),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Rank \{@types.rank_name(@types.tile_rank(game.max_tile))}",
     px + 20,
     py + 368,
@@ -617,35 +617,35 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(220, 236, 252, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Controls",
     px + 20,
     py + 418,
     28,
     @raylib.Color::new(230, 244, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Move: WASD / Arrows",
     px + 20,
     py + 450,
     24,
     @raylib.Color::new(194, 218, 242, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Zap: Enter/Space or Right Click",
     px + 20,
     py + 476,
     24,
     @raylib.Color::new(194, 218, 242, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Undo: U/Z   Restart: R",
     px + 20,
     py + 502,
     24,
     @raylib.Color::new(194, 218, 242, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Touch: use the on-screen buttons",
     px + 20,
     py + 528,
@@ -668,7 +668,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
       56,
       @raylib.Color::new(176, 208, 236, 230),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       game.msg,
       px + 30,
       py + 582,
@@ -686,18 +686,18 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
   let hold = game.mouse_hold
   let touch_count = game.touch_count
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Neon 2048 Storm 2026",
-    @types.screen_w / 2 - @raylib.measure_text("Neon 2048 Storm 2026", 88) / 2,
+    @types.screen_w / 2 - @draw.measure_text("Neon 2048 Storm 2026", 88) / 2,
     114,
     88,
     @raylib.Color::new(236, 246, 255, 248),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Merge fast, survive storm debris, and charge your Zap skill.",
     @types.screen_w / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Merge fast, survive storm debris, and charge your Zap skill.", 34,
     ) /
     2,
@@ -705,10 +705,10 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
     34,
     @raylib.Color::new(196, 220, 244, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Touch controls are available for mobile web play.",
     @types.screen_w / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Touch controls are available for mobile web play.", 34,
     ) /
     2,
@@ -727,10 +727,10 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
     @raylib.Color::new(92, 150, 208, 230),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Tip: save Zap for blockers or dead-board rescue.",
     @types.screen_w / 2 -
-    @raylib.measure_text("Tip: save Zap for blockers or dead-board rescue.", 30) /
+    @draw.measure_text("Tip: save Zap for blockers or dead-board rescue.", 30) /
     2,
     784,
     30,
@@ -774,36 +774,36 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     "Storm Locked Grid"
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
-    px + pw / 2 - @raylib.measure_text(title, 64) / 2,
+    px + pw / 2 - @draw.measure_text(title, 64) / 2,
     py + 34,
     64,
     @raylib.Color::new(244, 250, 255, 250),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score \{game.score}",
     px + 100,
     py + 132,
     46,
     @raylib.Color::new(228, 242, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Max Tile \{game.max_tile}",
     px + 100,
     py + 184,
     40,
     @raylib.Color::new(214, 232, 252, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Grade \{@types.final_grade(game)}",
     px + 100,
     py + 230,
     40,
     @raylib.Color::new(214, 232, 252, 244),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Rank \{@types.rank_name(@types.tile_rank(game.max_tile))}",
     px + 100,
     py + 276,
@@ -811,7 +811,7 @@ fn @types.Game::draw_result_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(214, 232, 252, 244),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Moves \{game.moves}    Debris \{game.blockers_spawned}    Time \{game.game_t.to_int()}s",
     px + 100,
     py + 328,

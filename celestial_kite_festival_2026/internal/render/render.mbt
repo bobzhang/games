@@ -6,8 +6,8 @@ fn draw_center_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
 }
 
 ///|
@@ -19,8 +19,8 @@ fn draw_right_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, x - tw, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, x - tw, y, size, col)
 }
 
 ///|
@@ -714,7 +714,7 @@ fn draw_hud_bar(
     @raylib.Color::new(148, 206, 244, 170),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
     x + 8,
     y + h / 2 - 8,
@@ -785,21 +785,21 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @types.amber(),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "STAGE " + game.stage.to_string(),
     684,
     14,
     24,
     @raylib.Color::new(214, 240, 255, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "SCORE " + game.score.to_string(),
     684,
     42,
     22,
     @types.a_col(@types.amber(), 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "GOAL " + game.stage_goal.to_string(),
     684,
     68,
@@ -848,7 +848,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
 
   match game.state {
     Play =>
-      @raylib.draw_text(
+      @draw.draw_text(
         "WASD move  SPACE burst  J/SHIFT reel",
         20,
         @types.hud_h + 6,
@@ -906,8 +906,8 @@ fn draw_button_visual(
   )
 
   let ts = 28
-  let tw = @raylib.measure_text(label, ts)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(label, ts)
+  @draw.draw_text(
     label,
     (rect.0 + rect.2 * 0.5 - Float::from_int(tw) * 0.5).to_int(),
     (rect.1 + rect.3 * 0.5 - Float::from_int(ts) * 0.5).to_int(),

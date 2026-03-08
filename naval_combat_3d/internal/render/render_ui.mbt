@@ -35,8 +35,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   )
   // Title
   let title = "NAVAL COMBAT 3D"
-  let tw = @raylib.measure_text(title, 52)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, 52)
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     120,
@@ -45,8 +45,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   )
   // Subtitle
   let sub = "Command your ship. Destroy the fleet."
-  let sw = @raylib.measure_text(sub, 20)
-  @raylib.draw_text(
+  let sw = @draw.measure_text(sub, 20)
+  @draw.draw_text(
     sub,
     (@types.screen_width - sw) / 2,
     185,
@@ -55,8 +55,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   )
   // Ship art (simple text art)
   let art = "~ ~ ~ __|__ ~ ~ ~"
-  let aw = @raylib.measure_text(art, 24)
-  @raylib.draw_text(
+  let aw = @draw.measure_text(art, 24)
+  @draw.draw_text(
     art,
     (@types.screen_width - aw) / 2,
     240,
@@ -67,7 +67,7 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   let items : Array[String] = ["Quick Battle", "Battle Select"]
   for i in 0..<items.length() {
     let y = 310 + i * 40
-    let iw = @raylib.measure_text(items[i], 28)
+    let iw = @draw.measure_text(items[i], 28)
     let ix = (@types.screen_width - iw) / 2
     if game.menu_cursor == i {
       // Highlighted item
@@ -78,7 +78,7 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
         36,
         @raylib.Color::new(60, 80, 120, 200),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "> \{items[i]} <",
         ix - 20,
         y,
@@ -86,7 +86,7 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
         @raylib.Color::new(255, 220, 100, 255),
       )
     } else {
-      @raylib.draw_text(
+      @draw.draw_text(
         items[i],
         ix,
         y,
@@ -102,8 +102,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   ]
   for i in 0..<controls.length() {
     let y = 430 + i * 24
-    let cw = @raylib.measure_text(controls[i], 16)
-    @raylib.draw_text(
+    let cw = @draw.measure_text(controls[i], 16)
+    @draw.draw_text(
       controls[i],
       (@types.screen_width - cw) / 2,
       y,
@@ -112,7 +112,7 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
     )
   }
   // Version
-  @raylib.draw_text(
+  @draw.draw_text(
     "8 Battles | Wind Sailing | Broadside Cannons",
     10,
     @types.screen_height - 25,
@@ -133,7 +133,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, 160),
   )
   // Battle info
-  @raylib.draw_text(
+  @draw.draw_text(
     "Battle: \{game.current_battle + 1}/\{game.total_battles}",
     10,
     5,
@@ -141,7 +141,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(220, 200, 140, 255),
   )
   // Score
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score: \{game.score}",
     220,
     5,
@@ -149,7 +149,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(200, 200, 200, 255),
   )
   // Enemies alive
-  @raylib.draw_text(
+  @draw.draw_text(
     "Enemies: \{game.enemies_alive}",
     420,
     5,
@@ -157,7 +157,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 150, 100, 255),
   )
   // Wind indicator text
-  @raylib.draw_text("Wind", 650, 5, 16, @raylib.Color::new(150, 180, 220, 255))
+  @draw.draw_text("Wind", 650, 5, 16, @raylib.Color::new(150, 180, 220, 255))
   // Wind direction as arrow character hint
   let wind_rel = @types.angle_diff(ship.heading, game.wind_angle)
   let wind_str = if wind_rel.abs() < 0.5 {
@@ -167,7 +167,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   } else {
     "Crosswind"
   }
-  @raylib.draw_text(
+  @draw.draw_text(
     wind_str,
     700,
     5,
@@ -176,7 +176,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   )
   // Speed
   let speed_pct = (ship.speed / @types.player_max_sail * 100.0).to_int()
-  @raylib.draw_text(
+  @draw.draw_text(
     "Speed: \{speed_pct}%",
     830,
     5,
@@ -185,7 +185,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   )
   // Sail amount
   let sail_pct = (ship.sail_amount * 100.0).to_int()
-  @raylib.draw_text(
+  @draw.draw_text(
     "Sails: \{sail_pct}%",
     830,
     25,
@@ -249,7 +249,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   } else {
     1.0
   }
-  @raylib.draw_text(
+  @draw.draw_text(
     "Port",
     reload_x,
     reload_y,
@@ -270,7 +270,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 200, 50, 255)
   }
   @raylib.draw_rectangle(reload_x + 50, reload_y + 2, left_fill, 12, left_color)
-  @raylib.draw_text(
+  @draw.draw_text(
     "Star",
     reload_x,
     reload_y + 18,
@@ -305,7 +305,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     20,
     @raylib.Color::new(0, 0, 0, 100),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "WASD: Sail | Q/LMB: Port Fire | E/RMB: Starboard Fire | Space: Both | P: Pause",
     10,
     @types.screen_height - 18,
@@ -343,7 +343,7 @@ fn draw_hp_bar(
     @raylib.Color::new(100, 100, 120, 255),
   )
   // Label
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
     x + 4,
     y + 1,
@@ -352,8 +352,8 @@ fn draw_hp_bar(
   )
   // Percentage
   let pct_text = "\{(clamped * 100.0).to_int()}%"
-  let tw = @raylib.measure_text(pct_text, 12)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(pct_text, 12)
+  @draw.draw_text(
     pct_text,
     x + w - tw - 4,
     y + 1,
@@ -365,7 +365,7 @@ fn draw_hp_bar(
 ///|
 fn @types.Game::draw_message(game : @types.Game) -> Unit {
   let text = game.message_text
-  let tw = @raylib.measure_text(text, 28)
+  let tw = @draw.measure_text(text, 28)
   let y = 60
   @raylib.draw_rectangle(
     (@types.screen_width - tw) / 2 - 15,
@@ -374,7 +374,7 @@ fn @types.Game::draw_message(game : @types.Game) -> Unit {
     40,
     @raylib.Color::new(0, 0, 0, 180),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     text,
     (@types.screen_width - tw) / 2,
     y,
@@ -393,8 +393,8 @@ fn draw_pause_overlay() -> Unit {
     @raylib.Color::new(0, 0, 0, 150),
   )
   let text = "PAUSED"
-  let tw = @raylib.measure_text(text, 60)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(text, 60)
+  @draw.draw_text(
     text,
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 50,
@@ -402,8 +402,8 @@ fn draw_pause_overlay() -> Unit {
     @raylib.white,
   )
   let hint = "Press P or ESC to resume"
-  let hw = @raylib.measure_text(hint, 20)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint, 20)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
     @types.screen_height / 2 + 20,
@@ -424,8 +424,8 @@ fn @types.Game::draw_battle_complete(game : @types.Game) -> Unit {
   if game.current_battle >= game.total_battles - 1 {
     // Victory screen
     let title = "VICTORY!"
-    let tw = @raylib.measure_text(title, 60)
-    @raylib.draw_text(
+    let tw = @draw.measure_text(title, 60)
+    @draw.draw_text(
       title,
       (@types.screen_width - tw) / 2,
       @types.screen_height / 2 - 80,
@@ -433,8 +433,8 @@ fn @types.Game::draw_battle_complete(game : @types.Game) -> Unit {
       @raylib.Color::new(255, 220, 100, 255),
     )
     let score_text = "Final Score: \{game.score}"
-    let sw = @raylib.measure_text(score_text, 28)
-    @raylib.draw_text(
+    let sw = @draw.measure_text(score_text, 28)
+    @draw.draw_text(
       score_text,
       (@types.screen_width - sw) / 2,
       @types.screen_height / 2,
@@ -442,8 +442,8 @@ fn @types.Game::draw_battle_complete(game : @types.Game) -> Unit {
       @raylib.Color::new(200, 220, 255, 255),
     )
     let msg = "All 8 battles won! You are the Admiral!"
-    let mw = @raylib.measure_text(msg, 20)
-    @raylib.draw_text(
+    let mw = @draw.measure_text(msg, 20)
+    @draw.draw_text(
       msg,
       (@types.screen_width - mw) / 2,
       @types.screen_height / 2 + 40,
@@ -452,8 +452,8 @@ fn @types.Game::draw_battle_complete(game : @types.Game) -> Unit {
     )
   } else {
     let title = "BATTLE COMPLETE!"
-    let tw = @raylib.measure_text(title, 48)
-    @raylib.draw_text(
+    let tw = @draw.measure_text(title, 48)
+    @draw.draw_text(
       title,
       (@types.screen_width - tw) / 2,
       @types.screen_height / 2 - 60,
@@ -461,8 +461,8 @@ fn @types.Game::draw_battle_complete(game : @types.Game) -> Unit {
       @raylib.Color::new(100, 255, 100, 255),
     )
     let score_text = "Score: \{game.score}"
-    let sw = @raylib.measure_text(score_text, 24)
-    @raylib.draw_text(
+    let sw = @draw.measure_text(score_text, 24)
+    @draw.draw_text(
       score_text,
       (@types.screen_width - sw) / 2,
       @types.screen_height / 2,
@@ -470,8 +470,8 @@ fn @types.Game::draw_battle_complete(game : @types.Game) -> Unit {
       @raylib.Color::new(200, 200, 200, 255),
     )
     let next_text = "Next: Battle \{game.current_battle + 2}"
-    let nw = @raylib.measure_text(next_text, 20)
-    @raylib.draw_text(
+    let nw = @draw.measure_text(next_text, 20)
+    @draw.draw_text(
       next_text,
       (@types.screen_width - nw) / 2,
       @types.screen_height / 2 + 35,
@@ -480,8 +480,8 @@ fn @types.Game::draw_battle_complete(game : @types.Game) -> Unit {
     )
   }
   let prompt = "Press ENTER to continue"
-  let pw = @raylib.measure_text(prompt, 18)
-  @raylib.draw_text(
+  let pw = @draw.measure_text(prompt, 18)
+  @draw.draw_text(
     prompt,
     (@types.screen_width - pw) / 2,
     @types.screen_height / 2 + 80,
@@ -502,8 +502,8 @@ fn @types.Game::draw_battle_select(game : @types.Game) -> Unit {
   )
   // Title
   let title = "SELECT BATTLE"
-  let tw = @raylib.measure_text(title, 44)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, 44)
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     40,
@@ -530,7 +530,7 @@ fn @types.Game::draw_battle_select(game : @types.Game) -> Unit {
         40,
         @raylib.Color::new(50, 70, 110, 220),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "> \{label}",
         80,
         y,
@@ -538,7 +538,7 @@ fn @types.Game::draw_battle_select(game : @types.Game) -> Unit {
         @raylib.Color::new(255, 220, 100, 255),
       )
     } else {
-      @raylib.draw_text(
+      @draw.draw_text(
         "  \{label}",
         80,
         y,
@@ -549,8 +549,8 @@ fn @types.Game::draw_battle_select(game : @types.Game) -> Unit {
   }
   // Footer hint
   let hint = "ENTER: Start | ESC: Back"
-  let hw = @raylib.measure_text(hint, 18)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint, 18)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
     @types.screen_height - 40,
@@ -569,8 +569,8 @@ fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
     @raylib.Color::new(40, 0, 0, 220),
   )
   let title = "SHIP SUNK!"
-  let tw = @raylib.measure_text(title, 60)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, 60)
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 80,
@@ -578,8 +578,8 @@ fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 80, 60, 255),
   )
   let score_text = "Score: \{game.score} | Battle: \{game.current_battle + 1}"
-  let sw = @raylib.measure_text(score_text, 24)
-  @raylib.draw_text(
+  let sw = @draw.measure_text(score_text, 24)
+  @draw.draw_text(
     score_text,
     (@types.screen_width - sw) / 2,
     @types.screen_height / 2 + 10,
@@ -587,8 +587,8 @@ fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
     @raylib.Color::new(200, 200, 200, 255),
   )
   let prompt = "Press ENTER to return to menu"
-  let pw = @raylib.measure_text(prompt, 18)
-  @raylib.draw_text(
+  let pw = @draw.measure_text(prompt, 18)
+  @draw.draw_text(
     prompt,
     (@types.screen_width - pw) / 2,
     @types.screen_height / 2 + 50,

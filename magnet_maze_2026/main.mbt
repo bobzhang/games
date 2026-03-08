@@ -355,6 +355,7 @@ fn apply_pulse(
 fn main {
   @raylib.init_window(sw, sh, "Magnet Maze 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let walls : Array[Bool] = Array::make(gw * gh, false)
   let orbs : Array[Orb] = Array::makei(max_orbs, fn(_i) {
@@ -558,35 +559,35 @@ fn main {
     @raylib.clear_background(@raylib.Color::new(12, 18, 28, 255))
 
     @raylib.draw_rectangle(0, 0, sw, 104, @raylib.Color::new(8, 12, 20, 230))
-    @raylib.draw_text(
+    @draw.draw_text(
       "MAGNET MAZE 2026",
       18,
       22,
       36,
       @raylib.Color::new(236, 244, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Level \{level}/3",
       420,
       34,
       30,
       @raylib.Color::new(246, 226, 134, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Turns \{turns_left}",
       604,
       34,
       30,
       @raylib.Color::new(218, 234, 250, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Goals \{goals_completed(orbs, goals_x, goals_y)}/\{max_orbs}",
       800,
       34,
       30,
       @raylib.Color::new(198, 228, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{score}",
       1050,
       34,
@@ -681,7 +682,7 @@ fn main {
         gh * cell,
         @raylib.Color::new(8, 14, 24, 140),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "SECTOR CLEAR",
         ox + 166,
         oy + gh * cell / 2 - 26,
@@ -699,7 +700,7 @@ fn main {
       186,
       @raylib.Color::new(10, 16, 24, 220),
     )
-    @raylib.draw_text("Touch", 62, sh - 198, 20, @raylib.white)
+    @draw.draw_text("Touch", 62, sh - 198, 20, @raylib.white)
 
     @raylib.draw_rectangle(
       ctl_x + 84,
@@ -708,7 +709,7 @@ fn main {
       52,
       @raylib.Color::new(46, 64, 88, 255),
     )
-    @raylib.draw_text("UP", ctl_x + 108, ctl_y + 16, 20, @raylib.white)
+    @draw.draw_text("UP", ctl_x + 108, ctl_y + 16, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x,
       ctl_y + 58,
@@ -716,7 +717,7 @@ fn main {
       52,
       @raylib.Color::new(46, 64, 88, 255),
     )
-    @raylib.draw_text("LEFT", ctl_x + 10, ctl_y + 74, 20, @raylib.white)
+    @draw.draw_text("LEFT", ctl_x + 10, ctl_y + 74, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x + 84,
       ctl_y + 58,
@@ -724,7 +725,7 @@ fn main {
       52,
       @raylib.Color::new(46, 64, 88, 255),
     )
-    @raylib.draw_text("RIGHT", ctl_x + 90, ctl_y + 74, 20, @raylib.white)
+    @draw.draw_text("RIGHT", ctl_x + 90, ctl_y + 74, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x + 84,
       ctl_y + 116,
@@ -732,7 +733,7 @@ fn main {
       52,
       @raylib.Color::new(46, 64, 88, 255),
     )
-    @raylib.draw_text("DOWN", ctl_x + 90, ctl_y + 132, 20, @raylib.white)
+    @draw.draw_text("DOWN", ctl_x + 90, ctl_y + 132, 20, @raylib.white)
 
     let mode_x = sw - 214
     let mode_y = sh - 264
@@ -742,7 +743,7 @@ fn main {
       @raylib.Color::new(146, 72, 72, 255)
     }
     @raylib.draw_rectangle(mode_x, mode_y, 184, 88, mode_color)
-    @raylib.draw_text(
+    @draw.draw_text(
       if attract_mode {
         "ATTRACT"
       } else {
@@ -763,7 +764,7 @@ fn main {
       126,
       @raylib.Color::new(70, 102, 182, 255),
     )
-    @raylib.draw_text("PULSE", pulse_x + 44, pulse_y + 46, 40, @raylib.white)
+    @draw.draw_text("PULSE", pulse_x + 44, pulse_y + 46, 40, @raylib.white)
 
     @raylib.draw_rectangle(
       188,
@@ -772,7 +773,7 @@ fn main {
       36,
       @raylib.Color::new(10, 16, 24, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       198,
       sh - 46,
@@ -780,14 +781,14 @@ fn main {
       @raylib.Color::new(224, 236, 246, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Moves \{moves}  Pulses \{pulses}",
       26,
       114,
       24,
       @raylib.Color::new(212, 228, 246, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Stars \{stars}",
       26,
       144,
@@ -804,7 +805,7 @@ fn main {
         192,
         @raylib.Color::new(16, 24, 40, 242),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "MAGNET MASTER"
         } else {
@@ -819,7 +820,7 @@ fn main {
           @raylib.Color::new(250, 132, 132, 255)
         },
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R to restart",
         sw / 2 - 124,
         sh / 2 + 40,
@@ -828,8 +829,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

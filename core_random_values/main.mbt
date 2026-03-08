@@ -11,6 +11,7 @@ fn main {
   let mut frames_counter = 0
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -26,13 +27,15 @@ fn main {
     // Draw
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
-    @raylib.draw_text(
+    @draw.draw_text(
       "Every 2 seconds a new random value is generated:", 130, 100, 20, @raylib.maroon,
     )
-    @raylib.draw_text("\{rand_value}", 360, 180, 80, @raylib.lightgray)
+    @draw.draw_text("\{rand_value}", 360, 180, 80, @raylib.lightgray)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

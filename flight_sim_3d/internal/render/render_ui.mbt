@@ -32,8 +32,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
     @raylib.Color::new(20, 30, 50, 255),
   )
   let title = "FLIGHT SIM 3D"
-  let tw = @raylib.measure_text(title, 48)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, 48)
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     60,
@@ -41,8 +41,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 255, 255, 255),
   )
   let sub = "Select Mission"
-  let sw = @raylib.measure_text(sub, 22)
-  @raylib.draw_text(
+  let sw = @draw.measure_text(sub, 22)
+  @draw.draw_text(
     sub,
     (@types.screen_width - sw) / 2,
     120,
@@ -74,14 +74,14 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
     let prefix = if is_sel { "> " } else { "  " }
     let mission = game.missions[i]
     let num_text = prefix + "\{i + 1}. " + mission.name
-    @raylib.draw_text(num_text, 200, y, 24, color)
+    @draw.draw_text(num_text, 200, y, 24, color)
     // Description
     let desc_color = if is_sel {
       @raylib.Color::new(200, 200, 220, 255)
     } else {
       @raylib.Color::new(130, 130, 150, 255)
     }
-    @raylib.draw_text(mission.description, 230, y + 26, 14, desc_color)
+    @draw.draw_text(mission.description, 230, y + 26, 14, desc_color)
     // Weather icon
     let weather_text = if mission.weather == Fog {
       "[FOG]"
@@ -91,7 +91,7 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
       ""
     }
     if weather_text != "" {
-      @raylib.draw_text(
+      @draw.draw_text(
         weather_text,
         750,
         y + 2,
@@ -101,7 +101,7 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
     }
     // Completed indicator
     if i < game.missions_completed {
-      @raylib.draw_text(
+      @draw.draw_text(
         "DONE",
         880,
         y + 2,
@@ -111,8 +111,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
     }
   }
   let hint = "Up/Down: Select | Enter: Start Mission"
-  let hw = @raylib.measure_text(hint, 16)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint, 16)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
     @types.screen_height - 40,
@@ -133,21 +133,21 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, 140),
   )
   let mission = game.missions[game.current_mission]
-  @raylib.draw_text(
+  @draw.draw_text(
     mission.name,
     10,
     8,
     20,
     @raylib.Color::new(200, 220, 255, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score: \{game.score}",
     350,
     8,
     18,
     @raylib.Color::new(255, 255, 200, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Kills: \{game.kills}",
     520,
     8,
@@ -158,7 +158,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   let alt_y = 60
   @raylib.draw_rectangle(20, alt_y, 40, 200, @raylib.Color::new(0, 0, 0, 120))
   let alt_text = "ALT"
-  @raylib.draw_text(
+  @draw.draw_text(
     alt_text,
     22,
     alt_y - 16,
@@ -175,7 +175,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(50, 150, 255, 200),
   )
   let alt_val = player.y.to_int()
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{alt_val}m",
     22,
     alt_y + 202,
@@ -185,7 +185,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   // Speed gauge (left side, below altitude)
   let spd_y = alt_y + 240
   @raylib.draw_rectangle(20, spd_y, 40, 100, @raylib.Color::new(0, 0, 0, 120))
-  @raylib.draw_text(
+  @draw.draw_text(
     "SPD",
     22,
     spd_y - 16,
@@ -207,7 +207,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(100, 255, 100, 200),
   )
   let spd_val = player.speed.to_int()
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{spd_val}",
     22,
     spd_y + 102,
@@ -224,7 +224,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     150,
     @raylib.Color::new(0, 0, 0, 120),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "FUEL",
     fuel_x - 2,
     fuel_y - 16,
@@ -252,7 +252,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     fuel_color,
   )
   let fuel_pct = (fuel_ratio * 100.0).to_int()
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{fuel_pct}%",
     fuel_x,
     fuel_y + 152,
@@ -285,7 +285,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(200, 200, 200, 150),
   )
   let hp_val = player.hp.to_int()
-  @raylib.draw_text(
+  @draw.draw_text(
     "HP: \{hp_val}",
     25,
     hp_y + 2,
@@ -293,7 +293,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 255, 255, 255),
   )
   // Throttle indicator (bottom center)
-  @raylib.draw_text(
+  @draw.draw_text(
     "THR",
     @types.screen_width / 2 - 60,
     hp_y,
@@ -326,7 +326,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   game.draw_objective()
   // Message display
   if game.message_timer > 0.0 {
-    let msg_w = @raylib.measure_text(game.message_text, 22)
+    let msg_w = @draw.measure_text(game.message_text, 22)
     @raylib.draw_rectangle(
       (@types.screen_width - msg_w) / 2 - 10,
       @types.screen_height / 2 + 140,
@@ -334,7 +334,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
       30,
       @raylib.Color::new(0, 0, 0, 150),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       game.message_text,
       (@types.screen_width - msg_w) / 2,
       @types.screen_height / 2 + 144,
@@ -362,7 +362,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     28,
     @raylib.Color::new(0, 0, 0, 100),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "W/S: Pitch | A/D: Yaw | Q/E: Roll | Shift: Throttle Up | Ctrl: Down | Space: Fire | P: Pause",
     10,
     @types.screen_height - 22,
@@ -377,7 +377,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(255, 150, 50, 255)
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       weather_text,
       @types.screen_width - 80,
       @types.screen_height - 22,
@@ -429,7 +429,7 @@ fn @types.Game::draw_objective(game : @types.Game) -> Unit {
     ""
   }
   if obj_text != "" {
-    let ow = @raylib.measure_text(obj_text, 18)
+    let ow = @draw.measure_text(obj_text, 18)
     @raylib.draw_rectangle(
       (@types.screen_width - ow) / 2 - 8,
       42,
@@ -437,7 +437,7 @@ fn @types.Game::draw_objective(game : @types.Game) -> Unit {
       26,
       @raylib.Color::new(0, 0, 0, 120),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       obj_text,
       (@types.screen_width - ow) / 2,
       46,
@@ -457,8 +457,8 @@ fn draw_pause_overlay() -> Unit {
     @raylib.Color::new(0, 0, 0, 150),
   )
   let text = "PAUSED"
-  let tw = @raylib.measure_text(text, 60)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(text, 60)
+  @draw.draw_text(
     text,
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 50,
@@ -466,8 +466,8 @@ fn draw_pause_overlay() -> Unit {
     @raylib.Color::new(255, 255, 255, 255),
   )
   let hint = "P: Resume | R: Restart | Q: Quit to Menu"
-  let hw = @raylib.measure_text(hint, 20)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint, 20)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
     @types.screen_height / 2 + 20,
@@ -486,8 +486,8 @@ fn @types.Game::draw_mission_complete_detailed(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, 180),
   )
   let text = "MISSION COMPLETE!"
-  let tw = @raylib.measure_text(text, 48)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(text, 48)
+  @draw.draw_text(
     text,
     (@types.screen_width - tw) / 2,
     100,
@@ -495,8 +495,8 @@ fn @types.Game::draw_mission_complete_detailed(game : @types.Game) -> Unit {
     @raylib.Color::new(100, 255, 100, 255),
   )
   let mission = game.missions[game.current_mission]
-  let mw = @raylib.measure_text(mission.name, 28)
-  @raylib.draw_text(
+  let mw = @draw.measure_text(mission.name, 28)
+  @draw.draw_text(
     mission.name,
     (@types.screen_width - mw) / 2,
     160,
@@ -523,7 +523,7 @@ fn @types.Game::draw_mission_complete_detailed(game : @types.Game) -> Unit {
   // Score details
   let line_x = panel_x + 20
   let mut line_y = panel_y + 15
-  @raylib.draw_text(
+  @draw.draw_text(
     "SCORE BREAKDOWN",
     line_x,
     line_y,
@@ -532,7 +532,7 @@ fn @types.Game::draw_mission_complete_detailed(game : @types.Game) -> Unit {
   )
   line_y = line_y + 35
   let mission_pts = "Mission Score: \{game.mission_score}"
-  @raylib.draw_text(
+  @draw.draw_text(
     mission_pts,
     line_x,
     line_y,
@@ -541,7 +541,7 @@ fn @types.Game::draw_mission_complete_detailed(game : @types.Game) -> Unit {
   )
   line_y = line_y + 25
   let kills_text = "Kills: \{game.kills}"
-  @raylib.draw_text(
+  @draw.draw_text(
     kills_text,
     line_x,
     line_y,
@@ -550,7 +550,7 @@ fn @types.Game::draw_mission_complete_detailed(game : @types.Game) -> Unit {
   )
   line_y = line_y + 25
   let destroyed_text = "Buildings Destroyed: \{game.buildings_destroyed}"
-  @raylib.draw_text(
+  @draw.draw_text(
     destroyed_text,
     line_x,
     line_y,
@@ -560,7 +560,7 @@ fn @types.Game::draw_mission_complete_detailed(game : @types.Game) -> Unit {
   line_y = line_y + 25
   let acc_val = game.accuracy_pct.to_int()
   let accuracy_text = "Accuracy: \{acc_val}%"
-  @raylib.draw_text(
+  @draw.draw_text(
     accuracy_text,
     line_x,
     line_y,
@@ -570,7 +570,7 @@ fn @types.Game::draw_mission_complete_detailed(game : @types.Game) -> Unit {
   line_y = line_y + 25
   let time_val = game.mission_timer.to_int()
   let time_text = "Time: \{time_val}s"
-  @raylib.draw_text(
+  @draw.draw_text(
     time_text,
     line_x,
     line_y,
@@ -580,7 +580,7 @@ fn @types.Game::draw_mission_complete_detailed(game : @types.Game) -> Unit {
   line_y = line_y + 25
   let hp_pct = (game.player.hp / game.player.max_hp * 100.0).to_int()
   let hp_text = "Hull Integrity: \{hp_pct}%"
-  @raylib.draw_text(
+  @draw.draw_text(
     hp_text,
     line_x,
     line_y,
@@ -599,8 +599,8 @@ fn @types.Game::draw_mission_complete_detailed(game : @types.Game) -> Unit {
   } else {
     @raylib.Color::new(200, 200, 200, 255)
   }
-  let rw = @raylib.measure_text(rating_label, 28)
-  @raylib.draw_text(
+  let rw = @draw.measure_text(rating_label, 28)
+  @draw.draw_text(
     rating_label,
     panel_x + (400 - rw) / 2,
     line_y,
@@ -609,8 +609,8 @@ fn @types.Game::draw_mission_complete_detailed(game : @types.Game) -> Unit {
   )
   // Total score
   let total_text = "Total Score: \{game.score}"
-  let tsw = @raylib.measure_text(total_text, 22)
-  @raylib.draw_text(
+  let tsw = @draw.measure_text(total_text, 22)
+  @draw.draw_text(
     total_text,
     (@types.screen_width - tsw) / 2,
     panel_y + 290,
@@ -619,8 +619,8 @@ fn @types.Game::draw_mission_complete_detailed(game : @types.Game) -> Unit {
   )
   // Hint
   let hint = "Enter: Back to Menu"
-  let hw = @raylib.measure_text(hint, 18)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint, 18)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
     @types.screen_height - 60,
@@ -639,8 +639,8 @@ fn @types.Game::draw_game_over_detailed(game : @types.Game) -> Unit {
     @raylib.Color::new(30, 0, 0, 220),
   )
   let text = "MISSION FAILED"
-  let tw = @raylib.measure_text(text, 50)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(text, 50)
+  @draw.draw_text(
     text,
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 80,
@@ -649,8 +649,8 @@ fn @types.Game::draw_game_over_detailed(game : @types.Game) -> Unit {
   )
   // Show what happened
   let mission = game.missions[game.current_mission]
-  let mission_w = @raylib.measure_text(mission.name, 22)
-  @raylib.draw_text(
+  let mission_w = @draw.measure_text(mission.name, 22)
+  @draw.draw_text(
     mission.name,
     (@types.screen_width - mission_w) / 2,
     @types.screen_height / 2 - 20,
@@ -660,8 +660,8 @@ fn @types.Game::draw_game_over_detailed(game : @types.Game) -> Unit {
   let progress_done = mission.targets_done
   let progress_total = mission.target_count
   let progress_text = "Progress: \{progress_done}/\{progress_total}"
-  let pw = @raylib.measure_text(progress_text, 18)
-  @raylib.draw_text(
+  let pw = @draw.measure_text(progress_text, 18)
+  @draw.draw_text(
     progress_text,
     (@types.screen_width - pw) / 2,
     @types.screen_height / 2 + 15,
@@ -669,8 +669,8 @@ fn @types.Game::draw_game_over_detailed(game : @types.Game) -> Unit {
     @raylib.Color::new(200, 150, 100, 255),
   )
   let kills_text = "Kills: \{game.kills}"
-  let kw = @raylib.measure_text(kills_text, 18)
-  @raylib.draw_text(
+  let kw = @draw.measure_text(kills_text, 18)
+  @draw.draw_text(
     kills_text,
     (@types.screen_width - kw) / 2,
     @types.screen_height / 2 + 40,
@@ -678,8 +678,8 @@ fn @types.Game::draw_game_over_detailed(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 150, 100, 255),
   )
   let hint = "Enter: Menu | R: Retry"
-  let hw = @raylib.measure_text(hint, 20)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint, 20)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
     @types.screen_height / 2 + 80,
@@ -700,8 +700,8 @@ fn @types.Game::draw_aircraft_select(game : @types.Game) -> Unit {
     @raylib.Color::new(15, 25, 45, 255),
   )
   let title = "SELECT AIRCRAFT"
-  let tw = @raylib.measure_text(title, 40)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, 40)
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     40,
@@ -756,8 +756,8 @@ fn @types.Game::draw_aircraft_select(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(180, 180, 200, 255)
     }
-    let nw = @raylib.measure_text(names[i], 24)
-    @raylib.draw_text(
+    let nw = @draw.measure_text(names[i], 24)
+    @draw.draw_text(
       names[i],
       cx + (card_w - nw) / 2,
       card_y + 15,
@@ -787,23 +787,23 @@ fn @types.Game::draw_aircraft_select(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(150, 200, 150, 255)
     }
-    @raylib.draw_text("Speed:", stat_x, stat_y, 14, stat_color)
-    @raylib.draw_text(speed_vals[i], stat_x + 130, stat_y, 14, val_color)
+    @draw.draw_text("Speed:", stat_x, stat_y, 14, stat_color)
+    @draw.draw_text(speed_vals[i], stat_x + 130, stat_y, 14, val_color)
     stat_y = stat_y + 22
-    @raylib.draw_text("HP:", stat_x, stat_y, 14, stat_color)
-    @raylib.draw_text(hp_vals[i], stat_x + 130, stat_y, 14, val_color)
+    @draw.draw_text("HP:", stat_x, stat_y, 14, stat_color)
+    @draw.draw_text(hp_vals[i], stat_x + 130, stat_y, 14, val_color)
     stat_y = stat_y + 22
-    @raylib.draw_text("MG Ammo:", stat_x, stat_y, 14, stat_color)
-    @raylib.draw_text(ammo_mg_vals[i], stat_x + 130, stat_y, 14, val_color)
+    @draw.draw_text("MG Ammo:", stat_x, stat_y, 14, stat_color)
+    @draw.draw_text(ammo_mg_vals[i], stat_x + 130, stat_y, 14, val_color)
     stat_y = stat_y + 22
-    @raylib.draw_text("Rockets:", stat_x, stat_y, 14, stat_color)
-    @raylib.draw_text(ammo_rkt_vals[i], stat_x + 130, stat_y, 14, val_color)
+    @draw.draw_text("Rockets:", stat_x, stat_y, 14, stat_color)
+    @draw.draw_text(ammo_rkt_vals[i], stat_x + 130, stat_y, 14, val_color)
     stat_y = stat_y + 22
-    @raylib.draw_text("Bombs:", stat_x, stat_y, 14, stat_color)
-    @raylib.draw_text(ammo_bomb_vals[i], stat_x + 130, stat_y, 14, val_color)
+    @draw.draw_text("Bombs:", stat_x, stat_y, 14, stat_color)
+    @draw.draw_text(ammo_bomb_vals[i], stat_x + 130, stat_y, 14, val_color)
     stat_y = stat_y + 22
-    @raylib.draw_text("Handling:", stat_x, stat_y, 14, stat_color)
-    @raylib.draw_text(turn_vals[i], stat_x + 130, stat_y, 14, val_color)
+    @draw.draw_text("Handling:", stat_x, stat_y, 14, stat_color)
+    @draw.draw_text(turn_vals[i], stat_x + 130, stat_y, 14, val_color)
     stat_y = stat_y + 30
     // Description
     let desc_color = if is_sel {
@@ -811,13 +811,13 @@ fn @types.Game::draw_aircraft_select(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(130, 140, 160, 255)
     }
-    @raylib.draw_text(descriptions[i], stat_x, stat_y, 12, desc_color)
+    @draw.draw_text(descriptions[i], stat_x, stat_y, 12, desc_color)
     ignore(i)
   }
   // Controls hint
   let hint = "Left/Right: Select | Enter: Confirm | Esc: Back"
-  let hw = @raylib.measure_text(hint, 16)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint, 16)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
     @types.screen_height - 40,
@@ -840,8 +840,8 @@ fn @types.Game::draw_mission_briefing(game : @types.Game) -> Unit {
   let mission = game.missions[game.current_mission]
   // Title
   let title = "MISSION BRIEFING"
-  let tw = @raylib.measure_text(title, 36)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, 36)
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     50,
@@ -849,8 +849,8 @@ fn @types.Game::draw_mission_briefing(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 220, 100, 255),
   )
   // Mission name
-  let mw = @raylib.measure_text(mission.name, 30)
-  @raylib.draw_text(
+  let mw = @draw.measure_text(mission.name, 30)
+  @draw.draw_text(
     mission.name,
     (@types.screen_width - mw) / 2,
     110,
@@ -885,7 +885,7 @@ fn @types.Game::draw_mission_briefing(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(200, 210, 230, 255)
     }
-    @raylib.draw_text(lines[i], panel_x + 25, line_y, 18, line_color)
+    @draw.draw_text(lines[i], panel_x + 25, line_y, 18, line_color)
     ignore(i)
   }
   // Mission stats
@@ -893,7 +893,7 @@ fn @types.Game::draw_mission_briefing(game : @types.Game) -> Unit {
   let stats_x = panel_x + 25
   let difficulty_label = "Difficulty: " +
     @types.difficulty_str(mission.difficulty)
-  @raylib.draw_text(
+  @draw.draw_text(
     difficulty_label,
     stats_x,
     stats_y,
@@ -901,7 +901,7 @@ fn @types.Game::draw_mission_briefing(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 180, 80, 255),
   )
   let weather_label = "Weather: " + @types.weather_name(mission.weather)
-  @raylib.draw_text(
+  @draw.draw_text(
     weather_label,
     stats_x,
     stats_y + 24,
@@ -912,7 +912,7 @@ fn @types.Game::draw_mission_briefing(game : @types.Game) -> Unit {
   let threats_ground = mission.enemy_count
   let threats_turret = mission.turret_count
   let threat_text = "Air: \{threats_air}  Ground: \{threats_ground}  Turrets: \{threats_turret}"
-  @raylib.draw_text(
+  @draw.draw_text(
     "Threats - " + threat_text,
     stats_x,
     stats_y + 48,
@@ -922,7 +922,7 @@ fn @types.Game::draw_mission_briefing(game : @types.Game) -> Unit {
   if mission.time_limit > 0.0 {
     let time_int = mission.time_limit.to_int()
     let time_text = "Time Limit: \{time_int}s"
-    @raylib.draw_text(
+    @draw.draw_text(
       time_text,
       stats_x,
       stats_y + 72,
@@ -934,7 +934,7 @@ fn @types.Game::draw_mission_briefing(game : @types.Game) -> Unit {
   let best = game.best_scores[game.current_mission]
   if best > 0 {
     let best_text = "Best Score: \{best}"
-    @raylib.draw_text(
+    @draw.draw_text(
       best_text,
       stats_x,
       stats_y + 96,
@@ -944,8 +944,8 @@ fn @types.Game::draw_mission_briefing(game : @types.Game) -> Unit {
   }
   // Controls hint
   let hint = "Enter: Start Mission | Esc: Back to Aircraft Select"
-  let hw = @raylib.measure_text(hint, 16)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint, 16)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
     @types.screen_height - 40,
@@ -1072,7 +1072,7 @@ fn @types.Game::draw_radar(game : @types.Game) -> Unit {
     )
   }
   // Radar label
-  @raylib.draw_text(
+  @draw.draw_text(
     "RADAR",
     radar_x,
     radar_y - 16,
@@ -1100,7 +1100,7 @@ fn @types.Game::draw_warning_indicators(game : @types.Game) -> Unit {
       22,
       @raylib.Color::new(255, 0, 0, 180),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "STALL",
       warn_x + 8,
       warn_y + 3,
@@ -1122,7 +1122,7 @@ fn @types.Game::draw_warning_indicators(game : @types.Game) -> Unit {
         22,
         @raylib.Color::new(255, 150, 0, 180),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "FUEL LOW",
         warn_x + 5,
         warn_y + 3,
@@ -1145,7 +1145,7 @@ fn @types.Game::draw_warning_indicators(game : @types.Game) -> Unit {
         22,
         @raylib.Color::new(255, 80, 0, 180),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "PULL UP",
         warn_x + 8,
         warn_y + 3,
@@ -1164,7 +1164,7 @@ fn @types.Game::draw_warning_indicators(game : @types.Game) -> Unit {
       22,
       @raylib.Color::new(200, 0, 0, 180),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "DAMAGE",
       warn_x + 8,
       warn_y + 3,
@@ -1182,7 +1182,7 @@ fn @types.Game::draw_warning_indicators(game : @types.Game) -> Unit {
       22,
       @raylib.Color::new(255, 50, 50, 200),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "INCOMING!",
       warn_x + 5,
       warn_y + 3,
@@ -1201,7 +1201,7 @@ fn @types.Game::draw_warning_indicators(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, 140),
   )
   let wep_name = @types.weapon_name(game.player.current_weapon)
-  @raylib.draw_text(
+  @draw.draw_text(
     "WPN: " + wep_name,
     weapon_x + 8,
     weapon_y + 5,
@@ -1217,14 +1217,14 @@ fn @types.Game::draw_warning_indicators(game : @types.Game) -> Unit {
   } else {
     @raylib.Color::new(100, 255, 100, 255)
   }
-  @raylib.draw_text(ammo_text, weapon_x + 8, weapon_y + 28, 16, ammo_color)
+  @draw.draw_text(ammo_text, weapon_x + 8, weapon_y + 28, 16, ammo_color)
   // Camera mode
   let cam_text = match game.camera_mode {
     Chase => "CAM: Chase"
     Cockpit => "CAM: Cockpit"
     Free => "CAM: Free"
   }
-  @raylib.draw_text(
+  @draw.draw_text(
     cam_text,
     weapon_x + 8,
     weapon_y + 46,

@@ -12,6 +12,7 @@ fn main {
     touch_positions.push(@raylib.Vector2::new(0.0, 0.0))
   }
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -32,7 +33,7 @@ fn main {
       if touch_positions[i].x > 0.0 && touch_positions[i].y > 0.0 {
         // Draw circle and touch index number
         @raylib.draw_circle_v(touch_positions[i], 34.0, @raylib.orange)
-        @raylib.draw_text(
+        @draw.draw_text(
           "\{i}",
           touch_positions[i].x.to_int() - 10,
           touch_positions[i].y.to_int() - 70,
@@ -41,13 +42,15 @@ fn main {
         )
       }
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       "touch the screen at multiple locations to get multiple balls", 10, 10, 20,
       @raylib.darkgray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

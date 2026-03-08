@@ -3,6 +3,8 @@ import {
   "bobzhang/games/dragon_boat_sprint_2026/internal/types",
   "bobzhang/games/dragon_boat_sprint_2026/internal/game",
   "bobzhang/games/dragon_boat_sprint_2026/internal/render",
+  "bobzhang/games/utils/draw",
+  "bobzhang/games/utils/fps",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

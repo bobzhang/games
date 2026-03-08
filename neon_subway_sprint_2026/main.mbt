@@ -427,6 +427,7 @@ fn obstacle_hit_center_y(ob : Obstacle) -> Float {
 fn main {
   @raylib.init_window(sw, sh, "Neon Subway Sprint 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let runner : Runner = {
     x: 220.0,
@@ -1034,7 +1035,7 @@ fn main {
             88,
             @raylib.Color::new(200, 56, 56, 84),
           )
-          @raylib.draw_text(
+          @draw.draw_text(
             "EXPRESS INBOUND",
             sw / 2 - 160,
             (y - 24.0).to_int(),
@@ -1119,7 +1120,7 @@ fn main {
           14,
           @raylib.Color::new(198, 162, 240, 255),
         )
-        @raylib.draw_text(
+        @draw.draw_text(
           "2",
           ox - 6,
           top + 36,
@@ -1183,7 +1184,7 @@ fn main {
         @raylib.Color::new(252, 240, 180, 255),
       )
       if coin.value > 1 {
-        @raylib.draw_text(
+        @draw.draw_text(
           "\{coin.value}",
           cx - 6,
           cy - 10,
@@ -1333,28 +1334,28 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 108, @raylib.Color::new(8, 10, 18, 232))
-    @raylib.draw_text(
+    @draw.draw_text(
       "NEON SUBWAY SPRINT 2026",
       16,
       16,
       34,
       @raylib.Color::new(236, 246, 254, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Sector \{level}/3",
       432,
       24,
       30,
       @raylib.Color::new(246, 224, 140, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Stage \{stage_score}/\{target_score}",
       614,
       24,
       30,
       @raylib.Color::new(214, 236, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Total \{total_score}",
       944,
       24,
@@ -1362,35 +1363,35 @@ fn main {
       @raylib.Color::new(214, 236, 252, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "HP \{runner.hp}",
       20,
       70,
       24,
       @raylib.Color::new(220, 236, 250, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Boost \{boost.to_int()}%",
       148,
       70,
       24,
       @raylib.Color::new(220, 236, 250, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Timer \{timer.to_int()}",
       360,
       70,
       24,
       @raylib.Color::new(252, 214, 146, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Stars \{stars}",
       548,
       70,
       24,
       @raylib.Color::new(250, 232, 138, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       if magnet_t > 0.0 {
         "Magnet ON"
       } else {
@@ -1462,7 +1463,7 @@ fn main {
       186,
       @raylib.Color::new(8, 14, 28, 220),
     )
-    @raylib.draw_text("Touch", 86, sh - 186, 20, @raylib.white)
+    @draw.draw_text("Touch", 86, sh - 186, 20, @raylib.white)
 
     let ctl_x = 16
     let ctl_y = sh - 186
@@ -1473,7 +1474,7 @@ fn main {
       58,
       @raylib.Color::new(54, 72, 102, 255),
     )
-    @raylib.draw_text("UP", ctl_x + 92, ctl_y + 18, 24, @raylib.white)
+    @draw.draw_text("UP", ctl_x + 92, ctl_y + 18, 24, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x + 76,
       ctl_y + 66,
@@ -1481,7 +1482,7 @@ fn main {
       58,
       @raylib.Color::new(54, 72, 102, 255),
     )
-    @raylib.draw_text("DN", ctl_x + 90, ctl_y + 84, 24, @raylib.white)
+    @draw.draw_text("DN", ctl_x + 90, ctl_y + 84, 24, @raylib.white)
 
     let jump_x = sw - 256
     let jump_y = sh - 170
@@ -1495,7 +1496,7 @@ fn main {
       154,
       @raylib.Color::new(88, 142, 218, 255),
     )
-    @raylib.draw_text("JUMP", jump_x + 16, jump_y + 58, 30, @raylib.white)
+    @draw.draw_text("JUMP", jump_x + 16, jump_y + 58, 30, @raylib.white)
     @raylib.draw_rectangle(
       dash_x,
       dash_y,
@@ -1503,7 +1504,7 @@ fn main {
       154,
       @raylib.Color::new(218, 124, 72, 255),
     )
-    @raylib.draw_text("DASH", dash_x + 12, dash_y + 58, 30, @raylib.white)
+    @draw.draw_text("DASH", dash_x + 12, dash_y + 58, 30, @raylib.white)
 
     @raylib.draw_rectangle(
       250,
@@ -1512,7 +1513,7 @@ fn main {
       40,
       @raylib.Color::new(6, 10, 18, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       262,
       sh - 48,
@@ -1522,7 +1523,7 @@ fn main {
 
     if transition_t > 0.0 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 12, 20, 110))
-      @raylib.draw_text(
+      @draw.draw_text(
         "SECTOR CLEAR",
         sw / 2 - 166,
         sh / 2 - 28,
@@ -1540,7 +1541,7 @@ fn main {
         216,
         @raylib.Color::new(16, 24, 40, 244),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "RUN COMPLETE"
         } else {
@@ -1555,7 +1556,7 @@ fn main {
           @raylib.Color::new(252, 140, 140, 255)
         },
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R to restart",
         sw / 2 - 124,
         sh / 2 + 44,
@@ -1564,8 +1565,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

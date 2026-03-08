@@ -68,6 +68,7 @@ fn main {
   let mut pause = false
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -174,18 +175,20 @@ fn main {
     // Draw help instructions
     @raylib.draw_rectangle(20, 20, 425, 145, @raylib.white)
     @raylib.draw_rectangle_lines(20, 20, 425, 145, @raylib.gray)
-    @raylib.draw_text("PRESS SPACE TO RESTART MUSIC", 40, 40, 20, @raylib.black)
-    @raylib.draw_text("PRESS P TO PAUSE/RESUME", 40, 70, 20, @raylib.black)
-    @raylib.draw_text(
+    @draw.draw_text("PRESS SPACE TO RESTART MUSIC", 40, 40, 20, @raylib.black)
+    @draw.draw_text("PRESS P TO PAUSE/RESUME", 40, 70, 20, @raylib.black)
+    @draw.draw_text(
       "PRESS UP/DOWN TO CHANGE SPEED", 40, 100, 20, @raylib.black,
     )
-    @raylib.draw_text("SPEED: \{pitch}", 40, 130, 20, @raylib.maroon)
+    @draw.draw_text("SPEED: \{pitch}", 40, 130, 20, @raylib.maroon)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_music_stream(music)
   @raylib.close_audio_device()
+  @draw.cleanup()
   @raylib.close_window()
 }

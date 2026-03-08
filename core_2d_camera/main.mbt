@@ -46,6 +46,7 @@ fn main {
     1.0,
   )
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -130,7 +131,7 @@ fn main {
     @raylib.end_mode_2d()
 
     // Screen area label
-    @raylib.draw_text("SCREEN AREA", 640, 10, 20, @raylib.red)
+    @draw.draw_text("SCREEN AREA", 640, 10, 20, @raylib.red)
 
     // Screen border
     @raylib.draw_rectangle(0, 0, screen_width, 5, @raylib.red)
@@ -152,21 +153,23 @@ fn main {
     @raylib.draw_rectangle_lines(10, 10, 250, 113, @raylib.blue)
 
     // Info text
-    @raylib.draw_text("Free 2d camera controls:", 20, 20, 10, @raylib.black)
-    @raylib.draw_text(
+    @draw.draw_text("Free 2d camera controls:", 20, 20, 10, @raylib.black)
+    @draw.draw_text(
       "- Right/Left to move Offset", 40, 40, 10, @raylib.darkgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "- Mouse Wheel to Zoom in-out", 40, 60, 10, @raylib.darkgray,
     )
-    @raylib.draw_text("- A / S to Rotate", 40, 80, 10, @raylib.darkgray)
-    @raylib.draw_text(
+    @draw.draw_text("- A / S to Rotate", 40, 80, 10, @raylib.darkgray)
+    @draw.draw_text(
       "- R to reset Zoom and Rotation", 40, 100, 10, @raylib.darkgray,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

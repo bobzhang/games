@@ -16,6 +16,7 @@ fn main {
   let fx_ogg = @raylib.load_sound("resources/target.ogg") // Load OGG audio file
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -30,12 +31,13 @@ fn main {
     // Draw
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
-    @raylib.draw_text(
+    @draw.draw_text(
       "Press SPACE to PLAY the WAV sound!", 200, 180, 20, @raylib.lightgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Press ENTER to PLAY the OGG sound!", 200, 220, 20, @raylib.lightgray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -43,5 +45,6 @@ fn main {
   @raylib.unload_sound(fx_wav)
   @raylib.unload_sound(fx_ogg)
   @raylib.close_audio_device()
+  @draw.cleanup()
   @raylib.close_window()
 }

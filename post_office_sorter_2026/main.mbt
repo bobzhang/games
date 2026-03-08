@@ -85,6 +85,7 @@ fn code_label(code : Int) -> String {
 fn main {
   @raylib.init_window(sw, sh, "Post Office Sorter 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let packages : Array[Package] = Array::makei(120, fn(_i) {
     { alive: false, x: 0.0, y: 0.0, lane: 0, code: 0, speed: 180.0 }
@@ -241,7 +242,7 @@ fn main {
       let code = chute_map[l]
       let col = code_color(code)
       @raylib.draw_rectangle(sw - 120, y.to_int() - 20, 52, 34, col)
-      @raylib.draw_text(
+      @draw.draw_text(
         code_label(code),
         sw - 102,
         y.to_int() - 14,
@@ -269,7 +270,7 @@ fn main {
       22,
       @raylib.blue,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "GATE",
       (sorter_x - 28.0).to_int(),
       (sy - 22.0).to_int(),
@@ -294,7 +295,7 @@ fn main {
           24,
           @raylib.black,
         )
-        @raylib.draw_text(
+        @draw.draw_text(
           code_label(pkg.code),
           (pkg.x - 6.0).to_int(),
           (pkg.y - 13.0).to_int(),
@@ -304,12 +305,12 @@ fn main {
       }
     }
 
-    @raylib.draw_text("POST OFFICE SORTER 2026", 20, 18, 38, @raylib.skyblue)
-    @raylib.draw_text("Score \{score}", 20, 62, 28, @raylib.white)
-    @raylib.draw_text("Correct \{correct}", 190, 62, 28, @raylib.lime)
-    @raylib.draw_text("Wrong \{wrong}", 390, 62, 28, @raylib.orange)
-    @raylib.draw_text("Missed \{missed}", 560, 62, 28, @raylib.orange)
-    @raylib.draw_text(
+    @draw.draw_text("POST OFFICE SORTER 2026", 20, 18, 38, @raylib.skyblue)
+    @draw.draw_text("Score \{score}", 20, 62, 28, @raylib.white)
+    @draw.draw_text("Correct \{correct}", 190, 62, 28, @raylib.lime)
+    @draw.draw_text("Wrong \{wrong}", 390, 62, 28, @raylib.orange)
+    @draw.draw_text("Missed \{missed}", 560, 62, 28, @raylib.orange)
+    @draw.draw_text(
       "Lives \{lives}",
       760,
       62,
@@ -321,7 +322,7 @@ fn main {
       },
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Lane Mapping Keys: on selected lane, press 1=A 2=B 3=C 4=D", 20, 652, 24,
       @raylib.darkblue,
     )
@@ -332,7 +333,7 @@ fn main {
       30,
       @raylib.Color::new(15, 20, 28, 220),
     )
-    @raylib.draw_text(msg, 28, 693, 20, @raylib.raywhite)
+    @draw.draw_text(msg, 28, 693, 20, @raylib.raywhite)
 
     if over {
       @raylib.draw_rectangle(
@@ -342,12 +343,14 @@ fn main {
         180,
         @raylib.fade(@raylib.black, 0.82),
       )
-      @raylib.draw_text("LINE STOPPED", 430, 312, 52, @raylib.red)
-      @raylib.draw_text("Press R to restart", 430, 370, 34, @raylib.white)
+      @draw.draw_text("LINE STOPPED", 430, 312, 52, @raylib.red)
+      @draw.draw_text("Press R to restart", 430, 370, 34, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

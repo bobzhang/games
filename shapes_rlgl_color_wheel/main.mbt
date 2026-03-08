@@ -73,6 +73,7 @@ fn main {
     screen_width, screen_height, "raylib [shapes] example - rlgl color wheel",
   )
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -314,8 +315,8 @@ fn main {
       ", " +
       color.b.to_int().to_string() +
       ")"
-    @raylib.draw_text(hex_str, 8, 8 + 64 + 8, 20, @raylib.darkgray)
-    @raylib.draw_text(dec_str, 8, 8 + 64 + 8 + 22, 20, @raylib.darkgray)
+    @draw.draw_text(hex_str, 8, 8 + 64 + 8, 20, @raylib.darkgray)
+    @draw.draw_text(dec_str, 8, 8 + 64 + 8 + 22, 20, @raylib.darkgray)
 
     // Update the visuals for the copying text
     let mut copy_color = @raylib.darkgray
@@ -326,10 +327,10 @@ fn main {
     }
 
     // Draw the copying text
-    @raylib.draw_text("press ctrl+c to copy!", 8, 425 - offset, 20, copy_color)
+    @draw.draw_text("press ctrl+c to copy!", 8, 425 - offset, 20, copy_color)
 
     // Display the number of rendered triangles
-    @raylib.draw_text(
+    @draw.draw_text(
       "triangle count: " + tri_count.to_string(),
       8,
       395,
@@ -353,8 +354,10 @@ fn main {
     // Draw FPS next to outlined color preview
     @raylib.draw_fps(64 + 16, 8)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

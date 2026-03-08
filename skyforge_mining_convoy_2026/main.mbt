@@ -334,7 +334,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(80, 108, 142, 86),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "L",
     bx + 30,
     by + 96,
@@ -349,7 +349,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(80, 108, 142, 86),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "R",
     bx + 198,
     by + 96,
@@ -364,7 +364,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(80, 108, 142, 86),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "UP",
     bx + 102,
     by + 24,
@@ -379,7 +379,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     58,
     @raylib.Color::new(220, 118, 86, 94),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "FIRE",
     ax + 74,
     by + 28,
@@ -394,7 +394,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     58,
     @raylib.Color::new(118, 198, 248, 94),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "PULSE",
     ax + 18,
     by + 91,
@@ -409,7 +409,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     58,
     @raylib.Color::new(158, 142, 252, 94),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "STORM",
     ax + 121,
     by + 91,
@@ -424,7 +424,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     66,
     @raylib.Color::new(112, 212, 160, 94),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "OVERDRIVE",
     ax + 32,
     by + 158,
@@ -438,9 +438,11 @@ fn main {
   @raylib.init_window(
     sw, sh, "raylib [moonbit] example - skyforge mining convoy 2026",
   )
+  @draw.cleanup()
   defer @raylib.close_window()
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let enemies = FixedArray::make(max_enemies, {
     active: false,
@@ -1252,6 +1254,7 @@ fn main {
     }
 
     @raylib.begin_drawing()
+    @fps.draw()
     defer @raylib.end_drawing()
 
     @raylib.clear_background(@raylib.Color::new(10, 16, 28, 255))
@@ -1508,14 +1511,14 @@ fn main {
       @raylib.Color::new(224, 236, 250, 138),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "SKYFORGE MINING CONVOY 2026",
       30,
       22,
       34,
       @raylib.Color::new(236, 244, 254, 250),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Move:A/D  Lift:W  Fire:J/Mouse  Pulse:K  Storm:L  Overdrive:Shift",
       32,
       62,
@@ -1532,7 +1535,7 @@ fn main {
       @raylib.Color::new(232, 130, 118, 255),
       @raylib.Color::new(90, 52, 52, 230),
     )
-    @raylib.draw_text("HP", 284, 92, 22, @raylib.Color::new(216, 230, 244, 244))
+    @draw.draw_text("HP", 284, 92, 22, @raylib.Color::new(216, 230, 244, 244))
 
     draw_bar(
       30,
@@ -1543,7 +1546,7 @@ fn main {
       @raylib.Color::new(118, 206, 252, 255),
       @raylib.Color::new(56, 78, 94, 230),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Energy",
       284,
       120,
@@ -1565,7 +1568,7 @@ fn main {
       @raylib.Color::new(144, 232, 186, 255),
       @raylib.Color::new(56, 90, 74, 230),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Overdrive",
       284,
       148,
@@ -1573,7 +1576,7 @@ fn main {
       @raylib.Color::new(216, 230, 244, 244),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Ore \{pilot.ore}   Score \{pilot.score}   Combo x\{pilot.combo}",
       32,
       184,
@@ -1592,21 +1595,21 @@ fn main {
       "Storm tied to overdrive CD"
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time: \{timer.to_int()}s",
       sw - 368,
       24,
       34,
       @raylib.Color::new(246, 246, 252, 250),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       pulse_text,
       sw - 368,
       64,
       24,
       @raylib.Color::new(170, 222, 252, 248),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       storm_text,
       sw - 368,
       90,
@@ -1621,7 +1624,7 @@ fn main {
       }
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Convoy Alive: \{alive_trucks}/\{convoy_count}",
       sw - 368,
       122,
@@ -1631,7 +1634,7 @@ fn main {
 
     if announce_t > 0.0 {
       let alpha : Int = clampf(announce_t * 90.0, 0.0, 220.0).to_int()
-      @raylib.draw_text(
+      @draw.draw_text(
         "Escort the convoy to the portal while harvesting ore.",
         sw / 2 - 340,
         224,
@@ -1642,28 +1645,28 @@ fn main {
 
     if state == 0 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 12, 20, 224))
-      @raylib.draw_text(
+      @draw.draw_text(
         "SKYFORGE CONVOY",
         sw / 2 - 314,
         sh / 2 - 116,
         78,
         @raylib.Color::new(238, 246, 252, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Escort fragile mining rigs through hostile skies.",
         sw / 2 - 352,
         sh / 2 - 12,
         34,
         @raylib.Color::new(192, 216, 242, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Use pulse/storm to break swarms before trucks collapse.",
         sw / 2 - 398,
         sh / 2 + 30,
         32,
         @raylib.Color::new(226, 232, 244, 238),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press ENTER to start",
         sw / 2 - 190,
         sh / 2 + 92,
@@ -1674,21 +1677,21 @@ fn main {
 
     if state == 2 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(10, 24, 20, 188))
-      @raylib.draw_text(
+      @draw.draw_text(
         "CONVOY DELIVERED",
         sw / 2 - 294,
         sh / 2 - 82,
         74,
         @raylib.Color::new(214, 252, 214, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score \{pilot.score}   HP \{pilot.hp.to_int()}   Ore \{pilot.ore}",
         sw / 2 - 286,
         sh / 2 + 8,
         38,
         @raylib.Color::new(236, 246, 238, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press ENTER for next run",
         sw / 2 - 230,
         sh / 2 + 70,
@@ -1697,21 +1700,21 @@ fn main {
       )
     } else if state == 3 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(22, 8, 8, 198))
-      @raylib.draw_text(
+      @draw.draw_text(
         "CONVOY LOST",
         sw / 2 - 208,
         sh / 2 - 82,
         74,
         @raylib.Color::new(252, 192, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Ore \{pilot.ore}   Time \{timer.to_int()}s",
         sw / 2 - 176,
         sh / 2 + 8,
         38,
         @raylib.Color::new(246, 228, 220, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press ENTER to retry",
         sw / 2 - 184,
         sh / 2 + 70,

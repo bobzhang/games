@@ -1,0 +1,18 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/chrono_heist_blueprint_2026"
+
+// Values
+
+// Errors
+
+// Types and methods
+type Actor
+
+type Door
+
+type Guard
+
+// Type aliases
+
+// Traits
+

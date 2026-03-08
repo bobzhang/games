@@ -619,28 +619,28 @@ fn draw_touch_ui(state : Int) -> Unit {
       @raylib.Color::new(24, 42, 62, 186),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "L",
       pad_x + 36,
       pad_y + 88,
       28,
       @raylib.Color::new(216, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "R",
       pad_x + 180,
       pad_y + 88,
       28,
       @raylib.Color::new(216, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "U",
       pad_x + 106,
       pad_y + 24,
       28,
       @raylib.Color::new(216, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "D",
       pad_x + 105,
       pad_y + 146,
@@ -692,28 +692,28 @@ fn draw_touch_ui(state : Int) -> Unit {
       @raylib.Color::new(24, 50, 72, 196),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "FIRE",
       btn_x + 44,
       btn_y + 46,
       24,
       @raylib.Color::new(246, 252, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "CAP",
       btn_x + 196,
       btn_y + 46,
       24,
       @raylib.Color::new(246, 252, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "DASH",
       btn_x + 40,
       btn_y + 146,
       24,
       @raylib.Color::new(246, 252, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "PULSE",
       btn_x + 178,
       btn_y + 146,
@@ -727,6 +727,7 @@ fn draw_touch_ui(state : Int) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] void anchor raid 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let walls : Array[Wall] = Array::makei(max_walls, fn(_i) {
     { active: false, x: 0.0, y: 0.0, w: 0.0, h: 0.0 }
@@ -2072,56 +2073,56 @@ fn main {
 
     // HUD
     @raylib.draw_rectangle(0, 0, sw, 86, @raylib.Color::new(8, 12, 20, 232))
-    @raylib.draw_text(
+    @draw.draw_text(
       "Void Anchor Raid 2026",
       16,
       10,
       30,
       @raylib.Color::new(210, 236, 252, 248),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Wave \{wave}",
       20,
       48,
       22,
       @raylib.Color::new(246, 228, 170, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{player.score}",
       164,
       48,
       22,
       @raylib.Color::new(214, 236, 252, 248),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Combo \{player.combo}",
       346,
       48,
       22,
       @raylib.Color::new(170, 236, 194, 250),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Best \{player.best_combo}",
       510,
       48,
       22,
       @raylib.Color::new(170, 210, 252, 250),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Anchors \{count_owned_anchors(anchors, 1)}/\{count_total_anchors(anchors)}",
       684,
       48,
       22,
       @raylib.Color::new(214, 236, 252, 248),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{timer.to_int()}s",
       1020,
       48,
       22,
       @raylib.Color::new(248, 214, 174, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "FPS \{@raylib.get_fps()}",
       sw - 118,
       12,
@@ -2147,7 +2148,7 @@ fn main {
       12,
       @raylib.Color::new(102, 212, 170, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "HOLD",
       16,
       110,
@@ -2169,7 +2170,7 @@ fn main {
       10,
       @raylib.Color::new(230, 102, 122, 255),
     )
-    @raylib.draw_text("HP", 16, 144, 16, @raylib.Color::new(238, 206, 216, 255))
+    @draw.draw_text("HP", 16, 144, 16, @raylib.Color::new(238, 206, 216, 255))
 
     @raylib.draw_rectangle(
       16,
@@ -2185,7 +2186,7 @@ fn main {
       10,
       @raylib.Color::new(90, 190, 240, 255),
     )
-    @raylib.draw_text("EN", 16, 176, 16, @raylib.Color::new(206, 230, 252, 255))
+    @draw.draw_text("EN", 16, 176, 16, @raylib.Color::new(206, 230, 252, 255))
 
     @raylib.draw_rectangle(
       16,
@@ -2201,7 +2202,7 @@ fn main {
       10,
       @raylib.Color::new(244, 172, 98, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "HEAT",
       16,
       208,
@@ -2209,14 +2210,14 @@ fn main {
       @raylib.Color::new(246, 222, 194, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Capture [H]  Dash [K] \{(player.dash_cd * 10.0).to_int()}  Pulse [L] \{(player.pulse_cd * 10.0).to_int()}",
       332,
       100,
       20,
       @raylib.Color::new(224, 236, 250, 244),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Enemies \{count_active_enemies(enemies)}  Hold \{hold_t.to_int()} / \{anchor_hold_goal.to_int()} sec",
       332,
       130,
@@ -2232,7 +2233,7 @@ fn main {
         36,
         @raylib.Color::new(12, 18, 30, 212),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         msg,
         sw / 2 - 310,
         sh - 58,
@@ -2260,49 +2261,49 @@ fn main {
         @raylib.Color::new(94, 154, 210, 206),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "VOID ANCHOR RAID 2026",
         262,
         186,
         56,
         @raylib.Color::new(188, 236, 252, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Capture every anchor and hold control for 10 seconds.",
         250,
         286,
         30,
         @raylib.Color::new(214, 228, 246, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Enemy waves scale and enemy anchors can fire back.",
         266,
         330,
         30,
         @raylib.Color::new(214, 228, 246, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Move: WASD / Arrows   Fire: J / Space",
         320,
         388,
         28,
         @raylib.Color::new(196, 220, 242, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Capture Boost: H   Dash: K   Pulse: L",
         332,
         430,
         28,
         @raylib.Color::new(196, 220, 242, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Touch controls are shown for mobile play.",
         344,
         470,
         28,
         @raylib.Color::new(196, 220, 242, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press Enter or tap to begin",
         444,
         552,
@@ -2326,28 +2327,28 @@ fn main {
         @raylib.Color::new(104, 220, 188, 214),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "ANCHORS STABILIZED",
         320,
         246,
         60,
         @raylib.Color::new(164, 246, 206, 254),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Final Score: \{player.score}",
         454,
         338,
         36,
         @raylib.Color::new(236, 246, 252, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Best Combo: \{player.best_combo}   Wave: \{wave}",
         418,
         388,
         30,
         @raylib.Color::new(214, 236, 252, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R / Enter / Tap to run again",
         404,
         470,
@@ -2371,28 +2372,28 @@ fn main {
         @raylib.Color::new(214, 106, 120, 214),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "RAID FAILED",
         432,
         246,
         60,
         @raylib.Color::new(248, 164, 176, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{player.score}",
         498,
         338,
         36,
         @raylib.Color::new(236, 246, 252, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Owned Anchors: \{count_owned_anchors(anchors, 1)}/\{count_total_anchors(anchors)}",
         350,
         388,
         30,
         @raylib.Color::new(214, 236, 252, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R / Enter / Tap to retry",
         430,
         470,
@@ -2401,8 +2402,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

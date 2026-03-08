@@ -141,6 +141,7 @@ fn estimate_enemy_power(distance : Float, angle : Float, wind : Float) -> Float 
 fn main {
   @raylib.init_window(sw, sh, "Castle Siege Artillery 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let player_center_x = Float::from_int(player_x + castle_w / 2)
   let enemy_center_x = Float::from_int(enemy_x + castle_w / 2)
@@ -508,8 +509,8 @@ fn main {
     let wind_end_x = wind_mid_x + (wind * 0.9).to_int()
     @raylib.draw_line(wind_mid_x, 44, wind_end_x, 44, @raylib.white)
     @raylib.draw_circle(wind_end_x, 44, 5.0, @raylib.white)
-    @raylib.draw_text("WIND", wind_mid_x - 40, 18, 22, @raylib.white)
-    @raylib.draw_text(
+    @draw.draw_text("WIND", wind_mid_x - 40, 18, 22, @raylib.white)
+    @draw.draw_text(
       "\{wind.to_int()}",
       wind_mid_x + 60,
       18,
@@ -525,7 +526,7 @@ fn main {
       24,
       @raylib.Color::new(88, 228, 112, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "PLAYER HP \{player_hp}",
       28,
       44,
@@ -547,7 +548,7 @@ fn main {
       24,
       @raylib.Color::new(240, 108, 108, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "ENEMY HP \{enemy_hp}",
       sw - 284,
       44,
@@ -555,14 +556,14 @@ fn main {
       @raylib.Color::new(220, 236, 248, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "CASTLE SIEGE ARTILLERY 2026",
       360,
       76,
       34,
       @raylib.Color::new(238, 244, 250, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Round \{round}",
       592,
       112,
@@ -597,14 +598,14 @@ fn main {
         }
       }
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "Angle \{player_angle.to_int()}",
         24,
         114,
         24,
         @raylib.Color::new(242, 246, 252, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Power \{player_power.to_int()}",
         24,
         142,
@@ -654,7 +655,7 @@ fn main {
       192,
       @raylib.Color::new(14, 20, 30, 220),
     )
-    @raylib.draw_text("Touch", 82, sh - 198, 20, @raylib.white)
+    @draw.draw_text("Touch", 82, sh - 198, 20, @raylib.white)
 
     @raylib.draw_rectangle(
       base_x,
@@ -663,7 +664,7 @@ fn main {
       52,
       @raylib.Color::new(42, 58, 82, 255),
     )
-    @raylib.draw_text("ANG-", base_x + 16, base_y + 16, 22, @raylib.white)
+    @draw.draw_text("ANG-", base_x + 16, base_y + 16, 22, @raylib.white)
     @raylib.draw_rectangle(
       base_x + 94,
       base_y,
@@ -671,7 +672,7 @@ fn main {
       52,
       @raylib.Color::new(42, 58, 82, 255),
     )
-    @raylib.draw_text("ANG+", base_x + 110, base_y + 16, 22, @raylib.white)
+    @draw.draw_text("ANG+", base_x + 110, base_y + 16, 22, @raylib.white)
 
     @raylib.draw_rectangle(
       base_x,
@@ -680,7 +681,7 @@ fn main {
       52,
       @raylib.Color::new(42, 58, 82, 255),
     )
-    @raylib.draw_text("POW-", base_x + 15, base_y + 76, 22, @raylib.white)
+    @draw.draw_text("POW-", base_x + 15, base_y + 76, 22, @raylib.white)
     @raylib.draw_rectangle(
       base_x + 94,
       base_y + 60,
@@ -688,7 +689,7 @@ fn main {
       52,
       @raylib.Color::new(42, 58, 82, 255),
     )
-    @raylib.draw_text("POW+", base_x + 109, base_y + 76, 22, @raylib.white)
+    @draw.draw_text("POW+", base_x + 109, base_y + 76, 22, @raylib.white)
 
     @raylib.draw_rectangle(
       base_x,
@@ -697,7 +698,7 @@ fn main {
       56,
       @raylib.Color::new(180, 70, 64, 255),
     )
-    @raylib.draw_text("FIRE", base_x + 62, base_y + 138, 26, @raylib.white)
+    @draw.draw_text("FIRE", base_x + 62, base_y + 138, 26, @raylib.white)
 
     @raylib.draw_rectangle(
       236,
@@ -706,7 +707,7 @@ fn main {
       42,
       @raylib.Color::new(10, 16, 24, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       248,
       sh - 54,
@@ -723,14 +724,14 @@ fn main {
         196,
         @raylib.Color::new(18, 28, 44, 242),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "BATTLE OVER",
         sw / 2 - 132,
         sh / 2 - 40,
         48,
         @raylib.Color::new(248, 226, 136, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R to restart",
         sw / 2 - 118,
         sh / 2 + 22,
@@ -739,8 +740,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -5,8 +5,8 @@ fn draw_center_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
 }
 
 ///|
@@ -485,15 +485,15 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(130, 178, 220, 210),
   )
 
-  @raylib.draw_text("SOLAR RAIL BREAKER", 28, 26, 30, @types.ring_alpha())
-  @raylib.draw_text(
+  @draw.draw_text("SOLAR RAIL BREAKER", 28, 26, 30, @types.ring_alpha())
+  @draw.draw_text(
     "Score: \{game.score}   Best: \{game.best_score}",
     30,
     56,
     22,
     @raylib.Color::new(232, 238, 250, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Stage \{game.stage}   Kills \{game.stage_kills}/\{game.stage_goal}   Combo x\{game.combo}",
     30,
     84,
@@ -512,7 +512,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     16,
     @raylib.Color::new(220, 236, 246, 220),
   )
-  @raylib.draw_text("HULL", 570, 2, 16, @raylib.Color::new(236, 242, 250, 255))
+  @draw.draw_text("HULL", 570, 2, 16, @raylib.Color::new(236, 242, 250, 255))
 
   let phase_w = 280
   let phase_fill = (Float::from_int(phase_w) *
@@ -533,7 +533,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     16,
     @raylib.Color::new(220, 236, 246, 220),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     if game.phase_beta {
       "PHASE BETA"
     } else {
@@ -572,7 +572,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     20,
     @raylib.Color::new(220, 236, 246, 220),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time \{game.stage_time_left.to_int()}s",
     884,
     48,
@@ -588,7 +588,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     44,
     @raylib.Color::new(166, 198, 226, 220),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "RESTART",
     1138,
     82,
@@ -598,7 +598,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
 
   if game.hint_t > 0.0 {
     let alpha = (game.hint_t / 7.0 * 255.0).to_int().clamp(min=0, max=255)
-    @raylib.draw_text(
+    @draw.draw_text(
       "Hint: phase shift to hit hidden enemies and avoid wrong gates",
       30,
       120,
@@ -635,8 +635,8 @@ fn draw_button(
     stroke,
   )
 
-  let tw = @raylib.measure_text(label, 34)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(label, 34)
+  @draw.draw_text(
     label,
     x.to_int() + w.to_int() / 2 - tw / 2,
     y.to_int() + h.to_int() / 2 - 16,
@@ -784,7 +784,7 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
     @types.ring_beta(),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mobile: < > rotate, IN/OUT switch rail, F fire, B beam",
     240,
     @types.screen_h - 26,
@@ -826,28 +826,28 @@ fn @types.Game::draw_title_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(126, 182, 232, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "A / D or Left / Right: orbit rotate",
     326,
     328,
     28,
     @raylib.Color::new(230, 238, 248, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "W / S or Up / Down: switch rail",
     326,
     366,
     28,
     @raylib.Color::new(230, 238, 248, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Space / J: rapid fire",
     326,
     404,
     28,
     @raylib.Color::new(230, 238, 248, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "K / L / Shift: phase beam",
     326,
     442,

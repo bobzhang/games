@@ -37,6 +37,7 @@ fn main {
 
   @raylib.disable_cursor()
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -102,7 +103,7 @@ fn main {
       @raylib.draw_bounding_box(bounds, @raylib.green)
     }
     @raylib.end_mode_3d()
-    @raylib.draw_text(
+    @draw.draw_text(
       "Drag & drop model to load mesh/texture.",
       10,
       @raylib.get_screen_height() - 20,
@@ -110,7 +111,7 @@ fn main {
       @raylib.darkgray,
     )
     if selected {
-      @raylib.draw_text(
+      @draw.draw_text(
         "MODEL SELECTED",
         @raylib.get_screen_width() - 110,
         10,
@@ -119,11 +120,13 @@ fn main {
       )
     }
     @raylib.draw_fps(10, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_texture(texture)
   @raylib.unload_model(model)
+  @draw.cleanup()
   @raylib.close_window()
 }

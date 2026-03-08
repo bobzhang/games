@@ -134,7 +134,7 @@ fn draw_unit(x : Int, y : Int, color : @raylib.Color, glyph : String) -> Unit {
   let px = view_x + x * tile_sz
   let py = view_y + y * tile_sz
   @raylib.draw_rectangle(px + 6, py + 6, tile_sz - 12, tile_sz - 12, color)
-  @raylib.draw_text(glyph, px + 12, py + 8, 20, @raylib.black)
+  @draw.draw_text(glyph, px + 12, py + 8, 20, @raylib.black)
 }
 
 ///|
@@ -152,6 +152,7 @@ fn alive_mobs(mobs : Array[Mob]) -> Int {
 fn main {
   @raylib.init_window(screen_w, screen_h, "Rogue Dungeon 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let level = gen_level()
   let mobs : Array[Mob] = [
@@ -285,18 +286,18 @@ fn main {
       }
     }
 
-    @raylib.draw_text("ROGUE DUNGEON 2026", 20, 20, 34, @raylib.lime)
-    @raylib.draw_text("HP: \{hero_hp}", 22, 60, 24, @raylib.raywhite)
-    @raylib.draw_text("Score: \{score}", 170, 60, 24, @raylib.raywhite)
-    @raylib.draw_text("Turns: \{turns}", 360, 60, 24, @raylib.raywhite)
-    @raylib.draw_text(
+    @draw.draw_text("ROGUE DUNGEON 2026", 20, 20, 34, @raylib.lime)
+    @draw.draw_text("HP: \{hero_hp}", 22, 60, 24, @raylib.raywhite)
+    @draw.draw_text("Score: \{score}", 170, 60, 24, @raylib.raywhite)
+    @draw.draw_text("Turns: \{turns}", 360, 60, 24, @raylib.raywhite)
+    @draw.draw_text(
       "Enemies: \{alive_mobs(mobs)}",
       530,
       60,
       24,
       @raylib.raywhite,
     )
-    @raylib.draw_text("WASD move/attack | R restart", 700, 26, 20, @raylib.gray)
+    @draw.draw_text("WASD move/attack | R restart", 700, 26, 20, @raylib.gray)
 
     if victory || defeat {
       @raylib.draw_rectangle(
@@ -306,7 +307,7 @@ fn main {
         120,
         @raylib.fade(@raylib.black, 0.76),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if victory {
           "DUNGEON CLEARED"
         } else {
@@ -321,11 +322,13 @@ fn main {
           @raylib.red
         },
       )
-      @raylib.draw_text("Press R to restart", 432, 378, 24, @raylib.raywhite)
+      @draw.draw_text("Press R to restart", 432, 378, 24, @raylib.raywhite)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

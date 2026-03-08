@@ -108,6 +108,7 @@ fn regen_world(terrain : Array[Int], zone : Array[Int]) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "City Builder Mini 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let terrain : Array[Int] = Array::make(gw * gh, 0)
   let zone : Array[Int] = Array::make(gw * gh, 0)
@@ -260,17 +261,17 @@ fn main {
       }
     }
 
-    @raylib.draw_text("CITY BUILDER MINI 2026", 20, 18, 34, @raylib.yellow)
-    @raylib.draw_text("Day: \{day}", 24, 58, 24, @raylib.raywhite)
-    @raylib.draw_text("Money: \{money}", 170, 58, 24, @raylib.gold)
-    @raylib.draw_text(
+    @draw.draw_text("CITY BUILDER MINI 2026", 20, 18, 34, @raylib.yellow)
+    @draw.draw_text("Day: \{day}", 24, 58, 24, @raylib.raywhite)
+    @draw.draw_text("Money: \{money}", 170, 58, 24, @raylib.gold)
+    @draw.draw_text(
       "Population: \{population}",
       360,
       58,
       24,
       @raylib.raywhite,
     )
-    @raylib.draw_text("Happiness: \{happiness}", 620, 58, 24, @raylib.lime)
+    @draw.draw_text("Happiness: \{happiness}", 620, 58, 24, @raylib.lime)
 
     let tool_name = match tool {
       0 => "Bulldoze"
@@ -280,8 +281,8 @@ fn main {
       4 => "Industrial"
       _ => ""
     }
-    @raylib.draw_text("Tool: \{tool_name}", 24, 630, 24, @raylib.skyblue)
-    @raylib.draw_text(
+    @draw.draw_text("Tool: \{tool_name}", 24, 630, 24, @raylib.skyblue)
+    @draw.draw_text(
       "0 bulldoze | 1 road | 2 res | 3 com | 4 ind | click to build | R restart",
       260, 630, 22, @raylib.gray,
     )
@@ -294,7 +295,7 @@ fn main {
         130,
         @raylib.fade(@raylib.black, 0.78),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "CITY THRIVES"
         } else {
@@ -309,11 +310,13 @@ fn main {
           @raylib.red
         },
       )
-      @raylib.draw_text("Press R to restart", 430, 366, 26, @raylib.raywhite)
+      @draw.draw_text("Press R to restart", 430, 366, 26, @raylib.raywhite)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

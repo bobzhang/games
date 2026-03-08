@@ -280,6 +280,7 @@ fn restore_crew(rooms : Array[Room], crew_vals : Array[Float]) -> Unit {
 fn main {
   @raylib.init_window(screen_w, screen_h, "Orbital Quarantine 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let rooms : Array[Room] = Array::makei(cols * rows, fn(_i) {
     { label: "", contam: 0.0F, oxygen: 100.0F, crew: 100.0F, source: 0.0F, purge_t: 0.0F, boost_t: 0.0F }
@@ -395,24 +396,24 @@ fn main {
 
     if title {
       @raylib.draw_rectangle_gradient_v(0, 0, screen_w, screen_h, @raylib.Color::new(12, 20, 34, 255), @raylib.Color::new(4, 8, 14, 255))
-      @raylib.draw_text("ORBITAL QUARANTINE 2026", 230, 150, 58, @raylib.Color::new(236, 246, 255, 255))
-      @raylib.draw_text("Seal compartments. Spend power. Keep oxygen and crew online.", 250, 246, 30, @raylib.Color::new(143, 206, 255, 255))
-      @raylib.draw_text("Left click room: Purge contamination (\{purge_cost.to_int()} power)", 280, 390, 28, @raylib.Color::new(255, 214, 118, 255))
-      @raylib.draw_text("Right click room: Oxygen boost (\{boost_cost.to_int()} power)", 286, 430, 28, @raylib.Color::new(255, 214, 118, 255))
-      @raylib.draw_text("Click door links: Seal or open", 350, 470, 28, @raylib.Color::new(255, 214, 118, 255))
-      @raylib.draw_text("Space: Pause / resume", 350, 510, 28, @raylib.Color::new(255, 214, 118, 255))
+      @draw.draw_text("ORBITAL QUARANTINE 2026", 230, 150, 58, @raylib.Color::new(236, 246, 255, 255))
+      @draw.draw_text("Seal compartments. Spend power. Keep oxygen and crew online.", 250, 246, 30, @raylib.Color::new(143, 206, 255, 255))
+      @draw.draw_text("Left click room: Purge contamination (\{purge_cost.to_int()} power)", 280, 390, 28, @raylib.Color::new(255, 214, 118, 255))
+      @draw.draw_text("Right click room: Oxygen boost (\{boost_cost.to_int()} power)", 286, 430, 28, @raylib.Color::new(255, 214, 118, 255))
+      @draw.draw_text("Click door links: Seal or open", 350, 470, 28, @raylib.Color::new(255, 214, 118, 255))
+      @draw.draw_text("Space: Pause / resume", 350, 510, 28, @raylib.Color::new(255, 214, 118, 255))
       @raylib.draw_rectangle(420, 630, 440, 82, @raylib.Color::new(44, 90, 124, 255))
-      @raylib.draw_text("PRESS ENTER TO START", 474, 658, 30, @raylib.Color::new(244, 249, 255, 255))
+      @draw.draw_text("PRESS ENTER TO START", 474, 658, 30, @raylib.Color::new(244, 249, 255, 255))
     } else {
       @raylib.draw_rectangle(80, 60, 1160, 92, @raylib.Color::new(14, 22, 34, 255))
-      @raylib.draw_text("Sector \{sector}/3", 104, 86, 32, @raylib.Color::new(237, 242, 248, 255))
-      @raylib.draw_text(if paused { "PAUSED" } else { "LIVE" }, 290, 86, 32, if paused { @raylib.Color::new(255, 211, 112, 255) } else { @raylib.Color::new(140, 236, 182, 255) })
-      @raylib.draw_text("Time \{timer.to_int()}s", 420, 86, 30, @raylib.Color::new(199, 216, 232, 255))
-      @raylib.draw_text("Power", 620, 72, 22, @raylib.Color::new(215, 226, 236, 255))
+      @draw.draw_text("Sector \{sector}/3", 104, 86, 32, @raylib.Color::new(237, 242, 248, 255))
+      @draw.draw_text(if paused { "PAUSED" } else { "LIVE" }, 290, 86, 32, if paused { @raylib.Color::new(255, 211, 112, 255) } else { @raylib.Color::new(140, 236, 182, 255) })
+      @draw.draw_text("Time \{timer.to_int()}s", 420, 86, 30, @raylib.Color::new(199, 216, 232, 255))
+      @draw.draw_text("Power", 620, 72, 22, @raylib.Color::new(215, 226, 236, 255))
       draw_bar(620, 100, 160, power, @raylib.Color::new(255, 204, 104, 255))
-      @raylib.draw_text("Integrity", 830, 72, 22, @raylib.Color::new(215, 226, 236, 255))
+      @draw.draw_text("Integrity", 830, 72, 22, @raylib.Color::new(215, 226, 236, 255))
       draw_bar(830, 100, 160, integrity, @raylib.Color::new(114, 219, 255, 255))
-      @raylib.draw_text("Crew", 1040, 72, 22, @raylib.Color::new(215, 226, 236, 255))
+      @draw.draw_text("Crew", 1040, 72, 22, @raylib.Color::new(215, 226, 236, 255))
       draw_bar(1040, 100, 150, avg_crew(rooms), @raylib.Color::new(134, 234, 170, 255))
 
       for y in 0..<rows {
@@ -424,12 +425,12 @@ fn main {
           let base_b = if rooms[i].boost_t > 0.0F { 150 } else { 104 }
           @raylib.draw_rectangle(rect.0, rect.1, rect.2, rect.3, @raylib.Color::new(base_r, base_g, base_b, 255))
           @raylib.draw_rectangle_lines(rect.0, rect.1, rect.2, rect.3, @raylib.Color::new(10, 16, 24, 255))
-          @raylib.draw_text(rooms[i].label, rect.0 + 14, rect.1 + 14, 24, @raylib.Color::new(244, 247, 252, 255))
+          @draw.draw_text(rooms[i].label, rect.0 + 14, rect.1 + 14, 24, @raylib.Color::new(244, 247, 252, 255))
           draw_bar(rect.0 + 14, rect.1 + 52, rect.2 - 28, rooms[i].contam, @raylib.Color::new(242, 104, 104, 255))
           draw_bar(rect.0 + 14, rect.1 + 72, rect.2 - 28, rooms[i].oxygen, @raylib.Color::new(116, 214, 255, 255))
           draw_bar(rect.0 + 14, rect.1 + 92, rect.2 - 28, rooms[i].crew, @raylib.Color::new(126, 228, 164, 255))
-          @raylib.draw_text("PURGE", rect.0 + 14, rect.1 + rect.3 - 44, 20, if rooms[i].purge_t > 0.0F { @raylib.Color::new(255, 232, 178, 255) } else { @raylib.Color::new(46, 70, 92, 255) })
-          @raylib.draw_text("BOOST", rect.0 + 104, rect.1 + rect.3 - 44, 20, if rooms[i].boost_t > 0.0F { @raylib.Color::new(226, 248, 255, 255) } else { @raylib.Color::new(46, 70, 92, 255) })
+          @draw.draw_text("PURGE", rect.0 + 14, rect.1 + rect.3 - 44, 20, if rooms[i].purge_t > 0.0F { @raylib.Color::new(255, 232, 178, 255) } else { @raylib.Color::new(46, 70, 92, 255) })
+          @draw.draw_text("BOOST", rect.0 + 104, rect.1 + rect.3 - 44, 20, if rooms[i].boost_t > 0.0F { @raylib.Color::new(226, 248, 255, 255) } else { @raylib.Color::new(46, 70, 92, 255) })
         }
       }
 
@@ -449,19 +450,21 @@ fn main {
       }
 
       @raylib.draw_rectangle(80, 742, 1160, 78, @raylib.Color::new(14, 22, 34, 255))
-      @raylib.draw_text(msg, 102, 770, 28, @raylib.Color::new(235, 242, 248, 255))
-      @raylib.draw_text("Left click: purge  |  Right click: boost  |  Space: pause", 642, 772, 22, @raylib.Color::new(255, 214, 118, 255))
+      @draw.draw_text(msg, 102, 770, 28, @raylib.Color::new(235, 242, 248, 255))
+      @draw.draw_text("Left click: purge  |  Right click: boost  |  Space: pause", 642, 772, 22, @raylib.Color::new(255, 214, 118, 255))
 
       if over {
         @raylib.draw_rectangle(0, 0, screen_w, screen_h, @raylib.fade(@raylib.black, 0.6F))
-        @raylib.draw_text(if won { "QUARANTINE HELD" } else { "STATION LOST" }, 360, 250, 62, if won { @raylib.Color::new(142, 242, 188, 255) } else { @raylib.Color::new(255, 120, 120, 255) })
-        @raylib.draw_text(msg, 320, 340, 34, @raylib.Color::new(238, 244, 248, 255))
-        @raylib.draw_text("Press R to restart", 482, 430, 30, @raylib.Color::new(255, 214, 118, 255))
+        @draw.draw_text(if won { "QUARANTINE HELD" } else { "STATION LOST" }, 360, 250, 62, if won { @raylib.Color::new(142, 242, 188, 255) } else { @raylib.Color::new(255, 120, 120, 255) })
+        @draw.draw_text(msg, 320, 340, 34, @raylib.Color::new(238, 244, 248, 255))
+        @draw.draw_text("Press R to restart", 482, 430, 30, @raylib.Color::new(255, 214, 118, 255))
       }
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

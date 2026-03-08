@@ -6,8 +6,8 @@ fn draw_center_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
 }
 
 ///|
@@ -426,7 +426,7 @@ fn draw_meter(
   ratio : Float,
   col : @raylib.Color,
 ) -> Unit {
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
     x,
     y - 20,
@@ -448,7 +448,7 @@ fn draw_meter(
     16,
     @raylib.Color::new(148, 170, 198, 170),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     value_text,
     x + w + 10,
     y - 2,
@@ -517,21 +517,21 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @types.col_barrier(),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Wave " + game.wave.to_string(),
     404,
     28,
     30,
     @raylib.Color::new(232, 242, 255, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score " + game.score.to_string(),
     404,
     68,
     30,
     @raylib.Color::new(250, 220, 132, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best " + game.best_score.to_string(),
     404,
     104,
@@ -539,7 +539,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(176, 208, 246, 230),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Kills " + game.kills.to_string(),
     650,
     36,
@@ -547,7 +547,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(202, 228, 250, 230),
   )
   if game.combo > 1 {
-    @raylib.draw_text(
+    @draw.draw_text(
       "Combo x" + game.combo.to_string(),
       650,
       82,
@@ -556,21 +556,21 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     )
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "WASD/Arrows Move Cursor",
     930,
     24,
     22,
     @raylib.Color::new(220, 232, 246, 220),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "J Place/Upgrade  K Sell/Cancel",
     930,
     56,
     22,
     @raylib.Color::new(220, 232, 246, 220),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Space Barrier Burst  P Pause  R Restart",
     930,
     88,

@@ -474,6 +474,7 @@ fn resolve_point(
 fn main {
   @raylib.init_window(sw, sh, "Rooftop Volleyball 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let player : Athlete = {
     x: 284.0,
@@ -1112,7 +1113,7 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 118, @raylib.Color::new(6, 10, 18, 232))
-    @raylib.draw_text(
+    @draw.draw_text(
       "ROOFTOP VOLLEYBALL 2026",
       16,
       18,
@@ -1120,14 +1121,14 @@ fn main {
       @raylib.Color::new(236, 246, 255, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Player",
       420,
       18,
       26,
       @raylib.Color::new(110, 226, 250, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Rival",
       770,
       18,
@@ -1135,14 +1136,14 @@ fn main {
       @raylib.Color::new(248, 140, 226, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Sets \{player.sets}",
       404,
       50,
       30,
       @raylib.Color::new(220, 236, 250, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Sets \{bot.sets}",
       754,
       50,
@@ -1150,14 +1151,14 @@ fn main {
       @raylib.Color::new(220, 236, 250, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Pts \{player.score}",
       526,
       50,
       30,
       @raylib.Color::new(250, 232, 142, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Pts \{bot.score}",
       876,
       50,
@@ -1165,7 +1166,7 @@ fn main {
       @raylib.Color::new(250, 232, 142, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Stars \{stars}",
       1080,
       24,
@@ -1173,14 +1174,14 @@ fn main {
       @raylib.Color::new(250, 228, 136, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "P-Energy \{player.energy.to_int()}%",
       20,
       78,
       22,
       @raylib.Color::new(214, 236, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "B-Energy \{bot.energy.to_int()}%",
       246,
       78,
@@ -1214,7 +1215,7 @@ fn main {
 
     if wind.ttl > 0.0 {
       let dir = if wind.dir > 0.0 { "->" } else { "<-" }
-      @raylib.draw_text(
+      @draw.draw_text(
         "Wind \{dir} \{wind.strength.to_int()}",
         470,
         82,
@@ -1222,7 +1223,7 @@ fn main {
         @raylib.Color::new(166, 234, 250, 255),
       )
     } else {
-      @raylib.draw_text(
+      @draw.draw_text(
         "Wind calm",
         470,
         82,
@@ -1238,7 +1239,7 @@ fn main {
       172,
       @raylib.Color::new(8, 14, 28, 220),
     )
-    @raylib.draw_text("Touch", 78, sh - 174, 20, @raylib.white)
+    @draw.draw_text("Touch", 78, sh - 174, 20, @raylib.white)
     @raylib.draw_rectangle(
       move_left_x,
       move_left_y,
@@ -1246,7 +1247,7 @@ fn main {
       152,
       @raylib.Color::new(52, 72, 100, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "LEFT",
       move_left_x + 18,
       move_left_y + 62,
@@ -1260,7 +1261,7 @@ fn main {
       152,
       @raylib.Color::new(52, 72, 100, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "RIGHT",
       move_right_x + 10,
       move_right_y + 62,
@@ -1275,7 +1276,7 @@ fn main {
       152,
       @raylib.Color::new(72, 154, 220, 255),
     )
-    @raylib.draw_text("JUMP", jump_x + 16, jump_y + 58, 30, @raylib.white)
+    @draw.draw_text("JUMP", jump_x + 16, jump_y + 58, 30, @raylib.white)
     @raylib.draw_rectangle(
       hit_x,
       hit_y,
@@ -1283,7 +1284,7 @@ fn main {
       152,
       @raylib.Color::new(214, 110, 82, 255),
     )
-    @raylib.draw_text("HIT", hit_x + 28, hit_y + 58, 30, @raylib.white)
+    @draw.draw_text("HIT", hit_x + 28, hit_y + 58, 30, @raylib.white)
     @raylib.draw_rectangle(
       dash_x,
       dash_y,
@@ -1291,7 +1292,7 @@ fn main {
       152,
       @raylib.Color::new(94, 188, 124, 255),
     )
-    @raylib.draw_text("DASH", dash_x + 8, dash_y + 58, 26, @raylib.white)
+    @draw.draw_text("DASH", dash_x + 8, dash_y + 58, 26, @raylib.white)
 
     @raylib.draw_rectangle(
       224,
@@ -1300,7 +1301,7 @@ fn main {
       38,
       @raylib.Color::new(6, 10, 18, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       round_msg,
       236,
       sh - 46,
@@ -1310,7 +1311,7 @@ fn main {
 
     if rally_wait > 0.0 && !over {
       let countdown = rally_wait.to_int() + 1
-      @raylib.draw_text(
+      @draw.draw_text(
         "Next rally \{countdown}",
         sw / 2 - 92,
         sh / 2 - 30,
@@ -1328,7 +1329,7 @@ fn main {
         208,
         @raylib.Color::new(16, 24, 40, 244),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "CHAMPION"
         } else {
@@ -1343,7 +1344,7 @@ fn main {
           @raylib.Color::new(252, 140, 140, 255)
         },
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R to restart",
         sw / 2 - 124,
         sh / 2 + 46,
@@ -1352,8 +1353,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

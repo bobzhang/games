@@ -213,6 +213,7 @@ fn draw_fire_arm(
 fn main {
   @raylib.init_window(screen_w, screen_h, "Bomber Grid 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let map = init_map()
   let mut player_x = 1
@@ -429,9 +430,9 @@ fn main {
       }
     }
 
-    @raylib.draw_text("BOMBER GRID 2026", 24, 20, 34, @raylib.yellow)
-    @raylib.draw_text("Score: \{score}", 26, 56, 24, @raylib.raywhite)
-    @raylib.draw_text(
+    @draw.draw_text("BOMBER GRID 2026", 24, 20, 34, @raylib.yellow)
+    @draw.draw_text("Score: \{score}", 26, 56, 24, @raylib.raywhite)
+    @draw.draw_text(
       "WASD move | SPACE bomb | R restart", 450, 30, 22, @raylib.gray,
     )
 
@@ -443,7 +444,7 @@ fn main {
         110,
         @raylib.fade(@raylib.black, 0.76),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if win {
           "YOU WIN"
         } else {
@@ -458,11 +459,13 @@ fn main {
           @raylib.red
         },
       )
-      @raylib.draw_text("Press R to restart", 368, 382, 24, @raylib.raywhite)
+      @draw.draw_text("Press R to restart", 368, 382, 24, @raylib.raywhite)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

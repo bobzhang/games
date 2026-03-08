@@ -4,6 +4,7 @@ fn main {
   @raylib.set_config_flags(@raylib.FlagWindowResizable)
   @raylib.init_window(800, 600, "MoonBit Raylib Demo")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Ball state
   let mut ball_x : Float = 400.0
@@ -55,8 +56,8 @@ fn main {
     @raylib.clear_background(@raylib.raywhite)
 
     // Draw title
-    @raylib.draw_text("MoonBit + Raylib", 10, 10, 30, @raylib.darkgray)
-    @raylib.draw_text(
+    @draw.draw_text("MoonBit + Raylib", 10, 10, 30, @raylib.darkgray)
+    @draw.draw_text(
       "Move the ball with WASD or Arrow Keys", 10, 50, 20, @raylib.gray,
     )
 
@@ -129,7 +130,7 @@ fn main {
       6,
       @raylib.darkpurple,
     )
-    @raylib.draw_text("Rounded Rect", 80, 430, 20, @raylib.white)
+    @draw.draw_text("Rounded Rect", 80, 430, 20, @raylib.white)
 
     // Draw polygon
     @raylib.draw_poly(
@@ -150,9 +151,11 @@ fn main {
     // Draw FPS
     @raylib.draw_fps(10, 570)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // Cleanup
+  @draw.cleanup()
   @raylib.close_window()
 }

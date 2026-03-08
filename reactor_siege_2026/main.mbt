@@ -360,7 +360,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(80, 106, 140, 84),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "L",
     pad_x + 30,
     pad_y + 88,
@@ -375,7 +375,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(80, 106, 140, 84),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "R",
     pad_x + 198,
     pad_y + 88,
@@ -390,7 +390,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(80, 106, 140, 84),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "U",
     pad_x + 112,
     pad_y + 26,
@@ -405,7 +405,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     78,
     @raylib.Color::new(80, 106, 140, 84),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "D",
     pad_x + 112,
     pad_y + 150,
@@ -420,7 +420,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     60,
     @raylib.Color::new(220, 126, 90, 96),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "FIRE",
     act_x + 56,
     pad_y + 30,
@@ -435,7 +435,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     60,
     @raylib.Color::new(108, 170, 232, 96),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "DASH",
     act_x + 52,
     pad_y + 96,
@@ -450,7 +450,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     60,
     @raylib.Color::new(114, 148, 222, 96),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "PULSE",
     act_x + 8,
     pad_y + 162,
@@ -465,7 +465,7 @@ fn draw_touch_controls(show : Bool) -> Unit {
     60,
     @raylib.Color::new(120, 190, 136, 96),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "BUILD",
     act_x + 100,
     pad_y + 162,
@@ -477,9 +477,11 @@ fn draw_touch_controls(show : Bool) -> Unit {
 ///|
 fn main {
   @raylib.init_window(sw, sh, "raylib [moonbit] example - reactor siege 2026")
+  @draw.cleanup()
   defer @raylib.close_window()
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let bullets = FixedArray::make(max_bullets, {
     active: false,
@@ -1252,6 +1254,7 @@ fn main {
     }
 
     @raylib.begin_drawing()
+    @fps.draw()
     defer @raylib.end_drawing()
 
     @raylib.clear_background(@raylib.Color::new(10, 18, 30, 255))
@@ -1514,14 +1517,14 @@ fn main {
       @raylib.Color::new(224, 236, 250, 138),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "REACTOR SIEGE 2026",
       30,
       24,
       34,
       @raylib.Color::new(236, 244, 254, 250),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Move: WASD/Arrows  Fire:J/Mouse  Dash:Shift  Pulse:Q  Build:E",
       32,
       64,
@@ -1538,7 +1541,7 @@ fn main {
       @raylib.Color::new(232, 130, 118, 255),
       @raylib.Color::new(90, 52, 52, 230),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Pilot HP",
       266,
       92,
@@ -1555,7 +1558,7 @@ fn main {
       @raylib.Color::new(116, 210, 242, 255),
       @raylib.Color::new(56, 78, 92, 230),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Reactor",
       266,
       120,
@@ -1572,7 +1575,7 @@ fn main {
       @raylib.Color::new(144, 234, 198, 255),
       @raylib.Color::new(58, 88, 74, 230),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Shield",
       266,
       148,
@@ -1580,7 +1583,7 @@ fn main {
       @raylib.Color::new(216, 230, 244, 244),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Scrap \{hero.scrap}   Score \{hero.score}   Level \{level}",
       32,
       180,
@@ -1599,21 +1602,21 @@ fn main {
       "Dash CD \{hero.dash_cd.to_int()}"
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time: \{timer.to_int()}s",
       sw - 320,
       22,
       34,
       @raylib.Color::new(246, 246, 252, 250),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       dash_text,
       sw - 320,
       62,
       24,
       @raylib.Color::new(176, 220, 252, 248),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       pulse_text,
       sw - 320,
       88,
@@ -1623,7 +1626,7 @@ fn main {
 
     if announce_t > 0.0 {
       let alpha : Int = clampf(announce_t * 90.0, 0.0, 220.0).to_int()
-      @raylib.draw_text(
+      @draw.draw_text(
         "Hold the perimeter. Build turrets on pads near the core.",
         sw / 2 - 372,
         218,
@@ -1634,28 +1637,28 @@ fn main {
 
     if state == 0 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 12, 20, 224))
-      @raylib.draw_text(
+      @draw.draw_text(
         "REACTOR SIEGE",
         sw / 2 - 292,
         sh / 2 - 116,
         82,
         @raylib.Color::new(238, 246, 252, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Defend the core from waves and keep the grid alive.",
         sw / 2 - 372,
         sh / 2 - 12,
         34,
         @raylib.Color::new(192, 216, 242, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Build and repair turrets using scrap from kills.",
         sw / 2 - 332,
         sh / 2 + 30,
         32,
         @raylib.Color::new(226, 232, 244, 238),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press ENTER to start",
         sw / 2 - 190,
         sh / 2 + 92,
@@ -1666,21 +1669,21 @@ fn main {
 
     if state == 2 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(10, 24, 20, 188))
-      @raylib.draw_text(
+      @draw.draw_text(
         "WAVE CLEARED",
         sw / 2 - 220,
         sh / 2 - 82,
         74,
         @raylib.Color::new(214, 252, 214, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score \{hero.score}   Scrap \{hero.scrap}   Core \{core.hp.to_int()}",
         sw / 2 - 312,
         sh / 2 + 8,
         38,
         @raylib.Color::new(236, 246, 238, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press ENTER for next wave",
         sw / 2 - 232,
         sh / 2 + 70,
@@ -1689,21 +1692,21 @@ fn main {
       )
     } else if state == 3 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(22, 8, 8, 198))
-      @raylib.draw_text(
+      @draw.draw_text(
         "REACTOR LOST",
         sw / 2 - 230,
         sh / 2 - 82,
         74,
         @raylib.Color::new(252, 192, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score \{hero.score}   Time \{timer.to_int()}s",
         sw / 2 - 200,
         sh / 2 + 8,
         38,
         @raylib.Color::new(246, 228, 220, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press ENTER to retry",
         sw / 2 - 184,
         sh / 2 + 70,

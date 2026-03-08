@@ -894,8 +894,8 @@ fn draw_button(
     @raylib.Color::new(220, 232, 252, 246),
   )
 
-  let tw : Int = @raylib.measure_text(label, 25)
-  @raylib.draw_text(
+  let tw : Int = @draw.measure_text(label, 25)
+  @draw.draw_text(
     label,
     x + (w - tw) / 2,
     y + h / 2 - 12,
@@ -1008,7 +1008,7 @@ fn draw_routes(
     let mx : Float = (nodes[a].x + nodes[b].x) * 0.5
     let my : Float = (nodes[a].y + nodes[b].y) * 0.5
     let hp_txt : Int = routes[i].hp.to_int()
-    @raylib.draw_text(
+    @draw.draw_text(
       "L\{routes[i].level} \{hp_txt}%",
       (mx - 42.0).to_int(),
       (my - 14.0).to_int(),
@@ -1116,14 +1116,14 @@ fn draw_nodes(nodes : Array[Node], selected_node : Int) -> Unit {
       )
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       nodes[i].name,
       (nodes[i].x - 72.0).to_int(),
       (nodes[i].y - nodes[i].r - 28.0).to_int(),
       18,
       @raylib.Color::new(236, 242, 255, 248),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       node_kind_name(nodes[i].kind),
       (nodes[i].x - 42.0).to_int(),
       (nodes[i].y - 8.0).to_int(),
@@ -1132,7 +1132,7 @@ fn draw_nodes(nodes : Array[Node], selected_node : Int) -> Unit {
     )
 
     if nodes[i].kind == 2 {
-      @raylib.draw_text(
+      @draw.draw_text(
         "G\{nodes[i].goods} D\{nodes[i].demand}",
         (nodes[i].x - 56.0).to_int(),
         (nodes[i].y + nodes[i].r + 8.0).to_int(),
@@ -1140,7 +1140,7 @@ fn draw_nodes(nodes : Array[Node], selected_node : Int) -> Unit {
         @raylib.Color::new(226, 240, 246, 246),
       )
     } else {
-      @raylib.draw_text(
+      @draw.draw_text(
         "R\{nodes[i].raw} G\{nodes[i].goods}",
         (nodes[i].x - 56.0).to_int(),
         (nodes[i].y + nodes[i].r + 8.0).to_int(),
@@ -1157,7 +1157,7 @@ fn draw_nodes(nodes : Array[Node], selected_node : Int) -> Unit {
         24,
         @raylib.Color::new(138, 28, 44, 224),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "OUTAGE",
         (nodes[i].x - 38.0).to_int(),
         (nodes[i].y + 34.0).to_int(),
@@ -1246,14 +1246,14 @@ fn draw_ui_panel(
     @raylib.Color::new(168, 188, 228, 244),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "PORT LOGISTICS EMPIRE",
     984,
     44,
     34,
     @raylib.Color::new(242, 248, 255, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Build routes. Move cargo. Beat the contract clock.",
     984,
     86,
@@ -1261,14 +1261,14 @@ fn draw_ui_panel(
     @raylib.Color::new(192, 214, 252, 238),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Timer",
     984,
     132,
     24,
     @raylib.Color::new(226, 236, 252, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{timer.to_int()}s",
     1126,
     132,
@@ -1276,14 +1276,14 @@ fn draw_ui_panel(
     @raylib.Color::new(248, 238, 150, 252),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Budget",
     984,
     170,
     24,
     @raylib.Color::new(226, 236, 252, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "$\{budget}",
     1126,
     170,
@@ -1291,14 +1291,14 @@ fn draw_ui_panel(
     @raylib.Color::new(138, 234, 156, 252),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Delivered",
     984,
     208,
     24,
     @raylib.Color::new(226, 236, 252, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{delivered}/\{goal}",
     1126,
     208,
@@ -1306,14 +1306,14 @@ fn draw_ui_panel(
     @raylib.Color::new(132, 214, 248, 252),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Load Tier",
     984,
     246,
     24,
     @raylib.Color::new(226, 236, 252, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{cycle}",
     1126,
     246,
@@ -1321,14 +1321,14 @@ fn draw_ui_panel(
     @raylib.Color::new(250, 210, 132, 252),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Routes \{route_n}",
     984,
     286,
     24,
     @raylib.Color::new(208, 224, 252, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Trucks \{truck_n}",
     1148,
     286,
@@ -1359,7 +1359,7 @@ fn draw_ui_panel(
   )
 
   if storm_t > 0.0 {
-    @raylib.draw_text(
+    @draw.draw_text(
       "STORM ACTIVE",
       984,
       354,
@@ -1367,7 +1367,7 @@ fn draw_ui_panel(
       @raylib.Color::new(252, 176, 186, 252),
     )
   } else {
-    @raylib.draw_text(
+    @draw.draw_text(
       "Storm ETA \{storm_cd.to_int()}s",
       984,
       354,
@@ -1394,21 +1394,21 @@ fn draw_ui_panel(
       @raylib.Color::new(178, 204, 248, 242),
     )
     let hp_txt : Int = routes[selected_route].hp.to_int()
-    @raylib.draw_text(
+    @draw.draw_text(
       "Selected Route #\{selected_route}",
       998,
       404,
       22,
       @raylib.Color::new(232, 242, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Level \{routes[selected_route].level}",
       998,
       432,
       22,
       @raylib.Color::new(248, 234, 152, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Integrity \{hp_txt}%",
       1148,
       432,
@@ -1430,7 +1430,7 @@ fn draw_ui_panel(
       84,
       @raylib.Color::new(156, 178, 216, 236),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Selected Route: none",
       998,
       420,
@@ -1439,21 +1439,21 @@ fn draw_ui_panel(
     )
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "How to play",
     984,
     672,
     26,
     @raylib.Color::new(230, 238, 252, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "1) Tap node A then node B to build line",
     984,
     704,
     19,
     @raylib.Color::new(194, 216, 252, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "2) Tap route to select, then upgrade",
     984,
     726,
@@ -1479,6 +1479,7 @@ fn route_upgrade_cost(level : Int) -> Int {
 fn main {
   @raylib.init_window(sw, sh, "raylib [game] port logistics empire 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let nodes : Array[Node] = Array::makei(max_nodes, fn(_i) {
     {
@@ -2013,14 +2014,14 @@ fn main {
       inside_rect(mouse.x, mouse.y, 984, 648, 326, 64),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Build new route cost: $\{build_cost}",
       36,
       704,
       24,
       @raylib.Color::new(228, 238, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Tap node A then node B to connect",
       36,
       730,
@@ -2029,7 +2030,7 @@ fn main {
     )
 
     if msg_t > 0.0 {
-      let bw : Int = @raylib.measure_text(msg, 30) + 44
+      let bw : Int = @draw.measure_text(msg, 30) + 44
       let bx : Int = sw / 2 - bw / 2
       @raylib.draw_rectangle(
         bx,
@@ -2045,7 +2046,7 @@ fn main {
         52,
         @raylib.Color::new(188, 214, 252, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         msg,
         bx + 22,
         28,
@@ -2056,14 +2057,14 @@ fn main {
 
     if state == 0 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 12, 20, 204))
-      @raylib.draw_text(
+      @draw.draw_text(
         "PORT LOGISTICS EMPIRE",
         sw / 2 - 318,
         138,
         70,
         @raylib.Color::new(234, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Real-time shipping strategy",
         sw / 2 - 184,
         226,
@@ -2086,28 +2087,28 @@ fn main {
         @raylib.Color::new(164, 196, 244, 246),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "Desktop",
         sw / 2 - 420,
         326,
         30,
         @raylib.Color::new(242, 246, 255, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Click node A then node B to build route",
         sw / 2 - 420,
         362,
         26,
         @raylib.Color::new(208, 226, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- U/F/B for upgrade, repair, surge",
         sw / 2 - 420,
         396,
         26,
         @raylib.Color::new(208, 226, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Keep network healthy through storms",
         sw / 2 - 420,
         430,
@@ -2115,28 +2116,28 @@ fn main {
         @raylib.Color::new(208, 226, 252, 248),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mobile",
         sw / 2 + 74,
         326,
         30,
         @raylib.Color::new(242, 246, 255, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Tap nodes and routes",
         sw / 2 + 74,
         362,
         26,
         @raylib.Color::new(208, 226, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Tap right-panel buttons",
         sw / 2 + 74,
         396,
         26,
         @raylib.Color::new(208, 226, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- No keyboard required",
         sw / 2 + 74,
         430,
@@ -2155,28 +2156,28 @@ fn main {
       )
     } else if state == 2 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 16, 10, 188))
-      @raylib.draw_text(
+      @draw.draw_text(
         "CONTRACT COMPLETE",
         sw / 2 - 308,
         196,
         80,
         @raylib.Color::new(156, 244, 174, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Delivered \{delivered_total} cargo units",
         sw / 2 - 206,
         314,
         38,
         @raylib.Color::new(232, 246, 234, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Final budget $\{budget}",
         sw / 2 - 132,
         360,
         34,
         @raylib.Color::new(244, 228, 152, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Tap or Enter to return",
         sw / 2 - 166,
         446,
@@ -2185,28 +2186,28 @@ fn main {
       )
     } else if state == 3 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(24, 8, 12, 200))
-      @raylib.draw_text(
+      @draw.draw_text(
         "OPERATION FAILED",
         sw / 2 - 266,
         194,
         80,
         @raylib.Color::new(250, 154, 170, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Delivered \{delivered_total}/\{goal}",
         sw / 2 - 174,
         322,
         38,
         @raylib.Color::new(242, 232, 236, 250),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Budget $\{budget}",
         sw / 2 - 94,
         366,
         34,
         @raylib.Color::new(244, 226, 160, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Tap or Enter to retry",
         sw / 2 - 150,
         446,
@@ -2215,8 +2216,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -24,6 +24,7 @@ fn main {
   let mut alpha : Float = 1.0 // Useful for fading
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -164,7 +165,7 @@ fn main {
         5 => "rayli"
         _ => "raylib"
       }
-      @raylib.draw_text(
+      @draw.draw_text(
         sub_text,
         @raylib.get_screen_width() / 2 - 44,
         @raylib.get_screen_height() / 2 + 48,
@@ -172,12 +173,14 @@ fn main {
         @raylib.fade(@raylib.black, alpha),
       )
     } else if state == 4 {
-      @raylib.draw_text("[R] REPLAY", 340, 200, 20, @raylib.gray)
+      @draw.draw_text("[R] REPLAY", 340, 200, 20, @raylib.gray)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

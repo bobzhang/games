@@ -21,6 +21,7 @@ fn main {
   @raylib.disable_cursor() // Limit cursor to relative movement inside the window
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -47,10 +48,10 @@ fn main {
     @raylib.draw_grid(10, 1.0)
     @raylib.end_mode_3d()
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Enemy: 100 / 100",
       cube_screen_position.x.to_int() -
-      @raylib.measure_text("Enemy: 100/100", 20) / 2,
+      @draw.measure_text("Enemy: 100/100", 20) / 2,
       cube_screen_position.y.to_int(),
       20,
       @raylib.black,
@@ -58,20 +59,22 @@ fn main {
 
     let sx = cube_screen_position.x.to_int()
     let sy = cube_screen_position.y.to_int()
-    @raylib.draw_text(
+    @draw.draw_text(
       "Cube position in screen space coordinates: [\{sx}, \{sy}]",
       10,
       10,
       20,
       @raylib.lime,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Text 2d should be always on top of the cube", 10, 40, 20, @raylib.gray,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

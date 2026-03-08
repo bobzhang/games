@@ -52,6 +52,7 @@ fn spawn_hazard(hazards : Array[Hazard], lane : Int, kind : Int) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "Mine Cart Mayhem 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let hazards : Array[Hazard] = Array::makei(120, fn(_i) {
     { alive: false, x: 0.0, lane: 0, kind: 0 }
@@ -287,11 +288,11 @@ fn main {
       @raylib.black,
     )
 
-    @raylib.draw_text("MINE CART MAYHEM 2026", 20, 14, 40, @raylib.orange)
-    @raylib.draw_text("Score \{score}", 20, 62, 30, @raylib.white)
-    @raylib.draw_text("Distance \{distance}m", 220, 62, 30, @raylib.white)
-    @raylib.draw_text("Coins \{coins}", 460, 62, 30, @raylib.gold)
-    @raylib.draw_text(
+    @draw.draw_text("MINE CART MAYHEM 2026", 20, 14, 40, @raylib.orange)
+    @draw.draw_text("Score \{score}", 20, 62, 30, @raylib.white)
+    @draw.draw_text("Distance \{distance}m", 220, 62, 30, @raylib.white)
+    @draw.draw_text("Coins \{coins}", 460, 62, 30, @raylib.gold)
+    @draw.draw_text(
       "Lives \{lives}",
       640,
       62,
@@ -303,7 +304,7 @@ fn main {
       },
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Low rocks need jump. High walls need lane switch or high jump timing.", 20,
       620, 24, @raylib.lightgray,
     )
@@ -314,7 +315,7 @@ fn main {
       34,
       @raylib.Color::new(8, 7, 6, 220),
     )
-    @raylib.draw_text(msg, 30, 676, 22, @raylib.raywhite)
+    @draw.draw_text(msg, 30, 676, 22, @raylib.raywhite)
 
     if over {
       @raylib.draw_rectangle(
@@ -324,12 +325,14 @@ fn main {
         180,
         @raylib.fade(@raylib.black, 0.82),
       )
-      @raylib.draw_text("RUN OVER", 470, 305, 54, @raylib.red)
-      @raylib.draw_text("Press R to restart", 450, 368, 34, @raylib.white)
+      @draw.draw_text("RUN OVER", 470, 305, 54, @raylib.red)
+      @draw.draw_text("Press R to restart", 450, 368, 34, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

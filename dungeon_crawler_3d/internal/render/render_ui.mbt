@@ -50,8 +50,8 @@ pub fn draw_ui(game : @types.Game) -> Unit {
   if game.message_timer > 0.0 {
     let alpha = @types.minf(game.message_timer * 2.0, 1.0)
     let a = (alpha * 255.0).to_int()
-    let tw = @raylib.measure_text(game.message_text, 28)
-    @raylib.draw_text(
+    let tw = @draw.measure_text(game.message_text, 28)
+    @draw.draw_text(
       game.message_text,
       (@types.screen_width - tw) / 2,
       @types.screen_height / 2 - 60,
@@ -84,8 +84,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   )
   // Title
   let title = "DUNGEON CRAWLER 3D"
-  let tw = @raylib.measure_text(title, 52)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, 52)
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     140,
@@ -94,8 +94,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   )
   // Subtitle
   let sub = "Descend. Fight. Survive."
-  let sw = @raylib.measure_text(sub, 22)
-  @raylib.draw_text(
+  let sw = @draw.measure_text(sub, 22)
+  @draw.draw_text(
     sub,
     (@types.screen_width - sw) / 2,
     200,
@@ -122,13 +122,13 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
     }
     let prefix = if is_selected { "> " } else { "  " }
     let text = prefix + items[i]
-    let full_w = @raylib.measure_text(text, 32)
-    @raylib.draw_text(text, (@types.screen_width - full_w) / 2, y, 32, color)
+    let full_w = @draw.measure_text(text, 32)
+    @draw.draw_text(text, (@types.screen_width - full_w) / 2, y, 32, color)
   }
   // Controls hint
   let hint = "Arrow Keys: Navigate | Enter: Select | WASD: Move | Mouse: Look"
-  let hw = @raylib.measure_text(hint, 14)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint, 14)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
     @types.screen_height - 50,
@@ -170,7 +170,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   )
   // Floor name
   let floor_name = "F\{game.current_floor + 1}: \{@levels.get_floor_name(game.current_floor)}"
-  @raylib.draw_text(
+  @draw.draw_text(
     floor_name,
     10,
     12,
@@ -179,7 +179,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   )
   // Player level
   let level_text = "Lv.\{game.player_level}"
-  @raylib.draw_text(
+  @draw.draw_text(
     level_text,
     @types.screen_width / 2 - 30,
     12,
@@ -195,7 +195,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   } else {
     @raylib.Color::new(255, 150, 100, 255)
   }
-  @raylib.draw_text(enemy_text, @types.screen_width - 200, 12, 18, enemy_color)
+  @draw.draw_text(enemy_text, @types.screen_width - 200, 12, 18, enemy_color)
   // Bottom bar - health and stats
   @raylib.draw_rectangle(
     0,
@@ -235,7 +235,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(180, 180, 180, 255),
   )
   let hp_text = "HP: \{game.player_hp}/\{game.player_max_hp}"
-  @raylib.draw_text(
+  @draw.draw_text(
     hp_text,
     hp_bar_x + 8,
     hp_bar_y + 3,
@@ -270,7 +270,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(120, 120, 160, 255),
   )
   let xp_text = "XP: \{game.player_xp}/\{game.player_xp_next}"
-  @raylib.draw_text(
+  @draw.draw_text(
     xp_text,
     hp_bar_x + 8,
     xp_bar_y - 1,
@@ -280,14 +280,14 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   // Stats
   let stat_x = 290
   let stat_y = @types.screen_height - 65
-  @raylib.draw_text(
+  @draw.draw_text(
     "ATK: \{game.player_atk}",
     stat_x,
     stat_y,
     18,
     @raylib.Color::new(255, 100, 80, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "DEF: \{game.player_def}",
     stat_x,
     stat_y + 22,
@@ -295,7 +295,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(80, 140, 255, 255),
   )
   // Controls hint
-  @raylib.draw_text(
+  @draw.draw_text(
     "WASD: Move | Mouse: Look | LMB/Space: Attack | E: Interact | Esc: Pause",
     stat_x + 130,
     @types.screen_height - 25,
@@ -499,8 +499,8 @@ fn @types.Game::draw_pause_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, 160),
   )
   let text = "PAUSED"
-  let tw = @raylib.measure_text(text, 64)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(text, 64)
+  @draw.draw_text(
     text,
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 60,
@@ -508,8 +508,8 @@ fn @types.Game::draw_pause_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 255, 255, 255),
   )
   let hint1 = "Esc/P: Resume | M: Main Menu"
-  let hw = @raylib.measure_text(hint1, 22)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint1, 22)
+  @draw.draw_text(
     hint1,
     (@types.screen_width - hw) / 2,
     @types.screen_height / 2 + 20,
@@ -528,8 +528,8 @@ fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
     @raylib.Color::new(40, 0, 0, 220),
   )
   let text = "YOU DIED"
-  let tw = @raylib.measure_text(text, 72)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(text, 72)
+  @draw.draw_text(
     text,
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 80,
@@ -537,8 +537,8 @@ fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 50, 50, 255),
   )
   let floor_text = "Reached Floor \{game.current_floor + 1} - Level \{game.player_level}"
-  let fw = @raylib.measure_text(floor_text, 24)
-  @raylib.draw_text(
+  let fw = @draw.measure_text(floor_text, 24)
+  @draw.draw_text(
     floor_text,
     (@types.screen_width - fw) / 2,
     @types.screen_height / 2,
@@ -546,8 +546,8 @@ fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
     @raylib.Color::new(200, 180, 160, 255),
   )
   let hint = "Enter: Try Again | M: Menu"
-  let hw = @raylib.measure_text(hint, 20)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint, 20)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
     @types.screen_height / 2 + 50,
@@ -566,8 +566,8 @@ fn @types.Game::draw_level_up_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, 120),
   )
   let text = "LEVEL UP!"
-  let tw = @raylib.measure_text(text, 56)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(text, 56)
+  @draw.draw_text(
     text,
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 80,
@@ -575,8 +575,8 @@ fn @types.Game::draw_level_up_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 215, 0, 255),
   )
   let stats = "Level \{game.player_level} | HP: \{game.player_max_hp} | ATK: \{game.player_atk} | DEF: \{game.player_def}"
-  let sw = @raylib.measure_text(stats, 22)
-  @raylib.draw_text(
+  let sw = @draw.measure_text(stats, 22)
+  @draw.draw_text(
     stats,
     (@types.screen_width - sw) / 2,
     @types.screen_height / 2 - 10,
@@ -584,8 +584,8 @@ fn @types.Game::draw_level_up_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 255, 200, 255),
   )
   let hint = "Press Enter to continue"
-  let hw = @raylib.measure_text(hint, 18)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint, 18)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
     @types.screen_height / 2 + 40,
@@ -605,13 +605,13 @@ fn @types.Game::draw_floor_complete_overlay(game : @types.Game) -> Unit {
   )
   let is_final = game.current_floor >= @types.max_floors - 1
   let title = if is_final { "VICTORY!" } else { "FLOOR CLEARED!" }
-  let tw = @raylib.measure_text(title, 52)
+  let tw = @draw.measure_text(title, 52)
   let title_color = if is_final {
     @raylib.Color::new(255, 215, 0, 255)
   } else {
     @raylib.Color::new(80, 255, 120, 255)
   }
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 80,
@@ -623,8 +623,8 @@ fn @types.Game::draw_floor_complete_overlay(game : @types.Game) -> Unit {
   } else {
     "Floor \{game.current_floor + 1} complete - descending deeper..."
   }
-  let fw = @raylib.measure_text(floor_text, 22)
-  @raylib.draw_text(
+  let fw = @draw.measure_text(floor_text, 22)
+  @draw.draw_text(
     floor_text,
     (@types.screen_width - fw) / 2,
     @types.screen_height / 2 - 10,
@@ -636,8 +636,8 @@ fn @types.Game::draw_floor_complete_overlay(game : @types.Game) -> Unit {
   } else {
     "Enter: Next Floor | M: Menu"
   }
-  let hw = @raylib.measure_text(hint, 18)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint, 18)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
     @types.screen_height / 2 + 40,
@@ -658,8 +658,8 @@ fn @types.Game::draw_class_select(game : @types.Game) -> Unit {
   )
   // Title
   let title = "CHOOSE YOUR CLASS"
-  let tw = @raylib.measure_text(title, 48)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, 48)
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     80,
@@ -705,8 +705,8 @@ fn @types.Game::draw_class_select(game : @types.Game) -> Unit {
     }
     let prefix = if is_selected { "> " } else { "  " }
     let name_text = prefix + names[i]
-    let nw = @raylib.measure_text(name_text, 36)
-    @raylib.draw_text(
+    let nw = @draw.measure_text(name_text, 36)
+    @draw.draw_text(
       name_text,
       (@types.screen_width - nw) / 2,
       y,
@@ -719,8 +719,8 @@ fn @types.Game::draw_class_select(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(120, 120, 120, 255)
     }
-    let dw = @raylib.measure_text(descs[i], 18)
-    @raylib.draw_text(
+    let dw = @draw.measure_text(descs[i], 18)
+    @draw.draw_text(
       descs[i],
       (@types.screen_width - dw) / 2,
       y + 45,
@@ -730,8 +730,8 @@ fn @types.Game::draw_class_select(game : @types.Game) -> Unit {
   }
   // Controls hint
   let hint = "Up/Down: Select | Enter: Confirm"
-  let hint_w = @raylib.measure_text(hint, 16)
-  @raylib.draw_text(
+  let hint_w = @draw.measure_text(hint, 16)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hint_w) / 2,
     @types.screen_height - 60,
@@ -752,8 +752,8 @@ fn @types.Game::draw_shop(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, 180),
   )
   let title = "SHOP"
-  let tw = @raylib.measure_text(title, 56)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, 56)
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 60,
@@ -761,8 +761,8 @@ fn @types.Game::draw_shop(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 215, 80, 255),
   )
   let hint = "Press Escape to leave"
-  let hw = @raylib.measure_text(hint, 22)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint, 22)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
     @types.screen_height / 2 + 20,
@@ -783,8 +783,8 @@ fn @types.Game::draw_shrine(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, 180),
   )
   let title = "SHRINE"
-  let tw = @raylib.measure_text(title, 56)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, 56)
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 60,
@@ -792,8 +792,8 @@ fn @types.Game::draw_shrine(game : @types.Game) -> Unit {
     @raylib.Color::new(120, 200, 255, 255),
   )
   let hint = "Press Escape to leave"
-  let hw = @raylib.measure_text(hint, 22)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint, 22)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
     @types.screen_height / 2 + 20,

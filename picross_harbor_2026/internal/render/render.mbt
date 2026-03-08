@@ -130,9 +130,9 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
       let ty : Int = board_y + y * tile + tile / 2 - fs / 2
       let text : String = if val == 0 { "-" } else { "\{val}" }
 
-      @raylib.draw_text(
+      @draw.draw_text(
         text,
-        tx - @raylib.measure_text(text, fs) / 2,
+        tx - @draw.measure_text(text, fs) / 2,
         ty,
         fs,
         if solved {
@@ -154,9 +154,9 @@ fn @types.Game::draw_board(game : @types.Game) -> Unit {
       let ty : Int = board_y - (k + 1) * tile + tile / 2 - fs / 2
       let text : String = if val == 0 { "-" } else { "\{val}" }
 
-      @raylib.draw_text(
+      @draw.draw_text(
         text,
-        tx - @raylib.measure_text(text, fs) / 2,
+        tx - @draw.measure_text(text, fs) / 2,
         ty,
         fs,
         if solved {
@@ -290,9 +290,9 @@ fn draw_button(
   )
 
   let fs : Int = 28
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
-    x + w / 2 - @raylib.measure_text(label, fs) / 2,
+    x + w / 2 - @draw.measure_text(label, fs) / 2,
     y + h / 2 - fs / 2,
     fs,
     @raylib.Color::new(242, 250, 255, 248),
@@ -316,14 +316,14 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(114, 158, 188, 206),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Picross Harbor 2026",
     px + 20,
     py + 22,
     38,
     @raylib.Color::new(238, 248, 255, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Nonogram Campaign",
     px + 20,
     py + 66,
@@ -331,14 +331,14 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(186, 216, 238, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Level \{game.level_index + 1}/\{game.level_count}",
     px + 20,
     py + 112,
     30,
     @raylib.Color::new(226, 236, 250, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     game.level_name,
     px + 20,
     py + 150,
@@ -346,21 +346,21 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(252, 224, 142, 246),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time \{game.level_time.to_int()}s / \{game.level_par_time}s",
     px + 20,
     py + 206,
     26,
     @raylib.Color::new(210, 230, 248, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mistakes \{game.mistakes}/\{game.level_mistake_limit}",
     px + 20,
     py + 238,
     26,
     @raylib.Color::new(210, 230, 248, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Hints \{game.hints_left}  Used \{game.hints_used}",
     px + 20,
     py + 270,
@@ -400,14 +400,14 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(170, 206, 234, 220),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Correct fills \{game.filled_correct}/\{game.solution_total}",
     px + 20,
     py + 346,
     24,
     @raylib.Color::new(206, 224, 244, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Wrong fills \{game.filled_wrong}",
     px + 20,
     py + 374,
@@ -415,14 +415,14 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(206, 224, 244, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Campaign stars \{game.total_stars}",
     px + 20,
     py + 418,
     24,
     @raylib.Color::new(255, 218, 122, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Completed \{game.total_completed}",
     px + 20,
     py + 446,
@@ -430,56 +430,56 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
     @raylib.Color::new(206, 224, 244, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Keyboard",
     px + 20,
     py + 498,
     24,
     @raylib.Color::new(224, 238, 250, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Move: WASD / Arrows",
     px + 20,
     py + 526,
     22,
     @raylib.Color::new(186, 210, 232, 232),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Fill: Space/F",
     px + 20,
     py + 552,
     22,
     @raylib.Color::new(186, 210, 232, 232),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mark: X/C",
     px + 20,
     py + 578,
     22,
     @raylib.Color::new(186, 210, 232, 232),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Undo: Z",
     px + 20,
     py + 604,
     22,
     @raylib.Color::new(186, 210, 232, 232),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Hint: H",
     px + 20,
     py + 630,
     22,
     @raylib.Color::new(186, 210, 232, 232),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Reset: R",
     px + 20,
     py + 656,
     22,
     @raylib.Color::new(186, 210, 232, 232),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Swap tool: Tab",
     px + 20,
     py + 682,
@@ -554,7 +554,7 @@ fn @types.Game::draw_side_panel(game : @types.Game) -> Unit {
       52,
       @raylib.Color::new(172, 206, 232, 238),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       game.message,
       px + 30,
       py + ph - 70,
@@ -666,28 +666,28 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
   @raylib.draw_rectangle_lines(cx - s / 2, cy - s - 18, s, s, edge)
   @raylib.draw_rectangle_lines(cx - s / 2, cy + 18, s, s, edge)
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "L",
     cx - s + 16 - 18,
     cy - 8,
     28,
     @raylib.Color::new(236, 246, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "R",
     cx + 18 + 20,
     cy - 8,
     28,
     @raylib.Color::new(236, 246, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "U",
     cx - 10,
     cy - s - 2,
     28,
     @raylib.Color::new(236, 246, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "D",
     cx - 10,
     cy + s + 26,
@@ -699,17 +699,17 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
 ///|
 /// Draws the title screen with the game name, descriptive text, and the Start Campaign button.
 fn @types.Game::draw_title_screen(game : @types.Game) -> Unit {
-  @raylib.draw_text(
+  @draw.draw_text(
     "Picross Harbor 2026",
-    @types.screen_w / 2 - @raylib.measure_text("Picross Harbor 2026", 92) / 2,
+    @types.screen_w / 2 - @draw.measure_text("Picross Harbor 2026", 92) / 2,
     108,
     92,
     @raylib.Color::new(238, 248, 255, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Decode harbor blueprints, one nonogram at a time.",
     @types.screen_w / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Decode harbor blueprints, one nonogram at a time.", 36,
     ) /
     2,
@@ -717,19 +717,19 @@ fn @types.Game::draw_title_screen(game : @types.Game) -> Unit {
     36,
     @raylib.Color::new(190, 218, 238, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "12 handcrafted puzzles | keyboard + touch",
     @types.screen_w / 2 -
-    @raylib.measure_text("12 handcrafted puzzles | keyboard + touch", 34) / 2,
+    @draw.measure_text("12 handcrafted puzzles | keyboard + touch", 34) / 2,
     292,
     34,
     @raylib.Color::new(190, 218, 238, 238),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Fill cells to match row/column clues. Avoid wrong fills and wrong crosses.",
     @types.screen_w / 2 -
-    @raylib.measure_text(
+    @draw.measure_text(
       "Fill cells to match row/column clues. Avoid wrong fills and wrong crosses.",
       30,
     ) /
@@ -738,10 +738,10 @@ fn @types.Game::draw_title_screen(game : @types.Game) -> Unit {
     30,
     @raylib.Color::new(218, 234, 248, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Hints are limited but can save a run.",
     @types.screen_w / 2 -
-    @raylib.measure_text("Hints are limited but can save a run.", 30) / 2,
+    @draw.measure_text("Hints are limited but can save a run.", 30) / 2,
     442,
     30,
     @raylib.Color::new(218, 234, 248, 236),
@@ -795,28 +795,28 @@ fn @types.Game::draw_level_clear_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(168, 208, 236, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Puzzle Cleared",
-    px + pw / 2 - @raylib.measure_text("Puzzle Cleared", 62) / 2,
+    px + pw / 2 - @draw.measure_text("Puzzle Cleared", 62) / 2,
     py + 34,
     62,
     @raylib.Color::new(246, 252, 255, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time: \{game.level_time.to_int()}s",
     px + 94,
     py + 136,
     36,
     @raylib.Color::new(220, 236, 250, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mistakes: \{game.mistakes}",
     px + 94,
     py + 182,
     36,
     @raylib.Color::new(220, 236, 250, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Hints used: \{game.hints_used}",
     px + 94,
     py + 228,
@@ -832,7 +832,7 @@ fn @types.Game::draw_level_clear_overlay(game : @types.Game) -> Unit {
     "Stars: *"
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     stars_text,
     px + 94,
     py + 282,
@@ -887,21 +887,21 @@ fn @types.Game::draw_level_fail_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(244, 178, 170, 230),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Puzzle Failed",
-    px + pw / 2 - @raylib.measure_text("Puzzle Failed", 62) / 2,
+    px + pw / 2 - @draw.measure_text("Puzzle Failed", 62) / 2,
     py + 34,
     62,
     @raylib.Color::new(255, 236, 236, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mistakes reached \{game.mistakes}/\{game.level_mistake_limit}",
     px + 92,
     py + 154,
     36,
     @raylib.Color::new(252, 222, 214, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Press R or tap Retry to restart this board.",
     px + 92,
     py + 206,
@@ -956,42 +956,42 @@ fn @types.Game::draw_campaign_clear_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(166, 206, 236, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Campaign Complete",
-    px + pw / 2 - @raylib.measure_text("Campaign Complete", 68) / 2,
+    px + pw / 2 - @draw.measure_text("Campaign Complete", 68) / 2,
     py + 32,
     68,
     @raylib.Color::new(246, 252, 255, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Total stars: \{game.total_stars}",
     px + 110,
     py + 152,
     42,
     @raylib.Color::new(255, 220, 126, 248),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Boards solved: \{game.total_completed}",
     px + 110,
     py + 204,
     36,
     @raylib.Color::new(220, 236, 250, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Total time: \{game.total_time.to_int()}s",
     px + 110,
     py + 246,
     36,
     @raylib.Color::new(220, 236, 250, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Total mistakes: \{game.total_mistakes}",
     px + 110,
     py + 288,
     36,
     @raylib.Color::new(220, 236, 250, 242),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Total hints used: \{game.total_hints}",
     px + 110,
     py + 330,
@@ -999,7 +999,7 @@ fn @types.Game::draw_campaign_clear_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(220, 236, 250, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Press Enter / Space or tap button to play again",
     px + 110,
     py + 388,

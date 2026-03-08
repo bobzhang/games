@@ -43,6 +43,7 @@ fn main {
       @raylib.white,
     )
     @raylib.end_shader_mode()
+    @fps.draw()
     @raylib.end_drawing()
   }
 

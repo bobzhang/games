@@ -81,6 +81,7 @@ fn reset_fishes(fishes : Array[Fish]) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "Fishing Tycoon 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let fishes : Array[Fish] = Array::makei(90, fn(_i) {
     { alive: false, x: 0.0, y: 0.0, vx: 0.0, kind: 0, size: 16.0 }
@@ -323,13 +324,13 @@ fn main {
       }
     }
 
-    @raylib.draw_text("FISHING TYCOON 2026", 20, 18, 42, @raylib.skyblue)
-    @raylib.draw_text("Money \{money}", 20, 66, 30, @raylib.gold)
-    @raylib.draw_text("Catch \{total_catch}", 220, 66, 30, @raylib.white)
-    @raylib.draw_text("Sales \{total_gold}", 380, 66, 30, @raylib.white)
+    @draw.draw_text("FISHING TYCOON 2026", 20, 18, 42, @raylib.skyblue)
+    @draw.draw_text("Money \{money}", 20, 66, 30, @raylib.gold)
+    @draw.draw_text("Catch \{total_catch}", 220, 66, 30, @raylib.white)
+    @draw.draw_text("Sales \{total_gold}", 380, 66, 30, @raylib.white)
 
     let tsec = day_timer.to_int()
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{tsec}s",
       560,
       66,
@@ -341,10 +342,10 @@ fn main {
       },
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "1 Reel+ (90)  2 Depth+ (120)  3 Bait+ (160)", 20, 618, 28, @raylib.raywhite,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Reel \{reel_speed.to_int()}  Depth \{max_depth.to_int()}  Bait bonus \{rare_bonus}",
       20,
       650,
@@ -359,7 +360,7 @@ fn main {
       30,
       @raylib.Color::new(8, 12, 18, 220),
     )
-    @raylib.draw_text(msg, 28, 684, 20, @raylib.white)
+    @draw.draw_text(msg, 28, 684, 20, @raylib.white)
 
     if over {
       @raylib.draw_rectangle(
@@ -369,12 +370,14 @@ fn main {
         170,
         @raylib.fade(@raylib.black, 0.82),
       )
-      @raylib.draw_text("DAY OVER", 455, 298, 52, @raylib.orange)
-      @raylib.draw_text("Press R for next day", 430, 360, 32, @raylib.white)
+      @draw.draw_text("DAY OVER", 455, 298, 52, @raylib.orange)
+      @draw.draw_text("Press R for next day", 430, 360, 32, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

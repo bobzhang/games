@@ -69,6 +69,7 @@ fn main {
   ]
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -104,10 +105,11 @@ fn main {
       30,
       @raylib.fade(@raylib.darkblue, 0.5),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "MOUSE LEFT BUTTON to CYCLE PROCEDURAL MODELS", 40, 410, 10, @raylib.blue,
     )
-    @raylib.draw_text(model_names[current_model], 680, 10, 20, @raylib.darkblue)
+    @draw.draw_text(model_names[current_model], 680, 10, 20, @raylib.darkblue)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -116,5 +118,6 @@ fn main {
   for i in 0..<num_models {
     @raylib.unload_model(models[i])
   }
+  @draw.cleanup()
   @raylib.close_window()
 }

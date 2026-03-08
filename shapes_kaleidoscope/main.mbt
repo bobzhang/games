@@ -63,6 +63,7 @@ fn main {
   let mut next_button_clicked = false
 
   @raylib.set_target_fps(20)
+  @draw.init_font()
 
   while !@raylib.window_should_close() {
     // Update
@@ -189,7 +190,7 @@ fn main {
       "Reset",
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "LINES: " +
       current_line_counter.to_string() +
       "/" +
@@ -201,8 +202,10 @@ fn main {
     )
     @raylib.draw_fps(10, 10)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

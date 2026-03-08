@@ -168,8 +168,8 @@ pub fn draw_shadow_text(
   size : Int,
   color : @raylib.Color,
 ) -> Unit {
-  @raylib.draw_text(text, x + 2, y + 2, size, @raylib.black)
-  @raylib.draw_text(text, x, y, size, color)
+  @draw.draw_text(text, x + 2, y + 2, size, @raylib.black)
+  @draw.draw_text(text, x, y, size, color)
 }
 
 ///|
@@ -181,7 +181,7 @@ pub fn draw_center_shadow_text(
   size : Int,
   color : @raylib.Color,
 ) -> Unit {
-  let w = @raylib.measure_text(text, size)
+  let w = @draw.measure_text(text, size)
   draw_shadow_text(text, x - w / 2, y, size, color)
 }
 

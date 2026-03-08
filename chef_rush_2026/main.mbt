@@ -99,6 +99,7 @@ fn next_order() -> (Int, Int) {
 fn main {
   @raylib.init_window(sw, sh, "Chef Rush 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let drops : Array[Drop] = Array::makei(140, fn(_i) {
     { alive: false, lane: 0, x: 0.0, y: 0.0, kind: 0, vy: 200.0 }
@@ -278,7 +279,7 @@ fn main {
         let c = ingredient_color(drop.kind)
         @raylib.draw_circle(drop.x.to_int(), drop.y.to_int(), 16.0, c)
         if drop.kind == 4 {
-          @raylib.draw_text(
+          @draw.draw_text(
             "X",
             (drop.x - 6.0).to_int(),
             (drop.y - 10.0).to_int(),
@@ -314,8 +315,8 @@ fn main {
       106,
       @raylib.Color::new(18, 16, 14, 220),
     )
-    @raylib.draw_text("CHEF RUSH 2026", 28, 22, 34, @raylib.gold)
-    @raylib.draw_text(
+    @draw.draw_text("CHEF RUSH 2026", 28, 22, 34, @raylib.gold)
+    @draw.draw_text(
       "Order: \{ingredient_name(order_kind)}  \{order_have}/\{order_need}",
       30,
       66,
@@ -323,12 +324,12 @@ fn main {
       @raylib.raywhite,
     )
     if order_have >= order_need {
-      @raylib.draw_text("READY! Press Space to serve", 30, 94, 22, @raylib.lime)
+      @draw.draw_text("READY! Press Space to serve", 30, 94, 22, @raylib.lime)
     }
 
-    @raylib.draw_text("Score \{score}", 590, 24, 30, @raylib.white)
-    @raylib.draw_text("Served \{served}", 590, 58, 30, @raylib.lime)
-    @raylib.draw_text(
+    @draw.draw_text("Score \{score}", 590, 24, 30, @raylib.white)
+    @draw.draw_text("Served \{served}", 590, 58, 30, @raylib.lime)
+    @draw.draw_text(
       "Lives \{lives}",
       590,
       92,
@@ -341,7 +342,7 @@ fn main {
     )
 
     let sec = timer.to_int()
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{sec}s",
       820,
       24,
@@ -353,7 +354,7 @@ fn main {
       },
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Avoid trash (X), collect exact ingredient for order", 20, 654, 24, @raylib.darkbrown,
     )
     @raylib.draw_rectangle(
@@ -363,7 +364,7 @@ fn main {
       28,
       @raylib.Color::new(20, 16, 13, 220),
     )
-    @raylib.draw_text(msg, 28, 688, 20, @raylib.raywhite)
+    @draw.draw_text(msg, 28, 688, 20, @raylib.raywhite)
 
     if over {
       @raylib.draw_rectangle(
@@ -373,12 +374,14 @@ fn main {
         180,
         @raylib.fade(@raylib.black, 0.82),
       )
-      @raylib.draw_text("SHIFT OVER", 420, 312, 52, @raylib.orange)
-      @raylib.draw_text("Press R to restart", 430, 370, 34, @raylib.white)
+      @draw.draw_text("SHIFT OVER", 420, 312, 52, @raylib.orange)
+      @draw.draw_text("Press R to restart", 430, 370, 34, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

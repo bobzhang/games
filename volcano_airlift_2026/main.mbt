@@ -181,6 +181,7 @@ fn survivors_count(
 fn main {
   @raylib.init_window(sw, sh, "Volcano Airlift 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let survivors : Array[Survivor] = Array::makei(max_survivors, fn(_i) {
     { x: 0.0, y: 0.0, state: 3 }
@@ -635,7 +636,7 @@ fn main {
       34,
       @raylib.Color::new(88, 110, 136, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "BASE",
       (base_x - 34.0 + shake_x).to_int(),
       (base_y - 70.0).to_int(),
@@ -794,35 +795,35 @@ fn main {
     )
 
     @raylib.draw_rectangle(0, 0, sw, 98, @raylib.Color::new(10, 14, 22, 230))
-    @raylib.draw_text(
+    @draw.draw_text(
       "VOLCANO AIRLIFT 2026",
       16,
       20,
       34,
       @raylib.Color::new(236, 244, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Sector \{level}/3",
       436,
       30,
       30,
       @raylib.Color::new(246, 230, 136, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "HP \{hull}",
       616,
       30,
       30,
       @raylib.Color::new(214, 236, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Fuel \{fuel.to_int()}",
       730,
       30,
       30,
       @raylib.Color::new(214, 236, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{score}",
       930,
       30,
@@ -830,14 +831,14 @@ fn main {
       @raylib.Color::new(214, 236, 252, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Rescued \{rescued_now}/\{quota}  Lost \{lost_now}  Onboard \{onboard_now}",
       20,
       72,
       22,
       @raylib.Color::new(224, 236, 246, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Timer \{timer.to_int()}",
       1010,
       72,
@@ -869,7 +870,7 @@ fn main {
       180,
       @raylib.Color::new(10, 16, 28, 220),
     )
-    @raylib.draw_text("Touch", 56, sh - 186, 20, @raylib.white)
+    @draw.draw_text("Touch", 56, sh - 186, 20, @raylib.white)
 
     @raylib.draw_rectangle(
       ctl_x,
@@ -878,7 +879,7 @@ fn main {
       54,
       @raylib.Color::new(46, 64, 90, 255),
     )
-    @raylib.draw_text("LEFT", ctl_x + 12, ctl_y + 18, 20, @raylib.white)
+    @draw.draw_text("LEFT", ctl_x + 12, ctl_y + 18, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x + 82,
       ctl_y,
@@ -886,7 +887,7 @@ fn main {
       54,
       @raylib.Color::new(46, 64, 90, 255),
     )
-    @raylib.draw_text("RIGHT", ctl_x + 86, ctl_y + 18, 20, @raylib.white)
+    @draw.draw_text("RIGHT", ctl_x + 86, ctl_y + 18, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x,
       ctl_y + 60,
@@ -894,7 +895,7 @@ fn main {
       54,
       @raylib.Color::new(46, 64, 90, 255),
     )
-    @raylib.draw_text("LIFT", ctl_x + 14, ctl_y + 78, 20, @raylib.white)
+    @draw.draw_text("LIFT", ctl_x + 14, ctl_y + 78, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x + 82,
       ctl_y + 60,
@@ -902,7 +903,7 @@ fn main {
       54,
       @raylib.Color::new(46, 64, 90, 255),
     )
-    @raylib.draw_text("DOWN", ctl_x + 86, ctl_y + 78, 20, @raylib.white)
+    @draw.draw_text("DOWN", ctl_x + 86, ctl_y + 78, 20, @raylib.white)
 
     let action_x = sw - 206
     let action_y = sh - 154
@@ -913,7 +914,7 @@ fn main {
       120,
       @raylib.Color::new(188, 82, 76, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       if carrying {
         "DROP"
       } else {
@@ -932,7 +933,7 @@ fn main {
       36,
       @raylib.Color::new(10, 16, 24, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       186,
       sh - 46,
@@ -940,7 +941,7 @@ fn main {
       @raylib.Color::new(224, 236, 246, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Stars \{stars}",
       sw - 170,
       116,
@@ -950,7 +951,7 @@ fn main {
 
     if transition_t > 0.0 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 12, 18, 120))
-      @raylib.draw_text(
+      @draw.draw_text(
         "SECTOR CLEAR",
         sw / 2 - 174,
         sh / 2 - 24,
@@ -968,7 +969,7 @@ fn main {
         200,
         @raylib.Color::new(16, 24, 40, 242),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "MISSION COMPLETE"
         } else {
@@ -983,7 +984,7 @@ fn main {
           @raylib.Color::new(250, 132, 132, 255)
         },
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R to restart",
         sw / 2 - 124,
         sh / 2 + 40,
@@ -992,8 +993,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

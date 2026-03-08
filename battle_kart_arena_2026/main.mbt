@@ -456,6 +456,7 @@ fn respawn_kart(karts : Array[Kart], i : Int) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "Battle Kart Arena 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let wx : Array[Float] = Array::make(wp_n, 0.0)
   let wy : Array[Float] = Array::make(wp_n, 0.0)
@@ -859,7 +860,7 @@ fn main {
       144,
       @raylib.Color::new(252, 104, 104, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "START",
       ol + 20,
       ot + oh / 2 - 16,
@@ -901,7 +902,7 @@ fn main {
       let hx = x + (cosf_deg(karts[i].angle) * 20.0).to_int()
       let hy = y + (sinf_deg(karts[i].angle) * 20.0).to_int()
       @raylib.draw_line(x, y, hx, hy, @raylib.Color::new(244, 244, 248, 255))
-      @raylib.draw_text("\{karts[i].lap + 1}", x - 6, y - 33, 20, @raylib.white)
+      @draw.draw_text("\{karts[i].lap + 1}", x - 6, y - 33, 20, @raylib.white)
     }
 
     for shot in shots {
@@ -937,35 +938,35 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 98, @raylib.Color::new(8, 12, 20, 230))
-    @raylib.draw_text(
+    @draw.draw_text(
       "BATTLE KART ARENA 2026",
       16,
       20,
       34,
       @raylib.Color::new(236, 244, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Lap \{karts[0].lap + 1}/\{lap_target}",
       436,
       30,
       30,
       @raylib.Color::new(246, 230, 136, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "HP \{karts[0].hp}",
       646,
       30,
       30,
       @raylib.Color::new(216, 236, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Ammo \{ammo}",
       780,
       30,
       30,
       @raylib.Color::new(216, 236, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{score}",
       930,
       30,
@@ -981,7 +982,7 @@ fn main {
       12,
       @raylib.Color::new(120, 212, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Boost \{boost.to_int()}",
       306,
       70,
@@ -998,7 +999,7 @@ fn main {
       180,
       @raylib.Color::new(10, 16, 28, 220),
     )
-    @raylib.draw_text("Touch", 56, sh - 186, 20, @raylib.white)
+    @draw.draw_text("Touch", 56, sh - 186, 20, @raylib.white)
 
     @raylib.draw_rectangle(
       ctl_x,
@@ -1007,7 +1008,7 @@ fn main {
       54,
       @raylib.Color::new(46, 64, 90, 255),
     )
-    @raylib.draw_text("LEFT", ctl_x + 14, ctl_y + 18, 20, @raylib.white)
+    @draw.draw_text("LEFT", ctl_x + 14, ctl_y + 18, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x + 82,
       ctl_y,
@@ -1015,7 +1016,7 @@ fn main {
       54,
       @raylib.Color::new(46, 64, 90, 255),
     )
-    @raylib.draw_text("RIGHT", ctl_x + 86, ctl_y + 18, 20, @raylib.white)
+    @draw.draw_text("RIGHT", ctl_x + 86, ctl_y + 18, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x,
       ctl_y + 60,
@@ -1023,7 +1024,7 @@ fn main {
       54,
       @raylib.Color::new(46, 64, 90, 255),
     )
-    @raylib.draw_text("ACC", ctl_x + 18, ctl_y + 78, 20, @raylib.white)
+    @draw.draw_text("ACC", ctl_x + 18, ctl_y + 78, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x + 82,
       ctl_y + 60,
@@ -1031,7 +1032,7 @@ fn main {
       54,
       @raylib.Color::new(46, 64, 90, 255),
     )
-    @raylib.draw_text("BRK", ctl_x + 98, ctl_y + 78, 20, @raylib.white)
+    @draw.draw_text("BRK", ctl_x + 98, ctl_y + 78, 20, @raylib.white)
 
     let boost_x = sw - 198
     let boost_y = sh - 250
@@ -1042,7 +1043,7 @@ fn main {
       84,
       @raylib.Color::new(72, 106, 180, 255),
     )
-    @raylib.draw_text("BOOST", boost_x + 36, boost_y + 26, 34, @raylib.white)
+    @draw.draw_text("BOOST", boost_x + 36, boost_y + 26, 34, @raylib.white)
 
     let fire_x = sw - 198
     let fire_y = sh - 154
@@ -1053,7 +1054,7 @@ fn main {
       116,
       @raylib.Color::new(188, 82, 76, 255),
     )
-    @raylib.draw_text("FIRE", fire_x + 52, fire_y + 40, 38, @raylib.white)
+    @draw.draw_text("FIRE", fire_x + 52, fire_y + 40, 38, @raylib.white)
 
     @raylib.draw_rectangle(
       176,
@@ -1062,7 +1063,7 @@ fn main {
       36,
       @raylib.Color::new(10, 16, 24, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       186,
       sh - 46,
@@ -1079,7 +1080,7 @@ fn main {
         200,
         @raylib.Color::new(16, 24, 40, 242),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "RACE WON"
         } else {
@@ -1094,7 +1095,7 @@ fn main {
           @raylib.Color::new(250, 132, 132, 255)
         },
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R to restart",
         sw / 2 - 124,
         sh / 2 + 40,
@@ -1103,8 +1104,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

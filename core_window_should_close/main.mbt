@@ -13,6 +13,7 @@ fn main {
   let mut exit_window = false // Flag to set window to exit
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !exit_window {
@@ -39,18 +40,20 @@ fn main {
 
     if exit_window_requested {
       @raylib.draw_rectangle(0, 100, screen_width, 200, @raylib.black)
-      @raylib.draw_text(
+      @draw.draw_text(
         "Are you sure you want to exit program? [Y/N]", 40, 180, 30, @raylib.white,
       )
     } else {
-      @raylib.draw_text(
+      @draw.draw_text(
         "Try to close the window to get confirmation message!", 120, 200, 20, @raylib.lightgray,
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -3,6 +3,8 @@ import {
   "bobzhang/games/xiaoxiaole/internal/types",
   "bobzhang/games/xiaoxiaole/internal/game",
   "bobzhang/games/xiaoxiaole/internal/render",
+  "bobzhang/games/utils/draw",
+  "bobzhang/games/utils/fps",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

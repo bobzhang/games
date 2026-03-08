@@ -160,6 +160,7 @@ fn main {
     )
     @raylib.end_shader_mode()
     @raylib.draw_fps(10, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
 

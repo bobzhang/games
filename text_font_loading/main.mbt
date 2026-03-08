@@ -27,6 +27,7 @@ fn main {
   let mut use_ttf = false
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -40,7 +41,7 @@ fn main {
     // Draw
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
-    @raylib.draw_text(
+    @draw.draw_text(
       "Hold SPACE to use TTF generated font", 20, 20, 20, @raylib.lightgray,
     )
     if !use_ttf {
@@ -52,7 +53,7 @@ fn main {
         2.0,
         @raylib.maroon,
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Using BMFont (Angelcode) imported",
         20,
         @raylib.get_screen_height() - 30,
@@ -68,7 +69,7 @@ fn main {
         2.0,
         @raylib.lime,
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Using TTF font generated",
         20,
         @raylib.get_screen_height() - 30,
@@ -76,11 +77,13 @@ fn main {
         @raylib.gray,
       )
     }
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_font(font_bm)
   @raylib.unload_font(font_ttf)
+  @draw.cleanup()
   @raylib.close_window()
 }

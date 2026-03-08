@@ -20,6 +20,7 @@ fn main {
   let message = "This sample illustrates a text writing\nanimation effect! Check it out! ;)"
   let mut frames_counter = 0
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -38,23 +39,25 @@ fn main {
     @raylib.clear_background(@raylib.raywhite)
 
     // Use string slicing to show only a portion of the message (writing animation)
-    @raylib.draw_text(
+    @draw.draw_text(
       text_subtext(message, frames_counter / 10),
       210,
       160,
       20,
       @raylib.maroon,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "PRESS [ENTER] to RESTART!", 240, 260, 20, @raylib.lightgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "HOLD [SPACE] to SPEED UP!", 239, 300, 20, @raylib.lightgray,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

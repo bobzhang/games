@@ -36,6 +36,7 @@ fn main {
   )
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -56,15 +57,17 @@ fn main {
       @raylib.white,
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "PRESS SPACE to SHOW FONT ATLAS USED", 290, 420, 10, @raylib.darkgray,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_texture(texture)
   @raylib.unload_font(font)
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -102,6 +102,7 @@ fn main {
     @raylib.ShaderUniformVec2,
   )
   @raylib.set_target_fps(60)
+  @draw.init_font()
   // Main game loop
   while !@raylib.window_should_close() {
     // Update
@@ -126,13 +127,13 @@ fn main {
       @raylib.white,
     )
     @raylib.end_shader_mode()
-    @raylib.draw_text(
+    @draw.draw_text(
       "Shader-based\ntexture\noutline", 10, 10, 20, @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Scroll mouse wheel to\nchange outline size", 10, 72, 20, @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Outline size: " + outline_size.to_int().to_string() + " px",
       10,
       120,
@@ -140,10 +141,12 @@ fn main {
       @raylib.maroon,
     )
     @raylib.draw_fps(710, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
   // De-Initialization
   @raylib.unload_texture(texture)
   @raylib.unload_shader(shdr_outline)
+  @draw.cleanup()
   @raylib.close_window()
 }

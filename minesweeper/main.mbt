@@ -174,6 +174,7 @@ fn main {
   let screen_height = GridOffsetY + Rows * CellSize + 10
   @raylib.init_window(screen_width, screen_height, "Minesweeper")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let total = Rows * Cols
   let mines : Array[Int] = Array::make(total, 0)
@@ -262,7 +263,7 @@ fn main {
 
     // Header
     let mines_left = MineCount - flags_placed
-    @raylib.draw_text(
+    @draw.draw_text(
       "Mines: \{mines_left}",
       GridOffsetX,
       15,
@@ -276,8 +277,8 @@ fn main {
       _ => ""
     }
     if status.length() > 0 {
-      let status_width = @raylib.measure_text(status, 20)
-      @raylib.draw_text(
+      let status_width = @draw.measure_text(status, 20)
+      @draw.draw_text(
         status,
         (screen_width - status_width) / 2,
         15,
@@ -291,8 +292,8 @@ fn main {
     }
     // Timer
     let timer_text = "Time: \{elapsed_time}"
-    let timer_width = @raylib.measure_text(timer_text, 20)
-    @raylib.draw_text(
+    let timer_width = @draw.measure_text(timer_text, 20)
+    @draw.draw_text(
       timer_text,
       screen_width - timer_width - GridOffsetX,
       15,
@@ -318,8 +319,8 @@ fn main {
           } else if adjacent[idx] > 0 {
             // Number
             let num_text = adjacent[idx].to_string()
-            let tw = @raylib.measure_text(num_text, 20)
-            @raylib.draw_text(
+            let tw = @draw.measure_text(num_text, 20)
+            @draw.draw_text(
               num_text,
               x + (CellSize - tw) / 2,
               y + (CellSize - 20) / 2,
@@ -375,8 +376,8 @@ fn main {
     // Restart hint
     if game_state == StateWon || game_state == StateLost {
       let hint = "Press R to restart"
-      let hint_width = @raylib.measure_text(hint, 16)
-      @raylib.draw_text(
+      let hint_width = @draw.measure_text(hint, 16)
+      @draw.draw_text(
         hint,
         (screen_width - hint_width) / 2,
         screen_height - 25,
@@ -385,8 +386,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

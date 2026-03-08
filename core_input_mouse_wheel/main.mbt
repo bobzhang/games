@@ -9,6 +9,7 @@ fn main {
   let mut box_position_y = screen_height / 2 - 40
   let scroll_speed = 4
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -26,19 +27,21 @@ fn main {
       80,
       @raylib.maroon,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Use mouse wheel to move the cube up and down!", 10, 10, 20, @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Box position Y: \{box_position_y}",
       10,
       40,
       20,
       @raylib.lightgray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

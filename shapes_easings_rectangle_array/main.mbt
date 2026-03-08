@@ -49,6 +49,7 @@ fn main {
   let mut state = 0
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   while !@raylib.window_should_close() {
     if state == 0 {
@@ -103,11 +104,13 @@ fn main {
         )
       }
     } else if state == 1 {
-      @raylib.draw_text(
+      @draw.draw_text(
         "PRESS [SPACE] TO PLAY AGAIN!", 240, 200, 20, @raylib.gray,
       )
     }
+    @fps.draw()
     @raylib.end_drawing()
   }
+  @draw.cleanup()
   @raylib.close_window()
 }

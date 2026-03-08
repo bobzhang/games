@@ -39,6 +39,7 @@ fn main {
 
   let mut rotation = 0
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -76,17 +77,19 @@ fn main {
       dest_rec.y.to_int(),
       @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "(c) Scarfy sprite by Eiden Marsal",
       screen_width - 200,
       screen_height - 20,
       10,
       @raylib.gray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_texture(scarfy)
+  @draw.cleanup()
   @raylib.close_window()
 }

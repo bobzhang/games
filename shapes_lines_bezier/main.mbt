@@ -17,6 +17,7 @@ fn main {
   let mut move_end_point = false
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -53,7 +54,7 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "MOVE START-END POINTS WITH MOUSE", 15, 20, 20, @raylib.gray,
     )
 
@@ -73,9 +74,11 @@ fn main {
     let end_color = if move_end_point { @raylib.red } else { @raylib.blue }
     @raylib.draw_circle_v(ep, end_radius, end_color)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

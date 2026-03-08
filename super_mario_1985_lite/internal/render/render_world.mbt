@@ -136,7 +136,7 @@ fn @types.Game::draw_tile(
         @types.tile_size,
         @raylib.Color::new(162, 108, 25, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "?",
         sx + 9,
         sy + 4,

@@ -163,6 +163,7 @@ fn ball_vs_bumper(ball : Ball, bx : Float, by : Float, r : Float) -> Bool {
 fn main {
   @raylib.init_window(screen_w, screen_h, "Pinball Workshop 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let ball : Ball = { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, live: false }
   reset_ball(ball)
@@ -337,16 +338,16 @@ fn main {
         @raylib.gray,
       )
       if !game_over {
-        @raylib.draw_text(
+        @draw.draw_text(
           "PRESS SPACE TO LAUNCH", 320, 630, 22, @raylib.lightgray,
         )
       }
     }
 
-    @raylib.draw_text("PINBALL WORKSHOP 2026", 18, 12, 30, @raylib.skyblue)
-    @raylib.draw_text("Score: \{score}", 20, 54, 24, @raylib.raywhite)
-    @raylib.draw_text("Lives: \{lives}", 20, 82, 24, @raylib.raywhite)
-    @raylib.draw_text("A/D flippers  R restart", 590, 18, 20, @raylib.gray)
+    @draw.draw_text("PINBALL WORKSHOP 2026", 18, 12, 30, @raylib.skyblue)
+    @draw.draw_text("Score: \{score}", 20, 54, 24, @raylib.raywhite)
+    @draw.draw_text("Lives: \{lives}", 20, 82, 24, @raylib.raywhite)
+    @draw.draw_text("A/D flippers  R restart", 590, 18, 20, @raylib.gray)
 
     if game_over {
       @raylib.draw_rectangle(
@@ -356,12 +357,14 @@ fn main {
         105,
         @raylib.fade(@raylib.black, 0.75),
       )
-      @raylib.draw_text("GAME OVER", 368, 322, 40, @raylib.red)
-      @raylib.draw_text("Press R to restart", 350, 365, 24, @raylib.raywhite)
+      @draw.draw_text("GAME OVER", 368, 322, 40, @raylib.red)
+      @draw.draw_text("Press R to restart", 350, 365, 24, @raylib.raywhite)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -338,6 +338,7 @@ fn main {
   let mut even_out_target : Float = 0.0
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -434,17 +435,17 @@ fn main {
 
     @raylib.end_mode_2d()
 
-    @raylib.draw_text("Controls:", 20, 20, 10, @raylib.black)
-    @raylib.draw_text("- Right/Left to move", 40, 40, 10, @raylib.darkgray)
-    @raylib.draw_text("- Space to jump", 40, 60, 10, @raylib.darkgray)
-    @raylib.draw_text(
+    @draw.draw_text("Controls:", 20, 20, 10, @raylib.black)
+    @draw.draw_text("- Right/Left to move", 40, 40, 10, @raylib.darkgray)
+    @draw.draw_text("- Space to jump", 40, 60, 10, @raylib.darkgray)
+    @draw.draw_text(
       "- Mouse Wheel to Zoom in-out, R to reset zoom", 40, 80, 10, @raylib.darkgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "- C to change camera mode", 40, 100, 10, @raylib.darkgray,
     )
-    @raylib.draw_text("Current camera mode:", 20, 120, 10, @raylib.black)
-    @raylib.draw_text(
+    @draw.draw_text("Current camera mode:", 20, 120, 10, @raylib.black)
+    @draw.draw_text(
       camera_descriptions[camera_option],
       40,
       140,
@@ -452,9 +453,11 @@ fn main {
       @raylib.darkgray,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -46,6 +46,7 @@ fn spawn_obj(objs : Array[Obj], lane : Int, kind : Int) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "Ski Rescue 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let objs : Array[Obj] = Array::makei(150, fn(_i) {
     { alive: false, x: 0.0, y: 0.0, lane: 0, kind: 0 }
@@ -233,7 +234,7 @@ fn main {
           @raylib.draw_circle_lines(x.to_int(), y.to_int(), 14.0, @raylib.black)
         } else if obj.kind == 2 {
           @raylib.draw_circle(x.to_int(), y.to_int(), 13.0, @raylib.orange)
-          @raylib.draw_text(
+          @draw.draw_text(
             "!",
             (x - 4.0).to_int(),
             (y - 11.0).to_int(),
@@ -242,7 +243,7 @@ fn main {
           )
         } else {
           @raylib.draw_circle(x.to_int(), y.to_int(), 12.0, @raylib.lime)
-          @raylib.draw_text(
+          @draw.draw_text(
             "+",
             (x - 6.0).to_int(),
             (y - 11.0).to_int(),
@@ -274,11 +275,11 @@ fn main {
       @raylib.blue,
     )
 
-    @raylib.draw_text("SKI RESCUE 2026", 20, 16, 42, @raylib.darkblue)
-    @raylib.draw_text("Score \{score}", 20, 66, 30, @raylib.black)
-    @raylib.draw_text("Rescued \{rescued}", 210, 66, 30, @raylib.darkgreen)
-    @raylib.draw_text("Distance \{distance}m", 430, 66, 30, @raylib.black)
-    @raylib.draw_text(
+    @draw.draw_text("SKI RESCUE 2026", 20, 16, 42, @raylib.darkblue)
+    @draw.draw_text("Score \{score}", 20, 66, 30, @raylib.black)
+    @draw.draw_text("Rescued \{rescued}", 210, 66, 30, @raylib.darkgreen)
+    @draw.draw_text("Distance \{distance}m", 430, 66, 30, @raylib.black)
+    @draw.draw_text(
       "Lives \{lives}",
       690,
       66,
@@ -291,7 +292,7 @@ fn main {
     )
 
     if boost_timer > 0.0 {
-      @raylib.draw_text("BOOST", 900, 66, 30, @raylib.lime)
+      @draw.draw_text("BOOST", 900, 66, 30, @raylib.lime)
     }
 
     @raylib.draw_rectangle(
@@ -301,7 +302,7 @@ fn main {
       34,
       @raylib.Color::new(22, 38, 56, 230),
     )
-    @raylib.draw_text(msg, 28, 676, 22, @raylib.raywhite)
+    @draw.draw_text(msg, 28, 676, 22, @raylib.raywhite)
 
     if over {
       @raylib.draw_rectangle(
@@ -311,12 +312,14 @@ fn main {
         180,
         @raylib.fade(@raylib.black, 0.8),
       )
-      @raylib.draw_text("MISSION FAILED", 380, 310, 52, @raylib.red)
-      @raylib.draw_text("Press R to retry", 440, 368, 34, @raylib.white)
+      @draw.draw_text("MISSION FAILED", 380, 310, 52, @raylib.red)
+      @draw.draw_text("Press R to retry", 440, 368, 34, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

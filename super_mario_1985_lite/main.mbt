@@ -26,6 +26,7 @@ fn main {
     @types.screen_width, @types.screen_height, "raylib [game] super mario 1985 lite",
   )
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let game = @types.Game()
   @game.init_game(game)
@@ -41,8 +42,10 @@ fn main {
     @raylib.clear_background(@raylib.black)
     @render.draw_world(game)
     @render.draw_ui(game)
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

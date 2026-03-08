@@ -1,0 +1,6 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/utils/draw",
+}
+
+warnings = "+missing_doc+unnecessary_annotation"

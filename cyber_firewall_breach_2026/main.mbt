@@ -341,6 +341,7 @@ fn spawn_interval(sector : Int) -> Float {
 fn main {
   @raylib.init_window(sw, sh, "Cyber Firewall Breach 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let enemies : Array[Enemy] = Array::makei(max_enemies, fn(_i) {
     { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, hp: 0, kind: 0, active: false }
@@ -830,21 +831,21 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 98, @raylib.Color::new(8, 12, 20, 230))
-    @raylib.draw_text(
+    @draw.draw_text(
       "CYBER FIREWALL BREACH 2026",
       16,
       20,
       34,
       @raylib.Color::new(236, 244, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Sector \{sector}/3",
       480,
       30,
       30,
       @raylib.Color::new(246, 230, 136, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{score}",
       684,
       30,
@@ -866,7 +867,7 @@ fn main {
       18,
       @raylib.Color::new(92, 230, 140, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Core HP \{core_hp}",
       975,
       52,
@@ -882,7 +883,7 @@ fn main {
       12,
       @raylib.Color::new(112, 198, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Sector timer",
       326,
       66,
@@ -898,7 +899,7 @@ fn main {
       10,
       @raylib.Color::new(244, 112, 88, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Heat \{heat.to_int()}",
       246,
       90,
@@ -915,7 +916,7 @@ fn main {
       178,
       @raylib.Color::new(10, 16, 28, 220),
     )
-    @raylib.draw_text("Touch", 64, sh - 184, 20, @raylib.white)
+    @draw.draw_text("Touch", 64, sh - 184, 20, @raylib.white)
 
     @raylib.draw_rectangle(
       ctl_x,
@@ -924,7 +925,7 @@ fn main {
       54,
       @raylib.Color::new(46, 64, 90, 255),
     )
-    @raylib.draw_text("UP", ctl_x + 22, ctl_y + 16, 22, @raylib.white)
+    @draw.draw_text("UP", ctl_x + 22, ctl_y + 16, 22, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x,
       ctl_y + 62,
@@ -932,7 +933,7 @@ fn main {
       54,
       @raylib.Color::new(46, 64, 90, 255),
     )
-    @raylib.draw_text("DOWN", ctl_x + 8, ctl_y + 78, 22, @raylib.white)
+    @draw.draw_text("DOWN", ctl_x + 8, ctl_y + 78, 22, @raylib.white)
 
     let pulse_x = sw - 208
     let pulse_y = sh - 290
@@ -943,9 +944,9 @@ fn main {
       94,
       @raylib.Color::new(70, 102, 182, 255),
     )
-    @raylib.draw_text("PULSE", pulse_x + 42, pulse_y + 30, 34, @raylib.white)
+    @draw.draw_text("PULSE", pulse_x + 42, pulse_y + 30, 34, @raylib.white)
     if pulse_cd > 0.0 {
-      @raylib.draw_text(
+      @draw.draw_text(
         "CD \{pulse_cd.to_int() + 1}",
         pulse_x + 58,
         pulse_y - 24,
@@ -963,7 +964,7 @@ fn main {
       120,
       @raylib.Color::new(188, 82, 76, 255),
     )
-    @raylib.draw_text("FIRE", fire_x + 56, fire_y + 42, 36, @raylib.white)
+    @draw.draw_text("FIRE", fire_x + 56, fire_y + 42, 36, @raylib.white)
 
     @raylib.draw_rectangle(
       188,
@@ -972,7 +973,7 @@ fn main {
       36,
       @raylib.Color::new(10, 16, 24, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       198,
       sh - 46,
@@ -989,7 +990,7 @@ fn main {
         212,
         @raylib.Color::new(16, 24, 40, 244),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "BREACH STOPPED"
         } else {
@@ -1004,7 +1005,7 @@ fn main {
           @raylib.Color::new(250, 128, 128, 255)
         },
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R to restart",
         sw / 2 - 124,
         sh / 2 + 40,
@@ -1013,8 +1014,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

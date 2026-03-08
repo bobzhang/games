@@ -6,8 +6,8 @@ fn draw_center_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, col)
 }
 
 ///|
@@ -19,8 +19,8 @@ fn draw_right_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, x - tw, y, size, col)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, x - tw, y, size, col)
 }
 
 ///|
@@ -48,7 +48,7 @@ fn draw_value_bar(
     h,
     @raylib.Color::new(176, 234, 255, 180),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
     x + 8,
     y + h / 2 - 8,
@@ -355,7 +355,7 @@ fn draw_obj_oxygen(
     r,
     @raylib.Color::new(col.r.to_int(), col.g.to_int(), col.b.to_int(), 235),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "O2",
     (x - 12.0).to_int(),
     (y - 8.0).to_int(),
@@ -630,8 +630,8 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     60,
     @raylib.Color::new(128, 206, 234, 170),
   )
-  @raylib.draw_text("DASH", 338, 26, 18, @raylib.Color::new(208, 234, 248, 230))
-  @raylib.draw_text(
+  @draw.draw_text("DASH", 338, 26, 18, @raylib.Color::new(208, 234, 248, 230))
+  @draw.draw_text(
     cooldown_text(game.dash_cd, @types.dash_cd_time),
     338,
     47,
@@ -651,14 +651,14 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     60,
     @raylib.Color::new(146, 186, 242, 170),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "SONAR",
     500,
     26,
     18,
     @raylib.Color::new(220, 230, 255, 230),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     cooldown_text(game.sonar_cd, @types.sonar_cd_time),
     500,
     47,
@@ -685,21 +685,21 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(134, 202, 234, 170),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "SCORE " + game.score.to_string(),
     @types.screen_w - 284,
     30,
     22,
     @raylib.Color::new(232, 248, 255, 240),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "BEST " + game.best_score.to_string(),
     @types.screen_w - 284,
     56,
     18,
     @raylib.Color::new(172, 224, 245, 220),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "STAGE " + game.stage.to_string(),
     @types.screen_w - 284,
     76,
@@ -787,8 +787,8 @@ fn draw_button_hint(
     base,
   )
 
-  let tw = @raylib.measure_text(text, 24)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(text, 24)
+  @draw.draw_text(
     text,
     (rect.0 + rect.2 * 0.5 - Float::from_int(tw) * 0.5).to_int(),
     (rect.1 + rect.3 * 0.5 - 12.0).to_int(),

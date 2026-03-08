@@ -12,6 +12,7 @@ fn main {
   let mut frames_counter = 0
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -52,14 +53,14 @@ fn main {
     match current_screen {
       0 => {
         // LOGO
-        @raylib.draw_text("LOGO SCREEN", 20, 20, 40, @raylib.lightgray)
-        @raylib.draw_text("WAIT for 2 SECONDS...", 290, 220, 20, @raylib.gray)
+        @draw.draw_text("LOGO SCREEN", 20, 20, 40, @raylib.lightgray)
+        @draw.draw_text("WAIT for 2 SECONDS...", 290, 220, 20, @raylib.gray)
       }
       1 => {
         // TITLE
         @raylib.draw_rectangle(0, 0, screen_width, screen_height, @raylib.green)
-        @raylib.draw_text("TITLE SCREEN", 20, 20, 40, @raylib.darkgreen)
-        @raylib.draw_text(
+        @draw.draw_text("TITLE SCREEN", 20, 20, 40, @raylib.darkgreen)
+        @draw.draw_text(
           "PRESS ENTER or TAP to JUMP to GAMEPLAY SCREEN", 120, 220, 20, @raylib.darkgreen,
         )
       }
@@ -68,24 +69,26 @@ fn main {
         @raylib.draw_rectangle(
           0, 0, screen_width, screen_height, @raylib.purple,
         )
-        @raylib.draw_text("GAMEPLAY SCREEN", 20, 20, 40, @raylib.maroon)
-        @raylib.draw_text(
+        @draw.draw_text("GAMEPLAY SCREEN", 20, 20, 40, @raylib.maroon)
+        @draw.draw_text(
           "PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, @raylib.maroon,
         )
       }
       3 => {
         // ENDING
         @raylib.draw_rectangle(0, 0, screen_width, screen_height, @raylib.blue)
-        @raylib.draw_text("ENDING SCREEN", 20, 20, 40, @raylib.darkblue)
-        @raylib.draw_text(
+        @draw.draw_text("ENDING SCREEN", 20, 20, 40, @raylib.darkblue)
+        @draw.draw_text(
           "PRESS ENTER or TAP to RETURN to TITLE SCREEN", 120, 220, 20, @raylib.darkblue,
         )
       }
       _ => ()
     }
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

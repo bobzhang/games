@@ -6,8 +6,8 @@ fn draw_center_text(
   size : Int,
   color : @raylib.Color,
 ) -> Unit {
-  let tw = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, color)
+  let tw = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - tw / 2, y, size, color)
 }
 
 ///|
@@ -23,7 +23,7 @@ fn draw_meter(
 ) -> Unit {
   let r = @types.clampf(ratio, 0.0, 1.0)
 
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
     x,
     y - 22,
@@ -151,7 +151,7 @@ fn @types.Game::draw_exits(game : @types.Game) -> Unit {
       @types.col_exit(),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "EXIT",
       game.exits[i].x.to_int() - 24,
       game.exits[i].y.to_int() - 8,
@@ -387,7 +387,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(8, 12, 20, 234),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Dungeon Courier Escape 2026",
     26,
     14,
@@ -395,7 +395,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(230, 238, 252, 244),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Wave \{game.wave}",
     30,
     54,
@@ -403,7 +403,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(190, 210, 236, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Delivered \{game.delivered_wave}/\{game.target_deliveries}",
     190,
     54,
@@ -411,7 +411,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(200, 220, 244, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score \{game.score}",
     520,
     54,
@@ -419,7 +419,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(216, 228, 246, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Smoke \{game.smoke_stock}",
     700,
     54,
@@ -427,7 +427,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(214, 226, 246, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Time \{@types.maxf(game.time_left, 0.0).to_int()}s",
     860,
     54,
@@ -458,7 +458,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @types.col_stealth(),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Move WASD/Arrows | J pickup/drop/deliver | K smoke | Space sprint",
     26,
     @types.screen_h - 34,
@@ -468,7 +468,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
 
   if game.info_t > 0.0 {
     let alpha = (@types.clampf(game.info_t / 2.4, 0.0, 1.0) * 230.0).to_int()
-    let box_w = @raylib.measure_text(game.hint, 28) + 44
+    let box_w = @draw.measure_text(game.hint, 28) + 44
     let box_x = @types.screen_w / 2 - box_w / 2
 
     @raylib.draw_rectangle(
@@ -485,7 +485,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
       44,
       @raylib.Color::new(152, 180, 208, alpha),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       game.hint,
       box_x + 20,
       @types.screen_h - 52,
@@ -556,28 +556,28 @@ fn draw_title_overlay() -> Unit {
     @raylib.Color::new(188, 212, 236, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Mission",
     panel_x + 46,
     panel_y + 188,
     34,
     @raylib.Color::new(224, 236, 252, 245),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "1. Pick up parcels with J",
     panel_x + 58,
     panel_y + 236,
     28,
     @raylib.Color::new(204, 222, 244, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "2. Deliver to glowing EXIT rings",
     panel_x + 58,
     panel_y + 274,
     28,
     @raylib.Color::new(204, 222, 244, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "3. Avoid guard cones and floor traps",
     panel_x + 58,
     panel_y + 312,
@@ -585,35 +585,35 @@ fn draw_title_overlay() -> Unit {
     @raylib.Color::new(204, 222, 244, 238),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Controls",
     panel_x + 490,
     panel_y + 188,
     34,
     @raylib.Color::new(224, 236, 252, 245),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Move: Arrows / WASD",
     panel_x + 504,
     panel_y + 236,
     28,
     @raylib.Color::new(204, 222, 244, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Interact: J",
     panel_x + 504,
     panel_y + 274,
     28,
     @raylib.Color::new(204, 222, 244, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Smoke Decoy: K",
     panel_x + 504,
     panel_y + 312,
     28,
     @raylib.Color::new(204, 222, 244, 238),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Sprint: Space (louder)",
     panel_x + 504,
     panel_y + 350,

@@ -85,9 +85,9 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   )
   // Title
   let title = "VOXEL WORLD 3D"
-  let tw = @raylib.measure_text(title, 52)
+  let tw = @draw.measure_text(title, 52)
   // Shadow (drawn first, behind the title)
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2 + 2,
     102,
@@ -95,7 +95,7 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
     @raylib.Color::new(20, 60, 20, 255),
   )
   // Main title text (drawn on top of shadow)
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     100,
@@ -104,8 +104,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   )
   // Subtitle
   let sub = "A Minecraft-lite Sandbox Adventure"
-  let sw = @raylib.measure_text(sub, 22)
-  @raylib.draw_text(
+  let sw = @draw.measure_text(sub, 22)
+  @draw.draw_text(
     sub,
     (@types.screen_width - sw) / 2,
     165,
@@ -114,8 +114,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   )
   // Version
   let ver = "v2.0 - MoonBit Edition"
-  let vw = @raylib.measure_text(ver, 16)
-  @raylib.draw_text(
+  let vw = @draw.measure_text(ver, 16)
+  @draw.draw_text(
     ver,
     (@types.screen_width - vw) / 2,
     195,
@@ -129,8 +129,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   ]
   for i in 0..<features.length() {
     let fy = 240 + i * 24
-    let fw = @raylib.measure_text(features[i], 16)
-    @raylib.draw_text(
+    let fw = @draw.measure_text(features[i], 16)
+    @draw.draw_text(
       features[i],
       (@types.screen_width - fw) / 2,
       fy,
@@ -142,8 +142,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   let blink = @math.sinf(game.menu_blink * 2.0)
   let alpha = if blink > 0.0 { 255 } else { 120 }
   let prompt = "Press ENTER or SPACE to Play"
-  let pw = @raylib.measure_text(prompt, 28)
-  @raylib.draw_text(
+  let pw = @draw.measure_text(prompt, 28)
+  @draw.draw_text(
     prompt,
     (@types.screen_width - pw) / 2,
     370,
@@ -157,8 +157,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   ]
   for i in 0..<controls.length() {
     let cy = 430 + i * 26
-    let cw = @raylib.measure_text(controls[i], 17)
-    @raylib.draw_text(
+    let cw = @draw.measure_text(controls[i], 17)
+    @draw.draw_text(
       controls[i],
       (@types.screen_width - cw) / 2,
       cy,
@@ -168,8 +168,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   }
   // Credits
   let credits = "Built with MoonBit + raylib"
-  let crw = @raylib.measure_text(credits, 14)
-  @raylib.draw_text(
+  let crw = @draw.measure_text(credits, 14)
+  @draw.draw_text(
     credits,
     (@types.screen_width - crw) / 2,
     @types.screen_height - 30,
@@ -198,7 +198,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   } else {
     "Empty"
   }
-  @raylib.draw_text(
+  @draw.draw_text(
     block_text,
     10,
     6,
@@ -208,8 +208,8 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   // FPS
   let fps = @raylib.get_fps()
   let fps_text = "FPS: \{fps}"
-  let fps_w = @raylib.measure_text(fps_text, 18)
-  @raylib.draw_text(
+  let fps_w = @draw.measure_text(fps_text, 18)
+  @draw.draw_text(
     fps_text,
     @types.screen_width - fps_w - 10,
     6,
@@ -220,8 +220,8 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   let time_pct = game.day_timer / @types.day_length * 100.0
   let time_text : String = if game.is_night { "Night" } else { "Day" }
   let day_text = "Day \{game.day_count} - \{time_text} (\{time_pct.to_int()}%)"
-  let dw = @raylib.measure_text(day_text, 16)
-  @raylib.draw_text(
+  let dw = @draw.measure_text(day_text, 16)
+  @draw.draw_text(
     day_text,
     (@types.screen_width - dw) / 2,
     8,
@@ -237,7 +237,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     } else {
       255
     }
-    let msg_w = @raylib.measure_text(game.message_text, 20)
+    let msg_w = @draw.measure_text(game.message_text, 20)
     // Background for message
     @raylib.draw_rectangle(
       (@types.screen_width - msg_w) / 2 - 8,
@@ -246,7 +246,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
       28,
       @raylib.Color::new(0, 0, 0, (msg_alpha / 2).clamp(min=0, max=140)),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       game.message_text,
       (@types.screen_width - msg_w) / 2,
       @types.screen_height / 2 + 56,
@@ -308,8 +308,8 @@ fn @types.Game::draw_hotbar(game : @types.Game) -> Unit {
       // Count
       if slot.count > 1 {
         let count_text = "\{slot.count}"
-        let count_w = @raylib.measure_text(count_text, 12)
-        @raylib.draw_text(
+        let count_w = @draw.measure_text(count_text, 12)
+        @draw.draw_text(
           count_text,
           sx + slot_size - count_w - 4,
           start_y + slot_size - 16,
@@ -320,7 +320,7 @@ fn @types.Game::draw_hotbar(game : @types.Game) -> Unit {
     }
     // Slot number
     let num_text = "\{i + 1}"
-    @raylib.draw_text(
+    @draw.draw_text(
       num_text,
       sx + 2,
       start_y + 2,
@@ -424,7 +424,7 @@ fn @types.Game::draw_health_hunger_bars(game : @types.Game) -> Unit {
   )
   // Health text
   let health_text = "HP: \{player.health}/\{@types.player_max_health}"
-  @raylib.draw_text(
+  @draw.draw_text(
     health_text,
     health_x + 4,
     start_y + 1,
@@ -432,7 +432,7 @@ fn @types.Game::draw_health_hunger_bars(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 255, 255, 255),
   )
   // Heart icon placeholder
-  @raylib.draw_text(
+  @draw.draw_text(
     "+",
     health_x - 16,
     start_y,
@@ -463,7 +463,7 @@ fn @types.Game::draw_health_hunger_bars(game : @types.Game) -> Unit {
     @raylib.Color::new(hunger_r, hunger_g, hunger_b, 255),
   )
   let hunger_text = "Food: \{player.hunger}/\{@types.player_max_hunger}"
-  @raylib.draw_text(
+  @draw.draw_text(
     hunger_text,
     hunger_x + 4,
     start_y + 1,
@@ -471,7 +471,7 @@ fn @types.Game::draw_health_hunger_bars(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 255, 255, 255),
   )
   // Drumstick icon placeholder
-  @raylib.draw_text(
+  @draw.draw_text(
     "~",
     hunger_x + bar_width + 4,
     start_y,
@@ -532,7 +532,7 @@ fn @types.Game::draw_air_bar(game : @types.Game) -> Unit {
     @raylib.Color::new(50, 150, 255, 255),
   )
   let air_text = "Air"
-  @raylib.draw_text(
+  @draw.draw_text(
     air_text,
     air_x + bar_width / 2 - 10,
     air_y - 1,
@@ -560,33 +560,33 @@ fn @types.Game::draw_debug_info(game : @types.Game) -> Unit {
   )
   let color = @raylib.Color::new(200, 220, 200, 255)
   let pos_text = "Pos: \{player.x.to_int()}, \{player.y.to_int()}, \{player.z.to_int()}"
-  @raylib.draw_text(pos_text, x, y, 15, color)
+  @draw.draw_text(pos_text, x, y, 15, color)
   y += line_h
   let chunk_cx = player.x.to_int() / @types.chunk_x
   let chunk_cz = player.z.to_int() / @types.chunk_z
   let chunk_text = "Chunk: \{chunk_cx}, \{chunk_cz}"
-  @raylib.draw_text(chunk_text, x, y, 15, color)
+  @draw.draw_text(chunk_text, x, y, 15, color)
   y += line_h
   let facing = @types.facing_direction(player.yaw)
   let facing_text = "Facing: \{facing}"
-  @raylib.draw_text(facing_text, x, y, 15, color)
+  @draw.draw_text(facing_text, x, y, 15, color)
   y += line_h
   let biome = @types.get_biome_at(player.x.to_int(), player.z.to_int())
   let biome_text = "Biome: \{@types.biome_name(biome)}"
-  @raylib.draw_text(biome_text, x, y, 15, color)
+  @draw.draw_text(biome_text, x, y, 15, color)
   y += line_h
   let vel_text = "Vel: \{player.vx.to_int()}, \{player.vy.to_int()}, \{player.vz.to_int()}"
-  @raylib.draw_text(vel_text, x, y, 15, color)
+  @draw.draw_text(vel_text, x, y, 15, color)
   y += line_h
   let ground_text : String = if player.on_ground {
     "On Ground: Yes"
   } else {
     "On Ground: No"
   }
-  @raylib.draw_text(ground_text, x, y, 15, color)
+  @draw.draw_text(ground_text, x, y, 15, color)
   y += line_h
   let tool_text = "Tool: \{@types.tool_name(player.equipped_tool)}"
-  @raylib.draw_text(tool_text, x, y, 15, color)
+  @draw.draw_text(tool_text, x, y, 15, color)
   y += line_h
   // Target block info
   if game.target.hit {
@@ -597,9 +597,9 @@ fn @types.Game::draw_debug_info(game : @types.Game) -> Unit {
       game.target.bz,
     )
     let target_text = "Target: \{@types.block_name(tblock)} at \{game.target.bx},\{game.target.by},\{game.target.bz}"
-    @raylib.draw_text(target_text, x, y, 15, color)
+    @draw.draw_text(target_text, x, y, 15, color)
   } else {
-    @raylib.draw_text("Target: None", x, y, 15, color)
+    @draw.draw_text("Target: None", x, y, 15, color)
   }
   y += line_h
   // Entity count
@@ -610,13 +610,13 @@ fn @types.Game::draw_debug_info(game : @types.Game) -> Unit {
     }
   }
   let ent_text = "Entities: \{ent_count}/\{@types.entity_max}"
-  @raylib.draw_text(ent_text, x, y, 15, color)
+  @draw.draw_text(ent_text, x, y, 15, color)
   y += line_h
   let stat_text = "Broken: \{game.blocks_broken} | Placed: \{game.blocks_placed} | Kills: \{game.mobs_killed}"
-  @raylib.draw_text(stat_text, x, y, 15, color)
+  @draw.draw_text(stat_text, x, y, 15, color)
   y += line_h
   let dist_text = "Distance: \{game.distance_walked.to_int()}m"
-  @raylib.draw_text(dist_text, x, y, 15, color)
+  @draw.draw_text(dist_text, x, y, 15, color)
   y += line_h
   let night_text : String = if game.is_night {
     "Night time"
@@ -624,7 +624,7 @@ fn @types.Game::draw_debug_info(game : @types.Game) -> Unit {
     "Day time"
   }
   let time_text = "\{night_text} | Day \{game.day_count}"
-  @raylib.draw_text(time_text, x, y, 15, color)
+  @draw.draw_text(time_text, x, y, 15, color)
 }
 
 // ========== Pause screen ==========
@@ -639,8 +639,8 @@ fn @types.Game::draw_pause_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, 150),
   )
   let text = "PAUSED"
-  let tw = @raylib.measure_text(text, 60)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(text, 60)
+  @draw.draw_text(
     text,
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 80,
@@ -655,8 +655,8 @@ fn @types.Game::draw_pause_overlay(game : @types.Game) -> Unit {
   ]
   for i in 0..<stats.length() {
     let sy = @types.screen_height / 2 - 10 + i * 22
-    let sw = @raylib.measure_text(stats[i], 16)
-    @raylib.draw_text(
+    let sw = @draw.measure_text(stats[i], 16)
+    @draw.draw_text(
       stats[i],
       (@types.screen_width - sw) / 2,
       sy,
@@ -665,8 +665,8 @@ fn @types.Game::draw_pause_overlay(game : @types.Game) -> Unit {
     )
   }
   let hint = "Esc/P: Resume  |  Q: Quit to Menu"
-  let hw = @raylib.measure_text(hint, 20)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint, 20)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
     @types.screen_height / 2 + 70,
@@ -687,8 +687,8 @@ fn @types.Game::draw_inventory_screen(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, 190),
   )
   let title = "INVENTORY"
-  let tw = @raylib.measure_text(title, 30)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, 30)
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     50,
@@ -696,8 +696,8 @@ fn @types.Game::draw_inventory_screen(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 255, 255, 255),
   )
   let hint = "1-9: Select Hotbar | E/Esc: Close"
-  let hw = @raylib.measure_text(hint, 16)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint, 16)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
     85,
@@ -783,8 +783,8 @@ fn @types.Game::draw_inventory_screen(game : @types.Game) -> Unit {
         // Count
         if slot.count > 1 {
           let cnt_text = "\{slot.count}"
-          let cnt_w = @raylib.measure_text(cnt_text, 12)
-          @raylib.draw_text(
+          let cnt_w = @draw.measure_text(cnt_text, 12)
+          @draw.draw_text(
             cnt_text,
             sx + slot_size - cnt_w - 3,
             sy + slot_size - 15,
@@ -795,7 +795,7 @@ fn @types.Game::draw_inventory_screen(game : @types.Game) -> Unit {
         // Item name on hover/select
         if is_selected {
           let name = @types.block_name(slot.item_id)
-          let nw = @raylib.measure_text(name, 14)
+          let nw = @draw.measure_text(name, 14)
           @raylib.draw_rectangle(
             sx + (slot_size - nw) / 2 - 4,
             sy - 18,
@@ -803,7 +803,7 @@ fn @types.Game::draw_inventory_screen(game : @types.Game) -> Unit {
             18,
             @raylib.Color::new(0, 0, 0, 200),
           )
-          @raylib.draw_text(
+          @draw.draw_text(
             name,
             sx + (slot_size - nw) / 2,
             sy - 16,
@@ -825,7 +825,7 @@ fn @types.Game::draw_inventory_screen(game : @types.Game) -> Unit {
       // Row label for hotbar row
       if row == 0 {
         let key_text = "\{col + 1}"
-        @raylib.draw_text(
+        @draw.draw_text(
           key_text,
           sx + 2,
           sy + 2,
@@ -837,7 +837,7 @@ fn @types.Game::draw_inventory_screen(game : @types.Game) -> Unit {
   }
   // Label for hotbar row
   let hotbar_label = "Hotbar"
-  @raylib.draw_text(
+  @draw.draw_text(
     hotbar_label,
     grid_start_x - 12,
     grid_start_y + slot_size / 2 - 6,
@@ -858,8 +858,8 @@ fn @types.Game::draw_crafting_screen(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, 190),
   )
   let title = "CRAFTING"
-  let tw = @raylib.measure_text(title, 30)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, 30)
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     40,
@@ -867,8 +867,8 @@ fn @types.Game::draw_crafting_screen(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 255, 255, 255),
   )
   let hint = "W/S: Navigate | Enter/Space: Craft | C/Esc: Close"
-  let hw = @raylib.measure_text(hint, 16)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint, 16)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
     75,
@@ -914,13 +914,13 @@ fn @types.Game::draw_crafting_screen(game : @types.Game) -> Unit {
       @raylib.Color::new(150, 100, 100, 200)
     }
     // Recipe name
-    @raylib.draw_text(recipe.name, panel_x + 10, ry + 6, 18, text_color)
+    @draw.draw_text(recipe.name, panel_x + 10, ry + 6, 18, text_color)
     // Input display
     let mut input_text = "Needs: \{@types.block_name(recipe.input1_id)} x\{recipe.input1_count}"
     if recipe.input2_id > 0 {
       input_text = "\{input_text} + \{@types.block_name(recipe.input2_id)} x\{recipe.input2_count}"
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       input_text,
       panel_x + 10,
       ry + 26,
@@ -929,8 +929,8 @@ fn @types.Game::draw_crafting_screen(game : @types.Game) -> Unit {
     )
     // Output display
     let output_text = "=> \{@types.block_name(recipe.output_id)} x\{recipe.output_count}"
-    let ow = @raylib.measure_text(output_text, 14)
-    @raylib.draw_text(
+    let ow = @draw.measure_text(output_text, 14)
+    @draw.draw_text(
       output_text,
       panel_x + panel_width - ow - 10,
       ry + 14,
@@ -969,7 +969,7 @@ fn @types.Game::draw_crafting_screen(game : @types.Game) -> Unit {
         @raylib.Color::new(255, 255, 0, 255),
       )
       // Arrow indicator
-      @raylib.draw_text(
+      @draw.draw_text(
         ">",
         panel_x - 20,
         ry + 12,
@@ -1025,10 +1025,10 @@ fn @types.Game::draw_game_over_screen(game : @types.Game) -> Unit {
   )
   // Title
   let title = "YOU DIED"
-  let tw = @raylib.measure_text(title, 64)
+  let tw = @draw.measure_text(title, 64)
   // Fade in
   let alpha : Int = (game.death_timer * 200.0).to_int().min(255)
-  @raylib.draw_text(
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 100,
@@ -1046,8 +1046,8 @@ fn @types.Game::draw_game_over_screen(game : @types.Game) -> Unit {
     ]
     for i in 0..<stats.length() {
       let sy = @types.screen_height / 2 - 20 + i * 24
-      let sw = @raylib.measure_text(stats[i], 18)
-      @raylib.draw_text(
+      let sw = @draw.measure_text(stats[i], 18)
+      @draw.draw_text(
         stats[i],
         (@types.screen_width - sw) / 2,
         sy,
@@ -1058,8 +1058,8 @@ fn @types.Game::draw_game_over_screen(game : @types.Game) -> Unit {
   }
   if game.death_timer > 1.5 {
     let prompt = "Press ENTER to Respawn  |  Q to Quit"
-    let pw = @raylib.measure_text(prompt, 22)
-    @raylib.draw_text(
+    let pw = @draw.measure_text(prompt, 22)
+    @draw.draw_text(
       prompt,
       (@types.screen_width - pw) / 2,
       @types.screen_height / 2 + 120,
@@ -1080,7 +1080,7 @@ fn @types.Game::draw_biome_indicator(game : @types.Game) -> Unit {
   let text_x = @types.screen_width - 150
   let text_y = 36
   // Background
-  let text_w = @raylib.measure_text(bname, 16)
+  let text_w = @draw.measure_text(bname, 16)
   @raylib.draw_rectangle(
     text_x - 6,
     text_y - 2,
@@ -1120,7 +1120,7 @@ fn @types.Game::draw_biome_indicator(game : @types.Game) -> Unit {
     12,
     @raylib.Color::new(dot_r, dot_g, dot_b, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     bname,
     text_x,
     text_y,
@@ -1151,7 +1151,7 @@ fn @types.Game::draw_compass(game : @types.Game) -> Unit {
   let n_x = cx + n_offset.to_int()
   // Draw N marker
   let n_alpha : Int = if n_offset.abs() < 30.0 { 255 } else { 100 }
-  @raylib.draw_text(
+  @draw.draw_text(
     "N",
     n_x - 4,
     cy - 8,
@@ -1162,7 +1162,7 @@ fn @types.Game::draw_compass(game : @types.Game) -> Unit {
   let s_offset = @math.sinf(yaw + @types.pi) * 40.0
   let s_x = cx + s_offset.to_int()
   let s_alpha : Int = if s_offset.abs() < 30.0 { 255 } else { 100 }
-  @raylib.draw_text(
+  @draw.draw_text(
     "S",
     s_x - 4,
     cy - 8,
@@ -1173,7 +1173,7 @@ fn @types.Game::draw_compass(game : @types.Game) -> Unit {
   let e_offset = @math.sinf(yaw + @types.pi * 0.5) * 40.0
   let e_x = cx + e_offset.to_int()
   let e_alpha : Int = if e_offset.abs() < 30.0 { 200 } else { 80 }
-  @raylib.draw_text(
+  @draw.draw_text(
     "E",
     e_x - 4,
     cy - 8,
@@ -1184,7 +1184,7 @@ fn @types.Game::draw_compass(game : @types.Game) -> Unit {
   let w_offset = @math.sinf(yaw - @types.pi * 0.5) * 40.0
   let w_x = cx + w_offset.to_int()
   let w_alpha : Int = if w_offset.abs() < 30.0 { 200 } else { 80 }
-  @raylib.draw_text(
+  @draw.draw_text(
     "W",
     w_x - 4,
     cy - 8,
@@ -1218,8 +1218,8 @@ fn @types.Game::draw_tool_durability(game : @types.Game) -> Unit {
   let bar_x = @types.screen_width / 2 - bar_width / 2
   let bar_y = @types.screen_height - 70
   // Tool name text
-  let tw = @raylib.measure_text(tname, 14)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(tname, 14)
+  @draw.draw_text(
     tname,
     @types.screen_width / 2 - tw / 2,
     bar_y - 16,
@@ -1266,8 +1266,8 @@ fn @types.Game::draw_tool_durability(game : @types.Game) -> Unit {
     ""
   }
   if tier_text.length() > 0 {
-    let tier_w = @raylib.measure_text(tier_text, 10)
-    @raylib.draw_text(
+    let tier_w = @draw.measure_text(tier_text, 10)
+    @draw.draw_text(
       tier_text,
       @types.screen_width / 2 - tier_w / 2,
       bar_y + bar_height + 2,
@@ -1302,11 +1302,11 @@ fn @types.Game::draw_event_log(game : @types.Game) -> Unit {
     }
   }
   let ent_text = "Mobs: \{ent_count}"
-  @raylib.draw_text(ent_text, log_x, log_y, 13, log_color)
+  @draw.draw_text(ent_text, log_x, log_y, 13, log_color)
   let kills_text = "Kills: \{game.mobs_killed}"
-  @raylib.draw_text(kills_text, log_x, log_y + line_h, 13, log_color)
+  @draw.draw_text(kills_text, log_x, log_y + line_h, 13, log_color)
   let blocks_text = "Mined: \{game.blocks_broken}"
-  @raylib.draw_text(blocks_text, log_x, log_y + line_h * 2, 13, log_color)
+  @draw.draw_text(blocks_text, log_x, log_y + line_h * 2, 13, log_color)
   let placed_text = "Placed: \{game.blocks_placed}"
-  @raylib.draw_text(placed_text, log_x, log_y + line_h * 3, 13, log_color)
+  @draw.draw_text(placed_text, log_x, log_y + line_h * 3, 13, log_color)
 }

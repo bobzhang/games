@@ -184,6 +184,7 @@ fn main {
   let mut border_color = @raylib.maroon
   let font = @raylib.get_font_default()
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -293,7 +294,7 @@ fn main {
       ),
       @raylib.maroon,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Word Wrap: ",
       313,
       screen_height - 115,
@@ -301,18 +302,18 @@ fn main {
       @raylib.black,
     )
     if word_wrap {
-      @raylib.draw_text("ON", 447, screen_height - 115, 20, @raylib.red)
+      @draw.draw_text("ON", 447, screen_height - 115, 20, @raylib.red)
     } else {
-      @raylib.draw_text("OFF", 447, screen_height - 115, 20, @raylib.black)
+      @draw.draw_text("OFF", 447, screen_height - 115, 20, @raylib.black)
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       "Press [SPACE] to toggle word wrap",
       218,
       screen_height - 86,
       20,
       @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Click hold & drag the    to resize the container",
       155,
       screen_height - 38,
@@ -320,9 +321,11 @@ fn main {
       @raylib.raywhite,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

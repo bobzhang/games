@@ -186,6 +186,7 @@ fn alive_team(units : Array[Piece], team : Int) -> Int {
 fn main {
   @raylib.init_window(sw, sh, "Auto Chess Micro 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let board : Array[Int] = Array::make(gw * gh, -1)
   let units : Array[Piece] = []
@@ -338,10 +339,10 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.Color::new(18, 20, 28, 255))
 
-    @raylib.draw_text("AUTO CHESS MICRO 2026", 22, 18, 34, @raylib.skyblue)
-    @raylib.draw_text("Round \{round}", 24, 58, 24, @raylib.raywhite)
-    @raylib.draw_text("Gold \{gold}", 170, 58, 24, @raylib.gold)
-    @raylib.draw_text("Life \{life}", 300, 58, 24, @raylib.lime)
+    @draw.draw_text("AUTO CHESS MICRO 2026", 22, 18, 34, @raylib.skyblue)
+    @draw.draw_text("Round \{round}", 24, 58, 24, @raylib.raywhite)
+    @draw.draw_text("Gold \{gold}", 170, 58, 24, @raylib.gold)
+    @draw.draw_text("Life \{life}", 300, 58, 24, @raylib.lime)
 
     for y in 0..<gh {
       for x in 0..<gw {
@@ -397,7 +398,7 @@ fn main {
             @raylib.red
           }
           @raylib.draw_rectangle(px + 12, py + 12, tile - 26, tile - 26, col)
-          @raylib.draw_text(
+          @draw.draw_text(
             "\{unit.hp}",
             px + 18,
             py + 16,
@@ -408,7 +409,7 @@ fn main {
       }
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "1 Tank(5)  2 Archer(4)  3 Blade(4)  ENTER start battle  R restart", 180, 580,
       22, @raylib.gray,
     )
@@ -419,7 +420,7 @@ fn main {
       44,
       @raylib.Color::new(24, 24, 34, 255),
     )
-    @raylib.draw_text(message, 52, 634, 22, @raylib.raywhite)
+    @draw.draw_text(message, 52, 634, 22, @raylib.raywhite)
 
     if won || lost {
       @raylib.draw_rectangle(
@@ -429,7 +430,7 @@ fn main {
         120,
         @raylib.fade(@raylib.black, 0.8),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "CHAMPION"
         } else {
@@ -444,11 +445,13 @@ fn main {
           @raylib.red
         },
       )
-      @raylib.draw_text("Press R to restart", 390, 334, 26, @raylib.raywhite)
+      @draw.draw_text("Press R to restart", 390, 334, 26, @raylib.raywhite)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

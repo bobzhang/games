@@ -82,13 +82,13 @@ fn @types.Game::draw_ghosts(game : @types.Game) -> Unit {
 ///|
 /// Draws the HUD panel showing score, lives, pellet count, ghost mode, and controls.
 fn @types.Game::draw_hud(game : @types.Game) -> Unit {
-  @raylib.draw_text("PAC DASH 2026", @types.hud_x, 30, 30, @raylib.raywhite)
-  @raylib.draw_text("Score", @types.hud_x, 90, 24, @raylib.lightgray)
-  @raylib.draw_text("\{game.score}", @types.hud_x, 118, 32, @raylib.yellow)
-  @raylib.draw_text("Lives", @types.hud_x, 170, 24, @raylib.lightgray)
-  @raylib.draw_text("\{game.lives}", @types.hud_x, 198, 30, @raylib.orange)
-  @raylib.draw_text("Pellets", @types.hud_x, 246, 24, @raylib.lightgray)
-  @raylib.draw_text(
+  @draw.draw_text("PAC DASH 2026", @types.hud_x, 30, 30, @raylib.raywhite)
+  @draw.draw_text("Score", @types.hud_x, 90, 24, @raylib.lightgray)
+  @draw.draw_text("\{game.score}", @types.hud_x, 118, 32, @raylib.yellow)
+  @draw.draw_text("Lives", @types.hud_x, 170, 24, @raylib.lightgray)
+  @draw.draw_text("\{game.lives}", @types.hud_x, 198, 30, @raylib.orange)
+  @draw.draw_text("Pellets", @types.hud_x, 246, 24, @raylib.lightgray)
+  @draw.draw_text(
     "\{game.pellets_left}",
     @types.hud_x,
     274,
@@ -103,17 +103,17 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   } else {
     "Scatter"
   }
-  @raylib.draw_text("Mode", @types.hud_x, 322, 24, @raylib.lightgray)
-  @raylib.draw_text(mode, @types.hud_x, 350, 28, @raylib.skyblue)
+  @draw.draw_text("Mode", @types.hud_x, 322, 24, @raylib.lightgray)
+  @draw.draw_text(mode, @types.hud_x, 350, 28, @raylib.skyblue)
 
-  @raylib.draw_text("Controls", @types.hud_x, 416, 24, @raylib.lightgray)
-  @raylib.draw_text("WASD / Arrows", @types.hud_x, 445, 20, @raylib.gray)
-  @raylib.draw_text("R: Restart", @types.hud_x, 468, 20, @raylib.gray)
+  @draw.draw_text("Controls", @types.hud_x, 416, 24, @raylib.lightgray)
+  @draw.draw_text("WASD / Arrows", @types.hud_x, 445, 20, @raylib.gray)
+  @draw.draw_text("R: Restart", @types.hud_x, 468, 20, @raylib.gray)
 
   if game.game_over {
     let msg = if game.win { "YOU WIN" } else { "GAME OVER" }
     let color = if game.win { @raylib.lime } else { @raylib.red }
-    @raylib.draw_text(msg, @types.hud_x, 520, 34, color)
+    @draw.draw_text(msg, @types.hud_x, 520, 34, color)
   }
 }
 
@@ -126,5 +126,6 @@ pub fn draw_frame(game : @types.Game) -> Unit {
   game.draw_player()
   game.draw_ghosts()
   game.draw_hud()
+  @fps.draw()
   @raylib.end_drawing()
 }

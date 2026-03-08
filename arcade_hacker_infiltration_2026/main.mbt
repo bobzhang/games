@@ -577,6 +577,7 @@ fn draw_camera(c : Camera) -> Unit {
 fn main {
   @raylib.init_window(sw, sh, "Arcade Hacker Infiltration 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let tiles : Array[Int] = Array::makei(map_w * map_h, fn(_i) { 0 })
 
@@ -1751,14 +1752,14 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 76, @raylib.Color::new(6, 10, 18, 228))
-    @raylib.draw_text(
+    @draw.draw_text(
       "ARCADE HACKER INFILTRATION 2026",
       16,
       12,
       30,
       @raylib.Color::new(236, 246, 255, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "WASD move  J hack  K EMP  L cloak",
       16,
       48,
@@ -1766,28 +1767,28 @@ fn main {
       @raylib.Color::new(176, 204, 236, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Stage \{stage}/\{max_stage}",
       560,
       14,
       28,
       @raylib.Color::new(250, 220, 132, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{player.score}",
       732,
       14,
       28,
       @raylib.Color::new(170, 238, 202, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time \{mission_time.to_int()}s",
       920,
       14,
       28,
       @raylib.Color::new(168, 224, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Strikes \{strikes}/3",
       1110,
       14,
@@ -1803,7 +1804,7 @@ fn main {
       10,
       @raylib.Color::new(116, 228, 164, 255),
     )
-    @raylib.draw_text("HP", 20, 100, 16, @raylib.Color::new(186, 212, 234, 255))
+    @draw.draw_text("HP", 20, 100, 16, @raylib.Color::new(186, 212, 234, 255))
 
     @raylib.draw_rectangle(
       256,
@@ -1819,7 +1820,7 @@ fn main {
       10,
       @raylib.Color::new(122, 198, 248, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "ENERGY",
       256,
       100,
@@ -1841,7 +1842,7 @@ fn main {
       10,
       @raylib.Color::new(246, 134, 132, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "ALARM",
       492,
       100,
@@ -1849,21 +1850,21 @@ fn main {
       @raylib.Color::new(186, 212, 234, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Cores \{terminal_done}/\{terminal_total}",
       732,
       84,
       20,
       @raylib.Color::new(144, 226, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Combo \{player.combo}",
       906,
       84,
       20,
       @raylib.Color::new(246, 220, 156, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Hack \{player.hack_cd.to_int()}  EMP \{player.emp_cd.to_int()}  Cloak \{player.cloak_cd.to_int()}",
       1030,
       84,
@@ -1878,7 +1879,7 @@ fn main {
       38,
       @raylib.Color::new(8, 12, 18, 214),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       sw / 2 - 300,
       sh - 44,
@@ -1902,7 +1903,7 @@ fn main {
       58,
       @raylib.Color::new(56, 82, 116, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "L",
       px0 + 30,
       py0 + 74,
@@ -1916,7 +1917,7 @@ fn main {
       58,
       @raylib.Color::new(56, 82, 116, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "R",
       px0 + 190,
       py0 + 74,
@@ -1930,7 +1931,7 @@ fn main {
       58,
       @raylib.Color::new(56, 82, 116, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "U",
       px0 + 110,
       py0 + 16,
@@ -1944,7 +1945,7 @@ fn main {
       58,
       @raylib.Color::new(56, 82, 116, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "D",
       px0 + 110,
       py0 + 132,
@@ -1968,7 +1969,7 @@ fn main {
       92,
       @raylib.Color::new(88, 146, 212, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "HACK",
       bx0 + 36,
       by0 + 44,
@@ -1982,7 +1983,7 @@ fn main {
       92,
       @raylib.Color::new(210, 118, 102, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "EMP",
       bx0 + 174,
       by0 + 44,
@@ -1996,7 +1997,7 @@ fn main {
       102,
       @raylib.Color::new(102, 184, 136, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "CLOAK",
       bx0 + 106,
       by0 + 156,
@@ -2013,35 +2014,35 @@ fn main {
         412,
         @raylib.Color::new(12, 18, 30, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "ARCADE HACKER INFILTRATION",
         sw / 2 - 390,
         sh / 2 - 128,
         60,
         @raylib.Color::new(238, 246, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Hack all security cores, avoid detection, reach the extraction gate.",
         sw / 2 - 370,
         sh / 2 - 28,
         30,
         @raylib.Color::new(182, 214, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mobile: left pad move, right buttons hack/EMP/cloak",
         sw / 2 - 334,
         sh / 2 + 14,
         30,
         @raylib.Color::new(182, 214, 246, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "3 strikes from full alarm means mission failed",
         sw / 2 - 258,
         sh / 2 + 58,
         32,
         @raylib.Color::new(252, 212, 132, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "ENTER or tap to start",
         sw / 2 - 180,
         sh / 2 + 122,
@@ -2057,35 +2058,35 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "MISSION CLEAN",
         sw / 2 - 208,
         sh / 2 - 132,
         62,
         @raylib.Color::new(248, 236, 186, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{player.score}",
         sw / 2 - 150,
         sh / 2 - 34,
         44,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Cores hacked: \{player.hacked_total}  Strikes: \{strikes}",
         sw / 2 - 248,
         sh / 2 + 18,
         34,
         @raylib.Color::new(172, 236, 202, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Time left: \{mission_time.to_int()}s",
         sw / 2 - 168,
         sh / 2 + 62,
         34,
         @raylib.Color::new(236, 172, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 178,
         sh / 2 + 124,
@@ -2101,35 +2102,35 @@ fn main {
         380,
         @raylib.Color::new(14, 20, 32, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "MISSION BLOWN",
         sw / 2 - 238,
         sh / 2 - 132,
         62,
         @raylib.Color::new(246, 140, 154, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score: \{player.score}",
         sw / 2 - 150,
         sh / 2 - 34,
         44,
         @raylib.Color::new(236, 244, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Stage: \{stage}  Cores hacked: \{player.hacked_total}",
         sw / 2 - 212,
         sh / 2 + 18,
         34,
         @raylib.Color::new(172, 236, 202, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Strikes: \{strikes}  Time left: \{mission_time.to_int()}s",
         sw / 2 - 216,
         sh / 2 + 62,
         34,
         @raylib.Color::new(236, 172, 182, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "R replay   ENTER menu",
         sw / 2 - 178,
         sh / 2 + 124,
@@ -2138,6 +2139,7 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
 
     if state == 2 || state == 3 {
@@ -2148,5 +2150,6 @@ fn main {
     }
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

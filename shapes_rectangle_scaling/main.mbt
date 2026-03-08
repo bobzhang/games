@@ -18,6 +18,7 @@ fn main {
   let mut mouse_scale_mode = false
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -73,7 +74,7 @@ fn main {
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Scale rectangle dragging from bottom-right corner!", 10, 10, 20, @raylib.gray,
     )
 
@@ -96,9 +97,11 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -32,6 +32,7 @@ fn main {
   @raylib.set_render_texture_filter(fog_of_war, @raylib.TextureFilterBilinear)
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   while !@raylib.window_should_close() {
     // Move player
@@ -162,14 +163,14 @@ fn main {
       @raylib.white,
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Current tile: [\{player_tile_x},\{player_tile_y}]",
       10,
       10,
       20,
       @raylib.raywhite,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "ARROW KEYS to move",
       10,
       screen_height - 25,
@@ -177,9 +178,11 @@ fn main {
       @raylib.raywhite,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   @raylib.unload_render_texture(fog_of_war)
+  @draw.cleanup()
   @raylib.close_window()
 }

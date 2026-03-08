@@ -333,6 +333,7 @@ fn setup_level(
 fn main {
   @raylib.init_window(sw, sh, "Harbor Smuggler Run 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let player : Smuggler = {
     x: 174.0,
@@ -936,7 +937,7 @@ fn main {
       @raylib.Color::new(108, 138, 164, 110)
     }
     @raylib.draw_rectangle(1110, 188, 160, 506, zone_col)
-    @raylib.draw_text(
+    @draw.draw_text(
       "DROP",
       1138,
       156,
@@ -966,7 +967,7 @@ fn main {
         16,
         @raylib.Color::new(190, 146, 94, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "\{crate.value}",
         cx - 5,
         cy - 10,
@@ -1098,7 +1099,7 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 112, @raylib.Color::new(6, 10, 18, 232))
-    @raylib.draw_text(
+    @draw.draw_text(
       "HARBOR SMUGGLER RUN 2026",
       16,
       16,
@@ -1106,21 +1107,21 @@ fn main {
       @raylib.Color::new(236, 246, 255, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Night \{level}/3",
       440,
       22,
       30,
       @raylib.Color::new(250, 226, 142, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Delivered \{delivered}/\{target}",
       620,
       22,
       30,
       @raylib.Color::new(214, 236, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{score}",
       948,
       22,
@@ -1128,35 +1129,35 @@ fn main {
       @raylib.Color::new(214, 236, 252, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "HP \{player.hp}",
       20,
       74,
       24,
       @raylib.Color::new(220, 236, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Fuel \{player.fuel.to_int()}%",
       132,
       74,
       24,
       @raylib.Color::new(220, 236, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Cargo \{player.cargo}",
       330,
       74,
       24,
       @raylib.Color::new(220, 236, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Timer \{timer.to_int()}",
       510,
       74,
       24,
       @raylib.Color::new(252, 222, 150, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Stars \{stars}",
       694,
       74,
@@ -1164,7 +1165,7 @@ fn main {
       @raylib.Color::new(252, 232, 132, 255),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       if player.stealth_t > 0.0 {
         "Stealth ON"
       } else {
@@ -1231,7 +1232,7 @@ fn main {
       186,
       @raylib.Color::new(8, 14, 28, 220),
     )
-    @raylib.draw_text("Touch", 90, sh - 186, 20, @raylib.white)
+    @draw.draw_text("Touch", 90, sh - 186, 20, @raylib.white)
     @raylib.draw_rectangle(
       pad_x + 76,
       pad_y,
@@ -1239,7 +1240,7 @@ fn main {
       54,
       @raylib.Color::new(54, 72, 102, 255),
     )
-    @raylib.draw_text("UP", pad_x + 92, pad_y + 16, 24, @raylib.white)
+    @draw.draw_text("UP", pad_x + 92, pad_y + 16, 24, @raylib.white)
     @raylib.draw_rectangle(
       pad_x,
       pad_y + 54,
@@ -1247,7 +1248,7 @@ fn main {
       54,
       @raylib.Color::new(54, 72, 102, 255),
     )
-    @raylib.draw_text("LT", pad_x + 20, pad_y + 70, 24, @raylib.white)
+    @draw.draw_text("LT", pad_x + 20, pad_y + 70, 24, @raylib.white)
     @raylib.draw_rectangle(
       pad_x + 152,
       pad_y + 54,
@@ -1255,7 +1256,7 @@ fn main {
       54,
       @raylib.Color::new(54, 72, 102, 255),
     )
-    @raylib.draw_text("RT", pad_x + 172, pad_y + 70, 24, @raylib.white)
+    @draw.draw_text("RT", pad_x + 172, pad_y + 70, 24, @raylib.white)
     @raylib.draw_rectangle(
       pad_x + 76,
       pad_y + 108,
@@ -1263,7 +1264,7 @@ fn main {
       54,
       @raylib.Color::new(54, 72, 102, 255),
     )
-    @raylib.draw_text("DN", pad_x + 90, pad_y + 124, 24, @raylib.white)
+    @draw.draw_text("DN", pad_x + 90, pad_y + 124, 24, @raylib.white)
 
     @raylib.draw_rectangle(
       dash_x,
@@ -1272,7 +1273,7 @@ fn main {
       154,
       @raylib.Color::new(214, 110, 82, 255),
     )
-    @raylib.draw_text("BOOST", dash_x + 8, dash_y + 58, 28, @raylib.white)
+    @draw.draw_text("BOOST", dash_x + 8, dash_y + 58, 28, @raylib.white)
     @raylib.draw_rectangle(
       stealth_x,
       stealth_y,
@@ -1280,7 +1281,7 @@ fn main {
       154,
       @raylib.Color::new(98, 156, 218, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "STEALTH",
       stealth_x + 6,
       stealth_y + 58,
@@ -1295,7 +1296,7 @@ fn main {
       42,
       @raylib.Color::new(6, 10, 18, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       262,
       sh - 50,
@@ -1305,7 +1306,7 @@ fn main {
 
     if transition_t > 0.0 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 12, 20, 112))
-      @raylib.draw_text(
+      @draw.draw_text(
         "NIGHT CLEAR",
         sw / 2 - 162,
         sh / 2 - 28,
@@ -1323,7 +1324,7 @@ fn main {
         224,
         @raylib.Color::new(16, 24, 42, 244),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "OPERATION SUCCESS"
         } else {
@@ -1338,7 +1339,7 @@ fn main {
           @raylib.Color::new(252, 140, 140, 255)
         },
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R to restart",
         sw / 2 - 124,
         sh / 2 + 48,
@@ -1347,8 +1348,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

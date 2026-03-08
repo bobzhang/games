@@ -1,0 +1,18 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/scrapyard_mech_pit_2026"
+
+// Values
+
+// Errors
+
+// Types and methods
+type Bullet
+
+type Enemy
+
+type Scrap
+
+// Type aliases
+
+// Traits
+

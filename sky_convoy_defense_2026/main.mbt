@@ -221,6 +221,7 @@ fn convoy_center(progress : Float) -> Float {
 fn main {
   @raylib.init_window(sw, sh, "Sky Convoy Defense 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let bullets : Array[Bullet] = Array::makei(max_bullets, fn(_i) {
     { x: 0.0, y: 0.0, vx: 0.0, vy: 0.0, ttl: 0.0, active: false }
@@ -839,28 +840,28 @@ fn main {
     }
 
     @raylib.draw_rectangle(0, 0, sw, 96, @raylib.Color::new(10, 14, 24, 224))
-    @raylib.draw_text(
+    @draw.draw_text(
       "SKY CONVOY DEFENSE 2026",
       18,
       20,
       34,
       @raylib.Color::new(236, 242, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Sector \{sector}/3",
       458,
       26,
       30,
       @raylib.Color::new(244, 226, 130, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score \{score}",
       660,
       26,
       30,
       @raylib.Color::new(222, 236, 250, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Aim \{aim.to_int()} deg",
       860,
       26,
@@ -876,7 +877,7 @@ fn main {
       14,
       @raylib.Color::new(92, 232, 136, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Convoy HP \{convoy_hp}",
       332,
       66,
@@ -898,7 +899,7 @@ fn main {
       14,
       @raylib.Color::new(110, 200, 252, 255),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Route",
       972,
       66,
@@ -915,7 +916,7 @@ fn main {
       160,
       @raylib.Color::new(10, 16, 28, 220),
     )
-    @raylib.draw_text("Touch", 68, sh - 180, 20, @raylib.white)
+    @draw.draw_text("Touch", 68, sh - 180, 20, @raylib.white)
 
     @raylib.draw_rectangle(
       ctl_x,
@@ -924,7 +925,7 @@ fn main {
       52,
       @raylib.Color::new(46, 66, 94, 255),
     )
-    @raylib.draw_text("LEFT", ctl_x + 16, ctl_y + 16, 20, @raylib.white)
+    @draw.draw_text("LEFT", ctl_x + 16, ctl_y + 16, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x + 90,
       ctl_y,
@@ -932,7 +933,7 @@ fn main {
       52,
       @raylib.Color::new(46, 66, 94, 255),
     )
-    @raylib.draw_text("RIGHT", ctl_x + 96, ctl_y + 16, 20, @raylib.white)
+    @draw.draw_text("RIGHT", ctl_x + 96, ctl_y + 16, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x,
       ctl_y + 60,
@@ -940,7 +941,7 @@ fn main {
       52,
       @raylib.Color::new(46, 66, 94, 255),
     )
-    @raylib.draw_text("AIM-", ctl_x + 16, ctl_y + 76, 20, @raylib.white)
+    @draw.draw_text("AIM-", ctl_x + 16, ctl_y + 76, 20, @raylib.white)
     @raylib.draw_rectangle(
       ctl_x + 90,
       ctl_y + 60,
@@ -948,7 +949,7 @@ fn main {
       52,
       @raylib.Color::new(46, 66, 94, 255),
     )
-    @raylib.draw_text("AIM+", ctl_x + 105, ctl_y + 76, 20, @raylib.white)
+    @draw.draw_text("AIM+", ctl_x + 105, ctl_y + 76, 20, @raylib.white)
 
     let fire_x = sw - 190
     let fire_y = sh - 146
@@ -959,7 +960,7 @@ fn main {
       112,
       @raylib.Color::new(190, 82, 76, 255),
     )
-    @raylib.draw_text("FIRE", fire_x + 45, fire_y + 38, 34, @raylib.white)
+    @draw.draw_text("FIRE", fire_x + 45, fire_y + 38, 34, @raylib.white)
 
     @raylib.draw_rectangle(
       202,
@@ -968,7 +969,7 @@ fn main {
       34,
       @raylib.Color::new(10, 16, 24, 220),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       msg,
       212,
       sh - 48,
@@ -985,7 +986,7 @@ fn main {
         208,
         @raylib.Color::new(16, 24, 40, 244),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         if won {
           "ESCORT SUCCESS"
         } else {
@@ -1000,7 +1001,7 @@ fn main {
           @raylib.Color::new(250, 126, 126, 255)
         },
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press R to restart",
         sw / 2 - 122,
         sh / 2 + 36,
@@ -1009,8 +1010,10 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

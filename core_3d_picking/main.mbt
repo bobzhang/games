@@ -26,6 +26,7 @@ fn main {
   let mut collision_hit = false
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -119,14 +120,14 @@ fn main {
 
     @raylib.end_mode_3d()
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Try clicking on the box with your mouse!", 240, 10, 20, @raylib.darkgray,
     )
 
     if collision_hit {
       let text = "BOX SELECTED"
-      let text_width = @raylib.measure_text(text, 30)
-      @raylib.draw_text(
+      let text_width = @draw.measure_text(text, 30)
+      @draw.draw_text(
         text,
         (screen_width - text_width) / 2,
         (Float::from_int(screen_height) * 0.1).to_int(),
@@ -135,15 +136,17 @@ fn main {
       )
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Right click mouse to toggle camera controls", 10, 430, 10, @raylib.gray,
     )
 
     @raylib.draw_fps(10, 10)
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

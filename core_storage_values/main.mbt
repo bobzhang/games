@@ -44,6 +44,7 @@ fn main {
   let mut hiscore = 0
   let mut frames_counter = 0
   @raylib.set_target_fps(60)
+  @draw.init_font()
   while !@raylib.window_should_close() {
     if @raylib.is_key_pressed(@raylib.KeyR) {
       score = @raylib.get_random_value(1000, 2000)
@@ -59,19 +60,21 @@ fn main {
     frames_counter += 1
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
-    @raylib.draw_text("SCORE: \{score}", 280, 130, 40, @raylib.maroon)
-    @raylib.draw_text("HI-SCORE: \{hiscore}", 210, 200, 50, @raylib.black)
-    @raylib.draw_text("frames: \{frames_counter}", 10, 10, 20, @raylib.lime)
-    @raylib.draw_text(
+    @draw.draw_text("SCORE: \{score}", 280, 130, 40, @raylib.maroon)
+    @draw.draw_text("HI-SCORE: \{hiscore}", 210, 200, 50, @raylib.black)
+    @draw.draw_text("frames: \{frames_counter}", 10, 10, 20, @raylib.lime)
+    @draw.draw_text(
       "Press R to generate random numbers", 220, 40, 20, @raylib.lightgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Press ENTER to SAVE values", 250, 310, 20, @raylib.lightgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Press SPACE to LOAD values", 252, 350, 20, @raylib.lightgray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
+  @draw.cleanup()
   @raylib.close_window()
 }

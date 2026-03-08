@@ -57,6 +57,7 @@ fn main {
   let mut show_font_atlas = false
 
   @raylib.set_target_fps(60) // Set our game to run at 60 frames-per-second
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -70,7 +71,7 @@ fn main {
     @raylib.clear_background(@raylib.raywhite)
 
     @raylib.draw_rectangle(0, 0, @raylib.get_screen_width(), 70, @raylib.black)
-    @raylib.draw_text(
+    @draw.draw_text(
       "Total codepoints contained in provided text: " +
       codepoint_count.to_string(),
       10,
@@ -78,7 +79,7 @@ fn main {
       20,
       @raylib.green,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Total codepoints required for font atlas (duplicates excluded): " +
       codepoints_no_dups_count.to_string(),
       10,
@@ -110,7 +111,7 @@ fn main {
       )
     }
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Press SPACE to toggle font atlas view!",
       10,
       @raylib.get_screen_height() - 30,
@@ -118,10 +119,12 @@ fn main {
       @raylib.gray,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_font(font) // Font unloading
+  @draw.cleanup()
   @raylib.close_window() // Close window and OpenGL context
 }

@@ -121,6 +121,7 @@ fn train_color(cargo : Int) -> @raylib.Color {
 fn main {
   @raylib.init_window(sw, sh, "Train Dispatch 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let trains : Array[Train] = Array::makei(80, fn(_i) {
     {
@@ -341,7 +342,7 @@ fn main {
       },
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       if gate0 {
         "1 ON"
       } else {
@@ -356,7 +357,7 @@ fn main {
         @raylib.red
       },
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       if gate1 {
         "2 ON"
       } else {
@@ -371,7 +372,7 @@ fn main {
         @raylib.red
       },
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       if gate2 {
         "3 ON"
       } else {
@@ -420,11 +421,11 @@ fn main {
       }
     }
 
-    @raylib.draw_text("TRAIN DISPATCH 2026", 24, 18, 42, @raylib.skyblue)
-    @raylib.draw_text("Score \{score}", 24, 68, 28, @raylib.white)
-    @raylib.draw_text("Delivered \{delivered}", 220, 68, 28, @raylib.lime)
-    @raylib.draw_text("Missed \{missed}", 430, 68, 28, @raylib.orange)
-    @raylib.draw_text(
+    @draw.draw_text("TRAIN DISPATCH 2026", 24, 18, 42, @raylib.skyblue)
+    @draw.draw_text("Score \{score}", 24, 68, 28, @raylib.white)
+    @draw.draw_text("Delivered \{delivered}", 220, 68, 28, @raylib.lime)
+    @draw.draw_text("Missed \{missed}", 430, 68, 28, @raylib.orange)
+    @draw.draw_text(
       "Lives \{lives}",
       600,
       68,
@@ -436,7 +437,7 @@ fn main {
       },
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Target: red => top-right / bottom-left, blue => bottom-right / top-left",
       24, 640, 24, @raylib.lightgray,
     )
@@ -447,7 +448,7 @@ fn main {
       38,
       @raylib.Color::new(8, 10, 14, 220),
     )
-    @raylib.draw_text(msg, 36, 684, 24, @raylib.raywhite)
+    @draw.draw_text(msg, 36, 684, 24, @raylib.raywhite)
 
     if over {
       @raylib.draw_rectangle(
@@ -457,12 +458,14 @@ fn main {
         170,
         @raylib.fade(@raylib.black, 0.82),
       )
-      @raylib.draw_text("DISPATCH FAILED", 430, 310, 50, @raylib.red)
-      @raylib.draw_text("Press R to restart shift", 452, 368, 30, @raylib.white)
+      @draw.draw_text("DISPATCH FAILED", 430, 310, 50, @raylib.red)
+      @draw.draw_text("Press R to restart shift", 452, 368, 30, @raylib.white)
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

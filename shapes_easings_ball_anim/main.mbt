@@ -54,6 +54,7 @@ fn main {
   let mut state = 0
   let mut frames_counter = 0
   @raylib.set_target_fps(60)
+  @draw.init_font()
   while !@raylib.window_should_close() {
     if state == 0 {
       frames_counter += 1
@@ -114,11 +115,13 @@ fn main {
       @raylib.fade(@raylib.red, 1.0 - ball_alpha),
     )
     if state == 3 {
-      @raylib.draw_text(
+      @draw.draw_text(
         "PRESS [ENTER] TO PLAY AGAIN!", 240, 200, 20, @raylib.black,
       )
     }
+    @fps.draw()
     @raylib.end_drawing()
   }
+  @draw.cleanup()
   @raylib.close_window()
 }

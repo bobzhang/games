@@ -61,6 +61,7 @@ fn main {
 
   @raylib.disable_cursor()
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -174,16 +175,17 @@ fn main {
     @raylib.draw_grid(10, 1.0)
     @raylib.end_mode_3d()
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Use the T/G to switch animation", 10, 10, 20, @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Use the F/H to rotate character left/right", 10, 35, 20, @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Use the 1,2,3 to toggle shown of hat, sword and shield", 10, 60, 20, @raylib.gray,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -193,5 +195,6 @@ fn main {
   for i in 0..<3 {
     @raylib.unload_model(equip_model[i])
   }
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -5,8 +5,8 @@ fn draw_center_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let w = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, @types.screen_w / 2 - w / 2, y, size, col)
+  let w = @draw.measure_text(text, size)
+  @draw.draw_text(text, @types.screen_w / 2 - w / 2, y, size, col)
 }
 
 ///|
@@ -17,8 +17,8 @@ fn draw_right_text(
   size : Int,
   col : @raylib.Color,
 ) -> Unit {
-  let w = @raylib.measure_text(text, size)
-  @raylib.draw_text(text, x - w, y, size, col)
+  let w = @draw.measure_text(text, size)
+  @draw.draw_text(text, x - w, y, size, col)
 }
 
 ///|
@@ -583,7 +583,7 @@ fn draw_bar(
     h,
     @raylib.Color::new(220, 210, 184, 140),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     name,
     x + 8,
     y + 4,
@@ -649,21 +649,21 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     "\{game.repair_kits}/\{@types.kit_max}",
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Score: \{game.score}",
     370,
     16,
     28,
     @raylib.Color::new(246, 236, 206, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best: \{game.best_score}",
     370,
     48,
     24,
     @raylib.Color::new(214, 234, 246, 236),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Kills: \{game.kills}",
     370,
     76,
@@ -671,21 +671,21 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(236, 194, 170, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Checkpoint \{game.checkpoint.min(@types.checkpoint_total)}/\{@types.checkpoint_total}",
     634,
     16,
     28,
     @raylib.Color::new(242, 232, 202, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Distance \{game.distance.to_int()}m",
     634,
     50,
     24,
     @raylib.Color::new(210, 228, 238, 232),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Raiders \{game.active_raider_count()}",
     634,
     80,
@@ -713,7 +713,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     ph,
     @raylib.Color::new(232, 222, 196, 160),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "To Next Checkpoint",
     px,
     py + 32,
@@ -721,7 +721,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(234, 224, 198, 214),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "WASD/Arrows Move  J Shoot/Confirm  K Repair  Space Roll  P Pause  R Restart",
     344,
     98,

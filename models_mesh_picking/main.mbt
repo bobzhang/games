@@ -45,6 +45,7 @@ fn main {
   let sp = @raylib.Vector3::new(-30.0, 5.0, 5.0)
   let sr : Float = 4.0
   @raylib.set_target_fps(60)
+  @draw.init_font()
   // Main game loop
   while !@raylib.window_should_close() {
     // Update
@@ -150,7 +151,7 @@ fn main {
     @raylib.draw_grid(10, 10.0)
     @raylib.end_mode_3d()
     // Draw some debug GUI text
-    @raylib.draw_text(
+    @draw.draw_text(
       "Hit Object: " + hit_object_name,
       10,
       50,
@@ -159,14 +160,14 @@ fn main {
     )
     if collision.hit {
       let ypos = 70
-      @raylib.draw_text(
+      @draw.draw_text(
         "Distance: " + format_float(collision.distance),
         10,
         ypos,
         10,
         @raylib.black,
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Hit Pos: " +
         format_float(collision.point.x) +
         " " +
@@ -178,7 +179,7 @@ fn main {
         10,
         @raylib.black,
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Hit Norm: " +
         format_float(collision.normal.x) +
         " " +
@@ -191,7 +192,7 @@ fn main {
         @raylib.black,
       )
       if tri_hit_info.hit && hit_object_name == "Triangle" {
-        @raylib.draw_text(
+        @draw.draw_text(
           "Barycenter: " +
           format_float(bary.x) +
           " " +
@@ -205,10 +206,10 @@ fn main {
         )
       }
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       "Right click mouse to toggle camera controls", 10, 430, 10, @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "(c) Turret 3D model by Alberto Cano",
       screen_width - 200,
       screen_height - 20,
@@ -216,11 +217,13 @@ fn main {
       @raylib.gray,
     )
     @raylib.draw_fps(10, 10)
+    @fps.draw()
     @raylib.end_drawing()
   }
   // De-Initialization
   @raylib.unload_model(tower)
   @raylib.unload_texture(texture)
+  @draw.cleanup()
   @raylib.close_window()
 }
 

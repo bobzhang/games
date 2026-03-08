@@ -83,6 +83,7 @@ fn main {
   let mut show_controls = true
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -253,30 +254,32 @@ fn main {
     @raylib.end_shader_mode()
 
     if show_controls {
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press Mouse buttons right/left to zoom in/out and move", 10, 15, 10, @raylib.raywhite,
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press KEY_F1 to toggle these controls", 10, 30, 10, @raylib.raywhite,
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press KEYS [1 - 6] to change point of interest", 10, 45, 10, @raylib.raywhite,
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press KEY_LEFT | KEY_RIGHT to change speed", 10, 60, 10, @raylib.raywhite,
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press KEY_SPACE to stop movement animation", 10, 75, 10, @raylib.raywhite,
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Press KEY_R to recenter the camera", 10, 90, 10, @raylib.raywhite,
       )
     }
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_shader(shader)
   @raylib.unload_render_texture(target)
+  @draw.cleanup()
   @raylib.close_window()
 }

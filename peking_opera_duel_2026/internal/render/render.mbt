@@ -215,8 +215,8 @@ fn @types.Game::draw_stage_actors(game : @types.Game) -> Unit {
     0.0,
   )
 
-  @raylib.draw_text("Your Troupe", 322, 790, 26, @types.col(219, 228, 236, 245))
-  @raylib.draw_text(
+  @draw.draw_text("Your Troupe", 322, 790, 26, @types.col(219, 228, 236, 245))
+  @draw.draw_text(
     "Rival Troupe",
     1075,
     790,
@@ -242,8 +242,8 @@ fn @types.Game::draw_focus_cursor(game : @types.Game) -> Unit {
   )
 
   let stance_text = "Stance: " + @types.stance_name(game.stance)
-  let tx = x - @raylib.measure_text(stance_text, 20) / 2
-  @raylib.draw_text(
+  let tx = x - @draw.measure_text(stance_text, 20) / 2
+  @draw.draw_text(
     stance_text,
     tx,
     y + 62,
@@ -295,8 +295,8 @@ fn @types.Game::draw_active_prompt(game : @types.Game) -> Unit {
   )
 
   let stance_text = @types.stance_name(game.prompt.stance)
-  let tw = @raylib.measure_text(stance_text, 26)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(stance_text, 26)
+  @draw.draw_text(
     stance_text,
     px - tw / 2,
     py - 14,
@@ -334,7 +334,7 @@ fn draw_meter(
   @raylib.draw_rectangle_lines(x, y, w, h, @types.col(227, 214, 194, 240))
 
   let value_i = value.to_int()
-  @raylib.draw_text(
+  @draw.draw_text(
     label + " " + value_i.to_string(),
     x + 8,
     y + 6,
@@ -393,21 +393,21 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @types.col(233, 187, 110, 245),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Acclaim " + game.acclaim.to_string(),
     640,
     24,
     32,
     @types.col(246, 228, 196, 255),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Combo x" + game.combo.to_string(),
     640,
     62,
     28,
     @types.col(255, 202, 128, 252),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best combo " + game.best_combo.to_string(),
     860,
     66,
@@ -424,7 +424,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   }
   @types.draw_center_text(burst_text, 906, 22, @types.col(181, 205, 255, 230))
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Hits " + game.hits.to_string() + "  Misses " + game.misses.to_string(),
     670,
     94,
@@ -458,21 +458,21 @@ fn draw_title_overlay() -> Unit {
     @types.col(219, 209, 194, 236),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "WASD/Arrows: stance axes + lane focus",
     390,
     392,
     30,
     @types.col(239, 232, 218, 245),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "J: beat hit / confirm   K: defensive transition   SPACE: focus burst",
     390,
     438,
     30,
     @types.col(239, 232, 218, 245),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "P: pause   R: restart duel",
     390,
     484,
@@ -526,7 +526,7 @@ fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
     @types.col(247, 227, 191, 252),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     game.game_over_reason,
     296,
     320,
@@ -534,21 +534,21 @@ fn @types.Game::draw_game_over_overlay(game : @types.Game) -> Unit {
     @types.col(240, 225, 205, 242),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "Acclaim: " + game.acclaim.to_string(),
     370,
     410,
     36,
     @types.col(246, 212, 154, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Best Combo: " + game.best_combo.to_string(),
     370,
     458,
     32,
     @types.col(213, 225, 244, 250),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Grade: " + @types.grade_for_acclaim(game.acclaim),
     370,
     506,

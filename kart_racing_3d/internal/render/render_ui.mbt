@@ -74,8 +74,8 @@ fn @types.Game::draw_kart_select_ui(game : @types.Game) -> Unit {
     @raylib.Color::new(15, 20, 45, 255),
   )
   let title = "Select Your Kart"
-  let tw = @raylib.measure_text(title, 36)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, 36)
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     40,
@@ -107,7 +107,7 @@ fn @types.Game::draw_kart_select_ui(game : @types.Game) -> Unit {
         min=0,
         max=@types.kart_type_count - 1,
       )]
-    @raylib.draw_text(
+    @draw.draw_text(
       kart_name,
       tx + 5,
       type_y + 5,
@@ -140,21 +140,21 @@ fn @types.Game::draw_kart_select_ui(game : @types.Game) -> Unit {
       6,
       @raylib.Color::new(100, 100, 255, 200),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "S",
       tx + 90,
       type_y + 22,
       10,
       @raylib.Color::new(255, 100, 100, 200),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "A",
       tx + 90,
       type_y + 32,
       10,
       @raylib.Color::new(100, 255, 100, 200),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "H",
       tx + 90,
       type_y + 42,
@@ -165,7 +165,7 @@ fn @types.Game::draw_kart_select_ui(game : @types.Game) -> Unit {
   // Character selection (vertical)
   let sel_char = game.selected_character
   let char_y = 220
-  @raylib.draw_text(
+  @draw.draw_text(
     "Select Character",
     60,
     char_y,
@@ -204,7 +204,7 @@ fn @types.Game::draw_kart_select_ui(game : @types.Game) -> Unit {
         min=0,
         max=@types.character_names.length() - 1,
       )]
-    @raylib.draw_text(
+    @draw.draw_text(
       char_name,
       95,
       cy + 6,
@@ -230,14 +230,14 @@ fn @types.Game::draw_kart_select_ui(game : @types.Game) -> Unit {
       } else {
         ""
       }
-      @raylib.draw_text(
+      @draw.draw_text(
         spd_str,
         280,
         cy + 8,
         14,
         @raylib.Color::new(150, 200, 255, 200),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         drift_str,
         340,
         cy + 8,
@@ -271,7 +271,7 @@ fn @types.Game::draw_kart_select_ui(game : @types.Game) -> Unit {
       min=0,
       max=@types.character_names.length() - 1,
     )]
-  @raylib.draw_text(
+  @draw.draw_text(
     char_name_sel,
     preview_x + 20,
     preview_y + 15,
@@ -279,7 +279,7 @@ fn @types.Game::draw_kart_select_ui(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 255, 200, 255),
   )
   let kart_label = "Kart: \{kart_name_sel}"
-  @raylib.draw_text(
+  @draw.draw_text(
     kart_label,
     preview_x + 20,
     preview_y + 50,
@@ -313,7 +313,7 @@ fn @types.Game::draw_kart_select_ui(game : @types.Game) -> Unit {
   ]
   for bi in 0..<5 {
     let by = bar_y + bi * 40
-    @raylib.draw_text(
+    @draw.draw_text(
       labels[bi],
       bar_x,
       by,
@@ -340,8 +340,8 @@ fn @types.Game::draw_kart_select_ui(game : @types.Game) -> Unit {
   }
   // Controls hint
   let hint = "Left/Right: Kart Type | Up/Down: Character | Enter: Confirm | Esc: Back"
-  let hiw = @raylib.measure_text(hint, 14)
-  @raylib.draw_text(
+  let hiw = @draw.measure_text(hint, 14)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hiw) / 2,
     @types.screen_height - 40,
@@ -360,8 +360,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
     @raylib.Color::new(20, 30, 60, 255),
   )
   let title = "KART RACING 3D"
-  let tw = @raylib.measure_text(title, 48)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, 48)
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     100,
@@ -369,8 +369,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 255, 255, 255),
   )
   let sub = "Choose Your Cup"
-  let sw = @raylib.measure_text(sub, 22)
-  @raylib.draw_text(
+  let sw = @draw.measure_text(sub, 22)
+  @draw.draw_text(
     sub,
     (@types.screen_width - sw) / 2,
     160,
@@ -393,12 +393,12 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
     let prefix = if is_sel { "> " } else { "  " }
     let cup_name = @levels.get_cup_name(i)
     let text = prefix + cup_name
-    let ftw = @raylib.measure_text(text, 28)
-    @raylib.draw_text(text, (@types.screen_width - ftw) / 2, y, 28, color)
+    let ftw = @draw.measure_text(text, 28)
+    @draw.draw_text(text, (@types.screen_width - ftw) / 2, y, 28, color)
     // Draw races info
     let info = "\{@types.races_per_cup} races"
-    let iw = @raylib.measure_text(info, 16)
-    @raylib.draw_text(
+    let iw = @draw.measure_text(info, 16)
+    @draw.draw_text(
       info,
       (@types.screen_width - iw) / 2,
       y + 30,
@@ -407,8 +407,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
     )
   }
   let hint = "Up/Down: Select | Enter: Race"
-  let hw = @raylib.measure_text(hint, 16)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint, 16)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
     @types.screen_height - 50,
@@ -430,7 +430,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   )
   // Track name
   let track_name = @levels.get_track_name(game.current_cup, game.current_race)
-  @raylib.draw_text(
+  @draw.draw_text(
     track_name,
     10,
     10,
@@ -439,7 +439,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   )
   // Position
   let place_text = "P\{kart.place}/\{@types.max_karts}"
-  @raylib.draw_text(
+  @draw.draw_text(
     place_text,
     300,
     10,
@@ -449,7 +449,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   // Lap
   let lap_num = (kart.lap + 1).clamp(min=1, max=@types.total_laps)
   let lap_text = "Lap \{lap_num}/\{@types.total_laps}"
-  @raylib.draw_text(
+  @draw.draw_text(
     lap_text,
     460,
     10,
@@ -459,7 +459,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   // Speed
   let speed_int = (kart.speed * 3.6).to_int()
   let speed_text = "\{speed_int} km/h"
-  @raylib.draw_text(
+  @draw.draw_text(
     speed_text,
     640,
     10,
@@ -470,7 +470,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   let time_secs = game.race_time.to_int()
   let time_ms = ((game.race_time - Float::from_int(time_secs)) * 100.0).to_int()
   let time_text = "Time: \{time_secs}.\{time_ms}"
-  @raylib.draw_text(
+  @draw.draw_text(
     time_text,
     800,
     10,
@@ -485,7 +485,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     28,
     @raylib.Color::new(0, 0, 0, 100),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "W: Accel | S: Brake | A/D: Steer | Z/X: Drift | Space: Item | P: Pause",
     10,
     @types.screen_height - 22,
@@ -523,7 +523,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
       35,
       @raylib.Color::new(0, 0, 0, 180),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       pu_name,
       @types.screen_width - 110,
       @types.screen_height - 62,
@@ -534,8 +534,8 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   // Boost/drift indicator
   if kart.boost_timer > 0.0 {
     let boost_text = "BOOST!"
-    let bw = @raylib.measure_text(boost_text, 30)
-    @raylib.draw_text(
+    let bw = @draw.measure_text(boost_text, 30)
+    @draw.draw_text(
       boost_text,
       (@types.screen_width - bw) / 2,
       @types.screen_height / 2 + 80,
@@ -545,8 +545,8 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   }
   if kart.drift_left || kart.drift_right {
     let drift_text = "DRIFT"
-    let dw = @raylib.measure_text(drift_text, 24)
-    @raylib.draw_text(
+    let dw = @draw.measure_text(drift_text, 24)
+    @draw.draw_text(
       drift_text,
       (@types.screen_width - dw) / 2,
       @types.screen_height / 2 + 115,
@@ -654,7 +654,7 @@ fn @types.Game::draw_countdown(game : @types.Game) -> Unit {
     "\{count}"
   }
   let size = if count <= 0 { 80 } else { 100 }
-  let tw = @raylib.measure_text(text, size)
+  let tw = @draw.measure_text(text, size)
   let color = if count <= 0 {
     @raylib.Color::new(100, 255, 100, 255)
   } else if count == 1 {
@@ -664,7 +664,7 @@ fn @types.Game::draw_countdown(game : @types.Game) -> Unit {
   } else {
     @raylib.Color::new(255, 255, 255, 255)
   }
-  @raylib.draw_text(
+  @draw.draw_text(
     text,
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 60,
@@ -683,8 +683,8 @@ fn draw_pause_overlay() -> Unit {
     @raylib.Color::new(0, 0, 0, 150),
   )
   let text = "PAUSED"
-  let tw = @raylib.measure_text(text, 60)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(text, 60)
+  @draw.draw_text(
     text,
     (@types.screen_width - tw) / 2,
     @types.screen_height / 2 - 50,
@@ -692,8 +692,8 @@ fn draw_pause_overlay() -> Unit {
     @raylib.Color::new(255, 255, 255, 255),
   )
   let hint = "P: Resume | Q: Quit to Menu"
-  let hw = @raylib.measure_text(hint, 20)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint, 20)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
     @types.screen_height / 2 + 20,
@@ -712,8 +712,8 @@ fn @types.Game::draw_race_results(game : @types.Game) -> Unit {
     @raylib.Color::new(0, 0, 0, 180),
   )
   let title = "RACE COMPLETE!"
-  let tw = @raylib.measure_text(title, 48)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, 48)
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     100,
@@ -721,8 +721,8 @@ fn @types.Game::draw_race_results(game : @types.Game) -> Unit {
     @raylib.Color::new(100, 255, 100, 255),
   )
   let track_name = @levels.get_track_name(game.current_cup, game.current_race)
-  let tnw = @raylib.measure_text(track_name, 22)
-  @raylib.draw_text(
+  let tnw = @draw.measure_text(track_name, 22)
+  @draw.draw_text(
     track_name,
     (@types.screen_width - tnw) / 2,
     155,
@@ -755,11 +755,11 @@ fn @types.Game::draw_race_results(game : @types.Game) -> Unit {
     // Position and name
     let prefix = if is_player { "YOU" } else { "AI \{i}" }
     let place_text = "\{kart.place}. \{prefix}"
-    @raylib.draw_text(place_text, 230, y, 22, color)
+    @draw.draw_text(place_text, 230, y, 22, color)
     // Points earned
     let pts = @types.position_points(kart.place)
     let pts_text = "+\{pts} pts"
-    @raylib.draw_text(
+    @draw.draw_text(
       pts_text,
       500,
       y,
@@ -769,7 +769,7 @@ fn @types.Game::draw_race_results(game : @types.Game) -> Unit {
     // Time
     let t = kart.finish_time.to_int()
     let time_text = "\{t}s"
-    @raylib.draw_text(
+    @draw.draw_text(
       time_text,
       620,
       y,
@@ -778,8 +778,8 @@ fn @types.Game::draw_race_results(game : @types.Game) -> Unit {
     )
   }
   let hint = "Enter: Next Race"
-  let hw = @raylib.measure_text(hint, 18)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(hint, 18)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
     @types.screen_height - 60,
@@ -799,8 +799,8 @@ fn @types.Game::draw_cup_results(game : @types.Game) -> Unit {
   )
   let cup_name = @levels.get_cup_name(game.current_cup)
   let title = cup_name + " COMPLETE!"
-  let tw = @raylib.measure_text(title, 40)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(title, 40)
+  @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
     80,
@@ -809,8 +809,8 @@ fn @types.Game::draw_cup_results(game : @types.Game) -> Unit {
   )
   // Show final standings
   let header = "Final Standings"
-  let hw = @raylib.measure_text(header, 24)
-  @raylib.draw_text(
+  let hw = @draw.measure_text(header, 24)
+  @draw.draw_text(
     header,
     (@types.screen_width - hw) / 2,
     140,
@@ -850,10 +850,10 @@ fn @types.Game::draw_cup_results(game : @types.Game) -> Unit {
       @raylib.Color::new(kc.0, kc.1, kc.2, 255),
     )
     let name = if is_player { "YOU" } else { "AI \{ki}" }
-    @raylib.draw_text(name, 270, y, 22, color)
+    @draw.draw_text(name, 270, y, 22, color)
     let pts = game.cup_points[ki]
     let pts_text = "\{pts} pts"
-    @raylib.draw_text(
+    @draw.draw_text(
       pts_text,
       500,
       y,
@@ -862,8 +862,8 @@ fn @types.Game::draw_cup_results(game : @types.Game) -> Unit {
     )
   }
   let hint = "Enter: Back to Menu"
-  let hiw = @raylib.measure_text(hint, 18)
-  @raylib.draw_text(
+  let hiw = @draw.measure_text(hint, 18)
+  @draw.draw_text(
     hint,
     (@types.screen_width - hiw) / 2,
     @types.screen_height - 50,
@@ -888,7 +888,7 @@ pub fn draw_lap_times(game : @types.Game) -> Unit {
   // Current lap time
   let cur_lap = @types.format_time(game.current_lap_time)
   let cur_text = "Lap: \{cur_lap}"
-  @raylib.draw_text(
+  @draw.draw_text(
     cur_text,
     10,
     base_y,
@@ -898,7 +898,7 @@ pub fn draw_lap_times(game : @types.Game) -> Unit {
   // Best lap time
   if game.best_lap_time < 900.0 {
     let best_text = "Best: \{@types.format_time(game.best_lap_time)}"
-    @raylib.draw_text(
+    @draw.draw_text(
       best_text,
       10,
       base_y + 22,
@@ -913,7 +913,7 @@ pub fn draw_lap_times(game : @types.Game) -> Unit {
   )
   if record < 900.0 {
     let rec_text = "Record: \{@types.format_time(record)}"
-    @raylib.draw_text(
+    @draw.draw_text(
       rec_text,
       10,
       base_y + 44,
@@ -924,7 +924,7 @@ pub fn draw_lap_times(game : @types.Game) -> Unit {
   // Individual lap times display
   if kart.lap_times.length() > 0 {
     let laps_y = base_y + 70
-    @raylib.draw_text(
+    @draw.draw_text(
       "Lap Times:",
       10,
       laps_y,
@@ -942,7 +942,7 @@ pub fn draw_lap_times(game : @types.Game) -> Unit {
       } else {
         @raylib.Color::new(180, 180, 180, 200)
       }
-      @raylib.draw_text(lap_text, 10, laps_y + 18 + li * 16, 14, lap_color)
+      @draw.draw_text(lap_text, 10, laps_y + 18 + li * 16, 14, lap_color)
     }
   }
 }
@@ -982,12 +982,12 @@ pub fn draw_item_indicator(game : @types.Game) -> Unit {
   let item_name = get_item_display_name(kart.held_powerup)
   let ic = get_item_display_color(kart.held_powerup)
   let item_color = @raylib.Color::new(ic.0, ic.1, ic.2, 255)
-  @raylib.draw_text(item_name, box_x + 8, box_y + 5, 16, item_color)
+  @draw.draw_text(item_name, box_x + 8, box_y + 5, 16, item_color)
   // Item count for triple mushroom
   if kart.held_powerup == TripleMushroom && kart.item_count > 0 {
     let count = kart.item_count + 1
     let count_text = "x\{count}"
-    @raylib.draw_text(
+    @draw.draw_text(
       count_text,
       box_x + 8,
       box_y + 25,
@@ -997,7 +997,7 @@ pub fn draw_item_indicator(game : @types.Game) -> Unit {
   }
   // "SPACE to use" hint
   let hint = "[SPACE]"
-  @raylib.draw_text(
+  @draw.draw_text(
     hint,
     box_x + 60,
     box_y + 28,
@@ -1034,8 +1034,8 @@ pub fn draw_detailed_race_results(game : @types.Game) -> Unit {
     @raylib.Color::new(100, 100, 120, 150),
   )
   let summary_title = "Your Performance"
-  let stw = @raylib.measure_text(summary_title, 20)
-  @raylib.draw_text(
+  let stw = @draw.measure_text(summary_title, 20)
+  @draw.draw_text(
     summary_title,
     (@types.screen_width - stw) / 2,
     summary_y + 8,
@@ -1044,7 +1044,7 @@ pub fn draw_detailed_race_results(game : @types.Game) -> Unit {
   )
   // Finish time
   let finish_text = "Finish: \{@types.format_time(player.finish_time)}"
-  @raylib.draw_text(
+  @draw.draw_text(
     finish_text,
     200,
     summary_y + 35,
@@ -1054,7 +1054,7 @@ pub fn draw_detailed_race_results(game : @types.Game) -> Unit {
   // Best lap
   if player.best_lap < 900.0 {
     let best_text = "Best Lap: \{@types.format_time(player.best_lap)}"
-    @raylib.draw_text(
+    @draw.draw_text(
       best_text,
       200,
       summary_y + 57,
@@ -1072,11 +1072,11 @@ pub fn draw_detailed_race_results(game : @types.Game) -> Unit {
   } else {
     @raylib.Color::new(180, 130, 100, 255)
   }
-  @raylib.draw_text(place_result, 500, summary_y + 35, 18, place_color)
+  @draw.draw_text(place_result, 500, summary_y + 35, 18, place_color)
   // Points earned
   let pts_earned = @types.position_points(player.place)
   let pts_text = "Points: +\{pts_earned}"
-  @raylib.draw_text(
+  @draw.draw_text(
     pts_text,
     500,
     summary_y + 57,
@@ -1086,7 +1086,7 @@ pub fn draw_detailed_race_results(game : @types.Game) -> Unit {
   // Cup standing update
   let cup_total = game.cup_points[@types.player_kart]
   let cup_text = "Cup Total: \{cup_total} pts"
-  @raylib.draw_text(
+  @draw.draw_text(
     cup_text,
     200,
     summary_y + 82,
@@ -1096,7 +1096,7 @@ pub fn draw_detailed_race_results(game : @types.Game) -> Unit {
   // Race progress indicator
   let race_num = game.current_race + 1
   let progress_text = "Race \{race_num} of \{@types.races_per_cup}"
-  @raylib.draw_text(
+  @draw.draw_text(
     progress_text,
     500,
     summary_y + 82,
@@ -1122,8 +1122,8 @@ pub fn draw_track_preview_panel(game : @types.Game) -> Unit {
   )
   // Track name
   let track_name = @levels.get_track_name(game.current_cup, game.current_race)
-  let tw = @raylib.measure_text(track_name, 40)
-  @raylib.draw_text(
+  let tw = @draw.measure_text(track_name, 40)
+  @draw.draw_text(
     track_name,
     (@types.screen_width - tw) / 2,
     60,
@@ -1132,8 +1132,8 @@ pub fn draw_track_preview_panel(game : @types.Game) -> Unit {
   )
   // Track description
   let desc = @levels.get_track_description(game.current_cup, game.current_race)
-  let dw = @raylib.measure_text(desc, 20)
-  @raylib.draw_text(
+  let dw = @draw.measure_text(desc, 20)
+  @draw.draw_text(
     desc,
     (@types.screen_width - dw) / 2,
     110,
@@ -1167,7 +1167,7 @@ pub fn draw_track_preview_panel(game : @types.Game) -> Unit {
       star_str = star_str + "-"
     }
   }
-  @raylib.draw_text(
+  @draw.draw_text(
     star_str,
     panel_x + 20,
     panel_y + 20,
@@ -1180,7 +1180,7 @@ pub fn draw_track_preview_panel(game : @types.Game) -> Unit {
     game.current_race,
   )
   let surf_text = "Surface: \{surface_info}"
-  @raylib.draw_text(
+  @draw.draw_text(
     surf_text,
     panel_x + 20,
     panel_y + 50,
@@ -1193,7 +1193,7 @@ pub fn draw_track_preview_panel(game : @types.Game) -> Unit {
     game.current_race,
   )
   let elev_text = "Terrain: \{elev_info}"
-  @raylib.draw_text(
+  @draw.draw_text(
     elev_text,
     panel_x + 20,
     panel_y + 76,
@@ -1203,7 +1203,7 @@ pub fn draw_track_preview_panel(game : @types.Game) -> Unit {
   // Laps
   let laps = @levels.get_track_laps(game.current_cup, game.current_race)
   let laps_text = "Laps: \{laps}"
-  @raylib.draw_text(
+  @draw.draw_text(
     laps_text,
     panel_x + 20,
     panel_y + 102,
@@ -1217,7 +1217,7 @@ pub fn draw_track_preview_panel(game : @types.Game) -> Unit {
   )
   let len_int = length.to_int()
   let length_text = "Length: ~\{len_int}m"
-  @raylib.draw_text(
+  @draw.draw_text(
     length_text,
     panel_x + 20,
     panel_y + 128,
@@ -1236,7 +1236,7 @@ pub fn draw_track_preview_panel(game : @types.Game) -> Unit {
   if record < 900.0 {
     let rec_str = @types.format_time(record)
     let rec_text = "Record: \{rec_str} by \{record_holder}"
-    @raylib.draw_text(
+    @draw.draw_text(
       rec_text,
       panel_x + 20,
       panel_y + 160,
@@ -1250,7 +1250,7 @@ pub fn draw_track_preview_panel(game : @types.Game) -> Unit {
     game.current_race,
   )
   let items_text = "Item Boxes: \{item_count}"
-  @raylib.draw_text(
+  @draw.draw_text(
     items_text,
     panel_x + 20,
     panel_y + 190,
@@ -1261,7 +1261,7 @@ pub fn draw_track_preview_panel(game : @types.Game) -> Unit {
   let cup_name = @levels.get_cup_name(game.current_cup)
   let race_num = game.current_race + 1
   let prog_text = "\{cup_name} - Race \{race_num}/\{@types.races_per_cup}"
-  @raylib.draw_text(
+  @draw.draw_text(
     prog_text,
     panel_x + 20,
     panel_y + 230,
@@ -1278,7 +1278,7 @@ pub fn draw_track_preview_panel(game : @types.Game) -> Unit {
       max=@types.max_karts - 1,
     )]
   let kart_info = "Racer: \{char_name} - \{kart_name} Kart"
-  @raylib.draw_text(
+  @draw.draw_text(
     kart_info,
     panel_x + 20,
     panel_y + 260,
@@ -1287,11 +1287,11 @@ pub fn draw_track_preview_panel(game : @types.Game) -> Unit {
   )
   // Hint
   let hint = "Press Enter to Start Race"
-  let hiw = @raylib.measure_text(hint, 20)
+  let hiw = @draw.measure_text(hint, 20)
   let blink = @math.sinf(game.preview_timer * 4.0)
   let hint_alpha_f : Float = 180.0 + blink * 60.0
   let hint_alpha = hint_alpha_f.to_int().clamp(min=120, max=240)
-  @raylib.draw_text(
+  @draw.draw_text(
     hint,
     (@types.screen_width - hiw) / 2,
     @types.screen_height - 60,
@@ -1319,7 +1319,7 @@ pub fn draw_standings_sidebar(game : @types.Game) -> Unit {
     entry_h * @types.max_karts + 25,
     @raylib.Color::new(0, 0, 0, 100),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     "Standings",
     side_x + 5,
     side_y + 3,
@@ -1355,10 +1355,10 @@ pub fn draw_standings_sidebar(game : @types.Game) -> Unit {
         @raylib.Color::new(180, 180, 180, 200)
       }
       let entry_text = "\{p}. \{name}"
-      @raylib.draw_text(entry_text, side_x + 20, y, 14, text_color)
+      @draw.draw_text(entry_text, side_x + 20, y, 14, text_color)
       // Show if finished
       if kart.finished {
-        @raylib.draw_text(
+        @draw.draw_text(
           "FIN",
           side_x + 110,
           y,

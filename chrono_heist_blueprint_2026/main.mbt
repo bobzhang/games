@@ -445,6 +445,7 @@ fn draw_tile(x : Int, y : Int, col : @raylib.Color) -> Unit {
 fn main {
   @raylib.init_window(screen_w, screen_h, "Chrono Heist Blueprint 2026")
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let tiles : Array[Int] = Array::make(grid_w * grid_h, tile_empty)
   let guards : Array[Guard] = Array::makei(max_guards, fn(_i) {
@@ -635,18 +636,18 @@ fn main {
 
     if title {
       @raylib.draw_rectangle_gradient_v(0, 0, screen_w, screen_h, @raylib.Color::new(18, 28, 44, 255), @raylib.Color::new(6, 12, 20, 255))
-      @raylib.draw_text("CHRONO HEIST BLUEPRINT", 210, 170, 56, @raylib.Color::new(233, 245, 255, 255))
-      @raylib.draw_text("Top-down time-loop stealth puzzle", 360, 248, 28, @raylib.Color::new(126, 196, 255, 255))
-      @raylib.draw_text("Each loop records your route. On the next loop, your ghost replays it.", 210, 360, 28, @raylib.Color::new(220, 228, 236, 255))
-      @raylib.draw_text("Use ghosts to hold plates, lure guards, and chain the vault escape.", 220, 404, 28, @raylib.Color::new(220, 228, 236, 255))
-      @raylib.draw_text("WASD / Arrows move   Space waits   R restarts", 310, 520, 26, @raylib.Color::new(255, 211, 112, 255))
+      @draw.draw_text("CHRONO HEIST BLUEPRINT", 210, 170, 56, @raylib.Color::new(233, 245, 255, 255))
+      @draw.draw_text("Top-down time-loop stealth puzzle", 360, 248, 28, @raylib.Color::new(126, 196, 255, 255))
+      @draw.draw_text("Each loop records your route. On the next loop, your ghost replays it.", 210, 360, 28, @raylib.Color::new(220, 228, 236, 255))
+      @draw.draw_text("Use ghosts to hold plates, lure guards, and chain the vault escape.", 220, 404, 28, @raylib.Color::new(220, 228, 236, 255))
+      @draw.draw_text("WASD / Arrows move   Space waits   R restarts", 310, 520, 26, @raylib.Color::new(255, 211, 112, 255))
       @raylib.draw_rectangle(420, 620, 420, 82, @raylib.Color::new(46, 92, 132, 255))
-      @raylib.draw_text("PRESS ENTER TO BREACH", 458, 648, 30, @raylib.Color::new(245, 250, 255, 255))
+      @draw.draw_text("PRESS ENTER TO BREACH", 458, 648, 30, @raylib.Color::new(245, 250, 255, 255))
     } else {
       @raylib.draw_rectangle(70, 56, 1140, 84, @raylib.Color::new(18, 28, 42, 255))
-      @raylib.draw_text("Loop \{loop_no}  Turns \{turn_in_loop}/\{loop_len}  Ghosts \{ghost_count}", 98, 82, 28, @raylib.Color::new(236, 243, 248, 255))
-      @raylib.draw_text("Level \{level}/3", 960, 82, 28, @raylib.Color::new(255, 210, 116, 255))
-      @raylib.draw_text(level_note, 96, 116, 22, @raylib.Color::new(163, 194, 224, 255))
+      @draw.draw_text("Loop \{loop_no}  Turns \{turn_in_loop}/\{loop_len}  Ghosts \{ghost_count}", 98, 82, 28, @raylib.Color::new(236, 243, 248, 255))
+      @draw.draw_text("Level \{level}/3", 960, 82, 28, @raylib.Color::new(255, 210, 116, 255))
+      @draw.draw_text(level_note, 96, 116, 22, @raylib.Color::new(163, 194, 224, 255))
 
       for y in 0..<grid_h {
         for x in 0..<grid_w {
@@ -659,10 +660,10 @@ fn main {
 
           if tile == tile_vault {
             draw_tile(x, y, @raylib.Color::new(44, 112, 132, 255))
-            @raylib.draw_text("V", screen_center_x(x) - 10, screen_center_y(y) - 16, 28, @raylib.Color::new(234, 248, 255, 255))
+            @draw.draw_text("V", screen_center_x(x) - 10, screen_center_y(y) - 16, 28, @raylib.Color::new(234, 248, 255, 255))
           } else if tile == tile_exit {
             draw_tile(x, y, @raylib.Color::new(42, 114, 82, 255))
-            @raylib.draw_text("EX", screen_center_x(x) - 16, screen_center_y(y) - 14, 22, @raylib.Color::new(239, 252, 244, 255))
+            @draw.draw_text("EX", screen_center_x(x) - 16, screen_center_y(y) - 14, 22, @raylib.Color::new(239, 252, 244, 255))
           } else if tile == tile_key {
             draw_tile(x, y, @raylib.Color::new(118, 94, 24, 255))
             @raylib.draw_circle(screen_center_x(x), screen_center_y(y), 10.0, @raylib.Color::new(255, 218, 110, 255))
@@ -683,7 +684,7 @@ fn main {
         draw_tile(door.x, door.y, col)
         draw_tile(door.plate_x, door.plate_y, @raylib.Color::new(176, 140, 62, 255))
         @raylib.draw_circle_lines(screen_center_x(door.plate_x), screen_center_y(door.plate_y), 20.0, @raylib.Color::new(255, 228, 148, 255))
-        @raylib.draw_text(door.title, board_x + grid_w * cell + 24, board_y + 150 + i * 30, 22, @raylib.Color::new(198, 214, 228, 255))
+        @draw.draw_text(door.title, board_x + grid_w * cell + 24, board_y + 150 + i * 30, 22, @raylib.Color::new(198, 214, 228, 255))
       }
 
       for i in 0..<ghost_count {
@@ -710,20 +711,22 @@ fn main {
       }
 
       @raylib.draw_rectangle(70, 748, 1140, 76, @raylib.Color::new(18, 28, 42, 255))
-      @raylib.draw_text(message, 96, 772, 28, @raylib.Color::new(236, 242, 248, 255))
-      @raylib.draw_text(if key_taken { "Key secured" } else { "Need vault key" }, 820, 772, 24, if key_taken { @raylib.Color::new(255, 218, 110, 255) } else { @raylib.Color::new(176, 190, 206, 255) })
-      @raylib.draw_text(if vault_looted { "Blueprint copied" } else { "Vault intact" }, 990, 772, 24, if vault_looted { @raylib.Color::new(130, 230, 178, 255) } else { @raylib.Color::new(176, 190, 206, 255) })
+      @draw.draw_text(message, 96, 772, 28, @raylib.Color::new(236, 242, 248, 255))
+      @draw.draw_text(if key_taken { "Key secured" } else { "Need vault key" }, 820, 772, 24, if key_taken { @raylib.Color::new(255, 218, 110, 255) } else { @raylib.Color::new(176, 190, 206, 255) })
+      @draw.draw_text(if vault_looted { "Blueprint copied" } else { "Vault intact" }, 990, 772, 24, if vault_looted { @raylib.Color::new(130, 230, 178, 255) } else { @raylib.Color::new(176, 190, 206, 255) })
 
       if over {
         @raylib.draw_rectangle(0, 0, screen_w, screen_h, @raylib.fade(@raylib.black, 0.58))
-        @raylib.draw_text(if won { "HEIST COMPLETE" } else { "HEIST FAILED" }, 410, 250, 58, if won { @raylib.Color::new(140, 245, 190, 255) } else { @raylib.Color::new(255, 120, 120, 255) })
-        @raylib.draw_text(message, 360, 340, 32, @raylib.Color::new(238, 244, 248, 255))
-        @raylib.draw_text("R to restart from level 1   Enter for title", 300, 430, 28, @raylib.Color::new(255, 214, 118, 255))
+        @draw.draw_text(if won { "HEIST COMPLETE" } else { "HEIST FAILED" }, 410, 250, 58, if won { @raylib.Color::new(140, 245, 190, 255) } else { @raylib.Color::new(255, 120, 120, 255) })
+        @draw.draw_text(message, 360, 340, 32, @raylib.Color::new(238, 244, 248, 255))
+        @draw.draw_text("R to restart from level 1   Enter for title", 300, 430, 28, @raylib.Color::new(255, 214, 118, 255))
       }
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -1,0 +1,32 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/mario/internal/game"
+
+import {
+  "bobzhang/games/mario/internal/types",
+}
+
+// Values
+pub fn bump_block(@types.Game, Int, Int) -> Unit
+
+pub fn kill_player(@types.Game) -> Unit
+
+pub fn load_level(@types.Game, Int) -> Unit
+
+pub fn record_frame_time(@types.Game, Float) -> Unit
+
+pub fn spawn_brick_particles(@types.Game, Float, Float) -> Unit
+
+pub fn spawn_score_popup(@types.Game, Float, Float, String) -> Unit
+
+pub fn spawn_stomp_poof(@types.Game, Float, Float) -> Unit
+
+pub fn update_game(@types.Game, Float) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

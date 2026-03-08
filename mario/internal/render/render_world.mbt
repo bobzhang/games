@@ -242,7 +242,7 @@ fn draw_question_tile(game : @types.Game, sx : Int, sy : Int) -> Unit {
   let qy = sy + ts / 2 - 10
   // Bright inner highlight
   @raylib.draw_rectangle(sx + 4, sy + 4, ts - 8, ts - 8, question_bright)
-  @raylib.draw_text("?", qx, qy, 24, question_dark)
+  @draw.draw_text("?", qx, qy, 24, question_dark)
 }
 
 ///|
@@ -683,8 +683,8 @@ fn draw_mario_dead(sx : Int, sy : Int, h : Int) -> Unit {
   @raylib.draw_rectangle(bx + 4, by, 24, 10, mario_red)
   @raylib.draw_rectangle(bx + 6, by + 10, 20, 12, mario_skin)
   // X eyes
-  @raylib.draw_text("x", bx + 12, by + 11, 12, @raylib.Color::new(0, 0, 0, 255))
-  @raylib.draw_text("x", bx + 20, by + 11, 12, @raylib.Color::new(0, 0, 0, 255))
+  @draw.draw_text("x", bx + 12, by + 11, 12, @raylib.Color::new(0, 0, 0, 255))
+  @draw.draw_text("x", bx + 20, by + 11, 12, @raylib.Color::new(0, 0, 0, 255))
   @raylib.draw_rectangle(bx + 4, by + 22, 24, 12, mario_blue)
   // Arms up
   @raylib.draw_rectangle(bx - 2, by + 16, 6, 10, mario_skin)
@@ -981,6 +981,6 @@ fn draw_score_popups(game : @types.Game, cam_x : Int) -> Unit {
     let sy = s.y.to_int()
     let alpha = (s.life * 255.0).to_int().clamp(min=0, max=255)
     let color = @raylib.Color::new(255, 255, 255, alpha)
-    @raylib.draw_text(s.text, sx - 12, sy, 16, color)
+    @draw.draw_text(s.text, sx - 12, sy, 16, color)
   }
 }

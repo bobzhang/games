@@ -47,6 +47,7 @@ fn main {
   let mut focused_control = -1
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -214,7 +215,7 @@ fn main {
         i < point_count - 1 {
         @raylib.draw_line_v(points[i], points[i + 1], @raylib.gray)
       }
-      @raylib.draw_text(
+      @draw.draw_text(
         "[\{points[i].x.to_int()}, \{points[i].y.to_int()}]",
         points[i].x.to_int(),
         points[i].y.to_int() + 10,
@@ -225,23 +226,25 @@ fn main {
 
     // Draw spline type info
     let type_names = ["LINEAR", "BSPLINE", "CATMULLROM", "BEZIER"]
-    @raylib.draw_text(
+    @draw.draw_text(
       "Spline type: \{type_names[spline_type_active]}",
       12,
       10,
       20,
       @raylib.darkgray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "[1] Linear  [2] BSpline  [3] CatmullRom  [4] Bezier", 12, 36, 10, @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Right-click to add points. Left-click to drag.", 12, 52, 10, @raylib.gray,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window()
 }

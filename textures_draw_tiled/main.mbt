@@ -265,6 +265,7 @@ fn main {
   let mut scale : Float = 1.0
   let mut rotation : Float = 0.0
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -352,7 +353,7 @@ fn main {
       @raylib.get_screen_height() - 2 * margin_size,
       @raylib.color_alpha(@raylib.lightgray, 0.5),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Select Pattern",
       2 + margin_size,
       30 + margin_size,
@@ -372,7 +373,7 @@ fn main {
       rec_pattern[active_pattern].height.to_int(),
       @raylib.color_alpha(@raylib.darkblue, 0.3),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Select Color",
       2 + margin_size,
       10 + 256 + margin_size,
@@ -389,35 +390,35 @@ fn main {
         )
       }
     }
-    @raylib.draw_text(
+    @draw.draw_text(
       "Scale (UP/DOWN to change)",
       2 + margin_size,
       80 + 256 + margin_size,
       10,
       @raylib.black,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{scale}x",
       2 + margin_size,
       92 + 256 + margin_size,
       20,
       @raylib.black,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Rotation (LEFT/RIGHT to change)",
       2 + margin_size,
       122 + 256 + margin_size,
       10,
       @raylib.black,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{rotation} degrees",
       2 + margin_size,
       134 + 256 + margin_size,
       20,
       @raylib.black,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Press [SPACE] to reset",
       2 + margin_size,
       164 + 256 + margin_size,
@@ -426,17 +427,19 @@ fn main {
     )
 
     // Draw FPS
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{@raylib.get_fps()} FPS",
       2 + margin_size,
       2 + margin_size,
       20,
       @raylib.black,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_texture(tex_pattern)
+  @draw.cleanup()
   @raylib.close_window()
 }

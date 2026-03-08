@@ -19,13 +19,13 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   let coins_left = @types.remaining_coins(game)
   let enemies_left = @types.active_enemy_count(game)
 
-  @raylib.draw_text("SUPER MARIO 1985 LITE", 18, 12, 28, @raylib.white)
-  @raylib.draw_text("SCORE \{player.score}", 20, 46, 20, @raylib.yellow)
-  @raylib.draw_text("COINS \{player.coins}", 250, 46, 20, @raylib.gold)
-  @raylib.draw_text("LIVES \{player.lives}", 440, 46, 20, @raylib.orange)
-  @raylib.draw_text("TIME \{game.time_left}", 610, 46, 20, @raylib.white)
-  @raylib.draw_text("ENEMIES \{enemies_left}", 780, 46, 20, @raylib.lightgray)
-  @raylib.draw_text("COINS LEFT \{coins_left}", 990, 46, 20, @raylib.lightgray)
+  @draw.draw_text("SUPER MARIO 1985 LITE", 18, 12, 28, @raylib.white)
+  @draw.draw_text("SCORE \{player.score}", 20, 46, 20, @raylib.yellow)
+  @draw.draw_text("COINS \{player.coins}", 250, 46, 20, @raylib.gold)
+  @draw.draw_text("LIVES \{player.lives}", 440, 46, 20, @raylib.orange)
+  @draw.draw_text("TIME \{game.time_left}", 610, 46, 20, @raylib.white)
+  @draw.draw_text("ENEMIES \{enemies_left}", 780, 46, 20, @raylib.lightgray)
+  @draw.draw_text("COINS LEFT \{coins_left}", 990, 46, 20, @raylib.lightgray)
 }
 
 ///|
@@ -58,10 +58,10 @@ fn draw_center_panel(
     @raylib.Color::new(106, 152, 255, 255),
   )
 
-  @raylib.draw_text(title, x + 24, y + 30, 40, @raylib.yellow)
-  @raylib.draw_text(line1, x + 24, y + 94, 24, @raylib.white)
-  @raylib.draw_text(line2, x + 24, y + 128, 24, @raylib.white)
-  @raylib.draw_text(line3, x + 24, y + 168, 24, @raylib.lightgray)
+  @draw.draw_text(title, x + 24, y + 30, 40, @raylib.yellow)
+  @draw.draw_text(line1, x + 24, y + 94, 24, @raylib.white)
+  @draw.draw_text(line2, x + 24, y + 128, 24, @raylib.white)
+  @draw.draw_text(line3, x + 24, y + 168, 24, @raylib.lightgray)
 }
 
 ///|

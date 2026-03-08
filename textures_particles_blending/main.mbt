@@ -56,6 +56,7 @@ fn main {
   let mut blending = @raylib.BlendAlpha
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -127,12 +128,12 @@ fn main {
 
     @raylib.end_blend_mode()
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "PRESS SPACE to CHANGE BLENDING MODE", 180, 20, 20, @raylib.black,
     )
 
     if blending == @raylib.BlendAlpha {
-      @raylib.draw_text(
+      @draw.draw_text(
         "ALPHA BLENDING",
         290,
         screen_height - 40,
@@ -140,7 +141,7 @@ fn main {
         @raylib.black,
       )
     } else {
-      @raylib.draw_text(
+      @draw.draw_text(
         "ADDITIVE BLENDING",
         280,
         screen_height - 40,
@@ -149,10 +150,12 @@ fn main {
       )
     }
 
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
   @raylib.unload_texture(smoke)
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -2,6 +2,7 @@ import {
   "moonbitlang/core/math",
   "tonyfettes/raylib",
   "bobzhang/games/dungeon_courier_escape_2026/internal/types",
+  "bobzhang/games/utils/draw",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

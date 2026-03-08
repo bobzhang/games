@@ -1,5 +1,6 @@
 import {
   "tonyfettes/raylib",
+  "bobzhang/games/utils/fps",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

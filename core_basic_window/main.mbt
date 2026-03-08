@@ -7,6 +7,7 @@ fn main {
     screen_width, screen_height, "raylib [core] example - basic window",
   )
   @raylib.set_target_fps(60) // Set our game to run at 60 frames-per-second
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
@@ -16,12 +17,14 @@ fn main {
     // Draw
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
-    @raylib.draw_text(
+    @draw.draw_text(
       "Congrats! You created your first window!", 190, 200, 20, @raylib.lightgray,
     )
+    @fps.draw()
     @raylib.end_drawing()
   }
 
   // De-Initialization
+  @draw.cleanup()
   @raylib.close_window() // Close window and OpenGL context
 }

@@ -1146,7 +1146,7 @@ fn draw_hospital(hospital : Hospital) -> Unit {
     x = x + 16
   }
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "MED HUB",
     hospital.x.to_int() + 18,
     hospital.y.to_int() + hospital.h + 8,
@@ -1196,7 +1196,7 @@ fn draw_districts(districts : Array[District], t : Float) -> Unit {
       @raylib.Color::new(246, 236, 168, 46 + (q01 * 80.0).to_int()),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "D\{districts[i].id} Q:\{districts[i].queue.to_int()} S:\{districts[i].stress.to_int()}",
       (districts[i].x - 56.0).to_int(),
       (districts[i].y + 24.0).to_int(),
@@ -1247,7 +1247,7 @@ fn draw_groups(groups : Array[SurvivorGroup], t : Float) -> Unit {
       @raylib.Color::new(252, 246, 236, 246),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "G\{group.id} N:\{group.count} P:\{group.panic.to_int()}",
       (group.x - 54.0).to_int(),
       (group.y + 14.0).to_int(),
@@ -1510,9 +1510,9 @@ fn draw_touch_controls(
       h,
       @raylib.Color::new(170, 208, 240, 238),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       text,
-      x + w / 2 - @raylib.measure_text(text, 28) / 2,
+      x + w / 2 - @draw.measure_text(text, 28) / 2,
       y + 10,
       28,
       @raylib.Color::new(236, 248, 255, 252),
@@ -1578,9 +1578,9 @@ fn draw_touch_controls(
       @raylib.Color::new(10, 18, 32, 176),
     )
     @raylib.draw_circle(x.to_int(), y.to_int(), r, col)
-    @raylib.draw_text(
+    @draw.draw_text(
       text,
-      x.to_int() - @raylib.measure_text(text, 22) / 2,
+      x.to_int() - @draw.measure_text(text, 22) / 2,
       y.to_int() - 10,
       22,
       @raylib.Color::new(236, 246, 255, 248),
@@ -1620,7 +1620,7 @@ fn draw_bar(
   maxv : Float,
   col : @raylib.Color,
 ) -> Unit {
-  @raylib.draw_text(
+  @draw.draw_text(
     label,
     panel_x + 16,
     y,
@@ -1651,7 +1651,7 @@ fn draw_bar(
     @raylib.Color::new(166, 202, 236, 238),
   )
 
-  @raylib.draw_text(
+  @draw.draw_text(
     "\{value.to_int()}/\{maxv.to_int()}",
     panel_x + 264,
     y + 52,
@@ -1684,9 +1684,9 @@ fn draw_button(
     h,
     @raylib.Color::new(198, 226, 252, 246),
   )
-  @raylib.draw_text(
+  @draw.draw_text(
     text,
-    x + w / 2 - @raylib.measure_text(text, 34) / 2,
+    x + w / 2 - @draw.measure_text(text, 34) / 2,
     y + h / 2 - 17,
     34,
     @raylib.Color::new(238, 248, 255, 252),
@@ -1699,9 +1699,11 @@ fn main {
   let sw : Int = 1680
   let sh : Int = 940
   @raylib.init_window(sw, sh, "raylib [game] aftershock rescue convoy 2026")
+  @draw.cleanup()
   defer @raylib.close_window()
 
   @raylib.set_target_fps(120)
+  @draw.init_font()
 
   let world_x : Int = 20
   let world_y : Int = 20
@@ -2358,6 +2360,7 @@ fn main {
     }
 
     @raylib.begin_drawing()
+    @fps.draw()
     defer @raylib.end_drawing()
 
     @raylib.clear_background(@raylib.Color::new(8, 16, 28, 255))
@@ -2412,14 +2415,14 @@ fn main {
       @raylib.Color::new(126, 168, 208, 242),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "AFTERSHOCK RESCUE CONVOY",
       panel_x + 16,
       36,
       30,
       @raylib.Color::new(236, 246, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Urban rescue under seismic instability",
       panel_x + 16,
       74,
@@ -2427,14 +2430,14 @@ fn main {
       @raylib.Color::new(194, 220, 252, 238),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Time",
       panel_x + 16,
       110,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{timer.to_int()}s",
       panel_x + 102,
       110,
@@ -2442,14 +2445,14 @@ fn main {
       @raylib.Color::new(248, 220, 152, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Rescued",
       panel_x + 16,
       146,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{rescued_total}/\{target_rescued}",
       panel_x + 132,
       146,
@@ -2457,14 +2460,14 @@ fn main {
       @raylib.Color::new(138, 228, 164, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Lost",
       panel_x + 16,
       182,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{lost_people}/\{lost_limit}",
       panel_x + 88,
       182,
@@ -2472,14 +2475,14 @@ fn main {
       @raylib.Color::new(246, 150, 164, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Tier",
       panel_x + 240,
       182,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{tier}",
       panel_x + 298,
       182,
@@ -2487,14 +2490,14 @@ fn main {
       @raylib.Color::new(248, 212, 130, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Onboard",
       panel_x + 16,
       218,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{player.onboard}/\{player.capacity}",
       panel_x + 114,
       218,
@@ -2502,14 +2505,14 @@ fn main {
       @raylib.Color::new(206, 232, 252, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Medkits",
       panel_x + 16,
       254,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{player.medkits}/\{player.medkit_max}",
       panel_x + 108,
       254,
@@ -2517,14 +2520,14 @@ fn main {
       @raylib.Color::new(160, 232, 166, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Hospital load",
       panel_x + 16,
       290,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{hospital_queue.to_int()}",
       panel_x + 164,
       290,
@@ -2532,14 +2535,14 @@ fn main {
       @raylib.Color::new(206, 232, 252, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Score",
       panel_x + 16,
       326,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{score}",
       panel_x + 92,
       326,
@@ -2547,14 +2550,14 @@ fn main {
       @raylib.Color::new(158, 220, 252, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Stabilized",
       panel_x + 16,
       362,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{stabilized_total.to_int()}",
       panel_x + 148,
       362,
@@ -2562,14 +2565,14 @@ fn main {
       @raylib.Color::new(246, 196, 150, 248),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Active groups",
       panel_x + 16,
       398,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{active_groups(groups)}",
       panel_x + 152,
       398,
@@ -2577,14 +2580,14 @@ fn main {
       @raylib.Color::new(246, 196, 150, 248),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Active cracks",
       panel_x + 16,
       434,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{active_cracks(cracks)}",
       panel_x + 148,
       434,
@@ -2592,14 +2595,14 @@ fn main {
       @raylib.Color::new(246, 196, 150, 248),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Peak crack",
       panel_x + 212,
       434,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{(peak_crack_intensity(cracks) * 100.0).to_int()}",
       panel_x + 316,
       434,
@@ -2607,14 +2610,14 @@ fn main {
       @raylib.Color::new(246, 196, 150, 248),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Critical groups",
       panel_x + 16,
       470,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{active_critical(groups)}",
       panel_x + 166,
       470,
@@ -2622,14 +2625,14 @@ fn main {
       @raylib.Color::new(246, 196, 150, 248),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Panic peak",
       panel_x + 214,
       470,
       24,
       @raylib.Color::new(214, 236, 252, 246),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "\{peak_group_panic(groups).to_int()}",
       panel_x + 314,
       470,
@@ -2662,35 +2665,35 @@ fn main {
       @raylib.Color::new(246, 186, 126, 252),
     )
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Controls",
       panel_x + 16,
       730,
       28,
       @raylib.Color::new(236, 246, 255, 252),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "WASD / Arrows : drive",
       panel_x + 16,
       762,
       21,
       @raylib.Color::new(198, 220, 252, 236),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "J / Space : hold boost",
       panel_x + 16,
       784,
       21,
       @raylib.Color::new(198, 220, 252, 236),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "L / U : rescue or stabilize",
       panel_x + 16,
       806,
       21,
       @raylib.Color::new(198, 220, 252, 236),
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "K / H : ping urgent target",
       panel_x + 16,
       828,
@@ -2701,7 +2704,7 @@ fn main {
     draw_touch_controls(sw, sh, mouse.x, mouse.y, hold)
 
     if msg_t > 0.0 {
-      let bw : Int = @raylib.measure_text(msg, 30) + 44
+      let bw : Int = @draw.measure_text(msg, 30) + 44
       let bx : Int = world_x + world_w / 2 - bw / 2
       @raylib.draw_rectangle(
         bx,
@@ -2717,7 +2720,7 @@ fn main {
         52,
         @raylib.Color::new(188, 214, 248, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         msg,
         bx + 22,
         30,
@@ -2728,14 +2731,14 @@ fn main {
 
     if state == 0 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 14, 24, 212))
-      @raylib.draw_text(
+      @draw.draw_text(
         "AFTERSHOCK RESCUE CONVOY",
         sw / 2 - 500,
         150,
         82,
         @raylib.Color::new(236, 246, 255, 255),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Ground rescue and crack stabilization",
         sw / 2 - 300,
         240,
@@ -2758,35 +2761,35 @@ fn main {
         @raylib.Color::new(166, 196, 244, 244),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "Mission",
         sw / 2 - 486,
         338,
         34,
         @raylib.Color::new(236, 246, 255, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Evacuate survivors and unload at MED HUB",
         sw / 2 - 486,
         382,
         29,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Stabilize aftershock cracks using medkits",
         sw / 2 - 486,
         418,
         29,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Prevent district overload and casualty spikes",
         sw / 2 - 486,
         454,
         29,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Fully touch playable on mobile",
         sw / 2 - 486,
         490,
@@ -2794,28 +2797,28 @@ fn main {
         @raylib.Color::new(210, 228, 252, 248),
       )
 
-      @raylib.draw_text(
+      @draw.draw_text(
         "Failure",
         sw / 2 + 64,
         338,
         34,
         @raylib.Color::new(236, 246, 255, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Timer expires",
         sw / 2 + 64,
         382,
         29,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Too many civilians lost",
         sw / 2 + 64,
         418,
         29,
         @raylib.Color::new(210, 228, 252, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "- Hospital overload or convoy destruction",
         sw / 2 + 64,
         454,
@@ -2834,28 +2837,28 @@ fn main {
       draw_button(sw / 2 - 210, 638, 420, 94, "START CONVOY", hover)
     } else if state == 2 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(8, 24, 14, 206))
-      @raylib.draw_text(
+      @draw.draw_text(
         "RESCUE SUCCESS",
         sw / 2 - 278,
         194,
         84,
         @raylib.Color::new(170, 248, 188, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Rescued \{rescued_total}/\{target_rescued}",
         sw / 2 - 196,
         334,
         42,
         @raylib.Color::new(236, 248, 240, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Score \{score}",
         sw / 2 - 102,
         388,
         38,
         @raylib.Color::new(248, 232, 166, 248),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Tap or Enter",
         sw / 2 - 94,
         466,
@@ -2864,28 +2867,28 @@ fn main {
       )
     } else if state == 3 {
       @raylib.draw_rectangle(0, 0, sw, sh, @raylib.Color::new(26, 8, 14, 214))
-      @raylib.draw_text(
+      @draw.draw_text(
         "MISSION FAILED",
         sw / 2 - 266,
         194,
         84,
         @raylib.Color::new(248, 156, 168, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Rescued \{rescued_total}/\{target_rescued}",
         sw / 2 - 196,
         334,
         42,
         @raylib.Color::new(246, 230, 236, 252),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Lost \{lost_people}/\{lost_limit}",
         sw / 2 - 116,
         388,
         38,
         @raylib.Color::new(252, 190, 198, 246),
       )
-      @raylib.draw_text(
+      @draw.draw_text(
         "Tap or Enter",
         sw / 2 - 94,
         466,

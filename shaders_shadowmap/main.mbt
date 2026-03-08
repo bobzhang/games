@@ -161,6 +161,7 @@ fn main {
   )
 
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   let mut fc = 0
 
@@ -265,17 +266,18 @@ fn main {
     draw_scene(cube, robot)
     @raylib.end_mode_3d()
 
-    @raylib.draw_text(
+    @draw.draw_text(
       "Shadows in raylib using the shadowmapping algorithm!",
       screen_width - 320,
       screen_height - 20,
       10,
       @raylib.gray,
     )
-    @raylib.draw_text(
+    @draw.draw_text(
       "Use the arrow keys to rotate the light!", 10, 10, 30, @raylib.red,
     )
 
+    @fps.draw()
     @raylib.end_drawing()
 
     if @raylib.is_key_pressed(@raylib.KeyF) {
@@ -290,5 +292,6 @@ fn main {
   @raylib.unload_model_animations(robot_animations)
   @raylib.unload_shadowmap_render_texture(shadow_map)
 
+  @draw.cleanup()
   @raylib.close_window()
 }

@@ -61,13 +61,14 @@ fn main {
     @raylib.lime, @raylib.gold, @raylib.red,
   ]
   @raylib.set_target_fps(60)
+  @draw.init_font()
 
   // Main game loop
   while !@raylib.window_should_close() {
     // Draw
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
-    @raylib.draw_text(
+    @draw.draw_text(
       "free fonts included with raylib", 250, 20, 20, @raylib.darkgray,
     )
     @raylib.draw_line(220, 50, 590, 50, @raylib.darkgray)
@@ -81,6 +82,7 @@ fn main {
         colors[i],
       )
     }
+    @fps.draw()
     @raylib.end_drawing()
   }
 
@@ -88,5 +90,6 @@ fn main {
   for i in 0..<max_fonts {
     @raylib.unload_font(fonts[i])
   }
+  @draw.cleanup()
   @raylib.close_window()
 }
