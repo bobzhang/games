@@ -1,0 +1,5 @@
+import {
+  "tonyfettes/raylib",
+}
+
+warnings = "+missing_doc+unnecessary_annotation"
