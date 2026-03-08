@@ -148,7 +148,7 @@ fn toggle_door_from_mouse(mx : Float, my : Float, hdoors : Array[Bool], vdoors :
     for x in 0..<(cols - 1) {
       let dx = grid_x + x * room_w + room_w - 18
       let dy = grid_y + y * room_h + 44
-      if inside_rect(mx, my, dx - 10, dy, 20, 70) {
+      if inside_rect(mx, my, dx, dy, 18, 70) {
         let i = hdoor_idx(x, y)
         hdoors[i] = !hdoors[i]
         return true
@@ -159,7 +159,7 @@ fn toggle_door_from_mouse(mx : Float, my : Float, hdoors : Array[Bool], vdoors :
     for x in 0..<cols {
       let dx = grid_x + x * room_w + 68
       let dy = grid_y + y * room_h + room_h - 18
-      if inside_rect(mx, my, dx, dy - 10, 70, 20) {
+      if inside_rect(mx, my, dx, dy, 70, 18) {
         let i = vdoor_idx(x, y)
         vdoors[i] = !vdoors[i]
         return true
@@ -246,6 +246,13 @@ fn update_systems(
 fn draw_bar(x : Int, y : Int, w : Int, value : Float, col : @raylib.Color) -> Unit {
   @raylib.draw_rectangle(x, y, w, 10, @raylib.Color::new(20, 26, 36, 255))
   @raylib.draw_rectangle(x, y, (Float::from_int(w) * clampf(value, 0.0F, 100.0F) / 100.0F).to_int(), 10, col)
+}
+
+///|
+fn restore_crew(rooms : Array[Room], crew_vals : Array[Float]) -> Unit {
+  for i in 0..<rooms.length() {
+    rooms[i].crew = crew_vals[i]
+  }
 }
 
 ///|
@@ -345,8 +352,10 @@ fn main {
           msg = "Containment failure."
         } else if timer <= 0.0F {
           if sector < 3 {
+            let carry_crew = Array::makei(rooms.length(), fn(i) { rooms[i].crew })
             sector = sector + 1
             timer = reset_sector(sector, rooms, hdoors, vdoors)
+            restore_crew(rooms, carry_crew)
             power = clampf(power + 18.0F, 0.0F, 100.0F)
             integrity = clampf(integrity + 10.0F, 0.0F, 100.0F)
             paused = true
@@ -407,14 +416,14 @@ fn main {
         for x in 0..<(cols - 1) {
           let dx = grid_x + x * room_w + room_w - 18
           let dy = grid_y + y * room_h + 46
-          @raylib.draw_rectangle(dx - 8, dy, 16, 66, if hdoors[hdoor_idx(x, y)] { @raylib.Color::new(120, 220, 158, 255) } else { @raylib.Color::new(230, 92, 92, 255) })
+          @raylib.draw_rectangle(dx + 2, dy, 14, 66, if hdoors[hdoor_idx(x, y)] { @raylib.Color::new(120, 220, 158, 255) } else { @raylib.Color::new(230, 92, 92, 255) })
         }
       }
       for y in 0..<(rows - 1) {
         for x in 0..<cols {
           let dx = grid_x + x * room_w + 72
           let dy = grid_y + y * room_h + room_h - 18
-          @raylib.draw_rectangle(dx, dy - 8, 66, 16, if vdoors[vdoor_idx(x, y)] { @raylib.Color::new(120, 220, 158, 255) } else { @raylib.Color::new(230, 92, 92, 255) })
+          @raylib.draw_rectangle(dx, dy + 2, 66, 14, if vdoors[vdoor_idx(x, y)] { @raylib.Color::new(120, 220, 158, 255) } else { @raylib.Color::new(230, 92, 92, 255) })
         }
       }
 
