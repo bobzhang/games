@@ -529,35 +529,17 @@ fn spawn_flood(
 
 ///|
 fn active_groups(groups : Array[Group]) -> Int {
-  let mut n : Int = 0
-  for group in groups {
-    if group.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(groups, fn(group) { group.active })
 }
 
 ///|
 fn active_floods(floods : Array[FloodCell]) -> Int {
-  let mut n : Int = 0
-  for flood in floods {
-    if flood.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(floods, fn(flood) { flood.active })
 }
 
 ///|
 fn active_critical(groups : Array[Group]) -> Int {
-  let mut n : Int = 0
-  for group in groups {
-    if group.active && group.panic >= 70.0 {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(groups, fn(group) { group.active && group.panic >= 70.0 })
 }
 
 ///|
