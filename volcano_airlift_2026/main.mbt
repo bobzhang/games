@@ -174,13 +174,7 @@ fn survivors_count(
   total : Int,
   state : Int,
 ) -> Int {
-  let mut c = 0
-  for i in 0..<total {
-    if survivors[i].state == state {
-      c = c + 1
-    }
-  }
-  c
+  @utils.count_by_view(survivors[0:total], fn(survivor) { survivor.state == state })
 }
 
 ///|
