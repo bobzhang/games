@@ -157,20 +157,15 @@ fn occupied_by(
   gx : Int,
   gy : Int,
 ) -> Bool {
-  let mut occ = false
-  for i in 0..<count {
-    if i == skip || !cars[i].active {
-      continue
-    }
-    if cars[i].horizontal {
-      if gy == cars[i].y && gx >= cars[i].x && gx < cars[i].x + cars[i].len {
-        occ = true
-      }
-    } else if gx == cars[i].x && gy >= cars[i].y && gy < cars[i].y + cars[i].len {
-      occ = true
-    }
-  }
-  occ
+  @utils.first_indexi_by_view(
+    cars[0:count],
+    fn(i, car) {
+      i != skip &&
+      car.active &&
+      ((car.horizontal && gy == car.y && gx >= car.x && gx < car.x + car.len) ||
+      (!car.horizontal && gx == car.x && gy >= car.y && gy < car.y + car.len))
+    },
+  ) >= 0
 }
 
 ///|
