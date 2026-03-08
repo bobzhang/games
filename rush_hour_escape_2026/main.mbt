@@ -170,20 +170,14 @@ fn occupied_by(
 
 ///|
 fn find_car_at(cars : Array[Car], count : Int, gx : Int, gy : Int) -> Int {
-  let mut found = -1
-  for i in 0..<count {
-    if !cars[i].active {
-      continue
-    }
-    if cars[i].horizontal {
-      if gy == cars[i].y && gx >= cars[i].x && gx < cars[i].x + cars[i].len {
-        found = i
-      }
-    } else if gx == cars[i].x && gy >= cars[i].y && gy < cars[i].y + cars[i].len {
-      found = i
-    }
-  }
-  found
+  @utils.first_index_by_view(
+    cars[0:count],
+    fn(car) {
+      car.active &&
+      ((car.horizontal && gy == car.y && gx >= car.x && gx < car.x + car.len) ||
+      (!car.horizontal && gx == car.x && gy >= car.y && gy < car.y + car.len))
+    },
+  )
 }
 
 ///|
