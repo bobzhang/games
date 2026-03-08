@@ -140,12 +140,7 @@ fn find_target(units : Array[Piece], idx : Int) -> Int {
 ///|
 /// Returns true if any alive unit currently occupies the given grid position.
 fn occupied(units : Array[Piece], x : Int, y : Int) -> Bool {
-  for unit in units {
-    if unit.alive && unit.x == x && unit.y == y {
-      return true
-    }
-  }
-  false
+  @utils.any_by(units, fn(unit) { unit.alive && unit.x == x && unit.y == y })
 }
 
 ///|
