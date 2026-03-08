@@ -75,17 +75,10 @@ fn @types.Game::tower_spot_ok(
     return false
   }
 
-  for i in 0..<placed {
-    if !game.towers[i].active {
-      continue
-    }
-
-    if @types.dist2(x, y, game.towers[i].x, game.towers[i].y) < 190.0 * 190.0 {
-      return false
-    }
-  }
-
-  true
+  !@utils.any_by_view(
+    game.towers[0:placed],
+    fn(tower) { tower.active && @types.dist2(x, y, tower.x, tower.y) < 190.0 * 190.0 },
+  )
 }
 
 ///|
