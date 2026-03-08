@@ -343,13 +343,7 @@ fn @types.Game::spawn_pickup(game : @types.Game) -> Bool {
 
 ///|
 fn @types.Game::count_active_survivors(game : @types.Game) -> Int {
-  let mut n : Int = 0
-  for survivor in game.survivors {
-    if survivor.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(game.survivors, fn(survivor) { survivor.active })
 }
 
 ///|
