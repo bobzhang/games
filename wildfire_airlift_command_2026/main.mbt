@@ -601,35 +601,17 @@ fn spawn_smoke(
 
 ///|
 fn active_groups(groups : Array[EvacGroup]) -> Int {
-  let mut n : Int = 0
-  for group in groups {
-    if group.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(groups, fn(group) { group.active })
 }
 
 ///|
 fn active_fires(fires : Array[FireZone]) -> Int {
-  let mut n : Int = 0
-  for fire in fires {
-    if fire.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(fires, fn(fire) { fire.active })
 }
 
 ///|
 fn active_critical(groups : Array[EvacGroup]) -> Int {
-  let mut n : Int = 0
-  for group in groups {
-    if group.active && group.panic >= 70.0 {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(groups, fn(group) { group.active && group.panic >= 70.0 })
 }
 
 ///|
