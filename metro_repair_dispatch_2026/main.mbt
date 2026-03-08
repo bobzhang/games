@@ -550,25 +550,13 @@ fn setup_network(
 ///|
 /// Returns the number of active segments that currently have an active fault.
 fn count_faults(segments : Array[Segment]) -> Int {
-  let mut n : Int = 0
-  for segment in segments {
-    if segment.active && segment.fault_t > 0.0 {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(segments, fn(segment) { segment.active && segment.fault_t > 0.0 })
 }
 
 ///|
 /// Returns the total number of active track segments.
 fn count_active_segments(segments : Array[Segment]) -> Int {
-  let mut n : Int = 0
-  for segment in segments {
-    if segment.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(segments, fn(segment) { segment.active })
 }
 
 ///|
