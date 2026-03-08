@@ -20,7 +20,7 @@ let board_x : Int = 150
 let board_y : Int = 150
 
 ///|
-let loop_len : Int = 8
+let loop_len : Int = 9
 
 ///|
 let max_ghosts : Int = 6
@@ -590,8 +590,8 @@ fn main {
         }
 
         if player_spotted(guards, player, ghosts, ghost_count, tiles, doors) {
-          message = "Guard lock. Level reset."
           reset_level()
+          message = "Guard lock. Level reset."
         } else if player.x == exit_x && player.y == exit_y && vault_looted {
           if level < 3 {
             level = level + 1
