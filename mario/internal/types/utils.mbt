@@ -1,44 +1,4 @@
 ///|
-/// Clamp a float to [lo, hi].
-pub fn clampf(v : Float, lo : Float, hi : Float) -> Float {
-  if v < lo {
-    lo
-  } else if v > hi {
-    hi
-  } else {
-    v
-  }
-}
-
-///|
-/// Linear interpolation.
-pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
-  a + (b - a) * t
-}
-
-///|
-/// Absolute value of a float.
-pub fn absf(v : Float) -> Float {
-  if v < 0.0 {
-    -v
-  } else {
-    v
-  }
-}
-
-///|
-/// Sign of a float: -1, 0, or 1.
-pub fn signf(v : Float) -> Float {
-  if v > 0.0 {
-    1.0
-  } else if v < 0.0 {
-    -1.0
-  } else {
-    0.0
-  }
-}
-
-///|
 /// Convert tile column to world-pixel X (left edge of tile).
 pub fn tile_to_world_x(tx : Int) -> Float {
   Float::from_int(tx * tile_size)

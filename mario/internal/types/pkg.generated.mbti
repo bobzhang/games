@@ -6,15 +6,11 @@ import {
 }
 
 // Values
-pub fn absf(Float) -> Float
-
 pub let air_accel : Float
 
 pub let bounce_velocity : Float
 
 pub let camera_offset_x : Float
-
-pub fn clampf(Float, Float, Float) -> Float
 
 pub let coyote_time : Float
 
@@ -49,8 +45,6 @@ pub let jump_buffer_time : Float
 pub let jump_velocity : Float
 
 pub let koopa_speed : Float
-
-pub fn lerpf(Float, Float, Float) -> Float
 
 pub let level_time : Float
 
@@ -103,8 +97,6 @@ pub fn set_tile(Game, Int, Int, TileKind) -> Unit
 pub let shell_speed : Float
 
 pub let shrink_duration : Float
-
-pub fn signf(Float) -> Float
 
 pub let star_bounce_vel : Float
 
@@ -218,8 +210,6 @@ pub(all) struct Game {
   mut mario_auto : Bool
   mut mario_target_x : Float
   mut frame_counter : Int
-  mut frame_times : Array[Float]
-  mut frame_time_cursor : Int
   mut rng_state : Int
   clouds : Array[Cloud]
 }

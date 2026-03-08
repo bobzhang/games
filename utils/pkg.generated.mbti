@@ -2,9 +2,13 @@
 package "bobzhang/games/utils"
 
 // Values
+pub fn absf(Float) -> Float
+
 pub fn[T] any_by(ArrayView[T], (T) -> Bool) -> Bool
 
 pub fn[T] any_by_view(ArrayView[T], (T) -> Bool) -> Bool
+
+pub fn clampf(Float, Float, Float) -> Float
 
 pub fn[T] count_by(ArrayView[T], (T) -> Bool) -> Int
 
@@ -18,9 +22,13 @@ pub fn[T] first_indexi_by(ArrayView[T], (Int, T) -> Bool) -> Int
 
 pub fn[T] first_indexi_by_view(ArrayView[T], (Int, T) -> Bool) -> Int
 
+pub fn lerpf(Float, Float, Float) -> Float
+
 pub fn[T] max_index_by(ArrayView[T], (T, T) -> Bool) -> Int
 
 pub fn[T] min_index_by(ArrayView[T], (T, T) -> Bool) -> Int
+
+pub fn signf(Float) -> Float
 
 // Errors
 

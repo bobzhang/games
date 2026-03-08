@@ -16,14 +16,6 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-/// Records the raw wall-clock frame time for the FPS graph.
-pub fn record_frame_time(game : @types.Game, frame_dt : Float) -> Unit {
-  let index = game.frame_time_cursor
-  game.frame_times[index] = frame_dt
-  game.frame_time_cursor = (index + 1) % game.frame_times.length()
-}
-
-///|
 fn update_clouds(game : @types.Game, dt : Float) -> Unit {
   let map_pixel_w = Float::from_int(game.map_width * @types.tile_size)
   for i in 0..<game.clouds.length() {
@@ -231,10 +223,10 @@ fn update_camera(game : @types.Game) -> Unit {
     cam = max_x
   }
   // Smooth camera follow
-  game.camera_x = @types.lerpf(
+  game.camera_x = @utils.lerpf(
     game.camera_x,
     cam,
-    @types.clampf(8.0 * @raylib.get_frame_time(), 0.0, 1.0),
+    @utils.clampf(8.0 * @raylib.get_frame_time(), 0.0, 1.0),
   )
 }
 

@@ -159,7 +159,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   move_player_y(game, dt)
   // ── Walking animation ──
   if p.on_ground {
-    let speed = @types.absf(p.vx)
+    let speed = @utils.absf(p.vx)
     if speed > 10.0 {
       p.anim_timer = p.anim_timer + speed * dt * 0.015
       p.anim_frame = p.anim_timer.to_int() % 3
@@ -680,7 +680,7 @@ fn check_flagpole(game : @types.Game) -> Unit {
       } else {
         1.0
       }
-      let clamped = @types.clampf(height_frac, 0.0, 1.0)
+      let clamped = @utils.clampf(height_frac, 0.0, 1.0)
       let one : Float = 1.0
       let scale : Float = 5000.0
       let height_bonus = (one - clamped) * scale

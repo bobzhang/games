@@ -12,8 +12,6 @@ pub fn kill_player(@types.Game) -> Unit
 
 pub fn load_level(@types.Game, Int) -> Unit
 
-pub fn record_frame_time(@types.Game, Float) -> Unit
-
 pub fn spawn_brick_particles(@types.Game, Float, Float) -> Unit
 
 pub fn spawn_score_popup(@types.Game, Float, Float, String) -> Unit
