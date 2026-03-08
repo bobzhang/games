@@ -23,7 +23,7 @@ let max_bullets : Int = 360
 let max_enemies : Int = 80
 
 ///|
-let max_scrap : Int = 80
+let max_scrap : Int = 128
 
 ///|
 struct Bullet {
@@ -430,12 +430,12 @@ fn main {
         overclock = parts.4
         hp = clampf(hp + 18.0F, 0.0F, max_hp(chassis, plating))
         choosing = false
-        wave = wave + 1
-        if wave > 6 {
+        if wave >= 6 {
           over = true
           won = true
           message = "The pit bosses are scrap now."
         } else {
+          wave = wave + 1
           spawn_left = 8 + wave * 3
           spawn_timer = 0.7F
           message = "Wave \{wave} online."
@@ -449,12 +449,12 @@ fn main {
         overclock = parts.4
         hp = clampf(hp + 18.0F, 0.0F, max_hp(chassis, plating))
         choosing = false
-        wave = wave + 1
-        if wave > 6 {
+        if wave >= 6 {
           over = true
           won = true
           message = "The pit bosses are scrap now."
         } else {
+          wave = wave + 1
           spawn_left = 8 + wave * 3
           spawn_timer = 0.7F
           message = "Wave \{wave} online."
@@ -468,12 +468,12 @@ fn main {
         overclock = parts.4
         hp = clampf(hp + 18.0F, 0.0F, max_hp(chassis, plating))
         choosing = false
-        wave = wave + 1
-        if wave > 6 {
+        if wave >= 6 {
           over = true
           won = true
           message = "The pit bosses are scrap now."
         } else {
+          wave = wave + 1
           spawn_left = 8 + wave * 3
           spawn_timer = 0.7F
           message = "Wave \{wave} online."
@@ -643,6 +643,9 @@ fn main {
         }
       }
       if !any_alive && spawn_left == 0 {
+        for bullet in bullets {
+          bullet.active = false
+        }
         choosing = true
         gen_choices(choices)
         message = "Choose salvage before the next wave."
