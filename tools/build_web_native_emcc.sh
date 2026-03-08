@@ -64,6 +64,10 @@ EMBED_FLAGS=()
 if [[ -d "$PKG_PATH/resources" ]]; then
   EMBED_FLAGS+=(--embed-file "$PKG_PATH/resources@$PKG_PATH/resources")
 fi
+# Embed shared utils resources (e.g. TTF font for utils/draw)
+if [[ -d "utils/draw/resources" ]]; then
+  EMBED_FLAGS+=(--embed-file "utils/draw/resources@utils/draw/resources")
+fi
 
 echo "[2/3] Compiling MoonBit runtime C: $RUNTIME_OBJ"
 # Keep runtime compilation isolated from raylib include paths, otherwise
