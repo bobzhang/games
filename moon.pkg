@@ -1,0 +1,12 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/mario/internal/types",
+  "bobzhang/games/mario/internal/game",
+  "bobzhang/games/mario/internal/render",
+}
+
+warnings = "+missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

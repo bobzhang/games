@@ -1,0 +1,7 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/mario/internal/types",
+  "bobzhang/games/mario/internal/levels",
+}
+
+warnings = "+missing_doc+unnecessary_annotation"
