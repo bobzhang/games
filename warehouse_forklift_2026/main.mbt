@@ -46,12 +46,7 @@ fn crate_at(crates : Array[Pos], x : Int, y : Int) -> Int {
 
 ///|
 fn is_target(targets : Array[Pos], x : Int, y : Int) -> Bool {
-  for target in targets {
-    if target.x == x && target.y == y {
-      return true
-    }
-  }
-  false
+  @utils.any_by(targets, fn(target) { target.x == x && target.y == y })
 }
 
 ///|
