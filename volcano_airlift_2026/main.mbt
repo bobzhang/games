@@ -478,19 +478,22 @@ fn main {
       }
 
       if action && !carrying {
-        for i in 0..<total {
-          if survivors[i].state != 0 {
-            continue
-          }
-          let dx = hx - survivors[i].x
-          let dy = hy - (survivors[i].y - 24.0)
-          if dx * dx + dy * dy <= 36.0 * 36.0 {
-            survivors[i].state = 1
-            carrying = true
-            carry_idx = i
-            msg = "Survivor onboard."
-            break
-          }
+        let pickup_idx = @utils.first_index_by_view(
+          survivors[0:total],
+          fn(survivor) {
+            if survivor.state != 0 {
+              return false
+            }
+            let dx = hx - survivor.x
+            let dy = hy - (survivor.y - 24.0)
+            dx * dx + dy * dy <= 36.0 * 36.0
+          },
+        )
+        if pickup_idx >= 0 {
+          survivors[pickup_idx].state = 1
+          carrying = true
+          carry_idx = pickup_idx
+          msg = "Survivor onboard."
         }
       }
 
