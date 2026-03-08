@@ -291,13 +291,7 @@ fn train_color_from_target(target_lane : Int) -> @types.TrainColor {
 
 ///|
 fn @types.Game::active_train_count(game : @types.Game) -> Int {
-  let mut n : Int = 0
-  for train in game.trains {
-    if train.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(game.trains, fn(train) { train.active })
 }
 
 ///|
