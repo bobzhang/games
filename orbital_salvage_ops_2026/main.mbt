@@ -1015,10 +1015,8 @@ fn main {
   reset_run()
 
   while !@raylib.window_should_close() {
-    let mut dt : Float = @raylib.get_frame_time()
-    if dt > 0.033 {
-      dt = 0.033
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
       @raylib.toggle_fullscreen()
@@ -1315,17 +1313,14 @@ fn main {
       }
 
       if fire_hold && player.fire_cd <= 0.0 && player.heat <= 92.0 {
-        let mut aim_x : Float = player.face_x
-        let mut aim_y : Float = player.face_y
-
-        let mut best_d2 : Float = 999999999.0
-        for drone in drones {
+        let (aim_x, aim_y, best_d2) = for
+          drone in drones
+          aim_x = player.face_x, aim_y = player.face_y, best_d2 = 999999999.0F {
           if !drone.active {
             continue
           }
           let d2 : Float = dist2(player.x, player.y, drone.x, drone.y)
           if d2 < best_d2 {
-            best_d2 = d2
             let dx : Float = drone.x - player.x
             let dy : Float = drone.y - player.y
             let mut l2 : Float = dx * dx + dy * dy
@@ -1333,15 +1328,15 @@ fn main {
               l2 = 1.0
             }
             let inv : Float = 1.0 / l2.sqrt()
-            aim_x = dx * inv
-            aim_y = dy * inv
+            continue dx * inv, dy * inv, d2
           }
+        } nobreak {
+          (aim_x, aim_y, best_d2)
         }
 
-        if boss.active {
+        let (aim_x, aim_y) = if boss.active {
           let d2 : Float = dist2(player.x, player.y, boss.x, boss.y)
           if d2 < best_d2 {
-            best_d2 = d2
             let dx : Float = boss.x - player.x
             let dy : Float = boss.y - player.y
             let mut l2 : Float = dx * dx + dy * dy
@@ -1349,9 +1344,12 @@ fn main {
               l2 = 1.0
             }
             let inv : Float = 1.0 / l2.sqrt()
-            aim_x = dx * inv
-            aim_y = dy * inv
+            (dx * inv, dy * inv)
+          } else {
+            (aim_x, aim_y)
           }
+        } else {
+          (aim_x, aim_y)
         }
 
         player.face_x = aim_x

@@ -110,16 +110,12 @@ fn @types.Game::alloc_segment_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best_i = 0
-    let mut best_x = game.segments[0].x
-    for i in 1..<game.segments.length() {
-      if game.segments[i].x < best_x {
-        best_x = game.segments[i].x
-        best_i = i
-      }
+    let best = @utils.min_index_by(game.segments, fn(a, b) { a.x < b.x })
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-
-    best_i
   }
 }
 
@@ -131,16 +127,12 @@ fn @types.Game::alloc_obstacle_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best_i = 0
-    let mut best_x = game.obstacles[0].x
-    for i in 1..<game.obstacles.length() {
-      if game.obstacles[i].x < best_x {
-        best_x = game.obstacles[i].x
-        best_i = i
-      }
+    let best = @utils.min_index_by(game.obstacles, fn(a, b) { a.x < b.x })
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-
-    best_i
   }
 }
 
@@ -152,16 +144,12 @@ fn @types.Game::alloc_chip_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best_i = 0
-    let mut best_x = game.chips[0].x
-    for i in 1..<game.chips.length() {
-      if game.chips[i].x < best_x {
-        best_x = game.chips[i].x
-        best_i = i
-      }
+    let best = @utils.min_index_by(game.chips, fn(a, b) { a.x < b.x })
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-
-    best_i
   }
 }
 
@@ -173,16 +161,12 @@ fn @types.Game::alloc_anchor_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best_i = 0
-    let mut best_x = game.anchors[0].x
-    for i in 1..<game.anchors.length() {
-      if game.anchors[i].x < best_x {
-        best_x = game.anchors[i].x
-        best_i = i
-      }
+    let best = @utils.min_index_by(game.anchors, fn(a, b) { a.x < b.x })
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-
-    best_i
   }
 }
 
@@ -194,16 +178,15 @@ fn @types.Game::alloc_particle_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best_i = 0
-    let mut best_life = game.particles[0].life
-    for i in 1..<game.particles.length() {
+    for
+      i in 1..<game.particles.length()
+      best_i = 0, best_life = game.particles[0].life {
       if game.particles[i].life < best_life {
-        best_life = game.particles[i].life
-        best_i = i
+        continue i, game.particles[i].life
       }
+    } nobreak {
+      best_i
     }
-
-    best_i
   }
 }
 
@@ -215,16 +198,15 @@ fn @types.Game::alloc_ghost_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best_i = 0
-    let mut best_life = game.ghosts[0].life
-    for i in 1..<game.ghosts.length() {
+    for
+      i in 1..<game.ghosts.length()
+      best_i = 0, best_life = game.ghosts[0].life {
       if game.ghosts[i].life < best_life {
-        best_life = game.ghosts[i].life
-        best_i = i
+        continue i, game.ghosts[i].life
       }
+    } nobreak {
+      best_i
     }
-
-    best_i
   }
 }
 
@@ -596,10 +578,9 @@ fn @types.Game::find_floor(
   game : @types.Game,
   center_x : Float,
 ) -> (Bool, Float) {
-  let mut found = false
-  let mut best_y = Float::from_int(@types.screen_h) + 400.0
-
-  for segment in game.segments {
+  let (found, best_y) = for
+    segment in game.segments
+    found = false, best_y = Float::from_int(@types.screen_h) + 400.0 {
     if !segment.active {
       continue
     }
@@ -608,10 +589,11 @@ fn @types.Game::find_floor(
     let s1 = segment.x + segment.w - 4.0
     if center_x >= s0 && center_x <= s1 {
       if segment.y < best_y {
-        best_y = segment.y
-        found = true
+        continue true, segment.y
       }
     }
+  } nobreak {
+    (found, best_y)
   }
 
   (found, best_y)
@@ -662,11 +644,9 @@ fn @types.Game::try_grapple(game : @types.Game) -> Bool {
   let hero_cx = game.hero.x + game.hero.w * 0.5
   let hero_cy = game.hero.y + game.hero.h * 0.32
 
-  let mut found = false
-  let mut best_dist : Float = 1000000000.0
-  let mut best_y = hero_cy
-
-  for anchor in game.anchors {
+  let (found, best_y) = for
+    anchor in game.anchors
+    found = false, best_dist = 1000000000.0F, best_y = hero_cy {
     if !anchor.active {
       continue
     }
@@ -683,10 +663,10 @@ fn @types.Game::try_grapple(game : @types.Game) -> Bool {
 
     let d2 = dx * dx + dy * dy
     if d2 < best_dist {
-      best_dist = d2
-      best_y = anchor.y
-      found = true
+      continue true, d2, anchor.y
     }
+  } nobreak {
+    (found, best_y)
   }
 
   if !found {

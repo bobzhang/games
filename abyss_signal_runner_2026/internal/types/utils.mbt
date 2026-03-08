@@ -290,21 +290,17 @@ pub fn cave_edges(game : Game, y : Float) -> (Float, Float) {
 ///|
 /// Finds a free trail slot or reuses the shortest-lived active trail.
 pub fn alloc_trail(game : Game) -> Int {
-  for i, slot in game.trails {
-    if !slot.active {
-      return i
-    }
+  let best = @utils.first_index_by(game.trails, fn(slot) { !slot.active })
+  if best >= 0 {
+    return best
   }
 
-  let mut best = 0
-  let mut best_life = game.trails[0].life
-  for i in 1..<game.trails.length() {
-    if game.trails[i].life < best_life {
-      best_life = game.trails[i].life
-      best = i
-    }
+  let best = @utils.min_index_by(game.trails, fn(a, b) { a.life < b.life })
+  if best >= 0 {
+    best
+  } else {
+    0
   }
-  best
 }
 
 ///|

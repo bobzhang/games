@@ -937,10 +937,8 @@ fn main {
   reset_run()
 
   while !@raylib.window_should_close() {
-    let mut dt : Float = @raylib.get_frame_time()
-    if dt > 0.033 {
-      dt = 0.033
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
       @raylib.toggle_fullscreen()
@@ -1092,16 +1090,16 @@ fn main {
       }
 
       if hack_press && player.hack_cd <= 0.0 {
-        let mut target : Int = -1
-        for i in 0..<terminals.length() {
+        let target = for i in 0..<terminals.length() {
           if terminals[i].active && !terminals[i].hacked {
             let d = (terminals[i].gx - player.gx).abs() +
               (terminals[i].gy - player.gy).abs()
             if d <= 1 {
-              target = i
-              break
+              break i
             }
           }
+        } nobreak {
+          -1
         }
 
         if target >= 0 {

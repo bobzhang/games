@@ -122,7 +122,10 @@ pub(all) struct Actor {
   mut fy : Float
   mut t : Float
   mut moving : Bool
+
+  fn new() -> Actor
 }
+#deprecated
 pub fn Actor::new() -> Self
 
 pub(all) struct Game {
@@ -159,7 +162,10 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -182,7 +188,10 @@ pub(all) struct Guard {
   mut seed : Int
   mut alert_t : Float
   mut color_id : Int
+
+  fn new() -> Guard
 }
+#deprecated
 pub fn Guard::new() -> Self
 
 pub(all) enum GuardMode {
@@ -198,7 +207,10 @@ pub(all) struct Loot {
   mut y : Int
   mut kind : LootKind
   mut value : Int
+
+  fn new() -> Loot
 }
+#deprecated
 pub fn Loot::new() -> Self
 
 pub(all) enum LootKind {
@@ -217,7 +229,10 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
+
+  fn new() -> Particle
 }
+#deprecated
 pub fn Particle::new() -> Self
 
 pub(all) enum ParticleKind {
@@ -232,7 +247,10 @@ pub(all) struct Smoke {
   mut x : Int
   mut y : Int
   mut t : Float
+
+  fn new() -> Smoke
 }
+#deprecated
 pub fn Smoke::new() -> Self
 
 pub(all) enum TileKind {

@@ -543,25 +543,13 @@ fn spawn_supply_box(
 ///|
 /// Returns the count of active orders waiting for the given recipe kind.
 fn find_pending_for_kind(orders : Array[Order], kind : Int) -> Int {
-  let mut c : Int = 0
-  for order in orders {
-    if order.active && order.kind == kind {
-      c = c + 1
-    }
-  }
-  c
+  @utils.count_by(orders, fn(order) { order.active && order.kind == kind })
 }
 
 ///|
 /// Returns the count of active stove slots currently cooking the given recipe kind.
 fn find_cooking_for_kind(stoves : Array[StoveSlot], kind : Int) -> Int {
-  let mut c : Int = 0
-  for stove in stoves {
-    if stove.active && stove.kind == kind {
-      c = c + 1
-    }
-  }
-  c
+  @utils.count_by(stoves, fn(stove) { stove.active && stove.kind == kind })
 }
 
 ///|
@@ -572,10 +560,7 @@ fn choose_recipe_for_cook(
   meals : Array[Int],
   ingredients : Array[Int],
 ) -> Int {
-  let mut best_kind : Int = -1
-  let mut best_time : Float = 10000.0
-
-  for order in orders {
+  let best_kind = for order in orders; best_kind = -1, best_time = 10000.0F {
     if !order.active {
       continue
     }
@@ -591,19 +576,21 @@ fn choose_recipe_for_cook(
       continue
     }
     if order.deadline < best_time {
-      best_time = order.deadline
-      best_kind = k
+      continue k, order.deadline
     }
+  } nobreak {
+    best_kind
   }
 
   if best_kind >= 0 {
     best_kind
   } else {
-    let mut fallback : Int = -1
-    for k in 0..<5 {
+    let fallback = for k in 0..<5; fallback = -1 {
       if recipe_can_make(k, ingredients) {
-        fallback = k
+        continue k
       }
+    } nobreak {
+      fallback
     }
     fallback
   }
@@ -612,14 +599,13 @@ fn choose_recipe_for_cook(
 ///|
 /// Returns the index of the first inactive stove slot, or -1 if all slots are busy.
 fn open_stove_slot(stoves : Array[StoveSlot]) -> Int {
-  let mut idx : Int = -1
   for i in 0..<stoves.length() {
     if !stoves[i].active {
-      idx = i
-      break
+      break i
     }
+  } nobreak {
+    -1
   }
-  idx
 }
 
 ///|
@@ -628,10 +614,7 @@ fn earliest_servable_order_index(
   orders : Array[Order],
   meals : Array[Int],
 ) -> Int {
-  let mut idx : Int = -1
-  let mut best_deadline : Float = 10000.0
-
-  for i in 0..<orders.length() {
+  for i in 0..<orders.length(); idx = -1, best_deadline = 10000.0F {
     if !orders[i].active {
       continue
     }
@@ -639,12 +622,11 @@ fn earliest_servable_order_index(
       continue
     }
     if orders[i].deadline < best_deadline {
-      best_deadline = orders[i].deadline
-      idx = i
+      continue i, orders[i].deadline
     }
+  } nobreak {
+    idx
   }
-
-  idx
 }
 
 ///|
@@ -1698,10 +1680,8 @@ fn main {
   state = 0
 
   while !@raylib.window_should_close() {
-    let mut dt : Float = @raylib.get_frame_time()
-    if dt > 0.033 {
-      dt = 0.033
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
     scene_t = scene_t + dt
 
     let mouse = @raylib.get_mouse_position()
@@ -2211,12 +2191,7 @@ fn main {
     } else {
       draw_floor_grid(world_x, world_y, world_w, world_h, scene_t)
 
-      let mut active_orders : Int = 0
-      for order in orders {
-        if order.active {
-          active_orders = active_orders + 1
-        }
-      }
+      let active_orders = @utils.count_by(orders, fn(order) { order.active })
 
       for station in stations {
         let near : Bool = inside_rectf(

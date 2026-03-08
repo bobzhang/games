@@ -172,7 +172,10 @@ pub(all) struct Game {
   mut input_pause_press : Bool
   mut input_restart_press : Bool
   mut input_confirm_press : Bool
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -191,7 +194,10 @@ pub(all) struct Hazard {
   mut size : Float
   mut kind : HazardKind
   mut near_miss_awarded : Bool
+
+  fn new() -> Hazard
 }
+#deprecated
 pub fn Hazard::new() -> Self
 
 pub(all) enum HazardKind {

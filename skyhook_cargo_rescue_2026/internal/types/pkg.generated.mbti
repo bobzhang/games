@@ -151,7 +151,10 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -171,7 +174,10 @@ pub(all) struct Hazard {
   mut hp : Float
   mut kind : HazardKind
   mut phase : Float
+
+  fn new() -> Hazard
 }
+#deprecated
 pub fn Hazard::new() -> Self
 
 pub(all) enum HazardKind {
@@ -190,7 +196,10 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : Int
+
+  fn new() -> Particle
 }
+#deprecated
 pub fn Particle::new() -> Self
 
 pub(all) struct Pickup {
@@ -201,7 +210,10 @@ pub(all) struct Pickup {
   mut vy : Float
   mut kind : PickupKind
   mut phase : Float
+
+  fn new() -> Pickup
 }
+#deprecated
 pub fn Pickup::new() -> Self
 
 pub(all) enum PickupKind {
@@ -220,7 +232,10 @@ pub(all) struct Survivor {
   mut carried : Bool
   mut panic : Float
   mut phase : Float
+
+  fn new() -> Survivor
 }
+#deprecated
 pub fn Survivor::new() -> Self
 
 // Type aliases

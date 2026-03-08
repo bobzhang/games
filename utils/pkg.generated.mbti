@@ -1,0 +1,16 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/utils"
+
+// Values
+pub fn[T] max_index_by(Array[T], (T, T) -> Bool) -> Int
+
+pub fn[T] min_index_by(Array[T], (T, T) -> Bool) -> Int
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

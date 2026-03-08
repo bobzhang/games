@@ -349,30 +349,28 @@ fn @types.Game::update_projectiles(game : @types.Game, dt : Float) -> Unit {
     // Check if target still valid
     if proj.target_idx < 0 || !game.enemies[proj.target_idx].active {
       // Find nearest enemy as fallback
-      let mut best = -1
-      let mut best_dist : Float = 999.0
-      for j in 0..<game.enemies.length() {
-        if !game.enemies[j].active {
+      for j, enemy in game.enemies; best = -1, best_dist = 999.0F {
+        if !enemy.active {
           continue
         }
         let d = @types.distance3d(
           proj.x,
           proj.y,
           proj.z,
-          game.enemies[j].x,
-          game.enemies[j].y,
-          game.enemies[j].z,
+          enemy.x,
+          enemy.y,
+          enemy.z,
         )
         if d < best_dist {
-          best_dist = d
-          best = j
+          continue j, d
         }
+      } nobreak {
+        if best < 0 {
+          proj.active = false
+          continue
+        }
+        proj.target_idx = best
       }
-      if best < 0 {
-        proj.active = false
-        continue
-      }
-      proj.target_idx = best
     }
     let target = game.enemies[proj.target_idx]
     let dx = target.x - proj.x
@@ -543,50 +541,45 @@ fn @types.Game::apply_chain_lightning(
   for c in 0..<chains {
     current_damage = current_damage * @types.chain_damage_decay
     // Find nearest unvisited enemy within chain range
-    let mut best = -1
-    let mut best_dist : Float = @types.chain_range + 1.0
-    for j in 0..<game.enemies.length() {
-      if !game.enemies[j].active {
+    for
+      j, enemy in game.enemies
+      best = -1, best_dist = @types.chain_range + 1.0F {
+      if !enemy.active {
         continue
       }
       if visited[j] {
         continue
       }
-      let dist = @types.distance2d(
-        prev_x,
-        prev_z,
-        game.enemies[j].x,
-        game.enemies[j].z,
-      )
+      let dist = @types.distance2d(prev_x, prev_z, enemy.x, enemy.z)
       if dist <= @types.chain_range && dist < best_dist {
-        best_dist = dist
-        best = j
+        continue j, dist
       }
-    }
-    if best < 0 {
-      // No more targets to chain to
+    } nobreak {
+      if best < 0 {
+        // No more targets to chain to
+        ignore(c)
+        return
+      }
+      visited[best] = true
+      let enemy = game.enemies[best]
+      let actual_damage = @types.calc_damage(current_damage, Lightning, enemy)
+      game.damage_enemy(best, actual_damage, proj.tower_idx)
+      @types.spawn_lightning_particles(game, enemy.x, enemy.y, enemy.z)
+      @types.add_chain_line(
+        game,
+        prev_x,
+        prev_y,
+        prev_z,
+        enemy.x,
+        enemy.y,
+        enemy.z,
+      )
+      prev_x = enemy.x
+      prev_y = enemy.y
+      prev_z = enemy.z
+      current_target = best
       ignore(c)
-      return
     }
-    visited[best] = true
-    let enemy = game.enemies[best]
-    let actual_damage = @types.calc_damage(current_damage, Lightning, enemy)
-    game.damage_enemy(best, actual_damage, proj.tower_idx)
-    @types.spawn_lightning_particles(game, enemy.x, enemy.y, enemy.z)
-    @types.add_chain_line(
-      game,
-      prev_x,
-      prev_y,
-      prev_z,
-      enemy.x,
-      enemy.y,
-      enemy.z,
-    )
-    prev_x = enemy.x
-    prev_y = enemy.y
-    prev_z = enemy.z
-    current_target = best
-    ignore(c)
   }
 }
 

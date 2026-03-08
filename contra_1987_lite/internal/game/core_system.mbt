@@ -97,29 +97,36 @@ fn @types.Game::seed_stage_cores(game : @types.Game, stage : Int) -> Unit {
   let hp = @types.core_hp_base + wave * 2
   game.cores_goal = core_goal_for_stage(stage)
 
-  let mut placed = 0
-  let mut tries = 0
-  while placed < game.cores_goal && tries < 1200 {
-    tries += 1
+  let placed = for tries = 0, placed = 0 {
+    if placed >= game.cores_goal || tries >= 1200 {
+      break placed
+    }
     let tx = @types.rand_range(game, 2, @types.map_tiles_w - 3)
     let ty = @types.rand_range(game, 2, @types.map_tiles_h - 3)
     if game.try_spawn_core_at_tile(tx, ty, hp) {
-      placed += 1
+      continue tries + 1, placed + 1
     }
+    continue tries + 1, placed
   }
 
-  if placed < game.cores_goal {
-    for ty = 2
-        ty < @types.map_tiles_h - 2 && placed < game.cores_goal
-        ty = ty + 1 {
-      for tx = 2
-          tx < @types.map_tiles_w - 2 && placed < game.cores_goal
-          tx = tx + 1 {
-        if game.try_spawn_core_at_tile(tx, ty, hp) {
-          placed += 1
-        }
+  let placed = if placed < game.cores_goal {
+    for ty = 2, placed = placed {
+      if ty >= @types.map_tiles_h - 2 || placed >= game.cores_goal {
+        break placed
       }
+      let placed = for tx = 2, placed = placed {
+        if tx >= @types.map_tiles_w - 2 || placed >= game.cores_goal {
+          break placed
+        }
+        if game.try_spawn_core_at_tile(tx, ty, hp) {
+          continue tx + 1, placed + 1
+        }
+        continue tx + 1, placed
+      }
+      continue ty + 1, placed
     }
+  } else {
+    placed
   }
 
   game.cores_goal = placed

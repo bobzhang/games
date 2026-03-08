@@ -497,13 +497,7 @@ fn burst(
 ///|
 /// Returns the number of currently active enemies.
 fn count_active_enemies(enemies : Array[Enemy]) -> Int {
-  let mut cnt : Int = 0
-  for enemy in enemies {
-    if enemy.active {
-      cnt = cnt + 1
-    }
-  }
-  cnt
+  @utils.count_by(enemies, fn(enemy) { enemy.active })
 }
 
 ///|
@@ -870,10 +864,8 @@ fn main {
   reset_run()
 
   while !@raylib.window_should_close() {
-    let mut dt : Float = @raylib.get_frame_time()
-    if dt > 0.033 {
-      dt = 0.033
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
       @raylib.toggle_fullscreen()
@@ -1343,18 +1335,18 @@ fn main {
         turret.fire_cd = turret.fire_cd - dt
 
         let range : Float = turret_range(turret.kind)
-        let mut target_i : Int = -1
-        let mut best_d2 : Float = 99999999.0
-
-        for e in 0..<enemies.length() {
+        let target_i = for
+          e in 0..<enemies.length()
+          target_i = -1, best_d2 = 99999999.0F {
           if !enemies[e].active {
             continue
           }
           let d2 : Float = dist2(turret.x, turret.y, enemies[e].x, enemies[e].y)
           if d2 <= range * range && d2 < best_d2 {
-            best_d2 = d2
-            target_i = e
+            continue e, d2
           }
+        } nobreak {
+          target_i
         }
 
         if target_i >= 0 && turret.fire_cd <= 0.0 {

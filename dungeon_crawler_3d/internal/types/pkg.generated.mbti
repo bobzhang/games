@@ -488,7 +488,10 @@ pub(all) struct FloorInfo {
   mut cleared : Bool
   mut enemies_killed : Int
   mut enemies_total : Int
+
+  fn new() -> FloorInfo
 }
+#deprecated
 pub fn FloorInfo::new() -> Self
 
 pub(all) struct Game {
@@ -566,7 +569,10 @@ pub(all) struct Game {
   mut poison_remaining : Float
   mut rng_state : Int
   mut frame_counter : Int
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -653,9 +659,12 @@ pub(all) struct Room {
   mut kind : Int
   mut explored : Bool
   mut enemies_cleared : Bool
+
+  fn new(Int, Int, Int, Int) -> Room
 }
 pub fn Room::center_x(Self) -> Int
 pub fn Room::center_y(Self) -> Int
+#deprecated
 pub fn Room::new(Int, Int, Int, Int) -> Self
 
 pub(all) enum ShipClass {

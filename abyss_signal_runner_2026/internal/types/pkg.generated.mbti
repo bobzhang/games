@@ -182,7 +182,10 @@ pub(all) struct Game {
   mut my : Float
   mut hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -204,7 +207,10 @@ pub(all) struct Obj {
   mut cloak : Bool
   mut spin : Float
   mut life : Float
+
+  fn new() -> Obj
 }
+#deprecated
 pub fn Obj::new() -> Self
 
 pub(all) enum ObjKind {
@@ -226,7 +232,10 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : Int
+
+  fn new() -> Particle
 }
+#deprecated
 pub fn Particle::new() -> Self
 
 pub(all) struct Player {
@@ -238,7 +247,10 @@ pub(all) struct Player {
   mut invuln : Float
   mut hurt_t : Float
   mut anim_t : Float
+
+  fn new() -> Player
 }
+#deprecated
 pub fn Player::new() -> Self
 
 pub(all) struct Ripple {
@@ -248,7 +260,10 @@ pub(all) struct Ripple {
   mut r : Float
   mut life : Float
   mut kind : Int
+
+  fn new() -> Ripple
 }
+#deprecated
 pub fn Ripple::new() -> Self
 
 pub(all) struct Trail {
@@ -259,7 +274,10 @@ pub(all) struct Trail {
   mut h : Float
   mut life : Float
   mut kind : Int
+
+  fn new() -> Trail
 }
+#deprecated
 pub fn Trail::new() -> Self
 
 // Type aliases

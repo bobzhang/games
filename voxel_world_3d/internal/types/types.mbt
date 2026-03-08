@@ -360,14 +360,14 @@ pub(all) struct CraftingRecipe {
   name : String
 
   fn new(
-  in1_id : Int,
-  in1_count : Int,
-  in2_id : Int,
-  in2_count : Int,
-  out_id : Int,
-  out_count : Int,
-  name : String,
-) -> CraftingRecipe
+    in1_id : Int,
+    in1_count : Int,
+    in2_id : Int,
+    in2_count : Int,
+    out_id : Int,
+    out_count : Int,
+    name : String,
+  ) -> CraftingRecipe
 }
 
 ///|

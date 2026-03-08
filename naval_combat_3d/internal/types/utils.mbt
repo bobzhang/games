@@ -447,65 +447,39 @@ pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
 ///|
 /// Returns the first inactive enemy slot index, or `-1` when full.
 pub fn alloc_enemy(game : Game) -> Int {
-  for i, slot in game.enemies {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.enemies, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the first inactive cannonball slot index, or `-1` when full.
 pub fn alloc_cannonball(game : Game) -> Int {
-  for i, slot in game.cannonballs {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.cannonballs, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the first inactive particle slot index, or `-1` when full.
 pub fn alloc_particle(game : Game) -> Int {
-  for i, slot in game.particles {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.particles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the first inactive wake slot index, or `-1` when full.
 pub fn alloc_wake(game : Game) -> Int {
-  for i, slot in game.wakes {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.wakes, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the first inactive debris slot index, or `-1` when full.
 pub fn alloc_debris(game : Game) -> Int {
-  for i, slot in game.debris_pool {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.debris_pool, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns a free battle-message slot, replacing the oldest if necessary.
 pub fn alloc_message(game : Game) -> Int {
-  for i, slot in game.messages {
-    if !slot.active {
-      return i
-    }
+  let best = @utils.first_index_by(game.messages, fn(slot) { !slot.active })
+  if best >= 0 {
+    return best
   }
   // Overwrite oldest
   let mut oldest_idx = 0

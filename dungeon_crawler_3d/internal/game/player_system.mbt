@@ -461,9 +461,9 @@ fn @types.Game::cast_lightning(game : @types.Game) -> Unit {
   let attack_dir_z = @math.cosf(game.camera_yaw)
   let int_bonus = game.player_int_stat / 2
   let damage = @types.lightning_damage + int_bonus
-  let mut hit_idx = -1
-  let mut best_dist : Float = 15.0
-  for i in 0..<game.enemies.length() {
+  let hit_idx = for
+    i in 0..<game.enemies.length()
+    hit_idx = -1, best_dist = 15.0F {
     let e = game.enemies[i]
     if !e.active {
       continue
@@ -476,9 +476,10 @@ fn @types.Game::cast_lightning(game : @types.Game) -> Unit {
     let dz = e.z - game.player_z
     let dot = dx * attack_dir_x + dz * attack_dir_z
     if dot > 0.0 && dist < best_dist {
-      best_dist = dist
-      hit_idx = i
+      continue i, dist
     }
+  } nobreak {
+    hit_idx
   }
   if hit_idx >= 0 {
     let e = game.enemies[hit_idx]

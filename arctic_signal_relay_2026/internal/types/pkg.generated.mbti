@@ -156,7 +156,10 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -175,7 +178,10 @@ pub(all) struct Storm {
   mut vy : Float
   mut phase : Float
   mut strength : Float
+
+  fn new() -> Storm
 }
+#deprecated
 pub fn Storm::new() -> Self
 
 pub(all) struct Tower {
@@ -185,7 +191,10 @@ pub(all) struct Tower {
   mut need : Int
   mut delivered : Int
   mut pulse_t : Float
+
+  fn new() -> Tower
 }
+#deprecated
 pub fn Tower::new() -> Self
 
 // Type aliases

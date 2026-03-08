@@ -65,15 +65,16 @@ fn @types.Game::clear_all_enemies_by_grenade(
   game : @types.Game,
   team : @types.Team,
 ) -> Unit {
-  let mut killed = 0
-  for enemy in game.enemies {
+  let killed = for enemy in game.enemies; killed = 0 {
     if enemy.active {
       enemy.active = false
       game.enemies_alive -= 1
       @particles.spawn_explosion(game, enemy.x, enemy.y, 1.4)
       @score.grant_score(game, team, @types.enemy_score(enemy.enemy_kind))
-      killed += 1
+      continue killed + 1
     }
+  } nobreak {
+    killed
   }
   if killed > 0 {
     @score.bump_combo(game)

@@ -195,78 +195,43 @@ pub fn rand_bool(game : Game, chance : Float) -> Bool {
 ///|
 /// Returns the index of the first inactive enemy slot, or -1 if the pool is full.
 pub fn alloc_enemy(game : Game) -> Int {
-  for i, slot in game.enemies {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.enemies, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive projectile slot, or -1 if the pool is full.
 pub fn alloc_projectile(game : Game) -> Int {
-  for i, slot in game.projectiles {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.projectiles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive particle slot, or -1 if the pool is full.
 pub fn alloc_particle(game : Game) -> Int {
-  for i, slot in game.particles {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.particles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive asteroid slot, or -1 if the pool is full.
 pub fn alloc_asteroid(game : Game) -> Int {
-  for i, slot in game.asteroids {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.asteroids, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive power-up slot, or -1 if the pool is full.
 pub fn alloc_powerup(game : Game) -> Int {
-  for i, slot in game.powerups {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.powerups, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive station slot, or -1 if the pool is full.
 pub fn alloc_station(game : Game) -> Int {
-  for i, slot in game.stations {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.stations, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive debris slot, or -1 if the pool is full.
 pub fn alloc_debris(game : Game) -> Int {
-  for i, slot in game.debris {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.debris, fn(slot) { !slot.active })
 }
 
 ///|
@@ -448,20 +413,17 @@ pub fn count_enemies_of_type(game : Game, kind : Int) -> Int {
 ///|
 /// Returns the index of the nearest active enemy to the given position, or -1 if none.
 pub fn find_nearest_enemy(game : Game, x : Float, y : Float, z : Float) -> Int {
-  let mut best_idx = -1
-  let mut best_dist : Float = 999999.0
-  for i in 0..<game.enemies.length() {
-    let e = game.enemies[i]
+  for i, e in game.enemies; best_idx = -1, best_dist = 999999.0F {
     if !e.active {
       continue
     }
     let dist = distance3d(x, y, z, e.x, e.y, e.z)
     if dist < best_dist {
-      best_dist = dist
-      best_idx = i
+      continue i, dist
     }
+  } nobreak {
+    best_idx
   }
-  best_idx
 }
 
 // Weapon name

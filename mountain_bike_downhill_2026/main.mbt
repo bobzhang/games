@@ -251,18 +251,18 @@ fn nearest_checkpoint_dy(
   cp_count : Int,
   rider_y : Float,
 ) -> Float {
-  let mut best : Float = 9999999.0
-  for i in 0..<cp_count {
+  for i in 0..<cp_count; best = 9999999.0F {
     if cps[i].state != 0 {
       continue
     }
 
     let dy : Float = cps[i].y - rider_y
     if dy >= -40.0 && dy < best {
-      best = dy
+      continue dy
     }
+  } nobreak {
+    best
   }
-  best
 }
 
 ///|
@@ -420,10 +420,8 @@ fn main {
   reset_run()
 
   while !@raylib.window_should_close() {
-    let mut dt : Float = @raylib.get_frame_time()
-    if dt > 0.033 {
-      dt = 0.033
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
       @raylib.toggle_fullscreen()

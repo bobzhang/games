@@ -92,15 +92,10 @@ fn @types.Game::reset_run(game : @types.Game) -> Unit {
 ///|
 /// Returns the player's current race rank by counting rivals ahead of the player.
 fn @types.Game::current_rank(game : @types.Game) -> Int {
-  let mut ahead : Int = 0
-
-  for rival in game.rivals {
-    if rival.active && rival.dist > game.distance {
-      ahead = ahead + 1
-    }
-  }
-
-  ahead + 1
+  @utils.count_by(
+    game.rivals,
+    fn(rival) { rival.active && rival.dist > game.distance },
+  ) + 1
 }
 
 ///|

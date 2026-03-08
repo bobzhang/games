@@ -117,15 +117,10 @@ fn @types.Game::far_from_active_parcels(
   upto : Int,
 ) -> Bool {
   let min_d2 = min_dist * min_dist
-  for i in 0..<upto {
-    if !game.parcels[i].active {
-      continue
-    }
-    if @types.dist2(x, y, game.parcels[i].x, game.parcels[i].y) < min_d2 {
-      return false
-    }
-  }
-  true
+  !@utils.any_by_view(
+    game.parcels[0:upto],
+    fn(parcel) { parcel.active && @types.dist2(x, y, parcel.x, parcel.y) < min_d2 },
+  )
 }
 
 ///|
@@ -386,16 +381,13 @@ fn @types.Game::alloc_smoke_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut oldest = 0
-    let mut life = game.smokes[0].life
-    for i in 1..<game.smokes.length() {
+    for i in 1..<game.smokes.length(); oldest = 0, life = game.smokes[0].life {
       if game.smokes[i].life < life {
-        life = game.smokes[i].life
-        oldest = i
+        continue i, game.smokes[i].life
       }
+    } nobreak {
+      oldest
     }
-
-    oldest
   }
 }
 
@@ -423,10 +415,7 @@ fn @types.Game::deploy_smoke(game : @types.Game) -> Unit {
 ///|
 /// Returns the index of the closest active, undelivered parcel within squared distance `max_d2` of the player, or -1 if none qualify.
 fn @types.Game::nearest_parcel(game : @types.Game, max_d2 : Float) -> Int {
-  let mut best = -1
-  let mut best_d2 = max_d2
-
-  for i in 0..<game.parcels.length() {
+  for i in 0..<game.parcels.length(); best = -1, best_d2 = max_d2 {
     if !game.parcels[i].active || game.parcels[i].delivered {
       continue
     }
@@ -438,21 +427,17 @@ fn @types.Game::nearest_parcel(game : @types.Game, max_d2 : Float) -> Int {
       game.parcels[i].y,
     )
     if d2 <= best_d2 {
-      best_d2 = d2
-      best = i
+      continue i, d2
     }
+  } nobreak {
+    best
   }
-
-  best
 }
 
 ///|
 /// Returns the index of the closest active exit within squared distance `max_d2` of the player, or -1 if none qualify.
 fn @types.Game::nearest_exit(game : @types.Game, max_d2 : Float) -> Int {
-  let mut best = -1
-  let mut best_d2 = max_d2
-
-  for i in 0..<game.exits.length() {
+  for i in 0..<game.exits.length(); best = -1, best_d2 = max_d2 {
     if !game.exits[i].active {
       continue
     }
@@ -464,12 +449,11 @@ fn @types.Game::nearest_exit(game : @types.Game, max_d2 : Float) -> Int {
       game.exits[i].y,
     )
     if d2 <= best_d2 {
-      best_d2 = d2
-      best = i
+      continue i, d2
     }
+  } nobreak {
+    best
   }
-
-  best
 }
 
 ///|
@@ -638,26 +622,20 @@ fn @types.Game::nearest_smoke_target(
   x : Float,
   y : Float,
 ) -> (Bool, Float, Float, Float) {
-  let mut found = false
-  let mut best_x : Float = 0.0
-  let mut best_y : Float = 0.0
-  let mut best_d2 : Float = 0.0
-
-  for smoke in game.smokes {
+  for
+    smoke in game.smokes
+    found = false, best_x = 0.0F, best_y = 0.0F, best_d2 = 0.0F {
     if !smoke.active {
       continue
     }
 
     let d2 = @types.dist2(x, y, smoke.x, smoke.y)
     if !found || d2 < best_d2 {
-      found = true
-      best_x = smoke.x
-      best_y = smoke.y
-      best_d2 = d2
+      continue true, smoke.x, smoke.y, d2
     }
+  } nobreak {
+    (found, best_x, best_y, best_d2)
   }
-
-  (found, best_x, best_y, best_d2)
 }
 
 ///|

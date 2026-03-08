@@ -88,6 +88,7 @@ pub(all) struct Game {
 
   fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -110,6 +111,7 @@ pub(all) struct Tile {
 
   fn new() -> Tile
 }
+#deprecated
 pub fn Tile::new() -> Self
 
 // Type aliases

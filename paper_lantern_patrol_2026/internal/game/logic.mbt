@@ -125,45 +125,25 @@ fn @types.Game::end_run_game_over(game : @types.Game, reason : String) -> Unit {
 ///|
 /// Returns the index of the first inactive lantern slot, or -1 if all slots are in use.
 fn @types.Game::free_lantern_slot(game : @types.Game) -> Int {
-  for i, slot in game.lanterns {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.lanterns, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive gust slot, or -1 if all slots are in use.
 fn @types.Game::free_gust_slot(game : @types.Game) -> Int {
-  for i, slot in game.gusts {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.gusts, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive spark slot, or -1 if all slots are in use.
 fn @types.Game::free_spark_slot(game : @types.Game) -> Int {
-  for i, slot in game.sparks {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.sparks, fn(slot) { !slot.active })
 }
 
 ///|
 /// Returns the index of the first inactive thief slot, or -1 if all slots are in use.
 fn @types.Game::free_thief_slot(game : @types.Game) -> Int {
-  for i, slot in game.thieves {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.thieves, fn(slot) { !slot.active })
 }
 
 ///|
@@ -267,22 +247,18 @@ fn @types.Game::nearest_active_lantern(
   y : Float,
   max_d2 : Float,
 ) -> Int {
-  let mut best = -1
-  let mut best_d2 = max_d2
-
-  for i in 0..<game.lanterns.length() {
+  for i in 0..<game.lanterns.length(); best = -1, best_d2 = max_d2 {
     if !game.lanterns[i].active || game.lanterns[i].flame <= 0.0 {
       continue
     }
 
     let d2 = @types.dist2(x, y, game.lanterns[i].x, game.lanterns[i].y)
     if d2 <= best_d2 {
-      best = i
-      best_d2 = d2
+      continue i, d2
     }
+  } nobreak {
+    best
   }
-
-  best
 }
 
 ///|

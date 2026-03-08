@@ -220,17 +220,12 @@ fn @types.Game::ghost_index_at(
   y : Int,
   skip : Int,
 ) -> Int {
-  for i in 0..<game.ghosts.length() {
-    if i == skip || !game.ghosts[i].active {
-      continue
-    }
-
-    if game.ghosts[i].body.x == x && game.ghosts[i].body.y == y {
-      return i
-    }
-  }
-
-  -1
+  @utils.first_indexi_by(
+    game.ghosts,
+    fn(i, ghost) {
+      i != skip && ghost.active && ghost.body.x == x && ghost.body.y == y
+    },
+  )
 }
 
 ///|
@@ -664,10 +659,7 @@ fn @types.Game::ghost_choose_step(game : @types.Game, gid : Int) -> (Int, Int) {
   let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
   if g.mode == Hunt {
-    let mut best_i : Int = -1
-    let mut best_d : Int = 999999
-
-    for i in 0..<4 {
+    let best_i = for i in 0..<4; best_i = -1, best_d = 999999 {
       let nx : Int = gx + dirs[i].0
       let ny : Int = gy + dirs[i].1
       if game.blocked_for_actor(gid, nx, ny) {
@@ -676,9 +668,10 @@ fn @types.Game::ghost_choose_step(game : @types.Game, gid : Int) -> (Int, Int) {
 
       let d : Int = @types.manhattan(nx, ny, px, py)
       if d < best_d {
-        best_d = d
-        best_i = i
+        continue i, d
       }
+    } nobreak {
+      best_i
     }
 
     if best_i >= 0 {

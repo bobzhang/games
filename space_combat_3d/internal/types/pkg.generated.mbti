@@ -534,7 +534,10 @@ pub(all) struct Game {
   mut flash_b : Int
   mut rng_state : Int
   mut frame_counter : Int
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -567,7 +570,10 @@ pub(all) struct MissionObjective {
   mut current_count : Int
   mut complete : Bool
   mut description : String
+
+  fn new(Objective, Int, String) -> MissionObjective
 }
+#deprecated
 pub fn MissionObjective::new(Objective, Int, String) -> Self
 
 pub(all) enum Objective {
@@ -633,7 +639,10 @@ pub(all) struct Player {
   mut kills : Int
   mut shots_fired : Int
   mut shots_hit : Int
+
+  fn new() -> Player
 }
+#deprecated
 pub fn Player::new() -> Self
 
 pub(all) struct PowerUp {

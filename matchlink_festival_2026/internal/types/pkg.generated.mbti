@@ -147,7 +147,10 @@ pub(all) struct Game {
   mut mouse_hold : Bool
   mut mouse_press : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {

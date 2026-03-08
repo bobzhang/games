@@ -4,34 +4,28 @@ fn compute_hilbert_step(order : Int, index : Int) -> (Float, Float) {
   let hilbert_points_x : FixedArray[Float] = [0.0, 0.0, 1.0, 1.0]
   let hilbert_points_y : FixedArray[Float] = [0.0, 1.0, 1.0, 0.0]
   let hilbert_index = index & 3
-  let mut vx : Float = hilbert_points_x[hilbert_index]
-  let mut vy : Float = hilbert_points_y[hilbert_index]
-  let mut idx = index
-  for j in 1..<order {
-    idx = (idx.reinterpret_as_uint() >> 2).reinterpret_as_int()
+  for
+    j in 1..<order
+    vx = hilbert_points_x[hilbert_index],
+    vy = hilbert_points_y[hilbert_index],
+    idx = index {
+    let idx = (idx.reinterpret_as_uint() >> 2).reinterpret_as_int()
     let hi = idx & 3
     let len : Float = Float::from_int(1 << j)
     match hi {
-      0 => {
-        let temp = vx
-        vx = vy
-        vy = temp
-      }
-      1 => vy = vy + len
-      2 => {
-        // case 2 falls through to case 1 in C: both x += len and y += len
-        vx = vx + len
-        vy = vy + len
-      }
+      0 => continue vy, vx, idx
+      1 => continue vx, vy + len, idx
+      // case 2 falls through to case 1 in C: both x += len and y += len
+      2 => continue vx + len, vy + len, idx
       3 => {
         let temp : Float = len - 1.0 - vx
-        vx = 2.0 * len - 1.0 - vy
-        vy = temp
+        continue 2.0 * len - 1.0 - vy, temp, idx
       }
-      _ => ()
+      _ => continue vx, vy, idx
     }
+  } nobreak {
+    (vx, vy)
   }
-  (vx, vy)
 }
 
 ///|

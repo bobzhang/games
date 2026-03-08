@@ -7,10 +7,8 @@ fn main {
   @raylib.set_target_fps(@types.target_fps)
   let game = @types.Game()
   while !@raylib.window_should_close() {
-    let mut dt : Float = @raylib.get_frame_time()
-    if dt > 0.05 {
-      dt = 0.05
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.05F { 0.05F } else { frame_dt }
     @game.update_game(game, dt)
     @raylib.begin_drawing()
     @render.draw_frame(game)

@@ -623,10 +623,8 @@ fn main {
   reset_round(level)
 
   while !@raylib.window_should_close() {
-    let mut dt : Float = @raylib.get_frame_time()
-    if dt > 0.033 {
-      dt = 0.033
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
       @raylib.toggle_fullscreen()
@@ -969,40 +967,32 @@ fn main {
         }
 
         if turret.cd <= 0.0 {
-          let mut best : Int = -1
-          let mut best_d2 : Float = 99999999.0
-          for j in 0..<enemies.length() {
-            if !enemies[j].active {
+          for j, enemy in enemies; best = -1, best_d2 = 99999999.0F {
+            if !enemy.active {
               continue
             }
-            let d2 : Float = dist2(
-              turret.x,
-              turret.y,
-              enemies[j].x,
-              enemies[j].y,
-            )
+            let d2 : Float = dist2(turret.x, turret.y, enemy.x, enemy.y)
             if d2 < best_d2 && d2 <= 460.0 * 460.0 {
-              best_d2 = d2
-              best = j
+              continue j, d2
             }
-          }
-
-          if best >= 0 {
-            let dx : Float = enemies[best].x - turret.x
-            let dy : Float = enemies[best].y - turret.y
-            let d2 : Float = dx * dx + dy * dy
-            let inv : Float = if d2 < 1.0 { 0.0 } else { 1.0 / d2.sqrt() }
-            spawn_bullet(
-              bullets,
-              1,
-              turret.x,
-              turret.y,
-              dx * inv * 560.0,
-              dy * inv * 560.0,
-              22.0,
-              1.2,
-            )
-            turret.cd = 0.26
+          } nobreak {
+            if best >= 0 {
+              let dx : Float = enemies[best].x - turret.x
+              let dy : Float = enemies[best].y - turret.y
+              let d2 : Float = dx * dx + dy * dy
+              let inv : Float = if d2 < 1.0 { 0.0 } else { 1.0 / d2.sqrt() }
+              spawn_bullet(
+                bullets,
+                1,
+                turret.x,
+                turret.y,
+                dx * inv * 560.0,
+                dy * inv * 560.0,
+                22.0,
+                1.2,
+              )
+              turret.cd = 0.26
+            }
           }
         }
       }

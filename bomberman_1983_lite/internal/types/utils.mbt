@@ -286,11 +286,11 @@ pub fn pulse_color(base : @raylib.Color, phase : Float) -> @raylib.Color {
 ///|
 /// Counts active bombs owned by `team`.
 pub fn count_team_bombs(game : Game, team : Team) -> Int {
-  let mut n = 0
-  for bomb in game.bombs {
+  for bomb in game.bombs; n = 0 {
     if bomb.active && bomb.owner_team == team {
-      n += 1
+      continue n + 1
     }
+  } nobreak {
+    n
   }
-  n
 }

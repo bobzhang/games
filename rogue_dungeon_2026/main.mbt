@@ -68,12 +68,7 @@ fn gen_level() -> Array[Int] {
 
 ///|
 fn mob_at(mobs : Array[Mob], x : Int, y : Int) -> Int {
-  for i in 0..<mobs.length() {
-    if mobs[i].alive && mobs[i].x == x && mobs[i].y == y {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(mobs, fn(mob) { mob.alive && mob.x == x && mob.y == y })
 }
 
 ///|

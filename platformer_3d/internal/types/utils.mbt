@@ -139,19 +139,19 @@ pub fn point_above_platform(
 ///|
 /// Finds the highest platform top below a point for projected shadow placement.
 pub fn find_shadow_y(game : Game, px : Float, py : Float, pz : Float) -> Float {
-  let mut best_y : Float = -25.0
-  for plat in game.platforms {
+  for plat in game.platforms; best_y = -25.0F {
     if !plat.active {
       continue
     }
     if point_above_platform(px, pz, plat.x, plat.z, plat.w, plat.d) {
       let top = plat.y + plat.h / 2.0
       if top < py && top > best_y {
-        best_y = top
+        continue top
       }
     }
+  } nobreak {
+    best_y
   }
-  best_y
 }
 
 // Calculate shadow alpha based on height above surface
@@ -190,12 +190,7 @@ pub fn shadow_scale(py : Float, shadow_y : Float) -> Float {
 ///|
 /// Returns the first inactive particle slot index, or `-1` if full.
 pub fn alloc_particle(game : Game) -> Int {
-  for i, slot in game.particles {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.particles, fn(slot) { !slot.active })
 }
 
 ///|
@@ -324,12 +319,7 @@ pub fn spawn_particle_ring(
 ///|
 /// Returns the first inactive projectile slot index, or `-1` if full.
 pub fn alloc_projectile(game : Game) -> Int {
-  for i, slot in game.projectiles {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.projectiles, fn(slot) { !slot.active })
 }
 
 // Allocate score fly slot

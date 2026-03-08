@@ -590,10 +590,8 @@ fn main {
   reset_run()
 
   while !@raylib.window_should_close() {
-    let mut dt : Float = @raylib.get_frame_time()
-    if dt > 0.033 {
-      dt = 0.033
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
       @raylib.toggle_fullscreen()
@@ -1128,10 +1126,9 @@ fn main {
       }
 
       if phase == 1 && home.level >= 2 && home.turret_cd <= 0.0 {
-        let mut target : Int = -1
-        let mut best_d2 : Float = 99999999.0
-
-        for i in 0..<zombies.length() {
+        let target = for
+          i in 0..<zombies.length()
+          target = -1, best_d2 = 99999999.0F {
           if !zombies[i].active {
             continue
           }
@@ -1141,9 +1138,10 @@ fn main {
             d2 <=
             (320.0 + Float::from_int(home.level) * 24.0) *
             (320.0 + Float::from_int(home.level) * 24.0) {
-            best_d2 = d2
-            target = i
+            continue i, d2
           }
+        } nobreak {
+          target
         }
 
         if target >= 0 {
@@ -1203,12 +1201,7 @@ fn main {
         }
       }
 
-      let mut alive_zombies : Int = 0
-      for zombie in zombies {
-        if zombie.active {
-          alive_zombies = alive_zombies + 1
-        }
-      }
+      let alive_zombies = @utils.count_by(zombies, fn(zombie) { zombie.active })
 
       if phase == 1 &&
         phase_t <= 0.0 &&

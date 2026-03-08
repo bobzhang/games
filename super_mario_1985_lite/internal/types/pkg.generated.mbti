@@ -173,7 +173,10 @@ pub(all) struct Game {
   enemies : Array[Enemy]
   coins : Array[Coin]
   particles : Array[Particle]
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -222,7 +225,10 @@ pub(all) struct Player {
   mut score : Int
   mut reached_flag : Bool
   mut flag_phase : Int
+
+  fn new() -> Player
 }
+#deprecated
 pub fn Player::new() -> Self
 
 pub(all) enum Tile {

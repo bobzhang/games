@@ -98,7 +98,10 @@ pub(all) struct Bullet {
   mut life : Float
   mut power : Float
   mut kind : BulletKind
+
+  fn new() -> Bullet
 }
+#deprecated
 pub fn Bullet::new() -> Self
 
 pub(all) enum BulletKind {
@@ -117,7 +120,10 @@ pub(all) struct Enemy {
   mut hp : Float
   mut kind : EnemyKind
   mut phase : Float
+
+  fn new() -> Enemy
 }
+#deprecated
 pub fn Enemy::new() -> Self
 
 pub(all) enum EnemyKind {
@@ -172,7 +178,10 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -191,7 +200,10 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
+
+  fn new() -> Particle
 }
+#deprecated
 pub fn Particle::new() -> Self
 
 pub(all) enum ParticleKind {
@@ -209,7 +221,10 @@ pub(all) struct Pickup {
   mut vy : Float
   mut kind : PickupKind
   mut phase : Float
+
+  fn new() -> Pickup
 }
+#deprecated
 pub fn Pickup::new() -> Self
 
 pub(all) enum PickupKind {

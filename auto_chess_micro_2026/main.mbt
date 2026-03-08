@@ -124,30 +124,23 @@ fn manhattan(ax : Int, ay : Int, bx : Int, by : Int) -> Int {
 /// Returns the index of the nearest enemy unit to the unit at the given index, or -1 if none exists.
 fn find_target(units : Array[Piece], idx : Int) -> Int {
   let self = units[idx]
-  let mut best = -1
-  let mut best_d = 1_000_000
-  for i in 0..<units.length() {
+  for i in 0..<units.length(); best = -1, best_d = 1_000_000 {
     if i == idx || !units[i].alive || units[i].team == self.team {
       continue
     }
     let d = manhattan(self.x, self.y, units[i].x, units[i].y)
     if d < best_d {
-      best_d = d
-      best = i
+      continue i, d
     }
+  } nobreak {
+    best
   }
-  best
 }
 
 ///|
 /// Returns true if any alive unit currently occupies the given grid position.
 fn occupied(units : Array[Piece], x : Int, y : Int) -> Bool {
-  for unit in units {
-    if unit.alive && unit.x == x && unit.y == y {
-      return true
-    }
-  }
-  false
+  @utils.any_by(units, fn(unit) { unit.alive && unit.x == x && unit.y == y })
 }
 
 ///|

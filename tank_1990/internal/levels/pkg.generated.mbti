@@ -8,7 +8,7 @@ import {
 // Values
 pub fn get_stage_profile(Int) -> @types.StageProfile
 
-pub fn level_pattern(Int) -> Array[String]
+pub fn level_pattern(Int) -> Array[Bytes]
 
 // Errors
 

@@ -147,42 +147,42 @@ fn @types.Game::best_move_for(
     return (true, @types.board_n / 2, @types.board_n / 2, 100)
   }
 
-  let mut found : Bool = false
-  let mut best_score : Int = -1
-  let mut best_x : Int = @types.board_n / 2
-  let mut best_y : Int = @types.board_n / 2
-
-  for y in 0..<@types.board_n {
-    for x in 0..<@types.board_n {
-      if @types.cell_at(game, x, y) != Empty {
-        continue
-      }
-
-      if !game.has_neighbor(x, y, 2) {
-        continue
-      }
-
-      let mut s : Int = 0
-
-      if game.would_win_if_place(x, y, p) {
-        s = 1000000
-      } else if game.would_win_if_place(x, y, opp) {
-        s = 760000
-      } else {
-        let off : Int = game.score_cell_for(x, y, p)
-        let def : Int = game.score_cell_for(x, y, opp)
-        s = off + def * 11 / 10
-      }
-
-      s = s + @raylib.get_random_value(0, 6)
-
-      if !found || s > best_score {
-        found = true
-        best_score = s
-        best_x = x
-        best_y = y
-      }
+  let total_cells : Int = @types.board_n * @types.board_n
+  let (found, best_score, best_x, best_y) = for
+    idx in 0..<total_cells
+    found = false,
+    best_score = -1,
+    best_x = @types.board_n / 2,
+    best_y = @types.board_n / 2 {
+    let y : Int = idx / @types.board_n
+    let x : Int = idx % @types.board_n
+    if @types.cell_at(game, x, y) != Empty {
+      continue
     }
+
+    if !game.has_neighbor(x, y, 2) {
+      continue
+    }
+
+    let mut s : Int = 0
+
+    if game.would_win_if_place(x, y, p) {
+      s = 1000000
+    } else if game.would_win_if_place(x, y, opp) {
+      s = 760000
+    } else {
+      let off : Int = game.score_cell_for(x, y, p)
+      let def : Int = game.score_cell_for(x, y, opp)
+      s = off + def * 11 / 10
+    }
+
+    s = s + @raylib.get_random_value(0, 6)
+
+    if !found || s > best_score {
+      continue true, s, x, y
+    }
+  } nobreak {
+    (found, best_score, best_x, best_y)
   }
 
   if !found {

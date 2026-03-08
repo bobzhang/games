@@ -134,7 +134,10 @@ pub(all) struct Checkpoint {
   mut h : Float
   mut bonus_s : Int
   mut taken : Bool
+
+  fn new() -> Checkpoint
 }
+#deprecated
 pub fn Checkpoint::new() -> Self
 
 pub(all) struct Game {
@@ -175,7 +178,10 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -207,7 +213,10 @@ pub(all) struct Player {
   mut coyote_t : Float
   mut jump_buffer_t : Float
   mut facing : Int
+
+  fn new() -> Player
 }
+#deprecated
 pub fn Player::new() -> Self
 
 pub(all) struct Tile {
@@ -216,7 +225,10 @@ pub(all) struct Tile {
   mut y : Float
   mut w : Float
   mut h : Float
+
+  fn new() -> Tile
 }
+#deprecated
 pub fn Tile::new() -> Self
 
 pub(all) enum TileKind {

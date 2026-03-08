@@ -129,7 +129,10 @@ pub(all) struct Game {
   mut weeks_survived : Int
   mut best_week : Int
   mut defeat_reason : String
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -149,7 +152,10 @@ pub(all) struct Input {
   mut pause_pressed : Bool
   mut restart_pressed : Bool
   mut start_pressed : Bool
+
+  fn new() -> Input
 }
+#deprecated
 pub fn Input::new() -> Self
 
 pub(all) enum Room {
@@ -167,7 +173,10 @@ pub(all) struct Student {
   mut skill : Float
   mut fatigue : Float
   mut room : Room
+
+  fn new(String, Float) -> Student
 }
+#deprecated
 pub fn Student::new(String, Float) -> Self
 
 // Type aliases

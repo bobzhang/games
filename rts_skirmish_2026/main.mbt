@@ -60,9 +60,7 @@ fn spawn_unit(units : Array[Unit], team : Int, kind : Int, lane : Int) -> Bool {
 
 ///|
 fn closest_enemy(units : Array[Unit], me : Int) -> Int {
-  let mut best = -1
-  let mut best_d : Float = 1_000_000.0
-  for i in 0..<units.length() {
+  for i in 0..<units.length(); best = -1, best_d = 1_000_000.0F {
     if i == me || !units[i].alive {
       continue
     }
@@ -71,11 +69,11 @@ fn closest_enemy(units : Array[Unit], me : Int) -> Int {
     }
     let d = (units[i].x - units[me].x).abs()
     if d < best_d {
-      best_d = d
-      best = i
+      continue i, d
     }
+  } nobreak {
+    best
   }
-  best
 }
 
 ///|
@@ -113,10 +111,8 @@ fn main {
   let mut lost = false
 
   while !@raylib.window_should_close() {
-    let mut dt = @raylib.get_frame_time()
-    if dt > 0.05 {
-      dt = 0.05
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.05F { 0.05F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyR) {
       for unit in units {

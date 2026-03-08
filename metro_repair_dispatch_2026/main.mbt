@@ -277,41 +277,39 @@ fn add_station(
   crowd : Int,
   name : String,
 ) -> Int {
-  for i in 0..<stations.length() {
-    if !stations[i].active {
-      stations[i].active = true
-      stations[i].x = x
-      stations[i].y = y
-      stations[i].line_mask = line_mask
-      stations[i].crowd = crowd
-      stations[i].spawn_cd = randf(1.0, 2.4)
-      stations[i].wait_t = 0.0
-      stations[i].strain = 0.0
-      stations[i].name = name
-      return i
-    }
+  let i = @utils.first_index_by(stations, fn(station) { !station.active })
+  if i < 0 {
+    return -1
   }
-  -1
+  stations[i].active = true
+  stations[i].x = x
+  stations[i].y = y
+  stations[i].line_mask = line_mask
+  stations[i].crowd = crowd
+  stations[i].spawn_cd = randf(1.0, 2.4)
+  stations[i].wait_t = 0.0
+  stations[i].strain = 0.0
+  stations[i].name = name
+  i
 }
 
 ///|
 /// Activates the first free segment slot connecting stations `a` and `b` on the given line, and returns its index.
 fn add_segment(segments : Array[Segment], a : Int, b : Int, line : Int) -> Int {
-  for i in 0..<segments.length() {
-    if !segments[i].active {
-      segments[i].active = true
-      segments[i].a = a
-      segments[i].b = b
-      segments[i].line = line
-      segments[i].health = randf(84.0, 100.0)
-      segments[i].fault_t = 0.0
-      segments[i].wear = 0.0
-      segments[i].traffic = 0.0
-      segments[i].spark_cd = randf(0.4, 1.4)
-      return i
-    }
+  let i = @utils.first_index_by(segments, fn(segment) { !segment.active })
+  if i < 0 {
+    return -1
   }
-  -1
+  segments[i].active = true
+  segments[i].a = a
+  segments[i].b = b
+  segments[i].line = line
+  segments[i].health = randf(84.0, 100.0)
+  segments[i].fault_t = 0.0
+  segments[i].wear = 0.0
+  segments[i].traffic = 0.0
+  segments[i].spark_cd = randf(0.4, 1.4)
+  i
 }
 
 ///|
@@ -325,23 +323,22 @@ fn add_train(
   capacity : Int,
   color_id : Int,
 ) -> Int {
-  for i in 0..<trains.length() {
-    if !trains[i].active {
-      trains[i].active = true
-      trains[i].route_id = route_id
-      trains[i].route_pos = route_pos
-      trains[i].dir = if dir >= 0 { 1 } else { -1 }
-      trains[i].t = randf(0.0, 0.8)
-      trains[i].speed = speed
-      trains[i].passengers = @raylib.get_random_value(6, capacity / 2)
-      trains[i].capacity = capacity
-      trains[i].delay_t = 0.0
-      trains[i].blink_t = 0.0
-      trains[i].color_id = color_id
-      return i
-    }
+  let i = @utils.first_index_by(trains, fn(train) { !train.active })
+  if i < 0 {
+    return -1
   }
-  -1
+  trains[i].active = true
+  trains[i].route_id = route_id
+  trains[i].route_pos = route_pos
+  trains[i].dir = if dir >= 0 { 1 } else { -1 }
+  trains[i].t = randf(0.0, 0.8)
+  trains[i].speed = speed
+  trains[i].passengers = @raylib.get_random_value(6, capacity / 2)
+  trains[i].capacity = capacity
+  trains[i].delay_t = 0.0
+  trains[i].blink_t = 0.0
+  trains[i].color_id = color_id
+  i
 }
 
 ///|
@@ -464,17 +461,13 @@ fn next_route_pos(route : Array[Int], pos : Int, dir : Int) -> (Int, Int) {
 ///|
 /// Returns the index of the active segment connecting stations `a` and `b` (in either order), or -1 if not found.
 fn find_segment(segments : Array[Segment], a : Int, b : Int) -> Int {
-  for i in 0..<segments.length() {
-    if !segments[i].active {
-      continue
-    }
-    let x : Int = segments[i].a
-    let y : Int = segments[i].b
-    if (x == a && y == b) || (x == b && y == a) {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(
+    segments,
+    fn(segment) {
+      segment.active &&
+      ((segment.a == a && segment.b == b) || (segment.a == b && segment.b == a))
+    },
+  )
 }
 
 ///|
@@ -557,25 +550,13 @@ fn setup_network(
 ///|
 /// Returns the number of active segments that currently have an active fault.
 fn count_faults(segments : Array[Segment]) -> Int {
-  let mut n : Int = 0
-  for segment in segments {
-    if segment.active && segment.fault_t > 0.0 {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(segments, fn(segment) { segment.active && segment.fault_t > 0.0 })
 }
 
 ///|
 /// Returns the total number of active track segments.
 fn count_active_segments(segments : Array[Segment]) -> Int {
-  let mut n : Int = 0
-  for segment in segments {
-    if segment.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(segments, fn(segment) { segment.active })
 }
 
 ///|
@@ -790,12 +771,9 @@ fn nearest_faulty_segment(
   x : Float,
   y : Float,
 ) -> (Int, Float, Float, Float) {
-  let mut best : Int = -1
-  let mut best_d2 : Float = 99999999.0
-  let mut best_x : Float = x
-  let mut best_y : Float = y
-
-  for i in 0..<segments.length() {
+  for
+    i in 0..<segments.length()
+    best = -1, best_d2 = 99999999.0F, best_x = x, best_y = y {
     if !segments[i].active || segments[i].fault_t <= 0.0 {
       continue
     }
@@ -806,14 +784,11 @@ fn nearest_faulty_segment(
       0.5
     let d2 : Float = dist2(x, y, mx, my)
     if d2 < best_d2 {
-      best_d2 = d2
-      best = i
-      best_x = mx
-      best_y = my
+      continue i, d2, mx, my
     }
+  } nobreak {
+    (best, best_d2, best_x, best_y)
   }
-
-  (best, best_d2, best_x, best_y)
 }
 
 ///|
@@ -1440,10 +1415,8 @@ fn main {
   reset_run()
 
   while !@raylib.window_should_close() {
-    let mut dt : Float = @raylib.get_frame_time()
-    if dt > 0.033 {
-      dt = 0.033
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
       @raylib.toggle_fullscreen()

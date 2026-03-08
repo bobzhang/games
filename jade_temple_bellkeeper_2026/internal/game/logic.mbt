@@ -115,15 +115,15 @@ fn @types.Game::alloc_foe(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.foes[0].life
-    for i in 1..<game.foes.length() {
-      if game.foes[i].life < best_life {
-        best_life = game.foes[i].life
-        best = i
-      }
+    let best = @utils.min_index_by(
+      game.foes,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best
   }
 }
 
@@ -135,15 +135,15 @@ fn @types.Game::alloc_bolt(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.bolts[0].life
-    for i in 1..<game.bolts.length() {
-      if game.bolts[i].life < best_life {
-        best_life = game.bolts[i].life
-        best = i
-      }
+    let best = @utils.min_index_by(
+      game.bolts,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best
   }
 }
 
@@ -155,15 +155,15 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.sparks[0].life
-    for i in 1..<game.sparks.length() {
-      if game.sparks[i].life < best_life {
-        best_life = game.sparks[i].life
-        best = i
-      }
+    let best = @utils.min_index_by(
+      game.sparks,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best
   }
 }
 
@@ -175,15 +175,15 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.rings[0].life
-    for i in 1..<game.rings.length() {
-      if game.rings[i].life < best_life {
-        best_life = game.rings[i].life
-        best = i
-      }
+    let best = @utils.min_index_by(
+      game.rings,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best
   }
 }
 
@@ -195,15 +195,15 @@ fn @types.Game::alloc_echo(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.echoes[0].life
-    for i in 1..<game.echoes.length() {
-      if game.echoes[i].life < best_life {
-        best_life = game.echoes[i].life
-        best = i
-      }
+    let best = @utils.min_index_by(
+      game.echoes,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best
   }
 }
 
@@ -509,10 +509,9 @@ fn @types.Game::ring_bell(game : @types.Game, bell_i : Int) -> Unit {
 ///|
 /// Returns the index of the bell within ring reach of the hero, or -1 if none is close enough.
 fn @types.Game::find_nearest_bell(game : @types.Game) -> Int {
-  let mut best = -1
-  let mut best_d2 = @types.bell_ring_reach * @types.bell_ring_reach
-
-  for i in 0..<@types.bell_count {
+  for
+    i in 0..<@types.bell_count
+    best = -1, best_d2 = @types.bell_ring_reach * @types.bell_ring_reach {
     let d2 = @types.dist2(
       game.hero.x,
       game.hero.y,
@@ -520,12 +519,11 @@ fn @types.Game::find_nearest_bell(game : @types.Game) -> Int {
       game.bells[i].y,
     )
     if d2 <= best_d2 {
-      best_d2 = d2
-      best = i
+      continue i, d2
     }
+  } nobreak {
+    best
   }
-
-  best
 }
 
 ///|

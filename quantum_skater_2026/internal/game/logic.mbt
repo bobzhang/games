@@ -61,15 +61,12 @@ fn @types.Game::alloc_obj_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best_i = 0
-    let mut best_z = game.objs[0].z
-    for i in 1..<game.objs.length() {
-      if game.objs[i].z < best_z {
-        best_z = game.objs[i].z
-        best_i = i
-      }
+    let best = @utils.min_index_by(game.objs, fn(a, b) { a.z < b.z })
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best_i
   }
 }
 
@@ -80,15 +77,15 @@ fn @types.Game::alloc_particle_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best_i = 0
-    let mut best_life = game.particles[0].life
-    for i in 1..<game.particles.length() {
-      if game.particles[i].life < best_life {
-        best_life = game.particles[i].life
-        best_i = i
-      }
+    let best = @utils.min_index_by(
+      game.particles,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best_i
   }
 }
 
@@ -99,15 +96,15 @@ fn @types.Game::alloc_trail_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best_i = 0
-    let mut best_life = game.trails[0].life
-    for i in 1..<game.trails.length() {
-      if game.trails[i].life < best_life {
-        best_life = game.trails[i].life
-        best_i = i
-      }
+    let best = @utils.min_index_by(
+      game.trails,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best_i
   }
 }
 

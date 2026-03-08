@@ -54,18 +54,14 @@ fn @types.Game::direction_score_player(
 
 ///|
 fn @types.Game::suggest_player_dir(game : @types.Game) -> @types.Dir? {
-  let mut best_dir : @types.Dir? = None
-  let mut best_score : Int = -999999
-
-  for d in all_dirs {
+  for d in all_dirs; best_dir = None, best_score = -999999 {
     let s : Int = game.direction_score_player(d)
     if s > best_score {
-      best_score = s
-      best_dir = Some(d)
+      continue Some(d), s
     }
+  } nobreak {
+    best_dir
   }
-
-  best_dir
 }
 
 ///|
@@ -110,16 +106,12 @@ fn @types.Game::direction_score_rival(
 fn @types.Game::ai_choose_dir(game : @types.Game, rid : Int) -> @types.Dir {
   let rival = game.rivals[rid]
 
-  let mut best_dir : @types.Dir = rival.dir
-  let mut best_score : Int = -999999
-
-  for d in all_dirs {
+  for d in all_dirs; best_dir = rival.dir, best_score = -999999 {
     let s : Int = game.direction_score_rival(rid, d)
     if s > best_score {
-      best_score = s
-      best_dir = d
+      continue d, s
     }
+  } nobreak {
+    best_dir
   }
-
-  best_dir
 }

@@ -521,35 +521,17 @@ fn burst(
 
 ///|
 fn count_active_enemies(enemies : Array[Enemy]) -> Int {
-  let mut n : Int = 0
-  for enemy in enemies {
-    if enemy.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(enemies, fn(enemy) { enemy.active })
 }
 
 ///|
 fn count_owned_anchors(anchors : Array[Anchor], owner : Int) -> Int {
-  let mut n : Int = 0
-  for anchor in anchors {
-    if anchor.active && anchor.owner == owner {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(anchors, fn(anchor) { anchor.active && anchor.owner == owner })
 }
 
 ///|
 fn count_total_anchors(anchors : Array[Anchor]) -> Int {
-  let mut n : Int = 0
-  for anchor in anchors {
-    if anchor.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(anchors, fn(anchor) { anchor.active })
 }
 
 ///|
@@ -922,10 +904,8 @@ fn main {
   reset_run()
 
   while !@raylib.window_should_close() {
-    let mut dt : Float = @raylib.get_frame_time()
-    if dt > 0.033 {
-      dt = 0.033
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
       @raylib.toggle_fullscreen()
@@ -1360,9 +1340,9 @@ fn main {
         // anchor weapon
         if anchors[i].fire_cd <= 0.0 {
           if anchors[i].owner == 1 {
-            let mut target_i : Int = -1
-            let mut best_d2 : Float = 99999999.0
-            for e in 0..<enemies.length() {
+            let target_i = for
+              e in 0..<enemies.length()
+              target_i = -1, best_d2 = 99999999.0F {
               if !enemies[e].active {
                 continue
               }
@@ -1373,9 +1353,10 @@ fn main {
                 enemies[e].y,
               )
               if d2 <= 320.0 * 320.0 && d2 < best_d2 {
-                best_d2 = d2
-                target_i = e
+                continue e, d2
               }
+            } nobreak {
+              target_i
             }
             if target_i >= 0 {
               let tx : Float = enemies[target_i].x - anchors[i].x
@@ -1466,9 +1447,9 @@ fn main {
         let mut target_x : Float = player.x
         let mut target_y : Float = player.y
 
-        let mut nearest_anchor : Int = -1
-        let mut best_anchor_d2 : Float = 99999999.0
-        for a in 0..<anchors.length() {
+        let nearest_anchor = for
+          a in 0..<anchors.length()
+          nearest_anchor = -1, best_anchor_d2 = 99999999.0F {
           if !anchors[a].active {
             continue
           }
@@ -1477,9 +1458,10 @@ fn main {
           }
           let d2 : Float = dist2(enemy.x, enemy.y, anchors[a].x, anchors[a].y)
           if d2 < best_anchor_d2 {
-            best_anchor_d2 = d2
-            nearest_anchor = a
+            continue a, d2
           }
+        } nobreak {
+          nearest_anchor
         }
 
         let player_d2 : Float = dist2(enemy.x, enemy.y, player.x, player.y)

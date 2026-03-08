@@ -86,10 +86,8 @@ fn main {
   let mut msg = "1-4 play queued track, A ad break (+budget, -listeners), R restart"
 
   while !@raylib.window_should_close() {
-    let mut dt = @raylib.get_frame_time()
-    if dt > 0.05 {
-      dt = 0.05
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.05F { 0.05F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyR) {
       queue = [random_song(), random_song(), random_song(), random_song()]

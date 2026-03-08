@@ -190,7 +190,10 @@ pub(all) struct Beacon {
   y : Float
   mut integrity : Float
   mut pulse_t : Float
+
+  fn new(Int) -> Beacon
 }
+#deprecated
 pub fn Beacon::new(Int) -> Self
 
 pub(all) struct Enemy {
@@ -207,7 +210,10 @@ pub(all) struct Enemy {
   mut slow_t : Float
   mut kind : Int
   mut anim_t : Float
+
+  fn new() -> Enemy
 }
+#deprecated
 pub fn Enemy::new() -> Self
 
 pub(all) struct Game {
@@ -233,7 +239,10 @@ pub(all) struct Game {
   mut status_t : Float
   mut shake_t : Float
   mut game_over_reason : String
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -253,7 +262,10 @@ pub(all) struct InputState {
   mut press_pause : Bool
   mut press_restart : Bool
   mut press_start : Bool
+
+  fn new() -> InputState
 }
+#deprecated
 pub fn InputState::new() -> Self
 
 pub(all) struct Player {
@@ -267,7 +279,10 @@ pub(all) struct Player {
   mut dash_cd : Float
   mut attack_cd : Float
   mut attack_t : Float
+
+  fn new() -> Player
 }
+#deprecated
 pub fn Player::new() -> Self
 
 pub(all) struct Trap {
@@ -276,7 +291,10 @@ pub(all) struct Trap {
   y : Float
   mut trigger_cd : Float
   mut flash_t : Float
+
+  fn new(Int) -> Trap
 }
+#deprecated
 pub fn Trap::new(Int) -> Self
 
 // Type aliases

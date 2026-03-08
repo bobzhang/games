@@ -120,7 +120,10 @@ pub(all) struct Anchor {
   mut x : Float
   mut y : Float
   mut glow_t : Float
+
+  fn new() -> Anchor
 }
+#deprecated
 pub fn Anchor::new() -> Self
 
 pub(all) struct Chip {
@@ -129,7 +132,10 @@ pub(all) struct Chip {
   mut y : Float
   mut bob_t : Float
   mut spin_t : Float
+
+  fn new() -> Chip
 }
+#deprecated
 pub fn Chip::new() -> Self
 
 pub(all) struct Game {
@@ -178,7 +184,10 @@ pub(all) struct Game {
   mut mouse_x : Float
   mut mouse_y : Float
   mut mouse_hold : Bool
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -197,7 +206,10 @@ pub(all) struct Ghost {
   mut h : Float
   mut life : Float
   mut hue : Float
+
+  fn new() -> Ghost
 }
+#deprecated
 pub fn Ghost::new() -> Self
 
 pub(all) struct Obstacle {
@@ -210,7 +222,10 @@ pub(all) struct Obstacle {
   mut vx : Float
   mut phase : Float
   mut hit_lock : Float
+
+  fn new() -> Obstacle
 }
+#deprecated
 pub fn Obstacle::new() -> Self
 
 pub(all) enum ObstacleKind {
@@ -230,7 +245,10 @@ pub(all) struct Particle {
   mut life : Float
   mut size : Float
   mut kind : ParticleKind
+
+  fn new() -> Particle
 }
+#deprecated
 pub fn Particle::new() -> Self
 
 pub(all) enum ParticleKind {
@@ -257,7 +275,10 @@ pub(all) struct Player {
   mut hurt_t : Float
   mut anim_t : Float
   mut floor_y : Float
+
+  fn new() -> Player
 }
+#deprecated
 pub fn Player::new() -> Self
 
 pub(all) struct Segment {
@@ -269,7 +290,10 @@ pub(all) struct Segment {
   mut skin : Int
   mut neon : Int
   mut window_seed : Int
+
+  fn new() -> Segment
 }
+#deprecated
 pub fn Segment::new() -> Self
 
 // Type aliases

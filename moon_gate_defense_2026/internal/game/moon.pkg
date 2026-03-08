@@ -1,4 +1,5 @@
 import {
+  "bobzhang/games/utils",
   "moonbitlang/core/math",
   "tonyfettes/raylib",
   "bobzhang/games/moon_gate_defense_2026/internal/types",

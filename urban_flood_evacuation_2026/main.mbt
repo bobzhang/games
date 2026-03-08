@@ -529,46 +529,28 @@ fn spawn_flood(
 
 ///|
 fn active_groups(groups : Array[Group]) -> Int {
-  let mut n : Int = 0
-  for group in groups {
-    if group.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(groups, fn(group) { group.active })
 }
 
 ///|
 fn active_floods(floods : Array[FloodCell]) -> Int {
-  let mut n : Int = 0
-  for flood in floods {
-    if flood.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(floods, fn(flood) { flood.active })
 }
 
 ///|
 fn active_critical(groups : Array[Group]) -> Int {
-  let mut n : Int = 0
-  for group in groups {
-    if group.active && group.panic >= 70.0 {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(groups, fn(group) { group.active && group.panic >= 70.0 })
 }
 
 ///|
 fn peak_group_panic(groups : Array[Group]) -> Float {
-  let mut best : Float = 0.0
-  for group in groups {
+  for group in groups; best = 0.0F {
     if group.active && group.panic > best {
-      best = group.panic
+      continue group.panic
     }
+  } nobreak {
+    best
   }
-  best
 }
 
 ///|
@@ -1556,10 +1538,8 @@ fn main {
   reset_run()
 
   while !@raylib.window_should_close() {
-    let mut dt : Float = @raylib.get_frame_time()
-    if dt > 0.033 {
-      dt = 0.033
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
     scene_t = scene_t + dt
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {

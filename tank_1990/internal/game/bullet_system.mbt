@@ -152,11 +152,9 @@ fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
     // Sub-steps for robust collision with narrow walls.
     let steps = 2
     let step_dt = dt / Float::from_int(steps)
-    let mut hit_something = false
-
-    for _ in 0..<steps {
+    let hit_something = for _ in 0..<steps {
       if !bullet.active {
-        break
+        break false
       }
 
       bullet.x += bullet.vx * step_dt
@@ -164,27 +162,25 @@ fn @types.Game::update_bullets(game : @types.Game, dt : Float) -> Unit {
 
       if !@world.point_in_world(bullet.x, bullet.y) {
         bullet.active = false
-        hit_something = true
-        break
+        break true
       }
 
       if game.damage_tile_at_point(bullet.x, bullet.y, bullet.power) {
         bullet.active = false
-        hit_something = true
-        break
+        break true
       }
 
       if bullet.owner_team is Enemy {
         if game.bullet_hit_player(bullet) {
           bullet.active = false
-          hit_something = true
-          break
+          break true
         }
       } else if game.bullet_hit_enemy(bullet) {
         bullet.active = false
-        hit_something = true
-        break
+        break true
       }
+    } nobreak {
+      false
     }
 
     if hit_something {

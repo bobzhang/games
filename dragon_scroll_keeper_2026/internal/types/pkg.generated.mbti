@@ -180,7 +180,10 @@ pub(all) struct Breach {
   mut severity : Float
   mut raider_cd : Float
   mut ember_cd : Float
+
+  fn new(Int) -> Breach
 }
+#deprecated
 pub fn Breach::new(Int) -> Self
 
 pub(all) struct Flame {
@@ -190,7 +193,10 @@ pub(all) struct Flame {
   y : Float
   mut intensity : Float
   mut spread_cd : Float
+
+  fn new() -> Flame
 }
+#deprecated
 pub fn Flame::new() -> Self
 
 pub(all) struct Game {
@@ -220,7 +226,10 @@ pub(all) struct Game {
   mut input_shield_press : Bool
   mut input_pause_press : Bool
   mut input_restart_press : Bool
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -243,7 +252,10 @@ pub(all) struct Keeper {
   mut shield_cd : Float
   mut shield_t : Float
   mut ink_shields : Float
+
+  fn new() -> Keeper
 }
+#deprecated
 pub fn Keeper::new() -> Self
 
 pub(all) struct Raider {
@@ -255,7 +267,10 @@ pub(all) struct Raider {
   max_hp : Float
   mut panic_t : Float
   mut attack_cd : Float
+
+  fn new() -> Raider
 }
+#deprecated
 pub fn Raider::new() -> Self
 
 // Type aliases

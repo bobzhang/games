@@ -246,67 +246,37 @@ pub fn rand_bool(game : Game, chance : Float) -> Bool {
 ///|
 /// Finds a free enemy slot in the enemy pool.
 pub fn alloc_enemy(game : Game) -> Int {
-  for i, slot in game.enemies {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.enemies, fn(slot) { !slot.active })
 }
 
 ///|
 /// Finds a free projectile slot in the projectile pool.
 pub fn alloc_projectile(game : Game) -> Int {
-  for i, slot in game.projectiles {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.projectiles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Finds a free particle slot in the particle pool.
 pub fn alloc_particle(game : Game) -> Int {
-  for i, slot in game.particles {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.particles, fn(slot) { !slot.active })
 }
 
 ///|
 /// Finds a free pickup slot in the pickup pool.
 pub fn alloc_pickup(game : Game) -> Int {
-  for i, slot in game.pickups {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.pickups, fn(slot) { !slot.active })
 }
 
 ///|
 /// Finds a free barricade slot in the barricade pool.
 pub fn alloc_barricade(game : Game) -> Int {
-  for i, slot in game.barricades {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.barricades, fn(slot) { !slot.active })
 }
 
 ///|
 /// Finds a free trap slot in the trap pool.
 pub fn alloc_trap(game : Game) -> Int {
-  for i, slot in game.traps {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.traps, fn(slot) { !slot.active })
 }
 
 // Spawn particles

@@ -102,12 +102,7 @@ fn @types.Game::base_patience(game : @types.Game, dish : @types.Dish) -> Float {
 ///|
 /// Returns the index of the first inactive order slot, or -1 if all slots are occupied.
 fn @types.Game::find_free_order_slot(game : @types.Game) -> Int {
-  for i, slot in game.orders {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.orders, fn(slot) { !slot.active })
 }
 
 ///|
@@ -172,15 +167,13 @@ fn @types.Game::choose_target_order(game : @types.Game) -> Int {
     return game.selected_order
   }
 
-  let mut best = -1
-  let mut best_patience : Float = 99999.0
-  for i in 0..<game.orders.length() {
+  for i in 0..<game.orders.length(); best = -1, best_patience = 99999.0F {
     if game.orders[i].active && game.orders[i].patience < best_patience {
-      best_patience = game.orders[i].patience
-      best = i
+      continue i, game.orders[i].patience
     }
+  } nobreak {
+    best
   }
-  best
 }
 
 ///|
@@ -232,17 +225,15 @@ fn @types.Game::find_matching_order(
     }
   }
 
-  let mut best = -1
-  let mut best_patience : Float = 99999.0
-  for i in 0..<game.orders.length() {
+  for i in 0..<game.orders.length(); best = -1, best_patience = 99999.0F {
     if game.orders[i].active &&
       game.orders[i].dish == dish &&
       game.orders[i].patience < best_patience {
-      best_patience = game.orders[i].patience
-      best = i
+      continue i, game.orders[i].patience
     }
+  } nobreak {
+    best
   }
-  best
 }
 
 ///|
@@ -424,11 +415,8 @@ fn @types.Game::move_cursor(
   }
 
   let cur = @types.node_pos(game.cursor)
-  let mut best = game.cursor
-  let mut best_score : Float = 1000000.0
-
   let nodes = @types.all_nav_nodes()
-  for node in nodes {
+  for node in nodes; best = game.cursor, best_score = 1000000.0F {
     if node != game.cursor {
       let p = @types.node_pos(node)
       let vx = p.0 - cur.0
@@ -453,14 +441,13 @@ fn @types.Game::move_cursor(
         let side : Float = if dir_x != 0 { vy.abs() } else { vx.abs() }
         let score : Float = forward + side * 1.9
         if score < best_score {
-          best_score = score
-          best = node
+          continue node, score
         }
       }
     }
+  } nobreak {
+    game.cursor = best
   }
-
-  game.cursor = best
 }
 
 ///|

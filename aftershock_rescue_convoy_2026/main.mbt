@@ -630,61 +630,43 @@ fn spawn_dust(
 ///|
 /// Returns the count of currently active survivor groups.
 fn active_groups(groups : Array[SurvivorGroup]) -> Int {
-  let mut n : Int = 0
-  for group in groups {
-    if group.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(groups, fn(group) { group.active })
 }
 
 ///|
 /// Returns the count of currently active crack zones.
 fn active_cracks(cracks : Array[CrackZone]) -> Int {
-  let mut n : Int = 0
-  for crack in cracks {
-    if crack.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(cracks, fn(crack) { crack.active })
 }
 
 ///|
 /// Returns the count of active survivor groups whose panic level is at or above the critical threshold.
 fn active_critical(groups : Array[SurvivorGroup]) -> Int {
-  let mut n : Int = 0
-  for group in groups {
-    if group.active && group.panic >= 70.0 {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(groups, fn(group) { group.active && group.panic >= 70.0 })
 }
 
 ///|
 /// Returns the highest panic value among all active survivor groups.
 fn peak_group_panic(groups : Array[SurvivorGroup]) -> Float {
-  let mut best : Float = 0.0
-  for group in groups {
+  for group in groups; best = 0.0F {
     if group.active && group.panic > best {
-      best = group.panic
+      continue group.panic
     }
+  } nobreak {
+    best
   }
-  best
 }
 
 ///|
 /// Returns the highest intensity value among all active crack zones.
 fn peak_crack_intensity(cracks : Array[CrackZone]) -> Float {
-  let mut best : Float = 0.0
-  for crack in cracks {
+  for crack in cracks; best = 0.0F {
     if crack.active && crack.intensity > best {
-      best = crack.intensity
+      continue crack.intensity
     }
+  } nobreak {
+    best
   }
-  best
 }
 
 ///|
@@ -1924,10 +1906,8 @@ fn main {
   reset_run()
 
   while !@raylib.window_should_close() {
-    let mut dt : Float = @raylib.get_frame_time()
-    if dt > 0.033 {
-      dt = 0.033
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
     scene_t = scene_t + dt
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {

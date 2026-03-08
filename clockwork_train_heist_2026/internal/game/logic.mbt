@@ -220,33 +220,21 @@ fn @types.Game::guard_index_at(
   y : Int,
   skip : Int,
 ) -> Int {
-  for i in 0..<game.guards.length() {
-    if i == skip || !game.guards[i].active {
-      continue
-    }
-
-    if game.guards[i].body.x == x && game.guards[i].body.y == y {
-      return i
-    }
-  }
-
-  -1
+  @utils.first_indexi_by(
+    game.guards,
+    fn(i, slot) {
+      i != skip && slot.active && slot.body.x == x && slot.body.y == y
+    },
+  )
 }
 
 ///|
 /// Returns the index of an active loot item at `(x, y)`, or -1 if none is present.
 fn @types.Game::loot_index_at(game : @types.Game, x : Int, y : Int) -> Int {
-  for i in 0..<game.loots.length() {
-    if !game.loots[i].active {
-      continue
-    }
-
-    if game.loots[i].x == x && game.loots[i].y == y {
-      return i
-    }
-  }
-
-  -1
+  @utils.first_index_by(
+    game.loots,
+    fn(loot) { loot.active && loot.x == x && loot.y == y },
+  )
 }
 
 ///|
@@ -688,10 +676,7 @@ fn @types.Game::guard_choose_chase_step(
 
   let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
-  let mut best_i : Int = -1
-  let mut best_d : Int = 999999
-
-  for i in 0..<4 {
+  let best_i = for i in 0..<4; best_i = -1, best_d = 999999 {
     let nx : Int = gx + dirs[i].0
     let ny : Int = gy + dirs[i].1
 
@@ -701,9 +686,10 @@ fn @types.Game::guard_choose_chase_step(
 
     let d : Int = @types.manhattan(nx, ny, px, py)
     if d < best_d {
-      best_d = d
-      best_i = i
+      continue i, d
     }
+  } nobreak {
+    best_i
   }
 
   if best_i < 0 {

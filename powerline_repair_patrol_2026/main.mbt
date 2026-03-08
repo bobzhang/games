@@ -689,10 +689,7 @@ fn nearest_fault_index(
   y : Float,
   radius : Float,
 ) -> Int {
-  let mut found : Int = -1
-  let mut best : Float = radius * radius
-
-  for i in 0..<faults.length() {
+  for i in 0..<faults.length(); found = -1, best = radius * radius {
     if !faults[i].active {
       continue
     }
@@ -700,12 +697,11 @@ fn nearest_fault_index(
     let tid : Int = faults[i].tower_id
     let d2v : Float = dist2(x, y, towers[tid].x, towers[tid].y)
     if d2v <= best {
-      best = d2v
-      found = i
+      continue i, d2v
     }
+  } nobreak {
+    found
   }
-
-  found
 }
 
 ///|
@@ -1925,10 +1921,8 @@ fn main {
   state = 0
 
   while !@raylib.window_should_close() {
-    let mut dt : Float = @raylib.get_frame_time()
-    if dt > 0.033 {
-      dt = 0.033
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
     scene_t = scene_t + dt
 
     let mouse = @raylib.get_mouse_position()
@@ -2597,11 +2591,5 @@ fn main {
 
 ///|
 fn active_faults_count(faults : Array[Fault]) -> Int {
-  let mut c : Int = 0
-  for fault in faults {
-    if fault.active {
-      c = c + 1
-    }
-  }
-  c
+  @utils.count_by(faults, fn(fault) { fault.active })
 }

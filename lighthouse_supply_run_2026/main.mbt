@@ -418,40 +418,28 @@ fn init_reefs(
 ///|
 /// Returns the count of currently active storm records.
 fn active_storms(storms : Array[Storm]) -> Int {
-  let mut n : Int = 0
-  for storm in storms {
-    if storm.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(storms, fn(storm) { storm.active })
 }
 
 ///|
 /// Returns the count of currently active pirate records.
 fn active_pirates(pirates : Array[Pirate]) -> Int {
-  let mut n : Int = 0
-  for pirate in pirates {
-    if pirate.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(pirates, fn(pirate) { pirate.active })
 }
 
 ///|
 /// Returns the highest demand value among all active lighthouses.
 fn peak_demand(lights : Array[Lighthouse]) -> Float {
-  let mut best : Float = 0.0
-  for light in lights {
+  for light in lights; best = 0.0F {
     if !light.active {
       continue
     }
     if light.demand > best {
-      best = light.demand
+      continue light.demand
     }
+  } nobreak {
+    best
   }
-  best
 }
 
 ///|
@@ -606,18 +594,16 @@ fn update_storms(
 ///|
 /// Returns the index of the active lighthouse with the highest current demand, or -1 if none are active.
 fn highest_demand_light(lights : Array[Lighthouse]) -> Int {
-  let mut best_i : Int = -1
-  let mut best : Float = -1.0
-  for i in 0..<lights.length() {
+  for i in 0..<lights.length(); best_i = -1, best = -1.0F {
     if !lights[i].active {
       continue
     }
     if lights[i].demand > best {
-      best = lights[i].demand
-      best_i = i
+      continue i, lights[i].demand
     }
+  } nobreak {
+    best_i
   }
-  best_i
 }
 
 ///|
@@ -800,28 +786,24 @@ fn nearest_urgent_light(
   x : Float,
   y : Float,
 ) -> (Bool, Float, Float, Float) {
-  let mut found : Bool = false
-  let mut best_d2 : Float = 999999999.0
-  let mut best_x : Float = x
-  let mut best_y : Float = y
-  let mut best_dem : Float = 0.0
-
-  for light in lights {
+  for
+    light in lights
+    found = false,
+    best_d2 = 999999999.0F,
+    best_x = x,
+    best_y = y,
+    best_dem = 0.0F {
     if !light.active || light.demand < 40.0 {
       continue
     }
 
     let d2v : Float = dist2(x, y, light.x, light.y)
     if d2v < best_d2 {
-      best_d2 = d2v
-      best_x = light.x
-      best_y = light.y
-      best_dem = light.demand
-      found = true
+      continue true, d2v, light.x, light.y, light.demand
     }
+  } nobreak {
+    (found, best_x, best_y, best_dem)
   }
-
-  (found, best_x, best_y, best_dem)
 }
 
 ///|
@@ -1582,10 +1564,8 @@ fn main {
   reset_run()
 
   while !@raylib.window_should_close() {
-    let mut dt : Float = @raylib.get_frame_time()
-    if dt > 0.033 {
-      dt = 0.033
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
     scene_t = scene_t + dt
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {

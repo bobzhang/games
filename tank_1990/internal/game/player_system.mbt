@@ -77,11 +77,12 @@ fn @types.Game::can_player_fire(game : @types.Game, index : Int) -> Bool {
   }
 
   let team = @types.team_of_player(index)
-  let mut active_count = 0
-  for bullet in game.bullets {
+  let active_count = for bullet in game.bullets; count = 0 {
     if bullet.active && bullet.owner_team == team {
-      active_count += 1
+      continue count + 1
     }
+  } nobreak {
+    count
   }
 
   let cap = if player.weapon_level >= 2 { 2 } else { 1 }
@@ -280,15 +281,16 @@ fn @types.Game::update_player_respawns(game : @types.Game, dt : Float) -> Unit {
 /// Returns true when every enabled player is both inactive (destroyed) and has
 /// zero lives left, meaning the game is over.
 fn @types.Game::all_players_out(game : @types.Game) -> Bool {
-  let mut living = 0
-  for i in 0..<@types.max_players {
+  let living = for i in 0..<@types.max_players; living = 0 {
     if !game.is_player_enabled(i) {
       continue
     }
     let player = game.players[i]
     if player.active || player.lives > 0 {
-      living += 1
+      continue living + 1
     }
+  } nobreak {
+    living
   }
   living == 0
 }

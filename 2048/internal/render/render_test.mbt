@@ -29,7 +29,9 @@ fn render_to_png(game : @types.Game, path : String) -> Unit {
 
 ///|
 /// Builds a game in the Title state for testing.
-fn make_title_game() -> @types.Game { Game() }
+fn make_title_game() -> @types.Game {
+  Game()
+}
 
 ///|
 /// Builds a game in Play state with a specific board layout for testing.

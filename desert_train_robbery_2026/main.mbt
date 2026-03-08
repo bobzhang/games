@@ -352,17 +352,17 @@ fn spawn_sheriff(
 ///|
 /// Returns the index of the wagon the player is standing on top of, or -1 if none.
 fn player_support_wagon(player : Rider, wagons : Array[Wagon]) -> Int {
-  let mut idx = -1
-  for i in 0..<wagons.length() {
+  for i in 0..<wagons.length(); idx = -1 {
     let left = wagons[i].x + 10.0
     let right = wagons[i].x + wagons[i].len - 10.0
     if player.x >= left &&
       player.x <= right &&
       (player.y - wagons[i].roof_y).abs() <= 6.0 {
-      idx = i
+      continue i
     }
+  } nobreak {
+    idx
   }
-  idx
 }
 
 ///|
@@ -448,10 +448,8 @@ fn main {
   let loot_y = sh - 170
 
   while !@raylib.window_should_close() {
-    let mut dt = @raylib.get_frame_time()
-    if dt > 0.05 {
-      dt = 0.05
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.05F { 0.05F } else { frame_dt }
 
     wave_t = wave_t + dt
 

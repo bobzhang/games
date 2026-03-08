@@ -337,10 +337,8 @@ fn main {
   let mut msg = "Aim with mouse/touch. W/S power. Space shoot."
 
   while !@raylib.window_should_close() {
-    let mut dt = @raylib.get_frame_time()
-    if dt > 0.05 {
-      dt = 0.05
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.05F { 0.05F } else { frame_dt }
 
     portal_t = portal_t + dt
 

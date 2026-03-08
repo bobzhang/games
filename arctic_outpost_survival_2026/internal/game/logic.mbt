@@ -832,13 +832,13 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
     return false
   }
 
-  let mut best_x : Float = @types.core_x()
-  let mut best_y : Float = @types.core_y()
-  let mut found_pickup : Bool = false
-
-  if game.fuel < 42.0 || game.ammo < 40 {
-    let mut best_d2 : Float = 1_000_000_000.0
-    for pickup in game.pickups {
+  let (best_x, best_y, found_pickup) = if game.fuel < 42.0 || game.ammo < 40 {
+    for
+      pickup in game.pickups
+      best_x = @types.core_x(),
+      best_y = @types.core_y(),
+      found_pickup = false,
+      best_d2 = 1_000_000_000.0F {
       if !pickup.active {
         continue
       }
@@ -861,18 +861,19 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
       )
 
       if d2 < best_d2 {
-        best_d2 = d2
-        best_x = pickup.x
-        best_y = pickup.y
-        found_pickup = true
+        continue pickup.x, pickup.y, true, d2
       }
+    } nobreak {
+      (best_x, best_y, found_pickup)
     }
+  } else {
+    (@types.core_x(), @types.core_y(), false)
   }
 
   if !found_pickup {
-    let mut safest_score : Float = 1_000_000_000.0
-
-    for lane in 0..<5 {
+    let (best_x, best_y) = for
+      lane in 0..<5
+      best_x = best_x, best_y = best_y, safest_score = 1_000_000_000.0F {
       let lx : Float = @types.world_left() +
         120.0 +
         Float::from_int(lane) * (Float::from_int(@types.world_w) - 240.0) / 4.0
@@ -890,15 +891,19 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
       }
 
       if threat < safest_score {
-        safest_score = threat
-        best_x = lx
-        best_y = ly
+        continue lx, ly, threat
       }
+    } nobreak {
+      (best_x, best_y)
     }
+
+    game.hint_x = best_x
+    game.hint_y = best_y
+  } else {
+    game.hint_x = best_x
+    game.hint_y = best_y
   }
 
-  game.hint_x = best_x
-  game.hint_y = best_y
   game.hint_t = 2.8
   game.hint_left = game.hint_left - 1
   game.score = (0).max(game.score - 6)

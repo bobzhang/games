@@ -1,7 +1,7 @@
 ///|
 /// Returns the roll value at `idx`, or 0 when the index is out of the recorded range.
-fn safe_roll(rolls : Array[Int], count : Int, idx : Int) -> Int {
-  if idx >= 0 && idx < count {
+fn safe_roll(rolls : ArrayView[Int], idx : Int) -> Int {
+  if idx >= 0 && idx < rolls.length() {
     rolls[idx]
   } else {
     0
@@ -10,8 +10,8 @@ fn safe_roll(rolls : Array[Int], count : Int, idx : Int) -> Int {
 
 ///|
 /// Returns the roll value at `idx`, or -2 when the index is beyond recorded rolls.
-fn maybe_roll(rolls : Array[Int], count : Int, idx : Int) -> Int {
-  if idx >= 0 && idx < count {
+fn maybe_roll(rolls : ArrayView[Int], idx : Int) -> Int {
+  if idx >= 0 && idx < rolls.length() {
     rolls[idx]
   } else {
     -2
@@ -60,37 +60,38 @@ fn @types.Game::recompute_score(game : @types.Game) -> Unit {
     game.frame_totals[i] = -1
   }
 
+  let rolls = game.rolls[0:game.roll_count]
   let mut idx : Int = 0
   let mut total : Int = 0
 
   for frame in 0..<10 {
-    if idx >= game.roll_count {
+    if idx >= rolls.length() {
       break
     }
 
     if frame < 9 {
-      let a : Int = safe_roll(game.rolls, game.roll_count, idx)
+      let a : Int = safe_roll(rolls, idx)
       if a == 10 {
-        if idx + 2 >= game.roll_count {
+        if idx + 2 >= rolls.length() {
           break
         }
         total = total +
           10 +
-          safe_roll(game.rolls, game.roll_count, idx + 1) +
-          safe_roll(game.rolls, game.roll_count, idx + 2)
+          safe_roll(rolls, idx + 1) +
+          safe_roll(rolls, idx + 2)
         game.frame_totals[frame] = total
         idx = idx + 1
       } else {
-        if idx + 1 >= game.roll_count {
+        if idx + 1 >= rolls.length() {
           break
         }
 
-        let b : Int = safe_roll(game.rolls, game.roll_count, idx + 1)
+        let b : Int = safe_roll(rolls, idx + 1)
         if a + b == 10 {
-          if idx + 2 >= game.roll_count {
+          if idx + 2 >= rolls.length() {
             break
           }
-          total = total + 10 + safe_roll(game.rolls, game.roll_count, idx + 2)
+          total = total + 10 + safe_roll(rolls, idx + 2)
         } else {
           total = total + a + b
         }
@@ -99,25 +100,24 @@ fn @types.Game::recompute_score(game : @types.Game) -> Unit {
         idx = idx + 2
       }
     } else {
-      if idx + 1 >= game.roll_count {
+      if idx + 1 >= rolls.length() {
         break
       }
 
-      let a : Int = safe_roll(game.rolls, game.roll_count, idx)
-      let b : Int = safe_roll(game.rolls, game.roll_count, idx + 1)
+      let a : Int = safe_roll(rolls, idx)
+      let b : Int = safe_roll(rolls, idx + 1)
       let mut frame_total : Int = a + b
 
       if a == 10 || a + b == 10 {
-        if idx + 2 >= game.roll_count {
+        if idx + 2 >= rolls.length() {
           break
         }
-        frame_total = frame_total +
-          safe_roll(game.rolls, game.roll_count, idx + 2)
+        frame_total = frame_total + safe_roll(rolls, idx + 2)
       }
 
       total = total + frame_total
       game.frame_totals[frame] = total
-      idx = game.roll_count
+      idx = rolls.length()
     }
   }
 
@@ -130,34 +130,34 @@ fn @types.Game::recompute_score(game : @types.Game) -> Unit {
 ///|
 /// Returns the roll-log index of the first delivery in the given frame number.
 fn @types.Game::frame_start_roll_idx(game : @types.Game, target : Int) -> Int {
-  let mut idx : Int = 0
-
-  for frame in 0..<target {
+  let rolls = game.rolls[0:game.roll_count]
+  for frame in 0..<target; idx = 0 {
     if frame >= 9 {
-      break
+      break idx
     }
 
-    if idx >= game.roll_count {
-      break
+    if idx >= rolls.length() {
+      break idx
     }
 
-    if game.rolls[idx] == 10 {
-      idx = idx + 1
+    if rolls[idx] == 10 {
+      continue idx + 1
     } else {
-      idx = idx + 2
+      continue idx + 2
     }
+  } nobreak {
+    idx
   }
-
-  idx
 }
 
 ///|
 /// Returns formatted roll marks for a frame as displayed on the scoreboard.
 pub fn frame_marks(game : @types.Game, frame : Int) -> (String, String, String) {
+  let rolls = game.rolls[0:game.roll_count]
   let idx : Int = game.frame_start_roll_idx(frame)
-  let a : Int = maybe_roll(game.rolls, game.roll_count, idx)
-  let b : Int = maybe_roll(game.rolls, game.roll_count, idx + 1)
-  let c : Int = maybe_roll(game.rolls, game.roll_count, idx + 2)
+  let a : Int = maybe_roll(rolls, idx)
+  let b : Int = maybe_roll(rolls, idx + 1)
+  let c : Int = maybe_roll(rolls, idx + 2)
 
   if frame < 9 {
     if a == 10 {

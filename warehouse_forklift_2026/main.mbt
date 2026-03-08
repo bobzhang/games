@@ -41,22 +41,12 @@ fn is_wall(walls : Array[Bool], x : Int, y : Int) -> Bool {
 
 ///|
 fn crate_at(crates : Array[Pos], x : Int, y : Int) -> Int {
-  for i in 0..<crates.length() {
-    if crates[i].x == x && crates[i].y == y {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(crates, fn(crate_) { crate_.x == x && crate_.y == y })
 }
 
 ///|
 fn is_target(targets : Array[Pos], x : Int, y : Int) -> Bool {
-  for target in targets {
-    if target.x == x && target.y == y {
-      return true
-    }
-  }
-  false
+  @utils.any_by(targets, fn(target) { target.x == x && target.y == y })
 }
 
 ///|

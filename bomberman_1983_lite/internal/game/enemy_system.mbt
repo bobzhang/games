@@ -57,19 +57,19 @@ fn @types.Game::choose_enemy_target_player(
   game : @types.Game,
   enemy : @types.Tank,
 ) -> Int {
-  let mut best_idx = -1
-  let mut best_dist : Float = Float::from_int(1000000000)
-  for i in 0..<@types.max_players {
+  for
+    i in 0..<@types.max_players
+    best_idx = -1, best_dist = Float::from_int(1000000000) {
     let player = game.players[i]
     if player.active {
       let d = @types.distance_sq(enemy.x, enemy.y, player.x, player.y)
       if d < best_dist {
-        best_dist = d
-        best_idx = i
+        continue i, d
       }
     }
+  } nobreak {
+    best_idx
   }
-  best_idx
 }
 
 ///|
@@ -78,15 +78,17 @@ fn @types.Game::enemy_desired_dir(
   enemy : @types.Tank,
 ) -> @types.Dir {
   let target_player = game.choose_enemy_target_player(enemy)
-  let mut target_x = @types.tile_center_x(@types.base_tile_x)
-  let mut target_y = @types.tile_center_y(@types.base_tile_y)
-
-  if target_player >= 0 {
+  let base_x = @types.tile_center_x(@types.base_tile_x)
+  let base_y = @types.tile_center_y(@types.base_tile_y)
+  let (target_x, target_y) = if target_player >= 0 {
     let player = game.players[target_player]
     if @types.rand_range(game, 0, 99) < 62 {
-      target_x = player.x
-      target_y = player.y
+      (player.x, player.y)
+    } else {
+      (base_x, base_y)
     }
+  } else {
+    (base_x, base_y)
   }
 
   let dx = target_x - enemy.x

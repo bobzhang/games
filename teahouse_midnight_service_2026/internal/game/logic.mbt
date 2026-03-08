@@ -79,15 +79,15 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.sparks[0].life
-    for i in 1..<game.sparks.length() {
-      if game.sparks[i].life < best_life {
-        best_life = game.sparks[i].life
-        best = i
-      }
+    let best = @utils.min_index_by(
+      game.sparks,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best
   }
 }
 
@@ -98,15 +98,15 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.rings[0].life
-    for i in 1..<game.rings.length() {
-      if game.rings[i].life < best_life {
-        best_life = game.rings[i].life
-        best = i
-      }
+    let best = @utils.min_index_by(
+      game.rings,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best
   }
 }
 
@@ -117,15 +117,15 @@ fn @types.Game::alloc_shadow(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.shadows[0].life
-    for i in 1..<game.shadows.length() {
-      if game.shadows[i].life < best_life {
-        best_life = game.shadows[i].life
-        best = i
-      }
+    let best = @utils.min_index_by(
+      game.shadows,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best
   }
 }
 
@@ -239,12 +239,7 @@ fn @types.Game::clear_combo(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::slot_used(game : @types.Game, slot : Int) -> Bool {
-  for customer in game.customers {
-    if customer.active && customer.slot == slot {
-      return true
-    }
-  }
-  false
+  @utils.any_by(game.customers, fn(customer) { customer.active && customer.slot == slot })
 }
 
 ///|
@@ -264,15 +259,15 @@ fn @types.Game::alloc_customer(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_patience = game.customers[0].patience
-    for i in 1..<game.customers.length() {
+    for
+      i in 1..<game.customers.length()
+      best = 0, best_patience = game.customers[0].patience {
       if game.customers[i].patience < best_patience {
-        best_patience = game.customers[i].patience
-        best = i
+        continue i, game.customers[i].patience
       }
+    } nobreak {
+      best
     }
-    best
   }
 }
 
@@ -344,18 +339,14 @@ fn @types.Game::spawn_customer(game : @types.Game) -> Unit {
 
 ///|
 fn nearest_leaf_station(px : Float, py : Float, reach : Float) -> Int {
-  let mut best = -1
-  let mut best_d2 = reach * reach
-
-  for tea in 0..<@types.tea_count {
+  for tea in 0..<@types.tea_count; best = -1, best_d2 = reach * reach {
     let d2 = @types.dist2(px, py, @types.leaf_x(), @types.leaf_y(tea))
     if d2 <= best_d2 {
-      best_d2 = d2
-      best = tea
+      continue tea, d2
     }
+  } nobreak {
+    best
   }
-
-  best
 }
 
 ///|
@@ -365,22 +356,18 @@ fn @types.Game::nearest_customer(
   y : Float,
   reach : Float,
 ) -> Int {
-  let mut best = -1
-  let mut best_d2 = reach * reach
-
-  for i in 0..<game.customers.length() {
+  for i in 0..<game.customers.length(); best = -1, best_d2 = reach * reach {
     if !game.customers[i].active {
       continue
     }
 
     let d2 = @types.dist2(x, y, game.customers[i].x, game.customers[i].y)
     if d2 <= best_d2 {
-      best_d2 = d2
-      best = i
+      continue i, d2
     }
+  } nobreak {
+    best
   }
-
-  best
 }
 
 ///|

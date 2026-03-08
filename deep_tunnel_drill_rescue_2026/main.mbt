@@ -434,13 +434,7 @@ fn setup_map(tiles : Array[Int], target_miners : Int) -> Int {
 ///|
 /// Returns the number of tiles in the grid that match the given kind.
 fn count_tiles(tiles : Array[Int], kind : Int) -> Int {
-  let mut n : Int = 0
-  for tile in tiles {
-    if tile == kind {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(tiles, fn(tile) { tile == kind })
 }
 
 ///|
@@ -571,28 +565,23 @@ fn nearest_miner(
   px : Float,
   py : Float,
 ) -> (Int, Int, Float) {
-  let mut best_x : Int = -1
-  let mut best_y : Int = -1
-  let mut best_d2 : Float = 99999999.0
-
-  for gy in 0..<grid_h {
-    for gx in 0..<grid_w {
-      if get_tile(tiles, gx, gy) != tile_miner {
-        continue
-      }
-
-      let cx : Float = cell_center_x(gx)
-      let cy : Float = cell_center_y(gy)
-      let d2 : Float = dist2(px, py, cx, cy)
-      if d2 < best_d2 {
-        best_d2 = d2
-        best_x = gx
-        best_y = gy
-      }
+  let total_cells : Int = grid_w * grid_h
+  for idx in 0..<total_cells; best_x = -1, best_y = -1, best_d2 = 99999999.0F {
+    let gy : Int = idx / grid_w
+    let gx : Int = idx % grid_w
+    if get_tile(tiles, gx, gy) != tile_miner {
+      continue
     }
-  }
 
-  (best_x, best_y, best_d2)
+    let cx : Float = cell_center_x(gx)
+    let cy : Float = cell_center_y(gy)
+    let d2 : Float = dist2(px, py, cx, cy)
+    if d2 < best_d2 {
+      continue gx, gy, d2
+    }
+  } nobreak {
+    (best_x, best_y, best_d2)
+  }
 }
 
 ///|
@@ -1274,10 +1263,8 @@ fn main {
   reset_run()
 
   while !@raylib.window_should_close() {
-    let mut dt : Float = @raylib.get_frame_time()
-    if dt > 0.033 {
-      dt = 0.033
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
       @raylib.toggle_fullscreen()

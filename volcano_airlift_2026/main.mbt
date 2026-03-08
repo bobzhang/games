@@ -174,13 +174,7 @@ fn survivors_count(
   total : Int,
   state : Int,
 ) -> Int {
-  let mut c = 0
-  for i in 0..<total {
-    if survivors[i].state == state {
-      c = c + 1
-    }
-  }
-  c
+  @utils.count_by_view(survivors[0:total], fn(survivor) { survivor.state == state })
 }
 
 ///|
@@ -242,10 +236,8 @@ fn main {
   let mut msg = "A/D steer, W lift, S descend, Space pickup/drop."
 
   while !@raylib.window_should_close() {
-    let mut dt = @raylib.get_frame_time()
-    if dt > 0.05 {
-      dt = 0.05
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.05F { 0.05F } else { frame_dt }
 
     rotor_t = rotor_t + dt * 20.0
 
@@ -486,19 +478,22 @@ fn main {
       }
 
       if action && !carrying {
-        for i in 0..<total {
-          if survivors[i].state != 0 {
-            continue
-          }
-          let dx = hx - survivors[i].x
-          let dy = hy - (survivors[i].y - 24.0)
-          if dx * dx + dy * dy <= 36.0 * 36.0 {
-            survivors[i].state = 1
-            carrying = true
-            carry_idx = i
-            msg = "Survivor onboard."
-            break
-          }
+        let pickup_idx = @utils.first_index_by_view(
+          survivors[0:total],
+          fn(survivor) {
+            if survivor.state != 0 {
+              return false
+            }
+            let dx = hx - survivor.x
+            let dy = hy - (survivor.y - 24.0)
+            dx * dx + dy * dy <= 36.0 * 36.0
+          },
+        )
+        if pickup_idx >= 0 {
+          survivors[pickup_idx].state = 1
+          carrying = true
+          carry_idx = pickup_idx
+          msg = "Survivor onboard."
         }
       }
 

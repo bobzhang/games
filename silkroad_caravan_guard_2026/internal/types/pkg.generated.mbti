@@ -135,7 +135,10 @@ pub(all) struct Bullet {
   mut vy : Float
   mut life : Float
   mut dmg : Float
+
+  fn new() -> Bullet
 }
+#deprecated
 pub fn Bullet::new() -> Self
 
 pub(all) struct Dust {
@@ -147,7 +150,10 @@ pub(all) struct Dust {
   mut life : Float
   mut size : Float
   mut kind : Int
+
+  fn new() -> Dust
 }
+#deprecated
 pub fn Dust::new() -> Self
 
 pub(all) struct Game {
@@ -183,7 +189,10 @@ pub(all) struct Game {
   mut input_pause_press : Bool
   mut input_restart_press : Bool
   mut input_confirm_press : Bool
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -209,7 +218,10 @@ pub(all) struct Player {
   mut shoot_cd : Float
   mut invuln_t : Float
   mut repair_t : Float
+
+  fn new() -> Player
 }
+#deprecated
 pub fn Player::new() -> Self
 
 pub(all) struct Raider {
@@ -226,7 +238,10 @@ pub(all) struct Raider {
   mut attack_cd : Float
   mut flash_t : Float
   mut radius : Float
+
+  fn new() -> Raider
 }
+#deprecated
 pub fn Raider::new() -> Self
 
 pub(all) enum RaiderKind {
@@ -242,7 +257,10 @@ pub(all) struct Wagon {
   mut hp : Float
   max_hp : Float
   mut repair_cd : Float
+
+  fn new(Int) -> Wagon
 }
+#deprecated
 pub fn Wagon::new(Int) -> Self
 
 // Type aliases

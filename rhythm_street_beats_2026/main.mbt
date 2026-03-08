@@ -408,10 +408,8 @@ fn main {
   reset_game()
 
   while !@raylib.window_should_close() {
-    let mut dt : Float = @raylib.get_frame_time()
-    if dt > 0.033 {
-      dt = 0.033
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
       @raylib.toggle_fullscreen()
@@ -532,9 +530,7 @@ fn main {
             continue
           }
 
-          let mut best : Int = -1
-          let mut best_dist : Float = 99.0
-          for i in 0..<note_count {
+          for i in 0..<note_count; best = -1, best_dist = 99.0F {
             if !notes[i].active {
               continue
             }
@@ -547,38 +543,37 @@ fn main {
 
             let dist : Float = (song_t - notes[i].time).abs()
             if dist < best_dist {
-              best_dist = dist
-              best = i
+              continue i, dist
             }
-          }
+          } nobreak {
+            if best >= 0 && best_dist <= 0.18 {
+              let hitx : Float = lane_center(lane)
+              let hity : Float = hit_y
 
-          if best >= 0 && best_dist <= 0.18 {
-            let hitx : Float = lane_center(lane)
-            let hity : Float = hit_y
+              if notes[best].kind == 1 {
+                notes[best].state = 1
+                notes[best].hold_ratio = 0.0
+                notes[best].pop_t = 0.0
 
-            if notes[best].kind == 1 {
-              notes[best].state = 1
-              notes[best].hold_ratio = 0.0
-              notes[best].pop_t = 0.0
-
-              judge_text = "HOLD"
-              judge_t = 0.32
-              judge_kind = 1
-              burst(particles, hitx, hity, 7, 0.28, 1)
-            } else {
-              notes[best].state = 2
-              notes[best].pop_t = 0.22
-
-              if best_dist <= 0.05 {
-                mark_hit(1050, 0, hitx, hity)
-              } else if best_dist <= 0.10 {
-                mark_hit(760, 1, hitx, hity)
+                judge_text = "HOLD"
+                judge_t = 0.32
+                judge_kind = 1
+                burst(particles, hitx, hity, 7, 0.28, 1)
               } else {
-                mark_hit(480, 2, hitx, hity)
+                notes[best].state = 2
+                notes[best].pop_t = 0.22
+
+                if best_dist <= 0.05 {
+                  mark_hit(1050, 0, hitx, hity)
+                } else if best_dist <= 0.10 {
+                  mark_hit(760, 1, hitx, hity)
+                } else {
+                  mark_hit(480, 2, hitx, hity)
+                }
               }
+            } else {
+              mark_miss(lane_center(lane), hit_y, "MISS")
             }
-          } else {
-            mark_miss(lane_center(lane), hit_y, "MISS")
           }
         }
 

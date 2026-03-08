@@ -139,9 +139,7 @@ fn @types.Game::spawn_prompt(game : @types.Game) -> Unit {
     }
   }
 
-  game.prompt = Prompt(
-    lane_x, lane_y, stance, @types.prompt_lead_time,
-  )
+  game.prompt = Prompt(lane_x, lane_y, stance, @types.prompt_lead_time)
   game.prompt_active = true
   game.prompt_serial = game.prompt_serial + 1
 }

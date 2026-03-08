@@ -42,7 +42,10 @@ pub(all) struct Bullet {
   mut vx : Float
   mut vy : Float
   mut ttl : Float
+
+  fn new() -> Bullet
 }
+#deprecated
 pub fn Bullet::new() -> Self
 
 pub(all) struct Game {
@@ -60,7 +63,10 @@ pub(all) struct Game {
   mut lives : Int
   mut wave : Int
   mut game_over : Bool
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) struct Rock {
@@ -71,7 +77,10 @@ pub(all) struct Rock {
   mut vy : Float
   mut radius : Float
   mut size : Int
+
+  fn new() -> Rock
 }
+#deprecated
 pub fn Rock::new() -> Self
 
 // Type aliases

@@ -738,18 +738,16 @@ fn nearest_span_index(
   y : Float,
   radius : Float,
 ) -> Int {
-  let mut found : Int = -1
-  let mut best : Float = radius * radius
-  for i in 0..<spans.length() {
+  for i in 0..<spans.length(); found = -1, best = radius * radius {
     let cx : Float = spans[i].x + spans[i].w * 0.5
     let cy : Float = spans[i].y + spans[i].h * 0.5
     let d2 : Float = dist2(x, y, cx, cy)
     if d2 <= best {
-      best = d2
-      found = i
+      continue i, d2
     }
+  } nobreak {
+    found
   }
-  found
 }
 
 ///|
@@ -1884,10 +1882,8 @@ fn main {
   reset_run()
 
   while !@raylib.window_should_close() {
-    let mut dt : Float = @raylib.get_frame_time()
-    if dt > 0.033 {
-      dt = 0.033
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
     scene_t = scene_t + dt
 
     let mouse = @raylib.get_mouse_position()
@@ -2436,17 +2432,18 @@ fn main {
         let mut did_action : Bool = false
 
         // Pick up from nearest raft
-        let mut nearest_raft : Int = -1
-        let mut best_d2 : Float = 54.0 * 54.0
-        for i in 0..<rafts.length() {
+        let nearest_raft = for
+          i in 0..<rafts.length()
+          nearest_raft = -1, best_d2 = 54.0F * 54.0F {
           if !rafts[i].active {
             continue
           }
           let d2 : Float = dist2(boat.x, boat.y, rafts[i].x, rafts[i].y)
           if d2 <= best_d2 {
-            best_d2 = d2
-            nearest_raft = i
+            continue i, d2
           }
+        } nobreak {
+          nearest_raft
         }
         if nearest_raft >= 0 {
           let can_take : Int = boat.capacity - boat.passengers

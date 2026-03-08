@@ -585,16 +585,13 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
     return false
   }
 
-  let mut best_x : Float = game.raft_x
-  let mut best_y : Float = @types.clampf(
+  let best_y : Float = @types.clampf(
     game.raft_y - 210.0,
     @types.world_top() + 80.0,
     @types.world_bottom() - 80.0,
   )
 
-  let mut best_cost : Float = 1_000_000.0
-
-  for lane in 0..<5 {
+  let best_x = for lane in 0..<5; best_x = game.raft_x, best_cost = 1_000_000.0F {
     let lane_x : Float = @types.world_left() +
       120.0 +
       Float::from_int(lane) * (Float::from_int(@types.world_w) - 240.0) / 4.0
@@ -620,15 +617,18 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
     }
 
     if cost < best_cost {
-      best_cost = cost
-      best_x = lane_x
+      continue lane_x, cost
     }
+  } nobreak {
+    best_x
   }
 
-  let mut pickup_found : Bool = false
-  let mut pickup_dist : Float = 1_000_000.0
-
-  for pickup in game.pickups {
+  let (best_x, best_y, pickup_found) = for
+    pickup in game.pickups
+    best_x = best_x,
+    best_y = best_y,
+    pickup_found = false,
+    pickup_dist = 1_000_000.0F {
     if !pickup.active {
       continue
     }
@@ -649,11 +649,10 @@ fn @types.Game::use_hint(game : @types.Game) -> Bool {
     )
 
     if d2 < pickup_dist {
-      pickup_dist = d2
-      best_x = pickup.x
-      best_y = pickup.y
-      pickup_found = true
+      continue pickup.x, pickup.y, true, d2
     }
+  } nobreak {
+    (best_x, best_y, pickup_found)
   }
 
   game.hint_x = best_x

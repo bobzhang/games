@@ -101,15 +101,12 @@ fn @types.Game::alloc_obj(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_y = game.objs[0].y
-    for i in 1..<game.objs.length() {
-      if game.objs[i].y > best_y {
-        best_y = game.objs[i].y
-        best = i
-      }
+    let best = @utils.max_index_by(game.objs, fn(a, b) { a.y > b.y })
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best
   }
 }
 
@@ -121,15 +118,15 @@ fn @types.Game::alloc_shot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.shots[0].life
-    for i in 1..<game.shots.length() {
-      if game.shots[i].life < best_life {
-        best_life = game.shots[i].life
-        best = i
-      }
+    let best = @utils.min_index_by(
+      game.shots,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best
   }
 }
 
@@ -141,15 +138,15 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.sparks[0].life
-    for i in 1..<game.sparks.length() {
-      if game.sparks[i].life < best_life {
-        best_life = game.sparks[i].life
-        best = i
-      }
+    let best = @utils.min_index_by(
+      game.sparks,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best
   }
 }
 
@@ -161,15 +158,15 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.rings[0].life
-    for i in 1..<game.rings.length() {
-      if game.rings[i].life < best_life {
-        best_life = game.rings[i].life
-        best = i
-      }
+    let best = @utils.min_index_by(
+      game.rings,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best
   }
 }
 
@@ -181,15 +178,15 @@ fn @types.Game::alloc_ghost(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.ghosts[0].life
-    for i in 1..<game.ghosts.length() {
-      if game.ghosts[i].life < best_life {
-        best_life = game.ghosts[i].life
-        best = i
-      }
+    let best = @utils.min_index_by(
+      game.ghosts,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best
   }
 }
 

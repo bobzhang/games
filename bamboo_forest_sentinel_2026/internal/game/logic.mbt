@@ -21,14 +21,14 @@ fn @types.Game::preferred_alive_beacon(
     return preferred
   }
 
-  let mut best_index = -1
-  let mut best_integrity : Float = -1.0
-
-  for i in 0..<game.beacons.length() {
+  let (best_index, best_integrity) = for
+    i in 0..<game.beacons.length()
+    best_index = -1, best_integrity = -1.0F {
     if game.beacons[i].integrity > best_integrity {
-      best_integrity = game.beacons[i].integrity
-      best_index = i
+      continue i, game.beacons[i].integrity
     }
+  } nobreak {
+    (best_index, best_integrity)
   }
 
   if best_integrity <= 0.0 {
@@ -165,10 +165,9 @@ fn @types.Game::nearest_trap_slot(
   want_active : Bool,
   max_distance : Float,
 ) -> Int {
-  let mut best = -1
-  let mut best_d2 = @types.squaref(max_distance)
-
-  for i in 0..<game.traps.length() {
+  for
+    i in 0..<game.traps.length()
+    best = -1, best_d2 = @types.squaref(max_distance) {
     if game.traps[i].active != want_active {
       continue
     }
@@ -180,12 +179,11 @@ fn @types.Game::nearest_trap_slot(
       game.traps[i].y,
     )
     if d2 <= best_d2 {
-      best = i
-      best_d2 = d2
+      continue i, d2
     }
+  } nobreak {
+    best
   }
-
-  best
 }
 
 ///|
@@ -468,12 +466,7 @@ fn @types.Game::handle_player_actions(game : @types.Game) -> Unit {
 ///|
 /// Returns the index of the first inactive enemy slot, or -1 if all slots are occupied.
 fn @types.Game::free_enemy_slot(game : @types.Game) -> Int {
-  for i, slot in game.enemies {
-    if !slot.active {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(game.enemies, fn(slot) { !slot.active })
 }
 
 ///|
@@ -577,10 +570,9 @@ fn @types.Game::update_traps(game : @types.Game, dt : Float) -> Unit {
       continue
     }
 
-    let mut hit_index = -1
-    let mut best_d2 = @types.squaref(@types.trap_trigger_radius)
-
-    for j in 0..<game.enemies.length() {
+    let hit_index = for
+      j in 0..<game.enemies.length()
+      hit_index = -1, best_d2 = @types.squaref(@types.trap_trigger_radius) {
       if !game.enemies[j].active {
         continue
       }
@@ -592,9 +584,10 @@ fn @types.Game::update_traps(game : @types.Game, dt : Float) -> Unit {
         game.enemies[j].y,
       )
       if d2 <= best_d2 {
-        hit_index = j
-        best_d2 = d2
+        continue j, d2
       }
+    } nobreak {
+      hit_index
     }
 
     if hit_index >= 0 {

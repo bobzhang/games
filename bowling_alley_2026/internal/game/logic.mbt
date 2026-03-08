@@ -112,51 +112,43 @@ fn @types.Game::reset_ball(game : @types.Game) -> Unit {
 /// Positions all ten pins in standard triangular formation and zeroes their motion state.
 fn @types.Game::reset_full_rack(game : @types.Game) -> Unit {
   let cx : Float = @types.ball_start_x
-  let mut idx : Int = 0
-
-  for row in 0..<4 {
-    let y : Float = @types.pin_deck_y +
-      Float::from_int(row) * @types.pin_row_gap
-    let x0 : Float = cx - Float::from_int(row) * @types.pin_col_gap * 0.5
-
-    for col in 0..<=row {
-      if idx >= game.pins.length() {
-        continue
+  for idx, pin in game.pins {
+    if idx < 10 {
+      let row : Int = if idx < 1 {
+        0
+      } else if idx < 3 {
+        1
+      } else if idx < 6 {
+        2
+      } else {
+        3
       }
+      let row_start : Int = row * (row + 1) / 2
+      let col : Int = idx - row_start
+      let y : Float = @types.pin_deck_y +
+        Float::from_int(row) * @types.pin_row_gap
+      let x0 : Float = cx - Float::from_int(row) * @types.pin_col_gap * 0.5
 
-      game.pins[idx].standing = true
-      game.pins[idx].x = x0 + Float::from_int(col) * @types.pin_col_gap
-      game.pins[idx].y = y
-      game.pins[idx].vx = 0.0
-      game.pins[idx].vy = 0.0
-      game.pins[idx].ang = 0.0
-      game.pins[idx].ang_v = 0.0
-      idx = idx + 1
+      pin.standing = true
+      pin.x = x0 + Float::from_int(col) * @types.pin_col_gap
+      pin.y = y
+    } else {
+      pin.standing = false
+      pin.x = -200.0
+      pin.y = -200.0
     }
-  }
 
-  while idx < game.pins.length() {
-    game.pins[idx].standing = false
-    game.pins[idx].x = -200.0
-    game.pins[idx].y = -200.0
-    game.pins[idx].vx = 0.0
-    game.pins[idx].vy = 0.0
-    game.pins[idx].ang = 0.0
-    game.pins[idx].ang_v = 0.0
-    idx = idx + 1
+    pin.vx = 0.0
+    pin.vy = 0.0
+    pin.ang = 0.0
+    pin.ang_v = 0.0
   }
 }
 
 ///|
 /// Returns the number of pins that are still standing.
 fn @types.Game::count_standing(game : @types.Game) -> Int {
-  let mut n : Int = 0
-  for pin in game.pins {
-    if pin.standing {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(game.pins, fn(pin) { pin.standing })
 }
 
 ///|

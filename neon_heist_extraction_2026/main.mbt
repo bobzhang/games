@@ -687,37 +687,19 @@ fn burst(
 ///|
 /// Returns the number of active terminals that have been fully hacked.
 fn count_hacked(terminals : Array[Terminal]) -> Int {
-  let mut n : Int = 0
-  for terminal in terminals {
-    if terminal.active && terminal.hacked {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(terminals, fn(terminal) { terminal.active && terminal.hacked })
 }
 
 ///|
 /// Returns the total number of active terminals in the pool.
 fn count_terminals(terminals : Array[Terminal]) -> Int {
-  let mut n : Int = 0
-  for terminal in terminals {
-    if terminal.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(terminals, fn(terminal) { terminal.active })
 }
 
 ///|
 /// Returns the total number of currently active guards in the pool.
 fn count_active_guards(guards : Array[Guard]) -> Int {
-  let mut n : Int = 0
-  for guard_val in guards {
-    if guard_val.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(guards, fn(guard_val) { guard_val.active })
 }
 
 ///|
@@ -1129,10 +1111,8 @@ fn main {
   reset_run()
 
   while !@raylib.window_should_close() {
-    let mut dt : Float = @raylib.get_frame_time()
-    if dt > 0.033 {
-      dt = 0.033
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
       @raylib.toggle_fullscreen()

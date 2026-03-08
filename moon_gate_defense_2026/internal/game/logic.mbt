@@ -195,12 +195,10 @@ fn @types.Game::enter_game_over(game : @types.Game) -> Unit {
 ///|
 /// Returns the index of the node at grid cell `(gx, gy)`, or -1 if none exists.
 fn @types.Game::find_node_at(game : @types.Game, gx : Int, gy : Int) -> Int {
-  for i in 0..<game.nodes.length() {
-    if game.nodes[i].active && game.nodes[i].gx == gx && game.nodes[i].gy == gy {
-      return i
-    }
-  }
-  -1
+  @utils.first_index_by(
+    game.nodes,
+    fn(node) { node.active && node.gx == gx && node.gy == gy },
+  )
 }
 
 ///|
@@ -571,15 +569,13 @@ fn @types.Game::update_nodes(game : @types.Game, dt : Float) -> Unit {
     let fx = @types.dir_vec_x(node.facing)
     let fy = @types.dir_vec_y(node.facing)
 
-    let mut best = -1
-    let mut best_d2 = range2
-    for j in 0..<game.enemies.length() {
-      if !game.enemies[j].active {
+    for j, enemy in game.enemies; best = -1, best_d2 = range2 {
+      if !enemy.active {
         continue
       }
 
-      let dx = game.enemies[j].x - x
-      let dy = game.enemies[j].y - y
+      let dx = enemy.x - x
+      let dy = enemy.y - y
       let d2 = dx * dx + dy * dy
       if d2 > range2 {
         continue
@@ -595,21 +591,20 @@ fn @types.Game::update_nodes(game : @types.Game, dt : Float) -> Unit {
       }
 
       if d2 < best_d2 {
-        best = j
-        best_d2 = d2
+        continue j, d2
       }
-    }
-
-    if best >= 0 {
-      game.spawn_bolt(
-        x,
-        y,
-        game.enemies[best].x,
-        game.enemies[best].y,
-        @types.node_damage(node.level),
-      )
-      node.cooldown = @types.node_fire_cd(node.level)
-      node.pulse = @types.maxf(node.pulse, 0.72)
+    } nobreak {
+      if best >= 0 {
+        game.spawn_bolt(
+          x,
+          y,
+          game.enemies[best].x,
+          game.enemies[best].y,
+          @types.node_damage(node.level),
+        )
+        node.cooldown = @types.node_fire_cd(node.level)
+        node.pulse = @types.maxf(node.pulse, 0.72)
+      }
     }
   }
 }

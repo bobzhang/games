@@ -80,10 +80,8 @@ fn main {
   let mut game_over = false
 
   while !@raylib.window_should_close() {
-    let mut dt = @raylib.get_frame_time()
-    if dt > 0.05 {
-      dt = 0.05
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.05F { 0.05F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyR) {
       for tower in towers {
@@ -178,17 +176,18 @@ fn main {
 
         let lane = tower.lane
         let tx = Float::from_int(grid_x + tower.slot * cell_w + cell_w / 2)
-        let mut best = -1
-        let mut best_x : Float = 1_000_000_000.0
-        for i in 0..<enemies.length() {
+        let best = for
+          i in 0..<enemies.length()
+          best = -1, best_x = 1_000_000_000.0F {
           if !enemies[i].alive || enemies[i].lane != lane {
             continue
           }
           let d = enemies[i].x - tx
           if d >= 0.0 && d <= 260.0 && enemies[i].x < best_x {
-            best_x = enemies[i].x
-            best = i
+            continue i, enemies[i].x
           }
+        } nobreak {
+          best
         }
 
         if best >= 0 {

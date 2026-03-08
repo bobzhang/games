@@ -304,34 +304,32 @@ fn @types.Game::clamp_kart_to_track_bounds(
     return
   }
   // Find nearest waypoint segment
-  let mut best_dist : Float = 99999.0
-  let mut best_seg = 0
-  for i in 0..<wc {
+  for i in 0..<wc; best_dist = 99999.0F, best_seg = 0 {
     let wp = game.waypoints[i]
     let d = @types.distance2d(kart.x, kart.z, wp.x, wp.z)
     if d < best_dist {
-      best_dist = d
-      best_seg = i
+      continue d, i
     }
-  }
-  // Get segment width multiplier
-  let seg = game.segments[best_seg]
-  let track_width = @types.road_width * seg.width_mult
-  // Check distance from track center line
-  let max_dist = track_width * 2.5
-  if best_dist > max_dist {
-    // Push kart back towards track
-    let wp = game.waypoints[best_seg]
-    let dx = wp.x - kart.x
-    let dz = wp.z - kart.z
-    let d = @types.distance2d(kart.x, kart.z, wp.x, wp.z)
-    if d > 0.01 {
-      let push = (best_dist - max_dist) * 0.5
-      kart.x = kart.x + dx / d * push
-      kart.z = kart.z + dz / d * push
+  } nobreak {
+    // Get segment width multiplier
+    let seg = game.segments[best_seg]
+    let track_width = @types.road_width * seg.width_mult
+    // Check distance from track center line
+    let max_dist = track_width * 2.5
+    if best_dist > max_dist {
+      // Push kart back towards track
+      let wp = game.waypoints[best_seg]
+      let dx = wp.x - kart.x
+      let dz = wp.z - kart.z
+      let d = @types.distance2d(kart.x, kart.z, wp.x, wp.z)
+      if d > 0.01 {
+        let push = (best_dist - max_dist) * 0.5
+        kart.x = kart.x + dx / d * push
+        kart.z = kart.z + dz / d * push
+      }
+      // Slow down when off track
+      kart.speed = kart.speed * 0.95
     }
-    // Slow down when off track
-    kart.speed = kart.speed * 0.95
   }
 }
 

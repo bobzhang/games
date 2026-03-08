@@ -395,7 +395,10 @@ pub(all) struct Game {
   mut preview_timer : Float
   mut fastest_lap_kart : Int
   mut fastest_lap_time : Float
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {

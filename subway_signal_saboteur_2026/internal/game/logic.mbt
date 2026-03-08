@@ -291,13 +291,7 @@ fn train_color_from_target(target_lane : Int) -> @types.TrainColor {
 
 ///|
 fn @types.Game::active_train_count(game : @types.Game) -> Int {
-  let mut n : Int = 0
-  for train in game.trains {
-    if train.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(game.trains, fn(train) { train.active })
 }
 
 ///|
@@ -354,15 +348,13 @@ fn @types.Game::try_toggle_switch(game : @types.Game) -> Bool {
   }
 
   let px : Int = game.player.x
-  let mut best_i : Int = -1
-  let mut best_d : Int = 999
-
-  for i in 0..<@types.junction_n {
+  let best_i = for i in 0..<@types.junction_n; best_i = -1, best_d = 999 {
     let d : Int = (px - @types.junction_x(i)).abs()
     if d <= 1 && d < best_d {
-      best_i = i
-      best_d = d
+      continue i, d
     }
+  } nobreak {
+    best_i
   }
 
   if best_i < 0 {
@@ -578,10 +570,7 @@ fn @types.Game::choose_inspector_step(
 
   if g.mode == Hunt {
     let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-    let mut best_i : Int = -1
-    let mut best_d : Int = 999999
-
-    for k in 0..<4 {
+    let best_i = for k in 0..<4; best_i = -1, best_d = 999999 {
       let nx : Int = gx + dirs[k].0
       let ny : Int = gy + dirs[k].1
       if game.blocked_for_inspector(nx, ny) {
@@ -590,9 +579,10 @@ fn @types.Game::choose_inspector_step(
 
       let dd : Int = @types.manhattan(nx, ny, px, py)
       if dd < best_d {
-        best_d = dd
-        best_i = k
+        continue k, dd
       }
+    } nobreak {
+      best_i
     }
 
     if best_i >= 0 {

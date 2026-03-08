@@ -503,10 +503,7 @@ fn nearest_viable_building(
   x : Float,
   y : Float,
 ) -> Int {
-  let mut best : Int = -1
-  let mut best_d2 : Float = 99999999.0
-
-  for i in 0..<buildings.length() {
+  for i in 0..<buildings.length(); best = -1, best_d2 = 99999999.0F {
     if !buildings[i].active || buildings[i].collapsed {
       continue
     }
@@ -515,12 +512,11 @@ fn nearest_viable_building(
     let by : Float = building_center_y(buildings[i])
     let d2 : Float = dist2(x, y, bx, by)
     if d2 < best_d2 {
-      best_d2 = d2
-      best = i
+      continue i, d2
     }
+  } nobreak {
+    best
   }
-
-  best
 }
 
 ///|
@@ -1228,10 +1224,8 @@ fn main {
   reset_run()
 
   while !@raylib.window_should_close() {
-    let mut dt : Float = @raylib.get_frame_time()
-    if dt > 0.033 {
-      dt = 0.033
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyF11) {
       @raylib.toggle_fullscreen()

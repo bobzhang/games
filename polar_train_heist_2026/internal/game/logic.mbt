@@ -107,15 +107,12 @@ fn @types.Game::alloc_ent(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_x = game.ents[0].x
-    for i in 1..<game.ents.length() {
-      if game.ents[i].x < best_x {
-        best_x = game.ents[i].x
-        best = i
-      }
+    let best = @utils.min_index_by(game.ents, fn(a, b) { a.x < b.x })
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best
   }
 }
 
@@ -127,15 +124,15 @@ fn @types.Game::alloc_shot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.shots[0].life
-    for i in 1..<game.shots.length() {
-      if game.shots[i].life < best_life {
-        best_life = game.shots[i].life
-        best = i
-      }
+    let best = @utils.min_index_by(
+      game.shots,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best
   }
 }
 
@@ -147,15 +144,15 @@ fn @types.Game::alloc_fx(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.fxs[0].life
-    for i in 1..<game.fxs.length() {
-      if game.fxs[i].life < best_life {
-        best_life = game.fxs[i].life
-        best = i
-      }
+    let best = @utils.min_index_by(
+      game.fxs,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best
   }
 }
 
@@ -167,15 +164,15 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.rings[0].life
-    for i in 1..<game.rings.length() {
-      if game.rings[i].life < best_life {
-        best_life = game.rings[i].life
-        best = i
-      }
+    let best = @utils.min_index_by(
+      game.rings,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best
   }
 }
 
@@ -187,15 +184,15 @@ fn @types.Game::alloc_shadow(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let mut best = 0
-    let mut best_life = game.shadows[0].life
-    for i in 1..<game.shadows.length() {
-      if game.shadows[i].life < best_life {
-        best_life = game.shadows[i].life
-        best = i
-      }
+    let best = @utils.min_index_by(
+      game.shadows,
+      fn(a, b) { a.life < b.life },
+    )
+    if best >= 0 {
+      best
+    } else {
+      0
     }
-    best
   }
 }
 

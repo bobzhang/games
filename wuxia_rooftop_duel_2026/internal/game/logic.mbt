@@ -19,13 +19,7 @@ fn @types.Game::clear_enemies(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::active_enemy_count(game : @types.Game) -> Int {
-  let mut count : Int = 0
-  for enemy in game.enemies {
-    if enemy.active {
-      count = count + 1
-    }
-  }
-  count
+  @utils.count_by(game.enemies, fn(enemy) { enemy.active })
 }
 
 ///|

@@ -132,7 +132,10 @@ pub(all) struct Game {
   mut mouse_y : Float
   mut mouse_hold : Bool
   mut touch_count : Int
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -150,7 +153,10 @@ pub(all) struct Pin {
   mut vy : Float
   mut ang : Float
   mut ang_v : Float
+
+  fn new() -> Pin
 }
+#deprecated
 pub fn Pin::new() -> Self
 
 pub(all) struct Spark {
@@ -162,7 +168,10 @@ pub(all) struct Spark {
   mut life : Float
   mut size : Float
   mut kind : Int
+
+  fn new() -> Spark
 }
+#deprecated
 pub fn Spark::new() -> Self
 
 // Type aliases

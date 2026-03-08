@@ -88,10 +88,8 @@ fn main {
   let mut msg = "Q/A Plant1  W/S Plant2  E/D Plant3  Space battery reserve"
 
   while !@raylib.window_should_close() {
-    let mut dt = @raylib.get_frame_time()
-    if dt > 0.05 {
-      dt = 0.05
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.05F { 0.05F } else { frame_dt }
 
     if @raylib.is_key_pressed(@raylib.KeyR) {
       reset_sector_values(sectors)

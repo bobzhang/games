@@ -583,7 +583,10 @@ pub(all) struct Game {
   mut accuracy_pct : Float
   mut mission_rating : String
   best_scores : Array[Int]
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) struct GameMessage {
@@ -675,8 +678,11 @@ pub(all) struct Player {
   mut shots_fired : Int
   mut shots_hit : Int
   mut weapon_switch_timer : Float
+
+  fn new() -> Player
 }
 pub fn Player::apply_stats(Self, AircraftStats) -> Unit
+#deprecated
 pub fn Player::new() -> Self
 
 pub(all) struct Projectile {
@@ -750,7 +756,10 @@ pub(all) struct WeatherState {
   mut cloud_height : Float
   mut rain_intensity : Float
   mut time_of_day : Float
+
+  fn new() -> WeatherState
 }
+#deprecated
 pub fn WeatherState::new() -> Self
 pub fn WeatherState::set_weather(Self, Weather) -> Unit
 

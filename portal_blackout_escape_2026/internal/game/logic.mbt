@@ -205,17 +205,10 @@ fn @types.Game::flare_cover_at(game : @types.Game, x : Int, y : Int) -> Bool {
 ///|
 /// Returns the index of the active core at tile `(x, y)`, or -1 if none present.
 fn @types.Game::core_index_at(game : @types.Game, x : Int, y : Int) -> Int {
-  for i in 0..<game.cores.length() {
-    if !game.cores[i].active {
-      continue
-    }
-
-    if game.cores[i].x == x && game.cores[i].y == y {
-      return i
-    }
-  }
-
-  -1
+  @utils.first_index_by(
+    game.cores,
+    fn(core) { core.active && core.x == x && core.y == y },
+  )
 }
 
 ///|
@@ -226,17 +219,12 @@ fn @types.Game::drone_index_at(
   y : Int,
   skip : Int,
 ) -> Int {
-  for i in 0..<game.drones.length() {
-    if i == skip || !game.drones[i].active {
-      continue
-    }
-
-    if game.drones[i].body.x == x && game.drones[i].body.y == y {
-      return i
-    }
-  }
-
-  -1
+  @utils.first_indexi_by(
+    game.drones,
+    fn(i, drone) {
+      i != skip && drone.active && drone.body.x == x && drone.body.y == y
+    },
+  )
 }
 
 ///|
@@ -661,10 +649,7 @@ fn @types.Game::choose_drone_step(game : @types.Game, i : Int) -> (Int, Int) {
   let dirs : Array[(Int, Int)] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
   if d.mode == Hunt {
-    let mut best_k : Int = -1
-    let mut best_d : Int = 999999
-
-    for k in 0..<4 {
+    let best_k = for k in 0..<4; best_k = -1, best_d = 999999 {
       let nx : Int = gx + dirs[k].0
       let ny : Int = gy + dirs[k].1
       if game.blocked_for_drone(i, nx, ny) {
@@ -673,9 +658,10 @@ fn @types.Game::choose_drone_step(game : @types.Game, i : Int) -> (Int, Int) {
 
       let dd : Int = @types.manhattan(nx, ny, px, py)
       if dd < best_d {
-        best_d = dd
-        best_k = k
+        continue k, dd
       }
+    } nobreak {
+      best_k
     }
 
     if best_k >= 0 {

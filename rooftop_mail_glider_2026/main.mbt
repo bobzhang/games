@@ -455,24 +455,12 @@ fn init_wind_tunnels(
 
 ///|
 fn active_delivery_count(deliveries : Array[Delivery]) -> Int {
-  let mut c : Int = 0
-  for delivery in deliveries {
-    if delivery.active {
-      c = c + 1
-    }
-  }
-  c
+  @utils.count_by(deliveries, fn(delivery) { delivery.active })
 }
 
 ///|
 fn active_delivery_for_pad(deliveries : Array[Delivery], pad_id : Int) -> Int {
-  let mut c : Int = 0
-  for delivery in deliveries {
-    if delivery.active && delivery.pad_id == pad_id {
-      c = c + 1
-    }
-  }
-  c
+  @utils.count_by(deliveries, fn(delivery) { delivery.active && delivery.pad_id == pad_id })
 }
 
 ///|
@@ -612,20 +600,16 @@ fn nearest_pad_id(
   y : Float,
   radius : Float,
 ) -> Int {
-  let mut found : Int = -1
-  let mut best : Float = radius * radius
-
-  for pad in pads {
+  for pad in pads; found = -1, best = radius * radius {
     let cx : Float = pad.x + pad.w * 0.5
     let cy : Float = pad.y + pad.h * 0.5
     let d2v : Float = dist2(x, y, cx, cy)
     if d2v <= best {
-      best = d2v
-      found = pad.id
+      continue pad.id, d2v
     }
+  } nobreak {
+    found
   }
-
-  found
 }
 
 ///|
@@ -1729,10 +1713,8 @@ fn main {
   state = 0
 
   while !@raylib.window_should_close() {
-    let mut dt : Float = @raylib.get_frame_time()
-    if dt > 0.033 {
-      dt = 0.033
-    }
+    let frame_dt = @raylib.get_frame_time()
+    let dt = if frame_dt > 0.033F { 0.033F } else { frame_dt }
     scene_t = scene_t + dt
 
     let mouse = @raylib.get_mouse_position()

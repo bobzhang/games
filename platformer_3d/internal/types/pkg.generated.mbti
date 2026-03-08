@@ -725,7 +725,10 @@ pub(all) struct Game {
   level_stars : Array[Int]
   mut rng_state : Int
   mut frame_counter : Int
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {

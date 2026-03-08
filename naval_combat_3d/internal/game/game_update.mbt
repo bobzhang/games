@@ -491,42 +491,42 @@ fn @types.Game::update_fleet_ships(game : @types.Game, dt : Float) -> Unit {
       fs.speed = @types.lerpf(fs.speed, target_speed, dt * 2.0)
     } else if fs.order == @types.fleet_order_attack {
       // Find nearest enemy and engage
-      let mut nearest_dist : Float = 999.0
-      let mut nearest_idx = -1
-      for j in 0..<game.enemies.length() {
+      for
+        j in 0..<game.enemies.length()
+        nearest_dist = 999.0F, nearest_idx = -1 {
         let e = game.enemies[j]
         if !e.active {
           continue
         }
         let d = @types.distance2d(fs.x, fs.z, e.x, e.z)
         if d < nearest_dist {
-          nearest_dist = d
-          nearest_idx = j
+          continue d, j
         }
-      }
-      if nearest_idx >= 0 {
-        let target = game.enemies[nearest_idx]
-        let to_target = @types.bearing(fs.x, fs.z, target.x, target.z)
-        // Approach at broadside angle
-        let approach = to_target + @types.pi * 0.4
-        let diff = @types.angle_diff(fs.heading, approach)
-        let turn = fs.turn_rate_base * dt
-        if diff > turn {
-          fs.heading += turn
-        } else if diff < -turn {
-          fs.heading -= turn
+      } nobreak {
+        if nearest_idx >= 0 {
+          let target = game.enemies[nearest_idx]
+          let to_target = @types.bearing(fs.x, fs.z, target.x, target.z)
+          // Approach at broadside angle
+          let approach = to_target + @types.pi * 0.4
+          let diff = @types.angle_diff(fs.heading, approach)
+          let turn = fs.turn_rate_base * dt
+          if diff > turn {
+            fs.heading += turn
+          } else if diff < -turn {
+            fs.heading -= turn
+          }
+          fs.heading = @types.normalize_angle(fs.heading)
+          fs.speed = @types.get_class_base_speed(fs.ship_class) * fs.sail_amount
+          // Fire when in range
+          fs.fire_timer -= dt
+          if fs.fire_timer <= 0.0 && nearest_dist < 30.0 {
+            game.fire_fleet_broadside(i, nearest_idx)
+            fs.fire_timer = fs.fire_rate
+          }
+        } else {
+          // No enemies, return to follow
+          fs.order = @types.fleet_order_follow
         }
-        fs.heading = @types.normalize_angle(fs.heading)
-        fs.speed = @types.get_class_base_speed(fs.ship_class) * fs.sail_amount
-        // Fire when in range
-        fs.fire_timer -= dt
-        if fs.fire_timer <= 0.0 && nearest_dist < 30.0 {
-          game.fire_fleet_broadside(i, nearest_idx)
-          fs.fire_timer = fs.fire_rate
-        }
-      } else {
-        // No enemies, return to follow
-        fs.order = @types.fleet_order_follow
       }
     } else if fs.order == @types.fleet_order_defend {
       // Stay near target position

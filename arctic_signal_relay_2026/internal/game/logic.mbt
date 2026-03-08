@@ -75,17 +75,10 @@ fn @types.Game::tower_spot_ok(
     return false
   }
 
-  for i in 0..<placed {
-    if !game.towers[i].active {
-      continue
-    }
-
-    if @types.dist2(x, y, game.towers[i].x, game.towers[i].y) < 190.0 * 190.0 {
-      return false
-    }
-  }
-
-  true
+  !@utils.any_by_view(
+    game.towers[0:placed],
+    fn(tower) { tower.active && @types.dist2(x, y, tower.x, tower.y) < 190.0 * 190.0 },
+  )
 }
 
 ///|
@@ -260,10 +253,10 @@ fn @types.Game::closest_pending_tower(
   x : Float,
   y : Float,
 ) -> Int {
-  let mut best_idx = -1
-  let mut best_d2 = @types.tower_interact_r() * @types.tower_interact_r()
-
-  for i in 0..<game.towers.length() {
+  for
+    i in 0..<game.towers.length()
+    best_idx = -1,
+    best_d2 = @types.tower_interact_r() * @types.tower_interact_r() {
     if !game.towers[i].active {
       continue
     }
@@ -273,12 +266,11 @@ fn @types.Game::closest_pending_tower(
 
     let d2 = @types.dist2(x, y, game.towers[i].x, game.towers[i].y)
     if d2 <= best_d2 {
-      best_d2 = d2
-      best_idx = i
+      continue i, d2
     }
+  } nobreak {
+    best_idx
   }
-
-  best_idx
 }
 
 ///|

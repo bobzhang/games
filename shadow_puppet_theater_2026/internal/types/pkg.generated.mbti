@@ -107,7 +107,10 @@ pub(all) struct Game {
   mut miss_count : Int
   mut message : String
   mut message_t : Float
+
+  fn new() -> Game
 }
+#deprecated
 pub fn Game::new() -> Self
 
 pub(all) enum GameState {
@@ -127,13 +130,19 @@ pub(all) struct Input {
   mut pause_pressed : Bool
   mut restart_pressed : Bool
   mut start_pressed : Bool
+
+  fn new() -> Input
 }
+#deprecated
 pub fn Input::new() -> Self
 
 pub(all) struct Pose {
   mut ax : Int
   mut ay : Int
+
+  fn new(Int, Int) -> Pose
 }
+#deprecated
 pub fn Pose::new(Int, Int) -> Self
 
 // Type aliases
