@@ -202,13 +202,7 @@ fn @types.Game::finish_run(game : @types.Game, win : Bool) -> Unit {
 ///|
 /// Returns the number of currently active delivery orders.
 fn @types.Game::active_orders(game : @types.Game) -> Int {
-  let mut n : Int = 0
-  for order in game.orders {
-    if order.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(game.orders, fn(order) { order.active })
 }
 
 ///|
