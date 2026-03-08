@@ -687,37 +687,19 @@ fn burst(
 ///|
 /// Returns the number of active terminals that have been fully hacked.
 fn count_hacked(terminals : Array[Terminal]) -> Int {
-  let mut n : Int = 0
-  for terminal in terminals {
-    if terminal.active && terminal.hacked {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(terminals, fn(terminal) { terminal.active && terminal.hacked })
 }
 
 ///|
 /// Returns the total number of active terminals in the pool.
 fn count_terminals(terminals : Array[Terminal]) -> Int {
-  let mut n : Int = 0
-  for terminal in terminals {
-    if terminal.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(terminals, fn(terminal) { terminal.active })
 }
 
 ///|
 /// Returns the total number of currently active guards in the pool.
 fn count_active_guards(guards : Array[Guard]) -> Int {
-  let mut n : Int = 0
-  for guard_val in guards {
-    if guard_val.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(guards, fn(guard_val) { guard_val.active })
 }
 
 ///|
