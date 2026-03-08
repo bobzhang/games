@@ -238,12 +238,7 @@ fn @types.Game::complete_mission(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::check_station_alive(game : @types.Game, kind : Int) -> Bool {
-  for station in game.stations {
-    if station.active && station.kind == kind {
-      return true
-    }
-  }
-  false
+  @utils.any_by(game.stations, fn(station) { station.active && station.kind == kind })
 }
 
 ///|
