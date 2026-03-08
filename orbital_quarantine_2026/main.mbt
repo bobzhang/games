@@ -23,6 +23,27 @@ let grid_x : Int = 170
 let grid_y : Int = 170
 
 ///|
+let power_regen_rate : Float = 11.5F
+
+///|
+let purge_cost : Float = 16.0F
+
+///|
+let boost_cost : Float = 12.0F
+
+///|
+let purge_power_drain : Float = 4.8F
+
+///|
+let boost_power_drain : Float = 3.4F
+
+///|
+let sector_power_refresh : Float = 24.0F
+
+///|
+let sector_integrity_refresh : Float = 14.0F
+
+///|
 fn room_idx(x : Int, y : Int) -> Int {
   y * cols + x
 }
@@ -192,7 +213,7 @@ fn update_systems(
   power : Float,
   integrity : Float,
 ) -> (Float, Float) {
-  let mut next_power = power + dt * 10.0F
+  let mut next_power = power + dt * power_regen_rate
   if next_power > 100.0F {
     next_power = 100.0F
   }
@@ -206,13 +227,13 @@ fn update_systems(
       room.purge_t = room.purge_t - dt
       room.contam = room.contam - dt * 17.0F
       room.oxygen = room.oxygen - dt * 7.0F
-      next_power = next_power - dt * 5.5F
+      next_power = next_power - dt * purge_power_drain
     }
     if room.boost_t > 0.0F {
       room.boost_t = room.boost_t - dt
       room.contam = room.contam - dt * 4.0F
       room.oxygen = room.oxygen + dt * 7.0F
-      next_power = next_power - dt * 4.0F
+      next_power = next_power - dt * boost_power_drain
     }
 
     room.contam = clampf(room.contam, 0.0F, 100.0F)
@@ -324,18 +345,18 @@ fn main {
           msg = "Door state toggled."
         } else {
           let room_i = room_from_mouse(mouse.x, mouse.y)
-          if room_i >= 0 && power >= 18.0F {
+          if room_i >= 0 && power >= purge_cost {
             rooms[room_i].purge_t = 4.5F
-            power = power - 18.0F
+            power = power - purge_cost
             msg = "Purge pulse armed in \{rooms[room_i].label}."
           }
         }
       }
       if @raylib.is_mouse_button_pressed(@raylib.MouseButtonRight) {
         let room_i = room_from_mouse(mouse.x, mouse.y)
-        if room_i >= 0 && power >= 14.0F {
+        if room_i >= 0 && power >= boost_cost {
           rooms[room_i].boost_t = 6.0F
-          power = power - 14.0F
+          power = power - boost_cost
           msg = "Oxygen boost routed to \{rooms[room_i].label}."
         }
       }
@@ -356,8 +377,8 @@ fn main {
             sector = sector + 1
             timer = reset_sector(sector, rooms, hdoors, vdoors)
             restore_crew(rooms, carry_crew)
-            power = clampf(power + 18.0F, 0.0F, 100.0F)
-            integrity = clampf(integrity + 10.0F, 0.0F, 100.0F)
+            power = clampf(power + sector_power_refresh, 0.0F, 100.0F)
+            integrity = clampf(integrity + sector_integrity_refresh, 0.0F, 100.0F)
             paused = true
             msg = "Sector \{sector} breach map loaded."
           } else {
@@ -376,8 +397,8 @@ fn main {
       @raylib.draw_rectangle_gradient_v(0, 0, screen_w, screen_h, @raylib.Color::new(12, 20, 34, 255), @raylib.Color::new(4, 8, 14, 255))
       @raylib.draw_text("ORBITAL QUARANTINE 2026", 230, 150, 58, @raylib.Color::new(236, 246, 255, 255))
       @raylib.draw_text("Seal compartments. Spend power. Keep oxygen and crew online.", 250, 246, 30, @raylib.Color::new(143, 206, 255, 255))
-      @raylib.draw_text("Left click room: Purge contamination", 350, 390, 28, @raylib.Color::new(255, 214, 118, 255))
-      @raylib.draw_text("Right click room: Oxygen boost", 350, 430, 28, @raylib.Color::new(255, 214, 118, 255))
+      @raylib.draw_text("Left click room: Purge contamination (\{purge_cost.to_int()} power)", 280, 390, 28, @raylib.Color::new(255, 214, 118, 255))
+      @raylib.draw_text("Right click room: Oxygen boost (\{boost_cost.to_int()} power)", 286, 430, 28, @raylib.Color::new(255, 214, 118, 255))
       @raylib.draw_text("Click door links: Seal or open", 350, 470, 28, @raylib.Color::new(255, 214, 118, 255))
       @raylib.draw_text("Space: Pause / resume", 350, 510, 28, @raylib.Color::new(255, 214, 118, 255))
       @raylib.draw_rectangle(420, 630, 440, 82, @raylib.Color::new(44, 90, 124, 255))
