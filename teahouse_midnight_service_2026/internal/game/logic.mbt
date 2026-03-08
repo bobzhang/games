@@ -239,12 +239,7 @@ fn @types.Game::clear_combo(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::slot_used(game : @types.Game, slot : Int) -> Bool {
-  for customer in game.customers {
-    if customer.active && customer.slot == slot {
-      return true
-    }
-  }
-  false
+  @utils.any_by(game.customers, fn(customer) { customer.active && customer.slot == slot })
 }
 
 ///|
