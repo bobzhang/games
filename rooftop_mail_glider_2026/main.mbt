@@ -455,24 +455,12 @@ fn init_wind_tunnels(
 
 ///|
 fn active_delivery_count(deliveries : Array[Delivery]) -> Int {
-  let mut c : Int = 0
-  for delivery in deliveries {
-    if delivery.active {
-      c = c + 1
-    }
-  }
-  c
+  @utils.count_by(deliveries, fn(delivery) { delivery.active })
 }
 
 ///|
 fn active_delivery_for_pad(deliveries : Array[Delivery], pad_id : Int) -> Int {
-  let mut c : Int = 0
-  for delivery in deliveries {
-    if delivery.active && delivery.pad_id == pad_id {
-      c = c + 1
-    }
-  }
-  c
+  @utils.count_by(deliveries, fn(delivery) { delivery.active && delivery.pad_id == pad_id })
 }
 
 ///|
