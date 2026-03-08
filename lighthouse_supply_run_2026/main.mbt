@@ -418,25 +418,13 @@ fn init_reefs(
 ///|
 /// Returns the count of currently active storm records.
 fn active_storms(storms : Array[Storm]) -> Int {
-  let mut n : Int = 0
-  for storm in storms {
-    if storm.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(storms, fn(storm) { storm.active })
 }
 
 ///|
 /// Returns the count of currently active pirate records.
 fn active_pirates(pirates : Array[Pirate]) -> Int {
-  let mut n : Int = 0
-  for pirate in pirates {
-    if pirate.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(pirates, fn(pirate) { pirate.active })
 }
 
 ///|
