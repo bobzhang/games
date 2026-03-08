@@ -6,6 +6,7 @@ fn main {
   )
   @raylib.set_target_fps(@types.target_fps)
   @draw.init_font()
+  @render.load_textures()
   let game = @types.Game::new()
   while not(@raylib.window_should_close()) {
     let frame_dt = @raylib.get_frame_time()
@@ -17,6 +18,7 @@ fn main {
     @render.draw_ui(game)
     @raylib.end_drawing()
   }
+  @render.unload_textures()
   @draw.cleanup()
   @raylib.close_window()
 }

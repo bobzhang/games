@@ -10,6 +10,10 @@ pub fn draw_game(@types.Game) -> Unit
 
 pub fn draw_ui(@types.Game) -> Unit
 
+pub fn load_textures() -> Unit
+
+pub fn unload_textures() -> Unit
+
 // Errors
 
 // Types and methods
