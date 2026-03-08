@@ -615,13 +615,7 @@ fn nearest_station_kind(
 ///|
 /// Returns the number of currently active show requests.
 fn active_requests_count(requests : Array[Request]) -> Int {
-  let mut c : Int = 0
-  for request in requests {
-    if request.active {
-      c = c + 1
-    }
-  }
-  c
+  @utils.count_by(requests, fn(request) { request.active })
 }
 
 ///|
