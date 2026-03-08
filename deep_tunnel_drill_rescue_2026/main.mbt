@@ -434,13 +434,7 @@ fn setup_map(tiles : Array[Int], target_miners : Int) -> Int {
 ///|
 /// Returns the number of tiles in the grid that match the given kind.
 fn count_tiles(tiles : Array[Int], kind : Int) -> Int {
-  let mut n : Int = 0
-  for tile in tiles {
-    if tile == kind {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(tiles, fn(tile) { tile == kind })
 }
 
 ///|
