@@ -630,37 +630,19 @@ fn spawn_dust(
 ///|
 /// Returns the count of currently active survivor groups.
 fn active_groups(groups : Array[SurvivorGroup]) -> Int {
-  let mut n : Int = 0
-  for group in groups {
-    if group.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(groups, fn(group) { group.active })
 }
 
 ///|
 /// Returns the count of currently active crack zones.
 fn active_cracks(cracks : Array[CrackZone]) -> Int {
-  let mut n : Int = 0
-  for crack in cracks {
-    if crack.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(cracks, fn(crack) { crack.active })
 }
 
 ///|
 /// Returns the count of active survivor groups whose panic level is at or above the critical threshold.
 fn active_critical(groups : Array[SurvivorGroup]) -> Int {
-  let mut n : Int = 0
-  for group in groups {
-    if group.active && group.panic >= 70.0 {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(groups, fn(group) { group.active && group.panic >= 70.0 })
 }
 
 ///|
