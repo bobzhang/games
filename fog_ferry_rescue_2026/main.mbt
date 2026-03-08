@@ -546,37 +546,19 @@ fn spawn_fog(
 ///|
 /// Returns the count of currently active survivor groups.
 fn active_groups(groups : Array[Group]) -> Int {
-  let mut n : Int = 0
-  for group in groups {
-    if group.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(groups, fn(group) { group.active })
 }
 
 ///|
 /// Returns the count of currently active fog cells.
 fn active_fogs(fogs : Array[FogCell]) -> Int {
-  let mut n : Int = 0
-  for fog in fogs {
-    if fog.active {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(fogs, fn(fog) { fog.active })
 }
 
 ///|
 /// Returns the count of active groups with panic level at or above 70.
 fn active_panic(groups : Array[Group]) -> Int {
-  let mut n : Int = 0
-  for group in groups {
-    if group.active && group.panic >= 70.0 {
-      n = n + 1
-    }
-  }
-  n
+  @utils.count_by(groups, fn(group) { group.active && group.panic >= 70.0 })
 }
 
 ///|
