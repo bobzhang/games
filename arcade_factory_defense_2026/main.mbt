@@ -497,13 +497,7 @@ fn burst(
 ///|
 /// Returns the number of currently active enemies.
 fn count_active_enemies(enemies : Array[Enemy]) -> Int {
-  let mut cnt : Int = 0
-  for enemy in enemies {
-    if enemy.active {
-      cnt = cnt + 1
-    }
-  }
-  cnt
+  @utils.count_by(enemies, fn(enemy) { enemy.active })
 }
 
 ///|
