@@ -7296,6 +7296,8 @@ var stringToUTF8Array = (str, heap, outIdx, maxBytesToWrite) => {
 
   var _glTexImage2D = _emscripten_glTexImage2D;
 
+  var _glTexParameterf = _emscripten_glTexParameterf;
+
   var _glTexParameteri = _emscripten_glTexParameteri;
 
   var _glUniform1fv = _emscripten_glUniform1fv;
@@ -9796,48 +9798,48 @@ function checkIncomingModuleAPI() {
   ignoredModuleProp('loadSplitModule');
 }
 var ASM_CONSTS = {
-  261648: () => { if (document.fullscreenElement) return 1; },  
- 261694: () => { return document.getElementById('canvas').width; },  
- 261746: () => { return parseInt(document.getElementById('canvas').style.width); },  
- 261814: () => { document.exitFullscreen(); },  
- 261841: () => { setTimeout(function() { Module.requestFullscreen(false, false); }, 100); },  
- 261914: () => { if (document.fullscreenElement) return 1; },  
- 261960: () => { return document.getElementById('canvas').width; },  
- 262012: () => { return screen.width; },  
- 262037: () => { document.exitFullscreen(); },  
- 262064: () => { setTimeout(function() { Module.requestFullscreen(false, true); setTimeout(function() { canvas.style.width="unset"; }, 100); }, 100); },  
- 262197: () => { return window.innerWidth; },  
- 262223: () => { return window.innerHeight; },  
- 262250: () => { if (document.fullscreenElement) return 1; },  
- 262296: () => { return document.getElementById('canvas').width; },  
- 262348: () => { return parseInt(document.getElementById('canvas').style.width); },  
- 262416: () => { if (document.fullscreenElement) return 1; },  
- 262462: () => { return document.getElementById('canvas').width; },  
- 262514: () => { return screen.width; },  
- 262539: () => { return window.innerWidth; },  
- 262565: () => { return window.innerHeight; },  
- 262592: () => { if (document.fullscreenElement) return 1; },  
- 262638: () => { return document.getElementById('canvas').width; },  
- 262690: () => { return screen.width; },  
- 262715: () => { document.exitFullscreen(); },  
- 262742: () => { if (document.fullscreenElement) return 1; },  
- 262788: () => { return document.getElementById('canvas').width; },  
- 262840: () => { return parseInt(document.getElementById('canvas').style.width); },  
- 262908: () => { document.exitFullscreen(); },  
- 262935: ($0) => { document.getElementById('canvas').style.opacity = $0; },  
- 262993: () => { return screen.width; },  
- 263018: () => { return screen.height; },  
- 263044: () => { return window.screenX; },  
- 263071: () => { return window.screenY; },  
- 263098: ($0) => { navigator.clipboard.writeText(UTF8ToString($0)); },  
- 263151: ($0) => { document.getElementById("canvas").style.cursor = UTF8ToString($0); },  
- 263222: () => { document.getElementById('canvas').style.cursor = 'none'; },  
- 263279: ($0, $1, $2, $3) => { try { navigator.getGamepads()[$0].vibrationActuator.playEffect('dual-rumble', { startDelay: 0, duration: $3, weakMagnitude: $1, strongMagnitude: $2 }); } catch (e) { try { navigator.getGamepads()[$0].hapticActuators[0].pulse($2, $3); } catch (e) { } } },  
- 263535: ($0) => { document.getElementById('canvas').style.cursor = UTF8ToString($0); },  
- 263606: () => { if (document.fullscreenElement) return 1; },  
- 263652: () => { return window.innerWidth; },  
- 263678: () => { return window.innerHeight; },  
- 263705: () => { if (document.pointerLockElement) return 1; }
+  261888: () => { if (document.fullscreenElement) return 1; },  
+ 261934: () => { return document.getElementById('canvas').width; },  
+ 261986: () => { return parseInt(document.getElementById('canvas').style.width); },  
+ 262054: () => { document.exitFullscreen(); },  
+ 262081: () => { setTimeout(function() { Module.requestFullscreen(false, false); }, 100); },  
+ 262154: () => { if (document.fullscreenElement) return 1; },  
+ 262200: () => { return document.getElementById('canvas').width; },  
+ 262252: () => { return screen.width; },  
+ 262277: () => { document.exitFullscreen(); },  
+ 262304: () => { setTimeout(function() { Module.requestFullscreen(false, true); setTimeout(function() { canvas.style.width="unset"; }, 100); }, 100); },  
+ 262437: () => { return window.innerWidth; },  
+ 262463: () => { return window.innerHeight; },  
+ 262490: () => { if (document.fullscreenElement) return 1; },  
+ 262536: () => { return document.getElementById('canvas').width; },  
+ 262588: () => { return parseInt(document.getElementById('canvas').style.width); },  
+ 262656: () => { if (document.fullscreenElement) return 1; },  
+ 262702: () => { return document.getElementById('canvas').width; },  
+ 262754: () => { return screen.width; },  
+ 262779: () => { return window.innerWidth; },  
+ 262805: () => { return window.innerHeight; },  
+ 262832: () => { if (document.fullscreenElement) return 1; },  
+ 262878: () => { return document.getElementById('canvas').width; },  
+ 262930: () => { return screen.width; },  
+ 262955: () => { document.exitFullscreen(); },  
+ 262982: () => { if (document.fullscreenElement) return 1; },  
+ 263028: () => { return document.getElementById('canvas').width; },  
+ 263080: () => { return parseInt(document.getElementById('canvas').style.width); },  
+ 263148: () => { document.exitFullscreen(); },  
+ 263175: ($0) => { document.getElementById('canvas').style.opacity = $0; },  
+ 263233: () => { return screen.width; },  
+ 263258: () => { return screen.height; },  
+ 263284: () => { return window.screenX; },  
+ 263311: () => { return window.screenY; },  
+ 263338: ($0) => { navigator.clipboard.writeText(UTF8ToString($0)); },  
+ 263391: ($0) => { document.getElementById("canvas").style.cursor = UTF8ToString($0); },  
+ 263462: () => { document.getElementById('canvas').style.cursor = 'none'; },  
+ 263519: ($0, $1, $2, $3) => { try { navigator.getGamepads()[$0].vibrationActuator.playEffect('dual-rumble', { startDelay: 0, duration: $3, weakMagnitude: $1, strongMagnitude: $2 }); } catch (e) { try { navigator.getGamepads()[$0].hapticActuators[0].pulse($2, $3); } catch (e) { } } },  
+ 263775: ($0) => { document.getElementById('canvas').style.cursor = UTF8ToString($0); },  
+ 263846: () => { if (document.fullscreenElement) return 1; },  
+ 263892: () => { return window.innerWidth; },  
+ 263918: () => { return window.innerHeight; },  
+ 263945: () => { if (document.pointerLockElement) return 1; }
 };
 
 // Imports from the Wasm binary.
@@ -10490,6 +10492,8 @@ var wasmImports = {
   glShaderSource: _glShaderSource,
   /** @export */
   glTexImage2D: _glTexImage2D,
+  /** @export */
+  glTexParameterf: _glTexParameterf,
   /** @export */
   glTexParameteri: _glTexParameteri,
   /** @export */
