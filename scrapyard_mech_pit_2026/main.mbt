@@ -26,6 +26,12 @@ let max_enemies : Int = 80
 let max_scrap : Int = 128
 
 ///|
+let salvage_heal : Float = 24.0F
+
+///|
+let scrap_heal : Float = 3.0F
+
+///|
 struct Bullet {
   mut active : Bool
   mut x : Float
@@ -115,13 +121,13 @@ fn booster_name(kind : Int) -> String {
 
 ///|
 fn weapon_fire_cd(kind : Int, overclock : Int) -> Float {
-  let base = if kind == 0 { 0.22F } else if kind == 1 { 0.34F } else { 0.14F }
+  let base = if kind == 0 { 0.22F } else if kind == 1 { 0.32F } else { 0.12F }
   clampf(base - Float::from_int(overclock) * 0.015F, 0.08F, 0.45F)
 }
 
 ///|
 fn weapon_damage(kind : Int, overclock : Int) -> Float {
-  let base = if kind == 0 { 18.0F } else if kind == 1 { 10.0F } else { 7.0F }
+  let base = if kind == 0 { 18.0F } else if kind == 1 { 10.0F } else { 8.0F }
   base + Float::from_int(overclock) * 2.5F
 }
 
@@ -133,7 +139,7 @@ fn move_speed(chassis : Int, booster : Int) -> Float {
 
 ///|
 fn max_hp(chassis : Int, plating : Int) -> Float {
-  let base = if chassis == 1 { 180.0F } else if chassis == 2 { 105.0F } else { 140.0F }
+  let base = if chassis == 1 { 180.0F } else if chassis == 2 { 112.0F } else { 140.0F }
   base + Float::from_int(plating) * 12.0F
 }
 
@@ -144,7 +150,7 @@ fn dash_force(booster : Int) -> Float {
 
 ///|
 fn magnet_range(booster : Int) -> Float {
-  if booster == 2 { 170.0F } else { 72.0F }
+  if booster == 2 { 210.0F } else { 84.0F }
 }
 
 ///|
@@ -428,7 +434,7 @@ fn main {
         booster = parts.2
         plating = parts.3
         overclock = parts.4
-        hp = clampf(hp + 18.0F, 0.0F, max_hp(chassis, plating))
+        hp = clampf(hp + salvage_heal, 0.0F, max_hp(chassis, plating))
         choosing = false
         if wave >= 6 {
           over = true
@@ -447,7 +453,7 @@ fn main {
         booster = parts.2
         plating = parts.3
         overclock = parts.4
-        hp = clampf(hp + 18.0F, 0.0F, max_hp(chassis, plating))
+        hp = clampf(hp + salvage_heal, 0.0F, max_hp(chassis, plating))
         choosing = false
         if wave >= 6 {
           over = true
@@ -466,7 +472,7 @@ fn main {
         booster = parts.2
         plating = parts.3
         overclock = parts.4
-        hp = clampf(hp + 18.0F, 0.0F, max_hp(chassis, plating))
+        hp = clampf(hp + salvage_heal, 0.0F, max_hp(chassis, plating))
         choosing = false
         if wave >= 6 {
           over = true
@@ -577,18 +583,18 @@ fn main {
             enemy.y = enemy.y + ny * 74.0F * dt
           }
           if enemy.fire_cd <= 0.0F && d > 0.001F {
-            spawn_bullet(bullets, enemy.x, enemy.y, nx * 280.0F, ny * 280.0F, 2.0F, 11.0F + Float::from_int(wave), false, 4.0F)
+            spawn_bullet(bullets, enemy.x, enemy.y, nx * 280.0F, ny * 280.0F, 2.0F, 9.0F + Float::from_int(wave), false, 4.0F)
             enemy.fire_cd = 1.3F
           }
         } else {
           enemy.x = enemy.x + nx * (52.0F + Float::from_int(wave) * 4.0F) * dt
           enemy.y = enemy.y + ny * (52.0F + Float::from_int(wave) * 4.0F) * dt
           if d < 28.0F {
-            hp = hp - (24.0F + Float::from_int(wave) * 3.0F) * dt
+            hp = hp - (20.0F + Float::from_int(wave) * 3.0F) * dt
           }
         }
         if d < 22.0F && enemy.kind != 2 {
-          hp = hp - (16.0F + Float::from_int(wave) * 2.0F) * dt
+          hp = hp - (14.0F + Float::from_int(wave) * 2.0F) * dt
         }
       }
 
@@ -632,7 +638,7 @@ fn main {
         if d < 18.0F {
           scrap.active = false
           scrap_bank = scrap_bank + scrap.value
-          hp = clampf(hp + 2.0F, 0.0F, max_hp(chassis, plating))
+          hp = clampf(hp + scrap_heal, 0.0F, max_hp(chassis, plating))
         }
       }
 
