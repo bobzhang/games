@@ -1,0 +1,14 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/abyssal_rift/internal/types",
+  "bobzhang/games/abyssal_rift/internal/game",
+  "bobzhang/games/abyssal_rift/internal/render",
+  "bobzhang/games/abyssal_rift/internal/audio",
+  "bobzhang/games/utils/draw",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

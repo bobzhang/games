@@ -1,0 +1,9 @@
+import {
+  "moonbitlang/core/math",
+  "tonyfettes/raylib",
+  "bobzhang/games/abyssal_rift/internal/types",
+  "bobzhang/games/abyssal_rift/internal/data",
+  "bobzhang/games/abyssal_rift/internal/dungeon",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
