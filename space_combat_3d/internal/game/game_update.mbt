@@ -38,6 +38,18 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     }
   }
 
+  // Damage number timer and upward drift
+  for i in 0..<@types.max_damage_numbers {
+    let dn = game.damage_numbers[i]
+    if dn.active {
+      dn.timer -= dt
+      dn.y += 3.0 * dt
+      if dn.timer <= 0.0 {
+        dn.active = false
+      }
+    }
+  }
+
   match game.state {
     StateMenu => game.update_menu(dt)
     StatePlaying => game.update_playing(dt)
@@ -478,6 +490,9 @@ fn @types.Game::start_mission(game : @types.Game, mission : Int) -> Unit {
   }
   for i in 0..<@types.max_kill_feed {
     game.kill_feed[i].active = false
+  }
+  for i in 0..<@types.max_damage_numbers {
+    game.damage_numbers[i].active = false
   }
 
   // Load mission basic data

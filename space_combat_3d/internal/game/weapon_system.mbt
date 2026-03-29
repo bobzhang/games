@@ -135,6 +135,32 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
             spark_b,
           )
 
+          // Plasma splash damage: hit nearby enemies within splash radius
+          if proj.kind == Plasma {
+            let splash_radius : Float = 8.0
+            let splash_fraction : Float = 0.4
+            for k in 0..<game.enemies.length() {
+              if k == j {
+                continue
+              }
+              let splash_e = game.enemies[k]
+              if !splash_e.active {
+                continue
+              }
+              let splash_dist = @types.distance3d(
+                proj.x, proj.y, proj.z, splash_e.x, splash_e.y, splash_e.z,
+              )
+              if splash_dist < splash_radius {
+                let falloff : Float = 1.0 - splash_dist / splash_radius
+                let splash_dmg : Float = proj.damage * splash_fraction * falloff
+                damage_enemy(game, k, splash_dmg)
+              }
+            }
+            @types.spawn_particles(
+              game, proj.x, proj.y, proj.z, 8, 100, 255, 100,
+            )
+          }
+
           if !proj.piercing {
             proj.active = false
             hit_something = true

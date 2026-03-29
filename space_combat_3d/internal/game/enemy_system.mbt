@@ -31,8 +31,11 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     game.update_ai_state(i, dist, dt)
 
     // Evasion override: if this enemy is the player's locked target, evade
+    // Only small craft (fighters, interceptors) evade - capital ships and bombers are too large
     let is_targeted = game.target_idx == i && game.target_lock_timer > 1.0
-    if is_targeted && game.ai_difficulty >= 1 {
+    let is_small_craft = e.kind == @types.enemy_fighter ||
+      e.kind == @types.enemy_interceptor
+    if is_small_craft && is_targeted && game.ai_difficulty >= 1 {
       game.apply_evasion_behavior(i, dx, dy, dz, dist, dt)
     } else if e.kind == @types.enemy_fighter {
       game.update_fighter_ai(i, dx, dy, dz, dist, dt)
@@ -658,6 +661,11 @@ pub fn damage_enemy(game : @types.Game, idx : Int, damage : Float) -> Unit {
 
   e.hp -= remaining_damage
   e.damage_flash = @types.damage_flash_duration
+
+  // Spawn floating damage number
+  @types.spawn_damage_number(
+    game, e.x, e.y + e.size, e.z, damage.to_int(), 255, 255, 100,
+  )
 
   if e.hp <= 0.0 {
     e.active = false

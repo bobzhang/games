@@ -685,6 +685,16 @@ pub let camera_distance : Float = 12.0
 /// Chase camera height offset above the player ship.
 pub let camera_height : Float = 4.0
 
+///|
+/// Camera yaw lag factor (0 = no lag, 1 = full lag). Controls how smoothly
+/// the camera target tracks the player's yaw orientation.
+pub let camera_lag_yaw : Float = 0.12
+
+///|
+/// Camera pitch lag factor (0 = no lag, 1 = full lag). Controls how smoothly
+/// the camera target tracks the player's pitch orientation.
+pub let camera_lag_pitch : Float = 0.10
+
 // World bounds
 
 ///|
@@ -738,6 +748,16 @@ pub let max_kill_feed : Int = 5
 ///|
 /// Duration in seconds a kill feed entry remains visible.
 pub let kill_feed_duration : Float = 3.0
+
+// Damage numbers
+
+///|
+/// Maximum number of floating damage numbers displayed simultaneously.
+pub let max_damage_numbers : Int = 16
+
+///|
+/// Duration in seconds a floating damage number stays visible.
+pub let damage_number_duration : Float = 1.0
 
 // Damage flash
 

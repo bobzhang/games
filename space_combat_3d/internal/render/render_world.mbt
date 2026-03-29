@@ -18,12 +18,46 @@ pub fn draw_world(game : @types.Game) -> Unit {
   game.draw_lead_indicator()
   game.draw_waypoint_markers()
   @raylib.end_mode_3d()
+
+  // Floating damage numbers (2D overlay projected from 3D positions)
+  for i in 0..<@types.max_damage_numbers {
+    let dn = game.damage_numbers[i]
+    if dn.active {
+      let screen_pos = @raylib.get_world_to_screen(
+        @raylib.Vector3::new(dn.x, dn.y, dn.z), camera,
+      )
+      let sx = screen_pos.x.to_int()
+      let sy = screen_pos.y.to_int()
+      // Only draw if on screen
+      if sx >= 0 && sx < @types.screen_width && sy >= 0 &&
+        sy < @types.screen_height {
+        let alpha_f = dn.timer / @types.damage_number_duration * 255.0
+        let alpha = alpha_f.to_int().clamp(min=0, max=255)
+        let text = "\{dn.value}"
+        let tw = @draw.measure_text(text, 18)
+        @draw.draw_text(
+          text,
+          sx - tw / 2,
+          sy,
+          18,
+          @raylib.Color::new(dn.r, dn.g, dn.b, alpha),
+        )
+      }
+    }
+  }
 }
 
 ///|
 fn @types.Game::build_camera(game : @types.Game) -> @raylib.Camera3D {
   let p = game.player
-  let fwd = @types.forward_dir(p.yaw, p.pitch)
+
+  // Apply camera lag: smoothly interpolate camera orientation toward player orientation
+  game.cam_yaw = @types.lerpf(game.cam_yaw, p.yaw, 1.0 - @types.camera_lag_yaw)
+  game.cam_pitch = @types.lerpf(
+    game.cam_pitch, p.pitch, 1.0 - @types.camera_lag_pitch,
+  )
+
+  let fwd = @types.forward_dir(game.cam_yaw, game.cam_pitch)
 
   // Chase camera: behind and above the player
   let cam_dist = @types.camera_distance

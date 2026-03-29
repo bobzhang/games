@@ -541,6 +541,37 @@ pub fn add_kill_feed(
   game.kill_feed[0].b = b
 }
 
+// Spawn floating damage number
+
+///|
+/// Creates a floating damage number at the given 3D position.
+pub fn spawn_damage_number(
+  game : Game,
+  x : Float,
+  y : Float,
+  z : Float,
+  value : Int,
+  r : Int,
+  g : Int,
+  b : Int,
+) -> Unit {
+  for i in 0..<max_damage_numbers {
+    if !game.damage_numbers[i].active {
+      let dn = game.damage_numbers[i]
+      dn.active = true
+      dn.x = x
+      dn.y = y
+      dn.z = z
+      dn.value = value
+      dn.timer = damage_number_duration
+      dn.r = r
+      dn.g = g
+      dn.b = b
+      return
+    }
+  }
+}
+
 // Update combo system
 
 ///|

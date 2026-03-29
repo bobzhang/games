@@ -410,6 +410,38 @@ pub fn KillFeedEntry::inactive() -> KillFeedEntry {
   { active: false, text: "", timer: 0.0, r: 255, g: 255, b: 255 }
 }
 
+// Damage number (floating combat text)
+
+///|
+/// Floating damage number displayed at a 3D position that drifts upward and fades.
+pub(all) struct DamageNumber {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut z : Float
+  mut value : Int
+  mut timer : Float
+  mut r : Int
+  mut g : Int
+  mut b : Int
+}
+
+///|
+/// Creates an inactive damage number slot for pool allocation.
+pub fn DamageNumber::inactive() -> DamageNumber {
+  {
+    active: false,
+    x: 0.0,
+    y: 0.0,
+    z: 0.0,
+    value: 0,
+    timer: 0.0,
+    r: 255,
+    g: 255,
+    b: 255,
+  }
+}
+
 // Mission Objective
 
 ///|
@@ -496,8 +528,13 @@ pub(all) struct Game {
   // Kill feed
   kill_feed : Array[KillFeedEntry]
 
+  // Damage numbers (floating combat text)
+  damage_numbers : Array[DamageNumber]
+
   // Camera
   mut camera_shake : Float
+  mut cam_yaw : Float
+  mut cam_pitch : Float
 
   // UI
   mut menu_cursor : Int
@@ -649,6 +686,12 @@ pub fn Game::new() -> Game {
     ignore(i)
   }
 
+  let damage_numbers_arr : Array[DamageNumber] = []
+  for i in 0..<max_damage_numbers {
+    damage_numbers_arr.push(DamageNumber::inactive())
+    ignore(i)
+  }
+
   {
     state: StateMenu,
     player: Player(),
@@ -722,7 +765,10 @@ pub fn Game::new() -> Game {
     },
     stars: stars_arr,
     kill_feed: kill_feed_arr,
+    damage_numbers: damage_numbers_arr,
     camera_shake: 0.0,
+    cam_yaw: 0.0,
+    cam_pitch: 0.0,
     menu_cursor: 0,
     menu_blink: 0.0,
     message_text: "",

@@ -331,13 +331,92 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   }
 
   // Kill feed (top right)
+  {
+    let mut drawn = 0
+    for i = @types.max_kill_feed - 1; i >= 0; i = i - 1 {
+      if game.kill_feed[i].active && game.kill_feed[i].timer > 0.0 {
+        let entry = game.kill_feed[i]
+        let alpha_f = entry.timer / @types.kill_feed_duration * 200.0
+        let alpha = alpha_f.to_int().clamp(min=0, max=255)
+        @draw.draw_text(
+          entry.text,
+          @types.screen_width - 210,
+          60 + drawn * 18,
+          14,
+          @raylib.Color::new(entry.r, entry.g, entry.b, alpha),
+        )
+        drawn += 1
+        if drawn >= 4 {
+          break
+        }
+      }
+    }
+  }
 
   // Mission objective progress
+  if game.objectives_count > 0 {
+    for i in 0..<game.objectives_count {
+      let obj = game.objectives[i]
+      let color = if obj.complete {
+        @raylib.Color::new(100, 255, 100, 200)
+      } else {
+        @raylib.Color::new(220, 220, 220, 200)
+      }
+      let status = if obj.complete { "[DONE]" } else { "[\{obj.current_count}/\{obj.target_count}]" }
+      @draw.draw_text(
+        "\{status} \{obj.description}",
+        10,
+        42 + i * 18,
+        14,
+        color,
+      )
+    }
+  }
 
-  // Missile warning indicator
+  // Missile warning indicator - scan for incoming enemy projectiles
+  {
+    let mut incoming = false
+    for proj in game.projectiles {
+      if proj.active && !proj.from_player && proj.kind == Plasma {
+        let dist = @types.distance3d(
+          proj.x, proj.y, proj.z, p.x, p.y, p.z,
+        )
+        if dist < 80.0 {
+          incoming = true
+          break
+        }
+      }
+    }
+    if incoming {
+      let flash = game.frame_counter % 10 < 5
+      if flash {
+        let text = "!! INCOMING FIRE !!"
+        let tw = @draw.measure_text(text, 24)
+        @draw.draw_text(
+          text,
+          (@types.screen_width - tw) / 2,
+          @types.screen_height - 100,
+          24,
+          @raylib.Color::new(255, 50, 50, 255),
+        )
+      }
+    }
+  }
 
   // Low hull damage effects (red flashing edges)
   if p.hull < p.max_hull * 0.3 {
+    let hull_ratio : Float = p.hull / p.max_hull
+    let alpha_f : Float = (1.0 - hull_ratio / 0.3) * 100.0
+    let alpha = alpha_f.to_int().clamp(min=0, max=255)
+    let edge_color = @raylib.Color::new(255, 0, 0, alpha)
+    @raylib.draw_rectangle(0, 0, @types.screen_width, 6, edge_color)
+    @raylib.draw_rectangle(
+      0, @types.screen_height - 6, @types.screen_width, 6, edge_color,
+    )
+    @raylib.draw_rectangle(0, 0, 6, @types.screen_height, edge_color)
+    @raylib.draw_rectangle(
+      @types.screen_width - 6, 0, 6, @types.screen_height, edge_color,
+    )
   }
 
   // Screen flash overlay
