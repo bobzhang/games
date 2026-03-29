@@ -157,6 +157,16 @@ fn @types.Game::draw_single_tile(
         ),
         @raylib.black,
       )
+      if game.base_flash > 0.0 {
+        let alpha = @types.clampf(game.base_flash, 0.0, 1.0)
+        @raylib.draw_rectangle(
+          sx,
+          sy,
+          @types.tile_size,
+          @types.tile_size,
+          @raylib.color_alpha(@raylib.Color::new(255, 60, 60, 255), alpha * 0.7),
+        )
+      }
     }
     _ => ()
   }
@@ -348,8 +358,22 @@ fn @types.Game::draw_enemies(
       }
     }
 
-    let body = @types.enemy_color(enemy.enemy_kind)
-    let trim = @raylib.Color::new(70, 30, 30, 255)
+    let (body, trim) = if enemy.blink_timer > 0.0 {
+      let flash = (enemy.blink_timer * 10.0).to_int() % 2
+      if flash == 0 {
+        (@raylib.white, @raylib.Color::new(220, 220, 220, 255))
+      } else {
+        (
+          @types.enemy_color(enemy.enemy_kind),
+          @raylib.Color::new(70, 30, 30, 255),
+        )
+      }
+    } else {
+      (
+        @types.enemy_color(enemy.enemy_kind),
+        @raylib.Color::new(70, 30, 30, 255),
+      )
+    }
     draw_tank(enemy, body, trim, shake_x, shake_y)
 
     if enemy.enemy_kind == Heavy {
@@ -559,6 +583,95 @@ fn @types.Game::draw_powerups(
 }
 
 ///|
+/// Traces the cross-shaped blast from a tile position and returns every
+/// affected tile coordinate. Follows the same stopping rules as trigger_bomb:
+/// the blast stops when it hits a blocking tile (Brick stops the blast after
+/// being included, Steel/Water/Base stop without being included).
+fn get_blast_tiles(
+  game : @types.Game,
+  cx : Int,
+  cy : Int,
+  blast_range : Int,
+) -> Array[(Int, Int)] {
+  let tiles : Array[(Int, Int)] = []
+  // Center tile.
+  if @types.in_tile_bounds(cx, cy) {
+    tiles.push((cx, cy))
+  }
+  // Trace four cardinal directions: Up, Right, Down, Left.
+  for dir_idx in 0..<4 {
+    let ddx = if dir_idx == 1 {
+      1
+    } else if dir_idx == 3 {
+      -1
+    } else {
+      0
+    }
+    let ddy = if dir_idx == 0 {
+      -1
+    } else if dir_idx == 2 {
+      1
+    } else {
+      0
+    }
+    for step in 1..<=blast_range {
+      let tx = cx + ddx * step
+      let ty = cy + ddy * step
+      if not(@types.in_tile_bounds(tx, ty)) {
+        break
+      }
+      let tile = @types.get_tile(game, tx, ty)
+      match tile {
+        // Brick is destroyed by the blast, so include it but stop.
+        Brick => {
+          tiles.push((tx, ty))
+          break
+        }
+        // Steel, Water, Base block the blast entirely.
+        Steel | Water | Base => break
+        _ => tiles.push((tx, ty))
+      }
+    }
+  }
+  tiles
+}
+
+///|
+/// Draws a semi-transparent blast radius preview for each alive player.
+/// Shown only during the Playing state when the player is standing on a
+/// tile where they could conceptually place a bomb.
+fn @types.Game::draw_blast_preview(
+  game : @types.Game,
+  shake_x : Float,
+  shake_y : Float,
+) -> Unit {
+  for pi in 0..<@types.max_players {
+    let player = game.players[pi]
+    if not(player.active) || player.hp <= 0 {
+      continue
+    }
+    let tile_x = @types.world_x_to_tile(player.x)
+    let tile_y = @types.world_y_to_tile(player.y)
+    let blast_range = (@types.bomb_range_base + player.weapon_level / 2).clamp(
+      min=2,
+      max=5,
+    )
+    let tiles = get_blast_tiles(game, tile_x, tile_y, blast_range)
+    let color = if pi == 0 {
+      @raylib.Color::new(0, 200, 255, 30)
+    } else {
+      @raylib.Color::new(255, 200, 0, 30)
+    }
+    for i in 0..<tiles.length() {
+      let (tx, ty) = tiles[i]
+      let sx = @types.tile_to_screen_x(tx, shake_x)
+      let sy = @types.tile_to_screen_y(ty, shake_y)
+      @raylib.draw_rectangle(sx, sy, @types.tile_size, @types.tile_size, color)
+    }
+  }
+}
+
+///|
 /// Draws battlefield layers, entities, and effects for one frame.
 pub fn draw_world(game : @types.Game) -> Unit {
   let (shake_x, shake_y) = @types.shake_offsets(game)
@@ -566,6 +679,9 @@ pub fn draw_world(game : @types.Game) -> Unit {
   game.draw_starfield()
   draw_world_backdrop(shake_x, shake_y)
   game.draw_terrain_layer(shake_x, shake_y)
+  if game.state == Playing {
+    game.draw_blast_preview(shake_x, shake_y)
+  }
   game.draw_bombs(shake_x, shake_y)
   game.draw_powerups(shake_x, shake_y)
   game.draw_players(shake_x, shake_y)

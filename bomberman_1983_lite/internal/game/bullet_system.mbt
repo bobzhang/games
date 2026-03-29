@@ -1,4 +1,42 @@
 ///|
+/// Allocates a bullet from the pool and launches it.
+pub fn spawn_bullet(
+  game : @types.Game,
+  team : @types.Team,
+  x : Float,
+  y : Float,
+  dir : @types.Dir,
+  speed : Float,
+  damage : Int,
+  power : Int
+) -> Unit {
+  let slot = for i in 0..<game.bullets.length() {
+    if !game.bullets[i].active {
+      break i
+    }
+  } nobreak {
+    -1
+  }
+  if slot < 0 {
+    return
+  }
+  let vx = @types.dir_vector_x(dir) * speed
+  let vy = @types.dir_vector_y(dir) * speed
+  game.bullets[slot] = {
+    active: true,
+    owner_team: team,
+    x,
+    y,
+    vx,
+    vy,
+    ttl: 3.0,
+    damage,
+    power,
+    radius: @types.bullet_radius,
+  }
+}
+
+///|
 fn @types.Game::bullet_hit_enemy(
   game : @types.Game,
   bullet : @types.Bullet,

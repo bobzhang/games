@@ -73,6 +73,76 @@ fn @types.Game::choose_enemy_target_player(
 }
 
 ///|
+/// Checks whether the enemy can move in the given direction without hitting
+/// a wall or map boundary by probing a half-tile ahead.
+fn can_move_in_dir(
+  game : @types.Game,
+  enemy : @types.Tank,
+  dir : @types.Dir,
+) -> Bool {
+  let step = Float::from_int(@types.tile_size) / 2.0
+  let nx = enemy.x + @types.dir_vector_x(dir) * step
+  let ny = enemy.y + @types.dir_vector_y(dir) * step
+  not(@world.tank_hits_world(game, nx, ny))
+}
+
+///|
+/// Ranks the four cardinal directions by desirability toward the delta
+/// vector `(dx, dy)`. The primary direction aligns with the larger axis
+/// component, followed by the perpendicular directions (preferring the
+/// one closer to the target), and finally the opposite direction.
+fn rank_directions(dx : Float, dy : Float) -> Array[@types.Dir] {
+  let dirs : Array[@types.Dir] = []
+  if dx.abs() > dy.abs() {
+    if dx > 0.0 {
+      dirs.push(Right)
+      if dy > 0.0 {
+        dirs.push(Down)
+        dirs.push(Up)
+      } else {
+        dirs.push(Up)
+        dirs.push(Down)
+      }
+      dirs.push(Left)
+    } else {
+      dirs.push(Left)
+      if dy > 0.0 {
+        dirs.push(Down)
+        dirs.push(Up)
+      } else {
+        dirs.push(Up)
+        dirs.push(Down)
+      }
+      dirs.push(Right)
+    }
+  } else if dy > 0.0 {
+    dirs.push(Down)
+    if dx > 0.0 {
+      dirs.push(Right)
+      dirs.push(Left)
+    } else {
+      dirs.push(Left)
+      dirs.push(Right)
+    }
+    dirs.push(Up)
+  } else {
+    dirs.push(Up)
+    if dx > 0.0 {
+      dirs.push(Right)
+      dirs.push(Left)
+    } else {
+      dirs.push(Left)
+      dirs.push(Right)
+    }
+    dirs.push(Down)
+  }
+  dirs
+}
+
+///|
+/// Picks a target for the enemy (player or base) and returns the first
+/// passable direction ranked toward that target. Falls back to the
+/// enemy's current direction if all four directions are blocked.
 fn @types.Game::enemy_desired_dir(
   game : @types.Game,
   enemy : @types.Tank,
@@ -93,25 +163,16 @@ fn @types.Game::enemy_desired_dir(
 
   let dx = target_x - enemy.x
   let dy = target_y - enemy.y
-  let horiz : @types.Dir = if dx < 0.0 { Left } else { Right }
-  let vert : @types.Dir = if dy < 0.0 { Up } else { Down }
+  let dirs = rank_directions(dx, dy)
 
-  let r = @types.rand_range(game, 0, 99)
-  if dx.abs() > dy.abs() {
-    if r < 72 {
-      horiz
-    } else if r < 92 {
-      vert
-    } else {
-      @types.Dir::from_int(@types.rand_range(game, 0, 3))
+  // Try each ranked direction, return first passable one.
+  for i in 0..<dirs.length() {
+    if can_move_in_dir(game, enemy, dirs[i]) {
+      return dirs[i]
     }
-  } else if r < 72 {
-    vert
-  } else if r < 92 {
-    horiz
-  } else {
-    @types.Dir::from_int(@types.rand_range(game, 0, 3))
   }
+  // All blocked: keep current direction.
+  enemy.dir
 }
 
 ///|
@@ -139,8 +200,18 @@ fn @types.Game::try_move_enemy(
 }
 
 ///|
-fn enemy_shoot_if_ready(_game : @types.Game, _enemy_index : Int) -> Unit {
-  ()
+/// Fires a bullet from the enemy if its reload timer has expired.
+fn enemy_shoot_if_ready(game : @types.Game, enemy_index : Int) -> Unit {
+  let e = game.enemies[enemy_index]
+  if !e.active || e.reload_timer > 0.0 {
+    return
+  }
+  e.reload_timer = e.reload_delay
+  let power = match e.enemy_kind {
+    Heavy | Sniper => 2
+    _ => 1
+  }
+  spawn_bullet(game, Enemy, e.x, e.y, e.dir, @types.enemy_bullet_speed, 1, power)
 }
 
 ///|
@@ -177,6 +248,12 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
         enemy.invuln_timer = 0.0
       }
     }
+    if enemy.blink_timer > 0.0 {
+      enemy.blink_timer -= dt
+      if enemy.blink_timer < 0.0 {
+        enemy.blink_timer = 0.0
+      }
+    }
 
     if game.freeze_all_timer > 0.0 {
       continue
@@ -194,9 +271,12 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
     let moved = game.try_move_enemy(i, enemy.dir, dt)
     if !moved {
       enemy.ai_stuck_timer += dt
-      if enemy.ai_stuck_timer > 0.14 {
+      let threshold = @types.rand_rangef(game, 0.08, 0.18)
+      if enemy.ai_stuck_timer > threshold {
         enemy.ai_stuck_timer = 0.0
-        enemy.dir = @types.Dir::from_int(@types.rand_range(game, 0, 3))
+        // Re-rank directions using look-ahead instead of pure random.
+        let new_dir = game.enemy_desired_dir(enemy)
+        enemy.dir = new_dir
       }
     } else {
       enemy.ai_stuck_timer = 0.0
@@ -236,9 +316,9 @@ fn @types.Game::destroy_enemy(
   game.enemies_alive -= 1
 
   let score = @types.enemy_score(enemy.enemy_kind)
+  @score.bump_combo(game)
   let mult = @score.combo_multiplier(game)
   @score.grant_score(game, killer_team, score * mult)
-  @score.bump_combo(game)
 
   @particles.spawn_explosion(game, enemy.x, enemy.y, 1.1)
 

@@ -55,6 +55,14 @@ pub let tank_half : Float = tank_size / 2.0
 pub let bullet_radius : Float = 3.0
 
 ///|
+/// Default bullet speed for player projectiles.
+pub let bullet_speed : Float = 220.0
+
+///|
+/// Default bullet speed for enemy projectiles.
+pub let enemy_bullet_speed : Float = 180.0
+
+///|
 /// Maximum number of player tanks.
 pub let max_players : Int = 2
 

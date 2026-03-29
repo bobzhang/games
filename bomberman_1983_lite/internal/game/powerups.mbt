@@ -38,21 +38,50 @@ fn @types.Game::spawn_powerup(
 }
 
 ///|
+/// Returns the Grenade drop percentage scaled by stage progression.
+/// Early stages get 10%, stage 20+ gets 15%, stage 50+ gets 18%.
+fn grenade_chance(stage : Int) -> Int {
+  if stage >= 50 {
+    18
+  } else if stage >= 20 {
+    15
+  } else {
+    10
+  }
+}
+
+///|
+/// Picks a random powerup kind with stage-scaled drop rates.
+/// Grenade chance is reduced in early stages; the freed budget goes
+/// to Shield and ExtraLife for better early-game survivability.
 fn @types.Game::spawn_random_powerup(
   game : @types.Game,
   x : Float,
   y : Float,
 ) -> Unit {
   let roll = @types.rand_range(game, 0, 99)
-  let kind : @types.PowerupKind = if roll < 18 {
+  let grenade_pct = grenade_chance(game.stage_index)
+  // Redistribute the budget freed by reducing Grenade (base 18 -> variable).
+  // Extra points split evenly between Shield and ExtraLife.
+  let grenade_saved = 18 - grenade_pct
+  let shield_extra = grenade_saved / 2
+  let extra_life_extra = grenade_saved - shield_extra
+  let shield_end = 18 + shield_extra
+  let star_end = shield_end + 18
+  let grenade_end = star_end + grenade_pct
+  let clock_end = grenade_end + 17
+  let shovel_end = clock_end + 14
+  // ExtraLife gets the remainder: 15 + extra_life_extra.
+  ignore(shovel_end + 15 + extra_life_extra)
+  let kind : @types.PowerupKind = if roll < shield_end {
     Shield
-  } else if roll < 36 {
+  } else if roll < star_end {
     Star
-  } else if roll < 54 {
+  } else if roll < grenade_end {
     Grenade
-  } else if roll < 71 {
+  } else if roll < clock_end {
     Clock
-  } else if roll < 85 {
+  } else if roll < shovel_end {
     Shovel
   } else {
     ExtraLife
