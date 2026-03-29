@@ -638,8 +638,8 @@ fn get_blast_tiles(
 
 ///|
 /// Draws a semi-transparent blast radius preview for each alive player.
-/// Shown only during the Playing state when the player is standing on a
-/// tile where they could conceptually place a bomb.
+/// Shown only during the Playing state when the player can actually place
+/// a bomb (not reloading, under bomb cap, and on a valid tile).
 fn @types.Game::draw_blast_preview(
   game : @types.Game,
   shake_x : Float,
@@ -650,8 +650,35 @@ fn @types.Game::draw_blast_preview(
     if not(player.active) || player.hp <= 0 {
       continue
     }
+    // Skip preview if still reloading.
+    if player.reload_timer > 0.0 {
+      continue
+    }
+    // Skip preview if bomb cap reached.
+    let team = @types.team_of_player(pi)
+    let bomb_cap = (1 + player.weapon_level / 2).clamp(min=1, max=4)
+    if @types.count_team_bombs(game, team) >= bomb_cap {
+      continue
+    }
     let tile_x = @types.world_x_to_tile(player.x)
     let tile_y = @types.world_y_to_tile(player.y)
+    // Skip preview if standing on a blocking tile.
+    let tile = @types.get_tile(game, tile_x, tile_y)
+    match tile {
+      Steel | Water | Base => continue
+      _ => ()
+    }
+    // Skip preview if a bomb already occupies this tile.
+    let mut tile_occupied = false
+    for bomb in game.bombs {
+      if bomb.active && bomb.tile_x == tile_x && bomb.tile_y == tile_y {
+        tile_occupied = true
+        break
+      }
+    }
+    if tile_occupied {
+      continue
+    }
     let blast_range = (@types.bomb_range_base + player.weapon_level / 2).clamp(
       min=2,
       max=5,

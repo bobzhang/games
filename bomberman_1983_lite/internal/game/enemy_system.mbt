@@ -74,16 +74,23 @@ fn @types.Game::choose_enemy_target_player(
 
 ///|
 /// Checks whether the enemy can move in the given direction without hitting
-/// a wall or map boundary by probing a half-tile ahead.
+/// a wall, map boundary, or another enemy by probing a half-tile ahead.
 fn can_move_in_dir(
   game : @types.Game,
   enemy : @types.Tank,
+  enemy_index : Int,
   dir : @types.Dir,
 ) -> Bool {
   let step = Float::from_int(@types.tile_size) / 2.0
   let nx = enemy.x + @types.dir_vector_x(dir) * step
   let ny = enemy.y + @types.dir_vector_y(dir) * step
-  not(@world.tank_hits_world(game, nx, ny))
+  if @world.tank_hits_world(game, nx, ny) {
+    return false
+  }
+  if @world.tank_hits_enemies(game, nx, ny, enemy_index) {
+    return false
+  }
+  true
 }
 
 ///|
@@ -146,6 +153,7 @@ fn rank_directions(dx : Float, dy : Float) -> Array[@types.Dir] {
 fn @types.Game::enemy_desired_dir(
   game : @types.Game,
   enemy : @types.Tank,
+  enemy_index : Int,
 ) -> @types.Dir {
   let target_player = game.choose_enemy_target_player(enemy)
   let base_x = @types.tile_center_x(@types.base_tile_x)
@@ -167,7 +175,7 @@ fn @types.Game::enemy_desired_dir(
 
   // Try each ranked direction, return first passable one.
   for i in 0..<dirs.length() {
-    if can_move_in_dir(game, enemy, dirs[i]) {
+    if can_move_in_dir(game, enemy, enemy_index, dirs[i]) {
       return dirs[i]
     }
   }
@@ -200,10 +208,54 @@ fn @types.Game::try_move_enemy(
 }
 
 ///|
-/// Fires a bullet from the enemy if its reload timer has expired.
+/// Checks whether the enemy has a clear line of tiles in its facing
+/// direction that contains a player or the base within `max_range` tiles.
+/// Returns false if a wall blocks the path before any target is reached.
+fn enemy_has_clear_shot(game : @types.Game, enemy : @types.Tank) -> Bool {
+  let ts = @types.tile_size
+  let dx = @types.dir_vector_x(enemy.dir).to_int()
+  let dy = @types.dir_vector_y(enemy.dir).to_int()
+  let start_tx = @types.world_x_to_tile(enemy.x)
+  let start_ty = @types.world_y_to_tile(enemy.y)
+  for step in 1..=8 {
+    let tx = start_tx + dx * step
+    let ty = start_ty + dy * step
+    if !@types.in_tile_bounds(tx, ty) {
+      return false
+    }
+    let tile = @types.get_tile(game, tx, ty)
+    if @types.is_tile_solid_for_bullet(tile) {
+      return false
+    }
+    // Check if a player is on this tile.
+    let cx = @types.tile_center_x(tx)
+    let cy = @types.tile_center_y(ty)
+    let half_ts = Float::from_int(ts) / 2.0
+    for p in 0..<@types.max_players {
+      let player = game.players[p]
+      if player.active &&
+        (player.x - cx).abs() < half_ts &&
+        (player.y - cy).abs() < half_ts {
+        return true
+      }
+    }
+    // Check if the base tile is here.
+    if tx == @types.base_tile_x && ty == @types.base_tile_y {
+      return true
+    }
+  }
+  false
+}
+
+///|
+/// Fires a bullet from the enemy if its reload timer has expired and the
+/// enemy has line-of-sight to a player or the base in its facing direction.
 fn enemy_shoot_if_ready(game : @types.Game, enemy_index : Int) -> Unit {
   let e = game.enemies[enemy_index]
   if !e.active || e.reload_timer > 0.0 {
+    return
+  }
+  if !enemy_has_clear_shot(game, e) {
     return
   }
   e.reload_timer = e.reload_delay
@@ -264,7 +316,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
 
     if enemy.ai_move_timer <= 0.0 {
       enemy.ai_move_timer = @types.rand_rangef(game, 0.35, 1.25)
-      let new_dir = game.enemy_desired_dir(enemy)
+      let new_dir = game.enemy_desired_dir(enemy, i)
       enemy.dir = new_dir
     }
 
@@ -275,7 +327,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
       if enemy.ai_stuck_timer > threshold {
         enemy.ai_stuck_timer = 0.0
         // Re-rank directions using look-ahead instead of pure random.
-        let new_dir = game.enemy_desired_dir(enemy)
+        let new_dir = game.enemy_desired_dir(enemy, i)
         enemy.dir = new_dir
       }
     } else {
