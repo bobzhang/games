@@ -47,8 +47,11 @@ fn collect_item(game : @types.Game, item : @types.Item) -> Unit {
       check_synergy_notification(game, old_synergies)
     }
     PassiveItem(passive) => {
-      p.passives.push(passive)
-      apply_passive(p, passive)
+      // Prevent duplicate boolean passives (e.g. GlassCannon stacking)
+      if !p.passives.contains(passive) {
+        p.passives.push(passive)
+        apply_passive(p, passive)
+      }
       push_event(game, Pickup(item.kind, item.x, item.y))
       // Recalculate synergies after acquiring a passive
       let old_synergies = get_active_synergy_names(game.synergies)
@@ -151,8 +154,11 @@ pub fn update_shop(game : @types.Game, input : InputState) -> Unit {
             check_synergy_notification(game, old_synergies)
           }
           PassiveItem(passive) => {
-            p.passives.push(passive)
-            apply_passive(p, passive)
+            // Prevent duplicate boolean passives (e.g. GlassCannon stacking)
+            if !p.passives.contains(passive) {
+              p.passives.push(passive)
+              apply_passive(p, passive)
+            }
             let old_synergies = get_active_synergy_names(game.synergies)
             game.synergies = get_synergy_bonuses(game.player)
             check_synergy_notification(game, old_synergies)

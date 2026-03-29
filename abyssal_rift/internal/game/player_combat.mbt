@@ -108,10 +108,10 @@ fn spawn_player_attack_hitbox(game : @types.Game) -> Unit {
     0.0
   }
   // Destroyer synergy: DamageUp + GlassCannon
-  if p.passives.contains(DamageUp) && p.passives.contains(GlassCannon) {
+  let syn = game.synergies
+  if syn.destroyer {
     bonus_mult += 0.25
   }
-  let syn = game.synergies
   if stats.is_ranged {
     // Multishot synergy: spawn multiple arrows in a spread for Bow
     let shot_count = if syn.multishot && p.weapon == Bow {

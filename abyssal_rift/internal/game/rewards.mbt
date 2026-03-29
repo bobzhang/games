@@ -1,4 +1,13 @@
 ///|
+pub fn all_passives() -> Array[@types.PassiveKind] {
+  [
+    MaxHpUp, DamageUp, SpeedUp, CritUp, DashCooldownDown, DefenseUp,
+    AttackSpeedUp, PickupRange, LifeSteal, Thorns, Berserker,
+    GlassCannon, Vampiric, ChainLightning,
+  ]
+}
+
+///|
 /// Generate a smart reward set: 1 on-build offer + 2 random/utility
 pub fn generate_smart_rewards(game : @types.Game) -> Array[@types.RewardChoice] {
   let p = game.player
@@ -118,6 +127,27 @@ fn find_missing_synergy_passives(
   if p.weapon == Staff && not(p.passives.contains(DamageUp)) {
     missing.push(DamageUp)
   }
+  // Iron Maiden: DefenseUp + Thorns
+  if p.passives.contains(DefenseUp) && not(p.passives.contains(Thorns)) {
+    missing.push(Thorns)
+  }
+  if p.passives.contains(Thorns) && not(p.passives.contains(DefenseUp)) {
+    missing.push(DefenseUp)
+  }
+  // Blood Rage: LifeSteal + Berserker
+  if p.passives.contains(LifeSteal) && not(p.passives.contains(Berserker)) {
+    missing.push(Berserker)
+  }
+  if p.passives.contains(Berserker) && not(p.passives.contains(LifeSteal)) {
+    missing.push(LifeSteal)
+  }
+  // Destroyer: DamageUp + GlassCannon
+  if p.passives.contains(DamageUp) && not(p.passives.contains(GlassCannon)) {
+    missing.push(GlassCannon)
+  }
+  if p.passives.contains(GlassCannon) && not(p.passives.contains(DamageUp)) {
+    missing.push(DamageUp)
+  }
   // Deduplicate
   let unique : Array[@types.PassiveKind] = []
   for i in 0..<missing.length() {
@@ -177,15 +207,11 @@ fn generate_unique_offer(
   existing : Array[@types.RewardChoice],
   rng : UInt
 ) -> (@types.RewardChoice, UInt) {
-  let all_passives : Array[@types.PassiveKind] = [
-    MaxHpUp, DamageUp, SpeedUp, CritUp, DashCooldownDown, DefenseUp,
-    AttackSpeedUp, PickupRange, LifeSteal, Thorns, Berserker,
-    GlassCannon, Vampiric, ChainLightning,
-  ]
+  let all = all_passives()
   // Filter out already-offered passives and player's existing passives
   let available : Array[@types.PassiveKind] = []
-  for i in 0..<all_passives.length() {
-    let passive = all_passives[i]
+  for i in 0..<all.length() {
+    let passive = all[i]
     let mut skip = false
     for j in 0..<existing.length() {
       match existing[j].kind {
@@ -264,14 +290,11 @@ fn get_gamble_passive(
     (missing[idx], s2)
   } else {
     // Fall back to random from all passives
-    let all_passives : Array[@types.PassiveKind] = [
-      MaxHpUp, DamageUp, SpeedUp, CritUp, DashCooldownDown, DefenseUp,
-      AttackSpeedUp, PickupRange,
-    ]
+    let all = all_passives()
     let (s2, f2) = @types.rng_next(s1)
-    let idx = (f2 * Float::from_int(all_passives.length())).to_int() %
-      all_passives.length()
-    (all_passives[idx], s2)
+    let idx = (f2 * Float::from_int(all.length())).to_int() %
+      all.length()
+    (all[idx], s2)
   }
 }
 

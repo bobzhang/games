@@ -8,21 +8,13 @@ fn get_floor_colors(floor_num : Int) -> (@raylib.Color, @raylib.Color, @raylib.C
       @raylib.Color::new(42, 38, 48, 255),
       @raylib.Color::new(30, 28, 35, 255),
     )
-  } else if floor_num <= 10 {
+  } else {
     // Fungal Caverns
     (
       @raylib.Color::new(30, 55, 40, 255),
       @raylib.Color::new(25, 42, 35, 255),
       @raylib.Color::new(28, 46, 38, 255),
       @raylib.Color::new(18, 32, 22, 255),
-    )
-  } else {
-    // Molten Depths
-    (
-      @raylib.Color::new(62, 35, 30, 255),
-      @raylib.Color::new(45, 28, 25, 255),
-      @raylib.Color::new(48, 32, 28, 255),
-      @raylib.Color::new(35, 18, 15, 255),
     )
   }
 }
@@ -36,10 +28,8 @@ fn draw_wall_shadow(px : Int, py : Int, ts : Int) -> Unit {
 fn draw_door_glow(px : Int, py : Int, ts : Int, floor_num : Int) -> Unit {
   let glow_color = if floor_num <= 5 {
     @raylib.Color::new(150, 130, 80, 60)
-  } else if floor_num <= 10 {
-    @raylib.Color::new(80, 180, 80, 60)
   } else {
-    @raylib.Color::new(200, 100, 50, 60)
+    @raylib.Color::new(80, 180, 80, 60)
   }
   @raylib.draw_rectangle(px + 2, py + 2, ts - 4, ts - 4, glow_color)
 }

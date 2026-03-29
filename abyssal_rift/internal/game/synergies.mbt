@@ -44,6 +44,18 @@ pub fn get_synergy_bonuses(player : @types.Player) -> @types.SynergyBonuses {
   if passives.contains(DamageUp) && player.weapon == Staff {
     bonuses.chain_projectile = true
   }
+  // Synergy: DefenseUp + Thorns = Iron Maiden (thorns doubled)
+  if passives.contains(DefenseUp) && passives.contains(Thorns) {
+    bonuses.iron_maiden = true
+  }
+  // Blood Rage: LifeSteal + Berserker = heal on hit + damage boost at low HP
+  if passives.contains(LifeSteal) && passives.contains(Berserker) {
+    bonuses.blood_rage = true
+  }
+  // Destroyer: DamageUp + GlassCannon = massive damage boost
+  if passives.contains(DamageUp) && passives.contains(GlassCannon) {
+    bonuses.destroyer = true
+  }
   bonuses
 }
 
@@ -79,6 +91,15 @@ pub fn get_active_synergy_names(
   }
   if synergies.chain_projectile {
     names.push("Chain Lightning")
+  }
+  if synergies.iron_maiden {
+    names.push("Iron Maiden")
+  }
+  if synergies.blood_rage {
+    names.push("Blood Rage")
+  }
+  if synergies.destroyer {
+    names.push("Destroyer")
   }
   names
 }

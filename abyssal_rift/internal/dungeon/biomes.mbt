@@ -19,32 +19,14 @@ pub fn get_biome(floor_num : Int) -> BiomeTheme {
       accent_color: @raylib.Color::new(80, 70, 90, 255),
       name: "Stone Crypt",
     }
-  } else if floor_num <= 10 {
-    // Fungal Caverns  --  damp greens
+  } else {
+    // Fungal Caverns  --  damp greens (floors 6+)
     {
       wall_color: @raylib.Color::new(30, 55, 40, 255),
       floor_color: @raylib.Color::new(25, 42, 35, 255),
       floor_alt_color: @raylib.Color::new(28, 46, 38, 255),
       accent_color: @raylib.Color::new(60, 120, 80, 255),
       name: "Fungal Caverns",
-    }
-  } else if floor_num <= 15 {
-    // Molten Depths  --  warm reds and oranges
-    {
-      wall_color: @raylib.Color::new(65, 30, 20, 255),
-      floor_color: @raylib.Color::new(45, 22, 18, 255),
-      floor_alt_color: @raylib.Color::new(50, 25, 20, 255),
-      accent_color: @raylib.Color::new(180, 80, 30, 255),
-      name: "Molten Depths",
-    }
-  } else {
-    // Abyssal Void  --  deep blues and blacks
-    {
-      wall_color: @raylib.Color::new(20, 25, 55, 255),
-      floor_color: @raylib.Color::new(15, 18, 40, 255),
-      floor_alt_color: @raylib.Color::new(18, 22, 45, 255),
-      accent_color: @raylib.Color::new(60, 80, 180, 255),
-      name: "Abyssal Void",
     }
   }
 }

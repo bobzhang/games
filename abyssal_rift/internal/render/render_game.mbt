@@ -51,10 +51,8 @@ pub fn draw_game(game : @types.Game) -> Unit {
         )
         let biome = if game.floor_num <= 5 {
           "Stone Crypt"
-        } else if game.floor_num <= 10 {
-          "Fungal Caverns"
         } else {
-          "Molten Depths"
+          "Fungal Caverns"
         }
         let bw = @raylib.measure_text(biome, 20)
         @raylib.draw_text(

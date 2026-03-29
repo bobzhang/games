@@ -19,9 +19,10 @@ pub fn draw_hud(game : @types.Game) -> Unit {
   let shield_ratio = p.shield / p.max_shield
   @raylib.draw_rectangle(bar_x, shield_y, shield_w, shield_h, @raylib.Color::new(20, 40, 60, 255))
   @raylib.draw_rectangle(bar_x, shield_y, (Float::from_int(shield_w) * shield_ratio).to_int(), shield_h, @types.color_shield)
-  // Weapon name
+  // Weapon name with icon
   let weapon_stats = @data.get_weapon_stats(p.weapon)
-  @raylib.draw_text(weapon_stats.name, 240, 10, 18, @raylib.white)
+  draw_weapon_icon(p.weapon, 240, 16)
+  @raylib.draw_text(weapon_stats.name, 258, 10, 18, @raylib.white)
   // Gold
   @raylib.draw_text("Gold: \{p.gold}", 450, 10, 18, @types.color_gold_text)
   // Floor
@@ -198,6 +199,61 @@ pub fn draw_hud(game : @types.Game) -> Unit {
 }
 
 ///|
+fn draw_weapon_icon(weapon : @types.WeaponKind, x : Int, y : Int) -> Unit {
+  let color = @raylib.Color::new(220, 220, 240, 220)
+  match weapon {
+    Sword =>
+      // Horizontal line (blade)
+      @raylib.draw_line_ex(
+        @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
+        @raylib.Vector2::new(Float::from_int(x + 12), Float::from_int(y)),
+        2.0,
+        color,
+      )
+    Daggers => {
+      // X shape (crossed daggers)
+      @raylib.draw_line_ex(
+        @raylib.Vector2::new(
+          Float::from_int(x + 1), Float::from_int(y - 4),
+        ),
+        @raylib.Vector2::new(
+          Float::from_int(x + 9), Float::from_int(y + 4),
+        ),
+        2.0,
+        color,
+      )
+      @raylib.draw_line_ex(
+        @raylib.Vector2::new(
+          Float::from_int(x + 9), Float::from_int(y - 4),
+        ),
+        @raylib.Vector2::new(
+          Float::from_int(x + 1), Float::from_int(y + 4),
+        ),
+        2.0,
+        color,
+      )
+    }
+    Bow =>
+      // Small triangle/arrow pointing right
+      @raylib.draw_triangle(
+        @raylib.Vector2::new(
+          Float::from_int(x + 12), Float::from_int(y),
+        ),
+        @raylib.Vector2::new(
+          Float::from_int(x + 1), Float::from_int(y + 5),
+        ),
+        @raylib.Vector2::new(
+          Float::from_int(x + 1), Float::from_int(y - 5),
+        ),
+        color,
+      )
+    Staff =>
+      // Small circle (orb)
+      @raylib.draw_circle(x + 6, y, 5.0, color)
+  }
+}
+
+///|
 fn passive_short_name(kind : @types.PassiveKind) -> String {
   match kind {
     MaxHpUp => "HP+"
@@ -361,6 +417,15 @@ fn draw_synergies(game : @types.Game) -> Unit {
   }
   if syn.chain_projectile {
     names.push("Chain Lightning")
+  }
+  if syn.iron_maiden {
+    names.push("Iron Maiden")
+  }
+  if syn.blood_rage {
+    names.push("Blood Rage")
+  }
+  if syn.destroyer {
+    names.push("Destroyer")
   }
   if names.length() == 0 {
     return

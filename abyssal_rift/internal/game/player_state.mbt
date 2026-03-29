@@ -160,7 +160,7 @@ pub fn damage_player(game : @types.Game, amount : Int) -> Unit {
   }
   // Thorns: reflect damage to nearby enemies
   if p.passives.contains(Thorns) {
-    let thorns_dmg = if p.passives.contains(DefenseUp) { 10 } else { 5 } // Iron Maiden synergy: doubled thorns
+    let thorns_dmg = if game.synergies.iron_maiden { 10 } else { 5 }
     for i in 0..<game.enemies.length() {
       let e = game.enemies[i]
       if !e.active {

@@ -64,7 +64,7 @@ pub fn apply_damage_to_enemy(
   dn.is_crit = is_crit
   // LifeSteal: heal 10% of damage dealt
   if p.passives.contains(LifeSteal) {
-    let heal_pct : Float = if p.passives.contains(Berserker) {
+    let heal_pct : Float = if syn.blood_rage {
       let hp_ratio = Float::from_int(p.hp) / Float::from_int(p.max_hp)
       if hp_ratio < 0.3 { 0.2 } else { 0.1 } // Blood Rage synergy: doubled lifesteal
     } else {
@@ -130,12 +130,13 @@ pub fn apply_damage_to_enemy(
     }
     let stats = @data.get_enemy_stats(e.kind, game.floor_num)
     push_event(game, Kill(e.kind, e.x, e.y))
-    // Drop gold (elites drop double)
-    let gold_reward = if e.is_elite {
+    // Drop gold (elites drop double, floor scaling bonus)
+    let floor_bonus = game.floor_num * 2
+    let gold_reward = (if e.is_elite {
       stats.reward_gold * 2
     } else {
       stats.reward_gold
-    }
+    }) + floor_bonus
     let item_idx = @types.alloc_item(game.items)
     let item = game.items[item_idx]
     item.active = true

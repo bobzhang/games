@@ -373,12 +373,20 @@ fn clear_room(game : @types.Game) -> Unit {
       // Boss rooms, EliteVault, and every 3rd combat room: trigger choice-of-3 reward
       if room.kind == Boss || room.kind == EliteVault || game.floor_rooms_cleared % 3 == 0 {
         trigger_reward_choice(game)
+        // Boss bonus: substantial extra gold reward
+        if room.kind == Boss {
+          let boss_gold = 50 + game.floor_num * 10
+          let bg_idx = @types.alloc_item(game.items)
+          let bg_item = game.items[bg_idx]
+          bg_item.active = true
+          bg_item.kind = Gold(boss_gold)
+          bg_item.x = game.player.x + 20.0
+          bg_item.y = game.player.y - 60.0
+          bg_item.bob_timer = 0.0
+        }
         // EliteVault bonus: drop an extra passive item
         if room.kind == EliteVault {
-          let passives : Array[@types.PassiveKind] = [
-            MaxHpUp, DamageUp, SpeedUp, CritUp,
-            DashCooldownDown, DefenseUp, AttackSpeedUp, PickupRange,
-          ]
+          let passives = all_passives()
           let (s_ev, pidx_ev) = @types.rng_int(
             game.rng_state, 0, passives.length() - 1,
           )
@@ -435,10 +443,7 @@ fn clear_room(game : @types.Game) -> Unit {
         let passive_chance : Float = 10.0 / 100.0 +
           Float::from_int(game.floor_num) * (3.0 / 100.0)
         if proll < passive_chance {
-          let passives : Array[@types.PassiveKind] = [
-            MaxHpUp, DamageUp, SpeedUp, CritUp,
-            DashCooldownDown, DefenseUp, AttackSpeedUp, PickupRange,
-          ]
+          let passives = all_passives()
           let (s6, pidx) = @types.rng_int(
             game.rng_state, 0, passives.length() - 1,
           )
@@ -514,8 +519,33 @@ fn clear_room(game : @types.Game) -> Unit {
       apply_status_effect(game.player, Haste(1.5))
       // Event
       push_event(game, RoomCleared)
-      // Celebration particles
-      spawn_particles_burst(game, game.player.x, game.player.y, 30, 100, 200, 255)
+      // Brief slow-motion celebration
+      game.hit_pause_timer = 0.15
+      // Celebration particles in a ring pattern
+      let ring_count = 24
+      for ring_i in 0..<ring_count {
+        let angle = Float::from_int(ring_i) / Float::from_int(ring_count) *
+          2.0 *
+          3.14159
+        let cos_a = Float::from_double(@math.cos(angle.to_double()))
+        let sin_a = Float::from_double(@math.sin(angle.to_double()))
+        let ring_r : Float = 40.0
+        let idx = @types.alloc_particle(game.particles)
+        let ptcl = game.particles[idx]
+        ptcl.active = true
+        ptcl.x = game.player.x + cos_a * ring_r
+        ptcl.y = game.player.y + sin_a * ring_r
+        ptcl.vx = cos_a * 180.0
+        ptcl.vy = sin_a * 180.0
+        ptcl.life = 0.6
+        ptcl.max_life = 0.6
+        ptcl.size = 4.0
+        ptcl.r = 100
+        ptcl.g = 200
+        ptcl.b = 255
+      }
+      // Extra random burst on top
+      spawn_particles_burst(game, game.player.x, game.player.y, 12, 255, 215, 0)
     }
   }
 }
@@ -542,10 +572,7 @@ fn setup_shop(game : @types.Game) -> Unit {
       shop0.x = cx - 80.0
       shop0.y = cy - 20.0
       // Item 1: Passive
-      let passives : Array[@types.PassiveKind] = [
-        MaxHpUp, DamageUp, SpeedUp, CritUp,
-        DashCooldownDown, DefenseUp, AttackSpeedUp, PickupRange,
-      ]
+      let passives = all_passives()
       let (s3, pidx) = @types.rng_int(game.rng_state, 0, passives.length() - 1)
       let (s4, pprice) = @types.rng_int(s3, 40, 80)
       game.rng_state = s4

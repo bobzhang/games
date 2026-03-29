@@ -150,6 +150,9 @@ pub(all) struct SynergyBonuses {
   mut vampiric : Bool
   mut momentum : Bool
   mut chain_projectile : Bool
+  mut iron_maiden : Bool
+  mut blood_rage : Bool
+  mut destroyer : Bool
 }
 
 ///|
@@ -168,6 +171,9 @@ pub fn SynergyBonuses::new() -> SynergyBonuses {
     vampiric: false,
     momentum: false,
     chain_projectile: false,
+    iron_maiden: false,
+    blood_rage: false,
+    destroyer: false,
   }
 }
 

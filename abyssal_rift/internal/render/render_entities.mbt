@@ -21,21 +21,30 @@ pub fn draw_player(game : @types.Game) -> Unit {
   }
   let px = p.x.to_int()
   let py = p.y.to_int()
+  // Low-HP heartbeat pulse
+  let hp_ratio = Float::from_int(p.hp) / Float::from_int(p.max_hp)
+  let pulse = if hp_ratio < 0.25 {
+    Float::from_double(@math.sin(game.frame_count.to_double() * 0.15)) *
+      2.0
+  } else {
+    0.0
+  }
+  let draw_radius = @types.player_radius + pulse
   // Shadow
-  draw_shadow(p.x, p.y, @types.player_radius)
+  draw_shadow(p.x, p.y, draw_radius)
   // Shield ring
   if p.shield > 0.0 {
     let shield_ratio = p.shield / p.max_shield
     @raylib.draw_circle_lines_v(
       @raylib.Vector2::new(p.x, p.y),
-      @types.player_radius + 4.0,
+      draw_radius + 4.0,
       @raylib.Color::new(80, 160, 255, (shield_ratio * 120.0).to_int()),
     )
   }
   // Body circle
-  @raylib.draw_circle(px, py, @types.player_radius, @types.color_player)
+  @raylib.draw_circle(px, py, draw_radius, @types.color_player)
   // Inner circle
-  @raylib.draw_circle(px, py, @types.player_radius - 4.0, @raylib.Color::new(130, 220, 255, 255))
+  @raylib.draw_circle(px, py, draw_radius - 4.0, @raylib.Color::new(130, 220, 255, 255))
   // Direction indicator (triangle pointing in facing direction)
   let fx = p.facing_x
   let fy = p.facing_y
@@ -80,16 +89,31 @@ fn draw_weapon_swing(game : @types.Game) -> Unit {
     Active(_) => {
       let stats = @data.get_weapon_stats(p.weapon)
       if !stats.is_ranged {
-        // Draw arc
+        // Draw filled arc sector for melee swing
         let range = stats.range
         let arc = stats.arc_angle
+        let base_angle = Float::from_double(
+          @math.atan2(p.facing_y.to_double(), p.facing_x.to_double()),
+        ) *
+          180.0 /
+          3.14159
+        let start_deg = base_angle - arc / 2.0
+        let end_deg = base_angle + arc / 2.0
+        // Filled semi-transparent sector
+        @raylib.draw_circle_sector(
+          @raylib.Vector2::new(p.x, p.y),
+          range,
+          start_deg,
+          end_deg,
+          8,
+          @raylib.Color::new(255, 255, 255, 50),
+        )
+        // Brighter edge lines for definition
+        let half_arc_rad = arc / 2.0 / 180.0 * 3.14159
         let fx = p.facing_x
         let fy = p.facing_y
-        // Simple arc visualization: draw a few lines
-        let steps = 5
-        let half_arc_rad = arc / 2.0 / 180.0 * 3.14159
-        for i in 0..=steps {
-          let frac = Float::from_int(i) / Float::from_int(steps)
+        for i in [0, 5] {
+          let frac = Float::from_int(i) / 5.0
           let angle = -half_arc_rad + frac * 2.0 * half_arc_rad
           let cos_a = Float::from_double(@math.cos(angle.to_double()))
           let sin_a = Float::from_double(@math.sin(angle.to_double()))
@@ -104,6 +128,15 @@ fn draw_weapon_swing(game : @types.Game) -> Unit {
             @raylib.Color::new(255, 255, 255, 120),
           )
         }
+        // Fading trail at 80% range
+        @raylib.draw_circle_sector(
+          @raylib.Vector2::new(p.x, p.y),
+          range * 0.8,
+          start_deg,
+          end_deg,
+          8,
+          @raylib.Color::new(255, 255, 255, 25),
+        )
       }
     }
     _ => ()
@@ -130,12 +163,15 @@ pub fn draw_enemies(game : @types.Game) -> Unit {
     }
     // Shadow
     draw_shadow(e.x, e.y, r)
-    // Death fade
+    // Death fade with shrink
     match e.state {
       Dead(t) => {
         let alpha = (t / 0.5 * 255.0).to_int()
+        let death_progress : Float = (1.0 : Float) - t / (0.5 : Float)
+        let shrink : Float = (1.0 : Float) - death_progress * (0.5 : Float)
+        let draw_r = r * shrink
         let fade = @raylib.Color::new(base_color.r.to_int(), base_color.g.to_int(), base_color.b.to_int(), @types.clampi(alpha, 0, 255))
-        draw_enemy_shape(e.kind, ex, ey, r, fade)
+        draw_enemy_shape(e.kind, ex, ey, draw_r, fade)
         continue
       }
       _ => ()
