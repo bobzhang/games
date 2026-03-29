@@ -118,13 +118,13 @@ pub fn mission_briefing(mission : Int) -> String {
   if mission == 0 {
     "A routine patrol sweep of Sector 7. Clear out any hostiles you encounter. This should be straightforward - perfect for getting your bearings."
   } else if mission == 1 {
-    "An asteroid field in the shipping lanes needs clearing. Watch for hostiles hiding among the rocks. Destroy asteroids blocking navigation routes."
+    "An asteroid field in the shipping lanes needs clearing. Patrol the designated waypoints and eliminate any hostiles encountered. Watch for ambushes among the rocks."
   } else if mission == 2 {
     "We have detected a cruiser-class vessel in the Vega system. Engage and eliminate. This is your first encounter with heavy armor - use missiles wisely."
   } else if mission == 3 {
     "A friendly supply station is under attack. Defend it from incoming waves of fighters and interceptors. The station must survive."
   } else if mission == 4 {
-    "Intel reports an enemy staging area inside a nebula. Strike fast and destroy their bomber squadron before they can launch an attack on our fleet."
+    "Intel reports a massive enemy force converging on this sector. Hold your position and survive the incoming waves until reinforcements arrive. ETA: 90 seconds."
   } else if mission == 5 {
     "We need supplies captured from an enemy outpost. Destroy the station defenses and any escort ships. Watch for incoming reinforcement waves."
   } else if mission == 6 {
@@ -132,7 +132,7 @@ pub fn mission_briefing(mission : Int) -> String {
   } else if mission == 7 {
     "A capital ship has been spotted. It has multiple turrets and a reinforced hull. Target the weak points on its underside. Escort fighters will defend it."
   } else if mission == 8 {
-    "An enemy fleet has taken position in a dense asteroid field. Navigate the debris while engaging hostiles. Stations on both sides are in the combat zone."
+    "An enemy fleet has taken position in a dense asteroid field. Patrol the sector waypoints to locate and engage hostiles. Navigate carefully through the debris."
   } else if mission == 9 {
     "Our fleet engages the main enemy armada. This is a massive battle. Focus on eliminating high-value targets and supporting our station."
   } else if mission == 10 {
@@ -150,13 +150,13 @@ pub fn mission_objective_type(mission : Int) -> @types.Objective {
   if mission == 0 {
     DestroyAll
   } else if mission == 1 {
-    DestroyAll
+    PatrolMission
   } else if mission == 2 {
     DestroyAll
   } else if mission == 3 {
     DefendStation
   } else if mission == 4 {
-    DestroyAll
+    Survive
   } else if mission == 5 {
     DestroyCount
   } else if mission == 6 {
@@ -164,7 +164,7 @@ pub fn mission_objective_type(mission : Int) -> @types.Objective {
   } else if mission == 7 {
     BossFight
   } else if mission == 8 {
-    DestroyAll
+    PatrolMission
   } else if mission == 9 {
     DestroyCount
   } else if mission == 10 {
@@ -370,6 +370,147 @@ pub fn mission_difficulty_text(mission : Int) -> String {
     "Very Hard"
   } else {
     "Extreme"
+  }
+}
+
+// Survive mission time limit in seconds
+
+///|
+/// Returns the time limit for survive-type missions.
+pub fn mission_survive_time(mission : Int) -> Float {
+  if mission == 4 {
+    @types.survive_time_limit
+  } else {
+    @types.survive_time_limit + Float::from_int(mission) * 5.0
+  }
+}
+
+///|
+/// Returns the patrol waypoint position for the given mission and waypoint index.
+pub fn mission_patrol_waypoint(
+  mission : Int,
+  index : Int,
+) -> (Float, Float, Float) {
+  if mission == 1 {
+    if index == 0 {
+      (60.0, 5.0, 80.0)
+    } else if index == 1 {
+      (-50.0, -10.0, 130.0)
+    } else if index == 2 {
+      (30.0, 15.0, 200.0)
+    } else {
+      (-70.0, 0.0, 60.0)
+    }
+  } else if mission == 8 {
+    if index == 0 {
+      (80.0, 0.0, 60.0)
+    } else if index == 1 {
+      (-60.0, 10.0, 120.0)
+    } else if index == 2 {
+      (40.0, -5.0, 180.0)
+    } else {
+      (-80.0, 0.0, 80.0)
+    }
+  } else {
+    let fi = Float::from_int(index)
+    let wpc = Float::from_int(@types.patrol_waypoint_count)
+    let angle : Float = fi * (@types.two_pi / wpc)
+    let radius : Float = 80.0 + fi * 20.0
+    (
+      @math.cosf(angle) * radius,
+      @math.sinf(angle) * 10.0,
+      @math.sinf(angle) * radius + 100.0,
+    )
+  }
+}
+
+///|
+/// Returns the mid-mission event definition for the given mission and event index.
+/// Returns (event_type, trigger_kill_fraction, message).
+pub fn mission_mid_event(
+  mission : Int,
+  event_index : Int,
+) -> (Int, Float, String) {
+  if mission <= 2 {
+    if event_index == 0 {
+      (1, 0.5, "Command: Good work. Keep it up!")
+    } else {
+      (0, 0.0, "")
+    }
+  } else if mission <= 5 {
+    if event_index == 0 {
+      (1, 0.25, "Command: Stay sharp, pilot!")
+    } else if event_index == 1 {
+      (0, 0.5, "")
+    } else {
+      (1, 0.75, "Command: Almost there!")
+    }
+  } else {
+    if event_index == 0 {
+      (1, 0.2, "Command: Heavy resistance ahead!")
+    } else if event_index == 1 {
+      (0, 0.5, "")
+    } else {
+      (2, 0.7, "Warning: Debris field ahead!")
+    }
+  }
+}
+
+///|
+/// Returns the number of mid-mission events for the given mission.
+pub fn mission_mid_event_count(mission : Int) -> Int {
+  if mission <= 2 {
+    1
+  } else {
+    3
+  }
+}
+
+///|
+/// Returns a short objective summary string for the briefing screen.
+pub fn mission_objective_summary(mission : Int) -> String {
+  let obj = mission_objective_type(mission)
+  match obj {
+    DestroyAll => "Eliminate all hostile forces in the area"
+    PatrolMission => "Reach all waypoints and clear hostiles"
+    Survive => {
+      let t = mission_survive_time(mission).to_int()
+      "Survive for " + t.to_string() + " seconds"
+    }
+    DefendStation => "Keep the friendly station alive"
+    BossFight => "Destroy the enemy capital ship"
+    DestroyCount => {
+      let c = mission_objective_target(mission)
+      "Destroy at least " + c.to_string() + " enemies"
+    }
+    _ => "Complete all objectives"
+  }
+}
+
+///|
+/// Returns the number of enemy waves as a display string.
+pub fn mission_wave_info(mission : Int) -> String {
+  let ext = get_mission_extended(mission)
+  let waves = ext.6
+  if waves == 1 {
+    "1 wave"
+  } else {
+    waves.to_string() + " waves"
+  }
+}
+
+///|
+/// Returns the total estimated enemy count for the mission as a display string.
+pub fn mission_enemy_estimate(mission : Int) -> String {
+  let def = get_mission_def(mission)
+  let ext = get_mission_extended(mission)
+  let base = def.0 + ext.0 + ext.1 + def.1 + ext.2
+  if base < 10 {
+    "Light resistance"
+  } else if base < 20 {
+    "Moderate resistance"
+  } else {
+    "Heavy resistance"
   }
 }
 

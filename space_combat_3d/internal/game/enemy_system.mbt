@@ -30,7 +30,11 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     // AI state machine
     game.update_ai_state(i, dist, dt)
 
-    if e.kind == @types.enemy_fighter {
+    // Evasion override: if this enemy is the player's locked target, evade
+    let is_targeted = game.target_idx == i && game.target_lock_timer > 1.0
+    if is_targeted && game.ai_difficulty >= 1 {
+      game.apply_evasion_behavior(i, dx, dy, dz, dist, dt)
+    } else if e.kind == @types.enemy_fighter {
       game.update_fighter_ai(i, dx, dy, dz, dist, dt)
     } else if e.kind == @types.enemy_interceptor {
       game.update_interceptor_ai(i, dx, dy, dz, dist, dt)
@@ -40,6 +44,11 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
       game.update_cruiser_ai(i, dx, dy, dz, dist, dt)
     } else if e.kind == @types.enemy_capital {
       game.update_capital_ai(i, dx, dy, dz, dist, dt)
+    }
+
+    // Formation flying: wing-pair cohesion
+    if e.squad_id >= 0 && game.ai_difficulty >= 1 {
+      game.apply_wing_pair_cohesion(i, dt)
     }
 
     // Move
@@ -52,13 +61,13 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     e.y = @types.wrap_coord(e.y)
     e.z = @types.wrap_coord(e.z)
 
-    // Fire timer
+    // Fire timer with difficulty-scaled rates
     e.fire_timer -= dt
     if e.fire_timer <= 0.0 && dist < 150.0 {
       // Only fire in attack or chase state
       if e.ai_state == Attack || e.ai_state == Chase {
         game.enemy_fire(i, dx, dy, dz, dist)
-        let rate : Float = if e.kind == @types.enemy_fighter {
+        let base_rate : Float = if e.kind == @types.enemy_fighter {
           @types.fighter_fire_rate
         } else if e.kind == @types.enemy_interceptor {
           @types.interceptor_fire_rate
@@ -69,6 +78,7 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
         } else {
           @types.capital_fire_rate
         }
+        let rate = difficulty_adjusted_fire_rate(base_rate, game.ai_difficulty)
         e.fire_timer = rate + @types.rand_rangef(game, -0.3, 0.5)
       } else {
         e.fire_timer = 0.5
@@ -535,7 +545,7 @@ fn @types.Game::enemy_fire(
   proj.piercing = false
 
   if e.kind == @types.enemy_bomber {
-    // Bombers fire plasma-like shots
+    // Bombers: always plasma but better at higher difficulty
     proj.kind = Plasma
     proj.damage = @types.bomber_damage
     proj.life = 4.0
@@ -543,11 +553,29 @@ fn @types.Game::enemy_fire(
     proj.size = 0.2
     proj.fuel = 0.0
   } else if e.kind == @types.enemy_capital {
-    proj.kind = Laser
-    proj.damage = @types.capital_damage
+    // Capital ships: missiles at long range (difficulty 2+), lasers at close range
+    if dist > 100.0 && game.ai_difficulty >= 2 {
+      proj.kind = Missile
+      proj.damage = @types.capital_damage + @types.capital_damage
+      proj.life = 6.0
+      proj.target_idx = -1
+      proj.size = 0.15
+      proj.fuel = @types.missile_fuel
+    } else {
+      proj.kind = Laser
+      proj.damage = @types.capital_damage
+      proj.life = 4.0
+      proj.target_idx = -1
+      proj.size = 0.12
+      proj.fuel = 0.0
+    }
+  } else if e.kind == @types.enemy_cruiser && dist > 50.0 && game.ai_difficulty >= 1 {
+    // Cruisers: plasma at long range on higher difficulty
+    proj.kind = Plasma
+    proj.damage = @types.cruiser_damage + @types.cruiser_damage
     proj.life = 4.0
     proj.target_idx = -1
-    proj.size = 0.12
+    proj.size = 0.15
     proj.fuel = 0.0
   } else {
     proj.kind = Laser
@@ -558,7 +586,9 @@ fn @types.Game::enemy_fire(
     } else {
       @types.cruiser_damage
     }
-    proj.damage = dmg
+    // Higher difficulty enemies deal more damage
+    let acc = @types.ai_difficulty_accuracy(game.ai_difficulty)
+    proj.damage = dmg + dmg * acc
     proj.life = 3.0
     proj.target_idx = -1
     proj.size = 0.08
@@ -836,4 +866,155 @@ pub fn damage_asteroid(game : @types.Game, idx : Int, damage : Float) -> Unit {
   if a.hp <= 0.0 {
     game.destroy_asteroid(idx)
   }
+}
+
+// ============================================================
+// AI Improvements: Formation flying, evasion, weapon selection
+// ============================================================
+
+///|
+/// Applies evasive maneuvers when this enemy is the player's locked target.
+fn @types.Game::apply_evasion_behavior(
+  game : @types.Game,
+  idx : Int,
+  dx : Float,
+  dy : Float,
+  dz : Float,
+  dist : Float,
+  dt : Float,
+) -> Unit {
+  let e = game.enemies[idx]
+  let spd : Float = if e.kind == @types.enemy_fighter {
+    @types.fighter_speed
+  } else if e.kind == @types.enemy_interceptor {
+    @types.interceptor_speed
+  } else if e.kind == @types.enemy_bomber {
+    @types.bomber_speed
+  } else if e.kind == @types.enemy_cruiser {
+    @types.cruiser_speed
+  } else {
+    @types.capital_speed
+  }
+
+  let evasion_skill = @types.ai_difficulty_evasion(game.ai_difficulty)
+  let time_val = Float::from_int(game.frame_counter) * 0.1 + Float::from_int(idx) * 2.7
+
+  // Perpendicular dodge direction (barrel roll pattern)
+  let norm = @types.normalize3d(dx, dy, dz)
+  let cross = @types.cross3d(norm.0, norm.1, norm.2, 0.0, 1.0, 0.0)
+
+  let roll_x = cross.0 * @math.sinf(time_val * 3.5) * evasion_skill
+  let roll_y = @math.cosf(time_val * 2.8) * evasion_skill
+  let roll_z = cross.2 * @math.sinf(time_val * 3.5) * evasion_skill
+
+  // Sudden direction reversal every ~2 seconds
+  let reversal : Float = if (game.frame_counter / 120 + idx) % 2 == 0 {
+    1.0
+  } else {
+    -1.0
+  }
+
+  // Blend evasion with approach/retreat based on distance
+  let approach : Float = if dist > 80.0 {
+    0.4
+  } else if dist < 20.0 {
+    -0.5
+  } else {
+    0.1
+  }
+
+  let evade_vx = (roll_x * reversal + norm.0 * approach) * spd * 1.3
+  let evade_vy = (roll_y * reversal + norm.1 * approach) * spd * 1.3
+  let evade_vz = (roll_z * reversal + norm.2 * approach) * spd * 1.3
+
+  e.vx = @types.lerpf(e.vx, evade_vx, 3.5 * dt)
+  e.vy = @types.lerpf(e.vy, evade_vy, 3.5 * dt)
+  e.vz = @types.lerpf(e.vz, evade_vz, 3.5 * dt)
+
+  let vel_len = @types.length3d(e.vx, e.vy, e.vz)
+  if vel_len > 1.0 {
+    e.yaw = @math.atan2f(e.vx, e.vz)
+    e.pitch = @math.atan2f(e.vy, (e.vx * e.vx + e.vz * e.vz).sqrt())
+  }
+  ignore(game)
+  ignore(dist)
+}
+
+///|
+/// Applies wing-pair formation cohesion for fighters and interceptors.
+fn @types.Game::apply_wing_pair_cohesion(
+  game : @types.Game,
+  idx : Int,
+  dt : Float,
+) -> Unit {
+  let e = game.enemies[idx]
+  if e.kind != @types.enemy_fighter && e.kind != @types.enemy_interceptor {
+    return
+  }
+  if e.ai_state == Flee || e.ai_state == Evade {
+    return
+  }
+
+  let partner_form_idx = if e.formation_index % 2 == 0 {
+    e.formation_index + 1
+  } else {
+    e.formation_index - 1
+  }
+
+  let mut partner_idx = -1
+  for j in 0..<game.enemies.length() {
+    if j == idx {
+      continue
+    }
+    let other = game.enemies[j]
+    if other.active &&
+      other.squad_id == e.squad_id &&
+      other.formation_index == partner_form_idx {
+      partner_idx = j
+      break
+    }
+  }
+
+  if partner_idx < 0 {
+    return
+  }
+
+  let partner = game.enemies[partner_idx]
+  let pdx = partner.x - e.x
+  let pdy = partner.y - e.y
+  let pdz = partner.z - e.z
+  let pdist = @types.length3d(pdx, pdy, pdz)
+
+  let desired_dist : Float = 12.0
+  if pdist < 3.0 || pdist > 60.0 {
+    return
+  }
+
+  let strength : Float = Float::from_int(game.ai_difficulty + 1) * 0.08
+  if pdist < desired_dist * 0.5 {
+    let norm = @types.normalize3d(-pdx, -pdy, -pdz)
+    e.vx = e.vx + norm.0 * strength * 10.0 * dt
+    e.vy = e.vy + norm.1 * strength * 10.0 * dt
+    e.vz = e.vz + norm.2 * strength * 10.0 * dt
+  } else if pdist > desired_dist * 1.5 {
+    let norm = @types.normalize3d(pdx, pdy, pdz)
+    e.vx = e.vx + norm.0 * strength * 8.0 * dt
+    e.vy = e.vy + norm.1 * strength * 8.0 * dt
+    e.vz = e.vz + norm.2 * strength * 8.0 * dt
+  }
+
+  // Match partner velocity slightly
+  let vel_blend : Float = strength * 0.3
+  e.vx = @types.lerpf(e.vx, partner.vx, vel_blend * dt)
+  e.vy = @types.lerpf(e.vy, partner.vy, vel_blend * dt)
+  e.vz = @types.lerpf(e.vz, partner.vz, vel_blend * dt)
+}
+
+///|
+/// Adjusts fire rate based on AI difficulty. Higher difficulty fires faster.
+fn difficulty_adjusted_fire_rate(base_rate : Float, difficulty : Int) -> Float {
+  let reduction = @types.ai_difficulty_accuracy(difficulty)
+  let adjusted : Float = base_rate - base_rate * reduction
+  let minimum : Float = base_rate * 0.5
+  if adjusted > minimum { adjusted } else { minimum }
 }

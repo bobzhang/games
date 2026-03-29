@@ -1,5 +1,6 @@
 import {
   "bobzhang/games/space_combat_3d/internal/types",
+  "moonbitlang/core/math",
 }
 
 warnings = "+missing_doc+unnecessary_annotation"

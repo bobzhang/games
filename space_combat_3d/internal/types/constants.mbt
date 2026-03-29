@@ -761,6 +761,48 @@ pub fn mission_difficulty_speed_mult(mission : Int) -> Float {
   1.0 + Float::from_int(mission) * 0.05
 }
 
+///|
+/// Returns the AI difficulty level (0-3) for a mission. Higher = smarter enemies.
+pub fn mission_ai_difficulty(mission : Int) -> Int {
+  if mission < 3 {
+    0
+  } else if mission < 6 {
+    1
+  } else if mission < 9 {
+    2
+  } else {
+    3
+  }
+}
+
+///|
+/// Returns the AI evasion skill for a given difficulty level.
+pub fn ai_difficulty_evasion(difficulty : Int) -> Float {
+  Float::from_int(difficulty) * 0.25
+}
+
+///|
+/// Returns the AI aim accuracy bonus for a given difficulty level.
+pub fn ai_difficulty_accuracy(difficulty : Int) -> Float {
+  Float::from_int(difficulty) * 0.15
+}
+
+///|
+/// Survive objective time limit in seconds.
+pub let survive_time_limit : Float = 90.0
+
+///|
+/// Number of patrol waypoints in patrol missions.
+pub let patrol_waypoint_count : Int = 4
+
+///|
+/// Radius to reach a patrol waypoint.
+pub let patrol_waypoint_radius : Float = 25.0
+
+///|
+/// Mid-mission message display duration in seconds.
+pub let mid_mission_msg_duration : Float = 3.0
+
 // Ship class hull by type
 
 ///|

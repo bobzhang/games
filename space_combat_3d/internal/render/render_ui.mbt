@@ -160,19 +160,67 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 150, 100, 255),
   )
 
+  // Survive timer (shown below top bar for survive missions)
+  if game.survive_total > 0.0 && game.survive_timer > 0.0 {
+    let secs = game.survive_timer.to_int()
+    let timer_color = if secs > 30 {
+      @raylib.Color::new(100, 255, 100, 255)
+    } else if secs > 10 {
+      @raylib.Color::new(255, 255, 100, 255)
+    } else {
+      @raylib.Color::new(255, 80, 80, 255)
+    }
+    let timer_text = "SURVIVE: \{secs}s"
+    let timer_w = @draw.measure_text(timer_text, 24)
+    @draw.draw_text(
+      timer_text,
+      (@types.screen_width - timer_w) / 2,
+      42,
+      24,
+      timer_color,
+    )
+  }
+
+  // Patrol waypoint indicator
+  if game.patrol_total > 0 && game.patrol_current < game.patrol_total {
+    let wp_num = game.patrol_current + 1
+    let wp_total = game.patrol_total
+    let wp_text = "WAYPOINT \{wp_num}/\{wp_total}"
+    let wp_dist = @types.distance3d(
+      game.player.x, game.player.y, game.player.z,
+      game.patrol_waypoints_x[game.patrol_current],
+      game.patrol_waypoints_y[game.patrol_current],
+      game.patrol_waypoints_z[game.patrol_current],
+    )
+    let dist_i = wp_dist.to_int()
+    let full_wp = "\{wp_text} - \{dist_i}m"
+    let wp_w = @draw.measure_text(full_wp, 20)
+    @draw.draw_text(
+      full_wp,
+      (@types.screen_width - wp_w) / 2,
+      42,
+      20,
+      @raylib.Color::new(100, 200, 255, 255),
+    )
+  } else if game.patrol_total > 0 && game.patrol_current >= game.patrol_total {
+    let done_text = "ALL WAYPOINTS REACHED"
+    let done_w = @draw.measure_text(done_text, 20)
+    @draw.draw_text(
+      done_text,
+      (@types.screen_width - done_w) / 2,
+      42,
+      20,
+      @raylib.Color::new(100, 255, 100, 255),
+    )
+  }
+
   // Hull bar (bottom left)
   let bar_x = 10
-  let bar_y = @types.screen_height - 60
+  let bar_y = @types.screen_height - 80
   let bar_w = 200
   let bar_h = 16
-  @raylib.draw_rectangle(
-    bar_x,
-    bar_y,
-    bar_w,
-    bar_h,
-    @raylib.Color::new(40, 0, 0, 200),
-  )
-  let hull_w = (p.hull / game.player.max_hull * Float::from_int(bar_w)).to_int()
+  @raylib.draw_rectangle(bar_x, bar_y, bar_w, bar_h, @raylib.Color::new(40, 0, 0, 200))
+  let hull_w = (p.hull / p.max_hull * Float::from_int(bar_w)).to_int()
   let hull_color = if p.hull > 50.0 {
     @raylib.Color::new(0, 200, 0, 255)
   } else if p.hull > 25.0 {
@@ -181,173 +229,126 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(200, 0, 0, 255)
   }
   @raylib.draw_rectangle(bar_x, bar_y, hull_w, bar_h, hull_color)
-  @raylib.draw_rectangle_lines(
-    bar_x,
-    bar_y,
-    bar_w,
-    bar_h,
-    @raylib.Color::new(150, 150, 150, 200),
-  )
-  @draw.draw_text(
-    "HULL",
-    bar_x,
-    bar_y - 16,
-    14,
-    @raylib.Color::new(200, 200, 200, 255),
-  )
+  @raylib.draw_rectangle_lines(bar_x, bar_y, bar_w, bar_h, @raylib.Color::new(150, 150, 150, 200))
+  let hull_pct = (p.hull / p.max_hull * 100.0).to_int()
+  @draw.draw_text("HULL \{hull_pct}%", bar_x, bar_y - 16, 14, @raylib.Color::new(200, 200, 200, 255))
 
   // Shield bar
-  let shield_y = @types.screen_height - 35
-  @raylib.draw_rectangle(
-    bar_x,
-    shield_y,
-    bar_w,
-    bar_h,
-    @raylib.Color::new(0, 0, 40, 200),
-  )
-  let shield_w = (p.shield / game.player.max_shield * Float::from_int(bar_w)).to_int()
-  @raylib.draw_rectangle(
-    bar_x,
-    shield_y,
-    shield_w,
-    bar_h,
-    @raylib.Color::new(80, 140, 255, 255),
-  )
-  @raylib.draw_rectangle_lines(
-    bar_x,
-    shield_y,
-    bar_w,
-    bar_h,
-    @raylib.Color::new(100, 120, 180, 200),
-  )
-  @draw.draw_text(
-    "SHIELD",
-    bar_x,
-    shield_y - 16,
-    14,
-    @raylib.Color::new(100, 150, 255, 255),
-  )
+  let shield_y = @types.screen_height - 55
+  @raylib.draw_rectangle(bar_x, shield_y, bar_w, bar_h, @raylib.Color::new(0, 0, 40, 200))
+  let shield_w = (p.shield / p.max_shield * Float::from_int(bar_w)).to_int()
+  @raylib.draw_rectangle(bar_x, shield_y, shield_w, bar_h, @raylib.Color::new(80, 140, 255, 255))
+  @raylib.draw_rectangle_lines(bar_x, shield_y, bar_w, bar_h, @raylib.Color::new(100, 120, 180, 200))
+  @draw.draw_text("SHIELD", bar_x, shield_y - 16, 14, @raylib.Color::new(100, 150, 255, 255))
 
-  // Weapon indicator (bottom right)
-  let wpn_x = @types.screen_width - 180
-  let wpn_y = @types.screen_height - 60
-  @raylib.draw_rectangle(
-    wpn_x,
-    wpn_y,
-    170,
-    50,
-    @raylib.Color::new(0, 0, 0, 160),
-  )
-  @draw.draw_text(
-    "WEAPON:",
-    wpn_x + 5,
-    wpn_y + 5,
-    14,
-    @raylib.Color::new(150, 150, 170, 255),
-  )
+  // Weapon energy bar
+  let energy_y = @types.screen_height - 30
+  @raylib.draw_rectangle(bar_x, energy_y, bar_w, 10, @raylib.Color::new(20, 20, 0, 200))
+  let energy_fill = (p.weapon_energy / @types.max_weapon_energy * Float::from_int(bar_w)).to_int()
+  let energy_color = if p.weapon_energy > 30.0 { @raylib.Color::new(200, 200, 50, 255) } else { @raylib.Color::new(200, 50, 50, 255) }
+  @raylib.draw_rectangle(bar_x, energy_y, energy_fill, 10, energy_color)
+  @raylib.draw_rectangle_lines(bar_x, energy_y, bar_w, 10, @raylib.Color::new(120, 120, 80, 200))
+  @draw.draw_text("ENERGY", bar_x + bar_w + 5, energy_y - 2, 12, @raylib.Color::new(180, 180, 100, 255))
+
+  // Weapon indicator (bottom right) with ammo/energy info
+  let wpn_x = @types.screen_width - 200
+  let wpn_y = @types.screen_height - 90
+  @raylib.draw_rectangle(wpn_x, wpn_y, 190, 72, @raylib.Color::new(0, 0, 0, 160))
+  @draw.draw_text("WEAPON:", wpn_x + 5, wpn_y + 3, 14, @raylib.Color::new(150, 150, 170, 255))
   let wpn_name = @types.weapon_name(p.weapon)
   let wpn_color = match p.weapon {
     Laser => @raylib.Color::new(255, 255, 100, 255)
     Missile => @raylib.Color::new(255, 180, 80, 255)
-    _ => @raylib.Color::new(100, 255, 150, 255)
-  }
-  @draw.draw_text(wpn_name, wpn_x + 5, wpn_y + 25, 20, wpn_color)
-
-  // Weapon selection keys
-  let key1_color = match p.weapon {
-    Laser => @raylib.Color::new(255, 255, 100, 255)
-    _ => @raylib.Color::new(100, 100, 100, 255)
-  }
-  let key2_color = match p.weapon {
-    Missile => @raylib.Color::new(255, 180, 80, 255)
-    _ => @raylib.Color::new(100, 100, 100, 255)
-  }
-  let key3_color = match p.weapon {
     Plasma => @raylib.Color::new(100, 255, 150, 255)
-    _ => @raylib.Color::new(100, 100, 100, 255)
+    Railgun => @raylib.Color::new(150, 200, 255, 255)
   }
-  @draw.draw_text("1", wpn_x + 90, wpn_y + 25, 18, key1_color)
-  @draw.draw_text("2", wpn_x + 110, wpn_y + 25, 18, key2_color)
-  @draw.draw_text("3", wpn_x + 130, wpn_y + 25, 18, key3_color)
+  @draw.draw_text(wpn_name, wpn_x + 5, wpn_y + 20, 20, wpn_color)
 
-  // Target info
+  // Ammo/energy cost display
+  let ammo_text : String = match p.weapon {
+    Laser => { let cost = @types.laser_energy_cost.to_int(); "Cost: \{cost}e" }
+    Missile => "Ammo: \{p.missile_ammo}/\{@types.missile_max_ammo}"
+    Plasma => { let cost = @types.plasma_energy_cost.to_int(); "Cost: \{cost}e" }
+    Railgun => { let cost = @types.railgun_energy_cost.to_int(); "Cost: \{cost}e" }
+  }
+  @draw.draw_text(ammo_text, wpn_x + 5, wpn_y + 42, 14, @raylib.Color::new(180, 180, 180, 255))
+
+  // Weapon keys 1-4
+  let key1_color = if p.weapon == Laser { @raylib.Color::new(255, 255, 100, 255) } else { @raylib.Color::new(100, 100, 100, 255) }
+  let key2_color = if p.weapon == Missile { @raylib.Color::new(255, 180, 80, 255) } else { @raylib.Color::new(100, 100, 100, 255) }
+  let key3_color = if p.weapon == Plasma { @raylib.Color::new(100, 255, 150, 255) } else { @raylib.Color::new(100, 100, 100, 255) }
+  let key4_color = if p.weapon == Railgun { @raylib.Color::new(150, 200, 255, 255) } else { @raylib.Color::new(100, 100, 100, 255) }
+  @draw.draw_text("1", wpn_x + 100, wpn_y + 20, 18, key1_color)
+  @draw.draw_text("2", wpn_x + 120, wpn_y + 20, 18, key2_color)
+  @draw.draw_text("3", wpn_x + 140, wpn_y + 20, 18, key3_color)
+  @draw.draw_text("4", wpn_x + 160, wpn_y + 20, 18, key4_color)
+
+  // Target info with health bar
   if game.target_idx >= 0 && game.target_idx < game.enemies.length() {
     let e = game.enemies[game.target_idx]
     if e.active {
-      let tgt_x = @types.screen_width / 2 - 80
-      let tgt_y = @types.screen_height - 80
-      @raylib.draw_rectangle(
-        tgt_x,
-        tgt_y,
-        160,
-        40,
-        @raylib.Color::new(0, 0, 0, 140),
-      )
-      let tgt_name = if e.kind == @types.enemy_fighter {
-        "FIGHTER"
-      } else {
-        "CRUISER"
-      }
-      @draw.draw_text(
-        "TARGET: \{tgt_name}",
-        tgt_x + 5,
-        tgt_y + 3,
-        14,
-        @raylib.Color::new(255, 255, 0, 255),
-      )
-      let dist = @types.distance3d(
-        game.player.x,
-        game.player.y,
-        game.player.z,
-        e.x,
-        e.y,
-        e.z,
-      )
-      let dist_i = dist.to_int()
-      @draw.draw_text(
-        "Dist: \{dist_i}m  HP: \{e.hp.to_int()}",
-        tgt_x + 5,
-        tgt_y + 20,
-        14,
-        @raylib.Color::new(200, 200, 100, 255),
-      )
+      let tgt_x = @types.screen_width / 2 - 100
+      let tgt_y = @types.screen_height - 100
+      @raylib.draw_rectangle(tgt_x, tgt_y, 200, 70, @raylib.Color::new(0, 0, 0, 160))
+      // Lock status
+      let lock_text = if game.target_lock_timer > 1.0 { "LOCKED" } else { "LOCKING..." }
+      let lock_color = if game.target_lock_timer > 1.0 { @raylib.Color::new(0, 255, 0, 255) } else { @raylib.Color::new(255, 255, 0, 200) }
+      @draw.draw_text(lock_text, tgt_x + 130, tgt_y + 3, 12, lock_color)
+      let tgt_name = @types.enemy_type_name(e.kind)
+      @draw.draw_text("TGT: \{tgt_name}", tgt_x + 5, tgt_y + 3, 14, @raylib.Color::new(255, 255, 0, 255))
+      let dist = @types.distance3d(game.player.x, game.player.y, game.player.z, e.x, e.y, e.z)
+      @draw.draw_text("Dist: \{dist.to_int()}m", tgt_x + 5, tgt_y + 20, 14, @raylib.Color::new(200, 200, 100, 255))
+      // Target health bar
+      let tgt_bar_y = tgt_y + 38
+      @raylib.draw_rectangle(tgt_x + 5, tgt_bar_y, 190, 12, @raylib.Color::new(60, 0, 0, 200))
+      let hp_pct = e.hp / e.max_hp
+      let hp_fill = (hp_pct * 190.0).to_int()
+      let hp_color = if hp_pct > 0.5 { @raylib.Color::new(0, 200, 0, 255) } else if hp_pct > 0.25 { @raylib.Color::new(200, 200, 0, 255) } else { @raylib.Color::new(255, 50, 50, 255) }
+      @raylib.draw_rectangle(tgt_x + 5, tgt_bar_y, hp_fill, 12, hp_color)
+      @raylib.draw_rectangle_lines(tgt_x + 5, tgt_bar_y, 190, 12, @raylib.Color::new(120, 120, 120, 200))
+      @draw.draw_text("HP: \{e.hp.to_int()}/\{e.max_hp.to_int()}", tgt_x + 5, tgt_bar_y + 14, 12, @raylib.Color::new(180, 180, 180, 255))
     }
   }
 
-  // Speed indicator
-  let spd_text = "SPD: \{game.player.speed.to_int()}"
-  @draw.draw_text(
-    spd_text,
-    @types.screen_width - 130,
-    40,
-    16,
-    @raylib.Color::new(150, 200, 150, 255),
-  )
-  if game.player.boosting {
-    @draw.draw_text(
-      "BOOST",
-      @types.screen_width - 130,
-      58,
-      14,
-      @raylib.Color::new(255, 200, 50, 255),
-    )
+  // Speed + boost fuel
+  @draw.draw_text("SPD: \{game.player.speed.to_int()}", @types.screen_width - 130, 40, 16, @raylib.Color::new(150, 200, 150, 255))
+  let boost_x = @types.screen_width - 130
+  @raylib.draw_rectangle(boost_x, 60, 100, 8, @raylib.Color::new(20, 20, 0, 180))
+  let boost_fill = (p.boost_fuel / @types.max_boost_fuel * 100.0).to_int()
+  let boost_color = if p.boosting { @raylib.Color::new(255, 200, 50, 255) } else { @raylib.Color::new(150, 150, 80, 200) }
+  @raylib.draw_rectangle(boost_x, 60, boost_fill, 8, boost_color)
+  if p.boosting {
+    @draw.draw_text("BOOST", boost_x + 105, 58, 12, @raylib.Color::new(255, 200, 50, 255))
   }
 
-  // Bottom bar - controls reminder
-  @raylib.draw_rectangle(
-    0,
-    @types.screen_height - 18,
-    @types.screen_width,
-    18,
-    @raylib.Color::new(0, 0, 0, 100),
-  )
-  @draw.draw_text(
-    "WASD: Fly | QE: Roll | Shift: Boost | Space: Fire | Tab: Target | 1-3: Weapons | P: Pause",
-    10,
-    @types.screen_height - 16,
-    12,
-    @raylib.Color::new(80, 90, 100, 255),
-  )
+  // Combo display
+  if game.combo_count >= 2 {
+    let combo_text = "x\{game.combo_count} COMBO"
+    let combo_tw = @draw.measure_text(combo_text, 24)
+    let combo_alpha_f = @types.minf(game.combo_timer / @types.combo_timeout, 1.0) * 255.0
+    let combo_a = combo_alpha_f.to_int().clamp(min=0, max=255)
+    @draw.draw_text(combo_text, (@types.screen_width - combo_tw) / 2, 50, 24, @raylib.Color::new(255, 220, 50, combo_a))
+  }
+
+  // Kill feed (top right)
+
+  // Mission objective progress
+
+  // Missile warning indicator
+
+  // Low hull damage effects (red flashing edges)
+  if p.hull < p.max_hull * 0.3 {
+  }
+
+  // Screen flash overlay
+  if game.screen_flash > 0.0 {
+    let flash_a = (game.screen_flash * 120.0).to_int().clamp(min=0, max=120)
+    @raylib.draw_rectangle(0, 0, @types.screen_width, @types.screen_height, @raylib.Color::new(game.flash_r, game.flash_g, game.flash_b, flash_a))
+  }
+
+  // Bottom bar
+  @raylib.draw_rectangle(0, @types.screen_height - 18, @types.screen_width, 18, @raylib.Color::new(0, 0, 0, 100))
+  @draw.draw_text("WASD: Fly | QE: Roll | Shift: Boost | Space: Fire | Tab: Target | 1-4: Weapons | P: Pause", 10, @types.screen_height - 16, 12, @raylib.Color::new(80, 90, 100, 255))
 }
 
 ///|
@@ -550,27 +551,54 @@ fn @types.Game::draw_mission_briefing(game : @types.Game) -> Unit {
     @raylib.Color::new(180, 190, 210, 255),
   )
 
-  // Objective
-  let obj_type = @levels.mission_objective_type(game.current_mission)
-  let obj_text = "Objective: \{@types.objective_type_name(obj_type)}"
-  let ow = @draw.measure_text(obj_text, 20)
+  // Objective summary (enhanced)
+  let obj_summary = @levels.mission_objective_summary(game.current_mission)
+  let os_text = "Objective: \{obj_summary}"
+  let osw = @draw.measure_text(os_text, 20)
+  let os_x = if osw < @types.screen_width - 100 {
+    (@types.screen_width - osw) / 2
+  } else {
+    50
+  }
   @draw.draw_text(
-    obj_text,
-    (@types.screen_width - ow) / 2,
-    300,
+    os_text,
+    os_x,
+    280,
     20,
     @raylib.Color::new(255, 200, 100, 255),
   )
 
-  // Difficulty
-  let diff_text = "Difficulty: \{@levels.mission_difficulty_text(game.current_mission)}"
-  let dw = @draw.measure_text(diff_text, 18)
+  // Difficulty and AI level
+  let diff_label = @levels.mission_difficulty_text(game.current_mission)
+  let ai_diff = @types.mission_ai_difficulty(game.current_mission)
+  let ai_label = if ai_diff == 0 {
+    "Basic"
+  } else if ai_diff == 1 {
+    "Adaptive"
+  } else if ai_diff == 2 {
+    "Tactical"
+  } else {
+    "Elite"
+  }
+  let full_diff = "Difficulty: \{diff_label}  |  Enemy AI: \{ai_label}"
+  let dw = @draw.measure_text(full_diff, 18)
   @draw.draw_text(
-    diff_text,
+    full_diff,
     (@types.screen_width - dw) / 2,
-    340,
+    320,
     18,
     @raylib.Color::new(200, 160, 120, 255),
+  )
+
+  // Wave and enemy info
+  let wave_text = "Waves: \{@levels.mission_wave_info(game.current_mission)}  |  \{@levels.mission_enemy_estimate(game.current_mission)}"
+  let ww = @draw.measure_text(wave_text, 18)
+  @draw.draw_text(
+    wave_text,
+    (@types.screen_width - ww) / 2,
+    355,
+    18,
+    @raylib.Color::new(180, 180, 200, 255),
   )
 
   // Ship class
@@ -579,7 +607,7 @@ fn @types.Game::draw_mission_briefing(game : @types.Game) -> Unit {
   @draw.draw_text(
     ship_text,
     (@types.screen_width - stw) / 2,
-    380,
+    390,
     18,
     @raylib.Color::new(150, 200, 150, 255),
   )
@@ -636,11 +664,29 @@ fn @types.Game::draw_mission_select(game : @types.Game) -> Unit {
       color,
     )
 
+    // Objective type
+    let obj_type = @levels.mission_objective_type(i)
+    let obj_short = @types.objective_type_name(obj_type)
+    let obj_color = match obj_type {
+      Survive => @raylib.Color::new(255, 180, 80, 255)
+      PatrolMission => @raylib.Color::new(80, 200, 255, 255)
+      BossFight => @raylib.Color::new(255, 80, 80, 255)
+      DefendStation => @raylib.Color::new(100, 255, 100, 255)
+      _ => @raylib.Color::new(160, 160, 180, 255)
+    }
+    @draw.draw_text(
+      obj_short,
+      @types.screen_width / 2 + 100,
+      y,
+      14,
+      obj_color,
+    )
+
     // Difficulty on the right
     let diff = @levels.mission_difficulty_text(i)
     @draw.draw_text(
       diff,
-      @types.screen_width / 2 + 150,
+      @types.screen_width / 2 + 280,
       y,
       16,
       @raylib.Color::new(180, 150, 100, 255),

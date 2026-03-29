@@ -190,8 +190,28 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   game.mission_timer += dt
   game.mission_time += dt
 
-  // Check mission complete conditions
+  // Mid-mission events
+  game.check_mid_mission_events()
+
+  // Patrol mission: check waypoint proximity
   let obj_type = @levels.mission_objective_type(game.current_mission)
+  if obj_type == PatrolMission {
+    game.update_patrol_waypoints()
+  }
+
+  // Survive mission: count down
+  if obj_type == Survive && game.survive_timer > 0.0 {
+    game.survive_timer = game.survive_timer - dt
+    if game.survive_timer <= 30.0 && game.survive_timer > 29.5 {
+      game.message_text = "30 SECONDS REMAINING"
+      game.message_timer = 2.0
+    } else if game.survive_timer <= 10.0 && game.survive_timer > 9.5 {
+      game.message_text = "10 SECONDS!"
+      game.message_timer = 2.0
+    }
+  }
+
+  // Check mission complete conditions
   if obj_type == DestroyAll {
     if @types.count_active_enemies(game) == 0 &&
       game.wave_number >= game.waves_total {
@@ -203,13 +223,11 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
       game.complete_mission()
     }
   } else if obj_type == BossFight {
-    // Check if all capital ships are destroyed
     if @types.count_enemies_of_type(game, @types.enemy_capital) == 0 &&
       game.wave_number >= game.waves_total {
       game.complete_mission()
     }
   } else if obj_type == DefendStation {
-    // Check if all enemies eliminated while station survives
     let station_alive = game.check_station_alive(@types.station_friendly)
     if !station_alive {
       game.state = StateGameOver
@@ -219,7 +237,16 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
       game.wave_number >= game.waves_total {
       game.complete_mission()
     }
-    // Default: destroy all
+  } else if obj_type == Survive {
+    if game.survive_timer <= 0.0 {
+      game.complete_mission()
+    }
+  } else if obj_type == PatrolMission {
+    if game.patrol_current >= game.patrol_total &&
+      @types.count_active_enemies(game) == 0 &&
+      game.wave_number >= game.waves_total {
+      game.complete_mission()
+    }
   } else if @types.count_active_enemies(game) == 0 &&
     game.wave_number >= game.waves_total {
     game.complete_mission()
@@ -573,12 +600,12 @@ fn @types.Game::start_mission(game : @types.Game, mission : Int) -> Unit {
   }
 
   // Setup objectives
-  let obj_type = @levels.mission_objective_type(mission)
+  let mission_obj_type = @levels.mission_objective_type(mission)
   game.objectives_count = 1
-  game.objectives[0].obj_type = obj_type
+  game.objectives[0].obj_type = mission_obj_type
   game.objectives[0].current_count = 0
   game.objectives[0].complete = false
-  match obj_type {
+  match mission_obj_type {
     DestroyAll => {
       game.objectives[0].target_count = total_enemies
       game.objectives[0].description = "Destroy all enemies"
@@ -596,15 +623,222 @@ fn @types.Game::start_mission(game : @types.Game, mission : Int) -> Unit {
       game.objectives[0].target_count = total_enemies
       game.objectives[0].description = "Defend the station"
     }
+    Survive => {
+      let survive_secs = @levels.mission_survive_time(mission).to_int()
+      game.objectives[0].target_count = survive_secs
+      game.objectives[0].description = "Survive for \{survive_secs} seconds"
+    }
+    PatrolMission => {
+      game.objectives[0].target_count = @types.patrol_waypoint_count
+      game.objectives[0].description = "Reach all patrol waypoints"
+    }
     _ => {
       game.objectives[0].target_count = total_enemies
       game.objectives[0].description = "Complete objectives"
     }
   }
 
+  // Set AI difficulty from mission data
+  game.ai_difficulty = @types.mission_ai_difficulty(mission)
+
+  // Initialize survive timer for survive missions
+  if mission_obj_type == Survive {
+    let survive_time = @levels.mission_survive_time(mission)
+    game.survive_timer = survive_time
+    game.survive_total = survive_time
+  } else {
+    game.survive_timer = 0.0
+    game.survive_total = 0.0
+  }
+
+  // Initialize patrol waypoints for patrol missions
+  if mission_obj_type == PatrolMission {
+    game.patrol_current = 0
+    game.patrol_total = @types.patrol_waypoint_count
+    for wi in 0..<@types.patrol_waypoint_count {
+      let wp = @levels.mission_patrol_waypoint(mission, wi)
+      game.patrol_waypoints_x[wi] = wp.0
+      game.patrol_waypoints_y[wi] = wp.1
+      game.patrol_waypoints_z[wi] = wp.2
+    }
+  } else {
+    game.patrol_current = 0
+    game.patrol_total = 0
+  }
+
+  // Initialize mid-mission event tracking
+  game.reinforcement_spawned = false
+  game.mid_event_timer = 0.0
+  game.mid_event_count = 0
+
   game.message_text = @levels.mission_name(mission)
   game.message_timer = 3.0
   game.camera_shake = 0.0
+}
+
+///|
+/// Updates patrol waypoint tracking.
+fn @types.Game::update_patrol_waypoints(game : @types.Game) -> Unit {
+  if game.patrol_current >= game.patrol_total {
+    return
+  }
+  let wp_x = game.patrol_waypoints_x[game.patrol_current]
+  let wp_y = game.patrol_waypoints_y[game.patrol_current]
+  let wp_z = game.patrol_waypoints_z[game.patrol_current]
+  let dist = @types.distance3d(
+    game.player.x, game.player.y, game.player.z, wp_x, wp_y, wp_z,
+  )
+  if dist < @types.patrol_waypoint_radius {
+    game.patrol_current = game.patrol_current + 1
+    let wp_num = game.patrol_current
+    if game.patrol_current < game.patrol_total {
+      let next = wp_num + 1
+      game.message_text = "WAYPOINT \{wp_num} REACHED - Proceed to waypoint \{next}"
+      game.message_timer = @types.mid_mission_msg_duration
+      if @types.rand_bool(game, 0.5) {
+        game.spawn_ambush_squad()
+      }
+    } else {
+      game.message_text = "ALL WAYPOINTS REACHED - Clear remaining hostiles"
+      game.message_timer = @types.mid_mission_msg_duration
+    }
+    @types.check_objective_progress(game, PatrolMission, 1)
+  }
+}
+
+///|
+/// Spawns a small ambush squad near the player.
+fn @types.Game::spawn_ambush_squad(game : @types.Game) -> Unit {
+  let hp_mult = @types.mission_difficulty_hp_mult(game.current_mission)
+  let num_ambush : Int = 2 + game.ai_difficulty
+  for i in 0..<num_ambush {
+    let idx = @types.alloc_enemy(game)
+    if idx < 0 { break }
+    let e = game.enemies[idx]
+    e.active = true
+    e.kind = if i % 2 == 0 { @types.enemy_fighter } else { @types.enemy_interceptor }
+    let fi = Float::from_int(i)
+    let fnum = Float::from_int(num_ambush)
+    let angle : Float = fi * @types.two_pi / fnum
+    e.x = game.player.x + @math.cosf(angle) * 40.0
+    e.y = game.player.y + @types.rand_rangef(game, -10.0, 10.0)
+    e.z = game.player.z + @math.sinf(angle) * 40.0
+    e.patrol_x = e.x
+    e.patrol_y = e.y
+    e.patrol_z = e.z
+    e.ai_state = Chase
+    e.ai_timer = 0.5
+    e.squad_id = 99
+    e.formation_index = i
+    e.damage_flash = 0.0
+    if e.kind == @types.enemy_fighter {
+      e.hp = @types.fighter_hp * hp_mult
+      e.max_hp = e.hp
+      e.shield_hp = 0.0
+      e.max_shield_hp = 0.0
+      e.fire_timer = 1.0
+      e.score_value = @types.fighter_score
+      e.size = 1.5
+      e.aggression = 0.7
+      e.flee_threshold = @types.fighter_flee_hp_pct
+      e.detect_range = @types.fighter_detect_range
+    } else {
+      e.hp = @types.interceptor_hp * hp_mult
+      e.max_hp = e.hp
+      e.shield_hp = 0.0
+      e.max_shield_hp = 0.0
+      e.fire_timer = 0.8
+      e.score_value = @types.interceptor_score
+      e.size = 1.2
+      e.aggression = 0.9
+      e.flee_threshold = 0.1
+      e.detect_range = @types.interceptor_detect_range
+    }
+    e.vx = 0.0
+    e.vy = 0.0
+    e.vz = 0.0
+    e.yaw = 0.0
+    e.pitch = 0.0
+    e.turret_timer_1 = 0.0
+    e.turret_timer_2 = 0.0
+    e.weak_point_hp = 0.0
+    game.enemies_remaining = game.enemies_remaining + 1
+  }
+}
+
+///|
+/// Checks and triggers mid-mission events based on kill fraction progress.
+fn @types.Game::check_mid_mission_events(game : @types.Game) -> Unit {
+  let total_events = @levels.mission_mid_event_count(game.current_mission)
+  if game.mid_event_count >= total_events {
+    return
+  }
+  let total_spawned : Float = if game.enemies_remaining > 0 {
+    Float::from_int(game.mission_kills + game.enemies_remaining)
+  } else {
+    let mk = Float::from_int(game.mission_kills)
+    if mk > 1.0 { mk } else { 1.0 }
+  }
+  let kill_fraction = Float::from_int(game.mission_kills) / total_spawned
+  let event = @levels.mission_mid_event(game.current_mission, game.mid_event_count)
+  let event_type = event.0
+  let threshold = event.1
+  let message = event.2
+  if kill_fraction >= threshold || (threshold == 0.0 && game.mission_time > 5.0) {
+    game.mid_event_count = game.mid_event_count + 1
+    if event_type == 0 {
+      if !game.reinforcement_spawned {
+        game.reinforcement_spawned = true
+        game.message_text = "ENEMY REINFORCEMENTS INCOMING"
+        game.message_timer = @types.mid_mission_msg_duration
+        game.spawn_ambush_squad()
+      }
+    } else if event_type == 1 {
+      if message.length() > 0 {
+        game.message_text = message
+        game.message_timer = @types.mid_mission_msg_duration
+      }
+    } else if event_type == 2 {
+      game.message_text = if message.length() > 0 { message } else { "HAZARD WARNING" }
+      game.message_timer = @types.mid_mission_msg_duration
+      game.spawn_hazard_asteroids()
+    }
+  }
+}
+
+///|
+/// Spawns a cluster of asteroids near the player as an environmental hazard.
+fn @types.Game::spawn_hazard_asteroids(game : @types.Game) -> Unit {
+  for i in 0..<5 {
+    let idx = @types.alloc_asteroid(game)
+    if idx < 0 { break }
+    let a = game.asteroids[idx]
+    a.active = true
+    let fi = Float::from_int(i)
+    let angle : Float = fi * @types.two_pi / 5.0
+    let spawn_dist : Float = 80.0 + @types.rand_rangef(game, 0.0, 30.0)
+    a.x = game.player.x + @math.cosf(angle) * spawn_dist
+    a.y = game.player.y + @types.rand_rangef(game, -15.0, 15.0)
+    a.z = game.player.z + @math.sinf(angle) * spawn_dist
+    let dx = game.player.x - a.x
+    let dy = game.player.y - a.y
+    let dz = game.player.z - a.z
+    let norm = @types.normalize3d(dx, dy, dz)
+    let spd = @types.rand_rangef(game, 5.0, 12.0)
+    a.vx = norm.0 * spd + @types.rand_rangef(game, -3.0, 3.0)
+    a.vy = norm.1 * spd + @types.rand_rangef(game, -1.0, 1.0)
+    a.vz = norm.2 * spd + @types.rand_rangef(game, -3.0, 3.0)
+    a.rot_x = @types.rand_rangef(game, 0.0, 6.28)
+    a.rot_y = @types.rand_rangef(game, 0.0, 6.28)
+    a.rot_z = @types.rand_rangef(game, 0.0, 6.28)
+    a.rot_speed = @types.rand_rangef(game, 1.0, 3.0)
+    a.size_tier = @types.asteroid_medium
+    a.size = @types.asteroid_medium_size
+    a.hp = @types.asteroid_medium_hp
+    a.breakable = true
+    ignore(i)
+  }
+  game.camera_shake = @types.maxf(game.camera_shake, 0.4)
 }
 
 ///|

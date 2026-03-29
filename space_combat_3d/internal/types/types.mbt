@@ -535,6 +535,25 @@ pub(all) struct Game {
   mut rng_state : Int
   mut frame_counter : Int
 
+  // AI difficulty level for current mission (0-3)
+  mut ai_difficulty : Int
+
+  // Survive mission: time remaining
+  mut survive_timer : Float
+  mut survive_total : Float
+
+  // Patrol mission: waypoint tracking
+  patrol_waypoints_x : Array[Float]
+  patrol_waypoints_y : Array[Float]
+  patrol_waypoints_z : Array[Float]
+  mut patrol_current : Int
+  mut patrol_total : Int
+
+  // Mid-mission events
+  mut reinforcement_spawned : Bool
+  mut mid_event_timer : Float
+  mut mid_event_count : Int
+
   fn new() -> Game
 }
 
@@ -724,6 +743,17 @@ pub fn Game::new() -> Game {
     flash_b: 0,
     rng_state: 12345,
     frame_counter: 0,
+    ai_difficulty: 0,
+    survive_timer: 0.0,
+    survive_total: 0.0,
+    patrol_waypoints_x: Array::make(patrol_waypoint_count, 0.0),
+    patrol_waypoints_y: Array::make(patrol_waypoint_count, 0.0),
+    patrol_waypoints_z: Array::make(patrol_waypoint_count, 0.0),
+    patrol_current: 0,
+    patrol_total: 0,
+    reinforcement_spawned: false,
+    mid_event_timer: 0.0,
+    mid_event_count: 0,
   }
 }
 
