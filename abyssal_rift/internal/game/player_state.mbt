@@ -175,9 +175,7 @@ pub fn damage_player(game : @types.Game, amount : Int) -> Unit {
         e.hp -= thorns_dmg
         e.flash_timer = 0.1
         if e.hp <= 0 {
-          e.state = Dead(0.5)
-          game.enemies_killed += 1
-          push_event(game, Kill(e.kind, e.x, e.y))
+          handle_enemy_death(game, i)
         }
       }
     }

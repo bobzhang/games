@@ -40,30 +40,7 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
         e.flash_timer = 0.05
         spawn_particles_burst(game, e.x, e.y, 2, 200, 50, 50)
         if e.hp <= 0 {
-          e.state = Dead(0.5)
-          game.enemies_killed += 1
-          let stats = @data.get_enemy_stats(e.kind, game.floor_num)
-          push_event(game, Kill(e.kind, e.x, e.y))
-          // Drop gold (same as normal kill)
-          let item_idx = @types.alloc_item(game.items)
-          let item = game.items[item_idx]
-          item.active = true
-          item.kind = Gold(stats.reward_gold)
-          item.x = e.x
-          item.y = e.y
-          item.bob_timer = 0.0
-          // Slime split
-          if e.kind == Slime {
-            spawn_small_slimes(game, e.x, e.y)
-          }
-          // Vampiric passive: kills heal 5 HP
-          if p.passives.contains(Vampiric) {
-            p.hp = @types.clampi(p.hp + 5, 0, p.max_hp)
-          }
-          // Vampiric synergy (PickupRange + MaxHpUp): heal 1 HP per kill
-          if game.synergies.vampiric {
-            p.hp = @types.clampi(p.hp + 1, 0, p.max_hp)
-          }
+          handle_enemy_death(game, i)
           continue
         }
       }

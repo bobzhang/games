@@ -1,4 +1,74 @@
 ///|
+pub fn handle_enemy_death(game : @types.Game, enemy_idx : Int) -> Unit {
+  let e = game.enemies[enemy_idx]
+  let p = game.player
+  let syn = game.synergies
+  let stats = @data.get_enemy_stats(e.kind, game.floor_num)
+  e.state = Dead(0.5)
+  game.enemies_killed += 1
+  push_event(game, Kill(e.kind, e.x, e.y))
+  // Slime splits immediately so small slimes count before room-clear check
+  if e.kind == Slime {
+    spawn_small_slimes(game, e.x, e.y)
+  }
+  // Vampiric passive: kills heal 5 HP
+  if p.passives.contains(Vampiric) {
+    p.hp = @types.clampi(p.hp + 5, 0, p.max_hp)
+  }
+  // Vampiric synergy (PickupRange + MaxHpUp): heal 1 HP per kill
+  if syn.vampiric {
+    p.hp = @types.clampi(p.hp + 1, 0, p.max_hp)
+  }
+  // Drop gold (elites drop double, floor scaling bonus)
+  let floor_bonus = game.floor_num * 2
+  let gold_reward = (if e.is_elite {
+    stats.reward_gold * 2
+  } else {
+    stats.reward_gold
+  }) + floor_bonus
+  let item_idx = @types.alloc_item(game.items)
+  let item = game.items[item_idx]
+  item.active = true
+  item.kind = Gold(gold_reward)
+  item.x = e.x
+  item.y = e.y
+  item.bob_timer = 0.0
+  // Elite Splitting affix: spawn 2 regular copies on death
+  if e.is_elite && e.affix == Splitting {
+    for _split in 0..<2 {
+      let (s_sx, sx_off) = @types.rng_range(game.rng_state, -20.0, 20.0)
+      let (s_sy, sy_off) = @types.rng_range(s_sx, -20.0, 20.0)
+      game.rng_state = s_sy
+      spawn_enemy(game, e.kind, e.x + sx_off, e.y + sy_off)
+    }
+  }
+  // Elite Explosive affix: AoE damage to player if within range
+  if e.is_elite && e.affix == Explosive {
+    let explode_radius : Float = 80.0
+    let explode_d2 = @types.dist2(e.x, e.y, p.x, p.y)
+    if explode_d2 < explode_radius * explode_radius {
+      let explode_dmg = stats.damage
+      damage_player(game, explode_dmg)
+    }
+    // Big particle burst for explosion
+    spawn_particles_burst(game, e.x, e.y, 20, 255, 150, 30)
+    shake_camera(game, 6.0, 0.2)
+  }
+  // Elite guaranteed premium drop (build-directed)
+  if e.is_elite {
+    let (drop_kind, s_drop) = get_on_build_drop(p, game.rng_state)
+    game.rng_state = s_drop
+    let drop_idx = @types.alloc_item(game.items)
+    let drop_item = game.items[drop_idx]
+    drop_item.active = true
+    drop_item.bob_timer = 0.0
+    drop_item.kind = drop_kind
+    drop_item.x = e.x
+    drop_item.y = e.y - 15.0
+  }
+}
+
+///|
 pub fn apply_damage_to_enemy(
   game : @types.Game,
   enemy_idx : Int,
@@ -89,72 +159,10 @@ pub fn apply_damage_to_enemy(
   }
   // Check death
   if e.hp <= 0 {
-    e.state = Dead(0.5)
-    game.enemies_killed += 1
-    // Vampiric passive: kills heal 5 HP
-    if p.passives.contains(Vampiric) {
-      p.hp = @types.clampi(p.hp + 5, 0, p.max_hp)
-    }
-    // Vampiric synergy (PickupRange + MaxHpUp): heal 1 HP per kill
-    if syn.vampiric {
-      p.hp = @types.clampi(p.hp + 1, 0, p.max_hp)
-    }
+    handle_enemy_death(game, enemy_idx)
     // Chain projectile synergy: spawn projectile toward nearest living enemy
     if syn.chain_projectile {
       spawn_chain_projectile(game, e.x, e.y, final_damage)
-    }
-    // Elite Splitting affix: spawn 2 regular copies on death
-    if e.is_elite && e.affix == Splitting {
-      for _split in 0..<2 {
-        let (s_sx, sx_off) = @types.rng_range(game.rng_state, -20.0, 20.0)
-        let (s_sy, sy_off) = @types.rng_range(s_sx, -20.0, 20.0)
-        game.rng_state = s_sy
-        spawn_enemy(game, e.kind, e.x + sx_off, e.y + sy_off)
-      }
-    }
-    // Elite Explosive affix: AoE damage to player if within range
-    if e.is_elite && e.affix == Explosive {
-      let explode_radius : Float = 80.0
-      let explode_d2 = @types.dist2(e.x, e.y, p.x, p.y)
-      if explode_d2 < explode_radius * explode_radius {
-        let explode_dmg = @data.get_enemy_stats(e.kind, game.floor_num).damage
-        damage_player(game, explode_dmg)
-      }
-      // Big particle burst for explosion
-      spawn_particles_burst(game, e.x, e.y, 20, 255, 150, 30)
-      shake_camera(game, 6.0, 0.2)
-    }
-    // Slime splits immediately so small slimes count before room-clear check
-    if e.kind == Slime {
-      spawn_small_slimes(game, e.x, e.y)
-    }
-    let stats = @data.get_enemy_stats(e.kind, game.floor_num)
-    push_event(game, Kill(e.kind, e.x, e.y))
-    // Drop gold (elites drop double, floor scaling bonus)
-    let floor_bonus = game.floor_num * 2
-    let gold_reward = (if e.is_elite {
-      stats.reward_gold * 2
-    } else {
-      stats.reward_gold
-    }) + floor_bonus
-    let item_idx = @types.alloc_item(game.items)
-    let item = game.items[item_idx]
-    item.active = true
-    item.kind = Gold(gold_reward)
-    item.x = e.x
-    item.y = e.y
-    item.bob_timer = 0.0
-    // Elite guaranteed premium drop (build-directed)
-    if e.is_elite {
-      let (drop_kind, s_drop) = get_on_build_drop(p, game.rng_state)
-      game.rng_state = s_drop
-      let drop_idx = @types.alloc_item(game.items)
-      let drop_item = game.items[drop_idx]
-      drop_item.active = true
-      drop_item.bob_timer = 0.0
-      drop_item.kind = drop_kind
-      drop_item.x = e.x
-      drop_item.y = e.y - 15.0
     }
   }
   // ChainLightning: 20% chance to arc to nearby enemy
@@ -191,13 +199,7 @@ pub fn apply_damage_to_enemy(
         // Spawn lightning visual
         spawn_particles_burst(game, chain_e.x, chain_e.y, 4, 150, 200, 255)
         if chain_e.hp <= 0 {
-          chain_e.state = Dead(0.5)
-          game.enemies_killed += 1
-          push_event(game, Kill(chain_e.kind, chain_e.x, chain_e.y))
-          // Vampiric also procs on chain kills
-          if p.passives.contains(Vampiric) {
-            p.hp = @types.clampi(p.hp + 5, 0, p.max_hp)
-          }
+          handle_enemy_death(game, nearest_idx)
         }
       }
     }

@@ -230,8 +230,8 @@ fn spawn_encounter_standard(
       }
       remaining -= 1
     }
-    if remaining > 10 {
-      break // Safety
+    if remaining <= 0 {
+      break
     }
   }
 }
