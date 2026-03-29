@@ -60,11 +60,16 @@ fn @types.Game::update_menu(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 fn @types.Game::start_new_game(game : @types.Game) -> Unit {
-  // Reset player stats
+  // Reset player stats to base defaults
   game.player_hp = @types.player_start_hp
   game.player_max_hp = @types.player_start_hp
+  game.player_mana = @types.player_start_mana
+  game.player_max_mana = @types.player_start_mana
   game.player_atk = @types.player_start_atk
   game.player_def = @types.player_start_def
+  game.player_str = @types.player_start_str
+  game.player_dex = @types.player_start_dex
+  game.player_int_stat = @types.player_start_int_stat
   game.player_level = 1
   game.player_xp = 0
   game.player_xp_next = @types.xp_per_level
@@ -76,6 +81,9 @@ fn @types.Game::start_new_game(game : @types.Game) -> Unit {
   game.player_boss_keys = 0
   game.player_kills = 0
   game.player_total_gold = 0
+  game.player_weapon = Sword
+  game.player_armor = @types.armor_none
+  game.mana_regen_accum = 0.0
   // Reset equipment
   game.equip_weapon_rarity = @types.rarity_common
   game.equip_weapon_bonus = 0
@@ -84,6 +92,26 @@ fn @types.Game::start_new_game(game : @types.Game) -> Unit {
   game.equip_ring_kind = -1
   game.equip_ring_rarity = @types.rarity_common
   game.equip_ring_bonus = 0
+  // Reset inventory
+  for i in 0..<@types.max_inventory {
+    game.inventory[i].active = false
+    game.inventory[i].kind = 0
+    game.inventory[i].rarity = @types.rarity_common
+    game.inventory[i].stat_bonus = 0
+    game.inventory[i].name_idx = 0
+  }
+  // Reset spells
+  for i in 0..<@types.max_spells {
+    game.spells[i].active = false
+    game.spells[i].spell_type = None
+  }
+  // Reset buffs
+  for i in 0..<@types.max_buffs {
+    game.buffs[i].active = false
+    game.buffs[i].timer = 0.0
+    game.buffs[i].value = 0
+    game.buffs[i].kind = 0
+  }
   // Class starting kits
   match game.player_class {
     Warrior => {

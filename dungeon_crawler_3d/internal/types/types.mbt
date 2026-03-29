@@ -28,6 +28,7 @@ pub(all) struct Enemy {
   mut telegraph_kind : Int
   mut boss_phase : Int
   mut strafe_dir : Float
+  mut aura_timer : Float
 }
 
 ///|
@@ -59,6 +60,7 @@ pub fn Enemy::inactive() -> Enemy {
     telegraph_kind: 0,
     boss_phase: 1,
     strafe_dir: 1.0,
+    aura_timer: 0.0,
   }
 }
 
@@ -536,6 +538,9 @@ pub(all) struct Game {
   mut equip_ring_rarity : Int
   mut equip_ring_bonus : Int
 
+  // Mana regen accumulator (fractional mana between frames)
+  mut mana_regen_accum : Float
+
   fn new() -> Game
 }
 
@@ -738,5 +743,6 @@ pub fn Game::new() -> Game {
     equip_ring_kind: -1,
     equip_ring_rarity: rarity_common,
     equip_ring_bonus: 0,
+    mana_regen_accum: 0.0,
   }
 }

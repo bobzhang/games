@@ -136,15 +136,18 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
     game.selected_spell = 5
   }
   // Mana regeneration (ring of wisdom boosts regen)
+  // Uses accumulator to avoid truncating fractional regen each frame
   let ring_mana_bonus : Float = if game.equip_ring_kind == @types.ring_mana_regen {
     Float::from_int(game.equip_ring_bonus) * 0.3
   } else {
     0.0
   }
-  let mana_regen : Float = (@types.mana_regen_rate + ring_mana_bonus) * dt
-  let new_mana_f : Float = Float::from_int(game.player_mana) + mana_regen
-  let new_mana = new_mana_f.to_int()
-  game.player_mana = new_mana.min(game.player_max_mana)
+  game.mana_regen_accum += (@types.mana_regen_rate + ring_mana_bonus) * dt
+  if game.mana_regen_accum >= 1.0 {
+    let whole = game.mana_regen_accum.to_int()
+    game.player_mana = (game.player_mana + whole).min(game.player_max_mana)
+    game.mana_regen_accum -= Float::from_int(whole)
+  }
   // Pickup loot
   game.check_loot_pickup()
   // Check stairs

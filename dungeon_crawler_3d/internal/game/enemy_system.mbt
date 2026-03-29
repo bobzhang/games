@@ -908,8 +908,16 @@ fn @types.Game::update_boss_enemy(
     }
   }
   // Phase 3: enrage aura - periodic damage to nearby player
-  if phase >= 3 {
-    e.move_timer += dt * 0.01 // Reuse for aura tick
+  if phase >= 3 && dist < 4.0 {
+    e.aura_timer += dt
+    if e.aura_timer >= 0.5 {
+      e.aura_timer = 0.0
+      damage_player(game, 2)
+      @types.spawn_particles(
+        game, game.player_x, 1.0, game.player_z, 4, 255, 40, 40,
+      )
+      @types.add_message(game, "Dragon aura burns!", 255, 40, 40)
+    }
   }
   ignore(atk_mult)
 }
