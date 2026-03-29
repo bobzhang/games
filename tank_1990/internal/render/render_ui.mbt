@@ -531,7 +531,11 @@ fn @types.Game::draw_campaign_clear_overlay(game : @types.Game) -> Unit {
 
 ///|
 /// Draws the large centered combo callout text when the multiplier increases.
+/// Only rendered during Playing state so it doesn't freeze on screen.
 fn @types.Game::draw_combo_callout(game : @types.Game) -> Unit {
+  if game.state != Playing {
+    return
+  }
   if game.combo_flash_timer <= 0.0 {
     return
   }

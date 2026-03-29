@@ -1,4 +1,17 @@
 ///|
+/// Clears transient feedback effects (score popups, spawn warnings, combo flash)
+/// so they don't freeze on screen when leaving the Playing state.
+fn @types.Game::clear_feedback_effects(game : @types.Game) -> Unit {
+  for i in 0..<game.score_popups.length() {
+    game.score_popups[i].active = false
+  }
+  for i in 0..<game.spawn_warnings.length() {
+    game.spawn_warnings[i].active = false
+  }
+  game.combo_flash_timer = 0.0
+}
+
+///|
 /// Applies damage to the map tile at the given world coordinates, destroying or weakening it based on bullet power. Returns true if the tile was solid (and thus blocked the bullet).
 fn @types.Game::damage_tile_at_point(
   game : @types.Game,
@@ -83,6 +96,7 @@ fn @types.Game::enter_game_over(game : @types.Game) -> Unit {
     return
   }
   game.state = GameOver
+  game.clear_feedback_effects()
   game.game_over_timer = if game.demo_mode {
     0.8
   } else {
@@ -230,6 +244,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
 
   if !game.demo_mode && @raylib.is_key_pressed(@raylib.KeyP) {
     game.state = Paused
+    game.clear_feedback_effects()
     return
   }
 
@@ -285,6 +300,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
 
   if game.stage_is_clear() {
     game.state = StageClear
+    game.clear_feedback_effects()
     game.stage_clear_timer = if game.demo_mode {
       0.65
     } else {

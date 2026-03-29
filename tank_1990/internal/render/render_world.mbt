@@ -460,11 +460,15 @@ fn @types.Game::draw_powerups(
 
 ///|
 /// Draws floating score popups that drift upward and fade out.
+/// Only rendered during Playing state so they don't freeze on screen.
 fn @types.Game::draw_score_popups(
   game : @types.Game,
   shake_x : Float,
   shake_y : Float,
 ) -> Unit {
+  if game.state != Playing {
+    return
+  }
   for popup in game.score_popups {
     if !popup.active {
       continue
@@ -491,11 +495,15 @@ fn @types.Game::draw_score_popups(
 
 ///|
 /// Draws pulsing red warning indicators at enemy spawn lanes before enemies appear.
+/// Only rendered during Playing state so they don't freeze on screen.
 fn @types.Game::draw_spawn_warnings(
   game : @types.Game,
   shake_x : Float,
   shake_y : Float,
 ) -> Unit {
+  if game.state != Playing {
+    return
+  }
   for w in game.spawn_warnings {
     if !w.active {
       continue
