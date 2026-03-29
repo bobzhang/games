@@ -64,8 +64,12 @@ fn @types.Game::start_round_intro(game : @types.Game) -> Unit {
     @types.round_time_start
   }
   game.winner_slot = @types.winner_none
+  let is_final = game.fighters[0].round_wins == @types.max_round_wins - 1 &&
+    game.fighters[1].round_wins == @types.max_round_wins - 1
   game.announcer_text = if game.mode_training {
     "TRAINING"
+  } else if is_final {
+    "FINAL ROUND"
   } else {
     "ROUND \{game.round_index}"
   }
@@ -209,6 +213,26 @@ fn @types.Game::update_select(game : @types.Game, dt : Float) -> Unit {
       game.p2_confirmed = true
     } else {
       game.p2_confirmed = false
+    }
+  }
+
+  // Cycle AI difficulty with Up/Down arrows while in VS CPU mode.
+  if game.mode_vs_cpu {
+    if @raylib.is_key_pressed(@raylib.KeyW) ||
+      @raylib.is_key_pressed(@raylib.KeyUp) {
+      game.ai_difficulty = match game.ai_difficulty {
+        Easy => Normal
+        Normal => Hard
+        Hard => Easy
+      }
+    }
+    if @raylib.is_key_pressed(@raylib.KeyS) ||
+      @raylib.is_key_pressed(@raylib.KeyDown) {
+      game.ai_difficulty = match game.ai_difficulty {
+        Easy => Hard
+        Normal => Easy
+        Hard => Normal
+      }
     }
   }
 
@@ -547,21 +571,54 @@ fn @types.Game::update_announcer(game : @types.Game, dt : Float) -> Unit {
       game.training_adv_text = ""
     }
   }
+
+  if game.guard_break_flash > 0.0 {
+    game.guard_break_flash -= dt
+    if game.guard_break_flash < 0.0 {
+      game.guard_break_flash = 0.0
+    }
+  }
+
+  if game.combat_badge_timer > 0.0 {
+    game.combat_badge_timer -= dt
+    if game.combat_badge_timer < 0.0 {
+      game.combat_badge_timer = 0.0
+      game.combat_badge_text = ""
+    }
+  }
+
+  if game.slowmo_timer > 0.0 {
+    game.slowmo_timer -= dt
+    if game.slowmo_timer < 0.0 {
+      game.slowmo_timer = 0.0
+    }
+  }
 }
 
 ///|
 /// Advances one frame of state, round, and match logic.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
+  // Apply slow-motion by scaling dt
+  let effective_dt = if game.slowmo_timer > 0.0 {
+    dt * 0.35
+  } else {
+    dt
+  }
   game.frame_count += 1
-  game.update_announcer(dt)
+  game.update_announcer(effective_dt)
+
+  // Update damage trails for all fighters
+  for slot in 0..<@types.max_players {
+    @types.update_trail(game.fighters[slot], effective_dt)
+  }
 
   match game.state {
-    StateTitle => game.update_title(dt)
-    StateSelect => game.update_select(dt)
-    StateIntro => game.update_intro(dt)
-    StateFight => game.update_fight(dt)
-    StateRoundOver => game.update_round_over(dt)
-    StateMatchOver => game.update_match_over(dt)
-    StatePause => game.update_pause(dt)
+    StateTitle => game.update_title(effective_dt)
+    StateSelect => game.update_select(effective_dt)
+    StateIntro => game.update_intro(effective_dt)
+    StateFight => game.update_fight(effective_dt)
+    StateRoundOver => game.update_round_over(effective_dt)
+    StateMatchOver => game.update_match_over(effective_dt)
+    StatePause => game.update_pause(effective_dt)
   }
 }

@@ -83,7 +83,10 @@ fn chosen_normal_move(
 }
 
 ///|
-fn can_cancel_current_move(fighter : @types.Fighter) -> Bool {
+fn can_cancel_current_move(
+  fighter : @types.Fighter,
+  into_kind : @types.MoveKind,
+) -> Bool {
   if fighter.action != ActionAttack {
     return false
   }
@@ -93,7 +96,8 @@ fn can_cancel_current_move(fighter : @types.Fighter) -> Bool {
     return false
   }
   if mv.move_kind == MoveKindNormal {
-    true
+    // Normals can only cancel into specials or supers, not other normals.
+    into_kind != MoveKindNormal
   } else {
     fighter.move_cancel_enabled
   }
@@ -166,11 +170,12 @@ fn @types.Game::try_start_attack(game : @types.Game, slot : Int) -> Unit {
     return
   }
 
-  if fighter.action == ActionAttack && !can_cancel_current_move(fighter) {
+  let mv = choose_attack_from_input(fighter, archetype)
+
+  if fighter.action == ActionAttack &&
+    !can_cancel_current_move(fighter, mv.move_kind) {
     return
   }
-
-  let mv = choose_attack_from_input(fighter, archetype)
 
   if mv.airborne_only && fighter.on_ground {
     return
@@ -187,6 +192,8 @@ fn @types.Game::try_start_attack(game : @types.Game, slot : Int) -> Unit {
     game.announcer_timer = 0.5
     game.dramatic_freeze = 7
     @effects.push_camera_shake(game, 5.0)
+    // SUPER activation badge: gold with glow
+    @types.set_combat_badge(game, "SUPER!", 255, 215, 0, 0.6)
   }
 }
 

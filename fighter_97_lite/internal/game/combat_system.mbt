@@ -149,17 +149,29 @@ fn @types.Game::apply_successful_hit(
     _ => SparkKindHit
   }
 
+  // Bigger sparks on heavy/special hits
+  let spark_count = if mv.move_kind == MoveKindSuper {
+    48
+  } else if mv.move_kind == MoveKindSpecial {
+    34
+  } else if mv.attack_id == AttackHp || mv.attack_id == AttackHk {
+    28
+  } else {
+    18
+  }
+
   @effects.spawn_hit_spark(
     game,
     hitbox_center_x,
     hitbox_center_y,
     spark_kind,
-    if mv.move_kind == MoveKindSuper {
-      44
-    } else {
-      22
-    },
+    spark_count,
   )
+
+  // Detect punish: hitting during recovery frames
+  let is_punish = defender.action == ActionAttack &&
+    defender.action_frame >= defender.current_move.startup_frames +
+      defender.current_move.active_frames
 
   if mv.move_kind == MoveKindSuper {
     @effects.push_camera_shake(game, 6.4)
@@ -169,12 +181,42 @@ fn @types.Game::apply_successful_hit(
       "SUPER HIT!"
     }
     game.announcer_timer = 0.7
+    // SUPER badge: gold with glow
+    @types.set_combat_badge(game, "SUPER!", 255, 215, 0, 0.7)
   } else {
     @effects.push_camera_shake(game, if counter_hit { 4.6 } else { 3.2 })
     if counter_hit {
       game.announcer_text = "COUNTER!"
       game.announcer_timer = 0.32
+      // COUNTER badge: yellow
+      @types.set_combat_badge(game, "COUNTER!", 255, 230, 50, 0.5)
+    } else if is_punish {
+      // PUNISH badge: orange
+      @types.set_combat_badge(game, "PUNISH!", 255, 165, 50, 0.5)
     }
+  }
+
+  // Stronger hit effects: bigger sparks and shake for heavy/special attacks
+  if mv.move_kind == MoveKindSpecial {
+    @effects.push_camera_shake(game, 2.0)
+    defender.flash_timer = 0.22
+  }
+  if mv.attack_id == AttackHp || mv.attack_id == AttackHk {
+    defender.flash_timer = 0.2
+  }
+
+  // Damage trail for heavy hits
+  if mv.move_kind == MoveKindSpecial ||
+    mv.move_kind == MoveKindSuper ||
+    mv.attack_id == AttackHp ||
+    mv.attack_id == AttackHk {
+    @types.start_damage_trail(defender)
+  }
+
+  // Slow-motion on killing blow
+  if defender.health <= 0 {
+    game.slowmo_timer = 0.45
+    @effects.push_camera_shake(game, 4.0)
   }
 
   if mv.move_kind != MoveKindSuper {
@@ -230,8 +272,11 @@ fn @types.Game::apply_blocked_hit(
     defender.blockstun = 0
     defender.knockdown = 0
 
-    game.announcer_text = "GUARD BREAK"
+    game.announcer_text = "GUARD BREAK!"
     game.announcer_timer = 0.55
+    game.guard_break_flash = 0.7
+    // GUARD BREAK badge: red
+    @types.set_combat_badge(game, "GUARD BREAK!", 255, 60, 60, 0.65)
     @effects.spawn_hit_spark(
       game,
       hitbox_center_x,
@@ -320,7 +365,39 @@ fn @types.Game::process_attack_contact(
 }
 
 ///|
+fn check_attack_will_connect(
+  attacker : @types.Fighter,
+  defender : @types.Fighter,
+) -> Bool {
+  if attacker.health <= 0 || defender.health <= 0 {
+    return false
+  }
+  if !attack_is_active(attacker) {
+    return false
+  }
+  if attacker.move_connected {
+    return false
+  }
+  if defender.invuln > 0 {
+    return false
+  }
+  let mv = attacker.current_move
+  let hitbox = @types.attack_hitbox_for(attacker, mv)
+  let hurtbox = @types.hurtbox_for(defender)
+  @raylib.check_collision_recs(hitbox, hurtbox)
+}
+
+///|
 fn @types.Game::update_combat(game : @types.Game) -> Unit {
-  game.process_attack_contact(0, 1)
-  game.process_attack_contact(1, 0)
+  // Check both directions before applying either, so trades are possible.
+  let p1 = game.fighters[0]
+  let p2 = game.fighters[1]
+  let p1_hits_p2 = check_attack_will_connect(p1, p2)
+  let p2_hits_p1 = check_attack_will_connect(p2, p1)
+  if p1_hits_p2 {
+    game.process_attack_contact(0, 1)
+  }
+  if p2_hits_p1 {
+    game.process_attack_contact(1, 0)
+  }
 }

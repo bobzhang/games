@@ -277,6 +277,8 @@ pub fn reset_fighter_round_state(fighter : Fighter) -> Unit {
   fighter.hurt_shake_x = 0.0
   fighter.hurt_shake_y = 0.0
   fighter.input = InputState()
+  fighter.trail_positions = []
+  fighter.trail_timer = 0.0
 }
 
 ///|
@@ -389,4 +391,52 @@ pub fn camera_project_y(game : Game, y : Float) -> Float {
 /// Projects world size to screen size using camera zoom.
 pub fn camera_project_size(game : Game, size : Float) -> Float {
   size * game.camera_zoom
+}
+
+///|
+/// Sets a combat badge with color and duration.
+pub fn set_combat_badge(
+  game : Game,
+  text : String,
+  r : Int,
+  g : Int,
+  b : Int,
+  duration : Float,
+) -> Unit {
+  game.combat_badge_text = text
+  game.combat_badge_timer = duration
+  game.combat_badge_color_r = r
+  game.combat_badge_color_g = g
+  game.combat_badge_color_b = b
+}
+
+///|
+/// Records trail afterimage positions for knockback effect.
+pub fn start_damage_trail(fighter : Fighter) -> Unit {
+  fighter.trail_positions = [(fighter.x, fighter.y)]
+  fighter.trail_timer = 0.28
+}
+
+///|
+/// Updates trail timer and records new positions while active.
+pub fn update_trail(fighter : Fighter, dt : Float) -> Unit {
+  if fighter.trail_timer <= 0.0 {
+    return
+  }
+  fighter.trail_timer -= dt
+  if fighter.trail_timer <= 0.0 {
+    fighter.trail_timer = 0.0
+    fighter.trail_positions = []
+    return
+  }
+  // Record position if we have room for more trail frames
+  if fighter.trail_positions.length() < 4 {
+    fighter.trail_positions.push((fighter.x, fighter.y))
+  } else {
+    // Shift positions and add new one at the end
+    for i in 0..<3 {
+      fighter.trail_positions[i] = fighter.trail_positions[i + 1]
+    }
+    fighter.trail_positions[3] = (fighter.x, fighter.y)
+  }
 }

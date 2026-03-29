@@ -185,6 +185,81 @@ fn @types.Game::draw_training_adv_panel(game : @types.Game) -> Unit {
 }
 
 ///|
+fn guard_meter_color(ratio : Float, game : @types.Game) -> @raylib.Color {
+  if ratio < 0.25 {
+    // Flash red when guard is critically low.
+    let blink = @math.sinf(
+        Float::from_int(game.frame_count) * 0.4,
+      ) *
+      0.5 +
+      0.5
+    if blink > 0.5 {
+      @raylib.Color::new(255, 70, 70, 255)
+    } else {
+      @raylib.Color::new(200, 100, 100, 255)
+    }
+  } else if ratio < 0.5 {
+    @raylib.Color::new(255, 200, 100, 255)
+  } else {
+    @raylib.Color::new(132, 206, 255, 255)
+  }
+}
+
+///|
+fn draw_guard_gauge(
+  x : Int,
+  y : Int,
+  w : Int,
+  h : Int,
+  ratio : Float,
+  base_color : @raylib.Color,
+  frame_count : Int,
+) -> Unit {
+  @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(16, 18, 26, 220))
+  @raylib.draw_rectangle_lines(
+    x,
+    y,
+    w,
+    h,
+    @raylib.Color::new(90, 140, 180, 255),
+  )
+  let fill = (ratio * Float::from_int(w - 2)).to_int().clamp(min=0, max=w - 2)
+  @raylib.draw_rectangle(x + 1, y + 1, fill, h - 2, base_color)
+
+  // Pulsing red overlay when guard is critically low
+  if ratio > @types.f(0.0) && ratio < @types.f(0.25) {
+    let pulse = Float::from_double(
+      @math.sin((Float::from_int(frame_count) * @types.f(0.15)).to_double()),
+    ) * @types.f(0.5) + @types.f(0.5)
+    let red_alpha = @types.f(0.15) + pulse * @types.f(0.25)
+    @raylib.draw_rectangle(
+      x + 1,
+      y + 1,
+      fill,
+      h - 2,
+      @raylib.color_alpha(@raylib.Color::new(255, 40, 40, 255), red_alpha),
+    )
+    // Pulsing border
+    @raylib.draw_rectangle_lines(
+      x,
+      y,
+      w,
+      h,
+      @raylib.color_alpha(@raylib.Color::new(255, 60, 60, 255), @types.f(0.4) + pulse * @types.f(0.5)),
+    )
+  }
+
+  // Label to identify this as guard meter.
+  @types.draw_shadow_text(
+    "GRD",
+    x + 2,
+    y + 1,
+    12,
+    @raylib.Color::new(200, 220, 240, 180),
+  )
+}
+
+///|
 fn @types.Game::draw_fight_hud(game : @types.Game) -> Unit {
   let p1 = game.fighters[0]
   let p2 = game.fighters[1]
@@ -248,22 +323,59 @@ fn @types.Game::draw_fight_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 188, 64, 255),
   )
 
-  draw_meter_gauge(
-    368,
-    76,
-    144,
-    16,
-    @types.guard_ratio(p1, a1),
-    @raylib.Color::new(132, 206, 255, 255),
-  )
-  draw_meter_gauge(
-    @types.screen_width - 512,
-    76,
-    144,
-    16,
-    @types.guard_ratio(p2, a2),
-    @raylib.Color::new(132, 206, 255, 255),
-  )
+  let g1_ratio = @types.guard_ratio(p1, a1)
+  let g2_ratio = @types.guard_ratio(p2, a2)
+  let guard_color_p1 = guard_meter_color(g1_ratio, game)
+  let guard_color_p2 = guard_meter_color(g2_ratio, game)
+
+  draw_guard_gauge(368, 74, 144, 18, g1_ratio, guard_color_p1, game.frame_count)
+  draw_guard_gauge(@types.screen_width - 512, 74, 144, 18, g2_ratio, guard_color_p2, game.frame_count)
+
+  // Low guard warning labels.
+  if g1_ratio > 0.0 && g1_ratio < 0.25 {
+    let blink = @math.sinf(
+        Float::from_int(game.frame_count) * 0.3,
+      ) *
+      0.5 +
+      0.5
+    if blink > 0.4 {
+      @types.draw_shadow_text(
+        "DANGER",
+        370,
+        60,
+        12,
+        @raylib.Color::new(255, 80, 80, 255),
+      )
+    }
+  }
+  if g2_ratio > 0.0 && g2_ratio < 0.25 {
+    let blink = @math.sinf(
+        Float::from_int(game.frame_count) * 0.3,
+      ) *
+      0.5 +
+      0.5
+    if blink > 0.4 {
+      @types.draw_shadow_text(
+        "DANGER",
+        @types.screen_width - 510,
+        60,
+        12,
+        @raylib.Color::new(255, 80, 80, 255),
+      )
+    }
+  }
+
+  // Guard break flash text.
+  if game.guard_break_flash > 0.0 {
+    let alpha = @types.clampf(game.guard_break_flash * 2.0, 0.0, 1.0)
+    @types.draw_center_shadow_text(
+      "GUARD BREAK!",
+      @types.screen_width / 2,
+      @types.screen_height * 35 / 100,
+      40,
+      @raylib.color_alpha(@raylib.Color::new(255, 100, 100, 255), alpha),
+    )
+  }
 
   if game.mode_training {
     @types.draw_shadow_text(
@@ -327,6 +439,27 @@ fn @types.Game::draw_fight_hud(game : @types.Game) -> Unit {
       94,
       14,
       @raylib.gold,
+    )
+  }
+
+  // Show CPU difficulty badge during VS CPU matches.
+  if game.mode_vs_cpu && !game.mode_training {
+    let diff_tag = match game.ai_difficulty {
+      Easy => "CPU:EASY"
+      Normal => "CPU:NRM"
+      Hard => "CPU:HARD"
+    }
+    let diff_clr : @raylib.Color = match game.ai_difficulty {
+      Easy => @raylib.Color::new(120, 220, 120, 200)
+      Normal => @raylib.Color::new(255, 220, 100, 200)
+      Hard => @raylib.Color::new(255, 100, 100, 200)
+    }
+    @types.draw_shadow_text(
+      diff_tag,
+      @types.screen_width - 130,
+      18,
+      14,
+      diff_clr,
     )
   }
 
@@ -592,6 +725,26 @@ fn @types.Game::draw_select_screen(game : @types.Game) -> Unit {
     @raylib.Color::new(178, 204, 232, 255),
   )
 
+  if game.mode_vs_cpu {
+    let diff_label = match game.ai_difficulty {
+      Easy => "EASY"
+      Normal => "NORMAL"
+      Hard => "HARD"
+    }
+    let diff_color : @raylib.Color = match game.ai_difficulty {
+      Easy => @raylib.Color::new(120, 220, 120, 255)
+      Normal => @raylib.Color::new(255, 220, 100, 255)
+      Hard => @raylib.Color::new(255, 100, 100, 255)
+    }
+    @types.draw_center_shadow_text(
+      "CPU DIFFICULTY: \{diff_label}  (W/S to change)",
+      @types.screen_width / 2,
+      110,
+      20,
+      diff_color,
+    )
+  }
+
   let card_w = 360
   let card_h = 182
   let gap_x = 28
@@ -765,6 +918,25 @@ fn @types.Game::draw_round_over_overlay(game : @types.Game) -> Unit {
       56,
       aw.ui_color,
     )
+
+    // Victory text with pulsing glow
+    let glow = @math.sinf(
+        Float::from_int(game.frame_count) * 0.08,
+      ) *
+      0.5 +
+      0.5
+    let vic_color = @raylib.color_lerp(
+      @raylib.Color::new(255, 220, 140, 255),
+      @raylib.Color::new(255, 255, 220, 255),
+      glow,
+    )
+    @types.draw_center_shadow_text(
+      "VICTORY!",
+      @types.screen_width / 2,
+      210,
+      42,
+      vic_color,
+    )
   }
 }
 
@@ -894,6 +1066,59 @@ fn @types.Game::draw_debug_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+fn @types.Game::draw_combat_badge(game : @types.Game) -> Unit {
+  if game.combat_badge_text == "" || game.combat_badge_timer <= 0.0 {
+    return
+  }
+
+  let t = game.combat_badge_timer
+  // Scale up briefly at the start then hold
+  let scale_t = @types.clampf(t * 4.0, 0.0, 1.0)
+  let size_mul : Float = @types.f(1.0) + (@types.f(1.0) - scale_t) * @types.f(
+      0.3,
+    )
+  let font_size = (@types.f(36.0) * size_mul).to_int()
+
+  // Fade out near the end
+  let alpha = @types.clampf(t * 3.5, 0.0, 1.0)
+  let badge_color = @raylib.color_alpha(
+    @raylib.Color::new(
+      game.combat_badge_color_r,
+      game.combat_badge_color_g,
+      game.combat_badge_color_b,
+      255,
+    ),
+    alpha,
+  )
+
+  let y = @types.screen_height * 38 / 100
+
+  // Glow effect for SUPER badge (gold)
+  if game.combat_badge_color_r == 255 && game.combat_badge_color_g == 215 {
+    let glow_alpha = alpha * 0.35
+    let glow_color = @raylib.color_alpha(
+      @raylib.Color::new(255, 215, 0, 255),
+      glow_alpha,
+    )
+    @types.draw_center_shadow_text(
+      game.combat_badge_text,
+      @types.screen_width / 2 + 1,
+      y + 1,
+      font_size + 4,
+      glow_color,
+    )
+  }
+
+  @types.draw_center_shadow_text(
+    game.combat_badge_text,
+    @types.screen_width / 2,
+    y,
+    font_size,
+    badge_color,
+  )
+}
+
+///|
 /// Renders the full frame for current game state.
 pub fn draw_game(game : @types.Game) -> Unit {
   game.draw_stage()
@@ -911,6 +1136,8 @@ pub fn draw_game(game : @types.Game) -> Unit {
         StateMatchOver => game.draw_match_over_overlay()
         _ => game.draw_announcer()
       }
+
+      game.draw_combat_badge()
 
       if game.state == StatePause {
         game.draw_pause_overlay()

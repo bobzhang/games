@@ -262,14 +262,94 @@ fn @types.Game::draw_fighter_nameplate(
 }
 
 ///|
+fn @types.Game::draw_fighter_trail(
+  game : @types.Game,
+  fighter : @types.Fighter,
+  archetype : @types.CharacterArchetype,
+) -> Unit {
+  if fighter.trail_timer <= 0.0 || fighter.trail_positions.length() == 0 {
+    return
+  }
+  let count = fighter.trail_positions.length()
+  for i in 0..<count {
+    let (tx, ty) = fighter.trail_positions[i]
+    let progress = Float::from_int(i) / Float::from_int(count)
+    let alpha = (@types.f(1.0) - progress) *
+      @types.f(0.4) *
+      (fighter.trail_timer / @types.f(0.28))
+    let trail_color = @raylib.color_alpha(archetype.body_main, alpha)
+    let trail_sx = @types.camera_project_x(game, tx)
+    let trail_sy = @types.camera_project_y(game, ty)
+    let radius = @types.camera_project_size(
+      game,
+      @types.fighter_body_width *
+      @types.f(0.35) *
+      (@types.f(1.0) - progress * @types.f(0.3)),
+    )
+    @raylib.draw_circle(
+      trail_sx.to_int(),
+      (trail_sy - @types.camera_project_size(game, @types.fighter_body_height * 0.5)).to_int(),
+      radius,
+      trail_color,
+    )
+  }
+}
+
+///|
+fn @types.Game::draw_fighter_low_guard_outline(
+  game : @types.Game,
+  fighter : @types.Fighter,
+  archetype : @types.CharacterArchetype,
+) -> Unit {
+  let guard_r = @types.guard_ratio(fighter, archetype)
+  if guard_r >= 0.25 || guard_r <= 0.0 {
+    return
+  }
+  // Only show while blocking
+  if fighter.action != ActionBlockstun {
+    return
+  }
+  let pulse = Float::from_double(
+      @math.sin((Float::from_int(game.frame_count) * @types.f(0.15)).to_double()),
+    ) *
+    @types.f(0.5) +
+    @types.f(0.5)
+  let alpha = @types.f(0.3) + pulse * @types.f(0.4)
+  let outline_color = @raylib.color_alpha(
+    @raylib.Color::new(255, 50, 50, 255),
+    alpha,
+  )
+  let hurt = @types.hurtbox_for(fighter)
+  let hx = @types.camera_project_x(game, hurt.x) - 3.0
+  let hy = @types.camera_project_y(game, hurt.y) - 3.0
+  let hw = @types.camera_project_size(game, hurt.width) + 6.0
+  let hh = @types.camera_project_size(game, hurt.height) + 6.0
+  @raylib.draw_rectangle_lines(
+    hx.to_int(),
+    hy.to_int(),
+    hw.to_int(),
+    hh.to_int(),
+    outline_color,
+  )
+}
+
+///|
 fn @types.Game::draw_single_fighter(
   game : @types.Game,
   fighter : @types.Fighter,
 ) -> Unit {
   let archetype = @types.fighter_archetype(game, fighter)
   let (sx, sy) = game.fighter_draw_pos(fighter)
+
+  // Draw damage trail afterimages behind the fighter
+  game.draw_fighter_trail(fighter, archetype)
+
   game.draw_fighter_shadow(fighter, sx)
   game.draw_fighter_body(fighter, archetype)
+
+  // Draw low guard pulsing red outline when blocking with low guard
+  game.draw_fighter_low_guard_outline(fighter, archetype)
+
   game.draw_fighter_nameplate(fighter, archetype, sx, sy)
 
   if game.debug_overlay {

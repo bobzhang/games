@@ -84,6 +84,8 @@ fn @types.Game::apply_throw_tech(
   game.announcer_timer = 0.34
   game.hud_flash = 0.08
   @effects.push_camera_shake(game, 2.0)
+  // THROW TECH badge: blue
+  @types.set_combat_badge(game, "THROW TECH!", 100, 180, 255, 0.5)
   @types.set_training_note(game, "Throw tech")
 }
 

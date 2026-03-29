@@ -1,4 +1,67 @@
 ///|
+fn ai_block_chance(game : @types.Game) -> Float {
+  match game.ai_difficulty {
+    Easy => 0.3
+    Normal => @types.cpu_block_chance
+    Hard => 0.8
+  }
+}
+
+///|
+fn ai_special_chance(game : @types.Game) -> Float {
+  match game.ai_difficulty {
+    Easy => @types.cpu_special_chance * 0.4
+    Normal => @types.cpu_special_chance
+    Hard => @types.cpu_special_chance * 1.6
+  }
+}
+
+///|
+fn ai_super_chance(game : @types.Game) -> Float {
+  match game.ai_difficulty {
+    Easy => @types.cpu_super_chance * 0.25
+    Normal => @types.cpu_super_chance
+    Hard => @types.cpu_super_chance * 1.5
+  }
+}
+
+///|
+fn ai_throw_chance(game : @types.Game) -> Float {
+  match game.ai_difficulty {
+    Easy => 0.0
+    Normal => 0.18
+    Hard => 0.35
+  }
+}
+
+///|
+fn ai_throw_tech_chance(game : @types.Game) -> Float {
+  match game.ai_difficulty {
+    Easy => 0.0
+    Normal => 0.0
+    Hard => 0.6
+  }
+}
+
+///|
+fn ai_reaction_delay(game : @types.Game) -> Float {
+  match game.ai_difficulty {
+    Easy => @types.cpu_reaction_base * 2.0
+    Normal => @types.cpu_reaction_base
+    Hard => @types.cpu_reaction_base * 0.65
+  }
+}
+
+///|
+fn ai_jump_chance(game : @types.Game) -> Float {
+  match game.ai_difficulty {
+    Easy => @types.cpu_jump_chance * 0.5
+    Normal => @types.cpu_jump_chance
+    Hard => @types.cpu_jump_chance * 1.3
+  }
+}
+
+///|
 fn ai_set_mode_from_distance(
   fighter : @types.Fighter,
   distance : Float,
@@ -32,10 +95,11 @@ fn @types.Game::ai_should_block(
   if distance > 170.0 {
     return false
   }
+  let base = ai_block_chance(game)
   let pressure = if opponent.current_move.move_kind == MoveKindSuper {
-    @types.cpu_block_chance + 0.18
+    base + 0.18
   } else {
-    @types.cpu_block_chance
+    base
   }
   @types.rand_chance(game, pressure)
 }
@@ -87,7 +151,7 @@ fn @types.Game::ai_try_jump(
   if distance < 130.0 || distance > 360.0 {
     return false
   }
-  @types.rand_chance(game, @types.cpu_jump_chance)
+  @types.rand_chance(game, ai_jump_chance(game))
 }
 
 ///|
@@ -115,42 +179,46 @@ fn @types.Game::ai_try_attack(
 
   let opp_air = !opponent.on_ground
 
+  let reaction = ai_reaction_delay(game)
+
   if fighter.on_ground &&
     opponent.on_ground &&
     distance <= @types.throw_distance * 0.9 &&
-    @types.rand_chance(game, 0.18) {
+    @types.rand_chance(game, ai_throw_chance(game)) {
     fighter.ai_wants_throw = true
-    fighter.ai_cooldown = @types.cpu_reaction_base +
-      @types.rand_rangef(game, 0.04, 0.1)
+    fighter.ai_cooldown = reaction + @types.rand_rangef(game, 0.04, 0.1)
     return
   }
 
   if fighter.super_meter >= @types.super_cost &&
     distance > 90.0 &&
     distance < 240.0 &&
-    @types.rand_chance(game, @types.cpu_super_chance) {
+    @types.rand_chance(game, ai_super_chance(game)) {
     fighter.ai_wants_super = true
-    fighter.ai_cooldown = @types.cpu_reaction_base +
-      @types.rand_rangef(game, 0.08, 0.18)
+    fighter.ai_cooldown = reaction + @types.rand_rangef(game, 0.08, 0.18)
     return
   }
 
-  if opp_air && distance < 140.0 && @types.rand_chance(game, 0.42) {
+  let anti_air_chance : Float = match game.ai_difficulty {
+    Easy => 0.15
+    Normal => 0.42
+    Hard => 0.7
+  }
+  if opp_air && distance < 140.0 && @types.rand_chance(game, anti_air_chance) {
     fighter.ai_wants_special = true
     fighter.input.buffered_motion = MotionDp
     fighter.input.motion_timer = 0.24
-    fighter.ai_cooldown = @types.cpu_reaction_base
+    fighter.ai_cooldown = reaction
     return
   }
 
   if distance > 120.0 &&
     distance < 250.0 &&
-    @types.rand_chance(game, @types.cpu_special_chance) {
+    @types.rand_chance(game, ai_special_chance(game)) {
     fighter.ai_wants_special = true
     fighter.input.buffered_motion = MotionQcf
     fighter.input.motion_timer = 0.24
-    fighter.ai_cooldown = @types.cpu_reaction_base +
-      @types.rand_rangef(game, 0.06, 0.16)
+    fighter.ai_cooldown = reaction + @types.rand_rangef(game, 0.06, 0.16)
     return
   }
 
@@ -240,6 +308,18 @@ fn @types.Game::update_cpu_input(
 
   game.ai_try_attack(fighter, opponent, distance)
   ai_apply_attack_flags(fighter)
+
+  // AI throw tech: on Hard difficulty, CPU tries to tech incoming throws.
+  let tech_chance = ai_throw_tech_chance(game)
+  if tech_chance > 0.0 &&
+    fighter.on_ground &&
+    opponent.action != ActionThrow &&
+    distance <= @types.throw_distance * 1.1 &&
+    @types.throw_input_pressed(opponent.input) &&
+    @types.rand_chance(game, tech_chance) {
+    input_press_lp(fighter)
+    input_press_lk(fighter)
+  }
 
   if fighter.input.any_attack_pressed {
     let dir_code = encode_relative_direction(

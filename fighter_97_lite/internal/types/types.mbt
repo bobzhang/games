@@ -89,6 +89,14 @@ pub(all) enum SparkKind {
 } derive(Eq)
 
 ///|
+/// CPU difficulty level.
+pub(all) enum AiDifficulty {
+  Easy
+  Normal
+  Hard
+} derive(Eq, Show)
+
+///|
 /// Per-frame input state and motion buffers for one fighter.
 pub(all) struct InputState {
   mut x : Int
@@ -329,6 +337,8 @@ pub(all) struct Fighter {
   mut ai_wants_super : Bool
   mut ai_wants_throw : Bool
   mut input : InputState
+  mut trail_positions : Array[(Float, Float)]
+  mut trail_timer : Float
 
   fn new(slot : Int, is_cpu : Bool) -> Fighter
 }
@@ -385,6 +395,8 @@ pub fn Fighter::new(slot : Int, is_cpu : Bool) -> Fighter {
     ai_wants_super: false,
     ai_wants_throw: false,
     input: InputState(),
+    trail_positions: [],
+    trail_timer: 0.0,
   }
 }
 
@@ -427,6 +439,14 @@ pub(all) struct Game {
   particles : Array[Particle]
   hit_sparks : Array[Particle]
   mut debug_overlay : Bool
+  mut ai_difficulty : AiDifficulty
+  mut guard_break_flash : Float
+  mut combat_badge_text : String
+  mut combat_badge_timer : Float
+  mut combat_badge_color_r : Int
+  mut combat_badge_color_g : Int
+  mut combat_badge_color_b : Int
+  mut slowmo_timer : Float
 
   fn new() -> Game
 }
@@ -472,5 +492,13 @@ pub fn Game::new() -> Game {
     particles: Array::make(max_particles, Particle::inactive()),
     hit_sparks: Array::make(max_hit_sparks, Particle::inactive()),
     debug_overlay: false,
+    ai_difficulty: Normal,
+    guard_break_flash: 0.0,
+    combat_badge_text: "",
+    combat_badge_timer: 0.0,
+    combat_badge_color_r: 255,
+    combat_badge_color_g: 255,
+    combat_badge_color_b: 255,
+    slowmo_timer: 0.0,
   }
 }
