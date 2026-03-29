@@ -58,15 +58,14 @@ fn activate_shrine(game : @types.Game) -> Unit {
     GambleShrine => {
       if p.gold >= 30 {
         p.gold -= 30
-        let passives : Array[@types.PassiveKind] = [
-          MaxHpUp, DamageUp, SpeedUp, CritUp, DashCooldownDown, DefenseUp,
-          AttackSpeedUp, PickupRange,
-        ]
-        let (s, idx) = @types.rng_int(game.rng_state, 0, 7)
-        game.rng_state = s
-        p.passives.push(passives[idx])
-        apply_passive(p, passives[idx])
+        // Build-biased: prefer synergy-completing passives
+        let (passive, s_new) = get_gamble_passive(p, game.rng_state)
+        game.rng_state = s_new
+        let old_synergies = get_active_synergy_names(game.synergies)
+        p.passives.push(passive)
+        apply_passive(p, passive)
         game.synergies = get_synergy_bonuses(p)
+        check_synergy_notification(game, old_synergies)
         game.shrine_used = true
         spawn_particles_burst(game, p.x, p.y, 15, 255, 215, 0)
       }

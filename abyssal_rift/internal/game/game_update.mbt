@@ -56,6 +56,12 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   if game.room_clear_timer > 0.0 {
     game.room_clear_timer -= dt
   }
+  if game.synergy_notification_timer > 0.0 {
+    game.synergy_notification_timer -= dt
+  }
+  if game.encounter_flash_timer > 0.0 {
+    game.encounter_flash_timer -= dt
+  }
   // Check stairs interaction (require pressing E)
   if game.stairs_active && !game.reward_active {
     let d2 = @types.dist2(
@@ -173,6 +179,8 @@ fn start_new_run(game : @types.Game) -> Unit {
   reveal_adjacent_rooms(floor, 0)
   // Room flow will handle enemy spawning when the room is entered
   game.room_clear_timer = 0.0
+  game.synergy_notification_timer = 0.0
+  game.synergy_notification_text = ""
   game.state = Playing
 }
 

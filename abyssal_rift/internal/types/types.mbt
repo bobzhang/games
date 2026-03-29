@@ -226,8 +226,8 @@ pub(all) struct Floor {
 pub(all) struct RewardChoice {
   kind : ItemKind
   description : String
-  x : Float
-  y : Float
+  mut x : Float
+  mut y : Float
 }
 
 ///|
@@ -275,6 +275,10 @@ pub(all) struct Game {
   mut shrine_kind : ShrineKind
   mut shrine_active : Bool
   mut shrine_used : Bool
+  mut synergy_notification_timer : Float
+  mut synergy_notification_text : String
+  mut current_encounter : EncounterType
+  mut encounter_flash_timer : Float
 }
 
 ///|
@@ -348,5 +352,9 @@ pub fn Game::new() -> Game {
     shrine_kind: HealingSpring,
     shrine_active: false,
     shrine_used: false,
+    synergy_notification_timer: 0.0,
+    synergy_notification_text: "",
+    current_encounter: Standard,
+    encounter_flash_timer: 0.0,
   }
 }

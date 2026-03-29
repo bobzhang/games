@@ -105,6 +105,36 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
     }
   }
 
+  // Pick one random Combat cell for EliteVault on floors 4+
+  if floor_num >= 4 {
+    let mut attempts = 0
+    while attempts < 20 {
+      let result = @types.rng_int(state, 1, cell_indices.length() - 2)
+      state = result.0
+      let ei = result.1
+      if room_kinds[ei] == Combat {
+        room_kinds[ei] = EliteVault
+        break
+      }
+      attempts += 1
+    }
+  }
+
+  // Pick one random Combat cell for Challenge on floors 6+
+  if floor_num >= 6 {
+    let mut attempts = 0
+    while attempts < 20 {
+      let result = @types.rng_int(state, 1, cell_indices.length() - 2)
+      state = result.0
+      let ci = result.1
+      if room_kinds[ci] == Combat {
+        room_kinds[ci] = Challenge
+        break
+      }
+      attempts += 1
+    }
+  }
+
   // --- build Room structs from templates -------------------------------------
   let rooms : Array[@types.Room] = []
 
@@ -124,6 +154,8 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
       Boss => 8
       Treasure => 7
       Shrine => 7
+      EliteVault => 8 // Use boss-size arena for elite vault
+      Challenge => 8 // Use boss-size arena for challenge
       Combat => {
         let result = @types.rng_int(state, 0, 4)
         state = result.0
@@ -177,6 +209,8 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
       Start | Treasure | Corridor | Shrine => 0
       Combat => 3 + floor_num
       Boss => 1
+      EliteVault => 3 // 2-3 elites
+      Challenge => 5 + floor_num // Waves
     }
 
     let room : @types.Room = {

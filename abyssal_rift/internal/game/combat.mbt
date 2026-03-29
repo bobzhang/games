@@ -143,30 +143,15 @@ pub fn apply_damage_to_enemy(
     item.x = e.x
     item.y = e.y
     item.bob_timer = 0.0
-    // Elite guaranteed premium drop
+    // Elite guaranteed premium drop (build-directed)
     if e.is_elite {
-      let (s_drop, drop_roll) = @types.rng_next(game.rng_state)
+      let (drop_kind, s_drop) = get_on_build_drop(p, game.rng_state)
       game.rng_state = s_drop
       let drop_idx = @types.alloc_item(game.items)
       let drop_item = game.items[drop_idx]
       drop_item.active = true
       drop_item.bob_timer = 0.0
-      if drop_roll < 0.5 {
-        // Passive item drop
-        let passives : Array[@types.PassiveKind] = [
-          MaxHpUp, DamageUp, SpeedUp, CritUp,
-          DashCooldownDown, DefenseUp, AttackSpeedUp, PickupRange,
-        ]
-        let (s_p, pidx) = @types.rng_int(game.rng_state, 0, passives.length() - 1)
-        game.rng_state = s_p
-        drop_item.kind = PassiveItem(passives[pidx])
-      } else {
-        // Weapon drop
-        let weapons : Array[@types.WeaponKind] = [Sword, Daggers, Bow, Staff]
-        let (s_w, widx) = @types.rng_int(game.rng_state, 0, 3)
-        game.rng_state = s_w
-        drop_item.kind = WeaponPickup(weapons[widx])
-      }
+      drop_item.kind = drop_kind
       drop_item.x = e.x
       drop_item.y = e.y - 15.0
     }

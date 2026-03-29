@@ -60,6 +60,57 @@ pub fn draw_hud(game : @types.Game) -> Unit {
       @raylib.Color::new(100, 255, 100, alpha),
     )
   }
+  // Encounter type flash
+  if game.encounter_flash_timer > 0.0 {
+    let alpha = @types.clampi(
+      (game.encounter_flash_timer / 2.0 * 255.0).to_int(),
+      0,
+      255,
+    )
+    let enc_text = @types.encounter_name(game.current_encounter)
+    let enc_color = match game.current_encounter {
+      Standard => @raylib.Color::new(200, 200, 200, alpha)
+      Swarm => @raylib.Color::new(255, 200, 50, alpha)
+      SniperNest => @raylib.Color::new(255, 100, 100, alpha)
+      BossRush => @raylib.Color::new(255, 50, 50, alpha)
+      SurvivalWave => @raylib.Color::new(100, 200, 255, alpha)
+      PoisonNest => @raylib.Color::new(100, 255, 50, alpha)
+      Ambush => @raylib.Color::new(255, 150, 50, alpha)
+    }
+    let enc_tw = @raylib.measure_text(enc_text, 30)
+    @raylib.draw_text(
+      enc_text,
+      (@types.screen_w - enc_tw) / 2,
+      @types.screen_h / 2 - 120,
+      30,
+      enc_color,
+    )
+  }
+  // Synergy unlocked notification
+  if game.synergy_notification_timer > 0.0 {
+    let alpha = @types.clampi(
+      (game.synergy_notification_timer / 3.0 * 255.0).to_int(),
+      0,
+      255,
+    )
+    let text = game.synergy_notification_text
+    let tw = @raylib.measure_text(text, 28)
+    // Background banner
+    @raylib.draw_rectangle(
+      (@types.screen_w - tw) / 2 - 12,
+      @types.screen_h / 2 - 120,
+      tw + 24,
+      36,
+      @raylib.Color::new(0, 0, 0, alpha * 3 / 4),
+    )
+    @raylib.draw_text(
+      text,
+      (@types.screen_w - tw) / 2,
+      @types.screen_h / 2 - 116,
+      28,
+      @raylib.Color::new(255, 215, 0, alpha),
+    )
+  }
   // Stairs notification
   if game.stairs_active {
     let pulse = Float::from_double(

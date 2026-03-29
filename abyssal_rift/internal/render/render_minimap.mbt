@@ -73,6 +73,8 @@ pub fn draw_minimap(game : @types.Game) -> Unit {
             Boss => @raylib.Color::new(200, 50, 50, 150)
             Corridor => @raylib.Color::new(50, 50, 60, 100)
             Shrine => @raylib.Color::new(180, 100, 220, 150)
+            EliteVault => @raylib.Color::new(255, 200, 50, 180)
+            Challenge => @raylib.Color::new(255, 100, 255, 180)
           }
         }
         @raylib.draw_rectangle(rx, ry, rw, rh, color)

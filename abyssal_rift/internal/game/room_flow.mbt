@@ -11,7 +11,8 @@ pub fn update_room_flow(game : @types.Game, _dt : Float) -> Unit {
           // Mark room as visited when player enters
           room.visited = true
           // Check if player has entered the room and enemies should spawn
-          if (room.kind == Combat || room.kind == Boss) && not(has_been_cleared(floor, floor.current_room)) {
+          if (room.kind == Combat || room.kind == Boss || room.kind == EliteVault || room.kind == Challenge) &&
+            not(has_been_cleared(floor, floor.current_room)) {
             seal_room(game)
           }
           // Shop for treasure rooms
@@ -126,10 +127,25 @@ fn seal_room(game : @types.Game) -> Unit {
         let cx = Float::from_int(room.x) * ts + Float::from_int(room.w) * ts / 2.0
         let cy = Float::from_int(room.y) * ts + Float::from_int(room.h) * ts / 2.0
         spawn_boss(game, cx, cy)
+        game.current_encounter = Standard
+      } else if room.kind == EliteVault || room.kind == Challenge || room.kind == Combat {
+        let encounter_type : @types.EncounterType = if room.kind == EliteVault {
+          BossRush // EliteVault always spawns boss rush
+        } else if room.kind == Challenge {
+          SurvivalWave
+        } else {
+          let (enc, s) = select_encounter(game.floor_num, game.rng_state)
+          game.rng_state = s
+          enc
+        }
+        game.current_encounter = encounter_type
+        game.encounter_flash_timer = 2.0
+        spawn_encounter(game, encounter_type, room)
       } else {
-        // Spawn enemies based on budget
+        // Fallback: spawn with budget
         let budget = 3 + game.floor_num * 2
         spawn_room_enemies(game, budget)
+        game.current_encounter = Standard
       }
     }
   }
@@ -271,53 +287,27 @@ fn spawn_room_enemies(game : @types.Game, budget : Int) -> Unit {
 fn trigger_reward_choice(game : @types.Game) -> Unit {
   game.reward_active = true
   game.reward_choices.clear()
-  // Generate 3 random choices
-  let mut s = game.rng_state
-  for i in 0..<3 {
-    let (s1, roll) = @types.rng_next(s)
-    s = s1
-    let (kind, desc) : (@types.ItemKind, String) = if roll < 0.3 {
-      // Weapon
-      let weapons : Array[@types.WeaponKind] = [Sword, Daggers, Bow, Staff]
-      let (s2, idx) = @types.rng_int(s, 0, 3)
-      s = s2
-      (WeaponPickup(weapons[idx]), "New weapon")
-    } else if roll < 0.7 {
-      // Passive
-      let passives : Array[@types.PassiveKind] = [
-        MaxHpUp, DamageUp, SpeedUp, CritUp,
-        DashCooldownDown, DefenseUp, AttackSpeedUp, PickupRange,
-      ]
-      let (s2, idx) = @types.rng_int(s, 0, 7)
-      s = s2
-      let p = passives[idx]
-      let stats = @data.get_passive_stats(p)
-      (PassiveItem(p), stats.description)
-    } else {
-      (HealthPotion, "Restore 30 HP + Shield")
+  // Generate build-directed smart rewards
+  let raw_choices = generate_smart_rewards(game)
+  let (center_x, center_y) = match game.floor {
+    Some(floor) => {
+      let room = floor.rooms[floor.current_room]
+      let ts = @types.tile_sizef
+      (
+        Float::from_int(room.x) * ts + Float::from_int(room.w) * ts / 2.0,
+        Float::from_int(room.y) * ts + Float::from_int(room.h) * ts / 2.0,
+      )
     }
-    let (center_x, center_y) = match game.floor {
-      Some(floor) => {
-        let room = floor.rooms[floor.current_room]
-        let ts = @types.tile_sizef
-        (Float::from_int(room.x) * ts + Float::from_int(room.w) * ts / 2.0,
-         Float::from_int(room.y) * ts + Float::from_int(room.h) * ts / 2.0)
-      }
-      None => (game.player.x, game.player.y)
-    }
-    let spacing : Float = 120.0
-    let base_x = center_x - spacing
-    let choice_y = center_y
-    game.reward_choices.push(
-      {
-        kind,
-        description: desc,
-        x: base_x + Float::from_int(i) * spacing,
-        y: choice_y,
-      },
-    )
+    None => (game.player.x, game.player.y)
   }
-  game.rng_state = s
+  let spacing : Float = 120.0
+  // Position them at room center with spacing
+  for i in 0..<raw_choices.length() {
+    let choice = raw_choices[i]
+    choice.x = center_x - spacing + Float::from_int(i) * spacing
+    choice.y = center_y
+    game.reward_choices.push(choice)
+  }
 }
 
 ///|
@@ -329,9 +319,39 @@ fn clear_room(game : @types.Game) -> Unit {
       room.state = Cleared
       game.rooms_cleared += 1
       game.floor_rooms_cleared += 1
-      // Boss rooms and every 3rd combat room: trigger choice-of-3 reward
-      if room.kind == Boss || game.floor_rooms_cleared % 3 == 0 {
+      // Boss rooms, EliteVault, and every 3rd combat room: trigger choice-of-3 reward
+      if room.kind == Boss || room.kind == EliteVault || game.floor_rooms_cleared % 3 == 0 {
         trigger_reward_choice(game)
+        // EliteVault bonus: drop an extra passive item
+        if room.kind == EliteVault {
+          let passives : Array[@types.PassiveKind] = [
+            MaxHpUp, DamageUp, SpeedUp, CritUp,
+            DashCooldownDown, DefenseUp, AttackSpeedUp, PickupRange,
+          ]
+          let (s_ev, pidx_ev) = @types.rng_int(
+            game.rng_state, 0, passives.length() - 1,
+          )
+          game.rng_state = s_ev
+          let pi_ev = @types.alloc_item(game.items)
+          let pitem_ev = game.items[pi_ev]
+          pitem_ev.active = true
+          pitem_ev.kind = PassiveItem(passives[pidx_ev])
+          pitem_ev.x = game.player.x + 50.0
+          pitem_ev.y = game.player.y - 50.0
+          pitem_ev.bob_timer = 0.0
+        }
+      } else if room.kind == Challenge {
+        // Challenge room: big reward on success
+        trigger_reward_choice(game)
+        // Bonus gold
+        let bonus_gold = 20 + game.floor_num * 5
+        let gi = @types.alloc_item(game.items)
+        let gitem = game.items[gi]
+        gitem.active = true
+        gitem.kind = Gold(bonus_gold)
+        gitem.x = game.player.x - 30.0
+        gitem.y = game.player.y - 60.0
+        gitem.bob_timer = 0.0
       } else {
         // Normal rooms: standard random drops
         let (s1, roll) = @types.rng_next(game.rng_state)
@@ -399,15 +419,24 @@ fn clear_room(game : @types.Game) -> Unit {
           proj.active = false
         }
       }
-      // Check if stairs should appear: ALL combat/boss rooms must be cleared
+      // Check if stairs should appear:
+      // On boss floors: stairs appear after boss is dead
+      // On normal floors: stairs appear after clearing 60% of combat rooms
       let mut total_combat_rooms = 0
       for i in 0..<floor.rooms.length() {
         let r = floor.rooms[i]
-        if r.kind == Combat || r.kind == Boss {
+        if r.kind == Combat || r.kind == Boss || r.kind == EliteVault || r.kind == Challenge {
           total_combat_rooms += 1
         }
       }
-      if game.floor_rooms_cleared >= total_combat_rooms {
+      let required = if game.floor_num % 5 == 0 {
+        // Boss floor: must clear all (boss room counts as combat)
+        total_combat_rooms
+      } else {
+        // Normal floor: 60% of combat rooms
+        @types.maxf(Float::from_int(total_combat_rooms) * 0.6, 2.0).to_int()
+      }
+      if game.floor_rooms_cleared >= required {
         // Place stairs in the center of the last cleared room
         let ts = @types.tile_sizef
         let cx = Float::from_int(room.x) * ts + Float::from_int(room.w) * ts / 2.0

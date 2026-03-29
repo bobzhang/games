@@ -41,14 +41,18 @@ fn collect_item(game : @types.Game, item : @types.Item) -> Unit {
       p.combo_count = 0
       push_event(game, Pickup(item.kind, item.x, item.y))
       // Weapon change may affect synergies
+      let old_synergies = get_active_synergy_names(game.synergies)
       game.synergies = get_synergy_bonuses(game.player)
+      check_synergy_notification(game, old_synergies)
     }
     PassiveItem(passive) => {
       p.passives.push(passive)
       apply_passive(p, passive)
       push_event(game, Pickup(item.kind, item.x, item.y))
       // Recalculate synergies after acquiring a passive
+      let old_synergies = get_active_synergy_names(game.synergies)
       game.synergies = get_synergy_bonuses(game.player)
+      check_synergy_notification(game, old_synergies)
     }
   }
 }
@@ -140,12 +144,16 @@ pub fn update_shop(game : @types.Game, input : InputState) -> Unit {
             p.weapon = kind
             p.attack_state = Idle
             p.combo_count = 0
+            let old_synergies = get_active_synergy_names(game.synergies)
             game.synergies = get_synergy_bonuses(game.player)
+            check_synergy_notification(game, old_synergies)
           }
           PassiveItem(passive) => {
             p.passives.push(passive)
             apply_passive(p, passive)
+            let old_synergies = get_active_synergy_names(game.synergies)
             game.synergies = get_synergy_bonuses(game.player)
+            check_synergy_notification(game, old_synergies)
           }
         }
         push_event(game, Pickup(shop.kind, shop.x, shop.y))

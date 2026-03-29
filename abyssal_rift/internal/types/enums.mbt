@@ -69,7 +69,33 @@ pub(all) enum RoomKind {
   Boss
   Corridor
   Shrine
+  EliteVault
+  Challenge
 } derive(Eq, Show)
+
+///|
+pub(all) enum EncounterType {
+  Standard
+  Swarm
+  SniperNest
+  BossRush
+  SurvivalWave
+  PoisonNest
+  Ambush
+} derive(Eq, Show)
+
+///|
+pub fn encounter_name(encounter : EncounterType) -> String {
+  match encounter {
+    Standard => "COMBAT!"
+    Swarm => "SWARM!"
+    SniperNest => "SNIPER NEST!"
+    BossRush => "ELITE RUSH!"
+    SurvivalWave => "SURVIVAL WAVE!"
+    PoisonNest => "POISON NEST!"
+    Ambush => "AMBUSH!"
+  }
+}
 
 ///|
 pub(all) enum ShrineKind {
@@ -98,6 +124,7 @@ pub(all) enum GameEvent {
   BossPhaseChange(Int)
   DashUsed(Float, Float, Float, Float)
   WeaponSwing(Float, Float, Float)
+  SynergyUnlocked(String)
 } derive(Show)
 
 ///|
