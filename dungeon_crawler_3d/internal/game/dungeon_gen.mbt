@@ -281,6 +281,16 @@ fn @types.Game::place_enemies(game : @types.Game) -> Unit {
       e.ai_state = @types.ai_idle
       e.xp_value = @types.xp_per_dragon
       e.speed_mult = 1.0
+      e.telegraph_timer = 0.0
+      e.telegraph_kind = 0
+      e.boss_phase = 1
+      e.strafe_dir = 1.0
+      e.stun_timer = 0.0
+      e.slow_timer = 0.0
+      e.ability_cooldown = 0.0
+      e.facing_angle = 0.0
+      e.patrol_x = wx
+      e.patrol_z = wz
       total_spawned += 1
     }
   }
@@ -408,6 +418,15 @@ fn @types.Game::spawn_enemy_in_room(
   e.slow_timer = 0.0
   e.xp_value = xp_value
   e.facing_angle = @types.rand_rangef(game, 0.0, 6.28)
+  e.telegraph_timer = 0.0
+  e.telegraph_kind = 0
+  e.boss_phase = 1
+  // Ranged enemies start with random strafe direction
+  e.strafe_dir = if @types.rand_range(game, 0, 1) == 0 { 1.0 } else { -1.0 }
+  // Mimics start in ambush state
+  if kind == Mimic {
+    e.ai_state = @types.ai_ambush
+  }
 }
 
 ///|

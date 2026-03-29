@@ -135,8 +135,13 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeySix) {
     game.selected_spell = 5
   }
-  // Mana regeneration
-  let mana_regen : Float = @types.mana_regen_rate * dt
+  // Mana regeneration (ring of wisdom boosts regen)
+  let ring_mana_bonus : Float = if game.equip_ring_kind == @types.ring_mana_regen {
+    Float::from_int(game.equip_ring_bonus) * 0.3
+  } else {
+    0.0
+  }
+  let mana_regen : Float = (@types.mana_regen_rate + ring_mana_bonus) * dt
   let new_mana_f : Float = Float::from_int(game.player_mana) + mana_regen
   let new_mana = new_mana_f.to_int()
   game.player_mana = new_mana.min(game.player_max_mana)
@@ -212,38 +217,104 @@ fn @types.Game::perform_melee_attack(game : @types.Game) -> Unit {
   let attack_dir_x = @math.sinf(game.camera_yaw)
   let attack_dir_z = @math.cosf(game.camera_yaw)
   let weapon_range = @types.get_weapon_range(game.player_weapon)
+  // Weapon-specific hit cone: axes/maces have wider, daggers narrower
+  let cone_dot_threshold : Float = match game.player_weapon {
+    Axe => -0.2 // Very wide ~120 degree cone
+    Mace => -0.1 // Wide cone
+    Dagger => 0.3 // Narrow, precise stab
+    Staff => 0.1 // Medium cone
+    _ => 0.0 // 90 degree default
+  }
   let mut hit_any = false
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]
     if !e.active {
       continue
     }
-    // Check distance
     let dist = @types.dist2d(game.player_x, game.player_z, e.x, e.z)
     if dist > weapon_range {
       continue
     }
-    // Check angle (within ~90 degree cone in front)
     let dx = e.x - game.player_x
     let dz = e.z - game.player_z
     let dot = dx * attack_dir_x + dz * attack_dir_z
-    if dot < 0.0 {
+    if dot < cone_dot_threshold {
       continue
     }
-    // Hit!
-    let raw_atk = @types.calc_player_attack(game)
+    // Hit! Use equipment-enhanced attack
+    let raw_atk = @types.calc_player_attack_with_equip(game)
     let damage = (1).max(raw_atk - e.def)
-    // Critical hit chance based on dex
-    let crit_chance = game.player_dex / 2
+    // Critical hit chance: dagger bonus + ring of precision
+    let base_crit = game.player_dex / 2
+    let ring_crit = if game.equip_ring_kind == @types.ring_crit_chance {
+      game.equip_ring_bonus
+    } else {
+      0
+    }
+    let crit_chance = match game.player_weapon {
+      Dagger => base_crit + 15 + ring_crit
+      _ => base_crit + ring_crit
+    }
     let is_crit = @types.rand_range(game, 0, 99) < crit_chance
     let final_damage = if is_crit { damage * 2 } else { damage }
     e.hp -= final_damage
-    e.hit_flash = 0.2
+    e.hit_flash = 0.3
     e.alerted = true
     hit_any = true
-    // Spawn hit particles
-    @types.spawn_particles(game, e.x, 1.0, e.z, 8, 255, 50, 50)
+    // Life steal ring: heal on hit
+    if game.equip_ring_kind == @types.ring_life_steal && game.equip_ring_bonus > 0 {
+      let heal = final_damage * game.equip_ring_bonus / 20
+      if heal > 0 {
+        game.player_hp = (game.player_hp + heal).min(game.player_max_hp)
+        @types.spawn_particles(
+          game, game.player_x, 1.5, game.player_z, 2, 50, 200, 50,
+        )
+      }
+    }
+    // Weapon-specific hit effects
+    match game.player_weapon {
+      Sword => {
+        // Clean slash particles
+        @types.spawn_particles(game, e.x, 1.0, e.z, 8, 220, 220, 240)
+        @types.trigger_shake(game, 0.04, 0.12)
+        @types.apply_knockback(game, e, game.player_x, game.player_z, 0.3)
+      }
+      Axe => {
+        // Heavy impact with ground-shake
+        @types.spawn_particles(game, e.x, 0.8, e.z, 12, 180, 140, 100)
+        @types.spawn_particles(game, e.x, 0.3, e.z, 6, 140, 100, 60)
+        @types.trigger_shake(game, 0.10, 0.25)
+        @types.apply_knockback(game, e, game.player_x, game.player_z, 0.8)
+        e.stun_timer = 0.3 // Axes stagger enemies briefly
+      }
+      Mace => {
+        // Crushing blow, stun-focused
+        @types.spawn_particles(game, e.x, 1.0, e.z, 10, 200, 200, 220)
+        @types.trigger_shake(game, 0.08, 0.20)
+        @types.apply_knockback(game, e, game.player_x, game.player_z, 0.6)
+        e.stun_timer = 0.5 // Maces stun longer
+      }
+      Dagger => {
+        // Quick precise stab, minimal particles, no knockback
+        @types.spawn_particles(game, e.x, 1.1, e.z, 4, 255, 50, 50)
+        @types.trigger_shake(game, 0.02, 0.06)
+      }
+      Staff => {
+        // Magical impact
+        @types.spawn_particles(game, e.x, 1.2, e.z, 8, 150, 100, 255)
+        @types.trigger_shake(game, 0.03, 0.10)
+        @types.apply_knockback(game, e, game.player_x, game.player_z, 0.4)
+      }
+      _ => {
+        @types.spawn_particles(game, e.x, 1.0, e.z, 8, 255, 50, 50)
+        @types.trigger_shake(game, 0.04, 0.12)
+      }
+    }
+    // Floating damage number
     if is_crit {
+      @types.spawn_damage_number(
+        game, e.x, 2.0, e.z, final_damage, 255, 215, 0, true,
+      )
       @types.add_message(
         game,
         "CRITICAL HIT! \{final_damage} damage to \{@types.get_enemy_name(e.kind)}!",
@@ -251,8 +322,11 @@ fn @types.Game::perform_melee_attack(game : @types.Game) -> Unit {
         215,
         0,
       )
-      @types.spawn_particles(game, e.x, 1.5, e.z, 6, 255, 215, 0)
+      @types.spawn_particles(game, e.x, 1.5, e.z, 8, 255, 215, 0)
     } else {
+      @types.spawn_damage_number(
+        game, e.x, 1.8, e.z, final_damage, 255, 200, 80, false,
+      )
       @types.add_message(
         game,
         "Hit \{@types.get_enemy_name(e.kind)} for \{final_damage}!",
@@ -361,6 +435,8 @@ fn @types.Game::cast_fireball(game : @types.Game) -> Unit {
   p.from_enemy = false
   p.aoe_radius = @types.fireball_radius
   p.slow_on_hit = false
+  // Fire launch effect: big burst + screen kick
+  @types.trigger_shake(game, 0.05, 0.12)
   @types.spawn_directional_particles(
     game,
     game.player_x,
@@ -368,12 +444,13 @@ fn @types.Game::cast_fireball(game : @types.Game) -> Unit {
     game.player_z,
     dir_x,
     dir_z,
-    8,
+    12,
     255,
     100,
     30,
     5.0,
   )
+  @types.spawn_particles(game, game.player_x, 1.0, game.player_z, 6, 255, 60, 10)
   @types.add_message(game, "Fireball!", 255, 100, 30)
 }
 
@@ -396,8 +473,9 @@ fn @types.Game::cast_ice_bolt(game : @types.Game) -> Unit {
   p.damage = @types.ice_bolt_damage + int_bonus
   p.lifetime = 2.5
   p.from_enemy = false
-  p.aoe_radius = 0.0
+  p.aoe_radius = 1.5 // Small frost AOE on impact
   p.slow_on_hit = true
+  // Frost crystallization launch effect
   @types.spawn_directional_particles(
     game,
     game.player_x,
@@ -405,12 +483,13 @@ fn @types.Game::cast_ice_bolt(game : @types.Game) -> Unit {
     game.player_z,
     dir_x,
     dir_z,
-    6,
+    8,
     100,
     180,
     255,
     4.0,
   )
+  @types.spawn_particles(game, game.player_x, 1.3, game.player_z, 4, 200, 240, 255)
   @types.add_message(game, "Ice Bolt!", 100, 180, 255)
 }
 
@@ -419,15 +498,31 @@ fn @types.Game::cast_heal(game : @types.Game) -> Unit {
   let int_bonus = game.player_int_stat / 2
   let heal = @types.heal_amount + int_bonus
   game.player_hp = (game.player_hp + heal).min(game.player_max_hp)
+  // Green healing aura burst: upward rising particles
   @types.spawn_particles(
     game,
     game.player_x,
-    1.0,
+    0.5,
     game.player_z,
-    16,
+    20,
     50,
     255,
     80,
+  )
+  // Secondary golden sparkles
+  @types.spawn_particles(
+    game,
+    game.player_x,
+    1.5,
+    game.player_z,
+    8,
+    200,
+    255,
+    100,
+  )
+  // Healing damage number (positive)
+  @types.spawn_damage_number(
+    game, game.player_x, 2.0, game.player_z, heal, 50, 255, 80, false,
   )
   @types.add_message(game, "Healed for \{heal} HP!", 50, 255, 80)
 }
@@ -435,23 +530,39 @@ fn @types.Game::cast_heal(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::cast_shield(game : @types.Game) -> Unit {
   let int_bonus = game.player_int_stat / 4
+  let bonus = @types.shield_defense_bonus + int_bonus
   @types.add_buff(
     game,
     @types.buff_shield,
     @types.shield_duration,
-    @types.shield_defense_bonus + int_bonus,
+    bonus,
+  )
+  // Blue protective aura burst
+  @types.spawn_particles(
+    game,
+    game.player_x,
+    0.5,
+    game.player_z,
+    16,
+    80,
+    130,
+    255,
   )
   @types.spawn_particles(
     game,
     game.player_x,
-    1.0,
+    1.2,
     game.player_z,
-    12,
-    100,
-    150,
+    10,
+    120,
+    180,
     255,
   )
-  @types.add_message(game, "Shield activated!", 100, 150, 255)
+  // Shield defense indicator
+  @types.spawn_damage_number(
+    game, game.player_x, 2.0, game.player_z, bonus, 100, 150, 255, false,
+  )
+  @types.add_message(game, "Shield activated! +\{bonus} DEF", 100, 150, 255)
 }
 
 ///|
@@ -485,10 +596,16 @@ fn @types.Game::cast_lightning(game : @types.Game) -> Unit {
     let e = game.enemies[hit_idx]
     let dmg = (1).max(damage - e.def)
     e.hp -= dmg
-    e.hit_flash = 0.3
+    e.hit_flash = 0.4
     e.alerted = true
-    e.stun_timer = 0.5
-    @types.spawn_particles(game, e.x, 1.5, e.z, 12, 255, 255, 100)
+    e.stun_timer = 0.7 // Lightning has longer stun
+    // Intense electric burst
+    @types.trigger_shake(game, 0.15, 0.20)
+    @types.spawn_particles(game, e.x, 1.5, e.z, 16, 255, 255, 100)
+    @types.spawn_particles(game, e.x, 1.0, e.z, 8, 200, 200, 255)
+    @types.spawn_damage_number(
+      game, e.x, 2.0, e.z, dmg, 255, 255, 100, true,
+    )
     @types.add_message(
       game,
       "Lightning hits \{@types.get_enemy_name(e.kind)} for \{dmg}!",
@@ -514,15 +631,38 @@ fn @types.Game::cast_lightning(game : @types.Game) -> Unit {
       if chain_dist < @types.lightning_chain_range {
         let chain_dmg = (1).max(damage / 2 - e2.def)
         e2.hp -= chain_dmg
-        e2.hit_flash = 0.3
+        e2.hit_flash = 0.4
         e2.alerted = true
-        @types.spawn_particles(game, e2.x, 1.5, e2.z, 6, 255, 255, 100)
+        e2.stun_timer = 0.3 // Chain targets get shorter stun
+        @types.spawn_particles(game, e2.x, 1.5, e2.z, 10, 255, 255, 100)
+        @types.spawn_particles(game, e2.x, 1.0, e2.z, 4, 200, 200, 255)
+        @types.spawn_damage_number(
+          game, e2.x, 1.8, e2.z, chain_dmg, 255, 255, 150, false,
+        )
+        @types.add_message(
+          game,
+          "Chain lightning hits \{@types.get_enemy_name(e2.kind)} for \{chain_dmg}!",
+          200,
+          255,
+          150,
+        )
         if e2.hp <= 0 {
           kill_enemy(game, j)
         }
       }
     }
   } else {
+    // Cast spark even on miss
+    @types.spawn_particles(
+      game,
+      game.player_x + attack_dir_x * 3.0,
+      1.5,
+      game.player_z + attack_dir_z * 3.0,
+      8,
+      255,
+      255,
+      100,
+    )
     @types.add_message(game, "Lightning finds no target!", 200, 200, 100)
   }
 }
@@ -590,8 +730,49 @@ pub fn kill_enemy(game : @types.Game, idx : Int) -> Unit {
   game.player_xp += e.xp_value
   game.player_kills += 1
   game.total_enemies_killed += 1
-  // Death particles
-  @types.spawn_particles(game, e.x, 1.0, e.z, 16, 180, 80, 40)
+  // Death explosion: scaled by enemy importance
+  let is_boss = e.kind == DragonBoss
+  let is_elite = e.kind == Lich || e.kind == Minotaur || e.kind == Golem
+  let particle_count = if is_boss {
+    32
+  } else if is_elite {
+    20
+  } else {
+    12
+  }
+  // Enemy-type-colored death particles
+  let death_colors : (Int, Int, Int) = match e.kind {
+    Skeleton => (200, 190, 170)
+    Archer => (80, 120, 60)
+    Golem => (140, 120, 100)
+    Wraith => (120, 80, 180)
+    DragonBoss => (255, 80, 30)
+    Slime => (50, 200, 50)
+    Bat => (100, 80, 60)
+    Spider => (120, 100, 80)
+    Minotaur => (180, 120, 60)
+    Lich => (180, 50, 200)
+    Mimic => (180, 140, 60)
+    _ => (180, 80, 40)
+  }
+  @types.spawn_particles(
+    game, e.x, 1.0, e.z, particle_count,
+    death_colors.0, death_colors.1, death_colors.2,
+  )
+  // Secondary white flash burst
+  @types.spawn_particles(game, e.x, 1.2, e.z, particle_count / 2, 255, 255, 255)
+  // Screen shake on death (bigger for bosses/elites)
+  if is_boss {
+    @types.trigger_shake(game, 0.25, 0.5)
+  } else if is_elite {
+    @types.trigger_shake(game, 0.10, 0.25)
+  } else {
+    @types.trigger_shake(game, 0.03, 0.10)
+  }
+  // XP damage number
+  @types.spawn_damage_number(
+    game, e.x, 2.0, e.z, e.xp_value, 80, 255, 80, is_boss,
+  )
   @types.add_message(
     game,
     "\{@types.get_enemy_name(e.kind)} defeated! +\{e.xp_value} XP",
@@ -614,8 +795,8 @@ pub fn kill_enemy(game : @types.Game, idx : Int) -> Unit {
     if loot_idx >= 0 {
       let l = game.loot[loot_idx]
       l.active = true
-      // Better enemies drop better loot
-      let roll = @types.rand_range(game, 0, 7)
+      // Roll loot type - expanded with equipment drops
+      let roll = @types.rand_range(game, 0, 10)
       if roll == 0 {
         l.kind = @types.loot_health_potion
       } else if roll == 1 {
@@ -631,11 +812,23 @@ pub fn kill_enemy(game : @types.Game, idx : Int) -> Unit {
         l.kind = @types.loot_speed_potion
       } else if roll == 6 {
         l.kind = @types.loot_strength_potion
-      } else {
+      } else if roll == 7 {
         l.kind = @types.loot_gold_pile
         l.value = @types.rand_range(game, 10, 40)
+      } else if roll == 8 {
+        // Equipment: weapon drop
+        l.kind = @types.loot_equip_weapon
+        l.value = @types.rand_range(game, 2, 5 + game.current_floor)
+      } else if roll == 9 {
+        // Equipment: armor drop
+        l.kind = @types.loot_equip_armor
+        l.value = @types.rand_range(game, 2, 4 + game.current_floor)
+      } else {
+        // Equipment: ring drop
+        l.kind = @types.loot_equip_ring
+        l.value = @types.rand_range(game, 0, 4) // ring kind
       }
-      // Boss drops boss key
+      // Boss drops boss key instead
       if e.kind == DragonBoss {
         l.kind = @types.loot_boss_key
       }
@@ -651,10 +844,22 @@ pub fn kill_enemy(game : @types.Game, idx : Int) -> Unit {
         @levels.get_rarity_weight_legendary(game.current_floor),
       ]
       l.rarity = @types.rand_weighted(game, rarity_weights)
+      // Elite/boss enemies boost rarity
+      if is_elite && l.rarity < 3 {
+        l.rarity += 1
+      }
+      if is_boss {
+        l.rarity = (3).max(l.rarity)
+      }
     }
   }
-  // Gold always drops
-  let gold_amount = @types.rand_range(game, 3, 15 + game.current_floor * 3)
+  // Gold always drops - ring of fortune gives bonus
+  let gold_base = @types.rand_range(game, 3, 15 + game.current_floor * 3)
+  let gold_amount = if game.equip_ring_kind == @types.ring_gold_find {
+    gold_base + gold_base * game.equip_ring_bonus / 10
+  } else {
+    gold_base
+  }
   game.player_gold += gold_amount
   game.player_total_gold += gold_amount
   e.active = false
@@ -744,6 +949,98 @@ fn @types.Game::check_loot_pickup(game : @types.Game) -> Unit {
         game.player_boss_keys += 1
         @types.add_message(game, "Got a Boss Key!", 255, 100, 100)
         @types.spawn_particles(game, l.x, 0.5, l.z, 10, 255, 100, 100)
+      } else if l.kind == @types.loot_equip_weapon {
+        // Equipment weapon: upgrade if better
+        let bonus = l.value + l.rarity * 2
+        let rarity_name = @types.get_rarity_name(l.rarity)
+        if bonus > game.equip_weapon_bonus {
+          game.equip_weapon_bonus = bonus
+          game.equip_weapon_rarity = l.rarity
+          let cr = @types.get_rarity_color_r(l.rarity)
+          let cg = @types.get_rarity_color_g(l.rarity)
+          let cb = @types.get_rarity_color_b(l.rarity)
+          @types.add_message(
+            game,
+            "Equipped \{rarity_name} Weapon +\{bonus}!",
+            cr,
+            cg,
+            cb,
+          )
+          @types.spawn_particles(game, l.x, 0.5, l.z, 12, cr, cg, cb)
+        } else {
+          // Sell for gold instead
+          let gold = 10 + l.rarity * 15
+          game.player_gold += gold
+          game.player_total_gold += gold
+          @types.add_message(
+            game,
+            "Sold weapon for \{gold} gold",
+            255,
+            215,
+            0,
+          )
+        }
+      } else if l.kind == @types.loot_equip_armor {
+        let bonus = l.value + l.rarity * 2
+        let rarity_name = @types.get_rarity_name(l.rarity)
+        if bonus > game.equip_armor_bonus {
+          game.equip_armor_bonus = bonus
+          game.equip_armor_rarity = l.rarity
+          let cr = @types.get_rarity_color_r(l.rarity)
+          let cg = @types.get_rarity_color_g(l.rarity)
+          let cb = @types.get_rarity_color_b(l.rarity)
+          @types.add_message(
+            game,
+            "Equipped \{rarity_name} Armor +\{bonus}!",
+            cr,
+            cg,
+            cb,
+          )
+          @types.spawn_particles(game, l.x, 0.5, l.z, 12, cr, cg, cb)
+        } else {
+          let gold = 10 + l.rarity * 15
+          game.player_gold += gold
+          game.player_total_gold += gold
+          @types.add_message(
+            game,
+            "Sold armor for \{gold} gold",
+            255,
+            215,
+            0,
+          )
+        }
+      } else if l.kind == @types.loot_equip_ring {
+        let ring_kind = l.value.clamp(min=0, max=4)
+        let bonus = 2 + l.rarity * 2
+        let rarity_name = @types.get_rarity_name(l.rarity)
+        let ring_name = @types.get_ring_name(ring_kind)
+        if game.equip_ring_kind < 0 || bonus > game.equip_ring_bonus {
+          game.equip_ring_kind = ring_kind
+          game.equip_ring_rarity = l.rarity
+          game.equip_ring_bonus = bonus
+          let cr = @types.get_rarity_color_r(l.rarity)
+          let cg = @types.get_rarity_color_g(l.rarity)
+          let cb = @types.get_rarity_color_b(l.rarity)
+          @types.add_message(
+            game,
+            "Equipped \{rarity_name} \{ring_name}!",
+            cr,
+            cg,
+            cb,
+          )
+          @types.spawn_particles(game, l.x, 0.5, l.z, 12, cr, cg, cb)
+        } else {
+          let gold = 15 + l.rarity * 20
+          game.player_gold += gold
+          game.player_total_gold += gold
+          @types.add_message(
+            game,
+            "Sold ring for \{gold} gold",
+            255,
+            215,
+            0,
+          )
+        }
       }
       l.active = false
       game.message_text = @types.get_loot_name(l.kind)
@@ -1072,13 +1369,57 @@ fn @types.Game::level_up(game : @types.Game) -> Unit {
 }
 
 ///|
-/// Applies incoming damage after defense, updates hit feedback, and clamps HP at zero.
+/// Applies incoming damage after defense (including equipment), updates hit feedback, and clamps HP at zero.
 pub fn damage_player(game : @types.Game, raw_damage : Int) -> Unit {
-  let total_def = @types.calc_player_defense(game)
+  let total_def = @types.calc_player_defense_with_equip(game)
   let damage = (1).max(raw_damage - total_def)
   game.player_hp -= damage
   game.player_hit_flash = 0.3
   game.damage_flash = 0.2
+  // Screen shake proportional to damage taken
+  let shake_intensity = @types.clampf(
+    Float::from_int(damage) * 0.005, 0.03, 0.20,
+  )
+  @types.trigger_shake(game, shake_intensity, 0.15)
+  // Floating damage number on player
+  @types.spawn_damage_number(
+    game, game.player_x, 2.0, game.player_z, damage, 255, 60, 60, damage > 20,
+  )
+  // Thorns ring: reflect damage back
+  if game.equip_ring_kind == @types.ring_thorns && game.equip_ring_bonus > 0 {
+    // Find nearest enemy
+    let mut nearest_dist : Float = 5.0
+    let mut nearest_idx = -1
+    for i in 0..<game.enemies.length() {
+      let e = game.enemies[i]
+      if !e.active {
+        continue
+      }
+      let d = @types.dist2d(game.player_x, game.player_z, e.x, e.z)
+      if d < nearest_dist {
+        nearest_dist = d
+        nearest_idx = i
+      }
+    }
+    if nearest_idx >= 0 {
+      let reflect = game.equip_ring_bonus
+      game.enemies[nearest_idx].hp -= reflect
+      game.enemies[nearest_idx].hit_flash = 0.15
+      @types.spawn_particles(
+        game,
+        game.enemies[nearest_idx].x,
+        1.0,
+        game.enemies[nearest_idx].z,
+        4,
+        200,
+        100,
+        255,
+      )
+      if game.enemies[nearest_idx].hp <= 0 {
+        kill_enemy(game, nearest_idx)
+      }
+    }
+  }
   if game.player_hp < 0 {
     game.player_hp = 0
   }

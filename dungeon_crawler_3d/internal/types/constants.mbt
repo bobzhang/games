@@ -88,6 +88,22 @@ pub let ai_chase : Int = 2
 /// Numeric id for special.
 pub let ai_special : Int = 6
 
+///|
+/// Numeric id for retreating AI state.
+pub let ai_retreat : Int = 7
+
+///|
+/// Numeric id for strafing AI state.
+pub let ai_strafe : Int = 8
+
+///|
+/// Numeric id for ambush (lurking) AI state.
+pub let ai_ambush : Int = 9
+
+///|
+/// Numeric id for telegraph (wind-up) AI state.
+pub let ai_telegraph : Int = 10
+
 // Loot types
 
 ///|
@@ -129,6 +145,18 @@ pub let loot_key : Int = 8
 ///|
 /// Numeric id for boss key.
 pub let loot_boss_key : Int = 9
+
+///|
+/// Numeric id for equipment weapon drop.
+pub let loot_equip_weapon : Int = 10
+
+///|
+/// Numeric id for equipment armor drop.
+pub let loot_equip_armor : Int = 11
+
+///|
+/// Numeric id for equipment ring drop.
+pub let loot_equip_ring : Int = 12
 
 // Weapon types
 
@@ -787,6 +815,46 @@ pub(all) enum WeaponKind {
   Staff
   Bow
 } derive(Eq)
+
+// Boss phase thresholds
+
+///|
+/// HP fraction below which boss enters phase 2 (faster attacks, new patterns).
+pub let boss_phase2_threshold : Float = 0.6
+
+///|
+/// HP fraction below which boss enters phase 3 (enraged).
+pub let boss_phase3_threshold : Float = 0.3
+
+///|
+/// Boss attack telegraph wind-up duration in seconds.
+pub let boss_telegraph_duration : Float = 0.6
+
+///|
+/// Enemy attack telegraph wind-up duration in seconds.
+pub let enemy_telegraph_duration : Float = 0.4
+
+// Ring effect types
+
+///|
+/// Ring effect: mana regeneration bonus.
+pub let ring_mana_regen : Int = 0
+
+///|
+/// Ring effect: life steal percentage.
+pub let ring_life_steal : Int = 1
+
+///|
+/// Ring effect: thorns (damage reflect).
+pub let ring_thorns : Int = 2
+
+///|
+/// Ring effect: bonus gold find.
+pub let ring_gold_find : Int = 3
+
+///|
+/// Ring effect: critical hit chance bonus.
+pub let ring_crit_chance : Int = 4
 
 // Boss intro duration
 

@@ -24,6 +24,10 @@ pub(all) struct Enemy {
   mut slow_timer : Float
   mut xp_value : Int
   mut facing_angle : Float
+  mut telegraph_timer : Float
+  mut telegraph_kind : Int
+  mut boss_phase : Int
+  mut strafe_dir : Float
 }
 
 ///|
@@ -51,6 +55,10 @@ pub fn Enemy::inactive() -> Enemy {
     slow_timer: 0.0,
     xp_value: 10,
     facing_angle: 0.0,
+    telegraph_timer: 0.0,
+    telegraph_kind: 0,
+    boss_phase: 1,
+    strafe_dir: 1.0,
   }
 }
 
@@ -512,8 +520,60 @@ pub(all) struct Game {
   mut rng_state : Int
   mut frame_counter : Int
 
+  // Screen shake
+  mut shake_timer : Float
+  mut shake_intensity : Float
+
+  // Floating damage numbers
+  damage_numbers : Array[DamageNumber]
+
+  // Equipment slots
+  mut equip_weapon_rarity : Int
+  mut equip_weapon_bonus : Int
+  mut equip_armor_rarity : Int
+  mut equip_armor_bonus : Int
+  mut equip_ring_kind : Int
+  mut equip_ring_rarity : Int
+  mut equip_ring_bonus : Int
+
   fn new() -> Game
 }
+
+///|
+/// Floating damage number displayed in 3D space.
+pub(all) struct DamageNumber {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut z : Float
+  mut value : Int
+  mut timer : Float
+  mut r : Int
+  mut g : Int
+  mut b : Int
+  mut is_crit : Bool
+}
+
+///|
+/// Creates an inactive damage number slot.
+pub fn DamageNumber::inactive() -> DamageNumber {
+  {
+    active: false,
+    x: 0.0,
+    y: 0.0,
+    z: 0.0,
+    value: 0,
+    timer: 0.0,
+    r: 255,
+    g: 255,
+    b: 255,
+    is_crit: false,
+  }
+}
+
+///|
+/// Maximum number of simultaneous floating damage numbers.
+pub let max_damage_numbers : Int = 32
 
 ///|
 /// Constructs a fresh game state with initialized pools and class-select defaults.
@@ -661,5 +721,22 @@ pub fn Game::new() -> Game {
     poison_remaining: 0.0,
     rng_state: 12345,
     frame_counter: 0,
+    shake_timer: 0.0,
+    shake_intensity: 0.0,
+    damage_numbers: {
+      let arr : Array[DamageNumber] = []
+      for i in 0..<max_damage_numbers {
+        arr.push(DamageNumber::inactive())
+        ignore(i)
+      }
+      arr
+    },
+    equip_weapon_rarity: rarity_common,
+    equip_weapon_bonus: 0,
+    equip_armor_rarity: rarity_common,
+    equip_armor_bonus: 0,
+    equip_ring_kind: -1,
+    equip_ring_rarity: rarity_common,
+    equip_ring_bonus: 0,
   }
 }

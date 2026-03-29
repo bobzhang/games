@@ -58,15 +58,29 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
         e.attack_timer = 0.0
       }
     }
+    // Telegraph timer (wind-up before attack)
+    if e.telegraph_timer > 0.0 {
+      e.telegraph_timer -= dt
+      if e.telegraph_timer <= 0.0 {
+        e.telegraph_timer = 0.0
+        // Execute the telegraphed attack
+        game.execute_telegraphed_attack(e, dist)
+      }
+      continue
+    }
     // Update facing angle toward player
     let dx = game.player_x - e.x
     let dz = game.player_z - e.z
     e.facing_angle = @math.atan2f(dx, dz)
+    // Update boss phase
+    if e.kind == DragonBoss {
+      e.boss_phase = @types.get_boss_phase(e.hp, e.max_hp)
+    }
     // Movement and AI based on type
     match e.kind {
       Skeleton => game.update_melee_enemy(e, dt, dist)
-      Golem => game.update_melee_enemy(e, dt, dist)
-      Wraith => game.update_melee_enemy(e, dt, dist)
+      Golem => game.update_golem_enemy(e, dt, dist)
+      Wraith => game.update_wraith_enemy(e, dt, dist)
       DragonBoss => game.update_boss_enemy(e, dt, dist)
       Archer => game.update_archer_enemy(e, dt, dist)
       Slime => game.update_slime_enemy(e, dt, dist)
@@ -74,7 +88,7 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
       Spider => game.update_spider_enemy(e, dt, dist)
       Minotaur => game.update_minotaur_enemy(e, dt, dist)
       Lich => game.update_lich_enemy(e, dt, dist)
-      Mimic => game.update_melee_enemy(e, dt, dist)
+      Mimic => game.update_ambush_enemy(e, dt, dist)
       _ => ()
     }
   }
@@ -114,27 +128,136 @@ fn @types.Game::update_patrol(
 }
 
 ///|
+/// Executes the attack after a telegraph wind-up completes.
+fn @types.Game::execute_telegraphed_attack(
+  game : @types.Game,
+  e : @types.Enemy,
+  dist : Float,
+) -> Unit {
+  match e.telegraph_kind {
+    0 => {
+      // Standard melee attack
+      let melee_range : Float = 3.0
+      if dist < melee_range {
+        damage_player(game, e.atk)
+        @types.spawn_particles(
+          game, game.player_x, 1.0, game.player_z, 6, 255, 80, 80,
+        )
+        @types.add_message(
+          game,
+          "\{@types.get_enemy_name(e.kind)} attacks for \{(1).max(e.atk - @types.calc_player_defense(game))} damage!",
+          255,
+          100,
+          80,
+        )
+      }
+    }
+    1 => {
+      // Golem heavy melee - more damage, small AoE shake
+      let melee_range : Float = 3.5
+      if dist < melee_range {
+        let heavy_dmg = e.atk + e.atk / 3
+        damage_player(game, heavy_dmg)
+        @types.spawn_particles(
+          game, game.player_x, 0.5, game.player_z, 10, 180, 120, 60,
+        )
+        @types.trigger_shake(game, 0.15, 0.3)
+        @types.add_message(
+          game,
+          "Golem smashes for \{(1).max(heavy_dmg - @types.calc_player_defense(game))} damage!",
+          180,
+          120,
+          60,
+        )
+      }
+    }
+    2 => {
+      // Archer ranged shot
+      game.shoot_projectile(e)
+    }
+    3 => {
+      // Lich bolt
+      game.shoot_lich_bolt(e)
+    }
+    4 => {
+      // Boss melee
+      let melee_range : Float = 4.0
+      if dist < melee_range {
+        let phase = e.boss_phase
+        let mult : Float = if phase == 1 {
+          1.0
+        } else if phase == 2 {
+          1.3
+        } else {
+          1.7
+        }
+        let dmg = (Float::from_int(e.atk) * mult).to_int()
+        damage_player(game, dmg)
+        @types.spawn_particles(
+          game, game.player_x, 1.0, game.player_z, 10, 255, 80, 80,
+        )
+        @types.trigger_shake(game, 0.2, 0.4)
+        @types.add_message(
+          game,
+          "Dragon strikes for \{(1).max(dmg - @types.calc_player_defense(game))}!",
+          255,
+          80,
+          40,
+        )
+      }
+    }
+    5 => {
+      // Boss fire breath cone
+      let phase = e.boss_phase
+      let spread = if phase == 1 { 2 } else if phase == 2 { 3 } else { 4 }
+      let base_angle = @math.atan2f(
+        game.player_x - e.x, game.player_z - e.z,
+      )
+      for j in -spread..<=spread {
+        let angle = base_angle + Float::from_int(j) * 0.18
+        let pidx = @types.alloc_projectile(game)
+        if pidx >= 0 {
+          let p = game.projectiles[pidx]
+          p.active = true
+          p.kind = Fireball
+          p.x = e.x
+          p.z = e.z
+          let speed : Float = if phase >= 3 { 8.0 } else { 6.0 }
+          p.vx = @math.sinf(angle) * speed
+          p.vz = @math.cosf(angle) * speed
+          let dmg_mult : Float = if phase == 1 {
+            0.5
+          } else if phase == 2 {
+            0.7
+          } else {
+            1.0
+          }
+          p.damage = (Float::from_int(e.atk) * dmg_mult).to_int()
+          p.lifetime = 2.5
+          p.from_enemy = true
+          p.aoe_radius = 0.0
+          p.slow_on_hit = false
+        }
+      }
+      @types.spawn_particles(game, e.x, 1.5, e.z, 16, 255, 100, 30)
+      @types.trigger_shake(game, 0.15, 0.3)
+      @types.add_message(game, "Dragon breathes fire!", 255, 100, 30)
+    }
+    _ => ()
+  }
+}
+
+///|
 fn @types.Game::update_melee_enemy(
   game : @types.Game,
   e : @types.Enemy,
   dt : Float,
   dist : Float,
 ) -> Unit {
-  // Choose move speed based on type
-  let base_speed : Float = match e.kind {
-    Wraith => @types.wraith_move_speed
-    Golem => @types.golem_move_speed
-    DragonBoss => @types.golem_move_speed
-    _ => @types.enemy_move_speed
-  }
-  let move_speed = base_speed * e.speed_mult
-  // Move towards player if not in melee range
-  let melee_range : Float = match e.kind {
-    DragonBoss => @types.enemy_melee_range + 1.0
-    _ => @types.enemy_melee_range
-  }
+  // Skeleton: standard melee with attack telegraph
+  let move_speed = @types.enemy_move_speed * e.speed_mult
+  let melee_range = @types.enemy_melee_range
   if dist > melee_range {
-    // Move toward player
     let dir = @types.pathfind_step(game, e.x, e.z, game.player_x, game.player_z)
     let nx = dir.0
     let nz = dir.1
@@ -147,28 +270,133 @@ fn @types.Game::update_melee_enemy(
     if !@types.is_blocked(game, e.x, new_z, radius) {
       e.z = new_z
     }
-    // In melee range - attack
   } else if e.attack_timer <= 0.0 {
-    damage_player(game, e.atk)
+    // Start telegraph instead of instant attack
+    e.telegraph_timer = @types.enemy_telegraph_duration
+    e.telegraph_kind = 0 // melee telegraph
     e.attack_timer = @types.enemy_attack_cooldown
-    @types.spawn_particles(
-      game,
-      game.player_x,
-      1.0,
-      game.player_z,
-      6,
-      255,
-      80,
-      80,
-    )
-    @types.add_message(
-      game,
-      "\{@types.get_enemy_name(e.kind)} attacks for \{(1).max(e.atk - @types.calc_player_defense(game))} damage!",
-      255,
-      100,
-      80,
-    )
+    // Visual warning: color flash
+    @types.spawn_particles(game, e.x, 1.2, e.z, 3, 255, 50, 50)
   }
+}
+
+///|
+/// Golem: slow tanky brute with heavy telegraphed attacks
+fn @types.Game::update_golem_enemy(
+  game : @types.Game,
+  e : @types.Enemy,
+  dt : Float,
+  dist : Float,
+) -> Unit {
+  let move_speed = @types.golem_move_speed * e.speed_mult
+  let melee_range : Float = 2.5
+  if dist > melee_range {
+    let dir = @types.pathfind_step(game, e.x, e.z, game.player_x, game.player_z)
+    let new_x = e.x + dir.0 * move_speed * dt
+    let new_z = e.z + dir.1 * move_speed * dt
+    let radius : Float = 0.5
+    if !@types.is_blocked(game, new_x, e.z, radius) {
+      e.x = new_x
+    }
+    if !@types.is_blocked(game, e.x, new_z, radius) {
+      e.z = new_z
+    }
+  } else if e.attack_timer <= 0.0 {
+    // Golem has longer telegraph (heavier attack)
+    e.telegraph_timer = @types.enemy_telegraph_duration + 0.3
+    e.telegraph_kind = 1 // heavy melee telegraph
+    e.attack_timer = 2.0 // slow attack rate
+    // Ground pound warning
+    @types.spawn_particles(game, e.x, 0.3, e.z, 6, 180, 120, 60)
+    @types.add_message(game, "Golem winds up!", 180, 120, 60)
+  }
+}
+
+///|
+/// Wraith: fast, erratic, phases through enemies
+fn @types.Game::update_wraith_enemy(
+  game : @types.Game,
+  e : @types.Enemy,
+  dt : Float,
+  dist : Float,
+) -> Unit {
+  let move_speed = @types.wraith_move_speed * e.speed_mult
+  let melee_range : Float = 2.0
+  // Wraiths strafe erratically while closing in
+  e.move_timer += dt
+  let strafe_offset = @math.sinf(e.move_timer * 4.0) * 2.0
+  if dist > melee_range {
+    let dx = game.player_x - e.x
+    let dz = game.player_z - e.z
+    let d = @math.hypotf(dx, dz)
+    if d > 0.1 {
+      let nx = dx / d
+      let nz = dz / d
+      // Add perpendicular strafe component
+      let sx = -nz * strafe_offset * 0.3
+      let sz = nx * strafe_offset * 0.3
+      let new_x = e.x + (nx + sx) * move_speed * dt
+      let new_z = e.z + (nz + sz) * move_speed * dt
+      let radius : Float = 0.3
+      if !@types.is_blocked(game, new_x, e.z, radius) {
+        e.x = new_x
+      }
+      if !@types.is_blocked(game, e.x, new_z, radius) {
+        e.z = new_z
+      }
+    }
+  } else if e.attack_timer <= 0.0 {
+    e.telegraph_timer = 0.25 // Quick telegraph for fast wraith
+    e.telegraph_kind = 0
+    e.attack_timer = 0.9
+    @types.spawn_particles(game, e.x, 1.0, e.z, 4, 120, 50, 200)
+  }
+}
+
+///|
+/// Ambush enemy (mimic): waits near walls, then burst-attacks
+fn @types.Game::update_ambush_enemy(
+  game : @types.Game,
+  e : @types.Enemy,
+  dt : Float,
+  dist : Float,
+) -> Unit {
+  let melee_range : Float = 2.0
+  if e.ai_state == @types.ai_ambush || e.ai_state == @types.ai_idle {
+    // Lurk until player is very close
+    if dist < 3.5 {
+      e.ai_state = @types.ai_chase
+      e.speed_mult = 2.0 // Burst of speed
+      @types.spawn_particles(game, e.x, 0.5, e.z, 10, 255, 50, 50)
+      @types.add_message(game, "MIMIC ambush!", 255, 50, 50)
+    }
+    return
+  }
+  // After burst, slow down over time
+  if e.speed_mult > 1.0 {
+    e.speed_mult -= dt * 0.5
+    if e.speed_mult < 1.0 {
+      e.speed_mult = 1.0
+    }
+  }
+  let move_speed = @types.enemy_move_speed * 1.5 * e.speed_mult
+  if dist > melee_range {
+    let dir = @types.pathfind_step(game, e.x, e.z, game.player_x, game.player_z)
+    let new_x = e.x + dir.0 * move_speed * dt
+    let new_z = e.z + dir.1 * move_speed * dt
+    let radius : Float = 0.4
+    if !@types.is_blocked(game, new_x, e.z, radius) {
+      e.x = new_x
+    }
+    if !@types.is_blocked(game, e.x, new_z, radius) {
+      e.z = new_z
+    }
+  } else if e.attack_timer <= 0.0 {
+    e.telegraph_timer = 0.3
+    e.telegraph_kind = 0
+    e.attack_timer = @types.enemy_attack_cooldown
+  }
+  ignore(dt)
 }
 
 ///|
@@ -178,25 +406,35 @@ fn @types.Game::update_archer_enemy(
   dt : Float,
   dist : Float,
 ) -> Unit {
-  // Archers try to maintain distance
+  // Archers keep distance, strafe sideways, and require LOS
   let preferred_dist : Float = 8.0
   let move_speed = @types.enemy_move_speed * e.speed_mult
+  let has_los = @types.has_line_of_sight(
+    game, e.x, e.z, game.player_x, game.player_z,
+  )
   if dist < 4.0 {
-    // Back away
+    // Retreat when too close
     let dx = e.x - game.player_x
     let dz = e.z - game.player_z
     let d = @math.hypotf(dx, dz)
     if d > 0.1 {
       let nx = dx / d
       let nz = dz / d
-      let new_x = e.x + nx * move_speed * dt
-      let new_z = e.z + nz * move_speed * dt
+      // Also strafe sideways while retreating
+      let strafe_x = -nz * e.strafe_dir * 0.5
+      let strafe_z = nx * e.strafe_dir * 0.5
+      let new_x = e.x + (nx + strafe_x) * move_speed * 1.3 * dt
+      let new_z = e.z + (nz + strafe_z) * move_speed * 1.3 * dt
       let radius : Float = 0.4
       if !@types.is_blocked(game, new_x, e.z, radius) {
         e.x = new_x
+      } else {
+        e.strafe_dir = -e.strafe_dir // Flip strafe on wall hit
       }
       if !@types.is_blocked(game, e.x, new_z, radius) {
         e.z = new_z
+      } else {
+        e.strafe_dir = -e.strafe_dir
       }
     }
   } else if dist > preferred_dist + 2.0 {
@@ -211,13 +449,45 @@ fn @types.Game::update_archer_enemy(
     if !@types.is_blocked(game, e.x, new_z, radius) {
       e.z = new_z
     }
+  } else {
+    // At preferred distance: strafe sideways
+    let dx = game.player_x - e.x
+    let dz = game.player_z - e.z
+    let d = @math.hypotf(dx, dz)
+    if d > 0.1 {
+      let nx = dx / d
+      let nz = dz / d
+      let strafe_x = -nz * e.strafe_dir
+      let strafe_z = nx * e.strafe_dir
+      let new_x = e.x + strafe_x * move_speed * 0.8 * dt
+      let new_z = e.z + strafe_z * move_speed * 0.8 * dt
+      let radius : Float = 0.4
+      if !@types.is_blocked(game, new_x, e.z, radius) {
+        e.x = new_x
+      } else {
+        e.strafe_dir = -e.strafe_dir
+      }
+      if !@types.is_blocked(game, e.x, new_z, radius) {
+        e.z = new_z
+      } else {
+        e.strafe_dir = -e.strafe_dir
+      }
+    }
+    // Periodically change strafe direction
+    e.move_timer += dt
+    if e.move_timer > 2.5 {
+      e.move_timer = 0.0
+      e.strafe_dir = -e.strafe_dir
+    }
   }
-  // Shoot at player
-  if dist < @types.archer_range && e.attack_timer <= 0.0 {
-    game.shoot_projectile(e)
+  // Shoot at player only with clear line of sight
+  if dist < @types.archer_range && e.attack_timer <= 0.0 && has_los {
+    // Telegraph the shot
+    e.telegraph_timer = 0.35
+    e.telegraph_kind = 2 // ranged telegraph
     e.attack_timer = @types.archer_shoot_cooldown
+    @types.spawn_particles(game, e.x, 1.3, e.z, 3, 80, 180, 60)
   }
-  ignore(dt)
 }
 
 ///|
@@ -464,29 +734,36 @@ fn @types.Game::update_lich_enemy(
   dt : Float,
   dist : Float,
 ) -> Unit {
-  // Lich: ranged spell attacks, summons skeletons
+  // Lich: ranged caster, keeps distance, strafes, requires LOS, summons
   let move_speed : Float = 1.8 * e.speed_mult
-  // Keep distance
+  let has_los = @types.has_line_of_sight(
+    game, e.x, e.z, game.player_x, game.player_z,
+  )
   if dist < 5.0 {
-    // Back away
+    // Retreat and strafe
     let dx = e.x - game.player_x
     let dz = e.z - game.player_z
     let d = @math.hypotf(dx, dz)
     if d > 0.1 {
       let nx = dx / d
       let nz = dz / d
-      let new_x = e.x + nx * move_speed * dt
-      let new_z = e.z + nz * move_speed * dt
+      let strafe_x = -nz * e.strafe_dir * 0.4
+      let strafe_z = nx * e.strafe_dir * 0.4
+      let new_x = e.x + (nx + strafe_x) * move_speed * dt
+      let new_z = e.z + (nz + strafe_z) * move_speed * dt
       let radius : Float = 0.4
       if !@types.is_blocked(game, new_x, e.z, radius) {
         e.x = new_x
+      } else {
+        e.strafe_dir = -e.strafe_dir
       }
       if !@types.is_blocked(game, e.x, new_z, radius) {
         e.z = new_z
+      } else {
+        e.strafe_dir = -e.strafe_dir
       }
     }
   } else if dist > 10.0 {
-    // Move closer
     let dir = @types.pathfind_step(game, e.x, e.z, game.player_x, game.player_z)
     let new_x = e.x + dir.0 * move_speed * dt
     let new_z = e.z + dir.1 * move_speed * dt
@@ -497,11 +774,42 @@ fn @types.Game::update_lich_enemy(
     if !@types.is_blocked(game, e.x, new_z, radius) {
       e.z = new_z
     }
+  } else {
+    // Strafe at preferred range
+    let dx = game.player_x - e.x
+    let dz = game.player_z - e.z
+    let d = @math.hypotf(dx, dz)
+    if d > 0.1 {
+      let nx = dx / d
+      let nz = dz / d
+      let strafe_x = -nz * e.strafe_dir
+      let strafe_z = nx * e.strafe_dir
+      let new_x = e.x + strafe_x * move_speed * 0.7 * dt
+      let new_z = e.z + strafe_z * move_speed * 0.7 * dt
+      let radius : Float = 0.4
+      if !@types.is_blocked(game, new_x, e.z, radius) {
+        e.x = new_x
+      } else {
+        e.strafe_dir = -e.strafe_dir
+      }
+      if !@types.is_blocked(game, e.x, new_z, radius) {
+        e.z = new_z
+      } else {
+        e.strafe_dir = -e.strafe_dir
+      }
+    }
+    e.move_timer += dt
+    if e.move_timer > 3.0 {
+      e.move_timer = 0.0
+      e.strafe_dir = -e.strafe_dir
+    }
   }
-  // Spell attacks
-  if dist < @types.archer_range && e.attack_timer <= 0.0 {
-    game.shoot_lich_bolt(e)
+  // Spell attacks - only with LOS
+  if dist < @types.archer_range && e.attack_timer <= 0.0 && has_los {
+    e.telegraph_timer = 0.5
+    e.telegraph_kind = 3 // lich bolt telegraph
     e.attack_timer = 1.5
+    @types.spawn_particles(game, e.x, 1.5, e.z, 4, 180, 50, 255)
   }
   // Summon skeleton ability
   if e.ability_cooldown <= 0.0 && dist < 12.0 {
@@ -509,7 +817,6 @@ fn @types.Game::update_lich_enemy(
     e.ability_cooldown = 8.0
     @types.add_message(game, "Lich summons a skeleton!", 180, 50, 200)
   }
-  ignore(dt)
 }
 
 ///|
@@ -519,9 +826,32 @@ fn @types.Game::update_boss_enemy(
   dt : Float,
   dist : Float,
 ) -> Unit {
-  // Dragon boss: melee + fire breath + summon
-  let base_speed = @types.golem_move_speed * e.speed_mult
+  // Dragon boss: multi-phase with telegraphed attacks
+  // Phase determines speed, attack patterns, and cooldowns
+  let phase = e.boss_phase
+  let speed_mult : Float = if phase == 1 {
+    1.0
+  } else if phase == 2 {
+    1.4
+  } else {
+    1.8
+  }
+  let base_speed = @types.golem_move_speed * e.speed_mult * speed_mult
   let melee_range : Float = 3.0
+  let ability_cd : Float = if phase == 1 {
+    4.0
+  } else if phase == 2 {
+    2.5
+  } else {
+    1.5
+  }
+  let atk_mult : Float = if phase == 1 {
+    1.0
+  } else if phase == 2 {
+    1.3
+  } else {
+    1.7
+  }
   if dist > melee_range {
     let dir = @types.pathfind_step(game, e.x, e.z, game.player_x, game.player_z)
     let new_x = e.x + dir.0 * base_speed * dt
@@ -533,47 +863,55 @@ fn @types.Game::update_boss_enemy(
     if !@types.is_blocked(game, e.x, new_z, radius) {
       e.z = new_z
     }
-    // Melee attack
   } else if e.attack_timer <= 0.0 {
-    damage_player(game, e.atk)
-    e.attack_timer = @types.enemy_attack_cooldown
-    @types.spawn_particles(
-      game,
-      game.player_x,
-      1.0,
-      game.player_z,
-      8,
-      255,
-      80,
-      80,
-    )
-  }
-  // Fire breath special attack
-  if e.ability_cooldown <= 0.0 && dist < 8.0 {
-    // Fire breath: multiple projectiles in a cone
-    let base_angle = @math.atan2f(game.player_x - e.x, game.player_z - e.z)
-    for j in -2..<=2 {
-      let angle = base_angle + Float::from_int(j) * 0.2
-      let pidx = @types.alloc_projectile(game)
-      if pidx >= 0 {
-        let p = game.projectiles[pidx]
-        p.active = true
-        p.kind = Fireball
-        p.x = e.x
-        p.z = e.z
-        p.vx = @math.sinf(angle) * 6.0
-        p.vz = @math.cosf(angle) * 6.0
-        p.damage = e.atk / 2
-        p.lifetime = 2.0
-        p.from_enemy = true
-        p.aoe_radius = 0.0
-        p.slow_on_hit = false
-      }
+    // Telegraphed melee attack
+    e.telegraph_timer = @types.boss_telegraph_duration
+    e.telegraph_kind = 4 // boss melee telegraph
+    let cd : Float = if phase == 1 {
+      @types.enemy_attack_cooldown
+    } else if phase == 2 {
+      0.9
+    } else {
+      0.6
     }
-    e.ability_cooldown = 4.0
-    @types.spawn_particles(game, e.x, 1.5, e.z, 12, 255, 100, 30)
-    @types.add_message(game, "Dragon breathes fire!", 255, 100, 30)
+    e.attack_timer = cd
+    // Ground AoE warning indicator
+    @types.spawn_particles(game, game.player_x, 0.2, game.player_z, 8, 255, 80, 30)
   }
+  // Fire breath special attack (telegraphed)
+  if e.ability_cooldown <= 0.0 && dist < 10.0 {
+    e.telegraph_timer = @types.boss_telegraph_duration + 0.2
+    e.telegraph_kind = 5 // fire breath telegraph
+    e.ability_cooldown = ability_cd
+    // Warning particles at mouth
+    @types.spawn_particles(game, e.x, 2.2, e.z, 6, 255, 150, 30)
+    @types.add_message(game, "Dragon readies fire breath!", 255, 150, 30)
+  }
+  // Phase 2+: tail sweep at close range
+  if phase >= 2 && dist < 4.0 && e.move_timer <= 0.0 {
+    // Tail sweep: damage nearby
+    let sweep_dmg = (Float::from_int(e.atk) * atk_mult * 0.6).to_int()
+    let sweep_dist = @types.dist2d(e.x, e.z, game.player_x, game.player_z)
+    if sweep_dist < 4.0 {
+      damage_player(game, sweep_dmg)
+      @types.spawn_particles(
+        game, game.player_x, 0.5, game.player_z, 6, 200, 80, 40,
+      )
+      @types.add_message(game, "Dragon tail sweep!", 200, 80, 40)
+    }
+    e.move_timer = if phase == 2 { 5.0 } else { 3.0 }
+  }
+  if e.move_timer > 0.0 {
+    e.move_timer -= dt
+    if e.move_timer < 0.0 {
+      e.move_timer = 0.0
+    }
+  }
+  // Phase 3: enrage aura - periodic damage to nearby player
+  if phase >= 3 {
+    e.move_timer += dt * 0.01 // Reuse for aura tick
+  }
+  ignore(atk_mult)
 }
 
 ///|
@@ -694,6 +1032,10 @@ fn @types.Game::summon_skeleton(game : @types.Game, e : @types.Enemy) -> Unit {
   se.facing_angle = 0.0
   se.patrol_x = se.x
   se.patrol_z = se.z
+  se.telegraph_timer = 0.0
+  se.telegraph_kind = 0
+  se.boss_phase = 1
+  se.strafe_dir = 1.0
   @types.spawn_particles(game, se.x, 1.0, se.z, 10, 180, 50, 200)
   game.floor_info[game.current_floor].enemies_total += 1
 }
@@ -754,25 +1096,78 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
         }
         let edist = @types.dist2d(p.x, p.z, enemy.x, enemy.z)
         if edist < 0.8 {
-          let raw_atk = @types.calc_player_attack(game)
-          let damage = (1).max(raw_atk - enemy.def)
+          // Use the projectile's stored damage instead of recalculating
+          let damage = (1).max(p.damage - enemy.def)
           enemy.hp -= damage
-          enemy.hit_flash = 0.2
+          enemy.hit_flash = 0.3
           enemy.alerted = true
-          // Apply slow from ice bolt
-          if p.slow_on_hit {
+          // Spell-specific hit effects
+          let spell_colors = get_spell_hit_colors(p.kind)
+          match p.kind {
+            Fireball => {
+              // Fireball: screen shake, knockback, explosion particles
+              @types.trigger_shake(game, 0.12, 0.25)
+              @types.apply_knockback(game, enemy, p.x, p.z, 1.2)
+              @types.spawn_particles(
+                game, enemy.x, 1.0, enemy.z, 14, 255, 120, 30,
+              )
+              @types.spawn_particles(
+                game, enemy.x, 0.5, enemy.z, 8, 255, 60, 10,
+              )
+              enemy.stun_timer = 0.2
+            }
+            IceBolt => {
+              // Ice bolt: slow enemy, ice crystal particles
+              enemy.slow_timer = @types.ice_bolt_slow_duration
+              enemy.speed_mult = 0.4
+              @types.spawn_particles(
+                game, enemy.x, 1.2, enemy.z, 10, 150, 220, 255,
+              )
+              @types.spawn_particles(
+                game, enemy.x, 0.6, enemy.z, 6, 200, 240, 255,
+              )
+            }
+            Lightning => {
+              // Lightning: stun, bright electric sparks
+              enemy.stun_timer = 0.5
+              @types.trigger_shake(game, 0.06, 0.15)
+              @types.spawn_particles(
+                game, enemy.x, 1.5, enemy.z, 12, 255, 255, 100,
+              )
+              @types.spawn_particles(
+                game, enemy.x, 1.0, enemy.z, 6, 200, 200, 255,
+              )
+            }
+            _ => {
+              // Generic projectile (arrows etc)
+              @types.spawn_particles(
+                game, enemy.x, 1.0, enemy.z, 8, spell_colors.0, spell_colors.1, spell_colors.2,
+              )
+            }
+          }
+          // Apply slow from ice bolt (kept for backward compat with p.slow_on_hit)
+          if p.slow_on_hit && p.kind != IceBolt {
             enemy.slow_timer = @types.ice_bolt_slow_duration
             enemy.speed_mult = 0.4
           }
-          p.active = false
-          @types.spawn_particles(game, enemy.x, 1.0, enemy.z, 8, 255, 50, 50)
+          // Spawn floating damage number
+          @types.spawn_damage_number(
+            game, enemy.x, 1.8, enemy.z, damage, spell_colors.0, spell_colors.1, spell_colors.2, false,
+          )
           @types.add_message(
             game,
             "Hit \{@types.get_enemy_name(enemy.kind)} for \{damage}!",
-            255,
-            200,
-            80,
+            spell_colors.0,
+            spell_colors.1,
+            spell_colors.2,
           )
+          // AOE: damage nearby enemies if aoe_radius > 0
+          if p.aoe_radius > 0.0 {
+            game.apply_aoe_damage(
+              p.x, p.z, p.aoe_radius, p.damage, p.kind, j,
+            )
+          }
+          p.active = false
           if enemy.hp <= 0 {
             kill_enemy(game, j)
           }
@@ -803,6 +1198,76 @@ pub fn update_particles(game : @types.Game, dt : Float) -> Unit {
     // Drag
     p.vx *= 0.98
     p.vz *= 0.98
+  }
+}
+
+///|
+/// Returns RGB color tuple for spell hit effects.
+fn get_spell_hit_colors(kind : @types.Spell) -> (Int, Int, Int) {
+  match kind {
+    Fireball => (255, 120, 30)
+    IceBolt => (150, 220, 255)
+    Lightning => (255, 255, 100)
+    _ => (255, 200, 80)
+  }
+}
+
+///|
+/// Applies AOE damage to enemies within radius of an impact point.
+fn @types.Game::apply_aoe_damage(
+  game : @types.Game,
+  cx : Float,
+  cz : Float,
+  radius : Float,
+  base_damage : Int,
+  kind : @types.Spell,
+  skip_idx : Int,
+) -> Unit {
+  let colors = get_spell_hit_colors(kind)
+  for j in 0..<game.enemies.length() {
+    if j == skip_idx {
+      continue
+    }
+    let e = game.enemies[j]
+    if !e.active {
+      continue
+    }
+    let dist = @types.dist2d(cx, cz, e.x, e.z)
+    if dist < radius {
+      // Damage falls off with distance
+      let falloff : Float = 1.0 - dist / radius
+      let dmg_f = Float::from_int(base_damage) * falloff * 0.6
+      let dmg = (1).max(dmg_f.to_int() - e.def)
+      e.hp -= dmg
+      e.hit_flash = 0.3
+      e.alerted = true
+      // AOE knockback
+      @types.apply_knockback(game, e, cx, cz, (radius - dist) * 0.5)
+      // AOE particles
+      @types.spawn_particles(
+        game, e.x, 1.0, e.z, 6, colors.0, colors.1, colors.2,
+      )
+      // AOE damage number
+      @types.spawn_damage_number(
+        game, e.x, 1.8, e.z, dmg, colors.0, colors.1, colors.2, false,
+      )
+      @types.add_message(
+        game,
+        "AOE hits \{@types.get_enemy_name(e.kind)} for \{dmg}!",
+        colors.0,
+        colors.1,
+        colors.2,
+      )
+      if e.hp <= 0 {
+        kill_enemy(game, j)
+      }
+    }
+  }
+  // AOE visual: large burst of particles at center
+  if kind == Fireball {
+    @types.spawn_particles(game, cx, 0.5, cz, 20, 255, 80, 20)
+    @types.spawn_particles(game, cx, 1.5, cz, 12, 255, 200, 60)
+    @types.trigger_shake(game, 0.2, 0.35)
   }
 }
 

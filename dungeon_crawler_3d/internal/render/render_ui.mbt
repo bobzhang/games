@@ -8,6 +8,8 @@ pub fn draw_ui(game : @types.Game) -> Unit {
     StatePlaying => {
       game.draw_hud()
       game.draw_minimap()
+      game.draw_boss_health_bar()
+      game.draw_equipment_hud()
       draw_crosshair()
     }
     StatePaused => {
@@ -277,6 +279,43 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     10,
     @raylib.Color::new(200, 200, 255, 255),
   )
+  // Mana bar (below HP bar)
+  let mana_bar_x = 15
+  let mana_bar_y = @types.screen_height - 38
+  let mana_bar_w = 250
+  let mana_bar_h = 16
+  @raylib.draw_rectangle(
+    mana_bar_x,
+    mana_bar_y,
+    mana_bar_w,
+    mana_bar_h,
+    @raylib.Color::new(15, 15, 50, 255),
+  )
+  let mana_frac = Float::from_int(game.player_mana) /
+    Float::from_int(game.player_max_mana)
+  let mana_fill = (Float::from_int(mana_bar_w) * mana_frac).to_int()
+  @raylib.draw_rectangle(
+    mana_bar_x,
+    mana_bar_y,
+    mana_fill,
+    mana_bar_h,
+    @raylib.Color::new(60, 100, 220, 255),
+  )
+  @raylib.draw_rectangle_lines(
+    mana_bar_x,
+    mana_bar_y,
+    mana_bar_w,
+    mana_bar_h,
+    @raylib.Color::new(120, 140, 200, 255),
+  )
+  let mana_text = "MP: \{game.player_mana}/\{game.player_max_mana}"
+  @draw.draw_text(
+    mana_text,
+    mana_bar_x + 8,
+    mana_bar_y + 1,
+    12,
+    @raylib.Color::new(200, 220, 255, 255),
+  )
   // Stats
   let stat_x = 290
   let stat_y = @types.screen_height - 65
@@ -294,12 +333,93 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     18,
     @raylib.Color::new(80, 140, 255, 255),
   )
+  // Spell slots display
+  let spell_start_x = @types.screen_width / 2 - 130
+  let spell_y = @types.screen_height - 75
+  for i in 0..<game.spells.length() {
+    let slot = game.spells[i]
+    let sx = spell_start_x + i * 46
+    let is_selected = game.selected_spell == i
+    // Slot background
+    let bg_color = if is_selected {
+      @raylib.Color::new(60, 50, 30, 220)
+    } else {
+      @raylib.Color::new(20, 20, 30, 180)
+    }
+    @raylib.draw_rectangle(sx, spell_y, 40, 40, bg_color)
+    // Slot border
+    let border_color = if is_selected {
+      @raylib.Color::new(255, 200, 80, 255)
+    } else {
+      @raylib.Color::new(80, 80, 100, 255)
+    }
+    @raylib.draw_rectangle_lines(sx, spell_y, 40, 40, border_color)
+    if slot.active {
+      // Spell type indicator (colored dot)
+      let spell_color = match slot.spell_type {
+        Fireball => @raylib.Color::new(255, 100, 30, 255)
+        IceBolt => @raylib.Color::new(100, 180, 255, 255)
+        Heal => @raylib.Color::new(50, 255, 80, 255)
+        Shield => @raylib.Color::new(100, 150, 255, 255)
+        Lightning => @raylib.Color::new(255, 255, 100, 255)
+        Teleport => @raylib.Color::new(150, 100, 255, 255)
+        _ => @raylib.Color::new(150, 150, 150, 255)
+      }
+      @raylib.draw_circle(sx + 20, spell_y + 16, 8.0, spell_color)
+      // Spell name abbreviation
+      let abbr = match slot.spell_type {
+        Fireball => "FB"
+        IceBolt => "IC"
+        Heal => "HL"
+        Shield => "SH"
+        Lightning => "LT"
+        Teleport => "TP"
+        _ => "--"
+      }
+      @draw.draw_text(
+        abbr,
+        sx + 10,
+        spell_y + 26,
+        10,
+        @raylib.Color::new(220, 220, 220, 255),
+      )
+    }
+    // Slot number
+    @draw.draw_text(
+      "\{i + 1}",
+      sx + 2,
+      spell_y + 2,
+      10,
+      @raylib.Color::new(150, 150, 160, 200),
+    )
+  }
+  // Cooldown indicator
+  if game.spell_cooldown > 0.0 {
+    let cd_text = "CD"
+    let cd_x = spell_start_x + game.selected_spell * 46
+    @draw.draw_text(
+      cd_text,
+      cd_x + 12,
+      spell_y - 14,
+      12,
+      @raylib.Color::new(255, 80, 80, 220),
+    )
+  }
+  // Weapon indicator
+  let weapon_text = @types.get_weapon_name(game.player_weapon)
+  @draw.draw_text(
+    weapon_text,
+    stat_x + 100,
+    stat_y,
+    16,
+    @raylib.Color::new(200, 200, 220, 255),
+  )
   // Controls hint
   @draw.draw_text(
-    "WASD: Move | Mouse: Look | LMB/Space: Attack | E: Interact | Esc: Pause",
-    stat_x + 130,
-    @types.screen_height - 25,
-    12,
+    "LMB: Attack | RMB: Spell | 1-6: Select Spell | Tab: Weapon",
+    stat_x + 100,
+    @types.screen_height - 18,
+    10,
     @raylib.Color::new(120, 120, 130, 255),
   )
 }
@@ -669,8 +789,9 @@ fn @types.Game::draw_class_select(game : @types.Game) -> Unit {
   // Class names and descriptions
   let names : Array[String] = ["Warrior", "Rogue", "Mage"]
   let descs : Array[String] = [
-    "High HP and defense. Starts with a sword.", "Fast and deadly. Starts with a dagger.",
-    "Wields magic. Starts with a staff and spells.",
+    "High HP, chain armor, +3 DEF. Starts with sword.",
+    "Fast, leather armor, Precision Ring. Starts with dagger.",
+    "High mana, Wisdom Ring, robes. Starts with staff and spells.",
   ]
   for i in 0..<3 {
     let y = 200 + i * 120
@@ -742,62 +863,348 @@ fn @types.Game::draw_class_select(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::draw_shop(game : @types.Game) -> Unit {
-  ignore(game)
   // Semi-transparent overlay
   @raylib.draw_rectangle(
     0,
     0,
     @types.screen_width,
     @types.screen_height,
-    @raylib.Color::new(0, 0, 0, 180),
+    @raylib.Color::new(0, 0, 0, 200),
   )
   let title = "SHOP"
-  let tw = @draw.measure_text(title, 56)
+  let tw = @draw.measure_text(title, 48)
   @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
-    @types.screen_height / 2 - 60,
-    56,
+    60,
+    48,
     @raylib.Color::new(255, 215, 80, 255),
   )
-  let hint = "Press Escape to leave"
-  let hw = @draw.measure_text(hint, 22)
+  // Gold display
+  let gold_text = "Gold: \{game.player_gold}"
+  let gw = @draw.measure_text(gold_text, 24)
+  @draw.draw_text(
+    gold_text,
+    (@types.screen_width - gw) / 2,
+    115,
+    24,
+    @raylib.Color::new(255, 215, 0, 255),
+  )
+  // Shop items list
+  let item_names : Array[String] = [
+    "Health Potion", "Mana Potion", "Damage Scroll", "Armor Shard", "Key",
+    "Speed Potion",
+  ]
+  for i in 0..<@types.max_shop_items {
+    let item = game.shop_items[i]
+    if !item.active {
+      continue
+    }
+    let y = 160 + i * 50
+    let is_selected = game.shop_cursor == i
+    let can_afford = game.player_gold >= item.price
+    if is_selected {
+      @raylib.draw_rectangle(
+        @types.screen_width / 2 - 220,
+        y - 5,
+        440,
+        42,
+        @raylib.Color::new(60, 50, 30, 255),
+      )
+      @raylib.draw_rectangle_lines(
+        @types.screen_width / 2 - 220,
+        y - 5,
+        440,
+        42,
+        @raylib.Color::new(255, 200, 80, 255),
+      )
+    }
+    let name = if i < item_names.length() { item_names[i] } else { "Item" }
+    let prefix = if is_selected { "> " } else { "  " }
+    let name_color = if !can_afford {
+      @raylib.Color::new(120, 80, 80, 255)
+    } else if is_selected {
+      @raylib.Color::new(255, 220, 80, 255)
+    } else {
+      @raylib.Color::new(200, 190, 170, 255)
+    }
+    @draw.draw_text(
+      prefix + name,
+      @types.screen_width / 2 - 200,
+      y,
+      22,
+      name_color,
+    )
+    let price_text = "\{item.price}g"
+    let pw = @draw.measure_text(price_text, 22)
+    let price_color = if can_afford {
+      @raylib.Color::new(255, 215, 0, 255)
+    } else {
+      @raylib.Color::new(120, 80, 80, 255)
+    }
+    @draw.draw_text(
+      price_text,
+      @types.screen_width / 2 + 200 - pw,
+      y,
+      22,
+      price_color,
+    )
+  }
+  let hint = "Up/Down: Browse | Enter: Buy | Esc: Leave"
+  let hw = @draw.measure_text(hint, 16)
   @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
-    @types.screen_height / 2 + 20,
-    22,
-    @raylib.Color::new(200, 200, 220, 255),
+    @types.screen_height - 60,
+    16,
+    @raylib.Color::new(150, 150, 160, 255),
   )
 }
 
 ///|
 fn @types.Game::draw_shrine(game : @types.Game) -> Unit {
-  ignore(game)
   // Semi-transparent overlay
   @raylib.draw_rectangle(
     0,
     0,
     @types.screen_width,
     @types.screen_height,
-    @raylib.Color::new(0, 0, 0, 180),
+    @raylib.Color::new(0, 0, 0, 200),
   )
-  let title = "SHRINE"
-  let tw = @draw.measure_text(title, 56)
+  let title = "SHRINE OF POWER"
+  let tw = @draw.measure_text(title, 48)
   @draw.draw_text(
     title,
     (@types.screen_width - tw) / 2,
-    @types.screen_height / 2 - 60,
-    56,
+    80,
+    48,
     @raylib.Color::new(120, 200, 255, 255),
   )
-  let hint = "Press Escape to leave"
-  let hw = @draw.measure_text(hint, 22)
+  if game.shrine_used {
+    let used_text = "This shrine has been used."
+    let uw = @draw.measure_text(used_text, 22)
+    @draw.draw_text(
+      used_text,
+      (@types.screen_width - uw) / 2,
+      200,
+      22,
+      @raylib.Color::new(150, 150, 150, 255),
+    )
+  } else {
+    let desc = "Sacrifice 20 HP for a blessing:"
+    let dw = @draw.measure_text(desc, 20)
+    @draw.draw_text(
+      desc,
+      (@types.screen_width - dw) / 2,
+      150,
+      20,
+      @raylib.Color::new(200, 200, 220, 255),
+    )
+    let option_names : Array[String] = [
+      "+15 Max HP", "+10 Max Mana", "+5 ATK",
+    ]
+    for i in 0..<3 {
+      let y = 200 + i * 55
+      let is_selected = game.shrine_cursor == i
+      if is_selected {
+        @raylib.draw_rectangle(
+          @types.screen_width / 2 - 180,
+          y - 5,
+          360,
+          45,
+          @raylib.Color::new(20, 40, 60, 255),
+        )
+        @raylib.draw_rectangle_lines(
+          @types.screen_width / 2 - 180,
+          y - 5,
+          360,
+          45,
+          @raylib.Color::new(120, 200, 255, 255),
+        )
+      }
+      let prefix = if is_selected { "> " } else { "  " }
+      let opt_color = if is_selected {
+        @raylib.Color::new(120, 220, 255, 255)
+      } else {
+        @raylib.Color::new(160, 160, 170, 255)
+      }
+      let opt_text = prefix + option_names[i]
+      let ow = @draw.measure_text(opt_text, 26)
+      @draw.draw_text(
+        opt_text,
+        (@types.screen_width - ow) / 2,
+        y,
+        26,
+        opt_color,
+      )
+    }
+  }
+  let hint = "Up/Down: Choose | Enter: Accept | Esc: Leave"
+  let hw = @draw.measure_text(hint, 16)
   @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
-    @types.screen_height / 2 + 20,
-    22,
-    @raylib.Color::new(200, 200, 220, 255),
+    @types.screen_height - 60,
+    16,
+    @raylib.Color::new(150, 150, 160, 255),
   )
+}
+
+///|
+/// Draws a prominent boss health bar at the bottom of the screen.
+fn @types.Game::draw_boss_health_bar(game : @types.Game) -> Unit {
+  // Find active boss
+  let mut boss_found = false
+  let mut boss_hp = 0
+  let mut boss_max_hp = 1
+  let mut boss_phase = 1
+  for e in game.enemies {
+    if e.active && e.kind == DragonBoss {
+      boss_found = true
+      boss_hp = e.hp
+      boss_max_hp = e.max_hp
+      boss_phase = e.boss_phase
+      break
+    }
+  }
+  if !boss_found {
+    return
+  }
+  let bar_w = 500
+  let bar_h = 28
+  let bar_x = (@types.screen_width - bar_w) / 2
+  let bar_y = @types.screen_height - 110
+  @raylib.draw_rectangle(
+    bar_x - 2,
+    bar_y - 2,
+    bar_w + 4,
+    bar_h + 4,
+    @raylib.Color::new(0, 0, 0, 220),
+  )
+  let hp_frac = Float::from_int(boss_hp) / Float::from_int(boss_max_hp)
+  let fill_w = (Float::from_int(bar_w) * hp_frac).to_int()
+  let bar_color = if boss_phase == 1 {
+    @raylib.Color::new(200, 40, 40, 255)
+  } else if boss_phase == 2 {
+    @raylib.Color::new(255, 140, 30, 255)
+  } else {
+    @raylib.Color::new(255, 50, 200, 255)
+  }
+  @raylib.draw_rectangle(
+    bar_x,
+    bar_y,
+    bar_w,
+    bar_h,
+    @raylib.Color::new(40, 10, 10, 255),
+  )
+  @raylib.draw_rectangle(bar_x, bar_y, fill_w, bar_h, bar_color)
+  // Phase threshold markers
+  let p2_x = bar_x +
+    (Float::from_int(bar_w) * @types.boss_phase2_threshold).to_int()
+  let p3_x = bar_x +
+    (Float::from_int(bar_w) * @types.boss_phase3_threshold).to_int()
+  @raylib.draw_rectangle(
+    p2_x, bar_y, 2, bar_h, @raylib.Color::new(255, 255, 100, 150),
+  )
+  @raylib.draw_rectangle(
+    p3_x, bar_y, 2, bar_h, @raylib.Color::new(255, 100, 255, 150),
+  )
+  @raylib.draw_rectangle_lines(
+    bar_x,
+    bar_y,
+    bar_w,
+    bar_h,
+    @raylib.Color::new(200, 180, 150, 255),
+  )
+  let phase_text = if boss_phase == 1 {
+    "DRAGON"
+  } else if boss_phase == 2 {
+    "DRAGON [ENRAGED]"
+  } else {
+    "DRAGON [BERSERK]"
+  }
+  let ntw = @draw.measure_text(phase_text, 18)
+  @draw.draw_text(
+    phase_text,
+    (@types.screen_width - ntw) / 2,
+    bar_y - 22,
+    18,
+    bar_color,
+  )
+  let hp_text = "\{boss_hp}/\{boss_max_hp}"
+  let htw = @draw.measure_text(hp_text, 16)
+  @draw.draw_text(
+    hp_text,
+    (@types.screen_width - htw) / 2,
+    bar_y + 5,
+    16,
+    @raylib.Color::new(255, 255, 255, 230),
+  )
+}
+
+///|
+/// Draws equipment slot indicators on the HUD.
+fn @types.Game::draw_equipment_hud(game : @types.Game) -> Unit {
+  let base_x = 15
+  let base_y = @types.screen_height - 165
+  // Weapon slot
+  let wpn_r = @types.get_rarity_color_r(game.equip_weapon_rarity)
+  let wpn_g = @types.get_rarity_color_g(game.equip_weapon_rarity)
+  let wpn_b = @types.get_rarity_color_b(game.equip_weapon_rarity)
+  let wpn_name = @types.get_weapon_name(game.player_weapon)
+  let wpn_text = if game.equip_weapon_bonus > 0 {
+    wpn_name + " +\{game.equip_weapon_bonus}"
+  } else {
+    wpn_name
+  }
+  @draw.draw_text(
+    wpn_text,
+    base_x,
+    base_y,
+    14,
+    @raylib.Color::new(wpn_r, wpn_g, wpn_b, 255),
+  )
+  // Armor slot
+  if game.equip_armor_bonus > 0 {
+    let arm_r = @types.get_rarity_color_r(game.equip_armor_rarity)
+    let arm_g = @types.get_rarity_color_g(game.equip_armor_rarity)
+    let arm_b = @types.get_rarity_color_b(game.equip_armor_rarity)
+    @draw.draw_text(
+      "Armor +\{game.equip_armor_bonus}",
+      base_x,
+      base_y + 16,
+      14,
+      @raylib.Color::new(arm_r, arm_g, arm_b, 255),
+    )
+  }
+  // Ring slot
+  if game.equip_ring_kind >= 0 {
+    let ring_r = @types.get_rarity_color_r(game.equip_ring_rarity)
+    let ring_g = @types.get_rarity_color_g(game.equip_ring_rarity)
+    let ring_b = @types.get_rarity_color_b(game.equip_ring_rarity)
+    let ring_name = @types.get_ring_name(game.equip_ring_kind)
+    @draw.draw_text(
+      ring_name,
+      base_x,
+      base_y + 32,
+      14,
+      @raylib.Color::new(ring_r, ring_g, ring_b, 255),
+    )
+  }
+  @draw.draw_text(
+    "Gold: \{game.player_gold}",
+    base_x + 140,
+    base_y,
+    14,
+    @raylib.Color::new(255, 215, 0, 255),
+  )
+  if game.player_keys > 0 {
+    @draw.draw_text(
+      "Keys: \{game.player_keys}",
+      base_x + 140,
+      base_y + 16,
+      14,
+      @raylib.Color::new(200, 200, 50, 255),
+    )
+  }
 }

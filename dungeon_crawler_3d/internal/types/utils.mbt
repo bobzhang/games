@@ -676,6 +676,12 @@ pub fn get_loot_name(kind : Int) -> String {
     "Key"
   } else if kind == loot_boss_key {
     "Boss Key"
+  } else if kind == loot_equip_weapon {
+    "Weapon"
+  } else if kind == loot_equip_armor {
+    "Armor"
+  } else if kind == loot_equip_ring {
+    "Ring"
   } else {
     "Unknown"
   }
@@ -743,6 +749,277 @@ pub fn ship_class_from_int(n : Int) -> ShipClass {
     Mage
   } else {
     Warrior
+  }
+}
+
+// Screen shake
+
+///|
+/// Triggers screen shake with given intensity and duration.
+pub fn trigger_shake(game : Game, intensity : Float, duration : Float) -> Unit {
+  if intensity > game.shake_intensity {
+    game.shake_intensity = intensity
+    game.shake_timer = duration
+  }
+}
+
+///|
+/// Updates the screen shake timer, decaying intensity over time.
+pub fn update_shake(game : Game, dt : Float) -> Unit {
+  if game.shake_timer > 0.0 {
+    game.shake_timer -= dt
+    if game.shake_timer <= 0.0 {
+      game.shake_timer = 0.0
+      game.shake_intensity = 0.0
+    } else {
+      // Decay intensity
+      game.shake_intensity *= 0.92
+    }
+  }
+}
+
+///|
+/// Returns a random shake offset for the current frame.
+pub fn get_shake_offset(game : Game) -> (Float, Float) {
+  if game.shake_timer > 0.0 {
+    let ox = rand_rangef(game, -game.shake_intensity, game.shake_intensity)
+    let oy = rand_rangef(game, -game.shake_intensity, game.shake_intensity)
+    (ox, oy)
+  } else {
+    (0.0, 0.0)
+  }
+}
+
+// Floating damage numbers
+
+///|
+/// Returns the first inactive damage number slot index, or `-1` if none.
+pub fn alloc_damage_number(game : Game) -> Int {
+  @utils.first_index_by(game.damage_numbers, fn(slot) { !slot.active })
+}
+
+///|
+/// Spawns a floating damage number at a world position.
+pub fn spawn_damage_number(
+  game : Game,
+  wx : Float,
+  wy : Float,
+  wz : Float,
+  value : Int,
+  r : Int,
+  g : Int,
+  b : Int,
+  is_crit : Bool,
+) -> Unit {
+  let idx = alloc_damage_number(game)
+  if idx < 0 {
+    return
+  }
+  let dn = game.damage_numbers[idx]
+  dn.active = true
+  dn.x = wx + rand_rangef(game, -0.3, 0.3)
+  dn.y = wy
+  dn.z = wz + rand_rangef(game, -0.3, 0.3)
+  dn.value = value
+  dn.timer = if is_crit { 1.5 } else { 1.0 }
+  dn.r = r
+  dn.g = g
+  dn.b = b
+  dn.is_crit = is_crit
+}
+
+///|
+/// Updates all floating damage numbers (rise and fade).
+pub fn update_damage_numbers(game : Game, dt : Float) -> Unit {
+  for dn in game.damage_numbers {
+    if !dn.active {
+      continue
+    }
+    dn.timer -= dt
+    dn.y += 1.5 * dt
+    if dn.timer <= 0.0 {
+      dn.active = false
+    }
+  }
+}
+
+// Knockback
+
+///|
+/// Applies knockback to an enemy away from a source point.
+pub fn apply_knockback(
+  game : Game,
+  e : Enemy,
+  source_x : Float,
+  source_z : Float,
+  force : Float,
+) -> Unit {
+  let dx = e.x - source_x
+  let dz = e.z - source_z
+  let d = @math.hypotf(dx, dz)
+  if d < 0.01 {
+    return
+  }
+  let nx = dx / d
+  let nz = dz / d
+  let new_x = e.x + nx * force
+  let new_z = e.z + nz * force
+  let radius : Float = 0.4
+  if !is_blocked(game, new_x, e.z, radius) {
+    e.x = new_x
+  }
+  if !is_blocked(game, e.x, new_z, radius) {
+    e.z = new_z
+  }
+}
+
+///|
+/// Returns rarity display name.
+pub fn get_rarity_name(rarity : Int) -> String {
+  if rarity == 0 {
+    "Common"
+  } else if rarity == 1 {
+    "Uncommon"
+  } else if rarity == 2 {
+    "Rare"
+  } else if rarity == 3 {
+    "Epic"
+  } else if rarity == 4 {
+    "Legendary"
+  } else {
+    "Common"
+  }
+}
+
+///|
+/// Returns rarity color R component.
+pub fn get_rarity_color_r(rarity : Int) -> Int {
+  if rarity == 0 {
+    200
+  } else if rarity == 1 {
+    80
+  } else if rarity == 2 {
+    50
+  } else if rarity == 3 {
+    180
+  } else if rarity == 4 {
+    255
+  } else {
+    200
+  }
+}
+
+///|
+/// Returns rarity color G component.
+pub fn get_rarity_color_g(rarity : Int) -> Int {
+  if rarity == 0 {
+    200
+  } else if rarity == 1 {
+    220
+  } else if rarity == 2 {
+    120
+  } else if rarity == 3 {
+    80
+  } else if rarity == 4 {
+    165
+  } else {
+    200
+  }
+}
+
+///|
+/// Returns rarity color B component.
+pub fn get_rarity_color_b(rarity : Int) -> Int {
+  if rarity == 0 {
+    200
+  } else if rarity == 1 {
+    80
+  } else if rarity == 2 {
+    255
+  } else if rarity == 3 {
+    220
+  } else if rarity == 4 {
+    0
+  } else {
+    200
+  }
+}
+
+///|
+/// Returns ring effect display name.
+pub fn get_ring_name(kind : Int) -> String {
+  if kind == ring_mana_regen {
+    "Ring of Wisdom"
+  } else if kind == ring_life_steal {
+    "Vampiric Ring"
+  } else if kind == ring_thorns {
+    "Thorned Ring"
+  } else if kind == ring_gold_find {
+    "Ring of Fortune"
+  } else if kind == ring_crit_chance {
+    "Ring of Precision"
+  } else {
+    "Ring"
+  }
+}
+
+///|
+/// Computes total player attack including equipment weapon bonus.
+pub fn calc_player_attack_with_equip(game : Game) -> Int {
+  let base = calc_player_attack(game)
+  base + game.equip_weapon_bonus
+}
+
+///|
+/// Computes total player defense including equipment armor bonus.
+pub fn calc_player_defense_with_equip(game : Game) -> Int {
+  let base = calc_player_defense(game)
+  base + game.equip_armor_bonus
+}
+
+///|
+/// Checks if enemy has line of sight to player (no walls in between).
+pub fn has_line_of_sight(
+  game : Game,
+  from_x : Float,
+  from_z : Float,
+  to_x : Float,
+  to_z : Float,
+) -> Bool {
+  let dx = to_x - from_x
+  let dz = to_z - from_z
+  let d = @math.hypotf(dx, dz)
+  if d < 0.5 {
+    return true
+  }
+  let steps = (d / 0.5).to_int() + 1
+  let step_x = dx / Float::from_int(steps)
+  let step_z = dz / Float::from_int(steps)
+  let mut cx = from_x
+  let mut cz = from_z
+  for i in 0..<steps {
+    cx += step_x
+    cz += step_z
+    let gx = world_to_grid_x(cx)
+    let gz = world_to_grid_z(cz)
+    if get_tile(game, gx, gz) == tile_wall {
+      return false
+    }
+    ignore(i)
+  }
+  true
+}
+
+///|
+/// Returns the boss phase (1, 2, or 3) based on current HP fraction.
+pub fn get_boss_phase(hp : Int, max_hp : Int) -> Int {
+  let frac = Float::from_int(hp) / Float::from_int(max_hp)
+  if frac > boss_phase2_threshold {
+    1
+  } else if frac > boss_phase3_threshold {
+    2
+  } else {
+    3
   }
 }
 
