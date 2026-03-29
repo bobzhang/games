@@ -131,74 +131,150 @@ fn seal_room(game : @types.Game) -> Unit {
 }
 
 ///|
+fn get_encounter_pack(
+  floor_num : Int,
+  rng : UInt
+) -> (Array[@types.EnemyKind], UInt) {
+  let (s, roll) = @types.rng_next(rng)
+  let pack : Array[@types.EnemyKind] = if floor_num <= 3 {
+    // Early floors: simple packs
+    if roll < 0.25 {
+      [Slime, Slime, Slime]
+    } else if roll < 0.5 {
+      [Skeleton, Skeleton]
+    } else if roll < 0.75 {
+      [Slime, Skeleton, Bat]
+    } else {
+      [Archer, Slime, Slime]
+    }
+  } else if floor_num <= 6 {
+    // Mid floors: mixed packs
+    if roll < 0.2 {
+      [Skeleton, Skeleton, Archer]
+    } else if roll < 0.4 {
+      [Spider, Slime, Slime, Bat]
+    } else if roll < 0.6 {
+      [Skeleton, Archer, Bat, Bat]
+    } else if roll < 0.8 {
+      [Golem, Slime, Slime]
+    } else {
+      [Spider, Archer, Skeleton]
+    }
+  } else {
+    // Late floors: hard packs
+    if roll < 0.2 {
+      [Golem, Spider, Archer]
+    } else if roll < 0.4 {
+      [Skeleton, Skeleton, Skeleton, Archer, Archer]
+    } else if roll < 0.6 {
+      [Golem, Bat, Bat, Bat]
+    } else if roll < 0.8 {
+      [Spider, Spider, Skeleton, Skeleton]
+    } else {
+      [Golem, Golem, Slime, Slime]
+    }
+  }
+  (pack, s)
+}
+
+///|
 fn spawn_room_enemies(game : @types.Game, budget : Int) -> Unit {
   match game.floor {
     None => ()
     Some(floor) => {
       let room = floor.rooms[floor.current_room]
       let ts = @types.tile_sizef
-      let mut remaining = budget
-      let mut attempts = 0
-      while remaining > 0 && attempts < 50 {
-        attempts += 1
-        // Pick enemy kind based on cost, scaled by floor difficulty
-        let (s1, roll) = @types.rng_next(game.rng_state)
-        game.rng_state = s1
-        // Later floors shift probability toward tougher enemies
-        let golem_chance : Float = if game.floor_num >= 5 {
-          0.12
-        } else if game.floor_num >= 3 {
-          0.06
-        } else {
-          0.0
+      // Spawn 1-3 packs based on budget
+      let num_packs = if budget <= 5 {
+        1
+      } else if budget <= 9 {
+        2
+      } else {
+        3
+      }
+      for _pack_i in 0..<num_packs {
+        let (pack, s_new) = get_encounter_pack(game.floor_num, game.rng_state)
+        game.rng_state = s_new
+        for j in 0..<pack.length() {
+          let kind = pack[j]
+          let mut attempts = 0
+          while attempts < 10 {
+            attempts += 1
+            let (s2, rx) = @types.rng_range(
+              game.rng_state,
+              Float::from_int(room.x + 2) * ts,
+              Float::from_int(room.x + room.w - 2) * ts,
+            )
+            let (s3, ry) = @types.rng_range(
+              s2,
+              Float::from_int(room.y + 2) * ts,
+              Float::from_int(room.y + room.h - 2) * ts,
+            )
+            game.rng_state = s3
+            let d2 = @types.dist2(rx, ry, game.player.x, game.player.y)
+            if d2 < 100.0 * 100.0 {
+              continue
+            }
+            spawn_enemy(game, kind, rx, ry)
+            break
+          }
         }
-        let spider_chance : Float = if game.floor_num >= 3 {
-          0.10
-        } else {
-          0.0
-        }
-        // Thresholds: slime [0, 0.25), skeleton [0.25, 0.50), archer [0.50, 0.65),
-        //   bat [0.65, 0.85 - spider - golem), spider, golem
-        let golem_start : Float = Float::from_double(1.0) - golem_chance
-        let spider_start : Float = golem_start - spider_chance
-        let (kind, cost) : (@types.EnemyKind, Int) = if roll < 0.25 {
-          (Slime, 1)
-        } else if roll < 0.50 {
-          (Skeleton, 2)
-        } else if roll < 0.65 {
-          (Archer, 2)
-        } else if roll < spider_start {
-          (Bat, 1)
-        } else if roll < golem_start {
-          (Spider, 3)
-        } else {
-          (Golem, 4)
-        }
-        if cost > remaining {
-          continue
-        }
-        // Random position in room (avoiding center where player spawns)
-        let (s2, rx) = @types.rng_range(
-          game.rng_state,
-          Float::from_int(room.x + 2) * ts,
-          Float::from_int(room.x + room.w - 2) * ts,
-        )
-        let (s3, ry) = @types.rng_range(
-          s2,
-          Float::from_int(room.y + 2) * ts,
-          Float::from_int(room.y + room.h - 2) * ts,
-        )
-        game.rng_state = s3
-        // Don't spawn too close to player
-        let d2 = @types.dist2(rx, ry, game.player.x, game.player.y)
-        if d2 < 100.0 * 100.0 {
-          continue
-        }
-        spawn_enemy(game, kind, rx, ry)
-        remaining -= cost
       }
     }
   }
+}
+
+///|
+fn trigger_reward_choice(game : @types.Game) -> Unit {
+  game.reward_active = true
+  game.reward_choices.clear()
+  // Generate 3 random choices
+  let mut s = game.rng_state
+  for i in 0..<3 {
+    let (s1, roll) = @types.rng_next(s)
+    s = s1
+    let (kind, desc) : (@types.ItemKind, String) = if roll < 0.3 {
+      // Weapon
+      let weapons : Array[@types.WeaponKind] = [Sword, Daggers, Bow, Staff]
+      let (s2, idx) = @types.rng_int(s, 0, 3)
+      s = s2
+      (WeaponPickup(weapons[idx]), "New weapon")
+    } else if roll < 0.7 {
+      // Passive
+      let passives : Array[@types.PassiveKind] = [
+        MaxHpUp, DamageUp, SpeedUp, CritUp,
+        DashCooldownDown, DefenseUp, AttackSpeedUp, PickupRange,
+      ]
+      let (s2, idx) = @types.rng_int(s, 0, 7)
+      s = s2
+      let p = passives[idx]
+      let stats = @data.get_passive_stats(p)
+      (PassiveItem(p), stats.description)
+    } else {
+      (HealthPotion, "Restore 30 HP + Shield")
+    }
+    let (center_x, center_y) = match game.floor {
+      Some(floor) => {
+        let room = floor.rooms[floor.current_room]
+        let ts = @types.tile_sizef
+        (Float::from_int(room.x) * ts + Float::from_int(room.w) * ts / 2.0,
+         Float::from_int(room.y) * ts + Float::from_int(room.h) * ts / 2.0)
+      }
+      None => (game.player.x, game.player.y)
+    }
+    let spacing : Float = 120.0
+    let base_x = center_x - spacing
+    let choice_y = center_y
+    game.reward_choices.push(
+      {
+        kind,
+        description: desc,
+        x: base_x + Float::from_int(i) * spacing,
+        y: choice_y,
+      },
+    )
+  }
+  game.rng_state = s
 }
 
 ///|
@@ -210,34 +286,59 @@ fn clear_room(game : @types.Game) -> Unit {
       room.state = Cleared
       game.rooms_cleared += 1
       game.floor_rooms_cleared += 1
-      // Reward: spawn health potion chance
-      let (s1, roll) = @types.rng_next(game.rng_state)
-      game.rng_state = s1
-      if roll < 0.3 {
-        let idx = @types.alloc_item(game.items)
-        let item = game.items[idx]
-        item.active = true
-        item.kind = HealthPotion
-        item.x = game.player.x
-        item.y = game.player.y - 40.0
-        item.bob_timer = 0.0
+      // Boss rooms and every 3rd combat room: trigger choice-of-3 reward
+      if room.kind == Boss || game.floor_rooms_cleared % 3 == 0 {
+        trigger_reward_choice(game)
+      } else {
+        // Normal rooms: standard random drops
+        let (s1, roll) = @types.rng_next(game.rng_state)
+        game.rng_state = s1
+        if roll < 0.3 {
+          let idx = @types.alloc_item(game.items)
+          let item = game.items[idx]
+          item.active = true
+          item.kind = HealthPotion
+          item.x = game.player.x
+          item.y = game.player.y - 40.0
+          item.bob_timer = 0.0
+        }
+        let (s2, wroll) = @types.rng_next(game.rng_state)
+        game.rng_state = s2
+        if wroll < 0.15 {
+          let idx = @types.alloc_item(game.items)
+          let item = game.items[idx]
+          item.active = true
+          let weapons : Array[@types.WeaponKind] = [Sword, Daggers, Bow, Staff]
+          let (s3, widx) = @types.rng_int(game.rng_state, 0, 3)
+          game.rng_state = s3
+          item.kind = WeaponPickup(weapons[widx])
+          item.x = game.player.x + 30.0
+          item.y = game.player.y - 40.0
+          item.bob_timer = 0.0
+        }
+        let (s5, proll) = @types.rng_next(game.rng_state)
+        game.rng_state = s5
+        let passive_chance : Float = 10.0 / 100.0 +
+          Float::from_int(game.floor_num) * (3.0 / 100.0)
+        if proll < passive_chance {
+          let passives : Array[@types.PassiveKind] = [
+            MaxHpUp, DamageUp, SpeedUp, CritUp,
+            DashCooldownDown, DefenseUp, AttackSpeedUp, PickupRange,
+          ]
+          let (s6, pidx) = @types.rng_int(
+            game.rng_state, 0, passives.length() - 1,
+          )
+          game.rng_state = s6
+          let pi = @types.alloc_item(game.items)
+          let pitem = game.items[pi]
+          pitem.active = true
+          pitem.kind = PassiveItem(passives[pidx])
+          pitem.x = game.player.x - 30.0
+          pitem.y = game.player.y - 50.0
+          pitem.bob_timer = 0.0
+        }
       }
-      // Weapon pickup chance
-      let (s2, wroll) = @types.rng_next(game.rng_state)
-      game.rng_state = s2
-      if wroll < 0.15 {
-        let idx = @types.alloc_item(game.items)
-        let item = game.items[idx]
-        item.active = true
-        let weapons : Array[@types.WeaponKind] = [Sword, Daggers, Bow, Staff]
-        let (s3, widx) = @types.rng_int(game.rng_state, 0, 3)
-        game.rng_state = s3
-        item.kind = WeaponPickup(weapons[widx])
-        item.x = game.player.x + 30.0
-        item.y = game.player.y - 40.0
-        item.bob_timer = 0.0
-      }
-      // Gold reward
+      // Gold reward (always)
       let gold_amount = 5 + game.floor_num * 3
       let (s4, gx_off) = @types.rng_range(game.rng_state, -20.0, 20.0)
       game.rng_state = s4
@@ -248,25 +349,6 @@ fn clear_room(game : @types.Game) -> Unit {
       gold_item.x = game.player.x + gx_off
       gold_item.y = game.player.y - 50.0
       gold_item.bob_timer = 0.0
-      // Passive item chance (increases with floor)
-      let (s5, proll) = @types.rng_next(game.rng_state)
-      game.rng_state = s5
-      let passive_chance : Float = 10.0 / 100.0 + Float::from_int(game.floor_num) * (3.0 / 100.0)
-      if proll < passive_chance {
-        let passives : Array[@types.PassiveKind] = [
-          MaxHpUp, DamageUp, SpeedUp, CritUp,
-          DashCooldownDown, DefenseUp, AttackSpeedUp, PickupRange,
-        ]
-        let (s6, pidx) = @types.rng_int(game.rng_state, 0, passives.length() - 1)
-        game.rng_state = s6
-        let pi = @types.alloc_item(game.items)
-        let pitem = game.items[pi]
-        pitem.active = true
-        pitem.kind = PassiveItem(passives[pidx])
-        pitem.x = game.player.x - 30.0
-        pitem.y = game.player.y - 50.0
-        pitem.bob_timer = 0.0
-      }
       // Deactivate all hostile (non-player) projectiles
       for i in 0..<game.projectiles.length() {
         let proj = game.projectiles[i]
@@ -274,40 +356,27 @@ fn clear_room(game : @types.Game) -> Unit {
           proj.active = false
         }
       }
-      // Check if stairs should appear: all combat/boss rooms cleared
-      let mut all_cleared = true
-      let mut combat_count = 0
-      let mut boss_cleared = true
+      // Check if stairs should appear: ALL combat/boss rooms must be cleared
+      let mut total_combat_rooms = 0
       for i in 0..<floor.rooms.length() {
         let r = floor.rooms[i]
         if r.kind == Combat || r.kind == Boss {
-          combat_count += 1
-          if r.state != Cleared {
-            all_cleared = false
-          }
-        }
-        if r.kind == Boss && r.state != Cleared {
-          boss_cleared = false
+          total_combat_rooms += 1
         }
       }
-      // On boss floors (every 5th), require the boss room to be cleared
-      let is_boss_floor = game.floor_num % 5 == 0
-      // Stairs appear once all combat/boss rooms are cleared, or enough rooms on this floor
-      let threshold = combat_count / 2 + 1
-      let stairs_ok = if is_boss_floor {
-        boss_cleared && (all_cleared || game.floor_rooms_cleared >= threshold)
-      } else {
-        all_cleared || game.floor_rooms_cleared >= threshold
-      }
-      if stairs_ok {
+      if game.floor_rooms_cleared >= total_combat_rooms {
+        // Place stairs in the center of the last cleared room
+        let ts = @types.tile_sizef
+        let cx = Float::from_int(room.x) * ts + Float::from_int(room.w) * ts / 2.0
+        let cy = Float::from_int(room.y) * ts + Float::from_int(room.h) * ts / 2.0
         game.stairs_active = true
-        game.stairs_x = game.player.x
-        game.stairs_y = game.player.y - 60.0
+        game.stairs_x = cx
+        game.stairs_y = cy
       }
       // Room cleared timer for UI flash
       game.room_clear_timer = 1.5
       // Brief Haste boost on room clear
-      apply_status_effect(game.player, Haste(3.0))
+      apply_status_effect(game.player, Haste(1.5))
       // Event
       push_event(game, RoomCleared)
       // Celebration particles

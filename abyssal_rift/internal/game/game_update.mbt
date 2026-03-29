@@ -46,6 +46,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   update_homing_projectiles(game, dt)
   update_items(game, dt)
   update_shop(game, input)
+  update_reward_choice(game, input)
   update_damage_numbers(game, dt)
   update_particles(game, dt)
   update_camera(game, dt)
@@ -54,12 +55,12 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   if game.room_clear_timer > 0.0 {
     game.room_clear_timer -= dt
   }
-  // Check stairs interaction
-  if game.stairs_active {
+  // Check stairs interaction (require pressing E)
+  if game.stairs_active && !game.reward_active {
     let d2 = @types.dist2(
       game.player.x, game.player.y, game.stairs_x, game.stairs_y,
     )
-    if d2 < 30.0 * 30.0 {
+    if d2 < 30.0 * 30.0 && input.interact_pressed {
       advance_floor(game)
     }
   }
@@ -120,6 +121,9 @@ fn start_new_run(game : @types.Game) -> Unit {
     game.shop_items[i].active = false
   }
   game.shop_active = false
+  // Clear reward choices
+  game.reward_active = false
+  game.reward_choices.clear()
   // Clear pools
   for i in 0..<game.enemies.length() {
     game.enemies[i].active = false
@@ -180,6 +184,9 @@ fn advance_floor(game : @types.Game) -> Unit {
     game.shop_items[i].active = false
   }
   game.shop_active = false
+  // Clear reward choices
+  game.reward_active = false
+  game.reward_choices.clear()
   // Clear pools
   for i in 0..<game.enemies.length() {
     game.enemies[i].active = false

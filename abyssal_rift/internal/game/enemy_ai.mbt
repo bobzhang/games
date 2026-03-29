@@ -72,6 +72,7 @@ pub fn update_enemy_ai(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit
           proj.piercing = false
           proj.homing = false
           proj.is_crit = false
+          proj.poison_on_hit = false
         }
       } else {
         e.vx *= 0.9

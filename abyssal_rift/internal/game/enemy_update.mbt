@@ -7,10 +7,22 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
       continue
     }
     if e.kind == BroodMother || e.kind == LichKing {
-      // Boss enemies are handled by update_boss, skip generic loop
-      // But still update flash/knockback timers
+      // Boss enemies are handled by update_boss for AI/movement
+      // But still update flash timer and process death state
       if e.flash_timer > 0.0 {
         e.flash_timer -= dt
+      }
+      // Still process death state for bosses
+      match e.state {
+        Dead(t) => {
+          let new_t = t - dt
+          if new_t <= 0.0 {
+            e.active = false
+          } else {
+            e.state = Dead(new_t)
+          }
+        }
+        _ => ()
       }
       continue
     }

@@ -1,4 +1,15 @@
 ///|
+fn draw_shadow(x : Float, y : Float, radius : Float) -> Unit {
+  @raylib.draw_ellipse(
+    x.to_int(),
+    (y + radius * 0.6).to_int(),
+    radius * 0.8,
+    radius * 0.3,
+    @raylib.Color::new(0, 0, 0, 40),
+  )
+}
+
+///|
 pub fn draw_player(game : @types.Game) -> Unit {
   let p = game.player
   if p.dead {
@@ -10,6 +21,8 @@ pub fn draw_player(game : @types.Game) -> Unit {
   }
   let px = p.x.to_int()
   let py = p.y.to_int()
+  // Shadow
+  draw_shadow(p.x, p.y, @types.player_radius)
   // Shield ring
   if p.shield > 0.0 {
     let shield_ratio = p.shield / p.max_shield
@@ -37,6 +50,24 @@ pub fn draw_player(game : @types.Game) -> Unit {
     @raylib.Vector2::new(base1_x, base1_y),
     @raylib.Vector2::new(base2_x, base2_y),
     @raylib.white,
+  )
+  // Weapon accent near direction indicator
+  let wstats = @data.get_weapon_stats(p.weapon)
+  let accent_color = if wstats.is_ranged {
+    @raylib.Color::new(120, 200, 255, 180)
+  } else {
+    @raylib.Color::new(255, 220, 150, 180)
+  }
+  let accent_len : Float = if wstats.is_ranged { 6.0 } else { 10.0 }
+  let accent_base_x = p.x + fx * (@types.player_radius + 10.0)
+  let accent_base_y = p.y + fy * (@types.player_radius + 10.0)
+  let accent_tip_x = accent_base_x + fx * accent_len
+  let accent_tip_y = accent_base_y + fy * accent_len
+  @raylib.draw_line_ex(
+    @raylib.Vector2::new(accent_base_x, accent_base_y),
+    @raylib.Vector2::new(accent_tip_x, accent_tip_y),
+    2.0,
+    accent_color,
   )
   // Weapon attack visual
   draw_weapon_swing(game)
@@ -96,6 +127,8 @@ pub fn draw_enemies(game : @types.Game) -> Unit {
     } else {
       get_enemy_color(e.kind)
     }
+    // Shadow
+    draw_shadow(e.x, e.y, r)
     // Death fade
     match e.state {
       Dead(t) => {
@@ -107,6 +140,12 @@ pub fn draw_enemies(game : @types.Game) -> Unit {
       _ => ()
     }
     draw_enemy_shape(e.kind, ex, ey, r, base_color)
+    // Outline
+    @raylib.draw_circle_lines_v(
+      @raylib.Vector2::new(Float::from_int(ex), Float::from_int(ey)),
+      r + 1.0,
+      @raylib.Color::new(255, 255, 255, 30),
+    )
     // Health bar
     if e.hp < e.max_hp {
       let bar_w = r * 2.0
@@ -346,6 +385,75 @@ fn shop_item_name(kind : @types.ItemKind) -> String {
       stats.name
     }
     Gold(amount) => "\{amount} Gold"
+  }
+}
+
+///|
+pub fn draw_reward_choices(game : @types.Game) -> Unit {
+  if !game.reward_active {
+    return
+  }
+  for i in 0..<game.reward_choices.length() {
+    let choice = game.reward_choices[i]
+    let cx = choice.x.to_int()
+    let cy = choice.y.to_int()
+    // Pedestal
+    @raylib.draw_rectangle(
+      cx - 25, cy + 10, 50, 8,
+      @raylib.Color::new(80, 80, 100, 200),
+    )
+    // Glow
+    let pulse = Float::from_double(
+        @math.sin(
+          game.frame_count.to_double() * 0.06 +
+            Float::from_int(i).to_double() * 2.0,
+        ),
+      ) *
+      20.0 +
+      40.0
+    @raylib.draw_circle(cx, cy, pulse, @raylib.Color::new(255, 215, 0, 20))
+    // Item icon
+    match choice.kind {
+      WeaponPickup(_) =>
+        @raylib.draw_rectangle(
+          cx - 8, cy - 8, 16, 16,
+          @raylib.Color::new(200, 200, 255, 230),
+        )
+      PassiveItem(_) =>
+        @raylib.draw_poly(
+          @raylib.Vector2::new(choice.x, choice.y),
+          5, 12.0, 0.0,
+          @raylib.Color::new(200, 100, 255, 230),
+        )
+      HealthPotion =>
+        @raylib.draw_circle(
+          cx, cy, 10.0,
+          @raylib.Color::new(255, 80, 80, 230),
+        )
+      _ =>
+        @raylib.draw_circle(
+          cx, cy, 8.0,
+          @raylib.Color::new(255, 215, 0, 230),
+        )
+    }
+    // Description below
+    let tw = @raylib.measure_text(choice.description, 12)
+    @raylib.draw_text(
+      choice.description,
+      cx - tw / 2, cy + 22, 12,
+      @raylib.Color::new(220, 220, 220, 200),
+    )
+    // Proximity hint
+    let d2 = @types.dist2(game.player.x, game.player.y, choice.x, choice.y)
+    if d2 < 50.0 * 50.0 {
+      let hint = "[E] Choose"
+      let hw = @raylib.measure_text(hint, 14)
+      @raylib.draw_text(
+        hint,
+        cx - hw / 2, cy - 30, 14,
+        @raylib.Color::new(255, 215, 0, 255),
+      )
+    }
   }
 }
 

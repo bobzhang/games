@@ -274,6 +274,7 @@ fn boss_web_attack(
   proj.piercing = false
   proj.homing = false
   proj.is_crit = false
+  proj.poison_on_hit = false
 }
 
 ///|
@@ -305,6 +306,7 @@ fn boss_web_spread(game : @types.Game, boss : @types.Enemy) -> Unit {
     proj.piercing = false
     proj.homing = false
     proj.is_crit = false
+    proj.poison_on_hit = false
   }
   shake_camera(game, 3.0, 0.2)
 }
@@ -538,6 +540,7 @@ fn lich_dark_orb(
   proj.piercing = false
   proj.homing = true
   proj.is_crit = false
+  proj.poison_on_hit = true
 }
 
 ///|
@@ -593,6 +596,7 @@ fn lich_darkness_ring(game : @types.Game, boss : @types.Enemy) -> Unit {
     proj.piercing = false
     proj.homing = false
     proj.is_crit = false
+    proj.poison_on_hit = false
   }
   shake_camera(game, 5.0, 0.25)
 }

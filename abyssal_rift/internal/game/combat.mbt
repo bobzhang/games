@@ -15,8 +15,12 @@ pub fn apply_damage_to_enemy(
   e.vx = dx * knockback
   e.vy = dy * knockback
   e.knockback_timer = @types.knockback_duration
-  // Hit pause
-  game.hit_pause_timer = @types.hit_pause_duration
+  // Hit pause (scale with crit)
+  game.hit_pause_timer = if is_crit {
+    @types.hit_pause_duration * 2.5
+  } else {
+    @types.hit_pause_duration
+  }
   // Events
   push_event(game, Hit(e.x, e.y, damage, is_crit))
   shake_camera(game, if is_crit { 4.0 } else { 2.0 }, 0.1)
@@ -30,6 +34,10 @@ pub fn apply_damage_to_enemy(
   dn.life = 0.8
   dn.value = damage
   dn.is_crit = is_crit
+  // Enemy hurt recoil
+  if e.hp > 0 {
+    e.state = Hurt(0.08)
+  }
   // Check death
   if e.hp <= 0 {
     e.state = Dead(0.5)
@@ -109,8 +117,8 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
       let hit_r = proj.radius + @types.player_radius
       if d2 <= hit_r * hit_r {
         damage_player(game, proj.damage)
-        // Apply Poison from Lich King boss projectiles
-        if game.boss_active {
+        // Apply Poison only from projectiles tagged with poison_on_hit
+        if proj.poison_on_hit {
           apply_status_effect(p, Poison(3.0))
         }
         proj.active = false

@@ -67,6 +67,31 @@ fn apply_passive(p : @types.Player, kind : @types.PassiveKind) -> Unit {
 }
 
 ///|
+pub fn update_reward_choice(game : @types.Game, input : InputState) -> Unit {
+  if !game.reward_active {
+    return
+  }
+  for i in 0..<game.reward_choices.length() {
+    let choice = game.reward_choices[i]
+    let d2 = @types.dist2(game.player.x, game.player.y, choice.x, choice.y)
+    if d2 < 50.0 * 50.0 && input.interact_pressed {
+      // Collect this choice
+      let fake_item : @types.Item = {
+        active: true,
+        kind: choice.kind,
+        x: choice.x,
+        y: choice.y,
+        bob_timer: 0.0,
+      }
+      collect_item(game, fake_item)
+      game.reward_active = false
+      game.reward_choices.clear()
+      return
+    }
+  }
+}
+
+///|
 pub fn update_shop(game : @types.Game, input : InputState) -> Unit {
   if !game.shop_active {
     return

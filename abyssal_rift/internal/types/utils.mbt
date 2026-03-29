@@ -124,20 +124,25 @@ pub fn alloc_particle(particles : Array[Particle]) -> Int {
 
 ///|
 pub fn alloc_enemy(enemies : Array[Enemy]) -> Int {
+  // First: find inactive slot
   for i, e in enemies {
     if !e.active {
       return i
     }
   }
-  let mut best = 0
-  let mut best_hp = enemies[0].hp
-  for i in 1..<enemies.length() {
-    if enemies[i].hp < best_hp {
-      best = i
-      best_hp = enemies[i].hp
+  // Evict lowest-HP non-boss enemy
+  let mut best = -1
+  let mut best_hp = 999999
+  for i in 0..<enemies.length() {
+    let e = enemies[i]
+    if e.kind != BroodMother && e.kind != LichKing {
+      if e.hp < best_hp {
+        best = i
+        best_hp = e.hp
+      }
     }
   }
-  best
+  if best >= 0 { best } else { 0 }
 }
 
 ///|

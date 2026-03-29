@@ -28,6 +28,48 @@ fn get_floor_colors(floor_num : Int) -> (@raylib.Color, @raylib.Color, @raylib.C
 }
 
 ///|
+fn draw_wall_shadow(px : Int, py : Int, ts : Int) -> Unit {
+  @raylib.draw_rectangle(px, py + ts - 3, ts, 3, @raylib.Color::new(0, 0, 0, 30))
+}
+
+///|
+fn draw_door_glow(px : Int, py : Int, ts : Int, floor_num : Int) -> Unit {
+  let glow_color = if floor_num <= 5 {
+    @raylib.Color::new(150, 130, 80, 60)
+  } else if floor_num <= 10 {
+    @raylib.Color::new(80, 180, 80, 60)
+  } else {
+    @raylib.Color::new(200, 100, 50, 60)
+  }
+  @raylib.draw_rectangle(px + 2, py + 2, ts - 4, ts - 4, glow_color)
+}
+
+///|
+fn draw_floor_decoration(px : Int, py : Int, ts : Int, tx : Int, ty : Int) -> Unit {
+  // Simple hash based on tile position to get pseudo-random decorations
+  let hash = (tx * 7919 + ty * 6271) % 100
+  if hash < 5 {
+    // Crack mark
+    let cx = px + ts / 3
+    let cy = py + ts / 2
+    @raylib.draw_line_ex(
+      @raylib.Vector2::new(Float::from_int(cx), Float::from_int(cy)),
+      @raylib.Vector2::new(
+        Float::from_int(cx + ts / 3),
+        Float::from_int(cy + ts / 4),
+      ),
+      1.0,
+      @raylib.Color::new(0, 0, 0, 20),
+    )
+  } else if hash < 8 {
+    // Moss dot
+    let mx = px + (hash * 3) % ts
+    let my = py + (hash * 5) % ts
+    @raylib.draw_circle(mx, my, 2.0, @raylib.Color::new(60, 90, 50, 25))
+  }
+}
+
+///|
 pub fn draw_world(game : @types.Game) -> Unit {
   match game.floor {
     None => ()
@@ -62,14 +104,32 @@ pub fn draw_world(game : @types.Game) -> Unit {
                 2.0,
                 wall_edge_col,
               )
-            } else {
-              // Floor tile (1) or door tile (2) with subtle checker
+              // Wall shadow on south side if adjacent tile below is floor
+              if y + 1 < room.h {
+                let below_tile = room.tiles[(y + 1) * room.w + x]
+                if below_tile != 0 {
+                  draw_wall_shadow(px, py, ts)
+                }
+              }
+            } else if tile == 2 {
+              // Door tile with checker + glow
               let color = if (x + y) % 2 == 0 {
                 floor_col
               } else {
                 floor_alt_col
               }
               @raylib.draw_rectangle(px, py, ts, ts, color)
+              draw_door_glow(px, py, ts, game.floor_num)
+            } else {
+              // Floor tile with subtle checker
+              let color = if (x + y) % 2 == 0 {
+                floor_col
+              } else {
+                floor_alt_col
+              }
+              @raylib.draw_rectangle(px, py, ts, ts, color)
+              // Occasional decorative floor marks
+              draw_floor_decoration(px, py, ts, x + room.x, y + room.y)
             }
           }
         }

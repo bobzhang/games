@@ -51,10 +51,10 @@ pub let combo_window : Float = 0.6
 
 ///|
 /// Shield
-pub let shield_regen_delay : Float = 3.0
+pub let shield_regen_delay : Float = 4.5
 
 ///|
-pub let shield_regen_rate : Float = 10.0
+pub let shield_regen_rate : Float = 6.0
 
 ///|
 /// Camera

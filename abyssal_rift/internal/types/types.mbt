@@ -94,6 +94,7 @@ pub(all) struct Projectile {
   mut homing : Bool
   mut lifetime : Float
   mut radius : Float
+  mut poison_on_hit : Bool
 }
 
 ///|
@@ -183,6 +184,14 @@ pub(all) struct Floor {
 }
 
 ///|
+pub(all) struct RewardChoice {
+  kind : ItemKind
+  description : String
+  x : Float
+  y : Float
+}
+
+///|
 pub(all) struct ShopItem {
   mut active : Bool
   mut kind : ItemKind
@@ -221,6 +230,8 @@ pub(all) struct Game {
   mut floor_transition_timer : Float
   shop_items : Array[ShopItem]
   mut shop_active : Bool
+  reward_choices : Array[RewardChoice]
+  mut reward_active : Bool
 }
 
 ///|
@@ -238,7 +249,8 @@ pub fn Game::new() -> Game {
     256,
     { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0,
       damage: 0, is_player: false, is_crit: false,
-      piercing: false, homing: false, lifetime: 0.0, radius: 4.0 },
+      piercing: false, homing: false, lifetime: 0.0, radius: 4.0,
+      poison_on_hit: false },
   )
   let items : Array[Item] = Array::make(
     64,
@@ -286,5 +298,7 @@ pub fn Game::new() -> Game {
       { active: false, kind: HealthPotion, price: 0, x: 0.0, y: 0.0 },
     ),
     shop_active: false,
+    reward_choices: [],
+    reward_active: false,
   }
 }

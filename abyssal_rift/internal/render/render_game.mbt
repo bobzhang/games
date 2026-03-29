@@ -11,6 +11,7 @@ pub fn draw_game(game : @types.Game) -> Unit {
       draw_stairs(game)
       draw_items(game)
       draw_shop_items(game)
+      draw_reward_choices(game)
       draw_enemies(game)
       draw_projectiles(game)
       draw_player(game)
@@ -20,6 +21,7 @@ pub fn draw_game(game : @types.Game) -> Unit {
       @raylib.end_mode_2d()
       // Screen-space UI
       draw_hud(game)
+      draw_screen_effects(game)
       if game.state == Paused {
         draw_pause_overlay(game)
       }

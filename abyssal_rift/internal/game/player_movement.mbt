@@ -18,6 +18,15 @@ pub fn update_player_movement(
     collide_player_with_tiles(game)
     return
   }
+  // Detect dash just ended
+  if p.dash_timer <= 0.0 && p.dash_dx != 0.0 {
+    // Landing burst
+    spawn_particles_burst(game, p.x, p.y, 8, 100, 200, 255)
+    // Clean dodge reward: small shield refund
+    p.shield = @types.minf(p.shield + 5.0, p.max_shield)
+    p.dash_dx = 0.0
+    p.dash_dy = 0.0
+  }
   // Dash input
   if input.dash_pressed && p.dash_cooldown <= 0.0 {
     let (dx, dy) = if @types.absf(input.move_x) > 0.01 || @types.absf(input.move_y) > 0.01 {

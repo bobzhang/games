@@ -46,6 +46,12 @@ pub fn update_player_combat(
         }
         let active_t = @data.get_active_time(p.weapon) * speed_mult
         p.attack_state = Active(active_t)
+        // Step-in movement during melee attack
+        let step_stats = @data.get_weapon_stats(p.weapon)
+        if !step_stats.is_ranged {
+          p.vx += p.facing_x * 120.0
+          p.vy += p.facing_y * 120.0
+        }
         // Create hitbox during active phase
         spawn_player_attack_hitbox(game)
       } else {
@@ -96,8 +102,15 @@ fn spawn_player_attack_hitbox(game : @types.Game) -> Unit {
     proj.damage = (Float::from_int(stats.base_damage) * p.damage_mult).to_int()
     proj.is_player = true
     proj.lifetime = 2.0
-    proj.radius = 6.0
-    proj.piercing = false
+    proj.poison_on_hit = false
+    // Staff projectiles are larger and piercing
+    if p.weapon == Staff {
+      proj.radius = 10.0
+      proj.piercing = true
+    } else {
+      proj.radius = 6.0
+      proj.piercing = false
+    }
     proj.homing = p.weapon == Staff
     // Crit roll
     let (s, roll) = @types.rng_next(game.rng_state)
