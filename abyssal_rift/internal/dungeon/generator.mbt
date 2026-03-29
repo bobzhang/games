@@ -90,8 +90,27 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
     room_kinds[ti] = Treasure
   }
 
+  // Pick one random non-start, non-boss, non-treasure cell for shrine (on floors with 5+ rooms)
+  if cell_indices.length() >= 5 {
+    let mut attempts = 0
+    while attempts < 20 {
+      let result = @types.rng_int(state, 1, cell_indices.length() - 2)
+      state = result.0
+      let si = result.1
+      if room_kinds[si] == Combat {
+        room_kinds[si] = Shrine
+        break
+      }
+      attempts += 1
+    }
+  }
+
   // --- build Room structs from templates -------------------------------------
   let rooms : Array[@types.Room] = []
+
+  // Store world-space door positions keyed as (grid_index * 4 + dir_index).
+  // dir_index: 0=Up, 1=Down, 2=Left, 3=Right
+  let door_positions : Array[(Int, Int, Int)] = [] // (key, world_x, world_y)
 
   for ci in 0..<cell_indices.length() {
     let idx = cell_indices[ci]
@@ -104,6 +123,7 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
       Start => 9
       Boss => 8
       Treasure => 7
+      Shrine => 7
       Combat => {
         let result = @types.rng_int(state, 0, 4)
         state = result.0
@@ -137,14 +157,24 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
       connections.push(Up)
     }
 
-    // Punch door openings for each connection
+    // Punch door openings for each connection and record world-space positions
     for d in 0..<connections.length() {
       let dir = connections[d]
-      ignore(place_door(tiles, tw, th, dir))
+      let (door_tx, door_ty) = place_door(tiles, tw, th, dir)
+      let world_door_x = wx + door_tx
+      let world_door_y = wy + door_ty
+      let dir_index = match dir {
+        Up => 0
+        Down => 1
+        Left => 2
+        Right => 3
+      }
+      let key = idx * 4 + dir_index
+      door_positions.push((key, world_door_x, world_door_y))
     }
 
     let enemies_remaining = match kind {
-      Start | Treasure | Corridor => 0
+      Start | Treasure | Corridor | Shrine => 0
       Combat => 3 + floor_num
       Boss => 1
     }
@@ -165,14 +195,8 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
   }
 
   // --- generate corridor rooms between connected cells -----------------------
-  // NOTE (known limitation): Corridor alignment uses room center averages
-  // rather than actual door positions, which can cause misalignment when rooms
-  // have different heights or widths.  The boss arena template already has
-  // doors punched on all 4 sides so at least one corridor can always connect.
-  // A more robust approach would thread the door tile coordinates through
-  // place_door and use them directly for corridor endpoint placement.
-  // For now this is acceptable since all templates receive doors via
-  // the connection loop above and uniform-height rooms mitigate the issue.
+  // Corridors now use actual door world-space positions as endpoints, creating
+  // L-shaped paths when doors don't share the same row/column.
   let corridor_set : Array[(Int, Int)] = []
   for ci in 0..<cell_indices.length() {
     let idx = cell_indices[ci]
@@ -184,15 +208,15 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
       let key_b = gy * grid_cols + gx + 1
       if not(corridor_exists(corridor_set, key_a, key_b)) {
         corridor_set.push((key_a, key_b))
-        let room_a = find_room_at_grid(
-          rooms, cell_indices, idx, grid_cols, spacing_x, spacing_y,
-        )
-        let room_b = find_room_at_grid(
-          rooms, cell_indices, key_b, grid_cols, spacing_x, spacing_y,
-        )
-        match (room_a, room_b) {
-          (Some(ra), Some(rb)) => {
-            let corr = make_h_corridor(ra, rb)
+        // room_a's Right door -> room_b's Left door
+        let door_key_a = key_a * 4 + 3 // Right = 3
+        let door_key_b = key_b * 4 + 2 // Left = 2
+        match (
+          lookup_door(door_positions, door_key_a),
+          lookup_door(door_positions, door_key_b),
+        ) {
+          (Some((x1, y1)), Some((x2, y2))) => {
+            let corr = create_corridor_between(x1, y1, x2, y2, true)
             rooms.push(corr)
           }
           _ => ()
@@ -205,15 +229,15 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
       let key_b = (gy + 1) * grid_cols + gx
       if not(corridor_exists(corridor_set, key_a, key_b)) {
         corridor_set.push((key_a, key_b))
-        let room_a = find_room_at_grid(
-          rooms, cell_indices, idx, grid_cols, spacing_x, spacing_y,
-        )
-        let room_b = find_room_at_grid(
-          rooms, cell_indices, key_b, grid_cols, spacing_x, spacing_y,
-        )
-        match (room_a, room_b) {
-          (Some(ra), Some(rb)) => {
-            let corr = make_v_corridor(ra, rb)
+        // room_a's Down door -> room_b's Up door
+        let door_key_a = key_a * 4 + 1 // Down = 1
+        let door_key_b = key_b * 4 + 0 // Up = 0
+        match (
+          lookup_door(door_positions, door_key_a),
+          lookup_door(door_positions, door_key_b),
+        ) {
+          (Some((x1, y1)), Some((x2, y2))) => {
+            let corr = create_corridor_between(x1, y1, x2, y2, false)
             rooms.push(corr)
           }
           _ => ()
@@ -254,108 +278,170 @@ fn corridor_exists(set : Array[(Int, Int)], a : Int, b : Int) -> Bool {
 }
 
 ///|
-fn find_room_at_grid(
-  rooms : Array[@types.Room],
-  cell_indices : Array[Int],
-  grid_idx : Int,
-  grid_cols : Int,
-  spacing_x : Int,
-  spacing_y : Int
-) -> @types.Room? {
-  let gx = grid_idx % grid_cols
-  let gy = grid_idx / grid_cols
-  let wx = gx * spacing_x
-  let wy = gy * spacing_y
-  for i in 0..<rooms.length() {
-    if rooms[i].x == wx && rooms[i].y == wy {
-      return Some(rooms[i])
+/// Look up a door's world-space position by key in the flat array.
+fn lookup_door(
+  positions : Array[(Int, Int, Int)],
+  key : Int
+) -> (Int, Int)? {
+  for i in 0..<positions.length() {
+    let (k, x, y) = positions[i]
+    if k == key {
+      return Some((x, y))
     }
   }
-  ignore(cell_indices)
   None
 }
 
 ///|
-/// Create a horizontal corridor room bridging two rooms (left-to-right).
-fn make_h_corridor(left : @types.Room, right : @types.Room) -> @types.Room {
-  let left_edge_x = left.x + left.w
-  let right_edge_x = right.x
-  let gap = right_edge_x - left_edge_x
-  let corridor_w = if gap > 2 { gap } else { 4 }
-  let corridor_h = 6
-  let corridor_x = left_edge_x
-  // Vertically centre between the two rooms
-  let left_cy = left.y + left.h / 2
-  let right_cy = right.y + right.h / 2
-  let avg_cy = (left_cy + right_cy) / 2
-  let corridor_y = avg_cy - corridor_h / 2
-  let tiles = Array::make(corridor_w * corridor_h, 1)
-  for y in 0..<corridor_h {
-    for x in 0..<corridor_w {
-      if y == 0 || y == corridor_h - 1 {
-        tiles[y * corridor_w + x] = 0
-      }
-    }
-  }
-  // Door openings at left and right ends
-  let my = corridor_h / 2
-  tiles[my * corridor_w + 0] = 2
-  tiles[(my - 1) * corridor_w + 0] = 2
-  tiles[my * corridor_w + (corridor_w - 1)] = 2
-  tiles[(my - 1) * corridor_w + (corridor_w - 1)] = 2
-  {
-    x: corridor_x,
-    y: corridor_y,
-    w: corridor_w,
-    h: corridor_h,
-    kind: Corridor,
-    state: Cleared,
-    tiles,
-    enemies_remaining: 0,
-    connections: [Left, Right],
-    visited: false,
+/// Set a tile to floor (1) if it is within bounds.
+fn carve(tiles : Array[Int], cw : Int, ch : Int, x : Int, y : Int) -> Unit {
+  if x >= 0 && x < cw && y >= 0 && y < ch {
+    tiles[y * cw + x] = 1
   }
 }
 
 ///|
-/// Create a vertical corridor room bridging two rooms (top-to-bottom).
-fn make_v_corridor(top : @types.Room, bottom : @types.Room) -> @types.Room {
-  let top_edge_y = top.y + top.h
-  let bottom_edge_y = bottom.y
-  let gap = bottom_edge_y - top_edge_y
-  let corridor_h = if gap > 2 { gap } else { 4 }
-  let corridor_w = 6
-  // Horizontally centre between the two rooms
-  let top_cx = top.x + top.w / 2
-  let bottom_cx = bottom.x + bottom.w / 2
-  let avg_cx = (top_cx + bottom_cx) / 2
-  let corridor_x = avg_cx - corridor_w / 2
-  let corridor_y = top_edge_y
-  let tiles = Array::make(corridor_w * corridor_h, 1)
-  for y in 0..<corridor_h {
-    for x in 0..<corridor_w {
-      if x == 0 || x == corridor_w - 1 {
-        tiles[y * corridor_w + x] = 0
-      }
-    }
+/// Carve a 3-wide horizontal strip of floor tiles from x_start to x_end
+/// (inclusive) centred on row cy.
+fn carve_h_strip(
+  tiles : Array[Int],
+  cw : Int,
+  ch : Int,
+  x_start : Int,
+  x_end : Int,
+  cy : Int
+) -> Unit {
+  let lo = @types.mini(x_start, x_end)
+  let hi = @types.maxi(x_start, x_end)
+  let mut x = lo
+  while x <= hi {
+    carve(tiles, cw, ch, x, cy - 1)
+    carve(tiles, cw, ch, x, cy)
+    carve(tiles, cw, ch, x, cy + 1)
+    x = x + 1
   }
-  // Door openings at top and bottom ends
-  let mx = corridor_w / 2
-  tiles[0 * corridor_w + mx] = 2
-  tiles[0 * corridor_w + mx - 1] = 2
-  tiles[(corridor_h - 1) * corridor_w + mx] = 2
-  tiles[(corridor_h - 1) * corridor_w + mx - 1] = 2
-  {
-    x: corridor_x,
-    y: corridor_y,
-    w: corridor_w,
-    h: corridor_h,
-    kind: Corridor,
-    state: Cleared,
-    tiles,
-    enemies_remaining: 0,
-    connections: [Up, Down],
-    visited: false,
+}
+
+///|
+/// Carve a 3-wide vertical strip of floor tiles from y_start to y_end
+/// (inclusive) centred on column cx.
+fn carve_v_strip(
+  tiles : Array[Int],
+  cw : Int,
+  ch : Int,
+  cx : Int,
+  y_start : Int,
+  y_end : Int
+) -> Unit {
+  let lo = @types.mini(y_start, y_end)
+  let hi = @types.maxi(y_start, y_end)
+  let mut y = lo
+  while y <= hi {
+    carve(tiles, cw, ch, cx - 1, y)
+    carve(tiles, cw, ch, cx, y)
+    carve(tiles, cw, ch, cx + 1, y)
+    y = y + 1
+  }
+}
+
+///|
+/// Create an L-shaped corridor room connecting two door positions.
+///
+/// `horizontal` = true means the primary direction is left-to-right (the
+/// start door faces Right, the end door faces Left).  When false the primary
+/// direction is top-to-bottom.
+///
+/// The corridor is 3 tiles wide (1 wall + 1 floor + 1 wall) along its
+/// cross-axis.  If the two doors are not aligned on the cross-axis the path
+/// makes a single L-bend at the midpoint of the primary axis.
+fn create_corridor_between(
+  x1 : Int,
+  y1 : Int,
+  x2 : Int,
+  y2 : Int,
+  horizontal : Bool
+) -> @types.Room {
+  // Padding: 1 tile of wall on each side of the 1-tile-wide walkable centre.
+  let pad = 2
+  if horizontal {
+    // Primary axis: X.  Cross axis: Y.
+    let left_x = x1
+    let right_x = x2
+    let mid_x = (left_x + right_x) / 2
+    // Bounding box in world coords
+    let min_y = @types.mini(y1, y2) - pad
+    let max_y = @types.maxi(y1, y2) + pad
+    let cw = right_x - left_x + 1
+    let ch = max_y - min_y + 1
+    let tiles = Array::make(cw * ch, 0)
+    // Local Y coords of each door within the tile array
+    let ly1 = y1 - min_y
+    let ly2 = y2 - min_y
+    let lmid = mid_x - left_x
+    // Carve: horizontal from door1 to mid, vertical bend, horizontal from mid to door2
+    carve_h_strip(tiles, cw, ch, 0, lmid, ly1)
+    carve_h_strip(tiles, cw, ch, lmid, cw - 1, ly2)
+    carve_v_strip(tiles, cw, ch, lmid, ly1, ly2)
+    // Punch door openings at corridor ends
+    tiles[ly1 * cw + 0] = 2
+    if ly1 - 1 >= 0 {
+      tiles[(ly1 - 1) * cw + 0] = 2
+    }
+    tiles[ly2 * cw + (cw - 1)] = 2
+    if ly2 - 1 >= 0 {
+      tiles[(ly2 - 1) * cw + (cw - 1)] = 2
+    }
+    {
+      x: left_x,
+      y: min_y,
+      w: cw,
+      h: ch,
+      kind: Corridor,
+      state: Cleared,
+      tiles,
+      enemies_remaining: 0,
+      connections: [Left, Right],
+      visited: false,
+    }
+  } else {
+    // Primary axis: Y.  Cross axis: X.
+    let top_y = y1
+    let bot_y = y2
+    let mid_y = (top_y + bot_y) / 2
+    let min_x = @types.mini(x1, x2) - pad
+    let max_x = @types.maxi(x1, x2) + pad
+    let cw = max_x - min_x + 1
+    let ch = bot_y - top_y + 1
+    let tiles = Array::make(cw * ch, 0)
+    // Local X coords of each door within the tile array
+    let lx1 = x1 - min_x
+    let lx2 = x2 - min_x
+    let lmid = mid_y - top_y
+    // Carve: vertical from door1 to mid, horizontal bend, vertical from mid to door2
+    carve_v_strip(tiles, cw, ch, lx1, 0, lmid)
+    carve_v_strip(tiles, cw, ch, lx2, lmid, ch - 1)
+    carve_h_strip(tiles, cw, ch, lx1, lx2, lmid)
+    // Punch door openings at corridor ends
+    tiles[0 * cw + lx1] = 2
+    if lx1 - 1 >= 0 {
+      tiles[0 * cw + (lx1 - 1)] = 2
+    }
+    tiles[(ch - 1) * cw + lx2] = 2
+    if lx2 - 1 >= 0 {
+      tiles[(ch - 1) * cw + (lx2 - 1)] = 2
+    }
+    {
+      x: min_x,
+      y: top_y,
+      w: cw,
+      h: ch,
+      kind: Corridor,
+      state: Cleared,
+      tiles,
+      enemies_remaining: 0,
+      connections: [Up, Down],
+      visited: false,
+    }
   }
 }
 

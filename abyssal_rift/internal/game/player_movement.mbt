@@ -16,6 +16,31 @@ pub fn update_player_movement(
     p.y += p.dash_dy * @types.dash_speed * dt
     p.invuln_timer = @types.maxf(p.invuln_timer, p.dash_timer)
     collide_player_with_tiles(game)
+    // Phantom Dash synergy: deal damage to nearby enemies during dash
+    // Only damage on first frame of dash (when dash_timer is near max)
+    let syn = game.synergies
+    if syn.dash_damages && p.dash_timer > @types.dash_duration - 0.02 {
+      let dash_radius : Float = 50.0
+      for i in 0..<game.enemies.length() {
+        let e = game.enemies[i]
+        if !e.active {
+          continue
+        }
+        match e.state {
+          Dead(_) => continue
+          _ => ()
+        }
+        let d2 = @types.dist2(p.x, p.y, e.x, e.y)
+        if d2 < dash_radius * dash_radius {
+          apply_damage_to_enemy(game, i, syn.dash_damage, false, 80.0)
+        }
+      }
+      game.hit_pause_timer = 0.0 // Don't stutter during dash
+    }
+    if syn.dash_damages {
+      // Visual trail particles (every frame during dash)
+      spawn_particles_burst(game, p.x, p.y, 2, 160, 100, 255)
+    }
     return
   }
   // Detect dash just ended

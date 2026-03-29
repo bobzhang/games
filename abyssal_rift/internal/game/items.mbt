@@ -40,11 +40,15 @@ fn collect_item(game : @types.Game, item : @types.Item) -> Unit {
       p.attack_state = Idle
       p.combo_count = 0
       push_event(game, Pickup(item.kind, item.x, item.y))
+      // Weapon change may affect synergies
+      game.synergies = get_synergy_bonuses(game.player)
     }
     PassiveItem(passive) => {
       p.passives.push(passive)
       apply_passive(p, passive)
       push_event(game, Pickup(item.kind, item.x, item.y))
+      // Recalculate synergies after acquiring a passive
+      game.synergies = get_synergy_bonuses(game.player)
     }
   }
 }
@@ -63,6 +67,18 @@ fn apply_passive(p : @types.Player, kind : @types.PassiveKind) -> Unit {
     DefenseUp => p.defense += 3
     AttackSpeedUp => ()     // handled in attack timing
     PickupRange => ()       // handled in pickup logic
+    LifeSteal => ()         // handled in combat
+    Thorns => ()            // handled in damage_player
+    Berserker => ()         // handled in damage calculation
+    GlassCannon => {
+      p.max_hp -= 30
+      if p.hp > p.max_hp {
+        p.hp = p.max_hp
+      }
+      p.damage_mult += 0.5
+    }
+    Vampiric => ()          // handled in combat on kill
+    ChainLightning => ()    // handled in combat
   }
 }
 
@@ -124,10 +140,12 @@ pub fn update_shop(game : @types.Game, input : InputState) -> Unit {
             p.weapon = kind
             p.attack_state = Idle
             p.combo_count = 0
+            game.synergies = get_synergy_bonuses(game.player)
           }
           PassiveItem(passive) => {
             p.passives.push(passive)
             apply_passive(p, passive)
+            game.synergies = get_synergy_bonuses(game.player)
           }
         }
         push_event(game, Pickup(shop.kind, shop.x, shop.y))

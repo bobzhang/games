@@ -118,7 +118,8 @@ pub fn draw_enemies(game : @types.Game) -> Unit {
       continue
     }
     let stats = @data.get_enemy_stats(e.kind, game.floor_num)
-    let r = stats.radius
+    // Elites are 1.3x size
+    let r : Float = if e.is_elite { stats.radius * 1.3 } else { stats.radius }
     let ex = e.x.to_int()
     let ey = e.y.to_int()
     // Flash white on hit
@@ -139,6 +140,28 @@ pub fn draw_enemies(game : @types.Game) -> Unit {
       }
       _ => ()
     }
+    // Elite: draw pulsing colored ring
+    if e.is_elite {
+      let affix_color = get_affix_color(e.affix)
+      let pulse = Float::from_double(
+        @math.sin((e.phase * 4.0).to_double()),
+      ) * 3.0 + 4.0
+      @raylib.draw_circle_lines_v(
+        @raylib.Vector2::new(e.x, e.y),
+        r + pulse,
+        affix_color,
+      )
+      @raylib.draw_circle_lines_v(
+        @raylib.Vector2::new(e.x, e.y),
+        r + pulse + 1.0,
+        @raylib.Color::new(
+          affix_color.r.to_int(),
+          affix_color.g.to_int(),
+          affix_color.b.to_int(),
+          120,
+        ),
+      )
+    }
     draw_enemy_shape(e.kind, ex, ey, r, base_color)
     // Outline
     @raylib.draw_circle_lines_v(
@@ -149,7 +172,7 @@ pub fn draw_enemies(game : @types.Game) -> Unit {
     // Health bar
     if e.hp < e.max_hp {
       let bar_w = r * 2.0
-      let bar_h = 3.0
+      let bar_h : Float = if e.is_elite { 4.0 } else { 3.0 }
       let bar_x = e.x - r
       let bar_y = e.y - r - 8.0
       let hp_ratio = Float::from_int(e.hp) / Float::from_int(e.max_hp)
@@ -158,12 +181,54 @@ pub fn draw_enemies(game : @types.Game) -> Unit {
         bar_w.to_int(), bar_h.to_int(),
         @raylib.Color::new(60, 20, 20, 200),
       )
+      let hp_color = if e.is_elite {
+        @raylib.Color::new(255, 180, 50, 255)
+      } else {
+        @types.color_health
+      }
       @raylib.draw_rectangle(
         bar_x.to_int(), bar_y.to_int(),
         (bar_w * hp_ratio).to_int(), bar_h.to_int(),
-        @types.color_health,
+        hp_color,
       )
     }
+    // Elite: draw affix name above health bar
+    if e.is_elite {
+      let affix_name = get_affix_name(e.affix)
+      let affix_color = get_affix_color(e.affix)
+      let tw = @raylib.measure_text(affix_name, 10)
+      @raylib.draw_text(
+        affix_name,
+        ex - tw / 2,
+        (e.y - r - 18.0).to_int(),
+        10,
+        affix_color,
+      )
+    }
+  }
+}
+
+///|
+fn get_affix_color(affix : @types.EliteAffix) -> @raylib.Color {
+  match affix {
+    Fast => @raylib.Color::new(255, 255, 80, 255)
+    Armored => @raylib.Color::new(160, 160, 180, 255)
+    Splitting => @raylib.Color::new(80, 255, 80, 255)
+    Vampiric => @raylib.Color::new(255, 50, 80, 255)
+    Explosive => @raylib.Color::new(255, 150, 30, 255)
+    None => @raylib.white
+  }
+}
+
+///|
+fn get_affix_name(affix : @types.EliteAffix) -> String {
+  match affix {
+    Fast => "FAST"
+    Armored => "ARMORED"
+    Splitting => "SPLITTING"
+    Vampiric => "VAMPIRIC"
+    Explosive => "EXPLOSIVE"
+    None => ""
   }
 }
 

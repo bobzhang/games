@@ -19,6 +19,11 @@ pub fn update_room_flow(game : @types.Game, _dt : Float) -> Unit {
             setup_shop(game)
             room.state = Cleared
           }
+          // Shrine rooms
+          if room.kind == Shrine && not(has_been_cleared(floor, floor.current_room)) {
+            setup_shrine(game)
+            room.state = Cleared
+          }
         }
         Sealed => {
           // Count active enemies belonging to this room
@@ -217,6 +222,44 @@ fn spawn_room_enemies(game : @types.Game, budget : Int) -> Unit {
             }
             spawn_enemy(game, kind, rx, ry)
             break
+          }
+        }
+      }
+      // Elite spawning on floors 3+
+      if game.floor_num >= 3 {
+        let elite_chance : Float = 0.15 + Float::from_int(game.floor_num) * 0.05
+        let (s_elite, roll) = @types.rng_next(game.rng_state)
+        game.rng_state = s_elite
+        if roll < elite_chance {
+          let affixes : Array[@types.EliteAffix] = [
+            Fast, Armored, Splitting, Vampiric, Explosive,
+          ]
+          let (s_affix, affix_idx) = @types.rng_int(game.rng_state, 0, 4)
+          game.rng_state = s_affix
+          let affix = affixes[affix_idx]
+          // Find a random active non-boss enemy to upgrade
+          let candidates : Array[Int] = []
+          for i in 0..<game.enemies.length() {
+            let ei = game.enemies[i]
+            if ei.active && !ei.is_elite &&
+              ei.room_id == floor.current_room &&
+              ei.kind != BroodMother && ei.kind != LichKing {
+              match ei.state {
+                Dead(_) => ()
+                _ => candidates.push(i)
+              }
+            }
+          }
+          if candidates.length() > 0 {
+            let (s_pick, pick_idx) = @types.rng_int(
+              game.rng_state, 0, candidates.length() - 1,
+            )
+            game.rng_state = s_pick
+            let target = game.enemies[candidates[pick_idx]]
+            target.is_elite = true
+            target.affix = affix
+            target.hp = (Float::from_int(target.hp) * 2.0).to_int()
+            target.max_hp = target.hp
           }
         }
       }

@@ -46,6 +46,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   update_homing_projectiles(game, dt)
   update_items(game, dt)
   update_shop(game, input)
+  update_shrine(game, input)
   update_reward_choice(game, input)
   update_damage_numbers(game, dt)
   update_particles(game, dt)
@@ -116,6 +117,8 @@ fn start_new_run(game : @types.Game) -> Unit {
   p.dead = false
   p.passives.clear()
   p.status_effects.clear()
+  // Reset synergies
+  game.synergies = @types.SynergyBonuses::new()
   // Clear shop
   for i in 0..<game.shop_items.length() {
     game.shop_items[i].active = false
@@ -146,6 +149,8 @@ fn start_new_run(game : @types.Game) -> Unit {
   game.rooms_cleared = 0
   game.floor_rooms_cleared = 0
   game.stairs_active = false
+  game.shrine_active = false
+  game.shrine_used = false
   game.boss_active = false
   game.boss_phase = 0
   game.boss_phase_timer = 0.0
@@ -205,6 +210,8 @@ fn advance_floor(game : @types.Game) -> Unit {
   }
   game.events.clear()
   game.stairs_active = false
+  game.shrine_active = false
+  game.shrine_used = false
   game.floor_rooms_cleared = 0
   game.boss_active = false
   game.boss_phase = 0

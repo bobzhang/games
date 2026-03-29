@@ -78,6 +78,9 @@ pub(all) struct Enemy {
   mut knockback_timer : Float
   mut phase : Float
   mut room_id : Int
+  mut bleed_timer : Float
+  mut is_elite : Bool
+  mut affix : EliteAffix
 }
 
 ///|
@@ -130,6 +133,42 @@ pub(all) struct DamageNumber {
   mut life : Float
   mut value : Int
   mut is_crit : Bool
+}
+
+///|
+pub(all) struct SynergyBonuses {
+  mut bleed_on_crit : Bool
+  mut dash_damages : Bool
+  mut dash_damage : Int
+  mut cleave : Bool
+  mut fortify : Bool
+  mut multishot : Bool
+  mut multishot_count : Int
+  mut execute : Bool
+  mut execute_threshold : Float
+  mut execute_mult : Float
+  mut vampiric : Bool
+  mut momentum : Bool
+  mut chain_projectile : Bool
+}
+
+///|
+pub fn SynergyBonuses::new() -> SynergyBonuses {
+  {
+    bleed_on_crit: false,
+    dash_damages: false,
+    dash_damage: 0,
+    cleave: false,
+    fortify: false,
+    multishot: false,
+    multishot_count: 0,
+    execute: false,
+    execute_threshold: 0.0,
+    execute_mult: 0.0,
+    vampiric: false,
+    momentum: false,
+    chain_projectile: false,
+  }
 }
 
 ///|
@@ -232,6 +271,10 @@ pub(all) struct Game {
   mut shop_active : Bool
   reward_choices : Array[RewardChoice]
   mut reward_active : Bool
+  mut synergies : SynergyBonuses
+  mut shrine_kind : ShrineKind
+  mut shrine_active : Bool
+  mut shrine_used : Bool
 }
 
 ///|
@@ -243,7 +286,8 @@ pub fn Game::new() -> Game {
       state: Idle, facing_x: 1.0, facing_y: 0.0,
       patrol_x: 0.0, patrol_y: 0.0, attack_cooldown: 0.0,
       anim_timer: 0.0, anim_frame: 0, flash_timer: 0.0,
-      knockback_timer: 0.0, phase: 0.0, room_id: -1 },
+      knockback_timer: 0.0, phase: 0.0, room_id: -1,
+      bleed_timer: 0.0, is_elite: false, affix: None },
   )
   let projectiles : Array[Projectile] = Array::make(
     256,
@@ -300,5 +344,9 @@ pub fn Game::new() -> Game {
     shop_active: false,
     reward_choices: [],
     reward_active: false,
+    synergies: SynergyBonuses::new(),
+    shrine_kind: HealingSpring,
+    shrine_active: false,
+    shrine_used: false,
   }
 }

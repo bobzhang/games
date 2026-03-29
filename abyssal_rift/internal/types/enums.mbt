@@ -53,6 +53,12 @@ pub(all) enum PassiveKind {
   DefenseUp
   AttackSpeedUp
   PickupRange
+  LifeSteal
+  Thorns
+  Berserker
+  GlassCannon
+  Vampiric
+  ChainLightning
 } derive(Eq, Show)
 
 ///|
@@ -62,6 +68,16 @@ pub(all) enum RoomKind {
   Treasure
   Boss
   Corridor
+  Shrine
+} derive(Eq, Show)
+
+///|
+pub(all) enum ShrineKind {
+  BloodAltar
+  HealingSpring
+  GambleShrine
+  CursedChest
+  ReforgeAnvil
 } derive(Eq, Show)
 
 ///|
@@ -109,3 +125,13 @@ pub(all) enum StatusEffect {
   Shield(Float)
   Haste(Float)
 } derive(Show)
+
+///|
+pub(all) enum EliteAffix {
+  None
+  Fast
+  Armored
+  Splitting
+  Vampiric
+  Explosive
+} derive(Eq, Show)

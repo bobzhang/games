@@ -119,11 +119,23 @@ pub fn damage_player(game : @types.Game, amount : Int) -> Unit {
   if p.dead || p.invuln_timer > 0.0 {
     return
   }
-  // Shield status effect reduces damage by 50%
-  let effective_amount = if has_status_shield(p) {
-    @types.maxf(Float::from_int(amount) * 0.5, 1.0).to_int()
+  // Fortify synergy: 30% less damage when above 70% HP
+  let syn = game.synergies
+  let fortified_amount = if syn.fortify {
+    let hp_ratio = Float::from_int(p.hp) / Float::from_int(p.max_hp)
+    if hp_ratio > 0.7 {
+      @types.maxf(Float::from_int(amount) * 0.7, 1.0).to_int()
+    } else {
+      amount
+    }
   } else {
     amount
+  }
+  // Shield status effect reduces damage by 50%
+  let effective_amount = if has_status_shield(p) {
+    @types.maxf(Float::from_int(fortified_amount) * 0.5, 1.0).to_int()
+  } else {
+    fortified_amount
   }
   let reduced = @types.maxf(Float::from_int(effective_amount - p.defense), 1.0).to_int()
   // Shield absorbs first
@@ -145,5 +157,29 @@ pub fn damage_player(game : @types.Game, amount : Int) -> Unit {
     p.hp = 0
     p.dead = true
     game.state = GameOver
+  }
+  // Thorns: reflect damage to nearby enemies
+  if p.passives.contains(Thorns) {
+    let thorns_dmg = if p.passives.contains(DefenseUp) { 10 } else { 5 } // Iron Maiden synergy: doubled thorns
+    for i in 0..<game.enemies.length() {
+      let e = game.enemies[i]
+      if !e.active {
+        continue
+      }
+      match e.state {
+        Dead(_) => continue
+        _ => ()
+      }
+      let d2 = @types.dist2(p.x, p.y, e.x, e.y)
+      if d2 < 80.0 * 80.0 {
+        e.hp -= thorns_dmg
+        e.flash_timer = 0.1
+        if e.hp <= 0 {
+          e.state = Dead(0.5)
+          game.enemies_killed += 1
+          push_event(game, Kill(e.kind, e.x, e.y))
+        }
+      }
+    }
   }
 }

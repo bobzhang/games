@@ -30,6 +30,47 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     if e.flash_timer > 0.0 {
       e.flash_timer -= dt
     }
+    // Bleed DOT from synergy (3 damage/sec)
+    if e.bleed_timer > 0.0 {
+      let old_tick = (e.bleed_timer * 3.0).to_int()
+      e.bleed_timer -= dt
+      let new_tick = (e.bleed_timer * 3.0).to_int()
+      if old_tick != new_tick && e.bleed_timer > 0.0 {
+        e.hp -= 1
+        e.flash_timer = 0.05
+        spawn_particles_burst(game, e.x, e.y, 2, 200, 50, 50)
+        if e.hp <= 0 {
+          e.state = Dead(0.5)
+          game.enemies_killed += 1
+          let stats = @data.get_enemy_stats(e.kind, game.floor_num)
+          push_event(game, Kill(e.kind, e.x, e.y))
+          // Drop gold (same as normal kill)
+          let item_idx = @types.alloc_item(game.items)
+          let item = game.items[item_idx]
+          item.active = true
+          item.kind = Gold(stats.reward_gold)
+          item.x = e.x
+          item.y = e.y
+          item.bob_timer = 0.0
+          // Slime split
+          if e.kind == Slime {
+            spawn_small_slimes(game, e.x, e.y)
+          }
+          // Vampiric passive: kills heal 5 HP
+          if p.passives.contains(Vampiric) {
+            p.hp = @types.clampi(p.hp + 5, 0, p.max_hp)
+          }
+          // Vampiric synergy (PickupRange + MaxHpUp): heal 1 HP per kill
+          if game.synergies.vampiric {
+            p.hp = @types.clampi(p.hp + 1, 0, p.max_hp)
+          }
+          continue
+        }
+      }
+      if e.bleed_timer < 0.0 {
+        e.bleed_timer = 0.0
+      }
+    }
     // Knockback
     if e.knockback_timer > 0.0 {
       e.knockback_timer -= dt
@@ -68,6 +109,11 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
           let d2 = @types.dist2(e.x, e.y, p.x, p.y)
           if d2 < (stats.attack_range + @types.player_radius) * (stats.attack_range + @types.player_radius) {
             damage_player(game, stats.damage)
+            // Elite Vampiric affix: heal 10% of max HP on hit
+            if e.is_elite && e.affix == Vampiric {
+              let heal = (Float::from_int(e.max_hp) * 0.1).to_int()
+              e.hp = @types.clampi(e.hp + heal, 0, e.max_hp)
+            }
           }
         } else {
           e.state = Attack(new_t)
@@ -184,6 +230,9 @@ fn spawn_small_slimes(game : @types.Game, x : Float, y : Float) -> Unit {
     e.flash_timer = 0.0
     e.knockback_timer = 0.0
     e.phase = 0.0
+    e.bleed_timer = 0.0
+    e.is_elite = false
+    e.affix = None
     e.room_id = match game.floor {
       Some(floor) => floor.current_room
       None => -1
@@ -220,8 +269,39 @@ pub fn spawn_enemy(
   e.flash_timer = 0.0
   e.knockback_timer = 0.0
   e.phase = 0.0
+  e.bleed_timer = 0.0
+  e.is_elite = false
+  e.affix = None
   e.room_id = match game.floor {
     Some(floor) => floor.current_room
     None => -1
   }
+}
+
+///|
+pub fn spawn_elite(
+  game : @types.Game,
+  kind : @types.EnemyKind,
+  x : Float,
+  y : Float,
+  affix : @types.EliteAffix
+) -> Unit {
+  spawn_enemy(game, kind, x, y)
+  // Find the just-spawned enemy (last active one)
+  let mut idx = -1
+  for i in 0..<game.enemies.length() {
+    let e = game.enemies[i]
+    if e.active && e.x == x && e.y == y && e.kind == kind && !e.is_elite {
+      idx = i
+    }
+  }
+  if idx < 0 {
+    return
+  }
+  let e = game.enemies[idx]
+  e.is_elite = true
+  e.affix = affix
+  // Elites get: 2x HP, doubled gold (handled in combat drop)
+  e.hp = (Float::from_int(e.hp) * 2.0).to_int()
+  e.max_hp = e.hp
 }

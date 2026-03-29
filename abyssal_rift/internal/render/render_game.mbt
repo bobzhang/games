@@ -11,6 +11,7 @@ pub fn draw_game(game : @types.Game) -> Unit {
       draw_stairs(game)
       draw_items(game)
       draw_shop_items(game)
+      draw_shrine(game)
       draw_reward_choices(game)
       draw_enemies(game)
       draw_projectiles(game)

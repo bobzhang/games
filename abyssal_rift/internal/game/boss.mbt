@@ -383,6 +383,7 @@ pub fn spawn_boss(game : @types.Game, x : Float, y : Float) -> Unit {
   e.flash_timer = 0.0
   e.knockback_timer = 0.0
   e.phase = 0.0
+  e.bleed_timer = 0.0
   e.room_id = match game.floor {
     Some(floor) => floor.current_room
     None => -1

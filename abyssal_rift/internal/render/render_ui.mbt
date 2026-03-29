@@ -99,6 +99,8 @@ pub fn draw_hud(game : @types.Game) -> Unit {
       }
     }
   }
+  // Synergies display - show active synergies from the game struct
+  draw_synergies(game)
   // Status effects
   if game.player.status_effects.length() > 0 {
     draw_status_effects(game)
@@ -136,6 +138,12 @@ fn passive_short_name(kind : @types.PassiveKind) -> String {
     DefenseUp => "DEF+"
     AttackSpeedUp => "ASPD+"
     PickupRange => "RANGE+"
+    LifeSteal => "LSTL"
+    Thorns => "THRN"
+    Berserker => "BSKR"
+    GlassCannon => "GLAS"
+    Vampiric => "VAMP"
+    ChainLightning => "CHNL"
   }
 }
 
@@ -150,6 +158,12 @@ fn passive_color(kind : @types.PassiveKind) -> @raylib.Color {
     DefenseUp => @raylib.Color::new(180, 180, 200, 220)
     AttackSpeedUp => @raylib.Color::new(255, 150, 200, 220)
     PickupRange => @raylib.Color::new(200, 100, 255, 220)
+    LifeSteal => @raylib.Color::new(200, 50, 50, 220)
+    Thorns => @raylib.Color::new(180, 140, 80, 220)
+    Berserker => @raylib.Color::new(255, 80, 40, 220)
+    GlassCannon => @raylib.Color::new(180, 100, 255, 220)
+    Vampiric => @raylib.Color::new(150, 0, 80, 220)
+    ChainLightning => @raylib.Color::new(100, 180, 255, 220)
   }
 }
 
@@ -157,7 +171,7 @@ fn passive_color(kind : @types.PassiveKind) -> @raylib.Color {
 fn draw_status_effects(game : @types.Game) -> Unit {
   let p = game.player
   let base_x = 16
-  let base_y = 64
+  let base_y = 78
   let mut offset = 0
   for i in 0..<p.status_effects.length() {
     let effect = p.status_effects[i]
@@ -242,6 +256,65 @@ fn draw_boss_health_bar(game : @types.Game) -> Unit {
         14,
         @raylib.Color::new(180, 180, 180, 200),
       )
+      break
+    }
+  }
+}
+
+///|
+fn draw_synergies(game : @types.Game) -> Unit {
+  let syn = game.synergies
+  let names : Array[String] = []
+  if syn.bleed_on_crit {
+    names.push("Assassin's Bleed")
+  }
+  if syn.dash_damages {
+    names.push("Phantom Dash")
+  }
+  if syn.cleave {
+    names.push("Cleave")
+  }
+  if syn.fortify {
+    names.push("Fortify")
+  }
+  if syn.multishot {
+    names.push("Multishot")
+  }
+  if syn.execute {
+    names.push("Execute")
+  }
+  if syn.vampiric {
+    names.push("Vampiric Aura")
+  }
+  if syn.momentum {
+    names.push("Momentum")
+  }
+  if syn.chain_projectile {
+    names.push("Chain Lightning")
+  }
+  if names.length() == 0 {
+    return
+  }
+  let sy = 62
+  let mut sx = 16
+  @raylib.draw_text(
+    "Synergy:",
+    sx,
+    sy,
+    12,
+    @raylib.Color::new(255, 215, 0, 180),
+  )
+  sx += 64
+  for i in 0..<names.length() {
+    @raylib.draw_text(
+      names[i],
+      sx,
+      sy,
+      12,
+      @raylib.Color::new(255, 215, 0, 220),
+    )
+    sx += @raylib.measure_text(names[i], 12) + 8
+    if sx > 600 {
       break
     }
   }

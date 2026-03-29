@@ -26,6 +26,16 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 }
 
 ///|
+pub fn mini(a : Int, b : Int) -> Int {
+  if a < b { a } else { b }
+}
+
+///|
+pub fn maxi(a : Int, b : Int) -> Int {
+  if a > b { a } else { b }
+}
+
+///|
 pub fn minf(a : Float, b : Float) -> Float {
   if a < b { a } else { b }
 }
