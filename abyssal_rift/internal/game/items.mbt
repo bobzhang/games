@@ -31,7 +31,8 @@ fn collect_item(game : @types.Game, item : @types.Item) -> Unit {
       push_event(game, Pickup(item.kind, item.x, item.y))
     }
     HealthPotion => {
-      p.hp = @types.clampi(p.hp + 30, 0, p.max_hp)
+      let heal_amount = 30 + game.meta.upgrades[5] * 10
+      p.hp = @types.clampi(p.hp + heal_amount, 0, p.max_hp)
       apply_status_effect(p, Shield(5.0))
       push_event(game, Pickup(item.kind, item.x, item.y))
     }
@@ -135,7 +136,8 @@ pub fn update_shop(game : @types.Game, input : InputState) -> Unit {
         match shop.kind {
           Gold(amount) => p.gold += amount
           HealthPotion => {
-            p.hp = @types.clampi(p.hp + 30, 0, p.max_hp)
+            let heal_amount = 30 + game.meta.upgrades[5] * 10
+            p.hp = @types.clampi(p.hp + heal_amount, 0, p.max_hp)
             apply_status_effect(p, Shield(5.0))
             // Also remove negative status effects
             clear_negative_status(p)

@@ -1,5 +1,5 @@
 ///|
-pub fn update_room_flow(game : @types.Game, _dt : Float) -> Unit {
+pub fn update_room_flow(game : @types.Game, dt : Float) -> Unit {
   match game.floor {
     None => ()
     Some(floor) => {
@@ -38,7 +38,22 @@ pub fn update_room_flow(game : @types.Game, _dt : Float) -> Unit {
               }
             }
           }
-          if alive == 0 {
+          if game.wave_active {
+            if alive == 0 {
+              game.wave_count += 1
+              if game.wave_count >= game.wave_max {
+                game.wave_active = false
+                clear_room(game)
+              } else {
+                // Spawn next wave after delay
+                game.wave_timer -= dt
+                if game.wave_timer <= 0.0 {
+                  spawn_wave(game, game.wave_count)
+                  game.wave_timer = 1.5
+                }
+              }
+            }
+          } else if alive == 0 {
             clear_room(game)
           }
         }
@@ -116,6 +131,36 @@ fn has_been_cleared(floor : @types.Floor, room_idx : Int) -> Bool {
 }
 
 ///|
+fn spawn_wave(game : @types.Game, wave_num : Int) -> Unit {
+  match game.floor {
+    None => ()
+    Some(floor) => {
+      let room = floor.rooms[floor.current_room]
+      let ts = @types.tile_sizef
+      let cx = Float::from_int(room.x) * ts + Float::from_int(room.w) * ts / 2.0
+      let cy = Float::from_int(room.y) * ts + Float::from_int(room.h) * ts / 2.0
+      let hw = Float::from_int(room.w - 4) * ts / 2.0
+      let hh = Float::from_int(room.h - 4) * ts / 2.0
+      let count = 3 + wave_num * 2
+      for _i in 0..<count {
+        let (s1, ox) = @types.rng_range(game.rng_state, -hw, hw)
+        let (s2, oy) = @types.rng_range(s1, -hh, hh)
+        game.rng_state = s2
+        let kind : @types.EnemyKind = match wave_num % 3 {
+          0 => SlimeSmall
+          1 => Skeleton
+          _ => Bat
+        }
+        if @types.dist2(cx + ox, cy + oy, game.player.x, game.player.y) >
+          80.0 * 80.0 {
+          spawn_enemy(game, kind, cx + ox, cy + oy)
+        }
+      }
+    }
+  }
+}
+
+///|
 fn seal_room(game : @types.Game) -> Unit {
   match game.floor {
     None => ()
@@ -141,6 +186,12 @@ fn seal_room(game : @types.Game) -> Unit {
         game.current_encounter = encounter_type
         game.encounter_flash_timer = 2.0
         spawn_encounter(game, encounter_type, room)
+        if encounter_type == SurvivalWave {
+          game.wave_active = true
+          game.wave_count = 0
+          game.wave_max = 3 + game.floor_num / 3
+          game.wave_timer = 0.0
+        }
       } else {
         // Fallback: spawn with budget
         let budget = 3 + game.floor_num * 2
@@ -420,23 +471,35 @@ fn clear_room(game : @types.Game) -> Unit {
         }
       }
       // Check if stairs should appear:
-      // On boss floors: stairs appear after boss is dead
-      // On normal floors: stairs appear after clearing 60% of combat rooms
-      let mut total_combat_rooms = 0
-      for i in 0..<floor.rooms.length() {
-        let r = floor.rooms[i]
-        if r.kind == Combat || r.kind == Boss || r.kind == EliteVault || r.kind == Challenge {
-          total_combat_rooms += 1
+      // On boss floors: stairs appear after boss room is cleared
+      // On normal floors: stairs appear after clearing 60% of combat rooms (min 3)
+      let stairs_unlocked = if game.floor_num % 5 == 0 {
+        // Boss floor: only require the Boss room to be cleared
+        let mut boss_cleared = false
+        for i in 0..<floor.rooms.length() {
+          let r = floor.rooms[i]
+          if r.kind == Boss && r.state == Cleared {
+            boss_cleared = true
+            break
+          }
         }
-      }
-      let required = if game.floor_num % 5 == 0 {
-        // Boss floor: must clear all (boss room counts as combat)
-        total_combat_rooms
+        boss_cleared
       } else {
-        // Normal floor: 60% of combat rooms
-        @types.maxf(Float::from_int(total_combat_rooms) * 0.6, 2.0).to_int()
+        // Normal floor: 60% of combat rooms, minimum 3
+        let mut total_combat_rooms = 0
+        for i in 0..<floor.rooms.length() {
+          let r = floor.rooms[i]
+          if r.kind == Combat || r.kind == Boss || r.kind == EliteVault || r.kind == Challenge {
+            total_combat_rooms += 1
+          }
+        }
+        let required = @types.maxf(
+          Float::from_int(total_combat_rooms) * 0.6,
+          3.0,
+        ).to_int()
+        game.floor_rooms_cleared >= required
       }
-      if game.floor_rooms_cleared >= required {
+      if stairs_unlocked {
         // Place stairs in the center of the last cleared room
         let ts = @types.tile_sizef
         let cx = Float::from_int(room.x) * ts + Float::from_int(room.w) * ts / 2.0

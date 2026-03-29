@@ -67,7 +67,8 @@ pub fn update_player_movement(
     } else {
       1.0
     }
-    p.dash_cooldown = @types.dash_cooldown * cooldown_mult
+    let meta_dash_mult : Float = 1.0 - Float::from_int(game.meta.upgrades[4]) * 0.1
+    p.dash_cooldown = @types.dash_cooldown * cooldown_mult * meta_dash_mult
     push_event(game, DashUsed(p.x, p.y, dx, dy))
     return
   }

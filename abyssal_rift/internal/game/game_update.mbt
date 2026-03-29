@@ -14,13 +14,14 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     Paused => update_paused(game)
     GameOver => update_game_over(game)
     Victory => update_victory(game)
+    MetaScreen => update_meta_screen(game)
   }
 }
 
 ///|
 fn update_title(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(@raylib.KeySpace) {
-    start_new_run(game)
+    game.state = MetaScreen
   }
 }
 
@@ -83,14 +84,30 @@ fn update_paused(game : @types.Game) -> Unit {
 ///|
 fn update_game_over(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(@raylib.KeySpace) {
-    start_new_run(game)
+    let tokens = earn_tokens(game)
+    let meta = game.meta
+    meta.abyss_tokens += tokens
+    meta.total_runs += 1
+    if game.floor_num > meta.best_floor {
+      meta.best_floor = game.floor_num
+    }
+    meta.total_kills += game.enemies_killed
+    game.state = MetaScreen
   }
 }
 
 ///|
 fn update_victory(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) {
-    start_new_run(game)
+    let tokens = earn_tokens(game)
+    let meta = game.meta
+    meta.abyss_tokens += tokens
+    meta.total_runs += 1
+    if game.floor_num > meta.best_floor {
+      meta.best_floor = game.floor_num
+    }
+    meta.total_kills += game.enemies_killed
+    game.state = MetaScreen
   }
 }
 
@@ -178,9 +195,14 @@ fn start_new_run(game : @types.Game) -> Unit {
   // Reveal adjacent rooms from start
   reveal_adjacent_rooms(floor, 0)
   // Room flow will handle enemy spawning when the room is entered
+  game.wave_active = false
+  game.wave_count = 0
+  game.wave_max = 0
+  game.wave_timer = 0.0
   game.room_clear_timer = 0.0
   game.synergy_notification_timer = 0.0
   game.synergy_notification_text = ""
+  apply_meta_upgrades(game)
   game.state = Playing
 }
 
@@ -238,6 +260,10 @@ fn advance_floor(game : @types.Game) -> Unit {
   game.camera.y = game.player.y
   // Reveal adjacent rooms from start
   reveal_adjacent_rooms(floor, 0)
+  game.wave_active = false
+  game.wave_count = 0
+  game.wave_max = 0
+  game.wave_timer = 0.0
   game.room_clear_timer = 0.0
   game.floor_transition_timer = 2.0
 }
@@ -312,5 +338,63 @@ fn process_events(game : @types.Game) -> Unit {
         spawn_particles_burst(game, x, y, 4, 255, 215, 0)
       _ => ()
     }
+  }
+}
+
+///|
+fn earn_tokens(game : @types.Game) -> Int {
+  let floor_bonus = game.floor_num * 3
+  let kill_bonus = game.enemies_killed / 5
+  let boss_bonus = (if game.floor_num >= 5 { 10 } else { 0 }) +
+    (if game.floor_num >= 10 { 20 } else { 0 })
+  let room_bonus = game.rooms_cleared * 2
+  floor_bonus + kill_bonus + boss_bonus + room_bonus
+}
+
+///|
+fn apply_meta_upgrades(game : @types.Game) -> Unit {
+  let p = game.player
+  let meta = game.meta
+  // HP Up: +10 per level
+  p.max_hp += meta.upgrades[0] * 10
+  p.hp = p.max_hp
+  // Shield Up: +10 per level
+  p.max_shield += Float::from_int(meta.upgrades[1]) * 10.0
+  p.shield = p.max_shield
+  // Starting Gold: +15 per level
+  p.gold += meta.upgrades[2] * 15
+  // Weapon Mastery: +5% damage per level
+  p.damage_mult += Float::from_int(meta.upgrades[3]) * 0.05
+  // Dash Mastery: applied in player_movement via meta check
+  // Potion Efficiency: applied in items.mbt via meta check
+}
+
+///|
+fn update_meta_screen(game : @types.Game) -> Unit {
+  let meta = game.meta
+  let max_levels = [3, 3, 3, 5, 3, 3]
+  let base_costs = [10, 10, 8, 15, 12, 10]
+  // Check number key presses for purchases
+  for i in 0..<6 {
+    let key = match i {
+      0 => @raylib.KeyOne
+      1 => @raylib.KeyTwo
+      2 => @raylib.KeyThree
+      3 => @raylib.KeyFour
+      4 => @raylib.KeyFive
+      _ => @raylib.KeySix
+    }
+    if @raylib.is_key_pressed(key) {
+      let level = meta.upgrades[i]
+      let cost = base_costs[i] * (level + 1)
+      if level < max_levels[i] && meta.abyss_tokens >= cost {
+        meta.abyss_tokens -= cost
+        meta.upgrades[i] += 1
+      }
+    }
+  }
+  // Start run
+  if @raylib.is_key_pressed(@raylib.KeyEnter) {
+    start_new_run(game)
   }
 }

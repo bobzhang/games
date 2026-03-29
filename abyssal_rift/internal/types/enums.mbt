@@ -5,7 +5,18 @@ pub(all) enum GameState {
   Paused
   GameOver
   Victory
+  MetaScreen
 } derive(Eq)
+
+///|
+pub(all) enum MetaUpgrade {
+  StartingHpUp
+  StartingShieldUp
+  StartingGold
+  WeaponMastery
+  DashMastery
+  PotionEfficiency
+} derive(Eq, Show)
 
 ///|
 pub(all) enum RoomState {

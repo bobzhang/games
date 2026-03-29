@@ -240,6 +240,26 @@ pub(all) struct ShopItem {
 }
 
 ///|
+pub(all) struct MetaProgress {
+  mut abyss_tokens : Int
+  mut total_runs : Int
+  mut best_floor : Int
+  mut total_kills : Int
+  upgrades : Array[Int]
+}
+
+///|
+pub fn MetaProgress::new() -> MetaProgress {
+  {
+    abyss_tokens: 0,
+    total_runs: 0,
+    best_floor: 0,
+    total_kills: 0,
+    upgrades: Array::make(6, 0),
+  }
+}
+
+///|
 pub(all) struct Game {
   mut state : GameState
   player : Player
@@ -279,6 +299,11 @@ pub(all) struct Game {
   mut synergy_notification_text : String
   mut current_encounter : EncounterType
   mut encounter_flash_timer : Float
+  meta : MetaProgress
+  mut wave_timer : Float
+  mut wave_count : Int
+  mut wave_max : Int
+  mut wave_active : Bool
 }
 
 ///|
@@ -356,5 +381,10 @@ pub fn Game::new() -> Game {
     synergy_notification_text: "",
     current_encounter: Standard,
     encounter_flash_timer: 0.0,
+    meta: MetaProgress::new(),
+    wave_timer: 0.0,
+    wave_count: 0,
+    wave_max: 0,
+    wave_active: false,
   }
 }

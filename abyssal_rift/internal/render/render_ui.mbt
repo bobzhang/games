@@ -86,6 +86,25 @@ pub fn draw_hud(game : @types.Game) -> Unit {
       enc_color,
     )
   }
+  // Wave counter
+  if game.wave_active {
+    let wave_text = "Wave \{game.wave_count + 1}/\{game.wave_max}"
+    let wave_tw = @raylib.measure_text(wave_text, 24)
+    @raylib.draw_rectangle(
+      (@types.screen_w - wave_tw) / 2 - 10,
+      @types.screen_h / 2 - 55,
+      wave_tw + 20,
+      32,
+      @raylib.Color::new(0, 0, 0, 150),
+    )
+    @raylib.draw_text(
+      wave_text,
+      (@types.screen_w - wave_tw) / 2,
+      @types.screen_h / 2 - 50,
+      24,
+      @raylib.Color::new(100, 200, 255, 230),
+    )
+  }
   // Synergy unlocked notification
   if game.synergy_notification_timer > 0.0 {
     let alpha = @types.clampi(

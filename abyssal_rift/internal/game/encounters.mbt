@@ -60,7 +60,7 @@ pub fn spawn_encounter(
     Swarm => spawn_encounter_swarm(game, cx, cy, hw, hh)
     SniperNest => spawn_encounter_sniper_nest(game, cx, cy, hw, hh)
     BossRush => spawn_encounter_boss_rush(game, cx, cy, hw, hh)
-    SurvivalWave => spawn_encounter_standard(game, cx, cy, hw, hh)
+    SurvivalWave => spawn_encounter_survival_wave(game, cx, cy, hw, hh)
     PoisonNest => spawn_encounter_poison_nest(game, cx, cy, hw, hh)
     Ambush => spawn_encounter_ambush(game, cx, cy, hw, hh)
   }
@@ -183,6 +183,26 @@ fn spawn_encounter_ambush(
       Archer
     }
     spawn_enemy(game, kind, ex, ey)
+  }
+}
+
+///|
+fn spawn_encounter_survival_wave(
+  game : @types.Game,
+  cx : Float,
+  cy : Float,
+  hw : Float,
+  hh : Float
+) -> Unit {
+  // Spawn only a small first wave; subsequent waves handled by room_flow
+  let count = 3
+  for _i in 0..<count {
+    let (s1, ox) = @types.rng_range(game.rng_state, -hw * 0.5, hw * 0.5)
+    let (s2, oy) = @types.rng_range(s1, -hh * 0.5, hh * 0.5)
+    game.rng_state = s2
+    if @types.dist2(cx + ox, cy + oy, game.player.x, game.player.y) > 80.0 * 80.0 {
+      spawn_enemy(game, SlimeSmall, cx + ox, cy + oy)
+    }
   }
 }
 

@@ -105,8 +105,8 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
     }
   }
 
-  // Pick one random Combat cell for EliteVault on floors 4+
-  if floor_num >= 4 {
+  // Pick one random Combat cell for EliteVault on floors 4+ (skip boss floors)
+  if floor_num >= 4 && floor_num % 5 != 0 {
     let mut attempts = 0
     while attempts < 20 {
       let result = @types.rng_int(state, 1, cell_indices.length() - 2)
@@ -120,8 +120,8 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
     }
   }
 
-  // Pick one random Combat cell for Challenge on floors 6+
-  if floor_num >= 6 {
+  // Pick one random Combat cell for Challenge on floors 6+ (skip boss floors)
+  if floor_num >= 6 && floor_num % 5 != 0 {
     let mut attempts = 0
     while attempts < 20 {
       let result = @types.rng_int(state, 1, cell_indices.length() - 2)

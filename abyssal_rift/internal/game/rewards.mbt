@@ -142,21 +142,28 @@ fn get_synergy_weapon(
 ) -> @types.WeaponKind {
   // Pick a weapon that synergizes with existing passives
   let candidates : Array[@types.WeaponKind] = []
-  if p.passives.contains(CritUp) {
+  if p.passives.contains(CritUp) && p.weapon != Daggers {
     candidates.push(Daggers)
   }
   if p.passives.contains(DamageUp) {
-    candidates.push(Sword)
-    candidates.push(Staff)
+    if p.weapon != Sword {
+      candidates.push(Sword)
+    }
+    if p.weapon != Staff {
+      candidates.push(Staff)
+    }
   }
-  if p.passives.contains(AttackSpeedUp) {
+  if p.passives.contains(AttackSpeedUp) && p.weapon != Bow {
     candidates.push(Bow)
   }
   if candidates.length() == 0 {
-    candidates.push(Sword)
-    candidates.push(Daggers)
-    candidates.push(Bow)
-    candidates.push(Staff)
+    // Fallback: all weapons except the one the player already has
+    let all_weapons : Array[@types.WeaponKind] = [Sword, Daggers, Bow, Staff]
+    for i in 0..<all_weapons.length() {
+      if all_weapons[i] != p.weapon {
+        candidates.push(all_weapons[i])
+      }
+    }
   }
   let (_, f) = @types.rng_next(rng)
   let idx = (f * Float::from_int(candidates.length())).to_int() %
@@ -172,7 +179,8 @@ fn generate_unique_offer(
 ) -> (@types.RewardChoice, UInt) {
   let all_passives : Array[@types.PassiveKind] = [
     MaxHpUp, DamageUp, SpeedUp, CritUp, DashCooldownDown, DefenseUp,
-    AttackSpeedUp, PickupRange,
+    AttackSpeedUp, PickupRange, LifeSteal, Thorns, Berserker,
+    GlassCannon, Vampiric, ChainLightning,
   ]
   // Filter out already-offered passives and player's existing passives
   let available : Array[@types.PassiveKind] = []

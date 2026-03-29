@@ -68,6 +68,7 @@ pub fn draw_game(game : @types.Game) -> Unit {
     }
     GameOver => draw_game_over(game)
     Victory => draw_victory_screen(game)
+    MetaScreen => draw_meta_screen(game)
   }
 }
 

@@ -184,11 +184,25 @@ pub fn draw_game_over(game : @types.Game) -> Unit {
   let pv = "\{num_passives}"
   let pvw = @raylib.measure_text(pv, 20)
   @raylib.draw_text(pv, cx + 100 - pvw, sy, 20, @raylib.Color::new(200, 100, 255, 255))
+  sy += 40
+  // Tokens to be earned
+  let tokens = game.floor_num * 3 + game.enemies_killed / 5 +
+    (if game.floor_num >= 5 { 10 } else { 0 }) +
+    (if game.floor_num >= 10 { 20 } else { 0 }) + game.rooms_cleared * 2
+  let token_text = "+\{tokens} Abyss Tokens"
+  let token_tw = @raylib.measure_text(token_text, 22)
+  @raylib.draw_text(
+    token_text,
+    (cx - token_tw / 2),
+    sy,
+    22,
+    @raylib.Color::new(255, 215, 0, 255),
+  )
   // Restart prompt
   if game.frame_count % 60 < 40 {
-    let restart = "Press ENTER to restart"
+    let restart = "Press ENTER to continue"
     let rw = @raylib.measure_text(restart, 20)
-    @raylib.draw_text(restart, (@types.screen_w - rw) / 2, 500, 20, @raylib.white)
+    @raylib.draw_text(restart, (@types.screen_w - rw) / 2, 520, 20, @raylib.white)
   }
 }
 
@@ -289,10 +303,144 @@ pub fn draw_victory_screen(game : @types.Game) -> Unit {
     20,
     @raylib.Color::new(200, 230, 255, 255),
   )
+  sy += 40
+  // Tokens to be earned
+  let tokens = game.floor_num * 3 + game.enemies_killed / 5 +
+    (if game.floor_num >= 5 { 10 } else { 0 }) +
+    (if game.floor_num >= 10 { 20 } else { 0 }) + game.rooms_cleared * 2
+  let token_text = "+\{tokens} Abyss Tokens"
+  let token_tw = @raylib.measure_text(token_text, 22)
+  @raylib.draw_text(
+    token_text,
+    (cx - token_tw / 2),
+    sy,
+    22,
+    @raylib.Color::new(255, 215, 0, 255),
+  )
   // Restart prompt
   if game.frame_count % 60 < 40 {
-    let restart = "Press ENTER to play again"
+    let restart = "Press ENTER to continue"
     let rw = @raylib.measure_text(restart, 20)
-    @raylib.draw_text(restart, (@types.screen_w - rw) / 2, 530, 20, @raylib.white)
+    @raylib.draw_text(restart, (@types.screen_w - rw) / 2, 550, 20, @raylib.white)
+  }
+}
+
+///|
+pub fn draw_meta_screen(game : @types.Game) -> Unit {
+  @raylib.clear_background(@raylib.Color::new(15, 12, 20, 255))
+  let meta = game.meta
+  // Background ambient particles
+  let t = Float::from_int(game.frame_count) * 0.015
+  let sw = Float::from_int(@types.screen_w)
+  let sh = Float::from_int(@types.screen_h)
+  for i in 0..<20 {
+    let fi = Float::from_int(i)
+    let x = (Float::from_double(@math.sin((t * 0.4 + fi * 0.8).to_double())) * 0.5 + 0.5) * sw
+    let y = (Float::from_double(@math.cos((t * 0.3 + fi * 1.1).to_double())) * 0.5 + 0.5) * sh
+    let alpha = 15 +
+      ((Float::from_double(@math.sin((t + fi * 0.6).to_double())) * 0.5 + 0.5) * 25.0).to_int()
+    @raylib.draw_circle(
+      x.to_int(),
+      y.to_int(),
+      2.0 + fi * 0.2,
+      @raylib.Color::new(120, 80, 200, alpha),
+    )
+  }
+  // Title
+  let title = "ABYSS SANCTUM"
+  let tw = @raylib.measure_text(title, 40)
+  @raylib.draw_text(
+    title,
+    (@types.screen_w - tw) / 2,
+    40,
+    40,
+    @raylib.Color::new(180, 140, 255, 255),
+  )
+  // Tokens
+  let tokens_text = "Abyss Tokens: \{meta.abyss_tokens}"
+  let ttw = @raylib.measure_text(tokens_text, 24)
+  @raylib.draw_text(
+    tokens_text,
+    (@types.screen_w - ttw) / 2,
+    95,
+    24,
+    @raylib.Color::new(255, 215, 0, 255),
+  )
+  // Divider
+  let cx = @types.screen_w / 2
+  @raylib.draw_line(
+    cx - 200,
+    125,
+    cx + 200,
+    125,
+    @raylib.Color::new(120, 80, 200, 80),
+  )
+  // Upgrades list
+  let names = [
+    "1. Starting HP Up",
+    "2. Starting Shield Up",
+    "3. Starting Gold",
+    "4. Weapon Mastery",
+    "5. Dash Mastery",
+    "6. Potion Efficiency",
+  ]
+  let descs = [
+    "Max HP +10 per level",
+    "Max Shield +10 per level",
+    "Start with +15 gold per level",
+    "All damage +5% per level",
+    "Dash cooldown -10% per level",
+    "Potion heal +10 per level",
+  ]
+  let base_costs = [10, 10, 8, 15, 12, 10]
+  let max_levels = [3, 3, 3, 5, 3, 3]
+  for i in 0..<6 {
+    let level = meta.upgrades[i]
+    let cost = base_costs[i] * (level + 1)
+    let y = 150 + i * 55
+    let maxed = level >= max_levels[i]
+    let can_afford = meta.abyss_tokens >= cost && not(maxed)
+    let color = if maxed {
+      @raylib.Color::new(100, 200, 100, 255)
+    } else if can_afford {
+      @raylib.white
+    } else {
+      @raylib.Color::new(120, 120, 120, 180)
+    }
+    @raylib.draw_text(names[i], 200, y, 20, color)
+    let level_text = if maxed {
+      "MAX"
+    } else {
+      "Lv.\{level}/\{max_levels[i]}  Cost: \{cost}"
+    }
+    @raylib.draw_text(level_text, 550, y, 16, color)
+    @raylib.draw_text(
+      descs[i],
+      550,
+      y + 20,
+      14,
+      @raylib.Color::new(160, 160, 180, 180),
+    )
+  }
+  // Stats
+  let stats_text = "Total Runs: \{meta.total_runs}  Best Floor: \{meta.best_floor}  Total Kills: \{meta.total_kills}"
+  @raylib.draw_text(
+    stats_text,
+    200,
+    500,
+    16,
+    @raylib.Color::new(140, 140, 160, 180),
+  )
+  // Prompt
+  if game.frame_count % 60 < 40 {
+    let prompt = "Press 1-6 to buy upgrades | ENTER to start run"
+    let pw = @raylib.measure_text(prompt, 20)
+    @raylib.draw_text(
+      prompt,
+      (@types.screen_w - pw) / 2,
+      560,
+      20,
+      @raylib.Color::new(200, 200, 220, 220),
+    )
   }
 }
