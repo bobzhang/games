@@ -94,5 +94,27 @@ pub fn get_enemy_stats(
         sight_range: 250.0,
         reward_gold: 20,
       }
+    BroodMother =>
+      {
+        hp: 500 + floor_bonus * 10,
+        speed: 60.0,
+        damage: 20 + floor_bonus * 2,
+        attack_range: 80.0,
+        attack_cooldown: 2.0,
+        radius: 40.0,
+        sight_range: 500.0,
+        reward_gold: 100,
+      }
+    LichKing =>
+      {
+        hp: 800 + floor_bonus * 15,
+        speed: 45.0,
+        damage: 25 + floor_bonus * 2,
+        attack_range: 300.0,
+        attack_cooldown: 1.5,
+        radius: 35.0,
+        sight_range: 600.0,
+        reward_gold: 200,
+      }
   }
 }

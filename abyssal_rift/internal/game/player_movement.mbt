@@ -37,8 +37,15 @@ pub fn update_player_movement(
     push_event(game, DashUsed(p.x, p.y, dx, dy))
     return
   }
-  // Normal movement with acceleration
-  let speed = @types.player_base_speed * p.speed
+  // Normal movement with acceleration (modified by status effects)
+  let mut speed_mult = p.speed
+  if has_status_slow(p) {
+    speed_mult = speed_mult * 0.5
+  }
+  if has_status_haste(p) {
+    speed_mult = speed_mult * 1.3
+  }
+  let speed = @types.player_base_speed * speed_mult
   let target_vx = input.move_x * speed
   let target_vy = input.move_y * speed
   if @types.absf(input.move_x) > 0.01 || @types.absf(input.move_y) > 0.01 {

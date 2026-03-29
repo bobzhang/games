@@ -31,6 +31,8 @@ pub(all) enum EnemyKind {
   Bat
   Spider
   Golem
+  BroodMother
+  LichKing
 } derive(Eq, Show)
 
 ///|
@@ -99,3 +101,11 @@ pub(all) enum EnemyState {
   Hurt(Float)
   Dead(Float)
 } derive(Eq)
+
+///|
+pub(all) enum StatusEffect {
+  Slow(Float)
+  Poison(Float)
+  Shield(Float)
+  Haste(Float)
+} derive(Show)

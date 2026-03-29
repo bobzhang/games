@@ -14,6 +14,11 @@ pub fn update_room_flow(game : @types.Game, _dt : Float) -> Unit {
           if (room.kind == Combat || room.kind == Boss) && not(has_been_cleared(floor, floor.current_room)) {
             seal_room(game)
           }
+          // Shop for treasure rooms
+          if room.kind == Treasure && not(has_been_cleared(floor, floor.current_room)) {
+            setup_shop(game)
+            room.state = Cleared
+          }
         }
         Sealed => {
           // Count active enemies belonging to this room
@@ -111,9 +116,16 @@ fn seal_room(game : @types.Game) -> Unit {
     Some(floor) => {
       let room = floor.rooms[floor.current_room]
       room.state = Sealed
-      // Spawn enemies based on budget
-      let budget = 3 + game.floor_num * 2
-      spawn_room_enemies(game, budget)
+      if room.kind == Boss {
+        let ts = @types.tile_sizef
+        let cx = Float::from_int(room.x) * ts + Float::from_int(room.w) * ts / 2.0
+        let cy = Float::from_int(room.y) * ts + Float::from_int(room.h) * ts / 2.0
+        spawn_boss(game, cx, cy)
+      } else {
+        // Spawn enemies based on budget
+        let budget = 3 + game.floor_num * 2
+        spawn_room_enemies(game, budget)
+      }
     }
   }
 }
@@ -129,18 +141,35 @@ fn spawn_room_enemies(game : @types.Game, budget : Int) -> Unit {
       let mut attempts = 0
       while remaining > 0 && attempts < 50 {
         attempts += 1
-        // Pick enemy kind based on cost
+        // Pick enemy kind based on cost, scaled by floor difficulty
         let (s1, roll) = @types.rng_next(game.rng_state)
         game.rng_state = s1
-        let (kind, cost) : (@types.EnemyKind, Int) = if roll < 0.3 {
+        // Later floors shift probability toward tougher enemies
+        let golem_chance : Float = if game.floor_num >= 5 {
+          0.12
+        } else if game.floor_num >= 3 {
+          0.06
+        } else {
+          0.0
+        }
+        let spider_chance : Float = if game.floor_num >= 3 {
+          0.10
+        } else {
+          0.0
+        }
+        // Thresholds: slime [0, 0.25), skeleton [0.25, 0.50), archer [0.50, 0.65),
+        //   bat [0.65, 0.85 - spider - golem), spider, golem
+        let golem_start : Float = Float::from_double(1.0) - golem_chance
+        let spider_start : Float = golem_start - spider_chance
+        let (kind, cost) : (@types.EnemyKind, Int) = if roll < 0.25 {
           (Slime, 1)
-        } else if roll < 0.55 {
+        } else if roll < 0.50 {
           (Skeleton, 2)
-        } else if roll < 0.7 {
+        } else if roll < 0.65 {
           (Archer, 2)
-        } else if roll < 0.85 {
+        } else if roll < spider_start {
           (Bat, 1)
-        } else if roll < 0.93 {
+        } else if roll < golem_start {
           (Spider, 3)
         } else {
           (Golem, 4)
@@ -281,6 +310,53 @@ fn clear_room(game : @types.Game) -> Unit {
       push_event(game, RoomCleared)
       // Celebration particles
       spawn_particles_burst(game, game.player.x, game.player.y, 30, 100, 200, 255)
+    }
+  }
+}
+
+///|
+fn setup_shop(game : @types.Game) -> Unit {
+  match game.floor {
+    None => ()
+    Some(floor) => {
+      let room = floor.rooms[floor.current_room]
+      let ts = @types.tile_sizef
+      let cx = Float::from_int(room.x) * ts + Float::from_int(room.w) * ts / 2.0
+      let cy = Float::from_int(room.y) * ts + Float::from_int(room.h) * ts / 2.0
+      // Generate 3 shop items: weapon, passive, health potion
+      // Item 0: Weapon
+      let weapons : Array[@types.WeaponKind] = [Sword, Daggers, Bow, Staff]
+      let (s1, widx) = @types.rng_int(game.rng_state, 0, 3)
+      let (s2, wprice) = @types.rng_int(s1, 30, 50)
+      game.rng_state = s2
+      let shop0 = game.shop_items[0]
+      shop0.active = true
+      shop0.kind = WeaponPickup(weapons[widx])
+      shop0.price = wprice
+      shop0.x = cx - 80.0
+      shop0.y = cy - 20.0
+      // Item 1: Passive
+      let passives : Array[@types.PassiveKind] = [
+        MaxHpUp, DamageUp, SpeedUp, CritUp,
+        DashCooldownDown, DefenseUp, AttackSpeedUp, PickupRange,
+      ]
+      let (s3, pidx) = @types.rng_int(game.rng_state, 0, passives.length() - 1)
+      let (s4, pprice) = @types.rng_int(s3, 40, 80)
+      game.rng_state = s4
+      let shop1 = game.shop_items[1]
+      shop1.active = true
+      shop1.kind = PassiveItem(passives[pidx])
+      shop1.price = pprice
+      shop1.x = cx
+      shop1.y = cy - 20.0
+      // Item 2: Health potion
+      let shop2 = game.shop_items[2]
+      shop2.active = true
+      shop2.kind = HealthPotion
+      shop2.price = 15
+      shop2.x = cx + 80.0
+      shop2.y = cy - 20.0
+      game.shop_active = true
     }
   }
 }

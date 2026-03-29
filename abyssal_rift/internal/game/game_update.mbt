@@ -26,6 +26,11 @@ fn update_title(game : @types.Game) -> Unit {
 
 ///|
 fn update_playing(game : @types.Game, dt : Float) -> Unit {
+  // Floor transition overlay
+  if game.floor_transition_timer > 0.0 {
+    game.floor_transition_timer -= dt
+    return
+  }
   let input = read_input(game)
   if input.pause_pressed {
     game.state = Paused
@@ -34,10 +39,13 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   update_player_movement(game, input, dt)
   update_player_combat(game, input, dt)
   update_player_state(game, dt)
+  update_status_effects(game, dt)
   update_enemies(game, dt)
+  update_boss(game, dt)
   update_projectiles(game, dt)
   update_homing_projectiles(game, dt)
   update_items(game, dt)
+  update_shop(game, input)
   update_damage_numbers(game, dt)
   update_particles(game, dt)
   update_camera(game, dt)
@@ -106,6 +114,12 @@ fn start_new_run(game : @types.Game) -> Unit {
   p.gold = 0
   p.dead = false
   p.passives.clear()
+  p.status_effects.clear()
+  // Clear shop
+  for i in 0..<game.shop_items.length() {
+    game.shop_items[i].active = false
+  }
+  game.shop_active = false
   // Clear pools
   for i in 0..<game.enemies.length() {
     game.enemies[i].active = false
@@ -128,6 +142,11 @@ fn start_new_run(game : @types.Game) -> Unit {
   game.rooms_cleared = 0
   game.floor_rooms_cleared = 0
   game.stairs_active = false
+  game.boss_active = false
+  game.boss_phase = 0
+  game.boss_phase_timer = 0.0
+  game.boss_attack_pattern = 0
+  game.floor_transition_timer = 0.0
   // Generate floor
   game.floor_num = 1
   let (floor, new_rng) = @dungeon.generate_floor(game.floor_num, game.rng_state)
@@ -151,11 +170,16 @@ fn start_new_run(game : @types.Game) -> Unit {
 ///|
 fn advance_floor(game : @types.Game) -> Unit {
   game.floor_num += 1
-  // Check victory condition (floor 8 cleared)
-  if game.floor_num > 8 {
+  // Check victory condition (floor 10 cleared)
+  if game.floor_num > 10 {
     game.state = Victory
     return
   }
+  // Clear shop
+  for i in 0..<game.shop_items.length() {
+    game.shop_items[i].active = false
+  }
+  game.shop_active = false
   // Clear pools
   for i in 0..<game.enemies.length() {
     game.enemies[i].active = false
@@ -175,6 +199,10 @@ fn advance_floor(game : @types.Game) -> Unit {
   game.events.clear()
   game.stairs_active = false
   game.floor_rooms_cleared = 0
+  game.boss_active = false
+  game.boss_phase = 0
+  game.boss_phase_timer = 0.0
+  game.boss_attack_pattern = 0
   // Generate new floor
   let (floor, new_rng) = @dungeon.generate_floor(game.floor_num, game.rng_state)
   game.rng_state = new_rng
@@ -189,6 +217,7 @@ fn advance_floor(game : @types.Game) -> Unit {
   // Reveal adjacent rooms from start
   reveal_adjacent_rooms(floor, 0)
   game.room_clear_timer = 0.0
+  game.floor_transition_timer = 2.0
 }
 
 ///|

@@ -1,29 +1,75 @@
 ///|
 pub fn draw_title_screen(game : @types.Game) -> Unit {
   @raylib.clear_background(@types.color_bg)
-  // Animated background particles
   let t = Float::from_int(game.frame_count) * 0.02
-  for i in 0..<20 {
+  let sw = Float::from_int(@types.screen_w)
+  let sh = Float::from_int(@types.screen_h)
+  // Slow drifting background layer (large dim particles)
+  for i in 0..<10 {
     let fi = Float::from_int(i)
-    let x = (Float::from_double(@math.sin((t + fi * 0.7).to_double())) * 0.5 + 0.5) * Float::from_int(@types.screen_w)
-    let y = (Float::from_double(@math.cos((t * 0.8 + fi * 1.1).to_double())) * 0.5 + 0.5) * Float::from_int(@types.screen_h)
-    let alpha = 30 + ((Float::from_double(@math.sin((t + fi).to_double())) * 0.5 + 0.5) * 40.0).to_int()
-    @raylib.draw_circle(x.to_int(), y.to_int(), 3.0 + fi * 0.3, @raylib.Color::new(80, 120, 200, alpha))
+    let x = (Float::from_double(@math.sin((t * 0.3 + fi * 1.3).to_double())) * 0.5 + 0.5) * sw
+    let y = (Float::from_double(@math.cos((t * 0.2 + fi * 0.9).to_double())) * 0.5 + 0.5) * sh
+    let alpha = 12 + ((Float::from_double(@math.sin((t * 0.5 + fi * 0.7).to_double())) * 0.5 + 0.5) * 18.0).to_int()
+    @raylib.draw_circle(x.to_int(), y.to_int(), 20.0 + fi * 3.0, @raylib.Color::new(40, 60, 120, alpha))
   }
-  // Title
+  // Mid-layer animated particles
+  for i in 0..<30 {
+    let fi = Float::from_int(i)
+    let x = (Float::from_double(@math.sin((t + fi * 0.7).to_double())) * 0.5 + 0.5) * sw
+    let y = (Float::from_double(@math.cos((t * 0.8 + fi * 1.1).to_double())) * 0.5 + 0.5) * sh
+    let alpha = 25 + ((Float::from_double(@math.sin((t + fi).to_double())) * 0.5 + 0.5) * 45.0).to_int()
+    @raylib.draw_circle(x.to_int(), y.to_int(), 2.0 + fi * 0.25, @raylib.Color::new(80, 120, 200, alpha))
+  }
+  // Rising mote particles (small, moving upward)
+  for i in 0..<15 {
+    let fi = Float::from_int(i)
+    let base_x = (fi / 15.0) * sw + Float::from_double(@math.sin((t * 0.4 + fi * 2.0).to_double())) * 30.0
+    // Use modulo-style wrapping for vertical rise
+    let rise_speed : Float = Float::from_double(0.6) + fi * Float::from_double(0.05)
+    let base_y = sh - ((t * rise_speed * 60.0 + fi * 80.0) % (sh + 40.0)) + 20.0
+    let alpha = 30 + ((Float::from_double(@math.sin((t * 1.5 + fi * 0.8).to_double())) * 0.5 + 0.5) * 35.0).to_int()
+    @raylib.draw_circle(base_x.to_int(), base_y.to_int(), 1.5, @raylib.Color::new(100, 160, 255, alpha))
+  }
+  // Title with glow effect
   let title = "ABYSSAL RIFT"
   let title_w = @raylib.measure_text(title, 60)
-  @raylib.draw_text(title, (@types.screen_w - title_w) / 2, 200, 60, @raylib.Color::new(100, 200, 255, 255))
+  let title_x = (@types.screen_w - title_w) / 2
+  let title_y = 200
+  // Glow pulse
+  let glow_pulse = Float::from_double(@math.sin((t * 1.5).to_double())) * 0.3 + 0.7
+  let glow_alpha = (glow_pulse * 60.0).to_int()
+  @raylib.draw_text(title, title_x - 2, title_y - 2, 60, @raylib.Color::new(60, 140, 220, glow_alpha))
+  @raylib.draw_text(title, title_x + 2, title_y + 2, 60, @raylib.Color::new(60, 140, 220, glow_alpha))
+  @raylib.draw_text(title, title_x, title_y, 60, @raylib.Color::new(100, 200, 255, 255))
   // Subtitle
   let sub = "A Roguelite Dungeon Crawler"
   let sub_w = @raylib.measure_text(sub, 20)
   @raylib.draw_text(sub, (@types.screen_w - sub_w) / 2, 275, 20, @raylib.Color::new(150, 150, 170, 200))
-  // Start prompt (blinking)
-  if game.frame_count % 60 < 40 {
-    let start = "Press ENTER to start"
-    let start_w = @raylib.measure_text(start, 24)
-    @raylib.draw_text(start, (@types.screen_w - start_w) / 2, 450, 24, @raylib.white)
+  // Weapon display rotation
+  let weapons = ["Sword", "Daggers", "Bow", "Staff"]
+  let weapon_idx = (game.frame_count / 120) % 4
+  let weapon_name = weapons[weapon_idx]
+  let weapon_alpha_t = Float::from_int(game.frame_count % 120) / 120.0
+  // Fade in for first half, fade out for second half
+  let weapon_alpha = if weapon_alpha_t < 0.15 {
+    (weapon_alpha_t / 0.15 * 180.0).to_int()
+  } else if weapon_alpha_t > 0.85 {
+    ((1.0 - weapon_alpha_t.to_double()) / 0.15 * 180.0).to_int()
+  } else {
+    180
   }
+  let wn_w = @raylib.measure_text(weapon_name, 18)
+  @raylib.draw_text(weapon_name, (@types.screen_w - wn_w) / 2, 340, 18, @raylib.Color::new(160, 180, 220, @types.clampi(weapon_alpha, 0, 255)))
+  // Decorative line under weapon
+  let line_cx = @types.screen_w / 2
+  let line_half = 40 + ((Float::from_double(@math.sin((t * 0.8).to_double())) * 0.5 + 0.5) * 20.0).to_int()
+  @raylib.draw_line(line_cx - line_half, 365, line_cx + line_half, 365, @raylib.Color::new(80, 120, 180, 60))
+  // Start prompt (smooth pulse instead of hard blink)
+  let prompt_pulse = Float::from_double(@math.sin((t * 2.0).to_double())) * 0.35 + 0.65
+  let prompt_alpha = (prompt_pulse * 255.0).to_int()
+  let start = "Press ENTER to start"
+  let start_w = @raylib.measure_text(start, 24)
+  @raylib.draw_text(start, (@types.screen_w - start_w) / 2, 450, 24, @raylib.Color::new(255, 255, 255, @types.clampi(prompt_alpha, 0, 255)))
   // Controls
   let controls = "WASD: Move | Mouse: Aim | Click: Attack | Space: Dash | ESC: Pause"
   let ctrl_w = @raylib.measure_text(controls, 14)
@@ -31,14 +77,43 @@ pub fn draw_title_screen(game : @types.Game) -> Unit {
 }
 
 ///|
-pub fn draw_pause_overlay(_game : @types.Game) -> Unit {
+pub fn draw_pause_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(0, 0, @types.screen_w, @types.screen_h, @raylib.Color::new(0, 0, 0, 150))
+  let cx = @types.screen_w / 2
   let text = "PAUSED"
   let tw = @raylib.measure_text(text, 48)
-  @raylib.draw_text(text, (@types.screen_w - tw) / 2, @types.screen_h / 2 - 40, 48, @raylib.white)
+  @raylib.draw_text(text, (cx - tw / 2), @types.screen_h / 2 - 80, 48, @raylib.white)
   let sub = "Press ESC to resume"
   let sw = @raylib.measure_text(sub, 20)
-  @raylib.draw_text(sub, (@types.screen_w - sw) / 2, @types.screen_h / 2 + 20, 20, @raylib.Color::new(180, 180, 180, 200))
+  @raylib.draw_text(sub, (cx - sw / 2), @types.screen_h / 2 - 30, 20, @raylib.Color::new(180, 180, 180, 200))
+  // Divider
+  @raylib.draw_line(cx - 140, @types.screen_h / 2, cx + 140, @types.screen_h / 2, @raylib.Color::new(100, 100, 120, 80))
+  // Run stats
+  let stat_color = @raylib.Color::new(180, 190, 210, 200)
+  let stats_y = @types.screen_h / 2 + 20
+  let stats_text = "Floor: \{game.floor_num}  |  Gold: \{game.player.gold}  |  Slain: \{game.enemies_killed}  |  Rooms: \{game.rooms_cleared}"
+  let stw = @raylib.measure_text(stats_text, 18)
+  @raylib.draw_text(stats_text, (cx - stw / 2), stats_y, 18, stat_color)
+  // Weapon info
+  let weapon_stats = @data.get_weapon_stats(game.player.weapon)
+  let weapon_text = "Weapon: \{weapon_stats.name}"
+  let wtw = @raylib.measure_text(weapon_text, 16)
+  @raylib.draw_text(weapon_text, (cx - wtw / 2), stats_y + 30, 16, @raylib.Color::new(160, 200, 255, 180))
+  // Passive count
+  let num_passives = game.player.passives.length()
+  let passive_text = "Items: \{num_passives}"
+  let ptw = @raylib.measure_text(passive_text, 16)
+  @raylib.draw_text(passive_text, (cx - ptw / 2), stats_y + 55, 16, @raylib.Color::new(200, 140, 255, 180))
+  // Controls reminder
+  let controls_y = @types.screen_h / 2 + 110
+  @raylib.draw_line(cx - 140, controls_y - 10, cx + 140, controls_y - 10, @raylib.Color::new(100, 100, 120, 50))
+  let ctrl_color = @raylib.Color::new(120, 120, 140, 160)
+  let c1 = "WASD: Move  |  Mouse: Aim  |  Click: Attack"
+  let c1w = @raylib.measure_text(c1, 14)
+  @raylib.draw_text(c1, (cx - c1w / 2), controls_y, 14, ctrl_color)
+  let c2 = "Space: Dash  |  ESC: Resume"
+  let c2w = @raylib.measure_text(c2, 14)
+  @raylib.draw_text(c2, (cx - c2w / 2), controls_y + 22, 14, ctrl_color)
 }
 
 ///|
@@ -174,7 +249,7 @@ pub fn draw_victory_screen(game : @types.Game) -> Unit {
   let val_color = @raylib.Color::new(255, 255, 255, 255)
   // Floors cleared
   @raylib.draw_text("Floors Cleared:", stat_x, sy, 20, stat_color)
-  let fv = "8"
+  let fv = "10"
   let fvw = @raylib.measure_text(fv, 20)
   @raylib.draw_text(fv, cx + 110 - fvw, sy, 20, val_color)
   sy += 32

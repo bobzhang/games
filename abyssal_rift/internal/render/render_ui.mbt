@@ -99,6 +99,26 @@ pub fn draw_hud(game : @types.Game) -> Unit {
       }
     }
   }
+  // Status effects
+  if game.player.status_effects.length() > 0 {
+    draw_status_effects(game)
+  }
+  // Boss health bar
+  if game.boss_active {
+    draw_boss_health_bar(game)
+  }
+  // Shop prompt
+  if game.shop_active {
+    let shop_text = "SHOP - Press [E] near items to buy"
+    let stw = @raylib.measure_text(shop_text, 16)
+    @raylib.draw_text(
+      shop_text,
+      (@types.screen_w - stw) / 2,
+      @types.screen_h - 85,
+      16,
+      @raylib.Color::new(255, 215, 0, 200),
+    )
+  }
   // FPS
   @fps.draw()
   // Minimap
@@ -130,5 +150,99 @@ fn passive_color(kind : @types.PassiveKind) -> @raylib.Color {
     DefenseUp => @raylib.Color::new(180, 180, 200, 220)
     AttackSpeedUp => @raylib.Color::new(255, 150, 200, 220)
     PickupRange => @raylib.Color::new(200, 100, 255, 220)
+  }
+}
+
+///|
+fn draw_status_effects(game : @types.Game) -> Unit {
+  let p = game.player
+  let base_x = 16
+  let base_y = 64
+  let mut offset = 0
+  for i in 0..<p.status_effects.length() {
+    let effect = p.status_effects[i]
+    let (name, color, duration) : (String, @raylib.Color, Float) = match effect {
+      Slow(t) => ("SLOW", @raylib.Color::new(100, 100, 255, 220), t)
+      Poison(t) => ("POISON", @raylib.Color::new(100, 200, 50, 220), t)
+      Shield(t) => ("SHIELD", @raylib.Color::new(100, 200, 255, 220), t)
+      Haste(t) => ("HASTE", @raylib.Color::new(255, 200, 50, 220), t)
+    }
+    let dur_text = "\{name} \{duration.to_int()}s"
+    @raylib.draw_text(dur_text, base_x + offset, base_y, 12, color)
+    offset += @raylib.measure_text(dur_text, 12) + 10
+    ignore(i)
+  }
+}
+
+///|
+fn draw_boss_health_bar(game : @types.Game) -> Unit {
+  // Find boss
+  for i in 0..<game.enemies.length() {
+    let e = game.enemies[i]
+    if e.active && (e.kind == BroodMother || e.kind == LichKing) {
+      let bar_w = 400
+      let bar_h = 20
+      let bar_x = (@types.screen_w - bar_w) / 2
+      let bar_y = @types.screen_h - 50
+      let hp_ratio = Float::from_int(e.hp) / Float::from_int(e.max_hp)
+      // Background
+      @raylib.draw_rectangle(
+        bar_x - 2,
+        bar_y - 2,
+        bar_w + 4,
+        bar_h + 4,
+        @raylib.Color::new(0, 0, 0, 200),
+      )
+      // HP bar
+      @raylib.draw_rectangle(
+        bar_x,
+        bar_y,
+        (Float::from_int(bar_w) * hp_ratio).to_int(),
+        bar_h,
+        @raylib.Color::new(200, 50, 50, 255),
+      )
+      // Phase markers
+      let phase_marks : Array[Float] = [0.75, 0.5, 0.25]
+      for j in 0..<phase_marks.length() {
+        let phase = phase_marks[j]
+        let px = bar_x + (Float::from_int(bar_w) * phase).to_int()
+        @raylib.draw_line(
+          px,
+          bar_y,
+          px,
+          bar_y + bar_h,
+          @raylib.Color::new(255, 255, 255, 100),
+        )
+      }
+      // Name
+      let name = if e.kind == LichKing {
+        "THE LICH KING"
+      } else {
+        "THE BROOD MOTHER"
+      }
+      let tw = @raylib.measure_text(name, 16)
+      let name_color = if e.kind == LichKing {
+        @raylib.Color::new(180, 100, 240, 255)
+      } else {
+        @raylib.Color::new(200, 150, 100, 255)
+      }
+      @raylib.draw_text(
+        name,
+        (@types.screen_w - tw) / 2,
+        bar_y - 20,
+        16,
+        name_color,
+      )
+      // Phase text
+      let phase_text = "Phase \{game.boss_phase}"
+      @raylib.draw_text(
+        phase_text,
+        bar_x + bar_w + 10,
+        bar_y + 2,
+        14,
+        @raylib.Color::new(180, 180, 180, 200),
+      )
+      break
+    }
   }
 }

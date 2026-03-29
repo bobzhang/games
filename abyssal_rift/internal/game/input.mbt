@@ -8,6 +8,7 @@ pub(all) struct InputState {
   mut dash_pressed : Bool
   mut pause_pressed : Bool
   mut confirm_pressed : Bool
+  mut interact_pressed : Bool
 }
 
 ///|
@@ -17,6 +18,7 @@ pub fn InputState::new() -> InputState {
     aim_x: 0.0, aim_y: 0.0,
     attack_pressed: false, dash_pressed: false,
     pause_pressed: false, confirm_pressed: false,
+    interact_pressed: false,
   }
 }
 
@@ -61,5 +63,6 @@ pub fn read_input(game : @types.Game) -> InputState {
   input.dash_pressed = @raylib.is_key_pressed(@raylib.KeySpace) || @raylib.is_mouse_button_pressed(@raylib.MouseButtonRight)
   input.pause_pressed = @raylib.is_key_pressed(@raylib.KeyEscape)
   input.confirm_pressed = @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(@raylib.KeySpace)
+  input.interact_pressed = @raylib.is_key_pressed(@raylib.KeyE)
   input
 }

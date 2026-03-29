@@ -21,12 +21,112 @@ pub fn update_player_state(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
+pub fn update_status_effects(game : @types.Game, dt : Float) -> Unit {
+  let p = game.player
+  if p.dead {
+    return
+  }
+  let mut i = 0
+  while i < p.status_effects.length() {
+    let effect = p.status_effects[i]
+    match effect {
+      Slow(remaining) => {
+        let new_t = remaining - dt
+        if new_t <= 0.0 {
+          ignore(p.status_effects.remove(i))
+        } else {
+          p.status_effects[i] = Slow(new_t)
+          i += 1
+        }
+      }
+      Poison(remaining) => {
+        let new_t = remaining - dt
+        // Deal 5 damage per second
+        let poison_dps : Float = 5.0
+        let poison_dmg = (poison_dps * dt).to_int()
+        if poison_dmg > 0 {
+          p.hp -= poison_dmg
+          if p.hp <= 0 {
+            p.hp = 0
+            p.dead = true
+            game.state = GameOver
+          }
+        }
+        if new_t <= 0.0 {
+          ignore(p.status_effects.remove(i))
+        } else {
+          p.status_effects[i] = Poison(new_t)
+          i += 1
+        }
+      }
+      Shield(remaining) => {
+        let new_t = remaining - dt
+        if new_t <= 0.0 {
+          ignore(p.status_effects.remove(i))
+        } else {
+          p.status_effects[i] = Shield(new_t)
+          i += 1
+        }
+      }
+      Haste(remaining) => {
+        let new_t = remaining - dt
+        if new_t <= 0.0 {
+          ignore(p.status_effects.remove(i))
+        } else {
+          p.status_effects[i] = Haste(new_t)
+          i += 1
+        }
+      }
+    }
+  }
+}
+
+///|
+pub fn has_status_slow(p : @types.Player) -> Bool {
+  for i in 0..<p.status_effects.length() {
+    match p.status_effects[i] {
+      Slow(_) => return true
+      _ => ()
+    }
+  }
+  false
+}
+
+///|
+pub fn has_status_shield(p : @types.Player) -> Bool {
+  for i in 0..<p.status_effects.length() {
+    match p.status_effects[i] {
+      Shield(_) => return true
+      _ => ()
+    }
+  }
+  false
+}
+
+///|
+pub fn has_status_haste(p : @types.Player) -> Bool {
+  for i in 0..<p.status_effects.length() {
+    match p.status_effects[i] {
+      Haste(_) => return true
+      _ => ()
+    }
+  }
+  false
+}
+
+///|
 pub fn damage_player(game : @types.Game, amount : Int) -> Unit {
   let p = game.player
   if p.dead || p.invuln_timer > 0.0 {
     return
   }
-  let reduced = @types.maxf(Float::from_int(amount - p.defense), 1.0).to_int()
+  // Shield status effect reduces damage by 50%
+  let effective_amount = if has_status_shield(p) {
+    @types.maxf(Float::from_int(amount) * 0.5, 1.0).to_int()
+  } else {
+    amount
+  }
+  let reduced = @types.maxf(Float::from_int(effective_amount - p.defense), 1.0).to_int()
   // Shield absorbs first
   if p.shield > 0.0 {
     let absorbed = @types.minf(p.shield, Float::from_int(reduced))

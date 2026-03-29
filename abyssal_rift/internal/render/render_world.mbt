@@ -1,10 +1,40 @@
 ///|
+fn get_floor_colors(floor_num : Int) -> (@raylib.Color, @raylib.Color, @raylib.Color, @raylib.Color) {
+  if floor_num <= 5 {
+    // Stone Crypt
+    (
+      @raylib.Color::new(55, 50, 62, 255),
+      @raylib.Color::new(38, 35, 45, 255),
+      @raylib.Color::new(42, 38, 48, 255),
+      @raylib.Color::new(30, 28, 35, 255),
+    )
+  } else if floor_num <= 10 {
+    // Fungal Caverns
+    (
+      @raylib.Color::new(30, 55, 40, 255),
+      @raylib.Color::new(25, 42, 35, 255),
+      @raylib.Color::new(28, 46, 38, 255),
+      @raylib.Color::new(18, 32, 22, 255),
+    )
+  } else {
+    // Molten Depths
+    (
+      @raylib.Color::new(62, 35, 30, 255),
+      @raylib.Color::new(45, 28, 25, 255),
+      @raylib.Color::new(48, 32, 28, 255),
+      @raylib.Color::new(35, 18, 15, 255),
+    )
+  }
+}
+
+///|
 pub fn draw_world(game : @types.Game) -> Unit {
   match game.floor {
     None => ()
     Some(floor) => {
       let ts = @types.tile_size
       let tsf = @types.tile_sizef
+      let (wall_col, floor_col, floor_alt_col, wall_edge_col) = get_floor_colors(game.floor_num)
       // Draw all visited rooms so corridors and adjacent rooms are visible
       for ri in 0..<floor.rooms.length() {
         let room = floor.rooms[ri]
@@ -20,7 +50,7 @@ pub fn draw_world(game : @types.Game) -> Unit {
             let py = room_py + y * ts
             if tile == 0 {
               // Wall
-              @raylib.draw_rectangle(px, py, ts, ts, @types.color_wall)
+              @raylib.draw_rectangle(px, py, ts, ts, wall_col)
               // Darker edge for depth
               @raylib.draw_rectangle_lines_ex(
                 @raylib.Rectangle::new(
@@ -30,14 +60,14 @@ pub fn draw_world(game : @types.Game) -> Unit {
                   tsf,
                 ),
                 2.0,
-                @raylib.Color::new(30, 28, 35, 255),
+                wall_edge_col,
               )
             } else {
               // Floor tile (1) or door tile (2) with subtle checker
               let color = if (x + y) % 2 == 0 {
-                @types.color_floor
+                floor_col
               } else {
-                @types.color_floor_alt
+                floor_alt_col
               }
               @raylib.draw_rectangle(px, py, ts, ts, color)
             }

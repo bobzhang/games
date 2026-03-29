@@ -138,6 +138,8 @@ fn get_enemy_color(kind : @types.EnemyKind) -> @raylib.Color {
     Bat => @raylib.Color::new(150, 80, 180, 255)
     Spider => @raylib.Color::new(100, 80, 60, 255)
     Golem => @raylib.Color::new(140, 140, 160, 255)
+    BroodMother => @raylib.Color::new(120, 70, 40, 255)
+    LichKing => @raylib.Color::new(140, 60, 200, 255)
   }
 }
 
@@ -180,6 +182,23 @@ fn draw_enemy_shape(
         x - r.to_int(), y - r.to_int(),
         (r * 2.0).to_int(), (r * 2.0).to_int(), color,
       )
+    BroodMother =>
+      // Large octagon
+      @raylib.draw_poly(
+        @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
+        8, r, 0.0, color,
+      )
+    LichKing => {
+      // Large diamond with inner glow
+      @raylib.draw_poly(
+        @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
+        4, r, 45.0, color,
+      )
+      @raylib.draw_poly(
+        @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
+        4, r * 0.6, 45.0, @raylib.Color::new(200, 120, 255, 180),
+      )
+    }
   }
 }
 
@@ -235,6 +254,98 @@ pub fn draw_items(game : @types.Game) -> Unit {
           5, 8.0, 0.0, @raylib.Color::new(200, 100, 255, 255),
         )
     }
+  }
+}
+
+///|
+pub fn draw_shop_items(game : @types.Game) -> Unit {
+  if !game.shop_active {
+    return
+  }
+  for i in 0..<game.shop_items.length() {
+    let shop = game.shop_items[i]
+    if !shop.active {
+      continue
+    }
+    let sx = shop.x.to_int()
+    let sy = shop.y.to_int()
+    // Draw pedestal
+    @raylib.draw_rectangle(
+      sx - 16, sy - 4, 32, 8,
+      @raylib.Color::new(80, 70, 90, 200),
+    )
+    // Draw item
+    let bob = Float::from_double(@math.sin(
+      (Float::from_int(game.frame_count) * 0.04 + Float::from_int(i) * 2.0).to_double(),
+    )) * 3.0
+    let iy = (shop.y - 20.0 + bob).to_int()
+    match shop.kind {
+      HealthPotion =>
+        @raylib.draw_circle(sx, iy, 8.0, @raylib.Color::new(255, 50, 80, 255))
+      WeaponPickup(_) =>
+        @raylib.draw_rectangle(sx - 7, iy - 7, 14, 14, @raylib.Color::new(200, 200, 255, 255))
+      PassiveItem(_) =>
+        @raylib.draw_poly(
+          @raylib.Vector2::new(shop.x, Float::from_int(iy)),
+          5, 9.0, 0.0, @raylib.Color::new(200, 100, 255, 255),
+        )
+      Gold(_) =>
+        @raylib.draw_circle(sx, iy, 6.0, @types.color_gold_text)
+    }
+    // Draw price tag
+    let price_text = "\{shop.price}g"
+    let tw = @raylib.measure_text(price_text, 12)
+    @raylib.draw_text(
+      price_text,
+      sx - tw / 2,
+      sy + 8,
+      12,
+      @types.color_gold_text,
+    )
+    // Draw item name
+    let name = shop_item_name(shop.kind)
+    let nw = @raylib.measure_text(name, 10)
+    @raylib.draw_text(
+      name,
+      sx - nw / 2,
+      sy - 38 + bob.to_int(),
+      10,
+      @raylib.Color::new(220, 220, 240, 200),
+    )
+    // Highlight if player is near
+    let d2 = @types.dist2(game.player.x, game.player.y, shop.x, shop.y)
+    if d2 < 60.0 * 60.0 {
+      @raylib.draw_circle_lines_v(
+        @raylib.Vector2::new(shop.x, shop.y - 20.0 + bob),
+        14.0,
+        @raylib.Color::new(255, 255, 100, 150),
+      )
+      let hint = "[E] Buy"
+      let hw = @raylib.measure_text(hint, 10)
+      @raylib.draw_text(
+        hint,
+        sx - hw / 2,
+        sy + 22,
+        10,
+        @raylib.Color::new(255, 255, 200, 200),
+      )
+    }
+  }
+}
+
+///|
+fn shop_item_name(kind : @types.ItemKind) -> String {
+  match kind {
+    HealthPotion => "Health Potion"
+    WeaponPickup(wk) => {
+      let stats = @data.get_weapon_stats(wk)
+      stats.name
+    }
+    PassiveItem(pk) => {
+      let stats = @data.get_passive_stats(pk)
+      stats.name
+    }
+    Gold(amount) => "\{amount} Gold"
   }
 }
 

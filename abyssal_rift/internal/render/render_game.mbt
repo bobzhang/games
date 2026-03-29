@@ -10,6 +10,7 @@ pub fn draw_game(game : @types.Game) -> Unit {
       draw_world(game)
       draw_stairs(game)
       draw_items(game)
+      draw_shop_items(game)
       draw_enemies(game)
       draw_projectiles(game)
       draw_player(game)
@@ -21,6 +22,45 @@ pub fn draw_game(game : @types.Game) -> Unit {
       draw_hud(game)
       if game.state == Paused {
         draw_pause_overlay(game)
+      }
+      // Floor transition overlay
+      if game.floor_transition_timer > 0.0 {
+        let alpha = @types.clampi(
+          (game.floor_transition_timer / 2.0 * 255.0).to_int(),
+          0,
+          255,
+        )
+        @raylib.draw_rectangle(
+          0,
+          0,
+          @types.screen_w,
+          @types.screen_h,
+          @raylib.Color::new(0, 0, 0, alpha),
+        )
+        let floor_text = "FLOOR \{game.floor_num}"
+        let ftw = @raylib.measure_text(floor_text, 48)
+        @raylib.draw_text(
+          floor_text,
+          (@types.screen_w - ftw) / 2,
+          @types.screen_h / 2 - 30,
+          48,
+          @raylib.Color::new(255, 255, 255, alpha),
+        )
+        let biome = if game.floor_num <= 5 {
+          "Stone Crypt"
+        } else if game.floor_num <= 10 {
+          "Fungal Caverns"
+        } else {
+          "Molten Depths"
+        }
+        let bw = @raylib.measure_text(biome, 20)
+        @raylib.draw_text(
+          biome,
+          (@types.screen_w - bw) / 2,
+          @types.screen_h / 2 + 30,
+          20,
+          @raylib.Color::new(180, 180, 200, alpha),
+        )
       }
     }
     GameOver => draw_game_over(game)

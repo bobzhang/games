@@ -6,6 +6,14 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     if !e.active {
       continue
     }
+    if e.kind == BroodMother || e.kind == LichKing {
+      // Boss enemies are handled by update_boss, skip generic loop
+      // But still update flash/knockback timers
+      if e.flash_timer > 0.0 {
+        e.flash_timer -= dt
+      }
+      continue
+    }
     // Flash timer
     if e.flash_timer > 0.0 {
       e.flash_timer -= dt
@@ -76,6 +84,15 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
             e.attack_cooldown = stats.attack_cooldown
           }
         }
+        Spider => {
+          // Spider contact applies Slow
+          let stats = @data.get_enemy_stats(e.kind, game.floor_num)
+          if e.attack_cooldown <= 0.0 {
+            damage_player(game, stats.damage)
+            apply_status_effect(p, Slow(3.0))
+            e.attack_cooldown = stats.attack_cooldown
+          }
+        }
         _ => ()
       }
     }
@@ -105,7 +122,8 @@ fn collide_enemy_with_tiles(game : @types.Game, e : @types.Enemy) -> Unit {
         for tx in min_tx..=max_tx {
           if tx >= 0 && tx < room.w && ty >= 0 && ty < room.h {
             let tile = room.tiles[ty * room.w + tx]
-            if tile == 0 {
+            let is_wall_tile = tile == 0 || (tile == 2 && room.state == Sealed)
+            if is_wall_tile {
               let tile_cx = room_px + Float::from_int(tx) * ts + ts / 2.0
               let tile_cy = room_py + Float::from_int(ty) * ts + ts / 2.0
               let half = ts / 2.0

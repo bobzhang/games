@@ -28,6 +28,7 @@ pub(all) struct Player {
   mut dead : Bool
   mut attack_buffered : Bool
   passives : Array[PassiveKind]
+  status_effects : Array[StatusEffect]
 }
 
 ///|
@@ -51,6 +52,7 @@ pub fn Player::new() -> Player {
     dead: false,
     attack_buffered: false,
     passives: [],
+    status_effects: [],
   }
 }
 
@@ -181,6 +183,15 @@ pub(all) struct Floor {
 }
 
 ///|
+pub(all) struct ShopItem {
+  mut active : Bool
+  mut kind : ItemKind
+  mut price : Int
+  mut x : Float
+  mut y : Float
+}
+
+///|
 pub(all) struct Game {
   mut state : GameState
   player : Player
@@ -203,6 +214,13 @@ pub(all) struct Game {
   mut enemies_killed : Int
   mut rooms_cleared : Int
   mut floor_rooms_cleared : Int
+  mut boss_active : Bool
+  mut boss_phase : Int
+  mut boss_phase_timer : Float
+  mut boss_attack_pattern : Int
+  mut floor_transition_timer : Float
+  shop_items : Array[ShopItem]
+  mut shop_active : Bool
 }
 
 ///|
@@ -258,5 +276,15 @@ pub fn Game::new() -> Game {
     enemies_killed: 0,
     rooms_cleared: 0,
     floor_rooms_cleared: 0,
+    boss_active: false,
+    boss_phase: 0,
+    boss_phase_timer: 0.0,
+    boss_attack_pattern: 0,
+    floor_transition_timer: 0.0,
+    shop_items: Array::make(
+      3,
+      { active: false, kind: HealthPotion, price: 0, x: 0.0, y: 0.0 },
+    ),
+    shop_active: false,
   }
 }

@@ -98,6 +98,8 @@ pub fn update_enemy_ai(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit
         e.vy *= 0.95
       }
     }
+    BroodMother => () // Handled by update_boss
+    LichKing => () // Handled by update_boss
   }
   ignore(dt)
 }
