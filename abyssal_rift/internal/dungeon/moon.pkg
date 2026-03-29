@@ -1,5 +1,6 @@
 import {
   "bobzhang/games/abyssal_rift/internal/types",
+  "tonyfettes/raylib",
 }
 
 warnings = "-missing_doc+unnecessary_annotation"

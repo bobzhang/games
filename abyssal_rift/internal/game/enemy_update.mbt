@@ -88,7 +88,12 @@ fn collide_enemy_with_tiles(game : @types.Game, e : @types.Enemy) -> Unit {
   match game.floor {
     None => ()
     Some(floor) => {
-      let room = floor.rooms[floor.current_room]
+      let room_idx = if e.room_id >= 0 && e.room_id < floor.rooms.length() {
+        e.room_id
+      } else {
+        floor.current_room
+      }
+      let room = floor.rooms[room_idx]
       let ts = @types.tile_sizef
       let room_px = Float::from_int(room.x) * ts
       let room_py = Float::from_int(room.y) * ts

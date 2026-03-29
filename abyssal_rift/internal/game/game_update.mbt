@@ -46,6 +46,15 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   if game.room_clear_timer > 0.0 {
     game.room_clear_timer -= dt
   }
+  // Check stairs interaction
+  if game.stairs_active {
+    let d2 = @types.dist2(
+      game.player.x, game.player.y, game.stairs_x, game.stairs_y,
+    )
+    if d2 < 30.0 * 30.0 {
+      advance_floor(game)
+    }
+  }
 }
 
 ///|
@@ -114,11 +123,17 @@ fn start_new_run(game : @types.Game) -> Unit {
     game.damage_numbers[i].active = false
   }
   game.events.clear()
+  // Reset stats
+  game.enemies_killed = 0
+  game.rooms_cleared = 0
+  game.floor_rooms_cleared = 0
+  game.stairs_active = false
   // Generate floor
   game.floor_num = 1
-  let floor = @dungeon.generate_test_floor()
+  let (floor, new_rng) = @dungeon.generate_floor(game.floor_num, game.rng_state)
+  game.rng_state = new_rng
   game.floor = Some(floor)
-  // Position player in center of room
+  // Position player in center of start room
   let room = floor.rooms[0]
   let ts = @types.tile_sizef
   p.x = (Float::from_int(room.x) + Float::from_int(room.w) / 2.0) * ts
@@ -126,9 +141,54 @@ fn start_new_run(game : @types.Game) -> Unit {
   // Camera snap
   game.camera.x = p.x
   game.camera.y = p.y
+  // Reveal adjacent rooms from start
+  reveal_adjacent_rooms(floor, 0)
   // Room flow will handle enemy spawning when the room is entered
   game.room_clear_timer = 0.0
   game.state = Playing
+}
+
+///|
+fn advance_floor(game : @types.Game) -> Unit {
+  game.floor_num += 1
+  // Check victory condition (floor 8 cleared)
+  if game.floor_num > 8 {
+    game.state = Victory
+    return
+  }
+  // Clear pools
+  for i in 0..<game.enemies.length() {
+    game.enemies[i].active = false
+  }
+  for i in 0..<game.projectiles.length() {
+    game.projectiles[i].active = false
+  }
+  for i in 0..<game.items.length() {
+    game.items[i].active = false
+  }
+  for i in 0..<game.particles.length() {
+    game.particles[i].active = false
+  }
+  for i in 0..<game.damage_numbers.length() {
+    game.damage_numbers[i].active = false
+  }
+  game.events.clear()
+  game.stairs_active = false
+  game.floor_rooms_cleared = 0
+  // Generate new floor
+  let (floor, new_rng) = @dungeon.generate_floor(game.floor_num, game.rng_state)
+  game.rng_state = new_rng
+  game.floor = Some(floor)
+  // Position player at start room center
+  let room = floor.rooms[0]
+  let ts = @types.tile_sizef
+  game.player.x = (Float::from_int(room.x) + Float::from_int(room.w) / 2.0) * ts
+  game.player.y = (Float::from_int(room.y) + Float::from_int(room.h) / 2.0) * ts
+  game.camera.x = game.player.x
+  game.camera.y = game.player.y
+  // Reveal adjacent rooms from start
+  reveal_adjacent_rooms(floor, 0)
+  game.room_clear_timer = 0.0
 }
 
 ///|

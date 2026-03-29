@@ -33,6 +33,7 @@ pub fn apply_damage_to_enemy(
   // Check death
   if e.hp <= 0 {
     e.state = Dead(0.5)
+    game.enemies_killed += 1
     // Slime splits immediately so small slimes count before room-clear check
     if e.kind == Slime {
       spawn_small_slimes(game, e.x, e.y)
@@ -55,17 +56,8 @@ fn check_projectile_wall_collision(game : @types.Game, proj : @types.Projectile)
   match game.floor {
     None => false
     Some(floor) => {
-      let room = floor.rooms[floor.current_room]
-      let ts = @types.tile_sizef
-      let room_px = Float::from_int(room.x) * ts
-      let room_py = Float::from_int(room.y) * ts
-      let tx = ((proj.x - room_px) / ts).to_int()
-      let ty = ((proj.y - room_py) / ts).to_int()
-      if tx >= 0 && tx < room.w && ty >= 0 && ty < room.h {
-        room.tiles[ty * room.w + tx] == 0
-      } else {
-        true  // out of bounds = wall
-      }
+      let tile = @dungeon.get_tile_at(floor, proj.x, proj.y)
+      @dungeon.is_wall(tile)
     }
   }
 }

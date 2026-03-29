@@ -8,6 +8,7 @@ pub fn draw_game(game : @types.Game) -> Unit {
       let cam = get_camera2d(game)
       @raylib.begin_mode_2d(cam)
       draw_world(game)
+      draw_stairs(game)
       draw_items(game)
       draw_enemies(game)
       draw_projectiles(game)
@@ -23,12 +24,7 @@ pub fn draw_game(game : @types.Game) -> Unit {
       }
     }
     GameOver => draw_game_over(game)
-    Victory => {
-      @raylib.clear_background(@types.color_bg)
-      let text = "VICTORY!"
-      let tw = @raylib.measure_text(text, 56)
-      @raylib.draw_text(text, (@types.screen_w - tw) / 2, 300, 56, @raylib.Color::new(255, 215, 0, 255))
-    }
+    Victory => draw_victory_screen(game)
   }
 }
 

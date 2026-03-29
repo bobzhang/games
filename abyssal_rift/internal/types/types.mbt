@@ -170,6 +170,7 @@ pub(all) struct Room {
   tiles : Array[Int]
   mut enemies_remaining : Int
   connections : Array[Direction]
+  mut visited : Bool
 }
 
 ///|
@@ -196,6 +197,12 @@ pub(all) struct Game {
   mut hit_pause_timer : Float
   mut room_clear_timer : Float
   mut rng_state : UInt
+  mut stairs_active : Bool
+  mut stairs_x : Float
+  mut stairs_y : Float
+  mut enemies_killed : Int
+  mut rooms_cleared : Int
+  mut floor_rooms_cleared : Int
 }
 
 ///|
@@ -245,5 +252,11 @@ pub fn Game::new() -> Game {
     hit_pause_timer: 0.0,
     room_clear_timer: 0.0,
     rng_state: 12345,
+    stairs_active: false,
+    stairs_x: 0.0,
+    stairs_y: 0.0,
+    enemies_killed: 0,
+    rooms_cleared: 0,
+    floor_rooms_cleared: 0,
   }
 }

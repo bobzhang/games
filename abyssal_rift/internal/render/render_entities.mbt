@@ -237,3 +237,42 @@ pub fn draw_items(game : @types.Game) -> Unit {
     }
   }
 }
+
+///|
+pub fn draw_stairs(game : @types.Game) -> Unit {
+  if game.stairs_active {
+    let sx = game.stairs_x.to_int()
+    let sy = game.stairs_y.to_int()
+    // Pulsing diamond
+    let pulse = Float::from_double(
+        @math.sin(Float::from_int(game.frame_count).to_double() * 0.08),
+      ) *
+      3.0 +
+      12.0
+    @raylib.draw_poly(
+      @raylib.Vector2::new(game.stairs_x, game.stairs_y),
+      4,
+      pulse,
+      45.0,
+      @raylib.Color::new(255, 215, 0, 200),
+    )
+    // Inner glow
+    @raylib.draw_poly(
+      @raylib.Vector2::new(game.stairs_x, game.stairs_y),
+      4,
+      pulse * 0.6,
+      45.0,
+      @raylib.Color::new(255, 240, 150, 150),
+    )
+    // Label
+    let text = "STAIRS"
+    let tw = @raylib.measure_text(text, 12)
+    @raylib.draw_text(
+      text,
+      sx - tw / 2,
+      sy - 25,
+      12,
+      @raylib.Color::new(255, 215, 0, 180),
+    )
+  }
+}

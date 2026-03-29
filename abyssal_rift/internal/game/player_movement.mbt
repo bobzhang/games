@@ -79,35 +79,52 @@ fn collide_player_with_tiles(game : @types.Game) -> Unit {
   match game.floor {
     None => ()
     Some(floor) => {
-      let room = floor.rooms[floor.current_room]
       let ts = @types.tile_sizef
-      let room_px = Float::from_int(room.x) * ts
-      let room_py = Float::from_int(room.y) * ts
-      // Check surrounding tiles
-      let min_tx = ((p.x - r - room_px) / ts).to_int()
-      let max_tx = ((p.x + r - room_px) / ts).to_int()
-      let min_ty = ((p.y - r - room_py) / ts).to_int()
-      let max_ty = ((p.y + r - room_py) / ts).to_int()
-      for ty in min_ty..=max_ty {
-        for tx in min_tx..=max_tx {
-          if tx >= 0 && tx < room.w && ty >= 0 && ty < room.h {
-            let tile = room.tiles[ty * room.w + tx]
-            if tile == 0 {
-              // Wall tile - push player out
-              let tile_cx = room_px + Float::from_int(tx) * ts + ts / 2.0
-              let tile_cy = room_py + Float::from_int(ty) * ts + ts / 2.0
-              let half = ts / 2.0
-              // AABB vs circle collision resolution
-              let closest_x = @types.clampf(p.x, tile_cx - half, tile_cx + half)
-              let closest_y = @types.clampf(p.y, tile_cy - half, tile_cy + half)
-              let dx = p.x - closest_x
-              let dy = p.y - closest_y
-              let d2 = dx * dx + dy * dy
-              if d2 < r * r && d2 > 0.001 {
-                let d = @types.dist(0.0, 0.0, dx, dy)
-                let overlap = r - d
-                p.x += dx / d * overlap
-                p.y += dy / d * overlap
+      // Check collision against all visited rooms so the player can
+      // walk through doors into corridors and adjacent rooms.
+      for ri in 0..<floor.rooms.length() {
+        let room = floor.rooms[ri]
+        if not(room.visited) && ri != floor.current_room {
+          continue
+        }
+        let room_px = Float::from_int(room.x) * ts
+        let room_py = Float::from_int(room.y) * ts
+        let room_pw = Float::from_int(room.w) * ts
+        let room_ph = Float::from_int(room.h) * ts
+        // Quick bounds check: skip rooms far from player
+        if p.x + r < room_px ||
+          p.x - r > room_px + room_pw ||
+          p.y + r < room_py ||
+          p.y - r > room_py + room_ph {
+          continue
+        }
+        // Check surrounding tiles
+        let min_tx = ((p.x - r - room_px) / ts).to_int()
+        let max_tx = ((p.x + r - room_px) / ts).to_int()
+        let min_ty = ((p.y - r - room_py) / ts).to_int()
+        let max_ty = ((p.y + r - room_py) / ts).to_int()
+        for ty in min_ty..=max_ty {
+          for tx in min_tx..=max_tx {
+            if tx >= 0 && tx < room.w && ty >= 0 && ty < room.h {
+              let tile = room.tiles[ty * room.w + tx]
+              let is_wall = tile == 0 || (tile == 2 && room.state == Sealed)
+              if is_wall {
+                // Wall tile - push player out
+                let tile_cx = room_px + Float::from_int(tx) * ts + ts / 2.0
+                let tile_cy = room_py + Float::from_int(ty) * ts + ts / 2.0
+                let half = ts / 2.0
+                // AABB vs circle collision resolution
+                let closest_x = @types.clampf(p.x, tile_cx - half, tile_cx + half)
+                let closest_y = @types.clampf(p.y, tile_cy - half, tile_cy + half)
+                let dx = p.x - closest_x
+                let dy = p.y - closest_y
+                let d2 = dx * dx + dy * dy
+                if d2 < r * r && d2 > 0.001 {
+                  let d = @types.dist(0.0, 0.0, dx, dy)
+                  let overlap = r - d
+                  p.x += dx / d * overlap
+                  p.y += dy / d * overlap
+                }
               }
             }
           }
