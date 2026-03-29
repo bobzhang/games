@@ -96,6 +96,11 @@ fn @types.Game::apply_successful_hit(
   let mv = attacker.current_move
   let attacker_archetype = @types.fighter_archetype(game, attacker)
   let defender_archetype = @types.fighter_archetype(game, defender)
+  // Capture defender state BEFORE applying hit for punish detection
+  let defender_was_in_recovery = defender.action == ActionAttack &&
+    defender.action_frame >= defender.current_move.startup_frames +
+      defender.current_move.active_frames
+
   let (damage, counter_hit) = compute_damage(
     attacker, defender, attacker_archetype, defender_archetype, mv,
   )
@@ -168,10 +173,8 @@ fn @types.Game::apply_successful_hit(
     spark_count,
   )
 
-  // Detect punish: hitting during recovery frames
-  let is_punish = defender.action == ActionAttack &&
-    defender.action_frame >= defender.current_move.startup_frames +
-      defender.current_move.active_frames
+  // Detect punish: hitting during recovery frames (uses pre-mutation snapshot)
+  let is_punish = defender_was_in_recovery && !counter_hit
 
   if mv.move_kind == MoveKindSuper {
     @effects.push_camera_shake(game, 6.4)
@@ -388,16 +391,42 @@ fn check_attack_will_connect(
 }
 
 ///|
+/// Apply a hit using pre-snapshotted data, without re-checking attack_is_active.
+/// Used for simultaneous trades so that neither side's state mutation
+/// invalidates the other side's hit.
+fn @types.Game::apply_trade_hit(
+  game : @types.Game,
+  attacker_slot : Int,
+  defender_slot : Int,
+) -> Unit {
+  let attacker = game.fighters[attacker_slot]
+  let defender = game.fighters[defender_slot]
+  let mv = attacker.current_move
+  let hitbox = @types.attack_hitbox_for(attacker, mv)
+  let hit_x = hitbox.x + hitbox.width * 0.5
+  let hit_y = hitbox.y + hitbox.height * 0.5
+  if can_defender_block(attacker, defender, mv) {
+    game.apply_blocked_hit(attacker_slot, defender_slot, hit_x, hit_y)
+  } else {
+    game.apply_successful_hit(attacker_slot, defender_slot, hit_x, hit_y)
+  }
+}
+
+///|
 fn @types.Game::update_combat(game : @types.Game) -> Unit {
   // Check both directions before applying either, so trades are possible.
   let p1 = game.fighters[0]
   let p2 = game.fighters[1]
   let p1_hits_p2 = check_attack_will_connect(p1, p2)
   let p2_hits_p1 = check_attack_will_connect(p2, p1)
-  if p1_hits_p2 {
+  if p1_hits_p2 && p2_hits_p1 {
+    // True trade: apply both hits simultaneously using pre-snapshotted data,
+    // bypassing attack_is_active re-checks that would fail after state mutation.
+    game.apply_trade_hit(0, 1)
+    game.apply_trade_hit(1, 0)
+  } else if p1_hits_p2 {
     game.process_attack_contact(0, 1)
-  }
-  if p2_hits_p1 {
+  } else if p2_hits_p1 {
     game.process_attack_contact(1, 0)
   }
 }
