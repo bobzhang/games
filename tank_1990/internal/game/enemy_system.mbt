@@ -1,4 +1,16 @@
 ///|
+/// Finds the first inactive score popup slot and returns its index, or -1 if all slots are full.
+fn alloc_popup(game : @types.Game) -> Int {
+  for i, slot in game.score_popups {
+    if !slot.active {
+      break i
+    }
+  } nobreak {
+    -1
+  }
+}
+
+///|
 /// Returns the x-coordinate for an enemy spawn point based on the given lane slot (0, 1, or 2).
 fn enemy_spawn_x(slot : Int) -> Float {
   if slot == 0 {
@@ -197,10 +209,34 @@ fn @types.Game::enemy_shoot_if_ready(
   }
 
   if should_fire {
+    // When aimed at player or base, compute the correct fire direction
+    // from target alignment instead of using enemy.dir
+    let fire_dir : @types.Dir = if fire_on_player && target_player >= 0 {
+      let player = game.players[target_player]
+      let aligned_horizontal = (player.y - enemy.y).abs() <
+        Float::from_int(@types.tile_size) * 0.5
+      if aligned_horizontal {
+        if player.x > enemy.x { Right } else { Left }
+      } else {
+        if player.y > enemy.y { Down } else { Up }
+      }
+    } else if fire_on_base {
+      let base_x = @types.tile_center_x(@types.base_tile_x)
+      let base_y = @types.tile_center_y(@types.base_tile_y)
+      let aligned_horizontal = (base_y - enemy.y).abs() <
+        Float::from_int(@types.tile_size) * 0.5
+      if aligned_horizontal {
+        if base_x > enemy.x { Right } else { Left }
+      } else {
+        if base_y > enemy.y { Down } else { Up }
+      }
+    } else {
+      enemy.dir
+    }
     let muzzle_x = enemy.x +
-      @types.dir_vector_x(enemy.dir) * (@types.tank_half + 3.0)
+      @types.dir_vector_x(fire_dir) * (@types.tank_half + 3.0)
     let muzzle_y = enemy.y +
-      @types.dir_vector_y(enemy.dir) * (@types.tank_half + 3.0)
+      @types.dir_vector_y(fire_dir) * (@types.tank_half + 3.0)
     let speed = match enemy.enemy_kind {
       Sniper => @types.bullet_speed_enemy + 40.0
       _ => @types.bullet_speed_enemy
@@ -209,20 +245,64 @@ fn @types.Game::enemy_shoot_if_ready(
       Heavy => 2
       _ => 1
     }
-    game.spawn_bullet(Enemy, muzzle_x, muzzle_y, enemy.dir, speed, power)
+    game.spawn_bullet(Enemy, muzzle_x, muzzle_y, fire_dir, speed, power)
     enemy.reload_timer = enemy.reload_delay
     @particles.spawn_spark_burst(game, muzzle_x, muzzle_y, 4)
   }
 }
 
 ///|
-/// Counts down the spawn timer each frame and spawns a new enemy when the timer expires, as long as there are still enemies left to introduce in the current stage.
+/// Activates a spawn warning indicator at the given lane position.
+fn activate_spawn_warning(game : @types.Game, lane : Int) -> Unit {
+  if lane >= 0 && lane < game.spawn_warnings.length() {
+    game.spawn_warnings[lane].active = true
+    game.spawn_warnings[lane].x = enemy_spawn_x(lane)
+    game.spawn_warnings[lane].y = @types.enemy_spawn_y
+    game.spawn_warnings[lane].timer = 0.75
+  }
+}
+
+///|
+/// Deactivates all spawn warning indicators.
+fn clear_spawn_warnings(game : @types.Game) -> Unit {
+  for w in game.spawn_warnings {
+    w.active = false
+    w.timer = 0.0
+  }
+}
+
+///|
+/// Counts down the spawn timer each frame, shows spawn lane warnings before spawning, and spawns a new enemy when the timer expires.
 fn @types.Game::update_enemy_spawn(game : @types.Game, dt : Float) -> Unit {
   if game.enemies_spawned >= game.enemies_to_spawn {
     return
   }
+
+  // Update active spawn warnings
+  for w in game.spawn_warnings {
+    if w.active {
+      w.timer -= dt
+      if w.timer <= 0.0 {
+        w.active = false
+      }
+    }
+  }
+
+  // Show warnings when spawn is approaching
+  let warn_threshold : Float = 0.75
+  if game.spawn_timer > 0.0 && game.spawn_timer <= warn_threshold {
+    let any_warning_active = game.spawn_warnings.iter().any(fn(w) { w.active })
+    if !any_warning_active &&
+      game.enemies_alive < @types.enemy_on_field_limit {
+      for lane in 0..<3 {
+        activate_spawn_warning(game, lane)
+      }
+    }
+  }
+
   game.spawn_timer -= dt
   if game.spawn_timer <= 0.0 {
+    clear_spawn_warnings(game)
     if game.spawn_enemy() {
       game.spawn_timer = @types.enemy_spawn_period * game.profile.spawn_scale
     } else {
@@ -249,6 +329,12 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
       enemy.invuln_timer -= dt
       if enemy.invuln_timer < 0.0 {
         enemy.invuln_timer = 0.0
+      }
+    }
+    if enemy.blink_timer > 0.0 {
+      enemy.blink_timer -= dt
+      if enemy.blink_timer < 0.0 {
+        enemy.blink_timer = 0.0
       }
     }
 
@@ -299,9 +385,33 @@ fn @types.Game::destroy_enemy(
   game.enemies_alive -= 1
 
   let score = @types.enemy_score(enemy.enemy_kind)
+  let old_mult = @score.combo_multiplier(game)
+  @score.bump_combo(game)
   let mult = @score.combo_multiplier(game)
   @score.grant_score(game, killer_team, score * mult)
-  @score.bump_combo(game)
+
+  // Floating score popup
+  let score_text = if mult > 1 {
+    "\{score * mult} x\{mult}"
+  } else {
+    "\{score}"
+  }
+  let popup_idx = alloc_popup(game)
+  if popup_idx >= 0 {
+    game.score_popups[popup_idx].active = true
+    game.score_popups[popup_idx].x = enemy.x
+    game.score_popups[popup_idx].y = enemy.y
+    game.score_popups[popup_idx].vy = -60.0
+    game.score_popups[popup_idx].life = 1.0
+    game.score_popups[popup_idx].text = score_text
+    game.score_popups[popup_idx].is_combo = mult > 1
+  }
+
+  // Combo callout when multiplier increases
+  if mult > old_mult && mult >= 2 {
+    game.combo_flash_timer = 1.2
+    game.combo_flash_text = "\{mult}x COMBO!"
+  }
 
   @particles.spawn_explosion(game, enemy.x, enemy.y, 1.1)
 

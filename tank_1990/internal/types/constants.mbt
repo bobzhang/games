@@ -159,6 +159,10 @@ pub let speed_enemy_heavy : Float = 66.0
 pub let speed_enemy_sniper : Float = 84.0
 
 ///|
+/// Maximum number of floating score popup slots.
+pub let max_score_popups : Int = 16
+
+///|
 /// Tile X coordinate of the player base.
 pub let base_tile_x : Int = 12
 

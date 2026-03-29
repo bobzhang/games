@@ -246,6 +246,26 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   game.update_player_respawns(dt)
   @particles.update_particles(game, dt)
 
+  // Update score popups: drift up and fade out
+  for popup in game.score_popups {
+    if popup.active {
+      popup.life -= dt
+      if popup.life <= 0.0 {
+        popup.active = false
+      } else {
+        popup.y += popup.vy * dt
+      }
+    }
+  }
+
+  // Update combo flash timer
+  if game.combo_flash_timer > 0.0 {
+    game.combo_flash_timer -= dt
+    if game.combo_flash_timer < 0.0 {
+      game.combo_flash_timer = 0.0
+    }
+  }
+
   if game.base_flash > 0.0 {
     game.base_flash -= dt * 2.0
     if game.base_flash < 0.0 {

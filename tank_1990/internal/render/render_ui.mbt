@@ -530,9 +530,39 @@ fn @types.Game::draw_campaign_clear_overlay(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws the large centered combo callout text when the multiplier increases.
+fn @types.Game::draw_combo_callout(game : @types.Game) -> Unit {
+  if game.combo_flash_timer <= 0.0 {
+    return
+  }
+  let alpha = @types.clampf(game.combo_flash_timer / 1.2, 0.0, 1.0)
+  // Scale up briefly then hold
+  let scale_t = @types.clampf(1.0 - game.combo_flash_timer / 1.2, 0.0, 1.0)
+  let font_size = if scale_t < 0.15 {
+    (36.0 + scale_t.to_double() / 0.15 * 12.0).to_int()
+  } else {
+    48
+  }
+  let color = @raylib.color_alpha(@raylib.gold, alpha)
+  let cx = @types.map_offset_x + @types.map_pixel_w / 2
+  let cy = @types.map_offset_y + @types.map_pixel_h / 3
+  let w = @draw.measure_text(game.combo_flash_text, font_size)
+  // Shadow
+  @draw.draw_text(
+    game.combo_flash_text,
+    cx - w / 2 + 2,
+    cy + 2,
+    font_size,
+    @raylib.color_alpha(@raylib.black, alpha * 0.6),
+  )
+  @draw.draw_text(game.combo_flash_text, cx - w / 2, cy, font_size, color)
+}
+
+///|
 /// Draws the full UI layer including the side panel and any active overlay.
 pub fn draw_ui(game : @types.Game) -> Unit {
   game.draw_panel()
+  game.draw_combo_callout()
 
   match game.state {
     Menu => game.draw_menu_overlay()

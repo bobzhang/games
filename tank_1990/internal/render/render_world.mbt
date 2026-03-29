@@ -134,7 +134,10 @@ fn @types.Game::draw_single_tile(
       )
     }
     Base => {
-      let base_color = if game.base_alive {
+      let base_color = if game.base_flash > 0.0 &&
+        (game.base_flash * 10.0).to_int() % 2 == 0 {
+        @raylib.white
+      } else if game.base_alive {
         @raylib.Color::new(201, 167, 86, 255)
       } else {
         @raylib.Color::new(110, 32, 32, 255)
@@ -357,7 +360,12 @@ fn @types.Game::draw_enemies(
       }
     }
 
-    let body = @types.enemy_color(enemy.enemy_kind)
+    let body = if enemy.blink_timer > 0.0 &&
+      (enemy.blink_timer * 12.0).to_int() % 2 == 0 {
+      @raylib.white
+    } else {
+      @types.enemy_color(enemy.enemy_kind)
+    }
     let trim = @raylib.Color::new(70, 30, 30, 255)
     draw_tank(enemy, body, trim, shake_x, shake_y)
 
@@ -451,6 +459,76 @@ fn @types.Game::draw_powerups(
 }
 
 ///|
+/// Draws floating score popups that drift upward and fade out.
+fn @types.Game::draw_score_popups(
+  game : @types.Game,
+  shake_x : Float,
+  shake_y : Float,
+) -> Unit {
+  for popup in game.score_popups {
+    if !popup.active {
+      continue
+    }
+    let alpha = @types.clampf(popup.life, 0.0, 1.0)
+    let color = if popup.is_combo {
+      @raylib.color_alpha(@raylib.gold, alpha)
+    } else {
+      @raylib.color_alpha(@raylib.white, alpha)
+    }
+    let sx = @types.world_to_screen_x(popup.x, shake_x)
+    let sy = @types.world_to_screen_y(popup.y, shake_y)
+    let font_size = if popup.is_combo { 18 } else { 16 }
+    let w = @draw.measure_text(popup.text, font_size)
+    @draw.draw_text(
+      popup.text,
+      sx - w / 2,
+      sy,
+      font_size,
+      color,
+    )
+  }
+}
+
+///|
+/// Draws pulsing red warning indicators at enemy spawn lanes before enemies appear.
+fn @types.Game::draw_spawn_warnings(
+  game : @types.Game,
+  shake_x : Float,
+  shake_y : Float,
+) -> Unit {
+  for w in game.spawn_warnings {
+    if !w.active {
+      continue
+    }
+    let pulse = @math.sinf(w.timer * 16.0) * 0.5 + 0.5
+    let alpha = @types.clampf(pulse * 0.7 + 0.3, 0.0, 1.0)
+    let sx = @types.world_to_screen_x(w.x, shake_x)
+    let sy = @types.world_to_screen_y(w.y, shake_y)
+    let radius : Float = 12.0 + pulse * 4.0
+    @raylib.draw_circle(
+      sx,
+      sy,
+      radius,
+      @raylib.color_alpha(@raylib.Color::new(255, 40, 40, 255), alpha * 0.3),
+    )
+    @raylib.draw_circle_lines(
+      sx,
+      sy,
+      radius,
+      @raylib.color_alpha(@raylib.red, alpha),
+    )
+    let text_alpha = @types.clampf(alpha, 0.0, 1.0)
+    @draw.draw_text(
+      "!",
+      sx - 3,
+      sy - 8,
+      16,
+      @raylib.color_alpha(@raylib.red, text_alpha),
+    )
+  }
+}
+
+///|
 /// Draws the entire game world including background, terrain, entities, particles, and fog.
 pub fn draw_world(game : @types.Game) -> Unit {
   let (shake_x, shake_y) = @types.shake_offsets(game)
@@ -458,12 +536,14 @@ pub fn draw_world(game : @types.Game) -> Unit {
   game.draw_starfield()
   draw_world_backdrop(shake_x, shake_y)
   game.draw_terrain_layer(shake_x, shake_y)
+  game.draw_spawn_warnings(shake_x, shake_y)
   game.draw_powerups(shake_x, shake_y)
   game.draw_players(shake_x, shake_y)
   game.draw_enemies(shake_x, shake_y)
   game.draw_bullets(shake_x, shake_y)
   game.draw_particles(shake_x, shake_y)
   game.draw_bush_layer(shake_x, shake_y)
+  game.draw_score_popups(shake_x, shake_y)
 
   if game.profile.fog_alpha > 0.0 {
     @raylib.draw_rectangle(

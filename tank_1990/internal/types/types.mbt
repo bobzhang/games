@@ -233,6 +233,39 @@ pub fn Powerup::inactive() -> Powerup {
 }
 
 ///|
+/// Floating score text that drifts upward and fades out when an enemy is destroyed.
+pub(all) struct ScorePopup {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut vy : Float
+  mut life : Float
+  mut text : String
+  mut is_combo : Bool
+}
+
+///|
+/// Creates an inactive score popup slot with default values.
+pub fn ScorePopup::inactive() -> ScorePopup {
+  { active: false, x: 0.0, y: 0.0, vy: 0.0, life: 0.0, text: "", is_combo: false }
+}
+
+///|
+/// Visual warning indicator shown at an enemy spawn lane before an enemy appears.
+pub(all) struct SpawnWarning {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut timer : Float
+}
+
+///|
+/// Creates an inactive spawn warning slot with default values.
+pub fn SpawnWarning::inactive() -> SpawnWarning {
+  { active: false, x: 0.0, y: 0.0, timer: 0.0 }
+}
+
+///|
 /// Background star for the parallax starfield effect.
 pub(all) struct Star {
   mut x : Float
@@ -490,6 +523,17 @@ pub(all) struct Game {
   /// within this window, `kill_combo` drops back to 0.
   mut combo_timer : Float
 
+  // ──────────────────────── Combat feedback ──────────────────────────
+
+  /// Pool of floating score popup texts that drift upward and fade out.
+  score_popups : Array[ScorePopup]
+  /// Visual warning indicators at enemy spawn lanes before spawning.
+  spawn_warnings : Array[SpawnWarning]
+  /// Countdown timer for the large centered combo callout text.
+  mut combo_flash_timer : Float
+  /// Text displayed during the combo flash (e.g. "2x COMBO!").
+  mut combo_flash_text : String
+
   // ──────────────────────── Random number generator ───────────────
 
   /// Internal state of the xorshift pseudo-random number generator.
@@ -595,6 +639,10 @@ pub fn Game::new() -> Game {
     spawn_timer: 0.0,
     kill_combo: 0,
     combo_timer: 0.0,
+    score_popups: Array::make(16, ScorePopup::inactive()),
+    spawn_warnings: Array::make(3, SpawnWarning::inactive()),
+    combo_flash_timer: 0.0,
+    combo_flash_text: "",
     rng_state: 0x13572468,
     map_tiles: Array::make(max_tiles, Empty),
     map_hp: Array::make(max_tiles, 0),

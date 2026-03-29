@@ -22,6 +22,15 @@ fn @types.Game::clear_entities_for_stage(game : @types.Game) -> Unit {
   game.kill_combo = 0
   game.combo_timer = 0.0
   game.base_flash = 0.0
+  // Clear combat feedback state
+  for i in 0..<game.score_popups.length() {
+    game.score_popups[i] = @types.ScorePopup::inactive()
+  }
+  for i in 0..<game.spawn_warnings.length() {
+    game.spawn_warnings[i] = @types.SpawnWarning::inactive()
+  }
+  game.combo_flash_timer = 0.0
+  game.combo_flash_text = ""
 }
 
 ///|
