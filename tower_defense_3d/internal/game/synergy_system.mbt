@@ -44,16 +44,13 @@ fn @types.Game::update_synergy_lines(game : @types.Game, dt : Float) -> Unit {
 }
 
 ///|
-/// Applies Frost+Lightning synergy damage bonus during chain lightning.
-/// Returns the synergy-adjusted damage for a lightning hit on the given enemy.
-fn apply_chain_synergy_damage(
-  base_damage : Float,
-  enemy : @types.Enemy,
-) -> Float {
+/// Returns the Frost+Lightning synergy multiplier for chain lightning.
+/// Returns >1.0 for chilled enemies, 1.0 otherwise.
+fn chain_synergy_mult(enemy : @types.Enemy) -> Float {
   if enemy.chilled {
-    base_damage * @types.synergy_frost_lightning_mult
+    @types.synergy_frost_lightning_mult
   } else {
-    base_damage
+    1.0
   }
 }
 

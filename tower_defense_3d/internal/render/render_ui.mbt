@@ -1356,7 +1356,9 @@ fn @types.Game::draw_combat_feedback_ui(game : @types.Game) -> Unit {
   if game.wave_active && game.enemies_to_spawn > 0 {
     let total = game.enemies_to_spawn
     let killed = game.enemies_killed_this_wave
-    let progress = Float::from_int(killed) / Float::from_int(total)
+    let progress = @types.clampf(
+      Float::from_int(killed) / Float::from_int(total), 0.0, 1.0,
+    )
     let bar_x = (@types.screen_width - 300) / 2
     let bar_y = 48
     @raylib.draw_rectangle(

@@ -17,6 +17,25 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.update_attack_beams(dt)
   game.update_notifications(dt)
   game.update_wave_message(dt)
+  // Visual-only timers tick in all states so feedback overlays don't freeze
+  if game.wave_complete_timer > 0.0 {
+    game.wave_complete_timer -= dt
+    if game.wave_complete_timer < 0.0 {
+      game.wave_complete_timer = 0.0
+    }
+  }
+  if game.gold_flash_timer > 0.0 {
+    game.gold_flash_timer -= dt
+    if game.gold_flash_timer < 0.0 {
+      game.gold_flash_timer = 0.0
+    }
+  }
+  if game.leak_warning_timer > 0.0 {
+    game.leak_warning_timer -= dt
+    if game.leak_warning_timer < 0.0 {
+      game.leak_warning_timer = 0.0
+    }
+  }
   match game.state {
     Menu => game.update_menu(dt)
     MapSelect => game.update_map_select(dt)
@@ -177,7 +196,6 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
     }
   }
   // Leak warning: check if any enemy is near the exit
-  game.leak_warning_timer -= dt
   if game.path_count > 1 {
     let exit_x = game.path_nodes[game.path_count - 1].x
     let exit_z = game.path_nodes[game.path_count - 1].z
@@ -192,19 +210,10 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
       }
     }
   }
-  // Gold flash tracking
+  // Gold flash tracking (timer decrement is in update_game)
   if game.gold != game.prev_gold {
     game.gold_flash_timer = 0.6
     game.prev_gold = game.gold
-  }
-  game.gold_flash_timer -= dt
-  if game.gold_flash_timer < 0.0 {
-    game.gold_flash_timer = 0.0
-  }
-  // Wave complete timer decay
-  game.wave_complete_timer -= dt
-  if game.wave_complete_timer < 0.0 {
-    game.wave_complete_timer = 0.0
   }
   // Check game over
   if game.lives <= 0 {

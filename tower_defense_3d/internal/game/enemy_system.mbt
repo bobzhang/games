@@ -455,15 +455,15 @@ fn @types.Game::apply_projectile_hit(
       if dist <= effective_splash {
         let dmg_factor : Float = 1.0 - dist / effective_splash
         let raw_damage = proj.damage * dmg_factor
-        // Synergy: Sniper armor-break + Splash/Cannon bonus
+        // Synergy: Sniper armor-break + Splash/Cannon bonus (applied post-armor)
         let synergy_mult : Float = if enemy.armor_broken {
           @types.synergy_armor_break_splash_mult
         } else {
           1.0
         }
         let actual_damage = @types.calc_damage(
-          raw_damage * synergy_mult, tower_kind, enemy,
-        )
+          raw_damage, tower_kind, enemy,
+        ) * synergy_mult
         game.damage_enemy(i, actual_damage, proj.tower_idx)
         // Apply splash status effects
         game.apply_projectile_effects(proj, i)
@@ -485,8 +485,9 @@ fn @types.Game::apply_projectile_hit(
     } else {
       proj.damage
     }
-    // Synergy: Frost + Lightning -- chilled enemies take extra lightning damage
+    // Synergy multipliers applied post-armor so they scale correctly
     let mut synergy_mult : Float = 1.0
+    // Synergy: Frost + Lightning -- chilled enemies take extra lightning damage
     if tower_kind == Lightning && enemy.chilled {
       synergy_mult = @types.synergy_frost_lightning_mult
     }
@@ -495,8 +496,8 @@ fn @types.Game::apply_projectile_hit(
       synergy_mult = @types.synergy_armor_break_splash_mult
     }
     let actual_damage = @types.calc_damage(
-      raw_damage * synergy_mult, tower_kind, enemy,
-    )
+      raw_damage, tower_kind, enemy,
+    ) * synergy_mult
     game.damage_enemy(proj.target_idx, actual_damage, proj.tower_idx)
     // Apply status effects
     game.apply_projectile_effects(proj, proj.target_idx)
@@ -633,9 +634,10 @@ fn @types.Game::apply_chain_lightning(
   // Hit initial target
   if current_target >= 0 && game.enemies[current_target].active {
     let enemy = game.enemies[current_target]
-    // Frost+Lightning synergy: bonus damage to chilled enemies
-    let synergy_damage = apply_chain_synergy_damage(current_damage, enemy)
-    let actual_damage = @types.calc_damage(synergy_damage, Lightning, enemy)
+    // Frost+Lightning synergy: bonus damage to chilled enemies (applied post-armor)
+    let synergy_mult = chain_synergy_mult(enemy)
+    let actual_damage = @types.calc_damage(current_damage, Lightning, enemy) *
+      synergy_mult
     game.damage_enemy(current_target, actual_damage, proj.tower_idx)
     if enemy.chilled {
       game.show_synergy_combo(
@@ -686,13 +688,11 @@ fn @types.Game::apply_chain_lightning(
       }
       visited[best] = true
       let enemy = game.enemies[best]
-      // Frost+Lightning synergy on chain bounces too
-      let synergy_chain_damage = apply_chain_synergy_damage(
-        current_damage, enemy,
-      )
+      // Frost+Lightning synergy on chain bounces too (applied post-armor)
+      let synergy_chain_mult = chain_synergy_mult(enemy)
       let actual_damage = @types.calc_damage(
-        synergy_chain_damage, Lightning, enemy,
-      )
+        current_damage, Lightning, enemy,
+      ) * synergy_chain_mult
       game.damage_enemy(best, actual_damage, proj.tower_idx)
       if enemy.chilled {
         game.show_synergy_combo(
