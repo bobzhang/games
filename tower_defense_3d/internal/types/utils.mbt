@@ -532,7 +532,7 @@ pub fn find_target(
   can_see_camo : Bool,
 ) -> Int {
   for j, enemy in game.enemies; best_idx = -1, best_score = -999999.0F {
-    if !enemy.active {
+    if !enemy.active || enemy.hp <= 0.0 {
       continue
     }
     // Skip camo enemies if tower cannot detect them
@@ -983,5 +983,204 @@ pub fn speed_from_setting(setting : Int) -> Float {
     speed_2x
   } else {
     speed_3x
+  }
+}
+
+// Synergy constants
+
+///|
+/// Damage multiplier for lightning hitting a chilled enemy (Frost+Lightning synergy).
+pub let synergy_frost_lightning_mult : Float = 1.5
+
+///|
+/// Damage multiplier for splash/cannon hitting an armor-broken enemy (Sniper+Splash synergy).
+pub let synergy_armor_break_splash_mult : Float = 1.3
+
+///|
+/// Duration in seconds for the chill status effect applied by frost towers.
+pub let chill_duration : Float = 2.5
+
+///|
+/// Duration in seconds for the armor break status from sniper synergy.
+pub let synergy_armor_break_duration : Float = 2.0
+
+///|
+/// Buff tower amplification factor for slow duration when near a frost tower.
+pub let buff_amplify_slow_duration : Float = 1.5
+
+///|
+/// Buff tower amplification factor for splash radius when near a cannon tower.
+pub let buff_amplify_splash_radius : Float = 1.3
+
+///|
+/// Adds a synergy combo visual line between two 3D points with color and label.
+pub fn add_synergy_line(
+  game : Game,
+  x1 : Float,
+  y1 : Float,
+  z1 : Float,
+  x2 : Float,
+  y2 : Float,
+  z2 : Float,
+  r : Int,
+  g : Int,
+  b : Int,
+  label : String,
+) -> Unit {
+  for sl in game.synergy_lines {
+    if !sl.active {
+      sl.active = true
+      sl.x1 = x1
+      sl.y1 = y1
+      sl.z1 = z1
+      sl.x2 = x2
+      sl.y2 = y2
+      sl.z2 = z2
+      sl.life = 0.6
+      sl.r = r
+      sl.g = g
+      sl.b = b
+      sl.label = label
+      return
+    }
+  }
+}
+
+///|
+/// Checks whether a buff tower is near the given tower position and returns the buff level.
+/// Returns 0 if no buff tower is nearby, otherwise returns the buff tower level.
+pub fn find_nearby_buff_level(
+  game : Game,
+  tower_gx : Int,
+  tower_gy : Int,
+) -> Int {
+  let tx = grid_to_world_x(tower_gx)
+  let tz = grid_to_world_z(tower_gy)
+  let mut best_level = 0
+  for t in game.towers {
+    if !t.active || t.kind != Buff {
+      continue
+    }
+    let bx = grid_to_world_x(t.gx)
+    let bz = grid_to_world_z(t.gy)
+    let dist = distance2d(tx, tz, bx, bz)
+    let buff_range = tower_effective_range(t)
+    if dist <= buff_range && t.level > best_level {
+      best_level = t.level
+    }
+  }
+  best_level
+}
+
+// Combat readability helpers
+
+///|
+/// Spawns a floating damage number above an enemy at the given position.
+pub fn spawn_floating_text(
+  game : Game,
+  x : Float,
+  y : Float,
+  z : Float,
+  value : Int,
+  r : Int,
+  g : Int,
+  b : Int,
+  is_gold : Bool,
+) -> Unit {
+  for ft in game.floating_texts {
+    if !ft.active {
+      ft.active = true
+      ft.x = x + rand_rangef(game, -0.2, 0.2)
+      ft.y = y
+      ft.z = z + rand_rangef(game, -0.2, 0.2)
+      ft.vy = 2.0
+      ft.life = 1.2
+      ft.max_life = 1.2
+      ft.value = value
+      ft.r = r
+      ft.g = g
+      ft.b = b
+      ft.is_gold = is_gold
+      return
+    }
+  }
+}
+
+///|
+/// Spawns a shield-break or armor-break flash at the given position.
+pub fn spawn_break_flash(
+  game : Game,
+  x : Float,
+  y : Float,
+  z : Float,
+  r : Int,
+  g : Int,
+  b : Int,
+) -> Unit {
+  for bf in game.break_flashes {
+    if !bf.active {
+      bf.active = true
+      bf.x = x
+      bf.y = y
+      bf.z = z
+      bf.life = 0.4
+      bf.r = r
+      bf.g = g
+      bf.b = b
+      bf.radius = 0.8
+      return
+    }
+  }
+}
+
+///|
+/// Adds a tower attack beam from source to target with type-specific color.
+pub fn add_attack_beam(
+  game : Game,
+  x1 : Float,
+  y1 : Float,
+  z1 : Float,
+  x2 : Float,
+  y2 : Float,
+  z2 : Float,
+  kind : TowerKind,
+) -> Unit {
+  let r : Int = match kind {
+    Frost => 100
+    Sniper => 255
+    Flame => 255
+    Lightning => 255
+    _ => 200
+  }
+  let g : Int = match kind {
+    Frost => 200
+    Sniper => 200
+    Flame => 100
+    Lightning => 255
+    _ => 200
+  }
+  let b : Int = match kind {
+    Frost => 255
+    Sniper => 50
+    Flame => 30
+    Lightning => 50
+    _ => 200
+  }
+  for ab in game.attack_beams {
+    if !ab.active {
+      ab.active = true
+      ab.x1 = x1
+      ab.y1 = y1
+      ab.z1 = z1
+      ab.x2 = x2
+      ab.y2 = y2
+      ab.z2 = z2
+      ab.life = 0.15
+      ab.r = r
+      ab.g = g
+      ab.b = b
+      ab.kind = kind
+      return
+    }
   }
 }

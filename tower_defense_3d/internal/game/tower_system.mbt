@@ -260,6 +260,17 @@ fn @types.Game::fire_tower(game : @types.Game, tower_idx : Int) -> Unit {
     proj.stun_chance = 0.15
     proj.stun_duration = @types.stun_duration * 0.5
   }
+  // Attack beam visualization for certain tower types
+  if tower.target_idx >= 0 && game.enemies[tower.target_idx].active {
+    let enemy = game.enemies[tower.target_idx]
+    match tower.kind {
+      Frost | Sniper | Lightning | Flame =>
+        @types.add_attack_beam(
+          game, tx, 1.5, tz, enemy.x, enemy.y, enemy.z, tower.kind,
+        )
+      _ => ()
+    }
+  }
 }
 
 // Secondary shot for level 3 arrow tower

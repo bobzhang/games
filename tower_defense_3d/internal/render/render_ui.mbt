@@ -28,6 +28,7 @@ pub fn draw_ui(game : @types.Game) -> Unit {
     game.draw_wave_message()
     game.draw_notification()
     game.draw_speed_indicator()
+    game.draw_combat_feedback_ui()
   } else if game.state == Paused {
     game.draw_hud()
     game.draw_pause_overlay()
@@ -356,14 +357,32 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     45,
     @raylib.Color::new(0, 0, 0, 180),
   )
-  // Gold
-  @draw.draw_text(
-    "Gold: \{game.gold}",
-    10,
-    12,
-    20,
-    @raylib.Color::new(255, 215, 0, 255),
-  )
+  // Gold (flash when changed)
+  let gold_color = if game.gold_flash_timer > 0.0 {
+    let flash = @math.sinf(game.gold_flash_timer * 15.0)
+    if flash > 0.0 {
+      @raylib.Color::new(255, 255, 150, 255)
+    } else {
+      @raylib.Color::new(255, 215, 0, 255)
+    }
+  } else {
+    @raylib.Color::new(255, 215, 0, 255)
+  }
+  @draw.draw_text("Gold: \{game.gold}", 10, 12, 20, gold_color)
+  // Gold flash highlight bar
+  if game.gold_flash_timer > 0.0 {
+    let flash_a = (game.gold_flash_timer / 0.6 * 80.0).to_int().clamp(
+      min=0,
+      max=80,
+    )
+    @raylib.draw_rectangle(
+      5,
+      8,
+      @draw.measure_text("Gold: \{game.gold}", 20) + 10,
+      28,
+      @raylib.Color::new(255, 215, 0, flash_a),
+    )
+  }
   // Lives (with color based on remaining)
   let lives_color = if game.lives > 15 {
     @raylib.Color::new(100, 255, 100, 255)
@@ -1326,4 +1345,140 @@ fn @types.Game::draw_victory(game : @types.Game) -> Unit {
     18,
     @raylib.Color::new(180, 200, 180, 255),
   )
+}
+
+// Combat feedback UI
+
+///|
+/// Draws 2D combat feedback overlays including gold flash, leak warning, wave complete, and synergy labels.
+fn @types.Game::draw_combat_feedback_ui(game : @types.Game) -> Unit {
+  // Wave progress bar during active waves
+  if game.wave_active && game.enemies_to_spawn > 0 {
+    let total = game.enemies_to_spawn
+    let killed = game.enemies_killed_this_wave
+    let progress = Float::from_int(killed) / Float::from_int(total)
+    let bar_x = (@types.screen_width - 300) / 2
+    let bar_y = 48
+    @raylib.draw_rectangle(
+      bar_x, bar_y, 300, 14, @raylib.Color::new(0, 0, 0, 140),
+    )
+    let fill_w = (300.0 * progress.to_double()).to_int()
+    @raylib.draw_rectangle(
+      bar_x, bar_y, fill_w, 14, @raylib.Color::new(80, 200, 80, 200),
+    )
+    @raylib.draw_rectangle_lines(
+      bar_x, bar_y, 300, 14, @raylib.Color::new(100, 150, 100, 200),
+    )
+    let progress_text = "Wave \{game.current_wave + 1}: \{killed}/\{total} killed"
+    let ptw = @draw.measure_text(progress_text, 11)
+    @draw.draw_text(
+      progress_text,
+      (@types.screen_width - ptw) / 2,
+      bar_y + 1,
+      11,
+      @raylib.Color::new(220, 220, 240, 255),
+    )
+  }
+  // Leak warning: red pulsing text and screen edge flash
+  if game.leak_warning_timer > 0.0 {
+    let pulse = @math.sinf(Float::from_int(game.frame_counter) * 0.4) * 0.5 +
+      0.5
+    let warn_alpha = (pulse * 255.0).to_int().clamp(min=0, max=255)
+    let warn_text = "WARNING: ENEMY APPROACHING!"
+    let ww = @draw.measure_text(warn_text, 24)
+    @draw.draw_text(
+      warn_text,
+      (@types.screen_width - ww) / 2,
+      @types.screen_height / 2 + 80,
+      24,
+      @raylib.Color::new(255, 50, 50, warn_alpha),
+    )
+    // Red screen edge flash
+    let edge_a = (pulse * 60.0).to_int().clamp(min=0, max=60)
+    @raylib.draw_rectangle(
+      0, 0, @types.screen_width, 3, @raylib.Color::new(255, 0, 0, edge_a),
+    )
+    @raylib.draw_rectangle(
+      0,
+      @types.screen_height - 3,
+      @types.screen_width,
+      3,
+      @raylib.Color::new(255, 0, 0, edge_a),
+    )
+    @raylib.draw_rectangle(
+      0, 0, 3, @types.screen_height, @raylib.Color::new(255, 0, 0, edge_a),
+    )
+    @raylib.draw_rectangle(
+      @types.screen_width - 3,
+      0,
+      3,
+      @types.screen_height,
+      @raylib.Color::new(255, 0, 0, edge_a),
+    )
+  }
+  // Wave complete celebration banner
+  if game.wave_complete_timer > 0.0 {
+    let banner_alpha_f : Float = @types.minf(
+        game.wave_complete_timer / 0.5, 1.0,
+      ) *
+      255.0
+    let a = banner_alpha_f.to_int().clamp(min=0, max=255)
+    let scale_f : Float = 1.0 + (3.0 - game.wave_complete_timer) * 0.03
+    let font_size = (28.0 * scale_f.to_double()).to_int()
+    let text = "WAVE COMPLETE!"
+    let tw = @draw.measure_text(text, font_size)
+    let bx = (@types.screen_width - tw) / 2 - 15
+    let by = @types.screen_height / 4
+    @raylib.draw_rectangle(
+      bx, by - 5, tw + 30, 40, @raylib.Color::new(0, 50, 0, a / 2),
+    )
+    @draw.draw_text(
+      text,
+      bx + 15,
+      by,
+      font_size,
+      @raylib.Color::new(100, 255, 100, a),
+    )
+  }
+  // Floating gold text near the gold HUD area
+  for ft in game.floating_texts {
+    if !ft.active || !ft.is_gold {
+      continue
+    }
+    let alpha_f = @types.minf(ft.life / 0.3, 1.0) * 255.0
+    let fa = alpha_f.to_int().clamp(min=0, max=255)
+    let prefix = "+"
+    let gold_text = prefix + ft.value.to_string() + "g"
+    let progress : Float = 1.0 - ft.life / ft.max_life
+    let fy = 35 + (progress.to_double() * 25.0).to_int()
+    @draw.draw_text(
+      gold_text, 120, fy, 14, @raylib.Color::new(ft.r, ft.g, ft.b, fa),
+    )
+  }
+  // Active synergy combo labels (2D text near screen center-top)
+  let mut combo_y = 65
+  for sl in game.synergy_lines {
+    if !sl.active || sl.label == "" {
+      continue
+    }
+    let label_alpha_f : Float = @types.minf(sl.life / 0.3, 1.0) * 255.0
+    let label_alpha = label_alpha_f.to_int().clamp(min=0, max=255)
+    let lw = @draw.measure_text(sl.label, 18)
+    let lx = (@types.screen_width - lw) / 2
+    @raylib.draw_rectangle(
+      lx - 5,
+      combo_y - 2,
+      lw + 10,
+      22,
+      @raylib.Color::new(0, 0, 0, label_alpha / 3),
+    )
+    @draw.draw_text(
+      sl.label,
+      lx,
+      combo_y,
+      18,
+      @raylib.Color::new(sl.r, sl.g, sl.b, label_alpha),
+    )
+    combo_y += 24
+  }
 }

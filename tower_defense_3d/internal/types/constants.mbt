@@ -566,6 +566,20 @@ pub let minimap_x : Int = 10
 /// Vertical screen position of the minimap in pixels.
 pub let minimap_y : Int = 60
 
+// Combat readability pool sizes
+
+///|
+/// Maximum number of floating damage/gold text entries.
+pub let max_floating_texts : Int = 64
+
+///|
+/// Maximum number of shield/armor break flash effects.
+pub let max_break_flashes : Int = 16
+
+///|
+/// Maximum number of tower attack beam visuals.
+pub let max_attack_beams : Int = 32
+
 ///|
 /// Enemy variant.
 pub(all) enum EnemyKind {

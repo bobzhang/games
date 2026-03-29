@@ -99,7 +99,7 @@ pub fn Tower::new(kind : TowerKind, gx : Int, gy : Int) -> Tower {
     buff_damage: 0.0,
     buff_range: 0.0,
     buff_rate: 0.0,
-    sell_value: tower_cost_for(kind),
+    sell_value: tower_sell_value(kind, 1),
   }
 }
 
@@ -127,6 +127,9 @@ pub(all) struct Enemy {
   mut stun_timer : Float
   mut armor_break_timer : Float
   mut armor_break_factor : Float
+  mut armor_broken : Bool
+  mut chilled : Bool
+  mut chill_timer : Float
   mut gold_value : Int
   mut flying : Bool
   mut is_boss : Bool
@@ -162,6 +165,9 @@ pub fn Enemy::inactive() -> Enemy {
     stun_timer: 0.0,
     armor_break_timer: 0.0,
     armor_break_factor: 1.0,
+    armor_broken: false,
+    chilled: false,
+    chill_timer: 0.0,
     gold_value: 10,
     flying: false,
     is_boss: false,
@@ -465,6 +471,20 @@ pub(all) struct Game {
   mut chain_lines : Array[ChainLine]
   mut chain_line_count : Int
 
+  // Synergy combo visualization
+  synergy_lines : Array[SynergyLine]
+
+  // Combat readability pools
+  floating_texts : Array[FloatingText]
+  break_flashes : Array[BreakFlash]
+  attack_beams : Array[AttackBeam]
+
+  // Combat readability state
+  mut wave_complete_timer : Float
+  mut leak_warning_timer : Float
+  mut gold_flash_timer : Float
+  mut prev_gold : Int
+
   fn new() -> Game
 }
 
@@ -495,6 +515,152 @@ pub fn ChainLine::inactive() -> ChainLine {
     y2: 0.0,
     z2: 0.0,
     life: 0.0,
+  }
+}
+
+// Synergy combo visual line
+
+///|
+/// Visual line segment for rendering tower synergy combo effects between towers.
+pub(all) struct SynergyLine {
+  mut active : Bool
+  mut x1 : Float
+  mut y1 : Float
+  mut z1 : Float
+  mut x2 : Float
+  mut y2 : Float
+  mut z2 : Float
+  mut life : Float
+  mut r : Int
+  mut g : Int
+  mut b : Int
+  mut label : String
+}
+
+///|
+/// Creates an inactive synergy line slot for use in the visual effect pool.
+pub fn SynergyLine::inactive() -> SynergyLine {
+  {
+    active: false,
+    x1: 0.0,
+    y1: 0.0,
+    z1: 0.0,
+    x2: 0.0,
+    y2: 0.0,
+    z2: 0.0,
+    life: 0.0,
+    r: 255,
+    g: 255,
+    b: 255,
+    label: "",
+  }
+}
+
+// Floating damage/text number
+
+///|
+/// Floating text number displayed above enemies when damage is dealt or gold is earned.
+pub(all) struct FloatingText {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut z : Float
+  mut vy : Float
+  mut life : Float
+  mut max_life : Float
+  mut value : Int
+  mut r : Int
+  mut g : Int
+  mut b : Int
+  mut is_gold : Bool
+}
+
+///|
+/// Creates an inactive floating text slot for use in the text pool.
+pub fn FloatingText::inactive() -> FloatingText {
+  {
+    active: false,
+    x: 0.0,
+    y: 0.0,
+    z: 0.0,
+    vy: 2.0,
+    life: 0.0,
+    max_life: 1.0,
+    value: 0,
+    r: 255,
+    g: 255,
+    b: 255,
+    is_gold: false,
+  }
+}
+
+// Shield break / armor break flash
+
+///|
+/// Visual flash effect shown when an enemy shield or armor breaks.
+pub(all) struct BreakFlash {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut z : Float
+  mut life : Float
+  mut r : Int
+  mut g : Int
+  mut b : Int
+  mut radius : Float
+}
+
+///|
+/// Creates an inactive break flash slot for use in the effect pool.
+pub fn BreakFlash::inactive() -> BreakFlash {
+  {
+    active: false,
+    x: 0.0,
+    y: 0.0,
+    z: 0.0,
+    life: 0.0,
+    r: 100,
+    g: 150,
+    b: 255,
+    radius: 0.8,
+  }
+}
+
+// Tower attack beam visual
+
+///|
+/// Visual beam line drawn from a tower to its current target for laser/frost type attacks.
+pub(all) struct AttackBeam {
+  mut active : Bool
+  mut x1 : Float
+  mut y1 : Float
+  mut z1 : Float
+  mut x2 : Float
+  mut y2 : Float
+  mut z2 : Float
+  mut life : Float
+  mut r : Int
+  mut g : Int
+  mut b : Int
+  mut kind : TowerKind
+}
+
+///|
+/// Creates an inactive attack beam slot for use in the visual effect pool.
+pub fn AttackBeam::inactive() -> AttackBeam {
+  {
+    active: false,
+    x1: 0.0,
+    y1: 0.0,
+    z1: 0.0,
+    x2: 0.0,
+    y2: 0.0,
+    z2: 0.0,
+    life: 0.0,
+    r: 255,
+    g: 255,
+    b: 255,
+    kind: Arrow,
   }
 }
 
@@ -573,5 +739,13 @@ pub fn Game::new() -> Game {
     wave_message_timer: 0.0,
     chain_lines: Array::make(16, ChainLine::inactive()),
     chain_line_count: 0,
+    synergy_lines: Array::make(16, SynergyLine::inactive()),
+    floating_texts: Array::make(max_floating_texts, FloatingText::inactive()),
+    break_flashes: Array::make(max_break_flashes, BreakFlash::inactive()),
+    attack_beams: Array::make(max_attack_beams, AttackBeam::inactive()),
+    wave_complete_timer: 0.0,
+    leak_warning_timer: 0.0,
+    gold_flash_timer: 0.0,
+    prev_gold: starting_gold,
   }
 }

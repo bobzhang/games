@@ -53,6 +53,18 @@ pub fn load_map(game : @types.Game, map_idx : Int) -> Unit {
   for i in 0..<game.chain_lines.length() {
     game.chain_lines[i] = @types.ChainLine::inactive()
   }
+  for i in 0..<game.synergy_lines.length() {
+    game.synergy_lines[i] = @types.SynergyLine::inactive()
+  }
+  for i in 0..<game.floating_texts.length() {
+    game.floating_texts[i] = @types.FloatingText::inactive()
+  }
+  for i in 0..<game.break_flashes.length() {
+    game.break_flashes[i] = @types.BreakFlash::inactive()
+  }
+  for i in 0..<game.attack_beams.length() {
+    game.attack_beams[i] = @types.AttackBeam::inactive()
+  }
   // Load map data
   let data = @levels.get_map_data(map_idx)
   // Build tiles from map data
@@ -197,4 +209,20 @@ fn @types.Game::reset_game(game : @types.Game) -> Unit {
   for i in 0..<game.chain_lines.length() {
     game.chain_lines[i] = @types.ChainLine::inactive()
   }
+  for i in 0..<game.synergy_lines.length() {
+    game.synergy_lines[i] = @types.SynergyLine::inactive()
+  }
+  for i in 0..<game.floating_texts.length() {
+    game.floating_texts[i] = @types.FloatingText::inactive()
+  }
+  for i in 0..<game.break_flashes.length() {
+    game.break_flashes[i] = @types.BreakFlash::inactive()
+  }
+  for i in 0..<game.attack_beams.length() {
+    game.attack_beams[i] = @types.AttackBeam::inactive()
+  }
+  game.wave_complete_timer = 0.0
+  game.leak_warning_timer = 0.0
+  game.gold_flash_timer = 0.0
+  game.prev_gold = @types.starting_gold
 }

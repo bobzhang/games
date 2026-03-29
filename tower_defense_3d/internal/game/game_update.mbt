@@ -11,6 +11,10 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   }
   game.update_particles(dt)
   game.update_chain_lines(dt)
+  game.update_synergy_lines(dt)
+  game.update_floating_texts(dt)
+  game.update_break_flashes(dt)
+  game.update_attack_beams(dt)
   game.update_notifications(dt)
   game.update_wave_message(dt)
   match game.state {
@@ -155,9 +159,11 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
     if !alive && game.wave_active {
       // Wave complete
       game.wave_active = false
+      game.wave_complete_timer = 3.0
       let info = @levels.get_wave_info(game.current_wave)
-      game.gold += info.bonus_gold + @types.wave_completion_bonus
-      game.total_gold_earned += info.bonus_gold + @types.wave_completion_bonus
+      let bonus = info.bonus_gold + @types.wave_completion_bonus
+      game.gold += bonus
+      game.total_gold_earned += bonus
       if game.current_wave > game.longest_wave {
         game.longest_wave = game.current_wave
       }
@@ -169,6 +175,36 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
         game.wave_timer = @types.wave_prep_time
       }
     }
+  }
+  // Leak warning: check if any enemy is near the exit
+  game.leak_warning_timer -= dt
+  if game.path_count > 1 {
+    let exit_x = game.path_nodes[game.path_count - 1].x
+    let exit_z = game.path_nodes[game.path_count - 1].z
+    for enemy in game.enemies {
+      if !enemy.active {
+        continue
+      }
+      let dist = @types.distance2d(enemy.x, enemy.z, exit_x, exit_z)
+      if dist < 4.0 {
+        game.leak_warning_timer = 0.5
+        break
+      }
+    }
+  }
+  // Gold flash tracking
+  if game.gold != game.prev_gold {
+    game.gold_flash_timer = 0.6
+    game.prev_gold = game.gold
+  }
+  game.gold_flash_timer -= dt
+  if game.gold_flash_timer < 0.0 {
+    game.gold_flash_timer = 0.0
+  }
+  // Wave complete timer decay
+  game.wave_complete_timer -= dt
+  if game.wave_complete_timer < 0.0 {
+    game.wave_complete_timer = 0.0
   }
   // Check game over
   if game.lives <= 0 {
@@ -451,13 +487,22 @@ fn @types.Game::update_wave_message(game : @types.Game, dt : Float) -> Unit {
 fn @types.Game::update_interest(game : @types.Game, dt : Float) -> Unit {
   game.interest_timer += dt
   if game.interest_timer >= @types.interest_interval {
-    game.interest_timer = 0.0
+    game.interest_timer -= @types.interest_interval
     let interest_amount : Float = Float::from_int(game.gold) *
       @types.interest_rate
     let capped = interest_amount.to_int().min(@types.interest_cap)
     if capped > 0 {
       game.gold += capped
       game.total_gold_earned += capped
+      // Floating interest income text at screen center area
+      let cx = game.camera_target_x
+      let cz = game.camera_target_z
+      @types.spawn_floating_text(
+        game, cx, 3.0, cz, capped, 100, 255, 100, true,
+      )
+      @types.set_notification(
+        game, "Interest: +\{capped}g", 1.5,
+      )
     }
   }
 }

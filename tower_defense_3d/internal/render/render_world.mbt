@@ -14,7 +14,12 @@ pub fn draw_world(game : @types.Game) -> Unit {
   game.draw_enemy_status_visuals()
   game.draw_projectiles()
   game.draw_chain_lightning_lines()
+  game.draw_synergy_lines()
+  game.draw_attack_beams()
+  game.draw_break_flashes()
+  game.draw_floating_texts_3d()
   game.draw_particles_3d()
+  game.draw_leak_warning_3d()
   // Draw hover indicator in building mode
   if game.state == Building {
     game.draw_build_cursor()
@@ -687,9 +692,7 @@ fn draw_buff_tower(
     ring_angle,
     @raylib.Color::new(200, 150, 255, ring_alpha),
   )
-  // Buff range indicator
-  let range = @types.tower_effective_range(game.towers[0])
-  // Find this tower to get actual range
+  // Buff range indicator - find this specific buff tower to get actual range
   for t in game.towers {
     if t.active && t.kind == Buff {
       let tx = @types.grid_to_world_x(t.gx)
@@ -707,7 +710,6 @@ fn draw_buff_tower(
       }
     }
   }
-  ignore(range)
   ignore(level)
 }
 
@@ -1335,14 +1337,52 @@ fn @types.Game::draw_enemy_status_visuals(game : @types.Game) -> Unit {
         ignore(s)
       }
     }
-    // Armor break indicator
-    if enemy.armor_break_timer > 0.0 {
+    // Armor break indicator (pulsing orange wireframe)
+    if enemy.armor_broken {
+      let ab_pulse = @math.sinf(Float::from_int(game.frame_counter) * 0.2) *
+        0.05 +
+        0.1
+      @raylib.draw_cube_wires(
+        @raylib.Vector3::new(enemy.x, enemy.y, enemy.z),
+        size + ab_pulse,
+        size + ab_pulse,
+        size + ab_pulse,
+        @raylib.Color::new(255, 100, 0, 150),
+      )
+      // Cracked armor pieces visual
+      @raylib.draw_cube(
+        @raylib.Vector3::new(
+          enemy.x + size * 0.3,
+          enemy.y - size * 0.2,
+          enemy.z,
+        ),
+        0.08,
+        0.08,
+        0.08,
+        @raylib.Color::new(255, 140, 0, 180),
+      )
+    } else if enemy.armor_break_timer > 0.0 {
       @raylib.draw_cube_wires(
         @raylib.Vector3::new(enemy.x, enemy.y, enemy.z),
         size + 0.1,
         size + 0.1,
         size + 0.1,
         @raylib.Color::new(255, 100, 0, 150),
+      )
+    }
+    // Chilled indicator (blue-white frost aura for synergy tracking)
+    if enemy.chilled {
+      let chill_pulse = @math.sinf(
+          Float::from_int(game.frame_counter) * 0.15,
+        ) *
+        0.05 +
+        0.15
+      @raylib.draw_cube(
+        @raylib.Vector3::new(enemy.x, enemy.y - size * 0.3, enemy.z),
+        size + chill_pulse,
+        0.05,
+        size + chill_pulse,
+        @raylib.Color::new(150, 200, 255, 100),
       )
     }
   }
@@ -1494,6 +1534,49 @@ fn @types.Game::draw_chain_lightning_lines(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws synergy combo visual lines between towers and enemies with labels.
+fn @types.Game::draw_synergy_lines(game : @types.Game) -> Unit {
+  for sl in game.synergy_lines {
+    if !sl.active {
+      continue
+    }
+    let alpha_f = sl.life / 0.6 * 200.0
+    let a = alpha_f.to_int().clamp(min=0, max=200)
+    // Draw colored line as interpolated cubes from tower to enemy
+    let steps = 8
+    for s in 0..<steps {
+      let t = Float::from_int(s) / Float::from_int(steps)
+      let lx = @types.lerpf(sl.x1, sl.x2, t)
+      let ly = @types.lerpf(sl.y1, sl.y2, t)
+      let lz = @types.lerpf(sl.z1, sl.z2, t)
+      let pulse = @math.sinf(t * 6.28 + Float::from_int(game.frame_counter) * 0.2) *
+        0.02 +
+        0.06
+      @raylib.draw_cube(
+        @raylib.Vector3::new(lx, ly, lz),
+        pulse,
+        pulse,
+        pulse,
+        @raylib.Color::new(sl.r, sl.g, sl.b, a),
+      )
+      ignore(s)
+    }
+    // Draw combo label as a glow cube at midpoint
+    let mid_x = (sl.x1 + sl.x2) / 2.0
+    let mid_y = (sl.y1 + sl.y2) / 2.0 + 0.5
+    let mid_z = (sl.z1 + sl.z2) / 2.0
+    @raylib.draw_cube(
+      @raylib.Vector3::new(mid_x, mid_y, mid_z),
+      0.3,
+      0.3,
+      0.3,
+      @raylib.Color::new(sl.r, sl.g, sl.b, a / 2),
+    )
+    ignore(sl.label)
+  }
+}
+
+///|
 /// Draws all active 3D particles as small cubes with lifetime-based alpha fade.
 fn @types.Game::draw_particles_3d(game : @types.Game) -> Unit {
   for p in game.particles {
@@ -1548,5 +1631,180 @@ fn @types.Game::draw_build_cursor(game : @types.Game) -> Unit {
     @raylib.Vector3::new(1.0, 0.0, 0.0),
     90.0,
     @raylib.Color::new(200, 200, 0, 100),
+  )
+}
+
+// Combat readability 3D rendering
+
+///|
+/// Draws floating damage and gold numbers as 3D billboards above enemies.
+fn @types.Game::draw_floating_texts_3d(game : @types.Game) -> Unit {
+  for ft in game.floating_texts {
+    if !ft.active {
+      continue
+    }
+    let alpha_f = @types.minf(ft.life / 0.3, 1.0) * 255.0
+    let a = alpha_f.to_int().clamp(min=0, max=255)
+    let size : Float = if ft.is_gold { 0.15 } else { 0.1 }
+    let scale : Float = 1.0 + (1.0 - ft.life / ft.max_life) * 0.3
+    // Draw as small colored cube billboard to represent the number
+    @raylib.draw_cube(
+      @raylib.Vector3::new(ft.x, ft.y, ft.z),
+      size * scale,
+      size * scale * 0.6,
+      0.02,
+      @raylib.Color::new(ft.r, ft.g, ft.b, a),
+    )
+    // Draw a wider bar for larger numbers
+    if ft.value >= 20 {
+      @raylib.draw_cube(
+        @raylib.Vector3::new(ft.x, ft.y, ft.z),
+        size * scale * 2.0,
+        size * scale * 0.3,
+        0.02,
+        @raylib.Color::new(ft.r, ft.g, ft.b, a / 2),
+      )
+    }
+  }
+}
+
+///|
+/// Draws expanding flash spheres when shields or armor break.
+fn @types.Game::draw_break_flashes(game : @types.Game) -> Unit {
+  for bf in game.break_flashes {
+    if !bf.active {
+      continue
+    }
+    let alpha_f = bf.life / 0.4 * 180.0
+    let a = alpha_f.to_int().clamp(min=0, max=180)
+    let expand : Float = 1.0 + (0.4 - bf.life) / 0.4 * 0.8
+    let r = bf.radius * expand
+    @raylib.draw_sphere(
+      @raylib.Vector3::new(bf.x, bf.y, bf.z),
+      r,
+      @raylib.Color::new(bf.r, bf.g, bf.b, a),
+    )
+    // Wireframe outer ring
+    @raylib.draw_cube_wires(
+      @raylib.Vector3::new(bf.x, bf.y, bf.z),
+      r * 2.0,
+      r * 2.0,
+      r * 2.0,
+      @raylib.Color::new(bf.r, bf.g, bf.b, a / 2),
+    )
+  }
+}
+
+///|
+/// Draws tower attack beams as 3D lines from tower to target with type-specific coloring.
+fn @types.Game::draw_attack_beams(game : @types.Game) -> Unit {
+  for ab in game.attack_beams {
+    if !ab.active {
+      continue
+    }
+    let alpha_f = ab.life / 0.15 * 255.0
+    let a = alpha_f.to_int().clamp(min=0, max=255)
+    // Draw main beam line
+    @raylib.draw_line_3d(
+      @raylib.Vector3::new(ab.x1, ab.y1, ab.z1),
+      @raylib.Vector3::new(ab.x2, ab.y2, ab.z2),
+      @raylib.Color::new(ab.r, ab.g, ab.b, a),
+    )
+    // Draw thick beam as cube segments for Frost and Sniper
+    match ab.kind {
+      Frost => {
+        // Frost: pulsing blue beam
+        let steps = 6
+        for s in 0..<steps {
+          let t = Float::from_int(s) / Float::from_int(steps)
+          let lx = @types.lerpf(ab.x1, ab.x2, t)
+          let ly = @types.lerpf(ab.y1, ab.y2, t)
+          let lz = @types.lerpf(ab.z1, ab.z2, t)
+          @raylib.draw_cube(
+            @raylib.Vector3::new(lx, ly, lz),
+            0.06,
+            0.06,
+            0.06,
+            @raylib.Color::new(100, 200, 255, a / 2),
+          )
+          ignore(s)
+        }
+      }
+      Sniper => {
+        // Sniper: thin fast tracer line
+        let mid_t : Float = 0.5
+        let mx = @types.lerpf(ab.x1, ab.x2, mid_t)
+        let my = @types.lerpf(ab.y1, ab.y2, mid_t)
+        let mz = @types.lerpf(ab.z1, ab.z2, mid_t)
+        @raylib.draw_cube(
+          @raylib.Vector3::new(mx, my, mz),
+          0.03,
+          0.03,
+          0.03,
+          @raylib.Color::new(255, 200, 50, a),
+        )
+      }
+      Flame => {
+        // Flame: orange glow segments
+        let steps = 4
+        for s in 0..<steps {
+          let t = Float::from_int(s) / Float::from_int(steps)
+          let lx = @types.lerpf(ab.x1, ab.x2, t)
+          let ly = @types.lerpf(ab.y1, ab.y2, t)
+          let lz = @types.lerpf(ab.z1, ab.z2, t)
+          @raylib.draw_cube(
+            @raylib.Vector3::new(lx, ly, lz),
+            0.08,
+            0.08,
+            0.08,
+            @raylib.Color::new(255, 100, 30, a / 2),
+          )
+          ignore(s)
+        }
+      }
+      Lightning => {
+        // Lightning: jagged segments already handled by chain lines
+        ()
+      }
+      _ => ()
+    }
+  }
+}
+
+///|
+/// Draws a pulsing red warning indicator near the exit when enemies are close.
+fn @types.Game::draw_leak_warning_3d(game : @types.Game) -> Unit {
+  if game.leak_warning_timer <= 0.0 {
+    return
+  }
+  if game.path_count < 2 {
+    return
+  }
+  let exit_x = game.path_nodes[game.path_count - 1].x
+  let exit_z = game.path_nodes[game.path_count - 1].z
+  let pulse = @math.sinf(Float::from_int(game.frame_counter) * 0.3) * 0.5 + 0.5
+  let alpha = (pulse * 120.0).to_int()
+  // Pulsing red ring on ground
+  @raylib.draw_circle_3d(
+    @raylib.Vector3::new(exit_x, 0.15, exit_z),
+    3.0,
+    @raylib.Vector3::new(1.0, 0.0, 0.0),
+    90.0,
+    @raylib.Color::new(255, 50, 50, alpha),
+  )
+  @raylib.draw_circle_3d(
+    @raylib.Vector3::new(exit_x, 0.15, exit_z),
+    2.0,
+    @raylib.Vector3::new(1.0, 0.0, 0.0),
+    90.0,
+    @raylib.Color::new(255, 80, 80, alpha),
+  )
+  // Red column indicator
+  @raylib.draw_cube(
+    @raylib.Vector3::new(exit_x, 2.0 + pulse * 0.5, exit_z),
+    0.3,
+    4.0,
+    0.3,
+    @raylib.Color::new(255, 50, 50, alpha / 2),
   )
 }
