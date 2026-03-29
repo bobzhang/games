@@ -306,6 +306,8 @@ fn clear_room(game : @types.Game) -> Unit {
       }
       // Room cleared timer for UI flash
       game.room_clear_timer = 1.5
+      // Brief Haste boost on room clear
+      apply_status_effect(game.player, Haste(3.0))
       // Event
       push_event(game, RoomCleared)
       // Celebration particles

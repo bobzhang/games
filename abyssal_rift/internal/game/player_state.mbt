@@ -41,15 +41,14 @@ pub fn update_status_effects(game : @types.Game, dt : Float) -> Unit {
       }
       Poison(remaining) => {
         let new_t = remaining - dt
-        // Deal 5 damage per second
-        let poison_dps : Float = 5.0
-        let poison_dmg = (poison_dps * dt).to_int()
-        if poison_dmg > 0 {
-          p.hp -= poison_dmg
+        // Deal 5 DPS: tick 1 damage every 0.2 seconds using integer tick counting
+        let old_tick = (remaining * 5.0).to_int()
+        let new_tick = (new_t * 5.0).to_int()
+        if old_tick != new_tick && new_t > 0.0 {
+          p.hp -= 1
+          // Poison cannot kill - leave player at 1 HP
           if p.hp <= 0 {
-            p.hp = 0
-            p.dead = true
-            game.state = GameOver
+            p.hp = 1
           }
         }
         if new_t <= 0.0 {

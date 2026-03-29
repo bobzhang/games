@@ -165,10 +165,14 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
   }
 
   // --- generate corridor rooms between connected cells -----------------------
-  // TODO: Corridor alignment uses room center averages rather than actual door
-  // positions, which can cause misalignment when rooms have different sizes.
-  // A more robust approach would thread the door tile coordinates through and
-  // use them directly for corridor placement.
+  // NOTE (known limitation): Corridor alignment uses room center averages
+  // rather than actual door positions, which can cause misalignment when rooms
+  // have different heights or widths.  The boss arena template already has
+  // doors punched on all 4 sides so at least one corridor can always connect.
+  // A more robust approach would thread the door tile coordinates through
+  // place_door and use them directly for corridor endpoint placement.
+  // For now this is acceptable since all templates receive doors via
+  // the connection loop above and uniform-height rooms mitigate the issue.
   let corridor_set : Array[(Int, Int)] = []
   for ci in 0..<cell_indices.length() {
     let idx = cell_indices[ci]

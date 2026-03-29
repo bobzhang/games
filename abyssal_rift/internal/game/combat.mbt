@@ -109,6 +109,10 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
       let hit_r = proj.radius + @types.player_radius
       if d2 <= hit_r * hit_r {
         damage_player(game, proj.damage)
+        // Apply Poison from Lich King boss projectiles
+        if game.boss_active {
+          apply_status_effect(p, Poison(3.0))
+        }
         proj.active = false
       }
     }

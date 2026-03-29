@@ -1,4 +1,19 @@
 ///|
+fn count_active_minions(game : @types.Game) -> Int {
+  let mut count = 0
+  for i in 0..<game.enemies.length() {
+    let e = game.enemies[i]
+    if e.active && e.kind != BroodMother && e.kind != LichKing {
+      match e.state {
+        Dead(_) => ()
+        _ => count += 1
+      }
+    }
+  }
+  count
+}
+
+///|
 pub fn update_boss(game : @types.Game, dt : Float) -> Unit {
   if !game.boss_active {
     return
@@ -47,8 +62,8 @@ pub fn update_boss(game : @types.Game, dt : Float) -> Unit {
     boss.attack_cooldown = 1.5 // Brief pause before new phase attacks
     boss.vx = 0.0 // Stop movement during transition
     boss.vy = 0.0
-    // Spawn minions on phase change
-    if new_phase >= 2 {
+    // Spawn minions on phase change (cap at 20 to avoid pool overflow)
+    if new_phase >= 2 && count_active_minions(game) < 20 {
       let count = new_phase
       let minion_kind : @types.EnemyKind = if boss.kind == LichKing {
         Skeleton
@@ -56,6 +71,9 @@ pub fn update_boss(game : @types.Game, dt : Float) -> Unit {
         Spider
       }
       for _i in 0..<count {
+        if count_active_minions(game) >= 20 {
+          break
+        }
         let (s1, ox) = @types.rng_range(game.rng_state, -100.0, 100.0)
         let (s2, oy) = @types.rng_range(s1, -100.0, 100.0)
         game.rng_state = s2
@@ -193,8 +211,9 @@ fn phase4_ai(
   boss.vx += dx * stats.speed * 1.3
   boss.vy += dy * stats.speed * 1.3
 
-  // Continuous minion spawning
-  if (game.boss_phase_timer * 2.0).to_int() % 3 == 0 {
+  // Continuous minion spawning (capped to avoid pool overflow)
+  if count_active_minions(game) < 20 &&
+    (game.boss_phase_timer * 2.0).to_int() % 3 == 0 {
     let (s1, roll) = @types.rng_next(game.rng_state)
     game.rng_state = s1
     if roll < 0.02 {
@@ -464,8 +483,9 @@ fn lich_phase4_ai(
   let stats = @data.get_enemy_stats(boss.kind, game.floor_num)
   boss.vx += -dx * stats.speed * 0.6
   boss.vy += -dy * stats.speed * 0.6
-  // Continuous skeleton spawning
-  if (game.boss_phase_timer * 2.0).to_int() % 3 == 0 {
+  // Continuous skeleton spawning (capped to avoid pool overflow)
+  if count_active_minions(game) < 20 &&
+    (game.boss_phase_timer * 2.0).to_int() % 3 == 0 {
     let (s1, roll) = @types.rng_next(game.rng_state)
     game.rng_state = s1
     if roll < 0.02 {
@@ -579,10 +599,17 @@ fn lich_darkness_ring(game : @types.Game, boss : @types.Enemy) -> Unit {
 
 ///|
 fn lich_summon_skeletons(game : @types.Game, boss : @types.Enemy) -> Unit {
-  // Summon 2-3 skeleton minions
+  // Summon 2-3 skeleton minions (capped to avoid pool overflow)
+  if count_active_minions(game) >= 20 {
+    spawn_particles_burst(game, boss.x, boss.y, 10, 140, 60, 200)
+    return
+  }
   let (s1, count_roll) = @types.rng_int(game.rng_state, 2, 3)
   game.rng_state = s1
   for _i in 0..<count_roll {
+    if count_active_minions(game) >= 20 {
+      break
+    }
     let (s2, ox) = @types.rng_range(game.rng_state, -80.0, 80.0)
     let (s3, oy) = @types.rng_range(s2, -80.0, 80.0)
     game.rng_state = s3
