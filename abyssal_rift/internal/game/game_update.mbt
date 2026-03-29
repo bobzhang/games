@@ -43,6 +43,9 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   update_camera(game, dt)
   process_events(game)
   update_room_flow(game, dt)
+  if game.room_clear_timer > 0.0 {
+    game.room_clear_timer -= dt
+  }
 }
 
 ///|
@@ -123,12 +126,8 @@ fn start_new_run(game : @types.Game) -> Unit {
   // Camera snap
   game.camera.x = p.x
   game.camera.y = p.y
-  // Spawn test enemies
-  spawn_enemy(game, Skeleton, p.x + 200.0, p.y - 100.0)
-  spawn_enemy(game, Skeleton, p.x - 200.0, p.y + 100.0)
-  spawn_enemy(game, Slime, p.x + 150.0, p.y + 150.0)
-  spawn_enemy(game, Archer, p.x - 250.0, p.y - 150.0)
-  spawn_enemy(game, Bat, p.x + 100.0, p.y - 200.0)
+  // Room flow will handle enemy spawning when the room is entered
+  game.room_clear_timer = 0.0
   game.state = Playing
 }
 

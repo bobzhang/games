@@ -32,6 +32,23 @@ pub fn draw_hud(game : @types.Game) -> Unit {
   } else {
     @raylib.draw_text("DASH", @types.screen_w / 2 - 20, @types.screen_h - 40, 14, @raylib.Color::new(100, 200, 255, 200))
   }
+  // Room cleared flash
+  if game.room_clear_timer > 0.0 {
+    let alpha = @types.clampi(
+      (game.room_clear_timer / 1.5 * 255.0).to_int(),
+      0,
+      255,
+    )
+    let text = "ROOM CLEARED!"
+    let tw = @raylib.measure_text(text, 36)
+    @raylib.draw_text(
+      text,
+      (@types.screen_w - tw) / 2,
+      @types.screen_h / 2 - 80,
+      36,
+      @raylib.Color::new(100, 255, 100, alpha),
+    )
+  }
   // FPS
   @fps.draw()
 }

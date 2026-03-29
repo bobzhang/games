@@ -25,10 +25,6 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
         let new_t = t - dt
         if new_t <= 0.0 {
           e.active = false
-          // Slime splits
-          if e.kind == Slime {
-            spawn_small_slimes(game, e.x, e.y)
-          }
         } else {
           e.state = Dead(new_t)
         }
@@ -153,6 +149,10 @@ fn spawn_small_slimes(game : @types.Game, x : Float, y : Float) -> Unit {
     e.flash_timer = 0.0
     e.knockback_timer = 0.0
     e.phase = 0.0
+    e.room_id = match game.floor {
+      Some(floor) => floor.current_room
+      None => -1
+    }
   }
 }
 
@@ -185,4 +185,8 @@ pub fn spawn_enemy(
   e.flash_timer = 0.0
   e.knockback_timer = 0.0
   e.phase = 0.0
+  e.room_id = match game.floor {
+    Some(floor) => floor.current_room
+    None => -1
+  }
 }

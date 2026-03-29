@@ -28,7 +28,12 @@ pub fn update_player_movement(
     p.dash_dx = dx
     p.dash_dy = dy
     p.dash_timer = @types.dash_duration
-    p.dash_cooldown = @types.dash_cooldown
+    let cooldown_mult : Float = if p.passives.contains(DashCooldownDown) {
+      0.75
+    } else {
+      1.0
+    }
+    p.dash_cooldown = @types.dash_cooldown * cooldown_mult
     push_event(game, DashUsed(p.x, p.y, dx, dy))
     return
   }

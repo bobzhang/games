@@ -8,7 +8,12 @@ pub fn update_items(game : @types.Game, dt : Float) -> Unit {
     }
     item.bob_timer += dt
     // Auto-pickup within range
-    let pickup_range : Float = 40.0
+    let base_range : Float = 40.0
+    let pickup_range : Float = if game.player.passives.contains(PickupRange) {
+      base_range * 1.5
+    } else {
+      base_range
+    }
     let d2 = @types.dist2(item.x, item.y, p.x, p.y)
     if d2 < pickup_range * pickup_range {
       collect_item(game, item)

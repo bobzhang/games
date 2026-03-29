@@ -75,6 +75,7 @@ pub(all) struct Enemy {
   mut flash_timer : Float
   mut knockback_timer : Float
   mut phase : Float
+  mut room_id : Int
 }
 
 ///|
@@ -193,6 +194,7 @@ pub(all) struct Game {
   mut floor_num : Int
   mut frame_count : Int
   mut hit_pause_timer : Float
+  mut room_clear_timer : Float
   mut rng_state : UInt
 }
 
@@ -205,7 +207,7 @@ pub fn Game::new() -> Game {
       state: Idle, facing_x: 1.0, facing_y: 0.0,
       patrol_x: 0.0, patrol_y: 0.0, attack_cooldown: 0.0,
       anim_timer: 0.0, anim_frame: 0, flash_timer: 0.0,
-      knockback_timer: 0.0, phase: 0.0 },
+      knockback_timer: 0.0, phase: 0.0, room_id: -1 },
   )
   let projectiles : Array[Projectile] = Array::make(
     256,
@@ -241,6 +243,7 @@ pub fn Game::new() -> Game {
     floor_num: 0,
     frame_count: 0,
     hit_pause_timer: 0.0,
+    room_clear_timer: 0.0,
     rng_state: 12345,
   }
 }

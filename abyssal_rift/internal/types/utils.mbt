@@ -165,7 +165,14 @@ pub fn alloc_item(items : Array[Item]) -> Int {
       return i
     }
   }
-  0
+  // Pool full - evict first Gold item (lowest priority)
+  for i, it in items {
+    match it.kind {
+      Gold(_) => return i
+      _ => ()
+    }
+  }
+  0 // Last resort
 }
 
 ///|

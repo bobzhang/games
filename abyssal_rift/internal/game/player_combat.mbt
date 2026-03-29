@@ -26,7 +26,12 @@ pub fn update_player_combat(
       if input.attack_pressed || p.attack_buffered {
         p.attack_buffered = false
         let stats = @data.get_weapon_stats(p.weapon)
-        let windup = @data.get_windup_time(p.weapon, p.combo_count)
+        let speed_mult : Float = if p.passives.contains(AttackSpeedUp) {
+          0.85
+        } else {
+          1.0
+        }
+        let windup = @data.get_windup_time(p.weapon, p.combo_count) * speed_mult
         p.attack_state = Windup(windup)
         push_event(game, WeaponSwing(p.x, p.y, p.facing_x))
         ignore(stats)
@@ -34,7 +39,12 @@ pub fn update_player_combat(
     Windup(t) => {
       let new_t = t - dt
       if new_t <= 0.0 {
-        let active_t = @data.get_active_time(p.weapon)
+        let speed_mult : Float = if p.passives.contains(AttackSpeedUp) {
+          0.85
+        } else {
+          1.0
+        }
+        let active_t = @data.get_active_time(p.weapon) * speed_mult
         p.attack_state = Active(active_t)
         // Create hitbox during active phase
         spawn_player_attack_hitbox(game)
@@ -45,7 +55,12 @@ pub fn update_player_combat(
     Active(t) => {
       let new_t = t - dt
       if new_t <= 0.0 {
-        let recovery = @data.get_recovery_time(p.weapon, p.combo_count)
+        let speed_mult : Float = if p.passives.contains(AttackSpeedUp) {
+          0.85
+        } else {
+          1.0
+        }
+        let recovery = @data.get_recovery_time(p.weapon, p.combo_count) * speed_mult
         p.attack_state = Recovery(recovery)
       } else {
         p.attack_state = Active(new_t)

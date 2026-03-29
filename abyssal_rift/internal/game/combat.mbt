@@ -33,6 +33,10 @@ pub fn apply_damage_to_enemy(
   // Check death
   if e.hp <= 0 {
     e.state = Dead(0.5)
+    // Slime splits immediately so small slimes count before room-clear check
+    if e.kind == Slime {
+      spawn_small_slimes(game, e.x, e.y)
+    }
     let stats = @data.get_enemy_stats(e.kind, game.floor_num)
     push_event(game, Kill(e.kind, e.x, e.y))
     // Drop gold
