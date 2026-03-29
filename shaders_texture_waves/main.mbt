@@ -1,20 +1,4 @@
 ///|
-fn float_to_bytes(v : Float) -> Bytes {
-  let arr = FixedArray::make(4, b'\x00')
-  let bits = v.reinterpret_as_int()
-  arr[0] = (bits & 0xFF).to_byte()
-  arr[1] = ((bits >> 8) & 0xFF).to_byte()
-  arr[2] = ((bits >> 16) & 0xFF).to_byte()
-  arr[3] = ((bits >> 24) & 0xFF).to_byte()
-  FixedArray::unsafe_reinterpret_as_bytes(arr)
-}
-
-///|
-fn vec2_to_bytes(v : @raylib.Vector2) -> Bytes {
-  v.to_bytes()
-}
-
-///|
 fn main {
   // Initialization
   let screen_width = 800
@@ -49,48 +33,16 @@ fn main {
     Float::from_int(@raylib.get_screen_width()),
     Float::from_int(@raylib.get_screen_height()),
   )
-  @raylib.set_shader_value(
-    shader,
+  shader.set_value(
     @raylib.get_shader_location(shader, "size"),
-    vec2_to_bytes(screen_size),
-    @raylib.ShaderUniformVec2,
+    Vec2(screen_size),
   )
-  @raylib.set_shader_value(
-    shader,
-    freq_x_loc,
-    float_to_bytes(freq_x),
-    @raylib.ShaderUniformFloat,
-  )
-  @raylib.set_shader_value(
-    shader,
-    freq_y_loc,
-    float_to_bytes(freq_y),
-    @raylib.ShaderUniformFloat,
-  )
-  @raylib.set_shader_value(
-    shader,
-    amp_x_loc,
-    float_to_bytes(amp_x),
-    @raylib.ShaderUniformFloat,
-  )
-  @raylib.set_shader_value(
-    shader,
-    amp_y_loc,
-    float_to_bytes(amp_y),
-    @raylib.ShaderUniformFloat,
-  )
-  @raylib.set_shader_value(
-    shader,
-    speed_x_loc,
-    float_to_bytes(speed_x),
-    @raylib.ShaderUniformFloat,
-  )
-  @raylib.set_shader_value(
-    shader,
-    speed_y_loc,
-    float_to_bytes(speed_y),
-    @raylib.ShaderUniformFloat,
-  )
+  shader.set_value(freq_x_loc, Float(freq_x))
+  shader.set_value(freq_y_loc, Float(freq_y))
+  shader.set_value(amp_x_loc, Float(amp_x))
+  shader.set_value(amp_y_loc, Float(amp_y))
+  shader.set_value(speed_x_loc, Float(speed_x))
+  shader.set_value(speed_y_loc, Float(speed_y))
 
   let mut seconds : Float = 0.0
 
@@ -101,12 +53,7 @@ fn main {
   while !@raylib.window_should_close() {
     // Update
     seconds = seconds + @raylib.get_frame_time()
-    @raylib.set_shader_value(
-      shader,
-      seconds_loc,
-      float_to_bytes(seconds),
-      @raylib.ShaderUniformFloat,
-    )
+    shader.set_value(seconds_loc, Float(seconds))
 
     // Draw
     @raylib.begin_drawing()

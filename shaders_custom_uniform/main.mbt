@@ -1,9 +1,4 @@
 ///|
-fn vec2_to_bytes(v : @raylib.Vector2) -> Bytes {
-  v.to_bytes()
-}
-
-///|
 fn main {
   // Initialization
   let screen_width = 800
@@ -37,11 +32,9 @@ fn main {
   )
 
   // Set initial swirl center value
-  @raylib.set_shader_value(
-    shader,
+  shader.set_value(
     swirl_center_loc,
-    vec2_to_bytes(swirl_center),
-    @raylib.ShaderUniformVec2,
+    Vec2(swirl_center),
   )
 
   // Create a RenderTexture2D to be used for render to texture
@@ -63,11 +56,9 @@ fn main {
     )
 
     // Send new value to the shader to be used on drawing
-    @raylib.set_shader_value(
-      shader,
+    shader.set_value(
       swirl_center_loc,
-      vec2_to_bytes(swirl_center),
-      @raylib.ShaderUniformVec2,
+      Vec2(swirl_center),
     )
 
     // Draw scene to render texture

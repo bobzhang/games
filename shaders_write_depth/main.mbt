@@ -16,9 +16,17 @@ fn main {
     "", "resources/shaders/glsl330/write_depth.fs",
   )
 
-  // Use customized function to create writable depth texture buffer
-  let target = @raylib.load_render_texture_depth_tex(
-    screen_width, screen_height,
+  // Create writable depth texture buffer using @rl helpers
+  let fbo_id = @rl.load_framebuffer()
+  let color_tex_id = @rl.load_texture(screen_width, screen_height, 7, 1) // 7 = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8
+  let depth_tex_id = @rl.load_texture_depth(screen_width, screen_height, false)
+  @rl.framebuffer_attach(fbo_id, color_tex_id, 0, 100, 0) // 0 = RL_ATTACHMENT_COLOR_CHANNEL0, 100 = RL_ATTACHMENT_TEXTURE2D
+  @rl.framebuffer_attach(fbo_id, depth_tex_id, 100, 100, 0) // 100 = RL_ATTACHMENT_DEPTH, 100 = RL_ATTACHMENT_TEXTURE2D
+  let _ = @rl.framebuffer_complete(fbo_id)
+  let target = @raylib.RenderTexture::new(
+    fbo_id,
+    @raylib.Texture::new(color_tex_id, screen_width, screen_height, 1, 7),
+    @raylib.Texture::new(depth_tex_id, screen_width, screen_height, 1, 19), // 19 = depth texture format
   )
 
   // Define the camera to look into our 3d world
@@ -91,7 +99,7 @@ fn main {
   }
 
   // De-Initialization
-  @raylib.unload_render_texture_depth_tex(target)
+  @raylib.unload_render_texture(target)
   @raylib.unload_shader(shader)
   @raylib.close_window()
 }

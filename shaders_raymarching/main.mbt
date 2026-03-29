@@ -1,52 +1,4 @@
 ///|
-fn float_to_bytes(v : Float) -> Bytes {
-  let arr = FixedArray::make(4, b'\x00')
-  let bits = v.reinterpret_as_int()
-  arr[0] = (bits & 0xFF).to_byte()
-  arr[1] = ((bits >> 8) & 0xFF).to_byte()
-  arr[2] = ((bits >> 16) & 0xFF).to_byte()
-  arr[3] = ((bits >> 24) & 0xFF).to_byte()
-  FixedArray::unsafe_reinterpret_as_bytes(arr)
-}
-
-///|
-fn vec2_to_uniform_bytes(x : Float, y : Float) -> Bytes {
-  let arr = FixedArray::make(8, b'\x00')
-  let bx = x.reinterpret_as_int()
-  arr[0] = (bx & 0xFF).to_byte()
-  arr[1] = ((bx >> 8) & 0xFF).to_byte()
-  arr[2] = ((bx >> 16) & 0xFF).to_byte()
-  arr[3] = ((bx >> 24) & 0xFF).to_byte()
-  let by = y.reinterpret_as_int()
-  arr[4] = (by & 0xFF).to_byte()
-  arr[5] = ((by >> 8) & 0xFF).to_byte()
-  arr[6] = ((by >> 16) & 0xFF).to_byte()
-  arr[7] = ((by >> 24) & 0xFF).to_byte()
-  FixedArray::unsafe_reinterpret_as_bytes(arr)
-}
-
-///|
-fn vec3_to_uniform_bytes(x : Float, y : Float, z : Float) -> Bytes {
-  let arr = FixedArray::make(12, b'\x00')
-  let bx = x.reinterpret_as_int()
-  arr[0] = (bx & 0xFF).to_byte()
-  arr[1] = ((bx >> 8) & 0xFF).to_byte()
-  arr[2] = ((bx >> 16) & 0xFF).to_byte()
-  arr[3] = ((bx >> 24) & 0xFF).to_byte()
-  let by = y.reinterpret_as_int()
-  arr[4] = (by & 0xFF).to_byte()
-  arr[5] = ((by >> 8) & 0xFF).to_byte()
-  arr[6] = ((by >> 16) & 0xFF).to_byte()
-  arr[7] = ((by >> 24) & 0xFF).to_byte()
-  let bz = z.reinterpret_as_int()
-  arr[8] = (bz & 0xFF).to_byte()
-  arr[9] = ((bz >> 8) & 0xFF).to_byte()
-  arr[10] = ((bz >> 16) & 0xFF).to_byte()
-  arr[11] = ((bz >> 24) & 0xFF).to_byte()
-  FixedArray::unsafe_reinterpret_as_bytes(arr)
-}
-
-///|
 fn main {
   // Initialization
   let screen_width = 800
@@ -76,11 +28,11 @@ fn main {
   let resolution_loc = @raylib.get_shader_location(shader, "resolution")
   let mut resolution_x = Float::from_int(screen_width)
   let mut resolution_y = Float::from_int(screen_height)
-  @raylib.set_shader_value(
-    shader,
+  shader.set_value(
     resolution_loc,
-    vec2_to_uniform_bytes(resolution_x, resolution_y),
-    @raylib.ShaderUniformVec2,
+    Vec2(
+      @raylib.Vector2::new(resolution_x, resolution_y),
+    ),
   )
   let mut run_time : Float = 0.0
   @raylib.disable_cursor()
@@ -95,38 +47,25 @@ fn main {
     run_time = run_time + delta_time
 
     // Set shader required uniform values
-    @raylib.set_shader_value(
-      shader,
+    shader.set_value(
       view_eye_loc,
-      vec3_to_uniform_bytes(
-        camera.position.x,
-        camera.position.y,
-        camera.position.z,
-      ),
-      @raylib.ShaderUniformVec3,
+      Vec3(camera.position),
     )
-    @raylib.set_shader_value(
-      shader,
+    shader.set_value(
       view_center_loc,
-      vec3_to_uniform_bytes(camera.target.x, camera.target.y, camera.target.z),
-      @raylib.ShaderUniformVec3,
+      Vec3(camera.target),
     )
-    @raylib.set_shader_value(
-      shader,
-      run_time_loc,
-      float_to_bytes(run_time),
-      @raylib.ShaderUniformFloat,
-    )
+    shader.set_value(run_time_loc, Float(run_time))
 
     // Check if screen is resized
     if @raylib.is_window_resized() {
       resolution_x = Float::from_int(@raylib.get_screen_width())
       resolution_y = Float::from_int(@raylib.get_screen_height())
-      @raylib.set_shader_value(
-        shader,
+      shader.set_value(
         resolution_loc,
-        vec2_to_uniform_bytes(resolution_x, resolution_y),
-        @raylib.ShaderUniformVec2,
+        Vec2(
+          @raylib.Vector2::new(resolution_x, resolution_y),
+        ),
       )
     }
 

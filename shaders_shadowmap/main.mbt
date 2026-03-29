@@ -76,8 +76,7 @@ fn main {
   )
   // Set the shader location for the view position
   let view_pos_loc = @raylib.get_shader_location(shadow_shader, "viewPos")
-  @raylib.set_shader_location(
-    shadow_shader,
+  shadow_shader.set_locs(
     @raylib.ShaderLocVectorView,
     view_pos_loc,
   )
@@ -91,27 +90,21 @@ fn main {
 
   let light_dir_loc = @raylib.get_shader_location(shadow_shader, "lightDir")
   let light_col_loc = @raylib.get_shader_location(shadow_shader, "lightColor")
-  @raylib.set_shader_value(
-    shadow_shader,
+  shadow_shader.set_value(
     light_dir_loc,
-    light_dir.to_bytes(),
-    @raylib.ShaderUniformVec3,
+    Vec3(light_dir),
   )
-  @raylib.set_shader_value(
-    shadow_shader,
+  shadow_shader.set_value(
     light_col_loc,
-    light_color_normalized.to_bytes(),
-    @raylib.ShaderUniformVec4,
+    Vec4(light_color_normalized),
   )
 
   // Ambient light
   let ambient_loc = @raylib.get_shader_location(shadow_shader, "ambient")
   let ambient = @raylib.Vector4::new(0.1, 0.1, 0.1, 1.0)
-  @raylib.set_shader_value(
-    shadow_shader,
+  shadow_shader.set_value(
     ambient_loc,
-    ambient.to_bytes(),
-    @raylib.ShaderUniformVec4,
+    Vec4(ambient),
   )
 
   // Shadow map uniforms
@@ -120,11 +113,9 @@ fn main {
   let shadow_map_resolution_loc = @raylib.get_shader_location(
     shadow_shader, "shadowMapResolution",
   )
-  @raylib.set_shader_value(
-    shadow_shader,
+  shadow_shader.set_value(
     shadow_map_resolution_loc,
-    int_to_bytes(ShadowmapResolution),
-    @raylib.ShaderUniformInt,
+    Int(ShadowmapResolution),
   )
 
   // Load models
@@ -145,10 +136,15 @@ fn main {
     robot_animations, 0,
   )
 
-  // Load shadow map render texture (depth-only)
-  let shadow_map = @raylib.load_shadowmap_render_texture(
-    ShadowmapResolution,
-    ShadowmapResolution,
+  // Load shadow map render texture (depth-only) using @rl helpers
+  let shadow_fbo_id = @rl.load_framebuffer()
+  let shadow_depth_tex_id = @rl.load_texture_depth(ShadowmapResolution, ShadowmapResolution, false)
+  @rl.framebuffer_attach(shadow_fbo_id, shadow_depth_tex_id, @rl.AttachmentDepth, @rl.AttachmentTexture2d, 0)
+  let _ = @rl.framebuffer_complete(shadow_fbo_id)
+  let shadow_map = @raylib.RenderTexture::new(
+    shadow_fbo_id,
+    @raylib.Texture::new(0U, ShadowmapResolution, ShadowmapResolution, 1, @raylib.PixelformatUncompressedR8g8b8a8),
+    @raylib.Texture::new(shadow_depth_tex_id, ShadowmapResolution, ShadowmapResolution, 1, 19),
   )
 
   // Light camera for shadow mapping (renders from the light's point of view)
@@ -171,12 +167,9 @@ fn main {
     let dt = @raylib.get_frame_time()
 
     // Update shader with current camera position
-    let camera_pos = cam.position
-    @raylib.set_shader_value(
-      shadow_shader,
+    shadow_shader.set_value(
       view_pos_loc,
-      camera_pos.to_bytes(),
-      @raylib.ShaderUniformVec3,
+      Vec3(cam.position),
     )
     cam = @raylib.update_camera(cam, @raylib.CameraOrbital)
 
@@ -218,11 +211,9 @@ fn main {
       light_cam.fovy,
       light_cam.projection,
     )
-    @raylib.set_shader_value(
-      shadow_shader,
+    shadow_shader.set_value(
       light_dir_loc,
-      light_dir.to_bytes(),
-      @raylib.ShaderUniformVec3,
+      Vec3(light_dir),
     )
 
     // Draw
@@ -248,7 +239,7 @@ fn main {
     )
 
     // Enable the shadow shader and bind the shadow map texture
-    let shader_id = @raylib.get_shader_id(shadow_shader).reinterpret_as_uint()
+    let shader_id = @raylib.get_shader_id(shadow_shader)
     @rl.enable_shader(shader_id)
     let slot : Int = 10 // Can be anything 0 to 15, but 0 will probably be taken up
     @rl.active_texture_slot(10)
@@ -290,7 +281,7 @@ fn main {
   @raylib.unload_model(cube)
   @raylib.unload_model(robot)
   @raylib.unload_model_animations(robot_animations)
-  @raylib.unload_shadowmap_render_texture(shadow_map)
+  shadow_map.unload()
 
   @draw.cleanup()
   @raylib.close_window()

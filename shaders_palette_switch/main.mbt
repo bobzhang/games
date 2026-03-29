@@ -1,18 +1,4 @@
 ///|
-fn ivec3_array_to_bytes(data : Array[Int]) -> Bytes {
-  let count = data.length()
-  let arr = FixedArray::make(count * 4, b'\x00')
-  for i in 0..<count {
-    let v = data[i]
-    arr[i * 4] = (v & 0xFF).to_byte()
-    arr[i * 4 + 1] = ((v >> 8) & 0xFF).to_byte()
-    arr[i * 4 + 2] = ((v >> 16) & 0xFF).to_byte()
-    arr[i * 4 + 3] = ((v >> 24) & 0xFF).to_byte()
-  }
-  FixedArray::unsafe_reinterpret_as_bytes(arr)
-}
-
-///|
 fn main {
   // Initialization
   let screen_width = 800
@@ -35,22 +21,22 @@ fn main {
 
   // Palettes: arrays of RGB triplets as ivec3
   // 3-BIT RGB
-  let palette0 : Array[Int] = [
-    0, 0, 0, 255, 0, 0, 0, 255, 0, 0, 0, 255, 0, 255, 255, 255, 0, 255, 255, 255,
-    0, 255, 255, 255,
+  let palette0 : Array[(Int, Int, Int)] = [
+    (0, 0, 0), (255, 0, 0), (0, 255, 0), (0, 0, 255),
+    (0, 255, 255), (255, 0, 255), (255, 255, 0), (255, 255, 255),
   ]
   // AMMO-8 (GameBoy-like)
-  let palette1 : Array[Int] = [
-    4, 12, 6, 17, 35, 24, 30, 58, 41, 48, 93, 66, 77, 128, 97, 137, 162, 87, 190,
-    220, 127, 238, 255, 204,
+  let palette1 : Array[(Int, Int, Int)] = [
+    (4, 12, 6), (17, 35, 24), (30, 58, 41), (48, 93, 66),
+    (77, 128, 97), (137, 162, 87), (190, 220, 127), (238, 255, 204),
   ]
   // RKBV (2-strip film)
-  let palette2 : Array[Int] = [
-    21, 25, 26, 138, 76, 88, 217, 98, 117, 230, 184, 193, 69, 107, 115, 75, 151,
-    166, 165, 189, 194, 255, 245, 247,
+  let palette2 : Array[(Int, Int, Int)] = [
+    (21, 25, 26), (138, 76, 88), (217, 98, 117), (230, 184, 193),
+    (69, 107, 115), (75, 151, 166), (165, 189, 194), (255, 245, 247),
   ]
 
-  let palettes : Array[Array[Int]] = [palette0, palette1, palette2]
+  let palettes : Array[Array[(Int, Int, Int)]] = [palette0, palette1, palette2]
   let palette_text : Array[String] = [
     "3-BIT RGB", "AMMO-8 (GameBoy-like)", "RKBV (2-strip film)",
   ]
@@ -75,12 +61,9 @@ fn main {
     }
 
     // Send palette data to the shader (RGB triplets as ivec3)
-    @raylib.set_shader_value_v(
-      shader,
+    shader.set_value_v(
       palette_loc,
-      ivec3_array_to_bytes(palettes[current_palette]),
-      @raylib.ShaderUniformIvec3,
-      colors_per_palette,
+      IVec3(palettes[current_palette]),
     )
 
     // Draw

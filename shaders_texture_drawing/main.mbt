@@ -1,15 +1,4 @@
 ///|
-fn float_to_bytes(v : Float) -> Bytes {
-  let arr = FixedArray::make(4, b'\x00')
-  let bits = v.reinterpret_as_int()
-  arr[0] = (bits & 0xFF).to_byte()
-  arr[1] = ((bits >> 8) & 0xFF).to_byte()
-  arr[2] = ((bits >> 16) & 0xFF).to_byte()
-  arr[3] = ((bits >> 24) & 0xFF).to_byte()
-  FixedArray::unsafe_reinterpret_as_bytes(arr)
-}
-
-///|
 fn main {
   // Initialization
   let screen_width = 800
@@ -27,24 +16,14 @@ fn main {
   )
   let mut time : Float = 0.0
   let time_loc = @raylib.get_shader_location(shader, "uTime")
-  @raylib.set_shader_value(
-    shader,
-    time_loc,
-    float_to_bytes(time),
-    @raylib.ShaderUniformFloat,
-  )
+  shader.set_value(time_loc, Float(time))
   @raylib.set_target_fps(60)
   @draw.init_font()
   // Main game loop
   while !@raylib.window_should_close() {
     // Update
     time = Float::from_double(@raylib.get_time())
-    @raylib.set_shader_value(
-      shader,
-      time_loc,
-      float_to_bytes(time),
-      @raylib.ShaderUniformFloat,
-    )
+    shader.set_value(time_loc, Float(time))
     // Draw
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)

@@ -3,23 +3,13 @@
 let font_state : Ref[@raylib.Font?] = { val: None }
 
 ///|
-/// Local FFI binding without `-> Unit` so MoonBit generates a void return,
-/// matching the C stub signature and avoiding a wasm signature mismatch trap.
-// TODO: replace with @raylib.set_font_texture_filter once upstream fixes
-// the return type (-> Unit compiles to i32, should be void for C stubs).
-extern "c" fn set_font_texture_filter_ffi(
-  font : @raylib.Font,
-  filter : Int,
-) = "moonbit_raylib_set_font_texture_filter"
-
-///|
 /// Loads a high-quality TTF font for use by all subsequent `draw_text` / `measure_text` calls.
 /// Must be called **after** `@raylib.init_window`.
 pub fn init_font() -> Unit {
   let f = @raylib.load_font_ex(
     "utils/draw/resources/anonymous_pro_bold.ttf", 48,
   )
-  set_font_texture_filter_ffi(f, @raylib.TextureFilterBilinear)
+  f.texture().set_filter(@raylib.TextureFilterBilinear)
   font_state.val = Some(f)
 }
 

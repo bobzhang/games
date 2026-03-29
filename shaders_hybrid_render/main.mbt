@@ -4,16 +4,6 @@ fn tanf(x : Float) -> Float {
 }
 
 ///|
-fn vec2_to_bytes(v : @raylib.Vector2) -> Bytes {
-  v.to_bytes()
-}
-
-///|
-fn vec3_to_bytes(v : @raylib.Vector3) -> Bytes {
-  v.to_bytes()
-}
-
-///|
 fn main {
   // Initialization
   let screen_width = 800
@@ -48,16 +38,22 @@ fn main {
     Float::from_int(screen_width) / 2.0,
     Float::from_int(screen_height) / 2.0,
   )
-  @raylib.set_shader_value(
-    shdr_raymarch,
+  shdr_raymarch.set_value(
     march_loc_screen_center,
-    vec2_to_bytes(screen_center),
-    @raylib.ShaderUniformVec2,
+    Vec2(screen_center),
   )
 
-  // Use customized function to create writable depth texture buffer
-  let target = @raylib.load_render_texture_depth_tex(
-    screen_width, screen_height,
+  // Create writable depth texture buffer using @rl helpers
+  let fbo_id = @rl.load_framebuffer()
+  let color_tex_id = @rl.load_texture(screen_width, screen_height, @raylib.PixelformatUncompressedR8g8b8a8, 1)
+  let depth_tex_id = @rl.load_texture_depth(screen_width, screen_height, false)
+  @rl.framebuffer_attach(fbo_id, color_tex_id, @rl.AttachmentColorChannel0, @rl.AttachmentTexture2d, 0)
+  @rl.framebuffer_attach(fbo_id, depth_tex_id, @rl.AttachmentDepth, @rl.AttachmentTexture2d, 0)
+  let _ = @rl.framebuffer_complete(fbo_id)
+  let target = @raylib.RenderTexture::new(
+    fbo_id,
+    @raylib.Texture::new(color_tex_id, screen_width, screen_height, 1, @raylib.PixelformatUncompressedR8g8b8a8),
+    @raylib.Texture::new(depth_tex_id, screen_width, screen_height, 1, 19),
   )
 
   // Define the camera to look into our 3d world
@@ -81,11 +77,9 @@ fn main {
     camera = @raylib.update_camera(camera, @raylib.CameraOrbital)
 
     // Update Camera Position in the ray march shader.
-    @raylib.set_shader_value(
-      shdr_raymarch,
+    shdr_raymarch.set_value(
       march_loc_cam_pos,
-      vec3_to_bytes(camera.position),
-      @raylib.ShaderUniformVec3,
+      Vec3(camera.position),
     )
 
     // Update Camera Looking Vector. Vector length determines FOV.
@@ -95,11 +89,9 @@ fn main {
       ),
       cam_dist,
     )
-    @raylib.set_shader_value(
-      shdr_raymarch,
+    shdr_raymarch.set_value(
       march_loc_cam_dir,
-      vec3_to_bytes(cam_dir),
-      @raylib.ShaderUniformVec3,
+      Vec3(cam_dir),
     )
 
     // Draw

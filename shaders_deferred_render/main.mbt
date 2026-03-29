@@ -24,26 +24,6 @@ struct Light {
 }
 
 ///|
-fn int_to_bytes(v : Int) -> Bytes {
-  let arr = FixedArray::make(4, b'\x00')
-  arr[0] = (v & 0xFF).to_byte()
-  arr[1] = ((v >> 8) & 0xFF).to_byte()
-  arr[2] = ((v >> 16) & 0xFF).to_byte()
-  arr[3] = ((v >> 24) & 0xFF).to_byte()
-  FixedArray::unsafe_reinterpret_as_bytes(arr)
-}
-
-///|
-fn vec3_to_bytes(v : @raylib.Vector3) -> Bytes {
-  v.to_bytes()
-}
-
-///|
-fn vec4_to_bytes(v : @raylib.Vector4) -> Bytes {
-  v.to_bytes()
-}
-
-///|
 fn create_light(
   light_type : Int,
   position : @raylib.Vector3,
@@ -92,35 +72,27 @@ fn create_light(
 fn update_light_values(shader : @raylib.Shader, light : Light) -> Unit {
   // Send light enabled state as integer
   let enabled_val = if light.enabled { 1 } else { 0 }
-  @raylib.set_shader_value(
-    shader,
+  shader.set_value(
     light.enabled_loc,
-    int_to_bytes(enabled_val),
-    @raylib.ShaderUniformInt,
+    Int(enabled_val),
   )
 
   // Send light type
-  @raylib.set_shader_value(
-    shader,
+  shader.set_value(
     light.type_loc,
-    int_to_bytes(light.light_type),
-    @raylib.ShaderUniformInt,
+    Int(light.light_type),
   )
 
   // Send light position as vec3
-  @raylib.set_shader_value(
-    shader,
+  shader.set_value(
     light.position_loc,
-    vec3_to_bytes(light.position),
-    @raylib.ShaderUniformVec3,
+    Vec3(light.position),
   )
 
   // Send light target as vec3
-  @raylib.set_shader_value(
-    shader,
+  shader.set_value(
     light.target_loc,
-    vec3_to_bytes(light.target),
-    @raylib.ShaderUniformVec3,
+    Vec3(light.target),
   )
 
   // Send light color as vec4 (normalized 0.0-1.0)
@@ -130,11 +102,9 @@ fn update_light_values(shader : @raylib.Shader, light : Light) -> Unit {
     Float::from_int(light.color.b.to_int()) / 255.0,
     Float::from_int(light.color.a.to_int()) / 255.0,
   )
-  @raylib.set_shader_value(
-    shader,
+  shader.set_value(
     light.color_loc,
-    vec4_to_bytes(color_normalized),
-    @raylib.ShaderUniformVec4,
+    Vec4(color_normalized),
   )
 }
 
@@ -216,8 +186,7 @@ fn main {
   let deferred_shader = @raylib.load_shader(
     "resources/shaders/glsl330/deferred_shading.vs", "resources/shaders/glsl330/deferred_shading.fs",
   )
-  @raylib.set_shader_locs(
-    deferred_shader,
+  deferred_shader.set_locs(
     @raylib.ShaderLocVectorView,
     @raylib.get_shader_location(deferred_shader, "viewPosition"),
   )
@@ -314,7 +283,7 @@ fn main {
   // Now we initialize the sampler2D uniform's in the deferred shader.
   // We do this by setting the uniform's value to the color channel slot we earlier
   // bound our textures to.
-  let deferred_shader_id = @raylib.get_shader_id(deferred_shader).reinterpret_as_uint()
+  let deferred_shader_id = @raylib.get_shader_id(deferred_shader)
   @rl.enable_shader(deferred_shader_id)
   @rl.set_uniform_sampler(
     @rl.get_location_uniform(deferred_shader_id, "gPosition"),
@@ -398,12 +367,9 @@ fn main {
     camera = @raylib.update_camera(camera, @raylib.CameraOrbital)
 
     // Update the shader with the camera view vector
-    let camera_pos = vec3_to_bytes(camera.position)
-    @raylib.set_shader_value(
-      deferred_shader,
+    deferred_shader.set_value(
       @raylib.get_shader_location(deferred_shader, "viewPosition"),
-      camera_pos,
-      @raylib.ShaderUniformVec3,
+      Vec3(camera.position),
     )
 
     // Toggle lights with key presses
@@ -452,7 +418,7 @@ fn main {
 
     // NOTE: We have to use rlEnableShader here. BeginShaderMode or thus rlSetShader
     // will not work, as they won't immediately load the shader program.
-    let gbuffer_shader_id = @raylib.get_shader_id(gbuffer_shader).reinterpret_as_uint()
+    let gbuffer_shader_id = @raylib.get_shader_id(gbuffer_shader)
     @rl.enable_shader(gbuffer_shader_id)
 
     // When drawing a model here, make sure that the material's shaders
@@ -547,10 +513,12 @@ fn main {
         @raylib.darkgreen,
       )
     } else if mode == DeferredPosition {
-      let tex = @raylib.texture_from_id(
+      let tex = @raylib.Texture::new(
         gbuffer.position_texture,
         screen_width,
         screen_height,
+        1,
+        @raylib.PixelformatUncompressedR8g8b8a8,
       )
       @raylib.draw_texture_rec(
         tex,
@@ -571,10 +539,12 @@ fn main {
         @raylib.darkgreen,
       )
     } else if mode == DeferredNormal {
-      let tex = @raylib.texture_from_id(
+      let tex = @raylib.Texture::new(
         gbuffer.normal_texture,
         screen_width,
         screen_height,
+        1,
+        @raylib.PixelformatUncompressedR8g8b8a8,
       )
       @raylib.draw_texture_rec(
         tex,
@@ -595,10 +565,12 @@ fn main {
         @raylib.darkgreen,
       )
     } else if mode == DeferredAlbedo {
-      let tex = @raylib.texture_from_id(
+      let tex = @raylib.Texture::new(
         gbuffer.albedo_spec_texture,
         screen_width,
         screen_height,
+        1,
+        @raylib.PixelformatUncompressedR8g8b8a8,
       )
       @raylib.draw_texture_rec(
         tex,

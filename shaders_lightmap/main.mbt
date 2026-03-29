@@ -2,17 +2,23 @@
 const MapSize : Int = 10
 
 ///|
-fn floats_to_bytes(values : FixedArray[Float]) -> Bytes {
-  let len = values.length()
-  let arr = FixedArray::make(len * 4, b'\x00')
+fn float_array_to_fixed(arr : @raylib.FloatArray) -> FixedArray[Float] {
+  let len = arr.length()
+  let result : FixedArray[Float] = FixedArray::make(len, (0.0 : Float))
   for i in 0..<len {
-    let bits = values[i].reinterpret_as_int()
-    arr[i * 4] = (bits & 0xFF).to_byte()
-    arr[i * 4 + 1] = ((bits >> 8) & 0xFF).to_byte()
-    arr[i * 4 + 2] = ((bits >> 16) & 0xFF).to_byte()
-    arr[i * 4 + 3] = ((bits >> 24) & 0xFF).to_byte()
+    result[i] = arr[i]
   }
-  FixedArray::unsafe_reinterpret_as_bytes(arr)
+  result
+}
+
+///|
+fn ushort_array_to_fixed(arr : @raylib.UShortArray) -> FixedArray[UInt16] {
+  let len = arr.length()
+  let result = FixedArray::make(len, (0 : UInt16))
+  for i in 0..<len {
+    result[i] = arr[i].to_uint16()
+  }
+  result
 }
 
 ///|
@@ -34,14 +40,20 @@ fn main {
     @raylib.CameraPerspective,
   )
 
-  let mesh = @raylib.gen_mesh_plane(
+  // GenMeshPlane doesn't generate texcoords2, so we generate the plane first,
+  // extract its data, then recreate the mesh with texcoords2 included.
+  let plane = @raylib.gen_mesh_plane(
     Float::from_int(MapSize),
     Float::from_int(MapSize),
     1,
     1,
   )
+  let plane_vertices = float_array_to_fixed(plane.vertices().unwrap())
+  let plane_texcoords = float_array_to_fixed(plane.texcoords().unwrap())
+  let plane_normals = float_array_to_fixed(plane.normals().unwrap())
+  let plane_indices = ushort_array_to_fixed(plane.indices().unwrap())
+  @raylib.unload_mesh(plane)
 
-  // GenMeshPlane doesn't generate texcoords2 so we will upload them separately
   // texcoords2: 4 vertices * 2 components = 8 floats
   let texcoords2 : FixedArray[Float] = [
     0.0, 0.0, // vertex 0
@@ -49,7 +61,14 @@ fn main {
      0.0, 1.0, // vertex 2
      1.0, 1.0,
   ] // vertex 3
-  @raylib.mesh_setup_texcoords2(mesh, floats_to_bytes(texcoords2), 8)
+
+  let mesh = @raylib.Mesh::new(
+    plane_vertices,
+    texcoords=plane_texcoords,
+    texcoords2=texcoords2,
+    normals=plane_normals,
+    indices=plane_indices,
+  )
 
   // Load lightmap shader
   let shader = @raylib.load_shader(
@@ -62,11 +81,11 @@ fn main {
   @raylib.gen_texture_mipmaps(texture)
   @raylib.set_texture_filter(texture, @raylib.TextureFilterTrilinear)
 
-  let lightmap = @raylib.load_render_texture(MapSize, MapSize)
+  let lightmap = @raylib.RenderTexture::load(MapSize, MapSize)
 
   @raylib.set_render_texture_filter(lightmap, @raylib.TextureFilterTrilinear)
 
-  let material = @raylib.load_material_default()
+  let material = @raylib.Material::default()
   @raylib.set_material_shader(material, shader)
   @raylib.set_material_texture(material, @raylib.MaterialMapAlbedo, texture)
   // Set lightmap texture on METALNESS map slot (used as texture1 in shader)

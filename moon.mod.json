@@ -2,8 +2,8 @@
   "name": "bobzhang/games",
   "version": "0.2.0",
   "deps": {
-    "tonyfettes/raylib": "0.2.2",
-    "moonbitlang/async": "0.16.6"
+    "tonyfettes/raylib": "0.3.1",
+    "moonbitlang/async": "0.16.8"
   },
   "license": "MIT",
   "preferred-target": "native"

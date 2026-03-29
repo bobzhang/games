@@ -1,17 +1,3 @@
-// Helper: serialize a Float to 4 little-endian bytes for SetShaderValue
-
-///|
-fn float_to_bytes(f : Float) -> Bytes {
-  let bits = f.reinterpret_as_int()
-  let arr : FixedArray[Byte] = [
-    (bits & 0xFF).to_byte(),
-    ((bits >> 8) & 0xFF).to_byte(),
-    ((bits >> 16) & 0xFF).to_byte(),
-    ((bits >> 24) & 0xFF).to_byte(),
-  ]
-  FixedArray::unsafe_reinterpret_as_bytes(arr)
-}
-
 ///|
 fn main {
   // Initialization
@@ -33,16 +19,16 @@ fn main {
   let img3 = @raylib.load_image("resources/fudesumi.png")
 
   let tex_widths = [
-    @raylib.image_width(img0),
-    @raylib.image_width(img1),
-    @raylib.image_width(img2),
-    @raylib.image_width(img3),
+    img0.width(),
+    img1.width(),
+    img2.width(),
+    img3.width(),
   ]
   let tex_heights = [
-    @raylib.image_height(img0),
-    @raylib.image_height(img1),
-    @raylib.image_height(img2),
-    @raylib.image_height(img3),
+    img0.height(),
+    img1.height(),
+    img2.height(),
+    img3.height(),
   ]
 
   let textures = [
@@ -80,24 +66,9 @@ fn main {
   )
 
   // Set initial shader values
-  @raylib.set_shader_value(
-    shdr_color_correction,
-    contrast_loc,
-    float_to_bytes(contrast.val),
-    0,
-  )
-  @raylib.set_shader_value(
-    shdr_color_correction,
-    saturation_loc,
-    float_to_bytes(saturation.val),
-    0,
-  )
-  @raylib.set_shader_value(
-    shdr_color_correction,
-    brightness_loc,
-    float_to_bytes(brightness.val),
-    0,
-  )
+  shdr_color_correction.set_value(contrast_loc, Float(contrast.val))
+  shdr_color_correction.set_value(saturation_loc, Float(saturation.val))
+  shdr_color_correction.set_value(brightness_loc, Float(brightness.val))
 
   @raylib.set_target_fps(60)
   @draw.init_font()
@@ -135,24 +106,9 @@ fn main {
     }
 
     // Send the values to the shader
-    @raylib.set_shader_value(
-      shdr_color_correction,
-      contrast_loc,
-      float_to_bytes(contrast.val),
-      0,
-    )
-    @raylib.set_shader_value(
-      shdr_color_correction,
-      saturation_loc,
-      float_to_bytes(saturation.val),
-      0,
-    )
-    @raylib.set_shader_value(
-      shdr_color_correction,
-      brightness_loc,
-      float_to_bytes(brightness.val),
-      0,
-    )
+    shdr_color_correction.set_value(contrast_loc, Float(contrast.val))
+    shdr_color_correction.set_value(saturation_loc, Float(saturation.val))
+    shdr_color_correction.set_value(brightness_loc, Float(brightness.val))
 
     // Draw
     @raylib.begin_drawing()

@@ -1,30 +1,3 @@
-///|
-fn float_to_bytes(v : Float) -> Bytes {
-  let arr = FixedArray::make(4, b'\x00')
-  let bits = v.reinterpret_as_int()
-  arr[0] = (bits & 0xFF).to_byte()
-  arr[1] = ((bits >> 8) & 0xFF).to_byte()
-  arr[2] = ((bits >> 16) & 0xFF).to_byte()
-  arr[3] = ((bits >> 24) & 0xFF).to_byte()
-  FixedArray::unsafe_reinterpret_as_bytes(arr)
-}
-
-///|
-fn vec2_to_uniform_bytes(x : Float, y : Float) -> Bytes {
-  let arr = FixedArray::make(8, b'\x00')
-  let bx = x.reinterpret_as_int()
-  arr[0] = (bx & 0xFF).to_byte()
-  arr[1] = ((bx >> 8) & 0xFF).to_byte()
-  arr[2] = ((bx >> 16) & 0xFF).to_byte()
-  arr[3] = ((bx >> 24) & 0xFF).to_byte()
-  let by = y.reinterpret_as_int()
-  arr[4] = (by & 0xFF).to_byte()
-  arr[5] = ((by >> 8) & 0xFF).to_byte()
-  arr[6] = ((by >> 16) & 0xFF).to_byte()
-  arr[7] = ((by >> 24) & 0xFF).to_byte()
-  FixedArray::unsafe_reinterpret_as_bytes(arr)
-}
-
 // Spot data
 
 ///|
@@ -154,12 +127,7 @@ fn main {
   // Tell the shader how wide the screen is
   let w_loc = @raylib.get_shader_location(shdr_spot, "screenWidth")
   let sw = Float::from_int(@raylib.get_screen_width())
-  @raylib.set_shader_value(
-    shdr_spot,
-    w_loc,
-    float_to_bytes(sw),
-    @raylib.ShaderUniformFloat,
-  )
+  shdr_spot.set_value(w_loc, Float(sw))
 
   // Randomize the locations and velocities of the spotlights
   for i in 0..<max_spots {
@@ -182,24 +150,12 @@ fn main {
     let radius = (48.0 : Float) * Float::from_int(i + 1)
     // Use struct update via direct field assignment
     spots[i] = { ..spots[i], inner, radius }
-    @raylib.set_shader_value(
-      shdr_spot,
+    shdr_spot.set_value(
       spots[i].position_loc,
-      vec2_to_uniform_bytes(spots[i].pos_x, spots[i].pos_y),
-      @raylib.ShaderUniformVec2,
+      Vec2(@raylib.Vector2::new(spots[i].pos_x, spots[i].pos_y)),
     )
-    @raylib.set_shader_value(
-      shdr_spot,
-      spots[i].inner_loc,
-      float_to_bytes(spots[i].inner),
-      @raylib.ShaderUniformFloat,
-    )
-    @raylib.set_shader_value(
-      shdr_spot,
-      spots[i].radius_loc,
-      float_to_bytes(spots[i].radius),
-      @raylib.ShaderUniformFloat,
-    )
+    shdr_spot.set_value(spots[i].inner_loc, Float(spots[i].inner))
+    shdr_spot.set_value(spots[i].radius_loc, Float(spots[i].radius))
   }
 
   @raylib.set_target_fps(60)
@@ -237,11 +193,9 @@ fn main {
           spots[i].speed_y = -spots[i].speed_y
         }
       }
-      @raylib.set_shader_value(
-        shdr_spot,
+      shdr_spot.set_value(
         spots[i].position_loc,
-        vec2_to_uniform_bytes(spots[i].pos_x, spots[i].pos_y),
-        @raylib.ShaderUniformVec2,
+        Vec2(@raylib.Vector2::new(spots[i].pos_x, spots[i].pos_y)),
       )
     }
 

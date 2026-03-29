@@ -24,26 +24,6 @@ struct Light {
 }
 
 ///|
-fn int_to_bytes(v : Int) -> Bytes {
-  let arr = FixedArray::make(4, b'\x00')
-  arr[0] = (v & 0xFF).to_byte()
-  arr[1] = ((v >> 8) & 0xFF).to_byte()
-  arr[2] = ((v >> 16) & 0xFF).to_byte()
-  arr[3] = ((v >> 24) & 0xFF).to_byte()
-  FixedArray::unsafe_reinterpret_as_bytes(arr)
-}
-
-///|
-fn vec3_to_bytes(v : @raylib.Vector3) -> Bytes {
-  v.to_bytes()
-}
-
-///|
-fn vec4_to_bytes(v : @raylib.Vector4) -> Bytes {
-  v.to_bytes()
-}
-
-///|
 fn create_light(
   light_type : Int,
   position : @raylib.Vector3,
@@ -92,36 +72,16 @@ fn create_light(
 fn update_light_values(shader : @raylib.Shader, light : Light) -> Unit {
   // Send light enabled state as integer
   let enabled_val = if light.enabled { 1 } else { 0 }
-  @raylib.set_shader_value(
-    shader,
-    light.enabled_loc,
-    int_to_bytes(enabled_val),
-    @raylib.ShaderUniformInt,
-  )
+  shader.set_value(light.enabled_loc, Int(enabled_val))
 
   // Send light type
-  @raylib.set_shader_value(
-    shader,
-    light.type_loc,
-    int_to_bytes(light.light_type),
-    @raylib.ShaderUniformInt,
-  )
+  shader.set_value(light.type_loc, Int(light.light_type))
 
   // Send light position as vec3
-  @raylib.set_shader_value(
-    shader,
-    light.position_loc,
-    vec3_to_bytes(light.position),
-    @raylib.ShaderUniformVec3,
-  )
+  shader.set_value(light.position_loc, Vec3(light.position))
 
   // Send light target as vec3
-  @raylib.set_shader_value(
-    shader,
-    light.target_loc,
-    vec3_to_bytes(light.target),
-    @raylib.ShaderUniformVec3,
-  )
+  shader.set_value(light.target_loc, Vec3(light.target))
 
   // Send light color as vec4 (normalized 0.0-1.0)
   let color_normalized = @raylib.Vector4::new(
@@ -130,12 +90,7 @@ fn update_light_values(shader : @raylib.Shader, light : Light) -> Unit {
     Float::from_int(light.color.b.to_int()) / 255.0,
     Float::from_int(light.color.a.to_int()) / 255.0,
   )
-  @raylib.set_shader_value(
-    shader,
-    light.color_loc,
-    vec4_to_bytes(color_normalized),
-    @raylib.ShaderUniformVec4,
-  )
+  shader.set_value(light.color_loc, Vec4(color_normalized))
 }
 
 // ============================================================================
@@ -211,12 +166,7 @@ fn main {
   // Ambient light level (some basic lighting)
   let ambient_loc = @raylib.get_shader_location(shader, "ambient")
   let ambient = @raylib.Vector4::new(0.1, 0.1, 0.1, 1.0)
-  @raylib.set_shader_value(
-    shader,
-    ambient_loc,
-    vec4_to_bytes(ambient),
-    @raylib.ShaderUniformVec4,
-  )
+  shader.set_value(ambient_loc, Vec4(ambient))
 
   // Assign our lighting shader to model
   for i in 0..<max_vox_files {
@@ -321,12 +271,7 @@ fn main {
     }
 
     // Update the shader with the camera view vector
-    @raylib.set_shader_value(
-      shader,
-      view_pos_loc,
-      camera.position.to_bytes(),
-      @raylib.ShaderUniformVec3,
-    )
+    shader.set_value(view_pos_loc, Vec3(camera.position))
 
     // Update light values (actually, only enable/disable them)
     for i in 0..<MaxLights {
