@@ -1,9 +1,10 @@
 # Raylib MoonBit Web Games
 
-Total games: 334
+Total games: 333
 
 - [2048](games/2048/2048.html)
 - [abyss_signal_runner_2026](games/abyss_signal_runner_2026/abyss_signal_runner_2026.html)
+- [abyssal_rift](games/abyssal_rift/abyssal_rift.html)
 - [aftershock_rescue_convoy_2026](games/aftershock_rescue_convoy_2026/aftershock_rescue_convoy_2026.html)
 - [air_traffic_control_2026](games/air_traffic_control_2026/air_traffic_control_2026.html)
 - [ancient_temple_trap_run_2026](games/ancient_temple_trap_run_2026/ancient_temple_trap_run_2026.html)
@@ -121,8 +122,6 @@ Total games: 334
 - [magnet_maze_2026](games/magnet_maze_2026/magnet_maze_2026.html)
 - [mahjong_solitaire_pavilion_2026](games/mahjong_solitaire_pavilion_2026/mahjong_solitaire_pavilion_2026.html)
 - [mario](games/mario/mario.html)
-- [mario-head](games/mario-head/mario.html)
-- [mario-head-fixed](games/mario-head-fixed/mario.html)
 - [martial_arts_school_manager_2026](games/martial_arts_school_manager_2026/martial_arts_school_manager_2026.html)
 - [match3_garden_2026](games/match3_garden_2026/match3_garden_2026.html)
 - [matchlink_festival_2026](games/matchlink_festival_2026/matchlink_festival_2026.html)
