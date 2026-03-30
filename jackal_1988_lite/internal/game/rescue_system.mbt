@@ -35,6 +35,20 @@ fn tile_is_hostage_spawnable(tile : Int) -> Bool {
 }
 
 ///|
+fn tile_has_hostage(game : @types.Game, tx : Int, ty : Int) -> Bool {
+  let cx = @types.tile_center_x(tx)
+  let cy = @types.tile_center_y(ty)
+  for hostage in game.hostages {
+    if hostage.active &&
+      (hostage.x - cx).abs() < 1.0 &&
+      (hostage.y - cy).abs() < 1.0 {
+      return true
+    }
+  }
+  false
+}
+
+///|
 fn @types.Game::try_spawn_hostage_at_tile(
   game : @types.Game,
   tx : Int,
@@ -49,6 +63,9 @@ fn @types.Game::try_spawn_hostage_at_tile(
   }
   let tile = @types.get_tile(game, tx, ty)
   if !tile_is_hostage_spawnable(tile) {
+    return false
+  }
+  if tile_has_hostage(game, tx, ty) {
     return false
   }
 

@@ -65,21 +65,10 @@ fn @types.Game::clear_all_enemies_by_grenade(
   game : @types.Game,
   team : @types.Team,
 ) -> Unit {
-  let killed = for enemy in game.enemies; killed = 0 {
+  for i, enemy in game.enemies {
     if enemy.active {
-      enemy.active = false
-      game.enemies_alive -= 1
-      @particles.spawn_explosion(game, enemy.x, enemy.y, 1.4)
-      @score.grant_score(game, team, @types.enemy_score(enemy.enemy_kind))
-      continue killed + 1
+      game.destroy_enemy(i, team)
     }
-  } nobreak {
-    killed
-  }
-  if killed > 0 {
-    @score.bump_combo(game)
-    let bonus = killed * 25
-    @score.grant_score(game, team, bonus)
   }
 }
 
@@ -115,7 +104,9 @@ fn @types.Game::apply_powerup(
       @particles.spawn_spark_burst(game, player.x, player.y, 26)
     }
     Shovel => {
-      game.cache_base_ring()
+      if game.shovel_timer <= 0.0 {
+        game.cache_base_ring()
+      }
       game.apply_shovel_fortress()
       game.shovel_timer = @types.shovel_duration
       @particles.spawn_spark_burst(

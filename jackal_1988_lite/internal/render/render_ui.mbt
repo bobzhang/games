@@ -8,17 +8,24 @@ fn @types.Game::draw_enemy_counter(
   let remaining = game.enemies_alive + (if pending > 0 { pending } else { 0 })
   @types.draw_shadow_text("CONVOY", x, y, 18, @raylib.raywhite)
 
-  for i in 0..<(@types.enemy_icon_rows * @types.enemy_icon_cols) {
+  let max_icons = @types.enemy_icon_rows * @types.enemy_icon_cols
+  let icons_to_show = if remaining > max_icons { max_icons } else { remaining }
+  for i in 0..<max_icons {
     let row = i / @types.enemy_icon_cols
     let col = i % @types.enemy_icon_cols
     let ix = x + col * 18
     let iy = y + 30 + row * 16
-    if i < remaining {
+    if i < icons_to_show {
       @raylib.draw_rectangle(ix, iy, 12, 10, @raylib.orange)
       @raylib.draw_rectangle(ix + 3, iy + 3, 6, 4, @raylib.brown)
     } else {
       @raylib.draw_rectangle_lines(ix, iy, 12, 10, @raylib.darkgray)
     }
+  }
+  if remaining > max_icons {
+    let overflow = remaining - max_icons
+    let oy = y + 30 + @types.enemy_icon_rows * 16 + 2
+    @types.draw_shadow_text("+\{overflow} more", x, oy, 14, @raylib.orange)
   }
 }
 

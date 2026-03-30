@@ -73,9 +73,78 @@ fn @types.Game::choose_enemy_target_player(
 }
 
 ///|
+fn can_move_in_dir(
+  game : @types.Game,
+  enemy : @types.Tank,
+  enemy_index : Int,
+  dir : @types.Dir,
+) -> Bool {
+  let step = Float::from_int(@types.tile_size) / 2.0
+  let nx = enemy.x + @types.dir_vector_x(dir) * step
+  let ny = enemy.y + @types.dir_vector_y(dir) * step
+  if @world.tank_hits_world(game, nx, ny) {
+    return false
+  }
+  if @world.tank_hits_enemies(game, nx, ny, enemy_index) {
+    return false
+  }
+  true
+}
+
+///|
+fn rank_directions(dx : Float, dy : Float) -> Array[@types.Dir] {
+  let dirs : Array[@types.Dir] = []
+  if dx.abs() > dy.abs() {
+    if dx > 0.0 {
+      dirs.push(Right)
+      if dy > 0.0 {
+        dirs.push(Down)
+        dirs.push(Up)
+      } else {
+        dirs.push(Up)
+        dirs.push(Down)
+      }
+      dirs.push(Left)
+    } else {
+      dirs.push(Left)
+      if dy > 0.0 {
+        dirs.push(Down)
+        dirs.push(Up)
+      } else {
+        dirs.push(Up)
+        dirs.push(Down)
+      }
+      dirs.push(Right)
+    }
+  } else if dy > 0.0 {
+    dirs.push(Down)
+    if dx > 0.0 {
+      dirs.push(Right)
+      dirs.push(Left)
+    } else {
+      dirs.push(Left)
+      dirs.push(Right)
+    }
+    dirs.push(Up)
+  } else {
+    dirs.push(Up)
+    if dx > 0.0 {
+      dirs.push(Right)
+      dirs.push(Left)
+    } else {
+      dirs.push(Left)
+      dirs.push(Right)
+    }
+    dirs.push(Down)
+  }
+  dirs
+}
+
+///|
 fn @types.Game::enemy_desired_dir(
   game : @types.Game,
   enemy : @types.Tank,
+  enemy_index : Int,
 ) -> @types.Dir {
   let target_player = game.choose_enemy_target_player(enemy)
   let base_x = @types.tile_center_x(@types.base_tile_x)
@@ -93,25 +162,14 @@ fn @types.Game::enemy_desired_dir(
 
   let dx = target_x - enemy.x
   let dy = target_y - enemy.y
-  let horiz : @types.Dir = if dx < 0.0 { Left } else { Right }
-  let vert : @types.Dir = if dy < 0.0 { Up } else { Down }
+  let dirs = rank_directions(dx, dy)
 
-  let r = @types.rand_range(game, 0, 99)
-  if dx.abs() > dy.abs() {
-    if r < 72 {
-      horiz
-    } else if r < 92 {
-      vert
-    } else {
-      @types.Dir::from_int(@types.rand_range(game, 0, 3))
+  for i in 0..<dirs.length() {
+    if can_move_in_dir(game, enemy, enemy_index, dirs[i]) {
+      return dirs[i]
     }
-  } else if r < 72 {
-    vert
-  } else if r < 92 {
-    horiz
-  } else {
-    @types.Dir::from_int(@types.rand_range(game, 0, 3))
   }
+  enemy.dir
 }
 
 ///|
@@ -190,17 +248,39 @@ fn @types.Game::enemy_shoot_if_ready(
   }
 
   if should_fire {
+    let fire_dir : @types.Dir = if fire_on_player && target_player >= 0 {
+      let player = game.players[target_player]
+      let aligned_horizontal = (player.y - enemy.y).abs() <
+        Float::from_int(@types.tile_size) * 0.5
+      if aligned_horizontal {
+        if player.x > enemy.x { Right } else { Left }
+      } else {
+        if player.y > enemy.y { Down } else { Up }
+      }
+    } else if fire_on_base {
+      let base_x = @types.tile_center_x(@types.base_tile_x)
+      let base_y = @types.tile_center_y(@types.base_tile_y)
+      let aligned_horizontal = (base_y - enemy.y).abs() <
+        Float::from_int(@types.tile_size) * 0.5
+      if aligned_horizontal {
+        if base_x > enemy.x { Right } else { Left }
+      } else {
+        if base_y > enemy.y { Down } else { Up }
+      }
+    } else {
+      enemy.dir
+    }
     let muzzle_x = enemy.x +
-      @types.dir_vector_x(enemy.dir) * (@types.tank_half + 3.0)
+      @types.dir_vector_x(fire_dir) * (@types.tank_half + 3.0)
     let muzzle_y = enemy.y +
-      @types.dir_vector_y(enemy.dir) * (@types.tank_half + 3.0)
+      @types.dir_vector_y(fire_dir) * (@types.tank_half + 3.0)
     let speed = if enemy.enemy_kind == Sniper {
       @types.bullet_speed_enemy + 40.0
     } else {
       @types.bullet_speed_enemy
     }
     let power = if enemy.enemy_kind == Heavy { 2 } else { 1 }
-    game.spawn_bullet(Enemy, muzzle_x, muzzle_y, enemy.dir, speed, power)
+    game.spawn_bullet(Enemy, muzzle_x, muzzle_y, fire_dir, speed, power)
     enemy.reload_timer = enemy.reload_delay
     @particles.spawn_spark_burst(game, muzzle_x, muzzle_y, 4)
   }
@@ -240,6 +320,12 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
         enemy.invuln_timer = 0.0
       }
     }
+    if enemy.blink_timer > 0.0 {
+      enemy.blink_timer -= dt
+      if enemy.blink_timer < 0.0 {
+        enemy.blink_timer = 0.0
+      }
+    }
 
     if game.freeze_all_timer > 0.0 {
       continue
@@ -250,7 +336,7 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
 
     if enemy.ai_move_timer <= 0.0 {
       enemy.ai_move_timer = @types.rand_rangef(game, 0.35, 1.25)
-      let new_dir = game.enemy_desired_dir(enemy)
+      let new_dir = game.enemy_desired_dir(enemy, i)
       enemy.dir = new_dir
     }
 
@@ -287,9 +373,9 @@ fn @types.Game::destroy_enemy(
   game.enemies_alive -= 1
 
   let score = @types.enemy_score(enemy.enemy_kind)
+  @score.bump_combo(game)
   let mult = @score.combo_multiplier(game)
   @score.grant_score(game, killer_team, score * mult)
-  @score.bump_combo(game)
 
   @particles.spawn_explosion(game, enemy.x, enemy.y, 1.1)
 

@@ -126,7 +126,10 @@ fn @types.Game::draw_single_tile(
       @raylib.Color::new(210, 248, 255, 255),
     )
   } else if tile == @types.tile_base {
-    let base_color = if game.base_alive {
+    let base_color = if game.base_flash > 0.0 &&
+      (game.base_flash * 10.0).to_int() % 2 == 0 {
+      @raylib.white
+    } else if game.base_alive {
       @raylib.Color::new(201, 167, 86, 255)
     } else {
       @raylib.Color::new(110, 32, 32, 255)
@@ -400,7 +403,12 @@ fn @types.Game::draw_enemies(
       }
     }
 
-    let body = @types.enemy_color(enemy.enemy_kind)
+    let body = if enemy.blink_timer > 0.0 &&
+      (enemy.blink_timer * 12.0).to_int() % 2 == 0 {
+      @raylib.white
+    } else {
+      @types.enemy_color(enemy.enemy_kind)
+    }
     let trim = @raylib.Color::new(70, 30, 30, 255)
     draw_tank(enemy, body, trim, shake_x, shake_y)
 
