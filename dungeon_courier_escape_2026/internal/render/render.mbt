@@ -23,13 +23,7 @@ fn draw_meter(
 ) -> Unit {
   let r = @types.clampf(ratio, 0.0, 1.0)
 
-  @draw.draw_text(
-    label,
-    x,
-    y - 22,
-    20,
-    @raylib.Color::new(210, 226, 244, 245),
-  )
+  @draw.draw_text(label, x, y - 22, 20, @raylib.Color::new(210, 226, 244, 245))
 
   @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(22, 28, 40, 230))
   @raylib.draw_rectangle(x, y, (Float::from_int(w) * r).to_int(), h, fill)

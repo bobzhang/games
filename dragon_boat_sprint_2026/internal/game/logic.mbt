@@ -92,10 +92,10 @@ fn @types.Game::reset_run(game : @types.Game) -> Unit {
 ///|
 /// Returns the player's current race rank by counting rivals ahead of the player.
 fn @types.Game::current_rank(game : @types.Game) -> Int {
-  @utils.count_by(
-    game.rivals,
-    fn(rival) { rival.active && rival.dist > game.distance },
-  ) + 1
+  @utils.count_by(game.rivals, fn(rival) {
+    rival.active && rival.dist > game.distance
+  }) +
+  1
 }
 
 ///|
@@ -250,7 +250,13 @@ fn @types.Game::update_speed_distance(game : @types.Game, dt : Float) -> Unit {
   let streak_bonus : Float = Float::from_int(game.streak.min(20)) * 2.4
   let rhythm_bonus : Float = game.rhythm_meter * 0.22
   let burst_bonus : Float = if game.burst_t > 0.0 { 108.0 } else { 0.0 }
-  let stabilize_drag : Float = if game.input.stabilize_down { 8.0 } else { 0.0 }
+  let stabilize_drag : Float = if game.burst_t > 0.0 {
+    0.0
+  } else if game.input.stabilize_down {
+    8.0
+  } else {
+    0.0
+  }
   let wobble_penalty : Float = game.wobble * 28.0
 
   let target_speed : Float = @types.base_speed +

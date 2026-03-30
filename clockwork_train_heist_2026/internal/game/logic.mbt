@@ -220,21 +220,17 @@ fn @types.Game::guard_index_at(
   y : Int,
   skip : Int,
 ) -> Int {
-  @utils.first_indexi_by(
-    game.guards,
-    fn(i, slot) {
-      i != skip && slot.active && slot.body.x == x && slot.body.y == y
-    },
-  )
+  @utils.first_indexi_by(game.guards, fn(i, slot) {
+    i != skip && slot.active && slot.body.x == x && slot.body.y == y
+  })
 }
 
 ///|
 /// Returns the index of an active loot item at `(x, y)`, or -1 if none is present.
 fn @types.Game::loot_index_at(game : @types.Game, x : Int, y : Int) -> Int {
-  @utils.first_index_by(
-    game.loots,
-    fn(loot) { loot.active && loot.x == x && loot.y == y },
-  )
+  @utils.first_index_by(game.loots, fn(loot) {
+    loot.active && loot.x == x && loot.y == y
+  })
 }
 
 ///|

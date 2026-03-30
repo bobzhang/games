@@ -456,13 +456,7 @@ fn draw_bar(
     @types.clampf(value / maxv, 0.0, 1.0)
   }
 
-  @draw.draw_text(
-    label,
-    x,
-    y - 20,
-    18,
-    @raylib.Color::new(208, 228, 244, 240),
-  )
+  @draw.draw_text(label, x, y - 20, 18, @raylib.Color::new(208, 228, 244, 240))
   @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(20, 38, 56, 236))
   @raylib.draw_rectangle(
     x + 2,

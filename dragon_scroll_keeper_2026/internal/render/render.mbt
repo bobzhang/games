@@ -455,13 +455,7 @@ fn draw_meter(
   value_text : String,
 ) -> Unit {
   let r = @types.clamp01(ratio)
-  @draw.draw_text(
-    label,
-    x,
-    y - 22,
-    18,
-    @raylib.Color::new(226, 236, 246, 235),
-  )
+  @draw.draw_text(label, x, y - 22, 18, @raylib.Color::new(226, 236, 246, 235))
   @raylib.draw_rectangle(x, y, w, h, @raylib.Color::new(18, 26, 36, 220))
   @raylib.draw_rectangle(x, y, (Float::from_int(w) * r).to_int(), h, col)
   @raylib.draw_rectangle_lines(

@@ -649,8 +649,7 @@ fn @types.Game::draw_sparks(game : @types.Game) -> Unit {
 fn @types.Game::draw_title(game : @types.Game) -> Unit {
   @draw.draw_text(
     "Gomoku Street Duel 2026",
-    @types.screen_w / 2 -
-    @draw.measure_text("Gomoku Street Duel 2026", 84) / 2,
+    @types.screen_w / 2 - @draw.measure_text("Gomoku Street Duel 2026", 84) / 2,
     108,
     84,
     @raylib.Color::new(238, 248, 255, 248),
@@ -667,8 +666,7 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
   @draw.draw_text(
     "Heuristic AI, touch controls, hints, and undo.",
     @types.screen_w / 2 -
-    @draw.measure_text("Heuristic AI, touch controls, hints, and undo.", 34) /
-    2,
+    @draw.measure_text("Heuristic AI, touch controls, hints, and undo.", 34) / 2,
     290,
     34,
     @raylib.Color::new(192, 220, 240, 238),

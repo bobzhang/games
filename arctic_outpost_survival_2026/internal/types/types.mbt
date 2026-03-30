@@ -8,6 +8,7 @@ pub(all) struct Enemy {
   mut vy : Float
   mut r : Float
   mut hp : Float
+  mut max_hp : Float
   mut kind : EnemyKind
   mut phase : Float
 
@@ -264,6 +265,7 @@ pub fn Enemy::new() -> Enemy {
     vy: 0.0,
     r: 0.0,
     hp: 0.0,
+    max_hp: 0.0,
     kind: Wolf,
     phase: 0.0,
   }

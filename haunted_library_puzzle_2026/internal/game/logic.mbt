@@ -220,12 +220,9 @@ fn @types.Game::ghost_index_at(
   y : Int,
   skip : Int,
 ) -> Int {
-  @utils.first_indexi_by(
-    game.ghosts,
-    fn(i, ghost) {
-      i != skip && ghost.active && ghost.body.x == x && ghost.body.y == y
-    },
-  )
+  @utils.first_indexi_by(game.ghosts, fn(i, ghost) {
+    i != skip && ghost.active && ghost.body.x == x && ghost.body.y == y
+  })
 }
 
 ///|

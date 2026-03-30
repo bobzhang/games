@@ -217,7 +217,7 @@ fn enemy_color(kind : @types.EnemyKind) -> @raylib.Color {
 }
 
 ///|
-/// Draws an enemy using a shape specific to its kind: wolf as a circle with ear triangles, brute as a double ring, and shard as four spinning blade triangles.
+/// Draws an enemy using a shape specific to its kind: wolf as a circle with ear triangles, brute as a double ring, and shard as four spinning blade triangles, plus a compact HP bar above the body.
 fn draw_enemy(enemy : @types.Enemy, ox : Int, oy : Int) -> Unit {
   if !enemy.active {
     return
@@ -283,6 +283,31 @@ fn draw_enemy(enemy : @types.Enemy, ox : Int, oy : Int) -> Unit {
   }
 
   @raylib.draw_circle(x + 4, y - 4, 3.0, @raylib.Color::new(24, 34, 42, 220))
+
+  let hp_ratio : Float = @types.clampf(
+    enemy.hp / @types.maxf(enemy.max_hp, 1.0),
+    0.0,
+    1.0,
+  )
+  let bar_w : Int = (enemy.r * 2.1).to_int().clamp(min=28, max=44)
+  let fill_w : Int = (Float::from_int(bar_w - 2) * hp_ratio).to_int()
+  let bar_x : Int = x - bar_w / 2
+  let bar_y : Int = y - enemy.r.to_int() - 14
+
+  @raylib.draw_rectangle(
+    bar_x,
+    bar_y,
+    bar_w,
+    6,
+    @raylib.Color::new(20, 30, 42, 230),
+  )
+  @raylib.draw_rectangle(
+    bar_x + 1,
+    bar_y + 1,
+    fill_w,
+    4,
+    @raylib.Color::new(246, 132, 126, 236),
+  )
 }
 
 ///|

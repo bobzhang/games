@@ -528,8 +528,14 @@ fn @types.Game::update_hook(game : @types.Game, dt : Float) -> Unit {
   game.hook_vx = game.hook_vx + (game.move_x * 640.0 * boost_mul + sway_x) * dt
   game.hook_vy = game.hook_vy + (game.move_y * 620.0 * boost_mul + sway_y) * dt
 
-  game.hook_vx = game.hook_vx * (1.0 - dt * 3.0)
-  game.hook_vy = game.hook_vy * (1.0 - dt * 3.0)
+  if game.boost_on || game.turbo_t > 0.0 {
+    // Let boost speed carry through instead of immediately damping it away.
+    game.hook_vx = @types.clampf(game.hook_vx, -520.0, 520.0)
+    game.hook_vy = @types.clampf(game.hook_vy, -520.0, 520.0)
+  } else {
+    game.hook_vx = game.hook_vx * (1.0 - dt * 3.0)
+    game.hook_vy = game.hook_vy * (1.0 - dt * 3.0)
+  }
 
   game.hook_x = game.hook_x + game.hook_vx * dt
   game.hook_y = game.hook_y + game.hook_vy * dt

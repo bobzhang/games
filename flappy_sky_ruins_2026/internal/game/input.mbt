@@ -33,11 +33,22 @@ fn @types.Game::result_hover(game : @types.Game) -> Bool {
 ///|
 /// Handles title-screen input and starts a new run when confirmed.
 pub fn update_title_input(game : @types.Game) -> Unit {
+  let start_rect = @types.start_button_rect()
   let key_start : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
   let click_start : Bool = @raylib.is_mouse_button_pressed(
     @raylib.MouseButtonLeft,
-  )
+  ) &&
+    @types.pointer_on_rect(
+      game.mouse_x,
+      game.mouse_y,
+      true,
+      0,
+      start_rect.0,
+      start_rect.1,
+      start_rect.2,
+      start_rect.3,
+    )
   let tap_start : Bool = game.touch_cd <= 0.0 && game.title_hover()
 
   if key_start || click_start || tap_start {
@@ -49,12 +60,23 @@ pub fn update_title_input(game : @types.Game) -> Unit {
 ///|
 /// Handles result-screen retry input and restarts the run.
 pub fn update_result_input(game : @types.Game) -> Unit {
+  let retry_rect = @types.retry_button_rect()
   let key_retry : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyR)
   let click_retry : Bool = @raylib.is_mouse_button_pressed(
     @raylib.MouseButtonLeft,
-  )
+  ) &&
+    @types.pointer_on_rect(
+      game.mouse_x,
+      game.mouse_y,
+      true,
+      0,
+      retry_rect.0,
+      retry_rect.1,
+      retry_rect.2,
+      retry_rect.3,
+    )
   let tap_retry : Bool = game.touch_cd <= 0.0 && game.result_hover()
 
   if key_retry || click_retry || tap_retry {

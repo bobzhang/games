@@ -651,13 +651,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     60,
     @raylib.Color::new(146, 186, 242, 170),
   )
-  @draw.draw_text(
-    "SONAR",
-    500,
-    26,
-    18,
-    @raylib.Color::new(220, 230, 255, 230),
-  )
+  @draw.draw_text("SONAR", 500, 26, 18, @raylib.Color::new(220, 230, 255, 230))
   @draw.draw_text(
     cooldown_text(game.sonar_cd, @types.sonar_cd_time),
     500,
@@ -963,14 +957,52 @@ fn @types.Game::draw_stage_clear_overlay(game : @types.Game) -> Unit {
     @raylib.Color::new(180, 255, 208, 255),
   )
   draw_center_text(
-    "Next stage loading...",
-    @types.screen_h / 2 + 8,
+    "Breach stabilized. Dive deeper when ready.",
+    @types.screen_h / 2 + 2,
     26,
     @raylib.Color::new(208, 238, 240, 230),
   )
+
+  let b = @types.restart_rect()
+  let hover = @types.pointer_on_rect(
+    game.mx,
+    game.my,
+    game.hold,
+    game.touch_count,
+    b.0,
+    b.1,
+    b.2,
+    b.3,
+  )
+
+  @raylib.draw_rectangle(
+    b.0.to_int(),
+    b.1.to_int(),
+    b.2.to_int(),
+    b.3.to_int(),
+    if hover {
+      @raylib.Color::new(44, 122, 148, 220)
+    } else {
+      @raylib.Color::new(20, 72, 92, 210)
+    },
+  )
+  @raylib.draw_rectangle_lines(
+    b.0.to_int(),
+    b.1.to_int(),
+    b.2.to_int(),
+    b.3.to_int(),
+    @raylib.Color::new(170, 236, 255, 210),
+  )
+
   draw_center_text(
-    "Tap or press ENTER to continue now",
-    @types.screen_h / 2 + 44,
+    "NEXT STAGE",
+    (b.1 + 16.0).to_int(),
+    34,
+    @raylib.Color::new(228, 247, 255, 255),
+  )
+  draw_center_text(
+    "Press ENTER or click NEXT STAGE",
+    @types.screen_h / 2 + 118,
     20,
     @raylib.Color::new(196, 222, 238, 220),
   )

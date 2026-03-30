@@ -75,10 +75,9 @@ fn @types.Game::tower_spot_ok(
     return false
   }
 
-  !@utils.any_by_view(
-    game.towers[0:placed],
-    fn(tower) { tower.active && @types.dist2(x, y, tower.x, tower.y) < 190.0 * 190.0 },
-  )
+  !@utils.any_by_view(game.towers[0:placed], fn(tower) {
+    tower.active && @types.dist2(x, y, tower.x, tower.y) < 190.0 * 190.0
+  })
 }
 
 ///|

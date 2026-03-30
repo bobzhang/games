@@ -24,6 +24,7 @@ fn @types.Game::clear_world(game : @types.Game) -> Unit {
     enemy.vy = 0.0
     enemy.r = 0.0
     enemy.hp = 0.0
+    enemy.max_hp = 0.0
     enemy.kind = Wolf
     enemy.phase = 0.0
   }
@@ -270,6 +271,7 @@ fn @types.Game::spawn_enemy(game : @types.Game) -> Bool {
       }
     }
 
+    enemy.max_hp = enemy.hp
     enemy.vx = 0.0
     enemy.vy = 0.0
     enemy.phase = @types.randf(0.0, 6.28)

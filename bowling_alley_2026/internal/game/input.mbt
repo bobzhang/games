@@ -3,9 +3,19 @@
 fn @types.Game::update_title_input(game : @types.Game) -> Unit {
   let key_start : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
+  let (start_x, start_y, start_w, start_h) = @types.title_start_button()
 
   let click_start : Bool = @raylib.is_mouse_button_pressed(
     @raylib.MouseButtonLeft,
+  ) && @types.pointer_on_rect(
+    game.mouse_x,
+    game.mouse_y,
+    true,
+    0,
+    start_x,
+    start_y,
+    start_w,
+    start_h,
   )
 
   let tap_start : Bool = game.touch_cd <= 0.0 &&
@@ -28,9 +38,19 @@ fn @types.Game::update_result_input(game : @types.Game) -> Unit {
   let key_retry : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyR)
+  let (retry_x, retry_y, retry_w, retry_h) = @types.retry_button()
 
   let click_retry : Bool = @raylib.is_mouse_button_pressed(
     @raylib.MouseButtonLeft,
+  ) && @types.pointer_on_rect(
+    game.mouse_x,
+    game.mouse_y,
+    true,
+    0,
+    retry_x,
+    retry_y,
+    retry_w,
+    retry_h,
   )
 
   let tap_retry : Bool = game.touch_cd <= 0.0 &&

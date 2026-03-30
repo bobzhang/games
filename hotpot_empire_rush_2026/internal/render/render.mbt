@@ -210,13 +210,7 @@ fn @types.Game::draw_station_info(
         } else {
           "Clean \{@types.veg_name(game.prep.out_flavor)}"
         }
-        @draw.draw_text(
-          "Ready: \{ready_label}",
-          x + 14,
-          y + 64,
-          24,
-          text_color,
-        )
+        @draw.draw_text("Ready: \{ready_label}", x + 14, y + 64, 24, text_color)
         @draw.draw_text("J: collect item", x + 14, y + 96, 20, text_color)
         @draw.draw_text("K: clear station", x + 14, y + 122, 20, text_color)
       } else {
@@ -313,13 +307,7 @@ fn @types.Game::draw_station_info(
           @raylib.Color::new(24, 52, 58, 220),
           @raylib.Color::new(132, 234, 208, 236),
         )
-        @draw.draw_text(
-          "K: serve head order",
-          x + 14,
-          y + 156,
-          18,
-          text_color,
-        )
+        @draw.draw_text("K: serve head order", x + 14, y + 156, 18, text_color)
       } else {
         @draw.draw_text("No queue head", x + 14, y + 70, 26, text_color)
         @draw.draw_text("K: serve (penalty)", x + 14, y + 106, 20, text_color)
@@ -348,13 +336,7 @@ fn @types.Game::draw_station_info(
     }
     Reputation => {
       @draw.draw_text("Reputation is your HP", x + 14, y + 66, 24, text_color)
-      @draw.draw_text(
-        "Drops to 0 => game over",
-        x + 14,
-        y + 98,
-        22,
-        text_color,
-      )
+      @draw.draw_text("Drops to 0 => game over", x + 14, y + 98, 22, text_color)
     }
     Storage => {
       @draw.draw_text("Shuffle next pickup", x + 14, y + 66, 24, text_color)

@@ -5,11 +5,20 @@ pub fn update_title_input(game : @types.Game) -> Unit {
   let my = game.mouse_y
   let hold = game.mouse_hold
   let touch_count = game.touch_count
+  let start_rect = @types.start_button_rect()
   let key_start : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
   let click_start : Bool = @raylib.is_mouse_button_pressed(
     @raylib.MouseButtonLeft,
-  )
+  ) &&
+    @types.point_in_rect(
+      mx,
+      my,
+      start_rect.0,
+      start_rect.1,
+      start_rect.2,
+      start_rect.3,
+    )
   let tap_start : Bool = game.touch_cd <= 0.0 &&
     @types.title_hover(mx, my, hold, touch_count)
 
@@ -26,12 +35,21 @@ pub fn update_result_input(game : @types.Game) -> Unit {
   let my = game.mouse_y
   let hold = game.mouse_hold
   let touch_count = game.touch_count
+  let retry_rect = @types.retry_button_rect()
   let key_retry : Bool = @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
     @raylib.is_key_pressed(@raylib.KeyR)
   let click_retry : Bool = @raylib.is_mouse_button_pressed(
     @raylib.MouseButtonLeft,
-  )
+  ) &&
+    @types.point_in_rect(
+      mx,
+      my,
+      retry_rect.0,
+      retry_rect.1,
+      retry_rect.2,
+      retry_rect.3,
+    )
   let tap_retry : Bool = game.touch_cd <= 0.0 &&
     @types.retry_hover(mx, my, hold, touch_count)
 

@@ -117,10 +117,9 @@ fn @types.Game::far_from_active_parcels(
   upto : Int,
 ) -> Bool {
   let min_d2 = min_dist * min_dist
-  !@utils.any_by_view(
-    game.parcels[0:upto],
-    fn(parcel) { parcel.active && @types.dist2(x, y, parcel.x, parcel.y) < min_d2 },
-  )
+  !@utils.any_by_view(game.parcels[0:upto], fn(parcel) {
+    parcel.active && @types.dist2(x, y, parcel.x, parcel.y) < min_d2
+  })
 }
 
 ///|
