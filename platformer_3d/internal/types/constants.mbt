@@ -144,6 +144,42 @@ pub let camera_zoom_speed : Float = 3.0
 /// Camera setting for camera shake decay.
 pub let camera_shake_decay : Float = 5.0
 
+///|
+/// How far ahead the camera target leads in the player movement direction.
+pub let camera_lead_factor : Float = 0.15
+
+///|
+/// Smoothing factor for camera Y when the player is rising.
+pub let camera_y_lag_rising : Float = 0.6
+
+///|
+/// Smoothing factor for camera Y when the player is falling (slower follow).
+pub let camera_y_lag_falling : Float = 0.3
+
+///|
+/// Minimum camera-to-player distance after occlusion pull-in.
+pub let camera_occlude_min_dist : Float = 2.0
+
+///|
+/// Multiplier applied to base gravity while falling for snappier landings.
+pub let gravity_fall_mult : Float = 1.6
+
+///|
+/// Multiplier applied to base gravity when rising with jump released.
+pub let gravity_cut_mult : Float = 2.5
+
+///|
+/// Vertical-velocity threshold below which apex-hang gravity reduction kicks in.
+pub let apex_vy_threshold : Float = 1.5
+
+///|
+/// Gravity multiplier during apex hang for a floaty peak feel.
+pub let apex_gravity_mult : Float = 0.5
+
+///|
+/// Horizontal speed threshold above which speed-trail particles are spawned.
+pub let speed_trail_threshold : Float = 5.0
+
 // ========== Pool sizes ==========
 
 ///|
@@ -589,6 +625,58 @@ pub let proj_lifetime : Float = 3.0
 ///|
 /// Size or distance value for proj radius in world units.
 pub let proj_radius : Float = 0.2
+
+// ========== Progression gating ==========
+
+///|
+/// Returns the total star count required to unlock a given world index.
+/// World 0 is always unlocked (0 stars). World 1 requires 3, world 2
+/// requires 8, and world 3 requires 15.
+pub fn stars_required_for_world(world : Int) -> Int {
+  if world <= 0 {
+    0
+  } else if world == 1 {
+    3
+  } else if world == 2 {
+    8
+  } else {
+    15
+  }
+}
+
+///|
+/// Returns whether a world is unlocked based on total stars earned.
+pub fn is_world_unlocked(game : Game, world : Int) -> Bool {
+  if world <= 0 {
+    return true
+  }
+  let mut total_stars = 0
+  // Count stars from all worlds before this one
+  for w in 0..<world {
+    for l in 0..<levels_per_world {
+      let idx = w * levels_per_world + l
+      total_stars += game.level_stars[idx]
+      ignore(l)
+    }
+    ignore(w)
+  }
+  total_stars >= stars_required_for_world(world)
+}
+
+///|
+/// Returns whether a level is unlocked. The first level of an unlocked world
+/// is always available; subsequent levels require at least 1 star on the
+/// previous level.
+pub fn is_level_unlocked(game : Game, world : Int, level : Int) -> Bool {
+  if !is_world_unlocked(game, world) {
+    return false
+  }
+  if level <= 0 {
+    return true
+  }
+  let prev_idx = world * levels_per_world + level - 1
+  game.level_stars[prev_idx] >= 1
+}
 
 // ========== Level complete stars ==========
 

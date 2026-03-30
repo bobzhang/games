@@ -583,11 +583,9 @@ fn @types.Game::draw_level_complete(game : @types.Game) -> Unit {
     22,
     @raylib.Color::new(255, 120, 100, 255),
   )
-  // Stars earned
-  let lvl_idx = game.current_world * @types.levels_per_world +
-    game.current_level
-  let stars = game.level_stars[lvl_idx]
-  draw_star_rating(panel_x + 200, panel_y + 15, stars, 3)
+  // Stars earned this run (not best-ever)
+  let run_stars = game.last_run_stars
+  draw_star_rating(panel_x + 200, panel_y + 15, run_stars, 3)
   // Score
   let score_text = "Score: \{game.score}"
   let scw = @draw.measure_text(score_text, 26)
@@ -745,9 +743,12 @@ fn @types.Game::draw_world_select(game : @types.Game) -> Unit {
     let x = 70 + i * 230
     let y = 140
     let is_sel = game.world_select_cursor == i
+    let unlocked = @types.is_world_unlocked(game, i)
     // Card background
     let wbg = @levels.world_bg_color(i)
-    let bg_color = if is_sel {
+    let bg_color = if !unlocked {
+      @raylib.Color::new(25, 25, 30, 255)
+    } else if is_sel {
       @raylib.Color::new(wbg.0 / 2 + 30, wbg.1 / 2 + 30, wbg.2 / 2 + 30, 255)
     } else {
       @raylib.Color::new(35, 40, 55, 255)
@@ -764,56 +765,79 @@ fn @types.Game::draw_world_select(game : @types.Game) -> Unit {
     }
     // World color swatch
     let wpc = @levels.world_platform_color(i)
+    let swatch_alpha : Int = if unlocked { 200 } else { 60 }
     @raylib.draw_rectangle(
       x + 15,
       y + 15,
       170,
       80,
-      @raylib.Color::new(wpc.0, wpc.1, wpc.2, 200),
+      @raylib.Color::new(wpc.0, wpc.1, wpc.2, swatch_alpha),
     )
     // World name
     let wname = @levels.get_world_name(i)
+    let name_alpha : Int = if unlocked { 255 } else { 100 }
     @draw.draw_text(
       wname,
       x + 15,
       y + 110,
       22,
-      @raylib.Color::new(220, 220, 240, 255),
+      @raylib.Color::new(220, 220, 240, name_alpha),
     )
-    // Level count
-    let levels_text = "\{@types.levels_per_world} Levels"
-    @draw.draw_text(
-      levels_text,
-      x + 15,
-      y + 145,
-      16,
-      @raylib.Color::new(150, 150, 170, 255),
-    )
-    // Difficulty
-    let diff = @levels.get_level_difficulty(i, 0)
-    let diff_text = "Difficulty: \{diff}/5"
-    @draw.draw_text(
-      diff_text,
-      x + 15,
-      y + 170,
-      16,
-      @raylib.Color::new(150, 150, 170, 255),
-    )
-    // Stars collected in this world
-    let mut world_stars = 0
-    for j in 0..<@types.levels_per_world {
-      let lvl_idx = i * @types.levels_per_world + j
-      world_stars += game.level_stars[lvl_idx]
-      ignore(j)
+    if unlocked {
+      // Level count
+      let levels_text = "\{@types.levels_per_world} Levels"
+      @draw.draw_text(
+        levels_text,
+        x + 15,
+        y + 145,
+        16,
+        @raylib.Color::new(150, 150, 170, 255),
+      )
+      // Difficulty
+      let diff = @levels.get_level_difficulty(i, 0)
+      let diff_text = "Difficulty: \{diff}/5"
+      @draw.draw_text(
+        diff_text,
+        x + 15,
+        y + 170,
+        16,
+        @raylib.Color::new(150, 150, 170, 255),
+      )
+      // Stars collected in this world
+      let mut world_stars = 0
+      for j in 0..<@types.levels_per_world {
+        let lvl_idx = i * @types.levels_per_world + j
+        world_stars += game.level_stars[lvl_idx]
+        ignore(j)
+      }
+      let star_text = "Stars: \{world_stars}/\{@types.levels_per_world * 3}"
+      @draw.draw_text(
+        star_text,
+        x + 15,
+        y + 200,
+        16,
+        @raylib.Color::new(255, 215, 0, 200),
+      )
+    } else {
+      // Locked indicator
+      let req = @types.stars_required_for_world(i)
+      let lock_text = "Locked"
+      @draw.draw_text(
+        lock_text,
+        x + 15,
+        y + 145,
+        18,
+        @raylib.Color::new(200, 80, 80, 255),
+      )
+      let req_text = "Need \{req} stars"
+      @draw.draw_text(
+        req_text,
+        x + 15,
+        y + 175,
+        14,
+        @raylib.Color::new(160, 140, 140, 200),
+      )
     }
-    let star_text = "Stars: \{world_stars}/\{@types.levels_per_world * 3}"
-    @draw.draw_text(
-      star_text,
-      x + 15,
-      y + 200,
-      16,
-      @raylib.Color::new(255, 215, 0, 200),
-    )
     // World number
     let num_text = "\{i + 1}"
     @draw.draw_text(
@@ -872,9 +896,16 @@ fn @types.Game::draw_level_select(game : @types.Game) -> Unit {
     let is_sel = game.level_select_cursor == i
     let world = i / @types.levels_per_world
     let level = i % @types.levels_per_world
+    let unlocked = @types.is_level_unlocked(game, world, level)
     // Card background
     let wbg = @levels.world_bg_color(world)
-    let bg_alpha : Int = if is_sel { 200 } else { 120 }
+    let bg_alpha : Int = if !unlocked {
+      60
+    } else if is_sel {
+      200
+    } else {
+      120
+    }
     @raylib.draw_rectangle(
       x,
       y,
@@ -888,14 +919,20 @@ fn @types.Game::draw_level_select(game : @types.Game) -> Unit {
       ),
     )
     if is_sel {
+      let sel_color = if unlocked {
+        @raylib.Color::new(255, 255, 100, 255)
+      } else {
+        @raylib.Color::new(200, 80, 80, 200)
+      }
       @raylib.draw_rectangle_lines(
         x - 1,
         y - 1,
         card_w + 2,
         card_h + 2,
-        @raylib.Color::new(255, 255, 100, 255),
+        sel_color,
       )
     }
+    let text_alpha : Int = if unlocked { 255 } else { 100 }
     // Level number
     let num_text = "\{i + 1}"
     @draw.draw_text(
@@ -903,20 +940,30 @@ fn @types.Game::draw_level_select(game : @types.Game) -> Unit {
       x + 8,
       y + 5,
       22,
-      @raylib.Color::new(220, 220, 240, 255),
+      @raylib.Color::new(220, 220, 240, text_alpha),
     )
-    // Level name
-    let lname = @levels.get_level_name(world, level)
-    @draw.draw_text(
-      lname,
-      x + 8,
-      y + 30,
-      12,
-      @raylib.Color::new(180, 180, 200, 255),
-    )
-    // Stars
-    let stars = game.level_stars[i]
-    draw_star_rating(x + 8, y + card_h - 30, stars, 3)
+    if unlocked {
+      // Level name
+      let lname = @levels.get_level_name(world, level)
+      @draw.draw_text(
+        lname,
+        x + 8,
+        y + 30,
+        12,
+        @raylib.Color::new(180, 180, 200, 255),
+      )
+      // Stars
+      let stars = game.level_stars[i]
+      draw_star_rating(x + 8, y + card_h - 30, stars, 3)
+    } else {
+      @draw.draw_text(
+        "Locked",
+        x + 8,
+        y + 30,
+        12,
+        @raylib.Color::new(200, 80, 80, 180),
+      )
+    }
     // World color indicator
     let wpc = @levels.world_platform_color(world)
     @raylib.draw_rectangle(

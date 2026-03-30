@@ -1,9 +1,14 @@
 ///|
 /// Renders the full 3D scene, including world geometry, actors, effects, and player avatar.
 pub fn draw_world(game : @types.Game) -> Unit {
+  // Camera looks at the smoothed look-ahead target, not raw player position
   let camera = @raylib.Camera3D::new(
     @raylib.Vector3::new(game.cam_x, game.cam_y, game.cam_z),
-    @raylib.Vector3::new(game.px, game.py, game.pz),
+    @raylib.Vector3::new(
+      game.cam_target_x,
+      game.cam_target_y - @types.camera_height + @types.player_height * 0.5,
+      game.cam_target_z,
+    ),
     @raylib.Vector3::new(0.0, 1.0, 0.0),
     @types.camera_fovy,
     @raylib.CameraPerspective,
@@ -23,6 +28,7 @@ pub fn draw_world(game : @types.Game) -> Unit {
   game.draw_goal()
   game.draw_player()
   game.draw_player_shadow()
+  game.draw_speed_trail()
   game.draw_particles_3d()
   @raylib.end_mode_3d()
 }
@@ -1247,7 +1253,11 @@ fn @types.Game::draw_player(game : @types.Game) -> Unit {
   // Wall slide indicator
   if game.wall_slide {
     @raylib.draw_cube(
-      @raylib.Vector3::new(px - game.wall_dir * (pr + 0.05), py, pz),
+      @raylib.Vector3::new(
+        px - game.wall_dir * (pr + 0.05),
+        py,
+        pz - game.wall_dir_z * (pr + 0.05),
+      ),
       0.05,
       ph * 0.6,
       pr * 1.5,
@@ -1268,6 +1278,44 @@ fn @types.Game::draw_player_shadow(game : @types.Game) -> Unit {
       0.02,
       scale,
       @raylib.Color::new(0, 0, 0, alpha),
+    )
+  }
+}
+
+///|
+/// Draws translucent afterimage cubes behind the player at high speed.
+fn @types.Game::draw_speed_trail(game : @types.Game) -> Unit {
+  let hspeed2 = game.vx * game.vx + game.vz * game.vz
+  let threshold2 = @types.speed_trail_threshold * @types.speed_trail_threshold
+  if hspeed2 <= threshold2 {
+    return
+  }
+  let hspeed = hspeed2.sqrt()
+  // Intensity ramps from 0 at threshold to 1 at 2x threshold
+  let intensity = @types.clampf(
+    (hspeed - @types.speed_trail_threshold) / @types.speed_trail_threshold,
+    0.0,
+    1.0,
+  )
+  let num_ghosts = 2 + (intensity * 3.0).to_int()
+  let dir_x = game.vx / hspeed
+  let dir_z = game.vz / hspeed
+  for i in 1..=num_ghosts {
+    let frac = Float::from_int(i) / Float::from_int(num_ghosts + 1)
+    let offset = frac * 1.5
+    let gx = game.px - dir_x * offset
+    let gz = game.pz - dir_z * offset
+    let alpha_f : Float = 80.0 * intensity * (1.0 - frac)
+    let alpha = alpha_f.to_int().clamp(min=10, max=80)
+    let scale : Float = 1.0 - frac * 0.3
+    @raylib.draw_cube(
+      @raylib.Vector3::new(gx, game.py, gz),
+      @types.player_radius * 2.0 * scale,
+      @types.player_height * scale,
+      @types.player_radius * 2.0 * scale,
+      @raylib.Color::new(
+        @types.player_body_r, @types.player_body_g, @types.player_body_b, alpha,
+      ),
     )
   }
 }

@@ -1,4 +1,88 @@
 ///|
+/// Snapshot of a platform's dynamic state, captured at a checkpoint.
+pub(all) struct PlatformSnapshot {
+  active : Bool
+  x : Float
+  y : Float
+  z : Float
+  w : Float
+  d : Float
+  move_timer : Float
+  fall_timer : Float
+  falling : Bool
+  touched : Bool
+  crumble_timer : Float
+  crumbling : Bool
+  phase_timer : Float
+  phase_visible : Bool
+  rot_angle : Float
+}
+
+///|
+/// Creates a default empty platform snapshot.
+pub fn PlatformSnapshot::empty() -> PlatformSnapshot {
+  {
+    active: false,
+    x: 0.0,
+    y: 0.0,
+    z: 0.0,
+    w: 2.0,
+    d: 2.0,
+    move_timer: 0.0,
+    fall_timer: 0.0,
+    falling: false,
+    touched: false,
+    crumble_timer: 0.0,
+    crumbling: false,
+    phase_timer: 0.0,
+    phase_visible: true,
+    rot_angle: 0.0,
+  }
+}
+
+///|
+/// Captures the current dynamic state of a platform for later restoration.
+pub fn Platform::snapshot(self : Platform) -> PlatformSnapshot {
+  {
+    active: self.active,
+    x: self.x,
+    y: self.y,
+    z: self.z,
+    w: self.w,
+    d: self.d,
+    move_timer: self.move_timer,
+    fall_timer: self.fall_timer,
+    falling: self.falling,
+    touched: self.touched,
+    crumble_timer: self.crumble_timer,
+    crumbling: self.crumbling,
+    phase_timer: self.phase_timer,
+    phase_visible: self.phase_visible,
+    rot_angle: self.rot_angle,
+  }
+}
+
+///|
+/// Restores a platform to a previously captured snapshot state.
+pub fn Platform::restore(self : Platform, snap : PlatformSnapshot) -> Unit {
+  self.active = snap.active
+  self.x = snap.x
+  self.y = snap.y
+  self.z = snap.z
+  self.w = snap.w
+  self.d = snap.d
+  self.move_timer = snap.move_timer
+  self.fall_timer = snap.fall_timer
+  self.falling = snap.falling
+  self.touched = snap.touched
+  self.crumble_timer = snap.crumble_timer
+  self.crumbling = snap.crumbling
+  self.phase_timer = snap.phase_timer
+  self.phase_visible = snap.phase_visible
+  self.rot_angle = snap.rot_angle
+}
+
+///|
 /// Runtime platform entity with movement, phase, and visual state used by level simulation.
 pub(all) struct Platform {
   mut active : Bool
@@ -393,6 +477,7 @@ pub(all) struct Game {
   mut double_jumped : Bool
   mut can_wall_jump : Bool
   mut wall_dir : Float
+  mut wall_dir_z : Float
   mut wall_slide : Bool
 
   // Dash
@@ -439,6 +524,9 @@ pub(all) struct Game {
   mut cam_dist : Float
   mut cam_shake : Float
   mut cam_shake_timer : Float
+  mut cam_target_x : Float
+  mut cam_target_y : Float
+  mut cam_target_z : Float
 
   // Level
   mut current_world : Int
@@ -474,9 +562,16 @@ pub(all) struct Game {
   mut anim_walk_timer : Float
   mut anim_land_squash : Float
   mut anim_jump_stretch : Float
+  mut speed_trail_timer : Float
 
   // Level stars earned (0-3 per level)
   level_stars : Array[Int]
+
+  // Stars from the most recent run (for completion screen)
+  mut last_run_stars : Int
+
+  // Platform snapshots at last checkpoint (for respawn restore)
+  checkpoint_platform_snapshots : Array[PlatformSnapshot]
 
   // RNG
   mut rng_state : Int
@@ -512,6 +607,7 @@ pub fn Game::new() -> Game {
     double_jumped: false,
     can_wall_jump: false,
     wall_dir: 0.0,
+    wall_dir_z: 0.0,
     wall_slide: false,
     dash_timer: 0.0,
     dash_cooldown_timer: 0.0,
@@ -542,6 +638,9 @@ pub fn Game::new() -> Game {
     cam_dist: camera_dist,
     cam_shake: 0.0,
     cam_shake_timer: 0.0,
+    cam_target_x: 0.0,
+    cam_target_y: 2.0,
+    cam_target_z: 0.0,
     current_world: 0,
     current_level: 0,
     goal_x: 0.0,
@@ -569,7 +668,10 @@ pub fn Game::new() -> Game {
     anim_walk_timer: 0.0,
     anim_land_squash: 0.0,
     anim_jump_stretch: 0.0,
+    speed_trail_timer: 0.0,
     level_stars: Array::make(total_levels, 0),
+    last_run_stars: 0,
+    checkpoint_platform_snapshots: Array::make(max_platforms, PlatformSnapshot::empty()),
     rng_state: 54321,
     frame_counter: 0,
   }

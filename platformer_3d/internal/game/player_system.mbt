@@ -77,7 +77,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
       game.pz += game.vz * dt
       game.grounded = false
       game.on_ice = false
-      game.resolve_platform_collisions()
+      game.resolve_platform_collisions(dt)
       // Dash trail particles
       if game.frame_counter % 2 == 0 {
         @types.spawn_particles_dir(
@@ -181,9 +181,10 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   } else if game.jump_buffer_timer > 0.0 &&
     game.can_wall_jump &&
     game.wall_slide {
-    // Wall jump
+    // Wall jump - push away from wall on both X and Z axes
     game.vy = @types.wall_jump_v_force
     game.vx = game.wall_dir * @types.wall_jump_h_force
+    game.vz = game.wall_dir_z * @types.wall_jump_h_force
     game.grounded = false
     game.coyote_timer = 0.0
     game.jump_buffer_timer = 0.0
@@ -197,7 +198,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
       @types.particle_jump_count,
       game.wall_dir * 2.0,
       1.0,
-      0.0,
+      game.wall_dir_z * 2.0,
       1.0,
       200,
       200,
@@ -227,7 +228,8 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
     )
   }
 
-  // Variable jump height
+  // Variable jump height: cut velocity when jump released while rising
+  let jump_held = @raylib.is_key_down(@raylib.KeySpace)
   if @raylib.is_key_released(@raylib.KeySpace) && game.vy > 0.0 {
     game.vy = game.vy * 0.5
   }
@@ -237,13 +239,13 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
     if game.vy < -@types.wall_slide_speed {
       game.vy = -@types.wall_slide_speed
     }
-    // Wall slide particles
+    // Wall slide particles (offset toward the wall)
     if game.frame_counter % 4 == 0 {
       @types.spawn_particles_dir(
         game,
         game.px - game.wall_dir * 0.3,
         game.py,
-        game.pz,
+        game.pz - game.wall_dir_z * 0.3,
         @types.particle_wall_slide_count,
         0.0,
         -0.5,
@@ -256,14 +258,28 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
     }
   }
 
-  // Gravity
-  let grav_mult : Float = if game.powerup_type == @types.powerup_slow_fall &&
+  // Gravity with separate rise/fall multipliers and apex hang
+  let base_grav_mult : Float = if game.powerup_type == @types.powerup_slow_fall &&
     game.vy < 0.0 {
     @types.powerup_slow_fall_mult
+  } else if game.vy < 0.0 {
+    // Falling: higher gravity for snappier landing
+    @types.gravity_fall_mult
+  } else if game.vy > 0.0 && !jump_held {
+    // Rising but jump released: cut jump height faster
+    @types.gravity_cut_mult
+  } else {
+    // Rising with jump held: normal gravity
+    1.0
+  }
+  // Apex hang: near the peak of a jump, reduce gravity for a floaty feel
+  let near_apex = game.vy.abs() < @types.apex_vy_threshold && !game.grounded
+  let apex_mult : Float = if near_apex {
+    @types.apex_gravity_mult
   } else {
     1.0
   }
-  game.vy -= @types.gravity * grav_mult * dt
+  game.vy -= @types.gravity * base_grav_mult * apex_mult * dt
   if game.vy < -@types.max_fall_speed {
     game.vy = -@types.max_fall_speed
   }
@@ -277,22 +293,31 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   let was_grounded = game.grounded
   game.grounded = false
   game.on_ice = false
-  game.resolve_platform_collisions()
+  game.resolve_platform_collisions(dt)
 
-  // Landing squash animation
+  // Landing squash animation -- stronger squash for harder landings
   if game.grounded && !was_grounded && game.vy <= 0.0 {
-    game.anim_land_squash = 0.3
+    let impact = @types.clampf(-game.vy / @types.max_fall_speed, 0.0, 1.0)
+    game.anim_land_squash = 0.2 + impact * 0.35
     if game.vy < -5.0 {
       @types.spawn_particles(
         game,
         game.px,
         game.py - @types.player_height * 0.5,
         game.pz,
-        @types.particle_landing_count,
+        @types.particle_landing_count + (impact * 6.0).to_int(),
         180,
         170,
         150,
       )
+    }
+  }
+
+  // Jump stretch: set proportional to upward velocity
+  if !game.grounded && game.vy > 1.0 {
+    let stretch_amount = @types.clampf(game.vy / @types.jump_force, 0.0, 1.0) * 0.35
+    if stretch_amount > game.anim_jump_stretch {
+      game.anim_jump_stretch = stretch_amount
     }
   }
 
@@ -310,6 +335,31 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
     }
   }
 
+  // Speed trail particles at high horizontal speed
+  let hspeed2 = game.vx * game.vx + game.vz * game.vz
+  if hspeed2 > @types.speed_trail_threshold * @types.speed_trail_threshold {
+    game.speed_trail_timer += dt
+    if game.speed_trail_timer >= 0.04 {
+      game.speed_trail_timer = 0.0
+      @types.spawn_particles_dir(
+        game,
+        game.px,
+        game.py,
+        game.pz,
+        1,
+        -game.vx * 0.15,
+        0.3,
+        -game.vz * 0.15,
+        0.3,
+        @types.player_body_r,
+        @types.player_body_g,
+        @types.player_body_b,
+      )
+    }
+  } else {
+    game.speed_trail_timer = 0.0
+  }
+
   // Magnet effect - pull collectibles toward player
   if game.powerup_type == @types.powerup_magnet {
     game.pull_collectibles_magnet(dt)
@@ -321,7 +371,7 @@ fn @types.Game::check_wall_slide(game : @types.Game) -> Unit {
   let pr = @types.player_radius
   let ph = @types.player_height
   let check_dist : Float = 0.15
-  // Check left and right walls
+  // Check left/right (X-axis) and front/back (Z-axis) walls
   for plat in game.platforms {
     if !plat.active {
       continue
@@ -341,23 +391,45 @@ fn @types.Game::check_wall_slide(game : @types.Game) -> Unit {
     if p_max_y <= b_min_y || p_min_y >= b_max_y {
       continue
     }
-    // Check Z overlap
-    if game.pz - pr >= b_max_z || game.pz + pr <= b_min_z {
-      continue
+    // X-axis walls: require Z overlap
+    let z_overlap = game.pz + pr > b_min_z && game.pz - pr < b_max_z
+    if z_overlap {
+      // Check left wall (-X face)
+      if game.px + pr + check_dist > b_min_x && game.px + pr < b_min_x + 0.2 {
+        game.wall_slide = true
+        game.can_wall_jump = true
+        game.wall_dir = -1.0
+        game.wall_dir_z = 0.0
+        return
+      }
+      // Check right wall (+X face)
+      if game.px - pr - check_dist < b_max_x && game.px - pr > b_max_x - 0.2 {
+        game.wall_slide = true
+        game.can_wall_jump = true
+        game.wall_dir = 1.0
+        game.wall_dir_z = 0.0
+        return
+      }
     }
-    // Check left wall
-    if game.px + pr + check_dist > b_min_x && game.px + pr < b_min_x + 0.2 {
-      game.wall_slide = true
-      game.can_wall_jump = true
-      game.wall_dir = -1.0
-      return
-    }
-    // Check right wall
-    if game.px - pr - check_dist < b_max_x && game.px - pr > b_max_x - 0.2 {
-      game.wall_slide = true
-      game.can_wall_jump = true
-      game.wall_dir = 1.0
-      return
+    // Z-axis walls: require X overlap
+    let x_overlap = game.px + pr > b_min_x && game.px - pr < b_max_x
+    if x_overlap {
+      // Check front wall (-Z face)
+      if game.pz + pr + check_dist > b_min_z && game.pz + pr < b_min_z + 0.2 {
+        game.wall_slide = true
+        game.can_wall_jump = true
+        game.wall_dir = 0.0
+        game.wall_dir_z = -1.0
+        return
+      }
+      // Check back wall (+Z face)
+      if game.pz - pr - check_dist < b_max_z && game.pz - pr > b_max_z - 0.2 {
+        game.wall_slide = true
+        game.can_wall_jump = true
+        game.wall_dir = 0.0
+        game.wall_dir_z = 1.0
+        return
+      }
     }
   }
 }
@@ -415,7 +487,7 @@ fn @types.Game::pull_collectibles_magnet(
 }
 
 ///|
-fn @types.Game::resolve_platform_collisions(game : @types.Game) -> Unit {
+fn @types.Game::resolve_platform_collisions(game : @types.Game, dt : Float) -> Unit {
   let pr = @types.player_radius
   let ph = @types.player_height
   for plat in game.platforms {
@@ -497,7 +569,7 @@ fn @types.Game::resolve_platform_collisions(game : @types.Game) -> Unit {
           // Moving platform carry
           if plat.kind >= @types.plat_moving_x &&
             plat.kind <= @types.plat_moving_z {
-            game.carry_player_on_platform(plat)
+            game.carry_player_on_platform(plat, dt)
           }
         } else {
           // Player hitting bottom
@@ -531,19 +603,20 @@ fn @types.Game::resolve_platform_collisions(game : @types.Game) -> Unit {
 fn @types.Game::carry_player_on_platform(
   game : @types.Game,
   plat : @types.Platform,
+  dt : Float,
 ) -> Unit {
   // Calculate platform velocity from its movement
   let speed = plat.move_speed
   let range = plat.move_range
   let cos_val = @math.cosf(plat.move_timer) * range * speed
   if plat.kind == @types.plat_moving_x {
-    let plat_vel_x : Float = cos_val * 0.016
+    let plat_vel_x : Float = cos_val * dt
     game.px += plat_vel_x
   } else if plat.kind == @types.plat_moving_y {
-    let plat_vel_y : Float = cos_val * 0.016
+    let plat_vel_y : Float = cos_val * dt
     game.py += plat_vel_y
   } else if plat.kind == @types.plat_moving_z {
-    let plat_vel_z : Float = cos_val * 0.016
+    let plat_vel_z : Float = cos_val * dt
     game.pz += plat_vel_z
   }
 }

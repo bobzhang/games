@@ -86,8 +86,8 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   if game.dash_cooldown_timer > 0.0 {
     game.dash_cooldown_timer -= dt
   }
-  game.update_player(dt)
   game.update_platforms(dt)
+  game.update_player(dt)
   game.update_collectibles(dt)
   game.update_enemies(dt)
   game.update_powerups(dt)
@@ -126,6 +126,7 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
       game.gems_total,
       game.level_deaths,
     )
+    game.last_run_stars = stars
     let lvl_idx = game.current_world * @types.levels_per_world +
       game.current_level
     if stars > game.level_stars[lvl_idx] {
@@ -252,11 +253,13 @@ fn @types.Game::update_world_select(game : @types.Game, _dt : Float) -> Unit {
   }
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) {
-    game.current_world = game.world_select_cursor
-    game.current_level = 0
-    game.world_intro_timer = @types.world_intro_duration
-    load_level(game, game.world_select_cursor, 0)
-    game.state = WorldIntro
+    if @types.is_world_unlocked(game, game.world_select_cursor) {
+      game.current_world = game.world_select_cursor
+      game.current_level = 0
+      game.world_intro_timer = @types.world_intro_duration
+      load_level(game, game.world_select_cursor, 0)
+      game.state = WorldIntro
+    }
   }
 }
 
@@ -306,8 +309,10 @@ fn @types.Game::update_level_select(game : @types.Game, _dt : Float) -> Unit {
     @raylib.is_key_pressed(@raylib.KeySpace) {
     let w = game.level_select_cursor / @types.levels_per_world
     let l = game.level_select_cursor % @types.levels_per_world
-    load_level(game, w, l)
-    game.state = Playing
+    if @types.is_level_unlocked(game, w, l) {
+      load_level(game, w, l)
+      game.state = Playing
+    }
   }
 }
 
@@ -334,6 +339,10 @@ fn @types.Game::update_death_anim(game : @types.Game, dt : Float) -> Unit {
       game.vz = 0.0
       game.grounded = false
       game.invincible_timer = @types.invincible_time
+      // Restore dynamic platform states from checkpoint snapshot
+      if game.checkpoint_active {
+        game.restore_platforms()
+      }
       game.state = Playing
     }
   }
@@ -405,10 +414,102 @@ fn @types.Game::update_camera(game : @types.Game, dt : Float) -> Unit {
     @types.camera_min_dist,
     @types.camera_max_dist,
   )
+  // Look-ahead: camera target leads the player's movement direction
+  let lead_x = game.vx * @types.camera_lead_factor
+  let lead_z = game.vz * @types.camera_lead_factor
+  let lead_smooth = @types.minf(dt * 4.0, 1.0)
+  game.cam_target_x = @types.lerpf(
+    game.cam_target_x,
+    game.px + lead_x,
+    lead_smooth,
+  )
+  game.cam_target_z = @types.lerpf(
+    game.cam_target_z,
+    game.pz + lead_z,
+    lead_smooth,
+  )
+  // Vertical tracking: slower follow when falling so the player can see below
+  let y_lag = if game.vy < 0.0 {
+    @types.camera_y_lag_falling
+  } else {
+    @types.camera_y_lag_rising
+  }
+  let y_smooth = @types.minf(y_lag * dt * @types.camera_smooth, 1.0)
+  game.cam_target_y = @types.lerpf(
+    game.cam_target_y,
+    game.py + @types.camera_height,
+    y_smooth,
+  )
+  // Camera orbit position from look-ahead target
   let angle_rad = game.cam_angle * @types.deg2rad
-  let target_x = game.px + @math.sinf(angle_rad) * game.cam_dist
-  let target_y = game.py + @types.camera_height
-  let target_z = game.pz + @math.cosf(angle_rad) * game.cam_dist
+  let mut effective_dist = game.cam_dist
+  // Simple occlusion avoidance: raycast from player toward desired camera pos
+  // If any platform AABB sits between player and camera, pull camera closer
+  let desired_cam_x = game.cam_target_x +
+    @math.sinf(angle_rad) * game.cam_dist
+  let desired_cam_y = game.cam_target_y
+  let desired_cam_z = game.cam_target_z +
+    @math.cosf(angle_rad) * game.cam_dist
+  let ray_dx = desired_cam_x - game.px
+  let ray_dy = desired_cam_y - game.py
+  let ray_dz = desired_cam_z - game.pz
+  let ray_len = (ray_dx * ray_dx + ray_dy * ray_dy + ray_dz * ray_dz).sqrt()
+  if ray_len > 0.01 {
+    let one : Float = 1.0
+    let inv_len = one / ray_len
+    let rdx = ray_dx * inv_len
+    let rdy = ray_dy * inv_len
+    let rdz = ray_dz * inv_len
+    // March along the ray in steps, check if inside any platform
+    let step_size : Float = 0.5
+    let mut t : Float = 1.0
+    let num_steps = (ray_len / step_size).to_int().clamp(min=1, max=30)
+    for i in 1..=num_steps {
+      let frac = Float::from_int(i) / Float::from_int(num_steps)
+      let sx = game.px + rdx * ray_len * frac
+      let sy = game.py + rdy * ray_len * frac
+      let sz = game.pz + rdz * ray_len * frac
+      let mut hit = false
+      for plat in game.platforms {
+        if !plat.active {
+          continue
+        }
+        // Only test reasonably sized solid geometry
+        if plat.h < 0.5 {
+          continue
+        }
+        let half_w = plat.w / 2.0
+        let half_h = plat.h / 2.0
+        let half_d = plat.d / 2.0
+        if sx > plat.x - half_w &&
+          sx < plat.x + half_w &&
+          sy > plat.y - half_h &&
+          sy < plat.y + half_h &&
+          sz > plat.z - half_d &&
+          sz < plat.z + half_d {
+          hit = true
+          break
+        }
+      }
+      if hit {
+        t = @types.maxf(frac - 0.1, 0.0)
+        break
+      }
+    }
+    if t < 1.0 {
+      // Pull camera closer to player
+      let min_t = @types.camera_occlude_min_dist / ray_len
+      effective_dist = @types.maxf(
+        game.cam_dist * @types.clampf(t, min_t, 1.0),
+        @types.camera_occlude_min_dist,
+      )
+    }
+  }
+  let target_x = game.cam_target_x +
+    @math.sinf(angle_rad) * effective_dist
+  let target_y = game.cam_target_y
+  let target_z = game.cam_target_z +
+    @math.cosf(angle_rad) * effective_dist
   let smooth = @types.minf(dt * @types.camera_smooth, 1.0)
   game.cam_x = @types.lerpf(game.cam_x, target_x, smooth)
   game.cam_y = @types.lerpf(game.cam_y, target_y, smooth)
@@ -857,6 +958,8 @@ fn @types.Game::check_checkpoint_collision(game : @types.Game) -> Unit {
       game.checkpoint_y = cp.y
       game.checkpoint_z = cp.z
       game.checkpoint_active = true
+      // Snapshot platform states so they can be restored on respawn
+      game.snapshot_platforms()
       @types.spawn_particle_ring(
         game,
         cp.x,

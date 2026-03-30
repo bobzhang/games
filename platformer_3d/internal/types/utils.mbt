@@ -407,23 +407,25 @@ pub fn pulse(timer : Float, speed : Float) -> Float {
 
 ///|
 /// Calculates a 1-3 star completion rating from time, gem completion, and deaths.
+/// - 1 star: Complete the level.
+/// - 2 stars: Complete with all gems collected OR under the time limit.
+/// - 3 stars: Complete with all gems AND under the time limit AND no deaths.
 pub fn calc_stars(
   time : Float,
   gems : Int,
   total_gems : Int,
   deaths : Int,
 ) -> Int {
-  let mut stars = 1
-  if deaths == 0 {
-    stars = stars + 1
+  let all_gems = gems == total_gems
+  let under_time = time < star_time_threshold_1
+  let no_deaths = deaths == 0
+  if all_gems && under_time && no_deaths {
+    3
+  } else if all_gems || under_time {
+    2
+  } else {
+    1
   }
-  if gems == total_gems && time < star_time_threshold_1 {
-    stars = stars + 1
-  }
-  if stars > 3 {
-    stars = 3
-  }
-  stars
 }
 
 ///|

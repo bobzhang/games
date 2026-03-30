@@ -391,3 +391,19 @@ fn @types.Game::load_checkpoints(
   ignore(world)
   ignore(level)
 }
+
+///|
+/// Captures the current state of all platforms for later restoration on respawn.
+fn @types.Game::snapshot_platforms(game : @types.Game) -> Unit {
+  for i in 0..<game.platforms.length() {
+    game.checkpoint_platform_snapshots[i] = game.platforms[i].snapshot()
+  }
+}
+
+///|
+/// Restores all platforms to their checkpoint-snapshot state.
+fn @types.Game::restore_platforms(game : @types.Game) -> Unit {
+  for i in 0..<game.platforms.length() {
+    game.platforms[i].restore(game.checkpoint_platform_snapshots[i])
+  }
+}
