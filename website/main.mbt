@@ -49,12 +49,23 @@ fn main_view(
   dispatch : @rabbita.Dispatch[Msg],
   model : Model
 ) -> @rabbita.Html {
+  let is_searching = model.search != ""
+  let is_filtered = model.category != "all"
   div(
     class="app",
     [
       render_header(dispatch, model),
-      render_hero(),
-      render_featured(dispatch),
+      // Hide hero and featured when searching or filtering
+      if is_searching || is_filtered {
+        @html.nothing
+      } else {
+        render_hero()
+      },
+      if is_searching || is_filtered {
+        @html.nothing
+      } else {
+        render_featured(dispatch)
+      },
       render_categories(dispatch, model),
       render_game_grid(dispatch, model),
       render_footer(),
