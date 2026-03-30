@@ -460,6 +460,15 @@ fn build_1_4() -> Array[String] {
   set(g, 66, 12, 'R')
   // BowserLite (boss at the end)
   set(g, 116, 12, 'W')
+  // ── Collapsing bridge before Bowser ──
+  // Bridge spans columns 109-115 at row 12, over a gap
+  // First clear existing ground tiles in that range at rows 12-13
+  for bx in 109..<=115 {
+    set(g, bx, 13, '.')
+    set(g, bx, 14, '.')
+  }
+  // Place bridge tiles at row 12
+  hrun(g, 109, 12, 7, 'b')
   // ── Coins ──
   // Sparse coins in the castle (more valuable since dangerous)
   coin_run(g, 36, 2, 3)
@@ -514,7 +523,7 @@ fn build_bonus_1() -> Array[String] {
 }
 
 ///|
-/// Bonus room for level 1-2.
+/// Bonus room for level 1-2: Star power bonus — hidden star block + scattered coins.
 fn build_bonus_2() -> Array[String] {
   let w = 22
   let g = make_grid(w, 15)
@@ -526,13 +535,20 @@ fn build_bonus_2() -> Array[String] {
     set(g, w - 1, y, '#')
   }
   set(g, 2, 12, 'S')
-  // Coin rows
-  coin_run(g, 3, 10, 16)
-  coin_run(g, 3, 8, 16)
-  coin_run(g, 5, 6, 12)
-  coin_run(g, 7, 4, 8)
-  // Mushroom question block
-  set(g, 10, 6, 'M')
+  // Star block (hidden among bricks)
+  tiles(g, 8, 5, "B*B")
+  tiles(g, 7, 8, "B?B?B")
+  // Coin clusters at different heights
+  coin_run(g, 3, 11, 6)
+  coin_run(g, 12, 11, 6)
+  coin_run(g, 5, 8, 3)
+  coin_run(g, 13, 8, 3)
+  coin_run(g, 7, 3, 7)
+  // Platforms to reach coins and star
+  hrun(g, 4, 10, 3, '#')
+  hrun(g, 14, 10, 3, '#')
+  hrun(g, 6, 7, 2, '#')
+  hrun(g, 13, 7, 2, '#')
   // Exit pipe
   pipe(g, w - 4, 10)
   set(g, w - 4, 10, 'E')
@@ -540,13 +556,48 @@ fn build_bonus_2() -> Array[String] {
 }
 
 ///|
-/// Bonus room for level 1-3.
+/// Bonus room for level 1-3: Sky coin heaven — vertical room with coins going up.
 fn build_bonus_3() -> Array[String] {
-  build_bonus_1()
+  let w = 18
+  let g = make_grid(w, 15)
+  // Walls only, no ceiling (open sky feel)
+  for y in 0..<=14 {
+    set(g, 0, y, '#')
+    set(g, w - 1, y, '#')
+  }
+  // Ground
+  ground(g, 0, w)
+  set(g, 2, 12, 'S')
+  // Ascending platforms with coins — zigzag pattern
+  hrun(g, 2, 11, 3, '#')
+  coin_run(g, 3, 10, 2)
+  hrun(g, 12, 10, 3, '#')
+  coin_run(g, 13, 9, 2)
+  hrun(g, 5, 9, 3, '#')
+  coin_run(g, 6, 8, 2)
+  hrun(g, 10, 8, 3, '#')
+  coin_run(g, 11, 7, 2)
+  hrun(g, 3, 7, 3, '#')
+  coin_run(g, 4, 6, 2)
+  hrun(g, 11, 6, 3, '#')
+  coin_run(g, 12, 5, 2)
+  hrun(g, 5, 5, 3, '#')
+  coin_run(g, 6, 4, 2)
+  hrun(g, 9, 4, 3, '#')
+  coin_run(g, 10, 3, 2)
+  // Reward at the top
+  set(g, 7, 3, 'M')
+  coin_run(g, 6, 2, 5)
+  // Exit pipe at top-right
+  hrun(g, 14, 3, 2, '#')
+  hrun(g, 14, 4, 2, '#')
+  pipe(g, 14, 2)
+  set(g, 14, 2, 'E')
+  grid_to_rows(g)
 }
 
 ///|
-/// Bonus room for level 1-4.
+/// Bonus room for level 1-4: Fire flower + coin stash (reward room before boss).
 fn build_bonus_4() -> Array[String] {
   let w = 24
   let g = make_grid(w, 15)
@@ -558,13 +609,20 @@ fn build_bonus_4() -> Array[String] {
     set(g, w - 1, y, '#')
   }
   set(g, 2, 12, 'S')
-  // Large coin collection
-  coin_run(g, 3, 10, 18)
-  coin_run(g, 3, 8, 18)
-  coin_run(g, 4, 6, 16)
-  coin_run(g, 6, 4, 12)
-  // 1-UP
-  set(g, 12, 3, '1')
+  // Central fire flower pedestal
+  hrun(g, 9, 8, 5, 'U')
+  set(g, 11, 7, 'M')
+  // Coin arcs on each side
+  coin_run(g, 3, 10, 5)
+  coin_run(g, 16, 10, 5)
+  coin_run(g, 4, 6, 4)
+  coin_run(g, 15, 6, 4)
+  coin_run(g, 6, 4, 3)
+  coin_run(g, 14, 4, 3)
+  // 1-UP hidden in the corner
+  set(g, 2, 3, '1')
+  // Large coin collection at floor level
+  coin_run(g, 3, 12, 18)
   // Exit pipe
   pipe(g, w - 4, 10)
   set(g, w - 4, 10, 'E')

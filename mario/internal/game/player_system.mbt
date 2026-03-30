@@ -377,6 +377,9 @@ fn handle_block_bump(game : @types.Game, tx : Int, ty : Int) -> Unit {
   let tile = @types.get_tile(game, tx, ty)
   let wx = @types.tile_to_world_x(tx) + @types.tile_sizef / 2.0
   let wy = @types.tile_to_world_y(ty)
+  // Game feel: block bump hitstop and shake
+  start_hitstop(game, 0.03)
+  start_shake(game, 4.0, 0.12)
   match tile {
     QuestionCoin => {
       @types.set_tile(game, tx, ty, UsedBlock)
@@ -598,6 +601,7 @@ fn check_enemy_collisions(game : @types.Game) -> Unit {
         }
       }
       if hit {
+        start_shake(game, 6.0, 0.2)
         damage_player(game)
       }
       continue
@@ -618,6 +622,7 @@ fn check_enemy_collisions(game : @types.Game) -> Unit {
     if p.star_timer > 0.0 {
       if e.kind == BowserLite {
         e.boss_hp = e.boss_hp - 1
+        e.flash_timer = 0.12
         if e.boss_hp <= 0 {
           e.dead = true
           e.dead_timer = 0.0
@@ -627,10 +632,14 @@ fn check_enemy_collisions(game : @types.Game) -> Unit {
           game.enemies_defeated = game.enemies_defeated + 1
           spawn_score_popup(game, e.x, e.y - e.height, "5000")
           game.boss_defeated = true
+          start_hitstop(game, 0.06)
+          start_shake(game, 10.0, 0.3)
         } else {
           game.score = game.score + 200
           spawn_score_popup(game, e.x, e.y - e.height, "200")
           spawn_stomp_poof(game, e.x, e.y)
+          start_hitstop(game, 0.06)
+          start_shake(game, 5.0, 0.15)
         }
       } else {
         e.dead = true
@@ -660,6 +669,10 @@ fn check_enemy_collisions(game : @types.Game) -> Unit {
       p.stomp_combo = p.stomp_combo + 1
       game.score = game.score + combo_pts
       game.enemies_defeated = game.enemies_defeated + 1
+      // Game feel: brief slowmo then bounce
+      game.slowmo_timer = 0.02
+      start_hitstop(game, 0.04)
+      start_shake(game, 3.0, 0.1)
       p.vy = @types.bounce_velocity
       p.on_ground = false
       p.coyote_timer = 0.0
@@ -768,6 +781,7 @@ fn check_item_collisions(game : @types.Game) -> Unit {
           p.grow_timer = @types.grow_duration
         }
         game.score = game.score + @types.score_mushroom
+        start_hitstop(game, 0.05)
         spawn_score_popup(
           game,
           it.x,
@@ -783,6 +797,7 @@ fn check_item_collisions(game : @types.Game) -> Unit {
           p.power = Fire
         }
         game.score = game.score + @types.score_fire_flower
+        start_hitstop(game, 0.05)
         spawn_score_popup(
           game,
           it.x,
@@ -793,6 +808,7 @@ fn check_item_collisions(game : @types.Game) -> Unit {
       Star => {
         p.star_timer = @types.star_duration
         game.score = game.score + @types.score_star
+        start_hitstop(game, 0.05)
         spawn_score_popup(
           game,
           it.x,

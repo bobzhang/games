@@ -73,10 +73,22 @@ fn draw_hud(game : @types.Game) -> Unit {
   @draw.draw_text("WORLD", 400, 4, 16, hud_white)
   let world_text = game.world_num.to_string() + "-" + game.level_num.to_string()
   @draw.draw_text(world_text, 410, 18, 16, hud_white)
-  // Time
-  @draw.draw_text("TIME", 600, 4, 16, hud_white)
-  let time_text = game.time_remaining.to_int().to_string()
-  @draw.draw_text(time_text, 608, 18, 16, hud_white)
+  // Time — flashes red when < 60 seconds remain
+  let time_int = game.time_remaining.to_int()
+  let time_low = time_int < 60 && time_int > 0
+  let time_label_color = if time_low && game.frame_counter / 15 % 2 == 0 {
+    @raylib.Color::new(252, 0, 0, 255)
+  } else {
+    hud_white
+  }
+  let time_value_color = if time_low && game.frame_counter / 10 % 2 == 0 {
+    @raylib.Color::new(252, 0, 0, 255)
+  } else {
+    hud_white
+  }
+  @draw.draw_text("TIME", 600, 4, 16, time_label_color)
+  let time_text = time_int.to_string()
+  @draw.draw_text(time_text, 608, 18, 16, time_value_color)
   // Lives
   let lives_text = "x" + game.lives.to_string()
   @draw.draw_text(lives_text, 780, 10, 16, hud_white)

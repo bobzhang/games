@@ -49,7 +49,8 @@ pub fn is_solid(tile : TileKind) -> Bool {
     | PipeBodyRight
     | CastleBlock
     | CastleTop
-    | PipeEntrance => true
+    | PipeEntrance
+    | BridgeTile => true
     _ => false
   }
 }

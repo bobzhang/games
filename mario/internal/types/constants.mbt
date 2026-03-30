@@ -230,6 +230,38 @@ pub let max_score_popups : Int = 16
 /// Maximum simultaneously bumping blocks.
 pub let max_bumped_blocks : Int = 8
 
+///|
+/// Maximum moving platforms.
+pub let max_platforms : Int = 16
+
+///|
+/// Maximum lift platforms.
+pub let max_lifts : Int = 8
+
+///|
+/// Maximum bridge state trackers.
+pub let max_bridges : Int = 32
+
+///|
+/// Platform thickness in pixels.
+pub let platform_thickness : Int = 16
+
+///|
+/// Time before a bridge tile starts shaking (seconds).
+pub let bridge_shake_delay : Float = 0.5
+
+///|
+/// Time a bridge tile shakes before falling (seconds).
+pub let bridge_shake_time : Float = 0.3
+
+///|
+/// Delay between adjacent bridge tiles starting to collapse (seconds).
+pub let bridge_chain_delay : Float = 0.1
+
+///|
+/// Speed at which a falling bridge tile drops (pixels/sec).
+pub let bridge_fall_speed : Float = 600.0
+
 // ── Camera ──────────────────────────────────────────────
 
 ///|

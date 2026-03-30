@@ -48,6 +48,7 @@ pub(all) enum TileKind {
   Checkpoint
   HiddenBonusCoin
   HiddenBonusOneUp
+  BridgeTile
 } derive(Eq)
 
 ///|
@@ -167,6 +168,7 @@ pub(all) struct Enemy {
   mut fire_cooldown : Float
   mut patrol_left : Float
   mut patrol_right : Float
+  mut flash_timer : Float
 }
 
 ///|
@@ -233,6 +235,7 @@ pub fn Enemy::new(kind : EnemyKind, spawn_x : Float, spawn_y : Float) -> Enemy {
     },
     patrol_left: spawn_x - bowser_patrol_range,
     patrol_right: spawn_x + bowser_patrol_range,
+    flash_timer: 0.0,
   }
 }
 
@@ -264,6 +267,7 @@ pub fn Enemy::clone(self : Enemy) -> Enemy {
     fire_cooldown: self.fire_cooldown,
     patrol_left: self.patrol_left,
     patrol_right: self.patrol_right,
+    flash_timer: self.flash_timer,
   }
 }
 
@@ -425,6 +429,98 @@ pub fn BumpedBlock::new() -> BumpedBlock {
 }
 
 ///|
+/// Bridge tile state for collapsing bridge segments.
+pub(all) enum BridgePhase {
+  Stable
+  Shaking
+  Falling
+  Gone
+} derive(Eq)
+
+///|
+/// Tracks a bridge tile that can collapse.
+pub(all) struct BridgeState {
+  mut active : Bool
+  mut tile_x : Int
+  mut tile_y : Int
+  mut phase : BridgePhase
+  mut timer : Float
+  mut fall_y : Float
+}
+
+///|
+/// Creates a new bridge state tracker.
+pub fn BridgeState::new() -> BridgeState {
+  { active: false, tile_x: 0, tile_y: 0, phase: Stable, timer: 0.0, fall_y: 0.0 }
+}
+
+///|
+/// Moving platform that travels between two points.
+pub(all) struct MovingPlatform {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  width : Float
+  mut start_x : Float
+  mut start_y : Float
+  mut end_x : Float
+  mut end_y : Float
+  mut speed : Float
+  mut progress : Float
+  mut direction : Int
+  mut prev_x : Float
+  mut prev_y : Float
+}
+
+///|
+/// Creates a new moving platform.
+pub fn MovingPlatform::new() -> MovingPlatform {
+  {
+    active: false,
+    x: 0.0,
+    y: 0.0,
+    width: 96.0,
+    start_x: 0.0,
+    start_y: 0.0,
+    end_x: 0.0,
+    end_y: 0.0,
+    speed: 0.5,
+    progress: 0.0,
+    direction: 1,
+    prev_x: 0.0,
+    prev_y: 0.0,
+  }
+}
+
+///|
+/// Lift platform that rises when Mario stands on it.
+pub(all) struct LiftPlatform {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  width : Float
+  mut target_y : Float
+  mut speed : Float
+  mut triggered : Bool
+  mut prev_y : Float
+}
+
+///|
+/// Creates a new lift platform.
+pub fn LiftPlatform::new() -> LiftPlatform {
+  {
+    active: false,
+    x: 0.0,
+    y: 0.0,
+    width: 96.0,
+    target_y: 0.0,
+    speed: 120.0,
+    triggered: false,
+    prev_y: 0.0,
+  }
+}
+
+///|
 /// Decorative background cloud.
 pub(all) struct Cloud {
   mut x : Float
@@ -451,6 +547,10 @@ pub(all) struct Game {
   particles : Array[Particle]
   score_popups : Array[ScorePopup]
   bumped_blocks : Array[BumpedBlock]
+  // ── Platforms ──
+  platforms : Array[MovingPlatform]
+  lifts : Array[LiftPlatform]
+  bridges : Array[BridgeState]
   // ── Boss ──
   mut boss_defeated : Bool
   // ── Map ──
@@ -513,6 +613,11 @@ pub(all) struct Game {
   mut bonus_saved_fireballs : Array[Fireball]
   mut bonus_fade_timer : Float
   mut bonus_fade_in : Bool
+  // ── Game feel ──
+  mut hitstop_timer : Float
+  mut shake_timer : Float
+  mut shake_intensity : Float
+  mut slowmo_timer : Float
 }
 
 ///|
@@ -533,6 +638,9 @@ pub fn Game::new() -> Game {
     particles: Array::makei(max_particles, fn(_i) { Particle::new() }),
     score_popups: Array::makei(max_score_popups, fn(_i) { ScorePopup::new() }),
     bumped_blocks: Array::makei(max_bumped_blocks, fn(_i) { BumpedBlock::new() }),
+    platforms: Array::makei(max_platforms, fn(_i) { MovingPlatform::new() }),
+    lifts: Array::makei(max_lifts, fn(_i) { LiftPlatform::new() }),
+    bridges: Array::makei(max_bridges, fn(_i) { BridgeState::new() }),
     boss_defeated: false,
     map_tiles: Array::make(15, Empty),
     map_width: 1,
@@ -589,5 +697,9 @@ pub fn Game::new() -> Game {
     bonus_saved_fireballs: [],
     bonus_fade_timer: 0.0,
     bonus_fade_in: false,
+    hitstop_timer: 0.0,
+    shake_timer: 0.0,
+    shake_intensity: 0.0,
+    slowmo_timer: 0.0,
   }
 }

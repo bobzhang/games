@@ -55,16 +55,25 @@ let fireball_yellow : @raylib.Color = @raylib.Color::new(252, 228, 88, 255)
 let underground_bg : @raylib.Color = @raylib.Color::new(0, 0, 0, 255)
 
 ///|
+/// Returns the background color for the current level theme.
+fn level_bg_color(game : @types.Game) -> @raylib.Color {
+  if game.in_bonus_room {
+    return underground_bg
+  }
+  match game.level_index {
+    0 => sky_blue // 1-1 Green overworld
+    1 => underground_bg // 1-2 Underground cave
+    2 => @raylib.Color::new(140, 200, 255, 255) // 1-3 Sky/cloud (light blue)
+    _ => @raylib.Color::new(40, 16, 16, 255) // 1-4 Castle (dark red/gray)
+  }
+}
+
+///|
 /// Draw the entire game world: background, tiles, entities, effects.
 pub fn draw_game(game : @types.Game) -> Unit {
   let cam_x = game.camera_x.to_int()
-  // Background
-  let bg = if game.in_bonus_room || game.level_index == 1 || game.level_index == 3 {
-    underground_bg
-  } else {
-    sky_blue
-  }
-  @raylib.clear_background(bg)
+  // Background — per-level theme
+  @raylib.clear_background(level_bg_color(game))
   // Star power zoom: slight zoom-in for visual punch
   let is_star = game.player.star_timer > 0.0
   if is_star {
@@ -79,13 +88,22 @@ pub fn draw_game(game : @types.Game) -> Unit {
     )
     @raylib.begin_mode_2d(cam)
   }
-  // Sky decorations (grassland levels only, not bonus rooms)
-  if not(game.in_bonus_room) && game.level_index != 1 && game.level_index != 3 {
+  // Sky decorations: grassland (0) and sky (2) get hills/clouds
+  if not(game.in_bonus_room) && (game.level_index == 0 || game.level_index == 2) {
     draw_hills(game, cam_x)
     draw_clouds(game, cam_x)
   }
+  // Castle level gets lava glow at the bottom
+  if not(game.in_bonus_room) && game.level_index == 3 {
+    draw_castle_lava_glow(game, cam_x)
+  }
   // Tiles
   draw_tiles(game, cam_x)
+  // Moving platforms and lifts (behind entities, on top of tiles)
+  draw_platforms(game, cam_x)
+  draw_lifts(game, cam_x)
+  // Falling bridge tiles
+  draw_bridge_falling(game, cam_x)
   // Items (behind player)
   draw_items(game, cam_x)
   // Enemies
@@ -175,6 +193,30 @@ fn draw_clouds(game : @types.Game, cam_x : Int) -> Unit {
   }
 }
 
+///|
+/// Draw a lava glow effect at the bottom of castle levels.
+fn draw_castle_lava_glow(game : @types.Game, _cam_x : Int) -> Unit {
+  let ground_y = 13 * @types.tile_size
+  // Animated lava shimmer
+  let phase = game.frame_counter % 60
+  let alpha1 = 80 + (phase * 3 % 40)
+  let alpha2 = 40 + (phase * 2 % 30)
+  @raylib.draw_rectangle(
+    0,
+    ground_y + @types.tile_size * 2,
+    @types.screen_w,
+    @types.screen_h - ground_y - @types.tile_size * 2,
+    @raylib.Color::new(200, 60, 0, alpha1),
+  )
+  @raylib.draw_rectangle(
+    0,
+    ground_y + @types.tile_size * 2 + 8,
+    @types.screen_w,
+    20,
+    @raylib.Color::new(255, 140, 0, alpha2),
+  )
+}
+
 // ── Tiles ───────────────────────────────────────────────────────
 
 ///|
@@ -214,6 +256,7 @@ fn draw_tiles(game : @types.Game, cam_x : Int) -> Unit {
         CastleDoor => draw_castle_door(sx, sy)
         CoinTile => draw_coin_tile(game, sx, sy)
         Checkpoint => draw_checkpoint_tile(game, sx, sy)
+        BridgeTile => draw_bridge_tile(game, tx, ty, sx, sy)
         HiddenCoin | HiddenOneUp | HiddenBonusCoin | HiddenBonusOneUp => ()
         _ => ()
       }
@@ -867,6 +910,19 @@ fn draw_enemies(game : @types.Game, cam_x : Int) -> Unit {
       BuzzyBeetle => draw_buzzy_beetle(e, sx, sy)
       Firebar => draw_firebar(e, sx, sy)
       BowserLite => draw_bowser_lite(game, e, sx, sy)
+    }
+    // Hit flash: draw white overlay when enemy was just hit
+    if e.flash_timer > 0.0 {
+      let ehw = (e.width / 2.0).to_int()
+      let eh = e.height.to_int()
+      let alpha = (e.flash_timer * 10.0 * 255.0).to_int().clamp(min=0, max=220)
+      @raylib.draw_rectangle(
+        sx - ehw,
+        sy - eh,
+        ehw * 2,
+        eh,
+        @raylib.Color::new(255, 255, 255, alpha),
+      )
     }
   }
   // Bowser fire breath projectiles
@@ -1685,4 +1741,153 @@ fn draw_bowser_fireballs(game : @types.Game, cam_x : Int) -> Unit {
       fireball_orange,
     )
   }
+}
+
+// ── Platforms / Lifts / Bridges ────────────────────────────────
+
+///|
+let platform_color : @raylib.Color = @raylib.Color::new(160, 82, 45, 255)
+
+///|
+let platform_top_c : @raylib.Color = @raylib.Color::new(200, 120, 70, 255)
+
+///|
+let platform_bottom_c : @raylib.Color = @raylib.Color::new(110, 56, 30, 255)
+
+///|
+let lift_color : @raylib.Color = @raylib.Color::new(80, 160, 220, 255)
+
+///|
+let lift_top_c : @raylib.Color = @raylib.Color::new(120, 200, 252, 255)
+
+///|
+let lift_bottom_c : @raylib.Color = @raylib.Color::new(40, 110, 170, 255)
+
+///|
+let bridge_color : @raylib.Color = @raylib.Color::new(160, 82, 45, 255)
+
+///|
+let bridge_dark_c : @raylib.Color = @raylib.Color::new(110, 56, 30, 255)
+
+///|
+/// Draw all active moving platforms.
+fn draw_platforms(game : @types.Game, cam_x : Int) -> Unit {
+  let th = @types.platform_thickness
+  for i in 0..<game.platforms.length() {
+    let plat = game.platforms[i]
+    if not(plat.active) {
+      continue
+    }
+    let hw = (plat.width / 2.0).to_int()
+    let sx = (plat.x - Float::from_int(cam_x)).to_int() - hw
+    let sy = plat.y.to_int()
+    let w = hw * 2
+    if sx + w < -20 || sx > @types.screen_w + 20 {
+      continue
+    }
+    // Main body
+    @raylib.draw_rectangle(sx, sy, w, th, platform_color)
+    // Lighter top edge (3D effect)
+    @raylib.draw_rectangle(sx, sy, w, 3, platform_top_c)
+    // Darker bottom edge
+    @raylib.draw_rectangle(sx, sy + th - 3, w, 3, platform_bottom_c)
+    // Side highlights
+    @raylib.draw_rectangle(sx, sy, 2, th, platform_top_c)
+    @raylib.draw_rectangle(sx + w - 2, sy, 2, th, platform_bottom_c)
+    // Rivet details
+    let rivet = @raylib.Color::new(90, 50, 20, 255)
+    let step = w / 4
+    for r in 1..<4 {
+      @raylib.draw_circle(sx + step * r, sy + th / 2, 3, rivet)
+    }
+  }
+}
+
+///|
+/// Draw all active lift platforms.
+fn draw_lifts(game : @types.Game, cam_x : Int) -> Unit {
+  let th = @types.platform_thickness
+  for i in 0..<game.lifts.length() {
+    let lift = game.lifts[i]
+    if not(lift.active) {
+      continue
+    }
+    let hw = (lift.width / 2.0).to_int()
+    let sx = (lift.x - Float::from_int(cam_x)).to_int() - hw
+    let sy = lift.y.to_int()
+    let w = hw * 2
+    if sx + w < -20 || sx > @types.screen_w + 20 {
+      continue
+    }
+    // Main body (blue-tinted)
+    @raylib.draw_rectangle(sx, sy, w, th, lift_color)
+    // Lighter top edge
+    @raylib.draw_rectangle(sx, sy, w, 3, lift_top_c)
+    // Darker bottom edge
+    @raylib.draw_rectangle(sx, sy + th - 3, w, 3, lift_bottom_c)
+    // Arrow indicator if not yet triggered
+    if not(lift.triggered) {
+      let arrow_c = @raylib.Color::new(200, 240, 252, 255)
+      let ax = sx + w / 2
+      let ay = sy - 4
+      @raylib.draw_rectangle(ax - 2, ay, 4, 6, arrow_c)
+      @raylib.draw_rectangle(ax - 5, ay + 2, 10, 3, arrow_c)
+    }
+  }
+}
+
+///|
+/// Draw bridge tiles that are in falling phase (already removed from tilemap).
+fn draw_bridge_falling(game : @types.Game, cam_x : Int) -> Unit {
+  let ts = @types.tile_size
+  for i in 0..<game.bridges.length() {
+    let b = game.bridges[i]
+    if not(b.active) {
+      continue
+    }
+    if b.phase != Falling {
+      continue
+    }
+    let sx = b.tile_x * ts - cam_x
+    let sy = b.tile_y * ts + b.fall_y.to_int()
+    if sx + ts < -20 || sx > @types.screen_w + 20 {
+      continue
+    }
+    // Draw a falling bridge segment
+    @raylib.draw_rectangle(sx, sy, ts, ts, bridge_color)
+    @raylib.draw_rectangle(sx, sy, ts, 4, platform_top_c)
+    @raylib.draw_rectangle(sx, sy + ts - 4, ts, 4, bridge_dark_c)
+    // Mortar lines
+    @raylib.draw_rectangle(sx + ts / 2 - 1, sy, 2, ts, bridge_dark_c)
+    @raylib.draw_rectangle(sx, sy + ts / 2 - 1, ts, 2, bridge_dark_c)
+  }
+}
+
+///|
+/// Draw a bridge tile in the tilemap with optional shaking offset.
+fn draw_bridge_tile(
+  game : @types.Game,
+  tx : Int,
+  ty : Int,
+  sx : Int,
+  sy : Int,
+) -> Unit {
+  let ts = @types.tile_size
+  // Check if this bridge tile is shaking
+  let mut shake_x = 0
+  for i in 0..<game.bridges.length() {
+    let b = game.bridges[i]
+    if b.active && b.tile_x == tx && b.tile_y == ty && b.phase == Shaking {
+      let shake_amt = (b.timer * 40.0).to_int() % 4 - 2
+      shake_x = shake_amt
+    }
+  }
+  let dx = sx + shake_x
+  // Draw the bridge segment (stone/brick appearance)
+  @raylib.draw_rectangle(dx, sy, ts, ts, bridge_color)
+  @raylib.draw_rectangle(dx, sy, ts, 4, platform_top_c)
+  @raylib.draw_rectangle(dx, sy + ts - 4, ts, 4, bridge_dark_c)
+  // Mortar lines
+  @raylib.draw_rectangle(dx + ts / 2 - 1, sy, 2, ts, bridge_dark_c)
+  @raylib.draw_rectangle(dx, sy + ts / 2 - 1, ts, 2, bridge_dark_c)
 }

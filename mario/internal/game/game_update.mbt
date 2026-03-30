@@ -2,18 +2,53 @@
 /// Main update entry point — dispatches to the current game-state handler.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   game.frame_counter += 1
-  update_clouds(game, dt)
+  // Hitstop: freeze game logic but keep rendering
+  if game.hitstop_timer > 0.0 {
+    game.hitstop_timer = game.hitstop_timer - dt
+    if game.hitstop_timer < 0.0 {
+      game.hitstop_timer = 0.0
+    }
+    return
+  }
+  // Slowmo: scale dt for brief slow-motion effect
+  let effective_dt = if game.slowmo_timer > 0.0 {
+    game.slowmo_timer = game.slowmo_timer - dt
+    if game.slowmo_timer < 0.0 {
+      game.slowmo_timer = 0.0
+    }
+    dt * 0.3
+  } else {
+    dt
+  }
+  // Shake timer decay
+  if game.shake_timer > 0.0 {
+    game.shake_timer = game.shake_timer - effective_dt
+    if game.shake_timer < 0.0 {
+      game.shake_timer = 0.0
+    }
+  }
+  // Update enemy flash timers
+  for i in 0..<game.enemies.length() {
+    let e = game.enemies[i]
+    if e.flash_timer > 0.0 {
+      e.flash_timer = e.flash_timer - effective_dt
+      if e.flash_timer < 0.0 {
+        e.flash_timer = 0.0
+      }
+    }
+  }
+  update_clouds(game, effective_dt)
   match game.state {
     Title => update_title(game)
-    LevelIntro => update_level_intro(game, dt)
-    Playing => update_playing(game, dt)
+    LevelIntro => update_level_intro(game, effective_dt)
+    Playing => update_playing(game, effective_dt)
     Paused => update_paused(game)
-    LevelClear => update_level_clear(game, dt)
-    LevelTally => update_level_tally(game, dt)
-    PlayerDied => update_player_died(game, dt)
-    GameOver => update_game_over(game, dt)
+    LevelClear => update_level_clear(game, effective_dt)
+    LevelTally => update_level_tally(game, effective_dt)
+    PlayerDied => update_player_died(game, effective_dt)
+    GameOver => update_game_over(game, effective_dt)
     Victory => update_victory(game)
-    BonusRoom => update_playing(game, dt)
+    BonusRoom => update_playing(game, effective_dt)
   }
 }
 
@@ -85,6 +120,9 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   update_particles(game, dt)
   update_score_popups(game, dt)
   update_bumped_blocks(game, dt)
+  update_platforms(game, dt)
+  update_lifts(game, dt)
+  update_bridges(game, dt)
   update_camera(game, dt)
   // Check boss defeated — route through tally like flagpole clears
   if game.boss_defeated {
@@ -322,6 +360,31 @@ fn update_camera(game : @types.Game, dt : Float) -> Unit {
     cam,
     @utils.clampf(8.0 * dt, 0.0, 1.0),
   )
+  // Apply screen shake offset
+  if game.shake_timer > 0.0 {
+    let shake_amount = game.shake_intensity * (game.shake_timer / 0.3)
+    let offset = @types.rand_rangef(game, -shake_amount, shake_amount)
+    game.camera_x = game.camera_x + offset
+  }
+}
+
+///|
+/// Trigger screen shake with given intensity and duration.
+pub fn start_shake(
+  game : @types.Game,
+  intensity : Float,
+  duration : Float,
+) -> Unit {
+  game.shake_intensity = intensity
+  game.shake_timer = duration
+}
+
+///|
+/// Trigger a hitstop freeze.
+pub fn start_hitstop(game : @types.Game, duration : Float) -> Unit {
+  if duration > game.hitstop_timer {
+    game.hitstop_timer = duration
+  }
 }
 
 ///|
@@ -660,6 +723,7 @@ pub fn exit_bonus_room(game : @types.Game) -> Unit {
       dst.fire_cooldown = src.fire_cooldown
       dst.patrol_left = src.patrol_left
       dst.patrol_right = src.patrol_right
+      dst.flash_timer = src.flash_timer
     } else {
       game.enemies[i].active = false
     }
@@ -725,6 +789,15 @@ pub fn load_level(game : @types.Game, level_index : Int) -> Unit {
   }
   for i in 0..<game.bumped_blocks.length() {
     game.bumped_blocks[i].active = false
+  }
+  for i in 0..<game.platforms.length() {
+    game.platforms[i].active = false
+  }
+  for i in 0..<game.lifts.length() {
+    game.lifts[i].active = false
+  }
+  for i in 0..<game.bridges.length() {
+    game.bridges[i].active = false
   }
   // Reset player
   game.player.dead = false
@@ -803,6 +876,50 @@ pub fn load_level(game : @types.Game, level_index : Int) -> Unit {
   }
   // Count total coins for tally
   game.level_total_coins = @types.count_coin_tiles(game)
+  // Spawn platforms, lifts, and bridges for this level
+  spawn_level_platforms(game, level_index)
+}
+
+///|
+/// Helper: convert tile column/row to world-pixel Float.
+fn tile_f(n : Int) -> Float {
+  Float::from_int(n * @types.tile_size)
+}
+
+///|
+/// Spawn moving platforms, lift platforms, and configure bridge tiles per level.
+fn spawn_level_platforms(game : @types.Game, level_index : Int) -> Unit {
+  match level_index {
+    0 => {
+      // 1-1: One horizontal moving platform over the main gap (columns 52-54)
+      let gap_y = tile_f(11)
+      spawn_platform(game, tile_f(52), gap_y, tile_f(54), gap_y, 96.0, 0.4)
+    }
+    1 => {
+      // 1-2: Two horizontal platforms in the underground section
+      let gap1_y = tile_f(10)
+      spawn_platform(
+        game, tile_f(48), gap1_y, tile_f(50), gap1_y, 96.0, 0.35,
+      )
+      let gap2_y = tile_f(10)
+      spawn_platform(
+        game, tile_f(88), gap2_y, tile_f(90), gap2_y, 96.0, 0.45,
+      )
+    }
+    2 => {
+      // 1-3: Three vertical lift platforms between floating island layers
+      spawn_lift(game, tile_f(10), tile_f(12), tile_f(9), 72.0, 100.0)
+      spawn_lift(game, tile_f(48), tile_f(10), tile_f(6), 72.0, 110.0)
+      spawn_lift(game, tile_f(90), tile_f(10), tile_f(6), 72.0, 120.0)
+    }
+    _ => {
+      // 1-4: Collapsing bridge before Bowser + one horizontal platform over pit
+      let pit_y = tile_f(10)
+      spawn_platform(
+        game, tile_f(82), pit_y, tile_f(84), pit_y, 96.0, 0.4,
+      )
+    }
+  }
 }
 
 ///|
@@ -832,6 +949,7 @@ fn parse_tile_char(ch : Char) -> @types.TileKind {
     'F' => Checkpoint
     'h' => HiddenBonusCoin
     'n' => HiddenBonusOneUp
+    'b' => BridgeTile
     _ => Empty
   }
 }
@@ -849,6 +967,277 @@ fn spawn_enemy_at(
       let ey = Float::from_int(ty * @types.tile_size + @types.tile_size)
       let e = @types.Enemy::new(kind, ex, ey)
       game.enemies[i] = e
+      return
+    }
+  }
+}
+
+///|
+/// Update all moving platforms: ping-pong between endpoints and carry the player.
+fn update_platforms(game : @types.Game, dt : Float) -> Unit {
+  let p = game.player
+  for i in 0..<game.platforms.length() {
+    let plat = game.platforms[i]
+    if not(plat.active) {
+      continue
+    }
+    // Save previous position for carrying the player
+    plat.prev_x = plat.x
+    plat.prev_y = plat.y
+    // Advance progress
+    plat.progress = plat.progress +
+      plat.speed * dt * Float::from_int(plat.direction)
+    if plat.progress >= 1.0 {
+      plat.progress = 1.0
+      plat.direction = -1
+    } else if plat.progress <= 0.0 {
+      plat.progress = 0.0
+      plat.direction = 1
+    }
+    // Interpolate position
+    plat.x = @utils.lerpf(plat.start_x, plat.end_x, plat.progress)
+    plat.y = @utils.lerpf(plat.start_y, plat.end_y, plat.progress)
+    // Carry player if standing on platform (one-way: top only)
+    if not(p.dead) {
+      let plat_left = plat.x - plat.width / 2.0
+      let plat_right = plat.x + plat.width / 2.0
+      let plat_top = plat.y
+      let foot_margin : Float = 6.0
+      let p_left = p.x - @types.player_half_w
+      let p_right = p.x + @types.player_half_w
+      if p_right > plat_left &&
+        p_left < plat_right &&
+        p.y >= plat_top - foot_margin &&
+        p.y <= plat_top + foot_margin &&
+        p.vy >= 0.0 {
+        let dx = plat.x - plat.prev_x
+        let dy = plat.y - plat.prev_y
+        p.x = p.x + dx
+        p.y = plat.y
+        p.vy = 0.0
+        p.on_ground = true
+        p.coyote_timer = @types.coyote_time
+        ignore(dy)
+      }
+    }
+  }
+}
+
+///|
+/// Update lift platforms: rise when Mario touches them, stop at target.
+fn update_lifts(game : @types.Game, dt : Float) -> Unit {
+  let p = game.player
+  for i in 0..<game.lifts.length() {
+    let lift = game.lifts[i]
+    if not(lift.active) {
+      continue
+    }
+    lift.prev_y = lift.y
+    // Check if player is on this lift to trigger it
+    if not(p.dead) {
+      let lift_left = lift.x - lift.width / 2.0
+      let lift_right = lift.x + lift.width / 2.0
+      let lift_top = lift.y
+      let foot_margin : Float = 6.0
+      let p_left = p.x - @types.player_half_w
+      let p_right = p.x + @types.player_half_w
+      if p_right > lift_left &&
+        p_left < lift_right &&
+        p.y >= lift_top - foot_margin &&
+        p.y <= lift_top + foot_margin &&
+        p.vy >= 0.0 {
+        // Player is on this lift
+        if not(lift.triggered) {
+          lift.triggered = true
+        }
+        // Snap player to top
+        p.y = lift.y
+        p.vy = 0.0
+        p.on_ground = true
+        p.coyote_timer = @types.coyote_time
+      }
+    }
+    // Move if triggered
+    if lift.triggered && lift.y > lift.target_y {
+      lift.y = lift.y - lift.speed * dt
+      if lift.y < lift.target_y {
+        lift.y = lift.target_y
+      }
+      // Carry the player along
+      if not(p.dead) {
+        let lift_left = lift.x - lift.width / 2.0
+        let lift_right = lift.x + lift.width / 2.0
+        let foot_margin : Float = 8.0
+        let p_left = p.x - @types.player_half_w
+        let p_right = p.x + @types.player_half_w
+        if p_right > lift_left &&
+          p_left < lift_right &&
+          p.y >= lift.prev_y - foot_margin &&
+          p.y <= lift.prev_y + foot_margin {
+          let dy = lift.y - lift.prev_y
+          p.y = p.y + dy
+          p.vy = 0.0
+          p.on_ground = true
+          p.coyote_timer = @types.coyote_time
+        }
+      }
+    }
+  }
+}
+
+///|
+/// Update bridge states: handle shaking, collapsing, chain reactions, and falling.
+fn update_bridges(game : @types.Game, dt : Float) -> Unit {
+  let p = game.player
+  if p.dead {
+    return
+  }
+  // Check if player is standing on any bridge tile
+  let p_tx = @types.world_to_tile_x(p.x)
+  let p_ty = @types.world_to_tile_y(p.y)
+  if p.on_ground && @types.get_tile(game, p_tx, p_ty) == BridgeTile {
+    start_bridge_collapse(game, p_tx, p_ty)
+  }
+  // Update active bridge states
+  for i in 0..<game.bridges.length() {
+    let b = game.bridges[i]
+    if not(b.active) {
+      continue
+    }
+    b.timer = b.timer + dt
+    match b.phase {
+      Stable =>
+        if b.timer >= @types.bridge_shake_delay {
+          b.phase = Shaking
+          b.timer = 0.0
+          chain_bridge_collapse(game, b.tile_x - 1, b.tile_y)
+          chain_bridge_collapse(game, b.tile_x + 1, b.tile_y)
+        }
+      Shaking =>
+        if b.timer >= @types.bridge_shake_time {
+          b.phase = Falling
+          b.timer = 0.0
+          @types.set_tile(game, b.tile_x, b.tile_y, Empty)
+        }
+      Falling => {
+        b.fall_y = b.fall_y + @types.bridge_fall_speed * dt
+        if b.fall_y > 400.0 {
+          b.phase = Gone
+          b.active = false
+        }
+      }
+      Gone => b.active = false
+    }
+  }
+}
+
+///|
+/// Start the collapse process for a bridge tile if not already tracked.
+fn start_bridge_collapse(game : @types.Game, tx : Int, ty : Int) -> Unit {
+  for i in 0..<game.bridges.length() {
+    let b = game.bridges[i]
+    if b.active && b.tile_x == tx && b.tile_y == ty {
+      return
+    }
+  }
+  if @types.get_tile(game, tx, ty) != BridgeTile {
+    return
+  }
+  for i in 0..<game.bridges.length() {
+    if not(game.bridges[i].active) {
+      let b = game.bridges[i]
+      b.active = true
+      b.tile_x = tx
+      b.tile_y = ty
+      b.phase = Stable
+      b.timer = 0.0
+      b.fall_y = 0.0
+      return
+    }
+  }
+}
+
+///|
+/// Trigger a chain collapse for adjacent bridge tiles with a short delay.
+fn chain_bridge_collapse(game : @types.Game, tx : Int, ty : Int) -> Unit {
+  if @types.get_tile(game, tx, ty) != BridgeTile {
+    return
+  }
+  for i in 0..<game.bridges.length() {
+    let b = game.bridges[i]
+    if b.active && b.tile_x == tx && b.tile_y == ty {
+      return
+    }
+  }
+  for i in 0..<game.bridges.length() {
+    if not(game.bridges[i].active) {
+      let b = game.bridges[i]
+      b.active = true
+      b.tile_x = tx
+      b.tile_y = ty
+      b.phase = Stable
+      b.timer = -@types.bridge_chain_delay
+      b.fall_y = 0.0
+      return
+    }
+  }
+}
+
+///|
+/// Spawn a moving platform between two world positions.
+pub fn spawn_platform(
+  game : @types.Game,
+  sx : Float,
+  sy : Float,
+  ex : Float,
+  ey : Float,
+  width : Float,
+  speed : Float,
+) -> Unit {
+  for i in 0..<game.platforms.length() {
+    if not(game.platforms[i].active) {
+      game.platforms[i] = {
+        active: true,
+        x: sx,
+        y: sy,
+        width,
+        start_x: sx,
+        start_y: sy,
+        end_x: ex,
+        end_y: ey,
+        speed,
+        progress: 0.0,
+        direction: 1,
+        prev_x: sx,
+        prev_y: sy,
+      }
+      return
+    }
+  }
+}
+
+///|
+/// Spawn a lift platform at a position that rises to a target height.
+pub fn spawn_lift(
+  game : @types.Game,
+  x : Float,
+  y : Float,
+  target_y : Float,
+  width : Float,
+  speed : Float,
+) -> Unit {
+  for i in 0..<game.lifts.length() {
+    if not(game.lifts[i].active) {
+      game.lifts[i] = {
+        active: true,
+        x,
+        y,
+        width,
+        target_y,
+        speed,
+        triggered: false,
+        prev_y: y,
+      }
       return
     }
   }

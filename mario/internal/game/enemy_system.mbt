@@ -270,6 +270,7 @@ fn check_bowser_fireball_player_hit(
     bf.y + bf_hh > p_top &&
     bf.y - bf_hh < p_bottom {
     bf.active = false
+    start_shake(game, 6.0, 0.2)
     damage_player_from_enemy(game)
   }
 }
@@ -322,6 +323,7 @@ fn check_shell_enemy_hits(game : @types.Game, shell_index : Int) -> Unit {
       s_bottom > e_top &&
       s_top < e_bottom {
       // Shell kills the enemy
+      e.flash_timer = 0.1
       e.dead = true
       e.dead_timer = 0.0
       e.vy = -300.0

@@ -174,6 +174,7 @@ fn check_fireball_enemy_hit(game : @types.Game, fb_index : Int) -> Unit {
       // BowserLite takes multiple hits
       if e.kind == BowserLite {
         e.boss_hp = e.boss_hp - 1
+        e.flash_timer = 0.12
         fb.active = false
         spawn_fireball_poof(game, fb.x, fb.y)
         if e.boss_hp <= 0 {
@@ -184,13 +185,18 @@ fn check_fireball_enemy_hit(game : @types.Game, fb_index : Int) -> Unit {
           game.score = game.score + 5000
           spawn_score_popup(game, e.x, e.y - e.height, "5000")
           game.boss_defeated = true
+          start_hitstop(game, 0.06)
+          start_shake(game, 10.0, 0.3)
         } else {
           game.score = game.score + 200
           spawn_score_popup(game, e.x, e.y - e.height, "200")
+          start_hitstop(game, 0.06)
+          start_shake(game, 5.0, 0.15)
         }
         return
       }
       // Hit! (standard enemies including PiranhaPlant)
+      e.flash_timer = 0.1
       e.dead = true
       e.dead_timer = 0.0
       e.vy = -250.0
