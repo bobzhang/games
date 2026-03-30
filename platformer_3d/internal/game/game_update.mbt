@@ -339,10 +339,8 @@ fn @types.Game::update_death_anim(game : @types.Game, dt : Float) -> Unit {
       game.vz = 0.0
       game.grounded = false
       game.invincible_timer = @types.invincible_time
-      // Restore dynamic platform states from checkpoint snapshot
-      if game.checkpoint_active {
-        game.restore_platforms()
-      }
+      // Restore platform states from snapshot (initial or checkpoint)
+      game.restore_platforms()
       game.state = Playing
     }
   }

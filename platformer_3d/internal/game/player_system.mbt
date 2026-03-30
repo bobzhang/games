@@ -613,8 +613,9 @@ fn @types.Game::carry_player_on_platform(
     let plat_vel_x : Float = cos_val * dt
     game.px += plat_vel_x
   } else if plat.kind == @types.plat_moving_y {
-    let plat_vel_y : Float = cos_val * dt
-    game.py += plat_vel_y
+    // Y carry is handled by collision snapping the player onto the platform top,
+    // so no additional Y offset is needed here (avoids double application).
+    ()
   } else if plat.kind == @types.plat_moving_z {
     let plat_vel_z : Float = cos_val * dt
     game.pz += plat_vel_z

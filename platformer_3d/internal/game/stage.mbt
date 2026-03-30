@@ -72,10 +72,18 @@ pub fn load_level(game : @types.Game, world : Int, level : Int) -> Unit {
   game.cam_dist = @types.camera_dist
   game.cam_shake = 0.0
   game.cam_shake_timer = 0.0
+  // Camera smoothed targets
+  game.cam_target_x = 0.0
+  game.cam_target_y = @types.respawn_height + @types.camera_height
+  game.cam_target_z = 0.0
   // Animation
   game.anim_walk_timer = 0.0
   game.anim_land_squash = 0.0
   game.anim_jump_stretch = 0.0
+  // Speed trail
+  game.speed_trail_timer = 0.0
+  // Snapshot initial platform state for respawn before any checkpoint
+  game.snapshot_platforms()
 }
 
 ///|
