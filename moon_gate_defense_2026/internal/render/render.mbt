@@ -426,13 +426,7 @@ fn draw_meter(
   ratio : Float,
   col : @raylib.Color,
 ) -> Unit {
-  @draw.draw_text(
-    label,
-    x,
-    y - 20,
-    18,
-    @raylib.Color::new(208, 224, 240, 220),
-  )
+  @draw.draw_text(label, x, y - 20, 18, @raylib.Color::new(208, 224, 240, 220))
   @raylib.draw_rectangle(x, y, w, 16, @raylib.Color::new(26, 30, 42, 220))
   @raylib.draw_rectangle(
     x,

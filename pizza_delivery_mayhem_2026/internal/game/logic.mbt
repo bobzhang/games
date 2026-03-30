@@ -501,8 +501,10 @@ fn @types.Game::update_rider(game : @types.Game, dt : Float) -> Unit {
     (game.move_x * 780.0 * boost_mul + traffic_drift_x) * dt
   game.rider_vy = game.rider_vy +
     (game.move_y * 760.0 * boost_mul + traffic_drift_y) * dt
-  game.rider_vx = game.rider_vx * (1.0 - dt * 3.0)
-  game.rider_vy = game.rider_vy * (1.0 - dt * 3.0)
+  if !(game.boost_on || game.turbo_t > 0.0) {
+    game.rider_vx = game.rider_vx * (1.0 - dt * 3.0)
+    game.rider_vy = game.rider_vy * (1.0 - dt * 3.0)
+  }
   game.rider_x = game.rider_x + game.rider_vx * dt
   game.rider_y = game.rider_y + game.rider_vy * dt
   game.rider_x = @types.clampf(

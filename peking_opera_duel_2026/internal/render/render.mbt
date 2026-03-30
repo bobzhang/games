@@ -216,13 +216,7 @@ fn @types.Game::draw_stage_actors(game : @types.Game) -> Unit {
   )
 
   @draw.draw_text("Your Troupe", 322, 790, 26, @types.col(219, 228, 236, 245))
-  @draw.draw_text(
-    "Rival Troupe",
-    1075,
-    790,
-    26,
-    @types.col(234, 194, 162, 245),
-  )
+  @draw.draw_text("Rival Troupe", 1075, 790, 26, @types.col(234, 194, 162, 245))
 }
 
 ///|

@@ -269,7 +269,9 @@ pub fn guard_sees_cell(game : Game, g : Guard, cx : Int, cy : Int) -> Bool {
 ///|
 /// Returns whether any guard occupies cell `(cx, cy)`.
 pub fn any_guard_on_cell(game : Game, cx : Int, cy : Int) -> Bool {
-  @utils.any_by(game.guards, fn(guard_val) { guard_val.x == cx && guard_val.y == cy })
+  @utils.any_by(game.guards, fn(guard_val) {
+    guard_val.x == cx && guard_val.y == cy
+  })
 }
 
 ///|
@@ -285,7 +287,9 @@ pub fn player_spotted(game : Game) -> Bool {
     return true
   }
 
-  @utils.any_by(game.guards, fn(guard_val) { guard_sees_cell(game, guard_val, game.player_x, game.player_y) })
+  @utils.any_by(game.guards, fn(guard_val) {
+    guard_sees_cell(game, guard_val, game.player_x, game.player_y)
+  })
 }
 
 ///|

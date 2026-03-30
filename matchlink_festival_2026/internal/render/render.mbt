@@ -669,8 +669,7 @@ fn @types.Game::draw_touch_overlay(game : @types.Game) -> Unit {
 fn @types.Game::draw_title(game : @types.Game) -> Unit {
   @draw.draw_text(
     "MatchLink Festival 2026",
-    @types.screen_w / 2 -
-    @draw.measure_text("MatchLink Festival 2026", 86) / 2,
+    @types.screen_w / 2 - @draw.measure_text("MatchLink Festival 2026", 86) / 2,
     104,
     86,
     @raylib.Color::new(238, 248, 255, 248),

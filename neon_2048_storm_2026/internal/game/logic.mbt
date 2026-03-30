@@ -157,7 +157,9 @@ fn line_index(line : Int, pos : Int, dir : @types.Direction) -> Int {
 ///|
 /// Places a new tile (2, 4, 8, or 16) in a random empty cell and emits a burst.
 fn @types.Game::spawn_tile(game : @types.Game, kind : @types.SparkKind) -> Bool {
-  let empty_count = @utils.count_by(game.board, fn(board_elem) { board_elem == 0 })
+  let empty_count = @utils.count_by(game.board, fn(board_elem) {
+    board_elem == 0
+  })
 
   if empty_count <= 0 {
     return false
@@ -213,7 +215,9 @@ fn @types.Game::spawn_tile(game : @types.Game, kind : @types.SparkKind) -> Bool 
 ///|
 /// Places a storm debris blocker in a random empty cell and triggers screen shake.
 fn @types.Game::spawn_blocker(game : @types.Game) -> Bool {
-  let empty_count = @utils.count_by(game.board, fn(board_elem) { board_elem == 0 })
+  let empty_count = @utils.count_by(game.board, fn(board_elem) {
+    board_elem == 0
+  })
 
   if empty_count <= 0 {
     return false

@@ -77,10 +77,7 @@ fn @types.Game::alloc_particle_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.particles,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.particles, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -96,10 +93,7 @@ fn @types.Game::alloc_trail_slot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.trails,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.trails, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {

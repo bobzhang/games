@@ -132,13 +132,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @draw.draw_text(title, 48, 34, 38, @raylib.Color::new(238, 228, 198, 245))
 
   let week_text = "Week " + game.week.to_string()
-  @draw.draw_text(
-    week_text,
-    52,
-    84,
-    30,
-    @raylib.Color::new(240, 244, 252, 236),
-  )
+  @draw.draw_text(week_text, 52, 84, 30, @raylib.Color::new(240, 244, 252, 236))
 
   let funds_text = "Funds " + game.funds.to_int().to_string()
   @draw.draw_text(

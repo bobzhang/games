@@ -709,9 +709,7 @@ fn @types.Game::draw_title_screen(game : @types.Game) -> Unit {
   @draw.draw_text(
     "Decode harbor blueprints, one nonogram at a time.",
     @types.screen_w / 2 -
-    @draw.measure_text(
-      "Decode harbor blueprints, one nonogram at a time.", 36,
-    ) /
+    @draw.measure_text("Decode harbor blueprints, one nonogram at a time.", 36) /
     2,
     246,
     36,

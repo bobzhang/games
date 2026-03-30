@@ -500,34 +500,10 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
     },
   )
 
-  @draw.draw_text(
-    "<",
-    l.0.to_int() + 42,
-    l.1.to_int() + 30,
-    42,
-    ui_text(l_hot),
-  )
-  @draw.draw_text(
-    ">",
-    r.0.to_int() + 42,
-    r.1.to_int() + 30,
-    42,
-    ui_text(r_hot),
-  )
-  @draw.draw_text(
-    "J",
-    j.0.to_int() + 38,
-    j.1.to_int() + 30,
-    42,
-    ui_text(j_hot),
-  )
-  @draw.draw_text(
-    "P",
-    p.0.to_int() + 38,
-    p.1.to_int() + 30,
-    42,
-    ui_text(p_hot),
-  )
+  @draw.draw_text("<", l.0.to_int() + 42, l.1.to_int() + 30, 42, ui_text(l_hot))
+  @draw.draw_text(">", r.0.to_int() + 42, r.1.to_int() + 30, 42, ui_text(r_hot))
+  @draw.draw_text("J", j.0.to_int() + 38, j.1.to_int() + 30, 42, ui_text(j_hot))
+  @draw.draw_text("P", p.0.to_int() + 38, p.1.to_int() + 30, 42, ui_text(p_hot))
 }
 
 ///|
@@ -614,13 +590,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     16,
     @raylib.Color::new(220, 236, 250, 210),
   )
-  @draw.draw_text(
-    "HEALTH",
-    590,
-    2,
-    16,
-    @raylib.Color::new(240, 244, 250, 255),
-  )
+  @draw.draw_text("HEALTH", 590, 2, 16, @raylib.Color::new(240, 244, 250, 255))
 
   let ph_w = 280
   let ph_fill = (Float::from_int(ph_w) * game.phase_energy / 100.0).to_int()

@@ -195,10 +195,9 @@ fn @types.Game::enter_game_over(game : @types.Game) -> Unit {
 ///|
 /// Returns the index of the node at grid cell `(gx, gy)`, or -1 if none exists.
 fn @types.Game::find_node_at(game : @types.Game, gx : Int, gy : Int) -> Int {
-  @utils.first_index_by(
-    game.nodes,
-    fn(node) { node.active && node.gx == gx && node.gy == gy },
-  )
+  @utils.first_index_by(game.nodes, fn(node) {
+    node.active && node.gx == gx && node.gy == gy
+  })
 }
 
 ///|

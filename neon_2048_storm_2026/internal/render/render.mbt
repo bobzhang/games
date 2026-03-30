@@ -708,9 +708,7 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
   @draw.draw_text(
     "Touch controls are available for mobile web play.",
     @types.screen_w / 2 -
-    @draw.measure_text(
-      "Touch controls are available for mobile web play.", 34,
-    ) /
+    @draw.measure_text("Touch controls are available for mobile web play.", 34) /
     2,
     304,
     34,

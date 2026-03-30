@@ -701,8 +701,7 @@ fn @types.Game::draw_title(game : @types.Game) -> Unit {
   @draw.draw_text(
     "Touch controls are available for mobile play.",
     @types.screen_w / 2 -
-    @draw.measure_text("Touch controls are available for mobile play.", 34) /
-    2,
+    @draw.measure_text("Touch controls are available for mobile play.", 34) / 2,
     288,
     34,
     @raylib.Color::new(196, 220, 244, 238),
