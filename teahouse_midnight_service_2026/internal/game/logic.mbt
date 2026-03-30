@@ -79,10 +79,7 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.sparks,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.sparks, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -98,10 +95,7 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.rings,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.rings, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -117,10 +111,7 @@ fn @types.Game::alloc_shadow(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.shadows,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.shadows, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -239,7 +230,9 @@ fn @types.Game::clear_combo(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::slot_used(game : @types.Game, slot : Int) -> Bool {
-  @utils.any_by(game.customers, fn(customer) { customer.active && customer.slot == slot })
+  @utils.any_by(game.customers, fn(customer) {
+    customer.active && customer.slot == slot
+  })
 }
 
 ///|
@@ -536,13 +529,22 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   game.player.vy = game.player.vy +
     game.input_y * @types.player_accel * speed_mul * dt
 
-  let drag = @types.clampf(1.0 - @types.player_drag * dt, 0.0, 1.0)
-  game.player.vx = game.player.vx * drag
-  game.player.vy = game.player.vy * drag
-
   let cap = @types.player_max_speed * speed_mul
-  game.player.vx = @types.clampf(game.player.vx, -cap, cap)
-  game.player.vy = @types.clampf(game.player.vy, -cap, cap)
+  let speed2 = game.player.vx * game.player.vx + game.player.vy * game.player.vy
+  if game.player.dash_t > 0.0 {
+    if speed2 > @types.dash_speed * @types.dash_speed {
+      let inv = Float::from_int(1) / speed2.sqrt()
+      game.player.vx = game.player.vx * inv * @types.dash_speed
+      game.player.vy = game.player.vy * inv * @types.dash_speed
+    }
+  } else {
+    let drag = @types.clampf(1.0 - @types.player_drag * dt, 0.0, 1.0)
+    game.player.vx = game.player.vx * drag
+    game.player.vy = game.player.vy * drag
+
+    game.player.vx = @types.clampf(game.player.vx, -cap, cap)
+    game.player.vy = @types.clampf(game.player.vy, -cap, cap)
+  }
 
   game.player.x = game.player.x + game.player.vx * dt
   game.player.y = game.player.y + game.player.vy * dt

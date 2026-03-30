@@ -1031,7 +1031,17 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
         hold,
         touch_count,
       )
-    _ =>
+    StageClear =>
+      draw_button_visual(
+        "NEXT STAGE",
+        @types.retry_rect(),
+        false,
+        mx,
+        my,
+        hold,
+        touch_count,
+      )
+    GameOver =>
       draw_button_visual(
         "RETRY",
         @types.retry_rect(),

@@ -11,6 +11,7 @@ fn @types.Game::clear_objs(game : @types.Game) -> Unit {
     obj.w = 0.0
     obj.h = 0.0
     obj.hp = 0.0
+    obj.max_hp = 0.0
     obj.life = 0.0
     obj.phase = 0.0
     obj.value = 0
@@ -87,10 +88,7 @@ fn @types.Game::alloc_obj(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.objs,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.objs, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -107,10 +105,7 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.sparks,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.sparks, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -127,10 +122,7 @@ fn @types.Game::alloc_halo(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.halos,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.halos, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -147,10 +139,7 @@ fn @types.Game::alloc_trail(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.trails,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.trails, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -268,6 +257,7 @@ fn @types.Game::spawn_obj(
   game.objs[i].w = w
   game.objs[i].h = h
   game.objs[i].hp = hp
+  game.objs[i].max_hp = hp
   game.objs[i].life = life
   game.objs[i].phase = @types.randf(0.0, 6.283)
   game.objs[i].value = value
@@ -653,9 +643,11 @@ fn @types.Game::update_kite(game : @types.Game, dt : Float) -> Unit {
   game.kite.vx = game.kite.vx + ax * dt
   game.kite.vy = game.kite.vy + ay * dt
 
-  let drag = @types.clampf(1.0 - @types.kite_drag * dt, 0.0, 1.0)
-  game.kite.vx = game.kite.vx * drag
-  game.kite.vy = game.kite.vy * drag
+  if game.burst_t <= 0.0 {
+    let drag = @types.clampf(1.0 - @types.kite_drag * dt, 0.0, 1.0)
+    game.kite.vx = game.kite.vx * drag
+    game.kite.vy = game.kite.vy * drag
+  }
 
   game.kite.vx = @types.clampf(
     game.kite.vx,

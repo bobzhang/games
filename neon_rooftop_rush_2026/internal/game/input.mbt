@@ -38,6 +38,11 @@ fn pointer_on_rect(
 }
 
 ///|
+fn result_retry_rect() -> (Float, Float, Float, Float) {
+  (404.0, 398.0, 470.0, 138.0)
+}
+
+///|
 /// Resets all per-frame input flags on the game state to their default off values.
 fn @types.Game::clear_frame_input(game : @types.Game) -> Unit {
   game.input_jump_press = false
@@ -213,19 +218,39 @@ fn @types.Game::update_result_input(game : @types.Game) -> Unit {
   game.clear_frame_input()
   game.update_pointer()
 
+  let mx = game.mouse_x
+  let my = game.mouse_y
+  let hold = game.mouse_hold
   let touch_count = @raylib.get_touch_point_count()
+  let retry_rect = result_retry_rect()
 
   let key_retry = @raylib.is_key_pressed(@raylib.KeyR) ||
     @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
 
-  let touch_retry = touch_count > 0 &&
-    game.mouse_hold &&
-    !game.touch_restart_prev
-  let click_retry = @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
+  let hover = pointer_on_rect(
+    mx,
+    my,
+    hold,
+    touch_count,
+    retry_rect.0,
+    retry_rect.1,
+    retry_rect.2,
+    retry_rect.3,
+  )
+  let touch_retry = hover && !game.touch_restart_prev
+  let click_retry = @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) &&
+    point_in_rect(
+      mx,
+      my,
+      retry_rect.0,
+      retry_rect.1,
+      retry_rect.2,
+      retry_rect.3,
+    )
 
   game.input_restart_press = key_retry || click_retry || touch_retry
   game.input_jump_press = key_retry
 
-  game.touch_restart_prev = touch_count > 0 && game.mouse_hold
+  game.touch_restart_prev = hover
 }

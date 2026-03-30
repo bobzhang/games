@@ -37,6 +37,11 @@ fn beam_rect() -> (Float, Float, Float, Float) {
 }
 
 ///|
+fn result_retry_rect() -> (Float, Float, Float, Float) {
+  (410.0, 398.0, 468.0, 132.0)
+}
+
+///|
 fn @types.Game::update_title_input(game : @types.Game) -> Unit {
   game.clear_frame_input()
   game.update_pointer()
@@ -221,16 +226,30 @@ fn @types.Game::update_result_input(game : @types.Game) -> Unit {
   game.clear_frame_input()
   game.update_pointer()
 
+  let mx = game.mouse_x
+  let my = game.mouse_y
   let hold = game.mouse_hold
   let touch_count = game.touch_count
+  let retry = result_retry_rect()
 
   let key_retry = @raylib.is_key_pressed(@raylib.KeyR) ||
     @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace)
-  let click_retry = @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
-  let touch_retry = touch_count > 0 && hold && !game.touch_restart_prev
+  let hover = @types.pointer_on_rect(
+    mx,
+    my,
+    hold,
+    touch_count,
+    retry.0,
+    retry.1,
+    retry.2,
+    retry.3,
+  )
+  let click_retry = @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) &&
+    @types.point_in_rect(mx, my, retry.0, retry.1, retry.2, retry.3)
+  let touch_retry = hover && !game.touch_restart_prev
 
   game.input_restart_press = key_retry || click_retry || touch_retry
   game.input_fire_hold = game.input_restart_press
-  game.touch_restart_prev = touch_count > 0 && hold
+  game.touch_restart_prev = hover
 }

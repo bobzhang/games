@@ -20,6 +20,7 @@ pub(all) struct SkyObj {
   mut w : Float
   mut h : Float
   mut hp : Float
+  mut max_hp : Float
   mut life : Float
   mut phase : Float
   mut value : Int
@@ -163,6 +164,7 @@ pub fn SkyObj::new() -> SkyObj {
     w: 0.0,
     h: 0.0,
     hp: 0.0,
+    max_hp: 0.0,
     life: 0.0,
     phase: 0.0,
     value: 0,

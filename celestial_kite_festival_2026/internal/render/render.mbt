@@ -470,18 +470,7 @@ fn draw_obj(o : @types.SkyObj, cam_x : Float, cam_y : Float) -> Unit {
     let hpx = o.x - hpw * 0.5 + cam_x
     let hpy = o.y - o.h * 0.8 + cam_y
 
-    let hp_ratio = @types.clampf(
-      o.hp /
-      @types.maxf(
-        1.0,
-        match o.kind {
-          Storm => 30.0 + Float::from_int(6 * 1)
-          _ => 20.0 + Float::from_int(4 * 1)
-        },
-      ),
-      0.0,
-      1.0,
-    )
+    let hp_ratio = @types.clampf(o.hp / @types.maxf(1.0, o.max_hp), 0.0, 1.0)
 
     @raylib.draw_rectangle(
       hpx.to_int(),
@@ -943,8 +932,9 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
       )
     }
     Title => draw_button_visual("START", @types.title_start_rect(), false, game)
-    StageClear | GameOver =>
-      draw_button_visual("RETRY", @types.retry_rect(), false, game)
+    StageClear =>
+      draw_button_visual("NEXT STAGE", @types.retry_rect(), false, game)
+    GameOver => draw_button_visual("RETRY", @types.retry_rect(), false, game)
   }
 }
 
