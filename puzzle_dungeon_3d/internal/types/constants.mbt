@@ -559,3 +559,25 @@ pub let world_name_3 : String = "Verdant Garden"
 ///|
 /// Display name for world index `4`.
 pub let world_name_4 : String = "The Void"
+
+// Star requirements to unlock each world
+
+///|
+/// Stars needed from World 1 to unlock World 2.
+pub let world_2_star_req : Int = 5
+
+///|
+/// Stars needed total to unlock World 3.
+pub let world_3_star_req : Int = 10
+
+///|
+/// Stars needed total to unlock World 4.
+pub let world_4_star_req : Int = 16
+
+///|
+/// Stars needed total to unlock World 5.
+pub let world_5_star_req : Int = 22
+
+///|
+/// Duration of undo flash overlay in seconds.
+pub let undo_flash_duration : Float = 0.25

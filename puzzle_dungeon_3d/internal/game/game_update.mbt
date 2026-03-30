@@ -38,6 +38,13 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
       game.achievement_display_timer = 0.0
     }
   }
+  // Update undo flash
+  if game.undo_flash_timer > 0.0 {
+    game.undo_flash_timer -= dt
+    if game.undo_flash_timer <= 0.0 {
+      game.undo_flash_timer = 0.0
+    }
+  }
 }
 
 ///|

@@ -386,6 +386,8 @@ pub(all) struct Game {
   // Player
   mut player_gx : Int
   mut player_gy : Int
+  mut prev_tile_x : Int
+  mut prev_tile_y : Int
   mut player_anim_x : Float
   mut player_anim_z : Float
   mut player_anim_timer : Float
@@ -470,6 +472,10 @@ pub(all) struct Game {
   mut complete_timer : Float
   mut complete_stars : Int
 
+  // Undo feedback
+  mut undo_flash_timer : Float
+  mut undo_is_last : Bool
+
   // Stats
   mut total_stars : Int
   mut total_moves : Int
@@ -500,6 +506,8 @@ pub fn Game::new() -> Game {
     prev_state: StateMenu,
     player_gx: 1,
     player_gy: 1,
+    prev_tile_x: 1,
+    prev_tile_y: 1,
     player_anim_x: 1.0,
     player_anim_z: 1.0,
     player_anim_timer: 0.0,
@@ -578,6 +586,8 @@ pub fn Game::new() -> Game {
     frame_counter: 0,
     complete_timer: 0.0,
     complete_stars: 0,
+    undo_flash_timer: 0.0,
+    undo_is_last: false,
     total_stars: 0,
     total_moves: 0,
     total_undos: 0,

@@ -71,6 +71,10 @@ fn @types.Game::try_move_player(game : @types.Game, dir : @types.Dir) -> Unit {
                 chain_entity.gy = cy
                 chain_entity.anim_timer = @types.push_anim_duration
                 game.handle_block_land(chain_entity, chain_tile, cx, cy)
+                // If second block lands on ice, slide it
+                if chain_tile == TileIce {
+                  @types.ice_slide_entity(game, behind_entity, dir)
+                }
                 // Move first block
                 entity.gx = bx
                 entity.gy = by
@@ -163,6 +167,27 @@ fn @types.Game::move_player_to(
   ny : Int,
   _dir : @types.Dir,
 ) -> Unit {
+  // Collapse cracked tile when player leaves it
+  let old_x = game.player_gx
+  let old_y = game.player_gy
+  if (old_x != nx || old_y != ny) &&
+    @types.get_tile(game, old_x, old_y) == TileCracked {
+    @types.set_tile(game, old_x, old_y, TilePit)
+    @types.spawn_ambient_particles(
+      game,
+      Float::from_int(old_x),
+      0.0,
+      Float::from_int(old_y),
+      4,
+      100,
+      85,
+      70,
+      0.3,
+      0.5,
+    )
+  }
+  game.prev_tile_x = old_x
+  game.prev_tile_y = old_y
   game.player_gx = nx
   game.player_gy = ny
   game.player_moving = true
@@ -298,19 +323,9 @@ fn @types.Game::handle_tile_effect(
       )
     }
   } else if target_tile == TileCracked {
-    @types.set_tile(game, nx, ny, TilePit)
-    @types.spawn_ambient_particles(
-      game,
-      Float::from_int(nx),
-      0.0,
-      Float::from_int(ny),
-      4,
-      100,
-      85,
-      70,
-      0.3,
-      0.5,
-    )
+    // Cracked tiles collapse when the player steps OFF them,
+    // handled in move_player_to
+    ignore(target_tile)
   } else if target_tile == TileExitOpen {
     // Level complete!
     game.complete_floor()
@@ -431,9 +446,9 @@ fn @types.Game::rotate_adjacent_mirrors(
 fn rotate_mirror(tile : @types.Tile) -> @types.Tile {
   match tile {
     TileMirrorNe => TileMirrorNw
-    TileMirrorNw => TileMirrorSw
+    TileMirrorNw => TileMirrorNe
+    TileMirrorSe => TileMirrorSw
     TileMirrorSw => TileMirrorSe
-    TileMirrorSe => TileMirrorNe
     _ => tile
   }
 }

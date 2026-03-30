@@ -792,15 +792,15 @@ pub fn get_tutorial_for_floor(floor : Int) -> String {
   } else if floor == 3 {
     tutorial_msg_diamond
   } else if floor == 4 {
-    tutorial_msg_ice
-  } else if floor == 6 {
     tutorial_msg_undo
-  } else if floor == 10 {
-    tutorial_msg_teleport
-  } else if floor == 17 {
-    tutorial_msg_switch
-  } else if floor == 12 {
+  } else if floor == 5 {
     tutorial_msg_cracked
+  } else if floor == 6 {
+    tutorial_msg_ice
+  } else if floor == 11 {
+    tutorial_msg_teleport
+  } else if floor == 13 {
+    tutorial_msg_switch
   } else {
     ""
   }
@@ -863,20 +863,40 @@ pub fn count_total_stars(game : Game) -> Int {
 // Check if a world is unlocked
 
 ///|
-/// Returns whether a world index is unlocked based on prior-world completion.
+/// Returns the star requirement to unlock a specific world index.
+pub fn world_star_requirement(world : Int) -> Int {
+  if world <= 0 {
+    0
+  } else if world == 1 {
+    world_2_star_req
+  } else if world == 2 {
+    world_3_star_req
+  } else if world == 3 {
+    world_4_star_req
+  } else {
+    world_5_star_req
+  }
+}
+
+///|
+/// Returns whether a world index is unlocked based on cumulative stars earned.
 pub fn is_world_unlocked(game : Game, world : Int) -> Bool {
   if world == 0 {
     return true
   }
-  // Need to complete at least 4 levels in previous world
-  let prev_start = (world - 1) * floors_per_world
-  let mut completed = 0
-  for i in prev_start..<(prev_start + floors_per_world) {
-    if i < max_floors && game.floor_info[i].completed {
-      completed += 1
-    }
-  }
-  completed >= 4
+  let total = count_total_stars(game)
+  total >= world_star_requirement(world)
 }
 
-// Get the number of stars needed to unlock a world
+///|
+/// Counts stars earned within a specific world (by world index).
+pub fn count_world_stars(game : Game, world_idx : Int) -> Int {
+  let floor_start = world_idx * floors_per_world
+  let mut total = 0
+  for i in floor_start..<(floor_start + floors_per_world) {
+    if i < max_floors {
+      total += game.floor_info[i].stars
+    }
+  }
+  total
+}

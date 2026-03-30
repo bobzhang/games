@@ -718,6 +718,7 @@ fn @types.Game::draw_mirror(
 ) -> Unit {
   draw_floor(wx, wz, world)
   ignore(game)
+  // Base platform
   @raylib.draw_cube(
     @raylib.Vector3::new(wx, 0.02, wz),
     0.4,
@@ -725,6 +726,7 @@ fn @types.Game::draw_mirror(
     0.4,
     @raylib.Color::new(100, 100, 110, 255),
   )
+  // Mirror glass
   let color = @raylib.Color::new(
     @types.color_mirror_r, @types.color_mirror_g, @types.color_mirror_b, 220,
   )
@@ -746,6 +748,110 @@ fn @types.Game::draw_mirror(
       0.62,
       @raylib.Color::new(180, 200, 240, 255),
     )
+  }
+  // Directional reflection arrows on the floor
+  // Each mirror type gets colored arrow lines showing the two reflection paths
+  let arrow_h : Float = 0.03
+  match tile {
+    TileMirrorNe => {
+      // NE "/" reflects: left->up, down->right (cyan arrows)
+      // Show incoming from left -> deflects up
+      @raylib.draw_cube(
+        @raylib.Vector3::new(wx - 0.25, arrow_h, wz),
+        0.3,
+        0.02,
+        0.04,
+        @raylib.Color::new(80, 200, 255, 200),
+      )
+      @raylib.draw_cube(
+        @raylib.Vector3::new(wx, arrow_h, wz - 0.25),
+        0.04,
+        0.02,
+        0.3,
+        @raylib.Color::new(80, 200, 255, 200),
+      )
+      // Corner dot
+      @raylib.draw_cube(
+        @raylib.Vector3::new(wx, arrow_h + 0.01, wz),
+        0.08,
+        0.02,
+        0.08,
+        @raylib.Color::new(80, 200, 255, 255),
+      )
+    }
+    TileMirrorNw => {
+      // NW "\" reflects: right->up, down->left (magenta arrows)
+      @raylib.draw_cube(
+        @raylib.Vector3::new(wx + 0.25, arrow_h, wz),
+        0.3,
+        0.02,
+        0.04,
+        @raylib.Color::new(220, 100, 255, 200),
+      )
+      @raylib.draw_cube(
+        @raylib.Vector3::new(wx, arrow_h, wz - 0.25),
+        0.04,
+        0.02,
+        0.3,
+        @raylib.Color::new(220, 100, 255, 200),
+      )
+      @raylib.draw_cube(
+        @raylib.Vector3::new(wx, arrow_h + 0.01, wz),
+        0.08,
+        0.02,
+        0.08,
+        @raylib.Color::new(220, 100, 255, 255),
+      )
+    }
+    TileMirrorSe => {
+      // SE reflects: left->down, up->right (yellow arrows)
+      @raylib.draw_cube(
+        @raylib.Vector3::new(wx - 0.25, arrow_h, wz),
+        0.3,
+        0.02,
+        0.04,
+        @raylib.Color::new(255, 255, 80, 200),
+      )
+      @raylib.draw_cube(
+        @raylib.Vector3::new(wx, arrow_h, wz + 0.25),
+        0.04,
+        0.02,
+        0.3,
+        @raylib.Color::new(255, 255, 80, 200),
+      )
+      @raylib.draw_cube(
+        @raylib.Vector3::new(wx, arrow_h + 0.01, wz),
+        0.08,
+        0.02,
+        0.08,
+        @raylib.Color::new(255, 255, 80, 255),
+      )
+    }
+    TileMirrorSw => {
+      // SW reflects: right->down, up->left (orange arrows)
+      @raylib.draw_cube(
+        @raylib.Vector3::new(wx + 0.25, arrow_h, wz),
+        0.3,
+        0.02,
+        0.04,
+        @raylib.Color::new(255, 160, 40, 200),
+      )
+      @raylib.draw_cube(
+        @raylib.Vector3::new(wx, arrow_h, wz + 0.25),
+        0.04,
+        0.02,
+        0.3,
+        @raylib.Color::new(255, 160, 40, 200),
+      )
+      @raylib.draw_cube(
+        @raylib.Vector3::new(wx, arrow_h + 0.01, wz),
+        0.08,
+        0.02,
+        0.08,
+        @raylib.Color::new(255, 160, 40, 255),
+      )
+    }
+    _ => ()
   }
 }
 

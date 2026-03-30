@@ -25,6 +25,8 @@ pub fn load_floor(game : @types.Game, floor : Int) -> Unit {
   game.conveyor_moved_this_turn = false
   game.gate_anim_timer = 0.0
   game.gate_opening = false
+  game.undo_flash_timer = 0.0
+  game.undo_is_last = false
   game.laser_segment_count = 0
   game.laser_targets_hit = 0
   game.laser_targets_total = 0
@@ -79,6 +81,8 @@ pub fn load_floor(game : @types.Game, floor : Int) -> Unit {
         // Player spawn
         game.player_gx = gx
         game.player_gy = gy
+        game.prev_tile_x = gx
+        game.prev_tile_y = gy
         game.player_anim_x = Float::from_int(gx)
         game.player_anim_z = Float::from_int(gy)
       }
@@ -224,9 +228,14 @@ fn @types.Game::undo_move(game : @types.Game) -> Unit {
   game.undo_count -= 1
   game.used_undo = true
   game.total_undos += 1
+  // Undo visual feedback
+  game.undo_flash_timer = @types.undo_flash_duration
+  game.undo_is_last = game.undo_count == 0
   let state = game.undo_stack[game.undo_count]
   game.player_gx = state.player_gx
   game.player_gy = state.player_gy
+  game.prev_tile_x = state.player_gx
+  game.prev_tile_y = state.player_gy
   game.player_anim_x = Float::from_int(state.player_gx)
   game.player_anim_z = Float::from_int(state.player_gy)
   game.player_moving = false
