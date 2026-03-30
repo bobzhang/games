@@ -211,12 +211,20 @@ pub fn update_player_kart(game : @types.Game, dt : Float) -> Unit {
   if kart.shield_timer > 0.0 {
     kart.shield_timer -= dt
   }
-  // Jump ramp detection
-  if kart.on_ground && @types.is_on_ramp(game, kart) && kart.speed > 8.0 {
+  // Jump ramp detection - only launch once per ramp segment
+  if kart.on_ground &&
+    @types.is_on_ramp(game, kart) &&
+    kart.speed > 8.0 &&
+    !kart.ramp_launched {
+    kart.ramp_launched = true
     kart.vy = @types.jump_ramp_force
     kart.on_ground = false
     kart.air_timer = 0.0
     @types.spawn_particles(game, kart.x, kart.y, kart.z, 6, 255, 255, 200)
+  }
+  // Reset ramp_launched when leaving ramp segment
+  if !@types.is_on_ramp(game, kart) {
+    kart.ramp_launched = false
   }
   apply_kart_physics(game, @types.player_kart, dt)
 }

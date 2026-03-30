@@ -182,7 +182,9 @@ pub fn update_kart_waypoint(game : @types.Game, kart_idx : Int) -> Unit {
   let next_wp = @types.get_waypoint(game, next_wp_idx)
   let dist_next = @types.distance2d(kart.x, kart.z, next_wp.x, next_wp.z)
   // Advance if close enough to next waypoint
-  if dist_next < @types.road_width * 1.2 {
+  let seg = @types.get_segment(game, kart.waypoint_idx)
+  let seg_width = @types.road_width * seg.width_mult
+  if dist_next < seg_width * 1.2 {
     let old_idx = kart.waypoint_idx
     kart.waypoint_idx = next_wp_idx
     // Check for lap completion (crossed start line)

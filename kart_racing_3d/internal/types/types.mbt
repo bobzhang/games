@@ -108,6 +108,7 @@ pub(all) struct Kart {
   mut ai_line_offset : Float
   mut ai_reaction_timer : Float
   mut ai_brake_timer : Float
+  mut ramp_launched : Bool
 }
 
 ///|
@@ -163,6 +164,7 @@ pub fn Kart::inactive() -> Kart {
     ai_line_offset: 0.0,
     ai_reaction_timer: 0.0,
     ai_brake_timer: 0.0,
+    ramp_launched: false,
   }
 }
 

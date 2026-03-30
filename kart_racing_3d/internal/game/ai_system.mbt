@@ -148,11 +148,19 @@ pub fn update_ai_karts(game : @types.Game, dt : Float) -> Unit {
       let line_range : Float = 3.0 * (1.0 - diff_stats.2) + 0.5
       kart.ai_line_offset = @types.rand_rangef(game, -line_range, line_range)
     }
-    // Jump ramp detection
-    if kart.on_ground && @types.is_on_ramp(game, kart) && kart.speed > 8.0 {
+    // Jump ramp detection - only launch once per ramp segment
+    if kart.on_ground &&
+      @types.is_on_ramp(game, kart) &&
+      kart.speed > 8.0 &&
+      !kart.ramp_launched {
+      kart.ramp_launched = true
       kart.vy = @types.jump_ramp_force
       kart.on_ground = false
       kart.air_timer = 0.0
+    }
+    // Reset ramp_launched when leaving ramp segment
+    if !@types.is_on_ramp(game, kart) {
+      kart.ramp_launched = false
     }
     apply_kart_physics(game, i, dt)
   }

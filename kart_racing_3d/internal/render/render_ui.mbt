@@ -45,6 +45,11 @@ pub fn draw_ui(game : @types.Game) -> Unit {
     }
     Racing => {
       game.draw_hud()
+      draw_speed_gauge(game)
+      draw_drift_meter(game)
+      draw_drift_boost_text(game)
+      draw_position_callout(game)
+      draw_item_pickup_flash(game)
       draw_lap_times(game)
       draw_item_indicator(game)
       draw_standings_sidebar(game)
