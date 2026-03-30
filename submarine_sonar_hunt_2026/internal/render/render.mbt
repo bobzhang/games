@@ -276,13 +276,7 @@ fn draw_value_bar(
     @raylib.Color::new(136, 210, 240, 170),
   )
   let txt = label + " " + value.to_int().to_string()
-  @draw.draw_text(
-    txt,
-    x + 8,
-    y + 5,
-    18,
-    @raylib.Color::new(236, 246, 255, 235),
-  )
+  @draw.draw_text(txt, x + 8, y + 5, 18, @raylib.Color::new(236, 246, 255, 235))
 }
 
 ///|

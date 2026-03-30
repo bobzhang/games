@@ -82,13 +82,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   draw_preview(game.hold_kind, @types.side_panel_x, 240, "HOLD")
 
   @draw.draw_text("SCORE", @types.side_panel_x, 410, 22, @raylib.lightgray)
-  @draw.draw_text(
-    "\{game.score}",
-    @types.side_panel_x,
-    438,
-    30,
-    @raylib.orange,
-  )
+  @draw.draw_text("\{game.score}", @types.side_panel_x, 438, 30, @raylib.orange)
 
   @draw.draw_text("LINES", @types.side_panel_x, 488, 22, @raylib.lightgray)
   @draw.draw_text(
