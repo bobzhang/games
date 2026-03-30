@@ -71,7 +71,7 @@ var ENVIRONMENT_IS_SHELL = !ENVIRONMENT_IS_WEB && !ENVIRONMENT_IS_NODE && !ENVIR
 
 // --pre-jses are emitted after the Module integration code, so that they can
 // refer to Module (if they choose; they can also define Module)
-// include: /Users/dii/git/games-web-all/tools/web_force_webgl1.pre.js
+// include: /Users/dii/git/games/tools/web_force_webgl1.pre.js
 if (typeof Module !== 'object') Module = {};
 
 const __previousPreRun = Module.preRun;
@@ -100,7 +100,7 @@ Module.preRun.push(function () {
     return originalCreateContext.call(Browser, canvas, useWebGL, setInModule, webGLContextAttributes);
   };
 });
-// end include: /Users/dii/git/games-web-all/tools/web_force_webgl1.pre.js
+// end include: /Users/dii/git/games/tools/web_force_webgl1.pre.js
 
 
 var arguments_ = [];
@@ -9235,8 +9235,6 @@ var stringToUTF8Array = (str, heap, outIdx, maxBytesToWrite) => {
     };
 
 
-  var requestFullscreen = Browser.requestFullscreen;
-
   var FS_createPath = (...args) => FS.createPath(...args);
 
 
@@ -9319,7 +9317,6 @@ if (Module['wasmBinary']) wasmBinary = Module['wasmBinary'];
   Module['removeRunDependency'] = removeRunDependency;
   Module['ccall'] = ccall;
   Module['cwrap'] = cwrap;
-  Module['requestFullscreen'] = requestFullscreen;
   Module['FS_preloadFile'] = FS_preloadFile;
   Module['FS_unlink'] = FS_unlink;
   Module['FS_createPath'] = FS_createPath;
@@ -9553,6 +9550,7 @@ missingLibrarySymbols.forEach(missingLibrarySymbol)
   'exceptionLast',
   'exceptionCaught',
   'Browser',
+  'requestFullscreen',
   'requestFullScreen',
   'setCanvasSize',
   'getUserMedia',
@@ -9737,48 +9735,48 @@ function checkIncomingModuleAPI() {
   ignoredModuleProp('onSbrkGrow');
 }
 var ASM_CONSTS = {
-  260964: () => { if (document.fullscreenElement) return 1; },  
- 261010: () => { return document.getElementById('canvas').width; },  
- 261062: () => { return parseInt(document.getElementById('canvas').style.width); },  
- 261130: () => { document.exitFullscreen(); },  
- 261157: () => { setTimeout(function() { Module.requestFullscreen(false, false); }, 100); },  
- 261230: () => { if (document.fullscreenElement) return 1; },  
- 261276: () => { return document.getElementById('canvas').width; },  
- 261328: () => { return screen.width; },  
- 261353: () => { document.exitFullscreen(); },  
- 261380: () => { setTimeout(function() { Module.requestFullscreen(false, true); setTimeout(function() { canvas.style.width="unset"; }, 100); }, 100); },  
- 261513: () => { return window.innerWidth; },  
- 261539: () => { return window.innerHeight; },  
- 261566: () => { if (document.fullscreenElement) return 1; },  
- 261612: () => { return document.getElementById('canvas').width; },  
- 261664: () => { return parseInt(document.getElementById('canvas').style.width); },  
- 261732: () => { if (document.fullscreenElement) return 1; },  
- 261778: () => { return document.getElementById('canvas').width; },  
- 261830: () => { return screen.width; },  
- 261855: () => { return window.innerWidth; },  
- 261881: () => { return window.innerHeight; },  
- 261908: () => { if (document.fullscreenElement) return 1; },  
- 261954: () => { return document.getElementById('canvas').width; },  
- 262006: () => { return screen.width; },  
- 262031: () => { document.exitFullscreen(); },  
- 262058: () => { if (document.fullscreenElement) return 1; },  
- 262104: () => { return document.getElementById('canvas').width; },  
- 262156: () => { return parseInt(document.getElementById('canvas').style.width); },  
- 262224: () => { document.exitFullscreen(); },  
- 262251: ($0) => { document.getElementById('canvas').style.opacity = $0; },  
- 262309: () => { return screen.width; },  
- 262334: () => { return screen.height; },  
- 262360: () => { return window.screenX; },  
- 262387: () => { return window.screenY; },  
- 262414: ($0) => { navigator.clipboard.writeText(UTF8ToString($0)); },  
- 262467: ($0) => { document.getElementById("canvas").style.cursor = UTF8ToString($0); },  
- 262538: () => { document.getElementById('canvas').style.cursor = 'none'; },  
- 262595: ($0, $1, $2, $3) => { try { navigator.getGamepads()[$0].vibrationActuator.playEffect('dual-rumble', { startDelay: 0, duration: $3, weakMagnitude: $1, strongMagnitude: $2 }); } catch (e) { try { navigator.getGamepads()[$0].hapticActuators[0].pulse($2, $3); } catch (e) { } } },  
- 262851: ($0) => { document.getElementById('canvas').style.cursor = UTF8ToString($0); },  
- 262922: () => { if (document.fullscreenElement) return 1; },  
- 262968: () => { return window.innerWidth; },  
- 262994: () => { return window.innerHeight; },  
- 263021: () => { if (document.pointerLockElement) return 1; }
+  260740: () => { if (document.fullscreenElement) return 1; },  
+ 260786: () => { return document.getElementById('canvas').width; },  
+ 260838: () => { return parseInt(document.getElementById('canvas').style.width); },  
+ 260906: () => { document.exitFullscreen(); },  
+ 260933: () => { setTimeout(function() { Module.requestFullscreen(false, false); }, 100); },  
+ 261006: () => { if (document.fullscreenElement) return 1; },  
+ 261052: () => { return document.getElementById('canvas').width; },  
+ 261104: () => { return screen.width; },  
+ 261129: () => { document.exitFullscreen(); },  
+ 261156: () => { setTimeout(function() { Module.requestFullscreen(false, true); setTimeout(function() { canvas.style.width="unset"; }, 100); }, 100); },  
+ 261289: () => { return window.innerWidth; },  
+ 261315: () => { return window.innerHeight; },  
+ 261342: () => { if (document.fullscreenElement) return 1; },  
+ 261388: () => { return document.getElementById('canvas').width; },  
+ 261440: () => { return parseInt(document.getElementById('canvas').style.width); },  
+ 261508: () => { if (document.fullscreenElement) return 1; },  
+ 261554: () => { return document.getElementById('canvas').width; },  
+ 261606: () => { return screen.width; },  
+ 261631: () => { return window.innerWidth; },  
+ 261657: () => { return window.innerHeight; },  
+ 261684: () => { if (document.fullscreenElement) return 1; },  
+ 261730: () => { return document.getElementById('canvas').width; },  
+ 261782: () => { return screen.width; },  
+ 261807: () => { document.exitFullscreen(); },  
+ 261834: () => { if (document.fullscreenElement) return 1; },  
+ 261880: () => { return document.getElementById('canvas').width; },  
+ 261932: () => { return parseInt(document.getElementById('canvas').style.width); },  
+ 262000: () => { document.exitFullscreen(); },  
+ 262027: ($0) => { document.getElementById('canvas').style.opacity = $0; },  
+ 262085: () => { return screen.width; },  
+ 262110: () => { return screen.height; },  
+ 262136: () => { return window.screenX; },  
+ 262163: () => { return window.screenY; },  
+ 262190: ($0) => { navigator.clipboard.writeText(UTF8ToString($0)); },  
+ 262243: ($0) => { document.getElementById("canvas").style.cursor = UTF8ToString($0); },  
+ 262314: () => { document.getElementById('canvas').style.cursor = 'none'; },  
+ 262371: ($0, $1, $2, $3) => { try { navigator.getGamepads()[$0].vibrationActuator.playEffect('dual-rumble', { startDelay: 0, duration: $3, weakMagnitude: $1, strongMagnitude: $2 }); } catch (e) { try { navigator.getGamepads()[$0].hapticActuators[0].pulse($2, $3); } catch (e) { } } },  
+ 262627: ($0) => { document.getElementById('canvas').style.cursor = UTF8ToString($0); },  
+ 262698: () => { if (document.fullscreenElement) return 1; },  
+ 262744: () => { return window.innerWidth; },  
+ 262770: () => { return window.innerHeight; },  
+ 262797: () => { if (document.pointerLockElement) return 1; }
 };
 
 // Imports from the Wasm binary.
@@ -10640,7 +10638,7 @@ run();
 
 // end include: postamble.js
 
-// include: /Users/dii/git/games-web-all/tools/web_mobile_touch.post.js
+// include: /Users/dii/git/games/tools/web_mobile_touch.post.js
 if (typeof Module !== "object") Module = {};
 
 (function () {
@@ -11133,5 +11131,5 @@ if (typeof Module !== "object") Module = {};
     });
   }
 })();
-// end include: /Users/dii/git/games-web-all/tools/web_mobile_touch.post.js
+// end include: /Users/dii/git/games/tools/web_mobile_touch.post.js
 
