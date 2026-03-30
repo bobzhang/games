@@ -30,6 +30,20 @@ pub fn draw_game(game : @types.Game) -> Unit {
     sky_blue
   }
   @raylib.clear_background(bg)
+  // Star power zoom: slight zoom-in for visual punch
+  let is_star = game.player.star_timer > 0.0
+  if is_star {
+    let star_zoom : Float = 1.03
+    let sw = Float::from_int(@types.screen_w)
+    let sh = Float::from_int(@types.screen_h)
+    let cam = @raylib.Camera2D::new(
+      @raylib.Vector2::new(sw / 2.0, sh / 2.0),
+      @raylib.Vector2::new(sw / 2.0, sh / 2.0),
+      0.0,
+      star_zoom,
+    )
+    @raylib.begin_mode_2d(cam)
+  }
   // Sky decorations (grassland levels only)
   if game.level_index != 1 && game.level_index != 3 {
     draw_hills(game, cam_x)
@@ -51,6 +65,10 @@ pub fn draw_game(game : @types.Game) -> Unit {
   draw_score_popups(game, cam_x)
   // Flagpole flag
   draw_flag(game, cam_x)
+  // End star power zoom
+  if is_star {
+    @raylib.end_mode_2d()
+  }
 }
 
 ///|
@@ -463,7 +481,7 @@ fn draw_player(game : @types.Game, cam_x : Int) -> Unit {
     draw_mario_dead(sx, sy, p.height().to_int())
     return
   }
-  if p.power == Small || p.ducking {
+  if p.power == Small {
     draw_mario_small_sprite(
       sx,
       sy,
@@ -474,6 +492,7 @@ fn draw_player(game : @types.Game, cam_x : Int) -> Unit {
       tint,
     )
   } else {
+    // Big or Fire Mario (including ducking state)
     draw_mario_big_sprite(
       sx,
       sy,

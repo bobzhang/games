@@ -72,7 +72,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   update_particles(game, dt)
   update_score_popups(game, dt)
   update_bumped_blocks(game, dt)
-  update_camera(game)
+  update_camera(game, dt)
   // Check death pit
   let pit_y = Float::from_int(game.map_height * @types.tile_size + 100)
   if game.player.y > pit_y && not(game.player.dead) {
@@ -90,9 +90,18 @@ fn update_paused(game : @types.Game) -> Unit {
 
 ///|
 fn update_level_clear(game : @types.Game, dt : Float) -> Unit {
-  // Animate flag sliding down
+  // Animate flag sliding down and Mario sliding with it
   if not(game.flag_done) {
-    game.flag_y = game.flag_y + 300.0 * dt
+    let slide_speed : Float = 300.0
+    game.flag_y = game.flag_y + slide_speed * dt
+    // Slide Mario down the pole alongside the flag
+    let p = game.player
+    p.y = p.y + slide_speed * dt
+    p.vy = 0.0
+    p.vx = 0.0
+    p.on_ground = false
+    // Keep Mario aligned with the flagpole X
+    // (player X was already set when touching the pole)
     if game.flag_y >= game.flag_target_y {
       game.flag_y = game.flag_target_y
       game.flag_done = true
@@ -210,7 +219,7 @@ pub fn kill_player(game : @types.Game) -> Unit {
 }
 
 ///|
-fn update_camera(game : @types.Game) -> Unit {
+fn update_camera(game : @types.Game, dt : Float) -> Unit {
   let target_x = game.player.x - @types.camera_offset_x
   let max_x = Float::from_int(
     game.map_width * @types.tile_size - @types.screen_w,
@@ -222,11 +231,11 @@ fn update_camera(game : @types.Game) -> Unit {
   if cam > max_x {
     cam = max_x
   }
-  // Smooth camera follow
+  // Smooth camera follow using clamped dt instead of raw frame time
   game.camera_x = @utils.lerpf(
     game.camera_x,
     cam,
-    @utils.clampf(8.0 * @raylib.get_frame_time(), 0.0, 1.0),
+    @utils.clampf(8.0 * dt, 0.0, 1.0),
   )
 }
 
@@ -360,6 +369,64 @@ pub fn spawn_stomp_poof(game : @types.Game, wx : Float, wy : Float) -> Unit {
 }
 
 ///|
+/// Spawn a small dust puff when Mario lands on the ground.
+pub fn spawn_landing_dust(
+  game : @types.Game,
+  wx : Float,
+  wy : Float
+) -> Unit {
+  let mut count = 0
+  for i in 0..<game.particles.length() {
+    if count >= 4 {
+      break
+    }
+    if not(game.particles[i].active) {
+      let p = game.particles[i]
+      p.active = true
+      p.x = wx + @types.rand_rangef(game, -10.0, 10.0)
+      p.y = wy + @types.rand_rangef(game, -4.0, 2.0)
+      p.vx = @types.rand_rangef(game, -50.0, 50.0)
+      p.vy = @types.rand_rangef(game, -30.0, -10.0)
+      p.life = 0.25
+      p.max_life = 0.25
+      p.size = @types.rand_rangef(game, 3.0, 7.0)
+      p.color = @raylib.Color::new(220, 220, 220, 160)
+      p.has_gravity = false
+      count = count + 1
+    }
+  }
+}
+
+///|
+/// Spawn a small dust trail when Mario skids (changes direction while running).
+pub fn spawn_skid_dust(
+  game : @types.Game,
+  wx : Float,
+  wy : Float
+) -> Unit {
+  let mut count = 0
+  for i in 0..<game.particles.length() {
+    if count >= 2 {
+      break
+    }
+    if not(game.particles[i].active) {
+      let p = game.particles[i]
+      p.active = true
+      p.x = wx + @types.rand_rangef(game, -6.0, 6.0)
+      p.y = wy + @types.rand_rangef(game, -6.0, 0.0)
+      p.vx = @types.rand_rangef(game, -20.0, 20.0)
+      p.vy = @types.rand_rangef(game, -40.0, -15.0)
+      p.life = 0.2
+      p.max_life = 0.2
+      p.size = @types.rand_rangef(game, 2.0, 5.0)
+      p.color = @raylib.Color::new(200, 200, 200, 140)
+      p.has_gravity = false
+      count = count + 1
+    }
+  }
+}
+
+///|
 /// Start a block bump animation.
 pub fn bump_block(game : @types.Game, tx : Int, ty : Int) -> Unit {
   for i in 0..<game.bumped_blocks.length() {
@@ -418,6 +485,8 @@ pub fn load_level(game : @types.Game, level_index : Int) -> Unit {
   game.player.grow_timer = 0.0
   game.player.shrink_timer = 0.0
   game.player.stomp_combo = 0
+  game.player.power = Small
+  game.player.star_timer = 0.0
   // Reset camera and timers
   game.camera_x = 0.0
   game.time_remaining = @types.level_time

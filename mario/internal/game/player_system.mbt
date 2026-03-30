@@ -157,6 +157,14 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   // ── Move & collide ──
   move_player_x(game, dt)
   move_player_y(game, dt)
+  // ── Landing dust particles ──
+  if p.on_ground && not(p.was_on_ground) {
+    spawn_landing_dust(game, p.x, p.y)
+  }
+  // ── Skid dust particles ──
+  if p.skid_timer > 0.0 && p.on_ground {
+    spawn_skid_dust(game, p.x, p.y)
+  }
   // ── Walking animation ──
   if p.on_ground {
     let speed = @utils.absf(p.vx)
@@ -546,7 +554,7 @@ fn damage_player(game : @types.Game) -> Unit {
       p.shrink_timer = @types.shrink_duration
     }
     Fire => {
-      p.power = Small
+      p.power = Big
       p.invuln_timer = @types.invuln_duration
       p.shrink_timer = @types.shrink_duration
     }
@@ -596,9 +604,13 @@ fn check_item_collisions(game : @types.Game) -> Unit {
         )
       }
       FireFlower => {
-        p.power = Fire
         if p.power == Small {
+          // Small -> Big (grow animation, same as mushroom)
+          p.power = Big
           p.grow_timer = @types.grow_duration
+        } else {
+          // Big -> Fire
+          p.power = Fire
         }
         game.score = game.score + @types.score_fire_flower
         spawn_score_popup(
