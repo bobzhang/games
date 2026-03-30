@@ -31,6 +31,7 @@ pub(all) struct Entity {
   mut w : Float
   mut h : Float
   mut hp : Float
+  mut max_hp : Float
   mut shot_cd : Float
   mut spin : Float
   mut cloak : Bool
@@ -181,6 +182,7 @@ pub fn Entity::new() -> Entity {
     w: 0.0,
     h: 0.0,
     hp: 0.0,
+    max_hp: 0.0,
     shot_cd: 0.0,
     spin: 0.0,
     cloak: false,

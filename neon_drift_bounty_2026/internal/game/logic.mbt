@@ -328,6 +328,7 @@ fn @types.Game::spawn_entity(
   game.entities[i].w = w
   game.entities[i].h = h
   game.entities[i].hp = hp
+  game.entities[i].max_hp = hp
   game.entities[i].shot_cd = shot_cd
   game.entities[i].spin = @types.randf(0.0, 6.283)
   game.entities[i].cloak = cloak
@@ -769,22 +770,32 @@ fn @types.Game::apply_player_input(game : @types.Game, dt : Float) -> Unit {
       @types.randf(0.14, 0.26),
       1,
     )
+    game.hero.vx = @types.clampf(
+      game.hero.vx,
+      -(@types.player_max_speed_x + @types.boost_speed_bonus),
+      @types.player_max_speed_x + @types.boost_speed_bonus,
+    )
+    game.hero.vy = @types.clampf(
+      game.hero.vy,
+      -(@types.player_max_speed_y + @types.boost_speed_bonus * 0.7),
+      @types.player_max_speed_y + @types.boost_speed_bonus * 0.7,
+    )
+  } else {
+    let drag_mul = @types.clampf(1.0 - @types.player_drag * dt, 0.0, 1.0)
+    game.hero.vx = game.hero.vx * drag_mul
+    game.hero.vy = game.hero.vy * drag_mul
+
+    game.hero.vx = @types.clampf(
+      game.hero.vx,
+      -@types.player_max_speed_x,
+      @types.player_max_speed_x,
+    )
+    game.hero.vy = @types.clampf(
+      game.hero.vy,
+      -@types.player_max_speed_y,
+      @types.player_max_speed_y,
+    )
   }
-
-  let drag_mul = @types.clampf(1.0 - @types.player_drag * dt, 0.0, 1.0)
-  game.hero.vx = game.hero.vx * drag_mul
-  game.hero.vy = game.hero.vy * drag_mul
-
-  game.hero.vx = @types.clampf(
-    game.hero.vx,
-    -@types.player_max_speed_x,
-    @types.player_max_speed_x,
-  )
-  game.hero.vy = @types.clampf(
-    game.hero.vy,
-    -@types.player_max_speed_y,
-    @types.player_max_speed_y,
-  )
 
   game.hero.x = game.hero.x + game.hero.vx * dt
   game.hero.y = game.hero.y + game.hero.vy * dt
@@ -1221,9 +1232,9 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
     game.energy = @types.maxf(0.0, game.energy - @types.energy_drain_boost * dt)
   }
 
-  game.shield = @types.maxf(
-    0.0,
-    game.shield - @types.shield_damage_decay * dt * 0.03,
+  game.shield = @types.minf(
+    @types.player_shield_max,
+    game.shield + @types.shield_damage_decay * dt * 0.03,
   )
 
   game.emit_ambient_traffic_glow(dt)

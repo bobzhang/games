@@ -518,11 +518,7 @@ fn @types.Game::draw_entities(
 
     if @types.entity_is_hostile(e.kind) && e.hp > 0.0 {
       let hp_ratio = @types.clampf(
-        e.hp /
-        (match e.kind {
-          FoeTruck => 50.0
-          _ => 20.0
-        }),
+        e.hp / @types.maxf(1.0, e.max_hp),
         0.0,
         1.0,
       )
@@ -1225,6 +1221,44 @@ fn @types.Game::draw_stage_clear_overlay(game : @types.Game) -> Unit {
     @types.screen_h / 2 + 44,
     20,
     @raylib.Color::new(196, 222, 238, 222),
+  )
+
+  let b = @types.result_retry_rect()
+  let hover = @types.pointer_on_rect(
+    game.mouse_x,
+    game.mouse_y,
+    game.mouse_hold,
+    game.touch_count,
+    b.0,
+    b.1,
+    b.2,
+    b.3,
+  )
+
+  @raylib.draw_rectangle(
+    b.0.to_int(),
+    b.1.to_int(),
+    b.2.to_int(),
+    b.3.to_int(),
+    if hover {
+      @raylib.Color::new(72, 112, 106, 224)
+    } else {
+      @raylib.Color::new(40, 78, 74, 214)
+    },
+  )
+  @raylib.draw_rectangle_lines(
+    b.0.to_int(),
+    b.1.to_int(),
+    b.2.to_int(),
+    b.3.to_int(),
+    @raylib.Color::new(182, 255, 212, 224),
+  )
+
+  draw_center_text(
+    "NEXT STAGE",
+    (b.1 + 16.0).to_int(),
+    34,
+    @raylib.Color::new(238, 252, 244, 255),
   )
 }
 
