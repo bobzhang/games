@@ -11,6 +11,7 @@ fn @types.Game::clear_objs(game : @types.Game) -> Unit {
     obj.w = 0.0
     obj.h = 0.0
     obj.hp = 0.0
+    obj.max_hp = 0.0
     obj.shot_cd = 0.0
     obj.spin = 0.0
     obj.cloak = false
@@ -118,10 +119,7 @@ fn @types.Game::alloc_shot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.shots,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.shots, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -138,10 +136,7 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.sparks,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.sparks, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -158,10 +153,7 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.rings,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.rings, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -178,10 +170,7 @@ fn @types.Game::alloc_ghost(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.ghosts,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.ghosts, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -328,6 +317,7 @@ fn @types.Game::spawn_obj(
   game.objs[i].w = w
   game.objs[i].h = h
   game.objs[i].hp = hp
+  game.objs[i].max_hp = hp
   game.objs[i].shot_cd = shot_cd
   game.objs[i].spin = @types.randf(0.0, 6.283)
   game.objs[i].cloak = cloak
@@ -768,22 +758,32 @@ fn @types.Game::apply_player_input(game : @types.Game, dt : Float) -> Unit {
       @types.randf(0.14, 0.26),
       1,
     )
+    game.hero.vx = @types.clampf(
+      game.hero.vx,
+      -(@types.max_speed_x + @types.dash_boost),
+      @types.max_speed_x + @types.dash_boost,
+    )
+    game.hero.vy = @types.clampf(
+      game.hero.vy,
+      -(@types.max_speed_y + @types.dash_boost * 0.72),
+      @types.max_speed_y + @types.dash_boost * 0.72,
+    )
+  } else {
+    let drag = @types.clampf(1.0 - @types.car_drag * dt, 0.0, 1.0)
+    game.hero.vx = game.hero.vx * drag
+    game.hero.vy = game.hero.vy * drag
+
+    game.hero.vx = @types.clampf(
+      game.hero.vx,
+      -@types.max_speed_x,
+      @types.max_speed_x,
+    )
+    game.hero.vy = @types.clampf(
+      game.hero.vy,
+      -@types.max_speed_y,
+      @types.max_speed_y,
+    )
   }
-
-  let drag = @types.clampf(1.0 - @types.car_drag * dt, 0.0, 1.0)
-  game.hero.vx = game.hero.vx * drag
-  game.hero.vy = game.hero.vy * drag
-
-  game.hero.vx = @types.clampf(
-    game.hero.vx,
-    -@types.max_speed_x,
-    @types.max_speed_x,
-  )
-  game.hero.vy = @types.clampf(
-    game.hero.vy,
-    -@types.max_speed_y,
-    @types.max_speed_y,
-  )
 
   game.hero.x = game.hero.x + game.hero.vx * dt
   game.hero.y = game.hero.y + game.hero.vy * dt
@@ -1203,7 +1203,10 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
     game.heat = @types.maxf(0.0, game.heat - @types.heat_drain_dash * dt)
   }
 
-  game.armor = @types.maxf(0.0, game.armor - @types.armor_drain_passive * dt)
+  game.armor = @types.minf(
+    @types.armor_max,
+    game.armor + @types.armor_drain_passive * dt,
+  )
 
   game.emit_ambient(dt)
 

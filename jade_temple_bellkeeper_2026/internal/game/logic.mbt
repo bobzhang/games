@@ -11,6 +11,7 @@ fn @types.Game::clear_foes(game : @types.Game) -> Unit {
     foe.w = 0.0
     foe.h = 0.0
     foe.hp = 0.0
+    foe.max_hp = 0.0
     foe.life = 0.0
     foe.phase = 0.0
     foe.shot_cd = 0.0
@@ -115,10 +116,7 @@ fn @types.Game::alloc_foe(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.foes,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.foes, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -135,10 +133,7 @@ fn @types.Game::alloc_bolt(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.bolts,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.bolts, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -155,10 +150,7 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.sparks,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.sparks, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -175,10 +167,7 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.rings,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.rings, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -195,10 +184,7 @@ fn @types.Game::alloc_echo(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.echoes,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.echoes, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -341,6 +327,7 @@ fn @types.Game::spawn_foe(
   game.foes[i].w = w
   game.foes[i].h = h
   game.foes[i].hp = hp
+  game.foes[i].max_hp = hp
   game.foes[i].life = life
   game.foes[i].phase = @types.randf(0.0, 6.283)
   game.foes[i].shot_cd = shot_cd
@@ -723,15 +710,24 @@ fn @types.Game::update_hero(game : @types.Game, dt : Float) -> Unit {
   game.hero.vx = game.hero.vx + cx * 0.6 * dt
   game.hero.vy = game.hero.vy + cy * 0.6 * dt
 
-  let drag = @types.clampf(1.0 - @types.hero_drag * dt, 0.0, 1.0)
-  game.hero.vx = game.hero.vx * drag
-  game.hero.vy = game.hero.vy * drag
-
   let speed2 = game.hero.vx * game.hero.vx + game.hero.vy * game.hero.vy
-  if speed2 > @types.hero_max_speed * @types.hero_max_speed {
-    let inv = Float::from_int(1) / speed2.sqrt()
-    game.hero.vx = game.hero.vx * inv * @types.hero_max_speed
-    game.hero.vy = game.hero.vy * inv * @types.hero_max_speed
+  if game.hero.dash_t > 0.0 {
+    if speed2 > @types.dash_speed * @types.dash_speed {
+      let inv = Float::from_int(1) / speed2.sqrt()
+      game.hero.vx = game.hero.vx * inv * @types.dash_speed
+      game.hero.vy = game.hero.vy * inv * @types.dash_speed
+    }
+  } else {
+    let drag = @types.clampf(1.0 - @types.hero_drag * dt, 0.0, 1.0)
+    game.hero.vx = game.hero.vx * drag
+    game.hero.vy = game.hero.vy * drag
+
+    let drag_speed2 = game.hero.vx * game.hero.vx + game.hero.vy * game.hero.vy
+    if drag_speed2 > @types.hero_max_speed * @types.hero_max_speed {
+      let inv = Float::from_int(1) / drag_speed2.sqrt()
+      game.hero.vx = game.hero.vx * inv * @types.hero_max_speed
+      game.hero.vy = game.hero.vy * inv * @types.hero_max_speed
+    }
   }
 
   game.hero.x = game.hero.x + game.hero.vx * dt

@@ -20,6 +20,7 @@ pub(all) struct Foe {
   mut w : Float
   mut h : Float
   mut hp : Float
+  mut max_hp : Float
   mut life : Float
   mut phase : Float
   mut shot_cd : Float
@@ -175,6 +176,7 @@ pub fn Foe::new() -> Foe {
     w: 0.0,
     h: 0.0,
     hp: 0.0,
+    max_hp: 0.0,
     life: 0.0,
     phase: 0.0,
     shot_cd: 0.0,

@@ -432,13 +432,7 @@ fn draw_foe(f : @types.Foe, cam_x : Float, cam_y : Float) -> Unit {
   }
 
   if @types.is_hostile(f.kind) {
-    let hp_max : Float = match f.kind {
-      Brute => 44.0
-      Shaman => 28.0
-      Wisp | Relic => 22.0
-    }
-
-    let hp_ratio = @types.clampf(f.hp / hp_max, 0.0, 1.0)
+    let hp_ratio = @types.clampf(f.hp / @types.maxf(1.0, f.max_hp), 0.0, 1.0)
     let hpw = @types.maxf(12.0, f.w)
     let hpx = f.x - hpw * 0.5 + cam_x
     let hpy = f.y - f.h * 0.78 + cam_y
@@ -989,7 +983,17 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
         hold,
         tc,
       )
-    StageClear | GameOver =>
+    StageClear =>
+      draw_button_visual(
+        "NEXT STAGE",
+        @types.retry_rect(),
+        false,
+        mx,
+        my,
+        hold,
+        tc,
+      )
+    GameOver =>
       draw_button_visual("RETRY", @types.retry_rect(), false, mx, my, hold, tc)
   }
 }
