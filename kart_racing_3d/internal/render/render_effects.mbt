@@ -327,9 +327,12 @@ fn @types.Game::draw_speed_lines(game : @types.Game) -> Unit {
   let cy_f = Float::from_int(@types.screen_height) / 2.0
   for li in 0..<line_count {
     // Place lines around screen edges, converging toward center
-    let angle = Float::from_int(li) * @types.two_pi / Float::from_int(line_count) +
+    let angle = Float::from_int(li) *
+      @types.two_pi /
+      Float::from_int(line_count) +
       Float::from_int(game.frame_counter) * 0.08
-    let edge_dist : Float = 420.0 + Float::from_int((li * 137 + game.frame_counter * 5) % 80)
+    let edge_dist : Float = 420.0 +
+      Float::from_int((li * 137 + game.frame_counter * 5) % 80)
     let outer_x = cx_f + @math.sinf(angle) * edge_dist
     let outer_y = cy_f + @math.cosf(angle) * edge_dist
     let inward : Float = 0.35 + Float::from_int(game.frame_counter % 20) * 0.01
@@ -603,7 +606,7 @@ fn @types.Game::draw_drift_smoke(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_skid_marks(game : @types.Game) -> Unit {
   let max = game.skid_marks.length()
-  let total = game.skid_mark_count.clamp(min=0, max=max)
+  let total = game.skid_mark_count.clamp(min=0, max~)
   for idx in 0..<total {
     let real_idx = if game.skid_mark_count > max {
       (game.skid_mark_count - max + idx) % max

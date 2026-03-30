@@ -169,9 +169,7 @@ fn main {
 
     // FLAG_FULLSCREEN_MODE
     if @raylib.is_window_state(@raylib.FlagFullscreenMode) {
-      @draw.draw_text(
-        "[F] FLAG_FULLSCREEN_MODE: on", 10, 80, 10, @raylib.lime,
-      )
+      @draw.draw_text("[F] FLAG_FULLSCREEN_MODE: on", 10, 80, 10, @raylib.lime)
     } else {
       @draw.draw_text(
         "[F] FLAG_FULLSCREEN_MODE: off", 10, 80, 10, @raylib.maroon,
@@ -244,9 +242,7 @@ fn main {
 
     // FLAG_WINDOW_TOPMOST
     if @raylib.is_window_state(@raylib.FlagWindowTopmost) {
-      @draw.draw_text(
-        "[T] FLAG_WINDOW_TOPMOST: on", 10, 220, 10, @raylib.lime,
-      )
+      @draw.draw_text("[T] FLAG_WINDOW_TOPMOST: on", 10, 220, 10, @raylib.lime)
     } else {
       @draw.draw_text(
         "[T] FLAG_WINDOW_TOPMOST: off", 10, 220, 10, @raylib.maroon,
@@ -281,9 +277,7 @@ fn main {
       @draw.draw_text("FLAG_WINDOW_HIGHDPI: off", 10, 320, 10, @raylib.maroon)
     }
     if @raylib.is_window_state(@raylib.FlagWindowTransparent) {
-      @draw.draw_text(
-        "FLAG_WINDOW_TRANSPARENT: on", 10, 340, 10, @raylib.lime,
-      )
+      @draw.draw_text("FLAG_WINDOW_TRANSPARENT: on", 10, 340, 10, @raylib.lime)
     } else {
       @draw.draw_text(
         "FLAG_WINDOW_TRANSPARENT: off", 10, 340, 10, @raylib.maroon,

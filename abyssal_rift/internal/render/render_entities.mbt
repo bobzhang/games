@@ -24,8 +24,7 @@ pub fn draw_player(game : @types.Game) -> Unit {
   // Low-HP heartbeat pulse
   let hp_ratio = Float::from_int(p.hp) / Float::from_int(p.max_hp)
   let pulse = if hp_ratio < 0.25 {
-    Float::from_double(@math.sin(game.frame_count.to_double() * 0.15)) *
-      2.0
+    Float::from_double(@math.sin(game.frame_count.to_double() * 0.15)) * 2.0
   } else {
     0.0
   }
@@ -44,7 +43,12 @@ pub fn draw_player(game : @types.Game) -> Unit {
   // Body circle
   @raylib.draw_circle(px, py, draw_radius, @types.color_player)
   // Inner circle
-  @raylib.draw_circle(px, py, draw_radius - 4.0, @raylib.Color::new(130, 220, 255, 255))
+  @raylib.draw_circle(
+    px,
+    py,
+    draw_radius - 4.0,
+    @raylib.Color::new(130, 220, 255, 255),
+  )
   // Direction indicator (triangle pointing in facing direction)
   let fx = p.facing_x
   let fy = p.facing_y
@@ -93,8 +97,8 @@ fn draw_weapon_swing(game : @types.Game) -> Unit {
         let range = stats.range
         let arc = stats.arc_angle
         let base_angle = Float::from_double(
-          @math.atan2(p.facing_y.to_double(), p.facing_x.to_double()),
-        ) *
+            @math.atan2(p.facing_y.to_double(), p.facing_x.to_double()),
+          ) *
           180.0 /
           3.14159
         let start_deg = base_angle - arc / 2.0
@@ -170,7 +174,12 @@ pub fn draw_enemies(game : @types.Game) -> Unit {
         let death_progress : Float = (1.0 : Float) - t / (0.5 : Float)
         let shrink : Float = (1.0 : Float) - death_progress * (0.5 : Float)
         let draw_r = r * shrink
-        let fade = @raylib.Color::new(base_color.r.to_int(), base_color.g.to_int(), base_color.b.to_int(), @types.clampi(alpha, 0, 255))
+        let fade = @raylib.Color::new(
+          base_color.r.to_int(),
+          base_color.g.to_int(),
+          base_color.b.to_int(),
+          @types.clampi(alpha, 0, 255),
+        )
         draw_enemy_shape(e.kind, ex, ey, draw_r, fade)
         continue
       }
@@ -179,9 +188,9 @@ pub fn draw_enemies(game : @types.Game) -> Unit {
     // Elite: draw pulsing colored ring
     if e.is_elite {
       let affix_color = get_affix_color(e.affix)
-      let pulse = Float::from_double(
-        @math.sin((e.phase * 4.0).to_double()),
-      ) * 3.0 + 4.0
+      let pulse = Float::from_double(@math.sin((e.phase * 4.0).to_double())) *
+        3.0 +
+        4.0
       @raylib.draw_circle_lines_v(
         @raylib.Vector2::new(e.x, e.y),
         r + pulse,
@@ -213,8 +222,10 @@ pub fn draw_enemies(game : @types.Game) -> Unit {
       let bar_y = e.y - r - 8.0
       let hp_ratio = Float::from_int(e.hp) / Float::from_int(e.max_hp)
       @raylib.draw_rectangle(
-        bar_x.to_int(), bar_y.to_int(),
-        bar_w.to_int(), bar_h.to_int(),
+        bar_x.to_int(),
+        bar_y.to_int(),
+        bar_w.to_int(),
+        bar_h.to_int(),
         @raylib.Color::new(60, 20, 20, 200),
       )
       let hp_color = if e.is_elite {
@@ -223,8 +234,10 @@ pub fn draw_enemies(game : @types.Game) -> Unit {
         @types.color_health
       }
       @raylib.draw_rectangle(
-        bar_x.to_int(), bar_y.to_int(),
-        (bar_w * hp_ratio).to_int(), bar_h.to_int(),
+        bar_x.to_int(),
+        bar_y.to_int(),
+        (bar_w * hp_ratio).to_int(),
+        bar_h.to_int(),
         hp_color,
       )
     }
@@ -289,7 +302,7 @@ fn draw_enemy_shape(
   x : Int,
   y : Int,
   r : Float,
-  color : @raylib.Color
+  color : @raylib.Color,
 ) -> Unit {
   match kind {
     Slime | SlimeSmall =>
@@ -299,13 +312,19 @@ fn draw_enemy_shape(
       // Diamond
       @raylib.draw_poly(
         @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
-        4, r, 45.0, color,
+        4,
+        r,
+        45.0,
+        color,
       )
     Archer =>
       // Triangle
       @raylib.draw_poly(
         @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
-        3, r, 0.0, color,
+        3,
+        r,
+        0.0,
+        color,
       )
     Bat =>
       // Small fast circle
@@ -314,29 +333,44 @@ fn draw_enemy_shape(
       // Hexagon
       @raylib.draw_poly(
         @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
-        6, r, 0.0, color,
+        6,
+        r,
+        0.0,
+        color,
       )
     Golem =>
       // Large square
       @raylib.draw_rectangle(
-        x - r.to_int(), y - r.to_int(),
-        (r * 2.0).to_int(), (r * 2.0).to_int(), color,
+        x - r.to_int(),
+        y - r.to_int(),
+        (r * 2.0).to_int(),
+        (r * 2.0).to_int(),
+        color,
       )
     BroodMother =>
       // Large octagon
       @raylib.draw_poly(
         @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
-        8, r, 0.0, color,
+        8,
+        r,
+        0.0,
+        color,
       )
     LichKing => {
       // Large diamond with inner glow
       @raylib.draw_poly(
         @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
-        4, r, 45.0, color,
+        4,
+        r,
+        45.0,
+        color,
       )
       @raylib.draw_poly(
         @raylib.Vector2::new(Float::from_int(x), Float::from_int(y)),
-        4, r * 0.6, 45.0, @raylib.Color::new(200, 120, 255, 180),
+        4,
+        r * 0.6,
+        45.0,
+        @raylib.Color::new(200, 120, 255, 180),
       )
     }
   }
@@ -360,11 +394,17 @@ pub fn draw_projectiles(game : @types.Game) -> Unit {
     }
     @raylib.draw_circle(proj.x.to_int(), proj.y.to_int(), proj.radius, color)
     // Trail
-    let trail_color = @raylib.Color::new(color.r.to_int(), color.g.to_int(), color.b.to_int(), 80)
+    let trail_color = @raylib.Color::new(
+      color.r.to_int(),
+      color.g.to_int(),
+      color.b.to_int(),
+      80,
+    )
     @raylib.draw_circle(
       (proj.x - proj.vx * 0.02).to_int(),
       (proj.y - proj.vy * 0.02).to_int(),
-      proj.radius * 0.7, trail_color,
+      proj.radius * 0.7,
+      trail_color,
     )
   }
 }
@@ -376,7 +416,8 @@ pub fn draw_items(game : @types.Game) -> Unit {
     if !item.active {
       continue
     }
-    let bob = Float::from_double(@math.sin((item.bob_timer * 3.0).to_double())) * 3.0
+    let bob = Float::from_double(@math.sin((item.bob_timer * 3.0).to_double())) *
+      3.0
     let ix = item.x.to_int()
     let iy = (item.y + bob).to_int()
     match item.kind {
@@ -387,11 +428,20 @@ pub fn draw_items(game : @types.Game) -> Unit {
       HealthPotion =>
         @raylib.draw_circle(ix, iy, 7.0, @raylib.Color::new(255, 50, 80, 255))
       WeaponPickup(_) =>
-        @raylib.draw_rectangle(ix - 6, iy - 6, 12, 12, @raylib.Color::new(200, 200, 255, 255))
+        @raylib.draw_rectangle(
+          ix - 6,
+          iy - 6,
+          12,
+          12,
+          @raylib.Color::new(200, 200, 255, 255),
+        )
       PassiveItem(_) =>
         @raylib.draw_poly(
           @raylib.Vector2::new(item.x, item.y + bob),
-          5, 8.0, 0.0, @raylib.Color::new(200, 100, 255, 255),
+          5,
+          8.0,
+          0.0,
+          @raylib.Color::new(200, 100, 255, 255),
         )
     }
   }
@@ -411,26 +461,40 @@ pub fn draw_shop_items(game : @types.Game) -> Unit {
     let sy = shop.y.to_int()
     // Draw pedestal
     @raylib.draw_rectangle(
-      sx - 16, sy - 4, 32, 8,
+      sx - 16,
+      sy - 4,
+      32,
+      8,
       @raylib.Color::new(80, 70, 90, 200),
     )
     // Draw item
-    let bob = Float::from_double(@math.sin(
-      (Float::from_int(game.frame_count) * 0.04 + Float::from_int(i) * 2.0).to_double(),
-    )) * 3.0
+    let bob = Float::from_double(
+        @math.sin(
+          (Float::from_int(game.frame_count) * 0.04 + Float::from_int(i) * 2.0).to_double(),
+        ),
+      ) *
+      3.0
     let iy = (shop.y - 20.0 + bob).to_int()
     match shop.kind {
       HealthPotion =>
         @raylib.draw_circle(sx, iy, 8.0, @raylib.Color::new(255, 50, 80, 255))
       WeaponPickup(_) =>
-        @raylib.draw_rectangle(sx - 7, iy - 7, 14, 14, @raylib.Color::new(200, 200, 255, 255))
+        @raylib.draw_rectangle(
+          sx - 7,
+          iy - 7,
+          14,
+          14,
+          @raylib.Color::new(200, 200, 255, 255),
+        )
       PassiveItem(_) =>
         @raylib.draw_poly(
           @raylib.Vector2::new(shop.x, Float::from_int(iy)),
-          5, 9.0, 0.0, @raylib.Color::new(200, 100, 255, 255),
+          5,
+          9.0,
+          0.0,
+          @raylib.Color::new(200, 100, 255, 255),
         )
-      Gold(_) =>
-        @raylib.draw_circle(sx, iy, 6.0, @types.color_gold_text)
+      Gold(_) => @raylib.draw_circle(sx, iy, 6.0, @types.color_gold_text)
     }
     // Draw price tag
     let price_text = "\{shop.price}g"
@@ -500,14 +564,17 @@ pub fn draw_reward_choices(game : @types.Game) -> Unit {
     let cy = choice.y.to_int()
     // Pedestal
     @raylib.draw_rectangle(
-      cx - 25, cy + 10, 50, 8,
+      cx - 25,
+      cy + 10,
+      50,
+      8,
       @raylib.Color::new(80, 80, 100, 200),
     )
     // Glow
     let pulse = Float::from_double(
         @math.sin(
           game.frame_count.to_double() * 0.06 +
-            Float::from_int(i).to_double() * 2.0,
+          Float::from_int(i).to_double() * 2.0,
         ),
       ) *
       20.0 +
@@ -517,31 +584,32 @@ pub fn draw_reward_choices(game : @types.Game) -> Unit {
     match choice.kind {
       WeaponPickup(_) =>
         @raylib.draw_rectangle(
-          cx - 8, cy - 8, 16, 16,
+          cx - 8,
+          cy - 8,
+          16,
+          16,
           @raylib.Color::new(200, 200, 255, 230),
         )
       PassiveItem(_) =>
         @raylib.draw_poly(
           @raylib.Vector2::new(choice.x, choice.y),
-          5, 12.0, 0.0,
+          5,
+          12.0,
+          0.0,
           @raylib.Color::new(200, 100, 255, 230),
         )
       HealthPotion =>
-        @raylib.draw_circle(
-          cx, cy, 10.0,
-          @raylib.Color::new(255, 80, 80, 230),
-        )
+        @raylib.draw_circle(cx, cy, 10.0, @raylib.Color::new(255, 80, 80, 230))
       _ =>
-        @raylib.draw_circle(
-          cx, cy, 8.0,
-          @raylib.Color::new(255, 215, 0, 230),
-        )
+        @raylib.draw_circle(cx, cy, 8.0, @raylib.Color::new(255, 215, 0, 230))
     }
     // Description below
     let tw = @raylib.measure_text(choice.description, 12)
     @raylib.draw_text(
       choice.description,
-      cx - tw / 2, cy + 22, 12,
+      cx - tw / 2,
+      cy + 22,
+      12,
       @raylib.Color::new(220, 220, 220, 200),
     )
     // Proximity hint
@@ -551,7 +619,9 @@ pub fn draw_reward_choices(game : @types.Game) -> Unit {
       let hw = @raylib.measure_text(hint, 14)
       @raylib.draw_text(
         hint,
-        cx - hw / 2, cy - 30, 14,
+        cx - hw / 2,
+        cy - 30,
+        14,
         @raylib.Color::new(255, 215, 0, 255),
       )
     }

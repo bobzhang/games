@@ -283,13 +283,7 @@ fn main {
       let h = plant_output[i]
       @raylib.draw_rectangle(x + 10, 400 - h, 76, h, @raylib.lime)
       @draw.draw_text("P\{i + 1}", x + 34, 420, 24, @raylib.raywhite)
-      @draw.draw_text(
-        "\{plant_output[i]}",
-        x + 26,
-        370 - h,
-        22,
-        @raylib.white,
-      )
+      @draw.draw_text("\{plant_output[i]}", x + 26, 370 - h, 22, @raylib.white)
     }
 
     // Stress bars

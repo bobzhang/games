@@ -142,13 +142,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   )
   // Floor name
   let floor_name = "F\{game.current_floor + 1}: \{@levels.get_floor_name(game.current_floor)}"
-  @draw.draw_text(
-    floor_name,
-    10,
-    6,
-    20,
-    @raylib.Color::new(200, 220, 255, 255),
-  )
+  @draw.draw_text(floor_name, 10, 6, 20, @raylib.Color::new(200, 220, 255, 255))
   // Moves counter with par
   let par = @levels.get_par_moves(game.current_floor)
   let moves_color = if game.moves <= par {
@@ -159,13 +153,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 180, 100, 255) // Orange: bronze range
   }
   let moves_text = "Moves: \{game.moves}"
-  @draw.draw_text(
-    moves_text,
-    @types.screen_width / 2 - 70,
-    6,
-    20,
-    moves_color,
-  )
+  @draw.draw_text(moves_text, @types.screen_width / 2 - 70, 6, 20, moves_color)
   // Par and star thresholds
   let par_text = "Par: \{par}"
   @draw.draw_text(
@@ -227,8 +215,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
       } else {
         // Unlit: pulsing red
         let pulse = @math.sinf(
-          Float::from_int(game.frame_counter) * 0.12 +
-          Float::from_int(t) * 0.5,
+          Float::from_int(game.frame_counter) * 0.12 + Float::from_int(t) * 0.5,
         )
         let rv = 180 + (pulse * 75.0).to_int()
         @raylib.Color::new(rv.clamp(min=120, max=255), 40, 40, 255)
@@ -269,11 +256,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
       @raylib.Color::new(150, 200, 255, a)
     }
     @raylib.draw_rectangle(
-      0,
-      0,
-      @types.screen_width,
-      @types.screen_height,
-      flash_color,
+      0, 0, @types.screen_width, @types.screen_height, flash_color,
     )
     // Undo text overlay
     let undo_msg = if game.undo_is_last {
@@ -727,13 +710,7 @@ fn @types.Game::draw_world_select(game : @types.Game) -> Unit {
       } else {
         @raylib.Color::new(180, 120, 80, 255)
       }
-      @draw.draw_text(
-        req_text,
-        x + (card_w - rw2) / 2,
-        y + 110,
-        12,
-        req_color,
-      )
+      @draw.draw_text(req_text, x + (card_w - rw2) / 2, y + 110, 12, req_color)
     }
   }
   // Hint
@@ -741,9 +718,7 @@ fn @types.Game::draw_world_select(game : @types.Game) -> Unit {
     "Left/Right: Navigate | Enter: Select | Esc: Back",
     (
       @types.screen_width -
-      @draw.measure_text(
-        "Left/Right: Navigate | Enter: Select | Esc: Back", 16,
-      )
+      @draw.measure_text("Left/Right: Navigate | Enter: Select | Esc: Back", 16)
     ) /
     2,
     @types.screen_height - 50,

@@ -71,13 +71,13 @@ fn apply_passive(p : @types.Player, kind : @types.PassiveKind) -> Unit {
     DamageUp => p.damage_mult += 0.15
     SpeedUp => p.speed += 0.12
     CritUp => p.crit_chance += 0.08
-    DashCooldownDown => ()  // handled in dash logic
+    DashCooldownDown => () // handled in dash logic
     DefenseUp => p.defense += 3
-    AttackSpeedUp => ()     // handled in attack timing
-    PickupRange => ()       // handled in pickup logic
-    LifeSteal => ()         // handled in combat
-    Thorns => ()            // handled in damage_player
-    Berserker => ()         // handled in damage calculation
+    AttackSpeedUp => () // handled in attack timing
+    PickupRange => () // handled in pickup logic
+    LifeSteal => () // handled in combat
+    Thorns => () // handled in damage_player
+    Berserker => () // handled in damage calculation
     GlassCannon => {
       p.max_hp -= 30
       if p.hp > p.max_hp {
@@ -85,8 +85,8 @@ fn apply_passive(p : @types.Player, kind : @types.PassiveKind) -> Unit {
       }
       p.damage_mult += 0.5
     }
-    Vampiric => ()          // handled in combat on kill
-    ChainLightning => ()    // handled in combat
+    Vampiric => () // handled in combat on kill
+    ChainLightning => () // handled in combat
   }
 }
 
@@ -189,9 +189,7 @@ fn clear_negative_status(p : @types.Player) -> Unit {
   let mut i = 0
   while i < p.status_effects.length() {
     match p.status_effects[i] {
-      Slow(_) | Poison(_) => {
-        ignore(p.status_effects.remove(i))
-      }
+      Slow(_) | Poison(_) => ignore(p.status_effects.remove(i))
       _ => i += 1
     }
   }

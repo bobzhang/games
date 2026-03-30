@@ -247,7 +247,15 @@ pub(all) struct ScorePopup {
 ///|
 /// Creates an inactive score popup slot with default values.
 pub fn ScorePopup::inactive() -> ScorePopup {
-  { active: false, x: 0.0, y: 0.0, vy: 0.0, life: 0.0, text: "", is_combo: false }
+  {
+    active: false,
+    x: 0.0,
+    y: 0.0,
+    vy: 0.0,
+    life: 0.0,
+    text: "",
+    is_combo: false,
+  }
 }
 
 ///|

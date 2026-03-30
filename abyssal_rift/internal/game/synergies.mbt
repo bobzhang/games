@@ -62,7 +62,7 @@ pub fn get_synergy_bonuses(player : @types.Player) -> @types.SynergyBonuses {
 ///|
 /// Return a list of human-readable synergy names that are currently active.
 pub fn get_active_synergy_names(
-  synergies : @types.SynergyBonuses
+  synergies : @types.SynergyBonuses,
 ) -> Array[String] {
   let names : Array[String] = []
   if synergies.bleed_on_crit {

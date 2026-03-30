@@ -18,18 +18,8 @@ fn main {
   let img2 = @raylib.load_image("resources/mandrill.png")
   let img3 = @raylib.load_image("resources/fudesumi.png")
 
-  let tex_widths = [
-    img0.width(),
-    img1.width(),
-    img2.width(),
-    img3.width(),
-  ]
-  let tex_heights = [
-    img0.height(),
-    img1.height(),
-    img2.height(),
-    img3.height(),
-  ]
+  let tex_widths = [img0.width(), img1.width(), img2.width(), img3.width()]
+  let tex_heights = [img0.height(), img1.height(), img2.height(), img3.height()]
 
   let textures = [
     @raylib.load_texture_from_image(img0),

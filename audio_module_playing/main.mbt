@@ -177,9 +177,7 @@ fn main {
     @raylib.draw_rectangle_lines(20, 20, 425, 145, @raylib.gray)
     @draw.draw_text("PRESS SPACE TO RESTART MUSIC", 40, 40, 20, @raylib.black)
     @draw.draw_text("PRESS P TO PAUSE/RESUME", 40, 70, 20, @raylib.black)
-    @draw.draw_text(
-      "PRESS UP/DOWN TO CHANGE SPEED", 40, 100, 20, @raylib.black,
-    )
+    @draw.draw_text("PRESS UP/DOWN TO CHANGE SPEED", 40, 100, 20, @raylib.black)
     @draw.draw_text("SPEED: \{pitch}", 40, 130, 20, @raylib.maroon)
 
     @fps.draw()

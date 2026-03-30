@@ -140,13 +140,7 @@ fn main {
       )
     }
     if angle_mode == 0 && vec2_sub(v0, v1).y < 0.0 {
-      @draw.draw_text(
-        "v1",
-        v1.x.to_int(),
-        v1.y.to_int(),
-        10,
-        @raylib.darkgray,
-      )
+      @draw.draw_text("v1", v1.x.to_int(), v1.y.to_int(), 10, @raylib.darkgray)
     }
     if angle_mode == 1 {
       @draw.draw_text(
@@ -165,9 +159,7 @@ fn main {
       10,
       @raylib.darkgray,
     )
-    @draw.draw_text(
-      "Press SPACE to change MODE", 460, 10, 20, @raylib.darkgray,
-    )
+    @draw.draw_text("Press SPACE to change MODE", 460, 10, 20, @raylib.darkgray)
 
     // Format angle with 2 decimal places
     let angle_int = angle.to_int()

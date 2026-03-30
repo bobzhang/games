@@ -466,19 +466,11 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
             if b.hp <= 0.0 {
               b.active = false
               game.buildings_destroyed += 1
-              @types.spawn_large_explosion(
-                game,
-                b.x,
-                b.y + b.height / 2.0,
-                b.z,
-              )
+              @types.spawn_large_explosion(game, b.x, b.y + b.height / 2.0, b.z)
               let mission = game.missions[game.current_mission]
               if mission.kind == @types.mission_defense {
                 @types.push_message(
-                  game,
-                  "Building destroyed by enemy!",
-                  2.5,
-                  3,
+                  game, "Building destroyed by enemy!", 2.5, 3,
                 )
               }
             }

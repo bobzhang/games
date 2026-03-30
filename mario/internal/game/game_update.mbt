@@ -297,7 +297,7 @@ pub fn spawn_score_popup(
   game : @types.Game,
   x : Float,
   y : Float,
-  text : String
+  text : String,
 ) -> Unit {
   for i in 0..<game.score_popups.length() {
     if not(game.score_popups[i].active) {
@@ -318,7 +318,7 @@ pub fn spawn_score_popup(
 pub fn spawn_brick_particles(
   game : @types.Game,
   wx : Float,
-  wy : Float
+  wy : Float,
 ) -> Unit {
   let color = @raylib.Color::new(200, 88, 24, 255)
   let mut count = 0
@@ -370,11 +370,7 @@ pub fn spawn_stomp_poof(game : @types.Game, wx : Float, wy : Float) -> Unit {
 
 ///|
 /// Spawn a small dust puff when Mario lands on the ground.
-pub fn spawn_landing_dust(
-  game : @types.Game,
-  wx : Float,
-  wy : Float
-) -> Unit {
+pub fn spawn_landing_dust(game : @types.Game, wx : Float, wy : Float) -> Unit {
   let mut count = 0
   for i in 0..<game.particles.length() {
     if count >= 4 {
@@ -399,11 +395,7 @@ pub fn spawn_landing_dust(
 
 ///|
 /// Spawn a small dust trail when Mario skids (changes direction while running).
-pub fn spawn_skid_dust(
-  game : @types.Game,
-  wx : Float,
-  wy : Float
-) -> Unit {
+pub fn spawn_skid_dust(game : @types.Game, wx : Float, wy : Float) -> Unit {
   let mut count = 0
   for i in 0..<game.particles.length() {
     if count >= 2 {
@@ -509,7 +501,9 @@ pub fn load_level(game : @types.Game, level_index : Int) -> Unit {
       // Handle special spawn characters
       match ch {
         'S' => {
-          game.player.x = Float::from_int(x * @types.tile_size + @types.tile_size / 2)
+          game.player.x = Float::from_int(
+            x * @types.tile_size + @types.tile_size / 2,
+          )
           game.player.y = Float::from_int(y * @types.tile_size)
           player_set = true
         }
@@ -560,7 +554,7 @@ fn spawn_enemy_at(
   game : @types.Game,
   kind : @types.EnemyKind,
   tx : Int,
-  ty : Int
+  ty : Int,
 ) -> Unit {
   for i in 0..<game.enemies.length() {
     if not(game.enemies[i].active) {

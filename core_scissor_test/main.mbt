@@ -63,9 +63,7 @@ fn main {
       1.0,
       @raylib.black,
     )
-    @draw.draw_text(
-      "Press S to toggle scissor test", 10, 10, 20, @raylib.black,
-    )
+    @draw.draw_text("Press S to toggle scissor test", 10, 10, 20, @raylib.black)
 
     @fps.draw()
     @raylib.end_drawing()

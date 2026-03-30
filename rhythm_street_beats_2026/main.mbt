@@ -954,13 +954,7 @@ fn main {
       10,
       @raylib.Color::new(104, 230, 148, 255),
     )
-    @draw.draw_text(
-      "LIFE",
-      642,
-      70,
-      18,
-      @raylib.Color::new(182, 210, 236, 255),
-    )
+    @draw.draw_text("LIFE", 642, 70, 18, @raylib.Color::new(182, 210, 236, 255))
 
     @raylib.draw_rectangle(
       978,

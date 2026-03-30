@@ -20,7 +20,8 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 fn update_title(game : @types.Game) -> Unit {
-  if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(@raylib.KeySpace) {
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) {
     game.state = MetaScreen
   }
 }
@@ -66,7 +67,10 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   // Check stairs interaction (require pressing E)
   if game.stairs_active && !game.reward_active {
     let d2 = @types.dist2(
-      game.player.x, game.player.y, game.stairs_x, game.stairs_y,
+      game.player.x,
+      game.player.y,
+      game.stairs_x,
+      game.stairs_y,
     )
     if d2 < 30.0 * 30.0 && input.interact_pressed {
       advance_floor(game)
@@ -83,7 +87,8 @@ fn update_paused(game : @types.Game) -> Unit {
 
 ///|
 fn update_game_over(game : @types.Game) -> Unit {
-  if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(@raylib.KeySpace) {
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) {
     let tokens = earn_tokens(game)
     let meta = game.meta
     meta.abyss_tokens += tokens
@@ -296,7 +301,7 @@ pub fn spawn_particles_burst(
   count : Int,
   r : Int,
   g : Int,
-  b : Int
+  b : Int,
 ) -> Unit {
   for _i in 0..<count {
     let idx = @types.alloc_particle(game.particles)
@@ -328,14 +333,12 @@ fn process_events(game : @types.Game) -> Unit {
         let (r, g, b) = if is_crit { (255, 200, 50) } else { (255, 160, 100) }
         spawn_particles_burst(game, x, y, if is_crit { 12 } else { 6 }, r, g, b)
       }
-      Kill(_kind, x, y) =>
-        spawn_particles_burst(game, x, y, 20, 200, 60, 60)
+      Kill(_kind, x, y) => spawn_particles_burst(game, x, y, 20, 200, 60, 60)
       PlayerDamaged(_amount, x, y) =>
         spawn_particles_burst(game, x, y, 8, 255, 80, 80)
       DashUsed(x, y, _dx, _dy) =>
         spawn_particles_burst(game, x, y, 5, 100, 200, 255)
-      Pickup(_kind, x, y) =>
-        spawn_particles_burst(game, x, y, 4, 255, 215, 0)
+      Pickup(_kind, x, y) => spawn_particles_burst(game, x, y, 4, 255, 215, 0)
       _ => ()
     }
   }

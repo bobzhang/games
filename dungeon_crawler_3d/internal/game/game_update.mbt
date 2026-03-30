@@ -314,7 +314,14 @@ fn @types.Game::update_shop(game : @types.Game, _dt : Float) -> Unit {
         }
         item.active = false
         @types.spawn_particles(
-          game, game.player_x, 1.0, game.player_z, 8, 255, 215, 0,
+          game,
+          game.player_x,
+          1.0,
+          game.player_z,
+          8,
+          255,
+          215,
+          0,
         )
       } else if item.active {
         @types.add_message(game, "Not enough gold!", 200, 100, 100)
@@ -353,31 +360,28 @@ fn @types.Game::update_shrine(game : @types.Game, _dt : Float) -> Unit {
       if game.shrine_cursor == 0 {
         game.player_max_hp += 15
         game.player_hp += 15
-        @types.add_message(
-          game, "Shrine blessing: +15 Max HP!", 120, 200, 255,
-        )
+        @types.add_message(game, "Shrine blessing: +15 Max HP!", 120, 200, 255)
       } else if game.shrine_cursor == 1 {
         game.player_max_mana += 10
-        game.player_mana = (game.player_mana + 10).min(
-          game.player_max_mana,
-        )
-        @types.add_message(
-          game, "Shrine blessing: +10 Max Mana!", 80, 120, 255,
-        )
+        game.player_mana = (game.player_mana + 10).min(game.player_max_mana)
+        @types.add_message(game, "Shrine blessing: +10 Max Mana!", 80, 120, 255)
       } else {
         game.player_atk += 5
-        @types.add_message(
-          game, "Shrine blessing: +5 ATK!", 255, 100, 80,
-        )
+        @types.add_message(game, "Shrine blessing: +5 ATK!", 255, 100, 80)
       }
       @types.spawn_particles(
-        game, game.player_x, 1.5, game.player_z, 16, 120, 200, 255,
+        game,
+        game.player_x,
+        1.5,
+        game.player_z,
+        16,
+        120,
+        200,
+        255,
       )
       game.damage_flash = 0.15
     } else {
-      @types.add_message(
-        game, "Not enough HP to sacrifice!", 200, 100, 100,
-      )
+      @types.add_message(game, "Not enough HP to sacrifice!", 200, 100, 100)
     }
   }
 }

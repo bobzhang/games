@@ -107,13 +107,7 @@ fn main {
           @raylib.darkgray,
         )
       } else {
-        @draw.draw_text(
-          gesture_strings[i],
-          35,
-          36 + 20 * i,
-          10,
-          @raylib.maroon,
-        )
+        @draw.draw_text(gesture_strings[i], 35, 36 + 20 * i, 10, @raylib.maroon)
       }
     }
     @raylib.draw_rectangle_lines(10, 29, 200, screen_height - 50, @raylib.gray)

@@ -271,9 +271,7 @@ fn main {
     @raylib.draw_circle(pxs, pys, 14.0, @raylib.skyblue)
     @raylib.draw_circle_lines(pxs, pys, 14.0, @raylib.white)
 
-    @draw.draw_text(
-      "TREASURE MAP EXPEDITION 2026", 20, 16, 34, @raylib.skyblue,
-    )
+    @draw.draw_text("TREASURE MAP EXPEDITION 2026", 20, 16, 34, @raylib.skyblue)
     @draw.draw_text("Bank \{bank}", 20, 56, 26, @raylib.lime)
     @draw.draw_text("Bag \{bag_value}", 180, 56, 26, @raylib.gold)
     @draw.draw_text("Steps \{steps}", 340, 56, 26, @raylib.white)

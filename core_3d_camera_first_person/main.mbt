@@ -188,9 +188,7 @@ fn main {
     @draw.draw_text(
       "- Look around: arrow keys or mouse", 15, 45, 10, @raylib.black,
     )
-    @draw.draw_text(
-      "- Camera mode keys: 1, 2, 3, 4", 15, 60, 10, @raylib.black,
-    )
+    @draw.draw_text("- Camera mode keys: 1, 2, 3, 4", 15, 60, 10, @raylib.black)
     @draw.draw_text(
       "- Zoom keys: num-plus, num-minus or mouse scroll", 15, 75, 10, @raylib.black,
     )

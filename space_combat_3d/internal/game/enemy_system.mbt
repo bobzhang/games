@@ -572,7 +572,9 @@ fn @types.Game::enemy_fire(
       proj.size = 0.12
       proj.fuel = 0.0
     }
-  } else if e.kind == @types.enemy_cruiser && dist > 50.0 && game.ai_difficulty >= 1 {
+  } else if e.kind == @types.enemy_cruiser &&
+    dist > 50.0 &&
+    game.ai_difficulty >= 1 {
     // Cruisers: plasma at long range on higher difficulty
     proj.kind = Plasma
     proj.damage = @types.cruiser_damage + @types.cruiser_damage
@@ -664,7 +666,14 @@ pub fn damage_enemy(game : @types.Game, idx : Int, damage : Float) -> Unit {
 
   // Spawn floating damage number
   @types.spawn_damage_number(
-    game, e.x, e.y + e.size, e.z, damage.to_int(), 255, 255, 100,
+    game,
+    e.x,
+    e.y + e.size,
+    e.z,
+    damage.to_int(),
+    255,
+    255,
+    100,
   )
 
   if e.hp <= 0.0 {
@@ -905,7 +914,8 @@ fn @types.Game::apply_evasion_behavior(
   }
 
   let evasion_skill = @types.ai_difficulty_evasion(game.ai_difficulty)
-  let time_val = Float::from_int(game.frame_counter) * 0.1 + Float::from_int(idx) * 2.7
+  let time_val = Float::from_int(game.frame_counter) * 0.1 +
+    Float::from_int(idx) * 2.7
 
   // Perpendicular dodge direction (barrel roll pattern)
   let norm = @types.normalize3d(dx, dy, dz)
@@ -1024,5 +1034,9 @@ fn difficulty_adjusted_fire_rate(base_rate : Float, difficulty : Int) -> Float {
   let reduction = @types.ai_difficulty_accuracy(difficulty)
   let adjusted : Float = base_rate - base_rate * reduction
   let minimum : Float = base_rate * 0.5
-  if adjusted > minimum { adjusted } else { minimum }
+  if adjusted > minimum {
+    adjusted
+  } else {
+    minimum
+  }
 }

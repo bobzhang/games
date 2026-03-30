@@ -471,7 +471,7 @@ fn @types.Game::emit_surface_particles(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::update_skid_marks(game : @types.Game, dt : Float) -> Unit {
   let max = game.skid_marks.length()
-  let total = game.skid_mark_count.clamp(min=0, max=max)
+  let total = game.skid_mark_count.clamp(min=0, max~)
   for idx in 0..<total {
     let real_idx = if game.skid_mark_count > max {
       (game.skid_mark_count - max + idx) % max
@@ -481,9 +481,25 @@ fn @types.Game::update_skid_marks(game : @types.Game, dt : Float) -> Unit {
     let mark = game.skid_marks[real_idx]
     let new_life = mark.5 - dt
     if new_life > 0.0 {
-      game.skid_marks[real_idx] = (mark.0, mark.1, mark.2, mark.3, mark.4, new_life, mark.6)
+      game.skid_marks[real_idx] = (
+        mark.0,
+        mark.1,
+        mark.2,
+        mark.3,
+        mark.4,
+        new_life,
+        mark.6,
+      )
     } else {
-      game.skid_marks[real_idx] = (mark.0, mark.1, mark.2, mark.3, mark.4, 0.0, mark.6)
+      game.skid_marks[real_idx] = (
+        mark.0,
+        mark.1,
+        mark.2,
+        mark.3,
+        mark.4,
+        0.0,
+        mark.6,
+      )
     }
   }
 }

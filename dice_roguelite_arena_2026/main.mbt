@@ -1286,13 +1286,7 @@ fn main {
     draw_panel(40, 28, 620, 180, @raylib.Color::new(104, 142, 232, 220))
     draw_panel(706, 28, 620, 180, @raylib.Color::new(230, 124, 126, 220))
 
-    @draw.draw_text(
-      "Pilot",
-      62,
-      44,
-      34,
-      @raylib.Color::new(210, 236, 255, 255),
-    )
+    @draw.draw_text("Pilot", 62, 44, 34, @raylib.Color::new(210, 236, 255, 255))
     @draw.draw_text(
       "Enemy",
       730,

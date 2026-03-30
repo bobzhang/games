@@ -39,7 +39,8 @@ fn update_items(game : @types.Game, dt : Float) -> Unit {
         let left_tx = @types.world_to_tile_x(it.x - hw)
         let right_tx = @types.world_to_tile_x(it.x + hw)
         let mid_ty = @types.world_to_tile_y(it.y - 20.0)
-        if it.vx > 0.0 && @types.is_solid(@types.get_tile(game, right_tx, mid_ty)) {
+        if it.vx > 0.0 &&
+          @types.is_solid(@types.get_tile(game, right_tx, mid_ty)) {
           it.vx = -it.vx
         } else if it.vx < 0.0 &&
           @types.is_solid(@types.get_tile(game, left_tx, mid_ty)) {
@@ -51,7 +52,7 @@ fn update_items(game : @types.Game, dt : Float) -> Unit {
         let foot_ty = @types.world_to_tile_y(it.y)
         let check_left = @types.world_to_tile_x(it.x - hw + 2.0)
         let check_right = @types.world_to_tile_x(it.x + hw - 2.0)
-        for tx in check_left..=check_right {
+        for tx in check_left..<=check_right {
           if @types.is_solid(@types.get_tile(game, tx, foot_ty)) {
             let tile_top = @types.tile_to_world_y(foot_ty)
             if it.y >= tile_top {
@@ -75,7 +76,8 @@ fn update_items(game : @types.Game, dt : Float) -> Unit {
         let left_tx = @types.world_to_tile_x(it.x - hw)
         let right_tx = @types.world_to_tile_x(it.x + hw)
         let mid_ty = @types.world_to_tile_y(it.y - 20.0)
-        if it.vx > 0.0 && @types.is_solid(@types.get_tile(game, right_tx, mid_ty)) {
+        if it.vx > 0.0 &&
+          @types.is_solid(@types.get_tile(game, right_tx, mid_ty)) {
           it.vx = -it.vx
         } else if it.vx < 0.0 &&
           @types.is_solid(@types.get_tile(game, left_tx, mid_ty)) {
@@ -85,7 +87,7 @@ fn update_items(game : @types.Game, dt : Float) -> Unit {
         let foot_ty = @types.world_to_tile_y(it.y)
         let check_left = @types.world_to_tile_x(it.x - hw + 2.0)
         let check_right = @types.world_to_tile_x(it.x + hw - 2.0)
-        for tx in check_left..=check_right {
+        for tx in check_left..<=check_right {
           if @types.is_solid(@types.get_tile(game, tx, foot_ty)) {
             let tile_top = @types.tile_to_world_y(foot_ty)
             if it.y >= tile_top {
@@ -161,7 +163,9 @@ fn check_fireball_enemy_hit(game : @types.Game, fb_index : Int) -> Unit {
     let e_right = e.x + ehw
     let e_top = e.y - e.height
     let e_bottom = e.y
-    if fb.x + fb_r > e_left && fb.x - fb_r < e_right && fb.y + fb_r > e_top &&
+    if fb.x + fb_r > e_left &&
+      fb.x - fb_r < e_right &&
+      fb.y + fb_r > e_top &&
       fb.y - fb_r < e_bottom {
       // Hit!
       e.dead = true

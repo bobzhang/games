@@ -294,14 +294,8 @@ fn @types.Game::update_camera(game : @types.Game, dt : Float) -> Unit {
   if game.screen_shake_timer > 0.0 {
     let shake = game.screen_shake_intensity *
       (game.screen_shake_timer / @types.shake_duration)
-    let shake_x = @math.sinf(
-        Float::from_int(game.frame_counter) * 17.3,
-      ) *
-      shake
-    let shake_y = @math.cosf(
-        Float::from_int(game.frame_counter) * 23.7,
-      ) *
-      shake
+    let shake_x = @math.sinf(Float::from_int(game.frame_counter) * 17.3) * shake
+    let shake_y = @math.cosf(Float::from_int(game.frame_counter) * 23.7) * shake
     game.cam_x += shake_x
     game.cam_y += shake_y
   }
@@ -528,15 +522,13 @@ fn @types.Game::update_recon_capture(game : @types.Game) -> Unit {
         2.0,
       )
     }
-  } else {
     // Out of range - reset capture timer
-    if game.recon_capture_target == best_idx {
-      if game.recon_capture_timer > 0.0 {
-        @types.push_message(game, "Target lost - get closer and lower!", 1.5, 1)
-      }
-      game.recon_capture_timer = 0.0
-      game.recon_capture_target = -1
+  } else if game.recon_capture_target == best_idx {
+    if game.recon_capture_timer > 0.0 {
+      @types.push_message(game, "Target lost - get closer and lower!", 1.5, 1)
     }
+    game.recon_capture_timer = 0.0
+    game.recon_capture_target = -1
   }
 }
 

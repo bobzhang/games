@@ -35,9 +35,7 @@ fn main {
   )
   @rl.enable_shader(@raylib.get_shader_id(shader))
   @rl.active_texture_slot(1)
-  @rl.enable_texture(
-    @raylib.get_texture_id(perlin_noise_map),
-  )
+  @rl.enable_texture(@raylib.get_texture_id(perlin_noise_map))
   @rl.set_uniform_sampler(perlin_noise_map_loc, 1U)
 
   // Create a plane mesh and model
@@ -58,10 +56,7 @@ fn main {
     camera = @raylib.update_camera(camera, @raylib.CameraFree)
 
     time += @raylib.get_frame_time()
-    shader.set_value(
-      @raylib.get_shader_location(shader, "time"),
-      Float(time),
-    )
+    shader.set_value(@raylib.get_shader_location(shader, "time"), Float(time))
 
     // Draw
     @raylib.begin_drawing()

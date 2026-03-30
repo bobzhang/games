@@ -1949,13 +1949,7 @@ fn main {
       12,
       @raylib.Color::new(238, 170, 94, 255),
     )
-    @draw.draw_text(
-      "HEAT",
-      16,
-      184,
-      16,
-      @raylib.Color::new(240, 222, 194, 255),
-    )
+    @draw.draw_text("HEAT", 16, 184, 16, @raylib.Color::new(240, 222, 194, 255))
 
     @draw.draw_text(
       "Rocket \{(player.rocket_cd * 10.0).to_int()}",

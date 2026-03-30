@@ -317,13 +317,7 @@ fn main {
       @raylib.blue,
     )
 
-    @draw.draw_text(
-      "Arc \{arc_lift.to_int()}",
-      410,
-      108,
-      26,
-      @raylib.raywhite,
-    )
+    @draw.draw_text("Arc \{arc_lift.to_int()}", 410, 108, 26, @raylib.raywhite)
     @raylib.draw_rectangle(
       510,
       114,

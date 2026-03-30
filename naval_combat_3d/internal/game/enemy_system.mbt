@@ -61,7 +61,9 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
       BroadsideRun => game.update_broadside_run(i, dt, target_x, target_z)
     }
     // Windward positioning: when player is upwind, try to tack upwind
-    if !enemy.has_convoy_target && enemy.ai_state != Retreat && enemy.ai_state != Patrol {
+    if !enemy.has_convoy_target &&
+      enemy.ai_state != Retreat &&
+      enemy.ai_state != Patrol {
       game.apply_windward_bias(i, dt, px, pz)
     }
     // Calculate speed based on wind and mast damage (same model as player)
@@ -609,10 +611,7 @@ fn @types.Game::fire_enemy_broadside(
     (game.player.x, game.player.z)
   }
   // Determine which side faces the target
-  let to_target = @math.atan2f(
-    aim_target_x - enemy.x,
-    aim_target_z - enemy.z,
-  )
+  let to_target = @math.atan2f(aim_target_x - enemy.x, aim_target_z - enemy.z)
   let rel = @types.angle_diff(enemy.heading, to_target)
   let side_angle : Float = if rel > 0.0 {
     enemy.heading + @types.pi / 2.0
@@ -637,12 +636,7 @@ fn @types.Game::fire_enemy_broadside(
     // Aim at target with inaccuracy based on class
     let aim_dx = aim_target_x - cb.x
     let aim_dz = aim_target_z - cb.z
-    let aim_dist = @types.distance2d(
-      cb.x,
-      cb.z,
-      aim_target_x,
-      aim_target_z,
-    )
+    let aim_dist = @types.distance2d(cb.x, cb.z, aim_target_x, aim_target_z)
     let cannon_spd = @types.get_cannon_speed(enemy.cannon_type)
     let inaccuracy : Float = match enemy.ship_class {
       ManOfWar => 1.5

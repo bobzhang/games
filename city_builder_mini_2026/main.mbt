@@ -264,13 +264,7 @@ fn main {
     @draw.draw_text("CITY BUILDER MINI 2026", 20, 18, 34, @raylib.yellow)
     @draw.draw_text("Day: \{day}", 24, 58, 24, @raylib.raywhite)
     @draw.draw_text("Money: \{money}", 170, 58, 24, @raylib.gold)
-    @draw.draw_text(
-      "Population: \{population}",
-      360,
-      58,
-      24,
-      @raylib.raywhite,
-    )
+    @draw.draw_text("Population: \{population}", 360, 58, 24, @raylib.raywhite)
     @draw.draw_text("Happiness: \{happiness}", 620, 58, 24, @raylib.lime)
 
     let tool_name = match tool {

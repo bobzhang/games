@@ -68,7 +68,10 @@ fn @types.Game::update_enemies_ai(game : @types.Game, dt : Float) -> Unit {
     }
     // Low wall collision
     let wall_result = @types.push_from_low_walls(
-      game, enemy.x, enemy.z, enemy.size * 0.5,
+      game,
+      enemy.x,
+      enemy.z,
+      enemy.size * 0.5,
     )
     enemy.x = wall_result.0
     enemy.z = wall_result.1

@@ -151,13 +151,7 @@ fn main {
     @raylib.draw_grid(10, 10.0)
     @raylib.end_mode_3d()
     // Draw some debug GUI text
-    @draw.draw_text(
-      "Hit Object: " + hit_object_name,
-      10,
-      50,
-      10,
-      @raylib.black,
-    )
+    @draw.draw_text("Hit Object: " + hit_object_name, 10, 50, 10, @raylib.black)
     if collision.hit {
       let ypos = 70
       @draw.draw_text(

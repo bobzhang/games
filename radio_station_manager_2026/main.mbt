@@ -257,13 +257,7 @@ fn main {
       30,
       mood_color(current.mood),
     )
-    @draw.draw_text(
-      "Energy: \{current.energy}",
-      60,
-      266,
-      28,
-      @raylib.raywhite,
-    )
+    @draw.draw_text("Energy: \{current.energy}", 60, 266, 28, @raylib.raywhite)
     @draw.draw_text(
       "Remain: \{current_time.to_int()}s",
       60,

@@ -75,7 +75,14 @@ fn clampf(v : Float, lo : Float, hi : Float) -> Float {
 }
 
 ///|
-fn inside_rect(px : Float, py : Float, rx : Float, ry : Float, rw : Float, rh : Float) -> Bool {
+fn inside_rect(
+  px : Float,
+  py : Float,
+  rx : Float,
+  ry : Float,
+  rw : Float,
+  rh : Float,
+) -> Bool {
   px >= rx && px <= rx + rw && py >= ry && py <= ry + rh
 }
 
@@ -133,24 +140,50 @@ fn weapon_damage(kind : Int, overclock : Int) -> Float {
 
 ///|
 fn move_speed(chassis : Int, booster : Int) -> Float {
-  let base = if chassis == 1 { 180.0F } else if chassis == 2 { 255.0F } else { 220.0F }
-  if booster == 1 { base + 32.0F } else { base }
+  let base = if chassis == 1 {
+    180.0F
+  } else if chassis == 2 {
+    255.0F
+  } else {
+    220.0F
+  }
+  if booster == 1 {
+    base + 32.0F
+  } else {
+    base
+  }
 }
 
 ///|
 fn max_hp(chassis : Int, plating : Int) -> Float {
-  let base = if chassis == 1 { 180.0F } else if chassis == 2 { 112.0F } else { 140.0F }
+  let base = if chassis == 1 {
+    180.0F
+  } else if chassis == 2 {
+    112.0F
+  } else {
+    140.0F
+  }
   base + Float::from_int(plating) * 12.0F
 }
 
 ///|
 fn dash_force(booster : Int) -> Float {
-  if booster == 0 { 240.0F } else if booster == 1 { 320.0F } else { 200.0F }
+  if booster == 0 {
+    240.0F
+  } else if booster == 1 {
+    320.0F
+  } else {
+    200.0F
+  }
 }
 
 ///|
 fn magnet_range(booster : Int) -> Float {
-  if booster == 2 { 210.0F } else { 84.0F }
+  if booster == 2 {
+    210.0F
+  } else {
+    84.0F
+  }
 }
 
 ///|
@@ -232,7 +265,17 @@ fn choice_color(choice : Int) -> @raylib.Color {
 }
 
 ///|
-fn spawn_bullet(bullets : Array[Bullet], x : Float, y : Float, vx : Float, vy : Float, life : Float, dmg : Float, friendly : Bool, r : Float) -> Unit {
+fn spawn_bullet(
+  bullets : Array[Bullet],
+  x : Float,
+  y : Float,
+  vx : Float,
+  vy : Float,
+  life : Float,
+  dmg : Float,
+  friendly : Bool,
+  r : Float,
+) -> Unit {
   for bullet in bullets {
     if bullet.active {
       continue
@@ -262,14 +305,18 @@ fn spawn_enemy(enemies : Array[Enemy], wave : Int) -> Unit {
     } else if edge == 1 {
       Float::from_int(arena_x + arena_w - 10)
     } else {
-      Float::from_int(@raylib.get_random_value(arena_x + 10, arena_x + arena_w - 10))
+      Float::from_int(
+        @raylib.get_random_value(arena_x + 10, arena_x + arena_w - 10),
+      )
     }
     let y = if edge == 2 {
       Float::from_int(arena_y + 10)
     } else if edge == 3 {
       Float::from_int(arena_y + arena_h - 10)
     } else {
-      Float::from_int(@raylib.get_random_value(arena_y + 10, arena_y + arena_h - 10))
+      Float::from_int(
+        @raylib.get_random_value(arena_y + 10, arena_y + arena_h - 10),
+      )
     }
     let roll = @raylib.get_random_value(0, 9)
     let kind = if wave >= 4 && roll > 6 {
@@ -279,7 +326,13 @@ fn spawn_enemy(enemies : Array[Enemy], wave : Int) -> Unit {
     } else {
       0
     }
-    let hp = if kind == 0 { 24.0F + Float::from_int(wave) * 4.0F } else if kind == 1 { 18.0F + Float::from_int(wave) * 3.0F } else { 42.0F + Float::from_int(wave) * 7.0F }
+    let hp = if kind == 0 {
+      24.0F + Float::from_int(wave) * 4.0F
+    } else if kind == 1 {
+      18.0F + Float::from_int(wave) * 3.0F
+    } else {
+      42.0F + Float::from_int(wave) * 7.0F
+    }
     enemy.active = true
     enemy.kind = kind
     enemy.x = x
@@ -292,7 +345,12 @@ fn spawn_enemy(enemies : Array[Enemy], wave : Int) -> Unit {
 }
 
 ///|
-fn spawn_scrap(scraps : Array[Scrap], x : Float, y : Float, value : Int) -> Unit {
+fn spawn_scrap(
+  scraps : Array[Scrap],
+  x : Float,
+  y : Float,
+  value : Int,
+) -> Unit {
   for scrap in scraps {
     if scrap.active {
       continue
@@ -328,7 +386,14 @@ fn gen_choices(choices : Array[Int]) -> Unit {
 }
 
 ///|
-fn apply_choice(choice : Int, weapon : Int, chassis : Int, booster : Int, plating : Int, overclock : Int) -> (Int, Int, Int, Int, Int) {
+fn apply_choice(
+  choice : Int,
+  weapon : Int,
+  chassis : Int,
+  booster : Int,
+  plating : Int,
+  overclock : Int,
+) -> (Int, Int, Int, Int, Int) {
   if choice <= 2 {
     (choice, chassis, booster, plating, overclock)
   } else if choice <= 5 {
@@ -349,10 +414,28 @@ fn main {
   @draw.init_font()
 
   let bullets : Array[Bullet] = Array::makei(max_bullets, fn(_i) {
-    { active: false, x: 0.0F, y: 0.0F, vx: 0.0F, vy: 0.0F, life: 0.0F, dmg: 0.0F, friendly: true, r: 3.0F }
+    {
+      active: false,
+      x: 0.0F,
+      y: 0.0F,
+      vx: 0.0F,
+      vy: 0.0F,
+      life: 0.0F,
+      dmg: 0.0F,
+      friendly: true,
+      r: 3.0F,
+    }
   })
   let enemies : Array[Enemy] = Array::makei(max_enemies, fn(_i) {
-    { active: false, kind: 0, x: 0.0F, y: 0.0F, hp: 0.0F, fire_cd: 0.0F, pulse: 0.0F }
+    {
+      active: false,
+      kind: 0,
+      x: 0.0F,
+      y: 0.0F,
+      hp: 0.0F,
+      fire_cd: 0.0F,
+      pulse: 0.0F,
+    }
   })
   let scraps : Array[Scrap] = Array::makei(max_scrap, fn(_i) {
     { active: false, x: 0.0F, y: 0.0F, value: 0 }
@@ -420,7 +503,8 @@ fn main {
     let mouse = @raylib.get_mouse_position()
 
     if title {
-      if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
+      if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+        @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
         reset_run()
       }
     } else if over {
@@ -428,8 +512,19 @@ fn main {
         reset_run()
       }
     } else if choosing {
-      if @raylib.is_key_pressed(@raylib.KeyOne) || (inside_rect(mouse.x, mouse.y, 1045.0F, 180.0F, 200.0F, 150.0F) && @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)) {
-        let parts = apply_choice(choices[0], weapon, chassis, booster, plating, overclock)
+      if @raylib.is_key_pressed(@raylib.KeyOne) ||
+        (
+          inside_rect(mouse.x, mouse.y, 1045.0F, 180.0F, 200.0F, 150.0F) &&
+          @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
+        ) {
+        let parts = apply_choice(
+          choices[0],
+          weapon,
+          chassis,
+          booster,
+          plating,
+          overclock,
+        )
         weapon = parts.0
         chassis = parts.1
         booster = parts.2
@@ -447,8 +542,19 @@ fn main {
           spawn_timer = 0.7F
           message = "Wave \{wave} online."
         }
-      } else if @raylib.is_key_pressed(@raylib.KeyTwo) || (inside_rect(mouse.x, mouse.y, 1045.0F, 360.0F, 200.0F, 150.0F) && @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)) {
-        let parts = apply_choice(choices[1], weapon, chassis, booster, plating, overclock)
+      } else if @raylib.is_key_pressed(@raylib.KeyTwo) ||
+        (
+          inside_rect(mouse.x, mouse.y, 1045.0F, 360.0F, 200.0F, 150.0F) &&
+          @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
+        ) {
+        let parts = apply_choice(
+          choices[1],
+          weapon,
+          chassis,
+          booster,
+          plating,
+          overclock,
+        )
         weapon = parts.0
         chassis = parts.1
         booster = parts.2
@@ -466,8 +572,19 @@ fn main {
           spawn_timer = 0.7F
           message = "Wave \{wave} online."
         }
-      } else if @raylib.is_key_pressed(@raylib.KeyThree) || (inside_rect(mouse.x, mouse.y, 1045.0F, 540.0F, 200.0F, 150.0F) && @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)) {
-        let parts = apply_choice(choices[2], weapon, chassis, booster, plating, overclock)
+      } else if @raylib.is_key_pressed(@raylib.KeyThree) ||
+        (
+          inside_rect(mouse.x, mouse.y, 1045.0F, 540.0F, 200.0F, 150.0F) &&
+          @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
+        ) {
+        let parts = apply_choice(
+          choices[2],
+          weapon,
+          chassis,
+          booster,
+          plating,
+          overclock,
+        )
         weapon = parts.0
         chassis = parts.1
         booster = parts.2
@@ -507,15 +624,33 @@ fn main {
         mvx = mvx / len
         mvy = mvy / len
       }
-      px = clampf(px + mvx * speed * dt, Float::from_int(arena_x + 20), Float::from_int(arena_x + arena_w - 20))
-      py = clampf(py + mvy * speed * dt, Float::from_int(arena_y + 20), Float::from_int(arena_y + arena_h - 20))
+      px = clampf(
+        px + mvx * speed * dt,
+        Float::from_int(arena_x + 20),
+        Float::from_int(arena_x + arena_w - 20),
+      )
+      py = clampf(
+        py + mvy * speed * dt,
+        Float::from_int(arena_y + 20),
+        Float::from_int(arena_y + arena_h - 20),
+      )
       fire_cd = fire_cd - dt
       dash_cd = dash_cd - dt
       dash_flash = dash_flash - dt
 
-      if @raylib.is_key_pressed(@raylib.KeySpace) && dash_cd <= 0.0F && len > 0.0F {
-        px = clampf(px + mvx * dash_force(booster), Float::from_int(arena_x + 20), Float::from_int(arena_x + arena_w - 20))
-        py = clampf(py + mvy * dash_force(booster), Float::from_int(arena_y + 20), Float::from_int(arena_y + arena_h - 20))
+      if @raylib.is_key_pressed(@raylib.KeySpace) &&
+        dash_cd <= 0.0F &&
+        len > 0.0F {
+        px = clampf(
+          px + mvx * dash_force(booster),
+          Float::from_int(arena_x + 20),
+          Float::from_int(arena_x + arena_w - 20),
+        )
+        py = clampf(
+          py + mvy * dash_force(booster),
+          Float::from_int(arena_y + 20),
+          Float::from_int(arena_y + arena_h - 20),
+        )
         dash_cd = if booster == 1 { 1.1F } else { 1.6F }
         dash_flash = 0.2F
       }
@@ -525,20 +660,71 @@ fn main {
       let aim_len = (aim_dx * aim_dx + aim_dy * aim_dy).sqrt()
       let dir_x = if aim_len > 0.001F { aim_dx / aim_len } else { 1.0F }
       let dir_y = if aim_len > 0.001F { aim_dy / aim_len } else { 0.0F }
-      if @raylib.is_mouse_button_down(@raylib.MouseButtonLeft) && fire_cd <= 0.0F {
+      if @raylib.is_mouse_button_down(@raylib.MouseButtonLeft) &&
+        fire_cd <= 0.0F {
         let dmg = weapon_damage(weapon, overclock)
         if weapon == 0 {
-          spawn_bullet(bullets, px + dir_x * 18.0F, py + dir_y * 18.0F, dir_x * 540.0F, dir_y * 540.0F, 1.4F, dmg, true, 5.0F)
+          spawn_bullet(
+            bullets,
+            px + dir_x * 18.0F,
+            py + dir_y * 18.0F,
+            dir_x * 540.0F,
+            dir_y * 540.0F,
+            1.4F,
+            dmg,
+            true,
+            5.0F,
+          )
         } else if weapon == 1 {
           let lx = dir_x * 0.95F - dir_y * 0.30F
           let ly = dir_y * 0.95F + dir_x * 0.30F
           let rx = dir_x * 0.95F + dir_y * 0.30F
           let ry = dir_y * 0.95F - dir_x * 0.30F
-          spawn_bullet(bullets, px + lx * 18.0F, py + ly * 18.0F, lx * 500.0F, ly * 500.0F, 0.9F, dmg, true, 4.0F)
-          spawn_bullet(bullets, px + dir_x * 18.0F, py + dir_y * 18.0F, dir_x * 500.0F, dir_y * 500.0F, 0.9F, dmg, true, 4.0F)
-          spawn_bullet(bullets, px + rx * 18.0F, py + ry * 18.0F, rx * 500.0F, ry * 500.0F, 0.9F, dmg, true, 4.0F)
+          spawn_bullet(
+            bullets,
+            px + lx * 18.0F,
+            py + ly * 18.0F,
+            lx * 500.0F,
+            ly * 500.0F,
+            0.9F,
+            dmg,
+            true,
+            4.0F,
+          )
+          spawn_bullet(
+            bullets,
+            px + dir_x * 18.0F,
+            py + dir_y * 18.0F,
+            dir_x * 500.0F,
+            dir_y * 500.0F,
+            0.9F,
+            dmg,
+            true,
+            4.0F,
+          )
+          spawn_bullet(
+            bullets,
+            px + rx * 18.0F,
+            py + ry * 18.0F,
+            rx * 500.0F,
+            ry * 500.0F,
+            0.9F,
+            dmg,
+            true,
+            4.0F,
+          )
         } else {
-          spawn_bullet(bullets, px + dir_x * 18.0F, py + dir_y * 18.0F, dir_x * 640.0F, dir_y * 640.0F, 0.55F, dmg, true, 3.5F)
+          spawn_bullet(
+            bullets,
+            px + dir_x * 18.0F,
+            py + dir_y * 18.0F,
+            dir_x * 640.0F,
+            dir_y * 640.0F,
+            0.55F,
+            dmg,
+            true,
+            3.5F,
+          )
         }
         fire_cd = weapon_fire_cd(weapon, overclock)
       }
@@ -548,7 +734,11 @@ fn main {
         if spawn_timer <= 0.0F {
           spawn_enemy(enemies, wave)
           spawn_left = spawn_left - 1
-          spawn_timer = clampf(0.82F - Float::from_int(wave) * 0.05F, 0.22F, 1.0F)
+          spawn_timer = clampf(
+            0.82F - Float::from_int(wave) * 0.05F,
+            0.22F,
+            1.0F,
+          )
         }
       }
 
@@ -559,7 +749,11 @@ fn main {
         bullet.x = bullet.x + bullet.vx * dt
         bullet.y = bullet.y + bullet.vy * dt
         bullet.life = bullet.life - dt
-        if bullet.life <= 0.0F || bullet.x < Float::from_int(arena_x) || bullet.x > Float::from_int(arena_x + arena_w) || bullet.y < Float::from_int(arena_y) || bullet.y > Float::from_int(arena_y + arena_h) {
+        if bullet.life <= 0.0F ||
+          bullet.x < Float::from_int(arena_x) ||
+          bullet.x > Float::from_int(arena_x + arena_w) ||
+          bullet.y < Float::from_int(arena_y) ||
+          bullet.y > Float::from_int(arena_y + arena_h) {
           bullet.active = false
         }
       }
@@ -584,7 +778,17 @@ fn main {
             enemy.y = enemy.y + ny * 74.0F * dt
           }
           if enemy.fire_cd <= 0.0F && d > 0.001F {
-            spawn_bullet(bullets, enemy.x, enemy.y, nx * 280.0F, ny * 280.0F, 2.0F, 9.0F + Float::from_int(wave), false, 4.0F)
+            spawn_bullet(
+              bullets,
+              enemy.x,
+              enemy.y,
+              nx * 280.0F,
+              ny * 280.0F,
+              2.0F,
+              9.0F + Float::from_int(wave),
+              false,
+              4.0F,
+            )
             enemy.fire_cd = 1.3F
           }
         } else {
@@ -608,7 +812,8 @@ fn main {
             if !enemy.active {
               continue
             }
-            if dist2(bullet.x, bullet.y, enemy.x, enemy.y) <= (14.0F + bullet.r) * (14.0F + bullet.r) {
+            if dist2(bullet.x, bullet.y, enemy.x, enemy.y) <=
+              (14.0F + bullet.r) * (14.0F + bullet.r) {
               enemy.hp = enemy.hp - bullet.dmg
               bullet.active = false
               if enemy.hp <= 0.0F {
@@ -619,7 +824,8 @@ fn main {
               break
             }
           }
-        } else if dist2(bullet.x, bullet.y, px, py) <= (15.0F + bullet.r) * (15.0F + bullet.r) {
+        } else if dist2(bullet.x, bullet.y, px, py) <=
+          (15.0F + bullet.r) * (15.0F + bullet.r) {
           hp = hp - bullet.dmg
           bullet.active = false
         }
@@ -668,35 +874,111 @@ fn main {
     @raylib.clear_background(@raylib.Color::new(11, 13, 18, 255))
 
     if title {
-      @raylib.draw_rectangle_gradient_v(0, 0, screen_w, screen_h, @raylib.Color::new(28, 20, 18, 255), @raylib.Color::new(10, 10, 14, 255))
-      @draw.draw_text("SCRAPYARD MECH PIT 2026", 204, 148, 58, @raylib.Color::new(246, 244, 238, 255))
-      @draw.draw_text("Arena survival with salvage-built mech parts.", 330, 238, 30, @raylib.Color::new(255, 193, 116, 255))
-      @draw.draw_text("WASD move  |  Mouse aim + fire  |  Space dash", 290, 398, 30, @raylib.Color::new(162, 218, 255, 255))
-      @draw.draw_text("Between waves, choose one of three scrap upgrades.", 250, 440, 30, @raylib.Color::new(162, 218, 255, 255))
-      @raylib.draw_rectangle(422, 618, 440, 82, @raylib.Color::new(98, 74, 42, 255))
-      @draw.draw_text("PRESS ENTER TO DROP IN", 460, 646, 30, @raylib.Color::new(248, 245, 236, 255))
+      @raylib.draw_rectangle_gradient_v(
+        0,
+        0,
+        screen_w,
+        screen_h,
+        @raylib.Color::new(28, 20, 18, 255),
+        @raylib.Color::new(10, 10, 14, 255),
+      )
+      @draw.draw_text(
+        "SCRAPYARD MECH PIT 2026",
+        204,
+        148,
+        58,
+        @raylib.Color::new(246, 244, 238, 255),
+      )
+      @draw.draw_text(
+        "Arena survival with salvage-built mech parts.",
+        330,
+        238,
+        30,
+        @raylib.Color::new(255, 193, 116, 255),
+      )
+      @draw.draw_text(
+        "WASD move  |  Mouse aim + fire  |  Space dash",
+        290,
+        398,
+        30,
+        @raylib.Color::new(162, 218, 255, 255),
+      )
+      @draw.draw_text(
+        "Between waves, choose one of three scrap upgrades.",
+        250,
+        440,
+        30,
+        @raylib.Color::new(162, 218, 255, 255),
+      )
+      @raylib.draw_rectangle(
+        422,
+        618,
+        440,
+        82,
+        @raylib.Color::new(98, 74, 42, 255),
+      )
+      @draw.draw_text(
+        "PRESS ENTER TO DROP IN",
+        460,
+        646,
+        30,
+        @raylib.Color::new(248, 245, 236, 255),
+      )
     } else {
-      @raylib.draw_rectangle(arena_x, arena_y, arena_w, arena_h, @raylib.Color::new(26, 28, 34, 255))
-      @raylib.draw_rectangle_lines(arena_x, arena_y, arena_w, arena_h, @raylib.Color::new(92, 86, 74, 255))
+      @raylib.draw_rectangle(
+        arena_x,
+        arena_y,
+        arena_w,
+        arena_h,
+        @raylib.Color::new(26, 28, 34, 255),
+      )
+      @raylib.draw_rectangle_lines(
+        arena_x,
+        arena_y,
+        arena_w,
+        arena_h,
+        @raylib.Color::new(92, 86, 74, 255),
+      )
       for gx in 0..<10 {
-        @raylib.draw_line(arena_x + gx * 92, arena_y, arena_x + gx * 92, arena_y + arena_h, @raylib.Color::new(32, 34, 40, 255))
+        @raylib.draw_line(
+          arena_x + gx * 92,
+          arena_y,
+          arena_x + gx * 92,
+          arena_y + arena_h,
+          @raylib.Color::new(32, 34, 40, 255),
+        )
       }
       for gy in 0..<8 {
-        @raylib.draw_line(arena_x, arena_y + gy * 82, arena_x + arena_w, arena_y + gy * 82, @raylib.Color::new(32, 34, 40, 255))
+        @raylib.draw_line(
+          arena_x,
+          arena_y + gy * 82,
+          arena_x + arena_w,
+          arena_y + gy * 82,
+          @raylib.Color::new(32, 34, 40, 255),
+        )
       }
 
       for scrap in scraps {
         if !scrap.active {
           continue
         }
-        @raylib.draw_circle(scrap.x.to_int(), scrap.y.to_int(), 6.0F, @raylib.Color::new(255, 202, 104, 255))
+        @raylib.draw_circle(
+          scrap.x.to_int(),
+          scrap.y.to_int(),
+          6.0F,
+          @raylib.Color::new(255, 202, 104, 255),
+        )
       }
 
       for bullet in bullets {
         if !bullet.active {
           continue
         }
-        let col = if bullet.friendly { @raylib.Color::new(134, 222, 255, 255) } else { @raylib.Color::new(255, 126, 108, 255) }
+        let col = if bullet.friendly {
+          @raylib.Color::new(134, 222, 255, 255)
+        } else {
+          @raylib.Color::new(255, 126, 108, 255)
+        }
         @raylib.draw_circle(bullet.x.to_int(), bullet.y.to_int(), bullet.r, col)
       }
 
@@ -704,48 +986,247 @@ fn main {
         if !enemy.active {
           continue
         }
-        @raylib.draw_circle(enemy.x.to_int(), enemy.y.to_int(), if enemy.kind == 2 { 18.0F } else { 14.0F }, enemy_color(enemy.kind))
-        @raylib.draw_circle_lines(enemy.x.to_int(), enemy.y.to_int(), if enemy.kind == 2 { 20.0F } else { 16.0F }, @raylib.Color::new(18, 18, 22, 255))
+        @raylib.draw_circle(
+          enemy.x.to_int(),
+          enemy.y.to_int(),
+          if enemy.kind == 2 {
+            18.0F
+          } else {
+            14.0F
+          },
+          enemy_color(enemy.kind),
+        )
+        @raylib.draw_circle_lines(
+          enemy.x.to_int(),
+          enemy.y.to_int(),
+          if enemy.kind == 2 {
+            20.0F
+          } else {
+            16.0F
+          },
+          @raylib.Color::new(18, 18, 22, 255),
+        )
       }
 
-      let mech_col = if dash_flash > 0.0F { @raylib.Color::new(255, 238, 176, 255) } else { @raylib.Color::new(134, 170, 255, 255) }
-      @raylib.draw_circle(px.to_int(), py.to_int(), if chassis == 1 { 18.0F } else if chassis == 2 { 13.0F } else { 15.0F }, mech_col)
-      @raylib.draw_line(px.to_int(), py.to_int(), mouse.x.to_int(), mouse.y.to_int(), @raylib.Color::new(160, 210, 255, 90))
+      let mech_col = if dash_flash > 0.0F {
+        @raylib.Color::new(255, 238, 176, 255)
+      } else {
+        @raylib.Color::new(134, 170, 255, 255)
+      }
+      @raylib.draw_circle(
+        px.to_int(),
+        py.to_int(),
+        if chassis == 1 {
+          18.0F
+        } else if chassis == 2 {
+          13.0F
+        } else {
+          15.0F
+        },
+        mech_col,
+      )
+      @raylib.draw_line(
+        px.to_int(),
+        py.to_int(),
+        mouse.x.to_int(),
+        mouse.y.to_int(),
+        @raylib.Color::new(160, 210, 255, 90),
+      )
 
-      @raylib.draw_rectangle(1035, 90, 210, 660, @raylib.Color::new(18, 18, 24, 255))
-      @draw.draw_text("Wave \{wave}/6", 1058, 114, 34, @raylib.Color::new(242, 246, 248, 255))
-      @draw.draw_text("HP", 1058, 162, 24, @raylib.Color::new(214, 222, 230, 255))
-      @raylib.draw_rectangle(1058, 194, 160, 12, @raylib.Color::new(36, 42, 48, 255))
-      @raylib.draw_rectangle(1058, 194, (160.0F * clampf(hp, 0.0F, max_hp(chassis, plating)) / max_hp(chassis, plating)).to_int(), 12, @raylib.Color::new(236, 106, 106, 255))
-      @draw.draw_text("Scrap \{scrap_bank}", 1058, 236, 26, @raylib.Color::new(255, 206, 118, 255))
-      @draw.draw_text(weapon_name(weapon), 1058, 294, 22, @raylib.Color::new(134, 192, 255, 255))
-      @draw.draw_text(chassis_name(chassis), 1058, 326, 22, @raylib.Color::new(138, 232, 182, 255))
-      @draw.draw_text(booster_name(booster), 1058, 358, 22, @raylib.Color::new(255, 206, 118, 255))
-      @draw.draw_text("Plating \{plating}", 1058, 408, 20, @raylib.Color::new(230, 148, 255, 255))
-      @draw.draw_text("Overclock \{overclock}", 1058, 434, 20, @raylib.Color::new(230, 148, 255, 255))
-      @draw.draw_text(message, 1058, 488, 22, @raylib.Color::new(228, 234, 240, 255))
-      @draw.draw_text("LMB fire", 1058, 666, 20, @raylib.Color::new(166, 218, 255, 255))
-      @draw.draw_text("WASD move", 1058, 692, 20, @raylib.Color::new(166, 218, 255, 255))
-      @draw.draw_text("Space dash", 1058, 718, 20, @raylib.Color::new(166, 218, 255, 255))
+      @raylib.draw_rectangle(
+        1035,
+        90,
+        210,
+        660,
+        @raylib.Color::new(18, 18, 24, 255),
+      )
+      @draw.draw_text(
+        "Wave \{wave}/6",
+        1058,
+        114,
+        34,
+        @raylib.Color::new(242, 246, 248, 255),
+      )
+      @draw.draw_text(
+        "HP",
+        1058,
+        162,
+        24,
+        @raylib.Color::new(214, 222, 230, 255),
+      )
+      @raylib.draw_rectangle(
+        1058,
+        194,
+        160,
+        12,
+        @raylib.Color::new(36, 42, 48, 255),
+      )
+      @raylib.draw_rectangle(
+        1058,
+        194,
+        (160.0F *
+        clampf(hp, 0.0F, max_hp(chassis, plating)) /
+        max_hp(chassis, plating)).to_int(),
+        12,
+        @raylib.Color::new(236, 106, 106, 255),
+      )
+      @draw.draw_text(
+        "Scrap \{scrap_bank}",
+        1058,
+        236,
+        26,
+        @raylib.Color::new(255, 206, 118, 255),
+      )
+      @draw.draw_text(
+        weapon_name(weapon),
+        1058,
+        294,
+        22,
+        @raylib.Color::new(134, 192, 255, 255),
+      )
+      @draw.draw_text(
+        chassis_name(chassis),
+        1058,
+        326,
+        22,
+        @raylib.Color::new(138, 232, 182, 255),
+      )
+      @draw.draw_text(
+        booster_name(booster),
+        1058,
+        358,
+        22,
+        @raylib.Color::new(255, 206, 118, 255),
+      )
+      @draw.draw_text(
+        "Plating \{plating}",
+        1058,
+        408,
+        20,
+        @raylib.Color::new(230, 148, 255, 255),
+      )
+      @draw.draw_text(
+        "Overclock \{overclock}",
+        1058,
+        434,
+        20,
+        @raylib.Color::new(230, 148, 255, 255),
+      )
+      @draw.draw_text(
+        message,
+        1058,
+        488,
+        22,
+        @raylib.Color::new(228, 234, 240, 255),
+      )
+      @draw.draw_text(
+        "LMB fire",
+        1058,
+        666,
+        20,
+        @raylib.Color::new(166, 218, 255, 255),
+      )
+      @draw.draw_text(
+        "WASD move",
+        1058,
+        692,
+        20,
+        @raylib.Color::new(166, 218, 255, 255),
+      )
+      @draw.draw_text(
+        "Space dash",
+        1058,
+        718,
+        20,
+        @raylib.Color::new(166, 218, 255, 255),
+      )
 
       if choosing {
-        @raylib.draw_rectangle(0, 0, screen_w, screen_h, @raylib.fade(@raylib.black, 0.64F))
-        @draw.draw_text("SALVAGE PICK", 468, 92, 56, @raylib.Color::new(247, 243, 236, 255))
+        @raylib.draw_rectangle(
+          0,
+          0,
+          screen_w,
+          screen_h,
+          @raylib.fade(@raylib.black, 0.64F),
+        )
+        @draw.draw_text(
+          "SALVAGE PICK",
+          468,
+          92,
+          56,
+          @raylib.Color::new(247, 243, 236, 255),
+        )
         for i in 0..<3 {
           let y = 180 + i * 180
           @raylib.draw_rectangle(1045, y, 200, 150, choice_color(choices[i]))
-          @raylib.draw_rectangle_lines(1045, y, 200, 150, @raylib.Color::new(16, 18, 22, 255))
-          @draw.draw_text("\{i + 1}", 1060, y + 14, 28, @raylib.Color::new(20, 20, 24, 255))
-          @draw.draw_text(choice_name(choices[i]), 1062, y + 48, 20, @raylib.Color::new(16, 20, 24, 255))
-          @draw.draw_text(choice_desc(choices[i]), 1062, y + 82, 18, @raylib.Color::new(20, 24, 28, 255))
+          @raylib.draw_rectangle_lines(
+            1045,
+            y,
+            200,
+            150,
+            @raylib.Color::new(16, 18, 22, 255),
+          )
+          @draw.draw_text(
+            "\{i + 1}",
+            1060,
+            y + 14,
+            28,
+            @raylib.Color::new(20, 20, 24, 255),
+          )
+          @draw.draw_text(
+            choice_name(choices[i]),
+            1062,
+            y + 48,
+            20,
+            @raylib.Color::new(16, 20, 24, 255),
+          )
+          @draw.draw_text(
+            choice_desc(choices[i]),
+            1062,
+            y + 82,
+            18,
+            @raylib.Color::new(20, 24, 28, 255),
+          )
         }
       }
 
       if over {
-        @raylib.draw_rectangle(0, 0, screen_w, screen_h, @raylib.fade(@raylib.black, 0.62F))
-        @draw.draw_text(if won { "PIT CLEARED" } else { "MECH DOWN" }, 420, 250, 68, if won { @raylib.Color::new(146, 242, 188, 255) } else { @raylib.Color::new(255, 122, 122, 255) })
-        @draw.draw_text(message, 360, 340, 34, @raylib.Color::new(242, 246, 248, 255))
-        @draw.draw_text("Press R to rebuild", 468, 430, 32, @raylib.Color::new(255, 206, 118, 255))
+        @raylib.draw_rectangle(
+          0,
+          0,
+          screen_w,
+          screen_h,
+          @raylib.fade(@raylib.black, 0.62F),
+        )
+        @draw.draw_text(
+          if won {
+            "PIT CLEARED"
+          } else {
+            "MECH DOWN"
+          },
+          420,
+          250,
+          68,
+          if won {
+            @raylib.Color::new(146, 242, 188, 255)
+          } else {
+            @raylib.Color::new(255, 122, 122, 255)
+          },
+        )
+        @draw.draw_text(
+          message,
+          360,
+          340,
+          34,
+          @raylib.Color::new(242, 246, 248, 255),
+        )
+        @draw.draw_text(
+          "Press R to rebuild",
+          468,
+          430,
+          32,
+          @raylib.Color::new(255, 206, 118, 255),
+        )
       }
     }
 

@@ -1,5 +1,7 @@
 ///|
-fn get_floor_colors(floor_num : Int) -> (@raylib.Color, @raylib.Color, @raylib.Color, @raylib.Color) {
+fn get_floor_colors(
+  floor_num : Int,
+) -> (@raylib.Color, @raylib.Color, @raylib.Color, @raylib.Color) {
   if floor_num <= 5 {
     // Stone Crypt
     (
@@ -21,7 +23,13 @@ fn get_floor_colors(floor_num : Int) -> (@raylib.Color, @raylib.Color, @raylib.C
 
 ///|
 fn draw_wall_shadow(px : Int, py : Int, ts : Int) -> Unit {
-  @raylib.draw_rectangle(px, py + ts - 3, ts, 3, @raylib.Color::new(0, 0, 0, 30))
+  @raylib.draw_rectangle(
+    px,
+    py + ts - 3,
+    ts,
+    3,
+    @raylib.Color::new(0, 0, 0, 30),
+  )
 }
 
 ///|
@@ -35,7 +43,13 @@ fn draw_door_glow(px : Int, py : Int, ts : Int, floor_num : Int) -> Unit {
 }
 
 ///|
-fn draw_floor_decoration(px : Int, py : Int, ts : Int, tx : Int, ty : Int) -> Unit {
+fn draw_floor_decoration(
+  px : Int,
+  py : Int,
+  ts : Int,
+  tx : Int,
+  ty : Int,
+) -> Unit {
   // Simple hash based on tile position to get pseudo-random decorations
   let hash = (tx * 7919 + ty * 6271) % 100
   if hash < 5 {
@@ -53,8 +67,8 @@ fn draw_floor_decoration(px : Int, py : Int, ts : Int, tx : Int, ty : Int) -> Un
     )
   } else if hash < 8 {
     // Moss dot
-    let mx = px + (hash * 3) % ts
-    let my = py + (hash * 5) % ts
+    let mx = px + hash * 3 % ts
+    let my = py + hash * 5 % ts
     @raylib.draw_circle(mx, my, 2.0, @raylib.Color::new(60, 90, 50, 25))
   }
 }
@@ -66,7 +80,9 @@ pub fn draw_world(game : @types.Game) -> Unit {
     Some(floor) => {
       let ts = @types.tile_size
       let tsf = @types.tile_sizef
-      let (wall_col, floor_col, floor_alt_col, wall_edge_col) = get_floor_colors(game.floor_num)
+      let (wall_col, floor_col, floor_alt_col, wall_edge_col) = get_floor_colors(
+        game.floor_num,
+      )
       // Draw all visited rooms so corridors and adjacent rooms are visible
       for ri in 0..<floor.rooms.length() {
         let room = floor.rooms[ri]

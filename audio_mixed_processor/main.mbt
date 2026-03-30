@@ -72,9 +72,7 @@ fn main {
     }
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
-    @draw.draw_text(
-      "MUSIC SHOULD BE PLAYING!", 255, 150, 20, @raylib.lightgray,
-    )
+    @draw.draw_text("MUSIC SHOULD BE PLAYING!", 255, 150, 20, @raylib.lightgray)
     @draw.draw_text(
       "EXPONENT = \{exponent[0]}",
       215,

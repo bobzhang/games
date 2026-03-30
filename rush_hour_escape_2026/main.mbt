@@ -157,27 +157,26 @@ fn occupied_by(
   gx : Int,
   gy : Int,
 ) -> Bool {
-  @utils.first_indexi_by_view(
-    cars[0:count],
-    fn(i, car) {
-      i != skip &&
-      car.active &&
-      ((car.horizontal && gy == car.y && gx >= car.x && gx < car.x + car.len) ||
-      (!car.horizontal && gx == car.x && gy >= car.y && gy < car.y + car.len))
-    },
-  ) >= 0
+  @utils.first_indexi_by_view(cars[0:count], fn(i, car) {
+    i != skip &&
+    car.active &&
+    (
+      (car.horizontal && gy == car.y && gx >= car.x && gx < car.x + car.len) ||
+      (!car.horizontal && gx == car.x && gy >= car.y && gy < car.y + car.len)
+    )
+  }) >=
+  0
 }
 
 ///|
 fn find_car_at(cars : Array[Car], count : Int, gx : Int, gy : Int) -> Int {
-  @utils.first_index_by_view(
-    cars[0:count],
-    fn(car) {
-      car.active &&
-      ((car.horizontal && gy == car.y && gx >= car.x && gx < car.x + car.len) ||
-      (!car.horizontal && gx == car.x && gy >= car.y && gy < car.y + car.len))
-    },
-  )
+  @utils.first_index_by_view(cars[0:count], fn(car) {
+    car.active &&
+    (
+      (car.horizontal && gy == car.y && gx >= car.x && gx < car.x + car.len) ||
+      (!car.horizontal && gx == car.x && gy >= car.y && gy < car.y + car.len)
+    )
+  })
 }
 
 ///|

@@ -8,7 +8,7 @@ pub fn spawn_bullet(
   dir : @types.Dir,
   speed : Float,
   damage : Int,
-  power : Int
+  power : Int,
 ) -> Unit {
   let slot = for i in 0..<game.bullets.length() {
     if !game.bullets[i].active {

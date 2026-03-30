@@ -104,8 +104,7 @@ pub fn handle_block_interaction(game : @types.Game, dt : Float) -> Unit {
           let cr = @levels.block_color_r(block)
           let cg = @levels.block_color_g(block)
           let cb = @levels.block_color_b(block)
-          if player.mining_progress > 0.25 &&
-            game.frame_counter % 8 == 0 {
+          if player.mining_progress > 0.25 && game.frame_counter % 8 == 0 {
             @types.spawn_mining_crack_particles(
               game,
               target.bx,

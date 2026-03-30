@@ -650,7 +650,11 @@ fn @types.Game::buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
     let new_lvl_f : Float = Float::from_int(new_lvl)
     let base : Float = 100.0
     let pct = (base - new_lvl_f * @types.upgrade_rate_step * base).to_int()
-    @types.show_message(game, "\{wname} Fire Rate Lv\{new_lvl}! \{pct}% interval", 1.5)
+    @types.show_message(
+      game,
+      "\{wname} Fire Rate Lv\{new_lvl}! \{pct}% interval",
+      1.5,
+    )
   } else if item_idx == 9 {
     // Per-weapon magazine upgrade
     let lvl = game.player.weapon_mag_level[wi]
@@ -663,7 +667,11 @@ fn @types.Game::buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
     // Sync live magazine state to new upgraded size and refill
     game.player.mag_size[wi] = new_mag
     game.player.magazine[wi] = new_mag
-    @types.show_message(game, "\{wname} Magazine Lv\{game.player.weapon_mag_level[wi]}! Size: \{new_mag}", 1.5)
+    @types.show_message(
+      game,
+      "\{wname} Magazine Lv\{game.player.weapon_mag_level[wi]}! Size: \{new_mag}",
+      1.5,
+    )
   } else if item_idx == 10 {
     // Buy Sniper
     if !game.player.owns_weapon[@types.Sniper.to_int()] {

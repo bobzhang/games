@@ -47,10 +47,18 @@ pub fn draw() -> Unit {
   let red = @raylib.Color::new(228, 80, 80, 255)
   // Panel background
   @raylib.draw_rectangle(
-    panel_x, panel_y, panel_w, panel_h, @raylib.Color::new(0, 0, 0, 170),
+    panel_x,
+    panel_y,
+    panel_w,
+    panel_h,
+    @raylib.Color::new(0, 0, 0, 170),
   )
   @raylib.draw_rectangle_lines(
-    panel_x, panel_y, panel_w, panel_h, @raylib.Color::new(255, 255, 255, 60),
+    panel_x,
+    panel_y,
+    panel_w,
+    panel_h,
+    @raylib.Color::new(255, 255, 255, 60),
   )
   // FPS label + value + ms
   @draw.draw_text("FPS", panel_x + 8, panel_y + 6, 16, white)
@@ -61,7 +69,13 @@ pub fn draw() -> Unit {
   } else {
     red
   }
-  @draw.draw_text(latest_fps.to_string(), panel_x + 44, panel_y + 6, 16, fps_color)
+  @draw.draw_text(
+    latest_fps.to_string(),
+    panel_x + 44,
+    panel_y + 6,
+    16,
+    fps_color,
+  )
   // Truncate ms string to avoid long decimals
   let ms_str = {
     let s = latest_ms.to_string()
@@ -86,8 +100,11 @@ pub fn draw() -> Unit {
     @raylib.Color::new(255, 255, 255, 18),
   )
   // Target FPS line
-  let target_line_y = graph_y + graph_h -
-    (target_ms / 33.333F * Float::from_int(graph_h)).to_int().clamp(min=0, max=graph_h)
+  let target_line_y = graph_y +
+    graph_h -
+    (target_ms / 33.333F * Float::from_int(graph_h))
+    .to_int()
+    .clamp(min=0, max=graph_h)
   @raylib.draw_line(
     graph_x,
     target_line_y,

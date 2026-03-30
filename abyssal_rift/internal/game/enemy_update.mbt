@@ -84,7 +84,9 @@ pub fn update_enemies(game : @types.Game, dt : Float) -> Unit {
           // Melee attack hits player if close
           let stats = @data.get_enemy_stats(e.kind, game.floor_num)
           let d2 = @types.dist2(e.x, e.y, p.x, p.y)
-          if d2 < (stats.attack_range + @types.player_radius) * (stats.attack_range + @types.player_radius) {
+          if d2 <
+            (stats.attack_range + @types.player_radius) *
+            (stats.attack_range + @types.player_radius) {
             damage_player(game, stats.damage)
             // Elite Vampiric affix: heal 10% of max HP on hit
             if e.is_elite && e.affix == Vampiric {
@@ -153,8 +155,8 @@ fn collide_enemy_with_tiles(game : @types.Game, e : @types.Enemy) -> Unit {
       let max_tx = ((e.x + r - room_px) / ts).to_int()
       let min_ty = ((e.y - r - room_py) / ts).to_int()
       let max_ty = ((e.y + r - room_py) / ts).to_int()
-      for ty in min_ty..=max_ty {
-        for tx in min_tx..=max_tx {
+      for ty in min_ty..<=max_ty {
+        for tx in min_tx..<=max_tx {
           if tx >= 0 && tx < room.w && ty >= 0 && ty < room.h {
             let tile = room.tiles[ty * room.w + tx]
             let is_wall_tile = tile == 0 || (tile == 2 && room.state == Sealed)
@@ -222,7 +224,7 @@ pub fn spawn_enemy(
   game : @types.Game,
   kind : @types.EnemyKind,
   x : Float,
-  y : Float
+  y : Float,
 ) -> Unit {
   let idx = @types.alloc_enemy(game.enemies)
   let e = game.enemies[idx]
@@ -261,7 +263,7 @@ pub fn spawn_elite(
   kind : @types.EnemyKind,
   x : Float,
   y : Float,
-  affix : @types.EliteAffix
+  affix : @types.EliteAffix,
 ) -> Unit {
   spawn_enemy(game, kind, x, y)
   // Find the just-spawned enemy (last active one)

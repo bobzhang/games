@@ -287,14 +287,13 @@ fn @types.Game::demo_player_command(
     let base_x = @types.tile_center_x(@types.base_tile_x)
     let base_y = @types.tile_center_y(@types.base_tile_y)
     let facing_base = match player.dir {
-      Down =>
-        player.y < base_y
+      Down => player.y < base_y
       Left =>
         player.x > base_x &&
-          (player.y - base_y).abs() < Float::from_int(@types.tile_size) * 2.0
+        (player.y - base_y).abs() < Float::from_int(@types.tile_size) * 2.0
       Right =>
         player.x < base_x &&
-          (player.y - base_y).abs() < Float::from_int(@types.tile_size) * 2.0
+        (player.y - base_y).abs() < Float::from_int(@types.tile_size) * 2.0
       Up => false
     }
     !facing_base

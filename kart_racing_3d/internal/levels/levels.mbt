@@ -245,10 +245,7 @@ pub fn get_track_waypoints(
 
 ///|
 /// Returns segment metadata for each waypoint pair on the given track.
-pub fn get_track_segments(
-  cup : Int,
-  race : Int,
-) -> Array[@types.TrackSegment] {
+pub fn get_track_segments(cup : Int, race : Int) -> Array[@types.TrackSegment] {
   let track_id = cup * 4 + race
   let wps = get_track_waypoints(cup, race)
   let count = wps.length()

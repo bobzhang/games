@@ -183,10 +183,9 @@ pub fn world_to_grid_y(wz : Float) -> Int {
 ///|
 /// Returns the tower pool index at grid position (`gx`, `gy`), or -1 if none.
 pub fn tower_at(game : Game, gx : Int, gy : Int) -> Int {
-  @utils.first_index_by(
-    game.towers,
-    fn(tower) { tower.active && tower.gx == gx && tower.gy == gy },
-  )
+  @utils.first_index_by(game.towers, fn(tower) {
+    tower.active && tower.gx == gx && tower.gy == gy
+  })
 }
 
 ///|

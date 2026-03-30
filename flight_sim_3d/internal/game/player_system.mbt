@@ -271,8 +271,8 @@ fn @types.Game::crash_player(game : @types.Game) -> Unit {
 pub fn damage_player(
   game : @types.Game,
   amount : Float,
-  attacker_x~ : Float = 0.0,
-  attacker_z~ : Float = 0.0,
+  attacker_x? : Float = 0.0,
+  attacker_z? : Float = 0.0,
 ) -> Unit {
   let player = game.player
   if !player.alive {

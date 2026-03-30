@@ -2148,13 +2148,7 @@ fn main {
       12,
       @raylib.Color::new(102, 212, 170, 255),
     )
-    @draw.draw_text(
-      "HOLD",
-      16,
-      110,
-      16,
-      @raylib.Color::new(208, 236, 220, 255),
-    )
+    @draw.draw_text("HOLD", 16, 110, 16, @raylib.Color::new(208, 236, 220, 255))
 
     @raylib.draw_rectangle(
       16,
@@ -2202,13 +2196,7 @@ fn main {
       10,
       @raylib.Color::new(244, 172, 98, 255),
     )
-    @draw.draw_text(
-      "HEAT",
-      16,
-      208,
-      16,
-      @raylib.Color::new(246, 222, 194, 255),
-    )
+    @draw.draw_text("HEAT", 16, 208, 16, @raylib.Color::new(246, 222, 194, 255))
 
     @draw.draw_text(
       "Capture [H]  Dash [K] \{(player.dash_cd * 10.0).to_int()}  Pulse [L] \{(player.pulse_cd * 10.0).to_int()}",

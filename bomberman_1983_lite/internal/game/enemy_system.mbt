@@ -217,7 +217,7 @@ fn enemy_has_clear_shot(game : @types.Game, enemy : @types.Tank) -> Bool {
   let dy = @types.dir_vector_y(enemy.dir).to_int()
   let start_tx = @types.world_x_to_tile(enemy.x)
   let start_ty = @types.world_y_to_tile(enemy.y)
-  for step in 1..=8 {
+  for step in 1..<=8 {
     let tx = start_tx + dx * step
     let ty = start_ty + dy * step
     if !@types.in_tile_bounds(tx, ty) {
@@ -263,7 +263,16 @@ fn enemy_shoot_if_ready(game : @types.Game, enemy_index : Int) -> Unit {
     Heavy | Sniper => 2
     _ => 1
   }
-  spawn_bullet(game, Enemy, e.x, e.y, e.dir, @types.enemy_bullet_speed, 1, power)
+  spawn_bullet(
+    game,
+    Enemy,
+    e.x,
+    e.y,
+    e.dir,
+    @types.enemy_bullet_speed,
+    1,
+    power,
+  )
 }
 
 ///|

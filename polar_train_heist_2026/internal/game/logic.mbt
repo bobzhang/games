@@ -124,10 +124,7 @@ fn @types.Game::alloc_shot(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.shots,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.shots, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -144,10 +141,7 @@ fn @types.Game::alloc_fx(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.fxs,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.fxs, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -164,10 +158,7 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.rings,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.rings, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -184,10 +175,7 @@ fn @types.Game::alloc_shadow(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.shadows,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.shadows, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {

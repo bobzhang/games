@@ -2,7 +2,7 @@
 pub fn update_player_combat(
   game : @types.Game,
   input : InputState,
-  dt : Float
+  dt : Float,
 ) -> Unit {
   let p = game.player
   if p.dead || p.dash_timer > 0.0 {
@@ -66,7 +66,8 @@ pub fn update_player_combat(
         } else {
           1.0
         }
-        let recovery = @data.get_recovery_time(p.weapon, p.combo_count) * speed_mult
+        let recovery = @data.get_recovery_time(p.weapon, p.combo_count) *
+          speed_mult
         p.attack_state = Recovery(recovery)
       } else {
         p.attack_state = Active(new_t)
@@ -102,7 +103,8 @@ fn spawn_player_attack_hitbox(game : @types.Game) -> Unit {
     bonus_mult += 0.5
   }
   // Assassin synergy: CritUp + Daggers
-  let assassin_crit_bonus : Float = if p.passives.contains(CritUp) && p.weapon == Daggers {
+  let assassin_crit_bonus : Float = if p.passives.contains(CritUp) &&
+    p.weapon == Daggers {
     0.10
   } else {
     0.0
@@ -142,7 +144,9 @@ fn spawn_player_attack_hitbox(game : @types.Game) -> Unit {
       proj.y = p.y + dir_y * 20.0
       proj.vx = dir_x * stats.projectile_speed
       proj.vy = dir_y * stats.projectile_speed
-      proj.damage = (Float::from_int(stats.base_damage) * p.damage_mult * bonus_mult).to_int()
+      proj.damage = (Float::from_int(stats.base_damage) *
+      p.damage_mult *
+      bonus_mult).to_int()
       proj.is_player = true
       proj.lifetime = 2.0
       proj.poison_on_hit = false
@@ -158,7 +162,8 @@ fn spawn_player_attack_hitbox(game : @types.Game) -> Unit {
       // Crit roll
       let (s, roll) = @types.rng_next(game.rng_state)
       game.rng_state = s
-      proj.is_crit = roll < (p.crit_chance + stats.crit_bonus + assassin_crit_bonus)
+      proj.is_crit = roll <
+        p.crit_chance + stats.crit_bonus + assassin_crit_bonus
       if proj.is_crit {
         proj.damage = (Float::from_int(proj.damage) * 1.5).to_int()
       }
@@ -166,10 +171,12 @@ fn spawn_player_attack_hitbox(game : @types.Game) -> Unit {
   } else {
     // Melee: check enemies in arc
     let range = stats.range
-    let damage = (Float::from_int(stats.base_damage) * p.damage_mult * bonus_mult).to_int()
+    let damage = (Float::from_int(stats.base_damage) *
+    p.damage_mult *
+    bonus_mult).to_int()
     let (s, roll) = @types.rng_next(game.rng_state)
     game.rng_state = s
-    let is_crit = roll < (p.crit_chance + stats.crit_bonus + assassin_crit_bonus)
+    let is_crit = roll < p.crit_chance + stats.crit_bonus + assassin_crit_bonus
     let final_damage = if is_crit {
       (Float::from_int(damage) * 1.5).to_int()
     } else {
@@ -185,7 +192,8 @@ fn spawn_player_attack_hitbox(game : @types.Game) -> Unit {
         _ => ()
       }
       let d2 = @types.dist2(p.x, p.y, e.x, e.y)
-      let hit_range = range + @data.get_enemy_stats(e.kind, game.floor_num).radius
+      let hit_range = range +
+        @data.get_enemy_stats(e.kind, game.floor_num).radius
       if d2 <= hit_range * hit_range {
         // Cleave synergy: skip arc check and hit all enemies in range
         if syn.cleave {
@@ -199,7 +207,13 @@ fn spawn_player_attack_hitbox(game : @types.Game) -> Unit {
           let half_arc = stats.arc_angle / 2.0 / 180.0 * 3.14159
           let arc_cos = Float::from_double(@math.cos(half_arc.to_double()))
           if dot >= arc_cos || stats.arc_angle >= 360.0 {
-            apply_damage_to_enemy(game, i, final_damage, is_crit, stats.knockback)
+            apply_damage_to_enemy(
+              game,
+              i,
+              final_damage,
+              is_crit,
+              stats.knockback,
+            )
           }
         }
       }

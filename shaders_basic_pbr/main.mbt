@@ -91,44 +91,32 @@ fn create_pbr_light(
 fn update_pbr_light(shader : @raylib.Shader, light : PbrLight) -> Unit {
   // Send light enabled state as integer
   let enabled_val = if light.enabled { 1 } else { 0 }
-  shader.set_value(
-    light.enabled_loc,
-    Int(enabled_val),
-  )
+  shader.set_value(light.enabled_loc, Int(enabled_val))
 
   // Send light type
-  shader.set_value(
-    light.type_loc,
-    Int(light.light_type),
-  )
+  shader.set_value(light.type_loc, Int(light.light_type))
 
   // Send light position as vec3
-  shader.set_value(
-    light.position_loc,
-    Vec3(light.position),
-  )
+  shader.set_value(light.position_loc, Vec3(light.position))
 
   // Send light target as vec3
-  shader.set_value(
-    light.target_loc,
-    Vec3(light.target),
-  )
+  shader.set_value(light.target_loc, Vec3(light.target))
 
   // Send light color as vec4 (normalized 0.0-1.0)
   shader.set_value(
     light.color_loc,
     Vec4(
       @raylib.Vector4::new(
-        light.color[0], light.color[1], light.color[2], light.color[3],
+        light.color[0],
+        light.color[1],
+        light.color[2],
+        light.color[3],
       ),
     ),
   )
 
   // Send light intensity
-  shader.set_value(
-    light.intensity_loc,
-    Float(light.intensity),
-  )
+  shader.set_value(light.intensity_loc, Float(light.intensity))
 }
 
 // ============================================================================
@@ -195,10 +183,7 @@ fn main {
   )
   let light_count_loc = @raylib.get_shader_location(shader, "numOfLights")
   let max_light_count = MaxLights
-  shader.set_value(
-    light_count_loc,
-    Int(max_light_count),
-  )
+  shader.set_value(light_count_loc, Int(max_light_count))
 
   // Setup ambient color and intensity parameters
   let ambient_intensity : Float = 0.02
@@ -387,10 +372,7 @@ fn main {
     @raylib.get_shader_location(shader, "useTexNormal"),
     Int(usage),
   )
-  shader.set_value(
-    @raylib.get_shader_location(shader, "useTexMRA"),
-    Int(usage),
-  )
+  shader.set_value(@raylib.get_shader_location(shader, "useTexMRA"), Int(usage))
   shader.set_value(
     @raylib.get_shader_location(shader, "useTexEmissive"),
     Int(usage),
@@ -436,15 +418,9 @@ fn main {
     @raylib.begin_mode_3d(camera)
 
     // Set floor model texture tiling and emissive color parameters on shader
-    shader.set_value(
-      texture_tiling_loc,
-      Vec2(floor_texture_tiling),
-    )
+    shader.set_value(texture_tiling_loc, Vec2(floor_texture_tiling))
     let floor_emissive_color = @raylib.color_normalize(@raylib.black)
-    shader.set_value(
-      emissive_color_loc,
-      Vec4(floor_emissive_color),
-    )
+    shader.set_value(emissive_color_loc, Vec4(floor_emissive_color))
 
     @raylib.draw_model(
       floor_model,
@@ -454,22 +430,13 @@ fn main {
     )
 
     // Set old car model texture tiling, emissive color and emissive intensity parameters on shader
-    shader.set_value(
-      texture_tiling_loc,
-      Vec2(car_texture_tiling),
-    )
+    shader.set_value(texture_tiling_loc, Vec2(car_texture_tiling))
     let car_emissive_color = @raylib.color_normalize(
       @raylib.Color::new(255, 162, 0, 255),
     )
-    shader.set_value(
-      emissive_color_loc,
-      Vec4(car_emissive_color),
-    )
+    shader.set_value(emissive_color_loc, Vec4(car_emissive_color))
     let emissive_intensity : Float = 0.01
-    shader.set_value(
-      emissive_intensity_loc,
-      Float(emissive_intensity),
-    )
+    shader.set_value(emissive_intensity_loc, Float(emissive_intensity))
 
     @raylib.draw_model(
       car,

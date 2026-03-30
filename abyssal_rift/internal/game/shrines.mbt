@@ -1,7 +1,11 @@
 ///|
 fn setup_shrine(game : @types.Game) -> Unit {
   let shrines : Array[@types.ShrineKind] = [
-    BloodAltar, HealingSpring, GambleShrine, CursedChest, ReforgeAnvil,
+    BloodAltar,
+    HealingSpring,
+    GambleShrine,
+    CursedChest,
+    ReforgeAnvil,
   ]
   let (s, idx) = @types.rng_int(game.rng_state, 0, 4)
   game.rng_state = s
@@ -23,10 +27,8 @@ pub fn update_shrine(game : @types.Game, input : InputState) -> Unit {
         return
       }
       let ts = @types.tile_sizef
-      let cx = Float::from_int(room.x) * ts +
-        Float::from_int(room.w) * ts / 2.0
-      let cy = Float::from_int(room.y) * ts +
-        Float::from_int(room.h) * ts / 2.0
+      let cx = Float::from_int(room.x) * ts + Float::from_int(room.w) * ts / 2.0
+      let cy = Float::from_int(room.y) * ts + Float::from_int(room.h) * ts / 2.0
       let d2 = @types.dist2(game.player.x, game.player.y, cx, cy)
       if d2 < 60.0 * 60.0 && input.interact_pressed {
         activate_shrine(game)
@@ -39,7 +41,7 @@ pub fn update_shrine(game : @types.Game, input : InputState) -> Unit {
 fn activate_shrine(game : @types.Game) -> Unit {
   let p = game.player
   match game.shrine_kind {
-    BloodAltar => {
+    BloodAltar =>
       if p.hp > 20 {
         p.hp -= 20
         p.damage_mult += 0.25
@@ -47,7 +49,6 @@ fn activate_shrine(game : @types.Game) -> Unit {
         push_event(game, PlayerDamaged(20, p.x, p.y))
         spawn_particles_burst(game, p.x, p.y, 15, 200, 30, 30)
       }
-    }
     HealingSpring => {
       p.hp = p.max_hp
       p.shield = p.max_shield
@@ -55,7 +56,7 @@ fn activate_shrine(game : @types.Game) -> Unit {
       game.shrine_used = true
       spawn_particles_burst(game, p.x, p.y, 20, 80, 255, 80)
     }
-    GambleShrine => {
+    GambleShrine =>
       if p.gold >= 30 {
         p.gold -= 30
         // Build-biased: prefer synergy-completing passives
@@ -69,7 +70,6 @@ fn activate_shrine(game : @types.Game) -> Unit {
         game.shrine_used = true
         spawn_particles_burst(game, p.x, p.y, 15, 255, 215, 0)
       }
-    }
     CursedChest => {
       let damage = @types.clampi(15, 0, p.hp - 1)
       p.hp -= damage

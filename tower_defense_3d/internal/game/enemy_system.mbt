@@ -308,7 +308,15 @@ fn @types.Game::kill_enemy(game : @types.Game, enemy : @types.Enemy) -> Unit {
   @types.spawn_gold_particles(game, enemy.x, enemy.y + 0.5, enemy.z)
   // Floating gold text
   @types.spawn_floating_text(
-    game, enemy.x, enemy.y + 1.2, enemy.z, enemy.gold_value, 255, 215, 0, true,
+    game,
+    enemy.x,
+    enemy.y + 1.2,
+    enemy.z,
+    enemy.gold_value,
+    255,
+    215,
+    0,
+    true,
   )
   // Splitter: spawn children
   if enemy.spawn_children {
@@ -436,11 +444,18 @@ fn @types.Game::apply_projectile_hit(
     if src_tower.active &&
       (src_tower.kind == Cannon || src_tower.kind == Splash) {
       let buff_level = @types.find_nearby_buff_level(
-        game, src_tower.gx, src_tower.gy,
+        game,
+        src_tower.gx,
+        src_tower.gy,
       )
       if buff_level > 0 {
         effective_splash = effective_splash *
-          (1.0 + Float::from_int(buff_level) * (@types.buff_amplify_splash_radius - 1.0) / 3.0)
+          (
+            1.0 +
+            Float::from_int(buff_level) *
+            (@types.buff_amplify_splash_radius - 1.0) /
+            3.0
+          )
       }
     }
   }
@@ -461,15 +476,21 @@ fn @types.Game::apply_projectile_hit(
         } else {
           1.0
         }
-        let actual_damage = @types.calc_damage(
-          raw_damage, tower_kind, enemy,
-        ) * synergy_mult
+        let actual_damage = @types.calc_damage(raw_damage, tower_kind, enemy) *
+          synergy_mult
         game.damage_enemy(i, actual_damage, proj.tower_idx)
         // Apply splash status effects
         game.apply_projectile_effects(proj, i)
         // Show armor-break synergy combo indicator
         if enemy.armor_broken && synergy_mult > 1.0 {
-          game.show_synergy_combo(proj.tower_idx, enemy, "ARMOR BREAK!", 255, 140, 0)
+          game.show_synergy_combo(
+            proj.tower_idx,
+            enemy,
+            "ARMOR BREAK!",
+            255,
+            140,
+            0,
+          )
         }
       }
     }
@@ -495,20 +516,33 @@ fn @types.Game::apply_projectile_hit(
     if (tower_kind == Cannon || tower_kind == Splash) && enemy.armor_broken {
       synergy_mult = @types.synergy_armor_break_splash_mult
     }
-    let actual_damage = @types.calc_damage(
-      raw_damage, tower_kind, enemy,
-    ) * synergy_mult
+    let actual_damage = @types.calc_damage(raw_damage, tower_kind, enemy) *
+      synergy_mult
     game.damage_enemy(proj.target_idx, actual_damage, proj.tower_idx)
     // Apply status effects
     game.apply_projectile_effects(proj, proj.target_idx)
     // Show synergy combo indicator
     if tower_kind == Lightning && enemy.chilled && synergy_mult > 1.0 {
-      game.show_synergy_combo(proj.tower_idx, enemy, "FROST+ZAP!", 100, 200, 255)
+      game.show_synergy_combo(
+        proj.tower_idx,
+        enemy,
+        "FROST+ZAP!",
+        100,
+        200,
+        255,
+      )
     }
     if (tower_kind == Cannon || tower_kind == Splash) &&
       enemy.armor_broken &&
       synergy_mult > 1.0 {
-      game.show_synergy_combo(proj.tower_idx, enemy, "ARMOR BREAK!", 255, 140, 0)
+      game.show_synergy_combo(
+        proj.tower_idx,
+        enemy,
+        "ARMOR BREAK!",
+        255,
+        140,
+        0,
+      )
     }
     // Crit visual
     if proj.is_crit {
@@ -549,11 +583,18 @@ fn @types.Game::apply_projectile_effects(
       let src_tower = game.towers[proj.tower_idx]
       if src_tower.active {
         let buff_level = @types.find_nearby_buff_level(
-          game, src_tower.gx, src_tower.gy,
+          game,
+          src_tower.gx,
+          src_tower.gy,
         )
         if buff_level > 0 {
           slow_dur = slow_dur *
-            (1.0 + Float::from_int(buff_level) * (@types.buff_amplify_slow_duration - 1.0) / 3.0)
+            (
+              1.0 +
+              Float::from_int(buff_level) *
+              (@types.buff_amplify_slow_duration - 1.0) /
+              3.0
+            )
         }
       }
     }
@@ -601,19 +642,22 @@ fn @types.Game::apply_projectile_effects(
       let sniper_tower = game.towers[proj.tower_idx]
       if sniper_tower.active && sniper_tower.level >= 3 {
         enemy.armor_break_factor = 0.4
-      } else {
         // Lower levels get a weaker armor break
-        if enemy.armor_break_factor > 0.7 {
-          enemy.armor_break_factor = 0.7
-        }
-      }
-    } else {
-      if enemy.armor_break_factor > 0.7 {
+      } else if enemy.armor_break_factor > 0.7 {
         enemy.armor_break_factor = 0.7
       }
+    } else if enemy.armor_break_factor > 0.7 {
+      enemy.armor_break_factor = 0.7
     }
     @types.spawn_particles(
-      game, enemy.x, enemy.y + 0.5, enemy.z, 4, 255, 140, 0,
+      game,
+      enemy.x,
+      enemy.y + 0.5,
+      enemy.z,
+      4,
+      255,
+      140,
+      0,
     )
     @types.spawn_break_flash(game, enemy.x, enemy.y, enemy.z, 255, 140, 0)
   }
@@ -641,7 +685,12 @@ fn @types.Game::apply_chain_lightning(
     game.damage_enemy(current_target, actual_damage, proj.tower_idx)
     if enemy.chilled {
       game.show_synergy_combo(
-        proj.tower_idx, enemy, "FROST+ZAP!", 100, 200, 255,
+        proj.tower_idx,
+        enemy,
+        "FROST+ZAP!",
+        100,
+        200,
+        255,
       )
     }
     @types.spawn_lightning_particles(game, enemy.x, enemy.y, enemy.z)
@@ -690,13 +739,17 @@ fn @types.Game::apply_chain_lightning(
       let enemy = game.enemies[best]
       // Frost+Lightning synergy on chain bounces too (applied post-armor)
       let synergy_chain_mult = chain_synergy_mult(enemy)
-      let actual_damage = @types.calc_damage(
-        current_damage, Lightning, enemy,
-      ) * synergy_chain_mult
+      let actual_damage = @types.calc_damage(current_damage, Lightning, enemy) *
+        synergy_chain_mult
       game.damage_enemy(best, actual_damage, proj.tower_idx)
       if enemy.chilled {
         game.show_synergy_combo(
-          proj.tower_idx, enemy, "FROST+ZAP!", 100, 200, 255,
+          proj.tower_idx,
+          enemy,
+          "FROST+ZAP!",
+          100,
+          200,
+          255,
         )
       }
       @types.spawn_lightning_particles(game, enemy.x, enemy.y, enemy.z)
@@ -737,7 +790,14 @@ fn @types.Game::damage_enemy(
   let ft_g = if is_crit { 215 } else { 255 }
   let ft_b = if is_crit { 0 } else { 255 }
   @types.spawn_floating_text(
-    game, enemy.x, enemy.y + 0.8, enemy.z, damage.to_int(), ft_r, ft_g, ft_b,
+    game,
+    enemy.x,
+    enemy.y + 0.8,
+    enemy.z,
+    damage.to_int(),
+    ft_r,
+    ft_g,
+    ft_b,
     false,
   )
   // Apply damage to shield first

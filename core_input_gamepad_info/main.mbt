@@ -28,13 +28,7 @@ fn main {
         )
         y += 11
         let axis_count = @raylib.get_gamepad_axis_count(i)
-        @draw.draw_text(
-          "  Axis count: \{axis_count}",
-          10,
-          y,
-          10,
-          @raylib.black,
-        )
+        @draw.draw_text("  Axis count: \{axis_count}", 10, y, 10, @raylib.black)
         y += 11
         for axis in 0..<axis_count {
           let axis_val = @raylib.get_gamepad_axis_movement(i, axis)

@@ -392,8 +392,12 @@ fn @types.Game::draw_enemy_ships(game : @types.Game) -> Unit {
       1.2,
       @raylib.Color::new(50, 40, 35, 255),
     )
-    let mast_lean_x = @math.cosf(enemy.heading) * (roll_lean + damage_lean) * 2.5
-    let mast_lean_z = -@math.sinf(enemy.heading) * (roll_lean + damage_lean) * 2.5
+    let mast_lean_x = @math.cosf(enemy.heading) *
+      (roll_lean + damage_lean) *
+      2.5
+    let mast_lean_z = -@math.sinf(enemy.heading) *
+      (roll_lean + damage_lean) *
+      2.5
     @raylib.draw_cylinder(
       @raylib.Vector3::new(enemy.x, base_y + 0.4, enemy.z),
       0.08,
@@ -653,11 +657,7 @@ fn @types.Game::draw_fleet_ships(game : @types.Game) -> Unit {
       0.2,
       @raylib.Color::new(50, 200, 80, 200),
     )
-    let fhp_pct = if fs.max_hp > 0.0 {
-      fs.hull_hp / fs.max_hp
-    } else {
-      0.0
-    }
+    let fhp_pct = if fs.max_hp > 0.0 { fs.hull_hp / fs.max_hp } else { 0.0 }
     let fbar_y = base_y + 4.6
     @raylib.draw_cube(
       @raylib.Vector3::new(fs.x, fbar_y, fs.z),
@@ -752,11 +752,7 @@ fn @types.Game::draw_convoy_ships(game : @types.Game) -> Unit {
       0.18,
       @raylib.Color::new(255, 255, 200, 200),
     )
-    let chp_pct = if cs.max_hp > 0.0 {
-      cs.hull_hp / cs.max_hp
-    } else {
-      0.0
-    }
+    let chp_pct = if cs.max_hp > 0.0 { cs.hull_hp / cs.max_hp } else { 0.0 }
     let cbar_y = base_y + 4.6
     @raylib.draw_cube(
       @raylib.Vector3::new(cs.x, cbar_y, cs.z),

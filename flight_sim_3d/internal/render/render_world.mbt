@@ -205,16 +205,8 @@ fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
       )
       // Health fill with green->yellow->red transition
       let inv_ratio : Float = 1.0 - ratio
-      let hr : Float = if ratio > 0.5 {
-        inv_ratio * 2.0 * 255.0
-      } else {
-        255.0
-      }
-      let hg : Float = if ratio > 0.5 {
-        255.0
-      } else {
-        ratio * 2.0 * 255.0
-      }
+      let hr : Float = if ratio > 0.5 { inv_ratio * 2.0 * 255.0 } else { 255.0 }
+      let hg : Float = if ratio > 0.5 { 255.0 } else { ratio * 2.0 * 255.0 }
       let health_color = @raylib.Color::new(
         hr.to_int().clamp(min=0, max=255),
         hg.to_int().clamp(min=0, max=255),
@@ -674,16 +666,8 @@ fn @types.Game::draw_turrets_3d(game : @types.Game) -> Unit {
       )
       // Health fill with color transition
       let t_inv : Float = 1.0 - ratio
-      let hr : Float = if ratio > 0.5 {
-        t_inv * 2.0 * 255.0
-      } else {
-        255.0
-      }
-      let hg : Float = if ratio > 0.5 {
-        255.0
-      } else {
-        ratio * 2.0 * 255.0
-      }
+      let hr : Float = if ratio > 0.5 { t_inv * 2.0 * 255.0 } else { 255.0 }
+      let hg : Float = if ratio > 0.5 { 255.0 } else { ratio * 2.0 * 255.0 }
       let health_color = @raylib.Color::new(
         hr.to_int().clamp(min=0, max=255),
         hg.to_int().clamp(min=0, max=255),

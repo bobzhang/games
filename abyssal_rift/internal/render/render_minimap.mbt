@@ -8,13 +8,7 @@ pub fn draw_minimap(game : @types.Game) -> Unit {
       let my = 55
       let mw = 170
       let mh = 130
-      @raylib.draw_rectangle(
-        mx,
-        my,
-        mw,
-        mh,
-        @raylib.Color::new(0, 0, 0, 150),
-      )
+      @raylib.draw_rectangle(mx, my, mw, mh, @raylib.Color::new(0, 0, 0, 150))
       @raylib.draw_rectangle_lines_ex(
         @raylib.Rectangle::new(
           Float::from_int(mx),
@@ -82,12 +76,8 @@ pub fn draw_minimap(game : @types.Game) -> Unit {
       // Draw player dot
       let p = game.player
       let ts = @types.tile_sizef
-      let px = mx +
-        5 +
-        ((p.x / ts - Float::from_int(min_rx)) * scale).to_int()
-      let py = my +
-        5 +
-        ((p.y / ts - Float::from_int(min_ry)) * scale).to_int()
+      let px = mx + 5 + ((p.x / ts - Float::from_int(min_rx)) * scale).to_int()
+      let py = my + 5 + ((p.y / ts - Float::from_int(min_ry)) * scale).to_int()
       @raylib.draw_circle(px, py, 2.0, @raylib.white)
     }
   }

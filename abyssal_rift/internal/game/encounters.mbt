@@ -1,5 +1,8 @@
 ///|
-pub fn select_encounter(floor_num : Int, rng : UInt) -> (@types.EncounterType, UInt) {
+pub fn select_encounter(
+  floor_num : Int,
+  rng : UInt,
+) -> (@types.EncounterType, UInt) {
   let (s, roll) = @types.rng_next(rng)
   let encounter : @types.EncounterType = if floor_num <= 2 {
     // Early: mostly standard
@@ -24,22 +27,20 @@ pub fn select_encounter(floor_num : Int, rng : UInt) -> (@types.EncounterType, U
     } else {
       Ambush
     }
+  } else if roll < 0.15 {
+    Standard
+  } else if roll < 0.3 {
+    Swarm
+  } else if roll < 0.45 {
+    SniperNest
+  } else if roll < 0.6 {
+    BossRush
+  } else if roll < 0.75 {
+    SurvivalWave
+  } else if roll < 0.9 {
+    PoisonNest
   } else {
-    if roll < 0.15 {
-      Standard
-    } else if roll < 0.3 {
-      Swarm
-    } else if roll < 0.45 {
-      SniperNest
-    } else if roll < 0.6 {
-      BossRush
-    } else if roll < 0.75 {
-      SurvivalWave
-    } else if roll < 0.9 {
-      PoisonNest
-    } else {
-      Ambush
-    }
+    Ambush
   }
   (encounter, s)
 }
@@ -48,7 +49,7 @@ pub fn select_encounter(floor_num : Int, rng : UInt) -> (@types.EncounterType, U
 pub fn spawn_encounter(
   game : @types.Game,
   encounter : @types.EncounterType,
-  room : @types.Room
+  room : @types.Room,
 ) -> Unit {
   let ts = @types.tile_sizef
   let cx = Float::from_int(room.x) * ts + Float::from_int(room.w) * ts / 2.0
@@ -72,7 +73,7 @@ fn spawn_encounter_swarm(
   cx : Float,
   cy : Float,
   hw : Float,
-  hh : Float
+  hh : Float,
 ) -> Unit {
   // Many weak enemies
   let count = 8 + game.floor_num * 2
@@ -95,7 +96,7 @@ fn spawn_encounter_sniper_nest(
   cx : Float,
   cy : Float,
   hw : Float,
-  hh : Float
+  hh : Float,
 ) -> Unit {
   // Archers at corners, spiders near center
   spawn_enemy(game, Archer, cx - hw + 20.0, cy - hh + 20.0)
@@ -112,11 +113,15 @@ fn spawn_encounter_boss_rush(
   cx : Float,
   cy : Float,
   hw : Float,
-  hh : Float
+  hh : Float,
 ) -> Unit {
   // One elite + supporting minions
   let affixes : Array[@types.EliteAffix] = [
-    Fast, Armored, Splitting, Vampiric, Explosive,
+    Fast,
+    Armored,
+    Splitting,
+    Vampiric,
+    Explosive,
   ]
   let (s1, idx_f) = @types.rng_next(game.rng_state)
   game.rng_state = s1
@@ -141,7 +146,7 @@ fn spawn_encounter_poison_nest(
   cx : Float,
   cy : Float,
   hw : Float,
-  hh : Float
+  hh : Float,
 ) -> Unit {
   // Lots of spiders
   let count = 4 + game.floor_num
@@ -159,7 +164,7 @@ fn spawn_encounter_ambush(
   cx : Float,
   cy : Float,
   hw : Float,
-  hh : Float
+  hh : Float,
 ) -> Unit {
   // Enemies at room edges
   let count = 4 + game.floor_num
@@ -192,7 +197,7 @@ fn spawn_encounter_survival_wave(
   cx : Float,
   cy : Float,
   hw : Float,
-  hh : Float
+  hh : Float,
 ) -> Unit {
   // Spawn only a small first wave; subsequent waves handled by room_flow
   let count = 3
@@ -200,7 +205,8 @@ fn spawn_encounter_survival_wave(
     let (s1, ox) = @types.rng_range(game.rng_state, -hw * 0.5, hw * 0.5)
     let (s2, oy) = @types.rng_range(s1, -hh * 0.5, hh * 0.5)
     game.rng_state = s2
-    if @types.dist2(cx + ox, cy + oy, game.player.x, game.player.y) > 80.0 * 80.0 {
+    if @types.dist2(cx + ox, cy + oy, game.player.x, game.player.y) >
+      80.0 * 80.0 {
       spawn_enemy(game, SlimeSmall, cx + ox, cy + oy)
     }
   }
@@ -212,7 +218,7 @@ fn spawn_encounter_standard(
   cx : Float,
   cy : Float,
   hw : Float,
-  hh : Float
+  hh : Float,
 ) -> Unit {
   // Use existing curated pack system
   let budget = 3 + game.floor_num * 2
@@ -235,4 +241,3 @@ fn spawn_encounter_standard(
     }
   }
 }
-

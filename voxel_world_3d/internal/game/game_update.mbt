@@ -224,11 +224,7 @@ fn @types.Game::try_craft(
       // Equip the tool and set durability
       game.player.equipped_tool = output_id
       game.player.tool_durability = @types.get_tool_max_durability(output_id)
-      @types.show_message(
-        game,
-        "Crafted & equipped: \{recipe.name}",
-        2.0,
-      )
+      @types.show_message(game, "Crafted & equipped: \{recipe.name}", 2.0)
     } else {
       // Add output to inventory
       let leftover = inv.add_item(recipe.output_id, recipe.output_count)

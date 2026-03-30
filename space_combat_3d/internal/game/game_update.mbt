@@ -277,7 +277,9 @@ fn @types.Game::complete_mission(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::check_station_alive(game : @types.Game, kind : Int) -> Bool {
-  @utils.any_by(game.stations, fn(station) { station.active && station.kind == kind })
+  @utils.any_by(game.stations, fn(station) {
+    station.active && station.kind == kind
+  })
 }
 
 ///|
@@ -701,7 +703,12 @@ fn @types.Game::update_patrol_waypoints(game : @types.Game) -> Unit {
   let wp_y = game.patrol_waypoints_y[game.patrol_current]
   let wp_z = game.patrol_waypoints_z[game.patrol_current]
   let dist = @types.distance3d(
-    game.player.x, game.player.y, game.player.z, wp_x, wp_y, wp_z,
+    game.player.x,
+    game.player.y,
+    game.player.z,
+    wp_x,
+    wp_y,
+    wp_z,
   )
   if dist < @types.patrol_waypoint_radius {
     game.patrol_current = game.patrol_current + 1
@@ -728,10 +735,16 @@ fn @types.Game::spawn_ambush_squad(game : @types.Game) -> Unit {
   let num_ambush : Int = 2 + game.ai_difficulty
   for i in 0..<num_ambush {
     let idx = @types.alloc_enemy(game)
-    if idx < 0 { break }
+    if idx < 0 {
+      break
+    }
     let e = game.enemies[idx]
     e.active = true
-    e.kind = if i % 2 == 0 { @types.enemy_fighter } else { @types.enemy_interceptor }
+    e.kind = if i % 2 == 0 {
+      @types.enemy_fighter
+    } else {
+      @types.enemy_interceptor
+    }
     let fi = Float::from_int(i)
     let fnum = Float::from_int(num_ambush)
     let angle : Float = fi * @types.two_pi / fnum
@@ -792,10 +805,17 @@ fn @types.Game::check_mid_mission_events(game : @types.Game) -> Unit {
     Float::from_int(game.mission_kills + game.enemies_remaining)
   } else {
     let mk = Float::from_int(game.mission_kills)
-    if mk > 1.0 { mk } else { 1.0 }
+    if mk > 1.0 {
+      mk
+    } else {
+      1.0
+    }
   }
   let kill_fraction = Float::from_int(game.mission_kills) / total_spawned
-  let event = @levels.mission_mid_event(game.current_mission, game.mid_event_count)
+  let event = @levels.mission_mid_event(
+    game.current_mission,
+    game.mid_event_count,
+  )
   let event_type = event.0
   let threshold = event.1
   let message = event.2
@@ -814,7 +834,11 @@ fn @types.Game::check_mid_mission_events(game : @types.Game) -> Unit {
         game.message_timer = @types.mid_mission_msg_duration
       }
     } else if event_type == 2 {
-      game.message_text = if message.length() > 0 { message } else { "HAZARD WARNING" }
+      game.message_text = if message.length() > 0 {
+        message
+      } else {
+        "HAZARD WARNING"
+      }
       game.message_timer = @types.mid_mission_msg_duration
       game.spawn_hazard_asteroids()
     }
@@ -826,7 +850,9 @@ fn @types.Game::check_mid_mission_events(game : @types.Game) -> Unit {
 fn @types.Game::spawn_hazard_asteroids(game : @types.Game) -> Unit {
   for i in 0..<5 {
     let idx = @types.alloc_asteroid(game)
-    if idx < 0 { break }
+    if idx < 0 {
+      break
+    }
     let a = game.asteroids[idx]
     a.active = true
     let fi = Float::from_int(i)

@@ -828,10 +828,14 @@ pub fn Game::new() -> Game {
     damage_dir_x: 0.0,
     damage_dir_z: 0.0,
     damage_dir_timer: 0.0,
-    floating_damage: Array::make(
-      16,
-      { active: false, x: 0.0, y: 0.0, z: 0.0, amount: 0, timer: 0.0 },
-    ),
+    floating_damage: Array::make(16, {
+      active: false,
+      x: 0.0,
+      y: 0.0,
+      z: 0.0,
+      amount: 0,
+      timer: 0.0,
+    }),
     weapon_switch_display_timer: 0.0,
   }
 }

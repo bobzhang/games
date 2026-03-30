@@ -59,13 +59,7 @@ fn @types.Game::draw_panel(game : @types.Game) -> Unit {
   @draw.draw_text(game.level.to_string(), 36, 38, 32, @types.panel_text_color)
   // Score
   @draw.draw_text("Score", 160, 20, 16, @types.panel_label_color)
-  @draw.draw_text(
-    game.score.to_string(),
-    160,
-    38,
-    32,
-    @types.panel_text_color,
-  )
+  @draw.draw_text(game.score.to_string(), 160, 38, 32, @types.panel_text_color)
   // Target
   let target_str = "/ \{game.target_score}"
   @draw.draw_text(target_str, 280, 46, 16, @types.panel_label_color)
@@ -250,13 +244,7 @@ fn @types.Game::draw_overlay_over(game : @types.Game) -> Unit {
   let sub = "Enter: Retry  |  R: Level 1  |  Esc: Title"
   let sub_s = 16
   let sub_w = @draw.measure_text(sub, sub_s)
-  @draw.draw_text(
-    sub,
-    cx - sub_w / 2,
-    cy + 40,
-    sub_s,
-    @types.panel_label_color,
-  )
+  @draw.draw_text(sub, cx - sub_w / 2, cy + 40, sub_s, @types.panel_label_color)
 }
 
 ///|
@@ -293,13 +281,7 @@ fn @types.Game::draw_overlay_clear(game : @types.Game) -> Unit {
   let sub = "Enter: Next Level  |  R: Level 1"
   let sub_s = 16
   let sub_w = @draw.measure_text(sub, sub_s)
-  @draw.draw_text(
-    sub,
-    cx - sub_w / 2,
-    cy + 40,
-    sub_s,
-    @types.panel_label_color,
-  )
+  @draw.draw_text(sub, cx - sub_w / 2, cy + 40, sub_s, @types.panel_label_color)
   ignore(tw)
   ignore(sw)
 }

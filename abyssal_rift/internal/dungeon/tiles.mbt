@@ -24,7 +24,7 @@ pub fn is_walkable(tile : Int) -> Bool {
 pub fn get_tile_at(
   floor : @types.Floor,
   world_x : Float,
-  world_y : Float
+  world_y : Float,
 ) -> Int {
   let ts = @types.tile_sizef
   for i in 0..<floor.rooms.length() {
@@ -46,11 +46,7 @@ pub fn get_tile_at(
 
 ///|
 /// Find which room index the world position is inside, or -1 if none.
-pub fn room_at(
-  floor : @types.Floor,
-  world_x : Float,
-  world_y : Float
-) -> Int {
+pub fn room_at(floor : @types.Floor, world_x : Float, world_y : Float) -> Int {
   let ts = @types.tile_sizef
   for i in 0..<floor.rooms.length() {
     let room = floor.rooms[i]

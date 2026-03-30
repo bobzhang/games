@@ -82,9 +82,7 @@ fn main {
 
     @raylib.end_mode_3d()
 
-    @draw.draw_text(
-      "Use the T/G to switch animation", 10, 10, 20, @raylib.gray,
-    )
+    @draw.draw_text("Use the T/G to switch animation", 10, 10, 20, @raylib.gray)
 
     @fps.draw()
     @raylib.end_drawing()

@@ -26,7 +26,8 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
   grid[boss_idx] = true
 
   // Fill other cells with 60-80 % probability, scaling slightly with depth
-  let base_chance : Float = 60.0 / 100.0 + Float::from_int(@types.clampi(floor_num, 1, 10)) * (2.0 / 100.0)
+  let base_chance : Float = 60.0 / 100.0 +
+    Float::from_int(@types.clampi(floor_num, 1, 10)) * (2.0 / 100.0)
   for i in 1..<cell_count {
     if i == boss_idx {
       continue
@@ -245,10 +246,11 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
         // room_a's Right door -> room_b's Left door
         let door_key_a = key_a * 4 + 3 // Right = 3
         let door_key_b = key_b * 4 + 2 // Left = 2
-        match (
-          lookup_door(door_positions, door_key_a),
-          lookup_door(door_positions, door_key_b),
-        ) {
+        match
+          (
+            lookup_door(door_positions, door_key_a),
+            lookup_door(door_positions, door_key_b),
+          ) {
           (Some((x1, y1)), Some((x2, y2))) => {
             let corr = create_corridor_between(x1, y1, x2, y2, true)
             rooms.push(corr)
@@ -266,10 +268,11 @@ pub fn generate_floor(floor_num : Int, rng : UInt) -> (@types.Floor, UInt) {
         // room_a's Down door -> room_b's Up door
         let door_key_a = key_a * 4 + 1 // Down = 1
         let door_key_b = key_b * 4 + 0 // Up = 0
-        match (
-          lookup_door(door_positions, door_key_a),
-          lookup_door(door_positions, door_key_b),
-        ) {
+        match
+          (
+            lookup_door(door_positions, door_key_a),
+            lookup_door(door_positions, door_key_b),
+          ) {
           (Some((x1, y1)), Some((x2, y2))) => {
             let corr = create_corridor_between(x1, y1, x2, y2, false)
             rooms.push(corr)
@@ -313,10 +316,7 @@ fn corridor_exists(set : Array[(Int, Int)], a : Int, b : Int) -> Bool {
 
 ///|
 /// Look up a door's world-space position by key in the flat array.
-fn lookup_door(
-  positions : Array[(Int, Int, Int)],
-  key : Int
-) -> (Int, Int)? {
+fn lookup_door(positions : Array[(Int, Int, Int)], key : Int) -> (Int, Int)? {
   for i in 0..<positions.length() {
     let (k, x, y) = positions[i]
     if k == key {
@@ -343,7 +343,7 @@ fn carve_h_strip(
   ch : Int,
   x_start : Int,
   x_end : Int,
-  cy : Int
+  cy : Int,
 ) -> Unit {
   let lo = @types.mini(x_start, x_end)
   let hi = @types.maxi(x_start, x_end)
@@ -365,7 +365,7 @@ fn carve_v_strip(
   ch : Int,
   cx : Int,
   y_start : Int,
-  y_end : Int
+  y_end : Int,
 ) -> Unit {
   let lo = @types.mini(y_start, y_end)
   let hi = @types.maxi(y_start, y_end)
@@ -393,7 +393,7 @@ fn create_corridor_between(
   y1 : Int,
   x2 : Int,
   y2 : Int,
-  horizontal : Bool
+  horizontal : Bool,
 ) -> @types.Room {
   // Padding: 1 tile of wall on each side of the 1-tile-wide walkable centre.
   let pad = 2
@@ -482,11 +482,7 @@ fn create_corridor_between(
 ///|
 /// Ensure every occupied cell is reachable from cell 0 by enabling bridge
 /// cells along the shortest grid path when disconnected components exist.
-fn ensure_connectivity(
-  grid : Array[Bool],
-  cols : Int,
-  rows : Int
-) -> Unit {
+fn ensure_connectivity(grid : Array[Bool], cols : Int, rows : Int) -> Unit {
   let count = cols * rows
   let visited : Array[Bool] = Array::make(count, false)
   // BFS from cell 0

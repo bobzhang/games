@@ -461,13 +461,10 @@ fn next_route_pos(route : Array[Int], pos : Int, dir : Int) -> (Int, Int) {
 ///|
 /// Returns the index of the active segment connecting stations `a` and `b` (in either order), or -1 if not found.
 fn find_segment(segments : Array[Segment], a : Int, b : Int) -> Int {
-  @utils.first_index_by(
-    segments,
-    fn(segment) {
-      segment.active &&
-      ((segment.a == a && segment.b == b) || (segment.a == b && segment.b == a))
-    },
-  )
+  @utils.first_index_by(segments, fn(segment) {
+    segment.active &&
+    ((segment.a == a && segment.b == b) || (segment.a == b && segment.b == a))
+  })
 }
 
 ///|
@@ -550,7 +547,9 @@ fn setup_network(
 ///|
 /// Returns the number of active segments that currently have an active fault.
 fn count_faults(segments : Array[Segment]) -> Int {
-  @utils.count_by(segments, fn(segment) { segment.active && segment.fault_t > 0.0 })
+  @utils.count_by(segments, fn(segment) {
+    segment.active && segment.fault_t > 0.0
+  })
 }
 
 ///|

@@ -1372,9 +1372,7 @@ fn @types.Game::draw_enemy_status_visuals(game : @types.Game) -> Unit {
     }
     // Chilled indicator (blue-white frost aura for synergy tracking)
     if enemy.chilled {
-      let chill_pulse = @math.sinf(
-          Float::from_int(game.frame_counter) * 0.15,
-        ) *
+      let chill_pulse = @math.sinf(Float::from_int(game.frame_counter) * 0.15) *
         0.05 +
         0.15
       @raylib.draw_cube(
@@ -1549,7 +1547,9 @@ fn @types.Game::draw_synergy_lines(game : @types.Game) -> Unit {
       let lx = @types.lerpf(sl.x1, sl.x2, t)
       let ly = @types.lerpf(sl.y1, sl.y2, t)
       let lz = @types.lerpf(sl.z1, sl.z2, t)
-      let pulse = @math.sinf(t * 6.28 + Float::from_int(game.frame_counter) * 0.2) *
+      let pulse = @math.sinf(
+          t * 6.28 + Float::from_int(game.frame_counter) * 0.2,
+        ) *
         0.02 +
         0.06
       @raylib.draw_cube(
@@ -1762,10 +1762,9 @@ fn @types.Game::draw_attack_beams(game : @types.Game) -> Unit {
           ignore(s)
         }
       }
-      Lightning => {
+      Lightning =>
         // Lightning: jagged segments already handled by chain lines
         ()
-      }
       _ => ()
     }
   }

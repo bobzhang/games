@@ -152,23 +152,11 @@ fn main {
     // Draw parameter text
     @draw.draw_text("Width: \{width.to_int()}", 640, 40, 10, @raylib.darkgray)
     @draw.draw_text("[LEFT/RIGHT]", 640, 55, 10, @raylib.gray)
-    @draw.draw_text(
-      "Height: \{height.to_int()}",
-      640,
-      70,
-      10,
-      @raylib.darkgray,
-    )
+    @draw.draw_text("Height: \{height.to_int()}", 640, 70, 10, @raylib.darkgray)
     @draw.draw_text("[UP/DOWN]", 640, 85, 10, @raylib.gray)
     @draw.draw_text("Roundness: \{roundness}", 640, 110, 10, @raylib.darkgray)
     @draw.draw_text("[W/S]", 640, 125, 10, @raylib.gray)
-    @draw.draw_text(
-      "Thickness: \{line_thick}",
-      640,
-      150,
-      10,
-      @raylib.darkgray,
-    )
+    @draw.draw_text("Thickness: \{line_thick}", 640, 150, 10, @raylib.darkgray)
     @draw.draw_text("[Q/E]", 640, 165, 10, @raylib.gray)
     @draw.draw_text(
       "Segments: \{segments.to_int()}",

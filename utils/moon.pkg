@@ -1,3 +1,4 @@
-import {}
+import {
+}
 
 warnings = "+missing_doc+unnecessary_annotation"

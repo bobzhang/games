@@ -128,7 +128,7 @@ fn phase1_ai(
   boss : @types.Enemy,
   _dt : Float,
   dx : Float,
-  dy : Float
+  dy : Float,
 ) -> Unit {
   // Phase 1: Slow chase + charge attack + web projectiles
   let stats = @data.get_enemy_stats(boss.kind, game.floor_num)
@@ -152,7 +152,7 @@ fn phase2_ai(
   boss : @types.Enemy,
   _dt : Float,
   dx : Float,
-  dy : Float
+  dy : Float,
 ) -> Unit {
   // Phase 2: Faster, more frequent attacks, spawns minions
   let stats = @data.get_enemy_stats(boss.kind, game.floor_num)
@@ -177,7 +177,7 @@ fn phase3_ai(
   boss : @types.Enemy,
   _dt : Float,
   dx : Float,
-  dy : Float
+  dy : Float,
 ) -> Unit {
   // Phase 3: Enraged, continuous attacks
   let stats = @data.get_enemy_stats(boss.kind, game.floor_num)
@@ -204,7 +204,7 @@ fn phase4_ai(
   boss : @types.Enemy,
   dt : Float,
   dx : Float,
-  dy : Float
+  dy : Float,
 ) -> Unit {
   // Phase 4: Desperate, everything faster
   let stats = @data.get_enemy_stats(boss.kind, game.floor_num)
@@ -243,7 +243,7 @@ fn boss_charge_attack(
   game : @types.Game,
   boss : @types.Enemy,
   dx : Float,
-  dy : Float
+  dy : Float,
 ) -> Unit {
   // Lunge toward player
   boss.vx = dx * 500.0
@@ -257,7 +257,7 @@ fn boss_web_attack(
   game : @types.Game,
   boss : @types.Enemy,
   dx : Float,
-  dy : Float
+  dy : Float,
 ) -> Unit {
   // Single aimed web projectile
   let idx = @types.alloc_projectile(game.projectiles)
@@ -328,7 +328,10 @@ fn boss_slam_attack(game : @types.Game, boss : @types.Enemy) -> Unit {
 }
 
 ///|
-pub fn apply_status_effect(p : @types.Player, effect : @types.StatusEffect) -> Unit {
+pub fn apply_status_effect(
+  p : @types.Player,
+  effect : @types.StatusEffect,
+) -> Unit {
   // Replace existing effect of same type or add new
   for i in 0..<p.status_effects.length() {
     match (p.status_effects[i], effect) {
@@ -402,7 +405,7 @@ fn lich_phase1_ai(
   boss : @types.Enemy,
   _dt : Float,
   dx : Float,
-  dy : Float
+  dy : Float,
 ) -> Unit {
   // Phase 1: Teleport around room, cast homing dark orbs
   let stats = @data.get_enemy_stats(boss.kind, game.floor_num)
@@ -426,7 +429,7 @@ fn lich_phase2_ai(
   boss : @types.Enemy,
   _dt : Float,
   dx : Float,
-  dy : Float
+  dy : Float,
 ) -> Unit {
   // Phase 2: Summon skeletons, cast AoE darkness ring
   let stats = @data.get_enemy_stats(boss.kind, game.floor_num)
@@ -450,7 +453,7 @@ fn lich_phase3_ai(
   boss : @types.Enemy,
   _dt : Float,
   dx : Float,
-  dy : Float
+  dy : Float,
 ) -> Unit {
   // Phase 3: Rapid-fire orbs, constant skeleton spawning
   let stats = @data.get_enemy_stats(boss.kind, game.floor_num)
@@ -482,7 +485,7 @@ fn lich_phase4_ai(
   boss : @types.Enemy,
   dt : Float,
   dx : Float,
-  dy : Float
+  dy : Float,
 ) -> Unit {
   // Phase 4: Enraged - all abilities combined
   let stats = @data.get_enemy_stats(boss.kind, game.floor_num)
@@ -526,7 +529,7 @@ fn lich_dark_orb(
   game : @types.Game,
   boss : @types.Enemy,
   dx : Float,
-  dy : Float
+  dy : Float,
 ) -> Unit {
   // Homing dark orb toward player
   let idx = @types.alloc_projectile(game.projectiles)

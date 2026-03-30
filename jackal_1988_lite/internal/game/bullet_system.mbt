@@ -104,10 +104,14 @@ fn @types.Game::update_bullet_vs_bullet(game : @types.Game) -> Unit {
       if game.bullets[i].owner_team == game.bullets[j].owner_team {
         continue
       }
-      let both_players = (game.bullets[i].owner_team == Player1 ||
-        game.bullets[i].owner_team == Player2) &&
-        (game.bullets[j].owner_team == Player1 ||
-        game.bullets[j].owner_team == Player2)
+      let both_players = (
+          game.bullets[i].owner_team == Player1 ||
+          game.bullets[i].owner_team == Player2
+        ) &&
+        (
+          game.bullets[j].owner_team == Player1 ||
+          game.bullets[j].owner_team == Player2
+        )
       if both_players {
         continue
       }

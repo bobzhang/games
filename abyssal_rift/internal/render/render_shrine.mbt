@@ -10,10 +10,8 @@ pub fn draw_shrine(game : @types.Game) -> Unit {
         return
       }
       let ts = @types.tile_sizef
-      let cx = Float::from_int(room.x) * ts +
-        Float::from_int(room.w) * ts / 2.0
-      let cy = Float::from_int(room.y) * ts +
-        Float::from_int(room.h) * ts / 2.0
+      let cx = Float::from_int(room.x) * ts + Float::from_int(room.w) * ts / 2.0
+      let cy = Float::from_int(room.y) * ts + Float::from_int(room.h) * ts / 2.0
       if game.shrine_used {
         // Dim, used shrine
         @raylib.draw_poly(
@@ -98,9 +96,7 @@ pub fn draw_shrine(game : @types.Game) -> Unit {
 }
 
 ///|
-fn get_shrine_info(
-  kind : @types.ShrineKind
-) -> (@raylib.Color, String, String) {
+fn get_shrine_info(kind : @types.ShrineKind) -> (@raylib.Color, String, String) {
   match kind {
     BloodAltar =>
       (

@@ -1276,13 +1276,7 @@ fn main {
       152,
       @raylib.Color::new(52, 72, 100, 255),
     )
-    @draw.draw_text(
-      "LEFT",
-      ctl_left_x + 18,
-      ctl_left_y + 62,
-      28,
-      @raylib.white,
-    )
+    @draw.draw_text("LEFT", ctl_left_x + 18, ctl_left_y + 62, 28, @raylib.white)
     @raylib.draw_rectangle(
       ctl_right_x,
       ctl_right_y,

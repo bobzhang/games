@@ -2,7 +2,7 @@
 pub fn update_player_movement(
   game : @types.Game,
   input : InputState,
-  dt : Float
+  dt : Float,
 ) -> Unit {
   let p = game.player
   if p.dead {
@@ -54,7 +54,8 @@ pub fn update_player_movement(
   }
   // Dash input
   if input.dash_pressed && p.dash_cooldown <= 0.0 {
-    let (dx, dy) = if @types.absf(input.move_x) > 0.01 || @types.absf(input.move_y) > 0.01 {
+    let (dx, dy) = if @types.absf(input.move_x) > 0.01 ||
+      @types.absf(input.move_y) > 0.01 {
       @types.normalize(input.move_x, input.move_y)
     } else {
       (p.facing_x, p.facing_y)
@@ -67,7 +68,8 @@ pub fn update_player_movement(
     } else {
       1.0
     }
-    let meta_dash_mult : Float = 1.0 - Float::from_int(game.meta.upgrades[4]) * 0.1
+    let meta_dash_mult : Float = 1.0 -
+      Float::from_int(game.meta.upgrades[4]) * 0.1
     p.dash_cooldown = @types.dash_cooldown * cooldown_mult * meta_dash_mult
     push_event(game, DashUsed(p.x, p.y, dx, dy))
     return
@@ -87,8 +89,16 @@ pub fn update_player_movement(
     // Accelerate toward target
     let ax = (target_vx - p.vx) * @types.player_accel * dt
     let ay = (target_vy - p.vy) * @types.player_accel * dt
-    p.vx += @types.clampf(ax, -@types.player_accel * dt, @types.player_accel * dt)
-    p.vy += @types.clampf(ay, -@types.player_accel * dt, @types.player_accel * dt)
+    p.vx += @types.clampf(
+      ax,
+      -@types.player_accel * dt,
+      @types.player_accel * dt,
+    )
+    p.vy += @types.clampf(
+      ay,
+      -@types.player_accel * dt,
+      @types.player_accel * dt,
+    )
   } else {
     // Decelerate
     let decel = @types.player_decel * dt
@@ -145,8 +155,8 @@ fn collide_player_with_tiles(game : @types.Game) -> Unit {
         let max_tx = ((p.x + r - room_px) / ts).to_int()
         let min_ty = ((p.y - r - room_py) / ts).to_int()
         let max_ty = ((p.y + r - room_py) / ts).to_int()
-        for ty in min_ty..=max_ty {
-          for tx in min_tx..=max_tx {
+        for ty in min_ty..<=max_ty {
+          for tx in min_tx..<=max_tx {
             if tx >= 0 && tx < room.w && ty >= 0 && ty < room.h {
               let tile = room.tiles[ty * room.w + tx]
               let is_wall = tile == 0 || (tile == 2 && room.state == Sealed)
@@ -156,8 +166,16 @@ fn collide_player_with_tiles(game : @types.Game) -> Unit {
                 let tile_cy = room_py + Float::from_int(ty) * ts + ts / 2.0
                 let half = ts / 2.0
                 // AABB vs circle collision resolution
-                let closest_x = @types.clampf(p.x, tile_cx - half, tile_cx + half)
-                let closest_y = @types.clampf(p.y, tile_cy - half, tile_cy + half)
+                let closest_x = @types.clampf(
+                  p.x,
+                  tile_cx - half,
+                  tile_cx + half,
+                )
+                let closest_y = @types.clampf(
+                  p.y,
+                  tile_cy - half,
+                  tile_cy + half,
+                )
                 let dx = p.x - closest_x
                 let dy = p.y - closest_y
                 let d2 = dx * dx + dy * dy

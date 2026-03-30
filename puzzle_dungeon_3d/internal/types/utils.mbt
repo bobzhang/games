@@ -250,10 +250,9 @@ pub fn mirror_reflect(tile : Tile, incoming_dir : Dir) -> Dir {
 ///|
 /// Returns index of an active entity at `(gx, gy)`, or `-1` when empty.
 pub fn entity_at(game : Game, gx : Int, gy : Int) -> Int {
-  @utils.first_index_by(
-    game.entities,
-    fn(entity) { entity.active && entity.gx == gx && entity.gy == gy },
-  )
+  @utils.first_index_by(game.entities, fn(entity) {
+    entity.active && entity.gx == gx && entity.gy == gy
+  })
 }
 
 ///|

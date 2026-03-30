@@ -116,7 +116,8 @@ pub fn update_player_kart(game : @types.Game, dt : Float) -> Unit {
     if kart.drift_level != DriftNone {
       let released_level = kart.drift_level
       let drift_mult = @types.get_kart_drift_boost_mult(kart)
-      let boost_power = @types.get_drift_boost_power(released_level) * drift_mult
+      let boost_power = @types.get_drift_boost_power(released_level) *
+        drift_mult
       let boost_dur = @types.get_drift_boost_duration(released_level)
       kart.boost_timer = boost_dur
       kart.boost_power = boost_power

@@ -1281,13 +1281,7 @@ fn main {
       154,
       @raylib.Color::new(98, 156, 218, 255),
     )
-    @draw.draw_text(
-      "STEALTH",
-      stealth_x + 6,
-      stealth_y + 58,
-      22,
-      @raylib.white,
-    )
+    @draw.draw_text("STEALTH", stealth_x + 6, stealth_y + 58, 22, @raylib.white)
 
     @raylib.draw_rectangle(
       250,

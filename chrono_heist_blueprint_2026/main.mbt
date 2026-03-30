@@ -150,20 +150,29 @@ fn clear_level(
 
 ///|
 fn set_wall_row(tiles : Array[Int], y : Int, x0 : Int, x1 : Int) -> Unit {
-  for x in x0..=x1 {
+  for x in x0..<=x1 {
     tiles[idx(x, y)] = tile_wall
   }
 }
 
 ///|
 fn set_wall_col(tiles : Array[Int], x : Int, y0 : Int, y1 : Int) -> Unit {
-  for y in y0..=y1 {
+  for y in y0..<=y1 {
     tiles[idx(x, y)] = tile_wall
   }
 }
 
 ///|
-fn set_guard_patrol(guards : Array[Guard], i : Int, x : Int, y : Int, ax : Int, ay : Int, bx : Int, by : Int) -> Unit {
+fn set_guard_patrol(
+  guards : Array[Guard],
+  i : Int,
+  x : Int,
+  y : Int,
+  ax : Int,
+  ay : Int,
+  bx : Int,
+  by : Int,
+) -> Unit {
   guards[i] = {
     active: true,
     x,
@@ -180,7 +189,15 @@ fn set_guard_patrol(guards : Array[Guard], i : Int, x : Int, y : Int, ax : Int, 
 }
 
 ///|
-fn set_door(doors : Array[Door], i : Int, x : Int, y : Int, px : Int, py : Int, title : String) -> Unit {
+fn set_door(
+  doors : Array[Door],
+  i : Int,
+  x : Int,
+  y : Int,
+  px : Int,
+  py : Int,
+  title : String,
+) -> Unit {
   doors[i] = { active: true, x, y, plate_x: px, plate_y: py, title }
 }
 
@@ -201,7 +218,9 @@ fn setup_level(
     tiles[idx(10, 6)] = tile_exit
     set_door(doors, 0, 5, 4, 2, 2, "Ghost holds plate")
     set_guard_patrol(guards, 0, 8, 5, 8, 5, 10, 5)
-    (1, 1, 8, 2, 10, 6, "Stand a ghost on the amber plate to open the breach door.")
+    (
+      1, 1, 8, 2, 10, 6, "Stand a ghost on the amber plate to open the breach door.",
+    )
   } else if level == 2 {
     set_wall_col(tiles, 4, 1, 6)
     set_wall_col(tiles, 8, 1, 6)
@@ -214,7 +233,9 @@ fn setup_level(
     set_door(doors, 1, 8, 5, 6, 6, "Loop 2 opens extraction gate")
     set_guard_patrol(guards, 0, 6, 2, 6, 2, 7, 5)
     set_guard_patrol(guards, 1, 10, 4, 10, 4, 9, 6)
-    (1, 6, 9, 2, 10, 1, "Collect the key, crack the vault, then extract through the north dock.")
+    (
+      1, 6, 9, 2, 10, 1, "Collect the key, crack the vault, then extract through the north dock.",
+    )
   } else {
     set_wall_row(tiles, 3, 2, 9)
     set_wall_row(tiles, 5, 2, 9)
@@ -228,7 +249,9 @@ fn setup_level(
     set_guard_patrol(guards, 0, 5, 2, 5, 2, 7, 2)
     set_guard_patrol(guards, 1, 7, 6, 7, 6, 9, 6)
     set_guard_patrol(guards, 2, 9, 3, 9, 3, 9, 4)
-    (1, 1, 9, 1, 10, 6, "Final blueprint: chain two loops and use ghosts as decoys.")
+    (
+      1, 1, 9, 1, 10, 6, "Final blueprint: chain two loops and use ghosts as decoys.",
+    )
   }
 }
 
@@ -248,7 +271,13 @@ fn action_dir(action : Int) -> (Int, Int) {
 }
 
 ///|
-fn door_is_open(doors : Array[Door], door_i : Int, player : Actor, ghosts : Array[Actor], ghost_count : Int) -> Bool {
+fn door_is_open(
+  doors : Array[Door],
+  door_i : Int,
+  player : Actor,
+  ghosts : Array[Actor],
+  ghost_count : Int,
+) -> Bool {
   if !doors[door_i].active {
     return false
   }
@@ -256,7 +285,8 @@ fn door_is_open(doors : Array[Door], door_i : Int, player : Actor, ghosts : Arra
     return true
   }
   for i in 0..<ghost_count {
-    if ghosts[i].x == doors[door_i].plate_x && ghosts[i].y == doors[door_i].plate_y {
+    if ghosts[i].x == doors[door_i].plate_x &&
+      ghosts[i].y == doors[door_i].plate_y {
       return true
     }
   }
@@ -264,7 +294,15 @@ fn door_is_open(doors : Array[Door], door_i : Int, player : Actor, ghosts : Arra
 }
 
 ///|
-fn tile_blocked(tiles : Array[Int], doors : Array[Door], player : Actor, ghosts : Array[Actor], ghost_count : Int, x : Int, y : Int) -> Bool {
+fn tile_blocked(
+  tiles : Array[Int],
+  doors : Array[Door],
+  player : Actor,
+  ghosts : Array[Actor],
+  ghost_count : Int,
+  x : Int,
+  y : Int,
+) -> Bool {
   if !in_bounds(x, y) {
     return true
   }
@@ -272,7 +310,10 @@ fn tile_blocked(tiles : Array[Int], doors : Array[Door], player : Actor, ghosts 
     return true
   }
   for i in 0..<doors.length() {
-    if doors[i].active && doors[i].x == x && doors[i].y == y && !door_is_open(doors, i, player, ghosts, ghost_count) {
+    if doors[i].active &&
+      doors[i].x == x &&
+      doors[i].y == y &&
+      !door_is_open(doors, i, player, ghosts, ghost_count) {
       return true
     }
   }
@@ -280,7 +321,15 @@ fn tile_blocked(tiles : Array[Int], doors : Array[Door], player : Actor, ghosts 
 }
 
 ///|
-fn step_actor(actor : Actor, action : Int, tiles : Array[Int], doors : Array[Door], player : Actor, ghosts : Array[Actor], ghost_count : Int) -> Unit {
+fn step_actor(
+  actor : Actor,
+  action : Int,
+  tiles : Array[Int],
+  doors : Array[Door],
+  player : Actor,
+  ghosts : Array[Actor],
+  ghost_count : Int,
+) -> Unit {
   let (dx, dy) = action_dir(action)
   let nx = actor.x + dx
   let ny = actor.y + dy
@@ -292,11 +341,21 @@ fn step_actor(actor : Actor, action : Int, tiles : Array[Int], doors : Array[Doo
 }
 
 ///|
-fn line_clear(tiles : Array[Int], doors : Array[Door], player : Actor, ghosts : Array[Actor], ghost_count : Int, x0 : Int, y0 : Int, x1 : Int, y1 : Int) -> Bool {
+fn line_clear(
+  tiles : Array[Int],
+  doors : Array[Door],
+  player : Actor,
+  ghosts : Array[Actor],
+  ghost_count : Int,
+  x0 : Int,
+  y0 : Int,
+  x1 : Int,
+  y1 : Int,
+) -> Bool {
   if x0 == x1 {
     let lo = if y0 < y1 { y0 + 1 } else { y1 + 1 }
     let hi = if y0 < y1 { y1 - 1 } else { y0 - 1 }
-    for y in lo..=hi {
+    for y in lo..<=hi {
       if tile_blocked(tiles, doors, player, ghosts, ghost_count, x0, y) {
         return false
       }
@@ -305,7 +364,7 @@ fn line_clear(tiles : Array[Int], doors : Array[Door], player : Actor, ghosts : 
   } else if y0 == y1 {
     let lo = if x0 < x1 { x0 + 1 } else { x1 + 1 }
     let hi = if x0 < x1 { x1 - 1 } else { x0 - 1 }
-    for x in lo..=hi {
+    for x in lo..<=hi {
       if tile_blocked(tiles, doors, player, ghosts, ghost_count, x, y0) {
         return false
       }
@@ -331,7 +390,17 @@ fn nearest_seen_target(
   let mut best_d = 9999
 
   if (guard_val.x == player.x || guard_val.y == player.y) &&
-    line_clear(tiles, doors, player, ghosts, ghost_count, guard_val.x, guard_val.y, player.x, player.y) {
+    line_clear(
+      tiles,
+      doors,
+      player,
+      ghosts,
+      ghost_count,
+      guard_val.x,
+      guard_val.y,
+      player.x,
+      player.y,
+    ) {
     best_seen = true
     best_x = player.x
     best_y = player.y
@@ -344,7 +413,17 @@ fn nearest_seen_target(
     if guard_val.x != gx && guard_val.y != gy {
       continue
     }
-    if !line_clear(tiles, doors, player, ghosts, ghost_count, guard_val.x, guard_val.y, gx, gy) {
+    if !line_clear(
+        tiles,
+        doors,
+        player,
+        ghosts,
+        ghost_count,
+        guard_val.x,
+        guard_val.y,
+        gx,
+        gy,
+      ) {
       continue
     }
     let d = (guard_val.x - gx).abs() + (guard_val.y - gy).abs()
@@ -371,12 +450,21 @@ fn guard_target_cell(guard_val : Guard) -> (Int, Int) {
 }
 
 ///|
-fn step_guard(guard_val : Guard, tiles : Array[Int], doors : Array[Door], player : Actor, ghosts : Array[Actor], ghost_count : Int) -> Unit {
+fn step_guard(
+  guard_val : Guard,
+  tiles : Array[Int],
+  doors : Array[Door],
+  player : Actor,
+  ghosts : Array[Actor],
+  ghost_count : Int,
+) -> Unit {
   if !guard_val.active {
     return
   }
 
-  let seen = nearest_seen_target(guard_val, player, ghosts, ghost_count, tiles, doors)
+  let seen = nearest_seen_target(
+    guard_val, player, ghosts, ghost_count, tiles, doors,
+  )
   if seen.0 {
     guard_val.alert_x = seen.1
     guard_val.alert_y = seen.2
@@ -403,23 +491,36 @@ fn step_guard(guard_val : Guard, tiles : Array[Int], doors : Array[Door], player
 
   let first_x = guard_val.x + dx
   let first_y = guard_val.y
-  if dx != 0 && !tile_blocked(tiles, doors, player, ghosts, ghost_count, first_x, first_y) {
+  if dx != 0 &&
+    !tile_blocked(tiles, doors, player, ghosts, ghost_count, first_x, first_y) {
     guard_val.x = first_x
   } else {
     let second_x = guard_val.x
     let second_y = guard_val.y + dy
-    if dy != 0 && !tile_blocked(tiles, doors, player, ghosts, ghost_count, second_x, second_y) {
+    if dy != 0 &&
+      !tile_blocked(
+        tiles, doors, player, ghosts, ghost_count, second_x, second_y,
+      ) {
       guard_val.y = second_y
     }
   }
 
-  if guard_val.alert_t <= 0 && guard_val.x == target.0 && guard_val.y == target.1 {
+  if guard_val.alert_t <= 0 &&
+    guard_val.x == target.0 &&
+    guard_val.y == target.1 {
     guard_val.to_b = !guard_val.to_b
   }
 }
 
 ///|
-fn player_spotted(guards : Array[Guard], player : Actor, ghosts : Array[Actor], ghost_count : Int, tiles : Array[Int], doors : Array[Door]) -> Bool {
+fn player_spotted(
+  guards : Array[Guard],
+  player : Actor,
+  ghosts : Array[Actor],
+  ghost_count : Int,
+  tiles : Array[Int],
+  doors : Array[Door],
+) -> Bool {
   for guard_val in guards {
     if !guard_val.active {
       continue
@@ -428,7 +529,17 @@ fn player_spotted(guards : Array[Guard], player : Actor, ghosts : Array[Actor], 
       return true
     }
     if (guard_val.x == player.x || guard_val.y == player.y) &&
-      line_clear(tiles, doors, player, ghosts, ghost_count, guard_val.x, guard_val.y, player.x, player.y) {
+      line_clear(
+        tiles,
+        doors,
+        player,
+        ghosts,
+        ghost_count,
+        guard_val.x,
+        guard_val.y,
+        player.x,
+        player.y,
+      ) {
       return true
     }
   }
@@ -470,7 +581,9 @@ fn main {
   let ghost_actions : Array[Array[Int]] = Array::makei(max_ghosts, fn(_i) {
     Array::makei(loop_len, fn(_j) { action_wait })
   })
-  let current_actions : Array[Int] = Array::makei(loop_len, fn(_i) { action_wait })
+  let current_actions : Array[Int] = Array::makei(loop_len, fn(_i) {
+    action_wait
+  })
 
   let mut level = 1
   let mut title = true
@@ -525,7 +638,8 @@ fn main {
     }
 
     if title {
-      if @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
+      if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+        @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
         title = false
         over = false
         won = false
@@ -548,13 +662,17 @@ fn main {
         reset_level()
       }
 
-      let action = if @raylib.is_key_pressed(@raylib.KeyW) || @raylib.is_key_pressed(@raylib.KeyUp) {
+      let action = if @raylib.is_key_pressed(@raylib.KeyW) ||
+        @raylib.is_key_pressed(@raylib.KeyUp) {
         action_up
-      } else if @raylib.is_key_pressed(@raylib.KeyS) || @raylib.is_key_pressed(@raylib.KeyDown) {
+      } else if @raylib.is_key_pressed(@raylib.KeyS) ||
+        @raylib.is_key_pressed(@raylib.KeyDown) {
         action_down
-      } else if @raylib.is_key_pressed(@raylib.KeyA) || @raylib.is_key_pressed(@raylib.KeyLeft) {
+      } else if @raylib.is_key_pressed(@raylib.KeyA) ||
+        @raylib.is_key_pressed(@raylib.KeyLeft) {
         action_left
-      } else if @raylib.is_key_pressed(@raylib.KeyD) || @raylib.is_key_pressed(@raylib.KeyRight) {
+      } else if @raylib.is_key_pressed(@raylib.KeyD) ||
+        @raylib.is_key_pressed(@raylib.KeyRight) {
         action_right
       } else if @raylib.is_key_pressed(@raylib.KeySpace) {
         action_wait
@@ -569,8 +687,16 @@ fn main {
         for i in 0..<ghost_count {
           ghosts[i].x = start_x
           ghosts[i].y = start_y
-          for s in 0..=turn_in_loop {
-            step_actor(ghosts[i], ghost_actions[i][s], tiles, doors, player, ghosts, ghost_count)
+          for s in 0..<=turn_in_loop {
+            step_actor(
+              ghosts[i],
+              ghost_actions[i][s],
+              tiles,
+              doors,
+              player,
+              ghosts,
+              ghost_count,
+            )
           }
         }
 
@@ -635,19 +761,92 @@ fn main {
     @raylib.clear_background(@raylib.Color::new(12, 18, 28, 255))
 
     if title {
-      @raylib.draw_rectangle_gradient_v(0, 0, screen_w, screen_h, @raylib.Color::new(18, 28, 44, 255), @raylib.Color::new(6, 12, 20, 255))
-      @draw.draw_text("CHRONO HEIST BLUEPRINT", 210, 170, 56, @raylib.Color::new(233, 245, 255, 255))
-      @draw.draw_text("Top-down time-loop stealth puzzle", 360, 248, 28, @raylib.Color::new(126, 196, 255, 255))
-      @draw.draw_text("Each loop records your route. On the next loop, your ghost replays it.", 210, 360, 28, @raylib.Color::new(220, 228, 236, 255))
-      @draw.draw_text("Use ghosts to hold plates, lure guards, and chain the vault escape.", 220, 404, 28, @raylib.Color::new(220, 228, 236, 255))
-      @draw.draw_text("WASD / Arrows move   Space waits   R restarts", 310, 520, 26, @raylib.Color::new(255, 211, 112, 255))
-      @raylib.draw_rectangle(420, 620, 420, 82, @raylib.Color::new(46, 92, 132, 255))
-      @draw.draw_text("PRESS ENTER TO BREACH", 458, 648, 30, @raylib.Color::new(245, 250, 255, 255))
+      @raylib.draw_rectangle_gradient_v(
+        0,
+        0,
+        screen_w,
+        screen_h,
+        @raylib.Color::new(18, 28, 44, 255),
+        @raylib.Color::new(6, 12, 20, 255),
+      )
+      @draw.draw_text(
+        "CHRONO HEIST BLUEPRINT",
+        210,
+        170,
+        56,
+        @raylib.Color::new(233, 245, 255, 255),
+      )
+      @draw.draw_text(
+        "Top-down time-loop stealth puzzle",
+        360,
+        248,
+        28,
+        @raylib.Color::new(126, 196, 255, 255),
+      )
+      @draw.draw_text(
+        "Each loop records your route. On the next loop, your ghost replays it.",
+        210,
+        360,
+        28,
+        @raylib.Color::new(220, 228, 236, 255),
+      )
+      @draw.draw_text(
+        "Use ghosts to hold plates, lure guards, and chain the vault escape.",
+        220,
+        404,
+        28,
+        @raylib.Color::new(220, 228, 236, 255),
+      )
+      @draw.draw_text(
+        "WASD / Arrows move   Space waits   R restarts",
+        310,
+        520,
+        26,
+        @raylib.Color::new(255, 211, 112, 255),
+      )
+      @raylib.draw_rectangle(
+        420,
+        620,
+        420,
+        82,
+        @raylib.Color::new(46, 92, 132, 255),
+      )
+      @draw.draw_text(
+        "PRESS ENTER TO BREACH",
+        458,
+        648,
+        30,
+        @raylib.Color::new(245, 250, 255, 255),
+      )
     } else {
-      @raylib.draw_rectangle(70, 56, 1140, 84, @raylib.Color::new(18, 28, 42, 255))
-      @draw.draw_text("Loop \{loop_no}  Turns \{turn_in_loop}/\{loop_len}  Ghosts \{ghost_count}", 98, 82, 28, @raylib.Color::new(236, 243, 248, 255))
-      @draw.draw_text("Level \{level}/3", 960, 82, 28, @raylib.Color::new(255, 210, 116, 255))
-      @draw.draw_text(level_note, 96, 116, 22, @raylib.Color::new(163, 194, 224, 255))
+      @raylib.draw_rectangle(
+        70,
+        56,
+        1140,
+        84,
+        @raylib.Color::new(18, 28, 42, 255),
+      )
+      @draw.draw_text(
+        "Loop \{loop_no}  Turns \{turn_in_loop}/\{loop_len}  Ghosts \{ghost_count}",
+        98,
+        82,
+        28,
+        @raylib.Color::new(236, 243, 248, 255),
+      )
+      @draw.draw_text(
+        "Level \{level}/3",
+        960,
+        82,
+        28,
+        @raylib.Color::new(255, 210, 116, 255),
+      )
+      @draw.draw_text(
+        level_note,
+        96,
+        116,
+        22,
+        @raylib.Color::new(163, 194, 224, 255),
+      )
 
       for y in 0..<grid_h {
         for x in 0..<grid_w {
@@ -660,13 +859,30 @@ fn main {
 
           if tile == tile_vault {
             draw_tile(x, y, @raylib.Color::new(44, 112, 132, 255))
-            @draw.draw_text("V", screen_center_x(x) - 10, screen_center_y(y) - 16, 28, @raylib.Color::new(234, 248, 255, 255))
+            @draw.draw_text(
+              "V",
+              screen_center_x(x) - 10,
+              screen_center_y(y) - 16,
+              28,
+              @raylib.Color::new(234, 248, 255, 255),
+            )
           } else if tile == tile_exit {
             draw_tile(x, y, @raylib.Color::new(42, 114, 82, 255))
-            @draw.draw_text("EX", screen_center_x(x) - 16, screen_center_y(y) - 14, 22, @raylib.Color::new(239, 252, 244, 255))
+            @draw.draw_text(
+              "EX",
+              screen_center_x(x) - 16,
+              screen_center_y(y) - 14,
+              22,
+              @raylib.Color::new(239, 252, 244, 255),
+            )
           } else if tile == tile_key {
             draw_tile(x, y, @raylib.Color::new(118, 94, 24, 255))
-            @raylib.draw_circle(screen_center_x(x), screen_center_y(y), 10.0, @raylib.Color::new(255, 218, 110, 255))
+            @raylib.draw_circle(
+              screen_center_x(x),
+              screen_center_y(y),
+              10.0,
+              @raylib.Color::new(255, 218, 110, 255),
+            )
           }
         }
       }
@@ -682,14 +898,39 @@ fn main {
           @raylib.Color::new(168, 76, 76, 255)
         }
         draw_tile(door.x, door.y, col)
-        draw_tile(door.plate_x, door.plate_y, @raylib.Color::new(176, 140, 62, 255))
-        @raylib.draw_circle_lines(screen_center_x(door.plate_x), screen_center_y(door.plate_y), 20.0, @raylib.Color::new(255, 228, 148, 255))
-        @draw.draw_text(door.title, board_x + grid_w * cell + 24, board_y + 150 + i * 30, 22, @raylib.Color::new(198, 214, 228, 255))
+        draw_tile(
+          door.plate_x,
+          door.plate_y,
+          @raylib.Color::new(176, 140, 62, 255),
+        )
+        @raylib.draw_circle_lines(
+          screen_center_x(door.plate_x),
+          screen_center_y(door.plate_y),
+          20.0,
+          @raylib.Color::new(255, 228, 148, 255),
+        )
+        @draw.draw_text(
+          door.title,
+          board_x + grid_w * cell + 24,
+          board_y + 150 + i * 30,
+          22,
+          @raylib.Color::new(198, 214, 228, 255),
+        )
       }
 
       for i in 0..<ghost_count {
-        @raylib.draw_circle(screen_center_x(ghosts[i].x), screen_center_y(ghosts[i].y), 18.0, @raylib.Color::new(136, 210, 255, 110))
-        @raylib.draw_circle_lines(screen_center_x(ghosts[i].x), screen_center_y(ghosts[i].y), 20.0, @raylib.Color::new(188, 232, 255, 170))
+        @raylib.draw_circle(
+          screen_center_x(ghosts[i].x),
+          screen_center_y(ghosts[i].y),
+          18.0,
+          @raylib.Color::new(136, 210, 255, 110),
+        )
+        @raylib.draw_circle_lines(
+          screen_center_x(ghosts[i].x),
+          screen_center_y(ghosts[i].y),
+          20.0,
+          @raylib.Color::new(188, 232, 255, 170),
+        )
       }
 
       for guard_val in guards {
@@ -700,26 +941,123 @@ fn main {
         let gy = screen_center_y(guard_val.y)
         @raylib.draw_circle(gx, gy, 18.0, @raylib.Color::new(236, 92, 92, 255))
         let target = guard_target_cell(guard_val)
-        @raylib.draw_line(gx, gy, screen_center_x(target.0), screen_center_y(target.1), @raylib.Color::new(255, 120, 120, 90))
+        @raylib.draw_line(
+          gx,
+          gy,
+          screen_center_x(target.0),
+          screen_center_y(target.1),
+          @raylib.Color::new(255, 120, 120, 90),
+        )
       }
 
-      @raylib.draw_circle(screen_center_x(player.x), screen_center_y(player.y), 18.0, @raylib.Color::new(86, 166, 255, 255))
-      @raylib.draw_circle_lines(screen_center_x(player.x), screen_center_y(player.y), 20.0, @raylib.Color::new(240, 246, 255, 255))
+      @raylib.draw_circle(
+        screen_center_x(player.x),
+        screen_center_y(player.y),
+        18.0,
+        @raylib.Color::new(86, 166, 255, 255),
+      )
+      @raylib.draw_circle_lines(
+        screen_center_x(player.x),
+        screen_center_y(player.y),
+        20.0,
+        @raylib.Color::new(240, 246, 255, 255),
+      )
 
       if intro_flash > 0.0 {
-        @raylib.draw_rectangle(board_x - 8, board_y - 8, grid_w * cell + 16, grid_h * cell + 16, @raylib.fade(@raylib.Color::new(116, 210, 255, 255), intro_flash * 0.18))
+        @raylib.draw_rectangle(
+          board_x - 8,
+          board_y - 8,
+          grid_w * cell + 16,
+          grid_h * cell + 16,
+          @raylib.fade(
+            @raylib.Color::new(116, 210, 255, 255),
+            intro_flash * 0.18,
+          ),
+        )
       }
 
-      @raylib.draw_rectangle(70, 748, 1140, 76, @raylib.Color::new(18, 28, 42, 255))
-      @draw.draw_text(message, 96, 772, 28, @raylib.Color::new(236, 242, 248, 255))
-      @draw.draw_text(if key_taken { "Key secured" } else { "Need vault key" }, 820, 772, 24, if key_taken { @raylib.Color::new(255, 218, 110, 255) } else { @raylib.Color::new(176, 190, 206, 255) })
-      @draw.draw_text(if vault_looted { "Blueprint copied" } else { "Vault intact" }, 990, 772, 24, if vault_looted { @raylib.Color::new(130, 230, 178, 255) } else { @raylib.Color::new(176, 190, 206, 255) })
+      @raylib.draw_rectangle(
+        70,
+        748,
+        1140,
+        76,
+        @raylib.Color::new(18, 28, 42, 255),
+      )
+      @draw.draw_text(
+        message,
+        96,
+        772,
+        28,
+        @raylib.Color::new(236, 242, 248, 255),
+      )
+      @draw.draw_text(
+        if key_taken {
+          "Key secured"
+        } else {
+          "Need vault key"
+        },
+        820,
+        772,
+        24,
+        if key_taken {
+          @raylib.Color::new(255, 218, 110, 255)
+        } else {
+          @raylib.Color::new(176, 190, 206, 255)
+        },
+      )
+      @draw.draw_text(
+        if vault_looted {
+          "Blueprint copied"
+        } else {
+          "Vault intact"
+        },
+        990,
+        772,
+        24,
+        if vault_looted {
+          @raylib.Color::new(130, 230, 178, 255)
+        } else {
+          @raylib.Color::new(176, 190, 206, 255)
+        },
+      )
 
       if over {
-        @raylib.draw_rectangle(0, 0, screen_w, screen_h, @raylib.fade(@raylib.black, 0.58))
-        @draw.draw_text(if won { "HEIST COMPLETE" } else { "HEIST FAILED" }, 410, 250, 58, if won { @raylib.Color::new(140, 245, 190, 255) } else { @raylib.Color::new(255, 120, 120, 255) })
-        @draw.draw_text(message, 360, 340, 32, @raylib.Color::new(238, 244, 248, 255))
-        @draw.draw_text("R to restart from level 1   Enter for title", 300, 430, 28, @raylib.Color::new(255, 214, 118, 255))
+        @raylib.draw_rectangle(
+          0,
+          0,
+          screen_w,
+          screen_h,
+          @raylib.fade(@raylib.black, 0.58),
+        )
+        @draw.draw_text(
+          if won {
+            "HEIST COMPLETE"
+          } else {
+            "HEIST FAILED"
+          },
+          410,
+          250,
+          58,
+          if won {
+            @raylib.Color::new(140, 245, 190, 255)
+          } else {
+            @raylib.Color::new(255, 120, 120, 255)
+          },
+        )
+        @draw.draw_text(
+          message,
+          360,
+          340,
+          32,
+          @raylib.Color::new(238, 244, 248, 255),
+        )
+        @draw.draw_text(
+          "R to restart from level 1   Enter for title",
+          300,
+          430,
+          28,
+          @raylib.Color::new(255, 214, 118, 255),
+        )
       }
     }
 

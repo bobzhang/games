@@ -646,7 +646,9 @@ pub fn effective_damage(player : Player, kind : Int) -> Float {
 pub fn effective_mag_size(player : Player, kind : Int) -> Int {
   let base = weapon_mag_size(kind)
   let lvl = player.weapon_mag_level[kind]
-  let bonus_f : Float = Float::from_int(base) * Float::from_int(lvl) * upgrade_mag_step
+  let bonus_f : Float = Float::from_int(base) *
+    Float::from_int(lvl) *
+    upgrade_mag_step
   base + bonus_f.to_int()
 }
 

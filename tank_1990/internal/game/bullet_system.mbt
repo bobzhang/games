@@ -116,10 +116,14 @@ fn @types.Game::update_bullet_vs_bullet(game : @types.Game) -> Unit {
         continue
       }
       // Skip friendly fire between player bullets
-      let both_players = (game.bullets[i].owner_team == Player1 ||
-        game.bullets[i].owner_team == Player2) &&
-        (game.bullets[j].owner_team == Player1 ||
-        game.bullets[j].owner_team == Player2)
+      let both_players = (
+          game.bullets[i].owner_team == Player1 ||
+          game.bullets[i].owner_team == Player2
+        ) &&
+        (
+          game.bullets[j].owner_team == Player1 ||
+          game.bullets[j].owner_team == Player2
+        )
       if both_players {
         continue
       }

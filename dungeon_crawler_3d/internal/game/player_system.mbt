@@ -137,7 +137,8 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   }
   // Mana regeneration (ring of wisdom boosts regen)
   // Uses accumulator to avoid truncating fractional regen each frame
-  let ring_mana_bonus : Float = if game.equip_ring_kind == @types.ring_mana_regen {
+  let ring_mana_bonus : Float = if game.equip_ring_kind ==
+    @types.ring_mana_regen {
     Float::from_int(game.equip_ring_bonus) * 0.3
   } else {
     0.0
@@ -265,12 +266,20 @@ fn @types.Game::perform_melee_attack(game : @types.Game) -> Unit {
     e.alerted = true
     hit_any = true
     // Life steal ring: heal on hit
-    if game.equip_ring_kind == @types.ring_life_steal && game.equip_ring_bonus > 0 {
+    if game.equip_ring_kind == @types.ring_life_steal &&
+      game.equip_ring_bonus > 0 {
       let heal = final_damage * game.equip_ring_bonus / 20
       if heal > 0 {
         game.player_hp = (game.player_hp + heal).min(game.player_max_hp)
         @types.spawn_particles(
-          game, game.player_x, 1.5, game.player_z, 2, 50, 200, 50,
+          game,
+          game.player_x,
+          1.5,
+          game.player_z,
+          2,
+          50,
+          200,
+          50,
         )
       }
     }
@@ -316,7 +325,15 @@ fn @types.Game::perform_melee_attack(game : @types.Game) -> Unit {
     // Floating damage number
     if is_crit {
       @types.spawn_damage_number(
-        game, e.x, 2.0, e.z, final_damage, 255, 215, 0, true,
+        game,
+        e.x,
+        2.0,
+        e.z,
+        final_damage,
+        255,
+        215,
+        0,
+        true,
       )
       @types.add_message(
         game,
@@ -328,7 +345,15 @@ fn @types.Game::perform_melee_attack(game : @types.Game) -> Unit {
       @types.spawn_particles(game, e.x, 1.5, e.z, 8, 255, 215, 0)
     } else {
       @types.spawn_damage_number(
-        game, e.x, 1.8, e.z, final_damage, 255, 200, 80, false,
+        game,
+        e.x,
+        1.8,
+        e.z,
+        final_damage,
+        255,
+        200,
+        80,
+        false,
       )
       @types.add_message(
         game,
@@ -453,7 +478,16 @@ fn @types.Game::cast_fireball(game : @types.Game) -> Unit {
     30,
     5.0,
   )
-  @types.spawn_particles(game, game.player_x, 1.0, game.player_z, 6, 255, 60, 10)
+  @types.spawn_particles(
+    game,
+    game.player_x,
+    1.0,
+    game.player_z,
+    6,
+    255,
+    60,
+    10,
+  )
   @types.add_message(game, "Fireball!", 255, 100, 30)
 }
 
@@ -492,7 +526,16 @@ fn @types.Game::cast_ice_bolt(game : @types.Game) -> Unit {
     255,
     4.0,
   )
-  @types.spawn_particles(game, game.player_x, 1.3, game.player_z, 4, 200, 240, 255)
+  @types.spawn_particles(
+    game,
+    game.player_x,
+    1.3,
+    game.player_z,
+    4,
+    200,
+    240,
+    255,
+  )
   @types.add_message(game, "Ice Bolt!", 100, 180, 255)
 }
 
@@ -525,7 +568,15 @@ fn @types.Game::cast_heal(game : @types.Game) -> Unit {
   )
   // Healing damage number (positive)
   @types.spawn_damage_number(
-    game, game.player_x, 2.0, game.player_z, heal, 50, 255, 80, false,
+    game,
+    game.player_x,
+    2.0,
+    game.player_z,
+    heal,
+    50,
+    255,
+    80,
+    false,
   )
   @types.add_message(game, "Healed for \{heal} HP!", 50, 255, 80)
 }
@@ -534,12 +585,7 @@ fn @types.Game::cast_heal(game : @types.Game) -> Unit {
 fn @types.Game::cast_shield(game : @types.Game) -> Unit {
   let int_bonus = game.player_int_stat / 4
   let bonus = @types.shield_defense_bonus + int_bonus
-  @types.add_buff(
-    game,
-    @types.buff_shield,
-    @types.shield_duration,
-    bonus,
-  )
+  @types.add_buff(game, @types.buff_shield, @types.shield_duration, bonus)
   // Blue protective aura burst
   @types.spawn_particles(
     game,
@@ -563,7 +609,15 @@ fn @types.Game::cast_shield(game : @types.Game) -> Unit {
   )
   // Shield defense indicator
   @types.spawn_damage_number(
-    game, game.player_x, 2.0, game.player_z, bonus, 100, 150, 255, false,
+    game,
+    game.player_x,
+    2.0,
+    game.player_z,
+    bonus,
+    100,
+    150,
+    255,
+    false,
   )
   @types.add_message(game, "Shield activated! +\{bonus} DEF", 100, 150, 255)
 }
@@ -606,9 +660,7 @@ fn @types.Game::cast_lightning(game : @types.Game) -> Unit {
     @types.trigger_shake(game, 0.15, 0.20)
     @types.spawn_particles(game, e.x, 1.5, e.z, 16, 255, 255, 100)
     @types.spawn_particles(game, e.x, 1.0, e.z, 8, 200, 200, 255)
-    @types.spawn_damage_number(
-      game, e.x, 2.0, e.z, dmg, 255, 255, 100, true,
-    )
+    @types.spawn_damage_number(game, e.x, 2.0, e.z, dmg, 255, 255, 100, true)
     @types.add_message(
       game,
       "Lightning hits \{@types.get_enemy_name(e.kind)} for \{dmg}!",
@@ -640,7 +692,15 @@ fn @types.Game::cast_lightning(game : @types.Game) -> Unit {
         @types.spawn_particles(game, e2.x, 1.5, e2.z, 10, 255, 255, 100)
         @types.spawn_particles(game, e2.x, 1.0, e2.z, 4, 200, 200, 255)
         @types.spawn_damage_number(
-          game, e2.x, 1.8, e2.z, chain_dmg, 255, 255, 150, false,
+          game,
+          e2.x,
+          1.8,
+          e2.z,
+          chain_dmg,
+          255,
+          255,
+          150,
+          false,
         )
         @types.add_message(
           game,
@@ -736,13 +796,7 @@ pub fn kill_enemy(game : @types.Game, idx : Int) -> Unit {
   // Death explosion: scaled by enemy importance
   let is_boss = e.kind == DragonBoss
   let is_elite = e.kind == Lich || e.kind == Minotaur || e.kind == Golem
-  let particle_count = if is_boss {
-    32
-  } else if is_elite {
-    20
-  } else {
-    12
-  }
+  let particle_count = if is_boss { 32 } else if is_elite { 20 } else { 12 }
   // Enemy-type-colored death particles
   let death_colors : (Int, Int, Int) = match e.kind {
     Skeleton => (200, 190, 170)
@@ -759,8 +813,14 @@ pub fn kill_enemy(game : @types.Game, idx : Int) -> Unit {
     _ => (180, 80, 40)
   }
   @types.spawn_particles(
-    game, e.x, 1.0, e.z, particle_count,
-    death_colors.0, death_colors.1, death_colors.2,
+    game,
+    e.x,
+    1.0,
+    e.z,
+    particle_count,
+    death_colors.0,
+    death_colors.1,
+    death_colors.2,
   )
   // Secondary white flash burst
   @types.spawn_particles(game, e.x, 1.2, e.z, particle_count / 2, 255, 255, 255)
@@ -774,7 +834,15 @@ pub fn kill_enemy(game : @types.Game, idx : Int) -> Unit {
   }
   // XP damage number
   @types.spawn_damage_number(
-    game, e.x, 2.0, e.z, e.xp_value, 80, 255, 80, is_boss,
+    game,
+    e.x,
+    2.0,
+    e.z,
+    e.xp_value,
+    80,
+    255,
+    80,
+    is_boss,
   )
   @types.add_message(
     game,
@@ -975,13 +1043,7 @@ fn @types.Game::check_loot_pickup(game : @types.Game) -> Unit {
           let gold = 10 + l.rarity * 15
           game.player_gold += gold
           game.player_total_gold += gold
-          @types.add_message(
-            game,
-            "Sold weapon for \{gold} gold",
-            255,
-            215,
-            0,
-          )
+          @types.add_message(game, "Sold weapon for \{gold} gold", 255, 215, 0)
         }
       } else if l.kind == @types.loot_equip_armor {
         let bonus = l.value + l.rarity * 2
@@ -1004,13 +1066,7 @@ fn @types.Game::check_loot_pickup(game : @types.Game) -> Unit {
           let gold = 10 + l.rarity * 15
           game.player_gold += gold
           game.player_total_gold += gold
-          @types.add_message(
-            game,
-            "Sold armor for \{gold} gold",
-            255,
-            215,
-            0,
-          )
+          @types.add_message(game, "Sold armor for \{gold} gold", 255, 215, 0)
         }
       } else if l.kind == @types.loot_equip_ring {
         let ring_kind = l.value.clamp(min=0, max=4)
@@ -1036,13 +1092,7 @@ fn @types.Game::check_loot_pickup(game : @types.Game) -> Unit {
           let gold = 15 + l.rarity * 20
           game.player_gold += gold
           game.player_total_gold += gold
-          @types.add_message(
-            game,
-            "Sold ring for \{gold} gold",
-            255,
-            215,
-            0,
-          )
+          @types.add_message(game, "Sold ring for \{gold} gold", 255, 215, 0)
         }
       }
       l.active = false
@@ -1381,12 +1431,22 @@ pub fn damage_player(game : @types.Game, raw_damage : Int) -> Unit {
   game.damage_flash = 0.2
   // Screen shake proportional to damage taken
   let shake_intensity = @types.clampf(
-    Float::from_int(damage) * 0.005, 0.03, 0.20,
+    Float::from_int(damage) * 0.005,
+    0.03,
+    0.20,
   )
   @types.trigger_shake(game, shake_intensity, 0.15)
   // Floating damage number on player
   @types.spawn_damage_number(
-    game, game.player_x, 2.0, game.player_z, damage, 255, 60, 60, damage > 20,
+    game,
+    game.player_x,
+    2.0,
+    game.player_z,
+    damage,
+    255,
+    60,
+    60,
+    damage > 20,
   )
   // Thorns ring: reflect damage back
   if game.equip_ring_kind == @types.ring_thorns && game.equip_ring_bonus > 0 {

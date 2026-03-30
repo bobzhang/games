@@ -14,10 +14,14 @@ pub(all) struct InputState {
 ///|
 pub fn InputState::new() -> InputState {
   {
-    move_x: 0.0, move_y: 0.0,
-    aim_x: 0.0, aim_y: 0.0,
-    attack_pressed: false, dash_pressed: false,
-    pause_pressed: false, confirm_pressed: false,
+    move_x: 0.0,
+    move_y: 0.0,
+    aim_x: 0.0,
+    aim_y: 0.0,
+    attack_pressed: false,
+    dash_pressed: false,
+    pause_pressed: false,
+    confirm_pressed: false,
     interact_pressed: false,
   }
 }
@@ -46,8 +50,14 @@ pub fn read_input(game : @types.Game) -> InputState {
   }
   // Aim toward mouse (world coords, accounting for camera offset)
   let mouse = @raylib.get_mouse_position()
-  let world_mouse_x = mouse.x - Float::from_int(@types.screen_w) / 2.0 + game.camera.x + game.camera.offset_x
-  let world_mouse_y = mouse.y - Float::from_int(@types.screen_h) / 2.0 + game.camera.y + game.camera.offset_y
+  let world_mouse_x = mouse.x -
+    Float::from_int(@types.screen_w) / 2.0 +
+    game.camera.x +
+    game.camera.offset_x
+  let world_mouse_y = mouse.y -
+    Float::from_int(@types.screen_h) / 2.0 +
+    game.camera.y +
+    game.camera.offset_y
   let raw_aim_x = world_mouse_x - game.player.x
   let raw_aim_y = world_mouse_y - game.player.y
   let (nx, ny) = @types.normalize(raw_aim_x, raw_aim_y)
@@ -59,10 +69,14 @@ pub fn read_input(game : @types.Game) -> InputState {
     game.player.facing_y = ny
   }
   // Actions
-  input.attack_pressed = @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft)
-  input.dash_pressed = @raylib.is_key_pressed(@raylib.KeySpace) || @raylib.is_mouse_button_pressed(@raylib.MouseButtonRight)
+  input.attack_pressed = @raylib.is_mouse_button_pressed(
+    @raylib.MouseButtonLeft,
+  )
+  input.dash_pressed = @raylib.is_key_pressed(@raylib.KeySpace) ||
+    @raylib.is_mouse_button_pressed(@raylib.MouseButtonRight)
   input.pause_pressed = @raylib.is_key_pressed(@raylib.KeyEscape)
-  input.confirm_pressed = @raylib.is_key_pressed(@raylib.KeyEnter) || @raylib.is_key_pressed(@raylib.KeySpace)
+  input.confirm_pressed = @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace)
   input.interact_pressed = @raylib.is_key_pressed(@raylib.KeyE)
   input
 }

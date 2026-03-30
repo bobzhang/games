@@ -290,8 +290,7 @@ pub fn get_crafting_recipes() -> Array[@types.CraftingRecipe] {
   // Wooden Axe: 3 planks + 2 sticks
   recipes.push(
     CraftingRecipe(
-      @types.block_planks, 3, @types.item_stick, 2, @types.tool_wooden_axe, 1,
-      "Wood Axe",
+      @types.block_planks, 3, @types.item_stick, 2, @types.tool_wooden_axe, 1, "Wood Axe",
     ),
   )
   // Wooden Shovel: 1 plank + 2 sticks
@@ -318,8 +317,8 @@ pub fn get_crafting_recipes() -> Array[@types.CraftingRecipe] {
   // Stone Axe: 3 cobblestone + 2 sticks
   recipes.push(
     CraftingRecipe(
-      @types.block_cobblestone, 3, @types.item_stick, 2, @types.tool_stone_axe,
-      1, "Stone Axe",
+      @types.block_cobblestone, 3, @types.item_stick, 2, @types.tool_stone_axe, 1,
+      "Stone Axe",
     ),
   )
   // Stone Shovel: 1 cobblestone + 2 sticks
@@ -339,8 +338,7 @@ pub fn get_crafting_recipes() -> Array[@types.CraftingRecipe] {
   // Iron Ingot (furnace smelting): 1 iron ore + 1 coal
   recipes.push(
     CraftingRecipe(
-      @types.block_ore_iron, 1, @types.item_coal, 1, @types.item_iron_ingot, 1,
-      "Smelt Iron Ingot",
+      @types.block_ore_iron, 1, @types.item_coal, 1, @types.item_iron_ingot, 1, "Smelt Iron Ingot",
     ),
   )
   // Iron Pickaxe: 3 iron ingots + 2 sticks
@@ -353,22 +351,21 @@ pub fn get_crafting_recipes() -> Array[@types.CraftingRecipe] {
   // Iron Axe: 3 iron ingots + 2 sticks
   recipes.push(
     CraftingRecipe(
-      @types.item_iron_ingot, 3, @types.item_stick, 2, @types.tool_iron_axe, 1,
-      "Iron Axe",
+      @types.item_iron_ingot, 3, @types.item_stick, 2, @types.tool_iron_axe, 1, "Iron Axe",
     ),
   )
   // Iron Shovel: 1 iron ingot + 2 sticks
   recipes.push(
     CraftingRecipe(
-      @types.item_iron_ingot, 1, @types.item_stick, 2, @types.tool_iron_shovel,
-      1, "Iron Shovel",
+      @types.item_iron_ingot, 1, @types.item_stick, 2, @types.tool_iron_shovel, 1,
+      "Iron Shovel",
     ),
   )
   // Iron Sword: 2 iron ingots + 1 stick
   recipes.push(
     CraftingRecipe(
-      @types.item_iron_ingot, 2, @types.item_stick, 1, @types.tool_iron_sword,
-      1, "Iron Sword",
+      @types.item_iron_ingot, 2, @types.item_stick, 1, @types.tool_iron_sword, 1,
+      "Iron Sword",
     ),
   )
   // === Fuel ===

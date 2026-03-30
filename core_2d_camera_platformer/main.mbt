@@ -441,9 +441,7 @@ fn main {
     @draw.draw_text(
       "- Mouse Wheel to Zoom in-out, R to reset zoom", 40, 80, 10, @raylib.darkgray,
     )
-    @draw.draw_text(
-      "- C to change camera mode", 40, 100, 10, @raylib.darkgray,
-    )
+    @draw.draw_text("- C to change camera mode", 40, 100, 10, @raylib.darkgray)
     @draw.draw_text("Current camera mode:", 20, 120, 10, @raylib.black)
     @draw.draw_text(
       camera_descriptions[camera_option],

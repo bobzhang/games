@@ -154,9 +154,7 @@ fn main {
 
     // Info text
     @draw.draw_text("Free 2d camera controls:", 20, 20, 10, @raylib.black)
-    @draw.draw_text(
-      "- Right/Left to move Offset", 40, 40, 10, @raylib.darkgray,
-    )
+    @draw.draw_text("- Right/Left to move Offset", 40, 40, 10, @raylib.darkgray)
     @draw.draw_text(
       "- Mouse Wheel to Zoom in-out", 40, 60, 10, @raylib.darkgray,
     )

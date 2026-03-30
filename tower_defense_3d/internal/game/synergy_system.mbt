@@ -23,7 +23,17 @@ fn @types.Game::show_synergy_combo(
   let tz = @types.grid_to_world_z(tower.gy)
   // Add visual synergy line from tower to enemy
   @types.add_synergy_line(
-    game, tx, 1.5, tz, enemy.x, enemy.y, enemy.z, r, g, b, label,
+    game,
+    tx,
+    1.5,
+    tz,
+    enemy.x,
+    enemy.y,
+    enemy.z,
+    r,
+    g,
+    b,
+    label,
   )
   // Spawn combo particles at enemy position
   @types.spawn_particles(game, enemy.x, enemy.y + 0.8, enemy.z, 6, r, g, b)

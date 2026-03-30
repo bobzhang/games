@@ -460,7 +460,9 @@ fn active_delivery_count(deliveries : Array[Delivery]) -> Int {
 
 ///|
 fn active_delivery_for_pad(deliveries : Array[Delivery], pad_id : Int) -> Int {
-  @utils.count_by(deliveries, fn(delivery) { delivery.active && delivery.pad_id == pad_id })
+  @utils.count_by(deliveries, fn(delivery) {
+    delivery.active && delivery.pad_id == pad_id
+  })
 }
 
 ///|

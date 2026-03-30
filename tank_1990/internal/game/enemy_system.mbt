@@ -216,9 +216,15 @@ fn @types.Game::enemy_shoot_if_ready(
       let aligned_horizontal = (player.y - enemy.y).abs() <
         Float::from_int(@types.tile_size) * 0.5
       if aligned_horizontal {
-        if player.x > enemy.x { Right } else { Left }
+        if player.x > enemy.x {
+          Right
+        } else {
+          Left
+        }
+      } else if player.y > enemy.y {
+        Down
       } else {
-        if player.y > enemy.y { Down } else { Up }
+        Up
       }
     } else if fire_on_base {
       let base_x = @types.tile_center_x(@types.base_tile_x)
@@ -226,9 +232,15 @@ fn @types.Game::enemy_shoot_if_ready(
       let aligned_horizontal = (base_y - enemy.y).abs() <
         Float::from_int(@types.tile_size) * 0.5
       if aligned_horizontal {
-        if base_x > enemy.x { Right } else { Left }
+        if base_x > enemy.x {
+          Right
+        } else {
+          Left
+        }
+      } else if base_y > enemy.y {
+        Down
       } else {
-        if base_y > enemy.y { Down } else { Up }
+        Up
       }
     } else {
       enemy.dir
@@ -292,8 +304,7 @@ fn @types.Game::update_enemy_spawn(game : @types.Game, dt : Float) -> Unit {
   let warn_threshold : Float = 0.75
   if game.spawn_timer > 0.0 && game.spawn_timer <= warn_threshold {
     let any_warning_active = game.spawn_warnings.iter().any(fn(w) { w.active })
-    if !any_warning_active &&
-      game.enemies_alive < @types.enemy_on_field_limit {
+    if !any_warning_active && game.enemies_alive < @types.enemy_on_field_limit {
       for lane in 0..<3 {
         activate_spawn_warning(game, lane)
       }

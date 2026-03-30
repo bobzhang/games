@@ -126,10 +126,10 @@ fn is_wall(walls : Array[Bool], x : Int, y : Int) -> Bool {
 ///|
 /// Returns true if any active orb other than `skip` occupies position (x, y).
 fn orb_at(orbs : Array[Orb], skip : Int, x : Int, y : Int) -> Bool {
-  @utils.first_indexi_by(
-    orbs,
-    fn(i, orb) { i != skip && orb.active && orb.x == x && orb.y == y },
-  ) >= 0
+  @utils.first_indexi_by(orbs, fn(i, orb) {
+    i != skip && orb.active && orb.x == x && orb.y == y
+  }) >=
+  0
 }
 
 ///|

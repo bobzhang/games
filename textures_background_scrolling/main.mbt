@@ -103,9 +103,7 @@ fn main {
       @raylib.white,
     )
 
-    @draw.draw_text(
-      "BACKGROUND SCROLLING & PARALLAX", 10, 10, 20, @raylib.red,
-    )
+    @draw.draw_text("BACKGROUND SCROLLING & PARALLAX", 10, 10, 20, @raylib.red)
     @draw.draw_text(
       "(c) Cyberpunk Street Environment by Luis Zuno (@ansimuz)",
       screen_width - 330,

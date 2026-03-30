@@ -271,9 +271,7 @@ fn @types.Game::draw_enemies_3d(game : @types.Game) -> Unit {
     }
     // Attack telegraph visual: pulsing glow and size increase
     if e.telegraph_timer > 0.0 {
-      let pulse = @math.sinf(
-        Float::from_int(game.frame_counter) * 0.5,
-      )
+      let pulse = @math.sinf(Float::from_int(game.frame_counter) * 0.5)
       let pulse_abs = if pulse > 0.0 { pulse } else { -pulse }
       let glow_size : Float = 0.5 + pulse_abs * 0.3
       // Red warning glow
@@ -288,18 +286,14 @@ fn @types.Game::draw_enemies_3d(game : @types.Game) -> Unit {
         let dir_x = @math.sinf(e.facing_angle)
         let dir_z = @math.cosf(e.facing_angle)
         @raylib.draw_cube(
-          @raylib.Vector3::new(
-            e.x + dir_x * 1.5, 1.0, e.z + dir_z * 1.5,
-          ),
+          @raylib.Vector3::new(e.x + dir_x * 1.5, 1.0, e.z + dir_z * 1.5),
           0.15,
           0.15,
           0.15,
           @raylib.Color::new(255, 200, 50, glow_alpha),
         )
         @raylib.draw_cube(
-          @raylib.Vector3::new(
-            e.x + dir_x * 2.5, 1.0, e.z + dir_z * 2.5,
-          ),
+          @raylib.Vector3::new(e.x + dir_x * 2.5, 1.0, e.z + dir_z * 2.5),
           0.1,
           0.1,
           0.1,
@@ -555,12 +549,7 @@ fn draw_dragon(
 }
 
 ///|
-fn draw_slime(
-  wx : Float,
-  wz : Float,
-  flash : Bool,
-  game : @types.Game,
-) -> Unit {
+fn draw_slime(wx : Float, wz : Float, flash : Bool, game : @types.Game) -> Unit {
   let sin_val = @math.sinf(Float::from_int(game.frame_counter) * 0.1)
   let bounce = (if sin_val < 0.0 { -sin_val } else { sin_val }) * 0.15
   let body_color = if flash {
@@ -588,12 +577,7 @@ fn draw_slime(
 }
 
 ///|
-fn draw_bat(
-  wx : Float,
-  wz : Float,
-  flash : Bool,
-  game : @types.Game,
-) -> Unit {
+fn draw_bat(wx : Float, wz : Float, flash : Bool, game : @types.Game) -> Unit {
   let wing_flap = @math.sinf(Float::from_int(game.frame_counter) * 0.3) * 0.3
   let body_color = if flash {
     @raylib.Color::new(255, 255, 255, 255)
@@ -601,11 +585,7 @@ fn draw_bat(
     @raylib.Color::new(80, 60, 40, 255)
   }
   // Small body
-  @raylib.draw_sphere(
-    @raylib.Vector3::new(wx, 1.6, wz),
-    0.15,
-    body_color,
-  )
+  @raylib.draw_sphere(@raylib.Vector3::new(wx, 1.6, wz), 0.15, body_color)
   // Wings
   @raylib.draw_cube(
     @raylib.Vector3::new(wx - 0.35, 1.6 + wing_flap, wz),
@@ -750,12 +730,7 @@ fn draw_minotaur(
 }
 
 ///|
-fn draw_lich(
-  wx : Float,
-  wz : Float,
-  flash : Bool,
-  game : @types.Game,
-) -> Unit {
+fn draw_lich(wx : Float, wz : Float, flash : Bool, game : @types.Game) -> Unit {
   let bob = @math.sinf(Float::from_int(game.frame_counter) * 0.06) * 0.1
   let body_color = if flash {
     @raylib.Color::new(255, 255, 255, 240)
@@ -804,12 +779,7 @@ fn draw_lich(
 }
 
 ///|
-fn draw_mimic(
-  wx : Float,
-  wz : Float,
-  flash : Bool,
-  game : @types.Game,
-) -> Unit {
+fn draw_mimic(wx : Float, wz : Float, flash : Bool, game : @types.Game) -> Unit {
   ignore(game)
   let body_color = if flash {
     @raylib.Color::new(255, 255, 255, 255)
@@ -949,7 +919,11 @@ fn @types.Game::draw_loot_3d(game : @types.Game) -> Unit {
     } else if l.kind == @types.loot_gold_pile {
       // Gold coins
       @raylib.draw_cube(
-        pos, 0.25, 0.12, 0.25, @raylib.Color::new(255, 215, 0, 240),
+        pos,
+        0.25,
+        0.12,
+        0.25,
+        @raylib.Color::new(255, 215, 0, 240),
       )
       @raylib.draw_cube(
         @raylib.Vector3::new(l.x + 0.08, 0.48 + bob, l.z - 0.06),
@@ -958,20 +932,22 @@ fn @types.Game::draw_loot_3d(game : @types.Game) -> Unit {
         0.15,
         @raylib.Color::new(230, 195, 0, 220),
       )
-    } else if l.kind == @types.loot_equip_weapon || l.kind == @types.loot_equip_armor || l.kind == @types.loot_equip_ring {
+    } else if l.kind == @types.loot_equip_weapon ||
+      l.kind == @types.loot_equip_armor ||
+      l.kind == @types.loot_equip_ring {
       // Equipment drops: rarity-colored glow
       let rr = @types.get_rarity_color_r(l.rarity)
       let rg = @types.get_rarity_color_g(l.rarity)
       let rb = @types.get_rarity_color_b(l.rarity)
       // Rarity glow aura
       let glow_pulse = @math.sinf(l.bob_phase * 2.0)
-      let glow_abs : Float = if glow_pulse > 0.0 { glow_pulse } else { -glow_pulse }
+      let glow_abs : Float = if glow_pulse > 0.0 {
+        glow_pulse
+      } else {
+        -glow_pulse
+      }
       let glow_size : Float = 0.35 + glow_abs * 0.1
-      @raylib.draw_sphere(
-        pos,
-        glow_size,
-        @raylib.Color::new(rr, rg, rb, 60),
-      )
+      @raylib.draw_sphere(pos, glow_size, @raylib.Color::new(rr, rg, rb, 60))
       if l.kind == @types.loot_equip_weapon {
         // Weapon: small sword shape
         @raylib.draw_cube(
@@ -999,16 +975,8 @@ fn @types.Game::draw_loot_3d(game : @types.Game) -> Unit {
         )
       } else {
         // Ring: small torus approximation
-        @raylib.draw_sphere(
-          pos,
-          0.15,
-          @raylib.Color::new(rr, rg, rb, 240),
-        )
-        @raylib.draw_sphere(
-          pos,
-          0.08,
-          @raylib.Color::new(20, 20, 20, 200),
-        )
+        @raylib.draw_sphere(pos, 0.15, @raylib.Color::new(rr, rg, rb, 240))
+        @raylib.draw_sphere(pos, 0.08, @raylib.Color::new(20, 20, 20, 200))
       }
     } else {
       // Generic pickup (key, potions, etc.)
@@ -1067,9 +1035,7 @@ fn @types.Game::draw_projectiles_3d(game : @types.Game) -> Unit {
         )
         // Frost trail
         @raylib.draw_sphere(
-          @raylib.Vector3::new(
-            p.x - p.vx * 0.03, 1.0, p.z - p.vz * 0.03,
-          ),
+          @raylib.Vector3::new(p.x - p.vx * 0.03, 1.0, p.z - p.vz * 0.03),
           0.06,
           @raylib.Color::new(200, 240, 255, 140),
         )
@@ -1108,18 +1074,14 @@ fn @types.Game::draw_projectiles_3d(game : @types.Game) -> Unit {
         } else {
           @raylib.Color::new(220, 200, 140, 255)
         }
-        @raylib.draw_sphere(
-          @raylib.Vector3::new(p.x, 1.0, p.z), 0.10, color,
-        )
+        @raylib.draw_sphere(@raylib.Vector3::new(p.x, 1.0, p.z), 0.10, color)
         let trail_color = if is_enemy {
           @raylib.Color::new(255, 50, 30, 140)
         } else {
           @raylib.Color::new(200, 180, 100, 140)
         }
         @raylib.draw_sphere(
-          @raylib.Vector3::new(
-            p.x - p.vx * 0.02, 1.0, p.z - p.vz * 0.02,
-          ),
+          @raylib.Vector3::new(p.x - p.vx * 0.02, 1.0, p.z - p.vz * 0.02),
           0.06,
           trail_color,
         )

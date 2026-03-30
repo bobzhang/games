@@ -22,10 +22,11 @@ pub fn handle_enemy_death(game : @types.Game, enemy_idx : Int) -> Unit {
   // Drop gold (elites drop double, floor scaling bonus)
   let floor_bonus = game.floor_num * 2
   let gold_reward = (if e.is_elite {
-    stats.reward_gold * 2
-  } else {
-    stats.reward_gold
-  }) + floor_bonus
+      stats.reward_gold * 2
+    } else {
+      stats.reward_gold
+    }) +
+    floor_bonus
   let item_idx = @types.alloc_item(game.items)
   let item = game.items[item_idx]
   item.active = true
@@ -74,7 +75,7 @@ pub fn apply_damage_to_enemy(
   enemy_idx : Int,
   damage : Int,
   is_crit : Bool,
-  knockback : Float
+  knockback : Float,
 ) -> Unit {
   let e = game.enemies[enemy_idx]
   let p = game.player
@@ -136,7 +137,11 @@ pub fn apply_damage_to_enemy(
   if p.passives.contains(LifeSteal) {
     let heal_pct : Float = if syn.blood_rage {
       let hp_ratio = Float::from_int(p.hp) / Float::from_int(p.max_hp)
-      if hp_ratio < 0.3 { 0.2 } else { 0.1 } // Blood Rage synergy: doubled lifesteal
+      if hp_ratio < 0.3 {
+        0.2
+      } else {
+        0.1
+      } // Blood Rage synergy: doubled lifesteal
     } else {
       0.1
     }
@@ -207,7 +212,10 @@ pub fn apply_damage_to_enemy(
 }
 
 ///|
-fn check_projectile_wall_collision(game : @types.Game, proj : @types.Projectile) -> Bool {
+fn check_projectile_wall_collision(
+  game : @types.Game,
+  proj : @types.Projectile,
+) -> Bool {
   match game.floor {
     None => false
     Some(floor) => {
@@ -280,7 +288,7 @@ fn spawn_chain_projectile(
   game : @types.Game,
   ox : Float,
   oy : Float,
-  base_damage : Int
+  base_damage : Int,
 ) -> Unit {
   let mut best_d2 : Float = 999999.0
   let mut best_idx : Int = -1

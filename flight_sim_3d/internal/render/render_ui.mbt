@@ -173,15 +173,9 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(50, 150, 255, 200),
   )
   // Altitude tick marks
-  for tick in 0..=4 {
+  for tick in 0..<=4 {
     let ty = alt_y + 196 - tick * 49
-    @raylib.draw_line(
-      42,
-      ty,
-      48,
-      ty,
-      @raylib.Color::new(150, 200, 255, 120),
-    )
+    @raylib.draw_line(42, ty, 48, ty, @raylib.Color::new(150, 200, 255, 120))
     let tick_val = tick * 20
     @draw.draw_text(
       "\{tick_val}",
@@ -260,9 +254,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   )
   // Stall warning on speed gauge
   if player.speed < stall_thresh {
-    let stall_flash = @math.sinf(
-      Float::from_int(game.frame_counter) * 0.4,
-    )
+    let stall_flash = @math.sinf(Float::from_int(game.frame_counter) * 0.4)
     if stall_flash > 0.0 {
       @draw.draw_text(
         "STALL",
@@ -307,7 +299,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     fuel_color,
   )
   // Fuel tick marks
-  for tick in 0..=4 {
+  for tick in 0..<=4 {
     let ty = fuel_y + 146 - tick * 36
     @raylib.draw_line(
       fuel_x + 22,
@@ -471,12 +463,11 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     let sw_text = ">> " + wname + " <<"
     let sw_tw = @draw.measure_text(sw_text, 24)
     let alpha = (@types.clampf(
-        game.weapon_switch_display_timer /
-        @types.weapon_switch_display_duration,
-        0.0,
-        1.0,
-      ) *
-      255.0).to_int()
+      game.weapon_switch_display_timer / @types.weapon_switch_display_duration,
+      0.0,
+      1.0,
+    ) *
+    255.0).to_int()
     @draw.draw_text(
       sw_text,
       (scr_w - sw_tw) / 2,
@@ -488,34 +479,10 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   // --- Crosshair ---
   let cx = scr_w / 2
   let cy = scr_h / 2
-  @raylib.draw_line(
-    cx - 15,
-    cy,
-    cx - 5,
-    cy,
-    @raylib.Color::new(0, 255, 0, 180),
-  )
-  @raylib.draw_line(
-    cx + 5,
-    cy,
-    cx + 15,
-    cy,
-    @raylib.Color::new(0, 255, 0, 180),
-  )
-  @raylib.draw_line(
-    cx,
-    cy - 15,
-    cx,
-    cy - 5,
-    @raylib.Color::new(0, 255, 0, 180),
-  )
-  @raylib.draw_line(
-    cx,
-    cy + 5,
-    cx,
-    cy + 15,
-    @raylib.Color::new(0, 255, 0, 180),
-  )
+  @raylib.draw_line(cx - 15, cy, cx - 5, cy, @raylib.Color::new(0, 255, 0, 180))
+  @raylib.draw_line(cx + 5, cy, cx + 15, cy, @raylib.Color::new(0, 255, 0, 180))
+  @raylib.draw_line(cx, cy - 15, cx, cy - 5, @raylib.Color::new(0, 255, 0, 180))
+  @raylib.draw_line(cx, cy + 5, cx, cy + 15, @raylib.Color::new(0, 255, 0, 180))
   // Mission objective text
   game.draw_objective()
   // Message display (center)
@@ -641,9 +608,13 @@ fn @types.Game::draw_objective(game : @types.Game) -> Unit {
     let bar_w = 200
     let bar_x = @types.screen_width / 2 - bar_w / 2
     let bar_y = 72
-    @raylib.draw_rectangle(bar_x, bar_y, bar_w, 14, @raylib.Color::new(
-      0, 0, 0, 150,
-    ))
+    @raylib.draw_rectangle(
+      bar_x,
+      bar_y,
+      bar_w,
+      14,
+      @raylib.Color::new(0, 0, 0, 150),
+    )
     @raylib.draw_rectangle(
       bar_x + 1,
       bar_y + 1,
@@ -1432,15 +1403,40 @@ fn @types.Game::draw_combat_feedback(game : @types.Game) -> Unit {
   let cy = scr_h / 2
   // Hit marker flash (white X at crosshair)
   if game.hit_marker_timer > 0.0 {
-    let alpha = (game.hit_marker_timer / @types.hit_marker_duration *
-      255.0).to_int().clamp(min=0, max=255)
+    let alpha = (game.hit_marker_timer / @types.hit_marker_duration * 255.0)
+      .to_int()
+      .clamp(min=0, max=255)
     let hm_color = @raylib.Color::new(255, 255, 255, alpha)
     let hm_len = 8
     let hm_gap = 3
-    @raylib.draw_line(cx - hm_len, cy - hm_len, cx - hm_gap, cy - hm_gap, hm_color)
-    @raylib.draw_line(cx + hm_gap, cy - hm_gap, cx + hm_len, cy - hm_len, hm_color)
-    @raylib.draw_line(cx - hm_len, cy + hm_len, cx - hm_gap, cy + hm_gap, hm_color)
-    @raylib.draw_line(cx + hm_gap, cy + hm_gap, cx + hm_len, cy + hm_len, hm_color)
+    @raylib.draw_line(
+      cx - hm_len,
+      cy - hm_len,
+      cx - hm_gap,
+      cy - hm_gap,
+      hm_color,
+    )
+    @raylib.draw_line(
+      cx + hm_gap,
+      cy - hm_gap,
+      cx + hm_len,
+      cy - hm_len,
+      hm_color,
+    )
+    @raylib.draw_line(
+      cx - hm_len,
+      cy + hm_len,
+      cx - hm_gap,
+      cy + hm_gap,
+      hm_color,
+    )
+    @raylib.draw_line(
+      cx + hm_gap,
+      cy + hm_gap,
+      cx + hm_len,
+      cy + hm_len,
+      hm_color,
+    )
   }
   // Damage vignette (red screen edges)
   if game.damage_vignette_timer > 0.0 {
@@ -1482,8 +1478,9 @@ fn @types.Game::draw_combat_feedback(game : @types.Game) -> Unit {
   }
   // Damage direction indicator (red arrow pointing toward attacker)
   if game.damage_dir_timer > 0.0 {
-    let dir_alpha = (game.damage_dir_timer / @types.damage_dir_duration *
-      200.0).to_int().clamp(min=0, max=200)
+    let dir_alpha = (game.damage_dir_timer / @types.damage_dir_duration * 200.0)
+      .to_int()
+      .clamp(min=0, max=200)
     // Calculate screen position of the indicator on the edge
     let player = game.player
     // Rotate attacker direction relative to player yaw
@@ -1579,11 +1576,7 @@ fn @types.Game::draw_radio_messages(game : @types.Game) -> Unit {
       continue
     }
     // Fade based on remaining timer
-    let fade = if msg.timer < 0.5 {
-      msg.timer * 2.0
-    } else {
-      1.0
-    }
+    let fade = if msg.timer < 0.5 { msg.timer * 2.0 } else { 1.0 }
     let alpha = (fade * 255.0).to_int().clamp(min=0, max=255)
     // Color based on priority: 0=green (info), 1=yellow (warning), 2=red (critical)
     let text_color = if msg.priority >= @types.msg_priority_critical {

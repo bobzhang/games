@@ -1336,13 +1336,7 @@ fn main {
       10,
       @raylib.Color::new(108, 196, 248, 255),
     )
-    @draw.draw_text(
-      "FUEL",
-      254,
-      96,
-      16,
-      @raylib.Color::new(182, 208, 230, 255),
-    )
+    @draw.draw_text("FUEL", 254, 96, 16, @raylib.Color::new(182, 208, 230, 255))
 
     if taxi.carry_idx >= 0 {
       @draw.draw_text(

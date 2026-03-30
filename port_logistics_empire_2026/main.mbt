@@ -296,10 +296,10 @@ fn add_node(
 ///|
 /// Returns the index of an active route connecting nodes a and b (either direction), or -1 if none exists.
 fn find_route(routes : Array[Route], a : Int, b : Int) -> Int {
-  @utils.first_index_by(
-    routes,
-    fn(route) { route.active && ((route.a == a && route.b == b) || (route.a == b && route.b == a)) },
-  )
+  @utils.first_index_by(routes, fn(route) {
+    route.active &&
+    ((route.a == a && route.b == b) || (route.a == b && route.b == a))
+  })
 }
 
 ///|
@@ -461,10 +461,9 @@ fn point_seg_dist2(
 ///|
 /// Returns the index of the first active node whose radius contains the pointer position, or -1.
 fn pick_node(nodes : Array[Node], mx : Float, my : Float) -> Int {
-  @utils.first_index_by(
-    nodes,
-    fn(node) { node.active && dist2(mx, my, node.x, node.y) <= node.r * node.r },
-  )
+  @utils.first_index_by(nodes, fn(node) {
+    node.active && dist2(mx, my, node.x, node.y) <= node.r * node.r
+  })
 }
 
 ///|
@@ -1261,13 +1260,7 @@ fn draw_ui_panel(
     @raylib.Color::new(192, 214, 252, 238),
   )
 
-  @draw.draw_text(
-    "Timer",
-    984,
-    132,
-    24,
-    @raylib.Color::new(226, 236, 252, 246),
-  )
+  @draw.draw_text("Timer", 984, 132, 24, @raylib.Color::new(226, 236, 252, 246))
   @draw.draw_text(
     "\{timer.to_int()}s",
     1126,

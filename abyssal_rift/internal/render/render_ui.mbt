@@ -9,16 +9,46 @@ pub fn draw_hud(game : @types.Game) -> Unit {
   let bar_w = 200
   let bar_h = 14
   let hp_ratio = Float::from_int(p.hp) / Float::from_int(p.max_hp)
-  @raylib.draw_rectangle(bar_x, bar_y, bar_w, bar_h, @raylib.Color::new(60, 20, 20, 255))
-  @raylib.draw_rectangle(bar_x, bar_y, (Float::from_int(bar_w) * hp_ratio).to_int(), bar_h, @types.color_health)
-  @raylib.draw_text("\{p.hp}/\{p.max_hp}", bar_x + 4, bar_y + 1, 12, @raylib.white)
+  @raylib.draw_rectangle(
+    bar_x,
+    bar_y,
+    bar_w,
+    bar_h,
+    @raylib.Color::new(60, 20, 20, 255),
+  )
+  @raylib.draw_rectangle(
+    bar_x,
+    bar_y,
+    (Float::from_int(bar_w) * hp_ratio).to_int(),
+    bar_h,
+    @types.color_health,
+  )
+  @raylib.draw_text(
+    "\{p.hp}/\{p.max_hp}",
+    bar_x + 4,
+    bar_y + 1,
+    12,
+    @raylib.white,
+  )
   // Shield bar
   let shield_y = bar_y + bar_h + 2
   let shield_w = 200
   let shield_h = 8
   let shield_ratio = p.shield / p.max_shield
-  @raylib.draw_rectangle(bar_x, shield_y, shield_w, shield_h, @raylib.Color::new(20, 40, 60, 255))
-  @raylib.draw_rectangle(bar_x, shield_y, (Float::from_int(shield_w) * shield_ratio).to_int(), shield_h, @types.color_shield)
+  @raylib.draw_rectangle(
+    bar_x,
+    shield_y,
+    shield_w,
+    shield_h,
+    @raylib.Color::new(20, 40, 60, 255),
+  )
+  @raylib.draw_rectangle(
+    bar_x,
+    shield_y,
+    (Float::from_int(shield_w) * shield_ratio).to_int(),
+    shield_h,
+    @types.color_shield,
+  )
   // Weapon name with icon
   let weapon_stats = @data.get_weapon_stats(p.weapon)
   draw_weapon_icon(p.weapon, 240, 16)
@@ -40,9 +70,21 @@ pub fn draw_hud(game : @types.Game) -> Unit {
   )
   // Dash cooldown indicator
   if p.dash_cooldown > 0.0 {
-    @raylib.draw_text("DASH", @types.screen_w / 2 - 20, @types.screen_h - 40, 14, @raylib.Color::new(100, 100, 100, 200))
+    @raylib.draw_text(
+      "DASH",
+      @types.screen_w / 2 - 20,
+      @types.screen_h - 40,
+      14,
+      @raylib.Color::new(100, 100, 100, 200),
+    )
   } else {
-    @raylib.draw_text("DASH", @types.screen_w / 2 - 20, @types.screen_h - 40, 14, @raylib.Color::new(100, 200, 255, 200))
+    @raylib.draw_text(
+      "DASH",
+      @types.screen_w / 2 - 20,
+      @types.screen_h - 40,
+      14,
+      @raylib.Color::new(100, 200, 255, 200),
+    )
   }
   // Room cleared flash
   if game.room_clear_timer > 0.0 {
@@ -213,22 +255,14 @@ fn draw_weapon_icon(weapon : @types.WeaponKind, x : Int, y : Int) -> Unit {
     Daggers => {
       // X shape (crossed daggers)
       @raylib.draw_line_ex(
-        @raylib.Vector2::new(
-          Float::from_int(x + 1), Float::from_int(y - 4),
-        ),
-        @raylib.Vector2::new(
-          Float::from_int(x + 9), Float::from_int(y + 4),
-        ),
+        @raylib.Vector2::new(Float::from_int(x + 1), Float::from_int(y - 4)),
+        @raylib.Vector2::new(Float::from_int(x + 9), Float::from_int(y + 4)),
         2.0,
         color,
       )
       @raylib.draw_line_ex(
-        @raylib.Vector2::new(
-          Float::from_int(x + 9), Float::from_int(y - 4),
-        ),
-        @raylib.Vector2::new(
-          Float::from_int(x + 1), Float::from_int(y + 4),
-        ),
+        @raylib.Vector2::new(Float::from_int(x + 9), Float::from_int(y - 4)),
+        @raylib.Vector2::new(Float::from_int(x + 1), Float::from_int(y + 4)),
         2.0,
         color,
       )
@@ -236,15 +270,9 @@ fn draw_weapon_icon(weapon : @types.WeaponKind, x : Int, y : Int) -> Unit {
     Bow =>
       // Small triangle/arrow pointing right
       @raylib.draw_triangle(
-        @raylib.Vector2::new(
-          Float::from_int(x + 12), Float::from_int(y),
-        ),
-        @raylib.Vector2::new(
-          Float::from_int(x + 1), Float::from_int(y + 5),
-        ),
-        @raylib.Vector2::new(
-          Float::from_int(x + 1), Float::from_int(y - 5),
-        ),
+        @raylib.Vector2::new(Float::from_int(x + 12), Float::from_int(y)),
+        @raylib.Vector2::new(Float::from_int(x + 1), Float::from_int(y + 5)),
+        @raylib.Vector2::new(Float::from_int(x + 1), Float::from_int(y - 5)),
         color,
       )
     Staff =>
@@ -301,7 +329,8 @@ fn draw_status_effects(game : @types.Game) -> Unit {
   let mut offset = 0
   for i in 0..<p.status_effects.length() {
     let effect = p.status_effects[i]
-    let (name, color, duration) : (String, @raylib.Color, Float) = match effect {
+    let (name, color, duration) : (String, @raylib.Color, Float) = match
+      effect {
       Slow(t) => ("SLOW", @raylib.Color::new(100, 100, 255, 220), t)
       Poison(t) => ("POISON", @raylib.Color::new(100, 200, 50, 220), t)
       Shield(t) => ("SHIELD", @raylib.Color::new(100, 200, 255, 220), t)

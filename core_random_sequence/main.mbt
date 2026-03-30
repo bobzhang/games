@@ -193,13 +193,7 @@ fn draw_text_center_key_help(
   let mut text_size_current = 0
   @draw.draw_text("Press", pos_x, pos_y, font_size, color)
   text_size_current += press_size + 2 * space_size
-  @draw.draw_text(
-    key,
-    pos_x + text_size_current,
-    pos_y,
-    font_size,
-    @raylib.red,
-  )
+  @draw.draw_text(key, pos_x + text_size_current, pos_y, font_size, @raylib.red)
   @raylib.draw_rectangle(
     pos_x + text_size_current,
     pos_y + font_size,

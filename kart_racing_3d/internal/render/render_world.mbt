@@ -279,15 +279,39 @@ fn @types.Game::draw_track(game : @types.Game) -> Unit {
         let dash_y0 = road_y0 + 0.02
         let dash_y1 = road_y1 + 0.02
         @raylib.draw_triangle_3d(
-          @raylib.Vector3::new(x0 - px0 * dash_half, dash_y0, z0 - pz0 * dash_half),
-          @raylib.Vector3::new(x0 + px0 * dash_half, dash_y0, z0 + pz0 * dash_half),
-          @raylib.Vector3::new(x1 + px1 * dash_half, dash_y1, z1 + pz1 * dash_half),
+          @raylib.Vector3::new(
+            x0 - px0 * dash_half,
+            dash_y0,
+            z0 - pz0 * dash_half,
+          ),
+          @raylib.Vector3::new(
+            x0 + px0 * dash_half,
+            dash_y0,
+            z0 + pz0 * dash_half,
+          ),
+          @raylib.Vector3::new(
+            x1 + px1 * dash_half,
+            dash_y1,
+            z1 + pz1 * dash_half,
+          ),
           dash_color,
         )
         @raylib.draw_triangle_3d(
-          @raylib.Vector3::new(x0 - px0 * dash_half, dash_y0, z0 - pz0 * dash_half),
-          @raylib.Vector3::new(x1 + px1 * dash_half, dash_y1, z1 + pz1 * dash_half),
-          @raylib.Vector3::new(x1 - px1 * dash_half, dash_y1, z1 - pz1 * dash_half),
+          @raylib.Vector3::new(
+            x0 - px0 * dash_half,
+            dash_y0,
+            z0 - pz0 * dash_half,
+          ),
+          @raylib.Vector3::new(
+            x1 + px1 * dash_half,
+            dash_y1,
+            z1 + pz1 * dash_half,
+          ),
+          @raylib.Vector3::new(
+            x1 - px1 * dash_half,
+            dash_y1,
+            z1 - pz1 * dash_half,
+          ),
           dash_color,
         )
       }
@@ -331,8 +355,12 @@ fn @types.Game::draw_start_finish_line(game : @types.Game) -> Unit {
       let col_f = Float::from_int(col) - Float::from_int(checks_across) / 2.0
       let row_f = Float::from_int(row) - Float::from_int(checks_along) / 2.0
       // Center of this check square
-      let cx = wp0.x + px * (col_f + 0.5) * check_w + fx * (row_f + 0.5) * check_l
-      let cz = wp0.z + pz * (col_f + 0.5) * check_w + fz * (row_f + 0.5) * check_l
+      let cx = wp0.x +
+        px * (col_f + 0.5) * check_w +
+        fx * (row_f + 0.5) * check_l
+      let cz = wp0.z +
+        pz * (col_f + 0.5) * check_w +
+        fz * (row_f + 0.5) * check_l
       // Quad corners
       let hw = check_w * 0.5
       let hl = check_l * 0.5
@@ -388,7 +416,11 @@ fn @types.Game::draw_start_finish_line(game : @types.Game) -> Unit {
     let bt = Float::from_int(bc) / 12.0 * 2.0 - 1.0
     let bx = wp0.x + px * bt * bar_hw
     let bz = wp0.z + pz * bt * bar_hw
-    let bc_color = if bc % 2 == 0 { white } else { @raylib.Color::new(220, 40, 40, 255) }
+    let bc_color = if bc % 2 == 0 {
+      white
+    } else {
+      @raylib.Color::new(220, 40, 40, 255)
+    }
     @raylib.draw_cube(
       @raylib.Vector3::new(bx, bar_y, bz),
       0.2,
@@ -1517,12 +1549,24 @@ fn draw_sky_gradient(game : @types.Game) -> Unit {
   for b in 0..<bands {
     let t0 = Float::from_int(b) / Float::from_int(bands)
     let t1 = Float::from_int(b + 1) / Float::from_int(bands)
-    let r0 = @types.lerpf(Float::from_int(top.0), Float::from_int(bot.0), t0).to_int().clamp(min=0, max=255)
-    let g0 = @types.lerpf(Float::from_int(top.1), Float::from_int(bot.1), t0).to_int().clamp(min=0, max=255)
-    let b0 = @types.lerpf(Float::from_int(top.2), Float::from_int(bot.2), t0).to_int().clamp(min=0, max=255)
-    let r1 = @types.lerpf(Float::from_int(top.0), Float::from_int(bot.0), t1).to_int().clamp(min=0, max=255)
-    let g1 = @types.lerpf(Float::from_int(top.1), Float::from_int(bot.1), t1).to_int().clamp(min=0, max=255)
-    let b1 = @types.lerpf(Float::from_int(top.2), Float::from_int(bot.2), t1).to_int().clamp(min=0, max=255)
+    let r0 = @types.lerpf(Float::from_int(top.0), Float::from_int(bot.0), t0)
+      .to_int()
+      .clamp(min=0, max=255)
+    let g0 = @types.lerpf(Float::from_int(top.1), Float::from_int(bot.1), t0)
+      .to_int()
+      .clamp(min=0, max=255)
+    let b0 = @types.lerpf(Float::from_int(top.2), Float::from_int(bot.2), t0)
+      .to_int()
+      .clamp(min=0, max=255)
+    let r1 = @types.lerpf(Float::from_int(top.0), Float::from_int(bot.0), t1)
+      .to_int()
+      .clamp(min=0, max=255)
+    let g1 = @types.lerpf(Float::from_int(top.1), Float::from_int(bot.1), t1)
+      .to_int()
+      .clamp(min=0, max=255)
+    let b1 = @types.lerpf(Float::from_int(top.2), Float::from_int(bot.2), t1)
+      .to_int()
+      .clamp(min=0, max=255)
     @raylib.draw_rectangle_gradient_v(
       0,
       b * band_h,
@@ -1557,8 +1601,12 @@ fn @types.Game::draw_kart_blob_shadows(game : @types.Game) -> Unit {
     let rz : Float = @types.kart_length * 0.7
     // Draw shadow as a fan of triangles for an ellipse
     for seg in 0..<shadow_segments {
-      let a0 = Float::from_int(seg) * @types.two_pi / Float::from_int(shadow_segments)
-      let a1 = Float::from_int(seg + 1) * @types.two_pi / Float::from_int(shadow_segments)
+      let a0 = Float::from_int(seg) *
+        @types.two_pi /
+        Float::from_int(shadow_segments)
+      let a1 = Float::from_int(seg + 1) *
+        @types.two_pi /
+        Float::from_int(shadow_segments)
       // Ellipse local coords
       let lx0 = @math.cosf(a0) * rx
       let lz0 = @math.sinf(a0) * rz
@@ -1610,10 +1658,26 @@ fn @types.Game::draw_boost_pad_glow(game : @types.Game) -> Unit {
     let half_w : Float = @types.road_half * seg.width_mult * 0.85
     let glow_y : Float = (wp0.y + wp1.y) * 0.5 + 0.06
     // Draw glowing quad on the road surface
-    let v0 = @raylib.Vector3::new(wp0.x - px * half_w, glow_y, wp0.z - pz * half_w)
-    let v1 = @raylib.Vector3::new(wp0.x + px * half_w, glow_y, wp0.z + pz * half_w)
-    let v2 = @raylib.Vector3::new(wp1.x + px * half_w, glow_y, wp1.z + pz * half_w)
-    let v3 = @raylib.Vector3::new(wp1.x - px * half_w, glow_y, wp1.z - pz * half_w)
+    let v0 = @raylib.Vector3::new(
+      wp0.x - px * half_w,
+      glow_y,
+      wp0.z - pz * half_w,
+    )
+    let v1 = @raylib.Vector3::new(
+      wp0.x + px * half_w,
+      glow_y,
+      wp0.z + pz * half_w,
+    )
+    let v2 = @raylib.Vector3::new(
+      wp1.x + px * half_w,
+      glow_y,
+      wp1.z + pz * half_w,
+    )
+    let v3 = @raylib.Vector3::new(
+      wp1.x - px * half_w,
+      glow_y,
+      wp1.z - pz * half_w,
+    )
     @raylib.draw_triangle_3d(v0, v1, v2, glow_color)
     @raylib.draw_triangle_3d(v0, v2, v3, glow_color)
     // Arrow chevrons on boost pad
@@ -1648,8 +1712,9 @@ fn @types.Game::draw_powerup_halos(game : @types.Game) -> Unit {
       continue
     }
     let bob = @math.sinf(
-      Float::from_int(game.frame_counter) * 0.08 + Float::from_int(i),
-    ) * 0.3
+        Float::from_int(game.frame_counter) * 0.08 + Float::from_int(i),
+      ) *
+      0.3
     let py = pu.y + bob
     let pulse = @math.sinf(
       Float::from_int(game.frame_counter) * 0.1 + Float::from_int(i) * 0.7,
@@ -1660,8 +1725,12 @@ fn @types.Game::draw_powerup_halos(game : @types.Game) -> Unit {
     let halo_color = @raylib.Color::new(255, 220, 100, halo_alpha)
     // Draw halo as triangle fan on a horizontal plane
     for seg in 0..<halo_segments {
-      let a0 = Float::from_int(seg) * @types.two_pi / Float::from_int(halo_segments)
-      let a1 = Float::from_int(seg + 1) * @types.two_pi / Float::from_int(halo_segments)
+      let a0 = Float::from_int(seg) *
+        @types.two_pi /
+        Float::from_int(halo_segments)
+      let a1 = Float::from_int(seg + 1) *
+        @types.two_pi /
+        Float::from_int(halo_segments)
       @raylib.draw_triangle_3d(
         @raylib.Vector3::new(pu.x, py, pu.z),
         @raylib.Vector3::new(

@@ -1450,13 +1450,7 @@ fn main {
       @raylib.Color::new(108, 222, 160, 255),
       @raylib.Color::new(54, 78, 72, 230),
     )
-    @draw.draw_text(
-      "Fuel",
-      260,
-      96,
-      22,
-      @raylib.Color::new(214, 230, 246, 240),
-    )
+    @draw.draw_text("Fuel", 260, 96, 22, @raylib.Color::new(214, 230, 246, 240))
 
     draw_bar(
       34,

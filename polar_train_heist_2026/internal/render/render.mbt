@@ -689,11 +689,7 @@ fn draw_ent(e : @types.Ent, cam_x : Float, cam_y : Float) -> Unit {
     let hpw = @types.maxf(8.0, e.w)
     let hpx = e.x - hpw * 0.5 + cam_x
     let hpy = e.y - e.h * 0.72 + cam_y
-    let pct = @types.clampf(
-      e.hp / @types.maxf(1.0, e.max_hp),
-      0.0,
-      1.0,
-    )
+    let pct = @types.clampf(e.hp / @types.maxf(1.0, e.max_hp), 0.0, 1.0)
     @raylib.draw_rectangle(
       hpx.to_int(),
       hpy.to_int(),

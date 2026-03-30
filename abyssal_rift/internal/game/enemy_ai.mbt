@@ -1,13 +1,14 @@
 ///|
-pub fn update_enemy_ai(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit {
+pub fn update_enemy_ai(
+  game : @types.Game,
+  e : @types.Enemy,
+  dt : Float,
+) -> Unit {
   let p = game.player
   let base_stats = @data.get_enemy_stats(e.kind, game.floor_num)
   // Elite Fast affix: 50% faster movement
   let speed_mult : Float = if e.is_elite && e.affix == Fast { 1.5 } else { 1.0 }
-  let stats = {
-    ..base_stats,
-    speed: base_stats.speed * speed_mult,
-  }
+  let stats = { ..base_stats, speed: base_stats.speed * speed_mult }
   // Update phase for oscillation
   e.phase += dt
   e.attack_cooldown -= dt
@@ -20,7 +21,7 @@ pub fn update_enemy_ai(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit
   let d2 = @types.dist2(e.x, e.y, p.x, p.y)
   let dist_to_player = @types.dist(e.x, e.y, p.x, p.y)
   match e.kind {
-    Skeleton | Slime | SlimeSmall | Golem | Spider => {
+    Skeleton | Slime | SlimeSmall | Golem | Spider =>
       // Melee chaser AI
       if dist_to_player < stats.sight_range {
         e.state = Chase
@@ -30,7 +31,8 @@ pub fn update_enemy_ai(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit
         e.vx = dx * stats.speed
         e.vy = dy * stats.speed
         // Attack when in range
-        if d2 < stats.attack_range * stats.attack_range && e.attack_cooldown <= 0.0 {
+        if d2 < stats.attack_range * stats.attack_range &&
+          e.attack_cooldown <= 0.0 {
           e.state = Attack(0.3)
           e.attack_cooldown = stats.attack_cooldown
           e.vx = 0.0
@@ -41,8 +43,7 @@ pub fn update_enemy_ai(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit
         e.vx *= 0.9
         e.vy *= 0.9
       }
-    }
-    Archer => {
+    Archer =>
       // Ranged: keep distance, shoot
       if dist_to_player < stats.sight_range {
         let (dx, dy) = @types.normalize(p.x - e.x, p.y - e.y)
@@ -84,18 +85,20 @@ pub fn update_enemy_ai(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit
         e.vx *= 0.9
         e.vy *= 0.9
       }
-    }
-    Bat => {
+    Bat =>
       // Erratic fast chaser
       if dist_to_player < stats.sight_range {
         let (dx, dy) = @types.normalize(p.x - e.x, p.y - e.y)
         e.facing_x = dx
         e.facing_y = dy
-        let osc_x = Float::from_double(@math.sin((e.phase * 8.0).to_double())) * 100.0
-        let osc_y = Float::from_double(@math.cos((e.phase * 6.0).to_double())) * 100.0
+        let osc_x = Float::from_double(@math.sin((e.phase * 8.0).to_double())) *
+          100.0
+        let osc_y = Float::from_double(@math.cos((e.phase * 6.0).to_double())) *
+          100.0
         e.vx = dx * stats.speed + osc_x
         e.vy = dy * stats.speed + osc_y
-        if d2 < stats.attack_range * stats.attack_range && e.attack_cooldown <= 0.0 {
+        if d2 < stats.attack_range * stats.attack_range &&
+          e.attack_cooldown <= 0.0 {
           e.attack_cooldown = stats.attack_cooldown
           // Direct damage on contact
           damage_player(game, stats.damage)
@@ -104,7 +107,6 @@ pub fn update_enemy_ai(game : @types.Game, e : @types.Enemy, dt : Float) -> Unit
         e.vx *= 0.95
         e.vy *= 0.95
       }
-    }
     BroodMother => () // Handled by update_boss
     LichKing => () // Handled by update_boss
   }

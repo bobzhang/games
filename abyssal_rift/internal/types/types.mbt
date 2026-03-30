@@ -34,20 +34,30 @@ pub(all) struct Player {
 ///|
 pub fn Player::new() -> Player {
   {
-    x: 0.0, y: 0.0,
-    vx: 0.0, vy: 0.0,
-    facing_x: 1.0, facing_y: 0.0,
-    hp: 100, max_hp: 100,
-    shield: 30.0, max_shield: 30.0,
+    x: 0.0,
+    y: 0.0,
+    vx: 0.0,
+    vy: 0.0,
+    facing_x: 1.0,
+    facing_y: 0.0,
+    hp: 100,
+    max_hp: 100,
+    shield: 30.0,
+    max_shield: 30.0,
     shield_regen_timer: 0.0,
     invuln_timer: 0.0,
-    dash_cooldown: 0.0, dash_timer: 0.0,
-    dash_dx: 0.0, dash_dy: 0.0,
+    dash_cooldown: 0.0,
+    dash_timer: 0.0,
+    dash_dx: 0.0,
+    dash_dy: 0.0,
     weapon: Sword,
     attack_state: Idle,
-    combo_count: 0, combo_timer: 0.0,
-    speed: 1.0, damage_mult: 1.0,
-    crit_chance: 0.05, defense: 0,
+    combo_count: 0,
+    combo_timer: 0.0,
+    speed: 1.0,
+    damage_mult: 1.0,
+    crit_chance: 0.05,
+    defense: 0,
     gold: 0,
     dead: false,
     attack_buffered: false,
@@ -202,9 +212,17 @@ pub(all) struct Camera {
 
 ///|
 pub fn Camera::new() -> Camera {
-  { x: 0.0, y: 0.0, target_x: 0.0, target_y: 0.0,
-    shake_intensity: 0.0, shake_timer: 0.0, shake_decay: 0.0,
-    offset_x: 0.0, offset_y: 0.0 }
+  {
+    x: 0.0,
+    y: 0.0,
+    target_x: 0.0,
+    target_y: 0.0,
+    shake_intensity: 0.0,
+    shake_timer: 0.0,
+    shake_decay: 0.0,
+    offset_x: 0.0,
+    offset_y: 0.0,
+  }
 }
 
 ///|
@@ -314,37 +332,75 @@ pub(all) struct Game {
 
 ///|
 pub fn Game::new() -> Game {
-  let enemies : Array[Enemy] = Array::make(
-    128,
-    { active: false, kind: Skeleton, x: 0.0, y: 0.0,
-      vx: 0.0, vy: 0.0, hp: 0, max_hp: 0,
-      state: Idle, facing_x: 1.0, facing_y: 0.0,
-      patrol_x: 0.0, patrol_y: 0.0, attack_cooldown: 0.0,
-      anim_timer: 0.0, anim_frame: 0, flash_timer: 0.0,
-      knockback_timer: 0.0, phase: 0.0, room_id: -1,
-      bleed_timer: 0.0, is_elite: false, affix: None },
-  )
-  let projectiles : Array[Projectile] = Array::make(
-    256,
-    { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0,
-      damage: 0, is_player: false, is_crit: false,
-      piercing: false, homing: false, lifetime: 0.0, radius: 4.0,
-      poison_on_hit: false },
-  )
-  let items : Array[Item] = Array::make(
-    64,
-    { active: false, kind: Gold(0), x: 0.0, y: 0.0, bob_timer: 0.0 },
-  )
-  let particles : Array[Particle] = Array::make(
-    600,
-    { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0,
-      life: 0.0, max_life: 0.0, size: 0.0, r: 255, g: 255, b: 255 },
-  )
-  let damage_numbers : Array[DamageNumber] = Array::make(
-    32,
-    { active: false, x: 0.0, y: 0.0, vy: 0.0,
-      life: 0.0, value: 0, is_crit: false },
-  )
+  let enemies : Array[Enemy] = Array::make(128, {
+    active: false,
+    kind: Skeleton,
+    x: 0.0,
+    y: 0.0,
+    vx: 0.0,
+    vy: 0.0,
+    hp: 0,
+    max_hp: 0,
+    state: Idle,
+    facing_x: 1.0,
+    facing_y: 0.0,
+    patrol_x: 0.0,
+    patrol_y: 0.0,
+    attack_cooldown: 0.0,
+    anim_timer: 0.0,
+    anim_frame: 0,
+    flash_timer: 0.0,
+    knockback_timer: 0.0,
+    phase: 0.0,
+    room_id: -1,
+    bleed_timer: 0.0,
+    is_elite: false,
+    affix: None,
+  })
+  let projectiles : Array[Projectile] = Array::make(256, {
+    active: false,
+    x: 0.0,
+    y: 0.0,
+    vx: 0.0,
+    vy: 0.0,
+    damage: 0,
+    is_player: false,
+    is_crit: false,
+    piercing: false,
+    homing: false,
+    lifetime: 0.0,
+    radius: 4.0,
+    poison_on_hit: false,
+  })
+  let items : Array[Item] = Array::make(64, {
+    active: false,
+    kind: Gold(0),
+    x: 0.0,
+    y: 0.0,
+    bob_timer: 0.0,
+  })
+  let particles : Array[Particle] = Array::make(600, {
+    active: false,
+    x: 0.0,
+    y: 0.0,
+    vx: 0.0,
+    vy: 0.0,
+    life: 0.0,
+    max_life: 0.0,
+    size: 0.0,
+    r: 255,
+    g: 255,
+    b: 255,
+  })
+  let damage_numbers : Array[DamageNumber] = Array::make(32, {
+    active: false,
+    x: 0.0,
+    y: 0.0,
+    vy: 0.0,
+    life: 0.0,
+    value: 0,
+    is_crit: false,
+  })
   {
     state: Title,
     player: Player::new(),
@@ -372,10 +428,13 @@ pub fn Game::new() -> Game {
     boss_phase_timer: 0.0,
     boss_attack_pattern: 0,
     floor_transition_timer: 0.0,
-    shop_items: Array::make(
-      3,
-      { active: false, kind: HealthPotion, price: 0, x: 0.0, y: 0.0 },
-    ),
+    shop_items: Array::make(3, {
+      active: false,
+      kind: HealthPotion,
+      price: 0,
+      x: 0.0,
+      y: 0.0,
+    }),
     shop_active: false,
     reward_choices: [],
     reward_active: false,

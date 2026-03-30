@@ -517,11 +517,7 @@ fn @types.Game::draw_entities(
     }
 
     if @types.entity_is_hostile(e.kind) && e.hp > 0.0 {
-      let hp_ratio = @types.clampf(
-        e.hp / @types.maxf(1.0, e.max_hp),
-        0.0,
-        1.0,
-      )
+      let hp_ratio = @types.clampf(e.hp / @types.maxf(1.0, e.max_hp), 0.0, 1.0)
       @raylib.draw_rectangle(
         (e.x - e.w * 0.42 + cam_x).to_int(),
         (e.y - e.h * 0.62 + cam_y).to_int(),
@@ -844,13 +840,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     56,
     @raylib.Color::new(134, 208, 242, 170),
   )
-  @draw.draw_text(
-    "BOOST",
-    338,
-    24,
-    18,
-    @raylib.Color::new(206, 230, 248, 230),
-  )
+  @draw.draw_text("BOOST", 338, 24, 18, @raylib.Color::new(206, 230, 248, 230))
   @draw.draw_text(
     cooldown_text(game.boost_cd, @types.boost_cd_time),
     338,

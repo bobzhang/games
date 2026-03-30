@@ -55,9 +55,7 @@ fn main {
       @raylib.white,
     )
     @raylib.end_shader_mode()
-    @draw.draw_text(
-      "Shader-based\ntexture\noutline", 10, 10, 20, @raylib.gray,
-    )
+    @draw.draw_text("Shader-based\ntexture\noutline", 10, 10, 20, @raylib.gray)
     @draw.draw_text(
       "Scroll mouse wheel to\nchange outline size", 10, 72, 20, @raylib.gray,
     )

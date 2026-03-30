@@ -27,27 +27,47 @@ pub fn clampi(v : Int, lo : Int, hi : Int) -> Int {
 
 ///|
 pub fn mini(a : Int, b : Int) -> Int {
-  if a < b { a } else { b }
+  if a < b {
+    a
+  } else {
+    b
+  }
 }
 
 ///|
 pub fn maxi(a : Int, b : Int) -> Int {
-  if a > b { a } else { b }
+  if a > b {
+    a
+  } else {
+    b
+  }
 }
 
 ///|
 pub fn minf(a : Float, b : Float) -> Float {
-  if a < b { a } else { b }
+  if a < b {
+    a
+  } else {
+    b
+  }
 }
 
 ///|
 pub fn maxf(a : Float, b : Float) -> Float {
-  if a > b { a } else { b }
+  if a > b {
+    a
+  } else {
+    b
+  }
 }
 
 ///|
 pub fn absf(v : Float) -> Float {
-  if v < 0.0 { -v } else { v }
+  if v < 0.0 {
+    -v
+  } else {
+    v
+  }
 }
 
 ///|
@@ -152,7 +172,11 @@ pub fn alloc_enemy(enemies : Array[Enemy]) -> Int {
       }
     }
   }
-  if best >= 0 { best } else { 0 }
+  if best >= 0 {
+    best
+  } else {
+    0
+  }
 }
 
 ///|

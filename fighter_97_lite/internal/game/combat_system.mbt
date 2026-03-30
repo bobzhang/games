@@ -98,8 +98,8 @@ fn @types.Game::apply_successful_hit(
   let defender_archetype = @types.fighter_archetype(game, defender)
   // Capture defender state BEFORE applying hit for punish detection
   let defender_was_in_recovery = defender.action == ActionAttack &&
-    defender.action_frame >= defender.current_move.startup_frames +
-      defender.current_move.active_frames
+    defender.action_frame >=
+    defender.current_move.startup_frames + defender.current_move.active_frames
 
   let (damage, counter_hit) = compute_damage(
     attacker, defender, attacker_archetype, defender_archetype, mv,
@@ -166,11 +166,7 @@ fn @types.Game::apply_successful_hit(
   }
 
   @effects.spawn_hit_spark(
-    game,
-    hitbox_center_x,
-    hitbox_center_y,
-    spark_kind,
-    spark_count,
+    game, hitbox_center_x, hitbox_center_y, spark_kind, spark_count,
   )
 
   // Detect punish: hitting during recovery frames (uses pre-mutation snapshot)

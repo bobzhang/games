@@ -2505,13 +2505,7 @@ fn main {
       11,
       @raylib.Color::new(244, 170, 96, 255),
     )
-    @draw.draw_text(
-      "HEAT",
-      16,
-      178,
-      16,
-      @raylib.Color::new(246, 222, 192, 255),
-    )
+    @draw.draw_text("HEAT", 16, 178, 16, @raylib.Color::new(246, 222, 192, 255))
 
     @draw.draw_text(
       "Dash \{(player.dash_cd * 10.0).to_int()}",

@@ -47,9 +47,7 @@ fn main {
     @raylib.end_mode_3d()
     @raylib.draw_rectangle(10, 10, 320, 93, @raylib.fade(@raylib.skyblue, 0.5))
     @raylib.draw_rectangle_lines(10, 10, 320, 93, @raylib.blue)
-    @draw.draw_text(
-      "Free camera default controls:", 20, 20, 10, @raylib.black,
-    )
+    @draw.draw_text("Free camera default controls:", 20, 20, 10, @raylib.black)
     @draw.draw_text(
       "- Mouse Wheel to Zoom in-out", 40, 40, 10, @raylib.darkgray,
     )

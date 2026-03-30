@@ -2514,13 +2514,7 @@ fn main {
       12,
       @raylib.Color::new(246, 170, 96, 255),
     )
-    @draw.draw_text(
-      "HEAT",
-      16,
-      188,
-      17,
-      @raylib.Color::new(244, 222, 190, 255),
-    )
+    @draw.draw_text("HEAT", 16, 188, 17, @raylib.Color::new(244, 222, 190, 255))
 
     @draw.draw_text(
       "Pulse CD \{(player.pulse_cd * 10.0).to_int()}",

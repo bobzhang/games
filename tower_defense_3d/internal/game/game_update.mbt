@@ -506,12 +506,8 @@ fn @types.Game::update_interest(game : @types.Game, dt : Float) -> Unit {
       // Floating interest income text at screen center area
       let cx = game.camera_target_x
       let cz = game.camera_target_z
-      @types.spawn_floating_text(
-        game, cx, 3.0, cz, capped, 100, 255, 100, true,
-      )
-      @types.set_notification(
-        game, "Interest: +\{capped}g", 1.5,
-      )
+      @types.spawn_floating_text(game, cx, 3.0, cz, capped, 100, 255, 100, true)
+      @types.set_notification(game, "Interest: +\{capped}g", 1.5)
     }
   }
 }

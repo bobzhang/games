@@ -22,18 +22,36 @@ fn main {
   // Palettes: arrays of RGB triplets as ivec3
   // 3-BIT RGB
   let palette0 : Array[(Int, Int, Int)] = [
-    (0, 0, 0), (255, 0, 0), (0, 255, 0), (0, 0, 255),
-    (0, 255, 255), (255, 0, 255), (255, 255, 0), (255, 255, 255),
+    (0, 0, 0),
+    (255, 0, 0),
+    (0, 255, 0),
+    (0, 0, 255),
+    (0, 255, 255),
+    (255, 0, 255),
+    (255, 255, 0),
+    (255, 255, 255),
   ]
   // AMMO-8 (GameBoy-like)
   let palette1 : Array[(Int, Int, Int)] = [
-    (4, 12, 6), (17, 35, 24), (30, 58, 41), (48, 93, 66),
-    (77, 128, 97), (137, 162, 87), (190, 220, 127), (238, 255, 204),
+    (4, 12, 6),
+    (17, 35, 24),
+    (30, 58, 41),
+    (48, 93, 66),
+    (77, 128, 97),
+    (137, 162, 87),
+    (190, 220, 127),
+    (238, 255, 204),
   ]
   // RKBV (2-strip film)
   let palette2 : Array[(Int, Int, Int)] = [
-    (21, 25, 26), (138, 76, 88), (217, 98, 117), (230, 184, 193),
-    (69, 107, 115), (75, 151, 166), (165, 189, 194), (255, 245, 247),
+    (21, 25, 26),
+    (138, 76, 88),
+    (217, 98, 117),
+    (230, 184, 193),
+    (69, 107, 115),
+    (75, 151, 166),
+    (165, 189, 194),
+    (255, 245, 247),
   ]
 
   let palettes : Array[Array[(Int, Int, Int)]] = [palette0, palette1, palette2]
@@ -61,10 +79,7 @@ fn main {
     }
 
     // Send palette data to the shader (RGB triplets as ivec3)
-    shader.set_value_v(
-      palette_loc,
-      IVec3(palettes[current_palette]),
-    )
+    shader.set_value_v(palette_loc, IVec3(palettes[current_palette]))
 
     // Draw
     @raylib.begin_drawing()

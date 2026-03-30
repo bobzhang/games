@@ -88,8 +88,7 @@ fn main {
     )
     match current_texture {
       0 => @draw.draw_text("VERTICAL GRADIENT", 560, 10, 20, @raylib.raywhite)
-      1 =>
-        @draw.draw_text("HORIZONTAL GRADIENT", 540, 10, 20, @raylib.raywhite)
+      1 => @draw.draw_text("HORIZONTAL GRADIENT", 540, 10, 20, @raylib.raywhite)
       2 => @draw.draw_text("DIAGONAL GRADIENT", 540, 10, 20, @raylib.raywhite)
       3 => @draw.draw_text("RADIAL GRADIENT", 580, 10, 20, @raylib.lightgray)
       4 => @draw.draw_text("SQUARE GRADIENT", 580, 10, 20, @raylib.lightgray)

@@ -371,10 +371,9 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @draw.draw_text("Gold: \{game.gold}", 10, 12, 20, gold_color)
   // Gold flash highlight bar
   if game.gold_flash_timer > 0.0 {
-    let flash_a = (game.gold_flash_timer / 0.6 * 80.0).to_int().clamp(
-      min=0,
-      max=80,
-    )
+    let flash_a = (game.gold_flash_timer / 0.6 * 80.0)
+      .to_int()
+      .clamp(min=0, max=80)
     @raylib.draw_rectangle(
       5,
       8,
@@ -1249,8 +1248,7 @@ fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
   )
   @draw.draw_text(
     "Enter: Return to Menu",
-    (@types.screen_width - @draw.measure_text("Enter: Return to Menu", 18)) /
-    2,
+    (@types.screen_width - @draw.measure_text("Enter: Return to Menu", 18)) / 2,
     @types.screen_height / 2 + 150,
     18,
     @raylib.Color::new(180, 180, 200, 255),
@@ -1339,8 +1337,7 @@ fn @types.Game::draw_victory(game : @types.Game) -> Unit {
   )
   @draw.draw_text(
     "Enter: Return to Menu",
-    (@types.screen_width - @draw.measure_text("Enter: Return to Menu", 18)) /
-    2,
+    (@types.screen_width - @draw.measure_text("Enter: Return to Menu", 18)) / 2,
     @types.screen_height / 2 + 170,
     18,
     @raylib.Color::new(180, 200, 180, 255),
@@ -1357,19 +1354,33 @@ fn @types.Game::draw_combat_feedback_ui(game : @types.Game) -> Unit {
     let total = game.enemies_to_spawn
     let killed = game.enemies_killed_this_wave
     let progress = @types.clampf(
-      Float::from_int(killed) / Float::from_int(total), 0.0, 1.0,
+      Float::from_int(killed) / Float::from_int(total),
+      0.0,
+      1.0,
     )
     let bar_x = (@types.screen_width - 300) / 2
     let bar_y = 48
     @raylib.draw_rectangle(
-      bar_x, bar_y, 300, 14, @raylib.Color::new(0, 0, 0, 140),
+      bar_x,
+      bar_y,
+      300,
+      14,
+      @raylib.Color::new(0, 0, 0, 140),
     )
     let fill_w = (300.0 * progress.to_double()).to_int()
     @raylib.draw_rectangle(
-      bar_x, bar_y, fill_w, 14, @raylib.Color::new(80, 200, 80, 200),
+      bar_x,
+      bar_y,
+      fill_w,
+      14,
+      @raylib.Color::new(80, 200, 80, 200),
     )
     @raylib.draw_rectangle_lines(
-      bar_x, bar_y, 300, 14, @raylib.Color::new(100, 150, 100, 200),
+      bar_x,
+      bar_y,
+      300,
+      14,
+      @raylib.Color::new(100, 150, 100, 200),
     )
     let progress_text = "Wave \{game.current_wave + 1}: \{killed}/\{total} killed"
     let ptw = @draw.measure_text(progress_text, 11)
@@ -1398,7 +1409,11 @@ fn @types.Game::draw_combat_feedback_ui(game : @types.Game) -> Unit {
     // Red screen edge flash
     let edge_a = (pulse * 60.0).to_int().clamp(min=0, max=60)
     @raylib.draw_rectangle(
-      0, 0, @types.screen_width, 3, @raylib.Color::new(255, 0, 0, edge_a),
+      0,
+      0,
+      @types.screen_width,
+      3,
+      @raylib.Color::new(255, 0, 0, edge_a),
     )
     @raylib.draw_rectangle(
       0,
@@ -1408,7 +1423,11 @@ fn @types.Game::draw_combat_feedback_ui(game : @types.Game) -> Unit {
       @raylib.Color::new(255, 0, 0, edge_a),
     )
     @raylib.draw_rectangle(
-      0, 0, 3, @types.screen_height, @raylib.Color::new(255, 0, 0, edge_a),
+      0,
+      0,
+      3,
+      @types.screen_height,
+      @raylib.Color::new(255, 0, 0, edge_a),
     )
     @raylib.draw_rectangle(
       @types.screen_width - 3,
@@ -1421,7 +1440,8 @@ fn @types.Game::draw_combat_feedback_ui(game : @types.Game) -> Unit {
   // Wave complete celebration banner
   if game.wave_complete_timer > 0.0 {
     let banner_alpha_f : Float = @types.minf(
-        game.wave_complete_timer / 0.5, 1.0,
+        game.wave_complete_timer / 0.5,
+        1.0,
       ) *
       255.0
     let a = banner_alpha_f.to_int().clamp(min=0, max=255)
@@ -1432,7 +1452,11 @@ fn @types.Game::draw_combat_feedback_ui(game : @types.Game) -> Unit {
     let bx = (@types.screen_width - tw) / 2 - 15
     let by = @types.screen_height / 4
     @raylib.draw_rectangle(
-      bx, by - 5, tw + 30, 40, @raylib.Color::new(0, 50, 0, a / 2),
+      bx,
+      by - 5,
+      tw + 30,
+      40,
+      @raylib.Color::new(0, 50, 0, a / 2),
     )
     @draw.draw_text(
       text,
@@ -1454,7 +1478,11 @@ fn @types.Game::draw_combat_feedback_ui(game : @types.Game) -> Unit {
     let progress : Float = 1.0 - ft.life / ft.max_life
     let fy = 35 + (progress.to_double() * 25.0).to_int()
     @draw.draw_text(
-      gold_text, 120, fy, 14, @raylib.Color::new(ft.r, ft.g, ft.b, fa),
+      gold_text,
+      120,
+      fy,
+      14,
+      @raylib.Color::new(ft.r, ft.g, ft.b, fa),
     )
   }
   // Active synergy combo labels (2D text near screen center-top)

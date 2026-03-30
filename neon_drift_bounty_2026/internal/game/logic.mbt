@@ -118,10 +118,7 @@ fn @types.Game::alloc_bullet(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.bullets,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.bullets, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -138,10 +135,7 @@ fn @types.Game::alloc_spark(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.sparks,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.sparks, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -158,10 +152,7 @@ fn @types.Game::alloc_ring(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.rings,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.rings, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {
@@ -178,10 +169,7 @@ fn @types.Game::alloc_image(game : @types.Game) -> Int {
       break i
     }
   } nobreak {
-    let best = @utils.min_index_by(
-      game.images,
-      fn(a, b) { a.life < b.life },
-    )
+    let best = @utils.min_index_by(game.images, fn(a, b) { a.life < b.life })
     if best >= 0 {
       best
     } else {

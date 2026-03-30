@@ -600,20 +600,8 @@ fn get_blast_tiles(
   }
   // Trace four cardinal directions: Up, Right, Down, Left.
   for dir_idx in 0..<4 {
-    let ddx = if dir_idx == 1 {
-      1
-    } else if dir_idx == 3 {
-      -1
-    } else {
-      0
-    }
-    let ddy = if dir_idx == 0 {
-      -1
-    } else if dir_idx == 2 {
-      1
-    } else {
-      0
-    }
+    let ddx = if dir_idx == 1 { 1 } else if dir_idx == 3 { -1 } else { 0 }
+    let ddy = if dir_idx == 0 { -1 } else if dir_idx == 2 { 1 } else { 0 }
     for step in 1..<=blast_range {
       let tx = cx + ddx * step
       let ty = cy + ddy * step

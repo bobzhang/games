@@ -2508,13 +2508,7 @@ fn main {
       10,
       @raylib.Color::new(244, 172, 98, 255),
     )
-    @draw.draw_text(
-      "HEAT",
-      16,
-      208,
-      16,
-      @raylib.Color::new(246, 222, 194, 255),
-    )
+    @draw.draw_text("HEAT", 16, 208, 16, @raylib.Color::new(246, 222, 194, 255))
 
     @draw.draw_text(
       "Hack [K]  Dash [L] \{(player.dash_cd * 10.0).to_int()}  EMP [O] \{(player.emp_cd * 10.0).to_int()}",

@@ -261,13 +261,7 @@ fn main {
       1.0,
       @raylib.blue,
     )
-    @draw.draw_text(
-      "Cosine " + cos_rad.to_string(),
-      640,
-      210,
-      6,
-      @raylib.blue,
-    )
+    @draw.draw_text("Cosine " + cos_rad.to_string(), 640, 210, 6, @raylib.blue)
     @raylib.draw_circle_v(
       @raylib.Vector2::new(
         start.x + angle / 360.0 * start.width,

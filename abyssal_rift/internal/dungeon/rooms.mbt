@@ -95,9 +95,7 @@ fn pillared_arena() -> (Array[Int], Int, Int) {
     }
   }
   // Four symmetrical 2x2 pillars
-  let pillar_positions : Array[(Int, Int)] = [
-    (4, 3), (10, 3), (4, 7), (10, 7),
-  ]
+  let pillar_positions : Array[(Int, Int)] = [(4, 3), (10, 3), (4, 7), (10, 7)]
   for i in 0..<pillar_positions.length() {
     let (px, py) = pillar_positions[i]
     tiles[py * w + px] = 0
@@ -154,9 +152,9 @@ fn corridor_h() -> (Array[Int], Int, Int) {
     }
   }
   // Door placeholders at left and right midpoints
-  tiles[(h / 2) * w + 0] = 2
+  tiles[h / 2 * w + 0] = 2
   tiles[(h / 2 - 1) * w + 0] = 2
-  tiles[(h / 2) * w + (w - 1)] = 2
+  tiles[h / 2 * w + (w - 1)] = 2
   tiles[(h / 2 - 1) * w + (w - 1)] = 2
   (tiles, w, h)
 }
@@ -175,9 +173,9 @@ fn corridor_v() -> (Array[Int], Int, Int) {
     }
   }
   // Door placeholders at top and bottom midpoints
-  tiles[0 * w + (w / 2)] = 2
+  tiles[0 * w + w / 2] = 2
   tiles[0 * w + (w / 2 - 1)] = 2
-  tiles[(h - 1) * w + (w / 2)] = 2
+  tiles[(h - 1) * w + w / 2] = 2
   tiles[(h - 1) * w + (w / 2 - 1)] = 2
   (tiles, w, h)
 }
@@ -222,7 +220,10 @@ fn boss_arena() -> (Array[Int], Int, Int) {
   }
   // Four large 2x2 pillars near corners
   let pillar_positions : Array[(Int, Int)] = [
-    (5, 4), (17, 4), (5, 14), (17, 14),
+    (5, 4),
+    (17, 4),
+    (5, 14),
+    (17, 14),
   ]
   for i in 0..<pillar_positions.length() {
     let (px, py) = pillar_positions[i]
@@ -262,7 +263,7 @@ pub fn place_door(
   tiles : Array[Int],
   w : Int,
   h : Int,
-  dir : @types.Direction
+  dir : @types.Direction,
 ) -> (Int, Int) {
   match dir {
     Up => {

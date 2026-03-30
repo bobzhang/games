@@ -253,9 +253,15 @@ fn @types.Game::enemy_shoot_if_ready(
       let aligned_horizontal = (player.y - enemy.y).abs() <
         Float::from_int(@types.tile_size) * 0.5
       if aligned_horizontal {
-        if player.x > enemy.x { Right } else { Left }
+        if player.x > enemy.x {
+          Right
+        } else {
+          Left
+        }
+      } else if player.y > enemy.y {
+        Down
       } else {
-        if player.y > enemy.y { Down } else { Up }
+        Up
       }
     } else if fire_on_base {
       let base_x = @types.tile_center_x(@types.base_tile_x)
@@ -263,9 +269,15 @@ fn @types.Game::enemy_shoot_if_ready(
       let aligned_horizontal = (base_y - enemy.y).abs() <
         Float::from_int(@types.tile_size) * 0.5
       if aligned_horizontal {
-        if base_x > enemy.x { Right } else { Left }
+        if base_x > enemy.x {
+          Right
+        } else {
+          Left
+        }
+      } else if base_y > enemy.y {
+        Down
       } else {
-        if base_y > enemy.y { Down } else { Up }
+        Up
       }
     } else {
       enemy.dir

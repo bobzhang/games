@@ -175,9 +175,7 @@ fn main {
     @raylib.draw_grid(10, 1.0)
     @raylib.end_mode_3d()
 
-    @draw.draw_text(
-      "Use the T/G to switch animation", 10, 10, 20, @raylib.gray,
-    )
+    @draw.draw_text("Use the T/G to switch animation", 10, 10, 20, @raylib.gray)
     @draw.draw_text(
       "Use the F/H to rotate character left/right", 10, 35, 20, @raylib.gray,
     )

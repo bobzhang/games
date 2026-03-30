@@ -100,7 +100,9 @@ pub let color_floor_alt : @raylib.Color = @raylib.Color::new(42, 38, 48, 255)
 pub let color_player : @raylib.Color = @raylib.Color::new(100, 200, 255, 255)
 
 ///|
-pub let color_player_shield : @raylib.Color = @raylib.Color::new(80, 160, 255, 120)
+pub let color_player_shield : @raylib.Color = @raylib.Color::new(
+  80, 160, 255, 120,
+)
 
 ///|
 pub let color_health : @raylib.Color = @raylib.Color::new(220, 50, 50, 255)

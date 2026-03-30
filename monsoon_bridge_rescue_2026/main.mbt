@@ -1210,13 +1210,7 @@ fn draw_hud_meter(
     h,
     @raylib.Color::new(224, 232, 244, 186),
   )
-  @draw.draw_text(
-    title,
-    x,
-    y - 22,
-    20,
-    @raylib.Color::new(224, 234, 246, 236),
-  )
+  @draw.draw_text(title, x, y - 22, 20, @raylib.Color::new(224, 234, 246, 236))
 }
 
 ///|
@@ -1659,8 +1653,7 @@ fn draw_end_screen(
   @draw.draw_text(
     "Lost: \{lost} | Time left: \{timer.to_int()}s",
     sw / 2 -
-    @draw.measure_text("Lost: \{lost} | Time left: \{timer.to_int()}s", 30) /
-    2,
+    @draw.measure_text("Lost: \{lost} | Time left: \{timer.to_int()}s", 30) / 2,
     414,
     30,
     @raylib.Color::new(202, 218, 238, 224),

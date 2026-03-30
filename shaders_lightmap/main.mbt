@@ -65,7 +65,7 @@ fn main {
   let mesh = @raylib.Mesh::new(
     plane_vertices,
     texcoords=plane_texcoords,
-    texcoords2=texcoords2,
+    texcoords2~,
     normals=plane_normals,
     indices=plane_indices,
   )

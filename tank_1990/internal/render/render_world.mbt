@@ -483,13 +483,7 @@ fn @types.Game::draw_score_popups(
     let sy = @types.world_to_screen_y(popup.y, shake_y)
     let font_size = if popup.is_combo { 18 } else { 16 }
     let w = @draw.measure_text(popup.text, font_size)
-    @draw.draw_text(
-      popup.text,
-      sx - w / 2,
-      sy,
-      font_size,
-      color,
-    )
+    @draw.draw_text(popup.text, sx - w / 2, sy, font_size, color)
   }
 }
 

@@ -30,9 +30,7 @@ fn main {
   let mut resolution_y = Float::from_int(screen_height)
   shader.set_value(
     resolution_loc,
-    Vec2(
-      @raylib.Vector2::new(resolution_x, resolution_y),
-    ),
+    Vec2(@raylib.Vector2::new(resolution_x, resolution_y)),
   )
   let mut run_time : Float = 0.0
   @raylib.disable_cursor()
@@ -47,14 +45,8 @@ fn main {
     run_time = run_time + delta_time
 
     // Set shader required uniform values
-    shader.set_value(
-      view_eye_loc,
-      Vec3(camera.position),
-    )
-    shader.set_value(
-      view_center_loc,
-      Vec3(camera.target),
-    )
+    shader.set_value(view_eye_loc, Vec3(camera.position))
+    shader.set_value(view_center_loc, Vec3(camera.target))
     shader.set_value(run_time_loc, Float(run_time))
 
     // Check if screen is resized
@@ -63,9 +55,7 @@ fn main {
       resolution_y = Float::from_int(@raylib.get_screen_height())
       shader.set_value(
         resolution_loc,
-        Vec2(
-          @raylib.Vector2::new(resolution_x, resolution_y),
-        ),
+        Vec2(@raylib.Vector2::new(resolution_x, resolution_y)),
       )
     }
 

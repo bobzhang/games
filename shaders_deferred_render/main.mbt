@@ -72,28 +72,16 @@ fn create_light(
 fn update_light_values(shader : @raylib.Shader, light : Light) -> Unit {
   // Send light enabled state as integer
   let enabled_val = if light.enabled { 1 } else { 0 }
-  shader.set_value(
-    light.enabled_loc,
-    Int(enabled_val),
-  )
+  shader.set_value(light.enabled_loc, Int(enabled_val))
 
   // Send light type
-  shader.set_value(
-    light.type_loc,
-    Int(light.light_type),
-  )
+  shader.set_value(light.type_loc, Int(light.light_type))
 
   // Send light position as vec3
-  shader.set_value(
-    light.position_loc,
-    Vec3(light.position),
-  )
+  shader.set_value(light.position_loc, Vec3(light.position))
 
   // Send light target as vec3
-  shader.set_value(
-    light.target_loc,
-    Vec3(light.target),
-  )
+  shader.set_value(light.target_loc, Vec3(light.target))
 
   // Send light color as vec4 (normalized 0.0-1.0)
   let color_normalized = @raylib.Vector4::new(
@@ -102,10 +90,7 @@ fn update_light_values(shader : @raylib.Shader, light : Light) -> Unit {
     Float::from_int(light.color.b.to_int()) / 255.0,
     Float::from_int(light.color.a.to_int()) / 255.0,
   )
-  shader.set_value(
-    light.color_loc,
-    Vec4(color_normalized),
-  )
+  shader.set_value(light.color_loc, Vec4(color_normalized))
 }
 
 // ============================================================================
@@ -195,7 +180,7 @@ fn main {
   let fbo = @rl.load_framebuffer()
   if fbo == 0U {
     @raylib.trace_log(@raylib.LogWarning, "Failed to create framebuffer")
-  @draw.cleanup()
+    @draw.cleanup()
     @raylib.close_window()
     return
   }
@@ -267,7 +252,7 @@ fn main {
   // NOTE: rlFramebufferComplete() automatically unbinds the framebuffer.
   if !@rl.framebuffer_complete(fbo) {
     @raylib.trace_log(@raylib.LogWarning, "Framebuffer is not complete")
-  @draw.cleanup()
+    @draw.cleanup()
     @raylib.close_window()
     return
   }

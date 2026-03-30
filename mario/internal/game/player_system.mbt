@@ -65,11 +65,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   p.ducking = duck && p.on_ground && p.power != Small
   // ── Horizontal movement ──
   let max_speed = if run_held { @types.run_speed } else { @types.walk_speed }
-  let accel = if p.on_ground {
-    @types.ground_accel
-  } else {
-    @types.air_accel
-  }
+  let accel = if p.on_ground { @types.ground_accel } else { @types.air_accel }
   if right && not(p.ducking) {
     p.facing_right = true
     if p.vx < 0.0 && p.on_ground {
@@ -214,8 +210,8 @@ fn move_player_x(game : @types.Game, dt : Float) -> Unit {
   let max_tx = @types.world_to_tile_x(right - 1.0)
   let min_ty = @types.world_to_tile_y(top)
   let max_ty = @types.world_to_tile_y(bottom)
-  for ty in min_ty..=max_ty {
-    for tx in min_tx..=max_tx {
+  for ty in min_ty..<=max_ty {
+    for tx in min_tx..<=max_tx {
       let tile = @types.get_tile(game, tx, ty)
       if @types.is_solid(tile) {
         let tile_left = @types.tile_to_world_x(tx)
@@ -255,7 +251,7 @@ fn move_player_y(game : @types.Game, dt : Float) -> Unit {
   if p.vy >= 0.0 {
     // Falling — check below
     let foot_ty = @types.world_to_tile_y(bottom)
-    for tx in min_tx..=max_tx {
+    for tx in min_tx..<=max_tx {
       let tile = @types.get_tile(game, tx, foot_ty)
       if @types.is_solid(tile) {
         let tile_top = @types.tile_to_world_y(foot_ty)
@@ -269,7 +265,7 @@ fn move_player_y(game : @types.Game, dt : Float) -> Unit {
   } else {
     // Rising — check above (head bonk)
     let head_ty = @types.world_to_tile_y(top)
-    for tx in min_tx..=max_tx {
+    for tx in min_tx..<=max_tx {
       let tile = @types.get_tile(game, tx, head_ty)
       if @types.is_solid(tile) || @types.is_bumpable(tile) {
         let tile_bottom = @types.tile_to_world_y(head_ty) + @types.tile_sizef
@@ -338,7 +334,7 @@ fn handle_block_bump(game : @types.Game, tx : Int, ty : Int) -> Unit {
       bump_block(game, tx, ty)
       spawn_item(game, OneUp, wx, wy)
     }
-    BrickBlock => {
+    BrickBlock =>
       if game.player.power != Small {
         // Big Mario breaks bricks
         @types.set_tile(game, tx, ty, Empty)
@@ -351,7 +347,6 @@ fn handle_block_bump(game : @types.Game, tx : Int, ty : Int) -> Unit {
         bump_block(game, tx, ty)
         kill_enemies_on_block(game, tx, ty)
       }
-    }
     _ => ()
   }
 }
@@ -368,7 +363,8 @@ fn kill_enemies_on_block(game : @types.Game, tx : Int, ty : Int) -> Unit {
     // Check if enemy is standing on this tile
     let ex_tile = @types.world_to_tile_x(e.x)
     let ey_tile = @types.world_to_tile_y(e.y)
-    if (ex_tile == tx || ex_tile == tx - 1 || ex_tile == tx + 1) && ey_tile == ty {
+    if (ex_tile == tx || ex_tile == tx - 1 || ex_tile == tx + 1) &&
+      ey_tile == ty {
       e.dead = true
       e.dead_timer = 0.0
       e.vy = -300.0
@@ -409,7 +405,7 @@ fn spawn_item(
   game : @types.Game,
   kind : @types.ItemKind,
   wx : Float,
-  wy : Float
+  wy : Float,
 ) -> Unit {
   for i in 0..<game.items.length() {
     if not(game.items[i].active) {
@@ -435,7 +431,8 @@ fn shoot_fireball(game : @types.Game) -> Unit {
     if not(game.fireballs[i].active) {
       let fb = game.fireballs[i]
       fb.active = true
-      fb.x = game.player.x + (if game.player.facing_right { 20.0 } else { -20.0 })
+      fb.x = game.player.x +
+        (if game.player.facing_right { 20.0 } else { -20.0 })
       fb.y = game.player.y - game.player.height() / 2.0
       fb.vx = if game.player.facing_right {
         @types.fireball_speed_x
@@ -470,7 +467,9 @@ fn check_enemy_collisions(game : @types.Game) -> Unit {
     let e_top = e.y - e.height
     let e_bottom = e.y
     // AABB overlap check
-    if p_right <= e_left || p_left >= e_right || p_bottom <= e_top ||
+    if p_right <= e_left ||
+      p_left >= e_right ||
+      p_bottom <= e_top ||
       p_top >= e_bottom {
       continue
     }
@@ -495,12 +494,7 @@ fn check_enemy_collisions(game : @types.Game) -> Unit {
       p.on_ground = false
       p.coyote_timer = 0.0
       spawn_stomp_poof(game, e.x, e.y)
-      spawn_score_popup(
-        game,
-        e.x,
-        e.y - e.height,
-        combo_pts.to_string(),
-      )
+      spawn_score_popup(game, e.x, e.y - e.height, combo_pts.to_string())
       match e.kind {
         Goomba => {
           e.squished = true
@@ -515,7 +509,7 @@ fn check_enemy_collisions(game : @types.Game) -> Unit {
           e.vx = 0.0
           e.shell_moving = false
         }
-        KoopaShell => {
+        KoopaShell =>
           if e.shell_moving {
             // Stop the shell
             e.vx = 0.0
@@ -523,19 +517,20 @@ fn check_enemy_collisions(game : @types.Game) -> Unit {
           } else {
             // Kick the shell
             e.shell_moving = true
-            e.vx = if p.x < e.x { @types.shell_speed } else { -@types.shell_speed }
+            e.vx = if p.x < e.x {
+              @types.shell_speed
+            } else {
+              -@types.shell_speed
+            }
           }
-        }
       }
-    } else {
       // Side collision — damage Mario
-      if e.kind == KoopaShell && not(e.shell_moving) {
-        // Kick stationary shell
-        e.shell_moving = true
-        e.vx = if p.x < e.x { @types.shell_speed } else { -@types.shell_speed }
-      } else {
-        damage_player(game)
-      }
+    } else if e.kind == KoopaShell && not(e.shell_moving) {
+      // Kick stationary shell
+      e.shell_moving = true
+      e.vx = if p.x < e.x { @types.shell_speed } else { -@types.shell_speed }
+    } else {
+      damage_player(game)
     }
   }
 }
@@ -583,7 +578,9 @@ fn check_item_collisions(game : @types.Game) -> Unit {
     let i_right = it.x + item_hw
     let i_top = it.y - item_h
     let i_bottom = it.y
-    if p_right <= i_left || p_left >= i_right || p_bottom <= i_top ||
+    if p_right <= i_left ||
+      p_left >= i_right ||
+      p_bottom <= i_top ||
       p_top >= i_bottom {
       continue
     }
@@ -657,7 +654,7 @@ fn check_flagpole(game : @types.Game) -> Unit {
   let py_tile = @types.world_to_tile_y(p.y - p.height() / 2.0)
   let range_start = py_tile - 1
   let range_end = py_tile + 1
-  for ty in range_start..=range_end {
+  for ty in range_start..<=range_end {
     let tile = @types.get_tile(game, px_tile, ty)
     if tile == Flagpole || tile == FlagTop {
       // Start level clear sequence

@@ -1,9 +1,18 @@
 // ── UI color constants ──
 
+///|
 let hud_bg : @raylib.Color = @raylib.Color::new(0, 0, 0, 160)
+
+///|
 let hud_white : @raylib.Color = @raylib.Color::new(252, 252, 252, 255)
+
+///|
 let hud_yellow : @raylib.Color = @raylib.Color::new(252, 200, 32, 255)
+
+///|
 let hud_coin : @raylib.Color = @raylib.Color::new(252, 200, 32, 255)
+
+///|
 let overlay_bg : @raylib.Color = @raylib.Color::new(0, 0, 0, 180)
 
 ///|
@@ -35,7 +44,8 @@ fn draw_hud(game : @types.Game) -> Unit {
   // Coins
   @raylib.draw_rectangle(220, 8, 10, 14, hud_coin)
   @raylib.draw_rectangle(222, 6, 6, 4, hud_coin)
-  let coin_text = "x" + (if game.coins < 10 { "0" } else { "" }) +
+  let coin_text = "x" +
+    (if game.coins < 10 { "0" } else { "" }) +
     game.coins.to_string()
   @draw.draw_text(coin_text, 236, 10, 16, hud_white)
   // World
@@ -70,7 +80,7 @@ fn draw_hud(game : @types.Game) -> Unit {
       860,
       10,
       16,
-      @types.star_color((game.frame_counter / 3) % 5),
+      @types.star_color(game.frame_counter / 3 % 5),
     )
   }
 }
@@ -81,36 +91,30 @@ fn draw_title_screen(game : @types.Game) -> Unit {
   // Draw some clouds for atmosphere
   for i in 0..<5 {
     let cx = 100 + i * 200
-    let cy = 80 + (i * 47) % 120
-    @raylib.draw_ellipse(cx, cy, 50, 25, @raylib.Color::new(
-      252, 252, 252, 200,
-    ))
-    @raylib.draw_ellipse(cx + 30, cy - 10, 35, 20, @raylib.Color::new(
-      252, 252, 252, 200,
-    ))
-    @raylib.draw_ellipse(cx - 25, cy - 5, 30, 18, @raylib.Color::new(
-      252, 252, 252, 200,
-    ))
+    let cy = 80 + i * 47 % 120
+    @raylib.draw_ellipse(cx, cy, 50, 25, @raylib.Color::new(252, 252, 252, 200))
+    @raylib.draw_ellipse(
+      cx + 30,
+      cy - 10,
+      35,
+      20,
+      @raylib.Color::new(252, 252, 252, 200),
+    )
+    @raylib.draw_ellipse(
+      cx - 25,
+      cy - 5,
+      30,
+      18,
+      @raylib.Color::new(252, 252, 252, 200),
+    )
   }
   // Ground
-  @raylib.draw_rectangle(
-    0,
-    560,
-    960,
-    160,
-    @raylib.Color::new(192, 96, 0, 255),
-  )
+  @raylib.draw_rectangle(0, 560, 960, 160, @raylib.Color::new(192, 96, 0, 255))
   @raylib.draw_rectangle(0, 552, 960, 12, @raylib.Color::new(0, 188, 0, 255))
   // Title box
-  @raylib.draw_rectangle(230, 180, 500, 120, @raylib.Color::new(
-    228, 0, 0, 255,
-  ))
-  @raylib.draw_rectangle(234, 184, 492, 112, @raylib.Color::new(
-    148, 0, 0, 255,
-  ))
-  @raylib.draw_rectangle(238, 188, 484, 104, @raylib.Color::new(
-    228, 0, 0, 255,
-  ))
+  @raylib.draw_rectangle(230, 180, 500, 120, @raylib.Color::new(228, 0, 0, 255))
+  @raylib.draw_rectangle(234, 184, 492, 112, @raylib.Color::new(148, 0, 0, 255))
+  @raylib.draw_rectangle(238, 188, 484, 104, @raylib.Color::new(228, 0, 0, 255))
   // Title text
   let title1 = "SUPER"
   let title2 = "MARIO"
@@ -196,15 +200,21 @@ fn draw_title_screen(game : @types.Game) -> Unit {
 fn draw_level_intro(game : @types.Game) -> Unit {
   @raylib.clear_background(@raylib.Color::new(0, 0, 0, 255))
   // World text
-  let world_text = "WORLD  " + game.world_num.to_string() + " - " +
+  let world_text = "WORLD  " +
+    game.world_num.to_string() +
+    " - " +
     game.level_num.to_string()
   let tw = @draw.measure_text(world_text, 40)
   @draw.draw_text(world_text, 480 - tw / 2, 280, 40, hud_white)
   // Mario icon + lives
   @raylib.draw_rectangle(400, 360, 20, 10, @raylib.Color::new(228, 0, 0, 255))
-  @raylib.draw_rectangle(402, 370, 16, 8, @raylib.Color::new(
-    252, 188, 116, 255,
-  ))
+  @raylib.draw_rectangle(
+    402,
+    370,
+    16,
+    8,
+    @raylib.Color::new(252, 188, 116, 255),
+  )
   @raylib.draw_rectangle(400, 378, 20, 12, @raylib.Color::new(32, 64, 200, 255))
   let lives_text = "x  " + game.lives.to_string()
   @draw.draw_text(lives_text, 440, 365, 28, hud_white)
@@ -214,11 +224,7 @@ fn draw_level_intro(game : @types.Game) -> Unit {
 fn draw_pause_overlay(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(0, 0, @types.screen_w, @types.screen_h, overlay_bg)
   let blink = game.frame_counter / 20 % 2
-  let color = if blink == 0 {
-    hud_white
-  } else {
-    hud_yellow
-  }
+  let color = if blink == 0 { hud_white } else { hud_yellow }
   let text = "P A U S E D"
   let tw = @draw.measure_text(text, 48)
   @draw.draw_text(text, 480 - tw / 2, 320, 48, color)
@@ -269,7 +275,7 @@ fn draw_victory(game : @types.Game) -> Unit {
   ]
   let text1 = "CONGRATULATIONS!"
   let tw1 = @draw.measure_text(text1, 40)
-  let col_idx = (game.frame_counter / 8) % 5
+  let col_idx = game.frame_counter / 8 % 5
   @draw.draw_text(text1, 480 - tw1 / 2, 200, 40, colors[col_idx])
   let text2 = "YOU SAVED THE MUSHROOM KINGDOM!"
   let tw2 = @draw.measure_text(text2, 24)
@@ -288,4 +294,3 @@ fn draw_victory(game : @types.Game) -> Unit {
     @draw.draw_text(prompt, 480 - tw_p / 2, 480, 20, hud_white)
   }
 }
-

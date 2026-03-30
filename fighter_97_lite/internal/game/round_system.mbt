@@ -599,11 +599,7 @@ fn @types.Game::update_announcer(game : @types.Game, dt : Float) -> Unit {
 /// Advances one frame of state, round, and match logic.
 pub fn update_game(game : @types.Game, dt : Float) -> Unit {
   // Apply slow-motion by scaling dt
-  let effective_dt = if game.slowmo_timer > 0.0 {
-    dt * 0.35
-  } else {
-    dt
-  }
+  let effective_dt = if game.slowmo_timer > 0.0 { dt * 0.35 } else { dt }
   game.frame_count += 1
   game.update_announcer(effective_dt)
 

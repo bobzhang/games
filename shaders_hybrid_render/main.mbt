@@ -38,21 +38,41 @@ fn main {
     Float::from_int(screen_width) / 2.0,
     Float::from_int(screen_height) / 2.0,
   )
-  shdr_raymarch.set_value(
-    march_loc_screen_center,
-    Vec2(screen_center),
-  )
+  shdr_raymarch.set_value(march_loc_screen_center, Vec2(screen_center))
 
   // Create writable depth texture buffer using @rl helpers
   let fbo_id = @rl.load_framebuffer()
-  let color_tex_id = @rl.load_texture(screen_width, screen_height, @raylib.PixelformatUncompressedR8g8b8a8, 1)
+  let color_tex_id = @rl.load_texture(
+    screen_width,
+    screen_height,
+    @raylib.PixelformatUncompressedR8g8b8a8,
+    1,
+  )
   let depth_tex_id = @rl.load_texture_depth(screen_width, screen_height, false)
-  @rl.framebuffer_attach(fbo_id, color_tex_id, @rl.AttachmentColorChannel0, @rl.AttachmentTexture2d, 0)
-  @rl.framebuffer_attach(fbo_id, depth_tex_id, @rl.AttachmentDepth, @rl.AttachmentTexture2d, 0)
+  @rl.framebuffer_attach(
+    fbo_id,
+    color_tex_id,
+    @rl.AttachmentColorChannel0,
+    @rl.AttachmentTexture2d,
+    0,
+  )
+  @rl.framebuffer_attach(
+    fbo_id,
+    depth_tex_id,
+    @rl.AttachmentDepth,
+    @rl.AttachmentTexture2d,
+    0,
+  )
   let _ = @rl.framebuffer_complete(fbo_id)
   let target = @raylib.RenderTexture::new(
     fbo_id,
-    @raylib.Texture::new(color_tex_id, screen_width, screen_height, 1, @raylib.PixelformatUncompressedR8g8b8a8),
+    @raylib.Texture::new(
+      color_tex_id,
+      screen_width,
+      screen_height,
+      1,
+      @raylib.PixelformatUncompressedR8g8b8a8,
+    ),
     @raylib.Texture::new(depth_tex_id, screen_width, screen_height, 1, 19),
   )
 
@@ -77,10 +97,7 @@ fn main {
     camera = @raylib.update_camera(camera, @raylib.CameraOrbital)
 
     // Update Camera Position in the ray march shader.
-    shdr_raymarch.set_value(
-      march_loc_cam_pos,
-      Vec3(camera.position),
-    )
+    shdr_raymarch.set_value(march_loc_cam_pos, Vec3(camera.position))
 
     // Update Camera Looking Vector. Vector length determines FOV.
     let cam_dir = @raylib.Vector3::scale(
@@ -89,10 +106,7 @@ fn main {
       ),
       cam_dist,
     )
-    shdr_raymarch.set_value(
-      march_loc_cam_dir,
-      Vec3(cam_dir),
-    )
+    shdr_raymarch.set_value(march_loc_cam_dir, Vec3(cam_dir))
 
     // Draw
     // Draw into our custom render texture (framebuffer)

@@ -224,13 +224,7 @@ fn main {
 
     @draw.draw_text("SPACE TRADER 2026", 20, 16, 36, @raylib.skyblue)
     @draw.draw_text("Day \{day}", 24, 58, 24, @raylib.raywhite)
-    @draw.draw_text(
-      "Dock: \{planet_names[at]}",
-      140,
-      58,
-      24,
-      @raylib.raywhite,
-    )
+    @draw.draw_text("Dock: \{planet_names[at]}", 140, 58, 24, @raylib.raywhite)
     @draw.draw_text("Cash \{cash}", 450, 58, 24, @raylib.gold)
     @draw.draw_text("Fuel \{fuel}", 620, 58, 24, @raylib.orange)
     @draw.draw_text("Hull \{hp}", 760, 58, 24, @raylib.lime)

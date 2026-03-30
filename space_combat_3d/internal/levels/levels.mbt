@@ -445,14 +445,12 @@ pub fn mission_mid_event(
     } else {
       (1, 0.75, "Command: Almost there!")
     }
+  } else if event_index == 0 {
+    (1, 0.2, "Command: Heavy resistance ahead!")
+  } else if event_index == 1 {
+    (0, 0.5, "")
   } else {
-    if event_index == 0 {
-      (1, 0.2, "Command: Heavy resistance ahead!")
-    } else if event_index == 1 {
-      (0, 0.5, "")
-    } else {
-      (2, 0.7, "Warning: Debris field ahead!")
-    }
+    (2, 0.7, "Warning: Debris field ahead!")
   }
 }
 

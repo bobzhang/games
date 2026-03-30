@@ -294,13 +294,7 @@ fn main {
       ),
       @raylib.maroon,
     )
-    @draw.draw_text(
-      "Word Wrap: ",
-      313,
-      screen_height - 115,
-      20,
-      @raylib.black,
-    )
+    @draw.draw_text("Word Wrap: ", 313, screen_height - 115, 20, @raylib.black)
     if word_wrap {
       @draw.draw_text("ON", 447, screen_height - 115, 20, @raylib.red)
     } else {

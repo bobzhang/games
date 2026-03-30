@@ -11,10 +11,7 @@ pub(all) struct EnemyStats {
 }
 
 ///|
-pub fn get_enemy_stats(
-  kind : @types.EnemyKind,
-  floor_num : Int
-) -> EnemyStats {
+pub fn get_enemy_stats(kind : @types.EnemyKind, floor_num : Int) -> EnemyStats {
   let floor_bonus = (floor_num - 1) * 2
   match kind {
     Slime =>

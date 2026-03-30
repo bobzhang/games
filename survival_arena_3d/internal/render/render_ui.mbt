@@ -248,12 +248,18 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     let rbar_w = 180
     let rbar_h = 8
     @raylib.draw_rectangle(
-      rbar_x, rbar_y, rbar_w, rbar_h,
+      rbar_x,
+      rbar_y,
+      rbar_w,
+      rbar_h,
       @raylib.Color::new(40, 40, 50, 200),
     )
     let fill_w = (Float::from_int(rbar_w) * reload_pct).to_int()
     @raylib.draw_rectangle(
-      rbar_x, rbar_y, fill_w, rbar_h,
+      rbar_x,
+      rbar_y,
+      fill_w,
+      rbar_h,
       @raylib.Color::new(100, 200, 255, 255),
     )
     @draw.draw_text(
@@ -651,17 +657,26 @@ fn @types.Game::draw_wave_summary(game : @types.Game) -> Unit {
   let alpha_f = @types.minf(game.wave_summary_timer, 1.0) * 230.0
   let alpha = alpha_f.to_int().clamp(min=0, max=230)
   @raylib.draw_rectangle(
-    panel_x, panel_y, panel_w, panel_h,
+    panel_x,
+    panel_y,
+    panel_w,
+    panel_h,
     @raylib.Color::new(10, 15, 25, alpha),
   )
   @raylib.draw_rectangle_lines(
-    panel_x, panel_y, panel_w, panel_h,
+    panel_x,
+    panel_y,
+    panel_w,
+    panel_h,
     @raylib.Color::new(100, 180, 100, alpha),
   )
   let title = "Wave \{game.current_wave} Complete!"
   let ttw = @draw.measure_text(title, 18)
   @draw.draw_text(
-    title, panel_x + (panel_w - ttw) / 2, panel_y + 8, 18,
+    title,
+    panel_x + (panel_w - ttw) / 2,
+    panel_y + 8,
+    18,
     @raylib.Color::new(100, 255, 100, alpha),
   )
   let wave_shots_fired = game.total_shots_fired - game.wave_start_shots_fired
@@ -672,19 +687,31 @@ fn @types.Game::draw_wave_summary(game : @types.Game) -> Unit {
     0
   }
   @draw.draw_text(
-    "Kills: \{game.wave_summary_kills}", panel_x + 15, panel_y + 34, 16,
+    "Kills: \{game.wave_summary_kills}",
+    panel_x + 15,
+    panel_y + 34,
+    16,
     @raylib.Color::new(220, 220, 240, alpha),
   )
   @draw.draw_text(
-    "Accuracy: \{accuracy}%", panel_x + 15, panel_y + 56, 16,
+    "Accuracy: \{accuracy}%",
+    panel_x + 15,
+    panel_y + 56,
+    16,
     @raylib.Color::new(220, 220, 240, alpha),
   )
   @draw.draw_text(
-    "Gold earned: +\{game.wave_summary_money}", panel_x + 15, panel_y + 78, 16,
+    "Gold earned: +\{game.wave_summary_money}",
+    panel_x + 15,
+    panel_y + 78,
+    16,
     @raylib.Color::new(255, 215, 0, alpha),
   )
   @draw.draw_text(
-    "Score: \{game.player.score}", panel_x + 15, panel_y + 100, 16,
+    "Score: \{game.player.score}",
+    panel_x + 15,
+    panel_y + 100,
+    16,
     @raylib.Color::new(200, 200, 220, alpha),
   )
 }
@@ -701,25 +728,37 @@ fn @types.Game::draw_shop_ui(game : @types.Game) -> Unit {
   let panel_x = (sw - panel_w) / 2
   let panel_y = 30
   @raylib.draw_rectangle(
-    panel_x, panel_y, panel_w, panel_h,
+    panel_x,
+    panel_y,
+    panel_w,
+    panel_h,
     @raylib.Color::new(15, 18, 28, 230),
   )
   @raylib.draw_rectangle_lines(
-    panel_x, panel_y, panel_w, panel_h,
+    panel_x,
+    panel_y,
+    panel_w,
+    panel_h,
     @raylib.Color::new(100, 120, 180, 255),
   )
   // Title
   let title = "SHOP - Between Waves"
   let ttw = @draw.measure_text(title, 20)
   @draw.draw_text(
-    title, panel_x + (panel_w - ttw) / 2, panel_y + 8, 20,
+    title,
+    panel_x + (panel_w - ttw) / 2,
+    panel_y + 8,
+    20,
     @raylib.Color::new(200, 220, 255, 255),
   )
   // Timer
   let timer_text = "Next wave in: \{game.wave_timer.to_int() + 1}s (SPACE to skip)"
   let ttw2 = @draw.measure_text(timer_text, 14)
   @draw.draw_text(
-    timer_text, panel_x + (panel_w - ttw2) / 2, panel_y + 30, 14,
+    timer_text,
+    panel_x + (panel_w - ttw2) / 2,
+    panel_y + 30,
+    14,
     @raylib.Color::new(255, 200, 100, 255),
   )
   // Build shop items dynamically for per-weapon upgrades
@@ -732,21 +771,33 @@ fn @types.Game::draw_shop_ui(game : @types.Game) -> Unit {
   let dmg_label = if dmg_lvl >= max_lvl {
     "\{wname} Damage [MAX]"
   } else {
-    let cur_pct = (hundred + Float::from_int(dmg_lvl) * @types.upgrade_damage_step * hundred).to_int()
+    let cur_pct = (hundred +
+    Float::from_int(dmg_lvl) * @types.upgrade_damage_step * hundred).to_int()
     let dmg_lvl_next = dmg_lvl + 1
-    let nxt_pct = (hundred + Float::from_int(dmg_lvl_next) * @types.upgrade_damage_step * hundred).to_int()
+    let nxt_pct = (hundred +
+    Float::from_int(dmg_lvl_next) * @types.upgrade_damage_step * hundred).to_int()
     "\{wname} Dmg Lv\{dmg_lvl}: \{cur_pct}%->\{nxt_pct}%"
   }
-  let dmg_cost = if dmg_lvl >= max_lvl { 0 } else { @types.upgrade_cost(dmg_lvl) }
+  let dmg_cost = if dmg_lvl >= max_lvl {
+    0
+  } else {
+    @types.upgrade_cost(dmg_lvl)
+  }
   let rate_label = if rate_lvl >= max_lvl {
     "\{wname} Rate [MAX]"
   } else {
-    let cur_pct = (hundred - Float::from_int(rate_lvl) * @types.upgrade_rate_step * hundred).to_int()
+    let cur_pct = (hundred -
+    Float::from_int(rate_lvl) * @types.upgrade_rate_step * hundred).to_int()
     let rate_lvl_next = rate_lvl + 1
-    let nxt_pct = (hundred - Float::from_int(rate_lvl_next) * @types.upgrade_rate_step * hundred).to_int()
+    let nxt_pct = (hundred -
+    Float::from_int(rate_lvl_next) * @types.upgrade_rate_step * hundred).to_int()
     "\{wname} Rate Lv\{rate_lvl}: \{cur_pct}%->\{nxt_pct}%"
   }
-  let rate_cost = if rate_lvl >= max_lvl { 0 } else { @types.upgrade_cost(rate_lvl) }
+  let rate_cost = if rate_lvl >= max_lvl {
+    0
+  } else {
+    @types.upgrade_cost(rate_lvl)
+  }
   let cur_mag = @types.effective_mag_size(player, wi)
   let mag_label = if mag_lvl >= max_lvl {
     "\{wname} Mag [MAX]"
@@ -754,53 +805,45 @@ fn @types.Game::draw_shop_ui(game : @types.Game) -> Unit {
     // Compute next mag size
     let base_mag = @types.weapon_mag_size(wi)
     let mag_lvl_next = mag_lvl + 1
-    let nxt_bonus = (Float::from_int(base_mag) * Float::from_int(mag_lvl_next) * @types.upgrade_mag_step).to_int()
+    let nxt_bonus = (Float::from_int(base_mag) *
+    Float::from_int(mag_lvl_next) *
+    @types.upgrade_mag_step).to_int()
     let nxt_mag = base_mag + nxt_bonus
     "\{wname} Mag Lv\{mag_lvl}: \{cur_mag}->\{nxt_mag}"
   }
-  let mag_cost = if mag_lvl >= max_lvl { 0 } else { @types.upgrade_cost(mag_lvl) }
+  let mag_cost = if mag_lvl >= max_lvl {
+    0
+  } else {
+    @types.upgrade_cost(mag_lvl)
+  }
   // Item list: (label, cost, is_maxed)
   let item_labels : Array[String] = [
-    "Heal +40 HP",
-    "Armor +30",
-    "Shotgun Ammo +12",
-    "Rifle Ammo +30",
-    "Sniper Ammo +5",
-    "Rocket Ammo +3",
-    "Minigun Ammo +100",
-    dmg_label,
-    rate_label,
-    mag_label,
-    "Buy Sniper Rifle",
-    "Buy Rocket Launcher",
-    "Buy Minigun",
-    "Place Barricade",
-    "Place Spike Trap",
+    "Heal +40 HP", "Armor +30", "Shotgun Ammo +12", "Rifle Ammo +30", "Sniper Ammo +5",
+    "Rocket Ammo +3", "Minigun Ammo +100", dmg_label, rate_label, mag_label, "Buy Sniper Rifle",
+    "Buy Rocket Launcher", "Buy Minigun", "Place Barricade", "Place Spike Trap",
   ]
   let item_costs : Array[Int] = [
-    @types.cost_heal,
-    @types.cost_armor,
-    @types.cost_shotgun_ammo,
-    @types.cost_rifle_ammo,
-    @types.cost_sniper_ammo,
-    @types.cost_rocket_ammo,
-    @types.cost_minigun_ammo,
-    dmg_cost,
-    rate_cost,
-    mag_cost,
-    @types.cost_buy_sniper,
-    @types.cost_buy_rocket,
-    @types.cost_buy_minigun,
-    @types.cost_barricade,
-    @types.cost_trap_spike,
+    @types.cost_heal, @types.cost_armor, @types.cost_shotgun_ammo, @types.cost_rifle_ammo,
+    @types.cost_sniper_ammo, @types.cost_rocket_ammo, @types.cost_minigun_ammo, dmg_cost,
+    rate_cost, mag_cost, @types.cost_buy_sniper, @types.cost_buy_rocket, @types.cost_buy_minigun,
+    @types.cost_barricade, @types.cost_trap_spike,
   ]
   let item_maxed : Array[Bool] = [
-    false, false, false, false, false, false, false,
-    dmg_lvl >= max_lvl, rate_lvl >= max_lvl, mag_lvl >= max_lvl,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    dmg_lvl >= max_lvl,
+    rate_lvl >= max_lvl,
+    mag_lvl >= max_lvl,
     player.owns_weapon[@types.Sniper.to_int()],
     player.owns_weapon[@types.Rocket.to_int()],
     player.owns_weapon[@types.Minigun.to_int()],
-    false, false,
+    false,
+    false,
   ]
   let item_count = item_labels.length()
   for i in 0..<item_count {
@@ -818,7 +861,10 @@ fn @types.Game::draw_shop_ui(game : @types.Game) -> Unit {
     @raylib.draw_rectangle(panel_x + 10, iy, panel_w - 20, 34, bg)
     if is_sel {
       @raylib.draw_rectangle_lines(
-        panel_x + 10, iy, panel_w - 20, 34,
+        panel_x + 10,
+        iy,
+        panel_w - 20,
+        34,
         @raylib.Color::new(150, 170, 220, 255),
       )
     }
@@ -837,20 +883,23 @@ fn @types.Game::draw_shop_ui(game : @types.Game) -> Unit {
     } else {
       @raylib.Color::new(255, 215, 0, 200)
     }
-    @draw.draw_text(
-      cost_str, panel_x + panel_w - 60, iy + 5, 14, cost_color,
-    )
+    @draw.draw_text(cost_str, panel_x + panel_w - 60, iy + 5, 14, cost_color)
   }
   // Gold display
   let footer_y = panel_y + panel_h - 28
   @draw.draw_text(
-    "Gold: \{player.money}", panel_x + 10, footer_y, 16,
+    "Gold: \{player.money}",
+    panel_x + 10,
+    footer_y,
+    16,
     @raylib.Color::new(255, 215, 0, 255),
   )
   // Controls hint
   @draw.draw_text(
     "Up/Down: Select | E/Enter: Buy",
-    panel_x + panel_w - 230, footer_y, 12,
+    panel_x + panel_w - 230,
+    footer_y,
+    12,
     @raylib.Color::new(140, 140, 160, 255),
   )
 }

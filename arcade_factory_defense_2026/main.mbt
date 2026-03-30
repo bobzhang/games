@@ -2067,13 +2067,7 @@ fn main {
       12,
       @raylib.Color::new(98, 200, 236, 255),
     )
-    @draw.draw_text(
-      "CORE",
-      16,
-      112,
-      16,
-      @raylib.Color::new(202, 232, 250, 255),
-    )
+    @draw.draw_text("CORE", 16, 112, 16, @raylib.Color::new(202, 232, 250, 255))
 
     @raylib.draw_rectangle(
       16,
@@ -2121,13 +2115,7 @@ fn main {
       10,
       @raylib.Color::new(244, 172, 98, 255),
     )
-    @draw.draw_text(
-      "HEAT",
-      16,
-      210,
-      16,
-      @raylib.Color::new(246, 222, 194, 255),
-    )
+    @draw.draw_text("HEAT", 16, 210, 16, @raylib.Color::new(246, 222, 194, 255))
 
     let build_label : String = if build_mode { "ON" } else { "OFF" }
     let turret_label : String = if selected_turret == 0 {

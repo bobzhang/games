@@ -28,10 +28,11 @@ pub fn update_camera(game : @types.Game, dt : Float) -> Unit {
 pub fn shake_camera(
   game : @types.Game,
   intensity : Float,
-  duration : Float
+  duration : Float,
 ) -> Unit {
   let cam = game.camera
-  if intensity > cam.shake_intensity * (cam.shake_timer / @types.maxf(cam.shake_decay, 0.01)) {
+  if intensity >
+    cam.shake_intensity * (cam.shake_timer / @types.maxf(cam.shake_decay, 0.01)) {
     cam.shake_intensity = intensity
     cam.shake_timer = duration
     cam.shake_decay = duration

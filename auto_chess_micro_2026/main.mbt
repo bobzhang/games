@@ -398,13 +398,7 @@ fn main {
             @raylib.red
           }
           @raylib.draw_rectangle(px + 12, py + 12, tile - 26, tile - 26, col)
-          @draw.draw_text(
-            "\{unit.hp}",
-            px + 18,
-            py + 16,
-            22,
-            @raylib.raywhite,
-          )
+          @draw.draw_text("\{unit.hp}", px + 18, py + 16, 22, @raylib.raywhite)
         }
       }
     }

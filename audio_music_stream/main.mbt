@@ -53,9 +53,7 @@ fn main {
     // Draw
     @raylib.begin_drawing()
     @raylib.clear_background(@raylib.raywhite)
-    @draw.draw_text(
-      "MUSIC SHOULD BE PLAYING!", 255, 150, 20, @raylib.lightgray,
-    )
+    @draw.draw_text("MUSIC SHOULD BE PLAYING!", 255, 150, 20, @raylib.lightgray)
     @raylib.draw_rectangle(200, 200, 400, 12, @raylib.lightgray)
     @raylib.draw_rectangle(
       200,

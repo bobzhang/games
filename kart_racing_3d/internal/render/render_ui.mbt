@@ -454,13 +454,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   // Lap
   let lap_num = (kart.lap + 1).clamp(min=1, max=game.track_laps)
   let lap_text = "Lap \{lap_num}/\{game.track_laps}"
-  @draw.draw_text(
-    lap_text,
-    460,
-    10,
-    20,
-    @raylib.Color::new(200, 200, 200, 255),
-  )
+  @draw.draw_text(lap_text, 460, 10, 20, @raylib.Color::new(200, 200, 200, 255))
   // Speed is drawn by draw_speed_gauge() with boost-state coloring
   // Time
   let time_secs = game.race_time.to_int()

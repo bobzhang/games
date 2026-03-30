@@ -38,13 +38,7 @@ fn set(g : Array[Array[Char]], x : Int, y : Int, ch : Char) -> Unit {
 
 ///|
 /// Fill a horizontal run of the same character.
-fn hrun(
-  g : Array[Array[Char]],
-  x : Int,
-  y : Int,
-  len : Int,
-  ch : Char
-) -> Unit {
+fn hrun(g : Array[Array[Char]], x : Int, y : Int, len : Int, ch : Char) -> Unit {
   for i in 0..<len {
     set(g, x + i, y, ch)
   }
@@ -74,12 +68,7 @@ fn pipe(g : Array[Array[Char]], x : Int, top_y : Int) -> Unit {
 
 ///|
 /// Place a short string of tile chars at (x, y). Spaces are skipped.
-fn tiles(
-  g : Array[Array[Char]],
-  x : Int,
-  y : Int,
-  pattern : String
-) -> Unit {
+fn tiles(g : Array[Array[Char]], x : Int, y : Int, pattern : String) -> Unit {
   for i in 0..<pattern.length() {
     let ch = Int::unsafe_to_char(pattern[i].to_int())
     if ch != ' ' {
@@ -92,13 +81,13 @@ fn tiles(
 /// Place a castle at column x (6 wide, rows 4-14).
 fn castle(g : Array[Array[Char]], x : Int) -> Unit {
   hrun(g, x, 4, 6, 'T')
-  for row in 5..=7 {
+  for row in 5..<=7 {
     hrun(g, x, row, 6, 'C')
   }
   hrun(g, x, 8, 6, 'C')
   set(g, x + 2, 8, 'D')
   set(g, x + 3, 8, 'D')
-  for row in 9..=12 {
+  for row in 9..<=12 {
     hrun(g, x, row, 6, 'C')
     set(g, x + 2, row, 'D')
     set(g, x + 3, row, 'D')
@@ -119,7 +108,7 @@ fn flagpole(g : Array[Array[Char]], x : Int, top_y : Int) -> Unit {
 ///|
 /// Place an ascending staircase from right to left, base at (x, 12), height blocks tall.
 fn staircase(g : Array[Array[Char]], x : Int, height : Int) -> Unit {
-  for step in 1..=height {
+  for step in 1..<=height {
     for row in 0..<step {
       set(g, x + height - step, 12 - row, '#')
     }

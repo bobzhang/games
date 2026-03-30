@@ -174,7 +174,9 @@ fn survivors_count(
   total : Int,
   state : Int,
 ) -> Int {
-  @utils.count_by_view(survivors[0:total], fn(survivor) { survivor.state == state })
+  @utils.count_by_view(survivors[0:total], fn(survivor) {
+    survivor.state == state
+  })
 }
 
 ///|
@@ -479,17 +481,16 @@ fn main {
       }
 
       if action && !carrying {
-        let pickup_idx = @utils.first_index_by_view(
-          survivors[0:total],
-          fn(survivor) {
-            if survivor.state != 0 {
-              return false
-            }
-            let dx = hx - survivor.x
-            let dy = hy - (survivor.y - 24.0)
-            dx * dx + dy * dy <= 36.0 * 36.0
-          },
-        )
+        let pickup_idx = @utils.first_index_by_view(survivors[0:total], fn(
+          survivor,
+        ) {
+          if survivor.state != 0 {
+            return false
+          }
+          let dx = hx - survivor.x
+          let dy = hy - (survivor.y - 24.0)
+          dx * dx + dy * dy <= 36.0 * 36.0
+        })
         if pickup_idx >= 0 {
           survivors[pickup_idx].state = 1
           carrying = true

@@ -1210,13 +1210,7 @@ fn main {
         @raylib.Color::new(108, 130, 160, 120)
       },
     )
-    @draw.draw_text(
-      "EXIT",
-      74,
-      612,
-      34,
-      @raylib.Color::new(236, 244, 252, 255),
-    )
+    @draw.draw_text("EXIT", 74, 612, 34, @raylib.Color::new(236, 244, 252, 255))
 
     for card in cards {
       if !card.active {

@@ -2,7 +2,9 @@
 /// Update all active enemies: physics, AI, collisions.
 fn update_enemies(game : @types.Game, dt : Float) -> Unit {
   let active_zone_left = game.camera_x - 100.0
-  let active_zone_right = game.camera_x + Float::from_int(@types.screen_w) + 100.0
+  let active_zone_right = game.camera_x +
+    Float::from_int(@types.screen_w) +
+    100.0
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]
     if not(e.active) {
@@ -52,15 +54,17 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     let max_tx = @types.world_to_tile_x(e_right - 1.0)
     let min_ty = @types.world_to_tile_y(e_top)
     let max_ty = @types.world_to_tile_y(e.y - 1.0)
-    for ty in min_ty..=max_ty {
-      for tx in min_tx..=max_tx {
+    for ty in min_ty..<=max_ty {
+      for tx in min_tx..<=max_tx {
         if @types.is_solid(@types.get_tile(game, tx, ty)) {
           let tile_left = @types.tile_to_world_x(tx)
           let tile_right = tile_left + @types.tile_sizef
           if e.vx > 0.0 && e.x + ehw > tile_left && e.x - ehw < tile_left {
             e.x = tile_left - ehw
             e.vx = -e.vx
-          } else if e.vx < 0.0 && e.x - ehw < tile_right && e.x + ehw > tile_right {
+          } else if e.vx < 0.0 &&
+            e.x - ehw < tile_right &&
+            e.x + ehw > tile_right {
             e.x = tile_right + ehw
             e.vx = -e.vx
           }
@@ -74,7 +78,7 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     let foot_ty = @types.world_to_tile_y(e.y)
     let left_tx = @types.world_to_tile_x(e.x - ehw + 2.0)
     let right_tx = @types.world_to_tile_x(e.x + ehw - 2.0)
-    for tx in left_tx..=right_tx {
+    for tx in left_tx..<=right_tx {
       if @types.is_solid(@types.get_tile(game, tx, foot_ty)) {
         let tile_top = @types.tile_to_world_y(foot_ty)
         if e.y >= tile_top && e.y - e.vy * dt <= tile_top + 4.0 {
@@ -86,11 +90,7 @@ fn update_enemies(game : @types.Game, dt : Float) -> Unit {
     }
     // Edge detection for non-shell walking enemies — turn at ledges
     if e.on_ground && e.kind != KoopaShell {
-      let check_x = if e.vx < 0.0 {
-        e.x - ehw - 2.0
-      } else {
-        e.x + ehw + 2.0
-      }
+      let check_x = if e.vx < 0.0 { e.x - ehw - 2.0 } else { e.x + ehw + 2.0 }
       let check_ty = @types.world_to_tile_y(e.y + 2.0)
       let ground_ahead = @types.get_tile(
         game,
@@ -133,7 +133,9 @@ fn check_shell_enemy_hits(game : @types.Game, shell_index : Int) -> Unit {
     let e_right = e.x + ehw
     let e_top = e.y - e.height
     let e_bottom = e.y
-    if s_right > e_left && s_left < e_right && s_bottom > e_top &&
+    if s_right > e_left &&
+      s_left < e_right &&
+      s_bottom > e_top &&
       s_top < e_bottom {
       // Shell kills the enemy
       e.dead = true

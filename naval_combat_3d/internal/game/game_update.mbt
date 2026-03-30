@@ -595,10 +595,12 @@ fn @types.Game::update_fleet_ships(game : @types.Game, dt : Float) -> Unit {
       game.wind_speed,
       fs_actual_speed,
     )
-    let new_x = fs.x + @math.sinf(fs.heading) * move_speed + fs_drift.0 * dt *
-      0.3
-    let new_z = fs.z + @math.cosf(fs.heading) * move_speed + fs_drift.1 * dt *
-      0.3
+    let new_x = fs.x +
+      @math.sinf(fs.heading) * move_speed +
+      fs_drift.0 * dt * 0.3
+    let new_z = fs.z +
+      @math.cosf(fs.heading) * move_speed +
+      fs_drift.1 * dt * 0.3
     if !@types.check_island_collision(game, new_x, new_z, 1.5) {
       let half : Float = @types.ocean_size / 2.0 - 5.0
       fs.x = @types.clampf(new_x, -half, half)

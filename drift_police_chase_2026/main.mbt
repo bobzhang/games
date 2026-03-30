@@ -1336,13 +1336,7 @@ fn main {
       @raylib.Color::new(154, 230, 176, 255)
     }
 
-    @draw.draw_text(
-      "Wanted Heat: \{heat.to_int()}",
-      sw - 356,
-      22,
-      34,
-      heat_col,
-    )
+    @draw.draw_text("Wanted Heat: \{heat.to_int()}", sw - 356, 22, 34, heat_col)
     @draw.draw_text(
       "Time: \{time_left.to_int()}s",
       sw - 356,

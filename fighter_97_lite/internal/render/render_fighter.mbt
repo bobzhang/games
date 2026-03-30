@@ -288,7 +288,8 @@ fn @types.Game::draw_fighter_trail(
     )
     @raylib.draw_circle(
       trail_sx.to_int(),
-      (trail_sy - @types.camera_project_size(game, @types.fighter_body_height * 0.5)).to_int(),
+      (trail_sy -
+      @types.camera_project_size(game, @types.fighter_body_height * 0.5)).to_int(),
       radius,
       trail_color,
     )
@@ -310,7 +311,9 @@ fn @types.Game::draw_fighter_low_guard_outline(
     return
   }
   let pulse = Float::from_double(
-      @math.sin((Float::from_int(game.frame_count) * @types.f(0.15)).to_double()),
+      @math.sin(
+        (Float::from_int(game.frame_count) * @types.f(0.15)).to_double(),
+      ),
     ) *
     @types.f(0.5) +
     @types.f(0.5)

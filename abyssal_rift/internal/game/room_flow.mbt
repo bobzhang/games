@@ -11,17 +11,24 @@ pub fn update_room_flow(game : @types.Game, dt : Float) -> Unit {
           // Mark room as visited when player enters
           room.visited = true
           // Check if player has entered the room and enemies should spawn
-          if (room.kind == Combat || room.kind == Boss || room.kind == EliteVault || room.kind == Challenge) &&
+          if (
+              room.kind == Combat ||
+              room.kind == Boss ||
+              room.kind == EliteVault ||
+              room.kind == Challenge
+            ) &&
             not(has_been_cleared(floor, floor.current_room)) {
             seal_room(game)
           }
           // Shop for treasure rooms
-          if room.kind == Treasure && not(has_been_cleared(floor, floor.current_room)) {
+          if room.kind == Treasure &&
+            not(has_been_cleared(floor, floor.current_room)) {
             setup_shop(game)
             room.state = Cleared
           }
           // Shrine rooms
-          if room.kind == Shrine && not(has_been_cleared(floor, floor.current_room)) {
+          if room.kind == Shrine &&
+            not(has_been_cleared(floor, floor.current_room)) {
             setup_shrine(game)
             room.state = Cleared
           }
@@ -73,7 +80,10 @@ fn check_room_transition(game : @types.Game, floor : @types.Floor) -> Unit {
   let cur_py = Float::from_int(cur.y) * ts
   let cur_pw = Float::from_int(cur.w) * ts
   let cur_ph = Float::from_int(cur.h) * ts
-  if p.x >= cur_px && p.x < cur_px + cur_pw && p.y >= cur_py && p.y < cur_py + cur_ph {
+  if p.x >= cur_px &&
+    p.x < cur_px + cur_pw &&
+    p.y >= cur_py &&
+    p.y < cur_py + cur_ph {
     return // Still in current room
   }
   // Player is outside current room - find which room they're in
@@ -169,11 +179,15 @@ fn seal_room(game : @types.Game) -> Unit {
       room.state = Sealed
       if room.kind == Boss {
         let ts = @types.tile_sizef
-        let cx = Float::from_int(room.x) * ts + Float::from_int(room.w) * ts / 2.0
-        let cy = Float::from_int(room.y) * ts + Float::from_int(room.h) * ts / 2.0
+        let cx = Float::from_int(room.x) * ts +
+          Float::from_int(room.w) * ts / 2.0
+        let cy = Float::from_int(room.y) * ts +
+          Float::from_int(room.h) * ts / 2.0
         spawn_boss(game, cx, cy)
         game.current_encounter = Standard
-      } else if room.kind == EliteVault || room.kind == Challenge || room.kind == Combat {
+      } else if room.kind == EliteVault ||
+        room.kind == Challenge ||
+        room.kind == Combat {
         let encounter_type : @types.EncounterType = if room.kind == EliteVault {
           BossRush // EliteVault always spawns boss rush
         } else if room.kind == Challenge {
@@ -205,7 +219,7 @@ fn seal_room(game : @types.Game) -> Unit {
 ///|
 fn get_encounter_pack(
   floor_num : Int,
-  rng : UInt
+  rng : UInt,
 ) -> (Array[@types.EnemyKind], UInt) {
   let (s, roll) = @types.rng_next(rng)
   let pack : Array[@types.EnemyKind] = if floor_num <= 3 {
@@ -232,19 +246,17 @@ fn get_encounter_pack(
     } else {
       [Spider, Archer, Skeleton]
     }
-  } else {
     // Late floors: hard packs
-    if roll < 0.2 {
-      [Golem, Spider, Archer]
-    } else if roll < 0.4 {
-      [Skeleton, Skeleton, Skeleton, Archer, Archer]
-    } else if roll < 0.6 {
-      [Golem, Bat, Bat, Bat]
-    } else if roll < 0.8 {
-      [Spider, Spider, Skeleton, Skeleton]
-    } else {
-      [Golem, Golem, Slime, Slime]
-    }
+  } else if roll < 0.2 {
+    [Golem, Spider, Archer]
+  } else if roll < 0.4 {
+    [Skeleton, Skeleton, Skeleton, Archer, Archer]
+  } else if roll < 0.6 {
+    [Golem, Bat, Bat, Bat]
+  } else if roll < 0.8 {
+    [Spider, Spider, Skeleton, Skeleton]
+  } else {
+    [Golem, Golem, Slime, Slime]
   }
   (pack, s)
 }
@@ -257,13 +269,7 @@ fn spawn_room_enemies(game : @types.Game, budget : Int) -> Unit {
       let room = floor.rooms[floor.current_room]
       let ts = @types.tile_sizef
       // Spawn 1-3 packs based on budget
-      let num_packs = if budget <= 5 {
-        1
-      } else if budget <= 9 {
-        2
-      } else {
-        3
-      }
+      let num_packs = if budget <= 5 { 1 } else if budget <= 9 { 2 } else { 3 }
       for _pack_i in 0..<num_packs {
         let (pack, s_new) = get_encounter_pack(game.floor_num, game.rng_state)
         game.rng_state = s_new
@@ -299,7 +305,11 @@ fn spawn_room_enemies(game : @types.Game, budget : Int) -> Unit {
         game.rng_state = s_elite
         if roll < elite_chance {
           let affixes : Array[@types.EliteAffix] = [
-            Fast, Armored, Splitting, Vampiric, Explosive,
+            Fast,
+            Armored,
+            Splitting,
+            Vampiric,
+            Explosive,
           ]
           let (s_affix, affix_idx) = @types.rng_int(game.rng_state, 0, 4)
           game.rng_state = s_affix
@@ -308,9 +318,11 @@ fn spawn_room_enemies(game : @types.Game, budget : Int) -> Unit {
           let candidates : Array[Int] = []
           for i in 0..<game.enemies.length() {
             let ei = game.enemies[i]
-            if ei.active && !ei.is_elite &&
+            if ei.active &&
+              !ei.is_elite &&
               ei.room_id == floor.current_room &&
-              ei.kind != BroodMother && ei.kind != LichKing {
+              ei.kind != BroodMother &&
+              ei.kind != LichKing {
               match ei.state {
                 Dead(_) => ()
                 _ => candidates.push(i)
@@ -319,7 +331,9 @@ fn spawn_room_enemies(game : @types.Game, budget : Int) -> Unit {
           }
           if candidates.length() > 0 {
             let (s_pick, pick_idx) = @types.rng_int(
-              game.rng_state, 0, candidates.length() - 1,
+              game.rng_state,
+              0,
+              candidates.length() - 1,
             )
             game.rng_state = s_pick
             let target = game.enemies[candidates[pick_idx]]
@@ -371,7 +385,9 @@ fn clear_room(game : @types.Game) -> Unit {
       game.rooms_cleared += 1
       game.floor_rooms_cleared += 1
       // Boss rooms, EliteVault, and every 3rd combat room: trigger choice-of-3 reward
-      if room.kind == Boss || room.kind == EliteVault || game.floor_rooms_cleared % 3 == 0 {
+      if room.kind == Boss ||
+        room.kind == EliteVault ||
+        game.floor_rooms_cleared % 3 == 0 {
         trigger_reward_choice(game)
         // Boss bonus: substantial extra gold reward
         if room.kind == Boss {
@@ -388,7 +404,9 @@ fn clear_room(game : @types.Game) -> Unit {
         if room.kind == EliteVault {
           let passives = all_passives()
           let (s_ev, pidx_ev) = @types.rng_int(
-            game.rng_state, 0, passives.length() - 1,
+            game.rng_state,
+            0,
+            passives.length() - 1,
           )
           game.rng_state = s_ev
           let pi_ev = @types.alloc_item(game.items)
@@ -445,7 +463,9 @@ fn clear_room(game : @types.Game) -> Unit {
         if proll < passive_chance {
           let passives = all_passives()
           let (s6, pidx) = @types.rng_int(
-            game.rng_state, 0, passives.length() - 1,
+            game.rng_state,
+            0,
+            passives.length() - 1,
           )
           game.rng_state = s6
           let pi = @types.alloc_item(game.items)
@@ -494,7 +514,10 @@ fn clear_room(game : @types.Game) -> Unit {
         let mut total_combat_rooms = 0
         for i in 0..<floor.rooms.length() {
           let r = floor.rooms[i]
-          if r.kind == Combat || r.kind == Boss || r.kind == EliteVault || r.kind == Challenge {
+          if r.kind == Combat ||
+            r.kind == Boss ||
+            r.kind == EliteVault ||
+            r.kind == Challenge {
             total_combat_rooms += 1
           }
         }
@@ -507,8 +530,10 @@ fn clear_room(game : @types.Game) -> Unit {
       if stairs_unlocked {
         // Place stairs in the center of the last cleared room
         let ts = @types.tile_sizef
-        let cx = Float::from_int(room.x) * ts + Float::from_int(room.w) * ts / 2.0
-        let cy = Float::from_int(room.y) * ts + Float::from_int(room.h) * ts / 2.0
+        let cx = Float::from_int(room.x) * ts +
+          Float::from_int(room.w) * ts / 2.0
+        let cy = Float::from_int(room.y) * ts +
+          Float::from_int(room.h) * ts / 2.0
         game.stairs_active = true
         game.stairs_x = cx
         game.stairs_y = cy
@@ -524,7 +549,8 @@ fn clear_room(game : @types.Game) -> Unit {
       // Celebration particles in a ring pattern
       let ring_count = 24
       for ring_i in 0..<ring_count {
-        let angle = Float::from_int(ring_i) / Float::from_int(ring_count) *
+        let angle = Float::from_int(ring_i) /
+          Float::from_int(ring_count) *
           2.0 *
           3.14159
         let cos_a = Float::from_double(@math.cos(angle.to_double()))

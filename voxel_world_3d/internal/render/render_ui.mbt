@@ -201,13 +201,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   } else {
     "Empty"
   }
-  @draw.draw_text(
-    block_text,
-    10,
-    6,
-    20,
-    @raylib.Color::new(200, 220, 200, 255),
-  )
+  @draw.draw_text(block_text, 10, 6, 20, @raylib.Color::new(200, 220, 200, 255))
   // FPS
   let fps = @raylib.get_fps()
   let fps_text = "FPS: \{fps}"
@@ -926,7 +920,8 @@ fn @types.Game::draw_crafting_screen(game : @types.Game) -> Unit {
     )
   }
   // Draw only visible recipes
-  let end_idx = if game.crafting_scroll_offset + visible_count < recipes.length() {
+  let end_idx = if game.crafting_scroll_offset + visible_count <
+    recipes.length() {
     game.crafting_scroll_offset + visible_count
   } else {
     recipes.length()
@@ -1482,7 +1477,10 @@ fn @types.Game::draw_damage_numbers_2d(game : @types.Game) -> Unit {
       let screen_y_offset = -dy / dist * 200.0
       let sx = @types.screen_width / 2 + screen_x_offset.to_int()
       let sy = @types.screen_height / 2 + screen_y_offset.to_int()
-      if sx < 0 || sx > @types.screen_width || sy < 0 || sy > @types.screen_height {
+      if sx < 0 ||
+        sx > @types.screen_width ||
+        sy < 0 ||
+        sy > @types.screen_height {
         continue
       }
       let alpha = (dn.timer / 1.5 * 255.0).to_int().clamp(min=0, max=255)

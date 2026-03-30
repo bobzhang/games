@@ -178,7 +178,12 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
     )
     // Shell casing
     @types.spawn_shell_casing(
-      game, player.x, eye_h - 0.2, player.z, right_x, right_z,
+      game,
+      player.x,
+      eye_h - 0.2,
+      player.z,
+      right_x,
+      right_z,
     )
   } else if weapon == @types.Sniper.to_int() {
     // Sniper: high accuracy, penetrating
@@ -198,7 +203,12 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
       200,
     )
     @types.spawn_shell_casing(
-      game, player.x, eye_h - 0.2, player.z, right_x, right_z,
+      game,
+      player.x,
+      eye_h - 0.2,
+      player.z,
+      right_x,
+      right_z,
     )
   } else if weapon == @types.Minigun.to_int() {
     // Minigun: spread increases when sustained firing
@@ -227,7 +237,12 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
         80,
       )
       @types.spawn_shell_casing(
-        game, player.x, eye_h - 0.2, player.z, right_x, right_z,
+        game,
+        player.x,
+        eye_h - 0.2,
+        player.z,
+        right_x,
+        right_z,
       )
     }
   } else {
@@ -261,7 +276,12 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
     )
     // Shell casing
     @types.spawn_shell_casing(
-      game, player.x, eye_h - 0.2, player.z, right_x, right_z,
+      game,
+      player.x,
+      eye_h - 0.2,
+      player.z,
+      right_x,
+      right_z,
     )
   }
 }
@@ -405,7 +425,13 @@ fn @types.Game::update_projectiles(game : @types.Game, dt : Float) -> Unit {
     for w in game.low_walls {
       if proj.y < w.height {
         let result = @types.push_from_box(
-          proj.x, proj.z, 0.2, w.x, w.z, w.width, w.depth,
+          proj.x,
+          proj.z,
+          0.2,
+          w.x,
+          w.z,
+          w.width,
+          w.depth,
         )
         if result.2 {
           hit_low_wall = true
@@ -416,11 +442,23 @@ fn @types.Game::update_projectiles(game : @types.Game, dt : Float) -> Unit {
     if hit_low_wall {
       if proj.splash_radius > 0.0 {
         game.apply_explosion(
-          proj.x, proj.y, proj.z, proj.splash_radius, proj.damage,
+          proj.x,
+          proj.y,
+          proj.z,
+          proj.splash_radius,
+          proj.damage,
         )
       }
       @types.spawn_particles_typed(
-        game, proj.x, proj.y, proj.z, 3, 180, 170, 160, Spark,
+        game,
+        proj.x,
+        proj.y,
+        proj.z,
+        3,
+        180,
+        170,
+        160,
+        Spark,
       )
       proj.active = false
       continue

@@ -148,7 +148,12 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
                 continue
               }
               let splash_dist = @types.distance3d(
-                proj.x, proj.y, proj.z, splash_e.x, splash_e.y, splash_e.z,
+                proj.x,
+                proj.y,
+                proj.z,
+                splash_e.x,
+                splash_e.y,
+                splash_e.z,
               )
               if splash_dist < splash_radius {
                 let falloff : Float = 1.0 - splash_dist / splash_radius
@@ -157,7 +162,14 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
               }
             }
             @types.spawn_particles(
-              game, proj.x, proj.y, proj.z, 8, 100, 255, 100,
+              game,
+              proj.x,
+              proj.y,
+              proj.z,
+              8,
+              100,
+              255,
+              100,
             )
           }
 

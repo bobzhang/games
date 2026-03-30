@@ -193,23 +193,11 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   } else {
     "Cross"
   }
-  @draw.draw_text(
-    wind_str,
-    700,
-    5,
-    16,
-    @raylib.Color::new(180, 200, 255, 255),
-  )
+  @draw.draw_text(wind_str, 700, 5, 16, @raylib.Color::new(180, 200, 255, 255))
   // Wind strength bar
   let wind_pct = game.wind_speed / @types.wind_speed_gale
   let wind_bar_w = (wind_pct * 40.0).to_int()
-  @raylib.draw_rectangle(
-    700,
-    25,
-    40,
-    6,
-    @raylib.Color::new(30, 30, 50, 200),
-  )
+  @raylib.draw_rectangle(700, 25, 40, 6, @raylib.Color::new(30, 30, 50, 200))
   @raylib.draw_rectangle(
     700,
     25,
@@ -467,12 +455,7 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
   // Player on minimap (green triangle)
   let px = map_cx + (game.player.x * map_scale).to_int()
   let pz = map_cy + (game.player.z * map_scale).to_int()
-  @raylib.draw_circle(
-    px,
-    pz,
-    3.0,
-    @raylib.Color::new(50, 255, 50, 255),
-  )
+  @raylib.draw_circle(px, pz, 3.0, @raylib.Color::new(50, 255, 50, 255))
   // Enemies on minimap (red dots)
   for enemy in game.enemies {
     if !enemy.active {
@@ -480,12 +463,7 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
     }
     let ex = map_cx + (enemy.x * map_scale).to_int()
     let ez = map_cy + (enemy.z * map_scale).to_int()
-    @raylib.draw_circle(
-      ex,
-      ez,
-      2.0,
-      @raylib.Color::new(255, 60, 60, 255),
-    )
+    @raylib.draw_circle(ex, ez, 2.0, @raylib.Color::new(255, 60, 60, 255))
   }
   // Fleet ships on minimap (blue dots)
   for fs in game.fleet_ships {
@@ -494,12 +472,7 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
     }
     let fx = map_cx + (fs.x * map_scale).to_int()
     let fz = map_cy + (fs.z * map_scale).to_int()
-    @raylib.draw_circle(
-      fx,
-      fz,
-      2.0,
-      @raylib.Color::new(50, 150, 255, 255),
-    )
+    @raylib.draw_circle(fx, fz, 2.0, @raylib.Color::new(50, 150, 255, 255))
   }
   // Convoy ships on minimap (yellow dots)
   for cs in game.convoy_ships {
@@ -508,12 +481,7 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
     }
     let ccx = map_cx + (cs.x * map_scale).to_int()
     let ccz = map_cy + (cs.z * map_scale).to_int()
-    @raylib.draw_circle(
-      ccx,
-      ccz,
-      2.0,
-      @raylib.Color::new(255, 220, 80, 255),
-    )
+    @raylib.draw_circle(ccx, ccz, 2.0, @raylib.Color::new(255, 220, 80, 255))
   }
   // Label
   @draw.draw_text(

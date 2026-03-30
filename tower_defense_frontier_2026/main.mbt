@@ -282,9 +282,7 @@ fn main {
     @draw.draw_text("Gold: \{gold}", 170, 56, 24, @raylib.raywhite)
     @draw.draw_text("Score: \{score}", 310, 56, 24, @raylib.raywhite)
     @draw.draw_text("Wave: \{wave}", 480, 56, 24, @raylib.raywhite)
-    @draw.draw_text(
-      "Click slot to build tower (40)", 680, 24, 22, @raylib.gray,
-    )
+    @draw.draw_text("Click slot to build tower (40)", 680, 24, 22, @raylib.gray)
     @draw.draw_text("R restart", 820, 56, 20, @raylib.gray)
 
     if paused_between_wave && !game_over {

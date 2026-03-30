@@ -266,7 +266,14 @@ fn @types.Game::fire_tower(game : @types.Game, tower_idx : Int) -> Unit {
     match tower.kind {
       Frost | Sniper | Lightning | Flame =>
         @types.add_attack_beam(
-          game, tx, 1.5, tz, enemy.x, enemy.y, enemy.z, tower.kind,
+          game,
+          tx,
+          1.5,
+          tz,
+          enemy.x,
+          enemy.y,
+          enemy.z,
+          tower.kind,
         )
       _ => ()
     }

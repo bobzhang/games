@@ -789,8 +789,7 @@ fn @types.Game::draw_class_select(game : @types.Game) -> Unit {
   // Class names and descriptions
   let names : Array[String] = ["Warrior", "Rogue", "Mage"]
   let descs : Array[String] = [
-    "High HP, chain armor, +3 DEF. Starts with sword.",
-    "Fast, leather armor, Precision Ring. Starts with dagger.",
+    "High HP, chain armor, +3 DEF. Starts with sword.", "Fast, leather armor, Precision Ring. Starts with dagger.",
     "High mana, Wisdom Ring, robes. Starts with staff and spells.",
   ]
   for i in 0..<3 {
@@ -892,8 +891,7 @@ fn @types.Game::draw_shop(game : @types.Game) -> Unit {
   )
   // Shop items list
   let item_names : Array[String] = [
-    "Health Potion", "Mana Potion", "Damage Scroll", "Armor Shard", "Key",
-    "Speed Potion",
+    "Health Potion", "Mana Potion", "Damage Scroll", "Armor Shard", "Key", "Speed Potion",
   ]
   for i in 0..<@types.max_shop_items {
     let item = game.shop_items[i]
@@ -1000,9 +998,7 @@ fn @types.Game::draw_shrine(game : @types.Game) -> Unit {
       20,
       @raylib.Color::new(200, 200, 220, 255),
     )
-    let option_names : Array[String] = [
-      "+15 Max HP", "+10 Max Mana", "+5 ATK",
-    ]
+    let option_names : Array[String] = ["+15 Max HP", "+10 Max Mana", "+5 ATK"]
     for i in 0..<3 {
       let y = 200 + i * 55
       let is_selected = game.shrine_cursor == i
@@ -1104,10 +1100,18 @@ fn @types.Game::draw_boss_health_bar(game : @types.Game) -> Unit {
   let p3_x = bar_x +
     (Float::from_int(bar_w) * @types.boss_phase3_threshold).to_int()
   @raylib.draw_rectangle(
-    p2_x, bar_y, 2, bar_h, @raylib.Color::new(255, 255, 100, 150),
+    p2_x,
+    bar_y,
+    2,
+    bar_h,
+    @raylib.Color::new(255, 255, 100, 150),
   )
   @raylib.draw_rectangle(
-    p3_x, bar_y, 2, bar_h, @raylib.Color::new(255, 100, 255, 150),
+    p3_x,
+    bar_y,
+    2,
+    bar_h,
+    @raylib.Color::new(255, 100, 255, 150),
   )
   @raylib.draw_rectangle_lines(
     bar_x,

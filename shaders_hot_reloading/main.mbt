@@ -25,10 +25,7 @@ fn main {
     Float::from_int(screen_width),
     Float::from_int(screen_height),
   )
-  shader.set_value(
-    resolution_loc,
-    Vec2(resolution),
-  )
+  shader.set_value(resolution_loc, Vec2(resolution))
 
   let mut total_time : Float = 0.0
   let mut shader_auto_reloading = false
@@ -57,10 +54,7 @@ fn main {
           resolution_loc = @raylib.get_shader_location(shader, "resolution")
           mouse_loc = @raylib.get_shader_location(shader, "mouse")
           time_loc = @raylib.get_shader_location(shader, "time")
-          shader.set_value(
-            resolution_loc,
-            Vec2(resolution),
-          )
+          shader.set_value(resolution_loc, Vec2(resolution))
         }
         frag_shader_mod_time = current_mod_time
       }
