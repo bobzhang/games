@@ -11,6 +11,7 @@ PKG_NAME="$(basename "$PKG_PATH")"
 OUT_DIR="${2:-_build/web/${PKG_NAME}}"
 PRE_JS="$ROOT_DIR/tools/web_force_webgl1.pre.js"
 POST_JS="$ROOT_DIR/tools/web_mobile_touch.post.js"
+SHELL_HTML="$ROOT_DIR/tools/web_shell.html"
 
 if ! command -v moon >/dev/null 2>&1; then
   echo "error: moon command not found in PATH" >&2
@@ -41,6 +42,11 @@ fi
 
 if [[ ! -f "$POST_JS" ]]; then
   echo "error: missing post-js patch file: $POST_JS" >&2
+  exit 1
+fi
+
+if [[ ! -f "$SHELL_HTML" ]]; then
+  echo "error: missing HTML shell template: $SHELL_HTML" >&2
   exit 1
 fi
 
@@ -126,6 +132,7 @@ emcc \
   ${EMBED_FLAGS[@]+"${EMBED_FLAGS[@]}"} \
   --pre-js "$PRE_JS" \
   --post-js "$POST_JS" \
+  --shell-file "$SHELL_HTML" \
   -o "$OUTPUT_HTML"
 
 echo

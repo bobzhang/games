@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>MoonBit Game</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%; height: 100%;
+      background: #000;
+      overflow: hidden;
+      touch-action: none;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    #canvas-container {
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    canvas#canvas {
+      display: block;
+      background: #000;
+      border: none;
+      outline: none;
+      /* Let JS handle sizing to avoid object-fit touch input misalignment */
+    }
+    #loading {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #0a0e1a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #e8edf5;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      z-index: 100;
+      transition: opacity 0.3s;
+    }
+    #loading.hidden { opacity: 0; pointer-events: none; }
+    #loading h2 { font-size: 20px; margin-bottom: 16px; color: #818cf8; }
+    #loading .bar-bg {
+      width: 200px; height: 6px; border-radius: 3px;
+      background: #1e293b; overflow: hidden;
+    }
+    #loading .bar-fill {
+      height: 100%; background: #6366f1; border-radius: 3px;
+      transition: width 0.15s;
+    }
+    #loading .status { margin-top: 10px; font-size: 13px; color: #8899b0; }
+    #back-link {
+      position: fixed; top: 8px; left: 8px; z-index: 50;
+      background: rgba(0,0,0,0.6); color: #ccc;
+      padding: 6px 12px; border-radius: 6px;
+      font-size: 13px; text-decoration: none;
+      font-family: -apple-system, sans-serif;
+      backdrop-filter: blur(4px);
+      opacity: 0.7; transition: opacity 0.2s;
+    }
+    #back-link:hover { opacity: 1; color: #fff; }
+    /* Hide emscripten UI chrome - we use our own */
+    #emscripten_logo, #controls, #output, .spinner,
+    div.emscripten:not(#canvas-container):not(.emscripten_border) { display: none !important; }
+  </style>
+</head>
+<body>
+  <a id="back-link" href="/">← Back to Games</a>
+  <div id="loading">
+    <h2>Loading Game...</h2>
+    <div class="bar-bg"><div class="bar-fill" id="progress-bar" style="width:0%"></div></div>
+    <div class="status" id="status-text">Initializing...</div>
+  </div>
+  <div id="canvas-container">
+    <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex="-1"></canvas>
+  </div>
+  <script>
+    var canvasElement = document.getElementById('canvas');
+    // Focus canvas for keyboard input
+    canvasElement.addEventListener('click', function() { canvasElement.focus(); });
+    window.addEventListener('load', function() { canvasElement.focus(); });
+
+    // Handle canvas context loss gracefully
+    canvasElement.addEventListener('webglcontextlost', function(e) {
+      e.preventDefault();
+      document.getElementById('status-text').textContent = 'WebGL context lost. Please reload.';
+      document.getElementById('loading').classList.remove('hidden');
+    });
+
+    var totalDeps = 0;
+    var Module = {
+      canvas: canvasElement,
+      print: function(text) { console.log(text); },
+      printErr: function(text) { console.warn(text); },
+      setStatus: function(text) {
+        var el = document.getElementById('status-text');
+        var bar = document.getElementById('progress-bar');
+        if (!text) {
+          document.getElementById('loading').classList.add('hidden');
+          canvasElement.focus();
+          resizeCanvas();
+          return;
+        }
+        el.textContent = text;
+        var m = text.match(/(\d+(\.\d+)?)\/(\d+)/);
+        if (m) {
+          var pct = (parseFloat(m[1]) / parseFloat(m[3]) * 100).toFixed(0);
+          bar.style.width = pct + '%';
+        }
+      },
+      monitorRunDependencies: function(left) {
+        totalDeps = Math.max(totalDeps, left);
+        var bar = document.getElementById('progress-bar');
+        var el = document.getElementById('status-text');
+        if (left) {
+          var pct = ((totalDeps - left) / totalDeps * 100).toFixed(0);
+          bar.style.width = pct + '%';
+          el.textContent = 'Loading... (' + (totalDeps - left) + '/' + totalDeps + ')';
+        } else {
+          bar.style.width = '100%';
+          el.textContent = 'Starting...';
+        }
+      },
+      onRuntimeInitialized: function() {
+        document.getElementById('loading').classList.add('hidden');
+        canvasElement.focus();
+        setTimeout(resizeCanvas, 100);
+      }
+    };
+
+    // Size the canvas CSS to fill viewport while matching its internal resolution.
+    // We do NOT change canvas.width/height (the internal framebuffer) because
+    // most games use a fixed resolution and don't set FLAG_WINDOW_RESIZABLE.
+    // Instead we scale the CSS size to fit the viewport, maintaining the
+    // game's native aspect ratio so touch coords stay correct (no object-fit).
+    function resizeCanvas() {
+      var vw = window.innerWidth;
+      var vh = window.innerHeight;
+      // Use the game's internal resolution (set by raylib init_window)
+      var cw = canvasElement.width || 800;
+      var ch = canvasElement.height || 600;
+      var aspect = cw / ch;
+      var fitW, fitH;
+      if (vw / vh > aspect) {
+        // Viewport is wider than game -> fit height, center horizontally
+        fitH = vh;
+        fitW = vh * aspect;
+      } else {
+        // Viewport is taller than game -> fit width, center vertically
+        fitW = vw;
+        fitH = vw / aspect;
+      }
+      canvasElement.style.width = Math.floor(fitW) + 'px';
+      canvasElement.style.height = Math.floor(fitH) + 'px';
+    }
+    // Re-measure after the game sets its resolution
+    var _resizeInterval = setInterval(function() {
+      if (canvasElement.width > 1) { resizeCanvas(); clearInterval(_resizeInterval); }
+    }, 200);
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+  </script>
+  {{{ SCRIPT }}}
+</body>
+</html>
