@@ -190,28 +190,45 @@ fn @types.Game::draw_enemies(game : @types.Game) -> Unit {
         @raylib.Color::new(150, 40, 40, 255),
       )
     }
-    // Health bar (when damaged)
-    if e.hp < e.max_hp {
-      let bar_w : Float = 2.0
+    // Health bar (visible within range)
+    if dist < @types.enemy_health_bar_range {
+      let bar_w : Float = 2.5
       let ratio = e.hp / e.max_hp
-      let bar_y = e.y + e.size + 0.5
+      let bar_y = e.y + e.size + 0.8
+      // Background bar (dark)
       @raylib.draw_cube(
         @raylib.Vector3::new(e.x, bar_y, e.z),
         bar_w,
-        0.15,
-        0.15,
-        @raylib.Color::new(255, 0, 0, 200),
+        0.18,
+        0.18,
+        @raylib.Color::new(40, 40, 40, 200),
       )
+      // Health fill with green->yellow->red transition
+      let inv_ratio : Float = 1.0 - ratio
+      let hr : Float = if ratio > 0.5 {
+        inv_ratio * 2.0 * 255.0
+      } else {
+        255.0
+      }
+      let hg : Float = if ratio > 0.5 {
+        255.0
+      } else {
+        ratio * 2.0 * 255.0
+      }
+      let health_color = @raylib.Color::new(
+        hr.to_int().clamp(min=0, max=255),
+        hg.to_int().clamp(min=0, max=255),
+        0,
+        220,
+      )
+      let health_w = bar_w * ratio
+      let health_offset = (bar_w - health_w) * 0.5
       @raylib.draw_cube(
-        @raylib.Vector3::new(
-          e.x - bar_w * (1.0 - ratio) / 2.0,
-          bar_y + 0.01,
-          e.z,
-        ),
-        bar_w * ratio,
-        0.15,
-        0.15,
-        @raylib.Color::new(0, 255, 0, 200),
+        @raylib.Vector3::new(e.x - health_offset, bar_y + 0.01, e.z),
+        health_w,
+        0.18,
+        0.18,
+        health_color,
       )
     }
   }
@@ -642,26 +659,45 @@ fn @types.Game::draw_turrets_3d(game : @types.Game) -> Unit {
         @raylib.Color::new(255, 255, 150, 200),
       )
     }
-    // Health bar above turret
-    if t.hp < t.max_hp {
+    // Health bar above turret (visible within range)
+    if dist < @types.enemy_health_bar_range {
       let bar_w : Float = 2.5
       let ratio = t.hp / t.max_hp
       let bar_y = t.y + 2.5
+      // Background
       @raylib.draw_cube(
         @raylib.Vector3::new(t.x, bar_y, t.z),
         bar_w,
-        0.15,
-        0.15,
-        @raylib.Color::new(255, 0, 0, 180),
+        0.18,
+        0.18,
+        @raylib.Color::new(40, 40, 40, 200),
+      )
+      // Health fill with color transition
+      let t_inv : Float = 1.0 - ratio
+      let hr : Float = if ratio > 0.5 {
+        t_inv * 2.0 * 255.0
+      } else {
+        255.0
+      }
+      let hg : Float = if ratio > 0.5 {
+        255.0
+      } else {
+        ratio * 2.0 * 255.0
+      }
+      let health_color = @raylib.Color::new(
+        hr.to_int().clamp(min=0, max=255),
+        hg.to_int().clamp(min=0, max=255),
+        0,
+        200,
       )
       let health_w = bar_w * ratio
       let health_offset = (bar_w - health_w) * 0.5
       @raylib.draw_cube(
         @raylib.Vector3::new(t.x - health_offset, bar_y + 0.01, t.z),
         health_w,
-        0.15,
-        0.15,
-        @raylib.Color::new(0, 255, 0, 180),
+        0.18,
+        0.18,
+        health_color,
       )
     }
   }

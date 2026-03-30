@@ -89,6 +89,19 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
       Free => Chase
     }
   }
+  // Weapon cycling (1/2/3 keys)
+  if @raylib.is_key_pressed(@raylib.KeyOne) {
+    game.player.current_weapon = MachineGun
+    game.weapon_switch_display_timer = @types.weapon_switch_display_duration
+  }
+  if @raylib.is_key_pressed(@raylib.KeyTwo) {
+    game.player.current_weapon = Rockets
+    game.weapon_switch_display_timer = @types.weapon_switch_display_duration
+  }
+  if @raylib.is_key_pressed(@raylib.KeyThree) {
+    game.player.current_weapon = Bombs
+    game.weapon_switch_display_timer = @types.weapon_switch_display_duration
+  }
   update_player(game, dt)
   game.update_camera(dt)
   game.update_terrain()
@@ -101,6 +114,40 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   update_mission_logic(game, dt)
   game.update_warnings(dt)
   game.update_weather_effects(dt)
+  game.update_combat_feedback(dt)
+}
+
+///|
+/// Updates combat feedback timers: hit marker, screen shake, vignette, floating damage.
+fn @types.Game::update_combat_feedback(game : @types.Game, dt : Float) -> Unit {
+  if game.hit_marker_timer > 0.0 {
+    game.hit_marker_timer -= dt
+  }
+  if game.screen_shake_timer > 0.0 {
+    game.screen_shake_timer -= dt
+    if game.screen_shake_timer <= 0.0 {
+      game.screen_shake_intensity = 0.0
+    }
+  }
+  if game.damage_vignette_timer > 0.0 {
+    game.damage_vignette_timer -= dt
+  }
+  if game.damage_dir_timer > 0.0 {
+    game.damage_dir_timer -= dt
+  }
+  if game.weapon_switch_display_timer > 0.0 {
+    game.weapon_switch_display_timer -= dt
+  }
+  // Update floating damage numbers
+  for fd in game.floating_damage {
+    if fd.active {
+      fd.timer -= dt
+      fd.y += 3.0 * dt
+      if fd.timer <= 0.0 {
+        fd.active = false
+      }
+    }
+  }
 }
 
 ///|
@@ -175,9 +222,22 @@ fn @types.Game::update_particles(game : @types.Game, dt : Float) -> Unit {
 
 ///|
 fn @types.Game::update_messages(game : @types.Game, dt : Float) -> Unit {
+  // Decrement the primary message timer
+  if game.message_timer > 0.0 {
+    game.message_timer -= dt
+    if game.message_timer <= 0.0 {
+      game.message_timer = 0.0
+      game.message_text = ""
+    }
+  }
+  // Decrement radio message queue timers
   for message in game.messages {
     if message.timer > 0.0 {
       message.timer -= dt
+      if message.timer <= 0.0 {
+        message.timer = 0.0
+        message.text = ""
+      }
     }
   }
 }
@@ -229,6 +289,21 @@ fn @types.Game::update_camera(game : @types.Game, dt : Float) -> Unit {
       game.cam_target_y = player.y
       game.cam_target_z = player.z
     }
+  }
+  // Screen shake offset
+  if game.screen_shake_timer > 0.0 {
+    let shake = game.screen_shake_intensity *
+      (game.screen_shake_timer / @types.shake_duration)
+    let shake_x = @math.sinf(
+        Float::from_int(game.frame_counter) * 17.3,
+      ) *
+      shake
+    let shake_y = @math.cosf(
+        Float::from_int(game.frame_counter) * 23.7,
+      ) *
+      shake
+    game.cam_x += shake_x
+    game.cam_y += shake_y
   }
   // Keep camera above terrain
   let cam_terrain = @types.terrain_height_at(game.cam_x, game.cam_z) + 2.0
@@ -361,6 +436,12 @@ fn @types.Game::update_clouds(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::update_checkpoints(game : @types.Game) -> Unit {
+  let mission = game.missions[game.current_mission]
+  // Recon missions use photo capture mechanic instead of fly-through
+  if mission.kind == @types.mission_recon {
+    game.update_recon_capture()
+    return
+  }
   let player = game.player
   for cp in game.checkpoints {
     if !cp.active {
@@ -374,7 +455,6 @@ fn @types.Game::update_checkpoints(game : @types.Game) -> Unit {
       cp.collected = true
       game.score += @types.score_checkpoint
       game.mission_score += @types.score_checkpoint
-      let mission = game.missions[game.current_mission]
       mission.targets_done += 1
       @types.spawn_particles(game, cp.x, cp.y, cp.z, 15, 50, 255, 50)
       @types.show_message(
@@ -382,6 +462,80 @@ fn @types.Game::update_checkpoints(game : @types.Game) -> Unit {
         "Checkpoint! \{mission.targets_done}/\{mission.target_count}",
         2.0,
       )
+    }
+  }
+}
+
+///|
+fn @types.Game::update_recon_capture(game : @types.Game) -> Unit {
+  let player = game.player
+  let mission = game.missions[game.current_mission]
+  let recon_radius : Float = 20.0
+  let recon_max_alt : Float = 15.0
+  let capture_duration : Float = 2.0
+  let dt = @raylib.get_frame_time()
+  // Find the nearest uncollected recon target
+  let mut best_idx = -1
+  let mut best_dist : Float = 9999.0
+  for i, cp in game.checkpoints {
+    if !cp.active {
+      continue
+    }
+    if cp.collected {
+      continue
+    }
+    let dist_h = @types.distance2d(player.x, player.z, cp.x, cp.z)
+    if dist_h < best_dist {
+      best_dist = dist_h
+      best_idx = i
+    }
+  }
+  if best_idx < 0 {
+    return
+  }
+  let cp = game.checkpoints[best_idx]
+  let alt_above = player.y - @types.terrain_height_at(cp.x, cp.z)
+  // Check if player is within capture range and at low altitude
+  if best_dist < recon_radius && alt_above < recon_max_alt && alt_above > 2.0 {
+    if game.recon_capture_target != best_idx {
+      // Started capturing a new target
+      game.recon_capture_target = best_idx
+      game.recon_capture_timer = 0.0
+      @types.show_message(game, "Recon target in range - hold steady!", 2.0)
+    }
+    game.recon_capture_timer += dt
+    // Check if player is flying steady (not rolling too much)
+    let steady = player.roll.abs() < 0.4 && player.pitch.abs() < 0.5
+    if !steady {
+      // Unstable flight slows capture
+      game.recon_capture_timer -= dt * 0.5
+      if game.recon_capture_timer < 0.0 {
+        game.recon_capture_timer = 0.0
+      }
+    }
+    if game.recon_capture_timer >= capture_duration {
+      // Photo captured
+      cp.collected = true
+      game.score += @types.score_checkpoint
+      game.mission_score += @types.score_checkpoint
+      mission.targets_done += 1
+      game.recon_capture_timer = 0.0
+      game.recon_capture_target = -1
+      @types.spawn_particles(game, cp.x, cp.y, cp.z, 15, 100, 200, 255)
+      @types.show_message(
+        game,
+        "Photo captured! \{mission.targets_done}/\{mission.target_count}",
+        2.0,
+      )
+    }
+  } else {
+    // Out of range - reset capture timer
+    if game.recon_capture_target == best_idx {
+      if game.recon_capture_timer > 0.0 {
+        @types.push_message(game, "Target lost - get closer and lower!", 1.5, 1)
+      }
+      game.recon_capture_timer = 0.0
+      game.recon_capture_target = -1
     }
   }
 }
@@ -631,6 +785,8 @@ pub fn start_mission(game : @types.Game, mission_idx : Int) -> Unit {
   game.mission_score = 0
   game.landing_approach = false
   game.landing_timer = 0.0
+  game.recon_capture_timer = 0.0
+  game.recon_capture_target = -1
   // Reset player
   let player = game.player
   let stats = @types.get_aircraft_stats(game.selected_aircraft)
@@ -671,6 +827,18 @@ pub fn start_mission(game : @types.Game, mission_idx : Int) -> Unit {
   game.altitude_warning = false
   game.damage_warning = false
   game.incoming_warning = false
+  // Reset combat feedback
+  game.hit_marker_timer = 0.0
+  game.screen_shake_intensity = 0.0
+  game.screen_shake_timer = 0.0
+  game.damage_vignette_timer = 0.0
+  game.damage_dir_x = 0.0
+  game.damage_dir_z = 0.0
+  game.damage_dir_timer = 0.0
+  game.weapon_switch_display_timer = 0.0
+  for fd in game.floating_damage {
+    fd.active = false
+  }
   // Clear entities
   for enemy in game.enemies {
     enemy.active = false

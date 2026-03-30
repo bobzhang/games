@@ -418,8 +418,72 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
         )
         if dist < @types.aircraft_size + 1.0 {
           proj.active = false
-          damage_player(game, proj.damage)
+          damage_player(
+            game,
+            proj.damage,
+            attacker_x=proj.x - proj.dx * 10.0,
+            attacker_z=proj.z - proj.dz * 10.0,
+          )
           @types.spawn_particles(game, proj.x, proj.y, proj.z, 5, 255, 100, 50)
+          continue
+        }
+      }
+      // Check enemy projectiles hitting buildings (base defense)
+      if proj.active {
+        for b in game.buildings {
+          if !b.active {
+            continue
+          }
+          if !b.destructible {
+            // Runway and indestructible buildings are immune
+            continue
+          }
+          let hit = @types.point_in_aabb(
+            proj.x,
+            proj.y,
+            proj.z,
+            b.x,
+            b.y + b.height / 2.0,
+            b.z,
+            b.width / 2.0 + 1.0,
+            b.height / 2.0 + 1.0,
+            b.depth / 2.0 + 1.0,
+          )
+          if hit {
+            proj.active = false
+            b.hp -= proj.damage
+            b.flash_timer = 0.2
+            @types.spawn_particles(
+              game,
+              proj.x,
+              proj.y,
+              proj.z,
+              4,
+              200,
+              150,
+              80,
+            )
+            if b.hp <= 0.0 {
+              b.active = false
+              game.buildings_destroyed += 1
+              @types.spawn_large_explosion(
+                game,
+                b.x,
+                b.y + b.height / 2.0,
+                b.z,
+              )
+              let mission = game.missions[game.current_mission]
+              if mission.kind == @types.mission_defense {
+                @types.push_message(
+                  game,
+                  "Building destroyed by enemy!",
+                  2.5,
+                  3,
+                )
+              }
+            }
+            break
+          }
         }
       }
     } else {
@@ -438,6 +502,23 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
             e.evade_timer = @types.ai_evade_duration
           }
           player.shots_hit += 1
+          // Combat feedback: hit marker, floating damage, screen shake
+          @types.trigger_hit_marker(game)
+          @types.spawn_floating_damage(
+            game,
+            e.x,
+            e.y,
+            e.z,
+            proj.damage.to_int(),
+          )
+          let shake_mag : Float = if proj.kind == @types.proj_rocket {
+            @types.shake_heavy
+          } else if proj.kind == @types.proj_bomb {
+            @types.shake_heavy
+          } else {
+            @types.shake_light * 0.5
+          }
+          @types.trigger_screen_shake(game, shake_mag)
           @types.spawn_particles(game, e.x, e.y, e.z, 5, 255, 150, 50)
           if e.hp <= 0.0 {
             e.active = false

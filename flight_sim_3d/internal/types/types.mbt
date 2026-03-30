@@ -15,6 +15,10 @@ pub(all) struct AircraftStats {
   ammo_mg : Int
   ammo_rockets : Int
   ammo_bombs : Int
+  pitch_rate : Float
+  yaw_rate : Float
+  acceleration : Float
+  stall_speed : Float
 }
 
 ///|
@@ -33,6 +37,10 @@ pub fn AircraftStats::trainer() -> AircraftStats {
     ammo_mg: trainer_ammo_mg,
     ammo_rockets: trainer_ammo_rockets,
     ammo_bombs: trainer_ammo_bombs,
+    pitch_rate: 1.6,
+    yaw_rate: 1.1,
+    acceleration: 0.02,
+    stall_speed: 12.0,
   }
 }
 
@@ -52,6 +60,10 @@ pub fn AircraftStats::fighter() -> AircraftStats {
     ammo_mg: fighter_ammo_mg,
     ammo_rockets: fighter_ammo_rockets,
     ammo_bombs: fighter_ammo_bombs,
+    pitch_rate: 2.2,
+    yaw_rate: 1.5,
+    acceleration: 0.03,
+    stall_speed: 18.0,
   }
 }
 
@@ -71,6 +83,10 @@ pub fn AircraftStats::bomber() -> AircraftStats {
     ammo_mg: bomber_ammo_mg,
     ammo_rockets: bomber_ammo_rockets,
     ammo_bombs: bomber_ammo_bombs,
+    pitch_rate: 1.0,
+    yaw_rate: 0.7,
+    acceleration: 0.012,
+    stall_speed: 15.0,
   }
 }
 
@@ -90,6 +106,10 @@ pub fn AircraftStats::interceptor() -> AircraftStats {
     ammo_mg: interceptor_ammo_mg,
     ammo_rockets: interceptor_ammo_rockets,
     ammo_bombs: interceptor_ammo_bombs,
+    pitch_rate: 2.0,
+    yaw_rate: 1.0,
+    acceleration: 0.04,
+    stall_speed: 22.0,
   }
 }
 
@@ -708,6 +728,10 @@ pub(all) struct Game {
   mut landing_approach : Bool
   mut landing_timer : Float
 
+  // Recon capture
+  mut recon_capture_timer : Float
+  mut recon_capture_target : Int
+
   // Mission rating
   mut accuracy_pct : Float
   mut mission_rating : String
@@ -715,7 +739,29 @@ pub(all) struct Game {
   // Best scores per mission
   best_scores : Array[Int]
 
+  // Combat feedback
+  mut hit_marker_timer : Float
+  mut screen_shake_intensity : Float
+  mut screen_shake_timer : Float
+  mut damage_vignette_timer : Float
+  mut damage_dir_x : Float
+  mut damage_dir_z : Float
+  mut damage_dir_timer : Float
+  floating_damage : Array[FloatingDamage]
+  mut weapon_switch_display_timer : Float
+
   fn new() -> Game
+}
+
+///|
+/// Floating damage number for combat feedback.
+pub(all) struct FloatingDamage {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut z : Float
+  mut amount : Int
+  mut timer : Float
 }
 
 ///|
@@ -770,9 +816,23 @@ pub fn Game::new() -> Game {
     frame_counter: 0,
     landing_approach: false,
     landing_timer: 0.0,
+    recon_capture_timer: 0.0,
+    recon_capture_target: -1,
     accuracy_pct: 0.0,
     mission_rating: "D",
     best_scores: Array::make(total_missions, 0),
+    hit_marker_timer: 0.0,
+    screen_shake_intensity: 0.0,
+    screen_shake_timer: 0.0,
+    damage_vignette_timer: 0.0,
+    damage_dir_x: 0.0,
+    damage_dir_z: 0.0,
+    damage_dir_timer: 0.0,
+    floating_damage: Array::make(
+      16,
+      { active: false, x: 0.0, y: 0.0, z: 0.0, amount: 0, timer: 0.0 },
+    ),
+    weapon_switch_display_timer: 0.0,
   }
 }
 

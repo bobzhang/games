@@ -647,6 +647,73 @@ pub fn weather_name(kind : Weather) -> String {
   }
 }
 
+// Allocate floating damage number
+
+///|
+/// Allocates a floating damage number slot, returning its index or -1 if full.
+pub fn alloc_floating_damage(game : Game) -> Int {
+  for i in 0..<game.floating_damage.length() {
+    if !game.floating_damage[i].active {
+      return i
+    }
+  }
+  -1
+}
+
+///|
+/// Spawns a floating damage number at the given world position.
+pub fn spawn_floating_damage(
+  game : Game,
+  wx : Float,
+  wy : Float,
+  wz : Float,
+  amount : Int,
+) -> Unit {
+  let idx = alloc_floating_damage(game)
+  if idx < 0 {
+    return
+  }
+  let fd = game.floating_damage[idx]
+  fd.active = true
+  fd.x = wx
+  fd.y = wy + 2.0
+  fd.z = wz
+  fd.amount = amount
+  fd.timer = floating_damage_duration
+}
+
+///|
+/// Triggers the hit marker flash on the HUD.
+pub fn trigger_hit_marker(game : Game) -> Unit {
+  game.hit_marker_timer = hit_marker_duration
+}
+
+///|
+/// Triggers screen shake with the given intensity.
+pub fn trigger_screen_shake(game : Game, intensity : Float) -> Unit {
+  game.screen_shake_intensity = intensity
+  game.screen_shake_timer = shake_duration
+}
+
+///|
+/// Triggers the damage vignette and direction indicator toward the attacker.
+pub fn trigger_damage_feedback(
+  game : Game,
+  attacker_x : Float,
+  attacker_z : Float,
+) -> Unit {
+  game.damage_vignette_timer = damage_vignette_duration
+  let player = game.player
+  let dx = attacker_x - player.x
+  let dz = attacker_z - player.z
+  let len = (dx * dx + dz * dz).sqrt()
+  if len > 0.1 {
+    game.damage_dir_x = dx / len
+    game.damage_dir_z = dz / len
+    game.damage_dir_timer = damage_dir_duration
+  }
+}
+
 // Difficulty stars string
 
 ///|

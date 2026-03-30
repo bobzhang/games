@@ -9,6 +9,9 @@ pub fn draw_ui(game : @types.Game) -> Unit {
       game.draw_hud()
       game.draw_radar()
       game.draw_warning_indicators()
+      game.draw_combat_feedback()
+      game.draw_radio_messages()
+      game.draw_attitude_indicator()
     }
     Paused => {
       game.draw_hud()
@@ -124,14 +127,10 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   let player = game.player
+  let scr_w = @types.screen_width
+  let scr_h = @types.screen_height
   // Top bar
-  @raylib.draw_rectangle(
-    0,
-    0,
-    @types.screen_width,
-    36,
-    @raylib.Color::new(0, 0, 0, 140),
-  )
+  @raylib.draw_rectangle(0, 0, scr_w, 36, @raylib.Color::new(0, 0, 0, 140))
   let mission = game.missions[game.current_mission]
   @draw.draw_text(
     mission.name,
@@ -154,12 +153,11 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     18,
     @raylib.Color::new(255, 150, 100, 255),
   )
-  // Altitude gauge (left side)
+  // --- Altitude indicator (left side) ---
   let alt_y = 60
-  @raylib.draw_rectangle(20, alt_y, 40, 200, @raylib.Color::new(0, 0, 0, 120))
-  let alt_text = "ALT"
+  @raylib.draw_rectangle(20, alt_y, 50, 200, @raylib.Color::new(0, 0, 0, 120))
   @draw.draw_text(
-    alt_text,
+    "ALT",
     22,
     alt_y - 16,
     14,
@@ -170,21 +168,50 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     22,
     alt_y + 198 - alt_bar_h,
-    36,
+    20,
     alt_bar_h,
     @raylib.Color::new(50, 150, 255, 200),
   )
+  // Altitude tick marks
+  for tick in 0..=4 {
+    let ty = alt_y + 196 - tick * 49
+    @raylib.draw_line(
+      42,
+      ty,
+      48,
+      ty,
+      @raylib.Color::new(150, 200, 255, 120),
+    )
+    let tick_val = tick * 20
+    @draw.draw_text(
+      "\{tick_val}",
+      44,
+      ty - 5,
+      10,
+      @raylib.Color::new(150, 200, 255, 150),
+    )
+  }
   let alt_val = player.y.to_int()
   @draw.draw_text(
     "\{alt_val}m",
     22,
     alt_y + 202,
-    14,
+    16,
     @raylib.Color::new(150, 200, 255, 255),
   )
-  // Speed gauge (left side, below altitude)
-  let spd_y = alt_y + 240
-  @raylib.draw_rectangle(20, spd_y, 40, 100, @raylib.Color::new(0, 0, 0, 120))
+  // AGL (above ground level)
+  let agl = @types.altitude_above_terrain(player.x, player.y, player.z)
+  let agl_val = agl.to_int()
+  @draw.draw_text(
+    "AGL:\{agl_val}",
+    22,
+    alt_y + 220,
+    12,
+    @raylib.Color::new(120, 180, 220, 200),
+  )
+  // --- Airspeed indicator (left side, below altitude) ---
+  let spd_y = alt_y + 250
+  @raylib.draw_rectangle(20, spd_y, 50, 120, @raylib.Color::new(0, 0, 0, 120))
   @draw.draw_text(
     "SPD",
     22,
@@ -192,50 +219,78 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     14,
     @raylib.Color::new(100, 255, 100, 255),
   )
+  let ac_stats = @types.get_aircraft_stats(player.aircraft_type)
   let spd_ratio = @types.clampf(
-    (player.speed - @types.aircraft_speed_min) /
-    (@types.aircraft_speed_max - @types.aircraft_speed_min),
+    (player.speed - ac_stats.min_speed) /
+    (ac_stats.max_speed - ac_stats.min_speed),
     0.0,
     1.0,
   )
-  let spd_bar_h = (spd_ratio * 96.0).to_int()
+  let spd_bar_h = (spd_ratio * 116.0).to_int()
+  // Stall zone (red region at bottom)
+  let stall_thresh = ac_stats.min_speed * @types.stall_speed_ratio
+  let stall_ratio = @types.clampf(
+    (stall_thresh - ac_stats.min_speed) /
+    (ac_stats.max_speed - ac_stats.min_speed),
+    0.0,
+    1.0,
+  )
+  let stall_h = (stall_ratio * 116.0).to_int()
   @raylib.draw_rectangle(
     22,
-    spd_y + 98 - spd_bar_h,
-    36,
-    spd_bar_h,
-    @raylib.Color::new(100, 255, 100, 200),
+    spd_y + 118 - stall_h,
+    20,
+    stall_h,
+    @raylib.Color::new(255, 50, 50, 80),
   )
+  // Speed bar fill
+  let spd_color = if player.speed < stall_thresh {
+    @raylib.Color::new(255, 80, 50, 220)
+  } else {
+    @raylib.Color::new(100, 255, 100, 200)
+  }
+  @raylib.draw_rectangle(22, spd_y + 118 - spd_bar_h, 20, spd_bar_h, spd_color)
   let spd_val = player.speed.to_int()
   @draw.draw_text(
-    "\{spd_val}",
+    "\{spd_val} kts",
     22,
-    spd_y + 102,
+    spd_y + 122,
     14,
     @raylib.Color::new(100, 255, 100, 255),
   )
-  // Fuel gauge (right side)
-  let fuel_x = @types.screen_width - 60
+  // Stall warning on speed gauge
+  if player.speed < stall_thresh {
+    let stall_flash = @math.sinf(
+      Float::from_int(game.frame_counter) * 0.4,
+    )
+    if stall_flash > 0.0 {
+      @draw.draw_text(
+        "STALL",
+        24,
+        spd_y + 50,
+        12,
+        @raylib.Color::new(255, 50, 50, 255),
+      )
+    }
+  }
+  // --- Fuel gauge (right side) ---
+  let fuel_x = scr_w - 70
   let fuel_y = 60
   @raylib.draw_rectangle(
     fuel_x,
     fuel_y,
-    40,
+    50,
     150,
     @raylib.Color::new(0, 0, 0, 120),
   )
   @draw.draw_text(
     "FUEL",
-    fuel_x - 2,
+    fuel_x,
     fuel_y - 16,
     14,
     @raylib.Color::new(255, 200, 50, 255),
   )
-  let fuel_ratio = @types.clampf(
-    player.fuel / @types.aircraft_max_fuel,
-    0.0,
-    1.0,
-  )
+  let fuel_ratio = @types.clampf(player.fuel / player.max_fuel, 0.0, 1.0)
   let fuel_bar_h = (fuel_ratio * 146.0).to_int()
   let fuel_color = if fuel_ratio < 0.2 {
     @raylib.Color::new(255, 50, 50, 200)
@@ -247,10 +302,21 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(
     fuel_x + 2,
     fuel_y + 148 - fuel_bar_h,
-    36,
+    20,
     fuel_bar_h,
     fuel_color,
   )
+  // Fuel tick marks
+  for tick in 0..=4 {
+    let ty = fuel_y + 146 - tick * 36
+    @raylib.draw_line(
+      fuel_x + 22,
+      ty,
+      fuel_x + 30,
+      ty,
+      @raylib.Color::new(255, 200, 50, 100),
+    )
+  }
   let fuel_pct = (fuel_ratio * 100.0).to_int()
   @draw.draw_text(
     "\{fuel_pct}%",
@@ -259,8 +325,8 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     14,
     @raylib.Color::new(255, 200, 50, 255),
   )
-  // HP bar (bottom left)
-  let hp_y = @types.screen_height - 60
+  // --- HP bar (bottom left) ---
+  let hp_y = scr_h - 60
   let hp_ratio = @types.clampf(player.hp / player.max_hp, 0.0, 1.0)
   let hp_bar_w = 200
   @raylib.draw_rectangle(
@@ -270,12 +336,19 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     20,
     @raylib.Color::new(80, 0, 0, 200),
   )
+  let hp_fill_color = if hp_ratio < 0.3 {
+    @raylib.Color::new(255, 50, 50, 200)
+  } else if hp_ratio < 0.6 {
+    @raylib.Color::new(255, 200, 50, 200)
+  } else {
+    @raylib.Color::new(0, 200, 0, 200)
+  }
   @raylib.draw_rectangle(
     20,
     hp_y,
     (Float::from_int(hp_bar_w) * hp_ratio).to_int(),
     20,
-    @raylib.Color::new(0, 200, 0, 200),
+    hp_fill_color,
   )
   @raylib.draw_rectangle_lines(
     20,
@@ -292,16 +365,16 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     16,
     @raylib.Color::new(255, 255, 255, 255),
   )
-  // Throttle indicator (bottom center)
+  // --- Throttle indicator (bottom center) ---
   @draw.draw_text(
     "THR",
-    @types.screen_width / 2 - 60,
+    scr_w / 2 - 60,
     hp_y,
     14,
     @raylib.Color::new(200, 200, 200, 200),
   )
   @raylib.draw_rectangle(
-    @types.screen_width / 2 - 20,
+    scr_w / 2 - 20,
     hp_y,
     100,
     16,
@@ -309,35 +382,156 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   )
   let thr_w = (player.throttle * 96.0).to_int()
   @raylib.draw_rectangle(
-    @types.screen_width / 2 - 18,
+    scr_w / 2 - 18,
     hp_y + 2,
     thr_w,
     12,
     @raylib.Color::new(255, 150, 50, 200),
   )
-  // Crosshair
-  let cx = @types.screen_width / 2
-  let cy = @types.screen_height / 2
-  @raylib.draw_line(cx - 15, cy, cx - 5, cy, @raylib.Color::new(0, 255, 0, 180))
-  @raylib.draw_line(cx + 5, cy, cx + 15, cy, @raylib.Color::new(0, 255, 0, 180))
-  @raylib.draw_line(cx, cy - 15, cx, cy - 5, @raylib.Color::new(0, 255, 0, 180))
-  @raylib.draw_line(cx, cy + 5, cx, cy + 15, @raylib.Color::new(0, 255, 0, 180))
+  // --- Weapon cycling HUD (bottom right) ---
+  let wpn_x = scr_w - 240
+  let wpn_y = scr_h - 90
+  @raylib.draw_rectangle(
+    wpn_x,
+    wpn_y,
+    220,
+    62,
+    @raylib.Color::new(0, 0, 0, 160),
+  )
+  @raylib.draw_rectangle_lines(
+    wpn_x,
+    wpn_y,
+    220,
+    62,
+    @raylib.Color::new(80, 120, 180, 150),
+  )
+  // Draw 3 weapon slots
+  let wpn_labels = ["1:MG", "2:RKT", "3:BMB"]
+  let wpn_ammo_vals = [player.ammo_mg, player.ammo_rockets, player.ammo_bombs]
+  let wpn_kinds : Array[@types.WeaponKind] = [MachineGun, Rockets, Bombs]
+  for i in 0..<3 {
+    let slot_x = wpn_x + 5 + i * 72
+    let is_active = player.current_weapon == wpn_kinds[i]
+    let bg = if is_active {
+      @raylib.Color::new(50, 80, 140, 200)
+    } else {
+      @raylib.Color::new(20, 30, 50, 150)
+    }
+    @raylib.draw_rectangle(slot_x, wpn_y + 4, 66, 54, bg)
+    if is_active {
+      @raylib.draw_rectangle_lines(
+        slot_x,
+        wpn_y + 4,
+        66,
+        54,
+        @raylib.Color::new(100, 200, 255, 255),
+      )
+    }
+    let label_c = if is_active {
+      @raylib.Color::new(255, 255, 200, 255)
+    } else {
+      @raylib.Color::new(150, 150, 170, 200)
+    }
+    @draw.draw_text(wpn_labels[i], slot_x + 4, wpn_y + 8, 14, label_c)
+    // Ammo text
+    let ammo_str : String = if i == 0 && wpn_ammo_vals[i] > 999 {
+      "INF"
+    } else {
+      wpn_ammo_vals[i].to_string()
+    }
+    let ammo_c = if wpn_ammo_vals[i] <= 0 {
+      @raylib.Color::new(255, 50, 50, 255)
+    } else if is_active {
+      @raylib.Color::new(100, 255, 100, 255)
+    } else {
+      @raylib.Color::new(100, 180, 100, 180)
+    }
+    @draw.draw_text(ammo_str, slot_x + 4, wpn_y + 28, 18, ammo_c)
+    // Fire rate bar for MG
+    if i == 0 && is_active {
+      let cooldown_ratio = @types.clampf(
+        1.0 - player.fire_timer / 0.1,
+        0.0,
+        1.0,
+      )
+      let filled = (cooldown_ratio * 58.0).to_int()
+      @raylib.draw_rectangle(
+        slot_x + 4,
+        wpn_y + 48,
+        filled,
+        4,
+        @raylib.Color::new(255, 255, 100, 180),
+      )
+    }
+    ignore(i)
+  }
+  // Weapon switch indicator (center of screen, fades)
+  if game.weapon_switch_display_timer > 0.0 {
+    let wname = @types.weapon_name(player.current_weapon)
+    let sw_text = ">> " + wname + " <<"
+    let sw_tw = @draw.measure_text(sw_text, 24)
+    let alpha = (@types.clampf(
+        game.weapon_switch_display_timer /
+        @types.weapon_switch_display_duration,
+        0.0,
+        1.0,
+      ) *
+      255.0).to_int()
+    @draw.draw_text(
+      sw_text,
+      (scr_w - sw_tw) / 2,
+      scr_h / 2 + 60,
+      24,
+      @raylib.Color::new(100, 200, 255, alpha),
+    )
+  }
+  // --- Crosshair ---
+  let cx = scr_w / 2
+  let cy = scr_h / 2
+  @raylib.draw_line(
+    cx - 15,
+    cy,
+    cx - 5,
+    cy,
+    @raylib.Color::new(0, 255, 0, 180),
+  )
+  @raylib.draw_line(
+    cx + 5,
+    cy,
+    cx + 15,
+    cy,
+    @raylib.Color::new(0, 255, 0, 180),
+  )
+  @raylib.draw_line(
+    cx,
+    cy - 15,
+    cx,
+    cy - 5,
+    @raylib.Color::new(0, 255, 0, 180),
+  )
+  @raylib.draw_line(
+    cx,
+    cy + 5,
+    cx,
+    cy + 15,
+    @raylib.Color::new(0, 255, 0, 180),
+  )
   // Mission objective text
   game.draw_objective()
-  // Message display
+  // Message display (center)
   if game.message_timer > 0.0 {
     let msg_w = @draw.measure_text(game.message_text, 22)
     @raylib.draw_rectangle(
-      (@types.screen_width - msg_w) / 2 - 10,
-      @types.screen_height / 2 + 140,
+      (scr_w - msg_w) / 2 - 10,
+      scr_h / 2 + 140,
       msg_w + 20,
       30,
       @raylib.Color::new(0, 0, 0, 150),
     )
     @draw.draw_text(
       game.message_text,
-      (@types.screen_width - msg_w) / 2,
-      @types.screen_height / 2 + 144,
+      (scr_w - msg_w) / 2,
+      scr_h / 2 + 144,
       22,
       @raylib.Color::new(255, 255, 200, 255),
     )
@@ -349,41 +543,37 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.draw_rectangle(
       0,
       0,
-      @types.screen_width,
-      @types.screen_height,
+      scr_w,
+      scr_h,
       @raylib.Color::new(255, 0, 0, fa),
     )
   }
   // Controls bar
   @raylib.draw_rectangle(
     0,
-    @types.screen_height - 28,
-    @types.screen_width,
+    scr_h - 28,
+    scr_w,
     28,
     @raylib.Color::new(0, 0, 0, 100),
   )
   @draw.draw_text(
-    "W/S: Pitch | A/D: Yaw | Q/E: Roll | Shift: Throttle Up | Ctrl: Down | Space: Fire | P: Pause",
+    "WASD: Fly | Q/E: Roll | Shift/Ctrl: Throttle | Space: Fire | 1/2/3: Weapon | P: Pause",
     10,
-    @types.screen_height - 22,
+    scr_h - 22,
     12,
     @raylib.Color::new(150, 150, 170, 255),
   )
   // Weather indicator
   if game.weather != Clear {
-    let weather_text = if game.weather == Fog { "FOG" } else { "STORM" }
+    let weather_text = @types.weather_name(game.weather)
     let weather_color = if game.weather == Fog {
       @raylib.Color::new(200, 200, 150, 255)
-    } else {
+    } else if game.weather == Storm {
       @raylib.Color::new(255, 150, 50, 255)
+    } else {
+      @raylib.Color::new(180, 200, 220, 255)
     }
-    @draw.draw_text(
-      weather_text,
-      @types.screen_width - 80,
-      @types.screen_height - 22,
-      14,
-      weather_color,
-    )
+    @draw.draw_text(weather_text, scr_w - 90, scr_h - 22, 14, weather_color)
   }
 }
 
@@ -443,6 +633,32 @@ fn @types.Game::draw_objective(game : @types.Game) -> Unit {
       46,
       18,
       @raylib.Color::new(255, 220, 100, 255),
+    )
+  }
+  // Recon capture progress bar
+  if mission.kind == @types.mission_recon && game.recon_capture_target >= 0 {
+    let capture_pct = @types.clampf(game.recon_capture_timer / 2.0, 0.0, 1.0)
+    let bar_w = 200
+    let bar_x = @types.screen_width / 2 - bar_w / 2
+    let bar_y = 72
+    @raylib.draw_rectangle(bar_x, bar_y, bar_w, 14, @raylib.Color::new(
+      0, 0, 0, 150,
+    ))
+    @raylib.draw_rectangle(
+      bar_x + 1,
+      bar_y + 1,
+      (capture_pct * Float::from_int(bar_w - 2)).to_int(),
+      12,
+      @raylib.Color::new(100, 200, 255, 220),
+    )
+    let cap_text = "CAPTURING..."
+    let cw = @draw.measure_text(cap_text, 12)
+    @draw.draw_text(
+      cap_text,
+      (@types.screen_width - cw) / 2,
+      bar_y + 1,
+      12,
+      @raylib.Color::new(255, 255, 255, 220),
     )
   }
 }
@@ -1190,35 +1406,7 @@ fn @types.Game::draw_warning_indicators(game : @types.Game) -> Unit {
       @raylib.Color::new(255, 255, 200, 255),
     )
   }
-  // Weapon and ammo display (right side)
-  let weapon_x = @types.screen_width - 150
-  let weapon_y = 60
-  @raylib.draw_rectangle(
-    weapon_x,
-    weapon_y,
-    130,
-    60,
-    @raylib.Color::new(0, 0, 0, 140),
-  )
-  let wep_name = @types.weapon_name(game.player.current_weapon)
-  @draw.draw_text(
-    "WPN: " + wep_name,
-    weapon_x + 8,
-    weapon_y + 5,
-    16,
-    @raylib.Color::new(200, 220, 255, 255),
-  )
-  let ammo = @types.get_ammo(game.player)
-  let ammo_text = "Ammo: \{ammo}"
-  let ammo_color = if ammo <= 0 {
-    @raylib.Color::new(255, 50, 50, 255)
-  } else if ammo < 50 {
-    @raylib.Color::new(255, 200, 50, 255)
-  } else {
-    @raylib.Color::new(100, 255, 100, 255)
-  }
-  @draw.draw_text(ammo_text, weapon_x + 8, weapon_y + 28, 16, ammo_color)
-  // Camera mode
+  // Camera mode (top right area, below fuel gauge)
   let cam_text = match game.camera_mode {
     Chase => "CAM: Chase"
     Cockpit => "CAM: Cockpit"
@@ -1226,9 +1414,302 @@ fn @types.Game::draw_warning_indicators(game : @types.Game) -> Unit {
   }
   @draw.draw_text(
     cam_text,
-    weapon_x + 8,
-    weapon_y + 46,
+    @types.screen_width - 110,
+    @types.screen_height - 180,
     12,
     @raylib.Color::new(150, 150, 170, 200),
+  )
+}
+
+// --- Combat feedback overlay ---
+
+///|
+/// Draws hit marker, damage vignette, damage direction indicator, and floating damage numbers.
+fn @types.Game::draw_combat_feedback(game : @types.Game) -> Unit {
+  let scr_w = @types.screen_width
+  let scr_h = @types.screen_height
+  let cx = scr_w / 2
+  let cy = scr_h / 2
+  // Hit marker flash (white X at crosshair)
+  if game.hit_marker_timer > 0.0 {
+    let alpha = (game.hit_marker_timer / @types.hit_marker_duration *
+      255.0).to_int().clamp(min=0, max=255)
+    let hm_color = @raylib.Color::new(255, 255, 255, alpha)
+    let hm_len = 8
+    let hm_gap = 3
+    @raylib.draw_line(cx - hm_len, cy - hm_len, cx - hm_gap, cy - hm_gap, hm_color)
+    @raylib.draw_line(cx + hm_gap, cy - hm_gap, cx + hm_len, cy - hm_len, hm_color)
+    @raylib.draw_line(cx - hm_len, cy + hm_len, cx - hm_gap, cy + hm_gap, hm_color)
+    @raylib.draw_line(cx + hm_gap, cy + hm_gap, cx + hm_len, cy + hm_len, hm_color)
+  }
+  // Damage vignette (red screen edges)
+  if game.damage_vignette_timer > 0.0 {
+    let vig_ratio = game.damage_vignette_timer / @types.damage_vignette_duration
+    let vig_alpha = (vig_ratio * 120.0).to_int().clamp(min=0, max=120)
+    let edge_w = 80
+    // Left edge
+    @raylib.draw_rectangle(
+      0,
+      0,
+      edge_w,
+      scr_h,
+      @raylib.Color::new(200, 0, 0, vig_alpha),
+    )
+    // Right edge
+    @raylib.draw_rectangle(
+      scr_w - edge_w,
+      0,
+      edge_w,
+      scr_h,
+      @raylib.Color::new(200, 0, 0, vig_alpha),
+    )
+    // Top edge
+    @raylib.draw_rectangle(
+      0,
+      0,
+      scr_w,
+      edge_w / 2,
+      @raylib.Color::new(200, 0, 0, vig_alpha),
+    )
+    // Bottom edge
+    @raylib.draw_rectangle(
+      0,
+      scr_h - edge_w / 2,
+      scr_w,
+      edge_w / 2,
+      @raylib.Color::new(200, 0, 0, vig_alpha),
+    )
+  }
+  // Damage direction indicator (red arrow pointing toward attacker)
+  if game.damage_dir_timer > 0.0 {
+    let dir_alpha = (game.damage_dir_timer / @types.damage_dir_duration *
+      200.0).to_int().clamp(min=0, max=200)
+    // Calculate screen position of the indicator on the edge
+    let player = game.player
+    // Rotate attacker direction relative to player yaw
+    let cos_yaw = @math.cosf(-player.yaw)
+    let sin_yaw = @math.sinf(-player.yaw)
+    let rx = game.damage_dir_x * cos_yaw - game.damage_dir_z * sin_yaw
+    let rz = game.damage_dir_x * sin_yaw + game.damage_dir_z * cos_yaw
+    // Map to screen position on edge ring
+    let ring_r : Float = 100.0
+    let ind_x = cx + (rx * ring_r).to_int()
+    let ind_y = cy + (rz * ring_r).to_int()
+    // Draw red indicator diamond
+    let ind_size = 8
+    @raylib.draw_rectangle(
+      ind_x - ind_size / 2,
+      ind_y - ind_size / 2,
+      ind_size,
+      ind_size,
+      @raylib.Color::new(255, 30, 30, dir_alpha),
+    )
+    // Arrow line from center toward indicator
+    let arrow_start_x = cx + (rx * 60.0).to_int()
+    let arrow_start_y = cy + (rz * 60.0).to_int()
+    @raylib.draw_line(
+      arrow_start_x,
+      arrow_start_y,
+      ind_x,
+      ind_y,
+      @raylib.Color::new(255, 50, 50, dir_alpha),
+    )
+  }
+  // Floating damage numbers
+  for fd in game.floating_damage {
+    if !fd.active {
+      continue
+    }
+    let fade = @types.clampf(
+      fd.timer / @types.floating_damage_duration,
+      0.0,
+      1.0,
+    )
+    let alpha = (fade * 255.0).to_int().clamp(min=0, max=255)
+    // Project 3D position to approximate 2D screen position
+    // Simple approximation: use distance from camera to scale
+    let dx = fd.x - game.cam_x
+    let dy = fd.y - game.cam_y
+    let dz = fd.z - game.cam_z
+    let dist = (dx * dx + dy * dy + dz * dz).sqrt()
+    if dist < 1.0 || dist > 150.0 {
+      continue
+    }
+    // Rough perspective projection
+    let fov_factor : Float = 400.0 / dist
+    let cam_fx = game.cam_target_x - game.cam_x
+    let cam_fz = game.cam_target_z - game.cam_z
+    let cam_len = (cam_fx * cam_fx + cam_fz * cam_fz).sqrt()
+    if cam_len < 0.01 {
+      continue
+    }
+    let cam_rx = cam_fz / cam_len
+    let cam_rz = -cam_fx / cam_len
+    let dot_fwd = dx * (cam_fx / cam_len) + dz * (cam_fz / cam_len)
+    if dot_fwd < 0.0 {
+      continue
+    }
+    let dot_right = dx * cam_rx + dz * cam_rz
+    let screen_x = cx + (dot_right * fov_factor).to_int()
+    let screen_y = cy - (dy * fov_factor).to_int()
+    if screen_x > 0 && screen_x < scr_w && screen_y > 0 && screen_y < scr_h {
+      let dmg_val = fd.amount
+      let dmg_text = "\{dmg_val}"
+      let size = if dist < 30.0 { 20 } else { 14 }
+      @draw.draw_text(
+        dmg_text,
+        screen_x,
+        screen_y,
+        size,
+        @raylib.Color::new(255, 255, 100, alpha),
+      )
+    }
+  }
+}
+
+// --- Radio message log (top-left corner) ---
+
+///|
+/// Draws the radio message queue as a log in the top-left corner with priority-based coloring.
+fn @types.Game::draw_radio_messages(game : @types.Game) -> Unit {
+  let mut msg_y = 42
+  let msg_x = 10
+  for msg in game.messages {
+    if msg.timer <= 0.0 || msg.text == "" {
+      continue
+    }
+    // Fade based on remaining timer
+    let fade = if msg.timer < 0.5 {
+      msg.timer * 2.0
+    } else {
+      1.0
+    }
+    let alpha = (fade * 255.0).to_int().clamp(min=0, max=255)
+    // Color based on priority: 0=green (info), 1=yellow (warning), 2=red (critical)
+    let text_color = if msg.priority >= @types.msg_priority_critical {
+      @raylib.Color::new(255, 80, 60, alpha)
+    } else if msg.priority >= @types.msg_priority_warning {
+      @raylib.Color::new(255, 230, 80, alpha)
+    } else {
+      @raylib.Color::new(80, 255, 120, alpha)
+    }
+    let bg_alpha = (fade * 140.0).to_int().clamp(min=0, max=140)
+    let rmsg_w = @draw.measure_text(msg.text, 14)
+    @raylib.draw_rectangle(
+      msg_x - 4,
+      msg_y,
+      rmsg_w + 8,
+      20,
+      @raylib.Color::new(0, 0, 0, bg_alpha),
+    )
+    @draw.draw_text(msg.text, msg_x, msg_y + 3, 14, text_color)
+    msg_y = msg_y + 22
+  }
+}
+
+// --- Simplified attitude indicator ---
+
+///|
+/// Draws a simplified artificial horizon showing pitch and roll.
+fn @types.Game::draw_attitude_indicator(game : @types.Game) -> Unit {
+  let player = game.player
+  let scr_w = @types.screen_width
+  let scr_h = @types.screen_height
+  // Position: bottom center, above throttle
+  let ai_cx = scr_w / 2
+  let ai_cy = scr_h - 130
+  let ai_r = 40
+  // Background circle
+  @raylib.draw_rectangle(
+    ai_cx - ai_r - 2,
+    ai_cy - ai_r - 2,
+    ai_r * 2 + 4,
+    ai_r * 2 + 4,
+    @raylib.Color::new(0, 0, 0, 140),
+  )
+  // Sky half (blue above horizon)
+  let pitch_offset = (player.pitch * 30.0).to_int()
+  let horizon_y = ai_cy + pitch_offset
+  // Sky
+  @raylib.draw_rectangle(
+    ai_cx - ai_r,
+    ai_cy - ai_r,
+    ai_r * 2,
+    ai_r * 2,
+    @raylib.Color::new(50, 100, 200, 180),
+  )
+  // Ground (brown below horizon)
+  let ground_top = if horizon_y < ai_cy - ai_r {
+    ai_cy - ai_r
+  } else if horizon_y > ai_cy + ai_r {
+    ai_cy + ai_r
+  } else {
+    horizon_y
+  }
+  let ground_h = ai_cy + ai_r - ground_top
+  if ground_h > 0 {
+    @raylib.draw_rectangle(
+      ai_cx - ai_r,
+      ground_top,
+      ai_r * 2,
+      ground_h,
+      @raylib.Color::new(120, 80, 40, 180),
+    )
+  }
+  // Horizon line
+  @raylib.draw_line(
+    ai_cx - ai_r,
+    horizon_y,
+    ai_cx + ai_r,
+    horizon_y,
+    @raylib.Color::new(255, 255, 255, 200),
+  )
+  // Roll indicator: small marks at the top of the circle
+  let roll_deg = (player.roll * 180.0 / @types.pi).to_int()
+  // Aircraft symbol (center fixed lines)
+  @raylib.draw_line(
+    ai_cx - 15,
+    ai_cy,
+    ai_cx - 5,
+    ai_cy,
+    @raylib.Color::new(255, 200, 50, 255),
+  )
+  @raylib.draw_line(
+    ai_cx + 5,
+    ai_cy,
+    ai_cx + 15,
+    ai_cy,
+    @raylib.Color::new(255, 200, 50, 255),
+  )
+  @raylib.draw_line(
+    ai_cx,
+    ai_cy - 2,
+    ai_cx,
+    ai_cy + 2,
+    @raylib.Color::new(255, 200, 50, 255),
+  )
+  // Pitch/Roll text
+  let pitch_deg = (player.pitch * 180.0 / @types.pi).to_int()
+  @draw.draw_text(
+    "P:\{pitch_deg}",
+    ai_cx - ai_r,
+    ai_cy + ai_r + 4,
+    10,
+    @raylib.Color::new(180, 200, 220, 180),
+  )
+  @draw.draw_text(
+    "R:\{roll_deg}",
+    ai_cx + 10,
+    ai_cy + ai_r + 4,
+    10,
+    @raylib.Color::new(180, 200, 220, 180),
+  )
+  // Border
+  @raylib.draw_rectangle_lines(
+    ai_cx - ai_r - 2,
+    ai_cy - ai_r - 2,
+    ai_r * 2 + 4,
+    ai_r * 2 + 4,
+    @raylib.Color::new(150, 180, 200, 150),
   )
 }

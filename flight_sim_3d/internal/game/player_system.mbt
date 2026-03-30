@@ -7,6 +7,7 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   if !player.alive {
     return
   }
+  let stats = @types.get_aircraft_stats(player.aircraft_type)
   // Throttle
   if @raylib.is_key_down(@raylib.KeyLeftShift) {
     player.throttle += 0.8 * dt
@@ -20,29 +21,29 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
       player.throttle = 0.0
     }
   }
-  // Pitch (W/S)
+  // Pitch (W/S) - use per-aircraft pitch_rate
   if @raylib.is_key_down(@raylib.KeyW) {
-    player.pitch -= @types.aircraft_pitch_rate * dt
+    player.pitch -= stats.pitch_rate * dt
   }
   if @raylib.is_key_down(@raylib.KeyS) {
-    player.pitch += @types.aircraft_pitch_rate * dt
+    player.pitch += stats.pitch_rate * dt
   }
   // Clamp pitch
   let max_pitch : Float = @types.pi * 0.45
   player.pitch = @types.clampf(player.pitch, -max_pitch, max_pitch)
-  // Yaw (A/D)
+  // Yaw (A/D) - use per-aircraft yaw_rate
   if @raylib.is_key_down(@raylib.KeyA) {
-    player.yaw -= @types.aircraft_yaw_rate * dt
+    player.yaw -= stats.yaw_rate * dt
   }
   if @raylib.is_key_down(@raylib.KeyD) {
-    player.yaw += @types.aircraft_yaw_rate * dt
+    player.yaw += stats.yaw_rate * dt
   }
-  // Roll (Q/E)
+  // Roll (Q/E) - use per-aircraft roll_rate
   if @raylib.is_key_down(@raylib.KeyQ) {
-    player.roll -= @types.aircraft_roll_rate * dt
+    player.roll -= stats.roll_rate * dt
   }
   if @raylib.is_key_down(@raylib.KeyE) {
-    player.roll += @types.aircraft_roll_rate * dt
+    player.roll += stats.roll_rate * dt
   }
   // Clamp roll
   let max_roll : Float = @types.pi * 0.8
@@ -61,13 +62,13 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
       }
     }
   }
-  // Roll affects yaw (banking turn)
-  player.yaw += @math.sinf(player.roll) * 0.8 * dt
-  // Speed based on throttle
-  let target_speed = @types.aircraft_speed_min +
-    (@types.aircraft_speed_max - @types.aircraft_speed_min) * player.throttle
+  // Roll affects yaw (banking turn) - scaled by turn_rate
+  player.yaw += @math.sinf(player.roll) * stats.turn_rate * 0.4 * dt
+  // Speed based on throttle - use per-aircraft max_speed, min_speed, acceleration
+  let target_speed = stats.min_speed +
+    (stats.max_speed - stats.min_speed) * player.throttle
   let speed_diff = target_speed - player.speed
-  player.speed += speed_diff * @types.aircraft_drag * 10.0 * dt
+  player.speed += speed_diff * stats.acceleration * 10.0 * dt
   // Fuel consumption
   player.fuel -= @types.aircraft_fuel_rate * player.throttle * dt
   if player.fuel < 0.0 {
@@ -80,10 +81,20 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   player.x += fx * player.speed * dt
   player.y += fy * player.speed * dt
   player.z += fz * player.speed * dt
-  // Gravity effect when slow or no fuel
+  // Gravity effect when slow or no fuel - stall based on per-aircraft stall_speed
   let lift = player.speed * @types.aircraft_lift_factor
   if lift < @types.aircraft_gravity {
     player.y -= (@types.aircraft_gravity - lift) * dt
+  }
+  // Stall detection using per-aircraft stall_speed
+  if player.speed < stats.stall_speed && player.fuel > 0.0 {
+    player.stalling = true
+    player.stall_timer += dt
+    // Force nose down during stall
+    player.pitch += 0.5 * dt
+  } else {
+    player.stalling = false
+    player.stall_timer = 0.0
   }
   // Terrain collision
   let ground = @types.terrain_height_at(player.x, player.z) +
@@ -108,10 +119,26 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   if player.fire_timer > 0.0 {
     player.fire_timer -= dt
   }
+  // Weapon switch (Tab key)
+  if player.weapon_switch_timer > 0.0 {
+    player.weapon_switch_timer -= dt
+  }
+  if @raylib.is_key_pressed(@raylib.KeyTab) && player.weapon_switch_timer <= 0.0 {
+    player.current_weapon = match player.current_weapon {
+      MachineGun => Rockets
+      Rockets => Bombs
+      Bombs => MachineGun
+    }
+    player.weapon_switch_timer = 0.3
+    @types.show_message(
+      game,
+      "Weapon: " + @types.weapon_name(player.current_weapon),
+      1.0,
+    )
+  }
   // Fire weapon
   if @raylib.is_key_down(@raylib.KeySpace) && player.fire_timer <= 0.0 {
     game.fire_player_weapon()
-    player.fire_timer = @types.fire_cooldown
   }
   // Landing check
   game.check_landing(dt)
@@ -140,23 +167,94 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::fire_player_weapon(game : @types.Game) -> Unit {
   let player = game.player
-  let idx = @types.alloc_projectile(game)
-  if idx < 0 {
-    return
-  }
   let (fx, fy, fz) = @types.get_forward(player.pitch, player.yaw)
-  let proj = game.projectiles[idx]
-  proj.active = true
-  proj.x = player.x + fx * 2.5
-  proj.y = player.y + fy * 2.5
-  proj.z = player.z + fz * 2.5
-  proj.dx = fx
-  proj.dy = fy
-  proj.dz = fz
-  proj.speed = @types.projectile_speed
-  proj.damage = @types.projectile_damage
-  proj.life = @types.projectile_life
-  proj.is_enemy = false
+  match player.current_weapon {
+    MachineGun => {
+      if player.ammo_mg <= 0 {
+        @types.show_message(game, "MG ammo depleted!", 1.0)
+        return
+      }
+      let idx = @types.alloc_projectile(game)
+      if idx < 0 {
+        return
+      }
+      player.ammo_mg -= 1
+      player.shots_fired += 1
+      player.fire_timer = 0.1
+      let proj = game.projectiles[idx]
+      proj.active = true
+      proj.kind = @types.proj_bullet
+      proj.x = player.x + fx * 2.5
+      proj.y = player.y + fy * 2.5
+      proj.z = player.z + fz * 2.5
+      proj.dx = fx
+      proj.dy = fy
+      proj.dz = fz
+      proj.speed = 140.0
+      proj.damage = 15.0
+      proj.life = 1.8
+      proj.is_enemy = false
+      proj.gravity_affected = false
+      proj.blast_radius = 0.0
+    }
+    Rockets => {
+      if player.ammo_rockets <= 0 {
+        @types.show_message(game, "No rockets remaining!", 1.0)
+        return
+      }
+      let idx = @types.alloc_projectile(game)
+      if idx < 0 {
+        return
+      }
+      player.ammo_rockets -= 1
+      player.shots_fired += 1
+      player.fire_timer = 0.6
+      let proj = game.projectiles[idx]
+      proj.active = true
+      proj.kind = @types.proj_rocket
+      proj.x = player.x + fx * 2.5
+      proj.y = player.y + fy * 2.5
+      proj.z = player.z + fz * 2.5
+      proj.dx = fx
+      proj.dy = fy
+      proj.dz = fz
+      proj.speed = 90.0
+      proj.damage = 60.0
+      proj.life = 3.0
+      proj.is_enemy = false
+      proj.gravity_affected = false
+      proj.blast_radius = 6.0
+    }
+    Bombs => {
+      if player.ammo_bombs <= 0 {
+        @types.show_message(game, "No bombs remaining!", 1.0)
+        return
+      }
+      let idx = @types.alloc_projectile(game)
+      if idx < 0 {
+        return
+      }
+      player.ammo_bombs -= 1
+      player.shots_fired += 1
+      player.fire_timer = 1.0
+      let proj = game.projectiles[idx]
+      proj.active = true
+      proj.kind = @types.proj_bomb
+      proj.x = player.x
+      proj.y = player.y - 1.0
+      proj.z = player.z
+      // Bombs inherit aircraft forward velocity but mostly drop
+      proj.dx = fx * 0.3
+      proj.dy = -0.2
+      proj.dz = fz * 0.3
+      proj.speed = player.speed * 0.5
+      proj.damage = 120.0
+      proj.life = 8.0
+      proj.is_enemy = false
+      proj.gravity_affected = true
+      proj.blast_radius = 10.0
+    }
+  }
 }
 
 ///|
@@ -169,8 +267,13 @@ fn @types.Game::crash_player(game : @types.Game) -> Unit {
 }
 
 ///|
-/// Applies `amount` damage to the player, triggering damage flash or destruction if HP reaches zero.
-pub fn damage_player(game : @types.Game, amount : Float) -> Unit {
+/// Applies `amount` damage to the player from attacker at (`ax`, `az`), triggering damage flash, vignette, and direction indicator.
+pub fn damage_player(
+  game : @types.Game,
+  amount : Float,
+  attacker_x~ : Float = 0.0,
+  attacker_z~ : Float = 0.0,
+) -> Unit {
   let player = game.player
   if !player.alive {
     return
@@ -180,6 +283,10 @@ pub fn damage_player(game : @types.Game, amount : Float) -> Unit {
   }
   player.hp -= amount
   player.damage_flash = 0.3
+  // Trigger damage vignette and direction indicator
+  @types.trigger_damage_feedback(game, attacker_x, attacker_z)
+  // Camera jolt
+  @types.trigger_screen_shake(game, @types.shake_light)
   if player.hp <= 0.0 {
     player.hp = 0.0
     player.alive = false

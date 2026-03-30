@@ -822,4 +822,58 @@ pub(all) enum Weather {
   Night
 } derive(Eq)
 
+// Combat feedback constants
+
+///|
+/// Duration of the hit marker flash in seconds.
+pub let hit_marker_duration : Float = 0.15
+
+///|
+/// Duration of the damage vignette effect in seconds.
+pub let damage_vignette_duration : Float = 0.4
+
+///|
+/// Duration of the damage direction indicator in seconds.
+pub let damage_dir_duration : Float = 1.0
+
+///|
+/// Duration of floating damage numbers in seconds.
+pub let floating_damage_duration : Float = 1.2
+
+///|
+/// Screen shake magnitude for machine gun hits.
+pub let shake_light : Float = 1.5
+
+///|
+/// Screen shake magnitude for rocket hits.
+pub let shake_heavy : Float = 4.0
+
+///|
+/// Duration of screen shake in seconds.
+pub let shake_duration : Float = 0.25
+
+///|
+/// Weapon switch display timer duration in seconds.
+pub let weapon_switch_display_duration : Float = 1.5
+
+///|
+/// Maximum range for rendering enemy health bars.
+pub let enemy_health_bar_range : Float = 200.0
+
+///|
+/// Stall speed threshold for the HUD stall warning bar.
+pub let stall_speed_ratio : Float = 1.3
+
+///|
+/// Message priority for mission updates (green).
+pub let msg_priority_info : Int = 0
+
+///|
+/// Message priority for warnings (yellow).
+pub let msg_priority_warning : Int = 1
+
+///|
+/// Message priority for critical alerts (red).
+pub let msg_priority_critical : Int = 2
+
 // Mission par times (for time bonus calculation)
