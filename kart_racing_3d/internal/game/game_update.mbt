@@ -164,6 +164,18 @@ fn @types.Game::update_racing(game : @types.Game, dt : Float) -> Unit {
   if game.drift_boost_text_timer > 0.0 {
     game.drift_boost_text_timer -= dt
   }
+  // Decay lap flash timer
+  if game.lap_flash_timer > 0.0 {
+    game.lap_flash_timer -= dt
+  }
+  // Decay hit flash timer
+  if game.hit_flash_timer > 0.0 {
+    game.hit_flash_timer -= dt
+  }
+  // Decay skid mark lifetimes
+  game.update_skid_marks(dt)
+  // Emit skid marks and drift smoke for drifting karts
+  game.emit_drift_skid_marks()
   update_projectiles(game, dt)
   update_dropped_items(game, dt)
   check_dropped_item_collisions(game)
@@ -451,5 +463,68 @@ fn @types.Game::emit_surface_particles(game : @types.Game) -> Unit {
         )
       }
     }
+  }
+}
+
+// Update skid mark lifetimes
+
+///|
+fn @types.Game::update_skid_marks(game : @types.Game, dt : Float) -> Unit {
+  let max = game.skid_marks.length()
+  let total = game.skid_mark_count.clamp(min=0, max=max)
+  for idx in 0..<total {
+    let real_idx = if game.skid_mark_count > max {
+      (game.skid_mark_count - max + idx) % max
+    } else {
+      idx
+    }
+    let mark = game.skid_marks[real_idx]
+    let new_life = mark.5 - dt
+    if new_life > 0.0 {
+      game.skid_marks[real_idx] = (mark.0, mark.1, mark.2, mark.3, mark.4, new_life, mark.6)
+    } else {
+      game.skid_marks[real_idx] = (mark.0, mark.1, mark.2, mark.3, mark.4, 0.0, mark.6)
+    }
+  }
+}
+
+// Emit skid marks under drifting karts
+
+///|
+fn @types.Game::emit_drift_skid_marks(game : @types.Game) -> Unit {
+  // Only emit every few frames to avoid flooding
+  if game.frame_counter % 4 != 0 {
+    return
+  }
+  for i in 0..<@types.max_karts {
+    let kart = game.karts[i]
+    if !kart.active || !kart.on_ground {
+      continue
+    }
+    if !kart.drift_left && !kart.drift_right {
+      continue
+    }
+    if kart.speed < 4.0 {
+      continue
+    }
+    let sin_a = @math.sinf(kart.angle)
+    let cos_a = @math.cosf(kart.angle)
+    let wx_off = @types.kart_width * 0.55
+    let wz_rear = @types.kart_length * 0.32
+    // Left rear wheel position
+    let rl_x = kart.x - sin_a * wz_rear + cos_a * wx_off
+    let rl_z = kart.z - cos_a * wz_rear - sin_a * wx_off
+    // Right rear wheel position
+    let rr_x = kart.x - sin_a * wz_rear - cos_a * wx_off
+    let rr_z = kart.z - cos_a * wz_rear + sin_a * wx_off
+    // Previous position (approximate by going backward along angle)
+    let back : Float = kart.speed * 0.06
+    let prev_rl_x = rl_x - sin_a * back
+    let prev_rl_z = rl_z - cos_a * back
+    let prev_rr_x = rr_x - sin_a * back
+    let prev_rr_z = rr_z - cos_a * back
+    // Add skid marks for both rear wheels
+    @types.add_skid_mark(game, prev_rl_x, prev_rl_z, rl_x, rl_z, kart.y, 3.0)
+    @types.add_skid_mark(game, prev_rr_x, prev_rr_z, rr_x, rr_z, kart.y, 3.0)
   }
 }

@@ -12,7 +12,18 @@ fn main {
     let dt = if frame_dt > 0.05F { 0.05F } else { frame_dt }
     @game.update_game(game, dt)
     @raylib.begin_drawing()
-    @raylib.clear_background(@raylib.Color::new(100, 180, 255, 255))
+    // Use theme sky color for clearing when in a race, default blue for menus
+    let sky_c = if game.state != Menu {
+      let ti = @types.theme_to_int(game.track_theme)
+      if ti < @types.theme_sky_colors.length() {
+        @types.theme_sky_colors[ti]
+      } else {
+        (100, 180, 255)
+      }
+    } else {
+      (100, 180, 255)
+    }
+    @raylib.clear_background(@raylib.Color::new(sky_c.0, sky_c.1, sky_c.2, 255))
     if game.state != Menu {
       @render.draw_world(game)
     }

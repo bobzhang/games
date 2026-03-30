@@ -130,6 +130,11 @@ fn @types.Game::apply_banana_hit(game : @types.Game, kart_idx : Int) -> Unit {
   let kart = game.karts[kart_idx]
   kart.spin_timer = @types.spin_duration
   kart.speed = kart.speed * 0.4
+  // Camera shake and hit flash for player
+  if kart_idx == @types.player_kart {
+    game.camera_shake = 0.5
+    game.hit_flash_timer = 0.4
+  }
   // Spawn banana peel explosion particles
   @types.spawn_particles(game, kart.x, kart.y + 0.3, kart.z, 12, 255, 230, 50)
   @types.spawn_typed_particles(

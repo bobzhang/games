@@ -679,3 +679,35 @@ pub fn should_spin_from_bump(
     (false, false) // neither spins
   }
 }
+
+///|
+/// Adds a skid mark line segment to the ring buffer.
+pub fn add_skid_mark(
+  game : Game,
+  x1 : Float,
+  z1 : Float,
+  x2 : Float,
+  z2 : Float,
+  y : Float,
+  life : Float,
+) -> Unit {
+  let max = game.skid_marks.length()
+  let idx = game.skid_mark_count % max
+  game.skid_marks[idx] = (x1, z1, x2, z2, y, life, life)
+  game.skid_mark_count = game.skid_mark_count + 1
+}
+
+///|
+/// Returns the dust particle RGB color for the given track theme.
+pub fn get_theme_dust_color(theme : Theme) -> (Int, Int, Int) {
+  match theme {
+    Desert => (180, 150, 90)
+    ThemeIce => (200, 215, 230)
+    Beach => (200, 180, 120)
+    Volcano => (120, 80, 50)
+    Night => (80, 80, 90)
+    Mountain => (130, 120, 95)
+    Castle => (100, 95, 80)
+    _ => (160, 150, 130)
+  }
+}

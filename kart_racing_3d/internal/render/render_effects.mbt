@@ -15,6 +15,8 @@ pub fn draw_effects(game : @types.Game) -> Unit {
   game.draw_lightning_flash()
   game.draw_star_glow()
   game.draw_shield_bubbles()
+  game.draw_hit_flash_overlay()
+  game.draw_lap_flash()
 }
 
 // Draw colored drift spark trails behind drifting karts
@@ -294,7 +296,7 @@ fn @types.Game::draw_dust_trails(game : @types.Game) -> Unit {
   }
 }
 
-// Draw speed lines effect when player is boosting
+// Draw speed lines converging toward screen center when boosting or at high speed
 
 ///|
 fn @types.Game::draw_speed_lines(game : @types.Game) -> Unit {
@@ -302,18 +304,39 @@ fn @types.Game::draw_speed_lines(game : @types.Game) -> Unit {
   if !kart.active {
     return
   }
-  if kart.boost_timer <= 0.0 && kart.star_timer <= 0.0 {
+  let boosting = kart.boost_timer > 0.0 || kart.star_timer > 0.0
+  let high_speed = kart.speed > 22.0
+  if !boosting && !high_speed {
     return
   }
-  let line_count = 8
-  let base_alpha : Float = if kart.star_timer > 0.0 { 180.0 } else { 120.0 }
+  let line_count = if kart.star_timer > 0.0 {
+    14
+  } else if boosting {
+    10
+  } else {
+    6
+  }
+  let base_alpha : Float = if kart.star_timer > 0.0 {
+    180.0
+  } else if boosting {
+    140.0
+  } else {
+    70.0 + (kart.speed - 22.0) * 10.0
+  }
+  let cx_f = Float::from_int(@types.screen_width) / 2.0
+  let cy_f = Float::from_int(@types.screen_height) / 2.0
   for li in 0..<line_count {
-    let seed = li * 137 + game.frame_counter * 3
-    let x_base = seed % @types.screen_width
-    let y_base = (seed * 7 + 31) % @types.screen_height
-    let line_len = 40 + seed * 3 % 60
-    let alpha_f : Float = base_alpha - Float::from_int(li * 15)
-    let alpha = alpha_f.to_int().clamp(min=30, max=200)
+    // Place lines around screen edges, converging toward center
+    let angle = Float::from_int(li) * @types.two_pi / Float::from_int(line_count) +
+      Float::from_int(game.frame_counter) * 0.08
+    let edge_dist : Float = 420.0 + Float::from_int((li * 137 + game.frame_counter * 5) % 80)
+    let outer_x = cx_f + @math.sinf(angle) * edge_dist
+    let outer_y = cy_f + @math.cosf(angle) * edge_dist
+    let inward : Float = 0.35 + Float::from_int(game.frame_counter % 20) * 0.01
+    let inner_x = cx_f + @math.sinf(angle) * edge_dist * inward
+    let inner_y = cy_f + @math.cosf(angle) * edge_dist * inward
+    let alpha_f : Float = base_alpha - Float::from_int(li * 8)
+    let alpha = alpha_f.to_int().clamp(min=20, max=200)
     let color = if kart.star_timer > 0.0 {
       let phase : Float = game.star_rainbow_timer + Float::from_int(li) * 0.8
       let r_f : Float = 127.0 + @math.sinf(phase) * 128.0
@@ -326,9 +349,15 @@ fn @types.Game::draw_speed_lines(game : @types.Game) -> Unit {
         alpha,
       )
     } else {
-      @raylib.Color::new(255, 220, 100, alpha)
+      @raylib.Color::new(255, 230, 120, alpha)
     }
-    @raylib.draw_line(x_base, y_base, x_base, y_base + line_len, color)
+    @raylib.draw_line(
+      outer_x.to_int(),
+      outer_y.to_int(),
+      inner_x.to_int(),
+      inner_y.to_int(),
+      color,
+    )
   }
 }
 
@@ -510,4 +539,251 @@ fn @types.Game::draw_shield_bubbles(game : @types.Game) -> Unit {
       @raylib.Color::new(120, 200, 255, (alpha + 20).clamp(min=0, max=100)),
     )
   }
+}
+
+// Draw drift smoke/dust from rear wheels when drifting
+
+///|
+fn @types.Game::draw_drift_smoke(game : @types.Game) -> Unit {
+  let theme = @levels.get_track_theme(game.current_cup, game.current_race)
+  let dust_c = @types.get_theme_dust_color(theme)
+  for i in 0..<@types.max_karts {
+    let kart = game.karts[i]
+    if !kart.active || !kart.on_ground {
+      continue
+    }
+    if !kart.drift_left && !kart.drift_right {
+      continue
+    }
+    if kart.speed < 3.0 {
+      continue
+    }
+    let sin_a = @math.sinf(kart.angle)
+    let cos_a = @math.cosf(kart.angle)
+    let drift_side : Float = if kart.drift_left { 1.0 } else { -1.0 }
+    // Smoke amount scales with drift duration
+    let smoke_intensity = @types.clampf(kart.drift_timer / 2.0, 0.3, 1.0)
+    let smoke_count : Int = if game.frame_counter % 2 == 0 { 2 } else { 1 }
+    for s in 0..<smoke_count {
+      let sf2 = Float::from_int(s) * 0.15
+      // Behind rear wheel on drift side
+      let wx : Float = kart.x -
+        sin_a * @types.kart_length * (0.4 + sf2) +
+        cos_a * drift_side * @types.kart_width * 0.5
+      let wz : Float = kart.z -
+        cos_a * @types.kart_length * (0.4 + sf2) -
+        sin_a * drift_side * @types.kart_width * 0.5
+      let smoke_size : Float = 0.2 + smoke_intensity * 0.25
+      let smoke_alpha_f : Float = 80.0 + smoke_intensity * 60.0
+      let smoke_alpha = smoke_alpha_f.to_int().clamp(min=40, max=160)
+      @raylib.draw_sphere(
+        @raylib.Vector3::new(wx, kart.y + 0.15, wz),
+        smoke_size,
+        @raylib.Color::new(dust_c.0, dust_c.1, dust_c.2, smoke_alpha),
+      )
+      // Second puff slightly higher and behind
+      let puff_x = wx - sin_a * 0.3
+      let puff_z = wz - cos_a * 0.3
+      @raylib.draw_sphere(
+        @raylib.Vector3::new(puff_x, kart.y + 0.3, puff_z),
+        smoke_size * 0.7,
+        @raylib.Color::new(
+          dust_c.0,
+          dust_c.1,
+          dust_c.2,
+          (smoke_alpha - 30).clamp(min=20, max=130),
+        ),
+      )
+    }
+  }
+}
+
+// Draw skid marks on the ground behind drifting karts
+
+///|
+fn @types.Game::draw_skid_marks(game : @types.Game) -> Unit {
+  let max = game.skid_marks.length()
+  let total = game.skid_mark_count.clamp(min=0, max=max)
+  for idx in 0..<total {
+    let real_idx = if game.skid_mark_count > max {
+      (game.skid_mark_count - max + idx) % max
+    } else {
+      idx
+    }
+    let mark = game.skid_marks[real_idx]
+    let life = mark.5
+    let max_life = mark.6
+    if life <= 0.0 || max_life <= 0.0 {
+      continue
+    }
+    let alpha_f : Float = life / max_life * 120.0
+    let alpha = alpha_f.to_int().clamp(min=0, max=120)
+    let y = mark.4 + 0.03
+    // Draw as two thin triangles forming a line quad
+    let x1 = mark.0
+    let z1 = mark.1
+    let x2 = mark.2
+    let z2 = mark.3
+    // Perpendicular for width
+    let dx = x2 - x1
+    let dz = z2 - z1
+    let d = @types.distance2d(x1, z1, x2, z2)
+    if d < 0.01 {
+      continue
+    }
+    let px = -dz / d * 0.06
+    let pz = dx / d * 0.06
+    @raylib.draw_triangle_3d(
+      @raylib.Vector3::new(x1 - px, y, z1 - pz),
+      @raylib.Vector3::new(x1 + px, y, z1 + pz),
+      @raylib.Vector3::new(x2 + px, y, z2 + pz),
+      @raylib.Color::new(30, 30, 35, alpha),
+    )
+    @raylib.draw_triangle_3d(
+      @raylib.Vector3::new(x1 - px, y, z1 - pz),
+      @raylib.Vector3::new(x2 + px, y, z2 + pz),
+      @raylib.Vector3::new(x2 - px, y, z2 - pz),
+      @raylib.Color::new(30, 30, 35, alpha),
+    )
+  }
+}
+
+// Draw sparkle stars around hit karts (3D, must be called inside begin_mode_3d)
+
+///|
+fn @types.Game::draw_hit_sparkle_effect_3d(game : @types.Game) -> Unit {
+  for i in 0..<@types.max_karts {
+    let kart = game.karts[i]
+    if !kart.active {
+      continue
+    }
+    // Show stars/sparkles when spinning from a hit
+    if kart.spin_timer <= 0.0 {
+      continue
+    }
+    let kart_mid_y = kart.y + @types.kart_height * 0.5
+    let star_count = 5
+    let spin_phase = kart.spin_timer * 6.0
+    for s in 0..<star_count {
+      let angle = spin_phase +
+        Float::from_int(s) * @types.two_pi / Float::from_int(star_count)
+      let radius : Float = 0.8 + @math.sinf(angle * 2.0) * 0.15
+      let sx = kart.x + @math.sinf(angle) * radius
+      let sz = kart.z + @math.cosf(angle) * radius
+      let sy = kart_mid_y + 0.6 + @math.sinf(angle * 3.0) * 0.2
+      let star_alpha_f : Float = kart.spin_timer / @types.spin_duration * 220.0
+      let star_alpha = star_alpha_f.to_int().clamp(min=40, max=220)
+      // Yellow star
+      @raylib.draw_cube(
+        @raylib.Vector3::new(sx, sy, sz),
+        0.1,
+        0.1,
+        0.1,
+        @raylib.Color::new(255, 230, 50, star_alpha),
+      )
+      // Cross piece
+      @raylib.draw_cube(
+        @raylib.Vector3::new(sx, sy, sz),
+        0.04,
+        0.18,
+        0.04,
+        @raylib.Color::new(255, 255, 150, star_alpha),
+      )
+      @raylib.draw_cube(
+        @raylib.Vector3::new(sx, sy, sz),
+        0.18,
+        0.04,
+        0.04,
+        @raylib.Color::new(255, 255, 150, star_alpha),
+      )
+    }
+  }
+}
+
+// Draw hit/camera shake flash overlay (2D, called after end_mode_3d)
+
+///|
+fn @types.Game::draw_hit_flash_overlay(game : @types.Game) -> Unit {
+  // Camera shake tinted overlay
+  if game.camera_shake > 0.1 {
+    let shake_alpha_f : Float = game.camera_shake * 60.0
+    let shake_alpha = shake_alpha_f.to_int().clamp(min=0, max=80)
+    @raylib.draw_rectangle(
+      0,
+      0,
+      @types.screen_width,
+      @types.screen_height,
+      @raylib.Color::new(255, 100, 50, shake_alpha),
+    )
+  }
+  // Hit flash overlay (bright red-orange flash)
+  if game.hit_flash_timer > 0.0 {
+    let flash_alpha_f : Float = game.hit_flash_timer / 0.4 * 100.0
+    let flash_alpha = flash_alpha_f.to_int().clamp(min=0, max=100)
+    @raylib.draw_rectangle(
+      0,
+      0,
+      @types.screen_width,
+      @types.screen_height,
+      @raylib.Color::new(255, 60, 30, flash_alpha),
+    )
+  }
+}
+
+// Draw lap completion flash and text popup
+
+///|
+fn @types.Game::draw_lap_flash(game : @types.Game) -> Unit {
+  if game.lap_flash_timer <= 0.0 {
+    return
+  }
+  let t = game.lap_flash_timer
+  // White flash that fades quickly
+  if t > 0.7 {
+    let flash_t = (t - 0.7) / 0.3
+    let flash_alpha_f : Float = flash_t * 180.0
+    let flash_alpha = flash_alpha_f.to_int().clamp(min=0, max=180)
+    @raylib.draw_rectangle(
+      0,
+      0,
+      @types.screen_width,
+      @types.screen_height,
+      @raylib.Color::new(255, 255, 255, flash_alpha),
+    )
+  }
+  // LAP text popup
+  let lap_num = game.lap_flash_lap
+  let text = if lap_num > game.track_laps {
+    "FINAL LAP!"
+  } else {
+    "LAP \{lap_num}"
+  }
+  let scale_t = @types.clampf(1.0 - t, 0.0, 1.0)
+  let font_size_f : Float = 48.0 + scale_t * 12.0
+  let font_size = font_size_f.to_int()
+  let text_alpha_f : Float = t * 255.0
+  let text_alpha = text_alpha_f.to_int().clamp(min=0, max=255)
+  let tw = @draw.measure_text(text, font_size)
+  let y_offset_f : Float = -scale_t * 30.0
+  let y_offset = y_offset_f.to_int()
+  // Shadow
+  @draw.draw_text(
+    text,
+    (@types.screen_width - tw) / 2 + 2,
+    @types.screen_height / 3 + y_offset + 2,
+    font_size,
+    @raylib.Color::new(0, 0, 0, (text_alpha / 2).clamp(min=0, max=128)),
+  )
+  // Main text
+  let is_final = lap_num > game.track_laps
+  let text_r = if is_final { 255 } else { 255 }
+  let text_g = if is_final { 80 } else { 255 }
+  let text_b = if is_final { 50 } else { 100 }
+  @draw.draw_text(
+    text,
+    (@types.screen_width - tw) / 2,
+    @types.screen_height / 3 + y_offset,
+    font_size,
+    @raylib.Color::new(text_r, text_g, text_b, text_alpha),
+  )
 }

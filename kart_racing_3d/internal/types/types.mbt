@@ -474,6 +474,18 @@ pub(all) struct Game {
   mut drift_boost_text_level : DriftLevel
   mut item_pickup_flash_timer : Float
 
+  // Lap completion flash
+  mut lap_flash_timer : Float
+  mut lap_flash_lap : Int
+
+  // Skid mark trail storage (ring buffer of positions)
+  skid_marks : Array[(Float, Float, Float, Float, Float, Float, Float)]
+  // (x1,z1,x2,z2,y,life,max_life)
+  mut skid_mark_count : Int
+
+  // Hit effect
+  mut hit_flash_timer : Float
+
   fn new() -> Game
 }
 
@@ -555,5 +567,10 @@ pub fn Game::new() -> Game {
     drift_boost_text_timer: 0.0,
     drift_boost_text_level: DriftNone,
     item_pickup_flash_timer: 0.0,
+    lap_flash_timer: 0.0,
+    lap_flash_lap: 0,
+    skid_marks: Array::make(64, (0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F)),
+    skid_mark_count: 0,
+    hit_flash_timer: 0.0,
   }
 }

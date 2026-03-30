@@ -33,6 +33,11 @@ pub fn load_track(game : @types.Game, cup : Int, race : Int) -> Unit {
   for i in 0..<game.particles.length() {
     game.particles[i] = @types.Particle::inactive()
   }
+  // Clear skid marks from previous race
+  game.skid_mark_count = 0
+  for i in 0..<game.skid_marks.length() {
+    game.skid_marks[i] = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0)
+  }
   // Spawn karts at start positions
   game.spawn_karts()
   // Spawn powerup pickups along track
@@ -196,6 +201,9 @@ pub fn update_kart_waypoint(game : @types.Game, kart_idx : Int) -> Unit {
           game.best_lap_time = lap_time
         }
         game.lap_start_time = game.race_time
+        // Trigger lap completion flash
+        game.lap_flash_timer = 1.0
+        game.lap_flash_lap = kart.lap
       }
       // Check race finish
       if kart.lap >= game.track_laps {
@@ -440,6 +448,11 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
             100,
             50,
           )
+        }
+        // Camera shake and hit flash for player
+        if ki == @types.player_kart {
+          game.camera_shake = 0.5
+          game.hit_flash_timer = 0.4
         }
         proj.active = false
         break
