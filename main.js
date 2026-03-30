@@ -19,6 +19,10 @@ _M0DTP419moonbit_2dcommunity7rabbita8internal7runtime3Cmd5Batch.prototype.$tag =
 function _M0DTP419moonbit_2dcommunity7rabbita8internal7runtime3Cmd5Empty() {}
 _M0DTP419moonbit_2dcommunity7rabbita8internal7runtime3Cmd5Empty.prototype.$tag = 3;
 const _M0DTP419moonbit_2dcommunity7rabbita8internal7runtime3Cmd5Empty__ = new _M0DTP419moonbit_2dcommunity7rabbita8internal7runtime3Cmd5Empty();
+function _M0TP28bobzhang15games_2dwebsite5Model(param0, param1) {
+  this.search = param0;
+  this.category = param1;
+}
 function _M0DTP319moonbit_2dcommunity7rabbita3url8Protocol4Http() {}
 _M0DTP319moonbit_2dcommunity7rabbita3url8Protocol4Http.prototype.$tag = 0;
 const _M0DTP319moonbit_2dcommunity7rabbita3url8Protocol4Http__ = new _M0DTP319moonbit_2dcommunity7rabbita3url8Protocol4Http();
@@ -617,20 +621,6 @@ function _M0TP219moonbit_2dcommunity7rabbita9TypedCellGRP28bobzhang15games_2dweb
   this.view = param4;
   this.flags = param5;
 }
-function _M0TP28bobzhang15games_2dwebsite5Model(param0, param1, param2, param3) {
-  this.search = param0;
-  this.category = param1;
-  this.selected_game = param2;
-  this.show_controls = param3;
-}
-function _M0TP28bobzhang15games_2dwebsite8GameInfo(param0, param1, param2, param3, param4, param5) {
-  this.id = param0;
-  this.title = param1;
-  this.genre = param2;
-  this.desc = param3;
-  this.icon = param4;
-  this.featured = param5;
-}
 function _M0DTPC16option6OptionGRPB5ArrayGsEE4None() {}
 _M0DTPC16option6OptionGRPB5ArrayGsEE4None.prototype.$tag = 0;
 const _M0DTPC16option6OptionGRPB5ArrayGsEE4None__ = new _M0DTPC16option6OptionGRPB5ArrayGsEE4None();
@@ -646,16 +636,14 @@ function _M0DTP28bobzhang15games_2dwebsite3Msg15CategoryChanged(param0) {
   this._0 = param0;
 }
 _M0DTP28bobzhang15games_2dwebsite3Msg15CategoryChanged.prototype.$tag = 1;
-function _M0DTP28bobzhang15games_2dwebsite3Msg8PlayGame(param0) {
-  this._0 = param0;
+function _M0TP28bobzhang15games_2dwebsite8GameInfo(param0, param1, param2, param3, param4, param5) {
+  this.id = param0;
+  this.title = param1;
+  this.genre = param2;
+  this.desc = param3;
+  this.icon = param4;
+  this.featured = param5;
 }
-_M0DTP28bobzhang15games_2dwebsite3Msg8PlayGame.prototype.$tag = 2;
-function _M0DTP28bobzhang15games_2dwebsite3Msg9CloseGame() {}
-_M0DTP28bobzhang15games_2dwebsite3Msg9CloseGame.prototype.$tag = 3;
-const _M0DTP28bobzhang15games_2dwebsite3Msg9CloseGame__ = new _M0DTP28bobzhang15games_2dwebsite3Msg9CloseGame();
-function _M0DTP28bobzhang15games_2dwebsite3Msg14ToggleControls() {}
-_M0DTP28bobzhang15games_2dwebsite3Msg14ToggleControls.prototype.$tag = 4;
-const _M0DTP28bobzhang15games_2dwebsite3Msg14ToggleControls__ = new _M0DTP28bobzhang15games_2dwebsite3Msg14ToggleControls();
 const _M0FP092moonbitlang_2fcore_2fbuiltin_2fStringBuilder_24as_24_40moonbitlang_2fcore_2fbuiltin_2eLogger = { method_0: _M0IPB13StringBuilderPB6Logger13write__string, method_1: _M0IP016_24default__implPB6Logger16write__substringGRPB13StringBuilderE, method_2: _M0IPB13StringBuilderPB6Logger11write__view, method_3: _M0IPB13StringBuilderPB6Logger11write__char };
 const _M0FP0133moonbit_2dcommunity_2frabbita_2finternal_2fruntime_2fSandbox_24as_24_40moonbit_2dcommunity_2frabbita_2finternal_2fruntime_2eScheduler = { method_0: _M0IP419moonbit_2dcommunity7rabbita8internal7runtime7SandboxP419moonbit_2dcommunity7rabbita8internal7runtime9Scheduler3add, method_1: _M0IP419moonbit_2dcommunity7rabbita8internal7runtime7SandboxP419moonbit_2dcommunity7rabbita8internal7runtime9Scheduler17add__url__changed };
 const _M0FP0189moonbit_2dcommunity_2frabbita_2fTypedCell_5bbobzhang_2fgames_2dwebsite_2fModel_2c_20bobzhang_2fgames_2dwebsite_2fMsg_5d_24as_24_40moonbit_2dcommunity_2frabbita_2finternal_2fruntime_2eIsCell = { method_0: _M0IP219moonbit_2dcommunity7rabbita9TypedCellP419moonbit_2dcommunity7rabbita8internal7runtime6IsCell4stepGRP28bobzhang15games_2dwebsite5ModelRP28bobzhang15games_2dwebsite3MsgE, method_1: _M0IP219moonbit_2dcommunity7rabbita9TypedCellP419moonbit_2dcommunity7rabbita8internal7runtime6IsCell4viewGRP28bobzhang15games_2dwebsite5ModelRP28bobzhang15games_2dwebsite3MsgE, method_2: _M0IP219moonbit_2dcommunity7rabbita9TypedCellP419moonbit_2dcommunity7rabbita8internal7runtime6IsCell5flagsGRP28bobzhang15games_2dwebsite5ModelRP28bobzhang15games_2dwebsite3MsgE };
@@ -674,215 +662,195 @@ const _M0FP319moonbit_2dcommunity7rabbita3url5parseN7_2abindS231 = "#";
 const _M0MP419moonbit_2dcommunity7rabbita8internal7runtime7Sandbox3newN7_2abindS1285 = "";
 const _M0FP419moonbit_2dcommunity7rabbita8internal7runtime4none = _M0DTP419moonbit_2dcommunity7rabbita8internal7runtime3Cmd5Empty__;
 const _M0FP319moonbit_2dcommunity7rabbita4html11push__styleN7_2abindS1975 = ";";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS75 = "abyssal_rift";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS76 = "Abyssal Rift";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS77 = "roguelite";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS79 = "⚔️";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS80 = "Top-down roguelite dungeon crawler. 12 item synergies, 2 multi-phase bosses, procedural dungeons, meta-progression with Abyss Tokens.";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS81 = "fighter_97_lite";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS82 = "Fighter '97";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS83 = "fighting";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS85 = "🥊";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS86 = "6-character fighting game with motion-input specials, guard meter, throw techs, combo scaling, and 3-tier AI difficulty.";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS87 = "kart_racing_3d";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS88 = "Kart Racing 3D";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS89 = "racing";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS91 = "🏎️";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS92 = "Arcade kart racer with drift boost mechanics, 8 power-ups, 16 tracks across 4 themed cups, and 8 AI racers.";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS93 = "tower_defense_3d";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS94 = "Tower Defense 3D";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS95 = "strategy";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS97 = "🏰";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS98 = "Strategic tower defense with 8 tower types, tower synergies (Frost+Lightning, Sniper+Splash), upgrades, and 6 maps.";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS99 = "space_combat_3d";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS100 = "Space Combat 3D";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS101 = "action";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS103 = "🚀";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS104 = "6DOF space combat with 12 missions, wing-pair formations, evasion AI, 4 weapon types, and patrol/survive objectives.";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS105 = "naval_combat_3d";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS106 = "Naval Combat 3D";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS107 = "simulation";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS109 = "⛵";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS110 = "Wind-based sailing warfare with broadside cannons, fleet tactics, convoy escorts, and dynamic weather across an archipelago.";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS111 = "dungeon_crawler_3d";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS112 = "Dungeon Crawler 3D";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS113 = "rpg";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS115 = "🧙";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS116 = "First-person roguelite with 5 spell types, equipment system (5 rarities), 3-phase dragon boss, shops, shrines, and 3 classes.";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS117 = "survival_arena_3d";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS118 = "Survival Arena 3D";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS119 = "shooter";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS121 = "🔫";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS122 = "Wave-based survival shooter with 6 weapons, per-weapon upgrades, recoil mechanics, hit markers, and 30 escalating waves.";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS123 = "bomberman_1983_lite";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS124 = "Bomberman 1983";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS125 = "classic";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS127 = "💣";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS128 = "96-stage bomb-laying action with 4 enemy types, 6 powerups, 2-player co-op, blast preview, and smart pathfinding AI.";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS129 = "tank_1990";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS130 = "Tank 1990";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS131 = "classic";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS133 = "🎯";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS134 = "NES-inspired tank battle across 96 stages. 4 enemy types, combo scoring, spawn warnings, and demo AI.";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS135 = "contra_1987_lite";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS136 = "Contra 1987";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS137 = "classic";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS139 = "🔫";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS140 = "Top-down tank combat with destructible terrain, 96 themed stages, power-ups, and co-op play.";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS141 = "jackal_1988_lite";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS142 = "Jackal 1988";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS143 = "classic";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS145 = "🛡️";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS146 = "Tank combat with hostage rescue. Navigate 96 stages, rescue captives, and defend your base.";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS147 = "super_mario_1985_lite";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS148 = "Super Mario 1985";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS149 = "classic";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS151 = "🍄";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS152 = "Classic side-scrolling platformer with power-ups, enemies, and multi-level progression.";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS153 = "mario";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS154 = "Mario";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS155 = "platformer";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS157 = "⭐";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS158 = "Platformer with sprite rendering, coyote-time jumping, enemy stomping, and 4 themed levels.";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS159 = "platformer_3d";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS160 = "Platformer 3D";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS161 = "platformer";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS163 = "🏃";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS164 = "3D platformer across 4 themed worlds with 20+ levels, gems, hazards, and star ratings.";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS165 = "flight_sim_3d";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS166 = "Flight Sim 3D";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS167 = "simulation";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS169 = "✈️";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS170 = "Arcade flight simulator with 15 missions, 4 aircraft, procedural terrain, and weather systems.";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS171 = "voxel_world_3d";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS172 = "Voxel World 3D";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS173 = "sandbox";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS175 = "🧊";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS176 = "Minecraft-inspired voxel sandbox with building, crafting, day/night cycle, biomes, and caves.";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS177 = "puzzle_dungeon_3d";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS178 = "Puzzle Dungeon 3D";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS179 = "puzzle";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS181 = "🧩";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS182 = "Isometric puzzle game with block pushing, switches, and 5 themed puzzle worlds.";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS183 = "2048";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS184 = "2048";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS185 = "puzzle";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS187 = "🔢";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS188 = "Classic number merging puzzle with smooth animations, undo support, and best-score tracking.";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS189 = "minesweeper";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS190 = "Minesweeper";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS191 = "puzzle";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS193 = "💥";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS194 = "Classic minesweeper with flood-fill reveal, flagging, and safe first-click guarantee.";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS195 = "demo";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS196 = "Demo";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS197 = "example";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS199 = "💻";
-const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS200 = "Basic raylib demo showcasing MoonBit + raylib rendering capabilities.";
-const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS257 = "1983";
-const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS258 = "1985";
-const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS259 = "1987";
-const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS260 = "1988";
-const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS261 = "1990";
-const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS262 = "_3d";
-const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS263 = "models_";
-const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS264 = "shaders_";
-const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS265 = "_2026";
-const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS266 = "core_";
-const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS267 = "shapes_";
-const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS268 = "textures_";
-const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS269 = "text_";
-const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS270 = "audio_";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS85 = "abyssal_rift";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS86 = "Abyssal Rift";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS87 = "roguelite";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS89 = "⚔️";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS90 = "Top-down roguelite dungeon crawler. 12 item synergies, 2 multi-phase bosses, procedural dungeons, meta-progression with Abyss Tokens.";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS91 = "fighter_97_lite";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS92 = "Fighter '97";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS93 = "fighting";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS95 = "🥊";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS96 = "6-character fighting game with motion-input specials, guard meter, throw techs, combo scaling, and 3-tier AI difficulty.";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS97 = "kart_racing_3d";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS98 = "Kart Racing 3D";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS99 = "racing";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS101 = "🏎️";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS102 = "Arcade kart racer with drift boost mechanics, 8 power-ups, 16 tracks across 4 themed cups, and 8 AI racers.";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS103 = "tower_defense_3d";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS104 = "Tower Defense 3D";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS105 = "strategy";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS107 = "🏰";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS108 = "Strategic tower defense with 8 tower types, tower synergies (Frost+Lightning, Sniper+Splash), upgrades, and 6 maps.";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS109 = "space_combat_3d";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS110 = "Space Combat 3D";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS111 = "action";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS113 = "🚀";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS114 = "6DOF space combat with 12 missions, wing-pair formations, evasion AI, 4 weapon types, and patrol/survive objectives.";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS115 = "naval_combat_3d";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS116 = "Naval Combat 3D";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS117 = "simulation";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS119 = "⛵";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS120 = "Wind-based sailing warfare with broadside cannons, fleet tactics, convoy escorts, and dynamic weather across an archipelago.";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS121 = "dungeon_crawler_3d";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS122 = "Dungeon Crawler 3D";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS123 = "rpg";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS125 = "🧙";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS126 = "First-person roguelite with 5 spell types, equipment system (5 rarities), 3-phase dragon boss, shops, shrines, and 3 classes.";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS127 = "survival_arena_3d";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS128 = "Survival Arena 3D";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS129 = "shooter";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS131 = "🔫";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS132 = "Wave-based survival shooter with 6 weapons, per-weapon upgrades, recoil mechanics, hit markers, and 30 escalating waves.";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS133 = "bomberman_1983_lite";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS134 = "Bomberman 1983";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS135 = "classic";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS137 = "💣";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS138 = "96-stage bomb-laying action with 4 enemy types, 6 powerups, 2-player co-op, blast preview, and smart pathfinding AI.";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS139 = "tank_1990";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS140 = "Tank 1990";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS141 = "classic";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS143 = "🎯";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS144 = "NES-inspired tank battle across 96 stages. 4 enemy types, combo scoring, spawn warnings, and demo AI.";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS145 = "contra_1987_lite";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS146 = "Contra 1987";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS147 = "classic";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS149 = "🔫";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS150 = "Top-down tank combat with destructible terrain, 96 themed stages, power-ups, and co-op play.";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS151 = "jackal_1988_lite";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS152 = "Jackal 1988";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS153 = "classic";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS155 = "🛡️";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS156 = "Tank combat with hostage rescue. Navigate 96 stages, rescue captives, and defend your base.";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS157 = "super_mario_1985_lite";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS158 = "Super Mario 1985";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS159 = "classic";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS161 = "🍄";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS162 = "Classic side-scrolling platformer with power-ups, enemies, and multi-level progression.";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS163 = "mario";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS164 = "Mario";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS165 = "platformer";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS167 = "⭐";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS168 = "Platformer with sprite rendering, coyote-time jumping, enemy stomping, and 4 themed levels.";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS169 = "platformer_3d";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS170 = "Platformer 3D";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS171 = "platformer";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS173 = "🏃";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS174 = "3D platformer across 4 themed worlds with 20+ levels, gems, hazards, and star ratings.";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS175 = "flight_sim_3d";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS176 = "Flight Sim 3D";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS177 = "simulation";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS179 = "✈️";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS180 = "Arcade flight simulator with 15 missions, 4 aircraft, procedural terrain, and weather systems.";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS181 = "voxel_world_3d";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS182 = "Voxel World 3D";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS183 = "sandbox";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS185 = "🧊";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS186 = "Minecraft-inspired voxel sandbox with building, crafting, day/night cycle, biomes, and caves.";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS187 = "puzzle_dungeon_3d";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS188 = "Puzzle Dungeon 3D";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS189 = "puzzle";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS191 = "🧩";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS192 = "Isometric puzzle game with block pushing, switches, and 5 themed puzzle worlds.";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS193 = "2048";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS194 = "2048";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS195 = "puzzle";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS197 = "🔢";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS198 = "Classic number merging puzzle with smooth animations, undo support, and best-score tracking.";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS199 = "minesweeper";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS200 = "Minesweeper";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS201 = "puzzle";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS203 = "💥";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS204 = "Classic minesweeper with flood-fill reveal, flagging, and safe first-click guarantee.";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS205 = "demo";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS206 = "Demo";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS207 = "example";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS209 = "💻";
+const _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS210 = "Basic raylib demo showcasing MoonBit + raylib rendering capabilities.";
+const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS217 = "1983";
+const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS218 = "1985";
+const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS219 = "1987";
+const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS220 = "1988";
+const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS221 = "1990";
+const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS222 = "_3d";
+const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS223 = "models_";
+const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS224 = "shaders_";
+const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS225 = "_2026";
+const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS226 = "core_";
+const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS227 = "shapes_";
+const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS228 = "textures_";
+const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS229 = "text_";
+const _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS230 = "audio_";
+const _M0FP28bobzhang15games_2dwebsite27init__model_2erecord_2f3185 = new _M0TP28bobzhang15games_2dwebsite5Model("", "all");
 const _M0FP319moonbit_2dcommunity7rabbita3cmd4none = _M0FP419moonbit_2dcommunity7rabbita8internal7runtime4none;
 const _M0FP419moonbit_2dcommunity7rabbita8internal7runtime17global__id__count = _M0FPC13ref3newGiE(0);
 const _M0FPB4seed = _M0FPB12random__seed();
 const _M0FPB33brute__force__find_2econstr_2f289 = 0;
 const _M0FPB43boyer__moore__horspool__find_2econstr_2f275 = 0;
-const _M0FP319moonbit_2dcommunity7rabbita3url21parse_2econstr_2f1846 = new _M0DTP319moonbit_2dcommunity7rabbita3url8Protocol5Other("");
-const _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3306 = "site-footer";
-const _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3307 = "footer-inner";
-const _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3308 = "footer-tech";
-const _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3309 = 1;
-const _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3310 = 1;
-const _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3311 = 1;
-const _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3312 = "footer-links";
-const _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3313 = 1;
-const _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3314 = 1;
-const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3355 = "hero";
-const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3356 = "hero-content";
-const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3357 = "hero-title";
-const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3358 = "hero-subtitle";
-const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3359 = "hero-stats";
-const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3360 = "stat";
-const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3361 = "stat-number";
-const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3362 = "stat-label";
-const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3363 = "stat";
-const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3364 = "stat-number";
-const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3365 = "stat-label";
-const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3366 = "stat";
-const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3367 = "stat-number";
-const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3368 = "stat-label";
-const _M0FP28bobzhang15games_2dwebsite30featured__card_2econstr_2f3290 = "featured-card";
-const _M0FP28bobzhang15games_2dwebsite30featured__card_2econstr_2f3291 = "featured-title";
-const _M0FP28bobzhang15games_2dwebsite30featured__card_2econstr_2f3292 = "featured-desc";
-const _M0FP28bobzhang15games_2dwebsite30featured__card_2econstr_2f3293 = "play-btn";
-const _M0FP28bobzhang15games_2dwebsite32render__featured_2econstr_2f3296 = "featured";
-const _M0FP28bobzhang15games_2dwebsite32render__featured_2econstr_2f3297 = "section-title";
-const _M0FP28bobzhang15games_2dwebsite32render__featured_2econstr_2f3298 = "featured-grid";
-const _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3273 = { _0: "all", _1: "🌍 All Games" };
-const _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3274 = { _0: "featured", _1: "⭐ Featured" };
-const _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3275 = { _0: "classic", _1: "🕹️ Classic Ports" };
-const _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3276 = { _0: "3d", _1: "💠 3D Games" };
-const _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3277 = { _0: "2026", _1: "🔥 2026 Collection" };
-const _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3278 = { _0: "raylib", _1: "📖 Raylib Examples" };
-const _M0FP28bobzhang15games_2dwebsite34render__categories_2econstr_2f3279 = "categories";
-const _M0FP28bobzhang15games_2dwebsite34render__categories_2econstr_2f3280 = "category-tabs";
+const _M0FP319moonbit_2dcommunity7rabbita3url21parse_2econstr_2f1827 = new _M0DTP319moonbit_2dcommunity7rabbita3url8Protocol5Other("");
+const _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3226 = "site-footer";
+const _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3227 = "footer-inner";
+const _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3228 = "footer-tech";
+const _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3229 = 1;
+const _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3230 = 1;
+const _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3231 = 1;
+const _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3232 = "footer-links";
+const _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3233 = 1;
+const _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3234 = 1;
+const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3276 = "hero";
+const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3277 = "hero-content";
+const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3278 = "hero-title";
+const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3279 = "hero-subtitle";
+const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3280 = "hero-stats";
+const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3281 = "stat";
+const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3282 = "stat-number";
+const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3283 = "stat-label";
+const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3284 = "stat";
+const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3285 = "stat-number";
+const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3286 = "stat-label";
+const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3287 = "stat";
+const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3288 = "stat-number";
+const _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3289 = "stat-label";
+const _M0FP28bobzhang15games_2dwebsite30featured__card_2econstr_2f3209 = "featured-card";
+const _M0FP28bobzhang15games_2dwebsite30featured__card_2econstr_2f3210 = "featured-title";
+const _M0FP28bobzhang15games_2dwebsite30featured__card_2econstr_2f3211 = "featured-desc";
+const _M0FP28bobzhang15games_2dwebsite30featured__card_2econstr_2f3212 = "play-btn";
+const _M0FP28bobzhang15games_2dwebsite30featured__card_2econstr_2f3213 = true;
+const _M0FP28bobzhang15games_2dwebsite32render__featured_2econstr_2f3216 = "featured";
+const _M0FP28bobzhang15games_2dwebsite32render__featured_2econstr_2f3217 = "section-title";
+const _M0FP28bobzhang15games_2dwebsite32render__featured_2econstr_2f3218 = "featured-grid";
+const _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3192 = { _0: "all", _1: "🌍 All Games" };
+const _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3193 = { _0: "featured", _1: "⭐ Featured" };
+const _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3194 = { _0: "classic", _1: "🕹️ Classic Ports" };
+const _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3195 = { _0: "3d", _1: "💠 3D Games" };
+const _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3196 = { _0: "2026", _1: "🔥 2026 Collection" };
+const _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3197 = { _0: "raylib", _1: "📖 Raylib Examples" };
+const _M0FP28bobzhang15games_2dwebsite34render__categories_2econstr_2f3198 = "categories";
+const _M0FP28bobzhang15games_2dwebsite34render__categories_2econstr_2f3199 = "category-tabs";
 const _p = [];
 const _M0FP319moonbit_2dcommunity7rabbita4html7nothing = new _M0DTP419moonbit_2dcommunity7rabbita8internal7runtime5VNode4Frag(_p);
-const _M0FP28bobzhang15games_2dwebsite26game__card_2econstr_2f3315 = "game-card";
-const _M0FP28bobzhang15games_2dwebsite26game__card_2econstr_2f3316 = "card-play-overlay";
-const _M0FP28bobzhang15games_2dwebsite26game__card_2econstr_2f3317 = "card-play-icon";
-const _M0FP28bobzhang15games_2dwebsite34render__game__grid_2econstr_2f3331 = "game-grid-section";
-const _M0FP28bobzhang15games_2dwebsite34render__game__grid_2econstr_2f3332 = "results-count";
-const _M0FP28bobzhang15games_2dwebsite34render__game__grid_2econstr_2f3333 = "game-grid";
-const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3338 = "site-header";
-const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3339 = "header-inner";
-const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3340 = "logo";
-const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3341 = "logo-icon";
-const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3342 = "logo-text";
-const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3343 = "search-bar";
-const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3344 = 18;
-const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3345 = "Search 333 games...";
-const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3346 = "search-input";
-const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3347 = "header-nav";
-const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3348 = "nav-link";
-const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3349 = 1;
-const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3350 = "nav-link";
-const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3351 = 1;
-const _M0FP28bobzhang15games_2dwebsite26main__view_2econstr_2f3369 = "app";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3243 = "player-overlay";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3244 = "player-header";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3245 = "back-btn";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3246 = "playing-title";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3247 = "controls-btn";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3248 = "controls-panel";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3249 = "control-group";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3250 = "control-key";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3251 = "control-desc";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3252 = "control-group";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3253 = "control-key";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3254 = "control-desc";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3255 = "control-group";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3256 = "control-key";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3257 = "control-desc";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3258 = "control-group";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3259 = "control-key";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3260 = "control-desc";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3261 = "control-group";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3262 = "control-key";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3263 = "control-desc";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3264 = "game-frame";
-const _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3265 = true;
+const _M0FP28bobzhang15games_2dwebsite26game__card_2econstr_2f3235 = "game-card";
+const _M0FP28bobzhang15games_2dwebsite26game__card_2econstr_2f3236 = "card-play-overlay";
+const _M0FP28bobzhang15games_2dwebsite26game__card_2econstr_2f3237 = "card-play-icon";
+const _M0FP28bobzhang15games_2dwebsite26game__card_2econstr_2f3238 = true;
+const _M0FP28bobzhang15games_2dwebsite34render__game__grid_2econstr_2f3252 = "game-grid-section";
+const _M0FP28bobzhang15games_2dwebsite34render__game__grid_2econstr_2f3253 = "results-count";
+const _M0FP28bobzhang15games_2dwebsite34render__game__grid_2econstr_2f3254 = "game-grid";
+const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3259 = "site-header";
+const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3260 = "header-inner";
+const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3261 = "logo";
+const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3262 = "logo-icon";
+const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3263 = "logo-text";
+const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3264 = "search-bar";
+const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3265 = 18;
+const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3266 = "Search 333 games...";
+const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3267 = "search-input";
+const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3268 = "header-nav";
+const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3269 = "nav-link";
+const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3270 = 1;
+const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3271 = "nav-link";
+const _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3272 = 1;
+const _M0FP28bobzhang15games_2dwebsite26main__view_2econstr_2f3290 = "app";
 function _M0FPC15abort5abortGuE(msg) {
   $panic();
 }
@@ -1068,11 +1036,11 @@ function _M0IP016_24default__implPB4Show10to__stringGRPB9SourceLocE(self) {
   _p$2.method_table.method_0(_p$2.self, self);
   return logger.val;
 }
-function _M0MPB4Iter4nextGcE(self) {
+function _M0MPB4Iter4nextGURP419moonbit_2dcommunity7rabbita8internal7runtime6InstIdRP419moonbit_2dcommunity7rabbita8internal7runtime8InstanceEE(self) {
   const _func = self;
   return _func();
 }
-function _M0MPB4Iter4nextGURP419moonbit_2dcommunity7rabbita8internal7runtime6InstIdRP419moonbit_2dcommunity7rabbita8internal7runtime8InstanceEE(self) {
+function _M0MPB4Iter4nextGcE(self) {
   const _func = self;
   return _func();
 }
@@ -1459,28 +1427,6 @@ function _M0MPC16string6String8contains(self, str) {
 function _M0MPC16string10StringView9is__empty(self) {
   return (self.end - self.start | 0) === 0;
 }
-function _M0MPC16string6String4iter(self) {
-  const len = self.length;
-  const index = new _M0TPB8MutLocalGiE(0);
-  const _p$2 = () => {
-    if (index.val < len) {
-      const c1 = self.charCodeAt(index.val);
-      if (_M0MPC16uint166UInt1622is__leading__surrogate(c1) && (index.val + 1 | 0) < len) {
-        const c2 = self.charCodeAt(index.val + 1 | 0);
-        if (_M0MPC16uint166UInt1623is__trailing__surrogate(c2)) {
-          const c = _M0FPB32code__point__of__surrogate__pair(c1, c2);
-          index.val = index.val + 2 | 0;
-          return c;
-        }
-      }
-      index.val = index.val + 1 | 0;
-      return c1;
-    } else {
-      return -1;
-    }
-  };
-  return _p$2;
-}
 function _M0MPB4Iter3mapGRPC16string10StringViewsE(self, f) {
   return () => {
     const _bind = _M0MPB4Iter4nextGURP419moonbit_2dcommunity7rabbita8internal7runtime6InstIdRP419moonbit_2dcommunity7rabbita8internal7runtime8InstanceEE(self);
@@ -1576,38 +1522,6 @@ function _M0MPC16string6String9to__lower(self) {
         const _c = _Some$2;
         if (_M0MPC14char4Char20is__ascii__uppercase(_c)) {
           _M0IPB13StringBuilderPB6Logger11write__char(buf, _c + 32 | 0);
-        } else {
-          _M0IPB13StringBuilderPB6Logger11write__char(buf, _c);
-        }
-        continue;
-      }
-    }
-    return buf.val;
-  }
-}
-function _M0MPC14char4Char20is__ascii__lowercase(self) {
-  return self >= 97 && self <= 122;
-}
-function _M0MPC16string6String9to__upper(self) {
-  const _bind = _M0MPC16string6String8find__by(self, (c) => _M0MPC14char4Char20is__ascii__lowercase(c));
-  if (_bind === undefined) {
-    return self;
-  } else {
-    const _Some = _bind;
-    const _idx = _Some;
-    const buf = _M0MPB13StringBuilder11new_2einner(self.length);
-    const head = _M0MPC16string6String12view_2einner(self, 0, _idx);
-    _M0IP016_24default__implPB6Logger16write__substringGRPB13StringBuilderE(buf, head.str, head.start, head.end - head.start | 0);
-    const _it = _M0MPC16string10StringView4iter(_M0MPC16string6String12view_2einner(self, _idx, undefined));
-    while (true) {
-      const _bind$2 = _M0MPB4Iter4nextGcE(_it);
-      if (_bind$2 === -1) {
-        break;
-      } else {
-        const _Some$2 = _bind$2;
-        const _c = _Some$2;
-        if (_M0MPC14char4Char20is__ascii__lowercase(_c)) {
-          _M0IPB13StringBuilderPB6Logger11write__char(buf, _c - 32 | 0);
         } else {
           _M0IPB13StringBuilderPB6Logger11write__char(buf, _c);
         }
@@ -5072,7 +4986,7 @@ function _M0FP319moonbit_2dcommunity7rabbita3url5parse(url) {
       } else {
         if (_bind$2.length === 1) {
           const _remain = _bind$2[0];
-          _bind = { _0: _M0FP319moonbit_2dcommunity7rabbita3url21parse_2econstr_2f1846, _1: _remain };
+          _bind = { _0: _M0FP319moonbit_2dcommunity7rabbita3url21parse_2econstr_2f1827, _1: _remain };
         } else {
           const _bind$3 = _M0FPB4failGURP319moonbit_2dcommunity7rabbita3url8ProtocolRPC16string10StringViewEE("Invalid protocol", "url/url.mbt:66:10-66:34@moonbit-community/rabbita");
           if (_bind$3.$tag === 1) {
@@ -6890,16 +6804,6 @@ function _M0FP319moonbit_2dcommunity7rabbita4html25push__value__prop__string(val
     return;
   }
 }
-function _M0FP319moonbit_2dcommunity7rabbita4html9push__src(value, attrs) {
-  if (value === undefined) {
-    return;
-  } else {
-    const _Some = value;
-    const _v = _Some;
-    _M0MP319moonbit_2dcommunity7rabbita4html5Attrs9attribute(attrs, "src", _v);
-    return;
-  }
-}
 function _M0FP319moonbit_2dcommunity7rabbita4html11push__title(value, attrs) {
   if (value === undefined) {
     return;
@@ -7209,46 +7113,6 @@ function _M0FP319moonbit_2dcommunity7rabbita4html15push__inputmode(value, attrs)
     const _Some = value;
     const _v = _Some;
     _M0MP319moonbit_2dcommunity7rabbita4html5Attrs9attribute(attrs, "inputmode", _v);
-    return;
-  }
-}
-function _M0FP319moonbit_2dcommunity7rabbita4html13push__loading(value, attrs) {
-  if (value === undefined) {
-    return;
-  } else {
-    const _Some = value;
-    const _v = _Some;
-    _M0MP319moonbit_2dcommunity7rabbita4html5Attrs9attribute(attrs, "loading", _v);
-    return;
-  }
-}
-function _M0FP319moonbit_2dcommunity7rabbita4html11push__allow(value, attrs) {
-  if (value === undefined) {
-    return;
-  } else {
-    const _Some = value;
-    const _v = _Some;
-    _M0MP319moonbit_2dcommunity7rabbita4html5Attrs9attribute(attrs, "allow", _v);
-    return;
-  }
-}
-function _M0FP319moonbit_2dcommunity7rabbita4html13push__sandbox(value, attrs) {
-  if (value === undefined) {
-    return;
-  } else {
-    const _Some = value;
-    const _v = _Some;
-    _M0MP319moonbit_2dcommunity7rabbita4html5Attrs9attribute(attrs, "sandbox", _v);
-    return;
-  }
-}
-function _M0FP319moonbit_2dcommunity7rabbita4html21push__allowfullscreen(value, attrs) {
-  if (value === -1) {
-    return;
-  } else {
-    const _Some = value;
-    const _v = _Some;
-    _M0MP319moonbit_2dcommunity7rabbita4html5Attrs8property(attrs, "allowfullscreen", new _M0DTP319moonbit_2dcommunity7rabbita7variant7Variant7Boolean(_v));
     return;
   }
 }
@@ -7575,6 +7439,19 @@ function _M0FP319moonbit_2dcommunity7rabbita4html9a_2einnerGsE(style, id, class_
   _M0FP319moonbit_2dcommunity7rabbita4html8push__id(id, attrs$2);
   return _M0MP419moonbit_2dcommunity7rabbita8internal7runtime5VNode12link_2einner(attrs$2, _M0IPC16string6StringP319moonbit_2dcommunity7rabbita4html10IsChildren12to__children(children), escape);
 }
+function _M0FP319moonbit_2dcommunity7rabbita4html9a_2einnerGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(style, id, class_, title, hidden, href, target, rel, download, attrs, children, escape) {
+  const attrs$2 = _M0FP319moonbit_2dcommunity7rabbita4html14resolve__attrs(attrs);
+  _M0FP319moonbit_2dcommunity7rabbita4html11push__title(title, attrs$2);
+  _M0FP319moonbit_2dcommunity7rabbita4html12push__hidden(hidden, attrs$2);
+  _M0MP319moonbit_2dcommunity7rabbita4html5Attrs9attribute(attrs$2, "href", href);
+  _M0MP319moonbit_2dcommunity7rabbita4html5Attrs6target(attrs$2, target);
+  _M0FP319moonbit_2dcommunity7rabbita4html9push__rel(rel, attrs$2);
+  _M0FP319moonbit_2dcommunity7rabbita4html14push__download(download, attrs$2);
+  _M0FP319moonbit_2dcommunity7rabbita4html11push__style(style, attrs$2);
+  _M0FP319moonbit_2dcommunity7rabbita4html11push__class(class_, attrs$2);
+  _M0FP319moonbit_2dcommunity7rabbita4html8push__id(id, attrs$2);
+  return _M0MP419moonbit_2dcommunity7rabbita8internal7runtime5VNode12link_2einner(attrs$2, _M0IPC15array5ArrayP319moonbit_2dcommunity7rabbita4html10IsChildren12to__children(children), escape);
+}
 function _M0FP319moonbit_2dcommunity7rabbita4html1aGsE(style$46$opt, id, class_, title, hidden, href, target$46$opt, rel, download, attrs, children, escape$46$opt) {
   let style;
   if (style$46$opt.$tag === 1) {
@@ -7593,26 +7470,7 @@ function _M0FP319moonbit_2dcommunity7rabbita4html1aGsE(style$46$opt, id, class_,
   const escape = escape$46$opt === -1 ? false : escape$46$opt;
   return _M0FP319moonbit_2dcommunity7rabbita4html9a_2einnerGsE(style, id, class_, title, hidden, href, target, rel, download, attrs, children, escape);
 }
-function _M0FP319moonbit_2dcommunity7rabbita4html4text(str) {
-  return new _M0DTP419moonbit_2dcommunity7rabbita8internal7runtime5VNode4Text(str);
-}
-function _M0FP319moonbit_2dcommunity7rabbita4html14iframe_2einner(style, id, class_, hidden, src, title, width, height, loading, allow, sandbox, allowfullscreen, attrs) {
-  const attrs$2 = _M0FP319moonbit_2dcommunity7rabbita4html14resolve__attrs(attrs);
-  _M0FP319moonbit_2dcommunity7rabbita4html12push__hidden(hidden, attrs$2);
-  _M0FP319moonbit_2dcommunity7rabbita4html9push__src(src, attrs$2);
-  _M0FP319moonbit_2dcommunity7rabbita4html11push__title(title, attrs$2);
-  _M0FP319moonbit_2dcommunity7rabbita4html11push__width(width, attrs$2);
-  _M0FP319moonbit_2dcommunity7rabbita4html12push__height(height, attrs$2);
-  _M0FP319moonbit_2dcommunity7rabbita4html13push__loading(loading, attrs$2);
-  _M0FP319moonbit_2dcommunity7rabbita4html11push__allow(allow, attrs$2);
-  _M0FP319moonbit_2dcommunity7rabbita4html13push__sandbox(sandbox, attrs$2);
-  _M0FP319moonbit_2dcommunity7rabbita4html21push__allowfullscreen(allowfullscreen, attrs$2);
-  _M0FP319moonbit_2dcommunity7rabbita4html11push__style(style, attrs$2);
-  _M0FP319moonbit_2dcommunity7rabbita4html11push__class(class_, attrs$2);
-  _M0FP319moonbit_2dcommunity7rabbita4html8push__id(id, attrs$2);
-  return _M0FP319moonbit_2dcommunity7rabbita4html4nodeGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE("iframe", attrs$2, []);
-}
-function _M0FP319moonbit_2dcommunity7rabbita4html6iframe(style$46$opt, id, class_, hidden, src, title, width, height, loading, allow, sandbox, allowfullscreen, attrs) {
+function _M0FP319moonbit_2dcommunity7rabbita4html1aGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(style$46$opt, id, class_, title, hidden, href, target$46$opt, rel, download, attrs, children, escape$46$opt) {
   let style;
   if (style$46$opt.$tag === 1) {
     const _Some = style$46$opt;
@@ -7620,7 +7478,18 @@ function _M0FP319moonbit_2dcommunity7rabbita4html6iframe(style$46$opt, id, class
   } else {
     style = [];
   }
-  return _M0FP319moonbit_2dcommunity7rabbita4html14iframe_2einner(style, id, class_, hidden, src, title, width, height, loading, allow, sandbox, allowfullscreen, attrs);
+  let target;
+  if (target$46$opt === undefined) {
+    target = 0;
+  } else {
+    const _Some = target$46$opt;
+    target = _Some;
+  }
+  const escape = escape$46$opt === -1 ? false : escape$46$opt;
+  return _M0FP319moonbit_2dcommunity7rabbita4html9a_2einnerGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(style, id, class_, title, hidden, href, target, rel, download, attrs, children, escape);
+}
+function _M0FP319moonbit_2dcommunity7rabbita4html4text(str) {
+  return new _M0DTP419moonbit_2dcommunity7rabbita8internal7runtime5VNode4Text(str);
 }
 function _M0FP319moonbit_2dcommunity7rabbita4html13input_2einnerGsE(input_type, name, value, checked, read_only, multiple, accept, placeholder, auto_complete, style, max, min, step, maxlength, minlength, pattern, size, width, height, id, class_, title, hidden, required, autofocus, list, inputmode, on_change, on_input, attrs, children) {
   let input_type$2;
@@ -7889,96 +7758,19 @@ function _M0FP219moonbit_2dcommunity7rabbita4cellGRP28bobzhang15games_2dwebsite5
 function _M0FP219moonbit_2dcommunity7rabbita12simple__cellGRP28bobzhang15games_2dwebsite5ModelRP28bobzhang15games_2dwebsite3MsgE(model, update, view) {
   return _M0FP219moonbit_2dcommunity7rabbita4cellGRP28bobzhang15games_2dwebsite5ModelRP28bobzhang15games_2dwebsite3MsgE(model, (_discard_, msg, model$2) => ({ _0: _M0FP319moonbit_2dcommunity7rabbita3cmd4none, _1: update(msg, model$2) }), view);
 }
-function _M0FP28bobzhang15games_2dwebsite11init__model() {
-  return new _M0TP28bobzhang15games_2dwebsite5Model("", "all", undefined, false);
-}
 function _M0FP28bobzhang15games_2dwebsite6update(msg, model) {
-  switch (msg.$tag) {
-    case 0: {
-      const _SearchChanged = msg;
-      const _s = _SearchChanged._0;
-      return new _M0TP28bobzhang15games_2dwebsite5Model(_s, model.category, model.selected_game, model.show_controls);
-    }
-    case 1: {
-      const _CategoryChanged = msg;
-      const _c = _CategoryChanged._0;
-      return new _M0TP28bobzhang15games_2dwebsite5Model(model.search, _c, model.selected_game, model.show_controls);
-    }
-    case 2: {
-      const _PlayGame = msg;
-      const _id = _PlayGame._0;
-      return new _M0TP28bobzhang15games_2dwebsite5Model(model.search, model.category, _id, model.show_controls);
-    }
-    case 3: {
-      return new _M0TP28bobzhang15games_2dwebsite5Model(model.search, model.category, undefined, model.show_controls);
-    }
-    default: {
-      return new _M0TP28bobzhang15games_2dwebsite5Model(model.search, model.category, model.selected_game, !model.show_controls);
-    }
-  }
-}
-function _M0FP28bobzhang15games_2dwebsite15get__all__games() {
-  return [new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS75, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS76, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS77, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS80, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS79, true), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS81, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS82, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS83, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS86, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS85, true), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS87, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS88, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS89, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS92, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS91, true), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS93, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS94, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS95, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS98, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS97, true), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS99, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS100, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS101, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS104, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS103, true), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS105, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS106, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS107, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS110, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS109, true), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS111, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS112, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS113, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS116, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS115, true), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS117, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS118, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS119, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS122, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS121, true), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS123, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS124, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS125, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS128, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS127, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS129, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS130, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS131, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS134, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS133, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS135, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS136, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS137, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS140, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS139, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS141, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS142, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS143, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS146, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS145, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS147, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS148, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS149, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS152, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS151, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS153, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS154, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS155, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS158, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS157, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS159, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS160, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS161, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS164, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS163, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS165, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS166, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS167, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS170, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS169, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS171, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS172, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS173, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS176, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS175, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS177, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS178, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS179, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS182, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS181, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS183, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS184, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS185, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS188, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS187, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS189, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS190, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS191, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS194, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS193, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS195, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS196, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS197, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS200, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS199, false)];
-}
-function _M0FP28bobzhang15games_2dwebsite10find__game(id) {
-  const games = _M0FP28bobzhang15games_2dwebsite15get__all__games();
-  const _bind = games.length;
-  let _tmp = 0;
-  while (true) {
-    const i = _tmp;
-    if (i < _bind) {
-      if (_M0MPC15array5Array2atGRP28bobzhang15games_2dwebsite8GameInfoE(games, i).id === id) {
-        return _M0MPC15array5Array2atGRP28bobzhang15games_2dwebsite8GameInfoE(games, i);
-      }
-      _tmp = i + 1 | 0;
-      continue;
-    } else {
-      break;
-    }
-  }
-  return undefined;
-}
-function _M0FP28bobzhang15games_2dwebsite13format__title(id) {
-  let result = "";
-  let capitalize_next = true;
-  const _it = _M0MPC16string6String4iter(id);
-  while (true) {
-    const _bind = _M0MPB4Iter4nextGcE(_it);
-    if (_bind === -1) {
-      break;
-    } else {
-      const _Some = _bind;
-      const _c = _Some;
-      if (_c === 95) {
-        result = `${result} `;
-        capitalize_next = true;
-      } else {
-        if (capitalize_next) {
-          result = `${result}${_M0MPC16string6String9to__upper(_M0IPC14char4CharPB4Show10to__string(_c))}`;
-          capitalize_next = false;
-        } else {
-          result = `${result}${_M0IPC14char4CharPB4Show10to__string(_c)}`;
-        }
-      }
-      continue;
-    }
-  }
-  return result;
-}
-function _M0FP28bobzhang15games_2dwebsite18game__player__view(dispatch, game_id, model) {
-  const game_info = _M0FP28bobzhang15games_2dwebsite10find__game(game_id);
-  let title;
-  if (game_info === undefined) {
-    title = _M0FP28bobzhang15games_2dwebsite13format__title(game_id);
+  if (msg.$tag === 0) {
+    const _SearchChanged = msg;
+    const _s = _SearchChanged._0;
+    return new _M0TP28bobzhang15games_2dwebsite5Model(_s, model.category);
   } else {
-    const _Some = game_info;
-    const _g = _Some;
-    title = _g.title;
+    const _CategoryChanged = msg;
+    const _c = _CategoryChanged._0;
+    return new _M0TP28bobzhang15games_2dwebsite5Model(model.search, _c);
   }
-  return _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3243, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3244, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html6buttonGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3245, undefined, -1, undefined, -1, undefined, undefined, -1, dispatch(_M0DTP28bobzhang15games_2dwebsite3Msg9CloseGame__), undefined, "← Back"), _M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3246, undefined, -1, undefined, title), _M0FP319moonbit_2dcommunity7rabbita4html6buttonGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3247, undefined, -1, undefined, -1, undefined, undefined, -1, dispatch(_M0DTP28bobzhang15games_2dwebsite3Msg14ToggleControls__), undefined, "⌨️ Controls")]), model.show_controls ? _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3248, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3249, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3250, undefined, -1, undefined, "WASD / Arrows"), _M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3251, undefined, -1, undefined, "Move")]), _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3252, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3253, undefined, -1, undefined, "Space / Enter"), _M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3254, undefined, -1, undefined, "Action")]), _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3255, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3256, undefined, -1, undefined, "Shift"), _M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3257, undefined, -1, undefined, "Run / Fire")]), _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3258, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3259, undefined, -1, undefined, "Escape"), _M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3260, undefined, -1, undefined, "Pause")]), _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3261, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3262, undefined, -1, undefined, "1-6"), _M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3263, undefined, -1, undefined, "Items / Weapons")])]) : _M0FP319moonbit_2dcommunity7rabbita4html7nothing, _M0FP319moonbit_2dcommunity7rabbita4html6iframe(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3264, -1, `games/${game_id}/${game_id}.html`, undefined, undefined, undefined, undefined, undefined, undefined, _M0FP28bobzhang15games_2dwebsite34game__player__view_2econstr_2f3265, undefined)]);
 }
 function _M0FP28bobzhang15games_2dwebsite18render__categories(dispatch, model) {
-  const categories = [_M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3273, _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3274, _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3275, _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3276, _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3277, _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3278];
+  const categories = [_M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3192, _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3193, _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3194, _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3195, _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3196, _M0FP28bobzhang15games_2dwebsite33render__categories_2etuple_2f3197];
   const _p$2 = new Array(categories.length);
   const _p$3 = categories.length;
   let _tmp = 0;
@@ -7996,7 +7788,7 @@ function _M0FP28bobzhang15games_2dwebsite18render__categories(dispatch, model) {
       break;
     }
   }
-  return _M0FP319moonbit_2dcommunity7rabbita4html7sectionGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34render__categories_2econstr_2f3279, undefined, -1, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34render__categories_2econstr_2f3280, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, _p$2)]);
+  return _M0FP319moonbit_2dcommunity7rabbita4html7sectionGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34render__categories_2econstr_2f3198, undefined, -1, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34render__categories_2econstr_2f3199, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, _p$2)]);
 }
 function _M0FP28bobzhang15games_2dwebsite12genre__color(genre) {
   switch (genre) {
@@ -8084,8 +7876,11 @@ function _M0FP28bobzhang15games_2dwebsite15genre__gradient(genre) {
     }
   }
 }
-function _M0FP28bobzhang15games_2dwebsite14featured__card(dispatch, game) {
-  return _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30featured__card_2econstr_2f3290, undefined, -1, dispatch(new _M0DTP28bobzhang15games_2dwebsite3Msg8PlayGame(game.id)), undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html11div_2einnerGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE([`background: ${_M0FP28bobzhang15games_2dwebsite15genre__gradient(game.genre)}; height: 140px; border-radius: 10px 10px 0 0; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;`], undefined, undefined, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html12span_2einnerGsE(["font-size: 48px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));"], undefined, undefined, undefined, -1, undefined, game.icon), _M0FP319moonbit_2dcommunity7rabbita4html12span_2einnerGsE([`position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.5); padding: 3px 10px; border-radius: 999px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: ${_M0FP28bobzhang15games_2dwebsite12genre__color(game.genre)};`], undefined, undefined, undefined, -1, undefined, game.genre)]), _M0FP319moonbit_2dcommunity7rabbita4html11div_2einnerGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(["padding: 16px;"], undefined, undefined, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html2h3GsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30featured__card_2econstr_2f3291, undefined, -1, undefined, game.title), _M0FP319moonbit_2dcommunity7rabbita4html1pGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30featured__card_2econstr_2f3292, undefined, -1, undefined, game.desc), _M0FP319moonbit_2dcommunity7rabbita4html6buttonGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30featured__card_2econstr_2f3293, undefined, -1, undefined, -1, undefined, undefined, -1, undefined, undefined, "▶  Play Now")])]);
+function _M0FP28bobzhang15games_2dwebsite14featured__card(_dispatch, game) {
+  return _M0FP319moonbit_2dcommunity7rabbita4html1aGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30featured__card_2econstr_2f3209, undefined, -1, `games/${game.id}/${game.id}.html`, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html11div_2einnerGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE([`background: ${_M0FP28bobzhang15games_2dwebsite15genre__gradient(game.genre)}; height: 140px; border-radius: 10px 10px 0 0; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;`], undefined, undefined, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html12span_2einnerGsE(["font-size: 48px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));"], undefined, undefined, undefined, -1, undefined, game.icon), _M0FP319moonbit_2dcommunity7rabbita4html12span_2einnerGsE([`position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.5); padding: 3px 10px; border-radius: 999px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: ${_M0FP28bobzhang15games_2dwebsite12genre__color(game.genre)};`], undefined, undefined, undefined, -1, undefined, game.genre)]), _M0FP319moonbit_2dcommunity7rabbita4html11div_2einnerGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(["padding: 16px;"], undefined, undefined, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html2h3GsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30featured__card_2econstr_2f3210, undefined, -1, undefined, game.title), _M0FP319moonbit_2dcommunity7rabbita4html1pGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30featured__card_2econstr_2f3211, undefined, -1, undefined, game.desc), _M0FP319moonbit_2dcommunity7rabbita4html6buttonGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30featured__card_2econstr_2f3212, undefined, -1, undefined, -1, undefined, undefined, -1, undefined, undefined, "▶  Play Now")])], _M0FP28bobzhang15games_2dwebsite30featured__card_2econstr_2f3213);
+}
+function _M0FP28bobzhang15games_2dwebsite15get__all__games() {
+  return [new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS85, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS86, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS87, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS90, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS89, true), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS91, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS92, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS93, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS96, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS95, true), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS97, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS98, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS99, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS102, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS101, true), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS103, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS104, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS105, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS108, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS107, true), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS109, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS110, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS111, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS114, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS113, true), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS115, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS116, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS117, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS120, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS119, true), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS121, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS122, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS123, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS126, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS125, true), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS127, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS128, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS129, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS132, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS131, true), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS133, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS134, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS135, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS138, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS137, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS139, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS140, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS141, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS144, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS143, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS145, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS146, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS147, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS150, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS149, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS151, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS152, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS153, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS156, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS155, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS157, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS158, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS159, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS162, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS161, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS163, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS164, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS165, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS168, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS167, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS169, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS170, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS171, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS174, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS173, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS175, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS176, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS177, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS180, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS179, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS181, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS182, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS183, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS186, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS185, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS187, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS188, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS189, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS192, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS191, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS193, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS194, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS195, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS198, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS197, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS199, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS200, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS201, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS204, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS203, false), new _M0TP28bobzhang15games_2dwebsite8GameInfo(_M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS205, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS206, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS207, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS210, _M0FP28bobzhang15games_2dwebsite15get__all__gamesN7_2abindS209, false)];
 }
 function _M0FP28bobzhang15games_2dwebsite16render__featured(dispatch) {
   const games = _M0FP28bobzhang15games_2dwebsite15get__all__games();
@@ -8104,7 +7899,7 @@ function _M0FP28bobzhang15games_2dwebsite16render__featured(dispatch) {
       break;
     }
   }
-  const _tmp$2 = _M0FP319moonbit_2dcommunity7rabbita4html2h2GsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite32render__featured_2econstr_2f3297, undefined, -1, undefined, "⭐ Featured Games");
+  const _tmp$2 = _M0FP319moonbit_2dcommunity7rabbita4html2h2GsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite32render__featured_2econstr_2f3217, undefined, -1, undefined, "⭐ Featured Games");
   const _p$2 = new Array(featured.length);
   const _p$3 = featured.length;
   let _tmp$3 = 0;
@@ -8119,13 +7914,13 @@ function _M0FP28bobzhang15games_2dwebsite16render__featured(dispatch) {
       break;
     }
   }
-  return _M0FP319moonbit_2dcommunity7rabbita4html7sectionGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite32render__featured_2econstr_2f3296, undefined, -1, undefined, [_tmp$2, _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite32render__featured_2econstr_2f3298, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, _p$2)]);
+  return _M0FP319moonbit_2dcommunity7rabbita4html7sectionGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite32render__featured_2econstr_2f3216, undefined, -1, undefined, [_tmp$2, _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite32render__featured_2econstr_2f3218, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, _p$2)]);
 }
 function _M0FP28bobzhang15games_2dwebsite14render__footer() {
-  return _M0FP319moonbit_2dcommunity7rabbita4html6footerGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3306, undefined, -1, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3307, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html1pGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3308, undefined, -1, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, undefined, undefined, -1, undefined, "Powered by "), _M0FP319moonbit_2dcommunity7rabbita4html1aGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, undefined, undefined, -1, "https://www.moonbitlang.com", _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3309, undefined, undefined, undefined, "MoonBit", -1), _M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, undefined, undefined, -1, undefined, " · "), _M0FP319moonbit_2dcommunity7rabbita4html1aGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, undefined, undefined, -1, "https://www.raylib.com", _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3310, undefined, undefined, undefined, "Raylib", -1), _M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, undefined, undefined, -1, undefined, " · "), _M0FP319moonbit_2dcommunity7rabbita4html1aGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, undefined, undefined, -1, "https://github.com/moonbit-community/rabbita", _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3311, undefined, undefined, undefined, "Rabbita", -1)]), _M0FP319moonbit_2dcommunity7rabbita4html1pGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3312, undefined, -1, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html1aGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, undefined, undefined, -1, "https://github.com/bobzhang/games", _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3313, undefined, undefined, undefined, "⭐ Star on GitHub", -1), _M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, undefined, undefined, -1, undefined, " · "), _M0FP319moonbit_2dcommunity7rabbita4html1aGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, undefined, undefined, -1, "https://mooncakes.io/docs/#/bobzhang/games/", _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3314, undefined, undefined, undefined, "MoonCakes Package", -1)])])]);
+  return _M0FP319moonbit_2dcommunity7rabbita4html6footerGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3226, undefined, -1, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3227, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html1pGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3228, undefined, -1, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, undefined, undefined, -1, undefined, "Powered by "), _M0FP319moonbit_2dcommunity7rabbita4html1aGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, undefined, undefined, -1, "https://www.moonbitlang.com", _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3229, undefined, undefined, undefined, "MoonBit", -1), _M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, undefined, undefined, -1, undefined, " · "), _M0FP319moonbit_2dcommunity7rabbita4html1aGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, undefined, undefined, -1, "https://www.raylib.com", _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3230, undefined, undefined, undefined, "Raylib", -1), _M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, undefined, undefined, -1, undefined, " · "), _M0FP319moonbit_2dcommunity7rabbita4html1aGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, undefined, undefined, -1, "https://github.com/moonbit-community/rabbita", _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3231, undefined, undefined, undefined, "Rabbita", -1)]), _M0FP319moonbit_2dcommunity7rabbita4html1pGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3232, undefined, -1, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html1aGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, undefined, undefined, -1, "https://github.com/bobzhang/games", _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3233, undefined, undefined, undefined, "⭐ Star on GitHub", -1), _M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, undefined, undefined, -1, undefined, " · "), _M0FP319moonbit_2dcommunity7rabbita4html1aGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, undefined, undefined, -1, "https://mooncakes.io/docs/#/bobzhang/games/", _M0FP28bobzhang15games_2dwebsite30render__footer_2econstr_2f3234, undefined, undefined, undefined, "MoonCakes Package", -1)])])]);
 }
-function _M0FP28bobzhang15games_2dwebsite10game__card(dispatch, game) {
-  const _tmp = dispatch(new _M0DTP28bobzhang15games_2dwebsite3Msg8PlayGame(game.id));
+function _M0FP28bobzhang15games_2dwebsite10game__card(_dispatch, game) {
+  const _tmp = `games/${game.id}/${game.id}.html`;
   const _tmp$2 = _M0FP319moonbit_2dcommunity7rabbita4html11div_2einnerGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE([`background: ${_M0FP28bobzhang15games_2dwebsite15genre__gradient(game.genre)}; height: 90px; border-radius: 8px 8px 0 0; display: flex; align-items: center; justify-content: center;`], undefined, undefined, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html12span_2einnerGsE(["font-size: 32px; opacity: 0.9;"], undefined, undefined, undefined, -1, undefined, game.icon)]);
   const _tmp$3 = ["padding: 10px 12px;"];
   const _tmp$4 = _M0FP319moonbit_2dcommunity7rabbita4html11div_2einnerGsE([`font-size: 10px; color: ${_M0FP28bobzhang15games_2dwebsite12genre__color(game.genre)}; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;`], undefined, undefined, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, game.genre);
@@ -8138,7 +7933,7 @@ function _M0FP28bobzhang15games_2dwebsite10game__card(dispatch, game) {
   } else {
     _tmp$6 = _M0FP319moonbit_2dcommunity7rabbita4html7nothing;
   }
-  return _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite26game__card_2econstr_2f3315, undefined, -1, _tmp, undefined, undefined, undefined, undefined, undefined, undefined, [_tmp$2, _M0FP319moonbit_2dcommunity7rabbita4html11div_2einnerGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_tmp$3, undefined, undefined, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_tmp$4, _tmp$5, _tmp$6]), _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite26game__card_2econstr_2f3316, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite26game__card_2econstr_2f3317, undefined, -1, undefined, "▶")])]);
+  return _M0FP319moonbit_2dcommunity7rabbita4html1aGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite26game__card_2econstr_2f3235, undefined, -1, _tmp, undefined, undefined, undefined, undefined, [_tmp$2, _M0FP319moonbit_2dcommunity7rabbita4html11div_2einnerGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_tmp$3, undefined, undefined, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_tmp$4, _tmp$5, _tmp$6]), _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite26game__card_2econstr_2f3236, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite26game__card_2econstr_2f3237, undefined, -1, undefined, "▶")])], _M0FP28bobzhang15games_2dwebsite26game__card_2econstr_2f3238);
 }
 function _M0FP28bobzhang15games_2dwebsite20get__filtered__games(model) {
   const all = _M0FP28bobzhang15games_2dwebsite15get__all__games();
@@ -8161,19 +7956,19 @@ function _M0FP28bobzhang15games_2dwebsite20get__filtered__games(model) {
           break;
         }
         case "classic": {
-          cat_match = _M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS257, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS257.length)) || (_M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS258, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS258.length)) || (_M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS259, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS259.length)) || (_M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS260, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS260.length)) || (_M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS261, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS261.length)) || (g.id === "2048" || (g.id === "mario" || g.id === "minesweeper"))))));
+          cat_match = _M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS217, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS217.length)) || (_M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS218, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS218.length)) || (_M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS219, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS219.length)) || (_M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS220, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS220.length)) || (_M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS221, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS221.length)) || (g.id === "2048" || (g.id === "mario" || g.id === "minesweeper"))))));
           break;
         }
         case "3d": {
-          cat_match = _M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS262, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS262.length)) || (_M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS263, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS263.length)) || _M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS264, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS264.length)));
+          cat_match = _M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS222, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS222.length)) || (_M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS223, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS223.length)) || _M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS224, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS224.length)));
           break;
         }
         case "2026": {
-          cat_match = _M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS265, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS265.length));
+          cat_match = _M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS225, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS225.length));
           break;
         }
         case "raylib": {
-          cat_match = _M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS266, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS266.length)) || (_M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS267, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS267.length)) || (_M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS268, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS268.length)) || (_M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS269, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS269.length)) || _M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS270, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS270.length)))));
+          cat_match = _M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS226, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS226.length)) || (_M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS227, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS227.length)) || (_M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS228, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS228.length)) || (_M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS229, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS229.length)) || _M0MPC16string6String8contains(g.id, new _M0TPC16string10StringView(_M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS230, 0, _M0FP28bobzhang15games_2dwebsite20get__filtered__gamesN7_2abindS230.length)))));
           break;
         }
         default: {
@@ -8200,7 +7995,7 @@ function _M0FP28bobzhang15games_2dwebsite20get__filtered__games(model) {
 }
 function _M0FP28bobzhang15games_2dwebsite18render__game__grid(dispatch, model) {
   const games = _M0FP28bobzhang15games_2dwebsite20get__filtered__games(model);
-  const _tmp = _M0FP319moonbit_2dcommunity7rabbita4html1pGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34render__game__grid_2econstr_2f3332, undefined, -1, undefined, `${_M0IP016_24default__implPB4Show10to__stringGiE(games.length)} games`);
+  const _tmp = _M0FP319moonbit_2dcommunity7rabbita4html1pGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34render__game__grid_2econstr_2f3253, undefined, -1, undefined, `${_M0IP016_24default__implPB4Show10to__stringGiE(games.length)} games`);
   const _p$2 = new Array(games.length);
   const _p$3 = games.length;
   let _tmp$2 = 0;
@@ -8215,13 +8010,13 @@ function _M0FP28bobzhang15games_2dwebsite18render__game__grid(dispatch, model) {
       break;
     }
   }
-  return _M0FP319moonbit_2dcommunity7rabbita4html7sectionGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34render__game__grid_2econstr_2f3331, undefined, -1, undefined, [_tmp, _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34render__game__grid_2econstr_2f3333, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, _p$2)]);
+  return _M0FP319moonbit_2dcommunity7rabbita4html7sectionGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34render__game__grid_2econstr_2f3252, undefined, -1, undefined, [_tmp, _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite34render__game__grid_2econstr_2f3254, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, _p$2)]);
 }
 function _M0FP28bobzhang15games_2dwebsite14render__header(dispatch, model) {
-  return _M0FP319moonbit_2dcommunity7rabbita4html6headerGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3338, undefined, -1, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3339, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3340, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3341, undefined, -1, undefined, "🎮"), _M0FP319moonbit_2dcommunity7rabbita4html2h1GsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3342, undefined, -1, undefined, undefined, "MoonBit Games")]), _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3343, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html5inputGsE(_M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3344, undefined, model.search, -1, -1, -1, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3345, undefined, _M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3346, undefined, -1, -1, -1, undefined, undefined, undefined, (s) => dispatch(new _M0DTP28bobzhang15games_2dwebsite3Msg13SearchChanged(s)), undefined, "")]), _M0FP319moonbit_2dcommunity7rabbita4html3navGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3347, undefined, -1, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html1aGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3348, undefined, -1, "https://github.com/bobzhang/games", _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3349, undefined, undefined, undefined, "GitHub", -1), _M0FP319moonbit_2dcommunity7rabbita4html1aGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3350, undefined, -1, "https://mooncakes.io/docs/#/bobzhang/games/", _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3351, undefined, undefined, undefined, "MoonCakes", -1)])])]);
+  return _M0FP319moonbit_2dcommunity7rabbita4html6headerGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3259, undefined, -1, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3260, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3261, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3262, undefined, -1, undefined, "🎮"), _M0FP319moonbit_2dcommunity7rabbita4html2h1GsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3263, undefined, -1, undefined, undefined, "MoonBit Games")]), _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3264, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html5inputGsE(_M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3265, undefined, model.search, -1, -1, -1, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3266, undefined, _M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3267, undefined, -1, -1, -1, undefined, undefined, undefined, (s) => dispatch(new _M0DTP28bobzhang15games_2dwebsite3Msg13SearchChanged(s)), undefined, "")]), _M0FP319moonbit_2dcommunity7rabbita4html3navGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3268, undefined, -1, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html1aGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3269, undefined, -1, "https://github.com/bobzhang/games", _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3270, undefined, undefined, undefined, "GitHub", -1), _M0FP319moonbit_2dcommunity7rabbita4html1aGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3271, undefined, -1, "https://mooncakes.io/docs/#/bobzhang/games/", _M0FP28bobzhang15games_2dwebsite30render__header_2econstr_2f3272, undefined, undefined, undefined, "MoonCakes", -1)])])]);
 }
 function _M0FP28bobzhang15games_2dwebsite12render__hero() {
-  return _M0FP319moonbit_2dcommunity7rabbita4html7sectionGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3355, undefined, -1, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3356, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html2h2GsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3357, undefined, -1, undefined, "333 Games Built with MoonBit + Raylib"), _M0FP319moonbit_2dcommunity7rabbita4html1pGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3358, undefined, -1, undefined, "From classic arcade ports to 3D adventures — all running in your browser via WebAssembly"), _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3359, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3360, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3361, undefined, -1, undefined, "333"), _M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3362, undefined, -1, undefined, "Games")]), _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3363, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3364, undefined, -1, undefined, "10"), _M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3365, undefined, -1, undefined, "Genres")]), _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3366, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3367, undefined, -1, undefined, "80K+"), _M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3368, undefined, -1, undefined, "Lines of Code")])])])]);
+  return _M0FP319moonbit_2dcommunity7rabbita4html7sectionGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3276, undefined, -1, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3277, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html2h2GsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3278, undefined, -1, undefined, "333 Games Built with MoonBit + Raylib"), _M0FP319moonbit_2dcommunity7rabbita4html1pGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3279, undefined, -1, undefined, "From classic arcade ports to 3D adventures — all running in your browser via WebAssembly"), _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3280, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3281, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3282, undefined, -1, undefined, "333"), _M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3283, undefined, -1, undefined, "Games")]), _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3284, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3285, undefined, -1, undefined, "10"), _M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3286, undefined, -1, undefined, "Genres")]), _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3287, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3288, undefined, -1, undefined, "80K+"), _M0FP319moonbit_2dcommunity7rabbita4html4spanGsE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite28render__hero_2econstr_2f3289, undefined, -1, undefined, "Lines of Code")])])])]);
 }
 function _M0FP28bobzhang15games_2dwebsite10main__view(dispatch, model) {
   const _p$2 = model.search;
@@ -8230,19 +8025,12 @@ function _M0FP28bobzhang15games_2dwebsite10main__view(dispatch, model) {
   const _p$4 = model.category;
   const _p$5 = "all";
   const is_filtered = !(_p$4 === _p$5);
-  return _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite26main__view_2econstr_2f3369, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP28bobzhang15games_2dwebsite14render__header(dispatch, model), is_searching || is_filtered ? _M0FP319moonbit_2dcommunity7rabbita4html7nothing : _M0FP28bobzhang15games_2dwebsite12render__hero(), is_searching || is_filtered ? _M0FP319moonbit_2dcommunity7rabbita4html7nothing : _M0FP28bobzhang15games_2dwebsite16render__featured(dispatch), _M0FP28bobzhang15games_2dwebsite18render__categories(dispatch, model), _M0FP28bobzhang15games_2dwebsite18render__game__grid(dispatch, model), _M0FP28bobzhang15games_2dwebsite14render__footer()]);
+  return _M0FP319moonbit_2dcommunity7rabbita4html3divGRPB5ArrayGRP319moonbit_2dcommunity7rabbita4html4HtmlEE(_M0DTPC16option6OptionGRPB5ArrayGsEE4None__, undefined, _M0FP28bobzhang15games_2dwebsite26main__view_2econstr_2f3290, undefined, -1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, [_M0FP28bobzhang15games_2dwebsite14render__header(dispatch, model), is_searching || is_filtered ? _M0FP319moonbit_2dcommunity7rabbita4html7nothing : _M0FP28bobzhang15games_2dwebsite12render__hero(), is_searching || is_filtered ? _M0FP319moonbit_2dcommunity7rabbita4html7nothing : _M0FP28bobzhang15games_2dwebsite16render__featured(dispatch), _M0FP28bobzhang15games_2dwebsite18render__categories(dispatch, model), _M0FP28bobzhang15games_2dwebsite18render__game__grid(dispatch, model), _M0FP28bobzhang15games_2dwebsite14render__footer()]);
 }
 function _M0FP28bobzhang15games_2dwebsite4view(dispatch, model) {
-  const _bind = model.selected_game;
-  if (_bind === undefined) {
-    return _M0FP28bobzhang15games_2dwebsite10main__view(dispatch, model);
-  } else {
-    const _Some = _bind;
-    const _game_id = _Some;
-    return _M0FP28bobzhang15games_2dwebsite18game__player__view(dispatch, _game_id, model);
-  }
+  return _M0FP28bobzhang15games_2dwebsite10main__view(dispatch, model);
 }
 (() => {
-  const app = _M0FP219moonbit_2dcommunity7rabbita12simple__cellGRP28bobzhang15games_2dwebsite5ModelRP28bobzhang15games_2dwebsite3MsgE(_M0FP28bobzhang15games_2dwebsite11init__model(), (msg, model) => _M0FP28bobzhang15games_2dwebsite6update(msg, model), (dispatch, model) => _M0FP28bobzhang15games_2dwebsite4view(dispatch, model));
+  const app = _M0FP219moonbit_2dcommunity7rabbita12simple__cellGRP28bobzhang15games_2dwebsite5ModelRP28bobzhang15games_2dwebsite3MsgE(_M0FP28bobzhang15games_2dwebsite27init__model_2erecord_2f3185, (msg, model) => _M0FP28bobzhang15games_2dwebsite6update(msg, model), (dispatch, model) => _M0FP28bobzhang15games_2dwebsite4view(dispatch, model));
   _M0MP219moonbit_2dcommunity7rabbita3App5mount(_M0FP219moonbit_2dcommunity7rabbita3new(app), "app");
 })();
