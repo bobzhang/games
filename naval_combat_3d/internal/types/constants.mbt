@@ -684,6 +684,10 @@ pub let survive_time_default : Float = 120.0
 // Convoy speed
 
 ///|
+/// Amplitude of ship bobbing on waves.
+pub let bob_amplitude : Float = 0.15
+
+///|
 /// Speed value for convoy speed in world units per second.
 pub let convoy_speed : Float = 2.0
 

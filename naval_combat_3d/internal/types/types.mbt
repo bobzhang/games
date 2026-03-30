@@ -148,6 +148,9 @@ pub(all) struct EnemyShip {
   mut fire_timer_decay : Float
   mut broadside_cooldown : Float
   mut target_heading : Float
+  mut has_convoy_target : Bool
+  mut convoy_target_x : Float
+  mut convoy_target_z : Float
   mut formation_offset_x : Float
   mut formation_offset_z : Float
 }
@@ -199,6 +202,9 @@ pub fn EnemyShip::inactive() -> EnemyShip {
     fire_timer_decay: 0.0,
     broadside_cooldown: 0.0,
     target_heading: 0.0,
+    has_convoy_target: false,
+    convoy_target_x: 0.0,
+    convoy_target_z: 0.0,
     formation_offset_x: 0.0,
     formation_offset_z: 0.0,
   }

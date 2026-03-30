@@ -571,10 +571,34 @@ fn @types.Game::update_fleet_ships(game : @types.Game, dt : Float) -> Unit {
       // Hold position
       fs.speed = @types.lerpf(fs.speed, 0.0, dt * 2.0)
     }
+    // Apply wind model to fleet ship speed
+    let fs_mast_ratio : Float = if fs.max_mast_hp > 0.0 {
+      fs.mast_hp / fs.max_mast_hp
+    } else {
+      1.0
+    }
+    let fs_base_speed = @types.get_class_base_speed(fs.ship_class)
+    let fs_wind_speed = @types.calc_sailing_speed(
+      fs.heading,
+      game.wind_angle,
+      game.wind_speed,
+      fs.sail_amount,
+      fs_mast_ratio,
+      fs_base_speed,
+    )
+    let fs_actual_speed = @types.minf(fs.speed, fs_wind_speed)
     // Move
-    let move_speed = fs.speed * dt
-    let new_x = fs.x + @math.sinf(fs.heading) * move_speed
-    let new_z = fs.z + @math.cosf(fs.heading) * move_speed
+    let move_speed = fs_actual_speed * dt
+    let fs_drift = @types.calc_wind_drift(
+      fs.heading,
+      game.wind_angle,
+      game.wind_speed,
+      fs_actual_speed,
+    )
+    let new_x = fs.x + @math.sinf(fs.heading) * move_speed + fs_drift.0 * dt *
+      0.3
+    let new_z = fs.z + @math.cosf(fs.heading) * move_speed + fs_drift.1 * dt *
+      0.3
     if !@types.check_island_collision(game, new_x, new_z, 1.5) {
       let half : Float = @types.ocean_size / 2.0 - 5.0
       fs.x = @types.clampf(new_x, -half, half)
@@ -663,8 +687,24 @@ fn @types.Game::update_convoy(game : @types.Game, dt : Float) -> Unit {
       cs.heading -= turn
     }
     cs.heading = @types.normalize_angle(cs.heading)
-    cs.x += @math.sinf(cs.heading) * cs.speed * dt
-    cs.z += @math.cosf(cs.heading) * cs.speed * dt
+    // Apply wind model to convoy speed
+    let cs_wind_speed = @types.calc_sailing_speed(
+      cs.heading,
+      game.wind_angle,
+      game.wind_speed,
+      0.7, // convoy ships sail at ~70%
+      1.0, // assume full mast health
+      cs.speed, // use convoy base speed as the class base speed
+    )
+    let cs_actual = @types.maxf(cs_wind_speed, cs.speed * 0.1) // small minimum to prevent total stalling
+    let cs_drift = @types.calc_wind_drift(
+      cs.heading,
+      game.wind_angle,
+      game.wind_speed,
+      cs_actual,
+    )
+    cs.x += @math.sinf(cs.heading) * cs_actual * dt + cs_drift.0 * dt * 0.3
+    cs.z += @math.cosf(cs.heading) * cs_actual * dt + cs_drift.1 * dt * 0.3
     // Check arrival
     let dist = @types.distance2d(
       cs.x,

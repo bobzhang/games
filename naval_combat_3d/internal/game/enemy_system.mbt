@@ -10,18 +10,61 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
       continue
     }
     let dist_to_player = @types.distance2d(enemy.x, enemy.z, px, pz)
+    // Target convoy ships if applicable (before AI state so targeting info
+    // is available to steering).  Run in ALL states so patrol ships can
+    // aggro convoy.  Only clear the flag when the targeted convoy ship is
+    // gone (destroyed / arrived).
+    if enemy.has_convoy_target {
+      // Validate the current convoy target still exists
+      let mut still_valid = false
+      for cs in game.convoy_ships {
+        if cs.active && !cs.arrived {
+          let d = @types.distance2d(
+            enemy.convoy_target_x,
+            enemy.convoy_target_z,
+            cs.x,
+            cs.z,
+          )
+          if d < 5.0 {
+            // Target is still alive -- update its position
+            enemy.convoy_target_x = cs.x
+            enemy.convoy_target_z = cs.z
+            still_valid = true
+            break
+          }
+        }
+      }
+      if !still_valid {
+        enemy.has_convoy_target = false
+      }
+    }
+    // Try to acquire a convoy target in every state (not just Attack/Chase)
+    if !enemy.has_convoy_target {
+      game.maybe_target_convoy(i, dt)
+    }
+    // Resolve effective target: convoy ship if targeted, else player
+    let (target_x, target_z) = if enemy.has_convoy_target {
+      (enemy.convoy_target_x, enemy.convoy_target_z)
+    } else {
+      (px, pz)
+    }
+    let dist_to_target = @types.distance2d(enemy.x, enemy.z, target_x, target_z)
     // AI state transitions based on personality
     game.update_ai_state(i, dist_to_player)
-    // Execute behavior
+    // Execute behavior -- pass effective target, not just player
     match enemy.ai_state {
       Patrol => game.update_patrol(i, dt)
-      Chase => game.update_chase(i, dt, px, pz)
-      Attack => game.update_attack(i, dt, px, pz)
+      Chase => game.update_chase(i, dt, target_x, target_z)
+      Attack => game.update_attack(i, dt, target_x, target_z)
       Retreat => game.update_retreat(i, dt, px, pz)
-      Flank => game.update_flank(i, dt, px, pz)
-      BroadsideRun => game.update_broadside_run(i, dt, px, pz)
+      Flank => game.update_flank(i, dt, target_x, target_z)
+      BroadsideRun => game.update_broadside_run(i, dt, target_x, target_z)
     }
-    // Calculate speed based on wind and mast damage
+    // Windward positioning: when player is upwind, try to tack upwind
+    if !enemy.has_convoy_target && enemy.ai_state != Retreat && enemy.ai_state != Patrol {
+      game.apply_windward_bias(i, dt, px, pz)
+    }
+    // Calculate speed based on wind and mast damage (same model as player)
     let mast_ratio : Float = if enemy.max_mast_hp > 0.0 {
       enemy.mast_hp / enemy.max_mast_hp
     } else {
@@ -36,8 +79,8 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
       mast_ratio,
       base_speed,
     )
-    // Use the min of AI-controlled speed and wind-calculated speed
-    let actual_speed = @types.minf(enemy.speed, @types.maxf(wind_speed, 1.5))
+    // Use wind-based speed -- no artificial floor
+    let actual_speed = @types.minf(enemy.speed, wind_speed)
     // Move enemy based on heading
     let move_speed = actual_speed * dt
     let new_x = enemy.x + @math.sinf(enemy.heading) * move_speed
@@ -89,12 +132,12 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
       (enemy.ai_state == Attack || enemy.ai_state == BroadsideRun) {
       let can_fire = enemy.crew > 0 && enemy.broadside_cooldown <= 0.0
       if can_fire {
-        // Check if player is within firing arc (broadside)
-        let to_player = @math.atan2f(px - enemy.x, pz - enemy.z)
-        let rel = @types.angle_diff(enemy.heading, to_player)
+        // Check if target is within firing arc (broadside)
+        let to_target = @math.atan2f(target_x - enemy.x, target_z - enemy.z)
+        let rel = @types.angle_diff(enemy.heading, to_target)
         let in_broadside_arc = rel.abs() > @types.pi * 0.2 &&
           rel.abs() < @types.pi * 0.8
-        if in_broadside_arc && dist_to_player < enemy.attack_range * 1.2 {
+        if in_broadside_arc && dist_to_target < enemy.attack_range * 1.2 {
           game.fire_enemy_broadside(i)
           enemy.fire_timer = enemy.fire_rate
           enemy.broadside_cooldown = enemy.fire_rate * 0.5
@@ -114,10 +157,6 @@ fn @types.Game::update_enemies(game : @types.Game, dt : Float) -> Unit {
         enemy.fire_timer += dt * penalty * 0.1
       }
     }
-    // Target convoy ships if applicable
-    if enemy.ai_state == Attack || enemy.ai_state == Chase {
-      game.maybe_target_convoy(i, dt)
-    }
   }
 }
 
@@ -133,15 +172,32 @@ fn @types.Game::update_ai_state(
   } else {
     1.0
   }
-  // Retreat check based on personality
+  // Flee when critically damaged (below 20% HP) regardless of personality
+  if hp_ratio < 0.2 {
+    enemy.ai_state = Retreat
+    return
+  }
+  // Retreat check based on personality threshold
   if hp_ratio < enemy.retreat_hp_pct && enemy.ai_personality != Berserker {
     enemy.ai_state = Retreat
     return
   }
+  // Use the closer of player or convoy target for state transition thresholds
+  let dist_to_target : Float = if enemy.has_convoy_target {
+    let dc = @types.distance2d(
+      enemy.x,
+      enemy.z,
+      enemy.convoy_target_x,
+      enemy.convoy_target_z,
+    )
+    @types.minf(dc, dist_to_player)
+  } else {
+    dist_to_player
+  }
   // State machine
   match enemy.ai_state {
     Patrol =>
-      if dist_to_player < enemy.detect_range {
+      if dist_to_target < enemy.detect_range {
         // Transition based on personality
         match enemy.ai_personality {
           Aggressive | Berserker => enemy.ai_state = Chase
@@ -151,17 +207,17 @@ fn @types.Game::update_ai_state(
         }
       }
     Chase =>
-      if dist_to_player < enemy.attack_range {
+      if dist_to_target < enemy.attack_range {
         if enemy.ai_personality == Flanker {
           enemy.ai_state = BroadsideRun
         } else {
           enemy.ai_state = Attack
         }
-      } else if dist_to_player > enemy.detect_range * 1.5 {
+      } else if dist_to_target > enemy.detect_range * 1.5 {
         enemy.ai_state = Patrol
       }
     Attack => {
-      if dist_to_player > enemy.attack_range * 1.3 {
+      if dist_to_target > enemy.attack_range * 1.3 {
         enemy.ai_state = Chase
       }
       // Berserkers try to close distance for boarding
@@ -172,17 +228,17 @@ fn @types.Game::update_ai_state(
       }
     }
     Retreat =>
-      if hp_ratio > enemy.retreat_hp_pct + 0.1 {
+      if hp_ratio > enemy.retreat_hp_pct + 0.1 && hp_ratio >= 0.2 {
         enemy.ai_state = Patrol
       }
     Flank =>
-      if dist_to_player < enemy.attack_range * 0.7 {
+      if dist_to_target < enemy.attack_range * 0.7 {
         enemy.ai_state = BroadsideRun
-      } else if dist_to_player > enemy.detect_range * 1.5 {
+      } else if dist_to_target > enemy.detect_range * 1.5 {
         enemy.ai_state = Patrol
       }
     BroadsideRun =>
-      if dist_to_player > enemy.attack_range * 1.2 {
+      if dist_to_target > enemy.attack_range * 1.2 {
         enemy.ai_state = Chase
       }
   }
@@ -231,12 +287,12 @@ fn @types.Game::update_chase(
   game : @types.Game,
   idx : Int,
   dt : Float,
-  px : Float,
-  pz : Float,
+  tx : Float,
+  tz : Float,
 ) -> Unit {
   let enemy = game.enemies[idx]
-  // Head towards player but try to approach broadside
-  let to_player = @math.atan2f(px - enemy.x, pz - enemy.z)
+  // Head towards target but try to approach broadside
+  let to_target = @math.atan2f(tx - enemy.x, tz - enemy.z)
   // Approach at an angle to get broadside position
   let approach_offset : Float = if enemy.ai_personality == Aggressive {
     @types.pi * 0.2
@@ -245,7 +301,7 @@ fn @types.Game::update_chase(
   } else {
     @types.pi * 0.3
   }
-  let approach_angle = to_player + approach_offset
+  let approach_angle = to_target + approach_offset
   let diff = @types.angle_diff(enemy.heading, approach_angle)
   let rudder_ratio : Float = if enemy.max_rudder_hp > 0.0 {
     enemy.rudder_hp / enemy.max_rudder_hp
@@ -276,13 +332,13 @@ fn @types.Game::update_attack(
   game : @types.Game,
   idx : Int,
   dt : Float,
-  px : Float,
-  pz : Float,
+  tx : Float,
+  tz : Float,
 ) -> Unit {
   let enemy = game.enemies[idx]
-  // Circle the player at attack range, keeping broadside
-  let to_player = @math.atan2f(px - enemy.x, pz - enemy.z)
-  let dist = @types.distance2d(enemy.x, enemy.z, px, pz)
+  // Circle the target at attack range, keeping broadside
+  let to_target = @math.atan2f(tx - enemy.x, tz - enemy.z)
+  let dist = @types.distance2d(enemy.x, enemy.z, tx, tz)
   // Orbit angle depends on personality
   let orbit_angle : Float = if dist < enemy.attack_range * 0.6 {
     // Too close, angle away
@@ -291,7 +347,7 @@ fn @types.Game::update_attack(
     } else {
       0.7
     }
-    to_player + @types.pi * away_mult
+    to_target + @types.pi * away_mult
   } else if dist > enemy.attack_range {
     // Too far, angle towards
     let toward_mult : Float = if enemy.ai_personality == Aggressive {
@@ -299,10 +355,10 @@ fn @types.Game::update_attack(
     } else {
       0.2
     }
-    to_player + @types.pi * toward_mult
+    to_target + @types.pi * toward_mult
   } else {
-    // Good distance, circle
-    to_player + @types.pi * 0.5
+    // Good distance -- broadside positioning: orbit perpendicular to target
+    to_target + @types.pi * 0.5
   }
   let diff = @types.angle_diff(enemy.heading, orbit_angle)
   let rudder_ratio : Float = if enemy.max_rudder_hp > 0.0 {
@@ -338,9 +394,14 @@ fn @types.Game::update_retreat(
   pz : Float,
 ) -> Unit {
   let enemy = game.enemies[idx]
+  let hp_ratio : Float = if enemy.max_hp > 0.0 {
+    enemy.hull_hp / enemy.max_hp
+  } else {
+    1.0
+  }
   // Run away from player
   let away_from_player = @math.atan2f(enemy.x - px, enemy.z - pz)
-  // Try to use wind advantage
+  // Try to use wind advantage -- sail downwind for maximum escape speed
   let wind_bonus = @types.angle_diff(away_from_player, game.wind_angle)
   let retreat_angle : Float = if wind_bonus.abs() < @types.pi * 0.3 {
     away_from_player
@@ -348,7 +409,15 @@ fn @types.Game::update_retreat(
     // Adjust to get better wind
     away_from_player + wind_bonus * 0.2
   }
-  let diff = @types.angle_diff(enemy.heading, retreat_angle)
+  // When critically damaged, bias even more toward downwind for speed
+  let final_retreat : Float = if hp_ratio < 0.2 {
+    let downwind = @types.normalize_angle(game.wind_angle + @types.pi)
+    let blend = @types.angle_diff(retreat_angle, downwind) * 0.4
+    @types.normalize_angle(retreat_angle + blend)
+  } else {
+    retreat_angle
+  }
+  let diff = @types.angle_diff(enemy.heading, final_retreat)
   let rudder_ratio : Float = if enemy.max_rudder_hp > 0.0 {
     enemy.rudder_hp / enemy.max_rudder_hp
   } else {
@@ -367,7 +436,7 @@ fn @types.Game::update_retreat(
   } else if diff < -turn_rate {
     enemy.heading -= turn_rate
   } else {
-    enemy.heading = retreat_angle
+    enemy.heading = final_retreat
   }
   enemy.heading = @types.normalize_angle(enemy.heading)
   // Full sail when retreating
@@ -380,20 +449,20 @@ fn @types.Game::update_flank(
   game : @types.Game,
   idx : Int,
   dt : Float,
-  px : Float,
-  pz : Float,
+  tx : Float,
+  tz : Float,
 ) -> Unit {
   let enemy = game.enemies[idx]
   // Approach from an oblique angle, using wind advantage
-  let to_player = @math.atan2f(px - enemy.x, pz - enemy.z)
+  let to_target = @math.atan2f(tx - enemy.x, tz - enemy.z)
   // Flankers approach at 60-90 degree offset
   let flank_offset : Float = @types.pi * 0.45
-  let dist = @types.distance2d(enemy.x, enemy.z, px, pz)
+  let dist = @types.distance2d(enemy.x, enemy.z, tx, tz)
   let flank_angle : Float = if dist > enemy.attack_range * 0.8 {
-    to_player + flank_offset
+    to_target + flank_offset
   } else {
     // Close enough, start circling for broadside
-    to_player + @types.pi * 0.5
+    to_target + @types.pi * 0.5
   }
   let diff = @types.angle_diff(enemy.heading, flank_angle)
   let rudder_ratio : Float = if enemy.max_rudder_hp > 0.0 {
@@ -425,24 +494,24 @@ fn @types.Game::update_broadside_run(
   game : @types.Game,
   idx : Int,
   dt : Float,
-  px : Float,
-  pz : Float,
+  tx : Float,
+  tz : Float,
 ) -> Unit {
   let enemy = game.enemies[idx]
-  // Sail parallel to the player at attack range, firing broadsides
-  let to_player = @math.atan2f(px - enemy.x, pz - enemy.z)
-  let dist = @types.distance2d(enemy.x, enemy.z, px, pz)
-  // Maintain parallel heading
-  let player_heading = game.player.heading
+  // Sail parallel to the target at attack range, firing broadsides
+  let to_target = @math.atan2f(tx - enemy.x, tz - enemy.z)
+  let dist = @types.distance2d(enemy.x, enemy.z, tx, tz)
+  // Maintain parallel heading -- use player heading for broadside run
+  // against player, otherwise orbit the convoy target
   let parallel_angle : Float = if dist < enemy.attack_range * 0.5 {
     // Too close, angle slightly away
-    player_heading + @types.pi * 0.15
+    to_target + @types.pi * 0.6
   } else if dist > enemy.attack_range * 0.9 {
     // Too far, angle slightly toward
-    to_player + @types.pi * 0.3
+    to_target + @types.pi * 0.3
   } else {
-    // Good range, run parallel
-    player_heading
+    // Good range, run perpendicular (broadside)
+    to_target + @types.pi * 0.5
   }
   let diff = @types.angle_diff(enemy.heading, parallel_angle)
   let rudder_ratio : Float = if enemy.max_rudder_hp > 0.0 {
@@ -466,6 +535,29 @@ fn @types.Game::update_broadside_run(
   }
   enemy.heading = @types.normalize_angle(enemy.heading)
   ignore(game)
+}
+
+///|
+/// When the player is upwind of the enemy, bias the enemy heading to tack
+/// toward the windward side so it can gain a positional advantage.
+fn @types.Game::apply_windward_bias(
+  game : @types.Game,
+  idx : Int,
+  dt : Float,
+  px : Float,
+  pz : Float,
+) -> Unit {
+  let enemy = game.enemies[idx]
+  // Determine if player is upwind of us
+  let to_player = @math.atan2f(px - enemy.x, pz - enemy.z)
+  let wind_to_player = @types.angle_diff(game.wind_angle, to_player).abs()
+  // Player is upwind when the bearing to player is close to the wind direction
+  if wind_to_player < @types.pi * 0.4 {
+    // Player is roughly upwind -- bias our heading slightly windward
+    let windward_dir = game.wind_angle
+    let bias = @types.angle_diff(enemy.heading, windward_dir) * 0.15 * dt
+    enemy.heading = @types.normalize_angle(enemy.heading + bias)
+  }
 }
 
 ///|
@@ -494,7 +586,10 @@ fn @types.Game::maybe_target_convoy(
     // Prefer attacking convoy if it's significantly closer
     if dist_to_convoy < dist_to_player * 0.6 &&
       dist_to_convoy < enemy.detect_range {
-      // Turn towards convoy instead
+      // Set convoy target so steering uses these coords
+      enemy.has_convoy_target = true
+      enemy.convoy_target_x = cs.x
+      enemy.convoy_target_z = cs.z
       enemy.target_heading = @types.bearing(enemy.x, enemy.z, cs.x, cs.z)
       return
     }
@@ -507,11 +602,18 @@ fn @types.Game::fire_enemy_broadside(
   enemy_idx : Int,
 ) -> Unit {
   let enemy = game.enemies[enemy_idx]
-  let px = game.player.x
-  let pz = game.player.z
-  // Determine which side faces the player
-  let to_player = @math.atan2f(px - enemy.x, pz - enemy.z)
-  let rel = @types.angle_diff(enemy.heading, to_player)
+  // Pick the actual target position -- convoy or player
+  let (aim_target_x, aim_target_z) = if enemy.has_convoy_target {
+    (enemy.convoy_target_x, enemy.convoy_target_z)
+  } else {
+    (game.player.x, game.player.z)
+  }
+  // Determine which side faces the target
+  let to_target = @math.atan2f(
+    aim_target_x - enemy.x,
+    aim_target_z - enemy.z,
+  )
+  let rel = @types.angle_diff(enemy.heading, to_target)
   let side_angle : Float = if rel > 0.0 {
     enemy.heading + @types.pi / 2.0
   } else {
@@ -532,10 +634,15 @@ fn @types.Game::fire_enemy_broadside(
     cb.x = enemy.x + @math.sinf(fire_angle) * (enemy.ship_width * 0.6)
     cb.y = 1.2
     cb.z = enemy.z + @math.cosf(fire_angle) * (enemy.ship_width * 0.6)
-    // Aim at player with inaccuracy based on class
-    let aim_dx = px - cb.x
-    let aim_dz = pz - cb.z
-    let aim_dist = @types.distance2d(cb.x, cb.z, px, pz)
+    // Aim at target with inaccuracy based on class
+    let aim_dx = aim_target_x - cb.x
+    let aim_dz = aim_target_z - cb.z
+    let aim_dist = @types.distance2d(
+      cb.x,
+      cb.z,
+      aim_target_x,
+      aim_target_z,
+    )
     let cannon_spd = @types.get_cannon_speed(enemy.cannon_type)
     let inaccuracy : Float = match enemy.ship_class {
       ManOfWar => 1.5
