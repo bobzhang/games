@@ -108,6 +108,26 @@ pub let block_cactus : Int = 22
 /// Block id for clay resource block.
 pub let block_clay : Int = 23
 
+///|
+/// Item id for sticks (non-block crafting material).
+pub let item_stick : Int = 24
+
+///|
+/// Item id for workbench.
+pub let item_workbench : Int = 25
+
+///|
+/// Item id for furnace.
+pub let item_furnace : Int = 26
+
+///|
+/// Item id for iron ingot.
+pub let item_iron_ingot : Int = 27
+
+///|
+/// Item id for coal.
+pub let item_coal : Int = 28
+
 // Biome types
 
 // Tool types
@@ -589,6 +609,18 @@ pub let fall_damage_multiplier : Float = 1.0
 pub let respawn_invulnerability : Float = 3.0
 
 // Block physics
+
+///|
+/// Durability for wooden tools.
+pub let durability_wood : Int = 60
+
+///|
+/// Durability for stone tools.
+pub let durability_stone : Int = 132
+
+///|
+/// Durability for iron tools.
+pub let durability_iron : Int = 250
 
 ///|
 /// Update interval for gravity-affected block simulation.

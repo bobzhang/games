@@ -17,6 +17,7 @@ pub fn draw_world(game : @types.Game) -> Unit {
   game.draw_torch_glow_effects()
   game.draw_water_surface_effects()
   game.draw_tool_in_hand()
+  game.draw_damage_numbers_3d()
   @raylib.end_mode_3d()
 }
 
@@ -135,10 +136,10 @@ fn @types.Game::draw_chunk_blocks(
   let chunk = game.chunks[cz * @types.world_chunks_x + cx]
   let base_wx = cx * @types.chunk_x
   let base_wz = cz * @types.chunk_z
-  // Only render blocks near player height +/- some range for performance
+  // Render blocks within extended vertical range for better visibility
   let player_y = game.player.y.to_int()
-  let min_y = (0).max(player_y - 20)
-  let max_y = (@types.chunk_y - 1).min(player_y + 20)
+  let min_y = (0).max(player_y - 40)
+  let max_y = (@types.chunk_y - 1).min(player_y + 40)
   // Distance from player to chunk center for fog
   let chunk_center_x = Float::from_int(base_wx + @types.chunk_x / 2)
   let chunk_center_z = Float::from_int(base_wz + @types.chunk_z / 2)
@@ -322,8 +323,8 @@ fn @types.Game::draw_chunk_decorations(
   let base_wx = cx * @types.chunk_x
   let base_wz = cz * @types.chunk_z
   let player_y = game.player.y.to_int()
-  let min_y = (0).max(player_y - 15)
-  let max_y = (@types.chunk_y - 1).min(player_y + 15)
+  let min_y = (0).max(player_y - 30)
+  let max_y = (@types.chunk_y - 1).min(player_y + 30)
   for ly in min_y..<=max_y {
     for lz in 0..<@types.chunk_z {
       for lx in 0..<@types.chunk_x {
@@ -1411,6 +1412,27 @@ fn @types.Game::draw_particles(game : @types.Game) -> Unit {
         p.size,
         p.size,
         @raylib.Color::new(p.color_r, p.color_g, p.color_b, clamped_alpha),
+      )
+    }
+  }
+}
+
+// ========== Damage number 3D rendering ==========
+
+///|
+fn @types.Game::draw_damage_numbers_3d(game : @types.Game) -> Unit {
+  for i in 0..<@types.damage_number_max {
+    let dn = game.damage_numbers[i]
+    if dn.active {
+      // Draw as a small colored cube that floats up
+      let alpha = (dn.timer / 1.5 * 255.0).to_int().clamp(min=0, max=255)
+      let size : Float = 0.15 + Float::from_int(dn.amount) * 0.03
+      @raylib.draw_cube(
+        @raylib.Vector3::new(dn.x, dn.y, dn.z),
+        size,
+        size,
+        size,
+        @raylib.Color::new(dn.color_r, dn.color_g, dn.color_b, alpha),
       )
     }
   }

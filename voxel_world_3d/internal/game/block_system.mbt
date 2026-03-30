@@ -87,17 +87,37 @@ pub fn handle_block_interaction(game : @types.Game, dt : Float) -> Unit {
     if target.hit {
       let block = @types.get_world_block(game, target.bx, target.by, target.bz)
       if @types.is_solid(block) && block != @types.block_bedrock {
-        // Check if same block we were mining
-        if player.mining_active &&
+        // Check inventory full before mining
+        let drop = @types.get_block_drop(block)
+        if drop != @types.block_air && player.inventory.is_full() {
+          game.inv_full_timer = 1.5
+          player.mining_active = false
+          player.mining_progress = 0.0
+        } else if player.mining_active &&
           player.mining_block_x == target.bx &&
           player.mining_block_y == target.by &&
           player.mining_block_z == target.bz {
           // Continue mining
           let mine_time = @types.get_mining_time(block, player.equipped_tool)
           player.mining_progress += dt / mine_time
+          // Spawn crack particles as mining progresses
+          let cr = @levels.block_color_r(block)
+          let cg = @levels.block_color_g(block)
+          let cb = @levels.block_color_b(block)
+          if player.mining_progress > 0.25 &&
+            game.frame_counter % 8 == 0 {
+            @types.spawn_mining_crack_particles(
+              game,
+              target.bx,
+              target.by,
+              target.bz,
+              cr,
+              cg,
+              cb,
+            )
+          }
           if player.mining_progress >= 1.0 {
             // Block broken!
-            let drop = @types.get_block_drop(block)
             @types.set_world_block(
               game,
               target.bx,
@@ -111,12 +131,11 @@ pub fn handle_block_interaction(game : @types.Game, dt : Float) -> Unit {
             // Add to inventory
             if drop != @types.block_air {
               let leftover = player.inventory.add_item(drop, 1)
-              ignore(leftover)
+              if leftover > 0 {
+                game.inv_full_timer = 1.5
+              }
             }
-            // Spawn break particles
-            let cr = @levels.block_color_r(block)
-            let cg = @levels.block_color_g(block)
-            let cb = @levels.block_color_b(block)
+            // Spawn break particles burst
             @types.spawn_break_particles(
               game,
               target.bx,
@@ -126,6 +145,15 @@ pub fn handle_block_interaction(game : @types.Game, dt : Float) -> Unit {
               cg,
               cb,
             )
+            // Deduct tool durability
+            if player.equipped_tool != @types.tool_hand {
+              player.tool_durability -= 1
+              if player.tool_durability <= 0 {
+                @types.show_message(game, "Tool broke!", 2.0)
+                player.equipped_tool = @types.tool_hand
+                player.tool_durability = 0
+              }
+            }
             @types.show_message(game, "Broke \{@types.block_name(block)}", 1.0)
           }
         } else {

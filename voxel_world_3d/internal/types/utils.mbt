@@ -616,6 +616,16 @@ pub fn block_name(kind : Int) -> String {
     "Cactus"
   } else if kind == block_clay {
     "Clay"
+  } else if kind == item_stick {
+    "Stick"
+  } else if kind == item_workbench {
+    "Workbench"
+  } else if kind == item_furnace {
+    "Furnace"
+  } else if kind == item_iron_ingot {
+    "Iron Ingot"
+  } else if kind == item_coal {
+    "Coal"
   } else {
     "Unknown"
   }
@@ -692,6 +702,100 @@ pub fn biome_name(kind : Biome) -> String {
     Tundra => "Tundra"
     Swamp => "Swamp"
   }
+}
+
+///|
+/// Returns whether an item id represents a tool.
+pub fn is_tool_item(id : Int) -> Bool {
+  id == tool_wooden_pickaxe ||
+  id == tool_stone_pickaxe ||
+  id == tool_iron_pickaxe ||
+  id == tool_wooden_axe ||
+  id == tool_stone_axe ||
+  id == tool_iron_axe ||
+  id == tool_wooden_shovel ||
+  id == tool_stone_shovel ||
+  id == tool_iron_shovel ||
+  id == tool_wooden_sword ||
+  id == tool_stone_sword ||
+  id == tool_iron_sword
+}
+
+///|
+/// Returns the total count of an item across all inventory slots.
+pub fn Inventory::count_item(self : Inventory, item_id : Int) -> Int {
+  let mut total = 0
+  for i in 0..<inventory_slots {
+    if self.slots[i].item_id == item_id && self.slots[i].count > 0 {
+      total += self.slots[i].count
+    }
+  }
+  total
+}
+
+///|
+/// Removes up to `count` items from inventory, deducting across multiple slots.
+/// Returns the number actually removed.
+pub fn Inventory::remove_item(
+  self : Inventory,
+  item_id : Int,
+  count : Int,
+) -> Int {
+  let mut remaining = count
+  for i in 0..<inventory_slots {
+    if remaining <= 0 {
+      break
+    }
+    if self.slots[i].item_id == item_id && self.slots[i].count > 0 {
+      let take = if self.slots[i].count < remaining {
+        self.slots[i].count
+      } else {
+        remaining
+      }
+      self.slots[i].count -= take
+      remaining -= take
+      if self.slots[i].count <= 0 {
+        self.slots[i].item_id = 0
+        self.slots[i].count = 0
+      }
+    }
+  }
+  count - remaining
+}
+
+///|
+/// Returns true if the inventory has room for the given item and count.
+pub fn Inventory::has_space_for(
+  self : Inventory,
+  item_id : Int,
+  count : Int,
+) -> Bool {
+  let mut remaining = count
+  // Check existing stacks
+  for i in 0..<inventory_slots {
+    if remaining <= 0 {
+      return true
+    }
+    if self.slots[i].item_id == item_id &&
+      self.slots[i].count > 0 &&
+      self.slots[i].count < stack_max {
+      let can_add = stack_max - self.slots[i].count
+      remaining -= can_add
+    }
+  }
+  if remaining <= 0 {
+    return true
+  }
+  // Check empty slots
+  for i in 0..<inventory_slots {
+    if remaining <= 0 {
+      return true
+    }
+    if self.slots[i].count <= 0 {
+      remaining -= stack_max
+    }
+  }
+  remaining <= 0
 }
 
 // Get mining time for a block with a given tool
@@ -958,5 +1062,103 @@ pub fn facing_direction(yaw : Float) -> String {
     "West"
   } else {
     "NW"
+  }
+}
+
+// ========== Tool durability helpers ==========
+
+///|
+/// Returns the maximum durability for a given tool id.
+pub fn get_tool_max_durability(tool : Int) -> Int {
+  if tool == tool_wooden_pickaxe ||
+    tool == tool_wooden_axe ||
+    tool == tool_wooden_shovel ||
+    tool == tool_wooden_sword {
+    durability_wood
+  } else if tool == tool_stone_pickaxe ||
+    tool == tool_stone_axe ||
+    tool == tool_stone_shovel ||
+    tool == tool_stone_sword {
+    durability_stone
+  } else if tool == tool_iron_pickaxe ||
+    tool == tool_iron_axe ||
+    tool == tool_iron_shovel ||
+    tool == tool_iron_sword {
+    durability_iron
+  } else {
+    0 // Hand has no durability
+  }
+}
+
+// ========== Inventory full check ==========
+
+///|
+/// Returns true when every inventory slot is occupied with non-empty stacks.
+pub fn Inventory::is_full(self : Inventory) -> Bool {
+  for i in 0..<inventory_slots {
+    if self.slots[i].count <= 0 {
+      return false
+    }
+    if self.slots[i].count < stack_max {
+      return false
+    }
+  }
+  true
+}
+
+// ========== Damage number spawning ==========
+
+///|
+/// Spawns a floating damage number at the given world position.
+pub fn spawn_damage_number(
+  game : Game,
+  x : Float,
+  y : Float,
+  z : Float,
+  amount : Int,
+  r : Int,
+  g : Int,
+  b : Int,
+) -> Unit {
+  for i in 0..<damage_number_max {
+    if !game.damage_numbers[i].active {
+      let dn = game.damage_numbers[i]
+      dn.active = true
+      dn.x = x
+      dn.y = y
+      dn.z = z
+      dn.amount = amount
+      dn.timer = 1.5
+      dn.color_r = r
+      dn.color_g = g
+      dn.color_b = b
+      return
+    }
+  }
+}
+
+// ========== Mining crack particles ==========
+
+///|
+/// Spawns a few small particles around the mined block as cracks progress.
+pub fn spawn_mining_crack_particles(
+  game : Game,
+  wx : Int,
+  wy : Int,
+  wz : Int,
+  r : Int,
+  g : Int,
+  b : Int,
+) -> Unit {
+  let cx = Float::from_int(wx) + 0.5
+  let cy = Float::from_int(wy) + 0.5
+  let cz = Float::from_int(wz) + 0.5
+  for i in 0..<3 {
+    let angle = Float::from_int(i) * 2.1 + rand_float(game) * 1.0
+    let speed : Float = 1.0 + rand_float(game) * 1.5
+    let pvx = @math.cosf(angle) * speed
+    let pvy : Float = 1.5 + rand_float(game) * 1.5
+    let pvz = @math.sinf(angle) * speed
+    spawn_particle(game, cx, cy, cz, pvx, pvy, pvz, r, g, b, 0.06, 0.4)
   }
 }

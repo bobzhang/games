@@ -39,6 +39,9 @@ pub fn draw_ui(game : @types.Game) -> Unit {
     game.draw_compass()
     game.draw_tool_durability()
     game.draw_event_log()
+    game.draw_sun_moon_indicator()
+    game.draw_inventory_full_warning()
+    game.draw_damage_numbers_2d()
   }
   // Damage flash overlay
   if game.player.damage_flash > 0.0 {
@@ -880,24 +883,58 @@ fn @types.Game::draw_crafting_screen(game : @types.Game) -> Unit {
   let panel_width = 500
   let panel_x = (@types.screen_width - panel_width) / 2
   let panel_y = 110
-  // Background panel
+  // Bug 5 fix: cap visible recipes and use scroll offset
+  let max_visible = 10
+  let visible_count = if recipes.length() < max_visible {
+    recipes.length()
+  } else {
+    max_visible
+  }
+  let panel_h = visible_count * recipe_height + 20
+  // Background panel with fixed height
   @raylib.draw_rectangle(
     panel_x - 10,
     panel_y - 10,
     panel_width + 20,
-    recipes.length() * recipe_height + 20,
+    panel_h,
     @raylib.Color::new(40, 40, 40, 220),
   )
   @raylib.draw_rectangle_lines(
     panel_x - 10,
     panel_y - 10,
     panel_width + 20,
-    recipes.length() * recipe_height + 20,
+    panel_h,
     @raylib.Color::new(100, 100, 100, 255),
   )
-  for i in 0..<recipes.length() {
+  // Draw scroll indicators if needed
+  if game.crafting_scroll_offset > 0 {
+    @draw.draw_text(
+      "^ more ^",
+      panel_x + panel_width / 2 - 30,
+      panel_y - 8,
+      12,
+      @raylib.Color::new(200, 200, 100, 200),
+    )
+  }
+  if game.crafting_scroll_offset + visible_count < recipes.length() {
+    @draw.draw_text(
+      "v more v",
+      panel_x + panel_width / 2 - 30,
+      panel_y + visible_count * recipe_height + 2,
+      12,
+      @raylib.Color::new(200, 200, 100, 200),
+    )
+  }
+  // Draw only visible recipes
+  let end_idx = if game.crafting_scroll_offset + visible_count < recipes.length() {
+    game.crafting_scroll_offset + visible_count
+  } else {
+    recipes.length()
+  }
+  for i in game.crafting_scroll_offset..<end_idx {
     let recipe = recipes[i]
-    let ry = panel_y + i * recipe_height
+    let row = i - game.crafting_scroll_offset
+    let ry = panel_y + row * recipe_height
     let is_selected = game.crafting_selection == i
     // Background
     let bg = if is_selected {
@@ -978,6 +1015,18 @@ fn @types.Game::draw_crafting_screen(game : @types.Game) -> Unit {
       )
     }
   }
+  // Show inventory full warning if active
+  if game.inv_full_timer > 0.0 {
+    let warn = "Inventory Full!"
+    let ww = @draw.measure_text(warn, 22)
+    @draw.draw_text(
+      warn,
+      (@types.screen_width - ww) / 2,
+      panel_y + panel_h + 10,
+      22,
+      @raylib.Color::new(255, 80, 80, 255),
+    )
+  }
 }
 
 ///|
@@ -989,22 +1038,12 @@ fn @types.Game::check_can_craft(
   let mut has1 = false
   let mut has2 = false
   if recipe.input1_id > 0 && recipe.input1_count > 0 {
-    for i in 0..<@types.inventory_slots {
-      if inv.slots[i].item_id == recipe.input1_id &&
-        inv.slots[i].count >= recipe.input1_count {
-        has1 = true
-      }
-    }
+    has1 = inv.count_item(recipe.input1_id) >= recipe.input1_count
   } else {
     has1 = true
   }
   if recipe.input2_id > 0 && recipe.input2_count > 0 {
-    for i in 0..<@types.inventory_slots {
-      if inv.slots[i].item_id == recipe.input2_id &&
-        inv.slots[i].count >= recipe.input2_count {
-        has2 = true
-      }
-    }
+    has2 = inv.count_item(recipe.input2_id) >= recipe.input2_count
   } else {
     has2 = true
   }
@@ -1234,11 +1273,27 @@ fn @types.Game::draw_tool_durability(game : @types.Game) -> Unit {
     bar_height + 2,
     @raylib.Color::new(0, 0, 0, 150),
   )
-  // Durability fill (simplified: always full since we don't track per-use yet)
-  let dur_pct : Float = 0.8 // Placeholder durability
+  // Durability fill using real tool durability
+  let max_dur = @types.get_tool_max_durability(tool)
+  let dur_pct : Float = if max_dur > 0 {
+    Float::from_int(player.tool_durability) / Float::from_int(max_dur)
+  } else {
+    0.0
+  }
   let fill = (Float::from_int(bar_width) * dur_pct).to_int()
-  let dur_r : Int = if dur_pct > 0.5 { 50 } else { 220 }
-  let dur_g : Int = if dur_pct > 0.5 { 200 } else { 80 }
+  // Color: green -> yellow -> red
+  let dur_r : Int = if dur_pct > 0.5 {
+    @types.lerpi(255, 50, (dur_pct - 0.5) * 2.0)
+  } else {
+    255
+  }
+  let dur_g : Int = if dur_pct > 0.5 {
+    200
+  } else if dur_pct > 0.25 {
+    @types.lerpi(80, 200, (dur_pct - 0.25) * 4.0)
+  } else {
+    @types.lerpi(0, 80, dur_pct * 4.0)
+  }
   @raylib.draw_rectangle(
     bar_x,
     bar_y,
@@ -1309,4 +1364,146 @@ fn @types.Game::draw_event_log(game : @types.Game) -> Unit {
   @draw.draw_text(blocks_text, log_x, log_y + line_h * 2, 13, log_color)
   let placed_text = "Placed: \{game.blocks_placed}"
   @draw.draw_text(placed_text, log_x, log_y + line_h * 3, 13, log_color)
+}
+
+// ========== Sun/Moon HUD indicator ==========
+
+///|
+fn @types.Game::draw_sun_moon_indicator(game : @types.Game) -> Unit {
+  let t = game.day_timer / @types.day_length
+  let indicator_x = @types.screen_width - 50
+  let indicator_y = 62
+  // Background circle
+  @raylib.draw_rectangle(
+    indicator_x - 16,
+    indicator_y - 16,
+    32,
+    32,
+    @raylib.Color::new(0, 0, 0, 100),
+  )
+  // Sun position within indicator (arc based on time)
+  let sun_local_y = -@math.cosf(t * @types.two_pi) * 10.0
+  let is_sun_up = t > 0.1 && t < 0.6
+  if is_sun_up {
+    // Draw sun as yellow square
+    @raylib.draw_rectangle(
+      indicator_x - 5,
+      indicator_y + sun_local_y.to_int() - 5,
+      10,
+      10,
+      @raylib.Color::new(255, 220, 50, 255),
+    )
+  } else {
+    // Draw moon as white square
+    let moon_local_y = @math.cosf(t * @types.two_pi) * 10.0
+    @raylib.draw_rectangle(
+      indicator_x - 4,
+      indicator_y + moon_local_y.to_int() - 4,
+      8,
+      8,
+      @raylib.Color::new(220, 220, 240, 255),
+    )
+  }
+  // Horizon line
+  @raylib.draw_rectangle(
+    indicator_x - 14,
+    indicator_y,
+    28,
+    1,
+    @raylib.Color::new(150, 150, 150, 180),
+  )
+}
+
+// ========== Inventory full warning ==========
+
+///|
+fn @types.Game::draw_inventory_full_warning(game : @types.Game) -> Unit {
+  if game.inv_full_timer <= 0.0 {
+    return
+  }
+  let text = "INVENTORY FULL!"
+  let tw = @draw.measure_text(text, 28)
+  let cx = (@types.screen_width - tw) / 2
+  let cy = @types.screen_height / 2 - 60
+  // Flash effect: pulse alpha
+  let flash = @math.sinf(game.inv_full_timer * 8.0)
+  let alpha : Int = if flash > 0.0 { 255 } else { 180 }
+  // Background
+  @raylib.draw_rectangle(
+    cx - 10,
+    cy - 4,
+    tw + 20,
+    36,
+    @raylib.Color::new(80, 0, 0, (alpha * 2 / 3).clamp(min=0, max=200)),
+  )
+  // Text
+  @draw.draw_text(
+    text,
+    cx,
+    cy,
+    28,
+    @raylib.Color::new(255, 50, 50, alpha.clamp(min=0, max=255)),
+  )
+}
+
+// ========== 2D Damage numbers ==========
+
+///|
+fn @types.Game::draw_damage_numbers_2d(game : @types.Game) -> Unit {
+  for i in 0..<@types.damage_number_max {
+    let dn = game.damage_numbers[i]
+    if dn.active {
+      // Simple screen-space rendering: project damage number
+      // Use approximate screen position based on distance/direction
+      let dx = dn.x - game.cam_pos_x
+      let dy = dn.y - game.cam_pos_y
+      let dz = dn.z - game.cam_pos_z
+      let dist = (dx * dx + dy * dy + dz * dz).sqrt()
+      if dist < 0.5 || dist > 30.0 {
+        continue
+      }
+      // Get look direction
+      let cos_yaw = @math.cosf(game.player.yaw)
+      let sin_yaw = @math.sinf(game.player.yaw)
+      let cos_pitch = @math.cosf(game.player.pitch)
+      let sin_pitch = @math.sinf(game.player.pitch)
+      let look_x = sin_yaw * cos_pitch
+      let look_y = sin_pitch
+      let look_z = cos_yaw * cos_pitch
+      // Dot product to check if in front of camera
+      let dot = dx * look_x + dy * look_y + dz * look_z
+      if dot <= 0.0 {
+        continue
+      }
+      // Simple projection to screen
+      let right_x = cos_yaw
+      let right_z = -sin_yaw
+      let screen_x_offset = (dx * right_x + dz * right_z) / dist * 200.0
+      let screen_y_offset = -dy / dist * 200.0
+      let sx = @types.screen_width / 2 + screen_x_offset.to_int()
+      let sy = @types.screen_height / 2 + screen_y_offset.to_int()
+      if sx < 0 || sx > @types.screen_width || sy < 0 || sy > @types.screen_height {
+        continue
+      }
+      let alpha = (dn.timer / 1.5 * 255.0).to_int().clamp(min=0, max=255)
+      let dmg_text = "-\{dn.amount}"
+      let tw = @draw.measure_text(dmg_text, 20)
+      // Shadow
+      @draw.draw_text(
+        dmg_text,
+        sx - tw / 2 + 1,
+        sy + 1,
+        20,
+        @raylib.Color::new(0, 0, 0, (alpha / 2).clamp(min=0, max=128)),
+      )
+      // Number
+      @draw.draw_text(
+        dmg_text,
+        sx - tw / 2,
+        sy,
+        20,
+        @raylib.Color::new(dn.color_r, dn.color_g, dn.color_b, alpha),
+      )
+    }
+  }
 }

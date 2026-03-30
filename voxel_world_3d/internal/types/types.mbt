@@ -171,6 +171,7 @@ pub(all) struct Player {
   mut mining_active : Bool
   // Tool
   mut equipped_tool : Int
+  mut tool_durability : Int
   // Combat
   mut attack_cooldown : Float
   mut invulnerable_timer : Float
@@ -218,6 +219,7 @@ pub fn Player::new() -> Player {
     mining_progress: 0.0,
     mining_active: false,
     equipped_tool: tool_hand,
+    tool_durability: 0,
     attack_cooldown: 0.0,
     invulnerable_timer: 0.0,
     damage_flash: 0.0,
@@ -346,6 +348,42 @@ pub fn Particle::inactive() -> Particle {
   }
 }
 
+// Damage number for combat feedback
+
+///|
+/// Floating damage number shown above entities when hit.
+pub(all) struct DamageNumber {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut z : Float
+  mut amount : Int
+  mut timer : Float
+  mut color_r : Int
+  mut color_g : Int
+  mut color_b : Int
+}
+
+///|
+/// Creates an inactive damage number slot.
+pub fn DamageNumber::inactive() -> DamageNumber {
+  {
+    active: false,
+    x: 0.0,
+    y: 0.0,
+    z: 0.0,
+    amount: 0,
+    timer: 0.0,
+    color_r: 255,
+    color_g: 50,
+    color_b: 50,
+  }
+}
+
+///|
+/// Maximum damage number pool size.
+pub let damage_number_max : Int = 16
+
 // Crafting recipe
 
 ///|
@@ -451,6 +489,7 @@ pub(all) struct Game {
   mut message_text : String
   mut show_debug : Bool
   mut crafting_selection : Int
+  mut crafting_scroll_offset : Int
 
   // Entities
   entities : Array[Entity]
@@ -484,6 +523,15 @@ pub(all) struct Game {
   mut death_timer : Float
   mut respawn_count : Int
 
+  // Inventory full warning
+  mut inv_full_timer : Float
+
+  // Damage numbers
+  damage_numbers : Array[DamageNumber]
+
+  // World seed
+  mut world_seed : Int
+
   fn new() -> Game
 }
 
@@ -511,6 +559,12 @@ pub fn Game::new() -> Game {
     particles.push(Particle::inactive())
     ignore(i)
   }
+  // Create damage number pool
+  let damage_numbers : Array[DamageNumber] = []
+  for i in 0..<damage_number_max {
+    damage_numbers.push(DamageNumber::inactive())
+    ignore(i)
+  }
   let game : Game = {
     state: Menu,
     player: Player(),
@@ -534,6 +588,7 @@ pub fn Game::new() -> Game {
     message_text: "",
     show_debug: false,
     crafting_selection: 0,
+    crafting_scroll_offset: 0,
     entities,
     entity_spawn_timer: 5.0,
     particles,
@@ -550,6 +605,9 @@ pub fn Game::new() -> Game {
     prev_pos_z: 0.0,
     death_timer: 0.0,
     respawn_count: 0,
+    inv_full_timer: 0.0,
+    damage_numbers,
+    world_seed: 12345,
   }
   // Generate terrain for all chunks
   for i in 0..<total_chunks {

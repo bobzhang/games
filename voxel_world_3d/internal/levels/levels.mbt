@@ -50,6 +50,16 @@ pub fn block_color_r(kind : Int) -> Int {
     30
   } else if kind == @types.block_clay {
     160
+  } else if kind == @types.item_stick {
+    180
+  } else if kind == @types.item_workbench {
+    150
+  } else if kind == @types.item_furnace {
+    120
+  } else if kind == @types.item_iron_ingot {
+    200
+  } else if kind == @types.item_coal {
+    40
   } else {
     255
   }
@@ -104,6 +114,16 @@ pub fn block_color_g(kind : Int) -> Int {
     130
   } else if kind == @types.block_clay {
     155
+  } else if kind == @types.item_stick {
+    120
+  } else if kind == @types.item_workbench {
+    100
+  } else if kind == @types.item_furnace {
+    120
+  } else if kind == @types.item_iron_ingot {
+    200
+  } else if kind == @types.item_coal {
+    40
   } else {
     255
   }
@@ -158,6 +178,16 @@ pub fn block_color_b(kind : Int) -> Int {
     50
   } else if kind == @types.block_clay {
     145
+  } else if kind == @types.item_stick {
+    60
+  } else if kind == @types.item_workbench {
+    50
+  } else if kind == @types.item_furnace {
+    120
+  } else if kind == @types.item_iron_ingot {
+    200
+  } else if kind == @types.item_coal {
+    40
   } else {
     255
   }
@@ -223,14 +253,139 @@ pub fn fog_color_b(is_night : Bool) -> Int {
 /// Returns full crafting recipe catalog used by crafting UI and execution.
 pub fn get_crafting_recipes() -> Array[@types.CraftingRecipe] {
   let recipes : Array[@types.CraftingRecipe] = []
+  // === Basic resources ===
   // Wood -> Planks (1 wood = 4 planks)
   recipes.push(
     CraftingRecipe(
       @types.block_wood, 1, 0, 0, @types.block_planks, 4, "Wood -> Planks",
     ),
   )
-  // Planks -> Sticks (not a block, but stored as item)
-  // Stone + Cobblestone -> Brick
+  // Planks -> Sticks (2 planks = 4 sticks)
+  recipes.push(
+    CraftingRecipe(
+      @types.block_planks, 2, 0, 0, @types.item_stick, 4, "Planks -> Sticks",
+    ),
+  )
+  // === Workstations ===
+  // Workbench: 4 planks -> 1 workbench
+  recipes.push(
+    CraftingRecipe(
+      @types.block_planks, 4, 0, 0, @types.item_workbench, 1, "Planks -> Workbench",
+    ),
+  )
+  // Furnace: 8 cobblestone -> 1 furnace
+  recipes.push(
+    CraftingRecipe(
+      @types.block_cobblestone, 8, 0, 0, @types.item_furnace, 1, "Cobblestone -> Furnace",
+    ),
+  )
+  // === Tools ===
+  // Wooden Pickaxe: 3 planks + 2 sticks
+  recipes.push(
+    CraftingRecipe(
+      @types.block_planks, 3, @types.item_stick, 2, @types.tool_wooden_pickaxe, 1,
+      "Wood Pickaxe",
+    ),
+  )
+  // Wooden Axe: 3 planks + 2 sticks
+  recipes.push(
+    CraftingRecipe(
+      @types.block_planks, 3, @types.item_stick, 2, @types.tool_wooden_axe, 1,
+      "Wood Axe",
+    ),
+  )
+  // Wooden Shovel: 1 plank + 2 sticks
+  recipes.push(
+    CraftingRecipe(
+      @types.block_planks, 1, @types.item_stick, 2, @types.tool_wooden_shovel, 1,
+      "Wood Shovel",
+    ),
+  )
+  // Wooden Sword: 2 planks + 1 stick
+  recipes.push(
+    CraftingRecipe(
+      @types.block_planks, 2, @types.item_stick, 1, @types.tool_wooden_sword, 1,
+      "Wood Sword",
+    ),
+  )
+  // Stone Pickaxe: 3 cobblestone + 2 sticks
+  recipes.push(
+    CraftingRecipe(
+      @types.block_cobblestone, 3, @types.item_stick, 2, @types.tool_stone_pickaxe,
+      1, "Stone Pickaxe",
+    ),
+  )
+  // Stone Axe: 3 cobblestone + 2 sticks
+  recipes.push(
+    CraftingRecipe(
+      @types.block_cobblestone, 3, @types.item_stick, 2, @types.tool_stone_axe,
+      1, "Stone Axe",
+    ),
+  )
+  // Stone Shovel: 1 cobblestone + 2 sticks
+  recipes.push(
+    CraftingRecipe(
+      @types.block_cobblestone, 1, @types.item_stick, 2, @types.tool_stone_shovel,
+      1, "Stone Shovel",
+    ),
+  )
+  // Stone Sword: 2 cobblestone + 1 stick
+  recipes.push(
+    CraftingRecipe(
+      @types.block_cobblestone, 2, @types.item_stick, 1, @types.tool_stone_sword,
+      1, "Stone Sword",
+    ),
+  )
+  // Iron Ingot (furnace smelting): 1 iron ore + 1 coal
+  recipes.push(
+    CraftingRecipe(
+      @types.block_ore_iron, 1, @types.item_coal, 1, @types.item_iron_ingot, 1,
+      "Smelt Iron Ingot",
+    ),
+  )
+  // Iron Pickaxe: 3 iron ingots + 2 sticks
+  recipes.push(
+    CraftingRecipe(
+      @types.item_iron_ingot, 3, @types.item_stick, 2, @types.tool_iron_pickaxe,
+      1, "Iron Pickaxe",
+    ),
+  )
+  // Iron Axe: 3 iron ingots + 2 sticks
+  recipes.push(
+    CraftingRecipe(
+      @types.item_iron_ingot, 3, @types.item_stick, 2, @types.tool_iron_axe, 1,
+      "Iron Axe",
+    ),
+  )
+  // Iron Shovel: 1 iron ingot + 2 sticks
+  recipes.push(
+    CraftingRecipe(
+      @types.item_iron_ingot, 1, @types.item_stick, 2, @types.tool_iron_shovel,
+      1, "Iron Shovel",
+    ),
+  )
+  // Iron Sword: 2 iron ingots + 1 stick
+  recipes.push(
+    CraftingRecipe(
+      @types.item_iron_ingot, 2, @types.item_stick, 1, @types.tool_iron_sword,
+      1, "Iron Sword",
+    ),
+  )
+  // === Fuel ===
+  // Charcoal: 4 wood -> 2 coal
+  recipes.push(
+    CraftingRecipe(
+      @types.block_wood, 4, 0, 0, @types.item_coal, 2, "Wood -> Charcoal",
+    ),
+  )
+  // === Building blocks ===
+  // Cobblestone -> Stone (smelting)
+  recipes.push(
+    CraftingRecipe(
+      @types.block_cobblestone, 1, 0, 0, @types.block_stone, 1, "Cobblestone -> Stone",
+    ),
+  )
+  // Cobblestone -> Brick
   recipes.push(
     CraftingRecipe(
       @types.block_cobblestone, 4, 0, 0, @types.block_brick, 1, "Cobblestone -> Brick",
@@ -242,10 +397,16 @@ pub fn get_crafting_recipes() -> Array[@types.CraftingRecipe] {
       @types.block_sand, 4, 0, 0, @types.block_glass, 1, "Sand -> Glass",
     ),
   )
-  // Cobblestone -> Stone (smelting)
+  // Planks+Wood -> Torches
   recipes.push(
     CraftingRecipe(
-      @types.block_cobblestone, 1, 0, 0, @types.block_stone, 1, "Cobblestone -> Stone",
+      @types.block_planks, 1, @types.item_stick, 1, @types.block_torch, 4, "Sticks+Planks -> Torches",
+    ),
+  )
+  // Wood -> Torches (simple)
+  recipes.push(
+    CraftingRecipe(
+      @types.block_wood, 2, 0, 0, @types.block_torch, 2, "Wood -> Torches",
     ),
   )
   // Clay -> Brick
@@ -254,72 +415,16 @@ pub fn get_crafting_recipes() -> Array[@types.CraftingRecipe] {
       @types.block_clay, 4, 0, 0, @types.block_brick, 2, "Clay -> Bricks",
     ),
   )
-  // Dirt + Sand -> Gravel
+  // Dirt+Sand -> Gravel
   recipes.push(
     CraftingRecipe(
       @types.block_dirt, 2, @types.block_sand, 2, @types.block_gravel, 4, "Dirt+Sand -> Gravel",
     ),
   )
-  // Planks -> Torch (simplified)
-  recipes.push(
-    CraftingRecipe(
-      @types.block_planks, 1, @types.block_wood, 1, @types.block_torch, 4, "Planks+Wood -> Torches",
-    ),
-  )
-  // Snow -> Ice (represented as glass-like block)
-  recipes.push(
-    CraftingRecipe(
-      @types.block_snow, 4, 0, 0, @types.block_glass, 1, "Snow -> Ice",
-    ),
-  )
-  // Gravel + Sand -> Cobblestone
-  recipes.push(
-    CraftingRecipe(
-      @types.block_gravel, 2, @types.block_sand, 2, @types.block_cobblestone, 4,
-      "Gravel+Sand -> Cobblestone",
-    ),
-  )
-  // Dirt -> Grass Block (with sunlight, simplified)
+  // Dirt+Leaves -> Grass
   recipes.push(
     CraftingRecipe(
       @types.block_dirt, 4, @types.block_leaves, 1, @types.block_grass, 4, "Dirt+Leaves -> Grass",
-    ),
-  )
-  // Stone + Sand -> Brick Wall
-  recipes.push(
-    CraftingRecipe(
-      @types.block_stone, 2, @types.block_sand, 1, @types.block_brick, 2, "Stone+Sand -> Bricks",
-    ),
-  )
-  // Leaves -> Tall Grass (decoration crafting)
-  recipes.push(
-    CraftingRecipe(
-      @types.block_leaves, 4, 0, 0, @types.block_tall_grass, 2, "Leaves -> Tall Grass",
-    ),
-  )
-  // Wood -> Torch (simple recipe)
-  recipes.push(
-    CraftingRecipe(
-      @types.block_wood, 2, 0, 0, @types.block_torch, 2, "Wood -> Torches",
-    ),
-  )
-  // Cobblestone + Dirt -> Gravel
-  recipes.push(
-    CraftingRecipe(
-      @types.block_cobblestone, 2, @types.block_dirt, 1, @types.block_gravel, 3,
-      "Cobble+Dirt -> Gravel",
-    ),
-  )
-  // Sand + Glass -> Decorative Glass
-  recipes.push(
-    CraftingRecipe(
-      @types.block_sand, 2, @types.block_glass, 1, @types.block_glass, 3, "Sand+Glass -> More Glass",
-    ),
-  )
-  // Clay + Sand -> Brick (alternate)
-  recipes.push(
-    CraftingRecipe(
-      @types.block_clay, 2, @types.block_sand, 2, @types.block_brick, 3, "Clay+Sand -> Bricks",
     ),
   )
   recipes

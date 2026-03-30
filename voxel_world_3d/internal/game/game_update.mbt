@@ -68,6 +68,8 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   game.update_combat(dt)
   game.update_player_stats(dt)
   game.update_distance_tracking()
+  game.update_inv_full_timer(dt)
+  game.update_damage_numbers(dt)
 }
 
 ///|
@@ -136,12 +138,23 @@ fn @types.Game::update_crafting(game : @types.Game, _dt : Float) -> Unit {
   }
   let recipes = @levels.get_crafting_recipes()
   let num_recipes = recipes.length()
+  let max_visible = 10
   // Navigate recipes with up/down or W/S
   if @raylib.is_key_pressed(@raylib.KeyW) ||
     @raylib.is_key_pressed(@raylib.KeyUp) {
     game.crafting_selection -= 1
     if game.crafting_selection < 0 {
       game.crafting_selection = num_recipes - 1
+      // Jump scroll to end
+      game.crafting_scroll_offset = if num_recipes > max_visible {
+        num_recipes - max_visible
+      } else {
+        0
+      }
+    }
+    // Scroll up if selection goes above visible area
+    if game.crafting_selection < game.crafting_scroll_offset {
+      game.crafting_scroll_offset = game.crafting_selection
     }
   }
   if @raylib.is_key_pressed(@raylib.KeyS) ||
@@ -149,7 +162,20 @@ fn @types.Game::update_crafting(game : @types.Game, _dt : Float) -> Unit {
     game.crafting_selection += 1
     if game.crafting_selection >= num_recipes {
       game.crafting_selection = 0
+      game.crafting_scroll_offset = 0
     }
+    // Scroll down if selection goes below visible area
+    if game.crafting_selection >= game.crafting_scroll_offset + max_visible {
+      game.crafting_scroll_offset = game.crafting_selection - max_visible + 1
+    }
+  }
+  // Mouse wheel scrolling
+  let wheel = @raylib.get_mouse_wheel_move()
+  if wheel > 0.0 && game.crafting_scroll_offset > 0 {
+    game.crafting_scroll_offset -= 1
+  } else if wheel < 0.0 &&
+    game.crafting_scroll_offset + max_visible < num_recipes {
+    game.crafting_scroll_offset += 1
   }
   // Craft with Enter or Space
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
@@ -166,56 +192,49 @@ fn @types.Game::try_craft(
   recipe : @types.CraftingRecipe,
 ) -> Unit {
   let inv = game.player.inventory
-  // Check if player has required materials
+  // Bug 3 fix: sum across ALL inventory slots for each ingredient
   let mut has_input1 = false
   let mut has_input2 = false
-  let mut input1_slot = -1
-  let mut input2_slot = -1
-  // Find input1
   if recipe.input1_id > 0 && recipe.input1_count > 0 {
-    for i in 0..<@types.inventory_slots {
-      if inv.slots[i].item_id == recipe.input1_id &&
-        inv.slots[i].count >= recipe.input1_count {
-        has_input1 = true
-        input1_slot = i
-      }
-    }
+    has_input1 = inv.count_item(recipe.input1_id) >= recipe.input1_count
   } else {
     has_input1 = true
   }
-  // Find input2
   if recipe.input2_id > 0 && recipe.input2_count > 0 {
-    for i in 0..<@types.inventory_slots {
-      if inv.slots[i].item_id == recipe.input2_id &&
-        inv.slots[i].count >= recipe.input2_count &&
-        i != input1_slot {
-        has_input2 = true
-        input2_slot = i
-      }
-    }
+    has_input2 = inv.count_item(recipe.input2_id) >= recipe.input2_count
   } else {
     has_input2 = true
   }
   if has_input1 && has_input2 {
-    // Consume inputs
-    if input1_slot >= 0 {
-      inv.slots[input1_slot].count -= recipe.input1_count
-      if inv.slots[input1_slot].count <= 0 {
-        inv.slots[input1_slot].item_id = 0
-        inv.slots[input1_slot].count = 0
-      }
+    // Bug 4 fix: check inventory space before crafting
+    if !inv.has_space_for(recipe.output_id, recipe.output_count) {
+      game.inv_full_timer = 1.5
+      return
     }
-    if input2_slot >= 0 {
-      inv.slots[input2_slot].count -= recipe.input2_count
-      if inv.slots[input2_slot].count <= 0 {
-        inv.slots[input2_slot].item_id = 0
-        inv.slots[input2_slot].count = 0
-      }
+    // Consume inputs across multiple slots
+    if recipe.input1_id > 0 && recipe.input1_count > 0 {
+      ignore(inv.remove_item(recipe.input1_id, recipe.input1_count))
     }
-    // Add output
-    let leftover = inv.add_item(recipe.output_id, recipe.output_count)
-    ignore(leftover)
-    @types.show_message(game, "Crafted: \{recipe.name}", 2.0)
+    if recipe.input2_id > 0 && recipe.input2_count > 0 {
+      ignore(inv.remove_item(recipe.input2_id, recipe.input2_count))
+    }
+    // Bug 2 fix: handle tool output - equip it instead of adding to inventory
+    let output_id = recipe.output_id
+    if @types.is_tool_item(output_id) {
+      // Equip the tool and set durability
+      game.player.equipped_tool = output_id
+      game.player.tool_durability = @types.get_tool_max_durability(output_id)
+      @types.show_message(
+        game,
+        "Crafted & equipped: \{recipe.name}",
+        2.0,
+      )
+    } else {
+      // Add output to inventory
+      let leftover = inv.add_item(recipe.output_id, recipe.output_count)
+      ignore(leftover)
+      @types.show_message(game, "Crafted: \{recipe.name}", 2.0)
+    }
   } else {
     @types.show_message(game, "Missing materials!", 1.5)
   }
@@ -261,11 +280,74 @@ fn @types.Game::respawn_player(game : @types.Game) -> Unit {
 
 ///|
 fn @types.Game::start_new_game(game : @types.Game) -> Unit {
-  // Reset player to spawn on terrain surface
-  let spawn_x = Float::from_int(@types.world_chunks_x * @types.chunk_x) / 2.0
-  let spawn_z = Float::from_int(@types.world_chunks_z * @types.chunk_z) / 2.0
-  let spawn_wx = spawn_x.to_int()
-  let spawn_wz = spawn_z.to_int()
+  // Regenerate world terrain with new seed
+  game.rng_state = game.rng_state ^ (game.frame_counter * 7919 + 104729)
+  if game.rng_state < 0 {
+    game.rng_state = -game.rng_state
+  }
+  if game.rng_state == 0 {
+    game.rng_state = 42
+  }
+  game.world_seed = game.rng_state
+  let total_chunks = @types.world_chunks_x * @types.world_chunks_z
+  for i in 0..<total_chunks {
+    @types.generate_chunk_terrain(game.chunks[i], game)
+  }
+  // Reset inventory to starter items
+  for i in 0..<@types.inventory_slots {
+    game.player.inventory.slots[i].item_id = 0
+    game.player.inventory.slots[i].count = 0
+  }
+  game.player.inventory.slots[0] = @types.ItemSlot::make(@types.block_wood, 8)
+  game.player.inventory.selected = 0
+  // Find safe spawn position (on solid ground, not in water/lava, with headroom)
+  let center_x = @types.world_chunks_x * @types.chunk_x / 2
+  let center_z = @types.world_chunks_z * @types.chunk_z / 2
+  let mut spawn_wx = center_x
+  let mut spawn_wz = center_z
+  let mut found_safe = false
+  // Spiral search for safe spawn
+  for radius in 0..<20 {
+    if found_safe {
+      break
+    }
+    let neg_r = -radius
+    for dx in neg_r..<=radius {
+      if found_safe {
+        break
+      }
+      for dz in neg_r..<=radius {
+        if found_safe {
+          break
+        }
+        if dx.abs() != radius && dz.abs() != radius {
+          continue
+        }
+        let test_x = center_x + dx
+        let test_z = center_z + dz
+        let h = game.find_surface_height(test_x, test_z)
+        if h < 2 {
+          continue
+        }
+        let surface_block = @types.get_world_block(game, test_x, h, test_z)
+        // Avoid water and lava
+        if surface_block == @types.block_water {
+          continue
+        }
+        // Check headroom (2 blocks above surface must be air)
+        let above1 = @types.get_world_block(game, test_x, h + 1, test_z)
+        let above2 = @types.get_world_block(game, test_x, h + 2, test_z)
+        if above1 != @types.block_air || above2 != @types.block_air {
+          continue
+        }
+        spawn_wx = test_x
+        spawn_wz = test_z
+        found_safe = true
+      }
+    }
+  }
+  let spawn_x = Float::from_int(spawn_wx) + 0.5
+  let spawn_z = Float::from_int(spawn_wz) + 0.5
   let height = game.find_surface_height(spawn_wx, spawn_wz)
   let spawn_y = Float::from_int(height + 1) + 0.1
   game.player.x = spawn_x
@@ -278,7 +360,7 @@ fn @types.Game::start_new_game(game : @types.Game) -> Unit {
   game.player.pitch = 0.0
   game.player.on_ground = false
   game.player.sprint = false
-  game.player.selected_block = @types.block_grass
+  game.player.selected_block = @types.block_wood
   game.player.bob_timer = 0.0
   game.player.health = @types.player_max_health
   game.player.hunger = @types.player_max_hunger
@@ -287,6 +369,7 @@ fn @types.Game::start_new_game(game : @types.Game) -> Unit {
   game.player.mining_active = false
   game.player.mining_progress = 0.0
   game.player.equipped_tool = @types.tool_hand
+  game.player.tool_durability = 0
   game.player.attack_cooldown = 0.0
   game.player.invulnerable_timer = @types.respawn_invulnerability
   game.player.damage_flash = 0.0
@@ -329,6 +412,12 @@ fn @types.Game::start_new_game(game : @types.Game) -> Unit {
   game.gravity_block_timer = 0.0
   game.water_spread_timer = 0.0
   game.crafting_selection = 0
+  game.crafting_scroll_offset = 0
+  game.inv_full_timer = 0.0
+  // Reset damage numbers
+  for i in 0..<@types.damage_number_max {
+    game.damage_numbers[i].active = false
+  }
 }
 
 ///|
@@ -464,6 +553,17 @@ pub fn damage_player(game : @types.Game, amount : Int) -> Unit {
   player.health -= amount
   player.damage_flash = 1.0
   player.invulnerable_timer = 0.5
+  // Show damage number above player
+  @types.spawn_damage_number(
+    game,
+    player.x,
+    player.y + 2.0,
+    player.z,
+    amount,
+    255,
+    80,
+    80,
+  )
   if player.health <= 0 {
     player.health = 0
     game.state = GameOver
@@ -634,6 +734,26 @@ fn @types.Game::update_combat(game : @types.Game, dt : Float) -> Unit {
       ent.health -= dmg
       ent.damage_flash = 0.5
       player.attack_cooldown = 0.4
+      // Spawn damage number
+      @types.spawn_damage_number(
+        game,
+        ent.x,
+        ent.y + 1.2,
+        ent.z,
+        dmg,
+        255,
+        50,
+        50,
+      )
+      // Deduct tool durability on attack
+      if player.equipped_tool != @types.tool_hand {
+        player.tool_durability -= 1
+        if player.tool_durability <= 0 {
+          @types.show_message(game, "Tool broke!", 2.0)
+          player.equipped_tool = @types.tool_hand
+          player.tool_durability = 0
+        }
+      }
       // Knockback on entity
       let dx = ent.x - player.x
       let dz = ent.z - player.z
@@ -675,6 +795,36 @@ fn @types.Game::update_combat(game : @types.Game, dt : Float) -> Unit {
       }
       // Prevent block breaking on the same click
       ignore(target)
+    }
+  }
+}
+
+// ========== Inventory full timer ==========
+
+///|
+/// Decrements the inventory-full warning timer each frame.
+fn @types.Game::update_inv_full_timer(game : @types.Game, dt : Float) -> Unit {
+  if game.inv_full_timer > 0.0 {
+    game.inv_full_timer -= dt
+    if game.inv_full_timer < 0.0 {
+      game.inv_full_timer = 0.0
+    }
+  }
+}
+
+// ========== Damage number update ==========
+
+///|
+/// Advances floating damage number timers and deactivates expired ones.
+fn @types.Game::update_damage_numbers(game : @types.Game, dt : Float) -> Unit {
+  for i in 0..<@types.damage_number_max {
+    let dn = game.damage_numbers[i]
+    if dn.active {
+      dn.timer -= dt
+      dn.y += dt * 1.5
+      if dn.timer <= 0.0 {
+        dn.active = false
+      }
     }
   }
 }
