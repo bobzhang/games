@@ -15,6 +15,7 @@ pub(all) struct Ent {
   mut spin : Float
   mut cloak : Bool
   mut reward : Int
+  mut max_hp : Float
 
   fn new() -> Ent
 }
@@ -172,6 +173,7 @@ pub fn Ent::new() -> Ent {
     spin: 0.0,
     cloak: false,
     reward: 0,
+    max_hp: 0.0,
   }
 }
 

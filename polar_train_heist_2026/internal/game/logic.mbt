@@ -335,6 +335,7 @@ fn @types.Game::spawn_ent(
   game.ents[i].w = w
   game.ents[i].h = h
   game.ents[i].hp = hp
+  game.ents[i].max_hp = hp
   game.ents[i].shot_cd = shot_cd
   game.ents[i].spin = @types.randf(0.0, 6.283)
   game.ents[i].cloak = cloak
@@ -762,13 +763,22 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
 
   game.hero.vx = game.hero.vx + game.input_x * @types.player_accel_x * dt
 
-  let drag = @types.clampf(1.0 - @types.player_drag_x * dt, 0.0, 1.0)
-  game.hero.vx = game.hero.vx * drag
-  game.hero.vx = @types.clampf(
-    game.hero.vx,
-    -@types.player_max_vx,
-    @types.player_max_vx,
-  )
+  if game.dash_t > 0.0 {
+    // During dash, allow full dash speed – skip drag and normal clamp
+    game.hero.vx = @types.clampf(
+      game.hero.vx,
+      -@types.dash_speed,
+      @types.dash_speed,
+    )
+  } else {
+    let drag = @types.clampf(1.0 - @types.player_drag_x * dt, 0.0, 1.0)
+    game.hero.vx = game.hero.vx * drag
+    game.hero.vx = @types.clampf(
+      game.hero.vx,
+      -@types.player_max_vx,
+      @types.player_max_vx,
+    )
+  }
 
   if game.hero.grounded {
     game.hero.coyote_t = 0.12
@@ -1191,7 +1201,10 @@ fn @types.Game::update_play(game : @types.Game, dt : Float) -> Unit {
     game.heat = @types.maxf(0.0, game.heat - @types.heat_drain_dash * dt)
   }
 
-  game.armor = @types.maxf(0.0, game.armor - @types.armor_passive * dt)
+  game.armor = @types.minf(
+    @types.armor_max,
+    game.armor + @types.armor_passive * dt,
+  )
 
   game.emit_snow(dt)
 

@@ -690,7 +690,7 @@ fn draw_ent(e : @types.Ent, cam_x : Float, cam_y : Float) -> Unit {
     let hpx = e.x - hpw * 0.5 + cam_x
     let hpy = e.y - e.h * 0.72 + cam_y
     let pct = @types.clampf(
-      e.hp / @types.maxf(1.0, if e.kind == Crate { 35.0 } else { 24.0 }),
+      e.hp / @types.maxf(1.0, e.max_hp),
       0.0,
       1.0,
     )
@@ -1268,6 +1268,8 @@ fn @types.Game::draw_touch_controls(game : @types.Game) -> Unit {
     )
   } else if game.state == Title {
     draw_button_visual("START", @types.title_start_rect(), false, game)
+  } else if game.state == StageClear {
+    draw_button_visual("NEXT STAGE", @types.retry_rect(), false, game)
   } else {
     draw_button_visual("RETRY", @types.retry_rect(), false, game)
   }
