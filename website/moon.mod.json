@@ -1,0 +1,9 @@
+{
+  "name": "bobzhang/games-website",
+  "version": "0.1.0",
+  "deps": {
+    "moonbit-community/rabbita": "0.11.6"
+  },
+  "license": "MIT",
+  "preferred-target": "js"
+}
