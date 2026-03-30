@@ -1300,7 +1300,7 @@ fn @types.Game::draw_speed_trail(game : @types.Game) -> Unit {
   let num_ghosts = 2 + (intensity * 3.0).to_int()
   let dir_x = game.vx / hspeed
   let dir_z = game.vz / hspeed
-  for i in 1..=num_ghosts {
+  for i in 1..<=num_ghosts {
     let frac = Float::from_int(i) / Float::from_int(num_ghosts + 1)
     let offset = frac * 1.5
     let gx = game.px - dir_x * offset

@@ -274,11 +274,7 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
   }
   // Apex hang: near the peak of a jump, reduce gravity for a floaty feel
   let near_apex = game.vy.abs() < @types.apex_vy_threshold && !game.grounded
-  let apex_mult : Float = if near_apex {
-    @types.apex_gravity_mult
-  } else {
-    1.0
-  }
+  let apex_mult : Float = if near_apex { @types.apex_gravity_mult } else { 1.0 }
   game.vy -= @types.gravity * base_grav_mult * apex_mult * dt
   if game.vy < -@types.max_fall_speed {
     game.vy = -@types.max_fall_speed
@@ -315,7 +311,8 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
 
   // Jump stretch: set proportional to upward velocity
   if !game.grounded && game.vy > 1.0 {
-    let stretch_amount = @types.clampf(game.vy / @types.jump_force, 0.0, 1.0) * 0.35
+    let stretch_amount = @types.clampf(game.vy / @types.jump_force, 0.0, 1.0) *
+      0.35
     if stretch_amount > game.anim_jump_stretch {
       game.anim_jump_stretch = stretch_amount
     }
@@ -487,7 +484,10 @@ fn @types.Game::pull_collectibles_magnet(
 }
 
 ///|
-fn @types.Game::resolve_platform_collisions(game : @types.Game, dt : Float) -> Unit {
+fn @types.Game::resolve_platform_collisions(
+  game : @types.Game,
+  dt : Float,
+) -> Unit {
   let pr = @types.player_radius
   let ph = @types.player_height
   for plat in game.platforms {

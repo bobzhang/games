@@ -671,7 +671,10 @@ pub fn Game::new() -> Game {
     speed_trail_timer: 0.0,
     level_stars: Array::make(total_levels, 0),
     last_run_stars: 0,
-    checkpoint_platform_snapshots: Array::make(max_platforms, PlatformSnapshot::empty()),
+    checkpoint_platform_snapshots: Array::make(
+      max_platforms,
+      PlatformSnapshot::empty(),
+    ),
     rng_state: 54321,
     frame_counter: 0,
   }

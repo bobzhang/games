@@ -443,11 +443,9 @@ fn @types.Game::update_camera(game : @types.Game, dt : Float) -> Unit {
   let mut effective_dist = game.cam_dist
   // Simple occlusion avoidance: raycast from player toward desired camera pos
   // If any platform AABB sits between player and camera, pull camera closer
-  let desired_cam_x = game.cam_target_x +
-    @math.sinf(angle_rad) * game.cam_dist
+  let desired_cam_x = game.cam_target_x + @math.sinf(angle_rad) * game.cam_dist
   let desired_cam_y = game.cam_target_y
-  let desired_cam_z = game.cam_target_z +
-    @math.cosf(angle_rad) * game.cam_dist
+  let desired_cam_z = game.cam_target_z + @math.cosf(angle_rad) * game.cam_dist
   let ray_dx = desired_cam_x - game.px
   let ray_dy = desired_cam_y - game.py
   let ray_dz = desired_cam_z - game.pz
@@ -462,7 +460,7 @@ fn @types.Game::update_camera(game : @types.Game, dt : Float) -> Unit {
     let step_size : Float = 0.5
     let mut t : Float = 1.0
     let num_steps = (ray_len / step_size).to_int().clamp(min=1, max=30)
-    for i in 1..=num_steps {
+    for i in 1..<=num_steps {
       let frac = Float::from_int(i) / Float::from_int(num_steps)
       let sx = game.px + rdx * ray_len * frac
       let sy = game.py + rdy * ray_len * frac
@@ -503,11 +501,9 @@ fn @types.Game::update_camera(game : @types.Game, dt : Float) -> Unit {
       )
     }
   }
-  let target_x = game.cam_target_x +
-    @math.sinf(angle_rad) * effective_dist
+  let target_x = game.cam_target_x + @math.sinf(angle_rad) * effective_dist
   let target_y = game.cam_target_y
-  let target_z = game.cam_target_z +
-    @math.cosf(angle_rad) * effective_dist
+  let target_z = game.cam_target_z + @math.cosf(angle_rad) * effective_dist
   let smooth = @types.minf(dt * @types.camera_smooth, 1.0)
   game.cam_x = @types.lerpf(game.cam_x, target_x, smooth)
   game.cam_y = @types.lerpf(game.cam_y, target_y, smooth)
