@@ -276,7 +276,29 @@ pub let mag_minigun : Int = 100
 
 // Weapon upgrade cost multiplier per level
 
-// Max upgrade level per stat
+///|
+/// Base gold cost for the first weapon upgrade tier.
+pub let upgrade_base_cost : Int = 75
+
+///|
+/// Cost multiplier added per existing upgrade level.
+pub let upgrade_cost_per_level : Int = 50
+
+///|
+/// Maximum upgrade level for any single weapon stat.
+pub let upgrade_max_level : Int = 4
+
+///|
+/// Damage multiplier steps per upgrade level: 1.0, 1.2, 1.4, 1.6, 1.8.
+pub let upgrade_damage_step : Float = 0.2
+
+///|
+/// Fire-rate improvement per upgrade level (fraction reduction).
+pub let upgrade_rate_step : Float = 0.12
+
+///|
+/// Magazine size bonus fraction per upgrade level.
+pub let upgrade_mag_step : Float = 0.3
 
 // Enemy types
 

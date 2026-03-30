@@ -66,6 +66,12 @@ fn @types.Game::update_enemies_ai(game : @types.Game, dt : Float) -> Unit {
       enemy.x = result.0
       enemy.z = result.1
     }
+    // Low wall collision
+    let wall_result = @types.push_from_low_walls(
+      game, enemy.x, enemy.z, enemy.size * 0.5,
+    )
+    enemy.x = wall_result.0
+    enemy.z = wall_result.1
     // Barricade collision + barricade damage
     for barr in game.barricades {
       if !barr.active {
@@ -918,8 +924,11 @@ fn @types.Game::damage_enemy(
   enemy.hp -= damage
   enemy.flash_timer = 0.1
   game.hit_marker_timer = 0.15
+  game.hit_marker_is_kill = false
   game.total_damage_dealt += damage
   if enemy.hp <= 0.0 {
+    game.hit_marker_is_kill = true
+    game.hit_marker_timer = 0.2
     game.kill_enemy(idx)
   }
 }
@@ -936,6 +945,7 @@ fn @types.Game::damage_enemy_headshot(
   enemy.flash_timer = 0.15
   enemy.stun_timer = 0.2
   game.hit_marker_timer = 0.2
+  game.hit_marker_is_kill = false
   game.total_damage_dealt += final_damage
   game.player.headshots += 1
   game.player.score += @types.bonus_headshot
@@ -952,6 +962,8 @@ fn @types.Game::damage_enemy_headshot(
     30,
   )
   if enemy.hp <= 0.0 {
+    game.hit_marker_is_kill = true
+    game.hit_marker_timer = 0.25
     game.kill_enemy(idx)
   }
 }

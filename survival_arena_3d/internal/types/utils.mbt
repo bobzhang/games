@@ -619,7 +619,7 @@ pub fn weapon_mag_size(kind : Int) -> Int {
 pub fn effective_fire_rate(player : Player, kind : Int) -> Float {
   let base = weapon_fire_rate(kind)
   let lvl = Float::from_int(player.weapon_rate_level[kind])
-  let mult : Float = 1.0 - lvl * 0.12
+  let mult : Float = 1.0 - lvl * upgrade_rate_step
   base * mult
 }
 
@@ -630,7 +630,7 @@ pub fn effective_fire_rate(player : Player, kind : Int) -> Float {
 pub fn effective_damage(player : Player, kind : Int) -> Float {
   let base = weapon_damage(kind)
   let lvl = Float::from_int(player.weapon_damage_level[kind])
-  let upgrade_mult : Float = 1.0 + lvl * 0.2
+  let upgrade_mult : Float = 1.0 + lvl * upgrade_damage_step
   let boost_mult : Float = if player.damage_boost_timer > 0.0 {
     1.5
   } else {
@@ -646,8 +646,27 @@ pub fn effective_damage(player : Player, kind : Int) -> Float {
 pub fn effective_mag_size(player : Player, kind : Int) -> Int {
   let base = weapon_mag_size(kind)
   let lvl = player.weapon_mag_level[kind]
-  let bonus_f : Float = Float::from_int(base) * Float::from_int(lvl) * 0.3
+  let bonus_f : Float = Float::from_int(base) * Float::from_int(lvl) * upgrade_mag_step
   base + bonus_f.to_int()
+}
+
+///|
+/// Returns the gold cost for upgrading a weapon stat at the given current level.
+pub fn upgrade_cost(current_level : Int) -> Int {
+  upgrade_base_cost + current_level * upgrade_cost_per_level
+}
+
+///|
+/// Returns the recoil kick amount for a weapon kind (camera pitch kick in radians).
+pub fn weapon_recoil_kick(kind : Int) -> Float {
+  match WeaponKind::from_int(kind) {
+    Pistol => 0.025
+    Shotgun => 0.06
+    Rifle => 0.015
+    Sniper => 0.08
+    Rocket => 0.04
+    Minigun => 0.008
+  }
 }
 
 // Enemy name

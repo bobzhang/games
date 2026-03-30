@@ -420,17 +420,22 @@ pub fn random_pickup_kind(roll : Int) -> Int {
 }
 
 // Shop item count
+// Layout: 0=Heal, 1=Armor, 2-6=Ammo (SG,Rifle,Sniper,Rocket,Minigun),
+// 7-9=Current weapon upgrades (Dmg,Rate,Mag), 10-12=Buy weapons,
+// 13=Barricade, 14=Spike Trap
 
 ///|
 /// Returns the number of purchasable shop entries shown between waves.
 pub fn shop_item_count() -> Int {
-  14
+  15
 }
 
 // Shop item definition: (name, cost)
 
 ///|
 /// Returns purchase cost for a shop item index.
+/// For weapon upgrade items (7-9), the cost depends on the player's current level.
+/// Pass -1 for upgrade_level when the item is not an upgrade.
 pub fn shop_item_cost(idx : Int) -> Int {
   if idx == 0 {
     50
@@ -447,16 +452,21 @@ pub fn shop_item_cost(idx : Int) -> Int {
   } else if idx == 6 {
     45
   } else if idx == 7 {
-    100
+    // Weapon damage upgrade - base cost, actual cost computed dynamically
+    75
   } else if idx == 8 {
-    80
+    // Weapon fire rate upgrade
+    75
   } else if idx == 9 {
-    200
+    // Weapon magazine upgrade
+    75
   } else if idx == 10 {
-    300
+    200
   } else if idx == 11 {
-    400
+    300
   } else if idx == 12 {
+    400
+  } else if idx == 13 {
     60
   } else {
     80

@@ -173,6 +173,23 @@ fn @types.Game::update_player(game : @types.Game, dt : Float) -> Unit {
       player.recoil_offset = 0.0
     }
   }
+  // Recoil kick recovery (apply kick to pitch and decay)
+  if player.recoil_kick > 0.0 {
+    let apply = @types.minf(player.recoil_kick, dt * 12.0)
+    player.pitch += apply
+    player.recoil_kick -= apply
+    player.pitch = @types.clampf(player.pitch, -1.4, 1.4)
+    if player.recoil_kick < 0.001 {
+      player.recoil_kick = 0.0
+    }
+  }
+  // Weapon switch timer
+  if player.weapon_switch_timer > 0.0 {
+    player.weapon_switch_timer -= dt
+    if player.weapon_switch_timer < 0.0 {
+      player.weapon_switch_timer = 0.0
+    }
+  }
   // Minigun spin decay when not firing
   if !player.minigun_spinning && player.minigun_spin > 0.0 {
     player.minigun_spin -= dt * 2.0

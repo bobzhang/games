@@ -50,6 +50,10 @@ fn @types.Game::try_reload(game : @types.Game, weapon : Int) -> Unit {
 fn @types.Game::handle_shooting(game : @types.Game) -> Unit {
   let weapon = game.player.current_weapon.to_int()
   let ws = game.weapons[weapon]
+  // Don't shoot during weapon switch animation
+  if game.player.weapon_switch_timer > 0.0 {
+    return
+  }
   // Don't shoot while reloading
   if ws.reloading {
     return
@@ -111,6 +115,9 @@ fn @types.Game::handle_shooting(game : @types.Game) -> Unit {
     }
     game.player.recoil_offset += recoil_amount
     game.player.recoil_offset = @types.minf(game.player.recoil_offset, 3.0)
+    // Camera pitch kick
+    let kick = @types.weapon_recoil_kick(weapon)
+    game.player.recoil_kick += kick
     // Auto-reload when magazine empty
     if game.player.magazine[weapon] <= 0 {
       game.try_reload(weapon)
@@ -132,6 +139,9 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
   // Right vector for shell casing
   let right_x = cos_yaw
   let right_z = -sin_yaw
+  // Eye height that follows crouch
+  let hdiff = @types.player_height - @types.player_crouch_height
+  let eye_h = @types.player_height - hdiff * player.crouch_lerp
   if weapon == @types.Shotgun.to_int() {
     // Fire multiple pellets with spread
     for i in 0..<@types.shotgun_pellets {
@@ -156,7 +166,7 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
     @types.spawn_particles_dir(
       game,
       player.x + look_x * 0.5,
-      @types.player_height + look_y * 0.5,
+      eye_h + look_y * 0.5,
       player.z + look_z * 0.5,
       look_x,
       look_y,
@@ -168,12 +178,7 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
     )
     // Shell casing
     @types.spawn_shell_casing(
-      game,
-      player.x,
-      @types.player_height - 0.2,
-      player.z,
-      right_x,
-      right_z,
+      game, player.x, eye_h - 0.2, player.z, right_x, right_z,
     )
   } else if weapon == @types.Sniper.to_int() {
     // Sniper: high accuracy, penetrating
@@ -182,7 +187,7 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
     @types.spawn_particles_dir(
       game,
       player.x + look_x * 0.6,
-      @types.player_height + look_y * 0.6,
+      eye_h + look_y * 0.6,
       player.z + look_z * 0.6,
       look_x,
       look_y,
@@ -193,18 +198,13 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
       200,
     )
     @types.spawn_shell_casing(
-      game,
-      player.x,
-      @types.player_height - 0.2,
-      player.z,
-      right_x,
-      right_z,
+      game, player.x, eye_h - 0.2, player.z, right_x, right_z,
     )
   } else if weapon == @types.Minigun.to_int() {
     // Minigun: spread increases when sustained firing
     let spin_ratio = game.player.minigun_spin
     let spread = @types.lerpf(
-      @types.minigun_min_spread, @types.minigun_max_spread, spin_ratio,
+      @types.minigun_max_spread, @types.minigun_min_spread, spin_ratio,
     )
     let dx = look_x + @types.rand_rangef(game, -spread, spread)
     let dy = look_y + @types.rand_rangef(game, -spread, spread)
@@ -216,7 +216,7 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
       @types.spawn_particles_dir(
         game,
         player.x + look_x * 0.5,
-        @types.player_height + look_y * 0.5,
+        eye_h + look_y * 0.5,
         player.z + look_z * 0.5,
         look_x,
         look_y,
@@ -227,12 +227,7 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
         80,
       )
       @types.spawn_shell_casing(
-        game,
-        player.x,
-        @types.player_height - 0.2,
-        player.z,
-        right_x,
-        right_z,
+        game, player.x, eye_h - 0.2, player.z, right_x, right_z,
       )
     }
   } else {
@@ -254,7 +249,7 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
     @types.spawn_particles_dir(
       game,
       player.x + look_x * 0.5,
-      @types.player_height + look_y * 0.5,
+      eye_h + look_y * 0.5,
       player.z + look_z * 0.5,
       look_x,
       look_y,
@@ -266,12 +261,7 @@ fn @types.Game::fire_weapon(game : @types.Game, weapon : Int) -> Unit {
     )
     // Shell casing
     @types.spawn_shell_casing(
-      game,
-      player.x,
-      @types.player_height - 0.2,
-      player.z,
-      right_x,
-      right_z,
+      game, player.x, eye_h - 0.2, player.z, right_x, right_z,
     )
   }
 }
@@ -295,9 +285,11 @@ fn @types.Game::fire_projectile(
   let sin_yaw = @math.sinf(player.yaw)
   proj.active = true
   proj.kind = weapon
-  // Spawn slightly in front and to the right of player
+  // Spawn slightly in front and to the right of player at camera height
   proj.x = player.x + sin_yaw * 0.3 + cos_yaw * 0.2
-  proj.y = @types.player_height - 0.15
+  let height_diff = @types.player_height - @types.player_crouch_height
+  let eye_height = @types.player_height - height_diff * player.crouch_lerp
+  proj.y = eye_height - 0.15
   proj.z = player.z + cos_yaw * 0.3 - sin_yaw * 0.2
   proj.dx = dx
   proj.dy = dy
@@ -404,6 +396,31 @@ fn @types.Game::update_projectiles(game : @types.Game, dt : Float) -> Unit {
         200,
         200,
         Spark,
+      )
+      proj.active = false
+      continue
+    }
+    // Low wall collision
+    let mut hit_low_wall = false
+    for w in game.low_walls {
+      if proj.y < w.height {
+        let result = @types.push_from_box(
+          proj.x, proj.z, 0.2, w.x, w.z, w.width, w.depth,
+        )
+        if result.2 {
+          hit_low_wall = true
+          break
+        }
+      }
+    }
+    if hit_low_wall {
+      if proj.splash_radius > 0.0 {
+        game.apply_explosion(
+          proj.x, proj.y, proj.z, proj.splash_radius, proj.damage,
+        )
+      }
+      @types.spawn_particles_typed(
+        game, proj.x, proj.y, proj.z, 3, 180, 170, 160, Spark,
       )
       proj.active = false
       continue

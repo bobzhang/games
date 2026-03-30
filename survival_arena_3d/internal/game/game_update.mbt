@@ -95,6 +95,8 @@ fn @types.Game::switch_weapon(game : @types.Game, weapon : Int) -> Unit {
     if wk != Minigun {
       game.player.minigun_spinning = false
     }
+    // Equip delay
+    game.player.weapon_switch_timer = 0.3
   }
 }
 
@@ -378,10 +380,10 @@ fn @types.Game::check_wave_status(game : @types.Game) -> Unit {
       let bonus = @levels.wave_bonus(game.current_wave)
       game.player.money += bonus
       game.player.score += bonus
-      // Wave summary
+      // Wave summary (per-wave deltas, not cumulative)
       game.show_wave_summary = true
       game.wave_summary_timer = 4.0
-      game.wave_summary_kills = game.player.kills
+      game.wave_summary_kills = game.player.kills - game.wave_start_kills
       game.wave_summary_money = bonus
       game.current_wave += 1
       if game.current_wave >= @types.max_waves {
@@ -455,6 +457,8 @@ fn @types.Game::start_new_game(game : @types.Game) -> Unit {
   game.player.minigun_spinning = false
   game.player.recoil_offset = 0.0
   game.player.recoil_recover = 0.0
+  game.player.weapon_switch_timer = 0.0
+  game.player.recoil_kick = 0.0
   for wi in 0..<@types.weapon_count {
     game.player.weapon_damage_level[wi] = 0
     game.player.weapon_rate_level[wi] = 0
@@ -469,6 +473,7 @@ fn @types.Game::start_new_game(game : @types.Game) -> Unit {
   game.wave_active = false
   game.difficulty = 1.0
   game.hit_marker_timer = 0.0
+  game.hit_marker_is_kill = false
   game.shop_cursor = 0
   game.message_timer = 0.0
   game.message_text = ""
@@ -479,6 +484,10 @@ fn @types.Game::start_new_game(game : @types.Game) -> Unit {
   game.highest_combo = 0
   game.total_damage_dealt = 0.0
   game.total_damage_taken = 0.0
+  game.wave_start_kills = 0
+  game.wave_start_shots_fired = 0
+  game.wave_start_shots_hit = 0
+  game.wave_start_money = 0
   // Clear pools
   for i in 0..<game.enemies.length() {
     game.enemies[i] = @types.Enemy::inactive()
@@ -526,14 +535,30 @@ fn @types.Game::start_wave(game : @types.Game, wave : Int) -> Unit {
   game.spawn_timer = 0.0
   game.wave_active = true
   game.difficulty = 1.0 + Float::from_int(wave) * 0.05
+  // Snapshot current stats so we can compute per-wave deltas at wave end
+  game.wave_start_kills = game.player.kills
+  game.wave_start_shots_fired = game.total_shots_fired
+  game.wave_start_shots_hit = game.total_shots_hit
+  game.wave_start_money = game.player.money
 }
 
 ///|
 fn @types.Game::buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
-  let cost = @levels.shop_item_cost(item_idx)
+  let wi = game.player.current_weapon.to_int()
+  // For upgrade items, compute dynamic cost based on current level
+  let cost = if item_idx == 7 {
+    @types.upgrade_cost(game.player.weapon_damage_level[wi])
+  } else if item_idx == 8 {
+    @types.upgrade_cost(game.player.weapon_rate_level[wi])
+  } else if item_idx == 9 {
+    @types.upgrade_cost(game.player.weapon_mag_level[wi])
+  } else {
+    @levels.shop_item_cost(item_idx)
+  }
   if game.player.money < cost {
     return
   }
+  let wname = @types.weapon_name(wi)
   if item_idx == 0 {
     // Heal
     if game.player.hp < @types.player_max_hp {
@@ -601,19 +626,46 @@ fn @types.Game::buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
       1.5,
     )
   } else if item_idx == 7 {
-    // Damage upgrade
+    // Per-weapon damage upgrade
+    let lvl = game.player.weapon_damage_level[wi]
+    if lvl >= @types.upgrade_max_level {
+      return
+    }
     game.player.money -= cost
-    game.player.damage_mult += 0.15
-    let pct = (game.player.damage_mult * 100.0).to_int()
-    @types.show_message(game, "Damage up! Now \{pct}%", 1.5)
+    game.player.weapon_damage_level[wi] += 1
+    let new_lvl = game.player.weapon_damage_level[wi]
+    let new_lvl_f : Float = Float::from_int(new_lvl)
+    let base : Float = 100.0
+    let pct = (base + new_lvl_f * @types.upgrade_damage_step * base).to_int()
+    @types.show_message(game, "\{wname} Damage Lv\{new_lvl}! \{pct}%", 1.5)
   } else if item_idx == 8 {
-    // Speed upgrade
+    // Per-weapon fire rate upgrade
+    let lvl = game.player.weapon_rate_level[wi]
+    if lvl >= @types.upgrade_max_level {
+      return
+    }
     game.player.money -= cost
-    game.player.speed_mult += 0.1
-    let pct = (game.player.speed_mult * 100.0).to_int()
-    @types.show_message(game, "Speed up! Now \{pct}%", 1.5)
+    game.player.weapon_rate_level[wi] += 1
+    let new_lvl = game.player.weapon_rate_level[wi]
+    let new_lvl_f : Float = Float::from_int(new_lvl)
+    let base : Float = 100.0
+    let pct = (base - new_lvl_f * @types.upgrade_rate_step * base).to_int()
+    @types.show_message(game, "\{wname} Fire Rate Lv\{new_lvl}! \{pct}% interval", 1.5)
   } else if item_idx == 9 {
-    // Buy @types.Sniper
+    // Per-weapon magazine upgrade
+    let lvl = game.player.weapon_mag_level[wi]
+    if lvl >= @types.upgrade_max_level {
+      return
+    }
+    game.player.money -= cost
+    game.player.weapon_mag_level[wi] += 1
+    let new_mag = @types.effective_mag_size(game.player, wi)
+    // Sync live magazine state to new upgraded size and refill
+    game.player.mag_size[wi] = new_mag
+    game.player.magazine[wi] = new_mag
+    @types.show_message(game, "\{wname} Magazine Lv\{game.player.weapon_mag_level[wi]}! Size: \{new_mag}", 1.5)
+  } else if item_idx == 10 {
+    // Buy Sniper
     if !game.player.owns_weapon[@types.Sniper.to_int()] {
       game.player.money -= cost
       game.player.owns_weapon[@types.Sniper.to_int()] = true
@@ -621,8 +673,8 @@ fn @types.Game::buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
       game.player.magazine[@types.Sniper.to_int()] = @types.mag_sniper
       @types.show_message(game, "Sniper Rifle acquired!", 2.0)
     }
-  } else if item_idx == 10 {
-    // Buy @types.Rocket Launcher
+  } else if item_idx == 11 {
+    // Buy Rocket Launcher
     if !game.player.owns_weapon[@types.Rocket.to_int()] {
       game.player.money -= cost
       game.player.owns_weapon[@types.Rocket.to_int()] = true
@@ -630,8 +682,8 @@ fn @types.Game::buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
       game.player.magazine[@types.Rocket.to_int()] = @types.mag_rocket
       @types.show_message(game, "Rocket Launcher acquired!", 2.0)
     }
-  } else if item_idx == 11 {
-    // Buy @types.Minigun
+  } else if item_idx == 12 {
+    // Buy Minigun
     if !game.player.owns_weapon[@types.Minigun.to_int()] {
       game.player.money -= cost
       game.player.owns_weapon[@types.Minigun.to_int()] = true
@@ -639,7 +691,7 @@ fn @types.Game::buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
       game.player.magazine[@types.Minigun.to_int()] = @types.mag_minigun
       @types.show_message(game, "Minigun acquired!", 2.0)
     }
-  } else if item_idx == 12 {
+  } else if item_idx == 13 {
     // Place barricade
     let bi = @types.alloc_barricade(game)
     if bi >= 0 {
@@ -655,7 +707,7 @@ fn @types.Game::buy_shop_item(game : @types.Game, item_idx : Int) -> Unit {
       barr.max_hp = @types.barricade_max_hp
       @types.show_message(game, "Barricade placed!", 1.5)
     }
-  } else if item_idx == 13 {
+  } else if item_idx == 14 {
     // Place spike trap
     let ti = @types.alloc_trap(game)
     if ti >= 0 {

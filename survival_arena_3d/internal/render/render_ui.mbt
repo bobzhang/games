@@ -11,12 +11,14 @@ pub fn draw_ui(game : @types.Game) -> Unit {
       game.draw_crosshair()
       game.draw_weapon_display()
       game.draw_damage_flash()
+      game.draw_damage_indicators()
       game.draw_message()
     }
     WaveComplete => {
       game.draw_hud()
       game.draw_crosshair()
       game.draw_weapon_display()
+      game.draw_wave_summary()
       game.draw_shop_ui()
       game.draw_message()
     }
@@ -65,8 +67,8 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
   @draw.draw_text(start_text, (sw - start_w) / 2, 300, 26, start_color)
   // Controls info
   let controls : Array[String] = [
-    "WASD - Move | Mouse - Look", "Left Click - Shoot | Shift - Sprint", "1-4 / Scroll - Switch Weapon",
-    "ESC - Pause",
+    "WASD - Move | Mouse - Look", "Left Click - Shoot | Shift - Sprint", "1-6 / Scroll - Switch Weapon | R - Reload",
+    "Ctrl/C - Crouch | ESC - Pause",
   ]
   for i in 0..<controls.length() {
     let text = controls[i]
@@ -80,7 +82,7 @@ fn @types.Game::draw_menu(game : @types.Game) -> Unit {
     )
   }
   // Game info
-  let info = "Survive 20 waves of enemies. Collect ammo crates. Buy upgrades between waves."
+  let info = "Survive 30 waves of enemies. Collect ammo crates. Buy upgrades between waves."
   let iw = @draw.measure_text(info, 14)
   @draw.draw_text(
     info,
@@ -195,14 +197,14 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     16,
     @raylib.Color::new(255, 255, 255, 255),
   )
-  // Ammo display (bottom right)
-  let ammo_x = sw - 220
-  let ammo_y = sh - 60
+  // Ammo display (bottom right) - mag/mag_size | reserve
+  let ammo_x = sw - 250
+  let ammo_y = sh - 72
   @raylib.draw_rectangle(
     ammo_x - 5,
     ammo_y - 5,
-    210,
-    50,
+    240,
+    66,
     @raylib.Color::new(0, 0, 0, 160),
   )
   let weapon = player.current_weapon.to_int()
@@ -214,18 +216,64 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     20,
     @raylib.Color::new(255, 220, 100, 255),
   )
-  let ammo_count = player.ammo[weapon]
+  // Magazine / max | reserve format
+  let mag_cur = player.magazine[weapon]
+  let mag_max = @types.effective_mag_size(player, weapon)
+  let reserve = player.ammo[weapon]
   let ammo_text = if player.current_weapon == Pistol {
-    "Ammo: INF"
+    "\{mag_cur}/\{mag_max} | INF"
   } else {
-    "Ammo: \{ammo_count}"
+    "\{mag_cur}/\{mag_max} | \{reserve}"
   }
-  let ammo_color = if ammo_count > 0 || player.current_weapon == Pistol {
+  let ammo_color = if mag_cur > 0 {
     @raylib.Color::new(200, 200, 200, 255)
+  } else if reserve > 0 || player.current_weapon == Pistol {
+    @raylib.Color::new(255, 180, 80, 255)
   } else {
     @raylib.Color::new(255, 80, 80, 255)
   }
   @draw.draw_text(ammo_text, ammo_x, ammo_y + 22, 18, ammo_color)
+  // Reload progress bar
+  let ws = game.weapons[weapon]
+  if ws.reloading {
+    let reload_total = @types.weapon_reload_time(weapon)
+    let reload_pct : Float = if reload_total > 0.0 {
+      let one : Float = 1.0
+      one - ws.reload_time / reload_total
+    } else {
+      1.0
+    }
+    let rbar_x = ammo_x
+    let rbar_y = ammo_y + 44
+    let rbar_w = 180
+    let rbar_h = 8
+    @raylib.draw_rectangle(
+      rbar_x, rbar_y, rbar_w, rbar_h,
+      @raylib.Color::new(40, 40, 50, 200),
+    )
+    let fill_w = (Float::from_int(rbar_w) * reload_pct).to_int()
+    @raylib.draw_rectangle(
+      rbar_x, rbar_y, fill_w, rbar_h,
+      @raylib.Color::new(100, 200, 255, 255),
+    )
+    @draw.draw_text(
+      "RELOADING",
+      rbar_x + rbar_w / 2 - 30,
+      rbar_y - 12,
+      12,
+      @raylib.Color::new(100, 200, 255, 255),
+    )
+  }
+  // Weapon switch indicator
+  if player.weapon_switch_timer > 0.0 {
+    @draw.draw_text(
+      "EQUIPPING...",
+      ammo_x,
+      ammo_y + 44,
+      12,
+      @raylib.Color::new(255, 220, 100, 200),
+    )
+  }
   // Weapon slots indicator
   let slot_y = sh - 95
   for i in 0..<@types.weapon_count {
@@ -299,9 +347,13 @@ fn @types.Game::draw_crosshair(game : @types.Game) -> Unit {
   let cy = sh / 2
   let size = 10
   let gap = 3
-  // Hit marker color flash
+  // Crosshair color: neutral when idle, tinted on hit
   let color = if game.hit_marker_timer > 0.0 {
-    @raylib.Color::new(255, 50, 50, 255)
+    if game.hit_marker_is_kill {
+      @raylib.Color::new(255, 50, 50, 255)
+    } else {
+      @raylib.Color::new(255, 255, 255, 255)
+    }
   } else {
     @raylib.Color::new(220, 220, 220, 200)
   }
@@ -312,39 +364,20 @@ fn @types.Game::draw_crosshair(game : @types.Game) -> Unit {
   @raylib.draw_rectangle(cx - 1, cy + gap + 1, 2, size - gap, color)
   // Center dot
   @raylib.draw_rectangle(cx - 1, cy - 1, 2, 2, color)
-  // Hit marker X when hitting
+  // Hit marker X: white for body, red for kill
   if game.hit_marker_timer > 0.0 {
     let hm_size = 6
-    // Top-left to bottom-right
-    @raylib.draw_rectangle(
-      cx - hm_size - 2,
-      cy - hm_size - 2,
-      4,
-      4,
-      @raylib.Color::new(255, 100, 100, 255),
-    )
-    @raylib.draw_rectangle(
-      cx + hm_size - 2,
-      cy + hm_size - 2,
-      4,
-      4,
-      @raylib.Color::new(255, 100, 100, 255),
-    )
-    // Top-right to bottom-left
-    @raylib.draw_rectangle(
-      cx + hm_size - 2,
-      cy - hm_size - 2,
-      4,
-      4,
-      @raylib.Color::new(255, 100, 100, 255),
-    )
-    @raylib.draw_rectangle(
-      cx - hm_size - 2,
-      cy + hm_size - 2,
-      4,
-      4,
-      @raylib.Color::new(255, 100, 100, 255),
-    )
+    let hm_color = if game.hit_marker_is_kill {
+      @raylib.Color::new(255, 50, 50, 255)
+    } else {
+      @raylib.Color::new(255, 255, 255, 230)
+    }
+    // Top-left to bottom-right diagonal
+    @raylib.draw_rectangle(cx - hm_size - 2, cy - hm_size - 2, 4, 4, hm_color)
+    @raylib.draw_rectangle(cx + hm_size - 2, cy + hm_size - 2, 4, 4, hm_color)
+    // Top-right to bottom-left diagonal
+    @raylib.draw_rectangle(cx + hm_size - 2, cy - hm_size - 2, 4, 4, hm_color)
+    @raylib.draw_rectangle(cx - hm_size - 2, cy + hm_size - 2, 4, 4, hm_color)
   }
 }
 
@@ -557,6 +590,34 @@ fn @types.Game::draw_damage_flash(game : @types.Game) -> Unit {
 }
 
 ///|
+fn @types.Game::draw_damage_indicators(game : @types.Game) -> Unit {
+  let sw = @types.screen_width
+  let sh = @types.screen_height
+  let cx = Float::from_int(sw) / 2.0
+  let cy = Float::from_int(sh) / 2.0
+  let indicator_dist : Float = 100.0
+  let indicator_w : Float = 8.0
+  let indicator_h : Float = 30.0
+  for di in game.damage_indicators {
+    if !di.active {
+      continue
+    }
+    let alpha_f = @types.minf(di.timer * 2.0, 1.0) * 220.0
+    let alpha = alpha_f.to_int().clamp(min=0, max=220)
+    let angle = di.angle
+    let ix = cx + @math.cosf(angle) * indicator_dist
+    let iy = cy + @math.sinf(angle) * indicator_dist
+    let degrees = angle * 180.0 / @types.pi
+    @raylib.draw_rectangle_pro(
+      @raylib.Rectangle::new(ix, iy, indicator_w, indicator_h),
+      @raylib.Vector2::new(indicator_w / 2.0, indicator_h / 2.0),
+      degrees + 90.0,
+      @raylib.Color::new(220, 30, 30, alpha),
+    )
+  }
+}
+
+///|
 fn @types.Game::draw_message(game : @types.Game) -> Unit {
   if game.message_timer > 0.0 {
     let alpha_f = @types.minf(game.message_timer * 2.0, 1.0) * 255.0
@@ -578,69 +639,177 @@ fn @types.Game::draw_message(game : @types.Game) -> Unit {
 }
 
 ///|
+fn @types.Game::draw_wave_summary(game : @types.Game) -> Unit {
+  if !game.show_wave_summary {
+    return
+  }
+  let sw = @types.screen_width
+  let panel_w = 260
+  let panel_h = 130
+  let panel_x = (sw - panel_w) / 2
+  let panel_y = (@types.screen_height - panel_h) / 2
+  let alpha_f = @types.minf(game.wave_summary_timer, 1.0) * 230.0
+  let alpha = alpha_f.to_int().clamp(min=0, max=230)
+  @raylib.draw_rectangle(
+    panel_x, panel_y, panel_w, panel_h,
+    @raylib.Color::new(10, 15, 25, alpha),
+  )
+  @raylib.draw_rectangle_lines(
+    panel_x, panel_y, panel_w, panel_h,
+    @raylib.Color::new(100, 180, 100, alpha),
+  )
+  let title = "Wave \{game.current_wave} Complete!"
+  let ttw = @draw.measure_text(title, 18)
+  @draw.draw_text(
+    title, panel_x + (panel_w - ttw) / 2, panel_y + 8, 18,
+    @raylib.Color::new(100, 255, 100, alpha),
+  )
+  let wave_shots_fired = game.total_shots_fired - game.wave_start_shots_fired
+  let wave_shots_hit = game.total_shots_hit - game.wave_start_shots_hit
+  let accuracy = if wave_shots_fired > 0 {
+    wave_shots_hit * 100 / wave_shots_fired
+  } else {
+    0
+  }
+  @draw.draw_text(
+    "Kills: \{game.wave_summary_kills}", panel_x + 15, panel_y + 34, 16,
+    @raylib.Color::new(220, 220, 240, alpha),
+  )
+  @draw.draw_text(
+    "Accuracy: \{accuracy}%", panel_x + 15, panel_y + 56, 16,
+    @raylib.Color::new(220, 220, 240, alpha),
+  )
+  @draw.draw_text(
+    "Gold earned: +\{game.wave_summary_money}", panel_x + 15, panel_y + 78, 16,
+    @raylib.Color::new(255, 215, 0, alpha),
+  )
+  @draw.draw_text(
+    "Score: \{game.player.score}", panel_x + 15, panel_y + 100, 16,
+    @raylib.Color::new(200, 200, 220, alpha),
+  )
+}
+
+///|
 fn @types.Game::draw_shop_ui(game : @types.Game) -> Unit {
   let sw = @types.screen_width
+  let player = game.player
+  let wi = player.current_weapon.to_int()
+  let wname = @types.weapon_name(wi)
   // Shop panel
-  let panel_w = 320
-  let panel_h = 620
+  let panel_w = 380
+  let panel_h = 650
   let panel_x = (sw - panel_w) / 2
-  let panel_y = 40
+  let panel_y = 30
   @raylib.draw_rectangle(
-    panel_x,
-    panel_y,
-    panel_w,
-    panel_h,
+    panel_x, panel_y, panel_w, panel_h,
     @raylib.Color::new(15, 18, 28, 230),
   )
   @raylib.draw_rectangle_lines(
-    panel_x,
-    panel_y,
-    panel_w,
-    panel_h,
+    panel_x, panel_y, panel_w, panel_h,
     @raylib.Color::new(100, 120, 180, 255),
   )
   // Title
   let title = "SHOP - Between Waves"
   let ttw = @draw.measure_text(title, 20)
   @draw.draw_text(
-    title,
-    panel_x + (panel_w - ttw) / 2,
-    panel_y + 10,
-    20,
+    title, panel_x + (panel_w - ttw) / 2, panel_y + 8, 20,
     @raylib.Color::new(200, 220, 255, 255),
   )
   // Timer
   let timer_text = "Next wave in: \{game.wave_timer.to_int() + 1}s (SPACE to skip)"
   let ttw2 = @draw.measure_text(timer_text, 14)
   @draw.draw_text(
-    timer_text,
-    panel_x + (panel_w - ttw2) / 2,
-    panel_y + 35,
-    14,
+    timer_text, panel_x + (panel_w - ttw2) / 2, panel_y + 30, 14,
     @raylib.Color::new(255, 200, 100, 255),
   )
-  // Shop items
-  let items : Array[(String, Int)] = [
-    ("Heal +40 HP", @types.cost_heal),
-    ("Armor +30", @types.cost_armor),
-    ("Shotgun Ammo +12", @types.cost_shotgun_ammo),
-    ("Rifle Ammo +30", @types.cost_rifle_ammo),
-    ("Sniper Ammo +5", @types.cost_sniper_ammo),
-    ("Rocket Ammo +3", @types.cost_rocket_ammo),
-    ("Minigun Ammo +100", @types.cost_minigun_ammo),
-    ("Damage +15%", @types.cost_damage_up),
-    ("Speed +10%", @types.cost_speed_up),
-    ("Buy Sniper Rifle", @types.cost_buy_sniper),
-    ("Buy Rocket Launcher", @types.cost_buy_rocket),
-    ("Buy Minigun", @types.cost_buy_minigun),
-    ("Place Barricade", @types.cost_barricade),
-    ("Place Spike Trap", @types.cost_trap_spike),
+  // Build shop items dynamically for per-weapon upgrades
+  let dmg_lvl = player.weapon_damage_level[wi]
+  let rate_lvl = player.weapon_rate_level[wi]
+  let mag_lvl = player.weapon_mag_level[wi]
+  let max_lvl = @types.upgrade_max_level
+  // Compute upgrade labels and costs
+  let hundred : Float = 100.0
+  let dmg_label = if dmg_lvl >= max_lvl {
+    "\{wname} Damage [MAX]"
+  } else {
+    let cur_pct = (hundred + Float::from_int(dmg_lvl) * @types.upgrade_damage_step * hundred).to_int()
+    let dmg_lvl_next = dmg_lvl + 1
+    let nxt_pct = (hundred + Float::from_int(dmg_lvl_next) * @types.upgrade_damage_step * hundred).to_int()
+    "\{wname} Dmg Lv\{dmg_lvl}: \{cur_pct}%->\{nxt_pct}%"
+  }
+  let dmg_cost = if dmg_lvl >= max_lvl { 0 } else { @types.upgrade_cost(dmg_lvl) }
+  let rate_label = if rate_lvl >= max_lvl {
+    "\{wname} Rate [MAX]"
+  } else {
+    let cur_pct = (hundred - Float::from_int(rate_lvl) * @types.upgrade_rate_step * hundred).to_int()
+    let rate_lvl_next = rate_lvl + 1
+    let nxt_pct = (hundred - Float::from_int(rate_lvl_next) * @types.upgrade_rate_step * hundred).to_int()
+    "\{wname} Rate Lv\{rate_lvl}: \{cur_pct}%->\{nxt_pct}%"
+  }
+  let rate_cost = if rate_lvl >= max_lvl { 0 } else { @types.upgrade_cost(rate_lvl) }
+  let cur_mag = @types.effective_mag_size(player, wi)
+  let mag_label = if mag_lvl >= max_lvl {
+    "\{wname} Mag [MAX]"
+  } else {
+    // Compute next mag size
+    let base_mag = @types.weapon_mag_size(wi)
+    let mag_lvl_next = mag_lvl + 1
+    let nxt_bonus = (Float::from_int(base_mag) * Float::from_int(mag_lvl_next) * @types.upgrade_mag_step).to_int()
+    let nxt_mag = base_mag + nxt_bonus
+    "\{wname} Mag Lv\{mag_lvl}: \{cur_mag}->\{nxt_mag}"
+  }
+  let mag_cost = if mag_lvl >= max_lvl { 0 } else { @types.upgrade_cost(mag_lvl) }
+  // Item list: (label, cost, is_maxed)
+  let item_labels : Array[String] = [
+    "Heal +40 HP",
+    "Armor +30",
+    "Shotgun Ammo +12",
+    "Rifle Ammo +30",
+    "Sniper Ammo +5",
+    "Rocket Ammo +3",
+    "Minigun Ammo +100",
+    dmg_label,
+    rate_label,
+    mag_label,
+    "Buy Sniper Rifle",
+    "Buy Rocket Launcher",
+    "Buy Minigun",
+    "Place Barricade",
+    "Place Spike Trap",
   ]
-  for i in 0..<items.length() {
-    let item = items[i]
-    let iy = panel_y + 58 + i * 38
+  let item_costs : Array[Int] = [
+    @types.cost_heal,
+    @types.cost_armor,
+    @types.cost_shotgun_ammo,
+    @types.cost_rifle_ammo,
+    @types.cost_sniper_ammo,
+    @types.cost_rocket_ammo,
+    @types.cost_minigun_ammo,
+    dmg_cost,
+    rate_cost,
+    mag_cost,
+    @types.cost_buy_sniper,
+    @types.cost_buy_rocket,
+    @types.cost_buy_minigun,
+    @types.cost_barricade,
+    @types.cost_trap_spike,
+  ]
+  let item_maxed : Array[Bool] = [
+    false, false, false, false, false, false, false,
+    dmg_lvl >= max_lvl, rate_lvl >= max_lvl, mag_lvl >= max_lvl,
+    player.owns_weapon[@types.Sniper.to_int()],
+    player.owns_weapon[@types.Rocket.to_int()],
+    player.owns_weapon[@types.Minigun.to_int()],
+    false, false,
+  ]
+  let item_count = item_labels.length()
+  for i in 0..<item_count {
+    let label = item_labels[i]
+    let cost = item_costs[i]
+    let maxed = item_maxed[i]
+    let iy = panel_y + 50 + i * 38
     let is_sel = game.shop_cursor == i
-    let can_afford = game.player.money >= item.1
+    let can_afford = player.money >= cost && !maxed
     let bg = if is_sel {
       @raylib.Color::new(50, 55, 80, 255)
     } else {
@@ -649,42 +818,39 @@ fn @types.Game::draw_shop_ui(game : @types.Game) -> Unit {
     @raylib.draw_rectangle(panel_x + 10, iy, panel_w - 20, 34, bg)
     if is_sel {
       @raylib.draw_rectangle_lines(
-        panel_x + 10,
-        iy,
-        panel_w - 20,
-        34,
+        panel_x + 10, iy, panel_w - 20, 34,
         @raylib.Color::new(150, 170, 220, 255),
       )
     }
-    let text_color = if can_afford {
+    let text_color = if maxed {
+      @raylib.Color::new(80, 180, 80, 255)
+    } else if can_afford {
       @raylib.Color::new(220, 220, 240, 255)
     } else {
       @raylib.Color::new(100, 80, 80, 255)
     }
     let prefix = if is_sel { "> " } else { "  " }
-    @draw.draw_text(prefix + item.0, panel_x + 18, iy + 5, 16, text_color)
+    @draw.draw_text(prefix + label, panel_x + 14, iy + 5, 14, text_color)
+    let cost_str = if maxed { "---" } else { "\{cost}g" }
+    let cost_color = if maxed {
+      @raylib.Color::new(80, 180, 80, 200)
+    } else {
+      @raylib.Color::new(255, 215, 0, 200)
+    }
     @draw.draw_text(
-      "\{item.1}g",
-      panel_x + panel_w - 60,
-      iy + 5,
-      16,
-      @raylib.Color::new(255, 215, 0, 200),
+      cost_str, panel_x + panel_w - 60, iy + 5, 14, cost_color,
     )
   }
   // Gold display
+  let footer_y = panel_y + panel_h - 28
   @draw.draw_text(
-    "Gold: \{game.player.money}",
-    panel_x + 10,
-    panel_y + panel_h - 30,
-    16,
+    "Gold: \{player.money}", panel_x + 10, footer_y, 16,
     @raylib.Color::new(255, 215, 0, 255),
   )
   // Controls hint
   @draw.draw_text(
     "Up/Down: Select | E/Enter: Buy",
-    panel_x + panel_w - 220,
-    panel_y + panel_h - 30,
-    12,
+    panel_x + panel_w - 230, footer_y, 12,
     @raylib.Color::new(140, 140, 160, 255),
   )
 }
@@ -744,7 +910,14 @@ fn @types.Game::draw_game_over(game : @types.Game) -> Unit {
   let stats : Array[String] = [
     "Score: \{player.score}",
     "Kills: \{player.kills}",
-    "Wave Reached: \{game.current_wave + 1}/\{@types.max_waves}",
+    {
+      let wave_display = if game.current_wave >= @types.max_waves {
+        @types.max_waves
+      } else {
+        game.current_wave + 1
+      }
+      "Wave Reached: \{wave_display}/\{@types.max_waves}"
+    },
     "Gold Earned: \{player.money + player.score}",
   ]
   for i in 0..<stats.length() {

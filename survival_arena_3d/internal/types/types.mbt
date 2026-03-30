@@ -61,6 +61,10 @@ pub(all) struct Player {
   weapon_damage_level : Array[Int]
   weapon_rate_level : Array[Int]
   weapon_mag_level : Array[Int]
+  // Weapon switch equip delay
+  mut weapon_switch_timer : Float
+  // Recoil pitch kick (applied to camera pitch directly)
+  mut recoil_kick : Float
 
   fn new() -> Player
 }
@@ -119,6 +123,8 @@ pub fn Player::new() -> Player {
     weapon_damage_level: Array::make(weapon_count, 0),
     weapon_rate_level: Array::make(weapon_count, 0),
     weapon_mag_level: Array::make(weapon_count, 0),
+    weapon_switch_timer: 0.0,
+    recoil_kick: 0.0,
   }
 }
 
@@ -567,6 +573,7 @@ pub(all) struct Game {
 
   // Crosshair hit marker
   mut hit_marker_timer : Float
+  mut hit_marker_is_kill : Bool
 
   // Difficulty scaling
   mut difficulty : Float
@@ -577,6 +584,12 @@ pub(all) struct Game {
   mut highest_combo : Int
   mut total_damage_dealt : Float
   mut total_damage_taken : Float
+
+  // Per-wave stat snapshots (captured at wave start, used to compute deltas)
+  mut wave_start_kills : Int
+  mut wave_start_shots_fired : Int
+  mut wave_start_shots_hit : Int
+  mut wave_start_money : Int
 
   fn new() -> Game
 }
@@ -747,11 +760,16 @@ pub fn Game::new() -> Game {
     rng_state: 54321,
     frame_counter: 0,
     hit_marker_timer: 0.0,
+    hit_marker_is_kill: false,
     difficulty: 1.0,
     total_shots_fired: 0,
     total_shots_hit: 0,
     highest_combo: 0,
     total_damage_dealt: 0.0,
     total_damage_taken: 0.0,
+    wave_start_kills: 0,
+    wave_start_shots_fired: 0,
+    wave_start_shots_hit: 0,
+    wave_start_money: 0,
   }
 }
