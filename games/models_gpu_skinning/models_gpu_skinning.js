@@ -71,7 +71,7 @@ var ENVIRONMENT_IS_SHELL = !ENVIRONMENT_IS_WEB && !ENVIRONMENT_IS_NODE && !ENVIR
 
 // --pre-jses are emitted after the Module integration code, so that they can
 // refer to Module (if they choose; they can also define Module)
-// include: /Users/dii/git/games-web-all/tools/web_force_webgl1.pre.js
+// include: /Users/dii/git/games/tools/web_force_webgl1.pre.js
 if (typeof Module !== 'object') Module = {};
 
 const __previousPreRun = Module.preRun;
@@ -100,7 +100,7 @@ Module.preRun.push(function () {
     return originalCreateContext.call(Browser, canvas, useWebGL, setInModule, webGLContextAttributes);
   };
 });
-// end include: /Users/dii/git/games-web-all/tools/web_force_webgl1.pre.js
+// end include: /Users/dii/git/games/tools/web_force_webgl1.pre.js
 
 
 var arguments_ = [];
@@ -9308,8 +9308,6 @@ var stringToUTF8Array = (str, heap, outIdx, maxBytesToWrite) => {
     };
 
 
-  var requestFullscreen = Browser.requestFullscreen;
-
   var FS_createPath = (...args) => FS.createPath(...args);
 
 
@@ -9392,7 +9390,6 @@ if (Module['wasmBinary']) wasmBinary = Module['wasmBinary'];
   Module['removeRunDependency'] = removeRunDependency;
   Module['ccall'] = ccall;
   Module['cwrap'] = cwrap;
-  Module['requestFullscreen'] = requestFullscreen;
   Module['FS_preloadFile'] = FS_preloadFile;
   Module['FS_unlink'] = FS_unlink;
   Module['FS_createPath'] = FS_createPath;
@@ -9626,6 +9623,7 @@ missingLibrarySymbols.forEach(missingLibrarySymbol)
   'exceptionLast',
   'exceptionCaught',
   'Browser',
+  'requestFullscreen',
   'requestFullScreen',
   'setCanvasSize',
   'getUserMedia',
@@ -9810,48 +9808,48 @@ function checkIncomingModuleAPI() {
   ignoredModuleProp('onSbrkGrow');
 }
 var ASM_CONSTS = {
-  438900: () => { if (document.fullscreenElement) return 1; },  
- 438946: () => { return document.getElementById('canvas').width; },  
- 438998: () => { return parseInt(document.getElementById('canvas').style.width); },  
- 439066: () => { document.exitFullscreen(); },  
- 439093: () => { setTimeout(function() { Module.requestFullscreen(false, false); }, 100); },  
- 439166: () => { if (document.fullscreenElement) return 1; },  
- 439212: () => { return document.getElementById('canvas').width; },  
- 439264: () => { return screen.width; },  
- 439289: () => { document.exitFullscreen(); },  
- 439316: () => { setTimeout(function() { Module.requestFullscreen(false, true); setTimeout(function() { canvas.style.width="unset"; }, 100); }, 100); },  
- 439449: () => { return window.innerWidth; },  
- 439475: () => { return window.innerHeight; },  
- 439502: () => { if (document.fullscreenElement) return 1; },  
- 439548: () => { return document.getElementById('canvas').width; },  
- 439600: () => { return parseInt(document.getElementById('canvas').style.width); },  
- 439668: () => { if (document.fullscreenElement) return 1; },  
- 439714: () => { return document.getElementById('canvas').width; },  
- 439766: () => { return screen.width; },  
- 439791: () => { return window.innerWidth; },  
- 439817: () => { return window.innerHeight; },  
- 439844: () => { if (document.fullscreenElement) return 1; },  
- 439890: () => { return document.getElementById('canvas').width; },  
- 439942: () => { return screen.width; },  
- 439967: () => { document.exitFullscreen(); },  
- 439994: () => { if (document.fullscreenElement) return 1; },  
- 440040: () => { return document.getElementById('canvas').width; },  
- 440092: () => { return parseInt(document.getElementById('canvas').style.width); },  
- 440160: () => { document.exitFullscreen(); },  
- 440187: ($0) => { document.getElementById('canvas').style.opacity = $0; },  
- 440245: () => { return screen.width; },  
- 440270: () => { return screen.height; },  
- 440296: () => { return window.screenX; },  
- 440323: () => { return window.screenY; },  
- 440350: ($0) => { navigator.clipboard.writeText(UTF8ToString($0)); },  
- 440403: ($0) => { document.getElementById("canvas").style.cursor = UTF8ToString($0); },  
- 440474: () => { document.getElementById('canvas').style.cursor = 'none'; },  
- 440531: ($0, $1, $2, $3) => { try { navigator.getGamepads()[$0].vibrationActuator.playEffect('dual-rumble', { startDelay: 0, duration: $3, weakMagnitude: $1, strongMagnitude: $2 }); } catch (e) { try { navigator.getGamepads()[$0].hapticActuators[0].pulse($2, $3); } catch (e) { } } },  
- 440787: ($0) => { document.getElementById('canvas').style.cursor = UTF8ToString($0); },  
- 440858: () => { if (document.fullscreenElement) return 1; },  
- 440904: () => { return window.innerWidth; },  
- 440930: () => { return window.innerHeight; },  
- 440957: () => { if (document.pointerLockElement) return 1; }
+  438692: () => { if (document.fullscreenElement) return 1; },  
+ 438738: () => { return document.getElementById('canvas').width; },  
+ 438790: () => { return parseInt(document.getElementById('canvas').style.width); },  
+ 438858: () => { document.exitFullscreen(); },  
+ 438885: () => { setTimeout(function() { Module.requestFullscreen(false, false); }, 100); },  
+ 438958: () => { if (document.fullscreenElement) return 1; },  
+ 439004: () => { return document.getElementById('canvas').width; },  
+ 439056: () => { return screen.width; },  
+ 439081: () => { document.exitFullscreen(); },  
+ 439108: () => { setTimeout(function() { Module.requestFullscreen(false, true); setTimeout(function() { canvas.style.width="unset"; }, 100); }, 100); },  
+ 439241: () => { return window.innerWidth; },  
+ 439267: () => { return window.innerHeight; },  
+ 439294: () => { if (document.fullscreenElement) return 1; },  
+ 439340: () => { return document.getElementById('canvas').width; },  
+ 439392: () => { return parseInt(document.getElementById('canvas').style.width); },  
+ 439460: () => { if (document.fullscreenElement) return 1; },  
+ 439506: () => { return document.getElementById('canvas').width; },  
+ 439558: () => { return screen.width; },  
+ 439583: () => { return window.innerWidth; },  
+ 439609: () => { return window.innerHeight; },  
+ 439636: () => { if (document.fullscreenElement) return 1; },  
+ 439682: () => { return document.getElementById('canvas').width; },  
+ 439734: () => { return screen.width; },  
+ 439759: () => { document.exitFullscreen(); },  
+ 439786: () => { if (document.fullscreenElement) return 1; },  
+ 439832: () => { return document.getElementById('canvas').width; },  
+ 439884: () => { return parseInt(document.getElementById('canvas').style.width); },  
+ 439952: () => { document.exitFullscreen(); },  
+ 439979: ($0) => { document.getElementById('canvas').style.opacity = $0; },  
+ 440037: () => { return screen.width; },  
+ 440062: () => { return screen.height; },  
+ 440088: () => { return window.screenX; },  
+ 440115: () => { return window.screenY; },  
+ 440142: ($0) => { navigator.clipboard.writeText(UTF8ToString($0)); },  
+ 440195: ($0) => { document.getElementById("canvas").style.cursor = UTF8ToString($0); },  
+ 440266: () => { document.getElementById('canvas').style.cursor = 'none'; },  
+ 440323: ($0, $1, $2, $3) => { try { navigator.getGamepads()[$0].vibrationActuator.playEffect('dual-rumble', { startDelay: 0, duration: $3, weakMagnitude: $1, strongMagnitude: $2 }); } catch (e) { try { navigator.getGamepads()[$0].hapticActuators[0].pulse($2, $3); } catch (e) { } } },  
+ 440579: ($0) => { document.getElementById('canvas').style.cursor = UTF8ToString($0); },  
+ 440650: () => { if (document.fullscreenElement) return 1; },  
+ 440696: () => { return window.innerWidth; },  
+ 440722: () => { return window.innerHeight; },  
+ 440749: () => { if (document.pointerLockElement) return 1; }
 };
 
 // Imports from the Wasm binary.
@@ -10746,7 +10744,7 @@ run();
 
 // end include: postamble.js
 
-// include: /Users/dii/git/games-web-all/tools/web_mobile_touch.post.js
+// include: /Users/dii/git/games/tools/web_mobile_touch.post.js
 if (typeof Module !== "object") Module = {};
 
 (function () {
@@ -10796,34 +10794,122 @@ if (typeof Module !== "object") Module = {};
     const canvas = Module.canvas || document.getElementById("canvas");
     if (!canvas) return;
 
+    // Detect game from URL path
+    const gameId = (function() {
+      const m = location.pathname.match(/\/games\/([^\/]+)\//);
+      return m ? m[1] : 'default';
+    })();
+
     const KEY_INFO = {
+      9:  { key: "Tab", code: "Tab" },
       13: { key: "Enter", code: "Enter" },
       16: { key: "Shift", code: "ShiftLeft" },
+      17: { key: "Control", code: "ControlLeft" },
       27: { key: "Escape", code: "Escape" },
       32: { key: " ", code: "Space" },
       37: { key: "ArrowLeft", code: "ArrowLeft" },
       38: { key: "ArrowUp", code: "ArrowUp" },
       39: { key: "ArrowRight", code: "ArrowRight" },
       40: { key: "ArrowDown", code: "ArrowDown" },
+      49: { key: "1", code: "Digit1" },
+      50: { key: "2", code: "Digit2" },
+      51: { key: "3", code: "Digit3" },
+      52: { key: "4", code: "Digit4" },
+      53: { key: "5", code: "Digit5" },
+      54: { key: "6", code: "Digit6" },
       65: { key: "a", code: "KeyA" },
+      67: { key: "c", code: "KeyC" },
       68: { key: "d", code: "KeyD" },
+      69: { key: "e", code: "KeyE" },
+      70: { key: "f", code: "KeyF" },
+      71: { key: "g", code: "KeyG" },
+      72: { key: "h", code: "KeyH" },
       74: { key: "j", code: "KeyJ" },
       75: { key: "k", code: "KeyK" },
       76: { key: "l", code: "KeyL" },
+      80: { key: "p", code: "KeyP" },
+      81: { key: "q", code: "KeyQ" },
+      82: { key: "r", code: "KeyR" },
       83: { key: "s", code: "KeyS" },
       87: { key: "w", code: "KeyW" },
+      90: { key: "z", code: "KeyZ" },
     };
 
-    const CONTROL_KEYS = {
+    const DPAD_KEYS = {
       up: [87, 38],
       down: [83, 40],
       left: [65, 37],
       right: [68, 39],
-      actionA: [74, 32],
-      actionB: [75, 13],
-      actionC: [76, 16],
-      menu: [27],
     };
+
+    const GAME_PROFILES = {
+      // Default: current D-pad + A/B/C + Menu
+      default: {
+        type: 'dpad',
+        buttons: [
+          { label: 'A', keys: [74, 32], class: 'actionA' },  // Space+J
+          { label: 'B', keys: [75, 13], class: 'actionB' },  // Enter+K
+          { label: 'C', keys: [76, 16], class: 'actionC' },  // Shift+L
+          { label: 'II', keys: [27], class: 'menu small' },   // Escape
+        ]
+      },
+      // Abyssal Rift: roguelite with mouse aim
+      abyssal_rift: {
+        type: 'dpad',
+        buttons: [
+          { label: '\u2694', keys: [32], class: 'actionA' },       // Space (dash)
+          { label: 'E', keys: [69], class: 'actionB' },            // E (interact)
+          { label: 'ATK', keys: [-1], class: 'actionC', mouse: 0 }, // Mouse left click
+          { label: 'II', keys: [27], class: 'menu small' },
+        ]
+      },
+      // Fighter 97: fighting game
+      fighter_97_lite: {
+        type: 'dpad',
+        buttons: [
+          { label: 'LP', keys: [70], class: 'actionA' },    // F
+          { label: 'HP', keys: [71], class: 'actionB' },    // G
+          { label: 'LK', keys: [72], class: 'actionC' },    // H
+          { label: 'HK', keys: [74], class: 'actionA2' },   // J
+          { label: 'ST', keys: [13], class: 'menu small' }, // Enter (start)
+        ]
+      },
+      // Survival Arena: FPS with mouse look
+      survival_arena_3d: {
+        type: 'dpad',
+        buttons: [
+          { label: '\uD83D\uDD2B', keys: [-1], class: 'actionA', mouse: 0 },  // Fire
+          { label: 'R', keys: [82], class: 'actionB' },                         // Reload
+          { label: 'E', keys: [69], class: 'actionC' },                         // Use/Buy
+          { label: 'II', keys: [27], class: 'menu small' },
+        ]
+      },
+      // Tank/Bomberman: classic controls
+      tank_1990: {
+        type: 'dpad',
+        buttons: [
+          { label: '\uD83D\uDD2B', keys: [74, 32], class: 'actionA' },  // Fire
+          { label: 'II', keys: [27], class: 'menu small' },
+        ]
+      },
+      bomberman_1983_lite: {
+        type: 'dpad',
+        buttons: [
+          { label: '\uD83D\uDCA3', keys: [74, 32], class: 'actionA' },  // Bomb
+          { label: 'II', keys: [27], class: 'menu small' },
+        ]
+      },
+      // 2048: swipe-friendly
+      '2048': {
+        type: 'dpad',
+        buttons: [
+          { label: '\u21A9', keys: [90], class: 'actionA' },     // Z (undo)
+          { label: 'R', keys: [82], class: 'actionB' },           // R (restart)
+        ]
+      },
+    };
+
+    const profile = GAME_PROFILES[gameId] || GAME_PROFILES.default;
 
     const keyRefCounts = new Map();
 
@@ -10887,6 +10973,16 @@ if (typeof Module !== "object") Module = {};
       try {
         canvas.focus();
       } catch (_) {}
+    }
+
+    function dispatchMouseButton(type, button) {
+      const rect = canvas.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      canvas.dispatchEvent(new MouseEvent(type, {
+        button: button, clientX: cx, clientY: cy,
+        bubbles: true, cancelable: true
+      }));
     }
 
     function preventTouchScroll(event) {
@@ -11024,6 +11120,11 @@ if (typeof Module !== "object") Module = {};
           top: 116px;
         }
 
+        .moonbit-touch-btn.actionA2 {
+          right: 116px;
+          top: 116px;
+        }
+
         #moonbit-touch-hint {
           position: fixed;
           left: 50%;
@@ -11091,6 +11192,11 @@ if (typeof Module !== "object") Module = {};
             right: 53px;
             top: 106px;
           }
+
+          .moonbit-touch-btn.actionA2 {
+            right: 106px;
+            top: 106px;
+          }
         }
       `;
       document.head.appendChild(style);
@@ -11102,34 +11208,37 @@ if (typeof Module !== "object") Module = {};
     canvas.addEventListener("touchstart", preventTouchScroll, { passive: false });
     canvas.addEventListener("touchmove", preventTouchScroll, { passive: false });
 
+    // Build overlay HTML dynamically from profile
+    let overlayHTML = `<div class="moonbit-touch-pad left">
+      <button class="moonbit-touch-btn up" data-control="up" aria-label="Up">\u25B2</button>
+      <button class="moonbit-touch-btn left" data-control="left" aria-label="Left">\u25C0</button>
+      <button class="moonbit-touch-btn down" data-control="down" aria-label="Down">\u25BC</button>
+      <button class="moonbit-touch-btn right" data-control="right" aria-label="Right">\u25B6</button>
+    </div>`;
+    overlayHTML += `<div class="moonbit-touch-pad right">`;
+    for (const btn of profile.buttons) {
+      overlayHTML += `<button class="moonbit-touch-btn ${btn.class}" data-control="${btn.class}" aria-label="${btn.label}">${btn.label}</button>`;
+    }
+    overlayHTML += `</div>`;
+
     const overlay = document.createElement("div");
     overlay.id = "moonbit-touch-overlay";
-    overlay.innerHTML = `
-      <div class="moonbit-touch-pad left">
-        <button class="moonbit-touch-btn up" data-control="up" aria-label="Move Up">▲</button>
-        <button class="moonbit-touch-btn left" data-control="left" aria-label="Move Left">◀</button>
-        <button class="moonbit-touch-btn down" data-control="down" aria-label="Move Down">▼</button>
-        <button class="moonbit-touch-btn right" data-control="right" aria-label="Move Right">▶</button>
-      </div>
-      <div class="moonbit-touch-pad right">
-        <button class="moonbit-touch-btn actionA" data-control="actionA" aria-label="Action A">A</button>
-        <button class="moonbit-touch-btn actionB" data-control="actionB" aria-label="Action B">B</button>
-        <button class="moonbit-touch-btn actionC" data-control="actionC" aria-label="Action C">C</button>
-        <button class="moonbit-touch-btn menu small" data-control="menu" aria-label="Menu">II</button>
-      </div>
-    `;
+    overlay.innerHTML = overlayHTML;
     overlay.addEventListener("contextmenu", (event) => event.preventDefault());
     document.body.appendChild(overlay);
+
+    // Build hint text from profile buttons
+    const btnLabels = profile.buttons.map(function(b) { return b.label; }).join('/');
+    const hintText = "Touch controls: D-pad + " + btnLabels;
 
     if (!document.getElementById("moonbit-touch-hint")) {
       const hint = document.createElement("div");
       hint.id = "moonbit-touch-hint";
-      hint.textContent = "Touch controls: D-pad + A/B/C + II(menu)";
+      hint.textContent = hintText;
       document.body.appendChild(hint);
     }
 
-    function installControlHandlers(button, controlName) {
-      const mappedKeys = CONTROL_KEYS[controlName] || [];
+    function installControlHandlers(button, mappedKeys, mouseButton) {
       const activePointers = new Set();
 
       function press(pointerId) {
@@ -11137,13 +11246,23 @@ if (typeof Module !== "object") Module = {};
         activePointers.add(pointerId);
         button.classList.add("active");
         ensureCanvasFocus();
-        for (const keyCode of mappedKeys) keyDown(keyCode);
+        if (mouseButton !== undefined) {
+          dispatchMouseButton('mousedown', mouseButton);
+        }
+        for (const keyCode of mappedKeys) {
+          if (keyCode >= 0) keyDown(keyCode);
+        }
       }
 
       function release(pointerId) {
         if (!activePointers.has(pointerId)) return;
         activePointers.delete(pointerId);
-        for (const keyCode of mappedKeys) keyUp(keyCode);
+        if (mouseButton !== undefined) {
+          dispatchMouseButton('mouseup', mouseButton);
+        }
+        for (const keyCode of mappedKeys) {
+          if (keyCode >= 0) keyUp(keyCode);
+        }
         if (activePointers.size === 0) {
           button.classList.remove("active");
         }
@@ -11225,9 +11344,20 @@ if (typeof Module !== "object") Module = {};
       }
     }
 
-    for (const button of overlay.querySelectorAll("[data-control]")) {
+    // Install handlers for D-pad buttons
+    for (const button of overlay.querySelectorAll(".moonbit-touch-pad.left [data-control]")) {
       const controlName = button.getAttribute("data-control");
-      installControlHandlers(button, controlName);
+      const mappedKeys = DPAD_KEYS[controlName] || [];
+      installControlHandlers(button, mappedKeys, undefined);
+    }
+
+    // Install handlers for right-side action buttons from profile
+    for (let i = 0; i < profile.buttons.length; i++) {
+      const btnDef = profile.buttons[i];
+      const btnEl = overlay.querySelector('.moonbit-touch-pad.right [data-control="' + btnDef.class + '"]');
+      if (btnEl) {
+        installControlHandlers(btnEl, btnDef.keys, btnDef.mouse);
+      }
     }
 
     window.addEventListener("blur", releaseAllKeys);
@@ -11239,5 +11369,5 @@ if (typeof Module !== "object") Module = {};
     });
   }
 })();
-// end include: /Users/dii/git/games-web-all/tools/web_mobile_touch.post.js
+// end include: /Users/dii/git/games/tools/web_mobile_touch.post.js
 

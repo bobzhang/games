@@ -71,7 +71,7 @@ var ENVIRONMENT_IS_SHELL = !ENVIRONMENT_IS_WEB && !ENVIRONMENT_IS_NODE && !ENVIR
 
 // --pre-jses are emitted after the Module integration code, so that they can
 // refer to Module (if they choose; they can also define Module)
-// include: /Users/dii/git/games-web-all/tools/web_force_webgl1.pre.js
+// include: /Users/dii/git/games/tools/web_force_webgl1.pre.js
 if (typeof Module !== 'object') Module = {};
 
 const __previousPreRun = Module.preRun;
@@ -100,7 +100,7 @@ Module.preRun.push(function () {
     return originalCreateContext.call(Browser, canvas, useWebGL, setInModule, webGLContextAttributes);
   };
 });
-// end include: /Users/dii/git/games-web-all/tools/web_force_webgl1.pre.js
+// end include: /Users/dii/git/games/tools/web_force_webgl1.pre.js
 
 
 var arguments_ = [];
@@ -9235,8 +9235,6 @@ var stringToUTF8Array = (str, heap, outIdx, maxBytesToWrite) => {
     };
 
 
-  var requestFullscreen = Browser.requestFullscreen;
-
   var FS_createPath = (...args) => FS.createPath(...args);
 
 
@@ -9319,7 +9317,6 @@ if (Module['wasmBinary']) wasmBinary = Module['wasmBinary'];
   Module['removeRunDependency'] = removeRunDependency;
   Module['ccall'] = ccall;
   Module['cwrap'] = cwrap;
-  Module['requestFullscreen'] = requestFullscreen;
   Module['FS_preloadFile'] = FS_preloadFile;
   Module['FS_unlink'] = FS_unlink;
   Module['FS_createPath'] = FS_createPath;
@@ -9553,6 +9550,7 @@ missingLibrarySymbols.forEach(missingLibrarySymbol)
   'exceptionLast',
   'exceptionCaught',
   'Browser',
+  'requestFullscreen',
   'requestFullScreen',
   'setCanvasSize',
   'getUserMedia',
@@ -9737,58 +9735,58 @@ function checkIncomingModuleAPI() {
   ignoredModuleProp('onSbrkGrow');
 }
 var ASM_CONSTS = {
-  268492: () => { if (document.fullscreenElement) return 1; },  
- 268538: () => { return document.getElementById('canvas').width; },  
- 268590: () => { return parseInt(document.getElementById('canvas').style.width); },  
- 268658: () => { document.exitFullscreen(); },  
- 268685: () => { setTimeout(function() { Module.requestFullscreen(false, false); }, 100); },  
- 268758: () => { if (document.fullscreenElement) return 1; },  
- 268804: () => { return document.getElementById('canvas').width; },  
- 268856: () => { return screen.width; },  
- 268881: () => { document.exitFullscreen(); },  
- 268908: () => { setTimeout(function() { Module.requestFullscreen(false, true); setTimeout(function() { canvas.style.width="unset"; }, 100); }, 100); },  
- 269041: () => { return window.innerWidth; },  
- 269067: () => { return window.innerHeight; },  
- 269094: () => { if (document.fullscreenElement) return 1; },  
- 269140: () => { return document.getElementById('canvas').width; },  
- 269192: () => { return parseInt(document.getElementById('canvas').style.width); },  
- 269260: () => { if (document.fullscreenElement) return 1; },  
- 269306: () => { return document.getElementById('canvas').width; },  
- 269358: () => { return screen.width; },  
- 269383: () => { return window.innerWidth; },  
- 269409: () => { return window.innerHeight; },  
- 269436: () => { if (document.fullscreenElement) return 1; },  
- 269482: () => { return document.getElementById('canvas').width; },  
- 269534: () => { return screen.width; },  
- 269559: () => { document.exitFullscreen(); },  
- 269586: () => { if (document.fullscreenElement) return 1; },  
- 269632: () => { return document.getElementById('canvas').width; },  
- 269684: () => { return parseInt(document.getElementById('canvas').style.width); },  
- 269752: () => { document.exitFullscreen(); },  
- 269779: ($0) => { document.getElementById('canvas').style.opacity = $0; },  
- 269837: () => { return screen.width; },  
- 269862: () => { return screen.height; },  
- 269888: () => { return window.screenX; },  
- 269915: () => { return window.screenY; },  
- 269942: ($0) => { navigator.clipboard.writeText(UTF8ToString($0)); },  
- 269995: ($0) => { document.getElementById("canvas").style.cursor = UTF8ToString($0); },  
- 270066: () => { document.getElementById('canvas').style.cursor = 'none'; },  
- 270123: ($0, $1, $2, $3) => { try { navigator.getGamepads()[$0].vibrationActuator.playEffect('dual-rumble', { startDelay: 0, duration: $3, weakMagnitude: $1, strongMagnitude: $2 }); } catch (e) { try { navigator.getGamepads()[$0].hapticActuators[0].pulse($2, $3); } catch (e) { } } },  
- 270379: ($0) => { document.getElementById('canvas').style.cursor = UTF8ToString($0); },  
- 270450: () => { if (document.fullscreenElement) return 1; },  
- 270496: () => { return window.innerWidth; },  
- 270522: () => { return window.innerHeight; },  
- 270549: () => { if (document.pointerLockElement) return 1; },  
- 270596: ($0, $1, $2, $3, $4) => { if (typeof window === 'undefined' || (window.AudioContext || window.webkitAudioContext) === undefined) { return 0; } if (typeof(window.miniaudio) === 'undefined') { window.miniaudio = { referenceCount: 0 }; window.miniaudio.device_type = {}; window.miniaudio.device_type.playback = $0; window.miniaudio.device_type.capture = $1; window.miniaudio.device_type.duplex = $2; window.miniaudio.device_state = {}; window.miniaudio.device_state.stopped = $3; window.miniaudio.device_state.started = $4; miniaudio.devices = []; miniaudio.track_device = function(device) { for (var iDevice = 0; iDevice < miniaudio.devices.length; ++iDevice) { if (miniaudio.devices[iDevice] == null) { miniaudio.devices[iDevice] = device; return iDevice; } } miniaudio.devices.push(device); return miniaudio.devices.length - 1; }; miniaudio.untrack_device_by_index = function(deviceIndex) { miniaudio.devices[deviceIndex] = null; while (miniaudio.devices.length > 0) { if (miniaudio.devices[miniaudio.devices.length-1] == null) { miniaudio.devices.pop(); } else { break; } } }; miniaudio.untrack_device = function(device) { for (var iDevice = 0; iDevice < miniaudio.devices.length; ++iDevice) { if (miniaudio.devices[iDevice] == device) { return miniaudio.untrack_device_by_index(iDevice); } } }; miniaudio.get_device_by_index = function(deviceIndex) { return miniaudio.devices[deviceIndex]; }; miniaudio.unlock_event_types = (function(){ return ['touchend', 'click']; })(); miniaudio.unlock = function() { for(var i = 0; i < miniaudio.devices.length; ++i) { var device = miniaudio.devices[i]; if (device != null && device.webaudio != null && device.state === window.miniaudio.device_state.started) { device.webaudio.resume().then(() => { Module._ma_device__on_notification_unlocked(device.pDevice); }, (error) => {console.error("Failed to resume audiocontext", error); }); } } miniaudio.unlock_event_types.map(function(event_type) { document.removeEventListener(event_type, miniaudio.unlock, true); }); }; miniaudio.unlock_event_types.map(function(event_type) { document.addEventListener(event_type, miniaudio.unlock, true); }); } window.miniaudio.referenceCount += 1; return 1; },  
- 272754: () => { if (typeof(window.miniaudio) !== 'undefined') { window.miniaudio.referenceCount -= 1; if (window.miniaudio.referenceCount === 0) { delete window.miniaudio; } } },  
- 272918: () => { return (navigator.mediaDevices !== undefined && navigator.mediaDevices.getUserMedia !== undefined); },  
- 273022: () => { try { var temp = new (window.AudioContext || window.webkitAudioContext)(); var sampleRate = temp.sampleRate; temp.close(); return sampleRate; } catch(e) { return 0; } },  
- 273193: ($0, $1, $2, $3, $4, $5) => { var deviceType = $0; var channels = $1; var sampleRate = $2; var bufferSize = $3; var pIntermediaryBuffer = $4; var pDevice = $5; if (typeof(window.miniaudio) === 'undefined') { return -1; } var device = {}; var audioContextOptions = {}; if (deviceType == window.miniaudio.device_type.playback && sampleRate != 0) { audioContextOptions.sampleRate = sampleRate; } device.webaudio = new (window.AudioContext || window.webkitAudioContext)(audioContextOptions); device.webaudio.suspend(); device.state = window.miniaudio.device_state.stopped; var channelCountIn = 0; var channelCountOut = channels; if (deviceType != window.miniaudio.device_type.playback) { channelCountIn = channels; } device.scriptNode = device.webaudio.createScriptProcessor(bufferSize, channelCountIn, channelCountOut); device.scriptNode.onaudioprocess = function(e) { if (device.intermediaryBufferView == null || device.intermediaryBufferView.length == 0) { device.intermediaryBufferView = new Float32Array(Module.HEAPF32.buffer, pIntermediaryBuffer, bufferSize * channels); } if (deviceType == miniaudio.device_type.capture || deviceType == miniaudio.device_type.duplex) { for (var iChannel = 0; iChannel < channels; iChannel += 1) { var inputBuffer = e.inputBuffer.getChannelData(iChannel); var intermediaryBuffer = device.intermediaryBufferView; for (var iFrame = 0; iFrame < bufferSize; iFrame += 1) { intermediaryBuffer[iFrame*channels + iChannel] = inputBuffer[iFrame]; } } _ma_device_process_pcm_frames_capture__webaudio(pDevice, bufferSize, pIntermediaryBuffer); } if (deviceType == miniaudio.device_type.playback || deviceType == miniaudio.device_type.duplex) { _ma_device_process_pcm_frames_playback__webaudio(pDevice, bufferSize, pIntermediaryBuffer); for (var iChannel = 0; iChannel < e.outputBuffer.numberOfChannels; ++iChannel) { var outputBuffer = e.outputBuffer.getChannelData(iChannel); var intermediaryBuffer = device.intermediaryBufferView; for (var iFrame = 0; iFrame < bufferSize; iFrame += 1) { outputBuffer[iFrame] = intermediaryBuffer[iFrame*channels + iChannel]; } } } else { for (var iChannel = 0; iChannel < e.outputBuffer.numberOfChannels; ++iChannel) { e.outputBuffer.getChannelData(iChannel).fill(0.0); } } }; if (deviceType == miniaudio.device_type.capture || deviceType == miniaudio.device_type.duplex) { navigator.mediaDevices.getUserMedia({audio:true, video:false}) .then(function(stream) { device.streamNode = device.webaudio.createMediaStreamSource(stream); device.streamNode.connect(device.scriptNode); device.scriptNode.connect(device.webaudio.destination); }) .catch(function(error) { console.log("Failed to get user media: " + error); }); } if (deviceType == miniaudio.device_type.playback) { device.scriptNode.connect(device.webaudio.destination); } device.pDevice = pDevice; return miniaudio.track_device(device); },  
- 276021: ($0) => { return miniaudio.get_device_by_index($0).webaudio.sampleRate; },  
- 276087: ($0) => { var device = miniaudio.get_device_by_index($0); if (device.scriptNode !== undefined) { device.scriptNode.onaudioprocess = function(e) {}; device.scriptNode.disconnect(); device.scriptNode = undefined; } if (device.streamNode !== undefined) { device.streamNode.disconnect(); device.streamNode = undefined; } device.webaudio.close(); device.webaudio = undefined; device.pDevice = undefined; },  
- 276480: ($0) => { miniaudio.untrack_device_by_index($0); },  
- 276523: ($0) => { var device = miniaudio.get_device_by_index($0); device.webaudio.resume(); device.state = miniaudio.device_state.started; },  
- 276648: ($0) => { var device = miniaudio.get_device_by_index($0); device.webaudio.suspend(); device.state = miniaudio.device_state.stopped; }
+  268284: () => { if (document.fullscreenElement) return 1; },  
+ 268330: () => { return document.getElementById('canvas').width; },  
+ 268382: () => { return parseInt(document.getElementById('canvas').style.width); },  
+ 268450: () => { document.exitFullscreen(); },  
+ 268477: () => { setTimeout(function() { Module.requestFullscreen(false, false); }, 100); },  
+ 268550: () => { if (document.fullscreenElement) return 1; },  
+ 268596: () => { return document.getElementById('canvas').width; },  
+ 268648: () => { return screen.width; },  
+ 268673: () => { document.exitFullscreen(); },  
+ 268700: () => { setTimeout(function() { Module.requestFullscreen(false, true); setTimeout(function() { canvas.style.width="unset"; }, 100); }, 100); },  
+ 268833: () => { return window.innerWidth; },  
+ 268859: () => { return window.innerHeight; },  
+ 268886: () => { if (document.fullscreenElement) return 1; },  
+ 268932: () => { return document.getElementById('canvas').width; },  
+ 268984: () => { return parseInt(document.getElementById('canvas').style.width); },  
+ 269052: () => { if (document.fullscreenElement) return 1; },  
+ 269098: () => { return document.getElementById('canvas').width; },  
+ 269150: () => { return screen.width; },  
+ 269175: () => { return window.innerWidth; },  
+ 269201: () => { return window.innerHeight; },  
+ 269228: () => { if (document.fullscreenElement) return 1; },  
+ 269274: () => { return document.getElementById('canvas').width; },  
+ 269326: () => { return screen.width; },  
+ 269351: () => { document.exitFullscreen(); },  
+ 269378: () => { if (document.fullscreenElement) return 1; },  
+ 269424: () => { return document.getElementById('canvas').width; },  
+ 269476: () => { return parseInt(document.getElementById('canvas').style.width); },  
+ 269544: () => { document.exitFullscreen(); },  
+ 269571: ($0) => { document.getElementById('canvas').style.opacity = $0; },  
+ 269629: () => { return screen.width; },  
+ 269654: () => { return screen.height; },  
+ 269680: () => { return window.screenX; },  
+ 269707: () => { return window.screenY; },  
+ 269734: ($0) => { navigator.clipboard.writeText(UTF8ToString($0)); },  
+ 269787: ($0) => { document.getElementById("canvas").style.cursor = UTF8ToString($0); },  
+ 269858: () => { document.getElementById('canvas').style.cursor = 'none'; },  
+ 269915: ($0, $1, $2, $3) => { try { navigator.getGamepads()[$0].vibrationActuator.playEffect('dual-rumble', { startDelay: 0, duration: $3, weakMagnitude: $1, strongMagnitude: $2 }); } catch (e) { try { navigator.getGamepads()[$0].hapticActuators[0].pulse($2, $3); } catch (e) { } } },  
+ 270171: ($0) => { document.getElementById('canvas').style.cursor = UTF8ToString($0); },  
+ 270242: () => { if (document.fullscreenElement) return 1; },  
+ 270288: () => { return window.innerWidth; },  
+ 270314: () => { return window.innerHeight; },  
+ 270341: () => { if (document.pointerLockElement) return 1; },  
+ 270388: ($0, $1, $2, $3, $4) => { if (typeof window === 'undefined' || (window.AudioContext || window.webkitAudioContext) === undefined) { return 0; } if (typeof(window.miniaudio) === 'undefined') { window.miniaudio = { referenceCount: 0 }; window.miniaudio.device_type = {}; window.miniaudio.device_type.playback = $0; window.miniaudio.device_type.capture = $1; window.miniaudio.device_type.duplex = $2; window.miniaudio.device_state = {}; window.miniaudio.device_state.stopped = $3; window.miniaudio.device_state.started = $4; miniaudio.devices = []; miniaudio.track_device = function(device) { for (var iDevice = 0; iDevice < miniaudio.devices.length; ++iDevice) { if (miniaudio.devices[iDevice] == null) { miniaudio.devices[iDevice] = device; return iDevice; } } miniaudio.devices.push(device); return miniaudio.devices.length - 1; }; miniaudio.untrack_device_by_index = function(deviceIndex) { miniaudio.devices[deviceIndex] = null; while (miniaudio.devices.length > 0) { if (miniaudio.devices[miniaudio.devices.length-1] == null) { miniaudio.devices.pop(); } else { break; } } }; miniaudio.untrack_device = function(device) { for (var iDevice = 0; iDevice < miniaudio.devices.length; ++iDevice) { if (miniaudio.devices[iDevice] == device) { return miniaudio.untrack_device_by_index(iDevice); } } }; miniaudio.get_device_by_index = function(deviceIndex) { return miniaudio.devices[deviceIndex]; }; miniaudio.unlock_event_types = (function(){ return ['touchend', 'click']; })(); miniaudio.unlock = function() { for(var i = 0; i < miniaudio.devices.length; ++i) { var device = miniaudio.devices[i]; if (device != null && device.webaudio != null && device.state === window.miniaudio.device_state.started) { device.webaudio.resume().then(() => { Module._ma_device__on_notification_unlocked(device.pDevice); }, (error) => {console.error("Failed to resume audiocontext", error); }); } } miniaudio.unlock_event_types.map(function(event_type) { document.removeEventListener(event_type, miniaudio.unlock, true); }); }; miniaudio.unlock_event_types.map(function(event_type) { document.addEventListener(event_type, miniaudio.unlock, true); }); } window.miniaudio.referenceCount += 1; return 1; },  
+ 272546: () => { if (typeof(window.miniaudio) !== 'undefined') { window.miniaudio.referenceCount -= 1; if (window.miniaudio.referenceCount === 0) { delete window.miniaudio; } } },  
+ 272710: () => { return (navigator.mediaDevices !== undefined && navigator.mediaDevices.getUserMedia !== undefined); },  
+ 272814: () => { try { var temp = new (window.AudioContext || window.webkitAudioContext)(); var sampleRate = temp.sampleRate; temp.close(); return sampleRate; } catch(e) { return 0; } },  
+ 272985: ($0, $1, $2, $3, $4, $5) => { var deviceType = $0; var channels = $1; var sampleRate = $2; var bufferSize = $3; var pIntermediaryBuffer = $4; var pDevice = $5; if (typeof(window.miniaudio) === 'undefined') { return -1; } var device = {}; var audioContextOptions = {}; if (deviceType == window.miniaudio.device_type.playback && sampleRate != 0) { audioContextOptions.sampleRate = sampleRate; } device.webaudio = new (window.AudioContext || window.webkitAudioContext)(audioContextOptions); device.webaudio.suspend(); device.state = window.miniaudio.device_state.stopped; var channelCountIn = 0; var channelCountOut = channels; if (deviceType != window.miniaudio.device_type.playback) { channelCountIn = channels; } device.scriptNode = device.webaudio.createScriptProcessor(bufferSize, channelCountIn, channelCountOut); device.scriptNode.onaudioprocess = function(e) { if (device.intermediaryBufferView == null || device.intermediaryBufferView.length == 0) { device.intermediaryBufferView = new Float32Array(Module.HEAPF32.buffer, pIntermediaryBuffer, bufferSize * channels); } if (deviceType == miniaudio.device_type.capture || deviceType == miniaudio.device_type.duplex) { for (var iChannel = 0; iChannel < channels; iChannel += 1) { var inputBuffer = e.inputBuffer.getChannelData(iChannel); var intermediaryBuffer = device.intermediaryBufferView; for (var iFrame = 0; iFrame < bufferSize; iFrame += 1) { intermediaryBuffer[iFrame*channels + iChannel] = inputBuffer[iFrame]; } } _ma_device_process_pcm_frames_capture__webaudio(pDevice, bufferSize, pIntermediaryBuffer); } if (deviceType == miniaudio.device_type.playback || deviceType == miniaudio.device_type.duplex) { _ma_device_process_pcm_frames_playback__webaudio(pDevice, bufferSize, pIntermediaryBuffer); for (var iChannel = 0; iChannel < e.outputBuffer.numberOfChannels; ++iChannel) { var outputBuffer = e.outputBuffer.getChannelData(iChannel); var intermediaryBuffer = device.intermediaryBufferView; for (var iFrame = 0; iFrame < bufferSize; iFrame += 1) { outputBuffer[iFrame] = intermediaryBuffer[iFrame*channels + iChannel]; } } } else { for (var iChannel = 0; iChannel < e.outputBuffer.numberOfChannels; ++iChannel) { e.outputBuffer.getChannelData(iChannel).fill(0.0); } } }; if (deviceType == miniaudio.device_type.capture || deviceType == miniaudio.device_type.duplex) { navigator.mediaDevices.getUserMedia({audio:true, video:false}) .then(function(stream) { device.streamNode = device.webaudio.createMediaStreamSource(stream); device.streamNode.connect(device.scriptNode); device.scriptNode.connect(device.webaudio.destination); }) .catch(function(error) { console.log("Failed to get user media: " + error); }); } if (deviceType == miniaudio.device_type.playback) { device.scriptNode.connect(device.webaudio.destination); } device.pDevice = pDevice; return miniaudio.track_device(device); },  
+ 275813: ($0) => { return miniaudio.get_device_by_index($0).webaudio.sampleRate; },  
+ 275879: ($0) => { var device = miniaudio.get_device_by_index($0); if (device.scriptNode !== undefined) { device.scriptNode.onaudioprocess = function(e) {}; device.scriptNode.disconnect(); device.scriptNode = undefined; } if (device.streamNode !== undefined) { device.streamNode.disconnect(); device.streamNode = undefined; } device.webaudio.close(); device.webaudio = undefined; device.pDevice = undefined; },  
+ 276272: ($0) => { miniaudio.untrack_device_by_index($0); },  
+ 276315: ($0) => { var device = miniaudio.get_device_by_index($0); device.webaudio.resume(); device.state = miniaudio.device_state.started; },  
+ 276440: ($0) => { var device = miniaudio.get_device_by_index($0); device.webaudio.suspend(); device.state = miniaudio.device_state.stopped; }
 };
 
 // Imports from the Wasm binary.
@@ -10659,7 +10657,7 @@ run();
 
 // end include: postamble.js
 
-// include: /Users/dii/git/games-web-all/tools/web_mobile_touch.post.js
+// include: /Users/dii/git/games/tools/web_mobile_touch.post.js
 if (typeof Module !== "object") Module = {};
 
 (function () {
@@ -10709,34 +10707,122 @@ if (typeof Module !== "object") Module = {};
     const canvas = Module.canvas || document.getElementById("canvas");
     if (!canvas) return;
 
+    // Detect game from URL path
+    const gameId = (function() {
+      const m = location.pathname.match(/\/games\/([^\/]+)\//);
+      return m ? m[1] : 'default';
+    })();
+
     const KEY_INFO = {
+      9:  { key: "Tab", code: "Tab" },
       13: { key: "Enter", code: "Enter" },
       16: { key: "Shift", code: "ShiftLeft" },
+      17: { key: "Control", code: "ControlLeft" },
       27: { key: "Escape", code: "Escape" },
       32: { key: " ", code: "Space" },
       37: { key: "ArrowLeft", code: "ArrowLeft" },
       38: { key: "ArrowUp", code: "ArrowUp" },
       39: { key: "ArrowRight", code: "ArrowRight" },
       40: { key: "ArrowDown", code: "ArrowDown" },
+      49: { key: "1", code: "Digit1" },
+      50: { key: "2", code: "Digit2" },
+      51: { key: "3", code: "Digit3" },
+      52: { key: "4", code: "Digit4" },
+      53: { key: "5", code: "Digit5" },
+      54: { key: "6", code: "Digit6" },
       65: { key: "a", code: "KeyA" },
+      67: { key: "c", code: "KeyC" },
       68: { key: "d", code: "KeyD" },
+      69: { key: "e", code: "KeyE" },
+      70: { key: "f", code: "KeyF" },
+      71: { key: "g", code: "KeyG" },
+      72: { key: "h", code: "KeyH" },
       74: { key: "j", code: "KeyJ" },
       75: { key: "k", code: "KeyK" },
       76: { key: "l", code: "KeyL" },
+      80: { key: "p", code: "KeyP" },
+      81: { key: "q", code: "KeyQ" },
+      82: { key: "r", code: "KeyR" },
       83: { key: "s", code: "KeyS" },
       87: { key: "w", code: "KeyW" },
+      90: { key: "z", code: "KeyZ" },
     };
 
-    const CONTROL_KEYS = {
+    const DPAD_KEYS = {
       up: [87, 38],
       down: [83, 40],
       left: [65, 37],
       right: [68, 39],
-      actionA: [74, 32],
-      actionB: [75, 13],
-      actionC: [76, 16],
-      menu: [27],
     };
+
+    const GAME_PROFILES = {
+      // Default: current D-pad + A/B/C + Menu
+      default: {
+        type: 'dpad',
+        buttons: [
+          { label: 'A', keys: [74, 32], class: 'actionA' },  // Space+J
+          { label: 'B', keys: [75, 13], class: 'actionB' },  // Enter+K
+          { label: 'C', keys: [76, 16], class: 'actionC' },  // Shift+L
+          { label: 'II', keys: [27], class: 'menu small' },   // Escape
+        ]
+      },
+      // Abyssal Rift: roguelite with mouse aim
+      abyssal_rift: {
+        type: 'dpad',
+        buttons: [
+          { label: '\u2694', keys: [32], class: 'actionA' },       // Space (dash)
+          { label: 'E', keys: [69], class: 'actionB' },            // E (interact)
+          { label: 'ATK', keys: [-1], class: 'actionC', mouse: 0 }, // Mouse left click
+          { label: 'II', keys: [27], class: 'menu small' },
+        ]
+      },
+      // Fighter 97: fighting game
+      fighter_97_lite: {
+        type: 'dpad',
+        buttons: [
+          { label: 'LP', keys: [70], class: 'actionA' },    // F
+          { label: 'HP', keys: [71], class: 'actionB' },    // G
+          { label: 'LK', keys: [72], class: 'actionC' },    // H
+          { label: 'HK', keys: [74], class: 'actionA2' },   // J
+          { label: 'ST', keys: [13], class: 'menu small' }, // Enter (start)
+        ]
+      },
+      // Survival Arena: FPS with mouse look
+      survival_arena_3d: {
+        type: 'dpad',
+        buttons: [
+          { label: '\uD83D\uDD2B', keys: [-1], class: 'actionA', mouse: 0 },  // Fire
+          { label: 'R', keys: [82], class: 'actionB' },                         // Reload
+          { label: 'E', keys: [69], class: 'actionC' },                         // Use/Buy
+          { label: 'II', keys: [27], class: 'menu small' },
+        ]
+      },
+      // Tank/Bomberman: classic controls
+      tank_1990: {
+        type: 'dpad',
+        buttons: [
+          { label: '\uD83D\uDD2B', keys: [74, 32], class: 'actionA' },  // Fire
+          { label: 'II', keys: [27], class: 'menu small' },
+        ]
+      },
+      bomberman_1983_lite: {
+        type: 'dpad',
+        buttons: [
+          { label: '\uD83D\uDCA3', keys: [74, 32], class: 'actionA' },  // Bomb
+          { label: 'II', keys: [27], class: 'menu small' },
+        ]
+      },
+      // 2048: swipe-friendly
+      '2048': {
+        type: 'dpad',
+        buttons: [
+          { label: '\u21A9', keys: [90], class: 'actionA' },     // Z (undo)
+          { label: 'R', keys: [82], class: 'actionB' },           // R (restart)
+        ]
+      },
+    };
+
+    const profile = GAME_PROFILES[gameId] || GAME_PROFILES.default;
 
     const keyRefCounts = new Map();
 
@@ -10800,6 +10886,16 @@ if (typeof Module !== "object") Module = {};
       try {
         canvas.focus();
       } catch (_) {}
+    }
+
+    function dispatchMouseButton(type, button) {
+      const rect = canvas.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      canvas.dispatchEvent(new MouseEvent(type, {
+        button: button, clientX: cx, clientY: cy,
+        bubbles: true, cancelable: true
+      }));
     }
 
     function preventTouchScroll(event) {
@@ -10937,6 +11033,11 @@ if (typeof Module !== "object") Module = {};
           top: 116px;
         }
 
+        .moonbit-touch-btn.actionA2 {
+          right: 116px;
+          top: 116px;
+        }
+
         #moonbit-touch-hint {
           position: fixed;
           left: 50%;
@@ -11004,6 +11105,11 @@ if (typeof Module !== "object") Module = {};
             right: 53px;
             top: 106px;
           }
+
+          .moonbit-touch-btn.actionA2 {
+            right: 106px;
+            top: 106px;
+          }
         }
       `;
       document.head.appendChild(style);
@@ -11015,34 +11121,37 @@ if (typeof Module !== "object") Module = {};
     canvas.addEventListener("touchstart", preventTouchScroll, { passive: false });
     canvas.addEventListener("touchmove", preventTouchScroll, { passive: false });
 
+    // Build overlay HTML dynamically from profile
+    let overlayHTML = `<div class="moonbit-touch-pad left">
+      <button class="moonbit-touch-btn up" data-control="up" aria-label="Up">\u25B2</button>
+      <button class="moonbit-touch-btn left" data-control="left" aria-label="Left">\u25C0</button>
+      <button class="moonbit-touch-btn down" data-control="down" aria-label="Down">\u25BC</button>
+      <button class="moonbit-touch-btn right" data-control="right" aria-label="Right">\u25B6</button>
+    </div>`;
+    overlayHTML += `<div class="moonbit-touch-pad right">`;
+    for (const btn of profile.buttons) {
+      overlayHTML += `<button class="moonbit-touch-btn ${btn.class}" data-control="${btn.class}" aria-label="${btn.label}">${btn.label}</button>`;
+    }
+    overlayHTML += `</div>`;
+
     const overlay = document.createElement("div");
     overlay.id = "moonbit-touch-overlay";
-    overlay.innerHTML = `
-      <div class="moonbit-touch-pad left">
-        <button class="moonbit-touch-btn up" data-control="up" aria-label="Move Up">▲</button>
-        <button class="moonbit-touch-btn left" data-control="left" aria-label="Move Left">◀</button>
-        <button class="moonbit-touch-btn down" data-control="down" aria-label="Move Down">▼</button>
-        <button class="moonbit-touch-btn right" data-control="right" aria-label="Move Right">▶</button>
-      </div>
-      <div class="moonbit-touch-pad right">
-        <button class="moonbit-touch-btn actionA" data-control="actionA" aria-label="Action A">A</button>
-        <button class="moonbit-touch-btn actionB" data-control="actionB" aria-label="Action B">B</button>
-        <button class="moonbit-touch-btn actionC" data-control="actionC" aria-label="Action C">C</button>
-        <button class="moonbit-touch-btn menu small" data-control="menu" aria-label="Menu">II</button>
-      </div>
-    `;
+    overlay.innerHTML = overlayHTML;
     overlay.addEventListener("contextmenu", (event) => event.preventDefault());
     document.body.appendChild(overlay);
+
+    // Build hint text from profile buttons
+    const btnLabels = profile.buttons.map(function(b) { return b.label; }).join('/');
+    const hintText = "Touch controls: D-pad + " + btnLabels;
 
     if (!document.getElementById("moonbit-touch-hint")) {
       const hint = document.createElement("div");
       hint.id = "moonbit-touch-hint";
-      hint.textContent = "Touch controls: D-pad + A/B/C + II(menu)";
+      hint.textContent = hintText;
       document.body.appendChild(hint);
     }
 
-    function installControlHandlers(button, controlName) {
-      const mappedKeys = CONTROL_KEYS[controlName] || [];
+    function installControlHandlers(button, mappedKeys, mouseButton) {
       const activePointers = new Set();
 
       function press(pointerId) {
@@ -11050,13 +11159,23 @@ if (typeof Module !== "object") Module = {};
         activePointers.add(pointerId);
         button.classList.add("active");
         ensureCanvasFocus();
-        for (const keyCode of mappedKeys) keyDown(keyCode);
+        if (mouseButton !== undefined) {
+          dispatchMouseButton('mousedown', mouseButton);
+        }
+        for (const keyCode of mappedKeys) {
+          if (keyCode >= 0) keyDown(keyCode);
+        }
       }
 
       function release(pointerId) {
         if (!activePointers.has(pointerId)) return;
         activePointers.delete(pointerId);
-        for (const keyCode of mappedKeys) keyUp(keyCode);
+        if (mouseButton !== undefined) {
+          dispatchMouseButton('mouseup', mouseButton);
+        }
+        for (const keyCode of mappedKeys) {
+          if (keyCode >= 0) keyUp(keyCode);
+        }
         if (activePointers.size === 0) {
           button.classList.remove("active");
         }
@@ -11138,9 +11257,20 @@ if (typeof Module !== "object") Module = {};
       }
     }
 
-    for (const button of overlay.querySelectorAll("[data-control]")) {
+    // Install handlers for D-pad buttons
+    for (const button of overlay.querySelectorAll(".moonbit-touch-pad.left [data-control]")) {
       const controlName = button.getAttribute("data-control");
-      installControlHandlers(button, controlName);
+      const mappedKeys = DPAD_KEYS[controlName] || [];
+      installControlHandlers(button, mappedKeys, undefined);
+    }
+
+    // Install handlers for right-side action buttons from profile
+    for (let i = 0; i < profile.buttons.length; i++) {
+      const btnDef = profile.buttons[i];
+      const btnEl = overlay.querySelector('.moonbit-touch-pad.right [data-control="' + btnDef.class + '"]');
+      if (btnEl) {
+        installControlHandlers(btnEl, btnDef.keys, btnDef.mouse);
+      }
     }
 
     window.addEventListener("blur", releaseAllKeys);
@@ -11152,5 +11282,5 @@ if (typeof Module !== "object") Module = {};
     });
   }
 })();
-// end include: /Users/dii/git/games-web-all/tools/web_mobile_touch.post.js
+// end include: /Users/dii/git/games/tools/web_mobile_touch.post.js
 
