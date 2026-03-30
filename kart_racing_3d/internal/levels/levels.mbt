@@ -243,6 +243,178 @@ pub fn get_track_waypoints(
 
 // Get track segment metadata for each waypoint pair
 
+///|
+/// Returns segment metadata for each waypoint pair on the given track.
+pub fn get_track_segments(
+  cup : Int,
+  race : Int,
+) -> Array[@types.TrackSegment] {
+  let track_id = cup * 4 + race
+  let wps = get_track_waypoints(cup, race)
+  let count = wps.length()
+  let segs : Array[@types.TrackSegment] = []
+  for i in 0..<count {
+    segs.push(@types.TrackSegment::default())
+    ignore(i)
+  }
+  // Apply track-specific segment data
+  if track_id == 2 {
+    // Sunny Circuit: boost pad on the main straight
+    if count > 1 {
+      segs[1].surface_type = BoostPad
+    }
+  } else if track_id == 3 {
+    // Beach Loop: sandy patches
+    if count > 3 {
+      segs[3].surface_type = Dirt
+      segs[3].width_mult = 1.3
+    }
+    if count > 7 {
+      segs[7].surface_type = Dirt
+    }
+  } else if track_id == 4 {
+    // Mountain Pass: narrow road with ramp
+    for i in 0..<count {
+      segs[i].width_mult = 0.8
+    }
+    if count > 2 {
+      segs[2].is_ramp = true
+      segs[2].ramp_height = 2.0
+    }
+    if count > 5 {
+      segs[5].is_ramp = true
+      segs[5].ramp_height = 1.5
+    }
+  } else if track_id == 5 {
+    // Castle Circuit: tight corners, narrow
+    for i in 0..<count {
+      segs[i].width_mult = 0.75
+    }
+  } else if track_id == 6 {
+    // S-Curve Challenge: boost pad reward for clean lines
+    if count > 4 {
+      segs[4].surface_type = BoostPad
+    }
+    if count > 8 {
+      segs[8].surface_type = BoostPad
+    }
+  } else if track_id == 7 {
+    // Bridge Run: narrow bridges with ramp
+    if count > 1 {
+      segs[1].width_mult = 0.6
+      segs[1].is_ramp = true
+      segs[1].ramp_height = 1.0
+    }
+    if count > 4 {
+      segs[4].width_mult = 0.6
+      segs[4].is_ramp = true
+      segs[4].ramp_height = 1.0
+    }
+  } else if track_id == 8 {
+    // Technical Circuit: varied width chicanes
+    if count > 3 {
+      segs[3].width_mult = 0.7
+    }
+    if count > 4 {
+      segs[4].width_mult = 0.7
+    }
+  } else if track_id == 9 {
+    // Desert Storm: wide with dirt patches
+    for i in 0..<count {
+      segs[i].width_mult = 1.4
+    }
+    if count > 2 {
+      segs[2].surface_type = Dirt
+    }
+    if count > 5 {
+      segs[5].surface_type = Dirt
+    }
+    if count > 8 {
+      segs[8].surface_type = Dirt
+    }
+  } else if track_id == 10 {
+    // Ice Track: icy surface throughout
+    for i in 0..<count {
+      segs[i].surface_type = SurfaceIce
+    }
+    if count > 3 {
+      segs[3].surface_type = Road
+    }
+  } else if track_id == 11 {
+    // Night City: boost pads on straights
+    if count > 0 {
+      segs[0].surface_type = BoostPad
+    }
+    if count > 3 {
+      segs[3].surface_type = BoostPad
+    }
+  } else if track_id == 12 {
+    // Rainbow Road: narrow, ramps, boost
+    for i in 0..<count {
+      segs[i].width_mult = 0.6
+    }
+    if count > 2 {
+      segs[2].is_ramp = true
+      segs[2].ramp_height = 2.5
+    }
+    if count > 6 {
+      segs[6].is_ramp = true
+      segs[6].ramp_height = 2.0
+    }
+    if count > 4 {
+      segs[4].surface_type = BoostPad
+    }
+  } else if track_id == 13 {
+    // Volcano Run: ramps and narrow lava sections
+    if count > 1 {
+      segs[1].is_ramp = true
+      segs[1].ramp_height = 2.0
+    }
+    if count > 5 {
+      segs[5].is_ramp = true
+      segs[5].ramp_height = 1.5
+    }
+    if count > 3 {
+      segs[3].width_mult = 0.7
+    }
+    if count > 7 {
+      segs[7].width_mult = 0.7
+    }
+  } else if track_id == 14 {
+    // Deep Trench: narrow with boost sections
+    for i in 0..<count {
+      segs[i].width_mult = 0.75
+    }
+    if count > 2 {
+      segs[2].surface_type = BoostPad
+    }
+    if count > 6 {
+      segs[6].surface_type = BoostPad
+    }
+  } else if track_id == 15 {
+    // Grand Prix: everything mixed
+    if count > 1 {
+      segs[1].is_ramp = true
+      segs[1].ramp_height = 1.5
+    }
+    if count > 3 {
+      segs[3].surface_type = BoostPad
+    }
+    if count > 5 {
+      segs[5].surface_type = Dirt
+      segs[5].width_mult = 1.3
+    }
+    if count > 7 {
+      segs[7].is_ramp = true
+      segs[7].ramp_height = 2.0
+    }
+    if count > 9 {
+      segs[9].surface_type = SurfaceIce
+    }
+  }
+  segs
+}
+
 // Track names
 
 ///|
@@ -301,6 +473,14 @@ pub fn get_cup_name(cup : Int) -> String {
 }
 
 // Cup difficulty levels (AI difficulty for each cup)
+
+///|
+/// Returns the AI difficulty level for the given cup index.
+/// Cup 0 (Mushroom) = 0 (Easy), Cup 1 (Star) = 1 (Medium),
+/// Cup 2 (Crown) = 2 (Hard), Cup 3 (Special) = 3 (Expert).
+pub fn get_cup_ai_difficulty(cup : Int) -> Int {
+  cup.clamp(min=0, max=3)
+}
 
 // Track theme index
 

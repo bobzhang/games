@@ -31,7 +31,7 @@ fn @types.Game::build_camera(game : @types.Game) -> @raylib.Camera3D {
       game.camera_look_z,
     ),
     @raylib.Vector3::new(0.0, 1.0, 0.0),
-    @types.camera_fovy,
+    game.camera_fov,
     @raylib.CameraPerspective,
   )
 }

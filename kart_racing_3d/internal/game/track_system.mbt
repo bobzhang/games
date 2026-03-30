@@ -9,6 +9,17 @@ pub fn load_track(game : @types.Game, cup : Int, race : Int) -> Unit {
     let d = wp_data[i]
     game.waypoints[i] = { x: d.0, y: d.1, z: d.2 }
   }
+  // Load segment metadata from level data
+  let seg_data = @levels.get_track_segments(cup, race)
+  for i in 0..<game.waypoint_count {
+    if i < seg_data.length() {
+      game.segments[i] = seg_data[i]
+    } else {
+      game.segments[i] = @types.TrackSegment::default()
+    }
+  }
+  // Load per-track lap count
+  game.track_laps = @levels.get_track_laps(cup, race)
   // Clear entity pools
   for i in 0..<game.karts.length() {
     game.karts[i] = @types.Kart::inactive()
@@ -32,6 +43,11 @@ pub fn load_track(game : @types.Game, cup : Int, race : Int) -> Unit {
   game.best_lap_time = 999.0
   game.current_lap_time = 0.0
   game.lap_start_time = 0.0
+  // Reset HUD feedback state
+  game.prev_player_place = 1
+  game.place_change_timer = 0.0
+  game.drift_boost_text_timer = 0.0
+  game.item_pickup_flash_timer = 0.0
 }
 
 ///|
@@ -51,6 +67,8 @@ fn @types.Game::spawn_karts(game : @types.Game) -> Unit {
   // Perpendicular direction for side-by-side placement
   let perp_x = -dir_z
   let perp_z = dir_x
+  // Determine AI difficulty from the current cup
+  let cup_difficulty = @levels.get_cup_ai_difficulty(game.current_cup)
   for i in 0..<@types.max_karts {
     let kart = game.karts[i]
     kart.active = true
@@ -85,6 +103,15 @@ fn @types.Game::spawn_karts(game : @types.Game) -> Unit {
     kart.ai_steer_target = 0.0
     kart.ai_accel = 0.8
     kart.ai_use_item_timer = @types.rand_rangef(game, 2.0, 5.0)
+    // Assign AI difficulty based on cup (player kart also stores it for rubber-banding)
+    kart.ai_difficulty = cup_difficulty
+    // Vary racing line width by difficulty - easy AI wanders more
+    let diff_stats = @types.ai_difficulty_stats[cup_difficulty]
+    kart.ai_line_offset = @types.rand_rangef(
+      game,
+      -3.0 * (1.0 - diff_stats.2),
+      3.0 * (1.0 - diff_stats.2),
+    )
   }
 }
 
@@ -119,7 +146,7 @@ fn @types.Game::spawn_track_powerups(game : @types.Game) -> Unit {
     p1.x = mx + px * 1.5
     p1.y = my
     p1.z = mz + pz * 1.5
-    p1.kind = @types.powerup_kind_from_int(@types.rand_range(game, 1, 3))
+    p1.kind = @types.powerup_kind_from_int(@types.rand_range(game, 1, 8))
     p1.respawn_timer = 0.0
     p1.collected = false
     pu_idx = pu_idx + 1
@@ -129,7 +156,7 @@ fn @types.Game::spawn_track_powerups(game : @types.Game) -> Unit {
       p2.x = mx - px * 1.5
       p2.y = my
       p2.z = mz - pz * 1.5
-      p2.kind = @types.powerup_kind_from_int(@types.rand_range(game, 1, 3))
+      p2.kind = @types.powerup_kind_from_int(@types.rand_range(game, 1, 8))
       p2.respawn_timer = 0.0
       p2.collected = false
       pu_idx = pu_idx + 1
@@ -169,7 +196,7 @@ pub fn update_kart_waypoint(game : @types.Game, kart_idx : Int) -> Unit {
         game.lap_start_time = game.race_time
       }
       // Check race finish
-      if kart.lap >= @types.total_laps {
+      if kart.lap >= game.track_laps {
         kart.finished = true
         kart.finish_time = game.race_time
       }
@@ -318,7 +345,7 @@ pub fn update_powerup_respawns(game : @types.Game, dt : Float) -> Unit {
       pu.respawn_timer -= dt
       if pu.respawn_timer <= 0.0 {
         pu.collected = false
-        pu.kind = @types.powerup_kind_from_int(@types.rand_range(game, 1, 3))
+        pu.kind = @types.powerup_kind_from_int(@types.rand_range(game, 1, 8))
       }
     }
   }

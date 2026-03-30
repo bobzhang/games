@@ -408,11 +408,12 @@ pub let ai_difficulty_medium : Int = 1
 
 ///|
 /// Per-difficulty tuples of speed multiplier, item luck, line accuracy, and reaction time.
+/// Easy=85%, Medium=95%, Hard=100%, Expert=105% speed.
 pub let ai_difficulty_stats : Array[(Float, Float, Float, Float)] = [
-  (0.85, 0.7, 0.6, 1.5), // Easy
-  (0.92, 0.85, 0.8, 1.0), // Medium
-  (0.97, 1.0, 0.92, 0.6), // Hard
-  (1.02, 1.1, 0.98, 0.3), // Expert
+  (0.85, 0.6, 0.5, 2.0), // Easy   - slower, fewer items, wider lines, slow reactions
+  (0.95, 0.85, 0.8, 1.0), // Medium - current baseline behavior
+  (1.0, 1.0, 0.92, 0.5), // Hard   - full speed, better items, tighter lines
+  (1.05, 1.15, 0.98, 0.2), // Expert - aggressive, optimal lines, frequent items
 ]
 
 // Countdown

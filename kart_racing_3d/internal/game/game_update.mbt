@@ -140,8 +140,30 @@ fn @types.Game::update_racing(game : @types.Game, dt : Float) -> Unit {
   }
   check_kart_collisions(game)
   update_positions(game)
+  // Track player position changes for HUD callout
+  let player_place = game.karts[@types.player_kart].place
+  if player_place != game.prev_player_place {
+    game.place_change_timer = 2.0
+    game.place_change_place = player_place
+    game.prev_player_place = player_place
+  }
+  if game.place_change_timer > 0.0 {
+    game.place_change_timer -= dt
+  }
+  // Track item pickup flash
+  let old_item = game.karts[@types.player_kart].held_powerup
   check_powerup_collisions(game)
-  update_powerup_respawns(game, dt)
+  if game.karts[@types.player_kart].held_powerup != old_item &&
+    game.karts[@types.player_kart].held_powerup != NoPowerup {
+    game.item_pickup_flash_timer = 1.0
+  }
+  if game.item_pickup_flash_timer > 0.0 {
+    game.item_pickup_flash_timer -= dt
+  }
+  // Track drift boost release for text display
+  if game.drift_boost_text_timer > 0.0 {
+    game.drift_boost_text_timer -= dt
+  }
   update_projectiles(game, dt)
   update_dropped_items(game, dt)
   check_dropped_item_collisions(game)

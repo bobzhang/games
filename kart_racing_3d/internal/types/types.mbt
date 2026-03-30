@@ -410,6 +410,7 @@ pub(all) struct Game {
   segments : Array[TrackSegment]
   mut track_theme : Theme
   mut track_name : String
+  mut track_laps : Int
 
   // Entity pools
   karts : Array[Kart]
@@ -463,6 +464,14 @@ pub(all) struct Game {
   mut fastest_lap_kart : Int
   mut fastest_lap_time : Float
 
+  // HUD feedback state
+  mut prev_player_place : Int
+  mut place_change_timer : Float
+  mut place_change_place : Int
+  mut drift_boost_text_timer : Float
+  mut drift_boost_text_level : DriftLevel
+  mut item_pickup_flash_timer : Float
+
   fn new() -> Game
 }
 
@@ -498,6 +507,7 @@ pub fn Game::new() -> Game {
     },
     track_theme: Circuit,
     track_name: "",
+    track_laps: total_laps,
     karts: {
       let arr : Array[Kart] = []
       for i in 0..<max_karts {
@@ -537,5 +547,11 @@ pub fn Game::new() -> Game {
     preview_timer: 0.0,
     fastest_lap_kart: -1,
     fastest_lap_time: 999.0,
+    prev_player_place: 1,
+    place_change_timer: 0.0,
+    place_change_place: 1,
+    drift_boost_text_timer: 0.0,
+    drift_boost_text_level: DriftNone,
+    item_pickup_flash_timer: 0.0,
   }
 }

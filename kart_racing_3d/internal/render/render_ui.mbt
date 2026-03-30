@@ -447,8 +447,8 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     @raylib.Color::new(255, 255, 100, 255),
   )
   // Lap
-  let lap_num = (kart.lap + 1).clamp(min=1, max=@types.total_laps)
-  let lap_text = "Lap \{lap_num}/\{@types.total_laps}"
+  let lap_num = (kart.lap + 1).clamp(min=1, max=game.track_laps)
+  let lap_text = "Lap \{lap_num}/\{game.track_laps}"
   @draw.draw_text(
     lap_text,
     460,
@@ -456,16 +456,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     20,
     @raylib.Color::new(200, 200, 200, 255),
   )
-  // Speed
-  let speed_int = (kart.speed * 3.6).to_int()
-  let speed_text = "\{speed_int} km/h"
-  @draw.draw_text(
-    speed_text,
-    640,
-    10,
-    20,
-    @raylib.Color::new(100, 255, 100, 255),
-  )
+  // Speed is drawn by draw_speed_gauge() with boost-state coloring
   // Time
   let time_secs = game.race_time.to_int()
   let time_ms = ((game.race_time - Float::from_int(time_secs)) * 100.0).to_int()
@@ -1367,5 +1358,264 @@ pub fn draw_standings_sidebar(game : @types.Game) -> Unit {
         )
       }
     }
+  }
+}
+
+// Drift tier meter - fills up as the player drifts with color changes
+
+///|
+/// Draws a drift charge meter near the bottom-center that fills and changes color by tier.
+pub fn draw_drift_meter(game : @types.Game) -> Unit {
+  if game.state != Racing {
+    return
+  }
+  let kart = game.karts[@types.player_kart]
+  if !kart.active {
+    return
+  }
+  // Only show when drifting
+  if !kart.drift_left && !kart.drift_right {
+    return
+  }
+  let meter_x = @types.screen_width / 2 - 80
+  let meter_y = @types.screen_height - 100
+  let meter_w = 160
+  let meter_h = 14
+  // Background
+  @raylib.draw_rectangle(
+    meter_x - 2,
+    meter_y - 2,
+    meter_w + 4,
+    meter_h + 4,
+    @raylib.Color::new(0, 0, 0, 180),
+  )
+  @raylib.draw_rectangle(
+    meter_x,
+    meter_y,
+    meter_w,
+    meter_h,
+    @raylib.Color::new(40, 40, 50, 200),
+  )
+  // Calculate fill based on drift timer and thresholds
+  // Ultra threshold is the max charge time
+  let max_time = @types.drift_ultra_threshold
+  let fill_frac = @types.clampf(kart.drift_timer / max_time, 0.0, 1.0)
+  let fill_w = (Float::from_int(meter_w) * fill_frac).to_int()
+  // Color based on current drift level: white -> orange -> red
+  let bar_color = match kart.drift_level {
+    DriftNone => @raylib.Color::new(200, 200, 200, 230)
+    Mini => @raylib.Color::new(255, 180, 50, 240)
+    Super => @raylib.Color::new(255, 80, 30, 250)
+    Ultra => @raylib.Color::new(255, 50, 200, 255)
+  }
+  @raylib.draw_rectangle(meter_x, meter_y, fill_w, meter_h, bar_color)
+  // Tier markers
+  let mini_x = meter_x +
+    (Float::from_int(meter_w) * @types.drift_mini_threshold / max_time).to_int()
+  let super_x = meter_x +
+    (Float::from_int(meter_w) * @types.drift_super_threshold / max_time).to_int()
+  @raylib.draw_rectangle(
+    mini_x,
+    meter_y,
+    2,
+    meter_h,
+    @raylib.Color::new(255, 255, 255, 150),
+  )
+  @raylib.draw_rectangle(
+    super_x,
+    meter_y,
+    2,
+    meter_h,
+    @raylib.Color::new(255, 255, 255, 150),
+  )
+  // Label
+  let label = match kart.drift_level {
+    DriftNone => "CHARGING..."
+    Mini => "MINI TURBO"
+    Super => "SUPER TURBO"
+    Ultra => "ULTRA TURBO!"
+  }
+  let lw = @draw.measure_text(label, 12)
+  @draw.draw_text(
+    label,
+    @types.screen_width / 2 - lw / 2,
+    meter_y - 16,
+    12,
+    bar_color,
+  )
+}
+
+// Drift boost release text popup
+
+///|
+/// Draws a fading text popup when the player releases a drift boost.
+pub fn draw_drift_boost_text(game : @types.Game) -> Unit {
+  if game.state != Racing {
+    return
+  }
+  if game.drift_boost_text_timer <= 0.0 {
+    return
+  }
+  let text = match game.drift_boost_text_level {
+    Mini => "MINI BOOST!"
+    Super => "SUPER BOOST!"
+    Ultra => "ULTRA BOOST!!"
+    DriftNone => ""
+  }
+  if text == "" {
+    return
+  }
+  let alpha_f = @types.clampf(game.drift_boost_text_timer / 1.5, 0.0, 1.0)
+  let alpha = (alpha_f * 255.0).to_int()
+  let color = match game.drift_boost_text_level {
+    Mini => @raylib.Color::new(255, 200, 50, alpha)
+    Super => @raylib.Color::new(255, 100, 30, alpha)
+    Ultra => @raylib.Color::new(255, 50, 200, alpha)
+    DriftNone => @raylib.Color::new(200, 200, 200, alpha)
+  }
+  let size = 28
+  let tw = @draw.measure_text(text, size)
+  // Float upward as it fades
+  let offset_y = ((1.5F - game.drift_boost_text_timer) * 20.0F).to_int()
+  @draw.draw_text(
+    text,
+    (@types.screen_width - tw) / 2,
+    @types.screen_height / 2 + 60 - offset_y,
+    size,
+    color,
+  )
+}
+
+// Speed gauge with boost color changes
+
+///|
+/// Draws a speed indicator that changes color based on boost state.
+pub fn draw_speed_gauge(game : @types.Game) -> Unit {
+  if game.state != Racing {
+    return
+  }
+  let kart = game.karts[@types.player_kart]
+  if !kart.active {
+    return
+  }
+  let speed_kmh = (kart.speed * 3.6).to_int()
+  let speed_text = "\{speed_kmh}"
+  let unit_text = "km/h"
+  // Position near lap counter area (right of center-top)
+  let gauge_x = 620
+  let gauge_y = 10
+  // Color based on boost state
+  let speed_color = if kart.star_timer > 0.0 {
+    // Rainbow effect during star
+    let hue = @math.sinf(game.race_time * 8.0)
+    if hue > 0.3 {
+      @raylib.Color::new(255, 100, 100, 255)
+    } else if hue > -0.3 {
+      @raylib.Color::new(100, 255, 100, 255)
+    } else {
+      @raylib.Color::new(100, 100, 255, 255)
+    }
+  } else if kart.boost_timer > 0.0 {
+    @raylib.Color::new(255, 180, 50, 255) // Orange during boost
+  } else {
+    @raylib.Color::new(100, 220, 255, 255) // Blue normal
+  }
+  @draw.draw_text(speed_text, gauge_x, gauge_y, 22, speed_color)
+  @draw.draw_text(
+    unit_text,
+    gauge_x + @draw.measure_text(speed_text, 22) + 4,
+    gauge_y + 4,
+    14,
+    @raylib.Color::new(150, 150, 170, 200),
+  )
+}
+
+// Position change callout
+
+///|
+/// Flashes a large position callout when the player changes race position.
+pub fn draw_position_callout(game : @types.Game) -> Unit {
+  if game.state != Racing {
+    return
+  }
+  if game.place_change_timer <= 0.0 {
+    return
+  }
+  let place = game.place_change_place
+  let text = @types.ordinal_suffix(place) + "!"
+  // Fade out over 2 seconds
+  let alpha_f = @types.clampf(game.place_change_timer / 2.0, 0.0, 1.0)
+  let alpha = (alpha_f * 255.0).to_int()
+  // Scale effect: bigger at start, shrinks
+  let size_f : Float = 36.0 + (1.0 - alpha_f) * 12.0
+  let size = size_f.to_int()
+  // Color based on position
+  let color = if place == 1 {
+    @raylib.Color::new(255, 215, 0, alpha) // Gold
+  } else if place <= 3 {
+    @raylib.Color::new(200, 200, 200, alpha) // Silver
+  } else {
+    @raylib.Color::new(255, 150, 100, alpha) // Bronze/red
+  }
+  let tw = @draw.measure_text(text, size)
+  // Position to the right of the place display in the HUD
+  @draw.draw_text(
+    text,
+    (@types.screen_width - tw) / 2,
+    @types.screen_height / 2 - 40,
+    size,
+    color,
+  )
+}
+
+// Item pickup flash animation
+
+///|
+/// Draws a brief flash effect when the player picks up a new item.
+pub fn draw_item_pickup_flash(game : @types.Game) -> Unit {
+  if game.state != Racing {
+    return
+  }
+  if game.item_pickup_flash_timer <= 0.0 {
+    return
+  }
+  let kart = game.karts[@types.player_kart]
+  if kart.held_powerup == NoPowerup {
+    return
+  }
+  let alpha_f = @types.clampf(game.item_pickup_flash_timer, 0.0, 1.0)
+  let alpha = (alpha_f * 200.0).to_int()
+  let ic = get_item_display_color(kart.held_powerup)
+  let item_name = get_item_display_name(kart.held_powerup)
+  // Large centered item name with glow
+  let size = 32
+  let tw = @draw.measure_text(item_name, size)
+  let cx = (@types.screen_width - tw) / 2
+  let cy = @types.screen_height / 2 + 120
+  // Glow background
+  @raylib.draw_rectangle(
+    cx - 10,
+    cy - 5,
+    tw + 20,
+    size + 10,
+    @raylib.Color::new(ic.0 / 3, ic.1 / 3, ic.2 / 3, alpha),
+  )
+  @draw.draw_text(
+    item_name,
+    cx,
+    cy,
+    size,
+    @raylib.Color::new(ic.0, ic.1, ic.2, alpha),
+  )
+  // Triple mushroom shows count
+  if kart.held_powerup == TripleMushroom {
+    let count_text = "x3"
+    @draw.draw_text(
+      count_text,
+      cx + tw + 5,
+      cy + 4,
+      22,
+      @raylib.Color::new(255, 255, 255, alpha),
+    )
   }
 }

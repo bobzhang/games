@@ -114,13 +114,13 @@ pub fn update_player_kart(game : @types.Game, dt : Float) -> Unit {
   } else {
     // Release drift = boost based on level
     if kart.drift_level != DriftNone {
+      let released_level = kart.drift_level
       let drift_mult = @types.get_kart_drift_boost_mult(kart)
-      let boost_power = @types.get_drift_boost_power(kart.drift_level) *
-        drift_mult
-      let boost_dur = @types.get_drift_boost_duration(kart.drift_level)
+      let boost_power = @types.get_drift_boost_power(released_level) * drift_mult
+      let boost_dur = @types.get_drift_boost_duration(released_level)
       kart.boost_timer = boost_dur
       kart.boost_power = boost_power
-      let dc = @types.get_drift_spark_color(kart.drift_level)
+      let dc = @types.get_drift_spark_color(released_level)
       @types.spawn_particles(
         game,
         kart.x,
@@ -131,6 +131,9 @@ pub fn update_player_kart(game : @types.Game, dt : Float) -> Unit {
         dc.1,
         dc.2,
       )
+      // Trigger drift boost text on HUD
+      game.drift_boost_text_timer = 1.5
+      game.drift_boost_text_level = released_level
     }
     kart.drift_left = false
     kart.drift_right = false
@@ -390,9 +393,13 @@ pub fn use_powerup(game : @types.Game, kart_idx : Int) -> Unit {
     }
     Banana => game.drop_item(kart_idx, Banana)
     TripleMushroom => {
+      // First use initializes count to 3, subsequent uses just boost
+      if kart.item_count <= 0 {
+        kart.item_count = 3
+      }
       kart.boost_timer = @types.triple_mushroom_boost
       kart.boost_power = @types.boost_speed_add
-      kart.item_count = 2 // 2 more uses remaining
+      kart.item_count -= 1
       @types.spawn_particles(
         game,
         kart.x,
@@ -403,19 +410,13 @@ pub fn use_powerup(game : @types.Game, kart_idx : Int) -> Unit {
         150,
         200,
       )
-      // Don't clear the item - it has remaining uses
+      if kart.item_count <= 0 {
+        kart.held_powerup = NoPowerup
+        kart.item_count = 0
+      }
       return
     }
     _ => ()
-  }
-  // Handle triple mushroom remaining uses
-  if kart.held_powerup == TripleMushroom && kart.item_count > 0 {
-    kart.item_count -= 1
-    if kart.item_count <= 0 {
-      kart.held_powerup = NoPowerup
-      kart.item_count = 0
-    }
-    return
   }
   kart.held_powerup = NoPowerup
   kart.item_count = 0

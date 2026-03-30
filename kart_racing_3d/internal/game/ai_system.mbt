@@ -139,11 +139,14 @@ pub fn update_ai_karts(game : @types.Game, dt : Float) -> Unit {
     }
     // AI item usage strategy
     game.ai_use_item(i, dt)
-    // Slight random variation for natural movement
+    // Slight random variation for natural movement (scaled by difficulty)
+    // Easy AI wobbles more; expert AI is very stable
     if game.frame_counter % 60 == i {
-      kart.steer = kart.steer + @types.rand_rangef(game, -0.15, 0.15)
-      // Occasionally update racing line offset
-      kart.ai_line_offset = @types.rand_rangef(game, -2.0, 2.0)
+      let wobble : Float = 0.25 * (1.0 - diff_stats.2) + 0.05
+      kart.steer = kart.steer + @types.rand_rangef(game, -wobble, wobble)
+      // Occasionally update racing line offset - easy AI wanders wider
+      let line_range : Float = 3.0 * (1.0 - diff_stats.2) + 0.5
+      kart.ai_line_offset = @types.rand_rangef(game, -line_range, line_range)
     }
     // Jump ramp detection
     if kart.on_ground && @types.is_on_ramp(game, kart) && kart.speed > 8.0 {
@@ -237,14 +240,22 @@ fn @types.Game::ai_use_item(
   }
   if should_use {
     use_powerup(game, kart_idx)
-    let reaction_base = diff_stats.3
+    // Item use cooldown scales with difficulty: easy = longer waits, expert = short
+    let reaction_base : Float = diff_stats.3
+    let item_luck : Float = diff_stats.1
+    let cooldown_min : Float = 1.5 + reaction_base
+    let cooldown_max : Float = 4.0 + reaction_base * 2.0
+    // Higher item luck reduces cooldown
+    let luck_factor : Float = 1.5 - item_luck * 0.5
     kart.ai_use_item_timer = @types.rand_rangef(
       game,
-      2.0 + reaction_base,
-      5.0 + reaction_base * 2.0,
+      cooldown_min * luck_factor,
+      cooldown_max * luck_factor,
     )
   } else {
-    kart.ai_use_item_timer = 1.0
+    // Easy AI rechecks less often
+    let recheck : Float = 0.5 + diff_stats.3 * 0.5
+    kart.ai_use_item_timer = recheck
   }
 }
 
