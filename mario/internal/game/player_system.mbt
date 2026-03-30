@@ -61,6 +61,10 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   let fire_pressed = @raylib.is_key_pressed(@raylib.KeyZ) ||
     @raylib.is_key_pressed(@raylib.KeyX) ||
     @raylib.is_key_pressed(@raylib.KeyLeftShift)
+  // ── Pipe entrance check ──
+  if duck && p.on_ground {
+    check_pipe_entrance(game)
+  }
   // Ducking (only when big and on ground)
   p.ducking = duck && p.on_ground && p.power != Small
   // ── Horizontal movement ──
@@ -69,7 +73,6 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   if right && not(p.ducking) {
     p.facing_right = true
     if p.vx < 0.0 && p.on_ground {
-      // Skidding
       p.skid_timer = 0.2
       p.vx = p.vx + @types.ground_decel * 2.0 * dt
       if p.vx > 0.0 {
@@ -96,7 +99,6 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
       }
     }
   } else if p.on_ground {
-    // Friction
     if p.vx > 0.0 {
       p.vx = p.vx - @types.ground_decel * dt
       if p.vx < 0.0 {
@@ -135,9 +137,8 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
     p.coyote_timer = 0.0
     p.jump_buffer = 0.0
   }
-  // Variable jump height: release early = fall faster
+  // Variable jump height
   if not(jump_held) && p.vy < 0.0 {
-    // Apply extra gravity to cut the jump short
     p.vy = p.vy + @types.gravity_high * dt
   }
   // ── Gravity ──
@@ -176,12 +177,106 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   if p.power == Fire && fire_pressed {
     shoot_fireball(game)
   }
+  // ── Coin tile collection ──
+  collect_coin_tiles(game)
+  // ── Checkpoint activation ──
+  check_checkpoint(game)
   // ── Enemy collision ──
   check_enemy_collisions(game)
   // ── Item collection ──
   check_item_collisions(game)
   // ── Flagpole check ──
   check_flagpole(game)
+}
+
+///|
+/// Check if player is standing on a pipe entrance and pressing down.
+fn check_pipe_entrance(game : @types.Game) -> Unit {
+  let p = game.player
+  let px_tile = @types.world_to_tile_x(p.x)
+  let py_tile = @types.world_to_tile_y(p.y) // tile below feet
+  // Check if any nearby tile is a PipeEntrance
+  for dx in -1..<=1 {
+    let tx = px_tile + dx
+    // Check tile at feet level and one above
+    for dy in -1..<=0 {
+      let ty = py_tile + dy
+      let tile = @types.get_tile(game, tx, ty)
+      if tile == PipeEntrance {
+        if game.in_bonus_room {
+          // Exit bonus room
+          exit_bonus_room(game)
+        } else {
+          // Enter bonus room
+          enter_bonus_room(game)
+        }
+        return
+      }
+    }
+  }
+}
+
+///|
+/// Collect any CoinTile the player overlaps.
+fn collect_coin_tiles(game : @types.Game) -> Unit {
+  let p = game.player
+  if p.dead {
+    return
+  }
+  let h = p.height()
+  let left = p.x - @types.player_half_w
+  let right = p.x + @types.player_half_w
+  let top = p.y - h
+  let bottom = p.y
+  let min_tx = @types.world_to_tile_x(left)
+  let max_tx = @types.world_to_tile_x(right - 1.0)
+  let min_ty = @types.world_to_tile_y(top)
+  let max_ty = @types.world_to_tile_y(bottom)
+  for ty in min_ty..<=max_ty {
+    for tx in min_tx..<=max_tx {
+      let tile = @types.get_tile(game, tx, ty)
+      if tile == CoinTile {
+        @types.set_tile(game, tx, ty, Empty)
+        game.score = game.score + @types.score_coin
+        game.coins = game.coins + 1
+        game.level_coins_collected = game.level_coins_collected + 1
+        if game.coins >= 100 {
+          game.coins = game.coins - 100
+          game.lives = game.lives + 1
+        }
+        let wx = @types.tile_to_world_x(tx) + @types.tile_sizef / 2.0
+        let wy = @types.tile_to_world_y(ty) + @types.tile_sizef / 2.0
+        spawn_coin_sparkle(game, wx, wy)
+        spawn_score_popup(game, wx, wy - 20.0, @types.score_coin.to_string())
+      }
+    }
+  }
+}
+
+///|
+/// Check if the player activates a checkpoint flag.
+fn check_checkpoint(game : @types.Game) -> Unit {
+  let p = game.player
+  if p.dead {
+    return
+  }
+  let px_tile = @types.world_to_tile_x(p.x)
+  let py_tile = @types.world_to_tile_y(p.y - p.height() / 2.0)
+  for dy in -1..<=1 {
+    let ty = py_tile + dy
+    let tile = @types.get_tile(game, px_tile, ty)
+    if tile == Checkpoint {
+      if not(game.checkpoint_active) {
+        game.checkpoint_active = true
+        game.checkpoint_x = p.x
+        game.checkpoint_y = p.y
+        // Visual feedback
+        spawn_score_popup(game, p.x, p.y - p.height() - 20.0, "CHECKPOINT!")
+      }
+      // Change tile to used (visual indicator)
+      @types.set_tile(game, px_tile, ty, UsedBlock)
+    }
+  }
 }
 
 ///|
@@ -217,14 +312,12 @@ fn move_player_x(game : @types.Game, dt : Float) -> Unit {
         let tile_left = @types.tile_to_world_x(tx)
         let tile_right = tile_left + @types.tile_sizef
         if p.vx > 0.0 {
-          // Moving right — push left
           if p.x + @types.player_half_w > tile_left &&
             p.x - @types.player_half_w < tile_right {
             p.x = tile_left - @types.player_half_w
             p.vx = 0.0
           }
         } else if p.vx < 0.0 {
-          // Moving left — push right
           if p.x - @types.player_half_w < tile_right &&
             p.x + @types.player_half_w > tile_left {
             p.x = tile_right + @types.player_half_w
@@ -272,7 +365,6 @@ fn move_player_y(game : @types.Game, dt : Float) -> Unit {
         if top < tile_bottom {
           p.y = tile_bottom + h
           p.vy = 0.0
-          // Bump the block
           handle_block_bump(game, tx, head_ty)
         }
       }
@@ -290,6 +382,7 @@ fn handle_block_bump(game : @types.Game, tx : Int, ty : Int) -> Unit {
       @types.set_tile(game, tx, ty, UsedBlock)
       game.score = game.score + @types.score_coin
       game.coins = game.coins + 1
+      game.level_coins_collected = game.level_coins_collected + 1
       if game.coins >= 100 {
         game.coins = game.coins - 100
         game.lives = game.lives + 1
@@ -321,6 +414,7 @@ fn handle_block_bump(game : @types.Game, tx : Int, ty : Int) -> Unit {
       @types.set_tile(game, tx, ty, UsedBlock)
       game.score = game.score + @types.score_coin
       game.coins = game.coins + 1
+      game.level_coins_collected = game.level_coins_collected + 1
       if game.coins >= 100 {
         game.coins = game.coins - 100
         game.lives = game.lives + 1
@@ -334,14 +428,31 @@ fn handle_block_bump(game : @types.Game, tx : Int, ty : Int) -> Unit {
       bump_block(game, tx, ty)
       spawn_item(game, OneUp, wx, wy)
     }
+    HiddenBonusCoin => {
+      @types.set_tile(game, tx, ty, UsedBlock)
+      game.score = game.score + @types.score_coin
+      game.coins = game.coins + 1
+      game.level_coins_collected = game.level_coins_collected + 1
+      if game.coins >= 100 {
+        game.coins = game.coins - 100
+        game.lives = game.lives + 1
+      }
+      bump_block(game, tx, ty)
+      spawn_coin_popup(game, wx, wy)
+      spawn_score_popup(game, wx, wy - 20.0, @types.score_coin.to_string())
+    }
+    HiddenBonusOneUp => {
+      @types.set_tile(game, tx, ty, UsedBlock)
+      bump_block(game, tx, ty)
+      spawn_item(game, OneUp, wx, wy)
+      spawn_score_popup(game, wx, wy - 20.0, "1UP!")
+    }
     BrickBlock =>
       if game.player.power != Small {
-        // Big Mario breaks bricks
         @types.set_tile(game, tx, ty, Empty)
         game.score = game.score + @types.score_brick
         spawn_brick_particles(game, wx, wy + @types.tile_sizef / 2.0)
         spawn_score_popup(game, wx, wy, @types.score_brick.to_string())
-        // Kill enemies on top
         kill_enemies_on_block(game, tx, ty)
       } else {
         bump_block(game, tx, ty)
@@ -352,26 +463,24 @@ fn handle_block_bump(game : @types.Game, tx : Int, ty : Int) -> Unit {
 }
 
 ///|
-fn kill_enemies_on_block(game : @types.Game, tx : Int, ty : Int) -> Unit {
+fn kill_enemies_on_block(game : @types.Game, tx : Int, _ty : Int) -> Unit {
   let bx = @types.tile_to_world_x(tx) + @types.tile_sizef / 2.0
-  let by = @types.tile_to_world_y(ty)
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]
     if not(e.active) || e.dead {
       continue
     }
-    // Check if enemy is standing on this tile
     let ex_tile = @types.world_to_tile_x(e.x)
     let ey_tile = @types.world_to_tile_y(e.y)
     if (ex_tile == tx || ex_tile == tx - 1 || ex_tile == tx + 1) &&
-      ey_tile == ty {
+      ey_tile == _ty {
       e.dead = true
       e.dead_timer = 0.0
       e.vy = -300.0
       game.score = game.score + 100
+      game.enemies_defeated = game.enemies_defeated + 1
       spawn_score_popup(game, e.x, e.y - e.height, "100")
       ignore(bx)
-      ignore(by)
     }
   }
 }
@@ -461,6 +570,38 @@ fn check_enemy_collisions(game : @types.Game) -> Unit {
     if not(e.active) || e.dead {
       continue
     }
+    // PiranhaPlant: skip if retracted (invisible, no collision)
+    if e.kind == PiranhaPlant && not(e.extended) {
+      continue
+    }
+    // Firebar: per-segment collision (not AABB)
+    if e.kind == Firebar {
+      if p.star_timer > 0.0 || p.invuln_timer > 0.0 {
+        continue
+      }
+      let angle = e.firebar_angle.to_double()
+      let spacing = @types.firebar_segment_spacing.to_double()
+      let seg_r : Float = @types.firebar_segment_radius + 4.0
+      let mut hit = false
+      for seg in 1..=e.firebar_segments {
+        let dist = spacing * seg.to_double()
+        let seg_x = e.x.to_double() + @math.cos(angle) * dist
+        let seg_y = (e.y - 16.0).to_double() + @math.sin(angle) * dist
+        let sx = seg_x.to_float()
+        let sy = seg_y.to_float()
+        if sx + seg_r > p_left &&
+          sx - seg_r < p_right &&
+          sy + seg_r > p_top &&
+          sy - seg_r < p_bottom {
+          hit = true
+          break
+        }
+      }
+      if hit {
+        damage_player(game)
+      }
+      continue
+    }
     let ehw = e.width / 2.0
     let e_left = e.x - ehw
     let e_right = e.x + ehw
@@ -473,37 +614,65 @@ fn check_enemy_collisions(game : @types.Game) -> Unit {
       p_top >= e_bottom {
       continue
     }
-    // Star power kills instantly
+    // Star power kills instantly (except BowserLite — damages instead)
     if p.star_timer > 0.0 {
-      e.dead = true
-      e.dead_timer = 0.0
-      e.vy = -300.0
-      game.score = game.score + 200
-      spawn_score_popup(game, e.x, e.y - e.height, "200")
-      spawn_stomp_poof(game, e.x, e.y)
+      if e.kind == BowserLite {
+        e.boss_hp = e.boss_hp - 1
+        if e.boss_hp <= 0 {
+          e.dead = true
+          e.dead_timer = 0.0
+          e.vy = -200.0
+          e.vx = 0.0
+          game.score = game.score + 5000
+          game.enemies_defeated = game.enemies_defeated + 1
+          spawn_score_popup(game, e.x, e.y - e.height, "5000")
+          game.boss_defeated = true
+        } else {
+          game.score = game.score + 200
+          spawn_score_popup(game, e.x, e.y - e.height, "200")
+          spawn_stomp_poof(game, e.x, e.y)
+        }
+      } else {
+        e.dead = true
+        e.dead_timer = 0.0
+        e.vy = -300.0
+        game.score = game.score + 200
+        game.enemies_defeated = game.enemies_defeated + 1
+        spawn_score_popup(game, e.x, e.y - e.height, "200")
+        spawn_stomp_poof(game, e.x, e.y)
+      }
       continue
     }
-    // Stomp check: Mario is falling and his feet are above enemy's midpoint
+    // Stomp check
     let stomp_threshold = e_top + e.height * 0.4
     if p.vy > 0.0 && p_bottom < stomp_threshold + 8.0 && p_bottom > e_top - 8.0 {
-      // Stomped!
+      // PiranhaPlant cannot be stomped
+      if e.kind == PiranhaPlant {
+        damage_player(game)
+        continue
+      }
+      // BowserLite cannot be stomped
+      if e.kind == BowserLite {
+        damage_player(game)
+        continue
+      }
       let combo_pts = @types.stomp_score(p.stomp_combo)
       p.stomp_combo = p.stomp_combo + 1
       game.score = game.score + combo_pts
+      game.enemies_defeated = game.enemies_defeated + 1
       p.vy = @types.bounce_velocity
       p.on_ground = false
       p.coyote_timer = 0.0
       spawn_stomp_poof(game, e.x, e.y)
       spawn_score_popup(game, e.x, e.y - e.height, combo_pts.to_string())
       match e.kind {
-        Goomba => {
+        Goomba | BuzzyBeetle => {
           e.squished = true
           e.dead = true
           e.dead_timer = 0.0
           e.vy = 0.0
         }
         KoopaTroopa => {
-          // Convert to shell
           e.kind = KoopaShell
           e.height = 36.0
           e.vx = 0.0
@@ -511,11 +680,9 @@ fn check_enemy_collisions(game : @types.Game) -> Unit {
         }
         KoopaShell =>
           if e.shell_moving {
-            // Stop the shell
             e.vx = 0.0
             e.shell_moving = false
           } else {
-            // Kick the shell
             e.shell_moving = true
             e.vx = if p.x < e.x {
               @types.shell_speed
@@ -523,12 +690,21 @@ fn check_enemy_collisions(game : @types.Game) -> Unit {
               -@types.shell_speed
             }
           }
+        _ => {
+          e.dead = true
+          e.dead_timer = 0.0
+          e.vy = -300.0
+        }
       }
-      // Side collision — damage Mario
     } else if e.kind == KoopaShell && not(e.shell_moving) {
-      // Kick stationary shell
       e.shell_moving = true
       e.vx = if p.x < e.x { @types.shell_speed } else { -@types.shell_speed }
+    } else if e.kind == PiranhaPlant {
+      // PiranhaPlant always hurts on side contact when extended
+      damage_player(game)
+    } else if e.kind == BowserLite {
+      // BowserLite always hurts on contact
+      damage_player(game)
     } else {
       damage_player(game)
     }
@@ -584,7 +760,6 @@ fn check_item_collisions(game : @types.Game) -> Unit {
       p_top >= i_bottom {
       continue
     }
-    // Collected!
     it.active = false
     match it.kind {
       Mushroom => {
@@ -602,11 +777,9 @@ fn check_item_collisions(game : @types.Game) -> Unit {
       }
       FireFlower => {
         if p.power == Small {
-          // Small -> Big (grow animation, same as mushroom)
           p.power = Big
           p.grow_timer = @types.grow_duration
         } else {
-          // Big -> Fire
           p.power = Fire
         }
         game.score = game.score + @types.score_fire_flower
@@ -634,6 +807,7 @@ fn check_item_collisions(game : @types.Game) -> Unit {
       CoinPopup => {
         game.score = game.score + @types.score_coin
         game.coins = game.coins + 1
+        game.level_coins_collected = game.level_coins_collected + 1
         if game.coins >= 100 {
           game.coins = game.coins - 100
           game.lives = game.lives + 1
@@ -646,10 +820,9 @@ fn check_item_collisions(game : @types.Game) -> Unit {
 ///|
 fn check_flagpole(game : @types.Game) -> Unit {
   let p = game.player
-  if game.state != Playing || p.dead {
+  if (game.state != Playing && game.state != BonusRoom) || p.dead {
     return
   }
-  // Check if player touches a flagpole tile
   let px_tile = @types.world_to_tile_x(p.x)
   let py_tile = @types.world_to_tile_y(p.y - p.height() / 2.0)
   let range_start = py_tile - 1
@@ -657,14 +830,12 @@ fn check_flagpole(game : @types.Game) -> Unit {
   for ty in range_start..<=range_end {
     let tile = @types.get_tile(game, px_tile, ty)
     if tile == Flagpole || tile == FlagTop {
-      // Start level clear sequence
       game.state = LevelClear
       game.clear_timer = 0.0
       game.flag_done = false
       game.mario_auto = false
       // Find castle door X for auto-walk target
       game.mario_target_x = p.x + 300.0
-      // Find actual castle position
       for cx in px_tile..<game.map_width {
         for cy in 0..<game.map_height {
           if @types.get_tile(game, cx, cy) == CastleDoor {
@@ -682,18 +853,14 @@ fn check_flagpole(game : @types.Game) -> Unit {
         }
       }
       game.flag_target_y = bottom_flag_y
-      // Height bonus: higher on pole = more points
+      // Height fraction for tally
       let pole_height = game.flag_target_y - game.flag_y
       let height_frac : Float = if pole_height > 0.0 {
         (p.y - p.height() - game.flag_y) / pole_height
       } else {
         1.0
       }
-      let clamped = @utils.clampf(height_frac, 0.0, 1.0)
-      let one : Float = 1.0
-      let scale : Float = 5000.0
-      let height_bonus = (one - clamped) * scale
-      game.score = game.score + height_bonus.to_int()
+      game.flag_height_frac = @utils.clampf(height_frac, 0.0, 1.0)
       p.vx = 0.0
       return
     }

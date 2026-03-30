@@ -86,6 +86,72 @@ pub let shell_speed : Float = 500.0
 /// Maximum simultaneous active enemies.
 pub let max_enemies : Int = 32
 
+// ── New enemies ────────────────────────────────────────
+
+///|
+/// BuzzyBeetle walk speed (similar to Goomba, slightly faster).
+pub let buzzy_beetle_speed : Float = 70.0
+
+///|
+/// BuzzyBeetle hop interval in seconds.
+pub let buzzy_beetle_hop_interval : Float = 1.5
+
+///|
+/// BuzzyBeetle hop vertical velocity.
+pub let buzzy_beetle_hop_velocity : Float = -320.0
+
+///|
+/// PiranhaPlant cycle: seconds extended.
+pub let piranha_extend_time : Float = 2.0
+
+///|
+/// PiranhaPlant cycle: seconds retracted.
+pub let piranha_retract_time : Float = 2.0
+
+///|
+/// PiranhaPlant full cycle time (extend + retract).
+pub let piranha_cycle_time : Float = 4.0
+
+///|
+/// Firebar rotation speed in radians per second.
+pub let firebar_rotation_speed : Float = 1.8
+
+///|
+/// Number of fire segments in a firebar.
+pub let firebar_num_segments : Int = 5
+
+///|
+/// Radius of each firebar segment.
+pub let firebar_segment_radius : Float = 8.0
+
+///|
+/// Spacing between firebar segments (center to center).
+pub let firebar_segment_spacing : Float = 20.0
+
+///|
+/// BowserLite walk speed.
+pub let bowser_speed : Float = 45.0
+
+///|
+/// BowserLite hit points.
+pub let bowser_hp : Int = 5
+
+///|
+/// BowserLite fire breath rate (seconds between shots).
+pub let bowser_fire_rate : Float = 2.5
+
+///|
+/// BowserLite fire breath projectile speed.
+pub let bowser_fire_speed : Float = 250.0
+
+///|
+/// BowserLite patrol range from spawn point.
+pub let bowser_patrol_range : Float = 120.0
+
+///|
+/// Maximum active Bowser fire breath projectiles.
+pub let max_bowser_fireballs : Int = 8
+
 // ── Items ───────────────────────────────────────────────
 
 ///|

@@ -167,7 +167,30 @@ fn check_fireball_enemy_hit(game : @types.Game, fb_index : Int) -> Unit {
       fb.x - fb_r < e_right &&
       fb.y + fb_r > e_top &&
       fb.y - fb_r < e_bottom {
-      // Hit!
+      // Firebar is immune to fireballs
+      if e.kind == Firebar {
+        continue
+      }
+      // BowserLite takes multiple hits
+      if e.kind == BowserLite {
+        e.boss_hp = e.boss_hp - 1
+        fb.active = false
+        spawn_fireball_poof(game, fb.x, fb.y)
+        if e.boss_hp <= 0 {
+          e.dead = true
+          e.dead_timer = 0.0
+          e.vy = -200.0
+          e.vx = 0.0
+          game.score = game.score + 5000
+          spawn_score_popup(game, e.x, e.y - e.height, "5000")
+          game.boss_defeated = true
+        } else {
+          game.score = game.score + 200
+          spawn_score_popup(game, e.x, e.y - e.height, "200")
+        }
+        return
+      }
+      // Hit! (standard enemies including PiranhaPlant)
       e.dead = true
       e.dead_timer = 0.0
       e.vy = -250.0

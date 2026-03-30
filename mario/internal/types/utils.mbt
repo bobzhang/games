@@ -48,7 +48,8 @@ pub fn is_solid(tile : TileKind) -> Bool {
     | PipeBodyLeft
     | PipeBodyRight
     | CastleBlock
-    | CastleTop => true
+    | CastleTop
+    | PipeEntrance => true
     _ => false
   }
 }
@@ -63,7 +64,9 @@ pub fn is_bumpable(tile : TileKind) -> Bool {
     | QuestionStar
     | QuestionOneUp
     | HiddenCoin
-    | HiddenOneUp => true
+    | HiddenOneUp
+    | HiddenBonusCoin
+    | HiddenBonusOneUp => true
     _ => false
   }
 }
@@ -115,4 +118,17 @@ pub fn rand_range(game : Game, low : Int, high : Int) -> Int {
 pub fn rand_rangef(game : Game, low : Float, high : Float) -> Float {
   let n = Float::from_int(rand_next(game) % 10000) / 10000.0
   low + (high - low) * n
+}
+
+///|
+/// Count all coin tiles in the current map (for tally screen).
+pub fn count_coin_tiles(game : Game) -> Int {
+  let mut count = 0
+  for i in 0..<game.map_tiles.length() {
+    match game.map_tiles[i] {
+      CoinTile | QuestionCoin | HiddenCoin | HiddenBonusCoin => count = count + 1
+      _ => ()
+    }
+  }
+  count
 }

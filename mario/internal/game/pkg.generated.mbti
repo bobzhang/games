@@ -14,7 +14,11 @@ pub fn load_level(@types.Game, Int) -> Unit
 
 pub fn spawn_brick_particles(@types.Game, Float, Float) -> Unit
 
+pub fn spawn_landing_dust(@types.Game, Float, Float) -> Unit
+
 pub fn spawn_score_popup(@types.Game, Float, Float, String) -> Unit
+
+pub fn spawn_skid_dust(@types.Game, Float, Float) -> Unit
 
 pub fn spawn_stomp_poof(@types.Game, Float, Float) -> Unit
 

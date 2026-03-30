@@ -9,6 +9,8 @@ pub(all) enum GameState {
   PlayerDied
   GameOver
   Victory
+  LevelTally
+  BonusRoom
 } derive(Eq)
 
 ///|
@@ -41,6 +43,11 @@ pub(all) enum TileKind {
   CastleBlock
   CastleTop
   CastleDoor
+  CoinTile
+  PipeEntrance
+  Checkpoint
+  HiddenBonusCoin
+  HiddenBonusOneUp
 } derive(Eq)
 
 ///|
@@ -49,6 +56,10 @@ pub(all) enum EnemyKind {
   Goomba
   KoopaTroopa
   KoopaShell
+  PiranhaPlant
+  BuzzyBeetle
+  Firebar
+  BowserLite
 } derive(Eq)
 
 ///|
@@ -147,6 +158,15 @@ pub(all) struct Enemy {
   mut shell_moving : Bool
   mut width : Float
   mut height : Float
+  mut pipe_timer : Float
+  mut extended : Bool
+  mut hop_timer : Float
+  mut firebar_angle : Float
+  mut firebar_segments : Int
+  mut boss_hp : Int
+  mut fire_cooldown : Float
+  mut patrol_left : Float
+  mut patrol_right : Float
 }
 
 ///|
@@ -156,16 +176,28 @@ pub fn Enemy::new(kind : EnemyKind, spawn_x : Float, spawn_y : Float) -> Enemy {
     Goomba => 40.0
     KoopaTroopa => 40.0
     KoopaShell => 40.0
+    PiranhaPlant => 40.0
+    BuzzyBeetle => 40.0
+    Firebar => 16.0
+    BowserLite => 64.0
   }
   let h : Float = match kind {
     Goomba => 40.0
     KoopaTroopa => 52.0
     KoopaShell => 36.0
+    PiranhaPlant => 48.0
+    BuzzyBeetle => 40.0
+    Firebar => 16.0
+    BowserLite => 72.0
   }
   let speed : Float = match kind {
     Goomba => goomba_speed
     KoopaTroopa => koopa_speed
     KoopaShell => 0.0
+    PiranhaPlant => 0.0
+    BuzzyBeetle => buzzy_beetle_speed
+    Firebar => 0.0
+    BowserLite => bowser_speed
   }
   {
     active: true,
@@ -183,6 +215,55 @@ pub fn Enemy::new(kind : EnemyKind, spawn_x : Float, spawn_y : Float) -> Enemy {
     shell_moving: false,
     width: w,
     height: h,
+    pipe_timer: 0.0,
+    extended: false,
+    hop_timer: 0.0,
+    firebar_angle: 0.0,
+    firebar_segments: match kind {
+      Firebar => firebar_num_segments
+      _ => 0
+    },
+    boss_hp: match kind {
+      BowserLite => bowser_hp
+      _ => 0
+    },
+    fire_cooldown: match kind {
+      BowserLite => bowser_fire_rate
+      _ => 0.0
+    },
+    patrol_left: spawn_x - bowser_patrol_range,
+    patrol_right: spawn_x + bowser_patrol_range,
+  }
+}
+
+///|
+/// Clone an enemy (snapshot all mutable fields).
+pub fn Enemy::clone(self : Enemy) -> Enemy {
+  {
+    active: self.active,
+    kind: self.kind,
+    x: self.x,
+    y: self.y,
+    vx: self.vx,
+    vy: self.vy,
+    on_ground: self.on_ground,
+    dead: self.dead,
+    dead_timer: self.dead_timer,
+    squished: self.squished,
+    anim_timer: self.anim_timer,
+    anim_frame: self.anim_frame,
+    shell_moving: self.shell_moving,
+    width: self.width,
+    height: self.height,
+    pipe_timer: self.pipe_timer,
+    extended: self.extended,
+    hop_timer: self.hop_timer,
+    firebar_angle: self.firebar_angle,
+    firebar_segments: self.firebar_segments,
+    boss_hp: self.boss_hp,
+    fire_cooldown: self.fire_cooldown,
+    patrol_left: self.patrol_left,
+    patrol_right: self.patrol_right,
   }
 }
 
@@ -219,6 +300,44 @@ pub fn Item::new() -> Item {
 }
 
 ///|
+/// Clone an item (snapshot all mutable fields).
+pub fn Item::clone(self : Item) -> Item {
+  {
+    active: self.active,
+    kind: self.kind,
+    x: self.x,
+    y: self.y,
+    vx: self.vx,
+    vy: self.vy,
+    on_ground: self.on_ground,
+    emerging: self.emerging,
+    emerge_start_y: self.emerge_start_y,
+    emerge_target_y: self.emerge_target_y,
+  }
+}
+
+///|
+/// Bowser fire breath projectile.
+pub(all) struct BowserFireball {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut vx : Float
+}
+
+///|
+/// Creates a new Bowser fireball.
+pub fn BowserFireball::new() -> BowserFireball {
+  { active: false, x: 0.0, y: 0.0, vx: 0.0 }
+}
+
+///|
+/// Clone a Bowser fireball.
+pub fn BowserFireball::clone(self : BowserFireball) -> BowserFireball {
+  { active: self.active, x: self.x, y: self.y, vx: self.vx }
+}
+
+///|
 /// Player fireball projectile.
 pub(all) struct Fireball {
   mut active : Bool
@@ -232,6 +351,12 @@ pub(all) struct Fireball {
 /// Creates a new fireball.
 pub fn Fireball::new() -> Fireball {
   { active: false, x: 0.0, y: 0.0, vx: 0.0, vy: 0.0 }
+}
+
+///|
+/// Clone a player fireball.
+pub fn Fireball::clone(self : Fireball) -> Fireball {
+  { active: self.active, x: self.x, y: self.y, vx: self.vx, vy: self.vy }
 }
 
 ///|
@@ -322,9 +447,12 @@ pub(all) struct Game {
   enemies : Array[Enemy]
   items : Array[Item]
   fireballs : Array[Fireball]
+  bowser_fireballs : Array[BowserFireball]
   particles : Array[Particle]
   score_popups : Array[ScorePopup]
   bumped_blocks : Array[BumpedBlock]
+  // ── Boss ──
+  mut boss_defeated : Bool
   // ── Map ──
   mut map_tiles : Array[TileKind]
   mut map_width : Int
@@ -352,6 +480,39 @@ pub(all) struct Game {
   mut rng_state : Int
   // ── Decoration ──
   clouds : Array[Cloud]
+  // ── Checkpoint ──
+  mut checkpoint_x : Float
+  mut checkpoint_y : Float
+  mut checkpoint_active : Bool
+  // ── Power-up persistence ──
+  mut saved_power : PowerState
+  // ── Level tally ──
+  mut tally_timer : Float
+  mut tally_phase : Int
+  mut tally_time_bonus : Int
+  mut tally_coin_bonus : Int
+  mut tally_enemy_bonus : Int
+  mut tally_height_bonus : Int
+  mut tally_rank : String
+  mut enemies_defeated : Int
+  mut level_coins_collected : Int
+  mut level_total_coins : Int
+  mut level_deaths : Int
+  // ── Flagpole height fraction ──
+  mut flag_height_frac : Float
+  // ── Bonus room ──
+  mut in_bonus_room : Bool
+  mut bonus_return_x : Float
+  mut bonus_return_y : Float
+  mut bonus_return_level : Int
+  mut bonus_saved_tiles : Array[TileKind]
+  mut bonus_saved_width : Int
+  mut bonus_saved_height : Int
+  mut bonus_saved_enemies : Array[Enemy]
+  mut bonus_saved_items : Array[Item]
+  mut bonus_saved_fireballs : Array[Fireball]
+  mut bonus_fade_timer : Float
+  mut bonus_fade_in : Bool
 }
 
 ///|
@@ -366,10 +527,13 @@ pub fn Game::new() -> Game {
     enemies: Array::makei(max_enemies, fn(_i) { Enemy::new(Goomba, 0.0, 0.0) }),
     items: Array::makei(max_items, fn(_i) { Item::new() }),
     fireballs: Array::makei(max_fireballs, fn(_i) { Fireball::new() }),
+    bowser_fireballs: Array::makei(max_bowser_fireballs, fn(_i) {
+      BowserFireball::new()
+    }),
     particles: Array::makei(max_particles, fn(_i) { Particle::new() }),
     score_popups: Array::makei(max_score_popups, fn(_i) { ScorePopup::new() }),
     bumped_blocks: Array::makei(max_bumped_blocks, fn(_i) { BumpedBlock::new() }),
-    // Keep the placeholder map internally consistent before the first level loads.
+    boss_defeated: false,
     map_tiles: Array::make(15, Empty),
     map_width: 1,
     map_height: 15,
@@ -397,5 +561,33 @@ pub fn Game::new() -> Game {
         speed: 8.0 + Float::from_int(i * 7 % 12),
       }
     }),
+    checkpoint_x: 0.0,
+    checkpoint_y: 0.0,
+    checkpoint_active: false,
+    saved_power: Small,
+    tally_timer: 0.0,
+    tally_phase: 0,
+    tally_time_bonus: 0,
+    tally_coin_bonus: 0,
+    tally_enemy_bonus: 0,
+    tally_height_bonus: 0,
+    tally_rank: "",
+    enemies_defeated: 0,
+    level_coins_collected: 0,
+    level_total_coins: 0,
+    level_deaths: 0,
+    flag_height_frac: 1.0,
+    in_bonus_room: false,
+    bonus_return_x: 0.0,
+    bonus_return_y: 0.0,
+    bonus_return_level: 0,
+    bonus_saved_tiles: [],
+    bonus_saved_width: 0,
+    bonus_saved_height: 0,
+    bonus_saved_enemies: [],
+    bonus_saved_items: [],
+    bonus_saved_fireballs: [],
+    bonus_fade_timer: 0.0,
+    bonus_fade_in: false,
   }
 }

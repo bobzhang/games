@@ -9,6 +9,17 @@ pub fn level_rows(index : Int) -> Array[String] {
   }
 }
 
+///|
+/// Returns the bonus room row data for a given level.
+pub fn bonus_room_rows(level_index : Int) -> Array[String] {
+  match level_index {
+    0 => build_bonus_1()
+    1 => build_bonus_2()
+    2 => build_bonus_3()
+    _ => build_bonus_4()
+  }
+}
+
 // ── Grid helpers ────────────────────────────────────────────
 
 ///|
@@ -67,6 +78,19 @@ fn pipe(g : Array[Array[Char]], x : Int, top_y : Int) -> Unit {
 }
 
 ///|
+/// Place a pipe entrance (enterable with Down key) at column x.
+fn pipe_entrance(g : Array[Array[Char]], x : Int, top_y : Int) -> Unit {
+  set(g, x, top_y, 'E')
+  set(g, x + 1, top_y, ']')
+  let mut y = top_y + 1
+  while y <= 12 {
+    set(g, x, y, '{')
+    set(g, x + 1, y, '}')
+    y = y + 1
+  }
+}
+
+///|
 /// Place a short string of tile chars at (x, y). Spaces are skipped.
 fn tiles(g : Array[Array[Char]], x : Int, y : Int, pattern : String) -> Unit {
   for i in 0..<pattern.length() {
@@ -115,6 +139,24 @@ fn staircase(g : Array[Array[Char]], x : Int, height : Int) -> Unit {
   }
 }
 
+///|
+/// Place a horizontal run of coins at the given row.
+fn coin_run(g : Array[Array[Char]], x : Int, y : Int, len : Int) -> Unit {
+  for i in 0..<len {
+    set(g, x + i, y, 'c')
+  }
+}
+
+///|
+/// Place a coin arc over a gap (parabolic coin trail).
+fn coin_arc(g : Array[Array[Char]], x : Int, base_y : Int, len : Int) -> Unit {
+  for i in 0..<len {
+    let mid = len / 2
+    let dy = if i <= mid { mid - i } else { i - mid }
+    set(g, x + i, base_y - dy, 'c')
+  }
+}
+
 // ── Level builders ──────────────────────────────────────────
 
 ///|
@@ -145,11 +187,11 @@ fn build_1_1() -> Array[String] {
   // Star block (reward for exploration)
   set(g, 60, 5, '*')
   // Pipes (increasing height)
-  pipe(g, 36, 10) // short pipe (3 tiles)
-  pipe(g, 56, 9) // medium pipe (4 tiles)
-  pipe(g, 78, 8) // tall pipe (5 tiles)
-  pipe(g, 96, 10) // short pipe
-  // Goombas — gradually more
+  pipe(g, 36, 10)
+  pipe_entrance(g, 56, 9) // secret pipe entrance
+  pipe(g, 78, 8)
+  pipe(g, 96, 10)
+  // Goombas
   set(g, 22, 11, 'G')
   set(g, 32, 11, 'G')
   set(g, 34, 11, 'G')
@@ -163,9 +205,25 @@ fn build_1_1() -> Array[String] {
   // Koopas
   set(g, 74, 11, 'K')
   set(g, 100, 11, 'K')
-  // Coins on ground path
-  tiles(g, 53, 9, "?")
-  // Staircase (8 blocks tall at cols 108-115)
+  // ── Coins ──
+  // Coin trail guiding path from start
+  coin_run(g, 10, 12, 4)
+  // Coins above first ? block
+  coin_run(g, 15, 6, 3)
+  // Coin arc over first gap
+  coin_arc(g, 52, 10, 3)
+  // Coins along upper brick platform
+  coin_run(g, 58, 3, 5)
+  // Coin cluster in hard-to-reach area above pipes
+  coin_run(g, 79, 5, 4)
+  // Coins guiding through pipe section
+  coin_run(g, 97, 12, 3)
+  // Hidden bonus blocks
+  set(g, 70, 4, 'h')
+  set(g, 102, 4, 'n')
+  // ── Checkpoint ──
+  set(g, 60, 12, 'F')
+  // Staircase
   staircase(g, 108, 8)
   // Flagpole
   flagpole(g, 120, 3)
@@ -203,7 +261,7 @@ fn build_1_2() -> Array[String] {
   tiles(g, 92, 4, "?")
   // Pipes
   pipe(g, 44, 10)
-  pipe(g, 86, 10)
+  pipe_entrance(g, 86, 10) // secret pipe entrance
   // Goombas
   set(g, 18, 11, 'G')
   set(g, 22, 11, 'G')
@@ -223,6 +281,29 @@ fn build_1_2() -> Array[String] {
   set(g, 42, 11, 'K')
   set(g, 76, 11, 'K')
   set(g, 102, 11, 'K')
+  // PiranhaPlants (in pipes)
+  set(g, 44, 9, 'P')
+  set(g, 86, 9, 'P')
+  // BuzzyBeetles (hopping enemies)
+  set(g, 40, 11, 'Z')
+  set(g, 68, 11, 'Z')
+  set(g, 94, 11, 'Z')
+  // ── Coins ──
+  // Coin trail along the ground
+  coin_run(g, 7, 12, 5)
+  // Coins on brick platforms
+  coin_run(g, 12, 5, 3)
+  coin_run(g, 26, 5, 5)
+  // Coin arc over gap
+  coin_arc(g, 48, 10, 3)
+  // Underground coin clusters (reward exploration)
+  coin_run(g, 60, 5, 5)
+  coin_run(g, 78, 5, 4)
+  // Hidden bonus blocks
+  set(g, 46, 4, 'h')
+  set(g, 80, 4, 'n')
+  // ── Checkpoint ──
+  set(g, 58, 12, 'F')
   // Staircase
   staircase(g, 108, 6)
   // Flagpole
@@ -242,25 +323,21 @@ fn build_1_3() -> Array[String] {
   ground(g, 120, w)
   // Player start
   set(g, 4, 12, 'S')
-  // Floating platforms (rows 6-12, made of ground tiles)
-  // Section 1: easy jumps
+  // Floating platforms
   hrun(g, 12, 11, 3, '#')
   hrun(g, 18, 10, 3, '#')
   hrun(g, 24, 11, 4, '#')
   hrun(g, 31, 9, 3, '#')
-  // Section 2: medium jumps with enemies
   hrun(g, 37, 10, 4, '#')
   hrun(g, 44, 8, 3, '#')
   hrun(g, 50, 10, 3, '#')
   hrun(g, 56, 6, 3, '#')
   hrun(g, 56, 11, 3, '#')
-  // Section 3: harder jumps
   hrun(g, 62, 8, 3, '#')
   hrun(g, 68, 10, 3, '#')
   hrun(g, 74, 7, 3, '#')
   hrun(g, 80, 9, 4, '#')
   hrun(g, 87, 10, 3, '#')
-  // Section 4: final stretch
   hrun(g, 93, 8, 3, '#')
   hrun(g, 99, 10, 3, '#')
   hrun(g, 105, 7, 3, '#')
@@ -285,7 +362,29 @@ fn build_1_3() -> Array[String] {
   set(g, 63, 7, 'G')
   set(g, 88, 9, 'G')
   set(g, 112, 8, 'G')
-  // Staircase (from ground level)
+  // BuzzyBeetles (hopping on platforms)
+  set(g, 25, 10, 'Z')
+  set(g, 50, 9, 'Z')
+  set(g, 80, 8, 'Z')
+  set(g, 99, 9, 'Z')
+  // ── Coins ──
+  // Coin trails between platforms
+  coin_run(g, 13, 9, 2)
+  coin_run(g, 19, 8, 2)
+  coin_run(g, 32, 7, 2)
+  // Coins over the abyss (teach where to jump)
+  coin_arc(g, 34, 8, 4)
+  coin_arc(g, 58, 9, 4)
+  coin_arc(g, 84, 8, 4)
+  // High coins (reward skilled jumping)
+  coin_run(g, 56, 4, 3)
+  coin_run(g, 74, 4, 3)
+  // Hidden bonus blocks on platforms
+  set(g, 44, 5, 'h')
+  set(g, 105, 4, 'n')
+  // ── Checkpoint ──
+  set(g, 62, 7, 'F')
+  // Staircase
   staircase(g, 124, 5)
   // Flagpole
   flagpole(g, 132, 4)
@@ -308,7 +407,7 @@ fn build_1_4() -> Array[String] {
   ground(g, 84, w)
   // Player start
   set(g, 4, 12, 'S')
-  // Solid block platforms (castle uses U instead of brick)
+  // Solid block platforms
   tiles(g, 16, 7, "UUU")
   tiles(g, 36, 4, "UUU")
   tiles(g, 50, 7, "UUU")
@@ -320,14 +419,14 @@ fn build_1_4() -> Array[String] {
   tiles(g, 96, 4, "UUU")
   tiles(g, 100, 8, "UUU")
   // Pipes
-  pipe(g, 76, 10)
+  pipe_entrance(g, 76, 10) // secret pipe entrance
   pipe(g, 106, 10)
   // ? blocks (sparse, rewarding)
   set(g, 18, 8, '?')
   set(g, 52, 8, '?')
   set(g, 90, 4, 'M')
   set(g, 48, 4, '?')
-  // Dense enemies — the gauntlet
+  // Dense enemies
   set(g, 14, 11, 'G')
   set(g, 16, 11, 'G')
   set(g, 20, 11, 'K')
@@ -352,11 +451,122 @@ fn build_1_4() -> Array[String] {
   set(g, 94, 11, 'G')
   set(g, 98, 11, 'K')
   set(g, 104, 11, 'G')
+  // PiranhaPlants (in pipes)
+  set(g, 76, 9, 'P')
+  set(g, 106, 9, 'P')
+  // Firebars (rotating hazards)
+  set(g, 24, 12, 'R')
+  set(g, 44, 7, 'R')
+  set(g, 66, 12, 'R')
+  // BowserLite (boss at the end)
+  set(g, 116, 12, 'W')
+  // ── Coins ──
+  // Sparse coins in the castle (more valuable since dangerous)
+  coin_run(g, 36, 2, 3)
+  coin_run(g, 64, 2, 3)
+  coin_run(g, 96, 2, 3)
+  // Coins over gaps
+  coin_arc(g, 30, 10, 3)
+  coin_arc(g, 58, 8, 3)
+  coin_arc(g, 82, 10, 3)
+  // Hidden bonus blocks
+  set(g, 40, 4, 'h')
+  set(g, 70, 4, 'n')
+  // ── Checkpoint ──
+  set(g, 54, 12, 'F')
   // Staircase
   staircase(g, 112, 6)
   // Flagpole
   flagpole(g, 122, 3)
   // Castle
   castle(g, 128)
+  grid_to_rows(g)
+}
+
+// ── Bonus rooms ──────────────────────────────────────────
+
+///|
+/// Bonus room for level 1-1: small coin-filled underground room.
+fn build_bonus_1() -> Array[String] {
+  let w = 20
+  let g = make_grid(w, 15)
+  // Ceiling
+  hrun(g, 0, 0, w, '#')
+  hrun(g, 0, 1, w, 'B')
+  // Ground
+  ground(g, 0, w)
+  // Walls
+  for y in 2..<=12 {
+    set(g, 0, y, '#')
+    set(g, w - 1, y, '#')
+  }
+  // Player spawn in bonus room
+  set(g, 2, 12, 'S')
+  // Lots of coins
+  coin_run(g, 3, 10, 14)
+  coin_run(g, 3, 8, 14)
+  coin_run(g, 5, 6, 10)
+  coin_run(g, 7, 4, 6)
+  // Exit pipe on the right
+  pipe(g, w - 4, 10)
+  set(g, w - 4, 10, 'E')
+  grid_to_rows(g)
+}
+
+///|
+/// Bonus room for level 1-2.
+fn build_bonus_2() -> Array[String] {
+  let w = 22
+  let g = make_grid(w, 15)
+  hrun(g, 0, 0, w, '#')
+  hrun(g, 0, 1, w, 'B')
+  ground(g, 0, w)
+  for y in 2..<=12 {
+    set(g, 0, y, '#')
+    set(g, w - 1, y, '#')
+  }
+  set(g, 2, 12, 'S')
+  // Coin rows
+  coin_run(g, 3, 10, 16)
+  coin_run(g, 3, 8, 16)
+  coin_run(g, 5, 6, 12)
+  coin_run(g, 7, 4, 8)
+  // Mushroom question block
+  set(g, 10, 6, 'M')
+  // Exit pipe
+  pipe(g, w - 4, 10)
+  set(g, w - 4, 10, 'E')
+  grid_to_rows(g)
+}
+
+///|
+/// Bonus room for level 1-3.
+fn build_bonus_3() -> Array[String] {
+  build_bonus_1()
+}
+
+///|
+/// Bonus room for level 1-4.
+fn build_bonus_4() -> Array[String] {
+  let w = 24
+  let g = make_grid(w, 15)
+  hrun(g, 0, 0, w, '#')
+  hrun(g, 0, 1, w, 'U')
+  ground(g, 0, w)
+  for y in 2..<=12 {
+    set(g, 0, y, '#')
+    set(g, w - 1, y, '#')
+  }
+  set(g, 2, 12, 'S')
+  // Large coin collection
+  coin_run(g, 3, 10, 18)
+  coin_run(g, 3, 8, 18)
+  coin_run(g, 4, 6, 16)
+  coin_run(g, 6, 4, 12)
+  // 1-UP
+  set(g, 12, 3, '1')
+  // Exit pipe
+  pipe(g, w - 4, 10)
+  set(g, w - 4, 10, 'E')
   grid_to_rows(g)
 }

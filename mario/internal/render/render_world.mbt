@@ -59,7 +59,7 @@ let underground_bg : @raylib.Color = @raylib.Color::new(0, 0, 0, 255)
 pub fn draw_game(game : @types.Game) -> Unit {
   let cam_x = game.camera_x.to_int()
   // Background
-  let bg = if game.level_index == 1 || game.level_index == 3 {
+  let bg = if game.in_bonus_room || game.level_index == 1 || game.level_index == 3 {
     underground_bg
   } else {
     sky_blue
@@ -79,8 +79,8 @@ pub fn draw_game(game : @types.Game) -> Unit {
     )
     @raylib.begin_mode_2d(cam)
   }
-  // Sky decorations (grassland levels only)
-  if game.level_index != 1 && game.level_index != 3 {
+  // Sky decorations (grassland levels only, not bonus rooms)
+  if not(game.in_bonus_room) && game.level_index != 1 && game.level_index != 3 {
     draw_hills(game, cam_x)
     draw_clouds(game, cam_x)
   }
@@ -206,12 +206,15 @@ fn draw_tiles(game : @types.Game, cam_x : Int) -> Unit {
         PipeTopRight => draw_pipe_top_right(sx, sy)
         PipeBodyLeft => draw_pipe_body_left(sx, sy)
         PipeBodyRight => draw_pipe_body_right(sx, sy)
+        PipeEntrance => draw_pipe_entrance_tile(sx, sy)
         Flagpole => draw_flagpole_tile(sx, sy)
         FlagTop => draw_flag_top_tile(sx, sy)
         CastleBlock => draw_castle_tile(sx, sy)
         CastleTop => draw_castle_top_tile(sx, sy)
         CastleDoor => draw_castle_door(sx, sy)
-        HiddenCoin | HiddenOneUp => ()
+        CoinTile => draw_coin_tile(game, sx, sy)
+        Checkpoint => draw_checkpoint_tile(game, sx, sy)
+        HiddenCoin | HiddenOneUp | HiddenBonusCoin | HiddenBonusOneUp => ()
         _ => ()
       }
     }
@@ -391,6 +394,8 @@ fn draw_pipe_body_right(sx : Int, sy : Int) -> Unit {
   @raylib.draw_rectangle(sx + ts - 8, sy, 8, ts, pipe_dark_col)
 }
 
+// (draw_pipe_entrance_tile, draw_coin_tile, draw_checkpoint_tile defined below)
+
 // ── Flagpole / Castle (no sprite assets — keep rectangles) ──────
 
 ///|
@@ -420,7 +425,7 @@ fn draw_flag_top_tile(sx : Int, sy : Int) -> Unit {
 
 ///|
 fn draw_flag(game : @types.Game, cam_x : Int) -> Unit {
-  if game.state != LevelClear && game.state != Playing {
+  if game.state != LevelClear && game.state != Playing && game.state != BonusRoom {
     return
   }
   let ts = @types.tile_size
@@ -858,8 +863,14 @@ fn draw_enemies(game : @types.Game, cam_x : Int) -> Unit {
       Goomba => draw_goomba(e, sx, sy)
       KoopaTroopa => draw_koopa(e, sx, sy)
       KoopaShell => draw_shell(e, sx, sy)
+      PiranhaPlant => draw_piranha_plant(e, sx, sy)
+      BuzzyBeetle => draw_buzzy_beetle(e, sx, sy)
+      Firebar => draw_firebar(e, sx, sy)
+      BowserLite => draw_bowser_lite(game, e, sx, sy)
     }
   }
+  // Bowser fire breath projectiles
+  draw_bowser_fireballs(game, cam_x)
 }
 
 ///|
@@ -1311,5 +1322,367 @@ fn draw_score_popups(game : @types.Game, cam_x : Int) -> Unit {
     let alpha = (s.life * 255.0).to_int().clamp(min=0, max=255)
     let color = @raylib.Color::new(255, 255, 255, alpha)
     @draw.draw_text(s.text, sx - 12, sy, 16, color)
+  }
+}
+
+// ── Coin tile ──────────────────────────────────────────────────
+
+///|
+/// Draw a spinning coin tile (animated rotation effect).
+fn draw_coin_tile(game : @types.Game, sx : Int, sy : Int) -> Unit {
+  let ts = @types.tile_size
+  let coin_gold = @raylib.Color::new(252, 200, 32, 255)
+  let coin_light = @raylib.Color::new(252, 228, 120, 255)
+  let coin_dark = @raylib.Color::new(200, 148, 0, 255)
+  let phase = game.frame_counter / 6 % 8
+  let widths = [12, 10, 6, 2, 6, 10, 12, 12]
+  let w = widths[phase]
+  let cx = sx + ts / 2
+  let cy = sy + ts / 2
+  @raylib.draw_rectangle(cx - w / 2, cy - 10, w, 20, coin_gold)
+  if w > 4 {
+    @raylib.draw_rectangle(cx - w / 2 + 2, cy - 8, w / 3, 16, coin_light)
+  }
+  @raylib.draw_rectangle(cx - w / 2, cy - 10, w, 2, coin_dark)
+  @raylib.draw_rectangle(cx - w / 2, cy + 8, w, 2, coin_dark)
+  if game.frame_counter / 15 % 3 == 0 {
+    let spark_x = cx + 6
+    let spark_y = cy - 12
+    @raylib.draw_rectangle(spark_x - 1, spark_y - 3, 2, 6, coin_light)
+    @raylib.draw_rectangle(spark_x - 3, spark_y - 1, 6, 2, coin_light)
+  }
+}
+
+// ── Pipe entrance tile ────────────────────────────────────────
+
+///|
+fn draw_pipe_entrance_tile(sx : Int, sy : Int) -> Unit {
+  let ts = @types.tile_size
+  @raylib.draw_rectangle(sx, sy, ts, ts, pipe_green)
+  @raylib.draw_rectangle(sx, sy, 8, ts, pipe_light)
+  @raylib.draw_rectangle(sx + ts - 4, sy, 4, ts, pipe_dark_col)
+  @raylib.draw_rectangle(sx, sy, ts, 6, pipe_light)
+  @raylib.draw_rectangle(sx - 4, sy, ts + 4, 12, pipe_green)
+  @raylib.draw_rectangle(sx - 4, sy, 8, 12, pipe_light)
+  let arrow_col = @raylib.Color::new(252, 252, 0, 220)
+  let mid_x = sx + ts / 2
+  let mid_y = sy + ts / 2 + 4
+  @raylib.draw_rectangle(mid_x - 2, mid_y - 8, 4, 12, arrow_col)
+  @raylib.draw_rectangle(mid_x - 6, mid_y, 12, 4, arrow_col)
+  @raylib.draw_rectangle(mid_x - 4, mid_y + 4, 8, 2, arrow_col)
+  @raylib.draw_rectangle(mid_x - 2, mid_y + 6, 4, 2, arrow_col)
+}
+
+// ── Checkpoint tile ───────────────────────────────────────────
+
+///|
+fn draw_checkpoint_tile(game : @types.Game, sx : Int, sy : Int) -> Unit {
+  let ts = @types.tile_size
+  let pole_x = sx + ts / 2 - 2
+  @raylib.draw_rectangle(
+    pole_x,
+    sy,
+    4,
+    ts,
+    @raylib.Color::new(180, 180, 180, 255),
+  )
+  let flag_col = if game.checkpoint_active {
+    @raylib.Color::new(0, 200, 0, 255)
+  } else {
+    @raylib.Color::new(200, 200, 0, 255)
+  }
+  @raylib.draw_rectangle(pole_x + 4, sy + 4, 18, 14, flag_col)
+  @raylib.draw_rectangle(
+    pole_x + 4,
+    sy + 4,
+    18,
+    2,
+    @raylib.Color::new(160, 160, 0, 255),
+  )
+  @raylib.draw_rectangle(
+    pole_x - 4,
+    sy + ts - 6,
+    12,
+    6,
+    @raylib.Color::new(140, 140, 140, 255),
+  )
+}
+
+// ── Fade overlay for bonus room transitions ────────────────────
+
+///|
+/// Draw a screen fade overlay for pipe transitions.
+pub fn draw_fade_overlay(game : @types.Game) -> Unit {
+  if game.bonus_fade_timer > 0.0 {
+    let alpha = (game.bonus_fade_timer * 2.0 * 255.0).to_int().clamp(
+      min=0,
+      max=255,
+    )
+    @raylib.draw_rectangle(
+      0,
+      0,
+      @types.screen_w,
+      @types.screen_h,
+      @raylib.Color::new(0, 0, 0, alpha),
+    )
+  }
+}
+
+// ── New enemy rendering ────────────────────────────────────────
+
+///|
+/// Draw a PiranhaPlant popping out of a pipe.
+fn draw_piranha_plant(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
+  if e.dead {
+    return
+  }
+  if not(e.extended) {
+    // Retracted — hidden inside pipe, draw nothing
+    return
+  }
+  // Green body
+  let plant_green = @raylib.Color::new(0, 180, 0, 255)
+  let plant_dark = @raylib.Color::new(0, 120, 0, 255)
+  let plant_red = @raylib.Color::new(220, 40, 40, 255)
+  let bx = sx - 18
+  let by = sy - 48
+  // Stem
+  @raylib.draw_rectangle(bx + 10, by + 20, 16, 28, plant_green)
+  @raylib.draw_rectangle(bx + 12, by + 20, 12, 28, plant_dark)
+  // Head (bulb with mouth)
+  @raylib.draw_rectangle(bx, by, 36, 22, plant_green)
+  @raylib.draw_rectangle(bx + 2, by + 2, 32, 18, plant_dark)
+  // Mouth (triangular teeth — red inside)
+  @raylib.draw_rectangle(bx + 4, by + 8, 28, 8, plant_red)
+  // White teeth as small rectangles
+  let teeth_white = @raylib.Color::new(252, 252, 252, 255)
+  @raylib.draw_rectangle(bx + 6, by + 8, 4, 4, teeth_white)
+  @raylib.draw_rectangle(bx + 14, by + 8, 4, 4, teeth_white)
+  @raylib.draw_rectangle(bx + 22, by + 8, 4, 4, teeth_white)
+  @raylib.draw_rectangle(bx + 8, by + 12, 4, 4, teeth_white)
+  @raylib.draw_rectangle(bx + 18, by + 12, 4, 4, teeth_white)
+  @raylib.draw_rectangle(bx + 26, by + 12, 4, 4, teeth_white)
+  // Spots on head
+  @raylib.draw_circle(bx + 8, by + 4, 3, plant_green)
+  @raylib.draw_circle(bx + 28, by + 4, 3, plant_green)
+}
+
+///|
+/// Draw a BuzzyBeetle (Goomba-like with wings).
+fn draw_buzzy_beetle(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
+  let beetle_body = @raylib.Color::new(40, 80, 180, 255)
+  let beetle_dark = @raylib.Color::new(20, 50, 120, 255)
+  let wing_white = @raylib.Color::new(240, 240, 255, 255)
+  if e.squished && e.dead {
+    @raylib.draw_rectangle(sx - 20, sy - 8, 40, 8, beetle_dark)
+    return
+  }
+  if e.dead {
+    let by = sy - 40
+    @raylib.draw_rectangle(sx - 18, by, 36, 28, beetle_body)
+    return
+  }
+  let by = sy - 40
+  // Body (like Goomba but blue)
+  @raylib.draw_rectangle(sx - 18, by + 8, 36, 20, beetle_body)
+  @raylib.draw_rectangle(sx - 14, by + 2, 28, 8, beetle_body)
+  @raylib.draw_rectangle(sx - 18, by + 20, 36, 8, beetle_dark)
+  // Eyes
+  @raylib.draw_rectangle(
+    sx - 10,
+    by + 10,
+    7,
+    8,
+    @raylib.Color::new(252, 252, 252, 255),
+  )
+  @raylib.draw_rectangle(
+    sx + 3,
+    by + 10,
+    7,
+    8,
+    @raylib.Color::new(252, 252, 252, 255),
+  )
+  let pupil_off = if e.anim_frame == 0 { 0 } else { 2 }
+  @raylib.draw_rectangle(
+    sx - 8 + pupil_off,
+    by + 12,
+    4,
+    5,
+    @raylib.Color::new(0, 0, 0, 255),
+  )
+  @raylib.draw_rectangle(
+    sx + 5 + pupil_off,
+    by + 12,
+    4,
+    5,
+    @raylib.Color::new(0, 0, 0, 255),
+  )
+  // Feet
+  if e.anim_frame == 0 {
+    @raylib.draw_rectangle(sx - 16, by + 28, 12, 12, beetle_dark)
+    @raylib.draw_rectangle(sx + 4, by + 28, 12, 12, beetle_dark)
+  } else {
+    @raylib.draw_rectangle(sx - 20, by + 30, 12, 10, beetle_dark)
+    @raylib.draw_rectangle(sx + 8, by + 30, 12, 10, beetle_dark)
+  }
+  // Wings (small triangles on sides)
+  let wing_bob = if e.anim_frame == 0 { -4 } else { 2 }
+  // Left wing
+  @raylib.draw_rectangle(sx - 26, by + wing_bob, 12, 8, wing_white)
+  @raylib.draw_rectangle(sx - 24, by + wing_bob - 2, 8, 4, wing_white)
+  // Right wing
+  @raylib.draw_rectangle(sx + 14, by + wing_bob, 12, 8, wing_white)
+  @raylib.draw_rectangle(sx + 16, by + wing_bob - 2, 8, 4, wing_white)
+}
+
+///|
+/// Draw a Firebar (rotating fire chain around a center block).
+fn draw_firebar(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
+  // Center block (gray)
+  let center_gray = @raylib.Color::new(140, 140, 140, 255)
+  @raylib.draw_rectangle(sx - 8, sy - 24, 16, 16, center_gray)
+  // Fire segments rotating
+  let angle = e.firebar_angle.to_double()
+  let segments = e.firebar_segments
+  let spacing = @types.firebar_segment_spacing.to_double()
+  let seg_r = @types.firebar_segment_radius
+  for seg in 1..=segments {
+    let dist = spacing * seg.to_double()
+    let seg_x = sx.to_double() + @math.cos(angle) * dist
+    let seg_y = (sy - 16).to_double() + @math.sin(angle) * dist
+    let seg_sx = seg_x.to_int()
+    let seg_sy = seg_y.to_int()
+    // Outer orange, inner yellow
+    let seg_ri = seg_r.to_int()
+    @raylib.draw_circle(seg_sx, seg_sy, seg_r, fireball_orange)
+    @raylib.draw_circle(
+      seg_sx,
+      seg_sy,
+      Float::from_int(seg_ri - 3),
+      fireball_yellow,
+    )
+  }
+}
+
+///|
+/// Draw BowserLite (large boss enemy).
+fn draw_bowser_lite(
+  game : @types.Game,
+  e : @types.Enemy,
+  sx : Int,
+  sy : Int,
+) -> Unit {
+  if e.dead {
+    // Death animation — falls off screen
+    let alpha = 255 - (e.dead_timer * 200.0).to_int().clamp(min=0, max=255)
+    let color = @raylib.Color::new(0, 140, 0, alpha)
+    @raylib.draw_rectangle(sx - 32, sy - 72, 64, 72, color)
+    return
+  }
+  // Large green body
+  let bowser_green = @raylib.Color::new(0, 140, 0, 255)
+  let bowser_dark = @raylib.Color::new(0, 100, 0, 255)
+  let bowser_belly = @raylib.Color::new(220, 180, 80, 255)
+  let horn_color = @raylib.Color::new(240, 200, 40, 255)
+  let bx = sx - 32
+  let by = sy - 72
+  // Body
+  @raylib.draw_rectangle(bx + 4, by + 16, 56, 40, bowser_green)
+  @raylib.draw_rectangle(bx + 8, by + 12, 48, 8, bowser_green)
+  // Belly
+  @raylib.draw_rectangle(bx + 12, by + 30, 32, 22, bowser_belly)
+  // Shell (dark back ridge)
+  @raylib.draw_rectangle(bx + 16, by + 14, 28, 16, bowser_dark)
+  // Spikes on shell
+  let spike_y = by + 10
+  @raylib.draw_rectangle(bx + 20, spike_y, 6, 8, bowser_dark)
+  @raylib.draw_rectangle(bx + 30, spike_y - 2, 6, 10, bowser_dark)
+  @raylib.draw_rectangle(bx + 40, spike_y, 6, 8, bowser_dark)
+  // Head
+  let head_x = if e.vx >= 0.0 { bx + 44 } else { bx - 12 }
+  @raylib.draw_rectangle(head_x, by + 4, 24, 24, bowser_green)
+  // Horns
+  @raylib.draw_rectangle(head_x + 2, by - 4, 6, 10, horn_color)
+  @raylib.draw_rectangle(head_x + 16, by - 4, 6, 10, horn_color)
+  // Eyes
+  let eye_x = if e.vx >= 0.0 { head_x + 12 } else { head_x + 4 }
+  @raylib.draw_rectangle(
+    eye_x,
+    by + 10,
+    6,
+    6,
+    @raylib.Color::new(252, 252, 252, 255),
+  )
+  @raylib.draw_rectangle(
+    eye_x + 2,
+    by + 12,
+    3,
+    4,
+    @raylib.Color::new(200, 0, 0, 255),
+  )
+  // Mouth / fire breath animation
+  if e.fire_cooldown < 0.5 && e.fire_cooldown > 0.0 {
+    // Breathing fire animation
+    let fire_x = if e.vx >= 0.0 { head_x + 24 } else { head_x - 16 }
+    let fire_phase = game.frame_counter % 4
+    @raylib.draw_rectangle(fire_x, by + 14, 16, 8, fireball_orange)
+    @raylib.draw_rectangle(
+      fire_x + (if fire_phase < 2 { 4 } else { -2 }),
+      by + 16,
+      8,
+      4,
+      fireball_yellow,
+    )
+  }
+  // Legs
+  @raylib.draw_rectangle(bx + 8, by + 56, 14, 16, bowser_green)
+  @raylib.draw_rectangle(bx + 36, by + 56, 14, 16, bowser_green)
+  @raylib.draw_rectangle(bx + 6, by + 68, 16, 6, bowser_dark)
+  @raylib.draw_rectangle(bx + 34, by + 68, 16, 6, bowser_dark)
+  // HP bar above head
+  let hp_max = @types.bowser_hp
+  let hp_cur = e.boss_hp
+  let bar_w = 48
+  let bar_h = 6
+  let bar_x = sx - bar_w / 2
+  let bar_y = by - 12
+  @raylib.draw_rectangle(bar_x, bar_y, bar_w, bar_h, @raylib.Color::new(
+    80, 0, 0, 255,
+  ))
+  let fill_w = bar_w * hp_cur / hp_max
+  @raylib.draw_rectangle(bar_x, bar_y, fill_w, bar_h, @raylib.Color::new(
+    0, 220, 0, 255,
+  ))
+}
+
+///|
+/// Draw Bowser fire breath projectiles.
+fn draw_bowser_fireballs(game : @types.Game, cam_x : Int) -> Unit {
+  for i in 0..<game.bowser_fireballs.length() {
+    let bf = game.bowser_fireballs[i]
+    if not(bf.active) {
+      continue
+    }
+    let sx = (bf.x - Float::from_int(cam_x)).to_int()
+    let sy = bf.y.to_int()
+    if sx < -30 || sx > @types.screen_w + 30 {
+      continue
+    }
+    let phase = game.frame_counter % 4
+    // Fire breath: elongated flame
+    @raylib.draw_rectangle(sx - 12, sy - 6, 24, 12, fireball_orange)
+    @raylib.draw_rectangle(
+      sx - 8 + (if phase < 2 { 2 } else { -2 }),
+      sy - 4,
+      16,
+      8,
+      fireball_yellow,
+    )
+    @raylib.draw_circle(
+      sx + (if bf.vx > 0.0 { 10 } else { -10 }),
+      sy,
+      6,
+      fireball_orange,
+    )
   }
 }

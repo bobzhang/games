@@ -168,8 +168,7 @@ pub(all) enum EnemyKind {
   Goomba
   KoopaTroopa
   KoopaShell
-}
-pub impl Eq for EnemyKind
+} derive(Eq)
 
 pub(all) struct Fireball {
   mut active : Bool
@@ -224,8 +223,7 @@ pub(all) enum GameState {
   PlayerDied
   GameOver
   Victory
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Item {
   mut active : Bool
@@ -247,8 +245,7 @@ pub(all) enum ItemKind {
   Star
   OneUp
   CoinPopup
-}
-pub impl Eq for ItemKind
+} derive(Eq)
 
 pub(all) struct Particle {
   mut active : Bool
@@ -295,8 +292,7 @@ pub(all) enum PowerState {
   Small
   Big
   Fire
-}
-pub impl Eq for PowerState
+} derive(Eq)
 
 pub(all) struct ScorePopup {
   mut active : Bool
@@ -328,8 +324,7 @@ pub(all) enum TileKind {
   CastleBlock
   CastleTop
   CastleDoor
-}
-pub impl Eq for TileKind
+} derive(Eq)
 
 // Type aliases
 
