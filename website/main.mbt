@@ -163,56 +163,20 @@ fn render_hero() -> @rabbita.Html {
 
 ///|
 fn render_featured(dispatch : @rabbita.Dispatch[Msg]) -> @rabbita.Html {
+  let games = get_all_games()
+  let featured : Array[GameInfo] = []
+  for i in 0..<games.length() {
+    if games[i].featured {
+      featured.push(games[i])
+    }
+  }
   section(
     class="featured",
     [
-      h2(class="section-title", "Featured Games"),
+      h2(class="section-title", "\u{2B50} Featured Games"),
       div(
         class="featured-grid",
-        [
-          featured_card(
-            dispatch,
-            "abyssal_rift",
-            "Abyssal Rift",
-            "Top-down roguelite dungeon crawler with 12 synergies, 2 bosses, meta-progression",
-            "roguelite",
-          ),
-          featured_card(
-            dispatch,
-            "fighter_97_lite",
-            "Fighter '97 Lite",
-            "2D fighting game with 6 characters, motion-input specials, AI difficulty scaling",
-            "fighting",
-          ),
-          featured_card(
-            dispatch,
-            "kart_racing_3d",
-            "Kart Racing 3D",
-            "Arcade kart racer with 8 racers, drift boost, 16 tracks across 4 cups",
-            "racing",
-          ),
-          featured_card(
-            dispatch,
-            "tower_defense_3d",
-            "Tower Defense 3D",
-            "Strategic TD with 8 tower types, synergies, upgrades, 6 maps",
-            "strategy",
-          ),
-          featured_card(
-            dispatch,
-            "space_combat_3d",
-            "Space Combat 3D",
-            "6DOF space combat with 12 missions, dogfighting AI, formation flying",
-            "action",
-          ),
-          featured_card(
-            dispatch,
-            "naval_combat_3d",
-            "Naval Combat 3D",
-            "Wind-based sailing with broadside cannons and tactical fleet combat",
-            "simulation",
-          ),
-        ],
+        featured.map(fn(g) { featured_card(dispatch, g) }),
       ),
     ],
   )
@@ -221,19 +185,36 @@ fn render_featured(dispatch : @rabbita.Dispatch[Msg]) -> @rabbita.Html {
 ///|
 fn featured_card(
   dispatch : @rabbita.Dispatch[Msg],
-  id : String,
-  title : String,
-  desc : String,
-  genre : String
+  game : GameInfo
 ) -> @rabbita.Html {
   div(
     class="featured-card",
-    on_click=dispatch(PlayGame(id)),
+    on_click=dispatch(PlayGame(game.id)),
     [
-      div(class="featured-genre", genre),
-      h3(class="featured-title", title),
-      p(class="featured-desc", desc),
-      button(class="play-btn", "Play Now"),
+      // Thumbnail with gradient + icon
+      div(
+        style=["background: \{genre_gradient(game.genre)}; height: 140px; border-radius: 10px 10px 0 0; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;"],
+        [
+          span(
+            style=["font-size: 48px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));"],
+            game.icon,
+          ),
+          // Genre pill overlay
+          span(
+            style=["position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.5); padding: 3px 10px; border-radius: 999px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: \{genre_color(game.genre)};"],
+            game.genre,
+          ),
+        ],
+      ),
+      // Card body
+      div(
+        style=["padding: 16px;"],
+        [
+          h3(class="featured-title", game.title),
+          p(class="featured-desc", game.desc),
+          button(class="play-btn", "\u{25B6}  Play Now"),
+        ],
+      ),
     ],
   )
 }
@@ -244,11 +225,12 @@ fn render_categories(
   model : Model
 ) -> @rabbita.Html {
   let categories = [
-    ("all", "All Games"),
-    ("classic", "Classic Ports"),
-    ("3d", "3D Games"),
-    ("2026", "2026 Collection"),
-    ("raylib", "Raylib Examples"),
+    ("all", "\u{1F30D} All Games"),
+    ("featured", "\u{2B50} Featured"),
+    ("classic", "\u{1F579}\u{FE0F} Classic Ports"),
+    ("3d", "\u{1F4A0} 3D Games"),
+    ("2026", "\u{1F525} 2026 Collection"),
+    ("raylib", "\u{1F4D6} Raylib Examples"),
   ]
   section(
     class="categories",
@@ -280,10 +262,7 @@ fn render_game_grid(
   section(
     class="game-grid-section",
     [
-      p(
-        class="results-count",
-        "\{games.length()} games",
-      ),
+      p(class="results-count", "\{games.length()} games"),
       div(class="game-grid", games.map(fn(g) { game_card(dispatch, g) })),
     ],
   )
@@ -292,16 +271,40 @@ fn render_game_grid(
 ///|
 fn game_card(
   dispatch : @rabbita.Dispatch[Msg],
-  game : (String, String, String)
+  game : GameInfo
 ) -> @rabbita.Html {
-  let (id, title, genre) = game
   div(
     class="game-card",
-    on_click=dispatch(PlayGame(id)),
+    on_click=dispatch(PlayGame(game.id)),
     [
-      div(class="card-genre-badge", genre),
-      div(class="card-title", title),
-      div(class="card-play", "\u{25B6}"),
+      // Mini thumbnail with gradient + icon
+      div(
+        style=["background: \{genre_gradient(game.genre)}; height: 90px; border-radius: 8px 8px 0 0; display: flex; align-items: center; justify-content: center;"],
+        [
+          span(style=["font-size: 32px; opacity: 0.9;"], game.icon),
+        ],
+      ),
+      // Card content
+      div(
+        style=["padding: 10px 12px;"],
+        [
+          div(
+            style=["font-size: 10px; color: \{genre_color(game.genre)}; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;"],
+            game.genre,
+          ),
+          div(style=["font-size: 13px; font-weight: 600;"], game.title),
+          if game.desc != "" {
+            p(
+              style=["font-size: 11px; color: #8899b0; margin-top: 4px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;"],
+              game.desc,
+            )
+          } else {
+            @html.nothing
+          },
+        ],
+      ),
+      // Play overlay hint
+      div(class="card-play-overlay", [span(class="card-play-icon", "\u{25B6}")]),
     ],
   )
 }
@@ -312,6 +315,11 @@ fn game_player_view(
   game_id : String,
   model : Model
 ) -> @rabbita.Html {
+  let game_info = find_game(game_id)
+  let title = match game_info {
+    Some(g) => g.title
+    None => format_title(game_id)
+  }
   div(
     class="player-overlay",
     [
@@ -321,13 +329,13 @@ fn game_player_view(
           button(
             class="back-btn",
             on_click=dispatch(CloseGame),
-            "\u{2190} Back to Games",
+            "\u{2190} Back",
           ),
-          span(class="playing-title", format_title(game_id)),
+          span(class="playing-title", title),
           button(
             class="controls-btn",
             on_click=dispatch(ToggleControls),
-            "Controls",
+            "\u{2328}\u{FE0F} Controls",
           ),
         ],
       ),
@@ -335,11 +343,41 @@ fn game_player_view(
         div(
           class="controls-panel",
           [
-            p("Arrow Keys / WASD: Move"),
-            p("Space / Enter: Action"),
-            p("Shift: Run / Fire"),
-            p("Escape: Pause / Menu"),
-            p("1-6: Select weapon/item"),
+            div(
+              class="control-group",
+              [
+                span(class="control-key", "WASD / Arrows"),
+                span(class="control-desc", "Move"),
+              ],
+            ),
+            div(
+              class="control-group",
+              [
+                span(class="control-key", "Space / Enter"),
+                span(class="control-desc", "Action"),
+              ],
+            ),
+            div(
+              class="control-group",
+              [
+                span(class="control-key", "Shift"),
+                span(class="control-desc", "Run / Fire"),
+              ],
+            ),
+            div(
+              class="control-group",
+              [
+                span(class="control-key", "Escape"),
+                span(class="control-desc", "Pause"),
+              ],
+            ),
+            div(
+              class="control-group",
+              [
+                span(class="control-key", "1-6"),
+                span(class="control-desc", "Items / Weapons"),
+              ],
+            ),
           ],
         )
       } else {
@@ -348,6 +386,7 @@ fn game_player_view(
       @html.iframe(
         class="game-frame",
         src="games/\{game_id}/\{game_id}.html",
+        allowfullscreen=true,
       ),
     ],
   )
@@ -358,33 +397,39 @@ fn render_footer() -> @rabbita.Html {
   footer(
     class="site-footer",
     [
-      p(
+      div(
+        class="footer-inner",
         [
-          span("Built with "),
-          a(href="https://www.moonbitlang.com", target=Blank, "MoonBit"),
-          span(" + "),
-          a(href="https://www.raylib.com", target=Blank, "Raylib"),
-          span(" + "),
-          a(
-            href="https://github.com/moonbit-community/rabbita",
-            target=Blank,
-            "Rabbita",
+          p(
+            class="footer-tech",
+            [
+              span("Powered by "),
+              a(href="https://www.moonbitlang.com", target=Blank, "MoonBit"),
+              span(" \u{00B7} "),
+              a(href="https://www.raylib.com", target=Blank, "Raylib"),
+              span(" \u{00B7} "),
+              a(
+                href="https://github.com/moonbit-community/rabbita",
+                target=Blank,
+                "Rabbita",
+              ),
+            ],
           ),
-        ],
-      ),
-      p(
-        class="footer-links",
-        [
-          a(
-            href="https://github.com/bobzhang/games",
-            target=Blank,
-            "Source Code",
-          ),
-          span(" \u{00B7} "),
-          a(
-            href="https://mooncakes.io/docs/#/bobzhang/games/",
-            target=Blank,
-            "Package",
+          p(
+            class="footer-links",
+            [
+              a(
+                href="https://github.com/bobzhang/games",
+                target=Blank,
+                "\u{2B50} Star on GitHub",
+              ),
+              span(" \u{00B7} "),
+              a(
+                href="https://mooncakes.io/docs/#/bobzhang/games/",
+                target=Blank,
+                "MoonCakes Package",
+              ),
+            ],
           ),
         ],
       ),
@@ -393,8 +438,18 @@ fn render_footer() -> @rabbita.Html {
 }
 
 ///|
+fn find_game(id : String) -> GameInfo? {
+  let games = get_all_games()
+  for i in 0..<games.length() {
+    if games[i].id == id {
+      return Some(games[i])
+    }
+  }
+  None
+}
+
+///|
 fn format_title(id : String) -> String {
-  // Convert snake_case to Title Case
   let mut result = ""
   let mut capitalize_next = true
   for c in id {
@@ -412,78 +467,50 @@ fn format_title(id : String) -> String {
 }
 
 ///|
-fn get_filtered_games(model : Model) -> Array[(String, String, String)] {
+fn get_filtered_games(model : Model) -> Array[GameInfo] {
   let all = get_all_games()
-  let filtered : Array[(String, String, String)] = []
+  let filtered : Array[GameInfo] = []
   for i in 0..<all.length() {
-    let (id, title, genre) = all[i]
-    // Category filter
+    let g = all[i]
     let cat_match = match model.category {
       "all" => true
+      "featured" => g.featured
       "classic" =>
-        id.contains("1983") ||
-        id.contains("1985") ||
-        id.contains("1987") ||
-        id.contains("1988") ||
-        id.contains("1990") ||
-        id == "2048" ||
-        id == "mario" ||
-        id == "minesweeper"
+        g.id.contains("1983") ||
+        g.id.contains("1985") ||
+        g.id.contains("1987") ||
+        g.id.contains("1988") ||
+        g.id.contains("1990") ||
+        g.id == "2048" ||
+        g.id == "mario" ||
+        g.id == "minesweeper"
       "3d" =>
-        id.contains("_3d") ||
-        id.contains("models_") ||
-        id.contains("shaders_")
-      "2026" => id.contains("_2026")
+        g.id.contains("_3d") ||
+        g.id.contains("models_") ||
+        g.id.contains("shaders_")
+      "2026" => g.id.contains("_2026")
       "raylib" =>
-        id.contains("core_") ||
-        id.contains("shapes_") ||
-        id.contains("textures_") ||
-        id.contains("text_") ||
-        id.contains("audio_")
+        g.id.contains("core_") ||
+        g.id.contains("shapes_") ||
+        g.id.contains("textures_") ||
+        g.id.contains("text_") ||
+        g.id.contains("audio_")
       _ => true
     }
-    // Search filter
     let search_match = if model.search == "" {
       true
     } else {
-      let lower_search = model.search.to_lower()
-      id.to_lower().contains(lower_search) ||
-      title.to_lower().contains(lower_search) ||
-      genre.to_lower().contains(lower_search)
+      let s = model.search.to_lower()
+      g.id.to_lower().contains(s) ||
+      g.title.to_lower().contains(s) ||
+      g.genre.to_lower().contains(s) ||
+      g.desc.to_lower().contains(s)
     }
     if cat_match && search_match {
-      filtered.push((id, title, genre))
+      filtered.push(g)
     }
   }
   filtered
-}
-
-///|
-fn get_all_games() -> Array[(String, String, String)] {
-  // Featured / quality-improved games first, then alphabetical
-  [
-    ("abyssal_rift", "Abyssal Rift", "roguelite"),
-    ("fighter_97_lite", "Fighter '97 Lite", "fighting"),
-    ("kart_racing_3d", "Kart Racing 3D", "racing"),
-    ("tower_defense_3d", "Tower Defense 3D", "strategy"),
-    ("space_combat_3d", "Space Combat 3D", "action"),
-    ("naval_combat_3d", "Naval Combat 3D", "simulation"),
-    ("dungeon_crawler_3d", "Dungeon Crawler 3D", "rpg"),
-    ("survival_arena_3d", "Survival Arena 3D", "shooter"),
-    ("bomberman_1983_lite", "Bomberman 1983 Lite", "classic"),
-    ("tank_1990", "Tank 1990", "classic"),
-    ("mario", "Mario", "platformer"),
-    ("2048", "2048", "puzzle"),
-    ("minesweeper", "Minesweeper", "puzzle"),
-    ("super_mario_1985_lite", "Super Mario 1985 Lite", "classic"),
-    ("contra_1987_lite", "Contra 1987 Lite", "classic"),
-    ("jackal_1988_lite", "Jackal 1988 Lite", "classic"),
-    ("platformer_3d", "Platformer 3D", "platformer"),
-    ("flight_sim_3d", "Flight Sim 3D", "simulation"),
-    ("voxel_world_3d", "Voxel World 3D", "sandbox"),
-    ("puzzle_dungeon_3d", "Puzzle Dungeon 3D", "puzzle"),
-    ("demo", "Demo", "example"),
-  ]
 }
 
 ///|
