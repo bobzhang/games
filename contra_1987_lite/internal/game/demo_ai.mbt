@@ -237,22 +237,40 @@ fn @types.Game::demo_player_command(
   let (move_dir, shoot) = if !shoot {
     let base_x = @types.tile_center_x(@types.base_tile_x)
     let base_y = @types.tile_center_y(@types.base_tile_y)
-    let (line_dir, aligned) = demo_line_shot_dir(
+    let (line_dir, _aligned) = demo_line_shot_dir(
       player.x,
       player.y,
       base_x,
       base_y,
     )
-    if aligned && @types.rand_range(game, 0, 99) < 8 {
-      (Some(line_dir), true)
-    } else {
-      (move_dir, false)
-    }
+    // Guard the base by moving toward it, but never shoot toward it
+    let _ = line_dir
+    (move_dir, false)
   } else {
     (move_dir, shoot)
   }
 
-  let shoot = if shoot { true } else { @types.rand_range(game, 0, 99) < 4 }
+  // Random 4% fire fallback, but never when facing toward the base
+  let shoot = if shoot {
+    true
+  } else if @types.rand_range(game, 0, 99) < 4 {
+    let base_x = @types.tile_center_x(@types.base_tile_x)
+    let base_y = @types.tile_center_y(@types.base_tile_y)
+    let facing_base = match player.dir {
+      Down =>
+        player.y < base_y
+      Left =>
+        player.x > base_x &&
+          (player.y - base_y).abs() < Float::from_int(@types.tile_size) * 2.0
+      Right =>
+        player.x < base_x &&
+          (player.y - base_y).abs() < Float::from_int(@types.tile_size) * 2.0
+      Up => false
+    }
+    !facing_base
+  } else {
+    false
+  }
 
   (move_dir, shoot)
 }
