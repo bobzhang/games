@@ -7,22 +7,17 @@ using @html {
 struct Model {
   search : String
   category : String
-  selected_game : String?
-  show_controls : Bool
 }
 
 ///|
 enum Msg {
   SearchChanged(String)
   CategoryChanged(String)
-  PlayGame(String)
-  CloseGame
-  ToggleControls
 }
 
 ///|
 fn init_model() -> Model {
-  { search: "", category: "all", selected_game: None, show_controls: false }
+  { search: "", category: "all" }
 }
 
 ///|
@@ -30,18 +25,13 @@ fn update(msg : Msg, model : Model) -> Model {
   match msg {
     SearchChanged(s) => { ..model, search: s }
     CategoryChanged(c) => { ..model, category: c }
-    PlayGame(id) => { ..model, selected_game: Some(id) }
-    CloseGame => { ..model, selected_game: None }
-    ToggleControls => { ..model, show_controls: !model.show_controls }
   }
 }
 
 ///|
 fn view(dispatch : @rabbita.Dispatch[Msg], model : Model) -> @rabbita.Html {
-  match model.selected_game {
-    Some(game_id) => game_player_view(dispatch, game_id, model)
-    None => main_view(dispatch, model)
-  }
+  // Always show main view - games open in new tab via direct navigation
+  main_view(dispatch, model)
 }
 
 ///|
@@ -195,12 +185,13 @@ fn render_featured(dispatch : @rabbita.Dispatch[Msg]) -> @rabbita.Html {
 
 ///|
 fn featured_card(
-  dispatch : @rabbita.Dispatch[Msg],
+  _dispatch : @rabbita.Dispatch[Msg],
   game : GameInfo
 ) -> @rabbita.Html {
-  div(
+  a(
     class="featured-card",
-    on_click=dispatch(PlayGame(game.id)),
+    href="games/\{game.id}/\{game.id}.html",
+    escape=true,
     [
       // Thumbnail with gradient + icon
       div(
@@ -281,12 +272,13 @@ fn render_game_grid(
 
 ///|
 fn game_card(
-  dispatch : @rabbita.Dispatch[Msg],
+  _dispatch : @rabbita.Dispatch[Msg],
   game : GameInfo
 ) -> @rabbita.Html {
-  div(
+  a(
     class="game-card",
-    on_click=dispatch(PlayGame(game.id)),
+    href="games/\{game.id}/\{game.id}.html",
+    escape=true,
     [
       // Mini thumbnail with gradient + icon
       div(
@@ -320,88 +312,6 @@ fn game_card(
   )
 }
 
-///|
-fn game_player_view(
-  dispatch : @rabbita.Dispatch[Msg],
-  game_id : String,
-  model : Model
-) -> @rabbita.Html {
-  let game_info = find_game(game_id)
-  let title = match game_info {
-    Some(g) => g.title
-    None => format_title(game_id)
-  }
-  div(
-    class="player-overlay",
-    [
-      div(
-        class="player-header",
-        [
-          button(
-            class="back-btn",
-            on_click=dispatch(CloseGame),
-            "\u{2190} Back",
-          ),
-          span(class="playing-title", title),
-          button(
-            class="controls-btn",
-            on_click=dispatch(ToggleControls),
-            "\u{2328}\u{FE0F} Controls",
-          ),
-        ],
-      ),
-      if model.show_controls {
-        div(
-          class="controls-panel",
-          [
-            div(
-              class="control-group",
-              [
-                span(class="control-key", "WASD / Arrows"),
-                span(class="control-desc", "Move"),
-              ],
-            ),
-            div(
-              class="control-group",
-              [
-                span(class="control-key", "Space / Enter"),
-                span(class="control-desc", "Action"),
-              ],
-            ),
-            div(
-              class="control-group",
-              [
-                span(class="control-key", "Shift"),
-                span(class="control-desc", "Run / Fire"),
-              ],
-            ),
-            div(
-              class="control-group",
-              [
-                span(class="control-key", "Escape"),
-                span(class="control-desc", "Pause"),
-              ],
-            ),
-            div(
-              class="control-group",
-              [
-                span(class="control-key", "1-6"),
-                span(class="control-desc", "Items / Weapons"),
-              ],
-            ),
-          ],
-        )
-      } else {
-        @html.nothing
-      },
-      @html.iframe(
-        class="game-frame",
-        src="games/\{game_id}/\{game_id}.html",
-        allowfullscreen=true,
-      ),
-    ],
-  )
-}
 
 ///|
 fn render_footer() -> @rabbita.Html {
@@ -448,34 +358,6 @@ fn render_footer() -> @rabbita.Html {
   )
 }
 
-///|
-fn find_game(id : String) -> GameInfo? {
-  let games = get_all_games()
-  for i in 0..<games.length() {
-    if games[i].id == id {
-      return Some(games[i])
-    }
-  }
-  None
-}
-
-///|
-fn format_title(id : String) -> String {
-  let mut result = ""
-  let mut capitalize_next = true
-  for c in id {
-    if c == '_' {
-      result = result + " "
-      capitalize_next = true
-    } else if capitalize_next {
-      result = result + c.to_string().to_upper()
-      capitalize_next = false
-    } else {
-      result = result + c.to_string()
-    }
-  }
-  result
-}
 
 ///|
 fn get_filtered_games(model : Model) -> Array[GameInfo] {

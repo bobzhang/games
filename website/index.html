@@ -102,6 +102,7 @@
       transition: all 0.25s;
       overflow: hidden;
     }
+    .featured-card { text-decoration: none; color: inherit; display: block; }
     .featured-card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 8px 30px var(--accent-glow); }
     .featured-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
     .featured-desc { color: var(--muted); font-size: 12px; line-height: 1.5; margin-bottom: 14px; min-height: 36px; }
@@ -126,6 +127,7 @@
       position: relative;
       overflow: hidden;
     }
+    .game-card { text-decoration: none; color: inherit; display: block; }
     .game-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
     .card-play-overlay { position: absolute; top: 0; left: 0; right: 0; height: 90px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0); transition: background 0.2s; }
     .game-card:hover .card-play-overlay { background: rgba(0,0,0,0.4); }
