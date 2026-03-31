@@ -1,0 +1,9 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/cascade/internal/types",
+  "bobzhang/games/cascade/internal/levels",
+  "bobzhang/games/utils/draw",
+  "bobzhang/games/utils/fps",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
