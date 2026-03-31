@@ -573,7 +573,7 @@ fn handle_mouse_click(
       let target = battle.units[uid]
       if target.team == Enemy && target.active && target.hp > 0 {
         // Click on enemy = attack
-        let stats = @content.get_mech_stats(mech.mech_class)
+        let stats = @content.get_augmented_mech_stats(mech.mech_class, battle.augments)
         let dist = @types.manhattan(mech.x, mech.y, gx, gy)
         if dist <= stats.ability_range {
           let ability_id = select_ability_id(mech.mech_class, dist)
@@ -597,7 +597,7 @@ fn handle_mouse_click(
         game.message_timer = 1.0
         return
       }
-      let stats = @content.get_mech_stats(mech.mech_class)
+      let stats = @content.get_augmented_mech_stats(mech.mech_class, battle.augments)
       let dist = @types.manhattan(mech.x, mech.y, gx, gy)
       if dist <= stats.move_range && dist > 0 {
         issue_command(game, battle, Move(gx, gy))
@@ -717,7 +717,7 @@ fn handle_enter(game : @types.Game, battle : @types.BattleState) -> Unit {
       let target = battle.units[tid]
       if target.team == Enemy && target.active && target.hp > 0 {
         // Attack command - auto select best ability based on class and range
-        let stats = @content.get_mech_stats(mech.mech_class)
+        let stats = @content.get_augmented_mech_stats(mech.mech_class, battle.augments)
         let dist = @types.manhattan(mech.x, mech.y, tx, ty)
         if dist <= stats.ability_range {
           let ability_id = select_ability_id(mech.mech_class, dist)
@@ -739,7 +739,7 @@ fn handle_enter(game : @types.Game, battle : @types.BattleState) -> Unit {
         game.message_timer = 1.0
         return
       }
-      let stats = @content.get_mech_stats(mech.mech_class)
+      let stats = @content.get_augmented_mech_stats(mech.mech_class, battle.augments)
       let dist = @types.manhattan(mech.x, mech.y, tx, ty)
       if dist <= stats.move_range && dist > 0 {
         issue_command(game, battle, Move(tx, ty))

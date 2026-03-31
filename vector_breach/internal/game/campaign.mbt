@@ -204,7 +204,9 @@ pub fn setup_mission_from_def(game : @types.Game, mission_id : Int) -> Unit {
   let battle = @types.new_battle(def.objective)
   battle.mission_id = mission_id
   battle.augments = game.run.augments
-  // Place special terrain tiles from mission definition
+  // 1. Place procedural terrain first
+  place_terrain(battle, mission_id)
+  // 2. THEN apply mission-specific tiles (authored layout overrides procedural)
   for i = 0; i < def.special_tiles.length(); i = i + 1 {
     let (tx, ty, tkind) = def.special_tiles[i]
     if battle.grid.in_bounds(tx, ty) {
@@ -219,8 +221,6 @@ pub fn setup_mission_from_def(game : @types.Game, mission_id : Int) -> Unit {
       battle.grid.set(hx, hy, { ..tile, hazard: hkind })
     }
   }
-  // Place procedural terrain
-  place_terrain(battle, mission_id)
   // Place 3 player mechs with augment-modified stats
   let classes : Array[@types.MechClass] = [Vanguard, Striker, Sentinel]
   for i = 0; i < 3; i = i + 1 {

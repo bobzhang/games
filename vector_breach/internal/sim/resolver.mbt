@@ -169,12 +169,19 @@ fn check_battle_conditions(battle : @types.BattleState) -> Unit {
         )
       }
     }
-    Assassinate(_target_id) => {
-      // Check if the specific target is dead
-      // For now, check if all enemies are dead
-      if enemies_alive == 0 {
-        battle.phase = Victory
-        battle.turn_log.push("VICTORY - Target eliminated!")
+    Assassinate(target_id) => {
+      // Check if the specific target unit is dead
+      if target_id >= 0 && target_id < battle.units.length() {
+        if !battle.units[target_id].active || battle.units[target_id].hp <= 0 {
+          battle.phase = Victory
+          battle.turn_log.push("VICTORY - Target eliminated!")
+        }
+      } else {
+        // Fallback: clear all enemies if target_id is invalid
+        if enemies_alive == 0 {
+          battle.phase = Victory
+          battle.turn_log.push("VICTORY - All enemies eliminated!")
+        }
       }
     }
     CapturePoints(needed) => {

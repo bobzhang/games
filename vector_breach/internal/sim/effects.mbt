@@ -84,9 +84,8 @@ pub fn apply_damage_from(
     // VampireCore augment: heal attacker 1 HP on kill
     if attacker_id >= 0 && attacker_id < battle.units.length() {
       let attacker = battle.units[attacker_id]
-      if attacker.active && attacker.team == Player {
-        // Check augment via a flag on the unit or check run state
-        // For sim-level check, we use a simple flag approach
+      if attacker.active && attacker.team == Player &&
+        @types.battle_has_augment(battle, VampireCore) {
         apply_vampire_heal(battle, attacker_id)
       }
     }

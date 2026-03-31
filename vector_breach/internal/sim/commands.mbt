@@ -58,7 +58,7 @@ fn execute_move(
 ) -> Unit {
   let u = battle.units[unit_id]
   let name = get_unit_name(battle, unit_id)
-  let stats = @content.get_mech_stats(u.mech_class)
+  let stats = @content.get_augmented_mech_stats(u.mech_class, battle.augments)
   // Validate range
   let dist = @types.manhattan(u.x, u.y, tx, ty)
   if dist > stats.move_range {
