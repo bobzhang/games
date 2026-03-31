@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/counterweight/internal/types",
+  "bobzhang/games/counterweight/internal/physics",
+  "bobzhang/games/counterweight/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

@@ -1,0 +1,13 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/counterweight/internal/types",
+  "bobzhang/games/counterweight/internal/game",
+  "bobzhang/games/counterweight/internal/render",
+  "bobzhang/games/utils/draw",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)
