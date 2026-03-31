@@ -30,7 +30,21 @@ pub fn check_achievements_on_complete(game : @types.Game) -> Unit {
   }
   // Perfectionist: 3 stars on 10+ levels
   if stars == 3 {
-    game.stats.levels_with_3_stars = game.stats.levels_with_3_stars + 1
+    // Only count this toward the total if the level didn't already have 3 stars.
+    // Use save_data.star_ratings which hasn't been persisted yet this completion.
+    let w = game.current_world
+    let l = game.current_level
+    let already_3 = if w >= 0 &&
+      w < game.save_data.star_ratings.length() &&
+      l >= 0 &&
+      l < game.save_data.star_ratings[w].length() {
+      game.save_data.star_ratings[w][l] >= 3
+    } else {
+      false
+    }
+    if !already_3 {
+      game.stats.levels_with_3_stars = game.stats.levels_with_3_stars + 1
+    }
     if game.stats.levels_with_3_stars >= 10 {
       try_unlock_achievement(game, Perfectionist)
     }
@@ -179,14 +193,27 @@ fn check_all_worlds(game : @types.Game) -> Unit {
 /// Check no-hints achievement for the current world
 fn check_no_hints_world(game : @types.Game) -> Unit {
   // Check if the whole current world was completed without hints
-  // For simplicity, we unlock this if the player completed a level without hints
-  // and the world has had no hints used (tracked by hints_remaining being at initial)
+  // and every level in the world is actually completed (stars > 0)
   let world = game.current_world
   if world >= 0 && world < game.hints.hints_remaining.length() {
     if game.hints.hints_remaining[world] == 3 {
       // All hints still remaining means none were used
-      let unlocked = game.levels_unlocked[world]
-      if unlocked >= @types.levels_per_world {
+      // Verify every level in this world has been completed
+      let start = world * @types.levels_per_world
+      let mut all_completed = true
+      for l in 0..< @types.levels_per_world {
+        let idx = start + l
+        if idx < game.level_stars.length() {
+          if game.level_stars[idx] <= 0 {
+            all_completed = false
+            break
+          }
+        } else {
+          all_completed = false
+          break
+        }
+      }
+      if all_completed {
         try_unlock_achievement(game, NoHints)
       }
     }

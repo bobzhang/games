@@ -458,6 +458,12 @@ fn complete_level(game : @types.Game) -> Unit {
   let stars = @types.calc_stars(level.moves, level.par_moves)
   let global_idx = game.current_world * @types.levels_per_world +
     game.current_level
+  // Capture previous stars before updating, for first-completion checks below
+  let prev_stars = if global_idx < game.level_stars.length() {
+    game.level_stars[global_idx]
+  } else {
+    0
+  }
   if global_idx < game.level_stars.length() && stars > game.level_stars[global_idx] {
     game.total_stars = game.total_stars - game.level_stars[global_idx] + stars
     game.level_stars[global_idx] = stars
@@ -480,11 +486,15 @@ fn complete_level(game : @types.Game) -> Unit {
   }
   // Save replay as best if improved
   @replay.save_best_replay(game)
-  // Update stats
+  // Update stats - only count gems/keys on first completion to avoid inflation
   game.stats.total_levels_completed = game.stats.total_levels_completed + 1
   game.stats.total_stars_earned = game.total_stars
-  game.stats.total_gems_collected = game.stats.total_gems_collected + level.gems_collected
-  game.stats.total_keys_collected = game.stats.total_keys_collected + level.keys_collected
+  if prev_stars == 0 {
+    game.stats.total_gems_collected = game.stats.total_gems_collected +
+      level.gems_collected
+    game.stats.total_keys_collected = game.stats.total_keys_collected +
+      level.keys_collected
+  }
   // Check achievements on level complete
   check_achievements_on_complete(game)
   // Save progress

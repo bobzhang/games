@@ -2,6 +2,7 @@ import {
   "moonbitlang/core/math",
   "tonyfettes/raylib",
   "bobzhang/games/gravity_puzzler/internal/types",
+  "bobzhang/games/gravity_puzzler/internal/content",
   "bobzhang/games/utils/draw",
 }
 

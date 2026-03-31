@@ -68,66 +68,10 @@ pub fn get_current_level_hint_text(game : @types.Game) -> String {
 }
 
 ///|
-/// Get hint text for a specific world and level
+/// Get hint text for a specific world and level.
+/// Delegates to the single canonical hint database in the content package.
 pub fn get_hint_text_for_level(world : Int, level : Int) -> String {
-  let index = world * @types.levels_per_world + level
-  match index {
-    // World 1: Stone Ruins - basic gravity hints
-    0 => "Try rotating gravity left to reach the exit"
-    1 => "Use gravity rotation to get over the walls"
-    2 => "Collect the gem before reaching the exit"
-    3 => "Navigate through the corridors with gravity shifts"
-    4 => "Push the box out of your path with gravity"
-    5 => "Use boxes as stepping stones after rotation"
-    6 => "Collect both gems by planning your gravity rotations"
-    7 => "Alternate between gravity directions to navigate the maze"
-    8 => "Use a zigzag pattern with gravity changes"
-    9 => "Combine box pushing with gravity rotation"
-    // World 2: Crystal Caverns - ice and portal hints
-    10 => "Ice tiles are slippery - plan your path carefully"
-    11 => "Use ice and walls together to control your slide"
-    12 => "Portals teleport you - use them to bypass walls"
-    13 => "Combine portals with gravity to reach the gem"
-    14 => "Ice and portals together create tricky paths"
-    15 => "Watch for ice near portals - you might slide past"
-    16 => "Mirror Cave has tricky portal and ice combos"
-    17 => "Watch out for the enemy while navigating ice"
-    18 => "Two portal pairs - plan which to use first"
-    19 => "Crystal Peak combines all Crystal Cavern mechanics with an enemy"
-    // World 3: Void Expanse - crumble and switch hints
-    20 => "Crumble tiles break after you leave - no going back"
-    21 => "Plan your path over crumble tiles carefully"
-    22 => "Hit the switch to open the gate"
-    23 => "Get to the switch before the gate blocks your path"
-    24 => "Crumble tiles limit your options - choose wisely"
-    25 => "Two switches control two gates"
-    26 => "Combine crumble paths with switch timing"
-    27 => "Watch out for the enemy near the switch!"
-    28 => "Dark Matter requires precise crumble and switch play"
-    29 => "The enemy in Void Heart adds extra pressure"
-    // World 4: Magma Depths - spike and conveyor hints
-    30 => "Avoid spikes - they are instant death"
-    31 => "Route around spikes using gravity rotation"
-    32 => "Conveyors push you automatically - use them wisely"
-    33 => "Boulders roll and can block spikes"
-    34 => "Conveyors and spikes together - time your moves"
-    35 => "Drop the boulder to clear a path"
-    36 => "The enemy chases you - stay ahead!"
-    37 => "Use boulders to crush the enemy"
-    38 => "Lure the enemy into the boulder's path"
-    39 => "Magma Core has an enemy - crush it with a boulder"
-    // World 5: Sky Citadel - combined mechanic hints
-    40 => "All mechanics combined - use what you have learned"
-    41 => "Crumble and gates together require planning"
-    42 => "Spikes with portals - teleport past the danger"
-    43 => "Ice and crumble are a dangerous combination"
-    44 => "Keys and portals unlock new possibilities"
-    45 => "The enemy adds pressure while dodging hazards"
-    46 => "Complex puzzles need step-by-step thinking"
-    47 => "Use the boulder to crush the enemy in Sky Fortress"
-    48 => "The Citadel tests everything you know"
-    _ => "Use all your skills to complete the Final Ascent - watch the enemy!"
-  }
+  @content.get_level_hint(world, level)
 }
 
 ///|
