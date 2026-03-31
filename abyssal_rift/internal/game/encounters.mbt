@@ -3,44 +3,103 @@ pub fn select_encounter(
   floor_num : Int,
   rng : UInt,
 ) -> (@types.EncounterType, UInt) {
+  select_encounter_with_path(floor_num, rng, None)
+}
+
+///|
+pub fn select_encounter_with_path(
+  floor_num : Int,
+  rng : UInt,
+  path : @types.FloorPath?,
+) -> (@types.EncounterType, UInt) {
   let (s, roll) = @types.rng_next(rng)
-  let encounter : @types.EncounterType = if floor_num <= 2 {
-    // Early: mostly standard
-    if roll < 0.6 {
-      Standard
-    } else if roll < 0.85 {
-      Swarm
-    } else {
-      Ambush
-    }
-  } else if floor_num <= 6 {
-    if roll < 0.3 {
-      Standard
-    } else if roll < 0.5 {
-      Swarm
-    } else if roll < 0.65 {
-      SniperNest
-    } else if roll < 0.8 {
-      BossRush
-    } else if roll < 0.9 {
-      PoisonNest
-    } else {
-      Ambush
-    }
-  } else if roll < 0.15 {
-    Standard
-  } else if roll < 0.3 {
-    Swarm
-  } else if roll < 0.45 {
-    SniperNest
-  } else if roll < 0.6 {
-    BossRush
-  } else if roll < 0.75 {
-    SurvivalWave
-  } else if roll < 0.9 {
-    PoisonNest
-  } else {
-    Ambush
+  let encounter : @types.EncounterType = match path {
+    Some(Hunter) =>
+      // Hunter: weight BossRush and SniperNest higher
+      if roll < 0.1 {
+        Standard
+      } else if roll < 0.2 {
+        Swarm
+      } else if roll < 0.45 {
+        SniperNest
+      } else if roll < 0.75 {
+        BossRush
+      } else if roll < 0.85 {
+        PoisonNest
+      } else {
+        Ambush
+      }
+    Some(Rot) =>
+      // Rot: weight PoisonNest and Swarm higher
+      if roll < 0.05 {
+        Standard
+      } else if roll < 0.35 {
+        Swarm
+      } else if roll < 0.45 {
+        SniperNest
+      } else if roll < 0.55 {
+        BossRush
+      } else if roll < 0.85 {
+        PoisonNest
+      } else {
+        Ambush
+      }
+    Some(Gauntlet) =>
+      // Gauntlet: all types evenly distributed
+      if roll < 0.143 {
+        Standard
+      } else if roll < 0.286 {
+        Swarm
+      } else if roll < 0.429 {
+        SniperNest
+      } else if roll < 0.571 {
+        BossRush
+      } else if roll < 0.714 {
+        SurvivalWave
+      } else if roll < 0.857 {
+        PoisonNest
+      } else {
+        Ambush
+      }
+    _ =>
+      // Default (None, Pilgrim, Forge): standard distribution
+      if floor_num <= 2 {
+        if roll < 0.6 {
+          Standard
+        } else if roll < 0.85 {
+          Swarm
+        } else {
+          Ambush
+        }
+      } else if floor_num <= 6 {
+        if roll < 0.3 {
+          Standard
+        } else if roll < 0.5 {
+          Swarm
+        } else if roll < 0.65 {
+          SniperNest
+        } else if roll < 0.8 {
+          BossRush
+        } else if roll < 0.9 {
+          PoisonNest
+        } else {
+          Ambush
+        }
+      } else if roll < 0.15 {
+        Standard
+      } else if roll < 0.3 {
+        Swarm
+      } else if roll < 0.45 {
+        SniperNest
+      } else if roll < 0.6 {
+        BossRush
+      } else if roll < 0.75 {
+        SurvivalWave
+      } else if roll < 0.9 {
+        PoisonNest
+      } else {
+        Ambush
+      }
   }
   (encounter, s)
 }

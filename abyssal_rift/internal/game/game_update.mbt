@@ -15,6 +15,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     GameOver => update_game_over(game)
     Victory => update_victory(game)
     MetaScreen => update_meta_screen(game)
+    StarterSelect => update_starter_select(game)
   }
 }
 
@@ -50,6 +51,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   update_shop(game, input)
   update_shrine(game, input)
   update_reward_choice(game, input)
+  update_pact_offer(game, input)
   update_damage_numbers(game, dt)
   update_particles(game, dt)
   update_camera(game, dt)
@@ -64,6 +66,11 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   if game.encounter_flash_timer > 0.0 {
     game.encounter_flash_timer -= dt
   }
+  // Path card selection overlay (blocks other input while active)
+  if game.path_active {
+    update_path_selection(game)
+    return
+  }
   // Check stairs interaction (require pressing E)
   if game.stairs_active && !game.reward_active {
     let d2 = @types.dist2(
@@ -73,7 +80,7 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
       game.stairs_y,
     )
     if d2 < 30.0 * 30.0 && input.interact_pressed {
-      advance_floor(game)
+      show_path_choices(game)
     }
   }
 }
@@ -145,6 +152,10 @@ fn start_new_run(game : @types.Game) -> Unit {
   p.dead = false
   p.passives.clear()
   p.status_effects.clear()
+  p.pacts.clear()
+  // Reset pact offers
+  game.pact_offers.clear()
+  game.pact_offer_active = false
   // Reset synergies
   game.synergies = @types.SynergyBonuses::new()
   // Clear shop
@@ -207,6 +218,9 @@ fn start_new_run(game : @types.Game) -> Unit {
   game.room_clear_timer = 0.0
   game.synergy_notification_timer = 0.0
   game.synergy_notification_text = ""
+  game.path_choices.clear()
+  game.path_active = false
+  game.current_path = None
   apply_meta_upgrades(game)
   game.state = Playing
 }
@@ -271,6 +285,120 @@ fn advance_floor(game : @types.Game) -> Unit {
   game.wave_timer = 0.0
   game.room_clear_timer = 0.0
   game.floor_transition_timer = 2.0
+  // Apply path modifications to the generated floor
+  apply_path_to_floor(game)
+}
+
+///|
+fn show_path_choices(game : @types.Game) -> Unit {
+  game.path_choices.clear()
+  let all_paths : Array[@types.FloorPath] = [
+    Hunter, Pilgrim, Rot, Forge, Gauntlet,
+  ]
+  // Fisher-Yates shuffle to pick 3 unique paths
+  let pool : Array[@types.FloorPath] = []
+  for i in 0..<all_paths.length() {
+    pool.push(all_paths[i])
+  }
+  for i = pool.length() - 1; i > 0; i = i - 1 {
+    let (s, roll) = @types.rng_int(game.rng_state, 0, i)
+    game.rng_state = s
+    let tmp = pool[i]
+    pool[i] = pool[roll]
+    pool[roll] = tmp
+  }
+  for i in 0..<3 {
+    game.path_choices.push(pool[i])
+  }
+  game.path_active = true
+}
+
+///|
+fn update_path_selection(game : @types.Game) -> Unit {
+  let keys : Array[Int] = [@raylib.KeyOne, @raylib.KeyTwo, @raylib.KeyThree]
+  for i in 0..<3 {
+    if i < game.path_choices.length() && @raylib.is_key_pressed(keys[i]) {
+      game.current_path = Some(game.path_choices[i])
+      game.path_active = false
+      advance_floor(game)
+      return
+    }
+  }
+}
+
+///|
+fn apply_path_to_floor(game : @types.Game) -> Unit {
+  match game.current_path {
+    None => ()
+    Some(path) =>
+      match game.floor {
+        None => ()
+        Some(floor) =>
+          match path {
+            Hunter => {
+              // +1 EliteVault room: upgrade one Combat room to elite budget
+              let mut done = false
+              for i in 0..<floor.rooms.length() {
+                if done {
+                  break
+                }
+                let r = floor.rooms[i]
+                if r.kind == Combat {
+                  r.enemies_remaining = 3
+                  done = true
+                }
+              }
+            }
+            Pilgrim => {
+              // +1 Shrine + Treasure: convert up to 2 Combat rooms to peaceful
+              let mut shrine_added = false
+              let mut treasure_added = false
+              for i in 0..<floor.rooms.length() {
+                if shrine_added && treasure_added {
+                  break
+                }
+                let r = floor.rooms[i]
+                if r.kind == Combat {
+                  if !shrine_added {
+                    r.enemies_remaining = 0
+                    shrine_added = true
+                  } else if !treasure_added {
+                    r.enemies_remaining = 0
+                    treasure_added = true
+                  }
+                }
+              }
+            }
+            Rot =>
+              // Encounter and reward mods happen in those systems
+              ()
+            Forge => {
+              // +1 shop room: convert one Combat room to peaceful
+              let mut done = false
+              for i in 0..<floor.rooms.length() {
+                if done {
+                  break
+                }
+                let r = floor.rooms[i]
+                if r.kind == Combat {
+                  r.enemies_remaining = 0
+                  done = true
+                }
+              }
+            }
+            Gauntlet =>
+              // All non-Start/Boss rooms become combat with higher budget
+              for i in 0..<floor.rooms.length() {
+                let r = floor.rooms[i]
+                if r.kind != Start && r.kind != Boss && r.kind != Corridor {
+                  r.enemies_remaining = (
+                    Float::from_int(3 + game.floor_num) * 1.5
+                  ).to_int()
+                }
+              }
+          }
+      }
+  }
 }
 
 ///|
@@ -396,8 +524,75 @@ fn update_meta_screen(game : @types.Game) -> Unit {
       }
     }
   }
-  // Start run
+  // Start run -> go to starter kit selection
   if @raylib.is_key_pressed(@raylib.KeyEnter) {
-    start_new_run(game)
+    game.starter_hover = 0
+    game.state = StarterSelect
   }
+}
+
+///|
+fn update_starter_select(game : @types.Game) -> Unit {
+  // Navigate with A/D or Left/Right
+  if @raylib.is_key_pressed(@raylib.KeyA) ||
+    @raylib.is_key_pressed(@raylib.KeyLeft) {
+    game.starter_hover = (game.starter_hover + 2) % 3
+  }
+  if @raylib.is_key_pressed(@raylib.KeyD) ||
+    @raylib.is_key_pressed(@raylib.KeyRight) {
+    game.starter_hover = (game.starter_hover + 1) % 3
+  }
+  // Select with 1/2/3 keys
+  if @raylib.is_key_pressed(@raylib.KeyOne) {
+    game.starter_hover = 0
+  }
+  if @raylib.is_key_pressed(@raylib.KeyTwo) {
+    game.starter_hover = 1
+  }
+  if @raylib.is_key_pressed(@raylib.KeyThree) {
+    game.starter_hover = 2
+  }
+  // Confirm with Enter or Space
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) {
+    let kit : @types.StarterKit = match game.starter_hover {
+      0 => Vanguard
+      1 => Cutpurse
+      _ => Invoker
+    }
+    start_new_run(game)
+    apply_starter_kit(game, kit)
+  }
+}
+
+///|
+fn apply_starter_kit(game : @types.Game, kit : @types.StarterKit) -> Unit {
+  let p = game.player
+  match kit {
+    Vanguard => {
+      // Sword + DefenseUp + shield-on-room-clear (inherent)
+      p.weapon = Sword
+      p.passives.push(DefenseUp)
+      p.defense += 3
+      // Extra starting shield
+      p.shield = p.max_shield
+    }
+    Cutpurse => {
+      // Daggers + PickupRange + extra gold, weaker potions
+      p.weapon = Daggers
+      p.passives.push(PickupRange)
+      p.gold += 30
+    }
+    Invoker => {
+      // Staff + ChainLightning + -20 max HP
+      p.weapon = Staff
+      p.passives.push(ChainLightning)
+      p.max_hp -= 20
+      if p.hp > p.max_hp {
+        p.hp = p.max_hp
+      }
+    }
+  }
+  // Recalculate synergies after kit application
+  game.synergies = get_synergy_bonuses(game.player)
 }

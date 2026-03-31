@@ -1,0 +1,56 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/abyssal_rift/internal/data"
+
+import {
+  "bobzhang/games/abyssal_rift/internal/types",
+}
+
+// Values
+pub fn get_active_time(@types.WeaponKind) -> Float
+
+pub fn get_enemy_stats(@types.EnemyKind, Int) -> EnemyStats
+
+pub fn get_passive_stats(@types.PassiveKind) -> PassiveStats
+
+pub fn get_recovery_time(@types.WeaponKind, Int) -> Float
+
+pub fn get_weapon_stats(@types.WeaponKind) -> WeaponStats
+
+pub fn get_windup_time(@types.WeaponKind, Int) -> Float
+
+// Errors
+
+// Types and methods
+pub(all) struct EnemyStats {
+  hp : Int
+  speed : Float
+  damage : Int
+  attack_range : Float
+  attack_cooldown : Float
+  radius : Float
+  sight_range : Float
+  reward_gold : Int
+}
+
+pub(all) struct PassiveStats {
+  name : String
+  description : String
+}
+
+pub(all) struct WeaponStats {
+  name : String
+  base_damage : Int
+  attack_speed : Float
+  range : Float
+  arc_angle : Float
+  knockback : Float
+  combo_count : Int
+  is_ranged : Bool
+  projectile_speed : Float
+  crit_bonus : Float
+}
+
+// Type aliases
+
+// Traits
+

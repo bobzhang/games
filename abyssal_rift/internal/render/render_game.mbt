@@ -23,6 +23,13 @@ pub fn draw_game(game : @types.Game) -> Unit {
       // Screen-space UI
       draw_hud(game)
       draw_screen_effects(game)
+      if game.pact_offer_active {
+        draw_pact_offer(game)
+      }
+      // Path card selection overlay
+      if game.path_active {
+        draw_path_cards(game)
+      }
       if game.state == Paused {
         draw_pause_overlay(game)
       }
@@ -49,14 +56,20 @@ pub fn draw_game(game : @types.Game) -> Unit {
           48,
           @raylib.Color::new(255, 255, 255, alpha),
         )
+        // Show path name alongside biome
+        let path_label = match game.current_path {
+          Some(p) => " - " + @types.path_name(p)
+          None => ""
+        }
         let biome = if game.floor_num <= 5 {
           "Stone Crypt"
         } else {
           "Fungal Caverns"
         }
-        let bw = @raylib.measure_text(biome, 20)
+        let biome_text = biome + path_label
+        let bw = @raylib.measure_text(biome_text, 20)
         @raylib.draw_text(
-          biome,
+          biome_text,
           (@types.screen_w - bw) / 2,
           @types.screen_h / 2 + 30,
           20,
@@ -67,6 +80,7 @@ pub fn draw_game(game : @types.Game) -> Unit {
     GameOver => draw_game_over(game)
     Victory => draw_victory_screen(game)
     MetaScreen => draw_meta_screen(game)
+    StarterSelect => draw_starter_select(game)
   }
 }
 

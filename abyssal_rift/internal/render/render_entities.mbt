@@ -664,5 +664,23 @@ pub fn draw_stairs(game : @types.Game) -> Unit {
       12,
       @raylib.Color::new(255, 215, 0, 180),
     )
+    // Proximity hint for path selection
+    let d2 = @types.dist2(
+      game.player.x,
+      game.player.y,
+      game.stairs_x,
+      game.stairs_y,
+    )
+    if d2 < 50.0 * 50.0 {
+      let hint = "[E] Choose Path"
+      let hw = @raylib.measure_text(hint, 14)
+      @raylib.draw_text(
+        hint,
+        sx - hw / 2,
+        sy + 15,
+        14,
+        @raylib.Color::new(255, 215, 0, 255),
+      )
+    }
   }
 }

@@ -19,14 +19,22 @@ pub fn handle_enemy_death(game : @types.Game, enemy_idx : Int) -> Unit {
   if syn.vampiric {
     p.hp = @types.clampi(p.hp + 1, 0, p.max_hp)
   }
+  // GlassStep pact: dash cooldown resets on kill
+  if @types.has_pact(p, GlassStep) {
+    p.dash_cooldown = 0.0
+  }
   // Drop gold (elites drop double, floor scaling bonus)
   let floor_bonus = game.floor_num * 2
-  let gold_reward = (if e.is_elite {
+  let mut gold_reward = (if e.is_elite {
       stats.reward_gold * 2
     } else {
       stats.reward_gold
     }) +
     floor_bonus
+  // VoidHeart pact: double gold drops
+  if @types.has_pact(p, VoidHeart) {
+    gold_reward = gold_reward * 2
+  }
   let item_idx = @types.alloc_item(game.items)
   let item = game.items[item_idx]
   item.active = true

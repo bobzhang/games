@@ -32,8 +32,16 @@ fn collect_item(game : @types.Game, item : @types.Item) -> Unit {
     }
     HealthPotion => {
       let heal_amount = 30 + game.meta.upgrades[5] * 10
-      p.hp = @types.clampi(p.hp + heal_amount, 0, p.max_hp)
-      apply_status_effect(p, Shield(5.0))
+      // BloodPrice pact: potions cost HP instead of healing
+      if @types.has_pact(p, BloodPrice) {
+        p.hp -= heal_amount
+        if p.hp <= 0 {
+          p.hp = 1
+        }
+      } else {
+        p.hp = @types.clampi(p.hp + heal_amount, 0, p.max_hp)
+        apply_status_effect(p, Shield(5.0))
+      }
       push_event(game, Pickup(item.kind, item.x, item.y))
     }
     WeaponPickup(kind) => {
@@ -140,10 +148,18 @@ pub fn update_shop(game : @types.Game, input : InputState) -> Unit {
           Gold(amount) => p.gold += amount
           HealthPotion => {
             let heal_amount = 30 + game.meta.upgrades[5] * 10
-            p.hp = @types.clampi(p.hp + heal_amount, 0, p.max_hp)
-            apply_status_effect(p, Shield(5.0))
-            // Also remove negative status effects
-            clear_negative_status(p)
+            // BloodPrice pact: potions cost HP instead of healing
+            if @types.has_pact(p, BloodPrice) {
+              p.hp -= heal_amount
+              if p.hp <= 0 {
+                p.hp = 1
+              }
+            } else {
+              p.hp = @types.clampi(p.hp + heal_amount, 0, p.max_hp)
+              apply_status_effect(p, Shield(5.0))
+              // Also remove negative status effects
+              clear_negative_status(p)
+            }
           }
           WeaponPickup(kind) => {
             p.weapon = kind

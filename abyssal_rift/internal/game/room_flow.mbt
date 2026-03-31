@@ -193,7 +193,11 @@ fn seal_room(game : @types.Game) -> Unit {
         } else if room.kind == Challenge {
           SurvivalWave
         } else {
-          let (enc, s) = select_encounter(game.floor_num, game.rng_state)
+          let (enc, s) = select_encounter_with_path(
+            game.floor_num,
+            game.rng_state,
+            game.current_path,
+          )
           game.rng_state = s
           enc
         }
@@ -477,8 +481,29 @@ fn clear_room(game : @types.Game) -> Unit {
           pitem.bob_timer = 0.0
         }
       }
-      // Gold reward (always)
-      let gold_amount = 5 + game.floor_num * 3
+      // Gauntlet path: guarantee weapon reward on every room clear
+      let is_gauntlet = match game.current_path {
+        Some(Gauntlet) => true
+        _ => false
+      }
+      if is_gauntlet {
+        let weapons : Array[@types.WeaponKind] = [Sword, Daggers, Bow, Staff]
+        let (sg, gwidx) = @types.rng_int(game.rng_state, 0, 3)
+        game.rng_state = sg
+        let gwi = @types.alloc_item(game.items)
+        let gwitem = game.items[gwi]
+        gwitem.active = true
+        gwitem.kind = WeaponPickup(weapons[gwidx])
+        gwitem.x = game.player.x + 40.0
+        gwitem.y = game.player.y - 40.0
+        gwitem.bob_timer = 0.0
+      }
+      // Gold reward (always) - Forge path: gold * 1.3
+      let gold_mult : Float = match game.current_path {
+        Some(Forge) => 1.3
+        _ => 1.0
+      }
+      let gold_amount = (Float::from_int(5 + game.floor_num * 3) * gold_mult).to_int()
       let (s4, gx_off) = @types.rng_range(game.rng_state, -20.0, 20.0)
       game.rng_state = s4
       let gold_idx = @types.alloc_item(game.items)
@@ -538,6 +563,17 @@ fn clear_room(game : @types.Game) -> Unit {
         game.stairs_x = cx
         game.stairs_y = cy
       }
+      // Vanguard kit bonus: restore shield on room clear
+      if game.player.passives.contains(DefenseUp) {
+        game.player.shield = @types.minf(
+          game.player.shield + 10.0,
+          game.player.max_shield,
+        )
+      }
+      // Offer a pact after boss or elite vault clears
+      if room.kind == Boss || room.kind == EliteVault {
+        offer_pact(game)
+      }
       // Room cleared timer for UI flash
       game.room_clear_timer = 1.5
       // Brief Haste boost on room clear
@@ -585,7 +621,17 @@ fn setup_shop(game : @types.Game) -> Unit {
       let ts = @types.tile_sizef
       let cx = Float::from_int(room.x) * ts + Float::from_int(room.w) * ts / 2.0
       let cy = Float::from_int(room.y) * ts + Float::from_int(room.h) * ts / 2.0
-      // Generate 3 shop items: weapon, passive, health potion
+      // Path price modifier: Pilgrim = 0.7, others = 1.0
+      let price_mult : Float = match game.current_path {
+        Some(Pilgrim) => 0.7
+        _ => 1.0
+      }
+      // Forge path: second slot is also a weapon
+      let forge_active = match game.current_path {
+        Some(Forge) => true
+        _ => false
+      }
+      // Generate 3 shop items: weapon, passive/weapon, health potion
       // Item 0: Weapon
       let weapons : Array[@types.WeaponKind] = [Sword, Daggers, Bow, Staff]
       let (s1, widx) = @types.rng_int(game.rng_state, 0, 3)
@@ -594,28 +640,122 @@ fn setup_shop(game : @types.Game) -> Unit {
       let shop0 = game.shop_items[0]
       shop0.active = true
       shop0.kind = WeaponPickup(weapons[widx])
-      shop0.price = wprice
+      shop0.price = (Float::from_int(wprice) * price_mult).to_int()
       shop0.x = cx - 80.0
       shop0.y = cy - 20.0
-      // Item 1: Passive
-      let passives = all_passives()
-      let (s3, pidx) = @types.rng_int(game.rng_state, 0, passives.length() - 1)
-      let (s4, pprice) = @types.rng_int(s3, 40, 80)
-      game.rng_state = s4
-      let shop1 = game.shop_items[1]
-      shop1.active = true
-      shop1.kind = PassiveItem(passives[pidx])
-      shop1.price = pprice
-      shop1.x = cx
-      shop1.y = cy - 20.0
+      // Item 1: Passive (or weapon if Forge)
+      if forge_active {
+        let (s3, widx2) = @types.rng_int(game.rng_state, 0, 3)
+        let (s4, wprice2) = @types.rng_int(s3, 25, 45)
+        game.rng_state = s4
+        let shop1 = game.shop_items[1]
+        shop1.active = true
+        shop1.kind = WeaponPickup(weapons[widx2])
+        shop1.price = (Float::from_int(wprice2) * price_mult).to_int()
+        shop1.x = cx
+        shop1.y = cy - 20.0
+      } else {
+        let passives = all_passives()
+        let (s3, pidx) = @types.rng_int(
+          game.rng_state,
+          0,
+          passives.length() - 1,
+        )
+        let (s4, pprice) = @types.rng_int(s3, 40, 80)
+        game.rng_state = s4
+        let shop1 = game.shop_items[1]
+        shop1.active = true
+        shop1.kind = PassiveItem(passives[pidx])
+        shop1.price = (Float::from_int(pprice) * price_mult).to_int()
+        shop1.x = cx
+        shop1.y = cy - 20.0
+      }
       // Item 2: Health potion
       let shop2 = game.shop_items[2]
       shop2.active = true
       shop2.kind = HealthPotion
-      shop2.price = 15
+      shop2.price = (Float::from_int(15) * price_mult).to_int()
       shop2.x = cx + 80.0
       shop2.y = cy - 20.0
+      // MerchantsDebt pact: all prices +50%
+      if @types.has_pact(game.player, MerchantsDebt) {
+        for si in 0..<game.shop_items.length() {
+          let s = game.shop_items[si]
+          if s.active {
+            s.price = (Float::from_int(s.price) * 1.5).to_int()
+          }
+        }
+      }
       game.shop_active = true
     }
+  }
+}
+
+///|
+fn offer_pact(game : @types.Game) -> Unit {
+  // Pick 2 random pacts the player doesn't already have
+  let all_pacts : Array[@types.PactKind] = [
+    BloodPrice, GlassStep, MerchantsDebt, CursedStrength, VoidHeart,
+  ]
+  let available : Array[@types.PactKind] = []
+  for i in 0..<all_pacts.length() {
+    if !@types.has_pact(game.player, all_pacts[i]) {
+      available.push(all_pacts[i])
+    }
+  }
+  if available.length() == 0 {
+    return
+  }
+  game.pact_offers.clear()
+  // Shuffle and pick up to 2
+  let count = @types.mini(available.length(), 2)
+  for _i in 0..<count {
+    let (s, roll) = @types.rng_int(game.rng_state, 0, available.length() - 1)
+    game.rng_state = s
+    game.pact_offers.push(available[roll])
+    ignore(available.remove(roll))
+  }
+  game.pact_offer_active = true
+}
+
+///|
+pub fn update_pact_offer(game : @types.Game, input : InputState) -> Unit {
+  if !game.pact_offer_active {
+    return
+  }
+  // Press 1 or 2 to accept a pact, ESC to decline
+  if game.pact_offers.length() > 0 && @raylib.is_key_pressed(@raylib.KeyOne) {
+    accept_pact(game, game.pact_offers[0])
+    game.pact_offer_active = false
+    return
+  }
+  if game.pact_offers.length() > 1 && @raylib.is_key_pressed(@raylib.KeyTwo) {
+    accept_pact(game, game.pact_offers[1])
+    game.pact_offer_active = false
+    return
+  }
+  // Decline
+  if @raylib.is_key_pressed(@raylib.KeyEscape) || input.interact_pressed {
+    game.pact_offer_active = false
+  }
+}
+
+///|
+fn accept_pact(game : @types.Game, pact : @types.PactKind) -> Unit {
+  let p = game.player
+  p.pacts.push(pact)
+  // Apply immediate effects
+  match pact {
+    VoidHeart => {
+      // Reduce max HP by 30
+      p.max_hp -= 30
+      if p.max_hp < 1 {
+        p.max_hp = 1
+      }
+      if p.hp > p.max_hp {
+        p.hp = p.max_hp
+      }
+    }
+    _ => ()
   }
 }

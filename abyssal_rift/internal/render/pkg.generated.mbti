@@ -1,0 +1,58 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/abyssal_rift/internal/render"
+
+import {
+  "bobzhang/games/abyssal_rift/internal/types",
+}
+
+// Values
+pub fn draw_damage_numbers(@types.Game) -> Unit
+
+pub fn draw_enemies(@types.Game) -> Unit
+
+pub fn draw_game(@types.Game) -> Unit
+
+pub fn draw_game_over(@types.Game) -> Unit
+
+pub fn draw_hud(@types.Game) -> Unit
+
+pub fn draw_items(@types.Game) -> Unit
+
+pub fn draw_meta_screen(@types.Game) -> Unit
+
+pub fn draw_minimap(@types.Game) -> Unit
+
+pub fn draw_particles(@types.Game) -> Unit
+
+pub fn draw_pause_overlay(@types.Game) -> Unit
+
+pub fn draw_player(@types.Game) -> Unit
+
+pub fn draw_projectiles(@types.Game) -> Unit
+
+pub fn draw_reward_choices(@types.Game) -> Unit
+
+pub fn draw_screen_effects(@types.Game) -> Unit
+
+pub fn draw_shop_items(@types.Game) -> Unit
+
+pub fn draw_shrine(@types.Game) -> Unit
+
+pub fn draw_stairs(@types.Game) -> Unit
+
+pub fn draw_telegraph_indicators(@types.Game) -> Unit
+
+pub fn draw_title_screen(@types.Game) -> Unit
+
+pub fn draw_victory_screen(@types.Game) -> Unit
+
+pub fn draw_world(@types.Game) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

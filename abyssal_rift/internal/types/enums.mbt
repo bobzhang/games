@@ -6,7 +6,24 @@ pub(all) enum GameState {
   GameOver
   Victory
   MetaScreen
+  StarterSelect
 } derive(Eq)
+
+///|
+pub(all) enum StarterKit {
+  Vanguard
+  Cutpurse
+  Invoker
+} derive(Eq, Show)
+
+///|
+pub(all) enum PactKind {
+  BloodPrice
+  GlassStep
+  MerchantsDebt
+  CursedStrength
+  VoidHeart
+} derive(Eq, Show)
 
 ///|
 pub(all) enum MetaUpgrade {
@@ -173,3 +190,23 @@ pub(all) enum EliteAffix {
   Vampiric
   Explosive
 } derive(Eq, Show)
+
+///|
+pub(all) enum FloorPath {
+  Hunter
+  Pilgrim
+  Rot
+  Forge
+  Gauntlet
+} derive(Eq, Show)
+
+///|
+pub fn path_name(path : FloorPath) -> String {
+  match path {
+    Hunter => "HUNTER"
+    Pilgrim => "PILGRIM"
+    Rot => "ROT"
+    Forge => "FORGE"
+    Gauntlet => "GAUNTLET"
+  }
+}

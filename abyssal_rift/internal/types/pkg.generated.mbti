@@ -1,0 +1,523 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/abyssal_rift/internal/types"
+
+import {
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn absf(Float) -> Float
+
+pub fn alloc_damage_num(Array[DamageNumber]) -> Int
+
+pub fn alloc_enemy(Array[Enemy]) -> Int
+
+pub fn alloc_item(Array[Item]) -> Int
+
+pub fn alloc_particle(Array[Particle]) -> Int
+
+pub fn alloc_projectile(Array[Projectile]) -> Int
+
+pub let camera_lead : Float
+
+pub let camera_lerp_speed : Float
+
+pub fn clampf(Float, Float, Float) -> Float
+
+pub fn clampi(Int, Int, Int) -> Int
+
+pub let color_bg : @raylib.Color
+
+pub let color_crit : @raylib.Color
+
+pub let color_damage : @raylib.Color
+
+pub let color_floor : @raylib.Color
+
+pub let color_floor_alt : @raylib.Color
+
+pub let color_gold_text : @raylib.Color
+
+pub let color_heal : @raylib.Color
+
+pub let color_health : @raylib.Color
+
+pub let color_hud_bg : @raylib.Color
+
+pub let color_player : @raylib.Color
+
+pub let color_player_shield : @raylib.Color
+
+pub let color_shield : @raylib.Color
+
+pub let color_wall : @raylib.Color
+
+pub let combo_window : Float
+
+pub let dash_cooldown : Float
+
+pub let dash_duration : Float
+
+pub let dash_speed : Float
+
+pub fn dist(Float, Float, Float, Float) -> Float
+
+pub fn dist2(Float, Float, Float, Float) -> Float
+
+pub fn ease_in_out(Float) -> Float
+
+pub fn ease_out(Float) -> Float
+
+pub fn encounter_name(EncounterType) -> String
+
+pub let hit_pause_duration : Float
+
+pub let invuln_duration : Float
+
+pub let knockback_duration : Float
+
+pub let knockback_speed : Float
+
+pub fn lerpf(Float, Float, Float) -> Float
+
+pub let max_damage_nums : Int
+
+pub let max_enemies : Int
+
+pub let max_items : Int
+
+pub let max_particles : Int
+
+pub let max_projectiles : Int
+
+pub fn maxf(Float, Float) -> Float
+
+pub fn maxi(Int, Int) -> Int
+
+pub fn minf(Float, Float) -> Float
+
+pub fn mini(Int, Int) -> Int
+
+pub fn normalize(Float, Float) -> (Float, Float)
+
+pub let player_accel : Float
+
+pub let player_base_speed : Float
+
+pub let player_decel : Float
+
+pub let player_max_speed : Float
+
+pub let player_radius : Float
+
+pub fn rng_int(UInt, Int, Int) -> (UInt, Int)
+
+pub fn rng_next(UInt) -> (UInt, Float)
+
+pub fn rng_range(UInt, Float, Float) -> (UInt, Float)
+
+pub let screen_h : Int
+
+pub let screen_w : Int
+
+pub let shield_regen_delay : Float
+
+pub let shield_regen_rate : Float
+
+pub let tile_size : Int
+
+pub let tile_sizef : Float
+
+// Errors
+
+// Types and methods
+pub(all) enum AttackState {
+  Idle
+  Windup(Float)
+  Active(Float)
+  Recovery(Float)
+} derive(Eq)
+
+pub(all) struct Camera {
+  mut x : Float
+  mut y : Float
+  mut target_x : Float
+  mut target_y : Float
+  mut shake_intensity : Float
+  mut shake_timer : Float
+  mut shake_decay : Float
+  mut offset_x : Float
+  mut offset_y : Float
+}
+pub fn Camera::new() -> Self
+
+pub(all) struct DamageNumber {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut vy : Float
+  mut life : Float
+  mut value : Int
+  mut is_crit : Bool
+}
+
+pub(all) enum Direction {
+  Up
+  Down
+  Left
+  Right
+} derive(Eq, Show)
+
+pub(all) enum EliteAffix {
+  None
+  Fast
+  Armored
+  Splitting
+  Vampiric
+  Explosive
+} derive(Eq, Show)
+
+pub(all) enum EncounterType {
+  Standard
+  Swarm
+  SniperNest
+  BossRush
+  SurvivalWave
+  PoisonNest
+  Ambush
+} derive(Eq, Show)
+
+pub(all) struct Enemy {
+  mut active : Bool
+  mut kind : EnemyKind
+  mut x : Float
+  mut y : Float
+  mut vx : Float
+  mut vy : Float
+  mut hp : Int
+  mut max_hp : Int
+  mut state : EnemyState
+  mut facing_x : Float
+  mut facing_y : Float
+  mut patrol_x : Float
+  mut patrol_y : Float
+  mut attack_cooldown : Float
+  mut anim_timer : Float
+  mut anim_frame : Int
+  mut flash_timer : Float
+  mut knockback_timer : Float
+  mut phase : Float
+  mut room_id : Int
+  mut bleed_timer : Float
+  mut is_elite : Bool
+  mut affix : EliteAffix
+}
+
+pub(all) enum EnemyKind {
+  Slime
+  SlimeSmall
+  Skeleton
+  Archer
+  Bat
+  Spider
+  Golem
+  BroodMother
+  LichKing
+} derive(Eq, Show)
+
+pub(all) enum EnemyState {
+  Idle
+  Patrol
+  Chase
+  Attack(Float)
+  Hurt(Float)
+  Dead(Float)
+} derive(Eq)
+
+pub(all) struct Floor {
+  rooms : Array[Room]
+  mut current_room : Int
+  floor_num : Int
+}
+
+pub(all) struct Game {
+  mut state : GameState
+  player : Player
+  camera : Camera
+  enemies : Array[Enemy]
+  projectiles : Array[Projectile]
+  items : Array[Item]
+  particles : Array[Particle]
+  damage_numbers : Array[DamageNumber]
+  events : Array[GameEvent]
+  mut floor : Floor?
+  mut floor_num : Int
+  mut frame_count : Int
+  mut hit_pause_timer : Float
+  mut room_clear_timer : Float
+  mut rng_state : UInt
+  mut stairs_active : Bool
+  mut stairs_x : Float
+  mut stairs_y : Float
+  mut enemies_killed : Int
+  mut rooms_cleared : Int
+  mut floor_rooms_cleared : Int
+  mut boss_active : Bool
+  mut boss_phase : Int
+  mut boss_phase_timer : Float
+  mut boss_attack_pattern : Int
+  mut floor_transition_timer : Float
+  shop_items : Array[ShopItem]
+  mut shop_active : Bool
+  reward_choices : Array[RewardChoice]
+  mut reward_active : Bool
+  mut synergies : SynergyBonuses
+  mut shrine_kind : ShrineKind
+  mut shrine_active : Bool
+  mut shrine_used : Bool
+  mut synergy_notification_timer : Float
+  mut synergy_notification_text : String
+  mut current_encounter : EncounterType
+  mut encounter_flash_timer : Float
+  meta : MetaProgress
+  mut wave_timer : Float
+  mut wave_count : Int
+  mut wave_max : Int
+  mut wave_active : Bool
+}
+pub fn Game::new() -> Self
+
+pub(all) enum GameEvent {
+  Hit(Float, Float, Int, Bool)
+  Kill(EnemyKind, Float, Float)
+  PlayerDamaged(Int, Float, Float)
+  Pickup(ItemKind, Float, Float)
+  RoomCleared
+  BossPhaseChange(Int)
+  DashUsed(Float, Float, Float, Float)
+  WeaponSwing(Float, Float, Float)
+  SynergyUnlocked(String)
+} derive(Show)
+
+pub(all) enum GameState {
+  Title
+  Playing
+  Paused
+  GameOver
+  Victory
+  MetaScreen
+} derive(Eq)
+
+pub(all) struct Hitbox {
+  x : Float
+  y : Float
+  radius : Float
+  damage : Int
+  knockback : Float
+  is_crit : Bool
+}
+
+pub(all) struct Item {
+  mut active : Bool
+  mut kind : ItemKind
+  mut x : Float
+  mut y : Float
+  mut bob_timer : Float
+}
+
+pub(all) enum ItemKind {
+  HealthPotion
+  WeaponPickup(WeaponKind)
+  Gold(Int)
+  PassiveItem(PassiveKind)
+} derive(Show)
+
+pub(all) struct MetaProgress {
+  mut abyss_tokens : Int
+  mut total_runs : Int
+  mut best_floor : Int
+  mut total_kills : Int
+  upgrades : Array[Int]
+}
+pub fn MetaProgress::new() -> Self
+
+pub(all) enum MetaUpgrade {
+  StartingHpUp
+  StartingShieldUp
+  StartingGold
+  WeaponMastery
+  DashMastery
+  PotionEfficiency
+} derive(Eq, Show)
+
+pub(all) struct Particle {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut vx : Float
+  mut vy : Float
+  mut life : Float
+  mut max_life : Float
+  mut size : Float
+  mut r : Int
+  mut g : Int
+  mut b : Int
+}
+
+pub(all) enum PassiveKind {
+  MaxHpUp
+  DamageUp
+  SpeedUp
+  CritUp
+  DashCooldownDown
+  DefenseUp
+  AttackSpeedUp
+  PickupRange
+  LifeSteal
+  Thorns
+  Berserker
+  GlassCannon
+  Vampiric
+  ChainLightning
+} derive(Eq, Show)
+
+pub(all) struct Player {
+  mut x : Float
+  mut y : Float
+  mut vx : Float
+  mut vy : Float
+  mut facing_x : Float
+  mut facing_y : Float
+  mut hp : Int
+  mut max_hp : Int
+  mut shield : Float
+  mut max_shield : Float
+  mut shield_regen_timer : Float
+  mut invuln_timer : Float
+  mut dash_cooldown : Float
+  mut dash_timer : Float
+  mut dash_dx : Float
+  mut dash_dy : Float
+  mut weapon : WeaponKind
+  mut attack_state : AttackState
+  mut combo_count : Int
+  mut combo_timer : Float
+  mut speed : Float
+  mut damage_mult : Float
+  mut crit_chance : Float
+  mut defense : Int
+  mut gold : Int
+  mut dead : Bool
+  mut attack_buffered : Bool
+  passives : Array[PassiveKind]
+  status_effects : Array[StatusEffect]
+}
+pub fn Player::new() -> Self
+
+pub(all) struct Projectile {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut vx : Float
+  mut vy : Float
+  mut damage : Int
+  mut is_player : Bool
+  mut is_crit : Bool
+  mut piercing : Bool
+  mut homing : Bool
+  mut lifetime : Float
+  mut radius : Float
+  mut poison_on_hit : Bool
+}
+
+pub(all) struct RewardChoice {
+  kind : ItemKind
+  description : String
+  mut x : Float
+  mut y : Float
+}
+
+pub(all) struct Room {
+  x : Int
+  y : Int
+  w : Int
+  h : Int
+  kind : RoomKind
+  mut state : RoomState
+  tiles : Array[Int]
+  mut enemies_remaining : Int
+  connections : Array[Direction]
+  mut visited : Bool
+}
+
+pub(all) enum RoomKind {
+  Start
+  Combat
+  Treasure
+  Boss
+  Corridor
+  Shrine
+  EliteVault
+  Challenge
+} derive(Eq, Show)
+
+pub(all) enum RoomState {
+  Idle
+  Sealed
+  Cleared
+} derive(Eq)
+
+pub(all) struct ShopItem {
+  mut active : Bool
+  mut kind : ItemKind
+  mut price : Int
+  mut x : Float
+  mut y : Float
+}
+
+pub(all) enum ShrineKind {
+  BloodAltar
+  HealingSpring
+  GambleShrine
+  CursedChest
+  ReforgeAnvil
+} derive(Eq, Show)
+
+pub(all) enum StatusEffect {
+  Slow(Float)
+  Poison(Float)
+  Shield(Float)
+  Haste(Float)
+} derive(Show)
+
+pub(all) struct SynergyBonuses {
+  mut bleed_on_crit : Bool
+  mut dash_damages : Bool
+  mut dash_damage : Int
+  mut cleave : Bool
+  mut fortify : Bool
+  mut multishot : Bool
+  mut multishot_count : Int
+  mut execute : Bool
+  mut execute_threshold : Float
+  mut execute_mult : Float
+  mut vampiric : Bool
+  mut momentum : Bool
+  mut chain_projectile : Bool
+  mut iron_maiden : Bool
+  mut blood_rage : Bool
+  mut destroyer : Bool
+}
+pub fn SynergyBonuses::new() -> Self
+
+pub(all) enum WeaponKind {
+  Sword
+  Daggers
+  Bow
+  Staff
+} derive(Eq, Show)
+
+// Type aliases
+
+// Traits
+

@@ -181,7 +181,7 @@ pub fn draw_hud(game : @types.Game) -> Unit {
       0.5 +
       0.5
     let alpha = (Float::from_double(150.0) + pulse * Float::from_double(105.0)).to_int()
-    let text = ">> STAIRS APPEARED - Find them to descend <<"
+    let text = ">> STAIRS APPEARED - Press [E] to choose path <<"
     let tw = @raylib.measure_text(text, 16)
     @raylib.draw_text(
       text,
@@ -214,6 +214,10 @@ pub fn draw_hud(game : @types.Game) -> Unit {
   }
   // Synergies display - show active synergies from the game struct
   draw_synergies(game)
+  // Active pacts display
+  if game.player.pacts.length() > 0 {
+    draw_pacts(game)
+  }
   // Status effects
   if game.player.status_effects.length() > 0 {
     draw_status_effects(game)
@@ -233,6 +237,21 @@ pub fn draw_hud(game : @types.Game) -> Unit {
       16,
       @raylib.Color::new(255, 215, 0, 200),
     )
+  }
+  // Current path indicator
+  match game.current_path {
+    Some(p) => {
+      let pname = @types.path_name(p)
+      let pcolor = path_card_color(p)
+      @raylib.draw_text(
+        "Path: \{pname}",
+        @types.screen_w - 180,
+        28,
+        14,
+        pcolor,
+      )
+    }
+    None => ()
   }
   // FPS
   @fps.draw()
@@ -481,5 +500,254 @@ fn draw_synergies(game : @types.Game) -> Unit {
     if sx > 600 {
       break
     }
+  }
+}
+
+///|
+fn draw_pacts(game : @types.Game) -> Unit {
+  let pacts = game.player.pacts
+  if pacts.length() == 0 {
+    return
+  }
+  // Draw pacts on the right side of the HUD bar
+  let base_x = @types.screen_w - 16
+  let base_y = 10
+  let mut offset = 0
+  for i in 0..<pacts.length() {
+    let name = pact_short_name(pacts[i])
+    let color = pact_hud_color(pacts[i])
+    let nw = @raylib.measure_text(name, 12)
+    let x = base_x - offset - nw
+    @raylib.draw_text(name, x, base_y, 12, color)
+    offset += nw + 8
+    if offset > 300 {
+      break
+    }
+  }
+  // Label
+  let label = "Pacts:"
+  let lw = @raylib.measure_text(label, 12)
+  @raylib.draw_text(
+    label,
+    base_x - offset - lw,
+    base_y,
+    12,
+    @raylib.Color::new(200, 80, 80, 180),
+  )
+}
+
+///|
+fn pact_short_name(kind : @types.PactKind) -> String {
+  match kind {
+    BloodPrice => "BLOOD"
+    GlassStep => "GLASS"
+    MerchantsDebt => "DEBT"
+    CursedStrength => "CURSE"
+    VoidHeart => "VOID"
+  }
+}
+
+///|
+fn pact_hud_color(kind : @types.PactKind) -> @raylib.Color {
+  match kind {
+    BloodPrice => @raylib.Color::new(200, 50, 50, 220)
+    GlassStep => @raylib.Color::new(100, 200, 255, 220)
+    MerchantsDebt => @raylib.Color::new(255, 215, 0, 220)
+    CursedStrength => @raylib.Color::new(255, 100, 50, 220)
+    VoidHeart => @raylib.Color::new(150, 0, 200, 220)
+  }
+}
+
+///|
+fn path_card_color(path : @types.FloorPath) -> @raylib.Color {
+  match path {
+    Hunter => @raylib.Color::new(255, 80, 50, 255)
+    Pilgrim => @raylib.Color::new(100, 200, 255, 255)
+    Rot => @raylib.Color::new(120, 200, 50, 255)
+    Forge => @raylib.Color::new(255, 180, 50, 255)
+    Gauntlet => @raylib.Color::new(200, 50, 200, 255)
+  }
+}
+
+///|
+fn path_card_icon(path : @types.FloorPath) -> String {
+  match path {
+    Hunter => "[X]"
+    Pilgrim => "(+)"
+    Rot => "{~}"
+    Forge => "[#]"
+    Gauntlet => "<!>"
+  }
+}
+
+///|
+fn path_card_bullets(path : @types.FloorPath) -> Array[String] {
+  match path {
+    Hunter => [
+      "+1 EliteVault room",
+      "BossRush/SniperNest more common",
+      "Elite drops upgraded",
+    ]
+    Pilgrim => [
+      "+1 Shrine + Treasure room",
+      "Shop prices -30%",
+      "Health potions more frequent",
+    ]
+    Rot => [
+      "Spider/Slime enemies favored",
+      "PoisonNest/Swarm encounters",
+      "More cursed rewards",
+    ]
+    Forge => [
+      "+1 shop w/ weapon focus",
+      "Gold drops +30%",
+      "Enemy HP +20%",
+    ]
+    Gauntlet => [
+      "All rooms become combat",
+      "Enemy budget x1.5",
+      "Weapon reward every clear",
+    ]
+  }
+}
+
+///|
+pub fn draw_path_cards(game : @types.Game) -> Unit {
+  // Full-screen dark overlay
+  @raylib.draw_rectangle(
+    0,
+    0,
+    @types.screen_w,
+    @types.screen_h,
+    @raylib.Color::new(0, 0, 0, 180),
+  )
+  // Title
+  let title = "CHOOSE YOUR PATH"
+  let ttw = @raylib.measure_text(title, 36)
+  @raylib.draw_text(
+    title,
+    (@types.screen_w - ttw) / 2,
+    60,
+    36,
+    @raylib.Color::new(255, 215, 0, 255),
+  )
+  // Subtitle
+  let subtitle = "Press [1], [2], or [3] to select"
+  let stw = @raylib.measure_text(subtitle, 16)
+  @raylib.draw_text(
+    subtitle,
+    (@types.screen_w - stw) / 2,
+    105,
+    16,
+    @raylib.Color::new(200, 200, 200, 200),
+  )
+  // Draw 3 cards
+  let card_w = 280
+  let card_h = 360
+  let spacing = 40
+  let total_w = card_w * 3 + spacing * 2
+  let start_x = (@types.screen_w - total_w) / 2
+  let card_y = 140
+  for i in 0..<game.path_choices.length() {
+    if i >= 3 {
+      break
+    }
+    let path = game.path_choices[i]
+    let cx = start_x + i * (card_w + spacing)
+    let color = path_card_color(path)
+    let icon = path_card_icon(path)
+    let name = @types.path_name(path)
+    let bullets = path_card_bullets(path)
+    // Card background
+    @raylib.draw_rectangle(
+      cx,
+      card_y,
+      card_w,
+      card_h,
+      @raylib.Color::new(30, 30, 40, 230),
+    )
+    // Color border
+    @raylib.draw_rectangle_lines(cx, card_y, card_w, card_h, color)
+    // Colored top bar
+    @raylib.draw_rectangle(cx + 1, card_y + 1, card_w - 2, 50, @raylib.Color::new(
+      color.r.to_int(),
+      color.g.to_int(),
+      color.b.to_int(),
+      60,
+    ))
+    // Key number
+    let key_text = "[\{i + 1}]"
+    @raylib.draw_text(
+      key_text,
+      cx + 10,
+      card_y + 12,
+      24,
+      @raylib.Color::new(255, 255, 255, 200),
+    )
+    // Icon
+    let iw = @raylib.measure_text(icon, 28)
+    @raylib.draw_text(
+      icon,
+      cx + card_w / 2 - iw / 2,
+      card_y + 70,
+      28,
+      color,
+    )
+    // Name
+    let nw = @raylib.measure_text(name, 26)
+    @raylib.draw_text(
+      name,
+      cx + card_w / 2 - nw / 2,
+      card_y + 110,
+      26,
+      color,
+    )
+    // Separator line
+    @raylib.draw_line(
+      cx + 20,
+      card_y + 145,
+      cx + card_w - 20,
+      card_y + 145,
+      @raylib.Color::new(
+        color.r.to_int(),
+        color.g.to_int(),
+        color.b.to_int(),
+        100,
+      ),
+    )
+    // Bullet points
+    for b in 0..<bullets.length() {
+      let bullet_text = "* " + bullets[b]
+      let btw = @raylib.measure_text(bullet_text, 16)
+      let bx = cx + card_w / 2 - btw / 2
+      @raylib.draw_text(
+        bullet_text,
+        bx,
+        card_y + 165 + b * 35,
+        16,
+        @raylib.Color::new(220, 220, 220, 220),
+      )
+    }
+    // Hover glow pulse
+    let pulse = Float::from_double(
+        @math.sin(
+          game.frame_count.to_double() * 0.08 +
+          Float::from_int(i).to_double() * 2.0,
+        ),
+      ) *
+      10.0 +
+      20.0
+    @raylib.draw_rectangle_lines(
+      cx - 2,
+      card_y - 2,
+      card_w + 4,
+      card_h + 4,
+      @raylib.Color::new(
+        color.r.to_int(),
+        color.g.to_int(),
+        color.b.to_int(),
+        pulse.to_int(),
+      ),
+    )
   }
 }

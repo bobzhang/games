@@ -8,8 +8,8 @@ pub fn update_player_state(game : @types.Game, dt : Float) -> Unit {
   if p.invuln_timer > 0.0 {
     p.invuln_timer -= dt
   }
-  // Shield regeneration
-  if p.shield < p.max_shield {
+  // Shield regeneration (disabled by GlassStep pact)
+  if p.shield < p.max_shield && !@types.has_pact(p, GlassStep) {
     p.shield_regen_timer -= dt
     if p.shield_regen_timer <= 0.0 {
       p.shield += @types.shield_regen_rate * dt
@@ -137,7 +137,13 @@ pub fn damage_player(game : @types.Game, amount : Int) -> Unit {
   } else {
     fortified_amount
   }
-  let reduced = @types.maxf(Float::from_int(effective_amount - p.defense), 1.0).to_int()
+  // CursedStrength pact: take 15% more damage
+  let cursed_amount = if @types.has_pact(p, CursedStrength) {
+    @types.maxf(Float::from_int(effective_amount) * 1.15, 1.0).to_int()
+  } else {
+    effective_amount
+  }
+  let reduced = @types.maxf(Float::from_int(cursed_amount - p.defense), 1.0).to_int()
   // Shield absorbs first
   if p.shield > 0.0 {
     let absorbed = @types.minf(p.shield, Float::from_int(reduced))

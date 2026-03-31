@@ -1,0 +1,59 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/abyssal_rift/internal/dungeon"
+
+import {
+  "bobzhang/games/abyssal_rift/internal/types",
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn default_minimap_config() -> MinimapConfig
+
+pub fn generate_floor(Int, UInt) -> (@types.Floor, UInt)
+
+pub fn generate_test_floor() -> @types.Floor
+
+pub fn get_biome(Int) -> BiomeTheme
+
+pub fn get_template(Int) -> (Array[Int], Int, Int)
+
+pub fn get_tile_at(@types.Floor, Float, Float) -> Int
+
+pub fn is_door(Int) -> Bool
+
+pub fn is_floor(Int) -> Bool
+
+pub fn is_walkable(Int) -> Bool
+
+pub fn is_wall(Int) -> Bool
+
+pub fn place_door(Array[Int], Int, Int, @types.Direction) -> (Int, Int)
+
+pub fn room_at(@types.Floor, Float, Float) -> Int
+
+pub fn room_center(@types.Room) -> (Float, Float)
+
+pub fn template_count() -> Int
+
+// Errors
+
+// Types and methods
+pub(all) struct BiomeTheme {
+  wall_color : @raylib.Color
+  floor_color : @raylib.Color
+  floor_alt_color : @raylib.Color
+  accent_color : @raylib.Color
+  name : String
+}
+
+pub(all) struct MinimapConfig {
+  x : Int
+  y : Int
+  scale : Float
+  room_size : Int
+}
+
+// Type aliases
+
+// Traits
+

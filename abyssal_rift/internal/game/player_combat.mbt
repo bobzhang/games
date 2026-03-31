@@ -114,6 +114,14 @@ fn spawn_player_attack_hitbox(game : @types.Game) -> Unit {
   if syn.destroyer {
     bonus_mult += 0.25
   }
+  // Pact: BloodPrice +25% damage
+  if @types.has_pact(p, BloodPrice) {
+    bonus_mult += 0.25
+  }
+  // Pact: CursedStrength +40% damage
+  if @types.has_pact(p, CursedStrength) {
+    bonus_mult += 0.40
+  }
   if stats.is_ranged {
     // Multishot synergy: spawn multiple arrows in a spread for Bow
     let shot_count = if syn.multishot && p.weapon == Bow {

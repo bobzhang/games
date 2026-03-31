@@ -1,0 +1,109 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/abyssal_rift/internal/game"
+
+import {
+  "bobzhang/games/abyssal_rift/internal/types",
+  "tonyfettes/raylib",
+}
+
+// Values
+pub fn all_passives() -> Array[@types.PassiveKind]
+
+pub fn apply_damage_to_enemy(@types.Game, Int, Int, Bool, Float) -> Unit
+
+pub fn apply_status_effect(@types.Player, @types.StatusEffect) -> Unit
+
+pub fn clear_events(@types.Game) -> Unit
+
+pub fn damage_player(@types.Game, Int) -> Unit
+
+pub fn generate_smart_rewards(@types.Game) -> Array[@types.RewardChoice]
+
+pub fn get_active_synergy_names(@types.SynergyBonuses) -> Array[String]
+
+pub fn get_raylib_camera(@types.Game) -> @raylib.Camera2D
+
+pub fn get_synergy_bonuses(@types.Player) -> @types.SynergyBonuses
+
+pub fn handle_enemy_death(@types.Game, Int) -> Unit
+
+pub fn has_status_haste(@types.Player) -> Bool
+
+pub fn has_status_shield(@types.Player) -> Bool
+
+pub fn has_status_slow(@types.Player) -> Bool
+
+pub fn push_event(@types.Game, @types.GameEvent) -> Unit
+
+pub fn read_input(@types.Game) -> InputState
+
+pub fn select_encounter(Int, UInt) -> (@types.EncounterType, UInt)
+
+pub fn shake_camera(@types.Game, Float, Float) -> Unit
+
+pub fn spawn_boss(@types.Game, Float, Float) -> Unit
+
+pub fn spawn_elite(@types.Game, @types.EnemyKind, Float, Float, @types.EliteAffix) -> Unit
+
+pub fn spawn_encounter(@types.Game, @types.EncounterType, @types.Room) -> Unit
+
+pub fn spawn_enemy(@types.Game, @types.EnemyKind, Float, Float) -> Unit
+
+pub fn spawn_particles_burst(@types.Game, Float, Float, Int, Int, Int, Int) -> Unit
+
+pub fn update_boss(@types.Game, Float) -> Unit
+
+pub fn update_camera(@types.Game, Float) -> Unit
+
+pub fn update_damage_numbers(@types.Game, Float) -> Unit
+
+pub fn update_enemies(@types.Game, Float) -> Unit
+
+pub fn update_enemy_ai(@types.Game, @types.Enemy, Float) -> Unit
+
+pub fn update_game(@types.Game, Float) -> Unit
+
+pub fn update_homing_projectiles(@types.Game, Float) -> Unit
+
+pub fn update_items(@types.Game, Float) -> Unit
+
+pub fn update_particles(@types.Game, Float) -> Unit
+
+pub fn update_player_combat(@types.Game, InputState, Float) -> Unit
+
+pub fn update_player_movement(@types.Game, InputState, Float) -> Unit
+
+pub fn update_player_state(@types.Game, Float) -> Unit
+
+pub fn update_projectiles(@types.Game, Float) -> Unit
+
+pub fn update_reward_choice(@types.Game, InputState) -> Unit
+
+pub fn update_room_flow(@types.Game, Float) -> Unit
+
+pub fn update_shop(@types.Game, InputState) -> Unit
+
+pub fn update_shrine(@types.Game, InputState) -> Unit
+
+pub fn update_status_effects(@types.Game, Float) -> Unit
+
+// Errors
+
+// Types and methods
+pub(all) struct InputState {
+  mut move_x : Float
+  mut move_y : Float
+  mut aim_x : Float
+  mut aim_y : Float
+  mut attack_pressed : Bool
+  mut dash_pressed : Bool
+  mut pause_pressed : Bool
+  mut confirm_pressed : Bool
+  mut interact_pressed : Bool
+}
+pub fn InputState::new() -> Self
+
+// Type aliases
+
+// Traits
+

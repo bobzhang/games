@@ -20,33 +20,92 @@ pub fn all_passives() -> Array[@types.PassiveKind] {
 
 ///|
 /// Generate a smart reward set: 1 on-build offer + 2 random/utility
+/// Path modifiers:
+/// - Hunter: elite drops guarantee weapon or rare passive (slot 1 = weapon)
+/// - Pilgrim: health potions appear more often (slot 3 threshold higher)
+/// - Forge: weapon drops more frequent (slot 2 = weapon)
+/// - Gauntlet: boss-tier reward (all 3 slots are build-directed)
 pub fn generate_smart_rewards(game : @types.Game) -> Array[@types.RewardChoice] {
   let p = game.player
   let choices : Array[@types.RewardChoice] = []
   let mut s = game.rng_state
-  // Slot 1: On-build offer (completes a synergy or supports weapon)
-  let on_build = get_on_build_offer(p, s)
-  let (s1, _) = @types.rng_next(s)
-  s = s1
-  choices.push(on_build)
-  // Slot 2: Random (no duplicates with slot 1 or player's existing passives)
-  let (choice2, s2) = generate_unique_offer(p, choices, s)
-  s = s2
-  choices.push(choice2)
-  // Slot 3: Random or health potion
-  let (s3, roll) = @types.rng_next(s)
-  s = s3
-  if roll < 0.3 || p.hp < p.max_hp / 2 {
+  // Hunter path: slot 1 is always a weapon or rare passive
+  let is_hunter = match game.current_path {
+    Some(Hunter) => true
+    _ => false
+  }
+  let is_pilgrim = match game.current_path {
+    Some(Pilgrim) => true
+    _ => false
+  }
+  let is_forge = match game.current_path {
+    Some(Forge) => true
+    _ => false
+  }
+  let is_gauntlet = match game.current_path {
+    Some(Gauntlet) => true
+    _ => false
+  }
+  // Slot 1: On-build offer (or weapon for Hunter)
+  if is_hunter {
+    let weapon = get_synergy_weapon(p, s)
+    let (s1, _) = @types.rng_next(s)
+    s = s1
     choices.push({
-      kind: HealthPotion,
-      description: "Restore 30 HP + Shield",
+      kind: WeaponPickup(weapon),
+      description: "Hunter's weapon",
       x: 0.0,
       y: 0.0,
     })
   } else {
+    let on_build = get_on_build_offer(p, s)
+    let (s1, _) = @types.rng_next(s)
+    s = s1
+    choices.push(on_build)
+  }
+  // Slot 2: Random or weapon (Forge) or build-directed (Gauntlet)
+  if is_forge {
+    let weapon = get_synergy_weapon(p, s)
+    let (s2, _) = @types.rng_next(s)
+    s = s2
+    choices.push({
+      kind: WeaponPickup(weapon),
+      description: "Forged weapon",
+      x: 0.0,
+      y: 0.0,
+    })
+  } else if is_gauntlet {
+    let on_build = get_on_build_offer(p, s)
+    let (s2, _) = @types.rng_next(s)
+    s = s2
+    choices.push(on_build)
+  } else {
+    let (choice2, s2) = generate_unique_offer(p, choices, s)
+    s = s2
+    choices.push(choice2)
+  }
+  // Slot 3: Random, health potion, or build-directed (Gauntlet)
+  if is_gauntlet {
     let (choice3, s4) = generate_unique_offer(p, choices, s)
     s = s4
     choices.push(choice3)
+  } else {
+    let (s3, roll) = @types.rng_next(s)
+    s = s3
+    // Pilgrim: health potions appear more often (0.6 vs 0.3 threshold)
+    let potion_threshold : Float = if is_pilgrim { 0.6 } else { 0.3 }
+    if roll < potion_threshold || p.hp < p.max_hp / 2 {
+      choices.push({
+        kind: HealthPotion,
+        description: "Restore 30 HP + Shield",
+        x: 0.0,
+        y: 0.0,
+      })
+    } else {
+      let (choice3, s4) = generate_unique_offer(p, choices, s)
+      s = s4
+      choices.push(choice3)
+    }
   }
   game.rng_state = s
   choices

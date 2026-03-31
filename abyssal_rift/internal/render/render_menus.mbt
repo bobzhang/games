@@ -626,3 +626,307 @@ pub fn draw_meta_screen(game : @types.Game) -> Unit {
     )
   }
 }
+
+///|
+pub fn draw_starter_select(game : @types.Game) -> Unit {
+  @raylib.clear_background(@raylib.Color::new(12, 10, 22, 255))
+  let t = Float::from_int(game.frame_count) * 0.02
+  let sw = Float::from_int(@types.screen_w)
+  let sh = Float::from_int(@types.screen_h)
+  // Ambient particles
+  for i in 0..<15 {
+    let fi = Float::from_int(i)
+    let x = (
+        Float::from_double(@math.sin((t * 0.3 + fi * 1.1).to_double())) * 0.5 +
+        0.5
+      ) *
+      sw
+    let y = (
+        Float::from_double(@math.cos((t * 0.25 + fi * 0.8).to_double())) * 0.5 +
+        0.5
+      ) *
+      sh
+    let alpha = 15 +
+      ((Float::from_double(@math.sin((t + fi * 0.5).to_double())) * 0.5 + 0.5) *
+      20.0).to_int()
+    @raylib.draw_circle(
+      x.to_int(),
+      y.to_int(),
+      2.0 + fi * 0.2,
+      @raylib.Color::new(100, 80, 180, alpha),
+    )
+  }
+  // Title
+  let title = "CHOOSE YOUR KIT"
+  let tw = @raylib.measure_text(title, 36)
+  @raylib.draw_text(
+    title,
+    (@types.screen_w - tw) / 2,
+    50,
+    36,
+    @raylib.Color::new(200, 180, 255, 255),
+  )
+  // Divider
+  let cx = @types.screen_w / 2
+  @raylib.draw_line(
+    cx - 180,
+    95,
+    cx + 180,
+    95,
+    @raylib.Color::new(120, 80, 200, 80),
+  )
+  // Kit definitions
+  let kit_names = ["1. VANGUARD", "2. CUTPURSE", "3. INVOKER"]
+  let kit_weapons = ["Sword", "Daggers", "Staff"]
+  let kit_passives = ["Defense Up", "Pickup Range", "Chain Lightning"]
+  let kit_specials = [
+    "Shield +10 on room clear", "+30 starting gold, weaker potions",
+    "-20 max HP",
+  ]
+  let kit_colors : Array[@raylib.Color] = [
+    @raylib.Color::new(100, 180, 255, 255),
+    @raylib.Color::new(255, 215, 0, 255),
+    @raylib.Color::new(180, 100, 255, 255),
+  ]
+  let card_w = 200
+  let card_h = 280
+  let card_spacing = 30
+  let total_w = card_w * 3 + card_spacing * 2
+  let start_x = ((@types.screen_w - total_w) / 2)
+  let card_y = 120
+  for i in 0..<3 {
+    let card_x = start_x + i * (card_w + card_spacing)
+    let is_hovered = game.starter_hover == i
+    // Card background
+    let bg_color = if is_hovered {
+      @raylib.Color::new(40, 35, 60, 240)
+    } else {
+      @raylib.Color::new(25, 22, 40, 200)
+    }
+    @raylib.draw_rectangle(card_x, card_y, card_w, card_h, bg_color)
+    // Card border
+    let border_color = if is_hovered {
+      kit_colors[i]
+    } else {
+      @raylib.Color::new(80, 70, 100, 150)
+    }
+    @raylib.draw_rectangle_lines(card_x, card_y, card_w, card_h, border_color)
+    if is_hovered {
+      @raylib.draw_rectangle_lines(
+        card_x - 1,
+        card_y - 1,
+        card_w + 2,
+        card_h + 2,
+        border_color,
+      )
+    }
+    // Kit name
+    let name_w = @raylib.measure_text(kit_names[i], 20)
+    @raylib.draw_text(
+      kit_names[i],
+      card_x + (card_w - name_w) / 2,
+      card_y + 16,
+      20,
+      kit_colors[i],
+    )
+    // Weapon label
+    let wlabel = "Weapon:"
+    @raylib.draw_text(
+      wlabel,
+      card_x + 16,
+      card_y + 55,
+      14,
+      @raylib.Color::new(150, 150, 170, 200),
+    )
+    @raylib.draw_text(
+      kit_weapons[i],
+      card_x + 16,
+      card_y + 75,
+      18,
+      @raylib.white,
+    )
+    // Passive label
+    @raylib.draw_text(
+      "Passive:",
+      card_x + 16,
+      card_y + 110,
+      14,
+      @raylib.Color::new(150, 150, 170, 200),
+    )
+    @raylib.draw_text(
+      kit_passives[i],
+      card_x + 16,
+      card_y + 130,
+      16,
+      @raylib.Color::new(100, 255, 100, 220),
+    )
+    // Special modifier
+    @raylib.draw_text(
+      "Special:",
+      card_x + 16,
+      card_y + 165,
+      14,
+      @raylib.Color::new(150, 150, 170, 200),
+    )
+    // Word-wrap the special text in ~22-char lines
+    let spec = kit_specials[i]
+    @raylib.draw_text(
+      spec,
+      card_x + 16,
+      card_y + 185,
+      14,
+      @raylib.Color::new(255, 200, 80, 220),
+    )
+    // Selection indicator
+    if is_hovered {
+      let sel = "> SELECTED <"
+      let sel_w = @raylib.measure_text(sel, 14)
+      @raylib.draw_text(
+        sel,
+        card_x + (card_w - sel_w) / 2,
+        card_y + card_h - 30,
+        14,
+        kit_colors[i],
+      )
+    }
+  }
+  // Controls prompt
+  let prompt_pulse = Float::from_double(@math.sin((t * 2.0).to_double())) *
+    0.3 +
+    0.7
+  let prompt_alpha = (prompt_pulse * 255.0).to_int()
+  let prompt = "A/D to browse | 1-3 to select | ENTER to confirm"
+  let pw = @raylib.measure_text(prompt, 18)
+  @raylib.draw_text(
+    prompt,
+    (@types.screen_w - pw) / 2,
+    card_y + card_h + 40,
+    18,
+    @raylib.Color::new(200, 200, 220, @types.clampi(prompt_alpha, 0, 255)),
+  )
+}
+
+///|
+pub fn draw_pact_offer(game : @types.Game) -> Unit {
+  // Semi-transparent overlay
+  @raylib.draw_rectangle(
+    0,
+    0,
+    @types.screen_w,
+    @types.screen_h,
+    @raylib.Color::new(0, 0, 0, 180),
+  )
+  // Title
+  let title = "PACT OFFERED"
+  let tw = @raylib.measure_text(title, 32)
+  let cx = @types.screen_w / 2
+  @raylib.draw_text(
+    title,
+    cx - tw / 2,
+    120,
+    32,
+    @raylib.Color::new(200, 50, 50, 255),
+  )
+  // Subtitle
+  let sub = "Accept power at a price..."
+  let sw = @raylib.measure_text(sub, 16)
+  @raylib.draw_text(
+    sub,
+    cx - sw / 2,
+    160,
+    16,
+    @raylib.Color::new(180, 150, 150, 200),
+  )
+  // Pact cards
+  let count = game.pact_offers.length()
+  let card_w = 280
+  let card_h = 200
+  let spacing = 40
+  let total = card_w * count + spacing * (count - 1)
+  let start_x = ((@types.screen_w - total) / 2)
+  let card_y = 200
+  for i in 0..<count {
+    let pact = game.pact_offers[i]
+    let card_x = start_x + i * (card_w + spacing)
+    // Card background
+    @raylib.draw_rectangle(
+      card_x,
+      card_y,
+      card_w,
+      card_h,
+      @raylib.Color::new(40, 15, 15, 230),
+    )
+    @raylib.draw_rectangle_lines(
+      card_x,
+      card_y,
+      card_w,
+      card_h,
+      @raylib.Color::new(200, 50, 50, 200),
+    )
+    // Pact name
+    let (name, upside, downside) = pact_info(pact)
+    let key_label = "\{i + 1}. \{name}"
+    let kw = @raylib.measure_text(key_label, 20)
+    @raylib.draw_text(
+      key_label,
+      card_x + (card_w - kw) / 2,
+      card_y + 16,
+      20,
+      @raylib.Color::new(255, 100, 100, 255),
+    )
+    // Upside
+    @raylib.draw_text(
+      "Upside:",
+      card_x + 16,
+      card_y + 55,
+      14,
+      @raylib.Color::new(100, 255, 100, 200),
+    )
+    @raylib.draw_text(
+      upside,
+      card_x + 16,
+      card_y + 75,
+      16,
+      @raylib.Color::new(100, 255, 100, 255),
+    )
+    // Downside
+    @raylib.draw_text(
+      "Downside:",
+      card_x + 16,
+      card_y + 110,
+      14,
+      @raylib.Color::new(255, 100, 100, 200),
+    )
+    @raylib.draw_text(
+      downside,
+      card_x + 16,
+      card_y + 130,
+      16,
+      @raylib.Color::new(255, 100, 100, 255),
+    )
+  }
+  // Controls
+  let ctrl = "Press 1-\{count} to accept | ESC/E to decline"
+  let cw = @raylib.measure_text(ctrl, 16)
+  @raylib.draw_text(
+    ctrl,
+    cx - cw / 2,
+    card_y + card_h + 30,
+    16,
+    @raylib.Color::new(180, 180, 200, 200),
+  )
+}
+
+///|
+fn pact_info(pact : @types.PactKind) -> (String, String, String) {
+  match pact {
+    BloodPrice => ("BLOOD PRICE", "+25% damage", "Potions cost HP instead")
+    GlassStep =>
+      ("GLASS STEP", "Dash resets on kill", "Shield no longer regenerates")
+    MerchantsDebt =>
+      ("MERCHANT'S DEBT", "+1 shop item slot", "All prices +50%")
+    CursedStrength =>
+      ("CURSED STRENGTH", "+40% damage", "Take 15% more damage")
+    VoidHeart => ("VOID HEART", "Double gold drops", "Max HP reduced by 30")
+  }
+}

@@ -1,0 +1,22 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "bobzhang/games/abyssal_rift/internal/audio"
+
+import {
+  "bobzhang/games/abyssal_rift/internal/types",
+}
+
+// Values
+pub fn cleanup() -> Unit
+
+pub fn init_audio() -> Unit
+
+pub fn process_events(Array[@types.GameEvent]) -> Unit
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

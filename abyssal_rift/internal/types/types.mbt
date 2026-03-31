@@ -29,6 +29,7 @@ pub(all) struct Player {
   mut attack_buffered : Bool
   passives : Array[PassiveKind]
   status_effects : Array[StatusEffect]
+  pacts : Array[PactKind]
 }
 
 ///|
@@ -63,6 +64,7 @@ pub fn Player::new() -> Player {
     attack_buffered: false,
     passives: [],
     status_effects: [],
+    pacts: [],
   }
 }
 
@@ -328,6 +330,12 @@ pub(all) struct Game {
   mut wave_count : Int
   mut wave_max : Int
   mut wave_active : Bool
+  path_choices : Array[FloorPath]
+  mut path_active : Bool
+  mut current_path : FloorPath?
+  mut starter_hover : Int
+  pact_offers : Array[PactKind]
+  mut pact_offer_active : Bool
 }
 
 ///|
@@ -451,5 +459,21 @@ pub fn Game::new() -> Game {
     wave_count: 0,
     wave_max: 0,
     wave_active: false,
+    path_choices: [],
+    path_active: false,
+    current_path: None,
+    starter_hover: 0,
+    pact_offers: [],
+    pact_offer_active: false,
   }
+}
+
+///|
+pub fn has_pact(p : Player, kind : PactKind) -> Bool {
+  for i in 0..<p.pacts.length() {
+    if p.pacts[i] == kind {
+      return true
+    }
+  }
+  false
 }
