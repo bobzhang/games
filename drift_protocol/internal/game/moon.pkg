@@ -1,0 +1,11 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/drift_protocol/internal/types",
+  "bobzhang/games/drift_protocol/internal/level",
+  "bobzhang/games/drift_protocol/internal/guard",
+  "bobzhang/games/drift_protocol/internal/hacking",
+  "bobzhang/games/drift_protocol/internal/stealth",
+  "moonbitlang/core/math",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

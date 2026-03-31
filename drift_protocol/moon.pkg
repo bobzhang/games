@@ -1,0 +1,13 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/drift_protocol/internal/types",
+  "bobzhang/games/drift_protocol/internal/game",
+  "bobzhang/games/drift_protocol/internal/render",
+  "bobzhang/games/utils/draw",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)
