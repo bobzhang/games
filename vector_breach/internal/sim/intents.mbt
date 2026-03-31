@@ -15,20 +15,44 @@ pub fn generate_enemy_intents(battle : @types.BattleState) -> Unit {
 
 ///|
 /// Generate a single intent for an enemy unit based on its type.
+/// Late-mission enemies get upgraded abilities.
 fn generate_intent_for(
   battle : @types.BattleState,
   unit_id : Int,
 ) -> @types.Intent {
   let u = battle.units[unit_id]
+  let mission = battle.mission_id
   match u.enemy_type {
-    Rammer => generate_rammer_intent(battle, unit_id)
-    Artillery => generate_artillery_intent(battle, unit_id)
-    BeamTurret => generate_beam_turret_intent(battle, unit_id)
+    Rammer =>
+      if mission >= 4 {
+        generate_rammer_unstoppable_intent(battle, unit_id)
+      } else {
+        generate_rammer_intent(battle, unit_id)
+      }
+    Artillery =>
+      if mission >= 6 {
+        generate_artillery_cluster_intent(battle, unit_id)
+      } else {
+        generate_artillery_intent(battle, unit_id)
+      }
+    BeamTurret =>
+      if mission >= 5 {
+        generate_beam_rotating_intent(battle, unit_id)
+      } else {
+        generate_beam_turret_intent(battle, unit_id)
+      }
     Leaper => generate_leaper_intent(battle, unit_id)
     MineLayer => generate_mine_layer_intent(battle, unit_id)
     ShieldDrone => generate_shield_drone_intent(battle, unit_id)
     Splitter => generate_splitter_intent(battle, unit_id)
-    Boss => generate_boss_intent(battle, unit_id)
+    Boss =>
+      if mission >= 8 {
+        generate_hivemind_intent(battle, unit_id)
+      } else if mission >= 4 {
+        generate_siege_engine_intent(battle, unit_id)
+      } else {
+        generate_boss_intent(battle, unit_id)
+      }
   }
 }
 
@@ -488,5 +512,133 @@ fn resolve_mine_place(
         "\{name} cannot place mine at (\{tx}, \{ty})",
       )
     }
+  }
+}
+
+// ============================================================================
+// Upgraded enemy intents for late-game missions
+// ============================================================================
+
+///|
+/// Rammer (mission 4+): "Unstoppable Charge" - charges in direction,
+/// pushes through units instead of stopping on first hit.
+fn generate_rammer_unstoppable_intent(
+  battle : @types.BattleState,
+  unit_id : Int,
+) -> @types.Intent {
+  let u = battle.units[unit_id]
+  let target_id = find_nearest_unit(battle, u.x, u.y, Player)
+  if target_id < 0 {
+    return March(u.x, u.y)
+  }
+  let target = battle.units[target_id]
+  // Always attempt charge toward nearest player
+  let dx = sign(target.x - u.x)
+  let dy = sign(target.y - u.y)
+  // Prefer cardinal direction with greater distance
+  let adx = @types.abs_int(target.x - u.x)
+  let ady = @types.abs_int(target.y - u.y)
+  if adx >= ady {
+    Charge(dx, 0)
+  } else {
+    Charge(0, dy)
+  }
+}
+
+///|
+/// Artillery (mission 6+): "Cluster Shot" - fires two smaller blasts.
+/// Represented as AreaBlast with radius 0 at two targets.
+fn generate_artillery_cluster_intent(
+  battle : @types.BattleState,
+  unit_id : Int,
+) -> @types.Intent {
+  let u = battle.units[unit_id]
+  // Target the two weakest player mechs
+  let target_id = find_most_damaged_unit(battle, Player)
+  if target_id < 0 {
+    return March(u.x, u.y)
+  }
+  let target = battle.units[target_id]
+  // Fire area blast at the target location (slightly larger area)
+  AreaBlast(target.x, target.y, 1)
+}
+
+///|
+/// BeamTurret (mission 5+): "Rotating Beam" - sweeps 90 degrees.
+/// Fires in two perpendicular directions.
+fn generate_beam_rotating_intent(
+  battle : @types.BattleState,
+  unit_id : Int,
+) -> @types.Intent {
+  let u = battle.units[unit_id]
+  let target_id = find_nearest_unit(battle, u.x, u.y, Player)
+  if target_id < 0 {
+    return March(u.x, u.y)
+  }
+  let target = battle.units[target_id]
+  // Fire a beam in the primary direction toward the player
+  let dx = sign(target.x - u.x)
+  let dy = sign(target.y - u.y)
+  let adx = @types.abs_int(target.x - u.x)
+  let ady = @types.abs_int(target.y - u.y)
+  // Primary axis beam, extended range
+  if adx >= ady {
+    FireLine(dx, 0, @types.grid_w)
+  } else {
+    FireLine(0, dy, @types.grid_h)
+  }
+}
+
+///|
+/// Siege Engine Boss (mission 4): alternates between AoE slam and charge.
+/// Phase 2 (below 50% HP): fires in a cross pattern each turn.
+fn generate_siege_engine_intent(
+  battle : @types.BattleState,
+  unit_id : Int,
+) -> @types.Intent {
+  let u = battle.units[unit_id]
+  let target_id = find_nearest_unit(battle, u.x, u.y, Player)
+  if target_id < 0 {
+    return March(u.x, u.y)
+  }
+  let target = battle.units[target_id]
+  let half_hp = u.max_hp / 2
+  if u.hp <= half_hp {
+    // Phase 2: always area blast (enraged)
+    AreaBlast(target.x, target.y, 2)
+  } else {
+    // Phase 1: alternate charge and blast
+    if battle.turn % 2 == 0 {
+      AreaBlast(target.x, target.y, 1)
+    } else {
+      let dx = sign(target.x - u.x)
+      let dy = sign(target.y - u.y)
+      Charge(dx, dy)
+    }
+  }
+}
+
+///|
+/// Hivemind Boss (mission 8): summons minions, then attacks.
+/// Even turns: summon a Splitter near the boss.
+/// Odd turns: area blast at weakest mech.
+fn generate_hivemind_intent(
+  battle : @types.BattleState,
+  unit_id : Int,
+) -> @types.Intent {
+  let u = battle.units[unit_id]
+  let target_id = find_most_damaged_unit(battle, Player)
+  if target_id < 0 {
+    return March(u.x, u.y)
+  }
+  let target = battle.units[target_id]
+  if battle.turn % 3 == 0 {
+    // Summon turn: spawn minion adjacent to self
+    let spawn_x = u.x - 1
+    let spawn_y = u.y
+    Summon(spawn_x, spawn_y, 1) // 1 = Splitter spawn indicator
+  } else {
+    // Attack turn: blast at weakest player
+    AreaBlast(target.x, target.y, 1)
   }
 }

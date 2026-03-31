@@ -99,3 +99,35 @@ pub let color_text : @raylib.Color = @raylib.Color::new(220, 225, 235, 255)
 
 ///|
 pub let color_text_dim : @raylib.Color = @raylib.Color::new(120, 130, 150, 255)
+
+// Animation timing constants
+
+///|
+pub let anim_move_duration : Float = 0.3
+
+///|
+pub let anim_attack_duration : Float = 0.25
+
+///|
+pub let anim_push_duration : Float = 0.25
+
+///|
+pub let anim_death_duration : Float = 0.5
+
+///|
+pub let anim_intent_duration : Float = 0.4
+
+///|
+pub let shake_duration : Float = 0.3
+
+///|
+pub let flash_duration : Float = 0.2
+
+///|
+pub let float_text_duration : Float = 1.2
+
+///|
+pub let particle_life : Float = 0.8
+
+///|
+pub let total_missions : Int = 8

@@ -160,6 +160,16 @@ if (typeof Module !== "object") Module = {};
           { label: 'R', keys: [82], class: 'actionB' },           // R (restart)
         ]
       },
+      // Vector Breach: tactical mech combat
+      vector_breach: {
+        type: 'dpad',
+        buttons: [
+          { label: '\u2714', keys: [13], class: 'actionA' },      // Enter (confirm)
+          { label: '\u23F8', keys: [32], class: 'actionB' },      // Space (wait/end turn)
+          { label: 'P', keys: [80], class: 'actionC' },           // P (push)
+          { label: 'Tab', keys: [9], class: 'menu small' },       // Tab (cycle mech)
+        ]
+      },
     };
 
     const profile = GAME_PROFILES[gameId] || GAME_PROFILES.default;

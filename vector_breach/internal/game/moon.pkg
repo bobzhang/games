@@ -4,6 +4,7 @@ import {
   "bobzhang/games/vector_breach/internal/types",
   "bobzhang/games/vector_breach/internal/content",
   "bobzhang/games/vector_breach/internal/sim",
+  "bobzhang/games/vector_breach/internal/render",
 }
 
 warnings = "-missing_doc+unnecessary_annotation"

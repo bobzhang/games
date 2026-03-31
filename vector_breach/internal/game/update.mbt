@@ -12,6 +12,7 @@ pub fn update(game : @types.Game, dt : Float) -> Unit {
   }
   match game.screen {
     Title => update_title(game)
+    Campaign => update_campaign(game)
     Battle => update_battle(game, dt)
     EnemyTurn => update_enemy_turn(game, dt)
     Reward => update_reward(game)
@@ -23,10 +24,12 @@ pub fn update(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn update_title(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
-    @raylib.is_key_pressed(@raylib.KeySpace) {
-    setup_battle(game, 1)
-    game.screen = Battle
-    game.message_text = "Deploy your mechs. Arrow keys + Enter."
+    @raylib.is_key_pressed(@raylib.KeySpace) ||
+    @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
+    // Initialize campaign map and go to campaign screen
+    game.run.campaign = Some(build_campaign_map())
+    game.screen = Campaign
+    game.message_text = "Choose your mission path."
     game.message_timer = 3.0
   }
 }
@@ -39,14 +42,24 @@ fn setup_battle(game : @types.Game, mission_id : Int) -> Unit {
     _ => Assassinate(0)
   }
   let battle = @types.new_battle(objective)
+  battle.mission_id = mission_id
+  battle.augments = game.run.augments
   // Place terrain based on mission
   place_terrain(battle, mission_id)
   // Place 3 player mechs in deployment zone (left columns)
   let classes : Array[@types.MechClass] = [Vanguard, Striker, Sentinel]
   for i = 0; i < 3; i = i + 1 {
-    let stats = @content.get_mech_stats(classes[i])
+    let stats = @content.get_augmented_mech_stats(
+      classes[i],
+      game.run.augments,
+    )
     let px = 1
     let py = 1 + i * 3
+    let mut shield = 0
+    // ShieldGenerator augment: start each battle with 2 shield
+    if @types.has_augment(game.run, ShieldGenerator) {
+      shield = 2
+    }
     let u : @types.CombatUnit = {
       id: i,
       active: true,
@@ -55,7 +68,7 @@ fn setup_battle(game : @types.Game, mission_id : Int) -> Unit {
       y: py,
       hp: stats.hp,
       max_hp: stats.hp,
-      shield: 0,
+      shield,
       heat: 0,
       max_heat: stats.max_heat,
       stunned: false,
@@ -83,10 +96,11 @@ fn setup_battle(game : @types.Game, mission_id : Int) -> Unit {
 
 ///|
 fn place_terrain(battle : @types.BattleState, mission_id : Int) -> Unit {
+  let tier = get_difficulty_tier(mission_id)
   // Set some tiles based on mission layout
   let seed : Ref[UInt] = { val: (mission_id * 7919 + 1234).reinterpret_as_uint() }
-  // Add walls
-  let wall_count = 3 + mission_id % 4
+  // Add walls - more on harder missions
+  let wall_count = 3 + mission_id % 4 + tier
   for i = 0; i < wall_count; i = i + 1 {
     let wx = @types.rand_range(seed, 2, 6)
     let wy = @types.rand_range(seed, 0, @types.grid_h - 1)
@@ -94,23 +108,27 @@ fn place_terrain(battle : @types.BattleState, mission_id : Int) -> Unit {
       battle.grid.set(wx, wy, { kind: Wall, hazard: None, occupied_by: -1 })
     }
   }
-  // Add hazard tiles
-  if mission_id >= 2 {
-    let hx = @types.rand_range(seed, 3, 5)
-    let hy = @types.rand_range(seed, 1, 6)
-    if battle.grid.in_bounds(hx, hy) {
-      battle.grid.set(hx, hy, { kind: Lava, hazard: Fire, occupied_by: -1 })
+  // Add hazard tiles - more variety on harder missions
+  if mission_id >= 2 || tier >= 1 {
+    let lava_count = 1 + tier / 2
+    for j = 0; j < lava_count; j = j + 1 {
+      ignore(j)
+      let hx = @types.rand_range(seed, 3, 6)
+      let hy = @types.rand_range(seed, 1, 6)
+      if battle.grid.in_bounds(hx, hy) {
+        battle.grid.set(hx, hy, { kind: Lava, hazard: Fire, occupied_by: -1 })
+      }
     }
   }
-  if mission_id >= 3 {
-    let cx = @types.rand_range(seed, 3, 6)
-    let cy = @types.rand_range(seed, 0, 7)
-    if battle.grid.in_bounds(cx, cy) {
-      battle.grid.set(
-        cx,
-        cy,
-        { kind: Chasm, hazard: None, occupied_by: -1 },
-      )
+  if mission_id >= 3 || tier >= 1 {
+    let chasm_count = 1 + tier / 2
+    for j = 0; j < chasm_count; j = j + 1 {
+      ignore(j)
+      let cx = @types.rand_range(seed, 3, 6)
+      let cy = @types.rand_range(seed, 0, 7)
+      if battle.grid.in_bounds(cx, cy) {
+        battle.grid.set(cx, cy, { kind: Chasm, hazard: None, occupied_by: -1 })
+      }
     }
   }
   // Add water/ice patches
@@ -127,21 +145,79 @@ fn place_terrain(battle : @types.BattleState, mission_id : Int) -> Unit {
       battle.grid.set(ix, iy, { kind: Ice, hazard: None, occupied_by: -1 })
     }
   }
+  // Expert tier: add acid hazards
+  if tier >= 3 {
+    let ax = @types.rand_range(seed, 2, 5)
+    let ay = @types.rand_range(seed, 2, 5)
+    if battle.grid.in_bounds(ax, ay) {
+      let tile = battle.grid.get(ax, ay)
+      if tile.kind == Floor {
+        battle.grid.set(ax, ay, { ..tile, hazard: Acid })
+      }
+    }
+  }
+}
+
+///|
+/// Get the difficulty tier for a mission (0=Easy, 1=Medium, 2=Hard, 3=Expert).
+fn get_difficulty_tier(mission_id : Int) -> Int {
+  if mission_id <= 2 {
+    0 // Easy: missions 1-2
+  } else if mission_id <= 4 {
+    1 // Medium: missions 3-4
+  } else if mission_id <= 6 {
+    2 // Hard: missions 5-6
+  } else {
+    3 // Expert: missions 7-8+
+  }
+}
+
+///|
+/// Scale enemy HP based on mission difficulty.
+/// Formula: base * (1.0 + mission * 0.15), rounded.
+fn scale_enemy_hp(base_hp : Int, mission_id : Int) -> Int {
+  let scale = 1.0F + Float::from_int(mission_id) * 0.15F
+  let scaled = Float::from_int(base_hp) * scale
+  let result = scaled.to_int()
+  if result < base_hp { base_hp } else { result }
+}
+
+///|
+/// Get available enemy types based on mission difficulty tier.
+fn get_available_enemy_types(tier : Int) -> Array[@types.EnemyType] {
+  match tier {
+    0 => [Rammer, Artillery, Leaper] // Easy: basic enemies
+    1 => [Rammer, Artillery, Leaper, BeamTurret, MineLayer] // Medium
+    2 => [Rammer, Artillery, Leaper, BeamTurret, MineLayer, ShieldDrone, Splitter] // Hard
+    _ => [Rammer, Artillery, Leaper, BeamTurret, MineLayer, ShieldDrone, Splitter] // Expert: all types
+  }
 }
 
 ///|
 fn spawn_enemies(battle : @types.BattleState, mission_id : Int) -> Unit {
+  let tier = get_difficulty_tier(mission_id)
   let base_count = 3 + mission_id / 2
-  let enemy_count = if base_count > 6 { 6 } else { base_count }
-  let all_types : Array[@types.EnemyType] = [
-    Rammer, Artillery, Leaper, BeamTurret, MineLayer, ShieldDrone, Splitter,
-  ]
+  let max_enemies = match tier {
+    0 => 4
+    1 => 5
+    2 => 6
+    _ => 7
+  }
+  let enemy_count = if base_count > max_enemies {
+    max_enemies
+  } else {
+    base_count
+  }
+  let available_types = get_available_enemy_types(tier)
   let seed : Ref[UInt] = { val: (mission_id * 31337 + 42).reinterpret_as_uint() }
   for i = 0; i < enemy_count; i = i + 1 {
     let eid = 3 + i
-    let etype_idx = @types.rand_range(seed, 0, all_types.length() - 1)
-    let etype = all_types[etype_idx]
-    let ehp = @content.get_enemy_hp(etype)
+    let etype_idx = @types.rand_range(seed, 0, available_types.length() - 1)
+    let etype = available_types[etype_idx]
+    let base_hp = @content.get_enemy_hp(etype)
+    let ehp = scale_enemy_hp(base_hp, mission_id)
+    // Enemy shield on harder tiers
+    let enemy_shield = if tier >= 2 && i == 0 { 1 } else { 0 }
     // Place enemies on right side of grid
     let mut ex = @types.rand_range(seed, 5, 7)
     let mut ey = @types.rand_range(seed, 0, @types.grid_h - 1)
@@ -166,7 +242,7 @@ fn spawn_enemies(battle : @types.BattleState, mission_id : Int) -> Unit {
       y: ey,
       hp: ehp,
       max_hp: ehp,
-      shield: 0,
+      shield: enemy_shield,
       heat: 0,
       max_heat: 0,
       stunned: false,
@@ -185,22 +261,25 @@ fn spawn_enemies(battle : @types.BattleState, mission_id : Int) -> Unit {
       )
     }
   }
-  // Boss on higher missions
-  if mission_id >= 4 {
+  // Boss on higher missions (tier 1+, i.e. mission 3+)
+  if tier >= 1 && mission_id >= 4 {
     let bid = battle.units.length()
     let bx = 7
     let by = 3
     if battle.grid.in_bounds(bx, by) &&
       battle.grid.get(bx, by).occupied_by < 0 {
+      let boss_base = @content.get_enemy_hp(Boss)
+      let boss_hp = scale_enemy_hp(boss_base, mission_id)
+      let boss_shield = if tier >= 2 { 3 } else { 2 }
       let bu : @types.CombatUnit = {
         id: bid,
         active: true,
         team: Enemy,
         x: bx,
         y: by,
-        hp: @content.get_enemy_hp(Boss),
-        max_hp: @content.get_enemy_hp(Boss),
-        shield: 2,
+        hp: boss_hp,
+        max_hp: boss_hp,
+        shield: boss_shield,
         heat: 0,
         max_heat: 0,
         stunned: false,
@@ -383,10 +462,29 @@ fn generate_enemy_intents(battle : @types.BattleState) -> Unit {
 }
 
 ///|
-fn update_battle(game : @types.Game, _dt : Float) -> Unit {
+fn update_battle(game : @types.Game, dt : Float) -> Unit {
   let battle = match game.battle {
     Some(b) => b
     None => return
+  }
+  // --- Update animations and effects ---
+  let animating = @render.update_animations(battle, dt)
+  if animating {
+    return // block input while animations play
+  }
+  // --- Mouse/touch input ---
+  if @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
+    let mouse = @raylib.get_mouse_position()
+    let mx = mouse.x.to_int()
+    let my = mouse.y.to_int()
+    let gx = @types.screen_to_tile_x(mx)
+    let gy = @types.screen_to_tile_y(my)
+    if battle.grid.in_bounds(gx, gy) {
+      battle.cursor_x = gx
+      battle.cursor_y = gy
+      // Auto-action: click on tile performs context-sensitive action
+      handle_mouse_click(game, battle, gx, gy)
+    }
   }
   // --- Cursor movement ---
   if @raylib.is_key_pressed(@raylib.KeyRight) {
@@ -438,6 +536,78 @@ fn update_battle(game : @types.Game, _dt : Float) -> Unit {
   // --- Escape to cancel/undo ---
   if @raylib.is_key_pressed(@raylib.KeyEscape) {
     handle_cancel(game, battle)
+  }
+}
+
+///|
+fn handle_mouse_click(
+  game : @types.Game,
+  battle : @types.BattleState,
+  gx : Int,
+  gy : Int,
+) -> Unit {
+  let mech = match get_selected_unit(battle) {
+    Some(u) => u
+    None => return
+  }
+  if mech.acted_this_turn {
+    // Check if clicking on a player mech to select it
+    let unit_id = find_unit_at(battle, gx, gy)
+    match unit_id {
+      Some(uid) => {
+        let u = battle.units[uid]
+        if u.team == Player && u.active && u.hp > 0 {
+          battle.selected_mech = uid
+          game.message_text = "Selected \{@content.get_mech_stats(u.mech_class).name}"
+          game.message_timer = 1.0
+        }
+      }
+      None => ()
+    }
+    return
+  }
+  // Check what is at this grid position
+  let unit_id = find_unit_at(battle, gx, gy)
+  match unit_id {
+    Some(uid) => {
+      let target = battle.units[uid]
+      if target.team == Enemy && target.active && target.hp > 0 {
+        // Click on enemy = attack
+        let stats = @content.get_mech_stats(mech.mech_class)
+        let dist = @types.manhattan(mech.x, mech.y, gx, gy)
+        if dist <= stats.ability_range {
+          let ability_id = select_ability_id(mech.mech_class, dist)
+          issue_command(game, battle, Attack(ability_id, gx, gy))
+        } else {
+          game.message_text = "Target out of range (\{dist}/\{stats.ability_range})"
+          game.message_timer = 1.5
+        }
+      } else if target.team == Player && target.active && target.hp > 0 {
+        // Click on own mech = select it
+        battle.selected_mech = uid
+        game.message_text = "Selected \{@content.get_mech_stats(target.mech_class).name}"
+        game.message_timer = 1.0
+      }
+    }
+    None => {
+      // Click on empty tile = move
+      let tile = battle.grid.get(gx, gy)
+      if tile.kind == Wall || tile.kind == Chasm {
+        game.message_text = "Cannot move there."
+        game.message_timer = 1.0
+        return
+      }
+      let stats = @content.get_mech_stats(mech.mech_class)
+      let dist = @types.manhattan(mech.x, mech.y, gx, gy)
+      if dist <= stats.move_range && dist > 0 {
+        issue_command(game, battle, Move(gx, gy))
+      } else if dist == 0 {
+        () // clicked on self, no action
+      } else {
+        game.message_text = "Too far (\{dist}/\{stats.move_range})"
+        game.message_timer = 1.5
+      }
+    }
   }
 }
 
@@ -755,6 +925,10 @@ fn execute_player_commands(
   battle.phase = EnemyTurn
   game.screen = EnemyTurn
   game.anim_timer = 0.0
+  // Trigger turn transition pulse effect
+  @render.trigger_pulse(battle)
+  // Queue intent reveal animation for next turn
+  @render.queue_intent_reveal(battle)
 }
 
 ///|
@@ -774,16 +948,19 @@ fn try_end_player_turn(
 }
 
 ///|
-fn update_enemy_turn(game : @types.Game, _dt : Float) -> Unit {
+fn update_enemy_turn(game : @types.Game, dt : Float) -> Unit {
   let battle = match game.battle {
     Some(b) => b
     None => return
   }
+  // Update animations during enemy turn
+  let _animating = @render.update_animations(battle, dt)
   // simulate_turn already resolved everything (player commands, enemy intents,
   // hazards, cleanup, conditions, new intent generation, and turn increment).
   // This state just serves as an animation delay so the player can see results.
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
     @raylib.is_key_pressed(@raylib.KeySpace) ||
+    @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) ||
     game.anim_timer > 1.5 {
     // Check for game-over / victory set by simulate_turn
     match battle.phase {
@@ -835,77 +1012,103 @@ fn find_unit_at(
 
 ///|
 fn update_reward(game : @types.Game) -> Unit {
-  // Three reward choices: 1=Repair, 2=Augment, 3=Power
+  // Generate offered augments if empty
+  if game.run.offered_augments.length() == 0 {
+    let seed : Ref[UInt] = { val: game.rng_state }
+    game.run.offered_augments = @content.pick_random_augments(
+      seed,
+      game.run.augments,
+      2,
+    )
+    game.rng_state = seed.val
+  }
+  // Three reward choices: 1=Pick Augment A, 2=Repair, 3=Grid Power
   if @raylib.is_key_pressed(@raylib.KeyOne) {
-    // Repair: heal all mechs to full
-    match game.battle {
-      Some(b) => {
-        for i = 0; i < b.units.length(); i = i + 1 {
-          let u = b.units[i]
-          if u.team == Player && u.active {
-            u.hp = u.max_hp
-            u.shield = 0
-            u.heat = 0
-          }
-        }
-      }
-      None => ()
+    // Pick first offered augment
+    if game.run.offered_augments.length() > 0 {
+      let aug = game.run.offered_augments[0]
+      game.run.augments.push(aug)
+      let def = @content.get_augment_def(aug)
+      game.message_text = "Acquired: \{def.name}!"
+      game.message_timer = 2.0
     }
     game.run.missions_completed += 1
-    game.message_text = "All mechs repaired!"
-    game.message_timer = 2.0
+    game.run.offered_augments = []
     advance_mission(game)
   }
   if @raylib.is_key_pressed(@raylib.KeyTwo) {
-    // Augment: +1 max HP to all mechs
-    match game.battle {
-      Some(b) => {
-        for i = 0; i < b.units.length(); i = i + 1 {
-          let u = b.units[i]
-          if u.team == Player {
-            u.max_hp += 1
-            u.hp += 1
-          }
-        }
-      }
-      None => ()
+    // Pick second offered augment or repair if only 1 offered
+    if game.run.offered_augments.length() > 1 {
+      let aug = game.run.offered_augments[1]
+      game.run.augments.push(aug)
+      let def = @content.get_augment_def(aug)
+      game.message_text = "Acquired: \{def.name}!"
+      game.message_timer = 2.0
+    } else {
+      game.message_text = "No second augment available."
+      game.message_timer = 1.5
+      return
     }
     game.run.missions_completed += 1
-    game.message_text = "Max HP increased!"
-    game.message_timer = 2.0
+    game.run.offered_augments = []
     advance_mission(game)
   }
   if @raylib.is_key_pressed(@raylib.KeyThree) {
-    // Grid power: increase grid power
-    game.run.grid_power += 1
-    game.run.missions_completed += 1
-    game.message_text = "Grid power increased!"
+    // Repair: heal all mechs
+    game.message_text = "All mechs repaired!"
     game.message_timer = 2.0
+    game.run.missions_completed += 1
+    game.run.offered_augments = []
+    advance_mission(game)
+  }
+  if @raylib.is_key_pressed(@raylib.KeyFour) {
+    // Grid power
+    game.run.grid_power += 2
+    game.message_text = "+2 Grid Power! (now \{game.run.grid_power})"
+    game.message_timer = 2.0
+    game.run.missions_completed += 1
+    game.run.offered_augments = []
     advance_mission(game)
   }
 }
 
 ///|
 fn advance_mission(game : @types.Game) -> Unit {
+  // Mark campaign node as completed
+  complete_campaign_node(game)
   game.run.current_mission += 1
-  if game.run.current_mission >= 5 {
-    // Victory - completed all missions
-    game.screen = Victory
-    match game.battle {
-      Some(b) => b.phase = Victory
-      None => ()
+  // Check if campaign is over (final boss beaten)
+  if game.screen == Victory {
+    return
+  }
+  match game.run.campaign {
+    Some(_) => {
+      // Return to campaign map for next mission choice
+      game.screen = Campaign
+      game.message_text = "Choose your next mission."
+      game.message_timer = 2.0
     }
-  } else {
-    // Start next battle
-    setup_battle(game, game.run.current_mission)
-    game.screen = Battle
+    None => {
+      // Fallback: linear progression
+      if game.run.current_mission >= @types.total_missions {
+        game.screen = Victory
+        match game.battle {
+          Some(b) => b.phase = Victory
+          None => ()
+        }
+      } else {
+        setup_battle(game, game.run.current_mission)
+        game.screen = Battle
+      }
+    }
   }
 }
 
 ///|
 fn update_end_screen(game : @types.Game) -> Unit {
   if @raylib.is_key_pressed(@raylib.KeyEnter) ||
-    @raylib.is_key_pressed(@raylib.KeySpace) {
+    @raylib.is_key_pressed(@raylib.KeySpace) ||
+    @raylib.is_mouse_button_pressed(@raylib.MouseButtonLeft) {
     game.screen = Title
     game.battle = None
     game.anim_timer = 0.0
@@ -916,6 +1119,8 @@ fn update_end_screen(game : @types.Game) -> Unit {
       augments: [],
       grid_power: 3,
       reputation: 0,
+      campaign: None,
+      offered_augments: [],
     }
   }
 }

@@ -212,5 +212,65 @@ pub fn new_battle(objective : Objective) -> BattleState {
     cursor_x: 0,
     cursor_y: 0,
     turn_log: [],
+    anim_queue: [],
+    anim_current: None,
+    floating_texts: [],
+    particles: [],
+    screen_fx: {
+      shake_timer: 0.0,
+      shake_intensity: 0.0,
+      flash_timer: 0.0,
+      flash_r: 255,
+      flash_g: 255,
+      flash_b: 255,
+      flash_alpha: 0,
+      slowmo_timer: 0.0,
+      pulse_timer: 0.0,
+    },
+    mission_id: 1,
+    augments: [],
+  }
+}
+
+///|
+pub fn battle_has_augment(
+  battle : BattleState,
+  kind : AugmentKind,
+) -> Bool {
+  for i = 0; i < battle.augments.length(); i = i + 1 {
+    if battle.augments[i] == kind {
+      return true
+    }
+  }
+  false
+}
+
+///|
+pub fn new_anim(kind : AnimKind, unit_id : Int, sx : Int, sy : Int, tx : Int, ty : Int) -> AnimState {
+  {
+    playing: false,
+    timer: 0.0,
+    kind,
+    source_x: sx,
+    source_y: sy,
+    target_x: tx,
+    target_y: ty,
+    unit_id,
+    alpha: 1.0,
+  }
+}
+
+///|
+pub fn default_screen_fx() -> ScreenFX {
+  {
+    shake_timer: 0.0,
+    shake_intensity: 0.0,
+    flash_timer: 0.0,
+    flash_r: 255,
+    flash_g: 255,
+    flash_b: 255,
+    flash_alpha: 0,
+    slowmo_timer: 0.0,
+    pulse_timer: 0.0,
   }
 }

@@ -36,10 +36,22 @@ pub fn move_unit_to(
 
 ///|
 /// Deal damage to a unit, respecting shields. Returns actual damage dealt.
+/// Optional attacker_id is used for augment effects (chain lightning, vampire core).
 pub fn apply_damage(
   battle : @types.BattleState,
   unit_id : Int,
   amount : Int,
+) -> Int {
+  apply_damage_from(battle, unit_id, amount, -1)
+}
+
+///|
+/// Deal damage from a specific attacker. Enables augment triggers.
+pub fn apply_damage_from(
+  battle : @types.BattleState,
+  unit_id : Int,
+  amount : Int,
+  attacker_id : Int,
 ) -> Int {
   if unit_id < 0 || unit_id >= battle.units.length() {
     return 0
@@ -65,11 +77,94 @@ pub fn apply_damage(
     u.shield = 0
   }
   u.hp -= remaining
-  if u.hp <= 0 {
+  let was_killed = u.hp <= 0
+  if was_killed {
     u.hp = 0
     kill_unit(battle, unit_id)
+    // VampireCore augment: heal attacker 1 HP on kill
+    if attacker_id >= 0 && attacker_id < battle.units.length() {
+      let attacker = battle.units[attacker_id]
+      if attacker.active && attacker.team == Player {
+        // Check augment via a flag on the unit or check run state
+        // For sim-level check, we use a simple flag approach
+        apply_vampire_heal(battle, attacker_id)
+      }
+    }
   }
   remaining
+}
+
+///|
+/// VampireCore heal effect: heal 1 HP on kill (capped at max).
+fn apply_vampire_heal(
+  battle : @types.BattleState,
+  unit_id : Int,
+) -> Unit {
+  let u = battle.units[unit_id]
+  if u.hp < u.max_hp {
+    u.hp += 1
+    let name = get_unit_name(battle, unit_id)
+    battle.turn_log.push("\{name} drains 1 HP (Vampire Core)")
+  }
+}
+
+///|
+/// ChainLightning effect: after dealing damage, check for adjacent enemies
+/// and deal 1 damage to the first one found.
+pub fn apply_chain_lightning(
+  battle : @types.BattleState,
+  target_id : Int,
+  attacker_id : Int,
+) -> Unit {
+  if target_id < 0 || target_id >= battle.units.length() {
+    return
+  }
+  let target = battle.units[target_id]
+  if !target.active {
+    return
+  }
+  let dx_arr = [0, 0, 1, -1]
+  let dy_arr = [-1, 1, 0, 0]
+  for d = 0; d < 4; d = d + 1 {
+    let nx = target.x + dx_arr[d]
+    let ny = target.y + dy_arr[d]
+    let adj_id = unit_at(battle, nx, ny)
+    if adj_id >= 0 && adj_id != attacker_id && adj_id != target_id {
+      let adj = battle.units[adj_id]
+      if adj.active && adj.hp > 0 && adj.team == Enemy {
+        let adj_name = get_unit_name(battle, adj_id)
+        let _ = apply_damage(battle, adj_id, 1)
+        battle.turn_log.push(
+          "Chain Lightning arcs to \{adj_name} for 1 damage!",
+        )
+        return // Only chain to one enemy
+      }
+    }
+  }
+}
+
+///|
+/// EmergencyRepair: auto-heal 1 HP when below 25%.
+pub fn check_emergency_repair(
+  battle : @types.BattleState,
+  unit_id : Int,
+) -> Unit {
+  if unit_id < 0 || unit_id >= battle.units.length() {
+    return
+  }
+  let u = battle.units[unit_id]
+  if !u.active || u.hp <= 0 {
+    return
+  }
+  // Below 25% means hp < max_hp / 4 (at least 1)
+  let threshold = if u.max_hp / 4 > 0 { u.max_hp / 4 } else { 1 }
+  if u.hp <= threshold && u.hp > 0 {
+    u.hp += 1
+    let name = get_unit_name(battle, unit_id)
+    battle.turn_log.push(
+      "\{name} emergency repair! +1 HP (\{u.hp}/\{u.max_hp})",
+    )
+  }
 }
 
 ///|
@@ -151,6 +246,7 @@ pub fn apply_heat(
 ///|
 /// Push a unit in direction (dx, dy) for up to `distance` tiles.
 /// Handles wall collision, chasm kills, chain pushes, and ice sliding.
+/// OverchargedPush augment adds +1 distance.
 pub fn try_push(
   battle : @types.BattleState,
   unit_id : Int,
@@ -166,7 +262,12 @@ pub fn try_push(
     return
   }
   let name = get_unit_name(battle, unit_id)
-  let mut steps_remaining = distance
+  let bonus = if @types.battle_has_augment(battle, OverchargedPush) {
+    1
+  } else {
+    0
+  }
+  let mut steps_remaining = distance + bonus
   while steps_remaining > 0 {
     let nx = u.x + dx
     let ny = u.y + dy

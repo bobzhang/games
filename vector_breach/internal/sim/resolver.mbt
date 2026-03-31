@@ -110,7 +110,12 @@ fn apply_hazard_damage(battle : @types.BattleState) -> Unit {
 
 ///|
 /// End-of-turn cleanup: clear stun after skipping, cool heat, reset flags.
+/// Also applies end-of-turn augment effects.
 fn cleanup_turn(battle : @types.BattleState) -> Unit {
+  let has_emergency_repair = @types.battle_has_augment(
+    battle,
+    EmergencyRepair,
+  )
   for i = 0; i < battle.units.length(); i = i + 1 {
     let u = battle.units[i]
     if !u.active {
@@ -119,6 +124,10 @@ fn cleanup_turn(battle : @types.BattleState) -> Unit {
     // Cool heat by 1 each turn for player units
     if u.team == Player && u.heat > 0 {
       u.heat -= 1
+    }
+    // EmergencyRepair augment: auto-heal 1 HP when below 25%
+    if u.team == Player && u.active && u.hp > 0 && has_emergency_repair {
+      check_emergency_repair(battle, i)
     }
     // Reset per-turn flags
     u.moved_this_turn = false

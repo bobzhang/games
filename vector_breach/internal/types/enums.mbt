@@ -3,6 +3,7 @@ pub(all) enum Screen {
   Title
   MapSelect
   MechSelect
+  Campaign
   Battle
   EnemyTurn
   Reward
@@ -115,4 +116,43 @@ pub(all) enum EffectKind {
   HazardPreview
   KillPreview
   CollisionPreview
+} derive(Eq, Show)
+
+///|
+pub(all) enum AugmentKind {
+  ExtendedBarrel     // +1 range on ranged attacks
+  HeavyFrame         // +2 max HP, -1 move range
+  OverchargedPush    // push distance +1
+  ShieldGenerator    // start each battle with 2 shield
+  HeatSink           // +1 max heat capacity
+  ChainLightning     // attacks chain to adjacent enemy for 1 damage
+  VampireCore        // heal 1 HP on kill
+  FortifiedGrid      // grid objectives take 1 less damage
+  ReflexBoost        // first mech each turn gets +1 move range
+  EmergencyRepair    // auto-heal 1 HP when below 25%
+} derive(Eq, Show)
+
+///|
+pub(all) enum CampaignNodeKind {
+  Mission(Int)       // mission def index
+  Boss(Int)          // boss mission def index
+  Rest               // heal opportunity
+  Shop               // buy augments
+} derive(Eq, Show)
+
+///|
+pub(all) enum RewardChoice {
+  PickAugment(Int)   // index into offered augments
+  RepairAll
+  GainGridPower
+} derive(Eq, Show)
+
+///|
+pub(all) enum AnimKind {
+  AnimNone
+  AnimMove
+  AnimAttack
+  AnimPush
+  AnimDeath
+  AnimIntentReveal
 } derive(Eq, Show)

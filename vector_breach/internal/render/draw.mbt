@@ -3,6 +3,7 @@ pub fn draw(game : @types.Game) -> Unit {
   @raylib.clear_background(@types.color_bg)
   match game.screen {
     Title => draw_title(game)
+    Campaign => draw_campaign(game)
     Battle => draw_battle(game)
     EnemyTurn => draw_battle_enemy_phase(game)
     Reward => draw_reward(game)
@@ -62,6 +63,185 @@ fn draw_title(game : @types.Game) -> Unit {
     @types.font_small - 2,
     @types.color_text_dim,
   )
+}
+
+// ============================================================================
+// Campaign map helpers (inlined to avoid circular dependency with game package)
+// ============================================================================
+
+///|
+fn campaign_node_completed(campaign : @types.CampaignMap, node_id : Int) -> Bool {
+  for i = 0; i < campaign.completed_nodes.length(); i = i + 1 {
+    if campaign.completed_nodes[i] == node_id {
+      return true
+    }
+  }
+  false
+}
+
+///|
+fn campaign_node_available(campaign : @types.CampaignMap, node_id : Int) -> Bool {
+  if campaign.completed_nodes.length() == 0 && node_id == 0 {
+    return true
+  }
+  for i = 0; i < campaign.completed_nodes.length(); i = i + 1 {
+    let cid = campaign.completed_nodes[i]
+    if cid >= 0 && cid < campaign.nodes.length() {
+      let node = campaign.nodes[cid]
+      for j = 0; j < node.connections.length(); j = j + 1 {
+        if node.connections[j] == node_id {
+          return true
+        }
+      }
+    }
+  }
+  false
+}
+
+///|
+fn campaign_node_name(node : @types.CampaignNode) -> String {
+  match node.kind {
+    Mission(mid) => @content.get_mission_def(mid).name
+    Boss(mid) => @content.get_mission_def(mid).name
+    Rest => "Rest Stop"
+    Shop => "Augment Shop"
+  }
+}
+
+// ============================================================================
+// Campaign map screen
+// ============================================================================
+
+///|
+fn draw_campaign(game : @types.Game) -> Unit {
+  let cx = @types.screen_w / 2
+  // Title
+  @types.draw_center_text(
+    "CAMPAIGN MAP",
+    cx,
+    30,
+    @types.font_title - 12,
+    @types.color_player,
+  )
+  let campaign = match game.run.campaign {
+    Some(c) => c
+    None => return
+  }
+  // Draw nodes and connections
+  let node_w = 140
+  let node_h = 50
+  let col_spacing = 170
+  let row_spacing = 80
+  let base_x = 60
+  let base_y = 100
+  // Draw connection lines first
+  for i = 0; i < campaign.nodes.length(); i = i + 1 {
+    let n = campaign.nodes[i]
+    let nx = base_x + n.x * col_spacing + node_w / 2
+    let ny = base_y + n.y * row_spacing + node_h / 2
+    for j = 0; j < n.connections.length(); j = j + 1 {
+      let cid = n.connections[j]
+      if cid >= 0 && cid < campaign.nodes.length() {
+        let cn = campaign.nodes[cid]
+        let cnx = base_x + cn.x * col_spacing + node_w / 2
+        let cny = base_y + cn.y * row_spacing + node_h / 2
+        let line_color = if campaign_node_completed(campaign, i) {
+          @raylib.Color::new(80, 200, 120, 120)
+        } else {
+          @raylib.Color::new(60, 80, 120, 80)
+        }
+        @raylib.draw_line_ex(
+          @raylib.Vector2::new(Float::from_int(nx), Float::from_int(ny)),
+          @raylib.Vector2::new(Float::from_int(cnx), Float::from_int(cny)),
+          2.0,
+          line_color,
+        )
+      }
+    }
+  }
+  // Draw nodes
+  for i = 0; i < campaign.nodes.length(); i = i + 1 {
+    let n = campaign.nodes[i]
+    let nx = base_x + n.x * col_spacing
+    let ny = base_y + n.y * row_spacing
+    let completed = campaign_node_completed(campaign, i)
+    let available = campaign_node_available(campaign, i) && !completed
+    let selected = campaign.selected_node == i
+    // Node background
+    let bg_color = if completed {
+      @raylib.Color::new(30, 60, 30, 200)
+    } else if available {
+      @raylib.Color::new(25, 35, 55, 220)
+    } else {
+      @raylib.Color::new(15, 18, 25, 200)
+    }
+    @raylib.draw_rectangle(nx, ny, node_w, node_h, bg_color)
+    // Border
+    let border_color = if selected && available {
+      @types.color_selected
+    } else if completed {
+      @raylib.Color::new(80, 200, 120, 180)
+    } else if available {
+      @types.color_player
+    } else {
+      @types.color_grid_line
+    }
+    @raylib.draw_rectangle_lines(nx, ny, node_w, node_h, border_color)
+    // Node name
+    let name = campaign_node_name(n)
+    let name_color = if completed {
+      @raylib.Color::new(80, 200, 120, 200)
+    } else if available {
+      @types.color_text
+    } else {
+      @types.color_text_dim
+    }
+    @types.draw_shadow_text(name, nx + 6, ny + 6, @types.font_small - 2, name_color)
+    // Node type label
+    let type_label = match n.kind {
+      Mission(_) => "Mission"
+      Boss(_) => "BOSS"
+      Rest => "Rest"
+      Shop => "Shop"
+    }
+    let type_color = match n.kind {
+      Boss(_) => @types.color_enemy
+      _ => @types.color_text_dim
+    }
+    @types.draw_shadow_text(type_label, nx + 6, ny + 26, @types.font_small - 4, type_color)
+    // Completed checkmark
+    if completed {
+      @types.draw_shadow_text("DONE", nx + node_w - 40, ny + 6, @types.font_small - 4, @raylib.Color::new(80, 200, 120, 200))
+    }
+    // Selected indicator
+    if selected && available {
+      let pulse = Float::from_double(
+        @math.sin(game.anim_timer.to_double() * 4.0),
+      )
+      let glow_alpha = 40 + (pulse * 20.0).to_int()
+      @raylib.draw_rectangle(
+        nx - 2, ny - 2, node_w + 4, node_h + 4,
+        @raylib.Color::new(255, 220, 80, glow_alpha),
+      )
+    }
+  }
+  // Instructions
+  @types.draw_center_text(
+    "Arrows to select, Enter to deploy",
+    cx,
+    @types.screen_h - 60,
+    @types.font_body,
+    @types.color_text_dim,
+  )
+  // Run stats
+  @types.draw_shadow_text(
+    "Missions: \{game.run.missions_completed}  Grid Power: \{game.run.grid_power}  Augments: \{game.run.augments.length()}",
+    20,
+    @types.screen_h - 30,
+    @types.font_small - 2,
+    @types.color_text_dim,
+  )
+  draw_message(game)
 }
 
 ///|
@@ -182,13 +362,31 @@ fn draw_battle(game : @types.Game) -> Unit {
     Some(b) => b
     None => return
   }
+  let (shake_x, shake_y) = get_shake_offset(battle.screen_fx)
+  if shake_x != 0 || shake_y != 0 {
+    @raylib.begin_mode_2d(
+      @raylib.Camera2D::new(
+        @raylib.Vector2::new(Float::from_int(-shake_x), Float::from_int(-shake_y)),
+        @raylib.Vector2::new(0.0, 0.0),
+        0.0,
+        1.0,
+      ),
+    )
+  }
   draw_grid(battle)
   draw_intents(battle)
   draw_command_preview(battle)
+  draw_current_anim(battle)
   draw_units(battle, game)
   draw_cursor(battle, game)
   draw_coord_labels()
+  draw_particles(battle)
+  draw_floating_texts(battle)
+  if shake_x != 0 || shake_y != 0 {
+    @raylib.end_mode_2d()
+  }
   draw_ui_panel(battle, game)
+  draw_screen_effects(battle)
   draw_message(game)
 }
 
@@ -198,11 +396,29 @@ fn draw_battle_enemy_phase(game : @types.Game) -> Unit {
     Some(b) => b
     None => return
   }
+  let (shake_x, shake_y) = get_shake_offset(battle.screen_fx)
+  if shake_x != 0 || shake_y != 0 {
+    @raylib.begin_mode_2d(
+      @raylib.Camera2D::new(
+        @raylib.Vector2::new(Float::from_int(-shake_x), Float::from_int(-shake_y)),
+        @raylib.Vector2::new(0.0, 0.0),
+        0.0,
+        1.0,
+      ),
+    )
+  }
   draw_grid(battle)
   draw_intents(battle)
+  draw_current_anim(battle)
   draw_units(battle, game)
   draw_coord_labels()
+  draw_particles(battle)
+  draw_floating_texts(battle)
+  if shake_x != 0 || shake_y != 0 {
+    @raylib.end_mode_2d()
+  }
   draw_ui_panel(battle, game)
+  draw_screen_effects(battle)
   // Enemy turn overlay text
   let pulse = Float::from_double(
     @math.sin(game.anim_timer.to_double() * 4.0),
@@ -1174,16 +1390,20 @@ fn draw_ui_panel(battle : @types.BattleState, game : @types.Game) -> Unit {
   )
   // Objective progress
   draw_objective_info(battle, px + 10, 56)
+  // Objective progress bar
+  draw_objective_progress_bar(battle, px + 10, 76, pw - 80)
+  // Turn countdown for survive/defend
+  draw_turn_countdown(battle, px + 10, 90)
   // Separator
   @raylib.draw_line(
     px + 10,
-    80,
+    106,
     px + pw - 10,
-    80,
+    106,
     @types.color_grid_line,
   )
   // Mech roster
-  let mut y = 90
+  let mut y = 114
   for i = 0; i < battle.units.length(); i = i + 1 {
     let u = battle.units[i]
     if u.team != Player || !u.active {
@@ -1360,7 +1580,7 @@ fn draw_turn_log(
 ///|
 fn draw_controls_legend(x : Int, y : Int) -> Unit {
   @types.draw_shadow_text(
-    "Arrows:Move  Tab:Cycle  Enter:Act",
+    "Arrows:Move  Tab:Cycle  Enter/Click:Act",
     x,
     y,
     @types.font_small - 4,
@@ -1402,65 +1622,118 @@ fn draw_reward(game : @types.Game) -> Unit {
   @types.draw_center_text(
     "MISSION COMPLETE",
     cx,
-    @types.screen_h / 5,
+    @types.screen_h / 6,
     @types.font_title,
     @raylib.Color::new(80, 220, 120, 255),
   )
   @types.draw_center_text(
     "Choose your reward:",
     cx,
-    @types.screen_h / 5 + 56,
+    @types.screen_h / 6 + 50,
     @types.font_body,
     @types.color_text,
   )
-  // Three reward cards
-  let card_w = 200
+  // Four reward cards
+  let card_w = 190
   let card_h = 120
-  let card_y = @types.screen_h / 2 - 40
-  let gap = 30
-  let total_w = card_w * 3 + gap * 2
+  let card_y = @types.screen_h / 2 - 50
+  let gap = 16
+  let total_w = card_w * 4 + gap * 3
   let start_x = cx - total_w / 2
-  // Card 1: Repair
+  // Card 1: First augment offer
+  let aug1_name = if game.run.offered_augments.length() > 0 {
+    let def = @content.get_augment_def(game.run.offered_augments[0])
+    def.name
+  } else {
+    "No Augment"
+  }
+  let aug1_desc = if game.run.offered_augments.length() > 0 {
+    let def = @content.get_augment_def(game.run.offered_augments[0])
+    def.description
+  } else {
+    "All augments owned"
+  }
   draw_reward_card(
     start_x,
     card_y,
     card_w,
     card_h,
-    "1: REPAIR",
-    "Fully heal all",
-    "mechs to max HP",
-    @raylib.Color::new(60, 200, 80, 200),
+    "1: \{aug1_name}",
+    aug1_desc,
+    "[AUGMENT]",
+    @raylib.Color::new(80, 200, 255, 200),
   )
-  // Card 2: Augment
+  // Card 2: Second augment offer
+  let aug2_name = if game.run.offered_augments.length() > 1 {
+    let def = @content.get_augment_def(game.run.offered_augments[1])
+    def.name
+  } else {
+    "N/A"
+  }
+  let aug2_desc = if game.run.offered_augments.length() > 1 {
+    let def = @content.get_augment_def(game.run.offered_augments[1])
+    def.description
+  } else {
+    ""
+  }
   draw_reward_card(
     start_x + card_w + gap,
     card_y,
     card_w,
     card_h,
-    "2: AUGMENT",
-    "+1 Max HP to",
-    "all mechs",
-    @raylib.Color::new(80, 140, 255, 200),
+    "2: \{aug2_name}",
+    aug2_desc,
+    "[AUGMENT]",
+    @raylib.Color::new(120, 160, 255, 200),
   )
-  // Card 3: Power
+  // Card 3: Repair
   draw_reward_card(
     start_x + (card_w + gap) * 2,
     card_y,
     card_w,
     card_h,
-    "3: GRID POWER",
-    "Increase grid",
-    "power by 1",
+    "3: REPAIR ALL",
+    "Fully heal all",
+    "mechs to max HP",
+    @raylib.Color::new(60, 200, 80, 200),
+  )
+  // Card 4: Grid Power
+  draw_reward_card(
+    start_x + (card_w + gap) * 3,
+    card_y,
+    card_w,
+    card_h,
+    "4: GRID POWER",
+    "+2 Grid Power",
+    "(now \{game.run.grid_power})",
     @raylib.Color::new(200, 140, 255, 200),
   )
   // Instructions
   @types.draw_center_text(
-    "Press 1, 2, or 3 to choose",
+    "Press 1, 2, 3, or 4 to choose",
     cx,
-    card_y + card_h + 40,
+    card_y + card_h + 30,
     @types.font_body,
     @types.color_text_dim,
   )
+  // Show currently owned augments
+  if game.run.augments.length() > 0 {
+    let mut aug_text = "Owned: "
+    for i = 0; i < game.run.augments.length(); i = i + 1 {
+      let def = @content.get_augment_def(game.run.augments[i])
+      aug_text = aug_text + def.icon
+      if i < game.run.augments.length() - 1 {
+        aug_text = aug_text + " "
+      }
+    }
+    @types.draw_center_text(
+      aug_text,
+      cx,
+      card_y + card_h + 56,
+      @types.font_small,
+      @types.color_text_dim,
+    )
+  }
 }
 
 ///|
@@ -1551,3 +1824,4 @@ fn draw_end(game : @types.Game, title : String, color : @raylib.Color) -> Unit {
     )
   }
 }
+

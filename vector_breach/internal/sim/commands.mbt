@@ -129,9 +129,14 @@ fn attack_vanguard_ram(
     return
   }
   let target = battle.units[target_id]
-  // Validate range (ability range 3)
+  // Validate range (ability range 3, +1 with ExtendedBarrel)
+  let range_bonus = if @types.battle_has_augment(battle, ExtendedBarrel) {
+    1
+  } else {
+    0
+  }
   let dist = @types.manhattan(u.x, u.y, tx, ty)
-  if dist > 3 {
+  if dist > 3 + range_bonus {
     battle.turn_log.push("\{name} target out of range for Ram!")
     return
   }
@@ -146,11 +151,15 @@ fn attack_vanguard_ram(
   let pdx = sign(target.x - u.x)
   let pdy = sign(target.y - u.y)
   // Deal 2 damage
-  let _ = apply_damage(battle, target_id, 2)
+  let _ = apply_damage_from(battle, target_id, 2, unit_id)
   let target_name = get_unit_name(battle, target_id)
   battle.turn_log.push(
     "\{name} rams \{target_name} for 2 damage!",
   )
+  // ChainLightning augment
+  if @types.battle_has_augment(battle, ChainLightning) {
+    apply_chain_lightning(battle, target_id, unit_id)
+  }
   // Push target 2 tiles
   if target.active && target.hp > 0 {
     try_push(battle, target_id, pdx, pdy, 2)
@@ -209,10 +218,14 @@ fn attack_striker_blade(
     return
   }
   let target_name = get_unit_name(battle, target_id)
-  let _ = apply_damage(battle, target_id, 4)
+  let _ = apply_damage_from(battle, target_id, 4, unit_id)
   battle.turn_log.push(
     "\{name} slashes \{target_name} for 4 damage!",
   )
+  // ChainLightning augment
+  if @types.battle_has_augment(battle, ChainLightning) {
+    apply_chain_lightning(battle, target_id, unit_id)
+  }
 }
 
 ///|
@@ -279,8 +292,13 @@ fn attack_sentinel_cannon(
     battle.turn_log.push("\{name} cannon fires at nothing!")
     return
   }
+  let range_bonus = if @types.battle_has_augment(battle, ExtendedBarrel) {
+    1
+  } else {
+    0
+  }
   let dist = @types.manhattan(u.x, u.y, tx, ty)
-  if dist > 4 {
+  if dist > 4 + range_bonus {
     battle.turn_log.push("\{name} target out of cannon range!")
     return
   }
@@ -289,10 +307,14 @@ fn attack_sentinel_cannon(
     return
   }
   let target_name = get_unit_name(battle, target_id)
-  let _ = apply_damage(battle, target_id, 3)
+  let _ = apply_damage_from(battle, target_id, 3, unit_id)
   battle.turn_log.push(
     "\{name} fires cannon at \{target_name} for 3 damage!",
   )
+  // ChainLightning augment
+  if @types.battle_has_augment(battle, ChainLightning) {
+    apply_chain_lightning(battle, target_id, unit_id)
+  }
 }
 
 ///|
@@ -305,8 +327,13 @@ fn attack_sentinel_artillery(
 ) -> Unit {
   let name = get_unit_name(battle, unit_id)
   let u = battle.units[unit_id]
+  let range_bonus = if @types.battle_has_augment(battle, ExtendedBarrel) {
+    1
+  } else {
+    0
+  }
   let dist = @types.manhattan(u.x, u.y, tx, ty)
-  if dist > 5 {
+  if dist > 5 + range_bonus {
     battle.turn_log.push("\{name} target out of artillery range!")
     return
   }
@@ -322,7 +349,7 @@ fn attack_sentinel_artillery(
         let hit_id = unit_at(battle, ax, ay)
         if hit_id >= 0 && hit_id != unit_id {
           let hit_name = get_unit_name(battle, hit_id)
-          let _ = apply_damage(battle, hit_id, 2)
+          let _ = apply_damage_from(battle, hit_id, 2, unit_id)
           battle.turn_log.push(
             "  Artillery hits \{hit_name} for 2 damage!",
           )
