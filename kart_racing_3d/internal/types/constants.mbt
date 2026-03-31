@@ -301,6 +301,100 @@ pub let speed_mult_ice : Float = 0.95
 
 // Drift level timing thresholds (seconds of sustained drift)
 
+// AI predictive cornering constants
+
+///|
+/// Number of segments to scan ahead for upcoming corners.
+pub let ai_lookahead_segments : Int = 5
+
+///|
+/// Braking deceleration used for AI braking distance calculation.
+pub let ai_brake_decel : Float = 22.0
+
+///|
+/// Speed fraction for sharp corners (>45 degrees).
+pub let ai_sharp_corner_speed : Float = 0.60
+
+///|
+/// Speed fraction for medium corners (20-45 degrees).
+pub let ai_medium_corner_speed : Float = 0.80
+
+///|
+/// Speed fraction for gentle corners (<20 degrees).
+pub let ai_gentle_corner_speed : Float = 1.0
+
+///|
+/// Apex steering strength multiplier toward inside of corner.
+pub let ai_apex_steer_strength : Float = 2.5
+
+///|
+/// Exit acceleration multiplier after passing corner apex.
+pub let ai_exit_accel_mult : Float = 1.3
+
+// AI pack racing constants
+
+///|
+/// Maximum distance behind another kart for drafting.
+pub let ai_draft_max_dist : Float = 8.0
+
+///|
+/// Maximum angle offset from another kart's heading for drafting.
+pub let ai_draft_max_angle : Float = 0.26 // ~15 degrees in radians
+
+///|
+/// Seconds of sustained drafting before boost activates.
+pub let ai_draft_charge_time : Float = 1.5
+
+///|
+/// Speed boost applied when draft is fully charged.
+pub let ai_draft_boost_power : Float = 6.0
+
+///|
+/// Duration of draft boost in seconds.
+pub let ai_draft_boost_duration : Float = 0.8
+
+///|
+/// Distance within which karts apply local avoidance steering.
+pub let ai_avoidance_dist : Float = 3.0
+
+///|
+/// Strength of avoidance steering repulsion.
+pub let ai_avoidance_strength : Float = 1.5
+
+///|
+/// Duration of an overtake intent before re-evaluating.
+pub let ai_overtake_duration : Float = 2.0
+
+///|
+/// Lateral offset applied for overtaking maneuvers.
+pub let ai_overtake_offset : Float = 3.5
+
+///|
+/// Lateral offset applied for defensive blocking.
+pub let ai_block_offset : Float = 2.0
+
+// AI hazard avoidance constants
+
+///|
+/// Forward scan distance in segments for hazard detection.
+pub let ai_hazard_lookahead : Int = 3
+
+///|
+/// Width of the forward cone for obstacle scanning (radians).
+pub let ai_obstacle_cone_half : Float = 0.26 // ~15 degrees
+
+///|
+/// Forward distance for obstacle scanning.
+pub let ai_obstacle_scan_dist : Float = 15.0
+
+///|
+/// Speed reduction factor when approaching a hazardous segment.
+pub let ai_hazard_speed_reduction : Float = 0.75
+
+///|
+/// Lateral offset to steer around detected obstacles.
+pub let ai_obstacle_dodge_offset : Float = 3.0
+
 ///|
 /// Seconds of sustained drift required for mini turbo.
 pub let drift_mini_threshold : Float = 0.6

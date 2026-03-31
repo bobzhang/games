@@ -63,6 +63,16 @@ pub fn minf(a : Float, b : Float) -> Float {
 }
 
 ///|
+/// Returns the larger of `a` and `b`.
+pub fn maxf(a : Float, b : Float) -> Float {
+  if a > b {
+    a
+  } else {
+    b
+  }
+}
+
+///|
 /// Returns the linear interpolation from `a` to `b` by factor `t`.
 pub fn lerpf(a : Float, b : Float, t : Float) -> Float {
   a + (b - a) * t
@@ -845,6 +855,39 @@ pub fn is_boost_item(item : PowerupKind) -> Bool {
     Star => true
     _ => false
   }
+}
+
+///|
+/// Returns the signed turn direction between two consecutive track segments A->B and B->C.
+/// Positive means left turn, negative means right turn.
+pub fn turn_direction(a : Waypoint, b : Waypoint, c : Waypoint) -> Float {
+  let dx1 = b.x - a.x
+  let dz1 = b.z - a.z
+  let dx2 = c.x - b.x
+  let dz2 = c.z - b.z
+  let angle1 = @math.atan2f(dx1, dz1)
+  let angle2 = @math.atan2f(dx2, dz2)
+  angle_diff(angle1, angle2)
+}
+
+///|
+/// Returns the distance from kart's current position to a specific waypoint index.
+pub fn distance_to_waypoint(
+  game : Game,
+  kart : Kart,
+  wp_idx : Int,
+) -> Float {
+  let wp = get_waypoint(game, wp_idx)
+  distance2d(kart.x, kart.z, wp.x, wp.z)
+}
+
+///|
+/// Returns the estimated segment length between two consecutive waypoints.
+pub fn segment_length(game : Game, seg_idx : Int) -> Float {
+  let wc = game.waypoint_count
+  let wp0 = get_waypoint(game, seg_idx)
+  let wp1 = get_waypoint(game, (seg_idx + 1) % wc)
+  distance2d(wp0.x, wp0.z, wp1.x, wp1.z)
 }
 
 ///|

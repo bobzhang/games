@@ -110,6 +110,18 @@ pub(all) struct Kart {
   mut ai_line_offset : Float
   mut ai_reaction_timer : Float
   mut ai_brake_timer : Float
+  // Predictive cornering state
+  mut ai_braking_for_corner : Bool
+  mut ai_corner_target_speed : Float
+  mut ai_corner_phase : Int // 0=approach, 1=apex, 2=exit
+  // Pack racing state
+  mut ai_draft_timer : Float
+  mut ai_draft_boost : Float
+  mut ai_overtake_side : Float // -1 left, 0 none, +1 right
+  mut ai_overtake_timer : Float
+  // Hazard avoidance state
+  mut ai_hazard_offset : Float
+  mut ai_hazard_slow : Float
   mut ramp_launched : Bool
   // Lateral physics
   mut lateral_vel : Float
@@ -176,6 +188,15 @@ pub fn Kart::inactive() -> Kart {
     ai_line_offset: 0.0,
     ai_reaction_timer: 0.0,
     ai_brake_timer: 0.0,
+    ai_braking_for_corner: false,
+    ai_corner_target_speed: 0.0,
+    ai_corner_phase: 0,
+    ai_draft_timer: 0.0,
+    ai_draft_boost: 0.0,
+    ai_overtake_side: 0.0,
+    ai_overtake_timer: 0.0,
+    ai_hazard_offset: 0.0,
+    ai_hazard_slow: 0.0,
     ramp_launched: false,
     lateral_vel: 0.0,
     hop_timer: 0.0,
