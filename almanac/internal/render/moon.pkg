@@ -1,0 +1,11 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/almanac/internal/types",
+  "bobzhang/games/almanac/internal/levels",
+  "bobzhang/games/almanac/internal/weather",
+  "bobzhang/games/utils/draw",
+  "bobzhang/games/utils/fps",
+  "moonbitlang/core/math",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
