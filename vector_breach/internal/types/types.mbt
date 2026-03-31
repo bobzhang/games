@@ -88,6 +88,8 @@ pub(all) struct FloatingText {
   mut color_r : Int
   mut color_g : Int
   mut color_b : Int
+  mut scale : Float
+  mut glow : Bool
 }
 
 ///|
@@ -104,6 +106,19 @@ pub(all) struct Particle {
 }
 
 ///|
+pub(all) struct RingEffect {
+  mut x : Float
+  mut y : Float
+  mut radius : Float
+  mut max_radius : Float
+  mut timer : Float
+  mut duration : Float
+  mut color_r : Int
+  mut color_g : Int
+  mut color_b : Int
+}
+
+///|
 pub(all) struct ScreenFX {
   mut shake_timer : Float
   mut shake_intensity : Float
@@ -114,6 +129,12 @@ pub(all) struct ScreenFX {
   mut flash_alpha : Int
   mut slowmo_timer : Float
   mut pulse_timer : Float
+  mut hitstop_timer : Float
+  mut tint_timer : Float
+  mut tint_r : Int
+  mut tint_g : Int
+  mut tint_b : Int
+  mut tint_alpha : Int
 }
 
 ///|
@@ -134,6 +155,7 @@ pub(all) struct BattleState {
   mut anim_current : AnimState?
   mut floating_texts : Array[FloatingText]
   mut particles : Array[Particle]
+  mut rings : Array[RingEffect]
   mut screen_fx : ScreenFX
   mut mission_id : Int
   // Augment flags (copied from RunState at battle start for sim access)
@@ -145,6 +167,11 @@ pub(all) struct BattleState {
   mut damage_taken_this_turn : Bool
   // Undo system
   mut undo_stack : Array[BattleSnapshot]
+  // Boss set-piece tracking
+  mut boss_phase : Int
+  mut boss_narrative_text : String
+  mut boss_narrative_timer : Float
+  mut boss_walls_deployed : Array[(Int, Int)]
 }
 
 ///|
@@ -191,6 +218,9 @@ pub(all) struct CampaignNode {
   x : Int                        // display x position (0-4 columns)
   y : Int                        // display y position (row in that column)
   connections : Array[Int]       // ids of nodes this connects to
+  difficulty : Int               // 1-3 stars
+  reward_icon : String           // "A"=augment, "G"=GP, "R"=repair, "?"=random
+  theme : BranchTheme            // path theme modifier
 }
 
 ///|
@@ -215,6 +245,8 @@ pub(all) struct RunState {
   mut mechs_lost : Int
   mut best_combo : Int
   mut total_turns : Int
+  mut mech_hp : Array[Int]        // persistent HP for [vanguard, striker, sentinel]
+  mut event_choice : Int          // 0=none, 1=pay, 2=fight for events
 }
 
 ///|
@@ -252,6 +284,8 @@ pub fn Game::new() -> Game {
       mechs_lost: 0,
       best_combo: 0,
       total_turns: 0,
+      mech_hp: [0, 0, 0],
+      event_choice: 0,
     },
     frame_count: 0,
     rng_state: 0xA3B7C1D5U,

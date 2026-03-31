@@ -219,17 +219,8 @@ pub fn new_battle(objective : Objective) -> BattleState {
     anim_current: None,
     floating_texts: [],
     particles: [],
-    screen_fx: {
-      shake_timer: 0.0,
-      shake_intensity: 0.0,
-      flash_timer: 0.0,
-      flash_r: 255,
-      flash_g: 255,
-      flash_b: 255,
-      flash_alpha: 0,
-      slowmo_timer: 0.0,
-      pulse_timer: 0.0,
-    },
+    rings: [],
+    screen_fx: default_screen_fx(),
     mission_id: 1,
     augments: [],
     score: 0,
@@ -237,6 +228,10 @@ pub fn new_battle(objective : Objective) -> BattleState {
     combo_timer: 0.0,
     damage_taken_this_turn: false,
     undo_stack: [],
+    boss_phase: 1,
+    boss_narrative_text: "",
+    boss_narrative_timer: 0.0,
+    boss_walls_deployed: [],
   }
 }
 
@@ -268,6 +263,92 @@ pub fn new_anim(kind : AnimKind, unit_id : Int, sx : Int, sy : Int, tx : Int, ty
   }
 }
 
+// ============================================================================
+// Sim-level visual effect helpers (data writes to BattleState)
+// ============================================================================
+
+///|
+/// Emit a hitstop (freeze frames) for the given duration in seconds.
+pub fn emit_hitstop(battle : BattleState, seconds : Float) -> Unit {
+  if seconds > battle.screen_fx.hitstop_timer {
+    battle.screen_fx.hitstop_timer = seconds
+  }
+}
+
+///|
+/// Emit a camera shake.
+pub fn emit_shake(battle : BattleState, intensity : Float) -> Unit {
+  battle.screen_fx.shake_timer = shake_duration
+  if intensity > battle.screen_fx.shake_intensity {
+    battle.screen_fx.shake_intensity = intensity
+  }
+}
+
+///|
+/// Emit a screen flash.
+pub fn emit_flash(battle : BattleState, r : Int, g : Int, b : Int, alpha : Int) -> Unit {
+  battle.screen_fx.flash_timer = flash_duration
+  battle.screen_fx.flash_r = r
+  battle.screen_fx.flash_g = g
+  battle.screen_fx.flash_b = b
+  battle.screen_fx.flash_alpha = alpha
+}
+
+///|
+/// Emit slow-motion effect.
+pub fn emit_slowmo(battle : BattleState, seconds : Float) -> Unit {
+  if seconds > battle.screen_fx.slowmo_timer {
+    battle.screen_fx.slowmo_timer = seconds
+  }
+}
+
+///|
+/// Emit a screen tint overlay.
+pub fn emit_tint(battle : BattleState, r : Int, g : Int, b : Int, alpha : Int, dur : Float) -> Unit {
+  battle.screen_fx.tint_timer = dur
+  battle.screen_fx.tint_r = r
+  battle.screen_fx.tint_g = g
+  battle.screen_fx.tint_b = b
+  battle.screen_fx.tint_alpha = alpha
+}
+
+///|
+/// Emit an expanding ring effect at grid position.
+pub fn emit_ring(battle : BattleState, gx : Int, gy : Int, max_r : Float, dur : Float, r : Int, g : Int, b : Int) -> Unit {
+  let cx = Float::from_int(tile_center_x(gx))
+  let cy = Float::from_int(tile_center_y(gy))
+  battle.rings.push({
+    x: cx,
+    y: cy,
+    radius: 0.0,
+    max_radius: max_r,
+    timer: 0.0,
+    duration: dur,
+    color_r: r,
+    color_g: g,
+    color_b: b,
+  })
+}
+
+///|
+/// Emit a floating text at grid position.
+pub fn emit_float_text(battle : BattleState, gx : Int, gy : Int, text : String, r : Int, g : Int, b : Int, sc : Float, gl : Bool) -> Unit {
+  let sx = Float::from_int(tile_center_x(gx))
+  let sy = Float::from_int(tile_center_y(gy)) - 30.0
+  battle.floating_texts.push({
+    text,
+    x: sx,
+    y: sy,
+    timer: 0.0,
+    duration: float_text_duration,
+    color_r: r,
+    color_g: g,
+    color_b: b,
+    scale: sc,
+    glow: gl,
+  })
+}
+
 ///|
 pub fn default_screen_fx() -> ScreenFX {
   {
@@ -280,5 +361,11 @@ pub fn default_screen_fx() -> ScreenFX {
     flash_alpha: 0,
     slowmo_timer: 0.0,
     pulse_timer: 0.0,
+    hitstop_timer: 0.0,
+    tint_timer: 0.0,
+    tint_r: 0,
+    tint_g: 0,
+    tint_b: 0,
+    tint_alpha: 0,
   }
 }

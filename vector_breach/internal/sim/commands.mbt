@@ -481,6 +481,12 @@ fn execute_overclock(
   battle.turn_log.push(
     "\{name} overclocks! (+\{heat_cost} heat, now \{u.heat})",
   )
+  // Overclock FX: hitstop + blue flash + ring + tint + text
+  @types.emit_hitstop(battle, 0.1)
+  @types.emit_flash(battle, 80, 140, 255, 100)
+  @types.emit_tint(battle, 40, 80, 200, 40, 0.4)
+  @types.emit_ring(battle, u.x, u.y, 50.0, 0.5, 80, 180, 255)
+  @types.emit_float_text(battle, u.x, u.y, "OVERCLOCK!", 80, 180, 255, 1.5, true)
   // Re-execute the ability targeting the nearest enemy
   let target_id = find_nearest_unit(battle, u.x, u.y, Enemy)
   if target_id >= 0 {

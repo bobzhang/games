@@ -61,6 +61,17 @@ pub fn apply_damage_from(
     return 0
   }
   let mut remaining = amount
+  // Hivemind Phase 1: damage to boss is halved while minions are alive
+  if u.enemy_type == Boss && battle.mission_id == 8 && battle.boss_phase == 1 &&
+    hivemind_has_minions(battle) {
+    remaining = remaining / 2
+    if remaining < 1 && amount > 0 {
+      remaining = 1
+    }
+    battle.turn_log.push(
+      "Hivemind link halves damage to \{remaining}!",
+    )
+  }
   // Shield absorbs first
   if u.shield > 0 {
     if u.shield >= remaining {
@@ -80,6 +91,11 @@ pub fn apply_damage_from(
   // Track damage taken by player for FLAWLESS combo
   if u.team == Player && remaining > 0 {
     battle.damage_taken_this_turn = true
+  }
+  // Normal hit FX
+  if remaining > 0 {
+    @types.emit_hitstop(battle, 0.06)
+    @types.emit_shake(battle, 2.0)
   }
   let was_killed = u.hp <= 0
   if was_killed {
@@ -172,8 +188,12 @@ pub fn check_emergency_repair(
 
 ///|
 /// Kill a unit - mark inactive and clear grid occupancy.
+/// Emits kill flourish: ring + slowmo + floating text.
 pub fn kill_unit(battle : @types.BattleState, unit_id : Int) -> Unit {
   let u = battle.units[unit_id]
+  let kill_x = u.x
+  let kill_y = u.y
+  let is_enemy = u.team == Enemy
   u.active = false
   u.hp = 0
   // Clear tile
@@ -189,6 +209,13 @@ pub fn kill_unit(battle : @types.BattleState, unit_id : Int) -> Unit {
   }
   let name = get_unit_name(battle, unit_id)
   battle.turn_log.push("\{name} is destroyed!")
+  // Kill flourish: hitstop + slowmo + ring + text
+  @types.emit_hitstop(battle, 0.06)
+  @types.emit_slowmo(battle, 0.2)
+  @types.emit_shake(battle, 3.0)
+  let (r, g, b) = if is_enemy { (80, 140, 255) } else { (220, 60, 60) }
+  @types.emit_ring(battle, kill_x, kill_y, 45.0, 0.5, r, g, b)
+  @types.emit_float_text(battle, kill_x, kill_y, "+KILL", r, g, b, 1.5, true)
 }
 
 ///|
@@ -279,6 +306,9 @@ pub fn try_push(
     if !battle.grid.in_bounds(nx, ny) {
       let _ = apply_damage(battle, unit_id, 1)
       battle.turn_log.push("\{name} slams into the edge!")
+      // Wall collision FX
+      @types.emit_hitstop(battle, 0.08)
+      @types.emit_shake(battle, 4.0)
       return
     }
     let tile = battle.grid.get(nx, ny)
@@ -296,6 +326,10 @@ pub fn try_push(
       }
       let _ = apply_damage(battle, unit_id, 1)
       battle.turn_log.push("\{name} slams into a wall!")
+      // Push-into-wall collision FX
+      @types.emit_hitstop(battle, 0.08)
+      @types.emit_shake(battle, 4.0)
+      @types.emit_flash(battle, 255, 200, 100, 60)
       return
     }
     // Fall into chasm
@@ -305,6 +339,11 @@ pub fn try_push(
       if u.team == Enemy {
         add_combo_score(battle, 200, "VOID KILL!")
       }
+      // Chasm kill FX: bigger hitstop + slowmo
+      @types.emit_hitstop(battle, 0.12)
+      @types.emit_slowmo(battle, 0.3)
+      @types.emit_shake(battle, 5.0)
+      @types.emit_ring(battle, nx, ny, 60.0, 0.6, 100, 40, 180)
       kill_unit(battle, unit_id)
       return
     }
@@ -317,9 +356,14 @@ pub fn try_push(
       battle.turn_log.push(
         "\{name} collides with \{other_name}!",
       )
-      // Combo: CHAIN! for pushing enemy into another
+      // Collision burst FX
+      @types.emit_hitstop(battle, 0.08)
+      @types.emit_shake(battle, 4.0 + Float::from_int(distance))
+      @types.emit_flash(battle, 255, 200, 100, 60)
+      // Combo: CHAIN! for pushing enemy into another (escalating)
       if u.team == Enemy {
         add_combo_score(battle, 100, "CHAIN!")
+        @types.emit_float_text(battle, nx, ny, "CHAIN x\{distance}!", 255, 200, 40, 1.0 + Float::from_int(distance) * 0.15, true)
       }
       // Chain push: the blocking unit gets pushed 1 tile
       try_push(battle, other_id, dx, dy, 1)
@@ -432,7 +476,7 @@ pub fn is_immobilized(u : @types.CombatUnit) -> Bool {
 }
 
 ///|
-/// Add combo score with floating text.
+/// Add combo score with floating text and gold glow popoff.
 pub fn add_combo_score(
   battle : @types.BattleState,
   points : Int,
@@ -442,6 +486,10 @@ pub fn add_combo_score(
   battle.combo_text = text
   battle.combo_timer = 2.0
   battle.turn_log.push("+\{points} \{text}")
+  // Gold glow popoff at grid center
+  let cx = @types.grid_w / 2
+  let cy = @types.grid_h / 2
+  @types.emit_float_text(battle, cx, cy, "+\{points} \{text}", 255, 220, 40, 1.5, true)
 }
 
 ///|

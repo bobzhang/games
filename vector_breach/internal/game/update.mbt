@@ -10,7 +10,7 @@ pub fn update(game : @types.Game, dt : Float) -> Unit {
       game.message_text = ""
     }
   }
-  // Decay combo timer
+  // Decay combo timer and boss narrative timer
   match game.battle {
     Some(b) => {
       if b.combo_timer > 0.0 {
@@ -18,6 +18,13 @@ pub fn update(game : @types.Game, dt : Float) -> Unit {
         if b.combo_timer < 0.0 {
           b.combo_timer = 0.0
           b.combo_text = ""
+        }
+      }
+      if b.boss_narrative_timer > 0.0 {
+        b.boss_narrative_timer -= dt
+        if b.boss_narrative_timer < 0.0 {
+          b.boss_narrative_timer = 0.0
+          b.boss_narrative_text = ""
         }
       }
     }
@@ -848,6 +855,8 @@ fn handle_overclock(
   mech.moved_this_turn = false
   game.message_text = "Overclocked! Heat: \{mech.heat}/\{mech.max_heat}"
   game.message_timer = 2.0
+  // Overclock visual FX
+  @render.fx_overclock(battle, mech.x, mech.y)
 }
 
 ///|
@@ -1335,10 +1344,11 @@ fn update_end_screen(game : @types.Game) -> Unit {
       mechs_lost: 0,
       best_combo: 0,
       total_turns: 0,
+      mech_hp: [0, 0, 0],
+      event_choice: 0,
     }
   }
 }
-
 
 ///|
 fn update_mission_briefing(game : @types.Game) -> Unit {
@@ -1385,6 +1395,8 @@ fn update_run_summary(game : @types.Game) -> Unit {
       mechs_lost: 0,
       best_combo: 0,
       total_turns: 0,
+      mech_hp: [0, 0, 0],
+      event_choice: 0,
     }
   }
 }

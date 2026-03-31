@@ -27,9 +27,15 @@ pub fn simulate_turn(
     execute_player_command(state, i, commands[i])
   }
 
+  // Phase 1.5: Check boss phase transitions before enemy acts
+  check_boss_phase_transition(state)
+
   // Phase 2: Resolve enemy intents
   state.turn_log.push("-- Enemy Phase --")
   resolve_all_enemy_intents(state)
+
+  // Phase 2.25: Boss per-turn effects (reinforcements, hazards, wall deploys)
+  resolve_boss_turn_effects(state)
 
   // Phase 2.5: Sentinel Overwatch (tier >= 2)
   resolve_overwatch(state)

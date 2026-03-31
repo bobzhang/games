@@ -624,8 +624,10 @@ fn generate_beam_rotating_intent(
 }
 
 ///|
-/// Siege Engine Boss (mission 4): alternates between AoE slam and charge.
-/// Phase 2 (below 50% HP): fires in a cross pattern each turn.
+/// Siege Engine Boss (mission 4): multi-phase scripted encounter.
+/// Phase 1 (100-60% HP): "Assault Mode" - charge + artillery + summon Rammers.
+/// Phase 2 (60-30% HP): "Fortify Mode" - stationary, shield, beam, deploy walls.
+/// Phase 3 (<30% HP): "Overload" - fast movement, cardinal fire, lava hazards.
 fn generate_siege_engine_intent(
   battle : @types.BattleState,
   unit_id : Int,
@@ -636,26 +638,100 @@ fn generate_siege_engine_intent(
     return March(u.x, u.y)
   }
   let target = battle.units[target_id]
-  let half_hp = u.max_hp / 2
-  if u.hp <= half_hp {
-    // Phase 2: always area blast (enraged)
-    AreaBlast(target.x, target.y, 2)
+  match battle.boss_phase {
+    2 => generate_siege_phase2(battle, unit_id, target)
+    3 => generate_siege_phase3(battle, unit_id, target)
+    _ => generate_siege_phase1(battle, unit_id, target)
+  }
+}
+
+///|
+/// Siege Engine Phase 1: "Assault Mode"
+/// - Charges across board every 2 turns (straight line)
+/// - Fires 3x3 artillery every other turn
+/// - Summons 1 Rammer every 3 turns
+fn generate_siege_phase1(
+  battle : @types.BattleState,
+  unit_id : Int,
+  target : @types.CombatUnit,
+) -> @types.Intent {
+  let u = battle.units[unit_id]
+  if battle.turn % 3 == 0 {
+    // Summon a Rammer adjacent to self
+    let spawn_x = u.x - 1
+    let spawn_y = u.y
+    Summon(spawn_x, spawn_y, 1)
+  } else if battle.turn % 2 == 0 {
+    // Charge across the board toward nearest player
+    let dx = sign(target.x - u.x)
+    let dy = sign(target.y - u.y)
+    let adx = @types.abs_int(target.x - u.x)
+    let ady = @types.abs_int(target.y - u.y)
+    if adx >= ady { Charge(dx, 0) } else { Charge(0, dy) }
   } else {
-    // Phase 1: alternate charge and blast
-    if battle.turn % 2 == 0 {
-      AreaBlast(target.x, target.y, 1)
+    // 3x3 artillery blast at target
+    AreaBlast(target.x, target.y, 1)
+  }
+}
+
+///|
+/// Siege Engine Phase 2: "Fortify Mode"
+/// - Boss stops moving, gains shield
+/// - Deploys wall tiles as cover
+/// - Fires beam across entire row each turn
+fn generate_siege_phase2(
+  battle : @types.BattleState,
+  _unit_id : Int,
+  target : @types.CombatUnit,
+) -> @types.Intent {
+  let u = battle.units[_unit_id]
+  if battle.turn % 2 == 0 {
+    // Deploy walls: represented as Summon with special marker (amount=0)
+    let wall_x = u.x - 2
+    let wall_y = u.y
+    Summon(wall_x, wall_y, 0)
+  } else {
+    // Beam across entire row toward nearest player
+    let dx = sign(target.x - u.x)
+    if dx == 0 {
+      // Player is on same column, fire downward
+      FireLine(0, sign(target.y - u.y), @types.grid_w)
     } else {
-      let dx = sign(target.x - u.x)
-      let dy = sign(target.y - u.y)
-      Charge(dx, dy)
+      FireLine(dx, 0, @types.grid_w)
     }
   }
 }
 
 ///|
-/// Hivemind Boss (mission 8): summons minions, then attacks.
-/// Even turns: summon a Splitter near the boss.
-/// Odd turns: area blast at weakest mech.
+/// Siege Engine Phase 3: "Overload"
+/// - Moves every turn (fast)
+/// - Fires in all 4 cardinal directions each turn (represented as FireLine
+///   toward nearest player for the intent; actual multi-fire in resolver)
+/// - Lava hazards appear on random tiles
+fn generate_siege_phase3(
+  battle : @types.BattleState,
+  _unit_id : Int,
+  target : @types.CombatUnit,
+) -> @types.Intent {
+  let u = battle.units[_unit_id]
+  // Alternate: charge on even turns, area blast on odd
+  if battle.turn % 2 == 0 {
+    let dx = sign(target.x - u.x)
+    let dy = sign(target.y - u.y)
+    let adx = @types.abs_int(target.x - u.x)
+    let ady = @types.abs_int(target.y - u.y)
+    if adx >= ady { Charge(dx, 0) } else { Charge(0, dy) }
+  } else {
+    // Fire at target location with larger radius
+    AreaBlast(target.x, target.y, 2)
+  }
+}
+
+///|
+/// Hivemind Boss (mission 8): multi-phase scripted encounter.
+/// Phase 1 (100-50% HP): "Swarm Control" - summons minions, damage halved while minions alive.
+/// Phase 2 (50-25% HP): "Direct Control" - moves toward player, AoE pulse, acid hazards.
+/// Phase 3 (<25% HP): "Last Stand" - absorbs minions, immobile, beam in all directions, mines.
 fn generate_hivemind_intent(
   battle : @types.BattleState,
   unit_id : Int,
@@ -666,13 +742,72 @@ fn generate_hivemind_intent(
     return March(u.x, u.y)
   }
   let target = battle.units[target_id]
-  if battle.turn % 3 == 0 {
-    // Summon turn: spawn minion adjacent to self
+  match battle.boss_phase {
+    2 => generate_hivemind_phase2(battle, unit_id, target)
+    3 => generate_hivemind_phase3(battle, unit_id, target)
+    _ => generate_hivemind_phase1(battle, unit_id, target)
+  }
+}
+
+///|
+/// Hivemind Phase 1: "Swarm Control"
+/// - Summons 2 minions per turn (Rammer + Splitter)
+/// - Minions shield the Hivemind (damage halving is handled in resolver)
+fn generate_hivemind_phase1(
+  battle : @types.BattleState,
+  unit_id : Int,
+  target : @types.CombatUnit,
+) -> @types.Intent {
+  let u = battle.units[unit_id]
+  if battle.turn % 2 == 0 {
+    // Summon minion adjacent to self
     let spawn_x = u.x - 1
-    let spawn_y = u.y
-    Summon(spawn_x, spawn_y, 1) // 1 = Splitter spawn indicator
+    let spawn_y = u.y + (if battle.turn % 4 == 0 { -1 } else { 1 })
+    Summon(spawn_x, spawn_y, 1)
   } else {
-    // Attack turn: blast at weakest player
+    // Blast at weakest player
     AreaBlast(target.x, target.y, 1)
+  }
+}
+
+///|
+/// Hivemind Phase 2: "Direct Control"
+/// - Moves toward player mechs
+/// - AoE pulse every turn (2 damage in 2-tile radius)
+fn generate_hivemind_phase2(
+  battle : @types.BattleState,
+  unit_id : Int,
+  target : @types.CombatUnit,
+) -> @types.Intent {
+  let u = battle.units[unit_id]
+  if battle.turn % 2 == 0 {
+    // Move toward nearest player
+    let (sdx, sdy) = step_toward(u.x, u.y, target.x, target.y)
+    March(u.x + sdx, u.y + sdy)
+  } else {
+    // AoE pulse centered on self with radius 2
+    AreaBlast(u.x, u.y, 2)
+  }
+}
+
+///|
+/// Hivemind Phase 3: "Last Stand"
+/// - Immobile, fires beam in all directions (resolved as AreaBlast with large radius)
+/// - Spawns mines on random floor tiles
+fn generate_hivemind_phase3(
+  _battle : @types.BattleState,
+  unit_id : Int,
+  _target : @types.CombatUnit,
+) -> @types.Intent {
+  let u = _battle.units[unit_id]
+  if _battle.turn % 2 == 0 {
+    // Place mines around the arena
+    // Use pseudo-random tile based on turn
+    let mx = (_battle.turn * 3 + 1) % @types.grid_w
+    let my = (_battle.turn * 7 + 2) % @types.grid_h
+    MinePlace(mx, my)
+  } else {
+    // Massive area blast centered on self
+    AreaBlast(u.x, u.y, 3)
   }
 }

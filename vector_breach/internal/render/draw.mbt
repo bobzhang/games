@@ -109,6 +109,8 @@ fn campaign_node_name(node : @types.CampaignNode) -> String {
     Boss(mid) => @content.get_mission_def(mid).name
     Rest => "Rest Stop"
     Shop => "Augment Shop"
+    Event => "Unknown Signal"
+    Elite(mid) => @content.get_mission_def(mid).name
   }
 }
 
@@ -132,12 +134,12 @@ fn draw_campaign(game : @types.Game) -> Unit {
     None => return
   }
   // Draw nodes and connections
-  let node_w = 140
-  let node_h = 50
-  let col_spacing = 170
-  let row_spacing = 80
-  let base_x = 60
-  let base_y = 100
+  let node_w = 120
+  let node_h = 60
+  let col_spacing = 128
+  let row_spacing = 110
+  let base_x = 20
+  let base_y = 70
   // Draw connection lines first
   for i = 0; i < campaign.nodes.length(); i = i + 1 {
     let n = campaign.nodes[i]
@@ -201,21 +203,54 @@ fn draw_campaign(game : @types.Game) -> Unit {
       @types.color_text_dim
     }
     @types.draw_shadow_text(name, nx + 6, ny + 6, @types.font_small - 2, name_color)
-    // Node type label
+    // Node type label + reward icon
     let type_label = match n.kind {
       Mission(_) => "Mission"
       Boss(_) => "BOSS"
       Rest => "Rest"
       Shop => "Shop"
+      Event => "Event"
+      Elite(_) => "ELITE"
     }
     let type_color = match n.kind {
-      Boss(_) => @types.color_enemy
+      Boss(_) | Elite(_) => @types.color_enemy
+      Rest => @raylib.Color::new(80, 200, 120, 200)
+      Shop => @raylib.Color::new(255, 220, 80, 200)
+      Event => @raylib.Color::new(180, 120, 255, 200)
       _ => @types.color_text_dim
     }
-    @types.draw_shadow_text(type_label, nx + 6, ny + 26, @types.font_small - 4, type_color)
+    @types.draw_shadow_text(type_label, nx + 6, ny + 20, @types.font_small - 4, type_color)
+    // Difficulty stars
+    if n.difficulty > 0 {
+      let mut stars = ""
+      for s = 0; s < n.difficulty; s = s + 1 {
+        stars = stars + "*"
+      }
+      @types.draw_shadow_text(stars, nx + 6, ny + 34, @types.font_small - 4, @raylib.Color::new(255, 200, 80, 180))
+    }
+    // Reward icon
+    if n.reward_icon != "" {
+      let ri_color = match n.reward_icon {
+        "A" => @types.color_player
+        "G" => @raylib.Color::new(255, 220, 80, 200)
+        "R" => @raylib.Color::new(80, 200, 120, 200)
+        _ => @raylib.Color::new(180, 120, 255, 180)
+      }
+      @types.draw_shadow_text(n.reward_icon, nx + node_w - 18, ny + 34, @types.font_small - 2, ri_color)
+    }
+    // Theme indicator
+    let theme_label = match n.theme {
+      ScorchedEarth => "~"
+      IceProtocol => "+"
+      VoidZone => "o"
+      Neutral => ""
+    }
+    if theme_label != "" {
+      @types.draw_shadow_text(theme_label, nx + node_w - 18, ny + 46, @types.font_small - 4, @types.color_text_dim)
+    }
     // Completed checkmark
     if completed {
-      @types.draw_shadow_text("DONE", nx + node_w - 40, ny + 6, @types.font_small - 4, @raylib.Color::new(80, 200, 120, 200))
+      @types.draw_shadow_text("OK", nx + node_w - 24, ny + 6, @types.font_small - 4, @raylib.Color::new(80, 200, 120, 200))
     }
     // Selected indicator
     if selected && available {
@@ -384,6 +419,7 @@ fn draw_battle(game : @types.Game) -> Unit {
   draw_units(battle, game)
   draw_cursor(battle, game)
   draw_coord_labels()
+  draw_rings(battle)
   draw_particles(battle)
   draw_floating_texts(battle)
   if shake_x != 0 || shake_y != 0 {
@@ -391,6 +427,7 @@ fn draw_battle(game : @types.Game) -> Unit {
   }
   draw_ui_panel(battle, game)
   draw_screen_effects(battle)
+  draw_boss_narrative(battle, game)
   draw_message(game)
 }
 
@@ -416,6 +453,7 @@ fn draw_battle_enemy_phase(game : @types.Game) -> Unit {
   draw_current_anim(battle)
   draw_units(battle, game)
   draw_coord_labels()
+  draw_rings(battle)
   draw_particles(battle)
   draw_floating_texts(battle)
   if shake_x != 0 || shake_y != 0 {
@@ -436,6 +474,7 @@ fn draw_battle_enemy_phase(game : @types.Game) -> Unit {
     @types.font_body,
     overlay_color,
   )
+  draw_boss_narrative(battle, game)
   draw_message(game)
 }
 
@@ -450,6 +489,58 @@ fn draw_message(game : @types.Game) -> Unit {
       @types.color_text,
     )
   }
+}
+
+///|
+/// Draw boss narrative text overlay during phase transitions.
+fn draw_boss_narrative(battle : @types.BattleState, game : @types.Game) -> Unit {
+  if battle.boss_narrative_timer <= 0.0 {
+    return
+  }
+  // Semi-transparent dark bar across middle of screen
+  let bar_y = @types.screen_h / 2 - 30
+  let bar_h = 60
+  @raylib.draw_rectangle(
+    0,
+    bar_y,
+    @types.screen_w,
+    bar_h,
+    @raylib.Color::new(0, 0, 0, 200),
+  )
+  @raylib.draw_line(
+    0, bar_y, @types.screen_w, bar_y,
+    @raylib.Color::new(255, 80, 80, 200),
+  )
+  @raylib.draw_line(
+    0, bar_y + bar_h, @types.screen_w, bar_y + bar_h,
+    @raylib.Color::new(255, 80, 80, 200),
+  )
+  // Pulsing text color
+  let pulse = Float::from_double(
+    @math.sin(game.anim_timer.to_double() * 5.0),
+  )
+  let text_alpha = 200 + (pulse * 55.0).to_int()
+  let text_color = if battle.boss_phase == 3 {
+    @raylib.Color::new(255, 80, 40, text_alpha)
+  } else {
+    @raylib.Color::new(255, 220, 80, text_alpha)
+  }
+  @types.draw_center_text(
+    battle.boss_narrative_text,
+    @types.screen_w / 2,
+    bar_y + 16,
+    @types.font_body + 4,
+    text_color,
+  )
+  // Phase indicator below narrative
+  let phase_label = "PHASE \{battle.boss_phase}"
+  @types.draw_center_text(
+    phase_label,
+    @types.screen_w / 2,
+    bar_y + bar_h + 6,
+    @types.font_small,
+    @raylib.Color::new(255, 180, 80, 160),
+  )
 }
 
 // ============================================================================
@@ -988,7 +1079,7 @@ fn draw_units(battle : @types.BattleState, game : @types.Game) -> Unit {
     let cy = @types.tile_center_y(u.y)
     match u.team {
       Player => draw_player_mech(u, cx, cy, i == battle.selected_mech, game)
-      Enemy => draw_enemy_unit(u, cx, cy)
+      Enemy => draw_enemy_unit(u, cx, cy, battle, game)
     }
     // Health bar
     draw_health_bar(u, cx, cy)
@@ -1084,12 +1175,20 @@ fn draw_player_mech(
 }
 
 ///|
-fn draw_enemy_unit(u : @types.CombatUnit, cx : Int, cy : Int) -> Unit {
+fn draw_enemy_unit(
+  u : @types.CombatUnit,
+  cx : Int,
+  cy : Int,
+  battle : @types.BattleState,
+  game : @types.Game,
+) -> Unit {
   let fcx = Float::from_int(cx)
   let fcy = Float::from_int(cy)
   let radius = Float::from_int(@types.tile_size / 3 - 2)
   let fill_color = @raylib.Color::new(160, 30, 30, 200)
   let edge_color = @types.color_enemy
+  ignore(battle)
+  ignore(game)
   match u.enemy_type {
     Rammer => {
       // Triangle pointing left (towards player side)
@@ -1205,32 +1304,124 @@ fn draw_enemy_unit(u : @types.CombatUnit, cx : Int, cy : Int) -> Unit {
       @raylib.draw_circle_lines(cx + 4, cy, small_r, edge_color)
       @draw.draw_text("P", cx - 4, cy - 6, @types.font_small - 2, @raylib.white)
     }
-    Boss => {
-      // Large pentagon with inner pentagon
-      @raylib.draw_poly(
-        @raylib.Vector2::new(fcx, fcy),
-        5,
-        radius + 4.0,
-        -18.0,
-        fill_color,
-      )
-      @raylib.draw_poly_lines(
-        @raylib.Vector2::new(fcx, fcy),
-        5,
-        radius + 4.0,
-        -18.0,
-        edge_color,
-      )
-      @raylib.draw_poly_lines(
-        @raylib.Vector2::new(fcx, fcy),
-        5,
-        radius * 0.5,
-        -18.0,
-        @raylib.Color::new(255, 200, 80, 180),
-      )
-      @draw.draw_text("X", cx - 5, cy - 7, @types.font_small, @raylib.white)
-    }
+    Boss => draw_boss_unit(fcx, fcy, cx, cy, radius, fill_color, edge_color, battle, game)
   }
+}
+
+///|
+/// Draw boss with phase-dependent visual effects.
+fn draw_boss_unit(
+  fcx : Float,
+  fcy : Float,
+  cx : Int,
+  cy : Int,
+  radius : Float,
+  fill_color : @raylib.Color,
+  edge_color : @raylib.Color,
+  battle : @types.BattleState,
+  game : @types.Game,
+) -> Unit {
+  let boss_radius = radius + 6.0
+  let phase = battle.boss_phase
+  // Phase-dependent fill color
+  let boss_fill = match phase {
+    2 => @raylib.Color::new(100, 60, 160, 220) // Purple fortify glow
+    3 => {
+      // Red/orange pulsing in overload
+      let pulse = Float::from_double(
+        @math.sin(game.anim_timer.to_double() * 8.0),
+      )
+      let r = 200 + (pulse * 55.0).to_int()
+      let g = 40 + (pulse * 30.0).to_int()
+      @raylib.Color::new(r, g, 10, 230)
+    }
+    _ => fill_color
+  }
+  // Main body: large pentagon
+  @raylib.draw_poly(
+    @raylib.Vector2::new(fcx, fcy),
+    5,
+    boss_radius,
+    -18.0,
+    boss_fill,
+  )
+  @raylib.draw_poly_lines(
+    @raylib.Vector2::new(fcx, fcy),
+    5,
+    boss_radius,
+    -18.0,
+    edge_color,
+  )
+  // Phase 1: pulsing outline
+  if phase == 1 {
+    let pulse = Float::from_double(
+      @math.sin(game.anim_timer.to_double() * 3.0),
+    )
+    let glow_r = boss_radius + 3.0 + pulse * 2.0
+    let glow_alpha = 120 + (pulse * 60.0).to_int()
+    @raylib.draw_poly_lines(
+      @raylib.Vector2::new(fcx, fcy),
+      5,
+      glow_r,
+      -18.0,
+      @raylib.Color::new(255, 200, 80, glow_alpha),
+    )
+  }
+  // Phase 2: shield glow ring
+  if phase == 2 {
+    let shield_pulse = Float::from_double(
+      @math.sin(game.anim_timer.to_double() * 2.0),
+    )
+    let shield_r = boss_radius + 5.0 + shield_pulse * 3.0
+    @raylib.draw_circle_lines(
+      cx,
+      cy,
+      shield_r,
+      @raylib.Color::new(80, 180, 255, 140),
+    )
+    @raylib.draw_circle_lines(
+      cx,
+      cy,
+      shield_r + 2.0,
+      @raylib.Color::new(80, 180, 255, 60),
+    )
+  }
+  // Phase 3: fire particles effect (cross lines pulsing outward)
+  if phase == 3 {
+    let fire_pulse = Float::from_double(
+      @math.sin(game.anim_timer.to_double() * 6.0),
+    )
+    let line_len = (8.0F + fire_pulse * 4.0F).to_int()
+    let fire_color = @raylib.Color::new(255, 100, 20, 180)
+    @raylib.draw_line(cx - line_len, cy, cx + line_len, cy, fire_color)
+    @raylib.draw_line(cx, cy - line_len, cx, cy + line_len, fire_color)
+    // Diagonal fire lines
+    let diag = (6.0F + fire_pulse * 3.0F).to_int()
+    @raylib.draw_line(
+      cx - diag, cy - diag, cx + diag, cy + diag,
+      @raylib.Color::new(255, 60, 10, 120),
+    )
+    @raylib.draw_line(
+      cx + diag, cy - diag, cx - diag, cy + diag,
+      @raylib.Color::new(255, 60, 10, 120),
+    )
+  }
+  // Inner pentagon
+  @raylib.draw_poly_lines(
+    @raylib.Vector2::new(fcx, fcy),
+    5,
+    radius * 0.5,
+    -18.0,
+    @raylib.Color::new(255, 200, 80, 180),
+  )
+  // Phase label
+  let label = match phase {
+    2 => "XD"
+    3 => "X!"
+    _ => "X"
+  }
+  let label_offset = if label.length() > 1 { -8 } else { -5 }
+  @draw.draw_text(label, cx + label_offset, cy - 7, @types.font_small, @raylib.white)
 }
 
 // ============================================================================

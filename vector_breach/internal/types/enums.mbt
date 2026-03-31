@@ -142,6 +142,23 @@ pub(all) enum CampaignNodeKind {
   Boss(Int)          // boss mission def index
   Rest               // heal opportunity
   Shop               // buy augments
+  Event              // random risk/reward event
+  Elite(Int)         // harder mission with guaranteed rare augment
+} derive(Eq, Show)
+
+///|
+pub(all) enum EventKind {
+  Scavenger          // pay 2 GP for random augment, or fight for free augment
+  Ambush             // surprise battle with extra enemies but double reward
+  Intel              // see next 2 missions' enemies + objectives
+} derive(Eq, Show)
+
+///|
+pub(all) enum BranchTheme {
+  ScorchedEarth      // more lava/fire tiles, fire-themed rewards
+  IceProtocol        // more ice tiles, mobility-themed rewards
+  VoidZone           // more chasms, push-themed rewards
+  Neutral            // no special theme
 } derive(Eq, Show)
 
 ///|

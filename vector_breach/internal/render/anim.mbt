@@ -4,12 +4,30 @@
 ///|
 /// Update all active animations and effects each frame.
 pub fn update_animations(battle : @types.BattleState, dt : Float) -> Bool {
+  // Hitstop: freeze gameplay but keep updating screen fx
+  if battle.screen_fx.hitstop_timer > 0.0 {
+    battle.screen_fx.hitstop_timer -= dt
+    if battle.screen_fx.hitstop_timer < 0.0 {
+      battle.screen_fx.hitstop_timer = 0.0
+    }
+    // Still update visual effects during hitstop
+    update_screen_fx(battle.screen_fx, dt)
+    return true
+  }
+  // Slowmo: scale dt
+  let effective_dt = if battle.screen_fx.slowmo_timer > 0.0 {
+    dt * 0.3
+  } else {
+    dt
+  }
   // Update screen effects
   update_screen_fx(battle.screen_fx, dt)
   // Update floating texts
-  update_floating_texts(battle, dt)
+  update_floating_texts(battle, effective_dt)
   // Update particles
-  update_particles(battle, dt)
+  update_particles(battle, effective_dt)
+  // Update ring effects
+  update_rings(battle, effective_dt)
   // Process animation queue
   match battle.anim_current {
     Some(anim) => {
@@ -80,6 +98,19 @@ fn update_screen_fx(fx : @types.ScreenFX, dt : Float) -> Unit {
     fx.pulse_timer -= dt
     if fx.pulse_timer < 0.0F {
       fx.pulse_timer = 0.0F
+    }
+  }
+  if fx.hitstop_timer > 0.0F {
+    fx.hitstop_timer -= dt
+    if fx.hitstop_timer < 0.0F {
+      fx.hitstop_timer = 0.0F
+    }
+  }
+  if fx.tint_timer > 0.0F {
+    fx.tint_timer -= dt
+    if fx.tint_timer < 0.0F {
+      fx.tint_timer = 0.0F
+      fx.tint_alpha = 0
     }
   }
 }
@@ -196,6 +227,8 @@ pub fn spawn_damage_text(battle : @types.BattleState, x : Int, y : Int, amount :
     color_r: 255,
     color_g: 60,
     color_b: 60,
+    scale: 1.0,
+    glow: false,
   }
   battle.floating_texts.push(ft)
 }
@@ -213,16 +246,23 @@ pub fn spawn_shield_text(battle : @types.BattleState, x : Int, y : Int) -> Unit 
     color_r: 80,
     color_g: 220,
     color_b: 255,
+    scale: 1.0,
+    glow: false,
   }
   battle.floating_texts.push(ft)
 }
 
 ///|
-pub fn spawn_chain_text(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+pub fn spawn_chain_text(battle : @types.BattleState, x : Int, y : Int, chain_count : Int) -> Unit {
   let sx = Float::from_int(@types.tile_center_x(x))
   let sy = Float::from_int(@types.tile_center_y(y)) - 20.0F
+  let label = if chain_count > 1 {
+    "CHAIN x\{chain_count}!"
+  } else {
+    "CHAIN!"
+  }
   let ft : @types.FloatingText = {
-    text: "CHAIN!",
+    text: label,
     x: sx,
     y: sy,
     timer: 0.0F,
@@ -230,6 +270,8 @@ pub fn spawn_chain_text(battle : @types.BattleState, x : Int, y : Int) -> Unit {
     color_r: 255,
     color_g: 200,
     color_b: 40,
+    scale: 1.0 + Float::from_int(chain_count) * 0.15,
+    glow: true,
   }
   battle.floating_texts.push(ft)
 }
@@ -247,8 +289,212 @@ pub fn spawn_stun_text(battle : @types.BattleState, x : Int, y : Int) -> Unit {
     color_r: 255,
     color_g: 255,
     color_b: 80,
+    scale: 1.0,
+    glow: false,
   }
   battle.floating_texts.push(ft)
+}
+
+// ============================================================================
+// Kill / Overclock / Combo floating text spawners
+// ============================================================================
+
+///|
+pub fn spawn_kill_text(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+  let sx = Float::from_int(@types.tile_center_x(x))
+  let sy = Float::from_int(@types.tile_center_y(y)) - 30.0F
+  let ft : @types.FloatingText = {
+    text: "+KILL",
+    x: sx,
+    y: sy,
+    timer: 0.0F,
+    duration: 1.5,
+    color_r: 255,
+    color_g: 80,
+    color_b: 80,
+    scale: 1.5,
+    glow: true,
+  }
+  battle.floating_texts.push(ft)
+}
+
+///|
+pub fn spawn_overclock_text(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+  let sx = Float::from_int(@types.tile_center_x(x))
+  let sy = Float::from_int(@types.tile_center_y(y)) - 35.0F
+  let ft : @types.FloatingText = {
+    text: "OVERCLOCK!",
+    x: sx,
+    y: sy,
+    timer: 0.0F,
+    duration: 1.8,
+    color_r: 80,
+    color_g: 180,
+    color_b: 255,
+    scale: 1.5,
+    glow: true,
+  }
+  battle.floating_texts.push(ft)
+}
+
+///|
+pub fn spawn_combo_text(battle : @types.BattleState, text : String, x : Int, y : Int) -> Unit {
+  let sx = Float::from_int(@types.tile_center_x(x))
+  let sy = Float::from_int(@types.tile_center_y(y)) - 40.0F
+  let ft : @types.FloatingText = {
+    text,
+    x: sx,
+    y: sy,
+    timer: 0.0F,
+    duration: 2.0,
+    color_r: 255,
+    color_g: 220,
+    color_b: 40,
+    scale: 1.5,
+    glow: true,
+  }
+  battle.floating_texts.push(ft)
+}
+
+// ============================================================================
+// Ring effect spawning and updating
+// ============================================================================
+
+///|
+pub fn spawn_ring(battle : @types.BattleState, x : Int, y : Int, max_r : Float, dur : Float, r : Int, g : Int, b : Int) -> Unit {
+  let cx = Float::from_int(@types.tile_center_x(x))
+  let cy = Float::from_int(@types.tile_center_y(y))
+  let ring : @types.RingEffect = {
+    x: cx,
+    y: cy,
+    radius: 0.0,
+    max_radius: max_r,
+    timer: 0.0,
+    duration: dur,
+    color_r: r,
+    color_g: g,
+    color_b: b,
+  }
+  battle.rings.push(ring)
+}
+
+///|
+fn update_rings(battle : @types.BattleState, dt : Float) -> Unit {
+  let mut i = 0
+  while i < battle.rings.length() {
+    let ring = battle.rings[i]
+    ring.timer += dt
+    let t = ring.timer / ring.duration
+    ring.radius = ring.max_radius * t
+    if ring.timer >= ring.duration {
+      let _ = battle.rings.remove(i)
+    } else {
+      i += 1
+    }
+  }
+}
+
+///|
+pub fn draw_rings(battle : @types.BattleState) -> Unit {
+  for i = 0; i < battle.rings.length(); i = i + 1 {
+    let ring = battle.rings[i]
+    let t = ring.timer / ring.duration
+    let alpha = ((1.0F - t) * 200.0F).to_int().clamp(min=0, max=200)
+    @raylib.draw_circle_lines(
+      ring.x.to_int(), ring.y.to_int(), ring.radius,
+      @raylib.Color::new(ring.color_r, ring.color_g, ring.color_b, alpha),
+    )
+    // Secondary inner ring for glow
+    if ring.radius > 4.0 {
+      let inner_alpha = alpha / 3
+      @raylib.draw_circle_lines(
+        ring.x.to_int(), ring.y.to_int(), ring.radius - 3.0,
+        @raylib.Color::new(ring.color_r, ring.color_g, ring.color_b, inner_alpha),
+      )
+    }
+  }
+}
+
+// ============================================================================
+// Hitstop and tint triggers
+// ============================================================================
+
+///|
+pub fn trigger_hitstop(battle : @types.BattleState, ms : Float) -> Unit {
+  battle.screen_fx.hitstop_timer = ms / 1000.0
+}
+
+///|
+pub fn trigger_tint(battle : @types.BattleState, r : Int, g : Int, b : Int, alpha : Int, duration : Float) -> Unit {
+  battle.screen_fx.tint_timer = duration
+  battle.screen_fx.tint_r = r
+  battle.screen_fx.tint_g = g
+  battle.screen_fx.tint_b = b
+  battle.screen_fx.tint_alpha = alpha
+}
+
+// ============================================================================
+// Impact effect bundles (call these from sim layer)
+// ============================================================================
+
+///|
+/// Normal hit: 60ms hitstop + small shake
+pub fn fx_normal_hit(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+  trigger_hitstop(battle, 60.0)
+  trigger_shake(battle, 2.0)
+  spawn_directional_particles(battle, x, y, 0, 0, 10, 255, 200, 100)
+}
+
+///|
+/// Push collision: 80ms hitstop + larger burst + shake
+pub fn fx_push_collision(battle : @types.BattleState, x : Int, y : Int, dx : Int, dy : Int) -> Unit {
+  trigger_hitstop(battle, 80.0)
+  trigger_shake(battle, 4.0)
+  spawn_directional_particles(battle, x, y, dx, dy, 25, 255, 140, 40)
+  trigger_flash(battle, 255, 200, 100, 60)
+}
+
+///|
+/// Chasm kill: 120ms hitstop + slow-motion + ring
+pub fn fx_chasm_kill(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+  trigger_hitstop(battle, 120.0)
+  trigger_slowmo(battle, 0.3)
+  trigger_shake(battle, 5.0)
+  spawn_ring(battle, x, y, 60.0, 0.6, 100, 40, 180)
+  spawn_kill_text(battle, x, y)
+}
+
+///|
+/// Boss phase transition: 150ms hitstop + screen flash
+pub fn fx_boss_phase_transition(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+  trigger_hitstop(battle, 150.0)
+  trigger_flash(battle, 255, 255, 255, 180)
+  trigger_shake(battle, 8.0)
+  spawn_ring(battle, x, y, 80.0, 0.8, 255, 80, 40)
+}
+
+///|
+/// Overclock activation: 100ms hitstop + blue flash + ring
+pub fn fx_overclock(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+  trigger_hitstop(battle, 100.0)
+  trigger_flash(battle, 80, 140, 255, 100)
+  trigger_tint(battle, 40, 80, 200, 40, 0.4)
+  spawn_ring(battle, x, y, 50.0, 0.5, 80, 180, 255)
+  spawn_overclock_text(battle, x, y)
+  // Heat particles rising
+  spawn_heat_particles(battle, x, y)
+}
+
+///|
+/// Kill flourish: ring + colored explosion + slowmo + text
+pub fn fx_kill(battle : @types.BattleState, x : Int, y : Int, is_enemy : Bool) -> Unit {
+  trigger_hitstop(battle, 60.0)
+  trigger_slowmo(battle, 0.2)
+  trigger_shake(battle, 3.0)
+  let (r, g, b) = if is_enemy { (80, 140, 255) } else { (220, 60, 60) }
+  spawn_ring(battle, x, y, 45.0, 0.5, r, g, b)
+  spawn_death_particles(battle, x, y, r, g, b)
+  spawn_kill_text(battle, x, y)
 }
 
 // ============================================================================
@@ -291,6 +537,80 @@ pub fn spawn_lava_particles(battle : @types.BattleState, x : Int, y : Int) -> Un
   spawn_death_particles(battle, x, y, 255, 80, 20)
 }
 
+///|
+/// Directional particle burst: spray in (dx, dy) direction with spread.
+pub fn spawn_directional_particles(
+  battle : @types.BattleState,
+  x : Int,
+  y : Int,
+  dx : Int,
+  dy : Int,
+  count : Int,
+  r : Int,
+  g : Int,
+  b : Int,
+) -> Unit {
+  let cx = Float::from_int(@types.tile_center_x(x))
+  let cy = Float::from_int(@types.tile_center_y(y))
+  let seed : Ref[UInt] = { val: (x * 47 + y * 83 + count * 13).reinterpret_as_uint() }
+  let base_angle : Float = if dx == 0 && dy == 0 {
+    0.0F
+  } else {
+    Float::from_double(
+      @math.atan2(Float::from_int(dy).to_double(), Float::from_int(dx).to_double()),
+    )
+  }
+  for i = 0; i < count; i = i + 1 {
+    ignore(i)
+    let spread = Float::from_int(@types.rand_range(seed, -100, 100)) / 100.0F * 1.2F
+    let angle = if dx == 0 && dy == 0 {
+      Float::from_int(@types.rand_range(seed, 0, 628)) / 100.0F
+    } else {
+      base_angle + spread
+    }
+    let speed = Float::from_int(@types.rand_range(seed, 60, 200))
+    let vx = Float::from_double(@math.cos(angle.to_double())) * speed
+    let vy = Float::from_double(@math.sin(angle.to_double())) * speed - 40.0F
+    let p : @types.Particle = {
+      x: cx,
+      y: cy,
+      vx,
+      vy,
+      life: @types.particle_life,
+      max_life: @types.particle_life,
+      color_r: r,
+      color_g: g,
+      color_b: b,
+    }
+    battle.particles.push(p)
+  }
+}
+
+///|
+/// Heat particles rising upward from a mech (for overclock).
+pub fn spawn_heat_particles(battle : @types.BattleState, x : Int, y : Int) -> Unit {
+  let cx = Float::from_int(@types.tile_center_x(x))
+  let cy = Float::from_int(@types.tile_center_y(y))
+  let seed : Ref[UInt] = { val: (x * 19 + y * 53 + 7).reinterpret_as_uint() }
+  for i = 0; i < 15; i = i + 1 {
+    ignore(i)
+    let offset_x = Float::from_int(@types.rand_range(seed, -16, 16))
+    let vy = Float::from_int(@types.rand_range(seed, -180, -60))
+    let p : @types.Particle = {
+      x: cx + offset_x,
+      y: cy,
+      vx: Float::from_int(@types.rand_range(seed, -20, 20)),
+      vy,
+      life: 0.6,
+      max_life: 0.6,
+      color_r: 255,
+      color_g: @types.rand_range(seed, 80, 180),
+      color_b: 20,
+    }
+    battle.particles.push(p)
+  }
+}
+
 // ============================================================================
 // Drawing animations and effects
 // ============================================================================
@@ -315,6 +635,15 @@ pub fn draw_screen_effects(battle : @types.BattleState) -> Unit {
       @raylib.Color::new(80, 120, 200, pulse_alpha),
     )
   }
+  // Screen tint overlay (e.g. blue tint for overclock)
+  if fx.tint_timer > 0.0F {
+    let fade = fx.tint_timer / 0.4 // fade over duration
+    let alpha = (Float::from_int(fx.tint_alpha) * @types.minf(fade, 1.0)).to_int()
+    @raylib.draw_rectangle(
+      0, 0, @types.screen_w, @types.screen_h,
+      @raylib.Color::new(fx.tint_r, fx.tint_g, fx.tint_b, alpha),
+    )
+  }
 }
 
 ///|
@@ -326,7 +655,20 @@ pub fn draw_floating_texts(battle : @types.BattleState) -> Unit {
     let color = @raylib.Color::new(ft.color_r, ft.color_g, ft.color_b, alpha)
     let ix = ft.x.to_int()
     let iy = ft.y.to_int()
-    @types.draw_shadow_text(ft.text, ix, iy, @types.font_body, color)
+    // Scale: pop up at start then shrink to normal
+    let scale_t = if progress < 0.15 {
+      ft.scale + (1.5 - ft.scale) * (1.0 - progress / 0.15)
+    } else {
+      1.0
+    }
+    let size = (Float::from_int(@types.font_body) * scale_t).to_int()
+    // Glow: draw a larger blurred version behind
+    if ft.glow {
+      let glow_alpha = (alpha / 3).clamp(min=0, max=80)
+      let glow_color = @raylib.Color::new(ft.color_r, ft.color_g, ft.color_b, glow_alpha)
+      @types.draw_shadow_text(ft.text, ix - 1, iy - 1, size + 2, glow_color)
+    }
+    @types.draw_shadow_text(ft.text, ix, iy, size, color)
   }
 }
 
