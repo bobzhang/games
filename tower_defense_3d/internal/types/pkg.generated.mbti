@@ -6,7 +6,11 @@ pub let ability_buff_pulse_cd : Float
 
 pub let ability_flame_aura_cd : Float
 
+pub fn add_attack_beam(Game, Float, Float, Float, Float, Float, Float, TowerKind) -> Unit
+
 pub fn add_chain_line(Game, Float, Float, Float, Float, Float, Float) -> Unit
+
+pub fn add_synergy_line(Game, Float, Float, Float, Float, Float, Float, Int, Int, Int, String) -> Unit
 
 pub fn alloc_enemy(Game) -> Int
 
@@ -36,6 +40,10 @@ pub let armor_swarm : Float
 
 pub let armor_tank : Float
 
+pub let buff_amplify_slow_duration : Float
+
+pub let buff_amplify_splash_radius : Float
+
 pub let buff_damage_bonus : Float
 
 pub let buff_range_bonus : Float
@@ -63,6 +71,8 @@ pub let chain_count : Int
 pub let chain_damage_decay : Float
 
 pub let chain_range : Float
+
+pub let chill_duration : Float
 
 pub fn clampf(Float, Float, Float) -> Float
 
@@ -140,6 +150,8 @@ pub fn enemy_total_progress(Enemy) -> Float
 
 pub let fast_spawn_interval : Float
 
+pub fn find_nearby_buff_level(Game, Int, Int) -> Int
+
 pub fn find_target(Game, Float, Float, Float, TargetPriority, Bool) -> Int
 
 pub fn get_tile(Game, Int, Int) -> Tile
@@ -178,7 +190,13 @@ pub let map_total : Int
 
 pub let map_w : Int
 
+pub let max_attack_beams : Int
+
+pub let max_break_flashes : Int
+
 pub let max_enemies : Int
+
+pub let max_floating_texts : Int
 
 pub let max_particles : Int
 
@@ -296,11 +314,15 @@ pub let sniper_crit_chance : Float
 
 pub let sniper_crit_mult : Float
 
+pub fn spawn_break_flash(Game, Float, Float, Float, Int, Int, Int) -> Unit
+
 pub fn spawn_build_particles(Game, Float, Float, Float) -> Unit
 
 pub fn spawn_explosion_particles(Game, Float, Float, Float, Int) -> Unit
 
 pub fn spawn_fire_particles(Game, Float, Float, Float) -> Unit
+
+pub fn spawn_floating_text(Game, Float, Float, Float, Int, Int, Int, Int, Bool) -> Unit
 
 pub fn spawn_gold_particles(Game, Float, Float, Float) -> Unit
 
@@ -341,6 +363,12 @@ pub let starting_gold : Int
 pub let starting_lives : Int
 
 pub let stun_duration : Float
+
+pub let synergy_armor_break_duration : Float
+
+pub let synergy_armor_break_splash_mult : Float
+
+pub let synergy_frost_lightning_mult : Float
 
 pub let target_mode_count : Int
 
@@ -401,6 +429,35 @@ pub fn world_to_grid_y(Float) -> Int
 // Errors
 
 // Types and methods
+pub(all) struct AttackBeam {
+  mut active : Bool
+  mut x1 : Float
+  mut y1 : Float
+  mut z1 : Float
+  mut x2 : Float
+  mut y2 : Float
+  mut z2 : Float
+  mut life : Float
+  mut r : Int
+  mut g : Int
+  mut b : Int
+  mut kind : TowerKind
+}
+pub fn AttackBeam::inactive() -> Self
+
+pub(all) struct BreakFlash {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut z : Float
+  mut life : Float
+  mut r : Int
+  mut g : Int
+  mut b : Int
+  mut radius : Float
+}
+pub fn BreakFlash::inactive() -> Self
+
 pub(all) struct ChainLine {
   mut active : Bool
   mut x1 : Float
@@ -433,6 +490,9 @@ pub(all) struct Enemy {
   mut stun_timer : Float
   mut armor_break_timer : Float
   mut armor_break_factor : Float
+  mut armor_broken : Bool
+  mut chilled : Bool
+  mut chill_timer : Float
   mut gold_value : Int
   mut flying : Bool
   mut is_boss : Bool
@@ -457,8 +517,23 @@ pub(all) enum EnemyKind {
   Shield
   Camo
   Splitter
+} derive(Eq)
+
+pub(all) struct FloatingText {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut z : Float
+  mut vy : Float
+  mut life : Float
+  mut max_life : Float
+  mut value : Int
+  mut r : Int
+  mut g : Int
+  mut b : Int
+  mut is_gold : Bool
 }
-pub impl Eq for EnemyKind
+pub fn FloatingText::inactive() -> Self
 
 pub(all) struct Game {
   mut state : GameState
@@ -524,6 +599,14 @@ pub(all) struct Game {
   mut wave_message_timer : Float
   mut chain_lines : Array[ChainLine]
   mut chain_line_count : Int
+  synergy_lines : Array[SynergyLine]
+  floating_texts : Array[FloatingText]
+  break_flashes : Array[BreakFlash]
+  attack_beams : Array[AttackBeam]
+  mut wave_complete_timer : Float
+  mut leak_warning_timer : Float
+  mut gold_flash_timer : Float
+  mut prev_gold : Int
 
   fn new() -> Game
 }
@@ -540,8 +623,7 @@ pub(all) enum GameState {
   Building
   MapSelect
   TowerInfo
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct MapInfo {
   name : String
@@ -609,13 +691,28 @@ pub(all) struct StatusEffect {
 pub fn StatusEffect::new(Int, Float, Float) -> Self
 pub fn StatusEffect::none() -> Self
 
+pub(all) struct SynergyLine {
+  mut active : Bool
+  mut x1 : Float
+  mut y1 : Float
+  mut z1 : Float
+  mut x2 : Float
+  mut y2 : Float
+  mut z2 : Float
+  mut life : Float
+  mut r : Int
+  mut g : Int
+  mut b : Int
+  mut label : String
+}
+pub fn SynergyLine::inactive() -> Self
+
 pub(all) enum TargetPriority {
   First
   Last
   Strongest
   Closest
-}
-pub impl Eq for TargetPriority
+} derive(Eq)
 
 pub(all) enum Tile {
   Grass
@@ -624,8 +721,7 @@ pub(all) enum Tile {
   End
   Water
   Rock
-}
-pub impl Eq for Tile
+} derive(Eq)
 
 pub(all) struct Tower {
   mut active : Bool
@@ -661,8 +757,7 @@ pub(all) enum TowerKind {
   Sniper
   Splash
   Buff
-}
-pub impl Eq for TowerKind
+} derive(Eq)
 
 pub(all) struct UpgradeInfo {
   cost : Int

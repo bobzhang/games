@@ -237,16 +237,14 @@ pub(all) enum Dir {
   Right
   Down
   Left
-}
-pub impl Eq for Dir
+} derive(Eq)
 
 pub(all) enum EnemyKind {
   Basic
   Fast
   Heavy
   Sniper
-}
-pub impl Eq for EnemyKind
+} derive(Eq)
 
 pub(all) struct Game {
   mut state : GameState
@@ -302,8 +300,7 @@ pub(all) enum GameState {
   StageClear
   GameOver
   CampaignClear
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Particle {
   mut active : Bool
@@ -337,8 +334,7 @@ pub(all) enum PowerupKind {
   Clock
   Shovel
   ExtraLife
-}
-pub impl Eq for PowerupKind
+} derive(Eq)
 
 pub(all) struct StageProfile {
   title : String
@@ -395,8 +391,7 @@ pub(all) enum Team {
   Player1
   Player2
   Enemy
-}
-pub impl Eq for Team
+} derive(Eq)
 
 pub(all) enum Tile {
   Empty
@@ -406,8 +401,7 @@ pub(all) enum Tile {
   Bush
   Ice
   Base
-}
-pub impl Eq for Tile
+} derive(Eq)
 
 // Type aliases
 

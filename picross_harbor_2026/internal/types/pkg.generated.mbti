@@ -79,8 +79,7 @@ pub(all) enum Cell {
   Unknown
   Fill
   Cross
-}
-pub impl Eq for Cell
+} derive(Eq)
 
 pub(all) enum Dir {
   None
@@ -88,8 +87,7 @@ pub(all) enum Dir {
   Right
   Up
   Down
-}
-pub impl Eq for Dir
+} derive(Eq)
 
 pub(all) struct Game {
   solution : Array[Bool]
@@ -149,8 +147,7 @@ pub(all) enum GameState {
   LevelClear
   CampaignClear
   LevelFail
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Spark {
   mut active : Bool
@@ -168,14 +165,12 @@ pub(all) enum SparkKind {
   Fill
   Error
   Mark
-}
-pub impl Eq for SparkKind
+} derive(Eq)
 
 pub(all) enum ToolKind {
   ToolFill
   ToolCross
-}
-pub impl Eq for ToolKind
+} derive(Eq)
 
 pub(all) struct UndoStep {
   valid : Bool

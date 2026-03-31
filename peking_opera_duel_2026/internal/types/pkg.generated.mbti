@@ -147,8 +147,7 @@ pub(all) enum GameState {
   Playing
   Paused
   GameOver
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct InputState {
   mut axis_x : Int
@@ -181,9 +180,8 @@ pub(all) enum Stance {
   Fan
   Guard
   Sleeve
-}
+} derive(Eq)
 pub fn Stance::from_int(Int) -> Self
-pub impl Eq for Stance
 
 // Type aliases
 

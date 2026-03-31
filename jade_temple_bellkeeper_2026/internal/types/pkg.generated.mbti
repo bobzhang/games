@@ -226,6 +226,7 @@ pub(all) struct Foe {
   mut w : Float
   mut h : Float
   mut hp : Float
+  mut max_hp : Float
   mut life : Float
   mut phase : Float
   mut shot_cd : Float
@@ -242,8 +243,7 @@ pub(all) enum FoeKind {
   Brute
   Shaman
   Relic
-}
-pub impl Eq for FoeKind
+} derive(Eq)
 
 pub(all) struct Game {
   bells : Array[Bell]
@@ -296,8 +296,7 @@ pub(all) enum GameState {
   Play
   StageClear
   GameOver
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Hero {
   mut x : Float

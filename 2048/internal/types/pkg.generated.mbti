@@ -96,8 +96,7 @@ pub(all) enum GameState {
   Play
   Won
   Over
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Tile {
   mut value : Int

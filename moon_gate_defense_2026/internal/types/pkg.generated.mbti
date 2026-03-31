@@ -220,9 +220,8 @@ pub(all) enum Dir {
   Right
   Down
   Left
-}
+} derive(Eq)
 pub fn Dir::rotate_cw(Self) -> Self
-pub impl Eq for Dir
 
 pub(all) struct Enemy {
   mut active : Bool
@@ -248,9 +247,8 @@ pub(all) enum EnemyKind {
   Skitter
   Carapace
   Wraith
-}
+} derive(Eq)
 pub fn EnemyKind::to_int(Self) -> Int
-pub impl Eq for EnemyKind
 
 pub(all) struct Game {
   nodes : Array[Node]
@@ -296,8 +294,7 @@ pub(all) enum GameState {
   Playing
   Paused
   GameOver
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Node {
   active : Bool

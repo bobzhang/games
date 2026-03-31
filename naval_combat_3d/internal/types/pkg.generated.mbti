@@ -36,6 +36,8 @@ pub let boarding_duration : Float
 
 pub let boarding_range : Float
 
+pub let bob_amplitude : Float
+
 pub let brigantine_base_speed : Float
 
 pub let brigantine_cannon_count : Int
@@ -441,8 +443,7 @@ pub(all) enum AiPersonality {
   Flanker
   Retreater
   Berserker
-}
-pub impl Eq for AiPersonality
+} derive(Eq)
 
 pub(all) enum AiState {
   Patrol
@@ -451,8 +452,7 @@ pub(all) enum AiState {
   Retreat
   Flank
   BroadsideRun
-}
-pub impl Eq for AiState
+} derive(Eq)
 
 pub(all) struct BattleMessage {
   mut active : Bool
@@ -503,8 +503,7 @@ pub(all) enum Cannon {
   Heavy
   Mortar
   ChainShot
-}
-pub impl Eq for Cannon
+} derive(Eq)
 
 pub(all) struct Cannonball {
   mut active : Bool
@@ -598,6 +597,9 @@ pub(all) struct EnemyShip {
   mut fire_timer_decay : Float
   mut broadside_cooldown : Float
   mut target_heading : Float
+  mut has_convoy_target : Bool
+  mut convoy_target_x : Float
+  mut convoy_target_z : Float
   mut formation_offset_x : Float
   mut formation_offset_z : Float
 }
@@ -689,8 +691,7 @@ pub(all) enum GameState {
   BattleComplete
   GameOver
   BattleSelect
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Island {
   mut active : Bool
@@ -717,8 +718,7 @@ pub(all) enum IslandKind {
   Medium
   Large
   Fortress
-}
-pub impl Eq for IslandKind
+} derive(Eq)
 
 pub(all) struct Particle {
   mut active : Bool
@@ -742,8 +742,7 @@ pub(all) enum Sail {
   Furled
   Half
   Full
-}
-pub impl Eq for Sail
+} derive(Eq)
 
 pub(all) struct Ship {
   mut x : Float
@@ -799,8 +798,7 @@ pub(all) enum ShipClass {
   Frigate
   Galleon
   ManOfWar
-}
-pub impl Eq for ShipClass
+} derive(Eq)
 
 pub(all) struct WaterWake {
   mut active : Bool

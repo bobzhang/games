@@ -130,8 +130,7 @@ pub(all) enum FishKind {
   Trout
   Salmon
   Gold
-}
-pub impl Eq for FishKind
+} derive(Eq)
 
 pub(all) struct Game {
   fish : Array[Fish]
@@ -189,8 +188,7 @@ pub(all) enum GameState {
   Title
   Play
   Result
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Hazard {
   mut active : Bool
@@ -212,8 +210,7 @@ pub(all) enum HazardKind {
   Jelly
   Eel
   Ice
-}
-pub impl Eq for HazardKind
+} derive(Eq)
 
 pub(all) struct Particle {
   mut active : Bool
@@ -234,8 +231,7 @@ pub(all) enum ParticleKind {
   Splash
   Spark
   Shimmer
-}
-pub impl Eq for ParticleKind
+} derive(Eq)
 
 pub(all) struct Pickup {
   mut active : Bool
@@ -255,8 +251,7 @@ pub(all) enum PickupKind {
   Bait
   Repair
   Thermos
-}
-pub impl Eq for PickupKind
+} derive(Eq)
 
 // Type aliases
 

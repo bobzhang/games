@@ -114,6 +114,8 @@ pub fn count_plates(Game) -> Int
 
 pub fn count_total_stars(Game) -> Int
 
+pub fn count_world_stars(Game, Int) -> Int
+
 pub fn dir_dx(Dir) -> Int
 
 pub fn dir_dy(Dir) -> Int
@@ -326,6 +328,8 @@ pub let tutorial_msg_teleport : String
 
 pub let tutorial_msg_undo : String
 
+pub let undo_flash_duration : Float
+
 pub fn update_gates(Game) -> Unit
 
 pub let void_accent_b : Int
@@ -346,6 +350,14 @@ pub let void_wall_g : Int
 
 pub let void_wall_r : Int
 
+pub let world_2_star_req : Int
+
+pub let world_3_star_req : Int
+
+pub let world_4_star_req : Int
+
+pub let world_5_star_req : Int
+
 pub let world_name_0 : String
 
 pub let world_name_1 : String
@@ -355,6 +367,8 @@ pub let world_name_2 : String
 pub let world_name_3 : String
 
 pub let world_name_4 : String
+
+pub fn world_star_requirement(Int) -> Int
 
 pub fn world_to_int(World) -> Int
 
@@ -379,8 +393,7 @@ pub(all) enum DecoKind {
   DecoPillar
   DecoMushroom
   DecoVine
-}
-pub impl Eq for DecoKind
+} derive(Eq)
 
 pub(all) struct Decoration {
   mut active : Bool
@@ -399,8 +412,7 @@ pub(all) enum Dir {
   DirRight
   DirDown
   DirLeft
-}
-pub impl Eq for Dir
+} derive(Eq)
 
 pub(all) struct Entity {
   mut active : Bool
@@ -425,8 +437,7 @@ pub(all) enum EntityKind {
   EntityDiamond
   EntityKey
   EntityBomb
-}
-pub impl Eq for EntityKind
+} derive(Eq)
 
 pub(all) struct FloorInfo {
   mut unlocked : Bool
@@ -444,6 +455,8 @@ pub(all) struct Game {
   mut prev_state : GameState
   mut player_gx : Int
   mut player_gy : Int
+  mut prev_tile_x : Int
+  mut prev_tile_y : Int
   mut player_anim_x : Float
   mut player_anim_z : Float
   mut player_anim_timer : Float
@@ -501,6 +514,8 @@ pub(all) struct Game {
   mut frame_counter : Int
   mut complete_timer : Float
   mut complete_stars : Int
+  mut undo_flash_timer : Float
+  mut undo_is_last : Bool
   mut total_stars : Int
   mut total_moves : Int
   mut total_undos : Int
@@ -521,8 +536,7 @@ pub(all) enum GameState {
   StateCampaignComplete
   StateWorldSelect
   StateTutorial
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct LaserSegment {
   mut active : Bool
@@ -585,8 +599,7 @@ pub(all) enum Tile {
   TileLaserSourceUp
   TileLaserTarget
   TileRotatePlatform
-}
-pub impl Eq for Tile
+} derive(Eq)
 
 pub(all) struct UndoState {
   mut player_gx : Int
@@ -608,8 +621,7 @@ pub(all) enum World {
   WorldLava
   WorldGarden
   WorldVoid
-}
-pub impl Eq for World
+} derive(Eq)
 
 // Type aliases
 

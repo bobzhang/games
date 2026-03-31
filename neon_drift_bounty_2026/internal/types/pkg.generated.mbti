@@ -214,6 +214,7 @@ pub(all) struct Entity {
   mut w : Float
   mut h : Float
   mut hp : Float
+  mut max_hp : Float
   mut shot_cd : Float
   mut spin : Float
   mut cloak : Bool
@@ -232,8 +233,7 @@ pub(all) enum EntityKind {
   ItemCredit
   ItemBattery
   ItemHackcell
-}
-pub impl Eq for EntityKind
+} derive(Eq)
 
 pub(all) struct Game {
   entities : Array[Entity]
@@ -291,8 +291,7 @@ pub(all) enum GameState {
   Play
   StageClear
   GameOver
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct GlowRing {
   mut active : Bool

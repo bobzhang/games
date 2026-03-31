@@ -147,75 +147,75 @@ fn find_missing_synergy_passives(
 ) -> Array[@types.PassiveKind] {
   let missing : Array[@types.PassiveKind] = []
   // CritUp + Daggers = Bleed -> if has Daggers but no CritUp, offer CritUp
-  if p.weapon == Daggers && not(p.passives.contains(CritUp)) {
+  if p.weapon == Daggers && !(p.passives.contains(CritUp)) {
     missing.push(CritUp)
   }
   // SpeedUp + DashCooldownDown = Phantom Dash
-  if p.passives.contains(SpeedUp) && not(p.passives.contains(DashCooldownDown)) {
+  if p.passives.contains(SpeedUp) && !(p.passives.contains(DashCooldownDown)) {
     missing.push(DashCooldownDown)
   }
-  if p.passives.contains(DashCooldownDown) && not(p.passives.contains(SpeedUp)) {
+  if p.passives.contains(DashCooldownDown) && !(p.passives.contains(SpeedUp)) {
     missing.push(SpeedUp)
   }
   // DamageUp + Sword = Cleave
-  if p.weapon == Sword && not(p.passives.contains(DamageUp)) {
+  if p.weapon == Sword && !(p.passives.contains(DamageUp)) {
     missing.push(DamageUp)
   }
   // MaxHpUp + DefenseUp = Fortify
-  if p.passives.contains(MaxHpUp) && not(p.passives.contains(DefenseUp)) {
+  if p.passives.contains(MaxHpUp) && !(p.passives.contains(DefenseUp)) {
     missing.push(DefenseUp)
   }
-  if p.passives.contains(DefenseUp) && not(p.passives.contains(MaxHpUp)) {
+  if p.passives.contains(DefenseUp) && !(p.passives.contains(MaxHpUp)) {
     missing.push(MaxHpUp)
   }
   // AttackSpeedUp + Bow = Multishot
-  if p.weapon == Bow && not(p.passives.contains(AttackSpeedUp)) {
+  if p.weapon == Bow && !(p.passives.contains(AttackSpeedUp)) {
     missing.push(AttackSpeedUp)
   }
   // CritUp + DamageUp = Execute
-  if p.passives.contains(CritUp) && not(p.passives.contains(DamageUp)) {
+  if p.passives.contains(CritUp) && !(p.passives.contains(DamageUp)) {
     missing.push(DamageUp)
   }
-  if p.passives.contains(DamageUp) && not(p.passives.contains(CritUp)) {
+  if p.passives.contains(DamageUp) && !(p.passives.contains(CritUp)) {
     missing.push(CritUp)
   }
   // PickupRange + MaxHpUp = Vampiric Aura
-  if p.passives.contains(PickupRange) && not(p.passives.contains(MaxHpUp)) {
+  if p.passives.contains(PickupRange) && !(p.passives.contains(MaxHpUp)) {
     missing.push(MaxHpUp)
   }
-  if p.passives.contains(MaxHpUp) && not(p.passives.contains(PickupRange)) {
+  if p.passives.contains(MaxHpUp) && !(p.passives.contains(PickupRange)) {
     missing.push(PickupRange)
   }
   // SpeedUp + AttackSpeedUp = Momentum
-  if p.passives.contains(SpeedUp) && not(p.passives.contains(AttackSpeedUp)) {
+  if p.passives.contains(SpeedUp) && !(p.passives.contains(AttackSpeedUp)) {
     missing.push(AttackSpeedUp)
   }
-  if p.passives.contains(AttackSpeedUp) && not(p.passives.contains(SpeedUp)) {
+  if p.passives.contains(AttackSpeedUp) && !(p.passives.contains(SpeedUp)) {
     missing.push(SpeedUp)
   }
   // DamageUp + Staff = Chain Lightning
-  if p.weapon == Staff && not(p.passives.contains(DamageUp)) {
+  if p.weapon == Staff && !(p.passives.contains(DamageUp)) {
     missing.push(DamageUp)
   }
   // Iron Maiden: DefenseUp + Thorns
-  if p.passives.contains(DefenseUp) && not(p.passives.contains(Thorns)) {
+  if p.passives.contains(DefenseUp) && !(p.passives.contains(Thorns)) {
     missing.push(Thorns)
   }
-  if p.passives.contains(Thorns) && not(p.passives.contains(DefenseUp)) {
+  if p.passives.contains(Thorns) && !(p.passives.contains(DefenseUp)) {
     missing.push(DefenseUp)
   }
   // Blood Rage: LifeSteal + Berserker
-  if p.passives.contains(LifeSteal) && not(p.passives.contains(Berserker)) {
+  if p.passives.contains(LifeSteal) && !(p.passives.contains(Berserker)) {
     missing.push(Berserker)
   }
-  if p.passives.contains(Berserker) && not(p.passives.contains(LifeSteal)) {
+  if p.passives.contains(Berserker) && !(p.passives.contains(LifeSteal)) {
     missing.push(LifeSteal)
   }
   // Destroyer: DamageUp + GlassCannon
-  if p.passives.contains(DamageUp) && not(p.passives.contains(GlassCannon)) {
+  if p.passives.contains(DamageUp) && !(p.passives.contains(GlassCannon)) {
     missing.push(GlassCannon)
   }
-  if p.passives.contains(GlassCannon) && not(p.passives.contains(DamageUp)) {
+  if p.passives.contains(GlassCannon) && !(p.passives.contains(DamageUp)) {
     missing.push(DamageUp)
   }
   // Deduplicate
@@ -228,7 +228,7 @@ fn find_missing_synergy_passives(
         break
       }
     }
-    if not(found) {
+    if !(found) {
       unique.push(missing[i])
     }
   }
@@ -289,7 +289,7 @@ fn generate_unique_offer(
     if p.passives.contains(passive) {
       skip = true
     }
-    if not(skip) {
+    if !(skip) {
       available.push(passive)
     }
   }
@@ -377,7 +377,7 @@ fn check_synergy_notification(
         break
       }
     }
-    if not(was_active) {
+    if !(was_active) {
       // New synergy unlocked
       game.synergy_notification_timer = 3.0
       game.synergy_notification_text = "SYNERGY UNLOCKED: " + name

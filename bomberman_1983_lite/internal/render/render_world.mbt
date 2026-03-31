@@ -605,7 +605,7 @@ fn get_blast_tiles(
     for step in 1..<=blast_range {
       let tx = cx + ddx * step
       let ty = cy + ddy * step
-      if not(@types.in_tile_bounds(tx, ty)) {
+      if !(@types.in_tile_bounds(tx, ty)) {
         break
       }
       let tile = @types.get_tile(game, tx, ty)
@@ -635,7 +635,7 @@ fn @types.Game::draw_blast_preview(
 ) -> Unit {
   for pi in 0..<@types.max_players {
     let player = game.players[pi]
-    if not(player.active) || player.hp <= 0 {
+    if !(player.active) || player.hp <= 0 {
       continue
     }
     // Skip preview if still reloading.

@@ -127,8 +127,7 @@ pub(all) enum GameState {
   Title
   Play
   Result
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Obstacle {
   mut active : Bool
@@ -150,8 +149,7 @@ pub(all) enum ObstacleKind {
   Rock
   Log
   Mine
-}
-pub impl Eq for ObstacleKind
+} derive(Eq)
 
 pub(all) struct Particle {
   mut active : Bool
@@ -172,8 +170,7 @@ pub(all) enum ParticleKind {
   Water
   Hit
   Bubble
-}
-pub impl Eq for ParticleKind
+} derive(Eq)
 
 pub(all) struct Pickup {
   mut active : Bool
@@ -192,8 +189,7 @@ pub(all) enum PickupKind {
   Fuel
   Shield
   Repair
-}
-pub impl Eq for PickupKind
+} derive(Eq)
 
 // Type aliases
 

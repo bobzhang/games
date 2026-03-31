@@ -184,9 +184,7 @@ pub(all) enum GameState {
   Playing
   Win
   GameOver
-}
-pub impl Eq for GameState
-pub impl Show for GameState
+} derive(Eq, Show)
 
 pub(all) struct Input {
   move_left : Bool
@@ -240,8 +238,7 @@ pub(all) enum Tile {
   Pipe
   FlagPole
   Castle
-}
-pub impl Eq for Tile
+} derive(Eq)
 
 // Type aliases
 

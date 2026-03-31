@@ -86,7 +86,7 @@ pub fn draw_world(game : @types.Game) -> Unit {
       // Draw all visited rooms so corridors and adjacent rooms are visible
       for ri in 0..<floor.rooms.length() {
         let room = floor.rooms[ri]
-        if not(room.visited) {
+        if !(room.visited) {
           continue
         }
         let room_px = room.x * ts

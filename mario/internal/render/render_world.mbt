@@ -89,12 +89,12 @@ pub fn draw_game(game : @types.Game) -> Unit {
     @raylib.begin_mode_2d(cam)
   }
   // Sky decorations: grassland (0) and sky (2) get hills/clouds
-  if not(game.in_bonus_room) && (game.level_index == 0 || game.level_index == 2) {
+  if !(game.in_bonus_room) && (game.level_index == 0 || game.level_index == 2) {
     draw_hills(game, cam_x)
     draw_clouds(game, cam_x)
   }
   // Castle level gets lava glow at the bottom
-  if not(game.in_bonus_room) && game.level_index == 3 {
+  if !(game.in_bonus_room) && game.level_index == 3 {
     draw_castle_lava_glow(game, cam_x)
   }
   // Tiles
@@ -276,7 +276,7 @@ fn draw_ground_tile(
     Some(tex) => {
       // Ground sprite at src_offset=(0, 32), 16x16
       let above = @types.get_tile(game, tx, ty - 1)
-      if not(@types.is_solid(above)) && above != Flagpole && above != FlagTop {
+      if !(@types.is_solid(above)) && above != Flagpole && above != FlagTop {
         // Grass-topped ground tile
         draw_sprite(tex, 0.0, 32.0, 16.0, 16.0, sx, sy, white)
       } else {
@@ -302,7 +302,7 @@ fn draw_ground_tile_fallback(
   let grass_green = @raylib.Color::new(0, 188, 0, 255)
   let grass_light = @raylib.Color::new(80, 220, 80, 255)
   let above = @types.get_tile(game, tx, ty - 1)
-  if not(@types.is_solid(above)) && above != Flagpole && above != FlagTop {
+  if !(@types.is_solid(above)) && above != Flagpole && above != FlagTop {
     @raylib.draw_rectangle(sx, sy + 8, ts, ts - 8, ground_brown)
     @raylib.draw_rectangle(sx, sy, ts, 8, grass_green)
     @raylib.draw_rectangle(sx + 4, sy - 2, 3, 4, grass_light)
@@ -627,7 +627,7 @@ fn draw_mario_small_sprite(
       //   Jumping Left:   (16, 16) Jumping Right:   (16, 48)  — 2 frames
       //   Crouching:      (0, 64)
       let y_off : Float = if facing_right { 32.0 } else { 0.0 }
-      if jumping && not(on_ground) {
+      if jumping && !(on_ground) {
         // Jumping sprite
         draw_sprite(tex, 16.0, 16.0 + y_off, 16.0, 16.0, dx, dy, tint)
       } else if on_ground && (frame == 1 || frame == 2) {
@@ -708,7 +708,7 @@ fn draw_mario_small_fallback(
       }
     }
   }
-  if on_ground && not(jumping) {
+  if on_ground && !(jumping) {
     match frame {
       0 => {
         @raylib.draw_rectangle(bx + 6, by + 34, 8, 10, mario_blue)
@@ -752,7 +752,7 @@ fn draw_mario_big_sprite(
       //   Crouching:      (32, 5)   (same for both directions)
       if ducking {
         draw_sprite(tex, 32.0, 5.0, 16.0, 27.0, dx, dy, tint)
-      } else if jumping && not(on_ground) {
+      } else if jumping && !(on_ground) {
         let src_y : Float = if facing_right { 70.0 } else { 6.0 }
         draw_sprite(tex, 48.0, src_y, 16.0, 27.0, dx, dy, tint)
       } else if on_ground && (frame == 1 || frame == 2) {
@@ -844,7 +844,7 @@ fn draw_mario_big_fallback(
       }
     }
   }
-  if on_ground && not(jumping) {
+  if on_ground && !(jumping) {
     match frame {
       0 => {
         @raylib.draw_rectangle(bx + 4, by + 56, 10, 14, mario_blue)
@@ -894,7 +894,7 @@ fn draw_mario_dead(sx : Int, sy : Int, h : Int) -> Unit {
 fn draw_enemies(game : @types.Game, cam_x : Int) -> Unit {
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]
-    if not(e.active) {
+    if !(e.active) {
       continue
     }
     let sx = (e.x - Float::from_int(cam_x)).to_int()
@@ -1173,7 +1173,7 @@ fn draw_shell_fallback(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
 fn draw_items(game : @types.Game, cam_x : Int) -> Unit {
   for i in 0..<game.items.length() {
     let it = game.items[i]
-    if not(it.active) {
+    if !(it.active) {
       continue
     }
     let sx = (it.x - Float::from_int(cam_x)).to_int()
@@ -1324,7 +1324,7 @@ fn draw_oneup(sx : Int, sy : Int) -> Unit {
 fn draw_fireballs(game : @types.Game, cam_x : Int) -> Unit {
   for i in 0..<game.fireballs.length() {
     let fb = game.fireballs[i]
-    if not(fb.active) {
+    if !(fb.active) {
       continue
     }
     let sx = (fb.x - Float::from_int(cam_x)).to_int()
@@ -1349,7 +1349,7 @@ fn draw_fireballs(game : @types.Game, cam_x : Int) -> Unit {
 fn draw_particles(game : @types.Game, cam_x : Int) -> Unit {
   for i in 0..<game.particles.length() {
     let p = game.particles[i]
-    if not(p.active) {
+    if !(p.active) {
       continue
     }
     let sx = (p.x - Float::from_int(cam_x)).to_int()
@@ -1370,7 +1370,7 @@ fn draw_particles(game : @types.Game, cam_x : Int) -> Unit {
 fn draw_score_popups(game : @types.Game, cam_x : Int) -> Unit {
   for i in 0..<game.score_popups.length() {
     let s = game.score_popups[i]
-    if not(s.active) {
+    if !(s.active) {
       continue
     }
     let sx = (s.x - Float::from_int(cam_x)).to_int()
@@ -1492,7 +1492,7 @@ fn draw_piranha_plant(e : @types.Enemy, sx : Int, sy : Int) -> Unit {
   if e.dead {
     return
   }
-  if not(e.extended) {
+  if !(e.extended) {
     // Retracted — hidden inside pipe, draw nothing
     return
   }
@@ -1716,7 +1716,7 @@ fn draw_bowser_lite(
 fn draw_bowser_fireballs(game : @types.Game, cam_x : Int) -> Unit {
   for i in 0..<game.bowser_fireballs.length() {
     let bf = game.bowser_fireballs[i]
-    if not(bf.active) {
+    if !(bf.active) {
       continue
     }
     let sx = (bf.x - Float::from_int(cam_x)).to_int()
@@ -1775,7 +1775,7 @@ fn draw_platforms(game : @types.Game, cam_x : Int) -> Unit {
   let th = @types.platform_thickness
   for i in 0..<game.platforms.length() {
     let plat = game.platforms[i]
-    if not(plat.active) {
+    if !(plat.active) {
       continue
     }
     let hw = (plat.width / 2.0).to_int()
@@ -1809,7 +1809,7 @@ fn draw_lifts(game : @types.Game, cam_x : Int) -> Unit {
   let th = @types.platform_thickness
   for i in 0..<game.lifts.length() {
     let lift = game.lifts[i]
-    if not(lift.active) {
+    if !(lift.active) {
       continue
     }
     let hw = (lift.width / 2.0).to_int()
@@ -1826,7 +1826,7 @@ fn draw_lifts(game : @types.Game, cam_x : Int) -> Unit {
     // Darker bottom edge
     @raylib.draw_rectangle(sx, sy + th - 3, w, 3, lift_bottom_c)
     // Arrow indicator if not yet triggered
-    if not(lift.triggered) {
+    if !(lift.triggered) {
       let arrow_c = @raylib.Color::new(200, 240, 252, 255)
       let ax = sx + w / 2
       let ay = sy - 4
@@ -1842,7 +1842,7 @@ fn draw_bridge_falling(game : @types.Game, cam_x : Int) -> Unit {
   let ts = @types.tile_size
   for i in 0..<game.bridges.length() {
     let b = game.bridges[i]
-    if not(b.active) {
+    if !(b.active) {
       continue
     }
     if b.phase != Falling {

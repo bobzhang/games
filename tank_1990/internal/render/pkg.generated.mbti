@@ -3,7 +3,7 @@ package "bobzhang/games/tank_1990/internal/render"
 
 import {
   "bobzhang/games/tank_1990/internal/types",
-  "tonyfettes/raylib/internal/raylib",
+  "tonyfettes/raylib",
 }
 
 // Values

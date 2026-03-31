@@ -211,8 +211,7 @@ pub(all) enum GameState {
   Play
   StageClear
   GameOver
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Halo {
   mut active : Bool
@@ -252,8 +251,7 @@ pub(all) enum ObjKind {
   Storm
   Orb
   Koi
-}
-pub impl Eq for ObjKind
+} derive(Eq)
 
 pub(all) struct SkyObj {
   mut active : Bool
@@ -265,6 +263,7 @@ pub(all) struct SkyObj {
   mut w : Float
   mut h : Float
   mut hp : Float
+  mut max_hp : Float
   mut life : Float
   mut phase : Float
   mut value : Int

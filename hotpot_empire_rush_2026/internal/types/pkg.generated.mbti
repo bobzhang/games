@@ -139,15 +139,13 @@ pub(all) enum GameState {
   Playing
   Paused
   GameOver
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) enum Ingredient {
   None
   Protein
   Veg
-}
-pub impl Eq for Ingredient
+} derive(Eq)
 
 pub(all) struct InputState {
   mut move_x : Int
@@ -230,8 +228,7 @@ pub(all) enum Station {
   Queue
   Reputation
   Storage
-}
-pub impl Eq for Station
+} derive(Eq)
 
 // Type aliases
 

@@ -107,8 +107,7 @@ pub fn Bullet::new() -> Self
 pub(all) enum BulletKind {
   Normal
   Pierce
-}
-pub impl Eq for BulletKind
+} derive(Eq)
 
 pub(all) struct Enemy {
   mut active : Bool
@@ -118,6 +117,7 @@ pub(all) struct Enemy {
   mut vy : Float
   mut r : Float
   mut hp : Float
+  mut max_hp : Float
   mut kind : EnemyKind
   mut phase : Float
 
@@ -130,8 +130,7 @@ pub(all) enum EnemyKind {
   Wolf
   Brute
   Shard
-}
-pub impl Eq for EnemyKind
+} derive(Eq)
 
 pub(all) struct Game {
   enemies : Array[Enemy]
@@ -188,8 +187,7 @@ pub(all) enum GameState {
   Title
   Play
   Result
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Particle {
   mut active : Bool
@@ -210,8 +208,7 @@ pub(all) enum ParticleKind {
   Default
   Damage
   OverdriveEffect
-}
-pub impl Eq for ParticleKind
+} derive(Eq)
 
 pub(all) struct Pickup {
   mut active : Bool
@@ -232,8 +229,7 @@ pub(all) enum PickupKind {
   Medkit
   Ammo
   Overdrive
-}
-pub impl Eq for PickupKind
+} derive(Eq)
 
 // Type aliases
 

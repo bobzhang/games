@@ -129,8 +129,7 @@ pub(all) enum Direction {
   Right
   Up
   Down
-}
-pub impl Eq for Direction
+} derive(Eq)
 
 pub(all) struct FrameInput {
   move_dir : Direction
@@ -175,8 +174,7 @@ pub(all) enum GameState {
   Win
   Lose
   CampaignClear
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Guard {
   mut x : Int
@@ -192,8 +190,7 @@ pub(all) struct Guard {
 pub(all) enum TileKind {
   Floor
   Wall
-}
-pub impl Eq for TileKind
+} derive(Eq)
 
 // Type aliases
 

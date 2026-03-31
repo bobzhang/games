@@ -140,8 +140,7 @@ pub(all) enum GameState {
   Playing
   Paused
   GameOver
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Input {
   mut move_x : Int
@@ -163,10 +162,9 @@ pub(all) enum Room {
   Train
   Sparring
   Defense
-}
+} derive(Eq)
 pub fn Room::from_int(Int) -> Self
 pub fn Room::to_int(Self) -> Int
-pub impl Eq for Room
 
 pub(all) struct Student {
   name : String

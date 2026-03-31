@@ -6,7 +6,7 @@ import {
 }
 
 // Values
-pub fn damage_player(@types.Game, Float) -> Unit
+pub fn damage_player(@types.Game, Float, attacker_x? : Float, attacker_z? : Float) -> Unit
 
 pub fn start_mission(@types.Game, Int) -> Unit
 

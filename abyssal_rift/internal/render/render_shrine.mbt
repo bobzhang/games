@@ -1,6 +1,6 @@
 ///|
 pub fn draw_shrine(game : @types.Game) -> Unit {
-  if not(game.shrine_active) {
+  if !(game.shrine_active) {
     return
   }
   match game.floor {

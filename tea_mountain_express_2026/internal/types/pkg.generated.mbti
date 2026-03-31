@@ -183,8 +183,7 @@ pub(all) enum GameState {
   Playing
   Paused
   GameOver
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Hazard {
   mut active : Bool
@@ -204,8 +203,7 @@ pub(all) enum HazardKind {
   Rock
   Landslide
   Crosswind
-}
-pub impl Eq for HazardKind
+} derive(Eq)
 
 // Type aliases
 

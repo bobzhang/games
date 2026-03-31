@@ -231,8 +231,7 @@ pub(all) enum GameState {
   Play
   StageClear
   GameOver
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Ghost {
   mut active : Bool
@@ -259,6 +258,7 @@ pub(all) struct Obj {
   mut w : Float
   mut h : Float
   mut hp : Float
+  mut max_hp : Float
   mut shot_cd : Float
   mut spin : Float
   mut cloak : Bool
@@ -277,8 +277,7 @@ pub(all) enum ObjKind {
   Coin
   Coolant
   EmpCell
-}
-pub impl Eq for ObjKind
+} derive(Eq)
 
 pub(all) struct Player {
   mut x : Float

@@ -180,8 +180,7 @@ pub(all) enum GameState {
   Playing
   Paused
   GameOver
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Incident {
   mut active : Bool

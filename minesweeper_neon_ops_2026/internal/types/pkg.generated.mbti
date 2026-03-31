@@ -133,8 +133,7 @@ pub(all) enum GameState {
   Title
   Play
   Result
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) enum Grade {
   GradeS
@@ -142,14 +141,12 @@ pub(all) enum Grade {
   GradeB
   GradeC
   GradeD
-}
-pub impl Eq for Grade
+} derive(Eq)
 
 pub(all) enum PlayMode {
   Reveal
   Flag
-}
-pub impl Eq for PlayMode
+} derive(Eq)
 
 pub(all) struct Spark {
   mut active : Bool

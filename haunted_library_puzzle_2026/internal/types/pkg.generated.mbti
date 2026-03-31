@@ -170,8 +170,7 @@ pub(all) enum GameState {
   Title
   Play
   Result
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Ghost {
   mut active : Bool
@@ -191,8 +190,7 @@ pub(all) enum GhostMode {
   Patrol
   Hunt
   Stunned
-}
-pub impl Eq for GhostMode
+} derive(Eq)
 
 pub(all) struct Particle {
   mut active : Bool
@@ -213,15 +211,13 @@ pub(all) enum ParticleKind {
   Dust
   Gold
   Purple
-}
-pub impl Eq for ParticleKind
+} derive(Eq)
 
 pub(all) enum Tile {
   Floor
   Wall
   Exit
-}
-pub impl Eq for Tile
+} derive(Eq)
 
 // Type aliases
 

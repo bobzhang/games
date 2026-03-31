@@ -91,8 +91,7 @@ pub(all) enum Direction {
   Right
   Up
   Down
-}
-pub impl Eq for Direction
+} derive(Eq)
 
 pub(all) struct Game {
   cells : Array[Int]
@@ -159,8 +158,7 @@ pub(all) enum GameState {
   LevelClear
   CampaignClear
   Fail
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct LinkPath {
   found : Bool

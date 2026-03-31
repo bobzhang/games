@@ -124,8 +124,7 @@ pub(all) enum Dir {
   Down
   Left
   Right
-}
-pub impl Eq for Dir
+} derive(Eq)
 
 pub(all) struct Game {
   terrain : Array[Tile]
@@ -180,23 +179,20 @@ pub(all) enum GameResult {
   None
   Win
   Lose
-}
-pub impl Eq for GameResult
+} derive(Eq)
 
 pub(all) enum GameState {
   Title
   Play
   Result
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) enum Tile {
   Ground
   Rock
   Depot
   Shelter
-}
-pub impl Eq for Tile
+} derive(Eq)
 
 // Type aliases
 

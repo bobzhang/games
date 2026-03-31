@@ -6,6 +6,8 @@ import {
 }
 
 // Values
+pub fn spawn_bullet(@types.Game, @types.Team, Float, Float, @types.Dir, Float, Int, Int) -> Unit
+
 pub fn update_game(@types.Game, Float) -> Unit
 
 // Errors

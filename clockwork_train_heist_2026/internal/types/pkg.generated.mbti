@@ -172,8 +172,7 @@ pub(all) enum GameState {
   Title
   Play
   Result
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Guard {
   mut active : Bool
@@ -198,8 +197,7 @@ pub(all) enum GuardMode {
   Patrol
   Hunt
   Stunned
-}
-pub impl Eq for GuardMode
+} derive(Eq)
 
 pub(all) struct Loot {
   mut active : Bool
@@ -217,8 +215,7 @@ pub(all) enum LootKind {
   Blueprint
   Keycard
   Gold
-}
-pub impl Eq for LootKind
+} derive(Eq)
 
 pub(all) struct Particle {
   mut active : Bool
@@ -239,8 +236,7 @@ pub(all) enum ParticleKind {
   Spark
   Glitter
   Smoke
-}
-pub impl Eq for ParticleKind
+} derive(Eq)
 
 pub(all) struct Smoke {
   mut active : Bool
@@ -258,8 +254,7 @@ pub(all) enum TileKind {
   Floor
   Door
   Exit
-}
-pub impl Eq for TileKind
+} derive(Eq)
 
 // Type aliases
 

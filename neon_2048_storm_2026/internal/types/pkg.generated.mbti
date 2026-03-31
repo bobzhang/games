@@ -84,8 +84,7 @@ pub(all) enum Direction {
   DirRight
   DirUp
   DirDown
-}
-pub impl Eq for Direction
+} derive(Eq)
 
 pub(all) struct Game {
   board : Array[Int]
@@ -136,8 +135,7 @@ pub(all) enum GameState {
   Title
   Play
   Result
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Spark {
   mut active : Bool
@@ -158,8 +156,7 @@ pub(all) enum SparkKind {
   SparkDefault
   SparkMerge
   SparkExplosion
-}
-pub impl Eq for SparkKind
+} derive(Eq)
 
 // Type aliases
 

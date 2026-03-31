@@ -71,8 +71,7 @@ pub(all) enum Dir {
   Right
   Up
   Down
-}
-pub impl Eq for Dir
+} derive(Eq)
 
 pub(all) struct Game {
   board : Array[Player]
@@ -123,15 +122,13 @@ pub(all) enum GameState {
   Title
   Play
   Result
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) enum Player {
   Empty
   Human
   AI
-}
-pub impl Eq for Player
+} derive(Eq)
 
 pub(all) struct Spark {
   mut active : Bool
@@ -149,8 +146,7 @@ pub(all) enum SparkKind {
   SparkHuman
   SparkUndo
   SparkHint
-}
-pub impl Eq for SparkKind
+} derive(Eq)
 
 // Type aliases
 

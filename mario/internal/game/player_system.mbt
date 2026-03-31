@@ -70,7 +70,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   // ── Horizontal movement ──
   let max_speed = if run_held { @types.run_speed } else { @types.walk_speed }
   let accel = if p.on_ground { @types.ground_accel } else { @types.air_accel }
-  if right && not(p.ducking) {
+  if right && !(p.ducking) {
     p.facing_right = true
     if p.vx < 0.0 && p.on_ground {
       p.skid_timer = 0.2
@@ -84,7 +84,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
         p.vx = max_speed
       }
     }
-  } else if left && not(p.ducking) {
+  } else if left && !(p.ducking) {
     p.facing_right = false
     if p.vx > 0.0 && p.on_ground {
       p.skid_timer = 0.2
@@ -131,14 +131,14 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   }
   // ── Jump ──
   let can_jump = p.coyote_timer > 0.0 && p.jump_buffer > 0.0
-  if can_jump && not(p.ducking) {
+  if can_jump && !(p.ducking) {
     p.vy = @types.jump_velocity
     p.on_ground = false
     p.coyote_timer = 0.0
     p.jump_buffer = 0.0
   }
   // Variable jump height
-  if not(jump_held) && p.vy < 0.0 {
+  if !(jump_held) && p.vy < 0.0 {
     p.vy = p.vy + @types.gravity_high * dt
   }
   // ── Gravity ──
@@ -155,7 +155,7 @@ fn update_player(game : @types.Game, dt : Float) -> Unit {
   move_player_x(game, dt)
   move_player_y(game, dt)
   // ── Landing dust particles ──
-  if p.on_ground && not(p.was_on_ground) {
+  if p.on_ground && !(p.was_on_ground) {
     spawn_landing_dust(game, p.x, p.y)
   }
   // ── Skid dust particles ──
@@ -266,7 +266,7 @@ fn check_checkpoint(game : @types.Game) -> Unit {
     let ty = py_tile + dy
     let tile = @types.get_tile(game, px_tile, ty)
     if tile == Checkpoint {
-      if not(game.checkpoint_active) {
+      if !(game.checkpoint_active) {
         game.checkpoint_active = true
         game.checkpoint_x = p.x
         game.checkpoint_y = p.y
@@ -470,7 +470,7 @@ fn kill_enemies_on_block(game : @types.Game, tx : Int, _ty : Int) -> Unit {
   let bx = @types.tile_to_world_x(tx) + @types.tile_sizef / 2.0
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]
-    if not(e.active) || e.dead {
+    if !(e.active) || e.dead {
       continue
     }
     let ex_tile = @types.world_to_tile_x(e.x)
@@ -495,7 +495,7 @@ fn spawn_coin_popup(game : @types.Game, wx : Float, wy : Float) -> Unit {
     if count >= 4 {
       break
     }
-    if not(game.particles[i].active) {
+    if !(game.particles[i].active) {
       let p = game.particles[i]
       p.active = true
       p.x = wx + @types.rand_rangef(game, -6.0, 6.0)
@@ -520,7 +520,7 @@ fn spawn_item(
   wy : Float,
 ) -> Unit {
   for i in 0..<game.items.length() {
-    if not(game.items[i].active) {
+    if !(game.items[i].active) {
       let it = game.items[i]
       it.active = true
       it.kind = kind
@@ -540,7 +540,7 @@ fn spawn_item(
 ///|
 fn shoot_fireball(game : @types.Game) -> Unit {
   for i in 0..<game.fireballs.length() {
-    if not(game.fireballs[i].active) {
+    if !(game.fireballs[i].active) {
       let fb = game.fireballs[i]
       fb.active = true
       fb.x = game.player.x +
@@ -570,11 +570,11 @@ fn check_enemy_collisions(game : @types.Game) -> Unit {
   let p_bottom = p.y
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]
-    if not(e.active) || e.dead {
+    if !(e.active) || e.dead {
       continue
     }
     // PiranhaPlant: skip if retracted (invisible, no collision)
-    if e.kind == PiranhaPlant && not(e.extended) {
+    if e.kind == PiranhaPlant && !(e.extended) {
       continue
     }
     // Firebar: per-segment collision (not AABB)
@@ -590,8 +590,8 @@ fn check_enemy_collisions(game : @types.Game) -> Unit {
         let dist = spacing * seg.to_double()
         let seg_x = e.x.to_double() + @math.cos(angle) * dist
         let seg_y = (e.y - 16.0).to_double() + @math.sin(angle) * dist
-        let sx = seg_x.to_float()
-        let sy = seg_y.to_float()
+        let sx = Float::from_double(seg_x)
+        let sy = Float::from_double(seg_y)
         if sx + seg_r > p_left &&
           sx - seg_r < p_right &&
           sy + seg_r > p_top &&
@@ -709,7 +709,7 @@ fn check_enemy_collisions(game : @types.Game) -> Unit {
           e.vy = -300.0
         }
       }
-    } else if e.kind == KoopaShell && not(e.shell_moving) {
+    } else if e.kind == KoopaShell && !(e.shell_moving) {
       e.shell_moving = true
       e.vx = if p.x < e.x { @types.shell_speed } else { -@types.shell_speed }
     } else if e.kind == PiranhaPlant {
@@ -758,7 +758,7 @@ fn check_item_collisions(game : @types.Game) -> Unit {
   let p_bottom = p.y
   for i in 0..<game.items.length() {
     let it = game.items[i]
-    if not(it.active) || it.emerging {
+    if !(it.active) || it.emerging {
       continue
     }
     let item_hw : Float = 20.0

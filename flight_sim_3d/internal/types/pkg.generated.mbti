@@ -52,6 +52,8 @@ pub fn alloc_cloud(Game) -> Int
 
 pub fn alloc_enemy(Game) -> Int
 
+pub fn alloc_floating_damage(Game) -> Int
+
 pub fn alloc_particle(Game) -> Int
 
 pub fn alloc_projectile(Game) -> Int
@@ -120,6 +122,10 @@ pub let cloud_base_height : Float
 
 pub fn count_active_buildings(Game) -> Int
 
+pub let damage_dir_duration : Float
+
+pub let damage_vignette_duration : Float
+
 pub fn difficulty_str(Int) -> String
 
 pub fn distance2d(Float, Float, Float, Float) -> Float
@@ -135,6 +141,8 @@ pub let enemy_fire_range : Float
 pub let enemy_fire_rate : Float
 
 pub let enemy_ground_size : Float
+
+pub let enemy_health_bar_range : Float
 
 pub let enemy_hp_air : Float
 
@@ -166,6 +174,8 @@ pub let fighter_turn_rate : Float
 
 pub let fire_cooldown : Float
 
+pub let floating_damage_duration : Float
+
 pub let fog_clear_dist : Float
 
 pub let fog_cloudy_dist : Float
@@ -187,6 +197,8 @@ pub fn get_ammo(Player) -> Int
 pub fn get_forward(Float, Float) -> (Float, Float, Float)
 
 pub fn get_right(Float, Float) -> (Float, Float, Float)
+
+pub let hit_marker_duration : Float
 
 pub let interceptor_ammo_bombs : Int
 
@@ -258,6 +270,12 @@ pub let mission_recon : Int
 
 pub let mission_survive : Int
 
+pub let msg_priority_critical : Int
+
+pub let msg_priority_info : Int
+
+pub let msg_priority_warning : Int
+
 pub fn normalize3d(Float, Float, Float) -> (Float, Float, Float)
 
 pub let particle_debris : Int
@@ -326,6 +344,12 @@ pub let screen_height : Int
 
 pub let screen_width : Int
 
+pub let shake_duration : Float
+
+pub let shake_heavy : Float
+
+pub let shake_light : Float
+
 pub fn show_message(Game, String, Float) -> Unit
 
 pub fn sign(Float) -> Float
@@ -336,6 +360,8 @@ pub fn spawn_explosion(Game, Float, Float, Float) -> Unit
 
 pub fn spawn_fire(Game, Float, Float, Float, Int) -> Unit
 
+pub fn spawn_floating_damage(Game, Float, Float, Float, Int) -> Unit
+
 pub fn spawn_large_explosion(Game, Float, Float, Float) -> Unit
 
 pub fn spawn_particles(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
@@ -343,6 +369,8 @@ pub fn spawn_particles(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
 pub fn spawn_rocket_trail(Game, Float, Float, Float) -> Unit
 
 pub fn spawn_smoke(Game, Float, Float, Float, Int) -> Unit
+
+pub let stall_speed_ratio : Float
 
 pub let stall_warning_speed_ratio : Float
 
@@ -382,6 +410,12 @@ pub let trainer_speed_min : Float
 
 pub let trainer_turn_rate : Float
 
+pub fn trigger_damage_feedback(Game, Float, Float) -> Unit
+
+pub fn trigger_hit_marker(Game) -> Unit
+
+pub fn trigger_screen_shake(Game, Float) -> Unit
+
 pub let turb_clear : Float
 
 pub let turb_cloudy : Float
@@ -414,6 +448,8 @@ pub let warning_fuel_rate : Float
 
 pub fn weapon_name(WeaponKind) -> String
 
+pub let weapon_switch_display_duration : Float
+
 pub fn weather_name(Weather) -> String
 
 pub let wind_clear : Float
@@ -436,8 +472,7 @@ pub(all) enum AiState {
   Engage
   Evade
   Flee
-}
-pub impl Eq for AiState
+} derive(Eq)
 
 pub(all) struct AircraftStats {
   kind : Int
@@ -452,6 +487,10 @@ pub(all) struct AircraftStats {
   ammo_mg : Int
   ammo_rockets : Int
   ammo_bombs : Int
+  pitch_rate : Float
+  yaw_rate : Float
+  acceleration : Float
+  stall_speed : Float
 }
 pub fn AircraftStats::bomber() -> Self
 pub fn AircraftStats::fighter() -> Self
@@ -478,8 +517,7 @@ pub(all) enum CameraMode {
   Chase
   Cockpit
   Free
-}
-pub impl Eq for CameraMode
+} derive(Eq)
 
 pub(all) struct Checkpoint {
   mut active : Bool
@@ -533,6 +571,15 @@ pub(all) struct Enemy {
 }
 pub fn Enemy::inactive() -> Self
 
+pub(all) struct FloatingDamage {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut z : Float
+  mut amount : Int
+  mut timer : Float
+}
+
 pub(all) struct Game {
   mut state : GameState
   player : Player
@@ -580,9 +627,20 @@ pub(all) struct Game {
   mut frame_counter : Int
   mut landing_approach : Bool
   mut landing_timer : Float
+  mut recon_capture_timer : Float
+  mut recon_capture_target : Int
   mut accuracy_pct : Float
   mut mission_rating : String
   best_scores : Array[Int]
+  mut hit_marker_timer : Float
+  mut screen_shake_intensity : Float
+  mut screen_shake_timer : Float
+  mut damage_vignette_timer : Float
+  mut damage_dir_x : Float
+  mut damage_dir_z : Float
+  mut damage_dir_timer : Float
+  floating_damage : Array[FloatingDamage]
+  mut weapon_switch_display_timer : Float
 
   fn new() -> Game
 }
@@ -604,8 +662,7 @@ pub(all) enum GameState {
   GameOver
   AircraftSelect
   MissionBriefing
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Mission {
   name : String
@@ -733,8 +790,7 @@ pub(all) enum WeaponKind {
   MachineGun
   Rockets
   Bombs
-}
-pub impl Eq for WeaponKind
+} derive(Eq)
 
 pub(all) enum Weather {
   Clear
@@ -743,8 +799,7 @@ pub(all) enum Weather {
   Rain
   Storm
   Night
-}
-pub impl Eq for Weather
+} derive(Eq)
 
 pub(all) struct WeatherState {
   mut kind : Weather

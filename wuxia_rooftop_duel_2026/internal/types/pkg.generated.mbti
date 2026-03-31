@@ -125,8 +125,7 @@ pub(all) enum Attack {
   None
   Light
   Heavy
-}
-pub impl Eq for Attack
+} derive(Eq)
 
 pub(all) struct Enemy {
   mut active : Bool
@@ -154,8 +153,7 @@ pub(all) enum EnemyState {
   Strike
   Recover
   Stunned
-}
-pub impl Eq for EnemyState
+} derive(Eq)
 
 pub(all) struct Game {
   enemies : Array[Enemy]
@@ -206,8 +204,7 @@ pub(all) enum GameState {
   Playing
   Paused
   GameOver
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 // Type aliases
 

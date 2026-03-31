@@ -12,6 +12,10 @@ pub fn alloc_particle(Game) -> Int
 
 pub fn alloc_projectile(Game) -> Int
 
+pub let apex_gravity_mult : Float
+
+pub let apex_vy_threshold : Float
+
 pub let bounce_force : Float
 
 pub fn calc_stars(Float, Int, Int, Int) -> Int
@@ -22,15 +26,23 @@ pub let camera_fovy : Float
 
 pub let camera_height : Float
 
+pub let camera_lead_factor : Float
+
 pub let camera_max_dist : Float
 
 pub let camera_min_dist : Float
+
+pub let camera_occlude_min_dist : Float
 
 pub let camera_rotate_speed : Float
 
 pub let camera_shake_decay : Float
 
 pub let camera_smooth : Float
+
+pub let camera_y_lag_falling : Float
+
+pub let camera_y_lag_rising : Float
 
 pub let camera_zoom_speed : Float
 
@@ -232,6 +244,10 @@ pub let goal_outer_r : Int
 
 pub let gravity : Float
 
+pub let gravity_cut_mult : Float
+
+pub let gravity_fall_mult : Float
+
 pub let ground_friction : Float
 
 pub let hazard_crusher : Int
@@ -255,6 +271,10 @@ pub let hud_height : Int
 pub let ice_friction : Float
 
 pub let invincible_time : Float
+
+pub fn is_level_unlocked(Game, Int, Int) -> Bool
+
+pub fn is_world_unlocked(Game, Int) -> Bool
 
 pub let jump_buffer : Float
 
@@ -518,6 +538,8 @@ pub fn spawn_particles(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
 
 pub fn spawn_particles_dir(Game, Float, Float, Float, Int, Float, Float, Float, Float, Int, Int, Int) -> Unit
 
+pub let speed_trail_threshold : Float
+
 pub fn sphere_aabb(Float, Float, Float, Float, Float, Float, Float, Float, Float, Float) -> Bool
 
 pub let spike_b : Int
@@ -539,6 +561,8 @@ pub let star_r : Int
 pub let star_score : Int
 
 pub let star_time_threshold_1 : Float
+
+pub fn stars_required_for_world(Int) -> Int
 
 pub let total_levels : Int
 
@@ -599,8 +623,7 @@ pub(all) enum Deco {
   Cloud
   Bush
   Lamp
-}
-pub impl Eq for Deco
+} derive(Eq)
 
 pub(all) struct Decoration {
   mut active : Bool
@@ -665,6 +688,7 @@ pub(all) struct Game {
   mut double_jumped : Bool
   mut can_wall_jump : Bool
   mut wall_dir : Float
+  mut wall_dir_z : Float
   mut wall_slide : Bool
   mut dash_timer : Float
   mut dash_cooldown_timer : Float
@@ -695,6 +719,9 @@ pub(all) struct Game {
   mut cam_dist : Float
   mut cam_shake : Float
   mut cam_shake_timer : Float
+  mut cam_target_x : Float
+  mut cam_target_y : Float
+  mut cam_target_z : Float
   mut current_world : Int
   mut current_level : Int
   mut goal_x : Float
@@ -722,7 +749,10 @@ pub(all) struct Game {
   mut anim_walk_timer : Float
   mut anim_land_squash : Float
   mut anim_jump_stretch : Float
+  mut speed_trail_timer : Float
   level_stars : Array[Int]
+  mut last_run_stars : Int
+  checkpoint_platform_snapshots : Array[PlatformSnapshot]
   mut rng_state : Int
   mut frame_counter : Int
 
@@ -742,8 +772,7 @@ pub(all) enum GameState {
   LevelSelect
   DeathAnim
   WorldIntro
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Hazard {
   mut active : Bool
@@ -810,6 +839,27 @@ pub(all) struct Platform {
   mut b : Int
 }
 pub fn Platform::inactive() -> Self
+pub fn Platform::restore(Self, PlatformSnapshot) -> Unit
+pub fn Platform::snapshot(Self) -> PlatformSnapshot
+
+pub(all) struct PlatformSnapshot {
+  active : Bool
+  x : Float
+  y : Float
+  z : Float
+  w : Float
+  d : Float
+  move_timer : Float
+  fall_timer : Float
+  falling : Bool
+  touched : Bool
+  crumble_timer : Float
+  crumbling : Bool
+  phase_timer : Float
+  phase_visible : Bool
+  rot_angle : Float
+}
+pub fn PlatformSnapshot::empty() -> Self
 
 pub(all) struct PowerUp {
   mut active : Bool

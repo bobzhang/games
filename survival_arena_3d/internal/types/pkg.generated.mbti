@@ -338,6 +338,20 @@ pub fn update_damage_indicators(Game, Float) -> Unit
 
 pub fn update_kill_feed(Game, Float) -> Unit
 
+pub let upgrade_base_cost : Int
+
+pub fn upgrade_cost(Int) -> Int
+
+pub let upgrade_cost_per_level : Int
+
+pub let upgrade_damage_step : Float
+
+pub let upgrade_mag_step : Float
+
+pub let upgrade_max_level : Int
+
+pub let upgrade_rate_step : Float
+
 pub let wave_shop_time : Float
 
 pub let weapon_count : Int
@@ -351,6 +365,8 @@ pub fn weapon_mag_size(Int) -> Int
 pub fn weapon_name(Int) -> String
 
 pub fn weapon_proj_speed(Int) -> Float
+
+pub fn weapon_recoil_kick(Int) -> Float
 
 pub fn weapon_reload_time(Int) -> Float
 
@@ -442,10 +458,9 @@ pub(all) enum EnemyKind {
   Necromancer
   Shielded
   Boss
-}
+} derive(Eq)
 pub fn EnemyKind::from_int(Int) -> Self
 pub fn EnemyKind::to_int(Self) -> Int
-pub impl Eq for EnemyKind
 
 pub(all) struct Game {
   mut state : GameState
@@ -492,12 +507,17 @@ pub(all) struct Game {
   mut rng_state : Int
   mut frame_counter : Int
   mut hit_marker_timer : Float
+  mut hit_marker_is_kill : Bool
   mut difficulty : Float
   mut total_shots_fired : Int
   mut total_shots_hit : Int
   mut highest_combo : Int
   mut total_damage_dealt : Float
   mut total_damage_taken : Float
+  mut wave_start_kills : Int
+  mut wave_start_shots_fired : Int
+  mut wave_start_shots_hit : Int
+  mut wave_start_money : Int
 
   fn new() -> Game
 }
@@ -510,8 +530,7 @@ pub(all) enum GameState {
   WaveComplete
   Paused
   GameOver
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct KillFeedEntry {
   mut active : Bool
@@ -557,10 +576,9 @@ pub(all) enum ParticleKind {
   Shell
   Spark
   Heal
-}
+} derive(Eq)
 pub fn ParticleKind::from_int(Int) -> Self
 pub fn ParticleKind::to_int(Self) -> Int
-pub impl Eq for ParticleKind
 
 pub(all) struct Pickup {
   mut active : Bool
@@ -620,6 +638,8 @@ pub(all) struct Player {
   weapon_damage_level : Array[Int]
   weapon_rate_level : Array[Int]
   weapon_mag_level : Array[Int]
+  mut weapon_switch_timer : Float
+  mut recoil_kick : Float
 
   fn new() -> Player
 }
@@ -664,10 +684,9 @@ pub(all) enum Trap {
   Spike
   Flame
   Electric
-}
+} derive(Eq)
 pub fn Trap::from_int(Int) -> Self
 pub fn Trap::to_int(Self) -> Int
-pub impl Eq for Trap
 
 pub(all) enum WeaponKind {
   Pistol
@@ -676,10 +695,9 @@ pub(all) enum WeaponKind {
   Sniper
   Rocket
   Minigun
-}
+} derive(Eq)
 pub fn WeaponKind::from_int(Int) -> Self
 pub fn WeaponKind::to_int(Self) -> Int
-pub impl Eq for WeaponKind
 
 pub(all) struct WeaponState {
   mut reload_timer : Float

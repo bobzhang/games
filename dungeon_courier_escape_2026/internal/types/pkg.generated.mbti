@@ -224,8 +224,7 @@ pub(all) enum GameState {
   Title
   Play
   Retry
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Guard {
   mut active : Bool

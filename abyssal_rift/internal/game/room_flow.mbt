@@ -17,18 +17,18 @@ pub fn update_room_flow(game : @types.Game, dt : Float) -> Unit {
               room.kind == EliteVault ||
               room.kind == Challenge
             ) &&
-            not(has_been_cleared(floor, floor.current_room)) {
+            !(has_been_cleared(floor, floor.current_room)) {
             seal_room(game)
           }
           // Shop for treasure rooms
           if room.kind == Treasure &&
-            not(has_been_cleared(floor, floor.current_room)) {
+            !(has_been_cleared(floor, floor.current_room)) {
             setup_shop(game)
             room.state = Cleared
           }
           // Shrine rooms
           if room.kind == Shrine &&
-            not(has_been_cleared(floor, floor.current_room)) {
+            !(has_been_cleared(floor, floor.current_room)) {
             setup_shrine(game)
             room.state = Cleared
           }

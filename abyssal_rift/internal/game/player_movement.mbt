@@ -136,7 +136,7 @@ fn collide_player_with_tiles(game : @types.Game) -> Unit {
       // walk through doors into corridors and adjacent rooms.
       for ri in 0..<floor.rooms.length() {
         let room = floor.rooms[ri]
-        if not(room.visited) && ri != floor.current_room {
+        if !(room.visited) && ri != floor.current_room {
           continue
         }
         let room_px = Float::from_int(room.x) * ts

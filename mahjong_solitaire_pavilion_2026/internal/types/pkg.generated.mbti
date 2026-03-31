@@ -95,8 +95,7 @@ pub(all) enum Dir {
   Right
   Up
   Down
-}
-pub impl Eq for Dir
+} derive(Eq)
 
 pub(all) struct Game {
   active : Array[Bool]
@@ -156,8 +155,7 @@ pub(all) enum GameState {
   LevelClear
   CampaignClear
   Fail
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Spark {
   mut active : Bool

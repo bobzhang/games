@@ -102,8 +102,7 @@ pub(all) enum GameState {
   Play
   Paused
   Result
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Hazard {
   mut active : Bool

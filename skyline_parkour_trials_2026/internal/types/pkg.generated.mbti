@@ -190,16 +190,14 @@ pub(all) enum GameState {
   StageClear
   GameOver
   Victory
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) enum LoseReason {
   None
   Time
   Fall
   HitHazard
-}
-pub impl Eq for LoseReason
+} derive(Eq)
 
 pub(all) struct Player {
   mut x : Float
@@ -234,8 +232,7 @@ pub fn Tile::new() -> Self
 pub(all) enum TileKind {
   Solid
   Hazard
-}
-pub impl Eq for TileKind
+} derive(Eq)
 
 // Type aliases
 

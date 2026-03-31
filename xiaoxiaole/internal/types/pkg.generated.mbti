@@ -102,8 +102,7 @@ pub(all) enum GameState {
   Fall
   Over
   Clear
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Gem {
   mut kind : GemKind
@@ -124,10 +123,9 @@ pub(all) enum GemKind {
   Yellow
   Purple
   Orange
-}
+} derive(Eq)
 pub fn GemKind::from_int(Int) -> Self
 pub fn GemKind::is_empty(Self) -> Bool
-pub impl Eq for GemKind
 
 // Type aliases
 

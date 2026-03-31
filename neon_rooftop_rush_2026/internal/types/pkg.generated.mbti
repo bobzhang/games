@@ -195,8 +195,7 @@ pub(all) enum GameState {
   Play
   StageClear
   GameOver
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Ghost {
   mut active : Bool
@@ -233,8 +232,7 @@ pub(all) enum ObstacleKind {
   Sign
   Drone
   Laser
-}
-pub impl Eq for ObstacleKind
+} derive(Eq)
 
 pub(all) struct Particle {
   mut active : Bool
@@ -255,8 +253,7 @@ pub(all) enum ParticleKind {
   Spark
   Glow
   Hurt
-}
-pub impl Eq for ParticleKind
+} derive(Eq)
 
 pub(all) struct Player {
   mut x : Float

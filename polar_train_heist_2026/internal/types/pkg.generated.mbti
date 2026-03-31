@@ -182,6 +182,7 @@ pub(all) struct Ent {
   mut spin : Float
   mut cloak : Bool
   mut reward : Int
+  mut max_hp : Float
 
   fn new() -> Ent
 }
@@ -196,8 +197,7 @@ pub(all) enum EntityKind {
   Medkit
   Battery
   Signal
-}
-pub impl Eq for EntityKind
+} derive(Eq)
 
 pub(all) struct Fx {
   mut active : Bool
@@ -271,8 +271,7 @@ pub(all) enum GameState {
   Play
   StageClear
   GameOver
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Player {
   mut x : Float

@@ -160,8 +160,7 @@ pub(all) enum GameState {
   StageClear
   Failed
   Victory
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Hazard {
   x : Float

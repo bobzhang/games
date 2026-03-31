@@ -2,7 +2,7 @@
 pub fn draw_telegraph_indicators(game : @types.Game) -> Unit {
   for i in 0..<game.enemies.length() {
     let e = game.enemies[i]
-    if not(e.active) {
+    if !(e.active) {
       continue
     }
     match e.state {

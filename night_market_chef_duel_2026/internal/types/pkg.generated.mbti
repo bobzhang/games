@@ -90,8 +90,7 @@ pub let wok_y : Float
 pub(all) enum CookStage {
   Prep
   Heat
-}
-pub impl Eq for CookStage
+} derive(Eq)
 
 pub(all) struct CookingState {
   mut active : Bool
@@ -112,8 +111,7 @@ pub(all) enum Dish {
   Noodles
   Squid
   FriedRice
-}
-pub impl Eq for Dish
+} derive(Eq)
 
 pub(all) struct Game {
   orders : Array[Order]
@@ -148,8 +146,7 @@ pub(all) enum GameState {
   Play
   Paused
   GameOver
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct InputState {
   mut move_x : Int
@@ -169,8 +166,7 @@ pub fn InputState::new() -> Self
 pub(all) enum Lane {
   Grill
   Wok
-}
-pub impl Eq for Lane
+} derive(Eq)
 
 pub(all) enum NavNode {
   OrderSlot(Int)
@@ -178,8 +174,7 @@ pub(all) enum NavNode {
   GrillStation
   WokStation
   PassStation
-}
-pub impl Eq for NavNode
+} derive(Eq)
 
 pub(all) struct Order {
   mut active : Bool

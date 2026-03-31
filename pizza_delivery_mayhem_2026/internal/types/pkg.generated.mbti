@@ -152,8 +152,7 @@ pub(all) enum GameState {
   Title
   Play
   Result
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Order {
   mut active : Bool
@@ -203,8 +202,7 @@ pub(all) enum PickupKind {
   Fuel
   Repair
   Speed
-}
-pub impl Eq for PickupKind
+} derive(Eq)
 
 pub(all) struct Traffic {
   mut active : Bool
@@ -226,8 +224,7 @@ pub(all) enum TrafficKind {
   Sedan
   Bus
   Van
-}
-pub impl Eq for TrafficKind
+} derive(Eq)
 
 // Type aliases
 

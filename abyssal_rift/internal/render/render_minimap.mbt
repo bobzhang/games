@@ -50,7 +50,7 @@ pub fn draw_minimap(game : @types.Game) -> Unit {
       // Draw rooms
       for i in 0..<floor.rooms.length() {
         let r = floor.rooms[i]
-        if not(r.visited) {
+        if !(r.visited) {
           continue
         }
         let rx = mx + 5 + (Float::from_int(r.x - min_rx) * scale).to_int()

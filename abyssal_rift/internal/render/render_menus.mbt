@@ -581,7 +581,7 @@ pub fn draw_meta_screen(game : @types.Game) -> Unit {
     let cost = base_costs[i] * (level + 1)
     let y = 150 + i * 55
     let maxed = level >= max_levels[i]
-    let can_afford = meta.abyss_tokens >= cost && not(maxed)
+    let can_afford = meta.abyss_tokens >= cost && !(maxed)
     let color = if maxed {
       @raylib.Color::new(100, 200, 100, 255)
     } else if can_afford {

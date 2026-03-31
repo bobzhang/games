@@ -140,16 +140,14 @@ pub(all) enum GameState {
   Play
   LevelClear
   GameOver
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) enum Special {
   None
   Row
   Col
   Bomb
-}
-pub impl Eq for Special
+} derive(Eq)
 
 // Type aliases
 

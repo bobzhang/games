@@ -220,6 +220,8 @@ pub let select_blink_speed : Float
 
 pub let select_grid_columns : Int
 
+pub fn set_combat_badge(Game, String, Int, Int, Int, Float) -> Unit
+
 pub fn set_training_frame_adv(Game, Int, String, Int) -> Unit
 
 pub fn set_training_note(Game, String) -> Unit
@@ -231,6 +233,8 @@ pub fn stage_clamp_x(Float) -> Float
 pub let stage_left_x : Float
 
 pub let stage_right_x : Float
+
+pub fn start_damage_trail(Fighter) -> Unit
 
 pub let super_cost : Int
 
@@ -268,6 +272,8 @@ pub let training_health_regen_per_sec : Float
 
 pub let training_info_duration : Float
 
+pub fn update_trail(Fighter, Float) -> Unit
+
 pub let wakeup_invuln_frames : Int
 
 pub let winner_draw : Int
@@ -293,16 +299,20 @@ pub(all) enum Action {
   ActionVictory
   ActionIntro
   ActionThrow
-}
-pub impl Eq for Action
+} derive(Eq)
+
+pub(all) enum AiDifficulty {
+  Easy
+  Normal
+  Hard
+} derive(Eq, Show)
 
 pub(all) enum AiMode {
   AiModeIdle
   AiModeRush
   AiModeZone
   AiModeEvade
-}
-pub impl Eq for AiMode
+} derive(Eq)
 
 pub(all) enum AttackId {
   AttackNone
@@ -313,8 +323,7 @@ pub(all) enum AttackId {
   AttackSpecialQcf
   AttackSpecialDp
   AttackSuper
-}
-pub impl Eq for AttackId
+} derive(Eq)
 
 pub(all) struct CharacterArchetype {
   name : String
@@ -348,8 +357,7 @@ pub(all) enum Direction {
   DirForward
   DirDownBack
   DirDownForward
-}
-pub impl Eq for Direction
+} derive(Eq)
 
 pub(all) struct Fighter {
   slot : Int
@@ -391,6 +399,8 @@ pub(all) struct Fighter {
   mut ai_wants_super : Bool
   mut ai_wants_throw : Bool
   mut input : InputState
+  mut trail_positions : Array[(Float, Float)]
+  mut trail_timer : Float
 
   fn new(Int, Bool) -> Fighter
 }
@@ -434,6 +444,14 @@ pub(all) struct Game {
   particles : Array[Particle]
   hit_sparks : Array[Particle]
   mut debug_overlay : Bool
+  mut ai_difficulty : AiDifficulty
+  mut guard_break_flash : Float
+  mut combat_badge_text : String
+  mut combat_badge_timer : Float
+  mut combat_badge_color_r : Int
+  mut combat_badge_color_g : Int
+  mut combat_badge_color_b : Int
+  mut slowmo_timer : Float
 
   fn new() -> Game
 }
@@ -448,9 +466,7 @@ pub(all) enum GameState {
   StateRoundOver
   StateMatchOver
   StatePause
-}
-pub impl Eq for GameState
-pub impl Show for GameState
+} derive(Eq, Show)
 
 pub(all) struct InputState {
   mut x : Int
@@ -489,15 +505,13 @@ pub(all) enum Motion {
   MotionNone
   MotionQcf
   MotionDp
-}
-pub impl Eq for Motion
+} derive(Eq)
 
 pub(all) enum MoveKind {
   MoveKindNormal
   MoveKindSpecial
   MoveKindSuper
-}
-pub impl Eq for MoveKind
+} derive(Eq)
 
 pub(all) struct MoveSpec {
   mut attack_id : AttackId
@@ -552,8 +566,7 @@ pub(all) enum SparkKind {
   SparkKindHit
   SparkKindBlock
   SparkKindSuper
-}
-pub impl Eq for SparkKind
+} derive(Eq)
 
 // Type aliases
 

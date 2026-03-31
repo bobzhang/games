@@ -201,8 +201,7 @@ pub(all) enum GameState {
   Pause
   GameOver
   Victory
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Player {
   mut x : Float
@@ -248,8 +247,7 @@ pub(all) enum RaiderKind {
   Skirmisher
   Brute
   Rider
-}
-pub impl Eq for RaiderKind
+} derive(Eq)
 
 pub(all) struct Wagon {
   mut x : Float

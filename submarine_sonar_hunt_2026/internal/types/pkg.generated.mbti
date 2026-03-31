@@ -200,16 +200,14 @@ pub(all) enum GameState {
   Play
   Win
   Lose
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) enum LoseReason {
   None
   Oxygen
   Fuel
   Hull
-}
-pub impl Eq for LoseReason
+} derive(Eq)
 
 pub(all) struct Mine {
   mut active : Bool

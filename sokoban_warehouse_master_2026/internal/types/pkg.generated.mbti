@@ -63,8 +63,7 @@ pub(all) enum Direction {
   Right
   Up
   Down
-}
-pub impl Eq for Direction
+} derive(Eq)
 
 pub(all) struct Game {
   tiles : Array[Tile]
@@ -113,8 +112,7 @@ pub(all) enum GameState {
   Play
   LevelClear
   CampaignClear
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Spark {
   mut active : Bool
@@ -132,16 +130,14 @@ pub(all) enum SparkKind {
   Orange
   Red
   Blue
-}
-pub impl Eq for SparkKind
+} derive(Eq)
 
 pub(all) enum Tile {
   Void
   Floor
   Wall
   Goal
-}
-pub impl Eq for Tile
+} derive(Eq)
 
 pub(all) struct UndoStep {
   mut valid : Bool

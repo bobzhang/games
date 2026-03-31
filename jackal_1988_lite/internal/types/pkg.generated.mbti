@@ -242,17 +242,15 @@ pub(all) enum Dir {
   Right
   Down
   Left
-}
+} derive(Eq)
 pub fn Dir::from_int(Int) -> Self
-pub impl Eq for Dir
 
 pub(all) enum EnemyKind {
   Basic
   Fast
   Heavy
   Sniper
-}
-pub impl Eq for EnemyKind
+} derive(Eq)
 
 pub(all) struct Game {
   mut state : GameState
@@ -309,8 +307,7 @@ pub(all) enum GameState {
   StageClear
   GameOver
   CampaignClear
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Hostage {
   mut active : Bool
@@ -353,8 +350,7 @@ pub(all) enum PowerupKind {
   Clock
   Shovel
   Tank
-}
-pub impl Eq for PowerupKind
+} derive(Eq)
 
 pub(all) struct StageProfile {
   title : String
@@ -411,8 +407,7 @@ pub(all) enum Team {
   Player1
   Player2
   Enemy
-}
-pub impl Eq for Team
+} derive(Eq)
 
 // Type aliases
 

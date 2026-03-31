@@ -150,8 +150,7 @@ pub fn Bullet::new() -> Self
 
 pub(all) enum BulletKind {
   Standard
-}
-pub impl Eq for BulletKind
+} derive(Eq)
 
 pub(all) struct Enemy {
   mut active : Bool
@@ -189,15 +188,13 @@ pub(all) enum EnemyBulletKind {
   BasicShot
   HeavyShot
   OrbiterShot
-}
-pub impl Eq for EnemyBulletKind
+} derive(Eq)
 
 pub(all) enum EnemyKind {
   Basic
   Heavy
   Orbiter
-}
-pub impl Eq for EnemyKind
+} derive(Eq)
 
 pub(all) struct Flare {
   mut active : Bool
@@ -269,8 +266,7 @@ pub(all) enum GameState {
   Play
   StageClear
   GameOver
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Particle {
   mut active : Bool
@@ -291,8 +287,7 @@ pub(all) enum ParticleKind {
   Spark
   Flash
   Damage
-}
-pub impl Eq for ParticleKind
+} derive(Eq)
 
 pub(all) struct Player {
   mut ring : Int

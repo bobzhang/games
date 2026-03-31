@@ -84,15 +84,13 @@ pub(all) enum Dir {
   Right
   Up
   Down
-}
+} derive(Eq)
 pub fn Dir::from_int(Int) -> Self
-pub impl Eq for Dir
 
 pub(all) enum FoodKind {
   Normal
   Gold
-}
-pub impl Eq for FoodKind
+} derive(Eq)
 
 pub(all) struct Game {
   p_seg_x : Array[Int]
@@ -147,8 +145,7 @@ pub(all) enum GameState {
   Title
   Play
   Result
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Rival {
   mut alive : Bool
@@ -186,8 +183,7 @@ pub(all) enum SparkKind {
   Splash
   Eat
   Death
-}
-pub impl Eq for SparkKind
+} derive(Eq)
 
 // Type aliases
 
