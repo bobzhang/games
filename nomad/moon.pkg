@@ -1,0 +1,14 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/nomad/internal/types",
+  "bobzhang/games/nomad/internal/game",
+  "bobzhang/games/nomad/internal/render",
+  "bobzhang/games/nomad/internal/levels",
+  "bobzhang/games/utils/draw",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

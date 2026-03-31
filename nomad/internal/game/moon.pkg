@@ -1,0 +1,7 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/nomad/internal/types",
+  "bobzhang/games/nomad/internal/world",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
