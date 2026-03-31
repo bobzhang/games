@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/fugue/internal/types",
+  "bobzhang/games/fugue/internal/harmony",
+  "bobzhang/games/fugue/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
