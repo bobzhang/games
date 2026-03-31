@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/tessellate/internal/types",
+  "bobzhang/games/tessellate/internal/packing",
+  "bobzhang/games/tessellate/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
