@@ -1,0 +1,10 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/parallax/internal/types",
+  "bobzhang/games/parallax/internal/voxel",
+  "bobzhang/games/parallax/internal/levels",
+  "bobzhang/games/utils/draw",
+  "moonbitlang/core/math",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
