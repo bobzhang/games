@@ -1,0 +1,12 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/void_drifter/internal/types",
+  "bobzhang/games/void_drifter/internal/physics",
+  "bobzhang/games/void_drifter/internal/weapons",
+  "bobzhang/games/void_drifter/internal/enemies",
+  "bobzhang/games/void_drifter/internal/sectors",
+  "bobzhang/games/void_drifter/internal/bosses",
+  "moonbitlang/core/math",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

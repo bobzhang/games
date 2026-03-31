@@ -1,0 +1,6 @@
+import {
+  "bobzhang/games/void_drifter/internal/types",
+  "bobzhang/games/void_drifter/internal/weapons",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
