@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/canopy/internal/types",
+  "bobzhang/games/canopy/internal/growth",
+  "bobzhang/games/canopy/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
