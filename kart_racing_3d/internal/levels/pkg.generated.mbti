@@ -6,6 +6,8 @@ import {
 }
 
 // Values
+pub fn get_cup_ai_difficulty(Int) -> Int
+
 pub fn get_cup_name(Int) -> String
 
 pub fn get_sky_gradient_color(Int, Int) -> (Int, Int, Int)
@@ -33,6 +35,8 @@ pub fn get_track_record_holder(Int, Int) -> String
 pub fn get_track_record_time(Int, Int) -> Float
 
 pub fn get_track_road_color(Int, Int) -> (Int, Int, Int)
+
+pub fn get_track_segments(Int, Int) -> Array[@types.TrackSegment]
 
 pub fn get_track_sky_color(Int, Int) -> (Int, Int, Int)
 

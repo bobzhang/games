@@ -2,6 +2,8 @@
 package "bobzhang/games/kart_racing_3d/internal/types"
 
 // Values
+pub fn add_skid_mark(Game, Float, Float, Float, Float, Float, Float) -> Unit
+
 pub let ai_difficulty_medium : Int
 
 pub let ai_difficulty_stats : Array[(Float, Float, Float, Float)]
@@ -149,6 +151,8 @@ pub fn get_segment(Game, Int) -> TrackSegment
 pub fn get_surface_grip(Surface) -> Float
 
 pub fn get_surface_speed_mult(Surface) -> Float
+
+pub fn get_theme_dust_color(Theme) -> (Int, Int, Int)
 
 pub fn get_track_direction(Game, Int) -> (Float, Float)
 
@@ -334,8 +338,7 @@ pub(all) enum DriftLevel {
   Mini
   Super
   Ultra
-}
-pub impl Eq for DriftLevel
+} derive(Eq)
 
 pub(all) struct DroppedItem {
   mut active : Bool
@@ -363,6 +366,7 @@ pub(all) struct Game {
   segments : Array[TrackSegment]
   mut track_theme : Theme
   mut track_name : String
+  mut track_laps : Int
   karts : Array[Kart]
   powerups : Array[Powerup]
   projectiles : Array[Projectile]
@@ -395,6 +399,17 @@ pub(all) struct Game {
   mut preview_timer : Float
   mut fastest_lap_kart : Int
   mut fastest_lap_time : Float
+  mut prev_player_place : Int
+  mut place_change_timer : Float
+  mut place_change_place : Int
+  mut drift_boost_text_timer : Float
+  mut drift_boost_text_level : DriftLevel
+  mut item_pickup_flash_timer : Float
+  mut lap_flash_timer : Float
+  mut lap_flash_lap : Int
+  skid_marks : Array[(Float, Float, Float, Float, Float, Float, Float)]
+  mut skid_mark_count : Int
+  mut hit_flash_timer : Float
 
   fn new() -> Game
 }
@@ -410,8 +425,7 @@ pub(all) enum GameState {
   CupComplete
   KartSelect
   TrackPreview
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Kart {
   mut active : Bool
@@ -463,6 +477,7 @@ pub(all) struct Kart {
   mut ai_line_offset : Float
   mut ai_reaction_timer : Float
   mut ai_brake_timer : Float
+  mut ramp_launched : Bool
 }
 pub fn Kart::inactive() -> Self
 
@@ -506,8 +521,7 @@ pub(all) enum PowerupKind {
   Star
   Banana
   TripleMushroom
-}
-pub impl Eq for PowerupKind
+} derive(Eq)
 
 pub(all) struct Projectile {
   mut active : Bool
@@ -539,8 +553,7 @@ pub(all) enum Surface {
   BoostPad
   Oil
   SurfaceIce
-}
-pub impl Eq for Surface
+} derive(Eq)
 
 pub(all) enum Theme {
   Circuit
@@ -551,8 +564,7 @@ pub(all) enum Theme {
   ThemeIce
   Night
   Volcano
-}
-pub impl Eq for Theme
+} derive(Eq)
 
 pub(all) struct TrackData {
   mut track_name : String

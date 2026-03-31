@@ -36,6 +36,7 @@ pub(all) struct TrackSegment {
   mut decoration_type : Int
   mut is_ramp : Bool
   mut ramp_height : Float
+  mut hazard : HazardKind
 }
 
 ///|
@@ -50,6 +51,7 @@ pub fn TrackSegment::default() -> TrackSegment {
     decoration_type: 0,
     is_ramp: false,
     ramp_height: 0.0,
+    hazard: NoHazard,
   }
 }
 
@@ -109,6 +111,16 @@ pub(all) struct Kart {
   mut ai_reaction_timer : Float
   mut ai_brake_timer : Float
   mut ramp_launched : Bool
+  // Lateral physics
+  mut lateral_vel : Float
+  // Hop-to-drift
+  mut hop_timer : Float
+  // Landing boost
+  mut landing_boost_timer : Float
+  // Speed wobble phase
+  mut speed_wobble_phase : Float
+  // Trailing defensive item visual
+  mut trailing_item_active : Bool
 }
 
 ///|
@@ -165,6 +177,11 @@ pub fn Kart::inactive() -> Kart {
     ai_reaction_timer: 0.0,
     ai_brake_timer: 0.0,
     ramp_launched: false,
+    lateral_vel: 0.0,
+    hop_timer: 0.0,
+    landing_boost_timer: 0.0,
+    speed_wobble_phase: 0.0,
+    trailing_item_active: false,
   }
 }
 
@@ -486,6 +503,12 @@ pub(all) struct Game {
   // Hit effect
   mut hit_flash_timer : Float
 
+  // Hazard system state
+  mut hazard_timer : Float
+  // Falling rock positions per segment: (seg_idx, offset_x, offset_z, active)
+  falling_rocks : Array[(Int, Float, Float, Bool)]
+  mut falling_rocks_count : Int
+
   fn new() -> Game
 }
 
@@ -572,5 +595,8 @@ pub fn Game::new() -> Game {
     skid_marks: Array::make(64, (0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F)),
     skid_mark_count: 0,
     hit_flash_timer: 0.0,
+    hazard_timer: 0.0,
+    falling_rocks: Array::make(max_waypoints * falling_rocks_max, (0, 0.0, 0.0, false)),
+    falling_rocks_count: 0,
   }
 }

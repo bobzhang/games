@@ -8,6 +8,7 @@ pub fn draw_effects(game : @types.Game) -> Unit {
   game.draw_drift_spark_trails()
   game.draw_boost_exhaust_flames()
   game.draw_dropped_items_3d()
+  game.draw_trailing_items()
   game.draw_dust_trails()
   game.draw_speed_lines()
   game.draw_start_confetti()
@@ -242,6 +243,74 @@ fn @types.Game::draw_dropped_items_3d(game : @types.Game) -> Unit {
         0.4,
         @raylib.Color::new(255, 50, 50, warn_alpha.clamp(min=0, max=255)),
       )
+    }
+  }
+}
+
+// Draw trailing defensive items behind karts holding them
+
+///|
+fn @types.Game::draw_trailing_items(game : @types.Game) -> Unit {
+  for i in 0..<@types.max_karts {
+    let kart = game.karts[i]
+    if !kart.active || !kart.trailing_item_active {
+      continue
+    }
+    let sin_a = @math.sinf(kart.angle)
+    let cos_a = @math.cosf(kart.angle)
+    // Position trailing item behind the kart
+    let trail_dist : Float = 1.8
+    let tx = kart.x - sin_a * trail_dist
+    let tz = kart.z - cos_a * trail_dist
+    let ty = kart.y + 0.3
+    // Bobbing animation
+    let bob = @math.sinf(Float::from_int(game.frame_counter) * 0.15 + Float::from_int(i) * 2.0) *
+      0.08
+    match kart.held_powerup {
+      Banana => {
+        // Small banana trailing behind
+        @raylib.draw_cube(
+          @raylib.Vector3::new(tx, ty + bob, tz),
+          0.35,
+          0.12,
+          0.22,
+          @raylib.Color::new(255, 230, 50, 220),
+        )
+        @raylib.draw_cube(
+          @raylib.Vector3::new(tx, ty + 0.08 + bob, tz),
+          0.1,
+          0.15,
+          0.1,
+          @raylib.Color::new(140, 100, 30, 220),
+        )
+      }
+      OilSlick => {
+        // Dark orb trailing behind
+        @raylib.draw_sphere(
+          @raylib.Vector3::new(tx, ty + bob, tz),
+          0.2,
+          @raylib.Color::new(30, 30, 40, 200),
+        )
+      }
+      Missile => {
+        // Small red shell/missile trailing behind
+        @raylib.draw_cube(
+          @raylib.Vector3::new(tx, ty + bob, tz),
+          0.25,
+          0.25,
+          0.35,
+          @raylib.Color::new(200, 50, 50, 220),
+        )
+        // Fin
+        @raylib.draw_cube(
+          @raylib.Vector3::new(tx, ty + 0.15 + bob, tz),
+          0.08,
+          0.15,
+          0.2,
+          @raylib.Color::new(180, 40, 40, 200),
+        )
+      }
+      _ => ()
     }
   }
 }

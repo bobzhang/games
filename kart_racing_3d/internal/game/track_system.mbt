@@ -117,6 +117,12 @@ fn @types.Game::spawn_karts(game : @types.Game) -> Unit {
       -3.0 * (1.0 - diff_stats.2),
       3.0 * (1.0 - diff_stats.2),
     )
+    // Reset new physics fields
+    kart.lateral_vel = 0.0
+    kart.hop_timer = 0.0
+    kart.landing_boost_timer = 0.0
+    kart.speed_wobble_phase = 0.0
+    kart.trailing_item_active = false
   }
 }
 
@@ -380,7 +386,8 @@ pub fn check_powerup_collisions(game : @types.Game) -> Unit {
       }
       let d = @types.distance2d(kart.x, kart.z, pu.x, pu.z)
       if d < 2.0 {
-        kart.held_powerup = pu.kind
+        // Position-weighted item roll: worse positions get better items
+        kart.held_powerup = @types.roll_position_weighted_item(game, kart.place)
         pu.collected = true
         pu.respawn_timer = 8.0
         @types.spawn_particles(game, pu.x, pu.y, pu.z, 8, 255, 255, 100)

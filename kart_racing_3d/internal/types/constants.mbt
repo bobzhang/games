@@ -45,6 +45,17 @@ pub(all) enum Theme {
   Volcano
 } derive(Eq)
 
+///|
+/// Hazard event types that can be assigned to track segments.
+pub(all) enum HazardKind {
+  NoHazard
+  LavaBurst
+  FallingRocks
+  WaterCurrent
+  IceSheet
+  Shortcut
+} derive(Eq, Show)
+
 // Screen
 
 ///|
@@ -390,15 +401,89 @@ pub let camera_drift_offset : Float = 1.5
 /// Additional field of view degrees added during boost.
 pub let camera_boost_fov_add : Float = 8.0
 
-// AI rubber-banding
+// Hop-to-drift mechanics
+
+///|
+/// Duration of the hop in seconds before drift initiates.
+pub let hop_duration : Float = 0.2
+
+///|
+/// Upward velocity applied during a drift hop.
+pub let hop_vy : Float = 4.0
+
+// Lateral physics
+
+///|
+/// How quickly lateral velocity builds during turns.
+pub let lateral_build_rate : Float = 8.0
+
+///|
+/// Lateral velocity damping per second on road surface.
+pub let lateral_damp_road : Float = 6.0
+
+///|
+/// Lateral velocity damping per second on ice surface.
+pub let lateral_damp_ice : Float = 0.8
+
+///|
+/// Lateral velocity damping per second on dirt surface.
+pub let lateral_damp_dirt : Float = 4.0
+
+///|
+/// Lateral velocity damping per second on grass surface.
+pub let lateral_damp_grass : Float = 3.5
+
+// Surface deceleration rates
+
+///|
+/// Extra deceleration on grass surface.
+pub let grass_decel : Float = 12.0
+
+///|
+/// Extra deceleration on dirt surface.
+pub let dirt_decel : Float = 5.0
+
+///|
+/// Probability of spin per second on deep off-road.
+pub let offroad_spin_chance : Int = 80
+
+// Landing boost
+
+///|
+/// Speed bonus per second of air time on landing.
+pub let landing_boost_per_sec : Float = 3.0
+
+///|
+/// Maximum landing boost power.
+pub let landing_boost_max : Float = 8.0
+
+///|
+/// Duration of landing boost effect.
+pub let landing_boost_duration : Float = 0.6
+
+// Speed wobble
+
+///|
+/// Speed ratio threshold above which wobble occurs.
+pub let speed_wobble_threshold : Float = 0.92
+
+///|
+/// Visual wobble angular amplitude.
+pub let speed_wobble_amplitude : Float = 0.015
+
+///|
+/// Rate of wobble phase advancement.
+pub let speed_wobble_rate : Float = 25.0
+
+// AI rubber-banding (reduced since items now handle catch-up)
 
 ///|
 /// Speed boost added to AI karts trailing the player.
-pub let ai_rubberband_behind : Float = 0.12
+pub let ai_rubberband_behind : Float = 0.07
 
 ///|
 /// Speed reduction applied to AI karts ahead of the player.
-pub let ai_rubberband_ahead : Float = 0.08
+pub let ai_rubberband_ahead : Float = 0.04
 
 ///|
 /// AI difficulty level ID for medium mode.
@@ -662,3 +747,69 @@ pub let track_difficulty_ratings : Array[Int] = [
    4, // Deep Trench
    5, // Grand Prix
 ]
+
+// Hazard timing constants
+
+///|
+/// Period in seconds for LavaBurst cycle (on + off).
+pub let lava_burst_period : Float = 4.5
+
+///|
+/// Duration in seconds that LavaBurst is active each cycle.
+pub let lava_burst_active_duration : Float = 1.5
+
+///|
+/// Speed penalty multiplier applied when hit by LavaBurst.
+pub let lava_burst_speed_penalty : Float = 0.3
+
+///|
+/// Spin duration when hit by LavaBurst.
+pub let lava_burst_spin_time : Float = 1.0
+
+///|
+/// Maximum number of falling rock obstacles per segment.
+pub let falling_rocks_max : Int = 4
+
+///|
+/// Collision radius for falling rock obstacles.
+pub let falling_rock_radius : Float = 0.8
+
+///|
+/// Speed penalty multiplier when hitting a falling rock.
+pub let falling_rock_speed_penalty : Float = 0.4
+
+///|
+/// Spin duration when hitting a falling rock.
+pub let falling_rock_spin_time : Float = 1.2
+
+///|
+/// Sideways force strength of WaterCurrent hazard.
+pub let water_current_force : Float = 6.0
+
+///|
+/// Grip multiplier on IceSheet hazard (near zero traction).
+pub let ice_sheet_grip : Float = 0.12
+
+///|
+/// Steering multiplier on IceSheet hazard.
+pub let ice_sheet_steer_mult : Float = 0.2
+
+///|
+/// Speed multiplier bonus when on Shortcut segment.
+pub let shortcut_speed_bonus : Float = 1.15
+
+///|
+/// Width multiplier for Shortcut segments (narrow path).
+pub let shortcut_width_mult : Float = 0.5
+
+///|
+/// Distance threshold for off-track fall reset.
+pub let fall_reset_distance : Float = 25.0
+
+///|
+/// Time penalty in seconds for a fall reset respawn.
+pub let fall_reset_time_penalty : Float = 2.0
+
+///|
+/// Speed after respawn from a fall reset.
+pub let fall_reset_speed : Float = 5.0

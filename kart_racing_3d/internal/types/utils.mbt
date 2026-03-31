@@ -578,7 +578,8 @@ pub fn calc_rubber_band_mult(
   } else if progress_diff > 0.0 {
     mult = mult - ai_rubberband_ahead
   }
-  clampf(mult, 0.7, 1.15)
+  // Narrower range since position-weighted items now handle catch-up
+  clampf(mult, 0.8, 1.1)
 }
 
 // Format time as string "MM:SS.ms"
@@ -695,6 +696,99 @@ pub fn add_skid_mark(
   let idx = game.skid_mark_count % max
   game.skid_marks[idx] = (x1, z1, x2, z2, y, life, life)
   game.skid_mark_count = game.skid_mark_count + 1
+}
+
+///|
+/// Returns a position-weighted powerup for the given race position (1-8).
+/// Worse positions get better items for natural rubber-banding.
+pub fn roll_position_weighted_item(game : Game, place : Int) -> PowerupKind {
+  let roll = rand_range(game, 1, 100)
+  if place <= 1 {
+    // 1st: Banana 30%, Green Shell (Missile) 30%, Coin (Shield) 20%, Mushroom 20%
+    if roll <= 30 {
+      Banana
+    } else if roll <= 60 {
+      Missile
+    } else if roll <= 80 {
+      Shield
+    } else {
+      Boost
+    }
+  } else if place <= 3 {
+    // 2nd-3rd: Banana 20%, Missile 25%, Shield 15%, Mushroom 25%, OilSlick 15%
+    if roll <= 20 {
+      Banana
+    } else if roll <= 45 {
+      Missile
+    } else if roll <= 60 {
+      Shield
+    } else if roll <= 85 {
+      Boost
+    } else {
+      OilSlick
+    }
+  } else if place <= 5 {
+    // 4th-5th: Mushroom 30%, Missile 25%, Star 15%, TripleMushroom 15%, Banana 15%
+    if roll <= 30 {
+      Boost
+    } else if roll <= 55 {
+      Missile
+    } else if roll <= 70 {
+      Star
+    } else if roll <= 85 {
+      TripleMushroom
+    } else {
+      Banana
+    }
+  } else {
+    // 6th-8th: Star 25%, TripleMushroom 25%, Missile 20%, Lightning 10%, Boost 20%
+    if roll <= 25 {
+      Star
+    } else if roll <= 50 {
+      TripleMushroom
+    } else if roll <= 70 {
+      Missile
+    } else if roll <= 80 {
+      Lightning
+    } else {
+      Boost
+    }
+  }
+}
+
+///|
+/// Returns the lateral velocity damping rate for the given surface.
+pub fn get_lateral_damp(surface : Surface) -> Float {
+  match surface {
+    Road => lateral_damp_road
+    BoostPad => lateral_damp_road
+    Dirt => lateral_damp_dirt
+    Grass => lateral_damp_grass
+    Oil => lateral_damp_ice
+    SurfaceIce => lateral_damp_ice
+  }
+}
+
+///|
+/// Returns whether the powerup is a defensive item (banana, oil slick, shell).
+pub fn is_defensive_item(item : PowerupKind) -> Bool {
+  match item {
+    Banana => true
+    OilSlick => true
+    Missile => true
+    _ => false
+  }
+}
+
+///|
+/// Returns whether the powerup is a boost-type item.
+pub fn is_boost_item(item : PowerupKind) -> Bool {
+  match item {
+    Boost => true
+    TripleMushroom => true
+    Star => true
+    _ => false
+  }
 }
 
 ///|

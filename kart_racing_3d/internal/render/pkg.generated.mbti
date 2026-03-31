@@ -8,11 +8,21 @@ import {
 // Values
 pub fn draw_detailed_race_results(@types.Game) -> Unit
 
+pub fn draw_drift_boost_text(@types.Game) -> Unit
+
+pub fn draw_drift_meter(@types.Game) -> Unit
+
 pub fn draw_effects(@types.Game) -> Unit
 
 pub fn draw_item_indicator(@types.Game) -> Unit
 
+pub fn draw_item_pickup_flash(@types.Game) -> Unit
+
 pub fn draw_lap_times(@types.Game) -> Unit
+
+pub fn draw_position_callout(@types.Game) -> Unit
+
+pub fn draw_speed_gauge(@types.Game) -> Unit
 
 pub fn draw_standings_sidebar(@types.Game) -> Unit
 

@@ -140,6 +140,9 @@ fn @types.Game::update_racing(game : @types.Game, dt : Float) -> Unit {
   }
   check_kart_collisions(game)
   update_positions(game)
+  // Hazard system: update timer and apply hazard effects to all karts
+  game.update_hazards(dt)
+  game.check_fall_reset()
   // Track player position changes for HUD callout
   let player_place = game.karts[@types.player_kart].place
   if player_place != game.prev_player_place {
@@ -542,5 +545,250 @@ fn @types.Game::emit_drift_skid_marks(game : @types.Game) -> Unit {
     // Add skid marks for both rear wheels
     @types.add_skid_mark(game, prev_rl_x, prev_rl_z, rl_x, rl_z, kart.y, 3.0)
     @types.add_skid_mark(game, prev_rr_x, prev_rr_z, rr_x, rr_z, kart.y, 3.0)
+  }
+}
+
+// Hazard system: update timer and apply segment hazard effects to karts
+
+///|
+/// Returns true when the LavaBurst hazard is in its active (dangerous) phase.
+fn is_lava_burst_active(hazard_timer : Float) -> Bool {
+  let cycle = hazard_timer % @types.lava_burst_period
+  cycle < @types.lava_burst_active_duration
+}
+
+///|
+/// Updates the global hazard timer and applies hazard effects to all active karts
+/// based on the segment they currently occupy.
+fn @types.Game::update_hazards(game : @types.Game, dt : Float) -> Unit {
+  game.hazard_timer += dt
+  let wc = game.waypoint_count
+  if wc < 2 {
+    return
+  }
+  // Spawn falling rocks once if needed
+  if game.falling_rocks_count == 0 {
+    game.spawn_falling_rocks()
+  }
+  for i in 0..<@types.max_karts {
+    let kart = game.karts[i]
+    if !kart.active || kart.finished || !kart.on_ground {
+      continue
+    }
+    if kart.spin_timer > 0.0 || kart.stunned_timer > 0.0 {
+      continue
+    }
+    let seg_idx = kart.waypoint_idx
+    if seg_idx < 0 || seg_idx >= wc {
+      continue
+    }
+    let seg = game.segments[seg_idx]
+    match seg.hazard {
+      LavaBurst =>
+        if is_lava_burst_active(game.hazard_timer) {
+          // Kart is on an active lava burst segment
+          if kart.invincible_timer <= 0.0 && kart.star_timer <= 0.0 {
+            if kart.shield_timer > 0.0 {
+              kart.shield_timer = 0.0
+            } else {
+              kart.speed = kart.speed * @types.lava_burst_speed_penalty
+              kart.spin_timer = @types.lava_burst_spin_time
+            }
+            @types.spawn_particles(
+              game, kart.x, kart.y + 0.3, kart.z, 8, 255, 80, 20,
+            )
+            if i == @types.player_kart {
+              game.hit_flash_timer = 0.5
+              game.camera_shake = 0.4
+            }
+          }
+        }
+      FallingRocks => game.check_falling_rock_collision(i)
+      WaterCurrent => {
+        // Apply sideways force based on segment perpendicular direction
+        let wp0 = game.waypoints[seg_idx]
+        let wp1 = game.waypoints[(seg_idx + 1) % wc]
+        let dx = wp1.x - wp0.x
+        let dz = wp1.z - wp0.z
+        let dist = @types.distance2d(wp0.x, wp0.z, wp1.x, wp1.z)
+        if dist > 0.01 {
+          // Perpendicular direction (push sideways)
+          let px = -dz / dist
+          let pz = dx / dist
+          kart.x = kart.x + px * @types.water_current_force * dt
+          kart.z = kart.z + pz * @types.water_current_force * dt
+        }
+      }
+      IceSheet => {
+        // Override traction: near-zero grip, minimal steering
+        kart.speed = kart.speed *
+          (1.0 - (1.0 - @types.ice_sheet_grip) * dt * 2.0)
+        kart.steer = kart.steer * @types.ice_sheet_steer_mult
+        // Cancel any active drift on ice sheet
+        if kart.drift_left || kart.drift_right {
+          kart.drift_left = false
+          kart.drift_right = false
+          kart.drift_timer = 0.0
+          kart.drift_level = DriftNone
+          kart.drift_angle = 0.0
+        }
+      }
+      Shortcut => {
+        // Speed bonus for staying on the narrow shortcut
+        let effective_max = @types.get_kart_max_speed(kart)
+        let boosted = effective_max * @types.shortcut_speed_bonus
+        if kart.speed < boosted && kart.speed > 3.0 {
+          kart.speed = @types.lerpf(kart.speed, boosted, dt * 2.0)
+        }
+      }
+      NoHazard => ()
+    }
+  }
+}
+
+///|
+/// Spawns falling rock obstacle positions for all FallingRocks segments.
+fn @types.Game::spawn_falling_rocks(game : @types.Game) -> Unit {
+  let wc = game.waypoint_count
+  let mut count = 0
+  for i in 0..<wc {
+    let seg = game.segments[i]
+    if seg.hazard != FallingRocks {
+      continue
+    }
+    let wp0 = game.waypoints[i]
+    let wp1 = game.waypoints[(i + 1) % wc]
+    let half_w = @types.road_half * seg.width_mult
+    for r in 0..<@types.falling_rocks_max {
+      if count >= game.falling_rocks.length() {
+        break
+      }
+      // Place rocks at random positions along and across the segment
+      let t = (Float::from_int(r) + 0.5) / Float::from_int(@types.falling_rocks_max)
+      let cx = @types.lerpf(wp0.x, wp1.x, t)
+      let cz = @types.lerpf(wp0.z, wp1.z, t)
+      // Offset across the road using perpendicular
+      let dx = wp1.x - wp0.x
+      let dz = wp1.z - wp0.z
+      let dist = @types.distance2d(wp0.x, wp0.z, wp1.x, wp1.z)
+      if dist > 0.01 {
+        let px = -dz / dist
+        let pz = dx / dist
+        // Alternate sides with some variation
+        let side : Float = if r % 2 == 0 { 1.0 } else { -1.0 }
+        let offset = side * half_w * 0.4
+        let rx = cx + px * offset
+        let rz = cz + pz * offset
+        game.falling_rocks[count] = (i, rx, rz, true)
+        count += 1
+      }
+    }
+  }
+  game.falling_rocks_count = count
+}
+
+///|
+/// Checks if a kart collides with any falling rock obstacle and applies effects.
+fn @types.Game::check_falling_rock_collision(
+  game : @types.Game,
+  kart_idx : Int,
+) -> Unit {
+  let kart = game.karts[kart_idx]
+  let seg_idx = kart.waypoint_idx
+  for r in 0..<game.falling_rocks_count {
+    let rock = game.falling_rocks[r]
+    if !rock.3 || rock.0 != seg_idx {
+      continue
+    }
+    let dist = @types.distance2d(kart.x, kart.z, rock.1, rock.2)
+    if dist < @types.falling_rock_radius + @types.kart_width * 0.5 {
+      if kart.invincible_timer > 0.0 || kart.star_timer > 0.0 {
+        // Destroy the rock
+        game.falling_rocks[r] = (rock.0, rock.1, rock.2, false)
+        @types.spawn_particles(
+          game, rock.1, kart.y + 0.5, rock.2, 6, 100, 90, 80,
+        )
+        continue
+      }
+      if kart.shield_timer > 0.0 {
+        kart.shield_timer = 0.0
+        game.falling_rocks[r] = (rock.0, rock.1, rock.2, false)
+        continue
+      }
+      kart.speed = kart.speed * @types.falling_rock_speed_penalty
+      kart.spin_timer = @types.falling_rock_spin_time
+      @types.spawn_particles(
+        game, kart.x, kart.y + 0.5, kart.z, 8, 120, 100, 80,
+      )
+      if kart_idx == @types.player_kart {
+        game.hit_flash_timer = 0.5
+        game.camera_shake = 0.35
+      }
+      // Destroy the rock on hit
+      game.falling_rocks[r] = (rock.0, rock.1, rock.2, false)
+      break
+    }
+  }
+}
+
+///|
+/// Checks if any kart has fallen too far off track and respawns them at the
+/// last waypoint with a time penalty. Primarily relevant for Rainbow Road.
+fn @types.Game::check_fall_reset(game : @types.Game) -> Unit {
+  let wc = game.waypoint_count
+  if wc < 2 {
+    return
+  }
+  // Only check tracks that have hazards or narrow/elevated segments (Rainbow Road etc.)
+  let has_fall_risk = {
+    let mut found = false
+    for i in 0..<wc {
+      if game.segments[i].width_mult < 0.7 {
+        found = true
+        break
+      }
+    }
+    found
+  }
+  if !has_fall_risk {
+    return
+  }
+  for i in 0..<@types.max_karts {
+    let kart = game.karts[i]
+    if !kart.active || kart.finished {
+      continue
+    }
+    // Check distance from the nearest waypoint
+    let mut best_dist = 99999.0F
+    for w in 0..<wc {
+      let wp = game.waypoints[w]
+      let d = @types.distance2d(kart.x, kart.z, wp.x, wp.z)
+      if d < best_dist {
+        best_dist = d
+      }
+    }
+    // Also check if kart has fallen below the track
+    let ground_y = get_ground_height(game, kart.x, kart.z)
+    let fell_off = kart.y < ground_y - 5.0
+    if best_dist > @types.fall_reset_distance || fell_off {
+      // Respawn at last waypoint
+      let wp_idx = kart.waypoint_idx.clamp(min=0, max=wc - 1)
+      let wp = game.waypoints[wp_idx]
+      kart.x = wp.x
+      kart.y = wp.y + 0.5
+      kart.z = wp.z
+      kart.speed = @types.fall_reset_speed
+      kart.vy = 0.0
+      kart.on_ground = true
+      kart.spin_timer = 0.0
+      kart.stunned_timer = 0.0
+      // Time penalty for player
+      if i == @types.player_kart {
+        game.race_time += @types.fall_reset_time_penalty
+        game.hit_flash_timer = 1.0
+        game.camera_shake = 0.5
+      }
+      @types.spawn_particles(game, kart.x, kart.y + 0.5, kart.z, 10, 255, 255, 200)
+    }
   }
 }

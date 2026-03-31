@@ -46,14 +46,31 @@ pub fn update_player_kart(game : @types.Game, dt : Float) -> Unit {
   if @raylib.is_key_down(@raylib.KeyRight) || @raylib.is_key_down(@raylib.KeyD) {
     steer_input = -1.0
   }
-  // Drift mechanic (left shift or Z/X)
-  let drift_key = @raylib.is_key_down(@raylib.KeyLeftShift) ||
+  // Drift mechanic with hop-to-drift initiation (left shift or Z/X)
+  let drift_key_pressed = @raylib.is_key_pressed(@raylib.KeyLeftShift) ||
+    @raylib.is_key_pressed(@raylib.KeyZ) ||
+    @raylib.is_key_pressed(@raylib.KeyX)
+  let drift_key_down = @raylib.is_key_down(@raylib.KeyLeftShift) ||
     @raylib.is_key_down(@raylib.KeyZ) ||
     @raylib.is_key_down(@raylib.KeyX)
-  let drifting = drift_key && steer_input.abs() > 0.01 && kart.speed > 5.0
-  if drifting {
-    if !kart.drift_left && !kart.drift_right {
-      // Initiate drift
+  // Hop-to-drift: press drift to hop, then steer to initiate drift
+  if drift_key_pressed &&
+    !kart.drift_left &&
+    !kart.drift_right &&
+    kart.on_ground &&
+    kart.speed > 5.0 &&
+    kart.hop_timer <= 0.0 {
+    // Start hop
+    kart.hop_timer = @types.hop_duration
+    kart.vy = @types.hop_vy
+    kart.on_ground = false
+    @types.spawn_particles(game, kart.x, kart.y, kart.z, 3, 200, 200, 200)
+  }
+  // During hop, check for steer direction to initiate drift
+  if kart.hop_timer > 0.0 {
+    kart.hop_timer -= dt
+    if kart.hop_timer <= 0.0 && drift_key_down && steer_input.abs() > 0.01 {
+      // Initiate drift after hop lands
       if steer_input > 0.0 {
         kart.drift_left = true
       } else {
@@ -63,6 +80,11 @@ pub fn update_player_kart(game : @types.Game, dt : Float) -> Unit {
       kart.drift_level = DriftNone
       kart.drift_angle = 0.0
     }
+  }
+  let drifting = drift_key_down &&
+    (kart.drift_left || kart.drift_right) &&
+    kart.speed > 5.0
+  if drifting {
     kart.drift_timer += dt
     // Update drift level based on accumulated time
     let new_level = @types.calc_drift_level(kart.drift_timer)
@@ -183,11 +205,88 @@ pub fn update_player_kart(game : @types.Game, dt : Float) -> Unit {
       }
     }
   }
+  // Surface-specific consequences
+  let surface = kart.on_surface_type
+  if surface == Grass && kart.on_ground {
+    // Grass: strong deceleration
+    kart.speed = kart.speed - @types.grass_decel * dt
+    if kart.speed < 0.0 {
+      kart.speed = 0.0
+    }
+  } else if surface == Dirt && kart.on_ground {
+    // Dirt: moderate deceleration + kickup particles
+    kart.speed = kart.speed - @types.dirt_decel * dt
+    if kart.speed > 5.0 && game.frame_counter % 4 == 0 {
+      @types.spawn_typed_particles(
+        game,
+        @types.particle_dust,
+        kart.x,
+        kart.y + 0.1,
+        kart.z,
+        2,
+        160,
+        130,
+        80,
+        0.07,
+        0.4,
+      )
+    }
+  } else if surface == SurfaceIce && kart.on_ground {
+    // Ice: reduced steering (already handled via grip), no extra decel
+    // but steer is further reduced
+    kart.steer = kart.steer * 0.5
+  }
+  // Off-road spin risk: random chance when on grass at high speed
+  if surface == Grass &&
+    kart.on_ground &&
+    kart.speed > 15.0 &&
+    kart.spin_timer <= 0.0 {
+    let spin_roll = @types.rand_range(game, 0, 1000)
+    if spin_roll < @types.offroad_spin_chance {
+      kart.spin_timer = 0.5
+      kart.speed = kart.speed * 0.6
+      @types.spawn_particles(game, kart.x, kart.y + 0.2, kart.z, 6, 80, 140, 60)
+    }
+  }
   kart.speed = @types.clampf(kart.speed, -effective_max * 0.3, effective_max)
+  // Lateral velocity / slip angle
+  if kart.on_ground {
+    // Build lateral velocity based on steering and speed
+    let steer_angle = kart.steer + kart.drift_angle
+    let lateral_force = steer_angle * kart.speed * 0.08
+    kart.lateral_vel = kart.lateral_vel + lateral_force * @types.lateral_build_rate * dt
+    // Damp lateral velocity based on surface traction
+    let lat_damp = @types.get_lateral_damp(kart.on_surface_type)
+    kart.lateral_vel = kart.lateral_vel * (1.0 - lat_damp * dt)
+    // Clamp lateral velocity
+    let max_lat : Float = kart.speed * 0.4
+    kart.lateral_vel = @types.clampf(kart.lateral_vel, -max_lat, max_lat)
+  } else {
+    // In the air, lateral velocity slowly decays
+    kart.lateral_vel = kart.lateral_vel * (1.0 - 1.0 * dt)
+  }
+  // Speed wobble at max speed
+  let wobble_ratio = kart.speed / effective_max
+  if wobble_ratio > @types.speed_wobble_threshold && kart.on_ground {
+    kart.speed_wobble_phase = kart.speed_wobble_phase +
+      @types.speed_wobble_rate * dt
+    let wobble_strength = (wobble_ratio - @types.speed_wobble_threshold) /
+      (1.0 - @types.speed_wobble_threshold)
+    kart.steer = kart.steer +
+      @math.sinf(kart.speed_wobble_phase) *
+      @types.speed_wobble_amplitude *
+      wobble_strength
+  } else {
+    kart.speed_wobble_phase = 0.0
+  }
   // Use powerup
   if @raylib.is_key_pressed(@raylib.KeySpace) {
     use_powerup(game, @types.player_kart)
   }
+  // Trailing item visual: active when holding a defensive item
+  kart.trailing_item_active = kart.held_powerup == Banana ||
+    kart.held_powerup == OilSlick ||
+    kart.held_powerup == Missile
   // Boost timer
   if kart.boost_timer > 0.0 {
     kart.boost_timer -= dt
@@ -207,6 +306,10 @@ pub fn update_player_kart(game : @types.Game, dt : Float) -> Unit {
         0.3,
       )
     }
+  }
+  // Landing boost timer
+  if kart.landing_boost_timer > 0.0 {
+    kart.landing_boost_timer -= dt
   }
   // Shield timer
   if kart.shield_timer > 0.0 {
@@ -264,11 +367,22 @@ pub fn apply_kart_physics(
   let total_steer = kart.steer + kart.drift_angle
   kart.angle = kart.angle + total_steer * dt
   kart.angle = @types.normalize_angle(kart.angle)
-  // Move in facing direction
-  let move_x = @math.sinf(kart.angle) * kart.speed * dt
-  let move_z = @math.cosf(kart.angle) * kart.speed * dt
-  kart.x = kart.x + move_x
-  kart.z = kart.z + move_z
+  // Move in facing direction + lateral slide
+  let sin_a = @math.sinf(kart.angle)
+  let cos_a = @math.cosf(kart.angle)
+  // Landing boost adds to effective speed
+  let effective_speed : Float = if kart.landing_boost_timer > 0.0 {
+    kart.speed + @types.landing_boost_max * (kart.landing_boost_timer / @types.landing_boost_duration)
+  } else {
+    kart.speed
+  }
+  let move_x = sin_a * effective_speed * dt
+  let move_z = cos_a * effective_speed * dt
+  // Lateral slide (perpendicular to facing direction)
+  let lat_x = cos_a * kart.lateral_vel * dt
+  let lat_z = -sin_a * kart.lateral_vel * dt
+  kart.x = kart.x + move_x + lat_x
+  kart.z = kart.z + move_z + lat_z
   // Gravity and ground
   let ground_y = get_ground_height(game, kart.x, kart.z)
   // Add ramp height
@@ -278,11 +392,37 @@ pub fn apply_kart_physics(
   } else {
     ground_y
   }
+  let was_airborne = !kart.on_ground
+  let air_time_before = kart.air_timer
   if kart.y <= effective_ground {
-    // Landing bounce
-    if !kart.on_ground && kart.air_timer > 0.3 {
+    // Landing boost off ramps: boost proportional to air time
+    if was_airborne && air_time_before > 0.3 {
       kart.bounce_timer = 0.2
       @types.spawn_particles(game, kart.x, kart.y, kart.z, 4, 200, 200, 200)
+      // Landing boost proportional to air time
+      let boost_power = @types.clampf(
+        air_time_before * @types.landing_boost_per_sec,
+        0.0,
+        @types.landing_boost_max,
+      )
+      if boost_power > 1.0 {
+        kart.landing_boost_timer = @types.landing_boost_duration
+        kart.boost_power = @types.clampf(
+          kart.boost_power + boost_power * 0.5,
+          kart.boost_power,
+          @types.landing_boost_max,
+        )
+        @types.spawn_particles(
+          game,
+          kart.x,
+          kart.y + 0.3,
+          kart.z,
+          6,
+          200,
+          255,
+          200,
+        )
+      }
     }
     kart.y = effective_ground
     kart.vy = 0.0
@@ -291,8 +431,16 @@ pub fn apply_kart_physics(
     kart.vy = kart.vy - @types.gravity * dt
     kart.y = kart.y + kart.vy * dt
     if kart.y < effective_ground {
-      if !kart.on_ground && kart.air_timer > 0.3 {
+      if was_airborne && air_time_before > 0.3 {
         kart.bounce_timer = 0.2
+        let boost_power = @types.clampf(
+          air_time_before * @types.landing_boost_per_sec,
+          0.0,
+          @types.landing_boost_max,
+        )
+        if boost_power > 1.0 {
+          kart.landing_boost_timer = @types.landing_boost_duration
+        }
       }
       kart.y = effective_ground
       kart.vy = 0.0

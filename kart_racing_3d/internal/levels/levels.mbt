@@ -296,11 +296,17 @@ pub fn get_track_segments(cup : Int, race : Int) -> Array[@types.TrackSegment] {
       segs[8].surface_type = BoostPad
     }
   } else if track_id == 7 {
-    // Bridge Run: narrow bridges with ramp
+    // Bridge Run: narrow bridges with ramp + FallingRocks on bridge
     if count > 1 {
       segs[1].width_mult = 0.6
       segs[1].is_ramp = true
       segs[1].ramp_height = 1.0
+    }
+    if count > 2 {
+      segs[2].hazard = FallingRocks
+    }
+    if count > 3 {
+      segs[3].hazard = FallingRocks
     }
     if count > 4 {
       segs[4].width_mult = 0.6
@@ -346,7 +352,7 @@ pub fn get_track_segments(cup : Int, race : Int) -> Array[@types.TrackSegment] {
       segs[3].surface_type = BoostPad
     }
   } else if track_id == 12 {
-    // Rainbow Road: narrow, ramps, boost
+    // Rainbow Road: narrow, ramps, boost + FallingRocks, IceSheet, no-rail fall/reset
     for i in 0..<count {
       segs[i].width_mult = 0.6
     }
@@ -354,15 +360,24 @@ pub fn get_track_segments(cup : Int, race : Int) -> Array[@types.TrackSegment] {
       segs[2].is_ramp = true
       segs[2].ramp_height = 2.5
     }
+    if count > 3 {
+      segs[3].hazard = FallingRocks
+    }
+    if count > 5 {
+      segs[5].hazard = IceSheet
+    }
     if count > 6 {
       segs[6].is_ramp = true
       segs[6].ramp_height = 2.0
+    }
+    if count > 8 {
+      segs[8].hazard = FallingRocks
     }
     if count > 4 {
       segs[4].surface_type = BoostPad
     }
   } else if track_id == 13 {
-    // Volcano Run: ramps and narrow lava sections
+    // Volcano Run: ramps and narrow lava sections + LavaBurst hazards
     if count > 1 {
       segs[1].is_ramp = true
       segs[1].ramp_height = 2.0
@@ -373,9 +388,14 @@ pub fn get_track_segments(cup : Int, race : Int) -> Array[@types.TrackSegment] {
     }
     if count > 3 {
       segs[3].width_mult = 0.7
+      segs[3].hazard = LavaBurst
+    }
+    if count > 6 {
+      segs[6].hazard = LavaBurst
     }
     if count > 7 {
       segs[7].width_mult = 0.7
+      segs[7].hazard = LavaBurst
     }
   } else if track_id == 14 {
     // Deep Trench: narrow with boost sections
@@ -389,13 +409,16 @@ pub fn get_track_segments(cup : Int, race : Int) -> Array[@types.TrackSegment] {
       segs[6].surface_type = BoostPad
     }
   } else if track_id == 15 {
-    // Grand Prix: everything mixed
+    // Grand Prix: everything mixed + WaterCurrent and Shortcut hazards
     if count > 1 {
       segs[1].is_ramp = true
       segs[1].ramp_height = 1.5
     }
     if count > 3 {
       segs[3].surface_type = BoostPad
+    }
+    if count > 4 {
+      segs[4].hazard = WaterCurrent
     }
     if count > 5 {
       segs[5].surface_type = Dirt
@@ -404,6 +427,10 @@ pub fn get_track_segments(cup : Int, race : Int) -> Array[@types.TrackSegment] {
     if count > 7 {
       segs[7].is_ramp = true
       segs[7].ramp_height = 2.0
+    }
+    if count > 8 {
+      segs[8].hazard = Shortcut
+      segs[8].width_mult = @types.shortcut_width_mult
     }
     if count > 9 {
       segs[9].surface_type = SurfaceIce

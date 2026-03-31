@@ -11,6 +11,7 @@ pub fn draw_world(game : @types.Game) -> Unit {
   game.draw_track()
   game.draw_surface_indicators()
   game.draw_boost_pad_glow()
+  game.draw_hazard_overlays()
   game.draw_powerups()
   game.draw_powerup_halos()
   game.draw_kart_blob_shadows()
@@ -1745,6 +1746,279 @@ fn @types.Game::draw_powerup_halos(game : @types.Game) -> Unit {
         ),
         halo_color,
       )
+    }
+  }
+}
+
+// Hazard overlays for track segments with special hazards
+
+///|
+/// Draws visual overlays for hazard segments: lava glow, rock obstacles,
+/// water current arrows, ice sheet gloss, and shortcut gold markings.
+fn @types.Game::draw_hazard_overlays(game : @types.Game) -> Unit {
+  let wc = game.waypoint_count
+  if wc < 2 {
+    return
+  }
+  let time_f = Float::from_int(game.frame_counter) * 0.016
+  for i in 0..<wc {
+    let seg = game.segments[i]
+    if seg.hazard == NoHazard {
+      continue
+    }
+    let next = (i + 1) % wc
+    let wp0 = game.waypoints[i]
+    let wp1 = game.waypoints[next]
+    let dx = wp1.x - wp0.x
+    let dz = wp1.z - wp0.z
+    let dist = @types.distance2d(wp0.x, wp0.z, wp1.x, wp1.z)
+    if dist < 0.01 {
+      continue
+    }
+    let px = -dz / dist
+    let pz = dx / dist
+    let half_w = @types.road_half * seg.width_mult * 0.9
+    let mid_y = (wp0.y + wp1.y) * 0.5
+    match seg.hazard {
+      LavaBurst => {
+        // Pulsing orange/red road overlay
+        let cycle = game.hazard_timer % @types.lava_burst_period
+        let is_active = cycle < @types.lava_burst_active_duration
+        let pulse = @math.sinf(time_f * 4.0)
+        let base_alpha : Float = if is_active { 160.0 } else { 60.0 }
+        let alpha_f = base_alpha + pulse * 30.0
+        let alpha = alpha_f.to_int().clamp(min=30, max=200)
+        let r_val = if is_active { 255 } else { 200 }
+        let g_val = if is_active {
+          let gf : Float = 60.0 + pulse * 30.0
+          gf.to_int().clamp(min=30, max=100)
+        } else {
+          let gf : Float = 100.0 + pulse * 20.0
+          gf.to_int().clamp(min=80, max=130)
+        }
+        let lava_color = @raylib.Color::new(r_val, g_val, 10, alpha)
+        let ov_y = mid_y + 0.04
+        @raylib.draw_triangle_3d(
+          @raylib.Vector3::new(
+            wp0.x - px * half_w, ov_y, wp0.z - pz * half_w,
+          ),
+          @raylib.Vector3::new(
+            wp0.x + px * half_w, ov_y, wp0.z + pz * half_w,
+          ),
+          @raylib.Vector3::new(
+            wp1.x + px * half_w, ov_y, wp1.z + pz * half_w,
+          ),
+          lava_color,
+        )
+        @raylib.draw_triangle_3d(
+          @raylib.Vector3::new(
+            wp0.x - px * half_w, ov_y, wp0.z - pz * half_w,
+          ),
+          @raylib.Vector3::new(
+            wp1.x + px * half_w, ov_y, wp1.z + pz * half_w,
+          ),
+          @raylib.Vector3::new(
+            wp1.x - px * half_w, ov_y, wp1.z - pz * half_w,
+          ),
+          lava_color,
+        )
+        // Lava particles when active
+        if is_active && game.frame_counter % 8 == i % 8 {
+          let spark_x = @types.lerpf(wp0.x, wp1.x, 0.5)
+          let spark_z = @types.lerpf(wp0.z, wp1.z, 0.5)
+          @types.spawn_typed_particles(
+            game,
+            @types.particle_explosion,
+            spark_x,
+            mid_y + 0.3,
+            spark_z,
+            2,
+            255,
+            100,
+            20,
+            0.1,
+            0.4,
+          )
+        }
+      }
+      FallingRocks => {
+        // Draw dark cube obstacles at falling rock positions
+        for r in 0..<game.falling_rocks_count {
+          let rock = game.falling_rocks[r]
+          if !rock.3 || rock.0 != i {
+            continue
+          }
+          let rock_y = mid_y + 0.4
+          @raylib.draw_cube(
+            @raylib.Vector3::new(rock.1, rock_y, rock.2),
+            @types.falling_rock_radius * 1.2,
+            @types.falling_rock_radius * 1.0,
+            @types.falling_rock_radius * 1.2,
+            @raylib.Color::new(70, 65, 55, 230),
+          )
+          @raylib.draw_cube(
+            @raylib.Vector3::new(rock.1, rock_y + 0.3, rock.2),
+            @types.falling_rock_radius * 0.8,
+            @types.falling_rock_radius * 0.4,
+            @types.falling_rock_radius * 0.8,
+            @raylib.Color::new(50, 45, 40, 200),
+          )
+        }
+      }
+      WaterCurrent => {
+        // Blue overlay with animated arrow decals
+        let water_alpha_f : Float = 100.0 + @math.sinf(time_f * 3.0) * 30.0
+        let water_alpha = water_alpha_f.to_int().clamp(min=60, max=140)
+        let water_color = @raylib.Color::new(50, 120, 220, water_alpha)
+        let ov_y = mid_y + 0.04
+        @raylib.draw_triangle_3d(
+          @raylib.Vector3::new(
+            wp0.x - px * half_w, ov_y, wp0.z - pz * half_w,
+          ),
+          @raylib.Vector3::new(
+            wp0.x + px * half_w, ov_y, wp0.z + pz * half_w,
+          ),
+          @raylib.Vector3::new(
+            wp1.x + px * half_w, ov_y, wp1.z + pz * half_w,
+          ),
+          water_color,
+        )
+        @raylib.draw_triangle_3d(
+          @raylib.Vector3::new(
+            wp0.x - px * half_w, ov_y, wp0.z - pz * half_w,
+          ),
+          @raylib.Vector3::new(
+            wp1.x + px * half_w, ov_y, wp1.z + pz * half_w,
+          ),
+          @raylib.Vector3::new(
+            wp1.x - px * half_w, ov_y, wp1.z - pz * half_w,
+          ),
+          water_color,
+        )
+        // Animated arrow chevrons
+        let arrow_color = @raylib.Color::new(100, 180, 255, water_alpha)
+        let num_arrows = 3
+        let anim_offset = (time_f * 2.0) % 1.0
+        for ai in 0..<num_arrows {
+          let at = (Float::from_int(ai) + anim_offset) /
+            Float::from_int(num_arrows)
+          let ax = @types.lerpf(wp0.x, wp1.x, at)
+          let az = @types.lerpf(wp0.z, wp1.z, at)
+          let ay = @types.lerpf(wp0.y, wp1.y, at) + 0.07
+          let arrow_hw = half_w * 0.3
+          let tip_x = ax + px * arrow_hw * 1.5
+          let tip_z = az + pz * arrow_hw * 1.5
+          let fwd_off : Float = 0.4
+          @raylib.draw_triangle_3d(
+            @raylib.Vector3::new(
+              ax - dx / dist * fwd_off, ay, az - dz / dist * fwd_off,
+            ),
+            @raylib.Vector3::new(
+              ax + dx / dist * fwd_off, ay, az + dz / dist * fwd_off,
+            ),
+            @raylib.Vector3::new(tip_x, ay, tip_z),
+            arrow_color,
+          )
+        }
+      }
+      IceSheet => {
+        // Glossy white-blue road surface
+        let shimmer = @math.sinf(time_f * 2.0 + Float::from_int(i) * 0.5)
+        let ice_alpha_f : Float = 120.0 + shimmer * 40.0
+        let ice_alpha = ice_alpha_f.to_int().clamp(min=70, max=170)
+        let ice_color = @raylib.Color::new(200, 220, 255, ice_alpha)
+        let ov_y = mid_y + 0.04
+        @raylib.draw_triangle_3d(
+          @raylib.Vector3::new(
+            wp0.x - px * half_w, ov_y, wp0.z - pz * half_w,
+          ),
+          @raylib.Vector3::new(
+            wp0.x + px * half_w, ov_y, wp0.z + pz * half_w,
+          ),
+          @raylib.Vector3::new(
+            wp1.x + px * half_w, ov_y, wp1.z + pz * half_w,
+          ),
+          ice_color,
+        )
+        @raylib.draw_triangle_3d(
+          @raylib.Vector3::new(
+            wp0.x - px * half_w, ov_y, wp0.z - pz * half_w,
+          ),
+          @raylib.Vector3::new(
+            wp1.x + px * half_w, ov_y, wp1.z + pz * half_w,
+          ),
+          @raylib.Vector3::new(
+            wp1.x - px * half_w, ov_y, wp1.z - pz * half_w,
+          ),
+          ice_color,
+        )
+        // Specular highlight stripe
+        let spec_alpha_f : Float = 80.0 + shimmer * 40.0
+        let spec_alpha = spec_alpha_f.to_int().clamp(min=40, max=120)
+        let spec_color = @raylib.Color::new(240, 245, 255, spec_alpha)
+        let spec_hw = half_w * 0.3
+        let mx = (wp0.x + wp1.x) * 0.5
+        let mz = (wp0.z + wp1.z) * 0.5
+        @raylib.draw_cube(
+          @raylib.Vector3::new(mx, ov_y + 0.02, mz),
+          spec_hw * 2.0,
+          0.02,
+          dist * 0.6,
+          spec_color,
+        )
+      }
+      Shortcut => {
+        // Subtle gold road markings
+        let gold_pulse = @math.sinf(time_f * 1.5 + Float::from_int(i))
+        let gold_alpha_f : Float = 80.0 + gold_pulse * 25.0
+        let gold_alpha = gold_alpha_f.to_int().clamp(min=50, max=110)
+        let gold_color = @raylib.Color::new(220, 190, 50, gold_alpha)
+        let ov_y = mid_y + 0.04
+        let sc_hw = half_w * 0.7
+        @raylib.draw_triangle_3d(
+          @raylib.Vector3::new(
+            wp0.x - px * sc_hw, ov_y, wp0.z - pz * sc_hw,
+          ),
+          @raylib.Vector3::new(
+            wp0.x + px * sc_hw, ov_y, wp0.z + pz * sc_hw,
+          ),
+          @raylib.Vector3::new(
+            wp1.x + px * sc_hw, ov_y, wp1.z + pz * sc_hw,
+          ),
+          gold_color,
+        )
+        @raylib.draw_triangle_3d(
+          @raylib.Vector3::new(
+            wp0.x - px * sc_hw, ov_y, wp0.z - pz * sc_hw,
+          ),
+          @raylib.Vector3::new(
+            wp1.x + px * sc_hw, ov_y, wp1.z + pz * sc_hw,
+          ),
+          @raylib.Vector3::new(
+            wp1.x - px * sc_hw, ov_y, wp1.z - pz * sc_hw,
+          ),
+          gold_color,
+        )
+        // Gold dashed center line
+        let dash_alpha = (gold_alpha + 30).clamp(min=50, max=180)
+        let dash_color = @raylib.Color::new(255, 220, 80, dash_alpha)
+        let num_dashes = 4
+        for di in 0..<num_dashes {
+          let dt_val = (Float::from_int(di) + 0.25) /
+            Float::from_int(num_dashes)
+          let ddx = @types.lerpf(wp0.x, wp1.x, dt_val)
+          let ddz = @types.lerpf(wp0.z, wp1.z, dt_val)
+          let ddy = @types.lerpf(wp0.y, wp1.y, dt_val) + 0.06
+          @raylib.draw_cube(
+            @raylib.Vector3::new(ddx, ddy, ddz),
+            0.25,
+            0.02,
+            0.8,
+            dash_color,
+          )
+        }
+      }
+      NoHazard => ()
     }
   }
 }

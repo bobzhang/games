@@ -128,7 +128,35 @@ pub fn update_ai_karts(game : @types.Game, dt : Float) -> Unit {
     } else {
       kart.speed = kart.speed - @types.kart_friction * 0.5 * dt
     }
+    // Surface consequences for AI
+    let ai_surface = kart.on_surface_type
+    if ai_surface == Grass && kart.on_ground {
+      kart.speed = kart.speed - @types.grass_decel * dt
+      if kart.speed < 0.0 {
+        kart.speed = 0.0
+      }
+    } else if ai_surface == Dirt && kart.on_ground {
+      kart.speed = kart.speed - @types.dirt_decel * dt
+    } else if ai_surface == SurfaceIce && kart.on_ground {
+      kart.steer = kart.steer * 0.5
+    }
     kart.speed = @types.clampf(kart.speed, 0.0, kart_max * 1.15)
+    // AI lateral velocity (simplified)
+    if kart.on_ground {
+      let steer_angle = kart.steer + kart.drift_angle
+      let lateral_force = steer_angle * kart.speed * 0.06
+      kart.lateral_vel = kart.lateral_vel + lateral_force * @types.lateral_build_rate * dt
+      let lat_damp = @types.get_lateral_damp(kart.on_surface_type)
+      kart.lateral_vel = kart.lateral_vel * (1.0 - lat_damp * dt)
+      let max_lat : Float = kart.speed * 0.3
+      kart.lateral_vel = @types.clampf(kart.lateral_vel, -max_lat, max_lat)
+    } else {
+      kart.lateral_vel = kart.lateral_vel * (1.0 - 1.0 * dt)
+    }
+    // Landing boost timer
+    if kart.landing_boost_timer > 0.0 {
+      kart.landing_boost_timer -= dt
+    }
     // Boost timer
     if kart.boost_timer > 0.0 {
       kart.boost_timer -= dt
@@ -209,43 +237,62 @@ fn @types.Game::ai_use_item(
       max=3,
     )]
   let item = kart.held_powerup
-  let should_use : Bool = if item == Boost || item == TripleMushroom {
-    // Use boost anytime (not in sharp turn)
-    let wc = game.waypoint_count
-    let next_wp = @types.get_waypoint(game, (kart.waypoint_idx + 1) % wc)
-    let dx = next_wp.x - kart.x
-    let dz = next_wp.z - kart.z
-    let turn = @types.angle_diff(kart.angle, @math.atan2f(dx, dz)).abs()
-    turn < 0.5
+  // Position-aware AI item strategy:
+  // Leaders hold defensive items, back markers boost immediately, mid-pack attacks ahead
+  let is_leader = kart.place <= 2
+  let is_back = kart.place >= 5
+  let should_use : Bool = if @types.is_boost_item(item) {
+    if is_back {
+      // Back markers use boost items immediately
+      true
+    } else {
+      // Others use boost when track is straight
+      let wc = game.waypoint_count
+      let next_wp = @types.get_waypoint(game, (kart.waypoint_idx + 1) % wc)
+      let dx = next_wp.x - kart.x
+      let dz = next_wp.z - kart.z
+      let turn = @types.angle_diff(kart.angle, @math.atan2f(dx, dz)).abs()
+      turn < 0.5
+    }
   } else if item == Shield {
     // Use shield when in danger (near opponents)
     game.has_nearby_opponent(kart_idx, 15.0)
   } else if item == Missile {
-    // Fire when someone is ahead and fairly close
-    let target = @types.find_target_ahead(game, kart_idx)
-    if target >= 0 {
-      @types.distance2d(
-        kart.x,
-        kart.z,
-        game.karts[target].x,
-        game.karts[target].z,
-      ) <
-      30.0
+    if is_leader {
+      // Leaders hold missiles as defense (don't fire unless threatened from behind)
+      game.has_nearby_opponent_behind(kart_idx, 8.0)
     } else {
-      false
+      // Mid-pack and back: fire at kart ahead when close
+      let target = @types.find_target_ahead(game, kart_idx)
+      if target >= 0 {
+        @types.distance2d(
+          kart.x,
+          kart.z,
+          game.karts[target].x,
+          game.karts[target].z,
+        ) <
+        30.0
+      } else {
+        false
+      }
     }
   } else if item == OilSlick || item == Banana {
-    // Drop behind when someone is close behind
-    game.has_nearby_opponent_behind(kart_idx, 10.0)
+    if is_leader {
+      // Leaders hold defensive items - only drop when threatened
+      game.has_nearby_opponent_behind(kart_idx, 6.0)
+    } else {
+      // Others drop when someone is close behind
+      game.has_nearby_opponent_behind(kart_idx, 10.0)
+    }
   } else if item == Lightning {
-    // Use when in lower positions
+    // Use when in lower positions (more useful further back)
     kart.place >= 4
-  } else if item == Star {
-    // Use when near opponents to ram them
-    game.has_nearby_opponent(kart_idx, 12.0) || kart.place >= 3
   } else {
     true
   }
+  // Update trailing item visual for AI karts too
+  kart.trailing_item_active = !should_use &&
+    (item == Banana || item == OilSlick || item == Missile)
   if should_use {
     use_powerup(game, kart_idx)
     // Item use cooldown scales with difficulty: easy = longer waits, expert = short
