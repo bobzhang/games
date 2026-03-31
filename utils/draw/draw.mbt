@@ -6,11 +6,25 @@ let font_state : Ref[@raylib.Font?] = { val: None }
 /// Loads a high-quality TTF font for use by all subsequent `draw_text` / `measure_text` calls.
 /// Must be called **after** `@raylib.init_window`.
 pub fn init_font() -> Unit {
-  let f = @raylib.load_font_ex(
-    "utils/draw/resources/anonymous_pro_bold.ttf", 48,
-  )
-  f.texture().set_filter(@raylib.TextureFilterBilinear)
-  font_state.val = Some(f)
+  // Try multiple paths for font loading.
+  // On native: CWD is project root, so "utils/draw/resources/..." works.
+  // On web (Emscripten): files are embedded at the @-mapped virtual path,
+  // but CWD may vary. Try both absolute and relative paths.
+  let paths = [
+    "utils/draw/resources/anonymous_pro_bold.ttf",
+    "/utils/draw/resources/anonymous_pro_bold.ttf",
+    "./utils/draw/resources/anonymous_pro_bold.ttf",
+  ]
+  for i in 0..<paths.length() {
+    let f = @raylib.load_font_ex(paths[i], 48)
+    // Check if the font loaded successfully (has valid texture)
+    if f.texture().id() > 0U {
+      f.texture().set_filter(@raylib.TextureFilterBilinear)
+      font_state.val = Some(f)
+      return
+    }
+  }
+  // All paths failed - font_state stays None, draw_text will use default raylib font
 }
 
 ///|
