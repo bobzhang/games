@@ -1,0 +1,13 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/splice/internal/types",
+  "bobzhang/games/splice/internal/game",
+  "bobzhang/games/splice/internal/render",
+  "bobzhang/games/utils/draw",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
+
+// options(
+//   "is-main": true,
+// )

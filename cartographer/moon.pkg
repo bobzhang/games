@@ -1,0 +1,14 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/cartographer/internal/types",
+  "bobzhang/games/cartographer/internal/game",
+  "bobzhang/games/cartographer/internal/render",
+  "bobzhang/games/cartographer/internal/levels",
+  "bobzhang/games/utils/draw",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

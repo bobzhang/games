@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/splice/internal/types",
+  "bobzhang/games/splice/internal/dna",
+  "bobzhang/games/splice/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

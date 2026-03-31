@@ -1,0 +1,7 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/cartographer/internal/types",
+  "bobzhang/games/cartographer/internal/solver",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

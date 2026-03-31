@@ -1,0 +1,10 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/splice/internal/types",
+  "bobzhang/games/splice/internal/dna",
+  "bobzhang/games/splice/internal/levels",
+  "bobzhang/games/utils/draw",
+  "moonbitlang/core/math",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
