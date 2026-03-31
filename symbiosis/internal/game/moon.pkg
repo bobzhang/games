@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/symbiosis/internal/types",
+  "bobzhang/games/symbiosis/internal/simulation",
+  "bobzhang/games/symbiosis/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
