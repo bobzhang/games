@@ -1,0 +1,5 @@
+import {
+  "bobzhang/games/echo_maze/internal/types",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

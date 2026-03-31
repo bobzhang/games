@@ -1,0 +1,7 @@
+import {
+  "bobzhang/games/echo_maze/internal/types",
+  "bobzhang/games/echo_maze/internal/maze",
+  "bobzhang/games/echo_maze/internal/simulation",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
