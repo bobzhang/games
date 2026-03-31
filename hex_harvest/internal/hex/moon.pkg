@@ -1,0 +1,5 @@
+import {
+  "bobzhang/games/hex_harvest/internal/types",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

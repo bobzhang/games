@@ -1,0 +1,13 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/hex_harvest/internal/types",
+  "bobzhang/games/hex_harvest/internal/game",
+  "bobzhang/games/hex_harvest/internal/render",
+  "bobzhang/games/utils/draw",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

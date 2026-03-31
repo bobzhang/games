@@ -1,0 +1,10 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/hex_harvest/internal/types",
+  "bobzhang/games/hex_harvest/internal/hex",
+  "bobzhang/games/hex_harvest/internal/water",
+  "bobzhang/games/hex_harvest/internal/crops",
+  "bobzhang/games/hex_harvest/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
