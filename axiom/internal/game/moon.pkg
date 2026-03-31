@@ -1,0 +1,10 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/axiom/internal/types",
+
+  "bobzhang/games/axiom/internal/simulator",
+  "bobzhang/games/axiom/internal/levels",
+  "bobzhang/games/axiom/internal/editor",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

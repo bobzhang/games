@@ -1,0 +1,6 @@
+import {
+  "bobzhang/games/axiom/internal/types",
+  "bobzhang/games/axiom/internal/commands",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

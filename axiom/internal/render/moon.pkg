@@ -1,0 +1,9 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/axiom/internal/types",
+  "bobzhang/games/axiom/internal/commands",
+  "bobzhang/games/utils/draw",
+  "moonbitlang/core/math",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
