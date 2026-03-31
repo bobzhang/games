@@ -128,6 +128,66 @@ pub let item_iron_ingot : Int = 27
 /// Item id for coal.
 pub let item_coal : Int = 28
 
+///|
+/// Block id for chest block (loot container).
+pub let block_chest : Int = 29
+
+///|
+/// Block id for ladder block.
+pub let block_ladder : Int = 30
+
+///|
+/// Block id for rail track decoration.
+pub let block_rail : Int = 31
+
+///|
+/// Block id for campfire remains.
+pub let block_campfire : Int = 32
+
+///|
+/// Block id for shrine stone (decorative ring block).
+pub let block_shrine_stone : Int = 33
+
+///|
+/// Item id for rotten flesh (zombie drop).
+pub let item_rotten_flesh : Int = 34
+
+///|
+/// Item id for bone (skeleton drop).
+pub let item_bone : Int = 35
+
+///|
+/// Item id for string (spider drop).
+pub let item_string : Int = 36
+
+///|
+/// Item id for arrows (skeleton drop / ammo).
+pub let item_arrow : Int = 37
+
+///|
+/// Item id for raw meat (animal drop).
+pub let item_raw_meat : Int = 38
+
+///|
+/// Item id for cooked meat (furnace output).
+pub let item_cooked_meat : Int = 39
+
+///|
+/// Recipe station requirement: none (basic, craft anywhere).
+pub let recipe_station_none : Int = 0
+
+///|
+/// Recipe station requirement: workbench.
+pub let recipe_station_workbench : Int = 1
+
+///|
+/// Recipe station requirement: furnace.
+pub let recipe_station_furnace : Int = 2
+
+///|
+/// Proximity distance for workbench/furnace usage.
+pub let station_proximity : Float = 4.0
+
 // Biome types
 
 // Tool types
@@ -491,6 +551,46 @@ pub let entity_speed_passive : Float = 1.5
 ///|
 /// Movement speed for hostile mobs.
 pub let entity_speed_hostile : Float = 2.8
+
+///|
+/// Movement speed for spiders (faster than other hostiles).
+pub let entity_speed_spider : Float = 3.8
+
+///|
+/// Spider lunge speed burst distance threshold.
+pub let spider_lunge_range : Float = 4.0
+
+///|
+/// Spider lunge speed multiplier.
+pub let spider_lunge_speed : Float = 7.0
+
+///|
+/// Skeleton ranged attack range.
+pub let skeleton_shoot_range : Float = 8.0
+
+///|
+/// Skeleton arrow fire interval in seconds.
+pub let skeleton_shoot_interval : Float = 2.0
+
+///|
+/// Arrow projectile speed.
+pub let arrow_speed : Float = 12.0
+
+///|
+/// Arrow damage on hit.
+pub let arrow_damage : Int = 3
+
+///|
+/// Maximum active projectiles.
+pub let projectile_max : Int = 16
+
+///|
+/// Torch spawn suppression radius in blocks.
+pub let torch_spawn_suppress_radius : Int = 5
+
+///|
+/// Dusk warning normalized time threshold (just before night).
+pub let dusk_warning_time : Float = 0.58
 
 ///|
 /// Preferred spawn radius around player for entity spawns.

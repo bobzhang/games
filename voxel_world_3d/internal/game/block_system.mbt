@@ -87,8 +87,18 @@ pub fn handle_block_interaction(game : @types.Game, dt : Float) -> Unit {
     if target.hit {
       let block = @types.get_world_block(game, target.bx, target.by, target.bz)
       if @types.is_solid(block) && block != @types.block_bedrock {
+        // Tool-class gating: check if tool can mine this block
+        let can_mine = @types.can_mine_block(player.equipped_tool, block)
+        let drop = if can_mine {
+          @types.get_block_drop(block)
+        } else {
+          @types.block_air
+        }
+        // Speed multiplier: wrong tool = 4x slower
+        let speed_mult = @types.mining_speed_multiplier(
+          player.equipped_tool, block,
+        )
         // Check inventory full before mining
-        let drop = @types.get_block_drop(block)
         if drop != @types.block_air && player.inventory.is_full() {
           game.inv_full_timer = 1.5
           player.mining_active = false
@@ -97,8 +107,9 @@ pub fn handle_block_interaction(game : @types.Game, dt : Float) -> Unit {
           player.mining_block_x == target.bx &&
           player.mining_block_y == target.by &&
           player.mining_block_z == target.bz {
-          // Continue mining
-          let mine_time = @types.get_mining_time(block, player.equipped_tool)
+          // Continue mining (apply speed multiplier for wrong tool)
+          let mine_time = @types.get_mining_time(block, player.equipped_tool) *
+            speed_mult
           player.mining_progress += dt / mine_time
           // Spawn crack particles as mining progresses
           let cr = @levels.block_color_r(block)
@@ -127,12 +138,16 @@ pub fn handle_block_interaction(game : @types.Game, dt : Float) -> Unit {
             game.blocks_broken += 1
             player.mining_active = false
             player.mining_progress = 0.0
-            // Add to inventory
+            // Add to inventory (only if tool can mine the block)
             if drop != @types.block_air {
               let leftover = player.inventory.add_item(drop, 1)
               if leftover > 0 {
                 game.inv_full_timer = 1.5
               }
+            }
+            // Loot from chest blocks
+            if block == @types.block_chest {
+              game.loot_chest()
             }
             // Spawn break particles burst
             @types.spawn_break_particles(
@@ -153,7 +168,15 @@ pub fn handle_block_interaction(game : @types.Game, dt : Float) -> Unit {
                 player.tool_durability = 0
               }
             }
-            @types.show_message(game, "Broke \{@types.block_name(block)}", 1.0)
+            if !can_mine {
+              @types.show_message(
+                game, "Need better pickaxe for \{@types.block_name(block)}!", 2.0,
+              )
+            } else {
+              @types.show_message(
+                game, "Broke \{@types.block_name(block)}", 1.0,
+              )
+            }
           }
         } else {
           // Start mining new block
@@ -201,27 +224,71 @@ pub fn handle_block_interaction(game : @types.Game, dt : Float) -> Unit {
           let sel = player.inventory.selected
           let slot = player.inventory.slots[sel]
           if slot.count > 0 && slot.item_id > 0 {
-            let block_to_place = slot.item_id
-            slot.count -= 1
-            if slot.count <= 0 {
-              slot.item_id = 0
-              slot.count = 0
+            let item_id = slot.item_id
+            // Check if item is a tool (can't place tools)
+            if @types.is_tool_item(item_id) {
+              // Equip the tool from hotbar instead of placing
+              game.player.equipped_tool = item_id
+              game.player.tool_durability = @types.get_tool_max_durability(
+                item_id,
+              )
+              @types.show_message(
+                game, "Equipped \{@types.tool_name(item_id)}", 1.0,
+              )
+              slot.count -= 1
+              if slot.count <= 0 {
+                slot.item_id = 0
+                slot.count = 0
+              }
+            } else if @types.is_placeable_item(item_id) ||
+              (item_id > 0 && item_id <= @types.block_shrine_stone) {
+              // Placeable block or workstation
+              let block_to_place = item_id
+              slot.count -= 1
+              if slot.count <= 0 {
+                slot.item_id = 0
+                slot.count = 0
+              }
+              @types.set_world_block(
+                game, place_x, place_y, place_z, block_to_place,
+              )
+              game.blocks_placed += 1
+              @types.show_message(
+                game,
+                "Placed \{@types.block_name(block_to_place)}",
+                1.0,
+              )
+            } else {
+              @types.show_message(game, "Can't place this item!", 1.0)
             }
-            @types.set_world_block(
-              game, place_x, place_y, place_z, block_to_place,
-            )
-            game.blocks_placed += 1
-            @types.show_message(
-              game,
-              "Placed \{@types.block_name(block_to_place)}",
-              1.0,
-            )
           } else {
             @types.show_message(game, "No blocks to place!", 1.0)
           }
         }
       }
     }
+  }
+}
+
+///|
+/// Gives random loot from a broken chest block.
+fn @types.Game::loot_chest(game : @types.Game) -> Unit {
+  let roll = @types.rand_next(game) % 100
+  if roll < 30 {
+    ignore(game.player.inventory.add_item(@types.item_coal, 3))
+    @types.show_message(game, "Found coal in chest!", 2.0)
+  } else if roll < 55 {
+    ignore(game.player.inventory.add_item(@types.item_iron_ingot, 1))
+    @types.show_message(game, "Found iron ingot in chest!", 2.0)
+  } else if roll < 75 {
+    ignore(game.player.inventory.add_item(@types.block_torch, 4))
+    @types.show_message(game, "Found torches in chest!", 2.0)
+  } else if roll < 90 {
+    ignore(game.player.inventory.add_item(@types.item_stick, 6))
+    @types.show_message(game, "Found sticks in chest!", 2.0)
+  } else {
+    ignore(game.player.inventory.add_item(@types.block_ore_gold, 1))
+    @types.show_message(game, "Found gold ore in chest!", 2.0)
   }
 }
 
@@ -273,9 +340,16 @@ pub fn handle_block_selection(game : @types.Game) -> Unit {
     }
     game.player.inventory.selected = next
   }
-  // Update selected_block from inventory
+  // Update selected_block from inventory and auto-equip tools
   let sel_slot = game.player.inventory.slots[game.player.inventory.selected]
   if sel_slot.count > 0 {
     game.player.selected_block = sel_slot.item_id
+    // Auto-equip if the selected slot is a tool
+    if @types.is_tool_item(sel_slot.item_id) {
+      game.player.equipped_tool = sel_slot.item_id
+      game.player.tool_durability = @types.get_tool_max_durability(
+        sel_slot.item_id,
+      )
+    }
   }
 }

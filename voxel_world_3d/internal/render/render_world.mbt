@@ -16,6 +16,7 @@ pub fn draw_world(game : @types.Game) -> Unit {
   game.draw_decorations()
   game.draw_torch_glow_effects()
   game.draw_water_surface_effects()
+  game.draw_projectiles()
   game.draw_tool_in_hand()
   game.draw_damage_numbers_3d()
   @raylib.end_mode_3d()
@@ -410,6 +411,98 @@ fn @types.Game::draw_chunk_decorations(
             @raylib.Vector3::new(fx, fy + 0.2, fz),
             0.4,
             @raylib.Color::new(255, 180, 30, 30),
+          )
+        } else if block == @types.block_ladder {
+          // Ladder: two vertical rails with rungs
+          @raylib.draw_cube(
+            @raylib.Vector3::new(fx - 0.15, fy, fz),
+            0.08,
+            0.9,
+            0.08,
+            @raylib.Color::new(139, 90, 43, 255),
+          )
+          @raylib.draw_cube(
+            @raylib.Vector3::new(fx + 0.15, fy, fz),
+            0.08,
+            0.9,
+            0.08,
+            @raylib.Color::new(139, 90, 43, 255),
+          )
+          // Rungs
+          @raylib.draw_cube(
+            @raylib.Vector3::new(fx, fy - 0.2, fz),
+            0.35,
+            0.06,
+            0.06,
+            @raylib.Color::new(160, 110, 50, 255),
+          )
+          @raylib.draw_cube(
+            @raylib.Vector3::new(fx, fy + 0.15, fz),
+            0.35,
+            0.06,
+            0.06,
+            @raylib.Color::new(160, 110, 50, 255),
+          )
+        } else if block == @types.block_rail {
+          // Rail: two parallel lines on the ground
+          @raylib.draw_cube(
+            @raylib.Vector3::new(fx - 0.15, fy - 0.4, fz),
+            0.08,
+            0.04,
+            0.9,
+            @raylib.Color::new(100, 80, 60, 255),
+          )
+          @raylib.draw_cube(
+            @raylib.Vector3::new(fx + 0.15, fy - 0.4, fz),
+            0.08,
+            0.04,
+            0.9,
+            @raylib.Color::new(100, 80, 60, 255),
+          )
+          // Crossties
+          @raylib.draw_cube(
+            @raylib.Vector3::new(fx, fy - 0.42, fz - 0.2),
+            0.4,
+            0.03,
+            0.08,
+            @raylib.Color::new(80, 60, 40, 255),
+          )
+          @raylib.draw_cube(
+            @raylib.Vector3::new(fx, fy - 0.42, fz + 0.2),
+            0.4,
+            0.03,
+            0.08,
+            @raylib.Color::new(80, 60, 40, 255),
+          )
+        } else if block == @types.block_campfire {
+          // Campfire: charred logs with ember glow
+          @raylib.draw_cube(
+            @raylib.Vector3::new(fx - 0.15, fy - 0.35, fz),
+            0.15,
+            0.15,
+            0.5,
+            @raylib.Color::new(50, 30, 20, 255),
+          )
+          @raylib.draw_cube(
+            @raylib.Vector3::new(fx + 0.15, fy - 0.35, fz),
+            0.15,
+            0.15,
+            0.5,
+            @raylib.Color::new(50, 30, 20, 255),
+          )
+          // Embers
+          let flicker = @math.sinf(game.day_timer * 5.0 + fx) * 0.02
+          @raylib.draw_cube(
+            @raylib.Vector3::new(fx + flicker, fy - 0.25, fz),
+            0.25,
+            0.12,
+            0.25,
+            @raylib.Color::new(200, 80, 20, 180),
+          )
+          @raylib.draw_sphere(
+            @raylib.Vector3::new(fx, fy - 0.1, fz),
+            0.3,
+            @raylib.Color::new(255, 120, 30, 20),
           )
         }
       }
@@ -1413,6 +1506,36 @@ fn @types.Game::draw_particles(game : @types.Game) -> Unit {
         p.size,
         @raylib.Color::new(p.color_r, p.color_g, p.color_b, clamped_alpha),
       )
+    }
+  }
+}
+
+// ========== Projectile rendering ==========
+
+///|
+/// Renders active arrow projectiles as elongated dark cubes oriented along
+/// their velocity direction.
+fn @types.Game::draw_projectiles(game : @types.Game) -> Unit {
+  for i in 0..<@types.projectile_max {
+    let proj = game.projectiles[i]
+    if proj.active {
+      // Arrow: thin dark brown elongated cube
+      let pos = @raylib.Vector3::new(proj.x, proj.y, proj.z)
+      @raylib.draw_cube(pos, 0.1, 0.1, 0.4, @raylib.Color::new(80, 50, 20, 255))
+      // Arrow tip: small white point
+      let speed = (proj.vx * proj.vx + proj.vy * proj.vy + proj.vz * proj.vz).sqrt()
+      if speed > 0.1 {
+        let tip_x = proj.x + proj.vx / speed * 0.25
+        let tip_y = proj.y + proj.vy / speed * 0.25
+        let tip_z = proj.z + proj.vz / speed * 0.25
+        @raylib.draw_cube(
+          @raylib.Vector3::new(tip_x, tip_y, tip_z),
+          0.06,
+          0.06,
+          0.06,
+          @raylib.Color::new(200, 200, 200, 255),
+        )
+      }
     }
   }
 }

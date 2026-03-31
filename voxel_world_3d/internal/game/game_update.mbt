@@ -66,10 +66,14 @@ fn @types.Game::update_playing(game : @types.Game, dt : Float) -> Unit {
   game.update_block_physics(dt)
   update_entity_spawning(game, dt)
   game.update_combat(dt)
+  update_projectiles(game, dt)
+  handle_food_consumption(game)
   game.update_player_stats(dt)
   game.update_distance_tracking()
   game.update_inv_full_timer(dt)
   game.update_damage_numbers(dt)
+  game.update_night_danger(dt)
+  game.update_poison(dt)
 }
 
 ///|
@@ -192,7 +196,19 @@ fn @types.Game::try_craft(
   recipe : @types.CraftingRecipe,
 ) -> Unit {
   let inv = game.player.inventory
-  // Bug 3 fix: sum across ALL inventory slots for each ingredient
+  // Check station proximity requirement
+  if recipe.station == @types.recipe_station_workbench {
+    if !@types.is_near_workbench(game) {
+      @types.show_message(game, "Need a placed Workbench nearby!", 2.0)
+      return
+    }
+  } else if recipe.station == @types.recipe_station_furnace {
+    if !@types.is_near_furnace(game) {
+      @types.show_message(game, "Need a placed Furnace nearby!", 2.0)
+      return
+    }
+  }
+  // Sum across ALL inventory slots for each ingredient
   let mut has_input1 = false
   let mut has_input2 = false
   if recipe.input1_id > 0 && recipe.input1_count > 0 {
@@ -206,7 +222,7 @@ fn @types.Game::try_craft(
     has_input2 = true
   }
   if has_input1 && has_input2 {
-    // Bug 4 fix: check inventory space before crafting
+    // Check inventory space before crafting
     if !inv.has_space_for(recipe.output_id, recipe.output_count) {
       game.inv_full_timer = 1.5
       return
@@ -218,13 +234,15 @@ fn @types.Game::try_craft(
     if recipe.input2_id > 0 && recipe.input2_count > 0 {
       ignore(inv.remove_item(recipe.input2_id, recipe.input2_count))
     }
-    // Bug 2 fix: handle tool output - equip it instead of adding to inventory
+    // Handle tool output - add to inventory as item
     let output_id = recipe.output_id
     if @types.is_tool_item(output_id) {
-      // Equip the tool and set durability
-      game.player.equipped_tool = output_id
-      game.player.tool_durability = @types.get_tool_max_durability(output_id)
-      @types.show_message(game, "Crafted & equipped: \{recipe.name}", 2.0)
+      // Add tool to inventory as an item (stack of 1)
+      let leftover = inv.add_item(output_id, 1)
+      if leftover > 0 {
+        game.inv_full_timer = 1.5
+      }
+      @types.show_message(game, "Crafted: \{recipe.name}", 2.0)
     } else {
       // Add output to inventory
       let leftover = inv.add_item(recipe.output_id, recipe.output_count)
@@ -414,6 +432,15 @@ fn @types.Game::start_new_game(game : @types.Game) -> Unit {
   for i in 0..<@types.damage_number_max {
     game.damage_numbers[i].active = false
   }
+  // Reset projectiles
+  for i in 0..<@types.projectile_max {
+    game.projectiles[i].active = false
+  }
+  // Reset night danger state
+  game.night_warning_timer = 0.0
+  game.night_danger_alpha = 0.0
+  game.nearby_enemy_count = 0
+  game.poison_timer = 0.0
 }
 
 ///|
@@ -774,20 +801,8 @@ fn @types.Game::update_combat(game : @types.Game, dt : Float) -> Unit {
       if ent.health <= 0 {
         ent.active = false
         game.mobs_killed += 1
-        @types.show_message(
-          game,
-          "Killed \{@types.entity_name(ent.kind)}!",
-          1.5,
-        )
-        // Drop food items (add to inventory)
-        if ent.kind == @types.entity_pig || ent.kind == @types.entity_cow {
-          // Restore hunger
-          game.player.hunger += 4
-          if game.player.hunger > @types.player_max_hunger {
-            game.player.hunger = @types.player_max_hunger
-          }
-          @types.show_message(game, "Got food! Hunger restored.", 2.0)
-        }
+        // Mob-specific item drops
+        game.drop_mob_loot(ent)
       }
       // Prevent block breaking on the same click
       ignore(target)
@@ -821,6 +836,192 @@ fn @types.Game::update_damage_numbers(game : @types.Game, dt : Float) -> Unit {
       if dn.timer <= 0.0 {
         dn.active = false
       }
+    }
+  }
+}
+
+// ========== Mob drops that feed survival ==========
+
+///|
+/// Drops mob-specific loot items into the player's inventory on kill.
+fn @types.Game::drop_mob_loot(game : @types.Game, ent : @types.Entity) -> Unit {
+  let inv = game.player.inventory
+  let kind = ent.kind
+  if kind == @types.entity_zombie {
+    // Zombie drops: Rotten Flesh (1-2)
+    let count = 1 + @types.rand_next(game) % 2
+    ignore(inv.add_item(@types.item_rotten_flesh, count))
+    @types.show_message(
+      game, "Killed Zombie! Got \{count} Rotten Flesh.", 2.0,
+    )
+  } else if kind == @types.entity_skeleton {
+    // Skeleton drops: Bones (1-2) + Arrows (1-3)
+    let bone_count = 1 + @types.rand_next(game) % 2
+    let arrow_count = 1 + @types.rand_next(game) % 3
+    ignore(inv.add_item(@types.item_bone, bone_count))
+    ignore(inv.add_item(@types.item_arrow, arrow_count))
+    @types.show_message(
+      game,
+      "Killed Skeleton! Got \{bone_count} Bones, \{arrow_count} Arrows.",
+      2.0,
+    )
+  } else if kind == @types.entity_spider {
+    // Spider drops: String (1-3)
+    let count = 1 + @types.rand_next(game) % 3
+    ignore(inv.add_item(@types.item_string, count))
+    @types.show_message(
+      game, "Killed Spider! Got \{count} String.", 2.0,
+    )
+  } else if kind == @types.entity_pig ||
+    kind == @types.entity_cow ||
+    kind == @types.entity_chicken {
+    // Passive mobs drop: Raw Meat (1-2)
+    let count = if kind == @types.entity_chicken { 1 } else { 1 + @types.rand_next(game) % 2 }
+    ignore(inv.add_item(@types.item_raw_meat, count))
+    @types.show_message(
+      game,
+      "Killed \{@types.entity_name(kind)}! Got \{count} Raw Meat.",
+      2.0,
+    )
+  } else {
+    @types.show_message(
+      game, "Killed \{@types.entity_name(kind)}!", 1.5,
+    )
+  }
+}
+
+// ========== Hunger/cooking: food consumption on right-click ==========
+
+///|
+/// Checks if right-click is pressed while holding food and consumes it.
+pub fn handle_food_consumption(game : @types.Game) -> Unit {
+  if !@raylib.is_mouse_button_pressed(@raylib.MouseButtonRight) {
+    return
+  }
+  let inv = game.player.inventory
+  let sel = inv.selected
+  let slot = inv.slots[sel]
+  if slot.count <= 0 {
+    return
+  }
+  let item = slot.item_id
+  // Raw meat: restores 3 hunger
+  if item == @types.item_raw_meat {
+    if game.player.hunger < @types.player_max_hunger {
+      slot.count -= 1
+      if slot.count <= 0 {
+        slot.item_id = 0
+      }
+      game.player.hunger += 3
+      if game.player.hunger > @types.player_max_hunger {
+        game.player.hunger = @types.player_max_hunger
+      }
+      @types.show_message(game, "Ate Raw Meat (+3 hunger)", 1.5)
+    }
+    // Cooked meat: restores 6 hunger
+  } else if item == @types.item_cooked_meat {
+    if game.player.hunger < @types.player_max_hunger {
+      slot.count -= 1
+      if slot.count <= 0 {
+        slot.item_id = 0
+      }
+      game.player.hunger += 6
+      if game.player.hunger > @types.player_max_hunger {
+        game.player.hunger = @types.player_max_hunger
+      }
+      @types.show_message(game, "Ate Cooked Meat (+6 hunger)", 1.5)
+    }
+    // Rotten flesh: restores 2 hunger but 20% chance of poison
+  } else if item == @types.item_rotten_flesh {
+    if game.player.hunger < @types.player_max_hunger {
+      slot.count -= 1
+      if slot.count <= 0 {
+        slot.item_id = 0
+      }
+      game.player.hunger += 2
+      if game.player.hunger > @types.player_max_hunger {
+        game.player.hunger = @types.player_max_hunger
+      }
+      // 20% chance of poison (4 seconds of drain)
+      let roll = @types.rand_next(game) % 100
+      if roll < 20 {
+        game.poison_timer = 4.0
+        @types.show_message(game, "Ate Rotten Flesh... Poisoned!", 2.0)
+      } else {
+        @types.show_message(game, "Ate Rotten Flesh (+2 hunger)", 1.5)
+      }
+    }
+  }
+}
+
+// ========== Night danger indicators ==========
+
+///|
+/// Tracks night danger state: warning timer, nearby enemy count, danger alpha.
+fn @types.Game::update_night_danger(game : @types.Game, dt : Float) -> Unit {
+  // Sunset warning: "Night is falling..."
+  let t = game.day_timer / @types.day_length
+  if t > @types.dusk_warning_time && t < @types.late_dusk_end &&
+    game.night_warning_timer <= 0.0 {
+    game.night_warning_timer = 3.0
+    @types.show_message(game, "Night is falling...", 3.0)
+  }
+  if game.night_warning_timer > 0.0 {
+    game.night_warning_timer -= dt
+    if game.night_warning_timer < 0.0 {
+      game.night_warning_timer = 0.0
+    }
+  }
+  // Count nearby enemies for danger indicator
+  let mut count = 0
+  let player = game.player
+  for i in 0..<@types.entity_max {
+    let ent = game.entities[i]
+    if ent.active && @types.is_hostile(ent.kind) {
+      let dist = @types.distance_xz(ent.x, ent.z, player.x, player.z)
+      if dist < 25.0 {
+        count += 1
+      }
+    }
+  }
+  game.nearby_enemy_count = count
+  // Red tint alpha: ramp up when enemies nearby at night
+  let target_alpha : Float = if game.is_night && count > 0 {
+    Float::from_int(count).clamp(min=1.0, max=5.0) * 15.0
+  } else {
+    0.0
+  }
+  // Smooth transition
+  if game.night_danger_alpha < target_alpha {
+    game.night_danger_alpha += dt * 40.0
+    if game.night_danger_alpha > target_alpha {
+      game.night_danger_alpha = target_alpha
+    }
+  } else if game.night_danger_alpha > target_alpha {
+    game.night_danger_alpha -= dt * 30.0
+    if game.night_danger_alpha < 0.0 {
+      game.night_danger_alpha = 0.0
+    }
+  }
+}
+
+// ========== Poison timer ==========
+
+///|
+/// Applies poison damage over time from rotten flesh consumption.
+fn @types.Game::update_poison(game : @types.Game, dt : Float) -> Unit {
+  if game.poison_timer > 0.0 {
+    game.poison_timer -= dt
+    // Drain hunger faster while poisoned
+    game.player.hunger_timer += 0.08 * dt
+    if game.player.hunger_timer >= 1.0 {
+      game.player.hunger_timer -= 1.0
+      if game.player.hunger > 0 {
+        game.player.hunger -= 1
+      }
+    }
+    if game.poison_timer < 0.0 {
+      game.poison_timer = 0.0
     }
   }
 }

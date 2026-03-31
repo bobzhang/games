@@ -106,6 +106,35 @@ pub fn update_entity_spawning(game : @types.Game, dt : Float) -> Unit {
   // Find surface height at spawn position
   let sx = spawn_x.to_int()
   let sz = spawn_z.to_int()
+  // Light-based spawn suppression: check for nearby torches
+  if game.is_night {
+    let tr = @types.torch_spawn_suppress_radius
+    let neg_tr = -tr
+    let mut torch_nearby = false
+    for dy in neg_tr..<=tr {
+      if torch_nearby {
+        break
+      }
+      for dz in neg_tr..<=tr {
+        if torch_nearby {
+          break
+        }
+        for dx in neg_tr..<=tr {
+          if torch_nearby {
+            break
+          }
+          let check_y = 20 + dy // approximate surface height
+          let blk = @types.get_world_block(game, sx + dx, check_y, sz + dz)
+          if blk == @types.block_torch {
+            torch_nearby = true
+          }
+        }
+      }
+    }
+    if torch_nearby {
+      return
+    }
+  }
   let mut surface_y = 0
   for y = @types.chunk_y - 1; y >= 0; y = y - 1 {
     let block = @types.get_world_block(game, sx, y, sz)
@@ -227,6 +256,30 @@ fn @types.Game::update_entity_ai(
       if dist_to_player < @types.entity_attack_range {
         ent.ai_state = Attack
       }
+      // Skeleton ranged attack: fire arrows from range instead of melee only
+      if ent.kind == @types.entity_skeleton &&
+        dist_to_player < @types.skeleton_shoot_range &&
+        dist_to_player > @types.entity_attack_range &&
+        ent.attack_cooldown <= 0.0 {
+        // Fire an arrow projectile toward the player
+        game.spawn_arrow_projectile(ent, player)
+        ent.attack_cooldown = @types.skeleton_shoot_interval
+      }
+      // Spider lunge: brief speed burst when within lunge range
+      if ent.kind == @types.entity_spider &&
+        dist_to_player < @types.spider_lunge_range &&
+        dist_to_player > @types.entity_attack_range &&
+        ent.on_ground {
+        let dx = player.x - ent.x
+        let dz = player.z - ent.z
+        let dl = @math.hypotf(dx, dz)
+        if dl > 0.1 {
+          ent.vx = dx / dl * @types.spider_lunge_speed
+          ent.vz = dz / dl * @types.spider_lunge_speed
+          ent.vy = 4.0 // jump toward player
+          ent.on_ground = false
+        }
+      }
       // Wander
     } else if ent.ai_timer <= 0.0 {
       ent.ai_state = Wander
@@ -269,7 +322,12 @@ fn @types.Game::update_entity_ai(
     if dist > 0.5 {
       let speed : Float = if is_hostile_mob &&
         (ent.ai_state == Chase || ent.ai_state == Attack) {
-        @types.entity_speed_hostile
+        // Spiders are faster than other hostiles
+        if ent.kind == @types.entity_spider {
+          @types.entity_speed_spider
+        } else {
+          @types.entity_speed_hostile
+        }
       } else if ent.ai_state == Flee {
         @types.entity_speed_hostile
       } else {
@@ -301,7 +359,22 @@ fn @types.Game::update_entity_ai(
       ahead_z.to_int(),
     )
     if @types.is_solid(ahead_block) {
-      ent.vy = 6.0
+      // Spiders can climb 2-block walls with higher jump
+      if ent.kind == @types.entity_spider {
+        let above_block = @types.get_world_block(
+          game,
+          ahead_x.to_int(),
+          ent.y.to_int() + 1,
+          ahead_z.to_int(),
+        )
+        if @types.is_solid(above_block) {
+          ent.vy = 9.0 // higher jump for 2-block walls
+        } else {
+          ent.vy = 6.0
+        }
+      } else {
+        ent.vy = 6.0
+      }
       ent.on_ground = false
     }
   }
@@ -370,5 +443,91 @@ fn @types.Game::update_entity_physics(
     ent.y = 1.0
     ent.vy = 0.0
     ent.on_ground = true
+  }
+}
+
+// ========== Projectile system (skeleton arrows) ==========
+
+///|
+/// Spawns an arrow projectile from a skeleton toward the player.
+fn @types.Game::spawn_arrow_projectile(
+  game : @types.Game,
+  ent : @types.Entity,
+  player : @types.Player,
+) -> Unit {
+  // Find a free projectile slot
+  for i in 0..<@types.projectile_max {
+    let proj = game.projectiles[i]
+    if !proj.active {
+      let dx = player.x - ent.x
+      let dy = (player.y + 0.8) - (ent.y + 1.0)
+      let dz = player.z - ent.z
+      let dist = (dx * dx + dy * dy + dz * dz).sqrt()
+      if dist < 0.1 {
+        return
+      }
+      proj.active = true
+      proj.x = ent.x
+      proj.y = ent.y + 1.0
+      proj.z = ent.z
+      proj.vx = dx / dist * @types.arrow_speed
+      proj.vy = dy / dist * @types.arrow_speed + 1.5 // slight arc
+      proj.vz = dz / dist * @types.arrow_speed
+      proj.lifetime = 3.0
+      proj.damage = @types.arrow_damage
+      proj.owner_kind = @types.entity_skeleton
+      return
+    }
+  }
+}
+
+///|
+/// Updates all active projectiles: movement, wall collision, and player hit detection.
+pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
+  let player = game.player
+  for i in 0..<@types.projectile_max {
+    let proj = game.projectiles[i]
+    if !proj.active {
+      continue
+    }
+    // Update lifetime
+    proj.lifetime -= dt
+    if proj.lifetime <= 0.0 {
+      proj.active = false
+      continue
+    }
+    // Apply gravity to arrow
+    proj.vy -= @types.gravity * 0.5 * dt
+    // Move projectile
+    proj.x += proj.vx * dt
+    proj.y += proj.vy * dt
+    proj.z += proj.vz * dt
+    // Check wall collision
+    let bx = proj.x.to_int()
+    let by = proj.y.to_int()
+    let bz = proj.z.to_int()
+    let block = @types.get_world_block(game, bx, by, bz)
+    if @types.is_solid(block) {
+      proj.active = false
+      continue
+    }
+    // Check player hit
+    let dx = proj.x - player.x
+    let dy = proj.y - (player.y + 0.8)
+    let dz = proj.z - player.z
+    let dist_sq = dx * dx + dy * dy + dz * dz
+    if dist_sq < 0.8 {
+      // Hit player
+      damage_player(game, proj.damage)
+      @types.show_message(game, "Hit by arrow!", 1.5)
+      // Knockback from arrow direction
+      let speed = (proj.vx * proj.vx + proj.vz * proj.vz).sqrt()
+      if speed > 0.1 {
+        player.vx += proj.vx / speed * 3.0
+        player.vz += proj.vz / speed * 3.0
+        player.vy += 2.0
+      }
+      proj.active = false
+    }
   }
 }

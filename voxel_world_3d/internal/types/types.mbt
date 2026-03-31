@@ -348,6 +348,40 @@ pub fn Particle::inactive() -> Particle {
   }
 }
 
+// Projectile struct for skeleton arrows etc.
+
+///|
+/// Projectile state for ranged attacks (skeleton arrows).
+pub(all) struct Projectile {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut z : Float
+  mut vx : Float
+  mut vy : Float
+  mut vz : Float
+  mut lifetime : Float
+  mut damage : Int
+  mut owner_kind : Int
+}
+
+///|
+/// Creates an inactive projectile slot.
+pub fn Projectile::inactive() -> Projectile {
+  {
+    active: false,
+    x: 0.0,
+    y: 0.0,
+    z: 0.0,
+    vx: 0.0,
+    vy: 0.0,
+    vz: 0.0,
+    lifetime: 0.0,
+    damage: 0,
+    owner_kind: 0,
+  }
+}
+
 // Damage number for combat feedback
 
 ///|
@@ -396,6 +430,7 @@ pub(all) struct CraftingRecipe {
   output_id : Int
   output_count : Int
   name : String
+  station : Int
 
   fn new(
     in1_id : Int,
@@ -409,7 +444,7 @@ pub(all) struct CraftingRecipe {
 }
 
 ///|
-/// Constructs a crafting recipe record.
+/// Constructs a crafting recipe record (defaults to no station required).
 #deprecated
 pub fn CraftingRecipe::new(
   in1_id : Int,
@@ -428,6 +463,31 @@ pub fn CraftingRecipe::new(
     output_id: out_id,
     output_count: out_count,
     name,
+    station: recipe_station_none,
+  }
+}
+
+///|
+/// Creates a crafting recipe that requires a specific station.
+pub fn CraftingRecipe::with_station(
+  in1_id : Int,
+  in1_count : Int,
+  in2_id : Int,
+  in2_count : Int,
+  out_id : Int,
+  out_count : Int,
+  name : String,
+  station : Int,
+) -> CraftingRecipe {
+  {
+    input1_id: in1_id,
+    input1_count: in1_count,
+    input2_id: in2_id,
+    input2_count: in2_count,
+    output_id: out_id,
+    output_count: out_count,
+    name,
+    station,
   }
 }
 
@@ -529,6 +589,17 @@ pub(all) struct Game {
   // Damage numbers
   damage_numbers : Array[DamageNumber]
 
+  // Projectiles (skeleton arrows)
+  projectiles : Array[Projectile]
+
+  // Night danger indicators
+  mut night_warning_timer : Float
+  mut night_danger_alpha : Float
+  mut nearby_enemy_count : Int
+
+  // Player poison timer (from rotten flesh)
+  mut poison_timer : Float
+
   // World seed
   mut world_seed : Int
 
@@ -563,6 +634,12 @@ pub fn Game::new() -> Game {
   let damage_numbers : Array[DamageNumber] = []
   for i in 0..<damage_number_max {
     damage_numbers.push(DamageNumber::inactive())
+    ignore(i)
+  }
+  // Create projectile pool
+  let projectiles : Array[Projectile] = []
+  for i in 0..<projectile_max {
+    projectiles.push(Projectile::inactive())
     ignore(i)
   }
   let game : Game = {
@@ -607,6 +684,11 @@ pub fn Game::new() -> Game {
     respawn_count: 0,
     inv_full_timer: 0.0,
     damage_numbers,
+    projectiles,
+    night_warning_timer: 0.0,
+    night_danger_alpha: 0.0,
+    nearby_enemy_count: 0,
+    poison_timer: 0.0,
     world_seed: 12345,
   }
   // Generate terrain for all chunks

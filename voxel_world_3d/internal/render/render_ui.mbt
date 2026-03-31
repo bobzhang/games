@@ -42,6 +42,9 @@ pub fn draw_ui(game : @types.Game) -> Unit {
     game.draw_sun_moon_indicator()
     game.draw_inventory_full_warning()
     game.draw_damage_numbers_2d()
+    game.draw_night_danger_overlay()
+    game.draw_enemy_count_indicator()
+    game.draw_poison_indicator()
   }
   // Damage flash overlay
   if game.player.damage_flash > 0.0 {
@@ -1029,6 +1032,16 @@ fn @types.Game::check_can_craft(
   game : @types.Game,
   recipe : @types.CraftingRecipe,
 ) -> Bool {
+  // Check station proximity
+  if recipe.station == @types.recipe_station_workbench {
+    if !@types.is_near_workbench(game) {
+      return false
+    }
+  } else if recipe.station == @types.recipe_station_furnace {
+    if !@types.is_near_furnace(game) {
+      return false
+    }
+  }
   let inv = game.player.inventory
   let mut has1 = false
   let mut has2 = false
@@ -1504,4 +1517,109 @@ fn @types.Game::draw_damage_numbers_2d(game : @types.Game) -> Unit {
       )
     }
   }
+}
+
+// ========== Night danger overlay ==========
+
+///|
+/// Draws a red tint on screen edges when enemies are nearby at night.
+fn @types.Game::draw_night_danger_overlay(game : @types.Game) -> Unit {
+  if game.night_danger_alpha <= 0.0 {
+    return
+  }
+  let alpha = game.night_danger_alpha.to_int().clamp(min=0, max=80)
+  let edge_w = 60
+  // Left edge
+  @raylib.draw_rectangle(
+    0,
+    0,
+    edge_w,
+    @types.screen_height,
+    @raylib.Color::new(180, 0, 0, alpha),
+  )
+  // Right edge
+  @raylib.draw_rectangle(
+    @types.screen_width - edge_w,
+    0,
+    edge_w,
+    @types.screen_height,
+    @raylib.Color::new(180, 0, 0, alpha),
+  )
+  // Top edge
+  @raylib.draw_rectangle(
+    0,
+    0,
+    @types.screen_width,
+    edge_w / 2,
+    @raylib.Color::new(180, 0, 0, alpha / 2),
+  )
+  // Bottom edge
+  @raylib.draw_rectangle(
+    0,
+    @types.screen_height - edge_w / 2,
+    @types.screen_width,
+    edge_w / 2,
+    @raylib.Color::new(180, 0, 0, alpha / 2),
+  )
+}
+
+// ========== Enemy count indicator ==========
+
+///|
+/// Shows nearby enemy count when hostiles are close at night.
+fn @types.Game::draw_enemy_count_indicator(game : @types.Game) -> Unit {
+  if !game.is_night || game.nearby_enemy_count <= 0 {
+    return
+  }
+  let text = "Enemies nearby: \{game.nearby_enemy_count}"
+  let tw = @draw.measure_text(text, 16)
+  let tx = @types.screen_width / 2 - tw / 2
+  let ty = @types.screen_height - 100
+  // Background
+  @raylib.draw_rectangle(
+    tx - 6,
+    ty - 2,
+    tw + 12,
+    22,
+    @raylib.Color::new(80, 0, 0, 140),
+  )
+  // Pulsing warning color
+  let pulse = @math.sinf(game.day_timer * 4.0)
+  let pr : Int = if pulse > 0.0 { 255 } else { 200 }
+  @draw.draw_text(
+    text,
+    tx,
+    ty,
+    16,
+    @raylib.Color::new(pr, 80, 80, 240),
+  )
+}
+
+// ========== Poison indicator ==========
+
+///|
+/// Shows a green-tinted overlay when the player is poisoned.
+fn @types.Game::draw_poison_indicator(game : @types.Game) -> Unit {
+  if game.poison_timer <= 0.0 {
+    return
+  }
+  // Green tint overlay
+  let alpha = (game.poison_timer * 10.0).to_int().clamp(min=0, max=40)
+  @raylib.draw_rectangle(
+    0,
+    0,
+    @types.screen_width,
+    @types.screen_height,
+    @raylib.Color::new(0, 150, 0, alpha),
+  )
+  // Poison text
+  let text = "POISONED"
+  let tw = @draw.measure_text(text, 18)
+  @draw.draw_text(
+    text,
+    @types.screen_width / 2 - tw / 2,
+    @types.screen_height / 2 + 80,
+    18,
+    @raylib.Color::new(0, 200, 0, 200),
+  )
 }

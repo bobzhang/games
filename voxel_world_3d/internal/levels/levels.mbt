@@ -60,6 +60,28 @@ pub fn block_color_r(kind : Int) -> Int {
     200
   } else if kind == @types.item_coal {
     40
+  } else if kind == @types.item_rotten_flesh {
+    120
+  } else if kind == @types.item_bone {
+    230
+  } else if kind == @types.item_string {
+    200
+  } else if kind == @types.item_arrow {
+    160
+  } else if kind == @types.item_raw_meat {
+    200
+  } else if kind == @types.item_cooked_meat {
+    160
+  } else if kind == @types.block_chest {
+    160
+  } else if kind == @types.block_ladder {
+    140
+  } else if kind == @types.block_rail {
+    100
+  } else if kind == @types.block_campfire {
+    80
+  } else if kind == @types.block_shrine_stone {
+    160
   } else {
     255
   }
@@ -124,6 +146,28 @@ pub fn block_color_g(kind : Int) -> Int {
     200
   } else if kind == @types.item_coal {
     40
+  } else if kind == @types.item_rotten_flesh {
+    90
+  } else if kind == @types.item_bone {
+    230
+  } else if kind == @types.item_string {
+    200
+  } else if kind == @types.item_arrow {
+    120
+  } else if kind == @types.item_raw_meat {
+    80
+  } else if kind == @types.item_cooked_meat {
+    100
+  } else if kind == @types.block_chest {
+    110
+  } else if kind == @types.block_ladder {
+    80
+  } else if kind == @types.block_rail {
+    80
+  } else if kind == @types.block_campfire {
+    30
+  } else if kind == @types.block_shrine_stone {
+    170
   } else {
     255
   }
@@ -188,6 +232,28 @@ pub fn block_color_b(kind : Int) -> Int {
     200
   } else if kind == @types.item_coal {
     40
+  } else if kind == @types.item_rotten_flesh {
+    30
+  } else if kind == @types.item_bone {
+    210
+  } else if kind == @types.item_string {
+    190
+  } else if kind == @types.item_arrow {
+    60
+  } else if kind == @types.item_raw_meat {
+    60
+  } else if kind == @types.item_cooked_meat {
+    40
+  } else if kind == @types.block_chest {
+    40
+  } else if kind == @types.block_ladder {
+    30
+  } else if kind == @types.block_rail {
+    60
+  } else if kind == @types.block_campfire {
+    10
+  } else if kind == @types.block_shrine_stone {
+    180
   } else {
     255
   }
@@ -279,107 +345,112 @@ pub fn get_crafting_recipes() -> Array[@types.CraftingRecipe] {
       @types.block_cobblestone, 8, 0, 0, @types.item_furnace, 1, "Cobblestone -> Furnace",
     ),
   )
-  // === Tools ===
+  // === Tools (require workbench) ===
   // Wooden Pickaxe: 3 planks + 2 sticks
   recipes.push(
-    CraftingRecipe(
+    @types.CraftingRecipe::with_station(
       @types.block_planks, 3, @types.item_stick, 2, @types.tool_wooden_pickaxe, 1,
-      "Wood Pickaxe",
+      "Wood Pickaxe [Workbench]", @types.recipe_station_workbench,
     ),
   )
   // Wooden Axe: 3 planks + 2 sticks
   recipes.push(
-    CraftingRecipe(
-      @types.block_planks, 3, @types.item_stick, 2, @types.tool_wooden_axe, 1, "Wood Axe",
+    @types.CraftingRecipe::with_station(
+      @types.block_planks, 3, @types.item_stick, 2, @types.tool_wooden_axe, 1,
+      "Wood Axe [Workbench]", @types.recipe_station_workbench,
     ),
   )
   // Wooden Shovel: 1 plank + 2 sticks
   recipes.push(
-    CraftingRecipe(
+    @types.CraftingRecipe::with_station(
       @types.block_planks, 1, @types.item_stick, 2, @types.tool_wooden_shovel, 1,
-      "Wood Shovel",
+      "Wood Shovel [Workbench]", @types.recipe_station_workbench,
     ),
   )
   // Wooden Sword: 2 planks + 1 stick
   recipes.push(
-    CraftingRecipe(
+    @types.CraftingRecipe::with_station(
       @types.block_planks, 2, @types.item_stick, 1, @types.tool_wooden_sword, 1,
-      "Wood Sword",
+      "Wood Sword [Workbench]", @types.recipe_station_workbench,
     ),
   )
   // Stone Pickaxe: 3 cobblestone + 2 sticks
   recipes.push(
-    CraftingRecipe(
+    @types.CraftingRecipe::with_station(
       @types.block_cobblestone, 3, @types.item_stick, 2, @types.tool_stone_pickaxe,
-      1, "Stone Pickaxe",
+      1, "Stone Pickaxe [Workbench]", @types.recipe_station_workbench,
     ),
   )
   // Stone Axe: 3 cobblestone + 2 sticks
   recipes.push(
-    CraftingRecipe(
+    @types.CraftingRecipe::with_station(
       @types.block_cobblestone, 3, @types.item_stick, 2, @types.tool_stone_axe, 1,
-      "Stone Axe",
+      "Stone Axe [Workbench]", @types.recipe_station_workbench,
     ),
   )
   // Stone Shovel: 1 cobblestone + 2 sticks
   recipes.push(
-    CraftingRecipe(
+    @types.CraftingRecipe::with_station(
       @types.block_cobblestone, 1, @types.item_stick, 2, @types.tool_stone_shovel,
-      1, "Stone Shovel",
+      1, "Stone Shovel [Workbench]", @types.recipe_station_workbench,
     ),
   )
   // Stone Sword: 2 cobblestone + 1 stick
   recipes.push(
-    CraftingRecipe(
+    @types.CraftingRecipe::with_station(
       @types.block_cobblestone, 2, @types.item_stick, 1, @types.tool_stone_sword,
-      1, "Stone Sword",
+      1, "Stone Sword [Workbench]", @types.recipe_station_workbench,
     ),
   )
   // Iron Ingot (furnace smelting): 1 iron ore + 1 coal
   recipes.push(
-    CraftingRecipe(
-      @types.block_ore_iron, 1, @types.item_coal, 1, @types.item_iron_ingot, 1, "Smelt Iron Ingot",
+    @types.CraftingRecipe::with_station(
+      @types.block_ore_iron, 1, @types.item_coal, 1, @types.item_iron_ingot, 1,
+      "Smelt Iron Ingot [Furnace]", @types.recipe_station_furnace,
     ),
   )
   // Iron Pickaxe: 3 iron ingots + 2 sticks
   recipes.push(
-    CraftingRecipe(
+    @types.CraftingRecipe::with_station(
       @types.item_iron_ingot, 3, @types.item_stick, 2, @types.tool_iron_pickaxe,
-      1, "Iron Pickaxe",
+      1, "Iron Pickaxe [Workbench]", @types.recipe_station_workbench,
     ),
   )
   // Iron Axe: 3 iron ingots + 2 sticks
   recipes.push(
-    CraftingRecipe(
-      @types.item_iron_ingot, 3, @types.item_stick, 2, @types.tool_iron_axe, 1, "Iron Axe",
+    @types.CraftingRecipe::with_station(
+      @types.item_iron_ingot, 3, @types.item_stick, 2, @types.tool_iron_axe, 1,
+      "Iron Axe [Workbench]", @types.recipe_station_workbench,
     ),
   )
   // Iron Shovel: 1 iron ingot + 2 sticks
   recipes.push(
-    CraftingRecipe(
+    @types.CraftingRecipe::with_station(
       @types.item_iron_ingot, 1, @types.item_stick, 2, @types.tool_iron_shovel, 1,
-      "Iron Shovel",
+      "Iron Shovel [Workbench]", @types.recipe_station_workbench,
     ),
   )
   // Iron Sword: 2 iron ingots + 1 stick
   recipes.push(
-    CraftingRecipe(
+    @types.CraftingRecipe::with_station(
       @types.item_iron_ingot, 2, @types.item_stick, 1, @types.tool_iron_sword, 1,
-      "Iron Sword",
+      "Iron Sword [Workbench]", @types.recipe_station_workbench,
     ),
   )
   // === Fuel ===
-  // Charcoal: 4 wood -> 2 coal
+  // Charcoal: 4 wood -> 2 coal (furnace)
   recipes.push(
-    CraftingRecipe(
-      @types.block_wood, 4, 0, 0, @types.item_coal, 2, "Wood -> Charcoal",
+    @types.CraftingRecipe::with_station(
+      @types.block_wood, 4, 0, 0, @types.item_coal, 2,
+      "Wood -> Charcoal [Furnace]", @types.recipe_station_furnace,
     ),
   )
   // === Building blocks ===
   // Cobblestone -> Stone (smelting)
   recipes.push(
-    CraftingRecipe(
-      @types.block_cobblestone, 1, 0, 0, @types.block_stone, 1, "Cobblestone -> Stone",
+    @types.CraftingRecipe::with_station(
+      @types.block_cobblestone, 1, 0, 0, @types.block_stone, 1,
+      "Cobblestone -> Stone [Furnace]", @types.recipe_station_furnace,
     ),
   )
   // Cobblestone -> Brick
@@ -390,8 +461,9 @@ pub fn get_crafting_recipes() -> Array[@types.CraftingRecipe] {
   )
   // Sand -> Glass (smelting)
   recipes.push(
-    CraftingRecipe(
-      @types.block_sand, 4, 0, 0, @types.block_glass, 1, "Sand -> Glass",
+    @types.CraftingRecipe::with_station(
+      @types.block_sand, 4, 0, 0, @types.block_glass, 1,
+      "Sand -> Glass [Furnace]", @types.recipe_station_furnace,
     ),
   )
   // Planks+Wood -> Torches
@@ -422,6 +494,26 @@ pub fn get_crafting_recipes() -> Array[@types.CraftingRecipe] {
   recipes.push(
     CraftingRecipe(
       @types.block_dirt, 4, @types.block_leaves, 1, @types.block_grass, 4, "Dirt+Leaves -> Grass",
+    ),
+  )
+  // === Cooking (furnace recipes) ===
+  // Raw meat + coal -> Cooked meat
+  recipes.push(
+    @types.CraftingRecipe::with_station(
+      @types.item_raw_meat, 1, @types.item_coal, 1, @types.item_cooked_meat, 1,
+      "Cook Meat [Furnace]", @types.recipe_station_furnace,
+    ),
+  )
+  // Bone -> Bone meal (sticks, useful for crafting)
+  recipes.push(
+    CraftingRecipe(
+      @types.item_bone, 2, 0, 0, @types.item_stick, 4, "Bones -> Sticks",
+    ),
+  )
+  // String -> Wool (planks, for building)
+  recipes.push(
+    CraftingRecipe(
+      @types.item_string, 4, 0, 0, @types.block_planks, 2, "String -> Planks",
     ),
   )
   recipes

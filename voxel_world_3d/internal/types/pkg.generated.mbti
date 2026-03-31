@@ -80,6 +80,8 @@ pub fn clampf(Float, Float, Float) -> Float
 
 pub let cow_health : Int
 
+pub let damage_number_max : Int
+
 pub let dawn_end : Float
 
 pub let day_end : Float
@@ -89,6 +91,12 @@ pub let day_length : Float
 pub fn distance3d(Float, Float, Float, Float, Float, Float) -> Float
 
 pub fn distance_xz(Float, Float, Float, Float) -> Float
+
+pub let durability_iron : Int
+
+pub let durability_stone : Int
+
+pub let durability_wood : Int
 
 pub let dusk_end : Float
 
@@ -142,6 +150,8 @@ pub fn get_entity_max_health(Int) -> Int
 
 pub fn get_mining_time(Int, Int) -> Float
 
+pub fn get_tool_max_durability(Int) -> Int
+
 pub fn get_world_block(Game, Int, Int, Int) -> Int
 
 pub let gravity : Float
@@ -176,7 +186,19 @@ pub fn is_hostile(Int) -> Bool
 
 pub fn is_solid(Int) -> Bool
 
+pub fn is_tool_item(Int) -> Bool
+
 pub fn is_transparent(Int) -> Bool
+
+pub let item_coal : Int
+
+pub let item_furnace : Int
+
+pub let item_iron_ingot : Int
+
+pub let item_stick : Int
+
+pub let item_workbench : Int
 
 pub let late_dusk_end : Float
 
@@ -282,6 +304,10 @@ pub let skeleton_health : Int
 
 pub fn spawn_break_particles(Game, Int, Int, Int, Int, Int, Int) -> Unit
 
+pub fn spawn_damage_number(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
+
+pub fn spawn_mining_crack_particles(Game, Int, Int, Int, Int, Int, Int) -> Unit
+
 pub fn spawn_particle(Game, Float, Float, Float, Float, Float, Float, Int, Int, Int, Float, Float) -> Unit
 
 pub let spider_damage : Int
@@ -353,8 +379,7 @@ pub(all) enum AiState {
   Flee
   Chase
   Attack
-}
-pub impl Eq for AiState
+} derive(Eq)
 
 pub(all) enum Biome {
   Plains
@@ -363,8 +388,7 @@ pub(all) enum Biome {
   Mountains
   Tundra
   Swamp
-}
-pub impl Eq for Biome
+} derive(Eq)
 
 pub(all) struct BiomeParams {
   id : Int
@@ -424,6 +448,19 @@ pub(all) struct CraftingRecipe {
 #deprecated
 pub fn CraftingRecipe::new(Int, Int, Int, Int, Int, Int, String) -> Self
 
+pub(all) struct DamageNumber {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut z : Float
+  mut amount : Int
+  mut timer : Float
+  mut color_r : Int
+  mut color_g : Int
+  mut color_b : Int
+}
+pub fn DamageNumber::inactive() -> Self
+
 pub(all) struct Entity {
   mut active : Bool
   mut kind : Int
@@ -470,6 +507,7 @@ pub(all) struct Game {
   mut message_text : String
   mut show_debug : Bool
   mut crafting_selection : Int
+  mut crafting_scroll_offset : Int
   entities : Array[Entity]
   mut entity_spawn_timer : Float
   particles : Array[Particle]
@@ -486,6 +524,9 @@ pub(all) struct Game {
   mut prev_pos_z : Float
   mut death_timer : Float
   mut respawn_count : Int
+  mut inv_full_timer : Float
+  damage_numbers : Array[DamageNumber]
+  mut world_seed : Int
 
   fn new() -> Game
 }
@@ -499,8 +540,7 @@ pub(all) enum GameState {
   Inventory
   Crafting
   GameOver
-}
-pub impl Eq for GameState
+} derive(Eq)
 
 pub(all) struct Inventory {
   slots : Array[ItemSlot]
@@ -509,8 +549,12 @@ pub(all) struct Inventory {
   fn new() -> Inventory
 }
 pub fn Inventory::add_item(Self, Int, Int) -> Int
+pub fn Inventory::count_item(Self, Int) -> Int
+pub fn Inventory::has_space_for(Self, Int, Int) -> Bool
+pub fn Inventory::is_full(Self) -> Bool
 #deprecated
 pub fn Inventory::new() -> Self
+pub fn Inventory::remove_item(Self, Int, Int) -> Int
 
 pub(all) struct ItemSlot {
   mut item_id : Int
@@ -559,6 +603,7 @@ pub(all) struct Player {
   mut mining_progress : Float
   mut mining_active : Bool
   mut equipped_tool : Int
+  mut tool_durability : Int
   mut attack_cooldown : Float
   mut invulnerable_timer : Float
   mut damage_flash : Float
