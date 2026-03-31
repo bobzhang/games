@@ -1,0 +1,13 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/gravity_puzzler/internal/types",
+  "bobzhang/games/gravity_puzzler/internal/game",
+  "bobzhang/games/gravity_puzzler/internal/render",
+  "bobzhang/games/utils/draw",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

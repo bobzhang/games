@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/gravity_puzzler/internal/types",
+  "bobzhang/games/gravity_puzzler/internal/physics",
+  "bobzhang/games/gravity_puzzler/internal/content",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
