@@ -1,0 +1,14 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/cradle/internal/types",
+  "bobzhang/games/cradle/internal/levels",
+  "bobzhang/games/cradle/internal/game",
+  "bobzhang/games/cradle/internal/render",
+  "bobzhang/games/utils/draw",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

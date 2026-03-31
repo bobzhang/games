@@ -1,0 +1,7 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/cradle/internal/types",
+  "bobzhang/games/cradle/internal/geometry",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
