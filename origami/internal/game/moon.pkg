@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/origami/internal/types",
+  "bobzhang/games/origami/internal/fold",
+  "bobzhang/games/origami/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
