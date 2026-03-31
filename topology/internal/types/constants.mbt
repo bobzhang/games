@@ -74,10 +74,14 @@ pub let color_overlap : @raylib.Color = @raylib.Color::new(255, 200, 60, 240)
 pub let color_hover : @raylib.Color = @raylib.Color::new(255, 255, 255, 80)
 
 ///|
-pub let color_grow_valid : @raylib.Color = @raylib.Color::new(100, 255, 100, 120)
+pub let color_grow_valid : @raylib.Color = @raylib.Color::new(
+  100, 255, 100, 120,
+)
 
 ///|
-pub let color_shrink_valid : @raylib.Color = @raylib.Color::new(255, 100, 100, 120)
+pub let color_shrink_valid : @raylib.Color = @raylib.Color::new(
+  255, 100, 100, 120,
+)
 
 ///|
 pub let color_text : @raylib.Color = @raylib.Color::new(220, 225, 240, 255)
@@ -98,7 +102,9 @@ pub let color_star_empty : @raylib.Color = @raylib.Color::new(80, 80, 100, 200)
 pub let color_op_bg : @raylib.Color = @raylib.Color::new(40, 42, 60, 230)
 
 ///|
-pub let color_op_selected : @raylib.Color = @raylib.Color::new(80, 140, 255, 230)
+pub let color_op_selected : @raylib.Color = @raylib.Color::new(
+  80, 140, 255, 230,
+)
 
 ///|
 pub let color_op_disabled : @raylib.Color = @raylib.Color::new(60, 60, 70, 150)
@@ -107,13 +113,19 @@ pub let color_op_disabled : @raylib.Color = @raylib.Color::new(60, 60, 70, 150)
 pub let color_button : @raylib.Color = @raylib.Color::new(60, 100, 180, 230)
 
 ///|
-pub let color_button_hover : @raylib.Color = @raylib.Color::new(80, 130, 220, 255)
+pub let color_button_hover : @raylib.Color = @raylib.Color::new(
+  80, 130, 220, 255,
+)
 
 ///|
-pub let color_tier_morph : @raylib.Color = @raylib.Color::new(100, 180, 255, 255)
+pub let color_tier_morph : @raylib.Color = @raylib.Color::new(
+  100, 180, 255, 255,
+)
 
 ///|
-pub let color_tier_sculpt : @raylib.Color = @raylib.Color::new(180, 120, 255, 255)
+pub let color_tier_sculpt : @raylib.Color = @raylib.Color::new(
+  180, 120, 255, 255,
+)
 
 ///|
 pub let color_tier_transform : @raylib.Color = @raylib.Color::new(

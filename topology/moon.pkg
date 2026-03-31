@@ -1,8 +1,13 @@
 import {
   "tonyfettes/raylib",
   "bobzhang/games/topology/internal/types",
+  "bobzhang/games/topology/internal/game",
+  "bobzhang/games/topology/internal/render",
   "bobzhang/games/utils/draw",
-  "bobzhang/games/utils/fps",
 }
 
 warnings = "-missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

@@ -9,7 +9,9 @@ fn draw_title(game : @types.Game) -> Unit {
       let x = i * 80 + 10
       let y = j * 60 + 10
       let pulse = time + Float::from_int(i + j) * 0.3
-      let alpha_f = 20.0 + Float::from_double(@math.sin(pulse.to_double())) * 15.0
+      let sin_val = Float::from_double(@math.sin(pulse.to_double()))
+      let base : Float = 20.0
+      let alpha_f = base + sin_val * 15.0
       let alpha = alpha_f.to_int()
       @raylib.draw_rectangle_lines(
         x,

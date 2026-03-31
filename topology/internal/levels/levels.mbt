@@ -71,7 +71,7 @@ fn build_levels() -> Array[@types.Level] {
       name: "Drop",
     },
   )
-  // Level 3: Shift diagonal (2 moves)
+  // Level 3: Shift diagonal
   levels.push(
     {
       initial_shape: s([v(1, 1), v(2, 1), v(1, 2)]),
@@ -143,7 +143,7 @@ fn build_levels() -> Array[@types.Level] {
       name: "Beam",
     },
   )
-  // === TIER 2: SCULPT (9 levels) - + Flip + Grow ===
+  // === TIER 2: SCULPT (9 levels) ===
   // Level 9: Simple flip
   levels.push(
     {
@@ -244,9 +244,7 @@ fn build_levels() -> Array[@types.Level] {
   levels.push(
     {
       initial_shape: s([v(1, 3), v(2, 3), v(2, 4), v(3, 4)]),
-      target_shape: s([
-        v(4, 3), v(5, 3), v(5, 4), v(6, 4), v(6, 5),
-      ]),
+      target_shape: s([v(4, 3), v(5, 3), v(5, 4), v(6, 4), v(6, 5)]),
       par_cost: 10,
       min_cost: 7,
       available_ops: sculpt_ops(),
@@ -254,7 +252,7 @@ fn build_levels() -> Array[@types.Level] {
       name: "Cascade",
     },
   )
-  // === TIER 3: TRANSFORM (8 levels) - + Shrink ===
+  // === TIER 3: TRANSFORM (8 levels) ===
   // Level 18: Simple shrink
   levels.push(
     {
@@ -330,9 +328,7 @@ fn build_levels() -> Array[@types.Level] {
   // Level 24: Precision challenge
   levels.push(
     {
-      initial_shape: s([
-        v(2, 2), v(3, 2), v(4, 2), v(5, 2), v(3, 3),
-      ]),
+      initial_shape: s([v(2, 2), v(3, 2), v(4, 2), v(5, 2), v(3, 3)]),
       target_shape: s([v(4, 4), v(5, 4), v(4, 5), v(5, 5)]),
       par_cost: 14,
       min_cost: 10,
@@ -345,9 +341,7 @@ fn build_levels() -> Array[@types.Level] {
   levels.push(
     {
       initial_shape: s([v(1, 3), v(2, 3), v(3, 3), v(2, 2), v(2, 4)]),
-      target_shape: s([
-        v(5, 3), v(6, 3), v(5, 4), v(6, 4), v(5, 5), v(6, 5),
-      ]),
+      target_shape: s([v(5, 3), v(6, 3), v(5, 4), v(6, 4), v(5, 5), v(6, 5)]),
       par_cost: 18,
       min_cost: 13,
       available_ops: transform_ops(),

@@ -169,7 +169,6 @@ pub fn shape_adjacent_empty(s : Shape) -> Array[Vec2i] {
         neighbor.y >= 0 &&
         neighbor.y < grid_rows &&
         !(shape_contains(s, neighbor)) {
-        // Check not already in result
         let mut found = false
         for r in 0..<result.length() {
           if result[r].x == neighbor.x && result[r].y == neighbor.y {
@@ -200,7 +199,6 @@ pub fn shape_edge_cells(s : Shape) -> Array[Vec2i] {
         break
       }
     }
-    // Also allow removal if shape has more than 1 cell
     if has_empty_neighbor && s.cells.length() > 1 {
       result.push(c)
     }
@@ -332,5 +330,43 @@ pub fn absi(a : Int) -> Int {
     -a
   } else {
     a
+  }
+}
+
+// These are placeholders used by render before levels package is available.
+// The actual level data comes from the levels package at runtime.
+// We store level info in a global once loaded.
+
+///|
+let level_data : Ref[Array[Level]?] = { val: None }
+
+///|
+pub fn set_level_data(levels : Array[Level]) -> Unit {
+  level_data.val = Some(levels)
+}
+
+///|
+pub fn get_level_par_and_min(idx : Int) -> (Int, Int) {
+  match level_data.val {
+    Some(levels) =>
+      if idx >= 0 && idx < levels.length() {
+        (levels[idx].par_cost, levels[idx].min_cost)
+      } else {
+        (99, 99)
+      }
+    None => (99, 99)
+  }
+}
+
+///|
+pub fn get_level_available_ops(idx : Int) -> Array[OpKind] {
+  match level_data.val {
+    Some(levels) =>
+      if idx >= 0 && idx < levels.length() {
+        levels[idx].available_ops
+      } else {
+        []
+      }
+    None => []
   }
 }
