@@ -1,0 +1,7 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/mosaic/internal/types",
+  "bobzhang/games/mosaic/internal/symmetry",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

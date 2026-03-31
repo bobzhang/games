@@ -1,0 +1,14 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/mosaic/internal/types",
+  "bobzhang/games/mosaic/internal/levels",
+  "bobzhang/games/mosaic/internal/game",
+  "bobzhang/games/mosaic/internal/render",
+  "bobzhang/games/utils/draw",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)
