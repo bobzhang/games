@@ -188,18 +188,38 @@ pub fn update_kart_waypoint(game : @types.Game, kart_idx : Int) -> Unit {
   if wc < 2 {
     return
   }
-  // Check distance to next waypoint
+  // Use segment projection to determine waypoint advancement
   let next_wp_idx = (kart.waypoint_idx + 1) % wc
+  let cur_wp = @types.get_waypoint(game, kart.waypoint_idx)
   let next_wp = @types.get_waypoint(game, next_wp_idx)
-  let dist_next = @types.distance2d(kart.x, kart.z, next_wp.x, next_wp.z)
-  // Advance if close enough to next waypoint
-  let seg = @types.get_segment(game, kart.waypoint_idx)
-  let seg_width = @types.road_width * seg.width_mult
-  if dist_next < seg_width * 1.2 {
+  // Vector from current to next waypoint
+  let seg_dx = next_wp.x - cur_wp.x
+  let seg_dz = next_wp.z - cur_wp.z
+  // Vector from current waypoint to kart
+  let kart_dx = kart.x - cur_wp.x
+  let kart_dz = kart.z - cur_wp.z
+  // Project kart position onto segment
+  let seg_len2 = seg_dx * seg_dx + seg_dz * seg_dz
+  let proj = if seg_len2 > 0.001 {
+    (kart_dx * seg_dx + kart_dz * seg_dz) / seg_len2
+  } else {
+    // Degenerate segment, fall back to distance check
+    let dist_next = @types.distance2d(kart.x, kart.z, next_wp.x, next_wp.z)
+    if dist_next < @types.road_width { 1.0 } else { 0.0 }
+  }
+  // Advance if projection exceeds 0.8 (80% of segment traversed)
+  if proj > 0.8 {
     let old_idx = kart.waypoint_idx
     kart.waypoint_idx = next_wp_idx
+    // Safety: if kart is WAY past the next waypoint, skip ahead to find nearest
+    if proj > 2.0 {
+      let nearest = @types.find_nearest_waypoint(game, kart.x, kart.z)
+      if nearest >= 0 {
+        kart.waypoint_idx = nearest
+      }
+    }
     // Check for lap completion (crossed start line)
-    if next_wp_idx == 0 && old_idx == wc - 1 {
+    if kart.waypoint_idx == 0 && old_idx == wc - 1 {
       kart.lap = kart.lap + 1
       if kart.is_player {
         let lap_time = game.race_time - game.lap_start_time

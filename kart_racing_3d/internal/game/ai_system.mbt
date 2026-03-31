@@ -29,7 +29,7 @@ pub fn update_ai_karts(game : @types.Game, dt : Float) -> Unit {
       apply_kart_physics(game, i, dt)
       continue
     }
-    // Determine target waypoint (look ahead based on difficulty)
+    // Determine target waypoint with adaptive lookahead
     let wc = game.waypoint_count
     if wc < 2 {
       continue
@@ -38,14 +38,26 @@ pub fn update_ai_karts(game : @types.Game, dt : Float) -> Unit {
         min=0,
         max=3,
       )]
-    let look_ahead : Int = 2 + (diff_stats.2 * 2.0).to_int()
-    let target_wp_idx = (kart.waypoint_idx + look_ahead) % wc
-    let target_wp = @types.get_waypoint(game, target_wp_idx)
+    // Adaptive lookahead: shorter for tight corners, longer for straights
+    let next_wp = @types.get_waypoint(game, (kart.waypoint_idx + 1) % wc)
+    let next2_wp = @types.get_waypoint(game, (kart.waypoint_idx + 2) % wc)
+    let cur_wp_pos = @types.get_waypoint(game, kart.waypoint_idx)
+    let corner_angle = @types.angle_between_segments(
+      cur_wp_pos, next_wp, next2_wp,
+    )
+    let look_ahead : Int = if corner_angle > 30.0 { 1 } else { 2 }
+    // Blend primary (next wp) and secondary (lookahead wp) targets
+    let primary_wp = @types.get_waypoint(game, (kart.waypoint_idx + 1) % wc)
+    let secondary_wp = @types.get_waypoint(
+      game, (kart.waypoint_idx + look_ahead) % wc,
+    )
+    let blend_x = primary_wp.x * 0.7 + secondary_wp.x * 0.3
+    let blend_z = primary_wp.z * 0.7 + secondary_wp.z * 0.3
     // Apply racing line offset for more natural movement
     let perp = @types.get_track_perpendicular(game, kart.waypoint_idx)
     let line_offset = kart.ai_line_offset * diff_stats.2
-    let target_x = target_wp.x + perp.0 * line_offset
-    let target_z = target_wp.z + perp.1 * line_offset
+    let target_x = blend_x + perp.0 * line_offset
+    let target_z = blend_z + perp.1 * line_offset
     // Steering towards target with reaction delay
     let dx = target_x - kart.x
     let dz = target_z - kart.z

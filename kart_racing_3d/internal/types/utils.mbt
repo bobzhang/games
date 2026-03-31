@@ -452,16 +452,39 @@ pub fn is_on_ramp(game : Game, kart : Kart) -> Bool {
 // Get surface type at kart position based on distance from track center
 
 ///|
+/// Returns the distance from point (`px`, `pz`) to the line segment from (`ax`, `az`) to (`bx`, `bz`).
+pub fn distance_to_segment(
+  px : Float,
+  pz : Float,
+  ax : Float,
+  az : Float,
+  bx : Float,
+  bz : Float,
+) -> Float {
+  let dx = bx - ax
+  let dz = bz - az
+  let len2 = dx * dx + dz * dz
+  if len2 < 0.0001 {
+    return distance2d(px, pz, ax, az)
+  }
+  let t = clampf(((px - ax) * dx + (pz - az) * dz) / len2, 0.0, 1.0)
+  let closest_x = ax + t * dx
+  let closest_z = az + t * dz
+  distance2d(px, pz, closest_x, closest_z)
+}
+
+///|
 /// Returns the surface type at position (`x`, `z`) based on distance from the nearest track segment.
 pub fn detect_surface_type(game : Game, x : Float, z : Float) -> Surface {
   let wc = game.waypoint_count
   if wc < 2 {
     return Road
   }
-  // Find nearest segment
+  // Find nearest segment using distance to line segments, not just points
   for i in 0..<wc; best_dist = 99999.0F, best_seg = 0 {
-    let wp = game.waypoints[i]
-    let d = distance2d(x, z, wp.x, wp.z)
+    let wp0 = game.waypoints[i]
+    let wp1 = game.waypoints[(i + 1) % wc]
+    let d = distance_to_segment(x, z, wp0.x, wp0.z, wp1.x, wp1.z)
     if d < best_dist {
       continue d, i
     }
@@ -616,6 +639,39 @@ pub fn ordinal_suffix(n : Int) -> String {
 }
 
 // Track spline interpolation: get position at progress along segment
+
+///|
+/// Returns the angle (in degrees) between two consecutive track segments A->B and B->C.
+/// A larger angle means a tighter corner.
+pub fn angle_between_segments(a : Waypoint, b : Waypoint, c : Waypoint) -> Float {
+  let dx1 = b.x - a.x
+  let dz1 = b.z - a.z
+  let dx2 = c.x - b.x
+  let dz2 = c.z - b.z
+  let angle1 = @math.atan2f(dx1, dz1)
+  let angle2 = @math.atan2f(dx2, dz2)
+  let diff = angle_diff(angle1, angle2).abs()
+  // Convert radians to degrees
+  diff * 180.0 / pi
+}
+
+///|
+/// Returns the index of the nearest waypoint to position (`x`, `z`), or -1 if no waypoints.
+pub fn find_nearest_waypoint(game : Game, x : Float, z : Float) -> Int {
+  let wc = game.waypoint_count
+  if wc == 0 {
+    return -1
+  }
+  for i in 0..<wc; best_dist = 99999.0F, best_idx = 0 {
+    let wp = game.waypoints[i]
+    let d = distance2d(x, z, wp.x, wp.z)
+    if d < best_dist {
+      continue d, i
+    }
+  } nobreak {
+    best_idx
+  }
+}
 
 // Get track direction vector at a segment
 
