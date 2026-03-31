@@ -175,7 +175,8 @@ fn @types.Game::execute_telegraphed_attack(
           120,
           60,
         )
-        @types.trigger_shake(game, 0.15, 0.3)
+        @types.trigger_shake(game, 0.18, 0.3)
+        @types.trigger_hitstop(game, 0.05)
         @types.add_message(
           game,
           "Golem smashes for \{(1).max(heavy_dmg - @types.calc_player_defense(game))} damage!",
@@ -192,7 +193,7 @@ fn @types.Game::execute_telegraphed_attack(
       // Lich bolt
       game.shoot_lich_bolt(e)
     4 => {
-      // Boss melee
+      // Boss melee with heavy screen effects
       let melee_range : Float = 4.0
       if dist < melee_range {
         let phase = e.boss_phase
@@ -215,7 +216,8 @@ fn @types.Game::execute_telegraphed_attack(
           80,
           80,
         )
-        @types.trigger_shake(game, 0.2, 0.4)
+        @types.trigger_shake(game, 0.25, 0.4)
+        @types.trigger_hitstop(game, 0.06)
         @types.add_message(
           game,
           "Dragon strikes for \{(1).max(dmg - @types.calc_player_defense(game))}!",
@@ -257,7 +259,8 @@ fn @types.Game::execute_telegraphed_attack(
         }
       }
       @types.spawn_particles(game, e.x, 1.5, e.z, 16, 255, 100, 30)
-      @types.trigger_shake(game, 0.15, 0.3)
+      @types.trigger_shake(game, 0.20, 0.35)
+      @types.trigger_hitstop(game, 0.05)
       @types.add_message(game, "Dragon breathes fire!", 255, 100, 30)
     }
     _ => ()
@@ -546,20 +549,12 @@ fn @types.Game::update_slime_enemy(
       // Spawn slime trail particles
       @types.spawn_particles(game, e.x, 0.2, e.z, 2, 50, 200, 50)
     }
-    // Attack
+    // Attack with telegraph
   } else if e.attack_timer <= 0.0 {
-    damage_player(game, e.atk)
+    e.telegraph_timer = 0.3
+    e.telegraph_kind = 0
     e.attack_timer = @types.enemy_attack_cooldown
-    @types.spawn_particles(
-      game,
-      game.player_x,
-      0.5,
-      game.player_z,
-      4,
-      50,
-      200,
-      50,
-    )
+    @types.spawn_particles(game, e.x, 0.3, e.z, 3, 50, 200, 50)
   }
 }
 
@@ -594,20 +589,12 @@ fn @types.Game::update_bat_enemy(
         e.z = new_z
       }
     }
-    // Swooping attack
+    // Swooping attack with telegraph
   } else if e.attack_timer <= 0.0 {
-    damage_player(game, e.atk)
+    e.telegraph_timer = 0.25
+    e.telegraph_kind = 0
     e.attack_timer = 0.8
-    @types.spawn_particles(
-      game,
-      game.player_x,
-      1.5,
-      game.player_z,
-      3,
-      80,
-      60,
-      40,
-    )
+    @types.spawn_particles(game, e.x, 1.5, e.z, 3, 80, 60, 40)
   }
 }
 
@@ -638,20 +625,12 @@ fn @types.Game::update_spider_enemy(
       game.shoot_web(e)
       e.ability_cooldown = 4.0
     }
-    // Melee attack
+    // Melee attack with telegraph
   } else if e.attack_timer <= 0.0 {
-    damage_player(game, e.atk)
+    e.telegraph_timer = 0.3
+    e.telegraph_kind = 0
     e.attack_timer = @types.enemy_attack_cooldown
-    @types.spawn_particles(
-      game,
-      game.player_x,
-      1.0,
-      game.player_z,
-      5,
-      120,
-      100,
-      80,
-    )
+    @types.spawn_particles(game, e.x, 0.5, e.z, 3, 120, 100, 80)
   }
 }
 
@@ -732,18 +711,10 @@ fn @types.Game::update_minotaur_enemy(
         e.z = new_z
       }
     } else if e.attack_timer <= 0.0 {
-      damage_player(game, e.atk)
+      e.telegraph_timer = 0.4
+      e.telegraph_kind = 1 // heavy melee
       e.attack_timer = 1.5
-      @types.spawn_particles(
-        game,
-        game.player_x,
-        1.0,
-        game.player_z,
-        8,
-        200,
-        100,
-        50,
-      )
+      @types.spawn_particles(game, e.x, 0.8, e.z, 4, 200, 100, 50)
     }
   }
 }
@@ -1249,6 +1220,12 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
                 spell_colors.2,
               )
           }
+          // Stagger: enemy pauses on projectile hit
+          if enemy.stun_timer < 0.15 {
+            enemy.stun_timer = 0.15
+          }
+          // Hitstop on spell impact
+          @types.trigger_hitstop(game, 0.04)
           // Apply slow from ice bolt (kept for backward compat with p.slow_on_hit)
           if p.slow_on_hit && p.kind != IceBolt {
             enemy.slow_timer = @types.ice_bolt_slow_duration

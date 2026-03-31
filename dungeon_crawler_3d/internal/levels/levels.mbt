@@ -340,6 +340,68 @@ pub fn get_shop_item_price(slot : Int) -> Int {
   }
 }
 
+// Rotating shop stock per floor
+
+///|
+/// Returns a randomized shop item (kind, price) based on floor and a random roll.
+/// Higher floors have access to better items.
+pub fn get_random_shop_item(floor : Int, roll : Int) -> (Int, Int) {
+  let r = if roll < 0 { -roll } else { roll }
+  if floor <= 2 {
+    // Early floors: basic consumables
+    let choices = r % 5
+    if choices == 0 {
+      (1, 25) // Health Potion
+    } else if choices == 1 {
+      (4, 30) // Mana Potion
+    } else if choices == 2 {
+      (8, 40) // Key
+    } else if choices == 3 {
+      (5, 50) // Speed Potion
+    } else {
+      (6, 45) // Strength Potion
+    }
+  } else if floor <= 5 {
+    // Mid floors: consumables + stat scrolls
+    let choices = r % 7
+    if choices == 0 {
+      (1, 20) // Health Potion (cheaper)
+    } else if choices == 1 {
+      (4, 25) // Mana Potion (cheaper)
+    } else if choices == 2 {
+      (2, 80) // Damage Scroll
+    } else if choices == 3 {
+      (3, 90) // Armor Shard
+    } else if choices == 4 {
+      (8, 35) // Key
+    } else if choices == 5 {
+      (5, 45) // Speed Potion
+    } else {
+      (6, 55) // Strength Potion
+    }
+  } else {
+    // Late floors: powerful items
+    let choices = r % 8
+    if choices == 0 {
+      (1, 15) // Health Potion (cheap)
+    } else if choices == 1 {
+      (4, 20) // Mana Potion (cheap)
+    } else if choices == 2 {
+      (2, 100) // Damage Scroll
+    } else if choices == 3 {
+      (3, 120) // Armor Shard
+    } else if choices == 4 {
+      (8, 30) // Key
+    } else if choices == 5 {
+      (5, 40) // Speed Potion
+    } else if choices == 6 {
+      (6, 60) // Strength Potion
+    } else {
+      (2, 150) // Premium Damage Scroll
+    }
+  }
+}
+
 // Shrine buff options
 
 // XP required for each level

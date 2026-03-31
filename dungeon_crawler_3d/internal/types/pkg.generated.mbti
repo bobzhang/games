@@ -6,11 +6,21 @@ pub fn add_buff(Game, Int, Float, Int) -> Unit
 
 pub fn add_message(Game, String, Int, Int, Int) -> Unit
 
+pub let ai_ambush : Int
+
 pub let ai_chase : Int
 
 pub let ai_idle : Int
 
+pub let ai_retreat : Int
+
 pub let ai_special : Int
+
+pub let ai_strafe : Int
+
+pub let ai_telegraph : Int
+
+pub fn alloc_damage_number(Game) -> Int
 
 pub fn alloc_enemy(Game) -> Int
 
@@ -23,6 +33,8 @@ pub fn alloc_projectile(Game) -> Int
 pub fn alloc_torch(Game) -> Int
 
 pub fn alloc_trap(Game) -> Int
+
+pub fn apply_knockback(Game, Enemy, Float, Float, Float) -> Unit
 
 pub let archer_range : Float
 
@@ -52,6 +64,12 @@ pub let axe_range : Float
 
 pub let bat_move_speed : Float
 
+pub let boss_phase2_threshold : Float
+
+pub let boss_phase3_threshold : Float
+
+pub let boss_telegraph_duration : Float
+
 pub let bow_cooldown : Float
 
 pub let bow_damage_mult : Float
@@ -66,7 +84,11 @@ pub let buff_strength : Int
 
 pub fn calc_player_attack(Game) -> Int
 
+pub fn calc_player_attack_with_equip(Game) -> Int
+
 pub fn calc_player_defense(Game) -> Int
+
+pub fn calc_player_defense_with_equip(Game) -> Int
 
 pub let camera_fovy : Float
 
@@ -102,6 +124,8 @@ pub let enemy_move_speed : Float
 
 pub let enemy_sight_range : Float
 
+pub let enemy_telegraph_duration : Float
+
 pub let fireball_damage : Int
 
 pub let fireball_mana_cost : Int
@@ -112,9 +136,23 @@ pub let flame_damage : Int
 
 pub fn get_armor_defense(Int) -> Int
 
+pub fn get_boss_phase(Int, Int) -> Int
+
 pub fn get_enemy_name(EnemyKind) -> String
 
 pub fn get_loot_name(Int) -> String
+
+pub fn get_rarity_color_b(Int) -> Int
+
+pub fn get_rarity_color_g(Int) -> Int
+
+pub fn get_rarity_color_r(Int) -> Int
+
+pub fn get_rarity_name(Int) -> String
+
+pub fn get_ring_name(Int) -> String
+
+pub fn get_shake_offset(Game) -> (Float, Float)
 
 pub fn get_spell_mana_cost(Spell) -> Int
 
@@ -147,6 +185,8 @@ pub let grid_total : Int
 pub let grid_w : Int
 
 pub fn has_buff(Game, Int) -> Bool
+
+pub fn has_line_of_sight(Game, Float, Float, Float, Float) -> Bool
 
 pub let heal_amount : Int
 
@@ -182,6 +222,12 @@ pub let loot_boss_key : Int
 
 pub let loot_damage_boost : Int
 
+pub let loot_equip_armor : Int
+
+pub let loot_equip_ring : Int
+
+pub let loot_equip_weapon : Int
+
 pub let loot_gold_pile : Int
 
 pub let loot_health_potion : Int
@@ -209,6 +255,8 @@ pub let mana_potion_restore : Int
 pub let mana_regen_rate : Float
 
 pub let max_buffs : Int
+
+pub let max_damage_numbers : Int
 
 pub let max_enemies : Int
 
@@ -302,6 +350,16 @@ pub let rarity_common : Int
 
 pub let rarity_uncommon : Int
 
+pub let ring_crit_chance : Int
+
+pub let ring_gold_find : Int
+
+pub let ring_life_steal : Int
+
+pub let ring_mana_regen : Int
+
+pub let ring_thorns : Int
+
 pub let robes_defense : Int
 
 pub let room_boss : Int
@@ -333,6 +391,8 @@ pub let shrine_options : Int
 pub fn signf(Float) -> Float
 
 pub let slime_move_speed : Float
+
+pub fn spawn_damage_number(Game, Float, Float, Float, Int, Int, Int, Int, Bool) -> Unit
 
 pub fn spawn_directional_particles(Game, Float, Float, Float, Float, Float, Int, Int, Int, Int, Float) -> Unit
 
@@ -394,11 +454,17 @@ pub let trap_cooldown : Float
 
 pub fn trap_kind_from_int(Int) -> TrapKind
 
+pub fn trigger_shake(Game, Float, Float) -> Unit
+
 pub fn update_buffs(Game, Float) -> Unit
+
+pub fn update_damage_numbers(Game, Float) -> Unit
 
 pub fn update_explored(Game) -> Unit
 
 pub fn update_messages(Game, Float) -> Unit
+
+pub fn update_shake(Game, Float) -> Unit
 
 pub let wall_height : Float
 
@@ -443,6 +509,20 @@ pub(all) struct Buff {
 }
 pub fn Buff::inactive() -> Self
 
+pub(all) struct DamageNumber {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut z : Float
+  mut value : Int
+  mut timer : Float
+  mut r : Int
+  mut g : Int
+  mut b : Int
+  mut is_crit : Bool
+}
+pub fn DamageNumber::inactive() -> Self
+
 pub(all) struct Enemy {
   mut active : Bool
   mut kind : EnemyKind
@@ -465,6 +545,11 @@ pub(all) struct Enemy {
   mut slow_timer : Float
   mut xp_value : Int
   mut facing_angle : Float
+  mut telegraph_timer : Float
+  mut telegraph_kind : Int
+  mut boss_phase : Int
+  mut strafe_dir : Float
+  mut aura_timer : Float
 }
 pub fn Enemy::inactive() -> Self
 
@@ -481,8 +566,7 @@ pub(all) enum EnemyKind {
   Minotaur
   Lich
   Mimic
-}
-pub impl Eq for EnemyKind
+} derive(Eq)
 
 pub(all) struct FloorInfo {
   mut cleared : Bool
@@ -569,6 +653,17 @@ pub(all) struct Game {
   mut poison_remaining : Float
   mut rng_state : Int
   mut frame_counter : Int
+  mut shake_timer : Float
+  mut shake_intensity : Float
+  damage_numbers : Array[DamageNumber]
+  mut equip_weapon_rarity : Int
+  mut equip_weapon_bonus : Int
+  mut equip_armor_rarity : Int
+  mut equip_armor_bonus : Int
+  mut equip_ring_kind : Int
+  mut equip_ring_rarity : Int
+  mut equip_ring_bonus : Int
+  mut mana_regen_accum : Float
 
   fn new() -> Game
 }
@@ -585,10 +680,9 @@ pub(all) enum GameState {
   StateShop
   StateShrine
   StateClassSelect
-}
+} derive(Eq)
 pub fn GameState::from_int(Int) -> Self
 pub fn GameState::to_int(Self) -> Int
-pub impl Eq for GameState
 
 pub(all) struct InvItem {
   mut kind : Int
@@ -671,8 +765,7 @@ pub(all) enum ShipClass {
   Warrior
   Rogue
   Mage
-}
-pub impl Eq for ShipClass
+} derive(Eq)
 
 pub(all) struct ShopItem {
   mut active : Bool
@@ -691,8 +784,7 @@ pub(all) enum Spell {
   Shield
   Lightning
   Teleport
-}
-pub impl Eq for Spell
+} derive(Eq)
 
 pub(all) struct SpellSlot {
   mut spell_type : Spell
@@ -726,8 +818,7 @@ pub(all) enum TrapKind {
   Flame
   Poison
   Pitfall
-}
-pub impl Eq for TrapKind
+} derive(Eq)
 
 pub(all) enum WeaponKind {
   Sword
@@ -736,8 +827,7 @@ pub(all) enum WeaponKind {
   Dagger
   Staff
   Bow
-}
-pub impl Eq for WeaponKind
+} derive(Eq)
 
 // Type aliases
 

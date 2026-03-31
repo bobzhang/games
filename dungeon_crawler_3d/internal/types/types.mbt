@@ -152,6 +152,8 @@ pub(all) struct Loot {
   mut bob_phase : Float
   mut rarity : Int
   mut value : Int
+  mut affix : WeaponAffix
+  mut weapon_type : WeaponKind
 }
 
 ///|
@@ -165,6 +167,8 @@ pub fn Loot::inactive() -> Loot {
     bob_phase: 0.0,
     rarity: rarity_common,
     value: 0,
+    affix: AffixNone,
+    weapon_type: Sword,
   }
 }
 
@@ -526,6 +530,9 @@ pub(all) struct Game {
   mut shake_timer : Float
   mut shake_intensity : Float
 
+  // Hitstop (brief freeze on impactful hits)
+  mut hitstop_timer : Float
+
   // Floating damage numbers
   damage_numbers : Array[DamageNumber]
 
@@ -540,6 +547,31 @@ pub(all) struct Game {
 
   // Mana regen accumulator (fractional mana between frames)
   mut mana_regen_accum : Float
+
+  // Weapon discovery: tracks which weapon types the player has found
+  discovered_weapons : Array[Bool]
+
+  // Weapon affix on currently equipped weapon
+  mut weapon_affix : WeaponAffix
+
+  // Pending equipment popup data
+  mut pending_equip_kind : Int
+  mut pending_equip_bonus : Int
+  mut pending_equip_rarity : Int
+  mut pending_equip_affix : WeaponAffix
+  mut pending_equip_weapon_type : WeaponKind
+  mut pending_equip_ring_kind : Int
+
+  // Level-up card choices (indices into card type table)
+  levelup_cards : Array[Int]
+  mut levelup_card_cursor : Int
+
+  // Shrine boon descriptions (dynamic per build)
+  shrine_boon_names : Array[String]
+  shrine_boon_ids : Array[Int]
+
+  // Fire DOT tracking on enemies
+  enemy_fire_dot : Array[Float]
 
   fn new() -> Game
 }
@@ -728,6 +760,7 @@ pub fn Game::new() -> Game {
     frame_counter: 0,
     shake_timer: 0.0,
     shake_intensity: 0.0,
+    hitstop_timer: 0.0,
     damage_numbers: {
       let arr : Array[DamageNumber] = []
       for i in 0..<max_damage_numbers {
@@ -744,5 +777,18 @@ pub fn Game::new() -> Game {
     equip_ring_rarity: rarity_common,
     equip_ring_bonus: 0,
     mana_regen_accum: 0.0,
+    discovered_weapons: Array::make(max_discovered_weapons, false),
+    weapon_affix: AffixNone,
+    pending_equip_kind: 0,
+    pending_equip_bonus: 0,
+    pending_equip_rarity: 0,
+    pending_equip_affix: AffixNone,
+    pending_equip_weapon_type: Sword,
+    pending_equip_ring_kind: -1,
+    levelup_cards: [0, 1, 2],
+    levelup_card_cursor: 0,
+    shrine_boon_names: ["+15 Max HP", "+10 Max Mana", "+5 ATK"],
+    shrine_boon_ids: [0, 1, 2],
+    enemy_fire_dot: Array::make(max_enemies, 0.0),
   }
 }

@@ -66,6 +66,18 @@ fn @types.Game::draw_dungeon(game : @types.Game) -> Unit {
       } else if tile == @types.tile_chest {
         draw_floor_tile(wx, wz)
         draw_chest(wx, wz, game)
+      } else if tile == @types.tile_shop {
+        draw_floor_tile(wx, wz)
+        draw_shop_stall(wx, wz, game)
+      } else if tile == @types.tile_shrine {
+        draw_floor_tile(wx, wz)
+        draw_shrine_altar(wx, wz, game)
+      } else if tile == @types.tile_trap {
+        draw_floor_tile(wx, wz)
+        draw_trap_markings(wx, wz, game)
+      } else if tile == @types.tile_locked_door {
+        draw_floor_tile(wx, wz)
+        draw_locked_door(wx, wz, game)
       }
     }
   }
@@ -218,6 +230,174 @@ fn draw_chest(wx : Float, wz : Float, game : @types.Game) -> Unit {
 }
 
 ///|
+fn draw_shop_stall(wx : Float, wz : Float, game : @types.Game) -> Unit {
+  ignore(game)
+  // Counter/table
+  @raylib.draw_cube(
+    @raylib.Vector3::new(wx, 0.45, wz),
+    1.0,
+    0.5,
+    0.6,
+    @raylib.Color::new(120, 80, 40, 255),
+  )
+  // Awning supports (two posts)
+  @raylib.draw_cube(
+    @raylib.Vector3::new(wx - 0.45, 1.2, wz + 0.25),
+    0.08,
+    1.7,
+    0.08,
+    @raylib.Color::new(100, 70, 30, 255),
+  )
+  @raylib.draw_cube(
+    @raylib.Vector3::new(wx + 0.45, 1.2, wz + 0.25),
+    0.08,
+    1.7,
+    0.08,
+    @raylib.Color::new(100, 70, 30, 255),
+  )
+  // Awning top (colored cloth)
+  @raylib.draw_cube(
+    @raylib.Vector3::new(wx, 2.1, wz + 0.1),
+    1.1,
+    0.08,
+    0.7,
+    @raylib.Color::new(180, 50, 50, 230),
+  )
+  // Awning stripe
+  @raylib.draw_cube(
+    @raylib.Vector3::new(wx, 2.1, wz - 0.05),
+    1.1,
+    0.08,
+    0.15,
+    @raylib.Color::new(220, 200, 60, 230),
+  )
+  // Wares on counter (gold coins)
+  @raylib.draw_sphere(
+    @raylib.Vector3::new(wx - 0.2, 0.78, wz),
+    0.08,
+    @raylib.Color::new(255, 215, 0, 240),
+  )
+  @raylib.draw_sphere(
+    @raylib.Vector3::new(wx + 0.15, 0.78, wz + 0.1),
+    0.06,
+    @raylib.Color::new(255, 215, 0, 240),
+  )
+}
+
+///|
+fn draw_shrine_altar(wx : Float, wz : Float, game : @types.Game) -> Unit {
+  // Stone altar base
+  @raylib.draw_cube(
+    @raylib.Vector3::new(wx, 0.25, wz),
+    0.7,
+    0.5,
+    0.7,
+    @raylib.Color::new(80, 70, 100, 255),
+  )
+  // Altar pillar
+  @raylib.draw_cube(
+    @raylib.Vector3::new(wx, 0.7, wz),
+    0.35,
+    0.4,
+    0.35,
+    @raylib.Color::new(100, 80, 130, 255),
+  )
+  // Pulsing glow orb
+  let pulse = @math.sinf(Float::from_int(game.frame_counter) * 0.08) * 0.15 +
+    0.85
+  let glow_size : Float = 0.2 * pulse
+  let alpha = (pulse * 200.0).to_int().clamp(min=120, max=200)
+  @raylib.draw_sphere(
+    @raylib.Vector3::new(wx, 1.1, wz),
+    glow_size,
+    @raylib.Color::new(150, 100, 255, alpha),
+  )
+  // Outer glow aura
+  @raylib.draw_sphere(
+    @raylib.Vector3::new(wx, 1.1, wz),
+    glow_size + 0.15,
+    @raylib.Color::new(120, 80, 220, 50),
+  )
+}
+
+///|
+fn draw_trap_markings(wx : Float, wz : Float, game : @types.Game) -> Unit {
+  ignore(game)
+  let cs = @types.cell_size
+  // Danger lines on floor: X pattern with red tint
+  @raylib.draw_cube(
+    @raylib.Vector3::new(wx - cs * 0.2, 0.02, wz - cs * 0.2),
+    cs * 0.6,
+    0.02,
+    0.04,
+    @raylib.Color::new(180, 40, 30, 160),
+  )
+  @raylib.draw_cube(
+    @raylib.Vector3::new(wx + cs * 0.2, 0.02, wz - cs * 0.2),
+    cs * 0.6,
+    0.02,
+    0.04,
+    @raylib.Color::new(180, 40, 30, 160),
+  )
+  // Center warning dot
+  @raylib.draw_sphere(
+    @raylib.Vector3::new(wx, 0.06, wz),
+    0.06,
+    @raylib.Color::new(200, 50, 30, 180),
+  )
+}
+
+///|
+fn draw_locked_door(wx : Float, wz : Float, game : @types.Game) -> Unit {
+  ignore(game)
+  // Door frame
+  @raylib.draw_cube(
+    @raylib.Vector3::new(wx, @types.wall_height / 2.0, wz),
+    0.3,
+    @types.wall_height,
+    @types.cell_size,
+    @raylib.Color::new(70, 50, 25, 255),
+  )
+  // Door panels (darker than normal door)
+  @raylib.draw_cube(
+    @raylib.Vector3::new(wx, @types.wall_height / 2.0, wz),
+    @types.cell_size * 0.9,
+    @types.wall_height * 0.85,
+    0.12,
+    @raylib.Color::new(60, 40, 20, 255),
+  )
+  // Door arch
+  @raylib.draw_cube(
+    @raylib.Vector3::new(wx, @types.wall_height - 0.3, wz),
+    @types.cell_size,
+    0.3,
+    0.3,
+    @raylib.Color::new(70, 50, 25, 255),
+  )
+  // Keyhole plate
+  @raylib.draw_cube(
+    @raylib.Vector3::new(wx, @types.wall_height * 0.4, wz + 0.07),
+    0.18,
+    0.22,
+    0.04,
+    @raylib.Color::new(160, 140, 50, 255),
+  )
+  // Keyhole shape (circle + slot)
+  @raylib.draw_sphere(
+    @raylib.Vector3::new(wx, @types.wall_height * 0.42, wz + 0.1),
+    0.04,
+    @raylib.Color::new(30, 25, 15, 255),
+  )
+  @raylib.draw_cube(
+    @raylib.Vector3::new(wx, @types.wall_height * 0.36, wz + 0.1),
+    0.03,
+    0.08,
+    0.03,
+    @raylib.Color::new(30, 25, 15, 255),
+  )
+}
+
+///|
 fn @types.Game::draw_enemies_3d(game : @types.Game) -> Unit {
   for e in game.enemies {
     if !e.active {
@@ -269,18 +449,40 @@ fn @types.Game::draw_enemies_3d(game : @types.Game) -> Unit {
         @raylib.Color::new(255, 255, 100, 200),
       )
     }
-    // Attack telegraph visual: pulsing glow and size increase
+    // Attack telegraph visual: pulsing glow color-coded by attack type
     if e.telegraph_timer > 0.0 {
       let pulse = @math.sinf(Float::from_int(game.frame_counter) * 0.5)
       let pulse_abs = if pulse > 0.0 { pulse } else { -pulse }
       let glow_size : Float = 0.5 + pulse_abs * 0.3
-      // Red warning glow
+      // Color based on telegraph kind: red for melee, blue for ice, orange for fire
+      let glow_color : (Int, Int, Int) = match e.telegraph_kind {
+        0 => (255, 60, 30) // Standard melee - red
+        1 => (255, 150, 30) // Heavy melee - orange
+        2 => (80, 200, 60) // Archer shot - green
+        3 => (180, 50, 255) // Lich bolt - purple
+        4 => (255, 80, 30) // Boss melee - fiery red
+        5 => (255, 120, 20) // Fire breath - fire orange
+        _ => (255, 60, 30) // Default red
+      }
       let glow_alpha = (pulse_abs * 200.0).to_int().clamp(min=60, max=200)
       @raylib.draw_sphere(
         @raylib.Vector3::new(e.x, 1.0, e.z),
         glow_size,
-        @raylib.Color::new(255, 60, 30, glow_alpha),
+        @raylib.Color::new(glow_color.0, glow_color.1, glow_color.2, glow_alpha),
       )
+      // Ground danger zone marker (circular) for melee attacks
+      if e.telegraph_kind == 0 || e.telegraph_kind == 1 {
+        let ground_size : Float = if e.telegraph_kind == 1 { 2.5 } else { 2.0 }
+        @raylib.draw_cube(
+          @raylib.Vector3::new(e.x, 0.03, e.z),
+          ground_size,
+          0.03,
+          ground_size,
+          @raylib.Color::new(
+            glow_color.0, glow_color.1, glow_color.2, glow_alpha / 4,
+          ),
+        )
+      }
       // Directional indicator for ranged attacks
       if e.telegraph_kind == 2 || e.telegraph_kind == 3 || e.telegraph_kind == 5 {
         let dir_x = @math.sinf(e.facing_angle)
@@ -290,15 +492,31 @@ fn @types.Game::draw_enemies_3d(game : @types.Game) -> Unit {
           0.15,
           0.15,
           0.15,
-          @raylib.Color::new(255, 200, 50, glow_alpha),
+          @raylib.Color::new(
+            glow_color.0, glow_color.1, glow_color.2, glow_alpha,
+          ),
         )
         @raylib.draw_cube(
           @raylib.Vector3::new(e.x + dir_x * 2.5, 1.0, e.z + dir_z * 2.5),
           0.1,
           0.1,
           0.1,
-          @raylib.Color::new(255, 200, 50, glow_alpha / 2),
+          @raylib.Color::new(
+            glow_color.0, glow_color.1, glow_color.2, glow_alpha / 2,
+          ),
         )
+        // Line along direction for cone attacks
+        if e.telegraph_kind == 5 {
+          @raylib.draw_cube(
+            @raylib.Vector3::new(e.x + dir_x * 3.5, 0.5, e.z + dir_z * 3.5),
+            0.08,
+            0.08,
+            0.08,
+            @raylib.Color::new(
+              glow_color.0, glow_color.1, glow_color.2, glow_alpha / 3,
+            ),
+          )
+        }
       }
       // Boss AoE ground marker
       if e.telegraph_kind == 4 {
@@ -308,6 +526,14 @@ fn @types.Game::draw_enemies_3d(game : @types.Game) -> Unit {
           0.05,
           3.0,
           @raylib.Color::new(255, 50, 30, glow_alpha / 3),
+        )
+        // Inner danger ring
+        @raylib.draw_cube(
+          @raylib.Vector3::new(game.player_x, 0.06, game.player_z),
+          2.0,
+          0.04,
+          2.0,
+          @raylib.Color::new(255, 80, 30, glow_alpha / 2),
         )
       }
     }

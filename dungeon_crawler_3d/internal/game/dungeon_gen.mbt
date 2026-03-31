@@ -708,11 +708,13 @@ fn @types.Game::place_shop(game : @types.Game) -> Unit {
   let sx = room.center_x()
   let sy = room.center_y()
   @types.set_tile(game, sx, sy, @types.tile_shop)
-  // Generate shop items
+  // Generate randomized shop items per floor (rotating stock)
   for i in 0..<@types.max_shop_items {
     game.shop_items[i].active = true
-    game.shop_items[i].kind = @levels.get_shop_item_type(i)
-    game.shop_items[i].price = @levels.get_shop_item_price(i)
+    let roll = @types.rand_next(game)
+    let item_data = @levels.get_random_shop_item(game.current_floor, roll)
+    game.shop_items[i].kind = item_data.0
+    game.shop_items[i].price = item_data.1
     game.shop_items[i].name_idx = i
     game.shop_items[i].stat_bonus = 0
   }
@@ -735,9 +737,10 @@ fn @types.Game::place_shrine(game : @types.Game) -> Unit {
   let sx = room.center_x()
   let sy = room.center_y()
   @types.set_tile(game, sx, sy, @types.tile_shrine)
-  // Generate shrine options
-  game.shrine_options[0] = 0 // HP bonus
-  game.shrine_options[1] = 1 // Mana bonus
-  game.shrine_options[2] = 2 // ATK bonus
+  // Generate build-weighted shrine boons
+  @types.generate_shrine_boons(game)
+  game.shrine_options[0] = game.shrine_boon_ids[0]
+  game.shrine_options[1] = game.shrine_boon_ids[1]
+  game.shrine_options[2] = game.shrine_boon_ids[2]
   game.shrine_used = false
 }

@@ -1023,4 +1023,201 @@ pub fn get_boss_phase(hp : Int, max_hp : Int) -> Int {
   }
 }
 
+// Hitstop
+
+///|
+/// Triggers hitstop (a brief game-freeze on impactful hits).
+pub fn trigger_hitstop(game : Game, duration : Float) -> Unit {
+  if duration > game.hitstop_timer {
+    game.hitstop_timer = duration
+  }
+}
+
+///|
+/// Updates the hitstop timer. Returns true when the game should be frozen.
+pub fn update_hitstop(game : Game, dt : Float) -> Bool {
+  if game.hitstop_timer > 0.0 {
+    game.hitstop_timer -= dt
+    if game.hitstop_timer < 0.0 {
+      game.hitstop_timer = 0.0
+    }
+    true
+  } else {
+    false
+  }
+}
+
+///|
+/// Returns a short display name for a buff kind.
+pub fn get_buff_name(kind : Int) -> String {
+  if kind == buff_speed {
+    "SPD"
+  } else if kind == buff_strength {
+    "STR"
+  } else if kind == buff_shield {
+    "SHD"
+  } else {
+    "BUF"
+  }
+}
+
+///|
+/// Returns RGB color for a buff kind.
+pub fn get_buff_color(kind : Int) -> (Int, Int, Int) {
+  if kind == buff_speed {
+    (100, 255, 100)
+  } else if kind == buff_strength {
+    (255, 100, 80)
+  } else if kind == buff_shield {
+    (80, 150, 255)
+  } else {
+    (200, 200, 200)
+  }
+}
+
+// Weapon discovery helpers
+
+///|
+/// Returns the weapon kind index (0..5) for discovered_weapons array.
+pub fn weapon_kind_index(w : WeaponKind) -> Int {
+  match w {
+    Sword => 0
+    Axe => 1
+    Mace => 2
+    Dagger => 3
+    Staff => 4
+    Bow => 5
+  }
+}
+
+///|
+/// Returns weapon kind from index.
+pub fn weapon_kind_from_index(i : Int) -> WeaponKind {
+  if i == 0 {
+    Sword
+  } else if i == 1 {
+    Axe
+  } else if i == 2 {
+    Mace
+  } else if i == 3 {
+    Dagger
+  } else if i == 4 {
+    Staff
+  } else {
+    Bow
+  }
+}
+
+///|
+/// Cycles to the next discovered weapon.
+pub fn next_discovered_weapon(game : Game) -> WeaponKind {
+  let current = weapon_kind_index(game.player_weapon)
+  // Find the next discovered weapon after current
+  for offset in 1..<=max_discovered_weapons {
+    let idx = (current + offset) % max_discovered_weapons
+    if game.discovered_weapons[idx] {
+      return weapon_kind_from_index(idx)
+    }
+  }
+  game.player_weapon
+}
+
+///|
+/// Rolls a random weapon affix for rare+ items.
+pub fn roll_affix(game : Game, rarity : Int) -> WeaponAffix {
+  if rarity < 2 {
+    return AffixNone
+  }
+  let roll = rand_range(game, 0, affix_count - 1)
+  if roll == 0 {
+    AffixVampiric
+  } else if roll == 1 {
+    AffixFlaming
+  } else if roll == 2 {
+    AffixIcy
+  } else if roll == 3 {
+    AffixSwift
+  } else if roll == 4 {
+    AffixHeavy
+  } else {
+    AffixKeen
+  }
+}
+
+///|
+/// Generates 3 random level-up card indices (no duplicates).
+pub fn roll_levelup_cards(game : Game) -> Unit {
+  game.levelup_cards[0] = rand_range(game, 0, levelup_card_count - 1)
+  game.levelup_cards[1] = rand_range(game, 0, levelup_card_count - 1)
+  // Avoid duplicate with first
+  while game.levelup_cards[1] == game.levelup_cards[0] {
+    game.levelup_cards[1] = rand_range(game, 0, levelup_card_count - 1)
+  }
+  game.levelup_cards[2] = rand_range(game, 0, levelup_card_count - 1)
+  // Avoid duplicates with first two
+  while game.levelup_cards[2] == game.levelup_cards[0] ||
+    game.levelup_cards[2] == game.levelup_cards[1] {
+    game.levelup_cards[2] = rand_range(game, 0, levelup_card_count - 1)
+  }
+}
+
+///|
+/// Returns name and description for a level-up card type.
+pub fn get_levelup_card_text(card_id : Int) -> (String, String) {
+  if card_id == 0 {
+    ("+5 Max HP", "Increases maximum health by 5")
+  } else if card_id == 1 {
+    ("+3 ATK", "Increases attack power by 3")
+  } else if card_id == 2 {
+    ("+10 Max Mana", "Increases maximum mana by 10")
+  } else if card_id == 3 {
+    ("+2 DEF", "Increases defense by 2")
+  } else if card_id == 4 {
+    ("+5% Crit", "Increases crit chance via DEX +5")
+  } else {
+    ("+2 STR/DEX/INT", "Increases all stats by 2")
+  }
+}
+
+///|
+/// Generates build-weighted shrine boons based on player stats.
+pub fn generate_shrine_boons(game : Game) -> Unit {
+  // Warrior-leaning: high HP build
+  if game.player_max_hp > 130 && game.player_str > 12 {
+    game.shrine_boon_names[0] = "Berserker's Fury (+20% DMG < 30% HP)"
+    game.shrine_boon_ids[0] = 10
+  } else {
+    game.shrine_boon_names[0] = "+15 Max HP"
+    game.shrine_boon_ids[0] = 0
+  }
+  // Mage-leaning: high INT build
+  if game.player_int_stat > 14 && game.player_max_mana > 70 {
+    game.shrine_boon_names[1] = "Mana Shield (absorb DMG with mana)"
+    game.shrine_boon_ids[1] = 11
+  } else {
+    game.shrine_boon_names[1] = "+10 Max Mana"
+    game.shrine_boon_ids[1] = 1
+  }
+  // Rogue-leaning: high DEX build
+  if game.player_dex > 14 {
+    game.shrine_boon_names[2] = "Shadow Step (invis after dodge)"
+    game.shrine_boon_ids[2] = 12
+  } else {
+    game.shrine_boon_names[2] = "+5 ATK"
+    game.shrine_boon_ids[2] = 2
+  }
+}
+
+///|
+/// Buff kind id for berserker fury effect.
+pub let buff_berserker : Int = 3
+
+///|
+/// Buff kind id for mana shield effect.
+pub let buff_mana_shield : Int = 4
+
+///|
+/// Buff kind id for shadow step effect.
+pub let buff_shadow_step : Int = 5
+
 // Get theme name

@@ -10,6 +10,8 @@ pub fn draw_ui(game : @types.Game) -> Unit {
       game.draw_minimap()
       game.draw_boss_health_bar()
       game.draw_equipment_hud()
+      game.draw_message_log()
+      game.draw_status_chips()
       draw_crosshair()
     }
     StatePaused => {
@@ -34,6 +36,10 @@ pub fn draw_ui(game : @types.Game) -> Unit {
     StateShrine => {
       game.draw_hud()
       game.draw_shrine()
+    }
+    StateEquipPopup => {
+      game.draw_hud()
+      game.draw_equip_popup()
     }
   }
   // Damage flash
@@ -416,7 +422,7 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
   )
   // Controls hint
   @draw.draw_text(
-    "LMB: Attack | RMB: Spell | 1-6: Select Spell | Tab: Weapon",
+    "LMB: Attack | RMB: Spell | 1-6: Spell | Tab: Next Weapon | E: Interact",
     stat_x + 100,
     @types.screen_height - 18,
     10,
@@ -504,12 +510,28 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
           @raylib.Color::new(140, 100, 50, 255),
         )
       } else if tile == @types.tile_stairs {
+        // Stairs: green arrow icon
         @raylib.draw_rectangle(
           px,
           py,
           cs,
           cs,
-          @raylib.Color::new(80, 200, 255, 255),
+          @raylib.Color::new(100, 95, 110, 255),
+        )
+        // Arrow pointing down (V shape)
+        @raylib.draw_line(
+          px + cs / 2,
+          py + cs,
+          px,
+          py,
+          @raylib.Color::new(80, 255, 80, 255),
+        )
+        @raylib.draw_line(
+          px + cs / 2,
+          py + cs,
+          px + cs,
+          py,
+          @raylib.Color::new(80, 255, 80, 255),
         )
       } else if tile == @types.tile_chest {
         @raylib.draw_rectangle(
@@ -518,6 +540,85 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
           cs,
           cs,
           @raylib.Color::new(255, 200, 50, 255),
+        )
+      } else if tile == @types.tile_shop {
+        // Shop: gold coin icon
+        @raylib.draw_rectangle(
+          px,
+          py,
+          cs,
+          cs,
+          @raylib.Color::new(100, 95, 110, 255),
+        )
+        @raylib.draw_circle(
+          px + cs / 2,
+          py + cs / 2,
+          Float::from_int(cs) / 2.0,
+          @raylib.Color::new(255, 215, 0, 255),
+        )
+      } else if tile == @types.tile_shrine {
+        // Shrine: purple star
+        @raylib.draw_rectangle(
+          px,
+          py,
+          cs,
+          cs,
+          @raylib.Color::new(100, 95, 110, 255),
+        )
+        @raylib.draw_circle(
+          px + cs / 2,
+          py + cs / 2,
+          Float::from_int(cs) / 2.0,
+          @raylib.Color::new(180, 80, 255, 255),
+        )
+      } else if tile == @types.tile_trap {
+        // Trap: red triangle (approximated as small red dot)
+        @raylib.draw_rectangle(
+          px,
+          py,
+          cs,
+          cs,
+          @raylib.Color::new(100, 95, 110, 255),
+        )
+        // Red triangle: top point and two bottom corners via lines
+        @raylib.draw_line(
+          px + cs / 2,
+          py,
+          px,
+          py + cs,
+          @raylib.Color::new(255, 60, 60, 255),
+        )
+        @raylib.draw_line(
+          px + cs / 2,
+          py,
+          px + cs,
+          py + cs,
+          @raylib.Color::new(255, 60, 60, 255),
+        )
+        @raylib.draw_line(
+          px,
+          py + cs,
+          px + cs,
+          py + cs,
+          @raylib.Color::new(255, 60, 60, 255),
+        )
+      } else if tile == @types.tile_locked_door {
+        // Locked door: yellow square
+        @raylib.draw_rectangle(
+          px,
+          py,
+          cs,
+          cs,
+          @raylib.Color::new(200, 180, 50, 255),
+        )
+      } else {
+        // Other walkable tiles
+        @raylib.draw_rectangle(
+          px,
+          py,
+          cs,
+          cs,
+          @raylib.Color::new(100, 95, 110, 255),
         )
       }
     }
@@ -543,13 +644,30 @@ fn @types.Game::draw_minimap(game : @types.Game) -> Unit {
     let ex = mx + (egx - start_gx) * @types.minimap_cell
     let ey = my + (egz - start_gz) * @types.minimap_cell
     if ex >= mx && ex < mx + ms && ey >= my && ey < my + ms {
-      @raylib.draw_rectangle(
-        ex,
-        ey,
-        @types.minimap_cell,
-        @types.minimap_cell,
-        @raylib.Color::new(255, 50, 50, 255),
-      )
+      if e.kind == DragonBoss {
+        // Boss: red skull icon (larger red dot with dark center)
+        let bcs = @types.minimap_cell
+        @raylib.draw_circle(
+          ex + bcs / 2,
+          ey + bcs / 2,
+          Float::from_int(bcs),
+          @raylib.Color::new(255, 30, 30, 255),
+        )
+        @raylib.draw_circle(
+          ex + bcs / 2,
+          ey + bcs / 2,
+          Float::from_int(bcs) * 0.4,
+          @raylib.Color::new(40, 0, 0, 255),
+        )
+      } else {
+        @raylib.draw_rectangle(
+          ex,
+          ey,
+          @types.minimap_cell,
+          @types.minimap_cell,
+          @raylib.Color::new(255, 50, 50, 255),
+        )
+      }
     }
   }
   // Draw loot on minimap
@@ -683,34 +801,94 @@ fn @types.Game::draw_level_up_overlay(game : @types.Game) -> Unit {
     0,
     @types.screen_width,
     @types.screen_height,
-    @raylib.Color::new(0, 0, 0, 120),
+    @raylib.Color::new(0, 0, 0, 160),
   )
   let text = "LEVEL UP!"
   let tw = @draw.measure_text(text, 56)
   @draw.draw_text(
     text,
     (@types.screen_width - tw) / 2,
-    @types.screen_height / 2 - 80,
+    100,
     56,
     @raylib.Color::new(255, 215, 0, 255),
   )
   let stats = "Level \{game.player_level} | HP: \{game.player_max_hp} | ATK: \{game.player_atk} | DEF: \{game.player_def}"
-  let sw = @draw.measure_text(stats, 22)
+  let sw = @draw.measure_text(stats, 20)
   @draw.draw_text(
     stats,
     (@types.screen_width - sw) / 2,
-    @types.screen_height / 2 - 10,
-    22,
+    170,
+    20,
     @raylib.Color::new(255, 255, 200, 255),
   )
-  let hint = "Press Enter to continue"
-  let hw = @draw.measure_text(hint, 18)
+  // Draw 3 level-up card choices
+  let choose_text = "Choose a bonus:"
+  let ctw = @draw.measure_text(choose_text, 22)
+  @draw.draw_text(
+    choose_text,
+    (@types.screen_width - ctw) / 2,
+    210,
+    22,
+    @raylib.Color::new(200, 200, 220, 255),
+  )
+  for i in 0..<@types.max_levelup_cards {
+    let card_id = game.levelup_cards[i]
+    let card_info = @types.get_levelup_card_text(card_id)
+    let y = 260 + i * 70
+    let is_selected = game.levelup_card_cursor == i
+    if is_selected {
+      @raylib.draw_rectangle(
+        @types.screen_width / 2 - 200,
+        y - 8,
+        400,
+        55,
+        @raylib.Color::new(60, 50, 20, 255),
+      )
+      @raylib.draw_rectangle_lines(
+        @types.screen_width / 2 - 200,
+        y - 8,
+        400,
+        55,
+        @raylib.Color::new(255, 215, 0, 255),
+      )
+    }
+    let prefix = if is_selected { "> " } else { "  " }
+    let name_color = if is_selected {
+      @raylib.Color::new(255, 220, 80, 255)
+    } else {
+      @raylib.Color::new(180, 170, 150, 255)
+    }
+    let card_name = prefix + card_info.0
+    let nw = @draw.measure_text(card_name, 28)
+    @draw.draw_text(
+      card_name,
+      (@types.screen_width - nw) / 2,
+      y,
+      28,
+      name_color,
+    )
+    let desc_color = if is_selected {
+      @raylib.Color::new(170, 170, 180, 255)
+    } else {
+      @raylib.Color::new(120, 120, 130, 255)
+    }
+    let dw = @draw.measure_text(card_info.1, 14)
+    @draw.draw_text(
+      card_info.1,
+      (@types.screen_width - dw) / 2,
+      y + 30,
+      14,
+      desc_color,
+    )
+  }
+  let hint = "Up/Down: Choose | Enter: Select"
+  let hw = @draw.measure_text(hint, 16)
   @draw.draw_text(
     hint,
     (@types.screen_width - hw) / 2,
-    @types.screen_height / 2 + 40,
-    18,
-    @raylib.Color::new(180, 180, 200, 255),
+    @types.screen_height - 60,
+    16,
+    @raylib.Color::new(150, 150, 160, 255),
   )
 }
 
@@ -889,10 +1067,7 @@ fn @types.Game::draw_shop(game : @types.Game) -> Unit {
     24,
     @raylib.Color::new(255, 215, 0, 255),
   )
-  // Shop items list
-  let item_names : Array[String] = [
-    "Health Potion", "Mana Potion", "Damage Scroll", "Armor Shard", "Key", "Speed Potion",
-  ]
+  // Shop items list (dynamic names from loot kind)
   for i in 0..<@types.max_shop_items {
     let item = game.shop_items[i]
     if !item.active {
@@ -917,7 +1092,7 @@ fn @types.Game::draw_shop(game : @types.Game) -> Unit {
         @raylib.Color::new(255, 200, 80, 255),
       )
     }
-    let name = if i < item_names.length() { item_names[i] } else { "Item" }
+    let name = @types.get_loot_name(item.kind)
     let prefix = if is_selected { "> " } else { "  " }
     let name_color = if !can_afford {
       @raylib.Color::new(120, 80, 80, 255)
@@ -998,39 +1173,44 @@ fn @types.Game::draw_shrine(game : @types.Game) -> Unit {
       20,
       @raylib.Color::new(200, 200, 220, 255),
     )
-    let option_names : Array[String] = ["+15 Max HP", "+10 Max Mana", "+5 ATK"]
     for i in 0..<3 {
       let y = 200 + i * 55
       let is_selected = game.shrine_cursor == i
       if is_selected {
         @raylib.draw_rectangle(
-          @types.screen_width / 2 - 180,
+          @types.screen_width / 2 - 220,
           y - 5,
-          360,
+          440,
           45,
           @raylib.Color::new(20, 40, 60, 255),
         )
         @raylib.draw_rectangle_lines(
-          @types.screen_width / 2 - 180,
+          @types.screen_width / 2 - 220,
           y - 5,
-          360,
+          440,
           45,
           @raylib.Color::new(120, 200, 255, 255),
         )
       }
       let prefix = if is_selected { "> " } else { "  " }
+      // Use dynamic boon names based on build
+      let boon_id = game.shrine_boon_ids[i]
       let opt_color = if is_selected {
-        @raylib.Color::new(120, 220, 255, 255)
+        if boon_id >= 10 {
+          @raylib.Color::new(255, 180, 80, 255) // Special boons are gold
+        } else {
+          @raylib.Color::new(120, 220, 255, 255)
+        }
       } else {
         @raylib.Color::new(160, 160, 170, 255)
       }
-      let opt_text = prefix + option_names[i]
-      let ow = @draw.measure_text(opt_text, 26)
+      let opt_text = prefix + game.shrine_boon_names[i]
+      let ow = @draw.measure_text(opt_text, 24)
       @draw.draw_text(
         opt_text,
         (@types.screen_width - ow) / 2,
         y,
-        26,
+        24,
         opt_color,
       )
     }
@@ -1147,6 +1327,118 @@ fn @types.Game::draw_boss_health_bar(game : @types.Game) -> Unit {
 }
 
 ///|
+/// Draws a scrolling message stack in the bottom-left showing the last 5 messages with fade.
+fn @types.Game::draw_message_log(game : @types.Game) -> Unit {
+  let log_x = 15
+  let log_base_y = @types.screen_height - 200
+  let line_height = 16
+  let max_shown = 5
+  let mut drawn = 0
+  for i in 0..<game.messages.length() {
+    if drawn >= max_shown {
+      break
+    }
+    let msg = game.messages[i]
+    if msg.timer <= 0.0 || msg.text == "" {
+      continue
+    }
+    // Fade based on timer: full alpha when > 2s, fading after
+    let alpha_f = @types.clampf(msg.timer / 2.0, 0.0, 1.0)
+    let a = (alpha_f * 220.0).to_int().clamp(min=0, max=220)
+    let y = log_base_y - drawn * line_height
+    // Background strip for readability
+    let tw = @draw.measure_text(msg.text, 12)
+    @raylib.draw_rectangle(
+      log_x - 2,
+      y - 1,
+      tw + 6,
+      14,
+      @raylib.Color::new(0, 0, 0, a / 2),
+    )
+    @draw.draw_text(
+      msg.text,
+      log_x,
+      y,
+      12,
+      @raylib.Color::new(msg.r, msg.g, msg.b, a),
+    )
+    drawn += 1
+  }
+}
+
+///|
+/// Draws active buff/poison/shield timers as small colored pills near the health bar.
+fn @types.Game::draw_status_chips(game : @types.Game) -> Unit {
+  let chip_x_start = 270
+  let chip_y = @types.screen_height - 78
+  let chip_w = 42
+  let chip_h = 16
+  let chip_spacing = 46
+  let mut idx = 0
+  // Buffs
+  for buff in game.buffs {
+    if !buff.active {
+      continue
+    }
+    let x = chip_x_start + idx * chip_spacing
+    let colors = @types.get_buff_color(buff.kind)
+    let name = @types.get_buff_name(buff.kind)
+    let timer_secs = buff.timer.to_int()
+    // Pill background
+    @raylib.draw_rectangle(
+      x,
+      chip_y,
+      chip_w,
+      chip_h,
+      @raylib.Color::new(colors.0, colors.1, colors.2, 60),
+    )
+    @raylib.draw_rectangle_lines(
+      x,
+      chip_y,
+      chip_w,
+      chip_h,
+      @raylib.Color::new(colors.0, colors.1, colors.2, 180),
+    )
+    // Buff name and remaining time
+    let chip_text = "\{name} \{timer_secs}"
+    @draw.draw_text(
+      chip_text,
+      x + 3,
+      chip_y + 2,
+      10,
+      @raylib.Color::new(colors.0, colors.1, colors.2, 230),
+    )
+    idx += 1
+  }
+  // Poison indicator
+  if game.poison_remaining > 0.0 {
+    let x = chip_x_start + idx * chip_spacing
+    let timer_secs = game.poison_remaining.to_int()
+    @raylib.draw_rectangle(
+      x,
+      chip_y,
+      chip_w,
+      chip_h,
+      @raylib.Color::new(80, 200, 30, 60),
+    )
+    @raylib.draw_rectangle_lines(
+      x,
+      chip_y,
+      chip_w,
+      chip_h,
+      @raylib.Color::new(80, 200, 30, 180),
+    )
+    @draw.draw_text(
+      "PSN \{timer_secs}",
+      x + 3,
+      chip_y + 2,
+      10,
+      @raylib.Color::new(80, 200, 30, 230),
+    )
+  }
+}
+
+///|
 /// Draws equipment slot indicators on the HUD.
 fn @types.Game::draw_equipment_hud(game : @types.Game) -> Unit {
   let base_x = 15
@@ -1156,7 +1448,10 @@ fn @types.Game::draw_equipment_hud(game : @types.Game) -> Unit {
   let wpn_g = @types.get_rarity_color_g(game.equip_weapon_rarity)
   let wpn_b = @types.get_rarity_color_b(game.equip_weapon_rarity)
   let wpn_name = @types.get_weapon_name(game.player_weapon)
-  let wpn_text = if game.equip_weapon_bonus > 0 {
+  let affix_name = @types.get_affix_name(game.weapon_affix)
+  let wpn_text = if affix_name != "" && game.equip_weapon_bonus > 0 {
+    affix_name + " " + wpn_name + " +\{game.equip_weapon_bonus}"
+  } else if game.equip_weapon_bonus > 0 {
     wpn_name + " +\{game.equip_weapon_bonus}"
   } else {
     wpn_name
@@ -1211,4 +1506,80 @@ fn @types.Game::draw_equipment_hud(game : @types.Game) -> Unit {
       @raylib.Color::new(200, 200, 50, 255),
     )
   }
+}
+
+///|
+/// Draws the equipment comparison popup when the player finds new gear.
+fn @types.Game::draw_equip_popup(game : @types.Game) -> Unit {
+  @raylib.draw_rectangle(
+    0,
+    0,
+    @types.screen_width,
+    @types.screen_height,
+    @raylib.Color::new(0, 0, 0, 180),
+  )
+  let title = "EQUIPMENT FOUND"
+  let tw = @draw.measure_text(title, 40)
+  @draw.draw_text(
+    title,
+    (@types.screen_width - tw) / 2,
+    100,
+    40,
+    @raylib.Color::new(255, 220, 80, 255),
+  )
+  let rr = @types.get_rarity_color_r(game.pending_equip_rarity)
+  let rg = @types.get_rarity_color_g(game.pending_equip_rarity)
+  let rb = @types.get_rarity_color_b(game.pending_equip_rarity)
+  let rarity_name = @types.get_rarity_name(game.pending_equip_rarity)
+  let item_name = if game.pending_equip_kind == @types.loot_equip_weapon {
+    let wpn = @types.get_weapon_name(game.pending_equip_weapon_type)
+    let affix = @types.get_affix_name(game.pending_equip_affix)
+    if affix == "" {
+      "\{rarity_name} \{wpn} +\{game.pending_equip_bonus}"
+    } else {
+      "\{affix} \{rarity_name} \{wpn} +\{game.pending_equip_bonus}"
+    }
+  } else if game.pending_equip_kind == @types.loot_equip_armor {
+    "\{rarity_name} Armor +\{game.pending_equip_bonus}"
+  } else {
+    "\{rarity_name} \{@types.get_ring_name(game.pending_equip_ring_kind)}"
+  }
+  let iw = @draw.measure_text(item_name, 28)
+  @draw.draw_text(
+    item_name,
+    (@types.screen_width - iw) / 2,
+    180,
+    28,
+    @raylib.Color::new(rr, rg, rb, 255),
+  )
+  // Current equipment comparison
+  let current_text = if game.pending_equip_kind == @types.loot_equip_weapon {
+    "Current: \{@types.get_weapon_name(game.player_weapon)} +\{game.equip_weapon_bonus}"
+  } else if game.pending_equip_kind == @types.loot_equip_armor {
+    "Current: Armor +\{game.equip_armor_bonus}"
+  } else {
+    let ring_str = if game.equip_ring_kind >= 0 {
+      @types.get_ring_name(game.equip_ring_kind)
+    } else {
+      "None"
+    }
+    "Current: \{ring_str}"
+  }
+  let cw = @draw.measure_text(current_text, 20)
+  @draw.draw_text(
+    current_text,
+    (@types.screen_width - cw) / 2,
+    230,
+    20,
+    @raylib.Color::new(160, 160, 170, 255),
+  )
+  let hint = "E: Equip | Q: Sell"
+  let hw = @draw.measure_text(hint, 22)
+  @draw.draw_text(
+    hint,
+    (@types.screen_width - hw) / 2,
+    300,
+    22,
+    @raylib.Color::new(200, 200, 220, 255),
+  )
 }

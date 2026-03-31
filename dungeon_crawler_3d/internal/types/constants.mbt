@@ -216,6 +216,7 @@ pub(all) enum GameState {
   StateShop
   StateShrine
   StateClassSelect
+  StateEquipPopup
 } derive(Eq)
 
 ///|
@@ -231,6 +232,7 @@ pub fn GameState::to_int(self : GameState) -> Int {
     StateShop => 7
     StateShrine => 8
     StateClassSelect => 11
+    StateEquipPopup => 12
   }
 }
 
@@ -246,6 +248,7 @@ pub fn GameState::from_int(v : Int) -> GameState {
     5 => StateFloorComplete
     7 => StateShop
     8 => StateShrine
+    12 => StateEquipPopup
     _ => StateClassSelect
   }
 }
@@ -855,6 +858,62 @@ pub let ring_gold_find : Int = 3
 ///|
 /// Ring effect: critical hit chance bonus.
 pub let ring_crit_chance : Int = 4
+
+// Weapon affixes
+
+///|
+/// Weapon affix variant.
+pub(all) enum WeaponAffix {
+  AffixNone
+  AffixVampiric
+  AffixFlaming
+  AffixIcy
+  AffixSwift
+  AffixHeavy
+  AffixKeen
+} derive(Eq)
+
+///|
+/// Returns display name for a weapon affix.
+pub fn get_affix_name(affix : WeaponAffix) -> String {
+  match affix {
+    AffixNone => ""
+    AffixVampiric => "Vampiric"
+    AffixFlaming => "Flaming"
+    AffixIcy => "Icy"
+    AffixSwift => "Swift"
+    AffixHeavy => "Heavy"
+    AffixKeen => "Keen"
+  }
+}
+
+///|
+/// Total number of non-None affixes.
+pub let affix_count : Int = 6
+
+///|
+/// Maximum discovered weapon slots.
+pub let max_discovered_weapons : Int = 6
+
+///|
+/// Maximum level-up card choices.
+pub let max_levelup_cards : Int = 3
+
+///|
+/// Total number of possible level-up card types.
+pub let levelup_card_count : Int = 6
+
+///|
+/// Fire DOT damage per tick.
+pub let fire_dot_damage : Int = 3
+
+///|
+/// Fire DOT duration in seconds.
+pub let fire_dot_duration : Float = 3.0
+
+///|
+/// Icy slow duration in seconds.
+pub let icy_slow_duration : Float = 2.0
 
 // Boss intro duration
 

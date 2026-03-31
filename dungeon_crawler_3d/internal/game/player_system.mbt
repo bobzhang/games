@@ -86,9 +86,14 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
       } else {
         game.perform_melee_attack()
       }
-      game.attack_cooldown_timer = @types.get_weapon_cooldown(
-        game.player_weapon,
-      )
+      // Apply affix speed modifiers
+      let mut cd = @types.get_weapon_cooldown(game.player_weapon)
+      if game.weapon_affix == AffixSwift {
+        cd *= 0.8 // 20% faster
+      } else if game.weapon_affix == AffixHeavy {
+        cd *= 1.2 // 20% slower
+      }
+      game.attack_cooldown_timer = cd
       game.swing_active = true
       game.swing_timer = @types.swing_duration
     }
@@ -105,9 +110,9 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
       game.spell_cooldown = 0.0
     }
   }
-  // Cycle weapon with Tab
+  // Cycle weapon with Tab - only discovered weapons
   if @raylib.is_key_pressed(@raylib.KeyTab) {
-    game.player_weapon = @types.next_weapon(game.player_weapon)
+    game.player_weapon = @types.next_discovered_weapon(game)
     @types.add_message(
       game,
       "Weapon: \{@types.get_weapon_name(game.player_weapon)}",
@@ -247,17 +252,31 @@ fn @types.Game::perform_melee_attack(game : @types.Game) -> Unit {
     }
     // Hit! Use equipment-enhanced attack
     let raw_atk = @types.calc_player_attack_with_equip(game)
-    let damage = (1).max(raw_atk - e.def)
-    // Critical hit chance: dagger bonus + ring of precision
+    // Heavy affix: +30% damage
+    let affix_atk = if game.weapon_affix == AffixHeavy {
+      (Float::from_int(raw_atk) * 1.3).to_int()
+    } else {
+      raw_atk
+    }
+    // Berserker's Fury: +20% DMG when below 30% HP
+    let berserk_atk = if @types.has_buff(game, @types.buff_berserker) &&
+      game.player_hp < game.player_max_hp * 30 / 100 {
+      (Float::from_int(affix_atk) * 1.2).to_int()
+    } else {
+      affix_atk
+    }
+    let damage = (1).max(berserk_atk - e.def)
+    // Critical hit chance: dagger bonus + ring of precision + Keen affix
     let base_crit = game.player_dex / 2
     let ring_crit = if game.equip_ring_kind == @types.ring_crit_chance {
       game.equip_ring_bonus
     } else {
       0
     }
+    let keen_crit = if game.weapon_affix == AffixKeen { 15 } else { 0 }
     let crit_chance = match game.player_weapon {
-      Dagger => base_crit + 15 + ring_crit
-      _ => base_crit + ring_crit
+      Dagger => base_crit + 15 + ring_crit + keen_crit
+      _ => base_crit + ring_crit + keen_crit
     }
     let is_crit = @types.rand_range(game, 0, 99) < crit_chance
     let final_damage = if is_crit { damage * 2 } else { damage }
@@ -265,6 +284,23 @@ fn @types.Game::perform_melee_attack(game : @types.Game) -> Unit {
     e.hit_flash = 0.3
     e.alerted = true
     hit_any = true
+    // Weapon affix on-hit effects
+    // Vampiric: heal 5% on hit
+    if game.weapon_affix == AffixVampiric {
+      let vamp_heal = (1).max(final_damage * 5 / 100)
+      game.player_hp = (game.player_hp + vamp_heal).min(game.player_max_hp)
+      @types.spawn_particles(game, game.player_x, 1.5, game.player_z, 2, 50, 200, 50)
+    }
+    // Flaming: apply fire DOT
+    if game.weapon_affix == AffixFlaming {
+      game.enemy_fire_dot[i] = @types.fire_dot_duration
+      @types.spawn_particles(game, e.x, 1.2, e.z, 4, 255, 100, 30)
+    }
+    // Icy: slow enemy
+    if game.weapon_affix == AffixIcy {
+      e.slow_timer = @types.icy_slow_duration
+      @types.spawn_particles(game, e.x, 1.0, e.z, 4, 100, 180, 255)
+    }
     // Life steal ring: heal on hit
     if game.equip_ring_kind == @types.ring_life_steal &&
       game.equip_ring_bonus > 0 {
@@ -322,6 +358,12 @@ fn @types.Game::perform_melee_attack(game : @types.Game) -> Unit {
         @types.trigger_shake(game, 0.04, 0.12)
       }
     }
+    // Stagger: all enemies briefly pause when hit
+    if e.stun_timer < 0.15 {
+      e.stun_timer = 0.15
+    }
+    // Hitstop on melee hit
+    @types.trigger_hitstop(game, 0.04)
     // Floating damage number
     if is_crit {
       @types.spawn_damage_number(
@@ -364,6 +406,11 @@ fn @types.Game::perform_melee_attack(game : @types.Game) -> Unit {
       )
     }
     if e.hp <= 0 {
+      // Crit kills get extra hitstop
+      if is_crit {
+        @types.trigger_hitstop(game, 0.08)
+        @types.trigger_shake(game, 0.15, 0.30)
+      }
       kill_enemy(game, i)
     }
   }
@@ -890,6 +937,10 @@ pub fn kill_enemy(game : @types.Game, idx : Int) -> Unit {
         // Equipment: weapon drop
         l.kind = @types.loot_equip_weapon
         l.value = @types.rand_range(game, 2, 5 + game.current_floor)
+        // Assign random weapon type
+        l.weapon_type = @types.weapon_kind_from_index(
+          @types.rand_range(game, 0, @types.max_discovered_weapons - 1),
+        )
       } else if roll == 9 {
         // Equipment: armor drop
         l.kind = @types.loot_equip_armor
@@ -921,6 +972,10 @@ pub fn kill_enemy(game : @types.Game, idx : Int) -> Unit {
       }
       if is_boss {
         l.rarity = (3).max(l.rarity)
+      }
+      // Roll affix for rare+ weapon drops
+      if l.kind == @types.loot_equip_weapon {
+        l.affix = @types.roll_affix(game, l.rarity)
       }
     }
   }
@@ -1021,79 +1076,42 @@ fn @types.Game::check_loot_pickup(game : @types.Game) -> Unit {
         @types.add_message(game, "Got a Boss Key!", 255, 100, 100)
         @types.spawn_particles(game, l.x, 0.5, l.z, 10, 255, 100, 100)
       } else if l.kind == @types.loot_equip_weapon {
-        // Equipment weapon: upgrade if better
+        // Equipment weapon: show comparison popup
         let bonus = l.value + l.rarity * 2
-        let rarity_name = @types.get_rarity_name(l.rarity)
-        if bonus > game.equip_weapon_bonus {
-          game.equip_weapon_bonus = bonus
-          game.equip_weapon_rarity = l.rarity
-          let cr = @types.get_rarity_color_r(l.rarity)
-          let cg = @types.get_rarity_color_g(l.rarity)
-          let cb = @types.get_rarity_color_b(l.rarity)
-          @types.add_message(
-            game,
-            "Equipped \{rarity_name} Weapon +\{bonus}!",
-            cr,
-            cg,
-            cb,
-          )
-          @types.spawn_particles(game, l.x, 0.5, l.z, 12, cr, cg, cb)
-        } else {
-          // Sell for gold instead
-          let gold = 10 + l.rarity * 15
-          game.player_gold += gold
-          game.player_total_gold += gold
-          @types.add_message(game, "Sold weapon for \{gold} gold", 255, 215, 0)
-        }
+        game.pending_equip_kind = @types.loot_equip_weapon
+        game.pending_equip_bonus = bonus
+        game.pending_equip_rarity = l.rarity
+        game.pending_equip_affix = l.affix
+        game.pending_equip_weapon_type = l.weapon_type
+        game.pending_equip_ring_kind = -1
+        game.state = StateEquipPopup
+        @raylib.enable_cursor()
+        @types.spawn_particles(game, l.x, 0.5, l.z, 8, 200, 200, 255)
       } else if l.kind == @types.loot_equip_armor {
+        // Equipment armor: show comparison popup
         let bonus = l.value + l.rarity * 2
-        let rarity_name = @types.get_rarity_name(l.rarity)
-        if bonus > game.equip_armor_bonus {
-          game.equip_armor_bonus = bonus
-          game.equip_armor_rarity = l.rarity
-          let cr = @types.get_rarity_color_r(l.rarity)
-          let cg = @types.get_rarity_color_g(l.rarity)
-          let cb = @types.get_rarity_color_b(l.rarity)
-          @types.add_message(
-            game,
-            "Equipped \{rarity_name} Armor +\{bonus}!",
-            cr,
-            cg,
-            cb,
-          )
-          @types.spawn_particles(game, l.x, 0.5, l.z, 12, cr, cg, cb)
-        } else {
-          let gold = 10 + l.rarity * 15
-          game.player_gold += gold
-          game.player_total_gold += gold
-          @types.add_message(game, "Sold armor for \{gold} gold", 255, 215, 0)
-        }
+        game.pending_equip_kind = @types.loot_equip_armor
+        game.pending_equip_bonus = bonus
+        game.pending_equip_rarity = l.rarity
+        game.pending_equip_affix = AffixNone
+        game.pending_equip_weapon_type = Sword
+        game.pending_equip_ring_kind = -1
+        game.state = StateEquipPopup
+        @raylib.enable_cursor()
+        @types.spawn_particles(game, l.x, 0.5, l.z, 8, 200, 200, 255)
       } else if l.kind == @types.loot_equip_ring {
+        // Equipment ring: show comparison popup
         let ring_kind = l.value.clamp(min=0, max=4)
         let bonus = 2 + l.rarity * 2
-        let rarity_name = @types.get_rarity_name(l.rarity)
-        let ring_name = @types.get_ring_name(ring_kind)
-        if game.equip_ring_kind < 0 || bonus > game.equip_ring_bonus {
-          game.equip_ring_kind = ring_kind
-          game.equip_ring_rarity = l.rarity
-          game.equip_ring_bonus = bonus
-          let cr = @types.get_rarity_color_r(l.rarity)
-          let cg = @types.get_rarity_color_g(l.rarity)
-          let cb = @types.get_rarity_color_b(l.rarity)
-          @types.add_message(
-            game,
-            "Equipped \{rarity_name} \{ring_name}!",
-            cr,
-            cg,
-            cb,
-          )
-          @types.spawn_particles(game, l.x, 0.5, l.z, 12, cr, cg, cb)
-        } else {
-          let gold = 15 + l.rarity * 20
-          game.player_gold += gold
-          game.player_total_gold += gold
-          @types.add_message(game, "Sold ring for \{gold} gold", 255, 215, 0)
-        }
+        game.pending_equip_kind = @types.loot_equip_ring
+        game.pending_equip_bonus = bonus
+        game.pending_equip_rarity = l.rarity
+        game.pending_equip_affix = AffixNone
+        game.pending_equip_weapon_type = Sword
+        game.pending_equip_ring_kind = ring_kind
+        game.state = StateEquipPopup
+        @raylib.enable_cursor()
+        @types.spawn_particles(game, l.x, 0.5, l.z, 8, 200, 200, 255)
       }
       l.active = false
       game.message_text = @types.get_loot_name(l.kind)
@@ -1376,35 +1394,34 @@ fn @types.Game::level_up(game : @types.Game) -> Unit {
   game.player_xp -= game.player_xp_next
   game.player_level += 1
   game.player_xp_next = @levels.get_xp_for_level(game.player_level)
-  game.player_max_hp += @types.hp_per_level
-  game.player_max_mana += @types.mana_per_level
+  // Base level-up: small stat boost + full heal
+  game.player_max_hp += @types.hp_per_level / 2
+  game.player_max_mana += @types.mana_per_level / 2
   game.player_hp = game.player_max_hp // Full heal on level up
   game.player_mana = game.player_max_mana // Full mana restore
-  game.player_atk += @types.atk_per_level
-  game.player_def += @types.def_per_level
+  game.player_atk += 1
+  game.player_def += 1
   // Stat bonuses based on class
   match game.player_class {
     Warrior => {
-      game.player_str += 2
-      game.player_max_hp += 5
-      game.player_hp += 5
+      game.player_str += 1
     }
     Rogue => {
-      game.player_dex += 2
-      game.player_atk += 1
+      game.player_dex += 1
     }
     Mage => {
-      game.player_int_stat += 2
-      game.player_max_mana += 5
-      game.player_mana += 5
+      game.player_int_stat += 1
     }
   }
+  // Roll 3 random level-up card choices
+  @types.roll_levelup_cards(game)
+  game.levelup_card_cursor = 0
   game.level_up_timer = 3.0
   game.message_text = "LEVEL UP! Lv.\{game.player_level}"
   game.message_timer = 3.0
   @types.add_message(
     game,
-    "Level Up! Lv.\{game.player_level} | HP:\{game.player_max_hp} ATK:\{game.player_atk} DEF:\{game.player_def}",
+    "Level Up! Lv.\{game.player_level} - Choose a bonus!",
     255,
     215,
     0,
@@ -1419,16 +1436,33 @@ fn @types.Game::level_up(game : @types.Game) -> Unit {
     255,
     50,
   )
+  // Transition to level-up card selection state
+  game.state = StateLevelUp
+  @raylib.enable_cursor()
 }
 
 ///|
 /// Applies incoming damage after defense (including equipment), updates hit feedback, and clamps HP at zero.
 pub fn damage_player(game : @types.Game, raw_damage : Int) -> Unit {
   let total_def = @types.calc_player_defense_with_equip(game)
-  let damage = (1).max(raw_damage - total_def)
+  let mut damage = (1).max(raw_damage - total_def)
+  // Mana Shield: absorb damage with mana first
+  if @types.has_buff(game, @types.buff_mana_shield) && game.player_mana > 0 {
+    let absorb = damage.min(game.player_mana)
+    game.player_mana -= absorb
+    damage -= absorb
+    if absorb > 0 {
+      @types.spawn_particles(game, game.player_x, 1.5, game.player_z, 4, 80, 120, 255)
+    }
+  }
+  if damage < 1 {
+    damage = 0
+  }
   game.player_hp -= damage
   game.player_hit_flash = 0.3
   game.damage_flash = 0.2
+  // Hitstop when player takes damage
+  @types.trigger_hitstop(game, 0.04)
   // Screen shake proportional to damage taken
   let shake_intensity = @types.clampf(
     Float::from_int(damage) * 0.005,
