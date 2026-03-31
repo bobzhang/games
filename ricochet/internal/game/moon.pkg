@@ -1,0 +1,9 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/ricochet/internal/types",
+  "bobzhang/games/ricochet/internal/physics",
+  "bobzhang/games/ricochet/internal/levels",
+  "moonbitlang/core/math",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
