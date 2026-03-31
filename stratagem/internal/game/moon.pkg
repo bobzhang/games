@@ -1,0 +1,9 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/stratagem/internal/types",
+  "bobzhang/games/stratagem/internal/combat",
+  "bobzhang/games/stratagem/internal/ai",
+  "bobzhang/games/stratagem/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

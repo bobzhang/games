@@ -1,0 +1,6 @@
+import {
+  "bobzhang/games/stratagem/internal/types",
+  "bobzhang/games/stratagem/internal/combat",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
