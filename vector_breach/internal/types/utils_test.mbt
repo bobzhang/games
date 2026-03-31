@@ -131,6 +131,8 @@ test "has_augment" {
     mechs_lost: 0,
     best_combo: 0,
     total_turns: 0,
+    mech_hp: [10, 8, 6],
+    event_choice: -1,
   }
   inspect(@types.has_augment(run, VampireCore), content="true")
   inspect(@types.has_augment(run, HeatSink), content="true")
