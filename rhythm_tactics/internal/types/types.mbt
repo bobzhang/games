@@ -9,16 +9,17 @@ pub(all) struct Tile {
   mut kind : TileKind
   mut has_item : Bool
   mut item_kind : Int
+  mut item : ItemKind?
 } derive(Show)
 
 ///|
 pub fn Tile::floor() -> Tile {
-  { kind: Floor, has_item: false, item_kind: 0 }
+  { kind: Floor, has_item: false, item_kind: 0, item: None }
 }
 
 ///|
 pub fn Tile::wall() -> Tile {
-  { kind: Wall, has_item: false, item_kind: 0 }
+  { kind: Wall, has_item: false, item_kind: 0, item: None }
 }
 
 ///|
@@ -66,7 +67,7 @@ pub(all) struct Player {
   mut x : Int
   mut y : Int
   mut hp : Int
-  max_hp : Int
+  mut max_hp : Int
   mut gold : Int
   mut combo : Int
   mut max_combo : Int
@@ -74,6 +75,8 @@ pub(all) struct Player {
   mut shield : Int
   mut special_charges : Int
   mut beat_multiplier : Float
+  mut speed_boost_beats : Int
+  mut beat_freeze_beats : Int
 } derive(Show)
 
 ///|
@@ -90,6 +93,8 @@ pub fn Player::new() -> Player {
     shield: 0,
     special_charges: 3,
     beat_multiplier: 1.0,
+    speed_boost_beats: 0,
+    beat_freeze_beats: 0,
   }
 }
 
@@ -119,6 +124,8 @@ pub(all) struct BeatState {
   mut last_rating : BeatRating
   mut combo : Int
   mut max_combo : Int
+  mut perfect_window : Float
+  mut good_window : Float
 } derive(Show)
 
 ///|
@@ -132,6 +139,8 @@ pub fn BeatState::new(bpm : Float) -> BeatState {
     last_rating: Miss,
     combo: 0,
     max_combo: 0,
+    perfect_window: beat_window_perfect,
+    good_window: beat_window_good,
   }
 }
 
@@ -156,6 +165,42 @@ pub fn Floor::new(floor_num : Int) -> Floor {
 }
 
 ///|
+pub(all) struct Particle {
+  mut x : Float
+  mut y : Float
+  mut vx : Float
+  mut vy : Float
+  mut life : Float
+  mut max_life : Float
+  r : Int
+  g : Int
+  b : Int
+  mut size : Float
+} derive(Show)
+
+///|
+pub(all) struct ShopEntry {
+  kind : ShopItemKind
+  price : Int
+  name : String
+  desc : String
+} derive(Show)
+
+///|
+pub(all) struct ScoreState {
+  mut base_kills : Int
+  mut beat_bonus : Int
+  mut combo_bonus : Int
+  mut floor_bonus : Int
+  mut total : Int
+} derive(Show)
+
+///|
+pub fn ScoreState::new() -> ScoreState {
+  { base_kills: 0, beat_bonus: 0, combo_bonus: 0, floor_bonus: 0, total: 0 }
+}
+
+///|
 pub(all) struct Game {
   mut screen : Screen
   player : Player
@@ -168,6 +213,18 @@ pub(all) struct Game {
   mut message_text : String
   mut message_timer : Float
   mut anim_timer : Float
+  particles : Array[Particle]
+  mut border_flash_color : @raylib.Color?
+  mut border_flash_timer : Float
+  mut combo_scale : Float
+  mut transition_timer : Float
+  mut transition_floor : Int
+  mut boss_intro_timer : Float
+  mut screen_shake : Float
+  shop_items : Array[ShopEntry]
+  mut shop_cursor : Int
+  score_state : ScoreState
+  mut is_boss_floor : Bool
 } derive(Show)
 
 ///|
@@ -184,5 +241,17 @@ pub fn Game::new() -> Game {
     message_text: "",
     message_timer: 0.0,
     anim_timer: 0.0,
+    particles: [],
+    border_flash_color: None,
+    border_flash_timer: 0.0,
+    combo_scale: 1.0,
+    transition_timer: 0.0,
+    transition_floor: 0,
+    boss_intro_timer: 0.0,
+    screen_shake: 0.0,
+    shop_items: [],
+    shop_cursor: 0,
+    score_state: ScoreState::new(),
+    is_boss_floor: false,
   }
 }

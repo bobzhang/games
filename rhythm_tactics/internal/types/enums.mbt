@@ -6,6 +6,9 @@ pub(all) enum Screen {
   LevelComplete
   GameOver
   FloorSelect
+  Shop
+  FloorTransition
+  BossIntro
 } derive(Eq, Show)
 
 ///|
@@ -36,6 +39,8 @@ pub(all) enum EnemyKind {
   Golem
   Wraith
   Boss
+  BeatDragon
+  RhythmLich
 } derive(Eq, Show)
 
 ///|
@@ -59,5 +64,36 @@ pub(all) enum EnemyIntent {
   Attack(Direction, Int)
   Charge(Direction, Int)
   Summon(EnemyKind, Int, Int)
+  BreathFire(Direction, Int)
+  AoeFreeze(Int)
   Wait
+} derive(Show)
+
+///|
+pub(all) enum ItemKind {
+  Gold(Int)
+  HealthPotion
+  ShieldOrb
+  SpeedBoost
+  WeaponUpgrade
+  BeatFreeze
+  SpecialCharge
+  Bomb
+} derive(Show)
+
+///|
+pub(all) enum ShopItemKind {
+  ShopHealthPotion
+  ShopShield
+  ShopWeaponUpgrade
+  ShopSpecialCharge
+  ShopBeatWindow
+} derive(Show)
+
+///|
+pub(all) enum ScoreGrade {
+  GradeS
+  GradeA
+  GradeB
+  GradeC
 } derive(Show)

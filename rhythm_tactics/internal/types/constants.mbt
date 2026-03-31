@@ -99,3 +99,134 @@ pub let max_enemies_per_floor : Int = 12
 
 ///|
 pub let max_floor : Int = 20
+
+// --- BPM Scaling ---
+
+///|
+pub let bpm_floor_1_3 : Float = 100.0
+
+///|
+pub let bpm_floor_4_6 : Float = 120.0
+
+///|
+pub let bpm_floor_7_9 : Float = 140.0
+
+///|
+pub let bpm_floor_10 : Float = 160.0
+
+// --- Beat Window Scaling ---
+
+///|
+pub let perfect_window_early : Float = 0.10
+
+///|
+pub let perfect_window_late : Float = 0.06
+
+///|
+pub let good_window_early : Float = 0.18
+
+///|
+pub let good_window_late : Float = 0.10
+
+// --- Shop Prices ---
+
+///|
+pub let price_health_potion : Int = 20
+
+///|
+pub let price_shield : Int = 30
+
+///|
+pub let price_weapon_upgrade : Int = 50
+
+///|
+pub let price_special_charge : Int = 25
+
+///|
+pub let price_beat_window : Int = 40
+
+// --- Boss constants ---
+
+///|
+pub let boss_arena_size : Int = 8
+
+///|
+pub let beat_dragon_hp : Int = 30
+
+///|
+pub let rhythm_lich_hp : Int = 40
+
+///|
+pub let beat_dragon_damage : Int = 3
+
+///|
+pub let rhythm_lich_damage : Int = 2
+
+///|
+pub let boss_intro_duration : Float = 2.0
+
+///|
+pub let floor_transition_duration : Float = 1.5
+
+// --- Particle constants ---
+
+///|
+pub let particle_count_death : Int = 12
+
+///|
+pub let particle_life : Float = 0.6
+
+// --- Score constants ---
+
+///|
+pub let score_kill_base_mult : Int = 10
+
+///|
+pub let score_perfect_mult : Float = 3.0
+
+///|
+pub let score_good_mult : Float = 1.5
+
+///|
+pub let score_miss_mult : Float = 0.5
+
+///|
+pub let score_combo_bonus : Int = 5
+
+///|
+pub let score_floor_hp_mult : Int = 100
+
+///|
+pub let score_floor_gold_mult : Int = 10
+
+///|
+pub let grade_s_threshold : Int = 5000
+
+///|
+pub let grade_a_threshold : Int = 3000
+
+///|
+pub let grade_b_threshold : Int = 1500
+
+// --- Item pickup gold amounts ---
+
+///|
+pub let item_gold_amount : Int = 15
+
+///|
+pub let speed_boost_duration : Int = 10
+
+///|
+pub let beat_freeze_duration : Int = 3
+
+///|
+pub let bomb_radius : Int = 1
+
+///|
+pub let color_lava : @raylib.Color = @raylib.Color::new(255, 80, 20, 255)
+
+///|
+pub let color_shop_bg : @raylib.Color = @raylib.Color::new(25, 20, 40, 255)
+
+///|
+pub let color_shop_highlight : @raylib.Color = @raylib.Color::new(60, 50, 90, 255)

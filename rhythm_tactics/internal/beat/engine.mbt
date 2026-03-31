@@ -24,9 +24,9 @@ pub fn rate_input(beat : @types.BeatState) -> @types.BeatRating {
   let bi = beat_interval_secs(beat)
   let phase = fmod(beat.beat_timer, bi)
   let dist = @types.minf(phase, bi - phase)
-  if dist <= @types.beat_window_perfect {
+  if dist <= beat.perfect_window {
     Perfect
-  } else if dist <= @types.beat_window_good {
+  } else if dist <= beat.good_window {
     Good
   } else {
     Miss

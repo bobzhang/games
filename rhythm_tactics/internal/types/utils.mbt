@@ -236,6 +236,8 @@ pub fn enemy_color(kind : EnemyKind) -> @raylib.Color {
     Golem => @raylib.Color::new(140, 140, 160, 255)
     Wraith => @raylib.Color::new(100, 180, 255, 255)
     Boss => @raylib.Color::new(255, 40, 40, 255)
+    BeatDragon => @raylib.Color::new(255, 60, 0, 255)
+    RhythmLich => @raylib.Color::new(120, 0, 200, 255)
   }
 }
 
@@ -255,4 +257,219 @@ pub fn rating_text(rating : BeatRating) -> String {
     Good => "GOOD"
     Miss => "MISS"
   }
+}
+
+///|
+pub fn bpm_for_floor(floor_num : Int) -> Float {
+  if floor_num <= 3 {
+    bpm_floor_1_3
+  } else if floor_num <= 6 {
+    bpm_floor_4_6
+  } else if floor_num <= 9 {
+    bpm_floor_7_9
+  } else {
+    bpm_floor_10
+  }
+}
+
+///|
+pub fn perfect_window_for_floor(floor_num : Int) -> Float {
+  if floor_num <= 3 {
+    perfect_window_early
+  } else if floor_num <= 6 {
+    beat_window_perfect
+  } else {
+    perfect_window_late
+  }
+}
+
+///|
+pub fn good_window_for_floor(floor_num : Int) -> Float {
+  if floor_num <= 3 {
+    good_window_early
+  } else if floor_num <= 6 {
+    beat_window_good
+  } else {
+    good_window_late
+  }
+}
+
+///|
+pub fn is_boss_floor(floor_num : Int) -> Bool {
+  floor_num == 5 || floor_num == 10
+}
+
+///|
+pub fn item_color(kind : ItemKind) -> @raylib.Color {
+  match kind {
+    Gold(_) => color_gold
+    HealthPotion => @raylib.Color::new(255, 80, 120, 255)
+    ShieldOrb => @raylib.Color::new(100, 180, 255, 255)
+    SpeedBoost => @raylib.Color::new(255, 255, 100, 255)
+    WeaponUpgrade => @raylib.Color::new(255, 140, 40, 255)
+    BeatFreeze => @raylib.Color::new(150, 220, 255, 255)
+    SpecialCharge => @raylib.Color::new(200, 120, 255, 255)
+    Bomb => @raylib.Color::new(255, 60, 60, 255)
+  }
+}
+
+///|
+pub fn shop_item_name(kind : ShopItemKind) -> String {
+  match kind {
+    ShopHealthPotion => "Health Potion"
+    ShopShield => "Shield Orb"
+    ShopWeaponUpgrade => "Weapon Upgrade"
+    ShopSpecialCharge => "Special Charge"
+    ShopBeatWindow => "Beat Window+"
+  }
+}
+
+///|
+pub fn shop_item_desc(kind : ShopItemKind) -> String {
+  match kind {
+    ShopHealthPotion => "Restore 3 HP"
+    ShopShield => "+2 Shield"
+    ShopWeaponUpgrade => "+1 Weapon Damage"
+    ShopSpecialCharge => "+1 Special"
+    ShopBeatWindow => "Wider beat window"
+  }
+}
+
+///|
+pub fn shop_item_price(kind : ShopItemKind) -> Int {
+  match kind {
+    ShopHealthPotion => price_health_potion
+    ShopShield => price_shield
+    ShopWeaponUpgrade => price_weapon_upgrade
+    ShopSpecialCharge => price_special_charge
+    ShopBeatWindow => price_beat_window
+  }
+}
+
+///|
+pub fn make_shop_entry(kind : ShopItemKind) -> ShopEntry {
+  {
+    kind,
+    price: shop_item_price(kind),
+    name: shop_item_name(kind),
+    desc: shop_item_desc(kind),
+  }
+}
+
+///|
+pub fn compute_score_grade(total : Int) -> ScoreGrade {
+  if total >= grade_s_threshold {
+    GradeS
+  } else if total >= grade_a_threshold {
+    GradeA
+  } else if total >= grade_b_threshold {
+    GradeB
+  } else {
+    GradeC
+  }
+}
+
+///|
+pub fn grade_text(grade : ScoreGrade) -> String {
+  match grade {
+    GradeS => "S"
+    GradeA => "A"
+    GradeB => "B"
+    GradeC => "C"
+  }
+}
+
+///|
+pub fn grade_color(grade : ScoreGrade) -> @raylib.Color {
+  match grade {
+    GradeS => color_perfect
+    GradeA => @raylib.Color::new(80, 255, 80, 255)
+    GradeB => color_good
+    GradeC => @raylib.Color::new(180, 180, 180, 255)
+  }
+}
+
+///|
+pub fn score_rating_mult(rating : BeatRating) -> Float {
+  match rating {
+    Perfect => score_perfect_mult
+    Good => score_good_mult
+    Miss => score_miss_mult
+  }
+}
+
+///|
+pub fn spawn_death_particles(
+  game : Game,
+  sx : Float,
+  sy : Float,
+  color : @raylib.Color,
+) -> Unit {
+  let rng = game_rng(game)
+  for i in 0..<particle_count_death {
+    let angle = Float::from_int(i) * 6.28F / Float::from_int(particle_count_death)
+    let speed = 40.0F + Float::from_int(rand_range(rng, 0, 40))
+    let vx = speed * cos_approx(angle)
+    let vy = speed * sin_approx(angle)
+    let p : Particle = {
+      x: sx,
+      y: sy,
+      vx,
+      vy,
+      life: particle_life,
+      max_life: particle_life,
+      r: color.r.to_int(),
+      g: color.g.to_int(),
+      b: color.b.to_int(),
+      size: 3.0F,
+    }
+    game.particles.push(p)
+  }
+  sync_rng(game, rng)
+}
+
+///|
+pub fn update_particles(game : Game, dt : Float) -> Unit {
+  let mut i = 0
+  while i < game.particles.length() {
+    let p = game.particles[i]
+    p.life = p.life - dt
+    if p.life <= 0.0F {
+      // Remove particle by swapping with last
+      let last = game.particles.length() - 1
+      if i < last {
+        game.particles[i] = game.particles[last]
+      }
+      let _ = game.particles.pop()
+      // Don't increment i, check swapped particle
+    } else {
+      p.x = p.x + p.vx * dt
+      p.y = p.y + p.vy * dt
+      p.vx = p.vx * 0.95F
+      p.vy = p.vy * 0.95F
+      p.size = p.size * (p.life / p.max_life)
+      i = i + 1
+    }
+  }
+}
+
+///|
+pub fn cos_approx(angle : Float) -> Float {
+  // Simple Taylor approximation: cos(x) ~ 1 - x^2/2 + x^4/24
+  // Normalize angle to [-pi, pi]
+  let mut a = angle
+  while a > 3.14159F {
+    a = a - 6.28318F
+  }
+  while a < -3.14159F {
+    a = a + 6.28318F
+  }
+  let a2 = a * a
+  let a4 = a2 * a2
+  1.0F - a2 / 2.0F + a4 / 24.0F
+}
+
+///|
+pub fn sin_approx(angle : Float) -> Float {
+  cos_approx(angle - 1.5708F)
 }

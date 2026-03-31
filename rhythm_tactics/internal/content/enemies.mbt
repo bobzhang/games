@@ -63,6 +63,34 @@ pub fn make_boss(id : Int, x : Int, y : Int) -> @types.Enemy {
 }
 
 ///|
+/// Create a Beat Dragon boss.
+pub fn make_beat_dragon(id : Int, x : Int, y : Int) -> @types.Enemy {
+  @types.Enemy::new(
+    id,
+    BeatDragon,
+    x,
+    y,
+    hp=@types.beat_dragon_hp,
+    damage=@types.beat_dragon_damage,
+    beat_pattern=[true, true, true, true],
+  )
+}
+
+///|
+/// Create a Rhythm Lich boss.
+pub fn make_rhythm_lich(id : Int, x : Int, y : Int) -> @types.Enemy {
+  @types.Enemy::new(
+    id,
+    RhythmLich,
+    x,
+    y,
+    hp=@types.rhythm_lich_hp,
+    damage=@types.rhythm_lich_damage,
+    beat_pattern=[true, true, true, true],
+  )
+}
+
+///|
 /// Create an enemy by kind.
 pub fn make_enemy(
   kind : @types.EnemyKind,
@@ -79,6 +107,8 @@ pub fn make_enemy(
     Golem => make_golem(id, x, y)
     Wraith => make_wraith(id, x, y)
     Boss => make_boss(id, x, y)
+    BeatDragon => make_beat_dragon(id, x, y)
+    RhythmLich => make_rhythm_lich(id, x, y)
   }
 }
 
