@@ -152,8 +152,8 @@ fn draw_capture_anims(game : @types.Game) -> Unit {
   for i in 0..<game.capture_anims.length() {
     let anim = game.capture_anims[i]
     let t = anim.timer / @types.capture_anim_time
-    let scale = 1.0 - t
-    let alpha = ((1.0 - t) * 255.0).to_int()
+    let scale : Float = 1.0 - t
+    let alpha = ((scale) * 255.0).to_int()
     let (px, py) = @types.hex_to_pixel(anim.pos, size)
     @raylib.draw_circle(
       px.to_int(),
@@ -185,7 +185,7 @@ fn draw_game_ui(game : @types.Game) -> Unit {
     GameOver => "GAME OVER"
     AIThinking => "AI thinking..."
     _ =>
-      if game.current_player == @types.Player::Black {
+      if game.current_player == Black {
         "Black's Turn"
       } else {
         "White's Turn"
@@ -196,7 +196,7 @@ fn draw_game_ui(game : @types.Game) -> Unit {
   if game.play_state != GameOver {
     let stone_x = panel_x + 280
     let stone_y = 52
-    if game.current_player == @types.Player::Black {
+    if game.current_player == Black {
       @raylib.draw_circle(stone_x, stone_y, 12.0, @types.color_black_stone)
     } else {
       @raylib.draw_circle(stone_x, stone_y, 12.0, @types.color_white_stone)
