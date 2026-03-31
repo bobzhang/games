@@ -1,5 +1,4 @@
 import {
-  "tonyfettes/raylib",
   "bobzhang/games/tessellate/internal/types",
 }
 
