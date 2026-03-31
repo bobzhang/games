@@ -9,8 +9,23 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
       game.message_timer = 0.0F
     }
   }
+  // Clear sound queue from previous frame
+  @types.clear_sound_queue(game)
   // Update particles
   @types.update_particles(game, dt)
+  @types.update_trail_particles(game, dt)
+  @types.update_damage_numbers(game, dt)
+  @types.update_achievement_toasts(game.achievements, dt)
+  // Update weapon effects
+  @types.update_weapon_effects(game, dt)
+  // Update weapon switch flash
+  @types.update_weapon_switch_flash(game, dt)
+  // BPM animation
+  if game.bpm_anim_timer > 0.0F {
+    game.bpm_anim_timer = game.bpm_anim_timer - dt
+    let progress = 1.0F - game.bpm_anim_timer / 1.5F
+    game.bpm_anim_value = game.bpm_anim_value + (game.bpm_anim_target - game.bpm_anim_value) * @types.clampf(progress, 0.0F, 1.0F)
+  }
   // Update border flash
   if game.border_flash_timer > 0.0F {
     game.border_flash_timer = game.border_flash_timer - dt
@@ -53,6 +68,7 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     BossIntro => update_boss_intro(game, dt)
     AbilityChoice => update_ability_choice(game)
     RunSummary => update_run_summary(game)
+    CurseOffer => update_curse_offer(game)
   }
 }
 
@@ -83,9 +99,20 @@ fn update_floor_transition(game : @types.Game, dt : Float) -> Unit {
     let floor_num = game.transition_floor
     // Set BPM and windows for this floor
     let bpm = @types.bpm_for_floor(floor_num)
+    let old_bpm = game.beat.bpm
     game.beat.bpm = bpm
     game.beat.perfect_window = @types.perfect_window_for_floor(floor_num)
     game.beat.good_window = @types.good_window_for_floor(floor_num)
+    // Apply DoubleTime curse
+    if @types.has_curse(game.curses, DoubleTime) {
+      game.beat.bpm = game.beat.bpm * (1.0F + @types.curse_bpm_bonus_pct)
+    }
+    // Apply BlindBeat curse
+    if @types.has_curse(game.curses, BlindBeat) {
+      game.beat.perfect_window = game.beat.perfect_window + @types.blind_beat_perfect_bonus
+    }
+    // BPM animation
+    start_bpm_animation(game, old_bpm, game.beat.bpm)
     // Account for speed boost widening beat window
     if game.player.speed_boost_beats > 0 {
       game.beat.perfect_window = game.beat.perfect_window + 0.03
@@ -95,6 +122,8 @@ fn update_floor_transition(game : @types.Game, dt : Float) -> Unit {
     game.floor = Some(floor)
     game.player.x = 1
     game.player.y = 1
+    // Initialize per-floor stats tracking
+    @types.start_floor_stats(game, floor_num)
     @beat.reset(game.beat)
     game.beat.bpm = bpm
     // Check if boss floor
@@ -125,8 +154,23 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   let new_beat = @beat.tick(beat, dt)
   guard game.floor is Some(floor) else { return }
   if new_beat {
+    // Sound event: beat tick
+    @types.push_sound(game, BeatTick)
     // Process ability effects on beat
     process_ability_effects_on_beat(game)
+    // Tick spell cooldowns
+    @types.tick_spell_cooldowns(game.player)
+    // Flush pending death explosions on beat
+    @types.flush_death_explosions(game)
+    // Decrement enemy frozen/stun timers
+    for enemy in floor.enemies {
+      if enemy.frozen_beats > 0 {
+        enemy.frozen_beats = enemy.frozen_beats - 1
+      }
+      if enemy.stunned_beats > 0 {
+        enemy.stunned_beats = enemy.stunned_beats - 1
+      }
+    }
     // Decrement player buff timers on beat
     if game.player.speed_boost_beats > 0 {
       game.player.speed_boost_beats = game.player.speed_boost_beats - 1
@@ -150,6 +194,8 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
     )
     @types.sync_rng(game, rng)
   }
+  // Handle spell input (1-4 keys)
+  handle_spell_input(game, floor)
   // Handle player input
   let action = read_player_input()
   match action {
@@ -199,6 +245,9 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
       game.score = game.score + floor_bonus
       game.floors_cleared = game.floors_cleared + 1
       game.is_boss_floor = false
+      // Finalize floor stats
+      @types.finalize_floor_stats(game)
+      @types.push_sound(game, LevelComplete)
       @types.set_message(game, "Floor cleared! +\{floor_bonus} bonus!")
       game.screen = LevelComplete
     } else {
@@ -230,6 +279,10 @@ fn check_item_pickup(game : @types.Game, floor : @types.Floor) -> Unit {
   let tile = floor.grid.tiles[idx]
   if tile.has_item {
     tile.has_item = false
+    // Track item pickup
+    game.current_floor_stats.items_collected = game.current_floor_stats.items_collected + 1
+    game.run_stats.total_items = game.run_stats.total_items + 1
+    @types.push_sound(game, ItemPickup)
     match tile.item {
       Some(Gold(amount)) => {
         game.player.gold = game.player.gold + amount
@@ -366,11 +419,26 @@ fn handle_player_action(
   @beat.update_combo(beat, rating)
   // Trigger border flash and combo scale
   trigger_border_flash(game, rating)
-  // Track perfects
+  // Sound events for beat rating
+  match rating {
+    Perfect => @types.push_sound(game, BeatPerfect)
+    Good => @types.push_sound(game, BeatGood)
+    Miss => @types.push_sound(game, BeatMiss)
+  }
+  // Track perfects and mana regen
   match rating {
     Perfect => {
       game.player.consecutive_perfects = game.player.consecutive_perfects + 1
       game.run_perfects = game.run_perfects + 1
+      game.current_floor_stats.perfects_hit = game.current_floor_stats.perfects_hit + 1
+      // Mana regen on Perfect
+      game.player.mana = @types.clampi(
+        game.player.mana + @types.mana_regen_on_perfect, 0, game.player.max_mana,
+      )
+      // Achievement: Perfect 10
+      if game.player.consecutive_perfects >= 10 {
+        let _ = @types.check_achievement(game.achievements, Perfect10)
+      }
     }
     Good => game.player.consecutive_perfects = 0
     Miss => game.player.consecutive_perfects = 0
@@ -420,6 +488,14 @@ fn handle_player_action(
           } else if @types.grid_is_walkable(floor.grid, nx, ny) {
             game.player.x = nx
             game.player.y = ny
+            // Trail particles on beat-synced movement
+            let trail_sx = Float::from_int(
+              @types.tile_screen_x(nx) + @types.tile_size / 2,
+            )
+            let trail_sy = Float::from_int(
+              @types.tile_screen_y(ny) + @types.tile_size / 2,
+            )
+            @types.spawn_trail_particles(game, trail_sx, trail_sy)
             // Double Step: move extra tile on Perfect
             if rating == Perfect && @types.has_ability(game.player, DoubleStep) {
               let nx2 = game.player.x + @types.dir_dx(dir)
@@ -518,6 +594,10 @@ fn execute_enemy_beats(game : @types.Game, floor : @types.Floor) -> Unit {
     if !(@beat.enemy_acts_this_beat(enemy)) {
       continue
     }
+    // Frozen/stunned enemies skip their turn
+    if enemy.frozen_beats > 0 || enemy.stunned_beats > 0 {
+      continue
+    }
     match enemy.intent {
       Move(dir) => {
         let nx = enemy.x + @types.dir_dx(dir)
@@ -528,8 +608,36 @@ fn execute_enemy_beats(game : @types.Game, floor : @types.Floor) -> Unit {
           enemy.x = nx
           enemy.y = ny
         }
+        // Elite Bat: double move
+        if enemy.is_elite && enemy.kind == Bat {
+          @content.elite_bat_double_move(enemy, floor, game.player.x, game.player.y)
+        }
       }
-      Attack(_, dmg) => {
+      Attack(_dir, dmg) => {
+        // Elite Skeleton: cross-pattern attack
+        if enemy.is_elite && enemy.kind == Skeleton {
+          let cells = @content.elite_skeleton_cross_cells(enemy.x, enemy.y)
+          for cell in cells {
+            let (cx, cy) = cell
+            if cx == game.player.x && cy == game.player.y {
+              if game.player.invincible_beats <= 0 && !(try_shadow_dodge(game)) {
+                let actual = if game.player.shield > 0 {
+                  game.player.shield = game.player.shield - 1
+                  (dmg + 1) / 2
+                } else {
+                  dmg
+                }
+                game.player.hp = game.player.hp - actual
+                @types.set_message(game, "Cross attack! -\{actual} HP!")
+                if game.player.hp <= 0 {
+                  finalize_run(game)
+                }
+              }
+              break
+            }
+          }
+          continue
+        }
         // Check if player is still adjacent
         let dist = @types.manhattan_dist(
           enemy.x, enemy.y, game.player.x, game.player.y,
@@ -550,6 +658,9 @@ fn execute_enemy_beats(game : @types.Game, floor : @types.Floor) -> Unit {
               dmg
             }
             game.player.hp = game.player.hp - actual_dmg
+            game.current_floor_stats.damage_taken = game.current_floor_stats.damage_taken + actual_dmg
+            game.run_stats.total_damage_taken = game.run_stats.total_damage_taken + actual_dmg
+            @types.push_sound(game, PlayerHit)
             @types.set_message(game, "Hit for \{actual_dmg} damage!")
             if game.player.hp <= 0 {
               finalize_run(game)
@@ -668,12 +779,24 @@ fn update_level_complete(game : @types.Game) -> Unit {
     let total_actions = game.run_perfects + 1
     let pct = game.run_perfects * 100 / total_actions
     @types.update_floor_mastery(game.meta, game.floors_cleared, pct)
+    // Achievement: Pacifist (no attacks on floor)
+    if game.player.floor_attacks == 0 {
+      let _ = @types.check_achievement(game.achievements, Pacifist)
+    }
+    // Achievement: Speed Demon (floor 10 under 200 beats)
+    if game.floors_cleared == 10 && game.beat.beat_count < 200 {
+      let _ = @types.check_achievement(game.achievements, SpeedDemon)
+    }
+    // Reset per-floor counters
+    game.player.floor_attacks = 0
     if game.floors_cleared >= @types.max_floor {
       finalize_run(game)
       @types.set_message(game, "YOU WIN! All floors cleared!")
     } else if game.is_boss_floor {
-      // After boss: offer ability choice
-      offer_ability_choices(game)
+      // Achievement: Boss Slayer
+      let _ = @types.check_achievement(game.achievements, BossSlayer)
+      // After boss: offer curse, then ability choice
+      offer_curse_choice(game)
     } else {
       setup_shop(game)
       game.screen = Shop
@@ -686,7 +809,7 @@ fn setup_shop(game : @types.Game) -> Unit {
   let rng = @types.game_rng(game)
   let all_kinds : Array[@types.ShopItemKind] = [
     ShopHealthPotion, ShopShield, ShopWeaponUpgrade, ShopSpecialCharge,
-    ShopBeatWindow,
+    ShopBeatWindow, ShopManaPotion,
   ]
   game.shop_items.clear()
   for _ in 0..<4 {
@@ -700,6 +823,15 @@ fn setup_shop(game : @types.Game) -> Unit {
     let wk = weapons[wi]
     if wk != game.player.weapon {
       game.shop_items.push(@types.make_shop_entry(ShopWeapon(wk)))
+    }
+  }
+  // Offer a spell every 3 floors
+  if game.floors_cleared % 3 == 0 && game.floors_cleared > 0 {
+    let spells = @types.all_spell_kinds()
+    let si = @types.rand_range(rng, 0, spells.length() - 1)
+    let sk = spells[si]
+    if !@types.has_spell(game.player, sk) {
+      game.shop_items.push(@types.make_shop_entry(ShopSpell(sk)))
     }
   }
   game.shop_cursor = 0
@@ -736,6 +868,7 @@ fn update_shop(game : @types.Game) -> Unit {
       if game.player.gold >= entry.price {
         game.player.gold = game.player.gold - entry.price
         apply_shop_purchase(game, entry.kind)
+        @types.push_sound(game, ShopPurchase)
         @types.set_message(game, "Purchased \{entry.name}!")
       } else {
         @types.set_message(game, "Not enough gold!")
@@ -767,7 +900,23 @@ fn apply_shop_purchase(game : @types.Game, kind : @types.ShopItemKind) -> Unit {
     ShopWeapon(wk) => {
       game.player.weapon = wk
       game.player.weapon_beat_counter = 0
+      @types.trigger_weapon_switch_flash(game)
     }
+    ShopSpell(sk) => {
+      if !@types.has_spell(game.player, sk) {
+        game.player.learned_spells.push(sk)
+        let _ = @types.equip_spell(game.player, sk)
+        @types.set_message(game, "Learned \{@types.spell_data(sk).name}!")
+      } else {
+        @types.set_message(game, "Already known!")
+        // Refund
+        game.player.gold = game.player.gold + @types.shop_item_price(kind)
+      }
+    }
+    ShopManaPotion =>
+      game.player.mana = @types.clampi(
+        game.player.mana + 5, 0, game.player.max_mana,
+      )
   }
 }
 
@@ -793,6 +942,10 @@ fn update_combo_state(game : @types.Game) -> Unit {
 
 ///|
 fn process_combo_milestone(game : @types.Game, combo : Int) -> Unit {
+  // Achievement: Combo King
+  if combo >= 50 {
+    let _ = @types.check_achievement(game.achievements, ComboKing)
+  }
   let ms = @types.check_combo_milestone(combo)
   let cs = game.combo_state
   match ms {
@@ -804,6 +957,8 @@ fn process_combo_milestone(game : @types.Game, combo : Int) -> Unit {
       game.player.invincible_beats = @types.fever_duration
       @types.set_message(game, "FEVER! Invincible!")
       game.screen_shake = 4.0F
+      @types.push_sound(game, ComboMilestoneSound(Fever))
+      @types.spawn_milestone_burst(game, Fever)
     }
     Frenzy => {
       cs.frenzy_active = true
@@ -813,6 +968,8 @@ fn process_combo_milestone(game : @types.Game, combo : Int) -> Unit {
       game.player.double_damage_beats = @types.frenzy_duration
       @types.set_message(game, "FRENZY! Double damage!")
       game.screen_shake = 6.0F
+      @types.push_sound(game, ComboMilestoneSound(Frenzy))
+      @types.spawn_milestone_burst(game, Frenzy)
     }
     PerfectStorm => {
       cs.storm_triggered = true
@@ -841,6 +998,8 @@ fn process_combo_milestone(game : @types.Game, combo : Int) -> Unit {
       game.player.hp = game.player.max_hp
       @types.set_message(game, "PERFECT STORM! Full heal + AoE!")
       game.screen_shake = 10.0F
+      @types.push_sound(game, ComboMilestoneSound(PerfectStorm))
+      @types.spawn_milestone_burst(game, PerfectStorm)
     }
     NoMilestone => ()
   }
@@ -904,9 +1063,28 @@ fn weapon_attack_enemies(
   let weapon = player.weapon
   let cells = @types.weapon_attack_cells(weapon, dir)
   let base_dmg = @types.weapon_base_damage(weapon) + player.weapon_damage - 1
-  let effective_dmg = if player.double_damage_beats > 0 { base_dmg * 2 } else { base_dmg }
+  // Glass Cannon curse: 2x damage
+  let curse_mult = if @types.has_curse(game.curses, GlassCannon) { 2 } else { 1 }
+  let effective_dmg = if player.double_damage_beats > 0 {
+    base_dmg * 2 * curse_mult
+  } else {
+    base_dmg * curse_mult
+  }
   let dmg = @beat.compute_damage(effective_dmg, game.beat, rating)
   let mut hit_any = false
+  player.floor_attacks = player.floor_attacks + 1
+  // Track weapon usage
+  @types.record_weapon_usage(game, weapon)
+  // Spawn weapon visual effect
+  let effect_x = Float::from_int(
+    @types.tile_screen_x(player.x) + @types.tile_size / 2,
+  )
+  let effect_y = Float::from_int(
+    @types.tile_screen_y(player.y) + @types.tile_size / 2,
+  )
+  @types.spawn_weapon_effect(game, weapon, effect_x, effect_y, dir)
+  // Sound event: player attack
+  @types.push_sound(game, PlayerAttack)
   for cell in cells {
     let (dx, dy) = cell
     let tx = player.x + dx
@@ -916,19 +1094,46 @@ fn weapon_attack_enemies(
       let enemy = floor.enemies[ei]
       enemy.hp = enemy.hp - dmg
       hit_any = true
+      let sx = Float::from_int(
+        @types.tile_screen_x(enemy.x) + @types.tile_size / 2,
+      )
+      let sy = Float::from_int(
+        @types.tile_screen_y(enemy.y) + @types.tile_size / 2,
+      )
+      // Spawn damage number
+      @types.spawn_damage_number(game, sx, sy - 10.0F, dmg, rating)
+      // Track damage dealt
+      game.current_floor_stats.damage_dealt = game.current_floor_stats.damage_dealt + dmg
+      game.run_stats.total_damage_dealt = game.run_stats.total_damage_dealt + dmg
+      // Check boss phase transition
+      let _ = @types.check_boss_phase_transition(game, enemy.kind, enemy.hp, enemy.max_hp)
       if enemy.hp <= 0 {
         enemy.active = false
         game.run_kills = game.run_kills + 1
+        game.current_floor_stats.enemies_killed = game.current_floor_stats.enemies_killed + 1
         add_kill_score(game, enemy, rating)
-        let sx = Float::from_int(
-          @types.tile_screen_x(enemy.x) + @types.tile_size / 2,
-        )
-        let sy = Float::from_int(
-          @types.tile_screen_y(enemy.y) + @types.tile_size / 2,
-        )
-        @types.spawn_death_particles(
-          game, sx, sy, @types.enemy_color(enemy.kind),
-        )
+        // Beat-synced death explosion (queued for next beat)
+        @types.queue_death_explosion(game, sx, sy, @types.enemy_color(enemy.kind))
+        // Sound: enemy death
+        @types.push_sound(game, EnemyDeath)
+        // Achievement: First Blood
+        if game.run_kills == 1 {
+          let _ = @types.check_achievement(game.achievements, FirstBlood)
+        }
+        // Elite Slime splits
+        if enemy.is_elite && enemy.kind == Slime {
+          let splits = @content.elite_slime_split(
+            enemy.x, enemy.y, floor.enemies.length(), floor,
+          )
+          for s in splits {
+            floor.enemies.push(s)
+          }
+        }
+        // Drop spell on elite kill
+        if enemy.is_elite {
+          maybe_drop_spell(game)
+          game.player.gold = game.player.gold + @types.elite_gold_drop
+        }
       }
     }
   }
@@ -1062,6 +1267,11 @@ fn update_run_summary(game : @types.Game) -> Unit {
 
 ///|
 fn finalize_run(game : @types.Game) -> Unit {
+  // Apply curse score multiplier
+  let mult = curse_score_multiplier(game)
+  if mult > 1.0F {
+    game.score = (Float::from_int(game.score) * mult).to_int()
+  }
   // Count bosses defeated this run
   let mut bosses = 0
   if game.floors_cleared >= 5 {
@@ -1105,11 +1315,25 @@ fn start_new_game(game : @types.Game) -> Unit {
   game.player.facing = South
   game.player.invincible_beats = 0
   game.player.double_damage_beats = 0
+  game.player.mana = game.player.max_mana
+  game.player.spell_slots.spells[0] = None
+  game.player.spell_slots.spells[1] = None
+  game.player.spell_slots.spells[2] = None
+  game.player.spell_slots.spells[3] = None
+  game.player.spell_slots.cooldowns[0] = 0
+  game.player.spell_slots.cooldowns[1] = 0
+  game.player.spell_slots.cooldowns[2] = 0
+  game.player.spell_slots.cooldowns[3] = 0
+  game.player.learned_spells.clear()
+  game.player.floor_attacks = 0
   game.score = 0
   game.floors_cleared = 0
   game.floor = None
   game.is_boss_floor = false
   game.particles.clear()
+  game.trail_particles.clear()
+  game.damage_numbers.clear()
+  game.pending_death_explosions.clear()
   game.border_flash_color = None
   game.border_flash_timer = 0.0
   game.combo_scale = 1.0
@@ -1133,10 +1357,467 @@ fn start_new_game(game : @types.Game) -> Unit {
   game.combo_visual_intensity = 0.0
   game.run_perfects = 0
   game.run_kills = 0
+  game.curses.active_curses.clear()
+  game.curse_offers.clear()
+  game.curse_cursor = 0
+  game.showing_curse_offer = false
+  game.bpm_anim_value = 0.0
+  game.bpm_anim_target = 0.0
+  game.bpm_anim_timer = 0.0
+  // Reset Phase 5 fields
+  game.sound_queue.clear()
+  game.weapon_effects.clear()
+  @types.reset_boss_phases(game)
+  @types.reset_run_stats(game)
+  game.current_floor_stats = @types.FloorStats::new(0)
+  game.weapon_switch_flash = 0.0
+  game.floor_wipe_progress = 0.0
+  game.boss_intro_pulse = 0.0
   @beat.reset(game.beat)
   game.beat.bpm = @types.bpm_for_floor(1)
   game.beat.perfect_window = @types.perfect_window_for_floor(1)
   game.beat.good_window = @types.good_window_for_floor(1)
   game.screen = FloorSelect
   @types.set_message(game, "Choose your floor!")
+}
+
+// ============================================================
+// === Spell System ===
+// ============================================================
+
+///|
+fn handle_spell_input(game : @types.Game, floor : @types.Floor) -> Unit {
+  let keys : Array[Int] = [
+    @raylib.KeyOne, @raylib.KeyTwo, @raylib.KeyThree, @raylib.KeyFour,
+  ]
+  for i in 0..<4 {
+    if @raylib.is_key_pressed(keys[i]) {
+      if @types.can_cast_spell(game.player, i) {
+        match game.player.spell_slots.spells[i] {
+          Some(kind) => cast_spell(game, floor, kind, i)
+          None => ()
+        }
+      } else {
+        match game.player.spell_slots.spells[i] {
+          Some(_) => @types.set_message(game, "Spell not ready!")
+          None => @types.set_message(game, "No spell in slot \{i + 1}")
+        }
+      }
+    }
+  }
+}
+
+///|
+fn cast_spell(
+  game : @types.Game,
+  floor : @types.Floor,
+  kind : @types.SpellKind,
+  slot : Int,
+) -> Unit {
+  let data = @types.spell_data(kind)
+  let player = game.player
+  // Deduct mana and set cooldown
+  player.mana = player.mana - data.mana_cost
+  player.spell_slots.cooldowns[slot] = data.beat_cooldown
+  let rating = @beat.rate_input(game.beat)
+  @beat.update_combo(game.beat, rating)
+  trigger_border_flash(game, rating)
+  // Track spell usage and sound
+  @types.record_spell_usage(game, kind)
+  @types.push_sound(game, SpellCast(data.element))
+  // Spell cast visual effects
+  let cast_sx = Float::from_int(@types.tile_screen_x(player.x) + @types.tile_size / 2)
+  let cast_sy = Float::from_int(@types.tile_screen_y(player.y) + @types.tile_size / 2)
+  @types.spawn_spell_particles(game, cast_sx, cast_sy, data.element)
+  @types.spell_border_flash(game, data.element)
+  match kind {
+    Fireball => {
+      // 3 damage to enemy in faced direction, range 1
+      let dir = player.facing
+      let tx = player.x + @types.dir_dx(dir)
+      let ty = player.y + @types.dir_dy(dir)
+      let ei = @types.find_enemy_at(floor.enemies, tx, ty)
+      if ei >= 0 {
+        let dmg = @beat.compute_damage(data.damage, game.beat, rating)
+        let enemy = floor.enemies[ei]
+        enemy.hp = enemy.hp - dmg
+        let sx = Float::from_int(@types.tile_screen_x(tx) + @types.tile_size / 2)
+        let sy = Float::from_int(@types.tile_screen_y(ty) + @types.tile_size / 2)
+        @types.spawn_damage_number(game, sx, sy - 10.0F, dmg, rating)
+        if enemy.hp <= 0 {
+          handle_enemy_death(game, floor, ei, rating)
+        }
+      }
+      game.screen_shake = 3.0F
+      @types.set_message(game, "Fireball!")
+    }
+    FrostNova => {
+      // 1 damage and freeze all adjacent enemies (bosses resist)
+      let dirs : Array[@types.Direction] = [North, South, East, West]
+      let mut frozen_count = 0
+      for dir in dirs {
+        let tx = player.x + @types.dir_dx(dir)
+        let ty = player.y + @types.dir_dy(dir)
+        let ei = @types.find_enemy_at(floor.enemies, tx, ty)
+        if ei >= 0 {
+          let enemy = floor.enemies[ei]
+          enemy.hp = enemy.hp - data.damage
+          if @content.can_freeze_enemy(enemy) {
+            enemy.frozen_beats = 3
+            frozen_count = frozen_count + 1
+          }
+          let sx = Float::from_int(@types.tile_screen_x(tx) + @types.tile_size / 2)
+          let sy = Float::from_int(@types.tile_screen_y(ty) + @types.tile_size / 2)
+          @types.spawn_damage_number(game, sx, sy - 10.0F, data.damage, rating)
+          if enemy.hp <= 0 {
+            handle_enemy_death(game, floor, ei, rating)
+          }
+        }
+      }
+      @types.set_message(game, "Frost Nova! \{frozen_count} frozen!")
+    }
+    ChainLightning => {
+      // 2 damage, chains to up to 3 enemies (nearest first)
+      let mut hits = 0
+      let mut last_x = player.x
+      let mut last_y = player.y
+      for enemy in floor.enemies {
+        if hits >= 3 {
+          break
+        }
+        if !(enemy.active) {
+          continue
+        }
+        let dist = @types.manhattan_dist(last_x, last_y, enemy.x, enemy.y)
+        if dist <= data.range {
+          let dmg = @beat.compute_damage(data.damage, game.beat, rating)
+          enemy.hp = enemy.hp - dmg
+          let sx = Float::from_int(@types.tile_screen_x(enemy.x) + @types.tile_size / 2)
+          let sy = Float::from_int(@types.tile_screen_y(enemy.y) + @types.tile_size / 2)
+          @types.spawn_damage_number(game, sx, sy - 10.0F, dmg, rating)
+          last_x = enemy.x
+          last_y = enemy.y
+          hits = hits + 1
+          if enemy.hp <= 0 {
+            enemy.active = false
+            game.run_kills = game.run_kills + 1
+            add_kill_score(game, enemy, rating)
+            @types.queue_death_explosion(game, sx, sy, @types.enemy_color(enemy.kind))
+          }
+        }
+      }
+      game.screen_shake = 4.0F
+      @types.set_message(game, "Chain Lightning! \{hits} hit!")
+    }
+    ShadowStep => {
+      // Teleport to a random empty tile
+      let rng = @types.game_rng(game)
+      for _ in 0..<30 {
+        let tx = @types.rand_range(rng, 1, floor.grid.width - 2)
+        let ty = @types.rand_range(rng, 1, floor.grid.height - 2)
+        if @types.grid_is_walkable(floor.grid, tx, ty) &&
+          @types.find_enemy_at(floor.enemies, tx, ty) < 0 {
+          player.x = tx
+          player.y = ty
+          break
+        }
+      }
+      @types.sync_rng(game, rng)
+      @types.set_message(game, "Shadow Step!")
+    }
+    Inferno => {
+      // 3x3 AoE centered on tile in facing direction
+      let cx = player.x + @types.dir_dx(player.facing) * 2
+      let cy = player.y + @types.dir_dy(player.facing) * 2
+      for dy = -1; dy <= 1; dy = dy + 1 {
+        for dx = -1; dx <= 1; dx = dx + 1 {
+          let tx = cx + dx
+          let ty = cy + dy
+          let ei = @types.find_enemy_at(floor.enemies, tx, ty)
+          if ei >= 0 {
+            let dmg = @beat.compute_damage(data.damage, game.beat, rating)
+            let enemy = floor.enemies[ei]
+            enemy.hp = enemy.hp - dmg
+            let sx = Float::from_int(@types.tile_screen_x(tx) + @types.tile_size / 2)
+            let sy = Float::from_int(@types.tile_screen_y(ty) + @types.tile_size / 2)
+            @types.spawn_damage_number(game, sx, sy - 10.0F, dmg, rating)
+            if enemy.hp <= 0 {
+              enemy.active = false
+              game.run_kills = game.run_kills + 1
+              add_kill_score(game, enemy, rating)
+              @types.queue_death_explosion(game, sx, sy, @types.enemy_color(enemy.kind))
+            }
+          }
+        }
+      }
+      game.screen_shake = 6.0F
+      @types.set_message(game, "Inferno!")
+    }
+    Blizzard => {
+      // Freeze all enemies for 2 beats (bosses resist)
+      let mut frozen_count = 0
+      for enemy in floor.enemies {
+        if enemy.active && @content.can_freeze_enemy(enemy) {
+          enemy.frozen_beats = 2
+          frozen_count = frozen_count + 1
+        }
+      }
+      game.screen_shake = 3.0F
+      @types.set_message(game, "Blizzard! \{frozen_count} frozen!")
+    }
+    ThunderStrike => {
+      // 5 damage single target + stun, in faced direction range 2
+      let dir = player.facing
+      let mut target_idx = -1
+      for r in 1..=2 {
+        let tx = player.x + @types.dir_dx(dir) * r
+        let ty = player.y + @types.dir_dy(dir) * r
+        let ei = @types.find_enemy_at(floor.enemies, tx, ty)
+        if ei >= 0 {
+          target_idx = ei
+          break
+        }
+      }
+      if target_idx >= 0 {
+        let dmg = @beat.compute_damage(data.damage, game.beat, rating)
+        let enemy = floor.enemies[target_idx]
+        enemy.hp = enemy.hp - dmg
+        enemy.stunned_beats = @content.stun_duration_for(enemy)
+        let sx = Float::from_int(@types.tile_screen_x(enemy.x) + @types.tile_size / 2)
+        let sy = Float::from_int(@types.tile_screen_y(enemy.y) + @types.tile_size / 2)
+        @types.spawn_damage_number(game, sx, sy - 10.0F, dmg, rating)
+        if enemy.hp <= 0 {
+          handle_enemy_death(game, floor, target_idx, rating)
+        }
+        game.screen_shake = 5.0F
+        @types.set_message(game, "Thunder Strike! \{dmg} dmg + Stun!")
+      } else {
+        @types.set_message(game, "Thunder Strike! No target!")
+      }
+    }
+    VoidPulse => {
+      // Push all adjacent enemies 2 tiles away + 1 damage
+      let dirs : Array[@types.Direction] = [North, South, East, West]
+      for dir in dirs {
+        let tx = player.x + @types.dir_dx(dir)
+        let ty = player.y + @types.dir_dy(dir)
+        let ei = @types.find_enemy_at(floor.enemies, tx, ty)
+        if ei >= 0 {
+          let enemy = floor.enemies[ei]
+          enemy.hp = enemy.hp - data.damage
+          // Push 2 tiles
+          for _ in 0..<2 {
+            let nx = enemy.x + @types.dir_dx(dir)
+            let ny = enemy.y + @types.dir_dy(dir)
+            if @types.grid_is_walkable(floor.grid, nx, ny) &&
+              @types.find_enemy_at(floor.enemies, nx, ny) < 0 {
+              enemy.x = nx
+              enemy.y = ny
+            }
+          }
+          if enemy.hp <= 0 {
+            enemy.active = false
+            game.run_kills = game.run_kills + 1
+            add_kill_score(game, enemy, rating)
+            let sx = Float::from_int(@types.tile_screen_x(enemy.x) + @types.tile_size / 2)
+            let sy = Float::from_int(@types.tile_screen_y(enemy.y) + @types.tile_size / 2)
+            @types.queue_death_explosion(game, sx, sy, @types.enemy_color(enemy.kind))
+          }
+        }
+      }
+      game.screen_shake = 4.0F
+      @types.set_message(game, "Void Pulse!")
+    }
+  }
+}
+
+///|
+fn handle_enemy_death(
+  game : @types.Game,
+  floor : @types.Floor,
+  ei : Int,
+  rating : @types.BeatRating,
+) -> Unit {
+  let enemy = floor.enemies[ei]
+  enemy.active = false
+  game.run_kills = game.run_kills + 1
+  game.current_floor_stats.enemies_killed = game.current_floor_stats.enemies_killed + 1
+  add_kill_score(game, enemy, rating)
+  // Sound event: enemy death
+  @types.push_sound(game, EnemyDeath)
+  // Check boss phase transitions
+  match enemy.kind {
+    BeatDragon | RhythmLich => ()
+    _ => ()
+  }
+  let sx = Float::from_int(@types.tile_screen_x(enemy.x) + @types.tile_size / 2)
+  let sy = Float::from_int(@types.tile_screen_y(enemy.y) + @types.tile_size / 2)
+  // Boss enemies get enhanced death explosion
+  match enemy.kind {
+    BeatDragon | RhythmLich => {
+      @types.spawn_boss_death_particles(game, sx, sy, @types.enemy_color(enemy.kind))
+      game.screen_shake = 12.0F
+    }
+    _ => @types.queue_death_explosion(game, sx, sy, @types.enemy_color(enemy.kind))
+  }
+  // First Blood achievement
+  if game.run_kills == 1 {
+    let _ = @types.check_achievement(game.achievements, FirstBlood)
+  }
+  // Elite slime split
+  if enemy.is_elite && enemy.kind == Slime {
+    let splits = @content.elite_slime_split(
+      enemy.x, enemy.y, floor.enemies.length(), floor,
+    )
+    for s in splits {
+      floor.enemies.push(s)
+    }
+  }
+  // Elite drops
+  if enemy.is_elite {
+    maybe_drop_spell(game)
+    game.player.gold = game.player.gold + @types.elite_gold_drop
+  }
+  // Mana regen on kill (small bonus)
+  game.player.mana = @types.clampi(game.player.mana + 1, 0, game.player.max_mana)
+  // Drop gold for all kills
+  let drop_gold = @content.enemy_drop_count(enemy) * 5
+  game.player.gold = game.player.gold + drop_gold
+}
+
+///|
+fn maybe_drop_spell(game : @types.Game) -> Unit {
+  let rng = @types.game_rng(game)
+  let roll = @types.rand_range(rng, 0, 99)
+  if roll < @types.spell_drop_chance {
+    let all = @types.all_spell_kinds()
+    let idx = @types.rand_range(rng, 0, all.length() - 1)
+    let spell = all[idx]
+    if !@types.has_spell(game.player, spell) {
+      game.player.learned_spells.push(spell)
+      let _ = @types.equip_spell(game.player, spell)
+      let data = @types.spell_data(spell)
+      @types.set_message(game, "Learned \{data.name}!")
+    }
+  }
+  @types.sync_rng(game, rng)
+}
+
+// ============================================================
+// === Curse System ===
+// ============================================================
+
+///|
+fn offer_curse_choice(game : @types.Game) -> Unit {
+  let rng = @types.game_rng(game)
+  let all = @types.all_curse_kinds()
+  game.curse_offers.clear()
+  // Offer 2 random curses not already active
+  let mut offered = 0
+  for _ in 0..<20 {
+    if offered >= 2 {
+      break
+    }
+    let idx = @types.rand_range(rng, 0, all.length() - 1)
+    let curse = all[idx]
+    if !@types.has_curse(game.curses, curse) {
+      let mut dup = false
+      for c in game.curse_offers {
+        if c == curse {
+          dup = true
+          break
+        }
+      }
+      if !dup {
+        game.curse_offers.push(curse)
+        offered = offered + 1
+      }
+    }
+  }
+  @types.sync_rng(game, rng)
+  game.curse_cursor = 0
+  game.showing_curse_offer = true
+  if game.curse_offers.length() == 0 {
+    // No curses available, go straight to ability choice
+    offer_ability_choices(game)
+  } else {
+    game.screen = CurseOffer
+  }
+}
+
+///|
+fn update_curse_offer(game : @types.Game) -> Unit {
+  if @raylib.is_key_pressed(@raylib.KeyUp) ||
+    @raylib.is_key_pressed(@raylib.KeyW) {
+    game.curse_cursor = game.curse_cursor - 1
+    if game.curse_cursor < 0 {
+      game.curse_cursor = game.curse_offers.length()
+      // Extra slot for "Skip"
+    }
+  }
+  if @raylib.is_key_pressed(@raylib.KeyDown) ||
+    @raylib.is_key_pressed(@raylib.KeyS) {
+    game.curse_cursor = game.curse_cursor + 1
+    if game.curse_cursor > game.curse_offers.length() {
+      game.curse_cursor = 0
+    }
+  }
+  if @raylib.is_key_pressed(@raylib.KeyEnter) ||
+    @raylib.is_key_pressed(@raylib.KeySpace) {
+    if game.curse_cursor < game.curse_offers.length() {
+      let curse = game.curse_offers[game.curse_cursor]
+      apply_curse(game, curse)
+      @types.push_sound(game, CurseAccepted)
+      @types.set_message(game, "Curse: \{@types.curse_name(curse)}!")
+    }
+    game.showing_curse_offer = false
+    // Then offer ability choice
+    offer_ability_choices(game)
+  }
+}
+
+///|
+fn apply_curse(game : @types.Game, curse : @types.CurseKind) -> Unit {
+  game.curses.active_curses.push(curse)
+  match curse {
+    DoubleTime => {
+      // BPM +20%
+      game.beat.bpm = game.beat.bpm * (1.0F + @types.curse_bpm_bonus_pct)
+    }
+    GlassCannon => {
+      // 1 HP max
+      game.player.max_hp = 1
+      game.player.hp = 1
+    }
+    BlindBeat => {
+      // Perfect window +50ms
+      game.beat.perfect_window = game.beat.perfect_window + @types.blind_beat_perfect_bonus
+    }
+    Swarm => ()
+    // Swarm effect is handled in floor generation
+  }
+}
+
+// ============================================================
+// === BPM transition animation ===
+// ============================================================
+
+///|
+fn start_bpm_animation(game : @types.Game, from : Float, to : Float) -> Unit {
+  game.bpm_anim_value = from
+  game.bpm_anim_target = to
+  game.bpm_anim_timer = 1.5F
+}
+
+// ============================================================
+// === Apply curse score bonus at finalize ===
+// ============================================================
+
+///|
+fn curse_score_multiplier(game : @types.Game) -> Float {
+  let mut mult = 1.0F
+  if @types.has_curse(game.curses, DoubleTime) {
+    mult = mult + @types.curse_score_bonus_pct
+  }
+  mult
 }

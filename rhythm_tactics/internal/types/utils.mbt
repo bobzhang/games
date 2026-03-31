@@ -323,6 +323,8 @@ pub fn shop_item_name(kind : ShopItemKind) -> String {
     ShopSpecialCharge => "Special Charge"
     ShopBeatWindow => "Beat Window+"
     ShopWeapon(wk) => weapon_data(wk).name
+    ShopSpell(sk) => spell_data(sk).name
+    ShopManaPotion => "Mana Potion"
   }
 }
 
@@ -338,6 +340,11 @@ pub fn shop_item_desc(kind : ShopItemKind) -> String {
       let wd = weapon_data(wk)
       "DMG:\{wd.damage} RNG:\{wd.range} CD:\{wd.beat_cost}"
     }
+    ShopSpell(sk) => {
+      let sd = spell_data(sk)
+      "\{sd.desc} [Mana:\{sd.mana_cost}]"
+    }
+    ShopManaPotion => "Restore 5 Mana"
   }
 }
 
@@ -350,6 +357,8 @@ pub fn shop_item_price(kind : ShopItemKind) -> Int {
     ShopSpecialCharge => price_special_charge
     ShopBeatWindow => price_beat_window
     ShopWeapon(_) => 40
+    ShopSpell(_) => 35
+    ShopManaPotion => 15
   }
 }
 
@@ -831,4 +840,990 @@ pub fn all_weapon_kinds() -> Array[WeaponKind] {
 ///|
 pub fn all_ability_kinds() -> Array[AbilityKind] {
   [DoubleStep, CounterAttack, HealBeat, ShadowDodge, RhythmShield]
+}
+
+// ============================================================
+// === Spell System ===
+// ============================================================
+
+///|
+pub fn spell_data(kind : SpellKind) -> SpellData {
+  match kind {
+    Fireball =>
+      {
+        kind, element: Fire, name: "Fireball", desc: "3 dmg, 1 tile range",
+        mana_cost: 3, beat_cooldown: 2, damage: 3, range: 1, aoe_radius: 0,
+      }
+    FrostNova =>
+      {
+        kind, element: Ice, name: "Frost Nova", desc: "1 dmg, freezes adjacent",
+        mana_cost: 4, beat_cooldown: 3, damage: 1, range: 0, aoe_radius: 1,
+      }
+    ChainLightning =>
+      {
+        kind, element: Lightning, name: "Chain Lightning", desc: "2 dmg, chains to 3",
+        mana_cost: 5, beat_cooldown: 3, damage: 2, range: 3, aoe_radius: 0,
+      }
+    ShadowStep =>
+      {
+        kind, element: Dark, name: "Shadow Step", desc: "Teleport to empty tile",
+        mana_cost: 2, beat_cooldown: 2, damage: 0, range: 5, aoe_radius: 0,
+      }
+    Inferno =>
+      {
+        kind, element: Fire, name: "Inferno", desc: "3x3 area, 2 dmg",
+        mana_cost: 6, beat_cooldown: 4, damage: 2, range: 2, aoe_radius: 1,
+      }
+    Blizzard =>
+      {
+        kind, element: Ice, name: "Blizzard", desc: "Freeze all enemies 2 beats",
+        mana_cost: 7, beat_cooldown: 5, damage: 0, range: 99, aoe_radius: 99,
+      }
+    ThunderStrike =>
+      {
+        kind, element: Lightning, name: "Thunder Strike", desc: "5 dmg, single, stuns",
+        mana_cost: 6, beat_cooldown: 4, damage: 5, range: 2, aoe_radius: 0,
+      }
+    VoidPulse =>
+      {
+        kind, element: Dark, name: "Void Pulse", desc: "Push adjacent enemies 2 tiles",
+        mana_cost: 4, beat_cooldown: 3, damage: 1, range: 0, aoe_radius: 1,
+      }
+  }
+}
+
+///|
+pub fn element_color(elem : Element) -> @raylib.Color {
+  match elem {
+    Fire => @raylib.Color::new(255, 100, 30, 255)
+    Ice => @raylib.Color::new(100, 200, 255, 255)
+    Lightning => @raylib.Color::new(255, 255, 100, 255)
+    Dark => @raylib.Color::new(160, 80, 220, 255)
+  }
+}
+
+///|
+pub fn spell_color(kind : SpellKind) -> @raylib.Color {
+  element_color(spell_data(kind).element)
+}
+
+///|
+pub fn can_cast_spell(player : Player, slot : Int) -> Bool {
+  if slot < 0 || slot >= 4 {
+    return false
+  }
+  match player.spell_slots.spells[slot] {
+    None => false
+    Some(kind) => {
+      let data = spell_data(kind)
+      player.mana >= data.mana_cost && player.spell_slots.cooldowns[slot] <= 0
+    }
+  }
+}
+
+///|
+pub fn equip_spell(player : Player, kind : SpellKind) -> Bool {
+  // Find first empty slot
+  for i in 0..<4 {
+    match player.spell_slots.spells[i] {
+      None => {
+        player.spell_slots.spells[i] = Some(kind)
+        return true
+      }
+      _ => continue
+    }
+  }
+  false
+}
+
+///|
+pub fn has_spell(player : Player, kind : SpellKind) -> Bool {
+  for s in player.learned_spells {
+    if s == kind {
+      return true
+    }
+  }
+  false
+}
+
+///|
+pub fn all_spell_kinds() -> Array[SpellKind] {
+  [Fireball, FrostNova, ChainLightning, ShadowStep, Inferno, Blizzard, ThunderStrike, VoidPulse]
+}
+
+///|
+pub fn tick_spell_cooldowns(player : Player) -> Unit {
+  for i in 0..<4 {
+    if player.spell_slots.cooldowns[i] > 0 {
+      player.spell_slots.cooldowns[i] = player.spell_slots.cooldowns[i] - 1
+    }
+  }
+}
+
+// ============================================================
+// === Elite Enemy System ===
+// ============================================================
+
+///|
+pub fn make_elite(enemy : Enemy) -> Unit {
+  enemy.is_elite = true
+  enemy.hp = enemy.hp * elite_hp_mult
+  // max_hp is immutable, but we track elite via is_elite flag
+}
+
+///|
+pub fn should_spawn_elite(floor_num : Int, rng : Ref[Int]) -> Bool {
+  if floor_num < elite_floor_threshold {
+    return false
+  }
+  let chance = 10 + (floor_num - elite_floor_threshold) * 5
+  let roll = rand_range(rng, 0, 99)
+  roll < chance
+}
+
+///|
+pub fn elite_suffix(kind : EnemyKind) -> String {
+  match kind {
+    Slime => "Splits on death"
+    Skeleton => "Cross attack"
+    Bat => "Double move"
+    Dragon => "Line breath"
+    _ => "Enhanced"
+  }
+}
+
+// ============================================================
+// === Curse / Run Modifier System ===
+// ============================================================
+
+///|
+pub fn curse_name(kind : CurseKind) -> String {
+  match kind {
+    DoubleTime => "Double Time"
+    GlassCannon => "Glass Cannon"
+    BlindBeat => "Blind Beat"
+    Swarm => "Swarm"
+  }
+}
+
+///|
+pub fn curse_desc(kind : CurseKind) -> String {
+  match kind {
+    DoubleTime => "BPM +20%, but +50% score"
+    GlassCannon => "2x damage dealt, 1 HP max"
+    BlindBeat => "Beat hidden, Perfect +50ms"
+    Swarm => "2x enemies, 2x drops"
+  }
+}
+
+///|
+pub fn has_curse(curses : CurseState, kind : CurseKind) -> Bool {
+  for c in curses.active_curses {
+    if c == kind {
+      return true
+    }
+  }
+  false
+}
+
+///|
+pub fn curse_color(kind : CurseKind) -> @raylib.Color {
+  match kind {
+    DoubleTime => @raylib.Color::new(255, 180, 40, 255)
+    GlassCannon => @raylib.Color::new(255, 60, 60, 255)
+    BlindBeat => @raylib.Color::new(100, 100, 180, 255)
+    Swarm => @raylib.Color::new(80, 200, 80, 255)
+  }
+}
+
+///|
+pub fn all_curse_kinds() -> Array[CurseKind] {
+  [DoubleTime, GlassCannon, BlindBeat, Swarm]
+}
+
+// ============================================================
+// === Achievement System ===
+// ============================================================
+
+///|
+pub fn check_achievement(
+  state : AchievementState,
+  kind : AchievementKind,
+) -> Bool {
+  for a in state.achievements {
+    if a.kind == kind && !(a.unlocked) {
+      a.unlocked = true
+      state.toasts.push({ text: "Achievement: " + a.name, timer: 3.0 })
+      return true
+    }
+  }
+  false
+}
+
+///|
+pub fn is_achievement_unlocked(state : AchievementState, kind : AchievementKind) -> Bool {
+  for a in state.achievements {
+    if a.kind == kind {
+      return a.unlocked
+    }
+  }
+  false
+}
+
+///|
+pub fn update_achievement_toasts(state : AchievementState, dt : Float) -> Unit {
+  let mut i = 0
+  while i < state.toasts.length() {
+    state.toasts[i].timer = state.toasts[i].timer - dt
+    if state.toasts[i].timer <= 0.0 {
+      let last = state.toasts.length() - 1
+      if i < last {
+        state.toasts[i] = state.toasts[last]
+      }
+      let _ = state.toasts.pop()
+    } else {
+      i = i + 1
+    }
+  }
+}
+
+// ============================================================
+// === Damage Numbers ===
+// ============================================================
+
+///|
+pub fn spawn_damage_number(
+  game : Game,
+  x : Float,
+  y : Float,
+  value : Int,
+  rating : BeatRating,
+) -> Unit {
+  let color = match rating {
+    Perfect => color_perfect
+    Good => color_good
+    Miss => color_miss
+  }
+  let dn : DamageNumber = {
+    x,
+    y,
+    vy: -damage_number_speed,
+    life: damage_number_life,
+    value,
+    color,
+  }
+  game.damage_numbers.push(dn)
+}
+
+///|
+pub fn update_damage_numbers(game : Game, dt : Float) -> Unit {
+  let mut i = 0
+  while i < game.damage_numbers.length() {
+    let dn = game.damage_numbers[i]
+    dn.life = dn.life - dt
+    if dn.life <= 0.0 {
+      let last = game.damage_numbers.length() - 1
+      if i < last {
+        game.damage_numbers[i] = game.damage_numbers[last]
+      }
+      let _ = game.damage_numbers.pop()
+    } else {
+      dn.y = dn.y + dn.vy * dt
+      dn.vy = dn.vy * 0.95
+      i = i + 1
+    }
+  }
+}
+
+// ============================================================
+// === Trail Particles (player movement on beat) ===
+// ============================================================
+
+///|
+pub fn spawn_trail_particles(game : Game, sx : Float, sy : Float) -> Unit {
+  let rng = game_rng(game)
+  for _ in 0..<trail_particle_count {
+    let angle = Float::from_int(rand_range(rng, 0, 628)) / 100.0F
+    let speed = 15.0F + Float::from_int(rand_range(rng, 0, 20))
+    let p : Particle = {
+      x: sx,
+      y: sy,
+      vx: speed * cos_approx(angle),
+      vy: speed * sin_approx(angle),
+      life: trail_particle_life,
+      max_life: trail_particle_life,
+      r: 80,
+      g: 200,
+      b: 255,
+      size: 2.0F,
+    }
+    game.trail_particles.push(p)
+  }
+  sync_rng(game, rng)
+}
+
+///|
+pub fn update_trail_particles(game : Game, dt : Float) -> Unit {
+  let mut i = 0
+  while i < game.trail_particles.length() {
+    let p = game.trail_particles[i]
+    p.life = p.life - dt
+    if p.life <= 0.0 {
+      let last = game.trail_particles.length() - 1
+      if i < last {
+        game.trail_particles[i] = game.trail_particles[last]
+      }
+      let _ = game.trail_particles.pop()
+    } else {
+      p.x = p.x + p.vx * dt
+      p.y = p.y + p.vy * dt
+      p.vx = p.vx * 0.9
+      p.vy = p.vy * 0.9
+      p.size = 2.0 * (p.life / p.max_life)
+      i = i + 1
+    }
+  }
+}
+
+// ============================================================
+// === Beat-synced death explosion ===
+// ============================================================
+
+///|
+pub fn queue_death_explosion(
+  game : Game,
+  sx : Float,
+  sy : Float,
+  color : @raylib.Color,
+) -> Unit {
+  game.pending_death_explosions.push((sx, sy, color))
+}
+
+///|
+pub fn flush_death_explosions(game : Game) -> Unit {
+  for explosion in game.pending_death_explosions {
+    let (sx, sy, color) = explosion
+    spawn_death_particles(game, sx, sy, color)
+  }
+  game.pending_death_explosions.clear()
+}
+
+///|
+pub fn screen_pulse_for_bpm(bpm : Float) -> Float {
+  // Faster BPM = more intense screen pulse (0.5 at 100, 1.0 at 160+)
+  clampf((bpm - 80.0) / 80.0, 0.3, 1.2)
+}
+
+// ============================================================
+// === Spell Cast Particles ===
+// ============================================================
+
+///|
+pub fn spawn_spell_particles(
+  game : Game,
+  sx : Float,
+  sy : Float,
+  element : Element,
+) -> Unit {
+  let (r, g, b) = match element {
+    Fire => (255, 100, 30)
+    Ice => (100, 200, 255)
+    Lightning => (255, 255, 100)
+    Dark => (160, 80, 220)
+  }
+  let rng = game_rng(game)
+  let count = 8
+  for i in 0..<count {
+    let angle = Float::from_int(i) * 6.28F / Float::from_int(count)
+    let speed = 30.0F + Float::from_int(rand_range(rng, 0, 30))
+    let p : Particle = {
+      x: sx,
+      y: sy,
+      vx: speed * cos_approx(angle),
+      vy: speed * sin_approx(angle),
+      life: 0.5F,
+      max_life: 0.5F,
+      r,
+      g,
+      b,
+      size: 3.0F,
+    }
+    game.particles.push(p)
+  }
+  sync_rng(game, rng)
+}
+
+// ============================================================
+// === Enhanced Death Explosion (more particles for bosses) ===
+// ============================================================
+
+///|
+pub fn spawn_boss_death_particles(
+  game : Game,
+  sx : Float,
+  sy : Float,
+  color : @raylib.Color,
+) -> Unit {
+  let rng = game_rng(game)
+  let count = 30
+  for i in 0..<count {
+    let angle = Float::from_int(i) * 6.28F / Float::from_int(count)
+    let speed = 60.0F + Float::from_int(rand_range(rng, 0, 80))
+    let vx = speed * cos_approx(angle)
+    let vy = speed * sin_approx(angle)
+    let p : Particle = {
+      x: sx,
+      y: sy,
+      vx,
+      vy,
+      life: 1.0F,
+      max_life: 1.0F,
+      r: color.r.to_int(),
+      g: color.g.to_int(),
+      b: color.b.to_int(),
+      size: 4.0F,
+    }
+    game.particles.push(p)
+  }
+  // Add secondary ring
+  for i in 0..<20 {
+    let angle = Float::from_int(i) * 6.28F / 20.0F
+    let speed = 100.0F + Float::from_int(rand_range(rng, 0, 40))
+    let p : Particle = {
+      x: sx,
+      y: sy,
+      vx: speed * cos_approx(angle),
+      vy: speed * sin_approx(angle),
+      life: 0.7F,
+      max_life: 0.7F,
+      r: 255,
+      g: 255,
+      b: 200,
+      size: 2.0F,
+    }
+    game.particles.push(p)
+  }
+  sync_rng(game, rng)
+}
+
+// ============================================================
+// === Spell Cast Flash Effect ===
+// ============================================================
+
+///|
+pub fn spell_border_flash(game : Game, element : Element) -> Unit {
+  let color = element_color(element)
+  game.border_flash_color = Some(color)
+  game.border_flash_timer = 0.3
+}
+
+// ============================================================
+// === Player Direction Arrow Character ===
+// ============================================================
+
+///|
+pub fn direction_arrow(dir : Direction) -> String {
+  match dir {
+    North => "^"
+    South => "v"
+    East => ">"
+    West => "<"
+  }
+}
+
+// ============================================================
+// === Mana Cost Color ===
+// ============================================================
+
+///|
+pub fn mana_cost_affordable(player : Player, cost : Int) -> Bool {
+  player.mana >= cost
+}
+
+// ============================================================
+// === Enemy Threat Level (for UI display) ===
+// ============================================================
+
+///|
+pub fn enemy_threat_level(enemy : Enemy) -> String {
+  let base = enemy.max_hp * enemy.damage
+  let elite_mult = if enemy.is_elite { 2 } else { 1 }
+  let threat = base * elite_mult
+  if threat >= 20 {
+    "!!!"
+  } else if threat >= 10 {
+    "!!"
+  } else if threat >= 5 {
+    "!"
+  } else {
+    ""
+  }
+}
+
+// ============================================================
+// === Floor Theme ambient sound hint (visual text) ===
+// ============================================================
+
+///|
+pub fn theme_ambient_text(theme : FloorTheme) -> String {
+  match theme {
+    Meadow => "Birds chirp to the beat..."
+    Cave => "Echoes reverberate..."
+    BossArena => "The ground trembles..."
+    IceDungeon => "Crystals hum..."
+    Volcano => "Lava bubbles rhythmically..."
+    FinalArena => "Reality bends to the music..."
+  }
+}
+
+// ============================================================
+// === Combo encouragement text ===
+// ============================================================
+
+///|
+pub fn combo_encouragement(combo : Int) -> String {
+  if combo >= 40 {
+    "UNSTOPPABLE!"
+  } else if combo >= 30 {
+    "LEGENDARY!"
+  } else if combo >= 20 {
+    "INCREDIBLE!"
+  } else if combo >= 10 {
+    "GREAT!"
+  } else if combo >= 5 {
+    "NICE!"
+  } else {
+    ""
+  }
+}
+
+// ============================================================
+// === Spell Slot Summary ===
+// ============================================================
+
+///|
+pub fn spell_slot_summary(player : Player) -> String {
+  let mut result = ""
+  for i in 0..<4 {
+    if result.length() > 0 {
+      result = result + " | "
+    }
+    match player.spell_slots.spells[i] {
+      None => result = result + "\{i + 1}:---"
+      Some(kind) => {
+        let data = spell_data(kind)
+        let cd = player.spell_slots.cooldowns[i]
+        if cd > 0 {
+          result = result + "\{i + 1}:\{data.name}[CD\{cd}]"
+        } else if player.mana >= data.mana_cost {
+          result = result + "\{i + 1}:\{data.name}*"
+        } else {
+          result = result + "\{i + 1}:\{data.name}"
+        }
+      }
+    }
+  }
+  result
+}
+
+// ============================================================
+// === Curse Risk/Reward Summary ===
+// ============================================================
+
+///|
+pub fn curse_risk_text(kind : CurseKind) -> String {
+  match kind {
+    DoubleTime => "RISK: Faster beats  |  REWARD: +50% score"
+    GlassCannon => "RISK: 1 HP max  |  REWARD: 2x damage"
+    BlindBeat => "RISK: Beat hidden  |  REWARD: Wider Perfect"
+    Swarm => "RISK: 2x enemies  |  REWARD: 2x drops"
+  }
+}
+
+// ============================================================
+// === Run Statistics Summary ===
+// ============================================================
+
+///|
+pub fn run_stats_summary(
+  floors : Int,
+  kills : Int,
+  perfects : Int,
+  max_combo_val : Int,
+  score : Int,
+) -> String {
+  let grade = compute_score_grade(score)
+  "F\{floors} K\{kills} P\{perfects} C\{max_combo_val} = \{grade_text(grade)}"
+}
+
+// ============================================================
+// === Floor difficulty estimation ===
+// ============================================================
+
+///|
+pub fn floor_difficulty_text(floor_num : Int) -> String {
+  if floor_num <= 2 {
+    "Easy"
+  } else if floor_num <= 4 {
+    "Normal"
+  } else if floor_num == 5 {
+    "BOSS"
+  } else if floor_num <= 7 {
+    "Hard"
+  } else if floor_num <= 9 {
+    "Very Hard"
+  } else {
+    "EXTREME"
+  }
+}
+
+///|
+pub fn floor_difficulty_color(floor_num : Int) -> @raylib.Color {
+  if floor_num <= 2 {
+    @raylib.Color::new(80, 200, 80, 255)
+  } else if floor_num <= 4 {
+    @raylib.Color::new(200, 200, 80, 255)
+  } else if floor_num == 5 {
+    @raylib.Color::new(255, 80, 40, 255)
+  } else if floor_num <= 7 {
+    @raylib.Color::new(255, 140, 40, 255)
+  } else if floor_num <= 9 {
+    @raylib.Color::new(255, 60, 60, 255)
+  } else {
+    @raylib.Color::new(200, 40, 255, 255)
+  }
+}
+
+// ============================================================
+// === Sound Event Queue System ===
+// ============================================================
+
+///|
+pub fn push_sound(game : Game, event : SoundEvent) -> Unit {
+  game.sound_queue.push(event)
+}
+
+///|
+pub fn clear_sound_queue(game : Game) -> Unit {
+  game.sound_queue.clear()
+}
+
+///|
+pub fn drain_sound_queue(game : Game) -> Array[SoundEvent] {
+  let result : Array[SoundEvent] = []
+  for ev in game.sound_queue {
+    result.push(ev)
+  }
+  game.sound_queue.clear()
+  result
+}
+
+// ============================================================
+// === Weapon Visual Effects ===
+// ============================================================
+
+///|
+pub fn spawn_weapon_effect(
+  game : Game,
+  kind : WeaponKind,
+  x : Float,
+  y : Float,
+  dir : Direction,
+) -> Unit {
+  let effect = WeaponEffect::new(kind, x, y, dir)
+  game.weapon_effects.push(effect)
+}
+
+///|
+pub fn update_weapon_effects(game : Game, dt : Float) -> Unit {
+  let mut i = 0
+  while i < game.weapon_effects.length() {
+    let ef = game.weapon_effects[i]
+    ef.timer = ef.timer - dt
+    if ef.timer <= 0.0 {
+      let last = game.weapon_effects.length() - 1
+      if i < last {
+        game.weapon_effects[i] = game.weapon_effects[last]
+      }
+      let _ = game.weapon_effects.pop()
+    } else {
+      i = i + 1
+    }
+  }
+}
+
+///|
+pub fn weapon_effect_color(kind : WeaponKind) -> @raylib.Color {
+  match kind {
+    Sword => @raylib.Color::new(220, 220, 240, 220)
+    Spear => @raylib.Color::new(200, 180, 120, 220)
+    Whip => @raylib.Color::new(180, 120, 80, 220)
+    Hammer => @raylib.Color::new(200, 200, 220, 240)
+    Bow => @raylib.Color::new(140, 200, 100, 220)
+    Staff => @raylib.Color::new(180, 120, 255, 220)
+  }
+}
+
+// ============================================================
+// === Boss Phase Management ===
+// ============================================================
+
+///|
+pub fn boss_phase_from_hp(kind : EnemyKind, hp : Int, max_hp : Int) -> BossPhase {
+  let frac = Float::from_int(hp) / Float::from_int(max_hp)
+  match kind {
+    BeatDragon =>
+      if frac > dragon_phase2_threshold {
+        Phase1
+      } else if frac > dragon_phase3_threshold {
+        Phase2
+      } else {
+        Phase3
+      }
+    RhythmLich =>
+      if frac > lich_phase2_threshold {
+        Phase1
+      } else if frac > lich_phase3_threshold {
+        Phase2
+      } else {
+        Phase3
+      }
+    _ => Phase1
+  }
+}
+
+///|
+pub fn check_boss_phase_transition(
+  game : Game,
+  kind : EnemyKind,
+  hp : Int,
+  max_hp : Int,
+) -> Bool {
+  let new_phase = boss_phase_from_hp(kind, hp, max_hp)
+  match kind {
+    BeatDragon => {
+      let old = game.boss_phases.dragon_phase
+      if old != new_phase {
+        game.boss_phases.dragon_phase = new_phase
+        push_sound(game, BossPhaseChange)
+        game.screen_shake = 8.0
+        true
+      } else {
+        false
+      }
+    }
+    RhythmLich => {
+      let old = game.boss_phases.lich_phase
+      if old != new_phase {
+        game.boss_phases.lich_phase = new_phase
+        push_sound(game, BossPhaseChange)
+        game.screen_shake = 8.0
+        // Phase 3 enables double summon
+        if new_phase == Phase3 {
+          game.boss_phases.lich_double_summon = true
+        }
+        true
+      } else {
+        false
+      }
+    }
+    _ => false
+  }
+}
+
+///|
+pub fn boss_phase_name(phase : BossPhase) -> String {
+  match phase {
+    Phase1 => "Phase 1"
+    Phase2 => "Phase 2"
+    Phase3 => "Phase 3"
+  }
+}
+
+///|
+pub fn boss_phase_color(phase : BossPhase) -> @raylib.Color {
+  match phase {
+    Phase1 => @raylib.Color::new(100, 200, 100, 255)
+    Phase2 => @raylib.Color::new(255, 200, 50, 255)
+    Phase3 => @raylib.Color::new(255, 60, 40, 255)
+  }
+}
+
+// ============================================================
+// === Run Statistics Tracking ===
+// ============================================================
+
+///|
+pub fn start_floor_stats(game : Game, floor_num : Int) -> Unit {
+  game.current_floor_stats = FloorStats::new(floor_num)
+}
+
+///|
+pub fn finalize_floor_stats(game : Game) -> Unit {
+  let stats = FloorStats::new(game.current_floor_stats.floor_num)
+  stats.enemies_killed = game.current_floor_stats.enemies_killed
+  stats.perfects_hit = game.current_floor_stats.perfects_hit
+  stats.items_collected = game.current_floor_stats.items_collected
+  stats.spells_cast = game.current_floor_stats.spells_cast
+  stats.damage_taken = game.current_floor_stats.damage_taken
+  stats.damage_dealt = game.current_floor_stats.damage_dealt
+  game.run_stats.floor_history.push(stats)
+}
+
+///|
+pub fn record_weapon_usage(game : Game, kind : WeaponKind) -> Unit {
+  for wu in game.run_stats.weapon_usage {
+    let (wk, _count) = wu
+    if wk == kind {
+      // MoonBit tuples in arrays are immutable, so update total
+      game.run_stats.total_damage_dealt = game.run_stats.total_damage_dealt
+      break
+    }
+  }
+  // Track via simple counter
+  let mut found = false
+  let new_usage : Array[(WeaponKind, Int)] = []
+  for wu in game.run_stats.weapon_usage {
+    let (wk, count) = wu
+    if wk == kind {
+      new_usage.push((wk, count + 1))
+      found = true
+    } else {
+      new_usage.push((wk, count))
+    }
+  }
+  if !found {
+    new_usage.push((kind, 1))
+  }
+  game.run_stats.weapon_usage = new_usage
+}
+
+///|
+pub fn record_spell_usage(game : Game, kind : SpellKind) -> Unit {
+  let new_usage : Array[(SpellKind, Int)] = []
+  let mut found = false
+  for su in game.run_stats.spell_usage {
+    let (sk, count) = su
+    if sk == kind {
+      new_usage.push((sk, count + 1))
+      found = true
+    } else {
+      new_usage.push((sk, count))
+    }
+  }
+  if !found {
+    new_usage.push((kind, 1))
+  }
+  game.run_stats.spell_usage = new_usage
+  game.run_stats.total_spells_cast = game.run_stats.total_spells_cast + 1
+  game.current_floor_stats.spells_cast = game.current_floor_stats.spells_cast + 1
+}
+
+///|
+pub fn most_used_weapon(stats : RunStats) -> (WeaponKind, Int) {
+  let mut best_kind : WeaponKind = Sword
+  let mut best_count = 0
+  for wu in stats.weapon_usage {
+    let (wk, count) = wu
+    if count > best_count {
+      best_count = count
+      best_kind = wk
+    }
+  }
+  (best_kind, best_count)
+}
+
+///|
+pub fn grade_distance_text(score : Int) -> String {
+  if score >= grade_s_threshold {
+    "MAX GRADE!"
+  } else if score >= grade_a_threshold {
+    let needed = grade_s_threshold - score
+    "\{needed} pts to S"
+  } else if score >= grade_b_threshold {
+    let needed = grade_a_threshold - score
+    "\{needed} pts to A"
+  } else {
+    let needed = grade_b_threshold - score
+    "\{needed} pts to B"
+  }
+}
+
+///|
+pub fn reset_run_stats(game : Game) -> Unit {
+  game.run_stats.floor_history.clear()
+  game.run_stats.weapon_usage = [(Sword, 0), (Spear, 0), (Whip, 0), (Hammer, 0), (Bow, 0), (Staff, 0)]
+  game.run_stats.spell_usage.clear()
+  game.run_stats.total_items = 0
+  game.run_stats.total_spells_cast = 0
+  game.run_stats.total_damage_dealt = 0
+  game.run_stats.total_damage_taken = 0
+}
+
+///|
+pub fn reset_boss_phases(game : Game) -> Unit {
+  game.boss_phases.dragon_phase = Phase1
+  game.boss_phases.lich_phase = Phase1
+  game.boss_phases.dragon_charge_cooldown = 0
+  game.boss_phases.lich_teleport_cooldown = 0
+  game.boss_phases.dragon_4dir_cooldown = 0
+  game.boss_phases.lich_double_summon = false
+}
+
+// ============================================================
+// === Weapon Switch Flash ===
+// ============================================================
+
+///|
+pub fn trigger_weapon_switch_flash(game : Game) -> Unit {
+  game.weapon_switch_flash = weapon_switch_flash_duration
+  push_sound(game, WeaponSwitch)
+}
+
+///|
+pub fn update_weapon_switch_flash(game : Game, dt : Float) -> Unit {
+  if game.weapon_switch_flash > 0.0 {
+    game.weapon_switch_flash = game.weapon_switch_flash - dt
+    if game.weapon_switch_flash < 0.0 {
+      game.weapon_switch_flash = 0.0
+    }
+  }
+}
+
+// ============================================================
+// === Combo Milestone Burst Particles ===
+// ============================================================
+
+///|
+pub fn spawn_milestone_burst(game : Game, ms : ComboMilestone) -> Unit {
+  let (r, g, b) = match ms {
+    Fever => (255, 200, 0)
+    Frenzy => (255, 100, 50)
+    PerfectStorm => (255, 50, 255)
+    NoMilestone => (255, 255, 255)
+  }
+  let rng = game_rng(game)
+  let cx = Float::from_int(tile_screen_x(game.player.x) + tile_size / 2)
+  let cy = Float::from_int(tile_screen_y(game.player.y) + tile_size / 2)
+  let count = 16
+  for i in 0..<count {
+    let angle = Float::from_int(i) * 6.28F / Float::from_int(count)
+    let speed = 50.0F + Float::from_int(rand_range(rng, 0, 50))
+    let vx = speed * cos_approx(angle)
+    let vy = speed * sin_approx(angle)
+    let p : Particle = {
+      x: cx,
+      y: cy,
+      vx,
+      vy,
+      life: 0.8F,
+      max_life: 0.8F,
+      r,
+      g,
+      b,
+      size: 4.0F,
+    }
+    game.particles.push(p)
+  }
+  sync_rng(game, rng)
 }

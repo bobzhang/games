@@ -11,6 +11,7 @@ pub(all) enum Screen {
   BossIntro
   AbilityChoice
   RunSummary
+  CurseOffer
 } derive(Eq, Show)
 
 ///|
@@ -92,6 +93,8 @@ pub(all) enum ShopItemKind {
   ShopSpecialCharge
   ShopBeatWindow
   ShopWeapon(WeaponKind)
+  ShopSpell(SpellKind)
+  ShopManaPotion
 } derive(Show)
 
 ///|
@@ -138,3 +141,68 @@ pub(all) enum ScoreGrade {
   GradeB
   GradeC
 } derive(Show)
+
+///|
+pub(all) enum Element {
+  Fire
+  Ice
+  Lightning
+  Dark
+} derive(Eq, Show)
+
+///|
+pub(all) enum SpellKind {
+  Fireball
+  FrostNova
+  ChainLightning
+  ShadowStep
+  Inferno
+  Blizzard
+  ThunderStrike
+  VoidPulse
+} derive(Eq, Show)
+
+///|
+pub(all) enum CurseKind {
+  DoubleTime
+  GlassCannon
+  BlindBeat
+  Swarm
+} derive(Eq, Show)
+
+///|
+pub(all) enum AchievementKind {
+  FirstBlood
+  Perfect10
+  BossSlayer
+  ComboKing
+  SpeedDemon
+  Pacifist
+} derive(Eq, Show)
+
+///|
+pub(all) enum SoundEvent {
+  BeatTick
+  BeatPerfect
+  BeatGood
+  BeatMiss
+  PlayerAttack
+  PlayerHit
+  EnemyDeath
+  ItemPickup
+  SpellCast(Element)
+  BossPhaseChange
+  LevelComplete
+  ComboMilestoneSound(ComboMilestone)
+  ShopPurchase
+  WeaponSwitch
+  BossRoar
+  CurseAccepted
+} derive(Show)
+
+///|
+pub(all) enum BossPhase {
+  Phase1
+  Phase2
+  Phase3
+} derive(Eq, Show)

@@ -250,3 +250,97 @@ pub let shadow_dodge_chance : Int = 30
 
 ///|
 pub let lava_damage : Int = 2
+
+// --- Spell constants ---
+
+///|
+pub let mana_regen_on_perfect : Int = 1
+
+///|
+pub let spell_drop_chance : Int = 25
+
+///|
+pub let elite_hp_mult : Int = 2
+
+///|
+pub let elite_drop_bonus : Int = 2
+
+///|
+pub let elite_gold_drop : Int = 30
+
+///|
+pub let elite_floor_threshold : Int = 4
+
+///|
+pub let damage_number_life : Float = 0.8
+
+///|
+pub let damage_number_speed : Float = 40.0
+
+///|
+pub let trail_particle_life : Float = 0.3
+
+///|
+pub let trail_particle_count : Int = 3
+
+///|
+pub let color_elite_outline : @raylib.Color = @raylib.Color::new(255, 215, 0, 255)
+
+///|
+pub let curse_bpm_bonus_pct : Float = 0.2
+
+///|
+pub let curse_score_bonus_pct : Float = 0.5
+
+///|
+pub let blind_beat_perfect_bonus : Float = 0.05
+
+// --- Weapon effect constants ---
+
+///|
+pub let weapon_effect_lifetime : Float = 0.2
+
+///|
+pub let weapon_switch_flash_duration : Float = 0.3
+
+// --- Boss phase HP thresholds ---
+
+///|
+pub let dragon_phase2_threshold : Float = 0.75
+
+///|
+pub let dragon_phase3_threshold : Float = 0.5
+
+///|
+pub let lich_phase2_threshold : Float = 0.75
+
+///|
+pub let lich_phase3_threshold : Float = 0.5
+
+// --- Boss phase timing ---
+
+///|
+pub let dragon_charge_interval : Int = 6
+
+///|
+pub let dragon_4dir_fire_interval : Int = 5
+
+///|
+pub let lich_summon_interval_p1 : Int = 6
+
+///|
+pub let lich_summon_interval_p2 : Int = 3
+
+///|
+pub let lich_aoe_interval_p2 : Int = 8
+
+///|
+pub let lich_aoe_interval_p3 : Int = 4
+
+///|
+pub let lich_teleport_interval : Int = 5
+
+// --- Floor wipe effect ---
+
+///|
+pub let floor_wipe_speed : Float = 2.0

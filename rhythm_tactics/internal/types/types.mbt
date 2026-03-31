@@ -35,6 +35,9 @@ pub(all) struct Enemy {
   mut intent : EnemyIntent
   beat_pattern : Array[Bool]
   mut pattern_idx : Int
+  mut is_elite : Bool
+  mut frozen_beats : Int
+  mut stunned_beats : Int
 } derive(Show)
 
 ///|
@@ -59,6 +62,9 @@ pub fn Enemy::new(
     intent: Wait,
     beat_pattern,
     pattern_idx: 0,
+    is_elite: false,
+    frozen_beats: 0,
+    stunned_beats: 0,
   }
 }
 
@@ -93,6 +99,11 @@ pub(all) struct Player {
   mut facing : Direction
   mut invincible_beats : Int
   mut double_damage_beats : Int
+  mut mana : Int
+  mut max_mana : Int
+  spell_slots : SpellSlots
+  learned_spells : Array[SpellKind]
+  mut floor_attacks : Int
 } derive(Show)
 
 ///|
@@ -118,6 +129,11 @@ pub fn Player::new() -> Player {
     facing: South,
     invincible_beats: 0,
     double_damage_beats: 0,
+    mana: 10,
+    max_mana: 10,
+    spell_slots: SpellSlots::new(),
+    learned_spells: [],
+    floor_attacks: 0,
   }
 }
 
@@ -307,6 +323,189 @@ pub(all) struct AbilityChoice {
   desc : String
 } derive(Show)
 
+// === Spell System ===
+
+///|
+pub(all) struct SpellData {
+  kind : SpellKind
+  element : Element
+  name : String
+  desc : String
+  mana_cost : Int
+  beat_cooldown : Int
+  damage : Int
+  range : Int
+  aoe_radius : Int
+} derive(Show)
+
+///|
+pub(all) struct SpellSlots {
+  spells : Array[SpellKind?]
+  mut cooldowns : Array[Int]
+} derive(Show)
+
+///|
+pub fn SpellSlots::new() -> SpellSlots {
+  { spells: [None, None, None, None], cooldowns: [0, 0, 0, 0] }
+}
+
+// === Curse / Run Modifier System ===
+
+///|
+pub(all) struct CurseState {
+  active_curses : Array[CurseKind]
+} derive(Show)
+
+///|
+pub fn CurseState::new() -> CurseState {
+  { active_curses: [] }
+}
+
+// === Achievement System ===
+
+///|
+pub(all) struct Achievement {
+  kind : AchievementKind
+  name : String
+  desc : String
+  mut unlocked : Bool
+} derive(Show)
+
+///|
+pub(all) struct AchievementState {
+  achievements : Array[Achievement]
+  toasts : Array[AchievementToast]
+} derive(Show)
+
+///|
+pub(all) struct AchievementToast {
+  text : String
+  mut timer : Float
+} derive(Show)
+
+///|
+pub fn AchievementState::new() -> AchievementState {
+  let achs : Array[Achievement] = [
+    { kind: FirstBlood, name: "First Blood", desc: "Kill first enemy", unlocked: false },
+    { kind: Perfect10, name: "Perfect 10", desc: "10 Perfects in a row", unlocked: false },
+    { kind: BossSlayer, name: "Boss Slayer", desc: "Defeat first boss", unlocked: false },
+    { kind: ComboKing, name: "Combo King", desc: "Reach 50 combo", unlocked: false },
+    { kind: SpeedDemon, name: "Speed Demon", desc: "Clear floor 10 under 200 beats", unlocked: false },
+    { kind: Pacifist, name: "Pacifist", desc: "Clear a floor without attacking", unlocked: false },
+  ]
+  { achievements: achs, toasts: [] }
+}
+
+// === Visual Polish: Damage Numbers ===
+
+///|
+pub(all) struct DamageNumber {
+  mut x : Float
+  mut y : Float
+  mut vy : Float
+  mut life : Float
+  value : Int
+  color : @raylib.Color
+} derive(Show)
+
+// === Weapon Visual Effects ===
+
+///|
+pub(all) struct WeaponEffect {
+  kind : WeaponKind
+  mut x : Float
+  mut y : Float
+  direction : Direction
+  mut timer : Float
+  max_timer : Float
+} derive(Show)
+
+///|
+pub fn WeaponEffect::new(
+  kind : WeaponKind,
+  x : Float,
+  y : Float,
+  direction : Direction,
+) -> WeaponEffect {
+  { kind, x, y, direction, timer: 0.2, max_timer: 0.2 }
+}
+
+// === Boss Phase Tracking ===
+
+///|
+pub(all) struct BossPhaseState {
+  mut dragon_phase : BossPhase
+  mut lich_phase : BossPhase
+  mut dragon_charge_cooldown : Int
+  mut lich_teleport_cooldown : Int
+  mut dragon_4dir_cooldown : Int
+  mut lich_double_summon : Bool
+} derive(Show)
+
+///|
+pub fn BossPhaseState::new() -> BossPhaseState {
+  {
+    dragon_phase: Phase1,
+    lich_phase: Phase1,
+    dragon_charge_cooldown: 0,
+    lich_teleport_cooldown: 0,
+    dragon_4dir_cooldown: 0,
+    lich_double_summon: false,
+  }
+}
+
+// === Per-Floor Run Statistics ===
+
+///|
+pub(all) struct FloorStats {
+  mut floor_num : Int
+  mut enemies_killed : Int
+  mut perfects_hit : Int
+  mut items_collected : Int
+  mut spells_cast : Int
+  mut damage_taken : Int
+  mut damage_dealt : Int
+} derive(Show)
+
+///|
+pub fn FloorStats::new(floor_num : Int) -> FloorStats {
+  {
+    floor_num,
+    enemies_killed: 0,
+    perfects_hit: 0,
+    items_collected: 0,
+    spells_cast: 0,
+    damage_taken: 0,
+    damage_dealt: 0,
+  }
+}
+
+// === Run Statistics Detail ===
+
+///|
+pub(all) struct RunStats {
+  floor_history : Array[FloorStats]
+  mut weapon_usage : Array[(WeaponKind, Int)]
+  mut spell_usage : Array[(SpellKind, Int)]
+  mut total_items : Int
+  mut total_spells_cast : Int
+  mut total_damage_dealt : Int
+  mut total_damage_taken : Int
+} derive(Show)
+
+///|
+pub fn RunStats::new() -> RunStats {
+  {
+    floor_history: [],
+    weapon_usage: [(Sword, 0), (Spear, 0), (Whip, 0), (Hammer, 0), (Bow, 0), (Staff, 0)],
+    spell_usage: [],
+    total_items: 0,
+    total_spells_cast: 0,
+    total_damage_dealt: 0,
+    total_damage_taken: 0,
+  }
+}
+
 ///|
 pub(all) struct Game {
   mut screen : Screen
@@ -341,6 +540,26 @@ pub(all) struct Game {
   mut combo_visual_intensity : Float
   mut run_perfects : Int
   mut run_kills : Int
+  curses : CurseState
+  achievements : AchievementState
+  damage_numbers : Array[DamageNumber]
+  trail_particles : Array[Particle]
+  mut pending_death_explosions : Array[(Float, Float, @raylib.Color)]
+  curse_offers : Array[CurseKind]
+  mut curse_cursor : Int
+  mut showing_curse_offer : Bool
+  mut bpm_anim_value : Float
+  mut bpm_anim_target : Float
+  mut bpm_anim_timer : Float
+  // === Phase 5: New fields ===
+  sound_queue : Array[SoundEvent]
+  weapon_effects : Array[WeaponEffect]
+  boss_phases : BossPhaseState
+  run_stats : RunStats
+  mut current_floor_stats : FloorStats
+  mut weapon_switch_flash : Float
+  mut floor_wipe_progress : Float
+  mut boss_intro_pulse : Float
 } derive(Show)
 
 ///|
@@ -378,5 +597,24 @@ pub fn Game::new() -> Game {
     combo_visual_intensity: 0.0,
     run_perfects: 0,
     run_kills: 0,
+    curses: CurseState::new(),
+    achievements: AchievementState::new(),
+    damage_numbers: [],
+    trail_particles: [],
+    pending_death_explosions: [],
+    curse_offers: [],
+    curse_cursor: 0,
+    showing_curse_offer: false,
+    bpm_anim_value: 0.0,
+    bpm_anim_target: 0.0,
+    bpm_anim_timer: 0.0,
+    sound_queue: [],
+    weapon_effects: [],
+    boss_phases: BossPhaseState::new(),
+    run_stats: RunStats::new(),
+    current_floor_stats: FloorStats::new(0),
+    weapon_switch_flash: 0.0,
+    floor_wipe_progress: 0.0,
+    boss_intro_pulse: 0.0,
   }
 }

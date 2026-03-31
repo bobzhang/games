@@ -34,7 +34,11 @@ pub fn generate_floor(game : @types.Game, floor_num : Int) -> @types.Floor {
   let exit_y = h - 2
   @types.grid_set_kind(grid, exit_x, exit_y, Exit)
   // Place varied items on floor tiles
-  let item_count = 3 + floor_num / 2
+  let mut item_count = 3 + floor_num / 2
+  // Swarm curse: double drops
+  if @types.has_curse(game.curses, Swarm) {
+    item_count = item_count * 2
+  }
   place_items(grid, rng, item_count, w, h, exit_x, exit_y)
   // Place weapon pickups on some floors
   if floor_num % 3 == 0 {
@@ -42,7 +46,14 @@ pub fn generate_floor(game : @types.Game, floor_num : Int) -> @types.Floor {
   }
   // Spawn enemies using themed rosters
   let kinds = themed_enemy_kinds(floor_num, theme)
-  let count = floor_enemy_count(floor_num)
+  let mut count = floor_enemy_count(floor_num)
+  // Swarm curse: double enemies
+  if @types.has_curse(game.curses, Swarm) {
+    count = count * 2
+    if count > @types.max_enemies_per_floor * 2 {
+      count = @types.max_enemies_per_floor * 2
+    }
+  }
   let enemies : Array[@types.Enemy] = []
   for i in 0..<count {
     for attempt = 0; attempt < 50; attempt = attempt + 1 {
@@ -54,7 +65,12 @@ pub fn generate_floor(game : @types.Game, floor_num : Int) -> @types.Floor {
         !(@types.has_enemy_at(enemies, ex, ey)) {
         let kind_idx = @types.rand_range(rng, 0, kinds.length() - 1)
         let kind = kinds[kind_idx]
-        enemies.push(make_enemy(kind, i, ex, ey))
+        // Check for elite spawn
+        if @types.should_spawn_elite(floor_num, rng) {
+          enemies.push(make_elite_enemy(kind, i, ex, ey))
+        } else {
+          enemies.push(make_enemy(kind, i, ex, ey))
+        }
         break
       }
     }
@@ -336,9 +352,10 @@ pub fn compute_enemy_intents(
 }
 
 ///|
-/// Beat Dragon boss AI.
-/// Phase 1: Moves every beat, breathes fire every 3 beats.
-/// Phase 2 (<50% HP): double-time, fire every 2 beats.
+/// Beat Dragon boss AI with 3-phase patterns.
+/// Phase 1 (100-75% HP): Normal pattern, single direction fire breath every 3 beats.
+/// Phase 2 (75-50% HP): Wider breath every 2 beats, spawns bat every 4 beats.
+/// Phase 3 (<50% HP): Charges across room, fire in 4 directions periodically.
 fn compute_beat_dragon_intent(
   enemy : @types.Enemy,
   floor : @types.Floor,
@@ -347,53 +364,106 @@ fn compute_beat_dragon_intent(
   rng : Ref[Int],
   beat_count : Int,
 ) -> Unit {
-  let hp_frac = Float::from_int(enemy.hp) / Float::from_int(enemy.max_hp)
-  let phase2 = hp_frac < 0.5
-  let fire_interval = if phase2 { 2 } else { 3 }
+  let phase = @types.boss_phase_from_hp(BeatDragon, enemy.hp, enemy.max_hp)
   let dist = @types.manhattan_dist(enemy.x, enemy.y, px, py)
-  // Fire breath on interval
-  if beat_count % fire_interval == 0 {
-    let dir = @types.direction_from_to(enemy.x, enemy.y, px, py)
-    enemy.intent = BreathFire(dir, enemy.damage)
-  } else if dist == 1 {
-    let dir = @types.direction_from_to(enemy.x, enemy.y, px, py)
-    enemy.intent = Attack(dir, enemy.damage)
-  } else {
-    // Move toward player
-    let dir = @types.direction_from_to(enemy.x, enemy.y, px, py)
-    let nx = enemy.x + @types.dir_dx(dir)
-    let ny = enemy.y + @types.dir_dy(dir)
-    if @types.grid_is_walkable(floor.grid, nx, ny) &&
-      !(@types.has_enemy_at(floor.enemies, nx, ny)) &&
-      !(nx == px && ny == py) {
-      enemy.intent = Move(dir)
-    } else {
-      let dirs : Array[@types.Direction] = [North, South, East, West]
-      let start = @types.rand_range(rng, 0, 3)
-      let mut moved = false
-      for di in 0..<4 {
-        let d = dirs[(start + di) % 4]
-        let mx = enemy.x + @types.dir_dx(d)
-        let my = enemy.y + @types.dir_dy(d)
-        if @types.grid_is_walkable(floor.grid, mx, my) &&
-          !(@types.has_enemy_at(floor.enemies, mx, my)) &&
-          !(mx == px && my == py) {
-          enemy.intent = Move(d)
-          moved = true
-          break
-        }
+  match phase {
+    Phase1 => {
+      // Phase 1: Fire breath every 3 beats, normal movement
+      let fire_interval = 3
+      if beat_count % fire_interval == 0 && beat_count > 0 {
+        let dir = @types.direction_from_to(enemy.x, enemy.y, px, py)
+        enemy.intent = BreathFire(dir, enemy.damage)
+      } else if dist == 1 {
+        let dir = @types.direction_from_to(enemy.x, enemy.y, px, py)
+        enemy.intent = Attack(dir, enemy.damage)
+      } else {
+        dragon_move_toward(enemy, floor, px, py, rng)
       }
-      if !(moved) {
-        enemy.intent = Wait
+    }
+    Phase2 => {
+      // Phase 2: Wider fire every 2 beats, spawns bat every 4 beats
+      if beat_count % 4 == 0 && beat_count > 0 {
+        // Spawn a bat minion
+        let sx = enemy.x + @types.rand_range(rng, -2, 2)
+        let sy = enemy.y + @types.rand_range(rng, -2, 2)
+        let csx = @types.clampi(sx, 1, floor.grid.width - 2)
+        let csy = @types.clampi(sy, 1, floor.grid.height - 2)
+        enemy.intent = Summon(Bat, csx, csy)
+      } else if beat_count % 2 == 0 && beat_count > 0 {
+        let dir = @types.direction_from_to(enemy.x, enemy.y, px, py)
+        // Wider breath attack deals more damage
+        enemy.intent = BreathFire(dir, enemy.damage + 1)
+      } else if dist == 1 {
+        let dir = @types.direction_from_to(enemy.x, enemy.y, px, py)
+        enemy.intent = Attack(dir, enemy.damage)
+      } else {
+        dragon_move_toward(enemy, floor, px, py, rng)
+      }
+    }
+    Phase3 => {
+      // Phase 3: Charges + fire in 4 directions periodically
+      if beat_count % @types.dragon_4dir_fire_interval == 0 && beat_count > 0 {
+        // Fire in all 4 directions (use BreathFire toward player for the intent,
+        // actual 4-dir handled in execute_enemy_beats)
+        let dir = @types.direction_from_to(enemy.x, enemy.y, px, py)
+        enemy.intent = BreathFire(dir, enemy.damage + 2)
+      } else if beat_count % @types.dragon_charge_interval == 0 && beat_count > 0 {
+        // Charge at player
+        let dir = @types.direction_from_to(enemy.x, enemy.y, px, py)
+        enemy.intent = Charge(dir, enemy.damage + 1)
+      } else if dist == 1 {
+        let dir = @types.direction_from_to(enemy.x, enemy.y, px, py)
+        enemy.intent = Attack(dir, enemy.damage + 1)
+      } else {
+        dragon_move_toward(enemy, floor, px, py, rng)
       }
     }
   }
 }
 
 ///|
-/// Rhythm Lich boss AI.
-/// Summons skeleton minions every 4 beats, AoE freeze every 6 beats.
-/// Phase 2 (<30% HP): Minions act on every beat.
+/// Helper: Move the dragon toward the player.
+fn dragon_move_toward(
+  enemy : @types.Enemy,
+  floor : @types.Floor,
+  px : Int,
+  py : Int,
+  rng : Ref[Int],
+) -> Unit {
+  let dir = @types.direction_from_to(enemy.x, enemy.y, px, py)
+  let nx = enemy.x + @types.dir_dx(dir)
+  let ny = enemy.y + @types.dir_dy(dir)
+  if @types.grid_is_walkable(floor.grid, nx, ny) &&
+    !(@types.has_enemy_at(floor.enemies, nx, ny)) &&
+    !(nx == px && ny == py) {
+    enemy.intent = Move(dir)
+  } else {
+    let dirs : Array[@types.Direction] = [North, South, East, West]
+    let start = @types.rand_range(rng, 0, 3)
+    let mut moved = false
+    for di in 0..<4 {
+      let d = dirs[(start + di) % 4]
+      let mx = enemy.x + @types.dir_dx(d)
+      let my = enemy.y + @types.dir_dy(d)
+      if @types.grid_is_walkable(floor.grid, mx, my) &&
+        !(@types.has_enemy_at(floor.enemies, mx, my)) &&
+        !(mx == px && my == py) {
+        enemy.intent = Move(d)
+        moved = true
+        break
+      }
+    }
+    if !(moved) {
+      enemy.intent = Wait
+    }
+  }
+}
+
+///|
+/// Rhythm Lich boss AI with 3-phase patterns.
+/// Phase 1 (100-75% HP): Summons skeleton every 6 beats.
+/// Phase 2 (75-50% HP): AoE freeze every 8 beats, double summon rate (every 3 beats).
+/// Phase 3 (<50% HP): Teleports randomly, summons 2 enemies at once, AoE every 4 beats.
 fn compute_rhythm_lich_intent(
   enemy : @types.Enemy,
   floor : @types.Floor,
@@ -402,35 +472,115 @@ fn compute_rhythm_lich_intent(
   rng : Ref[Int],
   beat_count : Int,
 ) -> Unit {
-  let hp_frac = Float::from_int(enemy.hp) / Float::from_int(enemy.max_hp)
-  let _phase2 = hp_frac < 0.3
-  // AoE freeze every 6 beats takes priority
-  if beat_count % 6 == 0 && beat_count > 0 {
-    // Freeze radius of 2 around player
-    enemy.intent = AoeFreeze(2)
-  } else if beat_count % 4 == 0 && beat_count > 0 {
-    // Summon skeleton nearby
-    let sx = enemy.x + @types.rand_range(rng, -2, 2)
-    let sy = enemy.y + @types.rand_range(rng, -2, 2)
-    let csx = @types.clampi(sx, 1, floor.grid.width - 2)
-    let csy = @types.clampi(sy, 1, floor.grid.height - 2)
-    enemy.intent = Summon(Skeleton, csx, csy)
-  } else {
-    let dist = @types.manhattan_dist(enemy.x, enemy.y, px, py)
-    if dist == 1 {
-      let dir = @types.direction_from_to(enemy.x, enemy.y, px, py)
-      enemy.intent = Attack(dir, enemy.damage)
-    } else {
-      let dir = @types.direction_from_to(enemy.x, enemy.y, px, py)
-      let nx = enemy.x + @types.dir_dx(dir)
-      let ny = enemy.y + @types.dir_dy(dir)
-      if @types.grid_is_walkable(floor.grid, nx, ny) &&
-        !(@types.has_enemy_at(floor.enemies, nx, ny)) &&
-        !(nx == px && ny == py) {
-        enemy.intent = Move(dir)
+  let phase = @types.boss_phase_from_hp(RhythmLich, enemy.hp, enemy.max_hp)
+  let dist = @types.manhattan_dist(enemy.x, enemy.y, px, py)
+  match phase {
+    Phase1 => {
+      // Phase 1: Summon skeleton every 6 beats
+      if beat_count % @types.lich_summon_interval_p1 == 0 && beat_count > 0 {
+        let sx = enemy.x + @types.rand_range(rng, -2, 2)
+        let sy = enemy.y + @types.rand_range(rng, -2, 2)
+        let csx = @types.clampi(sx, 1, floor.grid.width - 2)
+        let csy = @types.clampi(sy, 1, floor.grid.height - 2)
+        enemy.intent = Summon(Skeleton, csx, csy)
+      } else if dist == 1 {
+        let dir = @types.direction_from_to(enemy.x, enemy.y, px, py)
+        enemy.intent = Attack(dir, enemy.damage)
       } else {
-        enemy.intent = Wait
+        lich_move_toward(enemy, floor, px, py, rng)
       }
+    }
+    Phase2 => {
+      // Phase 2: AoE freeze every 8 beats, summon every 3 beats
+      if beat_count % @types.lich_aoe_interval_p2 == 0 && beat_count > 0 {
+        enemy.intent = AoeFreeze(2)
+      } else if beat_count % @types.lich_summon_interval_p2 == 0 && beat_count > 0 {
+        let sx = enemy.x + @types.rand_range(rng, -2, 2)
+        let sy = enemy.y + @types.rand_range(rng, -2, 2)
+        let csx = @types.clampi(sx, 1, floor.grid.width - 2)
+        let csy = @types.clampi(sy, 1, floor.grid.height - 2)
+        enemy.intent = Summon(Skeleton, csx, csy)
+      } else if dist == 1 {
+        let dir = @types.direction_from_to(enemy.x, enemy.y, px, py)
+        enemy.intent = Attack(dir, enemy.damage)
+      } else {
+        lich_move_toward(enemy, floor, px, py, rng)
+      }
+    }
+    Phase3 => {
+      // Phase 3: AoE every 4 beats, teleport every 5, summon 2 at once
+      if beat_count % @types.lich_aoe_interval_p3 == 0 && beat_count > 0 {
+        enemy.intent = AoeFreeze(3)
+      } else if beat_count % @types.lich_teleport_interval == 0 && beat_count > 0 {
+        // Teleport to a random walkable tile
+        for _ in 0..<20 {
+          let tx = @types.rand_range(rng, 1, floor.grid.width - 2)
+          let ty = @types.rand_range(rng, 1, floor.grid.height - 2)
+          if @types.grid_is_walkable(floor.grid, tx, ty) &&
+            !(@types.has_enemy_at(floor.enemies, tx, ty)) &&
+            !(tx == px && ty == py) {
+            enemy.x = tx
+            enemy.y = ty
+            break
+          }
+        }
+        // After teleport, summon 2 enemies near new position
+        let sx1 = enemy.x + @types.rand_range(rng, -1, 1)
+        let sy1 = enemy.y + @types.rand_range(rng, -1, 1)
+        let csx1 = @types.clampi(sx1, 1, floor.grid.width - 2)
+        let csy1 = @types.clampi(sy1, 1, floor.grid.height - 2)
+        enemy.intent = Summon(Wraith, csx1, csy1)
+      } else if beat_count % @types.lich_summon_interval_p2 == 0 && beat_count > 0 {
+        // Summon a skeleton
+        let sx = enemy.x + @types.rand_range(rng, -2, 2)
+        let sy = enemy.y + @types.rand_range(rng, -2, 2)
+        let csx = @types.clampi(sx, 1, floor.grid.width - 2)
+        let csy = @types.clampi(sy, 1, floor.grid.height - 2)
+        enemy.intent = Summon(Skeleton, csx, csy)
+      } else if dist == 1 {
+        let dir = @types.direction_from_to(enemy.x, enemy.y, px, py)
+        enemy.intent = Attack(dir, enemy.damage + 1)
+      } else {
+        lich_move_toward(enemy, floor, px, py, rng)
+      }
+    }
+  }
+}
+
+///|
+/// Helper: Move the lich toward the player.
+fn lich_move_toward(
+  enemy : @types.Enemy,
+  floor : @types.Floor,
+  px : Int,
+  py : Int,
+  rng : Ref[Int],
+) -> Unit {
+  let dir = @types.direction_from_to(enemy.x, enemy.y, px, py)
+  let nx = enemy.x + @types.dir_dx(dir)
+  let ny = enemy.y + @types.dir_dy(dir)
+  if @types.grid_is_walkable(floor.grid, nx, ny) &&
+    !(@types.has_enemy_at(floor.enemies, nx, ny)) &&
+    !(nx == px && ny == py) {
+    enemy.intent = Move(dir)
+  } else {
+    let dirs : Array[@types.Direction] = [North, South, East, West]
+    let start = @types.rand_range(rng, 0, 3)
+    let mut moved = false
+    for di in 0..<4 {
+      let d = dirs[(start + di) % 4]
+      let mx = enemy.x + @types.dir_dx(d)
+      let my = enemy.y + @types.dir_dy(d)
+      if @types.grid_is_walkable(floor.grid, mx, my) &&
+        !(@types.has_enemy_at(floor.enemies, mx, my)) &&
+        !(mx == px && my == py) {
+        enemy.intent = Move(d)
+        moved = true
+        break
+      }
+    }
+    if !(moved) {
+      enemy.intent = Wait
     }
   }
 }
