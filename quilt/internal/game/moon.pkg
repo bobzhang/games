@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/quilt/internal/types",
+  "bobzhang/games/quilt/internal/matching",
+  "bobzhang/games/quilt/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
