@@ -1,0 +1,14 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/physics_tower/internal/game",
+  "bobzhang/games/physics_tower/internal/render",
+  "bobzhang/games/physics_tower/internal/types",
+  "bobzhang/games/utils/draw",
+  "bobzhang/games/utils/fps",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

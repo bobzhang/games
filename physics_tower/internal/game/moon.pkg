@@ -1,0 +1,9 @@
+import {
+  "bobzhang/games/physics_tower/internal/types",
+  "bobzhang/games/physics_tower/internal/physics",
+  "bobzhang/games/physics_tower/internal/content",
+  "tonyfettes/raylib",
+  "moonbitlang/core/math",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
