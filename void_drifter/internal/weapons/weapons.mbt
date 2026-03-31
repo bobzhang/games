@@ -3,7 +3,8 @@ pub fn fire_weapon(
   game : @types.Game,
   weapon : @types.Weapon,
   origin : @types.Vec2,
-  aim_angle : Float
+  aim_angle : Float,
+  mod_kind~ : @types.ModKind? = None
 ) -> Unit {
   if weapon.fire_timer > 0.0 {
     return
@@ -45,8 +46,8 @@ pub fn fire_weapon(
       @types.cosf(angle) * weapon.projectile_speed,
       @types.sinf(angle) * weapon.projectile_speed,
     )
-    // Apply primary mod
-    apply_mod(p, game.ship.primary_mod)
+    // Apply weapon mod (only primary gets the primary mod)
+    apply_mod(p, mod_kind)
   }
 }
 

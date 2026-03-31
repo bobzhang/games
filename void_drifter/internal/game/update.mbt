@@ -234,6 +234,22 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
       )
     }
   }
+  // Post-AI death pass (handles bomber suicide, etc.)
+  for i in 0..<game.enemies.length() {
+    if game.enemies[i].active && game.enemies[i].hp <= 0 {
+      // Bomber explodes on self-destruct
+      if game.enemies[i].kind == Bomber {
+        apply_explosion(
+          game,
+          game.enemies[i].pos.x,
+          game.enemies[i].pos.y,
+          80.0,
+          game.enemies[i].damage,
+        )
+      }
+      kill_enemy(game, i)
+    }
+  }
   // Update boss
   @bosses.update_boss(game, dt)
   // Update asteroids
@@ -256,16 +272,25 @@ fn update_playing(game : @types.Game, dt : Float) -> Unit {
   update_damage_numbers(game, dt)
   // Collision detection
   resolve_collisions(game)
-  // Wave spawning
-  if !(game.sector_cleared) {
-    game.wave_timer = game.wave_timer - dt
-    if game.wave_timer <= 0.0 {
-      game.wave_timer = @types.wave_interval
-      game.wave_count += 1
-      @enemies.spawn_wave(game, game.wave_count, game.current_sector_kind)
+  // Wave spawning (not in boss arenas - boss handles its own spawns)
+  if !(game.sector_cleared) && game.current_sector_kind != BossArena {
+    // Get target enemy count from sector node
+    let target_count = match game.sector_map {
+      Some(map) => map.nodes[map.current].enemy_count
+      None => 10
     }
-    // Check if sector cleared
-    if game.sector_enemies_killed >= game.sector_enemies_total &&
+    // Only spawn more waves if we haven't reached the target
+    if game.sector_enemies_total < target_count {
+      game.wave_timer = game.wave_timer - dt
+      if game.wave_timer <= 0.0 {
+        game.wave_timer = @types.wave_interval
+        game.wave_count += 1
+        @enemies.spawn_wave(game, game.wave_count, game.current_sector_kind)
+      }
+    }
+    // Check if sector cleared (spawned enough AND killed them all)
+    if game.sector_enemies_total >= target_count &&
+      game.sector_enemies_killed >= game.sector_enemies_total &&
       @types.count_active_enemies(game.enemies) == 0 {
       game.sector_cleared = true
       match game.sector_map {
@@ -396,11 +421,13 @@ fn update_player_input(game : @types.Game, dt : Float) -> Unit {
   let mouse_x = Float::from_int(@raylib.get_mouse_x()) + game.camera_x
   let mouse_y = Float::from_int(@raylib.get_mouse_y()) + game.camera_y
   ship.angle = @types.angle_to(ship.pos, @types.vec2(mouse_x, mouse_y))
-  // Fire primary weapon
+  // Fire primary weapon (with primary mod)
   if @raylib.is_mouse_button_down(@raylib.MouseButtonLeft) {
-    @weapons.fire_weapon(game, ship.weapon, ship.pos, ship.angle)
+    @weapons.fire_weapon(
+      game, ship.weapon, ship.pos, ship.angle, mod_kind=ship.primary_mod,
+    )
   }
-  // Fire secondary weapon (Q key)
+  // Fire secondary weapon (Q key, no mod)
   if @raylib.is_key_down(@raylib.KeyQ) {
     match ship.secondary {
       Some(w) => @weapons.fire_weapon(game, w, ship.pos, ship.angle)
@@ -477,6 +504,46 @@ fn resolve_collisions(game : @types.Game) -> Unit {
         // Check enemy death
         if e.hp <= 0 {
           kill_enemy(game, j)
+        }
+        // Chain: spawn new projectile toward nearest other enemy
+        if p.chain_count > 0 {
+          let mut nearest_dist : Float = 999999.0
+          let mut nearest_idx = -1
+          for k in 0..<game.enemies.length() {
+            if game.enemies[k].active && k != j {
+              let d = @types.vec2_dist_sq(p.pos, game.enemies[k].pos)
+              if d < nearest_dist {
+                nearest_dist = d
+                nearest_idx = k
+              }
+            }
+          }
+          if nearest_idx >= 0 {
+            let chain_idx = @types.alloc_projectile(game.projectiles)
+            if chain_idx >= 0 {
+              let cp = game.projectiles[chain_idx]
+              cp.active = true
+              cp.pos = @types.vec2(p.pos.x, p.pos.y)
+              let target = game.enemies[nearest_idx]
+              let dir = @types.vec2_normalize(
+                @types.vec2_sub(target.pos, p.pos),
+              )
+              cp.vel = @types.vec2(
+                dir.x * @types.vec2_len(p.vel),
+                dir.y * @types.vec2_len(p.vel),
+              )
+              cp.damage = p.damage
+              cp.lifetime = 1.0
+              cp.radius = p.radius
+              cp.friendly = true
+              cp.piercing = false
+              cp.homing_strength = 0.0
+              cp.chain_count = p.chain_count - 1
+              cp.explosive_radius = 0.0
+              cp.freezing = p.freezing
+              cp.bounces = 0
+            }
+          }
         }
         if !(p.piercing) {
           p.active = false
@@ -583,6 +650,8 @@ fn resolve_collisions(game : @types.Game) -> Unit {
       ) {
         damage_player(game, p.damage)
         p.active = false
+        ship.invincible_timer = @types.invincible_duration
+        break // Only take one hit per frame
       }
     }
     // Contact damage from enemies

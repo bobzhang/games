@@ -16,7 +16,7 @@ pub fn spawn_enemy(
   e.vel = @types.vec2_zero()
   e.angle = 0.0
   e.frozen_timer = 0.0
-  e.shield = 0
+  e.shield = if kind == ShieldBearer { 3 } else { 0 }
   e.behavior_timer = 0.0
   e.target_pos = @types.vec2_zero()
   let stats = enemy_stats(kind)

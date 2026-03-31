@@ -127,7 +127,7 @@ pub fn enter_sector(game : @types.Game, node_idx : Int) -> Unit {
       map.current = node_idx
       let node = map.nodes[node_idx]
       game.current_sector_kind = node.kind
-      game.sector_enemies_total = node.enemy_count
+      game.sector_enemies_total = 0 // Track only actual spawns
       game.sector_enemies_killed = 0
       game.sector_cleared = false
       game.wave_count = 0

@@ -1,8 +1,11 @@
 ///|
 pub fn update_ship_physics(ship : @types.Ship, dt : Float) -> Unit {
-  // Apply drag
-  ship.vel.x = ship.vel.x * ship.drag
-  ship.vel.y = ship.vel.y * ship.drag
+  // Apply drag (dt-independent: drag^(dt*60) normalizes to 60fps behavior)
+  let drag_factor : Float = Float::from_double(
+    @math.pow(ship.drag.to_double(), (dt * 60.0).to_double()),
+  )
+  ship.vel.x = ship.vel.x * drag_factor
+  ship.vel.y = ship.vel.y * drag_factor
   // Integrate position
   ship.pos.x = ship.pos.x + ship.vel.x * dt
   ship.pos.y = ship.pos.y + ship.vel.y * dt
