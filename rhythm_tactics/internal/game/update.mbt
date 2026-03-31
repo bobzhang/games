@@ -95,6 +95,10 @@ fn update_floor_select(game : @types.Game) -> Unit {
 ///|
 fn update_floor_transition(game : @types.Game, dt : Float) -> Unit {
   game.transition_timer = game.transition_timer - dt
+  // Track wipe progress for rendering
+  game.floor_wipe_progress = @types.clampf(
+    1.0F - game.transition_timer / @types.floor_transition_duration, 0.0F, 1.0F,
+  )
   if game.transition_timer <= 0.0F {
     let floor_num = game.transition_floor
     // Set BPM and windows for this floor
@@ -125,7 +129,22 @@ fn update_floor_transition(game : @types.Game, dt : Float) -> Unit {
     // Initialize per-floor stats tracking
     @types.start_floor_stats(game, floor_num)
     @beat.reset(game.beat)
-    game.beat.bpm = bpm
+    // Re-apply BPM with curse modifiers after reset
+    let effective_bpm = if @types.has_curse(game.curses, DoubleTime) {
+      bpm * (1.0F + @types.curse_bpm_bonus_pct)
+    } else {
+      bpm
+    }
+    game.beat.bpm = effective_bpm
+    game.beat.perfect_window = @types.perfect_window_for_floor(floor_num)
+    game.beat.good_window = @types.good_window_for_floor(floor_num)
+    if @types.has_curse(game.curses, BlindBeat) {
+      game.beat.perfect_window = game.beat.perfect_window + @types.blind_beat_perfect_bonus
+    }
+    if game.player.speed_boost_beats > 0 {
+      game.beat.perfect_window = game.beat.perfect_window + 0.03
+      game.beat.good_window = game.beat.good_window + 0.05
+    }
     // Check if boss floor
     if @types.is_boss_floor(floor_num) {
       game.boss_intro_timer = @types.boss_intro_duration
@@ -142,6 +161,9 @@ fn update_floor_transition(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn update_boss_intro(game : @types.Game, dt : Float) -> Unit {
   game.boss_intro_timer = game.boss_intro_timer - dt
+  // Track intro pulse progress for rendering
+  let progress = 1.0F - game.boss_intro_timer / @types.boss_intro_duration
+  game.boss_intro_pulse = @math.sinf(progress * 12.0F) * 0.2F + 0.8F
   if game.boss_intro_timer <= 0.0F {
     game.screen = Playing
     @types.set_message(game, "Defeat the boss!")

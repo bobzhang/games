@@ -447,12 +447,12 @@ fn draw_enemies(floor : @types.Floor, beat : @types.BeatState) -> Unit {
         ts - margin * 2 - 8, ts - margin * 2 - 8,
         inner_color,
       )
-      // Phase indicator for bosses
-      let hp_frac = Float::from_int(enemy.hp) / Float::from_int(enemy.max_hp)
-      let phase_text = match enemy.kind {
-        BeatDragon => if hp_frac < 0.5F { "P2" } else { "P1" }
-        RhythmLich => if hp_frac < 0.3F { "P2" } else { "P1" }
-        _ => ""
+      // Phase indicator for bosses (3-phase system: >75% P1, 75-50% P2, <50% P3)
+      let phase = @types.boss_phase_from_hp(enemy.kind, enemy.hp, enemy.max_hp)
+      let phase_text = match phase {
+        Phase1 => "P1"
+        Phase2 => "P2"
+        Phase3 => "P3"
       }
       draw_centered_at(
         phase_text, sx + ts / 2, sy + ts - 8, 8,
@@ -644,43 +644,6 @@ fn draw_attack_preview(game : @types.Game) -> Unit {
   }
 }
 
-///|
-fn draw_beat_indicator(beat : @types.BeatState) -> Unit {
-  let y = @types.beat_indicator_y
-  let h = @types.beat_indicator_h
-  let w = @types.screen_w
-  // Background bar
-  @raylib.draw_rectangle(0, y, w, h, @types.color_hud_bg)
-  // Beat markers (4 markers evenly spaced)
-  let marker_count = 4
-  let spacing = w / marker_count
-  for i in 0..<marker_count {
-    let mx = i * spacing + spacing / 2
-    @raylib.draw_rectangle(
-      mx - 2, y + 4, 4, h - 8,
-      @raylib.Color::new(60, 60, 80, 255),
-    )
-  }
-  // Moving indicator
-  let phase = @beat.beat_phase(beat)
-  let indicator_x = (phase * Float::from_int(spacing)).to_int()
-  let indicator_color = if beat.in_window {
-    @types.color_perfect
-  } else {
-    @raylib.Color::new(200, 200, 220, 255)
-  }
-  @raylib.draw_rectangle(indicator_x - 3, y + 2, 6, h - 4, indicator_color)
-  // Window zone visualization
-  if beat.in_window {
-    @raylib.draw_rectangle(0, y, w, h, @raylib.Color::new(255, 215, 0, 30))
-  }
-  // BPM display
-  let bpm_text = "\{beat.bpm.to_int()} BPM"
-  @draw.draw_text(
-    bpm_text, 10, y + h / 2 - 8, 16,
-    @raylib.Color::new(150, 150, 170, 200),
-  )
-}
 
 ///|
 fn draw_combo(game : @types.Game, beat : @types.BeatState, scale : Float) -> Unit {
@@ -1103,97 +1066,7 @@ fn draw_shop(game : @types.Game) -> Unit {
   }
 }
 
-///|
-fn draw_floor_transition(game : @types.Game) -> Unit {
-  @raylib.clear_background(@types.color_bg)
-  let cx = @types.screen_w / 2
-  let cy = @types.screen_h / 2
-  let floor_num = game.transition_floor
-  let progress = 1.0F - game.transition_timer / @types.floor_transition_duration
-  let alpha = @types.clampf(progress * 2.0F, 0.0F, 1.0F)
-  let a = (alpha * 255.0F).to_int()
-  let size = 48 + (progress * 20.0F).to_int()
-  draw_centered(
-    "FLOOR \{floor_num}", cx, cy - 60, size,
-    @raylib.Color::new(80, 200, 255, a),
-  )
-  // Theme name
-  let theme = @types.floor_theme(floor_num)
-  let td = @types.theme_data(theme)
-  draw_centered(
-    td.name, cx, cy, 24,
-    @raylib.Color::new(
-      td.accent_color.r.to_int(),
-      td.accent_color.g.to_int(),
-      td.accent_color.b.to_int(),
-      a,
-    ),
-  )
-  // BPM display
-  let bpm = @types.bpm_for_floor(floor_num)
-  draw_centered(
-    "\{bpm.to_int()} BPM", cx, cy + 40, 28,
-    @raylib.Color::new(255, 200, 100, a),
-  )
-  // Boss warning
-  if @types.is_boss_floor(floor_num) {
-    let blink = if game.frame_count / 10 % 2 == 0 { a } else { a / 2 }
-    draw_centered(
-      "BOSS BATTLE!", cx, cy + 90, 32,
-      @raylib.Color::new(255, 40, 40, blink),
-    )
-  }
-  // BPM counter animation
-  draw_bpm_animation(game)
-}
 
-///|
-fn draw_boss_intro(game : @types.Game) -> Unit {
-  @raylib.clear_background(@raylib.Color::new(10, 5, 15, 255))
-  let cx = @types.screen_w / 2
-  let cy = @types.screen_h / 2
-  // Dramatic "BOSS!" text with screen shake effect
-  let progress = 1.0F - game.boss_intro_timer / @types.boss_intro_duration
-  let alpha = @types.clampf(progress * 3.0F, 0.0F, 1.0F)
-  let a = (alpha * 255.0F).to_int()
-  // Shake text position
-  let rng = @types.game_rng(game)
-  let shake_amount = (game.screen_shake * 2.0F).to_int()
-  let sx = if shake_amount > 0 {
-    @types.rand_range(rng, -shake_amount, shake_amount)
-  } else {
-    0
-  }
-  let sy_off = if shake_amount > 0 {
-    @types.rand_range(rng, -shake_amount, shake_amount)
-  } else {
-    0
-  }
-  @types.sync_rng(game, rng)
-  draw_centered(
-    "BOSS!", cx + sx, cy - 60 + sy_off, 72,
-    @raylib.Color::new(255, 40, 40, a),
-  )
-  // Boss name
-  guard game.floor is Some(floor) else { return }
-  let boss_name = if floor.floor_num == 5 {
-    "THE BEAT DRAGON"
-  } else {
-    "THE RHYTHM LICH"
-  }
-  draw_centered(
-    boss_name, cx, cy + 30, 28,
-    @raylib.Color::new(255, 200, 100, a),
-  )
-  // Countdown hint
-  if progress > 0.5F {
-    let hint_a = ((progress - 0.5F) * 2.0F * 255.0F).to_int()
-    draw_centered(
-      "Prepare yourself...", cx, cy + 100, 20,
-      @raylib.Color::new(180, 180, 200, hint_a),
-    )
-  }
-}
 
 ///|
 fn draw_centered(
@@ -1264,144 +1137,6 @@ fn draw_ability_choice(game : @types.Game) -> Unit {
   )
 }
 
-///|
-fn draw_run_summary(game : @types.Game) -> Unit {
-  @raylib.clear_background(@raylib.Color::new(12, 8, 20, 255))
-  let cx = @types.screen_w / 2
-  let is_win = game.floors_cleared >= @types.max_floor
-  let title = if is_win { "VICTORY!" } else { "RUN OVER" }
-  let title_color = if is_win { @types.color_perfect } else { @types.color_miss }
-  draw_centered(title, cx, 60, 42, title_color)
-  // Score and grade
-  let grade = @types.compute_score_grade(game.score)
-  draw_centered(
-    "Score: \{game.score}", cx, 120, 28, @raylib.white,
-  )
-  draw_centered(
-    "Grade: \{@types.grade_text(grade)}", cx, 160, 36,
-    @types.grade_color(grade),
-  )
-  // Stats
-  let sy = 210
-  draw_centered(
-    "Floors Cleared: \{game.floors_cleared}", cx, sy, 20,
-    @raylib.Color::new(180, 180, 200, 255),
-  )
-  draw_centered(
-    "Max Combo: \{game.beat.max_combo}", cx, sy + 30, 20,
-    @types.color_good,
-  )
-  draw_centered(
-    "Enemies Defeated: \{game.run_kills}", cx, sy + 60, 20,
-    @raylib.Color::new(255, 120, 100, 255),
-  )
-  draw_centered(
-    "Perfect Beats: \{game.run_perfects}", cx, sy + 90, 20,
-    @types.color_perfect,
-  )
-  let wd = @types.weapon_data(game.player.weapon)
-  draw_centered(
-    "Weapon: \{wd.name}", cx, sy + 120, 20,
-    @types.weapon_color(game.player.weapon),
-  )
-  // Score breakdown
-  draw_centered(
-    "Kill Score: \{game.score_state.base_kills}", cx, sy + 160, 16,
-    @raylib.Color::new(160, 160, 180, 200),
-  )
-  draw_centered(
-    "Beat Bonus: \{game.score_state.beat_bonus}", cx, sy + 182, 16,
-    @types.color_perfect,
-  )
-  draw_centered(
-    "Combo Bonus: \{game.score_state.combo_bonus}", cx, sy + 204, 16,
-    @types.color_good,
-  )
-  draw_centered(
-    "Floor Bonus: \{game.score_state.floor_bonus}", cx, sy + 226, 16,
-    @raylib.Color::new(200, 200, 100, 255),
-  )
-  // Meta progress
-  let meta = game.meta
-  draw_centered("--- Best Records ---", cx, sy + 260, 18, @raylib.Color::new(140, 140, 160, 255))
-  draw_centered(
-    "Best Score: \{meta.best_score}  Highest Combo: \{meta.highest_combo}", cx, sy + 285, 16,
-    @raylib.Color::new(120, 120, 150, 200),
-  )
-  draw_centered(
-    "Total Runs: \{meta.total_runs}  Bosses Beaten: \{meta.bosses_defeated}", cx, sy + 307, 16,
-    @raylib.Color::new(120, 120, 150, 200),
-  )
-  // Abilities
-  if game.player.abilities.length() > 0 {
-    let mut ab_str = "Abilities: "
-    for i, a in game.player.abilities {
-      if i > 0 {
-        ab_str = ab_str + ", "
-      }
-      ab_str = ab_str + @types.ability_name(a)
-    }
-    draw_centered(
-      ab_str, cx, sy + 335, 14,
-      @raylib.Color::new(200, 150, 255, 200),
-    )
-  }
-  // Active curses
-  if game.curses.active_curses.length() > 0 {
-    let mut curse_str = "Curses: "
-    for i, c in game.curses.active_curses {
-      if i > 0 {
-        curse_str = curse_str + ", "
-      }
-      curse_str = curse_str + @types.curse_name(c)
-    }
-    draw_centered(
-      curse_str, cx, sy + 355, 14,
-      @raylib.Color::new(200, 100, 80, 200),
-    )
-  }
-  // Spells learned
-  if game.player.learned_spells.length() > 0 {
-    let mut spell_str = "Spells: "
-    for i, s in game.player.learned_spells {
-      if i > 0 {
-        spell_str = spell_str + ", "
-      }
-      spell_str = spell_str + @types.spell_data(s).name
-    }
-    draw_centered(
-      spell_str, cx, sy + 375, 14,
-      @raylib.Color::new(100, 180, 255, 200),
-    )
-  }
-  // Achievements unlocked this run
-  let mut ach_str = ""
-  for a in game.achievements.achievements {
-    if a.unlocked {
-      if ach_str.length() > 0 {
-        ach_str = ach_str + ", "
-      }
-      ach_str = ach_str + a.name
-    }
-  }
-  if ach_str.length() > 0 {
-    draw_centered(
-      "Achievements: " + ach_str, cx, sy + 395, 13,
-      @raylib.Color::new(255, 215, 0, 180),
-    )
-  }
-  let blink = if game.frame_count / 30 % 2 == 0 { 255 } else { 120 }
-  draw_centered(
-    "Press ENTER to play again", cx, 650, 22,
-    @raylib.Color::new(255, 255, 255, blink),
-  )
-  // Message
-  if game.message_timer > 0.0F {
-    draw_centered(
-      game.message_text, cx, 680, 18, @types.color_perfect,
-    )
-  }
-}
 
 ///|
 /// Draw a mini score/multiplier indicator near the beat bar.
