@@ -629,6 +629,122 @@ fn @types.Game::draw_hud(game : @types.Game) -> Unit {
     )
   }
 
+  // Near-miss indicator: screen edge flash in the direction of the projectile
+  if game.near_miss_timer > 0.0 {
+    let nm_alpha_f = game.near_miss_timer / @types.near_miss_duration * 200.0
+    let nm_a = nm_alpha_f.to_int().clamp(min=0, max=200)
+    let nm_color = @raylib.Color::new(255, 255, 100, nm_a)
+    // Flash on screen edge based on direction
+    let edge_w = 30
+    if game.near_miss_dir_x > 0.3 {
+      // Right edge flash
+      @raylib.draw_rectangle(
+        @types.screen_width - edge_w, 0, edge_w, @types.screen_height, nm_color,
+      )
+    } else if game.near_miss_dir_x < -0.3 {
+      // Left edge flash
+      @raylib.draw_rectangle(0, 0, edge_w, @types.screen_height, nm_color)
+    }
+    if game.near_miss_dir_y > 0.3 {
+      // Top edge flash (projectile ahead)
+      @raylib.draw_rectangle(0, 0, @types.screen_width, edge_w, nm_color)
+    } else if game.near_miss_dir_y < -0.3 {
+      // Bottom edge flash (projectile behind)
+      @raylib.draw_rectangle(
+        0, @types.screen_height - edge_w, @types.screen_width, edge_w, nm_color,
+      )
+    }
+    // "NEAR MISS" text
+    let nm_text = "NEAR MISS"
+    let nm_tw = @draw.measure_text(nm_text, 20)
+    @draw.draw_text(
+      nm_text,
+      (@types.screen_width - nm_tw) / 2,
+      @types.screen_height / 2 + 40,
+      20,
+      @raylib.Color::new(255, 255, 100, nm_a),
+    )
+  }
+
+  // Weak point HUD indicator when targeting a capital ship
+  if game.target_idx >= 0 && game.target_idx < game.enemies.length() {
+    let tgt = game.enemies[game.target_idx]
+    if tgt.active && tgt.kind == @types.enemy_capital {
+      let wp_panel_x = @types.screen_width / 2 + 110
+      let wp_panel_y = @types.screen_height - 100
+      @raylib.draw_rectangle(
+        wp_panel_x, wp_panel_y, 120, 55, @raylib.Color::new(0, 0, 0, 140),
+      )
+      @draw.draw_text(
+        "WEAK POINTS",
+        wp_panel_x + 5,
+        wp_panel_y + 3,
+        12,
+        @raylib.Color::new(255, 200, 100, 255),
+      )
+      if tgt.weak_point_hp > 0.0 {
+        let wp_pct = tgt.weak_point_hp / @types.capital_weak_point_hp
+        let wp_fill = (wp_pct * 110.0).to_int()
+        let wp_bar_color = if wp_pct > 0.5 {
+          @raylib.Color::new(100, 255, 100, 255)
+        } else if wp_pct > 0.25 {
+          @raylib.Color::new(255, 255, 50, 255)
+        } else {
+          @raylib.Color::new(255, 80, 80, 255)
+        }
+        @raylib.draw_rectangle(
+          wp_panel_x + 5,
+          wp_panel_y + 18,
+          110,
+          10,
+          @raylib.Color::new(40, 0, 0, 200),
+        )
+        @raylib.draw_rectangle(
+          wp_panel_x + 5, wp_panel_y + 18, wp_fill, 10, wp_bar_color,
+        )
+        let wp_hp_text = "HP: \{tgt.weak_point_hp.to_int()}"
+        @draw.draw_text(
+          wp_hp_text,
+          wp_panel_x + 5,
+          wp_panel_y + 30,
+          11,
+          @raylib.Color::new(200, 200, 200, 255),
+        )
+      } else {
+        @draw.draw_text(
+          "DESTROYED",
+          wp_panel_x + 5,
+          wp_panel_y + 20,
+          14,
+          @raylib.Color::new(255, 80, 80, 255),
+        )
+      }
+      // Phase indicator
+      let phase_hp = tgt.hp / tgt.max_hp
+      let phase_text = if phase_hp < @types.capital_phase_death_spiral {
+        "DEATH SPIRAL"
+      } else if phase_hp < @types.capital_phase_slow {
+        "SYSTEMS FAILING"
+      } else if phase_hp < @types.capital_phase_shield_loss {
+        "SHIELDS DOWN"
+      } else {
+        "SHIELDS ACTIVE"
+      }
+      let phase_color = if phase_hp < @types.capital_phase_death_spiral {
+        @raylib.Color::new(255, 50, 50, 255)
+      } else if phase_hp < @types.capital_phase_slow {
+        @raylib.Color::new(255, 180, 50, 255)
+      } else if phase_hp < @types.capital_phase_shield_loss {
+        @raylib.Color::new(255, 255, 100, 255)
+      } else {
+        @raylib.Color::new(100, 200, 255, 255)
+      }
+      @draw.draw_text(
+        phase_text, wp_panel_x + 5, wp_panel_y + 42, 10, phase_color,
+      )
+    }
+  }
+
   // Screen flash overlay
   if game.screen_flash > 0.0 {
     let flash_a = (game.screen_flash * 120.0).to_int().clamp(min=0, max=120)

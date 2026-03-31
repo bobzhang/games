@@ -4,6 +4,10 @@ package "bobzhang/games/space_combat_3d/internal/types"
 // Values
 pub fn add_kill_feed(Game, String, Int, Int, Int) -> Unit
 
+pub fn ai_difficulty_accuracy(Int) -> Float
+
+pub fn ai_difficulty_evasion(Int) -> Float
+
 pub fn alloc_asteroid(Game) -> Int
 
 pub fn alloc_debris(Game) -> Int
@@ -70,6 +74,10 @@ pub let camera_fovy : Float
 
 pub let camera_height : Float
 
+pub let camera_lag_pitch : Float
+
+pub let camera_lag_yaw : Float
+
 pub let capital_class_boost : Float
 
 pub let capital_class_hull : Float
@@ -131,6 +139,8 @@ pub let cruiser_score : Int
 pub let cruiser_speed : Float
 
 pub let damage_flash_duration : Float
+
+pub let damage_number_duration : Float
 
 pub fn distance3d(Float, Float, Float, Float, Float, Float) -> Float
 
@@ -226,6 +236,8 @@ pub let max_asteroids : Int
 
 pub let max_boost_fuel : Float
 
+pub let max_damage_numbers : Int
+
 pub let max_debris : Int
 
 pub let max_enemies : Int
@@ -246,6 +258,8 @@ pub let max_weapon_energy : Float
 
 pub fn maxf(Float, Float) -> Float
 
+pub let mid_mission_msg_duration : Float
+
 pub fn minf(Float, Float) -> Float
 
 pub let missile_cooldown : Float
@@ -264,6 +278,8 @@ pub let missile_speed : Float
 
 pub let missile_turn_rate : Float
 
+pub fn mission_ai_difficulty(Int) -> Int
+
 pub fn mission_difficulty_hp_mult(Int) -> Float
 
 pub fn mission_difficulty_speed_mult(Int) -> Float
@@ -273,6 +289,10 @@ pub fn normalize3d(Float, Float, Float) -> (Float, Float, Float)
 pub fn objective_from_int(Int) -> Objective
 
 pub fn objective_type_name(Objective) -> String
+
+pub let patrol_waypoint_count : Int
+
+pub let patrol_waypoint_radius : Float
 
 pub let pi : Float
 
@@ -358,6 +378,8 @@ pub fn ship_class_turn(ShipKind) -> Float
 
 pub fn ship_kind_from_int(Int) -> ShipKind
 
+pub fn spawn_damage_number(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
+
 pub fn spawn_debris(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
 
 pub fn spawn_explosion(Game, Float, Float, Float, Int, Int, Int, Int) -> Unit
@@ -371,6 +393,8 @@ pub let station_enemy : Int
 pub let station_friendly : Int
 
 pub let station_hp : Float
+
+pub let survive_time_limit : Float
 
 pub let total_missions : Int
 
@@ -405,8 +429,7 @@ pub(all) enum AiState {
   Evade
   Flee
   Formation
-}
-pub impl Eq for AiState
+} derive(Eq)
 
 pub(all) struct Asteroid {
   mut active : Bool
@@ -426,6 +449,19 @@ pub(all) struct Asteroid {
   mut breakable : Bool
 }
 pub fn Asteroid::inactive() -> Self
+
+pub(all) struct DamageNumber {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut z : Float
+  mut value : Int
+  mut timer : Float
+  mut r : Int
+  mut g : Int
+  mut b : Int
+}
+pub fn DamageNumber::inactive() -> Self
 
 pub(all) struct Debris {
   mut active : Bool
@@ -486,8 +522,7 @@ pub(all) enum Formation {
   Line
   Circle
   Wedge
-}
-pub impl Eq for Formation
+} derive(Eq)
 
 pub(all) struct Game {
   mut state : GameState
@@ -513,7 +548,10 @@ pub(all) struct Game {
   debris : Array[Debris]
   stars : Array[Star]
   kill_feed : Array[KillFeedEntry]
+  damage_numbers : Array[DamageNumber]
   mut camera_shake : Float
+  mut cam_yaw : Float
+  mut cam_pitch : Float
   mut menu_cursor : Int
   mut menu_blink : Float
   mut message_text : String
@@ -534,6 +572,17 @@ pub(all) struct Game {
   mut flash_b : Int
   mut rng_state : Int
   mut frame_counter : Int
+  mut ai_difficulty : Int
+  mut survive_timer : Float
+  mut survive_total : Float
+  patrol_waypoints_x : Array[Float]
+  patrol_waypoints_y : Array[Float]
+  patrol_waypoints_z : Array[Float]
+  mut patrol_current : Int
+  mut patrol_total : Int
+  mut reinforcement_spawned : Bool
+  mut mid_event_timer : Float
+  mut mid_event_count : Int
 
   fn new() -> Game
 }
@@ -549,10 +598,9 @@ pub(all) enum GameState {
   StateMissionBriefing
   StateMissionSelect
   StateLoadout
-}
+} derive(Eq)
 pub fn GameState::from_int(Int) -> Self
 pub fn GameState::to_int(Self) -> Int
-pub impl Eq for GameState
 
 pub(all) struct KillFeedEntry {
   mut active : Bool
@@ -585,8 +633,7 @@ pub(all) enum Objective {
   PatrolMission
   Survive
   DestroyCount
-}
-pub impl Eq for Objective
+} derive(Eq)
 
 pub(all) struct Particle {
   mut active : Bool
@@ -662,8 +709,7 @@ pub(all) enum PowerupKind {
   Shield
   WeaponBoost
   SpeedBoost
-}
-pub impl Eq for PowerupKind
+} derive(Eq)
 
 pub(all) struct Projectile {
   mut active : Bool
@@ -690,8 +736,7 @@ pub(all) enum ShipKind {
   Bomber
   Cruiser
   CapitalShip
-}
-pub impl Eq for ShipKind
+} derive(Eq)
 
 pub(all) struct SpaceStation {
   mut active : Bool
@@ -721,8 +766,7 @@ pub(all) enum WeaponKind {
   Missile
   Plasma
   Railgun
-}
-pub impl Eq for WeaponKind
+} derive(Eq)
 
 // Type aliases
 

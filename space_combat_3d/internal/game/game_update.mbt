@@ -28,6 +28,28 @@ pub fn update_game(game : @types.Game, dt : Float) -> Unit {
     }
   }
 
+  // Near-miss timer decay
+  if game.near_miss_timer > 0.0 {
+    game.near_miss_timer -= dt
+    if game.near_miss_timer < 0.0 {
+      game.near_miss_timer = 0.0
+    }
+  }
+
+  // Shock ring update
+  for ring in game.shock_rings {
+    if !ring.active {
+      continue
+    }
+    ring.life -= dt
+    if ring.life <= 0.0 {
+      ring.active = false
+      continue
+    }
+    let life_frac : Float = ring.life / ring.max_life
+    ring.radius = ring.max_radius * (1.0F - life_frac)
+  }
+
   // Kill feed timer
   for i in 0..<@types.max_kill_feed {
     if game.kill_feed[i].active {
@@ -444,6 +466,21 @@ fn @types.Game::start_mission(game : @types.Game, mission : Int) -> Unit {
   p.vx = 0.0
   p.vy = 0.0
   p.vz = 0.0
+  // Reset orientation basis to identity (facing +Z)
+  p.ori_fx = 0.0
+  p.ori_fy = 0.0
+  p.ori_fz = 1.0
+  p.ori_ux = 0.0
+  p.ori_uy = 1.0
+  p.ori_uz = 0.0
+  p.ori_rx = 1.0
+  p.ori_ry = 0.0
+  p.ori_rz = 0.0
+  // Reset angular velocity
+  p.ang_vx = 0.0
+  p.ang_vy = 0.0
+  p.ang_vz = 0.0
+  p.flight_assist = true
   p.ship_class = sc
   p.max_hull = @types.ship_class_hull(sc)
   p.hull = p.max_hull
@@ -1202,5 +1239,26 @@ fn @types.Game::update_debris(game : @types.Game, dt : Float) -> Unit {
     d.vx *= 0.99
     d.vy *= 0.99
     d.vz *= 0.99
+    // Fire trail particles on burning debris (first 2 seconds)
+    if d.life > 1.0 && game.frame_counter % 5 == 0 {
+      let idx = @types.alloc_particle(game)
+      if idx >= 0 {
+        let p = game.particles[idx]
+        p.active = true
+        p.x = d.x
+        p.y = d.y
+        p.z = d.z
+        p.vx = @types.rand_rangef(game, -1.0, 1.0)
+        p.vy = @types.rand_rangef(game, 0.5, 2.0)
+        p.vz = @types.rand_rangef(game, -1.0, 1.0)
+        p.life = 0.4
+        p.max_life = 0.4
+        p.r = 255
+        p.g = @types.rand_range(game, 100, 200)
+        p.b = 30
+        p.size = 0.08
+        p.kind = 1
+      }
+    }
   }
 }

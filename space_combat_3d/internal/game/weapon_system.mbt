@@ -60,13 +60,76 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
     proj.z += proj.vz * dt
 
     // Trail particles
-    if proj.kind == Missile && game.frame_counter % 2 == 0 {
-      @types.spawn_particles(game, proj.x, proj.y, proj.z, 1, 255, 200, 100)
+    if proj.kind == Laser && game.frame_counter % 3 == 0 {
+      // Laser light trail: brief fading glow
+      let idx2 = @types.alloc_particle(game)
+      if idx2 >= 0 {
+        let p = game.particles[idx2]
+        p.active = true
+        p.x = proj.x
+        p.y = proj.y
+        p.z = proj.z
+        p.vx = 0.0
+        p.vy = 0.0
+        p.vz = 0.0
+        p.life = 0.1
+        p.max_life = 0.1
+        p.r = if proj.from_player { 255 } else { 255 }
+        p.g = if proj.from_player { 255 } else { 80 }
+        p.b = if proj.from_player { 100 } else { 80 }
+        p.size = 0.04
+        p.kind = 3
+      }
+    }
+    if proj.kind == Missile {
+      // Missile smoke trail every frame, fire every 2 frames
+      if game.frame_counter % 2 == 0 {
+        @types.spawn_particles(game, proj.x, proj.y, proj.z, 1, 255, 200, 100)
+      }
+      if game.frame_counter % 3 == 0 {
+        // Smoke trail
+        let idx2 = @types.alloc_particle(game)
+        if idx2 >= 0 {
+          let p = game.particles[idx2]
+          p.active = true
+          p.x = proj.x + @types.rand_rangef(game, -0.1, 0.1)
+          p.y = proj.y + @types.rand_rangef(game, -0.1, 0.1)
+          p.z = proj.z + @types.rand_rangef(game, -0.1, 0.1)
+          p.vx = @types.rand_rangef(game, -0.5, 0.5)
+          p.vy = @types.rand_rangef(game, 0.2, 0.8)
+          p.vz = @types.rand_rangef(game, -0.5, 0.5)
+          p.life = 0.6
+          p.max_life = 0.6
+          p.r = 120
+          p.g = 120
+          p.b = 120
+          p.size = 0.15
+          p.kind = 0
+        }
+      }
     }
     if proj.kind == Plasma && game.frame_counter % 2 == 0 {
-      @types.spawn_particles(game, proj.x, proj.y, proj.z, 1, 100, 255, 100)
+      // Plasma glowing orb trail
+      let idx2 = @types.alloc_particle(game)
+      if idx2 >= 0 {
+        let p = game.particles[idx2]
+        p.active = true
+        p.x = proj.x
+        p.y = proj.y
+        p.z = proj.z
+        p.vx = 0.0
+        p.vy = 0.0
+        p.vz = 0.0
+        p.life = 0.25
+        p.max_life = 0.25
+        p.r = if proj.from_player { 100 } else { 255 }
+        p.g = if proj.from_player { 255 } else { 100 }
+        p.b = if proj.from_player { 100 } else { 100 }
+        p.size = 0.2
+        p.kind = 2
+      }
     }
-    if proj.kind == Railgun && game.frame_counter % 1 == 0 {
+    if proj.kind == Railgun {
       // Railgun leaves a fading trail
       let idx2 = @types.alloc_particle(game)
       if idx2 >= 0 {
@@ -101,8 +164,11 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
         let dist = @types.distance3d(proj.x, proj.y, proj.z, e.x, e.y, e.z)
         let hit_radius : Float = e.size * 0.8
         if dist < hit_radius {
-          // Apply damage
-          damage_enemy(game, j, proj.damage)
+          // Apply damage - check weak points for capital ships
+          let actual_damage = check_weak_point_hit(
+            game, j, proj.x, proj.y, proj.z, proj.damage,
+          )
+          damage_enemy(game, j, actual_damage)
           game.player.shots_hit += 1
 
           // Hit sparks by weapon type
@@ -255,6 +321,19 @@ pub fn update_projectiles(game : @types.Game, dt : Float) -> Unit {
         damage_player(game, proj.damage)
         proj.active = false
         @types.spawn_particles(game, proj.x, proj.y, proj.z, 4, 255, 100, 100)
+      } else if dist < @types.near_miss_distance && game.near_miss_timer <= 0.0 {
+        // Near-miss: enemy projectile passed close without hitting
+        game.near_miss_timer = @types.near_miss_duration
+        // Compute direction from player to projectile for screen edge flash
+        let nm_dx = proj.x - game.player.x
+        let nm_dz = proj.z - game.player.z
+        let nm_len = (nm_dx * nm_dx + nm_dz * nm_dz).sqrt()
+        if nm_len > 0.01 {
+          game.near_miss_dir_x = nm_dx / nm_len
+          game.near_miss_dir_y = nm_dz / nm_len
+        }
+        // Brief directional camera shake
+        game.camera_shake = @types.maxf(game.camera_shake, 0.15)
       }
 
       // Enemy projectiles also hit friendly stations
@@ -373,4 +452,46 @@ pub fn update_particles(game : @types.Game, dt : Float) -> Unit {
       p.size *= 0.95
     }
   }
+}
+
+///|
+/// Checks if a hit on a capital ship struck a weak point. Returns actual damage to apply.
+fn check_weak_point_hit(
+  game : @types.Game,
+  enemy_idx : Int,
+  hit_x : Float,
+  hit_y : Float,
+  hit_z : Float,
+  base_damage : Float,
+) -> Float {
+  let e = game.enemies[enemy_idx]
+  if e.kind != @types.enemy_capital || e.weak_point_hp <= 0.0 {
+    return base_damage
+  }
+  // Check each weak point
+  for wp_i in 0..<@types.capital_weak_point_count {
+    let off = @types.capital_weak_point_offset(wp_i)
+    let wp_x = e.x + off.0
+    let wp_y = e.y + off.1
+    let wp_z = e.z + off.2
+    let wp_dist = @types.distance3d(hit_x, hit_y, hit_z, wp_x, wp_y, wp_z)
+    if wp_dist < @types.weak_point_hit_radius {
+      // Weak point hit
+      let wp_damage = base_damage * @types.weak_point_damage_mult
+      e.weak_point_hp -= wp_damage
+      // Spark effect at weak point
+      @types.spawn_particles(game, wp_x, wp_y, wp_z, 8, 255, 255, 50)
+      @types.spawn_damage_number(game, wp_x, wp_y + 1.0, wp_z, wp_damage.to_int(), 255, 100, 50)
+      if e.weak_point_hp <= 0.0 {
+        // Weak point destroyed - massive damage
+        e.weak_point_hp = 0.0
+        @types.spawn_explosion(game, wp_x, wp_y, wp_z, 20, 255, 200, 50)
+        game.camera_shake = @types.maxf(game.camera_shake, 0.6)
+        @types.add_kill_feed(game, "WEAK POINT DESTROYED", 255, 200, 50)
+        return base_damage + @types.weak_point_destroy_damage
+      }
+      return wp_damage
+    }
+  }
+  base_damage
 }

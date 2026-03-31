@@ -110,6 +110,13 @@ pub(all) enum AiState {
   Evade
   Flee
   Formation
+  // Dogfight attack-run states
+  LineUp // Maneuvering behind target for firing solution
+  FireBurst // Committed firing pass
+  BreakAway // Post-attack break turn
+  Reposition // Looping back for another pass
+  OvershootRecover // Overshot target, pulling away
+  PincerFlank // Wingman flanking from opposite side
 } derive(Eq)
 
 // Power-up types
@@ -196,6 +203,10 @@ pub let max_stations : Int = 4
 ///|
 /// Maximum number of concurrent debris fragments.
 pub let max_debris : Int = 64
+
+///|
+/// Maximum number of concurrent shock ring effects.
+pub let max_shock_rings : Int = 8
 
 // Ship class stats: hull, shield, speed, turn_rate, boost_speed
 // Fighter - balanced
@@ -695,6 +706,60 @@ pub let camera_lag_yaw : Float = 0.12
 /// the camera target tracks the player's pitch orientation.
 pub let camera_lag_pitch : Float = 0.10
 
+// 6DOF Flight model constants
+
+///|
+/// Translational drag coefficient (fraction of velocity lost per second).
+pub let flight_drag : Float = 0.4
+
+///|
+/// Angular drag coefficient (fraction of angular velocity lost per second).
+pub let angular_drag : Float = 3.0
+
+///|
+/// Forward thrust acceleration in units per second squared.
+pub let thrust_acceleration : Float = 60.0
+
+///|
+/// Boost thrust acceleration multiplier.
+pub let boost_acceleration_mult : Float = 2.5
+
+///|
+/// Flight-assist auto-leveling strength.
+pub let flight_assist_level_strength : Float = 1.5
+
+///|
+/// Flight-assist lateral drift kill strength.
+pub let flight_assist_drift_kill : Float = 2.0
+
+///|
+/// Camera roll interpolation speed (lower = more lag).
+pub let camera_roll_lag : Float = 0.08
+
+///|
+/// Enemy firing cone half-angle in radians (~30 degrees).
+pub let enemy_fire_cone_half : Float = 0.5236
+
+///|
+/// Distance behind target that fighters try to reach for attack runs.
+pub let attack_run_trail_dist : Float = 40.0
+
+///|
+/// Distance at which an enemy is considered to have overshot the player.
+pub let overshoot_distance : Float = 12.0
+
+///|
+/// Duration of a fire burst pass in seconds.
+pub let fire_burst_duration : Float = 2.0
+
+///|
+/// Duration of a break-away maneuver in seconds.
+pub let break_away_duration : Float = 2.5
+
+///|
+/// Duration of repositioning loop in seconds.
+pub let reposition_duration : Float = 3.0
+
 // World bounds
 
 ///|
@@ -979,3 +1044,41 @@ pub fn objective_from_int(v : Int) -> Objective {
     DestroyCount
   }
 }
+
+// Spectacle system constants
+
+///|
+/// Near-miss trigger distance for enemy projectiles passing the player.
+pub let near_miss_distance : Float = 5.0
+
+///|
+/// Duration of the near-miss visual/shake effect in seconds.
+pub let near_miss_duration : Float = 0.4
+
+///|
+/// Weak point damage multiplier when hitting a capital ship weak point.
+pub let weak_point_damage_mult : Float = 3.0
+
+///|
+/// Distance threshold for hitting a weak point on a capital ship.
+pub let weak_point_hit_radius : Float = 3.0
+
+///|
+/// Massive damage dealt to the ship when a weak point is destroyed.
+pub let weak_point_destroy_damage : Float = 100.0
+
+///|
+/// HP fraction at which capital ship loses shield regen.
+pub let capital_phase_shield_loss : Float = 0.66
+
+///|
+/// HP fraction at which capital ship slows and loses turrets.
+pub let capital_phase_slow : Float = 0.33
+
+///|
+/// HP fraction at which capital ship enters death spiral.
+pub let capital_phase_death_spiral : Float = 0.10
+
+///|
+/// Number of weak points on a capital ship.
+pub let capital_weak_point_count : Int = 3

@@ -74,6 +74,55 @@ pub fn cross3d(
 
 // Rotate a vector around an axis by angle (Rodrigues rotation formula)
 
+///|
+/// Rotates vector (vx,vy,vz) around unit axis (ax,ay,az) by `angle` radians.
+pub fn rotate_around_axis(
+  vx : Float,
+  vy : Float,
+  vz : Float,
+  ax : Float,
+  ay : Float,
+  az : Float,
+  angle : Float,
+) -> (Float, Float, Float) {
+  let c = @math.cosf(angle)
+  let s = @math.sinf(angle)
+  let dot = vx * ax + vy * ay + vz * az
+  let cx = ay * vz - az * vy
+  let cy = az * vx - ax * vz
+  let cz = ax * vy - ay * vx
+  (
+    vx * c + cx * s + ax * dot * (1.0 - c),
+    vy * c + cy * s + ay * dot * (1.0 - c),
+    vz * c + cz * s + az * dot * (1.0 - c),
+  )
+}
+
+///|
+/// Returns the dot product of two 3D vectors.
+pub fn dot3d(
+  x1 : Float,
+  y1 : Float,
+  z1 : Float,
+  x2 : Float,
+  y2 : Float,
+  z2 : Float,
+) -> Float {
+  x1 * x2 + y1 * y2 + z1 * z2
+}
+
+///|
+/// Clamps a float value between min and max.
+pub fn clampf(v : Float, low : Float, high : Float) -> Float {
+  if v < low {
+    low
+  } else if v > high {
+    high
+  } else {
+    v
+  }
+}
+
 // Forward direction from yaw and pitch
 
 ///|
@@ -669,3 +718,134 @@ pub fn check_objective_progress(
 // Accuracy percentage
 
 // Mission rank based on score, time, accuracy
+
+// === Spectacle System ===
+
+///|
+/// Spawns a directional explosion where particles expand outward from impact direction.
+pub fn spawn_directional_explosion(
+  game : Game,
+  wx : Float,
+  wy : Float,
+  wz : Float,
+  hit_dx : Float,
+  hit_dy : Float,
+  hit_dz : Float,
+  count : Int,
+  r : Int,
+  g : Int,
+  b : Int,
+) -> Unit {
+  let norm = normalize3d(hit_dx, hit_dy, hit_dz)
+  for i in 0..<count {
+    let idx = alloc_particle(game)
+    if idx < 0 {
+      return
+    }
+    let p = game.particles[idx]
+    p.active = true
+    p.x = wx
+    p.y = wy
+    p.z = wz
+    // Bias velocity along impact direction with spread
+    let base_speed = rand_rangef(game, 8.0, 20.0)
+    let spread_x = rand_rangef(game, -0.6, 0.6)
+    let spread_y = rand_rangef(game, -0.6, 0.6)
+    let spread_z = rand_rangef(game, -0.6, 0.6)
+    p.vx = norm.0 * base_speed + spread_x * base_speed
+    p.vy = norm.1 * base_speed + spread_y * base_speed
+    p.vz = norm.2 * base_speed + spread_z * base_speed
+    p.life = rand_rangef(game, 0.5, 1.5)
+    p.max_life = p.life
+    p.r = r
+    p.g = g
+    p.b = b
+    p.size = rand_rangef(game, 0.1, 0.4)
+    p.kind = 1
+    ignore(i)
+  }
+}
+
+///|
+/// Spawns burning debris chunks that drift and fade with fire trail particles.
+pub fn spawn_burning_debris(
+  game : Game,
+  wx : Float,
+  wy : Float,
+  wz : Float,
+  count : Int,
+  r : Int,
+  g : Int,
+  b : Int,
+) -> Unit {
+  let actual = minf(Float::from_int(count), 5.0).to_int()
+  for i in 0..<actual {
+    let idx = alloc_debris(game)
+    if idx < 0 {
+      return
+    }
+    let d = game.debris[idx]
+    d.active = true
+    d.x = wx + rand_rangef(game, -1.5, 1.5)
+    d.y = wy + rand_rangef(game, -1.5, 1.5)
+    d.z = wz + rand_rangef(game, -1.5, 1.5)
+    d.vx = rand_rangef(game, -6.0, 6.0)
+    d.vy = rand_rangef(game, -6.0, 6.0)
+    d.vz = rand_rangef(game, -6.0, 6.0)
+    d.rot_x = rand_rangef(game, 0.0, 6.28)
+    d.rot_y = rand_rangef(game, 0.0, 6.28)
+    d.rot_speed = rand_rangef(game, 2.0, 5.0)
+    d.life = rand_rangef(game, 3.0, 4.0)
+    d.size = rand_rangef(game, 0.3, 0.7)
+    d.r = r
+    d.g = g
+    d.b = b
+    ignore(i)
+  }
+}
+
+///|
+/// Spawns a shock ring expanding from the given position.
+pub fn spawn_shock_ring(
+  game : Game,
+  wx : Float,
+  wy : Float,
+  wz : Float,
+  max_radius : Float,
+  life : Float,
+  r : Int,
+  g : Int,
+  b : Int,
+) -> Unit {
+  for ring in game.shock_rings {
+    if !ring.active {
+      ring.active = true
+      ring.x = wx
+      ring.y = wy
+      ring.z = wz
+      ring.radius = 1.0
+      ring.max_radius = max_radius
+      ring.life = life
+      ring.max_life = life
+      ring.r = r
+      ring.g = g
+      ring.b = b
+      return
+    }
+  }
+}
+
+///|
+/// Returns the 3D offset for a capital ship weak point at the given index.
+pub fn capital_weak_point_offset(index : Int) -> (Float, Float, Float) {
+  if index == 0 {
+    // Underside center
+    (0.0, -1.8, 0.0)
+  } else if index == 1 {
+    // Port engine
+    (-2.0, -0.5, -4.0)
+  } else {
+    // Starboard engine
+    (2.0, -0.5, -4.0)
+  }
+}

@@ -16,17 +16,31 @@ pub fn mission_briefing(Int) -> String
 
 pub fn mission_difficulty_text(Int) -> String
 
+pub fn mission_enemy_estimate(Int) -> String
+
 pub fn mission_formation(Int) -> @types.Formation
 
+pub fn mission_mid_event(Int, Int) -> (Int, Float, String)
+
+pub fn mission_mid_event_count(Int) -> Int
+
 pub fn mission_name(Int) -> String
+
+pub fn mission_objective_summary(Int) -> String
 
 pub fn mission_objective_target(Int) -> Int
 
 pub fn mission_objective_type(Int) -> @types.Objective
 
+pub fn mission_patrol_waypoint(Int, Int) -> (Float, Float, Float)
+
 pub fn mission_reward(Int) -> Int
 
 pub fn mission_station_pos(Int, Int) -> (Float, Float, Float)
+
+pub fn mission_survive_time(Int) -> Float
+
+pub fn mission_wave_info(Int) -> String
 
 pub fn powerup_spawn_pos(Int, Int) -> (Float, Float, Float, @types.PowerupKind)
 

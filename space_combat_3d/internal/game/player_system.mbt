@@ -1,4 +1,91 @@
-// Player movement and controls
+// Player movement and controls — 6DOF inertia-based flight model
+
+///|
+/// Rotates the player orientation basis by pitch, yaw, and roll angular velocities.
+fn rotate_orientation(p : @types.Player, dt : Float) -> Unit {
+  // Apply pitch rotation (around right axis)
+  if p.ang_vx.abs() > 0.0001 {
+    let angle = p.ang_vx * dt
+    let nf = @types.rotate_around_axis(
+      p.ori_fx, p.ori_fy, p.ori_fz, p.ori_rx, p.ori_ry, p.ori_rz, angle,
+    )
+    let nu = @types.rotate_around_axis(
+      p.ori_ux, p.ori_uy, p.ori_uz, p.ori_rx, p.ori_ry, p.ori_rz, angle,
+    )
+    p.ori_fx = nf.0
+    p.ori_fy = nf.1
+    p.ori_fz = nf.2
+    p.ori_ux = nu.0
+    p.ori_uy = nu.1
+    p.ori_uz = nu.2
+  }
+  // Apply yaw rotation (around up axis)
+  if p.ang_vy.abs() > 0.0001 {
+    let angle = p.ang_vy * dt
+    let nf = @types.rotate_around_axis(
+      p.ori_fx, p.ori_fy, p.ori_fz, p.ori_ux, p.ori_uy, p.ori_uz, angle,
+    )
+    let nr = @types.rotate_around_axis(
+      p.ori_rx, p.ori_ry, p.ori_rz, p.ori_ux, p.ori_uy, p.ori_uz, angle,
+    )
+    p.ori_fx = nf.0
+    p.ori_fy = nf.1
+    p.ori_fz = nf.2
+    p.ori_rx = nr.0
+    p.ori_ry = nr.1
+    p.ori_rz = nr.2
+  }
+  // Apply roll rotation (around forward axis)
+  if p.ang_vz.abs() > 0.0001 {
+    let angle = p.ang_vz * dt
+    let nu = @types.rotate_around_axis(
+      p.ori_ux, p.ori_uy, p.ori_uz, p.ori_fx, p.ori_fy, p.ori_fz, angle,
+    )
+    let nr = @types.rotate_around_axis(
+      p.ori_rx, p.ori_ry, p.ori_rz, p.ori_fx, p.ori_fy, p.ori_fz, angle,
+    )
+    p.ori_ux = nu.0
+    p.ori_uy = nu.1
+    p.ori_uz = nu.2
+    p.ori_rx = nr.0
+    p.ori_ry = nr.1
+    p.ori_rz = nr.2
+  }
+  // Re-orthonormalize to prevent drift
+  let fn2 = @types.normalize3d(p.ori_fx, p.ori_fy, p.ori_fz)
+  p.ori_fx = fn2.0
+  p.ori_fy = fn2.1
+  p.ori_fz = fn2.2
+  // Right = cross(forward, up), then normalize
+  let rn = @types.cross3d(
+    p.ori_fx, p.ori_fy, p.ori_fz, p.ori_ux, p.ori_uy, p.ori_uz,
+  )
+  let rn2 = @types.normalize3d(rn.0, rn.1, rn.2)
+  p.ori_rx = rn2.0
+  p.ori_ry = rn2.1
+  p.ori_rz = rn2.2
+  // Up = cross(right, forward)
+  let un = @types.cross3d(
+    p.ori_rx, p.ori_ry, p.ori_rz, p.ori_fx, p.ori_fy, p.ori_fz,
+  )
+  let un2 = @types.normalize3d(un.0, un.1, un.2)
+  p.ori_ux = un2.0
+  p.ori_uy = un2.1
+  p.ori_uz = un2.2
+}
+
+///|
+/// Extracts yaw, pitch, roll Euler angles from the orientation basis for rendering.
+fn sync_euler_from_orientation(p : @types.Player) -> Unit {
+  p.yaw = @math.atan2f(p.ori_fx, p.ori_fz)
+  let horiz = (p.ori_fx * p.ori_fx + p.ori_fz * p.ori_fz).sqrt()
+  p.pitch = @math.atan2f(p.ori_fy, horiz)
+  // Roll: angle between world-up projected onto the right-up plane
+  // and the ship's up vector
+  let world_up_dot_ship_right = p.ori_ry
+  let world_up_dot_ship_up = p.ori_uy
+  p.roll = @math.atan2f(-world_up_dot_ship_right, world_up_dot_ship_up)
+}
 
 ///|
 /// Updates player ship movement, controls, weapon firing, boost, and shield regeneration.
@@ -7,54 +94,88 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
   let sc = p.ship_class
   let turn = @types.ship_class_turn(sc)
 
+  // --- Angular input: add torque to angular velocity ---
+
   // Pitch control (W/S)
   if @raylib.is_key_down(@raylib.KeyW) {
-    p.pitch += turn * dt
-    if p.pitch > @types.pi * 0.45 {
-      p.pitch = @types.pi * 0.45
-    }
+    p.ang_vx += turn * dt
   }
   if @raylib.is_key_down(@raylib.KeyS) {
-    p.pitch -= turn * dt
-    if p.pitch < -@types.pi * 0.45 {
-      p.pitch = -@types.pi * 0.45
-    }
+    p.ang_vx -= turn * dt
   }
 
   // Yaw control (A/D)
   if @raylib.is_key_down(@raylib.KeyA) {
-    p.yaw -= turn * dt
+    p.ang_vy -= turn * dt
   }
   if @raylib.is_key_down(@raylib.KeyD) {
-    p.yaw += turn * dt
+    p.ang_vy += turn * dt
   }
 
   // Roll control (Q/E)
   if @raylib.is_key_down(@raylib.KeyQ) {
-    p.roll -= @types.player_roll_speed * dt
+    p.ang_vz -= @types.player_roll_speed * dt
   }
   if @raylib.is_key_down(@raylib.KeyE) {
-    p.roll += @types.player_roll_speed * dt
+    p.ang_vz += @types.player_roll_speed * dt
   }
-  // Decay roll
-  p.roll = p.roll * 0.95
 
-  // Strafe controls (arrow keys for vertical/horizontal strafe)
-  let strafe_speed : Float = 15.0
-  p.strafe_x = 0.0
-  p.strafe_y = 0.0
+  // Angular velocity damping
+  let ang_drag = @types.angular_drag * dt
+  let no_pitch = !@raylib.is_key_down(@raylib.KeyW) &&
+    !@raylib.is_key_down(@raylib.KeyS)
+  let no_yaw = !@raylib.is_key_down(@raylib.KeyA) &&
+    !@raylib.is_key_down(@raylib.KeyD)
+  let no_roll = !@raylib.is_key_down(@raylib.KeyQ) &&
+    !@raylib.is_key_down(@raylib.KeyE)
+  if no_pitch {
+    p.ang_vx = p.ang_vx * @types.maxf(0.0, 1.0 - ang_drag)
+  }
+  if no_yaw {
+    p.ang_vy = p.ang_vy * @types.maxf(0.0, 1.0 - ang_drag)
+  }
+  if no_roll {
+    p.ang_vz = p.ang_vz * @types.maxf(0.0, 1.0 - ang_drag)
+  }
+
+  // Clamp angular velocity
+  let max_ang = turn * 1.5
+  p.ang_vx = @types.clampf(p.ang_vx, -max_ang, max_ang)
+  p.ang_vy = @types.clampf(p.ang_vy, -max_ang, max_ang)
+  let max_roll_ang = @types.player_roll_speed * 1.5
+  p.ang_vz = @types.clampf(p.ang_vz, -max_roll_ang, max_roll_ang)
+
+  // Rotate orientation basis by angular velocity
+  rotate_orientation(p, dt)
+
+  // Sync Euler angles for rendering and other systems
+  sync_euler_from_orientation(p)
+
+  // Flight assist toggle (F key)
+  if @raylib.is_key_pressed(@raylib.KeyF) {
+    p.flight_assist = !p.flight_assist
+  }
+
+  // --- Translational movement: thrust as acceleration ---
+
+  // Strafe controls (arrow keys)
+  let strafe_accel : Float = 30.0
+  let mut strafe_ax : Float = 0.0
+  let mut strafe_ay : Float = 0.0
   if @raylib.is_key_down(@raylib.KeyLeft) {
-    p.strafe_x = -strafe_speed
+    strafe_ax = -strafe_accel
   }
   if @raylib.is_key_down(@raylib.KeyRight) {
-    p.strafe_x = strafe_speed
+    strafe_ax = strafe_accel
   }
   if @raylib.is_key_down(@raylib.KeyUp) {
-    p.strafe_y = strafe_speed
+    strafe_ay = strafe_accel
   }
   if @raylib.is_key_down(@raylib.KeyDown) {
-    p.strafe_y = -strafe_speed
+    strafe_ay = -strafe_accel
   }
+  p.strafe_x = strafe_ax
+  p.strafe_y = strafe_ay
 
   // Boost (left shift) - uses fuel
   let can_boost = p.boost_fuel > 0.0
@@ -66,36 +187,93 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
     }
   }
 
-  // Calculate target speed
-  let base_speed = @types.ship_class_speed(sc)
-  let boost_speed = @types.ship_class_boost(sc)
+  // Forward thrust acceleration
+  let base_accel = @types.thrust_acceleration
   let speed_boost_mult : Float = if p.speed_boost_timer > 0.0 {
     1.3
   } else {
     1.0
   }
-
-  let cur_speed : Float = if p.boosting {
-    boost_speed * speed_boost_mult
+  let boost_mult : Float = if p.boosting {
+    @types.boost_acceleration_mult
   } else {
-    base_speed * speed_boost_mult
+    1.0
   }
-  p.speed = @types.lerpf(p.speed, cur_speed, 3.0 * dt)
+  let throttle_accel = base_accel * boost_mult * speed_boost_mult
 
-  // Brake (left ctrl)
-  if @raylib.is_key_down(@raylib.KeyLeftControl) {
-    p.speed = @types.lerpf(p.speed, base_speed * 0.3, 4.0 * dt)
+  // Brake (left ctrl) — applies reverse thrust
+  let braking = @raylib.is_key_down(@raylib.KeyLeftControl)
+
+  // Apply thrust along ship's forward axis
+  if !braking {
+    p.vx += p.ori_fx * throttle_accel * dt
+    p.vy += p.ori_fy * throttle_accel * dt
+    p.vz += p.ori_fz * throttle_accel * dt
+  } else {
+    // Braking: decelerate toward zero
+    let brake_force : Float = base_accel * 1.5
+    let spd = @types.length3d(p.vx, p.vy, p.vz)
+    if spd > 0.5 {
+      let inv_spd : Float = 1.0F / spd
+      p.vx -= p.vx * inv_spd * brake_force * dt
+      p.vy -= p.vy * inv_spd * brake_force * dt
+      p.vz -= p.vz * inv_spd * brake_force * dt
+    } else {
+      p.vx = p.vx * 0.9
+      p.vy = p.vy * 0.9
+      p.vz = p.vz * 0.9
+    }
   }
 
-  // Calculate forward direction
-  let fwd = @types.forward_dir(p.yaw, p.pitch)
-  let rgt = @types.right_dir(p.yaw)
-  let up = @types.up_dir(p.yaw, p.pitch)
+  // Apply strafe acceleration along ship's right and up axes
+  if strafe_ax.abs() > 0.1 {
+    p.vx += p.ori_rx * strafe_ax * dt
+    p.vy += p.ori_ry * strafe_ax * dt
+    p.vz += p.ori_rz * strafe_ax * dt
+  }
+  if strafe_ay.abs() > 0.1 {
+    p.vx += p.ori_ux * strafe_ay * dt
+    p.vy += p.ori_uy * strafe_ay * dt
+    p.vz += p.ori_uz * strafe_ay * dt
+  }
 
-  // Combine forward movement with strafe
-  p.vx = fwd.0 * p.speed + rgt.0 * p.strafe_x + up.0 * p.strafe_y
-  p.vy = fwd.1 * p.speed + rgt.1 * p.strafe_x + up.1 * p.strafe_y
-  p.vz = fwd.2 * p.speed + rgt.2 * p.strafe_x + up.2 * p.strafe_y
+  // Flight assist: auto-level and kill lateral drift
+  if p.flight_assist {
+    // Kill lateral drift (velocity component not along forward axis)
+    let fwd_speed = @types.dot3d(
+      p.vx, p.vy, p.vz, p.ori_fx, p.ori_fy, p.ori_fz,
+    )
+    let lateral_vx = p.vx - p.ori_fx * fwd_speed
+    let lateral_vy = p.vy - p.ori_fy * fwd_speed
+    let lateral_vz = p.vz - p.ori_fz * fwd_speed
+    let drift_kill = @types.flight_assist_drift_kill * dt
+    p.vx -= lateral_vx * drift_kill
+    p.vy -= lateral_vy * drift_kill
+    p.vz -= lateral_vz * drift_kill
+
+    // Auto-level: gently rotate ship up toward world up when no roll input
+    if no_roll {
+      let level_strength = @types.flight_assist_level_strength * dt
+      p.ang_vz -= p.roll * level_strength
+    }
+  }
+
+  // Translational drag (always applies)
+  let drag_factor : Float = 1.0F - @types.flight_drag * dt
+  p.vx = p.vx * drag_factor
+  p.vy = p.vy * drag_factor
+  p.vz = p.vz * drag_factor
+
+  // Clamp max speed to prevent runaway
+  let max_speed = @types.ship_class_boost(sc) * 1.5
+  let cur_speed = @types.length3d(p.vx, p.vy, p.vz)
+  if cur_speed > max_speed {
+    let scale = max_speed / cur_speed
+    p.vx = p.vx * scale
+    p.vy = p.vy * scale
+    p.vz = p.vz * scale
+  }
+  p.speed = cur_speed
 
   // Move
   p.x += p.vx * dt
@@ -170,10 +348,9 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
 
   // Engine particles
   if game.frame_counter % 3 == 0 {
-    let fwd2 = @types.forward_dir(p.yaw, p.pitch)
-    let ex = p.x - fwd2.0 * 1.5
-    let ey = p.y - fwd2.1 * 1.5
-    let ez = p.z - fwd2.2 * 1.5
+    let ex = p.x - p.ori_fx * 1.5
+    let ey = p.y - p.ori_fy * 1.5
+    let ez = p.z - p.ori_fz * 1.5
     let r : Int = if p.boosting { 100 } else { 50 }
     let g : Int = if p.boosting { 180 } else { 120 }
     @types.spawn_particles(game, ex, ey, ez, 1, r, g, 255)
@@ -181,10 +358,9 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
 
   // Extra engine particles for boost
   if p.boosting && game.frame_counter % 2 == 0 {
-    let fwd2 = @types.forward_dir(p.yaw, p.pitch)
-    let ex = p.x - fwd2.0 * 2.0 + @types.rand_rangef(game, -0.3, 0.3)
-    let ey = p.y - fwd2.1 * 2.0 + @types.rand_rangef(game, -0.3, 0.3)
-    let ez = p.z - fwd2.2 * 2.0 + @types.rand_rangef(game, -0.3, 0.3)
+    let ex = p.x - p.ori_fx * 2.0 + @types.rand_rangef(game, -0.3, 0.3)
+    let ey = p.y - p.ori_fy * 2.0 + @types.rand_rangef(game, -0.3, 0.3)
+    let ez = p.z - p.ori_fz * 2.0 + @types.rand_rangef(game, -0.3, 0.3)
     @types.spawn_particles(game, ex, ey, ez, 2, 200, 220, 255)
   }
 
@@ -197,8 +373,8 @@ pub fn update_player(game : @types.Game, dt : Float) -> Unit {
 ///|
 fn @types.Game::fire_weapon(game : @types.Game) -> Unit {
   let p = game.player
-  let fwd = @types.forward_dir(p.yaw, p.pitch)
-  let rgt = @types.right_dir(p.yaw)
+  let fwd = (p.ori_fx, p.ori_fy, p.ori_fz)
+  let rgt = (p.ori_rx, p.ori_ry, p.ori_rz)
 
   let damage_mult : Float = if p.weapon_boost_timer > 0.0 { 1.5 } else { 1.0 }
 
@@ -233,9 +409,9 @@ fn @types.Game::fire_laser(
     proj.x = p.x + fwd.0 * 2.0 + rgt.0 * off
     proj.y = p.y + fwd.1 * 2.0 + rgt.1 * off
     proj.z = p.z + fwd.2 * 2.0 + rgt.2 * off
-    proj.vx = fwd.0 * @types.laser_speed
-    proj.vy = fwd.1 * @types.laser_speed
-    proj.vz = fwd.2 * @types.laser_speed
+    proj.vx = fwd.0 * @types.laser_speed + p.vx
+    proj.vy = fwd.1 * @types.laser_speed + p.vy
+    proj.vz = fwd.2 * @types.laser_speed + p.vz
     proj.damage = @types.laser_damage * damage_mult
     proj.life = @types.laser_range / @types.laser_speed
     proj.target_idx = -1
@@ -263,9 +439,9 @@ fn @types.Game::fire_missile(
   proj.x = p.x + fwd.0 * 2.0
   proj.y = p.y + fwd.1 * 2.0
   proj.z = p.z + fwd.2 * 2.0
-  proj.vx = fwd.0 * @types.missile_speed
-  proj.vy = fwd.1 * @types.missile_speed
-  proj.vz = fwd.2 * @types.missile_speed
+  proj.vx = fwd.0 * @types.missile_speed + p.vx
+  proj.vy = fwd.1 * @types.missile_speed + p.vy
+  proj.vz = fwd.2 * @types.missile_speed + p.vz
   proj.damage = @types.missile_damage * damage_mult
   proj.life = @types.missile_range / @types.missile_speed
   proj.target_idx = game.target_idx
@@ -292,9 +468,9 @@ fn @types.Game::fire_plasma(
   proj.x = p.x + fwd.0 * 2.0
   proj.y = p.y + fwd.1 * 2.0
   proj.z = p.z + fwd.2 * 2.0
-  proj.vx = fwd.0 * @types.plasma_speed
-  proj.vy = fwd.1 * @types.plasma_speed
-  proj.vz = fwd.2 * @types.plasma_speed
+  proj.vx = fwd.0 * @types.plasma_speed + p.vx
+  proj.vy = fwd.1 * @types.plasma_speed + p.vy
+  proj.vz = fwd.2 * @types.plasma_speed + p.vz
   proj.damage = @types.plasma_damage * damage_mult
   proj.life = @types.plasma_range / @types.plasma_speed
   proj.target_idx = -1
@@ -321,9 +497,9 @@ fn @types.Game::fire_railgun(
   proj.x = p.x + fwd.0 * 2.5
   proj.y = p.y + fwd.1 * 2.5
   proj.z = p.z + fwd.2 * 2.5
-  proj.vx = fwd.0 * @types.railgun_speed
-  proj.vy = fwd.1 * @types.railgun_speed
-  proj.vz = fwd.2 * @types.railgun_speed
+  proj.vx = fwd.0 * @types.railgun_speed + p.vx
+  proj.vy = fwd.1 * @types.railgun_speed + p.vy
+  proj.vz = fwd.2 * @types.railgun_speed + p.vz
   proj.damage = @types.railgun_damage * damage_mult
   proj.life = @types.railgun_range / @types.railgun_speed
   proj.target_idx = -1

@@ -14,6 +14,7 @@ pub fn draw_world(game : @types.Game) -> Unit {
   game.draw_projectiles()
   game.draw_particles_3d()
   game.draw_debris_3d()
+  game.draw_shock_rings()
   game.draw_target_indicator()
   game.draw_lead_indicator()
   game.draw_waypoint_markers()
@@ -54,22 +55,36 @@ pub fn draw_world(game : @types.Game) -> Unit {
 fn @types.Game::build_camera(game : @types.Game) -> @raylib.Camera3D {
   let p = game.player
 
-  // Apply camera lag: smoothly interpolate camera orientation toward player orientation
-  game.cam_yaw = @types.lerpf(game.cam_yaw, p.yaw, 1.0 - @types.camera_lag_yaw)
+  // Use ship orientation basis for camera with lag
+  // Camera lag on yaw/pitch via interpolating camera direction
+  game.cam_yaw = @types.lerpf(
+    game.cam_yaw,
+    p.yaw,
+    1.0 - @types.camera_lag_yaw,
+  )
   game.cam_pitch = @types.lerpf(
     game.cam_pitch,
     p.pitch,
     1.0 - @types.camera_lag_pitch,
   )
 
-  let fwd = @types.forward_dir(game.cam_yaw, game.cam_pitch)
+  // Camera forward: use lagged yaw/pitch for smooth follow
+  let cam_fwd = @types.forward_dir(game.cam_yaw, game.cam_pitch)
 
-  // Chase camera: behind and above the player
+  // Camera up: smoothly interpolate from world-up toward ship's up vector
+  // This creates the banking effect
+  let roll_blend : Float = 1.0F - @types.camera_roll_lag
+  let cam_up_x = @types.lerpf(0.0F, p.ori_ux, roll_blend)
+  let cam_up_y = @types.lerpf(1.0F, p.ori_uy, roll_blend)
+  let cam_up_z = @types.lerpf(0.0F, p.ori_uz, roll_blend)
+  let cam_up_norm = @types.normalize3d(cam_up_x, cam_up_y, cam_up_z)
+
+  // Chase camera: behind and above the player along camera forward
   let cam_dist = @types.camera_distance
   let cam_h = @types.camera_height
-  let cam_x = p.x - fwd.0 * cam_dist
-  let cam_y = p.y - fwd.1 * cam_dist + cam_h
-  let cam_z = p.z - fwd.2 * cam_dist
+  let cam_x = p.x - cam_fwd.0 * cam_dist + cam_up_norm.0 * cam_h
+  let cam_y = p.y - cam_fwd.1 * cam_dist + cam_up_norm.1 * cam_h
+  let cam_z = p.z - cam_fwd.2 * cam_dist + cam_up_norm.2 * cam_h
 
   // Camera shake
   let mut shake_x : Float = 0.0
@@ -80,15 +95,15 @@ fn @types.Game::build_camera(game : @types.Game) -> @raylib.Camera3D {
     shake_y = @math.cosf(t * 23.1) * game.camera_shake * 0.5
   }
 
-  // Look ahead of the player
-  let look_x = p.x + fwd.0 * 20.0
-  let look_y = p.y + fwd.1 * 20.0
-  let look_z = p.z + fwd.2 * 20.0
+  // Look ahead of the player along camera forward
+  let look_x = p.x + cam_fwd.0 * 20.0
+  let look_y = p.y + cam_fwd.1 * 20.0
+  let look_z = p.z + cam_fwd.2 * 20.0
 
   @raylib.Camera3D::new(
     @raylib.Vector3::new(cam_x + shake_x, cam_y + shake_y, cam_z),
     @raylib.Vector3::new(look_x, look_y, look_z),
-    @raylib.Vector3::new(0.0, 1.0, 0.0),
+    @raylib.Vector3::new(cam_up_norm.0, cam_up_norm.1, cam_up_norm.2),
     @types.camera_fovy,
     @raylib.CameraPerspective,
   )
@@ -168,8 +183,8 @@ fn @types.Game::draw_stars(game : @types.Game) -> Unit {
 ///|
 fn @types.Game::draw_player_ship(game : @types.Game) -> Unit {
   let p = game.player
-  let fwd = @types.forward_dir(p.yaw, p.pitch)
-  let rgt = @types.right_dir(p.yaw)
+  let fwd = (p.ori_fx, p.ori_fy, p.ori_fz)
+  let rgt = (p.ori_rx, p.ori_ry, p.ori_rz)
 
   // Ship color based on class
   let body_r : Int = match p.ship_class {
@@ -740,6 +755,67 @@ fn draw_capital_ship(
       @raylib.Color::new(255, 50, 50, sa.clamp(min=5, max=30)),
     )
   }
+  // Weak point subsystem rendering
+  if e.weak_point_hp > 0.0 {
+    let wp_frac = e.weak_point_hp / @types.capital_weak_point_hp
+    for wp_i in 0..<@types.capital_weak_point_count {
+      let off = @types.capital_weak_point_offset(wp_i)
+      let wp_x = e.x + off.0
+      let wp_y = e.y + off.1
+      let wp_z = e.z + off.2
+      let wp_pulse = @math.sinf(frame_f * 0.2 + Float::from_int(wp_i) * 2.0) *
+        0.15
+      // Glowing spot - green when healthy, red when damaged
+      let wp_r = (255.0F * (1.0F - wp_frac)).to_int().clamp(min=0, max=255)
+      let wp_g = (255.0F * wp_frac).to_int().clamp(min=0, max=255)
+      @raylib.draw_sphere(
+        @raylib.Vector3::new(wp_x, wp_y, wp_z),
+        0.6 + wp_pulse,
+        @raylib.Color::new(wp_r, wp_g, 50, 180),
+      )
+      // Outer glow
+      @raylib.draw_sphere(
+        @raylib.Vector3::new(wp_x, wp_y, wp_z),
+        1.0 + wp_pulse,
+        @raylib.Color::new(wp_r, wp_g, 50, 40),
+      )
+      ignore(wp_i)
+    }
+  } else if e.weak_point_hp == 0.0 {
+    // Destroyed weak points: sparking and smoking
+    if game.frame_counter % 10 < 3 {
+      for wp_i in 0..<@types.capital_weak_point_count {
+        let off = @types.capital_weak_point_offset(wp_i)
+        let wp_x = e.x + off.0
+        let wp_y = e.y + off.1
+        let wp_z = e.z + off.2
+        @raylib.draw_sphere(
+          @raylib.Vector3::new(wp_x, wp_y, wp_z),
+          0.3,
+          @raylib.Color::new(255, 200, 50, 150),
+        )
+        ignore(wp_i)
+      }
+    }
+  }
+  // Death spiral visual: trailing fire when below 10% HP
+  let hp_frac = e.hp / e.max_hp
+  if hp_frac < @types.capital_phase_death_spiral {
+    let fire_pulse = @math.sinf(frame_f * 0.4) * 2.0
+    @raylib.draw_sphere(
+      @raylib.Vector3::new(e.x + fire_pulse, e.y + 0.5, e.z),
+      1.5,
+      @raylib.Color::new(255, 100, 30, 100),
+    )
+  } else if hp_frac < @types.capital_phase_slow {
+    // Smoke at slow phase
+    let smoke_off = @math.sinf(frame_f * 0.15) * 1.5
+    @raylib.draw_sphere(
+      @raylib.Vector3::new(e.x + smoke_off, e.y + 1.0, e.z),
+      0.8,
+      @raylib.Color::new(80, 80, 80, 60),
+    )
+  }
 }
 
 ///|
@@ -1185,13 +1261,81 @@ fn @types.Game::draw_debris_3d(game : @types.Game) -> Unit {
     }
     let alpha_f : Float = @types.minf(d.life / 2.0, 1.0) * 255.0
     let a = alpha_f.to_int().clamp(min=0, max=255)
+    // Tumbling cube - offset by rotation
+    let rot_off_x = @math.sinf(d.rot_x) * d.size * 0.2
+    let rot_off_y = @math.cosf(d.rot_y) * d.size * 0.2
     @raylib.draw_cube(
-      @raylib.Vector3::new(d.x, d.y, d.z),
+      @raylib.Vector3::new(d.x + rot_off_x, d.y + rot_off_y, d.z),
       d.size,
       d.size * 0.5,
       d.size * 0.8,
       @raylib.Color::new(d.r, d.g, d.b, a),
     )
+    // Second offset cube for irregular shape
+    @raylib.draw_cube(
+      @raylib.Vector3::new(d.x - rot_off_x * 0.5, d.y, d.z + rot_off_y * 0.3),
+      d.size * 0.6,
+      d.size * 0.4,
+      d.size * 0.5,
+      @raylib.Color::new(
+        (d.r - 30).clamp(min=0, max=255),
+        (d.g - 20).clamp(min=0, max=255),
+        d.b,
+        a,
+      ),
+    )
+    // Fire glow on burning debris (first 2 seconds of life)
+    if d.life > 1.0 {
+      let fire_alpha_f = (d.life - 1.0) / 3.0 * 120.0
+      let fire_a = fire_alpha_f.to_int().clamp(min=0, max=120)
+      @raylib.draw_sphere(
+        @raylib.Vector3::new(d.x, d.y, d.z),
+        d.size * 0.8,
+        @raylib.Color::new(255, 150, 30, fire_a),
+      )
+    }
+  }
+}
+
+///|
+fn @types.Game::draw_shock_rings(game : @types.Game) -> Unit {
+  for ring in game.shock_rings {
+    if !ring.active {
+      continue
+    }
+    let alpha_f = ring.life / ring.max_life * 180.0
+    let a = alpha_f.to_int().clamp(min=0, max=180)
+    let thickness = @types.maxf(0.3, 1.5 * (ring.life / ring.max_life))
+    // Draw ring as a sphere wireframe at the current radius
+    @raylib.draw_sphere(
+      @raylib.Vector3::new(ring.x, ring.y, ring.z),
+      ring.radius,
+      @raylib.Color::new(ring.r, ring.g, ring.b, (a / 5).clamp(min=0, max=30)),
+    )
+    // Inner ring detail (slightly smaller, brighter)
+    let inner = ring.radius - thickness
+    if inner > 0.0 {
+      @raylib.draw_sphere(
+        @raylib.Vector3::new(ring.x, ring.y, ring.z),
+        inner,
+        @raylib.Color::new(ring.r, ring.g, ring.b, (a / 8).clamp(min=0, max=20)),
+      )
+    }
+    // Ring edge cubes for visible ring shape
+    let segments = 12
+    for s in 0..<segments {
+      let angle = Float::from_int(s) * (@types.two_pi / Float::from_int(segments))
+      let rx = ring.x + @math.cosf(angle) * ring.radius
+      let rz = ring.z + @math.sinf(angle) * ring.radius
+      @raylib.draw_cube(
+        @raylib.Vector3::new(rx, ring.y, rz),
+        thickness,
+        thickness * 0.3,
+        thickness,
+        @raylib.Color::new(ring.r, ring.g, ring.b, a),
+      )
+      ignore(s)
+    }
   }
 }
 

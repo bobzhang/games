@@ -12,6 +12,22 @@ pub(all) struct Player {
   mut vx : Float
   mut vy : Float
   mut vz : Float
+  // Orientation basis vectors (forward, up, right)
+  mut ori_fx : Float
+  mut ori_fy : Float
+  mut ori_fz : Float
+  mut ori_ux : Float
+  mut ori_uy : Float
+  mut ori_uz : Float
+  mut ori_rx : Float
+  mut ori_ry : Float
+  mut ori_rz : Float
+  // Angular velocity (rad/s)
+  mut ang_vx : Float // pitch rate
+  mut ang_vy : Float // yaw rate
+  mut ang_vz : Float // roll rate
+  // Flight assist toggle
+  mut flight_assist : Bool
   mut hull : Float
   mut max_hull : Float
   mut shield : Float
@@ -53,6 +69,19 @@ pub fn Player::new() -> Player {
     vx: 0.0,
     vy: 0.0,
     vz: 0.0,
+    ori_fx: 0.0,
+    ori_fy: 0.0,
+    ori_fz: 1.0,
+    ori_ux: 0.0,
+    ori_uy: 1.0,
+    ori_uz: 0.0,
+    ori_rx: 1.0,
+    ori_ry: 0.0,
+    ori_rz: 0.0,
+    ang_vx: 0.0,
+    ang_vy: 0.0,
+    ang_vz: 0.0,
+    flight_assist: true,
     hull: player_max_hull,
     max_hull: player_max_hull,
     shield: player_max_shield,
@@ -591,7 +620,49 @@ pub(all) struct Game {
   mut mid_event_timer : Float
   mut mid_event_count : Int
 
+  // Shock rings from large explosions
+  shock_rings : Array[ShockRing]
+
+  // Near-miss system
+  mut near_miss_timer : Float
+  mut near_miss_dir_x : Float
+  mut near_miss_dir_y : Float
+
   fn new() -> Game
+}
+
+///|
+/// Expanding shock ring from capital/cruiser explosions.
+pub(all) struct ShockRing {
+  mut active : Bool
+  mut x : Float
+  mut y : Float
+  mut z : Float
+  mut radius : Float
+  mut max_radius : Float
+  mut life : Float
+  mut max_life : Float
+  mut r : Int
+  mut g : Int
+  mut b : Int
+}
+
+///|
+/// Creates an inactive shock ring slot for pool allocation.
+pub fn ShockRing::inactive() -> ShockRing {
+  {
+    active: false,
+    x: 0.0,
+    y: 0.0,
+    z: 0.0,
+    radius: 0.0,
+    max_radius: 40.0,
+    life: 0.0,
+    max_life: 1.5,
+    r: 255,
+    g: 200,
+    b: 100,
+  }
 }
 
 ///|
@@ -800,6 +871,17 @@ pub fn Game::new() -> Game {
     reinforcement_spawned: false,
     mid_event_timer: 0.0,
     mid_event_count: 0,
+    shock_rings: {
+      let arr : Array[ShockRing] = []
+      for i in 0..<max_shock_rings {
+        arr.push(ShockRing::inactive())
+        ignore(i)
+      }
+      arr
+    },
+    near_miss_timer: 0.0,
+    near_miss_dir_x: 0.0,
+    near_miss_dir_y: 0.0,
   }
 }
 
