@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/tremor/internal/types",
+  "bobzhang/games/tremor/internal/sensors",
+  "bobzhang/games/tremor/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

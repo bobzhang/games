@@ -1,0 +1,6 @@
+import {
+  "bobzhang/games/tremor/internal/types",
+  "moonbitlang/core/math",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

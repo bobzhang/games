@@ -1,0 +1,9 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/tremor/internal/types",
+  "bobzhang/games/tremor/internal/sensors",
+  "bobzhang/games/utils/draw",
+  "moonbitlang/core/math",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
