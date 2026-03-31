@@ -1,0 +1,13 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/convex/internal/types",
+  "bobzhang/games/convex/internal/game",
+  "bobzhang/games/convex/internal/render",
+  "bobzhang/games/utils/draw",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

@@ -1,0 +1,9 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/convex/internal/types",
+  "bobzhang/games/convex/internal/geometry",
+  "bobzhang/games/utils/draw",
+  "moonbitlang/core/math",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
