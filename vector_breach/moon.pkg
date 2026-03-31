@@ -1,0 +1,16 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/vector_breach/internal/types",
+  "bobzhang/games/vector_breach/internal/content",
+  "bobzhang/games/vector_breach/internal/sim",
+  "bobzhang/games/vector_breach/internal/game",
+  "bobzhang/games/vector_breach/internal/render",
+  "bobzhang/games/utils/draw",
+  "bobzhang/games/utils/fps",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

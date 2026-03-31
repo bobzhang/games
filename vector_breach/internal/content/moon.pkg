@@ -1,0 +1,5 @@
+import {
+  "bobzhang/games/vector_breach/internal/types",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
