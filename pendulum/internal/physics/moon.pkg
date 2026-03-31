@@ -1,0 +1,6 @@
+import {
+  "bobzhang/games/pendulum/internal/types",
+  "moonbitlang/core/math",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
