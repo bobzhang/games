@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/strata/internal/types",
+  "bobzhang/games/strata/internal/geology",
+  "bobzhang/games/strata/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
