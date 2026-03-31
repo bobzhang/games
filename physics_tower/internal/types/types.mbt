@@ -48,6 +48,7 @@ pub(all) struct World {
   mut wind_force : Float
   mut quake_timer : Float
   mut quake_intensity : Float
+  mut friction_mult : Float
 }
 
 ///|

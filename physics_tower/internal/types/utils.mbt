@@ -156,6 +156,7 @@ pub fn new_world() -> World {
     wind_force: 0.0,
     quake_timer: 0.0,
     quake_intensity: 0.0,
+    friction_mult: 1.0,
   }
 }
 

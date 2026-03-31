@@ -95,7 +95,7 @@ fn resolve_ground(world : @types.World) -> Unit {
           body.grounded = true
         }
         // Friction slows horizontal motion
-        body.vx = body.vx * (1.0 - @types.friction_coeff * 0.5)
+        body.vx = body.vx * (1.0 - @types.friction_coeff * world.friction_mult * 0.5)
         body.angular_vel = body.angular_vel * 0.8
       }
       // Add stress from impact
@@ -133,13 +133,13 @@ fn resolve_collisions(world : @types.World) -> Unit {
       if !(b.active) || b.broken {
         continue
       }
-      resolve_pair(a, b)
+      resolve_pair(a, b, world.friction_mult)
     }
   }
 }
 
 ///|
-fn resolve_pair(a : @types.Body, b : @types.Body) -> Unit {
+fn resolve_pair(a : @types.Body, b : @types.Body, friction_mult : Float) -> Unit {
   // Use OBB approximation: compute axis-aligned bounding boxes of rotated rects
   let (a_half_w, a_half_h) = obb_half_extents(a)
   let (b_half_w, b_half_h) = obb_half_extents(b)
@@ -169,7 +169,7 @@ fn resolve_pair(a : @types.Body, b : @types.Body) -> Unit {
     a.vx = a.vx - impulse * a_ratio
     b.vx = b.vx + impulse * b_ratio
     // Friction on perpendicular axis
-    let fric = @types.friction_coeff * @types.absf(impulse)
+    let fric = @types.friction_coeff * friction_mult * @types.absf(impulse)
     let rel_vy = a.vy - b.vy
     if @types.absf(rel_vy) > 0.1 {
       let sign_y : Float = if rel_vy > 0.0 { 1.0 } else { -1.0 }
@@ -202,7 +202,7 @@ fn resolve_pair(a : @types.Body, b : @types.Body) -> Unit {
       a.grounded = true
     }
     // Friction on perpendicular axis
-    let fric = @types.friction_coeff * @types.absf(impulse)
+    let fric = @types.friction_coeff * friction_mult * @types.absf(impulse)
     let rel_vx = a.vx - b.vx
     if @types.absf(rel_vx) > 0.1 {
       let sign_x : Float = if rel_vx > 0.0 { 1.0 } else { -1.0 }

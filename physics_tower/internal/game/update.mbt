@@ -185,6 +185,8 @@ fn start_level(game : @types.Game, level : @types.Level) -> Unit {
   // Apply world gravity modifier
   let grav_mult = @content.world_gravity_mult(level.world_index)
   game.world.gravity = @types.gravity * grav_mult
+  // Apply world friction modifier
+  game.world.friction_mult = @content.world_friction_mult(level.world_index)
   // Start recording for replay
   start_recording(game)
   // Initialize tutorial for level 1
@@ -495,25 +497,31 @@ fn finish_test(game : @types.Game) -> Unit {
   let levels = @content.get_levels()
   let level = levels[game.current_level]
   let height = @physics.measure_tower_height(game.world)
-  let height_bonus = if height >= level.target_height { 500 } else { 0 }
-  game.score = survival_pct * 10 + height_bonus
-  game.total_score = game.total_score + game.score
+  let passed = height >= level.target_height
+  // Only award score and stars if test was passed
+  if passed {
+    let height_bonus = if height >= level.target_height { 500 } else { 0 }
+    game.score = survival_pct * 10 + height_bonus
+    game.total_score = game.total_score + game.score
+    // Compute star rating
+    game.result_stars = if game.score >= 800 {
+      3
+    } else if game.score >= 400 {
+      2
+    } else if game.score > 0 {
+      1
+    } else {
+      0
+    }
+  } else {
+    game.score = 0
+    game.result_stars = 0
+  }
   if height > game.best_height {
     game.best_height = height
   }
-  // Compute star rating
-  game.result_stars = if game.score >= 800 {
-    3
-  } else if game.score >= 400 {
-    2
-  } else if game.score > 0 {
-    1
-  } else {
-    0
-  }
   game.star_anim_timer = 0.01
   // Record statistics
-  let passed = height >= level.target_height
   record_breaks(game, broken)
   record_level_result(
     game, game.current_level, height, game.result_stars, passed,

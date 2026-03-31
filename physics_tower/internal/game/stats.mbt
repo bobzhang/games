@@ -30,6 +30,13 @@ pub fn record_level_result(
   passed : Bool
 ) -> Unit {
   let stats = game.statistics
+  // Check if level was previously completed BEFORE updating best height/stars
+  let already_completed = if level_idx >= 0 &&
+    level_idx < stats.best_heights.length() {
+    stats.level_stars[level_idx] > 0
+  } else {
+    false
+  }
   // Update best height
   if level_idx >= 0 && level_idx < stats.best_heights.length() {
     if height > stats.best_heights[level_idx] {
@@ -43,21 +50,8 @@ pub fn record_level_result(
       stats.stars_earned = stats.stars_earned + (stars - old_stars)
     }
   }
-  if passed {
-    // Count unique level completions
-    let mut already_completed = false
-    if level_idx >= 0 && level_idx < stats.best_heights.length() {
-      if stats.best_heights[level_idx] > 0.0 &&
-        stats.level_stars[level_idx] > 0 {
-        // Check if this was already completed before this test
-        // If height was > 0 before, it was completed
-        already_completed = height <= stats.best_heights[level_idx] &&
-          stars <= stats.level_stars[level_idx]
-      }
-    }
-    if !(already_completed) {
-      stats.levels_completed = stats.levels_completed + 1
-    }
+  if passed && !(already_completed) {
+    stats.levels_completed = stats.levels_completed + 1
   }
 }
 
