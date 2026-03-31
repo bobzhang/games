@@ -1,0 +1,13 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/sieve/internal/types",
+  "bobzhang/games/sieve/internal/game",
+  "bobzhang/games/sieve/internal/render",
+  "bobzhang/games/utils/draw",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
+
+options(
+  "is-main": true,
+)

@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/sieve/internal/types",
+  "bobzhang/games/sieve/internal/constraints",
+  "bobzhang/games/sieve/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
