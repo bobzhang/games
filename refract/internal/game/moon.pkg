@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/refract/internal/types",
+  "bobzhang/games/refract/internal/beam",
+  "bobzhang/games/refract/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
