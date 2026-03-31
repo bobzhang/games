@@ -1,0 +1,8 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/topology/internal/types",
+  "bobzhang/games/topology/internal/transform",
+  "bobzhang/games/topology/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

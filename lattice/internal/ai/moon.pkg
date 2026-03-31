@@ -1,0 +1,7 @@
+import {
+  "bobzhang/games/lattice/internal/types",
+  "bobzhang/games/lattice/internal/board",
+  "tonyfettes/raylib",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"

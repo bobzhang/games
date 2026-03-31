@@ -1,0 +1,9 @@
+import {
+  "tonyfettes/raylib",
+  "bobzhang/games/lattice/internal/types",
+  "bobzhang/games/lattice/internal/board",
+  "bobzhang/games/lattice/internal/ai",
+  "bobzhang/games/lattice/internal/levels",
+}
+
+warnings = "-missing_doc+unnecessary_annotation"
